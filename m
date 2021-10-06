@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D59C4332F
-	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 05:54:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21711C433FE
+	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 05:54:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2812661248
-	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 05:54:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0702F6113D
+	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 05:54:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbhJFF4S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Oct 2021 01:56:18 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58916 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbhJFF4Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Oct 2021 01:56:16 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1965rxxa004725;
-        Wed, 6 Oct 2021 00:53:59 -0500
+        id S237284AbhJFF4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Oct 2021 01:56:30 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:52694 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237213AbhJFF41 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Oct 2021 01:56:27 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1965sIof062163;
+        Wed, 6 Oct 2021 00:54:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1633499639;
-        bh=71iTNYvSXz7PJ6/1p3pzVlud0Eg7uyTxPUQOHqjQ5fk=;
+        s=ti-com-17Q1; t=1633499658;
+        bh=QBLxdizwX50FzhNQIhAmOTQtQIE230t8AjfKr0KvKmI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=P7iafUpUj7A3v194Kab68htAoynfz6NtqNCJU9PBYEvGRUUWTAzq9ea3P8vJcMTJc
-         wfNZN0i49R7Cg4hsDivtCEHAzU1wJuNczplckgsKoO0trnOO0khjNrO61gx5CWY3oU
-         tHY3RsZLklbAamMpda4oPTXKBswANEaWUR6VfsFE=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1965rwTd083572
+        b=Nd862HM5PXO7Qa5Ty2MC19+qgZ4a6OwEAdRKO25hgsyuRiUwKRPB4QY2Qh76rqd0n
+         wgXM/hDrL2u/xB5rywIYgmw19K/Z0JzpHK1jUyyEKRwCPzlOUYOSLsvMRp904Ukc+E
+         FMuAO15jIBy1wCqzigtiTAuax1R4k48jqVWk2ra8=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1965sIL2026371
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Oct 2021 00:53:58 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 6 Oct 2021 00:54:18 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 6
- Oct 2021 00:53:58 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2021 00:54:18 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Wed, 6 Oct 2021 00:53:58 -0500
+ Frontend Transport; Wed, 6 Oct 2021 00:54:18 -0500
 Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1965rjkD070213;
-        Wed, 6 Oct 2021 00:53:53 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1965rjkG070213;
+        Wed, 6 Oct 2021 00:54:13 -0500
 From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Aswath Govindraju <a-govindraju@ti.com>,
@@ -55,9 +55,9 @@ CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
         <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH v4 1/6] arm64: dts: ti: k3-am65-mcu: Add Support for MCAN
-Date:   Wed, 6 Oct 2021 11:23:38 +0530
-Message-ID: <20211006055344.22662-2-a-govindraju@ti.com>
+Subject: [PATCH v4 4/6] arm64: dts: ti: k3-j721e-common-proc-board: Add support for mcu and main mcan nodes
+Date:   Wed, 6 Oct 2021 11:23:41 +0530
+Message-ID: <20211006055344.22662-5-a-govindraju@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211006055344.22662-1-a-govindraju@ti.com>
 References: <20211006055344.22662-1-a-govindraju@ti.com>
@@ -71,56 +71,200 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Faiz Abbas <faiz_abbas@ti.com>
 
-Add Support for two MCAN controllers present on the am65x SOC. Both support
-classic CAN messages as well as CAN-FD.
+Add four MCAN nodes present on the common processor board and set a
+maximum data rate of 5 Mbps. Disable all other nodes as they
+are not brought out on the common processor board.
 
 Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
 Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi | 30 +++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../dts/ti/k3-j721e-common-proc-board.dts     | 155 ++++++++++++++++++
+ 1 file changed, 155 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-index c93ff1520a0e..8d592bf41d6f 100644
---- a/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi
-@@ -159,6 +159,36 @@
- 		};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+index dc2bc67f9f48..2d7596911b27 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+@@ -112,6 +112,42 @@
+ 			      "cpb-codec-scki",
+ 			      "cpb-codec-scki-48000", "cpb-codec-scki-44100";
  	};
++
++	transceiver1: can-phy0 {
++		compatible = "ti,tcan1043";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&mcu_mcan0_gpio_pins_default>;
++		standby-gpios = <&wkup_gpio0 54 GPIO_ACTIVE_LOW>;
++		enable-gpios = <&wkup_gpio0 0 GPIO_ACTIVE_HIGH>;
++	};
++
++	transceiver2: can-phy1 {
++		compatible = "ti,tcan1042";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&mcu_mcan1_gpio_pins_default>;
++		standby-gpios = <&wkup_gpio0 2 GPIO_ACTIVE_HIGH>;
++	};
++
++	transceiver3: can-phy2 {
++		compatible = "ti,tcan1043";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		standby-gpios = <&exp2 7 GPIO_ACTIVE_LOW>;
++		enable-gpios = <&exp2 6 GPIO_ACTIVE_HIGH>;
++	};
++
++	transceiver4: can-phy3 {
++		compatible = "ti,tcan1042";
++		#phy-cells = <0>;
++		max-bitrate = <5000000>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&main_mcan2_gpio_pins_default>;
++		standby-gpios = <&main_gpio0 127 GPIO_ACTIVE_HIGH>;
++	};
+ };
  
-+	m_can0: mcan@40528000 {
-+		compatible = "bosch,m_can";
-+		reg = <0x0 0x40528000 0x0 0x400>,
-+		      <0x0 0x40500000 0x0 0x4400>;
-+		reg-names = "m_can", "message_ram";
-+		power-domains = <&k3_pds 102 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 102 5>, <&k3_clks 102 0>;
-+		clock-names = "hclk", "cclk";
-+		interrupt-parent = <&gic500>;
-+		interrupts = <GIC_SPI 544 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 545 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "int0", "int1";
-+		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+ &main_pmx0 {
+@@ -207,6 +243,26 @@
+ 			J721E_IOPAD(0x1a4, PIN_OUTPUT, 3) /* (W26) RGMII6_RXC.AUDIO_EXT_REFCLK2 */
+ 		>;
+ 	};
++
++	main_mcan0_pins_default: main-mcan0-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x208, PIN_INPUT, 0) /* (W5) MCAN0_RX */
++			J721E_IOPAD(0x20c, PIN_OUTPUT, 0) /* (W6) MCAN0_TX */
++		>;
 +	};
 +
-+	m_can1: mcan@40568000 {
-+		compatible = "bosch,m_can";
-+		reg = <0x0 0x40568000 0x0 0x400>,
-+		      <0x0 0x40540000 0x0 0x4400>;
-+		reg-names = "m_can", "message_ram";
-+		power-domains = <&k3_pds 103 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 103 5>, <&k3_clks 103 0>;
-+		clock-names = "hclk", "cclk";
-+		interrupt-parent = <&gic500>;
-+		interrupts = <GIC_SPI 547 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 548 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "int0", "int1";
-+		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
++	main_mcan2_pins_default: main-mcan2-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x01f0, PIN_INPUT, 3) /* (AC2) MCAN2_RX.GPIO0_123 */
++			J721E_IOPAD(0x01f4, PIN_OUTPUT, 3) /* (AB1) MCAN2_TX.GPIO0_124 */
++		>;
 +	};
 +
- 	fss: fss@47000000 {
- 		compatible = "simple-bus";
- 		#address-cells = <2>;
++	main_mcan2_gpio_pins_default: main-mcan2-gpio-pins-default {
++		pinctrl-single,pins = <
++			J721E_IOPAD(0x200, PIN_INPUT, 7) /* (AC4) UART1_CTSn.GPIO0_127 */
++		>;
++	};
+ };
+ 
+ &wkup_pmx0 {
+@@ -252,6 +308,33 @@
+ 			J721E_WKUP_IOPAD(0x0088, PIN_INPUT, 0) /* MCU_MDIO0_MDIO */
+ 		>;
+ 	};
++
++	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
++		pinctrl-single,pins = <
++			J721E_WKUP_IOPAD(0xac, PIN_INPUT, 0) /* (C29) MCU_MCAN0_RX */
++			J721E_WKUP_IOPAD(0xa8, PIN_OUTPUT, 0) /* (D29) MCU_MCAN0_TX */
++		>;
++	};
++
++	mcu_mcan0_gpio_pins_default: mcu-mcan0-gpio-pins-default {
++		pinctrl-single,pins = <
++			J721E_WKUP_IOPAD(0xb0, PIN_INPUT, 7) /* (F26) WKUP_GPIO0_0 */
++			J721E_WKUP_IOPAD(0x98, PIN_INPUT, 7) /* (E28) MCU_SPI0_D1.WKUP_GPIO0_54 */
++		>;
++	};
++
++	mcu_mcan1_pins_default: mcu-mcan1-pins-default {
++		pinctrl-single,pins = <
++			J721E_WKUP_IOPAD(0xc4, PIN_INPUT, 0) /* (G24) WKUP_GPIO0_5.MCU_MCAN1_RX */
++			J721E_WKUP_IOPAD(0xc0, PIN_OUTPUT, 0) /* (G25) WKUP_GPIO0_4.MCU_MCAN1_TX */
++		>;
++	};
++
++	mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
++		pinctrl-single,pins = <
++			J721E_WKUP_IOPAD(0xb8, PIN_INPUT, 7) /* (F28) WKUP_GPIO0_2 */
++		>;
++	};
+ };
+ 
+ &wkup_uart0 {
+@@ -773,3 +856,75 @@
+ &icssg1_mdio {
+ 	status = "disabled";
+ };
++
++&mcu_mcan0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_mcan0_pins_default>;
++	phys = <&transceiver1>;
++};
++
++&mcu_mcan1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&mcu_mcan1_pins_default>;
++	phys = <&transceiver2>;
++};
++
++&main_mcan0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan0_pins_default>;
++	phys = <&transceiver3>;
++};
++
++&main_mcan1 {
++	status = "disabled";
++};
++
++&main_mcan2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&main_mcan2_pins_default>;
++	phys = <&transceiver4>;
++};
++
++&main_mcan3 {
++	status = "disabled";
++};
++
++&main_mcan4 {
++	status = "disabled";
++};
++
++&main_mcan5 {
++	status = "disabled";
++};
++
++&main_mcan6 {
++	status = "disabled";
++};
++
++&main_mcan7 {
++	status = "disabled";
++};
++
++&main_mcan8 {
++	status = "disabled";
++};
++
++&main_mcan9 {
++	status = "disabled";
++};
++
++&main_mcan10 {
++	status = "disabled";
++};
++
++&main_mcan11 {
++	status = "disabled";
++};
++
++&main_mcan12 {
++	status = "disabled";
++};
++
++&main_mcan13 {
++	status = "disabled";
++};
 -- 
 2.17.1
 
