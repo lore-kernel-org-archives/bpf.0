@@ -2,202 +2,297 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F434C433F5
-	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 22:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3839C433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 22:21:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29B2F610A1
-	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 22:05:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C352C610A0
+	for <bpf@archiver.kernel.org>; Wed,  6 Oct 2021 22:21:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbhJFWHM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Oct 2021 18:07:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58229 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230285AbhJFWHM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Oct 2021 18:07:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633557919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WIclh3AdLfVYAiQkIwrJSiR618YUkbU+lYFgoUPsNwE=;
-        b=DGGm5ynFE5V7eFaxuE/pFDB0Wi5nDuD1uILyZDlRi6KzEeZ92lFDG4EmKJmZcq50HvoJ5j
-        2MRJlksYC6P9+ZIyW7qYLB3aoOm2zTMyIe4H8c+pr2Ucp1ejoWhli8F7vG1gb1V/ZQGLdr
-        fB73ePek99v2olj49TsMfr0Qt5nf+5U=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-603-6I5pqS0FMdqlcbi20i-q6A-1; Wed, 06 Oct 2021 18:05:17 -0400
-X-MC-Unique: 6I5pqS0FMdqlcbi20i-q6A-1
-Received: by mail-wr1-f70.google.com with SMTP id k16-20020a5d6290000000b00160753b430fso3109781wru.11
-        for <bpf@vger.kernel.org>; Wed, 06 Oct 2021 15:05:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WIclh3AdLfVYAiQkIwrJSiR618YUkbU+lYFgoUPsNwE=;
-        b=F64oRoAEs9mFdmWE0Gq3v4Qs7FVNDuaX5DPpUjN4Px4aNIi+01hSMN0aAATCRTSReN
-         xHtBvTzBiBD7Unr02OEkrUAEeQ6y+2mccoDNmQGi8ePRhJxDeXWXoYFOLzfMPKXT1u8c
-         MtV7Bl3mw+vfKfVQnZjfac1QcnwMoiDYzel/wm5oGMixuYoYS4wBaPgTmy1uBKz7Frge
-         Z3DwaSzNlcKfZoqD+l/TjIpOmbiN/pKV5+Gli7GOv3+9f7n5E2tGL/a+y07aODBa5DVG
-         KV/8t9P0zVLuKKfXEgMsxREY+tWj281U7614vejmodKeVr4eHw1VDieEo61piW5JtUFc
-         ZFYg==
-X-Gm-Message-State: AOAM5321dbN7nDqH8Jya9nYvSkKorhH9J5wFtXK20w25G7BYXIh4pZBR
-        5qoykzTBrIwXDX4BTrQzzP/6cWYyEjkbroxhRlG7GXLBScPS0aAvy3LtWxvHLa9/3e4k2Zyx2Kp
-        kK4NM+A+i+jdj
-X-Received: by 2002:adf:b7c1:: with SMTP id t1mr688005wre.387.1633557916632;
-        Wed, 06 Oct 2021 15:05:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRTA68peCg8NEEERGtCSLZCyWO84r+k/Kvv8uWPQpdDnts+ZtGWzwc43c2i45LBMnvVeWplA==
-X-Received: by 2002:adf:b7c1:: with SMTP id t1mr687965wre.387.1633557916339;
-        Wed, 06 Oct 2021 15:05:16 -0700 (PDT)
-Received: from krava ([83.240.63.48])
-        by smtp.gmail.com with ESMTPSA id i6sm12105401wrv.61.2021.10.06.15.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Oct 2021 15:05:16 -0700 (PDT)
-Date:   Thu, 7 Oct 2021 00:05:14 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Viktor Malik <vmalik@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Subject: Re: [RFC] store function address in BTF
-Message-ID: <YV4dmkXO6nkB2DeV@krava>
-References: <YV1hRboJopUBLm3H@krava>
- <CAEf4BzZPH6WQTYaUTpWBw1gW=cNUtPYPnN8OySgXtbQLzZLhEQ@mail.gmail.com>
- <YV4Bx7705mgWzhTd@krava>
- <CAEf4BzbirA4F_kW-sVrS_YmfUxhAjYVDwO1BvtzTYyngqHLkiw@mail.gmail.com>
+        id S230292AbhJFWXY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Oct 2021 18:23:24 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37920 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230236AbhJFWXY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 6 Oct 2021 18:23:24 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 196M3cmV027614
+        for <bpf@vger.kernel.org>; Wed, 6 Oct 2021 15:21:31 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=tpvrmC9X0utdZCbHTTYba8Xu1YZ66mzNHmJWWZpyfak=;
+ b=JfjWvooHVbDpRSdoUt/BkSPg9vrNm+eVs37HDo/nNY1F2R+vDltcxgLQN+Q0zTIkwN5D
+ DYhQvD0OrjWq+ZRhU+ZRm4E7sB0U2Bevxq6T/hR0QKd1AOsSHD14o9r98cLfo2EPO97v
+ 3ylaWU8FaJuZqtck8Cxyad4SFwbPLMHf0bw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 3bhfn52fa3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 06 Oct 2021 15:21:31 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Wed, 6 Oct 2021 15:21:30 -0700
+Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
+        id B3230345188F; Wed,  6 Oct 2021 15:21:29 -0700 (PDT)
+From:   Joanne Koong <joannekoong@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Joanne Koong <joannekoong@fb.com>
+Subject: [PATCH bpf-next v4 2/5] libbpf: Add "map_extra" as a per-map-type extra flag
+Date:   Wed, 6 Oct 2021 15:21:00 -0700
+Message-ID: <20211006222103.3631981-3-joannekoong@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211006222103.3631981-1-joannekoong@fb.com>
+References: <20211006222103.3631981-1-joannekoong@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbirA4F_kW-sVrS_YmfUxhAjYVDwO1BvtzTYyngqHLkiw@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: zbXo7tx_ot9QlfdsnPnFXsQjI2lOHLC_
+X-Proofpoint-ORIG-GUID: zbXo7tx_ot9QlfdsnPnFXsQjI2lOHLC_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-10-06_04,2021-10-06_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ spamscore=0 phishscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ bulkscore=0 clxscore=1015 mlxlogscore=999 priorityscore=1501
+ malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109230001 definitions=main-2110060139
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 06, 2021 at 02:22:28PM -0700, Andrii Nakryiko wrote:
-> On Wed, Oct 6, 2021 at 1:06 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Wed, Oct 06, 2021 at 09:17:39AM -0700, Andrii Nakryiko wrote:
-> > > On Wed, Oct 6, 2021 at 1:42 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > > >
-> > > > hi,
-> > > > I'm hitting performance issue and soft lock ups with the new version
-> > > > of the patchset and the reason seems to be kallsyms lookup that we
-> > > > need to do for each btf id we want to attach
-> > > >
-> > > > I tried to change kallsyms_lookup_name linear search into rbtree search,
-> > > > but it has its own pitfalls like duplicate function names and it still
-> > > > seems not to be fast enough when you want to attach like 30k functions
-> > >
-> > > How not fast enough is it exactly? How long does it take?
-> >
-> > 30k functions takes 75 seconds for me, it's loop calling bpf_check_attach_target
-> >
-> > getting soft lock up messages:
-> >
-> > krava33 login: [  168.896671] watchdog: BUG: soft lockup - CPU#1 stuck for 26s! [bpftrace:1087]
-> >
-> 
-> That's without RB tree right? I was curious about the case of you
-> converting kallsyms to RB tree and it still being slow. Can't imagine
-> 30k queries against RB tree with ~160k kallsyms taking 75 seconds.
+This patch adds the libbpf infrastructure for supporting a
+per-map-type "map_extra" field, whose definition will be
+idiosyncratic depending on map type.
 
-yep, that's the standard kallsyms lookup api
+For example, for the bitset map, the lower 4 bits of map_extra
+is used to denote the number of hash functions.
 
-I need to make some adjustment for rbtree kalsyms code, I think I found
-a bug in there, so the numbers are probably better as you suggest
+Signed-off-by: Joanne Koong <joannekoong@fb.com>
+---
+ include/uapi/linux/bpf.h        |  1 +
+ tools/include/uapi/linux/bpf.h  |  1 +
+ tools/lib/bpf/bpf.c             |  1 +
+ tools/lib/bpf/bpf.h             |  1 +
+ tools/lib/bpf/bpf_helpers.h     |  1 +
+ tools/lib/bpf/libbpf.c          | 25 ++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.h          |  4 ++++
+ tools/lib/bpf/libbpf.map        |  2 ++
+ tools/lib/bpf/libbpf_internal.h |  4 +++-
+ 9 files changed, 38 insertions(+), 2 deletions(-)
 
-> 
-> But as I said, why not map BTF IDs into function names, sort function
-> names, and then pass over kallsyms once, doing binary search into a
-> sorted array of requested function names and then recording addr for
-> each. Then check that you found addresses for all functions (it also
-> leaves a question of what to do when we have multiple matching
-> functions, but it's a problem with any approach). If everything checks
-> out, you have a nice btf id -> func name -> func addr mapping. It's
-> O(N log(M)), which sounds like it shouldn't be slow. Definitely not
-> multiple seconds slow.
-
-ok, now that's clear to me, thanks for these details
-
-> 
-> 
-> >
-> > >
-> > > >
-> > > > so I wonder we could 'fix this' by storing function address in BTF,
-> > > > which would cut kallsyms lookup completely, because it'd be done in
-> > > > compile time
-> > > >
-> > > > my first thought was to add extra BTF section for that, after discussion
-> > > > with Arnaldo perhaps we could be able to store extra 8 bytes after
-> > > > BTF_KIND_FUNC record, using one of the 'unused' bits in btf_type to
-> > > > indicate that? or new BTF_KIND_FUNC2 type?
-> > > >
-> > > > thoughts?
-> > >
-> > > I'm strongly against this, because (besides the BTF bloat reason) we
-> > > need similar mass attachment functionality for kprobe/kretprobe and
-> > > that one won't be relying on BTF FUNCs, so I think it's better to
-> > > stick to the same mechanism for figuring out the address of the
-> > > function.
-> >
-> > ok
-> >
-> > >
-> > > If RB tree is not feasible, we can do a linear search over unsorted
-> > > kallsyms and do binary search over sorted function names (derived from
-> > > BTF IDs). That would be O(Nlog(M)), where N is number of ksyms, M is
-> > > number of BTF IDs/functions-to-be-attached-to. If we did have an RB
-> > > tree for kallsyms (is it hard to support duplicates? why?) it could be
-> > > even faster O(Mlog(N)).
-> >
-> > I had issues with generic kallsyms rbtree in the post some time ago,
-> > I'll revisit it to check on details.. but having the tree with just
-> > btf id functions might clear that.. I'll check
-> 
-> That's not what I'm proposing. See above. Please let me know if
-> something is not clear before going all in for RB tree implementation
-> :)
-> 
-> 
-> But while we are on topic, do you think (with ftrace changes you are
-> doing) it would be hard to support multi-attach for
-> kprobes/kretprobes? We now have bpf_link interface for attaching
-> kprobes, so API can be pretty aligned with fentry/fexit, except
-> instead of btf IDs we'd need to pass array of pointers of C strings, I
-> suppose.
-
-hum, I think kprobe/kretprobe is made of perf event (kprobe/kretprobe
-pmus), then you pass event fd and program fd to bpf link syscall,
-and it attaches bpf program to that perf event
-
-so perhaps the user interface would be array of perf events fds and prog fd
-
-also I think you can have just one probe for function, so we will not need
-to share kprobes for multiple users like we need for trampolines, so the
-attach logic will be simple
-
-jirka
-
-> 
-> >
-> > thanks,
-> > jirka
-> >
-> > >
-> > >
-> > > >
-> > > > thanks,
-> > > > jirka
-> > > >
-> > >
-> >
-> 
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b40fa1a72a75..a6f225e9c95a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5639,6 +5639,7 @@ struct bpf_map_info {
+ 	__u32 btf_id;
+ 	__u32 btf_key_type_id;
+ 	__u32 btf_value_type_id;
++	__u32 map_extra;
+ } __attribute__((aligned(8)));
+=20
+ struct bpf_btf_info {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index b40fa1a72a75..a6f225e9c95a 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5639,6 +5639,7 @@ struct bpf_map_info {
+ 	__u32 btf_id;
+ 	__u32 btf_key_type_id;
+ 	__u32 btf_value_type_id;
++	__u32 map_extra;
+ } __attribute__((aligned(8)));
+=20
+ struct bpf_btf_info {
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 7d1741ceaa32..41e3e85e7789 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -97,6 +97,7 @@ int bpf_create_map_xattr(const struct bpf_create_map_at=
+tr *create_attr)
+ 	attr.btf_key_type_id =3D create_attr->btf_key_type_id;
+ 	attr.btf_value_type_id =3D create_attr->btf_value_type_id;
+ 	attr.map_ifindex =3D create_attr->map_ifindex;
++	attr.map_extra =3D create_attr->map_extra;
+ 	if (attr.map_type =3D=3D BPF_MAP_TYPE_STRUCT_OPS)
+ 		attr.btf_vmlinux_value_type_id =3D
+ 			create_attr->btf_vmlinux_value_type_id;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 6fffb3cdf39b..c4049f2d63cc 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -50,6 +50,7 @@ struct bpf_create_map_attr {
+ 		__u32 inner_map_fd;
+ 		__u32 btf_vmlinux_value_type_id;
+ 	};
++	__u32 map_extra;
+ };
+=20
+ LIBBPF_API int
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 963b1060d944..bce5a0090f3f 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -133,6 +133,7 @@ struct bpf_map_def {
+ 	unsigned int value_size;
+ 	unsigned int max_entries;
+ 	unsigned int map_flags;
++	unsigned int map_extra;
+ };
+=20
+ enum libbpf_pin_type {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ed313fd491bd..12a9ecd45a78 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2274,6 +2274,10 @@ int parse_btf_map_def(const char *map_name, struct=
+ btf *btf,
+ 			}
+ 			map_def->pinning =3D val;
+ 			map_def->parts |=3D MAP_DEF_PINNING;
++		} else if (strcmp(name, "map_extra") =3D=3D 0) {
++			if (!get_map_field_int(map_name, btf, m, &map_def->map_extra))
++				return -EINVAL;
++			map_def->parts |=3D MAP_DEF_MAP_EXTRA;
+ 		} else {
+ 			if (strict) {
+ 				pr_warn("map '%s': unknown field '%s'.\n", map_name, name);
+@@ -2298,6 +2302,7 @@ static void fill_map_from_def(struct bpf_map *map, =
+const struct btf_map_def *def
+ 	map->def.value_size =3D def->value_size;
+ 	map->def.max_entries =3D def->max_entries;
+ 	map->def.map_flags =3D def->map_flags;
++	map->def.map_extra =3D def->map_extra;
+=20
+ 	map->numa_node =3D def->numa_node;
+ 	map->btf_key_type_id =3D def->key_type_id;
+@@ -2322,6 +2327,8 @@ static void fill_map_from_def(struct bpf_map *map, =
+const struct btf_map_def *def
+ 		pr_debug("map '%s': found max_entries =3D %u.\n", map->name, def->max_=
+entries);
+ 	if (def->parts & MAP_DEF_MAP_FLAGS)
+ 		pr_debug("map '%s': found map_flags =3D %u.\n", map->name, def->map_fl=
+ags);
++	if (def->parts & MAP_DEF_MAP_EXTRA)
++		pr_debug("map '%s': found map_extra =3D %u.\n", map->name, def->map_ex=
+tra);
+ 	if (def->parts & MAP_DEF_PINNING)
+ 		pr_debug("map '%s': found pinning =3D %u.\n", map->name, def->pinning)=
+;
+ 	if (def->parts & MAP_DEF_NUMA_NODE)
+@@ -4017,6 +4024,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 	map->def.value_size =3D info.value_size;
+ 	map->def.max_entries =3D info.max_entries;
+ 	map->def.map_flags =3D info.map_flags;
++	map->def.map_extra =3D info.map_extra;
+ 	map->btf_key_type_id =3D info.btf_key_type_id;
+ 	map->btf_value_type_id =3D info.btf_value_type_id;
+ 	map->reused =3D true;
+@@ -4534,7 +4542,8 @@ static bool map_is_reuse_compat(const struct bpf_ma=
+p *map, int map_fd)
+ 		map_info.key_size =3D=3D map->def.key_size &&
+ 		map_info.value_size =3D=3D map->def.value_size &&
+ 		map_info.max_entries =3D=3D map->def.max_entries &&
+-		map_info.map_flags =3D=3D map->def.map_flags);
++		map_info.map_flags =3D=3D map->def.map_flags &&
++		map_info.map_extra =3D=3D map->def.map_extra);
+ }
+=20
+ static int
+@@ -4631,6 +4640,7 @@ static int bpf_object__create_map(struct bpf_object=
+ *obj, struct bpf_map *map, b
+ 	create_attr.key_size =3D def->key_size;
+ 	create_attr.value_size =3D def->value_size;
+ 	create_attr.numa_node =3D map->numa_node;
++	create_attr.map_extra =3D def->map_extra;
+=20
+ 	if (def->type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY && !def->max_entries=
+) {
+ 		int nr_cpus;
+@@ -8637,6 +8647,19 @@ int bpf_map__set_map_flags(struct bpf_map *map, __=
+u32 flags)
+ 	return 0;
+ }
+=20
++__u32 bpf_map__map_extra(const struct bpf_map *map)
++{
++	return map->def.map_extra;
++}
++
++int bpf_map__set_map_extra(struct bpf_map *map, __u32 map_extra)
++{
++	if (map->fd >=3D 0)
++		return libbpf_err(-EBUSY);
++	map->def.map_extra =3D map_extra;
++	return 0;
++}
++
+ __u32 bpf_map__numa_node(const struct bpf_map *map)
+ {
+ 	return map->numa_node;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 89ca9c83ed4e..55e8dfe6f3e1 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -486,6 +486,7 @@ struct bpf_map_def {
+ 	unsigned int value_size;
+ 	unsigned int max_entries;
+ 	unsigned int map_flags;
++	unsigned int map_extra;
+ };
+=20
+ /**
+@@ -562,6 +563,9 @@ LIBBPF_API __u32 bpf_map__btf_value_type_id(const str=
+uct bpf_map *map);
+ /* get/set map if_index */
+ LIBBPF_API __u32 bpf_map__ifindex(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
++/* get/set map map_extra flags */
++LIBBPF_API __u32 bpf_map__map_extra(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_map_extra(struct bpf_map *map, __u32 map_ext=
+ra);
+=20
+ typedef void (*bpf_map_clear_priv_t)(struct bpf_map *, void *);
+ LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index f270d25e4af3..308378b3f20b 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -395,4 +395,6 @@ LIBBPF_0.6.0 {
+ 		bpf_object__prev_program;
+ 		btf__add_btf;
+ 		btf__add_tag;
++		bpf_map__map_extra;
++		bpf_map__set_map_extra;
+ } LIBBPF_0.5.0;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+index f7fd3944d46d..188db854d9c2 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -193,8 +193,9 @@ enum map_def_parts {
+ 	MAP_DEF_NUMA_NODE	=3D 0x080,
+ 	MAP_DEF_PINNING		=3D 0x100,
+ 	MAP_DEF_INNER_MAP	=3D 0x200,
++	MAP_DEF_MAP_EXTRA	=3D 0x400,
+=20
+-	MAP_DEF_ALL		=3D 0x3ff, /* combination of all above */
++	MAP_DEF_ALL		=3D 0x7ff, /* combination of all above */
+ };
+=20
+ struct btf_map_def {
+@@ -208,6 +209,7 @@ struct btf_map_def {
+ 	__u32 map_flags;
+ 	__u32 numa_node;
+ 	__u32 pinning;
++	__u32 map_extra;
+ };
+=20
+ int parse_btf_map_def(const char *map_name, struct btf *btf,
+--=20
+2.30.2
 
