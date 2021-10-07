@@ -2,231 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 136AEC433EF
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 14:30:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 359F5C433EF
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 14:41:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E78F1610C8
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 14:30:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 188A1610C8
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 14:41:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242084AbhJGOcY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Oct 2021 10:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbhJGOcY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Oct 2021 10:32:24 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394D4C061746
-        for <bpf@vger.kernel.org>; Thu,  7 Oct 2021 07:30:30 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id v18so24056689edc.11
-        for <bpf@vger.kernel.org>; Thu, 07 Oct 2021 07:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8fTtRnswbazIUnyAHS8h/DFC2rlG7Kd7HlnILrsmiPo=;
-        b=CkeB/+aFckGK+ggkMunX6zz4pReX6IHgo+AX9eshy5rULWn75FlkdL64GbY4GzyL99
-         1txZdtInDGFaTEUxk+eoTH8RP2tSoJCC5ddFqOu1RhOFhWL/9R5LZZ09UndWCVGI4R45
-         qJQCwRnXCUxbgPvwzL2mCLTKPL55JfBBmPM2Xfh8DCdbetFn6y1hE5GswgbwRUw+vsKZ
-         efb/QlNw+aL/IWbDZ2fy3LJDzmoW3U5NdiWEcXkV2nypYmcXCKAfMvqfHWHnaFU4tuMT
-         BYC3aPoOaxUZ11RT+gGtSJ3oaBQ7Qg+fRkWbVkQ8tQvUAtJYMF53quVL7rj3tuyXbl9h
-         /ryQ==
+        id S241999AbhJGOnk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Oct 2021 10:43:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40400 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242064AbhJGOnk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 7 Oct 2021 10:43:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1633617706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9UsAj+RvkqSk1B1eEQgMjvEXwWnDtfISX9Eoc5Bzxs0=;
+        b=dG/8cvIs2WYi1JdcfrjyDsUJpOWl6h6mSr3Vm+JZFjioaV8qp6klf2wmNzD/hh0w9e3aRL
+        YU+x8V82S1abzA4gWcn8CLD2BZI/NI6VuA2OjJs44PUrbWpe/XCa12afzJoMgu5tTAiXCV
+        lLzHmepQClajsWOoCiEJvtHNNM/AMgs=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-498-dMNBm8mpOemDSWSwoGbSaQ-1; Thu, 07 Oct 2021 10:41:45 -0400
+X-MC-Unique: dMNBm8mpOemDSWSwoGbSaQ-1
+Received: by mail-ed1-f72.google.com with SMTP id q26-20020aa7da9a000000b003db531e7acbso1749952eds.22
+        for <bpf@vger.kernel.org>; Thu, 07 Oct 2021 07:41:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8fTtRnswbazIUnyAHS8h/DFC2rlG7Kd7HlnILrsmiPo=;
-        b=MrXnZUzH3RpFwtFjwQknSUCArlwGx98PXl5wbZK0kB1VHrXPO8xsFEvSGof/Hj2oEh
-         JbLC+H/az20W9pUGhK+WJqRtQpOogLy1j4he9BmWJvlyyYYiMDZjelGJcEyzqzFeX2Nx
-         kljbn42gSdQXqdMBoBYasb+bQYytwkm/HeNaHIgwS+QByhwxbS1/iiXYausYwHEpOymg
-         GEiV8HGoF5zXhqx3Gvz1Au4Y3sbq6o0D99Aabh73IRjUgcNpyj5UNKk7G0XEmgvT7Ce6
-         UMkGKJ3I74TZm0Z15k9Pv8oHxMsbV9lku7OTIq4IdoH/FMtpK+/EAJI5vSjnPHAFPpqE
-         ktug==
-X-Gm-Message-State: AOAM531WqAL6SZh4fTmOz6pFI/irTMwOsgN5paLg4TllThz4aBxEr5+T
-        E65gqPWDIFe2pG5N1t20OvsgjA==
-X-Google-Smtp-Source: ABdhPJxGdFpuWq1cKWHvzh+Ut2ycwFwcDKQsCM9wHceOxXnT1292AF+3QOXiBCiJ9BslzRQRL84JKw==
-X-Received: by 2002:a50:be8f:: with SMTP id b15mr6745943edk.200.1633617020623;
-        Thu, 07 Oct 2021 07:30:20 -0700 (PDT)
-Received: from anpc2.lan (static-213-115-136-2.sme.telenor.se. [213.115.136.2])
-        by smtp.gmail.com with ESMTPSA id og39sm3617830ejc.93.2021.10.07.07.30.19
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=9UsAj+RvkqSk1B1eEQgMjvEXwWnDtfISX9Eoc5Bzxs0=;
+        b=C0m2UAc0ntRERWDBj+jloV21VmvIb4Yq8CjkPN8iLlvkWtEFZi6EQp/9m+iyGte5je
+         Cq/r7DMhRL/udAsnXvieoWClsfQRonISgsIERX0yEvotM1716CseNG0thS/JPFAdAJoc
+         rP1Q4T7vlElLkmxWUcNRCJuHSL+SrGV8twBpytPB1A/KUOP2piywTYD0eFd8qfZJ5zXy
+         V9jvXnfrLiq09uHE2FiZAu5+qBop6pSw9byzQV2q/oztmyEv07N9Q6ziFkoDcm4rcAr7
+         fm046+npmxUKQXW63mZlGKfzDJRsDlx1Y0C/i/dDkiyzGAxYZ7Ebsnm8Vst+T4beHppM
+         3NkA==
+X-Gm-Message-State: AOAM531FVC/D1RAq79tt84/WnJKlCZs0fi8o5c9qHMSjcLH1OVcwmTBr
+        elGnOb5qXUbFE5lXpJB2SrM5skQJxUlqhblC8pKMmEUoQMaap5tcHyl6tOE2aPV9e7XBQuuBoJC
+        e83tdojWIdZTo
+X-Received: by 2002:a17:906:a3c4:: with SMTP id ca4mr5944631ejb.529.1633617704011;
+        Thu, 07 Oct 2021 07:41:44 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzeNIJPlwwnvwGXyY8+AXFH3jjdLd70rNGsjxas2Uu97WK1uAY7zz/494/IF5D9WG4divTqWw==
+X-Received: by 2002:a17:906:a3c4:: with SMTP id ca4mr5944597ejb.529.1633617703677;
+        Thu, 07 Oct 2021 07:41:43 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ke24sm2505369ejc.73.2021.10.07.07.41.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 07:30:20 -0700 (PDT)
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next] bpf, tests: Add more LD_IMM64 tests
-Date:   Thu,  7 Oct 2021 16:30:06 +0200
-Message-Id: <20211007143006.634308-1-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 07 Oct 2021 07:41:42 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 4B521180151; Thu,  7 Oct 2021 16:41:42 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Joanne Koong <joannekoong@fb.com>, bpf@vger.kernel.org
+Cc:     kafai@fb.com, netdev@vger.kernel.org, Kernel-team@fb.com
+Subject: Re: [PATCH bpf-next v2 0/3] Add XDP support for bpf_load_hdr_opt
+In-Reply-To: <20211006230543.3928580-1-joannekoong@fb.com>
+References: <20211006230543.3928580-1-joannekoong@fb.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 07 Oct 2021 16:41:42 +0200
+Message-ID: <87h7dsnbh5.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds new tests for the two-instruction LD_IMM64. The new tests
-verify the operation with immediate values of different byte patterns.
-Mainly intended to cover JITs that want to be clever when loading 64-bit
-constants.
+Joanne Koong <joannekoong@fb.com> writes:
 
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
- lib/test_bpf.c | 120 +++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 117 insertions(+), 3 deletions(-)
+> Currently, bpf_sockops programs have been using bpf_load_hdr_opt() to
+> parse the tcp header option. It will be useful to allow other bpf prog
+> types to have a similar way of handling tcp hdr options.
+>
+> This series adds XDP support for bpf_load_hdr_opt(). At a high level,
+> these patches are:
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index b9fc330fc83b..e5b10fdefab5 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -2134,7 +2134,7 @@ static int bpf_fill_atomic32_cmpxchg_reg_pairs(struct bpf_test *self)
-  * of the immediate value. This is often the case if the native instruction
-  * immediate field width is narrower than 32 bits.
-  */
--static int bpf_fill_ld_imm64(struct bpf_test *self)
-+static int bpf_fill_ld_imm64_magn(struct bpf_test *self)
- {
- 	int block = 64; /* Increase for more tests per MSB position */
- 	int len = 3 + 8 * 63 * block * 2;
-@@ -2180,6 +2180,88 @@ static int bpf_fill_ld_imm64(struct bpf_test *self)
- 	return 0;
- }
- 
-+/*
-+ * Test the two-instruction 64-bit immediate load operation for different
-+ * combinations of bytes. Each byte in the 64-bit word is constructed as
-+ * (base & mask) | (rand() & ~mask), where rand() is a deterministic LCG.
-+ * All patterns (base1, mask1) and (base2, mask2) bytes are tested.
-+ */
-+static int __bpf_fill_ld_imm64_bytes(struct bpf_test *self,
-+				     u8 base1, u8 mask1,
-+				     u8 base2, u8 mask2)
-+{
-+	struct bpf_insn *insn;
-+	int len = 3 + 8 * BIT(8);
-+	int pattern, index;
-+	u32 rand = 1;
-+	int i = 0;
-+
-+	insn = kmalloc_array(len, sizeof(*insn), GFP_KERNEL);
-+	if (!insn)
-+		return -ENOMEM;
-+
-+	insn[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 0);
-+
-+	for (pattern = 0; pattern < BIT(8); pattern++) {
-+		u64 imm = 0;
-+
-+		for (index = 0; index < 8; index++) {
-+			int byte;
-+
-+			if (pattern & BIT(index))
-+				byte = (base1 & mask1) | (rand & ~mask1);
-+			else
-+				byte = (base2 & mask2) | (rand & ~mask2);
-+			imm = (imm << 8) | byte;
-+		}
-+
-+		/* Update our LCG */
-+		rand = rand * 1664525 + 1013904223;
-+
-+		/* Perform operation */
-+		i += __bpf_ld_imm64(&insn[i], R1, imm);
-+
-+		/* Load reference */
-+		insn[i++] = BPF_ALU32_IMM(BPF_MOV, R2, imm);
-+		insn[i++] = BPF_ALU32_IMM(BPF_MOV, R3, (u32)(imm >> 32));
-+		insn[i++] = BPF_ALU64_IMM(BPF_LSH, R3, 32);
-+		insn[i++] = BPF_ALU64_REG(BPF_OR, R2, R3);
-+
-+		/* Check result */
-+		insn[i++] = BPF_JMP_REG(BPF_JEQ, R1, R2, 1);
-+		insn[i++] = BPF_EXIT_INSN();
-+	}
-+
-+	insn[i++] = BPF_ALU64_IMM(BPF_MOV, R0, 1);
-+	insn[i++] = BPF_EXIT_INSN();
-+
-+	self->u.ptr.insns = insn;
-+	self->u.ptr.len = len;
-+	BUG_ON(i != len);
-+
-+	return 0;
-+}
-+
-+static int bpf_fill_ld_imm64_checker(struct bpf_test *self)
-+{
-+	return __bpf_fill_ld_imm64_bytes(self, 0, 0xff, 0xff, 0xff);
-+}
-+
-+static int bpf_fill_ld_imm64_pos_neg(struct bpf_test *self)
-+{
-+	return __bpf_fill_ld_imm64_bytes(self, 1, 0x81, 0x80, 0x80);
-+}
-+
-+static int bpf_fill_ld_imm64_pos_zero(struct bpf_test *self)
-+{
-+	return __bpf_fill_ld_imm64_bytes(self, 1, 0x81, 0, 0xff);
-+}
-+
-+static int bpf_fill_ld_imm64_neg_zero(struct bpf_test *self)
-+{
-+	return __bpf_fill_ld_imm64_bytes(self, 0x80, 0x80, 0, 0xff);
-+}
-+
- /*
-  * Exhaustive tests of JMP operations for all combinations of power-of-two
-  * magnitudes of the operands, both for positive and negative values. The
-@@ -12401,14 +12483,46 @@ static struct bpf_test tests[] = {
- 		.fill_helper = bpf_fill_alu32_mod_reg,
- 		.nr_testruns = NR_PATTERN_RUNS,
- 	},
--	/* LD_IMM64 immediate magnitudes */
-+	/* LD_IMM64 immediate magnitudes and byte patterns */
- 	{
- 		"LD_IMM64: all immediate value magnitudes",
- 		{ },
- 		INTERNAL | FLAG_NO_DATA,
- 		{ },
- 		{ { 0, 1 } },
--		.fill_helper = bpf_fill_ld_imm64,
-+		.fill_helper = bpf_fill_ld_imm64_magn,
-+	},
-+	{
-+		"LD_IMM64: checker byte patterns",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_ld_imm64_checker,
-+	},
-+	{
-+		"LD_IMM64: random positive and zero byte patterns",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_ld_imm64_pos_zero,
-+	},
-+	{
-+		"LD_IMM64: random negative and zero byte patterns",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_ld_imm64_neg_zero,
-+	},
-+	{
-+		"LD_IMM64: random positive and negative byte patterns",
-+		{ },
-+		INTERNAL | FLAG_NO_DATA,
-+		{ },
-+		{ { 0, 1 } },
-+		.fill_helper = bpf_fill_ld_imm64_pos_neg,
- 	},
- 	/* 64-bit ATOMIC register combinations */
- 	{
--- 
-2.30.2
+Why is this needed? Why not just parse the header directly in XDP? Seems
+a bit arbitrary to add a helper for this particular type of packet
+payload parsing to this particular program type. I.e., what about other
+headers (IP options?)? Are we going to have a whole bunch of
+special-purpose parsing helpers to pick out protocol data from packets?
+
+Also, why only enable this for XDP (and not, say the TC hook as well)?
+
+-Toke
 
