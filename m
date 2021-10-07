@@ -2,40 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15198C433EF
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:00:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A7ACC433FE
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:00:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1A18610CC
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:00:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7080D610CC
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241530AbhJGUCC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Oct 2021 16:02:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43176 "EHLO mail.kernel.org"
+        id S241670AbhJGUCE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Oct 2021 16:02:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236210AbhJGUCB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S241477AbhJGUCB (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 7 Oct 2021 16:02:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 50561610C8;
+Received: by mail.kernel.org (Postfix) with ESMTPS id 665246112D;
         Thu,  7 Oct 2021 20:00:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1633636807;
-        bh=RH9bOR8XoFNTkhlmoufx0mIr+7AtFOAnO2k9u1/anN0=;
+        bh=vBf7O5HaMg+yen9rxsqNpu/kJW27dU+jgbD/U9q/aRw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ry1xVbO/WFeMCyY24JvHajNSVBWQl8AglidLCWTzPvJhgMZeqkNgtHsQEMnEsrPdG
-         8vNqD8Jcq/TVFoJG4276eFrJhDoWzTZIVnY2tV0ws+g5JA85vaCVZ4r7zxFmcTiWgi
-         BuxC1c8Iexl289Ak1+PQPQscWC1y8B7118u7U7K9HTjbtSr+rbtrPsq6LRA30jCaF8
-         KLV298auCASjrV23Ii1Vl7SvGA0utxSbiJY0oSH6bQOcWKtGHQfgLPv9yUlEtj8aRY
-         6WUlTcdtQXIiFzc6ZJED/2Txl3K7Hiln+hu2t6f4SrkAbbJHFnIC6DjPA7M/f+P9xT
-         VDoyee6bl0efw==
+        b=kQOWpKiGswLw12/2lywgoHEz3UDSVJVgyyjAKFFKOrTOu15BVU8Ew8yGG78yXwi8A
+         M19ETubmSadYjMIBPkN0n3dlMUcIkfDaQEP06sEIqhJ3jJgcSBTW/s9mamkM0N0T5n
+         IrbQRV3kKDSzBMLkKya4ZWkfGyQdkTVUn4Ly8iErSLh6rOoLOZ9xcc2+5syBK5b+6f
+         C3wqs0ypbJWnZP7WSh5yE2ZQoOfzJE26RIL7xbP/SQ7/TQtmIOuXAaD7ddm+1vgivW
+         4rnr4JtnXPpI+Z/lYjAzpDhpnUAXY56ocrsJDUACgoO+Fuu3aN3i1nuuBPQOSGUoqk
+         AvTUFjFYog9Ww==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] mips,
- bpf: Fix Makefile that referenced a removed file
+Subject: Re: [PATCH bpf-next] mips, bpf: Optimize loading of 64-bit constants
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163363680726.2891.16519442145591885027.git-patchwork-notify@kernel.org>
+Message-Id: <163363680737.2891.16781139212094319162.git-patchwork-notify@kernel.org>
 Date:   Thu, 07 Oct 2021 20:00:07 +0000
-References: <20211007142339.633899-1-johan.almbladh@anyfinetworks.com>
-In-Reply-To: <20211007142339.633899-1-johan.almbladh@anyfinetworks.com>
+References: <20211007142828.634182-1-johan.almbladh@anyfinetworks.com>
+In-Reply-To: <20211007142828.634182-1-johan.almbladh@anyfinetworks.com>
 To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         paulburton@kernel.org, kafai@fb.com, songliubraving@fb.com,
@@ -51,19 +50,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Thu,  7 Oct 2021 16:23:39 +0200 you wrote:
-> This patch removes a stale Makefile reference to the cBPF JIT that was
-> removed.
+On Thu,  7 Oct 2021 16:28:28 +0200 you wrote:
+> This patch shaves off a few instructions when loading sparse 64-bit
+> constants to register. The change is covered by additional tests in
+> lib/test_bpf.c.
 > 
-> Fixes: 06b339fe5450 ("mips, bpf: Remove old BPF JIT implementations")
 > Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
 > ---
->  arch/mips/net/Makefile | 1 -
->  1 file changed, 1 deletion(-)
+>  arch/mips/net/bpf_jit_comp64.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
 Here is the summary with links:
-  - [bpf-next] mips, bpf: Fix Makefile that referenced a removed file
-    https://git.kernel.org/bpf/bpf-next/c/065485ac5e86
+  - [bpf-next] mips, bpf: Optimize loading of 64-bit constants
+    https://git.kernel.org/bpf/bpf-next/c/612ff31f7672
 
 You are awesome, thank you!
 --
