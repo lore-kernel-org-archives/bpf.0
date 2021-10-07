@@ -2,116 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7A9EC433EF
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11798C433F5
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:57:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B84A961130
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:55:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E7B216103C
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:57:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbhJGU5r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Oct 2021 16:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbhJGU5r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Oct 2021 16:57:47 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CB0C061570;
-        Thu,  7 Oct 2021 13:55:53 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id s16so6411304pfk.0;
-        Thu, 07 Oct 2021 13:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jS2/b+lbzWP06L31MQafqGN4NvFQGhEEw9KPUBF6vTU=;
-        b=ba0Y3T1KjkRH5mo4igmdhPrYnUBo93K2nbl3U48Oq4s06JeAjaWWqqQIUG9XVFXNy3
-         xqFxI63hLYFXDlLtg4kTuLJgEy6jxAuL1nQZrsvGEbBAObJNbV4PamO5sMQE9Qyo19aX
-         fU1zS/9jxJH6IDSmtuqF8mWWEzSeOA/9ZPNGEP5MlpHZZ3exnoZlYdN/Va7sAM9jx4gO
-         zBOKdndiM5sGfhjVF9HyGjCfq3d5scdSf53pAjfqdMlLr2xxIWQrltG4INLe0Dhaz8Is
-         LVQSYkUqIWoIa9EWzvicWSHx79HvGPL2sHS+UZjjHMUb3U4KCGvo952PQlzt6RTmGByD
-         Uuqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jS2/b+lbzWP06L31MQafqGN4NvFQGhEEw9KPUBF6vTU=;
-        b=XDkkG9ow7qiGB2Iz2bsW3wnRP5Q3U4eeXKgUzRAj54AV9jF8F3AUiwSp21QECk3u9/
-         FSs5AiAxq6yB3KOUr3YY4rwMwyP0HnsusuYJHADt+H4T39qkXiPTFD5S+sI8bzW9va/K
-         nDwunZik/faz1PH/e7RIC1hAN3o5WWFZFqRG8+oRm1D9UeeFR2x8ZLwa8fGWxxqWvN9y
-         hqESVKJuPmX/3rKPNP6U28O5zjIPPvMHgyb5fXP63VFiyuW9OXiaNnDgqH7KhSc8LWjM
-         EPt2ZKq26XoVXA5eaxiQo5BcljdRo6BR7BWuKRyHUD8K09VrFoPn9ZCR/Z9oJz6Agh/m
-         fKXQ==
-X-Gm-Message-State: AOAM532YmJk+ja/kr0JIFKykicrTgfpuJyxF+h1CYflCqHhNlEiB7xLV
-        VOdRfhkHglmVF4d66hggbFg=
-X-Google-Smtp-Source: ABdhPJzyID+dVU48WKqiH600GMBY5J8ckSNzbjGBYxKGnm4t7S+bTbRBGqbclAH5cUDrarR4LKoAgA==
-X-Received: by 2002:a05:6a00:15c9:b0:44c:a998:b50d with SMTP id o9-20020a056a0015c900b0044ca998b50dmr6401320pfu.49.1633640152661;
-        Thu, 07 Oct 2021 13:55:52 -0700 (PDT)
-Received: from localhost ([2405:201:6014:d058:a28d:3909:6ed5:29e7])
-        by smtp.gmail.com with ESMTPSA id j7sm288879pfh.168.2021.10.07.13.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Oct 2021 13:55:52 -0700 (PDT)
-Date:   Fri, 8 Oct 2021 02:25:49 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Song Liu <song@kernel.org>
+        id S233974AbhJGU7n (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Oct 2021 16:59:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35666 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233984AbhJGU7k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Oct 2021 16:59:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 97F7761260;
+        Thu,  7 Oct 2021 20:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633640266;
+        bh=kq9ipP3n9kqk0udZeE9so7NJ5j6P2xpJapjR4CXaRyM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J0Spw7axv/RHJn3TJ9iuauB0lE+yVrz/uEosOKMrGLroJa5QBpe69YEncu5J4Hjf/
+         HABp+/opqR+pyS/ypSieRV10cNQRsj6ljxEv6p9oRlQFLIz4YJeJVlbAi4Tf12n1ov
+         2bqQWpIhU/W4iLsolyyVbwTkB9e8GOheOnhIaEzwUiUgtE8pnyDXqhQVqGSgbFLJDf
+         p9e0PtP7F/J/2Y0AJ3rwS4b0ZVQSZwjnraNlHu91r/bntZrW5B8AXP1SudVyj0iODf
+         wkPWZrlUBDd8erp1NtQXxFb6/fQhaIVmaJKvL5dKu6ZoUBL+mBiMrS1h7gGluZzJNF
+         G5WufKyQJD1Bw==
+Received: by mail-lf1-f52.google.com with SMTP id i24so28769555lfj.13;
+        Thu, 07 Oct 2021 13:57:46 -0700 (PDT)
+X-Gm-Message-State: AOAM532h+IVnwfdKq0BjdZI9g5VhA/APV/kCWHYQ0JxXoHZ88FQyZXsT
+        si4IZL9D8kj8FDz9GBfMsf01bw5G309f3OLsoL8=
+X-Google-Smtp-Source: ABdhPJyn/YCpkYPG4okYft7JLZaGkH804BXrMpZSu9j5zYfD3VL842eipRpzrovUvtSQ1FGeMQhx79Nm8k58yA1m3Vk=
+X-Received: by 2002:ac2:5582:: with SMTP id v2mr6512651lfg.143.1633640264670;
+ Thu, 07 Oct 2021 13:57:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211006002853.308945-1-memxor@gmail.com> <20211006002853.308945-5-memxor@gmail.com>
+ <CAPhsuW7y3ycWkXLwSmJ5TKbo7Syd65aLRABtWbZcohET0RF6rA@mail.gmail.com> <20211007204609.ygrqpx4rahfzqzly@apollo.localdomain>
+In-Reply-To: <20211007204609.ygrqpx4rahfzqzly@apollo.localdomain>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 7 Oct 2021 13:57:33 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4X3L7ZZH_RfeP5xYvoMh3STthqZEFDpcqTTjbkfsh3sw@mail.gmail.com>
+Message-ID: <CAPhsuW4X3L7ZZH_RfeP5xYvoMh3STthqZEFDpcqTTjbkfsh3sw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/6] bpf: selftests: Move test_ksyms_weak test
+ to lskel, add libbpf test
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
         Networking <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v1 4/6] bpf: selftests: Move test_ksyms_weak
- test to lskel, add libbpf test
-Message-ID: <20211007205549.xklfits3xkdligat@apollo.localdomain>
-References: <20211006002853.308945-1-memxor@gmail.com>
- <20211006002853.308945-5-memxor@gmail.com>
- <CAPhsuW7y3ycWkXLwSmJ5TKbo7Syd65aLRABtWbZcohET0RF6rA@mail.gmail.com>
- <20211007204609.ygrqpx4rahfzqzly@apollo.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211007204609.ygrqpx4rahfzqzly@apollo.localdomain>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 08, 2021 at 02:16:09AM IST, Kumar Kartikeya Dwivedi wrote:
-> On Fri, Oct 08, 2021 at 02:03:49AM IST, Song Liu wrote:
-> > On Tue, Oct 5, 2021 at 5:29 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Thu, Oct 7, 2021 at 1:46 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+[...]
 > > >
-> > > Also, avoid using CO-RE features, as lskel doesn't support CO-RE, yet.
-> > > Create a file for testing libbpf skeleton as well, so that both
-> > > gen_loader and libbpf get tested.
-> > >
-> > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > [...]
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_weak_libbpf.c b/tools/testing/selftests/bpf/prog_tests/ksyms_weak_libbpf.c
-> > > new file mode 100644
-> > > index 000000000000..b75725e28647
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/ksyms_weak_libbpf.c
-> > > @@ -0,0 +1,31 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +#include <test_progs.h>
-> > > +#include "test_ksyms_weak.skel.h"
-> > > +
-> > > +void test_ksyms_weak_libbpf(void)
+> > >  /* typeless symbols, default to zero. */
+> > > @@ -38,7 +37,7 @@ int pass_handler(const void *ctx)
+> > >         /* tests existing symbols. */
+> > >         rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, 0);
+> > >         if (rq)
+> > > -               out__existing_typed = rq->cpu;
+> > > +               out__existing_typed = 0;
 > >
-> > This is (almost?) the same as test_weak_syms(), right? Why do we need both?
+> > Why do we need this change?
 > >
 >
-> One includes lskel.h (light skeleton), the other includes skel.h (libbpf
-> skeleton). Trying to include both in the same file, it ends up redefining the
-> same struct. I am not sure whether adding a prefix/suffix to light skeleton
-> struct names is possible now, maybe through another option to bpftool in
-> addition to name?
+> Since they share the same BPF object for generating skeleton, it needs to remove
+> dependency on CO-RE which gen_loader does not support.
+>
+> If it is kept, we get this:
+> ...
+> libbpf: // TODO core_relo: prog 0 insn[5] rq kind 0
+> libbpf: prog 'pass_handler': relo #0: failed to relocate: -95
+> libbpf: failed to perform CO-RE relocations: -95
+> libbpf: failed to load object 'test_ksyms_weak'
 
-Sorry, I misremembered. The name option is enough, it is because of how I did it
-in the Makefile (using LSKELS_EXTRA).  I'll fix this in the next spin.
+I see. Thanks for the explanation.
 
-> [...]
-
---
-Kartikeya
+Song
