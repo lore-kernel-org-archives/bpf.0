@@ -2,98 +2,196 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6AF7C433EF
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D3BBC433F5
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:24:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C757F610C8
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:00:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E2D461175
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 20:24:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241825AbhJGUCU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Oct 2021 16:02:20 -0400
-Received: from www62.your-server.de ([213.133.104.62]:56756 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241686AbhJGUCU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Oct 2021 16:02:20 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mYZZ3-0006K9-1W; Thu, 07 Oct 2021 22:00:25 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mYZZ2-000KBa-R2; Thu, 07 Oct 2021 22:00:24 +0200
-Subject: Re: [Patch bpf v3 3/4] net: implement ->sock_is_readable() for UDP
- and AF_UNIX
-To:     Cong Wang <xiyou.wangcong@gmail.com>, netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Yucong Sun <sunyucong@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-References: <20211002003706.11237-1-xiyou.wangcong@gmail.com>
- <20211002003706.11237-4-xiyou.wangcong@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <582ff8e9-c7b7-88c1-6cf0-e143da92836f@iogearbox.net>
-Date:   Thu, 7 Oct 2021 22:00:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S232646AbhJGU0D (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Oct 2021 16:26:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51652 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232278AbhJGU0C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Oct 2021 16:26:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8289F61248;
+        Thu,  7 Oct 2021 20:24:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633638248;
+        bh=i2ENI6ev+4ytBDtCA52TOEUhotS1o52ohxJfoBwmq/Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b3JJwN0coq3swTjTLe7kViINmeSbgQZ8hsOkAxsuVYB9z5er/jytsN4GYVDzvzeLa
+         /iRJiUM7fELYLn/HIgAAF+JVf7wysdzptFTXqLQfBfJ/5llysSJ8HWGigZ82GFojSw
+         MRELTuCpwpvuf/JORvbI6CdWEuZ6Cq5ltPI2SsiE/PK3oi+Er6e2Ap8nWlKm5GRfuJ
+         tItfmqwsXv7gtFmaibeXmx9poPFc9mo/vvjgFXuMdMetJIKLboIKgOspn7tvMzNNO9
+         NgYh4c71E4x18T3vlFNrratsBY4E2RfA1ZoNL2TGxSuz21+ocR47B0gMa707Pu+Zae
+         lLICZydLa5j6Q==
+Received: by mail-lf1-f51.google.com with SMTP id i24so28424310lfj.13;
+        Thu, 07 Oct 2021 13:24:08 -0700 (PDT)
+X-Gm-Message-State: AOAM5309EO5rVeHEFMpSCT27RT9TQKTWTV+mMz9cA9LtAYv7uDgYLH5n
+        72C1DdPSMmRb3RkYuH/pTZ/2btfQYq7niKexiJs=
+X-Google-Smtp-Source: ABdhPJwnR4mn5NImFQklOP3SJuU83TSGM1YNG/ialtZugLnVMz4Hprzyx6PX44gq5nxOjUWcYNRHdgwwwxazfwoPN5Y=
+X-Received: by 2002:a2e:3907:: with SMTP id g7mr6852603lja.285.1633638246444;
+ Thu, 07 Oct 2021 13:24:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211002003706.11237-4-xiyou.wangcong@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26315/Thu Oct  7 11:09:01 2021)
+References: <20211006002853.308945-1-memxor@gmail.com> <20211006002853.308945-2-memxor@gmail.com>
+In-Reply-To: <20211006002853.308945-2-memxor@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 7 Oct 2021 13:23:55 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4NYBZ40h5Wni0jjNOWcq5+NkyO+XMWn7NWVqXTo=qScg@mail.gmail.com>
+Message-ID: <CAPhsuW4NYBZ40h5Wni0jjNOWcq5+NkyO+XMWn7NWVqXTo=qScg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/6] bpf: Add bpf_kallsyms_lookup_name helper
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/2/21 2:37 AM, Cong Wang wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> Yucong noticed we can't poll() sockets in sockmap even
-> when they are the destination sockets of redirections.
-> This is because we never poll any psock queues in ->poll(),
-> except for TCP. With ->sock_is_readable() now we can
-> overwrite >sock_is_readable(), invoke and implement it for
-> both UDP and AF_UNIX sockets.
-> 
-> Reported-by: Yucong Sun <sunyucong@gmail.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Jakub Sitnicki <jakub@cloudflare.com>
-> Cc: Lorenz Bauer <lmb@cloudflare.com>
-> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+On Tue, Oct 5, 2021 at 5:29 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> This helper allows us to get the address of a kernel symbol from inside
+> a BPF_PROG_TYPE_SYSCALL prog (used by gen_loader), so that we can
+> relocate weak and typeless ksym vars.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+
+LGTM.
+
+Acked-by: Song Liu <songliubraving@fb.com>
+
 > ---
->   net/ipv4/udp.c      | 2 ++
->   net/ipv4/udp_bpf.c  | 1 +
->   net/unix/af_unix.c  | 4 ++++
->   net/unix/unix_bpf.c | 2 ++
->   4 files changed, 9 insertions(+)
-> 
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 2a7825a5b842..4a7e15a43a68 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -2866,6 +2866,8 @@ __poll_t udp_poll(struct file *file, struct socket *sock, poll_table *wait)
->   	    !(sk->sk_shutdown & RCV_SHUTDOWN) && first_packet_length(sk) == -1)
->   		mask &= ~(EPOLLIN | EPOLLRDNORM);
->   
-> +	if (sk_is_readable(sk))
-> +		mask |= EPOLLIN | EPOLLRDNORM;
-
-udp_poll() has this extra logic around first_packet_length() which drops all bad csum'ed
-skbs. How does this stand in relation to sk_msg_is_readable()? Is this a concern as well
-there? Maybe makes sense to elaborate a bit more in the commit message for context / future
-reference.
-
-Thanks,
-Daniel
-
->   	return mask;
->   
->   }
-
-
+>  include/linux/bpf.h            |  1 +
+>  include/uapi/linux/bpf.h       | 14 ++++++++++++++
+>  kernel/bpf/syscall.c           | 24 ++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h | 14 ++++++++++++++
+>  4 files changed, 53 insertions(+)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index d604c8251d88..17206aae329d 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2107,6 +2107,7 @@ extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
+>  extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
+>  extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
+>  extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
+> +extern const struct bpf_func_proto bpf_kallsyms_lookup_name_proto;
+>
+>  const struct bpf_func_proto *tracing_prog_func_proto(
+>    enum bpf_func_id func_id, const struct bpf_prog *prog);
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 6fc59d61937a..bbd0a3f4e5f6 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -4909,6 +4909,19 @@ union bpf_attr {
+>   *     Return
+>   *             The number of bytes written to the buffer, or a negative error
+>   *             in case of failure.
+> + *
+> + * long bpf_kallsyms_lookup_name(const char *name, int name_sz, int flags, u64 *res)
+> + *     Description
+> + *             Get the address of a kernel symbol, returned in *res*. *res* is
+> + *             set to 0 if the symbol is not found.
+> + *     Return
+> + *             On success, zero. On error, a negative value.
+> + *
+> + *             **-EINVAL** if *flags* is not zero.
+> + *
+> + *             **-EINVAL** if string *name* is not the same size as *name_sz*.
+> + *
+> + *             **-ENOENT** if symbol is not found.
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -5089,6 +5102,7 @@ union bpf_attr {
+>         FN(task_pt_regs),               \
+>         FN(get_branch_snapshot),        \
+>         FN(trace_vprintk),              \
+> +       FN(kallsyms_lookup_name),       \
+>         /* */
+>
+>  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 4e50c0bfdb7d..073ca9ebe58b 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4753,6 +4753,28 @@ static const struct bpf_func_proto bpf_sys_close_proto = {
+>         .arg1_type      = ARG_ANYTHING,
+>  };
+>
+> +BPF_CALL_4(bpf_kallsyms_lookup_name, const char *, name, int, name_sz, int, flags, u64 *, res)
+> +{
+> +       if (flags)
+> +               return -EINVAL;
+> +
+> +       if (name_sz <= 1 || name[name_sz - 1])
+> +               return -EINVAL;
+> +
+> +       *res = kallsyms_lookup_name(name);
+> +       return *res ? 0 : -ENOENT;
+> +}
+> +
+> +const struct bpf_func_proto bpf_kallsyms_lookup_name_proto = {
+> +       .func           = bpf_kallsyms_lookup_name,
+> +       .gpl_only       = true,
+> +       .ret_type       = RET_INTEGER,
+> +       .arg1_type      = ARG_PTR_TO_MEM,
+> +       .arg2_type      = ARG_CONST_SIZE,
+> +       .arg3_type      = ARG_ANYTHING,
+> +       .arg4_type      = ARG_PTR_TO_LONG,
+> +};
+> +
+>  static const struct bpf_func_proto *
+>  syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  {
+> @@ -4763,6 +4785,8 @@ syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>                 return &bpf_btf_find_by_name_kind_proto;
+>         case BPF_FUNC_sys_close:
+>                 return &bpf_sys_close_proto;
+> +       case BPF_FUNC_kallsyms_lookup_name:
+> +               return &bpf_kallsyms_lookup_name_proto;
+>         default:
+>                 return tracing_prog_func_proto(func_id, prog);
+>         }
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 6fc59d61937a..bbd0a3f4e5f6 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -4909,6 +4909,19 @@ union bpf_attr {
+>   *     Return
+>   *             The number of bytes written to the buffer, or a negative error
+>   *             in case of failure.
+> + *
+> + * long bpf_kallsyms_lookup_name(const char *name, int name_sz, int flags, u64 *res)
+> + *     Description
+> + *             Get the address of a kernel symbol, returned in *res*. *res* is
+> + *             set to 0 if the symbol is not found.
+> + *     Return
+> + *             On success, zero. On error, a negative value.
+> + *
+> + *             **-EINVAL** if *flags* is not zero.
+> + *
+> + *             **-EINVAL** if string *name* is not the same size as *name_sz*.
+> + *
+> + *             **-ENOENT** if symbol is not found.
+>   */
+>  #define __BPF_FUNC_MAPPER(FN)          \
+>         FN(unspec),                     \
+> @@ -5089,6 +5102,7 @@ union bpf_attr {
+>         FN(task_pt_regs),               \
+>         FN(get_branch_snapshot),        \
+>         FN(trace_vprintk),              \
+> +       FN(kallsyms_lookup_name),       \
+>         /* */
+>
+>  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> --
+> 2.33.0
+>
