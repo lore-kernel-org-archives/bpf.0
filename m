@@ -2,104 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5CA5C433F5
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 00:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E95C433EF
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 04:01:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F0E5611C1
-	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 00:41:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 749C661056
+	for <bpf@archiver.kernel.org>; Thu,  7 Oct 2021 04:01:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239941AbhJGAnY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Oct 2021 20:43:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230322AbhJGAnY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Oct 2021 20:43:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3BE66611AE
-        for <bpf@vger.kernel.org>; Thu,  7 Oct 2021 00:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633567291;
-        bh=2lpIC68QiU3Vlz95LFKwYQBfiMaSICDucj2X6fmcyTw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KYBERzdlUbXIlYgD4sWgUVMiU8Gtx9LcTS6FDR2PnAY5ezFpVwodRPmJphtzFgdkM
-         x7gJHZXG+x8C+SZyWfmdjreT7eOVyjaNykDUuFTcz4L60Us6yZRKP40S68n8EWxcux
-         OwDGq3n1nitzZetZiGZmJpToJSRpu2RMWPjX96xeMROaznyB+8dLUxvcUWDxvbP4qx
-         VfMQJ8evaMOVPmNcTPfJJBcwxhvptVb7toEfMxo05D3WqNznFctssb55vzS5ql5jJ+
-         daEkWkZualmJfIF5pTyeQ+ti+TvLuoBgsqRNfq7ym8LOrGH2gvdUSzKyUqGJAlFrgE
-         REe4ySzPwlRXQ==
-Received: by mail-lf1-f54.google.com with SMTP id x27so17548992lfu.5
-        for <bpf@vger.kernel.org>; Wed, 06 Oct 2021 17:41:31 -0700 (PDT)
-X-Gm-Message-State: AOAM532sPxrYUEukyGHxhYgwW/5ZrPRN74DVlp6YC1XoU2ivkuVVK9Dp
-        Jo2Zsz7zqu8IzoLHjjgviHZNJR8lIv5lf2qKhxw=
-X-Google-Smtp-Source: ABdhPJxOttcePKsRirTeu6qKJWipMHO6yVysEjI8l5gBrcxjH+qqLnYTL6jG9TtD7zb4E5i66irBwFGLIc310O1dhPk=
-X-Received: by 2002:a05:6512:3046:: with SMTP id b6mr1177958lfb.650.1633567289578;
- Wed, 06 Oct 2021 17:41:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1633535940.git.zhuyifei@google.com> <a2e569ee61e677ee474b7538adcebb0e1462df69.1633535940.git.zhuyifei@google.com>
-In-Reply-To: <a2e569ee61e677ee474b7538adcebb0e1462df69.1633535940.git.zhuyifei@google.com>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 6 Oct 2021 17:41:18 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4UaidSZXj4-L9t4Ez9TjzoXR6yQvwn_7LC87hYmJbtFw@mail.gmail.com>
-Message-ID: <CAPhsuW4UaidSZXj4-L9t4Ez9TjzoXR6yQvwn_7LC87hYmJbtFw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add cgroup helper bpf_export_errno to
- get/set exported errno value
-To:     YiFei Zhu <zhuyifei1999@gmail.com>
+        id S229593AbhJGEDl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 7 Oct 2021 00:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhJGEDl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 7 Oct 2021 00:03:41 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C614C061746
+        for <bpf@vger.kernel.org>; Wed,  6 Oct 2021 21:01:48 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id i65so1222197pfe.12
+        for <bpf@vger.kernel.org>; Wed, 06 Oct 2021 21:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8RuerzCch4nqLVXvEGDjejXIum9u11/xWwhEwLuDTz4=;
+        b=VSSXdhAuJ1JXN/rdd5f/tJpsDW/b0PRx9U5T6QCoQs6nuCiiMskm7r2jzy8p6Z+4ia
+         ZVQArQEXNxZZ8kQrg1eOLzYjZx7TkXgULa2QgPemM7q0O3OnOk2Rm19ltg24X7jmoIXh
+         xjFHtsyy9NVb082yTR+QJw/apGnbZK+DOfdoK0x6j/BdkDln5I3tKS6t7YAadBB1gKib
+         m+TELTe9swkOT9xG1pk7/gM+qa288oB4dxGuPoXnOei12280A0v14eZGSyhwCcCD0smy
+         uCE+o1Dkrn5C3BMgt7HDIbAdSwescVQJMXHZOBwZ/bWEm6j10q37w/l7OnXU1MbIAS+2
+         owbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8RuerzCch4nqLVXvEGDjejXIum9u11/xWwhEwLuDTz4=;
+        b=0U+mhZ0y+iMxi88INSVG83SPvMGZYqhcdkDaI2lOiAPM6r4UthTzQteA9wqfYq1IPa
+         5AZSEU7qi3dBU8kpQ6d09T1DKJznZVcgCFFg5gtSeN9bp12QGciALCj4PrJwteX5E9Ka
+         SJFLk7jGFAhSHyKZGzpdMdrzjOtBgE9AKT8sS1rDFB89IccxcjyktddVWluKsR9c7ql9
+         rHBonmAw9gvw5q5pxaze3F1tgWYQiO8Wj2zWPtEpSYqa3VaFHTvW8NUsHR1UQxPxrAbS
+         OuYlI3z7HJP8Lo4lZeU1Z+TqlQDfGE7yWUUs9CcGATpG1LEoMzliTx/KW3ckxV43m1qV
+         vbgg==
+X-Gm-Message-State: AOAM533mphUWn4KGcdxxj7s1WTHyjDIwsj4Oc4V5YBevWxao1sNKM2nN
+        D/tmLtxyb3q5b/GZ5gABI/Y3+hu0I7R/QQ==
+X-Google-Smtp-Source: ABdhPJyCdcs5vBSjLIhnP9rZJuPlij/VzlZrdg9OqL9JrWIlAbNhJJixWYkkE6FyaObsTrJYagQAIw==
+X-Received: by 2002:a63:3705:: with SMTP id e5mr1583828pga.307.1633579307770;
+        Wed, 06 Oct 2021 21:01:47 -0700 (PDT)
+Received: from [0.0.0.0] ([150.109.126.7])
+        by smtp.gmail.com with ESMTPSA id h4sm6450529pjm.14.2021.10.06.21.01.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Oct 2021 21:01:47 -0700 (PDT)
+Subject: Re: [PATCH bpf-next 1/2 v2] libbpf: Deprecate
+ bpf_{map,program}__{prev,next} APIs since v0.7
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Song Liu <song@kernel.org>
 Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>,
-        YiFei Zhu <zhuyifei@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+References: <20211003165844.4054931-1-hengqi.chen@gmail.com>
+ <20211003165844.4054931-2-hengqi.chen@gmail.com>
+ <CAPhsuW6NVoUebaxWm4YGNkStjxGwcdf5-hRKtcjtpVRpkEfBow@mail.gmail.com>
+ <CAEf4BzbzJC30O288-iHpdOqJRxsoNFdb=cZuHV3C_1ABbdXzWg@mail.gmail.com>
+From:   Hengqi Chen <hengqi.chen@gmail.com>
+Message-ID: <666156ca-9f7f-d365-7c7a-05acde1670ad@gmail.com>
+Date:   Thu, 7 Oct 2021 12:01:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <CAEf4BzbzJC30O288-iHpdOqJRxsoNFdb=cZuHV3C_1ABbdXzWg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 6, 2021 at 9:04 AM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
->
-> From: YiFei Zhu <zhuyifei@google.com>
->
-> When passed in a positive errno, it sets the errno and returns 0.
-> When passed in 0, it gets the previously set errno. When passed in
-> an out of bound number, it returns -EINVAL. This is unambiguous:
-> negative return values are error in invoking the helper itself,
-> and positive return values are errnos being exported. Errnos once
-> set cannot be unset, but can be overridden.
->
-> The errno value is stored inside bpf_cg_run_ctx for ease of access
-> different prog types with different context structs layouts. The
-> helper implementation can simply perform a container_of from
-> current->bpf_ctx to retrieve bpf_cg_run_ctx.
->
-> For backward compatibility, if a program rejects without calling
-> the helper, and the errno has not been set by any prior progs, the
-> BPF_PROG_RUN_ARRAY_CG family macros automatically set the errno to
-> EPERM. If a prog sets an errno but returns 1 (allow), the outcome
-> is considered implementation-defined. This patch treat it the same
-> way as if 0 (reject) is returned.
->
-> For BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY, the prior behavior is
-> that, if the return value is NET_XMIT_DROP, the packet is silently
-> dropped. We preserve this behavior for backward compatibility
-> reasons, so even if an errno is set, the errno does not return to
-> caller.
->
-> For getsockopt hooks, they are different in that bpf progs runs
-> after kernel processes the getsockopt syscall instead of before.
-> There is also a retval in its context struct in which bpf progs
-> can unset the retval, and can force an -EPERM by returning 0.
-> We preseve the same semantics. Even though there is retval,
-> that value can only be unset, while progs can set (and not unset)
-> additional errno by using the helper, and that will override
-> whatever is in retval.
->
-> Signed-off-by: YiFei Zhu <zhuyifei@google.com>
-> Reviewed-by: Stanislav Fomichev <sdf@google.com>
 
-This is pretty complicated, but the logic looks all correct. Thus,
 
-Acked-by: Song Liu <songliubraving@fb.com>
+On 10/7/21 2:07 AM, Andrii Nakryiko wrote:
+> On Tue, Oct 5, 2021 at 3:22 PM Song Liu <song@kernel.org> wrote:
+>>
+>> On Sun, Oct 3, 2021 at 10:00 AM Hengqi Chen <hengqi.chen@gmail.com> wrote:
+>>>
+>>> Deprecate bpf_{map,program}__{prev,next} APIs. Replace them with
+>>> a new set of APIs named bpf_object__{prev,next}_{program,map} which
+>>> follow the libbpf API naming convention.[0] No functionality changes.
+>>>
+>>>   Closes: https://github.com/libbpf/libbpf/issues/296
+>> ^^^ I guess we need "[0]" here?
+>>
+>>>
+>>> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+>>> ---
+>>
+>> Other than the nitpick above
+> 
+> Fixed that up while applying. There were also 4 more uses of
+> bpf_program__next and bpf_map__next in bpftool and samples/bpf, I've
+> fixed them up as well to not come back to this again. Hengqi, for
+> future deprecations, please do grep for the entire Linux source code,
+> not just selftests, there are a bunch of other tools and parts of the
+> kernel that use libbpf APIs.
+> 
 
-One question, if the program want to retrieve existing errno_val, and
-set a different one, it needs to call the helper twice, right? I guess it
-is possible to do that in one call with a "swap" logic. Would this work?
+Thanks. Will keep this in mind. :)
 
-Thanks,
-Song
+> Applied to bpf-next, thanks.
+> 
+>>
+>> Acked-by: Song Liu <songliubraving@fb.com>
