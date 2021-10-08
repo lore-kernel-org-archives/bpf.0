@@ -2,122 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC143C433F5
-	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 14:28:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAAB0C433EF
+	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 15:26:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D407261038
-	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 14:28:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C146060F6E
+	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 15:26:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbhJHOa2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Oct 2021 10:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S242800AbhJHP2v (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Oct 2021 11:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbhJHOa1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Oct 2021 10:30:27 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301E0C061570
-        for <bpf@vger.kernel.org>; Fri,  8 Oct 2021 07:28:32 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id k23so7767143pji.0
-        for <bpf@vger.kernel.org>; Fri, 08 Oct 2021 07:28:32 -0700 (PDT)
+        with ESMTP id S242662AbhJHP2v (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Oct 2021 11:28:51 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122DEC061570;
+        Fri,  8 Oct 2021 08:26:56 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id i189so3422317ioa.1;
+        Fri, 08 Oct 2021 08:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=axtJcHZV0CC/72kCrQBXBxS1HPNlzpvK5e7u/fn38QE=;
-        b=ZpRghE/t0VSWC9ZxQnSfoeqlENfca/I2gofNMiKQsNXHQYFzdWfAAsU2AdmcGx8MXZ
-         hUntDWE1spPDJMbX9Ea2XgL7TLcI3lSJxn8cMY4I7hzfUV3vc+kmpzUYtT3MYVmgfvnM
-         kEw7VKGmkwHq4HZyCN+sNmc8dq3jEBzA+tURbIgFnrriUr2hCdxE5SWN+3sXeeW2lpyR
-         m6+xI1qiDIFSGahT7sLsYVw/LzlPNpmZai0aGODZeJVHzPk0cIyoB+9oLNjB0Q4B7qH2
-         bbO70FtcvaovLQYszcrlsoeiPOWBquO2qgEd91kvhZXVmzqEM4APT/u7xzOnWRKsq0L1
-         MwXA==
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=A/oayawmuy+VyA5QsA82KpXbIgkfgnumRWalv0CRXnM=;
+        b=UN2QyC9IMcewHJjiGTBQ/mLtBY0sDy/VWCbZ/0TChVec1IesnmQi+IqJ/LLIe74k/N
+         Oag+YfmFyAkPvnO29Bt+TSX3jcuDsLo92StDp7P02TYeJVaAZkCz3AzYYjwumSp2GBju
+         4a73fsIhFkZSzU/vyN0sfGGS5KTlxv4IHeiMwxr5IxCQhVMU3IelttCsnDGXq81Au0Rs
+         mWbaaZlQb97hlSfxv1e0NXyDDAayowPrW0d+GNu5fROznwUWuM2hj3Jv77/McQcMN/6m
+         6cC4mwrmXQdU4MgFnbGSb1Z3eS9CFnQmBWPlrisyK87S8C8rOMvUZyfkU3/WVqIPrhMq
+         COiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=axtJcHZV0CC/72kCrQBXBxS1HPNlzpvK5e7u/fn38QE=;
-        b=0jZH+kyQ8NY68ZZDSkEbbYbS0003zU/Uaka9yI6VUD/6cIxVonsubpGBMEbSsU66Jb
-         a+sVStzoz3rYa4B/LTC4mUwb9FHfQ1VGtPT6gMbZ7/LtUH4gVerRnsAGZ1RG38+gBAp5
-         NLdaJnr3Wvg0B0oHJUpfDEp2U4+7lvIt0UDoP2OfG51uaTmm0vPEGWmf9K3RKrFKoK+5
-         Ga7V4WIVHzW5aUWzPvwpZvX3pXR+YToDE7+3eVQaoHP+9y8Wf5wJkpeQ+0xdajHr6H9g
-         5kcAkrL+eq+DU0hcH+GVwKv9LAsIloE6xGbe+BmwiSWFGIqGsQdLy15vrLRDnU4dkcWv
-         R3sw==
-X-Gm-Message-State: AOAM533HgWJWMgB90uObP1uIpkJNmACUORl6cyegpKT79obsIY451szk
-        KQEadkPCW13ivz7GA+iHE9B0iuUYKiA=
-X-Google-Smtp-Source: ABdhPJzZlNTol8J9Tb3NlhBW2dwe6PvAYLAeZ1QsSkcaHfH9PFqgJ7jQDTVI2FOhrA1+ifBFcIvCCw==
-X-Received: by 2002:a17:902:ecd0:b0:13f:1469:c0f2 with SMTP id a16-20020a170902ecd000b0013f1469c0f2mr4084550plh.10.1633703311528;
-        Fri, 08 Oct 2021 07:28:31 -0700 (PDT)
-Received: from [0.0.0.0] ([104.207.159.124])
-        by smtp.gmail.com with ESMTPSA id e6sm2867303pfm.212.2021.10.08.07.28.29
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Oct 2021 07:28:31 -0700 (PDT)
-To:     bpf@vger.kernel.org
-From:   zerons <sironhide0null@gmail.com>
-Subject: branch prediction issue
-Message-ID: <57c1bcd6-f034-f5d1-f282-a6d843a2937f@gmail.com>
-Date:   Fri, 8 Oct 2021 22:28:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=A/oayawmuy+VyA5QsA82KpXbIgkfgnumRWalv0CRXnM=;
+        b=rq2/EcaxtqmRilcVlpe5wsmJ83lBb0B8B8j2JNRDwBbbCvnUviZfACnv2p1sHxdy3H
+         ktXKP5VQicYpofPqjnZZ4YVpXw/+EXK+BXj7FXsxL2UUrc+7SuF55x6T70HK3QI+0/nP
+         aS4I7F0YdhAUQOBAvjcvPiaHOvJliBLiHvsztLDjnFtbCUslxyEczfD2DIub5oq1FJwZ
+         yAoBgYhVgdtXma1E3H9CdTZX91XbO9NMdTqH0oLWJqDQ8UbRID8ntcm3yMLpOf+S+zvi
+         9i5eqlq6DXo+9utp/QfDlRVcrumqdm94XtUkpyyOLdGIIszk/oncQEiFOkdtHo/2GUTE
+         jIzA==
+X-Gm-Message-State: AOAM530ejT00ZqEZf9em7MLml9T1rmwQsOIa1EIm4zofNyTeMRfwOPtx
+        iq1IM6KSuUKSg3crkUSDz9U=
+X-Google-Smtp-Source: ABdhPJzQm+uf5SVKswyRWf8micBUEGQuZiVLxia1Up2FbzoI31muuiRnCyUlPNlHM7HtA8wb7i6FYA==
+X-Received: by 2002:a02:ab8f:: with SMTP id t15mr8056129jan.47.1633706815517;
+        Fri, 08 Oct 2021 08:26:55 -0700 (PDT)
+Received: from localhost ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id s8sm1169494ilt.47.2021.10.08.08.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Oct 2021 08:26:54 -0700 (PDT)
+Date:   Fri, 08 Oct 2021 08:26:45 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Cong Wang <cong.wang@bytedance.com>,
+        Yucong Sun <sunyucong@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+Message-ID: <61606335e85ae_1bf1208bb@john-XPS-13-9370.notmuch>
+In-Reply-To: <CAM_iQpXy5HOHOU=T_FVVydBniL=tOW9sYTAMsc_nRWcZsqo8Yg@mail.gmail.com>
+References: <20211002003706.11237-1-xiyou.wangcong@gmail.com>
+ <20211002003706.11237-4-xiyou.wangcong@gmail.com>
+ <582ff8e9-c7b7-88c1-6cf0-e143da92836f@iogearbox.net>
+ <CAM_iQpXy5HOHOU=T_FVVydBniL=tOW9sYTAMsc_nRWcZsqo8Yg@mail.gmail.com>
+Subject: Re: [Patch bpf v3 3/4] net: implement ->sock_is_readable() for UDP
+ and AF_UNIX
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In check_cond_jmp_op(), the is_branch_taken() is called when
-1) SRC op is imm
-2) the value of SRC op is known
+Cong Wang wrote:
+> On Thu, Oct 7, 2021 at 1:00 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >
+> > On 10/2/21 2:37 AM, Cong Wang wrote:
+> > > From: Cong Wang <cong.wang@bytedance.com>
+> > >
+> > > Yucong noticed we can't poll() sockets in sockmap even
+> > > when they are the destination sockets of redirections.
+> > > This is because we never poll any psock queues in ->poll(),
+> > > except for TCP. With ->sock_is_readable() now we can
+> > > overwrite >sock_is_readable(), invoke and implement it for
+> > > both UDP and AF_UNIX sockets.
+> > >
+> > > Reported-by: Yucong Sun <sunyucong@gmail.com>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> > > Cc: Lorenz Bauer <lmb@cloudflare.com>
+> > > Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> > > ---
+> > >   net/ipv4/udp.c      | 2 ++
+> > >   net/ipv4/udp_bpf.c  | 1 +
+> > >   net/unix/af_unix.c  | 4 ++++
+> > >   net/unix/unix_bpf.c | 2 ++
+> > >   4 files changed, 9 insertions(+)
+> > >
+> > > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> > > index 2a7825a5b842..4a7e15a43a68 100644
+> > > --- a/net/ipv4/udp.c
+> > > +++ b/net/ipv4/udp.c
+> > > @@ -2866,6 +2866,8 @@ __poll_t udp_poll(struct file *file, struct socket *sock, poll_table *wait)
+> > >           !(sk->sk_shutdown & RCV_SHUTDOWN) && first_packet_length(sk) == -1)
+> > >               mask &= ~(EPOLLIN | EPOLLRDNORM);
+> > >
+> > > +     if (sk_is_readable(sk))
+> > > +             mask |= EPOLLIN | EPOLLRDNORM;
+> >
+> > udp_poll() has this extra logic around first_packet_length() which drops all bad csum'ed
+> > skbs. How does this stand in relation to sk_msg_is_readable()? Is this a concern as well
+> > there? Maybe makes sense to elaborate a bit more in the commit message for context / future
+> > reference.
+> 
+> We don't validate UDP checksums on sockmap RX path, so
+> it is okay to leave it as it is, but it is worth a comment like
+> you suggest. I will add a comment in this code.
+> 
+> If we really need to validate the checksum, it should be addressed
+> in a separate patch(set), not in this one.
+> 
+> Thanks.
 
-Here comes the question: what if the value of DST op is known.
-
-Consider the following instructions:
-
-BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_8, 0),
-BPF_JMP32_IMM(BPF_JGT, BPF_REG_7, 0x7ffffff0, 1),
-BPF_EXIT_INSN(),
-BPF_LD_IMM64(BPF_REG_3, 0x7fffffe0),
-BPF_JMP32_REG(BPF_JGT, BPF_REG_3, BPF_REG_7, 1),
-BPF_EXIT_INSN(),
-BPF_EXIT_INSN(), ==> point_a
-
-At point_a, the state of regs[7] is
-(gdb) p /x $regs[7]
-$219 = {
-  type = 0x1,
-  {
-    range = 0x0,
-    map_ptr = 0x0,
-    btf_id = 0x0,
-    mem_size = 0x0,
-    raw = 0x0
-  },
-  off = 0x0,
-  id = 0x0,
-  ref_obj_id = 0x0,
-  var_off = {
-    value = 0x7fffffc0,
-    mask = 0xffffffff0000003f
-  },
-  smin_value = 0x800000007fffffc0,
-  smax_value = 0x7fffffff7fffffff,
-  umin_value = 0x7fffffc0,
-  umax_value = 0xffffffff7fffffff,
-  s32_min_value = 0x7ffffff1,
-  s32_max_value = 0x7fffffdf,
-  u32_min_value = 0x7ffffff1,
-  u32_max_value = 0x7fffffdf,
-  parent = 0xffff88807127e348,
-  frameno = 0x0,
-  subreg_def = 0x0,
-  live = 0x4,
-  precise = 0x1
-}
-
-u32_min_value is larger than u32_max_value.
-
-The point_a instructions should be dead code. I wonder if the
-verifier do this on purpose. Do we need to handle this situation?
-
-Thanks.
+We should validate the checksum before creating the sk_msg so that any parsers running
+on top of UDP don't parse a bad checksum payload or pass a bad checksum up to user
+space. I thought there would be a check in the read_sock side, but I didn't see it.
