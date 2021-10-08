@@ -2,111 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F399FC433EF
-	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 22:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B16C433F5
+	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 22:27:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC03860F12
-	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 22:27:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F5F761038
+	for <bpf@archiver.kernel.org>; Fri,  8 Oct 2021 22:27:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243642AbhJHW31 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Oct 2021 18:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
+        id S243651AbhJHW3b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Oct 2021 18:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243627AbhJHW31 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Oct 2021 18:29:27 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7247DC061570
-        for <bpf@vger.kernel.org>; Fri,  8 Oct 2021 15:27:31 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id s4so24141318ybs.8
-        for <bpf@vger.kernel.org>; Fri, 08 Oct 2021 15:27:31 -0700 (PDT)
+        with ESMTP id S243627AbhJHW3a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Oct 2021 18:29:30 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34085C061570
+        for <bpf@vger.kernel.org>; Fri,  8 Oct 2021 15:27:35 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id k23so8659800pji.0
+        for <bpf@vger.kernel.org>; Fri, 08 Oct 2021 15:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D2GlswS4uVXET+UpBRtdDSMuyOIWsJQMeemuhVwzdkk=;
-        b=BHSLX1nOSW6A6la71adF3BpKIqcxPLTTZ8DjHgN74ng6Re4IEo1fZE5xi+s0WZHaBc
-         tiPFBL3jxWIgUbcJZh1RU3G1bG3nTAjf0eAXnBKG5zN7N6mRwUWNRBECztoNVupEkowu
-         qOvsgxHt8xT4DJ+cjhGzBjg8E4GOH4uZZmoLFwlj1EFMdX2uW7bshqYFTnK19hnIP+ac
-         b/kTzXlKcenp6mjLtwuYdKq6rzz4wy4SBnqHbHcZ+LCKaxdnSpcfZHmzQV/U/E/i7qpF
-         QMy3gKyqaZh9dBhOSPYOR65khsYNAr+4IR++wHwhpS6dvwklZ5ONkAA9IFiXpPYxy8Vl
-         R+pQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gOCDWv+OpTK30qPaMp1sNZIWQM80bg8X8ZPM9I5Xe9w=;
+        b=jT490KAhKXbUVzq/4orppLnonnQVcc+s9BC15ZuKfIU2TZcwJAJ3EJi6136pwrkD6U
+         ITZi19UY/gva9Mi0etaJG95v+auWVeE0YOzs4sQbcAOap5BlIGNa0YJTSvE6vQkVTQbU
+         f8pADzheCeQ82A9Y9skkxDGPeonHuJyrU6AFRuewR0wO3Kn2lDtdF7kAWeayQ+rpfZpQ
+         q9uFSkQ8Uvaxd2o10LFr01jl1dNL8LX8x9zj4SMoNBVsVO7/Qo9tDxx1jrZNYb2I+RlQ
+         SmdacPrk1wMPTYztSfQ+TReO1PS/daf1MHMSLFX/Q/j2WHp/gVOB7MTMo8Wi9jhs8ofW
+         QwLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D2GlswS4uVXET+UpBRtdDSMuyOIWsJQMeemuhVwzdkk=;
-        b=kShUGIEXSxjITzA0IAhm++OrXbgzlFEL7q8uD/k6Tf+1EoA75cXzltIOtSBo65lwm/
-         nxV01ACkPPj/tnwXCyXLgC0rRCDnKdT365VPeiOEU8rNAcOUoyrRN6W72X37Ljzl20Yr
-         gF8fIMVKdTWHomP+ibsN1pJK7GMRLIx0xG78klR0+DKJkP1VzIyvL1yv6Jh+2ZyzNAP9
-         b/rRWwHMPCutfdQQZjUc5puQZ6ctUWF/9Y3mdsWXAo13KhbgUnW3dNMu0fQ+ZuWSwvnk
-         Q/aSmIByIj5aFZvlHTFB2s8toqiJdX1OAC2EbL9RYOOrXN0py1AEQcbYFEuCKssPATYU
-         x17Q==
-X-Gm-Message-State: AOAM532YSguM1PnuMilPo8DITGiPMDXSTZUxv7DoqcYk2b29heQGXG40
-        SnFxrttS5of/5cwoa/FoB8XucJO6+MR3V5KYld4=
-X-Google-Smtp-Source: ABdhPJwOdD025eSdMRGVO/EAW2yfLXPTx5smZiOk7JNPErvmTbXN0NHU1w2+gKR/tc8MNNshD5dFL4XaNTuLRB/X4R0=
-X-Received: by 2002:a25:afcf:: with SMTP id d15mr5706893ybj.433.1633732050766;
- Fri, 08 Oct 2021 15:27:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gOCDWv+OpTK30qPaMp1sNZIWQM80bg8X8ZPM9I5Xe9w=;
+        b=r4AaEzceoKpbk9q38Vo4x1nHbVDa6Epn00CFRWzy1p5nK3wAvLin2qUGeaL+u/tcv7
+         DwBiiWulQm/ftgMCJ8mJJL116wXfZdSe6fXGUBJ3oAy9uwXqavkp5tgYUpgoWvdF9TFV
+         5B+9MhGskIMA69HvyJqo/VlpVrpy8YGiB+Y1NmXF2fnS8Jbko1Zv/wyc3Itl+WAQNY5t
+         4WT2UeiGQHFkQOFcyiv+jt0kpC83NLf3tw4kpkg2oHPaMZRIm1NCLECEJ2SiS6Pbi2X0
+         ForLna/PP9GRh5ZpjukW++3lYNSML5e+XdgmymbmqHbV+KVbfBW8qDt4CCY//055QuWM
+         n6JQ==
+X-Gm-Message-State: AOAM530dRRnYMLZnX7DAI6Nzh1NliX0YHIRk82JT5u+ViwHXidsZNwNt
+        HMWZCGwrM5+dWL/bxT24tlwr9kIZuVo=
+X-Google-Smtp-Source: ABdhPJy6kNNZmMizM6ZKfyFHPhxGwgKnbshVJEjammKYZwH2UX9VvZOVKVrOORdePaAnElgAO9kRgQ==
+X-Received: by 2002:a17:90a:1942:: with SMTP id 2mr15048170pjh.195.1633732054451;
+        Fri, 08 Oct 2021 15:27:34 -0700 (PDT)
+Received: from localhost ([2405:201:6014:d058:a28d:3909:6ed5:29e7])
+        by smtp.gmail.com with ESMTPSA id r2sm329230pgn.8.2021.10.08.15.27.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Oct 2021 15:27:34 -0700 (PDT)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2] bpf: Silence Coverity warning for find_kfunc_desc_btf
+Date:   Sat,  9 Oct 2021 03:57:31 +0530
+Message-Id: <20211008222731.789446-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <CAEf4BzYpp+VqqL4n1N7-Uw8sySVgvaCagEcVicgumtpK-y68aw@mail.gmail.com>
+References: <CAEf4BzYpp+VqqL4n1N7-Uw8sySVgvaCagEcVicgumtpK-y68aw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211006185619.364369-1-fallentree@fb.com> <20211006185619.364369-12-fallentree@fb.com>
-In-Reply-To: <20211006185619.364369-12-fallentree@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 8 Oct 2021 15:27:19 -0700
-Message-ID: <CAEf4Bza-DrWa1Z_Q93egdUHWdcjnWn4jJtCBwZEBx3p1ynC+uA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 11/14] selftests/bpf: adding random delay for
- send_signal test
-To:     Yucong Sun <fallentree@fb.com>, Yonghong Song <yhs@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Yucong Sun <sunyucong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 6, 2021 at 11:56 AM Yucong Sun <fallentree@fb.com> wrote:
->
-> From: Yucong Sun <sunyucong@gmail.com>
->
-> This patch adds random delay on waiting for the signal to arrive,
-> making the test more robust.
->
-> Signed-off-by: Yucong Sun <sunyucong@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/send_signal.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-> index 776916b61c40..6200256243f2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-> @@ -19,6 +19,7 @@ static void test_send_signal_common(struct perf_event_attr *attr,
->         int err = -1, pmu_fd = -1;
->         char buf[256];
->         pid_t pid;
-> +       int attempts = 100;
->
->         if (!ASSERT_OK(pipe(pipe_c2p), "pipe_c2p"))
->                 return;
-> @@ -63,7 +64,10 @@ static void test_send_signal_common(struct perf_event_attr *attr,
->                 ASSERT_EQ(read(pipe_p2c[0], buf, 1), 1, "pipe_read");
->
->                 /* wait a little for signal handler */
-> -               sleep(1);
-> +               while (attempts > 0 && !sigusr1_received) {
+The helper function returns a pointer that in the failure case encodes
+an error in the struct btf pointer. The current code lead to Coverity
+warning about the use of the invalid pointer:
 
-This is not reliable, sigusr1_received has to be volatile or
-sig_atomic_t, please fix. I haven't applied this patch yet.
+ *** CID 1507963:  Memory - illegal accesses  (USE_AFTER_FREE)
+ /kernel/bpf/verifier.c: 1788 in find_kfunc_desc_btf()
+ 1782                          return ERR_PTR(-EINVAL);
+ 1783                  }
+ 1784
+ 1785                  kfunc_btf = __find_kfunc_desc_btf(env, offset, btf_modp);
+ 1786                  if (IS_ERR_OR_NULL(kfunc_btf)) {
+ 1787                          verbose(env, "cannot find module BTF for func_id %u\n", func_id);
+ >>>      CID 1507963:  Memory - illegal accesses  (USE_AFTER_FREE)
+ >>>      Using freed pointer "kfunc_btf".
+ 1788                          return kfunc_btf ?: ERR_PTR(-ENOENT);
+ 1789                  }
+ 1790                  return kfunc_btf;
+ 1791          }
+ 1792          return btf_vmlinux ?: ERR_PTR(-ENOENT);
+ 1793     }
 
-Also, previously we slept for a second, now we can, technically, sleep
-only up to 100ms, would that cause any problems in practice? cc
-Yonghong
+Daniel suggested the use of ERR_CAST so that the intended use is clear
+to Coverity, but on closer look it seems that we never return NULL from
+the helper. Andrii noted that since __find_kfunc_desc_btf already logs
+errors for all cases except btf_get_by_fd, it is much easier to add
+logging for that and remove the IS_ERR check altogether, returning
+directly from it.
 
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+v1->v2
+ * Remove error check, log btf_get_by_fd failure (Andrii)
+---
+ kernel/bpf/verifier.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-> +                       attempts--;
-> +                       usleep(500 + rand() % 500);
-> +               }
->
->                 buf[0] = sigusr1_received ? '2' : '0';
->                 ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
-> --
-> 2.30.2
->
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 20900a1bac12..7180f0bc347e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1727,8 +1727,10 @@ static struct btf *__find_kfunc_desc_btf(struct bpf_verifier_env *env,
+ 			return ERR_PTR(-EFAULT);
+
+ 		btf = btf_get_by_fd(btf_fd);
+-		if (IS_ERR(btf))
++		if (IS_ERR(btf)) {
++			verbose(env, "invalid module BTF fd specified\n");
+ 			return btf;
++		}
+
+ 		if (!btf_is_module(btf)) {
+ 			verbose(env, "BTF fd for kfunc is not a module BTF\n");
+@@ -1782,12 +1784,7 @@ static struct btf *find_kfunc_desc_btf(struct bpf_verifier_env *env,
+ 			return ERR_PTR(-EINVAL);
+ 		}
+
+-		kfunc_btf = __find_kfunc_desc_btf(env, offset, btf_modp);
+-		if (IS_ERR_OR_NULL(kfunc_btf)) {
+-			verbose(env, "cannot find module BTF for func_id %u\n", func_id);
+-			return kfunc_btf ?: ERR_PTR(-ENOENT);
+-		}
+-		return kfunc_btf;
++		return __find_kfunc_desc_btf(env, offset, btf_modp);
+ 	}
+ 	return btf_vmlinux ?: ERR_PTR(-ENOENT);
+ }
+--
+2.33.0
+
