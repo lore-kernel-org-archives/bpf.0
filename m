@@ -2,75 +2,134 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C28A0C43217
-	for <bpf@archiver.kernel.org>; Mon, 11 Oct 2021 01:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E119C433EF
+	for <bpf@archiver.kernel.org>; Mon, 11 Oct 2021 02:27:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AACD860F6E
-	for <bpf@archiver.kernel.org>; Mon, 11 Oct 2021 01:19:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08A4F60FBF
+	for <bpf@archiver.kernel.org>; Mon, 11 Oct 2021 02:27:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbhJKBVY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 10 Oct 2021 21:21:24 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34100 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231481AbhJKBVX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 10 Oct 2021 21:21:23 -0400
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP2oPkWNh8sYXAA--.22187S2;
-        Mon, 11 Oct 2021 09:19:11 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S233194AbhJKC3K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 10 Oct 2021 22:29:10 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15744 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232748AbhJKC3J (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 10 Oct 2021 22:29:09 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19A81nj7006215
+        for <bpf@vger.kernel.org>; Sun, 10 Oct 2021 19:27:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=facebook; bh=R+8yjzS/cHngTmJx9VVXcB+dEeKhMINGWb7US1nn4Sg=;
+ b=ate/DN1Zrecry+SjBSVU3BrNsvpsWy4YX4dueCv29kIOASyZN9iCRCwV4YbZlbZH1+mJ
+ HKcWwhBrGX+uTVc5jVhtsHA2EkAzmkCNQCScrMFZ85Kj06/BVq4Nt8U3riztapZ8SpZe
+ pB0Ha3njYQOpr9Qp1q3GJE5bFPbwlciPnNs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3bkv9gv1qm-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 10 Oct 2021 19:27:09 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Sun, 10 Oct 2021 19:27:08 -0700
+Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
+        id B7DB17D98F30; Sun, 10 Oct 2021 19:27:05 -0700 (PDT)
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+To:     <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
+CC:     Song Liu <songliubraving@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
-        Paul Burton <paulburton@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next v2 0/2] bpf, mips: Do some small changes
-Date:   Mon, 11 Oct 2021 09:19:08 +0800
-Message-Id: <1633915150-13220-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf9DxP2oPkWNh8sYXAA--.22187S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYq7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
-        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26F4j6r4UJw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAG
-        YxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVWkMxAIw28IcxkI7VAKI48JMx
-        C20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAF
-        wI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20x
-        vE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v2
-        0xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUFE_MDUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Subject: [PATCH bpf-next 0/4] libbpf: deprecate bpf_program__get_prog_info_linear
+Date:   Sun, 10 Oct 2021 19:27:00 -0700
+Message-ID: <20211011022704.2143205-1-davemarchevsky@fb.com>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: 4Usg4GCxlIaFm-fhIRG4_IrXvR7r6Rut
+X-Proofpoint-ORIG-GUID: 4Usg4GCxlIaFm-fhIRG4_IrXvR7r6Rut
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.391,FMLib:17.0.607.475
+ definitions=2021-10-10_07,2021-10-07_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 spamscore=0 phishscore=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110110012
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset is based on bpf-next tree:
-https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
+bpf_program__get_prog_info_linear is a helper which wraps the
+bpf_obj_get_info_by_fd BPF syscall with some niceties that put
+all dynamic-length bpf_prog_info in one buffer contiguous with struct
+bpf_prog_info, and simplify the selection of which dynamic data to grab.
 
-v2:
-  -- Update patch #2 to only fix the comment,
-     suggested by Johan Almbladh, thank you.
+The resultant combined struct, bpf_prog_info_linear, is persisted to
+file by 'perf' to enable later annotation of BPF prog data. libbpf
+includes some vaddr <-> offset conversion helpers for
+struct bpf_prog_info_linear to simplify this.
 
-Tiezhu Yang (2):
-  bpf, mips: Clean up config options about JIT
-  bpf, mips: Fix comment on tail call count limiting
+This functionality is heavily tailored to perf's usecase, so its use as
+a general prog info API should be deemphasized in favor of just calling
+bpf_obj_get_info_by_fd, which can be more easily fit to purpose. Some
+examples from caller migrations in this series:
 
- arch/mips/Kconfig              | 9 ---------
- arch/mips/net/Makefile         | 6 +++---
- arch/mips/net/bpf_jit_comp32.c | 2 +-
- 3 files changed, 4 insertions(+), 13 deletions(-)
+  * Some callers weren't requesting or using dynamic-sized prog info and
+    are well served by a simple get_info_by_fd call (e.g.
+    dump_prog_id_as_func_ptr in bpftool)
+  * Some callers were requesting all of a specific dynamic info type but
+    only using the first record, so can avoid unnecessary malloc by
+    only requesting 1 (e.g. profile_target_name in bpftool)
+  * bpftool's do_dump saves some malloc/free by growing and reusing its
+    dynamic prog_info buf as it loops over progs to grab info and dump.
 
--- 
-2.1.0
+Perf does need the full functionality of
+bpf_program__get_prog_info_linear and its accompanying structs +
+helpers, so copy the code to its codebase, migrate all other uses in the
+tree, and deprecate the helper in libbpf.
+
+Since the deprecated symbols continue to be included in perf some
+renaming was necessary in perf's copy, otherwise functionality is
+unchanged.
+
+This work was previously discussed in libbpf's issue tracker [0].
+
+[0]: https://github.com/libbpf/libbpf/issues/313
+
+Dave Marchevsky (4):
+  libbpf: migrate internal use of bpf_program__get_prog_info_linear
+  bpftool: use bpf_obj_get_info_by_fd directly
+  perf: pull in bpf_program__get_prog_info_linear
+  libbpf: deprecate bpf_program__get_prog_info_linear
+
+ tools/bpf/bpftool/btf_dumper.c                |  40 +--
+ tools/bpf/bpftool/prog.c                      | 153 +++++++---
+ tools/lib/bpf/libbpf.c                        |  15 +-
+ tools/lib/bpf/libbpf.h                        |   3 +
+ .../Documentation/perf.data-file-format.txt   |   2 +-
+ tools/perf/util/Build                         |   1 +
+ tools/perf/util/annotate.c                    |   3 +-
+ tools/perf/util/bpf-event.c                   |  41 ++-
+ tools/perf/util/bpf-event.h                   |   2 +-
+ tools/perf/util/bpf-utils.c                   | 261 ++++++++++++++++++
+ tools/perf/util/bpf-utils.h                   |  76 +++++
+ tools/perf/util/bpf_counter.c                 |   6 +-
+ tools/perf/util/dso.c                         |   1 +
+ tools/perf/util/env.c                         |   1 +
+ tools/perf/util/header.c                      |  13 +-
+ 15 files changed, 526 insertions(+), 92 deletions(-)
+ create mode 100644 tools/perf/util/bpf-utils.c
+ create mode 100644 tools/perf/util/bpf-utils.h
+
+--=20
+2.30.2
 
