@@ -2,110 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 515E4C433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 11:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57A99C433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 11:43:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3475761074
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 11:17:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B4BF61074
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 11:43:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbhJLLTJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Oct 2021 07:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbhJLLTH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Oct 2021 07:19:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72C25C061570;
-        Tue, 12 Oct 2021 04:17:06 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id q5so5538971pgr.7;
-        Tue, 12 Oct 2021 04:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=toin2qRutuPFHVWf+g8domdh9ga8LXuWYrISewj7CEM=;
-        b=j0050LnyUGXdh7+N0cUFjwwpgCK+nBjYRj668ZBSS+1KLxHmQrxXIb/5qyKAQ40ToG
-         Hu6ge+c26Hz1/Ad+kY75fcr5aWzmS9vSo3ThWdyxcFcbnxwV0iERsRQY8AldmR7Qcccx
-         rmsm853DLLhxZSVVlhhXoKr6vmmo/b2wmHB/CIDNgUDNTUmemSdftPF19+xsyBOozOp/
-         Tv6xbI1iCD/ghms30JSUznvToFpursgOUWShVDTetiSik2VP4D6q92T8LY/Lk4wjnXXc
-         tTuFGCSLj685t2IYUBDTRSjecEWPruU+sn0tY0GFK81a27vzgeyVZkI4dJqecG7LwBav
-         7x6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=toin2qRutuPFHVWf+g8domdh9ga8LXuWYrISewj7CEM=;
-        b=iJ4mSOc6UNkKNgSpmg2tknwagkJ/1/QcYZBToPuAQMhvpg3vkI1zCaL6TO6R3i0gcy
-         jBAxs531k/zlB3qmfyn4Ryzjx16wYBIdf+S5746pWT06DcR6k+Q8QdBi4KvLgGC1SlnK
-         GBtEvmvTS802NiS4CuRSQfOcflDqhaAuNnsOeehicAmPHONOaKxPLgTCCRPcBh0RVPzc
-         9/VZ3SI1DWDLfpc1pNa0NZwJ5pKUo+mJj4C8rilILEKzReh/78YoDtpIJ65tuhLnmY1z
-         ZFeK/f3MJslSsnTWeXo2EPKtyNoSGRCz0+L/oidAwUApZJ5faIjNooLXC14Ybqb9JFrF
-         7JnQ==
-X-Gm-Message-State: AOAM530pL0vtLCq508R2Xm1e9KA2xtVZR1rtr+TnvS1v787gVPhCPyFr
-        SzEENsb0ILRXglEooGmH0nc=
-X-Google-Smtp-Source: ABdhPJyzPsKwhgLrlj2Aty7rX51eUmE1cPtuzka/4Nm3SSRKgPQhrzgmjJlZFXmDyyZ93l5PoetOOw==
-X-Received: by 2002:aa7:814f:0:b0:44d:626:8b96 with SMTP id d15-20020aa7814f000000b0044d06268b96mr15953073pfn.65.1634037426042;
-        Tue, 12 Oct 2021 04:17:06 -0700 (PDT)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id 63sm10383409pfv.192.2021.10.12.04.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 04:17:05 -0700 (PDT)
-From:   davidcomponentone@gmail.com
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        David Yang <davidcomponentone@gmail.com>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] Fix application of sizeof to pointer
-Date:   Tue, 12 Oct 2021 19:16:49 +0800
-Message-Id: <20211012111649.983253-1-davidcomponentone@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S236129AbhJLLpu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Oct 2021 07:45:50 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:20034 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232704AbhJLLpu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Oct 2021 07:45:50 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19CB3Mso026714;
+        Tue, 12 Oct 2021 07:43:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=jOvfsQNRsaWG6xIqiUwd8J5SFAiJeaVyxUdtYxIhmno=;
+ b=Y/JhRqQdKCndCigWg/tch5hYzu63KHM68Jp5NwrPGb2ww2vUeuCIvmFKlaJ0lLvqfVCS
+ yCURcAtdirmiGAV32THPF7MdBuldyhYx/Dkc/pbKt/mIcgOGYGbMmCkyqxm8buntmUfi
+ ShjG6p2ki3WIKdx9u0h+/IQ2cSQvaF8QnzGOSCsDDgzbWVgncAypY7h7UjJkP1eisHGo
+ br2qIM0mFVrt5TPtvi9GHb/Che7Rr+mIDZkGzUAtqGmFMJZnjA82CJIdgGqZ71zPoUg9
+ rLi9NeC19dGireAchotG5nw+PZfOuhY6Qa0cCJvnFL8P/GFHiCiEMDu+Iaas3MdacvIc fA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bn49yqfqa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Oct 2021 07:43:37 -0400
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19CBN9Vg019406;
+        Tue, 12 Oct 2021 07:43:36 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bn49yqfps-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Oct 2021 07:43:36 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19CBhPcZ031110;
+        Tue, 12 Oct 2021 11:43:34 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 3bk2q9pa6h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Oct 2021 11:43:33 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19CBhK7g23069036
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Oct 2021 11:43:21 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E79C75207A;
+        Tue, 12 Oct 2021 11:43:20 +0000 (GMT)
+Received: from sig-9-145-45-184.uk.ibm.com (unknown [9.145.45.184])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9D0905204F;
+        Tue, 12 Oct 2021 11:43:20 +0000 (GMT)
+Message-ID: <b4e2bd3d417a808cb747c09bf6cfa6f74404f1c0.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next 2/3] libbpf: Fix dumping big-endian bitfields
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Date:   Tue, 12 Oct 2021 13:43:20 +0200
+In-Reply-To: <CAEf4BzZeUQf4DzCNgkpR7yqsb41=Vvu8EPfdTQBwaBk95Dxi-w@mail.gmail.com>
+References: <20211012023218.399568-1-iii@linux.ibm.com>
+         <20211012023218.399568-3-iii@linux.ibm.com>
+         <CAEf4BzZeUQf4DzCNgkpR7yqsb41=Vvu8EPfdTQBwaBk95Dxi-w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: UaXgtLwku4G3Bj7opmC_tgNnZmfP6sV_
+X-Proofpoint-GUID: iTF0q4JhUK-UgrMGss-0DUINa05opmXl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-12_02,2021-10-12_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999 malwarescore=0
+ adultscore=0 priorityscore=1501 phishscore=0 spamscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110120067
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: David Yang <davidcomponentone@gmail.com>
+On Tue, 2021-10-12 at 06:03 +0200, Andrii Nakryiko wrote:
+> On Tue, Oct 12, 2021 at 4:32 AM Ilya Leoshkevich <iii@linux.ibm.com>
+> wrote:
+> > 
+> > On big-endian arches not only bytes, but also bits are numbered in
+> > reverse order (see e.g. S/390 ELF ABI Supplement, but this is also
+> > true
+> > for other big-endian arches as well).
+> > 
+> > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> > ---
+> >  tools/lib/bpf/btf_dump.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> > index ad6df97295ae..ab45771d0cb4 100644
+> > --- a/tools/lib/bpf/btf_dump.c
+> > +++ b/tools/lib/bpf/btf_dump.c
+> > @@ -1577,14 +1577,15 @@ static int
+> > btf_dump_get_bitfield_value(struct btf_dump *d,
+> >         /* Bitfield value retrieval is done in two steps; first
+> > relevant bytes are
+> >          * stored in num, then we left/right shift num to eliminate
+> > irrelevant bits.
+> >          */
+> > -       nr_copy_bits = bit_sz + bits_offset;
+> >         nr_copy_bytes = t->size;
+> >  #if __BYTE_ORDER == __LITTLE_ENDIAN
+> >         for (i = nr_copy_bytes - 1; i >= 0; i--)
+> >                 num = num * 256 + bytes[i];
+> > +       nr_copy_bits = bit_sz + bits_offset;
+> >  #elif __BYTE_ORDER == __BIG_ENDIAN
+> >         for (i = 0; i < nr_copy_bytes; i++)
+> >                 num = num * 256 + bytes[i];
+> > +       nr_copy_bits = nr_copy_bytes * 8 - bits_offset;
+> 
+> oh, I remember dealing with this in the context of pahole. Just one
+> nit, please use t->size instead of nr_copy_bytes, I think it will
+> make
+> it a bit more explicit (nr_copy_bytes is logically mutable, though
+> only in little-endian case, but still).
 
-The coccinelle check report:
-"./samples/bpf/xdp_redirect_cpu_user.c:397:32-38:
-ERROR: application of sizeof to pointer"
-Using the "strlen" to fix it.
+Both sz and num_copy_bytes look redundant to be honest. What do you
+think about dropping both completely and just using t->size everywhere
+instead?
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: David Yang <davidcomponentone@gmail.com>
----
- samples/bpf/xdp_redirect_cpu_user.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> >  #else
+> >  # error "Unrecognized __BYTE_ORDER__"
+> >  #endif
+> > --
+> > 2.31.1
+> > 
 
-diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
-index 6e25fba64c72..d84e6949007c 100644
---- a/samples/bpf/xdp_redirect_cpu_user.c
-+++ b/samples/bpf/xdp_redirect_cpu_user.c
-@@ -325,7 +325,6 @@ int main(int argc, char **argv)
- 	int add_cpu = -1;
- 	int ifindex = -1;
- 	int *cpu, i, opt;
--	char *ifname;
- 	__u32 qsize;
- 	int n_cpus;
- 
-@@ -393,9 +392,8 @@ int main(int argc, char **argv)
- 				fprintf(stderr, "-d/--dev name too long\n");
- 				goto end_cpu;
- 			}
--			ifname = (char *)&ifname_buf;
--			safe_strncpy(ifname, optarg, sizeof(ifname));
--			ifindex = if_nametoindex(ifname);
-+			safe_strncpy(ifname_buf, optarg, strlen(ifname_buf));
-+			ifindex = if_nametoindex(ifname_buf);
- 			if (!ifindex)
- 				ifindex = strtoul(optarg, NULL, 0);
- 			if (!ifindex) {
--- 
-2.30.2
 
