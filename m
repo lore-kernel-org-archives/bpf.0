@@ -2,106 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51489C433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 12:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3807C433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 12:51:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B2536101D
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 12:48:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC3506101D
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 12:51:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbhJLMuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Oct 2021 08:50:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43573 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236508AbhJLMuT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Oct 2021 08:50:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1634042896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OKLvXpV+oAjkG5GJWRYOYD3Wm31HeEfrG7+1hQhnTQY=;
-        b=QZf9GUa/nHuPAYRzPJwH+qCshx5J8k+AOjkQrF+54u1cy+8aK6LpmiLEU/Mj77YHMtO/RX
-        JG8bg1KIiLvc2TKrd45FxrB+VxR/GDlHybg59t5xf8kv2hnHZl0lfj0gnOEAlnIGClDsD2
-        XSfjVz7lmkJsLMwNsSQ1LKYO29ZQtxw=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-383-1LSsi1YiPKKuS8PrEogqbA-1; Tue, 12 Oct 2021 08:48:15 -0400
-X-MC-Unique: 1LSsi1YiPKKuS8PrEogqbA-1
-Received: by mail-ed1-f70.google.com with SMTP id v2-20020a50f082000000b003db24e28d59so18802376edl.5
-        for <bpf@vger.kernel.org>; Tue, 12 Oct 2021 05:48:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=OKLvXpV+oAjkG5GJWRYOYD3Wm31HeEfrG7+1hQhnTQY=;
-        b=qyzVgIpnjlTyzblD+CsiOB4I3aRwauhL3e1Vx/ZeP/x9+OlbGzztvLGxyVdpeO5k9b
-         uRe2mBKMsNHQCdSFvNxVcXqO1OFqibBP4Ty3eXdVmNdRpUBsZVBi0iCfqpFQa4AlVDF5
-         9R9gwJTRduILIA/PS2MsrohT1Nb8DSQVYIzWy6bJt/nWXElX/C1AVYdjhcPBG3GlfrRg
-         QzWLmcCLkaD1L0d2AQ8kPRDCCJ8DOUG2tyIJaERnfVPLgXI/Apjhw5sq5wSrdd8I3Z+3
-         STZAONoRaqQueipWw4C12gy2n2EyPoyUkzsYrKlbKeuee2OLORHIAenHUjo1L+0kCCkN
-         g+UQ==
-X-Gm-Message-State: AOAM532IbY+u13kje4y7uT5WolJsa4XCVdIVPfzW4JxH+6Kph3imW1FX
-        oE+j5D5TD5siOGb/6Mc0oTFLdcnH3cmW0bzcfKUjDRfUXWGwNLSjQd9nsNIZ+c6pVLcWCksaQJd
-        sIIv0g+xzy8wT
-X-Received: by 2002:a17:906:ce25:: with SMTP id sd5mr31414775ejb.398.1634042892309;
-        Tue, 12 Oct 2021 05:48:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzt4ERaDuaOp0WSodAqCRB84ZWS5CYlr3SxKZHLOVekfIN4mKBw8+90dBiOjzrjmx0YHgjLHg==
-X-Received: by 2002:a17:906:ce25:: with SMTP id sd5mr31414591ejb.398.1634042890550;
-        Tue, 12 Oct 2021 05:48:10 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id x16sm4828581ejj.8.2021.10.12.05.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 05:48:09 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 3A02E180151; Tue, 12 Oct 2021 14:48:09 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Joanne Koong <joannekoong@fb.com>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v4 1/5] bpf: Add bitset map with bloom filter
- capabilities
-In-Reply-To: <CAEf4BzbWVCz6RNKHVgqLYx8UqGUdDqL5EPKyuQ5YTXZMxt2r_Q@mail.gmail.com>
-References: <20211006222103.3631981-1-joannekoong@fb.com>
- <20211006222103.3631981-2-joannekoong@fb.com> <87k0ioncgz.fsf@toke.dk>
- <4536decc-5366-dc07-4923-32f2db948d85@fb.com> <87o87zji2a.fsf@toke.dk>
- <CAEf4BzbqQRzTgPmK3EM0wWw5XrgnenqhhBJdudFjwxLrfPJF8g@mail.gmail.com>
- <87czoejqcv.fsf@toke.dk>
- <CAEf4BzbWVCz6RNKHVgqLYx8UqGUdDqL5EPKyuQ5YTXZMxt2r_Q@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 12 Oct 2021 14:48:09 +0200
-Message-ID: <877deiif3q.fsf@toke.dk>
+        id S236565AbhJLMxN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Oct 2021 08:53:13 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25088 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236489AbhJLMxM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Oct 2021 08:53:12 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19CBWTjV003807;
+        Tue, 12 Oct 2021 08:50:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=z8QTCRjDtWf1CvJ9QlZd9BpM9xbtgJRdNA7YVywr8UA=;
+ b=LCPBFmieWUOAJ6VBshnw6qDVRqS6AF/NlVfFVVNnJMvqzAGo8FGLx+nI7jcti5LTTJZt
+ Y6/jbIhwIkVJVWeMJaa8qPc2d5GxcqTRLJRHb7/xxJg8ej7eeHrOo+t073Qw96nk4Qcc
+ aT2fCoDFCayNVAtwdL7v0PnU/rHyd+O5hOLjmJm36yZG5dukjxWTfDdUqr/QDUDwGnSc
+ NDUk0rr8ngfAMTdOMuDKhczblKb9ENvqmI7RVv3ajJqZHPOumapts5AkQ+neZwebwt/5
+ U8Z+qPwb8/0vyZjX0TQ18AVczlmbjTX97KyQph5qHLv3mJiuXs54Et0XNaawzeWvorVX KQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bn6mwds7n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Oct 2021 08:50:43 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19CCbwNE021744;
+        Tue, 12 Oct 2021 08:50:42 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bn6mwds6u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Oct 2021 08:50:42 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19CCDSVt023862;
+        Tue, 12 Oct 2021 12:31:55 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma02fra.de.ibm.com with ESMTP id 3bk2q9pqem-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Oct 2021 12:31:54 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19CCVePc58786234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Oct 2021 12:31:40 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10204A405E;
+        Tue, 12 Oct 2021 12:31:40 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D3DCA4069;
+        Tue, 12 Oct 2021 12:31:25 +0000 (GMT)
+Received: from hbathini-workstation.ibm.com.com (unknown [9.43.27.69])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Oct 2021 12:31:24 +0000 (GMT)
+From:   Hari Bathini <hbathini@linux.ibm.com>
+To:     naveen.n.rao@linux.ibm.com, christophe.leroy@csgroup.eu,
+        mpe@ellerman.id.au, ast@kernel.org, daniel@iogearbox.net
+Cc:     paulus@samba.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Subject: [RESEND PATCH v4 1/8] bpf powerpc: Remove unused SEEN_STACK
+Date:   Tue, 12 Oct 2021 18:00:49 +0530
+Message-Id: <20211012123056.485795-2-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211012123056.485795-1-hbathini@linux.ibm.com>
+References: <20211012123056.485795-1-hbathini@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: T_NaaMFUFCfZoHe0m2zO2Nm_7aCJAzmy
+X-Proofpoint-ORIG-GUID: G2kuLDpQSFiLJBeP0CSO5UeyqyGpu8i8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-12_03,2021-10-12_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110120073
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+From: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
 
->>
->> The 'find first set' operation is a single instruction on common
->> architectures, so it's an efficient way of finding the first non-empty
->> bucket if you index them in a bitmap; sch_qfq uses this, for instance.
->
-> There is also extremely useful popcnt() instruction, would be great to
-> have that as well. There is also fls() (find largest set bit), it is
-> used extensively throughout the kernel. If we'd like to take this ad
-> absurdum, there are a lot of useful operations defined in
-> include/linux/bitops.h and include/linux/bitmap.h, I'm pretty sure one
-> can come up with a use case for every one of those.
->
-> The question is whether we should bloat the kernel with such
-> helpers/operations?
+SEEN_STACK is unused on PowerPC. Remove it. Also, have
+SEEN_TAILCALL use 0x40000000.
 
-I agree, all of those are interesting bitwise operations that would be
-useful to expose to BPF. But if we're not going to "bloat the kernel"
-with them, what should we do? Introduce new BPF instructions?
+Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
 
-> I'd love to hear specific arguments in favor of dedicated BITSET,
-> though.
+* No changes in v4.
 
-Mainly the above; given the right instructions, I totally buy your
-assertion that one can build a bitmap using regular BPF arrays...
 
--Toke
+ arch/powerpc/net/bpf_jit.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 7e9b978b768e..89bd744c2bff 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -125,8 +125,7 @@
+ #define COND_LE		(CR0_GT | COND_CMP_FALSE)
+ 
+ #define SEEN_FUNC	0x20000000 /* might call external helpers */
+-#define SEEN_STACK	0x40000000 /* uses BPF stack */
+-#define SEEN_TAILCALL	0x80000000 /* uses tail calls */
++#define SEEN_TAILCALL	0x40000000 /* uses tail calls */
+ 
+ #define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
+ #define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
+-- 
+2.31.1
 
