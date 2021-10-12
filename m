@@ -2,121 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3807C433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 12:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47BB9C433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 13:59:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC3506101D
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 12:51:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C5BE60EBB
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 13:59:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236565AbhJLMxN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Oct 2021 08:53:13 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25088 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236489AbhJLMxM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Oct 2021 08:53:12 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19CBWTjV003807;
-        Tue, 12 Oct 2021 08:50:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=z8QTCRjDtWf1CvJ9QlZd9BpM9xbtgJRdNA7YVywr8UA=;
- b=LCPBFmieWUOAJ6VBshnw6qDVRqS6AF/NlVfFVVNnJMvqzAGo8FGLx+nI7jcti5LTTJZt
- Y6/jbIhwIkVJVWeMJaa8qPc2d5GxcqTRLJRHb7/xxJg8ej7eeHrOo+t073Qw96nk4Qcc
- aT2fCoDFCayNVAtwdL7v0PnU/rHyd+O5hOLjmJm36yZG5dukjxWTfDdUqr/QDUDwGnSc
- NDUk0rr8ngfAMTdOMuDKhczblKb9ENvqmI7RVv3ajJqZHPOumapts5AkQ+neZwebwt/5
- U8Z+qPwb8/0vyZjX0TQ18AVczlmbjTX97KyQph5qHLv3mJiuXs54Et0XNaawzeWvorVX KQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bn6mwds7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Oct 2021 08:50:43 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19CCbwNE021744;
-        Tue, 12 Oct 2021 08:50:42 -0400
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bn6mwds6u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Oct 2021 08:50:42 -0400
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19CCDSVt023862;
-        Tue, 12 Oct 2021 12:31:55 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3bk2q9pqem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Oct 2021 12:31:54 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19CCVePc58786234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Oct 2021 12:31:40 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 10204A405E;
-        Tue, 12 Oct 2021 12:31:40 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0D3DCA4069;
-        Tue, 12 Oct 2021 12:31:25 +0000 (GMT)
-Received: from hbathini-workstation.ibm.com.com (unknown [9.43.27.69])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Oct 2021 12:31:24 +0000 (GMT)
-From:   Hari Bathini <hbathini@linux.ibm.com>
-To:     naveen.n.rao@linux.ibm.com, christophe.leroy@csgroup.eu,
-        mpe@ellerman.id.au, ast@kernel.org, daniel@iogearbox.net
-Cc:     paulus@samba.org, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Subject: [RESEND PATCH v4 1/8] bpf powerpc: Remove unused SEEN_STACK
-Date:   Tue, 12 Oct 2021 18:00:49 +0530
-Message-Id: <20211012123056.485795-2-hbathini@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211012123056.485795-1-hbathini@linux.ibm.com>
-References: <20211012123056.485795-1-hbathini@linux.ibm.com>
+        id S236948AbhJLOBq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Oct 2021 10:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236936AbhJLOBp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Oct 2021 10:01:45 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A54EC06161C
+        for <bpf@vger.kernel.org>; Tue, 12 Oct 2021 06:59:44 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id t2so67306339wrb.8
+        for <bpf@vger.kernel.org>; Tue, 12 Oct 2021 06:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J+GuIj3aWc+P2iq5KRg3Ocnb9emA6/eo+vt5L54uAB8=;
+        b=taW16PAyESJ5O3dRnEWjPJa2DMMYr4oAUH/8HAG7iqZRv+eV4Cjf1Vja1t2FiBAFev
+         flYbmHkQH1G19nooWHG3uyVLv/fvw2QSE/dasax6pbqw2Y2DrrlvlCgZqEXoogfR+xqS
+         EWYIHrd/cnopoVB+lFVq+N1XNgCBrAfkX76OA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J+GuIj3aWc+P2iq5KRg3Ocnb9emA6/eo+vt5L54uAB8=;
+        b=KzQrWi9iGxB2xxnJx7Ov2gBmvXUTQcKHHjaKZQe9kVWlRrniRxZXwMxr9fe26Zzoff
+         l8AEfjTzHQFqM0k44J7P1h9VMmhiQ1y1UTs86NPIB7RYurOxFrV1nP1aTlmykiDC/CC8
+         1wu9g3zCyC3UuIue8dSVKNUfIZMfY/2xsduX0/MzDAZv+1FMV6sch5WMMKbG0N8eAabM
+         s1jclTYg9Uz0lI75Q5RqQGsL1FRCMMeCUujGR5tGQs6jAyaKoswholkurE2jv1fu0E89
+         aeJ7SbynmtRmWrzh6ouD9UiyTV5OgBaDl8dXL3FdgvTIrnomj0G5DihorhwjP4iLz2YR
+         J8mw==
+X-Gm-Message-State: AOAM531mfPOWlAZDH4Z0nzxwq1Cn2TORvNejnedOxiI2KapzdxJZvTor
+        I6E5gC+XA/t/UGa2xP8wjxcjLg==
+X-Google-Smtp-Source: ABdhPJzEvONrPWYpm0JwryJr3pc0eUlNhggqvqv4BA1FliYf1tYhBkyS6nLO5ZstlXnqog5GloEXcg==
+X-Received: by 2002:adf:aa04:: with SMTP id p4mr32712587wrd.67.1634047182565;
+        Tue, 12 Oct 2021 06:59:42 -0700 (PDT)
+Received: from antares.. (d.5.b.3.f.b.d.4.c.0.9.7.6.8.3.1.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:1386:790c:4dbf:3b5d])
+        by smtp.gmail.com with ESMTPSA id o6sm14875894wri.49.2021.10.12.06.59.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Oct 2021 06:59:42 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     nicolas.dichtel@6wind.com, luke.r.nels@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH v2 0/4] Fix up bpf_jit_limit some more
+Date:   Tue, 12 Oct 2021 14:59:31 +0100
+Message-Id: <20211012135935.37054-1-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: T_NaaMFUFCfZoHe0m2zO2Nm_7aCJAzmy
-X-Proofpoint-ORIG-GUID: G2kuLDpQSFiLJBeP0CSO5UeyqyGpu8i8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-12_03,2021-10-12_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- mlxscore=0 adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110120073
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Some more cleanups around bpf_jit_limit to make it readable via sysctl.
 
-SEEN_STACK is unused on PowerPC. Remove it. Also, have
-SEEN_TAILCALL use 0x40000000.
+Jakub raised the point that a sysctl toggle is UAPI and therefore
+can't be easily changed later on. I tried to find another place to stick
+the info, but couldn't find a good one. All the current BPF knobs are in
+sysctl.
 
-Signed-off-by: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
+There are examples of read only sysctls:
+$ sudo find /proc/sys -perm 0444 | wc -l
+90
 
-* No changes in v4.
+There are no examples of sysctls with mode 0400 however:
+$ sudo find /proc/sys -perm 0400 | wc -l
+0
 
+Thoughts?
 
- arch/powerpc/net/bpf_jit.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Changes in v2:
+* riscv not sparcv (Luke)
+* Expose bpf_jit_current in bytes, not pages (Nicholas)
 
-diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-index 7e9b978b768e..89bd744c2bff 100644
---- a/arch/powerpc/net/bpf_jit.h
-+++ b/arch/powerpc/net/bpf_jit.h
-@@ -125,8 +125,7 @@
- #define COND_LE		(CR0_GT | COND_CMP_FALSE)
- 
- #define SEEN_FUNC	0x20000000 /* might call external helpers */
--#define SEEN_STACK	0x40000000 /* uses BPF stack */
--#define SEEN_TAILCALL	0x80000000 /* uses tail calls */
-+#define SEEN_TAILCALL	0x40000000 /* uses tail calls */
- 
- #define SEEN_VREG_MASK	0x1ff80000 /* Volatile registers r3-r12 */
- #define SEEN_NVREG_MASK	0x0003ffff /* Non volatile registers r14-r31 */
+Lorenz Bauer (4):
+  bpf: define bpf_jit_alloc_exec_limit for riscv JIT
+  bpf: define bpf_jit_alloc_exec_limit for arm64 JIT
+  bpf: prevent increasing bpf_jit_limit above max
+  bpf: export bpf_jit_current
+
+ Documentation/admin-guide/sysctl/net.rst |  6 ++++++
+ arch/arm64/net/bpf_jit_comp.c            |  5 +++++
+ arch/riscv/net/bpf_jit_core.c            |  5 +++++
+ include/linux/filter.h                   |  2 ++
+ kernel/bpf/core.c                        |  7 ++++---
+ net/core/sysctl_net_core.c               | 26 +++++++++++++++++++++++-
+ 6 files changed, 47 insertions(+), 4 deletions(-)
+
 -- 
-2.31.1
+2.30.2
 
