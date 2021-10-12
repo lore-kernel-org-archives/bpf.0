@@ -2,116 +2,219 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D185C433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 02:51:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4429C433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 03:17:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DC2960EE5
-	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 02:51:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FD7E60E8B
+	for <bpf@archiver.kernel.org>; Tue, 12 Oct 2021 03:17:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbhJLCxj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Oct 2021 22:53:39 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44480 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231672AbhJLCxh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 11 Oct 2021 22:53:37 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19C2g7ur014649;
-        Mon, 11 Oct 2021 22:51:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=xYqeXchHEW1P/AnDNf/4ITuRTVdjA655bkxy8OJILVE=;
- b=d7PY52UN8WwpWf2dlDlC9aBB4Or/Mg+plEFVaAQOz7Qu3vq6PtSwJgmzbLxZku+2f4z5
- 3nl/4OEPGzaZUjooQu6B1ZXjMoDNWKvEZgAcna8xU8RJwSHdgrK6Wtge/wWdmn4S7Nuu
- CELc+akIwk0Bw6ZE7J67nretug9qzhNlTnb4TI/Sy4O9vw+6v/ZJB0EXTKvMUT1I5I7F
- ie/FrpsW0CeC0I1nJFcqjniYswMIKT6MxdDq2ztnaJeZRBa4Q+9yikA7tTPyI24NcKTp
- EH4AyHt4x/q7fxu8SoFHpy4V5u3K/p3XBxRWDkiPdkfRsKTYTM8CnIv7v1fs5ynXiQ2c Tg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bn1t9g3vg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Oct 2021 22:51:24 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19C2pNAo017132;
-        Mon, 11 Oct 2021 22:51:23 -0400
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bn1t9g3tu-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Oct 2021 22:51:23 -0400
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19C2BLhT009794;
-        Tue, 12 Oct 2021 02:32:24 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3bk2q9be7c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Oct 2021 02:32:24 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19C2WKfS18678204
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Oct 2021 02:32:20 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA44811C054;
-        Tue, 12 Oct 2021 02:32:20 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A5F111C050;
-        Tue, 12 Oct 2021 02:32:20 +0000 (GMT)
-Received: from vm.lan (unknown [9.145.45.184])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Oct 2021 02:32:20 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Use cpu_number only on arches that have it
-Date:   Tue, 12 Oct 2021 04:32:16 +0200
-Message-Id: <20211012023218.399568-2-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211012023218.399568-1-iii@linux.ibm.com>
-References: <20211012023218.399568-1-iii@linux.ibm.com>
+        id S231951AbhJLDTt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Oct 2021 23:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231742AbhJLDTt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Oct 2021 23:19:49 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487CFC061570
+        for <bpf@vger.kernel.org>; Mon, 11 Oct 2021 20:17:48 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id d131so43542497ybd.5
+        for <bpf@vger.kernel.org>; Mon, 11 Oct 2021 20:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RBk23ij5AVzmMpFqPM3b8WHu01WexSRJcFMEd4U2rcA=;
+        b=FyO4xieYGo2P6VjByrQIIl3J3lSYBmps2udq4thGf84ryCDNPggyvLbi36DmHe0T4a
+         vStysyiQy2qnmPmlrC2htzbjW5a6qc6bB+59TlATHkLWuYHR1Smq8XID+3HF7Zozzizo
+         nKVYr08OlTE5ILE3vqY37tEf/mR3CzC5y35P42FNVlycTaNP01nqk3ZtjI/jBmE1D3em
+         7Za5fNQGV87ZV6RYtExqUC36g4Y6DyROalsrrbYL+t3BD8d1BJ1VBO7vkUfKAmbtaxVK
+         CZbzVYCtiwg21fez2/Urper5LV6kMUb2gktxYasNRT9kJ9j8dh1kOuuxwpdXBNpvp+v8
+         VIUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RBk23ij5AVzmMpFqPM3b8WHu01WexSRJcFMEd4U2rcA=;
+        b=66AyQzLoD4bOmJB6eyTZVW7cj3gcVwfRYMc3UNuzNm5hKm7JboWTjlM0kslmnZO7Nx
+         7+JI9iNkKLGTF7u6IZMdXgnab1icfvF0OkmvCDI4siEQLWUwcX8I7+FoKqg5h8oiRH3u
+         W9LQFFOGeHGSfd8itQjc1upVCUn+7IFc5Fx1D0s4IWh6gtuItm+aFb+/jmmjjDKnlfs6
+         AkwwKuu4AvwYrBYvHu1nGSDX1MayEgC4tfsLQnpGdPVF3gjExbPdvtSnIoQa4u/sMZvr
+         TkJwB9NYtqGF8m/d8vwWJ6JWn1kwjrpfgPx/xhDcvlP2usdJAA4Z47dRWnO1eJyBvzq2
+         6AxA==
+X-Gm-Message-State: AOAM532Aw4E8UIYKjWkoiCQWSW5O5ohr5Ho5LPoAFHk8RCXEUn2biDFr
+        /2r2A++nHEslUll/VPTURqFGLXrTrcWrtGdC6A4=
+X-Google-Smtp-Source: ABdhPJzGa0yJYV9NAJM8Jj3nSkd1Fq0sK5ZJDgTxOPRcJOKkK5riGcKItg8c0/jr8CyVuLlVei1ngQMMThHTLgZzqLs=
+X-Received: by 2002:a25:5606:: with SMTP id k6mr25399666ybb.51.1634008667335;
+ Mon, 11 Oct 2021 20:17:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: vTuccsjHYX8zwnplm3xVYGEn_97kD7Sa
-X-Proofpoint-GUID: DKaW5zZTMfq-d_Vx87WsO89eUcSxdrtx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-11_11,2021-10-11_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 suspectscore=0 impostorscore=0 mlxscore=0
- spamscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110120008
+References: <20211006222103.3631981-1-joannekoong@fb.com> <20211006222103.3631981-2-joannekoong@fb.com>
+ <87k0ioncgz.fsf@toke.dk> <4536decc-5366-dc07-4923-32f2db948d85@fb.com>
+ <87o87zji2a.fsf@toke.dk> <CAEf4BzbqQRzTgPmK3EM0wWw5XrgnenqhhBJdudFjwxLrfPJF8g@mail.gmail.com>
+ <87czoejqcv.fsf@toke.dk>
+In-Reply-To: <87czoejqcv.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Oct 2021 05:17:36 +0200
+Message-ID: <CAEf4BzbWVCz6RNKHVgqLYx8UqGUdDqL5EPKyuQ5YTXZMxt2r_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/5] bpf: Add bitset map with bloom filter capabilities
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Joanne Koong <joannekoong@fb.com>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <Kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-cpu_number exists only on Intel and aarch64, so skip the test involing
-it on other arches. An alternative would be to replace it with an
-exported non-ifdefed primitive-typed percpu variable from the common
-code, but there appears to be none.
+On Sat, Oct 9, 2021 at 3:10 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
+t.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Fri, Oct 8, 2021 at 2:58 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
+edhat.com> wrote:
+> >>
+> >> Joanne Koong <joannekoong@fb.com> writes:
+> >>
+> >> > On 10/7/21 7:20 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> >> >
+> >> >> Joanne Koong <joannekoong@fb.com> writes:
+> >> >>
+> >> >>> This patch adds the kernel-side changes for the implementation of
+> >> >>> a bitset map with bloom filter capabilities.
+> >> >>>
+> >> >>> The bitset map does not have keys, only values since it is a
+> >> >>> non-associative data type. When the bitset map is created, it must
+> >> >>> be created with a key_size of 0, and the max_entries value should =
+be the
+> >> >>> desired size of the bitset, in number of bits.
+> >> >>>
+> >> >>> The bitset map supports peek (determining whether a bit is set in =
+the
+> >> >>> map), push (setting a bit in the map), and pop (clearing a bit in =
+the
+> >> >>> map) operations. These operations are exposed to userspace applica=
+tions
+> >> >>> through the already existing syscalls in the following way:
+> >> >>>
+> >> >>> BPF_MAP_UPDATE_ELEM -> bpf_map_push_elem
+> >> >>> BPF_MAP_LOOKUP_ELEM -> bpf_map_peek_elem
+> >> >>> BPF_MAP_LOOKUP_AND_DELETE_ELEM -> bpf_map_pop_elem
+> >> >>>
+> >> >>> For updates, the user will pass in a NULL key and the index of the
+> >> >>> bit to set in the bitmap as the value. For lookups, the user will =
+pass
+> >> >>> in the index of the bit to check as the value. If the bit is set, =
+0
+> >> >>> will be returned, else -ENOENT. For clearing the bit, the user wil=
+l pass
+> >> >>> in the index of the bit to clear as the value.
+> >> >> This is interesting, and I can see other uses of such a data struct=
+ure.
+> >> >> However, a couple of questions (talking mostly about the 'raw' bitm=
+ap
+> >> >> without the bloom filter enabled):
+> >> >>
+> >> >> - How are you envisioning synchronisation to work? The code is usin=
+g the
+> >> >>    atomic set_bit() operation, but there's no test_and_{set,clear}_=
+bit().
+> >> >>    Any thoughts on how users would do this?
+> >> > I was thinking for users who are doing concurrent lookups + updates,
+> >> > they are responsible for synchronizing the operations through mutexe=
+s.
+> >> > Do you think this makes sense / is reasonable?
+> >>
+> >> Right, that is an option, of course, but it's a bit heavyweight. Atomi=
+c
+> >> bitops are a nice light-weight synchronisation primitive.
+> >>
+> >> Hmm, looking at your code again, you're already using
+> >> test_and_clear_bit() in pop_elem(). So why not just mirror that to
+> >> test_and_set_bit() in push_elem(), and change the returns to EEXIST an=
+d
+> >> ENOENT if trying to set or clear a bit that is already set or cleared
+> >> (respectively)?
+> >>
+> >> >> - It would be useful to expose the "find first set (ffs)" operation=
+ of
+> >> >>    the bitmap as well. This can be added later, but thinking about =
+the
+> >> >>    API from the start would be good to avoid having to add a whole
+> >> >>    separate helper for this. My immediate thought is to reserve pee=
+k(-1)
+> >> >>    for this use - WDYT?
+> >> > I think using peek(-1) for "find first set" sounds like a great idea=
+!
+> >>
+> >> Awesome!
+> >
+> > What's the intended use case for such an operation?
+>
+> The 'find first set' operation is a single instruction on common
+> architectures, so it's an efficient way of finding the first non-empty
+> bucket if you index them in a bitmap; sch_qfq uses this, for instance.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 2 ++
- 1 file changed, 2 insertions(+)
+There is also extremely useful popcnt() instruction, would be great to
+have that as well. There is also fls() (find largest set bit), it is
+used extensively throughout the kernel. If we'd like to take this ad
+absurdum, there are a lot of useful operations defined in
+include/linux/bitops.h and include/linux/bitmap.h, I'm pretty sure one
+can come up with a use case for every one of those.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index 87f9df653e4e..12f457b6786d 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -778,8 +778,10 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- static void test_btf_dump_var_data(struct btf *btf, struct btf_dump *d,
- 				   char *str)
- {
-+#if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
- 	TEST_BTF_DUMP_VAR(btf, d, NULL, str, "cpu_number", int, BTF_F_COMPACT,
- 			  "int cpu_number = (int)100", 100);
-+#endif
- 	TEST_BTF_DUMP_VAR(btf, d, NULL, str, "cpu_profile_flip", int, BTF_F_COMPACT,
- 			  "static int cpu_profile_flip = (int)2", 2);
- }
--- 
-2.31.1
+The question is whether we should bloat the kernel with such helpers/operat=
+ions?
 
+I still think that we don't need a dedicated BITSET map. I'm not
+talking about Bloom filters here, mind you. With the Bloom filter I
+can't (in principle) beat the performance aspect, so I stopped trying
+to argue against that. But for BITSET map, there is next to zero
+reason (in my view) to have it as a dedicated map vs just implementing
+it as an ARRAY map. Or even, for cases where it's feasible, as a
+global variable array (avoiding BPF helper calls completely). Any
+bitset operation is literally one bpf_map_lookup_elem() helper call
+and one logical and/or/xor operation. And you can choose whether it
+has to be atomic or not. And you don't even have to do power-of-2
+sizing, if you don't want to (but your life will be a bit harder to
+prove stuff to the BPF verifier).
+
+Further, if one implements BITSET as just an ARRAY of u64s (for
+example), you get all the power of bpf_for_each_map_elem() and you can
+implement finding first unset bit, last unset bit, and anything in
+between. All using already existing primitives. Yes, there is a
+callback overhead, but with your custom ARRAY, you can optimize
+further by using something bigger than u64 as a "building block" of
+your ARRAY. E.g., you can have u64[8], and reduce the number of
+necessary callbacks by 8. But we are getting way too far ahead. My
+claim is that ARRAY is better than BITSET map and doesn't lose in
+performance (still one BPF helper call for basic operations).
+
+I'd love to hear specific arguments in favor of dedicated BITSET, though.
+
+>
+> > But also searching just a first set bit is non completely generic, I'd
+> > imagine that in practice (at least judging from bit operations done on
+> > u64s I've seen in the wild) you'd most likely need "first set bit
+> > after bit N", so peek(-N)?..
+>
+> You're right as far as generality goes, but for my use case "after bit
+> N" is not so important (you enqueue into different buckets and always
+> need to find the lowest one. But there could be other use cases for
+> "find first set after N", of course. If using -N the parameter would
+> have to change to explicitly signed, of course, but that's fine by me :)
+>
+> > I think it's an overkill to provide something like this, but even if
+> > we do, wouldn't BPF_MAP_GET_NEXT_KEY (except we now say it's a
+> > "value", not a "key", but that's nitpicking) be a sort of natural
+> > extension to provide this? Though it might be only available to
+> > user-space right?
+>
+> Yeah, thought about get_next_key() but as you say that doesn't work from
+> BPF. It would make sense to *also* expose this to userspace through
+> get_next_key(), though.
+>
+> > Oh, and it won't work in Bloom filter "mode", right?
+>
+> I expect not? But we could just return -EINVAL in that case?
+>
+> -Toke
+>
