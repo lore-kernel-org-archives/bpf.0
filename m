@@ -2,30 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D0BC43219
-	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 13:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D719BC433FE
+	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 13:10:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC9AD61205
-	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 13:10:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2E79610E5
+	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 13:10:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239349AbhJONMn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Oct 2021 09:12:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34364 "EHLO mail.kernel.org"
+        id S239338AbhJONMo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Oct 2021 09:12:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239346AbhJONMg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Oct 2021 09:12:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AB14F611CC;
-        Fri, 15 Oct 2021 13:10:26 +0000 (UTC)
+        id S239358AbhJONMn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Oct 2021 09:12:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BBDF161151;
+        Fri, 15 Oct 2021 13:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634303429;
-        bh=pos/A3AGWkLojLmktvSfwwI5TPEKapaOyRxc3LrsxfM=;
+        s=k20201202; t=1634303436;
+        bh=y+VIQ6gYgEGg+yQtJUDCekJ1gmSJf3kzkfaDMO+CdMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bv66ZCN0MyXMdmiR3+fE4FxnbDwLwVTdqUg9M4lscWG3WzaIgGDP3b+U/MiDLhU/p
-         tUkU55kirbtOlbVRNV/6AUiyHO/WZkc8PnVzSloLWHMhDAQmK8kF3JmA+2qAO+a5YA
-         P9ZJINU1iTRW0nRwWJBg5h0p5Np/8bwjpvZUrCxJzLS8ReCXPYIbT9kicK94WjOBe1
-         9TP55G2+Nec2n9wAbu/bIx/ZXIr+qM3Wk8nzTO7iK76qraFulxgvtFvPDl4zCzH5UG
-         wMQQ+jnBAEA/x5QAMEiEMQU8TGsnW2NN2gA8vMbS9RFEHjeAouU7Ckv1UbP4ZhgIFA
-         F8NexLjDJliPw==
+        b=UgPq/X1wgcPYX+m5hpVZlHH8z1r/2X4ZIT0scdxtLsyTjsWIVAfGKBsgfb2TtQFi5
+         PlnSnxrkAc2zbyLrD+E8t9VBjUV7ziqFsT2+QFvL6KbT+fvcmBW4KQit64DdrbMcPb
+         j9gCWopKxN4S1yJuLbTbnVb6sdUETZTYvZDlJS5kIxAX94Pg7HnIdDQ5pnTQVBt/1O
+         KRXAlXWIcyYkwrt7KO8EH2WJ2/sRXI3OJmxmd4FzXzPlvqTDq82S9TdhQND/B8oYsD
+         J3QwLldZ7oJ3ZSz4xC1pNKmOBJWMTcdgb1J0wFXsjw+g4dn9GwIpNr7vO/kQtcCsY0
+         s7jBAElPBao8A==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -35,9 +35,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v16 bpf-next 16/20] bpf: test_run: add xdp_shared_info pointer in bpf_test_finish signature
-Date:   Fri, 15 Oct 2021 15:08:53 +0200
-Message-Id: <1b4a98540bd3038c34c1f4d4106268b6874aa1c9.1634301224.git.lorenzo@kernel.org>
+Subject: [PATCH v16 bpf-next 18/20] libbpf: Add SEC name for xdp_mb programs
+Date:   Fri, 15 Oct 2021 15:08:55 +0200
+Message-Id: <682d2fdae2f89e540377dfccee502b1e9dc2f0c4.1634301224.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1634301224.git.lorenzo@kernel.org>
 References: <cover.1634301224.git.lorenzo@kernel.org>
@@ -47,108 +47,46 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-introduce xdp_shared_info pointer in bpf_test_finish signature in order
-to copy back paged data from a xdp multi-buff frame to userspace buffer
+Introduce support SEC("xdp_mb") as a short cut for loading
+the program with type BPF_PROG_TYPE_XDP that fully supports
+XDP multi-buffer.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- net/bpf/test_run.c | 48 +++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 39 insertions(+), 9 deletions(-)
+ tools/lib/bpf/libbpf.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index d7ef526f8d23..80fd2799a06c 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -130,7 +130,8 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index ae0889bebe32..d5ae2716d08b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -244,6 +244,8 @@ enum sec_def_flags {
+ 	SEC_SLEEPABLE = 8,
+ 	/* allow non-strict prefix matching */
+ 	SEC_SLOPPY_PFX = 16,
++	/* BPF program support XDP multi-buff */
++	SEC_XDP_MB = 32,
+ };
  
- static int bpf_test_finish(const union bpf_attr *kattr,
- 			   union bpf_attr __user *uattr, const void *data,
--			   u32 size, u32 retval, u32 duration)
-+			   struct skb_shared_info *sinfo, u32 size,
-+			   u32 retval, u32 duration)
- {
- 	void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
- 	int err = -EFAULT;
-@@ -145,8 +146,36 @@ static int bpf_test_finish(const union bpf_attr *kattr,
- 		err = -ENOSPC;
- 	}
+ struct bpf_sec_def {
+@@ -6171,6 +6173,9 @@ static int libbpf_preload_prog(struct bpf_program *prog,
+ 	if (def & SEC_SLEEPABLE)
+ 		attr->prog_flags |= BPF_F_SLEEPABLE;
  
--	if (data_out && copy_to_user(data_out, data, copy_size))
--		goto out;
-+	if (data_out) {
-+		int len = sinfo ? copy_size - sinfo->xdp_frags_size : copy_size;
++	if (prog->type == BPF_PROG_TYPE_XDP && (def & SEC_XDP_MB))
++		attr->prog_flags |= BPF_F_XDP_MB;
 +
-+		if (copy_to_user(data_out, data, len))
-+			goto out;
-+
-+		if (sinfo) {
-+			int i, offset = len, data_len;
-+
-+			for (i = 0; i < sinfo->nr_frags; i++) {
-+				skb_frag_t *frag = &sinfo->frags[i];
-+
-+				if (offset >= copy_size) {
-+					err = -ENOSPC;
-+					break;
-+				}
-+
-+				data_len = min_t(int, copy_size - offset,
-+						 skb_frag_size(frag));
-+
-+				if (copy_to_user(data_out + offset,
-+						 skb_frag_address(frag),
-+						 data_len))
-+					goto out;
-+
-+				offset += data_len;
-+			}
-+		}
-+	}
-+
- 	if (copy_to_user(&uattr->test.data_size_out, &size, sizeof(size)))
- 		goto out;
- 	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
-@@ -688,7 +717,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	/* bpf program can never convert linear skb to non-linear */
- 	if (WARN_ON_ONCE(skb_is_nonlinear(skb)))
- 		size = skb_headlen(skb);
--	ret = bpf_test_finish(kattr, uattr, skb->data, size, retval, duration);
-+	ret = bpf_test_finish(kattr, uattr, skb->data, NULL, size, retval,
-+			      duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct __sk_buff));
-@@ -856,8 +886,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		goto out;
- 
- 	size = xdp.data_end - xdp.data_meta + sinfo->xdp_frags_size;
--	ret = bpf_test_finish(kattr, uattr, xdp.data_meta, size, retval,
--			      duration);
-+	ret = bpf_test_finish(kattr, uattr, xdp.data_meta, sinfo, size,
-+			      retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct xdp_md));
-@@ -949,8 +979,8 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	if (ret < 0)
- 		goto out;
- 
--	ret = bpf_test_finish(kattr, uattr, &flow_keys, sizeof(flow_keys),
--			      retval, duration);
-+	ret = bpf_test_finish(kattr, uattr, &flow_keys, NULL,
-+			      sizeof(flow_keys), retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, user_ctx,
- 				     sizeof(struct bpf_flow_keys));
-@@ -1054,7 +1084,7 @@ int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kat
- 		user_ctx->cookie = sock_gen_cookie(ctx.selected_sk);
- 	}
- 
--	ret = bpf_test_finish(kattr, uattr, NULL, 0, retval, duration);
-+	ret = bpf_test_finish(kattr, uattr, NULL, NULL, 0, retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, user_ctx, sizeof(*user_ctx));
- 
+ 	if ((prog->type == BPF_PROG_TYPE_TRACING ||
+ 	     prog->type == BPF_PROG_TYPE_LSM ||
+ 	     prog->type == BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
+@@ -8094,6 +8099,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("xdp_devmap/",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
+ 	SEC_DEF("xdp_cpumap/",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
+ 	SEC_DEF("xdp",			XDP, BPF_XDP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
++	SEC_DEF("xdp_mb/",		XDP, BPF_XDP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX | SEC_XDP_MB),
+ 	SEC_DEF("perf_event",		PERF_EVENT, 0, SEC_NONE | SEC_SLOPPY_PFX),
+ 	SEC_DEF("lwt_in",		LWT_IN, 0, SEC_NONE | SEC_SLOPPY_PFX),
+ 	SEC_DEF("lwt_out",		LWT_OUT, 0, SEC_NONE | SEC_SLOPPY_PFX),
 -- 
 2.31.1
 
