@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D0B3C433EF
-	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 16:31:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2341CC4332F
+	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 16:31:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E17496120A
+	by mail.kernel.org (Postfix) with ESMTP id 067606120A
 	for <bpf@archiver.kernel.org>; Fri, 15 Oct 2021 16:31:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241364AbhJOQdm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Oct 2021 12:33:42 -0400
-Received: from mga12.intel.com ([192.55.52.136]:37918 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241358AbhJOQdl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S241360AbhJOQdl (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 15 Oct 2021 12:33:41 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10138"; a="208059619"
+Received: from mga12.intel.com ([192.55.52.136]:37917 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241276AbhJOQdl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Oct 2021 12:33:41 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10138"; a="208059637"
 X-IronPort-AV: E=Sophos;i="5.85,376,1624345200"; 
-   d="scan'208";a="208059619"
+   d="scan'208";a="208059637"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2021 09:31:05 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2021 09:31:07 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.85,376,1624345200"; 
-   d="scan'208";a="528205558"
+   d="scan'208";a="528205571"
 Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Oct 2021 09:31:04 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 15 Oct 2021 09:31:06 -0700
 From:   Tony Nguyen <anthony.l.nguyen@intel.com>
 To:     davem@davemloft.net, kuba@kernel.org
 Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
@@ -32,10 +32,10 @@ Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
         kpsingh@kernel.org, kafai@fb.com, yhs@fb.com,
         songliubraving@fb.com, bpf@vger.kernel.org,
-        Gurucharan G <gurucharanx.g@intel.com>
-Subject: [PATCH net-next 1/9] ice: remove ring_active from ice_ring
-Date:   Fri, 15 Oct 2021 09:29:00 -0700
-Message-Id: <20211015162908.145341-2-anthony.l.nguyen@intel.com>
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Subject: [PATCH net-next 4/9] ice: unify xdp_rings accesses
+Date:   Fri, 15 Oct 2021 09:29:03 -0700
+Message-Id: <20211015162908.145341-5-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211015162908.145341-1-anthony.l.nguyen@intel.com>
 References: <20211015162908.145341-1-anthony.l.nguyen@intel.com>
@@ -47,63 +47,66 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-This field is dead and driver is not making any use of it. Simply remove
-it.
+There has been a long lasting issue of improper xdp_rings indexing for
+XDP_TX and XDP_REDIRECT actions. Given that currently rx_ring->q_index
+is mixed with smp_processor_id(), there could be a situation where Tx
+descriptors are produced onto XDP Tx ring, but tail is never bumped -
+for example pin a particular queue id to non-matching IRQ line.
+
+Address this problem by ignoring the user ring count setting and always
+initialize the xdp_rings array to be of num_possible_cpus() size. Then,
+always use the smp_processor_id() as an index to xdp_rings array. This
+provides serialization as at given time only a single softirq can run on
+a particular CPU.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Gurucharan G <gurucharanx.g@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c  | 2 --
- drivers/net/ethernet/intel/ice/ice_main.c | 1 -
- drivers/net/ethernet/intel/ice/ice_txrx.h | 2 --
- 3 files changed, 5 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_lib.c      | 2 +-
+ drivers/net/ethernet/intel/ice/ice_main.c     | 2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index c8a50898bbc1..472c4525e984 100644
+index 04155139125c..58fad5f82076 100644
 --- a/drivers/net/ethernet/intel/ice/ice_lib.c
 +++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -1338,7 +1338,6 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
+@@ -3215,7 +3215,7 @@ int ice_vsi_rebuild(struct ice_vsi *vsi, bool init_vsi)
  
- 		ring->q_index = i;
- 		ring->reg_idx = vsi->txq_map[i];
--		ring->ring_active = false;
- 		ring->vsi = vsi;
- 		ring->tx_tstamps = &pf->ptp.port.tx;
- 		ring->dev = dev;
-@@ -1357,7 +1356,6 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
- 
- 		ring->q_index = i;
- 		ring->reg_idx = vsi->rxq_map[i];
--		ring->ring_active = false;
- 		ring->vsi = vsi;
- 		ring->netdev = vsi->netdev;
- 		ring->dev = dev;
+ 		ice_vsi_map_rings_to_vectors(vsi);
+ 		if (ice_is_xdp_ena_vsi(vsi)) {
+-			vsi->num_xdp_txq = vsi->alloc_rxq;
++			vsi->num_xdp_txq = num_possible_cpus();
+ 			ret = ice_prepare_xdp_rings(vsi, vsi->xdp_prog);
+ 			if (ret)
+ 				goto err_vectors;
 diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index ceb0912e5850..da91d9f9128c 100644
+index e4c12a87785c..856ae223bf4c 100644
 --- a/drivers/net/ethernet/intel/ice/ice_main.c
 +++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2385,7 +2385,6 @@ static int ice_xdp_alloc_setup_rings(struct ice_vsi *vsi)
+@@ -2638,7 +2638,7 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
+ 	}
  
- 		xdp_ring->q_index = xdp_q_idx;
- 		xdp_ring->reg_idx = vsi->txq_map[xdp_q_idx];
--		xdp_ring->ring_active = false;
- 		xdp_ring->vsi = vsi;
- 		xdp_ring->netdev = NULL;
- 		xdp_ring->dev = dev;
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
-index cce348c83da8..24e123cd6554 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-@@ -269,8 +269,6 @@ struct ice_ring {
- 	u16 q_index;			/* Queue number of ring */
- 	u16 q_handle;			/* Queue handle per TC */
+ 	if (!ice_is_xdp_ena_vsi(vsi) && prog) {
+-		vsi->num_xdp_txq = vsi->alloc_rxq;
++		vsi->num_xdp_txq = num_possible_cpus();
+ 		xdp_ring_err = ice_prepare_xdp_rings(vsi, prog);
+ 		if (xdp_ring_err)
+ 			NL_SET_ERR_MSG_MOD(extack, "Setting up XDP Tx resources failed");
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+index d6d71f82142f..bc64610df7cb 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+@@ -297,7 +297,7 @@ void ice_finalize_xdp_rx(struct ice_rx_ring *rx_ring, unsigned int xdp_res)
  
--	u8 ring_active:1;		/* is ring online or not */
--
- 	u16 count;			/* Number of descriptors */
- 	u16 reg_idx;			/* HW register index of the ring */
+ 	if (xdp_res & ICE_XDP_TX) {
+ 		struct ice_tx_ring *xdp_ring =
+-			rx_ring->vsi->xdp_rings[rx_ring->q_index];
++			rx_ring->vsi->xdp_rings[smp_processor_id()];
  
+ 		ice_xdp_ring_update_tail(xdp_ring);
+ 	}
 -- 
 2.31.1
 
