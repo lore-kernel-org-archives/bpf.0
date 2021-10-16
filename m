@@ -2,21 +2,21 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 194B8C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59470C4321E
 	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0247F60EB4
-	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3593B60F59
+	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbhJPMfV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S240435AbhJPMfV (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 16 Oct 2021 08:35:21 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:25196 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbhJPMfU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Oct 2021 08:35:20 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HWjFF0RZNz8tWZ;
-        Sat, 16 Oct 2021 20:32:01 +0800 (CST)
+Received: from szxga01-in.huawei.com ([45.249.212.187]:13745 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240424AbhJPMfV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Oct 2021 08:35:21 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HWjDd6SJNzWh9V;
+        Sat, 16 Oct 2021 20:31:29 +0800 (CST)
 Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -24,16 +24,16 @@ Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Sat, 16 Oct
- 2021 20:33:08 +0800
+ 2021 20:33:09 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
         "Daniel Borkmann" <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <houtao1@huawei.com>
-Subject: [PATCH bpf-next v2 3/5] bpf: add dummy BPF STRUCT_OPS for test purpose
-Date:   Sat, 16 Oct 2021 20:48:04 +0800
-Message-ID: <20211016124806.1547989-4-houtao1@huawei.com>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: add test cases for struct_ops prog
+Date:   Sat, 16 Oct 2021 20:48:06 +0800
+Message-ID: <20211016124806.1547989-6-houtao1@huawei.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211016124806.1547989-1-houtao1@huawei.com>
 References: <20211016124806.1547989-1-houtao1@huawei.com>
@@ -48,297 +48,196 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently the test of BPF STRUCT_OPS depends on the specific bpf
-implementation of tcp_congestion_ops, but it can not cover all
-basic functionalities (e.g, return value handling), so introduce
-a dummy BPF STRUCT_OPS for test purpose.
-
-Loading a bpf_dummy_ops implementation from userspace is prohibited,
-and its only purpose is to run BPF_PROG_TYPE_STRUCT_OPS program
-through bpf(BPF_PROG_TEST_RUN). Now programs for test_1() & test_2()
-are supported. The following three cases are exercised in
-bpf_dummy_struct_ops_test_run():
-
-(1) test and check the value returned from state arg in test_1(state)
-The content of state is copied from userspace pointer and copied back
-after calling test_1(state). The user pointer is saved in an u64 array
-and the array address is passed through ctx_in.
-
-(2) test and check the return value of test_1(NULL)
-Just simulate the case in which an invalid input argument is passed in.
-
-(3) test multiple arguments passing in test_2(state, ...)
-5 arguments are passed through ctx_in in form of u64 array. The first
-element of array is userspace pointer of state and others 4 arguments
-follow.
+Running a BPF_PROG_TYPE_STRUCT_OPS prog for dummy_st_ops::test_N()
+through bpf_prog_test_run(). Four test cases are added:
+(1) attach dummy_st_ops should fail
+(2) function return value of bpf_dummy_ops::test_1() is expected
+(3) pointer argument of bpf_dummy_ops::test_1() works as expected
+(4) multiple arguments passed to bpf_dummy_ops::test_2() are correct
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- include/linux/bpf.h               |  14 ++
- kernel/bpf/bpf_struct_ops_types.h |   1 +
- net/bpf/Makefile                  |   3 +
- net/bpf/bpf_dummy_struct_ops.c    | 206 ++++++++++++++++++++++++++++++
- 4 files changed, 224 insertions(+)
- create mode 100644 net/bpf/bpf_dummy_struct_ops.c
+ .../selftests/bpf/prog_tests/dummy_st_ops.c   | 114 ++++++++++++++++++
+ .../selftests/bpf/progs/dummy_st_ops.c        |  50 ++++++++
+ 2 files changed, 164 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b503306da2ab..edcd84077bf1 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1016,6 +1016,20 @@ static inline void bpf_module_put(const void *data, struct module *owner)
- 	else
- 		module_put(owner);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+new file mode 100644
+index 000000000000..e59a674b5052
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2021. Huawei Technologies Co., Ltd */
++#include <test_progs.h>
++#include "dummy_st_ops.skel.h"
 +
-+/* Define it here to avoid the use of forward declaration */
++/* Need to keep consistent with definition in include/linux/bpf.h */
 +struct bpf_dummy_ops_state {
 +	int val;
 +};
 +
++static void test_dummy_st_ops_attach(void)
++{
++	struct dummy_st_ops *skel;
++	struct bpf_link *link;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	link = bpf_map__attach_struct_ops(skel->maps.dummy_1);
++	ASSERT_EQ(libbpf_get_error(link), -EOPNOTSUPP, "dummy_st_ops_attach");
++
++	dummy_st_ops__destroy(skel);
++}
++
++static void test_dummy_init_ret_value(void)
++{
++	__u64 args[1] = {0};
++	struct bpf_prog_test_run_attr attr = {
++		.ctx_size_in = sizeof(args),
++		.ctx_in = args,
++	};
++	struct dummy_st_ops *skel;
++	int fd, err;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	fd = bpf_program__fd(skel->progs.test_1);
++	attr.prog_fd = fd;
++	err = bpf_prog_test_run_xattr(&attr);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(attr.retval, 0xf2f3f4f5, "test_ret");
++
++	dummy_st_ops__destroy(skel);
++}
++
++static void test_dummy_init_ptr_arg(void)
++{
++	int exp_retval = 0xbeef;
++	struct bpf_dummy_ops_state in_state = {
++		.val = exp_retval,
++	};
++	__u64 args[1] = {(unsigned long)&in_state};
++	struct bpf_prog_test_run_attr attr = {
++		.ctx_size_in = sizeof(args),
++		.ctx_in = args,
++	};
++	struct dummy_st_ops *skel;
++	int fd, err;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	fd = bpf_program__fd(skel->progs.test_1);
++	attr.prog_fd = fd;
++	err = bpf_prog_test_run_xattr(&attr);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(in_state.val, 0x5a, "test_ptr_ret");
++	ASSERT_EQ(attr.retval, exp_retval, "test_ret");
++
++	dummy_st_ops__destroy(skel);
++}
++
++static void test_dummy_multiple_args(void)
++{
++	__u64 args[5] = {0, -100, 0x8a5f, 'c', 0x1234567887654321ULL};
++	struct bpf_prog_test_run_attr attr = {
++		.ctx_size_in = sizeof(args),
++		.ctx_in = args,
++	};
++	struct dummy_st_ops *skel;
++	int fd, err;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	fd = bpf_program__fd(skel->progs.test_2);
++	attr.prog_fd = fd;
++	err = bpf_prog_test_run_xattr(&attr);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(skel->bss->test_2_args[0], args[0], "arg 0");
++	ASSERT_EQ(skel->bss->test_2_args[1], args[1], "arg 1");
++	ASSERT_EQ(skel->bss->test_2_args[2], args[2], "arg 2");
++	ASSERT_EQ(skel->bss->test_2_args[3], args[3], "arg 3");
++	ASSERT_EQ(skel->bss->test_2_args[4], args[4], "arg 4");
++
++	dummy_st_ops__destroy(skel);
++}
++
++void test_dummy_st_ops(void)
++{
++	if (test__start_subtest("dummy_st_ops_attach"))
++		test_dummy_st_ops_attach();
++	if (test__start_subtest("dummy_init_ret_value"))
++		test_dummy_init_ret_value();
++	if (test__start_subtest("dummy_init_ptr_arg"))
++		test_dummy_init_ptr_arg();
++	if (test__start_subtest("dummy_multiple_args"))
++		test_dummy_multiple_args();
++}
+diff --git a/tools/testing/selftests/bpf/progs/dummy_st_ops.c b/tools/testing/selftests/bpf/progs/dummy_st_ops.c
+new file mode 100644
+index 000000000000..ead87edb75e2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/dummy_st_ops.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2021. Huawei Technologies Co., Ltd */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++struct bpf_dummy_ops_state {
++	int val;
++} __attribute__((preserve_access_index));
++
 +struct bpf_dummy_ops {
-+	int (*test_1)(struct bpf_dummy_ops_state *cb);
-+	int (*test_2)(struct bpf_dummy_ops_state *cb, int a1, unsigned short a2,
++	int (*test_1)(struct bpf_dummy_ops_state *state);
++	int (*test_2)(struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
 +		      char a3, unsigned long a4);
 +};
-+int bpf_dummy_struct_ops_test_run(struct bpf_prog *prog,
-+				  const union bpf_attr *kattr,
-+				  union bpf_attr __user *uattr);
- #else
- static inline const struct bpf_struct_ops *bpf_struct_ops_find(u32 type_id)
- {
-diff --git a/kernel/bpf/bpf_struct_ops_types.h b/kernel/bpf/bpf_struct_ops_types.h
-index 066d83ea1c99..74733ee012e4 100644
---- a/kernel/bpf/bpf_struct_ops_types.h
-+++ b/kernel/bpf/bpf_struct_ops_types.h
-@@ -2,6 +2,7 @@
- /* internal file - do not include directly */
- 
- #ifdef CONFIG_BPF_JIT
-+BPF_STRUCT_OPS_TYPE(bpf_dummy_ops)
- #ifdef CONFIG_INET
- #include <net/tcp.h>
- BPF_STRUCT_OPS_TYPE(tcp_congestion_ops)
-diff --git a/net/bpf/Makefile b/net/bpf/Makefile
-index 1c0a98d8c28f..1ebe270bde23 100644
---- a/net/bpf/Makefile
-+++ b/net/bpf/Makefile
-@@ -1,2 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_BPF_SYSCALL)	:= test_run.o
-+ifeq ($(CONFIG_BPF_JIT),y)
-+obj-$(CONFIG_BPF_SYSCALL)	+= bpf_dummy_struct_ops.o
-+endif
-diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
-new file mode 100644
-index 000000000000..478d7b656ab3
---- /dev/null
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2021. Huawei Technologies Co., Ltd
-+ */
-+#include <linux/kernel.h>
-+#include <linux/bpf_verifier.h>
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
 +
-+extern struct bpf_struct_ops bpf_bpf_dummy_ops;
++char _license[] SEC("license") = "GPL";
 +
-+/* A common type for test_N with return value in bpf_dummy_ops */
-+typedef int (*dummy_ops_test_ret_fn)(struct bpf_dummy_ops_state *state, ...);
-+
-+struct bpf_dummy_ops_test_args {
-+	u64 args[MAX_BPF_FUNC_ARGS];
-+	struct bpf_dummy_ops_state state;
-+};
-+
-+static const struct btf_type *dummy_ops_state;
-+
-+static struct bpf_dummy_ops_test_args *
-+dummy_ops_init_args(const union bpf_attr *kattr, unsigned int nr)
++SEC("struct_ops/test_1")
++int BPF_PROG(test_1, struct bpf_dummy_ops_state *state)
 +{
-+	__u32 size_in;
-+	struct bpf_dummy_ops_test_args *args;
-+	void __user *ctx_in;
-+	void __user *u_state;
++	int ret;
 +
-+	if (!nr || nr > MAX_BPF_FUNC_ARGS)
-+		return ERR_PTR(-EINVAL);
++	if (!state)
++		return 0xf2f3f4f5;
 +
-+	size_in = kattr->test.ctx_size_in;
-+	if (size_in != sizeof(u64) * nr)
-+		return ERR_PTR(-EINVAL);
-+
-+	args = kzalloc(sizeof(*args), GFP_KERNEL);
-+	if (!args)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
-+	if (copy_from_user(args->args, ctx_in, size_in))
-+		return ERR_PTR(-EFAULT);
-+
-+	u_state = u64_to_user_ptr(args->args[0]);
-+	if (!u_state)
-+		return args;
-+
-+	if (copy_from_user(&args->state, u_state, sizeof(args->state))) {
-+		kfree(args);
-+		return ERR_PTR(-EFAULT);
-+	}
-+
-+	return args;
++	ret = state->val;
++	state->val = 0x5a;
++	return ret;
 +}
 +
-+static int dummy_ops_copy_args(struct bpf_dummy_ops_test_args *args)
++__u64 test_2_args[5];
++
++SEC("struct_ops/test_2")
++int BPF_PROG(test_2, struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
++	     char a3, unsigned long a4)
 +{
-+	void __user *u_state;
-+
-+	u_state = u64_to_user_ptr(args->args[0]);
-+	if (!u_state)
-+		return 0;
-+
-+	if (copy_to_user(u_state, &args->state, sizeof(args->state)))
-+		return -EFAULT;
-+
++	test_2_args[0] = (unsigned long)state;
++	test_2_args[1] = a1;
++	test_2_args[2] = a2;
++	test_2_args[3] = a3;
++	test_2_args[4] = a4;
 +	return 0;
 +}
 +
-+static int dummy_ops_call_op(void *image, struct bpf_dummy_ops_test_args *args)
-+{
-+	dummy_ops_test_ret_fn test = (void *)image;
-+	struct bpf_dummy_ops_state *state = NULL;
-+
-+	/* state needs to be NULL if args[0] is 0 */
-+	if (args->args[0])
-+		state = &args->state;
-+	return test(state, args->args[1], args->args[2],
-+		    args->args[3], args->args[4]);
-+}
-+
-+int bpf_dummy_struct_ops_test_run(struct bpf_prog *prog,
-+				  const union bpf_attr *kattr,
-+				  union bpf_attr __user *uattr)
-+{
-+	const struct bpf_struct_ops *st_ops = &bpf_bpf_dummy_ops;
-+	const struct btf_type *func_proto = prog->aux->attach_func_proto;
-+	struct bpf_dummy_ops_test_args *args = NULL;
-+	struct bpf_tramp_progs *tprogs = NULL;
-+	void *image = NULL;
-+	unsigned int op_idx;
-+	int err;
-+	int prog_ret;
-+
-+	args = dummy_ops_init_args(kattr, btf_type_vlen(func_proto));
-+	if (IS_ERR(args))
-+		return PTR_ERR(args);
-+
-+	tprogs = kcalloc(BPF_TRAMP_MAX, sizeof(*tprogs), GFP_KERNEL);
-+	if (!tprogs) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+
-+	image = bpf_jit_alloc_exec(PAGE_SIZE);
-+	if (!image) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
-+	set_vm_flush_reset_perms(image);
-+
-+	op_idx = prog->expected_attach_type;
-+	err = bpf_struct_ops_prepare_trampoline(tprogs, prog,
-+						&st_ops->func_models[op_idx],
-+						image, image + PAGE_SIZE);
-+	if (err < 0)
-+		goto out;
-+
-+	set_memory_ro((long)image, 1);
-+	set_memory_x((long)image, 1);
-+	prog_ret = dummy_ops_call_op(image, args);
-+
-+	err = dummy_ops_copy_args(args);
-+	if (err)
-+		goto out;
-+	if (put_user(prog_ret, &uattr->test.retval))
-+		err = -EFAULT;
-+out:
-+	kfree(args);
-+	bpf_jit_free_exec(image);
-+	kfree(tprogs);
-+	return err;
-+}
-+
-+static int bpf_dummy_init(struct btf *btf)
-+{
-+	s32 type_id;
-+
-+	type_id = btf_find_by_name_kind(btf, "bpf_dummy_ops_state",
-+					BTF_KIND_STRUCT);
-+	if (type_id < 0)
-+		return -EINVAL;
-+
-+	dummy_ops_state = btf_type_by_id(btf, type_id);
-+
-+	return 0;
-+}
-+
-+static bool bpf_dummy_ops_is_valid_access(int off, int size,
-+					  enum bpf_access_type type,
-+					  const struct bpf_prog *prog,
-+					  struct bpf_insn_access_aux *info)
-+{
-+	return bpf_check_btf_func_ctx_access(off, size, type, prog, info);
-+}
-+
-+static int bpf_dummy_ops_btf_struct_access(struct bpf_verifier_log *log,
-+					   const struct btf *btf,
-+					   const struct btf_type *t, int off,
-+					   int size, enum bpf_access_type atype,
-+					   u32 *next_btf_id)
-+{
-+	int err;
-+
-+	if (atype != BPF_READ && t != dummy_ops_state) {
-+		bpf_log(log, "only write to bpf_dummy_ops_state is supported\n");
-+		return -EACCES;
-+	}
-+
-+	err = btf_struct_access(log, btf, t, off, size, atype, next_btf_id);
-+	if (err < 0)
-+		return err;
-+
-+	return atype == BPF_READ ? err : NOT_INIT;
-+}
-+
-+static const struct bpf_verifier_ops bpf_dummy_verifier_ops = {
-+	.is_valid_access = bpf_dummy_ops_is_valid_access,
-+	.btf_struct_access = bpf_dummy_ops_btf_struct_access,
-+};
-+
-+static int bpf_dummy_init_member(const struct btf_type *t,
-+				 const struct btf_member *member,
-+				 void *kdata, const void *udata)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static int bpf_dummy_reg(void *kdata)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static void bpf_dummy_unreg(void *kdata)
-+{
-+}
-+
-+struct bpf_struct_ops bpf_bpf_dummy_ops = {
-+	.verifier_ops = &bpf_dummy_verifier_ops,
-+	.init = bpf_dummy_init,
-+	.init_member = bpf_dummy_init_member,
-+	.reg = bpf_dummy_reg,
-+	.unreg = bpf_dummy_unreg,
-+	.name = "bpf_dummy_ops",
++SEC(".struct_ops")
++struct bpf_dummy_ops dummy_1 = {
++	.test_1 = (void *)test_1,
++	.test_2 = (void *)test_2,
 +};
 -- 
 2.29.2
