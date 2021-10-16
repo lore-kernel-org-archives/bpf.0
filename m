@@ -2,139 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CFD4C433F5
-	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 09:57:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AFD3C433F5
+	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 11:40:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1537C611AF
-	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 09:57:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D411561040
+	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 11:40:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239987AbhJPJ7y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Oct 2021 05:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235573AbhJPJ7x (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Oct 2021 05:59:53 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BC5C061570
-        for <bpf@vger.kernel.org>; Sat, 16 Oct 2021 02:57:46 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id s136so7688356pgs.4
-        for <bpf@vger.kernel.org>; Sat, 16 Oct 2021 02:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mpOAixr3OFRGdoe91PDD9LeUpr0a8cKcJu5K7EQ3uGQ=;
-        b=JAvSW+z0zH5mW19NfQLdGpTtMx5uvMBh9Ncmv/xzv5oOCvPSej7vQKnZt4lSgtil7R
-         G4wr9u8bZM1XJQLsyrW27XwR1p9sFH6DmnkkMcaqitZ8PaoQI+xJQhTGjjLNfeapOh5J
-         UyE6tYLKKDA5ltSQLzk1S7TjDczRs7/D2RzVDVagMVqoiwBwhDzyd2kOG0BEKYLz56nz
-         hp7OhOEsh5BxnQVic4x+m6neopD8gFddkwR8SUVRXTOvvkf9xocJ98HXuBh28oFxf0Fu
-         ouxlZEsFRdcbd+eHlavLtOpRdOUt0U3NZQewa87YPVE3Sy559rVXpZJc4gaCXwWhzCQJ
-         Z7Tg==
+        id S235100AbhJPLmI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Oct 2021 07:42:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38376 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232168AbhJPLmI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 16 Oct 2021 07:42:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634384399;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tjS9YFlVGwtcWTbzJnOhWSoY+8PFA5sGYT0gTfsGBcw=;
+        b=ZdpTbFNszwAvkmv6ltNfNQwPTWMqkUcWZccM5V0hNdxRg27w9//7ZtlyAjxYoVKbyb+BTw
+        wdkq4b4yxgC4YjSz+CfM5a30kMhDaWWify95INUiVLcCfn66MDKPPB3xzLj7MUWQR8rpnd
+        V3OzoeAXfKGqpYOged4IURGDSL06H1A=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-104-MOXF02PpMdiV4T7TFVp-bA-1; Sat, 16 Oct 2021 07:39:58 -0400
+X-MC-Unique: MOXF02PpMdiV4T7TFVp-bA-1
+Received: by mail-wm1-f72.google.com with SMTP id o196-20020a1ca5cd000000b0030dc197412aso1608587wme.0
+        for <bpf@vger.kernel.org>; Sat, 16 Oct 2021 04:39:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mpOAixr3OFRGdoe91PDD9LeUpr0a8cKcJu5K7EQ3uGQ=;
-        b=TuZCovEu/37ptIMnG7PIGgoKX/QCJZwJkr9zZq8ghFAcqzsRGd0H/r9wnHU4hcFOph
-         DNqsp1b5dj5Uit8iupKpYyh0fQ7itJWl+OtWFvGixMfqL1/Dmsnlo2YdQxMTVrJfLZSe
-         JnvJwb67X8O2kKp9vZ4IhJHbIZvoaqTlJJHus0zFHQYdDeXwHRMiDKQT/5blQQJ27Df4
-         X2p0TWHIj+ookBYSkOivDSJcPFq03kogpXDjneEHAC7AEWlSOQbjOrQTl3HYVi0fzabz
-         NqnnKenSa31su/O1+aK+uNJyfHuWNQBjWVvsLdv3M1EuW2lIitP2fO7FxqieY+THiOeI
-         Qlsw==
-X-Gm-Message-State: AOAM532KIyAgGv8bYifNhF0dQi5bc0hpcam6LoCIpgFwt6CxNARC2bts
-        rGAI1hTMUY6S0LBm1RUhyPs=
-X-Google-Smtp-Source: ABdhPJxZBw7bzWVuP8lbk3O7qtXM6z6NYPYBwR54lBu50c84pcrzNoQJ/f1AOOsy/z/o07afNbNWGQ==
-X-Received: by 2002:a05:6a00:24d6:b0:44c:df15:f52e with SMTP id d22-20020a056a0024d600b0044cdf15f52emr16907872pfv.36.1634378265831;
-        Sat, 16 Oct 2021 02:57:45 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.115])
-        by smtp.gmail.com with ESMTPSA id o72sm7209316pjo.50.2021.10.16.02.57.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Oct 2021 02:57:45 -0700 (PDT)
-Subject: Re: BUG: Ksnoop tool failed to pass the BPF verifier with recent
- kernel changes
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, alan.maguire@oracle.com,
-        Yonghong Song <yhs@fb.com>
-References: <800ce502-8f63-8712-7ed4-d3124a5fd6fb@gmail.com>
- <20211015193010.22frp6eat3wz54hq@kafai-mbp.dhcp.thefacebook.com>
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-Message-ID: <da0a8a77-eb71-57c3-35b9-f1dcaeaa560d@gmail.com>
-Date:   Sat, 16 Oct 2021 17:57:43 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.13.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tjS9YFlVGwtcWTbzJnOhWSoY+8PFA5sGYT0gTfsGBcw=;
+        b=MIPBE0R0HHj+HRPXeX6zhpNUOA1T0h/AVAvbzm6IYyuJbWtjEa7gsZ9z0JszmeMGrv
+         E+G+Q1oSjK92IFf9IuX9gwGntRRACdxLzyOye/drpXQAoytBCB+XYvIN1tbkvcW5KOzl
+         VlXllo05BB5tqVMEalTfnU+h4iRJ7qZDK159xlviy2g2NALND3DhsiFfjdj4UNWo9oC9
+         6bwHnSE4PA778E24cHfM+zmpgGjebkiqAEzKN94YV+5fwKiQo9zUMQLw3K/9NmkFOjxC
+         5uXVkhbYVX7ic6cExSHgSiH+lRCtruEScYEi10u58I9d6qDyenwQuKHR4UuF0B5Engs3
+         m1ew==
+X-Gm-Message-State: AOAM533wJ53U9D6OMerlP4xh+CFPlWrI3LB4vwTadrX7zWMUnveC7sCh
+        vws/979ejuao1Bv5t0URODwWTg4XFn6oBuw9BTBmvGkCzJVa/9PlY/Rd2WgOW1UKSpf2LdP7UVw
+        n/PeBIlMpB3dL
+X-Received: by 2002:a5d:47ac:: with SMTP id 12mr20371852wrb.352.1634384397260;
+        Sat, 16 Oct 2021 04:39:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwMbnFqzfoci5oeFVy4BTnkfciAlNCmyxciKO8osAJkH83DA6kseDTUUvad29VpBWcw3rw/Vw==
+X-Received: by 2002:a5d:47ac:: with SMTP id 12mr20371836wrb.352.1634384397087;
+        Sat, 16 Oct 2021 04:39:57 -0700 (PDT)
+Received: from krava ([83.240.63.48])
+        by smtp.gmail.com with ESMTPSA id d24sm6867737wmb.35.2021.10.16.04.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Oct 2021 04:39:56 -0700 (PDT)
+Date:   Sat, 16 Oct 2021 13:39:55 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: Re: [PATCH 7/8] ftrace: Add multi direct modify interface
+Message-ID: <YWq6C69rQhUcAGe+@krava>
+References: <20211008091336.33616-1-jolsa@kernel.org>
+ <20211008091336.33616-8-jolsa@kernel.org>
+ <20211014162819.5c85618b@gandalf.local.home>
+ <YWluhdDMfkNGwlhz@krava>
+ <20211015100509.78d4fb01@gandalf.local.home>
 MIME-Version: 1.0
-In-Reply-To: <20211015193010.22frp6eat3wz54hq@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211015100509.78d4fb01@gandalf.local.home>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 2021/10/16 3:30 AM, Martin KaFai Lau wrote:
-> On Thu, Oct 14, 2021 at 12:35:42AM +0800, Hengqi Chen wrote:
->> Hi, BPF community,
->>
->>
->> I would like to report a possible bug in bpf-next,
->> hope I don't make any stupid mistake. Here is the details:
->>
->> I have two VMs:
->>
->> One has the kernel built against the following commit:
->>
->> 0693b27644f04852e46f7f034e3143992b658869 (bpf-next)
->>
->> The ksnoop tool (from BCC repo) works well on this VM.
->>
->>
->> Another has the kernel built against the following commit:
->>
->> 5319255b8df9271474bc9027cabf82253934f28d (bpf-next)
->>
->> On this VM, the ksnoop tool failed with the following message:
-> I see the error in both mentioned bpf-next commits above.
-> I use the latest llvm and bcc from github.
+On Fri, Oct 15, 2021 at 10:05:09AM -0400, Steven Rostedt wrote:
+> On Fri, 15 Oct 2021 14:05:25 +0200
+> Jiri Olsa <jolsa@redhat.com> wrote:
 > 
-> Can you confirm which llvm version (or llvm git commit) you are using
-> in both the good and the bad case?
+> > ATM I'm bit stuck on the bpf side of this whole change, I'll test
+> > it with my other changes when I unstuck myself ;-)
 > 
+> If you want, I'll apply this as a separate change on top of your patch set.
+> As I don't see anything wrong with your current code.
+> 
+> And when you are satisfied with this, just give me a "tested-by" and I'll
+> push it too.
 
-Indeed, this could be the problem of LLVM, not the kernel.
+sounds great, thanks
+jirka
 
-The following is the version info of my environment:
-
-The good one:
-
-	llvm-config-14 --version
-	14.0.0
-
-	clang -v     
-	Ubuntu clang version 14.0.0-++20210915052613+c78ed20784ee-1~exp1~20210915153417.547
-	Target: x86_64-pc-linux-gnu
-	Thread model: posix
-	InstalledDir: /usr/bin
-	Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9
-	Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9
-	Candidate multilib: .;@m64
-	Selected multilib: .;@m64
-
-The bad one:
-
-	llvm-config-14 --version
-	14.0.0
-
-	clang -v         
-	Ubuntu clang version 14.0.0-++20211008104411+f4145c074cb8-1~exp1~20211008085218.709
-	Target: x86_64-pc-linux-gnu
-	Thread model: posix
-	InstalledDir: /usr/bin
-	Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/10
-	Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/11
-	Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/9
-	Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/11
-	Candidate multilib: .;@m64
-	Selected multilib: .;@m64
