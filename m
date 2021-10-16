@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59470C4321E
-	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EFB2C4332F
+	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3593B60F59
-	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4AB4960EB4
+	for <bpf@archiver.kernel.org>; Sat, 16 Oct 2021 12:33:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240435AbhJPMfV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S240427AbhJPMfW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Oct 2021 08:35:22 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:14359 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240426AbhJPMfV (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 16 Oct 2021 08:35:21 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:13745 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240424AbhJPMfV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Oct 2021 08:35:21 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4HWjDd6SJNzWh9V;
-        Sat, 16 Oct 2021 20:31:29 +0800 (CST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HWj8y1d3zz8x35;
+        Sat, 16 Oct 2021 20:28:18 +0800 (CST)
 Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.8; Sat, 16 Oct 2021 20:33:11 +0800
+ 15.1.2308.8; Sat, 16 Oct 2021 20:33:08 +0800
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.8; Sat, 16 Oct
- 2021 20:33:09 +0800
+ 2021 20:33:07 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
         "Daniel Borkmann" <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <houtao1@huawei.com>
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: add test cases for struct_ops prog
-Date:   Sat, 16 Oct 2021 20:48:06 +0800
-Message-ID: <20211016124806.1547989-6-houtao1@huawei.com>
+Subject: [PATCH bpf-next v2 2/5] bpf: factor out helpers to check ctx access for BTF function
+Date:   Sat, 16 Oct 2021 20:48:03 +0800
+Message-ID: <20211016124806.1547989-3-houtao1@huawei.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211016124806.1547989-1-houtao1@huawei.com>
 References: <20211016124806.1547989-1-houtao1@huawei.com>
@@ -48,197 +48,112 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Running a BPF_PROG_TYPE_STRUCT_OPS prog for dummy_st_ops::test_N()
-through bpf_prog_test_run(). Four test cases are added:
-(1) attach dummy_st_ops should fail
-(2) function return value of bpf_dummy_ops::test_1() is expected
-(3) pointer argument of bpf_dummy_ops::test_1() works as expected
-(4) multiple arguments passed to bpf_dummy_ops::test_2() are correct
+Factor out two helpers to check the read access of ctx for BTF
+function. bpf_check_btf_func_arg_access() is used to check the
+read access to argument is valid, and bpf_check_btf_func_ctx_access()
+also checks whether the btf type of argument is valid besides
+the checking of arguments read. bpf_check_btf_func_ctx_access()
+will be used by the following patch.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- .../selftests/bpf/prog_tests/dummy_st_ops.c   | 114 ++++++++++++++++++
- .../selftests/bpf/progs/dummy_st_ops.c        |  50 ++++++++
- 2 files changed, 164 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
- create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops.c
+ include/linux/bpf.h      | 27 +++++++++++++++++++++++++++
+ kernel/trace/bpf_trace.c | 16 ++--------------
+ net/ipv4/bpf_tcp_ca.c    |  9 +--------
+ 3 files changed, 30 insertions(+), 22 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
-new file mode 100644
-index 000000000000..e59a674b5052
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2021. Huawei Technologies Co., Ltd */
-+#include <test_progs.h>
-+#include "dummy_st_ops.skel.h"
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index b7c1e2bc93f7..b503306da2ab 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1648,6 +1648,33 @@ bool bpf_prog_test_check_kfunc_call(u32 kfunc_id, struct module *owner);
+ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		    const struct bpf_prog *prog,
+ 		    struct bpf_insn_access_aux *info);
 +
-+/* Need to keep consistent with definition in include/linux/bpf.h */
-+struct bpf_dummy_ops_state {
-+	int val;
-+};
-+
-+static void test_dummy_st_ops_attach(void)
++/*
++ * The maximum number of BTF function arguments is MAX_BPF_FUNC_ARGS.
++ * And only aligned read is allowed.
++ */
++static inline bool bpf_check_btf_func_arg_access(int off, int size,
++						 enum bpf_access_type type)
 +{
-+	struct dummy_st_ops *skel;
-+	struct bpf_link *link;
-+
-+	skel = dummy_st_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
-+		return;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.dummy_1);
-+	ASSERT_EQ(libbpf_get_error(link), -EOPNOTSUPP, "dummy_st_ops_attach");
-+
-+	dummy_st_ops__destroy(skel);
++	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
++		return false;
++	if (type != BPF_READ)
++		return false;
++	if (off % size != 0)
++		return false;
++	return true;
 +}
 +
-+static void test_dummy_init_ret_value(void)
++static inline bool bpf_check_btf_func_ctx_access(int off, int size,
++						 enum bpf_access_type type,
++						 const struct bpf_prog *prog,
++						 struct bpf_insn_access_aux *info)
 +{
-+	__u64 args[1] = {0};
-+	struct bpf_prog_test_run_attr attr = {
-+		.ctx_size_in = sizeof(args),
-+		.ctx_in = args,
-+	};
-+	struct dummy_st_ops *skel;
-+	int fd, err;
-+
-+	skel = dummy_st_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
-+		return;
-+
-+	fd = bpf_program__fd(skel->progs.test_1);
-+	attr.prog_fd = fd;
-+	err = bpf_prog_test_run_xattr(&attr);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(attr.retval, 0xf2f3f4f5, "test_ret");
-+
-+	dummy_st_ops__destroy(skel);
++	if (!bpf_check_btf_func_arg_access(off, size, type))
++		return false;
++	return btf_ctx_access(off, size, type, prog, info);
 +}
 +
-+static void test_dummy_init_ptr_arg(void)
-+{
-+	int exp_retval = 0xbeef;
-+	struct bpf_dummy_ops_state in_state = {
-+		.val = exp_retval,
-+	};
-+	__u64 args[1] = {(unsigned long)&in_state};
-+	struct bpf_prog_test_run_attr attr = {
-+		.ctx_size_in = sizeof(args),
-+		.ctx_in = args,
-+	};
-+	struct dummy_st_ops *skel;
-+	int fd, err;
-+
-+	skel = dummy_st_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
-+		return;
-+
-+	fd = bpf_program__fd(skel->progs.test_1);
-+	attr.prog_fd = fd;
-+	err = bpf_prog_test_run_xattr(&attr);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(in_state.val, 0x5a, "test_ptr_ret");
-+	ASSERT_EQ(attr.retval, exp_retval, "test_ret");
-+
-+	dummy_st_ops__destroy(skel);
-+}
-+
-+static void test_dummy_multiple_args(void)
-+{
-+	__u64 args[5] = {0, -100, 0x8a5f, 'c', 0x1234567887654321ULL};
-+	struct bpf_prog_test_run_attr attr = {
-+		.ctx_size_in = sizeof(args),
-+		.ctx_in = args,
-+	};
-+	struct dummy_st_ops *skel;
-+	int fd, err;
-+
-+	skel = dummy_st_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
-+		return;
-+
-+	fd = bpf_program__fd(skel->progs.test_2);
-+	attr.prog_fd = fd;
-+	err = bpf_prog_test_run_xattr(&attr);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(skel->bss->test_2_args[0], args[0], "arg 0");
-+	ASSERT_EQ(skel->bss->test_2_args[1], args[1], "arg 1");
-+	ASSERT_EQ(skel->bss->test_2_args[2], args[2], "arg 2");
-+	ASSERT_EQ(skel->bss->test_2_args[3], args[3], "arg 3");
-+	ASSERT_EQ(skel->bss->test_2_args[4], args[4], "arg 4");
-+
-+	dummy_st_ops__destroy(skel);
-+}
-+
-+void test_dummy_st_ops(void)
-+{
-+	if (test__start_subtest("dummy_st_ops_attach"))
-+		test_dummy_st_ops_attach();
-+	if (test__start_subtest("dummy_init_ret_value"))
-+		test_dummy_init_ret_value();
-+	if (test__start_subtest("dummy_init_ptr_arg"))
-+		test_dummy_init_ptr_arg();
-+	if (test__start_subtest("dummy_multiple_args"))
-+		test_dummy_multiple_args();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/dummy_st_ops.c b/tools/testing/selftests/bpf/progs/dummy_st_ops.c
-new file mode 100644
-index 000000000000..ead87edb75e2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/dummy_st_ops.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2021. Huawei Technologies Co., Ltd */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct bpf_dummy_ops_state {
-+	int val;
-+} __attribute__((preserve_access_index));
-+
-+struct bpf_dummy_ops {
-+	int (*test_1)(struct bpf_dummy_ops_state *state);
-+	int (*test_2)(struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
-+		      char a3, unsigned long a4);
-+};
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("struct_ops/test_1")
-+int BPF_PROG(test_1, struct bpf_dummy_ops_state *state)
-+{
-+	int ret;
-+
-+	if (!state)
-+		return 0xf2f3f4f5;
-+
-+	ret = state->val;
-+	state->val = 0x5a;
-+	return ret;
-+}
-+
-+__u64 test_2_args[5];
-+
-+SEC("struct_ops/test_2")
-+int BPF_PROG(test_2, struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
-+	     char a3, unsigned long a4)
-+{
-+	test_2_args[0] = (unsigned long)state;
-+	test_2_args[1] = a1;
-+	test_2_args[2] = a2;
-+	test_2_args[3] = a3;
-+	test_2_args[4] = a4;
-+	return 0;
-+}
-+
-+SEC(".struct_ops")
-+struct bpf_dummy_ops dummy_1 = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+};
+ int btf_struct_access(struct bpf_verifier_log *log, const struct btf *btf,
+ 		      const struct btf_type *t, int off, int size,
+ 		      enum bpf_access_type atype,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 6b3153841a33..f2858ef32e16 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1644,13 +1644,7 @@ static bool raw_tp_prog_is_valid_access(int off, int size,
+ 					const struct bpf_prog *prog,
+ 					struct bpf_insn_access_aux *info)
+ {
+-	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
+-		return false;
+-	if (type != BPF_READ)
+-		return false;
+-	if (off % size != 0)
+-		return false;
+-	return true;
++	return bpf_check_btf_func_arg_access(off, size, type);
+ }
+ 
+ static bool tracing_prog_is_valid_access(int off, int size,
+@@ -1658,13 +1652,7 @@ static bool tracing_prog_is_valid_access(int off, int size,
+ 					 const struct bpf_prog *prog,
+ 					 struct bpf_insn_access_aux *info)
+ {
+-	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
+-		return false;
+-	if (type != BPF_READ)
+-		return false;
+-	if (off % size != 0)
+-		return false;
+-	return btf_ctx_access(off, size, type, prog, info);
++	return bpf_check_btf_func_ctx_access(off, size, type, prog, info);
+ }
+ 
+ int __weak bpf_prog_test_run_tracing(struct bpf_prog *prog,
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 57709ac09fb2..1eccc4974382 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -81,14 +81,7 @@ static bool bpf_tcp_ca_is_valid_access(int off, int size,
+ 				       const struct bpf_prog *prog,
+ 				       struct bpf_insn_access_aux *info)
+ {
+-	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
+-		return false;
+-	if (type != BPF_READ)
+-		return false;
+-	if (off % size != 0)
+-		return false;
+-
+-	if (!btf_ctx_access(off, size, type, prog, info))
++	if (!bpf_check_btf_func_ctx_access(off, size, type, prog, info))
+ 		return false;
+ 
+ 	if (info->reg_type == PTR_TO_BTF_ID && info->btf_id == sock_id)
 -- 
 2.29.2
 
