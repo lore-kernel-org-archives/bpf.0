@@ -2,69 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 789BCC433F5
-	for <bpf@archiver.kernel.org>; Mon, 18 Oct 2021 14:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F9F5C433F5
+	for <bpf@archiver.kernel.org>; Mon, 18 Oct 2021 14:17:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54A8860F9F
-	for <bpf@archiver.kernel.org>; Mon, 18 Oct 2021 14:14:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2853F60ED5
+	for <bpf@archiver.kernel.org>; Mon, 18 Oct 2021 14:17:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbhJRORE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Oct 2021 10:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S232970AbhJROT0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Oct 2021 10:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbhJRORC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Oct 2021 10:17:02 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEBAC03544C;
-        Mon, 18 Oct 2021 06:53:42 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id s3so15060623ild.0;
-        Mon, 18 Oct 2021 06:53:42 -0700 (PDT)
+        with ESMTP id S232842AbhJROTX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Oct 2021 10:19:23 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA25C094268;
+        Mon, 18 Oct 2021 07:05:47 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id i189so16438977ioa.1;
+        Mon, 18 Oct 2021 07:05:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:message-id:in-reply-to:references:subject
          :mime-version:content-transfer-encoding;
-        bh=EOZerNjV7VwRXGLfK1GgW58LQxxa7xTDPEkBD+ahYkk=;
-        b=MT8G7y3ID+Y6hFzKjaDOoJZ/IOb7HMWvo4wYT0ZX1CsuyXPXxlPxz9ydKtAoEKDEol
-         HBwMr92lF5CAy7XqnOBVPfWaIfyNXH4/ShAa3FTghKCL3fCHfpvRxHnvB8bwqw0PTLX8
-         v1IeBe+iuo0ReVqoZaR27A3mIEYHg9yM3E7IFLayu2PreQScPfF8BrJw2tzEH+6QZqlf
-         6AbdAhRxQTZib4nXx12aporL8S0EP5qvPZGO6cXQx3pAnV2JMLV49kEaw8/1Wa3ws6b6
-         dxxjCXZZr99gZCm35+WXlgWQXqBymBR9eE1jsmwyu7q/QU7lPGVl37sWQgnd7+wwJ5kc
-         BXmw==
+        bh=Zg7ZOhohtZhCCy7y9pyI3V1BTITKPMF9LsGk4rxu3ME=;
+        b=nWNyDok3ZmGoXBOCY7rCOH0ppd4gXK2vUtMNQkkv7frHeMXcrlianwSQCXCO8XHfcz
+         3y8V7pEP1XpLmpJnkagiE5hUH0ZoZ6RxtvaZV6UUNXD9zHSR1ikashslErZRryq+/RoB
+         x51k0yCMuqY5womdTVfwGUtijvkUI3gL4qE5q3LQV5gYGMOrvIuRLGGsyFdPcyx8e2Mt
+         fzCx8+qg0UOaky5bIJACV5hKzdWWrDvFWaDn2p+Nqwz52iLhJwIeu+PuIDQP40iAStDn
+         z2wbm0rzPI2Vny/ISUNKAOKof7A794b8TrwXVkYmrAVR1gI6P4d7CwXIYnuoX3oSIYwo
+         6CKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
          :references:subject:mime-version:content-transfer-encoding;
-        bh=EOZerNjV7VwRXGLfK1GgW58LQxxa7xTDPEkBD+ahYkk=;
-        b=m6JHwvulJcW8x0eRiHpOThqXyvG4VUBhDhLEEXxMaLdqovXUt6QWAi8+20ektPxox9
-         5MgQFG7sETB4tQ3P9cfQ7fW4c66QXmtYunxylUj1RSVS+uklrS2wJXm7glzVw6yBU53M
-         rFBX9iCcfwX6s/giUYMpA7VhjCtzZC2EuHlZkYWj92bzHPo2vnp/TXs7HPyEjgcmGYEu
-         H7nqazYq3LH/ExjrQYBk1B38e35vmRdXf2ulSetQOQfGVdRbT4NrVjg0grX6it/WKmnJ
-         G00b3Ph9iJB8G2IoB2IlfPsIq+HwIo6QfLuPop9TDpjxO/N6frmls36ZZsUqNsgQNjg0
-         p6qA==
-X-Gm-Message-State: AOAM531O4AnfF+kzdDu39cWRFN/lHxb25+RaapgptO2Gp/jPC4DtER3r
-        uSZrA/3J+++Kmv+Lfwm2uIw=
-X-Google-Smtp-Source: ABdhPJyXvxdhBXoSeTKmihalt1uma35kPl5KzbxSsvve67eVWXNiimgTwedVCHGZz0miFzjk2M498w==
-X-Received: by 2002:a92:ca0c:: with SMTP id j12mr15408263ils.50.1634565221879;
-        Mon, 18 Oct 2021 06:53:41 -0700 (PDT)
+        bh=Zg7ZOhohtZhCCy7y9pyI3V1BTITKPMF9LsGk4rxu3ME=;
+        b=5TYZK11lqjkpncD4VBREDErviYpNtz38JHdCGiCDtI9NoV0yq8imNw9M879a8pduXf
+         UJlgPfFBfqcoZgaMZa3XQCSvxHl4K5xAwBtttO0BnkXRnYho3DhN/C1rcRz0OhK6ee67
+         /qfnb4tfxEKoCJb339VZ5+uzS+ORT098jfKBLCNL0jaOggqdlOwYCGbndwmQFFgD0VgY
+         89RBP3k44eq+uIchWjtXmGMChBZfun+Coc3Vbc0+D/PFqz+vLjdd46Lg97/wINGR3gdb
+         XBCKQCa8miMeq/DcoWEQISx+Juri9yHEkOrWb5W9PF6OzblljX2iSa9RS1UO+p+JQyML
+         otvw==
+X-Gm-Message-State: AOAM530HA2W7PdVQsiUrJpCmwSVfJwlt049DctyaIROukmW9Nwxd13ry
+        27gptYGM98o4n8zXCibu9JY=
+X-Google-Smtp-Source: ABdhPJzFz3LOOcUrd20WZd2igSMrraNbJfSZMRIQa54AFozFR435NJccy3bCwPdMG49RTzIOq3jViA==
+X-Received: by 2002:a02:c484:: with SMTP id t4mr18449727jam.37.1634565947280;
+        Mon, 18 Oct 2021 07:05:47 -0700 (PDT)
 Received: from localhost ([172.243.157.240])
-        by smtp.gmail.com with ESMTPSA id k9sm7521032ilo.46.2021.10.18.06.53.38
+        by smtp.gmail.com with ESMTPSA id g9sm3610257ila.20.2021.10.18.07.05.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Oct 2021 06:53:41 -0700 (PDT)
-Date:   Mon, 18 Oct 2021 06:53:30 -0700
+        Mon, 18 Oct 2021 07:05:46 -0700 (PDT)
+Date:   Mon, 18 Oct 2021 07:05:38 -0700
 From:   John Fastabend <john.fastabend@gmail.com>
-To:     Jakub Sitnicki <jakub@cloudflare.com>,
-        Liu Jian <liujian56@huawei.com>
-Cc:     john.fastabend@gmail.com, daniel@iogearbox.net, lmb@cloudflare.com,
-        edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, ast@kernel.org,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Message-ID: <616d7c5aa492a_1eb12084b@john-XPS-13-9370.notmuch>
-In-Reply-To: <87v91ug1bi.fsf@cloudflare.com>
-References: <20211015080142.43424-1-liujian56@huawei.com>
- <87v91ug1bi.fsf@cloudflare.com>
-Subject: Re: [PATCH] bpf, sockmap: Do not read sk_receive_queue in
- tcp_bpf_recvmsg if strparser enabled
+To:     Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Quentin Monnet <quentin@isovalent.com>
+Message-ID: <616d7f32e2125_1eb12088b@john-XPS-13-9370.notmuch>
+In-Reply-To: <20211009210341.6291-1-quentin@isovalent.com>
+References: <20211009210341.6291-1-quentin@isovalent.com>
+Subject: RE: [PATCH bpf-next 0/3] fixes for bpftool's Makefile
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -73,76 +70,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jakub Sitnicki wrote:
-> On Fri, Oct 15, 2021 at 10:01 AM CEST, Liu Jian wrote:
-> > If the strparser function of sk is turned on, all received data needs to
-> > be processed by strparser first.
-> >
-> > Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
-> > Signed-off-by: Liu Jian <liujian56@huawei.com>
-> > ---
+Quentin Monnet wrote:
+> This set contains one fix for bpftool's Makefile, to make sure that the
+> headers internal to libbpf are installed properly even if we add more
+> headers to the relevant Makefile variable in the future (although we'd like
+> to avoid that if possible).
 > 
-> [...]
+> The other patches aim at cleaning up the output from the Makefile, in
+> particular when running the command "make" another time after bpftool is
+> built.
 > 
-> >  net/core/skmsg.c      | 5 +++++
-> >  net/ipv4/tcp_bpf.c    | 9 ++++++---
-> >  3 files changed, 17 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> > index 94e2a1f6e58d..25e92dff04aa 100644
-> > --- a/include/linux/skmsg.h
-> > +++ b/include/linux/skmsg.h
-> > @@ -390,6 +390,7 @@ void sk_psock_stop(struct sk_psock *psock, bool wait);
-> >  int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock);
-> >  void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock);
-> >  void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock);
-> > +bool sk_psock_strparser_started(struct sock *sk);
-> >  #else
-> >  static inline int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
-> >  {
-> > @@ -403,6 +404,11 @@ static inline void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
-> >  static inline void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
-> >  {
-> >  }
-> > +
-> > +static inline bool sk_psock_strparser_started(struct sock *sk)
-> > +{
-> > +	return false;
-> > +}
-> >  #endif
-> >  
-> >  void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock);
-> > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> > index e85b7f8491b9..dd64ef854f3e 100644
-> > --- a/net/core/skmsg.c
-> > +++ b/net/core/skmsg.c
-> > @@ -1105,6 +1105,11 @@ void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
-> >  	sk->sk_write_space = sk_psock_write_space;
-> >  }
-> >  
-> > +bool sk_psock_strparser_started(struct sock *sk)
-> > +{
-> > +	return sk->sk_data_ready == sk_psock_strp_data_ready;
+> Quentin Monnet (3):
+>   bpftool: fix install for libbpf's internal header(s)
+>   bpftool: do not FORCE-build libbpf
+>   bpftool: turn check on zlib from a phony target into a conditional
+>     error
 > 
-> What if kTLS is configured on the socket? I think this check won't work then.
-
-Liu, did you see this. I think its a bit cleaner, avoids the extra parser
-check in hotpath, and should solve the issue?
-
-https://patchwork.kernel.org/project/netdevbpf/patch/20211011191647.418704-3-john.fastabend@gmail.com/
-
-I think it should also address Jakub's concern.
-
-Thanks,
-John
-
+>  tools/bpf/bpftool/Makefile | 29 +++++++++++++++--------------
+>  1 file changed, 15 insertions(+), 14 deletions(-)
 > 
-> > +}
-> > +
-> >  void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
-> >  {
-> >  	if (!psock->saved_data_ready)
+> -- 
+> 2.30.2
 > 
-> [...]
 
+I'm not a Makefile expert, but from my side these look good. Thanks.
 
+Acked-by: John Fastabend <john.fastabend@gmail.com>
