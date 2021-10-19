@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43522C433F5
-	for <bpf@archiver.kernel.org>; Tue, 19 Oct 2021 07:43:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABC7FC4332F
+	for <bpf@archiver.kernel.org>; Tue, 19 Oct 2021 08:04:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27D7C611EF
-	for <bpf@archiver.kernel.org>; Tue, 19 Oct 2021 07:43:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92B6C61264
+	for <bpf@archiver.kernel.org>; Tue, 19 Oct 2021 08:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234592AbhJSHpQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Oct 2021 03:45:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55850 "EHLO mail.kernel.org"
+        id S234777AbhJSIGp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Oct 2021 04:06:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234581AbhJSHpO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Oct 2021 03:45:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 385656136F;
-        Tue, 19 Oct 2021 07:43:02 +0000 (UTC)
+        id S234713AbhJSIGk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Oct 2021 04:06:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A1B306139E;
+        Tue, 19 Oct 2021 08:04:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1634629382;
-        bh=hJoet635Vy1bZq8U3J0xmPvh7E+f4HrdZFse3BcIUaE=;
+        s=k20201202; t=1634630667;
+        bh=/Vuy2qYN6tzcoCI8XehyWZlcCbAKDGIPiOkwjFdSsyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZAiYan56EhycFINj4QXIHezUk0hXKMCem+RCbBFZQB0gwQk8FLcLUWWw0CDNtiW1g
-         jqrJVPxyn6aZBikDklBi7T7q6JCJHW41tvbaiJlso8PH3H3xHPbfRegZIYizB4gQgu
-         nvTQd3Yv4P4rNbGMVp/pZZGUdH+eyxQrPDK82cfzfjddpgSTNthoj/MRvS8IRV/dix
-         dHgusBY45kDfnyoIYVOdc9XTDqhrIIy4gCZ54k+73jqNREHjuBVSzEa0XLDFT6RXVB
-         PZoe7Lnw9JHN7HklmO7w/plzsLdxl7Tg3Zz8b6kHYXk4AYR3xhdMaRBFun1ts8G3SE
-         ljzeut4d9MIkg==
+        b=kyxew2eGQ4Fvu15FGUrZvOjZt5FRXMotpDYXpZr4Ci9gnnl0uZ1Y/do9zASiFJ0Zi
+         yLSgzVSsNkAlyhX2EdiLLH1dx++A7R1B9zS/8aYXKM0jKlQnC2MUFS9d1HW9Brlp/P
+         13YXAId0gUZ53yVqRX03BNXGjE0fT/EP6fraVPhDWAO8Dm58yBHsgM4s3j7PinJ+cv
+         37NoOp1szKsr5W8TmEBkc5CWXgRkvv0rQZYPaT1Hsfz8aK7Sz2iP7QkdLlxFq5W6wI
+         08N0JrngF1odEQZ4YBsituHZ+MGP5gCEYNkn4A+u6/dyi+eymEVs0y5hAEAmkLrHOE
+         kYzqtpt4LcDWw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mcjlt-001nLk-8V; Tue, 19 Oct 2021 08:42:53 +0100
+        id 1mck6j-001oIu-13; Tue, 19 Oct 2021 09:04:25 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
@@ -36,18 +36,18 @@ Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Grant Seltzer <grantseltzer@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH 2/2] scripts: documentation-file-ref-check: fix bpf selftests path
-Date:   Tue, 19 Oct 2021 08:42:51 +0100
-Message-Id: <49b765cbac6ccd22d627573154806ec9389d60f0.1634629094.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 02/23] libbpf: update index.rst reference
+Date:   Tue, 19 Oct 2021 09:04:01 +0100
+Message-Id: <83beca0ec615afcce4c9f9244f640615beb0ea72.1634630485.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1634629094.git.mchehab+huawei@kernel.org>
-References: <cover.1634629094.git.mchehab+huawei@kernel.org>
+In-Reply-To: <cover.1634630485.git.mchehab+huawei@kernel.org>
+References: <cover.1634630485.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
@@ -55,38 +55,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-tools/testing/selftests/bpf/test_bpftool_synctypes.py use
-relative patches on the top of BPFTOOL_DIR:
+Changeset d20b41115ad5 ("libbpf: Rename libbpf documentation index file")
+renamed: Documentation/bpf/libbpf/libbpf.rst
+to: Documentation/bpf/libbpf/index.rst.
 
-	BPFTOOL_DIR = os.path.join(LINUX_ROOT, 'tools/bpf/bpftool')
+Update its cross-reference accordingly.
 
-Change the script to automatically convert:
-
-	testing/selftests/bpf -> bpf/bpftool
-
-In order to properly check the files used by such script.
-
+Fixes: d20b41115ad5 ("libbpf: Rename libbpf documentation index file")
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 To mailbombing on a large number of people, only mailing lists were C/C on the cover.
-See [PATCH 0/2] at: https://lore.kernel.org/all/cover.1634629094.git.mchehab+huawei@kernel.org/
+See [PATCH v3 00/23] at: https://lore.kernel.org/all/cover.1634630485.git.mchehab+huawei@kernel.org/
 
- scripts/documentation-file-ref-check | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/bpf/index.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/scripts/documentation-file-ref-check b/scripts/documentation-file-ref-check
-index 6865d8e63d5c..68083f2f1122 100755
---- a/scripts/documentation-file-ref-check
-+++ b/scripts/documentation-file-ref-check
-@@ -147,6 +147,7 @@ while (<IN>) {
- 		if ($f =~ m/tools/) {
- 			my $path = $f;
- 			$path =~ s,(.*)/.*,$1,;
-+			$path =~ s,testing/selftests/bpf,bpf/bpftool,;
- 			next if (grep -e, glob("$path/$ref $path/../$ref $path/$fulref"));
- 		}
+diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
+index 37f273a7e8b6..610450f59e05 100644
+--- a/Documentation/bpf/index.rst
++++ b/Documentation/bpf/index.rst
+@@ -15,7 +15,7 @@ that goes into great technical depth about the BPF Architecture.
+ libbpf
+ ======
  
+-Documentation/bpf/libbpf/libbpf.rst is a userspace library for loading and interacting with bpf programs.
++Documentation/bpf/libbpf/index.rst is a userspace library for loading and interacting with bpf programs.
+ 
+ BPF Type Format (BTF)
+ =====================
 -- 
 2.31.1
 
