@@ -2,37 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2153FC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 519F0C4167D
 	for <bpf@archiver.kernel.org>; Wed, 20 Oct 2021 07:49:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C509613A8
+	by mail.kernel.org (Postfix) with ESMTP id 32F1C613A8
 	for <bpf@archiver.kernel.org>; Wed, 20 Oct 2021 07:49:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbhJTHuq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Oct 2021 03:50:46 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42116 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229503AbhJTHup (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Oct 2021 03:50:45 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19K5rq5E000953
-        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 00:48:32 -0700
+        id S229829AbhJTHu5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Oct 2021 03:50:57 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26664 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229498AbhJTHu4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 20 Oct 2021 03:50:56 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19JKfNq5018959
+        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 00:48:42 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=WriUjlWvY77pUn6Pi+Z10LcGJVKXHNS/ZpEWB8ATRV4=;
- b=O2YcAa6ia1DTOXnYjz6EOmJ9IKwQmn87PMCgnwKAQNAdmrxba0X5cuYeJn8kYkH708V+
- 2ZlvtgHAjC33uPxyEPyQtmHktR1R1TOpDXmQJFUofZvf6bhdUZzcFTWzl5Jlh2m76Gcm
- TZluI1utKspa7nkFzkEpSKczfQB3nH/HLIQ= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=l+EXY5ITIrA2bTA1mE+9i19+7GeZDrDna/h5jdbRXlc=;
+ b=Xke9xPmWOAtOZ7B1beTWH/REPXvbq9KQhtVpQ8arNDrHHQunsfWPq6F91tIsOgCAJyi2
+ IyHxvNPMVZ/QNd3phNwAlTYH6qzL5h+fdAgjdn/Y4FLsYgqn3ZUs0X/CoEiKpdj5xbIz
+ ZU5WomgFCDRjTVFBBpUmruqcZfVMmjtbwJc= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3btdc3gjev-3
+        by mx0a-00082601.pphosted.com with ESMTP id 3bt1crd7q5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 00:48:31 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 00:48:42 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 20 Oct 2021 00:48:30 -0700
+ 15.1.2308.14; Wed, 20 Oct 2021 00:48:40 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id F334684FD513; Wed, 20 Oct 2021 00:48:27 -0700 (PDT)
+        id 1C03E84FD53A; Wed, 20 Oct 2021 00:48:33 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
@@ -40,73 +41,80 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v3 bpf-next 0/2] bpf: keep track of verifier insn_processed
-Date:   Wed, 20 Oct 2021 00:48:16 -0700
-Message-ID: <20211020074818.1017682-1-davemarchevsky@fb.com>
+Subject: [PATCH v3 bpf-next 2/2] selftests/bpf: add verif_stats test
+Date:   Wed, 20 Oct 2021 00:48:18 -0700
+Message-ID: <20211020074818.1017682-3-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211020074818.1017682-1-davemarchevsky@fb.com>
+References: <20211020074818.1017682-1-davemarchevsky@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: xj4znOzYRdmYLWBAv5jiKIZ8UrtMFdW8
-X-Proofpoint-ORIG-GUID: xj4znOzYRdmYLWBAv5jiKIZ8UrtMFdW8
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: XCnyiyqdwN5JnxC6hbPTlG3D7jv2Pjpn
+X-Proofpoint-ORIG-GUID: XCnyiyqdwN5JnxC6hbPTlG3D7jv2Pjpn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-20_02,2021-10-19_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- clxscore=1015 bulkscore=0 phishscore=0 priorityscore=1501 mlxscore=0
- adultscore=0 malwarescore=0 spamscore=0 mlxlogscore=413 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110200043
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 mlxscore=0
+ adultscore=0 suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
+ spamscore=0 lowpriorityscore=0 clxscore=1015 mlxlogscore=769
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110200042
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a followup to discussion around RFC patchset "bpf: keep track of
-prog verification stats" [0]. The RFC elaborates on my usecase, but to
-summarize: keeping track of verifier stats for programs as they - and
-the kernels they run on - change over time can help developers of
-individual programs and BPF kernel folks.
+verified_insns field was added to response of bpf_obj_get_info_by_fd
+call on a prog. Confirm that it's being populated by loading a simple
+program and asking for its info.
 
-The RFC added a verif_stats to the uapi which contained most of the info
-which verifier prints currently. Feedback here was to avoid polluting
-uapi with stats that might be meaningless after major changes to the
-verifier, but that insn_processed or conceptually similar number would
-exist in the long term and was safe to expose.
-
-So let's expose just insn_processed via bpf_prog_info and fdinfo for now
-and explore good ways of getting more complicated stats in the future.
-
-[0] https://lore.kernel.org/bpf/20210920151112.3770991-1-davemarchevsky@fb.=
-com/
-
-v2->v3:
-  * Remove unnecessary check in patch 2's test [Andrii]
-  * Go back to adding new u32 in bpf_prog_info (vs using spare bits) [Andri=
-i]
-	* Rebase + add acks [Andrii, John]
-
-v1->v2:
-  * Rename uapi field from insn_processed to verified_insns [Daniel]
-  * use 31 bits of existing bitfield space in bpf_prog_info [Daniel]
-  * change underlying type from 64-> 32 bits [Daniel]
-
-Dave Marchevsky (2):
-  bpf: add verified_insns to bpf_prog_info and fdinfo
-  selftests/bpf: add verif_stats test
-
- include/linux/bpf.h                           |  1 +
- include/uapi/linux/bpf.h                      |  1 +
- kernel/bpf/syscall.c                          |  8 ++++--
- kernel/bpf/verifier.c                         |  1 +
- tools/include/uapi/linux/bpf.h                |  1 +
+Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
  .../selftests/bpf/prog_tests/verif_stats.c    | 28 +++++++++++++++++++
- 6 files changed, 38 insertions(+), 2 deletions(-)
+ 1 file changed, 28 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/verif_stats.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/verif_stats.c b/tools=
+/testing/selftests/bpf/prog_tests/verif_stats.c
+new file mode 100644
+index 000000000000..b4bae1340cf1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/verif_stats.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include <test_progs.h>
++
++#include "trace_vprintk.lskel.h"
++
++void test_verif_stats(void)
++{
++	__u32 len =3D sizeof(struct bpf_prog_info);
++	struct bpf_prog_info info =3D {};
++	struct trace_vprintk *skel;
++	int err;
++
++	skel =3D trace_vprintk__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "trace_vprintk__open_and_load"))
++		goto cleanup;
++
++	err =3D bpf_obj_get_info_by_fd(skel->progs.sys_enter.prog_fd, &info, &l=
+en);
++	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
++		goto cleanup;
++
++	if (!ASSERT_GT(info.verified_insns, 0, "verified_insns"))
++		goto cleanup;
++
++cleanup:
++	trace_vprintk__destroy(skel);
++}
 --=20
 2.30.2
 
