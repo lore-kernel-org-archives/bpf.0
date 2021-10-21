@@ -2,148 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2689C433FE
-	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C2BEC433F5
+	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A14F76113D
-	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E78BD61186
+	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbhJUBqx convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 20 Oct 2021 21:46:53 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23260 "EHLO
+        id S230363AbhJUBq5 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 20 Oct 2021 21:46:57 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15680 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230368AbhJUBqw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Oct 2021 21:46:52 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KN9pmc024692
-        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:37 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3btqsf33mu-1
+        by vger.kernel.org with ESMTP id S230286AbhJUBq4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 20 Oct 2021 21:46:56 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KNAfVw016382
+        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:41 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3btct0yyqg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:37 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:41 -0700
+Received: from intmgw002.46.prn1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 20 Oct 2021 18:44:36 -0700
+ 15.1.2308.14; Wed, 20 Oct 2021 18:44:41 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 5CD356E3E199; Wed, 20 Oct 2021 18:44:25 -0700 (PDT)
+        id C94706E3E1DD; Wed, 20 Oct 2021 18:44:33 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Stanislav Fomichev <sdf@google.com>,
         Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2 bpf-next 06/10] bpftool: improve skeleton generation for data maps without DATASEC type
-Date:   Wed, 20 Oct 2021 18:44:00 -0700
-Message-ID: <20211021014404.2635234-7-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 09/10] libbpf: simplify look up by name of internal maps
+Date:   Wed, 20 Oct 2021 18:44:03 -0700
+Message-ID: <20211021014404.2635234-10-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211021014404.2635234-1-andrii@kernel.org>
 References: <20211021014404.2635234-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 X-FB-Internal: Safe
-Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: A06t4ZhGzjwG8aQei2vJRvsd0cuhQPHq
-X-Proofpoint-ORIG-GUID: A06t4ZhGzjwG8aQei2vJRvsd0cuhQPHq
+X-Proofpoint-GUID: k4cAgkWH6mJnwNjFHlts76DfHBCNvT83
+X-Proofpoint-ORIG-GUID: k4cAgkWH6mJnwNjFHlts76DfHBCNvT83
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-20_06,2021-10-20_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=0
- phishscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109230001 definitions=main-2110210008
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It can happen that some data sections (e.g., .rodata.cst16, containing
-compiler populated string constants) won't have a corresponding BTF
-DATASEC type. Now that libbpf supports .rodata.* and .data.* sections,
-situation like that will cause invalid BPF skeleton to be generated that
-won't compile successfully, as some parts of skeleton would assume
-memory-mapped struct definitions for each special data section.
+Map name that's assigned to internal maps (.rodata, .data, .bss, etc)
+consist of a small prefix of bpf_object's name and ELF section name as
+a suffix. This makes it hard for users to "guess" the name to use for
+looking up by name with bpf_object__find_map_by_name() API.
 
-Fix this by generating empty struct definitions for such data sections.
+One proposal was to drop object name prefix from the map name and just
+use ".rodata", ".data", etc, names. One downside called out was that
+when multiple BPF applications are active on the host, it will be hard
+to distinguish between multiple instances of .rodata and know which BPF
+object (app) they belong to. Having few first characters, while quite
+limiting, still can give a bit of a clue, in general.
 
+Note, though, that btf_value_type_id for such global data maps (ARRAY)
+points to DATASEC type, which encodes full ELF name, so tools like
+bpftool can take advantage of this fact to "recover" full original name
+of the map. This is also the reason why for custom .data.* and .rodata.*
+maps libbpf uses only their ELF names and doesn't prepend object name at
+all.
+
+Another downside of such approach is that it is not backwards compatible
+and, among direct use of bpf_object__find_map_by_name() API, will break
+any BPF skeleton generated using bpftool that was compiled with older
+libbpf version.
+
+Instead of causing all this pain, libbpf will still generate map name
+using a combination of object name and ELF section name, but it will
+allow looking such maps up by their natural names, which correspond to
+their respective ELF section names. This means non-truncated ELF section
+names longer than 15 characters are going to be expected and supported.
+
+With such set up, we get the best of both worlds: leave small bits of
+a clue about BPF application that instantiated such maps, as well as
+making it easy for user apps to lookup such maps at runtime. In this
+sense it closes corresponding libbpf 1.0 issue ([0]).
+
+BPF skeletons will continue using full names for lookups.
+
+  [0] Closes: https://github.com/libbpf/libbpf/issues/275
+
+Cc: Toke Høiland-Jørgensen <toke@redhat.com>
+Cc: Stanislav Fomichev <sdf@google.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/bpftool/gen.c | 51 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 45 insertions(+), 6 deletions(-)
+ tools/lib/bpf/libbpf.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 59afe9a2ca3c..c446405ab73f 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -213,22 +213,61 @@ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
- 	struct btf *btf = bpf_object__btf(obj);
- 	int n = btf__get_nr_types(btf);
- 	struct btf_dump *d;
-+	struct bpf_map *map;
-+	const struct btf_type *sec;
-+	char sec_ident[256], map_ident[256];
- 	int i, err = 0;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 031f4611e0ff..db6e48014839 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9043,6 +9043,16 @@ bpf_object__find_map_by_name(const struct bpf_object *obj, const char *name)
+ 	struct bpf_map *pos;
  
- 	d = btf_dump__new(btf, NULL, NULL, codegen_btf_dump_printf);
- 	if (IS_ERR(d))
- 		return PTR_ERR(d);
- 
--	for (i = 1; i <= n; i++) {
--		const struct btf_type *t = btf__type_by_id(btf, i);
-+	bpf_object__for_each_map(map, obj) {
-+		/* only generate definitions for memory-mapped internal maps */
-+		if (!bpf_map__is_internal(map))
-+			continue;
-+		if (!(bpf_map__def(map)->map_flags & BPF_F_MMAPABLE))
-+			continue;
- 
--		if (!btf_is_datasec(t))
-+		if (!get_map_ident(map, map_ident, sizeof(map_ident)))
- 			continue;
- 
--		err = codegen_datasec_def(obj, btf, d, t, obj_name);
--		if (err)
--			goto out;
-+		sec = NULL;
-+		for (i = 1; i <= n; i++) {
-+			const struct btf_type *t = btf__type_by_id(btf, i);
-+			const char *name;
-+
-+			if (!btf_is_datasec(t))
-+				continue;
-+
-+			name = btf__str_by_offset(btf, t->name_off);
-+			if (!get_datasec_ident(name, sec_ident, sizeof(sec_ident)))
-+				continue;
-+
-+			if (strcmp(sec_ident, map_ident) == 0) {
-+				sec = t;
-+				break;
-+			}
-+		}
-+
-+		/* In some cases (e.g., sections like .rodata.cst16 containing
-+		 * compiler allocated string constants only) there will be
-+		 * special internal maps with no corresponding DATASEC BTF
-+		 * type. In such case, generate empty structs for each such
-+		 * map. It will still be memory-mapped and its contents
-+		 * accessible from user-space through BPF skeleton.
+ 	bpf_object__for_each_map(pos, obj) {
++		/* if it's a special internal map name (which always starts
++		 * with dot) then check if that special name matches the
++		 * real map name (ELF section name)
 +		 */
-+		if (!sec) {
-+			printf("	struct %s__%s {\n", obj_name, map_ident);
-+			printf("	} *%s;\n", map_ident);
-+		} else {
-+			err = codegen_datasec_def(obj, btf, d, sec, obj_name);
-+			if (err)
-+				goto out;
++		if (name[0] == '.') {
++			if (pos->real_name && strcmp(pos->real_name, name) == 0)
++				return pos;
++			continue;
 +		}
- 	}
-+
-+
- out:
- 	btf_dump__free(d);
- 	return err;
++		/* otherwise map name has to be an exact match */
+ 		if (map_uses_real_name(pos)) {
+ 			if (strcmp(pos->real_name, name) == 0)
+ 				return pos;
 -- 
 2.30.2
 
