@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A85BAC433FE
-	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75963C433F5
+	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 885D4611CC
-	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BA7D61186
+	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 01:44:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbhJUBqc convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 20 Oct 2021 21:46:32 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55756 "EHLO
+        id S230299AbhJUBqj convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 20 Oct 2021 21:46:39 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:28590 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230299AbhJUBqc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Oct 2021 21:46:32 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KNASON027829
-        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:17 -0700
+        by vger.kernel.org with ESMTP id S230326AbhJUBqi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 20 Oct 2021 21:46:38 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19KNAcEM016250
+        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:23 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3btk7mnhg6-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3btct0yyp8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:17 -0700
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 20 Oct 2021 18:44:23 -0700
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 20 Oct 2021 18:44:15 -0700
+ 15.1.2308.14; Wed, 20 Oct 2021 18:44:22 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BDBC06E3E142; Wed, 20 Oct 2021 18:44:14 -0700 (PDT)
+        id 45A706E3E18B; Wed, 20 Oct 2021 18:44:19 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2 bpf-next 02/10] libbpf: extract ELF processing state into separate struct
-Date:   Wed, 20 Oct 2021 18:43:56 -0700
-Message-ID: <20211021014404.2635234-3-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 04/10] libbpf: remove assumptions about uniqueness of .rodata/.data/.bss maps
+Date:   Wed, 20 Oct 2021 18:43:58 -0700
+Message-ID: <20211021014404.2635234-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211021014404.2635234-1-andrii@kernel.org>
 References: <20211021014404.2635234-1-andrii@kernel.org>
@@ -42,140 +42,503 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: 1DHBV6r7ZWB887rKLIekFvQWZ0WROlAS
-X-Proofpoint-ORIG-GUID: 1DHBV6r7ZWB887rKLIekFvQWZ0WROlAS
+X-Proofpoint-GUID: ZWAUXBcQ8pqdn-BbBR_Yt63sgt0nqAuN
+X-Proofpoint-ORIG-GUID: ZWAUXBcQ8pqdn-BbBR_Yt63sgt0nqAuN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-20_06,2021-10-20_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 adultscore=0 impostorscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 phishscore=0 priorityscore=1501 spamscore=0
- clxscore=1034 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109230001 definitions=main-2110210008
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Name currently anonymous internal struct that keeps ELF-related state
-for bpf_object. Just a bit of clean up, no functional changes.
+Remove internal libbpf assumption that there can be only one .rodata,
+.data, and .bss map per BPF object. To achieve that, extend and
+generalize the scheme that was used for keeping track of relocation ELF
+sections. Now each ELF section has a temporary extra index that keeps
+track of logical type of ELF section (relocations, data, read-only data,
+BSS). Switch relocation to this scheme, as well as .rodata/.data/.bss
+handling.
+
+We don't yet allow multiple .rodata, .data, and .bss sections, but no
+libbpf internal code makes an assumption that there can be only one of
+each and thus they can be explicitly referenced by a single index. Next
+patches will actually allow multiple .rodata and .data sections.
 
 Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 70 ++++++++++++++++++++----------------------
- 1 file changed, 34 insertions(+), 36 deletions(-)
+ tools/lib/bpf/libbpf.c | 260 ++++++++++++++++++++++-------------------
+ 1 file changed, 140 insertions(+), 120 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fdc25a112150..84a0683d214b 100644
+index 74f7d9252d13..a7320d272b34 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -462,6 +462,35 @@ struct module_btf {
+@@ -462,6 +462,20 @@ struct module_btf {
  	int fd_array_idx;
  };
  
-+struct elf_state {
-+	int fd;
-+	const void *obj_buf;
-+	size_t obj_buf_sz;
-+	Elf *elf;
-+	GElf_Ehdr ehdr;
-+	Elf_Data *symbols;
-+	Elf_Data *data;
-+	Elf_Data *rodata;
-+	Elf_Data *bss;
-+	Elf_Data *st_ops_data;
-+	size_t shstrndx; /* section index for section name strings */
-+	size_t strtabidx;
-+	struct {
-+		GElf_Shdr shdr;
-+		Elf_Data *data;
-+	} *reloc_sects;
-+	int nr_reloc_sects;
-+	int maps_shndx;
-+	int btf_maps_shndx;
-+	__u32 btf_maps_sec_btf_id;
-+	int text_shndx;
-+	int symbols_shndx;
-+	int data_shndx;
-+	int rodata_shndx;
-+	int bss_shndx;
-+	int st_ops_shndx;
++enum sec_type {
++	SEC_UNUSED = 0,
++	SEC_RELO,
++	SEC_BSS,
++	SEC_DATA,
++	SEC_RODATA,
 +};
 +
- struct bpf_object {
- 	char name[BPF_OBJ_NAME_LEN];
- 	char license[64];
-@@ -484,40 +513,10 @@ struct bpf_object {
++struct elf_sec_desc {
++	enum sec_type sec_type;
++	Elf64_Shdr *shdr;
++	Elf_Data *data;
++};
++
+ struct elf_state {
+ 	int fd;
+ 	const void *obj_buf;
+@@ -469,25 +483,16 @@ struct elf_state {
+ 	Elf *elf;
+ 	Elf64_Ehdr *ehdr;
+ 	Elf_Data *symbols;
+-	Elf_Data *data;
+-	Elf_Data *rodata;
+-	Elf_Data *bss;
+ 	Elf_Data *st_ops_data;
+ 	size_t shstrndx; /* section index for section name strings */
+ 	size_t strtabidx;
+-	struct {
+-		Elf64_Shdr *shdr;
+-		Elf_Data *data;
+-	} *reloc_sects;
+-	int nr_reloc_sects;
++	struct elf_sec_desc *secs;
++	int sec_cnt;
+ 	int maps_shndx;
+ 	int btf_maps_shndx;
+ 	__u32 btf_maps_sec_btf_id;
+ 	int text_shndx;
+ 	int symbols_shndx;
+-	int data_shndx;
+-	int rodata_shndx;
+-	int bss_shndx;
+ 	int st_ops_shndx;
+ };
+ 
+@@ -506,10 +511,10 @@ struct bpf_object {
+ 	struct extern_desc *externs;
+ 	int nr_extern;
+ 	int kconfig_map_idx;
+-	int rodata_map_idx;
+ 
+ 	bool loaded;
+ 	bool has_subcalls;
++	bool has_rodata;
  
  	struct bpf_gen *gen_loader;
  
-+	/* Information when doing ELF related work. Only valid if efile.elf is not NULL */
-+	struct elf_state efile;
- 	/*
--	 * Information when doing elf related work. Only valid if fd
--	 * is valid.
--	 */
--	struct {
--		int fd;
--		const void *obj_buf;
--		size_t obj_buf_sz;
--		Elf *elf;
--		GElf_Ehdr ehdr;
--		Elf_Data *symbols;
--		Elf_Data *data;
--		Elf_Data *rodata;
--		Elf_Data *bss;
--		Elf_Data *st_ops_data;
--		size_t shstrndx; /* section index for section name strings */
--		size_t strtabidx;
--		struct {
--			GElf_Shdr shdr;
--			Elf_Data *data;
--		} *reloc_sects;
--		int nr_reloc_sects;
--		int maps_shndx;
--		int btf_maps_shndx;
--		__u32 btf_maps_sec_btf_id;
--		int text_shndx;
--		int symbols_shndx;
--		int data_shndx;
--		int rodata_shndx;
--		int bss_shndx;
--		int st_ops_shndx;
--	} efile;
--	/*
--	 * All loaded bpf_object is linked in a list, which is
-+	 * All loaded bpf_object are linked in a list, which is
- 	 * hidden to caller. bpf_objects__<func> handlers deal with
- 	 * all objects.
- 	 */
-@@ -551,7 +550,6 @@ struct bpf_object {
+@@ -1168,12 +1173,8 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 	obj->efile.obj_buf_sz = obj_buf_sz;
+ 	obj->efile.maps_shndx = -1;
+ 	obj->efile.btf_maps_shndx = -1;
+-	obj->efile.data_shndx = -1;
+-	obj->efile.rodata_shndx = -1;
+-	obj->efile.bss_shndx = -1;
+ 	obj->efile.st_ops_shndx = -1;
+ 	obj->kconfig_map_idx = -1;
+-	obj->rodata_map_idx = -1;
  
- 	char path[];
- };
--#define obj_elf_valid(o)	((o)->efile.elf)
- 
- static const char *elf_sym_str(const struct bpf_object *obj, size_t off);
- static const char *elf_sec_str(const struct bpf_object *obj, size_t off);
-@@ -1185,7 +1183,7 @@ static struct bpf_object *bpf_object__new(const char *path,
- 
- static void bpf_object__elf_finish(struct bpf_object *obj)
- {
--	if (!obj_elf_valid(obj))
-+	if (!obj->efile.elf)
- 		return;
- 
- 	if (obj->efile.elf) {
-@@ -1210,7 +1208,7 @@ static int bpf_object__elf_init(struct bpf_object *obj)
- 	int err = 0;
- 	GElf_Ehdr *ep;
- 
--	if (obj_elf_valid(obj)) {
-+	if (obj->efile.elf) {
- 		pr_warn("elf: init internal error\n");
- 		return -LIBBPF_ERRNO__LIBELF;
+ 	obj->kern_version = get_kernel_version();
+ 	obj->loaded = false;
+@@ -1193,13 +1194,10 @@ static void bpf_object__elf_finish(struct bpf_object *obj)
+ 		obj->efile.elf = NULL;
  	}
+ 	obj->efile.symbols = NULL;
+-	obj->efile.data = NULL;
+-	obj->efile.rodata = NULL;
+-	obj->efile.bss = NULL;
+ 	obj->efile.st_ops_data = NULL;
+ 
+-	zfree(&obj->efile.reloc_sects);
+-	obj->efile.nr_reloc_sects = 0;
++	zfree(&obj->efile.secs);
++	obj->efile.sec_cnt = 0;
+ 	zclose(obj->efile.fd);
+ 	obj->efile.obj_buf = NULL;
+ 	obj->efile.obj_buf_sz = 0;
+@@ -1340,30 +1338,18 @@ static bool bpf_map_type__is_map_in_map(enum bpf_map_type type)
+ static int find_elf_sec_sz(const struct bpf_object *obj, const char *name, __u32 *size)
+ {
+ 	int ret = -ENOENT;
++	Elf_Data *data;
++	Elf_Scn *scn;
+ 
+ 	*size = 0;
+-	if (!name) {
++	if (!name)
+ 		return -EINVAL;
+-	} else if (!strcmp(name, DATA_SEC)) {
+-		if (obj->efile.data)
+-			*size = obj->efile.data->d_size;
+-	} else if (!strcmp(name, BSS_SEC)) {
+-		if (obj->efile.bss)
+-			*size = obj->efile.bss->d_size;
+-	} else if (!strcmp(name, RODATA_SEC)) {
+-		if (obj->efile.rodata)
+-			*size = obj->efile.rodata->d_size;
+-	} else if (!strcmp(name, STRUCT_OPS_SEC)) {
+-		if (obj->efile.st_ops_data)
+-			*size = obj->efile.st_ops_data->d_size;
+-	} else {
+-		Elf_Scn *scn = elf_sec_by_name(obj, name);
+-		Elf_Data *data = elf_sec_data(obj, scn);
+ 
+-		if (data) {
+-			ret = 0; /* found it */
+-			*size = data->d_size;
+-		}
++	scn = elf_sec_by_name(obj, name);
++	data = elf_sec_data(obj, scn);
++	if (data) {
++		ret = 0; /* found it */
++		*size = data->d_size;
+ 	}
+ 
+ 	return *size ? 0 : ret;
+@@ -1516,34 +1502,39 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+ 
+ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+ {
+-	int err;
++	struct elf_sec_desc *sec_desc;
++	int err = 0, sec_idx;
+ 
+ 	/*
+ 	 * Populate obj->maps with libbpf internal maps.
+ 	 */
+-	if (obj->efile.data_shndx >= 0) {
+-		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_DATA,
+-						    obj->efile.data_shndx,
+-						    obj->efile.data->d_buf,
+-						    obj->efile.data->d_size);
+-		if (err)
+-			return err;
+-	}
+-	if (obj->efile.rodata_shndx >= 0) {
+-		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_RODATA,
+-						    obj->efile.rodata_shndx,
+-						    obj->efile.rodata->d_buf,
+-						    obj->efile.rodata->d_size);
+-		if (err)
+-			return err;
+-
+-		obj->rodata_map_idx = obj->nr_maps - 1;
+-	}
+-	if (obj->efile.bss_shndx >= 0) {
+-		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_BSS,
+-						    obj->efile.bss_shndx,
+-						    NULL,
+-						    obj->efile.bss->d_size);
++	for (sec_idx = 1; sec_idx < obj->efile.sec_cnt; sec_idx++) {
++		sec_desc = &obj->efile.secs[sec_idx];
++
++		switch (sec_desc->sec_type) {
++		case SEC_DATA:
++			err = bpf_object__init_internal_map(obj, LIBBPF_MAP_DATA,
++							    sec_idx,
++							    sec_desc->data->d_buf,
++							    sec_desc->data->d_size);
++			break;
++		case SEC_RODATA:
++			obj->has_rodata = true;
++			err = bpf_object__init_internal_map(obj, LIBBPF_MAP_RODATA,
++							    sec_idx,
++							    sec_desc->data->d_buf,
++							    sec_desc->data->d_size);
++			break;
++		case SEC_BSS:
++			err = bpf_object__init_internal_map(obj, LIBBPF_MAP_BSS,
++							    sec_idx,
++							    NULL,
++							    sec_desc->data->d_size);
++			break;
++		default:
++			/* skip */
++			break;
++		}
+ 		if (err)
+ 			return err;
+ 	}
+@@ -3123,6 +3114,7 @@ static int cmp_progs(const void *_a, const void *_b)
+ 
+ static int bpf_object__elf_collect(struct bpf_object *obj)
+ {
++	struct elf_sec_desc *sec_desc;
+ 	Elf *elf = obj->efile.elf;
+ 	Elf_Data *btf_ext_data = NULL;
+ 	Elf_Data *btf_data = NULL;
+@@ -3132,6 +3124,15 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 	Elf_Scn *scn;
+ 	Elf64_Shdr *sh;
+ 
++	/* ELF section indices are 1-based, so allocate +1 element to keep
++	 * indexing simple. Also include 0th invalid section into sec_cnt for
++	 * simpler and more traditional iteration logic.
++	 */
++	obj->efile.sec_cnt = 1 + obj->efile.ehdr->e_shnum;
++	obj->efile.secs = calloc(obj->efile.sec_cnt, sizeof(*obj->efile.secs));
++	if (!obj->efile.secs)
++		return -ENOMEM;
++
+ 	/* a bunch of ELF parsing functionality depends on processing symbols,
+ 	 * so do the first pass and find the symbol table
+ 	 */
+@@ -3151,8 +3152,10 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 			if (!data)
+ 				return -LIBBPF_ERRNO__FORMAT;
+ 
++			idx = elf_ndxscn(scn);
++
+ 			obj->efile.symbols = data;
+-			obj->efile.symbols_shndx = elf_ndxscn(scn);
++			obj->efile.symbols_shndx = idx;
+ 			obj->efile.strtabidx = sh->sh_link;
+ 		}
+ 	}
+@@ -3165,7 +3168,8 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 
+ 	scn = NULL;
+ 	while ((scn = elf_nextscn(elf, scn)) != NULL) {
+-		idx++;
++		idx = elf_ndxscn(scn);
++		sec_desc = &obj->efile.secs[idx];
+ 
+ 		sh = elf_sec_hdr(obj, scn);
+ 		if (!sh)
+@@ -3213,11 +3217,13 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 				if (err)
+ 					return err;
+ 			} else if (strcmp(name, DATA_SEC) == 0) {
+-				obj->efile.data = data;
+-				obj->efile.data_shndx = idx;
++				sec_desc->sec_type = SEC_DATA;
++				sec_desc->shdr = sh;
++				sec_desc->data = data;
+ 			} else if (strcmp(name, RODATA_SEC) == 0) {
+-				obj->efile.rodata = data;
+-				obj->efile.rodata_shndx = idx;
++				sec_desc->sec_type = SEC_RODATA;
++				sec_desc->shdr = sh;
++				sec_desc->data = data;
+ 			} else if (strcmp(name, STRUCT_OPS_SEC) == 0) {
+ 				obj->efile.st_ops_data = data;
+ 				obj->efile.st_ops_shndx = idx;
+@@ -3226,33 +3232,25 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 					idx, name);
+ 			}
+ 		} else if (sh->sh_type == SHT_REL) {
+-			int nr_sects = obj->efile.nr_reloc_sects;
+-			void *sects = obj->efile.reloc_sects;
+-			int sec = sh->sh_info; /* points to other section */
++			int targ_sec_idx = sh->sh_info; /* points to other section */
+ 
+ 			/* Only do relo for section with exec instructions */
+-			if (!section_have_execinstr(obj, sec) &&
++			if (!section_have_execinstr(obj, targ_sec_idx) &&
+ 			    strcmp(name, ".rel" STRUCT_OPS_SEC) &&
+ 			    strcmp(name, ".rel" MAPS_ELF_SEC)) {
+ 				pr_info("elf: skipping relo section(%d) %s for section(%d) %s\n",
+-					idx, name, sec,
+-					elf_sec_name(obj, elf_sec_by_idx(obj, sec)) ?: "<?>");
++					idx, name, targ_sec_idx,
++					elf_sec_name(obj, elf_sec_by_idx(obj, targ_sec_idx)) ?: "<?>");
+ 				continue;
+ 			}
+ 
+-			sects = libbpf_reallocarray(sects, nr_sects + 1,
+-						    sizeof(*obj->efile.reloc_sects));
+-			if (!sects)
+-				return -ENOMEM;
+-
+-			obj->efile.reloc_sects = sects;
+-			obj->efile.nr_reloc_sects++;
+-
+-			obj->efile.reloc_sects[nr_sects].shdr = sh;
+-			obj->efile.reloc_sects[nr_sects].data = data;
++			sec_desc->sec_type = SEC_RELO;
++			sec_desc->shdr = sh;
++			sec_desc->data = data;
+ 		} else if (sh->sh_type == SHT_NOBITS && strcmp(name, BSS_SEC) == 0) {
+-			obj->efile.bss = data;
+-			obj->efile.bss_shndx = idx;
++			sec_desc->sec_type = SEC_BSS;
++			sec_desc->shdr = sh;
++			sec_desc->data = data;
+ 		} else {
+ 			pr_info("elf: skipping section(%d) %s (size %zu)\n", idx, name,
+ 				(size_t)sh->sh_size);
+@@ -3732,9 +3730,14 @@ bpf_object__find_program_by_name(const struct bpf_object *obj,
+ static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
+ 				      int shndx)
+ {
+-	return shndx == obj->efile.data_shndx ||
+-	       shndx == obj->efile.bss_shndx ||
+-	       shndx == obj->efile.rodata_shndx;
++	switch (obj->efile.secs[shndx].sec_type) {
++	case SEC_BSS:
++	case SEC_DATA:
++	case SEC_RODATA:
++		return true;
++	default:
++		return false;
++	}
+ }
+ 
+ static bool bpf_object__shndx_is_maps(const struct bpf_object *obj,
+@@ -3747,16 +3750,19 @@ static bool bpf_object__shndx_is_maps(const struct bpf_object *obj,
+ static enum libbpf_map_type
+ bpf_object__section_to_libbpf_map_type(const struct bpf_object *obj, int shndx)
+ {
+-	if (shndx == obj->efile.data_shndx)
+-		return LIBBPF_MAP_DATA;
+-	else if (shndx == obj->efile.bss_shndx)
++	if (shndx == obj->efile.symbols_shndx)
++		return LIBBPF_MAP_KCONFIG;
++
++	switch (obj->efile.secs[shndx].sec_type) {
++	case SEC_BSS:
+ 		return LIBBPF_MAP_BSS;
+-	else if (shndx == obj->efile.rodata_shndx)
++	case SEC_DATA:
++		return LIBBPF_MAP_DATA;
++	case SEC_RODATA:
+ 		return LIBBPF_MAP_RODATA;
+-	else if (shndx == obj->efile.symbols_shndx)
+-		return LIBBPF_MAP_KCONFIG;
+-	else
++	default:
+ 		return LIBBPF_MAP_UNSPEC;
++	}
+ }
+ 
+ static int bpf_program__record_reloc(struct bpf_program *prog,
+@@ -3892,7 +3898,7 @@ static int bpf_program__record_reloc(struct bpf_program *prog,
+ 	}
+ 	for (map_idx = 0; map_idx < nr_maps; map_idx++) {
+ 		map = &obj->maps[map_idx];
+-		if (map->libbpf_type != type)
++		if (map->libbpf_type != type || map->sec_idx != sym->st_shndx)
+ 			continue;
+ 		pr_debug("prog '%s': found data map %zd (%s, sec %d, off %zu) for insn %u\n",
+ 			 prog->name, map_idx, map->name, map->sec_idx,
+@@ -6205,10 +6211,18 @@ static int bpf_object__collect_relos(struct bpf_object *obj)
+ {
+ 	int i, err;
+ 
+-	for (i = 0; i < obj->efile.nr_reloc_sects; i++) {
+-		Elf64_Shdr *shdr = obj->efile.reloc_sects[i].shdr;
+-		Elf_Data *data = obj->efile.reloc_sects[i].data;
+-		int idx = shdr->sh_info;
++	for (i = 0; i < obj->efile.sec_cnt; i++) {
++		struct elf_sec_desc *sec_desc = &obj->efile.secs[i];
++		Elf64_Shdr *shdr;
++		Elf_Data *data;
++		int idx;
++
++		if (sec_desc->sec_type != SEC_RELO)
++			continue;
++
++		shdr = sec_desc->shdr;
++		data = sec_desc->data;
++		idx = shdr->sh_info;
+ 
+ 		if (shdr->sh_type != SHT_REL) {
+ 			pr_warn("internal error at %d\n", __LINE__);
+@@ -6331,6 +6345,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	     char *license, __u32 kern_version, int *pfd)
+ {
+ 	struct bpf_prog_load_params load_attr = {};
++	struct bpf_object *obj = prog->obj;
+ 	char *cp, errmsg[STRERR_BUFSIZE];
+ 	size_t log_buf_size = 0;
+ 	char *log_buf = NULL;
+@@ -6351,7 +6366,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 
+ 	load_attr.prog_type = prog->type;
+ 	load_attr.expected_attach_type = prog->expected_attach_type;
+-	if (kernel_supports(prog->obj, FEAT_PROG_NAME))
++	if (kernel_supports(obj, FEAT_PROG_NAME))
+ 		load_attr.name = prog->name;
+ 	load_attr.insns = insns;
+ 	load_attr.insn_cnt = insns_cnt;
+@@ -6364,8 +6379,8 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	load_attr.prog_ifindex = prog->prog_ifindex;
+ 
+ 	/* specify func_info/line_info only if kernel supports them */
+-	btf_fd = bpf_object__btf_fd(prog->obj);
+-	if (btf_fd >= 0 && kernel_supports(prog->obj, FEAT_BTF_FUNC)) {
++	btf_fd = bpf_object__btf_fd(obj);
++	if (btf_fd >= 0 && kernel_supports(obj, FEAT_BTF_FUNC)) {
+ 		load_attr.prog_btf_fd = btf_fd;
+ 		load_attr.func_info = prog->func_info;
+ 		load_attr.func_info_rec_size = prog->func_info_rec_size;
+@@ -6376,7 +6391,7 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	}
+ 	load_attr.log_level = prog->log_level;
+ 	load_attr.prog_flags = prog->prog_flags;
+-	load_attr.fd_array = prog->obj->fd_array;
++	load_attr.fd_array = obj->fd_array;
+ 
+ 	/* adjust load_attr if sec_def provides custom preload callback */
+ 	if (prog->sec_def && prog->sec_def->preload_fn) {
+@@ -6388,9 +6403,9 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 		}
+ 	}
+ 
+-	if (prog->obj->gen_loader) {
+-		bpf_gen__prog_load(prog->obj->gen_loader, &load_attr,
+-				   prog - prog->obj->programs);
++	if (obj->gen_loader) {
++		bpf_gen__prog_load(obj->gen_loader, &load_attr,
++				   prog - obj->programs);
+ 		*pfd = -1;
+ 		return 0;
+ 	}
+@@ -6411,16 +6426,21 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 		if (log_buf && load_attr.log_level)
+ 			pr_debug("verifier log:\n%s", log_buf);
+ 
+-		if (prog->obj->rodata_map_idx >= 0 &&
+-		    kernel_supports(prog->obj, FEAT_PROG_BIND_MAP)) {
+-			struct bpf_map *rodata_map =
+-				&prog->obj->maps[prog->obj->rodata_map_idx];
++		if (obj->has_rodata && kernel_supports(obj, FEAT_PROG_BIND_MAP)) {
++			struct bpf_map *map;
++			int i;
++
++			for (i = 0; i < obj->nr_maps; i++) {
++				map = &prog->obj->maps[i];
++				if (map->libbpf_type != LIBBPF_MAP_RODATA)
++					continue;
+ 
+-			if (bpf_prog_bind_map(ret, bpf_map__fd(rodata_map), NULL)) {
+-				cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+-				pr_warn("prog '%s': failed to bind .rodata map: %s\n",
+-					prog->name, cp);
+-				/* Don't fail hard if can't bind rodata. */
++				if (bpf_prog_bind_map(ret, bpf_map__fd(map), NULL)) {
++					cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
++					pr_warn("prog '%s': failed to bind .rodata map: %s\n",
++						prog->name, cp);
++					/* Don't fail hard if can't bind rodata. */
++				}
+ 			}
+ 		}
+ 
 -- 
 2.30.2
 
