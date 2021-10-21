@@ -2,161 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3141C433FE
-	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 10:47:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57945C433F5
+	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 11:41:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9652B60F46
-	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 10:47:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3644A611C7
+	for <bpf@archiver.kernel.org>; Thu, 21 Oct 2021 11:41:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbhJUKtf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Oct 2021 06:49:35 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33484 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230105AbhJUKte (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 21 Oct 2021 06:49:34 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19LA4WBg032518;
-        Thu, 21 Oct 2021 06:47:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=lB3ISM13wYswQvXfMd1RnDWIu/Uxjqjlw/0IFk1DnSg=;
- b=EhoBLtk8cNyoeeFot9xLaCsF3sUpzjl1JrnTgQfrDYdjNu4qw08w14crQKCDjhvmiyAS
- bpJSmSG5K/7p8Gv4/LnNLiZG069UHqa2/5pKR/zO85IFT6XEA5KpgeTqCSWWxFxQY7pV
- dHyIw83meCRlrKZjKYfHQFxjmuF/xNuT9bfSPjqIr2MFYztbOaZ/f+wTBTq3kaqCGSro
- LYaKuutme6cl15vV1DEvO+fphNRje8gwS8c8z4hU5wYP/i+DnVpCfTQdaYvkTQSKNAsL
- Pq7xsDt6c9hY4i3wMv0NDVQUBfr6Hz7xuXHiN3YF4xSky7cnvsw0sf7Sb4x7z7E/FiX+ 4g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bu20p6buk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Oct 2021 06:47:07 -0400
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19LAExRu010945;
-        Thu, 21 Oct 2021 06:47:06 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3bu20p6btx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Oct 2021 06:47:06 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19LAcIUB020304;
-        Thu, 21 Oct 2021 10:47:05 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 3bqpcajud5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 21 Oct 2021 10:47:04 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19LAl1Yb52232560
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Oct 2021 10:47:01 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 884C242095;
-        Thu, 21 Oct 2021 10:47:01 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2BD1342099;
-        Thu, 21 Oct 2021 10:47:01 +0000 (GMT)
-Received: from vm.lan (unknown [9.145.12.156])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 21 Oct 2021 10:47:01 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
+        id S230213AbhJULnw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Oct 2021 07:43:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:24806 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229765AbhJULnv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 21 Oct 2021 07:43:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1634816495;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L2e4spOXfMpskoS1N0H4A7qUNY78c1wAiks2CIeTGAQ=;
+        b=ZRIGxZA4avtHmPI3RprqMo8IHRb1ouFAxxkoGlsUmBV3h9caWYMh8I3f5KjNniVIp1JWgd
+        LHge+0YTA3jF6oCY41gRLtJsQ0lXuvXDlfPO/BixzdKlFQTMA8UTIrlKVJsm4LmOuBe7vD
+        f8aFv/o6kdtnApL7HkFTg8+QHO7hVj8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-599-VB3jZMw7NxS7840b9G-2SA-1; Thu, 21 Oct 2021 07:41:34 -0400
+X-MC-Unique: VB3jZMw7NxS7840b9G-2SA-1
+Received: by mail-ed1-f71.google.com with SMTP id g28-20020a50d0dc000000b003dae69dfe3aso35674edf.7
+        for <bpf@vger.kernel.org>; Thu, 21 Oct 2021 04:41:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=L2e4spOXfMpskoS1N0H4A7qUNY78c1wAiks2CIeTGAQ=;
+        b=1oa41hbedyXawAOpWpzEm1NAAxv2HA53VH+Mwy3ng2xGU+zaJKRjBCjn0SxAlKVaEp
+         k5N28Vn34UBWoGrUgY9B2/jkfxbRcT7CDJzq+uZa0BLwgaEqfztigoNlE5ZnSbqcs191
+         wy+8rWy00GKHqhQ9qIvyGf4kRA9jM4q/Pj/64kNIwmUytKfDuAiHYefyvO4TLTW8ojzL
+         TlOOnLZez8crM413I6qB9C83xDl6fvw3yjMw4FXzWI81EjAFAXrU6RegVpBbQC7Nv6Ht
+         vW3kpH++M45IMNdOSIwp28an5xjeSqgL8niojZR1HN+uXSWoNOL1MmclSSiu++EJn4Ny
+         zHdA==
+X-Gm-Message-State: AOAM531izf1U6eT0JoqDAV8eh9TTxJEM9ml12ULZRc2joHB4PowCCTBT
+        pwfQHcMF9OQB1Q2Uv8a6aVL6PZWGCwDoInGhvTnV7WyH3ucBNkgn7OPqmb/8hr1m9w8JHv/HRTf
+        VbSx9H9vBvnK7
+X-Received: by 2002:a05:6402:2553:: with SMTP id l19mr6934937edb.321.1634816493338;
+        Thu, 21 Oct 2021 04:41:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw0/PpaJBgA3ZF+GNCyLqQ+YOun7Y/ZtdJIj1MoEWgtX6K0YICG+8Suaaa0E9xfjgwyIjkUAg==
+X-Received: by 2002:a05:6402:2553:: with SMTP id l19mr6934908edb.321.1634816493207;
+        Thu, 21 Oct 2021 04:41:33 -0700 (PDT)
+Received: from krava.cust.in.nbox.cz ([83.240.63.48])
+        by smtp.gmail.com with ESMTPSA id y6sm2459996ejf.58.2021.10.21.04.41.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Oct 2021 04:41:32 -0700 (PDT)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 1/1] libbpf: Fix ptr_is_aligned() usages
-Date:   Thu, 21 Oct 2021 12:46:58 +0200
-Message-Id: <20211021104658.624944-2-iii@linux.ibm.com>
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: [PATCH bpf-next 0/3] selftests/bpf: Fixes for perf_buffer test
+Date:   Thu, 21 Oct 2021 13:41:29 +0200
+Message-Id: <20211021114132.8196-1-jolsa@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211021104658.624944-1-iii@linux.ibm.com>
-References: <20211021104658.624944-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: O-7XjzVHtvlntdpp5P3zsdg3vAJ2z-wb
-X-Proofpoint-GUID: ml7ls4UYUJHJxR_T5hiJO7h5fU_wyYXR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-21_02,2021-10-20_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 clxscore=1015
- mlxlogscore=999 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2109230001 definitions=main-2110210054
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently ptr_is_aligned() takes size, and not alignment, as a
-parameter, which may be overly pessimistic e.g. for __i128 on s390,
-which must be only 8-byte aligned. Fix by using btf__align_of().
+hi,
+sending fixes for perf_buffer test on systems
+with offline cpus.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+v2:
+  - resend due to delivery issues, no changes
+
+thanks,
+jirka
+
+
 ---
- tools/lib/bpf/btf_dump.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+Jiri Olsa (3):
+      selftests/bpf: Fix perf_buffer test on system with offline cpus
+      selftests/bpf: Fix possible/online index mismatch in perf_buffer test
+      selftests/bpf: Use nanosleep tracepoint in perf buffer test
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index e98c201f29b5..e9e5801ece4c 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1657,9 +1657,15 @@ static int btf_dump_base_type_check_zero(struct btf_dump *d,
- 	return 0;
- }
- 
--static bool ptr_is_aligned(const void *data, int data_sz)
-+static bool ptr_is_aligned(const struct btf *btf, __u32 type_id,
-+			   const void *data)
- {
--	return ((uintptr_t)data) % data_sz == 0;
-+	int alignment = btf__align_of(btf, type_id);
-+
-+	if (alignment == 0)
-+		return false;
-+
-+	return ((uintptr_t)data) % alignment == 0;
- }
- 
- static int btf_dump_int_data(struct btf_dump *d,
-@@ -1681,7 +1687,7 @@ static int btf_dump_int_data(struct btf_dump *d,
- 	/* handle packed int data - accesses of integers not aligned on
- 	 * int boundaries can cause problems on some platforms.
- 	 */
--	if (!ptr_is_aligned(data, sz)) {
-+	if (!ptr_is_aligned(d->btf, type_id, data)) {
- 		memcpy(buf, data, sz);
- 		data = buf;
- 	}
-@@ -1770,7 +1776,7 @@ static int btf_dump_float_data(struct btf_dump *d,
- 	int sz = t->size;
- 
- 	/* handle unaligned data; copy to local union */
--	if (!ptr_is_aligned(data, sz)) {
-+	if (!ptr_is_aligned(d->btf, type_id, data)) {
- 		memcpy(&fl, data, sz);
- 		flp = &fl;
- 	}
-@@ -1933,7 +1939,7 @@ static int btf_dump_ptr_data(struct btf_dump *d,
- 			      __u32 id,
- 			      const void *data)
- {
--	if (ptr_is_aligned(data, d->ptr_sz) && d->ptr_sz == sizeof(void *)) {
-+	if (ptr_is_aligned(d->btf, id, data) && d->ptr_sz == sizeof(void *)) {
- 		btf_dump_type_values(d, "%p", *(void **)data);
- 	} else {
- 		union ptr_data pt;
-@@ -1953,10 +1959,8 @@ static int btf_dump_get_enum_value(struct btf_dump *d,
- 				   __u32 id,
- 				   __s64 *value)
- {
--	int sz = t->size;
--
- 	/* handle unaligned enum value */
--	if (!ptr_is_aligned(data, sz)) {
-+	if (!ptr_is_aligned(d->btf, id, data)) {
- 		__u64 val;
- 		int err;
- 
--- 
-2.31.1
+ tools/testing/selftests/bpf/prog_tests/perf_buffer.c | 17 +++++++++--------
+ tools/testing/selftests/bpf/progs/test_perf_buffer.c |  2 +-
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
