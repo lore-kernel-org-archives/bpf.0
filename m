@@ -2,97 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B006C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 20:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C48C433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 21:06:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5745560FC4
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 20:20:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A5B8B60F57
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 21:06:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234173AbhJVUXA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Oct 2021 16:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S234396AbhJVVJM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Oct 2021 17:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbhJVUXA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Oct 2021 16:23:00 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535F9C061764
-        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 13:20:42 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id v10so3171665qvb.10
-        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 13:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QGZRv16f5XExnXn4iObzLJBi0s4BfYl5Srzvu+ICLoo=;
-        b=fCbVxA6qMqMPU/mpynMau4DZgEYa9VLL72iGY8TDf3jlLGsX0QgGMzgizbHAvAS80X
-         K2Q0fMdEls9fO04mf2NMyjQZhsCHX3ZX5N8xssSXM8kr10ER2vfs2N8K42L48JAcwlzf
-         3oaEoR6q6+oQ7lcJTurLAg3BQuHzIV5EjYHXc=
+        with ESMTP id S234309AbhJVVJK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Oct 2021 17:09:10 -0400
+Received: from mail-ua1-x963.google.com (mail-ua1-x963.google.com [IPv6:2607:f8b0:4864:20::963])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059ACC061766
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 14:06:52 -0700 (PDT)
+Received: by mail-ua1-x963.google.com with SMTP id h4so10223386uaw.1
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 14:06:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QGZRv16f5XExnXn4iObzLJBi0s4BfYl5Srzvu+ICLoo=;
-        b=6VgbwjRlhXjp7o7fMv6UEfDqWib77GrHrKrWkDXThZzhHqRCQaOPTMeNDGAM6LJxjY
-         yJdEJlwaIKB3vIUuDNkRysX197xOq6hhcsj4/x7i8yqoJVHK8B7RGPIkdh0huKoTDG73
-         p6etQjEph6wVcgXqBrX4JA0jOFo1PJaVyddRCojWEX8hhhKrZQDnZsvLiHTumivHeirQ
-         O9qWB1Tp9B1rNkf6hRHalPEGYrczbylOQ2BZa7gPO61ngiAONLwpTuKX61mImZi1nqe6
-         As3cWVbn1bBEMNcg/Cy4LGMW4XCZM/pkQs69Z523/+sV6WJGgnup4qfsT9r08kvuy0s4
-         1YEg==
-X-Gm-Message-State: AOAM532prMFKWnn6ZyT42bsNw+NO0WOMuac3/KodqNNVaMi7TVC2wp1i
-        y8ySdD+u8Knrq/KgBxbiLYfzBQ==
-X-Google-Smtp-Source: ABdhPJxckZm6FEOZm4by1lsAllqeLG5ShaFUIHBtFByj8nDYcG6CQ+RT1ON8D+HEHkGmNqT85dLzOw==
-X-Received: by 2002:ad4:53a1:: with SMTP id j1mr1850525qvv.25.1634934039902;
-        Fri, 22 Oct 2021 13:20:39 -0700 (PDT)
-Received: from localhost.localdomain ([191.91.82.96])
-        by smtp.gmail.com with ESMTPSA id u11sm2934594qko.119.2021.10.22.13.20.38
+        h=x-gm-message-state:dkim-signature:mime-version:references
+         :in-reply-to:from:date:message-id:subject:to:cc;
+        bh=ImoABBg6541EdX3zFl8zDtW+p0YhC+RBw8rNkgwHIS4=;
+        b=NoS2EzomGV/JuMSSHfzTq6L0PtY3MhEKeg9btooldhSWAGfJCgk4kCMQc2wBU68ipR
+         Hjbl1Y7ZFJDS4YlhZGBKqIEqaFKj9oz/RcI3kpKbOrH7AWrCyhV9XkYSy48KWuuEt29R
+         N+Lf2Gh/vQLkmbGqyUgEMZyStsn3qM6WGotxhDi6+3Rfk52tYFW/AtL+7dka76t/LZEh
+         yl8b/yr0eHmdZDfh9UaJ3oN/OymwLhlAf94dc257GQm+6vUnDIjaMdeoRH6CZB3vZZjh
+         RZqIqbRO5FFxyaOEQxrVNl82eYOx/OcGt4tPuchfy0SURF1J7pO/90eeb5sgtHFrVA/f
+         0Dlw==
+X-Gm-Message-State: AOAM532isUoTpSJjiNKpoDn5L+UBpGc5J6qtlP/PLGLXJlGRaIxLo9AA
+        7GMNmq05VNENMmvpGqM6bXJ4IHV0lHDWKA7hHCOd3NGVbSWgog==
+X-Google-Smtp-Source: ABdhPJzpO8xIOr7JntExVCHHboXlXTOFO60rMpnOVT9raU6BeZ0sxdQyWcKwaiIq2/MVE/AXXN9gbzC/gks6
+X-Received: by 2002:a67:7282:: with SMTP id n124mr3112381vsc.15.1634936811224;
+        Fri, 22 Oct 2021 14:06:51 -0700 (PDT)
+Received: from netskope.com ([8.36.116.139])
+        by smtp-relay.gmail.com with ESMTPS id a6sm2667684vsh.2.2021.10.22.14.06.50
+        for <bpf@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Oct 2021 13:20:39 -0700 (PDT)
-From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next] libbpf: fix memory leak in btf__dedup()
-Date:   Fri, 22 Oct 2021 15:20:35 -0500
-Message-Id: <20211022202035.48868-1-mauricio@kinvolk.io>
-X-Mailer: git-send-email 2.25.1
+        Fri, 22 Oct 2021 14:06:51 -0700 (PDT)
+X-Relaying-Domain: riotgames.com
+Received: by mail-ed1-f70.google.com with SMTP id l10-20020a056402230a00b003db6977b694so4844777eda.23
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 14:06:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riotgames.com; s=riotgames;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ImoABBg6541EdX3zFl8zDtW+p0YhC+RBw8rNkgwHIS4=;
+        b=VFmwou63xGBQ7r34dSPf7G5KlE1DUc2W+kayLyAE2/eZMKcB5WubGiZmilCp2KmwZp
+         Pk3ga81w4nej3U06VYYL1eYiL4YlaaMIpDXbzav9hcRx2VXw15SOXSHRW3j/5si9dPMA
+         4y9wDck3ehrGR1l+e/xf7oBw51iZ8CXpl4HV0=
+X-Received: by 2002:a50:e145:: with SMTP id i5mr3152590edl.16.1634936808196;
+        Fri, 22 Oct 2021 14:06:48 -0700 (PDT)
+X-Received: by 2002:a50:e145:: with SMTP id i5mr3152548edl.16.1634936807940;
+ Fri, 22 Oct 2021 14:06:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20211020104442.021802560@infradead.org> <20211020105843.345016338@infradead.org>
+ <YW/4/7MjUf3hWfjz@hirez.programming.kicks-ass.net> <20211021000502.ltn5o6ji6offwzeg@ast-mbp.dhcp.thefacebook.com>
+ <YXEpBKxUICIPVj14@hirez.programming.kicks-ass.net> <CAC1LvL33KYZUJTr1HZZM_owhH=Mvwo9gBEEmFgdpZFEwkUiVKw@mail.gmail.com>
+ <YXJ3WPu1AxHd1cLq@hirez.programming.kicks-ass.net>
+In-Reply-To: <YXJ3WPu1AxHd1cLq@hirez.programming.kicks-ass.net>
+From:   Zvi Effron <zeffron@riotgames.com>
+Date:   Fri, 22 Oct 2021 14:06:36 -0700
+Message-ID: <CAC1LvL1YCkX=0XwM4WHgSVejcs4RywMsXs--OTaJfsyWELHv+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 14/14] bpf,x86: Respect X86_FEATURE_RETPOLINE*
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
+        jpoimboe@redhat.com, andrew.cooper3@citrix.com,
+        linux-kernel@vger.kernel.org, ndesaulniers@google.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+x-netskope-inspected: true
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Free btf_dedup if btf_ensure_modifiable() returns error.
+On Fri, Oct 22, 2021 at 1:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Thu, Oct 21, 2021 at 04:51:08PM -0700, Zvi Effron wrote:
+>
+> > > What's a patchwork and where do I find it?
+> > >
+> >
+> > Patchwork[0] tracks the status of patches from submission through to merge (and
+> > beyond?).
+>
+> Yeah, I sorta know that :-) Even though I loathe the things because
+> web-browser, but the second part of the question was genuine, there's a
+> *lot* of patchwork instances around, not everyone uses the new k.org
+> based one.
+>
 
-Fixes: 919d2b1dbb07 ("libbpf: Allow modification of BTF and add btf__add_str API")
+BPF and NetDev share one: https://patchwork.kernel.org/project/netdevbpf/list/
 
-Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
----
- tools/lib/bpf/btf.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 3a01c4b7f36a..85705c10f7b2 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -2991,8 +2991,10 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf_ext,
- 		return libbpf_err(-EINVAL);
- 	}
- 
--	if (btf_ensure_modifiable(btf))
--		return libbpf_err(-ENOMEM);
-+	if (btf_ensure_modifiable(btf)) {
-+		err = -ENOMEM;
-+		goto done;
-+	}
- 
- 	err = btf_dedup_prep(d);
- 	if (err) {
--- 
-2.25.1
-
+--Zvi
