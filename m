@@ -2,124 +2,149 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D338C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 19:26:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E63AC433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 20:13:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25B01610D0
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 19:26:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1031B610CB
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 20:13:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233564AbhJVT2f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Oct 2021 15:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbhJVT2e (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Oct 2021 15:28:34 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7C6C061764;
-        Fri, 22 Oct 2021 12:26:16 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id o17so9292754ybq.4;
-        Fri, 22 Oct 2021 12:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kjFVYyZDuuF+EL0ZNFMRLD5Ub7SUklZXemiD8dj4nu8=;
-        b=AlcRkbliBroMe95h1np6Dp2heCHNBL2t/AagarT9oD3DpY+rEh8d1eZ02+93CUPZMb
-         XquxYDAAGXV50gkC6kGjy2feM+XrJTFZvt24WYFvHAam6rF5k8HkvsVafUqTz+ub8nOn
-         Y8exOb4i7alO86Y1oHeD1RfP6Zng2NK0/dFByzp8NAU00URyWdAKPQ3uWFa8K+6JgPh6
-         NovkApO1VUz4gpjwMC+4sV9IqSRbZTlVzHRAORqG9MTDZrp3DnY3Ut9pO0xd50zpXzH2
-         I/8KCjNApcNl2Wh2Y56nZeIeP72NLFEf5koueJEMXZdlTopThK3Cls9E2y2ABSZiUNNY
-         0Y4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kjFVYyZDuuF+EL0ZNFMRLD5Ub7SUklZXemiD8dj4nu8=;
-        b=L+oxbo9yGidNedpXBkve1EONLVqXz8z+WfBWnerxnqAqIxMDtam5jNJ6HwDqcx80R4
-         MV+BSCg9HKhIdqXMXs2O8F6D+q/5CNM60Dtm/GCGstVSj2YtJv14WJGMN9ERDVXTbijL
-         hryX/pZtkSvFVct7TTLo86Dkt2qzB+oN6dXx0JvmZ2WQWIX3abUGBa3BSvaXL93GORzY
-         c2RBKAeDjnXzsaZM4chnUKZnE0tN229HlSTDruxZown4gUpE2lHIAPTrmNlNyGETFAJG
-         F6iGYIAuriMkXRPftOriGgSjdRe/M5Q6oRIYN8Dtx9XY77pMMh4ywOboxKeJBy8hdsJk
-         fiEQ==
-X-Gm-Message-State: AOAM530gOQeAq4WZ9GWqdUeKoaD+WRtmluXOju02HKhcSdv7a9WudSHI
-        kESgxKL/NSa0RKPxgC68YS9ZCQAHkkO7ke6KVzc=
-X-Google-Smtp-Source: ABdhPJzRIraq6n30h7CFDfVm0wqO3ZrygEZ0QfNQsiSxmr0WrxCfNMViGYkvbH+tpDkvAzf9cKKPXa1eX0MEPiW3Zl8=
-X-Received: by 2002:a25:afcd:: with SMTP id d13mr1818947ybj.504.1634930775935;
- Fri, 22 Oct 2021 12:26:15 -0700 (PDT)
+        id S233417AbhJVUQI convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 22 Oct 2021 16:16:08 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51158 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232750AbhJVUQI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 22 Oct 2021 16:16:08 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 19MIPKku007751
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 13:13:50 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 3buktt869m-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 13:13:50 -0700
+Received: from intmgw001.27.prn2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 22 Oct 2021 13:13:46 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 565BF70B2FE6; Fri, 22 Oct 2021 13:13:44 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH bpf-next] selftests/bpf: make perf_buffer selftests work on 4.9 kernel again
+Date:   Fri, 22 Oct 2021 13:13:42 -0700
+Message-ID: <20211022201342.3490692-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20211011082031.4148337-1-davemarchevsky@fb.com>
- <20211011082031.4148337-5-davemarchevsky@fb.com> <CAEf4BzbY+OMR_=JJHdzJpiuar_giusd0sb1LKoCQ7BEDYh57NQ@mail.gmail.com>
- <87o87je7hn.fsf@toke.dk> <d3de589a-21f3-7a0d-59de-126d3c70fba1@fb.com>
-In-Reply-To: <d3de589a-21f3-7a0d-59de-126d3c70fba1@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 22 Oct 2021 12:26:04 -0700
-Message-ID: <CAEf4BzaGH63-kaM40ifCWBLncEn7tfJcKxGdVKOR0_jcdpeX1g@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 4/4] libbpf: deprecate bpf_program__get_prog_info_linear
-To:     Dave Marchevsky <davemarchevsky@fb.com>
-Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: BzABqH2d4uVZ729dGf2DMzpfx1LhmKWe
+X-Proofpoint-ORIG-GUID: BzABqH2d4uVZ729dGf2DMzpfx1LhmKWe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-22_05,2021-10-22_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 adultscore=0 malwarescore=0 clxscore=1015 mlxscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2109230001 definitions=main-2110220113
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 12:18 PM Dave Marchevsky <davemarchevsky@fb.com> wr=
-ote:
->
-> On 10/20/21 5:01 PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
-> >
-> >> On Mon, Oct 11, 2021 at 1:20 AM Dave Marchevsky <davemarchevsky@fb.com=
-> wrote:
-> >>>
-> >>> As part of the road to libbpf 1.0, and discussed in libbpf issue trac=
-ker
-> >>> [0], bpf_program__get_prog_info_linear and its associated structs and
-> >>> helper functions should be deprecated. The functionality is too speci=
-fic
-> >>> to the needs of 'perf', and there's little/no out-of-tree usage to
-> >>> preclude introduction of a more general helper in the future.
-> >>>
-> >>> [0] Closes: https://github.com/libbpf/libbpf/issues/313
-> >>
-> >> styling nit: don't know if it's described anywhere or not, but when
-> >> people do references like this, they use 2 spaces of indentation. No
-> >> idea how it came to be, but that's what I did for a while and see
-> >> others doing the same.
-> >>
-> >>>
-> >>> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
-> >>> ---
->
-> [...]
->
-> >> we can actually deprecate all this starting from v0.6, because perf is
-> >> building libbpf statically, so no worries about releases (also there
-> >> are no replacement APIs we have to wait full release for)
-> >
-> > Just FYI, we're also using this in libxdp, and that does link
-> > dynamically to libbpf. It's not an issue to move away from it[0], but
-> > perf is not the only user :)
-> >
-> > -Toke
-> >
-> > [0] Track that here: https://github.com/xdp-project/xdp-tools/issues/12=
-7
-> >
->
-> I submitted a PR to migrate the xdp-tools usage as well. Strange that
-> this didn't show up in an "all github" search.
->
-> Andrii, should the DEPRECATED_SINCE stay at 0.7 in light of this?
+Recent change to use tp/syscalls/sys_enter_nanosleep for perf_buffer
+selftests causes this selftest to fail on 4.9 kernel in libbpf CI ([0]):
 
-There is no replacement API that we need to wait to go through full
-libbpf release, so no, it can stay as is.
+  libbpf: prog 'handle_sys_enter': failed to attach to perf_event FD 6: Invalid argument
+  libbpf: prog 'handle_sys_enter': failed to attach to tracepoint 'syscalls/sys_enter_nanosleep': Invalid argument
+
+It's not exactly clear why, because perf_event itself is created for
+this tracepoint, but I can't even compile 4.9 kernel locally, so it's
+hard to figure this out. If anyone has better luck and would like to
+help investigating this, I'd really appreciate this.
+
+For now, unblock CI by switching back to raw_syscalls/sys_enter, but reduce
+amount of unnecessary samples emitted by filter by process ID. Use
+explicit ARRAY map for that to make it work on 4.9 as well, because
+global data isn't yet supported there.
+
+Cc: Jiri Olsa <jolsa@kernel.org>
+Fixes: aa274f98b269 ("selftests/bpf: Fix possible/online index mismatch in perf_buffer test")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../selftests/bpf/prog_tests/perf_buffer.c    |  5 +++++
+ .../selftests/bpf/progs/test_perf_buffer.c    | 20 +++++++++++++++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
+index 0b0cd045979b..4e32f3586a75 100644
+--- a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
++++ b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
+@@ -46,6 +46,7 @@ int trigger_on_cpu(int cpu)
+ void serial_test_perf_buffer(void)
+ {
+ 	int err, on_len, nr_on_cpus = 0, nr_cpus, i, j;
++	int zero = 0, my_pid = getpid();
+ 	struct perf_buffer_opts pb_opts = {};
+ 	struct test_perf_buffer *skel;
+ 	cpu_set_t cpu_seen;
+@@ -71,6 +72,10 @@ void serial_test_perf_buffer(void)
+ 	if (CHECK(!skel, "skel_load", "skeleton open/load failed\n"))
+ 		goto out_close;
+ 
++	err = bpf_map_update_elem(bpf_map__fd(skel->maps.my_pid_map), &zero, &my_pid, 0);
++	if (!ASSERT_OK(err, "my_pid_update"))
++		goto out_close;
++
+ 	/* attach probe */
+ 	err = test_perf_buffer__attach(skel);
+ 	if (CHECK(err, "attach_kprobe", "err %d\n", err))
+diff --git a/tools/testing/selftests/bpf/progs/test_perf_buffer.c b/tools/testing/selftests/bpf/progs/test_perf_buffer.c
+index a08874c5bdf2..17d5b67744d5 100644
+--- a/tools/testing/selftests/bpf/progs/test_perf_buffer.c
++++ b/tools/testing/selftests/bpf/progs/test_perf_buffer.c
+@@ -6,20 +6,36 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, int);
++	__type(value, int);
++	__uint(max_entries, 1);
++} my_pid_map SEC(".maps");
++
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+ 	__type(key, int);
+ 	__type(value, int);
+ } perf_buf_map SEC(".maps");
+ 
+-SEC("tp/syscalls/sys_enter_nanosleep")
++SEC("tp/raw_syscalls/sys_enter")
+ int handle_sys_enter(void *ctx)
+ {
++	int zero = 0, *my_pid, cur_pid;
+ 	int cpu = bpf_get_smp_processor_id();
+ 
++	my_pid = bpf_map_lookup_elem(&my_pid_map, &zero);
++	if (!my_pid)
++		return 1;
++
++	cur_pid = bpf_get_current_pid_tgid() >> 32;
++	if (cur_pid != *my_pid)
++		return 1;
++
+ 	bpf_perf_event_output(ctx, &perf_buf_map, BPF_F_CURRENT_CPU,
+ 			      &cpu, sizeof(cpu));
+-	return 0;
++	return 1;
+ }
+ 
+ char _license[] SEC("license") = "GPL";
+-- 
+2.30.2
+
