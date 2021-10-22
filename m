@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94E25C4332F
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 07:39:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03A98C43219
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 07:39:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F44E61183
+	by mail.kernel.org (Postfix) with ESMTP id E488E61205
 	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 07:39:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbhJVHmN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S232351AbhJVHmN (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 22 Oct 2021 03:42:13 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:26180 "EHLO
+Received: from szxga03-in.huawei.com ([45.249.212.189]:26181 "EHLO
         szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbhJVHmM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Oct 2021 03:42:12 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HbGRx1GWPz8tps;
-        Fri, 22 Oct 2021 15:38:37 +0800 (CST)
+        with ESMTP id S231923AbhJVHmN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Oct 2021 03:42:13 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HbGRy0w13z8tqG;
+        Fri, 22 Oct 2021 15:38:38 +0800 (CST)
 Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Fri, 22 Oct 2021 15:39:53 +0800
+ 15.1.2308.15; Fri, 22 Oct 2021 15:39:54 +0800
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Fri, 22 Oct
- 2021 15:39:52 +0800
+ 2021 15:39:53 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>
 CC:     Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
         "Andrii Nakryiko" <andrii@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <houtao1@huawei.com>
-Subject: [PATCH bpf-next v3 1/4] bpf: factor out a helper to prepare trampoline for struct_ops prog
-Date:   Fri, 22 Oct 2021 15:55:08 +0800
-Message-ID: <20211022075511.1682588-2-houtao1@huawei.com>
+Subject: [PATCH bpf-next v3 3/4] bpf: add dummy BPF STRUCT_OPS for test purpose
+Date:   Fri, 22 Oct 2021 15:55:10 +0800
+Message-ID: <20211022075511.1682588-4-houtao1@huawei.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211022075511.1682588-1-houtao1@huawei.com>
 References: <20211022075511.1682588-1-houtao1@huawei.com>
@@ -48,97 +48,314 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out a helper bpf_struct_ops_prepare_trampoline() to prepare
-trampoline for BPF_PROG_TYPE_STRUCT_OPS prog. It will be used by
-.test_run callback in following patch.
+Currently the test of BPF STRUCT_OPS depends on the specific bpf
+implementation of tcp_congestion_ops, but it can not cover all
+basic functionalities (e.g, return value handling), so introduce
+a dummy BPF STRUCT_OPS for test purpose.
+
+Loading a bpf_dummy_ops implementation from userspace is prohibited,
+and its only purpose is to run BPF_PROG_TYPE_STRUCT_OPS program
+through bpf(BPF_PROG_TEST_RUN). Now programs for test_1() & test_2()
+are supported. The following three cases are exercised in
+bpf_dummy_struct_ops_test_run():
+
+(1) test and check the value returned from state arg in test_1(state)
+The content of state is copied from userspace pointer and copied back
+after calling test_1(state). The user pointer is saved in an u64 array
+and the array address is passed through ctx_in.
+
+(2) test and check the return value of test_1(NULL)
+Just simulate the case in which an invalid input argument is passed in.
+
+(3) test multiple arguments passing in test_2(state, ...)
+5 arguments are passed through ctx_in in form of u64 array. The first
+element of array is userspace pointer of state and others 4 arguments
+follow.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- include/linux/bpf.h         |  4 ++++
- kernel/bpf/bpf_struct_ops.c | 29 +++++++++++++++++++----------
- 2 files changed, 23 insertions(+), 10 deletions(-)
+ include/linux/bpf.h               |  16 +++
+ kernel/bpf/bpf_struct_ops.c       |   3 +
+ kernel/bpf/bpf_struct_ops_types.h |   3 +
+ net/bpf/Makefile                  |   3 +
+ net/bpf/bpf_dummy_struct_ops.c    | 203 ++++++++++++++++++++++++++++++
+ 5 files changed, 228 insertions(+)
+ create mode 100644 net/bpf/bpf_dummy_struct_ops.c
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 31421c74ba08..3d2cf94a72ce 100644
+index 0dd2de9eeed3..1297af15ec1c 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -999,6 +999,10 @@ bool bpf_struct_ops_get(const void *kdata);
- void bpf_struct_ops_put(const void *kdata);
- int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map, void *key,
- 				       void *value);
-+int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_progs *tprogs,
-+				      struct bpf_prog *prog,
-+				      const struct btf_func_model *model,
-+				      void *image, void *image_end);
- static inline bool bpf_try_module_get(const void *data, struct module *owner)
+@@ -1017,6 +1017,22 @@ static inline void bpf_module_put(const void *data, struct module *owner)
+ 	else
+ 		module_put(owner);
+ }
++
++#ifdef CONFIG_NET
++/* Define it here to avoid the use of forward declaration */
++struct bpf_dummy_ops_state {
++	int val;
++};
++
++struct bpf_dummy_ops {
++	int (*test_1)(struct bpf_dummy_ops_state *cb);
++	int (*test_2)(struct bpf_dummy_ops_state *cb, int a1, unsigned short a2,
++		      char a3, unsigned long a4);
++};
++
++int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
++			    union bpf_attr __user *uattr);
++#endif
+ #else
+ static inline const struct bpf_struct_ops *bpf_struct_ops_find(u32 type_id)
  {
- 	if (owner == BPF_MODULE_OWNER)
 diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 9abcc33f02cf..44be101f2562 100644
+index 44be101f2562..8ecfe4752769 100644
 --- a/kernel/bpf/bpf_struct_ops.c
 +++ b/kernel/bpf/bpf_struct_ops.c
-@@ -312,6 +312,20 @@ static int check_zero_holes(const struct btf_type *t, void *data)
- 	return 0;
- }
+@@ -93,6 +93,9 @@ const struct bpf_verifier_ops bpf_struct_ops_verifier_ops = {
+ };
  
-+int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_progs *tprogs,
-+				      struct bpf_prog *prog,
-+				      const struct btf_func_model *model,
-+				      void *image, void *image_end)
-+{
-+	u32 flags;
+ const struct bpf_prog_ops bpf_struct_ops_prog_ops = {
++#ifdef CONFIG_NET
++	.test_run = bpf_struct_ops_test_run,
++#endif
+ };
+ 
+ static const struct btf_type *module_type;
+diff --git a/kernel/bpf/bpf_struct_ops_types.h b/kernel/bpf/bpf_struct_ops_types.h
+index 066d83ea1c99..5678a9ddf817 100644
+--- a/kernel/bpf/bpf_struct_ops_types.h
++++ b/kernel/bpf/bpf_struct_ops_types.h
+@@ -2,6 +2,9 @@
+ /* internal file - do not include directly */
+ 
+ #ifdef CONFIG_BPF_JIT
++#ifdef CONFIG_NET
++BPF_STRUCT_OPS_TYPE(bpf_dummy_ops)
++#endif
+ #ifdef CONFIG_INET
+ #include <net/tcp.h>
+ BPF_STRUCT_OPS_TYPE(tcp_congestion_ops)
+diff --git a/net/bpf/Makefile b/net/bpf/Makefile
+index 1c0a98d8c28f..1ebe270bde23 100644
+--- a/net/bpf/Makefile
++++ b/net/bpf/Makefile
+@@ -1,2 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-$(CONFIG_BPF_SYSCALL)	:= test_run.o
++ifeq ($(CONFIG_BPF_JIT),y)
++obj-$(CONFIG_BPF_SYSCALL)	+= bpf_dummy_struct_ops.o
++endif
+diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_ops.c
+new file mode 100644
+index 000000000000..ac27836e55df
+--- /dev/null
++++ b/net/bpf/bpf_dummy_struct_ops.c
+@@ -0,0 +1,203 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2021. Huawei Technologies Co., Ltd
++ */
++#include <linux/kernel.h>
++#include <linux/bpf_verifier.h>
++#include <linux/bpf.h>
++#include <linux/btf.h>
 +
-+	tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
-+	tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
-+	flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
-+	return arch_prepare_bpf_trampoline(NULL, image, image_end,
-+					   model, flags, tprogs, NULL);
++extern struct bpf_struct_ops bpf_bpf_dummy_ops;
++
++/* A common type for test_N with return value in bpf_dummy_ops */
++typedef int (*dummy_ops_test_ret_fn)(struct bpf_dummy_ops_state *state, ...);
++
++struct bpf_dummy_ops_test_args {
++	u64 args[MAX_BPF_FUNC_ARGS];
++	struct bpf_dummy_ops_state state;
++};
++
++static struct bpf_dummy_ops_test_args *
++dummy_ops_init_args(const union bpf_attr *kattr, unsigned int nr)
++{
++	__u32 size_in;
++	struct bpf_dummy_ops_test_args *args;
++	void __user *ctx_in;
++	void __user *u_state;
++
++	if (!nr || nr > MAX_BPF_FUNC_ARGS)
++		return ERR_PTR(-EINVAL);
++
++	size_in = kattr->test.ctx_size_in;
++	if (size_in != sizeof(u64) * nr)
++		return ERR_PTR(-EINVAL);
++
++	args = kzalloc(sizeof(*args), GFP_KERNEL);
++	if (!args)
++		return ERR_PTR(-ENOMEM);
++
++	ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
++	if (copy_from_user(args->args, ctx_in, size_in))
++		goto out;
++
++	/* args[0] is 0 means state argument of test_N will be NULL */
++	u_state = u64_to_user_ptr(args->args[0]);
++	if (u_state && copy_from_user(&args->state, u_state,
++				      sizeof(args->state)))
++		goto out;
++
++	return args;
++out:
++	kfree(args);
++	return ERR_PTR(-EFAULT);
 +}
 +
- static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 					  void *value, u64 flags)
- {
-@@ -323,7 +337,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	struct bpf_tramp_progs *tprogs = NULL;
- 	void *udata, *kdata;
- 	int prog_fd, err = 0;
--	void *image;
-+	void *image, *image_end;
- 	u32 i;
- 
- 	if (flags)
-@@ -363,12 +377,12 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	udata = &uvalue->data;
- 	kdata = &kvalue->data;
- 	image = st_map->image;
-+	image_end = st_map->image + PAGE_SIZE;
- 
- 	for_each_member(i, t, member) {
- 		const struct btf_type *mtype, *ptype;
- 		struct bpf_prog *prog;
- 		u32 moff;
--		u32 flags;
- 
- 		moff = btf_member_bit_offset(t, member) / 8;
- 		ptype = btf_type_resolve_ptr(btf_vmlinux, member->type, NULL);
-@@ -430,14 +444,9 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 			goto reset_unlock;
- 		}
- 
--		tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
--		tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
--		flags = st_ops->func_models[i].ret_size > 0 ?
--			BPF_TRAMP_F_RET_FENTRY_RET : 0;
--		err = arch_prepare_bpf_trampoline(NULL, image,
--						  st_map->image + PAGE_SIZE,
--						  &st_ops->func_models[i],
--						  flags, tprogs, NULL);
-+		err = bpf_struct_ops_prepare_trampoline(tprogs, prog,
-+							&st_ops->func_models[i],
-+							image, image_end);
- 		if (err < 0)
- 			goto reset_unlock;
- 
++static int dummy_ops_copy_args(struct bpf_dummy_ops_test_args *args)
++{
++	void __user *u_state;
++
++	u_state = u64_to_user_ptr(args->args[0]);
++	if (u_state && copy_to_user(u_state, &args->state, sizeof(args->state)))
++		return -EFAULT;
++
++	return 0;
++}
++
++static int dummy_ops_call_op(void *image, struct bpf_dummy_ops_test_args *args)
++{
++	dummy_ops_test_ret_fn test = (void *)image;
++	struct bpf_dummy_ops_state *state = NULL;
++
++	/* state needs to be NULL if args[0] is 0 */
++	if (args->args[0])
++		state = &args->state;
++	return test(state, args->args[1], args->args[2],
++		    args->args[3], args->args[4]);
++}
++
++int bpf_struct_ops_test_run(struct bpf_prog *prog, const union bpf_attr *kattr,
++			    union bpf_attr __user *uattr)
++{
++	const struct bpf_struct_ops *st_ops = &bpf_bpf_dummy_ops;
++	const struct btf_type *func_proto;
++	struct bpf_dummy_ops_test_args *args;
++	struct bpf_tramp_progs *tprogs;
++	void *image = NULL;
++	unsigned int op_idx;
++	int prog_ret;
++	int err;
++
++	if (prog->aux->attach_btf_id != st_ops->type_id)
++		return -EOPNOTSUPP;
++
++	func_proto = prog->aux->attach_func_proto;
++	args = dummy_ops_init_args(kattr, btf_type_vlen(func_proto));
++	if (IS_ERR(args))
++		return PTR_ERR(args);
++
++	tprogs = kcalloc(BPF_TRAMP_MAX, sizeof(*tprogs), GFP_KERNEL);
++	if (!tprogs) {
++		err = -ENOMEM;
++		goto out;
++	}
++
++	image = bpf_jit_alloc_exec(PAGE_SIZE);
++	if (!image) {
++		err = -ENOMEM;
++		goto out;
++	}
++	set_vm_flush_reset_perms(image);
++
++	op_idx = prog->expected_attach_type;
++	err = bpf_struct_ops_prepare_trampoline(tprogs, prog,
++						&st_ops->func_models[op_idx],
++						image, image + PAGE_SIZE);
++	if (err < 0)
++		goto out;
++
++	set_memory_ro((long)image, 1);
++	set_memory_x((long)image, 1);
++	prog_ret = dummy_ops_call_op(image, args);
++
++	err = dummy_ops_copy_args(args);
++	if (err)
++		goto out;
++	if (put_user(prog_ret, &uattr->test.retval))
++		err = -EFAULT;
++out:
++	kfree(args);
++	bpf_jit_free_exec(image);
++	kfree(tprogs);
++	return err;
++}
++
++static int bpf_dummy_init(struct btf *btf)
++{
++	return 0;
++}
++
++static bool bpf_dummy_ops_is_valid_access(int off, int size,
++					  enum bpf_access_type type,
++					  const struct bpf_prog *prog,
++					  struct bpf_insn_access_aux *info)
++{
++	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
++}
++
++static int bpf_dummy_ops_btf_struct_access(struct bpf_verifier_log *log,
++					   const struct btf *btf,
++					   const struct btf_type *t, int off,
++					   int size, enum bpf_access_type atype,
++					   u32 *next_btf_id)
++{
++	const struct btf_type *state;
++	s32 type_id;
++	int err;
++
++	type_id = btf_find_by_name_kind(btf, "bpf_dummy_ops_state",
++					BTF_KIND_STRUCT);
++	if (type_id < 0)
++		return -EINVAL;
++
++	state = btf_type_by_id(btf, type_id);
++	if (t != state) {
++		bpf_log(log, "only access to bpf_dummy_ops_state is supported\n");
++		return -EACCES;
++	}
++
++	err = btf_struct_access(log, btf, t, off, size, atype, next_btf_id);
++	if (err < 0)
++		return err;
++
++	return atype == BPF_READ ? err : NOT_INIT;
++}
++
++static const struct bpf_verifier_ops bpf_dummy_verifier_ops = {
++	.is_valid_access = bpf_dummy_ops_is_valid_access,
++	.btf_struct_access = bpf_dummy_ops_btf_struct_access,
++};
++
++static int bpf_dummy_init_member(const struct btf_type *t,
++				 const struct btf_member *member,
++				 void *kdata, const void *udata)
++{
++	return -EOPNOTSUPP;
++}
++
++static int bpf_dummy_reg(void *kdata)
++{
++	return -EOPNOTSUPP;
++}
++
++static void bpf_dummy_unreg(void *kdata)
++{
++}
++
++struct bpf_struct_ops bpf_bpf_dummy_ops = {
++	.verifier_ops = &bpf_dummy_verifier_ops,
++	.init = bpf_dummy_init,
++	.init_member = bpf_dummy_init_member,
++	.reg = bpf_dummy_reg,
++	.unreg = bpf_dummy_unreg,
++	.name = "bpf_dummy_ops",
++};
 -- 
 2.29.2
 
