@@ -2,158 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B6BC433F5
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 07:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B13DC433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 08:20:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 467F5610EA
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 07:40:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 162F260FD8
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 08:20:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbhJVHm3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Oct 2021 03:42:29 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:14843 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232057AbhJVHm3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Oct 2021 03:42:29 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4HbGMz5khjz90M9;
-        Fri, 22 Oct 2021 15:35:11 +0800 (CST)
-Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Fri, 22 Oct 2021 15:39:53 +0800
-Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
- (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Fri, 22 Oct
- 2021 15:39:53 +0800
-From:   Hou Tao <houtao1@huawei.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>
-CC:     Yonghong Song <yhs@fb.com>, Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <houtao1@huawei.com>
-Subject: [PATCH bpf-next v3 2/4] bpf: factor out helpers to check ctx access for BTF function
-Date:   Fri, 22 Oct 2021 15:55:09 +0800
-Message-ID: <20211022075511.1682588-3-houtao1@huawei.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20211022075511.1682588-1-houtao1@huawei.com>
-References: <20211022075511.1682588-1-houtao1@huawei.com>
+        id S232344AbhJVIWo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Oct 2021 04:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232357AbhJVIWo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Oct 2021 04:22:44 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8B2C061766
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 01:20:26 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e12so2696505wra.4
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 01:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=neYj3P+KpD7Ixifz+7FY5d/nurCJB3b5gZwG2Bu+tWA=;
+        b=MQQ96Ad3GvUJIHBvb4Bvf2VBFIMn8/IRihE+Dup8572sBeDX7PGZnKtEoPMl2AIzjH
+         /fssTrL3B4HWFp9S1nmlFsTck7Gn62GI8uwtWYWoUDTAS8XkiM2IUBi3hq13f6B+IE9f
+         u5W0qTMUviS9DeSypiuEfQEc8431st8buHB7Tr3h3ipEVVULCF+ezW1enOvaE/o6gEb1
+         j4J1eGRmoImbo0EVixMm3p4J+luaFw+zRdQaaRW2KMrhm/lL+wHuUodLi4/7UjTC8RUW
+         STXZJXmNWGrh1CZpajcDz7onv0BeB4z2Sz2HCGW6Kcar/f2IireW6sYAtAL+aNk61qir
+         UtUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=neYj3P+KpD7Ixifz+7FY5d/nurCJB3b5gZwG2Bu+tWA=;
+        b=GZ2Vi3HUhOLnfrSoWLcddxGuNfNc+Ku4f07HzN1oGDMxsg9njKmYvMFo2opSx/PFPI
+         MJcFRfJXuqO/PrvQHzTkZ5dEtqw78eyKmciQRlkiO6U0QRlD6ZHrGJsV2DyquAHWj0S4
+         PixEO5YX3V2Q+Mby5WdM0Ki9PaWxET040+dRUnA9qGV0gR+zqtsrziPxsaJX8qsi268t
+         tO7+rZkrdkBFujzXG0GpiRv58j1+LEC9ZNSUk7LCwFBY4oF4XCLjekj83cQgwGrou4PL
+         deF0pzRCNaAzsykVjkmTXJ6pVjUgdJBpb2gO8td9PlIt9g8ZJGDSJmiCrrJ6OE69c46g
+         9TYw==
+X-Gm-Message-State: AOAM531CJ/28WRkEOf+QyHw6/aP0R24+8gwWINzPNA/WOX5uR/oFY310
+        tEhNkfOWceZtaOZ6dYAmZCHA4A==
+X-Google-Smtp-Source: ABdhPJwwI2ntAGm8BDkW8fxgcUnYPYIusmCXdTeOURUv/D6LptPaPFSbmiraJ6C/sCdgDPXRRMQEfw==
+X-Received: by 2002:a5d:4b51:: with SMTP id w17mr10585157wrs.47.1634890825468;
+        Fri, 22 Oct 2021 01:20:25 -0700 (PDT)
+Received: from [192.168.1.8] ([149.86.66.22])
+        by smtp.gmail.com with ESMTPSA id o17sm1372876wmq.11.2021.10.22.01.20.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Oct 2021 01:20:25 -0700 (PDT)
+Message-ID: <0d4e18a7-4db4-a942-60ad-a9e5312a316b@isovalent.com>
+Date:   Fri, 22 Oct 2021 09:20:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH bpf-next v5 2/3] bpftool: conditionally append / to the
+ progtype
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+References: <20211021214814.1236114-1-sdf@google.com>
+ <20211021214814.1236114-3-sdf@google.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20211021214814.1236114-3-sdf@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out two helpers to check the read access of ctx for BTF
-function. bpf_tracing_ctx_access() is used to check the
-read access to argument is valid, and bpf_tracing_btf_ctx_access()
-checks whether the btf type of argument is valid besides
-the checking of argument read. bpf_tracing_btf_ctx_access()
-will be used by the following patch.
+2021-10-21 14:48 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
+> Otherwise, attaching with bpftool doesn't work with strict section names.
+> 
+> Also, switch to libbpf strict mode to use the latest conventions
+> (note, I don't think we have any cli api guarantees?).
+> 
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- include/linux/bpf.h      | 27 +++++++++++++++++++++++++++
- kernel/trace/bpf_trace.c | 16 ++--------------
- net/ipv4/bpf_tcp_ca.c    |  9 +--------
- 3 files changed, 30 insertions(+), 22 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 3d2cf94a72ce..0dd2de9eeed3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1649,6 +1649,33 @@ bool bpf_prog_test_check_kfunc_call(u32 kfunc_id, struct module *owner);
- bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 		    const struct bpf_prog *prog,
- 		    struct bpf_insn_access_aux *info);
-+
-+/*
-+ * The maximum number of BTF function arguments is MAX_BPF_FUNC_ARGS.
-+ * And only aligned read is allowed.
-+ */
-+static inline bool bpf_tracing_ctx_access(int off, int size,
-+					  enum bpf_access_type type)
-+{
-+	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
-+		return false;
-+	if (type != BPF_READ)
-+		return false;
-+	if (off % size != 0)
-+		return false;
-+	return true;
-+}
-+
-+static inline bool bpf_tracing_btf_ctx_access(int off, int size,
-+					      enum bpf_access_type type,
-+					      const struct bpf_prog *prog,
-+					      struct bpf_insn_access_aux *info)
-+{
-+	if (!bpf_tracing_ctx_access(off, size, type))
-+		return false;
-+	return btf_ctx_access(off, size, type, prog, info);
-+}
-+
- int btf_struct_access(struct bpf_verifier_log *log, const struct btf *btf,
- 		      const struct btf_type *t, int off, int size,
- 		      enum bpf_access_type atype,
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index cbcd0d6fca7c..7396488793ff 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1646,13 +1646,7 @@ static bool raw_tp_prog_is_valid_access(int off, int size,
- 					const struct bpf_prog *prog,
- 					struct bpf_insn_access_aux *info)
- {
--	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
--		return false;
--	if (type != BPF_READ)
--		return false;
--	if (off % size != 0)
--		return false;
--	return true;
-+	return bpf_tracing_ctx_access(off, size, type);
- }
- 
- static bool tracing_prog_is_valid_access(int off, int size,
-@@ -1660,13 +1654,7 @@ static bool tracing_prog_is_valid_access(int off, int size,
- 					 const struct bpf_prog *prog,
- 					 struct bpf_insn_access_aux *info)
- {
--	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
--		return false;
--	if (type != BPF_READ)
--		return false;
--	if (off % size != 0)
--		return false;
--	return btf_ctx_access(off, size, type, prog, info);
-+	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
- }
- 
- int __weak bpf_prog_test_run_tracing(struct bpf_prog *prog,
-diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-index 57709ac09fb2..2cf02b4d77fb 100644
---- a/net/ipv4/bpf_tcp_ca.c
-+++ b/net/ipv4/bpf_tcp_ca.c
-@@ -81,14 +81,7 @@ static bool bpf_tcp_ca_is_valid_access(int off, int size,
- 				       const struct bpf_prog *prog,
- 				       struct bpf_insn_access_aux *info)
- {
--	if (off < 0 || off >= sizeof(__u64) * MAX_BPF_FUNC_ARGS)
--		return false;
--	if (type != BPF_READ)
--		return false;
--	if (off % size != 0)
--		return false;
--
--	if (!btf_ctx_access(off, size, type, prog, info))
-+	if (!bpf_tracing_btf_ctx_access(off, size, type, prog, info))
- 		return false;
- 
- 	if (info->reg_type == PTR_TO_BTF_ID && info->btf_id == sock_id)
--- 
-2.29.2
-
+Thanks!
+Reviewed-by: Quentin Monnet <quentin@isovalent.com>
