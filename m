@@ -2,107 +2,393 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5CD8C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 21:29:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EADC433EF
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 22:03:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADF8561205
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 21:29:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1CE46109D
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 22:03:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233615AbhJVVby (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Oct 2021 17:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231997AbhJVVbx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Oct 2021 17:31:53 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04957C061764;
-        Fri, 22 Oct 2021 14:29:35 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id r2so4419728pgl.10;
-        Fri, 22 Oct 2021 14:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ol5e64LpFv12Uil1+Y88UDesKUE1+NUsIExRzpZDEd8=;
-        b=BpmWcikC+ew8/gMm6u1SAa+zQSytt+28rPkVD5UD9I2c7P06ebvMGKHBAHptJ1Lq8L
-         UA1XQ4C+3ESsY0odxDK5aAETefQyvMnYkj1Lr3huk98RrYTPlQwZfXsinwPvZlzqD0wo
-         gNdvqKs3E5yFjwIMvH/1dmamiM9QdmoP1I4A8q1UqieeLL5a5itT/wVC6kuHRrzzwOKK
-         0o5rJs11ikZPvW7bOzw9JQUVnQUbPIQ2Ias6W43qmCQNYSYFtvjnYMY9tvFGipiUpd5l
-         R+8k2jXj+KQdxj+pr11/XkTbBvnpR72l94pSyNVf1pA5sKoQPOVgS6TRv4k/HyYXbzJP
-         Hd5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ol5e64LpFv12Uil1+Y88UDesKUE1+NUsIExRzpZDEd8=;
-        b=iZ3DOgeAs5cAseOe3LZJ7u3WUV8/tYstC+FEuf/bil1G0RrpPG9tbFqOLLiH6H4u/q
-         7iXnXmXRjQWZasMJhxYxxxUT9Xtq8Hzf31tJQhaIQQnyfktu3VSnNC1ZTI8uiuYE2cGa
-         pK6C/yRTiiiSPx/TdIcBOqiOt0GxfHA0/jov/3ZhVscI/gQMaUEVaQ1PjXaaRNd1lT1I
-         GiGS7osyH5aLim3U6Ln53WuEM1vR2ebGaGxFmgC4yUnQWM1qHjs3JxGzIyZN5pAqtbWz
-         nmycSsMRdwvfWrRl2Q3YmtJhYyenI2S+LywgtQebNQBai/CqNxI8zDdsXKvrNkW6t2w+
-         u+CA==
-X-Gm-Message-State: AOAM530Z558ZU/B4xvPc0L7iUOvwwCKy+fDZ0lK38ZXm8EiRJ+rJ6jJW
-        zlhq4wG5x8HQriViHFZbKZj9fdfD/WmmT4ilU6Q=
-X-Google-Smtp-Source: ABdhPJznYah8sfUkvYsGPHfJr5lIbvCn1KAeRiDeqtlzO1lODkHPr6qNMJkOgVQLUsmCjC4BeTb4yy2xOw4rhf5VFPY=
-X-Received: by 2002:aa7:9f8f:0:b0:44c:cf63:ec7c with SMTP id
- z15-20020aa79f8f000000b0044ccf63ec7cmr2539742pfr.77.1634938175193; Fri, 22
- Oct 2021 14:29:35 -0700 (PDT)
+        id S231382AbhJVWGM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Oct 2021 18:06:12 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27188 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231363AbhJVWGM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 22 Oct 2021 18:06:12 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19MLBrLh031721
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 15:03:54 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=G0DnBSPtX6TVwWNYxH5XgBAvJE2ZiWvE/W8Q3ZXZKrU=;
+ b=pBAL+nLC7gPdaZQ/yk3i+qmr2qYJDZAH1HSb+PuFajULVMEjIGA26jiqHdfbWxWTLmnZ
+ YGLACTdBEyzlp4O7Ue9b5Jyf32gCaI9uNyYsPQaNEMcGPeWvbXdO4dmcWFiK1gKrjN59
+ DGuULizF2hMjUOcNFA0T4WOTRfCpqUykeoE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3bumafrn9h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 22 Oct 2021 15:03:54 -0700
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 22 Oct 2021 15:03:53 -0700
+Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
+        id 9ED0B3EE3871; Fri, 22 Oct 2021 15:03:50 -0700 (PDT)
+From:   Joanne Koong <joannekoong@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Joanne Koong <joannekoong@fb.com>
+Subject: [PATCH v5 bpf-next 3/5] selftests/bpf: Add bloom filter map test cases
+Date:   Fri, 22 Oct 2021 15:02:47 -0700
+Message-ID: <20211022220249.2040337-4-joannekoong@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211022220249.2040337-1-joannekoong@fb.com>
+References: <20211022220249.2040337-1-joannekoong@fb.com>
 MIME-Version: 1.0
-References: <20211018075623.26884-1-quanyang.wang@windriver.com>
- <YXIUMJWrXUcrvZf5@carbon.DHCP.thefacebook.com> <35e9e89f-d92f-06f9-b919-ef956d99d7df@windriver.com>
-In-Reply-To: <35e9e89f-d92f-06f9-b919-ef956d99d7df@windriver.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 22 Oct 2021 14:29:24 -0700
-Message-ID: <CAADnVQJANZQJ5pAeH5KkC2rtY1TDFA_AomDfaPaBY_hw8qhgSA@mail.gmail.com>
-Subject: Re: [V2][PATCH] cgroup: fix memory leak caused by missing cgroup_bpf_offline
-To:     Quanyang Wang <quanyang.wang@windriver.com>
-Cc:     Roman Gushchin <guro@fb.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>,
-        mkoutny@suse.com,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-ORIG-GUID: VQ66IRg9eVf8alo4FGNMfGB8e9Agp_dy
+X-Proofpoint-GUID: VQ66IRg9eVf8alo4FGNMfGB8e9Agp_dy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-22_05,2021-10-22_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
+ mlxlogscore=999 malwarescore=0 phishscore=0 spamscore=0 suspectscore=0
+ mlxscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2109230001 definitions=main-2110220124
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 22, 2021 at 4:56 AM Quanyang Wang
-<quanyang.wang@windriver.com> wrote:
-> >> Fixes: 2b0d3d3e4fcf ("percpu_ref: reduce memory footprint of percpu_ref in fast path")
-> >> Fixes: 4bfc0bb2c60e ("bpf: decouple the lifetime of cgroup_bpf from cgroup itself")
-> >> Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
-> >> ---
-> >> V1 ---> V2:
-> >> 1. As per Daniel's suggestion, add description to commit msg about the
-> >> balance of cgroup's refcount in cgroup_bpf_offline.
-> >> 2. As per Michal's suggestion, add tag "Fixes: 4bfc0bb2c60e" and add
-> >> description about it.
-> >> 3. Fix indentation on the percpu_ref_is_dying line.
-> >
-> > Acked-by: Roman Gushchin <guro@fb.com>
-> >
-> > The fix looks correct, two fixes tag are fine too, if only it won't
-> > confuse scripts picking up patches for stable backports.
-> >
-> > In fact, it's a very cold path, which is arguably never hit in the real
-> > life. On cgroup v2 it's not an issue. I'm not sure we need a stable
-> > backport at all, only if it creates a noise for some automation tests.
-> >
-> > Quanyang, out of curiosity, how did you find it?
-> I ran ltp testsuite to find this.
->
-> ./runltp -f controllers -s cgroup
->
-> Thanks,
-> Quanyang
-> >
-> > Anyway, thanks for catching and fixing it!
+This patch adds test cases for bpf bloom filter maps. They include tests
+checking against invalid operations by userspace, tests for using the
+bloom filter map as an inner map, and a bpf program that queries the
+bloom filter map for values added by a userspace program.
 
-Applied to bpf tree. Thanks everyone!
+Signed-off-by: Joanne Koong <joannekoong@fb.com>
+---
+ .../bpf/prog_tests/bloom_filter_map.c         | 204 ++++++++++++++++++
+ .../selftests/bpf/progs/bloom_filter_map.c    |  82 +++++++
+ 2 files changed, 286 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bloom_filter_m=
+ap.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bloom_filter_map.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c b/=
+tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
+new file mode 100644
+index 000000000000..287e0934d4fe
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bloom_filter_map.c
+@@ -0,0 +1,204 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include <sys/syscall.h>
++#include <test_progs.h>
++#include "bloom_filter_map.skel.h"
++
++static void test_fail_cases(void)
++{
++	struct bpf_create_map_attr xattr =3D {
++		.name =3D "bloom_filter_map",
++		.map_type =3D BPF_MAP_TYPE_BLOOM_FILTER,
++		.max_entries =3D 100,
++		.value_size =3D 11,
++	};
++	__u32 value;
++	int fd, err;
++
++	/* Invalid key size */
++	xattr.key_size =3D 4;
++	fd =3D bpf_create_map_xattr(&xattr);
++	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid key size"))
++		close(fd);
++	xattr.key_size =3D 0;
++
++	/* Invalid value size */
++	xattr.value_size =3D 0;
++	fd =3D bpf_create_map_xattr(&xattr);
++	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid value size 0=
+"))
++		close(fd);
++	xattr.value_size =3D 11;
++
++	/* Invalid max entries size */
++	xattr.max_entries =3D 0;
++	fd =3D bpf_create_map_xattr(&xattr);
++	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid max entries =
+size"))
++		close(fd);
++	xattr.max_entries =3D 100;
++
++	/* Bloom filter maps do not support BPF_F_NO_PREALLOC */
++	xattr.map_flags =3D BPF_F_NO_PREALLOC;
++	fd =3D bpf_create_map_xattr(&xattr);
++	if (!ASSERT_LT(fd, 0, "bpf_create_map bloom filter invalid flags"))
++		close(fd);
++	xattr.map_flags =3D 0;
++
++	fd =3D bpf_create_map_xattr(&xattr);
++	if (!ASSERT_GE(fd, 0, "bpf_create_map bloom filter"))
++		return;
++
++	/* Test invalid flags */
++	err =3D bpf_map_update_elem(fd, NULL, &value, -1);
++	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
+");
++
++	err =3D bpf_map_update_elem(fd, NULL, &value, BPF_EXIST);
++	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
+");
++
++	err =3D bpf_map_update_elem(fd, NULL, &value, BPF_F_LOCK);
++	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
+");
++
++	err =3D bpf_map_update_elem(fd, NULL, &value, BPF_NOEXIST);
++	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
+");
++
++	err =3D bpf_map_update_elem(fd, NULL, &value, 10000);
++	ASSERT_EQ(err, -EINVAL, "bpf_map_update_elem bloom filter invalid flags=
+");
++
++	close(fd);
++}
++
++static void check_bloom(struct bloom_filter_map *skel)
++{
++	struct bpf_link *link;
++
++	link =3D bpf_program__attach(skel->progs.check_bloom);
++	if (!ASSERT_OK_PTR(link, "link"))
++		return;
++
++	syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->error, 0, "error");
++
++	bpf_link__destroy(link);
++}
++
++static void test_inner_map(struct bloom_filter_map *skel, const __u32 *r=
+and_vals,
++			     __u32 nr_rand_vals)
++{
++	int outer_map_fd, inner_map_fd, err, i, key =3D 0;
++	struct bpf_create_map_attr xattr =3D {
++		.name =3D "bloom_filter_inner_map",
++		.map_type =3D BPF_MAP_TYPE_BLOOM_FILTER,
++		.value_size =3D sizeof(__u32),
++		.max_entries =3D nr_rand_vals,
++	};
++	struct bpf_link *link;
++
++	/* Create a bloom filter map that will be used as the inner map */
++	inner_map_fd =3D bpf_create_map_xattr(&xattr);
++	if (!ASSERT_GE(inner_map_fd, 0, "bpf_create_map bloom filter inner map"=
+))
++		return;
++
++	for (i =3D 0; i < nr_rand_vals; i++) {
++		err =3D bpf_map_update_elem(inner_map_fd, NULL, rand_vals + i, BPF_ANY=
+);
++		if (!ASSERT_OK(err, "Add random value to inner_map_fd"))
++			goto done;
++	}
++
++	/* Add the bloom filter map to the outer map */
++	outer_map_fd =3D bpf_map__fd(skel->maps.outer_map);
++	err =3D bpf_map_update_elem(outer_map_fd, &key, &inner_map_fd, BPF_ANY)=
+;
++	if (!ASSERT_OK(err, "Add bloom filter map to outer map"))
++		goto done;
++
++	/* Attach the bloom_filter_inner_map prog */
++	link =3D bpf_program__attach(skel->progs.inner_map);
++	if (!ASSERT_OK_PTR(link, "link"))
++		goto delete_inner_map;
++
++	syscall(SYS_getpgid);
++
++	ASSERT_EQ(skel->bss->error, 0, "error");
++
++	bpf_link__destroy(link);
++
++delete_inner_map:
++	/* Ensure the inner bloom filter map can be deleted */
++	err =3D bpf_map_delete_elem(outer_map_fd, &key);
++	ASSERT_OK(err, "Delete inner bloom filter map");
++
++done:
++	close(inner_map_fd);
++}
++
++static int setup_progs(struct bloom_filter_map **out_skel, __u32 **out_r=
+and_vals,
++			      __u32 *out_nr_rand_vals)
++{
++	struct bloom_filter_map *skel;
++	int random_data_fd, bloom_fd;
++	__u32 *rand_vals =3D NULL;
++	__u32 map_size, val;
++	int err, i;
++
++	/* Set up a bloom filter map skeleton */
++	skel =3D bloom_filter_map__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "bloom_filter_map__open_and_load"))
++		return -EINVAL;
++
++	/* Set up rand_vals */
++	map_size =3D bpf_map__max_entries(skel->maps.map_random_data);
++	rand_vals =3D malloc(sizeof(*rand_vals) * map_size);
++	if (!rand_vals) {
++		err =3D -ENOMEM;
++		goto error;
++	}
++
++	/* Generate random values and populate both skeletons */
++	random_data_fd =3D bpf_map__fd(skel->maps.map_random_data);
++	bloom_fd =3D bpf_map__fd(skel->maps.map_bloom);
++	for (i =3D 0; i < map_size; i++) {
++		val =3D rand();
++
++		err =3D bpf_map_update_elem(random_data_fd, &i, &val, BPF_ANY);
++		if (!ASSERT_OK(err, "Add random value to map_random_data"))
++			goto error;
++
++		err =3D bpf_map_update_elem(bloom_fd, NULL, &val, BPF_ANY);
++		if (!ASSERT_OK(err, "Add random value to map_bloom"))
++			goto error;
++
++		rand_vals[i] =3D val;
++	}
++
++	*out_skel =3D skel;
++	*out_rand_vals =3D rand_vals;
++	*out_nr_rand_vals =3D map_size;
++
++	return 0;
++
++error:
++	bloom_filter_map__destroy(skel);
++	if (rand_vals)
++		free(rand_vals);
++	return err;
++}
++
++void test_bloom_filter_map(void)
++{
++	__u32 *rand_vals, nr_rand_vals;
++	struct bloom_filter_map *skel;
++	int err;
++
++	test_fail_cases();
++
++	err =3D setup_progs(&skel, &rand_vals, &nr_rand_vals);
++	if (err)
++		return;
++
++	test_inner_map(skel, rand_vals, nr_rand_vals);
++	free(rand_vals);
++
++	check_bloom(skel);
++
++	bloom_filter_map__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bloom_filter_map.c b/tools=
+/testing/selftests/bpf/progs/bloom_filter_map.c
+new file mode 100644
+index 000000000000..7f72102ea6a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bloom_filter_map.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++struct bpf_map;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1000);
++	__type(key, __u32);
++	__type(value, __u32);
++} map_random_data SEC(".maps");
++
++struct map_bloom_type {
++	__uint(type, BPF_MAP_TYPE_BLOOM_FILTER);
++	__uint(value_size, sizeof(__u32));
++	__uint(max_entries, 10000);
++	__uint(map_extra, 5);
++} map_bloom SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(int));
++	__uint(value_size, sizeof(int));
++	__array(values, struct map_bloom_type);
++} outer_map SEC(".maps");
++
++struct callback_ctx {
++	struct bpf_map *map;
++};
++
++int error =3D 0;
++
++static __u64
++check_elem(struct bpf_map *map, __u32 *key, __u32 *val,
++	   struct callback_ctx *data)
++{
++	int err;
++
++	err =3D bpf_map_peek_elem(data->map, val);
++	if (err) {
++		error |=3D 1;
++		return 1; /* stop the iteration */
++	}
++
++	return 0;
++}
++
++SEC("fentry/__x64_sys_getpgid")
++int inner_map(void *ctx)
++{
++	struct bpf_map *inner_map;
++	struct callback_ctx data;
++	int key =3D 0;
++
++	inner_map =3D bpf_map_lookup_elem(&outer_map, &key);
++	if (!inner_map) {
++		error |=3D 2;
++		return 0;
++	}
++
++	data.map =3D inner_map;
++	bpf_for_each_map_elem(&map_random_data, check_elem, &data, 0);
++
++	return 0;
++}
++
++SEC("fentry/__x64_sys_getpgid")
++int check_bloom(void *ctx)
++{
++	struct callback_ctx data;
++
++	data.map =3D (struct bpf_map *)&map_bloom;
++	bpf_for_each_map_elem(&map_random_data, check_elem, &data, 0);
++
++	return 0;
++}
+--=20
+2.30.2
+
