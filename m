@@ -2,139 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FB6EC433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 17:01:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B3B9C433FE
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 17:05:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59586611F2
-	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 17:01:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 721E5611CB
+	for <bpf@archiver.kernel.org>; Fri, 22 Oct 2021 17:05:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233651AbhJVREF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Oct 2021 13:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S233690AbhJVRHl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Oct 2021 13:07:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbhJVREE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Oct 2021 13:04:04 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF43BC061764;
-        Fri, 22 Oct 2021 10:01:46 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id t127so8351634ybf.13;
-        Fri, 22 Oct 2021 10:01:46 -0700 (PDT)
+        with ESMTP id S233782AbhJVRHh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Oct 2021 13:07:37 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4188C061226;
+        Fri, 22 Oct 2021 10:05:15 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id h196so6297198iof.2;
+        Fri, 22 Oct 2021 10:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XHJUHTrwjU4F/ZFIi+0+Hy9sqvSA84f2Ooi/Dw6+GEk=;
-        b=L+/AHfLVAcfGzmNDDNI7rTgSxAQRkLSDtue0Jg/yxkgUpZra0JwzBnv6bZ8An6fkSq
-         2lu4n87u5VnJ//VuXjlBWPZmy4Oea18w6h7HbqE7IH6kf7hZLMGNDLgCsyrNzfPE4uXl
-         3DWWkIfwW2eoQIvk/K6BmRJAwu3Ug+efv859rFVQAFugKtw8wSLMZif15BgymUAPHK9T
-         mLa4H/xouTzuXPdJA1V1Jt+kTIY/nSClpPmeRlLEW8hNkGLNFk2xD/O/iQetZIY9adjF
-         9vi2Ght64F+df9PVxsaKbD1RfIjkRIXpEPZnU2lYGzGovm0Ssmex3Df5UZ/b9KPheuf1
-         WHKw==
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=aOicbiME2BnKBlw3Dk0BrMP0wVjcmRzulWqjlzLwSCQ=;
+        b=cdW6TAzqKQ5AUhN3093+i/BliSPkrf2o+V+QAW3FBdW47e2E6kop2Ff3OKG8KXHACJ
+         jhNg4twWG9yzzsSDKQE0NMGX7CCqqkkI6KeuZI/xeXHtr17eMdMqiB/2XsjHYwnJTJg4
+         HbkLpX/7S8u5q8BJHWDHk9Zi4C2pYJX376VHh8WWXTfU0jHgBRmg+191MYAUpmdDB1ZG
+         lH+az8h0UAMFK6R+qyL6mY1oI0iayDAcS84CvZmwCrjZ99TZfY86/WyEsRqmZZZB/bCm
+         XjscpIOFmmsKbP2Z6sVcfxsKKxJFRihPXvsrGZkfqpdFliZ1VDYCIP8jRUfOcxwQVSGf
+         7VaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XHJUHTrwjU4F/ZFIi+0+Hy9sqvSA84f2Ooi/Dw6+GEk=;
-        b=b1hUta4k91Nxbhht9FO9tcQ+s0YPC5sJvip/tFjeWz7y6kL55Y0NAg50o+nUjBTjg0
-         tcM/woPjTzekgfDZyeR8/gDoSXnUp92Mx5pOU3PAymxNxYbFNYGn9XS/NnBd+CLfMDTl
-         XjBlPDRsFC+pT6VCgLPRJkxW5KvYtN1hUr599wdTxwKP+pjlhPF4BK8SM/Jf1FEJMA/0
-         xR+JokhCUKX5nLUBgQST0nf2sGne8rz2gZc1tE0SCbNiCbeEDngdZzUF3wWDSFwfHJY+
-         et7YgRfFUQrdLkyR3vWrZ4jAnUbKn81SXsW758ucPFX8JKanNLkpXb3RJGJLFW3Qqt0M
-         4N+w==
-X-Gm-Message-State: AOAM53078GCchtdIwJ01FaJg5CRGEe/THymdh+QoAG1mGE4gKG5L78pF
-        VMGGpEwXrL1XobQ+VH4HGlCQ90JEZK99VEhV1oY4ArcGlHQ9gQ==
-X-Google-Smtp-Source: ABdhPJxSH59FibVzKKvY6bWyduKCQroOBHTdW1x5NX4ig7p4Asxof+9edU8MP7836+qi1EqxlmIHBhm72gzdLLSnnAY=
-X-Received: by 2002:a25:e7d7:: with SMTP id e206mr869619ybh.267.1634922105930;
- Fri, 22 Oct 2021 10:01:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <YXB5Mec4ahxXRx8K@slm.duckdns.org>
-In-Reply-To: <YXB5Mec4ahxXRx8K@slm.duckdns.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 22 Oct 2021 10:01:34 -0700
-Message-ID: <CAEf4BzaSC7gWJSX+s0eudy=AMm_KHd3V92Ps4YMWGOmj-VOG4g@mail.gmail.com>
-Subject: Re: [RFC] bpf: Implement prealloc for task_local_storage
-To:     Tejun Heo <tj@kernel.org>, Song Liu <songliubraving@fb.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=aOicbiME2BnKBlw3Dk0BrMP0wVjcmRzulWqjlzLwSCQ=;
+        b=Y0bVIRLbRYNmnSSdRri+Zt3cGWOd0x2MOhvTLoAhoL5/IuUdWLgpaViJ3XyxSSM76x
+         LS0YIiAiI0GwW9Xm+zqaFexpratP0mpO9Y7eg6yh1jUZXc2VRC8kQ8qcKlY5zeqg8O71
+         WJ3pC8Z66Cox/3ouOhmhhWWSDiiQPtwLQ3phtEzD7u+Cyw4IZMay4VIxlfM7c8BkYBTU
+         Lr1C8jOFKIRj4vjwRDiuZha5ba1ea2hbkdWgCBGIWLQwe+6lgqTj6AG+o3e0FT8ox34Y
+         rLyl46x2YyCnMnCz5SGO+ICdzOwtmRjncsfAqnqx7BTidn9I+vf/JC0zxfRu6zFa69Gb
+         OtrA==
+X-Gm-Message-State: AOAM530dKR/3vMmV5Zjgku7IKsusk1NQZ1kBRHdJfeLi4yK2WeD1rkGE
+        VAt/uPKC0ZxB7k3z7srrHiI=
+X-Google-Smtp-Source: ABdhPJxMx2NhdH5diZ2QHqNazQmaVAp2wti9qiQPkutzsRaFumXXUnshVy2VWy8JFKVV8Dm60GM9gw==
+X-Received: by 2002:a02:ce82:: with SMTP id y2mr675819jaq.121.1634922315117;
+        Fri, 22 Oct 2021 10:05:15 -0700 (PDT)
+Received: from localhost ([172.243.157.240])
+        by smtp.gmail.com with ESMTPSA id r9sm4699655ilb.28.2021.10.22.10.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Oct 2021 10:05:14 -0700 (PDT)
+Date:   Fri, 22 Oct 2021 10:05:05 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        Stanislav Fomichev <sdf@google.com>
+Message-ID: <6172ef4180b84_840632087a@john-XPS-13-9370.notmuch>
+In-Reply-To: <20211011155636.2666408-2-sdf@google.com>
+References: <20211011155636.2666408-1-sdf@google.com>
+ <20211011155636.2666408-2-sdf@google.com>
+Subject: RE: [PATCH bpf-next 2/3] bpftool: don't append / to the progtype
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 20, 2021 at 1:16 PM Tejun Heo <tj@kernel.org> wrote:
->
-> task_local_storage currently does not support pre-allocation and the memory
-> is allocated on demand using the GFP_ATOMIC mask. While atomic allocations
-> succeed most of the time and the occasional failures aren't a problem for
-> many use-cases, there are some which can benefit from reliable allocations -
-> e.g. tracking acquisitions and releases of specific resources to root cause
-> long-term reference leaks.
->
-> This patchset implements prealloc support for task_local_storage so that
-> once a map is created, it's guaranteed that the storage area is always
-> available for all tasks unless explicitly deleted.
+Stanislav Fomichev wrote:
+> Otherwise, attaching with bpftool doesn't work with strict section names.
+> 
+> Also, switch to libbpf strict mode to use the latest conventions
+> (note, I don't think we have any cli api guarantees?).
+> 
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
+>  tools/bpf/bpftool/main.c |  4 ++++
+>  tools/bpf/bpftool/prog.c | 15 +--------------
+>  2 files changed, 5 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> index 02eaaf065f65..8223bac1e401 100644
+> --- a/tools/bpf/bpftool/main.c
+> +++ b/tools/bpf/bpftool/main.c
+> @@ -409,6 +409,10 @@ int main(int argc, char **argv)
+>  	block_mount = false;
+>  	bin_name = argv[0];
+>  
+> +	ret = libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+> +	if (ret)
+> +		p_err("failed to enable libbpf strict mode: %d", ret);
+> +
 
-Song, Martin, can you please take a look at this? It might be
-worthwhile to consider having pre-allocated local storage for all
-supported types: socket, cgroup, task. Especially for cases where BPF
-app is going to touch all or almost all system entities (sockets,
-cgroups, tasks, respectively).
+Would it better to just warn? Seems like this shouldn't be fatal from
+bpftool side?
 
-Song, in ced47e30ab8b ("bpf: runqslower: Use task local storage") you
-did some benchmarking of task-local storage vs hashmap and it was
-faster in all cases but the first allocation of task-local storage. It
-would be curious to see how numbers change if task-local storage is
-pre-allocated, if you get a chance to benchmark it with Tejun's
-changes. Thanks!
+Also this is a potentially breaking change correct? Programs that _did_
+work in the unstrict might suddently fail in the strict mode? If this
+is the case whats the versioning plan? We don't want to leak these
+type of changes across multiple versions, idealy we have a hard
+break and bump the version.
 
->
-> The only tricky part is syncronizing against the fork path. Fortunately,
-> cgroup needs to do the same thing and is already using
-> cgroup_threadgroup_rwsem and we can use the same mechanism without adding
-> extra overhead. This patchset generalizes the rwsem and make cgroup and bpf
-> select it.
->
-> This patchset is on top of bpf-next 223f903e9c83 ("bpf: Rename BTF_KIND_TAG
-> to BTF_KIND_DECL_TAG") and contains the following patches:
->
->  0001-cgroup-Drop-cgroup_-prefix-from-cgroup_threadgroup_r.patch
->  0002-sched-cgroup-Generalize-threadgroup_rwsem.patch
->  0003-bpf-Implement-prealloc-for-task_local_storage.patch
->
-> and also available in the following git branch:
->
->  git://git.kernel.org/pub/scm/linux/kernel/git/tj/misc.git bpf-task-local-storage-prealloc
->
-> diffstat follows. Thanks.
->
->  fs/exec.c                                                   |    7 +
->  include/linux/bpf.h                                         |    6 +
->  include/linux/bpf_local_storage.h                           |   12 +++
->  include/linux/cgroup-defs.h                                 |   33 ---------
->  include/linux/cgroup.h                                      |   11 +--
->  include/linux/sched/threadgroup_rwsem.h                     |   46 ++++++++++++
->  init/Kconfig                                                |    4 +
->  kernel/bpf/Kconfig                                          |    1
->  kernel/bpf/bpf_local_storage.c                              |  112 ++++++++++++++++++++++--------
->  kernel/bpf/bpf_task_storage.c                               |  138 +++++++++++++++++++++++++++++++++++++-
->  kernel/cgroup/cgroup-internal.h                             |    4 -
->  kernel/cgroup/cgroup-v1.c                                   |    9 +-
->  kernel/cgroup/cgroup.c                                      |   74 ++++++++++++--------
->  kernel/cgroup/pids.c                                        |    2
->  kernel/fork.c                                               |   16 ++++
->  kernel/sched/core.c                                         |    4 +
->  kernel/sched/sched.h                                        |    1
->  kernel/signal.c                                             |    7 +
->  tools/testing/selftests/bpf/prog_tests/task_local_storage.c |  101 +++++++++++++++++++++++++++
->  tools/testing/selftests/bpf/progs/task_ls_prealloc.c        |   15 ++++
->  20 files changed, 489 insertions(+), 114 deletions(-)
->
-> --
-> tejun
->
+I didn't catch a cover letter on the series. A small
+note about versioning and upgrading bpftool would be helpful.
+
+
+>  	hash_init(prog_table.table);
+>  	hash_init(map_table.table);
+>  	hash_init(link_table.table);
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index 277d51c4c5d9..17505dc1243e 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1396,8 +1396,6 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  
+>  	while (argc) {
+>  		if (is_prefix(*argv, "type")) {
+> -			char *type;
+> -
+>  			NEXT_ARG();
+>  
+>  			if (common_prog_type != BPF_PROG_TYPE_UNSPEC) {
+> @@ -1407,19 +1405,8 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  			if (!REQ_ARGS(1))
+>  				goto err_free_reuse_maps;
+>  
+> -			/* Put a '/' at the end of type to appease libbpf */
+> -			type = malloc(strlen(*argv) + 2);
+> -			if (!type) {
+> -				p_err("mem alloc failed");
+> -				goto err_free_reuse_maps;
+> -			}
+> -			*type = 0;
+> -			strcat(type, *argv);
+> -			strcat(type, "/");
+> -
+> -			err = get_prog_type_by_name(type, &common_prog_type,
+> +			err = get_prog_type_by_name(*argv, &common_prog_type,
+>  						    &expected_attach_type);
+> -			free(type);
+>  			if (err < 0)
+>  				goto err_free_reuse_maps;
+
+This wont potentially break existing programs correct? It looks like
+just adding a '/' should be fine.
+
+Thanks,
+John
