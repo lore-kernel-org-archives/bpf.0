@@ -2,63 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9347C43219
-	for <bpf@archiver.kernel.org>; Sat, 23 Oct 2021 20:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 626A3C433EF
+	for <bpf@archiver.kernel.org>; Sat, 23 Oct 2021 20:52:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5EF260527
-	for <bpf@archiver.kernel.org>; Sat, 23 Oct 2021 20:52:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D9A460F0F
+	for <bpf@archiver.kernel.org>; Sat, 23 Oct 2021 20:52:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbhJWUy2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 23 Oct 2021 16:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S231290AbhJWUya (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 23 Oct 2021 16:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbhJWUy1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231322AbhJWUy1 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 23 Oct 2021 16:54:27 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED03AC061225
-        for <bpf@vger.kernel.org>; Sat, 23 Oct 2021 13:52:04 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id m22so1338156wrb.0
-        for <bpf@vger.kernel.org>; Sat, 23 Oct 2021 13:52:04 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5BC061229
+        for <bpf@vger.kernel.org>; Sat, 23 Oct 2021 13:52:06 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 67-20020a1c1946000000b0030d4c90fa87so5749915wmz.2
+        for <bpf@vger.kernel.org>; Sat, 23 Oct 2021 13:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bnsaoE1e74DLOSAtR3sU8+tx3L1vl2315dJJbbFqhwA=;
-        b=xk1sp6FCgFAnCZkSENGff/VbflX4iTBSz2KUmXUhJCUDyUVRfwgIrMPLBv7EmXZPjO
-         chbHeTGOpixKlIRopb7I35yB7OgEDfJGu42cRdHblcbM8E7FChRFyhNhKVr/bMLI0PFR
-         +lQem7iLZ+l9taKeuA4DgHACbG6bbhRs8tL0v+nX7wI4fvwIr2Nr2vMkTw5xG9RkmtCZ
-         zw8qV4tZNs3/1ORhfNQ4f4hmRhv3ip9k4fHghGz3gkpZzXEebv/mQzHDl+vBws5mbNiJ
-         zcNQ1QcLAN1Fupoc7y+skKe16Bx4+I+/KyX7WOpwXOBa70JfTIIsVGLREYmG1SQ2niAJ
-         ciKw==
+        bh=V75jyjYdnsS07mbviL23NDsfFATkmATGP+SmihVgCnc=;
+        b=DJom9nNiqcagruhi2MeS37eTM40tr0+0XVvXdeibkuOp5ukBiUc2tM18tg95jGr5kq
+         0wV9O771pci7gQTVRJAVLuIojm8myBNNdJAtwAh5TpT/yj6HfUi/fqdnKEqxIIVcTq8D
+         VKg/nDniritOPObV1x5Cy6ulVwXyhWigJPXs0LhgBZI64Z3HR13CAoIroXD//pIYouG1
+         NeyxqT8XaRDXKreDUj5ub7TbXxK978AzKipSGaymz5JPI9qOAo8p/m/bm9lWVObBf70q
+         uoRcs/KuqvIE5WC89JhD05y6KG1er6df12fyUR2NJ7V2p9NVR7aXywWEbIo9bf+yDVWK
+         7oFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bnsaoE1e74DLOSAtR3sU8+tx3L1vl2315dJJbbFqhwA=;
-        b=HjJlMxmDe6t9z3VCNXXjg9xwKTjJis7gntsh2zaIrwHe+gK19LSJGg1v9+2M7xPP2Q
-         R2kVhkzogaLsaUVXSwLJtPKQQHhDNUEGHARo4ZUw7mo+jFO7HYzSXIJeu20hLWQP3kRp
-         DSX0Xr7OQFhqpRBUqVIOttrybQkHHQUedrG1PSD7eaj18CTsZ9NLRvy9wHioYef/Ropq
-         0nbssNt7KMnIUj+sHdOMKDJor5L0bvTeziXgeGawmVvvYbnDG41Wk2NHmLfWgvXBNfTY
-         1YNovW0BcWGfDYXzccwhlvvGXvjrlsXkBsHbhyh7u9O3TdLFz0a3CZFEM79+ALPiTZkE
-         EXNw==
-X-Gm-Message-State: AOAM533vfqqQUh0Gn0xao00jUHYo0PNJCfYq8QdzFcL/3vw3stThi3Gk
-        QGalULZZfgxZ1Z0k8cQS7HVmyw==
-X-Google-Smtp-Source: ABdhPJy8zfqQ9Kcn1jlxAOcN8Jp5M1mwAfrL6QI3aDVgXlEDmmdWlPojEETFIIV82GeNBlEy7nBoPg==
-X-Received: by 2002:a05:6000:2a1:: with SMTP id l1mr10366862wry.87.1635022323449;
-        Sat, 23 Oct 2021 13:52:03 -0700 (PDT)
+        bh=V75jyjYdnsS07mbviL23NDsfFATkmATGP+SmihVgCnc=;
+        b=dlynbS56O2LW/j9hOnnzz8lG6IN3JK4N4cghM81itD4sozHVFiNu5dWOBgzidirmfF
+         iQgXBHwAHWFzEKhlHaZgPg/7mTrQafiNtZV+kx6z+wxdOTUw6bvgvByscLpaORUBIwMC
+         g4YVUeyggY9ioBYxU3VWfbC0mavS0D+NIPgOBgEsERrGtz8giYRlxncf8ABGMfPLXzu6
+         zW5lRPzFONjRFar0ToQPUd3HsJ8BGgFdyNGyNTgEFEX7kFDPbm+K4nXNPOVPjQJY17uy
+         rlL3A7NyHDfey9sFY3j0u9mCVNYQEdSh5pGTQAZNpvBq3978ItO6G1VAqammxHITnz0E
+         /Cig==
+X-Gm-Message-State: AOAM530HiG0Ce6vkGMm5RFz6AKrrBvgMdHHP93U8G0lsrL1Ycfzqlbis
+        IsaFKO5DWx6jq/Bv9aBcNQ8fZg==
+X-Google-Smtp-Source: ABdhPJzeObqQN5rRkuOn4D8ImXTgx9DiSKQAKO1voiymQblIg3tyOfyR3HekHOLuDNVQp1EIzny9wA==
+X-Received: by 2002:a7b:c303:: with SMTP id k3mr9048853wmj.44.1635022325405;
+        Sat, 23 Oct 2021 13:52:05 -0700 (PDT)
 Received: from localhost.localdomain ([149.86.74.50])
-        by smtp.gmail.com with ESMTPSA id u16sm13555398wmc.21.2021.10.23.13.52.02
+        by smtp.gmail.com with ESMTPSA id u16sm13555398wmc.21.2021.10.23.13.52.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Oct 2021 13:52:03 -0700 (PDT)
+        Sat, 23 Oct 2021 13:52:04 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 3/5] bpftool: Switch to libbpf's hashmap for pinned paths of BPF objects
-Date:   Sat, 23 Oct 2021 21:51:52 +0100
-Message-Id: <20211023205154.6710-4-quentin@isovalent.com>
+Subject: [PATCH bpf-next v2 5/5] bpftool: Switch to libbpf's hashmap for PIDs/names references
+Date:   Sat, 23 Oct 2021 21:51:54 +0100
+Message-Id: <20211023205154.6710-6-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211023205154.6710-1-quentin@isovalent.com>
 References: <20211023205154.6710-1-quentin@isovalent.com>
@@ -68,487 +68,447 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order to show pinned paths for BPF programs, maps, or links when
-listing them with the "-f" option, bpftool creates hash maps to store
-all relevant paths under the bpffs. So far, it would rely on the
-kernel implementation (from tools/include/linux/hashtable.h).
+In order to show PIDs and names for processes holding references to BPF
+programs, maps, links, or BTF objects, bpftool creates hash maps to
+store all relevant information. This commit is part of a set that
+transitions from the kernel's hash map implementation to the one coming
+with libbpf.
 
-We can make bpftool rely on libbpf's implementation instead. The
-motivation is to make bpftool less dependent of kernel headers, to ease
-the path to a potential out-of-tree mirror, like libbpf has.
+The motivation is to make bpftool less dependent of kernel headers, to
+ease the path to a potential out-of-tree mirror, like libbpf has.
 
-This commit is the first step of the conversion: the hash maps for
-pinned paths for programs, maps, and links are converted to libbpf's
-hashmap.{c,h}. Other hash maps used for the PIDs of process holding
-references to BPF objects are left unchanged for now. On the build side,
-this requires adding a dependency to a second header internal to libbpf,
-and making it a dependency for the bootstrap bpftool version as well.
-The rest of the changes are a rather straightforward conversion.
+This is the third and final step of the transition, in which we convert
+the hash maps used for storing the information about the processes
+holding references to BPF objects (programs, maps, links, BTF), and at
+last we drop the inclusion of tools/include/linux/hashtable.h.
+
+Note: Checkpatch complains about the use of __weak declarations, and the
+missing empty lines after the bunch of empty function declarations when
+compiling without the BPF skeletons (none of these were introduced in
+this patch). We want to keep things as they are, and the reports should
+be safe to ignore.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/Makefile |  8 +++---
- tools/bpf/bpftool/common.c | 50 +++++++++++++++++++++++---------------
- tools/bpf/bpftool/link.c   | 36 +++++++++++++++------------
- tools/bpf/bpftool/main.h   | 29 +++++++++++++---------
- tools/bpf/bpftool/map.c    | 36 +++++++++++++++------------
- tools/bpf/bpftool/prog.c   | 36 +++++++++++++++------------
- 6 files changed, 111 insertions(+), 84 deletions(-)
+ tools/bpf/bpftool/btf.c  |  7 ++--
+ tools/bpf/bpftool/link.c |  6 +--
+ tools/bpf/bpftool/main.c |  5 ++-
+ tools/bpf/bpftool/main.h | 17 +++-----
+ tools/bpf/bpftool/map.c  |  6 +--
+ tools/bpf/bpftool/pids.c | 90 +++++++++++++++++++++++-----------------
+ tools/bpf/bpftool/prog.c |  6 +--
+ 7 files changed, 72 insertions(+), 65 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 939b0fca5fb9..c0c30e56988f 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -31,9 +31,9 @@ LIBBPF = $(LIBBPF_OUTPUT)libbpf.a
- LIBBPF_BOOTSTRAP_OUTPUT = $(BOOTSTRAP_OUTPUT)libbpf/
- LIBBPF_BOOTSTRAP = $(LIBBPF_BOOTSTRAP_OUTPUT)libbpf.a
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 11dd31b6e730..015d2758f826 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -9,7 +9,6 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <linux/btf.h>
+-#include <linux/hashtable.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
  
--# We need to copy nlattr.h which is not otherwise exported by libbpf, but still
--# required by bpftool.
--LIBBPF_INTERNAL_HDRS := $(addprefix $(LIBBPF_HDRS_DIR)/,nlattr.h)
-+# We need to copy hashmap.h and nlattr.h which is not otherwise exported by
-+# libbpf, but still required by bpftool.
-+LIBBPF_INTERNAL_HDRS := $(addprefix $(LIBBPF_HDRS_DIR)/,hashmap.h nlattr.h)
+@@ -797,7 +796,7 @@ show_btf_plain(struct bpf_btf_info *info, int fd,
+ 		       hash_field_as_u32(entry->value));
+ 	}
  
- ifeq ($(BPFTOOL_VERSION),)
- BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
-@@ -209,7 +209,7 @@ $(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
- $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
- 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
+-	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
++	emit_obj_refs_plain(refs_table, info->id, "\n\tpids ");
  
--$(BOOTSTRAP_OUTPUT)%.o: %.c | $(BOOTSTRAP_OUTPUT)
-+$(BOOTSTRAP_OUTPUT)%.o: %.c $(LIBBPF_INTERNAL_HDRS) | $(BOOTSTRAP_OUTPUT)
- 	$(QUIET_CC)$(HOSTCC) $(CFLAGS) -c -MMD -o $@ $<
+ 	printf("\n");
+ }
+@@ -830,7 +829,7 @@ show_btf_json(struct bpf_btf_info *info, int fd,
+ 	}
+ 	jsonw_end_array(json_wtr);	/* map_ids */
  
- $(OUTPUT)%.o: %.c
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index d42d930a3ec4..511eccdbdfe6 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -22,6 +22,7 @@
- #include <sys/vfs.h>
+-	emit_obj_refs_json(&refs_table, info->id, json_wtr); /* pids */
++	emit_obj_refs_json(refs_table, info->id, json_wtr); /* pids */
+ 
+ 	jsonw_bool_field(json_wtr, "kernel", info->kernel_btf);
+ 
+@@ -961,7 +960,7 @@ static int do_show(int argc, char **argv)
+ exit_free:
+ 	hashmap__free(btf_prog_table);
+ 	hashmap__free(btf_map_table);
+-	delete_obj_refs_table(&refs_table);
++	delete_obj_refs_table(refs_table);
+ 
+ 	return err;
+ }
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 404cc5459c6b..2c258db0d352 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -170,7 +170,7 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
+ 		jsonw_end_array(json_wtr);
+ 	}
+ 
+-	emit_obj_refs_json(&refs_table, info->id, json_wtr);
++	emit_obj_refs_json(refs_table, info->id, json_wtr);
+ 
+ 	jsonw_end_object(json_wtr);
+ 
+@@ -253,7 +253,7 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
+ 					    u32_as_hash_field(info->id))
+ 			printf("\n\tpinned %s", (char *)entry->value);
+ 	}
+-	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
++	emit_obj_refs_plain(refs_table, info->id, "\n\tpids ");
+ 
+ 	printf("\n");
+ 
+@@ -352,7 +352,7 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
+-	delete_obj_refs_table(&refs_table);
++	delete_obj_refs_table(refs_table);
+ 
+ 	if (show_pinned)
+ 		delete_pinned_obj_table(link_table);
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 7a33f0e6da28..28237d7cef67 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -10,8 +10,9 @@
+ #include <string.h>
  
  #include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+ #include <bpf/btf.h>
 +#include <bpf/hashmap.h>
- #include <bpf/libbpf.h> /* libbpf_num_possible_cpus */
++#include <bpf/libbpf.h>
  
  #include "main.h"
-@@ -393,7 +394,7 @@ void print_hex_data_json(uint8_t *data, size_t len)
+ 
+@@ -31,7 +32,7 @@ bool verifier_logs;
+ bool relaxed_maps;
+ bool use_loader;
+ struct btf *base_btf;
+-struct obj_refs_table refs_table;
++struct hashmap *refs_table;
+ 
+ static void __noreturn clean_and_exit(int i)
+ {
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index f6f2f951b193..383835c2604d 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -11,7 +11,6 @@
+ #include <linux/bpf.h>
+ #include <linux/compiler.h>
+ #include <linux/kernel.h>
+-#include <linux/hashtable.h>
+ #include <tools/libc_compat.h>
+ 
+ #include <bpf/hashmap.h>
+@@ -92,7 +91,7 @@ extern bool verifier_logs;
+ extern bool relaxed_maps;
+ extern bool use_loader;
+ extern struct btf *base_btf;
+-extern struct obj_refs_table refs_table;
++extern struct hashmap *refs_table;
+ 
+ void __printf(1, 2) p_err(const char *fmt, ...);
+ void __printf(1, 2) p_info(const char *fmt, ...);
+@@ -106,18 +105,12 @@ void set_max_rlimit(void);
+ 
+ int mount_tracefs(const char *target);
+ 
+-struct obj_refs_table {
+-	DECLARE_HASHTABLE(table, 16);
+-};
+-
+ struct obj_ref {
+ 	int pid;
+ 	char comm[16];
+ };
+ 
+ struct obj_refs {
+-	struct hlist_node node;
+-	__u32 id;
+ 	int ref_cnt;
+ 	struct obj_ref *refs;
+ };
+@@ -128,12 +121,12 @@ struct bpf_line_info;
+ int build_pinned_obj_table(struct hashmap *table,
+ 			   enum bpf_obj_type type);
+ void delete_pinned_obj_table(struct hashmap *table);
+-__weak int build_obj_refs_table(struct obj_refs_table *table,
++__weak int build_obj_refs_table(struct hashmap **table,
+ 				enum bpf_obj_type type);
+-__weak void delete_obj_refs_table(struct obj_refs_table *table);
+-__weak void emit_obj_refs_json(struct obj_refs_table *table, __u32 id,
++__weak void delete_obj_refs_table(struct hashmap *table);
++__weak void emit_obj_refs_json(struct hashmap *table, __u32 id,
+ 			       json_writer_t *json_wtr);
+-__weak void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id,
++__weak void emit_obj_refs_plain(struct hashmap *table, __u32 id,
+ 				const char *prefix);
+ void print_dev_plain(__u32 ifindex, __u64 ns_dev, __u64 ns_inode);
+ void print_dev_json(__u32 ifindex, __u64 ns_dev, __u64 ns_inode);
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 2647603c5e5d..cae1f1119296 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -549,7 +549,7 @@ static int show_map_close_json(int fd, struct bpf_map_info *info)
+ 		jsonw_end_array(json_wtr);
+ 	}
+ 
+-	emit_obj_refs_json(&refs_table, info->id, json_wtr);
++	emit_obj_refs_json(refs_table, info->id, json_wtr);
+ 
+ 	jsonw_end_object(json_wtr);
+ 
+@@ -637,7 +637,7 @@ static int show_map_close_plain(int fd, struct bpf_map_info *info)
+ 	if (frozen)
+ 		printf("%sfrozen", info->btf_id ? "  " : "");
+ 
+-	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
++	emit_obj_refs_plain(refs_table, info->id, "\n\tpids ");
+ 
+ 	printf("\n");
+ 	return 0;
+@@ -748,7 +748,7 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
+-	delete_obj_refs_table(&refs_table);
++	delete_obj_refs_table(refs_table);
+ 
+ 	if (show_pinned)
+ 		delete_pinned_obj_table(map_table);
+diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
+index 477e55d59c34..56b598eee043 100644
+--- a/tools/bpf/bpftool/pids.c
++++ b/tools/bpf/bpftool/pids.c
+@@ -6,35 +6,37 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++
+ #include <bpf/bpf.h>
++#include <bpf/hashmap.h>
+ 
+ #include "main.h"
+ #include "skeleton/pid_iter.h"
+ 
+ #ifdef BPFTOOL_WITHOUT_SKELETONS
+ 
+-int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type type)
++int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
+ {
+ 	return -ENOTSUP;
+ }
+-void delete_obj_refs_table(struct obj_refs_table *table) {}
+-void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id, const char *prefix) {}
+-void emit_obj_refs_json(struct obj_refs_table *table, __u32 id, json_writer_t *json_writer) {}
++void delete_obj_refs_table(struct hashmap *map) {}
++void emit_obj_refs_plain(struct hashmap *map, __u32 id, const char *prefix) {}
++void emit_obj_refs_json(struct hashmap *map, __u32 id, json_writer_t *json_writer) {}
+ 
+ #else /* BPFTOOL_WITHOUT_SKELETONS */
+ 
+ #include "pid_iter.skel.h"
+ 
+-static void add_ref(struct obj_refs_table *table, struct pid_iter_entry *e)
++static void add_ref(struct hashmap *map, struct pid_iter_entry *e)
+ {
++	struct hashmap_entry *entry;
+ 	struct obj_refs *refs;
+ 	struct obj_ref *ref;
++	int err, i;
+ 	void *tmp;
+-	int i;
+ 
+-	hash_for_each_possible(table->table, refs, node, e->id) {
+-		if (refs->id != e->id)
+-			continue;
++	hashmap__for_each_key_entry(map, entry, u32_as_hash_field(e->id)) {
++		refs = entry->value;
+ 
+ 		for (i = 0; i < refs->ref_cnt; i++) {
+ 			if (refs->refs[i].pid == e->pid)
+@@ -64,7 +66,6 @@ static void add_ref(struct obj_refs_table *table, struct pid_iter_entry *e)
+ 		return;
+ 	}
+ 
+-	refs->id = e->id;
+ 	refs->refs = malloc(sizeof(*refs->refs));
+ 	if (!refs->refs) {
+ 		free(refs);
+@@ -76,7 +77,11 @@ static void add_ref(struct obj_refs_table *table, struct pid_iter_entry *e)
+ 	ref->pid = e->pid;
+ 	memcpy(ref->comm, e->comm, sizeof(ref->comm));
+ 	refs->ref_cnt = 1;
+-	hash_add(table->table, &refs->node, e->id);
++
++	err = hashmap__append(map, u32_as_hash_field(e->id), refs);
++	if (err)
++		p_err("failed to append entry to hashmap for ID %u: %s",
++		      e->id, strerror(errno));
  }
  
- /* extra params for nftw cb */
--static struct pinned_obj_table *build_fn_table;
-+static struct hashmap *build_fn_table;
- static enum bpf_obj_type build_fn_type;
+ static int __printf(2, 0)
+@@ -87,7 +92,7 @@ libbpf_print_none(__maybe_unused enum libbpf_print_level level,
+ 	return 0;
+ }
  
- static int do_build_table_cb(const char *fpath, const struct stat *sb,
-@@ -401,9 +402,9 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
+-int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type type)
++int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
  {
- 	struct bpf_prog_info pinned_info;
- 	__u32 len = sizeof(pinned_info);
--	struct pinned_obj *obj_node;
- 	enum bpf_obj_type objtype;
- 	int fd, err = 0;
-+	char *path;
+ 	struct pid_iter_entry *e;
+ 	char buf[4096 / sizeof(*e) * sizeof(*e)];
+@@ -95,7 +100,11 @@ int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type type)
+ 	int err, ret, fd = -1, i;
+ 	libbpf_print_fn_t default_print;
  
- 	if (typeflag != FTW_F)
- 		goto out_ret;
-@@ -420,28 +421,26 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 	if (bpf_obj_get_info_by_fd(fd, &pinned_info, &len))
- 		goto out_close;
+-	hash_init(table->table);
++	*map = hashmap__new(hash_fn_for_key_as_id, equal_fn_for_key_as_id, NULL);
++	if (!*map) {
++		p_err("failed to create hashmap for PID references");
++		return -1;
++	}
+ 	set_max_rlimit();
  
--	obj_node = calloc(1, sizeof(*obj_node));
--	if (!obj_node) {
-+	path = strdup(fpath);
-+	if (!path) {
- 		err = -1;
- 		goto out_close;
+ 	skel = pid_iter_bpf__open();
+@@ -151,7 +160,7 @@ int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type type)
+ 
+ 		e = (void *)buf;
+ 		for (i = 0; i < ret; i++, e++) {
+-			add_ref(table, e);
++			add_ref(*map, e);
+ 		}
  	}
- 
--	obj_node->id = pinned_info.id;
--	obj_node->path = strdup(fpath);
--	if (!obj_node->path) {
--		err = -1;
--		free(obj_node);
-+	err = hashmap__append(build_fn_table, u32_as_hash_field(pinned_info.id), path);
-+	if (err) {
-+		p_err("failed to append entry to hashmap for ID %u, path '%s': %s",
-+		      pinned_info.id, path, strerror(errno));
- 		goto out_close;
- 	}
- 
--	hash_add(build_fn_table->table, &obj_node->hash, obj_node->id);
- out_close:
- 	close(fd);
- out_ret:
+ 	err = 0;
+@@ -162,39 +171,44 @@ int build_obj_refs_table(struct obj_refs_table *table, enum bpf_obj_type type)
  	return err;
  }
  
--int build_pinned_obj_table(struct pinned_obj_table *tab,
-+int build_pinned_obj_table(struct hashmap *tab,
- 			   enum bpf_obj_type type)
+-void delete_obj_refs_table(struct obj_refs_table *table)
++void delete_obj_refs_table(struct hashmap *map)
  {
- 	struct mntent *mntent = NULL;
-@@ -470,17 +469,18 @@ int build_pinned_obj_table(struct pinned_obj_table *tab,
- 	return err;
- }
- 
--void delete_pinned_obj_table(struct pinned_obj_table *tab)
-+void delete_pinned_obj_table(struct hashmap *map)
- {
--	struct pinned_obj *obj;
+-	struct obj_refs *refs;
 -	struct hlist_node *tmp;
 -	unsigned int bkt;
 +	struct hashmap_entry *entry;
 +	size_t bkt;
- 
--	hash_for_each_safe(tab->table, bkt, tmp, obj, hash) {
--		hash_del(&obj->hash);
--		free(obj->path);
--		free(obj);
--	}
++
 +	if (!map)
 +		return;
 +
-+	hashmap__for_each_entry(map, entry, bkt)
-+		free(entry->value);
++	hashmap__for_each_entry(map, entry, bkt) {
++		struct obj_refs *refs = entry->value;
+ 
+-	hash_for_each_safe(table->table, bkt, tmp, refs, node) {
+-		hash_del(&refs->node);
+ 		free(refs->refs);
+ 		free(refs);
+ 	}
 +
 +	hashmap__free(map);
  }
  
- unsigned int get_page_size(void)
-@@ -962,3 +962,13 @@ int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len)
- 
- 	return fd;
- }
-+
-+size_t hash_fn_for_key_as_id(const void *key, void *ctx)
-+{
-+	return (size_t)key;
-+}
-+
-+bool equal_fn_for_key_as_id(const void *k1, const void *k2, void *ctx)
-+{
-+	return k1 == k2;
-+}
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index a5effb1816b7..404cc5459c6b 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -7,6 +7,7 @@
- #include <unistd.h>
- 
- #include <bpf/bpf.h>
-+#include <bpf/hashmap.h>
- 
- #include "json_writer.h"
- #include "main.h"
-@@ -20,7 +21,7 @@ static const char * const link_type_name[] = {
- 	[BPF_LINK_TYPE_NETNS]			= "netns",
- };
- 
--static struct pinned_obj_table link_table;
-+static struct hashmap *link_table;
- 
- static int link_parse_fd(int *argc, char ***argv)
+-void emit_obj_refs_json(struct obj_refs_table *table, __u32 id,
++void emit_obj_refs_json(struct hashmap *map, __u32 id,
+ 			json_writer_t *json_writer)
  {
-@@ -158,15 +159,14 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
- 		break;
+-	struct obj_refs *refs;
+-	struct obj_ref *ref;
+-	int i;
++	struct hashmap_entry *entry;
+ 
+-	if (hash_empty(table->table))
++	if (hashmap__empty(map))
+ 		return;
+ 
+-	hash_for_each_possible(table->table, refs, node, id) {
+-		if (refs->id != id)
+-			continue;
++	hashmap__for_each_key_entry(map, entry, u32_as_hash_field(id)) {
++		struct obj_refs *refs = entry->value;
++		int i;
++
+ 		if (refs->ref_cnt == 0)
+ 			break;
+ 
+ 		jsonw_name(json_writer, "pids");
+ 		jsonw_start_array(json_writer);
+ 		for (i = 0; i < refs->ref_cnt; i++) {
+-			ref = &refs->refs[i];
++			struct obj_ref *ref = &refs->refs[i];
++
+ 			jsonw_start_object(json_writer);
+ 			jsonw_int_field(json_writer, "pid", ref->pid);
+ 			jsonw_string_field(json_writer, "comm", ref->comm);
+@@ -205,24 +219,24 @@ void emit_obj_refs_json(struct obj_refs_table *table, __u32 id,
  	}
- 
--	if (!hash_empty(link_table.table)) {
--		struct pinned_obj *obj;
-+	if (!hashmap__empty(link_table)) {
-+		struct hashmap_entry *entry;
- 
- 		jsonw_name(json_wtr, "pinned");
- 		jsonw_start_array(json_wtr);
--		hash_for_each_possible(link_table.table, obj, hash, info->id) {
--			if (obj->id == info->id)
--				jsonw_string(json_wtr, obj->path);
--		}
-+		hashmap__for_each_key_entry(link_table, entry,
-+					    u32_as_hash_field(info->id))
-+			jsonw_string(json_wtr, entry->value);
- 		jsonw_end_array(json_wtr);
- 	}
- 
-@@ -246,13 +246,12 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
- 		break;
- 	}
- 
--	if (!hash_empty(link_table.table)) {
--		struct pinned_obj *obj;
-+	if (!hashmap__empty(link_table)) {
-+		struct hashmap_entry *entry;
- 
--		hash_for_each_possible(link_table.table, obj, hash, info->id) {
--			if (obj->id == info->id)
--				printf("\n\tpinned %s", obj->path);
--		}
-+		hashmap__for_each_key_entry(link_table, entry,
-+					    u32_as_hash_field(info->id))
-+			printf("\n\tpinned %s", (char *)entry->value);
- 	}
- 	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
- 
-@@ -305,8 +304,13 @@ static int do_show(int argc, char **argv)
- 	int err, fd;
- 
- 	if (show_pinned) {
--		hash_init(link_table.table);
--		build_pinned_obj_table(&link_table, BPF_OBJ_LINK);
-+		link_table = hashmap__new(hash_fn_for_key_as_id,
-+					  equal_fn_for_key_as_id, NULL);
-+		if (!link_table) {
-+			p_err("failed to create hashmap for pinned paths");
-+			return -1;
-+		}
-+		build_pinned_obj_table(link_table, BPF_OBJ_LINK);
- 	}
- 	build_obj_refs_table(&refs_table, BPF_OBJ_LINK);
- 
-@@ -351,7 +355,7 @@ static int do_show(int argc, char **argv)
- 	delete_obj_refs_table(&refs_table);
- 
- 	if (show_pinned)
--		delete_pinned_obj_table(&link_table);
-+		delete_pinned_obj_table(link_table);
- 
- 	return errno == ENOENT ? 0 : -1;
  }
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index baf607cd5924..0d64e39573f2 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -14,6 +14,7 @@
- #include <linux/hashtable.h>
- #include <tools/libc_compat.h>
  
-+#include <bpf/hashmap.h>
- #include <bpf/libbpf.h>
- 
- #include "json_writer.h"
-@@ -105,16 +106,6 @@ void set_max_rlimit(void);
- 
- int mount_tracefs(const char *target);
- 
--struct pinned_obj_table {
--	DECLARE_HASHTABLE(table, 16);
--};
--
--struct pinned_obj {
--	__u32 id;
--	char *path;
--	struct hlist_node hash;
--};
--
- struct obj_refs_table {
- 	DECLARE_HASHTABLE(table, 16);
- };
-@@ -134,9 +125,9 @@ struct obj_refs {
- struct btf;
- struct bpf_line_info;
- 
--int build_pinned_obj_table(struct pinned_obj_table *table,
-+int build_pinned_obj_table(struct hashmap *table,
- 			   enum bpf_obj_type type);
--void delete_pinned_obj_table(struct pinned_obj_table *tab);
-+void delete_pinned_obj_table(struct hashmap *table);
- __weak int build_obj_refs_table(struct obj_refs_table *table,
- 				enum bpf_obj_type type);
- __weak void delete_obj_refs_table(struct obj_refs_table *table);
-@@ -256,4 +247,18 @@ int do_filter_dump(struct tcmsg *ifinfo, struct nlattr **tb, const char *kind,
- 
- int print_all_levels(__maybe_unused enum libbpf_print_level level,
- 		     const char *format, va_list args);
-+
-+size_t hash_fn_for_key_as_id(const void *key, void *ctx);
-+bool equal_fn_for_key_as_id(const void *k1, const void *k2, void *ctx);
-+
-+static inline void *u32_as_hash_field(__u32 x)
-+{
-+	return (void *)(uintptr_t)x;
-+}
-+
-+static inline bool hashmap__empty(struct hashmap *map)
-+{
-+	return map ? hashmap__size(map) == 0 : true;
-+}
-+
- #endif
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 0085039d9610..2647603c5e5d 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -17,6 +17,7 @@
- 
- #include <bpf/bpf.h>
- #include <bpf/btf.h>
-+#include <bpf/hashmap.h>
- 
- #include "json_writer.h"
- #include "main.h"
-@@ -56,7 +57,7 @@ const char * const map_type_name[] = {
- 
- const size_t map_type_name_size = ARRAY_SIZE(map_type_name);
- 
--static struct pinned_obj_table map_table;
-+static struct hashmap *map_table;
- 
- static bool map_is_per_cpu(__u32 type)
+-void emit_obj_refs_plain(struct obj_refs_table *table, __u32 id, const char *prefix)
++void emit_obj_refs_plain(struct hashmap *map, __u32 id, const char *prefix)
  {
-@@ -537,15 +538,14 @@ static int show_map_close_json(int fd, struct bpf_map_info *info)
- 	if (info->btf_id)
- 		jsonw_int_field(json_wtr, "btf_id", info->btf_id);
+-	struct obj_refs *refs;
+-	struct obj_ref *ref;
+-	int i;
++	struct hashmap_entry *entry;
  
--	if (!hash_empty(map_table.table)) {
--		struct pinned_obj *obj;
-+	if (!hashmap__empty(map_table)) {
-+		struct hashmap_entry *entry;
+-	if (hash_empty(table->table))
++	if (hashmap__empty(map))
+ 		return;
  
- 		jsonw_name(json_wtr, "pinned");
- 		jsonw_start_array(json_wtr);
--		hash_for_each_possible(map_table.table, obj, hash, info->id) {
--			if (obj->id == info->id)
--				jsonw_string(json_wtr, obj->path);
--		}
-+		hashmap__for_each_key_entry(map_table, entry,
-+					    u32_as_hash_field(info->id))
-+			jsonw_string(json_wtr, entry->value);
- 		jsonw_end_array(json_wtr);
- 	}
+-	hash_for_each_possible(table->table, refs, node, id) {
+-		if (refs->id != id)
+-			continue;
++	hashmap__for_each_key_entry(map, entry, u32_as_hash_field(id)) {
++		struct obj_refs *refs = entry->value;
++		int i;
++
+ 		if (refs->ref_cnt == 0)
+ 			break;
  
-@@ -612,13 +612,12 @@ static int show_map_close_plain(int fd, struct bpf_map_info *info)
- 	}
- 	close(fd);
- 
--	if (!hash_empty(map_table.table)) {
--		struct pinned_obj *obj;
-+	if (!hashmap__empty(map_table)) {
-+		struct hashmap_entry *entry;
- 
--		hash_for_each_possible(map_table.table, obj, hash, info->id) {
--			if (obj->id == info->id)
--				printf("\n\tpinned %s", obj->path);
--		}
-+		hashmap__for_each_key_entry(map_table, entry,
-+					    u32_as_hash_field(info->id))
-+			printf("\n\tpinned %s", (char *)entry->value);
- 	}
- 	printf("\n");
- 
-@@ -697,8 +696,13 @@ static int do_show(int argc, char **argv)
- 	int fd;
- 
- 	if (show_pinned) {
--		hash_init(map_table.table);
--		build_pinned_obj_table(&map_table, BPF_OBJ_MAP);
-+		map_table = hashmap__new(hash_fn_for_key_as_id,
-+					 equal_fn_for_key_as_id, NULL);
-+		if (!map_table) {
-+			p_err("failed to create hashmap for pinned paths");
-+			return -1;
-+		}
-+		build_pinned_obj_table(map_table, BPF_OBJ_MAP);
- 	}
- 	build_obj_refs_table(&refs_table, BPF_OBJ_MAP);
- 
-@@ -747,7 +751,7 @@ static int do_show(int argc, char **argv)
- 	delete_obj_refs_table(&refs_table);
- 
- 	if (show_pinned)
--		delete_pinned_obj_table(&map_table);
-+		delete_pinned_obj_table(map_table);
- 
- 	return errno == ENOENT ? 0 : -1;
- }
+ 		printf("%s", prefix);
+ 		for (i = 0; i < refs->ref_cnt; i++) {
+-			ref = &refs->refs[i];
++			struct obj_ref *ref = &refs->refs[i];
++
+ 			printf("%s%s(%d)", i == 0 ? "" : ", ", ref->comm, ref->pid);
+ 		}
+ 		break;
 diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 48c2fa4d068e..8fce78ce6f8b 100644
+index 8fce78ce6f8b..515d22952602 100644
 --- a/tools/bpf/bpftool/prog.c
 +++ b/tools/bpf/bpftool/prog.c
-@@ -24,6 +24,7 @@
- 
- #include <bpf/bpf.h>
- #include <bpf/btf.h>
-+#include <bpf/hashmap.h>
- #include <bpf/libbpf.h>
- #include <bpf/skel_internal.h>
- 
-@@ -84,7 +85,7 @@ static const char * const attach_type_strings[] = {
- 	[__MAX_BPF_ATTACH_TYPE] = NULL,
- };
- 
--static struct pinned_obj_table prog_table;
-+static struct hashmap *prog_table;
- 
- static enum bpf_attach_type parse_attach_type(const char *str)
- {
-@@ -418,15 +419,14 @@ static void print_prog_json(struct bpf_prog_info *info, int fd)
- 	if (info->btf_id)
- 		jsonw_int_field(json_wtr, "btf_id", info->btf_id);
- 
--	if (!hash_empty(prog_table.table)) {
--		struct pinned_obj *obj;
-+	if (!hashmap__empty(prog_table)) {
-+		struct hashmap_entry *entry;
- 
- 		jsonw_name(json_wtr, "pinned");
- 		jsonw_start_array(json_wtr);
--		hash_for_each_possible(prog_table.table, obj, hash, info->id) {
--			if (obj->id == info->id)
--				jsonw_string(json_wtr, obj->path);
--		}
-+		hashmap__for_each_key_entry(prog_table, entry,
-+					    u32_as_hash_field(info->id))
-+			jsonw_string(json_wtr, entry->value);
+@@ -430,7 +430,7 @@ static void print_prog_json(struct bpf_prog_info *info, int fd)
  		jsonw_end_array(json_wtr);
  	}
  
-@@ -490,13 +490,12 @@ static void print_prog_plain(struct bpf_prog_info *info, int fd)
- 	if (info->nr_map_ids)
- 		show_prog_maps(fd, info->nr_map_ids);
+-	emit_obj_refs_json(&refs_table, info->id, json_wtr);
++	emit_obj_refs_json(refs_table, info->id, json_wtr);
  
--	if (!hash_empty(prog_table.table)) {
--		struct pinned_obj *obj;
-+	if (!hashmap__empty(prog_table)) {
-+		struct hashmap_entry *entry;
+ 	show_prog_metadata(fd, info->nr_map_ids);
  
--		hash_for_each_possible(prog_table.table, obj, hash, info->id) {
--			if (obj->id == info->id)
--				printf("\n\tpinned %s", obj->path);
--		}
-+		hashmap__for_each_key_entry(prog_table, entry,
-+					    u32_as_hash_field(info->id))
-+			printf("\n\tpinned %s", (char *)entry->value);
- 	}
- 
+@@ -501,7 +501,7 @@ static void print_prog_plain(struct bpf_prog_info *info, int fd)
  	if (info->btf_id)
-@@ -570,8 +569,13 @@ static int do_show(int argc, char **argv)
- 	int fd;
+ 		printf("\n\tbtf_id %d", info->btf_id);
  
- 	if (show_pinned) {
--		hash_init(prog_table.table);
--		build_pinned_obj_table(&prog_table, BPF_OBJ_PROG);
-+		prog_table = hashmap__new(hash_fn_for_key_as_id,
-+					  equal_fn_for_key_as_id, NULL);
-+		if (!prog_table) {
-+			p_err("failed to create hashmap for pinned paths");
-+			return -1;
-+		}
-+		build_pinned_obj_table(prog_table, BPF_OBJ_PROG);
- 	}
- 	build_obj_refs_table(&refs_table, BPF_OBJ_PROG);
+-	emit_obj_refs_plain(&refs_table, info->id, "\n\tpids ");
++	emit_obj_refs_plain(refs_table, info->id, "\n\tpids ");
  
-@@ -618,7 +622,7 @@ static int do_show(int argc, char **argv)
- 	delete_obj_refs_table(&refs_table);
+ 	printf("\n");
+ 
+@@ -619,7 +619,7 @@ static int do_show(int argc, char **argv)
+ 	if (json_output)
+ 		jsonw_end_array(json_wtr);
+ 
+-	delete_obj_refs_table(&refs_table);
++	delete_obj_refs_table(refs_table);
  
  	if (show_pinned)
--		delete_pinned_obj_table(&prog_table);
-+		delete_pinned_obj_table(prog_table);
- 
- 	return err;
- }
+ 		delete_pinned_obj_table(prog_table);
 -- 
 2.30.2
 
