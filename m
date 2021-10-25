@@ -2,60 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 505BFC433F5
-	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 13:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B583BC433EF
+	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 13:12:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3175560EFF
-	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 13:12:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C25560EFF
+	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 13:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233436AbhJYNO7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Oct 2021 09:14:59 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6330 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233371AbhJYNO6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 25 Oct 2021 09:14:58 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19PCM6rg028877;
-        Mon, 25 Oct 2021 13:12:22 GMT
+        id S233449AbhJYNPC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Oct 2021 09:15:02 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43490 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233371AbhJYNPC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 25 Oct 2021 09:15:02 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19PCM1Bf021913;
+        Mon, 25 Oct 2021 13:12:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=G0GWFK8CqDfBJlic01i4S1HzVZ6TV2at09DO1LpCong=;
- b=MTmQCsUNKC/Ta+dxqKkSE9oYRmKOK82mI9XLmwMr7BitNw+16wk+8sj9OWUTXkcOIvn6
- rLhGqD5KvqIg3poURN9qPlytmU1zZJHJiIThsmMG+kgsIWdPU+vBv5zo3zSaocEwc2Yh
- Ny0i9CRAP86jQJVB21zGwvgbtfjBH21PERB3npCaRpm0uTgL4CqV7e/Rckffhe97BfC6
- aDHqzO19cfBb0IlEEfsiWK71rHEAcFEBFY+tTF/FiG86KaWHs9KtgJ7q4uCw8OL3vj3x
- ZBAuFvUWps1x5931Av8ZsKsj1Q8+kKSt4CGTbOFRpWAP17IoWLWsm4l9NLctrIbrq3b0 +g== 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=s1k2TD0Qrcb9vKYI8rZr0EVa6rS0hMGvSNluFaVQbSA=;
+ b=JhlX8AeIxRcuEcQhu6KODfaO+JgFTHlBL8lNQUuB++w3Jld+zCghxo1YHwD4h+lmB4Fb
+ 4x5tjv1sI+nrVEKHLYDd+rghDdAk5VVbBZZD7ekMvgydgpEqGZI+14ywIcBSuaZfp8dR
+ YsihYwR4ANpjRjy+M/6oAclkRwzvXUrv73nbxreNePTfRCWOBXb6xfMiflv2tYFQexfq
+ iShQjhYyw37DB6MRKmAm6WVv3bAKsq6y8DdlzyGqKd7+Wg+OiwgH1V8Uf/Xh3qsu35xm
+ PVMbnrvP6/o58VUSsaajgqGrSShSNCwtfN0UHVRyQ8tf2aNkIKisLob0/nW7tHH2Oeoc lw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bwt0twesd-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bwsy859wc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Oct 2021 13:12:22 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19PCeaFj010637;
-        Mon, 25 Oct 2021 13:12:22 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3bwt0twerq-1
+        Mon, 25 Oct 2021 13:12:27 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 19PCQn7X008259;
+        Mon, 25 Oct 2021 13:12:27 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3bwsy859v8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Oct 2021 13:12:22 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19PD8HXI000379;
-        Mon, 25 Oct 2021 13:12:20 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03ams.nl.ibm.com with ESMTP id 3bva19pxnw-1
+        Mon, 25 Oct 2021 13:12:27 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 19PD8nji023713;
+        Mon, 25 Oct 2021 13:12:24 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3bv9njf1wm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 25 Oct 2021 13:12:20 +0000
+        Mon, 25 Oct 2021 13:12:23 +0000
 Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19PD6D7g56492426
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 19PDCIRp5243598
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Oct 2021 13:06:13 GMT
+        Mon, 25 Oct 2021 13:12:18 GMT
 Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 22490A406B;
-        Mon, 25 Oct 2021 13:12:16 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 8F30EA4083;
+        Mon, 25 Oct 2021 13:12:18 +0000 (GMT)
 Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C28F2A4069;
-        Mon, 25 Oct 2021 13:12:15 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 394A4A404D;
+        Mon, 25 Oct 2021 13:12:18 +0000 (GMT)
 Received: from vm.lan (unknown [9.145.12.156])
         by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 25 Oct 2021 13:12:15 +0000 (GMT)
+        Mon, 25 Oct 2021 13:12:18 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -63,66 +64,66 @@ To:     Alexei Starovoitov <ast@kernel.org>,
 Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v2 0/5] core_reloc fixes for s390
-Date:   Mon, 25 Oct 2021 15:12:09 +0200
-Message-Id: <20211025131214.731972-1-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v2 3/5] samples: seccomp: use __BYTE_ORDER__
+Date:   Mon, 25 Oct 2021 15:12:12 +0200
+Message-Id: <20211025131214.731972-4-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: c3bI0yAhAkdwGh9e4trczTbTFo4QFJ-x
-X-Proofpoint-GUID: Y1FmJQ9k5J0ddBz8m-TwdjKDOLsvond-
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+In-Reply-To: <20211025131214.731972-1-iii@linux.ibm.com>
+References: <20211025131214.731972-1-iii@linux.ibm.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _Dd0zDBrLIYjerofQnHz9HcVUIgWM3zV
+X-Proofpoint-GUID: w6-8zZPCi7nEBdKBXmZvtjov_bi-cxdW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-25_05,2021-10-25_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0
- mlxlogscore=999 lowpriorityscore=0 clxscore=1015 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 mlxscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2109230001 definitions=main-2110250081
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v1: https://lore.kernel.org/bpf/20211021234653.643302-1-iii@linux.ibm.com/
-v1 -> v2: Drop bpf_core_calc_field_relo() restructuring, split
-          __BYTE_ORDER__ change.
+Use the compiler-defined __BYTE_ORDER__ instead of the libc-defined
+__BYTE_ORDER for consistency.
 
-Hi,
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ samples/seccomp/bpf-helper.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-this series fixes test failures in core_reloc on s390.
-
-Patches 1-4 replace __BYTE_ORDER with __BYTE_ORDER__ in order to fix an
-endianness bug and make the code consistent.
-Patch 5 fixes an endianness issue in test_core_reloc_mods.
-
-Best regards,
-Ilya
-
-Ilya Leoshkevich (5):
-  libbpf: Use __BYTE_ORDER__
-  selftests/bpf: Use __BYTE_ORDER__
-  samples: seccomp: use __BYTE_ORDER__
-  selftests/seccomp: Use __BYTE_ORDER__
-  selftests/bpf: Fix test_core_reloc_mods on big-endian machines
-
- samples/seccomp/bpf-helper.h                       |  8 ++++----
- tools/lib/bpf/bpf_core_read.h                      |  2 +-
- tools/lib/bpf/btf.c                                |  4 ++--
- tools/lib/bpf/btf_dump.c                           |  8 ++++----
- tools/lib/bpf/libbpf.c                             |  4 ++--
- tools/lib/bpf/linker.c                             | 12 ++++++------
- tools/lib/bpf/relo_core.c                          |  2 +-
- .../testing/selftests/bpf/prog_tests/btf_endian.c  |  6 +++---
- .../selftests/bpf/progs/test_core_reloc_mods.c     |  9 +++++++++
- tools/testing/selftests/bpf/test_sysctl.c          |  4 ++--
- tools/testing/selftests/bpf/verifier/ctx_skb.c     | 14 +++++++-------
- tools/testing/selftests/bpf/verifier/lwt.c         |  2 +-
- .../bpf/verifier/perf_event_sample_period.c        |  6 +++---
- tools/testing/selftests/seccomp/seccomp_bpf.c      |  6 +++---
- 14 files changed, 48 insertions(+), 39 deletions(-)
-
+diff --git a/samples/seccomp/bpf-helper.h b/samples/seccomp/bpf-helper.h
+index 0cc9816fe8e8..417e48a4c4df 100644
+--- a/samples/seccomp/bpf-helper.h
++++ b/samples/seccomp/bpf-helper.h
+@@ -62,9 +62,9 @@ void seccomp_bpf_print(struct sock_filter *filter, size_t count);
+ #define EXPAND(...) __VA_ARGS__
+ 
+ /* Ensure that we load the logically correct offset. */
+-#if __BYTE_ORDER == __LITTLE_ENDIAN
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define LO_ARG(idx) offsetof(struct seccomp_data, args[(idx)])
+-#elif __BYTE_ORDER == __BIG_ENDIAN
++#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ #define LO_ARG(idx) offsetof(struct seccomp_data, args[(idx)]) + sizeof(__u32)
+ #else
+ #error "Unknown endianness"
+@@ -85,10 +85,10 @@ void seccomp_bpf_print(struct sock_filter *filter, size_t count);
+ #elif __BITS_PER_LONG == 64
+ 
+ /* Ensure that we load the logically correct offset. */
+-#if __BYTE_ORDER == __LITTLE_ENDIAN
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ #define ENDIAN(_lo, _hi) _lo, _hi
+ #define HI_ARG(idx) offsetof(struct seccomp_data, args[(idx)]) + sizeof(__u32)
+-#elif __BYTE_ORDER == __BIG_ENDIAN
++#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ #define ENDIAN(_lo, _hi) _hi, _lo
+ #define HI_ARG(idx) offsetof(struct seccomp_data, args[(idx)])
+ #endif
 -- 
 2.31.1
 
