@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C31BC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9F3BC43219
 	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 06:25:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE38560FDC
-	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 06:25:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD61860FDC
+	for <bpf@archiver.kernel.org>; Mon, 25 Oct 2021 06:25:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhJYG1e (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Oct 2021 02:27:34 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:14860 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbhJYG1c (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Oct 2021 02:27:32 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Hd4gj2WGsz90QR;
-        Mon, 25 Oct 2021 14:25:05 +0800 (CST)
+        id S230108AbhJYG1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Oct 2021 02:27:36 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:26192 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230199AbhJYG1d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Oct 2021 02:27:33 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Hd4fD5wQPz8ttV;
+        Mon, 25 Oct 2021 14:23:48 +0800 (CST)
 Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.15; Mon, 25 Oct 2021 14:25:06 +0800
+ 15.1.2308.15; Mon, 25 Oct 2021 14:25:08 +0800
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Mon, 25 Oct
- 2021 14:25:06 +0800
+ 2021 14:25:07 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
         "Daniel Borkmann" <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <houtao1@huawei.com>
-Subject: [PATCH bpf-next v4 1/4] bpf: factor out a helper to prepare trampoline for struct_ops prog
-Date:   Mon, 25 Oct 2021 14:40:22 +0800
-Message-ID: <20211025064025.2567443-2-houtao1@huawei.com>
+Subject: [PATCH bpf-next v4 4/4] selftests/bpf: add test cases for struct_ops prog
+Date:   Mon, 25 Oct 2021 14:40:25 +0800
+Message-ID: <20211025064025.2567443-5-houtao1@huawei.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20211025064025.2567443-1-houtao1@huawei.com>
 References: <20211025064025.2567443-1-houtao1@huawei.com>
@@ -48,98 +48,199 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Factor out a helper bpf_struct_ops_prepare_trampoline() to prepare
-trampoline for BPF_PROG_TYPE_STRUCT_OPS prog. It will be used by
-.test_run callback in following patch.
+Running a BPF_PROG_TYPE_STRUCT_OPS prog for dummy_st_ops::test_N()
+through bpf_prog_test_run(). Four test cases are added:
+(1) attach dummy_st_ops should fail
+(2) function return value of bpf_dummy_ops::test_1() is expected
+(3) pointer argument of bpf_dummy_ops::test_1() works as expected
+(4) multiple arguments passed to bpf_dummy_ops::test_2() are correct
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/bpf.h         |  4 ++++
- kernel/bpf/bpf_struct_ops.c | 29 +++++++++++++++++++----------
- 2 files changed, 23 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/dummy_st_ops.c   | 115 ++++++++++++++++++
+ .../selftests/bpf/progs/dummy_st_ops.c        |  50 ++++++++
+ 2 files changed, 165 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/dummy_st_ops.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 31421c74ba08..3d2cf94a72ce 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -999,6 +999,10 @@ bool bpf_struct_ops_get(const void *kdata);
- void bpf_struct_ops_put(const void *kdata);
- int bpf_struct_ops_map_sys_lookup_elem(struct bpf_map *map, void *key,
- 				       void *value);
-+int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_progs *tprogs,
-+				      struct bpf_prog *prog,
-+				      const struct btf_func_model *model,
-+				      void *image, void *image_end);
- static inline bool bpf_try_module_get(const void *data, struct module *owner)
- {
- 	if (owner == BPF_MODULE_OWNER)
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 9abcc33f02cf..44be101f2562 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -312,6 +312,20 @@ static int check_zero_holes(const struct btf_type *t, void *data)
- 	return 0;
- }
- 
-+int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_progs *tprogs,
-+				      struct bpf_prog *prog,
-+				      const struct btf_func_model *model,
-+				      void *image, void *image_end)
-+{
-+	u32 flags;
+diff --git a/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+new file mode 100644
+index 000000000000..cbaa44ffb8c6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/dummy_st_ops.c
+@@ -0,0 +1,115 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2021. Huawei Technologies Co., Ltd */
++#include <test_progs.h>
++#include "dummy_st_ops.skel.h"
 +
-+	tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
-+	tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
-+	flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
-+	return arch_prepare_bpf_trampoline(NULL, image, image_end,
-+					   model, flags, tprogs, NULL);
++/* Need to keep consistent with definition in include/linux/bpf.h */
++struct bpf_dummy_ops_state {
++	int val;
++};
++
++static void test_dummy_st_ops_attach(void)
++{
++	struct dummy_st_ops *skel;
++	struct bpf_link *link;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	link = bpf_map__attach_struct_ops(skel->maps.dummy_1);
++	ASSERT_EQ(libbpf_get_error(link), -EOPNOTSUPP, "dummy_st_ops_attach");
++
++	dummy_st_ops__destroy(skel);
 +}
 +
- static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 					  void *value, u64 flags)
- {
-@@ -323,7 +337,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	struct bpf_tramp_progs *tprogs = NULL;
- 	void *udata, *kdata;
- 	int prog_fd, err = 0;
--	void *image;
-+	void *image, *image_end;
- 	u32 i;
- 
- 	if (flags)
-@@ -363,12 +377,12 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 	udata = &uvalue->data;
- 	kdata = &kvalue->data;
- 	image = st_map->image;
-+	image_end = st_map->image + PAGE_SIZE;
- 
- 	for_each_member(i, t, member) {
- 		const struct btf_type *mtype, *ptype;
- 		struct bpf_prog *prog;
- 		u32 moff;
--		u32 flags;
- 
- 		moff = btf_member_bit_offset(t, member) / 8;
- 		ptype = btf_type_resolve_ptr(btf_vmlinux, member->type, NULL);
-@@ -430,14 +444,9 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 			goto reset_unlock;
- 		}
- 
--		tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
--		tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
--		flags = st_ops->func_models[i].ret_size > 0 ?
--			BPF_TRAMP_F_RET_FENTRY_RET : 0;
--		err = arch_prepare_bpf_trampoline(NULL, image,
--						  st_map->image + PAGE_SIZE,
--						  &st_ops->func_models[i],
--						  flags, tprogs, NULL);
-+		err = bpf_struct_ops_prepare_trampoline(tprogs, prog,
-+							&st_ops->func_models[i],
-+							image, image_end);
- 		if (err < 0)
- 			goto reset_unlock;
- 
++static void test_dummy_init_ret_value(void)
++{
++	__u64 args[1] = {0};
++	struct bpf_prog_test_run_attr attr = {
++		.ctx_size_in = sizeof(args),
++		.ctx_in = args,
++	};
++	struct dummy_st_ops *skel;
++	int fd, err;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	fd = bpf_program__fd(skel->progs.test_1);
++	attr.prog_fd = fd;
++	err = bpf_prog_test_run_xattr(&attr);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(attr.retval, 0xf2f3f4f5, "test_ret");
++
++	dummy_st_ops__destroy(skel);
++}
++
++static void test_dummy_init_ptr_arg(void)
++{
++	int exp_retval = 0xbeef;
++	struct bpf_dummy_ops_state in_state = {
++		.val = exp_retval,
++	};
++	__u64 args[1] = {(unsigned long)&in_state};
++	struct bpf_prog_test_run_attr attr = {
++		.ctx_size_in = sizeof(args),
++		.ctx_in = args,
++	};
++	struct dummy_st_ops *skel;
++	int fd, err;
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	fd = bpf_program__fd(skel->progs.test_1);
++	attr.prog_fd = fd;
++	err = bpf_prog_test_run_xattr(&attr);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(in_state.val, 0x5a, "test_ptr_ret");
++	ASSERT_EQ(attr.retval, exp_retval, "test_ret");
++
++	dummy_st_ops__destroy(skel);
++}
++
++static void test_dummy_multiple_args(void)
++{
++	__u64 args[5] = {0, -100, 0x8a5f, 'c', 0x1234567887654321ULL};
++	struct bpf_prog_test_run_attr attr = {
++		.ctx_size_in = sizeof(args),
++		.ctx_in = args,
++	};
++	struct dummy_st_ops *skel;
++	int fd, err;
++	size_t i;
++	char name[8];
++
++	skel = dummy_st_ops__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "dummy_st_ops_load"))
++		return;
++
++	fd = bpf_program__fd(skel->progs.test_2);
++	attr.prog_fd = fd;
++	err = bpf_prog_test_run_xattr(&attr);
++	ASSERT_OK(err, "test_run");
++	for (i = 0; i < ARRAY_SIZE(args); i++) {
++		snprintf(name, sizeof(name), "arg %zu", i);
++		ASSERT_EQ(skel->bss->test_2_args[i], args[i], name);
++	}
++
++	dummy_st_ops__destroy(skel);
++}
++
++void test_dummy_st_ops(void)
++{
++	if (test__start_subtest("dummy_st_ops_attach"))
++		test_dummy_st_ops_attach();
++	if (test__start_subtest("dummy_init_ret_value"))
++		test_dummy_init_ret_value();
++	if (test__start_subtest("dummy_init_ptr_arg"))
++		test_dummy_init_ptr_arg();
++	if (test__start_subtest("dummy_multiple_args"))
++		test_dummy_multiple_args();
++}
+diff --git a/tools/testing/selftests/bpf/progs/dummy_st_ops.c b/tools/testing/selftests/bpf/progs/dummy_st_ops.c
+new file mode 100644
+index 000000000000..ead87edb75e2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/dummy_st_ops.c
+@@ -0,0 +1,50 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (C) 2021. Huawei Technologies Co., Ltd */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++struct bpf_dummy_ops_state {
++	int val;
++} __attribute__((preserve_access_index));
++
++struct bpf_dummy_ops {
++	int (*test_1)(struct bpf_dummy_ops_state *state);
++	int (*test_2)(struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
++		      char a3, unsigned long a4);
++};
++
++char _license[] SEC("license") = "GPL";
++
++SEC("struct_ops/test_1")
++int BPF_PROG(test_1, struct bpf_dummy_ops_state *state)
++{
++	int ret;
++
++	if (!state)
++		return 0xf2f3f4f5;
++
++	ret = state->val;
++	state->val = 0x5a;
++	return ret;
++}
++
++__u64 test_2_args[5];
++
++SEC("struct_ops/test_2")
++int BPF_PROG(test_2, struct bpf_dummy_ops_state *state, int a1, unsigned short a2,
++	     char a3, unsigned long a4)
++{
++	test_2_args[0] = (unsigned long)state;
++	test_2_args[1] = a1;
++	test_2_args[2] = a2;
++	test_2_args[3] = a3;
++	test_2_args[4] = a4;
++	return 0;
++}
++
++SEC(".struct_ops")
++struct bpf_dummy_ops dummy_1 = {
++	.test_1 = (void *)test_1,
++	.test_2 = (void *)test_2,
++};
 -- 
 2.29.2
 
