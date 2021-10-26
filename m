@@ -2,108 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53D01C433FE
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 09:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEACEC433EF
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 10:36:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2886260F90
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 09:24:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A13F460E09
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 10:36:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbhJZJ0Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Oct 2021 05:26:24 -0400
-Received: from mga12.intel.com ([192.55.52.136]:42904 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230219AbhJZJ0X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Oct 2021 05:26:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10148"; a="209947524"
-X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
-   d="scan'208";a="209947524"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 02:23:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,182,1631602800"; 
-   d="scan'208";a="722229541"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Oct 2021 02:23:47 -0700
-Received: from alobakin-mobl.ger.corp.intel.com (dartyukh-MOBL2.ger.corp.intel.com [10.213.24.113])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 19Q9NftA019935;
-        Tue, 26 Oct 2021 10:23:41 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Saeed Mahameed <saeed@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S234188AbhJZKio (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Oct 2021 06:38:44 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:47904 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234596AbhJZKiU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Oct 2021 06:38:20 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CFCFC1FD4C;
+        Tue, 26 Oct 2021 10:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1635244551; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1eIOwvf/mMVcZwym9Rsv9K70HOPBD5q/9n5lAFwsZyI=;
+        b=INOy8JbcR/E0RvXOtZ9l6kLK4ypy5b76OCI5OckfNKpFgnwhlXjEbmuL3zGAyCw8uxdvjj
+        YSpBGCium6DRcUwhe5EC3/On5TQaGYvsiKMxzDZqBKy4LcBGj5EteMRwpKyc5XDj7AZPwm
+        YDf9opjAXlpbqwZAzKOuC4KIFz3WjkU=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 025E8A3B85;
+        Tue, 26 Oct 2021 10:35:50 +0000 (UTC)
+Date:   Tue, 26 Oct 2021 12:35:47 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "Zhang, Qiang" <qiang.zhang@windriver.com>, robdclark@chromium.org,
+        Christian Brauner <christian@brauner.io>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Lukasz Czapnik <lukasz.czapnik@intel.com>,
-        Marcin Kubiak <marcin.kubiak@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Netanel Belgazal <netanel@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        Guy Tzalik <gtzalik@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Sameeh Jubran <sameehj@amazon.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Danielle Ratson <danieller@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vladyslav Tarasiuk <vladyslavt@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jian Shen <shenjian15@huawei.com>,
-        Petr Vorel <petr.vorel@gmail.com>, Dan Murphy <dmurphy@ti.com>,
-        Yangbo Lu <yangbo.lu@nxp.com>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next 03/21] ethtool, stats: introduce standard XDP statistics
-Date:   Tue, 26 Oct 2021 11:23:23 +0200
-Message-Id: <20211026092323.165-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210803134900.578b4c37@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20210803163641.3743-1-alexandr.lobakin@intel.com> <20210803163641.3743-4-alexandr.lobakin@intel.com> <20210803134900.578b4c37@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <ec0aefbc987575d1979f9102d331bd3e8f809824.camel@kernel.org>
+        dennis.dalessandro@cornelisnetworks.com,
+        mike.marciniszyn@cornelisnetworks.com,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, linux-perf-users@vger.kernel.org,
+        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH v6 00/12] extend task comm from 16 to 24
+Message-ID: <YXfaA2uSj9JIfZIl@alley>
+References: <20211025083315.4752-1-laoar.shao@gmail.com>
+ <CAADnVQKm0Ljj-w5PbkAu1ugLFnZRRPt-Vk-J7AhXxDD5xVompA@mail.gmail.com>
+ <20211025170503.59830a43@gandalf.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211025170503.59830a43@gandalf.local.home>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Saeed Mahameed <saeed@kernel.org>
-Date: Tue, 03 Aug 2021 16:57:22 -0700
+On Mon 2021-10-25 17:05:03, Steven Rostedt wrote:
+> On Mon, 25 Oct 2021 11:10:09 -0700
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> 
+> > It looks like a churn that doesn't really address the problem.
+> > If we were to allow long names then make it into a pointer and use 16 byte
+> > as an optimized storage for short names. Any longer name would be a pointer.
+> > In other words make it similar to dentry->d_iname.
+> 
+> That would be quite a bigger undertaking too, as it is assumed throughout
+> the kernel that the task->comm is TASK_COMM_LEN and is nul terminated. And
+> most locations that save the comm simply use a fixed size string of
+> TASK_COMM_LEN. Not saying its not feasible, but it would require a lot more
+> analysis of the impact by changing such a fundamental part of task struct
+> from a static to something requiring allocation.
 
-[ snip ]
+I fully agree. The evolution of this patchset clearly shows how many
+code paths depend on the existing behavior.
 
-> XDP is going to always be eBPF based ! why not just report such stats
-> to a special BPF_MAP ? BPF stack can collect the stats from the driver
-> and report them to this special MAP upon user request.
 
-I really dig this idea now. How do you see it?
-<ifindex:channel:stat_id> as a key and its value as a value or ...?
+> Unless you are suggesting that we truncate like normal the 16 byte names
+> (to a max of 15 characters), and add a way to hold the entire name for
+> those locations that understand it.
 
-[ snip ]
+Yup. If the problem is only with kthreads, it might be possible to
+store the pointer into "struct kthread" and update proc_task_name().
+It would generalize the solution already used by workqueues.
+I think that something like this was mentioned in the discussion
+about v1.
 
-Thanks,
-Al
+Best Regards,
+Petr
