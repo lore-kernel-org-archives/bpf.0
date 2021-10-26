@@ -2,111 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D1D8C433F5
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:04:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8CD2C433EF
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:05:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2ACF760F39
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:04:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD13560F92
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:05:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235612AbhJZMG0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Oct 2021 08:06:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41520 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235137AbhJZMG0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 26 Oct 2021 08:06:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635249842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbLnbRSwhQhs8N5RIiGSM3VgajNsI4V0GezJnyOJpM0=;
-        b=ERD7tT0lUcsgdDioAlbwPTZYJD1QuS4GRnUEDgm8xSTaGLwjFsGdIwpiBl0C+E0FfSY+vy
-        lqbswtai2piOK/aqEwTRxMo08QBRonTQKhIisgeFAK/Vb0ONupIP0gKiRj+TOfDUbkFxso
-        rzCjahEvg2b6JNPGSUP5vYuFzjY2nJg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-508-ta5oZ3XcOcKf6uOFHcL-Xg-1; Tue, 26 Oct 2021 08:04:01 -0400
-X-MC-Unique: ta5oZ3XcOcKf6uOFHcL-Xg-1
-Received: by mail-wm1-f70.google.com with SMTP id l187-20020a1c25c4000000b0030da46b76daso901095wml.9
-        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 05:04:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bbLnbRSwhQhs8N5RIiGSM3VgajNsI4V0GezJnyOJpM0=;
-        b=glOq9UxG1cMJdQFqzz4WD8RpmWH9/VRkkOpI0OK2SSPdBG87wYGL3FkO54C+6zsW3N
-         iAloLWXaACU2GTXNyoXd8GDmfJ+l3W68tw007zIHFzwDrbk3rG2LdgB0prB6TlyPTNym
-         M7vBFKi+f/3RTl/HGSK45zxFp5eWxmhxRpJbCbtZ991xdiCSv2eM4N1NeCcAJG1jzHXT
-         Ys9+puv/wZR4Xhrl0lInjVN4UbWXa5/UjFvnJEgDEypAu9nB/K7uwSrQ0K3QO9OuHdlI
-         VTShATHO3epYIx6MRZ4zRvJf/5qlwze7wjVR9fX1ZJOCt6Z26gOIqPcJDNFibiMrN3iT
-         1PMg==
-X-Gm-Message-State: AOAM532UHYHjFJyALMdzchef1wYtx0v8Wl5pskOWV0WE4gnjIgTiqeor
-        tz1gnZEILXwViONADgTmfeek9PlmMi4opWFD1/FmIkBbjWkTpHBLeUHqjlrNdpKtC0y2+eZJSgq
-        mkKs7TvVl7KXc
-X-Received: by 2002:a7b:c858:: with SMTP id c24mr26221209wml.171.1635249839698;
-        Tue, 26 Oct 2021 05:03:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxJvjKDHPGbMGVwdOiYPfUuiFmMZo0qJ4BKiGjBexd8LXhhl4CNtK3HD5jILfUUiEVdnHUjlQ==
-X-Received: by 2002:a7b:c858:: with SMTP id c24mr26221177wml.171.1635249839393;
-        Tue, 26 Oct 2021 05:03:59 -0700 (PDT)
-Received: from krava ([83.240.63.48])
-        by smtp.gmail.com with ESMTPSA id f3sm428348wmb.12.2021.10.26.05.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Oct 2021 05:03:58 -0700 (PDT)
-Date:   Tue, 26 Oct 2021 14:03:57 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [PATCH bpf-next 1/2] kbuild: Unify options for BTF generation
- for vmlinux and modules
-Message-ID: <YXfurV+mNr0daiz9@krava>
-References: <20211023120452.212885-1-jolsa@kernel.org>
- <20211023120452.212885-2-jolsa@kernel.org>
- <CAEf4BzZimh+OotN3gWR=E-eCGzxFYm7rM8jbgAMy7HRCYpKnNw@mail.gmail.com>
+        id S235137AbhJZMHs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Oct 2021 08:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235051AbhJZMHr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Oct 2021 08:07:47 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66ABC061745;
+        Tue, 26 Oct 2021 05:05:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To;
+        bh=2Wv6DImRgiySnGcSnXMjSSpGZmAPInIBJI58+RxSTgg=; b=Yt3Aw9C6KEdXdqbNXyYgUF3yuw
+        gb2iG2QJWb9pK1gY6lZrTNbJk7YwG08RZQ87/33Q9T5gHZuVxZNwpvfeJSpFPwSvv9KXotW6hnfRQ
+        4D9GPxGAP2iBZPqTdZFTRcEmEjfWgyXTMFcBrQNLQ246S7moQpHZUZ5f3xel26qD+T8PrzBNAO57v
+        WXHVNen2DvfWkVlvOzDdfkL+Vrtn7l4LwbHD6PvcoeaG1swyx1FmlOsl7ymUQ+5dkqTDhqcwJiyjA
+        tP5g5dqa9es3D+M81HjPmOeC1EyKXmgck5jkVmaYG8FAROEP3rax0v68ef+6545rHud48IiYQ2nZ/
+        c3W7D/lg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mfLCe-00CM14-77; Tue, 26 Oct 2021 12:05:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3CB32300996;
+        Tue, 26 Oct 2021 14:05:14 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 1913425E57E59; Tue, 26 Oct 2021 14:05:14 +0200 (CEST)
+Message-ID: <20211026120310.041792350@infradead.org>
+User-Agent: quilt/0.66
+Date:   Tue, 26 Oct 2021 14:01:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, jpoimboe@redhat.com, andrew.cooper3@citrix.com
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        alexei.starovoitov@gmail.com, ndesaulniers@google.com,
+        bpf@vger.kernel.org
+Subject: [PATCH v3 07/16] x86/asm: Fixup odd GEN-for-each-reg.h usage
+References: <20211026120132.613201817@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZimh+OotN3gWR=E-eCGzxFYm7rM8jbgAMy7HRCYpKnNw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 09:56:37PM -0700, Andrii Nakryiko wrote:
-> On Sat, Oct 23, 2021 at 5:05 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > Using new PAHOLE_FLAGS variable to pass extra arguments to
-> > pahole for both vmlinux and modules BTF data generation.
-> >
-> > Adding new scripts/pahole-flags.sh script that detect and
-> > prints pahole options.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> 
-> LGTM. I suggest posting it separately from the BTF dedup hack.
+Currently GEN-for-each-reg.h usage leaves GEN defined, relying on any
+subsequent usage to start with #undef, which is rude.
 
-ok, will post today
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/include/asm/asm-prototypes.h |    2 +-
+ arch/x86/lib/retpoline.S              |    4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-thanks,
-jirka
+--- a/arch/x86/include/asm/asm-prototypes.h
++++ b/arch/x86/include/asm/asm-prototypes.h
+@@ -19,9 +19,9 @@ extern void cmpxchg8b_emu(void);
+ 
+ #ifdef CONFIG_RETPOLINE
+ 
+-#undef GEN
+ #define GEN(reg) \
+ 	extern asmlinkage void __x86_indirect_thunk_ ## reg (void);
+ #include <asm/GEN-for-each-reg.h>
++#undef GEN
+ 
+ #endif /* CONFIG_RETPOLINE */
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -55,10 +55,10 @@ SYM_FUNC_END(__x86_indirect_thunk_\reg)
+ #define __EXPORT_THUNK(sym)	_ASM_NOKPROBE(sym); EXPORT_SYMBOL(sym)
+ #define EXPORT_THUNK(reg)	__EXPORT_THUNK(__x86_indirect_thunk_ ## reg)
+ 
+-#undef GEN
+ #define GEN(reg) THUNK reg
+ #include <asm/GEN-for-each-reg.h>
+-
+ #undef GEN
++
+ #define GEN(reg) EXPORT_THUNK(reg)
+ #include <asm/GEN-for-each-reg.h>
++#undef GEN
 
-> 
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> 
-> >  Makefile                  |  3 +++
-> >  scripts/Makefile.modfinal |  2 +-
-> >  scripts/link-vmlinux.sh   | 11 +----------
-> >  scripts/pahole-flags.sh   | 20 ++++++++++++++++++++
-> >  4 files changed, 25 insertions(+), 11 deletions(-)
-> >  create mode 100755 scripts/pahole-flags.sh
-> >
-> 
-> [...]
-> 
 
