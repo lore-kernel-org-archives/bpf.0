@@ -2,100 +2,189 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 692A6C433F5
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:06:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63B1CC433FE
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:24:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E45260230
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:06:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 462B560E09
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:24:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237076AbhJZVId (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Oct 2021 17:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239420AbhJZVIb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Oct 2021 17:08:31 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EDAC061348;
-        Tue, 26 Oct 2021 14:06:06 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id ls14-20020a17090b350e00b001a00e2251c8so455901pjb.4;
-        Tue, 26 Oct 2021 14:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qIlg9pcglox4T7ATE2cET/B8l0TxcSrLbPwLhUNDR0M=;
-        b=oVK903AIVsoG2KrYw5P6WncWnxZeFUL9X8SnFTK5FkszxkOE6GXX6GIeJjw6Futr9+
-         d4Tkg+VNVjDpefWQqcfEYf3/EHH0JU7voYoMhAXFRwZHeo1CWIeWsS9LCR/T4DuauGbb
-         VXP68AXOsCQnc/6B//ah5NjrkNF5R7hfrmAV8LvtD/NvSvkqxGGlUA/2NprAcsvVj/BF
-         keokXK5LA/Z7C1jGvkbGItRQ87cm1GKeZr6nsaUWAdqAQif9F4tt6mCoWvmlWQrB9rGz
-         hlqUU1N4Pt8OY3yGPG6WmUSR7EXbMr6D5SG7SPqCEhKdkW6Ls4bZIzqtot04gzK00i3+
-         dOTA==
+        id S232059AbhJZV0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Oct 2021 17:26:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29169 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239575AbhJZV0s (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Oct 2021 17:26:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635283463;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=c0f2U91ZYdHciaCbl1twiqOJ6L+v0KBNSmK6aUUIrtE=;
+        b=XevrFokYlbtEF9Bgtj+Dm5oCV6H//zkc7Btb3yLbxyBvE+t1E080HX92hC+RRRaCHgrJKD
+        P6MdvpGbBKZzBO2nV1Gp3pMCCUXuoz0EEz5bHspkY2d6WlMpGdul86I5jIJpDF5saKNcmz
+        q9w52mLYKUowp1K1fofYfv652+165LQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-523-t3PZAQ6WPnqyWFZG2fBEkg-1; Tue, 26 Oct 2021 17:24:22 -0400
+X-MC-Unique: t3PZAQ6WPnqyWFZG2fBEkg-1
+Received: by mail-wm1-f69.google.com with SMTP id c1-20020a05600c0ac100b00322fcaa2bc7so263124wmr.4
+        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 14:24:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qIlg9pcglox4T7ATE2cET/B8l0TxcSrLbPwLhUNDR0M=;
-        b=tuGqSob8iSEpBRyV8W43jsHYjSaDJ3CK36hdplO80WBkATR79yHqJEB+bLUwV+Nq+c
-         fBnlGSuN2QHngonxDulmDWUrVcfKOpXNxow5C4sixSJA+ZIvPGGcd4SQEho7Je18CgdO
-         igIyU6GRNiEo7FFDI7k8mgzj4FX785/Ex9FCapxb2Jt5RdE/5w7jDVWJHEkIO4QzzXeP
-         hT+Vn8GNdAGnixCIs7ha36CSRr+HR3Qalc1AbST/op45m197TRUx6GkqfZo7+AiNnmw0
-         9yE2FMPJ5dXb2uM5lWl3itLOV+tKnqcqHBnWeCkhPv286x1SZ7e/h38ggJ2V+aXyum8I
-         57EQ==
-X-Gm-Message-State: AOAM530Rk4z27eollcrd/VOmrvw3eim0zGhC8b9GJ3z9cKrKQyfacexS
-        wEMGdqW4RQDQE7NGnMJyTc15ksUfWeQh4FUOyxThqbkm
-X-Google-Smtp-Source: ABdhPJxQV1IT9aGON+yzfyu4hI4UZZ5M3cqUXzsa4bx4C3RvFEoAcO/fYc2GhqkQ5G59X+yI8ket218G8kGTLZDo1V4=
-X-Received: by 2002:a17:902:8211:b0:13f:afe5:e4fb with SMTP id
- x17-20020a170902821100b0013fafe5e4fbmr24803576pln.20.1635282366365; Tue, 26
- Oct 2021 14:06:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c0f2U91ZYdHciaCbl1twiqOJ6L+v0KBNSmK6aUUIrtE=;
+        b=My5LeQOhtUo8ch2inulQKEvRN78qbJZWFyiYrKjrU3kTzAFGJfjE3wTV9D7HN9Gz4i
+         9La12SH0fvkE1HBUb5HWKNh0yT6hoNLTLm0lROwQUJKZNLrP9F62VB/3fBO7Y/4BOwr0
+         FfLRqbp3aU4ZX7xP2O1iaW+gPp3J2YflFzBVVJWNBXDp1MqolDom28JgH56D5EHMYOlB
+         IU6CyIbyx9ebZMEq0S/O9G5qkCiqPfKlHoQ/Iuf2o8mAjvlT+JPjzIOcCCHSZeGpz6Qa
+         Vrm8HgIBHqTS92Pm0UrjmLa01ol9NRcyUUENZFF9LEaOZ+Gnd08POgs59qK06Wz+zwGN
+         Tt4A==
+X-Gm-Message-State: AOAM5323C55P5zcqUCMCzAO4hIawd1OiUACTySTrp2rG53yJPT+iKKFy
+        7wuNIy+0bMfexnrjk5hamsgXu4KTQbL07CNr+1UpLFzYatqt2nFug12GNYHxh+ou96Y6jHMk7KO
+        GlMykAYWpPpNe
+X-Received: by 2002:a5d:5402:: with SMTP id g2mr31143126wrv.290.1635283461123;
+        Tue, 26 Oct 2021 14:24:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwApQ6dlu1w5joksZslbDv4X+LkjmHfIX/w2wmCQK02a+UzvJ/pIx/wfXYYP4tdhcXj30e93w==
+X-Received: by 2002:a5d:5402:: with SMTP id g2mr31143091wrv.290.1635283460869;
+        Tue, 26 Oct 2021 14:24:20 -0700 (PDT)
+Received: from krava.cust.in.nbox.cz ([83.240.63.48])
+        by smtp.gmail.com with ESMTPSA id h22sm1828123wmq.42.2021.10.26.14.24.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 14:24:20 -0700 (PDT)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: [PATCHv2 bpf-next] kbuild: Unify options for BTF generation for vmlinux and modules
+Date:   Tue, 26 Oct 2021 23:24:19 +0200
+Message-Id: <20211026212419.144077-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211026120132.613201817@infradead.org> <CAADnVQJaiHWWnVcaRN43DcNgqktgKs3i1P3uz4Qm8kN7bvPCCg@mail.gmail.com>
- <YXhMv6rENfn/zsaj@hirez.programming.kicks-ass.net> <CAADnVQ+w_ww3ZR_bJVEU-PxWusT569y0biLNi=GZJNpKqFzNLA@mail.gmail.com>
- <20211026210509.GH174703@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211026210509.GH174703@worktop.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 26 Oct 2021 14:05:55 -0700
-Message-ID: <CAADnVQ+NA2J3Lxvb8Y31yaubM6ntx5LtoSEaLziZ1b8qiY4oYQ@mail.gmail.com>
-Subject: Re: [PATCH v3 00/16] x86: Rewrite the retpoline rewrite logic
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 2:05 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Oct 26, 2021 at 01:00:04PM -0700, Alexei Starovoitov wrote:
-> > On Tue, Oct 26, 2021 at 11:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Tue, Oct 26, 2021 at 11:26:57AM -0700, Alexei Starovoitov wrote:
-> > >
-> > > > It's a merge conflict. The patchset failed to apply to both bpf and
-> > > > bpf-next trees:
-> > >
-> > > Figures :/ I suspect it relies on tip/objtool/core at the very least and
-> > > possibly some of the x86 trees as well.
-> > >
-> > > I can locally merge tip/master with bpf, but getting a CI to do that
-> > > might be tricky.
-> >
-> > We have an ability in CI to supply few additional patches on top bpf/bpf-next
-> > trees, but that's usually done for the cases where we've merged a fix into
-> > one tree, but it's needed in both while bpf->net->linus->net-next->bpf-next
-> > circle is still pending.
-> >
-> > Does tip/objtool/core dependency relevant for this set?
-> > Can you rebase the current set on top of bpf-next and send it to the list
-> > just to get CI to run it? We won't be merging it into bpf-next, of course.
-> > I'm mainly interested in seeing all that additional tests passing that
-> > we have in bpf-next.
->
-> I should be able to rebase it just to that, let me try that in the am
-> though, brain is fairly fried atm. Do you really want me to post it to
-> the list, or is a git repo good enough?
+Using new PAHOLE_FLAGS variable to pass extra arguments to
+pahole for both vmlinux and modules BTF data generation.
 
-Please post it. CI cannot pull it from the repo.
+Adding new scripts/pahole-flags.sh script that detect and
+prints pahole options.
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+v2 changes:
+  - posting separately from original patchset
+  - added Andrii's ack
+
+ Makefile                  |  3 +++
+ scripts/Makefile.modfinal |  2 +-
+ scripts/link-vmlinux.sh   | 11 +----------
+ scripts/pahole-flags.sh   | 20 ++++++++++++++++++++
+ 4 files changed, 25 insertions(+), 11 deletions(-)
+ create mode 100755 scripts/pahole-flags.sh
+
+diff --git a/Makefile b/Makefile
+index 437ccc66a1c2..ee514b80c62e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -480,6 +480,8 @@ LZ4		= lz4c
+ XZ		= xz
+ ZSTD		= zstd
+ 
++PAHOLE_FLAGS	= $(shell PAHOLE=$(PAHOLE) scripts/pahole-flags.sh)
++
+ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
+ 		  -Wbitwise -Wno-return-void -Wno-unknown-attribute $(CF)
+ NOSTDINC_FLAGS :=
+@@ -534,6 +536,7 @@ export KBUILD_CFLAGS CFLAGS_KERNEL CFLAGS_MODULE
+ export KBUILD_AFLAGS AFLAGS_KERNEL AFLAGS_MODULE
+ export KBUILD_AFLAGS_MODULE KBUILD_CFLAGS_MODULE KBUILD_LDFLAGS_MODULE
+ export KBUILD_AFLAGS_KERNEL KBUILD_CFLAGS_KERNEL
++export PAHOLE_FLAGS
+ 
+ # Files to ignore in find ... statements
+ 
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 1fb45b011e4b..7f39599e9fae 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -40,7 +40,7 @@ quiet_cmd_ld_ko_o = LD [M]  $@
+ quiet_cmd_btf_ko = BTF [M] $@
+       cmd_btf_ko = 							\
+ 	if [ -f vmlinux ]; then						\
+-		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J --btf_base vmlinux $@; \
++		LLVM_OBJCOPY="$(OBJCOPY)" $(PAHOLE) -J $(PAHOLE_FLAGS) --btf_base vmlinux $@; \
+ 		$(RESOLVE_BTFIDS) -b vmlinux $@; 			\
+ 	else								\
+ 		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index d74cee5c4326..3ea7cece7c97 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -205,7 +205,6 @@ vmlinux_link()
+ gen_btf()
+ {
+ 	local pahole_ver
+-	local extra_paholeopt=
+ 
+ 	if ! [ -x "$(command -v ${PAHOLE})" ]; then
+ 		echo >&2 "BTF: ${1}: pahole (${PAHOLE}) is not available"
+@@ -220,16 +219,8 @@ gen_btf()
+ 
+ 	vmlinux_link ${1}
+ 
+-	if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
+-		# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
+-		extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
+-	fi
+-	if [ "${pahole_ver}" -ge "121" ]; then
+-		extra_paholeopt="${extra_paholeopt} --btf_gen_floats"
+-	fi
+-
+ 	info "BTF" ${2}
+-	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${extra_paholeopt} ${1}
++	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+ 
+ 	# Create ${2} which contains just .BTF section but no symbols. Add
+ 	# SHF_ALLOC because .BTF will be part of the vmlinux image. --strip-all
+diff --git a/scripts/pahole-flags.sh b/scripts/pahole-flags.sh
+new file mode 100755
+index 000000000000..2b99fc77019c
+--- /dev/null
++++ b/scripts/pahole-flags.sh
+@@ -0,0 +1,20 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++extra_paholeopt=
++
++if ! [ -x "$(command -v ${PAHOLE})" ]; then
++	return
++fi
++
++pahole_ver=$(${PAHOLE} --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/')
++
++if [ "${pahole_ver}" -ge "118" ] && [ "${pahole_ver}" -le "121" ]; then
++	# pahole 1.18 through 1.21 can't handle zero-sized per-CPU vars
++	extra_paholeopt="${extra_paholeopt} --skip_encoding_btf_vars"
++fi
++if [ "${pahole_ver}" -ge "121" ]; then
++	extra_paholeopt="${extra_paholeopt} --btf_gen_floats"
++fi
++
++echo ${extra_paholeopt}
+-- 
+2.31.1
+
