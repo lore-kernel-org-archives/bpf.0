@@ -2,168 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D7EC433EF
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 14:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D93C433F5
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 14:57:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E25160F70
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 14:48:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CC9060E05
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 14:57:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236954AbhJZOub (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Oct 2021 10:50:31 -0400
-Received: from mga09.intel.com ([134.134.136.24]:9883 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236113AbhJZOu0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Oct 2021 10:50:26 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10149"; a="229788046"
-X-IronPort-AV: E=Sophos;i="5.87,184,1631602800"; 
-   d="scan'208";a="229788046"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2021 07:48:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,184,1631602800"; 
-   d="scan'208";a="497370480"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orsmga008.jf.intel.com with ESMTP; 26 Oct 2021 07:47:59 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, davem@davemloft.net,
-        marta.a.plantykow@intel.com, alexandr.lobakin@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH intel-next 2/2] ice: avoid bpf_prog refcount underflow
-Date:   Tue, 26 Oct 2021 18:47:19 +0200
-Message-Id: <20211026164719.1766911-3-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211026164719.1766911-1-maciej.fijalkowski@intel.com>
-References: <20211026164719.1766911-1-maciej.fijalkowski@intel.com>
+        id S231562AbhJZPAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Oct 2021 11:00:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48475 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231178AbhJZPAV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 26 Oct 2021 11:00:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635260276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bnR4c+Nt/7GVr9rRgsl6rPDDaxcJiXfn96FJFlPUEJM=;
+        b=a+MAyfkq5RBZIkUCfrTa0ZTBHIiwM1QRAXYi3DkfDgU7jRvpQuHnGk+kqZJ//+k6aDdqtE
+        gmzCcM3CWw7CBpE82Fu6UljEHABfyJenWxnK/O7CpAOp+wvJCJ/u0/Il1DvG3F/RYVKn5x
+        yGjOxrwU8/MXva8KD594EO6FUwNDvoY=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-563-rNXRywQCNqq7lFyi3aLr8A-1; Tue, 26 Oct 2021 10:57:55 -0400
+X-MC-Unique: rNXRywQCNqq7lFyi3aLr8A-1
+Received: by mail-ed1-f70.google.com with SMTP id q6-20020a056402518600b003dd81fc405eso2445593edd.1
+        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 07:57:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=bnR4c+Nt/7GVr9rRgsl6rPDDaxcJiXfn96FJFlPUEJM=;
+        b=UphTcITc/R81uAAH8vTeJ2tHoEYy7wdGzWfNnUqDlBH1Ul/i/kf/pH4x0rm/ECLxxV
+         GVrCU4q2FxVrSZ0+nBIWkhXKwnN987UCF6D1wmOzXv0cdcafyDhv2NETYryBGQNdyT+A
+         j2ntXPu9RCbfn8rCs/GQyWaWU5izRbF/MDrVdmSgPx+z9xsIVYMw7y4KcM1ebrnEuKJE
+         27n6p+PTBWX1Zh354QAQ5L4UPRNI3f2QUJscR0EtVDq/c0zMO56gUs6kGG34N1GE+k3Q
+         CBa+yHBOmWm5SeBWc+qly8JxJiAAD3DSEb461p73EpOs4jtkvPB7P7uTKQDsbsogS89E
+         57gA==
+X-Gm-Message-State: AOAM533vr1Z3LdvaWCNyKI09b2jVoke6U4KaOXwQtL5T15e+bkMj040w
+        CI4Fx/q57pEn7vXJxRwugiiXw/evxOaBPTjiBNrDoj5l73QwFwzzP6MQUDz9tFG7y1BQh7CVPa3
+        Z6XqW7JGCK36W
+X-Received: by 2002:a17:907:628f:: with SMTP id nd15mr31624228ejc.389.1635260273648;
+        Tue, 26 Oct 2021 07:57:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxOExiF9/7HJ/tp6AE/GzXDrNk7T7DN0dMgGEtPG2IyveEht+MKrPT9jZgljdMyypg30ByR5w==
+X-Received: by 2002:a17:907:628f:: with SMTP id nd15mr31624136ejc.389.1635260272847;
+        Tue, 26 Oct 2021 07:57:52 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id eu9sm3926816ejc.14.2021.10.26.07.57.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Oct 2021 07:57:52 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id D2E1F180262; Tue, 26 Oct 2021 16:57:51 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>
+Subject: Re: libxsk move from libbpf to libxdp
+In-Reply-To: <CAJ8uoz1GP4M71E-PNScndfeTbcCG2OUg+wcoO4ZaJF5UTBiXCQ@mail.gmail.com>
+References: <CAEf4BzZ5Uajg5548=vpq8O2L5VLrONmr8h2O-6X6H0urMDXEqA@mail.gmail.com>
+ <CAJ8uoz35Xqx1YCnxB0wCd-58_u9fdzEy5xS45Jcs82gXiAnK1Q@mail.gmail.com>
+ <87v91lay7o.fsf@toke.dk>
+ <CAEf4BzZoajVwGywDipuAk7ojY9WjL2rvuk82EtCZKGU-JSZUow@mail.gmail.com>
+ <CAJ8uoz1GP4M71E-PNScndfeTbcCG2OUg+wcoO4ZaJF5UTBiXCQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 26 Oct 2021 16:57:51 +0200
+Message-ID: <87sfwnal5c.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marta Plantykow <marta.a.plantykow@intel.com>
+Magnus Karlsson <magnus.karlsson@gmail.com> writes:
 
-Ice driver has the routines for managing XDP resources that are shared
-between ndo_bpf op and VSI rebuild flow. The latter takes place for
-example when user changes queue count on an interface via ethtool's
-set_channels().
+> On Tue, Oct 26, 2021 at 6:18 AM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+>>
+>> On Mon, Oct 25, 2021 at 9:03 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
+edhat.com> wrote:
+>> >
+>> > Magnus Karlsson <magnus.karlsson@gmail.com> writes:
+>> >
+>> > > On Fri, Oct 22, 2021 at 7:49 PM Andrii Nakryiko
+>> > > <andrii.nakryiko@gmail.com> wrote:
+>> > >>
+>> > >> Hey guys,
+>> > >>
+>> > >> It's been a while since we chatted about libxsk move. I believe last
+>> > >> time we were already almost ready to recommend libxdp for this, but
+>> > >> I'd like to double-check. Can one of you please own [0], validate t=
+hat
+>> > >> whatever APIs are provided by libxdp are equivalent to what libbpf
+>> > >> provides, and start marking xdk.h APIs as deprecated? Thanks!
+>> > >
+>> > > Resending since Gmail had jumped out of plain text mode again.
+>> > >
+>> > > No problem, I will own this. I will verify the APIs are the same then
+>> > > submit a patch marking the ones in libbpf's xsk.h as deprecated.
+>> > >
+>> > > One question is what to do with the samples and the selftests for xs=
+k.
+>> > > They currently rely on libbpf's xsk support. Two options that I see:
+>> > >
+>> > > 1: Require libxdp on the system. Do not try to compile the xsk sampl=
+es
+>> > > and selftests if libxdp is not available so the rest of the bpf
+>> > > samples and selftests are not impacted.
+>> > > 2: Provide a standalone mock-up file of xsk.c and xsk.h that samples
+>> > > and selftests could use.
+>> > >
+>> > > I prefer #1 as it is better for the long-term. #2 means I would have
+>> > > to maintain that mock-up file as libxdp features are added. Sounds
+>> > > like double the amount of work to me. Thoughts?
+>> >
+>> > I agree #1 is preferable of those two. Another option is to move the
+>> > samples to the xdp-tools repo instead? Doesn't work for selftests, of
+>> > course; if it's acceptable to conditionally-compile the XSK tests
+>> > depending on system library availability that would be fine by me...
+>>
+>> Seems like the only thing that uses xsk.h is xdpxceiver.c which is
+>> tested through test_xsk.sh. It's not part of test_progs and so isn't
+>> run regularly by BPF CI or maintainers. It makes sense to me to move
+>> such test closer to the library it's supposed to be testing (i.e.,
+>> libxdp)?
+>
+> xdpxceiver.c tests kernel functionality, not libxdp functionality,
+> though it does use libxdp (and libbpf) to make the implementation
+> simpler. So it should remain here and use strategy #1. libxdp tests
+> are on another level and should definitely go into the libxdp repo.
+> The xsk samples in samples/bpf/, we could just stop developing/retire
+> (or even remove) in the Linux repo and move them to the xdp-tools
+> repo. They just show how to use the xsk.h api:s and it makes more
+> sense to have them together with libxdp.
 
-There is an issue around the bpf_prog refcounting when VSI is being
-rebuilt - since ice_prepare_xdp_rings() is called with vsi->xdp_prog as
-an argument that is used later on by ice_vsi_assign_bpf_prog(), same
-bpf_prog pointers are swapped with each other. Then it is also
-interpreted as an 'old_prog' which in turn causes us to call
-bpf_prog_put on it that will decrement its refcount.
+SGTM :)
 
-Below splat can be interpreted in a way that due to zero refcount of a
-bpf_prog it is wiped out from the system while kernel still tries to
-refer to it:
-
-[  481.069429] BUG: unable to handle page fault for address: ffffc9000640f038
-[  481.077390] #PF: supervisor read access in kernel mode
-[  481.083335] #PF: error_code(0x0000) - not-present page
-[  481.089276] PGD 100000067 P4D 100000067 PUD 1001cb067 PMD 106d2b067 PTE 0
-[  481.097141] Oops: 0000 [#1] PREEMPT SMP PTI
-[  481.101980] CPU: 12 PID: 3339 Comm: sudo Tainted: G           OE     5.15.0-rc5+ #1
-[  481.110840] Hardware name: Intel Corp. GRANTLEY/GRANTLEY, BIOS GRRFCRB1.86B.0276.D07.1605190235 05/19/2016
-[  481.122021] RIP: 0010:dev_xdp_prog_id+0x25/0x40
-[  481.127265] Code: 80 00 00 00 00 0f 1f 44 00 00 89 f6 48 c1 e6 04 48 01 fe 48 8b 86 98 08 00 00 48 85 c0 74 13 48 8b 50 18 31 c0 48 85 d2 74 07 <48> 8b 42 38 8b 40 20 c3 48 8b 96 90 08 00 00 eb e8 66 2e 0f 1f 84
-[  481.148991] RSP: 0018:ffffc90007b63868 EFLAGS: 00010286
-[  481.155034] RAX: 0000000000000000 RBX: ffff889080824000 RCX: 0000000000000000
-[  481.163278] RDX: ffffc9000640f000 RSI: ffff889080824010 RDI: ffff889080824000
-[  481.171527] RBP: ffff888107af7d00 R08: 0000000000000000 R09: ffff88810db5f6e0
-[  481.179776] R10: 0000000000000000 R11: ffff8890885b9988 R12: ffff88810db5f4bc
-[  481.188026] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-[  481.196276] FS:  00007f5466d5bec0(0000) GS:ffff88903fb00000(0000) knlGS:0000000000000000
-[  481.205633] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  481.212279] CR2: ffffc9000640f038 CR3: 000000014429c006 CR4: 00000000003706e0
-[  481.220530] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  481.228771] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  481.237029] Call Trace:
-[  481.239856]  rtnl_fill_ifinfo+0x768/0x12e0
-[  481.244602]  rtnl_dump_ifinfo+0x525/0x650
-[  481.249246]  ? __alloc_skb+0xa5/0x280
-[  481.253484]  netlink_dump+0x168/0x3c0
-[  481.257725]  netlink_recvmsg+0x21e/0x3e0
-[  481.262263]  ____sys_recvmsg+0x87/0x170
-[  481.266707]  ? __might_fault+0x20/0x30
-[  481.271046]  ? _copy_from_user+0x66/0xa0
-[  481.275591]  ? iovec_from_user+0xf6/0x1c0
-[  481.280226]  ___sys_recvmsg+0x82/0x100
-[  481.284566]  ? sock_sendmsg+0x5e/0x60
-[  481.288791]  ? __sys_sendto+0xee/0x150
-[  481.293129]  __sys_recvmsg+0x56/0xa0
-[  481.297267]  do_syscall_64+0x3b/0xc0
-[  481.301395]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  481.307238] RIP: 0033:0x7f5466f39617
-[  481.311373] Code: 0c 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb bd 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 2f 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 89 54 24 1c 48 89 74 24 10
-[  481.342944] RSP: 002b:00007ffedc7f4308 EFLAGS: 00000246 ORIG_RAX: 000000000000002f
-[  481.361783] RAX: ffffffffffffffda RBX: 00007ffedc7f5460 RCX: 00007f5466f39617
-[  481.380278] RDX: 0000000000000000 RSI: 00007ffedc7f5360 RDI: 0000000000000003
-[  481.398500] RBP: 00007ffedc7f53f0 R08: 0000000000000000 R09: 000055d556f04d50
-[  481.416463] R10: 0000000000000077 R11: 0000000000000246 R12: 00007ffedc7f5360
-[  481.434131] R13: 00007ffedc7f5350 R14: 00007ffedc7f5344 R15: 0000000000000e98
-[  481.451520] Modules linked in: ice(OE) af_packet binfmt_misc nls_iso8859_1 ipmi_ssif intel_rapl_msr intel_rapl_common x86_pkg_temp_thermal intel_powerclamp mxm_wmi mei_me coretemp mei ipmi_si ipmi_msghandler wmi acpi_pad acpi_power_meter ip_tables x_tables autofs4 crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel ahci crypto_simd cryptd libahci lpc_ich [last unloaded: ice]
-[  481.528558] CR2: ffffc9000640f038
-[  481.542041] ---[ end trace d1f24c9ecf5b61c1 ]---
-
-Fix this by only calling ice_vsi_assign_bpf_prog() inside
-ice_prepare_xdp_rings() when current vsi->xdp_prog pointer is NULL.
-This way set_channels() flow will not attempt to swap the vsi->xdp_prog
-pointers with itself.
-
-Also, sprinkle around some comments that provide a reasoning about
-correlation between driver and kernel in terms of bpf_prog refcount.
-
-Fixes: efc2214b6047 ("ice: Add support for XDP")
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Signed-off-by: Marta Plantykow <marta.a.plantykow@intel.com>
-[ Maciej: don't assign the prog if already present, expand commit
-  message ]
-Co-developed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index cabe84bb29fe..aff6e388fdd9 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2501,7 +2501,18 @@ int ice_prepare_xdp_rings(struct ice_vsi *vsi, struct bpf_prog *prog)
- 			ice_stat_str(status));
- 		goto clear_xdp_rings;
- 	}
--	ice_vsi_assign_bpf_prog(vsi, prog);
-+
-+	/* assign the prog only when it's not already present on VSI;
-+	 * this flow is a subject of both ethtool -L and ndo_bpf flows;
-+	 * VSI rebuild that happens under ethtool -L can expose us to
-+	 * the bpf_prog refcount issues as we would be swapping same
-+	 * bpf_prog pointers from vsi->xdp_prog and calling bpf_prog_put
-+	 * on it as it would be treated as an 'old_prog'; for ndo_bpf
-+	 * this is not harmful as dev_xdp_install bumps the refcount
-+	 * before calling the op exposed by the driver;
-+	 */
-+	if (!ice_is_xdp_ena_vsi(vsi))
-+		ice_vsi_assign_bpf_prog(vsi, prog);
- 
- 	return 0;
- clear_xdp_rings:
-@@ -2647,6 +2658,11 @@ ice_xdp_setup_prog(struct ice_vsi *vsi, struct bpf_prog *prog,
- 		if (xdp_ring_err)
- 			NL_SET_ERR_MSG_MOD(extack, "Freeing XDP Tx resources failed");
- 	} else {
-+		/* safe to call even when prog == vsi->xdp_prog as
-+		 * dev_xdp_install in net/core/dev.c incremented prog's
-+		 * refcount so corresponding bpf_prog_put won't cause
-+		 * underflow
-+		 */
- 		ice_vsi_assign_bpf_prog(vsi, prog);
- 	}
- 
--- 
-2.31.1
+-Toke
 
