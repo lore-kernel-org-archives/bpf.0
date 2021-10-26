@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B2ECC433F5
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF7A3C433EF
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:05:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EA9C6109E
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B7AC26108D
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 12:05:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbhJZMHx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Oct 2021 08:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
+        id S235684AbhJZMHy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Oct 2021 08:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235635AbhJZMHt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S235643AbhJZMHt (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 26 Oct 2021 08:07:49 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C98FC061220;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B9CC061745;
         Tue, 26 Oct 2021 05:05:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=8kDZVERolORkFGbEFI3gQAAb9SpVjedaRkguUav/LRc=; b=kh9KcajrAc2AAzATUAaQFxgqMb
-        siCQD6i8pQcqq5lmYfyH3FI2u9cdZ9rqeN9YlVgSB9+H8H3OsvAlx1AoS6NZ/svQKhBoWbNeIyo1S
-        WSu6DGm07NJOjWCNuVHy3nbZb3GzRj2xQVH2m2iIDhOnm0rz3WRLiRb2Wlfrn9Nl5lTkAbx8+JhmR
-        wsf3f4b9uqC+NuAMTkMCzmKeUc7sBeWnfzXQH9UXbUwWYMN12lD5IcTjuadF/c2T4aGjlbr/Lh9Bp
-        MGbrc9n1//6sh3S3Wk8GMkkka90PrC2A0gNufLr2RGuNVYjyF82yBYtCKbnbn3lLS3jfdwKp4vesT
-        AL5miO9Q==;
+        bh=+sOTmecnIakflIXpIKeS+SSr11ao3M3ORAInvCdoZxM=; b=USmXuBHOyKnYMges5EUn15QehV
+        URKtmUr6sqR3e9qLeSONwHOVzKkjpLTrKlnRLQbfWwW/N1yxyyoHBYprG00o3O9VnJJjUTTJV+M1f
+        5XUv2PrT+pUqwFevXQ35vqP/VJZwVURkAA9KNeqpMwQ49bdkvHSU/mIQWdV5A2cx4j8+AYsxQy48I
+        rTw4YbilxoBtzJ8WgnMu5VmHQ5gqtSh/F+Y0Tp1FJ8z3KqrG0Yp0QAgLF0gutRortUsYMVrgv3gza
+        cYjzfc6JGWpocdAjveVl7Vfl4oxWyj86ezc7YVO5YR4LNlel6SEEu4TfJCBshxRBfURcOjPJ0J5Ga
+        XQjd8WJA==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mfLCd-00CM0t-9B; Tue, 26 Oct 2021 12:05:15 +0000
+        id 1mfLCe-00CM15-6d; Tue, 26 Oct 2021 12:05:16 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1FB12300288;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3D86D300B80;
         Tue, 26 Oct 2021 14:05:14 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 05A1525E57E56; Tue, 26 Oct 2021 14:05:14 +0200 (CEST)
-Message-ID: <20211026120309.785456706@infradead.org>
+        id 211A025E57E5F; Tue, 26 Oct 2021 14:05:14 +0200 (CEST)
+Message-ID: <20211026120310.169659320@infradead.org>
 User-Agent: quilt/0.66
-Date:   Tue, 26 Oct 2021 14:01:35 +0200
+Date:   Tue, 26 Oct 2021 14:01:41 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, jpoimboe@redhat.com, andrew.cooper3@citrix.com
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         alexei.starovoitov@gmail.com, ndesaulniers@google.com,
         bpf@vger.kernel.org
-Subject: [PATCH v3 03/16] objtool: Shrink struct instruction
+Subject: [PATCH v3 09/16] x86/retpoline: Create a retpoline thunk array
 References: <20211026120132.613201817@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +54,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Any one instruction can only ever call a single function, therefore
-insn->mcount_loc_node is superfluous and can use insn->call_node.
+Stick all the retpolines in a single symbol and have the individual
+thunks as inner labels, this should guarantee thunk order and layout.
 
-This shrinks struct instruction, which is by far the most numerous
-structure objtool creates.
+Previously there were 16 (or rather 15 without rsp) separate symbols and
+a toolchain might reasonably expect it could displace them however it
+liked, with disregard for their relative position.
+
+However, now they're part of a larger symbol. Any change to their
+relative position would disrupt this larger _array symbol and thus not
+be sound.
+
+This is the same reasoning used for data symbols. On their own there
+is no guarantee about their relative position wrt to one aonther, but
+we're still able to do arrays because an array as a whole is a single
+larger symbol.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- tools/objtool/check.c                 |    6 +++---
- tools/objtool/include/objtool/check.h |    1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/nospec-branch.h |    8 +++++++-
+ arch/x86/lib/retpoline.S             |   14 +++++++++-----
+ 2 files changed, 16 insertions(+), 6 deletions(-)
 
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -701,7 +701,7 @@ static int create_mcount_loc_sections(st
- 		return 0;
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -12,6 +12,8 @@
+ #include <asm/msr-index.h>
+ #include <asm/unwind_hints.h>
  
- 	idx = 0;
--	list_for_each_entry(insn, &file->mcount_loc_list, mcount_loc_node)
-+	list_for_each_entry(insn, &file->mcount_loc_list, call_node)
- 		idx++;
++#define RETPOLINE_THUNK_SIZE	32
++
+ /*
+  * Fill the CPU return stack buffer.
+  *
+@@ -120,11 +122,15 @@
  
- 	sec = elf_create_section(file->elf, "__mcount_loc", 0, sizeof(unsigned long), idx);
-@@ -709,7 +709,7 @@ static int create_mcount_loc_sections(st
- 		return -1;
+ #ifdef CONFIG_RETPOLINE
  
- 	idx = 0;
--	list_for_each_entry(insn, &file->mcount_loc_list, mcount_loc_node) {
-+	list_for_each_entry(insn, &file->mcount_loc_list, call_node) {
++typedef u8 retpoline_thunk_t[RETPOLINE_THUNK_SIZE];
++
+ #define GEN(reg) \
+-	extern asmlinkage void __x86_indirect_thunk_ ## reg (void);
++	extern retpoline_thunk_t __x86_indirect_thunk_ ## reg;
+ #include <asm/GEN-for-each-reg.h>
+ #undef GEN
  
- 		loc = (unsigned long *)sec->data->d_buf + idx;
- 		memset(loc, 0, sizeof(unsigned long));
-@@ -1049,7 +1049,7 @@ static void annotate_call_site(struct ob
++extern retpoline_thunk_t __x86_indirect_thunk_array[];
++
+ #ifdef CONFIG_X86_64
  
- 		insn->type = INSN_NOP;
+ /*
+--- a/arch/x86/lib/retpoline.S
++++ b/arch/x86/lib/retpoline.S
+@@ -28,16 +28,14 @@
  
--		list_add_tail(&insn->mcount_loc_node, &file->mcount_loc_list);
-+		list_add_tail(&insn->call_node, &file->mcount_loc_list);
- 		return;
- 	}
- }
---- a/tools/objtool/include/objtool/check.h
-+++ b/tools/objtool/include/objtool/check.h
-@@ -40,7 +40,6 @@ struct instruction {
- 	struct list_head list;
- 	struct hlist_node hash;
- 	struct list_head call_node;
--	struct list_head mcount_loc_node;
- 	struct section *sec;
- 	unsigned long offset;
- 	unsigned int len;
+ .macro THUNK reg
+ 
+-	.align 32
+-
+-SYM_FUNC_START(__x86_indirect_thunk_\reg)
++	.align RETPOLINE_THUNK_SIZE
++SYM_INNER_LABEL(__x86_indirect_thunk_\reg, SYM_L_GLOBAL)
++	UNWIND_HINT_EMPTY
+ 
+ 	ALTERNATIVE_2 __stringify(ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), \
+ 		      __stringify(RETPOLINE \reg), X86_FEATURE_RETPOLINE, \
+ 		      __stringify(lfence; ANNOTATE_RETPOLINE_SAFE; jmp *%\reg), X86_FEATURE_RETPOLINE_AMD
+ 
+-SYM_FUNC_END(__x86_indirect_thunk_\reg)
+-
+ .endm
+ 
+ /*
+@@ -55,10 +53,16 @@ SYM_FUNC_END(__x86_indirect_thunk_\reg)
+ #define __EXPORT_THUNK(sym)	_ASM_NOKPROBE(sym); EXPORT_SYMBOL(sym)
+ #define EXPORT_THUNK(reg)	__EXPORT_THUNK(__x86_indirect_thunk_ ## reg)
+ 
++	.align RETPOLINE_THUNK_SIZE
++SYM_CODE_START(__x86_indirect_thunk_array)
++
+ #define GEN(reg) THUNK reg
+ #include <asm/GEN-for-each-reg.h>
+ #undef GEN
+ 
++	.align RETPOLINE_THUNK_SIZE
++SYM_CODE_END(__x86_indirect_thunk_array)
++
+ #define GEN(reg) EXPORT_THUNK(reg)
+ #include <asm/GEN-for-each-reg.h>
+ #undef GEN
 
 
