@@ -2,166 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F817C433F5
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA2DC433F5
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:26:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8550960E09
-	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:24:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9038A60F9B
+	for <bpf@archiver.kernel.org>; Tue, 26 Oct 2021 21:26:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239575AbhJZV1C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Oct 2021 17:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S239595AbhJZV3T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Oct 2021 17:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239580AbhJZV1B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Oct 2021 17:27:01 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707DCC061767
-        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 14:24:37 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id i65so1059545ybb.2
-        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 14:24:37 -0700 (PDT)
+        with ESMTP id S239576AbhJZV3T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Oct 2021 17:29:19 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3379BC061570
+        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 14:26:55 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id bl14so505067qkb.4
+        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 14:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6O5vbr72GKDlarVqLODX1PC787jPL/Yv8hW6xR71VDM=;
-        b=bBxwS/tZFnQZgPCvdzEx+88Lk632snOXJM5ZohNsG41vIM7WRzDZBk1Hu1th6DXWSX
-         F2KQofb8QL+TWOwZPTuXm9AIG5HLdI9Y4FsdCnCNpSk2BXbbXc7EcGuJ8p3Q08IIWDLO
-         7CJ47pjaPwTDYc10U7MXbi25dyTe1IepKGsF88wnzSIm42lK9QWQPQ7A/cwwzgaiBaCO
-         USNdKfiBbgCbGVMzORpmI26h/S+9oPeUcycsVRWENJI5b3vzDcXPmxdpU32UclDa5ST9
-         QNQ3tyOBRUxQfhMOKdx4xUzXvGQXRl48UJvMMVje8fm/y6clgfwO57Qwu55nzhBPedRI
-         915g==
+        bh=J0x8zvgJhWOxibNxJcbFQB2Ec+ISL26TgiW2P+CR8us=;
+        b=IW9QgU5VOHrzO2VCvzX7Yn/iyfZJIikNHLxO38e/B8K9jZzbJmHpOlUbaQdgm9pyW3
+         WUDItmT0xBRL7EG/Qj08SDBxrf4jS17H16pYgko2F3rKMkfMSoJBz3J/ZVo65/gNlqci
+         hOANVbMmzv8SIUtR76PxLPBl+b6bfhQUvDVkmGdJtLTkb95RhkdBKdpj5t3WTb+a5FAA
+         eUzWIb20DKWNB4X60o3W5Wmdk4HdwjmOr0LJ86bNSI7AMC4IRmB4y62QaEURGmSjdkNJ
+         7lNgI6xmkw1EFDMl4zUkNVbGTGyOVETWEP1cyYzE5jTt3cZXin8HrKWnzNrZY1K5kI/g
+         444Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6O5vbr72GKDlarVqLODX1PC787jPL/Yv8hW6xR71VDM=;
-        b=hF2exfzk2QtyIciA8mHe5LQxGp8H6xIGVoYteAzU8+1v2yc7iqo0gWK9MTX+vmmPG9
-         8MfTE5vI0zyBxKpkMlMIeCBzHsm2ATOuqdtEqRLgLGJHq+bHfoMKDFGqQmilJMEvPEes
-         Y57zPwS2mlDIFT+HhoVql++gctlvO/FEfzjqbM2dfRGYfxWXOQXaRMyd169+QEqr3CFg
-         ftVxpYalcXRGoxUNQ5YD5xEzhkLUfntBlcfFXEBEUggwahQR3SFvh14PdpEVT6tc5pKU
-         hdWE+g5ujqEZsslE5tnyaP5TVE4Lr80XQ1t/4YhXWKgqONhG3dlnFyEr9Ie4yeJqWeUq
-         A8FQ==
-X-Gm-Message-State: AOAM530v2qTVbdtPa9DnB0OHhQYo54J766E3qL8qdKSjteIFtCWqeZnl
-        AnQxtEScQrIygTU/fOBeuzORXSMeJxjedMhDNlACkKbZtxY=
-X-Google-Smtp-Source: ABdhPJwFdxK4q99Kr33oeW6QFucd/skGlXegm2tjPw1WyWDWw9qOeSfj/mp8qgLHKNBXcdbupgRvz7hdtD3ZhajYPJA=
-X-Received: by 2002:a25:b19b:: with SMTP id h27mr1184606ybj.225.1635283476663;
- Tue, 26 Oct 2021 14:24:36 -0700 (PDT)
+        bh=J0x8zvgJhWOxibNxJcbFQB2Ec+ISL26TgiW2P+CR8us=;
+        b=lbNUeE53QsCgU+xoy/LYx5ABwY7u926V+Uu9lIs53WekEMvlThpvtT6V0oq4w4TlYN
+         6ulyXOCR3Zw0LqvybA9QSriEHtsk54UnLpDwfBweilq7WFYJyB0wCsOS75Rlkfh8LvzN
+         551VEqnf2xkUAXaD2bAaEc4Cs5kwABzHbhChSykxpcAiTqWe7ztHNf752pV5J+o7sffO
+         5HLP7NzKwV28iDTG8+FeUd93JQGOVJsHdtfW4stVqJkN4FZnKl4gHaL9zqKGKgJF0nLX
+         fQR8vtSlQwv4MMw8AtTdsx+2zmLg/cvvq14a1N/PtW01d2AoWUo8Ie8dkGvUOWVib9Xa
+         seIA==
+X-Gm-Message-State: AOAM531bCirgaHrPZq+JxGqqXzSz/NC5i4J6rR+XqGiOaGEbNYw2fuk+
+        scLLed7nrPmwT6SfQWstZawuQIKSmPi4iueyNH6H82oUpYQnvkks
+X-Google-Smtp-Source: ABdhPJySV+oWF8SkfN/NQpPM+bw2at10D7Iyg1O81fEKprlHLacsmfR2BR6ytwKyN1WJjTgwrwGSWz1XmHk+vCBBM50=
+X-Received: by 2002:a05:620a:4088:: with SMTP id f8mr13419506qko.355.1635283614030;
+ Tue, 26 Oct 2021 14:26:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20211025231256.4030142-1-haoluo@google.com> <20211025231256.4030142-3-haoluo@google.com>
- <20211026034854.3ozkpaxaok7hk6kn@ast-mbp.dhcp.thefacebook.com>
- <CAEf4BzbvXQ1qpGazNKCBhzUUPmmfe9d9icDtf++weJkJmme0aw@mail.gmail.com>
- <CAADnVQJQuZ9pP_T_ZDgoeTnqfPcRMcKM_BshBTpmsZiRmzWMgA@mail.gmail.com>
- <CAEf4Bzb2LdZrYVP+h5HxKS+H5tj-s7h_4xir_c3+bihaU5z_yQ@mail.gmail.com> <CAADnVQKo+jrFO4FVm=rm8q--hkHwBe9-iwDrdBzWW_aFxQ5KxA@mail.gmail.com>
-In-Reply-To: <CAADnVQKo+jrFO4FVm=rm8q--hkHwBe9-iwDrdBzWW_aFxQ5KxA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 26 Oct 2021 14:24:18 -0700
-Message-ID: <CAEf4BzYkM043BR9Vabj5khZ7-eBh31PM2FxF1jfpm7n_v_a=iA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Introduce ARG_PTR_TO_WRITABLE_MEM
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Hao Luo <haoluo@google.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>
+References: <cover.1633535940.git.zhuyifei@google.com> <a2e569ee61e677ee474b7538adcebb0e1462df69.1633535940.git.zhuyifei@google.com>
+ <CAEf4Bzbj0Bd5bnUrJMr4ozFFAHVE=NvsO1KR1o9=iqBT85=LUw@mail.gmail.com>
+ <CAA-VZP=Hft3MkKxc+2xxM6Qc1ZO=d+2JshjV5g2TxfymjfW6rw@mail.gmail.com>
+ <CAKH8qBs2xgqJnECSNpguqkwNMOd4m2gaz1CGueReP32cUdPgGw@mail.gmail.com> <CAA-VZP=rXb_oyoORsK5apL39xpY7XeVAdEQvVFhBqUBQOTxthA@mail.gmail.com>
+In-Reply-To: <CAA-VZP=rXb_oyoORsK5apL39xpY7XeVAdEQvVFhBqUBQOTxthA@mail.gmail.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 26 Oct 2021 14:26:42 -0700
+Message-ID: <CAKH8qBunq4LQGGuX9_L_3BMgPNOjqjZJrxK0ih6QnD_UYsAq6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add cgroup helper bpf_export_errno to
+ get/set exported errno value
+To:     YiFei Zhu <zhuyifei@google.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        YiFei Zhu <zhuyifei1999@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 12:23 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, Oct 26, 2021 at 1:50 PM YiFei Zhu <zhuyifei@google.com> wrote:
 >
-> On Tue, Oct 26, 2021 at 11:45 AM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
+> On Tue, Oct 26, 2021 at 8:44 AM Stanislav Fomichev <sdf@google.com> wrote:
 > >
-> > On Tue, Oct 26, 2021 at 10:59 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
+> > On Mon, Oct 25, 2021 at 5:06 PM YiFei Zhu <zhuyifei@google.com> wrote:
 > > >
-> > > On Mon, Oct 25, 2021 at 10:14 PM Andrii Nakryiko
+> > > On Wed, Oct 20, 2021 at 4:28 PM Andrii Nakryiko
 > > > <andrii.nakryiko@gmail.com> wrote:
-> > > > >
-> > > > > Instead of adding new types,
-> > > > > can we do something like this instead:
-> > > > >
-> > > > > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> > > > > index c8a78e830fca..5dbd2541aa86 100644
-> > > > > --- a/include/linux/bpf_verifier.h
-> > > > > +++ b/include/linux/bpf_verifier.h
-> > > > > @@ -68,7 +68,8 @@ struct bpf_reg_state {
-> > > > >                         u32 btf_id;
-> > > > >                 };
-> > > > >
-> > > > > -               u32 mem_size; /* for PTR_TO_MEM | PTR_TO_MEM_OR_NULL */
-> > > > > +               u32 rd_mem_size; /* for PTR_TO_MEM | PTR_TO_MEM_OR_NULL */
-> > > > > +               u32 wr_mem_size; /* for PTR_TO_MEM | PTR_TO_MEM_OR_NULL */
 > > > >
-> > > > This seems more confusing, it's technically possible to express a
-> > > > memory pointer from which you can read X bytes, but can write Y bytes.
-> > >
-> > > I'm fine it being a new flag instead of wr_mem_size.
-> > >
-> > > > I actually liked the idea that helpers will be explicit about whether
-> > > > they can write into a memory or only read from it.
+> > > > it's subjective, but "bpf_export_errno" name is quite confusing. What
+> > > > are we "exporting" and where?
 > > > >
-> > > > Apart from a few more lines of code, are there any downsides to having
-> > > > PTR_TO_MEM vs PTR_TO_RDONLY_MEM?
+> > > > I actually like Song's proposal for two helpers,
+> > > > bpf_set_err()/bpf_get_err(). It makes the semantics less confusing. I
+> > > > honestly don't remember the requirement to have one combined helper
+> > > > from the BPF office hour discussion, but if there was a good reason
+> > > > for that, please remind us.
+> > > >
+> > > > > + *     Description
+> > > > > + *             If *errno_val* is positive, set the syscall's return error code;
+> > > >
+> > > > This inversion of error code is also confusing. If we are to return
+> > > > -EXXX, bpf_set_err(EXXX) is quite confusing.
+> > > >
+> > > > > + *             if *errno_val* is zero, retrieve the previously set code.
+> > > >
+> > > > Also, are there use cases where zero is the valid "error" (or lack of
+> > > > it, rather). I.e., wouldn't there be cases where you want to clear a
+> > > > previous error? We might have discussed this, sorry if I forgot.
 > > >
-> > > because it's a churn and non scalable long term.
-> > > It's not just PTR_TO_RDONLY_MEM.
-> > > It's also ARG_PTR_TO_RDONLY_MEM,
-> > > and RET_PTR_TO_RDONLY_MEM,
-> > > and PTR_TO_RDONLY_MEM_OR_NULL
-> > > and *_OR_BTF_ID,
-> > > and *_OR_BTF_ID_OR_NULL.
-> > > It felt that expressing readonly-ness as a flag in bpf_reg_state
-> > > will make it easier to get right in the code and extend in the future.
+> > > Hmm, originally I thought it's best to assume the underlying
+> > > assumption is that filters may set policies and it would violate it if
+> > > policies become ignored; however one could argue that debugging would
+> > > be a use case for an error-clearing filter.
+> > >
+> > > Let's say we do bpf_set_err()/bpf_get_err(), with the ability to clear
+> > > errors. I'm having trouble thinking of the best way to have it
+> > > interact with the getsockopt "retval" in its context:
+> > > * Let's say the kernel initially sets an error code in the retval. I
+> > > think it would be a surprising behavior if only "retval" but not
+> > > bpf_get_err() shows the error. Therefore we'd need to initialize "err"
+> > > with the "retval" if retval is an error.
+> > > * If we initialize "err" with the "retval", then for a prog to clear
+> > > the error they'd need to clear it twice, once with bpf_set_err(0) with
+> > > and another with ctx->retval = 0. This will immediately break backward
+> > > compatibility. Therefore, we'd need to mirror the setting of
+> > > ctx->retval = 0 to bpf_set_err(0)
+> > > * In that case, what to do if a user uses ctx->retval as a way to pass
+> > > data between filters? I mean, whether ctx->retval is set to 0 or the
+> > > original is only checked after all filters are run. It could be any
+> > > value while the filters are running.
+> > > * A second issue, if we have first a legacy filter that returns 0 to
+> > > set EPERM, and then there's another filter that does a ctx->retval =
+> > > 0. The original behavior would be that the syscall fails with EPERM,
+> > > but if we mirror ctx->retval = 0 to bpf_set_err(0), then that EPERM
+> > > would be cleared.
+> > >
+> > > One of the reasons I liked "export" is that it's slightly clearer that
+> > > this value is strictly from the BPF's side and has nothing to do with
+> > > what the kernel sets (as in the getsockopt case). But yeah I agree
+> > > it's not an ideal name.
 > >
-> > That's true, but while it's easy to add a flag to bpf_reg_state, it's
-> > not easy to do the same for BPF helper input (ARG_PTR_xxx) and output
-> > (RET_PTR_xxx) restrictions. So unless we extend ARG_PTR and RET_PTR
-> > with flags, it seems more consistent to keep the same pure enum
-> > approach for reg_state.
-> >
-> > > May be we will have a kernel vs user flag for PTR_TO_MEM in the future.
-> > > If we use different name to express that we will have:
-> > > PTR_TO_USER_RDONLY_MEM and
-> > > PTR_TO_USER_MEM
-> > > plus all variants of ARG_* and RET_* and *_OR_NULL.
-> > > With a flag approach it will be just another flag in bpf_reg_state.
-> >
-> > All true, but then maybe we should rethink how we do all those enums.
-> > And instead of having all the _OR_NULL variants, it should be
-> > ARG_NULLABLE/REG_NULLABLE/RET_NULLABLE flag that can be or-ed with the
-> > basic set of register/input/output type enums? Same for ARG_RDONLY
-> > flag. Same could technically be done for USER vs KERNEL memory in the
-> > future.
+> > For getsockopt, maybe the best way to go is to point ctx->retval to
+> > run_ctx.errno_val? (i.e., bpf_set_err would be equivalent to doing
+> > ctx->retval = x;). We can leave ctx->retval as a backwards-compatible
+> > legacy way of doing things. For new programs, bpf_set_err would work
+> > universally, regardless of attach type. Any cons here?
 >
-> Exactly. OR_NULL is such a flag and we already struggled to
-> differentiate that flag with truly_not_equal_to_NULL and may_be_NULL.
-> That's why all bpf_skc* helpers have additional run-time !NULL check.
->
-> ARG_NULLABLE/REG_NULLABLE/RET_NULLABLE would make it cleaner.
-> And ARG_RDONLY would fit that model well.
->
-> > It's definitely a bunch of code changes, but if we are worried about
-> > an explosion of enum values, it might be the right move?
-> >
-> > On the other hand, if there are all those different variations and
-> > each is handled slightly differently, we'll have to have different
-> > logic for each of them. And whether it's an enum + flags, or a few
-> > more enumerators, doesn't change anything fundamentally. I feel like
-> > enums make code discovery a bit simpler in practice, but it's
-> > subjective.
->
-> I think it's a bit of a mess already.
-> ARG_PTR_TO_BTF_ID has may_be_NULL flag.
-> Just like ARG_PTR_TO_BTF_ID_SOCK_COMMON.
-> but RET_PTR_TO_BTF_ID doesn't.
-> PTR_TO_BTF_ID doesn't have that may_be_NULL assumption either.
->
-> imo cleaning up OR_NULL will be very nice.
-> RDONLY would be an addition on top.
-> We can probably fold UNINIT as a flag too.
->
-> All that will be a big change, but I think it's worth it.
+> Is it a concern that AFAICT getsockopt retval may be a positive number
+> whereas the err here must be non-negative?
 
-Yep, agree.
+getsockopt retval is either -errno or 0. It's not really enforced at
+load/attach time, but there is a runtime check which returns -EFAULT
+if the prog sets it to something else.
+
+> Also the fourth point still stands. If any getsockopt returns 0,
+> original behavior is return -EPERM whereas new behavior, clearing
+> retval will clear -EPERM.
+
+True, but do you think these cases exist out there? I guess somebody
+can do it inadvertently, but the example you've mentioned doesn't
+really make sense, right?
+This is why we are adding a way to propagate the status, so the
+programs in the chain can understand whether they should do anything
+at all (previous prog returned EPERM). Returning EPERM from the child
+and then doing ctx->retval=0 in the parent should already not work as
+expected.
