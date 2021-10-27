@@ -2,134 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E857CC433EF
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 09:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB728C433FE
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 09:03:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D238C60FC0
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 09:00:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC88D61039
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 09:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241161AbhJ0JCc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Oct 2021 05:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
+        id S234448AbhJ0JGP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Oct 2021 05:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241152AbhJ0JC2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Oct 2021 05:02:28 -0400
+        with ESMTP id S230350AbhJ0JGO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Oct 2021 05:06:14 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FE0C061348
-        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 02:00:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B751AC061570;
+        Wed, 27 Oct 2021 02:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:To:From:Date:Message-ID:Sender:Reply-To:Cc:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=2v3uIvVPHvF6X4QD+1Tv1yg25b3qVdoNykrE8xV5weA=; b=KMrBiUbItLUw+L4C6EWrePOC4a
-        /Hlb7G9HMVZeP63BabBz9AAtSuPwI2TOKeCGc3Ib4y/9tfpCjcO0nfigvgmIuAe8pBFsQGEraFECa
-        p0+YsvsQFEr9ZLCtTxwLcKbeSeX/fC7yXwoVDBdaEbAfhhG26Laz9JalRXrvKKh6q5lqRI6Z1ju49
-        oAQ0+bGoAmRNxBmNqu8QcWhE+129FgWrGSisy4zPUo5MzcKshkwhSepzP8yKSrHDHY362znzAVL/t
-        QZH/3h2pgAhTdW1L+0TpYDhkwhzGNjqGSu37VGsr4HVvxf3Pi5Uqnj+QbOYqHQR2wtfvcNc/3sFwH
-        m3noRTPw==;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GJg6eB6n8rP40WF7KLwrQtbmrEa/9yt5sPpTb6bjopM=; b=J2yCCtFPMmo3xtP5ajSZqKRB7D
+        nLKe/YCLDCHv29Fo6MvPx3AOPkJv96BTVBfrCTFXqFgeJBcPxXkhtmoQ7JiDc2OCqckAgsd5yDt2y
+        6EV4gAZR6XLM5V56xoOE4i2hycDkB3IFMmcI3joAOEkuKxSFN3jgA16PMRfVv3I/l/7vL+79pFVEZ
+        t5cnBi28jp7O3d8NvMs15XnAp2ri+Bwmlj2yo1EN+hUelmQ0ggoON4w+NGNM/4cirEc4RWroVqYkQ
+        u5mzu+Vr1BiEAa6HmTiEX/iQjI1DGLZwCnKh1F37yXJJ8nYfK4UujEXuWPmAqRC+FfcZxcLbdDZ+Q
+        EPmKAJ+w==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mfelQ-00HWTL-5M
-        for bpf@vger.kernel.org; Wed, 27 Oct 2021 08:58:51 +0000
+        id 1mfen3-00HWYd-R3; Wed, 27 Oct 2021 09:00:39 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AC1EF301994
-        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 10:58:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 9E5D8236E43DA; Wed, 27 Oct 2021 10:58:20 +0200 (CEST)
-Message-ID: <20211027085520.838533099@infradead.org>
-User-Agent: quilt/0.66
-Date:   Wed, 27 Oct 2021 10:52:55 +0200
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73AD730031A;
+        Wed, 27 Oct 2021 11:00:09 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 51060236E43D9; Wed, 27 Oct 2021 11:00:09 +0200 (CEST)
+Date:   Wed, 27 Oct 2021 11:00:09 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     bpf@vger.kernel.org
-Subject: [PATCH bpf-next 12/17] x86/alternative: Handle Jcc __x86_indirect_thunk_\reg
-References: <20211027085243.008677168@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     X86 ML <x86@kernel.org>, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v3 00/16] x86: Rewrite the retpoline rewrite logic
+Message-ID: <YXkVGSG3BkMUEaKH@hirez.programming.kicks-ass.net>
+References: <20211026120132.613201817@infradead.org>
+ <CAADnVQJaiHWWnVcaRN43DcNgqktgKs3i1P3uz4Qm8kN7bvPCCg@mail.gmail.com>
+ <YXhMv6rENfn/zsaj@hirez.programming.kicks-ass.net>
+ <CAADnVQ+w_ww3ZR_bJVEU-PxWusT569y0biLNi=GZJNpKqFzNLA@mail.gmail.com>
+ <20211026210509.GH174703@worktop.programming.kicks-ass.net>
+ <CAADnVQ+NA2J3Lxvb8Y31yaubM6ntx5LtoSEaLziZ1b8qiY4oYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+NA2J3Lxvb8Y31yaubM6ntx5LtoSEaLziZ1b8qiY4oYQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Handle the rare cases where the compiler (clang) does an indirect
-conditional tail-call using:
+On Tue, Oct 26, 2021 at 02:05:55PM -0700, Alexei Starovoitov wrote:
 
-  Jcc __x86_indirect_thunk_\reg
+> Please post it. CI cannot pull it from the repo.
 
-For the !RETPOLINE case this can be rewritten to fit the original (6
-byte) instruction like:
+Done:
 
-  Jncc.d8	1f
-  JMP		*%\reg
-  NOP
-1:
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kernel/alternative.c |   38 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 34 insertions(+), 4 deletions(-)
-
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -393,7 +393,8 @@ static int emit_indirect(int op, int reg
- static int patch_retpoline(void *addr, struct insn *insn, u8 *bytes)
- {
- 	retpoline_thunk_t *target;
--	int reg, i = 0;
-+	int reg, ret, i = 0;
-+	u8 op, cc;
- 
- 	target = addr + insn->length + insn->immediate.value;
- 	reg = target - __x86_indirect_thunk_array;
-@@ -407,9 +408,34 @@ static int patch_retpoline(void *addr, s
- 	if (cpu_feature_enabled(X86_FEATURE_RETPOLINE))
- 		return -1;
- 
--	i = emit_indirect(insn->opcode.bytes[0], reg, bytes);
--	if (i < 0)
--		return i;
-+	op = insn->opcode.bytes[0];
-+
-+	/*
-+	 * Convert:
-+	 *
-+	 *   Jcc.d32 __x86_indirect_thunk_\reg
-+	 *
-+	 * into:
-+	 *
-+	 *   Jncc.d8 1f
-+	 *   JMP *%\reg
-+	 *   NOP
-+	 * 1:
-+	 */
-+	if (op == 0x0f && (insn->opcode.bytes[1] & 0xf0) == 0x80) {
-+		cc = insn->opcode.bytes[1] & 0xf;
-+		cc ^= 1; /* invert condition */
-+
-+		bytes[i++] = 0x70 + cc; /* Jcc.d8 */
-+		bytes[i++] = insn->length - 2;
-+
-+		op = JMP32_INSN_OPCODE;
-+	}
-+
-+	ret = emit_indirect(op, reg, bytes + i);
-+	if (ret < 0)
-+		return ret;
-+	i += ret;
- 
- 	for (; i < insn->length;)
- 		bytes[i++] = BYTES_NOP1;
-@@ -443,6 +469,10 @@ void __init_or_module noinline apply_ret
- 		case JMP32_INSN_OPCODE:
- 			break;
- 
-+		case 0x0f: /* escape */
-+			if (op2 >= 0x80 && op2 <= 0x8f)
-+				break;
-+			fallthrough;
- 		default:
- 			WARN_ON_ONCE(1);
- 			continue;
-
-
+  https://lore.kernel.org/bpf/20211027085243.008677168@infradead.org/T/#t
