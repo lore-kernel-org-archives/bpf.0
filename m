@@ -2,111 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 196FDC433EF
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 06:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95761C433F5
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 08:34:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 036E0610F8
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 06:21:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7571760F9D
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 08:34:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238624AbhJ0GXZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Oct 2021 02:23:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:30989 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239972AbhJ0GXW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 27 Oct 2021 02:23:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635315657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y5IbjGZT6ncLji1412wTNCgblKToa0KMNUhBknTBoOE=;
-        b=fyIhbyY+5do4asd2R+68O/0Xo+ekWMOaRhZ7rS9HwinyTKHQ8vH0BCeutNzw90AyeNMo13
-        nq/pOFd9CBY/BlWQ+e36tnBGQUfkod/8Rbu8erQRzHDa14uD6svRLPaQrD61me3jbZ05ig
-        cOk7wpqBJ/bz5ZANnSqHcbNk75Y+AXQ=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-578-dTUb1sFJM6GePq5dJOO1kA-1; Wed, 27 Oct 2021 02:20:55 -0400
-X-MC-Unique: dTUb1sFJM6GePq5dJOO1kA-1
-Received: by mail-ed1-f70.google.com with SMTP id t18-20020a056402021200b003db9e6b0e57so1329492edv.10
-        for <bpf@vger.kernel.org>; Tue, 26 Oct 2021 23:20:55 -0700 (PDT)
+        id S238766AbhJ0IhJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Oct 2021 04:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233389AbhJ0IhI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Oct 2021 04:37:08 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90534C061570
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 01:34:43 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id h11so3430936ljk.1
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 01:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KIDFtAiKeA+WxeyP7TSnB2e6k+2/VG+8HR9nAV/81kI=;
+        b=k3lsPonJ3nEEe9s6t52vikl+DKG36TXthaT+bsFpnRoBg0qP3GSE5peymnGk1dpcpf
+         WuUW6UDylysQEEPYcNvkEyHKGiXricPjOaaYonKnpj/0DEws9bWHtJhwO3or0XAIfK0s
+         c3Je9JvEiamrGDrRbPa50yEUUbtepgxBLz6p8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:cc:subject:to:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=y5IbjGZT6ncLji1412wTNCgblKToa0KMNUhBknTBoOE=;
-        b=zpIhIlgmPFSG3i5fy0mYv6WJHpMtHmalRUy7tx1Ri2+w52liuwL3K8vUQKMmnWaBJV
-         MEzMiXnM+RCf44TdQ+wMwI3yriSQo3HW8kktFI97KgJxZNcbevPiUFAYFT1uh3pCdljK
-         bUKadEPJuK5S02cnHZJtgqYu23rKrLLTOLxHLRWVTk8HH8WIPxfxokTtkZ7IyJmSqKnQ
-         TmajhP16YLrwf6nrQ9j30sYkcuOOGDI3ks0WaWyKLhjm0MVHa2MTITlIIQ0RHsEVMy/1
-         G15g08XNW4rweD6vKU9UpEUk6rJ3Fhfh+8xuS+xx6T1RV0J4WiK+CF/x5EjTYDeMrF8H
-         nHsw==
-X-Gm-Message-State: AOAM5326UuklVcnqDLYsNO/XK/66j9rAVAeHis28j6be2yMPbBRsv23q
-        zjX8n8na91gq7UlsWerDHP5OdWYU62+BWI+CFmzNzpNMXYoAG6y6WHPHkeET2ucmVvMxPLHNdVb
-        Fx+lsP5uQh5P6
-X-Received: by 2002:aa7:d34f:: with SMTP id m15mr42149456edr.40.1635315654700;
-        Tue, 26 Oct 2021 23:20:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxL1weoF88I/0V+Lz+k0kuNgr3cDwX0UE1tb2DCxFcXqabkq8zk5Ay5zmfolyIHuRIgkMJmNQ==
-X-Received: by 2002:aa7:d34f:: with SMTP id m15mr42149436edr.40.1635315654540;
-        Tue, 26 Oct 2021 23:20:54 -0700 (PDT)
-Received: from [192.168.42.238] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
-        by smtp.gmail.com with ESMTPSA id s12sm343243edc.48.2021.10.26.23.20.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Oct 2021 23:20:53 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     brouer@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Subject: Re: [PATCH net-next] xdp: Remove redundant warning
-To:     Yajun Deng <yajun.deng@linux.dev>, ast@kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com
-References: <20211027013856.1866-1-yajun.deng@linux.dev>
-Message-ID: <095fa222-824a-b38c-3432-35bdb61bab88@redhat.com>
-Date:   Wed, 27 Oct 2021 08:20:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KIDFtAiKeA+WxeyP7TSnB2e6k+2/VG+8HR9nAV/81kI=;
+        b=W6HnOJ5iEbeLfzQfOLfTrqWjiry3BP3ijkJT753EMMseOHyaH6ECtr7XuRMOttUnWV
+         FQAkN1QT6X15x534czBnsaBVxwQGPIDnM2gVSQ+N0/Cyw/kc61PdNGdXPnPnnNbWn2hO
+         qfM6XUlvS1SbEhQEir3dwt7Lw41QaIc+JEbB1sIjCRfc7RTvjyqNQGH2H2g1q/hwnFt4
+         uFI1YVWGbWAjnG64cCEihtnVtqfKIaLaGBRFeLE6rXt4W5rh29V+ULm+pz8jMa0D1lbw
+         u15Tr6QE8tIcigRxeUnPVRJbivjYk6Dff1LuIvj5auqibDuywrEGNAK5IXjrYUHFgAw7
+         4J3A==
+X-Gm-Message-State: AOAM530tW1Mwr2RCYzkp9ya4p83jD/cgDBgMz6oq8/Y72fb7pRKF6zSh
+        GhgB280FxPO46/PwCisQe6IhyJs5kTnJuAULhPncYQ==
+X-Google-Smtp-Source: ABdhPJxI9s3Gnb8U1l5ecHTKXwGJNbsw6QtitFikqgde5xFWdwI818s8KeQVN/LZpnNqM2coqoQMKip3NaMpkNWUFr8=
+X-Received: by 2002:a05:651c:2328:: with SMTP id bi40mr31550620ljb.121.1635323681920;
+ Wed, 27 Oct 2021 01:34:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20211027013856.1866-1-yajun.deng@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211019144655.3483197-1-maximmi@nvidia.com> <20211019144655.3483197-10-maximmi@nvidia.com>
+ <CACAyw9_MT-+n_b1pLYrU+m6OicgRcndEBiOwb5Kc1w0CANd_9A@mail.gmail.com>
+ <87y26nekoc.fsf@toke.dk> <533129a4-7f4e-e7a6-407c-f15b6acbb0e2@nvidia.com>
+In-Reply-To: <533129a4-7f4e-e7a6-407c-f15b6acbb0e2@nvidia.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Wed, 27 Oct 2021 09:34:31 +0100
+Message-ID: <CACAyw9-rKNX=EtQ2JtLkLTyDfj2-HBtZfFB05TLgcJSw3ja7AQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 09/10] bpf: Add a helper to issue timestamp
+ cookies in XDP
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Brendan Jackman <jackmanb@google.com>,
+        Florent Revest <revest@chromium.org>,
+        Joe Stringer <joe@cilium.io>, Tariq Toukan <tariqt@nvidia.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Fri, 22 Oct 2021 at 17:56, Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+>
+> tcp_time_stamp_raw() uses ktime_get_ns(), while bpf_ktime_get_ns() uses
+> ktime_get_mono_fast_ns(). Is it fine to use ktime_get_mono_fast_ns()
+> instead of ktime_get_ns()? I'm a bit worried about this note in
+> Documentation/core-api/timekeeping.rst:
+>
+>  > most drivers should never call them,
+>  > since the time is allowed to jump under certain conditions.
 
-On 27/10/2021 03.38, Yajun Deng wrote:
-> There is a warning in xdp_rxq_info_unreg_mem_model() when reg_state isn't
-> equal to REG_STATE_REGISTERED, so the warning in xdp_rxq_info_unreg() is
-> redundant.
- >
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+That depends on what happens when the timestamp is "off". Since you're
+sending this value over the network I doubt that the two methods will
+show a difference.
 
-Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Lorenz
 
-I guess/wonder if we should mark this as a fix for:
+-- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
-Fixes: dce5bd6140a4 ("xdp: export xdp_rxq_info_unreg_mem_model")
-
-> ---
->   net/core/xdp.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index cc92ccb38432..5ddc29f29bad 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -143,8 +143,6 @@ void xdp_rxq_info_unreg(struct xdp_rxq_info *xdp_rxq)
->   	if (xdp_rxq->reg_state == REG_STATE_UNUSED)
->   		return;
->   
-> -	WARN(!(xdp_rxq->reg_state == REG_STATE_REGISTERED), "Driver BUG");
-> -
->   	xdp_rxq_info_unreg_mem_model(xdp_rxq);
->   
->   	xdp_rxq->reg_state = REG_STATE_UNREGISTERED;
-> 
-
+www.cloudflare.com
