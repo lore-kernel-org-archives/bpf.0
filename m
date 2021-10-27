@@ -2,103 +2,185 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26348C433F5
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 08:50:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93847C433F5
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 08:53:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 02BF961075
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 08:50:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7446A60174
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 08:53:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241018AbhJ0Iwo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Oct 2021 04:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239598AbhJ0Iwn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Oct 2021 04:52:43 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E5CC061570;
-        Wed, 27 Oct 2021 01:50:19 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id v1-20020a17090a088100b001a21156830bso4552864pjc.1;
-        Wed, 27 Oct 2021 01:50:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z5P3/alhJ1He0txyAzdck7/7d56+F/fzpzqghGnxQS8=;
-        b=LrKScxu+Cucp9+VA8Fh1unPAtj/7zshPQgCWMkw5J8oT3efw8cbN3c4ai6VVR2qjpN
-         yi6ZsVIyNWPig9umy3cp+99AlFO8qdLWV76TLgGeIeNWF3/tRQ2zYnfRmC+2+UURRejG
-         SDtEQBMVHahz19Qr9pBqom8ZsBXt6Dl4yvS6cCvTtGQ2EoBnGUXTEiAaCT8pHI5cU2+B
-         o6kaXpWDRsIthluNLtBQKcWa4saLe8syRy3lfJU7+9Z1iWLo6g7lDzDzQPVk85QvNQPr
-         jULjI5hyjQKElSFa10vOV/3lzFpgefXX2q7ZVspwunbi53TxLhvc92tsXfz6DqIQA5yr
-         SFcw==
+        id S239652AbhJ0I4B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Oct 2021 04:56:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41383 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231566AbhJ0I4A (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Oct 2021 04:56:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635324815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xkEtfXaUHgkoGn6l6lm0Umryp7LWvtcOmvRvMtYrMj8=;
+        b=NhV8Ph/c8zAS2itkvxhyFTweyLaOAvJRodpIqlR/BzNRV2/wLorhjn6mcPX5skh0VBjzKz
+        thtMJCkQz92hY60lpuGxiTYceYEkrhLjhqaYpJZrEVdLYvc+sz4YciFQxuactVN5p28kbW
+        by5lWnN2hGoV8GbdDRG5vmPADHepQ8U=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-186-rgjzZvFhM9ec-YPGG1CstA-1; Wed, 27 Oct 2021 04:53:34 -0400
+X-MC-Unique: rgjzZvFhM9ec-YPGG1CstA-1
+Received: by mail-wm1-f72.google.com with SMTP id k6-20020a7bc306000000b0030d92a6bdc7so923256wmj.3
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 01:53:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z5P3/alhJ1He0txyAzdck7/7d56+F/fzpzqghGnxQS8=;
-        b=vOxH9e/D1VXFd+vhKvGXidFk9KafLdIa3V355hHpkX13EVs1CUXrsrlvuOl9aRyY2f
-         KKQnbq9GT0Kxn0S6v6quoxQG9up0Nk0ISOU+wJMmvlDipylkYgcKCN9XlnECtyKtprKZ
-         9AAFRmo0EWeQRai0stJ7YpG3cob4BzPlt8w1SJf6HE/L6rbjn4FEWc7BfrtthFZ7Trve
-         z4M+eeJquGYGcU1IwoGTa+2KePohi0zjeJuP1lKYwN/hAw51lcsnsdh442B0VahIfWre
-         9b9djxrAdIl+G3A6Ll7j1o4VBn66/CW3NLzDne4HpNzRZi5kTYDfyzeirMEXD3Qyof7p
-         xwQA==
-X-Gm-Message-State: AOAM5326cX91tBDlKOiKtlGYJXO17AuXJkgwKw6J6TZWtriilTQxbwYx
-        wnLBGwaCPIomAcU4tKeNG7o=
-X-Google-Smtp-Source: ABdhPJzHbtpYZoghiArpc3WdPAyZOlRyOKbFVqo3wjB3HDjkVTNYVtaizG1t6Px7p7bQFEJ9zmoT3A==
-X-Received: by 2002:a17:902:a70a:b0:140:44f9:6d75 with SMTP id w10-20020a170902a70a00b0014044f96d75mr19675029plq.58.1635324618570;
-        Wed, 27 Oct 2021 01:50:18 -0700 (PDT)
-Received: from localhost.localdomain ([154.86.159.246])
-        by smtp.gmail.com with ESMTPSA id bg15sm3401055pjb.15.2021.10.27.01.50.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 27 Oct 2021 01:50:18 -0700 (PDT)
-From:   kerneljasonxing@gmail.com
-To:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, edumazet@google.com, atenart@kernel.org,
-        alobakin@pm.me, weiwan@google.com, bjorn@kernel.org, arnd@arndb.de,
-        memxor@gmail.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kerneljasonxing@gmail.com,
-        Jason Xing <xingwanli@kuaishou.com>
-Subject: [PATCH net] net: gro: flush the real oldest skb
-Date:   Wed, 27 Oct 2021 16:49:44 +0800
-Message-Id: <20211027084944.4508-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xkEtfXaUHgkoGn6l6lm0Umryp7LWvtcOmvRvMtYrMj8=;
+        b=aOy37xTE+WcPbX3xdpfgio607sybZ8lAT3Pdc+z25O3SzBQDeRqthwadf7NgMvUcRb
+         MnHs+9B8rw0/MLEszTTNgT7hF8sK8HmoVVsakXIeQf5Iv3mySnyhUucdQmNgWTUVDlYe
+         yRICWcQkwvI3CxRqtamySETueHA1mrfVlWlA79/8DpQA4pTQByNNjuNAMf56pk70glZi
+         YnqHbLfZN36W9eagGbl9IgCYp1KcXBMOcn0Hj/v4HlF9kyPa9ef5yc8fBFACA/NI5DGP
+         B0DlmfFhjb9/EYDEPZbLCaXsnkebWLorSNg8MVaNrfr0SjxUkRiFdwX3+CDmkT7ZsWL8
+         9L1A==
+X-Gm-Message-State: AOAM530Z4uZF5zoH4IGw4VWyCmWTBeO9Cc1Spl48Quwt0OIIxCMGxlg8
+        M17eVMUKJeAkRqnMu5QiYVk7LghFTpHmpr89G2vkVNYbd+TYLychHTnukrvBogHwI0w6rNLPfP4
+        rlvXuRz5pnsVP
+X-Received: by 2002:adf:ab46:: with SMTP id r6mr38915218wrc.71.1635324812883;
+        Wed, 27 Oct 2021 01:53:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy+69hHxkJc7BCA6VqOPiuK5KN6oHbbYMRxTdhStFp9IHN+k+N+npVbf8SXGSZwd9PPSNCZ8w==
+X-Received: by 2002:adf:ab46:: with SMTP id r6mr38915189wrc.71.1635324812673;
+        Wed, 27 Oct 2021 01:53:32 -0700 (PDT)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id m8sm20814914wri.33.2021.10.27.01.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 01:53:32 -0700 (PDT)
+Date:   Wed, 27 Oct 2021 10:53:30 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 0/2] bpf: Fix BTF data for modules
+Message-ID: <YXkTihiRKKJIc9M6@krava>
+References: <20211023120452.212885-1-jolsa@kernel.org>
+ <CAEf4BzbaD60KFsUB4VkTAH2v3+GFkRvRbY_O-bNSpNG0=8pJ0Q@mail.gmail.com>
+ <YXfulitQY1+Gd35h@krava>
+ <CAEf4BzabyAdsrUoRx58MZKbwVBGa93247sw8pwU62N_wNhSZSQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzabyAdsrUoRx58MZKbwVBGa93247sw8pwU62N_wNhSZSQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jason Xing <xingwanli@kuaishou.com>
+On Tue, Oct 26, 2021 at 09:12:31PM -0700, Andrii Nakryiko wrote:
+> On Tue, Oct 26, 2021 at 5:03 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Mon, Oct 25, 2021 at 09:54:48PM -0700, Andrii Nakryiko wrote:
+> > > On Sat, Oct 23, 2021 at 5:05 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > >
+> > > > hi,
+> > > > I'm trying to enable BTF for kernel module in fedora,
+> > > > and I'm getting big increase on modules sizes on s390x arch.
+> > > >
+> > > > Size of modules in total - kernel dir under /lib/modules/VER/
+> > > > from kernel-core and kernel-module packages:
+> > > >
+> > > >                current   new
+> > > >       aarch64      60M   76M
+> > > >       ppc64le      53M   66M
+> > > >       s390x        21M   41M
+> > > >       x86_64       64M   79M
+> > > >
+> > > > The reason for higher increase on s390x was that dedup algorithm
+> > > > did not detect some of the big kernel structs like 'struct module',
+> > > > so they are duplicated in the kernel module BTF data. The s390x
+> > > > has many small modules that increased significantly in size because
+> > > > of that even after compression.
+> > > >
+> > > > First issues was that the '--btf_gen_floats' option is not passed
+> > > > to pahole for kernel module BTF generation.
+> > > >
+> > > > The other problem is more tricky and is the reason why this patchset
+> > > > is RFC ;-)
+> > > >
+> > > > The s390x compiler generates multiple definitions of the same struct
+> > > > and dedup algorithm does not seem to handle this at the moment.
+> > > >
+> > > > I put the debuginfo and btf dump of the s390x pnet.ko module in here:
+> > > >   http://people.redhat.com/~jolsa/kmodbtf/
+> > > >
+> > > > Please let me know if you'd like to see other info/files.
+> > > >
+> > >
+> > > Hard to tell what's going on without vmlinux itself. Can you upload a
+> > > corresponding kernel image with BTF in it?
+> >
+> > sure, uploaded
+> >
+> 
+> vmlinux.btfdump:
+> 
+> [174] FLOAT 'float' size=4
+> [175] FLOAT 'double' size=8
+> 
+> VS
+> 
+> pnet.btfdump:
+> 
+> [89318] INT 'float' size=4 bits_offset=0 nr_bits=32 encoding=(none)
+> [89319] INT 'double' size=8 bits_offset=0 nr_bits=64 encoding=(none)
 
-Prior to this patch, when the count of skbs of one flow is larger than
-MAX_GRO_SKBS, gro_flush_oldest() flushes the tail of the list. However,
-as we can see in the merge part of skb_gro_receive(), the tail of the
-list is the newest, head oldest.
+ugh, that's with no fix applied, sry
 
-Here, we need to fetch the real oldest one and then process it to lower
-the latency.
+I applied the first patch and uploaded new files
 
-Fix: 07d78363dc ("net: Convert NAPI gro list into a small hash table.")
-Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
----
- net/core/dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+now when I compare the 'module' struct from vmlinux:
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 7ee9fec..d52ebdb 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6012,7 +6012,7 @@ static void gro_flush_oldest(struct napi_struct *napi, struct list_head *head)
- {
- 	struct sk_buff *oldest;
- 
--	oldest = list_last_entry(head, struct sk_buff, list);
-+	oldest = list_first_entry(head, struct sk_buff, list);
- 
- 	/* We are called with head length >= MAX_GRO_SKBS, so this is
- 	 * impossible.
--- 
-1.8.3.1
+	[885] STRUCT 'module' size=1280 vlen=70
+
+and same one from pnet.ko:
+
+	[89323] STRUCT 'module' size=1280 vlen=70
+
+they seem to completely match, all the fields
+and yet it still appears in the kmod's BTF
+
+thanks,
+jirka
+
+> 
+> 
+> > jirka
+> >
+> > >
+> > > > I found code in dedup that seems to handle such situation for arrays,
+> > > > and added 'some' fix for structs. With that change I can no longer
+> > > > see vmlinux's structs in kernel module BTF data, but I have no idea
+> > > > if that breaks anything else.
+> > > >
+> > > > thoughts? thanks,
+> > > > jirka
+> > > >
+> > > >
+> > > > ---
+> > > > Jiri Olsa (2):
+> > > >       kbuild: Unify options for BTF generation for vmlinux and modules
+> > > >       bpf: Add support to detect and dedup instances of same structs
+> > > >
+> > > >  Makefile                  |  3 +++
+> > > >  scripts/Makefile.modfinal |  2 +-
+> > > >  scripts/link-vmlinux.sh   | 11 +----------
+> > > >  scripts/pahole-flags.sh   | 20 ++++++++++++++++++++
+> > > >  tools/lib/bpf/btf.c       | 12 ++++++++++--
+> > > >  5 files changed, 35 insertions(+), 13 deletions(-)
+> > > >  create mode 100755 scripts/pahole-flags.sh
+> > > >
+> > >
+> >
+> 
 
