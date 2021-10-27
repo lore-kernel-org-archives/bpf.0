@@ -2,84 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BCE8C433F5
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 22:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 917DBC433F5
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 22:03:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 62549610EA
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 22:00:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73B896109E
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 22:03:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbhJ0WDW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Oct 2021 18:03:22 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46052 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229893AbhJ0WDV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 27 Oct 2021 18:03:21 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RLfjri026705
-        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 15:00:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=9Z4DHBUKQ7KDMPBFYeTqQo5w8PrCfjCKAN0i6BSeSvw=;
- b=jmtWpf4W9JzBbeaBvjFbMGU3TmryxYMnDa5i0owgwFaSWQkK9sB/AJnfywLZUgQvBhKx
- pXtgBzV4GQG+a2kI1Pn3Aeq5rQIBM/izEga2aHTAQD752AnJoWE3scpihvKsnq2jFLra
- 4Dwdwm4fdHmKUTI4/tN201fc5RVLMi66/F4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3bxy9e8a69-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 15:00:55 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 27 Oct 2021 15:00:52 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 9E0A71B7DA3B8; Wed, 27 Oct 2021 15:00:45 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <kpsingh@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next 0/2] introduce bpf_find_vma
-Date:   Wed, 27 Oct 2021 15:00:41 -0700
-Message-ID: <20211027220043.1937648-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.30.2
+        id S229979AbhJ0WGM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Oct 2021 18:06:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:55233 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229928AbhJ0WGK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Oct 2021 18:06:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1635372223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ivJoc+D4kdpuDzvrSqI7vix80j2b31Z3Ev5flf6hx9I=;
+        b=iUqS63JMPV401oss8N/wyvbCsBiRHYjnWL8kl0rycg3CnqP+T3XUO/niHDJnaWsCmlGXj9
+        emSRn0jjZrDxhNwaf+mDie3gvgmiuC9Io10LkAe8HdTOSxYd+KWkzwyZ5bGOtmAtqzLMzd
+        HQLD8Rm480vzz6r2gnl3BZnObzhSeZA=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-560-_jXXZC66MS6wFdcnI2Uiqg-1; Wed, 27 Oct 2021 18:03:42 -0400
+X-MC-Unique: _jXXZC66MS6wFdcnI2Uiqg-1
+Received: by mail-ed1-f71.google.com with SMTP id i9-20020a508709000000b003dd4b55a3caso3619508edb.19
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 15:03:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=ivJoc+D4kdpuDzvrSqI7vix80j2b31Z3Ev5flf6hx9I=;
+        b=TNsdIeXnB3SCftx33iLhpm2ik5vimh0f7up9UsOty55Hxbnzs3euMh9RPHa0kPFHUM
+         AK5HwyjmR5HmV2cmO8XEaQq3Z2gL2kEDsZrgmqARpZcib9qhEtLoIlqfkTBUA4OxWDTM
+         A7DDvEHaNdaygMuabViDxlh/yDsxZBI3XtyN/f2Sj04PgCcu233FASbnIC+gAlomHwKd
+         bBZiHdWezv1VOAODEg6HkNM/WZiRnDs1nPOBNiYN2fGCKa+y9aoOTYejKKNVBDDD/s9h
+         jSKqRqqZ7kBaWsQMDD6qcMUdxWy0DlntlMPgx8z5FUN4jn+pzGc0B6XqW9ifLbR6N1SS
+         KdqA==
+X-Gm-Message-State: AOAM5306pD9vNIMzG/Dci2ZXoKaiepbrCbmtKSwMGqC7dmYwR5SyRt7k
+        rbz249K+rbUw5Q7JXD+HYnaYYnB20G4p/zm7yPOQpfqVgG4dHqyxTKBkuoki9+aSfkmZ7OgmdRS
+        daF89rIj2Q3sF
+X-Received: by 2002:a17:906:2505:: with SMTP id i5mr300662ejb.450.1635372220221;
+        Wed, 27 Oct 2021 15:03:40 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxOFadTn1wI9p1W0PpE5i2kpyqQPmBKw7giZKvXodqFBvoZqJBFDxufHf6J0BnECfffgS0UMg==
+X-Received: by 2002:a17:906:2505:: with SMTP id i5mr300564ejb.450.1635372219262;
+        Wed, 27 Oct 2021 15:03:39 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id i5sm454997ejw.24.2021.10.27.15.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Oct 2021 15:03:38 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 29A8B180262; Thu, 28 Oct 2021 00:03:38 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>, davem@davemloft.net
+Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        andrii.nakryiko@gmail.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+Subject: Re: pull-request: bpf 2021-10-26
+In-Reply-To: <20211026201920.11296-1-daniel@iogearbox.net>
+References: <20211026201920.11296-1-daniel@iogearbox.net>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 28 Oct 2021 00:03:38 +0200
+Message-ID: <87bl3a9lc5.fsf@toke.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: nGY15lqJnk5H45_U03OzKp-9K0nD-vz_
-X-Proofpoint-GUID: nGY15lqJnk5H45_U03OzKp-9K0nD-vz_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-27_06,2021-10-26_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- malwarescore=0 adultscore=0 spamscore=0 mlxscore=0 impostorscore=0
- clxscore=1015 priorityscore=1501 lowpriorityscore=0 phishscore=0
- mlxlogscore=397 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2110270121
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add helper bpf_find_vma. This can be used in some profiling use cases. It
-might also be useful for LSM.
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-Song Liu (2):
-  bpf: introduce helper bpf_find_vma
-  selftests/bpf: add tests for bpf_find_vma
+> The following pull-request contains BPF updates for your *net* tree.
+>
+> We've added 12 non-merge commits during the last 7 day(s) which contain
+> a total of 23 files changed, 118 insertions(+), 98 deletions(-).
 
- include/linux/bpf.h                           |   1 +
- include/uapi/linux/bpf.h                      |  20 ++++
- kernel/bpf/task_iter.c                        | 102 +++++++++++++++++-
- kernel/bpf/verifier.c                         |  36 +++++++
- kernel/trace/bpf_trace.c                      |   2 +
- tools/include/uapi/linux/bpf.h                |  19 ++++
- .../selftests/bpf/prog_tests/find_vma.c       |  95 ++++++++++++++++
- tools/testing/selftests/bpf/progs/find_vma.c  |  70 ++++++++++++
- 8 files changed, 344 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/find_vma.c
- create mode 100644 tools/testing/selftests/bpf/progs/find_vma.c
+Hi Daniel
 
---
-2.30.2
+Any chance we could also get bpf merged into bpf-next? We'd like to use
+this fix:
+
+> 1) Fix potential race window in BPF tail call compatibility check,
+> from Toke H=C3=B8iland-J=C3=B8rgensen.
+
+in the next version of the XDP multi-buf submission without creating
+merge conflicts. Or is there some other way we can achieve this without
+creating more work for you? :)
+
+-Toke
+
