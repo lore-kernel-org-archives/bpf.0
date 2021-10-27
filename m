@@ -2,165 +2,401 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 311EDC433EF
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 23:37:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ACC2C433F5
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 23:45:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 159A760232
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 23:37:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60D766109F
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 23:45:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbhJ0Xjx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Oct 2021 19:39:53 -0400
-Received: from mga11.intel.com ([192.55.52.93]:17497 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229458AbhJ0Xjx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Oct 2021 19:39:53 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="227744238"
-X-IronPort-AV: E=Sophos;i="5.87,188,1631602800"; 
-   d="scan'208";a="227744238"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 16:37:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,188,1631602800"; 
-   d="scan'208";a="529804966"
-Received: from gupta-dev2.jf.intel.com (HELO gupta-dev2.localdomain) ([10.54.74.119])
-  by orsmga001.jf.intel.com with ESMTP; 27 Oct 2021 16:37:26 -0700
-Date:   Wed, 27 Oct 2021 16:39:43 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        antonio.gomez.iglesias@intel.com, tony.luck@intel.com,
-        dave.hansen@linux.intel.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH ebpf] bpf: Disallow unprivileged bpf by default
-Message-ID: <20211027233943.kehyrdbibp2d2u4c@gupta-dev2.localdomain>
-References: <d37b01e70e65dced2659561ed5bc4b2ed1a50711.1635367330.git.pawan.kumar.gupta@linux.intel.com>
- <bd4db8da-0d44-1785-5767-1731bdaebef8@iogearbox.net>
+        id S229549AbhJ0Xrs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Oct 2021 19:47:48 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17042 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229486AbhJ0Xrs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Oct 2021 19:47:48 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RLfVco030843
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 16:45:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=VewP2ugAmHaymqCAkT4JsxFyHPwRIO25qZhAfsI36Ko=;
+ b=lsWWviJdr/+IuS/Sqx5u847f18B6yj/cesZ7en/d4x3dofwmke5QaNSpgyfjXrB0v+dP
+ Whbwah0UChQVC6tBux38jcNEGuWw4+k8azeK3fcY+OIbP2pwLWUPAx1QyqsgSt/bDbp0
+ dsYG/5Z+FdTmVukNzgCriDngHdvoVed3COw= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3by9w84f9k-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 16:45:21 -0700
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Wed, 27 Oct 2021 16:45:20 -0700
+Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
+        id 8C535421C738; Wed, 27 Oct 2021 16:45:18 -0700 (PDT)
+From:   Joanne Koong <joannekoong@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <kafai@fb.com>, <Kernel-team@fb.com>,
+        Joanne Koong <joannekoong@fb.com>
+Subject: [PATCH v6 bpf-next 2/5] libbpf: Add "map_extra" as a per-map-type extra flag
+Date:   Wed, 27 Oct 2021 16:45:01 -0700
+Message-ID: <20211027234504.30744-3-joannekoong@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211027234504.30744-1-joannekoong@fb.com>
+References: <20211027234504.30744-1-joannekoong@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-In-Reply-To: <bd4db8da-0d44-1785-5767-1731bdaebef8@iogearbox.net>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: ePFQ1KOdruco7bjy4awJibI75lvl4VXg
+X-Proofpoint-ORIG-GUID: ePFQ1KOdruco7bjy4awJibI75lvl4VXg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-27_07,2021-10-26_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0 bulkscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=999 impostorscore=0
+ adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110270130
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 27.10.2021 23:21, Daniel Borkmann wrote:
->Hello Pawan,
->
->On 10/27/21 10:51 PM, Pawan Gupta wrote:
->>Disabling unprivileged BPF by default would help prevent unprivileged
->>users from creating the conditions required for potential speculative
->>execution side-channel attacks on affected hardware as demonstrated by
->>[1][2][3].
->>
->>This will sync mainline with what most distros are currently applying.
->>An admin can enable this at runtime if necessary.
->>
->>Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
->>
->>[1] https://access.redhat.com/security/cve/cve-2019-7308
->>[2] https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-3490
->>[3] https://bugzilla.redhat.com/show_bug.cgi?id=1672355#c5
->
->Some of your above quoted links are just random ?! For example, [2] has really _zero_ to
->do with what you wrote with regards to speculative execution side-channel attacks ...
->
->We recently did a deep dive on our mitigation work we did in BPF here [0]. This also includes
->an appendix with an extract of the main commits related to the different Spectre variants.
->
->I'd suggest to link to that one instead to avoid confusion on what is related and what not.
->
->  [0] https://ebpf.io/summit-2021-slides/eBPF_Summit_2021-Keynote-Daniel_Borkmann-BPF_and_Spectre.pdf
+This patch adds the libbpf infrastructure for supporting a
+per-map-type "map_extra" field, whose definition will be
+idiosyncratic depending on map type.
 
-Sure, I will add reference to this presentation.
+For example, for the bloom filter map, the lower 4 bits of
+map_extra is used to denote the number of hash functions.
 
->>---
->>  kernel/bpf/Kconfig | 5 +++++
->>  1 file changed, 5 insertions(+)
->>
->>diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
->>index a82d6de86522..73d446294455 100644
->>--- a/kernel/bpf/Kconfig
->>+++ b/kernel/bpf/Kconfig
->>@@ -64,6 +64,7 @@ config BPF_JIT_DEFAULT_ON
->>  config BPF_UNPRIV_DEFAULT_OFF
->>  	bool "Disable unprivileged BPF by default"
->>+	default y
->
->Hm, arm arch has a CPU_SPECTRE Kconfig symbol, see commit c58d237d0852 ("ARM: spectre:
->add Kconfig symbol for CPUs vulnerable to Spectre") that can be selected.
->
->Would be good to generalize it for reuse so archs can select it, and make the above as
->'default y if CPU_SPECTRE'.
+Please note that until libbpf 1.0 is here, the
+"bpf_create_map_params" struct is used as a temporary
+means for propagating the map_extra field to the kernel.
 
-Thanks for your feedback, I will send a v2 soon. I guess below is how
-you want it to be:
-
+Signed-off-by: Joanne Koong <joannekoong@fb.com>
 ---
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 8df1c7102643..6aa856d51cb7 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1091,6 +1091,9 @@ config ARCH_SUPPORTS_RT
-  config CPU_NO_EFFICIENT_FFS
-  	def_bool n
-  
-+config CPU_SPECTRE
-+	bool
+ tools/lib/bpf/bpf.c              | 27 ++++++++++++++++++++++-
+ tools/lib/bpf/bpf_gen_internal.h |  2 +-
+ tools/lib/bpf/gen_loader.c       |  3 ++-
+ tools/lib/bpf/libbpf.c           | 38 +++++++++++++++++++++++++++-----
+ tools/lib/bpf/libbpf.h           |  3 +++
+ tools/lib/bpf/libbpf.map         |  2 ++
+ tools/lib/bpf/libbpf_internal.h  | 25 ++++++++++++++++++++-
+ 7 files changed, 91 insertions(+), 9 deletions(-)
+
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 7d1741ceaa32..fe4b6ebc9b8f 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -77,7 +77,7 @@ static inline int sys_bpf_prog_load(union bpf_attr *att=
+r, unsigned int size)
+ 	return fd;
+ }
+=20
+-int bpf_create_map_xattr(const struct bpf_create_map_attr *create_attr)
++int libbpf__bpf_create_map_xattr(const struct bpf_create_map_params *cre=
+ate_attr)
+ {
+ 	union bpf_attr attr;
+ 	int fd;
+@@ -102,11 +102,36 @@ int bpf_create_map_xattr(const struct bpf_create_ma=
+p_attr *create_attr)
+ 			create_attr->btf_vmlinux_value_type_id;
+ 	else
+ 		attr.inner_map_fd =3D create_attr->inner_map_fd;
++	attr.map_extra =3D create_attr->map_extra;
+=20
+ 	fd =3D sys_bpf(BPF_MAP_CREATE, &attr, sizeof(attr));
+ 	return libbpf_err_errno(fd);
+ }
+=20
++int bpf_create_map_xattr(const struct bpf_create_map_attr *create_attr)
++{
++	struct bpf_create_map_params p =3D {};
 +
-  config HAVE_ARCH_VMAP_STACK
-  	def_bool n
-  	help
-diff --git a/arch/arm/mm/Kconfig b/arch/arm/mm/Kconfig
-index 8355c3895894..44551465fd03 100644
---- a/arch/arm/mm/Kconfig
-+++ b/arch/arm/mm/Kconfig
-@@ -828,9 +828,6 @@ config CPU_BPREDICT_DISABLE
-  	help
-  	  Say Y here to disable branch prediction.  If unsure, say N.
-  
--config CPU_SPECTRE
--	bool
--
-  config HARDEN_BRANCH_PREDICTOR
-  	bool "Harden the branch predictor against aliasing attacks" if EXPERT
-  	depends on CPU_SPECTRE
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index d9830e7e1060..769739da67c6 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -124,6 +124,7 @@ config X86
-  	select CLKEVT_I8253
-  	select CLOCKSOURCE_VALIDATE_LAST_CYCLE
-  	select CLOCKSOURCE_WATCHDOG
-+	select CPU_SPECTRE
-  	select DCACHE_WORD_ACCESS
-  	select EDAC_ATOMIC_SCRUB
-  	select EDAC_SUPPORT
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index a82d6de86522..510a5a73f9a2 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -64,6 +64,7 @@ config BPF_JIT_DEFAULT_ON
-  
-  config BPF_UNPRIV_DEFAULT_OFF
-  	bool "Disable unprivileged BPF by default"
-+	default y if CPU_SPECTRE
-  	depends on BPF_SYSCALL
-  	help
-  	  Disables unprivileged BPF by default by setting the corresponding
-@@ -72,6 +73,10 @@ config BPF_UNPRIV_DEFAULT_OFF
-  	  disable it by setting it to 1 (from which no other transition to
-  	  0 is possible anymore).
-  
-+	  Unprivileged BPF can be used to exploit potential speculative
-+	  execution side-channel vulnerabilities on affected hardware. If you
-+	  are concerned about it, answer Y.
++	p.map_type =3D create_attr->map_type;
++	p.key_size =3D create_attr->key_size;
++	p.value_size =3D create_attr->value_size;
++	p.max_entries =3D create_attr->max_entries;
++	p.map_flags =3D create_attr->map_flags;
++	p.name =3D create_attr->name;
++	p.numa_node =3D create_attr->numa_node;
++	p.btf_fd =3D create_attr->btf_fd;
++	p.btf_key_type_id =3D create_attr->btf_key_type_id;
++	p.btf_value_type_id =3D create_attr->btf_value_type_id;
++	p.map_ifindex =3D create_attr->map_ifindex;
++	if (p.map_type =3D=3D BPF_MAP_TYPE_STRUCT_OPS)
++		p.btf_vmlinux_value_type_id =3D
++			create_attr->btf_vmlinux_value_type_id;
++	else
++		p.inner_map_fd =3D create_attr->inner_map_fd;
 +
-  source "kernel/bpf/preload/Kconfig"
-  
-  config BPF_LSM
++	return libbpf__bpf_create_map_xattr(&p);
++}
++
+ int bpf_create_map_node(enum bpf_map_type map_type, const char *name,
+ 			int key_size, int value_size, int max_entries,
+ 			__u32 map_flags, int node)
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_int=
+ernal.h
+index 70eccbffefb1..b8d41d6fbc40 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -43,7 +43,7 @@ void bpf_gen__init(struct bpf_gen *gen, int log_level);
+ int bpf_gen__finish(struct bpf_gen *gen);
+ void bpf_gen__free(struct bpf_gen *gen);
+ void bpf_gen__load_btf(struct bpf_gen *gen, const void *raw_data, __u32 =
+raw_size);
+-void bpf_gen__map_create(struct bpf_gen *gen, struct bpf_create_map_attr=
+ *map_attr, int map_idx);
++void bpf_gen__map_create(struct bpf_gen *gen, struct bpf_create_map_para=
+ms *map_attr, int map_idx);
+ struct bpf_prog_load_params;
+ void bpf_gen__prog_load(struct bpf_gen *gen, struct bpf_prog_load_params=
+ *load_attr, int prog_idx);
+ void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *va=
+lue, __u32 value_size);
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 937bfc7db41e..e552484ae4a4 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -431,7 +431,7 @@ void bpf_gen__load_btf(struct bpf_gen *gen, const voi=
+d *btf_raw_data,
+ }
+=20
+ void bpf_gen__map_create(struct bpf_gen *gen,
+-			 struct bpf_create_map_attr *map_attr, int map_idx)
++			 struct bpf_create_map_params *map_attr, int map_idx)
+ {
+ 	int attr_size =3D offsetofend(union bpf_attr, btf_vmlinux_value_type_id=
+);
+ 	bool close_inner_map_fd =3D false;
+@@ -443,6 +443,7 @@ void bpf_gen__map_create(struct bpf_gen *gen,
+ 	attr.key_size =3D map_attr->key_size;
+ 	attr.value_size =3D map_attr->value_size;
+ 	attr.map_flags =3D map_attr->map_flags;
++	attr.map_extra =3D map_attr->map_extra;
+ 	memcpy(attr.map_name, map_attr->name,
+ 	       min((unsigned)strlen(map_attr->name), BPF_OBJ_NAME_LEN - 1));
+ 	attr.numa_node =3D map_attr->numa_node;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index db6e48014839..7cb017d486d8 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -400,6 +400,7 @@ struct bpf_map {
+ 	char *pin_path;
+ 	bool pinned;
+ 	bool reused;
++	__u64 map_extra;
+ };
+=20
+ enum extern_type {
+@@ -2313,6 +2314,13 @@ int parse_btf_map_def(const char *map_name, struct=
+ btf *btf,
+ 			}
+ 			map_def->pinning =3D val;
+ 			map_def->parts |=3D MAP_DEF_PINNING;
++		} else if (strcmp(name, "map_extra") =3D=3D 0) {
++			__u32 map_extra;
++
++			if (!get_map_field_int(map_name, btf, m, &map_extra))
++				return -EINVAL;
++			map_def->map_extra =3D map_extra;
++			map_def->parts |=3D MAP_DEF_MAP_EXTRA;
+ 		} else {
+ 			if (strict) {
+ 				pr_warn("map '%s': unknown field '%s'.\n", map_name, name);
+@@ -2337,6 +2345,7 @@ static void fill_map_from_def(struct bpf_map *map, =
+const struct btf_map_def *def
+ 	map->def.value_size =3D def->value_size;
+ 	map->def.max_entries =3D def->max_entries;
+ 	map->def.map_flags =3D def->map_flags;
++	map->map_extra =3D def->map_extra;
+=20
+ 	map->numa_node =3D def->numa_node;
+ 	map->btf_key_type_id =3D def->key_type_id;
+@@ -2360,7 +2369,10 @@ static void fill_map_from_def(struct bpf_map *map,=
+ const struct btf_map_def *def
+ 	if (def->parts & MAP_DEF_MAX_ENTRIES)
+ 		pr_debug("map '%s': found max_entries =3D %u.\n", map->name, def->max_=
+entries);
+ 	if (def->parts & MAP_DEF_MAP_FLAGS)
+-		pr_debug("map '%s': found map_flags =3D %u.\n", map->name, def->map_fl=
+ags);
++		pr_debug("map '%s': found map_flags =3D 0x%x.\n", map->name, def->map_=
+flags);
++	if (def->parts & MAP_DEF_MAP_EXTRA)
++		pr_debug("map '%s': found map_extra =3D 0x%llx.\n", map->name,
++			 (unsigned long long)def->map_extra);
+ 	if (def->parts & MAP_DEF_PINNING)
+ 		pr_debug("map '%s': found pinning =3D %u.\n", map->name, def->pinning)=
+;
+ 	if (def->parts & MAP_DEF_NUMA_NODE)
+@@ -4199,6 +4211,7 @@ int bpf_map__reuse_fd(struct bpf_map *map, int fd)
+ 	map->btf_key_type_id =3D info.btf_key_type_id;
+ 	map->btf_value_type_id =3D info.btf_value_type_id;
+ 	map->reused =3D true;
++	map->map_extra =3D info.map_extra;
+=20
+ 	return 0;
+=20
+@@ -4713,7 +4726,8 @@ static bool map_is_reuse_compat(const struct bpf_ma=
+p *map, int map_fd)
+ 		map_info.key_size =3D=3D map->def.key_size &&
+ 		map_info.value_size =3D=3D map->def.value_size &&
+ 		map_info.max_entries =3D=3D map->def.max_entries &&
+-		map_info.map_flags =3D=3D map->def.map_flags);
++		map_info.map_flags =3D=3D map->def.map_flags &&
++		map_info.map_extra =3D=3D map->map_extra);
+ }
+=20
+ static int
+@@ -4796,7 +4810,7 @@ static void bpf_map__destroy(struct bpf_map *map);
+=20
+ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map=
+ *map, bool is_inner)
+ {
+-	struct bpf_create_map_attr create_attr;
++	struct bpf_create_map_params create_attr;
+ 	struct bpf_map_def *def =3D &map->def;
+ 	int err =3D 0;
+=20
+@@ -4810,6 +4824,7 @@ static int bpf_object__create_map(struct bpf_object=
+ *obj, struct bpf_map *map, b
+ 	create_attr.key_size =3D def->key_size;
+ 	create_attr.value_size =3D def->value_size;
+ 	create_attr.numa_node =3D map->numa_node;
++	create_attr.map_extra =3D map->map_extra;
+=20
+ 	if (def->type =3D=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY && !def->max_entries=
+) {
+ 		int nr_cpus;
+@@ -4884,7 +4899,7 @@ static int bpf_object__create_map(struct bpf_object=
+ *obj, struct bpf_map *map, b
+ 		 */
+ 		map->fd =3D 0;
+ 	} else {
+-		map->fd =3D bpf_create_map_xattr(&create_attr);
++		map->fd =3D libbpf__bpf_create_map_xattr(&create_attr);
+ 	}
+ 	if (map->fd < 0 && (create_attr.btf_key_type_id ||
+ 			    create_attr.btf_value_type_id)) {
+@@ -4899,7 +4914,7 @@ static int bpf_object__create_map(struct bpf_object=
+ *obj, struct bpf_map *map, b
+ 		create_attr.btf_value_type_id =3D 0;
+ 		map->btf_key_type_id =3D 0;
+ 		map->btf_value_type_id =3D 0;
+-		map->fd =3D bpf_create_map_xattr(&create_attr);
++		map->fd =3D libbpf__bpf_create_map_xattr(&create_attr);
+ 	}
+=20
+ 	err =3D map->fd < 0 ? -errno : 0;
+@@ -8853,6 +8868,19 @@ int bpf_map__set_map_flags(struct bpf_map *map, __=
+u32 flags)
+ 	return 0;
+ }
+=20
++__u64 bpf_map__map_extra(const struct bpf_map *map)
++{
++	return map->map_extra;
++}
++
++int bpf_map__set_map_extra(struct bpf_map *map, __u64 map_extra)
++{
++	if (map->fd >=3D 0)
++		return libbpf_err(-EBUSY);
++	map->map_extra =3D map_extra;
++	return 0;
++}
++
+ __u32 bpf_map__numa_node(const struct bpf_map *map)
+ {
+ 	return map->numa_node;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 89ca9c83ed4e..b8485db077ea 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -562,6 +562,9 @@ LIBBPF_API __u32 bpf_map__btf_value_type_id(const str=
+uct bpf_map *map);
+ /* get/set map if_index */
+ LIBBPF_API __u32 bpf_map__ifindex(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
++/* get/set map map_extra flags */
++LIBBPF_API __u64 bpf_map__map_extra(const struct bpf_map *map);
++LIBBPF_API int bpf_map__set_map_extra(struct bpf_map *map, __u64 map_ext=
+ra);
+=20
+ typedef void (*bpf_map_clear_priv_t)(struct bpf_map *, void *);
+ LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index e6fb1ba49369..af550a279bf1 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -389,6 +389,8 @@ LIBBPF_0.5.0 {
+=20
+ LIBBPF_0.6.0 {
+ 	global:
++		bpf_map__map_extra;
++		bpf_map__set_map_extra;
+ 		bpf_object__next_map;
+ 		bpf_object__next_program;
+ 		bpf_object__prev_map;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+index 13bc7950e304..a6dd7e25747f 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -193,8 +193,9 @@ enum map_def_parts {
+ 	MAP_DEF_NUMA_NODE	=3D 0x080,
+ 	MAP_DEF_PINNING		=3D 0x100,
+ 	MAP_DEF_INNER_MAP	=3D 0x200,
++	MAP_DEF_MAP_EXTRA	=3D 0x400,
+=20
+-	MAP_DEF_ALL		=3D 0x3ff, /* combination of all above */
++	MAP_DEF_ALL		=3D 0x7ff, /* combination of all above */
+ };
+=20
+ struct btf_map_def {
+@@ -208,6 +209,7 @@ struct btf_map_def {
+ 	__u32 map_flags;
+ 	__u32 numa_node;
+ 	__u32 pinning;
++	__u64 map_extra;
+ };
+=20
+ int parse_btf_map_def(const char *map_name, struct btf *btf,
+@@ -303,6 +305,27 @@ struct bpf_prog_load_params {
+=20
+ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr);
+=20
++struct bpf_create_map_params {
++	const char *name;
++	enum bpf_map_type map_type;
++	__u32 map_flags;
++	__u32 key_size;
++	__u32 value_size;
++	__u32 max_entries;
++	__u32 numa_node;
++	__u32 btf_fd;
++	__u32 btf_key_type_id;
++	__u32 btf_value_type_id;
++	__u32 map_ifindex;
++	union {
++		__u32 inner_map_fd;
++		__u32 btf_vmlinux_value_type_id;
++	};
++	__u64 map_extra;
++};
++
++int libbpf__bpf_create_map_xattr(const struct bpf_create_map_params *cre=
+ate_attr);
++
+ struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf);
+ void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
+ 				const char **prefix, int *kind);
+--=20
+2.30.2
+
