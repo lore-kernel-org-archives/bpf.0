@@ -2,89 +2,265 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F0C9C433EF
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 21:29:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70099C433F5
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 22:00:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17CBE610C7
-	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 21:29:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52680610A6
+	for <bpf@archiver.kernel.org>; Wed, 27 Oct 2021 22:00:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234164AbhJ0Vb2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Oct 2021 17:31:28 -0400
-Received: from mga14.intel.com ([192.55.52.115]:40550 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233715AbhJ0VbR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Oct 2021 17:31:17 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10150"; a="230531568"
-X-IronPort-AV: E=Sophos;i="5.87,187,1631602800"; 
-   d="scan'208";a="230531568"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2021 13:49:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,187,1631602800"; 
-   d="scan'208";a="579912633"
-Received: from gupta-dev2.jf.intel.com (HELO gupta-dev2.localdomain) ([10.54.74.119])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Oct 2021 13:49:33 -0700
-Date:   Wed, 27 Oct 2021 13:51:49 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        antonio.gomez.iglesias@intel.com, tony.luck@intel.com,
-        dave.hansen@linux.intel.com, gregkh@linuxfoundation.org
-Subject: [PATCH ebpf] bpf: Disallow unprivileged bpf by default
-Message-ID: <d37b01e70e65dced2659561ed5bc4b2ed1a50711.1635367330.git.pawan.kumar.gupta@linux.intel.com>
+        id S229940AbhJ0WDS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Oct 2021 18:03:18 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10036 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229924AbhJ0WDS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 27 Oct 2021 18:03:18 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19RLfXD0023451
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 15:00:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=oYyKoBU/ysy/RT9UZVgiFUATRbAvLEUIdecO1J+uyZQ=;
+ b=gSLfinbFX8z0aWQG1R3xnpvyx3JfC/MQaM/nC/1D0IgXV+e4Gw+QA3QHcvCcbVX462N1
+ idFFb/UPeI8jvHVMWIgE0mSOyVhDCAPXvKHZ07ztdRIPZs4nfKFnBPFQ+UArC6+AqydA
+ 5RtQSm/QI2FuLtMoMoHvsfdgM+jfINcmLpI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3bxwmx1ng5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 27 Oct 2021 15:00:51 -0700
+Received: from intmgw002.06.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Wed, 27 Oct 2021 15:00:51 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 6BC7B1B7DA3EF; Wed, 27 Oct 2021 15:00:50 -0700 (PDT)
+From:   Song Liu <songliubraving@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <kpsingh@kernel.org>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add tests for bpf_find_vma
+Date:   Wed, 27 Oct 2021 15:00:43 -0700
+Message-ID: <20211027220043.1937648-3-songliubraving@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211027220043.1937648-1-songliubraving@fb.com>
+References: <20211027220043.1937648-1-songliubraving@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: ru2sXo0R3WHDKwqH_SzA2K424iLsjNEH
+X-Proofpoint-ORIG-GUID: ru2sXo0R3WHDKwqH_SzA2K424iLsjNEH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-27_06,2021-10-26_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
+ adultscore=0 spamscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110270121
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Disabling unprivileged BPF by default would help prevent unprivileged
-users from creating the conditions required for potential speculative
-execution side-channel attacks on affected hardware as demonstrated by
-[1][2][3].
+Add tests for bpf_find_vma in perf_event program and kprobe program. The
+perf_event program is triggered from NMI context, so the second call of
+bpf_find_vma() will return -EBUSY (irq_work busy). The kprobe program,
+on the other hand, does not have this constraint.
 
-This will sync mainline with what most distros are currently applying.
-An admin can enable this at runtime if necessary.
-
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-
-[1] https://access.redhat.com/security/cve/cve-2019-7308
-[2] https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-3490
-[3] https://bugzilla.redhat.com/show_bug.cgi?id=1672355#c5
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../selftests/bpf/prog_tests/find_vma.c       | 95 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/find_vma.c  | 70 ++++++++++++++
+ 2 files changed, 165 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/find_vma.c
+ create mode 100644 tools/testing/selftests/bpf/progs/find_vma.c
 
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index a82d6de86522..73d446294455 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -64,6 +64,7 @@ config BPF_JIT_DEFAULT_ON
- 
- config BPF_UNPRIV_DEFAULT_OFF
- 	bool "Disable unprivileged BPF by default"
-+	default y
- 	depends on BPF_SYSCALL
- 	help
- 	  Disables unprivileged BPF by default by setting the corresponding
-@@ -72,6 +73,10 @@ config BPF_UNPRIV_DEFAULT_OFF
- 	  disable it by setting it to 1 (from which no other transition to
- 	  0 is possible anymore).
- 
-+	  Unprivileged BPF can be used to exploit potential speculative
-+	  execution side-channel vulnerabilities on affected hardware. If you
-+	  are concerned about it, answer Y.
+diff --git a/tools/testing/selftests/bpf/prog_tests/find_vma.c b/tools/te=
+sting/selftests/bpf/prog_tests/find_vma.c
+new file mode 100644
+index 0000000000000..34d4d02c60153
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/find_vma.c
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include <test_progs.h>
++#include <sys/types.h>
++#include <unistd.h>
++#include "find_vma.skel.h"
 +
- source "kernel/bpf/preload/Kconfig"
- 
- config BPF_LSM
--- 
-2.31.1
++static void test_and_reset_skel(struct find_vma *skel, int expected_find=
+_zero_ret)
++{
++	ASSERT_EQ(skel->bss->found_vm_exec, 1, "found_vm_exec");
++	ASSERT_EQ(skel->data->find_addr_ret, 0, "find_addr_ret");
++	ASSERT_EQ(skel->data->find_zero_ret, expected_find_zero_ret, "find_zero=
+_ret");
++	ASSERT_OK_PTR(strstr(skel->bss->d_iname, "test_progs"), "find_test_prog=
+s");
++
++	skel->bss->found_vm_exec =3D 0;
++	skel->data->find_addr_ret =3D -1;
++	skel->data->find_zero_ret =3D -1;
++	skel->bss->d_iname[0] =3D 0;
++}
++
++static int open_pe(void)
++{
++	struct perf_event_attr attr =3D {0};
++	int pfd;
++
++	/* create perf event */
++	attr.size =3D sizeof(attr);
++	attr.type =3D PERF_TYPE_HARDWARE;
++	attr.config =3D PERF_COUNT_HW_CPU_CYCLES;
++	attr.freq =3D 1;
++	attr.sample_freq =3D 4000;
++	pfd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FLAG_FD_CL=
+OEXEC);
++
++	return pfd >=3D 0 ? pfd : -errno;
++}
++
++static void test_find_vma_pe(struct find_vma *skel)
++{
++	struct bpf_link *link =3D NULL;
++	volatile int j =3D 0;
++	int pfd =3D -1, i;
++
++	pfd =3D open_pe();
++	if (pfd < 0) {
++		if (pfd =3D=3D -ENOENT || pfd =3D=3D -EOPNOTSUPP) {
++			printf("%s:SKIP:no PERF_COUNT_HW_CPU_CYCLES\n", __func__);
++			test__skip();
++		}
++		if (!ASSERT_GE(pfd, 0, "perf_event_open"))
++			goto cleanup;
++	}
++
++	link =3D bpf_program__attach_perf_event(skel->progs.handle_pe, pfd);
++	if (!ASSERT_OK_PTR(link, "attach_perf_event"))
++		goto cleanup;
++
++	for (i =3D 0; i < 1000000; ++i)
++		++j;
++
++	test_and_reset_skel(skel, -EBUSY /* in nmi, irq_work is busy */);
++cleanup:
++	bpf_link__destroy(link);
++	close(pfd);
++	/* caller will clean up skel */
++}
++
++static void test_find_vma_kprobe(struct find_vma *skel)
++{
++	int err;
++
++	err =3D find_vma__attach(skel);
++	if (!ASSERT_OK(err, "get_branch_snapshot__attach"))
++		return;  /* caller will cleanup skel */
++
++	getpgid(skel->bss->target_pid);
++	test_and_reset_skel(skel, -ENOENT /* could not find vma for ptr 0 */);
++}
++
++void serial_test_find_vma(void)
++{
++	struct find_vma *skel;
++
++	skel =3D find_vma__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "find_vma__open_and_load"))
++		return;
++
++	skel->bss->target_pid =3D getpid();
++	skel->bss->addr =3D (__u64)test_find_vma_pe;
++
++	test_find_vma_pe(skel);
++	usleep(100000); /* allow the irq_work to finish */
++	test_find_vma_kprobe(skel);
++
++	find_vma__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/find_vma.c b/tools/testing=
+/selftests/bpf/progs/find_vma.c
+new file mode 100644
+index 0000000000000..2776718a54e29
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/find_vma.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++struct callback_ctx {
++	int dummy;
++};
++
++#define VM_EXEC		0x00000004
++#define DNAME_INLINE_LEN 32
++
++pid_t target_pid =3D 0;
++char d_iname[DNAME_INLINE_LEN] =3D {0};
++__u32 found_vm_exec =3D 0;
++__u64 addr =3D 0;
++int find_zero_ret =3D -1;
++int find_addr_ret =3D -1;
++
++static __u64
++check_vma(struct task_struct *task, struct vm_area_struct *vma,
++	  struct callback_ctx *data)
++{
++	if (vma->vm_file)
++		bpf_probe_read_kernel_str(d_iname, DNAME_INLINE_LEN - 1,
++					  vma->vm_file->f_path.dentry->d_iname);
++
++	/* check for VM_EXEC */
++	if (vma->vm_flags & VM_EXEC)
++		found_vm_exec =3D 1;
++
++	return 0;
++}
++
++SEC("kprobe/__x64_sys_getpgid")
++int handle_getpid(void)
++{
++	struct task_struct *task =3D bpf_get_current_task_btf();
++	struct callback_ctx data =3D {0};
++
++	if (task->pid !=3D target_pid)
++		return 0;
++
++	find_addr_ret =3D bpf_find_vma(task, addr, check_vma, &data, 0);
++
++	/* this should return -ENOENT */
++	find_zero_ret =3D bpf_find_vma(task, 0, check_vma, &data, 0);
++	return 0;
++}
++
++SEC("perf_event")
++int handle_pe(void)
++{
++	struct task_struct *task =3D bpf_get_current_task_btf();
++	struct callback_ctx data =3D {0};
++
++	if (task->pid !=3D target_pid)
++		return 0;
++
++	find_addr_ret =3D bpf_find_vma(task, addr, check_vma, &data, 0);
++
++	/* In NMI, this should return -EBUSY, as the previous call is using
++	 * the irq_work.
++	 */
++	find_zero_ret =3D bpf_find_vma(task, 0, check_vma, &data, 0);
++	return 0;
++}
+--=20
+2.30.2
 
