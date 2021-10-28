@@ -2,117 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C03A7C433EF
-	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 17:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D5DEC433FE
+	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 18:01:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 951A060F38
-	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 17:43:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 60FA7610EA
+	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 18:01:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbhJ1RqR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Oct 2021 13:46:17 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:36016 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229610AbhJ1RqR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Oct 2021 13:46:17 -0400
-Received: from zn.tnic (p200300ec2f13a700349123b1f000d126.dip0.t-ipconnect.de [IPv6:2003:ec:2f13:a700:3491:23b1:f000:d126])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 11AA41EC067E;
-        Thu, 28 Oct 2021 19:43:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1635443029;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=LV/QiZdF7ZKqnJvyt4f9O/KBxui21yF4wr9jzKFDXrY=;
-        b=qIWNzriERo9OwiVILV1unRM52LETMnLqD3z4taQIYbRTcwlLNSDkB47m4F2nal4ODvWhVM
-        w4+M1r126g/lvOGdl3krqz4WodnO5D2W6NkFwVoas+Cn1RunTatMwxHEAvo9Ipf6dTk/9m
-        zn3qhAel7oTvjr4iS1fpAWUK6sTL+04=
-Date:   Thu, 28 Oct 2021 19:43:45 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, jpoimboe@redhat.com, andrew.cooper3@citrix.com,
-        linux-kernel@vger.kernel.org, alexei.starovoitov@gmail.com,
-        ndesaulniers@google.com, bpf@vger.kernel.org
-Subject: Re: [PATCH v3 00/16] x86: Rewrite the retpoline rewrite logic
-Message-ID: <YXrhUQZ5lA70Fhm0@zn.tnic>
-References: <20211026120132.613201817@infradead.org>
+        id S230370AbhJ1SEZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Oct 2021 14:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230495AbhJ1SEV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Oct 2021 14:04:21 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357B5C0431A2;
+        Thu, 28 Oct 2021 11:00:31 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id d204so17430570ybb.4;
+        Thu, 28 Oct 2021 11:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/UqmxhR8480mrjTDLn3IXeFR7Vq7XPYW3k/R4b/MBdo=;
+        b=VSnElJ0A/9MYWA250j8kXsCaxHxduIHgTlF9Eb/o3RmoI7KBZEMoQqTbCF5oq88TCv
+         CG8hKVkphajrx4B3lQxyNo35F1OPtjLlrm0X3Ruaqbhp8vWhZXgn86j/a+51FOxjw8qb
+         WIu3uxi4DAix3lzCjY29UCMWIH8GBwOK4moufkFPYAbKZCEVKe62fPwilram4ApZph3i
+         E+BqZw6UjbWD420k2RYH5c+ImV6IcBHKXCkcc83Gw0DjP15N/9RdqSwwtjgbO6htmOkv
+         jszttNXZyMquaN+ZCHYIsHch26LXalequYrvgu47DfHAkSAdmjALdRe7gC5UZRKu1CGj
+         H2fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/UqmxhR8480mrjTDLn3IXeFR7Vq7XPYW3k/R4b/MBdo=;
+        b=c0UaTfrsSqO22866eOk4PGIFneV+vg/9D8SLJdflu4gu2PNR4Dq3tWK+EilhboqSwN
+         xF4vybPG8DBy55xig9j5GU4e0ZzhFnoH5ni6sQ/HNxiBzXcTEKhvyoys0FISb8lXHeKJ
+         j186UmioUwsq4fqzxKj8ZuK/0WQhwX+dRhBG6viGRW/toMXzsNccJVKIv4ShhevMsgl7
+         uRO3wwlKn0mqEAd2FHl+uqel2HTPHx0GEASqx4vMqlJnQxQksqiqoQTT6WJNAt7M5DB1
+         YDrOpktJnzXBZqc9vMD2rGPl3XjW72xqcK4bbUt22VWCISCifnesCdQ+4mhe1bljbNJw
+         kxQQ==
+X-Gm-Message-State: AOAM530ZYJUIKqiWlN5vcqZCqvSlMBrz89QWcbjKnRAVnjHVVcDIkpRg
+        /VC8tgx1cFGNunvhBRqlGmkOyhISHIqPPtyoPyFp2b/sXAENgg==
+X-Google-Smtp-Source: ABdhPJyraz2B+xsLtN0q+nN4Bnt7vnk+K8y9wJL9buOASAh9Ff67k7SI8O/Ll8JHVKP3dxxL+nVAG6VvRvzRNcm17X4=
+X-Received: by 2002:a25:cc4c:: with SMTP id l73mr3628202ybf.114.1635444030250;
+ Thu, 28 Oct 2021 11:00:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211026120132.613201817@infradead.org>
+References: <20211028063501.2239335-1-memxor@gmail.com> <20211028063501.2239335-5-memxor@gmail.com>
+In-Reply-To: <20211028063501.2239335-5-memxor@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 28 Oct 2021 11:00:18 -0700
+Message-ID: <CAEf4Bza=PU3tKLs22_g-tn=-S12mZLLXEyPOzr1TRMC9mRDnZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/8] libbpf: Ensure that BPF syscall fds are
+ never 0, 1, or 2
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 26, 2021 at 02:01:32PM +0200, Peter Zijlstra wrote:
-> Hi,
-> 
-> These patches rewrite the way retpolines are rewritten. Currently objtool emits
-> alternative entries for most retpoline calls. However trying to extend that led
-> to trouble (ELF files are horrid).
-> 
-> Therefore completely overhaul this and have objtool emit a .retpoline_sites
-> section that lists all compiler generated retpoline thunk calls. Then the
-> kernel can do with them as it pleases.
-> 
-> Notably it will:
-> 
->  - rewrite them to indirect instructions for !RETPOLINE
->  - rewrite them to lfence; indirect; for RETPOLINE_AMD,
->    where size allows (boo clang!)
-> 
-> Specifically, the !RETPOLINE case can now also deal with the clang-special
-> conditional-indirect-tail-call:
-> 
->   Jcc __x86_indirect_thunk_\reg.
-> 
-> Finally, also update the x86 BPF jit to catch up to recent times and do these
-> same things.
-> 
-> All this should help improve performance by removing an indirection.
-> 
-> Patches can (soon) be found here:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git objtool/core
-> 
-> Changes since v2:
-> 
->  - rewrite the __x86_indirect_thunk_array[] stuff again
->  - rewrite the retpoline,amd rewrite logic, it now also supports
->    rewriting the Jcc case, if the original instruction is long enough, but
->    more importantly, it's simpler code.
->  - bpf label simplification patch
->  - random assorted cleanups
->  - actually managed to get bpf selftests working
-> 
+On Wed, Oct 27, 2021 at 11:35 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> Add a simple wrapper for passing an fd and getting a new one >= 3 if it
+> is one of 0, 1, or 2. There are two primary reasons to make this change:
+> First, libbpf relies on the assumption a certain BPF fd is never 0 (e.g.
+> most recently noticed in [0]). Second, Alexei pointed out in [1] that
+> some environments reset stdin, stdout, and stderr if they notice an
+> invalid fd at these numbers. To protect against both these cases, switch
+> all internal BPF syscall wrappers in libbpf to always return an fd >= 3.
+> We only need to modify the syscall wrappers and not other code that
+> assumes a valid fd by doing >= 0, to avoid pointless churn, and because
+> it is still a valid assumption. The cost paid is two additional syscalls
+> if fd is in range [0, 2].
+>
+>   [0]: e31eec77e4ab ("bpf: selftests: Fix fd cleanup in get_branch_snapshot")
+>   [1]: https://lore.kernel.org/bpf/CAADnVQKVKY8o_3aU8Gzke443+uHa-eGoM0h7W4srChMXU1S4Bg@mail.gmail.com
+>
+> Acked-by: Song Liu <songliubraving@fb.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
->  arch/um/kernel/um_arch.c                |   4 +
->  arch/x86/include/asm/GEN-for-each-reg.h |  14 ++-
->  arch/x86/include/asm/alternative.h      |   1 +
->  arch/x86/include/asm/asm-prototypes.h   |  18 ---
->  arch/x86/include/asm/nospec-branch.h    |  72 ++---------
->  arch/x86/kernel/alternative.c           | 189 ++++++++++++++++++++++++++++-
->  arch/x86/kernel/cpu/bugs.c              |   7 --
->  arch/x86/kernel/module.c                |   9 +-
->  arch/x86/kernel/vmlinux.lds.S           |  14 +++
->  arch/x86/lib/retpoline.S                |  56 ++-------
->  arch/x86/net/bpf_jit_comp.c             | 160 +++++++++---------------
->  arch/x86/net/bpf_jit_comp32.c           |  22 +++-
->  tools/objtool/arch/x86/decode.c         | 120 ------------------
->  tools/objtool/check.c                   | 208 ++++++++++++++++++++++----------
->  tools/objtool/elf.c                     |  84 -------------
->  tools/objtool/include/objtool/check.h   |   1 -
->  tools/objtool/include/objtool/elf.h     |   6 +-
->  tools/objtool/special.c                 |   8 --
->  18 files changed, 472 insertions(+), 521 deletions(-)
 
-Ok, this all looks real nice, thx!
+LGTM, thanks.
 
-Reviewed-by: Borislav Petkov <bp@suse.de> 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
--- 
-Regards/Gruss,
-    Boris.
+>  tools/lib/bpf/bpf.c             | 35 +++++++++++++++++++++------------
+>  tools/lib/bpf/libbpf_internal.h | 24 ++++++++++++++++++++++
+>  2 files changed, 46 insertions(+), 13 deletions(-)
+>
 
-https://people.kernel.org/tglx/notes-about-netiquette
+[...]
