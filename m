@@ -2,64 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D70C4332F
-	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 09:48:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B385EC433EF
+	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 09:48:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 695A660F9B
-	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 09:48:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9CEFD610D2
+	for <bpf@archiver.kernel.org>; Thu, 28 Oct 2021 09:48:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbhJ1Juv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Oct 2021 05:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S230189AbhJ1Ju4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Oct 2021 05:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbhJ1Jut (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Oct 2021 05:50:49 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D499C061767
-        for <bpf@vger.kernel.org>; Thu, 28 Oct 2021 02:48:22 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id b12so4643396wrh.4
-        for <bpf@vger.kernel.org>; Thu, 28 Oct 2021 02:48:22 -0700 (PDT)
+        with ESMTP id S230135AbhJ1Juv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Oct 2021 05:50:51 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A7BC061228
+        for <bpf@vger.kernel.org>; Thu, 28 Oct 2021 02:48:24 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z14so9090349wrg.6
+        for <bpf@vger.kernel.org>; Thu, 28 Oct 2021 02:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TDEJin9Wub/pTmZCaG0ahvo3TESho8nP0MZ/DG5F4bU=;
-        b=Fq7FjlAbZV5zR/iWtDoqRfxsQKOz3/NHuIDK/MgY5Uz+X8Bzve19JOmFMCKZtHnc6C
-         3JxZxqr5idu9by/1C9tNk29r5SoxWsPFNh4ZvUOyQuzMqlwxlTBnfcpI7COiVFzwU5i7
-         Kh46iOm6VO6gPmtmj2vn2dabUejlwv7uesL9o=
+        bh=r3QcDl+qrCs7DfRcj3nDkgEldBtCcz4guF3zRxr4yw0=;
+        b=V1tUt0C+yOFlv1l6b4PrP7zPJM4iHTVUGYIiH5UnTUEaG0AniQhwCxz1BJDgWfiTOr
+         UWi1hgVhvCQQv+5lrpnBpaoMDmriNh1Q342XoCjlM/oJg/9lolw1gbl7XDwAeJrHzO2K
+         ujDlfcvNKS6rSwtYQGaw7+zuEOlPJGPxpyYPo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TDEJin9Wub/pTmZCaG0ahvo3TESho8nP0MZ/DG5F4bU=;
-        b=SkeGZiKocV0AuH2r62GWfdQoJrQBFubRo7ZTTkb6bfwaMfUueSdq5dIqs2z77zNXuk
-         yq9d0yTAyBqBy/rrtZ4OrJYhLVE9zGf3v+PvBlOY8taeYnMpkg0vMHqDT1Zp5Q8NuXHm
-         7w/5f/aksQ0B/RzyO0ZWfeunxs0OO/xrBy8adXniQdeds29gHsk3FA2qaShg4A7D+a6F
-         SkuKIZHA0+GwpTHc8JMtNHvxYO2fcKZ2OWJ1YxpSLY/wm/RlEmQKZ4fr+7IqLV5/iFPD
-         qSQmB4fNaiMmifYCcqdg1qHSEzDzgNC94tlmwIDEz2OWjOxiB1BSAJuDUPb8I8jjyGJw
-         b4RQ==
-X-Gm-Message-State: AOAM532kmiozR042hu/whJVzPJ57oOH2H7+2qbq4gkWSC0HEN0rTcuhJ
-        6YD1qzsh4GsdboJX/QesCoCguA==
-X-Google-Smtp-Source: ABdhPJzuPEadJHFC6DHS+OKXKCrBNBoHbYtFLfXrapFarUbsAE/PiuGk7n5gPew0+g/APt+J5HIwJA==
-X-Received: by 2002:a5d:4d52:: with SMTP id a18mr4233102wru.406.1635414500859;
-        Thu, 28 Oct 2021 02:48:20 -0700 (PDT)
+        bh=r3QcDl+qrCs7DfRcj3nDkgEldBtCcz4guF3zRxr4yw0=;
+        b=L2dEMoPl5tByaJmopn4vor7xIOZk7vM/vFj1omsFyeUmhoK4sU0Pc447VNf/ql3bS/
+         zBT+dulgDlz23wuw+E8cH9V3ZWKND5O7zuoT4WEV7yEVfSnocSoeBZ/1/V83rV5H8mLe
+         tnm8bUPQSuuQaRgrgAelPlF5GTddZtHN+l5xZ8i//3bQveJNLMApaeRDhw4yw+Fzjg0l
+         GuhUQtxtN2so8RMV5iIQWc45olvy3Q/mkTZ2Jz6fHwuLu5/+Coh4xI7mLEA52eXpYL6z
+         5RKEARKas0YXh2Y1Ws6MFQ8+sgnFJHFFO4DcqHb29auv6hPAIq5SC3eomhPmMobg1J5n
+         4uWQ==
+X-Gm-Message-State: AOAM530QnimLBKfMR8mRwa4YeUBsXKkFMyt8F4MjNSgpPZ06+EM601ov
+        ngcD+8TpShwi+bPU6po/kZairQ==
+X-Google-Smtp-Source: ABdhPJzIo8pks7n2t0RUJFJiDKpZeJEfJSYFuhEHfnaygEuP2ulaLXtrXHHK1wlBmnYNMksso8MRXg==
+X-Received: by 2002:adf:ee43:: with SMTP id w3mr4157256wro.198.1635414502859;
+        Thu, 28 Oct 2021 02:48:22 -0700 (PDT)
 Received: from altair.lan (2.f.6.6.b.3.3.0.3.a.d.b.6.0.6.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:606:bda3:33b:66f2])
-        by smtp.googlemail.com with ESMTPSA id i6sm3378029wry.71.2021.10.28.02.48.20
+        by smtp.googlemail.com with ESMTPSA id i6sm3378029wry.71.2021.10.28.02.48.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Oct 2021 02:48:20 -0700 (PDT)
+        Thu, 28 Oct 2021 02:48:22 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     viro@zeniv.linux.org.uk, Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+To:     viro@zeniv.linux.org.uk, Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     mszeredi@redhat.com, gregkh@linuxfoundation.org,
         Lorenz Bauer <lmb@cloudflare.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/4] libfs: move shmem_exchange to simple_rename_exchange
-Date:   Thu, 28 Oct 2021 10:47:21 +0100
-Message-Id: <20211028094724.59043-2-lmb@cloudflare.com>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 3/4] selftests: bpf: convert test_bpffs to ASSERT macros
+Date:   Thu, 28 Oct 2021 10:47:23 +0100
+Message-Id: <20211028094724.59043-4-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211028094724.59043-1-lmb@cloudflare.com>
 References: <20211028094724.59043-1-lmb@cloudflare.com>
@@ -69,106 +68,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move shmem_exchange and make it available to other callers.
+Remove usage of deprecated CHECK macros.
 
-Suggested-by: <mszeredi@redhat.com>
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- fs/libfs.c         | 24 ++++++++++++++++++++++++
- include/linux/fs.h |  2 ++
- mm/shmem.c         | 24 +-----------------------
- 3 files changed, 27 insertions(+), 23 deletions(-)
+ .../selftests/bpf/prog_tests/test_bpffs.c     | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/fs/libfs.c b/fs/libfs.c
-index 51b4de3b3447..1cf144dc9ed2 100644
---- a/fs/libfs.c
-+++ b/fs/libfs.c
-@@ -448,6 +448,30 @@ int simple_rmdir(struct inode *dir, struct dentry *dentry)
- }
- EXPORT_SYMBOL(simple_rmdir);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+index 172c999e523c..533e3f3a459a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_bpffs.c
+@@ -29,43 +29,43 @@ static int read_iter(char *file)
  
-+int simple_rename_exchange(struct inode *old_dir, struct dentry *old_dentry,
-+			   struct inode *new_dir, struct dentry *new_dentry)
-+{
-+	bool old_is_dir = d_is_dir(old_dentry);
-+	bool new_is_dir = d_is_dir(new_dentry);
-+
-+	if (old_dir != new_dir && old_is_dir != new_is_dir) {
-+		if (old_is_dir) {
-+			drop_nlink(old_dir);
-+			inc_nlink(new_dir);
-+		} else {
-+			drop_nlink(new_dir);
-+			inc_nlink(old_dir);
-+		}
-+	}
-+	old_dir->i_ctime = old_dir->i_mtime =
-+	new_dir->i_ctime = new_dir->i_mtime =
-+	d_inode(old_dentry)->i_ctime =
-+	d_inode(new_dentry)->i_ctime = current_time(old_dir);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(simple_rename_exchange);
-+
- int simple_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
- 		  struct dentry *old_dentry, struct inode *new_dir,
- 		  struct dentry *new_dentry, unsigned int flags)
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e7a633353fd2..333b8af405ce 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3383,6 +3383,8 @@ extern int simple_open(struct inode *inode, struct file *file);
- extern int simple_link(struct dentry *, struct inode *, struct dentry *);
- extern int simple_unlink(struct inode *, struct dentry *);
- extern int simple_rmdir(struct inode *, struct dentry *);
-+extern int simple_rename_exchange(struct inode *old_dir, struct dentry *old_dentry,
-+				  struct inode *new_dir, struct dentry *new_dentry);
- extern int simple_rename(struct user_namespace *, struct inode *,
- 			 struct dentry *, struct inode *, struct dentry *,
- 			 unsigned int);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index b5860f4a2738..a18dde3d3092 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2945,28 +2945,6 @@ static int shmem_rmdir(struct inode *dir, struct dentry *dentry)
- 	return shmem_unlink(dir, dentry);
- }
- 
--static int shmem_exchange(struct inode *old_dir, struct dentry *old_dentry, struct inode *new_dir, struct dentry *new_dentry)
--{
--	bool old_is_dir = d_is_dir(old_dentry);
--	bool new_is_dir = d_is_dir(new_dentry);
--
--	if (old_dir != new_dir && old_is_dir != new_is_dir) {
--		if (old_is_dir) {
--			drop_nlink(old_dir);
--			inc_nlink(new_dir);
--		} else {
--			drop_nlink(new_dir);
--			inc_nlink(old_dir);
--		}
--	}
--	old_dir->i_ctime = old_dir->i_mtime =
--	new_dir->i_ctime = new_dir->i_mtime =
--	d_inode(old_dentry)->i_ctime =
--	d_inode(new_dentry)->i_ctime = current_time(old_dir);
--
--	return 0;
--}
--
- static int shmem_whiteout(struct user_namespace *mnt_userns,
- 			  struct inode *old_dir, struct dentry *old_dentry)
+ static int fn(void)
  {
-@@ -3012,7 +2990,7 @@ static int shmem_rename2(struct user_namespace *mnt_userns,
- 		return -EINVAL;
+-	int err, duration = 0;
++	int err;
  
- 	if (flags & RENAME_EXCHANGE)
--		return shmem_exchange(old_dir, old_dentry, new_dir, new_dentry);
-+		return simple_rename_exchange(old_dir, old_dentry, new_dir, new_dentry);
+ 	err = unshare(CLONE_NEWNS);
+-	if (CHECK(err, "unshare", "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "unshare"))
+ 		goto out;
  
- 	if (!simple_empty(new_dentry))
- 		return -ENOTEMPTY;
+ 	err = mount("", "/", "", MS_REC | MS_PRIVATE, NULL);
+-	if (CHECK(err, "mount /", "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "mount /"))
+ 		goto out;
+ 
+ 	err = umount(TDIR);
+-	if (CHECK(err, "umount " TDIR, "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "umount " TDIR))
+ 		goto out;
+ 
+ 	err = mount("none", TDIR, "tmpfs", 0, NULL);
+-	if (CHECK(err, "mount", "mount root failed: %d\n", errno))
++	if (!ASSERT_OK(err, "mount tmpfs"))
+ 		goto out;
+ 
+ 	err = mkdir(TDIR "/fs1", 0777);
+-	if (CHECK(err, "mkdir "TDIR"/fs1", "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "mkdir " TDIR "/fs1"))
+ 		goto out;
+ 	err = mkdir(TDIR "/fs2", 0777);
+-	if (CHECK(err, "mkdir "TDIR"/fs2", "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "mkdir " TDIR "/fs2"))
+ 		goto out;
+ 
+ 	err = mount("bpf", TDIR "/fs1", "bpf", 0, NULL);
+-	if (CHECK(err, "mount bpffs "TDIR"/fs1", "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "mount bpffs " TDIR "/fs1"))
+ 		goto out;
+ 	err = mount("bpf", TDIR "/fs2", "bpf", 0, NULL);
+-	if (CHECK(err, "mount bpffs " TDIR "/fs2", "failed: %d\n", errno))
++	if (!ASSERT_OK(err, "mount bpffs " TDIR "/fs2"))
+ 		goto out;
+ 
+ 	err = read_iter(TDIR "/fs1/maps.debug");
+-	if (CHECK(err, "reading " TDIR "/fs1/maps.debug", "failed\n"))
++	if (!ASSERT_OK(err, "reading " TDIR "/fs1/maps.debug"))
+ 		goto out;
+ 	err = read_iter(TDIR "/fs2/progs.debug");
+-	if (CHECK(err, "reading " TDIR "/fs2/progs.debug", "failed\n"))
++	if (!ASSERT_OK(err, "reading " TDIR "/fs2/progs.debug"))
+ 		goto out;
+ out:
+ 	umount(TDIR "/fs1");
 -- 
 2.32.0
 
