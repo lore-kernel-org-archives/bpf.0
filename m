@@ -2,142 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD6C5C43217
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 14:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E61A5C433EF
+	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 14:54:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B48B561184
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 14:09:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7824610EA
+	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 14:54:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbhJ2OMC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Oct 2021 10:12:02 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:26135 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbhJ2OLz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Oct 2021 10:11:55 -0400
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Hgkl5003tz1DHg5;
-        Fri, 29 Oct 2021 22:07:12 +0800 (CST)
-Received: from dggema772-chm.china.huawei.com (10.1.198.214) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.15; Fri, 29 Oct 2021 22:09:11 +0800
-Received: from huawei.com (10.175.101.6) by dggema772-chm.china.huawei.com
- (10.1.198.214) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.15; Fri, 29
- Oct 2021 22:09:10 +0800
-From:   Liu Jian <liujian56@huawei.com>
-To:     <john.fastabend@gmail.com>, <daniel@iogearbox.net>,
-        <jakub@cloudflare.com>, <lmb@cloudflare.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <ast@kernel.org>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <kpsingh@kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <xiyou.wangcong@gmail.com>,
-        <alexei.starovoitov@gmail.com>
-CC:     <liujian56@huawei.com>
-Subject: [PATHC bpf v6 3/3] selftests, bpf: Add one test for sockmap with strparser
-Date:   Fri, 29 Oct 2021 22:12:16 +0800
-Message-ID: <20211029141216.211899-3-liujian56@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211029141216.211899-1-liujian56@huawei.com>
-References: <20211029141216.211899-1-liujian56@huawei.com>
+        id S229888AbhJ2O4b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 29 Oct 2021 10:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbhJ2O4a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 29 Oct 2021 10:56:30 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F03C061570
+        for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 07:54:02 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q187so10176111pgq.2
+        for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 07:54:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=4AuMATFjpbWTZ0I+UQqUufcg225mt5ZMICnMbvDg+1c=;
+        b=UqAJD3EsmUrq0vYya3aSXA9/SSthOtLtjisA6YqGtPD/9zoz1wNJL3p/YoPQWmtcrb
+         E8HuOahKfoSlTYgFdK2AFrHzvnifZq/HyiNrnXAk5IH2IibId00aVlpx1lq6XMvIUjOm
+         oy+l265CPz+yyDh3To+spKQrKdzgHPzcR7FZSkbqjDmwbQflAlm21FDW5CN28xzlLRPS
+         wXPEvF5fl8+BjKQUw78GupShBsOaBB+Ybfju2XPkVE/W+H6uExbSFXVcp0UWYQkCH91r
+         ZdkM0/LOuURF3zAYXIf1pYjc/XGJ6q3a7KF6QMvnE0Sr6zisl3otQ0rHsJv/62lNGqlI
+         zU9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4AuMATFjpbWTZ0I+UQqUufcg225mt5ZMICnMbvDg+1c=;
+        b=jJt2NSqae5mk51ljyVW2aKN9glf8cKOu2YZyTTSb3MqH51She+xH27BLQliEzEnmrO
+         XQzT7pxS2XXodgxCbUvPu4ndCoG8kb4ZcviqXknJfM+JWVV53kq86a/JeD6Tkcgj4aTi
+         2M6LQNJZyZ11uWPKsdgZbWm4T8Yiy1ZlefH+0U7lHWnojRcajJpsrUSFqAOwf4DQVk3Q
+         8RuqPvWETZhEV4utLeeZ9luEg4k23zjSoXeh/n1T8dMMybZfumK5XNmKB3syT2v49ez7
+         +GA18mpat2FU5EveJoX0U4rJwN1x5TgWcWMJf4dYI8mDF1AZDbOMf0A5eii+/b+ODvSM
+         XqGQ==
+X-Gm-Message-State: AOAM531WQjd2l4yzfF6f5AQU5VfHRJJW8f5mn8fsy4a/Z0WjyJ+02837
+        68hnDncm7nQDRWKAyAVZ1y3TCUxi6BzZGg==
+X-Google-Smtp-Source: ABdhPJwwbEf6zpdpALTBZM1s3rXj/nVxxSNUS2i4eTc7FxG3JTde4ZQluzi28M0KtJV6WV/Hh/rvXA==
+X-Received: by 2002:a63:7a53:: with SMTP id j19mr8433987pgn.275.1635519241744;
+        Fri, 29 Oct 2021 07:54:01 -0700 (PDT)
+Received: from [0.0.0.0] ([150.109.126.7])
+        by smtp.gmail.com with ESMTPSA id k8sm7721459pfu.179.2021.10.29.07.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Oct 2021 07:54:01 -0700 (PDT)
+Subject: Re: Read large payload from struct mm_struct without ring buffer
+To:     Yadunandan Pillai <ytpillai@thesw4rm.com>, bpf@vger.kernel.org
+References: <20211026180110.nfgozwtq7diptye7@bigdesk>
+From:   Hengqi Chen <hengqi.chen@gmail.com>
+Message-ID: <f8b84cfa-7571-7594-ef5f-9aa278a9b428@gmail.com>
+Date:   Fri, 29 Oct 2021 22:53:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggema772-chm.china.huawei.com (10.1.198.214)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20211026180110.nfgozwtq7diptye7@bigdesk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the test to check sockmap with strparser is working well.
 
-Signed-off-by: Liu Jian <liujian56@huawei.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- tools/testing/selftests/bpf/test_sockmap.c | 33 ++++++++++++++++++++--
- 1 file changed, 30 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index 06924917ad77..1ba7e7346afb 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -139,6 +139,7 @@ struct sockmap_options {
- 	bool sendpage;
- 	bool data_test;
- 	bool drop_expected;
-+	bool check_recved_len;
- 	int iov_count;
- 	int iov_length;
- 	int rate;
-@@ -556,8 +557,12 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 	int err, i, flags = MSG_NOSIGNAL;
- 	bool drop = opt->drop_expected;
- 	bool data = opt->data_test;
-+	int iov_alloc_length = iov_length;
- 
--	err = msg_alloc_iov(&msg, iov_count, iov_length, data, tx);
-+	if (!tx && opt->check_recved_len)
-+		iov_alloc_length *= 2;
-+
-+	err = msg_alloc_iov(&msg, iov_count, iov_alloc_length, data, tx);
- 	if (err)
- 		goto out_errno;
- 	if (peek_flag) {
-@@ -665,6 +670,13 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
- 
- 			s->bytes_recvd += recv;
- 
-+			if (opt->check_recved_len && s->bytes_recvd > total_bytes) {
-+				errno = EMSGSIZE;
-+				fprintf(stderr, "recv failed(), bytes_recvd:%zd, total_bytes:%f\n",
-+						s->bytes_recvd, total_bytes);
-+				goto out_errno;
-+			}
-+
- 			if (data) {
- 				int chunk_sz = opt->sendpage ?
- 						iov_length * cnt :
-@@ -744,7 +756,8 @@ static int sendmsg_test(struct sockmap_options *opt)
- 
- 	rxpid = fork();
- 	if (rxpid == 0) {
--		iov_buf -= (txmsg_pop - txmsg_start_pop + 1);
-+		if (txmsg_pop || txmsg_start_pop)
-+			iov_buf -= (txmsg_pop - txmsg_start_pop + 1);
- 		if (opt->drop_expected || txmsg_ktls_skb_drop)
- 			_exit(0);
- 
-@@ -1688,6 +1701,19 @@ static void test_txmsg_ingress_parser(int cgrp, struct sockmap_options *opt)
- 	test_exec(cgrp, opt);
- }
- 
-+static void test_txmsg_ingress_parser2(int cgrp, struct sockmap_options *opt)
-+{
-+	if (ktls == 1)
-+		return;
-+	skb_use_parser = 10;
-+	opt->iov_length = 20;
-+	opt->iov_count = 1;
-+	opt->rate = 1;
-+	opt->check_recved_len = true;
-+	test_exec(cgrp, opt);
-+	opt->check_recved_len = false;
-+}
-+
- char *map_names[] = {
- 	"sock_map",
- 	"sock_map_txmsg",
-@@ -1786,7 +1812,8 @@ struct _test test[] = {
- 	{"txmsg test pull-data", test_txmsg_pull},
- 	{"txmsg test pop-data", test_txmsg_pop},
- 	{"txmsg test push/pop data", test_txmsg_push_pop},
--	{"txmsg text ingress parser", test_txmsg_ingress_parser},
-+	{"txmsg test ingress parser", test_txmsg_ingress_parser},
-+	{"txmsg test ingress parser2", test_txmsg_ingress_parser2},
- };
- 
- static int check_whitelist(struct _test *t, struct sockmap_options *opt)
--- 
-2.17.1
+On 10/27/21 2:01 AM, Yadunandan Pillai wrote:
+> I am intercepting sched_wakeup_new and am able to read command line
+> arguments for an event using active_mm within the current task_struct.
+> However, the maximum size for these arguments is way beyond the stack
+> size of an eBPF program. Is there a way to read such a large payload
+> into userspace?
+> 
+> I'm trying to maintain backwards compatibility so unfortunately ringbuf
+> is not an option for the time being. I've tried reading the payload
+> directly into a hashmap, but unfortunately can't read past 512 bytes
+> (max buffer size). Is there another way to reserve large amounts of
+> memory in a separate location and get a direct reference, so I can read
+> into it with something like bpf_probe_read?
+> 
 
+You can use a per-cpu array as a heap storage for that purpose.
+Please refer to Andrii's blog post ([0]) and a real-world application ([1]).
+
+  [0]: https://nakryiko.com/posts/bpf-ringbuf/#bpf-perfbuf-bpf-perf-event-output
+  [1]: https://github.com/iovisor/bcc/blob/master/libbpf-tools/mountsnoop.bpf.c
+
+Cheers,
+--
+Hengqi
