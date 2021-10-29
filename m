@@ -2,21 +2,21 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F013DC433F5
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 06:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06708C433FE
+	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 06:51:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D099E610E8
+	by mail.kernel.org (Postfix) with ESMTP id E6A6C6113B
 	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 06:51:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbhJ2Gxd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S232055AbhJ2Gxd (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 29 Oct 2021 02:53:33 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:26205 "EHLO
+Received: from szxga03-in.huawei.com ([45.249.212.189]:26206 "EHLO
         szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbhJ2Gx1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230252AbhJ2Gx1 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 29 Oct 2021 02:53:27 -0400
 Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HgY226XsBz8tcK;
-        Fri, 29 Oct 2021 14:49:30 +0800 (CST)
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HgY232Lp1z8tx9;
+        Fri, 29 Oct 2021 14:49:31 +0800 (CST)
 Received: from huawei.com (10.67.189.2) by dggeme762-chm.china.huawei.com
  (10.3.19.108) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.15; Fri, 29
@@ -33,12 +33,13 @@ CC:     <james.clark@arm.com>, <acme@kernel.org>,
         <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
         <natechancellor@gmail.com>, <ndesaulniers@google.com>,
         <bpf@vger.kernel.org>, <clang-built-linux@googlegroups.com>
-Subject: [PATCH v2 0/2] kallsyms: Ignore $a/$d symbols in kallsyms for ARM
-Date:   Fri, 29 Oct 2021 14:50:36 +0800
-Message-ID: <20211029065038.39449-1-shaolexi@huawei.com>
+Subject: [PATCH v2 2/2] kallsyms: ignore arm mapping symbols when loading module
+Date:   Fri, 29 Oct 2021 14:50:38 +0800
+Message-ID: <20211029065038.39449-3-shaolexi@huawei.com>
 X-Mailer: git-send-email 2.12.3
-In-Reply-To: <cb7e9ef7-eda4-b197-df8a-0b54f9b56181@arm.com>
+In-Reply-To: <20211029065038.39449-1-shaolexi@huawei.com>
 References: <cb7e9ef7-eda4-b197-df8a-0b54f9b56181@arm.com>
+ <20211029065038.39449-1-shaolexi@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.189.2]
@@ -49,41 +50,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On ARM machine, $a/$d symbols are used by the compiler to mark the beginning
-of code/data part in code section. These symbols are filtered out when
-linking vmlinux(see scripts/kallsyms.c ignored_prefixes), but are left on
-modules. So there are $a symbols in /proc/kallsyms whose address overlap
-with the actual module symbols and can confuse tools such as perf when
-resolving kernel symbols.
+Arm modules contains mapping symbols(e.g. $a $d) which are ignored in
+module_kallsyms_on_each_symbol. However, these symbols are still
+displayed when catting /proc/kallsyms. This confuses tools(e.g. perf)
+that resolves kernel symbols with address using information from
+/proc/kallsyms. See discussion in Link:
+https://lore.kernel.org/all/c7dfbd17-85fd-b914-b90f-082abc64c9d1@arm.com/
 
-A sample stacktrace shown by perf script:
-c0f2e39c schedule_hrtimeout+0x14 ([kernel.kallsyms])
-bf4a66d8 $a+0x78 ([test_module]) // $a is shown instead of actual sym name
-c0a4f5f4 kthread+0x15c ([kernel.kallsyms])
-c0a001f8 ret_from_fork+0x14 ([kernel.kallsyms])
+Being left out in vmlinux(see scripts/kallsyms.c is_ignored_symbol) and
+kernelspace API implies that these symbols are not used in any cases.
+So we can ignore them in the first place by not adding them to module
+kallsyms.
 
-This patch set contains 2 patches to fix such problem:
-The 1st patch modifies perf userspace tools to ignore $a/$d symbols from
-/proc/kallsyms. So people can use new perf tool to get correct kernel symbol
-on arm machines instead of updating kernel image.
+Signed-off-by: Lexi Shao <shaolexi@huawei.com>
+---
+ kernel/module.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-The 2nd patch modifies the logic of loading modules to ignore arm mapping
-symbols in the first place. Being left out in vmlinux and kernelspace API
-(e.g. module_kallsyms_on_each_symbol) means these symbols are not used
-anywhere, so it should be safe to remove them from module kallsyms list.
-
-v2:
- - Add 2nd patch as discussed with James Clark, see:
-   https://lore.kernel.org/all/c7dfbd17-85fd-b914-b90f-082abc64c9d1@arm.com/
-
-Lexi Shao (2):
-  perf symbol: ignore $a/$d symbols for ARM modules
-  kallsyms: ignore arm mapping symbols when loading module
-
- kernel/module.c          | 19 +++++++++++--------
- tools/perf/util/symbol.c |  4 ++++
- 2 files changed, 15 insertions(+), 8 deletions(-)
-
+diff --git a/kernel/module.c b/kernel/module.c
+index 5c26a76e800b..b30cbbe144c7 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2662,16 +2662,22 @@ static char elf_type(const Elf_Sym *sym, const struct load_info *info)
+ 	return '?';
+ }
+ 
+-static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
+-			unsigned int shnum, unsigned int pcpundx)
++static inline int is_arm_mapping_symbol(const char *str);
++static bool is_core_symbol(const Elf_Sym *src, const struct load_info *info)
+ {
+ 	const Elf_Shdr *sec;
++	const Elf_Shdr *sechdrs = info->sechdrs;
++	unsigned int shnum = info->hdr->e_shnum;
++	unsigned int pcpundx = info->index.pcpu;
+ 
+ 	if (src->st_shndx == SHN_UNDEF
+ 	    || src->st_shndx >= shnum
+ 	    || !src->st_name)
+ 		return false;
+ 
++	if (is_arm_mapping_symbol(&info->strtab[src->st_name]))
++		return false;
++
+ #ifdef CONFIG_KALLSYMS_ALL
+ 	if (src->st_shndx == pcpundx)
+ 		return true;
+@@ -2714,8 +2720,7 @@ static void layout_symtab(struct module *mod, struct load_info *info)
+ 	/* Compute total space required for the core symbols' strtab. */
+ 	for (ndst = i = 0; i < nsrc; i++) {
+ 		if (i == 0 || is_livepatch_module(mod) ||
+-		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
+-				   info->index.pcpu)) {
++		    is_core_symbol(src+i, info)) {
+ 			strtab_size += strlen(&info->strtab[src[i].st_name])+1;
+ 			ndst++;
+ 		}
+@@ -2778,8 +2783,7 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
+ 	for (ndst = i = 0; i < mod->kallsyms->num_symtab; i++) {
+ 		mod->kallsyms->typetab[i] = elf_type(src + i, info);
+ 		if (i == 0 || is_livepatch_module(mod) ||
+-		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
+-				   info->index.pcpu)) {
++		    is_core_symbol(src+i, info)) {
+ 			mod->core_kallsyms.typetab[ndst] =
+ 			    mod->kallsyms->typetab[i];
+ 			dst[ndst] = src[i];
+@@ -4246,8 +4250,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 		 * We ignore unnamed symbols: they're uninformative
+ 		 * and inserted at a whim.
+ 		 */
+-		if (*kallsyms_symbol_name(kallsyms, i) == '\0'
+-		    || is_arm_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
++		if (*kallsyms_symbol_name(kallsyms, i) == '\0')
+ 			continue;
+ 
+ 		if (thisval <= addr && thisval > bestval) {
 -- 
 2.12.3
 
