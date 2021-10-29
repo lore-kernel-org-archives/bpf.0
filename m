@@ -2,103 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D58FCC433F5
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 01:51:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA0EC433F5
+	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 02:22:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCA1B61177
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 01:51:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D10B61130
+	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 02:22:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbhJ2Bxd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 28 Oct 2021 21:53:33 -0400
-Received: from gandalf.ozlabs.org ([150.107.74.76]:57019 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbhJ2Bxc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Oct 2021 21:53:32 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4HgQPd6QCNz4xYy;
-        Fri, 29 Oct 2021 12:51:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1635472263;
-        bh=wmANmsRuASHCQHaz7QWRHhQxlaXvm3wDVWXitsA8xxU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=k7nE+Vbr2pEF9UfeAQQyh6z/iW03s/mt4EHnKSFFZz+hBUwgB7/+sPbL+UUzYvwXL
-         4CYAcfWnYSocPoFgg9P7z6JzggGChqSkAQPC+K32pOqPYoWhLSTFkPL6GjnSr+mnfz
-         mS5crCCfBHTU6SJu4PYXO/lfxwq3ULO/dkgV2gF8VtVR4fDzIGx/FDwuGiiabyOHDn
-         B9RQREbhSyeeLdZQpfW39tNzqBTpCztnGXaF4WqOoWB/opPbpsZOOuCRRLxgkEKwqZ
-         SmNj9iAB1JPPl0zZxl3KqEOVE+9Hz/gyuerIyCTYFzMrPWwEyXdHF3mGoz82LyadCD
-         EFatR9mT4aA1A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, ast@kernel.org,
-        christophe.leroy@csgroup.eu, Hari Bathini <hbathini@linux.ibm.com>,
-        jniethe5@gmail.com
-Cc:     andrii@kernel.org, bpf@vger.kernel.org, john.fastabend@gmail.com,
-        kafai@fb.com, kpsingh@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        netdev@vger.kernel.org, paulus@samba.org, songliubraving@fb.com,
-        stable@vger.kernel.org, yhs@fb.com
-Subject: Re: [PATCH] powerpc/bpf: fix write protecting JIT code
-In-Reply-To: <c8d7390b-c07c-75cd-e9e9-4b8f0b786cc6@iogearbox.net>
-References: <20211025055649.114728-1-hbathini@linux.ibm.com>
- <1635142354.46h6w5c2rx.naveen@linux.ibm.com>
- <c8d7390b-c07c-75cd-e9e9-4b8f0b786cc6@iogearbox.net>
-Date:   Fri, 29 Oct 2021 12:50:57 +1100
-Message-ID: <87zgqs8upq.fsf@mpe.ellerman.id.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S231520AbhJ2CZW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 28 Oct 2021 22:25:22 -0400
+Received: from smtp25.cstnet.cn ([159.226.251.25]:36674 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231509AbhJ2CZV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Oct 2021 22:25:21 -0400
+X-Greylist: delayed 970 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Oct 2021 22:25:20 EDT
+Received: from localhost.localdomain (unknown [124.16.138.128])
+        by APP-05 (Coremail) with SMTP id zQCowABXGfYSV3thW+2TBQ--.15439S2;
+        Fri, 29 Oct 2021 10:06:10 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     jeyu@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] module: Fix implicit type conversion
+Date:   Fri, 29 Oct 2021 02:06:09 +0000
+Message-Id: <1635473169-1848729-1-git-send-email-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: zQCowABXGfYSV3thW+2TBQ--.15439S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFy5GFW7WrWrCFW3KF1kuFg_yoWDCwc_Jr
+        1DXrWjgryYvwn29a13Jw4rZryxKw1jgFs09a48WFZxJFyrtr13Aw1vqry3Zrn5WrWrCFn7
+        Xas8Jrnxuw1IgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F
+        4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_Gr1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyU
+        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUO_MaUUUUU
+X-Originating-IP: [124.16.138.128]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
-> On 10/25/21 8:15 AM, Naveen N. Rao wrote:
->> Hari Bathini wrote:
->>> Running program with bpf-to-bpf function calls results in data access
->>> exception (0x300) with the below call trace:
->>>
->>> =C2=A0=C2=A0=C2=A0 [c000000000113f28] bpf_int_jit_compile+0x238/0x750 (=
-unreliable)
->>> =C2=A0=C2=A0=C2=A0 [c00000000037d2f8] bpf_check+0x2008/0x2710
->>> =C2=A0=C2=A0=C2=A0 [c000000000360050] bpf_prog_load+0xb00/0x13a0
->>> =C2=A0=C2=A0=C2=A0 [c000000000361d94] __sys_bpf+0x6f4/0x27c0
->>> =C2=A0=C2=A0=C2=A0 [c000000000363f0c] sys_bpf+0x2c/0x40
->>> =C2=A0=C2=A0=C2=A0 [c000000000032434] system_call_exception+0x164/0x330
->>> =C2=A0=C2=A0=C2=A0 [c00000000000c1e8] system_call_vectored_common+0xe8/=
-0x278
->>>
->>> as bpf_int_jit_compile() tries writing to write protected JIT code
->>> location during the extra pass.
->>>
->>> Fix it by holding off write protection of JIT code until the extra
->>> pass, where branch target addresses fixup happens.
->>>
->>> Cc: stable@vger.kernel.org
->>> Fixes: 62e3d4210ac9 ("powerpc/bpf: Write protect JIT code")
->>> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
->>> ---
->>> =C2=A0arch/powerpc/net/bpf_jit_comp.c | 2 +-
->>> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->>=20
->> Thanks for the fix!
->>=20
->> Reviewed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
->
-> LGTM, I presume this fix will be routed via Michael.
+The variable 'cpu' is defined as unsigned int.
+However in the for_each_possible_cpu, its values is assigned to -1.
+That doesn't make sense and in the cpumask_next() it is implicitly
+type conversed to int.
+It is universally accepted that the implicit type conversion is
+terrible.
+Also, having the good programming custom will set an example for
+others.
+Thus, it might be better to change the definition of 'cpu' from
+unsigned int to int.
 
-Thanks for reviewing, I've picked it up.
+Fixes: 10fad5e ("percpu, module: implement and use is_kernel/module_percpu_address()")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ kernel/module.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> BPF selftests have plenty of BPF-to-BPF calls in there, too bad this was
-> caught so late. :/
+diff --git a/kernel/module.c b/kernel/module.c
+index 927d46c..f10d611 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -632,7 +632,7 @@ static void percpu_modcopy(struct module *mod,
+ bool __is_module_percpu_address(unsigned long addr, unsigned long *can_addr)
+ {
+ 	struct module *mod;
+-	unsigned int cpu;
++	int cpu;
+ 
+ 	preempt_disable();
+ 
+-- 
+2.7.4
 
-Yeah :/
-
-STRICT_KERNEL_RWX is not on by default in all our defconfigs, so that's
-probably why no one caught it.
-
-I used to run the BPF selftests but they stopped building for me a while
-back, I'll see if I can get them going again.
-
-cheers
