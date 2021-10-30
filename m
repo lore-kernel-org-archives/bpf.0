@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26D27C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4425C433EF
 	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 05:00:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED1E56103E
-	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 05:00:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA05F6103E
+	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 05:00:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbhJ3FCn convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 30 Oct 2021 01:02:43 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2728 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231596AbhJ3FCn (ORCPT
+        id S231638AbhJ3FCo convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 30 Oct 2021 01:02:44 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59086 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231635AbhJ3FCn (ORCPT
         <rfc822;bpf@vger.kernel.org>); Sat, 30 Oct 2021 01:02:43 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 19U1cACw029386
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19U4jqGh020062
         for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 22:00:13 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3c0vj1gnj6-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3c0ya801dh-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 22:00:13 -0700
 Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.14; Fri, 29 Oct 2021 22:00:11 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D7E0D7830593; Fri, 29 Oct 2021 22:00:03 -0700 (PDT)
+        id 02806783059F; Fri, 29 Oct 2021 22:00:07 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH bpf-next 10/14] selftests/bpf: fix non-strict SEC() program sections
-Date:   Fri, 29 Oct 2021 21:59:37 -0700
-Message-ID: <20211030045941.3514948-11-andrii@kernel.org>
+Subject: [PATCH bpf-next 12/14] selftests/bpf: merge test_stub.c into testing_helpers.c
+Date:   Fri, 29 Oct 2021 21:59:39 -0700
+Message-ID: <20211030045941.3514948-13-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211030045941.3514948-1-andrii@kernel.org>
 References: <20211030045941.3514948-1-andrii@kernel.org>
@@ -42,125 +42,221 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: sA_NqUetbyzm5DLXBbppTDsL6ersFo7c
-X-Proofpoint-ORIG-GUID: sA_NqUetbyzm5DLXBbppTDsL6ersFo7c
+X-Proofpoint-GUID: ZebNvxLNwfRG6GWW7gDEdwRMmkj9Wzoi
+X-Proofpoint-ORIG-GUID: ZebNvxLNwfRG6GWW7gDEdwRMmkj9Wzoi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-10-30_01,2021-10-29_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- malwarescore=0 bulkscore=0 adultscore=0 mlxscore=0 spamscore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=992
- clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2110300025
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 bulkscore=0
+ clxscore=1015 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110300025
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix few more SEC() definitions that were previously missed.
+Move testing prog and object load wrappers (bpf_prog_test_load and
+bpf_test_load_program) into testing_helpers.{c,h} and get rid of
+otherwise useless test_stub.c. Make testing_helpers.c available to
+non-test_progs binaries as well.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_l4lb.c            | 2 +-
- tools/testing/selftests/bpf/progs/test_l4lb_noinline.c   | 2 +-
- tools/testing/selftests/bpf/progs/test_map_lock.c        | 2 +-
- tools/testing/selftests/bpf/progs/test_queue_stack_map.h | 2 +-
- tools/testing/selftests/bpf/progs/test_skb_ctx.c         | 2 +-
- tools/testing/selftests/bpf/progs/test_spin_lock.c       | 2 +-
- tools/testing/selftests/bpf/progs/test_tcp_estats.c      | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/Makefile          | 33 +++++------
+ tools/testing/selftests/bpf/test_stub.c       | 44 ---------------
+ tools/testing/selftests/bpf/testing_helpers.c | 55 +++++++++++++++++++
+ tools/testing/selftests/bpf/testing_helpers.h |  6 ++
+ 4 files changed, 78 insertions(+), 60 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/test_stub.c
 
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb.c b/tools/testing/selftests/bpf/progs/test_l4lb.c
-index 04fee08863cb..c26057ec46dc 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb.c
-@@ -448,7 +448,7 @@ static __always_inline int process_packet(void *data, __u64 off, void *data_end,
- 	return bpf_redirect(ifindex, 0);
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 43e5e5182317..74c2ddf3c0e0 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -178,10 +178,6 @@ $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_tes
+ 	$(Q)$(MAKE) $(submake_extras) -C bpf_testmod
+ 	$(Q)cp bpf_testmod/bpf_testmod.ko $@
+ 
+-$(OUTPUT)/test_stub.o: test_stub.c $(BPFOBJ)
+-	$(call msg,CC,,$@)
+-	$(Q)$(CC) -c $(CFLAGS) -o $@ $<
+-
+ DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
+ 
+ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+@@ -194,18 +190,23 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+ 
+ TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
+ 
+-$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BPFOBJ)
+-
+-$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c
+-$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c
+-$(OUTPUT)/test_sock: cgroup_helpers.c
+-$(OUTPUT)/test_sock_addr: cgroup_helpers.c
+-$(OUTPUT)/test_sockmap: cgroup_helpers.c
+-$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c
+-$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c
+-$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c
+-$(OUTPUT)/test_sock_fields: cgroup_helpers.c
+-$(OUTPUT)/test_sysctl: cgroup_helpers.c
++$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
++
++$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_sock: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_sock_addr: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_sockmap: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c testing_helpers.o
++$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_sock_fields: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_sysctl: cgroup_helpers.c testing_helpers.o
++$(OUTPUT)/test_tag: testing_helpers.o
++$(OUTPUT)/test_lirc_mode2_user: testing_helpers.o
++$(OUTPUT)/xdping: testing_helpers.o
++$(OUTPUT)/flow_dissector_load: testing_helpers.o
++$(OUTPUT)/test_maps: testing_helpers.o
+ 
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+diff --git a/tools/testing/selftests/bpf/test_stub.c b/tools/testing/selftests/bpf/test_stub.c
+deleted file mode 100644
+index 47e132726203..000000000000
+--- a/tools/testing/selftests/bpf/test_stub.c
++++ /dev/null
+@@ -1,44 +0,0 @@
+-// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-/* Copyright (C) 2019 Netronome Systems, Inc. */
+-
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-#include <string.h>
+-
+-int extra_prog_load_log_flags = 0;
+-
+-int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
+-		       struct bpf_object **pobj, int *prog_fd)
+-{
+-	struct bpf_prog_load_attr attr;
+-
+-	memset(&attr, 0, sizeof(struct bpf_prog_load_attr));
+-	attr.file = file;
+-	attr.prog_type = type;
+-	attr.expected_attach_type = 0;
+-	attr.prog_flags = BPF_F_TEST_RND_HI32;
+-	attr.log_level = extra_prog_load_log_flags;
+-
+-	return bpf_prog_load_xattr(&attr, pobj, prog_fd);
+-}
+-
+-int bpf_test_load_program(enum bpf_prog_type type, const struct bpf_insn *insns,
+-			  size_t insns_cnt, const char *license,
+-			  __u32 kern_version, char *log_buf,
+-		     size_t log_buf_sz)
+-{
+-	struct bpf_load_program_attr load_attr;
+-
+-	memset(&load_attr, 0, sizeof(struct bpf_load_program_attr));
+-	load_attr.prog_type = type;
+-	load_attr.expected_attach_type = 0;
+-	load_attr.name = NULL;
+-	load_attr.insns = insns;
+-	load_attr.insns_cnt = insns_cnt;
+-	load_attr.license = license;
+-	load_attr.kern_version = kern_version;
+-	load_attr.prog_flags = BPF_F_TEST_RND_HI32;
+-	load_attr.log_level = extra_prog_load_log_flags;
+-
+-	return bpf_load_program_xattr(&load_attr, log_buf, log_buf_sz);
+-}
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+index 800d503e5cb4..ef61d43adfe4 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -1,7 +1,11 @@
+ // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++/* Copyright (C) 2019 Netronome Systems, Inc. */
+ /* Copyright (C) 2020 Facebook, Inc. */
+ #include <stdlib.h>
++#include <string.h>
+ #include <errno.h>
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
+ #include "testing_helpers.h"
+ 
+ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
+@@ -78,3 +82,54 @@ __u32 link_info_prog_id(const struct bpf_link *link, struct bpf_link_info *info)
+ 	}
+ 	return info->prog_id;
  }
++
++int extra_prog_load_log_flags = 0;
++
++int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
++		       struct bpf_object **pobj, int *prog_fd)
++{
++	struct bpf_object *obj;
++	struct bpf_program *prog;
++	int err;
++
++	obj = bpf_object__open(file);
++	if (!obj)
++		return -errno;
++
++	prog = bpf_object__next_program(obj, NULL);
++	if (!prog) {
++		err = -ENOENT;
++		goto err_out;
++	}
++
++	if (type != BPF_PROG_TYPE_UNSPEC)
++		bpf_program__set_type(prog, type);
++
++	err = bpf_object__load(obj);
++	if (err)
++		goto err_out;
++
++	*pobj = obj;
++	*prog_fd = bpf_program__fd(prog);
++
++	return 0;
++err_out:
++	bpf_object__close(obj);
++	return err;
++}
++
++int bpf_test_load_program(enum bpf_prog_type type, const struct bpf_insn *insns,
++			  size_t insns_cnt, const char *license,
++			  __u32 kern_version, char *log_buf,
++			  size_t log_buf_sz)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, opts,
++		.kern_version = kern_version,
++		.prog_flags = BPF_F_TEST_RND_HI32,
++		.log_level = extra_prog_load_log_flags,
++		.log_buf = log_buf,
++		.log_size = log_buf_sz,
++	);
++
++	return bpf_prog_load(type, NULL, license, insns, insns_cnt, &opts);
++}
+diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
+index d4f8e749611b..f46ebc476ee8 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.h
++++ b/tools/testing/selftests/bpf/testing_helpers.h
+@@ -6,3 +6,9 @@
  
--SEC("l4lb-demo")
-+SEC("tc")
- int balancer_ingress(struct __sk_buff *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-index b9e2753f4f91..19e4d2071c60 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-@@ -447,7 +447,7 @@ static __noinline int process_packet(void *data, __u64 off, void *data_end,
- 	return bpf_redirect(ifindex, 0);
- }
- 
--SEC("l4lb-demo")
-+SEC("tc")
- int balancer_ingress(struct __sk_buff *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
-index b5c07ae7b68f..acf073db9e8b 100644
---- a/tools/testing/selftests/bpf/progs/test_map_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
-@@ -30,7 +30,7 @@ struct {
- 	__type(value, struct array_elem);
- } array_map SEC(".maps");
- 
--SEC("map_lock_demo")
-+SEC("cgroup/skb")
- int bpf_map_lock_test(struct __sk_buff *skb)
- {
- 	struct hmap_elem zero = {}, *val;
-diff --git a/tools/testing/selftests/bpf/progs/test_queue_stack_map.h b/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
-index 0fcd3ff0e38a..648e8cab7a23 100644
---- a/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
-+++ b/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
-@@ -24,7 +24,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } map_out SEC(".maps");
- 
--SEC("test")
-+SEC("tc")
- int _test(struct __sk_buff *skb)
- {
- 	void *data_end = (void *)(long)skb->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_skb_ctx.c b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-index 1d61b36e6067..c482110cfc95 100644
---- a/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-+++ b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-@@ -5,7 +5,7 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--SEC("skb_ctx")
-+SEC("tc")
- int process(struct __sk_buff *skb)
- {
- 	#pragma clang loop unroll(full)
-diff --git a/tools/testing/selftests/bpf/progs/test_spin_lock.c b/tools/testing/selftests/bpf/progs/test_spin_lock.c
-index 0d31a3b3505f..7e88309d3229 100644
---- a/tools/testing/selftests/bpf/progs/test_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_spin_lock.c
-@@ -45,7 +45,7 @@ struct {
- 
- #define CREDIT_PER_NS(delta, rate) (((delta) * rate) >> 20)
- 
--SEC("spin_lock_demo")
-+SEC("tc")
- int bpf_sping_lock_test(struct __sk_buff *skb)
- {
- 	volatile int credit = 0, max_credit = 100, pkt_len = 64;
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_estats.c b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-index 2c5c602c6011..e2ae049c2f85 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-@@ -244,7 +244,7 @@ static __always_inline void send_basic_event(struct sock *sk,
- 	bpf_map_update_elem(&ev_record_map, &key, &ev, BPF_ANY);
- }
- 
--SEC("dummy_tracepoint")
-+SEC("tp/dummy/tracepoint")
- int _dummy_tracepoint(struct dummy_tracepoint_args *arg)
- {
- 	if (!arg->sock)
+ int parse_num_list(const char *s, bool **set, int *set_len);
+ __u32 link_info_prog_id(const struct bpf_link *link, struct bpf_link_info *info);
++int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
++		       struct bpf_object **pobj, int *prog_fd);
++int bpf_test_load_program(enum bpf_prog_type type, const struct bpf_insn *insns,
++			  size_t insns_cnt, const char *license,
++			  __u32 kern_version, char *log_buf,
++			  size_t log_buf_sz);
 -- 
 2.30.2
 
