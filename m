@@ -2,217 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D0ECC433EF
-	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 05:00:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B154C433EF
+	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 09:23:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7609D6103E
-	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 05:00:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBE9360F3A
+	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 09:23:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbhJ3FCp convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 30 Oct 2021 01:02:45 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20772 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231635AbhJ3FCp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 30 Oct 2021 01:02:45 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19U4jhPA019970
-        for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 22:00:15 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c0ya801dp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 22:00:15 -0700
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        id S231830AbhJ3JZg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 30 Oct 2021 05:25:36 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:26213 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231829AbhJ3JZg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 30 Oct 2021 05:25:36 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4HhDM7049Qz8tjw;
+        Sat, 30 Oct 2021 17:21:39 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 29 Oct 2021 22:00:14 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 1B44C78305B0; Fri, 29 Oct 2021 22:00:12 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH bpf-next 14/14] selftests/bpf: use explicit bpf_test_load_program() helper calls
-Date:   Fri, 29 Oct 2021 21:59:41 -0700
-Message-ID: <20211030045941.3514948-15-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211030045941.3514948-1-andrii@kernel.org>
-References: <20211030045941.3514948-1-andrii@kernel.org>
+ 15.1.2308.15; Sat, 30 Oct 2021 17:23:03 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Sat, 30 Oct
+ 2021 17:23:03 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
+        <ast@kernel.org>
+Subject: [PATCH -next] bpf/benchs: Fix return value check of bpf_program__attach()
+Date:   Sat, 30 Oct 2021 17:30:51 +0800
+Message-ID: <20211030093051.2609665-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: EIUuZC5jx1S5ETF-hm761uWQqgqhYXnI
-X-Proofpoint-ORIG-GUID: EIUuZC5jx1S5ETF-hm761uWQqgqhYXnI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-10-30_01,2021-10-29_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 bulkscore=0
- clxscore=1015 impostorscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 phishscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2110300025
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove the second part of prog loading testing helper re-definition:
+If bpf_program__attach() fails, it never returns NULL,
+we should use libbpf_get_error() to check the return value.
 
-  -Dbpf_load_program=bpf_test_load_program
-
-This completes the clean up of deprecated libbpf program loading APIs.
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
- tools/testing/selftests/bpf/Makefile                          | 3 +--
- .../selftests/bpf/prog_tests/cgroup_attach_autodetach.c       | 2 +-
- tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c  | 2 +-
- .../testing/selftests/bpf/prog_tests/cgroup_attach_override.c | 2 +-
- .../selftests/bpf/prog_tests/flow_dissector_load_bytes.c      | 2 +-
- .../selftests/bpf/prog_tests/flow_dissector_reattach.c        | 4 ++--
- tools/testing/selftests/bpf/prog_tests/signal_pending.c       | 2 +-
- tools/testing/selftests/bpf/test_cgroup_storage.c             | 3 ++-
- tools/testing/selftests/bpf/test_tag.c                        | 3 ++-
- 9 files changed, 12 insertions(+), 11 deletions(-)
+ .../bpf/benchs/bench_bloom_filter_map.c       | 20 ++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 84958884eeac..cd9dbc1fa592 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -23,8 +23,7 @@ BPF_GCC		?= $(shell command -v bpf-gcc;)
- SAN_CFLAGS	?=
- CFLAGS += -g -O0 -rdynamic -Wall $(GENFLAGS) $(SAN_CFLAGS)		\
- 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
--	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)			\
--	  -Dbpf_load_program=bpf_test_load_program
-+	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
- LDLIBS += -lcap -lelf -lz -lrt -lpthread
+diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+index 6eeeed2913e6..6879340b20c4 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
++++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
+@@ -296,6 +296,7 @@ static struct bloom_filter_bench *setup_skeleton(void)
+ static void bloom_lookup_setup(void)
+ {
+ 	struct bpf_link *link;
++	int err;
  
- # Silence some warnings when compiled with clang
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
-index 5de485c7370f..858916d11e2e 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_autodetach.c
-@@ -16,7 +16,7 @@ static int prog_load(void)
- 	};
- 	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+ 	ctx.use_array_map = true;
  
--	return bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
-+	return bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
- 			       prog, insns_cnt, "GPL", 0,
- 			       bpf_log_buf, BPF_LOG_BUF_SIZE);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
-index 731bea84d8ed..de9c3e12b0ea 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_multi.c
-@@ -66,7 +66,7 @@ static int prog_load_cnt(int verdict, int val)
- 	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
- 	int ret;
+@@ -304,7 +305,8 @@ static void bloom_lookup_setup(void)
+ 	populate_maps();
  
--	ret = bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
-+	ret = bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
- 			       prog, insns_cnt, "GPL", 0,
- 			       bpf_log_buf, BPF_LOG_BUF_SIZE);
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_lookup);
+-	if (!link) {
++	err = libbpf_get_error(link);
++	if (err) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -313,6 +315,7 @@ static void bloom_lookup_setup(void)
+ static void bloom_update_setup(void)
+ {
+ 	struct bpf_link *link;
++	int err;
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
-index 10d3c33821a7..356547e849e2 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach_override.c
-@@ -18,7 +18,7 @@ static int prog_load(int verdict)
- 	};
- 	size_t insns_cnt = sizeof(prog) / sizeof(struct bpf_insn);
+ 	ctx.use_array_map = true;
  
--	return bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
-+	return bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
- 			       prog, insns_cnt, "GPL", 0,
- 			       bpf_log_buf, BPF_LOG_BUF_SIZE);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-index 6093728497c7..93ac3f28226c 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_load_bytes.c
-@@ -30,7 +30,7 @@ void serial_test_flow_dissector_load_bytes(void)
+@@ -321,7 +324,8 @@ static void bloom_update_setup(void)
+ 	populate_maps();
  
- 	/* make sure bpf_skb_load_bytes is not allowed from skb-less context
- 	 */
--	fd = bpf_load_program(BPF_PROG_TYPE_FLOW_DISSECTOR, prog,
-+	fd = bpf_test_load_program(BPF_PROG_TYPE_FLOW_DISSECTOR, prog,
- 			      ARRAY_SIZE(prog), "GPL", 0, NULL, 0);
- 	CHECK(fd < 0,
- 	      "flow_dissector-bpf_skb_load_bytes-load",
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
-index f0c6c226aba8..7c79462d2702 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_reattach.c
-@@ -47,9 +47,9 @@ static int load_prog(enum bpf_prog_type type)
- 	};
- 	int fd;
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_update);
+-	if (!link) {
++	err = libbpf_get_error(link);
++	if (err) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -330,6 +334,7 @@ static void bloom_update_setup(void)
+ static void false_positive_setup(void)
+ {
+ 	struct bpf_link *link;
++	int err;
  
--	fd = bpf_load_program(type, prog, ARRAY_SIZE(prog), "GPL", 0, NULL, 0);
-+	fd = bpf_test_load_program(type, prog, ARRAY_SIZE(prog), "GPL", 0, NULL, 0);
- 	if (CHECK_FAIL(fd < 0))
--		perror("bpf_load_program");
-+		perror("bpf_test_load_program");
+ 	ctx.use_hashmap = true;
+ 	ctx.hashmap_use_bloom = true;
+@@ -340,7 +345,8 @@ static void false_positive_setup(void)
+ 	populate_maps();
  
- 	return fd;
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/signal_pending.c b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-index fdfdcff6cbef..aecfe662c070 100644
---- a/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-+++ b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
-@@ -22,7 +22,7 @@ static void test_signal_pending_by_type(enum bpf_prog_type prog_type)
- 		prog[i] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0);
- 	prog[ARRAY_SIZE(prog) - 1] = BPF_EXIT_INSN();
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+-	if (!link) {
++	err = libbpf_get_error(link);
++	if (err) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -349,6 +355,7 @@ static void false_positive_setup(void)
+ static void hashmap_with_bloom_setup(void)
+ {
+ 	struct bpf_link *link;
++	int err;
  
--	prog_fd = bpf_load_program(prog_type, prog, ARRAY_SIZE(prog),
-+	prog_fd = bpf_test_load_program(prog_type, prog, ARRAY_SIZE(prog),
- 				   "GPL", 0, NULL, 0);
- 	CHECK(prog_fd < 0, "test-run", "errno %d\n", errno);
+ 	ctx.use_hashmap = true;
+ 	ctx.hashmap_use_bloom = true;
+@@ -358,7 +365,8 @@ static void hashmap_with_bloom_setup(void)
+ 	populate_maps();
  
-diff --git a/tools/testing/selftests/bpf/test_cgroup_storage.c b/tools/testing/selftests/bpf/test_cgroup_storage.c
-index 0cda61da5d39..a63787e7bb1a 100644
---- a/tools/testing/selftests/bpf/test_cgroup_storage.c
-+++ b/tools/testing/selftests/bpf/test_cgroup_storage.c
-@@ -8,6 +8,7 @@
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+-	if (!link) {
++	err = libbpf_get_error(link);
++	if (err) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
+@@ -367,6 +375,7 @@ static void hashmap_with_bloom_setup(void)
+ static void hashmap_no_bloom_setup(void)
+ {
+ 	struct bpf_link *link;
++	int err;
  
- #include "bpf_rlimit.h"
- #include "cgroup_helpers.h"
-+#include "testing_helpers.h"
+ 	ctx.use_hashmap = true;
  
- char bpf_log_buf[BPF_LOG_BUF_SIZE];
+@@ -375,7 +384,8 @@ static void hashmap_no_bloom_setup(void)
+ 	populate_maps();
  
-@@ -66,7 +67,7 @@ int main(int argc, char **argv)
- 
- 	prog[0].imm = percpu_map_fd;
- 	prog[7].imm = map_fd;
--	prog_fd = bpf_load_program(BPF_PROG_TYPE_CGROUP_SKB,
-+	prog_fd = bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
- 				   prog, insns_cnt, "GPL", 0,
- 				   bpf_log_buf, BPF_LOG_BUF_SIZE);
- 	if (prog_fd < 0) {
-diff --git a/tools/testing/selftests/bpf/test_tag.c b/tools/testing/selftests/bpf/test_tag.c
-index 6272c784ca2a..5c7bea525626 100644
---- a/tools/testing/selftests/bpf/test_tag.c
-+++ b/tools/testing/selftests/bpf/test_tag.c
-@@ -21,6 +21,7 @@
- 
- #include "../../../include/linux/filter.h"
- #include "bpf_rlimit.h"
-+#include "testing_helpers.h"
- 
- static struct bpf_insn prog[BPF_MAXINSNS];
- 
-@@ -57,7 +58,7 @@ static int bpf_try_load_prog(int insns, int fd_map,
- 	int fd_prog;
- 
- 	bpf_filler(insns, fd_map);
--	fd_prog = bpf_load_program(BPF_PROG_TYPE_SCHED_CLS, prog, insns, "", 0,
-+	fd_prog = bpf_test_load_program(BPF_PROG_TYPE_SCHED_CLS, prog, insns, "", 0,
- 				   NULL, 0);
- 	assert(fd_prog > 0);
- 	if (fd_map > 0)
+ 	link = bpf_program__attach(ctx.skel->progs.bloom_hashmap_lookup);
+-	if (!link) {
++	err = libbpf_get_error(link);
++	if (err) {
+ 		fprintf(stderr, "failed to attach program!\n");
+ 		exit(1);
+ 	}
 -- 
-2.30.2
+2.25.1
 
