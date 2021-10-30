@@ -2,111 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24974C433F5
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 23:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E6BC433EF
+	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 04:59:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F37E860FED
-	for <bpf@archiver.kernel.org>; Fri, 29 Oct 2021 23:29:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A58B861054
+	for <bpf@archiver.kernel.org>; Sat, 30 Oct 2021 04:59:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbhJ2Xbg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 29 Oct 2021 19:31:36 -0400
-Received: from www62.your-server.de ([213.133.104.62]:51428 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhJ2Xbf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 29 Oct 2021 19:31:35 -0400
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mgbIy-0003Jv-0R; Sat, 30 Oct 2021 01:29:00 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mgbIx-0007ES-Pp; Sat, 30 Oct 2021 01:28:59 +0200
-Subject: Re: [PATCH bpf-next] bpf: Fix propagation of bounds from 64-bit
- min/max into 32-bit and var_off.
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
-References: <20211029163102.80290-1-alexei.starovoitov@gmail.com>
- <2d8df23d-175f-3eb8-3ba4-35659664336c@fb.com>
- <CAADnVQLvwGMsawF9s3wDw9Gh_HJpCTkHTS=0MHLLy+VqapLUWQ@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <4c43dc61-d8b8-b179-280f-84bc291583ca@iogearbox.net>
-Date:   Sat, 30 Oct 2021 01:28:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S230012AbhJ3FCU convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sat, 30 Oct 2021 01:02:20 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:52056 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230002AbhJ3FCU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 30 Oct 2021 01:02:20 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 19U2f92A009175
+        for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 21:59:50 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c0qu529v6-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 29 Oct 2021 21:59:50 -0700
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 29 Oct 2021 21:59:49 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 72CD4783050C; Fri, 29 Oct 2021 21:59:45 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH bpf-next 01/14] bpftool: fix unistd.h include
+Date:   Fri, 29 Oct 2021 21:59:28 -0700
+Message-ID: <20211030045941.3514948-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211030045941.3514948-1-andrii@kernel.org>
+References: <20211030045941.3514948-1-andrii@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQLvwGMsawF9s3wDw9Gh_HJpCTkHTS=0MHLLy+VqapLUWQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26337/Fri Oct 29 10:19:12 2021)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: nZInxJnVHeMU-zM22p5IvxP3TwADj496
+X-Proofpoint-ORIG-GUID: nZInxJnVHeMU-zM22p5IvxP3TwADj496
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-10-30_01,2021-10-29_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ mlxlogscore=929 malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2110300025
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/29/21 9:22 PM, Alexei Starovoitov wrote:
-> On Fri, Oct 29, 2021 at 11:29 AM Yonghong Song <yhs@fb.com> wrote:
->> On 10/29/21 9:31 AM, Alexei Starovoitov wrote:
->>> From: Alexei Starovoitov <ast@kernel.org>
->>>
->>> Before this fix:
->>> 166: (b5) if r2 <= 0x1 goto pc+22
->>> from 166 to 189: R2=invP(id=1,umax_value=1,var_off=(0x0; 0xffffffff))
->>>
->>> After this fix:
->>> 166: (b5) if r2 <= 0x1 goto pc+22
->>> from 166 to 189: R2=invP(id=1,umax_value=1,var_off=(0x0; 0x1))
->>>
->>> While processing BPF_JLE the reg_set_min_max() would set true_reg->umax_value = 1
->>> and call __reg_combine_64_into_32(true_reg).
->>>
->>> Without the fix it would not pass the condition:
->>> if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value))
->>>
->>> since umin_value == 0 at this point.
->>> Before commit 10bf4e83167c the umin was incorrectly ingored.
->>> The commit 10bf4e83167c fixed the correctness issue, but pessimized
->>> propagation of 64-bit min max into 32-bit min max and corresponding var_off.
->>>
->>> Fixes: 10bf4e83167c ("bpf: Fix propagation of 32 bit unsigned bounds from 64 bit bounds")
->>> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
->>
->> See an unrelated nits below.
->>
->> Acked-by: Yonghong Song <yhs@fb.com>
->>
->>> ---
->>>    kernel/bpf/verifier.c                               | 2 +-
->>>    tools/testing/selftests/bpf/verifier/array_access.c | 2 +-
->>>    2 files changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index 3c8aa7df1773..29671ed49ee8 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -1425,7 +1425,7 @@ static bool __reg64_bound_s32(s64 a)
->>
->> We have
->> static bool __reg64_bound_s32(s64 a)
->> {
->>           return a > S32_MIN && a < S32_MAX;
->> }
->>
->> Should we change to
->>          return a >= S32_MIN && a <= S32_MAX
->> ?
-> 
-> Probably, but I haven't investigated that yet.
+cgroup.c in bpftool source code is defining _XOPEN_SOURCE 500, which,
+apparently, makes syscall() unavailable. Which is a problem now that
+libbpf exposes syscal()-usign bpf() API in bpf.h.
 
-Fix looks good to me as well, we should make it consistent if so given it's the same
-logic, but some tests for the S32 would be good if we don't have them yet.
+Fix by defining _GNU_SOURCE instead, which enables syscall() wrapper.
 
-Thanks!
-Daniel
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/bpf/bpftool/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+index 3571a281c43f..4876364e753d 100644
+--- a/tools/bpf/bpftool/cgroup.c
++++ b/tools/bpf/bpftool/cgroup.c
+@@ -2,7 +2,7 @@
+ // Copyright (C) 2017 Facebook
+ // Author: Roman Gushchin <guro@fb.com>
+ 
+-#define _XOPEN_SOURCE 500
++#define _GNU_SOURCE
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <ftw.h>
+-- 
+2.30.2
+
