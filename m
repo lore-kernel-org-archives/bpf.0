@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E0B8C433FE
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 22:46:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B81B3C433F5
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 22:46:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E405E60F56
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 22:46:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96FA360F0F
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 22:46:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbhKAWtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Nov 2021 18:49:02 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:60642 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229848AbhKAWtC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 1 Nov 2021 18:49:02 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A1GoUGU015841
-        for <bpf@vger.kernel.org>; Mon, 1 Nov 2021 15:46:28 -0700
+        id S232347AbhKAWtH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Nov 2021 18:49:07 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14142 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229848AbhKAWtG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 1 Nov 2021 18:49:06 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A1GobZi005512
+        for <bpf@vger.kernel.org>; Mon, 1 Nov 2021 15:46:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : content-type :
  content-transfer-encoding : mime-version; s=facebook;
- bh=jEL9FPuzOA6BkBpc3aPNfm5lLcrZd5euAGA5QhONQjY=;
- b=YuwACxfcUy6392khDYVt9OrjRuz/bsbYqdRj9Sc3cHpsDILlBX7HNjKwGFIb7jvreKOZ
- 7xbHW4faWRbU/pJTNqnB3kHBzVuoWUCqb/ys5omOePUVP1YtD7tlgS6EWS0maHPvFFn8
- EPunShgDbIsJA1fcZli9bg75RKJiRZFLFNk= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c2da3d5ey-1
+ bh=wtDfupDnUeK2GmXhiYUJq/iMmB9T61YCROCImzi4NYo=;
+ b=bioNMm0P4b/5KBXvPcqXGfRWYw4pUedHQE436jQn3YEfYZexGCAVoijt/RYsFTnHnohX
+ HVR+41Ik8QiRAKlw/GjwaqHWv5qISsE/+hMjwV0OuoiqXj/JvQQCsWS9H0MCNN/qY1Sm
+ lHZhZHXYMZC3RM6xdCb6WJywq8hhNoktwXg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c2dp1n3xa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 01 Nov 2021 15:46:28 -0700
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 01 Nov 2021 15:46:32 -0700
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Mon, 1 Nov 2021 15:46:26 -0700
+ 15.1.2308.14; Mon, 1 Nov 2021 15:46:23 -0700
 Received: by devbig030.frc3.facebook.com (Postfix, from userid 158236)
-        id BDE628EEEB06; Mon,  1 Nov 2021 15:44:03 -0700 (PDT)
+        id 499C68EEEAF5; Mon,  1 Nov 2021 15:44:00 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
 CC:     Song Liu <songliubraving@fb.com>,
@@ -45,17 +45,17 @@ CC:     Song Liu <songliubraving@fb.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH v3 bpf-next 4/4] libbpf: deprecate bpf_program__get_prog_info_linear
-Date:   Mon, 1 Nov 2021 15:43:57 -0700
-Message-ID: <20211101224357.2651181-5-davemarchevsky@fb.com>
+Subject: [PATCH v3 bpf-next 1/4] bpftool: Migrate -1 err checks of libbpf fn calls
+Date:   Mon, 1 Nov 2021 15:43:54 -0700
+Message-ID: <20211101224357.2651181-2-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211101224357.2651181-1-davemarchevsky@fb.com>
 References: <20211101224357.2651181-1-davemarchevsky@fb.com>
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: zls4ya9RL4Z1BnTOFUs-KjNh3zFw7FTw
-X-Proofpoint-GUID: zls4ya9RL4Z1BnTOFUs-KjNh3zFw7FTw
+X-Proofpoint-ORIG-GUID: ofIm3dX44SISRqZ91u2tsoJ8Cj40r48i
+X-Proofpoint-GUID: ofIm3dX44SISRqZ91u2tsoJ8Cj40r48i
 Content-Transfer-Encoding: quoted-printable
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
@@ -63,48 +63,57 @@ X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.182.1,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-01_07,2021-11-01_01,2020-04-07_01
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- bulkscore=0 phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=583
- spamscore=0 malwarescore=0 priorityscore=1501 clxscore=1015
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 phishscore=0 spamscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 mlxlogscore=896 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2110150000 definitions=main-2111010119
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As part of the road to libbpf 1.0, and discussed in libbpf issue tracker
-[0], bpf_program__get_prog_info_linear and its associated structs and
-helper functions should be deprecated. The functionality is too specific
-to the needs of 'perf', and there's little/no out-of-tree usage to
-preclude introduction of a more general helper in the future.
+Per [0], callers of libbpf functions with LIBBPF_STRICT_DIRECT_ERRS set
+should handle negative error codes of various values (e.g. -EINVAL).
+Migrate two callsites which were explicitly checking for -1 only to
+handle the new scheme.
 
-  [0] Closes: https://github.com/libbpf/libbpf/issues/313
+  [0]: https://github.com/libbpf/libbpf/wiki/Libbpf-1.0-migration-guide#dir=
+ect-error-code-returning-libbpf_strict_direct_errs
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- tools/lib/bpf/libbpf.h | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/bpf/bpftool/btf_dumper.c | 2 +-
+ tools/bpf/bpftool/struct_ops.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 9de0f299706b..797f5f8a0e20 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -918,12 +918,15 @@ struct bpf_prog_info_linear {
- 	__u8			data[];
- };
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
+index 9c25286a5c73..6934e8634b94 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -52,7 +52,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_dump=
+er *d,
 =20
-+LIBBPF_DEPRECATED_SINCE(0, 6, "use a custom linear prog_info wrapper")
- LIBBPF_API struct bpf_prog_info_linear *
- bpf_program__get_prog_info_linear(int fd, __u64 arrays);
+ 	/* Get the bpf_prog's name.  Obtain from func_info. */
+ 	prog_fd =3D bpf_prog_get_fd_by_id(prog_id);
+-	if (prog_fd =3D=3D -1)
++	if (prog_fd < 0)
+ 		goto print;
 =20
-+LIBBPF_DEPRECATED_SINCE(0, 6, "use a custom linear prog_info wrapper")
- LIBBPF_API void
- bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear);
+ 	prog_info =3D bpf_program__get_prog_info_linear(prog_fd,
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index ab2d2290569a..20f803dce2e4 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -252,7 +252,7 @@ static struct res do_one_id(const char *id_str, work_fu=
+nc func, void *data,
+ 	}
 =20
-+LIBBPF_DEPRECATED_SINCE(0, 6, "use a custom linear prog_info wrapper")
- LIBBPF_API void
- bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear);
-=20
+ 	fd =3D bpf_map_get_fd_by_id(id);
+-	if (fd =3D=3D -1) {
++	if (fd < 0) {
+ 		p_err("can't get map by id (%lu): %s", id, strerror(errno));
+ 		res.nr_errs++;
+ 		return res;
 --=20
 2.30.2
 
