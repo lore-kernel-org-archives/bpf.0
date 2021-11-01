@@ -2,116 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49E13C433F5
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 15:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0502C433EF
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 15:45:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 305D46124C
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 15:01:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 836FD61051
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 15:45:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbhKAPDr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Nov 2021 11:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbhKAPDq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Nov 2021 11:03:46 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBC2C061714
-        for <bpf@vger.kernel.org>; Mon,  1 Nov 2021 08:01:13 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id i12so12544586ila.12
-        for <bpf@vger.kernel.org>; Mon, 01 Nov 2021 08:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UeCamez7dYjsVrzr0y/VUZD6no3Hy/V9lIflaKTQhDk=;
-        b=m8+uc5Hqe0SMu/zS36qgvCpi65JkbeDmRFHvstBwQ5bIVE2XCLjeJjV5cXcrb+K2t6
-         IuUXrneaToxudpTgMoPzGljjZz75iTvTwwwklJ12xj78aVw99Gq6ovznhZSGex3R4JbV
-         QQqZBaTyH2qJF7UMrZcm0WNRhD5kzJgz3x6YM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UeCamez7dYjsVrzr0y/VUZD6no3Hy/V9lIflaKTQhDk=;
-        b=V3Ql5zFEl8E98Xd+V0Ar24Z+ceieY6HXa78OXzmR8ey9Q0Q44h8SiDIrZUxCcee7Z7
-         sHaHZxbZDVc/zOcxKGp2mlVWbI1Kuc93OqlGaMJHuxXC/RDSTwbXWIQq4gAwBeZH5nAu
-         i05bzBUpmAxX1GpcDklTiQG9qGhvNqX3R+abcC8i1vUSC/WTKcvqDQKGFFWVAPIrgBEo
-         +uHGpERzQ89/0m33UPY0W3JSkHlskq/OZsMLCCWiXy35K6HAIniv6kcFbJmDSwupbmSD
-         IiZTjr4k7Xse7B2c7PnnKm2fmeT2KcflcNTRBXh06QVI6lmzSkkE7hplaAcw83jLpyQK
-         gd2g==
-X-Gm-Message-State: AOAM531JswaPOstxO9bWYxUkqfAtm6VrcOdH5Q701hM4E1D5oG/mHopK
-        uNB34HA5bqYNKwVeI3LhpMjs6S3faXaZPcMaxUK916XefYOPXQ==
-X-Google-Smtp-Source: ABdhPJwCzDoM1KKgXMm9p+bT5xCKWNES6qXpJKw0Z+anp4R+lQkPh2d5qolZHXfPnwqrdOJcfW59FWKOhQIaqaqH5IU=
-X-Received: by 2002:a05:6e02:148b:: with SMTP id n11mr2709381ilk.83.1635778873157;
- Mon, 01 Nov 2021 08:01:13 -0700 (PDT)
+        id S231362AbhKAPrc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Nov 2021 11:47:32 -0400
+Received: from www62.your-server.de ([213.133.104.62]:41768 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229658AbhKAPrc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Nov 2021 11:47:32 -0400
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mhZUS-000Eo3-QG; Mon, 01 Nov 2021 16:44:52 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mhZUS-0002JX-DH; Mon, 01 Nov 2021 16:44:52 +0100
+Subject: Re: [PATCH bpf-next v3] bpf: Change value of MAX_TAIL_CALL_CNT from
+ 32 to 33
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Johan Almbladh <johan.almbladh@anyfinetworks.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, illusionist.neo@gmail.com,
+        zlim.lnx@gmail.com, naveen.n.rao@linux.ibm.com,
+        luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
+        iii@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        udknight@gmail.com, davem@davemloft.net
+References: <1635508430-2918-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f80b4756-8e74-6ee8-c367-30f8d2771bfb@iogearbox.net>
+Date:   Mon, 1 Nov 2021 16:44:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20211028164357.1439102-1-revest@chromium.org> <20211028224653.qhuwkp75fridkzpw@kafai-mbp.dhcp.thefacebook.com>
- <CABRcYmLWAp6kYJBA2g+DvNQcg-5NaAz7u51ucBMPfW0dGykZAg@mail.gmail.com> <204584e8-7817-f445-1e73-b23552f54c2f@gmail.com>
-In-Reply-To: <204584e8-7817-f445-1e73-b23552f54c2f@gmail.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Mon, 1 Nov 2021 16:01:02 +0100
-Message-ID: <CABRcYmJxp6-GSDRZfBQ-_7MbaJWTM_W4Ok=nSxLVEJ3+Sn7Fpw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Allow bpf_d_path in perf_event_mmap
-To:     Hengqi Chen <hengqi.chen@gmail.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@kernel.org, jackmanb@google.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1635508430-2918-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26340/Mon Nov  1 09:21:46 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 1, 2021 at 2:17 PM Hengqi Chen <hengqi.chen@gmail.com> wrote:
->
-> Hi,
->
->
-> On 2021/10/30 1:02 AM, Florent Revest wrote:
-> > On Fri, Oct 29, 2021 at 12:47 AM Martin KaFai Lau <kafai@fb.com> wrote:
-> >>
-> >> On Thu, Oct 28, 2021 at 06:43:57PM +0200, Florent Revest wrote:
-> >>> Allow the helper to be called from the perf_event_mmap hook. This is
-> >>> convenient to lookup vma->vm_file and implement a similar logic as
-> >>> perf_event_mmap_event in BPF.
-> >> From struct vm_area_struct:
-> >>         struct file * vm_file;          /* File we map to (can be NULL). */
-> >>
-> >> Under perf_event_mmap, vm_file won't be NULL or bpf_d_path can handle it?
-> >
-> > Thanks Martin, this is a very good point. :) Yes, vm_file can be NULL
-> > in perf_event_mmap.
-> > I wonder what would happen (and what we could do about it? :|).
-> > bpf_d_path is called on &vma->vm_file->f_path So without NULL checks
-> > (of vm_file) in BPF, the helper wouldn't be called with a NULL pointer
-> > but rather with an address that is offsetof(struct file, f_path).
-> >
->
-> I tested this patch with the following BCC script:
->
->     bpf_text = '''
->     #include <linux/mm_types.h>
->
->     KFUNC_PROBE(perf_event_mmap, struct vm_area_struct *vma)
->     {
->         char path[256] = {};
->
->         bpf_d_path(&vma->vm_file->f_path, path, sizeof(path));
->         bpf_trace_printk("perf_event_mmap %s", path);
->         return 0;
->     }
->     '''
->
->     b = BPF(text=bpf_text)
->     print("BPF program loaded")
->     b.trace_print()
->
-> This change causes kernel panic. I think it's because of this NULL pointer.
+On 10/29/21 1:53 PM, Tiezhu Yang wrote:
+[...]
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index b6c72af..6d10292 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -1565,7 +1565,8 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+>   
+>   		if (unlikely(index >= array->map.max_entries))
+>   			goto out;
+> -		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
+> +
+> +		if (unlikely(tail_call_cnt == MAX_TAIL_CALL_CNT))
+>   			goto out;
+>   
 
-Thank you for the testing and repro Hengqi :)
-Indeed, I was able to reproduce this panic. When vma->vm_file is NULL,
-&vma->vm_file->f_path ends up being 0x18 so d_path causes a panic.
-I suppose that this sort of issue must be relatively common in helpers
-that take a PTR_TO_BTF_ID though ? I wonder if there is anything that
-the verifier could do about this ? For example if vma->vm_file could
-be PTR_TO_BTF_ID_OR_NULL and therefore vma->vm_file->f_path somehow
-considered invalid ?
+Why making it less robust by going with == rather than >= ?
