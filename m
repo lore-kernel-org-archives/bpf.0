@@ -2,118 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1B85C433F5
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 13:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA98BC433FE
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 14:07:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8EC5160F0F
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 13:17:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B993E60E0C
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 14:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbhKANUU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Nov 2021 09:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbhKANUT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Nov 2021 09:20:19 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1347C061714;
-        Mon,  1 Nov 2021 06:17:46 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id g11so4941286pfv.7;
-        Mon, 01 Nov 2021 06:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ElXLGUufMIfi7saztQ05KyMJtRkBVmLZk3K8RMUcE/g=;
-        b=pbWrcOS/E/Gkv13GNp//Zd/onyhqaNcNq2Rdu9GxPxMXEDnfiBU933SbOH0wbi0FJC
-         obvfAJ/lnAXDu938R6NR9nSq2GaJpxSmgiSW48lj5dE/iknMmNjPY7afACSmTivHY6NS
-         y03ZdwmxJmriBiBTtPYs9SVLnMg1Ho7E4e5DESub/+DGM8HwLFFo9tff2ENNEKE+ae+G
-         0zU4uHj/N4RTMuV7Fg5ejyKTvLwtcBIarPnAHOTH5CGgCJL/O8KtCf/3baCwl6E/H3wQ
-         wbxN1xEHKnirwvrIiL94fxx/ULwhEJwO/fGj2u4aPwtmVpoSSg4piz4zOTfHbIEiwv/4
-         6Wcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ElXLGUufMIfi7saztQ05KyMJtRkBVmLZk3K8RMUcE/g=;
-        b=cx6kKTjNk/ihbNjt8w/uk/n16/EpvLFRbcJToKfPjoG/jaj3lVmglYlfApSJIVxNF5
-         KAqtLij9B3R5OZ24Ec1PEUsGiJc8w91d6unUInjenov+0K8cXc2dk5DZYFXJ0gHKtOIl
-         4sx0gb0Um4TBQOz5YAoDRVQpd8pIWVi5ECWRDRM8aN+R0bRKRzJsJszO6kLBjH5nk3nm
-         MI/OpEHJEJbqbP5vnMuNF2SfKXr7uBS1g1/L2fUd6obgl+M9N/jo5h+ujNKD5qyEzp4p
-         rvEKyaqRw1r6GyIUqA/cStQuz4F+K4NrS20RHR6qWVcQzLi4daKWyy+TvfKKN5oOXHtV
-         8V5Q==
-X-Gm-Message-State: AOAM530359Hn1uL8hA4ucQwcaVx4u2asOn0jWgWiTYkVyg1AKZ//vTBC
-        dlOyYXUnNLWLZXMZIlWcW8A=
-X-Google-Smtp-Source: ABdhPJxZtOo8xG7N0PRsh2O8ZZhFc5wI/xd3rxFZqqMP3xc3A++hez5iW7ovtZl1hKAhrmG1ZwjX5A==
-X-Received: by 2002:aa7:90d0:0:b0:44d:b8a:8837 with SMTP id k16-20020aa790d0000000b0044d0b8a8837mr28905418pfk.47.1635772666050;
-        Mon, 01 Nov 2021 06:17:46 -0700 (PDT)
-Received: from [192.168.255.10] ([203.205.141.115])
-        by smtp.gmail.com with ESMTPSA id q18sm16897419pfj.46.2021.11.01.06.17.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Nov 2021 06:17:45 -0700 (PDT)
-Message-ID: <204584e8-7817-f445-1e73-b23552f54c2f@gmail.com>
-Date:   Mon, 1 Nov 2021 21:17:42 +0800
+        id S232250AbhKAOKO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Nov 2021 10:10:14 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:48592 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232157AbhKAOKO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Nov 2021 10:10:14 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 25DFD1FD73;
+        Mon,  1 Nov 2021 14:07:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1635775659; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JCO02YOtqC3o+QYpVWZbFnMlxhlNKWkgnCq9GR7eOfY=;
+        b=rCpSfWbAI96JJfPfUefp3YNvUeZTDPGjfKjwkZITw2oSVBOuuD44X8+Tf2EqJP3BTjF9sx
+        GG4pyJNuna9fIR4vJ6+gx8wG2f3v9Lgqc6xO5cHqly6ACyATUhIAjBQ0Wzw/mAXTJkynZw
+        xDiFcGbJyW1/WHoPxB6gspVnXb/SGiI=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F02FCA3B81;
+        Mon,  1 Nov 2021 14:07:37 +0000 (UTC)
+Date:   Mon, 1 Nov 2021 15:07:03 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     akpm@linux-foundation.org, keescook@chromium.org,
+        rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        arnaldo.melo@gmail.com, peterz@infradead.org,
+        viro@zeniv.linux.org.uk, valentin.schneider@arm.com,
+        qiang.zhang@windriver.com, robdclark@chromium.org,
+        christian@brauner.io, dietmar.eggemann@arm.com, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, dennis.dalessandro@cornelisnetworks.com,
+        mike.marciniszyn@cornelisnetworks.com, dledford@redhat.com,
+        jgg@ziepe.ca, linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com
+Subject: Re: [PATCH v7 00/11] extend task comm from 16 to 24
+Message-ID: <YX/0h7j/nDwoBA+J@alley>
+References: <20211101060419.4682-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.2.0
-Subject: Re: [PATCH bpf-next] bpf: Allow bpf_d_path in perf_event_mmap
-Content-Language: en-US
-To:     Florent Revest <revest@chromium.org>,
-        Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jackmanb@google.com,
-        linux-kernel@vger.kernel.org
-References: <20211028164357.1439102-1-revest@chromium.org>
- <20211028224653.qhuwkp75fridkzpw@kafai-mbp.dhcp.thefacebook.com>
- <CABRcYmLWAp6kYJBA2g+DvNQcg-5NaAz7u51ucBMPfW0dGykZAg@mail.gmail.com>
-From:   Hengqi Chen <hengqi.chen@gmail.com>
-In-Reply-To: <CABRcYmLWAp6kYJBA2g+DvNQcg-5NaAz7u51ucBMPfW0dGykZAg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211101060419.4682-1-laoar.shao@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
-
-
-On 2021/10/30 1:02 AM, Florent Revest wrote:
-> On Fri, Oct 29, 2021 at 12:47 AM Martin KaFai Lau <kafai@fb.com> wrote:
->>
->> On Thu, Oct 28, 2021 at 06:43:57PM +0200, Florent Revest wrote:
->>> Allow the helper to be called from the perf_event_mmap hook. This is
->>> convenient to lookup vma->vm_file and implement a similar logic as
->>> perf_event_mmap_event in BPF.
->> From struct vm_area_struct:
->>         struct file * vm_file;          /* File we map to (can be NULL). */
->>
->> Under perf_event_mmap, vm_file won't be NULL or bpf_d_path can handle it?
+On Mon 2021-11-01 06:04:08, Yafang Shao wrote:
+> There're many truncated kthreads in the kernel, which may make trouble
+> for the user, for example, the user can't get detailed device
+> information from the task comm.
 > 
-> Thanks Martin, this is a very good point. :) Yes, vm_file can be NULL
-> in perf_event_mmap.
-> I wonder what would happen (and what we could do about it? :|).
-> bpf_d_path is called on &vma->vm_file->f_path So without NULL checks
-> (of vm_file) in BPF, the helper wouldn't be called with a NULL pointer
-> but rather with an address that is offsetof(struct file, f_path).
+> This patchset tries to improve this problem fundamentally by extending
+> the task comm size from 16 to 24, which is a very simple way. 
 > 
+> In order to do that, we have to do some cleanups first.
+> 
+> 1. Make the copy of task comm always safe no matter what the task
+>    comm size is. For example,
+> 
+>       Unsafe                 Safe
+>       strlcpy                strscpy_pad
+>       strncpy                strscpy_pad
+>       bpf_probe_read_kernel  bpf_probe_read_kernel_str
+>                              bpf_core_read_str
+>                              bpf_get_current_comm
+>                              perf_event__prepare_comm
+>                              prctl(2)
+> 
+>    After this step, the comm size change won't make any trouble to the
+>    kernel or the in-tree tools for example perf, BPF programs.
+> 
+> 2. Cleanup some old hard-coded 16
+>    Actually we don't need to convert all of them to TASK_COMM_LEN or
+>    TASK_COMM_LEN_16, what we really care about is if the convert can
+>    make the code more reasonable or easier to understand. For
+>    example, some in-tree tools read the comm from sched:sched_switch
+>    tracepoint, as it is derived from the kernel, we'd better make them
+>    consistent with the kernel.
 
-I tested this patch with the following BCC script:
+The above changes make sense even if we do not extend comm[] array in
+task_struct.
 
-    bpf_text = '''
-    #include <linux/mm_types.h>
 
-    KFUNC_PROBE(perf_event_mmap, struct vm_area_struct *vma)
-    {
-        char path[256] = {};
+> 3. Extend the task comm size from 16 to 24
+>    task_struct is growing rather regularly by 8 bytes. This size change
+>    should be acceptable. We used to think about extending the size for
+>    CONFIG_BASE_FULL only, but that would be a burden for maintenance
+>    and introduce code complexity.
+> 
+> 4. Print a warning if the kthread comm is still truncated.
+> 
+> 5. What will happen to the out-of-tree tools after this change?
+>    If the tool get task comm through kernel API, for example prctl(2),
+>    bpf_get_current_comm() and etc, then it doesn't matter how large the
+>    user buffer is, because it will always get a string with a nul
+>    terminator. While if it gets the task comm through direct string copy,
+>    the user tool must make sure the copied string has a nul terminator
+>    itself. As TASK_COMM_LEN is not exposed to userspace, there's no
+>    reason that it must require a fixed-size task comm.
 
-        bpf_d_path(&vma->vm_file->f_path, path, sizeof(path));
-        bpf_trace_printk("perf_event_mmap %s", path);
-        return 0;
-    }
-    '''
+The amount of code that has to be updated is really high. I am pretty
+sure that there are more potential buffer overflows left.
 
-    b = BPF(text=bpf_text)
-    print("BPF program loaded")
-    b.trace_print()
+You did not commented on the concerns in the thread
+https://lore.kernel.org/all/CAADnVQKm0Ljj-w5PbkAu1ugLFnZRRPt-Vk-J7AhXxDD5xVompA@mail.gmail.com/
 
-This change causes kernel panic. I think it's because of this NULL pointer.
+Several people suggested to use a more conservative approach. I mean
+to keep comm[16] as is and add a new pointer to the full name. The buffer
+for the long name might be dynamically allocated only when needed.
+
+The pointer might be either in task_struct or struct kthread. It might
+be used the same way as the full name stored by workqueue kthreads.
+
+The advantage of the separate pointer:
+
+   + would work for names longer than 32
+   + will not open security holes in code
+
+Best Regards,
+Petr
