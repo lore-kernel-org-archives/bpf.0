@@ -2,88 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A47CC433EF
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 16:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B6D2C433F5
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 16:20:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5D9D610D2
-	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 16:06:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09A3761166
+	for <bpf@archiver.kernel.org>; Mon,  1 Nov 2021 16:20:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231919AbhKAQJS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 1 Nov 2021 12:09:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37154 "EHLO mail.kernel.org"
+        id S232698AbhKAQWm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 1 Nov 2021 12:22:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44570 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230517AbhKAQJS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 1 Nov 2021 12:09:18 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D66A610FC;
-        Mon,  1 Nov 2021 16:06:39 +0000 (UTC)
-Date:   Mon, 1 Nov 2021 12:06:36 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Qiang Zhang <qiang.zhang@windriver.com>,
-        robdclark <robdclark@chromium.org>,
-        christian <christian@brauner.io>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        dennis.dalessandro@cornelisnetworks.com,
-        mike.marciniszyn@cornelisnetworks.com, dledford@redhat.com,
-        jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 00/11] extend task comm from 16 to 24
-Message-ID: <20211101120636.3cfc5afa@gandalf.local.home>
-In-Reply-To: <YYAPhE9uX7OYTlpv@alley>
-References: <20211101060419.4682-1-laoar.shao@gmail.com>
-        <YX/0h7j/nDwoBA+J@alley>
-        <CALOAHbA61RyGVzG8SVcNG=0rdqnUCt4AxCKmtuxRnbS_SH=+MQ@mail.gmail.com>
-        <YYAPhE9uX7OYTlpv@alley>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S232692AbhKAQWm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 1 Nov 2021 12:22:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id BA7716115B;
+        Mon,  1 Nov 2021 16:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635783608;
+        bh=hUZM1gaPOjZAlPgpNZ5sCi4NaVWCN9ntfJOsTV3J2Aw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=G1J6hxyOhppDDNCQOAkMSfAexH9U0Srb9rS4GlBN/44v1hcO7AfPbtoiNaiorSV9C
+         jXiDnOGPH84mVVXoDsNoYVGtpUZ6UbenFstv8ejJJdvgz3UKDL8mZny/aJrLeu6Dvj
+         CwchYAx65f1Lo/gUEV4Sn7mEgTT+bSBZ/feSqkW36+bq/uDl0dGyPBUCXYwIny+R18
+         JSxgBGq5SLfEdetLbALwpzRNlkYoI2WXsAj8bfUoEgkeG7pH5EDbmaDk92EQWw1V9W
+         Og5/Q9/KI3ysZd69NIDItaeXzAcWrV48lgKUcwVWm5SSZHIcpxndwV0VblwTX4n4ql
+         u7kR2w6ZLuOVg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/4] Various RISC-V BPF improvements
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163578360870.18867.4815897974014023266.git-patchwork-notify@kernel.org>
+Date:   Mon, 01 Nov 2021 16:20:08 +0000
+References: <20211028161057.520552-1-bjorn@kernel.org>
+In-Reply-To: <20211028161057.520552-1-bjorn@kernel.org>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, luke.r.nels@gmail.com, xi.wang@gmail.com,
+        linux-riscv@lists.infradead.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 1 Nov 2021 17:02:12 +0100
-Petr Mladek <pmladek@suse.com> wrote:
+Hello:
 
-> > I thought Steven[1] and  Kees[2] have already clearly explained why we
-> > do it like that, so I didn't give any more words on it.
-> > 
-> > [1]. https://lore.kernel.org/all/20211025170503.59830a43@gandalf.local.home/  
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Thu, 28 Oct 2021 18:10:53 +0200 you wrote:
+> Unfortunately selftest/bpf does not build for RV64. This series fixes
+> that.
 > 
-> Steven was against switching task->comm[16] into a dynamically
-> allocated pointer. But he was not against storing longer names
-> separately.
+> * JIT requires more iterations to converge
+> * Some Makefile issues
+> * bpf_tracing.h was missing RISC-V macros for PT_REGS
+> 
+> [...]
 
-Just to be clear. I was recommending that the comm[16] would still behave
-like it does today. Where it is truncated. But if the name is longer, it
-could be stored in a separate location if the caller wanted to know the
-full name.
+Here is the summary with links:
+  - [bpf-next,v2,1/4] riscv, bpf: Increase the maximum number of iterations
+    https://git.kernel.org/bpf/bpf-next/c/4b54214f39ff
+  - [bpf-next,v2,2/4] tools build: Add RISC-V to HOSTARCH parsing
+    https://git.kernel.org/bpf/bpf-next/c/b390d69831ee
+  - [bpf-next,v2,3/4] riscv, libbpf: Add RISC-V (RV64) support to bpf_tracing.h
+    https://git.kernel.org/bpf/bpf-next/c/589fed479ba1
+  - [bpf-next,v2,4/4] selftests/bpf: Fix broken riscv build
+    https://git.kernel.org/bpf/bpf-next/c/36e70b9b06bf
 
--- Steve
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
