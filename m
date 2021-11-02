@@ -2,138 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F5E6C433EF
-	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 09:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72C3DC433F5
+	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 10:00:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 38CF660C41
-	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 09:43:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6174361078
+	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 10:00:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbhKBJpr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Nov 2021 05:45:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:59422 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230058AbhKBJpq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Nov 2021 05:45:46 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DAA411B3;
-        Tue,  2 Nov 2021 02:43:08 -0700 (PDT)
-Received: from [10.32.36.26] (e121896.Emea.Arm.com [10.32.36.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E3BA3F5A1;
-        Tue,  2 Nov 2021 02:43:02 -0700 (PDT)
-Subject: Re: [PATCH v2 2/2] kallsyms: ignore arm mapping symbols when loading
- module
-To:     Lexi Shao <shaolexi@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, mark.rutland@arm.com, mingo@redhat.com,
-        namhyung@kernel.org, nixiaoming@huawei.com, peterz@infradead.org,
-        qiuxi1@huawei.com, wangbing6@huawei.com, jeyu@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        natechancellor@gmail.com, ndesaulniers@google.com,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-References: <cb7e9ef7-eda4-b197-df8a-0b54f9b56181@arm.com>
- <20211029065038.39449-1-shaolexi@huawei.com>
- <20211029065038.39449-3-shaolexi@huawei.com>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <415161e7-cdfc-557a-23cb-f72c5829bae4@arm.com>
-Date:   Tue, 2 Nov 2021 09:43:00 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S230411AbhKBKCz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Nov 2021 06:02:55 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:14697 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229612AbhKBKCz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Nov 2021 06:02:55 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Hk51y5qHqzZcTn;
+        Tue,  2 Nov 2021 17:58:14 +0800 (CST)
+Received: from dggpeml500025.china.huawei.com (7.185.36.35) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Tue, 2 Nov 2021 18:00:18 +0800
+Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.15; Tue, 2 Nov
+ 2021 18:00:17 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <houtao1@huawei.com>
+Subject: [PATCH bpf-next v3 1/2] bpf: clean-up bpf_verifier_vlog() for BPF_LOG_KERNEL log level
+Date:   Tue, 2 Nov 2021 18:15:35 +0800
+Message-ID: <20211102101536.2958763-2-houtao1@huawei.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20211102101536.2958763-1-houtao1@huawei.com>
+References: <20211102101536.2958763-1-houtao1@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20211029065038.39449-3-shaolexi@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+An extra newline will output for bpf_log() with BPF_LOG_KERNEL level
+as shown below:
 
+[   52.095704] BPF:The function test_3 has 12 arguments. Too many.
+[   52.095704]
+[   52.096896] Error in parsing func ptr test_3 in struct bpf_dummy_ops
 
-On 29/10/2021 07:50, Lexi Shao wrote:
-> Arm modules contains mapping symbols(e.g. $a $d) which are ignored in
-> module_kallsyms_on_each_symbol. However, these symbols are still
-> displayed when catting /proc/kallsyms. This confuses tools(e.g. perf)
-> that resolves kernel symbols with address using information from
-> /proc/kallsyms. See discussion in Link:
-> https://lore.kernel.org/all/c7dfbd17-85fd-b914-b90f-082abc64c9d1@arm.com/
-> 
-> Being left out in vmlinux(see scripts/kallsyms.c is_ignored_symbol) and
-> kernelspace API implies that these symbols are not used in any cases.
-> So we can ignore them in the first place by not adding them to module
-> kallsyms.
-> 
-> Signed-off-by: Lexi Shao <shaolexi@huawei.com>
+Now all bpf_log() are ended by newline, but not all btf_verifier_log()
+are ended by newline, so checking whether or not the log message
+has the trailing newline and adding a newline if not.
 
+Also there is no need to calculate the left userspace buffer size
+for kernel log output and to truncate the output by '\0' which
+has already been done by vscnprintf(), so only do these for
+userspace log output.
 
-I tested this and it has removed the $ symbols from kallsyms where I saw
-them before.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/verifier.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Reviewed-by: James Clark <james.clark@arm.com>
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a4b48bd4e3ca..77beaa46329a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -299,13 +299,15 @@ void bpf_verifier_vlog(struct bpf_verifier_log *log, const char *fmt,
+ 	WARN_ONCE(n >= BPF_VERIFIER_TMP_LOG_SIZE - 1,
+ 		  "verifier log line truncated - local buffer too short\n");
+ 
+-	n = min(log->len_total - log->len_used - 1, n);
+-	log->kbuf[n] = '\0';
+-
+ 	if (log->level == BPF_LOG_KERNEL) {
+-		pr_err("BPF:%s\n", log->kbuf);
++		bool newline = n > 0 && log->kbuf[n - 1] == '\n';
++
++		pr_err("BPF: %s%s", log->kbuf, newline ? "" : "\n");
+ 		return;
+ 	}
++
++	n = min(log->len_total - log->len_used - 1, n);
++	log->kbuf[n] = '\0';
+ 	if (!copy_to_user(log->ubuf + log->len_used, log->kbuf, n + 1))
+ 		log->len_used += n;
+ 	else
+-- 
+2.29.2
 
-> ---
->  kernel/module.c | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 5c26a76e800b..b30cbbe144c7 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -2662,16 +2662,22 @@ static char elf_type(const Elf_Sym *sym, const struct load_info *info)
->  	return '?';
->  }
->  
-> -static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
-> -			unsigned int shnum, unsigned int pcpundx)
-> +static inline int is_arm_mapping_symbol(const char *str);
-> +static bool is_core_symbol(const Elf_Sym *src, const struct load_info *info)
->  {
->  	const Elf_Shdr *sec;
-> +	const Elf_Shdr *sechdrs = info->sechdrs;
-> +	unsigned int shnum = info->hdr->e_shnum;
-> +	unsigned int pcpundx = info->index.pcpu;
->  
->  	if (src->st_shndx == SHN_UNDEF
->  	    || src->st_shndx >= shnum
->  	    || !src->st_name)
->  		return false;
->  
-> +	if (is_arm_mapping_symbol(&info->strtab[src->st_name]))
-> +		return false;
-> +
->  #ifdef CONFIG_KALLSYMS_ALL
->  	if (src->st_shndx == pcpundx)
->  		return true;
-> @@ -2714,8 +2720,7 @@ static void layout_symtab(struct module *mod, struct load_info *info)
->  	/* Compute total space required for the core symbols' strtab. */
->  	for (ndst = i = 0; i < nsrc; i++) {
->  		if (i == 0 || is_livepatch_module(mod) ||
-> -		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
-> -				   info->index.pcpu)) {
-> +		    is_core_symbol(src+i, info)) {
->  			strtab_size += strlen(&info->strtab[src[i].st_name])+1;
->  			ndst++;
->  		}
-> @@ -2778,8 +2783,7 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
->  	for (ndst = i = 0; i < mod->kallsyms->num_symtab; i++) {
->  		mod->kallsyms->typetab[i] = elf_type(src + i, info);
->  		if (i == 0 || is_livepatch_module(mod) ||
-> -		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum,
-> -				   info->index.pcpu)) {
-> +		    is_core_symbol(src+i, info)) {
->  			mod->core_kallsyms.typetab[ndst] =
->  			    mod->kallsyms->typetab[i];
->  			dst[ndst] = src[i];
-> @@ -4246,8 +4250,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
->  		 * We ignore unnamed symbols: they're uninformative
->  		 * and inserted at a whim.
->  		 */
-> -		if (*kallsyms_symbol_name(kallsyms, i) == '\0'
-> -		    || is_arm_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-> +		if (*kallsyms_symbol_name(kallsyms, i) == '\0')
->  			continue;
->  
->  		if (thisval <= addr && thisval > bestval) {
-> 
