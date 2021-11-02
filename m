@@ -2,110 +2,201 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3AD3C433FE
-	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 07:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AEDDC433EF
+	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 08:49:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E28F60EDF
-	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 07:56:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E02260EB8
+	for <bpf@archiver.kernel.org>; Tue,  2 Nov 2021 08:49:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbhKBH64 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 2 Nov 2021 03:58:56 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:52976 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbhKBH6y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 2 Nov 2021 03:58:54 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B46FE21956;
-        Tue,  2 Nov 2021 07:56:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1635839778; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6ap4olzBTfLejakCPItyAX9e8bDmpSosfrrPGCanr3k=;
-        b=WwJzLSQXjGdAyznGGV6SpWmdhW49bQlRnvPytZ6fgxedhPeRJVVTgMy0Ih0O5QwjOYpS6a
-        96PQR55FMHbwdMZIMobPll5efDcxRY2ZviZSkiefrXc10IHo417/75YCqs3hplKbT1wpnR
-        lqnAN+Chyaj0oXodeKoyvl4MpccGfbE=
-Received: from suse.cz (unknown [10.100.224.162])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A7312A3B88;
-        Tue,  2 Nov 2021 07:56:17 +0000 (UTC)
-Date:   Tue, 2 Nov 2021 08:56:14 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Qiang Zhang <qiang.zhang@windriver.com>,
-        robdclark <robdclark@chromium.org>,
-        christian <christian@brauner.io>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        dennis.dalessandro@cornelisnetworks.com,
-        mike.marciniszyn@cornelisnetworks.com, dledford@redhat.com,
-        jgg@ziepe.ca, linux-rdma@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH v7 00/11] extend task comm from 16 to 24
-Message-ID: <YYDvHv76tJtJht8b@alley>
-References: <20211101060419.4682-1-laoar.shao@gmail.com>
- <YX/0h7j/nDwoBA+J@alley>
- <CALOAHbA61RyGVzG8SVcNG=0rdqnUCt4AxCKmtuxRnbS_SH=+MQ@mail.gmail.com>
- <YYAPhE9uX7OYTlpv@alley>
- <CALOAHbAx55AUo3bm8ZepZSZnw7A08cvKPdPyNTf=E_tPqmw5hw@mail.gmail.com>
- <20211101211845.20ff5b2e@gandalf.local.home>
- <CALOAHbCgaJ83qZVj6qt8tgJBd4ojuLfgSp2Ce7CgzQYshM-amQ@mail.gmail.com>
+        id S229924AbhKBIwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 2 Nov 2021 04:52:06 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:14696 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhKBIwF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 2 Nov 2021 04:52:05 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Hk3SD3jYczZcJc;
+        Tue,  2 Nov 2021 16:47:24 +0800 (CST)
+Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Tue, 2 Nov 2021 16:49:28 +0800
+Received: from localhost.localdomain (10.175.101.6) by
+ dggpeml500011.china.huawei.com (7.185.36.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.15; Tue, 2 Nov 2021 16:49:27 +0800
+From:   Di Zhu <zhudi2@huawei.com>
+To:     <davem@davemloft.net>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <jakub@cloudflare.com>
+CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhudi2@huawei.com>
+Subject: [PATCH bpf-next v4 2/2] selftests: bpf: test BPF_PROG_QUERY for progs attached to sockmap
+Date:   Tue, 2 Nov 2021 16:48:56 +0800
+Message-ID: <20211102084856.483534-2-zhudi2@huawei.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20211102084856.483534-1-zhudi2@huawei.com>
+References: <20211102084856.483534-1-zhudi2@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALOAHbCgaJ83qZVj6qt8tgJBd4ojuLfgSp2Ce7CgzQYshM-amQ@mail.gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500011.china.huawei.com (7.185.36.84)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue 2021-11-02 09:26:35, Yafang Shao wrote:
-> On Tue, Nov 2, 2021 at 9:18 AM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > On Tue, 2 Nov 2021 09:09:50 +0800
-> > Yafang Shao <laoar.shao@gmail.com> wrote:
-> > >      Now we only care about kthread, so we can put the pointer into a
-> > > kthread specific struct.
-> > >      For example in the struct kthread, or in kthread->data (which may
-> > > conflict with workqueue).
-> >
-> > No, add a new field to the structure. "full_name" or something like that.
-> > I'm guessing it should be NULL if the name fits in TASK_COMM_LEN and
-> > allocated if the name had to be truncated.
-> >
-> > Do not overload data with this. That will just make things confusing.
-> > There's not that many kthreads, where an addition of an 8 byte pointer is
-> > going to cause issues.
-> 
-> Sure, I will add a new field named "full_name", which only be
-> allocated if the kthread's comm is truncated.
+Add test for querying progs attached to sockmap. we use an existing
+libbpf query interface to query prog cnt before and after progs
+attaching to sockmap and check whether the queried prog id is right.
 
-The plan looks good to me.
+Signed-off-by: Di Zhu <zhudi2@huawei.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 84 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_progs_query.c      | 24 ++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
 
-One more thing. It should obsolete the workqueue-specific solution.
-It would be great to clean up the workqueue code as the next step.
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 1352ec104149..7f3d5c5da6e1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -8,6 +8,7 @@
+ #include "test_sockmap_update.skel.h"
+ #include "test_sockmap_invalid_update.skel.h"
+ #include "test_sockmap_skb_verdict_attach.skel.h"
++#include "test_sockmap_progs_query.skel.h"
+ #include "bpf_iter_sockmap.skel.h"
+ 
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+@@ -315,6 +316,83 @@ static void test_sockmap_skb_verdict_attach(enum bpf_attach_type first,
+ 	test_sockmap_skb_verdict_attach__destroy(skel);
+ }
+ 
++static __u32 query_prog_id(int prog)
++{
++	struct bpf_prog_info info = {};
++	__u32 info_len = sizeof(info);
++	int err;
++
++	err = bpf_obj_get_info_by_fd(prog, &info, &info_len);
++	if (CHECK_FAIL(err || info_len != sizeof(info))) {
++		perror("bpf_obj_get_info_by_fd");
++		return 0;
++	}
++
++	return info.id;
++}
++
++static void test_sockmap_progs_query(enum bpf_attach_type attach_type)
++{
++	struct test_sockmap_progs_query *skel;
++	int err, map, verdict, duration = 0;
++	__u32 attach_flags = 0;
++	__u32 prog_ids[3] = {};
++	__u32 prog_cnt = 3;
++
++	skel = test_sockmap_progs_query__open_and_load();
++	if (CHECK_FAIL(!skel)) {
++		perror("test_sockmap_progs_query__open_and_load");
++		return;
++	}
++
++	map = bpf_map__fd(skel->maps.sock_map);
++
++	if (attach_type == BPF_SK_MSG_VERDICT)
++		verdict = bpf_program__fd(skel->progs.prog_skmsg_verdict);
++	else
++		verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++
++	err = bpf_prog_query(map, attach_type, 0 /* query flags */,
++			     &attach_flags, prog_ids, &prog_cnt);
++	if (CHECK(err, "bpf_prog_query", "failed\n"))
++		goto out;
++
++	if (CHECK(attach_flags != 0, "bpf_prog_query",
++		  "wrong attach_flags on query: %u", attach_flags))
++		goto out;
++
++	if (CHECK(prog_cnt != 0, "bpf_prog_query",
++		  "wrong program count on query: %u", prog_cnt))
++		goto out;
++
++	err = bpf_prog_attach(verdict, map, attach_type, 0);
++	if (CHECK(err, "bpf_prog_attach", "failed\n"))
++		goto out;
++
++	prog_cnt = 1;
++	err = bpf_prog_query(map, attach_type, 0 /* query flags */,
++			     &attach_flags, prog_ids, &prog_cnt);
++	if (CHECK(err, "bpf_prog_query", "failed\n"))
++		goto detach;
++
++	if (CHECK(attach_flags != 0, "bpf_prog_query attach_flags",
++		  "wrong attach_flags on query: %u", attach_flags))
++		goto detach;
++
++	if (CHECK(prog_cnt != 1, "bpf_prog_query prog_cnt",
++		  "wrong program count on query: %u", prog_cnt))
++		goto detach;
++
++	if (CHECK(prog_ids[0] != query_prog_id(verdict), "bpf_prog_query",
++		  "wrong prog_ids on query: %u", prog_ids[0]))
++		goto detach;
++
++detach:
++	bpf_prog_detach2(verdict, map, attach_type);
++out:
++	test_sockmap_progs_query__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -341,4 +419,10 @@ void test_sockmap_basic(void)
+ 		test_sockmap_skb_verdict_attach(BPF_SK_SKB_STREAM_VERDICT,
+ 						BPF_SK_SKB_VERDICT);
+ 	}
++	if (test__start_subtest("sockmap progs query")) {
++		test_sockmap_progs_query(BPF_SK_MSG_VERDICT);
++		test_sockmap_progs_query(BPF_SK_SKB_STREAM_PARSER);
++		test_sockmap_progs_query(BPF_SK_SKB_STREAM_VERDICT);
++		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
++	}
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
+new file mode 100644
+index 000000000000..9d58d61c0dee
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} sock_map SEC(".maps");
++
++SEC("sk_skb")
++int prog_skb_verdict(struct __sk_buff *skb)
++{
++	return SK_PASS;
++}
++
++SEC("sk_msg")
++int prog_skmsg_verdict(struct sk_msg_md *msg)
++{
++	return SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.27.0
 
-Best Regards,
-Petr
