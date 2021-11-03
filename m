@@ -2,65 +2,69 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 333A5C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A124C433F5
 	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 15:00:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1666261073
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 15:00:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D64376109F
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 15:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbhKCPCs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S230382AbhKCPCs (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 3 Nov 2021 11:02:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49648 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:49656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230500AbhKCPCs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S231441AbhKCPCs (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 3 Nov 2021 11:02:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8BCDD60EBC;
+Received: by mail.kernel.org (Postfix) with ESMTPS id 94080610E8;
         Wed,  3 Nov 2021 15:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1635951611;
-        bh=33b7lEsjBKX7zlGhVCM5u3dB6n6JAXw6hKuBCqWIzWU=;
+        bh=AmH1lUcquZ/7tPRdAzSR1hBvSo9cYeGErGG5dSXtHWo=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=R7sidw6X+HQiqf4Q7XlGE4Z0T84vT6VMJJMZ43Uu1wvA8qjkcJXsp6BWuVjy3a13i
-         HoE+C2Z8OSa4HPGdTkdC//2Fk5cXBbLhFStSnmckarjcyLZhLygz/E3K69kERHBQnl
-         04/MT1+6m8Dk+KZK+nBivF6mB5JDU4WB4LuMx/NQsMFVzQJyIDs4pVVoiOhRbp5+C9
-         BocNrPXqgtGXiK1vjT6fQJi7fikyB4UloRKXR2HcbC9PnVdbAsqiJeaI8JG0PjMLGe
-         jFI8UBIld9JofBa9KhK3qVMfK5nwD7dFxvHLRzoLyF/mNzI1gPbtmtOFi9vTDmJxAO
-         vY5RH0cEldinA==
+        b=MVvXgh+Fd9ykethFx1oLFEpv/4d7JVKd1WAPZiGkZM2RNwGZWK7mdTDOio6/XVnsT
+         6Bo9jew9NyIf2QSZU9S3e6O4hV5j5jdzUeVpu9DG5WqAit0CVKYEUrz1IewpyHMZQX
+         H1jerJyaWDOzLgrX1IGguTETXnIRov9McX1SFPxn62mcXvmKZ0eYgWmi1zuIwrTr5r
+         V5pyrLkjoTutbE0thyGLwrRNaq11zxuJLgMZ8N46ch9Xph+UsPoyH912tp7aXJgJ4h
+         RJxEwrnjtYM4Phvoyno72qq9oexI8L5pGsIxBpM4uPfaQNuZATpDyGGNqrMp9/enD6
+         2rNdpYurAb+XA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: make netcnt selftests serial to avoid
- spurious failures
+Subject: Re: [PATCH bpf-next 0/2] bpf: Allow doing stack read with size larger
+ than the earlier spilled reg
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163595161150.22644.1739857992912896755.git-patchwork-notify@kernel.org>
+Message-Id: <163595161153.22644.6536061698592430689.git-patchwork-notify@kernel.org>
 Date:   Wed, 03 Nov 2021 15:00:11 +0000
-References: <20211103054113.2130582-1-andrii@kernel.org>
-In-Reply-To: <20211103054113.2130582-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com
+References: <20211102064528.315637-1-kafai@fb.com>
+In-Reply-To: <20211102064528.315637-1-kafai@fb.com>
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, yhs@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This series was applied to bpf/bpf.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Tue, 2 Nov 2021 22:41:13 -0700 you wrote:
-> When running `./test_progs -j` test_netcnt fails with a very high
-> probability, undercounting number of packets received (9999 vs expected
-> 10000). It seems to be conflicting with other cgroup/skb selftests. So
-> make it serial for now to make parallel mode more robust.
+On Mon, 1 Nov 2021 23:45:28 -0700 you wrote:
+> This set fixes an issue that the verifier rejects a u64 stack read
+> after an earlier u32 scalar spill.  It is caused by the earlier commit
+> that allows tracking the spilled u32 scalar reg.
 > 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> Martin KaFai Lau (2):
+>   bpf: Do not reject when the stack read size is different from the
+>     tracked scalar size
+>   bpf: selftest: verifier test on refill from a smaller spill
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] selftests/bpf: make netcnt selftests serial to avoid spurious failures
-    https://git.kernel.org/bpf/bpf/c/401a33da3a45
+  - [bpf-next,1/2] bpf: Do not reject when the stack read size is different from the tracked scalar size
+    https://git.kernel.org/bpf/bpf/c/f30d4968e9ae
+  - [bpf-next,2/2] bpf: selftest: verifier test on refill from a smaller spill
+    https://git.kernel.org/bpf/bpf/c/c08455dec5ac
 
 You are awesome, thank you!
 -- 
