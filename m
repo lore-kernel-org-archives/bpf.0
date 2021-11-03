@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B60A9C433FE
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11090C433F5
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A44E16113B
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA12B611AE
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbhKCWLo convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Nov 2021 18:11:44 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:4768 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230301AbhKCWLn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 3 Nov 2021 18:11:43 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1A3KAjOv001369
-        for <bpf@vger.kernel.org>; Wed, 3 Nov 2021 15:09:06 -0700
+        id S230319AbhKCWLq convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Nov 2021 18:11:46 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13542 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230314AbhKCWLq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 3 Nov 2021 18:11:46 -0400
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A3KAcsg008185
+        for <bpf@vger.kernel.org>; Wed, 3 Nov 2021 15:09:08 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 3c3ves38hg-8
+        by mx0a-00082601.pphosted.com with ESMTP id 3c3veb36sm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 03 Nov 2021 15:09:06 -0700
+        for <bpf@vger.kernel.org>; Wed, 03 Nov 2021 15:09:08 -0700
 Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 3 Nov 2021 15:08:59 -0700
+ 15.1.2308.14; Wed, 3 Nov 2021 15:09:07 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id AF98F7D65E48; Wed,  3 Nov 2021 15:08:51 -0700 (PDT)
+        id 0BB357D65E5E; Wed,  3 Nov 2021 15:09:04 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v2 bpf-next 02/12] libbpf: pass number of prog load attempts explicitly
-Date:   Wed, 3 Nov 2021 15:08:35 -0700
-Message-ID: <20211103220845.2676888-3-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 08/12] selftests/bpf: fix non-strict SEC() program sections
+Date:   Wed, 3 Nov 2021 15:08:41 -0700
+Message-ID: <20211103220845.2676888-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211103220845.2676888-1-andrii@kernel.org>
 References: <20211103220845.2676888-1-andrii@kernel.org>
@@ -42,88 +42,125 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: sj6D_YnHfi__ugWWgbGASVVl_t9MIunN
-X-Proofpoint-ORIG-GUID: sj6D_YnHfi__ugWWgbGASVVl_t9MIunN
+X-Proofpoint-ORIG-GUID: nqQQPWZczuY2HQ0yyAwABDCPbT2Tviu9
+X-Proofpoint-GUID: nqQQPWZczuY2HQ0yyAwABDCPbT2Tviu9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-03_06,2021-11-03_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- mlxlogscore=956 clxscore=1015 impostorscore=0 adultscore=0 malwarescore=0
- mlxscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2111030116
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ spamscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ bulkscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111030116
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow to control number of BPF_PROG_LOAD attempts from outside the
-sys_bpf_prog_load() helper.
+Fix few more SEC() definitions that were previously missed.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/progs/test_l4lb.c            | 2 +-
+ tools/testing/selftests/bpf/progs/test_l4lb_noinline.c   | 2 +-
+ tools/testing/selftests/bpf/progs/test_map_lock.c        | 2 +-
+ tools/testing/selftests/bpf/progs/test_queue_stack_map.h | 2 +-
+ tools/testing/selftests/bpf/progs/test_skb_ctx.c         | 2 +-
+ tools/testing/selftests/bpf/progs/test_spin_lock.c       | 2 +-
+ tools/testing/selftests/bpf/progs/test_tcp_estats.c      | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index c09cbb868c9f..8e6a23c42560 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -74,14 +74,15 @@ static inline int sys_bpf_fd(enum bpf_cmd cmd, union bpf_attr *attr,
- 	return ensure_good_fd(fd);
+diff --git a/tools/testing/selftests/bpf/progs/test_l4lb.c b/tools/testing/selftests/bpf/progs/test_l4lb.c
+index 04fee08863cb..c26057ec46dc 100644
+--- a/tools/testing/selftests/bpf/progs/test_l4lb.c
++++ b/tools/testing/selftests/bpf/progs/test_l4lb.c
+@@ -448,7 +448,7 @@ static __always_inline int process_packet(void *data, __u64 off, void *data_end,
+ 	return bpf_redirect(ifindex, 0);
  }
  
--static inline int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size)
-+#define PROG_LOAD_ATTEMPTS 5
-+
-+static inline int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts)
+-SEC("l4lb-demo")
++SEC("tc")
+ int balancer_ingress(struct __sk_buff *ctx)
  {
--	int retries = 5;
- 	int fd;
- 
- 	do {
- 		fd = sys_bpf_fd(BPF_PROG_LOAD, attr, size);
--	} while (fd < 0 && errno == EAGAIN && retries-- > 0);
-+	} while (fd < 0 && errno == EAGAIN && --attempts > 0);
- 
- 	return fd;
- }
-@@ -304,7 +305,7 @@ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
- 		memcpy(attr.prog_name, load_attr->name,
- 		       min(strlen(load_attr->name), (size_t)BPF_OBJ_NAME_LEN - 1));
- 
--	fd = sys_bpf_prog_load(&attr, sizeof(attr));
-+	fd = sys_bpf_prog_load(&attr, sizeof(attr), PROG_LOAD_ATTEMPTS);
- 	if (fd >= 0)
- 		return fd;
- 
-@@ -345,7 +346,7 @@ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
- 			break;
- 		}
- 
--		fd = sys_bpf_prog_load(&attr, sizeof(attr));
-+		fd = sys_bpf_prog_load(&attr, sizeof(attr), PROG_LOAD_ATTEMPTS);
- 		if (fd >= 0)
- 			goto done;
- 	}
-@@ -359,7 +360,7 @@ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
- 	attr.log_level = 1;
- 	load_attr->log_buf[0] = 0;
- 
--	fd = sys_bpf_prog_load(&attr, sizeof(attr));
-+	fd = sys_bpf_prog_load(&attr, sizeof(attr), PROG_LOAD_ATTEMPTS);
- done:
- 	/* free() doesn't affect errno, so we don't need to restore it */
- 	free(finfo);
-@@ -449,7 +450,7 @@ int bpf_verify_program(enum bpf_prog_type type, const struct bpf_insn *insns,
- 	attr.kern_version = kern_version;
- 	attr.prog_flags = prog_flags;
- 
--	fd = sys_bpf_prog_load(&attr, sizeof(attr));
-+	fd = sys_bpf_prog_load(&attr, sizeof(attr), PROG_LOAD_ATTEMPTS);
- 	return libbpf_err_errno(fd);
+ 	void *data_end = (void *)(long)ctx->data_end;
+diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
+index b9e2753f4f91..19e4d2071c60 100644
+--- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
++++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
+@@ -447,7 +447,7 @@ static __noinline int process_packet(void *data, __u64 off, void *data_end,
+ 	return bpf_redirect(ifindex, 0);
  }
  
+-SEC("l4lb-demo")
++SEC("tc")
+ int balancer_ingress(struct __sk_buff *ctx)
+ {
+ 	void *data_end = (void *)(long)ctx->data_end;
+diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
+index b5c07ae7b68f..acf073db9e8b 100644
+--- a/tools/testing/selftests/bpf/progs/test_map_lock.c
++++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
+@@ -30,7 +30,7 @@ struct {
+ 	__type(value, struct array_elem);
+ } array_map SEC(".maps");
+ 
+-SEC("map_lock_demo")
++SEC("cgroup/skb")
+ int bpf_map_lock_test(struct __sk_buff *skb)
+ {
+ 	struct hmap_elem zero = {}, *val;
+diff --git a/tools/testing/selftests/bpf/progs/test_queue_stack_map.h b/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
+index 0fcd3ff0e38a..648e8cab7a23 100644
+--- a/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
++++ b/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
+@@ -24,7 +24,7 @@ struct {
+ 	__uint(value_size, sizeof(__u32));
+ } map_out SEC(".maps");
+ 
+-SEC("test")
++SEC("tc")
+ int _test(struct __sk_buff *skb)
+ {
+ 	void *data_end = (void *)(long)skb->data_end;
+diff --git a/tools/testing/selftests/bpf/progs/test_skb_ctx.c b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
+index 1d61b36e6067..c482110cfc95 100644
+--- a/tools/testing/selftests/bpf/progs/test_skb_ctx.c
++++ b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
+@@ -5,7 +5,7 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+-SEC("skb_ctx")
++SEC("tc")
+ int process(struct __sk_buff *skb)
+ {
+ 	#pragma clang loop unroll(full)
+diff --git a/tools/testing/selftests/bpf/progs/test_spin_lock.c b/tools/testing/selftests/bpf/progs/test_spin_lock.c
+index 0d31a3b3505f..7e88309d3229 100644
+--- a/tools/testing/selftests/bpf/progs/test_spin_lock.c
++++ b/tools/testing/selftests/bpf/progs/test_spin_lock.c
+@@ -45,7 +45,7 @@ struct {
+ 
+ #define CREDIT_PER_NS(delta, rate) (((delta) * rate) >> 20)
+ 
+-SEC("spin_lock_demo")
++SEC("tc")
+ int bpf_sping_lock_test(struct __sk_buff *skb)
+ {
+ 	volatile int credit = 0, max_credit = 100, pkt_len = 64;
+diff --git a/tools/testing/selftests/bpf/progs/test_tcp_estats.c b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
+index 2c5c602c6011..e2ae049c2f85 100644
+--- a/tools/testing/selftests/bpf/progs/test_tcp_estats.c
++++ b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
+@@ -244,7 +244,7 @@ static __always_inline void send_basic_event(struct sock *sk,
+ 	bpf_map_update_elem(&ev_record_map, &key, &ev, BPF_ANY);
+ }
+ 
+-SEC("dummy_tracepoint")
++SEC("tp/dummy/tracepoint")
+ int _dummy_tracepoint(struct dummy_tracepoint_args *arg)
+ {
+ 	if (!arg->sock)
 -- 
 2.30.2
 
