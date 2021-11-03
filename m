@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11090C433F5
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEDABC4332F
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA12B611AE
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A95AB6113B
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbhKCWLq convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Nov 2021 18:11:46 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13542 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230314AbhKCWLq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 3 Nov 2021 18:11:46 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A3KAcsg008185
-        for <bpf@vger.kernel.org>; Wed, 3 Nov 2021 15:09:08 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c3veb36sm-1
+        id S231144AbhKCWLt convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Nov 2021 18:11:49 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10026 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230334AbhKCWLt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 3 Nov 2021 18:11:49 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A3KAuuH003715
+        for <bpf@vger.kernel.org>; Wed, 3 Nov 2021 15:09:12 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c3ddfrse2-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 03 Nov 2021 15:09:08 -0700
-Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 03 Nov 2021 15:09:12 -0700
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 3 Nov 2021 15:09:07 -0700
+ 15.1.2308.14; Wed, 3 Nov 2021 15:09:11 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 0BB357D65E5E; Wed,  3 Nov 2021 15:09:04 -0700 (PDT)
+        id 3AFC07D65E6A; Wed,  3 Nov 2021 15:09:10 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v2 bpf-next 08/12] selftests/bpf: fix non-strict SEC() program sections
-Date:   Wed, 3 Nov 2021 15:08:41 -0700
-Message-ID: <20211103220845.2676888-9-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 11/12] selftests/bpf: use explicit bpf_prog_test_load() calls everywhere
+Date:   Wed, 3 Nov 2021 15:08:44 -0700
+Message-ID: <20211103220845.2676888-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211103220845.2676888-1-andrii@kernel.org>
 References: <20211103220845.2676888-1-andrii@kernel.org>
@@ -42,125 +42,779 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: nqQQPWZczuY2HQ0yyAwABDCPbT2Tviu9
-X-Proofpoint-GUID: nqQQPWZczuY2HQ0yyAwABDCPbT2Tviu9
+X-Proofpoint-ORIG-GUID: NiB51Rlc8PdZoaoYuGHrBMukqfyhX38A
+X-Proofpoint-GUID: NiB51Rlc8PdZoaoYuGHrBMukqfyhX38A
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-03_06,2021-11-03_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- spamscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
- bulkscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111030116
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 suspectscore=0
+ bulkscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999 spamscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111030115
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix few more SEC() definitions that were previously missed.
+-Dbpf_prog_load_deprecated=bpf_prog_test_load trick is both ugly and
+breaks when deprecation goes into effect due to macro magic. Convert all
+the uses to explicit bpf_prog_test_load() calls which avoid deprecation
+errors and makes everything less magical.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_l4lb.c            | 2 +-
- tools/testing/selftests/bpf/progs/test_l4lb_noinline.c   | 2 +-
- tools/testing/selftests/bpf/progs/test_map_lock.c        | 2 +-
- tools/testing/selftests/bpf/progs/test_queue_stack_map.h | 2 +-
- tools/testing/selftests/bpf/progs/test_skb_ctx.c         | 2 +-
- tools/testing/selftests/bpf/progs/test_spin_lock.c       | 2 +-
- tools/testing/selftests/bpf/progs/test_tcp_estats.c      | 2 +-
- 7 files changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/Makefile           |  2 +-
+ .../selftests/bpf/flow_dissector_load.h        |  3 ++-
+ .../testing/selftests/bpf/get_cgroup_id_user.c |  5 +++--
+ .../selftests/bpf/prog_tests/bpf_obj_id.c      |  2 +-
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c   |  8 ++++----
+ .../bpf/prog_tests/get_stack_raw_tp.c          |  4 ++--
+ .../selftests/bpf/prog_tests/global_data.c     |  2 +-
+ .../bpf/prog_tests/global_func_args.c          |  2 +-
+ .../selftests/bpf/prog_tests/kfree_skb.c       |  2 +-
+ .../selftests/bpf/prog_tests/l4lb_all.c        |  2 +-
+ .../bpf/prog_tests/load_bytes_relative.c       |  2 +-
+ .../selftests/bpf/prog_tests/map_lock.c        |  4 ++--
+ .../selftests/bpf/prog_tests/pkt_access.c      |  2 +-
+ .../selftests/bpf/prog_tests/pkt_md_access.c   |  2 +-
+ .../selftests/bpf/prog_tests/queue_stack_map.c |  2 +-
+ .../testing/selftests/bpf/prog_tests/skb_ctx.c |  2 +-
+ .../selftests/bpf/prog_tests/skb_helpers.c     |  2 +-
+ .../selftests/bpf/prog_tests/spinlock.c        |  4 ++--
+ .../selftests/bpf/prog_tests/stacktrace_map.c  |  2 +-
+ .../bpf/prog_tests/stacktrace_map_raw_tp.c     |  2 +-
+ .../selftests/bpf/prog_tests/tailcalls.c       | 18 +++++++++---------
+ .../bpf/prog_tests/task_fd_query_rawtp.c       |  2 +-
+ .../bpf/prog_tests/task_fd_query_tp.c          |  4 ++--
+ .../selftests/bpf/prog_tests/tcp_estats.c      |  2 +-
+ .../selftests/bpf/prog_tests/tp_attach_query.c |  2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp.c   |  2 +-
+ .../selftests/bpf/prog_tests/xdp_adjust_tail.c |  6 +++---
+ .../selftests/bpf/prog_tests/xdp_attach.c      |  6 +++---
+ .../selftests/bpf/prog_tests/xdp_info.c        |  2 +-
+ .../selftests/bpf/prog_tests/xdp_perf.c        |  2 +-
+ .../selftests/bpf/progs/fexit_bpf2bpf.c        |  2 +-
+ tools/testing/selftests/bpf/test_dev_cgroup.c  |  3 ++-
+ .../selftests/bpf/test_lirc_mode2_user.c       |  6 ++++--
+ tools/testing/selftests/bpf/test_maps.c        |  7 ++++---
+ tools/testing/selftests/bpf/test_sysctl.c      |  1 +
+ .../selftests/bpf/test_tcpnotify_user.c        |  3 ++-
+ tools/testing/selftests/bpf/xdping.c           |  3 ++-
+ 37 files changed, 68 insertions(+), 59 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb.c b/tools/testing/selftests/bpf/progs/test_l4lb.c
-index 04fee08863cb..c26057ec46dc 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb.c
-@@ -448,7 +448,7 @@ static __always_inline int process_packet(void *data, __u64 off, void *data_end,
- 	return bpf_redirect(ifindex, 0);
- }
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 5588c622d266..2016c583ed20 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -24,7 +24,6 @@ SAN_CFLAGS	?=
+ CFLAGS += -g -O0 -rdynamic -Wall $(GENFLAGS) $(SAN_CFLAGS)		\
+ 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
+ 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)			\
+-	  -Dbpf_prog_load_deprecated=bpf_prog_test_load			\
+ 	  -Dbpf_load_program=bpf_test_load_program
+ LDLIBS += -lcap -lelf -lz -lrt -lpthread
  
--SEC("l4lb-demo")
-+SEC("tc")
- int balancer_ingress(struct __sk_buff *ctx)
+@@ -207,6 +206,7 @@ $(OUTPUT)/test_lirc_mode2_user: testing_helpers.o
+ $(OUTPUT)/xdping: testing_helpers.o
+ $(OUTPUT)/flow_dissector_load: testing_helpers.o
+ $(OUTPUT)/test_maps: testing_helpers.o
++$(OUTPUT)/test_verifier: testing_helpers.o
+ 
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+diff --git a/tools/testing/selftests/bpf/flow_dissector_load.h b/tools/testing/selftests/bpf/flow_dissector_load.h
+index 9d0acc2fc6cc..f40b585f4e7e 100644
+--- a/tools/testing/selftests/bpf/flow_dissector_load.h
++++ b/tools/testing/selftests/bpf/flow_dissector_load.h
+@@ -4,6 +4,7 @@
+ 
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
++#include "testing_helpers.h"
+ 
+ static inline int bpf_flow_load(struct bpf_object **obj,
+ 				const char *path,
+@@ -18,7 +19,7 @@ static inline int bpf_flow_load(struct bpf_object **obj,
+ 	int prog_array_fd;
+ 	int ret, fd, i;
+ 
+-	ret = bpf_prog_load(path, BPF_PROG_TYPE_FLOW_DISSECTOR, obj,
++	ret = bpf_prog_test_load(path, BPF_PROG_TYPE_FLOW_DISSECTOR, obj,
+ 			    prog_fd);
+ 	if (ret)
+ 		return ret;
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+index 99628e1a1e58..3a7b82bd9e94 100644
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+@@ -19,6 +19,7 @@
+ #include <bpf/libbpf.h>
+ 
+ #include "cgroup_helpers.h"
++#include "testing_helpers.h"
+ #include "bpf_rlimit.h"
+ 
+ #define CHECK(condition, tag, format...) ({		\
+@@ -66,8 +67,8 @@ int main(int argc, char **argv)
+ 	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
+ 		return 1;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+-	if (CHECK(err, "bpf_prog_load", "err %d errno %d\n", err, errno))
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
++	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+ 		goto cleanup_cgroup_env;
+ 
+ 	cgidmap_fd = bpf_find_map(__func__, obj, "cg_ids");
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c b/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
+index eb8eeebe6935..0a6c5f00abd4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_obj_id.c
+@@ -48,7 +48,7 @@ void serial_test_bpf_obj_id(void)
+ 	bzero(zeros, sizeof(zeros));
+ 	for (i = 0; i < nr_iters; i++) {
+ 		now = time(NULL);
+-		err = bpf_prog_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT,
++		err = bpf_prog_test_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT,
+ 				    &objs[i], &prog_fds[i]);
+ 		/* test_obj_id.o is a dumb prog. It should never fail
+ 		 * to load.
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index 9cff14a23bb7..fdd603ebda28 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -65,7 +65,7 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 	int err, tgt_fd, i;
+ 	struct btf *btf;
+ 
+-	err = bpf_prog_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
++	err = bpf_prog_test_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
+ 			    &tgt_obj, &tgt_fd);
+ 	if (!ASSERT_OK(err, "tgt_prog_load"))
+ 		return;
+@@ -224,7 +224,7 @@ static int test_second_attach(struct bpf_object *obj)
+ 	if (CHECK(!prog, "find_prog", "prog %s not found\n", prog_name))
+ 		return -ENOENT;
+ 
+-	err = bpf_prog_load(tgt_obj_file, BPF_PROG_TYPE_UNSPEC,
++	err = bpf_prog_test_load(tgt_obj_file, BPF_PROG_TYPE_UNSPEC,
+ 			    &tgt_obj, &tgt_fd);
+ 	if (CHECK(err, "second_prog_load", "file %s err %d errno %d\n",
+ 		  tgt_obj_file, err, errno))
+@@ -274,7 +274,7 @@ static void test_fmod_ret_freplace(void)
+ 	__u32 duration = 0;
+ 	int err, pkt_fd, attach_prog_fd;
+ 
+-	err = bpf_prog_load(tgt_name, BPF_PROG_TYPE_UNSPEC,
++	err = bpf_prog_test_load(tgt_name, BPF_PROG_TYPE_UNSPEC,
+ 			    &pkt_obj, &pkt_fd);
+ 	/* the target prog should load fine */
+ 	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
+@@ -341,7 +341,7 @@ static void test_obj_load_failure_common(const char *obj_file,
+ 	int err, pkt_fd;
+ 	__u32 duration = 0;
+ 
+-	err = bpf_prog_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
++	err = bpf_prog_test_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
+ 			    &pkt_obj, &pkt_fd);
+ 	/* the target prog should load fine */
+ 	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+index 522237aa4470..569fcc6ed660 100644
+--- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+@@ -94,11 +94,11 @@ void test_get_stack_raw_tp(void)
+ 	struct bpf_map *map;
+ 	cpu_set_t cpu_set;
+ 
+-	err = bpf_prog_load(file_err, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
++	err = bpf_prog_test_load(file_err, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err >= 0, "prog_load raw tp", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load raw tp", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_data.c b/tools/testing/selftests/bpf/prog_tests/global_data.c
+index afd8639f9a94..9da131b32e13 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_data.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_data.c
+@@ -136,7 +136,7 @@ void test_global_data(void)
+ 	struct bpf_object *obj;
+ 	int err, prog_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+ 	if (CHECK(err, "load program", "error %d loading %s\n", err, file))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_func_args.c b/tools/testing/selftests/bpf/prog_tests/global_func_args.c
+index 8bcc2869102f..93a2439237b0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_func_args.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_func_args.c
+@@ -44,7 +44,7 @@ void test_global_func_args(void)
+ 	struct bpf_object *obj;
+ 	int err, prog_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_CGROUP_SKB, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_CGROUP_SKB, &obj, &prog_fd);
+ 	if (CHECK(err, "load program", "error %d loading %s\n", err, file))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+index 01e51d16c8b8..885413ed5c96 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+@@ -74,7 +74,7 @@ void serial_test_kfree_skb(void)
+ 	const int zero = 0;
+ 	bool test_ok[2];
+ 
+-	err = bpf_prog_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
++	err = bpf_prog_test_load("./test_pkt_access.o", BPF_PROG_TYPE_SCHED_CLS,
+ 			    &obj, &tattr.prog_fd);
+ 	if (CHECK(err, "prog_load sched cls", "err %d errno %d\n", err, errno))
+ 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/l4lb_all.c b/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
+index 8073105548ff..540ef28fabff 100644
+--- a/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
++++ b/tools/testing/selftests/bpf/prog_tests/l4lb_all.c
+@@ -30,7 +30,7 @@ static void test_l4lb(const char *file)
+ 	char buf[128];
+ 	u32 *magic = (u32 *)buf;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/load_bytes_relative.c b/tools/testing/selftests/bpf/prog_tests/load_bytes_relative.c
+index 5a2a689dbb68..4e0b2ec057aa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/load_bytes_relative.c
++++ b/tools/testing/selftests/bpf/prog_tests/load_bytes_relative.c
+@@ -27,7 +27,7 @@ void test_load_bytes_relative(void)
+ 	if (CHECK_FAIL(server_fd < 0))
+ 		goto close_cgroup_fd;
+ 
+-	err = bpf_prog_load("./load_bytes_relative.o", BPF_PROG_TYPE_CGROUP_SKB,
++	err = bpf_prog_test_load("./load_bytes_relative.o", BPF_PROG_TYPE_CGROUP_SKB,
+ 			    &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		goto close_server_fd;
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_lock.c b/tools/testing/selftests/bpf/prog_tests/map_lock.c
+index ce17b1ed8709..23d19e9cf26a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_lock.c
+@@ -53,9 +53,9 @@ void test_map_lock(void)
+ 	int err = 0, key = 0, i;
+ 	void *ret;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_CGROUP_SKB, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_CGROUP_SKB, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err)) {
+-		printf("test_map_lock:bpf_prog_load errno %d\n", errno);
++		printf("test_map_lock:bpf_prog_test_load errno %d\n", errno);
+ 		goto close_prog;
+ 	}
+ 	map_fd[0] = bpf_find_map(__func__, obj, "hash_map");
+diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
+index 44b514fabccd..6628710ec3c6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/pkt_access.c
++++ b/tools/testing/selftests/bpf/prog_tests/pkt_access.c
+@@ -9,7 +9,7 @@ void test_pkt_access(void)
+ 	__u32 duration, retval;
+ 	int err, prog_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
+index 939015cd6dba..c9d2d6a1bfcc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
++++ b/tools/testing/selftests/bpf/prog_tests/pkt_md_access.c
+@@ -9,7 +9,7 @@ void test_pkt_md_access(void)
+ 	__u32 duration, retval;
+ 	int err, prog_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
+index f47e7b1cb32c..8ccba3ab70ee 100644
+--- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
++++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
+@@ -27,7 +27,7 @@ static void test_queue_stack_map_by_type(int type)
+ 	else
+ 		return;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_SCHED_CLS, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+index c437e6ba8fe2..d3106078838c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
++++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+@@ -32,7 +32,7 @@ void test_skb_ctx(void)
+ 	int err;
+ 	int i;
+ 
+-	err = bpf_prog_load("./test_skb_ctx.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load("./test_skb_ctx.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &tattr.prog_fd);
+ 	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
+ 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/skb_helpers.c b/tools/testing/selftests/bpf/prog_tests/skb_helpers.c
+index f302ad84a298..6f802a1c0800 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skb_helpers.c
++++ b/tools/testing/selftests/bpf/prog_tests/skb_helpers.c
+@@ -20,7 +20,7 @@ void test_skb_helpers(void)
+ 	struct bpf_object *obj;
+ 	int err;
+ 
+-	err = bpf_prog_load("./test_skb_helpers.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load("./test_skb_helpers.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &tattr.prog_fd);
+ 	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
+ 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/spinlock.c b/tools/testing/selftests/bpf/prog_tests/spinlock.c
+index 7577a77a4c4c..6307f5d2b417 100644
+--- a/tools/testing/selftests/bpf/prog_tests/spinlock.c
++++ b/tools/testing/selftests/bpf/prog_tests/spinlock.c
+@@ -24,9 +24,9 @@ void test_spinlock(void)
+ 	int err = 0, i;
+ 	void *ret;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_CGROUP_SKB, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_CGROUP_SKB, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err)) {
+-		printf("test_spin_lock:bpf_prog_load errno %d\n", errno);
++		printf("test_spin_lock:bpf_prog_test_load errno %d\n", errno);
+ 		goto close_prog;
+ 	}
+ 	for (i = 0; i < 4; i++)
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
+index 04b476bd62b9..337493d74ec5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map.c
+@@ -12,7 +12,7 @@ void test_stacktrace_map(void)
+ 	struct bpf_object *obj;
+ 	struct bpf_link *link;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
+index 4fd30bb651ad..063a14a2060d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_raw_tp.c
+@@ -12,7 +12,7 @@ void test_stacktrace_map_raw_tp(void)
+ 	struct bpf_object *obj;
+ 	struct bpf_link *link = NULL;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load raw tp", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index 9825f1f7bfcc..5dc0f425bd11 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -16,7 +16,7 @@ static void test_tailcall_1(void)
+ 	char prog_name[32];
+ 	char buff[128] = {};
+ 
+-	err = bpf_prog_load("tailcall1.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load("tailcall1.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -154,7 +154,7 @@ static void test_tailcall_2(void)
+ 	char prog_name[32];
+ 	char buff[128] = {};
+ 
+-	err = bpf_prog_load("tailcall2.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load("tailcall2.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -228,7 +228,7 @@ static void test_tailcall_count(const char *which)
+ 	__u32 retval, duration;
+ 	char buff[128] = {};
+ 
+-	err = bpf_prog_load(which, BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load(which, BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -324,7 +324,7 @@ static void test_tailcall_4(void)
+ 	char buff[128] = {};
+ 	char prog_name[32];
+ 
+-	err = bpf_prog_load("tailcall4.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load("tailcall4.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -412,7 +412,7 @@ static void test_tailcall_5(void)
+ 	char buff[128] = {};
+ 	char prog_name[32];
+ 
+-	err = bpf_prog_load("tailcall5.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++	err = bpf_prog_test_load("tailcall5.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
+ 			    &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -498,7 +498,7 @@ static void test_tailcall_bpf2bpf_1(void)
+ 	__u32 retval, duration;
+ 	char prog_name[32];
+ 
+-	err = bpf_prog_load("tailcall_bpf2bpf1.o", BPF_PROG_TYPE_SCHED_CLS,
++	err = bpf_prog_test_load("tailcall_bpf2bpf1.o", BPF_PROG_TYPE_SCHED_CLS,
+ 			    &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -582,7 +582,7 @@ static void test_tailcall_bpf2bpf_2(void)
+ 	__u32 retval, duration;
+ 	char buff[128] = {};
+ 
+-	err = bpf_prog_load("tailcall_bpf2bpf2.o", BPF_PROG_TYPE_SCHED_CLS,
++	err = bpf_prog_test_load("tailcall_bpf2bpf2.o", BPF_PROG_TYPE_SCHED_CLS,
+ 			    &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -660,7 +660,7 @@ static void test_tailcall_bpf2bpf_3(void)
+ 	__u32 retval, duration;
+ 	char prog_name[32];
+ 
+-	err = bpf_prog_load("tailcall_bpf2bpf3.o", BPF_PROG_TYPE_SCHED_CLS,
++	err = bpf_prog_test_load("tailcall_bpf2bpf3.o", BPF_PROG_TYPE_SCHED_CLS,
+ 			    &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+@@ -757,7 +757,7 @@ static void test_tailcall_bpf2bpf_4(bool noise)
+ 	__u32 retval, duration;
+ 	char prog_name[32];
+ 
+-	err = bpf_prog_load("tailcall_bpf2bpf4.o", BPF_PROG_TYPE_SCHED_CLS,
++	err = bpf_prog_test_load("tailcall_bpf2bpf4.o", BPF_PROG_TYPE_SCHED_CLS,
+ 			    &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_rawtp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_rawtp.c
+index 1bdc1d86a50c..17947c9e1d66 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_rawtp.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_rawtp.c
+@@ -11,7 +11,7 @@ void test_task_fd_query_rawtp(void)
+ 	__u32 duration = 0;
+ 	char buf[256];
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_RAW_TRACEPOINT, &obj, &prog_fd);
+ 	if (CHECK(err, "prog_load raw tp", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+index 3f131b8fe328..c2a98a7a8dfc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+@@ -13,8 +13,8 @@ static void test_task_fd_query_tp_core(const char *probe_name,
+ 	__u32 duration = 0;
+ 	char buf[256];
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+-	if (CHECK(err, "bpf_prog_load", "err %d errno %d\n", err, errno))
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
++	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+ 		goto close_prog;
+ 
+ 	snprintf(buf, sizeof(buf),
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_estats.c b/tools/testing/selftests/bpf/prog_tests/tcp_estats.c
+index 594307dffd13..11bf755be4c9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcp_estats.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcp_estats.c
+@@ -8,7 +8,7 @@ void test_tcp_estats(void)
+ 	struct bpf_object *obj;
+ 	__u32 duration = 0;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+ 	CHECK(err, "", "err %d errno %d\n", err, errno);
+ 	if (err)
+ 		return;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+index 8652d0a46c87..39e79291c82b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
++++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+@@ -35,7 +35,7 @@ void serial_test_tp_attach_query(void)
+ 
+ 	query = malloc(sizeof(*query) + sizeof(__u32) * num_progs);
+ 	for (i = 0; i < num_progs; i++) {
+-		err = bpf_prog_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj[i],
++		err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj[i],
+ 				    &prog_fd[i]);
+ 		if (CHECK(err, "prog_load", "err %d errno %d\n", err, errno))
+ 			goto cleanup1;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp.c b/tools/testing/selftests/bpf/prog_tests/xdp.c
+index 48921ff74850..7a7ef9d4e151 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp.c
+@@ -16,7 +16,7 @@ void test_xdp(void)
+ 	__u32 duration, retval, size;
+ 	int err, prog_fd, map_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index f529e3c923ae..3f5a17c38be5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -10,7 +10,7 @@ static void test_xdp_adjust_tail_shrink(void)
+ 	int err, prog_fd;
+ 	char buf[128];
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+@@ -38,7 +38,7 @@ static void test_xdp_adjust_tail_grow(void)
+ 	__u32 duration, retval, size, expect_sz;
+ 	int err, prog_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+@@ -75,7 +75,7 @@ static void test_xdp_adjust_tail_grow2(void)
+ 		.data_size_out	= 0, /* Per test */
+ 	};
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &tattr.prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &tattr.prog_fd);
+ 	if (CHECK_ATTR(err, "load", "err %d errno %d\n", err, errno))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
+index 4c4057262cd8..c6fa390e3aa1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
+@@ -16,7 +16,7 @@ void serial_test_xdp_attach(void)
+ 
+ 	len = sizeof(info);
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj1, &fd1);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj1, &fd1);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 	err = bpf_obj_get_info_by_fd(fd1, &info, &len);
+@@ -24,7 +24,7 @@ void serial_test_xdp_attach(void)
+ 		goto out_1;
+ 	id1 = info.id;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj2, &fd2);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj2, &fd2);
+ 	if (CHECK_FAIL(err))
+ 		goto out_1;
+ 
+@@ -34,7 +34,7 @@ void serial_test_xdp_attach(void)
+ 		goto out_2;
+ 	id2 = info.id;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj3, &fd3);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj3, &fd3);
+ 	if (CHECK_FAIL(err))
+ 		goto out_2;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_info.c b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
+index 4e2a4fd56f67..abe48e82e1dc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_info.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
+@@ -29,7 +29,7 @@ void serial_test_xdp_info(void)
+ 
+ 	/* Setup prog */
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_perf.c b/tools/testing/selftests/bpf/prog_tests/xdp_perf.c
+index 7185bee16fe4..15a3900e4370 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_perf.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_perf.c
+@@ -9,7 +9,7 @@ void test_xdp_perf(void)
+ 	char in[128], out[128];
+ 	int err, prog_fd;
+ 
+-	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	err = bpf_prog_test_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
+ 	if (CHECK_FAIL(err))
+ 		return;
+ 
+diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+index 49a84a3a2306..48cd14b43741 100644
+--- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
+@@ -73,7 +73,7 @@ int test_subprog2(struct args_subprog2 *ctx)
+ 			      __builtin_preserve_access_index(&skb->len));
+ 
+ 	ret = ctx->ret;
+-	/* bpf_prog_load() loads "test_pkt_access.o" with BPF_F_TEST_RND_HI32
++	/* bpf_prog_test_load() loads "test_pkt_access.o" with BPF_F_TEST_RND_HI32
+ 	 * which randomizes upper 32 bits after BPF_ALU32 insns.
+ 	 * Hence after 'w0 <<= 1' upper bits of $rax are random.
+ 	 * That is expected and correct. Trim them.
+diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
+index 804dddd97d4c..c299d3452695 100644
+--- a/tools/testing/selftests/bpf/test_dev_cgroup.c
++++ b/tools/testing/selftests/bpf/test_dev_cgroup.c
+@@ -14,6 +14,7 @@
+ #include <bpf/libbpf.h>
+ 
+ #include "cgroup_helpers.h"
++#include "testing_helpers.h"
+ #include "bpf_rlimit.h"
+ 
+ #define DEV_CGROUP_PROG "./dev_cgroup.o"
+@@ -27,7 +28,7 @@ int main(int argc, char **argv)
+ 	int prog_fd, cgroup_fd;
+ 	__u32 prog_cnt;
+ 
+-	if (bpf_prog_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
++	if (bpf_prog_test_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
+ 			  &obj, &prog_fd)) {
+ 		printf("Failed to load DEV_CGROUP program\n");
+ 		goto out;
+diff --git a/tools/testing/selftests/bpf/test_lirc_mode2_user.c b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
+index fb5fd6841ef3..ebf68dce5504 100644
+--- a/tools/testing/selftests/bpf/test_lirc_mode2_user.c
++++ b/tools/testing/selftests/bpf/test_lirc_mode2_user.c
+@@ -45,6 +45,8 @@
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
+ 
++#include "testing_helpers.h"
++
+ int main(int argc, char **argv)
  {
- 	void *data_end = (void *)(long)ctx->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-index b9e2753f4f91..19e4d2071c60 100644
---- a/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-+++ b/tools/testing/selftests/bpf/progs/test_l4lb_noinline.c
-@@ -447,7 +447,7 @@ static __noinline int process_packet(void *data, __u64 off, void *data_end,
- 	return bpf_redirect(ifindex, 0);
- }
+ 	struct bpf_object *obj;
+@@ -58,8 +60,8 @@ int main(int argc, char **argv)
+ 		return 2;
+ 	}
  
--SEC("l4lb-demo")
-+SEC("tc")
- int balancer_ingress(struct __sk_buff *ctx)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
-index b5c07ae7b68f..acf073db9e8b 100644
---- a/tools/testing/selftests/bpf/progs/test_map_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
-@@ -30,7 +30,7 @@ struct {
- 	__type(value, struct array_elem);
- } array_map SEC(".maps");
+-	ret = bpf_prog_load("test_lirc_mode2_kern.o",
+-			    BPF_PROG_TYPE_LIRC_MODE2, &obj, &progfd);
++	ret = bpf_prog_test_load("test_lirc_mode2_kern.o",
++				 BPF_PROG_TYPE_LIRC_MODE2, &obj, &progfd);
+ 	if (ret) {
+ 		printf("Failed to load bpf program\n");
+ 		return 1;
+diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+index c7a36a9378f8..8b31bc1a801d 100644
+--- a/tools/testing/selftests/bpf/test_maps.c
++++ b/tools/testing/selftests/bpf/test_maps.c
+@@ -25,6 +25,7 @@
+ #include "bpf_util.h"
+ #include "bpf_rlimit.h"
+ #include "test_maps.h"
++#include "testing_helpers.h"
  
--SEC("map_lock_demo")
-+SEC("cgroup/skb")
- int bpf_map_lock_test(struct __sk_buff *skb)
- {
- 	struct hmap_elem zero = {}, *val;
-diff --git a/tools/testing/selftests/bpf/progs/test_queue_stack_map.h b/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
-index 0fcd3ff0e38a..648e8cab7a23 100644
---- a/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
-+++ b/tools/testing/selftests/bpf/progs/test_queue_stack_map.h
-@@ -24,7 +24,7 @@ struct {
- 	__uint(value_size, sizeof(__u32));
- } map_out SEC(".maps");
+ #ifndef ENOTSUPP
+ #define ENOTSUPP 524
+@@ -830,21 +831,21 @@ static void test_sockmap(unsigned int tasks, void *data)
+ 	}
  
--SEC("test")
-+SEC("tc")
- int _test(struct __sk_buff *skb)
- {
- 	void *data_end = (void *)(long)skb->data_end;
-diff --git a/tools/testing/selftests/bpf/progs/test_skb_ctx.c b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-index 1d61b36e6067..c482110cfc95 100644
---- a/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-+++ b/tools/testing/selftests/bpf/progs/test_skb_ctx.c
-@@ -5,7 +5,7 @@
+ 	/* Load SK_SKB program and Attach */
+-	err = bpf_prog_load(SOCKMAP_PARSE_PROG,
++	err = bpf_prog_test_load(SOCKMAP_PARSE_PROG,
+ 			    BPF_PROG_TYPE_SK_SKB, &obj, &parse_prog);
+ 	if (err) {
+ 		printf("Failed to load SK_SKB parse prog\n");
+ 		goto out_sockmap;
+ 	}
  
- char _license[] SEC("license") = "GPL";
+-	err = bpf_prog_load(SOCKMAP_TCP_MSG_PROG,
++	err = bpf_prog_test_load(SOCKMAP_TCP_MSG_PROG,
+ 			    BPF_PROG_TYPE_SK_MSG, &obj, &msg_prog);
+ 	if (err) {
+ 		printf("Failed to load SK_SKB msg prog\n");
+ 		goto out_sockmap;
+ 	}
  
--SEC("skb_ctx")
-+SEC("tc")
- int process(struct __sk_buff *skb)
- {
- 	#pragma clang loop unroll(full)
-diff --git a/tools/testing/selftests/bpf/progs/test_spin_lock.c b/tools/testing/selftests/bpf/progs/test_spin_lock.c
-index 0d31a3b3505f..7e88309d3229 100644
---- a/tools/testing/selftests/bpf/progs/test_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/test_spin_lock.c
-@@ -45,7 +45,7 @@ struct {
+-	err = bpf_prog_load(SOCKMAP_VERDICT_PROG,
++	err = bpf_prog_test_load(SOCKMAP_VERDICT_PROG,
+ 			    BPF_PROG_TYPE_SK_SKB, &obj, &verdict_prog);
+ 	if (err) {
+ 		printf("Failed to load SK_SKB verdict prog\n");
+diff --git a/tools/testing/selftests/bpf/test_sysctl.c b/tools/testing/selftests/bpf/test_sysctl.c
+index 4a395d7a8ea9..4f6cf833b522 100644
+--- a/tools/testing/selftests/bpf/test_sysctl.c
++++ b/tools/testing/selftests/bpf/test_sysctl.c
+@@ -17,6 +17,7 @@
+ #include "bpf_rlimit.h"
+ #include "bpf_util.h"
+ #include "cgroup_helpers.h"
++#include "testing_helpers.h"
  
- #define CREDIT_PER_NS(delta, rate) (((delta) * rate) >> 20)
+ #define CG_PATH			"/foo"
+ #define MAX_INSNS		512
+diff --git a/tools/testing/selftests/bpf/test_tcpnotify_user.c b/tools/testing/selftests/bpf/test_tcpnotify_user.c
+index 4a39304cc5a6..63111cb082fe 100644
+--- a/tools/testing/selftests/bpf/test_tcpnotify_user.c
++++ b/tools/testing/selftests/bpf/test_tcpnotify_user.c
+@@ -25,6 +25,7 @@
  
--SEC("spin_lock_demo")
-+SEC("tc")
- int bpf_sping_lock_test(struct __sk_buff *skb)
- {
- 	volatile int credit = 0, max_credit = 100, pkt_len = 64;
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_estats.c b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-index 2c5c602c6011..e2ae049c2f85 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_estats.c
-@@ -244,7 +244,7 @@ static __always_inline void send_basic_event(struct sock *sk,
- 	bpf_map_update_elem(&ev_record_map, &key, &ev, BPF_ANY);
- }
+ #include "test_tcpnotify.h"
+ #include "trace_helpers.h"
++#include "testing_helpers.h"
  
--SEC("dummy_tracepoint")
-+SEC("tp/dummy/tracepoint")
- int _dummy_tracepoint(struct dummy_tracepoint_args *arg)
- {
- 	if (!arg->sock)
+ #define SOCKET_BUFFER_SIZE (getpagesize() < 8192L ? getpagesize() : 8192L)
+ 
+@@ -92,7 +93,7 @@ int main(int argc, char **argv)
+ 	if (cg_fd < 0)
+ 		goto err;
+ 
+-	if (bpf_prog_load(file, BPF_PROG_TYPE_SOCK_OPS, &obj, &prog_fd)) {
++	if (bpf_prog_test_load(file, BPF_PROG_TYPE_SOCK_OPS, &obj, &prog_fd)) {
+ 		printf("FAILED: load_bpf_file failed for: %s\n", file);
+ 		goto err;
+ 	}
+diff --git a/tools/testing/selftests/bpf/xdping.c b/tools/testing/selftests/bpf/xdping.c
+index 30f12637f4e4..baa870a759a2 100644
+--- a/tools/testing/selftests/bpf/xdping.c
++++ b/tools/testing/selftests/bpf/xdping.c
+@@ -22,6 +22,7 @@
+ #include "bpf/libbpf.h"
+ 
+ #include "xdping.h"
++#include "testing_helpers.h"
+ 
+ static int ifindex;
+ static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
+@@ -173,7 +174,7 @@ int main(int argc, char **argv)
+ 
+ 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+ 
+-	if (bpf_prog_load(filename, BPF_PROG_TYPE_XDP, &obj, &prog_fd)) {
++	if (bpf_prog_test_load(filename, BPF_PROG_TYPE_XDP, &obj, &prog_fd)) {
+ 		fprintf(stderr, "load of %s failed\n", filename);
+ 		return 1;
+ 	}
 -- 
 2.30.2
 
