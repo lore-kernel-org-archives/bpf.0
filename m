@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00F39C433F5
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B755C4332F
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D81E86113E
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18A666113E
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 22:09:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbhKCWLn convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Nov 2021 18:11:43 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10466 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230221AbhKCWLn (ORCPT
+        id S230301AbhKCWLo convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 3 Nov 2021 18:11:44 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7560 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230314AbhKCWLn (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 3 Nov 2021 18:11:43 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1A3KAeB3017257
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A3KAfv6031724
         for <bpf@vger.kernel.org>; Wed, 3 Nov 2021 15:09:06 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 3c3dcf0qew-3
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c3vegb80q-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Wed, 03 Nov 2021 15:09:06 -0700
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+Received: from intmgw001.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 3 Nov 2021 15:09:02 -0700
+ 15.1.2308.14; Wed, 3 Nov 2021 15:09:05 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id F38257D65E5A; Wed,  3 Nov 2021 15:09:01 -0700 (PDT)
+        id E93107D65E55; Wed,  3 Nov 2021 15:08:59 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v2 bpf-next 07/12] libbpf: remove deprecation attribute from struct bpf_prog_prep_result
-Date:   Wed, 3 Nov 2021 15:08:40 -0700
-Message-ID: <20211103220845.2676888-8-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 06/12] bpftool: stop using deprecated bpf_load_program()
+Date:   Wed, 3 Nov 2021 15:08:39 -0700
+Message-ID: <20211103220845.2676888-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211103220845.2676888-1-andrii@kernel.org>
 References: <20211103220845.2676888-1-andrii@kernel.org>
@@ -42,49 +42,41 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: 5p1x2JT-BYqk_n8E9azeJ9utOol_qcO2
-X-Proofpoint-ORIG-GUID: 5p1x2JT-BYqk_n8E9azeJ9utOol_qcO2
+X-Proofpoint-GUID: FoVYMXGxC9WlWdS7CtPnUp2oSw1ABYhd
+X-Proofpoint-ORIG-GUID: FoVYMXGxC9WlWdS7CtPnUp2oSw1ABYhd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-03_06,2021-11-03_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 spamscore=0 priorityscore=1501 phishscore=0 bulkscore=0
- mlxlogscore=999 suspectscore=0 clxscore=1015 adultscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 mlxscore=0 adultscore=0
+ impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2111030116
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This deprecation annotation has no effect because for struct deprecation
-attribute has to be declared after struct definition. But instead of
-moving it to the end of struct definition, remove it. When deprecation
-will go in effect at libbpf v0.7, this deprecation attribute will cause
-libbpf's own source code compilation to trigger deprecation warnings,
-which is unavoidable because libbpf still has to support that API.
+Switch to bpf_prog_load() instead.
 
-So keep deprecation of APIs, but don't mark structs used in API as
-deprecated.
-
-Fixes: e21d585cb3db ("libbpf: Deprecate multi-instance bpf_program APIs")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.h | 1 -
- 1 file changed, 1 deletion(-)
+ tools/bpf/bpftool/feature.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index bbc828667b22..039058763173 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -431,7 +431,6 @@ bpf_program__attach_iter(const struct bpf_program *prog,
-  * one instance. In this case bpf_program__fd(prog) is equal to
-  * bpf_program__nth_fd(prog, 0).
-  */
--LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_program__insns() for getting bpf_program instructions")
- struct bpf_prog_prep_result {
- 	/*
- 	 * If not NULL, load new instruction array.
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index ade44577688e..5397077d0d9e 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -467,7 +467,7 @@ static bool probe_bpf_syscall(const char *define_prefix)
+ {
+ 	bool res;
+ 
+-	bpf_load_program(BPF_PROG_TYPE_UNSPEC, NULL, 0, NULL, 0, NULL, 0);
++	bpf_prog_load(BPF_PROG_TYPE_UNSPEC, NULL, NULL, NULL, 0, NULL);
+ 	res = (errno != ENOSYS);
+ 
+ 	print_bool_feature("have_bpf_syscall",
 -- 
 2.30.2
 
