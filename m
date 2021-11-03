@@ -2,78 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97AE5C4332F
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 15:00:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8423C433FE
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 16:14:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83B796109F
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 15:00:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9109610E5
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 16:14:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231474AbhKCPCs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 3 Nov 2021 11:02:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49642 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231304AbhKCPCs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 3 Nov 2021 11:02:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 80D0E61076;
-        Wed,  3 Nov 2021 15:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635951611;
-        bh=jWCMYuWajVvJ5x7/F1+deHeYv6zzi2sK+QhqwCuRmQQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VGhewqwgfQ4yiq9+n6njXVU8BoLwRF+blPVwYEQz8bPlKh2JryogoIY8dWN2XgXLK
-         qSvK2iHB7kJlBR8NC8X72fnizpPuRHLUmZmhKbqAabaycRX5SmmWjAdHY4j2Ng18zD
-         7gFjdz7eu+Qvp9Hm54zRtyksNpXlfdeg0lcu//oaOzDo6nawoNg0KvB+6i1jXAk6uK
-         8Php8+d3CFNEdPUz/xRNZYWlG7bTx4scusf57uYOEe9+ttDUdNOZOW7xiC876eBvyi
-         A1am66n1j2eP3//KFtGyTd3tlyyfskguC6VaphLLeMf4s1wzk2W2bouVeq3H9AO1ek
-         +nbFF55h5oYIg==
-Content-Type: text/plain; charset="utf-8"
+        id S232830AbhKCQR1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 3 Nov 2021 12:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232825AbhKCQR0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 3 Nov 2021 12:17:26 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1130AC061714
+        for <bpf@vger.kernel.org>; Wed,  3 Nov 2021 09:14:49 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id t11so2760218plq.11
+        for <bpf@vger.kernel.org>; Wed, 03 Nov 2021 09:14:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Gcc0EUM1EauKNq+43vPpaFdtVYVD7iAXZHWErocDtp0=;
+        b=GerNQsh9cv7fbDFjWov4KivBQdKjB2oHp6+hu5L0IzSuHrFf7yC9nsNjEK4mKa1thg
+         lIef1g1Q5waG3Bo27dyQD9IGceZ5FdA0UnVr/ZFrZRZrTE5L/cCOMJ3+Ap+sF3V9itpe
+         xd7YTDezqpu5NUNKOUXH5YXvAc+giJbRz+574=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Gcc0EUM1EauKNq+43vPpaFdtVYVD7iAXZHWErocDtp0=;
+        b=Vzp72KEtZfztGvAlH4KI/TK9ianhUpPcgKTY4p1srRH/wGeJvUR21py8YrpVZti6Ll
+         JiiiEO5A9eaAZCTaQbXhfyVYVMQigu3SYhGGQlr205a+kPBSVTTJL/auC3NCFqMjwM+z
+         0YEnFlgAPaH5Jx7d5GRmSVKEPfS74+c895L9j/RQPLwudoVbNpczkcgd1b8mdRo1yK8F
+         XML8Q36KBdEGHLV6+WUIYxlmlDg73QDpoAR4e12SvTcIJmv12P3ODcH0DOLdjcc2OiiY
+         x40+q6dqt0/VKya6z5dpU485TQP8O3RUyinnmWQyX1quC1ij4Oo77aOEa93+f8kwJ8Ib
+         HFug==
+X-Gm-Message-State: AOAM531qy/mly00w1RG7ODcEKEPj/6ji+du/p0suq5oiUcwekr0Zfuvy
+        u5iZF/K6oH1bjNfsSGBXXxk2Sg==
+X-Google-Smtp-Source: ABdhPJwfVfLAFqcLr/+fzW2AVuq4++yVTWfgk5KQYqUOGtMy5pycxzm1sypp4lVosI+3B8C3SbUzIg==
+X-Received: by 2002:a17:90b:124d:: with SMTP id gx13mr15668790pjb.106.1635956088496;
+        Wed, 03 Nov 2021 09:14:48 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u33sm3296082pfg.0.2021.11.03.09.14.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Nov 2021 09:14:48 -0700 (PDT)
+Date:   Wed, 3 Nov 2021 09:14:47 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Andrea Righi <andrea.righi@canonical.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: selftests: seccomp_bpf failure on 5.15
+Message-ID: <202111030838.CB201E4@keescook>
+References: <YXrN+Hnl9pSOsWlA@arighi-desktop>
+ <202110280955.B18CB67@keescook>
+ <878rydm56l.fsf@disp2133>
+ <202110281136.5CE65399A7@keescook>
+ <8735okls76.fsf@disp2133>
+ <202110290755.451B036CE9@keescook>
+ <87y2665sf8.fsf@disp2133>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/4] Support RENAME_EXCHANGE on bpffs
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163595161144.22644.942879656026929279.git-patchwork-notify@kernel.org>
-Date:   Wed, 03 Nov 2021 15:00:11 +0000
-References: <20211028094724.59043-1-lmb@cloudflare.com>
-In-Reply-To: <20211028094724.59043-1-lmb@cloudflare.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
-Cc:     viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, mszeredi@redhat.com, gregkh@linuxfoundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y2665sf8.fsf@disp2133>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This series was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Thu, 28 Oct 2021 10:47:20 +0100 you wrote:
-> Add support for renameat2(RENAME_EXCHANGE) on bpffs. This is useful
-> for atomic upgrades of our sk_lookup control plane.
+On Tue, Nov 02, 2021 at 01:22:19PM -0500, Eric W. Biederman wrote:
+> Kees Cook <keescook@chromium.org> writes:
 > 
-> v3:
-> - Re-use shmem_exchange (Miklos)
+> > On Thu, Oct 28, 2021 at 05:06:53PM -0500, Eric W. Biederman wrote:
+> >> Kees Cook <keescook@chromium.org> writes:
+> >> 
+> >> > On Thu, Oct 28, 2021 at 12:26:26PM -0500, Eric W. Biederman wrote:
+> >> 
+> >> Is it a problem that the debugger can see the signal if the process does
+> >> not?
+> >
+> > Right, I'm trying to understand that too. However, my neighbor just lost
+> > power. :|
+> >
+> > What I was in the middle of checking was what ptrace "sees" going
+> > through a fatal SIGSYS; my initial debugging attempts were weird.
 > 
-> v2:
-> - Test exchanging a map and a directory (Alexei)
-> - Use ASSERT macros (Andrii)
-> 
-> [...]
+> Kees have you regained power and had a chance to see my SA_IMMUTABLE
+> patch?
 
-Here is the summary with links:
-  - [bpf-next,v3,1/4] libfs: move shmem_exchange to simple_rename_exchange
-    https://git.kernel.org/bpf/bpf/c/6429e46304ac
-  - [bpf-next,v3,2/4] libfs: support RENAME_EXCHANGE in simple_rename()
-    https://git.kernel.org/bpf/bpf/c/3871cb8cf741
-  - [bpf-next,v3,3/4] selftests: bpf: convert test_bpffs to ASSERT macros
-    https://git.kernel.org/bpf/bpf/c/9fc23c22e574
-  - [bpf-next,v3,4/4] selftests: bpf: test RENAME_EXCHANGE and RENAME_NOREPLACE on bpffs
-    https://git.kernel.org/bpf/bpf/c/7e5ad817ec29
+Apologies; I got busy with other stuff, but I've tested this now. It's
+happy and I see the expected behaviors again. Note that I used the patch
+with this change:
 
-You are awesome, thank you!
+-#define SA_IMMUTABLE           0x008000000
++#define SA_IMMUTABLE           0x00800000
+
+Tested-by: Kees Cook <keescook@chromium.org>
+
+Thanks!
+
+-Kees
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kees Cook
