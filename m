@@ -2,72 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C84C7C433FE
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 00:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73342C433EF
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 00:10:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADA22610E7
-	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 00:10:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55E58610FC
+	for <bpf@archiver.kernel.org>; Wed,  3 Nov 2021 00:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbhKCAMs convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 2 Nov 2021 20:12:48 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:52736 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232308AbhKCAMr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 2 Nov 2021 20:12:47 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A2Lar9V019210
-        for <bpf@vger.kernel.org>; Tue, 2 Nov 2021 17:10:11 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c3ddbryb6-5
+        id S232384AbhKCAM4 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 2 Nov 2021 20:12:56 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48568 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232124AbhKCAMx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 2 Nov 2021 20:12:53 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A2LbpdM032509
+        for <bpf@vger.kernel.org>; Tue, 2 Nov 2021 17:10:18 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c3ddp8yme-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 02 Nov 2021 17:10:11 -0700
-Received: from intmgw002.48.prn1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 02 Nov 2021 17:10:17 -0700
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 2 Nov 2021 17:10:08 -0700
+ 15.1.2308.14; Tue, 2 Nov 2021 17:10:11 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id EDE687C14DA3; Tue,  2 Nov 2021 17:10:04 -0700 (PDT)
+        id 1D6597C14DB6; Tue,  2 Nov 2021 17:10:11 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 0/5] libbpf ELF sanity checking improvements
-Date:   Tue, 2 Nov 2021 17:09:58 -0700
-Message-ID: <20211103001003.398812-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/5] libbpf: validate that .BTF and .BTF.ext sections contain data
+Date:   Tue, 2 Nov 2021 17:10:01 -0700
+Message-ID: <20211103001003.398812-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211103001003.398812-1-andrii@kernel.org>
+References: <20211103001003.398812-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: P4BHKLKrCU_5g62JEcS7_QIfypoITkOJ
-X-Proofpoint-ORIG-GUID: P4BHKLKrCU_5g62JEcS7_QIfypoITkOJ
+X-Proofpoint-ORIG-GUID: s_alJ4OriW5Z-JJqLu5r4SpQCLN4Lsxl
+X-Proofpoint-GUID: s_alJ4OriW5Z-JJqLu5r4SpQCLN4Lsxl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-02_08,2021-11-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- mlxlogscore=766 adultscore=0 clxscore=1015 priorityscore=1501 spamscore=0
- malwarescore=0 impostorscore=0 phishscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ adultscore=0 mlxscore=0 priorityscore=1501 bulkscore=0 malwarescore=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2110150000 definitions=main-2111020125
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Few patches fixing various issues discovered by oss-fuzz project fuzzing
-bpf_object__open() call. Fixes are mostly focused around additional simple
-sanity checks of ELF format: symbols, relos, section indices.
+.BTF and .BTF.ext ELF sections should have SHT_PROGBITS type and contain
+data. If they are not, ELF is invalid or corrupted, so bail out.
+Otherwise this can lead to data->d_buf being NULL and SIGSEGV later on.
+Reported by oss-fuzz project.
 
-Andrii Nakryiko (5):
-  libbpf: detect corrupted ELF symbols section
-  libbpf: improve sanity checking during BTF fix up
-  libbpf: validate that .BTF and .BTF.ext sections contain data
-  libbpf: fix section counting logic
-  libbpf: improve ELF relo sanitization
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- tools/lib/bpf/libbpf.c | 40 +++++++++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 11 deletions(-)
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 4537ce6d54ce..757604b9f869 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3271,8 +3271,12 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 		} else if (strcmp(name, MAPS_ELF_SEC) == 0) {
+ 			obj->efile.btf_maps_shndx = idx;
+ 		} else if (strcmp(name, BTF_ELF_SEC) == 0) {
++			if (sh->sh_type != SHT_PROGBITS)
++				return -LIBBPF_ERRNO__FORMAT;
+ 			btf_data = data;
+ 		} else if (strcmp(name, BTF_EXT_ELF_SEC) == 0) {
++			if (sh->sh_type != SHT_PROGBITS)
++				return -LIBBPF_ERRNO__FORMAT;
+ 			btf_ext_data = data;
+ 		} else if (sh->sh_type == SHT_SYMTAB) {
+ 			/* already processed during the first pass above */
 -- 
 2.30.2
 
