@@ -2,78 +2,197 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 275DDC433F5
-	for <bpf@archiver.kernel.org>; Thu,  4 Nov 2021 17:37:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D0D0C433F5
+	for <bpf@archiver.kernel.org>; Thu,  4 Nov 2021 17:38:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 114F560724
-	for <bpf@archiver.kernel.org>; Thu,  4 Nov 2021 17:37:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28E4560724
+	for <bpf@archiver.kernel.org>; Thu,  4 Nov 2021 17:38:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233976AbhKDRk1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 4 Nov 2021 13:40:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49552 "EHLO mail.kernel.org"
+        id S234001AbhKDRkj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 4 Nov 2021 13:40:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49768 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233983AbhKDRk0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 4 Nov 2021 13:40:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D5A1611C4;
-        Thu,  4 Nov 2021 17:37:44 +0000 (UTC)
+        id S233993AbhKDRki (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 4 Nov 2021 13:40:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 087DD60E90;
+        Thu,  4 Nov 2021 17:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636047468;
-        bh=+5b5e7V3suXF9bMBYwNIaMhKxwfF2xoxxSlP1bkU+B4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TuyNm/s0MNRUWY+U6Ch47SWK2s9g29CkzYFbvNPtqcglBaM7XO8UD6nU+wvWNVX8l
-         vU5sCgE9lzSx4uxIK4yhzdl0TurTNs8G8fHKsGHyTRNNspvFu7AyRJi+O1bZLkwKCd
-         +vZwQTQDsj8OiEhvqVhqnkYuTQYggh+yJg7rWRnuCSCYRFQennfs2yxYRbTOXjXJu1
-         /PUMQO/nzRcUtgAtreyceF98/YFK+M0pWRjJuhITr95yGAdRC/PA4SUA2TZF9VEugP
-         HNModJkU6TnrDjNJAjeXvE2jaqm/w1wTDddwdW5CAro3XVCDoZU9uCiXMsxcHu16hN
-         jh26ZpJlTirbQ==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, shayagr@amazon.com,
-        john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
-        echaudro@redhat.com, jasowang@redhat.com,
-        alexander.duyck@gmail.com, saeed@kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v17 bpf-next 23/23] xdp: disable XDP_REDIRECT for xdp multi-buff
-Date:   Thu,  4 Nov 2021 18:35:43 +0100
-Message-Id: <b90891939e6a4c9a803cd1b5072bb971baa4fb69.1636044387.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1636044387.git.lorenzo@kernel.org>
-References: <cover.1636044387.git.lorenzo@kernel.org>
+        s=k20201202; t=1636047480;
+        bh=3dj54GcToDRArCavCYNJX6yC7TQbVCKsCf0X142AsN4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZRm47lGanUSQF+rZXsdd7tJtrfbOawKWrtazrpkrNThnER0OcS/zUQW9P79HLNUkB
+         IXvx9CnbdBMILZdTZuZzo1/wxm+w0bUURrCINFsseom5Hl+Db0YqDMOdb6R/Im2uHY
+         RcPhst0dFOqQPQqBzw1p2Uyf4DolhOZyYI2uwTYBEOoUaFps5iL5BMkwYCKMoeC3Mh
+         iolF1k8teUGtZ3oPNYep8lJiSoOHpofA/kuDrpyYps7ym/l92vRYDVQF2LojEi4yeZ
+         WO5dEt21xNCMP5QOQTeFoTwwezMYzXpHOD8wVp6/uawVWAKPHLgFothOsVbL+/v64g
+         Q4OLc4wSabIqg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AB116410A1; Thu,  4 Nov 2021 14:37:57 -0300 (-03)
+Date:   Thu, 4 Nov 2021 14:37:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>, bpf@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: perf build broken looking for bpf/{libbpf,bpf}.h after merge with
+ upstream
+Message-ID: <YYQadWbtdZ9Ff9N4@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-XDP_REDIRECT is not fully supported yet for xdp multi-buff since not
-all XDP capable drivers can map non-linear xdp_frame in ndo_xdp_xmit
-so disable it for the moment.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- net/core/filter.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hi Song,
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 534305037ad7..00e08bdeb5f2 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4183,6 +4183,13 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 	struct bpf_map *map;
- 	int err;
- 
-+	/* XDP_REDIRECT is not fully supported yet for xdp multi-buff since
-+	 * not all XDP capable drivers can map non-linear xdp_frame in
-+	 * ndo_xdp_xmit.
-+	 */
-+	if (unlikely(xdp_buff_is_mb(xdp)))
-+		return -EOPNOTSUPP;
-+
- 	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
- 	ri->map_type = BPF_MAP_TYPE_UNSPEC;
- 
--- 
-2.31.1
+	I just did a merge with upstream and I'm getting this:
 
+  LINK    /tmp/build/perf/plugins/plugin_scsi.so
+  INSTALL trace_plugins
+
+Auto-detecting system features:
+...                        libbfd: [ on  ]
+...        disassembler-four-args: [ on  ]
+...                          zlib: [ on  ]
+...                        libcap: [ on  ]
+...               clang-bpf-co-re: [ on  ]
+
+
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//libbpf//include/bpf
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/
+  INSTALL /tmp/build/perf/util/bpf_skel/.tmp//libbpf//include/bpf/hashmap.h
+  INSTALL /tmp/build/perf/util/bpf_skel/.tmp//libbpf//include/bpf/nlattr.h
+  GEN     /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/bpf_helper_defs.h
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  MKDIR   /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/libbpf.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/libbpf_probes.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/xsk.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/bpf.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/nlattr.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/btf.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/libbpf_errno.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/hashmap.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/str_error.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/netlink.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/btf_dump.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/bpf_prog_linfo.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/ringbuf.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/strset.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/linker.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/gen_loader.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/relo_core.o
+  LD      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/staticobjs/libbpf-in.o
+  LINK    /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/libbpf/libbpf.a
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/main.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/common.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/gen.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/json_writer.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/btf.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/xlated_dumper.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/btf_dumper.o
+  CC      /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/disasm.o
+gen.c:15:10: fatal error: bpf/bpf.h: No such file or directory
+   15 | #include <bpf/bpf.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[3]: *** [Makefile:213: /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/gen.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+xlated_dumper.c:10:10: fatal error: bpf/libbpf.h: No such file or directory
+   10 | #include <bpf/libbpf.h>
+      |          ^~~~~~~~~~~~~~
+compilation terminated.
+btf.c:15:10: fatal error: bpf/bpf.h: No such file or directory
+   15 | #include <bpf/bpf.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[3]: *** [Makefile:213: /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/xlated_dumper.o] Error 1
+make[3]: *** [Makefile:213: /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/btf.o] Error 1
+main.c:12:10: fatal error: bpf/bpf.h: No such file or directory
+   12 | #include <bpf/bpf.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[3]: *** [Makefile:213: /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/main.o] Error 1
+btf_dumper.c:12:10: fatal error: bpf/btf.h: No such file or directory
+   12 | #include <bpf/btf.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[3]: *** [Makefile:213: /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/btf_dumper.o] Error 1
+common.c:24:10: fatal error: bpf/bpf.h: No such file or directory
+   24 | #include <bpf/bpf.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[3]: *** [Makefile:213: /tmp/build/perf/util/bpf_skel/.tmp//bootstrap/common.o] Error 1
+make[2]: *** [Makefile.perf:1048: /tmp/build/perf/util/bpf_skel/.tmp/bootstrap/bpftool] Error 2
+make[1]: *** [Makefile.perf:240: sub-make] Error 2
+make: *** [Makefile:113: install-bin] Error 2
+make: Leaving directory '/var/home/acme/git/perf/tools/perf'
+
+ Performance counter stats for 'make -k BUILD_BPF_SKEL=1 CORESIGHT=1 PYTHON=python3 O=/tmp/build/perf -C tools/perf install-bin':
+
+          6,965.78 msec task-clock:u              #    1.492 CPUs utilized
+          6,937.93 msec cpu-clock:u               #    1.486 CPUs utilized
+
+       4.669198336 seconds time elapsed
+
+       4.015978000 seconds user
+       3.202660000 seconds sys
+
+
+70: Event expansion for cgroups                                     : Ok
+88: perf all metricgroups test                                      : FAILED!
+⬢[acme@toolbox perf]$ find tools/ -name bpf.h
+tools/include/uapi/linux/bpf.h
+tools/lib/bpf/bpf.h
+tools/perf/include/bpf/bpf.h
+⬢[acme@toolbox perf]$ find tools/ -name libbpf.h
+tools/lib/bpf/libbpf.h
+⬢[acme@toolbox perf]$ find tools/perf/ -name gen.c
+⬢[acme@toolbox perf]$
+
+Before the merge, with pristine sources I wasn't getting this,
+investigating now.
+
+⬢[acme@toolbox perf]$ git show HEAD
+commit e1498f18537a1639963370a4635c6fb99e7d672b (HEAD -> perf/core)
+Merge: 32f7aa2731b24ad8 abfecb39092029c4
+Author: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date:   Thu Nov 4 14:32:11 2021 -0300
+
+    Merge remote-tracking branch 'torvalds/master' into perf/core
+
+    To pick up some tools/perf/ patches that went via tip/perf/core, such
+    as:
+
+      tools/perf: Add mem_hops field in perf_mem_data_src structure
+
+    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+
+⬢[acme@toolbox perf]$
+
+⬢[acme@toolbox perf]$ git log --oneline -10 torvalds/master
+abfecb39092029c4 (torvalds/master) Merge tag 'tty-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty
+95faf6ba654dd334 Merge tag 'driver-core-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core
+5c904c66ed4e86c3 Merge tag 'char-misc-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
+5cd4dc44b8a0f656 Merge tag 'staging-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+048ff8629e117d84 Merge tag 'usb-5.16-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+7ddb58cb0ecae8e8 Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+ce840177930f591a Merge tag 'defconfig-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+d461e96cd22b5aeb Merge tag 'drivers-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+ae45d84fc36d01dc Merge tag 'dt-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+2219b0ceefe835b9 Merge tag 'soc-5.16' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+⬢[acme@toolbox perf]$
+
+- Arnaldo
