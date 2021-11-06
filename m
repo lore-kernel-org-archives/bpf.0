@@ -2,190 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 029F8C433F5
-	for <bpf@archiver.kernel.org>; Sat,  6 Nov 2021 21:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F860C43217
+	for <bpf@archiver.kernel.org>; Sat,  6 Nov 2021 23:18:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2F91611EE
-	for <bpf@archiver.kernel.org>; Sat,  6 Nov 2021 21:20:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8758D61186
+	for <bpf@archiver.kernel.org>; Sat,  6 Nov 2021 23:18:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbhKFVWz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 6 Nov 2021 17:22:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233912AbhKFVWz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 6 Nov 2021 17:22:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 16E7861139;
-        Sat,  6 Nov 2021 21:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636233613;
-        bh=En7ugPZwMj4wEOcXJ2z95aMtHtRSF4XCmNpI+QBG1nk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nib81Xv8Z6A/Gb8YlZgPUiGfIaETHFoBUvGGkBi61eSu9y6H+jz/rsF8OsjI06PCb
-         akZZTjGQQc8pKXDc3Z44D3YD6/bTskMCb5OTPd3I3iylM1OX9jERjFYHWrrnqK6UT4
-         PNJBQp7AqqgtaFBlXI9og0OoYG8lHBzLCI0TZGAn5HGZ9ISYvi5PdEqtBhg+01OiXk
-         JkA/Ddgt+20fdHSwjhWoxw5N6V7QTe0RUoRWzNt/8EpfN4uDWuF0Va4Lj/bNYgYOJy
-         nygT5z6epy3bFHLIK9WLCU/rjBK4RdXsm0axWKJmjyzOISB1Zne+wzIFEKL3UQ9rX0
-         XmCCnjas/eslw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 97558410A1; Sat,  6 Nov 2021 18:20:10 -0300 (-03)
-Date:   Sat, 6 Nov 2021 18:20:10 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        id S231176AbhKFXUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 6 Nov 2021 19:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229843AbhKFXUx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 6 Nov 2021 19:20:53 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37648C061570
+        for <bpf@vger.kernel.org>; Sat,  6 Nov 2021 16:18:12 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id c126so3907337pfb.0
+        for <bpf@vger.kernel.org>; Sat, 06 Nov 2021 16:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KA7psG7HBAZzMlq6d02Rq13qEhDqHzUzLpTfP7j+OBQ=;
+        b=NxnQF3LLFzugm1w7n7aIiqvOnU2FDR5owmBVkXsOt8xVOSWtepN4Tt1dT5qh5w0ofS
+         WrrEwWLrzeSWst8AIkFcxtXskma/ZDTB+SHeGTTdg3gMljhNqvoEExNsm/wyXjKAJ/Xd
+         zuivOTMzjsZ1wjyIsOPc77vmnbYNTbcmO69BU9ws7Kv482DTuRVrFj8ChNRUMiGQKOhb
+         aRvvIBG3WT8kErSniEHH8AtcvpxkLSJMUmxwvN5EboVd/2ztDZTYWAqz5HYXRAzCVKzR
+         Phf8/J/Am6n9McXHNZZ1iPODAxGhEVwybvo7BmuEPVcREV6BqZCPtvBJ3opBRnmLZBVS
+         fvpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KA7psG7HBAZzMlq6d02Rq13qEhDqHzUzLpTfP7j+OBQ=;
+        b=K9FAi31QHIAiD4K2+xBxh+tKa1MT2GND9TIH5MHxUfgX6YEKdOwwwEniuwIcHMgKSN
+         MbOSsriewnRfDs2mlfQkq0YS1c/cRK9LoERfxnozn0sG/5NwmAX/OQAOb/F7dW+Twl4q
+         FBD/Rp4cW2AcXP/D0sQbE2iNacoQ13oZtALD05zvN6ZgGLNE4GnUZto24rQ324K8zO56
+         WQp4Edf56sBe4mnwjntpeqHFrlejvtcZg7W5Od1KhsRFIysQHNAxeDOQiXdyqXBbCzXK
+         VSnHE3KfO9HILnyOngnIgIB9bfjcimdAg90YXOZMJTu2PU3crII2opqPTNdfZ3vdKCVV
+         kHZg==
+X-Gm-Message-State: AOAM530J98Fdgzp6Tg5hJ3foip+76bJV1Mb4BSC5NdmOWc4k/fcxKgb0
+        Gy3/SScfLBQxjcDCXv5xhilWklZikIxXfJZpBoM=
+X-Google-Smtp-Source: ABdhPJytfIVR4nJO+/5KJcKvAnWq/IJMvXwaxVl05tVV6Yle43zUoh6Q8Tlz4Jt4jYlS7CvlZXkBUnPXusAJRHpKLCg=
+X-Received: by 2002:aa7:8b56:0:b0:44c:10a:4ee9 with SMTP id
+ i22-20020aa78b56000000b0044c010a4ee9mr70546397pfd.46.1636240691711; Sat, 06
+ Nov 2021 16:18:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211105191055.3324874-1-andrii@kernel.org> <CAADnVQJ6REFCJZYCLzk0NNqo5p9C5KpOmko9REaF1KYkBEaa9w@mail.gmail.com>
+ <CAEf4BzaehmbFQ50tZrZYtC+cTe+XTPBs2KBEXsjnmsSHWBYoUg@mail.gmail.com>
+In-Reply-To: <CAEf4BzaehmbFQ50tZrZYtC+cTe+XTPBs2KBEXsjnmsSHWBYoUg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 6 Nov 2021 16:18:00 -0700
+Message-ID: <CAADnVQKRWwak8_T=UjD=aw3e5TB-bpg-4wd7mc0S=_DwZYOY-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: fix non-C89 loop variable declaration in gen_loader.c
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [BUG] Re: [PATCH bpf-next] perf build: Install libbpf headers
- locally when building
-Message-ID: <YYbxigLXFkomexsZ@kernel.org>
-References: <20211105020244.6869-1-quentin@isovalent.com>
- <CAEf4Bza_-vvOXPRZaJzi4YpU5Bfb=werLUFG=Au9DtaanbuArg@mail.gmail.com>
- <YYbXjE1aAdNjI+aY@kernel.org>
- <YYbhwPnn4OvnybzQ@kernel.org>
- <YYbuA347Y5nMJ4Xm@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YYbuA347Y5nMJ4Xm@kernel.org>
-X-Url:  http://acmel.wordpress.com
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Sat, Nov 06, 2021 at 06:05:07PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Sat, Nov 06, 2021 at 05:12:48PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Sat, Nov 06, 2021 at 04:29:16PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Fri, Nov 05, 2021 at 11:38:50AM -0700, Andrii Nakryiko escreveu:
-> > > > On Thu, Nov 4, 2021 at 7:02 PM Quentin Monnet <quentin@isovalent.com> wrote:
-> > > > >
-> > > > > API headers from libbpf should not be accessed directly from the
-> > > > > library's source directory. Instead, they should be exported with "make
-> > > > > install_headers". Let's adjust perf's Makefile to install those headers
-> > > > > locally when building libbpf.
-> > > > >
-> > > > > Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-> > > > > ---
-> > > > > Note: Sending to bpf-next because it's directly related to libbpf, and
-> > > > > to similar patches merged through bpf-next, but maybe Arnaldo prefers to
-> > > > > take it?
-> > > > 
-> > > > Arnaldo would know better how to thoroughly test it, so I'd prefer to
-> > > > route this through perf tree. Any objections, Arnaldo?
-> > > 
-> > > Preliminary testing passed for 'BUILD_BPF_SKEL=1' with without
-> > > LIBBPF_DYNAMIC=1 (using the system's libbpf-devel to build perf), so far
-> > > so good, so I tentatively applied it, will see with the full set of
-> > > containers.
-> > 
-> > Because all the preliminary tests used O= to have that OUTPUT variable
-> > set, when we do simply:
-> > 
-> > 	make -C tools/perf
-> 
-> So I'll have to remove it now as my container builds test both O= and
-> in-place builds (make -C tools/perf), I know many people (Jiri for
-> instance) don't use O=.
-> 
-> I tried to fix this but run out of time today, visits arriving soon, so
-> I'll try to come back to this tomorrow early morning, to push what I
-> have in to Linus, that is blocked by this now :-\
+On Sat, Nov 6, 2021 at 12:56 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sat, Nov 6, 2021 at 9:38 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Nov 5, 2021 at 12:11 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+> > >
+> > > Fix the `int i` declaration inside the for statement. This is non-C89
+> > > compliant. See [0] for user report breaking BCC build.
+> > >
+> > >   [0] https://github.com/libbpf/libbpf/issues/403
+> >
+> > I'd prefer to fix bcc and/or its derivatives instead.
+> > It's year 2021.
+>
+> Fixing BCC and derivatives is a separate topic. This is the only
+> instance of non-C89 compliant for() loop in libbpf and I'd prefer to
+> fix it at the very least for style consistency.
 
-What I have, with your patch, is at:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git tmp.perf/core
-
-It has both patches, as its needed for the BUILD_BPF_SKEL=1 mode to
-build correctly with/without LIBBPF_DYNAMIC=1.
-
-- Arnaldo
- 
-> - Arnaldo
->  
-> > it breaks:
-> > 
-> > ⬢[acme@toolbox perf]$ make -C tools clean > /dev/null 2>&1
-> > ⬢[acme@toolbox perf]$ make JOBS=1 -C tools/perf
-> > make: Entering directory '/var/home/acme/git/perf/tools/perf'
-> >   BUILD:   Doing 'make -j1' parallel build
-> >   HOSTCC  fixdep.o
-> >   HOSTLD  fixdep-in.o
-> >   LINK    fixdep
-> > <SNIP ABI sync warnings>
-> > 
-> > Auto-detecting system features:
-> > ...                         dwarf: [ on  ]
-> > ...            dwarf_getlocations: [ on  ]
-> > ...                         glibc: [ on  ]
-> > ...                        libbfd: [ on  ]
-> > ...                libbfd-buildid: [ on  ]
-> > ...                        libcap: [ on  ]
-> > ...                        libelf: [ on  ]
-> > ...                       libnuma: [ on  ]
-> > ...        numa_num_possible_cpus: [ on  ]
-> > ...                       libperl: [ on  ]
-> > ...                     libpython: [ on  ]
-> > ...                     libcrypto: [ on  ]
-> > ...                     libunwind: [ on  ]
-> > ...            libdw-dwarf-unwind: [ on  ]
-> > ...                          zlib: [ on  ]
-> > ...                          lzma: [ on  ]
-> > ...                     get_cpuid: [ on  ]
-> > ...                           bpf: [ on  ]
-> > ...                        libaio: [ on  ]
-> > ...                       libzstd: [ on  ]
-> > ...        disassembler-four-args: [ on  ]
-> > 
-> > 
-> >   CC      fd/array.o
-> >   LD      fd/libapi-in.o
-> >   CC      fs/fs.o
-> >   CC      fs/tracing_path.o
-> >   CC      fs/cgroup.o
-> >   LD      fs/libapi-in.o
-> >   CC      cpu.o
-> >   CC      debug.o
-> >   CC      str_error_r.o
-> >   LD      libapi-in.o
-> >   AR      libapi.a
-> >   CC      exec-cmd.o
-> >   CC      help.o
-> >   CC      pager.o
-> >   CC      parse-options.o
-> >   CC      run-command.o
-> >   CC      sigchain.o
-> >   CC      subcmd-config.o
-> >   LD      libsubcmd-in.o
-> >   AR      libsubcmd.a
-> >   CC      core.o
-> >   CC      cpumap.o
-> >   CC      threadmap.o
-> >   CC      evsel.o
-> >   CC      evlist.o
-> >   CC      mmap.o
-> >   CC      zalloc.o
-> >   CC      xyarray.o
-> >   CC      lib.o
-> >   LD      libperf-in.o
-> >   AR      libperf.a
-> > make[2]: *** No rule to make target 'libbpf', needed by 'libbpf/libbpf.a'.  Stop.
-> > make[1]: *** [Makefile.perf:240: sub-make] Error 2
-> > make: *** [Makefile:70: all] Error 2
-> > make: Leaving directory '/var/home/acme/git/perf/tools/perf'
-> > ⬢[acme@toolbox perf]$
-> > 
-> > Trying to fix...
-> > 
-> > - Arnaldo
-> 
-> -- 
-> 
-> - Arnaldo
-
--- 
-
-- Arnaldo
+Fair enough. Applied.
