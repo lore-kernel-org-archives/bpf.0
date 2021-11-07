@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BDEC433FE
-	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AE9FC433EF
+	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A5C2C61076
-	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 662116105A
+	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235822AbhKGQtX convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 7 Nov 2021 11:49:23 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20218 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235831AbhKGQtV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 7 Nov 2021 11:49:21 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A7EJhOB007999
-        for <bpf@vger.kernel.org>; Sun, 7 Nov 2021 08:46:38 -0800
+        id S235829AbhKGQtZ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 7 Nov 2021 11:49:25 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62232 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234852AbhKGQtY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 7 Nov 2021 11:49:24 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1A7EmEni011758
+        for <bpf@vger.kernel.org>; Sun, 7 Nov 2021 08:46:41 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c6atd2cqp-3
+        by m0089730.ppops.net with ESMTP id 3c695tty5a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 07 Nov 2021 08:46:38 -0800
-Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 07 Nov 2021 08:46:41 -0800
+Received: from intmgw001.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Sun, 7 Nov 2021 08:46:36 -0800
+ 15.1.2308.14; Sun, 7 Nov 2021 08:46:40 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 983D7838FAC3; Sun,  7 Nov 2021 08:46:29 -0800 (PST)
+        id CBB12838FAD4; Sun,  7 Nov 2021 08:46:37 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v3 bpf-next 2/9] libbpf: free up resources used by inner map definition
-Date:   Sun, 7 Nov 2021 08:46:17 -0800
-Message-ID: <20211107164624.4137512-3-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 6/9] selftests/bpf: clean up btf and btf_dump in dump_datasec test
+Date:   Sun, 7 Nov 2021 08:46:21 -0800
+Message-ID: <20211107164624.4137512-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211107164624.4137512-1-andrii@kernel.org>
 References: <20211107164624.4137512-1-andrii@kernel.org>
@@ -42,47 +42,63 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: hPh3E1nWDm9UA74Pw78Fyi9xyvkco0WY
-X-Proofpoint-ORIG-GUID: hPh3E1nWDm9UA74Pw78Fyi9xyvkco0WY
+X-Proofpoint-GUID: YTm8EjpNnJZQG8hGHn4CqWIVv_ltj3Fh
+X-Proofpoint-ORIG-GUID: YTm8EjpNnJZQG8hGHn4CqWIVv_ltj3Fh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-07_09,2021-11-03_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=680 clxscore=1034
- priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111070109
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=883 impostorscore=0 suspectscore=0
+ phishscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111070108
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's not enough to just free(map->inner_map), as inner_map itself can
-have extra memory allocated, like map name.
+Free up used resources at the end and on error. Also make it more
+obvious that there is btf__parse() call that creates struct btf
+instance.
 
-Fixes: 646f02ffdd49 ("libbpf: Add BTF-defined map-in-map support")
 Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/btf_dump.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7fcea11ecaa9..eef71ac8b99e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9053,7 +9053,10 @@ int bpf_map__set_inner_map_fd(struct bpf_map *map, int fd)
- 		pr_warn("error: inner_map_fd already specified\n");
- 		return libbpf_err(-EINVAL);
- 	}
--	zfree(&map->inner_map);
-+	if (map->inner_map) {
-+		bpf_map__destroy(map->inner_map);
-+		zfree(&map->inner_map);
-+	}
- 	map->inner_map_fd = fd;
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+index aa76360d8f49..a04961942dfa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -814,21 +814,25 @@ static void test_btf_datasec(struct btf *btf, struct btf_dump *d, char *str,
+ 
+ static void test_btf_dump_datasec_data(char *str)
+ {
+-	struct btf *btf = btf__parse("xdping_kern.o", NULL);
++	struct btf *btf;
+ 	struct btf_dump_opts opts = { .ctx = str };
+ 	char license[4] = "GPL";
+ 	struct btf_dump *d;
+ 
++	btf = btf__parse("xdping_kern.o", NULL);
+ 	if (!ASSERT_OK_PTR(btf, "xdping_kern.o BTF not found"))
+ 		return;
+ 
+ 	d = btf_dump__new(btf, NULL, &opts, btf_dump_snprintf);
+ 	if (!ASSERT_OK_PTR(d, "could not create BTF dump"))
+-		return;
++		goto out;
+ 
+ 	test_btf_datasec(btf, d, str, "license",
+ 			 "SEC(\"license\") char[4] _license = (char[4])['G','P','L',];",
+ 			 license, sizeof(license));
++out:
++	btf_dump__free(d);
++	btf__free(btf);
  }
+ 
+ void test_btf_dump() {
 -- 
 2.30.2
 
