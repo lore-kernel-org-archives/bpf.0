@@ -2,97 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBE59C433F5
-	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC20C433EF
+	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C741A610A6
-	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C4046105A
+	for <bpf@archiver.kernel.org>; Sun,  7 Nov 2021 16:46:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbhKGQtW convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 7 Nov 2021 11:49:22 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10276 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235819AbhKGQtQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 7 Nov 2021 11:49:16 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A7AvQcZ019285
-        for <bpf@vger.kernel.org>; Sun, 7 Nov 2021 08:46:32 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c67uebntc-1
+        id S235819AbhKGQtX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 7 Nov 2021 11:49:23 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16794 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235829AbhKGQtV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 7 Nov 2021 11:49:21 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1A7AuPPV011240
+        for <bpf@vger.kernel.org>; Sun, 7 Nov 2021 08:46:37 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c6atd2cqn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 07 Nov 2021 08:46:32 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 07 Nov 2021 08:46:37 -0800
+Received: from intmgw003.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Sun, 7 Nov 2021 08:46:31 -0800
+ 15.1.2308.14; Sun, 7 Nov 2021 08:46:36 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 81008838FABC; Sun,  7 Nov 2021 08:46:25 -0800 (PST)
+        id A490B838FAC8; Sun,  7 Nov 2021 08:46:31 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v3 bpf-next 0/9] Fix leaks in libbpf and selftests
-Date:   Sun, 7 Nov 2021 08:46:15 -0800
-Message-ID: <20211107164624.4137512-1-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH v3 bpf-next 3/9] selftests/bpf: fix memory leaks in btf_type_c_dump() helper
+Date:   Sun, 7 Nov 2021 08:46:18 -0800
+Message-ID: <20211107164624.4137512-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211107164624.4137512-1-andrii@kernel.org>
+References: <20211107164624.4137512-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: d1Vdz6AdvODHPeHrnLyhsbpnhIE36bjf
-X-Proofpoint-ORIG-GUID: d1Vdz6AdvODHPeHrnLyhsbpnhIE36bjf
+X-Proofpoint-GUID: XCNiLDC1TKUbNi--1Ai-CcV5Sf2v_wVq
+X-Proofpoint-ORIG-GUID: XCNiLDC1TKUbNi--1Ai-CcV5Sf2v_wVq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-07_09,2021-11-03_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 mlxscore=0
- malwarescore=0 suspectscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 priorityscore=1501 mlxlogscore=918 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111070108
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=890 clxscore=1034
+ priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111070109
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix all the memory leaks reported by ASAN. All but one are just improper
-resource clean up in selftests. But one memory leak was discovered in libbpf,
-leaving inner map's name leaked.
+Free up memory and resources used by temporary allocated memstream and
+btf_dump instance.
 
-First patch fixes selftests' Makefile by passing through SAN_CFLAGS to linker.
-Without that compiling with SAN_CFLAGS=-fsanitize=address kept failing.
+Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/btf_helpers.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Running selftests under ASAN in BPF CI is the next step, we just need to make
-sure all the necessary libraries (libasan and liblsan) are installed on the
-host and inside the VM. Would be great to get some help with that, but for now
-make sure that test_progs run is clean from leak sanitizer errors.
-
-v2->v3:
-  - fix per-cpu array memory leaks in btf_iter.c selftests (Hengqi);
-v1->v2:
-  - call bpf_map__destroy() conditionally if map->inner_map is present.
-
-Andrii Nakryiko (9):
-  selftests/bpf: pass sanitizer flags to linker through LDFLAGS
-  libbpf: free up resources used by inner map definition
-  selftests/bpf: fix memory leaks in btf_type_c_dump() helper
-  selftests/bpf: free per-cpu values array in bpf_iter selftest
-  selftests/bpf: free inner strings index in btf selftest
-  selftests/bpf: clean up btf and btf_dump in dump_datasec test
-  selftests/bpf: avoid duplicate btf__parse() call
-  selftests/bpf: destroy XDP link correctly
-  selftests/bpf: fix bpf_object leak in skb_ctx selftest
-
- tools/lib/bpf/libbpf.c                                   | 5 ++++-
- tools/testing/selftests/bpf/Makefile                     | 1 +
- tools/testing/selftests/bpf/btf_helpers.c                | 9 +++++++--
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c        | 8 ++++----
- tools/testing/selftests/bpf/prog_tests/btf.c             | 6 ++----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c        | 8 ++++++--
- tools/testing/selftests/bpf/prog_tests/core_reloc.c      | 2 +-
- .../testing/selftests/bpf/prog_tests/migrate_reuseport.c | 4 ++--
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c         | 2 ++
- 9 files changed, 29 insertions(+), 16 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/selftests/bpf/btf_helpers.c
+index b5b6b013a245..3d1a748d09d8 100644
+--- a/tools/testing/selftests/bpf/btf_helpers.c
++++ b/tools/testing/selftests/bpf/btf_helpers.c
+@@ -251,18 +251,23 @@ const char *btf_type_c_dump(const struct btf *btf)
+ 	d = btf_dump__new(btf, NULL, &opts, btf_dump_printf);
+ 	if (libbpf_get_error(d)) {
+ 		fprintf(stderr, "Failed to create btf_dump instance: %ld\n", libbpf_get_error(d));
+-		return NULL;
++		goto err_out;
+ 	}
+ 
+ 	for (i = 1; i < btf__type_cnt(btf); i++) {
+ 		err = btf_dump__dump_type(d, i);
+ 		if (err) {
+ 			fprintf(stderr, "Failed to dump type [%d]: %d\n", i, err);
+-			return NULL;
++			goto err_out;
+ 		}
+ 	}
+ 
++	btf_dump__free(d);
+ 	fflush(buf_file);
+ 	fclose(buf_file);
+ 	return buf;
++err_out:
++	btf_dump__free(d);
++	fclose(buf_file);
++	return NULL;
+ }
 -- 
 2.30.2
 
