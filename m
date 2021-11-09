@@ -2,101 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E97F7C433EF
-	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 03:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23BBDC433F5
+	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 05:29:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C195A611C5
-	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 03:44:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E617B610A0
+	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 05:29:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238711AbhKIDrL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 8 Nov 2021 22:47:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S236498AbhKIFcj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Nov 2021 00:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbhKIDrL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 8 Nov 2021 22:47:11 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F947C061764
-        for <bpf@vger.kernel.org>; Mon,  8 Nov 2021 19:44:26 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id j9so17213672pgh.1
-        for <bpf@vger.kernel.org>; Mon, 08 Nov 2021 19:44:26 -0800 (PST)
+        with ESMTP id S232345AbhKIFci (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Nov 2021 00:32:38 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E8DC061764
+        for <bpf@vger.kernel.org>; Mon,  8 Nov 2021 21:29:52 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id n8so18872755plf.4
+        for <bpf@vger.kernel.org>; Mon, 08 Nov 2021 21:29:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XEXSCzbN8p/s1FKt7KutVxPygmGdIuPrIWK9reGfTzo=;
-        b=EcxIe3odmtPr4pd5V1ArGUqiGiq8bGk+ZPnIQajG6IplJiOLAIGN7/rNgm4AG6Puaw
-         B/4+w44YvrDM8cEteTIIyyumJJLAQET733ReM6ULgy32VhlhXieu40ZhQnWAJmLMsaLs
-         pzdq+9jV8sNgi9EPDpYV3Ij+Vz4P/aepkKRPxDzSNgiFfVb2uclMq3xukbOqMe+A/V5U
-         3SJSq5F+Yhb4Y7CzP1Qpq501x9ZmfFQxX/+sFCB3fFDt0uirOuuHw0mnSBTJuO/UyRtN
-         BOqzJGG1pvYcVZ1Ma/3Q6Oiw9bmOH8swEoHt5C1H8d2hEwGOYwXvikF8KuFLC75xoasU
-         Fhgw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4DsNC5GzNOHaDAjaPC2+u9+MfH+j95NhbnjPHc6cwLY=;
+        b=T0E0X5PWx9xF+tV2nHlf8hH6SpNRL0O+0iMpI5AgUifDka15SYiiRWRKZdP6dMS6JX
+         sO+e90JigDf3CS37LRY+Kk39G7N9GOSG5uJyHqVl42xPkFhvpmbZjYpo0iEizRvgRsSv
+         aNHLFMPCnEmcHcty4ASUaBEXm7vFm1X3xhVYX5eCyKprI/HySiGG6gx4UUHouGxx8RCo
+         lbTN0ZadmOV2HkE4mABN0XJmD37w+sUyjr11f4rQP+ic9lzfYU/lrUHHmT0zqW04KJTR
+         lY3CADlsG8nEFXt2iXWTZC0YzqjKm3Rh4Sc3PJW+ai8Nq1xGb5wUjIuP3v5E7AtATfBB
+         jlbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XEXSCzbN8p/s1FKt7KutVxPygmGdIuPrIWK9reGfTzo=;
-        b=dSJ+VU/nvVjtJ/Axvcnp3SYguPj05SmBbElQti50wSSbfJV4peyZFitXWnC4OpE8AJ
-         oAmEcYG+vswrN1ls3IC4hyHsKE23GE34BP3b53r5GKV2F+j5jpIcZJZqK+R+PbMB56br
-         yRJ/VqWnMl2aG4OrPmsnOsvySnynT/zo9um9OnUmB1mfqmwsFnlngHg9dh62jS7pW5wG
-         yQoo+SIqK9lg143VH/hapIHAQZJtxkYqGMjENXXUGlB6PSl3LLGMTy+WVWITo4fcATTp
-         E9XK1lL2ybUnTD3EyGd8YKqk7Quy0UfEx49XY5cBkqqDBLJ/3a0nvVRpxn0FgnknHZPQ
-         Lbxw==
-X-Gm-Message-State: AOAM532xKDtvijxtPzbjLCe+oeaLaGakotJYG4HOfSCOLlIrg8/UsvJI
-        4tG9sAn78qCCmy0Fvz9zeoI=
-X-Google-Smtp-Source: ABdhPJwWF69Nh9nqXkU8qYhJlTZOXx+HKfL1noCNLx8XC5qBpmjPHzkX1A5sb4pDyDPBJhAMnXmXpA==
-X-Received: by 2002:a62:7f4a:0:b0:44d:292f:cc24 with SMTP id a71-20020a627f4a000000b0044d292fcc24mr87107048pfd.58.1636429465588;
-        Mon, 08 Nov 2021 19:44:25 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:e262])
-        by smtp.gmail.com with ESMTPSA id gv23sm723749pjb.17.2021.11.08.19.44.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Nov 2021 19:44:25 -0800 (PST)
-Date:   Mon, 8 Nov 2021 19:44:23 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com
-Subject: Re: [PATCH bpf-next 04/11] selftests/bpf: add test_progs flavor
- using libbpf as a shared lib
-Message-ID: <20211109034423.2fcwtksijnmywexg@ast-mbp.dhcp.thefacebook.com>
-References: <20211108061316.203217-1-andrii@kernel.org>
- <20211108061316.203217-5-andrii@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4DsNC5GzNOHaDAjaPC2+u9+MfH+j95NhbnjPHc6cwLY=;
+        b=Hxq8FR4qra8KtW0XL/svBrd5mzgBS1m9r3po8i9rRombXm+HSgegY5m/9YosZGsGbp
+         GyyJdscyuGcLcjHcSActQKOoVgRbUqaLdSaGziLDLj8JXfqm5Et5KCASC6/IF/NYokHZ
+         Dp8ZsEyaDQe2bVWOGmGdu+NmLtxJC8K8BVQKY6tMFvujlJHx7XC4TL4UGja2d09JQSJk
+         6m1lt2MbnCRcDPgXtXZ1FSLfhjaS3GXuh+EEV1F1588grsAY0Ihbpc9mcniHBZlrKjS4
+         j5MqOyH12qgqB4TeWo2lzmqOrHJvFTiUzoVWjyKVWuOsIzRKcNFvxcagdRDP8tdhkb05
+         WvTg==
+X-Gm-Message-State: AOAM530HdYNbmRBISTc2dZdluzfQALZAsbV4+hLLc7QkHEsJzTkIf52N
+        XJLtgHWGPFQGTpVGluDzYOpQ9ZkjhRtovlpLltl6ChkEd34=
+X-Google-Smtp-Source: ABdhPJxRU+mtpLIYQqs2CfQ9ozmdMKbprxEaJSYe/yRkmCTzoDZ+XZVNsJkWxrN0/av6gwScqwbwArViDf5j4uR9dBk=
+X-Received: by 2002:a17:902:d491:b0:142:892d:a89 with SMTP id
+ c17-20020a170902d49100b00142892d0a89mr4808725plg.20.1636435792326; Mon, 08
+ Nov 2021 21:29:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211108061316.203217-5-andrii@kernel.org>
+References: <36467ea3-8b19-f385-c2d0-02e2bd9c934e@polito.it>
+In-Reply-To: <36467ea3-8b19-f385-c2d0-02e2bd9c934e@polito.it>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 8 Nov 2021 21:29:41 -0800
+Message-ID: <CAADnVQLszubAWyq+Mch0xRneyhVpqNwQhrW3u_eocN6NzRcpEw@mail.gmail.com>
+Subject: Re: Add variable offset to packet pointer in XDP/TC programs
+To:     Federico Parola <federico.parola@polito.it>
+Cc:     bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Nov 07, 2021 at 10:13:09PM -0800, Andrii Nakryiko wrote:
-> Add test_progs-shared flavor to compile against libbpf as a shared
-> library. This is useful to make sure that libbpf's backwards/forward
-> compatibility guarantees are upheld. Currently this has to be checked
-> locally, but in the future we'll automate at least some scenarios as
-> part of libbpf CI runs.
-> 
-> Biggest change is how either libbpf.a or libbpf.so is passed to the
-> compiler, which is controled on per-flavor through a new TRUNNER_LIBBPF
-> parameter. All the places that depend on libbpf artifacts (headers,
-> library itself, etc) to be built are moved to order-only dependency on
-> $(BPFOBJ). rpath is used to specify relative location to where libbpf.so
-> should be so that when test_progs-shared is run under QEMU, libbpf.so is
-> still going to be discovered correctly.
-> 
-> Few selftests are using or testing internal libbpf APIs, so are not
-> compatible with shared library use of libbpf. Filter them out for shared
-> flavor.
-...
-> +# Define test_progs-shared test runner.
-> +TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
-> +TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
-> +TRUNNER_EXTRA_CFLAGS := -Wl,-rpath=$(subst $(CURDIR)/,,$(dir $(BPFOBJ)))
-> +TRUNNER_LIBBPF := $(patsubst %libbpf.a,%libbpf.so,$(BPFOBJ))
-> +TRUNNER_TESTS_BLACKLIST := cpu_mask.c hashmap.c perf_buffer.c raw_tp_test_run.c
-> +$(eval $(call DEFINE_TEST_RUNNER,test_progs,shared))
-> +TRUNNER_TESTS_BLACKLIST :=
+On Mon, Nov 8, 2021 at 6:04 AM Federico Parola
+<federico.parola@polito.it> wrote:
+>
+> Dear all,
+> I found out that every time an offset stored in a 2 (or more) bytes
+> variable is added to a packet pointer subsequent checks against packet
+> boundaries become ineffective.
+> Here is a toy example to test the problem (it doesn't do anything useful):
+>
+> int test(struct __sk_buff *ctx) {
+>      void *data = (void *)(long)ctx->data;
+>      void *data_end = (void *)(long)ctx->data_end;
+>
+>      /* Skipping an amount of bytes stored in __u8 works */
+>      if (data + sizeof(__u8) > data_end)
+>          return TC_ACT_OK;
+>      bpf_trace_printk("Skipping %d bytes", *(__u8 *)data);
+>      data += *(__u8 *)data;
+>
+>      /* Skipping an amount of bytes stored in __u16 works but... */
+>      if (data + sizeof(__u16) > data_end)
+>          return TC_ACT_OK;
+>      bpf_trace_printk("Skipping %d bytes", *(__u16 *)data);
+>      data += *(__u16 *)data;
+>
+>      /* ...this check is not effective and packet access is rejected */
+>      if (data + sizeof(__u8) > data_end)
+>          return TC_ACT_OK;
+>      bpf_trace_printk("Next byte is %x", *(__u8 *)data);
+>
+>      return TC_ACT_OK;
+> }
+>
+> My practical use case would be skipping variable-size TLS header
+> extensions until I reach the desired one (the length of these options is
+> 2 bytes long).
+> Another use case can be found here:
+> https://lists.iovisor.org/g/iovisor-dev/topic/access_packet_payload_in_tc/86442134
+> After I use the bpf_skb_pull_data() I would like to directly jump to the
+> part of packet I was working on and avoid re-parsing everything from
+> scratch, however if I save the offset in a 2 bytes variable and then add
+> it to the packet pointer I'm no longer able to access it (if the offset
+> is stored in a 1 byte var everything works).
+>
+> Is this a verifier bug?
 
-It's a good idea to add libbpf.so test, but going through test_progs is imo overkill.
-No reason to run more than one test with shared lib.
-If it links fine it's pretty much certain that it will work.
-Maybe convert test_maps into shared only? CI runs it already.
+It's because of:
+        if (dst_reg->umax_value > MAX_PACKET_OFF ||
+            dst_reg->umax_value + dst_reg->off > MAX_PACKET_OFF)
+                /* Risk of overflow.  For instance, ptr + (1<<63) may be less
+                 * than pkt_end, but that's because it's also less than pkt.
+                 */
+                return;
+
+by adding u16 scalar the offset becomes bigger than MAX_PACKET_OFF.
+Could you try clamping the value before 'data += ' ?
