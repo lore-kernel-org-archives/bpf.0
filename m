@@ -2,151 +2,276 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C124C433EF
-	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 17:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8064C433EF
+	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 17:34:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5D0F611BF
-	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 17:01:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B186E6128E
+	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 17:34:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238164AbhKIREP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Nov 2021 12:04:15 -0500
-Received: from mail-eopbgr50136.outbound.protection.outlook.com ([40.107.5.136]:32389
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238128AbhKIREO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Nov 2021 12:04:14 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J5GzFC8W1WIPUkw2yVGpd96xpG6FkC0xButJWlldhsUw8y6xKhgHwosoT6XFtp+LluTJHS/BHTDCEmWE9VZWFHiTQehTHoZOnVjxkzSePR7oaShudEq1s/hWHuczIg8e+3YDot9F87NNHnbYgoMX+xjNmKE8T/1Zo5bslxUNiHJA8LrfQ9GyliBdjMHmHx/+w3slwU25iSaoS2t1+mzErZ0Jce0voQD+sHF47bEq7sMKB1bL7x7KJFZv2P/4Q7wrObZh45vuWyYUf9OPA/RAwtM+e4O3ChNuT1yyuqCYDRNeQSpdY95+2y/ByKqO2fu3qWH2Uei9aobD4qdLpCy7og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OLKBOoNjgtG+KI7tPASSKvwLiOsDs7NkqV2qfYgTc+k=;
- b=la0L31Zlkl0fx6s28fNZHqs6IovCF/7tYmNi+qJS6IBYTGBV56QiZxJRAzvbMsZg2MGtwGo8bIesgR/4iR5cVWwyecu6+7Ur3a9k6DpN/yZ5a2pTi6Sf1EjU7JoK4GT77jt6/C5QSVeG8tiLeSH4bKZr81TUwDMjWE2JwIklAub42QrrP3BuNJohAvEtrfK7trHr3d/I+oCH+6SCKZDoelCORFBShTyXvF9KEDhLpSt1ZN9HgVY1+FMxMIb72mqO8kpJ19I1Pq++AI5bb06g7z7LbBag7CPTOJWDdhRs+x3SbVetKtkSVN4DWzb7R9zWhfTGCQ0NdpPQBAhWyRzFYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=eho.link; dmarc=pass action=none header.from=eho.link;
- dkim=pass header.d=eho.link; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=eho.link; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OLKBOoNjgtG+KI7tPASSKvwLiOsDs7NkqV2qfYgTc+k=;
- b=DtP0syLfIB6JYrnYhlZi9ksa1B9SmUFOGnYWvnKPsZu7JxGPyHIC93ZDBj1n5DMlxGu1JcnnVD0ZRaCRcFwnD52PItYf0u2E3YlVGN7XejrmtS9nNUu67F33U6LPnp59Gb84eSAb8SVQ6DGKZHPI9rz4uYtVSB6t3Xl+qADU6UpyDA0n3RIaZIoCyFvdBY/D80gfVLg700zUFInY+8CLlOEiY2Hc+D+8C7+8GO26DBMwxknR0pad8THfoM6k5nVeaRrUgD8otrVmi2kLbqvibzFyn19FvJ31NOJEZVv2wP1K5P5y82I4hcDnibdQCIe/UqvoMrHeZz/C81TJCdY42w==
-Received: from DB9PR06MB8058.eurprd06.prod.outlook.com (2603:10a6:10:26b::20)
- by DBAPR06MB7061.eurprd06.prod.outlook.com (2603:10a6:10:1a2::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.15; Tue, 9 Nov
- 2021 17:01:25 +0000
-Received: from DB9PR06MB8058.eurprd06.prod.outlook.com
- ([fe80::8c3c:6acb:c2ca:3721]) by DB9PR06MB8058.eurprd06.prod.outlook.com
- ([fe80::8c3c:6acb:c2ca:3721%8]) with mapi id 15.20.4690.015; Tue, 9 Nov 2021
- 17:01:24 +0000
-From:   Emmanuel Deloget <emmanuel.deloget@eho.link>
-To:     Marcin Wojtas <mw@semihalf.com>, Louis Amas <louis.amas@eho.link>
-CC:     Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH] net: mvpp2: fix XDP rx queues registering
-Thread-Topic: [PATCH] net: mvpp2: fix XDP rx queues registering
-Thread-Index: AQHX1VTwPcpWvxILPUqEUkI20PYhwKv7ReIAgAAlV58=
-Date:   Tue, 9 Nov 2021 17:01:24 +0000
-Message-ID: <DB9PR06MB8058D71218633CD7024976CAFA929@DB9PR06MB8058.eurprd06.prod.outlook.com>
-References: <20211109103101.92382-1-louis.amas@eho.link>
- <CAPv3WKeHN3c_C4Y+QrAR9=BnQ_+tdhyKKAk=-o_DpyQ_6KyzAQ@mail.gmail.com>
-In-Reply-To: <CAPv3WKeHN3c_C4Y+QrAR9=BnQ_+tdhyKKAk=-o_DpyQ_6KyzAQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-suggested_attachment_session_id: 42bf139a-25ec-ad94-6d57-ac4f09329ab6
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=eho.link;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2b2c0621-8e9f-49bf-ccbf-08d9a3a29039
-x-ms-traffictypediagnostic: DBAPR06MB7061:
-x-microsoft-antispam-prvs: <DBAPR06MB7061CE152CF7C3291B8D8A38FA929@DBAPR06MB7061.eurprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1468;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wuorwzHmCn4dzoJ//tF4j7tjiqCfUF+n+T1izvTzNe6H7QJvgXLslvZZ7zVaeOZFqAfWbVBB/ST+sZ3gzuDhgciWYhCmgRkcIJA4L15wUIk26p0BZanvL95LveRsobvMpLtJvDYFUbPgVCPjCrxaQgQNN/BX3AsLqVFHUQfCw8tu4F4q6buNskfjK0hBI27qSxTl/C5n5Z/2fVUFMLmXOhe3Z+947kyVEz9c9gU203AJyUD3f58BMo0kB//IW7Z9kiVic0v9NT86vy5tdUd5XdHIUmGGQf+tfMRGHDnLhg6mldzs9xsY0SEsQjUVuaMK8rEVL1hBLdYEPjlbXuAWHOZyIs1BmH9tXgvJ0xAbhDlHDEc4g8YzbOc/1ihE4wZ3bec5Gs7XqI/couMx4R84qdKEz4mVC7l+ui919AY0ANHAgI+MZ3gSwjkA94FPJ7l4pdLKWW2uHOj+gaPsTbB3ArgeibQq8DeklobbgR8Y9SpU6TG7o1FBiK4gGj5NwUdTab6nwEvR8HivjndVtZjMCD3iJHb6BNvLXB5WBAN5EtkZ5mNBHrA2bA3D4at7FPu4Cb9bOX9B/IiZ5uL3dcIVjyJDhjZ0PSFd/mrmgmf3f1WcsJztQmYVrqeFEdB6mcy81fG/aj6bd6JkGHU8rrIX76pc5bIbGBQu2vu26ZL+w8chHSlXHkzN9xcztClR1DLRSkZPl8YvgcxkIiL0atm/OA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR06MB8058.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(396003)(39830400003)(346002)(376002)(4326008)(33656002)(7696005)(71200400001)(6506007)(44832011)(83380400001)(55016002)(66446008)(2906002)(86362001)(54906003)(38100700002)(508600001)(7416002)(5660300002)(8936002)(38070700005)(66556008)(316002)(64756008)(26005)(122000001)(66476007)(9686003)(4744005)(8676002)(186003)(76116006)(110136005)(6636002)(91956017)(66946007)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?FimSB4IyhpxlDXZfTgwRyFUxwFd75CZ5JsYflxdxfZ8tlZuef6t08MYFe1?=
- =?iso-8859-2?Q?8WtDJhzEZVLNKb4THEUtV9buGGf5fwYno4kDJDZM/o+T/Prv1qFxOy18G8?=
- =?iso-8859-2?Q?OPR+aNEf2vtf3/X/NLW5QrWf5ttal3Q7xn9v2AXFuMGwZ1UUnhmz37GjaM?=
- =?iso-8859-2?Q?LgbdnM08HiJmzdnnVivkZzN/NEW/WGR1vxnSFr8DGEQvdhNeaCdTVUnTnT?=
- =?iso-8859-2?Q?UHH2vFOxquutBP2thGD6zm8TE8Sb84O7wIf0iMFzLFGHigHCSf4aTywz5J?=
- =?iso-8859-2?Q?kjhtSVAHhOLY3G4oFl18SbWmgWh3vkfwROyG3ajHvjQqG2ESisc1/7dKXX?=
- =?iso-8859-2?Q?TnFgQ2QlRpyMdiHqgvmi9VlCY3/8vsMdebW9K/UfhZunbmC2Vn4rPgo0mK?=
- =?iso-8859-2?Q?Q0dpZ130Tvdu7klBl/28kmmudeuh5URPdcPkhsaR4rLOdF33hNogRujpE5?=
- =?iso-8859-2?Q?cVollrODmKl+kSbhCF8pbD/HK4FXTqSxtge3H2kyZVT5SS1weyoBAVZyY0?=
- =?iso-8859-2?Q?DFionz/nqmV0ICxGrSkEdxCNffOs/+DSPMIMagvvVBgp2N4Wa7cfZl2GrA?=
- =?iso-8859-2?Q?A4x7If7Kpg+3E4oSRorwCyZoWwh1lSV9zK86RUYi/6xQKDhqZ9/DiRETHg?=
- =?iso-8859-2?Q?6lLhEUJuWSEw5kyb65ZsAyKxwG2RBkhWaepS/APxEuTHJxpFTQOs4EebTb?=
- =?iso-8859-2?Q?XTH9pVibOl9Zu96kkk4mgwzwM7z3PM2m4vwN0mVo+vLmPDPp2K78dpmsQy?=
- =?iso-8859-2?Q?18nLJ5fI+yZw6O7jsj4s/HPzH1MsDZiRvBVj4EiMmXxbfpV2fZyE72pNS8?=
- =?iso-8859-2?Q?9aq8dJi5sR12JaEiyJhOw5xkg8eTVgt8KPWBh72U47Tn/P87+rZLYhQFbg?=
- =?iso-8859-2?Q?khe8szbG1T4HGqGvFiTdyA3orJdla65Hvq03c+2CkaSc3SWxcuqd1xeRqE?=
- =?iso-8859-2?Q?XZpNb7vX5fKfaLO8deIOeyxE87f6vuHv3YD4qyl2fQA5qnFKTmM7eRHlfj?=
- =?iso-8859-2?Q?R89OH6JRAvKNVrXYtl2ESGVSEtSZAzE0Rll09nRk3f/Zk7nqGSgZfoGvLz?=
- =?iso-8859-2?Q?BVLsjhYU4UXjRu6KWViCv+iTh9lO1HHUeqi6HZY037CTP6IoI51EVExk1p?=
- =?iso-8859-2?Q?kCqz/3g+77/lUjGyQiZqTv4Ti/FcuhNBxH5scE/4x9s/S8INtSlZXaOoFa?=
- =?iso-8859-2?Q?a735G9iMI6aXMP+n7zXDdTcvu4IJxs3F27OHGxrTTI2m/da2ogMpp6idxj?=
- =?iso-8859-2?Q?SmNYk+EVx5QCGVoJZPvc2OtQz9aCOGN5KLMUR4jsz3Wv9JT0CGTHDp5v7m?=
- =?iso-8859-2?Q?LUonh+JbY+l1AK7xUNqRk7Ur4L1CQZRSCSfwtuEAgOsr04h9tutE/pF1Og?=
- =?iso-8859-2?Q?vzuRak3L909iUCSph0oUXefYPuOeBzDnkm2hfUcMC8FuQ0vwU4n5OJ9m9l?=
- =?iso-8859-2?Q?ofiILCsncXthvL+FZLW6rIP8MGuRlE/dCwbTnVFNiOajuGMZnan2Vxxq/M?=
- =?iso-8859-2?Q?Ym13lh3vJWjayBW5a3q4NxYaVYo9ZsX73UWQlo6a74qbcLC4KWBoGPPBwk?=
- =?iso-8859-2?Q?Hd6jBHBZpDp7kQJ1dqwMEJXc5V8f7bQzkLTuDZcz0eowByhSqC6YCZOi+M?=
- =?iso-8859-2?Q?mLwxlcwmDuqIPB5P3jchVjyTpko5VLyctnNMQCaoDLaxH6u3C7uFj23hd2?=
- =?iso-8859-2?Q?8vWMbtS5jDIrejk/OhvzqBJSzpWjdjVzyCziwVlquQ6+sEt41oPiC4J4D2?=
- =?iso-8859-2?Q?N+ag=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S241167AbhKIRha (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Nov 2021 12:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241148AbhKIRh1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Nov 2021 12:37:27 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E309CC061767
+        for <bpf@vger.kernel.org>; Tue,  9 Nov 2021 09:34:40 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id p17so19146805pgj.2
+        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 09:34:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YtCMrd8soCJwqQdYqfS1Uxj+jvIWsqJW9Sfp+I5znK0=;
+        b=RnI334WgYGo1s2xg0PnNwh/LwyjwkbeECYSptgpgWOUMErGKHmsDK/ZLGV9pEMwl/O
+         ekYV7g3Qyj7iroFAawbog28LZq8j9E8ozPsy6LbXEeNYDfaWne0pF0iY2RKw20oFgoi+
+         iUWeYVTxBO9NJJ4Hp1KyWtYKI60Ou3f9tZSZ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YtCMrd8soCJwqQdYqfS1Uxj+jvIWsqJW9Sfp+I5znK0=;
+        b=zRv4UnXRetRTuK37VhZP7tpUtMP3WP2auofNl/4OLWOC1jZJqlWxXSebWTOODhCa+e
+         lCVX/5hpyXu+nrnS9yDRAuzWFlR6xefn9cnDrlrpnDTVrfZeVeuyTtYVuxsPo/qHxZPk
+         McIDHb3+pOf276c3UI5YUGpK24tq4dwc+Zmy7GtnRZZ/to1pY3JpT+HNL7pr164lGkDp
+         uFfrfImYMwNAveJFhMxXblembR5uIctWDEC+M7NlAujYdSlH7jss5Qp/hmcmiZVNcXfU
+         tK6mu3riBh+eXTWu1UkN1n11guM7YlDavXIhdl8YHKjF4WYoW2NrmRSf6axdf9b+8Pqf
+         CIIw==
+X-Gm-Message-State: AOAM530xcwyrp0DNtDEMmnMC054uuRYBQL7aeXm3nb4MrR2fQkek3T4s
+        WxOi9RB1kOEzxIL3pB/RU8jeSQ==
+X-Google-Smtp-Source: ABdhPJzSUauLeZJaFQUg6w2y5hqN0XLLDLzRlcMe5/CcpZD5KWsYDIDxVT3fGawLe51+TwjHa4Pryg==
+X-Received: by 2002:a63:e710:: with SMTP id b16mr7200956pgi.38.1636479280328;
+        Tue, 09 Nov 2021 09:34:40 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q9sm20769593pfj.88.2021.11.09.09.34.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Nov 2021 09:34:39 -0800 (PST)
+Date:   Tue, 9 Nov 2021 09:34:39 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] kthread: dynamically allocate memory to store kthread's
+ full name
+Message-ID: <202111090930.75BBF4678@keescook>
+References: <20211108084142.4692-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: eho.link
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR06MB8058.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b2c0621-8e9f-49bf-ccbf-08d9a3a29039
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2021 17:01:24.8705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 924d502f-ff7e-4272-8fa5-f920518a3f4c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8KLCyU8PtMgoPPue8UFN2M4eJTm4yAxk14LkZLuY31Jy6WJI9Ez1HsXQJtci8exyLJ9rk7mDyKSytT/YRTwPLbG2YQmLoeosQSjxEv/o//k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR06MB7061
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211108084142.4692-1-laoar.shao@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello, =0A=
-=0A=
-From: Marcin Wojtas <mw@semihalf.com>=0A=
-> wt., 9 lis 2021 o 11:31 Louis Amas <louis.amas@eho.link> napisa=B3(a):=0A=
-> =0A=
-> Thank you for the patch and the detailed explanation. I think "Fixes:"=0A=
-> tag should be added to the commit message:=0A=
-> Fixes: b27db2274ba8 ("mvpp2: use page_pool allocator")=0A=
-> =0A=
-> Other than that - LGTM, so you can add my:=0A=
-> Reviewed-by: Marcin Wojtas <mw@semihalf.com>=0A=
-> =0A=
-> Best regards,=0A=
-> Marcin=0A=
-=0A=
-Thank you :)=0A=
-=0A=
-We'll send an augmented version tomorrow along with a small rework of the c=
-ommit message. =0A=
-=0A=
-Best regards, =0A=
-=0A=
--- Emmanuel Deloget=
+On Mon, Nov 08, 2021 at 08:41:42AM +0000, Yafang Shao wrote:
+> When I was implementing a new per-cpu kthread cfs_migration, I found the
+> comm of it "cfs_migration/%u" is truncated due to the limitation of
+> TASK_COMM_LEN. For example, the comm of the percpu thread on CPU10~19 are
+> all with the same name "cfs_migration/1", which will confuse the user. This
+> issue is not critical, because we can get the corresponding CPU from the
+> task's Cpus_allowed. But for kthreads correspoinding to other hardware
+> devices, it is not easy to get the detailed device info from task comm,
+> for example,
+> 
+>     jbd2/nvme0n1p2-
+>     xfs-reclaim/sdf
+> 
+> Currently there are so many truncated kthreads:
+> 
+>     rcu_tasks_kthre
+>     rcu_tasks_rude_
+>     rcu_tasks_trace
+>     poll_mpt3sas0_s
+>     ext4-rsv-conver
+>     xfs-reclaim/sd{a, b, c, ...}
+>     xfs-blockgc/sd{a, b, c, ...}
+>     xfs-inodegc/sd{a, b, c, ...}
+>     audit_send_repl
+>     ecryptfs-kthrea
+>     vfio-irqfd-clea
+>     jbd2/nvme0n1p2-
+>     ...
+> 
+> We can shorten these names to work around this problem, but it may be
+> not applied to all of the truncated kthreads. Take 'jbd2/nvme0n1p2-' for
+> example, it is a nice name, and it is not a good idea to shorten it.
+> 
+> One possible way to fix this issue is extending the task comm size, but
+> as task->comm is used in lots of places, that may cause some potential
+> buffer overflows. Another more conservative approach is introducing a new
+> pointer to store kthread's full name if it is truncated, which won't
+> introduce too much overhead as it is in the non-critical path. Finally we
+> make a dicision to use the second approach. See also the discussions in
+> this thread:
+> https://lore.kernel.org/lkml/20211101060419.4682-1-laoar.shao@gmail.com/
+> 
+> After this change, the full name of these truncated kthreads will be
+> displayed via /proc/[pid]/comm:
+> 
+>     rcu_tasks_kthread
+>     rcu_tasks_rude_kthread
+>     rcu_tasks_trace_kthread
+>     poll_mpt3sas0_statu
+>     ext4-rsv-conversion
+>     xfs-reclaim/sdf1
+>     xfs-blockgc/sdf1
+>     xfs-inodegc/sdf1
+>     audit_send_reply
+>     ecryptfs-kthread
+>     vfio-irqfd-cleanup
+>     jbd2/nvme0n1p2-8
+> 
+> Suggested-by: Petr Mladek <pmladek@suse.com>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+> Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Al Viro <viro@zeniv.linux.org.uk>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Petr Mladek <pmladek@suse.com>
+> ---
+> TODO: will cleanup worker comm in the next step. 
+> 
+> ---
+>  fs/proc/array.c         |  3 +++
+>  include/linux/kthread.h |  1 +
+>  kernel/kthread.c        | 32 +++++++++++++++++++++++++++++++-
+>  3 files changed, 35 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/proc/array.c b/fs/proc/array.c
+> index 49be8c8ef555..860e4deafa65 100644
+> --- a/fs/proc/array.c
+> +++ b/fs/proc/array.c
+> @@ -92,6 +92,7 @@
+>  #include <linux/string_helpers.h>
+>  #include <linux/user_namespace.h>
+>  #include <linux/fs_struct.h>
+> +#include <linux/kthread.h>
+>  
+>  #include <asm/processor.h>
+>  #include "internal.h"
+> @@ -102,6 +103,8 @@ void proc_task_name(struct seq_file *m, struct task_struct *p, bool escape)
+>  
+>  	if (p->flags & PF_WQ_WORKER)
+>  		wq_worker_comm(tcomm, sizeof(tcomm), p);
+> +	else if (p->flags & PF_KTHREAD)
+> +		get_kthread_comm(tcomm, sizeof(tcomm), p);
+>  	else
+>  		__get_task_comm(tcomm, sizeof(tcomm), p);
+>  
+> diff --git a/include/linux/kthread.h b/include/linux/kthread.h
+> index 346b0f269161..2a5c04494663 100644
+> --- a/include/linux/kthread.h
+> +++ b/include/linux/kthread.h
+> @@ -33,6 +33,7 @@ struct task_struct *kthread_create_on_cpu(int (*threadfn)(void *data),
+>  					  unsigned int cpu,
+>  					  const char *namefmt);
+>  
+> +void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk);
+>  void set_kthread_struct(struct task_struct *p);
+>  
+>  void kthread_set_per_cpu(struct task_struct *k, int cpu);
+> diff --git a/kernel/kthread.c b/kernel/kthread.c
+> index 5b37a8567168..ce8258231eea 100644
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -60,6 +60,8 @@ struct kthread {
+>  #ifdef CONFIG_BLK_CGROUP
+>  	struct cgroup_subsys_state *blkcg_css;
+>  #endif
+> +	/* To store the full name if task comm is truncated. */
+> +	char *full_name;
+>  };
+>  
+>  enum KTHREAD_BITS {
+> @@ -93,6 +95,18 @@ static inline struct kthread *__to_kthread(struct task_struct *p)
+>  	return kthread;
+>  }
+>  
+> +void get_kthread_comm(char *buf, size_t buf_size, struct task_struct *tsk)
+> +{
+> +	struct kthread *kthread = to_kthread(tsk);
+> +
+> +	if (!kthread || !kthread->full_name) {
+> +		__get_task_comm(buf, buf_size, tsk);
+> +		return;
+> +	}
+> +
+> +	strscpy_pad(buf, kthread->full_name, buf_size);
+> +}
+> +
+>  void set_kthread_struct(struct task_struct *p)
+>  {
+>  	struct kthread *kthread;
+> @@ -121,6 +135,7 @@ void free_kthread_struct(struct task_struct *k)
+>  #ifdef CONFIG_BLK_CGROUP
+>  	WARN_ON_ONCE(kthread && kthread->blkcg_css);
+>  #endif
+> +	kfree(kthread->full_name);
+>  	kfree(kthread);
+>  }
+>  
+> @@ -399,12 +414,27 @@ struct task_struct *__kthread_create_on_node(int (*threadfn)(void *data),
+>  	if (!IS_ERR(task)) {
+>  		static const struct sched_param param = { .sched_priority = 0 };
+>  		char name[TASK_COMM_LEN];
+> +		va_list aq;
+> +		int len;
+>  
+>  		/*
+>  		 * task is already visible to other tasks, so updating
+>  		 * COMM must be protected.
+>  		 */
+> -		vsnprintf(name, sizeof(name), namefmt, args);
+> +		va_copy(aq, args);
+> +		len = vsnprintf(name, sizeof(name), namefmt, aq);
+> +		va_end(aq);
+> +		if (len >= TASK_COMM_LEN) {
+> +			struct kthread *kthread = to_kthread(task);
+> +			char *full_name;
+> +
+> +			full_name = kvasprintf(GFP_KERNEL, namefmt, args);
+> +			if (!full_name) {
+> +				kfree(create);
+> +				return ERR_PTR(-ENOMEM);
+
+I'm not a fan of this out-of-line free/return. Why not just leave it
+truncated when out of memory? For example just do:
+
+			struct kthread *kthread = to_kthread(task);
+
+			kthread->full_name = kvasprintf(GFP_KERNEL, namefmt, args);
+
+> +			}
+> +			kthread->full_name = full_name;
+> +		}
+>  		set_task_comm(task, name);
+>  		/*
+>  		 * root may have changed our (kthreadd's) priority or CPU mask.
+> -- 
+> 2.17.1
+> 
+
+-- 
+Kees Cook
