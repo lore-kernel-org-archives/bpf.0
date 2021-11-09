@@ -2,109 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55D79C433EF
-	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 22:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E91DC433F5
+	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 22:56:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4108C610A0
-	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 22:51:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FA4D610CB
+	for <bpf@archiver.kernel.org>; Tue,  9 Nov 2021 22:56:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242068AbhKIWya (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 9 Nov 2021 17:54:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S241763AbhKIW6q (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 9 Nov 2021 17:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345702AbhKIWyI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:54:08 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B27EC0432D5
-        for <bpf@vger.kernel.org>; Tue,  9 Nov 2021 14:25:52 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id o4so724203pfp.13
-        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 14:25:52 -0800 (PST)
+        with ESMTP id S241305AbhKIW6l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 9 Nov 2021 17:58:41 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87E8C08B2CD
+        for <bpf@vger.kernel.org>; Tue,  9 Nov 2021 14:39:06 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id az33-20020a05600c602100b00333472fef04so2358788wmb.5
+        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 14:39:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cilium-io.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Kmoy5rAGgZZp57wgnePj16rJ2xiDfWmZHrxezWo+FSE=;
-        b=jQ1azQAntPbNJVZqOChZ68OM8heGfYh1USRovJKbmbDY7W2SZDOCXBDxobuEPSGbZM
-         jgfe5l0QFx80u8z9nF1Z07YpWmWeWqSi3GisCaC6jxz5uVNeFO4Rk2vrd2JASlsqvz/w
-         S3EVvH1gi75QUWg1bnG7SaiklFHzUDc+yxRFeJ4pLLiN5uMPpRgRcRlZdL8thqMLAVrH
-         jFGHEa2bOOggerIXr3S2KzsdhD1ek6afsUV06DEN2brpKSEVs0GL2ERrNI1VGbU/s6rO
-         WVHZcatLmQCq+rBY4o1pFdQZuPm7K51oZ2ZYiAXwryGD4k1gOU8vPvVlqn/bv5hVG22V
-         7frw==
+        bh=jA/4RJpaH4m2WSVrDPCYphtg9Wi1iLRKOjZENRMh2+g=;
+        b=Jc1efR6lUrCdnc9z67tz8bnlA3JCrGXirTuP/E/O5xxATDVuQpbBRJMR1MMWOjeq+2
+         UWA15FdHV/QhwZ6RkhGtDa+dwDkNwECVrq8YTP0ts7yWXunWPTYPCbxzLxnaxseXlO1+
+         DPQbPiGKRdX13rWsGeSp1/lPSUA7VZr1WfEnTVMYJuZnKdD2zBj3Dqws7Rg1p0dqQkNf
+         mvO+ESzWr2nneeASz+8dLyPniophkAosMRHlwvEqYCJNM/p6YoCyjv2vl7ITcubUZtRq
+         VfDKXiEaf9+4nqN0pWsK2RljrL2eBoYNR/cZIKaY0CrkYkiaCPWDUf8Et3sC9bs5TjVP
+         Sl3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Kmoy5rAGgZZp57wgnePj16rJ2xiDfWmZHrxezWo+FSE=;
-        b=fSji/UVG4fiyQhMW5WHqTRGgUGrt6/yxH4wej8FqVC3bTc4r5L5/a2IlanzOuqOu5u
-         kSt84OfSq1Ca3+OCKYX8NjPvInwVanBeIibxgGlSXbC0ehEvYpbXB1m34E56fIlKC0d/
-         /usN4BnSglU4ilK7Nw2wrh9SFLWuApCIrPI+8Olw1qDENX1PGUY2RcX9OmHdcJNlO5Rl
-         0W3f6YS58CuuvHceXimmOSZrkJ2fjmWcTVC4LolgZ9KVHFfGY2/ml0Ue2WYmevq2JnFO
-         ourieWVSzENHp2129Tqp4t44rdivutx5f69X+RffAoGLcKA5sPB7xON0BC7wGdRNqyRC
-         MrtA==
-X-Gm-Message-State: AOAM532/7vQq0rYLXqgcLU+qW5HfaYf7C8dsnR3z8SUP/2tq25tDyBgb
-        GKIYzixnNyUTIsEvXyrUEi0h7qkrePHlQ0O0TAg=
-X-Google-Smtp-Source: ABdhPJwZTGQs+kgd3gCos8OB+AV0a2Cu4kU/JvPskynfBf3T5r2UGP4gMHnba7DcT1z7Ds3wQb2XDA==
-X-Received: by 2002:a05:6a00:1350:b0:49f:e389:8839 with SMTP id k16-20020a056a00135000b0049fe3898839mr11654263pfu.51.1636496751888;
-        Tue, 09 Nov 2021 14:25:51 -0800 (PST)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com. [209.85.214.178])
-        by smtp.gmail.com with ESMTPSA id t13sm8563697pfl.98.2021.11.09.14.25.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Nov 2021 14:25:51 -0800 (PST)
-Received: by mail-pl1-f178.google.com with SMTP id o14so1213207plg.5;
-        Tue, 09 Nov 2021 14:25:51 -0800 (PST)
-X-Received: by 2002:a17:90b:1bcb:: with SMTP id oa11mr11254969pjb.140.1636496750801;
- Tue, 09 Nov 2021 14:25:50 -0800 (PST)
+        bh=jA/4RJpaH4m2WSVrDPCYphtg9Wi1iLRKOjZENRMh2+g=;
+        b=rvaUb2sWbarOliWEm5bnp/BhH+ayEaSZfgNkTNkp5W3zWkdZMdiMtEDADRnJLqlAZK
+         iNX+GoA7BbGIFvHXNAq3a9AVDR6DPt9ZOvSdKAVQZAv6xYHqjLolgmGT2k4r61Cr0Jzf
+         ASkw8pVS13skOWVX4r8cY0pL+FjXTdYzNcqMKZPZ8VxpHgW6uHtsP/ghg1wsOVkQm3Mn
+         bea+/O40BHL+sXfPfHdfeV0gFv6mdp5jzhI7rEUWqIc+LINm+ZGwUqKnm9Pvz55IjHUv
+         hdtNbCV1va/wCJ+UsJyrpkff5OA4uCB4jN8fU6K6fnlcQe4RNpZvuWA9ifCa697JKw8i
+         BZvA==
+X-Gm-Message-State: AOAM532uQxSmxlyWOBzuVvo0QKL7VGbmv73aJwIjQLqaiGsoBlhSlMTv
+        89WWoheAjb+D62B5O3omUcP4UqKGeEfECq5PMLDq4A==
+X-Google-Smtp-Source: ABdhPJy6ZvIAGhjwHNa2K82Ak3hX8mWmKPXYq4otAJnR6W/6/gieOfWqHtpZ+mlXQ/9+c3axSeDYsEl6keeA3ABhPgM=
+X-Received: by 2002:a05:600c:3ba3:: with SMTP id n35mr11535482wms.88.1636497544809;
+ Tue, 09 Nov 2021 14:39:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20211105221904.3536-1-quentin@isovalent.com>
-In-Reply-To: <20211105221904.3536-1-quentin@isovalent.com>
-From:   Joe Stringer <joe@cilium.io>
-Date:   Tue, 9 Nov 2021 14:25:40 -0800
-X-Gmail-Original-Message-ID: <CAOftzPinVTm3rfVFE-OQ5rtxOAamiJXfyanE7XPr6zNqPgrqsg@mail.gmail.com>
-Message-ID: <CAOftzPinVTm3rfVFE-OQ5rtxOAamiJXfyanE7XPr6zNqPgrqsg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpftool: Fix SPDX tag for Makefiles and .gitignore
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jiri Olsa <jolsa@kernel.org>, Peter Wu <peter@lekensteyn.nl>,
-        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Tobias Klauser <tklauser@distanz.ch>
+References: <20211109222447.3251621-1-songliubraving@fb.com>
+In-Reply-To: <20211109222447.3251621-1-songliubraving@fb.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 9 Nov 2021 14:38:52 -0800
+Message-ID: <CANn89iLULCxZ+p-zkZVTLObLvJ+z34nEqS-e3nmA8MK0cKzi=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: fix btf_task_struct_ids w/o CONFIG_DEBUG_INFO_BTF
+To:     Song Liu <songliubraving@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, Kernel-team@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Nov 5, 2021 at 3:19 PM Quentin Monnet <quentin@isovalent.com> wrote:
+On Tue, Nov 9, 2021 at 2:25 PM Song Liu <songliubraving@fb.com> wrote:
 >
-> Bpftool is dual-licensed under GPLv2 and BSD-2-Clause. In commit
-> 907b22365115 ("tools: bpftool: dual license all files") we made sure
-> that all its source files were indeed covered by the two licenses, and
-> that they had the correct SPDX tags.
+> This fixes KASAN oops like
 >
-> However, bpftool's Makefile, the Makefile for its documentation, and the
-> .gitignore file were skipped at the time (their GPL-2.0-only tag was
-> added later). Let's update the tags.
+> BUG: KASAN: global-out-of-bounds in task_iter_init+0x212/0x2e7 kernel/bpf/task_iter.c:661
+> Read of size 4 at addr ffffffff90297404 by task swapper/0/1
 >
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Andrii Nakryiko <andriin@fb.com>
-> Cc: Ilya Leoshkevich <iii@linux.ibm.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Joe Stringer <joe@cilium.io>
-> Cc: Peter Wu <peter@lekensteyn.nl>
-> Cc: Roman Gushchin <guro@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Tobias Klauser <tklauser@distanz.ch>
-> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.15.0-syzkaller #0
+> Hardware name: ... Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+> <TASK>
+> __dump_stack lib/dump_stack.c:88 [inline]
+> dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> print_address_description.constprop.0.cold+0xf/0x309 mm/kasan/report.c:256
+> __kasan_report mm/kasan/report.c:442 [inline]
+> kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
+> task_iter_init+0x212/0x2e7 kernel/bpf/task_iter.c:661
+> do_one_initcall+0x103/0x650 init/main.c:1295
+> do_initcall_level init/main.c:1368 [inline]
+> do_initcalls init/main.c:1384 [inline]
+> do_basic_setup init/main.c:1403 [inline]
+> kernel_init_freeable+0x6b1/0x73a init/main.c:1606
+> kernel_init+0x1a/0x1d0 init/main.c:1497
+> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> </TASK>
+>
 
-Acked-by: Joe Stringer <joe@cilium.io>
+Please add a Fixes: tag
+
+Also you can add
+
+Reported-by: syzbot+e0d81ec552a21d9071aa@syzkaller.appspotmail.com
+
+
+> Reported-by: Eric Dumazet <edumazet@google.com>
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>  kernel/bpf/btf.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index cdb0fba656006..6db929a5826d4 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6342,10 +6342,14 @@ const struct bpf_func_proto bpf_btf_find_by_name_kind_proto = {
+>         .arg4_type      = ARG_ANYTHING,
+>  };
+>
+> +#ifdef CONFIG_DEBUG_INFO_BTF
+>  BTF_ID_LIST_GLOBAL(btf_task_struct_ids)
+>  BTF_ID(struct, task_struct)
+>  BTF_ID(struct, file)
+>  BTF_ID(struct, vm_area_struct)
+> +#else
+> +u32 btf_task_struct_ids[3];
+> +#endif
+
+What about adding to  BTF_ID_LIST_GLOBAL() another argument ?
+
+BTF_ID_LIST_GLOBAL(btf_task_struct_ids, 3)
+
+This would avoid this #ifdef
+
+I understand commit 079ef53673f2e3b3ee1728800311f20f28eed4f7
+hardcoded a [5] value, maybe we can do slightly better with exact
+boundary checks for KASAN.
+
+>
+>  /* BTF ID set registration API for modules */
+>
+> --
+> 2.30.2
+>
