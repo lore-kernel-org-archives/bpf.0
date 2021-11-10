@@ -2,63 +2,63 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D02C4332F
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 11:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BC31C43219
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 11:46:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 603E761130
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 11:46:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4782861152
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 11:46:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbhKJLtZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Nov 2021 06:49:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S231460AbhKJLt1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Nov 2021 06:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbhKJLtY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Nov 2021 06:49:24 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71279C061764
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 03:46:37 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id y84-20020a1c7d57000000b00330cb84834fso4376498wmc.2
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 03:46:37 -0800 (PST)
+        with ESMTP id S231158AbhKJLt1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 10 Nov 2021 06:49:27 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F71DC061766
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 03:46:39 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so1755883wmd.1
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 03:46:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=K9FibD2+vxFCyU9lOfqbGOey2cIbsrO6jDFWOa35ijw=;
-        b=c77sbtiNTfU6sYUC1ctTYHdiIxAZKv7yGifdUfhGLI4O/1ESqx+7wAvFyOdzrs221k
-         qk1hcAHbg2T1v0boLzTzF3evRgLmfixAvNIMbkugp06gD6og5HRa3Yd8JC6K6PMYLbxB
-         8znU5WHl1DM93w0Bz0BIVXHriep9gv/qOM/qki4P2WQeWbGPKbL8FTTxF/VEAxeSKjd6
-         c7F/aksV5i7dsbZEX1RdxrzlKsAYT/zopYLwU8vYk9EmAyPAN0dAhJhj5aecV6l3Agxk
-         Ukv+CD/M/ouhpvearutlioxFuebmDkreVSLfF7W7k0Fqmfq7LjZtcjGOTkbLb+1E83tt
-         RUMw==
+        bh=uFsDhVwNfx2+wkoea0+L+uj6nk2RYNAhjgBsFkxBpOc=;
+        b=LGuOHPNv5SM+Efl20xjITHcexnv/lLd9xDAvK0xXDYAM1Zuzey8RxnUiiLUbO2RO4Q
+         l2LboeCRNrAKIpCsRdQ0zTmbU3D+IWFZ7Flqbcu6mlYNePFyZqgT2Dr1QnQhKrQFVkV5
+         Bop2d6/nCinD7lw87akAXcFWfV8IHnDtFzyAc9HIqKv3tlc2/mJe5I9zUkUlSFZUg6F/
+         a+o/jpb45DZSLo5OO5UJ21FdK244oIZ95VUbXO5Kvh2H2XWrq8SnvTsLiffZLP2/1IMH
+         l9WmJR0HSmiRngOEQU9g62y3RFbAyaXy2vLEpdWAThQYWXywxej13J6k9ZN5L0rIcOn9
+         lxgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=K9FibD2+vxFCyU9lOfqbGOey2cIbsrO6jDFWOa35ijw=;
-        b=WDGmySEXWJND1M0ZuZktlfQCIuVLCznPdzTL2uky/Qm28HranInKZkgXv1MqQfSQx8
-         848s+AeHvnXDFOAv6vclQzueZDxrvxlVXSO+XPzhnqoONnt2r2LXp/Np+07m6cze/4Lq
-         GFbNSUy8xLMDgZyYQQiuEoJTyVd4XSQ+wzHiX0YWe/03J0ZcSNWLfqa/R+LD8N3hUoKj
-         eK0uwTt4JfGW3oY5Pacl88Fr2jyn/pmESVVIncrqkY0ni7s199V/nwFCV8qRDziKmMwx
-         jfuLF+P05dF9SQuw5Y/0VVRJpkPZ3hvaeIGoRriE8JOqxDaGBSOijTig9Svpuh4Z7FZB
-         epPA==
-X-Gm-Message-State: AOAM531ruebCPvTCw7/wsh+2QY8Om7LB+yTvka7OuvvhWcEdDWx9usFq
-        bjc3YtiNqtGIavxtfzS/0zaA3w==
-X-Google-Smtp-Source: ABdhPJyygoY1jioNWfGmWgo4I2cdWNmrOxwSLOmOO59qV9FsIBCV5aRxkmFAh+zRtNCLiKDosuT8sQ==
-X-Received: by 2002:a05:600c:1d01:: with SMTP id l1mr16066389wms.44.1636544796018;
-        Wed, 10 Nov 2021 03:46:36 -0800 (PST)
+        bh=uFsDhVwNfx2+wkoea0+L+uj6nk2RYNAhjgBsFkxBpOc=;
+        b=leBpg9/UkqizdMyTZK7iO/U/A0asfdX+GVreTjgTroI16Ujnty70kSa1wnNa6tJpgI
+         nCDXEr7L0D6t4ak2a2QWBsVDYv5JsuggStY42LFKe7y2hkbLjr9Vazq8w2UPnPLQCoPF
+         fN0QMhxacflYH24qkX+I0BDuTlsPyPgEBJJZnbZRVxSPZUHjkMGW5/ojv/1Ns4by2CC4
+         NXKafYBldtDqGHwreAFCgr0hvDlvUloemBHRYn+f8ALqQ9aSl9wCW0tzms5SEEtTBz0G
+         dG3qZ7qYh1697OXBLFbDnxTXWB1UKvC/4BXNUiIf6LQTn0zprFyRbD3Sd1Yz8oip7Z3X
+         8pKQ==
+X-Gm-Message-State: AOAM532tGTOmAjjCtOuHvLplsgPRvjgmIbi2B85qJRXtjiE3o9QoUMf4
+        Bb0uFSAMiscF49CsDXyngzkNDQ==
+X-Google-Smtp-Source: ABdhPJzRX4of9vIT8wZ5LBq5RdCJb+hTM8osAAIprtsMS+oFv3HstM8wzOlGAQOEQlO9LH6Mmp+Qcg==
+X-Received: by 2002:a05:600c:5101:: with SMTP id o1mr15660896wms.81.1636544798013;
+        Wed, 10 Nov 2021 03:46:38 -0800 (PST)
 Received: from localhost.localdomain ([149.86.79.190])
-        by smtp.gmail.com with ESMTPSA id i15sm6241152wmq.18.2021.11.10.03.46.35
+        by smtp.gmail.com with ESMTPSA id i15sm6241152wmq.18.2021.11.10.03.46.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 03:46:35 -0800 (PST)
+        Wed, 10 Nov 2021 03:46:37 -0800 (PST)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 1/6] bpftool: Fix memory leak in prog_dump()
-Date:   Wed, 10 Nov 2021 11:46:27 +0000
-Message-Id: <20211110114632.24537-2-quentin@isovalent.com>
+Subject: [PATCH bpf-next 3/6] bpftool: Use $(OUTPUT) and not $(O) for VMLINUX_BTF_PATHS in Makefile
+Date:   Wed, 10 Nov 2021 11:46:29 +0000
+Message-Id: <20211110114632.24537-4-quentin@isovalent.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211110114632.24537-1-quentin@isovalent.com>
 References: <20211110114632.24537-1-quentin@isovalent.com>
@@ -68,73 +68,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Following the extraction of prog_dump() from do_dump(), the struct btf
-allocated in prog_dump() is no longer freed on error; the struct
-bpf_prog_linfo is not freed at all. Make sure we release them before
-exiting the function.
+The Makefile for bpftool relies on $(OUTPUT), and not on $(O), for
+passing the output directory. So $(VMLINUX_BTF_PATHS), used for
+searching for kernel BTF info, should use the same variable.
 
-Fixes: ec2025095cf6 ("bpftool: Match several programs with same tag")
+Fixes: 05aca6da3b5a ("tools/bpftool: Generalize BPF skeleton support and generate vmlinux.h")
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
 ---
- tools/bpf/bpftool/prog.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ tools/bpf/bpftool/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index dea7a49ec26e..d5fcbb02cf91 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -709,8 +709,8 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 	char func_sig[1024];
- 	unsigned char *buf;
- 	__u32 member_len;
-+	int fd, err = -1;
- 	ssize_t n;
--	int fd;
+diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+index 2a846cb92120..40abf50b59d4 100644
+--- a/tools/bpf/bpftool/Makefile
++++ b/tools/bpf/bpftool/Makefile
+@@ -150,7 +150,7 @@ $(BOOTSTRAP_OBJS): $(LIBBPF_BOOTSTRAP)
+ OBJS = $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
+ $(OBJS): $(LIBBPF) $(LIBBPF_INTERNAL_HDRS)
  
- 	if (mode == DUMP_JITED) {
- 		if (info->jited_prog_len == 0 || !info->jited_prog_insns) {
-@@ -749,7 +749,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 		if (fd < 0) {
- 			p_err("can't open file %s: %s", filepath,
- 			      strerror(errno));
--			return -1;
-+			goto exit_free;
- 		}
- 
- 		n = write(fd, buf, member_len);
-@@ -757,7 +757,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 		if (n != (ssize_t)member_len) {
- 			p_err("error writing output file: %s",
- 			      n < 0 ? strerror(errno) : "short write");
--			return -1;
-+			goto exit_free;
- 		}
- 
- 		if (json_output)
-@@ -771,7 +771,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 						     info->netns_ino,
- 						     &disasm_opt);
- 			if (!name)
--				return -1;
-+				goto exit_free;
- 		}
- 
- 		if (info->nr_jited_func_lens && info->jited_func_lens) {
-@@ -866,9 +866,12 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 		kernel_syms_destroy(&dd);
- 	}
- 
--	btf__free(btf);
-+	err = 0;
- 
--	return 0;
-+exit_free:
-+	btf__free(btf);
-+	bpf_prog_linfo__free(prog_linfo);
-+	return err;
- }
- 
- static int do_dump(int argc, char **argv)
+-VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
++VMLINUX_BTF_PATHS ?= $(if $(OUTPUT),$(OUTPUT)/vmlinux)			\
+ 		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
+ 		     ../../../vmlinux					\
+ 		     /sys/kernel/btf/vmlinux				\
 -- 
 2.32.0
 
