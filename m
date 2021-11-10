@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 832E8C433F5
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F825C433F5
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:21:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A64761211
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:20:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DA6D61211
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:21:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbhKJFX1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Nov 2021 00:23:27 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8612 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229526AbhKJFX1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 10 Nov 2021 00:23:27 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AA4dO3f032165
-        for <bpf@vger.kernel.org>; Tue, 9 Nov 2021 21:20:40 -0800
+        id S229615AbhKJFXx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Nov 2021 00:23:53 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63042 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229526AbhKJFXx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 10 Nov 2021 00:23:53 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AA55tow010822
+        for <bpf@vger.kernel.org>; Tue, 9 Nov 2021 21:21:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=aGwqNNuEq/SdnmEHQB8AcUtSqN/JXLzf7kaDcI48gnI=;
- b=N21IpDTOHzC1RRyfIO6XRe/WeKGMUcXhi/nHzwzjwIjtALyZQjRdqzfQC7JMiyhk9tnW
- Eei3Gh05wfIVbyNaqNpANGjUd9YS8drMEMo783fUf8KZyMX5OQAYZXucVPzmXZDGhb1u
- dQFAk3x/qb8G4H0XkEbifbyDIhbyv0qAGfU= 
+ bh=VgOTPtCMrzK/2NJQ+vyaQ49kDYsFrUyj30uakT1Y2K0=;
+ b=HKy/YX5WutRxvq486eWAswlgwsaO6Dpye4/t6250nlvgS3OD9Z3jg6Mr50hzcoF4N5qJ
+ KIVCiC7AWYsU+otJNgvXWcOe1QkXh8Ip8s6igzDX2mDDYIzRj9XlR4R5Bvb1QN5V79H3
+ ks7dOC4ud9sxLzBxNk6Lh8fWhmBhAcOOH2Y= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c828pj03a-8
+        by mx0a-00082601.pphosted.com with ESMTP id 3c8430s22h-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 21:20:40 -0800
-Received: from intmgw002.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 21:21:05 -0800
+Received: from intmgw006.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 9 Nov 2021 21:20:36 -0800
+ 15.1.2308.14; Tue, 9 Nov 2021 21:20:26 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 66E1F2361239; Tue,  9 Nov 2021 21:20:33 -0800 (PST)
+        id E8E2E236121B; Tue,  9 Nov 2021 21:20:22 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "Jose E . Marchesi" <jose.marchesi@oracle.com>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next 10/10] docs/bpf: Update documentation for BTF_KIND_TYPE_TAG support
-Date:   Tue, 9 Nov 2021 21:20:33 -0800
-Message-ID: <20211110052033.372886-1-yhs@fb.com>
+Subject: [PATCH bpf-next 08/10] selftests/bpf: Add a C test for btf_type_tag
+Date:   Tue, 9 Nov 2021 21:20:22 -0800
+Message-ID: <20211110052022.372373-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211110051940.367472-1-yhs@fb.com>
 References: <20211110051940.367472-1-yhs@fb.com>
@@ -52,68 +52,139 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: hMWGaUnEPyTIBdBL7rLViw-KA7F8FIO_
-X-Proofpoint-GUID: hMWGaUnEPyTIBdBL7rLViw-KA7F8FIO_
+X-Proofpoint-GUID: j1pI4fqis0_3DShBStlXlEibVtQUwKDt
+X-Proofpoint-ORIG-GUID: j1pI4fqis0_3DShBStlXlEibVtQUwKDt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-10_02,2021-11-08_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- adultscore=0 suspectscore=0 impostorscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111100025
+ definitions=2021-11-10_01,2021-11-08_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ clxscore=1015 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=999 mlxscore=0 phishscore=0 suspectscore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111100024
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BTF_KIND_TYPE_TAG documentation in btf.rst.
+For the C test, compiler the kernel and selftest with clang compiler
+by adding LLVM=3D1 to the make command line since btf_type_tag is
+only supported by clang compiler now.
+
+The following is the key btf_type_tag usage:
+  #define __tag1 __attribute__((btf_type_tag("tag1")))
+  #define __tag2 __attribute__((btf_type_tag("tag2")))
+  struct btf_type_tag_test {
+       int __tag1 * __tag1 __tag2 *p;
+  } g;
+
+The bpftool raw dump with related types:
+  [4] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED
+  [11] STRUCT 'btf_type_tag_test' size=3D8 vlen=3D1
+          'p' type_id=3D14 bits_offset=3D0
+  [12] TYPE_TAG 'tag1' type_id=3D16
+  [13] TYPE_TAG 'tag2' type_id=3D12
+  [14] PTR '(anon)' type_id=3D13
+  [15] TYPE_TAG 'tag1' type_id=3D4
+  [16] PTR '(anon)' type_id=3D15
+  [17] VAR 'g' type_id=3D11, linkage=3Dglobal
+
+With format C dump, we have
+  struct btf_type_tag_test {
+        int __attribute__((btf_type_tag("tag1"))) * __attribute__((btf_ty=
+pe_tag("tag1"))) __attribute__((btf_type_tag("tag2"))) *p;
+  };
+The result C code is identical to the original definition except macro's =
+are gone.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- Documentation/bpf/btf.rst | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/btf_tag.c        | 24 +++++++++++++++
+ .../selftests/bpf/progs/btf_type_tag.c        | 29 +++++++++++++++++++
+ 2 files changed, 53 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_type_tag.c
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 9ad4218a751f..d0ec40d00c28 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -86,6 +86,7 @@ sequentially and type id is assigned to each recognized=
- type starting from id
-     #define BTF_KIND_DATASEC        15      /* Section      */
-     #define BTF_KIND_FLOAT          16      /* Floating point       */
-     #define BTF_KIND_DECL_TAG       17      /* Decl Tag     */
-+    #define BTF_KIND_TYPE_TAG       18      /* Type Tag     */
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_tag.c b/tools/tes=
+ting/selftests/bpf/prog_tests/btf_tag.c
+index d15cc7a88182..88d63e23e35f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_tag.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_tag.c
+@@ -3,6 +3,12 @@
+ #include <test_progs.h>
+ #include "btf_decl_tag.skel.h"
 =20
- Note that the type section encodes debug info, not just pure types.
- ``BTF_KIND_FUNC`` is not a type, and it represents a defined subprogram.
-@@ -107,7 +108,7 @@ Each type contains the following common data::
-          * "size" tells the size of the type it is describing.
-          *
-          * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--         * FUNC, FUNC_PROTO and DECL_TAG.
-+         * FUNC, FUNC_PROTO, DECL_TAG and TYPE_TAG.
-          * "type" is a type_id referring to another type.
-          */
-         union {
-@@ -492,6 +493,16 @@ the attribute is applied to a ``struct``/``union`` m=
-ember or
- a ``func`` argument, and ``btf_decl_tag.component_idx`` should be a
- valid index (starting from 0) pointing to a member or an argument.
-=20
-+2.2.17 BTF_KIND_TYPE_TAG
-+~~~~~~~~~~~~~~~~~~~~~~~~
++/* struct btf_type_tag_test is referenced in btf_type_tag.skel.h */
++struct btf_type_tag_test {
++        int **p;
++};
++#include "btf_type_tag.skel.h"
 +
-+``struct btf_type`` encoding requirement:
-+ * ``name_off``: offset to a non-empty string
-+ * ``info.kind_flag``: 0
-+ * ``info.kind``: BTF_KIND_TYPE_TAG
-+ * ``info.vlen``: 0
-+ * ``type``: the type with ``btf_type_tag`` attribute
-+
- 3. BTF Kernel API
- *****************
+ static void test_btf_decl_tag(void)
+ {
+ 	struct btf_decl_tag *skel;
+@@ -19,8 +25,26 @@ static void test_btf_decl_tag(void)
+ 	btf_decl_tag__destroy(skel);
+ }
 =20
++static void test_btf_type_tag(void)
++{
++	struct btf_type_tag *skel;
++
++	skel =3D btf_type_tag__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "btf_type_tag"))
++		return;
++
++	if (skel->rodata->skip_tests) {
++		printf("%s:SKIP: btf_type_tag attribute not supported", __func__);
++		test__skip();
++	}
++
++	btf_type_tag__destroy(skel);
++}
++
+ void test_btf_tag(void)
+ {
+ 	if (test__start_subtest("btf_decl_tag"))
+ 		test_btf_decl_tag();
++	if (test__start_subtest("btf_type_tag"))
++		test_btf_type_tag();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/btf_type_tag.c b/tools/tes=
+ting/selftests/bpf/progs/btf_type_tag.c
+new file mode 100644
+index 000000000000..0e18c777862c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btf_type_tag.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#ifndef __has_attribute
++#define __has_attribute(x) 0
++#endif
++
++#if __has_attribute(btf_type_tag)
++#define __tag1 __attribute__((btf_type_tag("tag1")))
++#define __tag2 __attribute__((btf_type_tag("tag2")))
++volatile const bool skip_tests =3D false;
++#else
++#define __tag1
++#define __tag2
++volatile const bool skip_tests =3D true;
++#endif
++
++struct btf_type_tag_test {
++	int __tag1 * __tag1 __tag2 *p;
++} g;
++
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(sub, int x)
++{
++  return 0;
++}
 --=20
 2.30.2
 
