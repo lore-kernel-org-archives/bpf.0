@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ABDFC433F5
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57873C433EF
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3427761208
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:20:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3984C61208
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbhKJFXA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Nov 2021 00:23:00 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:50226 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229567AbhKJFXA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 10 Nov 2021 00:23:00 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AA4dNlv032052
-        for <bpf@vger.kernel.org>; Tue, 9 Nov 2021 21:20:13 -0800
+        id S229567AbhKJFXC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Nov 2021 00:23:02 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37570 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229572AbhKJFXB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 10 Nov 2021 00:23:01 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AA54jDj021848
+        for <bpf@vger.kernel.org>; Tue, 9 Nov 2021 21:20:14 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=ojV0wWZnUgmMYanetfxkzbvnc4d7VxYLMCq1gHCxvcY=;
- b=FmZlJqD1eIhizzb03GlPgolgJrOfRbQRqezWaFDD8psxlZllNEezJhZApHDdrIP3GVQr
- dprE9+X+PbRX4xOCUtSspf5mGKgYhTJfjJT1N+0MMCHt+X+HkisiExlxh2QB8SDbxlBf
- hv4loq9PdaICwmBokK1W8YMYUhza3enhG0A= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c828phywv-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=pVZvUQ4oGDl+ZWGfchgL2qyCMTH6TAHM4H+ASn+2qp4=;
+ b=rMVfeRzxeVYUp4Vp9JYfNUviwwupjR5hGM3j42hVsKB9d0bMqW2LyvlBoNjhEIG7za7k
+ DJy+kK/DG8uj6UjA/ZnNKj2a95NIW1ZhIf24QccmF1KFh7+da7r0kOokkJb61bJbZWe2
+ K6g0u0g3/SU5L+iT2eXH7imO1hyb6xtEUVw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c7ys2u5xq-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 21:20:04 -0800
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 21:20:14 -0800
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Tue, 9 Nov 2021 21:19:51 -0800
+ 15.1.2308.14; Tue, 9 Nov 2021 21:20:13 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 133CA236113C; Tue,  9 Nov 2021 21:19:46 -0800 (PST)
+        id 7740823611D3; Tue,  9 Nov 2021 21:20:12 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,176 +41,123 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "Jose E . Marchesi" <jose.marchesi@oracle.com>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next 01/10] bpf: Support BTF_KIND_TYPE_TAG for btf_type_tag attributes
-Date:   Tue, 9 Nov 2021 21:19:46 -0800
-Message-ID: <20211110051946.368626-1-yhs@fb.com>
+Subject: [PATCH bpf-next 06/10] selftests/bpf: Test BTF_KIND_DECL_TAG for deduplication
+Date:   Tue, 9 Nov 2021 21:20:12 -0800
+Message-ID: <20211110052012.371411-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211110051940.367472-1-yhs@fb.com>
 References: <20211110051940.367472-1-yhs@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: 5r3xIkCgWrXvjmsloE5_kyrrmv2R3aW_
-X-Proofpoint-GUID: 5r3xIkCgWrXvjmsloE5_kyrrmv2R3aW_
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: S2O_X7-45V0NrtEiiZf6QcoVFXwUM2D6
+X-Proofpoint-GUID: S2O_X7-45V0NrtEiiZf6QcoVFXwUM2D6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-10_01,2021-11-08_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=808
- adultscore=0 suspectscore=0 impostorscore=0 phishscore=0 bulkscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111100025
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ adultscore=0 mlxlogscore=848 spamscore=0 bulkscore=0 lowpriorityscore=0
+ priorityscore=1501 malwarescore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111100024
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-LLVM patches ([1] for clang, [2] and [3] for BPF backend)
-added support for btf_type_tag attributes. This patch
-added support for the kernel.
-
-The main motivation for btf_type_tag is to bring kernel
-annotations __user, __rcu etc. to btf. With such information
-available in btf, bpf verifier can detect mis-usages
-and reject the program. For example, for __user tagged pointer,
-developers can then use proper helper like bpf_probe_read_kernel()
-etc. to read the data.
-
-BTF_KIND_TYPE_TAG may also useful for other tracing
-facility where instead of to require user to specify
-kernel/user address type, the kernel can detect it
-by itself with btf.
-
-  [1] https://reviews.llvm.org/D111199
-  [2] https://reviews.llvm.org/D113222
-  [3] https://reviews.llvm.org/D113496
-
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/uapi/linux/btf.h       |  3 ++-
- kernel/bpf/btf.c               | 14 +++++++++++++-
- tools/include/uapi/linux/btf.h |  3 ++-
- 3 files changed, 17 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 46 ++++++++++++++++++--
+ 1 file changed, 42 insertions(+), 4 deletions(-)
 
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index deb12f755f0f..b0d8fea1951d 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -43,7 +43,7 @@ struct btf_type {
- 	 * "size" tells the size of the type it is describing.
- 	 *
- 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--	 * FUNC, FUNC_PROTO, VAR and DECL_TAG.
-+	 * FUNC, FUNC_PROTO, VAR, DECL_TAG and TYPE_TAG.
- 	 * "type" is a type_id referring to another type.
- 	 */
- 	union {
-@@ -75,6 +75,7 @@ enum {
- 	BTF_KIND_DATASEC	=3D 15,	/* Section	*/
- 	BTF_KIND_FLOAT		=3D 16,	/* Floating point	*/
- 	BTF_KIND_DECL_TAG	=3D 17,	/* Decl Tag */
-+	BTF_KIND_TYPE_TAG	=3D 18,	/* Type Tag */
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
+/selftests/bpf/prog_tests/btf.c
+index ebd0ead5f4bc..91b19c41729f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -6889,15 +6889,16 @@ const struct btf_dedup_test dedup_tests[] =3D {
+ 			BTF_RESTRICT_ENC(8),						/* [11] restrict */
+ 			BTF_FUNC_PROTO_ENC(1, 2),					/* [12] func_proto */
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
+-				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 8),
++				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 18),
+ 			BTF_FUNC_ENC(NAME_TBD, 12),					/* [13] func */
+ 			BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),				/* [14] float */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, -1),				/* [15] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, 1),				/* [16] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 7, -1),				/* [17] decl_tag */
++			BTF_TYPE_TAG_ENC(NAME_TBD, 8),					/* [18] type_tag */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q"),
++		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q\0R"),
+ 	},
+ 	.expect =3D {
+ 		.raw_types =3D {
+@@ -6918,15 +6919,16 @@ const struct btf_dedup_test dedup_tests[] =3D {
+ 			BTF_RESTRICT_ENC(8),						/* [11] restrict */
+ 			BTF_FUNC_PROTO_ENC(1, 2),					/* [12] func_proto */
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
+-				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 8),
++				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 18),
+ 			BTF_FUNC_ENC(NAME_TBD, 12),					/* [13] func */
+ 			BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),				/* [14] float */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, -1),				/* [15] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, 1),				/* [16] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 7, -1),				/* [17] decl_tag */
++			BTF_TYPE_TAG_ENC(NAME_TBD, 8),					/* [18] type_tag */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q"),
++		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q\0R"),
+ 	},
+ 	.opts =3D {
+ 		.dont_resolve_fwds =3D false,
+@@ -7254,6 +7256,42 @@ const struct btf_dedup_test dedup_tests[] =3D {
+ 		.dont_resolve_fwds =3D false,
+ 	},
+ },
++{
++	.descr =3D "dedup: btf_tag_type",
++	.input =3D {
++		.raw_types =3D {
++			/* int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			/* tag: tag1, tag2 */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* tag: tag1, tag2 */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [5] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 5),		/* [6] */
++			BTF_PTR_ENC(6),					/* [7] */
++			/* tag: tag1 */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [8] */
++			BTF_PTR_ENC(8),					/* [9] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++	.expect =3D {
++		.raw_types =3D {
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			BTF_PTR_ENC(2),					/* [5] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++	.opts =3D {
++		.dont_resolve_fwds =3D false,
++	},
++},
 =20
- 	NR_BTF_KINDS,
- 	BTF_KIND_MAX		=3D NR_BTF_KINDS - 1,
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index cdb0fba65600..1dd9ba82da1e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -282,6 +282,7 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =
-=3D {
- 	[BTF_KIND_DATASEC]	=3D "DATASEC",
- 	[BTF_KIND_FLOAT]	=3D "FLOAT",
- 	[BTF_KIND_DECL_TAG]	=3D "DECL_TAG",
-+	[BTF_KIND_TYPE_TAG]	=3D "TYPE_TAG",
  };
 =20
- const char *btf_type_str(const struct btf_type *t)
-@@ -418,6 +419,7 @@ static bool btf_type_is_modifier(const struct btf_type =
-*t)
- 	case BTF_KIND_VOLATILE:
- 	case BTF_KIND_CONST:
- 	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_TYPE_TAG:
- 		return true;
- 	}
-=20
-@@ -1737,6 +1739,7 @@ __btf_resolve_size(const struct btf *btf, const struc=
-t btf_type *type,
- 		case BTF_KIND_VOLATILE:
- 		case BTF_KIND_CONST:
- 		case BTF_KIND_RESTRICT:
-+		case BTF_KIND_TYPE_TAG:
- 			id =3D type->type;
- 			type =3D btf_type_by_id(btf, type->type);
- 			break;
-@@ -2345,6 +2348,8 @@ static int btf_ref_type_check_meta(struct btf_verifie=
-r_env *env,
- 				   const struct btf_type *t,
- 				   u32 meta_left)
- {
-+	const char *value;
-+
- 	if (btf_type_vlen(t)) {
- 		btf_verifier_log_type(env, t, "vlen !=3D 0");
- 		return -EINVAL;
-@@ -2360,7 +2365,7 @@ static int btf_ref_type_check_meta(struct btf_verifie=
-r_env *env,
- 		return -EINVAL;
- 	}
-=20
--	/* typedef type must have a valid name, and other ref types,
-+	/* typedef/type_tag type must have a valid name, and other ref types,
- 	 * volatile, const, restrict, should have a null name.
- 	 */
- 	if (BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_TYPEDEF) {
-@@ -2369,6 +2374,12 @@ static int btf_ref_type_check_meta(struct btf_verifi=
-er_env *env,
- 			btf_verifier_log_type(env, t, "Invalid name");
- 			return -EINVAL;
- 		}
-+	} else if (BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_TYPE_TAG) {
-+		value =3D btf_name_by_offset(env->btf, t->name_off);
-+		if (!value || !value[0]) {
-+			btf_verifier_log_type(env, t, "Invalid name");
-+			return -EINVAL;
-+		}
- 	} else {
- 		if (t->name_off) {
- 			btf_verifier_log_type(env, t, "Invalid name");
-@@ -4059,6 +4070,7 @@ static const struct btf_kind_operations * const kind_=
-ops[NR_BTF_KINDS] =3D {
- 	[BTF_KIND_DATASEC] =3D &datasec_ops,
- 	[BTF_KIND_FLOAT] =3D &float_ops,
- 	[BTF_KIND_DECL_TAG] =3D &decl_tag_ops,
-+	[BTF_KIND_TYPE_TAG] =3D &modifier_ops,
- };
-=20
- static s32 btf_check_meta(struct btf_verifier_env *env,
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index deb12f755f0f..b0d8fea1951d 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -43,7 +43,7 @@ struct btf_type {
- 	 * "size" tells the size of the type it is describing.
- 	 *
- 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--	 * FUNC, FUNC_PROTO, VAR and DECL_TAG.
-+	 * FUNC, FUNC_PROTO, VAR, DECL_TAG and TYPE_TAG.
- 	 * "type" is a type_id referring to another type.
- 	 */
- 	union {
-@@ -75,6 +75,7 @@ enum {
- 	BTF_KIND_DATASEC	=3D 15,	/* Section	*/
- 	BTF_KIND_FLOAT		=3D 16,	/* Floating point	*/
- 	BTF_KIND_DECL_TAG	=3D 17,	/* Decl Tag */
-+	BTF_KIND_TYPE_TAG	=3D 18,	/* Type Tag */
-=20
- 	NR_BTF_KINDS,
- 	BTF_KIND_MAX		=3D NR_BTF_KINDS - 1,
 --=20
 2.30.2
 
