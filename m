@@ -2,90 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E30CAC433EF
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7299BC433F5
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:35:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B876C611BF
-	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:28:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46357611BF
+	for <bpf@archiver.kernel.org>; Wed, 10 Nov 2021 05:35:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbhKJFay (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Nov 2021 00:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbhKJFay (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Nov 2021 00:30:54 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78554C061764
-        for <bpf@vger.kernel.org>; Tue,  9 Nov 2021 21:28:07 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id n8so2067758plf.4
-        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 21:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QQynKUCQPvmsFtwRfkzXjC8rg6JNth+QCeuAjo2J1eM=;
-        b=O5os32VwhqONHYMYeocG4SGp3wEOwAfReC+ZhisQ16rbpYSjfo7agi4nKqhwAmD97a
-         zpv98CmTjrVPwdBLmgGuxSTuhglb9NFEZNh4B2NDxsmOrtMMb95uiBS9J4RYiuxsts4l
-         XIi+ig7OZTU3Ro3eBNG1ka40Rio6RZ0Z6bf4Pd14mdGIXrOLc2IqBYrnTJhfSoAk74zN
-         vWPCsZj1fCR4IdxnqIxQxkJb5MY6G4ViWRFIJRl5kfkGB5eqhBfIkmKoqkNCThxkWwow
-         zhhuxNLV3hkMrHL7AoE9A2gWA0UyI/S5PwNNlsVitt5srqQ1/cpR/kQdaeogK0NPFKrH
-         urGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QQynKUCQPvmsFtwRfkzXjC8rg6JNth+QCeuAjo2J1eM=;
-        b=p+AZwHwW8AkNNozEIbXDsOVmq2iGayUFtKaRiQaeL18a5V4qC7Dn3VqiYllmMhpS/6
-         IB5RPTO7fDR45BFiFusNve9hxvB4jO77CLJ91XwgqgbP0igFRxK8Mv4atQ0Ks4uwrreW
-         7N0T4GWFmBX8NJjj6mEqJY9Uw0B/rXgZEfEGYpFFY7WVb/VpTLBqDg8kdAsSf5J6axpG
-         TiajQNjRVzyWIfzRNlRmAnkN7Am7n1ctqHVyH97kaqIipZEnYAB6mIEgAhvcbLNvzbtA
-         UXATDO855e8nQEjkY5XdsshNtY44vwTRCOyCB0erreNrPIRtYHuYQu64uxRW257dC4eC
-         j/wA==
-X-Gm-Message-State: AOAM530wvZHtjgxnYNBl4SBcAb8tdgDIvrP9o36WZ+Cjr+5tZ8yqwXky
-        KWDAnTiQsBSipy1lcLEEtog=
-X-Google-Smtp-Source: ABdhPJzuIC8agOYHGAT92bDedMa7UL6or+8tq16c1iA6sUNtv1H/mGfhUcZq4icYNRJIg8E2YG2n6g==
-X-Received: by 2002:a17:903:2344:b0:142:25b4:76c1 with SMTP id c4-20020a170903234400b0014225b476c1mr13313689plh.43.1636522086889;
-        Tue, 09 Nov 2021 21:28:06 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:8f53])
-        by smtp.gmail.com with ESMTPSA id 17sm21473924pfp.14.2021.11.09.21.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Nov 2021 21:28:06 -0800 (PST)
-Date:   Tue, 9 Nov 2021 21:28:05 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        id S229526AbhKJFiU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 10 Nov 2021 00:38:20 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57738 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229493AbhKJFiU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 10 Nov 2021 00:38:20 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AA5SPpi024134
+        for <bpf@vger.kernel.org>; Tue, 9 Nov 2021 21:35:32 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=tfCjNzQ2rQRKcEuF+O/mbAuG4abDU/XspOPKy2BNuRI=;
+ b=oZMLgiSSMJFCdNbv+LOnheJsYGlFvKr/gh/loWnqyddjbtX+/tdb+U5RhuSphInlLvys
+ vNk6ksi4fZBHyJQdHPT8DRy54SSSGbwOeMpaX4o7JJRgqwMUkhFglKUs1530u0k7MP1e
+ xq9o9/8tf5Vyu7JKaXLemaCRcYnXnXBu7n4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c7vm9mg11-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 09 Nov 2021 21:35:32 -0800
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Tue, 9 Nov 2021 21:20:10 -0800
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 401B223611C6; Tue,  9 Nov 2021 21:20:07 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "Jose E . Marchesi" <jose.marchesi@oracle.com>, kernel-team@fb.com
-Subject: Re: [PATCH bpf-next 00/10] Support BTF_KIND_TYPE_TAG for
- btf_type_tag attributes
-Message-ID: <20211110052805.qds3qzhabhdr3ah4@ast-mbp.dhcp.thefacebook.com>
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        <kernel-team@fb.com>
+Subject: [PATCH bpf-next 05/10] selftests/bpf: Add BTF_KIND_TYPE_TAG unit tests
+Date:   Tue, 9 Nov 2021 21:20:07 -0800
+Message-ID: <20211110052007.371167-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211110051940.367472-1-yhs@fb.com>
 References: <20211110051940.367472-1-yhs@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211110051940.367472-1-yhs@fb.com>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: JCFLpB-pWRpyV1w7N3fXpslFHnEf7pou
+X-Proofpoint-ORIG-GUID: JCFLpB-pWRpyV1w7N3fXpslFHnEf7pou
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-10_02,2021-11-08_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 phishscore=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 mlxlogscore=997 spamscore=0 priorityscore=1501 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111100027
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 09:19:40PM -0800, Yonghong Song wrote:
-> LLVM patches ([1] for clang, [2] and [3] for BPF backend)
-> added support for btf_type_tag attributes. This patch
-> added support for the kernel.
-> 
-> The main motivation for btf_type_tag is to bring kernel
-> annotations __user, __rcu etc. to btf. With such information
-> available in btf, bpf verifier can detect mis-usages
-> and reject the program. For example, for __user tagged pointer,
-> developers can then use proper helper like bpf_probe_read_kernel()
-> etc. to read the data.
+Add BTF_KIND_TYPE_TAG unit tests.
 
-+#define __tag1 __attribute__((btf_type_tag("tag1")))
-+#define __tag2 __attribute__((btf_type_tag("tag2")))
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/testing/selftests/bpf/prog_tests/btf.c | 18 ++++++++++++++++++
+ tools/testing/selftests/bpf/test_btf.h       |  3 +++
+ 2 files changed, 21 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
+/selftests/bpf/prog_tests/btf.c
+index ebd1aa4d09d6..ebd0ead5f4bc 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -3939,6 +3939,23 @@ static struct btf_raw_test raw_tests[] =3D {
+ 	.btf_load_err =3D true,
+ 	.err_str =3D "Invalid component_idx",
+ },
++{
++	.descr =3D "type_tag test #1",
++	.raw_types =3D {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++		BTF_TYPE_TAG_ENC(NAME_TBD, 1),			/* [2] */
++		BTF_PTR_ENC(2),					/* [3] */
++		BTF_END_RAW,
++	},
++	BTF_STR_SEC("\0tag"),
++	.map_type =3D BPF_MAP_TYPE_ARRAY,
++	.map_name =3D "tag_type_check_btf",
++	.key_size =3D sizeof(int),
++	.value_size =3D 4,
++	.key_type_id =3D 1,
++	.value_type_id =3D 1,
++	.max_entries =3D 1,
++},
+=20
+ }; /* struct btf_raw_test raw_tests[] */
+=20
+@@ -7255,6 +7272,7 @@ static int btf_type_size(const struct btf_type *t)
+ 	case BTF_KIND_TYPEDEF:
+ 	case BTF_KIND_FUNC:
+ 	case BTF_KIND_FLOAT:
++	case BTF_KIND_TYPE_TAG:
+ 		return base_size;
+ 	case BTF_KIND_INT:
+ 		return base_size + sizeof(__u32);
+diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selft=
+ests/bpf/test_btf.h
+index 32c7a57867da..128989bed8b7 100644
+--- a/tools/testing/selftests/bpf/test_btf.h
++++ b/tools/testing/selftests/bpf/test_btf.h
+@@ -72,4 +72,7 @@
+ #define BTF_DECL_TAG_ENC(value, type, component_idx)	\
+ 	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_DECL_TAG, 0, 0), type), (comp=
+onent_idx)
+=20
++#define BTF_TYPE_TAG_ENC(value, type)	\
++	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_TYPE_TAG, 0, 0), type)
 +
-+struct btf_type_tag_test {
-+       int __tag1 * __tag1 __tag2 *p;
-+} g;
+ #endif /* _TEST_BTF_H */
+--=20
+2.30.2
 
-Can we build the kernel with the latest clang and get __user in BTF ?
