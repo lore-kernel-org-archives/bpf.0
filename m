@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14F50C433EF
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 23:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97A8BC433F5
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 23:26:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2A7C61267
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 23:26:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8195E61268
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 23:26:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233437AbhKKX3J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Nov 2021 18:29:09 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56734 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233119AbhKKX3J (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 18:29:09 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1ABN4gb0031824
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 15:26:19 -0800
+        id S233445AbhKKX3U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Nov 2021 18:29:20 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2152 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233119AbhKKX3T (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 18:29:19 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ABMebXj016098
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 15:26:30 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=tBwZY5DJMJI2ahD/od5TQpeZhpzbVRL/8y3nCbHkPYI=;
- b=HUWuRj31z6Z7cFCbi1kpzTu6Ky4vRaoLkJdDd6r2wy/O0wjVFaUkENJ7CHOYthhbg5a1
- BPkAGLFKrbMGGrYuQQ/zhDX+VU1mkzbegeuWzw8G2zDCmPmIbBIiraXLH9h4WbXqHcO6
- cGzVgfuj89PztIRrbVoUtk8YX19bFxcwdnA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3c9brfggtt-2
+ bh=CD+pk/mLiIIFN0fAszFLT/Cgj06U7TcK42KuqOg8KfU=;
+ b=rJ7LZXH3/p7L63keVAEe7wlBL9q7c7tXgOK0kxE8JVdtlAOgpJscK1iKentBonPyzWsg
+ 5PWctcufcW5sUgQ8wK2rjfQ484TVaAeKUcHpLpFNRR2vbLp4COOy4WK6CHbPgVg3nhKW
+ UdXDJC+fiqFHvMn5EIgGQYefRHT0tmMvJQ8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c98k51xyy-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 15:26:19 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 15:26:30 -0800
+Received: from intmgw001.05.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 11 Nov 2021 15:26:17 -0800
+ 15.1.2308.14; Thu, 11 Nov 2021 15:26:25 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 613E624B3E1D; Thu, 11 Nov 2021 15:26:10 -0800 (PST)
+        id 5125724B3E9E; Thu, 11 Nov 2021 15:26:24 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "Jose E . Marchesi" <jose.marchesi@oracle.com>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v2 05/10] selftests/bpf: Add BTF_KIND_TYPE_TAG unit tests
-Date:   Thu, 11 Nov 2021 15:26:10 -0800
-Message-ID: <20211111232610.789922-1-yhs@fb.com>
+Subject: [PATCH bpf-next v2 07/10] selftests/bpf: Rename progs/tag.c to progs/btf_decl_tag.c
+Date:   Thu, 11 Nov 2021 15:26:24 -0800
+Message-ID: <20211111232624.791186-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211111232543.786041-1-yhs@fb.com>
 References: <20211111232543.786041-1-yhs@fb.com>
@@ -52,81 +52,98 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: csw-MThVhJ3vXeu75b3Afg0HKk1GHFbn
-X-Proofpoint-GUID: csw-MThVhJ3vXeu75b3Afg0HKk1GHFbn
+X-Proofpoint-ORIG-GUID: pqPyft8W9FjYulXoBZht1JfTKs9V1UVs
+X-Proofpoint-GUID: pqPyft8W9FjYulXoBZht1JfTKs9V1UVs
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-11_09,2021-11-11_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 mlxscore=0 mlxlogscore=968 phishscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2111110118
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BTF_KIND_TYPE_TAG unit tests.
+Rename progs/tag.c to progs/btf_decl_tag.c so we can introduce
+progs/btf_type_tag.c in the next patch.
+
+Also create a subtest for btf_decl_tag in prog_tests/btf_tag.c
+so we can introduce btf_type_tag subtest in the next patch.
+
+I also took opportunity to remove the check whether __has_attribute
+is defined or not in progs/btf_decl_tag.c since all recent
+clangs should already support this macro.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/testing/selftests/bpf/prog_tests/btf.c | 18 ++++++++++++++++++
- tools/testing/selftests/bpf/test_btf.h       |  3 +++
- 2 files changed, 21 insertions(+)
+ .../selftests/bpf/prog_tests/btf_tag.c        | 20 ++++++++++++-------
+ .../bpf/progs/{tag.c =3D> btf_decl_tag.c}       |  4 ----
+ 2 files changed, 13 insertions(+), 11 deletions(-)
+ rename tools/testing/selftests/bpf/progs/{tag.c =3D> btf_decl_tag.c} (94=
+%)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
-/selftests/bpf/prog_tests/btf.c
-index ebd1aa4d09d6..ebd0ead5f4bc 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -3939,6 +3939,23 @@ static struct btf_raw_test raw_tests[] =3D {
- 	.btf_load_err =3D true,
- 	.err_str =3D "Invalid component_idx",
- },
-+{
-+	.descr =3D "type_tag test #1",
-+	.raw_types =3D {
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+		BTF_TYPE_TAG_ENC(NAME_TBD, 1),			/* [2] */
-+		BTF_PTR_ENC(2),					/* [3] */
-+		BTF_END_RAW,
-+	},
-+	BTF_STR_SEC("\0tag"),
-+	.map_type =3D BPF_MAP_TYPE_ARRAY,
-+	.map_name =3D "tag_type_check_btf",
-+	.key_size =3D sizeof(int),
-+	.value_size =3D 4,
-+	.key_type_id =3D 1,
-+	.value_type_id =3D 1,
-+	.max_entries =3D 1,
-+},
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_tag.c b/tools/tes=
+ting/selftests/bpf/prog_tests/btf_tag.c
+index 91821f42714d..d15cc7a88182 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_tag.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_tag.c
+@@ -1,20 +1,26 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2021 Facebook */
+ #include <test_progs.h>
+-#include "tag.skel.h"
++#include "btf_decl_tag.skel.h"
 =20
- }; /* struct btf_raw_test raw_tests[] */
+-void test_btf_tag(void)
++static void test_btf_decl_tag(void)
+ {
+-	struct tag *skel;
++	struct btf_decl_tag *skel;
 =20
-@@ -7255,6 +7272,7 @@ static int btf_type_size(const struct btf_type *t)
- 	case BTF_KIND_TYPEDEF:
- 	case BTF_KIND_FUNC:
- 	case BTF_KIND_FLOAT:
-+	case BTF_KIND_TYPE_TAG:
- 		return base_size;
- 	case BTF_KIND_INT:
- 		return base_size + sizeof(__u32);
-diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selft=
-ests/bpf/test_btf.h
-index 32c7a57867da..128989bed8b7 100644
---- a/tools/testing/selftests/bpf/test_btf.h
-+++ b/tools/testing/selftests/bpf/test_btf.h
-@@ -72,4 +72,7 @@
- #define BTF_DECL_TAG_ENC(value, type, component_idx)	\
- 	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_DECL_TAG, 0, 0), type), (comp=
-onent_idx)
+-	skel =3D tag__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "btf_tag"))
++	skel =3D btf_decl_tag__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "btf_decl_tag"))
+ 		return;
 =20
-+#define BTF_TYPE_TAG_ENC(value, type)	\
-+	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_TYPE_TAG, 0, 0), type)
+ 	if (skel->rodata->skip_tests) {
+-		printf("%s:SKIP: btf_tag attribute not supported", __func__);
++		printf("%s:SKIP: btf_decl_tag attribute not supported", __func__);
+ 		test__skip();
+ 	}
+=20
+-	tag__destroy(skel);
++	btf_decl_tag__destroy(skel);
++}
 +
- #endif /* _TEST_BTF_H */
++void test_btf_tag(void)
++{
++	if (test__start_subtest("btf_decl_tag"))
++		test_btf_decl_tag();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tag.c b/tools/testing/self=
+tests/bpf/progs/btf_decl_tag.c
+similarity index 94%
+rename from tools/testing/selftests/bpf/progs/tag.c
+rename to tools/testing/selftests/bpf/progs/btf_decl_tag.c
+index 1792f4eda095..c88ccc53529a 100644
+--- a/tools/testing/selftests/bpf/progs/tag.c
++++ b/tools/testing/selftests/bpf/progs/btf_decl_tag.c
+@@ -4,10 +4,6 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+=20
+-#ifndef __has_attribute
+-#define __has_attribute(x) 0
+-#endif
+-
+ #if __has_attribute(btf_decl_tag)
+ #define __tag1 __attribute__((btf_decl_tag("tag1")))
+ #define __tag2 __attribute__((btf_decl_tag("tag2")))
 --=20
 2.30.2
 
