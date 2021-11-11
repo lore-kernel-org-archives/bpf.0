@@ -2,92 +2,318 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73FD9C433EF
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F13A0C433F5
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5738C6103B
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD6F56115A
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbhKKFji convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:39:38 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21042 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229643AbhKKFjh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:39:37 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5X1PD019818
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:49 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c8n6w3ap3-10
+        id S229629AbhKKFjf convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:39:35 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19316 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229649AbhKKFje (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:39:34 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5XYHm008121
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:46 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c8qgrsurx-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:49 -0800
-Received: from intmgw001.46.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:45 -0800
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 10 Nov 2021 21:36:43 -0800
+ 15.1.2308.14; Wed, 10 Nov 2021 21:36:39 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 0A8398B10659; Wed, 10 Nov 2021 21:36:41 -0800 (PST)
+        id D17F18B1047C; Wed, 10 Nov 2021 21:36:35 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 8/9] tools/runqslower: update perf_buffer__new() calls
-Date:   Wed, 10 Nov 2021 21:36:23 -0800
-Message-ID: <20211111053624.190580-9-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 5/9] libbpf: make perf_buffer__new() use OPTS-based interface
+Date:   Wed, 10 Nov 2021 21:36:20 -0800
+Message-ID: <20211111053624.190580-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211111053624.190580-1-andrii@kernel.org>
 References: <20211111053624.190580-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: FIGg_Esz03_wXaEKv7XNSF0c4-7F4c4V
-X-Proofpoint-ORIG-GUID: FIGg_Esz03_wXaEKv7XNSF0c4-7F4c4V
+X-Proofpoint-ORIG-GUID: vYgAW5XfQjdS0Q-ff6K28eO6Z1dSyEAu
+X-Proofpoint-GUID: vYgAW5XfQjdS0Q-ff6K28eO6Z1dSyEAu
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-11_01,2021-11-08_02,2020-04-07_01
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- spamscore=0 clxscore=1015 mlxscore=0 malwarescore=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=907
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111110029
+ bulkscore=0 spamscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111110029
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use v1.0+ compatible variant of perf_buffer__new() call to prepare for
-deprecation.
+Add new variants of perf_buffer__new() and perf_buffer__new_raw() that
+use OPTS-based options for future extensibility ([0]). Given all the
+currently used API names are best fits, re-use them and use
+___libbpf_override() approach and symbol versioning to preserve ABI and
+source code compatibility. struct perf_buffer_opts and struct
+perf_buffer_raw_opts are kept as well, but they are restructured such
+that they are OPTS-based when used with new APIs. For struct
+perf_buffer_raw_opts we keep few fields intact, so we have to also
+preserve the memory location of them both when used as OPTS and for
+legacy API variants. This is achieved with anonymous padding for OPTS
+"incarnation" of the struct.  These pads can be eventually used for new
+options.
+
+  [0] Closes: https://github.com/libbpf/libbpf/issues/311
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/runqslower/runqslower.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/lib/bpf/libbpf.c   | 70 +++++++++++++++++++++++++-------
+ tools/lib/bpf/libbpf.h   | 86 ++++++++++++++++++++++++++++++++++------
+ tools/lib/bpf/libbpf.map |  4 ++
+ 3 files changed, 132 insertions(+), 28 deletions(-)
 
-diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/runqslower.c
-index d89715844952..2414cc764461 100644
---- a/tools/bpf/runqslower/runqslower.c
-+++ b/tools/bpf/runqslower/runqslower.c
-@@ -123,7 +123,6 @@ int main(int argc, char **argv)
- 		.parser = parse_arg,
- 		.doc = argp_program_doc,
- 	};
--	struct perf_buffer_opts pb_opts;
- 	struct perf_buffer *pb = NULL;
- 	struct runqslower_bpf *obj;
- 	int err;
-@@ -165,9 +164,8 @@ int main(int argc, char **argv)
- 	printf("Tracing run queue latency higher than %llu us\n", env.min_us);
- 	printf("%-8s %-16s %-6s %14s\n", "TIME", "COMM", "PID", "LAT(us)");
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index d869ebee1e27..cc08d677c5c0 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10564,11 +10564,18 @@ perf_buffer__open_cpu_buf(struct perf_buffer *pb, struct perf_event_attr *attr,
+ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
+ 					      struct perf_buffer_params *p);
  
--	pb_opts.sample_cb = handle_event;
--	pb_opts.lost_cb = handle_lost_events;
--	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64, &pb_opts);
-+	pb = perf_buffer__new(bpf_map__fd(obj->maps.events), 64,
-+			      handle_event, handle_lost_events, NULL, NULL);
- 	err = libbpf_get_error(pb);
- 	if (err) {
- 		pb = NULL;
+-struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
+-				     const struct perf_buffer_opts *opts)
++DEFAULT_VERSION(perf_buffer__new_v0_6_0, perf_buffer__new, LIBBPF_0.6.0)
++struct perf_buffer *perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
++					    perf_buffer_sample_fn sample_cb,
++					    perf_buffer_lost_fn lost_cb,
++					    void *ctx,
++					    const struct perf_buffer_opts *opts)
+ {
+ 	struct perf_buffer_params p = {};
+-	struct perf_event_attr attr = { 0, };
++	struct perf_event_attr attr = {};
++
++	if (!OPTS_VALID(opts, perf_buffer_opts))
++		return libbpf_err_ptr(-EINVAL);
+ 
+ 	attr.config = PERF_COUNT_SW_BPF_OUTPUT;
+ 	attr.type = PERF_TYPE_SOFTWARE;
+@@ -10577,29 +10584,62 @@ struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
+ 	attr.wakeup_events = 1;
+ 
+ 	p.attr = &attr;
+-	p.sample_cb = opts ? opts->sample_cb : NULL;
+-	p.lost_cb = opts ? opts->lost_cb : NULL;
+-	p.ctx = opts ? opts->ctx : NULL;
++	p.sample_cb = sample_cb;
++	p.lost_cb = lost_cb;
++	p.ctx = ctx;
+ 
+ 	return libbpf_ptr(__perf_buffer__new(map_fd, page_cnt, &p));
+ }
+ 
+-struct perf_buffer *
+-perf_buffer__new_raw(int map_fd, size_t page_cnt,
+-		     const struct perf_buffer_raw_opts *opts)
++COMPAT_VERSION(perf_buffer__new_deprecated, perf_buffer__new, LIBBPF_0.0.4)
++struct perf_buffer *perf_buffer__new_deprecated(int map_fd, size_t page_cnt,
++						const struct perf_buffer_opts *opts)
++{
++	return perf_buffer__new_v0_6_0(map_fd, page_cnt,
++				       opts ? opts->sample_cb : NULL,
++				       opts ? opts->lost_cb : NULL,
++				       opts ? opts->ctx : NULL,
++				       NULL);
++}
++
++DEFAULT_VERSION(perf_buffer__new_raw_v0_6_0, perf_buffer__new_raw, LIBBPF_0.6.0)
++struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
++						struct perf_event_attr *attr,
++						perf_buffer_event_fn event_cb, void *ctx,
++						const struct perf_buffer_raw_opts *opts)
+ {
+ 	struct perf_buffer_params p = {};
+ 
+-	p.attr = opts->attr;
+-	p.event_cb = opts->event_cb;
+-	p.ctx = opts->ctx;
+-	p.cpu_cnt = opts->cpu_cnt;
+-	p.cpus = opts->cpus;
+-	p.map_keys = opts->map_keys;
++	if (page_cnt == 0 || !attr)
++		return libbpf_err_ptr(-EINVAL);
++
++	if (!OPTS_VALID(opts, perf_buffer_raw_opts))
++		return libbpf_err_ptr(-EINVAL);
++
++	p.attr = attr;
++	p.event_cb = event_cb;
++	p.ctx = ctx;
++	p.cpu_cnt = OPTS_GET(opts, cpu_cnt, 0);
++	p.cpus = OPTS_GET(opts, cpus, NULL);
++	p.map_keys = OPTS_GET(opts, map_keys, NULL);
+ 
+ 	return libbpf_ptr(__perf_buffer__new(map_fd, page_cnt, &p));
+ }
+ 
++COMPAT_VERSION(perf_buffer__new_raw_deprecated, perf_buffer__new_raw, LIBBPF_0.0.4)
++struct perf_buffer *perf_buffer__new_raw_deprecated(int map_fd, size_t page_cnt,
++						    const struct perf_buffer_raw_opts *opts)
++{
++	LIBBPF_OPTS(perf_buffer_raw_opts, inner_opts,
++		.cpu_cnt = opts->cpu_cnt,
++		.cpus = opts->cpus,
++		.map_keys = opts->map_keys,
++	);
++
++	return perf_buffer__new_raw_v0_6_0(map_fd, page_cnt, opts->attr,
++					   opts->event_cb, opts->ctx, &inner_opts);
++}
++
+ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
+ 					      struct perf_buffer_params *p)
+ {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 039058763173..47d4585a79bb 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -775,18 +775,52 @@ typedef void (*perf_buffer_lost_fn)(void *ctx, int cpu, __u64 cnt);
+ 
+ /* common use perf buffer options */
+ struct perf_buffer_opts {
+-	/* if specified, sample_cb is called for each sample */
+-	perf_buffer_sample_fn sample_cb;
+-	/* if specified, lost_cb is called for each batch of lost samples */
+-	perf_buffer_lost_fn lost_cb;
+-	/* ctx is provided to sample_cb and lost_cb */
+-	void *ctx;
++	union {
++		size_t sz;
++		struct { /* DEPRECATED: will be removed in v1.0 */
++			/* if specified, sample_cb is called for each sample */
++			perf_buffer_sample_fn sample_cb;
++			/* if specified, lost_cb is called for each batch of lost samples */
++			perf_buffer_lost_fn lost_cb;
++			/* ctx is provided to sample_cb and lost_cb */
++			void *ctx;
++		};
++	};
+ };
++#define perf_buffer_opts__last_field sz
+ 
++/**
++ * @brief **perf_buffer__new()** creates BPF perfbuf manager for a specified
++ * BPF_PERF_EVENT_ARRAY map
++ * @param map_fd FD of BPF_PERF_EVENT_ARRAY BPF map that will be used by BPF
++ * code to send data over to user-space
++ * @param page_cnt number of memory pages allocated for each per-CPU buffer
++ * @param sample_cb function called on each received data record
++ * @param lost_cb function called when record loss has occurred
++ * @param ctx user-provided extra context passed into *sample_cb* and *lost_cb*
++ * @return a new instance of struct perf_buffer on success, NULL on error with
++ * *errno* containing an error code
++ */
+ LIBBPF_API struct perf_buffer *
+ perf_buffer__new(int map_fd, size_t page_cnt,
++		 perf_buffer_sample_fn sample_cb, perf_buffer_lost_fn lost_cb, void *ctx,
+ 		 const struct perf_buffer_opts *opts);
+ 
++LIBBPF_API struct perf_buffer *
++perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
++			perf_buffer_sample_fn sample_cb, perf_buffer_lost_fn lost_cb, void *ctx,
++			const struct perf_buffer_opts *opts);
++
++LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use new variant of perf_buffer__new() instead")
++struct perf_buffer *perf_buffer__new_deprecated(int map_fd, size_t page_cnt,
++						const struct perf_buffer_opts *opts);
++
++#define perf_buffer__new(...) ___libbpf_overload(___perf_buffer_new, __VA_ARGS__)
++#define ___perf_buffer_new6(map_fd, page_cnt, sample_cb, lost_cb, ctx, opts) \
++	perf_buffer__new(map_fd, page_cnt, sample_cb, lost_cb, ctx, opts)
++#define ___perf_buffer_new3(map_fd, page_cnt, opts) \
++	perf_buffer__new_deprecated(map_fd, page_cnt, opts)
++
+ enum bpf_perf_event_ret {
+ 	LIBBPF_PERF_EVENT_DONE	= 0,
+ 	LIBBPF_PERF_EVENT_ERROR	= -1,
+@@ -800,12 +834,21 @@ typedef enum bpf_perf_event_ret
+ 
+ /* raw perf buffer options, giving most power and control */
+ struct perf_buffer_raw_opts {
+-	/* perf event attrs passed directly into perf_event_open() */
+-	struct perf_event_attr *attr;
+-	/* raw event callback */
+-	perf_buffer_event_fn event_cb;
+-	/* ctx is provided to event_cb */
+-	void *ctx;
++	union {
++		struct {
++			size_t sz;
++			long :0;
++			long :0;
++		};
++		struct { /* DEPRECATED: will be removed in v1.0 */
++			/* perf event attrs passed directly into perf_event_open() */
++			struct perf_event_attr *attr;
++			/* raw event callback */
++			perf_buffer_event_fn event_cb;
++			/* ctx is provided to event_cb */
++			void *ctx;
++		};
++	};
+ 	/* if cpu_cnt == 0, open all on all possible CPUs (up to the number of
+ 	 * max_entries of given PERF_EVENT_ARRAY map)
+ 	 */
+@@ -815,11 +858,28 @@ struct perf_buffer_raw_opts {
+ 	/* if cpu_cnt > 0, map_keys specify map keys to set per-CPU FDs for */
+ 	int *map_keys;
+ };
++#define perf_buffer_raw_opts__last_field map_keys
+ 
+ LIBBPF_API struct perf_buffer *
+-perf_buffer__new_raw(int map_fd, size_t page_cnt,
++perf_buffer__new_raw(int map_fd, size_t page_cnt, struct perf_event_attr *attr,
++		     perf_buffer_event_fn event_cb, void *ctx,
+ 		     const struct perf_buffer_raw_opts *opts);
+ 
++LIBBPF_API struct perf_buffer *
++perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt, struct perf_event_attr *attr,
++			    perf_buffer_event_fn event_cb, void *ctx,
++			    const struct perf_buffer_raw_opts *opts);
++
++LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use new variant of perf_buffer__new_raw() instead")
++struct perf_buffer *perf_buffer__new_raw_deprecated(int map_fd, size_t page_cnt,
++						    const struct perf_buffer_raw_opts *opts);
++
++#define perf_buffer__new_raw(...) ___libbpf_overload(___perf_buffer_new_raw, __VA_ARGS__)
++#define ___perf_buffer_new_raw6(map_fd, page_cnt, attr, event_cb, ctx, opts) \
++	perf_buffer__new_raw(map_fd, page_cnt, attr, event_cb, ctx, opts)
++#define ___perf_buffer_new_raw3(map_fd, page_cnt, opts) \
++	perf_buffer__new_raw_deprecated(map_fd, page_cnt, opts)
++
+ LIBBPF_API void perf_buffer__free(struct perf_buffer *pb);
+ LIBBPF_API int perf_buffer__epoll_fd(const struct perf_buffer *pb);
+ LIBBPF_API int perf_buffer__poll(struct perf_buffer *pb, int timeout_ms);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index c51411d46c9e..19396e1c59f9 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -407,4 +407,8 @@ LIBBPF_0.6.0 {
+ 		btf__type_cnt;
+ 		btf_dump__new;
+ 		btf_dump__new_deprecated;
++		perf_buffer__new;
++		perf_buffer__new_deprecated;
++		perf_buffer__new_raw;
++		perf_buffer__new_raw_deprecated;
+ } LIBBPF_0.5.0;
 -- 
 2.30.2
 
