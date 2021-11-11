@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E46FBC433EF
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80985C433F5
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:37:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC65061211
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:37:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 682506103B
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:37:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbhKKFkK convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:40:10 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12880 "EHLO
+        id S229814AbhKKFkL convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:40:11 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40300 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230127AbhKKFkE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:40:04 -0500
+        by vger.kernel.org with ESMTP id S230040AbhKKFkC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:40:02 -0500
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5Y3K4006748
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:37:15 -0800
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5Y3K1006748
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:37:13 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c8n7su0rm-5
+        by mx0a-00082601.pphosted.com with ESMTP id 3c8n7su0rm-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:37:15 -0800
-Received: from intmgw002.48.prn1.facebook.com (2620:10d:c085:108::4) by
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:37:13 -0800
+Received: from intmgw001.46.prn1.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 10 Nov 2021 21:36:45 -0800
+ 15.1.2308.14; Wed, 10 Nov 2021 21:36:42 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 14E778B10670; Wed, 10 Nov 2021 21:36:44 -0800 (PST)
+        id DBCD58B10530; Wed, 10 Nov 2021 21:36:37 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 9/9] bpftool: update btf_dump__new() and perf_buffer__new_raw() calls
-Date:   Wed, 10 Nov 2021 21:36:24 -0800
-Message-ID: <20211111053624.190580-10-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 6/9] selftests/bpf: migrate all deprecated perf_buffer uses
+Date:   Wed, 10 Nov 2021 21:36:21 -0800
+Message-ID: <20211111053624.190580-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211111053624.190580-1-andrii@kernel.org>
 References: <20211111053624.190580-1-andrii@kernel.org>
@@ -41,8 +41,8 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: qc8CYyRkoSTSV_-c0dnfaX7I-4SU23NJ
-X-Proofpoint-ORIG-GUID: qc8CYyRkoSTSV_-c0dnfaX7I-4SU23NJ
+X-Proofpoint-GUID: LIFOCs8wtllXO_V4G8B2hgLQ0TcwbFd2
+X-Proofpoint-ORIG-GUID: LIFOCs8wtllXO_V4G8B2hgLQ0TcwbFd2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-11_01,2021-11-08_02,2020-04-07_01
@@ -56,73 +56,163 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use v1.0-compatible variants of btf_dump and perf_buffer "constructors".
-This is also a demonstration of reusing struct perf_buffer_raw_opts as
-OPTS-style option struct for new perf_buffer__new_raw() API.
+Migrate all old-style perf_buffer__new() and perf_buffer__new_raw()
+calls to new v1.0+ variants.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/bpftool/btf.c           | 2 +-
- tools/bpf/bpftool/gen.c           | 2 +-
- tools/bpf/bpftool/map_perf_ring.c | 9 +++------
- 3 files changed, 5 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/benchs/bench_ringbufs.c       | 8 ++------
+ tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 5 ++---
+ tools/testing/selftests/bpf/prog_tests/kfree_skb.c        | 6 ++----
+ tools/testing/selftests/bpf/prog_tests/perf_buffer.c      | 6 ++----
+ tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c      | 7 ++-----
+ tools/testing/selftests/bpf/test_tcpnotify_user.c         | 4 +---
+ 6 files changed, 11 insertions(+), 25 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 015d2758f826..223ac7676027 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -418,7 +418,7 @@ static int dump_btf_c(const struct btf *btf,
- 	struct btf_dump *d;
- 	int err = 0, i;
+diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+index d167bffac679..52d4a2f91dbd 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
++++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+@@ -394,11 +394,6 @@ static void perfbuf_libbpf_setup()
+ {
+ 	struct perfbuf_libbpf_ctx *ctx = &perfbuf_libbpf_ctx;
+ 	struct perf_event_attr attr;
+-	struct perf_buffer_raw_opts pb_opts = {
+-		.event_cb = perfbuf_process_sample_raw,
+-		.ctx = (void *)(long)0,
+-		.attr = &attr,
+-	};
+ 	struct bpf_link *link;
  
--	d = btf_dump__new(btf, NULL, NULL, btf_dump_printf);
-+	d = btf_dump__new(btf, btf_dump_printf, NULL, NULL);
- 	if (IS_ERR(d))
- 		return PTR_ERR(d);
- 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 5c18351290f0..89f0e828bbfa 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -218,7 +218,7 @@ static int codegen_datasecs(struct bpf_object *obj, const char *obj_name)
- 	char sec_ident[256], map_ident[256];
- 	int i, err = 0;
- 
--	d = btf_dump__new(btf, NULL, NULL, codegen_btf_dump_printf);
-+	d = btf_dump__new(btf, codegen_btf_dump_printf, NULL, NULL);
- 	if (IS_ERR(d))
- 		return PTR_ERR(d);
- 
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index b98ea702d284..6b0c410152de 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -124,7 +124,7 @@ int do_event_pipe(int argc, char **argv)
- 		.wakeup_events = 1,
- 	};
- 	struct bpf_map_info map_info = {};
--	struct perf_buffer_raw_opts opts = {};
-+	LIBBPF_OPTS(perf_buffer_raw_opts, opts);
- 	struct event_pipe_ctx ctx = {
- 		.all_cpus = true,
- 		.cpu = -1,
-@@ -190,14 +190,11 @@ int do_event_pipe(int argc, char **argv)
- 		ctx.idx = 0;
+ 	ctx->skel = perfbuf_setup_skeleton();
+@@ -423,7 +418,8 @@ static void perfbuf_libbpf_setup()
  	}
  
--	opts.attr = &perf_attr;
--	opts.event_cb = print_bpf_output;
--	opts.ctx = &ctx;
- 	opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
- 	opts.cpus = &ctx.cpu;
- 	opts.map_keys = &ctx.idx;
--
--	pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &opts);
-+	pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &perf_attr,
-+				  print_bpf_output, &ctx, &opts);
- 	err = libbpf_get_error(pb);
- 	if (err) {
- 		p_err("failed to create perf buffer: %s (%d)",
+ 	ctx->perfbuf = perf_buffer__new_raw(bpf_map__fd(ctx->skel->maps.perfbuf),
+-					    args.perfbuf_sz, &pb_opts);
++					    args.perfbuf_sz, &attr,
++					    perfbuf_process_sample_raw, NULL, NULL);
+ 	if (!ctx->perfbuf) {
+ 		fprintf(stderr, "failed to create perfbuf\n");
+ 		exit(1);
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+index 569fcc6ed660..4184c399d4c6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+@@ -85,7 +85,6 @@ void test_get_stack_raw_tp(void)
+ 	const char *file_err = "./test_get_stack_rawtp_err.o";
+ 	const char *prog_name = "raw_tracepoint/sys_enter";
+ 	int i, err, prog_fd, exp_cnt = MAX_CNT_RAWTP;
+-	struct perf_buffer_opts pb_opts = {};
+ 	struct perf_buffer *pb = NULL;
+ 	struct bpf_link *link = NULL;
+ 	struct timespec tv = {0, 10};
+@@ -124,8 +123,8 @@ void test_get_stack_raw_tp(void)
+ 	if (!ASSERT_OK_PTR(link, "attach_raw_tp"))
+ 		goto close_prog;
+ 
+-	pb_opts.sample_cb = get_stack_print_output;
+-	pb = perf_buffer__new(bpf_map__fd(map), 8, &pb_opts);
++	pb = perf_buffer__new(bpf_map__fd(map), 8, get_stack_print_output,
++			      NULL, NULL, NULL);
+ 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
+ 		goto close_prog;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+index 885413ed5c96..2a49f8fcde06 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+@@ -66,7 +66,6 @@ void serial_test_kfree_skb(void)
+ 	struct bpf_map *perf_buf_map, *global_data;
+ 	struct bpf_program *prog, *fentry, *fexit;
+ 	struct bpf_object *obj, *obj2 = NULL;
+-	struct perf_buffer_opts pb_opts = {};
+ 	struct perf_buffer *pb = NULL;
+ 	int err, kfree_skb_fd;
+ 	bool passed = false;
+@@ -112,9 +111,8 @@ void serial_test_kfree_skb(void)
+ 		goto close_prog;
+ 
+ 	/* set up perf buffer */
+-	pb_opts.sample_cb = on_sample;
+-	pb_opts.ctx = &passed;
+-	pb = perf_buffer__new(bpf_map__fd(perf_buf_map), 1, &pb_opts);
++	pb = perf_buffer__new(bpf_map__fd(perf_buf_map), 1,
++			      on_sample, NULL, &passed, NULL);
+ 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
+ 		goto close_prog;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
+index 4e32f3586a75..5fc2b3a0711e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
++++ b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
+@@ -47,7 +47,6 @@ void serial_test_perf_buffer(void)
+ {
+ 	int err, on_len, nr_on_cpus = 0, nr_cpus, i, j;
+ 	int zero = 0, my_pid = getpid();
+-	struct perf_buffer_opts pb_opts = {};
+ 	struct test_perf_buffer *skel;
+ 	cpu_set_t cpu_seen;
+ 	struct perf_buffer *pb;
+@@ -82,9 +81,8 @@ void serial_test_perf_buffer(void)
+ 		goto out_close;
+ 
+ 	/* set up perf buffer */
+-	pb_opts.sample_cb = on_sample;
+-	pb_opts.ctx = &cpu_seen;
+-	pb = perf_buffer__new(bpf_map__fd(skel->maps.perf_buf_map), 1, &pb_opts);
++	pb = perf_buffer__new(bpf_map__fd(skel->maps.perf_buf_map), 1,
++			      on_sample, NULL, &cpu_seen, NULL);
+ 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
+ 		goto out_close;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
+index 3bd5904b4db5..f99386d1dc4c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
+@@ -49,7 +49,6 @@ void test_xdp_bpf2bpf(void)
+ 	struct vip key4 = {.protocol = 6, .family = AF_INET};
+ 	struct bpf_program *prog;
+ 	struct perf_buffer *pb = NULL;
+-	struct perf_buffer_opts pb_opts = {};
+ 
+ 	/* Load XDP program to introspect */
+ 	pkt_skel = test_xdp__open_and_load();
+@@ -86,10 +85,8 @@ void test_xdp_bpf2bpf(void)
+ 		goto out;
+ 
+ 	/* Set up perf buffer */
+-	pb_opts.sample_cb = on_sample;
+-	pb_opts.ctx = &passed;
+-	pb = perf_buffer__new(bpf_map__fd(ftrace_skel->maps.perf_buf_map),
+-			      1, &pb_opts);
++	pb = perf_buffer__new(bpf_map__fd(ftrace_skel->maps.perf_buf_map), 1,
++			      on_sample, NULL, &passed, NULL);
+ 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
+ 		goto out;
+ 
+diff --git a/tools/testing/selftests/bpf/test_tcpnotify_user.c b/tools/testing/selftests/bpf/test_tcpnotify_user.c
+index 63111cb082fe..4c5114765b23 100644
+--- a/tools/testing/selftests/bpf/test_tcpnotify_user.c
++++ b/tools/testing/selftests/bpf/test_tcpnotify_user.c
+@@ -72,7 +72,6 @@ int main(int argc, char **argv)
+ {
+ 	const char *file = "test_tcpnotify_kern.o";
+ 	struct bpf_map *perf_map, *global_map;
+-	struct perf_buffer_opts pb_opts = {};
+ 	struct tcpnotify_globals g = {0};
+ 	struct perf_buffer *pb = NULL;
+ 	const char *cg_path = "/foo";
+@@ -117,8 +116,7 @@ int main(int argc, char **argv)
+ 		return -1;
+ 	}
+ 
+-	pb_opts.sample_cb = dummyfn;
+-	pb = perf_buffer__new(bpf_map__fd(perf_map), 8, &pb_opts);
++	pb = perf_buffer__new(bpf_map__fd(perf_map), 8, dummyfn, NULL, NULL, NULL);
+ 	if (!pb)
+ 		goto err;
+ 
 -- 
 2.30.2
 
