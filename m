@@ -2,120 +2,249 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F709C433F5
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B82C433EF
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 704AF6135E
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA9696103B
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:36:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbhKKFj1 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:39:27 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42500 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229463AbhKKFjZ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:39:25 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB4iiu1012620
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:37 -0800
+        id S229463AbhKKFj3 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:39:29 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45772 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229629AbhKKFj1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:39:27 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5XaWq008222
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:39 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c8mxck8yv-1
+        by mx0a-00082601.pphosted.com with ESMTP id 3c8qgrsurm-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:36 -0800
-Received: from intmgw002.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:36:38 -0800
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 10 Nov 2021 21:36:35 -0800
+ 15.1.2308.14; Wed, 10 Nov 2021 21:36:37 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 951E88B0E5FD; Wed, 10 Nov 2021 21:36:25 -0800 (PST)
+        id C51C18B0EFA5; Wed, 10 Nov 2021 21:36:33 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 0/9] Future-proof more tricky libbpf APIs
-Date:   Wed, 10 Nov 2021 21:36:15 -0800
-Message-ID: <20211111053624.190580-1-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 4/9] libbpf: ensure btf_dump__new() and btf_dump_opts are future-proof
+Date:   Wed, 10 Nov 2021 21:36:19 -0800
+Message-ID: <20211111053624.190580-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20211111053624.190580-1-andrii@kernel.org>
+References: <20211111053624.190580-1-andrii@kernel.org>
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: NSkPM2f00uzyo5RuXoXLJoj3VFTDR6_2
-X-Proofpoint-GUID: NSkPM2f00uzyo5RuXoXLJoj3VFTDR6_2
+X-Proofpoint-ORIG-GUID: -02uT4rTXWJyYfmfHXGFOKmtc6r69z1l
+X-Proofpoint-GUID: -02uT4rTXWJyYfmfHXGFOKmtc6r69z1l
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-11_01,2021-11-08_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- malwarescore=0 spamscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0
- phishscore=0 mlxscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111110029
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 spamscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 malwarescore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111110029
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set continues the work of revamping libbpf APIs that are not
-extensible, as they were added before we figured out all the intricacies of
-building APIs that can preserve ABI compatibility (both backward and forward).
+Change btf_dump__new() and corresponding struct btf_dump_ops structure
+to be extensible by using OPTS "framework" ([0]). Given we don't change
+the names, we use a similar approach as with bpf_prog_load(), but this
+time we ended up with two APIs with the same name and same number of
+arguments, so overloading based on number of arguments with
+___libbpf_override() doesn't work.
 
-What makes them tricky is that (most of) these APIs are actively used by
-multiple applications, so we need to be careful about refactoring them. See
-individual patches for details, but the general approach is similar to
-previous bpf_prog_load() API revamp. The biggest different and complexity is
-in changing btf_dump__new(), because function overloading through macro magic
-doesn't work based on number of arguments, as both new and old APIs have
-4 arguments. Because of that, another overloading approach is taken; overload
-happens based on argument types.
+Instead, use "overloading" based on types. In this particular case,
+print callback has to be specified, so we detect which argument is
+a callback. If it's 4th (last) argument, old implementation of API is
+used by user code. If not, it must be 2nd, and thus new implementation
+is selected. The rest is handled by the same symbol versioning approach.
 
-I've validated manually (by using local test_progs-shared flavor that is
-compiling test_progs against libbpf as a shared library) that compiling "old
-application" (selftests before being adapted to using new variants of revamped
-APIs) are compiled and successfully run against newest libbpf version as well
-as the older libbpf version (provided no new variants are used). All these
-scenarios seem to be working as expected.
+btf_ext argument is dropped as it was never used and isn't necessary
+either. If in the future we'll need btf_ext, that will be added into
+OPTS-based struct btf_dump_opts.
 
-v1->v2:
-  - add explicit printf_fn NULL check in btf_dump__new() (Alexei);
-  - replaced + with || in __builtin_choose_expr() (Alexei);
-  - dropped test_progs-shared flavor (Alexei).
+struct btf_dump_opts is reused for both old API and new APIs. ctx field
+is marked deprecated in v0.7+ and it's put at the same memory location
+as OPTS's sz field. Any user of new-style btf_dump__new() will have to
+set sz field and doesn't/shouldn't use ctx, as ctx is now passed along
+the callback as mandatory input argument, following the other APIs in
+libbpf that accept callbacks consistently.
 
-Andrii Nakryiko (9):
-  bpftool: normalize compile rules to specify output file last
-  selftests/bpf: minor cleanups and normalization of Makefile
-  libbpf: turn btf_dedup_opts into OPTS-based struct
-  libbpf: ensure btf_dump__new() and btf_dump_opts are future-proof
-  libbpf: make perf_buffer__new() use OPTS-based interface
-  selftests/bpf: migrate all deprecated perf_buffer uses
-  selftests/bpf: update btf_dump__new() uses to v1.0+ variant
-  tools/runqslower: update perf_buffer__new() calls
-  bpftool: update btf_dump__new() and perf_buffer__new_raw() calls
+Again, this is quite ugly in implementation, but is done in the name of
+backwards compatibility and uniform and extensible future APIs (at the
+same time, sigh). And it will be gone in libbpf 1.0.
 
- tools/bpf/bpftool/Makefile                    | 16 ++--
- tools/bpf/bpftool/btf.c                       |  2 +-
- tools/bpf/bpftool/gen.c                       |  2 +-
- tools/bpf/bpftool/map_perf_ring.c             |  9 +-
- tools/bpf/runqslower/runqslower.c             |  6 +-
- tools/lib/bpf/btf.c                           | 46 ++++++----
- tools/lib/bpf/btf.h                           | 71 +++++++++++++--
- tools/lib/bpf/btf_dump.c                      | 31 +++++--
- tools/lib/bpf/libbpf.c                        | 70 +++++++++++----
- tools/lib/bpf/libbpf.h                        | 86 ++++++++++++++++---
- tools/lib/bpf/libbpf.map                      |  8 ++
- tools/lib/bpf/linker.c                        |  4 +-
- tools/testing/selftests/bpf/Makefile          | 32 +++----
- .../selftests/bpf/benchs/bench_ringbufs.c     |  8 +-
- tools/testing/selftests/bpf/btf_helpers.c     |  4 +-
- tools/testing/selftests/bpf/prog_tests/btf.c  | 46 ++--------
- .../bpf/prog_tests/btf_dedup_split.c          |  6 +-
- .../selftests/bpf/prog_tests/btf_dump.c       | 33 +++----
- .../selftests/bpf/prog_tests/btf_split.c      |  4 +-
- .../bpf/prog_tests/get_stack_raw_tp.c         |  5 +-
- .../selftests/bpf/prog_tests/kfree_skb.c      |  6 +-
- .../selftests/bpf/prog_tests/perf_buffer.c    |  6 +-
- .../selftests/bpf/prog_tests/xdp_bpf2bpf.c    |  7 +-
- .../selftests/bpf/test_tcpnotify_user.c       |  4 +-
- 24 files changed, 318 insertions(+), 194 deletions(-)
+  [0] Closes: https://github.com/libbpf/libbpf/issues/283
 
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/btf.h      | 51 ++++++++++++++++++++++++++++++++++++----
+ tools/lib/bpf/btf_dump.c | 31 +++++++++++++++++-------
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 71 insertions(+), 13 deletions(-)
+
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 6aae4f62ee0b..45310c65e865 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -267,15 +267,58 @@ LIBBPF_API int btf__dedup_deprecated(struct btf *btf, struct btf_ext *btf_ext, c
+ struct btf_dump;
+ 
+ struct btf_dump_opts {
+-	void *ctx;
++	union {
++		size_t sz;
++		void *ctx; /* DEPRECATED: will be gone in v1.0 */
++	};
+ };
+ 
+ typedef void (*btf_dump_printf_fn_t)(void *ctx, const char *fmt, va_list args);
+ 
+ LIBBPF_API struct btf_dump *btf_dump__new(const struct btf *btf,
+-					  const struct btf_ext *btf_ext,
+-					  const struct btf_dump_opts *opts,
+-					  btf_dump_printf_fn_t printf_fn);
++					  btf_dump_printf_fn_t printf_fn,
++					  void *ctx,
++					  const struct btf_dump_opts *opts);
++
++LIBBPF_API struct btf_dump *btf_dump__new_v0_6_0(const struct btf *btf,
++						 btf_dump_printf_fn_t printf_fn,
++						 void *ctx,
++						 const struct btf_dump_opts *opts);
++
++LIBBPF_API struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
++						     const struct btf_ext *btf_ext,
++						     const struct btf_dump_opts *opts,
++						     btf_dump_printf_fn_t printf_fn);
++
++/* Choose either btf_dump__new() or btf_dump__new_deprecated() based on the
++ * type of 4th argument. If it's btf_dump's print callback, use deprecated
++ * API; otherwise, choose the new btf_dump__new(). ___libbpf_override()
++ * doesn't work here because both variants have 4 input arguments.
++ *
++ * (void *) casts are necessary to avoid compilation warnings about type
++ * mismatches, because even though __builtin_choose_expr() only ever evaluates
++ * one side the other side still has to satisfy type constraints (this is
++ * compiler implementation limitation which might be lifted eventually,
++ * according to the documentation). So passing struct btf_ext in place of
++ * btf_dump_printf_fn_t would be generating compilation warning.  Casting to
++ * void * avoids this issue.
++ *
++ * Also, two type compatibility checks for a function and function pointer are
++ * required because passing function reference into btf_dump__new() as
++ * btf_dump__new(..., my_callback, ...) and as btf_dump__new(...,
++ * &my_callback, ...) (not explicit ampersand in the latter case) actually
++ * differs as far as __builtin_types_compatible_p() is concerned. Thus two
++ * checks are combined to detect callback argument.
++ *
++ * The rest works just like in case of ___libbpf_override() usage with symbol
++ * versioning.
++ */
++#define btf_dump__new(a1, a2, a3, a4) __builtin_choose_expr(				\
++	__builtin_types_compatible_p(typeof(a4), btf_dump_printf_fn_t) ||		\
++	__builtin_types_compatible_p(typeof(a4), void(void *, const char *, va_list)),	\
++	btf_dump__new_deprecated((void *)a1, (void *)a2, (void *)a3, (void *)a4),	\
++	btf_dump__new((void *)a1, (void *)a2, (void *)a3, (void *)a4))
++
+ LIBBPF_API void btf_dump__free(struct btf_dump *d);
+ 
+ LIBBPF_API int btf_dump__dump_type(struct btf_dump *d, __u32 id);
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 17db62b5002e..b8cd7e4f557a 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -77,9 +77,8 @@ struct btf_dump_data {
+ 
+ struct btf_dump {
+ 	const struct btf *btf;
+-	const struct btf_ext *btf_ext;
+ 	btf_dump_printf_fn_t printf_fn;
+-	struct btf_dump_opts opts;
++	void *cb_ctx;
+ 	int ptr_sz;
+ 	bool strip_mods;
+ 	bool skip_anon_defs;
+@@ -138,29 +137,32 @@ static void btf_dump_printf(const struct btf_dump *d, const char *fmt, ...)
+ 	va_list args;
+ 
+ 	va_start(args, fmt);
+-	d->printf_fn(d->opts.ctx, fmt, args);
++	d->printf_fn(d->cb_ctx, fmt, args);
+ 	va_end(args);
+ }
+ 
+ static int btf_dump_mark_referenced(struct btf_dump *d);
+ static int btf_dump_resize(struct btf_dump *d);
+ 
+-struct btf_dump *btf_dump__new(const struct btf *btf,
+-			       const struct btf_ext *btf_ext,
+-			       const struct btf_dump_opts *opts,
+-			       btf_dump_printf_fn_t printf_fn)
++DEFAULT_VERSION(btf_dump__new_v0_6_0, btf_dump__new, LIBBPF_0.6.0)
++struct btf_dump *btf_dump__new_v0_6_0(const struct btf *btf,
++				      btf_dump_printf_fn_t printf_fn,
++				      void *ctx,
++				      const struct btf_dump_opts *opts)
+ {
+ 	struct btf_dump *d;
+ 	int err;
+ 
++	if (!printf_fn)
++		return libbpf_err_ptr(-EINVAL);
++
+ 	d = calloc(1, sizeof(struct btf_dump));
+ 	if (!d)
+ 		return libbpf_err_ptr(-ENOMEM);
+ 
+ 	d->btf = btf;
+-	d->btf_ext = btf_ext;
+ 	d->printf_fn = printf_fn;
+-	d->opts.ctx = opts ? opts->ctx : NULL;
++	d->cb_ctx = ctx;
+ 	d->ptr_sz = btf__pointer_size(btf) ? : sizeof(void *);
+ 
+ 	d->type_names = hashmap__new(str_hash_fn, str_equal_fn, NULL);
+@@ -186,6 +188,17 @@ struct btf_dump *btf_dump__new(const struct btf *btf,
+ 	return libbpf_err_ptr(err);
+ }
+ 
++COMPAT_VERSION(btf_dump__new_deprecated, btf_dump__new, LIBBPF_0.0.4)
++struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
++					  const struct btf_ext *btf_ext,
++					  const struct btf_dump_opts *opts,
++					  btf_dump_printf_fn_t printf_fn)
++{
++	if (!printf_fn)
++		return libbpf_err_ptr(-EINVAL);
++	return btf_dump__new_v0_6_0(btf, printf_fn, opts ? opts->ctx : NULL, opts);
++}
++
+ static int btf_dump_resize(struct btf_dump *d)
+ {
+ 	int err, last_id = btf__type_cnt(d->btf) - 1;
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index edc40bc16f19..c51411d46c9e 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -405,4 +405,6 @@ LIBBPF_0.6.0 {
+ 		btf__dedup_deprecated;
+ 		btf__raw_data;
+ 		btf__type_cnt;
++		btf_dump__new;
++		btf_dump__new_deprecated;
+ } LIBBPF_0.5.0;
 -- 
 2.30.2
 
