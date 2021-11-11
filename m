@@ -2,217 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80985C433F5
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FBEEC433EF
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 06:43:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 682506103B
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:37:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3423061269
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 06:43:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbhKKFkL convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:40:11 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40300 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230040AbhKKFkC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:40:02 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5Y3K1006748
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:37:13 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c8n7su0rm-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:37:13 -0800
-Received: from intmgw001.46.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 10 Nov 2021 21:36:42 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id DBCD58B10530; Wed, 10 Nov 2021 21:36:37 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 6/9] selftests/bpf: migrate all deprecated perf_buffer uses
-Date:   Wed, 10 Nov 2021 21:36:21 -0800
-Message-ID: <20211111053624.190580-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211111053624.190580-1-andrii@kernel.org>
-References: <20211111053624.190580-1-andrii@kernel.org>
+        id S230027AbhKKGqJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Nov 2021 01:46:09 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:43715 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229564AbhKKGqJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Nov 2021 01:46:09 -0500
+Received: by mail-il1-f200.google.com with SMTP id e15-20020a92194f000000b00275b13f2b6aso3437528ilm.10
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 22:43:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mnls3d+B5dNpFY4b4y80Brjr8wlqrHuUE32ifq4dCs8=;
+        b=zWv2Y4LgsgtmJJ0haFJYRV5f4jFc4d9XqeO0T/vnND6xaw4jf1BmlxboZKKRsJuveJ
+         Gk+T4EVUuSWOEBiXbdb82Eg8XjKdHKPlznKIJQW9A1BILATa366wknxms7UwnZpqWjeP
+         5WgUsY47n3op5hUY8WTm4j2KbzWCCBVYb3rcCiph3E7nZLZlh/9ipCpy1aWsS0qHi42B
+         7gqJSmQKcjzk5iShp0Pc0u6htGWaI4zsiboAsl0e2lBGwK4Qor6Xz9PzzCl36aFQLB8f
+         CCWb/Z6hi7SJurwLkGBr98yoY/UyZ89uX8qN9PKDrc9eb+ROlvXfBbMHthrl9l08uNbD
+         JIzQ==
+X-Gm-Message-State: AOAM530efq4uIwy2xC5CyTPPnUfS+9z0ucEFgPlonanSAl2lWSZPzVLD
+        /y8LXNcFD8mKBUvXC0fBAkabMjYCDaj5ie7VwwMtohPXQJXO
+X-Google-Smtp-Source: ABdhPJwA57G8Lx4oLqI477r2EWE3KPXCpaPPjX1Ze5ECwkKzAOip1D1Ie0wh3HxAAwqEy/qD2XyMFpdoT6dMY3KnFpfmeynDLMds
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: LIFOCs8wtllXO_V4G8B2hgLQ0TcwbFd2
-X-Proofpoint-ORIG-GUID: LIFOCs8wtllXO_V4G8B2hgLQ0TcwbFd2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-11_01,2021-11-08_02,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- mlxlogscore=999 phishscore=0 impostorscore=0 bulkscore=0 mlxscore=0
- clxscore=1015 suspectscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2111110029
-X-FB-Internal: deliver
+X-Received: by 2002:a05:6e02:1561:: with SMTP id k1mr2998713ilu.135.1636613000688;
+ Wed, 10 Nov 2021 22:43:20 -0800 (PST)
+Date:   Wed, 10 Nov 2021 22:43:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008a7c9605d07da846@google.com>
+Subject: [syzbot] WARNING in __dev_change_net_namespace
+From:   syzbot <syzbot+5434727aa485c3203fed@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, avagin@gmail.com,
+        bpf@vger.kernel.org, cong.wang@bytedance.com, daniel@iogearbox.net,
+        davem@davemloft.net, hawk@kernel.org, johannes.berg@intel.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Migrate all old-style perf_buffer__new() and perf_buffer__new_raw()
-calls to new v1.0+ variants.
+Hello,
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+syzbot found the following issue on:
+
+HEAD commit:    512b7931ad05 Merge branch 'akpm' (patches from Andrew)
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b45fb6b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=99780e4a2873b273
+dashboard link: https://syzkaller.appspot.com/bug?extid=5434727aa485c3203fed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5434727aa485c3203fed@syzkaller.appspotmail.com
+
+RAX: ffffffffffffffda RBX: 00007f02bf014f60 RCX: 00007f02bef01ae9
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000000000003
+RBP: 00007f02bc4771d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007ffcc2738d7f R14: 00007f02bc477300 R15: 0000000000022000
+ </TASK>
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 4974 at net/core/dev.c:11254 __dev_change_net_namespace+0x1079/0x1330 net/core/dev.c:11254
+Modules linked in:
+CPU: 0 PID: 4974 Comm: syz-executor.2 Not tainted 5.15.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__dev_change_net_namespace+0x1079/0x1330 net/core/dev.c:11254
+Code: c7 c7 80 9b 8c 8a c6 05 ba 0e 3b 06 01 e8 36 73 d5 01 0f 0b e9 69 f0 ff ff e8 e3 95 57 fa 0f 0b e9 60 fb ff ff e8 d7 95 57 fa <0f> 0b e9 2a fb ff ff 41 bd ea ff ff ff e9 62 f2 ff ff e8 f0 38 9e
+RSP: 0018:ffffc900217aed70 EFLAGS: 00010246
+RAX: 0000000000040000 RBX: 00000000fffffff4 RCX: ffffc9000b291000
+RDX: 0000000000040000 RSI: ffffffff87202d59 RDI: 0000000000000003
+RBP: ffff88815cbea000 R08: 0000000000000000 R09: ffff88815cbea64b
+R10: ffffffff87202882 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffffff8d0e3dc0 R14: ffff88815cbeac00 R15: ffffffff8d0e3f0c
+FS:  00007f02bc477700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b32027000 CR3: 0000000162d58000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ do_setlink+0x275/0x3970 net/core/rtnetlink.c:2624
+ __rtnl_newlink+0xde6/0x1750 net/core/rtnetlink.c:3391
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3506
+ rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5571
+ netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2491
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x86d/0xda0 net/netlink/af_netlink.c:1916
+ sock_sendmsg_nosec net/socket.c:704 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:724
+ ____sys_sendmsg+0x6e8/0x810 net/socket.c:2409
+ ___sys_sendmsg+0xf3/0x170 net/socket.c:2463
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2492
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f02bef01ae9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f02bc477188 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f02bf014f60 RCX: 00007f02bef01ae9
+RDX: 0000000000000000 RSI: 0000000020000080 RDI: 0000000000000003
+RBP: 00007f02bc4771d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
+R13: 00007ffcc2738d7f R14: 00007f02bc477300 R15: 0000000000022000
+ </TASK>
+
+
 ---
- tools/testing/selftests/bpf/benchs/bench_ringbufs.c       | 8 ++------
- tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 5 ++---
- tools/testing/selftests/bpf/prog_tests/kfree_skb.c        | 6 ++----
- tools/testing/selftests/bpf/prog_tests/perf_buffer.c      | 6 ++----
- tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c      | 7 ++-----
- tools/testing/selftests/bpf/test_tcpnotify_user.c         | 4 +---
- 6 files changed, 11 insertions(+), 25 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-index d167bffac679..52d4a2f91dbd 100644
---- a/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_ringbufs.c
-@@ -394,11 +394,6 @@ static void perfbuf_libbpf_setup()
- {
- 	struct perfbuf_libbpf_ctx *ctx = &perfbuf_libbpf_ctx;
- 	struct perf_event_attr attr;
--	struct perf_buffer_raw_opts pb_opts = {
--		.event_cb = perfbuf_process_sample_raw,
--		.ctx = (void *)(long)0,
--		.attr = &attr,
--	};
- 	struct bpf_link *link;
- 
- 	ctx->skel = perfbuf_setup_skeleton();
-@@ -423,7 +418,8 @@ static void perfbuf_libbpf_setup()
- 	}
- 
- 	ctx->perfbuf = perf_buffer__new_raw(bpf_map__fd(ctx->skel->maps.perfbuf),
--					    args.perfbuf_sz, &pb_opts);
-+					    args.perfbuf_sz, &attr,
-+					    perfbuf_process_sample_raw, NULL, NULL);
- 	if (!ctx->perfbuf) {
- 		fprintf(stderr, "failed to create perfbuf\n");
- 		exit(1);
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-index 569fcc6ed660..4184c399d4c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-@@ -85,7 +85,6 @@ void test_get_stack_raw_tp(void)
- 	const char *file_err = "./test_get_stack_rawtp_err.o";
- 	const char *prog_name = "raw_tracepoint/sys_enter";
- 	int i, err, prog_fd, exp_cnt = MAX_CNT_RAWTP;
--	struct perf_buffer_opts pb_opts = {};
- 	struct perf_buffer *pb = NULL;
- 	struct bpf_link *link = NULL;
- 	struct timespec tv = {0, 10};
-@@ -124,8 +123,8 @@ void test_get_stack_raw_tp(void)
- 	if (!ASSERT_OK_PTR(link, "attach_raw_tp"))
- 		goto close_prog;
- 
--	pb_opts.sample_cb = get_stack_print_output;
--	pb = perf_buffer__new(bpf_map__fd(map), 8, &pb_opts);
-+	pb = perf_buffer__new(bpf_map__fd(map), 8, get_stack_print_output,
-+			      NULL, NULL, NULL);
- 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
- 		goto close_prog;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-index 885413ed5c96..2a49f8fcde06 100644
---- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-@@ -66,7 +66,6 @@ void serial_test_kfree_skb(void)
- 	struct bpf_map *perf_buf_map, *global_data;
- 	struct bpf_program *prog, *fentry, *fexit;
- 	struct bpf_object *obj, *obj2 = NULL;
--	struct perf_buffer_opts pb_opts = {};
- 	struct perf_buffer *pb = NULL;
- 	int err, kfree_skb_fd;
- 	bool passed = false;
-@@ -112,9 +111,8 @@ void serial_test_kfree_skb(void)
- 		goto close_prog;
- 
- 	/* set up perf buffer */
--	pb_opts.sample_cb = on_sample;
--	pb_opts.ctx = &passed;
--	pb = perf_buffer__new(bpf_map__fd(perf_buf_map), 1, &pb_opts);
-+	pb = perf_buffer__new(bpf_map__fd(perf_buf_map), 1,
-+			      on_sample, NULL, &passed, NULL);
- 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
- 		goto close_prog;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
-index 4e32f3586a75..5fc2b3a0711e 100644
---- a/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/perf_buffer.c
-@@ -47,7 +47,6 @@ void serial_test_perf_buffer(void)
- {
- 	int err, on_len, nr_on_cpus = 0, nr_cpus, i, j;
- 	int zero = 0, my_pid = getpid();
--	struct perf_buffer_opts pb_opts = {};
- 	struct test_perf_buffer *skel;
- 	cpu_set_t cpu_seen;
- 	struct perf_buffer *pb;
-@@ -82,9 +81,8 @@ void serial_test_perf_buffer(void)
- 		goto out_close;
- 
- 	/* set up perf buffer */
--	pb_opts.sample_cb = on_sample;
--	pb_opts.ctx = &cpu_seen;
--	pb = perf_buffer__new(bpf_map__fd(skel->maps.perf_buf_map), 1, &pb_opts);
-+	pb = perf_buffer__new(bpf_map__fd(skel->maps.perf_buf_map), 1,
-+			      on_sample, NULL, &cpu_seen, NULL);
- 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
- 		goto out_close;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-index 3bd5904b4db5..f99386d1dc4c 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_bpf2bpf.c
-@@ -49,7 +49,6 @@ void test_xdp_bpf2bpf(void)
- 	struct vip key4 = {.protocol = 6, .family = AF_INET};
- 	struct bpf_program *prog;
- 	struct perf_buffer *pb = NULL;
--	struct perf_buffer_opts pb_opts = {};
- 
- 	/* Load XDP program to introspect */
- 	pkt_skel = test_xdp__open_and_load();
-@@ -86,10 +85,8 @@ void test_xdp_bpf2bpf(void)
- 		goto out;
- 
- 	/* Set up perf buffer */
--	pb_opts.sample_cb = on_sample;
--	pb_opts.ctx = &passed;
--	pb = perf_buffer__new(bpf_map__fd(ftrace_skel->maps.perf_buf_map),
--			      1, &pb_opts);
-+	pb = perf_buffer__new(bpf_map__fd(ftrace_skel->maps.perf_buf_map), 1,
-+			      on_sample, NULL, &passed, NULL);
- 	if (!ASSERT_OK_PTR(pb, "perf_buf__new"))
- 		goto out;
- 
-diff --git a/tools/testing/selftests/bpf/test_tcpnotify_user.c b/tools/testing/selftests/bpf/test_tcpnotify_user.c
-index 63111cb082fe..4c5114765b23 100644
---- a/tools/testing/selftests/bpf/test_tcpnotify_user.c
-+++ b/tools/testing/selftests/bpf/test_tcpnotify_user.c
-@@ -72,7 +72,6 @@ int main(int argc, char **argv)
- {
- 	const char *file = "test_tcpnotify_kern.o";
- 	struct bpf_map *perf_map, *global_map;
--	struct perf_buffer_opts pb_opts = {};
- 	struct tcpnotify_globals g = {0};
- 	struct perf_buffer *pb = NULL;
- 	const char *cg_path = "/foo";
-@@ -117,8 +116,7 @@ int main(int argc, char **argv)
- 		return -1;
- 	}
- 
--	pb_opts.sample_cb = dummyfn;
--	pb = perf_buffer__new(bpf_map__fd(perf_map), 8, &pb_opts);
-+	pb = perf_buffer__new(bpf_map__fd(perf_map), 8, dummyfn, NULL, NULL, NULL);
- 	if (!pb)
- 		goto err;
- 
--- 
-2.30.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
