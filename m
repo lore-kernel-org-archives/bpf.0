@@ -2,172 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 801D6C433EF
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 02:11:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D52E0C433F5
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:18:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 669DA61073
-	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 02:11:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0ED2611C9
+	for <bpf@archiver.kernel.org>; Thu, 11 Nov 2021 05:18:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232723AbhKKCO0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 10 Nov 2021 21:14:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbhKKCOZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 10 Nov 2021 21:14:25 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E2DC061766;
-        Wed, 10 Nov 2021 18:11:37 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id n8so4551812plf.4;
-        Wed, 10 Nov 2021 18:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UsyCG8atsFeiYKk5HZLyFdqQ8bvEHYSrT0Mck/R3QNQ=;
-        b=qDq/OZYgTWRQMSCsn/CG907AhLIlN+1HK9fX8tSZtPiUtbBwJA1Pr/keWYtbcbYQMP
-         BzkhgW/RaR8beJCczzk5FsjinNX5F/1Q0FNBdzlSvU7Pqm5zP/PXlBSydpTBWES0Uuhk
-         nCfw0GB524VvrXhDKtKV7llwB5KyNylGadG8P9lPZYcBjEzrXAn82BJzOWUt5FRnrx8b
-         dt676FiJXz5c2Ah+lvsg64Yx/XVt5AXK22/ptFL0IjHuruZ3rCkqePYnqh+wfMYW2W58
-         O9EuYqpJH36Z6Wb9lG4sVMTnQBlFeweii8tFEiJYY9bnV80KMS889NW2KExwIROrYT+B
-         RsLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UsyCG8atsFeiYKk5HZLyFdqQ8bvEHYSrT0Mck/R3QNQ=;
-        b=GGJPya3hV6r15/1rjS+U/BgblC1kAYZVP2NU0Q5MVs2ouybHaGt3N68rcumnXkIY0S
-         1kDyHhnToJmNRM3thT5jxJGi1ut2ZYVvmzCIGSkrhjBcJ/mwwsn64tGQoJJlZk1XzisQ
-         +CCUW6Wu4AoyXnikn7ybxZqnsj7HD1FfXqNP9REY11FHG4CAd6VeRoE3ayYqW8w2nSCz
-         CXDuo/NJzZM8s5ZAFAVW8sF/LYiL4zun/boXhbTMmpAS+KxOxuDfCY4uDO6PNRP1a9Sh
-         FjG0Gdu+IKTYkfPybOXbkNwfW4FzsXJ04b45Z9pDAiIcBpg1Buqg4e3XdBAkQerMZ/r2
-         umqg==
-X-Gm-Message-State: AOAM531cZpDQlebC8IsZAYmK1/h5ND13Sz5xRGbaBKOwGvIZSsYTmlpx
-        ymaHtylgoafY4AWqyXwiXKo=
-X-Google-Smtp-Source: ABdhPJzw+11Q88k8zPcmQVPoMqnXcSJEXkX0erP+CgRsa36lg8qwfxiLaCVWF76rxNb9H1LL4NLNpg==
-X-Received: by 2002:a17:90b:128d:: with SMTP id fw13mr4336755pjb.50.1636596697112;
-        Wed, 10 Nov 2021 18:11:37 -0800 (PST)
-Received: from localhost ([2405:201:6014:d064:3d4e:6265:800c:dc84])
-        by smtp.gmail.com with ESMTPSA id v19sm343490pju.32.2021.11.10.18.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 18:11:36 -0800 (PST)
-Date:   Thu, 11 Nov 2021 07:41:33 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH net v2] bpf: Fix build when CONFIG_BPF_SYSCALL is disabled
-Message-ID: <20211111021133.ekxloctojcriu4sb@apollo.localdomain>
-References: <20211110205418.332403-1-vinicius.gomes@intel.com>
- <20211110212553.e2xnltq3dqduhjnj@apollo.localdomain>
- <CAADnVQKqjLM1P7X+iTfnH-QFw5=z5L_w8MLsWtcNWbh5QR7VVg@mail.gmail.com>
- <878rxvbmcm.fsf@intel.com>
- <20211111001359.3v2yjha5nxkdtoju@apollo.localdomain>
- <87v90za1mx.fsf@intel.com>
+        id S229533AbhKKFU4 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 11 Nov 2021 00:20:56 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36788 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229463AbhKKFU4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 00:20:56 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AB5EBEC026793
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:18:07 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c8n7stwsk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 10 Nov 2021 21:18:06 -0800
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Wed, 10 Nov 2021 21:18:05 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id B4AA08B08655; Wed, 10 Nov 2021 21:18:01 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 1/2] libbpf: add ability to get/set per-program load flags
+Date:   Wed, 10 Nov 2021 21:17:57 -0800
+Message-ID: <20211111051758.92283-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211111051758.92283-1-andrii@kernel.org>
+References: <20211111051758.92283-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v90za1mx.fsf@intel.com>
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: bw79RMONn4l0x3K_THCvigtJ-g2KUxf2
+X-Proofpoint-ORIG-GUID: bw79RMONn4l0x3K_THCvigtJ-g2KUxf2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-11_01,2021-11-08_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxlogscore=999 phishscore=0 impostorscore=0 bulkscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111110028
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 07:34:38AM IST, Vinicius Costa Gomes wrote:
-> Hi Kartikeya,
->
-> Kumar Kartikeya Dwivedi <memxor@gmail.com> writes:
->
-> > On Thu, Nov 11, 2021 at 05:21:53AM IST, Vinicius Costa Gomes wrote:
-> >> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-> >>
-> >> >> Thanks for the fix.
-> >> >>
-> >> >> But instead of moving this to core.c, you can probably make the btf.h
-> >> >> declaration conditional on CONFIG_BPF_SYSCALL, since this is not useful in
-> >> >> isolation (only used by verifier for module kfunc support). For the case of
-> >> >> kfunc_btf_id_list variables, just define it as an empty struct and static
-> >> >> variables, since the definition is still inside btf.c. So it becomes a noop for
-> >> >> !CONFIG_BPF_SYSCALL.
-> >> >>
-> >> >> I am also not sure whether BTF is useful without BPF support, but maybe I'm
-> >> >> missing some usecase.
-> >> >
-> >> > Unlikely. I would just disallow such config instead of sprinkling
-> >> > the code with ifdefs.
-> >>
-> >> Is something like this what you have in mind?
-> >>
-> >> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> >> index 6fdbf9613aec..eae860c86e26 100644
-> >> --- a/lib/Kconfig.debug
-> >> +++ b/lib/Kconfig.debug
-> >> @@ -316,6 +316,7 @@ config DEBUG_INFO_BTF
-> >>  	bool "Generate BTF typeinfo"
-> >>  	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
-> >>  	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
-> >> +	depends on BPF_SYSCALL
-> >>  	help
-> >>  	  Generate deduplicated BTF type information from DWARF debug info.
-> >>  	  Turning this on expects presence of pahole tool, which will convert
-> >>
-> >>
-> >
-> > BTW, you will need a little more than that, I suspect the compiler optimizes out
-> > the register/unregister call so we don't see a build failure, but adding a side
-> > effect gives me errors, so something like this should resolve the problem (since
-> > kfunc_btf_id_list variable definition is behind CONFIG_BPF_SYSCALL).
-> >
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index 203eef993d76..e9881ef9e9aa 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -254,6 +254,8 @@ void unregister_kfunc_btf_id_set(struct kfunc_btf_id_list *l,
-> >                                  struct kfunc_btf_id_set *s);
-> >  bool bpf_check_mod_kfunc_call(struct kfunc_btf_id_list *klist, u32 kfunc_id,
-> >                               struct module *owner);
-> > +extern struct kfunc_btf_id_list bpf_tcp_ca_kfunc_list;
-> > +extern struct kfunc_btf_id_list prog_test_kfunc_list;
-> >  #else
-> >  static inline void register_kfunc_btf_id_set(struct kfunc_btf_id_list *l,
-> >                                              struct kfunc_btf_id_set *s)
-> > @@ -268,13 +270,13 @@ static inline bool bpf_check_mod_kfunc_call(struct kfunc_btf_id_list *klist,
-> >  {
-> >         return false;
-> >  }
-> > +struct kfunc_btf_id_list {};
-> > +static struct kfunc_btf_id_list bpf_tcp_ca_kfunc_list __maybe_unused;
-> > +static struct kfunc_btf_id_list prog_test_kfunc_list __maybe_unused;
-> > +
-> >  #endif
-> >
-> >  #define DEFINE_KFUNC_BTF_ID_SET(set, name)                                     \
-> >         struct kfunc_btf_id_set name = { LIST_HEAD_INIT(name.list), (set),     \
-> >                                          THIS_MODULE }
-> > -
-> > -extern struct kfunc_btf_id_list bpf_tcp_ca_kfunc_list;
-> > -extern struct kfunc_btf_id_list prog_test_kfunc_list;
-> > -
-> >  #endif
-> >
->
-> I could not reproduce the build failure here even when adding some side
-> effects, but I didn't try very hard.
->
-> As you are more familiar with the code, I would be glad if you could
-> take it from here and propose a patch.
->
+Add bpf_program__flags() API to retrieve prog_flags that will be (or
+were) supplied to BPF_PROG_LOAD command.
 
-Sure, no worries!
+Also add bpf_program__set_extra_flags() API to allow to set *extra*
+flags, in addition to those determined by program's SEC() definition.
+Such flags are logically OR'ed with libbpf-derived flags.
 
->
-> Cheers,
-> --
-> Vinicius
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c   | 14 ++++++++++++++
+ tools/lib/bpf/libbpf.h   |  3 +++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 19 insertions(+)
 
---
-Kartikeya
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index d869ebee1e27..a823b5ed705b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8262,6 +8262,20 @@ void bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 	prog->expected_attach_type = type;
+ }
+ 
++__u32 bpf_program__flags(const struct bpf_program *prog)
++{
++	return prog->prog_flags;
++}
++
++int bpf_program__set_extra_flags(struct bpf_program *prog, __u32 extra_flags)
++{
++	if (prog->obj->loaded)
++		return libbpf_err(-EBUSY);
++
++	prog->prog_flags |= extra_flags;
++	return 0;
++}
++
+ #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
+ 	.sec = sec_pfx,							    \
+ 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 039058763173..f69512ae8505 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -493,6 +493,9 @@ LIBBPF_API void
+ bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 				      enum bpf_attach_type type);
+ 
++LIBBPF_API __u32 bpf_program__flags(const struct bpf_program *prog);
++LIBBPF_API int bpf_program__set_extra_flags(struct bpf_program *prog, __u32 extra_flags);
++
+ LIBBPF_API int
+ bpf_program__set_attach_target(struct bpf_program *prog, int attach_prog_fd,
+ 			       const char *attach_func_name);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index b895861a13c0..256d5d4be951 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -397,8 +397,10 @@ LIBBPF_0.6.0 {
+ 		bpf_object__prev_program;
+ 		bpf_prog_load_deprecated;
+ 		bpf_prog_load;
++		bpf_program__flags;
+ 		bpf_program__insn_cnt;
+ 		bpf_program__insns;
++		bpf_program__set_extra_flags;
+ 		btf__add_btf;
+ 		btf__add_decl_tag;
+ 		btf__raw_data;
+-- 
+2.30.2
+
