@@ -2,172 +2,216 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9337EC433F5
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:08:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 345D0C433EF
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:26:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 702E76135E
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:08:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17D5A6124D
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:26:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbhKLBLf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Nov 2021 20:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbhKLBLe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 11 Nov 2021 20:11:34 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF95C061766;
-        Thu, 11 Nov 2021 17:08:44 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id v22so2396808qtx.8;
-        Thu, 11 Nov 2021 17:08:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5n/yTDCK8CRJjJdsGfPnssp0jZQU00+EZOCC5bWYfFU=;
-        b=eUFcPQH0+0JCmXaHUH4Vr/Q5I/Z1D9/oJh0q7uzMisY7Jtkb5gI3JH1sT/SXrOnOpM
-         g8HruycYIChrcCipVEllN5Jv8xJ9gLMJbZJYA+E9KWfKOR/8BBWgxzKkF36mXpIJl8mo
-         AR7yOz9wVNZCVBNfJE2jqwfJ/7PdIp7P3B5BRlZp+dIsl7df4Ul6d7n0jSVwTh+dpOjr
-         WVodnD6rwOxGWD7SPgfwN9oK2dZK8zg9hzw7+Px7+Uiy7HarZuqFKe5a4OVNJmOVTpT+
-         2CR/bSkH8UZfCQ6riWAIYRGWE9B9EqVtxsKAv26PNJPjaujKiyzLnRf0tb69K1PfaFd9
-         Ph0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5n/yTDCK8CRJjJdsGfPnssp0jZQU00+EZOCC5bWYfFU=;
-        b=u7yTapVgQVR8mJzwI72o0xRMoYMoySGn4NWOuy7tc3DZbfxvYAq8j8io/DptXca1Ws
-         ir/di8hpMHIJnOV84IHUh0cQ5n2Rc/FdN0g+pJF/ftgiqHjBYV8LnI+D70/4aQU3rLiU
-         YaOMIGWNvn3kHwWZYrIjzSfYUBWA1fDY1QlmACeRwF8i/R8eI1DoV3tD/EApEcKnGUzG
-         VdHyKkh+6Jj/HT4NPrdMHiFmz9zy7uY2C13P+zUmVt/kRlLCsc4il2rWdUjxq9vtHZcr
-         nsCrDjajBn1znyLS9frPRCbXiLBjEAYCvxEH2zpx2lZlZL/YI4pnx5fwGStYkplfMSb2
-         mvmw==
-X-Gm-Message-State: AOAM5302NBQmmMSGEP5fPMG7QEI/B0N9eXhCr+BSnqdHW4pWQ27YDJ8c
-        UTMZpTUG/u9KnK++RvrmQOYlmPPwnQW0//UHPec=
-X-Google-Smtp-Source: ABdhPJwuSkW7GcYwHPj4mRDzO3ZZvr5ZfE3/Da4Wdt9UsnAM5SMYhEoz/FAMUpgFUYTswEasTP0wQZl74+yXE4QGJ/E=
-X-Received: by 2002:a05:622a:194:: with SMTP id s20mr12344990qtw.66.1636679323658;
- Thu, 11 Nov 2021 17:08:43 -0800 (PST)
+        id S233793AbhKLB3E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Nov 2021 20:29:04 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:4146 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233752AbhKLB3E (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 20:29:04 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AC0vPlK024616
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:26:14 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=PIHZNHyITasDuBy1sLcMc2Qj33YXclcvyWFLLcSWpKU=;
+ b=IEVsjOJ19hZ4AhziBJJa0EQv5pi4zWxsumsC6zKCDBlCEul6k5Fq3lkxFvZrozzlPu/c
+ Wt23jO65MIv+JAgWayakOAbBSwAyZgTU95joYDYM+Q4Hmoe9zKW1yW1UcLUWkBdBCh+1
+ /g8aecLkLr44AYA+XacPdagQif6dXobhrkI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c9cfvrw4j-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:26:14 -0800
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Thu, 11 Nov 2021 17:26:13 -0800
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id B9E7F24C5B1B; Thu, 11 Nov 2021 17:26:09 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Jose E . Marchesi" <jose.marchesi@oracle.com>,
+        <kernel-team@fb.com>
+Subject: [PATCH bpf-next v3 01/10] bpf: Support BTF_KIND_TYPE_TAG for btf_type_tag attributes
+Date:   Thu, 11 Nov 2021 17:26:09 -0800
+Message-ID: <20211112012609.1505032-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211112012604.1504583-1-yhs@fb.com>
+References: <20211112012604.1504583-1-yhs@fb.com>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: J4eMXZS_qT17OB2ulUAG34SrM86Yagu7
+X-Proofpoint-ORIG-GUID: J4eMXZS_qT17OB2ulUAG34SrM86Yagu7
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20211108083840.4627-1-laoar.shao@gmail.com> <20211108083840.4627-5-laoar.shao@gmail.com>
- <a13c0541-59a3-6561-6d42-b51fef9f7c8b@redhat.com> <b495d38d-5cdd-8a33-b9d3-de721095ccab@redhat.com>
- <YYz/4bSdSXR3Palz@alley> <70dd5e1c-99c9-c1ca-4e3f-1a894896cf06@redhat.com>
-In-Reply-To: <70dd5e1c-99c9-c1ca-4e3f-1a894896cf06@redhat.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Fri, 12 Nov 2021 09:08:05 +0800
-Message-ID: <CALOAHbBcetHc9h436L9aHv17R+noERrZ0kETSEW9MfW7OOdQkg@mail.gmail.com>
-Subject: Re: [PATCH 4/7] fs/binfmt_elf: use get_task_comm instead of
- open-coded string copy
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-11_09,2021-11-11_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=794 suspectscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111120005
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 11, 2021 at 7:47 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 11.11.21 12:34, Petr Mladek wrote:
-> > On Thu 2021-11-11 11:06:04, David Hildenbrand wrote:
-> >> On 11.11.21 11:03, David Hildenbrand wrote:
-> >>> On 08.11.21 09:38, Yafang Shao wrote:
-> >>>> It is better to use get_task_comm() instead of the open coded string
-> >>>> copy as we do in other places.
-> >>>>
-> >>>> struct elf_prpsinfo is used to dump the task information in userspace
-> >>>> coredump or kernel vmcore. Below is the verfication of vmcore,
-> >>>>
-> >>>> crash> ps
-> >>>>    PID    PPID  CPU       TASK        ST  %MEM     VSZ    RSS  COMM
-> >>>>       0      0   0  ffffffff9d21a940  RU   0.0       0      0  [swapper/0]
-> >>>>>     0      0   1  ffffa09e40f85e80  RU   0.0       0      0  [swapper/1]
-> >>>>>     0      0   2  ffffa09e40f81f80  RU   0.0       0      0  [swapper/2]
-> >>>>>     0      0   3  ffffa09e40f83f00  RU   0.0       0      0  [swapper/3]
-> >>>>>     0      0   4  ffffa09e40f80000  RU   0.0       0      0  [swapper/4]
-> >>>>>     0      0   5  ffffa09e40f89f80  RU   0.0       0      0  [swapper/5]
-> >>>>       0      0   6  ffffa09e40f8bf00  RU   0.0       0      0  [swapper/6]
-> >>>>>     0      0   7  ffffa09e40f88000  RU   0.0       0      0  [swapper/7]
-> >>>>>     0      0   8  ffffa09e40f8de80  RU   0.0       0      0  [swapper/8]
-> >>>>>     0      0   9  ffffa09e40f95e80  RU   0.0       0      0  [swapper/9]
-> >>>>>     0      0  10  ffffa09e40f91f80  RU   0.0       0      0  [swapper/10]
-> >>>>>     0      0  11  ffffa09e40f93f00  RU   0.0       0      0  [swapper/11]
-> >>>>>     0      0  12  ffffa09e40f90000  RU   0.0       0      0  [swapper/12]
-> >>>>>     0      0  13  ffffa09e40f9bf00  RU   0.0       0      0  [swapper/13]
-> >>>>>     0      0  14  ffffa09e40f98000  RU   0.0       0      0  [swapper/14]
-> >>>>>     0      0  15  ffffa09e40f9de80  RU   0.0       0      0  [swapper/15]
-> >>>>
-> >>>> It works well as expected.
-> >>>>
-> >>>> Suggested-by: Kees Cook <keescook@chromium.org>
-> >>>> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> >>>> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> >>>> Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> >>>> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> >>>> Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-> >>>> Cc: Peter Zijlstra <peterz@infradead.org>
-> >>>> Cc: Steven Rostedt <rostedt@goodmis.org>
-> >>>> Cc: Matthew Wilcox <willy@infradead.org>
-> >>>> Cc: David Hildenbrand <david@redhat.com>
-> >>>> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> >>>> Cc: Kees Cook <keescook@chromium.org>
-> >>>> Cc: Petr Mladek <pmladek@suse.com>
-> >>>> ---
-> >>>>  fs/binfmt_elf.c | 2 +-
-> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-> >>>> index a813b70f594e..138956fd4a88 100644
-> >>>> --- a/fs/binfmt_elf.c
-> >>>> +++ b/fs/binfmt_elf.c
-> >>>> @@ -1572,7 +1572,7 @@ static int fill_psinfo(struct elf_prpsinfo *psinfo, struct task_struct *p,
-> >>>>    SET_UID(psinfo->pr_uid, from_kuid_munged(cred->user_ns, cred->uid));
-> >>>>    SET_GID(psinfo->pr_gid, from_kgid_munged(cred->user_ns, cred->gid));
-> >>>>    rcu_read_unlock();
-> >>>> -  strncpy(psinfo->pr_fname, p->comm, sizeof(psinfo->pr_fname));
-> >>>> +  get_task_comm(psinfo->pr_fname, p);
-> >>>>
-> >>>>    return 0;
-> >>>>  }
-> >>>>
-> >>>
-> >>> We have a hard-coded "pr_fname[16]" as well, not sure if we want to
-> >>> adjust that to use TASK_COMM_LEN?
-> >>
-> >> But if the intention is to chance TASK_COMM_LEN later, we might want to
-> >> keep that unchanged.
-> >
-> > It seems that len will not change in the end. Another solution is
-> > going to be used for the long names, see
-> > https://lore.kernel.org/r/20211108084142.4692-1-laoar.shao@gmail.com.
->
-> Yes, that's what I recall as well. The I read the patch
-> subjects+descriptions in this series "make it adopt to task comm size
-> change" and was slightly confused.
->
-> Maybe we should just remove any notion of "task comm size change" from
-> this series and instead just call it a cleanup.
->
->
+LLVM patches ([1] for clang, [2] and [3] for BPF backend)
+added support for btf_type_tag attributes. This patch
+added support for the kernel.
 
-Agreed that it may make a little confused for the one who didn't
-engage in this series at the first place.
-I will improve the subjection+description.
+The main motivation for btf_type_tag is to bring kernel
+annotations __user, __rcu etc. to btf. With such information
+available in btf, bpf verifier can detect mis-usages
+and reject the program. For example, for __user tagged pointer,
+developers can then use proper helper like bpf_probe_read_user()
+etc. to read the data.
 
+BTF_KIND_TYPE_TAG may also useful for other tracing
+facility where instead of to require user to specify
+kernel/user address type, the kernel can detect it
+by itself with btf.
 
--- 
-Thanks
-Yafang
+  [1] https://reviews.llvm.org/D111199
+  [2] https://reviews.llvm.org/D113222
+  [3] https://reviews.llvm.org/D113496
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ include/uapi/linux/btf.h       |  3 ++-
+ kernel/bpf/btf.c               | 14 +++++++++++++-
+ tools/include/uapi/linux/btf.h |  3 ++-
+ 3 files changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+index deb12f755f0f..b0d8fea1951d 100644
+--- a/include/uapi/linux/btf.h
++++ b/include/uapi/linux/btf.h
+@@ -43,7 +43,7 @@ struct btf_type {
+ 	 * "size" tells the size of the type it is describing.
+ 	 *
+ 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
+-	 * FUNC, FUNC_PROTO, VAR and DECL_TAG.
++	 * FUNC, FUNC_PROTO, VAR, DECL_TAG and TYPE_TAG.
+ 	 * "type" is a type_id referring to another type.
+ 	 */
+ 	union {
+@@ -75,6 +75,7 @@ enum {
+ 	BTF_KIND_DATASEC	=3D 15,	/* Section	*/
+ 	BTF_KIND_FLOAT		=3D 16,	/* Floating point	*/
+ 	BTF_KIND_DECL_TAG	=3D 17,	/* Decl Tag */
++	BTF_KIND_TYPE_TAG	=3D 18,	/* Type Tag */
+=20
+ 	NR_BTF_KINDS,
+ 	BTF_KIND_MAX		=3D NR_BTF_KINDS - 1,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index cdb0fba65600..1dd9ba82da1e 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -282,6 +282,7 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =
+=3D {
+ 	[BTF_KIND_DATASEC]	=3D "DATASEC",
+ 	[BTF_KIND_FLOAT]	=3D "FLOAT",
+ 	[BTF_KIND_DECL_TAG]	=3D "DECL_TAG",
++	[BTF_KIND_TYPE_TAG]	=3D "TYPE_TAG",
+ };
+=20
+ const char *btf_type_str(const struct btf_type *t)
+@@ -418,6 +419,7 @@ static bool btf_type_is_modifier(const struct btf_type =
+*t)
+ 	case BTF_KIND_VOLATILE:
+ 	case BTF_KIND_CONST:
+ 	case BTF_KIND_RESTRICT:
++	case BTF_KIND_TYPE_TAG:
+ 		return true;
+ 	}
+=20
+@@ -1737,6 +1739,7 @@ __btf_resolve_size(const struct btf *btf, const struc=
+t btf_type *type,
+ 		case BTF_KIND_VOLATILE:
+ 		case BTF_KIND_CONST:
+ 		case BTF_KIND_RESTRICT:
++		case BTF_KIND_TYPE_TAG:
+ 			id =3D type->type;
+ 			type =3D btf_type_by_id(btf, type->type);
+ 			break;
+@@ -2345,6 +2348,8 @@ static int btf_ref_type_check_meta(struct btf_verifie=
+r_env *env,
+ 				   const struct btf_type *t,
+ 				   u32 meta_left)
+ {
++	const char *value;
++
+ 	if (btf_type_vlen(t)) {
+ 		btf_verifier_log_type(env, t, "vlen !=3D 0");
+ 		return -EINVAL;
+@@ -2360,7 +2365,7 @@ static int btf_ref_type_check_meta(struct btf_verifie=
+r_env *env,
+ 		return -EINVAL;
+ 	}
+=20
+-	/* typedef type must have a valid name, and other ref types,
++	/* typedef/type_tag type must have a valid name, and other ref types,
+ 	 * volatile, const, restrict, should have a null name.
+ 	 */
+ 	if (BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_TYPEDEF) {
+@@ -2369,6 +2374,12 @@ static int btf_ref_type_check_meta(struct btf_verifi=
+er_env *env,
+ 			btf_verifier_log_type(env, t, "Invalid name");
+ 			return -EINVAL;
+ 		}
++	} else if (BTF_INFO_KIND(t->info) =3D=3D BTF_KIND_TYPE_TAG) {
++		value =3D btf_name_by_offset(env->btf, t->name_off);
++		if (!value || !value[0]) {
++			btf_verifier_log_type(env, t, "Invalid name");
++			return -EINVAL;
++		}
+ 	} else {
+ 		if (t->name_off) {
+ 			btf_verifier_log_type(env, t, "Invalid name");
+@@ -4059,6 +4070,7 @@ static const struct btf_kind_operations * const kind_=
+ops[NR_BTF_KINDS] =3D {
+ 	[BTF_KIND_DATASEC] =3D &datasec_ops,
+ 	[BTF_KIND_FLOAT] =3D &float_ops,
+ 	[BTF_KIND_DECL_TAG] =3D &decl_tag_ops,
++	[BTF_KIND_TYPE_TAG] =3D &modifier_ops,
+ };
+=20
+ static s32 btf_check_meta(struct btf_verifier_env *env,
+diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
+index deb12f755f0f..b0d8fea1951d 100644
+--- a/tools/include/uapi/linux/btf.h
++++ b/tools/include/uapi/linux/btf.h
+@@ -43,7 +43,7 @@ struct btf_type {
+ 	 * "size" tells the size of the type it is describing.
+ 	 *
+ 	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
+-	 * FUNC, FUNC_PROTO, VAR and DECL_TAG.
++	 * FUNC, FUNC_PROTO, VAR, DECL_TAG and TYPE_TAG.
+ 	 * "type" is a type_id referring to another type.
+ 	 */
+ 	union {
+@@ -75,6 +75,7 @@ enum {
+ 	BTF_KIND_DATASEC	=3D 15,	/* Section	*/
+ 	BTF_KIND_FLOAT		=3D 16,	/* Floating point	*/
+ 	BTF_KIND_DECL_TAG	=3D 17,	/* Decl Tag */
++	BTF_KIND_TYPE_TAG	=3D 18,	/* Type Tag */
+=20
+ 	NR_BTF_KINDS,
+ 	BTF_KIND_MAX		=3D NR_BTF_KINDS - 1,
+--=20
+2.30.2
+
