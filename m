@@ -2,79 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F132C433EF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 18:25:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E902C433F5
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 19:26:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D83A160F22
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 18:24:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D41CC60F21
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 19:26:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbhKLS1t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 13:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbhKLS1t (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Nov 2021 13:27:49 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CCBC061766;
-        Fri, 12 Nov 2021 10:24:57 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id m15so4842691pgu.11;
-        Fri, 12 Nov 2021 10:24:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mkt6AP+n99P3mfOBMyYypO8TZsZpPPI9SiuJAVZuQWg=;
-        b=XCGCUKQ+AbklpSSJrDxAj6X8ruoZZojsmv1PC4IDv2bxPxm//jd4nxutDzp73co98y
-         H2z36YuxeXHfdVi0/BUpIYEef4hvjXhoRauLijTMgteFiP3/8eHxXMk8tpglskPMllVT
-         geLxrIuq/jyApw2TZsCNiZIX2/+y7WW7KZ9C3CgfsbtoACoy1zk9BNJgDM/B2vMPFA0z
-         pmLDe44f6aytnmQP3PQ9Z55MTiarwjJ0g/wmvsw5fJWli+k3BPDxT9Ppy+1stMUxhyts
-         lfcMHMQNJuLbYa7fUkwHHmsjMTkzMkd3bcD1jdv1kAzq1TRFkra25iy10KToic8YXMMp
-         p3aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mkt6AP+n99P3mfOBMyYypO8TZsZpPPI9SiuJAVZuQWg=;
-        b=LtQJQ7LJh9XO4jtsNHlGdve0bDijGx00DJ37BS/mJWDeibOcIZuQPHU/NGs8ZNZIhv
-         2SHPo5BQUyOtkktz+q6kZhOWV9dNCQLEMOjyKMrZWiBbnCytPJe5dQmxy/ZfKhMut6Qd
-         81d1X2RM1LT55DCx1H85bmMIlhZakQ0gYulz5vR3V7CLSaoDmKfjX/wO5Z5byTLVj0xN
-         Vo97F8A7DX4ywFXax+jel3W8YNnP+1xfUpfkT8Nyn/j+Zy2OD8K3/HEZWaUuvPFCidEp
-         SrmQula54ladxkVeanc2EG/+gWCGqww5t7Rgg5bqBzuudQWHAbS74MvPfy3077HidkNe
-         fakQ==
-X-Gm-Message-State: AOAM531rliAkL7Yjb51qbpM1m3wVb7BVqRZxwoW63GoymuH7ZPQLTZWA
-        Vm3scJdhL3ojR63b6YGVURpGklXX1iloWvxBWTA=
-X-Google-Smtp-Source: ABdhPJwhD98FKUZrvKr9N3YT0ZyqZYGzhmlIyLot9V0ah5IFVT+VDzc/z/7lSVIafa0vCb8FFUkC5PB7LgHfJUggU4Q=
-X-Received: by 2002:a05:6a00:1583:b0:49f:dc1c:a0fe with SMTP id
- u3-20020a056a00158300b0049fdc1ca0femr15664027pfk.46.1636741497032; Fri, 12
- Nov 2021 10:24:57 -0800 (PST)
+        id S230101AbhKLT3U (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 14:29:20 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11688 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229810AbhKLT3U (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 14:29:20 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ACIjFNd023049
+        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 11:26:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=7TD35CBBrxBt0ONHPRciJj2id40BUzhUtfDucGsvGdQ=;
+ b=VZRel+HNGW1pFOO61IEQbkwWBQLzShEJMu1kFNnS0R+xt9z4F9k/WLD/fS4hSGciSIB6
+ ZAqDK7OKkgrWhWIwPo3Jev4XpyZwCbHo6ubwbx+AHGG1hOrvzdLhLJFPd0is5LOlXykW
+ dUWMKQp/ukgecF2rAoshbLTBUzNkd8WDqF4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c98k59js2-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 11:26:29 -0800
+Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Fri, 12 Nov 2021 11:25:49 -0800
+Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
+        id BB7606C83835; Fri, 12 Nov 2021 11:25:39 -0800 (PST)
+From:   Yucong Sun <fallentree@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <fallentree@fb.com>,
+        Yucong Sun <sunyucong@gmail.com>
+Subject: [PATCH bpf-next 1/4] selftests/bpf: Move summary line after the error logs
+Date:   Fri, 12 Nov 2021 11:25:32 -0800
+Message-ID: <20211112192535.898352-2-fallentree@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211112192535.898352-1-fallentree@fb.com>
+References: <20211112192535.898352-1-fallentree@fb.com>
 MIME-Version: 1.0
-References: <20211112150243.1270987-1-songliubraving@fb.com>
-In-Reply-To: <20211112150243.1270987-1-songliubraving@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 12 Nov 2021 10:24:45 -0800
-Message-ID: <CAADnVQ+YSGFqJyJUq+obYkTqTVpmFSeM499wsZoHf-p4=FP_5A@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 0/2] introduce btf_tracing_ids
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-ORIG-GUID: _JuZp_1LlFCL0opSRRxx5krXks_akHdD
+X-Proofpoint-GUID: _JuZp_1LlFCL0opSRRxx5krXks_akHdD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-12_05,2021-11-12_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111120102
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 7:07 AM Song Liu <songliubraving@fb.com> wrote:
->
-> Changes v2 => v3:
-> 1. Fix bug in task_iter.c. (Kernel test robot <lkp@intel.com>)
->
-> Changes v1 => v2:
-> 1. Add patch 2/2. (Alexei)
->
-> 1/2 fixes issue with btf_task_struct_ids w/o CONFIG_DEBUG_INFO_BTF.
-> 2/2 replaces btf_task_struct_ids with easier to understand btf_tracing_ids.
+From: Yucong Sun <sunyucong@gmail.com>
 
-Applied. Thanks
+Makes it easier to find the summary line when there is a lot of logs to
+scroll back.
+
+Signed-off-by: Yucong Sun <sunyucong@gmail.com>
+---
+ tools/testing/selftests/bpf/test_progs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index c65986bd9d07..d129ea5c9a48 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1198,11 +1198,11 @@ static int server_main(void)
+ 		env.sub_succ_cnt +=3D result->sub_succ_cnt;
+ 	}
+=20
++	print_all_error_logs();
++
+ 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
+ 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
+=20
+-	print_all_error_logs();
+-
+ 	/* reap all workers */
+ 	for (i =3D 0; i < env.workers; i++) {
+ 		int wstatus, pid;
+@@ -1484,11 +1484,11 @@ int main(int argc, char **argv)
+ 	if (env.list_test_names)
+ 		goto out;
+=20
++	print_all_error_logs();
++
+ 	fprintf(stdout, "Summary: %d/%d PASSED, %d SKIPPED, %d FAILED\n",
+ 		env.succ_cnt, env.sub_succ_cnt, env.skip_cnt, env.fail_cnt);
+=20
+-	print_all_error_logs();
+-
+ 	close(env.saved_netns_fd);
+ out:
+ 	if (!env.list_test_names && env.has_testmod)
+--=20
+2.30.2
+
