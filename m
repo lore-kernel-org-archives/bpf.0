@@ -2,139 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EB77C433EF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 20:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8901C433F5
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 21:00:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EEE9660F26
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 20:53:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD6AD61076
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 21:00:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235535AbhKLU4L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 15:56:11 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12016 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235335AbhKLU4K (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 15:56:10 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ACKpvvL016201
-        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 12:53:18 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=HbkCpS4xSO5+Wl8k5HkroNNAn+OrwvM0u56evJ3qjOs=;
- b=W9+exQAsIqkFQ4I971I35Hxzh48OIA2MRGzLKMciQ2Leu2+o1I2y4yfa8O6xNJk5WHlX
- KviTFQS9eit4kTC3SHxscK4NqNurz3CcyeNuK0dZQNJeTlqL6nXO7T3qxTXEHu0XVodo
- V6jsJWdEEIAWDIGh2ijwvvtzRZFN3+ouY0k= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c98k5a339-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 12:53:18 -0800
-Received: from intmgw002.06.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 12 Nov 2021 12:48:40 -0800
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id F266D25602D1; Fri, 12 Nov 2021 12:48:38 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: fix a tautological-constant-out-of-range-compare compiler warning
-Date:   Fri, 12 Nov 2021 12:48:38 -0800
-Message-ID: <20211112204838.3579953-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211112204833.3579457-1-yhs@fb.com>
-References: <20211112204833.3579457-1-yhs@fb.com>
+        id S235619AbhKLVC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 16:02:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56510 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235576AbhKLVC6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Nov 2021 16:02:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 7E75360231;
+        Fri, 12 Nov 2021 21:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636750807;
+        bh=ag2Tdmm/lYDghBFg1BWUUWn+s7sh3z1VhWqDjuapc7c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=S7oweAo++rAisUn0dOr0NO0Kpk6+ZKSVWYBrJoZqcgHxCAupOfazpkJwM7+rzV1Pm
+         pxlQVr90JSQAM02EhvSFlWvMswjvk1tDDbMUNGzQ9isLCJPAY+hTjBdDpLPky2iLRz
+         HdrXJsnUYi3U15EeOZw7e4W9Gmx+c4bxxq7pTzWLL6R4e0NobEVBW7EECtynrw0Slx
+         BbuSY7zmT7wd/LX29Ms+6mRxq78Ms2mecz3jzp053jQWHsF3m9yo2PnV0VXmb6Un6G
+         282HuU9Ql9JIqtq5dGsDe8gahCOrGedtEEw5j6m1NRlN4gEI337RnVdcsykYKG6ALR
+         PGmZOQL0LeBOg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: KdMkE9lUmfawbQq8bgtUurCkmr6sF4Bb
-X-Proofpoint-GUID: KdMkE9lUmfawbQq8bgtUurCkmr6sF4Bb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-12_05,2021-11-12_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 phishscore=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111120108
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] tools/runqslower: Fix cross-build
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163675080746.17861.4035490534028049921.git-patchwork-notify@kernel.org>
+Date:   Fri, 12 Nov 2021 21:00:07 +0000
+References: <20211112155128.565680-1-jean-philippe@linaro.org>
+In-Reply-To: <20211112155128.565680-1-jean-philippe@linaro.org>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        quentin@isovalent.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When using clang to build selftests with LLVM=3D1 in make commandline,
-I hit the following compiler warning:
+Hello:
 
-  benchs/bench_bloom_filter_map.c:84:46: warning: result of comparison of=
- constant 256
-    with expression of type '__u8' (aka 'unsigned char') is always false
-    [-Wtautological-constant-out-of-range-compare]
-                if (args.value_size < 2 || args.value_size > 256) {
-                                           ~~~~~~~~~~~~~~~ ^ ~~~
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-The reason is arg.vaue_size has type __u8, so comparison "args.value_size=
- > 256"
-is always false.
+On Fri, 12 Nov 2021 15:51:30 +0000 you wrote:
+> Commit be79505caf3f ("tools/runqslower: Install libbpf headers when
+> building") uses the target libbpf to build the host bpftool, which
+> doesn't work when cross-building:
+> 
+>   make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -C tools/bpf/runqslower O=/tmp/runqslower
+>   ...
+>     LINK    /tmp/runqslower/bpftool/bpftool
+>   /usr/bin/ld: /tmp/runqslower/libbpf/libbpf.a(libbpf-in.o): Relocations in generic ELF (EM: 183)
+>   /usr/bin/ld: /tmp/runqslower/libbpf/libbpf.a: error adding symbols: file in wrong format
+>   collect2: error: ld returned 1 exit status
+> 
+> [...]
 
-This patch fixed the issue by doing proper comparison before assigning th=
-e
-value to args.value_size. The patch also fixed the same issue in two
-other places.
+Here is the summary with links:
+  - [bpf] tools/runqslower: Fix cross-build
+    https://git.kernel.org/bpf/bpf/c/c9213bcf2fe1
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- .../bpf/benchs/bench_bloom_filter_map.c         | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c =
-b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-index 6eeeed2913e6..5bcb8a8cdeb2 100644
---- a/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_bloom_filter_map.c
-@@ -63,29 +63,34 @@ static const struct argp_option opts[] =3D {
-=20
- static error_t parse_arg(int key, char *arg, struct argp_state *state)
- {
-+	long ret;
-+
- 	switch (key) {
- 	case ARG_NR_ENTRIES:
--		args.nr_entries =3D strtol(arg, NULL, 10);
--		if (args.nr_entries =3D=3D 0) {
-+		ret =3D strtol(arg, NULL, 10);
-+		if (ret < 1 || ret > UINT_MAX) {
- 			fprintf(stderr, "Invalid nr_entries count.");
- 			argp_usage(state);
- 		}
-+		args.nr_entries =3D ret;
- 		break;
- 	case ARG_NR_HASH_FUNCS:
--		args.nr_hash_funcs =3D strtol(arg, NULL, 10);
--		if (args.nr_hash_funcs =3D=3D 0 || args.nr_hash_funcs > 15) {
-+		ret =3D strtol(arg, NULL, 10);
-+		if (ret < 1 || ret > 15) {
- 			fprintf(stderr,
- 				"The bloom filter must use 1 to 15 hash functions.");
- 			argp_usage(state);
- 		}
-+		args.nr_hash_funcs =3D ret;
- 		break;
- 	case ARG_VALUE_SIZE:
--		args.value_size =3D strtol(arg, NULL, 10);
--		if (args.value_size < 2 || args.value_size > 256) {
-+		ret =3D strtol(arg, NULL, 10);
-+		if (ret < 2 || ret > 256) {
- 			fprintf(stderr,
- 				"Invalid value size. Must be between 2 and 256 bytes");
- 			argp_usage(state);
- 		}
-+		args.value_size =3D ret;
- 		break;
- 	default:
- 		return ARGP_ERR_UNKNOWN;
---=20
-2.30.2
 
