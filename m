@@ -2,88 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79B6DC433EF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F9D1C433EF
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 606F060F46
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:07:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58BDC61076
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbhKLPJu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 10:09:50 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:57306 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229509AbhKLPJt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 10:09:49 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ACF4Utw026438
-        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 07:06:59 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=VX7J7Gzy96s0CAxZsM8utdZ4Hm+Uw3NgP1n/8spaUd4=;
- b=f0DYnfjNc5eJO6Py388rB8Qw+W71bLuqnOo4P6/TBWWZYWvoVIhC2ret3adeFBNfdFPk
- qG7OhtTQtv/m9NMzSOgba6tHYaRri+xkFEotWGSscfrXugrhYHMssdjBmokdPOuCYxVA
- mSHPVWx1XI+NvMFevLfWR9+NlF8+KgyhDMA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c98k575su-20
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 07:06:58 -0800
-Received: from intmgw002.06.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 12 Nov 2021 07:02:53 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id E4E021FA8FBEF; Fri, 12 Nov 2021 07:02:47 -0800 (PST)
-From:   Song Liu <songliubraving@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v3 bpf-next 0/2] introduce btf_tracing_ids
-Date:   Fri, 12 Nov 2021 07:02:41 -0800
-Message-ID: <20211112150243.1270987-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.30.2
+        id S232157AbhKLPXB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 10:23:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35228 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230019AbhKLPW6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Nov 2021 10:22:58 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id DA8D861075;
+        Fri, 12 Nov 2021 15:20:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1636730407;
+        bh=98H4O+FKpQ9XX0+bYQopI0JkrcUYcv+gZiOfk7O2tr0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uD5i+EEr4l3cSQu9kv7Ob+9kw9cOLtYnR40bHGvfA1iWxDQwH+M78nmfiMdHmyu21
+         7+OCK3xWvq3JcH11v6sHBXIn6qx8hdLJkLhbZiwJA4+uJAJ0QKr9sBsAO0baOlaQV0
+         qlRPFkqehYl6lGAe99+xHwmCPdLpw4wmfmQH4zx4/o8EgRPJm8+jfLumPm20kA3xxb
+         KGyiNMYifGtEtT6GFLzEM/rjfyO2kFcA6WL2AX9IG4kCGUyQz8iO2XQOw0p2rojYn3
+         WJk9iR2Uuz3uKtgIJNDB4C6/7nGxkuPMsaUa0ax/hmJ0yxvgzDLDaLOZPYg5y41JJ3
+         ltfpILv7AkPdg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: LQL69_kYiJkFyBXv0jMF-EvI2jsrhRBu
-X-Proofpoint-GUID: LQL69_kYiJkFyBXv0jMF-EvI2jsrhRBu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-12_05,2021-11-12_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- bulkscore=0 adultscore=0 mlxlogscore=384 phishscore=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111120087
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163673040779.12963.16453161654886346779.git-patchwork-notify@kernel.org>
+Date:   Fri, 12 Nov 2021 15:20:07 +0000
+References: <20211111161452.86864-1-lmb@cloudflare.com>
+In-Reply-To: <20211111161452.86864-1-lmb@cloudflare.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@cloudflare.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes v2 =3D> v3:
-1. Fix bug in task_iter.c. (Kernel test robot <lkp@intel.com>)
+Hello:
 
-Changes v1 =3D> v2:
-1. Add patch 2/2. (Alexei)
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-1/2 fixes issue with btf_task_struct_ids w/o CONFIG_DEBUG_INFO_BTF.
-2/2 replaces btf_task_struct_ids with easier to understand btf_tracing_id=
-s.
+On Thu, 11 Nov 2021 16:14:52 +0000 you wrote:
+> Ensure that two registers with a map_value loaded from a nested
+> map are considered equivalent for the purpose of state pruning
+> and don't cause the verifier to revisit a pruning point.
+> 
+> This uses a rather crude match on the number of insns visited by
+> the verifier, which might change in the future. I've therefore
+> tried to keep the code as "unpruneable" as possible by having
+> the code paths only converge on the second to last instruction.
+> 
+> [...]
 
-Song Liu (2):
-  bpf: extend BTF_ID_LIST_GLOBAL with parameter for number of IDs
-  bpf: introduce btf_tracing_ids
+Here is the summary with links:
+  - [bpf] selftests: bpf: check map in map pruning
+    https://git.kernel.org/bpf/bpf/c/a583309d968b
 
- include/linux/btf_ids.h       | 20 ++++++++++++++++----
- kernel/bpf/bpf_task_storage.c |  4 ++--
- kernel/bpf/btf.c              |  8 ++++----
- kernel/bpf/stackmap.c         |  2 +-
- kernel/bpf/task_iter.c        | 12 ++++++------
- kernel/bpf/verifier.c         |  2 +-
- kernel/trace/bpf_trace.c      |  4 ++--
- net/core/filter.c             |  6 +-----
- 8 files changed, 33 insertions(+), 25 deletions(-)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---
-2.30.2
+
