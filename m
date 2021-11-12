@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D6ADC433F5
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E506EC433F5
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:27:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 469B16124D
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:27:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3DB461284
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:27:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbhKLBaa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Nov 2021 20:30:30 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46632 "EHLO
+        id S229952AbhKLBal (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Nov 2021 20:30:41 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29410 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233638AbhKLBaa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 20:30:30 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AC1KPhJ026437
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:27:40 -0800
+        by vger.kernel.org with ESMTP id S231470AbhKLBal (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 20:30:41 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AC132mj032094
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:27:51 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=PF6/RQ9y6rpyxQrd4hK+BJDNu690s0g0zw0sP+6+a1g=;
- b=jw5NtQXX67EXHRxBrueAaPV3sQk9v8tmiQA0tJ3OC777tjii6jvEWqMWUmn4tEE39cxr
- 2qweH8mn4N8pBBCp5lsWgZgn41+JP1fWeJAMkfIXAs9tKyQiy85WrLS5MFPPf8PVT6J3
- T3hy6+eHIpdJuYPTU0yIE72SR6d2hmfetF0= 
+ bh=4ozWJivqtOVYCqxq1+Xi9/b5WTYJo9fZ1P5dKoo2Rkk=;
+ b=SzSRWAy3ZSehj2wyC+g4w07QEDYDISmk9SVD5/IU8kkI1ptchkQ0v86vVWyopvJN6zJo
+ 3l4m8QyXTBK2nAX5KUD26yB4hGJH8E2FO8PFgriBZG23xkRboawKj2lxua85dJEPc6ZE
+ QyBN9WmFV6w+zu69lASpq0+j8RhbuiLLfl4= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c98k52hkk-18
+        by mx0a-00082601.pphosted.com with ESMTP id 3c9br6s6st-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:27:40 -0800
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:27:51 -0800
+Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 11 Nov 2021 17:26:24 -0800
+ 15.1.2308.14; Thu, 11 Nov 2021 17:26:40 -0800
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id EFD9C24C5B2B; Thu, 11 Nov 2021 17:26:14 -0800 (PST)
+        id D757024C5B66; Thu, 11 Nov 2021 17:26:35 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "Jose E . Marchesi" <jose.marchesi@oracle.com>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 02/10] libbpf: Support BTF_KIND_TYPE_TAG
-Date:   Thu, 11 Nov 2021 17:26:14 -0800
-Message-ID: <20211112012614.1505315-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 06/10] selftests/bpf: Test BTF_KIND_DECL_TAG for deduplication
+Date:   Thu, 11 Nov 2021 17:26:35 -0800
+Message-ID: <20211112012635.1506853-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211112012604.1504583-1-yhs@fb.com>
 References: <20211112012604.1504583-1-yhs@fb.com>
@@ -52,331 +52,207 @@ Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: QgN-p2yUqb8Pj-6l4AUjzrEnRS2TuC7B
-X-Proofpoint-GUID: QgN-p2yUqb8Pj-6l4AUjzrEnRS2TuC7B
+X-Proofpoint-GUID: _whw_oAc2qKz4vOBXgiQrDVYyQBfIq4A
+X-Proofpoint-ORIG-GUID: _whw_oAc2qKz4vOBXgiQrDVYyQBfIq4A
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-11_09,2021-11-11_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- bulkscore=0 adultscore=0 mlxlogscore=966 phishscore=0 lowpriorityscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 impostorscore=0
+ mlxlogscore=935 mlxscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2111120005
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add libbpf support for BTF_KIND_TYPE_TAG.
+Add BTF_KIND_TYPE_TAG duplication unit tests.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/btf.c             | 23 +++++++++++++++++++++++
- tools/lib/bpf/btf.h             |  9 ++++++++-
- tools/lib/bpf/btf_dump.c        |  9 +++++++++
- tools/lib/bpf/libbpf.c          | 31 ++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf.map        |  1 +
- tools/lib/bpf/libbpf_internal.h |  2 ++
- 6 files changed, 73 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 139 ++++++++++++++++++-
+ 1 file changed, 135 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index fcec27622e7a..fadf089ae8fe 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -299,6 +299,7 @@ static int btf_type_size(const struct btf_type *t)
- 	case BTF_KIND_TYPEDEF:
- 	case BTF_KIND_FUNC:
- 	case BTF_KIND_FLOAT:
-+	case BTF_KIND_TYPE_TAG:
- 		return base_size;
- 	case BTF_KIND_INT:
- 		return base_size + sizeof(__u32);
-@@ -349,6 +350,7 @@ static int btf_bswap_type_rest(struct btf_type *t)
- 	case BTF_KIND_TYPEDEF:
- 	case BTF_KIND_FUNC:
- 	case BTF_KIND_FLOAT:
-+	case BTF_KIND_TYPE_TAG:
- 		return 0;
- 	case BTF_KIND_INT:
- 		*(__u32 *)(t + 1) =3D bswap_32(*(__u32 *)(t + 1));
-@@ -649,6 +651,7 @@ int btf__align_of(const struct btf *btf, __u32 id)
- 	case BTF_KIND_VOLATILE:
- 	case BTF_KIND_CONST:
- 	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_TYPE_TAG:
- 		return btf__align_of(btf, t->type);
- 	case BTF_KIND_ARRAY:
- 		return btf__align_of(btf, btf_array(t)->type);
-@@ -2235,6 +2238,22 @@ int btf__add_restrict(struct btf *btf, int ref_typ=
-e_id)
- 	return btf_add_ref_kind(btf, BTF_KIND_RESTRICT, NULL, ref_type_id);
- }
-=20
-+/*
-+ * Append new BTF_KIND_TYPE_TAG type with:
-+ *   - *value*, non-empty/non-NULL tag value;
-+ *   - *ref_type_id* - referenced type ID, it might not exist yet;
-+ * Returns:
-+ *   - >0, type ID of newly added BTF type;
-+ *   - <0, on error.
-+ */
-+int btf__add_type_tag(struct btf *btf, const char *value, int ref_type_i=
-d)
-+{
-+	if (!value|| !value[0])
-+		return libbpf_err(-EINVAL);
-+
-+	return btf_add_ref_kind(btf, BTF_KIND_TYPE_TAG, value, ref_type_id);
-+}
-+
- /*
-  * Append new BTF_KIND_FUNC type with:
-  *   - *name*, non-empty/non-NULL name;
-@@ -3639,6 +3658,7 @@ static int btf_dedup_prep(struct btf_dedup *d)
- 		case BTF_KIND_TYPEDEF:
- 		case BTF_KIND_FUNC:
- 		case BTF_KIND_FLOAT:
-+		case BTF_KIND_TYPE_TAG:
- 			h =3D btf_hash_common(t);
- 			break;
- 		case BTF_KIND_INT:
-@@ -3699,6 +3719,7 @@ static int btf_dedup_prim_type(struct btf_dedup *d,=
- __u32 type_id)
- 	case BTF_KIND_VAR:
- 	case BTF_KIND_DATASEC:
- 	case BTF_KIND_DECL_TAG:
-+	case BTF_KIND_TYPE_TAG:
- 		return 0;
-=20
- 	case BTF_KIND_INT:
-@@ -4297,6 +4318,7 @@ static int btf_dedup_ref_type(struct btf_dedup *d, =
-__u32 type_id)
- 	case BTF_KIND_PTR:
- 	case BTF_KIND_TYPEDEF:
- 	case BTF_KIND_FUNC:
-+	case BTF_KIND_TYPE_TAG:
- 		ref_type_id =3D btf_dedup_ref_type(d, t->type);
- 		if (ref_type_id < 0)
- 			return ref_type_id;
-@@ -4603,6 +4625,7 @@ int btf_type_visit_type_ids(struct btf_type *t, typ=
-e_id_visit_fn visit, void *ct
- 	case BTF_KIND_FUNC:
- 	case BTF_KIND_VAR:
- 	case BTF_KIND_DECL_TAG:
-+	case BTF_KIND_TYPE_TAG:
- 		return visit(&t->type, ctx);
-=20
- 	case BTF_KIND_ARRAY: {
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 45310c65e865..5c73a5b0a044 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -227,6 +227,7 @@ LIBBPF_API int btf__add_typedef(struct btf *btf, cons=
-t char *name, int ref_type_
- LIBBPF_API int btf__add_volatile(struct btf *btf, int ref_type_id);
- LIBBPF_API int btf__add_const(struct btf *btf, int ref_type_id);
- LIBBPF_API int btf__add_restrict(struct btf *btf, int ref_type_id);
-+LIBBPF_API int btf__add_type_tag(struct btf *btf, const char *value, int=
- ref_type_id);
-=20
- /* func and func_proto construction APIs */
- LIBBPF_API int btf__add_func(struct btf *btf, const char *name,
-@@ -458,7 +459,8 @@ static inline bool btf_is_mod(const struct btf_type *=
-t)
-=20
- 	return kind =3D=3D BTF_KIND_VOLATILE ||
- 	       kind =3D=3D BTF_KIND_CONST ||
--	       kind =3D=3D BTF_KIND_RESTRICT;
-+	       kind =3D=3D BTF_KIND_RESTRICT ||
-+	       kind =3D=3D BTF_KIND_TYPE_TAG;
- }
-=20
- static inline bool btf_is_func(const struct btf_type *t)
-@@ -491,6 +493,11 @@ static inline bool btf_is_decl_tag(const struct btf_=
-type *t)
- 	return btf_kind(t) =3D=3D BTF_KIND_DECL_TAG;
- }
-=20
-+static inline bool btf_is_type_tag(const struct btf_type *t)
-+{
-+	return btf_kind(t) =3D=3D BTF_KIND_TYPE_TAG;
-+}
-+
- static inline __u8 btf_int_encoding(const struct btf_type *t)
- {
- 	return BTF_INT_ENCODING(*(__u32 *)(t + 1));
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index b8cd7e4f557a..05f3e7dfec0a 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -330,6 +330,7 @@ static int btf_dump_mark_referenced(struct btf_dump *=
-d)
- 		case BTF_KIND_FUNC:
- 		case BTF_KIND_VAR:
- 		case BTF_KIND_DECL_TAG:
-+		case BTF_KIND_TYPE_TAG:
- 			d->type_states[t->type].referenced =3D 1;
- 			break;
-=20
-@@ -573,6 +574,7 @@ static int btf_dump_order_type(struct btf_dump *d, __=
-u32 id, bool through_ptr)
- 	case BTF_KIND_VOLATILE:
- 	case BTF_KIND_CONST:
- 	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_TYPE_TAG:
- 		return btf_dump_order_type(d, t->type, through_ptr);
-=20
- 	case BTF_KIND_FUNC_PROTO: {
-@@ -747,6 +749,7 @@ static void btf_dump_emit_type(struct btf_dump *d, __=
-u32 id, __u32 cont_id)
- 	case BTF_KIND_VOLATILE:
- 	case BTF_KIND_CONST:
- 	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_TYPE_TAG:
- 		btf_dump_emit_type(d, t->type, cont_id);
- 		break;
- 	case BTF_KIND_ARRAY:
-@@ -1167,6 +1170,7 @@ static void btf_dump_emit_type_decl(struct btf_dump=
- *d, __u32 id,
- 		case BTF_KIND_CONST:
- 		case BTF_KIND_RESTRICT:
- 		case BTF_KIND_FUNC_PROTO:
-+		case BTF_KIND_TYPE_TAG:
- 			id =3D t->type;
- 			break;
- 		case BTF_KIND_ARRAY:
-@@ -1335,6 +1339,11 @@ static void btf_dump_emit_type_chain(struct btf_du=
-mp *d,
- 		case BTF_KIND_RESTRICT:
- 			btf_dump_printf(d, " restrict");
- 			break;
-+		case BTF_KIND_TYPE_TAG:
-+			btf_dump_emit_mods(d, decls);
-+			name =3D btf_name_of(d, t->name_off);
-+			btf_dump_printf(d, " __attribute__((btf_type_tag(\"%s\")))", name);
-+			break;
- 		case BTF_KIND_ARRAY: {
- 			const struct btf_array *a =3D btf_array(t);
- 			const struct btf_type *next_t;
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7db14859b27c..de7e09a6b5ec 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -197,6 +197,8 @@ enum kern_feature_id {
- 	FEAT_PERF_LINK,
- 	/* BTF_KIND_DECL_TAG support */
- 	FEAT_BTF_DECL_TAG,
-+	/* BTF_KIND_TYPE_TAG support */
-+	FEAT_BTF_TYPE_TAG,
- 	__FEAT_CNT,
- };
-=20
-@@ -2076,6 +2078,7 @@ static const char *__btf_kind_str(__u16 kind)
- 	case BTF_KIND_DATASEC: return "datasec";
- 	case BTF_KIND_FLOAT: return "float";
- 	case BTF_KIND_DECL_TAG: return "decl_tag";
-+	case BTF_KIND_TYPE_TAG: return "type_tag";
- 	default: return "unknown";
- 	}
- }
-@@ -2588,8 +2591,10 @@ static bool btf_needs_sanitization(struct bpf_obje=
-ct *obj)
- 	bool has_float =3D kernel_supports(obj, FEAT_BTF_FLOAT);
- 	bool has_func =3D kernel_supports(obj, FEAT_BTF_FUNC);
- 	bool has_decl_tag =3D kernel_supports(obj, FEAT_BTF_DECL_TAG);
-+	bool has_type_tag =3D kernel_supports(obj, FEAT_BTF_TYPE_TAG);
-=20
--	return !has_func || !has_datasec || !has_func_global || !has_float || !=
-has_decl_tag;
-+	return !has_func || !has_datasec || !has_func_global || !has_float ||
-+	       !has_decl_tag || !has_type_tag;
- }
-=20
- static void bpf_object__sanitize_btf(struct bpf_object *obj, struct btf =
-*btf)
-@@ -2599,6 +2604,7 @@ static void bpf_object__sanitize_btf(struct bpf_obj=
-ect *obj, struct btf *btf)
- 	bool has_float =3D kernel_supports(obj, FEAT_BTF_FLOAT);
- 	bool has_func =3D kernel_supports(obj, FEAT_BTF_FUNC);
- 	bool has_decl_tag =3D kernel_supports(obj, FEAT_BTF_DECL_TAG);
-+	bool has_type_tag =3D kernel_supports(obj, FEAT_BTF_TYPE_TAG);
- 	struct btf_type *t;
- 	int i, j, vlen;
-=20
-@@ -2657,6 +2663,10 @@ static void bpf_object__sanitize_btf(struct bpf_ob=
-ject *obj, struct btf *btf)
- 			 */
- 			t->name_off =3D 0;
- 			t->info =3D BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 0);
-+		} else if (!has_type_tag && btf_is_type_tag(t)) {
-+			/* replace TYPE_TAG with a CONST */
-+			t->name_off =3D 0;
-+			t->info =3D BTF_INFO_ENC(BTF_KIND_CONST, 0, 0);
- 		}
- 	}
- }
-@@ -4460,6 +4470,22 @@ static int probe_kern_btf_decl_tag(void)
- 					     strs, sizeof(strs)));
- }
-=20
-+static int probe_kern_btf_type_tag(void)
-+{
-+	static const char strs[] =3D "\0tag";
-+	__u32 types[] =3D {
-+		/* int */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
-+		/* attr */
-+		BTF_TYPE_TYPE_TAG_ENC(1, 1),				/* [2] */
-+		/* ptr */
-+		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),	/* [3] */
-+	};
-+
-+	return probe_fd(libbpf__load_raw_btf((char *)types, sizeof(types),
-+					     strs, sizeof(strs)));
-+}
-+
- static int probe_kern_array_mmap(void)
- {
- 	struct bpf_create_map_attr attr =3D {
-@@ -4657,6 +4683,9 @@ static struct kern_feature_desc {
- 	[FEAT_BTF_DECL_TAG] =3D {
- 		"BTF_KIND_DECL_TAG support", probe_kern_btf_decl_tag,
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
+/selftests/bpf/prog_tests/btf.c
+index 88510a2d9858..4aa6343dc4c8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -6878,15 +6878,16 @@ static struct btf_dedup_test dedup_tests[] =3D {
+ 			BTF_RESTRICT_ENC(8),						/* [11] restrict */
+ 			BTF_FUNC_PROTO_ENC(1, 2),					/* [12] func_proto */
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
+-				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 8),
++				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 18),
+ 			BTF_FUNC_ENC(NAME_TBD, 12),					/* [13] func */
+ 			BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),				/* [14] float */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, -1),				/* [15] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, 1),				/* [16] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 7, -1),				/* [17] decl_tag */
++			BTF_TYPE_TAG_ENC(NAME_TBD, 8),					/* [18] type_tag */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q"),
++		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q\0R"),
  	},
-+	[FEAT_BTF_TYPE_TAG] =3D {
-+		"BTF_KIND_TYPE_TAG support", probe_kern_btf_type_tag,
+ 	.expect =3D {
+ 		.raw_types =3D {
+@@ -6907,15 +6908,16 @@ static struct btf_dedup_test dedup_tests[] =3D {
+ 			BTF_RESTRICT_ENC(8),						/* [11] restrict */
+ 			BTF_FUNC_PROTO_ENC(1, 2),					/* [12] func_proto */
+ 				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 1),
+-				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 8),
++				BTF_FUNC_PROTO_ARG_ENC(NAME_TBD, 18),
+ 			BTF_FUNC_ENC(NAME_TBD, 12),					/* [13] func */
+ 			BTF_TYPE_FLOAT_ENC(NAME_TBD, 2),				/* [14] float */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, -1),				/* [15] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 13, 1),				/* [16] decl_tag */
+ 			BTF_DECL_TAG_ENC(NAME_TBD, 7, -1),				/* [17] decl_tag */
++			BTF_TYPE_TAG_ENC(NAME_TBD, 8),					/* [18] type_tag */
+ 			BTF_END_RAW,
+ 		},
+-		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q"),
++		BTF_STR_SEC("\0A\0B\0C\0D\0E\0F\0G\0H\0I\0J\0K\0L\0M\0N\0O\0P\0Q\0R"),
+ 	},
+ },
+ {
+@@ -7221,6 +7223,135 @@ static struct btf_dedup_test dedup_tests[] =3D {
+ 		BTF_STR_SEC("\0t\0tag1\0tag2\0tag3"),
+ 	},
+ },
++{
++	.descr =3D "dedup: btf_type_tag #1",
++	.input =3D {
++		.raw_types =3D {
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [5] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 5),		/* [6] */
++			BTF_PTR_ENC(6),					/* [7] */
++			/* ptr -> tag1 -> int */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [8] */
++			BTF_PTR_ENC(8),					/* [9] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
 +	},
++	.expect =3D {
++		.raw_types =3D {
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* ptr -> tag1 -> int */
++			BTF_PTR_ENC(2),					/* [5] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++},
++{
++	.descr =3D "dedup: btf_type_tag #2",
++	.input =3D {
++		.raw_types =3D {
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* ptr -> tag2 -> int */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 1),		/* [5] */
++			BTF_PTR_ENC(5),					/* [6] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++	.expect =3D {
++		.raw_types =3D {
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* ptr -> tag2 -> int */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 1),		/* [5] */
++			BTF_PTR_ENC(5),					/* [6] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++},
++{
++	.descr =3D "dedup: btf_type_tag #3",
++	.input =3D {
++		.raw_types =3D {
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* ptr -> tag1 -> tag2 -> int */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 1),		/* [5] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 5),		/* [6] */
++			BTF_PTR_ENC(6),					/* [7] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++	.expect =3D {
++		.raw_types =3D {
++			/* ptr -> tag2 -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 2),		/* [3] */
++			BTF_PTR_ENC(3),					/* [4] */
++			/* ptr -> tag1 -> tag2 -> int */
++			BTF_TYPE_TAG_ENC(NAME_NTH(2), 1),		/* [5] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 5),		/* [6] */
++			BTF_PTR_ENC(6),					/* [7] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1\0tag2"),
++	},
++},
++{
++	.descr =3D "dedup: btf_type_tag #4",
++	.input =3D {
++		.raw_types =3D {
++			/* ptr -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_PTR_ENC(2),					/* [3] */
++			/* ptr -> tag1 -> long */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 64, 8),	/* [4] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 4),		/* [5] */
++			BTF_PTR_ENC(5),					/* [6] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1"),
++	},
++	.expect =3D {
++		.raw_types =3D {
++			/* ptr -> tag1 -> int */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 1),		/* [2] */
++			BTF_PTR_ENC(2),					/* [3] */
++			/* ptr -> tag1 -> long */
++			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 64, 8),	/* [4] */
++			BTF_TYPE_TAG_ENC(NAME_NTH(1), 4),		/* [5] */
++			BTF_PTR_ENC(5),					/* [6] */
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0tag1"),
++	},
++},
+=20
  };
 =20
- static bool kernel_supports(const struct bpf_object *obj, enum kern_feat=
-ure_id feat_id)
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 9e91aa8da303..6a59514a48cf 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -403,6 +403,7 @@ LIBBPF_0.6.0 {
- 		bpf_program__set_extra_flags;
- 		btf__add_btf;
- 		btf__add_decl_tag;
-+		btf__add_type_tag;
- 		btf__dedup;
- 		btf__dedup_deprecated;
- 		btf__raw_data;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-index 2d873c962f99..5490fa98c0a6 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -73,6 +73,8 @@
- 	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_FLOAT, 0, 0), sz)
- #define BTF_TYPE_DECL_TAG_ENC(value, type, component_idx) \
- 	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_DECL_TAG, 0, 0), type), (comp=
-onent_idx)
-+#define BTF_TYPE_TYPE_TAG_ENC(value, type) \
-+	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_TYPE_TAG, 0, 0), type)
-=20
- #ifndef likely
- #define likely(x) __builtin_expect(!!(x), 1)
 --=20
 2.30.2
 
