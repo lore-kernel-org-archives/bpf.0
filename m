@@ -2,85 +2,247 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB09C433EF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F89C433EF
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:02:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4EC4660E93
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:01:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41D0B60EB9
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:02:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbhKLHEo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 02:04:44 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22934 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230259AbhKLHEo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 02:04:44 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1AC5TOME003525
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:01:53 -0800
+        id S232887AbhKLHFP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 02:05:15 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44796 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230259AbhKLHFP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 02:05:15 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AC70gPh013343
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:02:24 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=v88wNH+SO7MKD6P1/lFZoe4stJ84ryDclqwta/Kju40=;
- b=J/ke9Elyl7vuxBhT6XMmqVfEUeuWTKZtpO9K3m5TdbtZN1biBXDZZbpFEhyv/MDb3AI3
- xmll0DuhAsMukOYpEJCbK0ScdwCXP5JKH4L/tE4Jcrx0SddNrjj8FhykYPIh9CUOFv8G
- eExvb9ID6ged8A26kwgtVQM61UfDN0ujRFQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 3c9brfjqvu-6
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=npgU1vUSQ1KqZ26OsFW8XRRUcdH9MEY8I5xa5NDRQAo=;
+ b=MG3bIF1VDr5FR+vJoi4HJg4rVHgaRMXuMDD4DTIZy3/o780PGwdTQyK4jPJQehfJ2Xgs
+ 1rzYZtmg7ksMHWrXSbWw7obz52W/9K/FSUy0bqA1ueaH30SHBdMCojT8R/bFihxbtMvd
+ svAi7oTVozYVmv2xtBAGGsMBiJ3R0pS+SAo= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3c9dtk1b8b-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:01:53 -0800
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:02:24 -0800
+Received: from intmgw001.05.ash7.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 11 Nov 2021 23:01:49 -0800
+ 15.1.2308.14; Thu, 11 Nov 2021 23:02:10 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 40D0B1F8ACEA0; Thu, 11 Nov 2021 23:01:45 -0800 (PST)
+        id 4E8CE1F8ACF5D; Thu, 11 Nov 2021 23:01:57 -0800 (PST)
 From:   Song Liu <songliubraving@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kernel-team@fb.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2 bpf-next 0/2] introduce btf_tracing_ids
-Date:   Thu, 11 Nov 2021 23:01:29 -0800
-Message-ID: <20211112070131.3131449-1-songliubraving@fb.com>
+Subject: [PATCH v2 bpf-next 2/2] bpf: introduce btf_tracing_ids
+Date:   Thu, 11 Nov 2021 23:01:31 -0800
+Message-ID: <20211112070131.3131449-3-songliubraving@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211112070131.3131449-1-songliubraving@fb.com>
+References: <20211112070131.3131449-1-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: bpJBGby-zfAW1zqBsUh1-d7ntnL9SyFc
-X-Proofpoint-GUID: bpJBGby-zfAW1zqBsUh1-d7ntnL9SyFc
+X-Proofpoint-ORIG-GUID: wYUVnPlsyGXfcUk-1iNJ7s8qWN6pqbI3
+X-Proofpoint-GUID: wYUVnPlsyGXfcUk-1iNJ7s8qWN6pqbI3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-12_02,2021-11-11_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501
- adultscore=0 mlxscore=0 mlxlogscore=391 phishscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=921 malwarescore=0
+ suspectscore=0 priorityscore=1501 spamscore=0 impostorscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2111120037
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes v1 =3D> v2:
-1. Add patch 2/2. (Alexei)
+Similar to btf_sock_ids, btf_tracing_ids provides btf ID for task_struct,
+file, and vm_area_struct via easy to understand format like
+btf_tracing_ids[BTF_TRACING_TYPE_[TASK|file|VMA]].
 
-1/2 fixes issue with btf_task_struct_ids w/o CONFIG_DEBUG_INFO_BTF.
-2/2 replaces btf_task_struct_ids with easier to understand btf_tracing_id=
-s.
-
-Song Liu (2):
-  bpf: extend BTF_ID_LIST_GLOBAL with parameter for number of IDs
-  bpf: introduce btf_tracing_ids
-
- include/linux/btf_ids.h       | 20 ++++++++++++++++----
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ include/linux/btf_ids.h       | 14 +++++++++++++-
  kernel/bpf/bpf_task_storage.c |  4 ++--
  kernel/bpf/btf.c              |  8 ++++----
  kernel/bpf/stackmap.c         |  2 +-
  kernel/bpf/task_iter.c        | 12 ++++++------
  kernel/bpf/verifier.c         |  2 +-
  kernel/trace/bpf_trace.c      |  4 ++--
- net/core/filter.c             |  6 +-----
- 8 files changed, 33 insertions(+), 25 deletions(-)
+ 7 files changed, 29 insertions(+), 17 deletions(-)
 
---
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 6bb42b785293a..919c0fde1c515 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -189,6 +189,18 @@ MAX_BTF_SOCK_TYPE,
+ extern u32 btf_sock_ids[];
+ #endif
+=20
+-extern u32 btf_task_struct_ids[];
++#define BTF_TRACING_TYPE_xxx	\
++	BTF_TRACING_TYPE(BTF_TRACING_TYPE_TASK, task_struct)	\
++	BTF_TRACING_TYPE(BTF_TRACING_TYPE_FILE, file)		\
++	BTF_TRACING_TYPE(BTF_TRACING_TYPE_VMA, vm_area_struct)
++
++enum {
++#define BTF_TRACING_TYPE(name, type) name,
++BTF_TRACING_TYPE_xxx
++#undef BTF_TRACING_TYPE
++MAX_BTF_TRACING_TYPE,
++};
++
++extern u32 btf_tracing_ids[];
+=20
+ #endif
+diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.=
+c
+index ebfa8bc908923..bb69aea1a7776 100644
+--- a/kernel/bpf/bpf_task_storage.c
++++ b/kernel/bpf/bpf_task_storage.c
+@@ -323,7 +323,7 @@ const struct bpf_func_proto bpf_task_storage_get_prot=
+o =3D {
+ 	.ret_type =3D RET_PTR_TO_MAP_VALUE_OR_NULL,
+ 	.arg1_type =3D ARG_CONST_MAP_PTR,
+ 	.arg2_type =3D ARG_PTR_TO_BTF_ID,
+-	.arg2_btf_id =3D &btf_task_struct_ids[0],
++	.arg2_btf_id =3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ 	.arg3_type =3D ARG_PTR_TO_MAP_VALUE_OR_NULL,
+ 	.arg4_type =3D ARG_ANYTHING,
+ };
+@@ -334,5 +334,5 @@ const struct bpf_func_proto bpf_task_storage_delete_p=
+roto =3D {
+ 	.ret_type =3D RET_INTEGER,
+ 	.arg1_type =3D ARG_CONST_MAP_PTR,
+ 	.arg2_type =3D ARG_PTR_TO_BTF_ID,
+-	.arg2_btf_id =3D &btf_task_struct_ids[0],
++	.arg2_btf_id =3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ };
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 2a9d8a1fee1de..6b9d23be1e992 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6354,10 +6354,10 @@ const struct bpf_func_proto bpf_btf_find_by_name_=
+kind_proto =3D {
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+=20
+-BTF_ID_LIST_GLOBAL(btf_task_struct_ids, 3)
+-BTF_ID(struct, task_struct)
+-BTF_ID(struct, file)
+-BTF_ID(struct, vm_area_struct)
++BTF_ID_LIST_GLOBAL(btf_tracing_ids, MAX_BTF_TRACING_TYPE)
++#define BTF_TRACING_TYPE(name, type) BTF_ID(struct, type)
++BTF_TRACING_TYPE_xxx
++#undef BTF_TRACING_TYPE
+=20
+ /* BTF ID set registration API for modules */
+=20
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 1de0a1b03636e..49e567209c6b6 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -489,7 +489,7 @@ const struct bpf_func_proto bpf_get_task_stack_proto =
+=3D {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+-	.arg1_btf_id	=3D &btf_task_struct_ids[0],
++	.arg1_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ 	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
+ 	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg4_type	=3D ARG_ANYTHING,
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index f171479f7dd6b..0aa14afa8173e 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -622,7 +622,7 @@ const struct bpf_func_proto bpf_find_vma_proto =3D {
+ 	.func		=3D bpf_find_vma,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+-	.arg1_btf_id	=3D &btf_task_struct_ids[0],
++	.arg1_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ 	.arg2_type	=3D ARG_ANYTHING,
+ 	.arg3_type	=3D ARG_PTR_TO_FUNC,
+ 	.arg4_type	=3D ARG_PTR_TO_STACK_OR_NULL,
+@@ -652,19 +652,19 @@ static int __init task_iter_init(void)
+ 		init_irq_work(&work->irq_work, do_mmap_read_unlock);
+ 	}
+=20
+-	task_reg_info.ctx_arg_info[0].btf_id =3D btf_task_struct_ids[0];
++	task_reg_info.ctx_arg_info[0].btf_id =3D &btf_tracing_ids[BTF_TRACING_T=
+YPE_TASK];
+ 	ret =3D bpf_iter_reg_target(&task_reg_info);
+ 	if (ret)
+ 		return ret;
+=20
+-	task_file_reg_info.ctx_arg_info[0].btf_id =3D btf_task_struct_ids[0];
+-	task_file_reg_info.ctx_arg_info[1].btf_id =3D btf_task_struct_ids[1];
++	task_file_reg_info.ctx_arg_info[0].btf_id =3D &btf_tracing_ids[BTF_TRAC=
+ING_TYPE_TASK];
++	task_file_reg_info.ctx_arg_info[1].btf_id =3D &btf_tracing_ids[BTF_TRAC=
+ING_TYPE_FILE];
+ 	ret =3D  bpf_iter_reg_target(&task_file_reg_info);
+ 	if (ret)
+ 		return ret;
+=20
+-	task_vma_reg_info.ctx_arg_info[0].btf_id =3D btf_task_struct_ids[0];
+-	task_vma_reg_info.ctx_arg_info[1].btf_id =3D btf_task_struct_ids[2];
++	task_vma_reg_info.ctx_arg_info[0].btf_id =3D &btf_tracing_ids[BTF_TRACI=
+NG_TYPE_TASK];
++	task_vma_reg_info.ctx_arg_info[1].btf_id =3D &btf_tracing_ids[BTF_TRACI=
+NG_TYPE_VMA];
+ 	return bpf_iter_reg_target(&task_vma_reg_info);
+ }
+ late_initcall(task_iter_init);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1aafb43f61d1c..d31a031ab3775 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6147,7 +6147,7 @@ static int set_find_vma_callback_state(struct bpf_v=
+erifier_env *env,
+ 	callee->regs[BPF_REG_2].type =3D PTR_TO_BTF_ID;
+ 	__mark_reg_known_zero(&callee->regs[BPF_REG_2]);
+ 	callee->regs[BPF_REG_2].btf =3D  btf_vmlinux;
+-	callee->regs[BPF_REG_2].btf_id =3D btf_task_struct_ids[2];
++	callee->regs[BPF_REG_2].btf_id =3D btf_tracing_ids[BTF_TRACING_TYPE_VMA=
+],
+=20
+ 	/* pointer to stack or null */
+ 	callee->regs[BPF_REG_3] =3D caller->regs[BPF_REG_4];
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 390176a3031ab..25ea521fb8f14 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -764,7 +764,7 @@ const struct bpf_func_proto bpf_get_current_task_btf_=
+proto =3D {
+ 	.func		=3D bpf_get_current_task_btf,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_PTR_TO_BTF_ID,
+-	.ret_btf_id	=3D &btf_task_struct_ids[0],
++	.ret_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ };
+=20
+ BPF_CALL_1(bpf_task_pt_regs, struct task_struct *, task)
+@@ -779,7 +779,7 @@ const struct bpf_func_proto bpf_task_pt_regs_proto =3D=
+ {
+ 	.func		=3D bpf_task_pt_regs,
+ 	.gpl_only	=3D true,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+-	.arg1_btf_id	=3D &btf_task_struct_ids[0],
++	.arg1_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+ 	.ret_type	=3D RET_PTR_TO_BTF_ID,
+ 	.ret_btf_id	=3D &bpf_task_pt_regs_ids[0],
+ };
+--=20
 2.30.2
+
