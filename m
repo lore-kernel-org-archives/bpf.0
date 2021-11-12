@@ -2,76 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6502C433EF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 19:29:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB3A4C433F5
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 19:29:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFDC960F41
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 19:29:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD30361039
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 19:29:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbhKLTcG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 14:32:06 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64290 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229892AbhKLTcG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 14:32:06 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ACJSmqG016367
-        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 11:29:14 -0800
+        id S232572AbhKLTcW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 14:32:22 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40098 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229892AbhKLTcT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 14:32:19 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1ACJTHBl027399
+        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 11:29:27 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=jNf1dNKFhLMvuyBHeXb1PdRLKoOl78cCq3lFBrUpdk0=;
- b=KImUxQMP0kqZdOpYrWe/IrXmGtDxDw/303bk7y74k3rzyOL0g4+xdhvNQNnDNNcjbqlN
- M0ZCIbiaRv5Ba6+aedOfOz5wuJEkUe9QOJgwwgL7lKKNTB4ohm+DQNGywZqrTOU91gH1
- r8M6TuZci6uFDjov0Xq+KSyrwyeWjfYuhGg= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=86kIcNsvaqDvX2Hx0i789sntqyT+gLkR7h955WY3cvU=;
+ b=nPILvdLCznt1IkTi2knQDdO/5diUoA/iM8mscx76DTWhtTgWid/hMe9BOAIE4Phd/Mpm
+ PHx2pUY3AMhNXNB7mEoXzdzZlL56HrWJhIBCxrS6xG36lJGOlfUXCwvo+at5xoF8u5wd
+ F4AoY65APMbQnqfGxbub2GkAU2AlmjxeDhQ= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c9x54r3vf-15
+        by m0001303.ppops.net with ESMTP id 3c9ukssf83-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 11:29:14 -0800
+        for <bpf@vger.kernel.org>; Fri, 12 Nov 2021 11:29:27 -0800
 Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 12 Nov 2021 11:25:46 -0800
+ 15.1.2308.14; Fri, 12 Nov 2021 11:25:48 -0800
 Received: by devvm2661.vll0.facebook.com (Postfix, from userid 200310)
-        id B83C16C83833; Fri, 12 Nov 2021 11:25:39 -0800 (PST)
+        id C68C66C83839; Fri, 12 Nov 2021 11:25:39 -0800 (PST)
 From:   Yucong Sun <fallentree@fb.com>
 To:     <bpf@vger.kernel.org>
-CC:     <andrii@kernel.org>, <fallentree@fb.com>
-Subject: [PATCH bpf-next 0/4] selftests/bpf: improve test_progs
-Date:   Fri, 12 Nov 2021 11:25:31 -0800
-Message-ID: <20211112192535.898352-1-fallentree@fb.com>
+CC:     <andrii@kernel.org>, <fallentree@fb.com>,
+        Yucong Sun <sunyucong@gmail.com>
+Subject: [PATCH bpf-next 3/4] selftests/bpf: mark variable as static
+Date:   Fri, 12 Nov 2021 11:25:34 -0800
+Message-ID: <20211112192535.898352-4-fallentree@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211112192535.898352-1-fallentree@fb.com>
+References: <20211112192535.898352-1-fallentree@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: jXI3cUsmvZXUSP-vn0jX1e7sQE1u2I7o
-X-Proofpoint-GUID: jXI3cUsmvZXUSP-vn0jX1e7sQE1u2I7o
+X-Proofpoint-ORIG-GUID: bqBg83amcP9IGO2ChimVwMOA-O6VDueI
+X-Proofpoint-GUID: bqBg83amcP9IGO2ChimVwMOA-O6VDueI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-12_05,2021-11-12_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- spamscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
- bulkscore=0 priorityscore=1501 clxscore=1015 suspectscore=0 adultscore=0
- mlxlogscore=388 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 priorityscore=1501 spamscore=0 mlxlogscore=844
+ malwarescore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2111120103
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-various improvement to test_progs, including new '--timing' feature.
+From: Yucong Sun <sunyucong@gmail.com>
 
-Yucong Sun (4):
-  selftests/bpf: Move summary line after the error logs
-  selftests/bpf: variable naming fix
-  selftests/bpf: mark variable as static
-  selftests/bpf: Add timing to tests_progs
+Fix warnings from checkstyle.pl
 
- tools/testing/selftests/bpf/test_progs.c | 153 +++++++++++++++++++----
- tools/testing/selftests/bpf/test_progs.h |   2 +
- 2 files changed, 134 insertions(+), 21 deletions(-)
+Signed-off-by: Yucong Sun <sunyucong@gmail.com>
+---
+ tools/testing/selftests/bpf/test_progs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index 926475aa10bb..296928948bb9 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -473,11 +473,11 @@ static struct prog_test_def prog_test_defs[] =3D {
+ #include <prog_tests/tests.h>
+ #undef DEFINE_TEST
+ };
+-const int prog_test_cnt =3D ARRAY_SIZE(prog_test_defs);
++static const int prog_test_cnt =3D ARRAY_SIZE(prog_test_defs);
+=20
+ const char *argp_program_version =3D "test_progs 0.1";
+ const char *argp_program_bug_address =3D "<bpf@vger.kernel.org>";
+-const char argp_program_doc[] =3D "BPF selftests test runner";
++static const char argp_program_doc[] =3D "BPF selftests test runner";
+=20
+ enum ARG_KEYS {
+ 	ARG_TEST_NUM =3D 'n',
 --=20
 2.30.2
 
