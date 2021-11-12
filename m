@@ -2,217 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A1E0C433EF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:29:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE95BC433F5
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:46:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B15561269
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:29:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F5366052B
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 01:46:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbhKLBcE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 11 Nov 2021 20:32:04 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36258 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229908AbhKLBcD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 11 Nov 2021 20:32:03 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AC1E2br023078
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:29:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=qSUwyYkxxmuhBND29iuCdZ7gzkPdmTt+KP/WveLpBjA=;
- b=TWVE6bTDTfzFxb7CYYYFqQFxLbpLO/HFNAsZVQvQAhEM6Gq5AlRhsn4JVgVlGAJZpRi7
- D90a3sH7woBFRKchb+pVuL77b9RT9wJBuJpW4wjf44HLKFuGy8RqCX4MCecOIhnkD83S
- hb58mCGu2qw3N0EyG0P6mb5sTzjhJ3GdwvM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c9dtk06u6-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:29:13 -0800
-Received: from intmgw001.05.ash7.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 11 Nov 2021 17:29:12 -0800
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 6AF9424C5B45; Thu, 11 Nov 2021 17:26:25 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+        id S230360AbhKLBs6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 11 Nov 2021 20:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230308AbhKLBs5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 11 Nov 2021 20:48:57 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D811C061766
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:46:08 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id t5-20020a17090a4e4500b001a0a284fcc2so6044147pjl.2
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 17:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jDCsBHbV8od8GRczENL1rwrYnS8Z44BcmYulsw6L8NE=;
+        b=EdWosODTx6fQ6lKw5r+L8QC4a9W3cxIdt12KBSGpNc/e9j3lTit5ae+Bh1arTGugxe
+         2QLBjKQc245ARKiX4ifxJAXaR6jHhaqZRa02B5yr0SDNw6rA6a5iAWIEVXalSXXzC1vr
+         7keRCzcQjiSy52OlZfV78RtITqCpApu9R4iqNrnK1QqxEo19KYWfSI5hKRjKj0rgV0cD
+         nUBz9yW05q/pHqfM7vLDBC7+BBcm925K1xEqDCZvVRU0tXSXwhyZknt+0f6in9x7y8By
+         rv7J4cVX6NszOed+wNs2+BlTygzJeuYUbnvVjeKgJASqlbY0uOlg6do3qU9/Y0sxX5Pn
+         nRHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jDCsBHbV8od8GRczENL1rwrYnS8Z44BcmYulsw6L8NE=;
+        b=kVFbp3g15EDYF91SN5mQMPK0xJoYyKjv1jx+fd3t4XEg3qPqeGIVxfCKVDmj6bQJ6R
+         UlUz/MYoMtLlVrZTJoS3KTa9tHG4mOesuddXULa5A6/k91uaONK3h9pvO+sWKlajjfte
+         ZXbL7Y3rkHRl9dfAAgM0weabFkr2fBIFepd05GS4A5E+rHh++n3X9ZfbbgikybiTVR6y
+         e/OVrw6oBfFQW+c4XR3jPFflHbSCTRTVtvuC4z2Bt4sKoQvW5zQE57RKsb5/wS3NPN3e
+         ZXBepnvyUYjw6tuHB2gnT879/cIfUdeZJgXmbbei2I1/w5SW89LwnbKoYTe9vzeNgvp1
+         lsIA==
+X-Gm-Message-State: AOAM532bGyAvIeikJ5cXYm1mC9ryNXrXVOLV19ZRUgViBcZfllU6mh8v
+        8wIwhWdXLEziFNihPECTg/zHUd1j9zIyFCtxgqg=
+X-Google-Smtp-Source: ABdhPJwyPaXKANCxUPmMEJHFjA+ebOe2yKY0dZPU2SCENjeAkO2xpWkRyPTksOFdvf+cTeqcFSCdH/GkU2SJx6vy6fo=
+X-Received: by 2002:a17:902:d491:b0:142:892d:a89 with SMTP id
+ c17-20020a170902d49100b00142892d0a89mr4097123plg.20.1636681567514; Thu, 11
+ Nov 2021 17:46:07 -0800 (PST)
+MIME-Version: 1.0
+References: <20211112012604.1504583-1-yhs@fb.com>
+In-Reply-To: <20211112012604.1504583-1-yhs@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 11 Nov 2021 17:45:56 -0800
+Message-ID: <CAADnVQKm3bT-fA_zXv75MpM6E+UaL-iHnGKQmJ09X6bB2khm+w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 00/10] Support BTF_KIND_TYPE_TAG for
+ btf_type_tag attributes
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "Jose E . Marchesi" <jose.marchesi@oracle.com>,
-        <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 04/10] selftests/bpf: Test libbpf API function btf__add_type_tag()
-Date:   Thu, 11 Nov 2021 17:26:25 -0800
-Message-ID: <20211112012625.1505748-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211112012604.1504583-1-yhs@fb.com>
-References: <20211112012604.1504583-1-yhs@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: CbJuYCEaXHevHCtNj1bLqXib2-0wzbDi
-X-Proofpoint-GUID: CbJuYCEaXHevHCtNj1bLqXib2-0wzbDi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-11_09,2021-11-11_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=932 malwarescore=0
- suspectscore=0 priorityscore=1501 spamscore=0 impostorscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111120005
-X-FB-Internal: deliver
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add unit tests for btf__add_type_tag().
+On Thu, Nov 11, 2021 at 5:26 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> LLVM patches ([1] for clang, [2] and [3] for BPF backend)
+> added support for btf_type_tag attributes. This patch
+> added support for the kernel.
+>
+> The main motivation for btf_type_tag is to bring kernel
+> annotations __user, __rcu etc. to btf. With such information
+> available in btf, bpf verifier can detect mis-usages
+> and reject the program. For example, for __user tagged pointer,
+> developers can then use proper helper like bpf_probe_read_kernel()
+> etc. to read the data.
+>
+> BTF_KIND_TYPE_TAG may also useful for other tracing
+> facility where instead of to require user to specify
+> kernel/user address type, the kernel can detect it
+> by itself with btf.
+>
+> Patch 1 added support in kernel, Patch 2 for libbpf and Patch 3
+> for bpftool. Patches 4-9 are for bpf selftests and Patch 10
+> updated docs/bpf/btf.rst file with new btf kind.
+>
+>   [1] https://reviews.llvm.org/D111199
+>   [2] https://reviews.llvm.org/D113222
+>   [3] https://reviews.llvm.org/D113496
+>
+> Changelogs:
+>   v2 -> v3:
+>     - rebase to resolve merge conflicts.
+>   v1 -> v2:
+>     - add more dedup tests.
+>     - remove build requirement for LLVM=1.
+>     - remove testing macro __has_attribute in bpf programs
+>       as it is always defined in recent clang compilers.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/testing/selftests/bpf/btf_helpers.c     |  4 +-
- .../selftests/bpf/prog_tests/btf_write.c      | 67 +++++++++++--------
- 2 files changed, 43 insertions(+), 28 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/se=
-lftests/bpf/btf_helpers.c
-index acb59202486d..b5941d514e17 100644
---- a/tools/testing/selftests/bpf/btf_helpers.c
-+++ b/tools/testing/selftests/bpf/btf_helpers.c
-@@ -25,11 +25,12 @@ static const char * const btf_kind_str_mapping[] =3D =
-{
- 	[BTF_KIND_DATASEC]	=3D "DATASEC",
- 	[BTF_KIND_FLOAT]	=3D "FLOAT",
- 	[BTF_KIND_DECL_TAG]	=3D "DECL_TAG",
-+	[BTF_KIND_TYPE_TAG]	=3D "TYPE_TAG",
- };
-=20
- static const char *btf_kind_str(__u16 kind)
- {
--	if (kind > BTF_KIND_DECL_TAG)
-+	if (kind > BTF_KIND_TYPE_TAG)
- 		return "UNKNOWN";
- 	return btf_kind_str_mapping[kind];
- }
-@@ -109,6 +110,7 @@ int fprintf_btf_type_raw(FILE *out, const struct btf =
-*btf, __u32 id)
- 	case BTF_KIND_VOLATILE:
- 	case BTF_KIND_RESTRICT:
- 	case BTF_KIND_TYPEDEF:
-+	case BTF_KIND_TYPE_TAG:
- 		fprintf(out, " type_id=3D%u", t->type);
- 		break;
- 	case BTF_KIND_ARRAY: {
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_write.c b/tools/t=
-esting/selftests/bpf/prog_tests/btf_write.c
-index b912eeb0b6b4..addf99c05896 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_write.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_write.c
-@@ -297,6 +297,16 @@ static void gen_btf(struct btf *btf)
- 	ASSERT_EQ(btf_decl_tag(t)->component_idx, 1, "tag_component_idx");
- 	ASSERT_STREQ(btf_type_raw_dump(btf, 19),
- 		     "[19] DECL_TAG 'tag2' type_id=3D14 component_idx=3D1", "raw_dump"=
-);
-+
-+	/* TYPE_TAG */
-+	id =3D btf__add_type_tag(btf, "tag1", 1);
-+	ASSERT_EQ(id, 20, "tag_id");
-+	t =3D btf__type_by_id(btf, 20);
-+	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "tag1", "tag_value")=
-;
-+	ASSERT_EQ(btf_kind(t), BTF_KIND_TYPE_TAG, "tag_kind");
-+	ASSERT_EQ(t->type, 1, "tag_type");
-+	ASSERT_STREQ(btf_type_raw_dump(btf, 20),
-+		     "[20] TYPE_TAG 'tag1' type_id=3D1", "raw_dump");
- }
-=20
- static void test_btf_add()
-@@ -337,7 +347,8 @@ static void test_btf_add()
- 		"[17] DATASEC 'datasec1' size=3D12 vlen=3D1\n"
- 		"\ttype_id=3D1 offset=3D4 size=3D8",
- 		"[18] DECL_TAG 'tag1' type_id=3D16 component_idx=3D-1",
--		"[19] DECL_TAG 'tag2' type_id=3D14 component_idx=3D1");
-+		"[19] DECL_TAG 'tag2' type_id=3D14 component_idx=3D1",
-+		"[20] TYPE_TAG 'tag1' type_id=3D1");
-=20
- 	btf__free(btf);
- }
-@@ -359,7 +370,7 @@ static void test_btf_add_btf()
- 	gen_btf(btf2);
-=20
- 	id =3D btf__add_btf(btf1, btf2);
--	if (!ASSERT_EQ(id, 20, "id"))
-+	if (!ASSERT_EQ(id, 21, "id"))
- 		goto cleanup;
-=20
- 	VALIDATE_RAW_BTF(
-@@ -391,35 +402,37 @@ static void test_btf_add_btf()
- 		"\ttype_id=3D1 offset=3D4 size=3D8",
- 		"[18] DECL_TAG 'tag1' type_id=3D16 component_idx=3D-1",
- 		"[19] DECL_TAG 'tag2' type_id=3D14 component_idx=3D1",
-+		"[20] TYPE_TAG 'tag1' type_id=3D1",
-=20
- 		/* types appended from the second BTF */
--		"[20] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNE=
-D",
--		"[21] PTR '(anon)' type_id=3D20",
--		"[22] CONST '(anon)' type_id=3D24",
--		"[23] VOLATILE '(anon)' type_id=3D22",
--		"[24] RESTRICT '(anon)' type_id=3D23",
--		"[25] ARRAY '(anon)' type_id=3D21 index_type_id=3D20 nr_elems=3D10",
--		"[26] STRUCT 's1' size=3D8 vlen=3D2\n"
--		"\t'f1' type_id=3D20 bits_offset=3D0\n"
--		"\t'f2' type_id=3D20 bits_offset=3D32 bitfield_size=3D16",
--		"[27] UNION 'u1' size=3D8 vlen=3D1\n"
--		"\t'f1' type_id=3D20 bits_offset=3D0 bitfield_size=3D16",
--		"[28] ENUM 'e1' size=3D4 vlen=3D2\n"
-+		"[21] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNE=
-D",
-+		"[22] PTR '(anon)' type_id=3D21",
-+		"[23] CONST '(anon)' type_id=3D25",
-+		"[24] VOLATILE '(anon)' type_id=3D23",
-+		"[25] RESTRICT '(anon)' type_id=3D24",
-+		"[26] ARRAY '(anon)' type_id=3D22 index_type_id=3D21 nr_elems=3D10",
-+		"[27] STRUCT 's1' size=3D8 vlen=3D2\n"
-+		"\t'f1' type_id=3D21 bits_offset=3D0\n"
-+		"\t'f2' type_id=3D21 bits_offset=3D32 bitfield_size=3D16",
-+		"[28] UNION 'u1' size=3D8 vlen=3D1\n"
-+		"\t'f1' type_id=3D21 bits_offset=3D0 bitfield_size=3D16",
-+		"[29] ENUM 'e1' size=3D4 vlen=3D2\n"
- 		"\t'v1' val=3D1\n"
- 		"\t'v2' val=3D2",
--		"[29] FWD 'struct_fwd' fwd_kind=3Dstruct",
--		"[30] FWD 'union_fwd' fwd_kind=3Dunion",
--		"[31] ENUM 'enum_fwd' size=3D4 vlen=3D0",
--		"[32] TYPEDEF 'typedef1' type_id=3D20",
--		"[33] FUNC 'func1' type_id=3D34 linkage=3Dglobal",
--		"[34] FUNC_PROTO '(anon)' ret_type_id=3D20 vlen=3D2\n"
--		"\t'p1' type_id=3D20\n"
--		"\t'p2' type_id=3D21",
--		"[35] VAR 'var1' type_id=3D20, linkage=3Dglobal-alloc",
--		"[36] DATASEC 'datasec1' size=3D12 vlen=3D1\n"
--		"\ttype_id=3D20 offset=3D4 size=3D8",
--		"[37] DECL_TAG 'tag1' type_id=3D35 component_idx=3D-1",
--		"[38] DECL_TAG 'tag2' type_id=3D33 component_idx=3D1");
-+		"[30] FWD 'struct_fwd' fwd_kind=3Dstruct",
-+		"[31] FWD 'union_fwd' fwd_kind=3Dunion",
-+		"[32] ENUM 'enum_fwd' size=3D4 vlen=3D0",
-+		"[33] TYPEDEF 'typedef1' type_id=3D21",
-+		"[34] FUNC 'func1' type_id=3D35 linkage=3Dglobal",
-+		"[35] FUNC_PROTO '(anon)' ret_type_id=3D21 vlen=3D2\n"
-+		"\t'p1' type_id=3D21\n"
-+		"\t'p2' type_id=3D22",
-+		"[36] VAR 'var1' type_id=3D21, linkage=3Dglobal-alloc",
-+		"[37] DATASEC 'datasec1' size=3D12 vlen=3D1\n"
-+		"\ttype_id=3D21 offset=3D4 size=3D8",
-+		"[38] DECL_TAG 'tag1' type_id=3D36 component_idx=3D-1",
-+		"[39] DECL_TAG 'tag2' type_id=3D34 component_idx=3D1",
-+		"[40] TYPE_TAG 'tag1' type_id=3D21");
-=20
- cleanup:
- 	btf__free(btf1);
---=20
-2.30.2
-
+Applied. Thanks.
+Cannot wait to get tags available in vmlinux.
