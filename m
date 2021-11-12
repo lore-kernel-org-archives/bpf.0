@@ -2,178 +2,514 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F1D5C433F5
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E42E6C433EF
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:23:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20A3560EDF
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:04:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C672560FE3
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 07:23:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbhKLHGu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 02:06:50 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:4586 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230259AbhKLHGu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 02:06:50 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AC72mbF023111
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:03:59 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=JmVH4GD6sUTxR/dJfK/zemiSK3SWDbgoDIamqDzUy34=;
- b=CuApcC0/DJJPeRF0s+b7EaqiWssh9O3RlsIg6X5LI+7q868C/HfkCTDRNNun+UbKAGUh
- 4hGkWrdXtmMGAlnjOJTPEmdbENJlkF05+zMYzpWw2tB1darKmbqM1a7rGjj/Mqg4J+Qj
- 3ZpFbMe+B+Rmyfn7RQ1eEgACfc8hVHNAMjk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3c9k9981sg-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:03:59 -0800
-Received: from intmgw001.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Thu, 11 Nov 2021 23:01:56 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 926EE1F8ACF51; Thu, 11 Nov 2021 23:01:55 -0800 (PST)
-From:   Song Liu <songliubraving@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, Song Liu <songliubraving@fb.com>,
-        <syzbot+e0d81ec552a21d9071aa@syzkaller.appspotmail.com>,
-        Eric Dumazet <edumazet@google.com>
-Subject: [PATCH v2 bpf-next 1/2] bpf: extend BTF_ID_LIST_GLOBAL with parameter for number of IDs
-Date:   Thu, 11 Nov 2021 23:01:30 -0800
-Message-ID: <20211112070131.3131449-2-songliubraving@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211112070131.3131449-1-songliubraving@fb.com>
-References: <20211112070131.3131449-1-songliubraving@fb.com>
+        id S233843AbhKLH0h (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 02:26:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58400 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231173AbhKLH0h (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 12 Nov 2021 02:26:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1636701826;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kvPuxi8GCSBD/keJhT/UPDsGKj1mTYNPlAmJnLH932Y=;
+        b=FdyJhE5Nhsy/exKq425ySutWpUL+AWB2Z1QwOMVYO/cvG9zY73iMpsbEKxjAdwxU+rygfW
+        Syob+47ZRCXwBP59KpFjg1tsTM+gxKNcfbBPT93xG4qkrZ8xCN6kRDQE1KhQPXfflu5sxw
+        f8OvLOJW8mh/K0P3WlLMmV/IsKJZ4nE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-526-F7c-XJECOOCYSYjAyUbfLw-1; Fri, 12 Nov 2021 02:23:45 -0500
+X-MC-Unique: F7c-XJECOOCYSYjAyUbfLw-1
+Received: by mail-wm1-f72.google.com with SMTP id l187-20020a1c25c4000000b0030da46b76daso5868952wml.9
+        for <bpf@vger.kernel.org>; Thu, 11 Nov 2021 23:23:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kvPuxi8GCSBD/keJhT/UPDsGKj1mTYNPlAmJnLH932Y=;
+        b=feUw+lFN4igg+/xjyjabwfFkgj532YOrZUkSzQUTZ8thlrzHj12ZAyKFwB0qvEWtsW
+         Mp7ZQBecCnvQBplGEZW6bmuzyA1MjrWFEV4qnr1TMZ41s/mh6ooUYvbL4YCllK5q+kYG
+         pL/uYTCPt92bsV5GO1jbyU9LTwrI4befgFBKc+0tSFIOPEH1aaSkFStHeXCFREac6KqT
+         TpXi+mhPpZnsF5eZXIKIqaMCtF3i1hkAksC/9AbIN5UNAaZSOpiHs+6TX2MK1wAnVHsB
+         dk5iD3HOZcHk09YqR1kh2DPixIB5eJ83ZwcTu6qX43qfH8WE8gewYA+1GY3fZpLe1Bn2
+         /rYA==
+X-Gm-Message-State: AOAM5327CRCIWHzfTIYPyIkMmFWq34yLj+LqUn1zV+9gJbq4KhVvT/ox
+        iOZtOYm+RZZ5t3aNSXiho4PsMzYsB6E/SdV5VRA/D/hWD316caD5UswmlOkc0+7tdsQgI/4aVcP
+        VE//hYzjtXMQD
+X-Received: by 2002:a5d:4a85:: with SMTP id o5mr16674303wrq.109.1636701823583;
+        Thu, 11 Nov 2021 23:23:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQhrwifxkOsJSh+PN45diQntSMrUUEBuY7gxGX9NPHXumQ496A5V6RDd0NLSenjh31hX6MhA==
+X-Received: by 2002:a5d:4a85:: with SMTP id o5mr16674270wrq.109.1636701823215;
+        Thu, 11 Nov 2021 23:23:43 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id d15sm7314921wri.50.2021.11.11.23.23.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Nov 2021 23:23:42 -0800 (PST)
+Date:   Fri, 12 Nov 2021 08:23:41 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 0/2] bpf: Fix BTF data for modules
+Message-ID: <YY4WfQrExICZ6jI+@krava>
+References: <YXfulitQY1+Gd35h@krava>
+ <CAEf4BzabyAdsrUoRx58MZKbwVBGa93247sw8pwU62N_wNhSZSQ@mail.gmail.com>
+ <YXkTihiRKKJIc9M6@krava>
+ <CAEf4BzYP8eK0qxF+1UK7=TZ+vFRVMfmnm9AN=B2JHROoDwaHeg@mail.gmail.com>
+ <YXmX4+HDw9rghl0T@krava>
+ <YXr2NFlJTAhHdZqq@krava>
+ <CAEf4BzY1WLO+OmRQnRuJZc_-TEM12VZxd6RKQOrxWjT84KqBXw@mail.gmail.com>
+ <YYFH2qSOGdcYAqaE@krava>
+ <YYfpcN71HCqoY1DT@krava>
+ <CAEf4BzYhnLt453hQj2=2uzR-yPiSTjgvyf2E_qHv=F-8ZM=ZyA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: KSfiCV0xmfsSDXEqa1DEUbsIZnmn2WxT
-X-Proofpoint-ORIG-GUID: KSfiCV0xmfsSDXEqa1DEUbsIZnmn2WxT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-12_02,2021-11-11_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- lowpriorityscore=0 impostorscore=0 priorityscore=1501 bulkscore=0
- phishscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 clxscore=1015
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111120037
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYhnLt453hQj2=2uzR-yPiSTjgvyf2E_qHv=F-8ZM=ZyA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot reported the following BUG w/o CONFIG_DEBUG_INFO_BTF
+On Tue, Nov 09, 2021 at 03:23:25PM -0800, Andrii Nakryiko wrote:
+> On Sun, Nov 7, 2021 at 6:57 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Tue, Nov 02, 2021 at 03:14:52PM +0100, Jiri Olsa wrote:
+> > > On Mon, Nov 01, 2021 at 04:14:29PM -0700, Andrii Nakryiko wrote:
+> > > > On Thu, Oct 28, 2021 at 12:12 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > > >
+> > > > > On Wed, Oct 27, 2021 at 08:18:11PM +0200, Jiri Olsa wrote:
+> > > > > > On Wed, Oct 27, 2021 at 10:53:55AM -0700, Andrii Nakryiko wrote:
+> > > > > > > On Wed, Oct 27, 2021 at 1:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, Oct 26, 2021 at 09:12:31PM -0700, Andrii Nakryiko wrote:
+> > > > > > > > > On Tue, Oct 26, 2021 at 5:03 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Mon, Oct 25, 2021 at 09:54:48PM -0700, Andrii Nakryiko wrote:
+> > > > > > > > > > > On Sat, Oct 23, 2021 at 5:05 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > hi,
+> > > > > > > > > > > > I'm trying to enable BTF for kernel module in fedora,
+> > > > > > > > > > > > and I'm getting big increase on modules sizes on s390x arch.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Size of modules in total - kernel dir under /lib/modules/VER/
+> > > > > > > > > > > > from kernel-core and kernel-module packages:
+> > > > > > > > > > > >
+> > > > > > > > > > > >                current   new
+> > > > > > > > > > > >       aarch64      60M   76M
+> > > > > > > > > > > >       ppc64le      53M   66M
+> > > > > > > > > > > >       s390x        21M   41M
+> > > > > > > > > > > >       x86_64       64M   79M
+> > > > > > > > > > > >
+> > > > > > > > > > > > The reason for higher increase on s390x was that dedup algorithm
+> > > > > > > > > > > > did not detect some of the big kernel structs like 'struct module',
+> > > > > > > > > > > > so they are duplicated in the kernel module BTF data. The s390x
+> > > > > > > > > > > > has many small modules that increased significantly in size because
+> > > > > > > > > > > > of that even after compression.
+> > > > > > > > > > > >
+> > > > > > > > > > > > First issues was that the '--btf_gen_floats' option is not passed
+> > > > > > > > > > > > to pahole for kernel module BTF generation.
+> > > > > > > > > > > >
+> > > > > > > > > > > > The other problem is more tricky and is the reason why this patchset
+> > > > > > > > > > > > is RFC ;-)
+> > > > > > > > > > > >
+> > > > > > > > > > > > The s390x compiler generates multiple definitions of the same struct
+> > > > > > > > > > > > and dedup algorithm does not seem to handle this at the moment.
+> > > > > > > > > > > >
+> > > > > > > > > > > > I put the debuginfo and btf dump of the s390x pnet.ko module in here:
+> > > > > > > > > > > >   http://people.redhat.com/~jolsa/kmodbtf/
+> > > > > > > > > > > >
+> > > > > > > > > > > > Please let me know if you'd like to see other info/files.
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > Hard to tell what's going on without vmlinux itself. Can you upload a
+> > > > > > > > > > > corresponding kernel image with BTF in it?
+> > > > > > > > > >
+> > > > > > > > > > sure, uploaded
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > vmlinux.btfdump:
+> > > > > > > > >
+> > > > > > > > > [174] FLOAT 'float' size=4
+> > > > > > > > > [175] FLOAT 'double' size=8
+> > > > > > > > >
+> > > > > > > > > VS
+> > > > > > > > >
+> > > > > > > > > pnet.btfdump:
+> > > > > > > > >
+> > > > > > > > > [89318] INT 'float' size=4 bits_offset=0 nr_bits=32 encoding=(none)
+> > > > > > > > > [89319] INT 'double' size=8 bits_offset=0 nr_bits=64 encoding=(none)
+> > > > > > > >
+> > > > > > > > ugh, that's with no fix applied, sry
+> > > > > > > >
+> > > > > > > > I applied the first patch and uploaded new files
+> > > > > > > >
+> > > > > > > > now when I compare the 'module' struct from vmlinux:
+> > > > > > > >
+> > > > > > > >         [885] STRUCT 'module' size=1280 vlen=70
+> > > > > > > >
+> > > > > > > > and same one from pnet.ko:
+> > > > > > > >
+> > > > > > > >         [89323] STRUCT 'module' size=1280 vlen=70
+> > > > > > > >
+> > > > > > > > they seem to completely match, all the fields
+> > > > > > > > and yet it still appears in the kmod's BTF
+> > > > > > > >
+> > > > > > >
+> > > > > > > Ok, now struct module is identical down to the types referenced from
+> > > > > > > the fields, which means it should have been deduplicated completely.
+> > > > > > > This will require a more time-consuming debugging, though, so I'll put
+> > > > > > > it on my TODO list for now. If you get to this earlier, see where the
+> > > > > > > equivalence check fails in btf_dedup (sprinkle debug outputs around to
+> > > > > > > see what's going on).
+> > > > > >
+> > > > > > it failed for me on that hypot_type_id check where I did fix,
+> > > > > > I thought it's the issue of multiple same struct in the kmod,
+> > > > > > but now I see I might have confused cannon_id with cand_id ;-)
+> > > > > > I'll check more on this
+> > > > >
+> > > > > with more checking I got to the same conclusion as before,
+> > > > > now maybe with little more details ;-)
+> > > > >
+> > > > > the problem seems to be that in some cases the module BTF
+> > > > > data stores same structs under new/different IDs, while the
+> > > > > kernel BTF data is already dedup-ed
+> > > > >
+> > > > > the dedup algo keeps hypot_map of kernel IDs to kmod IDs,
+> > > > > and in my case it will get to the point that the kernel ID
+> > > > > is already 'known' and points to certain kmod ID 'A', but it
+> > > > > is also equiv to another kmod ID 'B' (so kmod ID 'A' and 'B'
+> > > > > are equiv structs) but the dedup will claim as not equiv
+> > > > >
+> > > > >
+> > > > > This is where the dedup fails for me on that s390 data:
+> > > > >
+> > > > > The pt_regs is defined as:
+> > > > >
+> > > > >         struct pt_regs
+> > > > >         {
+> > > > >                 union {
+> > > > >                         user_pt_regs user_regs;
+> > > > >                         struct {
+> > > > >                                 unsigned long args[1];
+> > > > >                                 psw_t psw;
+> > > > >                                 unsigned long gprs[NUM_GPRS];
+> > > > >                         };
+> > > > >                 };
+> > > > >                 ...
+> > > > >         };
+> > > > >
+> > > > > considering just the first union:
+> > > > >
+> > > > >         [186] UNION '(anon)' size=152 vlen=2
+> > > > >                 'user_regs' type_id=183 bits_offset=0
+> > > > >                 '(anon)' type_id=181 bits_offset=0
+> > > > >
+> > > > >         [91251] UNION '(anon)' size=152 vlen=2
+> > > > >                 'user_regs' type_id=91247 bits_offset=0
+> > > > >                 '(anon)' type_id=91250 bits_offset=0
+> > > > >
+> > > > >
+> > > > > ---------------------------------------------------------------
+> > > > >
+> > > > > Comparing the first member 'user_regs':
+> > > > >
+> > > > >         struct pt_regs
+> > > > >         {
+> > > > >                 union {
+> > > > >     --->                user_pt_regs user_regs;
+> > > > >                         struct {
+> > > > >                                 unsigned long args[1];
+> > > > >                                 psw_t psw;
+> > > > >                                 unsigned long gprs[NUM_GPRS];
+> > > > >                         };
+> > > > >                 };
+> > > > >
+> > > > > Which looks like:
+> > > > >
+> > > > >         typedef struct {
+> > > > >                 unsigned long args[1];
+> > > > >                 psw_t psw;
+> > > > >                 unsigned long gprs[NUM_GPRS];
+> > > > >         } user_pt_regs;
+> > > > >
+> > > > >
+> > > > > and is also equiv to the next union member struct.. and that's what
+> > > > > kernel knows but not kmod... anyway,
+> > > > >
+> > > > >
+> > > > > the dedup will compare 'user_pt_regs':
+> > > > >
+> > > > >         [183] TYPEDEF 'user_pt_regs' type_id=181
+> > > > >
+> > > > >         [91247] TYPEDEF 'user_pt_regs' type_id=91245
+> > > > >
+> > > > >
+> > > > >         [181] STRUCT '(anon)' size=152 vlen=3
+> > > > >                 'args' type_id=182 bits_offset=0
+> > > > >                 'psw' type_id=179 bits_offset=64
+> > > > >                 'gprs' type_id=48 bits_offset=192
+> > > > >
+> > > > >         [91245] STRUCT '(anon)' size=152 vlen=3
+> > > > >                 'args' type_id=91246 bits_offset=0
+> > > > >                 'psw' type_id=91243 bits_offset=64
+> > > > >                 'gprs' type_id=91132 bits_offset=192
+> > > > >
+> > > > > and make them equiv by setting hypot_type_id for 181 to be 91245
+> > > > >
+> > > > >
+> > > > > ---------------------------------------------------------------
+> > > > >
+> > > > > Now comparing the second member:
+> > > > >
+> > > > >         struct pt_regs
+> > > > >         {
+> > > > >                 union {
+> > > > >                         user_pt_regs user_regs;
+> > > > >     --->                struct {
+> > > > >                                 unsigned long args[1];
+> > > > >                                 psw_t psw;
+> > > > >                                 unsigned long gprs[NUM_GPRS];
+> > > > >                         };
+> > > > >                 };
+> > > > >
+> > > > >
+> > > > > kernel knows it's same struct as user_pt_regs and uses ID 181
+> > > > >
+> > > > >         [186] UNION '(anon)' size=152 vlen=2
+> > > > >                 'user_regs' type_id=183 bits_offset=0
+> > > > >                 '(anon)' type_id=181 bits_offset=0
+> > > > >
+> > > > > but kmod has new ID 91250 (not 91245):
+> > > > >
+> > > > >         [91251] UNION '(anon)' size=152 vlen=2
+> > > > >                 'user_regs' type_id=91247 bits_offset=0
+> > > > >                 '(anon)' type_id=91250 bits_offset=0
+> > > > >
+> > > > >
+> > > > > and 181 and 91250 are equiv structs:
+> > > > >
+> > > > >         [181] STRUCT '(anon)' size=152 vlen=3
+> > > > >                 'args' type_id=182 bits_offset=0
+> > > > >                 'psw' type_id=179 bits_offset=64
+> > > > >                 'gprs' type_id=48 bits_offset=192
+> > > > >
+> > > > >         [91250] STRUCT '(anon)' size=152 vlen=3
+> > > > >                 'args' type_id=91246 bits_offset=0
+> > > > >                 'psw' type_id=91243 bits_offset=64
+> > > > >                 'gprs' type_id=91132 bits_offset=192
+> > > > >
+> > > > >
+> > > > > now hypot_type_id for 181 is 91245, but we have brand new struct
+> > > > > ID 91250, so we fail
+> > > > >
+> > > > > what the patch tries to do is at this point to compare ID 91250
+> > > > > with 91245 and if it passes then we are equal and we throw away
+> > > > > ID 91250 because the hypot_type_id for 181 stays 91245
+> > > > >
+> > > > >
+> > > > > ufff.. thoughts? ;-)
+> > > >
+> > > > Oh, this is a really great analysis, thanks a lot! It makes everything
+> > > > clear. Basically, BTF dedup algo does too good job deduping vmlinux
+> > > > BTF. :)
+> > > >
+> > > > What's not clear is what to do about that, because a (current)
+> > > > fundamental assumption of is_equiv() check is that any type within CU
+> > > > (or in this case deduped vmlinux BTF) has exactly one unique mapping.
+> > > > Clearly that's not the case now. That array fix you mentioned worked
+> > > > around GCC bug where this assumption broke. In this case it's not a
+> > > > bug of a compiler (neither of algo, really), we just need to make algo
+> > > > smarter.
+> > > >
+> > > > Let me think about this a bit, we'll need to make the equivalence
+> > > > check be aware that there could be multiple equivalent mappings and be
+> > > > ok with that as long as all candidates are equivalent between
+> > > > themselves. Lots of equivalence and recursion to think about.
+> > > >
+> > > > It would be great to have a simplified test case to play with that. Do
+> > > > you mind distilling the chain of types above into a selftests and
+> > > > posting it to the mailing list so that I can play with it? It
+> > > > shouldn't be hard to write given BTF writing APIs. And we'll need a
+> > > > selftests anyway once we improve the algo, so it's definitely not a
+> > > > wasted work.
+> > > >
+> >
+> >
+> > I ended up with simply test, where the idea is to use
+> > type id which is defined after currently processed type
+> >
+> > the last VALIDATE_RAW_BTF fails
+> >
+> > I'm not sending full atch, because I assume this is not
+> > to merge yet also I assume you might want to change that
+> > anyway ;-)
+> >
+> 
+> Thanks, Jiri! I'll get to playing with this some time this week,
+> hopefully. I hope this is not a huge blocker for you?
 
-BUG: KASAN: global-out-of-bounds in task_iter_init+0x212/0x2e7 kernel/bpf=
-/task_iter.c:661
-Read of size 4 at addr ffffffff90297404 by task swapper/0/1
+I switched off s390x for the moment, so we can move on
+I don't think it's huge blocker, nobody is screaming yet ;-)
 
-CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.15.0-syzkaller #0
-Hardware name: ... Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
-<TASK>
-__dump_stack lib/dump_stack.c:88 [inline]
-dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-print_address_description.constprop.0.cold+0xf/0x309 mm/kasan/report.c:25=
-6
-__kasan_report mm/kasan/report.c:442 [inline]
-kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
-task_iter_init+0x212/0x2e7 kernel/bpf/task_iter.c:661
-do_one_initcall+0x103/0x650 init/main.c:1295
-do_initcall_level init/main.c:1368 [inline]
-do_initcalls init/main.c:1384 [inline]
-do_basic_setup init/main.c:1403 [inline]
-kernel_init_freeable+0x6b1/0x73a init/main.c:1606
-kernel_init+0x1a/0x1d0 init/main.c:1497
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-</TASK>
+thanks,
+jirka
 
-This is caused by hard-coded name[1] in BTF_ID_LIST_GLOBAL (w/o
-CONFIG_DEBUG_INFO_BTF). Fix this by adding a parameter n to
-BTF_ID_LIST_GLOBAL. This avoids ifdef CONFIG_DEBUG_INFO_BTF in btf.c and
-filter.c.
-
-Fixes: 7c7e3d31e785 ("bpf: Introduce helper bpf_find_vma")
-Reported-by: syzbot+e0d81ec552a21d9071aa@syzkaller.appspotmail.com
-Suggested-by: Eric Dumazet <edumazet@google.com>
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- include/linux/btf_ids.h | 6 +++---
- kernel/bpf/btf.c        | 2 +-
- net/core/filter.c       | 6 +-----
- 3 files changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 47d9abfbdb556..6bb42b785293a 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -73,7 +73,7 @@ asm(							\
- __BTF_ID_LIST(name, local)				\
- extern u32 name[];
-=20
--#define BTF_ID_LIST_GLOBAL(name)			\
-+#define BTF_ID_LIST_GLOBAL(name, n)			\
- __BTF_ID_LIST(name, globl)
-=20
- /* The BTF_ID_LIST_SINGLE macro defines a BTF_ID_LIST with
-@@ -83,7 +83,7 @@ __BTF_ID_LIST(name, globl)
- 	BTF_ID_LIST(name) \
- 	BTF_ID(prefix, typename)
- #define BTF_ID_LIST_GLOBAL_SINGLE(name, prefix, typename) \
--	BTF_ID_LIST_GLOBAL(name) \
-+	BTF_ID_LIST_GLOBAL(name, 1)			  \
- 	BTF_ID(prefix, typename)
-=20
- /*
-@@ -149,7 +149,7 @@ extern struct btf_id_set name;
- #define BTF_ID_LIST(name) static u32 name[5];
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
--#define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-+#define BTF_ID_LIST_GLOBAL(name, n) u32 name[n];
- #define BTF_ID_LIST_SINGLE(name, prefix, typename) static u32 name[1];
- #define BTF_ID_LIST_GLOBAL_SINGLE(name, prefix, typename) u32 name[1];
- #define BTF_SET_START(name) static struct btf_id_set name =3D { 0 };
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 1dd9ba82da1e0..2a9d8a1fee1de 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6354,7 +6354,7 @@ const struct bpf_func_proto bpf_btf_find_by_name_ki=
-nd_proto =3D {
- 	.arg4_type	=3D ARG_ANYTHING,
- };
-=20
--BTF_ID_LIST_GLOBAL(btf_task_struct_ids)
-+BTF_ID_LIST_GLOBAL(btf_task_struct_ids, 3)
- BTF_ID(struct, task_struct)
- BTF_ID(struct, file)
- BTF_ID(struct, vm_area_struct)
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 315a58466fc93..46f09a8fba20b 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10611,14 +10611,10 @@ void bpf_prog_change_xdp(struct bpf_prog *prev_=
-prog, struct bpf_prog *prog)
- 	bpf_dispatcher_change_prog(BPF_DISPATCHER_PTR(xdp), prev_prog, prog);
- }
-=20
--#ifdef CONFIG_DEBUG_INFO_BTF
--BTF_ID_LIST_GLOBAL(btf_sock_ids)
-+BTF_ID_LIST_GLOBAL(btf_sock_ids, MAX_BTF_SOCK_TYPE)
- #define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
- BTF_SOCK_TYPE_xxx
- #undef BTF_SOCK_TYPE
--#else
--u32 btf_sock_ids[MAX_BTF_SOCK_TYPE];
--#endif
-=20
- BPF_CALL_1(bpf_skc_to_tcp6_sock, struct sock *, sk)
- {
---=20
-2.30.2
+> 
+> 
+> > I'll check later on that special array case
+> >
+> > thanks,
+> > jirka
+> >
+> >
+> > ---
+> >  .../bpf/prog_tests/btf_dedup_split.c          | 113 ++++++++++++++++++
+> >  1 file changed, 113 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+> > index 64554fd33547..2ad54e185221 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+> > @@ -314,6 +314,117 @@ static void test_split_struct_duped() {
+> >         btf__free(btf1);
+> >  }
+> >
+> > +static void btf_add_data(struct btf *btf, int start_id)
+> > +{
+> > +#define ID(n) (start_id + n)
+> > +       btf__set_pointer_size(btf, 8); /* enforce 64-bit arch */
+> > +
+> > +       btf__add_int(btf, "int", 4, BTF_INT_SIGNED);    /* [1] int */
+> > +
+> > +       btf__add_struct(btf, "s", 8);                   /* [2] struct s { */
+> > +       btf__add_field(btf, "a", ID(3), 0, 0);          /*      struct anon a; */
+> > +       btf__add_field(btf, "b", ID(4), 0, 0);          /*      struct anon b; */
+> > +                                                       /* } */
+> > +
+> > +       btf__add_struct(btf, "(anon)", 8);              /* [3] struct anon { */
+> > +       btf__add_field(btf, "f1", ID(1), 0, 0);         /*      int f1; */
+> > +       btf__add_field(btf, "f2", ID(1), 32, 0);        /*      int f2; */
+> > +                                                       /* } */
+> > +
+> > +       btf__add_struct(btf, "(anon)", 8);              /* [4] struct anon { */
+> > +       btf__add_field(btf, "f1", ID(1), 0, 0);         /*      int f1; */
+> > +       btf__add_field(btf, "f2", ID(1), 32, 0);        /*      int f2; */
+> > +                                                       /* } */
+> > +#undef ID
+> > +}
+> > +
+> > +static void test_split_struct_missed()
+> > +{
+> > +       struct btf *btf1, *btf2;
+> > +       int err;
+> > +
+> > +       /* generate the base data.. */
+> > +       btf1 = btf__new_empty();
+> > +       if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
+> > +               return;
+> > +
+> > +       btf_add_data(btf1, 0);
+> > +
+> > +       VALIDATE_RAW_BTF(
+> > +               btf1,
+> > +               "[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> > +               "[2] STRUCT 's' size=8 vlen=2\n"
+> > +               "\t'a' type_id=3 bits_offset=0\n"
+> > +               "\t'b' type_id=4 bits_offset=0",
+> > +               "[3] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=1 bits_offset=0\n"
+> > +               "\t'f2' type_id=1 bits_offset=32",
+> > +               "[4] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=1 bits_offset=0\n"
+> > +               "\t'f2' type_id=1 bits_offset=32");
+> > +
+> > +       /* ..dedup them... */
+> > +       err = btf__dedup(btf1, NULL, NULL);
+> > +       if (!ASSERT_OK(err, "btf_dedup"))
+> > +               goto cleanup;
+> > +
+> > +       VALIDATE_RAW_BTF(
+> > +               btf1,
+> > +               "[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> > +               "[2] STRUCT 's' size=8 vlen=2\n"
+> > +               "\t'a' type_id=3 bits_offset=0\n"
+> > +               "\t'b' type_id=3 bits_offset=0",
+> > +               "[3] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=1 bits_offset=0\n"
+> > +               "\t'f2' type_id=1 bits_offset=32");
+> > +
+> > +       /* and add the same data on top of it */
+> > +       btf2 = btf__new_empty_split(btf1);
+> > +       if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
+> > +               goto cleanup;
+> > +
+> > +       btf_add_data(btf2, 3);
+> > +
+> > +       VALIDATE_RAW_BTF(
+> > +               btf2,
+> > +               "[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> > +               "[2] STRUCT 's' size=8 vlen=2\n"
+> > +               "\t'a' type_id=3 bits_offset=0\n"
+> > +               "\t'b' type_id=3 bits_offset=0",
+> > +               "[3] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=1 bits_offset=0\n"
+> > +               "\t'f2' type_id=1 bits_offset=32",
+> > +               "[4] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> > +               "[5] STRUCT 's' size=8 vlen=2\n"
+> > +               "\t'a' type_id=6 bits_offset=0\n"
+> > +               "\t'b' type_id=7 bits_offset=0",
+> > +               "[6] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=4 bits_offset=0\n"
+> > +               "\t'f2' type_id=4 bits_offset=32",
+> > +               "[7] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=4 bits_offset=0\n"
+> > +               "\t'f2' type_id=4 bits_offset=32");
+> > +
+> > +       err = btf__dedup(btf2, NULL, NULL);
+> > +       if (!ASSERT_OK(err, "btf_dedup"))
+> > +               goto cleanup;
+> > +
+> > +       /* after dedup it should match the original data */
+> > +       VALIDATE_RAW_BTF(
+> > +               btf2,
+> > +               "[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
+> > +               "[2] STRUCT 's' size=8 vlen=2\n"
+> > +               "\t'a' type_id=3 bits_offset=0\n"
+> > +               "\t'b' type_id=3 bits_offset=0",
+> > +               "[3] STRUCT '(anon)' size=8 vlen=2\n"
+> > +               "\t'f1' type_id=1 bits_offset=0\n"
+> > +               "\t'f2' type_id=1 bits_offset=32");
+> > +
+> > +cleanup:
+> > +       btf__free(btf2);
+> > +       btf__free(btf1);
+> > +}
+> > +
+> >  void test_btf_dedup_split()
+> >  {
+> >         if (test__start_subtest("split_simple"))
+> > @@ -322,4 +433,6 @@ void test_btf_dedup_split()
+> >                 test_split_struct_duped();
+> >         if (test__start_subtest("split_fwd_resolve"))
+> >                 test_split_fwd_resolve();
+> > +       if (test__start_subtest("split_struct_missed"))
+> > +               test_split_struct_missed();
+> >  }
+> > --
+> > 2.32.0
+> >
+> 
 
