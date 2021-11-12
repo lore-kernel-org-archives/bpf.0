@@ -2,70 +2,163 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0C3C433FE
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:20:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33222C433F5
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:34:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5602461076
-	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:20:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E58261027
+	for <bpf@archiver.kernel.org>; Fri, 12 Nov 2021 15:34:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233776AbhKLPXD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 12 Nov 2021 10:23:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35220 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229959AbhKLPW6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 12 Nov 2021 10:22:58 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id C46F761039;
-        Fri, 12 Nov 2021 15:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636730407;
-        bh=BupmhtmIu0gjIqcH5mLgMP9lAuZOf0PLxLlfbquSS1k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TvU0PKAS+gdn6gZ+J1D5WLsZJ07krXNhGZrSeVnNAKbwyvaFbPkz0WhRqqVDjUyIN
-         I+xA50VGNPRQE5YvwLj5VG5NwDPS/8XwZ1jL222kd8vz/BhKOdK3LUsejn5kFnsfxO
-         joiM8akuHiI7rBVHGes1zpETkUZfYMbVClG8E25YPZm3Im2W912oRBeFzQ4FOEZ0Pe
-         z/cqU74rgm7xfKl+6ujfh+OGD4uu29n2UMo84CQIHqwq4Bpn88vnEbP/O8kHSIWbpJ
-         BhJGE1TBqqlKpZRWnLwb+Kg2zyTyt19R32JQvz31LyODfTmGbjjf/V1JVbvViHztKj
-         9ZN7pMUKqlxTA==
-Content-Type: text/plain; charset="utf-8"
+        id S234365AbhKLPh0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 12 Nov 2021 10:37:26 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:35168 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233776AbhKLPhZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 12 Nov 2021 10:37:25 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id B0C631FD3D;
+        Fri, 12 Nov 2021 15:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1636731273; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u2sbpI/plwivBXzGwyojuYWpzjgBzhbo5rCRsZexXDo=;
+        b=J/RTt8c++HduhLkKS5rLA4+TiIwxyYV10ziRyMv+dozhao5sHlKMoBS9gf6Cs/sHn7rcGo
+        Ef4aSmlfrpSgaeHtAODLG9J4Us2ZnXt6tLKE3n1UGZhSKA35lwosCHstCh4qsx27IZt1rJ
+        dDnw20mLk5aN5UF7wVKNIOQ7ZVy5xUg=
+Received: from suse.cz (unknown [10.100.224.162])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 17FCBA3B81;
+        Fri, 12 Nov 2021 15:34:33 +0000 (UTC)
+Date:   Fri, 12 Nov 2021 16:34:29 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] kthread: dynamically allocate memory to store kthread's
+ full name
+Message-ID: <YY6JhZK/oiLUwHyZ@alley>
+References: <20211108084142.4692-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] bpf: Fix inner map state pruning regression.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163673040774.12963.2114401773647308255.git-patchwork-notify@kernel.org>
-Date:   Fri, 12 Nov 2021 15:20:07 +0000
-References: <20211110172556.20754-1-alexei.starovoitov@gmail.com>
-In-Reply-To: <20211110172556.20754-1-alexei.starovoitov@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, lmb@cloudflare.com,
-        andrii@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211108084142.4692-1-laoar.shao@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Wed, 10 Nov 2021 09:25:56 -0800 you wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On Mon 2021-11-08 08:41:42, Yafang Shao wrote:
+> When I was implementing a new per-cpu kthread cfs_migration, I found the
+> comm of it "cfs_migration/%u" is truncated due to the limitation of
+> TASK_COMM_LEN. For example, the comm of the percpu thread on CPU10~19 are
+> all with the same name "cfs_migration/1", which will confuse the user. This
+> issue is not critical, because we can get the corresponding CPU from the
+> task's Cpus_allowed. But for kthreads correspoinding to other hardware
+> devices, it is not easy to get the detailed device info from task comm,
+> for example,
 > 
-> Introduction of map_uid made two lookups from outer map to be distinct.
-> That distinction is only necessary when inner map has an embedded timer.
-> Otherwise it will make the verifier state pruning to be conservative
-> which will cause complex programs to hit 1M insn_processed limit.
-> Tighten map_uid logic to apply to inner maps with timers only.
+> After this change, the full name of these truncated kthreads will be
+> displayed via /proc/[pid]/comm:
 > 
-> [...]
+> --- a/fs/proc/array.c
+> +++ b/fs/proc/array.c
+> @@ -102,6 +103,8 @@ void proc_task_name(struct seq_file *m, struct task_struct *p, bool escape)
+>  
+>  	if (p->flags & PF_WQ_WORKER)
+>  		wq_worker_comm(tcomm, sizeof(tcomm), p);
 
-Here is the summary with links:
-  - [bpf] bpf: Fix inner map state pruning regression.
-    https://git.kernel.org/bpf/bpf/c/b5634057b30f
+Just for record. I though that this patch obsoleted wq_worker_comm()
+but it did not. wq_worker_comm() returns different values
+depending on the last proceed work item and has to stay.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> +	else if (p->flags & PF_KTHREAD)
+> +		get_kthread_comm(tcomm, sizeof(tcomm), p);
+>  	else
+>  		__get_task_comm(tcomm, sizeof(tcomm), p);
+>  
+> --- a/kernel/kthread.c
+> +++ b/kernel/kthread.c
+> @@ -121,6 +135,7 @@ void free_kthread_struct(struct task_struct *k)
+
+Hmm, there is the following comment:
+
+	/*
+	 * Can be NULL if this kthread was created by kernel_thread()
+	 * or if kmalloc() in kthread() failed.
+	 */
+	kthread = to_kthread(k);
+
+And indeed, set_kthread_struct() is called only by kthread()
+and init_idle().
+
+For example, call_usermodehelper_exec_sync() calls kernel_thread()
+but given @fn does not call set_kthread_struct(). Also init_idle()
+continues even when the allocation failed.
 
 
+>  #ifdef CONFIG_BLK_CGROUP
+>  	WARN_ON_ONCE(kthread && kthread->blkcg_css);
+>  #endif
+> +	kfree(kthread->full_name);
+
+Hence, we have to make sure that it is not NULL here. I suggest
+something like:
+
+void free_kthread_struct(struct task_struct *k)
+{
+	struct kthread *kthread;
+
+	/*
+	 * Can be NULL if this kthread was created by kernel_thread()
+	 * or if kmalloc() in kthread() failed.
+	 */
+	kthread = to_kthread(k);
+	if (!kthread)
+		return;
+
+#ifdef CONFIG_BLK_CGROUP
+	WARN_ON_ONCE(kthread->blkcg_css);
+#endif
+	kfree(kthread->full_name);
+	kfree(kthread);
+}
+
+
+Side note: The possible NULL pointer looks dangerous to
+    me. to_kthread() is dereferenced without any check on
+    several locations.
+
+    For example, kthread_create_on_cpu() looks safe. It is a kthread
+    crated by kthread(). It will exists only when the allocation
+    succeeded.
+
+    kthread_stop() is probably safe only because it used only for
+    the classic kthreads created by kthread(). But the API
+    is not safe.
+
+    kthread_use_mm() is probably used only by classic kthreads as
+    well. But it is less clear to me.
+
+    All this unsafe APIs looks like a ticking bomb to me. But
+    it is beyond this patchset.
+
+
+>  	kfree(kthread);
+>  }
+>  
+
+Best Regards,
+Petr
