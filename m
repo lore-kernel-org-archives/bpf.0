@@ -2,133 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3BBFC4332F
-	for <bpf@archiver.kernel.org>; Sat, 13 Nov 2021 08:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E00B1C433EF
+	for <bpf@archiver.kernel.org>; Sat, 13 Nov 2021 14:22:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A9A6A6113B
-	for <bpf@archiver.kernel.org>; Sat, 13 Nov 2021 08:46:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA95E60F14
+	for <bpf@archiver.kernel.org>; Sat, 13 Nov 2021 14:22:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235755AbhKMIs7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 13 Nov 2021 03:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
+        id S235852AbhKMOZh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 13 Nov 2021 09:25:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbhKMIs7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 13 Nov 2021 03:48:59 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118BAC061767
-        for <bpf@vger.kernel.org>; Sat, 13 Nov 2021 00:46:07 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id w29so19693643wra.12
-        for <bpf@vger.kernel.org>; Sat, 13 Nov 2021 00:46:06 -0800 (PST)
+        with ESMTP id S235634AbhKMOZf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 13 Nov 2021 09:25:35 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7937C061767
+        for <bpf@vger.kernel.org>; Sat, 13 Nov 2021 06:22:42 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id m14so50247421edd.0
+        for <bpf@vger.kernel.org>; Sat, 13 Nov 2021 06:22:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZtDnCZ/w/psJS2PRIihRoZb3eaeTQIwGDkZv2udShjk=;
-        b=li607doaPUCb/xWMTz67AL9GZ9Pb3MRIpM7Nw+vkpA6TVMXwAwH8herBsCby7Q591x
-         YDu522PWnbNiiQv160pBddkTsiC1+K8+ZWgsb6AhQKeFPTjFhSYLqcFzoKGtLigEuREw
-         8DmvXcZI4YVT7kmxEU4myncpmY2OYZyDrRQ3ZHMTcA2ETAbZuSkK3EiPIUdQPz0LUCeu
-         40QKhHdNfdCrpi8z8sz0DYjgZaJ+dPNqKc9WRH+rvJ+lOUrepLgmQc5VIEn0fABJ3gTQ
-         IZ2J05SlDJpOlGkVDkd9VuTNIiASVG1RD6dI35WR72/pvipKffRI2JDl8SCLCoF766g4
-         4rkw==
+        d=ubique-spb-ru.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MRN60IWLDnv5Ty38gBT5/CzrewJ5PhcZHXfvFeewv6o=;
+        b=DkEoloGHAD5a8Tj9gnzTpAR0XtBtw0V2P5ZakYG8pPYmmxWNxbV1oWT3lsO89HDYS5
+         sQYoNls2ETdL4K+ut+RNEQArNZyz/GVAcU5aUEaVXr0gXR4xTzCD3Qy53YaxeGgm/nk3
+         tjb5YEXJiR31eM4lRH14ddXl4xTdu2zWD71dv4HpqVPdJwGkFITX15ks4ljtPycknmNS
+         OpJsWGjGgIybl1FIfz+fveX5rQ8lRqP9GVZ0+vl09AuPaZn8OaZEmeSzyuxqJwfg1yKQ
+         YDxUtrFB8Z/llvMIlU1PVPDrpZ9TVXuWa3Pq6UTt+IkHHV6Y/6cHT3YlJlr4SVvovHBS
+         TcLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=ZtDnCZ/w/psJS2PRIihRoZb3eaeTQIwGDkZv2udShjk=;
-        b=6mbdNY3gjEIrYQVUcec6t+lz6e2ngmUHjBjQLGJpiMe+55EHy3cwsEMsspuKf4dKYW
-         XfQHgrkgiFGTnJbroEpCyJps/5D9SFMkW4mB/kxg8hQZRvWX6Ht0C9j/izN8V2FSpq5s
-         3GQvgjbMB6x+drn4Etb/re5j6vL3bKdt83jTfWwUfqAliuY5c5lEP5/DTOb8VrC1acw6
-         6YW48x11PVHOx00TGGxqyuVE56TCVH+r/2VeR9sYLf5Zp0uQWPeLSceKUkHKUhY/8GtD
-         wfgzWnM9pYYOQ0bQgWlq2CmA7fDtaMnWzttF38hOKbdRFEd+ZKDzkfS/RqsPOc40fpwi
-         IxSQ==
-X-Gm-Message-State: AOAM532o7C00fImB74+dE+J2ABjIaeLw95JVyObauex6Y6v7HyX3fWXw
-        TJcnfANSTEMAWOtW6rGdvWEbuQ==
-X-Google-Smtp-Source: ABdhPJzfL02HdsRzG4Og/K2JWrEAxZfcZ6YSER9KY6jul7/fUwjNjtVbk7TR191IUwRViXJNdLACrQ==
-X-Received: by 2002:adf:cf05:: with SMTP id o5mr27250298wrj.325.1636793165247;
-        Sat, 13 Nov 2021 00:46:05 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:90b:17fa:42f:1e9c? ([2a01:e34:ed2f:f020:90b:17fa:42f:1e9c])
-        by smtp.googlemail.com with ESMTPSA id y6sm8480147wrh.18.2021.11.13.00.46.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Nov 2021 00:46:04 -0800 (PST)
-Subject: Re: 32bit x86 build broken (was: Re: [GIT PULL] Networking for
- 5.16-rc1)
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        David Miller <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        linux-can@vger.kernel.org
-References: <20211111163301.1930617-1-kuba@kernel.org>
- <163667214755.13198.7575893429746378949.pr-tracker-bot@kernel.org>
- <20211111174654.3d1f83e3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAHk-=wiNEdrLirAbHwJvmp_s2Kjjd5eV680hTZnbBT2gXK4QbQ@mail.gmail.com>
- <20211112063355.16cb9d3b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <9999b559abecea2eeb72b0b6973a31fcd39087c1.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <be9c603b-26a6-fb33-07d9-7aae8f9bf644@linaro.org>
-Date:   Sat, 13 Nov 2021 09:46:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        bh=MRN60IWLDnv5Ty38gBT5/CzrewJ5PhcZHXfvFeewv6o=;
+        b=rvPyv8693IjYqI14UT3/zHRprizY4QKJ59oCZJEoXG5V3YvBrTTAS56gFEUnO/aOYc
+         rq9QCMagq8QHa1ZRHOSEC0M6ANpHtTVPB3T8Qf/BEWmIJcXiXu9JcxKg6cPK/rxh5wut
+         t7+sSTxnMNJWg6MjXC7ViNwC3kiHQbIZdQ7kFf7286WwiAuYkghkHaVqDj+JH8JQ4x94
+         FOulxMA+UvwQxQZiU8dvMLEVGnKWg8dOUyUq+ysQJtjIt5jNK+KKdvlGzb2fjyS1teAo
+         oA3RxVT4gF2hFwkcfqHD5dtS7hA4/T5iEfBhEvlh5JJIZk8F8UrmIY5QvDmlRgfiT/zY
+         y1RA==
+X-Gm-Message-State: AOAM533W2sTc4zuzU58/s2AbB9PJ1pdx9O2aa1IElWQ67MFgqVMVTYQq
+        1TQ2QpA6Syri0iQcCJwhdsOUHki64nMuTYeLgXV1tg==
+X-Google-Smtp-Source: ABdhPJzPX3P/PUcI/TgZYja+jpJuHrjZX/SZS0+hhN0cttf5b+dHVLuHI1xWyTmpMoC1G43RIcIdMw==
+X-Received: by 2002:a17:906:f0d4:: with SMTP id dk20mr30379627ejb.257.1636813360831;
+        Sat, 13 Nov 2021 06:22:40 -0800 (PST)
+Received: from localhost ([154.21.15.43])
+        by smtp.gmail.com with ESMTPSA id oz13sm3894007ejc.65.2021.11.13.06.22.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Nov 2021 06:22:40 -0800 (PST)
+From:   Dmitrii Banshchikov <me@ubique.spb.ru>
+To:     bpf@vger.kernel.org
+Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, tglx@linutronix.de,
+        rdna@fb.com
+Subject: [PATCH bpf v2 0/2] Forbid bpf_ktime_get_coarse_ns and bpf_timer_* in tracing progs
+Date:   Sat, 13 Nov 2021 18:22:25 +0400
+Message-Id: <20211113142227.566439-1-me@ubique.spb.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <9999b559abecea2eeb72b0b6973a31fcd39087c1.camel@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/11/2021 16:04, Srinivas Pandruvada wrote:
-> On Fri, 2021-11-12 at 06:33 -0800, Jakub Kicinski wrote:
->> On Thu, 11 Nov 2021 18:48:43 -0800 Linus Torvalds wrote:
->>> On Thu, Nov 11, 2021 at 5:46 PM Jakub Kicinski <kuba@kernel.org>
->>> wrote:
->>>> Rafael, Srinivas, we're getting 32 bit build failures after pulling
->>>> back
->>>> from Linus today.
->>>>
->>>> make[1]: *** [/home/nipa/net/Makefile:1850: drivers] Error 2
->>>> make: *** [Makefile:219: __sub-make] Error 2
->>>> ../drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c:
->>>> In function ‘send_mbox_cmd’:
->>>> ../drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.c:7
->>>> 9:37: error: implicit declaration of function ‘readq’; did you mean
->>>> ‘readl’? [-Werror=implicit-function-declaration]
->>>>    79 |                         *cmd_resp = readq((void __iomem *)
->>>> (proc_priv->mmio_base + MBOX_OFFSET_DATA));
->>>>       |                                     ^~~~~
->>>>       |                                     readl  
->>>
->>> Gaah.
->>>
->>> The trivial fix is *probably* just a simple
->>
->> To be sure - are you planning to wait for the fix to come via 
->> the usual path?  We can hold applying new patches to net on the 
->> off chance that you'd apply the fix directly and we can fast 
->> forward again :) 
->>
->> Not that 32bit x86 matters all that much in practice, it's just 
->> for preventing new errors (64b divs, mostly) from sneaking in.
->>
->> I'm guessing Rafeal may be AFK for the independence day weekend.
-> He was off, but not sure if he is back. I requested Daniel to send PULL
-> request for
-> https://lore.kernel.org/lkml/a22a1eeb-c7a0-74c1-46e2-0a7bada73520@infradead.org/T/
+Various locking issues are possible with bpf_ktime_get_coarse_ns() and
+bpf_timer_* set of helpers.
 
-FYI
+syzbot found a locking issue with bpf_ktime_get_coarse_ns() helper executed in
+BPF_PROG_TYPE_PERF_EVENT prog type - [1]. The issue is possible because the
+helper uses non fast version of time accessor that isn't safe for any context.
+The helper was added because it provided performance benefits in comparison to
+bpf_ktime_get_ns() helper.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d9c8e52ff9e84ff1a406330f9ea4de7c5eb40282
+A similar locking issue is possible with bpf_timer_* set of helpers when used
+in tracing progs.
 
+The solution is to restrict use of the helpers in tracing progs.
+
+In the [1] discussion it was stated that bpf_spin_lock related helpers shall
+also be excluded for tracing progs. The verifier has a compatibility check
+between a map and a program. If a tracing program tries to use a map which
+value has struct bpf_spin_lock the verifier fails that is why bpf_spin_lock is
+already restricted.
+
+Patch 1 restricts helpers
+Patch 2 adds tests
+
+v1 -> v2:
+ * Limit the helpers via func proto getters instead of allowed callback
+ * Add note about helpers' restrictions to linux/bpf.h
+ * Add Fixes tag
+ * Remove extra \0 from btf_str_sec
+ * Beside asm tests add prog tests
+ * Trim CC
+
+1. https://lore.kernel.org/all/00000000000013aebd05cff8e064@google.com/
+
+Dmitrii Banshchikov (2):
+  bpf: Forbid bpf_ktime_get_coarse_ns and bpf_timer_* in tracing progs
+  selftests/bpf: Add tests for restricted helpers
+
+ include/uapi/linux/bpf.h                      |   6 +
+ kernel/bpf/cgroup.c                           |   2 +
+ kernel/bpf/helpers.c                          |   2 -
+ kernel/bpf/verifier.c                         |   7 +
+ kernel/trace/bpf_trace.c                      |   2 -
+ net/core/filter.c                             |   6 +
+ net/ipv4/bpf_tcp_ca.c                         |   2 +
+ tools/include/uapi/linux/bpf.h                |   6 +
+ .../bpf/prog_tests/helper_restricted.c        |  33 +++
+ .../bpf/progs/test_helper_restricted.c        | 123 +++++++++++
+ tools/testing/selftests/bpf/test_verifier.c   |  46 +++-
+ .../bpf/verifier/helper_restricted.c          | 196 ++++++++++++++++++
+ 12 files changed, 426 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/helper_restricted.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_helper_restricted.c
+ create mode 100644 tools/testing/selftests/bpf/verifier/helper_restricted.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
