@@ -2,30 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B4D8C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0374BC433F5
 	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E008F63217
+	by mail.kernel.org (Postfix) with ESMTP id D2C9863219
 	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347882AbhKOWzE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 17:55:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46808 "EHLO mail.kernel.org"
+        id S1347715AbhKOWzB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 17:55:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351191AbhKOWlU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1351220AbhKOWlU (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 15 Nov 2021 17:41:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D56F6325A;
-        Mon, 15 Nov 2021 22:35:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5FC436325C;
+        Mon, 15 Nov 2021 22:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637015705;
-        bh=I1e5Kynq3bpP2r8Ig0f4nGTpoOnL7qGeIPRcJgrUQnA=;
+        s=k20201202; t=1637015721;
+        bh=OTSXZslYL/62rjA+HJvdEc/hBnVqYdc6fAAwGoWqerE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YFFLCf2lhPwxTgA9JW5hzJWTrdpu+ihCos/7w5HqJgll0HJDz+zBhOwEEGOlpHCUy
-         nXThzNDb4T7HvLt9TrBqhkeE2R1P+/n+lVODPQvCPHlFiAFtsggNPewhvMhgJTUR7/
-         T0On9ReXm6NniDU1EKnuomBbRkZwOptMh/8trDNuQjkSC32xiKDJ4RAFa3ZeyknC9a
-         5xyJfUI4bNByEklsECP2UuZAiCABXyiEXgtIDyf4lRzMyigYw5L07S0g3srOyeMgt7
-         00x/Ti1dMnFj9qAGnS6VqODz1Um4Yx4HRQAUHUGEZllXoKixTa7bLe8kT6olqtWGSE
-         MVdRSdfBzqudg==
+        b=ANmGBXYq7kELiqytPpmgTkbYsZC0KRXifcOjnW5WUYw8d+HFrhHrcEb6X2Er8FfP8
+         6igqw3gEok82XN6zpR2wyFTZaL+amdsCU1gFfXbJJrgSIvAY7kz9Gckfnm2lvFqKha
+         FvZfKy8W2iCVhdZu090GoHk7H3hMCYuK0IrHS6jrUc6xh3J+bZ/SKVTgmEJmgZa+y2
+         yyQAq5KCXFF7coUlcJucNelGm0lPgJW0r1+p4ZyBBagZkxgHIObOlhY1HhZaO4qZuJ
+         vkerTvvnpKSbpBasUFcwhbLtV9ixHpoCRuLuCwoOYy8Bii11AX+a+PvhzjvUg/ZdbO
+         IFtXjGU2GlCWA==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -35,9 +35,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v18 bpf-next 19/23] bpf: generalise tail call map compatibility check
-Date:   Mon, 15 Nov 2021 23:33:13 +0100
-Message-Id: <27b3e222ad035ae63f37bd041c79adc06cb55c7d.1637013639.git.lorenzo@kernel.org>
+Subject: [PATCH v18 bpf-next 22/23] bpf: selftests: add CPUMAP/DEVMAP selftests for xdp multi-buff
+Date:   Mon, 15 Nov 2021 23:33:16 +0100
+Message-Id: <1518e05fc7c67688056ca5582b40ac02868b9852.1637013639.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1637013639.git.lorenzo@kernel.org>
 References: <cover.1637013639.git.lorenzo@kernel.org>
@@ -47,263 +47,292 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Hoiland-Jorgensen <toke@redhat.com>
+Verify compatibility checks attaching a XDP multi-buff program to a
+CPUMAP/DEVMAP
 
-The check for tail call map compatibility ensures that tail calls only
-happen between maps of the same type. To ensure backwards compatibility for
-XDP multi-buffer we need a similar type of check for cpumap and devmap
-programs, so move the state from bpf_array_aux into bpf_map, add xdp_mb to
-the check, and apply the same check to cpumap and devmap.
-
-Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Toke Hoiland-Jorgensen <toke@redhat.com>
 ---
- include/linux/bpf.h   | 31 ++++++++++++++++++++-----------
- kernel/bpf/arraymap.c |  4 +---
- kernel/bpf/core.c     | 28 ++++++++++++++--------------
- kernel/bpf/cpumap.c   |  8 +++++---
- kernel/bpf/devmap.c   |  3 ++-
- kernel/bpf/syscall.c  | 21 +++++++++++----------
- 6 files changed, 53 insertions(+), 42 deletions(-)
+ .../bpf/prog_tests/xdp_cpumap_attach.c        | 65 ++++++++++++++++++-
+ .../bpf/prog_tests/xdp_devmap_attach.c        | 56 ++++++++++++++++
+ .../bpf/progs/test_xdp_with_cpumap_helpers.c  |  6 ++
+ .../progs/test_xdp_with_cpumap_mb_helpers.c   | 27 ++++++++
+ .../bpf/progs/test_xdp_with_devmap_helpers.c  |  7 ++
+ .../progs/test_xdp_with_devmap_mb_helpers.c   | 27 ++++++++
+ 6 files changed, 187 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_mb_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_devmap_mb_helpers.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c1b5d3ec57e7..e1ca31c5fc00 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -194,6 +194,18 @@ struct bpf_map {
- 	struct work_struct work;
- 	struct mutex freeze_mutex;
- 	u64 writecnt; /* writable mmap cnt; protected by freeze_mutex */
-+
-+	/* 'Ownership' of program-containing map is claimed by the first program
-+	 * that is going to use this map or by the first program which FD is
-+	 * stored in the map to make sure that all callers and callees have the
-+	 * same prog type, JITed flag and xdp_mb flag.
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+index fd812bd43600..ee580b50a945 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+@@ -3,11 +3,12 @@
+ #include <linux/if_link.h>
+ #include <test_progs.h>
+ 
++#include "test_xdp_with_cpumap_mb_helpers.skel.h"
+ #include "test_xdp_with_cpumap_helpers.skel.h"
+ 
+ #define IFINDEX_LO	1
+ 
+-void serial_test_xdp_cpumap_attach(void)
++void test_xdp_with_cpumap_helpers(void)
+ {
+ 	struct test_xdp_with_cpumap_helpers *skel;
+ 	struct bpf_prog_info info = {};
+@@ -54,6 +55,68 @@ void serial_test_xdp_cpumap_attach(void)
+ 	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
+ 	ASSERT_NEQ(err, 0, "Add non-BPF_XDP_CPUMAP program to cpumap entry");
+ 
++	/* try to attach BPF_XDP_CPUMAP multi-buff program when we have already
++	 * loaded a legacy XDP program on the map
 +	 */
-+	struct {
-+		spinlock_t lock;
-+		enum bpf_prog_type type;
-+		bool jited;
-+		bool xdp_mb;
-+	} owner;
- };
- 
- static inline bool map_value_has_spin_lock(const struct bpf_map *map)
-@@ -930,16 +942,6 @@ struct bpf_prog_aux {
- };
- 
- struct bpf_array_aux {
--	/* 'Ownership' of prog array is claimed by the first program that
--	 * is going to use this map or by the first program which FD is
--	 * stored in the map to make sure that all callers and callees have
--	 * the same prog type and JITed flag.
--	 */
--	struct {
--		spinlock_t lock;
--		enum bpf_prog_type type;
--		bool jited;
--	} owner;
- 	/* Programs with direct jumps into programs part of this array. */
- 	struct list_head poke_progs;
- 	struct bpf_map *map;
-@@ -1114,7 +1116,14 @@ struct bpf_event_entry {
- 	struct rcu_head rcu;
- };
- 
--bool bpf_prog_array_compatible(struct bpf_array *array, const struct bpf_prog *fp);
-+static inline bool map_type_contains_progs(struct bpf_map *map)
++	idx = 1;
++	val.qsize = 192;
++	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_cm_mb);
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_NEQ(err, 0,
++		   "Add BPF_XDP_CPUMAP multi-buff program to cpumap entry");
++
+ out_close:
+ 	test_xdp_with_cpumap_helpers__destroy(skel);
+ }
++
++void test_xdp_with_cpumap_mb_helpers(void)
 +{
-+	return map->map_type == BPF_MAP_TYPE_PROG_ARRAY ||
-+	       map->map_type == BPF_MAP_TYPE_DEVMAP ||
-+	       map->map_type == BPF_MAP_TYPE_CPUMAP;
++	struct test_xdp_with_cpumap_mb_helpers *skel;
++	struct bpf_prog_info info = {};
++	__u32 len = sizeof(info);
++	struct bpf_cpumap_val val = {
++		.qsize = 192,
++	};
++	int err, mb_prog_fd, map_fd;
++	__u32 idx = 0;
++
++	skel = test_xdp_with_cpumap_mb_helpers__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_with_cpumap_helpers__open_and_load"))
++		return;
++
++	mb_prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm_mb);
++	map_fd = bpf_map__fd(skel->maps.cpu_map);
++	err = bpf_obj_get_info_by_fd(mb_prog_fd, &info, &len);
++	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
++		goto out_close;
++
++	val.bpf_prog.fd = mb_prog_fd;
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_OK(err, "Add program to cpumap entry");
++
++	err = bpf_map_lookup_elem(map_fd, &idx, &val);
++	ASSERT_OK(err, "Read cpumap entry");
++	ASSERT_EQ(info.id, val.bpf_prog.id,
++		  "Match program id to cpumap entry prog_id");
++
++	/* try to attach BPF_XDP_CPUMAP program when we have already
++	 * loaded a multi-buff XDP program on the map
++	 */
++	idx = 1;
++	val.qsize = 192;
++	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_NEQ(err, 0, "Add BPF_XDP_CPUMAP program to cpumap entry");
++
++out_close:
++	test_xdp_with_cpumap_mb_helpers__destroy(skel);
 +}
 +
-+bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp);
- int bpf_prog_calc_tag(struct bpf_prog *fp);
- 
- const struct bpf_func_proto *bpf_get_trace_printk_proto(void);
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index c7a5be3bf8be..7f145aefbff8 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -837,13 +837,12 @@ static int fd_array_map_delete_elem(struct bpf_map *map, void *key)
- static void *prog_fd_array_get_ptr(struct bpf_map *map,
- 				   struct file *map_file, int fd)
- {
--	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 	struct bpf_prog *prog = bpf_prog_get(fd);
- 
- 	if (IS_ERR(prog))
- 		return prog;
- 
--	if (!bpf_prog_array_compatible(array, prog)) {
-+	if (!bpf_prog_map_compatible(map, prog)) {
- 		bpf_prog_put(prog);
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -1071,7 +1070,6 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
- 	INIT_WORK(&aux->work, prog_array_map_clear_deferred);
- 	INIT_LIST_HEAD(&aux->poke_progs);
- 	mutex_init(&aux->poke_mutex);
--	spin_lock_init(&aux->owner.lock);
- 
- 	map = array_map_alloc(attr);
- 	if (IS_ERR(map)) {
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 327e3996eadb..bd24cc30d3bd 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1821,28 +1821,30 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- }
- #endif
- 
--bool bpf_prog_array_compatible(struct bpf_array *array,
--			       const struct bpf_prog *fp)
-+bool bpf_prog_map_compatible(struct bpf_map *map,
-+			     const struct bpf_prog *fp)
- {
- 	bool ret;
- 
- 	if (fp->kprobe_override)
- 		return false;
- 
--	spin_lock(&array->aux->owner.lock);
--
--	if (!array->aux->owner.type) {
-+	spin_lock(&map->owner.lock);
-+	if (!map->owner.type) {
- 		/* There's no owner yet where we could check for
- 		 * compatibility.
- 		 */
--		array->aux->owner.type  = fp->type;
--		array->aux->owner.jited = fp->jited;
-+		map->owner.type  = fp->type;
-+		map->owner.jited = fp->jited;
-+		map->owner.xdp_mb = fp->aux->xdp_mb;
- 		ret = true;
- 	} else {
--		ret = array->aux->owner.type  == fp->type &&
--		      array->aux->owner.jited == fp->jited;
-+		ret = map->owner.type  == fp->type &&
-+		      map->owner.jited == fp->jited &&
-+		      map->owner.xdp_mb == fp->aux->xdp_mb;
- 	}
--	spin_unlock(&array->aux->owner.lock);
-+	spin_unlock(&map->owner.lock);
++void serial_test_xdp_cpumap_attach(void)
++{
++	if (test__start_subtest("CPUMAP with programs in entries"))
++		test_xdp_with_cpumap_helpers();
 +
- 	return ret;
- }
++	if (test__start_subtest("CPUMAP with multi-buff programs in entries"))
++		test_xdp_with_cpumap_mb_helpers();
++}
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+index 3079d5568f8f..5c0dc3c20fc9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -4,6 +4,7 @@
+ #include <test_progs.h>
  
-@@ -1854,13 +1856,11 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
- 	mutex_lock(&aux->used_maps_mutex);
- 	for (i = 0; i < aux->used_map_cnt; i++) {
- 		struct bpf_map *map = aux->used_maps[i];
--		struct bpf_array *array;
+ #include "test_xdp_devmap_helpers.skel.h"
++#include "test_xdp_with_devmap_mb_helpers.skel.h"
+ #include "test_xdp_with_devmap_helpers.skel.h"
  
--		if (map->map_type != BPF_MAP_TYPE_PROG_ARRAY)
-+		if (!map_type_contains_progs(map))
- 			continue;
+ #define IFINDEX_LO 1
+@@ -56,6 +57,16 @@ static void test_xdp_with_devmap_helpers(void)
+ 	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
+ 	ASSERT_NEQ(err, 0, "Add non-BPF_XDP_DEVMAP program to devmap entry");
  
--		array = container_of(map, struct bpf_array, map);
--		if (!bpf_prog_array_compatible(array, fp)) {
-+		if (!bpf_prog_map_compatible(map, fp)) {
- 			ret = -EINVAL;
- 			goto out;
- 		}
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 585b2b77ccc4..7f9984e7ba1d 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -397,7 +397,8 @@ static int cpu_map_kthread_run(void *data)
- 	return 0;
- }
- 
--static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
-+static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu,
-+				      struct bpf_map *map, int fd)
- {
- 	struct bpf_prog *prog;
- 
-@@ -405,7 +406,8 @@ static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
- 	if (IS_ERR(prog))
- 		return PTR_ERR(prog);
- 
--	if (prog->expected_attach_type != BPF_XDP_CPUMAP) {
-+	if (prog->expected_attach_type != BPF_XDP_CPUMAP ||
-+	    !bpf_prog_map_compatible(map, prog)) {
- 		bpf_prog_put(prog);
- 		return -EINVAL;
- 	}
-@@ -457,7 +459,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
- 	rcpu->map_id = map->id;
- 	rcpu->value.qsize  = value->qsize;
- 
--	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, fd))
-+	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, map, fd))
- 		goto free_ptr_ring;
- 
- 	/* Setup kthread */
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index f02d04540c0c..a35edd4a2bf1 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -868,7 +868,8 @@ static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
- 					     BPF_PROG_TYPE_XDP, false);
- 		if (IS_ERR(prog))
- 			goto err_put_dev;
--		if (prog->expected_attach_type != BPF_XDP_DEVMAP)
-+		if (prog->expected_attach_type != BPF_XDP_DEVMAP ||
-+		    !bpf_prog_map_compatible(&dtab->map, prog))
- 			goto err_put_prog;
- 	}
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index fbae37d5b329..ba78d3490491 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -540,16 +540,15 @@ static unsigned long bpf_map_memory_footprint(const struct bpf_map *map)
- 
- static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- {
--	const struct bpf_map *map = filp->private_data;
--	const struct bpf_array *array;
--	u32 type = 0, jited = 0;
--
--	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY) {
--		array = container_of(map, struct bpf_array, map);
--		spin_lock(&array->aux->owner.lock);
--		type  = array->aux->owner.type;
--		jited = array->aux->owner.jited;
--		spin_unlock(&array->aux->owner.lock);
-+	struct bpf_map *map = filp->private_data;
-+	u32 type = 0, jited = 0, xdp_mb = 0;
++	/* try to attach BPF_XDP_DEVMAP multi-buff program when we have already
++	 * loaded a legacy XDP program on the map
++	 */
++	idx = 1;
++	val.ifindex = 1;
++	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_dm_mb);
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_NEQ(err, 0,
++		   "Add BPF_XDP_DEVMAP multi-buff program to devmap entry");
 +
-+	if (map_type_contains_progs(map)) {
-+		spin_lock(&map->owner.lock);
-+		type  = map->owner.type;
-+		jited = map->owner.jited;
-+		xdp_mb = map->owner.xdp_mb;
-+		spin_unlock(&map->owner.lock);
- 	}
- 
- 	seq_printf(m,
-@@ -574,6 +573,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- 	if (type) {
- 		seq_printf(m, "owner_prog_type:\t%u\n", type);
- 		seq_printf(m, "owner_jited:\t%u\n", jited);
-+		seq_printf(m, "owner_xdp_mb:\t%u\n", xdp_mb);
+ out_close:
+ 	test_xdp_with_devmap_helpers__destroy(skel);
+ }
+@@ -71,12 +82,57 @@ static void test_neg_xdp_devmap_helpers(void)
  	}
  }
- #endif
-@@ -864,6 +864,7 @@ static int map_create(union bpf_attr *attr)
- 	atomic64_set(&map->refcnt, 1);
- 	atomic64_set(&map->usercnt, 1);
- 	mutex_init(&map->freeze_mutex);
-+	spin_lock_init(&map->owner.lock);
  
- 	map->spin_lock_off = -EINVAL;
- 	map->timer_off = -EINVAL;
++void test_xdp_with_devmap_mb_helpers(void)
++{
++	struct test_xdp_with_devmap_mb_helpers *skel;
++	struct bpf_prog_info info = {};
++	struct bpf_devmap_val val = {
++		.ifindex = IFINDEX_LO,
++	};
++	__u32 len = sizeof(info);
++	int err, dm_fd_mb, map_fd;
++	__u32 idx = 0;
++
++	skel = test_xdp_with_devmap_mb_helpers__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
++		return;
++
++	dm_fd_mb = bpf_program__fd(skel->progs.xdp_dummy_dm_mb);
++	map_fd = bpf_map__fd(skel->maps.dm_ports);
++	err = bpf_obj_get_info_by_fd(dm_fd_mb, &info, &len);
++	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd"))
++		goto out_close;
++
++	val.bpf_prog.fd = dm_fd_mb;
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_OK(err, "Add multi-buff program to devmap entry");
++
++	err = bpf_map_lookup_elem(map_fd, &idx, &val);
++	ASSERT_OK(err, "Read devmap entry");
++	ASSERT_EQ(info.id, val.bpf_prog.id,
++		  "Match program id to devmap entry prog_id");
++
++	/* try to attach BPF_XDP_DEVMAP program when we have already loaded a
++	 * multi-buff XDP program on the map
++	 */
++	idx = 1;
++	val.ifindex = 1;
++	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_NEQ(err, 0, "Add BPF_XDP_DEVMAP program to devmap entry");
++
++out_close:
++	test_xdp_with_devmap_mb_helpers__destroy(skel);
++}
+ 
+ void serial_test_xdp_devmap_attach(void)
+ {
+ 	if (test__start_subtest("DEVMAP with programs in entries"))
+ 		test_xdp_with_devmap_helpers();
+ 
++	if (test__start_subtest("DEVMAP with multi-buff programs in entries"))
++		test_xdp_with_devmap_mb_helpers();
++
+ 	if (test__start_subtest("Verifier check of DEVMAP programs"))
+ 		test_neg_xdp_devmap_helpers();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+index 532025057711..f32e4dab1751 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+@@ -33,4 +33,10 @@ int xdp_dummy_cm(struct xdp_md *ctx)
+ 	return XDP_PASS;
+ }
+ 
++SEC("xdp_cpumap_mb/mb_dummy_cm")
++int xdp_dummy_cm_mb(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_mb_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_mb_helpers.c
+new file mode 100644
+index 000000000000..96eedbaef71b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_mb_helpers.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++#define IFINDEX_LO	1
++
++struct {
++	__uint(type, BPF_MAP_TYPE_CPUMAP);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(struct bpf_cpumap_val));
++	__uint(max_entries, 4);
++} cpu_map SEC(".maps");
++
++SEC("xdp_cpumap/dummy_cm")
++int xdp_dummy_cm(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++SEC("xdp_cpumap_mb/mb_dummy_cm")
++int xdp_dummy_cm_mb(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+index 1e6b9c38ea6d..691f2d70dedc 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_helpers.c
+@@ -40,4 +40,11 @@ int xdp_dummy_dm(struct xdp_md *ctx)
+ 
+ 	return XDP_PASS;
+ }
++
++SEC("xdp_devmap_mb/mp_map_prog")
++int xdp_dummy_dm_mb(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_mb_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_mb_helpers.c
+new file mode 100644
+index 000000000000..05221b1fd9f2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_devmap_mb_helpers.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_DEVMAP);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(struct bpf_devmap_val));
++	__uint(max_entries, 4);
++} dm_ports SEC(".maps");
++
++/* valid program on DEVMAP entry via SEC name;
++ * has access to egress and ingress ifindex
++ */
++SEC("xdp_devmap/map_prog")
++int xdp_dummy_dm(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++SEC("xdp_devmap_mb/mp_map_prog")
++int xdp_dummy_dm_mb(struct xdp_md *ctx)
++{
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.31.1
 
