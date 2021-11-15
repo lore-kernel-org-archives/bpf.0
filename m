@@ -2,30 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8BD5C433EF
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B4D8C433EF
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF6C463222
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E008F63217
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347487AbhKOWy6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 17:54:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47432 "EHLO mail.kernel.org"
+        id S1347882AbhKOWzE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 17:55:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46808 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351166AbhKOWlU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1351191AbhKOWlU (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 15 Nov 2021 17:41:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7AC9F63256;
-        Mon, 15 Nov 2021 22:34:54 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D56F6325A;
+        Mon, 15 Nov 2021 22:35:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637015697;
-        bh=4S3O8whqH0V5ZiJypFNmSFiR73aDZLUOOlDLfBYn4NU=;
+        s=k20201202; t=1637015705;
+        bh=I1e5Kynq3bpP2r8Ig0f4nGTpoOnL7qGeIPRcJgrUQnA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cYsjTjhjDp3cuDdt+AZyUPtq2uTcbhUJ/yvI55vKF//iiTeebcKR/t+tXZDGsrJ2V
-         pfS+Ue08F5xZE3ovBoFGOt+f9hvqeW6ZZL5YWEpsvvtDS0c4LTuwPyiCDMPM2jBppG
-         OXALKygkwYr0kqAPwI4bqwsfUkwgW48QK1iFHBX5+YVfN4tEM04lRVJYZS51zHF0I9
-         zFeqQn9joarIGO5Bwtbd5wE9vwQJxYoX5vA0ZWHTjXNAtybRM+qJhJThVdT0lDFLwF
-         qvNsi+dyLt6OlWtsEJamSXz7+9kdgOhv+r+9Q/bE+QPakYloLcAX0X8lMtyF29DX1W
-         wP15fAqPRlm3g==
+        b=YFFLCf2lhPwxTgA9JW5hzJWTrdpu+ihCos/7w5HqJgll0HJDz+zBhOwEEGOlpHCUy
+         nXThzNDb4T7HvLt9TrBqhkeE2R1P+/n+lVODPQvCPHlFiAFtsggNPewhvMhgJTUR7/
+         T0On9ReXm6NniDU1EKnuomBbRkZwOptMh/8trDNuQjkSC32xiKDJ4RAFa3ZeyknC9a
+         5xyJfUI4bNByEklsECP2UuZAiCABXyiEXgtIDyf4lRzMyigYw5L07S0g3srOyeMgt7
+         00x/Ti1dMnFj9qAGnS6VqODz1Um4Yx4HRQAUHUGEZllXoKixTa7bLe8kT6olqtWGSE
+         MVdRSdfBzqudg==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -35,9 +35,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v18 bpf-next 17/23] bpf: selftests: update xdp_adjust_tail selftest to include multi-buffer
-Date:   Mon, 15 Nov 2021 23:33:11 +0100
-Message-Id: <3331c08f3c38cba9f5facbb58a372942bd7dac5e.1637013639.git.lorenzo@kernel.org>
+Subject: [PATCH v18 bpf-next 19/23] bpf: generalise tail call map compatibility check
+Date:   Mon, 15 Nov 2021 23:33:13 +0100
+Message-Id: <27b3e222ad035ae63f37bd041c79adc06cb55c7d.1637013639.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1637013639.git.lorenzo@kernel.org>
 References: <cover.1637013639.git.lorenzo@kernel.org>
@@ -47,231 +47,263 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Eelco Chaudron <echaudro@redhat.com>
+From: Toke Hoiland-Jorgensen <toke@redhat.com>
 
-This change adds test cases for the multi-buffer scenarios when shrinking
-and growing.
+The check for tail call map compatibility ensures that tail calls only
+happen between maps of the same type. To ensure backwards compatibility for
+XDP multi-buffer we need a similar type of check for cpumap and devmap
+programs, so move the state from bpf_array_aux into bpf_map, add xdp_mb to
+the check, and apply the same check to cpumap and devmap.
 
-Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
+Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Toke Hoiland-Jorgensen <toke@redhat.com>
 ---
- .../bpf/prog_tests/xdp_adjust_tail.c          | 118 ++++++++++++++++++
- .../bpf/progs/test_xdp_adjust_tail_grow.c     |  10 +-
- .../bpf/progs/test_xdp_adjust_tail_shrink.c   |  32 ++++-
- 3 files changed, 153 insertions(+), 7 deletions(-)
+ include/linux/bpf.h   | 31 ++++++++++++++++++++-----------
+ kernel/bpf/arraymap.c |  4 +---
+ kernel/bpf/core.c     | 28 ++++++++++++++--------------
+ kernel/bpf/cpumap.c   |  8 +++++---
+ kernel/bpf/devmap.c   |  3 ++-
+ kernel/bpf/syscall.c  | 21 +++++++++++----------
+ 6 files changed, 53 insertions(+), 42 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-index 3f5a17c38be5..de9ca2a34490 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
-@@ -130,6 +130,120 @@ static void test_xdp_adjust_tail_grow2(void)
- 	bpf_object__close(obj);
- }
- 
-+void test_xdp_adjust_mb_tail_shrink(void)
-+{
-+	const char *file = "./test_xdp_adjust_tail_shrink.o";
-+	__u32 duration, retval, size, exp_size;
-+	struct bpf_object *obj;
-+	int err, prog_fd;
-+	__u8 *buf;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c1b5d3ec57e7..e1ca31c5fc00 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -194,6 +194,18 @@ struct bpf_map {
+ 	struct work_struct work;
+ 	struct mutex freeze_mutex;
+ 	u64 writecnt; /* writable mmap cnt; protected by freeze_mutex */
 +
-+	/* For the individual test cases, the first byte in the packet
-+	 * indicates which test will be run.
++	/* 'Ownership' of program-containing map is claimed by the first program
++	 * that is going to use this map or by the first program which FD is
++	 * stored in the map to make sure that all callers and callees have the
++	 * same prog type, JITed flag and xdp_mb flag.
 +	 */
-+
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	buf = malloc(9000);
-+	if (CHECK(!buf, "malloc()", "error:%s\n", strerror(errno)))
-+		return;
-+
-+	memset(buf, 0, 9000);
-+
-+	/* Test case removing 10 bytes from last frag, NOT freeing it */
-+	exp_size = 8990; /* 9000 - 10 */
-+	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
-+				buf, &size, &retval, &duration);
-+
-+	CHECK(err || retval != XDP_TX || size != exp_size,
-+	      "9k-10b", "err %d errno %d retval %d[%d] size %d[%u]\n",
-+	      err, errno, retval, XDP_TX, size, exp_size);
-+
-+	/* Test case removing one of two pages, assuming 4K pages */
-+	buf[0] = 1;
-+	exp_size = 4900; /* 9000 - 4100 */
-+	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
-+				buf, &size, &retval, &duration);
-+
-+	CHECK(err || retval != XDP_TX || size != exp_size,
-+	      "9k-1p", "err %d errno %d retval %d[%d] size %d[%u]\n",
-+	      err, errno, retval, XDP_TX, size, exp_size);
-+
-+	/* Test case removing two pages resulting in a non mb xdp_buff */
-+	buf[0] = 2;
-+	exp_size = 800; /* 9000 - 8200 */
-+	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
-+				buf, &size, &retval, &duration);
-+
-+	CHECK(err || retval != XDP_TX || size != exp_size,
-+	      "9k-2p", "err %d errno %d retval %d[%d] size %d[%u]\n",
-+	      err, errno, retval, XDP_TX, size, exp_size);
-+
-+	free(buf);
-+
-+	bpf_object__close(obj);
-+}
-+
-+void test_xdp_adjust_mb_tail_grow(void)
++	struct {
++		spinlock_t lock;
++		enum bpf_prog_type type;
++		bool jited;
++		bool xdp_mb;
++	} owner;
+ };
+ 
+ static inline bool map_value_has_spin_lock(const struct bpf_map *map)
+@@ -930,16 +942,6 @@ struct bpf_prog_aux {
+ };
+ 
+ struct bpf_array_aux {
+-	/* 'Ownership' of prog array is claimed by the first program that
+-	 * is going to use this map or by the first program which FD is
+-	 * stored in the map to make sure that all callers and callees have
+-	 * the same prog type and JITed flag.
+-	 */
+-	struct {
+-		spinlock_t lock;
+-		enum bpf_prog_type type;
+-		bool jited;
+-	} owner;
+ 	/* Programs with direct jumps into programs part of this array. */
+ 	struct list_head poke_progs;
+ 	struct bpf_map *map;
+@@ -1114,7 +1116,14 @@ struct bpf_event_entry {
+ 	struct rcu_head rcu;
+ };
+ 
+-bool bpf_prog_array_compatible(struct bpf_array *array, const struct bpf_prog *fp);
++static inline bool map_type_contains_progs(struct bpf_map *map)
 +{
-+	const char *file = "./test_xdp_adjust_tail_grow.o";
-+	__u32 duration, retval, size, exp_size;
-+	struct bpf_object *obj;
-+	int err, i, prog_fd;
-+	__u8 *buf;
-+
-+	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	buf = malloc(16384);
-+	if (CHECK(!buf, "malloc()", "error:%s\n", strerror(errno)))
-+		return;
-+
-+	/* Test case add 10 bytes to last frag */
-+	memset(buf, 1, 16384);
-+	size = 9000;
-+	exp_size = size + 10;
-+	err = bpf_prog_test_run(prog_fd, 1, buf, size,
-+				buf, &size, &retval, &duration);
-+
-+	CHECK(err || retval != XDP_TX || size != exp_size,
-+	      "9k+10b", "err %d retval %d[%d] size %d[%u]\n",
-+	      err, retval, XDP_TX, size, exp_size);
-+
-+	for (i = 0; i < 9000; i++)
-+		CHECK(buf[i] != 1, "9k+10b-old",
-+		      "Old data not all ok, offset %i is failing [%u]!\n",
-+		      i, buf[i]);
-+
-+	for (i = 9000; i < 9010; i++)
-+		CHECK(buf[i] != 0, "9k+10b-new",
-+		      "New data not all ok, offset %i is failing [%u]!\n",
-+		      i, buf[i]);
-+
-+	for (i = 9010; i < 16384; i++)
-+		CHECK(buf[i] != 1, "9k+10b-untouched",
-+		      "Unused data not all ok, offset %i is failing [%u]!\n",
-+		      i, buf[i]);
-+
-+	/* Test a too large grow */
-+	memset(buf, 1, 16384);
-+	size = 9001;
-+	exp_size = size;
-+	err = bpf_prog_test_run(prog_fd, 1, buf, size,
-+				buf, &size, &retval, &duration);
-+
-+	CHECK(err || retval != XDP_DROP || size != exp_size,
-+	      "9k+10b", "err %d retval %d[%d] size %d[%u]\n",
-+	      err, retval, XDP_TX, size, exp_size);
-+
-+	free(buf);
-+
-+	bpf_object__close(obj);
++	return map->map_type == BPF_MAP_TYPE_PROG_ARRAY ||
++	       map->map_type == BPF_MAP_TYPE_DEVMAP ||
++	       map->map_type == BPF_MAP_TYPE_CPUMAP;
 +}
 +
- void test_xdp_adjust_tail(void)
- {
- 	if (test__start_subtest("xdp_adjust_tail_shrink"))
-@@ -138,4 +252,8 @@ void test_xdp_adjust_tail(void)
- 		test_xdp_adjust_tail_grow();
- 	if (test__start_subtest("xdp_adjust_tail_grow2"))
- 		test_xdp_adjust_tail_grow2();
-+	if (test__start_subtest("xdp_adjust_mb_tail_shrink"))
-+		test_xdp_adjust_mb_tail_shrink();
-+	if (test__start_subtest("xdp_adjust_mb_tail_grow"))
-+		test_xdp_adjust_mb_tail_grow();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
-index 199c61b7d062..53b64c999450 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
-@@ -7,11 +7,10 @@ int _xdp_adjust_tail_grow(struct xdp_md *xdp)
- {
- 	void *data_end = (void *)(long)xdp->data_end;
- 	void *data = (void *)(long)xdp->data;
--	unsigned int data_len;
-+	int data_len = bpf_xdp_get_buff_len(xdp);
- 	int offset = 0;
++bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp);
+ int bpf_prog_calc_tag(struct bpf_prog *fp);
  
- 	/* Data length determine test case */
--	data_len = data_end - data;
+ const struct bpf_func_proto *bpf_get_trace_printk_proto(void);
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index c7a5be3bf8be..7f145aefbff8 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -837,13 +837,12 @@ static int fd_array_map_delete_elem(struct bpf_map *map, void *key)
+ static void *prog_fd_array_get_ptr(struct bpf_map *map,
+ 				   struct file *map_file, int fd)
+ {
+-	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	struct bpf_prog *prog = bpf_prog_get(fd);
  
- 	if (data_len == 54) { /* sizeof(pkt_v4) */
- 		offset = 4096; /* test too large offset */
-@@ -20,7 +19,12 @@ int _xdp_adjust_tail_grow(struct xdp_md *xdp)
- 	} else if (data_len == 64) {
- 		offset = 128;
- 	} else if (data_len == 128) {
--		offset = 4096 - 256 - 320 - data_len; /* Max tail grow 3520 */
-+		/* Max tail grow 3520 */
-+		offset = 4096 - 256 - 320 - data_len;
-+	} else if (data_len == 9000) {
-+		offset = 10;
-+	} else if (data_len == 9001) {
-+		offset = 4096;
- 	} else {
- 		return XDP_ABORTED; /* No matching test */
+ 	if (IS_ERR(prog))
+ 		return prog;
+ 
+-	if (!bpf_prog_array_compatible(array, prog)) {
++	if (!bpf_prog_map_compatible(map, prog)) {
+ 		bpf_prog_put(prog);
+ 		return ERR_PTR(-EINVAL);
  	}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
-index b7448253d135..eeff48997b6e 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
-@@ -12,14 +12,38 @@
- SEC("xdp")
- int _xdp_adjust_tail_shrink(struct xdp_md *xdp)
- {
--	void *data_end = (void *)(long)xdp->data_end;
--	void *data = (void *)(long)xdp->data;
-+	__u8 *data_end = (void *)(long)xdp->data_end;
-+	__u8 *data = (void *)(long)xdp->data;
- 	int offset = 0;
+@@ -1071,7 +1070,6 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
+ 	INIT_WORK(&aux->work, prog_array_map_clear_deferred);
+ 	INIT_LIST_HEAD(&aux->poke_progs);
+ 	mutex_init(&aux->poke_mutex);
+-	spin_lock_init(&aux->owner.lock);
  
--	if (data_end - data == 54) /* sizeof(pkt_v4) */
-+	switch (bpf_xdp_get_buff_len(xdp)) {
-+	case 54:
-+		/* sizeof(pkt_v4) */
- 		offset = 256; /* shrink too much */
--	else
-+		break;
-+	case 9000:
-+		/* Multi-buffer test cases */
-+		if (data + 1 > data_end)
-+			return XDP_DROP;
+ 	map = array_map_alloc(attr);
+ 	if (IS_ERR(map)) {
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 327e3996eadb..bd24cc30d3bd 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1821,28 +1821,30 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
+ }
+ #endif
+ 
+-bool bpf_prog_array_compatible(struct bpf_array *array,
+-			       const struct bpf_prog *fp)
++bool bpf_prog_map_compatible(struct bpf_map *map,
++			     const struct bpf_prog *fp)
+ {
+ 	bool ret;
+ 
+ 	if (fp->kprobe_override)
+ 		return false;
+ 
+-	spin_lock(&array->aux->owner.lock);
+-
+-	if (!array->aux->owner.type) {
++	spin_lock(&map->owner.lock);
++	if (!map->owner.type) {
+ 		/* There's no owner yet where we could check for
+ 		 * compatibility.
+ 		 */
+-		array->aux->owner.type  = fp->type;
+-		array->aux->owner.jited = fp->jited;
++		map->owner.type  = fp->type;
++		map->owner.jited = fp->jited;
++		map->owner.xdp_mb = fp->aux->xdp_mb;
+ 		ret = true;
+ 	} else {
+-		ret = array->aux->owner.type  == fp->type &&
+-		      array->aux->owner.jited == fp->jited;
++		ret = map->owner.type  == fp->type &&
++		      map->owner.jited == fp->jited &&
++		      map->owner.xdp_mb == fp->aux->xdp_mb;
+ 	}
+-	spin_unlock(&array->aux->owner.lock);
++	spin_unlock(&map->owner.lock);
 +
-+		switch (data[0]) {
-+		case 0:
-+			offset = 10;
-+			break;
-+		case 1:
-+			offset = 4100;
-+			break;
-+		case 2:
-+			offset = 8200;
-+			break;
-+		default:
-+			return XDP_DROP;
-+		}
-+		break;
-+	default:
- 		offset = 20;
-+		break;
-+	}
- 	if (bpf_xdp_adjust_tail(xdp, 0 - offset))
- 		return XDP_DROP;
- 	return XDP_TX;
+ 	return ret;
+ }
+ 
+@@ -1854,13 +1856,11 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
+ 	mutex_lock(&aux->used_maps_mutex);
+ 	for (i = 0; i < aux->used_map_cnt; i++) {
+ 		struct bpf_map *map = aux->used_maps[i];
+-		struct bpf_array *array;
+ 
+-		if (map->map_type != BPF_MAP_TYPE_PROG_ARRAY)
++		if (!map_type_contains_progs(map))
+ 			continue;
+ 
+-		array = container_of(map, struct bpf_array, map);
+-		if (!bpf_prog_array_compatible(array, fp)) {
++		if (!bpf_prog_map_compatible(map, fp)) {
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 585b2b77ccc4..7f9984e7ba1d 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -397,7 +397,8 @@ static int cpu_map_kthread_run(void *data)
+ 	return 0;
+ }
+ 
+-static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
++static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu,
++				      struct bpf_map *map, int fd)
+ {
+ 	struct bpf_prog *prog;
+ 
+@@ -405,7 +406,8 @@ static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
+ 	if (IS_ERR(prog))
+ 		return PTR_ERR(prog);
+ 
+-	if (prog->expected_attach_type != BPF_XDP_CPUMAP) {
++	if (prog->expected_attach_type != BPF_XDP_CPUMAP ||
++	    !bpf_prog_map_compatible(map, prog)) {
+ 		bpf_prog_put(prog);
+ 		return -EINVAL;
+ 	}
+@@ -457,7 +459,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ 	rcpu->map_id = map->id;
+ 	rcpu->value.qsize  = value->qsize;
+ 
+-	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, fd))
++	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, map, fd))
+ 		goto free_ptr_ring;
+ 
+ 	/* Setup kthread */
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index f02d04540c0c..a35edd4a2bf1 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -868,7 +868,8 @@ static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
+ 					     BPF_PROG_TYPE_XDP, false);
+ 		if (IS_ERR(prog))
+ 			goto err_put_dev;
+-		if (prog->expected_attach_type != BPF_XDP_DEVMAP)
++		if (prog->expected_attach_type != BPF_XDP_DEVMAP ||
++		    !bpf_prog_map_compatible(&dtab->map, prog))
+ 			goto err_put_prog;
+ 	}
+ 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index fbae37d5b329..ba78d3490491 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -540,16 +540,15 @@ static unsigned long bpf_map_memory_footprint(const struct bpf_map *map)
+ 
+ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
+ {
+-	const struct bpf_map *map = filp->private_data;
+-	const struct bpf_array *array;
+-	u32 type = 0, jited = 0;
+-
+-	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY) {
+-		array = container_of(map, struct bpf_array, map);
+-		spin_lock(&array->aux->owner.lock);
+-		type  = array->aux->owner.type;
+-		jited = array->aux->owner.jited;
+-		spin_unlock(&array->aux->owner.lock);
++	struct bpf_map *map = filp->private_data;
++	u32 type = 0, jited = 0, xdp_mb = 0;
++
++	if (map_type_contains_progs(map)) {
++		spin_lock(&map->owner.lock);
++		type  = map->owner.type;
++		jited = map->owner.jited;
++		xdp_mb = map->owner.xdp_mb;
++		spin_unlock(&map->owner.lock);
+ 	}
+ 
+ 	seq_printf(m,
+@@ -574,6 +573,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
+ 	if (type) {
+ 		seq_printf(m, "owner_prog_type:\t%u\n", type);
+ 		seq_printf(m, "owner_jited:\t%u\n", jited);
++		seq_printf(m, "owner_xdp_mb:\t%u\n", xdp_mb);
+ 	}
+ }
+ #endif
+@@ -864,6 +864,7 @@ static int map_create(union bpf_attr *attr)
+ 	atomic64_set(&map->refcnt, 1);
+ 	atomic64_set(&map->usercnt, 1);
+ 	mutex_init(&map->freeze_mutex);
++	spin_lock_init(&map->owner.lock);
+ 
+ 	map->spin_lock_off = -EINVAL;
+ 	map->timer_off = -EINVAL;
 -- 
 2.31.1
 
