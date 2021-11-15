@@ -2,116 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62DDDC433F5
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 17:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 000CCC433EF
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 18:13:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 472EC632B2
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 17:52:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD79761AA2
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 18:13:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239173AbhKORyt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 12:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238916AbhKORwo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 12:52:44 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD316C0A8890;
-        Mon, 15 Nov 2021 09:27:06 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id iq11so13440633pjb.3;
-        Mon, 15 Nov 2021 09:27:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MTplP5x3igISERaVQs+hIMgLuqZSlQ4Kja2MmpsBHAg=;
-        b=XEesiEVEHvHPl3zz61+KH76/lHBYqWLtuRbcxXYCqzA6IQc3RAlIGyXVf6Y9sogUOP
-         VLJNhKHIq09yEI7hj28ed90T9anjGeFSAMPiiL5iHS+qngUXuYMy96gJOrVy46jQJL+t
-         vEHYXYWWvs03BH3Ac8tBYPO2gKWGVlOJHVp1TFWQ64E5YAoSC5NYj1LKDrgg4C3DlEuV
-         rrWP2HQZbsEMvii43atUgOPEFozNKTPjRjYoWQ7T6bLY1gM72BmZFES8KE0D4tuOwSq8
-         M6SfY6Kdq1oZ0GnETyHfvxR1aS1MVrdwknGA/w2mV2ImGEIP4RLd+c3/LO/OEb7QbPiQ
-         6iFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MTplP5x3igISERaVQs+hIMgLuqZSlQ4Kja2MmpsBHAg=;
-        b=VNHrsHlbAiVjouv10QxfdoHqQzMEKA8j5fipAlrKOGaLMPY7I763qvPDCIIvefqaPO
-         2aP1u27F3NgZLfpVDmYwvOJM6X7ftokeNIvJh++yxlq7E8N2xbPxtzZZfggRkc9qo5li
-         COhTCTi/DScLpXrhk6qKJnaOGbO8X6WqHOVkfRE9NHXYNBBgDz9e6nRGW/y/nr40xJ4+
-         v4t0OOP8weqdDCesNPz2Mo7nMeGSDRJX+X2obl4p3ZhVmNhCSgrsbNyBukw26cYNkYU8
-         I/qZX0LI2gZjprxnWUBNBywavH2F0dHl2a+NqS5MPpaLIScyWfrWMzkc9xuhsLveoRim
-         1c+Q==
-X-Gm-Message-State: AOAM53031Nw+npclgvkpkr6Rbem6Tei/NioggVATPLuSk0PyiuKudnUP
-        Ojp8jnkI4DGVZBpPHQszVBw=
-X-Google-Smtp-Source: ABdhPJxOdNEmuNutKJ8PiqRLJaeXrrFp6pWlZCD8dzOqYvJkjrqKPN/vRoOqkrsbfgXlSFVwngw0FQ==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr246408pjb.190.1636997226093;
-        Mon, 15 Nov 2021 09:27:06 -0800 (PST)
-Received: from localhost ([2405:201:6014:d064:502e:73f4:8af1:9522])
-        by smtp.gmail.com with ESMTPSA id a29sm15467251pfh.29.2021.11.15.09.27.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 09:27:05 -0800 (PST)
-Date:   Mon, 15 Nov 2021 22:57:03 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     ast@kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: "resolve_btfids: unresolved" warnings while building v5.16-rc1
-Message-ID: <20211115172703.hgsuukifbji6khln@apollo.localdomain>
-References: <1b99ae14-abb4-d18f-cc6a-d7e523b25542@gmail.com>
- <20211115141735.o4reo2jruu73a2vf@apollo.localdomain>
+        id S237015AbhKOSQl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 13:16:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49950 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240695AbhKOSLr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 13:11:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EEB9063317;
+        Mon, 15 Nov 2021 17:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636998476;
+        bh=QeOx66bLaohTdP8iS3no5arKK1EF+YLTTkG3AQMRpUo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=0Jb2HN69OhqmKTu7S6RducJLBtUirHxHsVXOD+qgMG71LqRpE+awp1PiHnhE5bQXa
+         td3fp6odRlsECRtYzvyrBL1hlGN5nJXLzTTlaaxP5A3FH2hpzecsFFrb5p/4jfMvdS
+         RtkVcZty+lX5gXCTqSzUUMv26b4iQBLlI+HM4CEM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiri Olsa <jolsa@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 523/575] perf bpf: Add missing free to bpf_event__print_bpf_prog_info()
+Date:   Mon, 15 Nov 2021 18:04:08 +0100
+Message-Id: <20211115165401.758780025@linuxfoundation.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211115165343.579890274@linuxfoundation.org>
+References: <20211115165343.579890274@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211115141735.o4reo2jruu73a2vf@apollo.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 07:47:35PM IST, Kumar Kartikeya Dwivedi wrote:
-> On Mon, Nov 15, 2021 at 07:04:51PM IST, Pavel Skripkin wrote:
-> > Hi, net/bpf developers!
-> >
-> > While building newest kernel for fuzzing I met following warnings:
-> >
-> > ```
-> >   BTFIDS  vmlinux
-> > WARN: resolve_btfids: unresolved symbol tcp_dctcp_kfunc_ids
-> > WARN: resolve_btfids: unresolved symbol tcp_cubic_kfunc_ids
-> > WARN: resolve_btfids: unresolved symbol tcp_bbr_kfunc_ids
-> >   SORTTAB vmlinux
-> >
-> > ```
+From: Ian Rogers <irogers@google.com>
 
-+Cc Andrii
+[ Upstream commit 88c42f4d6cb249eb68524282f8d4cc32f9059984 ]
 
-So the reason should be CONFIG_DYNAMIC_FTRACE=n, when that is turned off,
-all these three BTF sets should be empty. Earlier they were all part of the
-set in bpf_tcp_ca.c, which would never be empty, so there was no warning.
+If btf__new() is called then there needs to be a corresponding btf__free().
 
-I guess we can demote that warning to debug, but not sure, since it isn't
-limited to BTF sets, but also other symbols (e.g. kernel functions referenced in
-.BTF_ids).
+Fixes: f8dfeae009effc0b ("perf bpf: Show more BPF program info in print_bpf_prog_info()")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20211106053733.3580931-2-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/bpf-event.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-The other option is to add a dummy function in the set so that set->cnt != 0.
+diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
+index 3742511a08d15..c8101575dbf45 100644
+--- a/tools/perf/util/bpf-event.c
++++ b/tools/perf/util/bpf-event.c
+@@ -557,7 +557,7 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
+ 		synthesize_bpf_prog_name(name, KSYM_NAME_LEN, info, btf, 0);
+ 		fprintf(fp, "# bpf_prog_info %u: %s addr 0x%llx size %u\n",
+ 			info->id, name, prog_addrs[0], prog_lens[0]);
+-		return;
++		goto out;
+ 	}
+ 
+ 	fprintf(fp, "# bpf_prog_info %u:\n", info->id);
+@@ -567,4 +567,6 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
+ 		fprintf(fp, "# \tsub_prog %u: %s addr 0x%llx size %u\n",
+ 			i, name, prog_addrs[i], prog_lens[i]);
+ 	}
++out:
++	btf__free(btf);
+ }
+-- 
+2.33.0
 
-> >
-> > I haven't seen such warnings before and have no idea are they important or
-> > not. Config is attached.
-> >
-> > My host is openSUSE Tumbleweed with gcc (SUSE Linux) 10.3.1 20210707
-> > [revision 048117e16c77f82598fca9af585500572d46ad73] if it's important :)
-> >
-> >
->
-> I'll take a look later today.
->
-> >
-> > With regards,
-> > Pavel Skripkin
->
-> --
-> Kartikeya
 
---
-Kartikeya
+
