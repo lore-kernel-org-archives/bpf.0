@@ -2,215 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9CC4C433F5
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 23:13:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82B8CC433EF
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 23:32:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C21DC61A89
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 23:13:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70FDF61A40
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 23:32:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbhKOXQj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 18:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350020AbhKOXOb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 18:14:31 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5DEC04EFB6
-        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 14:16:16 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id p17so15789851pgj.2
-        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 14:16:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q5Q7mjWxHvomA4joFyHp8gbW0OzP0GYKgcSZNkWKQbw=;
-        b=GfFI7XvVt8YFksskvqmrQ3qPuEuVeXEYjSmuZkGA5xMMXxFy564PrMeBNc7Y8WH5PL
-         yt5GdFT0FW445phxmH69+fTSi0opmzSp0MKM1Su7LpWaODpHqJOvO/AjHDC3wXOmrXDe
-         2wLMSbl2QDTBiMGmIPaGGEJJB0n0X5+1Qk2gI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Q5Q7mjWxHvomA4joFyHp8gbW0OzP0GYKgcSZNkWKQbw=;
-        b=M9n7F/JgppkHBAgcXhLQmof3DLRKDJZEtTZ0ah/5AFLvIW0WmpPdM1AFA6bTZkh2uO
-         lQVJ6TYsWJHsVUPGhVAz0Aw5QyhdnWsm0opjH7QY8XBDcVGjNTj2pQ1dj6VeSzQ3Wugu
-         8slAlZhv7zSSfUaSn4RKukeFn4tslLs6AY3G5QUQFOixOLU4lKeH4E5j54BVfbHmWv2N
-         qFT4Imc2hjzfzvhidRnoncZIVTX7ju+zAF+/v8yNW1FNY5+sx4TLxYp2kHfYvPvkYZzk
-         KdOMtrpouPw7mn79EOlYFTvy5SDlwpc8+cGrcWW/59WLNqoObIUMwSC7snFef2fV6O+o
-         tJLw==
-X-Gm-Message-State: AOAM530C2z2DALOWn+TOemxF9PrLjH42P1HwuyNCG9DnDPTC9Ig1mJNK
-        BiFHhyvc0+VpTpZ0kEGJ16CDTA==
-X-Google-Smtp-Source: ABdhPJz3d1Fm6DVmJXDnQcSZ6XVqy1YGkg+bK+EhRM29LMp3+iWkEpRfouWPgP5TqiLJ0sYBVy/rdA==
-X-Received: by 2002:a63:1d13:: with SMTP id d19mr1556417pgd.383.1637014576434;
-        Mon, 15 Nov 2021 14:16:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id oc10sm293770pjb.26.2021.11.15.14.16.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 14:16:16 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Saeed Mahameed <saeedm@nvidia.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] net/mlx5e: Avoid field-overflowing memcpy()
-Date:   Mon, 15 Nov 2021 14:16:13 -0800
-Message-Id: <20211115221613.2791637-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
+        id S1346015AbhKOXfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 18:35:20 -0500
+Received: from www62.your-server.de ([213.133.104.62]:53340 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353101AbhKOXdO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 18:33:14 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mmlQO-000Ci8-7O; Tue, 16 Nov 2021 00:30:08 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1mmlQN-000GXA-PZ; Tue, 16 Nov 2021 00:30:07 +0100
+Subject: Re: [PATCH] bpf: Enable bpf support for reading branch records in
+ powerpc
+To:     Kajol Jain <kjain@linux.ibm.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     acme@kernel.org, peterz@infradead.org, songliubraving@fb.com,
+        andrii@kernel.org, kafai@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, davem@davemloft.net, kpsingh@kernel.org,
+        hawk@kernel.org, kuba@kernel.org, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, linux-perf-users@vger.kernel.org,
+        rnsastry@linux.ibm.com
+References: <20211115044437.12047-1-kjain@linux.ibm.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5a185d6b-7090-23f0-1ec9-140a31ee5fb4@iogearbox.net>
+Date:   Tue, 16 Nov 2021 00:30:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5948; h=from:subject; bh=0WIZ0LaG1CrIgiauMUryZqkW+d9Y9QkDjTEtreWu41w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhktwsH+KBpNKg9y8K0YobbeqSLF6d2fuY7VTbl+5Z Uh4uM5yJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYZLcLAAKCRCJcvTf3G3AJmobD/ 4yvXZ4YCp0KjHJMvrX51CQUEcJK+sRXEh/r1W+abkDL4ueQ+6QV3vWeVSrhqJESh+XpSxMLwszT+IF xrIH7gRb+kRPp3AXQaL8Eh4rC3NpFmtrhyo5tKR1FTkRViKY1ziXYvytN3tnVhL+btoLMt69UWKA4M rH0wA3BuMNWUIK1yxE7SHdVTs9H0FZ1M9qPaWt9a+uq6DLPTP3iJUKRM12850xYCvVzdFbbf7mIg+m pXUDLunfMEj2Vc3jg5LwpL/ow9rH2Q+9RU9Nx0hiUlNfQA+4m75yhlsDP81nmQv9aLkoHTuSvowmGT dGJOEUZep0TZp09tQJTgrb+6rJNPIQM5KD2uj/+6ks2FeGu1ADL6WQIlRJpKGRhZZFwJW9lDx4BuIk kK9RfAVMz9bw0QJSeX8iq7Wmx5cro599decAtm8SwF0Pku/UhCALalcV5AlXHgINCFYldUYDNTJ+KY RdLLm3HGfN22x6hoP7AqbCJvIYEsmf2qlBuzHH6vSD8PjHelqMKzw3F2d470UfxUDtlzI5lMNMsAj3 GYLomDbvaxl11/Z2MJeb0SnUHTnFzbHFeYkCZQylS9lAiycVZ9AkxDIch7PQTVW/TSO8uAtuTeXnDS 4oiEm5xtKVE2kUINM+5T3E6lXmFCmBmSV7z5qTKv6zt2wbuQPEOHPukS7IIQ==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211115044437.12047-1-kjain@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.3/26354/Mon Nov 15 10:21:07 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memcpy(), memmove(), and memset(), avoid
-intentionally writing across neighboring fields.
+On 11/15/21 5:44 AM, Kajol Jain wrote:
+> Branch data available to bpf programs can be very useful to get
+> stack traces out of userspace applications.
+> 
+> Commit fff7b64355ea ("bpf: Add bpf_read_branch_records() helper")
+> added bpf support to capture branch records in x86. Enable this feature
+> for powerpc as well.
+> 
+> Commit 67306f84ca78 ("selftests/bpf: Add bpf_read_branch_records()
+> selftest") adds selftest corresponding to bpf branch read
+> function bpf_read_branch_records(). Used this selftest to
+> test bpf support, for reading branch records in powerpc.
+> 
+> Selftest result in power9 box before this patch changes:
+> 
+> [command]# ./test_progs -t perf_branches
+> Failed to load bpf_testmod.ko into the kernel: -8
+> WARNING! Selftests relying on bpf_testmod.ko will be skipped.
+> test_perf_branches_common:PASS:test_perf_branches_load 0 nsec
+> test_perf_branches_common:PASS:attach_perf_event 0 nsec
+> test_perf_branches_common:PASS:set_affinity 0 nsec
+> check_good_sample:PASS:output not valid 0 nsec
+> check_good_sample:FAIL:read_branches_size err -2
+> check_good_sample:FAIL:read_branches_stack err -2
+> check_good_sample:FAIL:read_branches_stack stack bytes written=-2
+> not multiple of struct size=24
+> check_good_sample:FAIL:read_branches_global err -2
+> check_good_sample:FAIL:read_branches_global global bytes written=-2
+> not multiple of struct size=24
+> check_good_sample:PASS:read_branches_size 0 nsec
+>   #75/1 perf_branches_hw:FAIL
+>   #75/2 perf_branches_no_hw:OK
+>   #75 perf_branches:FAIL
+> Summary: 0/1 PASSED, 0 SKIPPED, 2 FAILED
+> 
+> Selftest result in power9 box after this patch changes:
+> 
+> [command]#: ./test_progs -t perf_branches
+>   #75/1 perf_branches_hw:OK
+>   #75/2 perf_branches_no_hw:OK
+>   #75 perf_branches:OK
+> Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> Signed-off-by: Kajol Jain<kjain@linux.ibm.com>
+> ---
+>   kernel/trace/bpf_trace.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index fdd14072fc3b..2b7343b64bb7 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1245,7 +1245,7 @@ static const struct bpf_func_proto bpf_perf_prog_read_value_proto = {
+>   BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+>   	   void *, buf, u32, size, u64, flags)
+>   {
+> -#ifndef CONFIG_X86
+> +#if !(defined(CONFIG_X86) || defined(CONFIG_PPC64))
 
-Use flexible arrays instead of zero-element arrays (which look like they
-are always overflowing) and split the cross-field memcpy() into two halves
-that can be appropriately bounds-checked by the compiler.
+Can this really be enabled generically? Looking at 3925f46bb590 ("powerpc/perf: Enable
+branch stack sampling framework") it says POWER8 [and beyond]. Should there be a generic
+Kconfig symbol like ARCH_HAS_BRANCH_RECORDS that can be selected by archs instead?
 
-We were doing:
-
-	#define ETH_HLEN  14
-	#define VLAN_HLEN  4
-	...
-	#define MLX5E_XDP_MIN_INLINE (ETH_HLEN + VLAN_HLEN)
-	...
-        struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(wq, pi);
-	...
-        struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
-        struct mlx5_wqe_data_seg *dseg = wqe->data;
-	...
-	memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
-
-target is wqe->eth.inline_hdr.start (which the compiler sees as being
-2 bytes in size), but copying 18, intending to write across start
-(really vlan_tci, 2 bytes). The remaining 16 bytes get written into
-wqe->data[0], covering byte_count (4 bytes), lkey (4 bytes), and addr
-(8 bytes).
-
-struct mlx5e_tx_wqe {
-        struct mlx5_wqe_ctrl_seg   ctrl;                 /*     0    16 */
-        struct mlx5_wqe_eth_seg    eth;                  /*    16    16 */
-        struct mlx5_wqe_data_seg   data[];               /*    32     0 */
-
-        /* size: 32, cachelines: 1, members: 3 */
-        /* last cacheline: 32 bytes */
-};
-
-struct mlx5_wqe_eth_seg {
-        u8                         swp_outer_l4_offset;  /*     0     1 */
-        u8                         swp_outer_l3_offset;  /*     1     1 */
-        u8                         swp_inner_l4_offset;  /*     2     1 */
-        u8                         swp_inner_l3_offset;  /*     3     1 */
-        u8                         cs_flags;             /*     4     1 */
-        u8                         swp_flags;            /*     5     1 */
-        __be16                     mss;                  /*     6     2 */
-        __be32                     flow_table_metadata;  /*     8     4 */
-        union {
-                struct {
-                        __be16     sz;                   /*    12     2 */
-                        u8         start[2];             /*    14     2 */
-                } inline_hdr;                            /*    12     4 */
-                struct {
-                        __be16     type;                 /*    12     2 */
-                        __be16     vlan_tci;             /*    14     2 */
-                } insert;                                /*    12     4 */
-                __be32             trailer;              /*    12     4 */
-        };                                               /*    12     4 */
-
-        /* size: 16, cachelines: 1, members: 9 */
-        /* last cacheline: 16 bytes */
-};
-
-struct mlx5_wqe_data_seg {
-        __be32                     byte_count;           /*     0     4 */
-        __be32                     lkey;                 /*     4     4 */
-        __be64                     addr;                 /*     8     8 */
-
-        /* size: 16, cachelines: 1, members: 3 */
-        /* last cacheline: 16 bytes */
-};
-
-So, split the memcpy() so the compiler can reason about the buffer
-sizes.
-
-"pahole" shows no size nor member offset changes to struct mlx5e_tx_wqe
-nor struct mlx5e_umr_wqe. "objdump -d" shows no meaningful object
-code changes (i.e. only source line number induced differences and
-optimizations).
-
-Cc: Saeed Mahameed <saeedm@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-rdma@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/ethernet/mellanox/mlx5/core/en.h     | 6 +++---
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 4 +++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index f0ac6b0d9653..0925092211ce 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -225,7 +225,7 @@ static inline int mlx5e_get_max_num_channels(struct mlx5_core_dev *mdev)
- struct mlx5e_tx_wqe {
- 	struct mlx5_wqe_ctrl_seg ctrl;
- 	struct mlx5_wqe_eth_seg  eth;
--	struct mlx5_wqe_data_seg data[0];
-+	struct mlx5_wqe_data_seg data[];
- };
- 
- struct mlx5e_rx_wqe_ll {
-@@ -242,8 +242,8 @@ struct mlx5e_umr_wqe {
- 	struct mlx5_wqe_umr_ctrl_seg   uctrl;
- 	struct mlx5_mkey_seg           mkc;
- 	union {
--		struct mlx5_mtt inline_mtts[0];
--		struct mlx5_klm inline_klms[0];
-+		DECLARE_FLEX_ARRAY(struct mlx5_mtt, inline_mtts);
-+		DECLARE_FLEX_ARRAY(struct mlx5_klm, inline_klms);
- 	};
- };
- 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index 2f0df5cc1a2d..efae2444c26f 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -341,8 +341,10 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- 
- 	/* copy the inline part if required */
- 	if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
--		memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
-+		memcpy(eseg->inline_hdr.start, xdptxd->data, sizeof(eseg->inline_hdr.start));
- 		eseg->inline_hdr.sz = cpu_to_be16(MLX5E_XDP_MIN_INLINE);
-+		memcpy(dseg, xdptxd->data + sizeof(eseg->inline_hdr.start),
-+		       MLX5E_XDP_MIN_INLINE - sizeof(eseg->inline_hdr.start));
- 		dma_len  -= MLX5E_XDP_MIN_INLINE;
- 		dma_addr += MLX5E_XDP_MIN_INLINE;
- 		dseg++;
--- 
-2.30.2
+>   	return -ENOENT;
+>   #else
+>   	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
+> 
 
