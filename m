@@ -2,116 +2,173 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC7AC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2706BC4321E
 	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 20:07:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ECBF461BE6
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 20:07:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E45661B95
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 20:07:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344882AbhKOUIK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 15:08:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45398 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344908AbhKOTZm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:25:42 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A0B0C636E9;
-        Mon, 15 Nov 2021 19:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637003202;
-        bh=pppEKA1xdqr9mZaw9WCFjTzjBBLvrCTXY22vIoJ0THM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AbUAYk+fkSZ1sQs2GP4Hfhb+M2himCo+SxJa1MNMmIi26FTBlApHnDb0IrYbLNkq+
-         0m/vIEVSvCGmORJBh++T4O/bg1etgzHhMv15jHINkCaCugk5QHlWvM3SZzAGT+4swv
-         5OTTAGVYo6yKRSwF1XLsgT1IGdOqTAliFeGKBQwg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jiri Olsa <jolsa@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stephane Eranian <eranian@google.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 815/917] perf bpf: Add missing free to bpf_event__print_bpf_prog_info()
-Date:   Mon, 15 Nov 2021 18:05:10 +0100
-Message-Id: <20211115165456.664905447@linuxfoundation.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165428.722074685@linuxfoundation.org>
-References: <20211115165428.722074685@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1345040AbhKOUI2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 15:08:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347427AbhKOTjv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:39:51 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385B9C03541C
+        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 11:31:08 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id x16-20020a25b910000000b005b6b7f2f91cso28556161ybj.1
+        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 11:31:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=4uSzuTcwVIaWHj9mOBdqmeLq8zoZlReWYD6+yqHjK7w=;
+        b=B0ygsEcxpyi9/suFEKLR81K66yi2KGN23Crva/YVNYqEsJoA1tmUHqX7aBKJPkGd4U
+         fSY+qEoMnFtGx3lA3nRfsm8SB4PtZW0ApzXc0X5dE8C3slCsuHw1TfJF5CyaXwIuSags
+         lW/QqSiAJ9cd4+ws49dsTNiX1im5s2FvA/7eNhyjV1NBJ8pnsHhulKkqfISz9anHSEts
+         t0Gyqw9rwlsXfOXf/MeZY2fzaHxoj2BseikTjsd75HbDcMRl4K/pZrdruPUZ2aiV+w3O
+         /o9dmZcMz8HHmpcegWRku0WJIWb0uKW0PK2oes/F4Q0CMkfpljUoU19qxC2XQNmahS4W
+         DDLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=4uSzuTcwVIaWHj9mOBdqmeLq8zoZlReWYD6+yqHjK7w=;
+        b=oKB/asa7inMCXmtlk0OYoSpj7ftNxIzuOUIeaK6jYIemYtStIsk2NJYAC6qwkUZs/K
+         nrFioy3k7KvYWYcIbMw+ej0/1naMAjZfZCWElla+OTeTxjXY5IZBpGN8A8ClmjpnnHW0
+         sRXgY8xtrepb/Qcet1/UXlhwP+5DMy+4vcGL2+sy2ikWAKEJIVHRPydlhZOzkcfHZLna
+         oilII0Lt8pG9Bg8+f6gHls+aZvWXPmtI7SRX3Teyebq6aEXzzzs7bzFFVt8NwuxpatL8
+         qC5JxxxGb0e5P+Y2mF/TVGmsyU4hjo9LA6f1HozmY+2r+0eOnwYZm7CvbWb4tLAk/cL3
+         H5UQ==
+X-Gm-Message-State: AOAM531NTsNTvH6llGM/eY910bXDexbbOBjraGtgpLrBx26eHGT52xoz
+        +wpk7AOe88igir8PbzdK/mZAhOQ=
+X-Google-Smtp-Source: ABdhPJytAWI4KPZsWIikMibV8nJzJ28kBVZg7YdtJbWDUVMDJpTI8G3PxhgKxZG7EHtm4MR8in9j1j8=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:b159:a155:9460:f1ca])
+ (user=sdf job=sendgmr) by 2002:a25:5954:: with SMTP id n81mr1457941ybb.435.1637004667476;
+ Mon, 15 Nov 2021 11:31:07 -0800 (PST)
+Date:   Mon, 15 Nov 2021 11:31:05 -0800
+Message-Id: <20211115193105.1952656-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc1.387.gb447b232ab-goog
+Subject: [PATCH bpf-next v2] bpftool: add current libbpf_strict mode to
+ version output
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        Stanislav Fomichev <sdf@google.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
++ bpftool --legacy --version
+bpftool v5.15.0
+features: libbfd, skeletons
++ bpftool --version
+bpftool v5.15.0
+features: libbfd, libbpf_strict, skeletons
 
-[ Upstream commit 88c42f4d6cb249eb68524282f8d4cc32f9059984 ]
++ bpftool --legacy --help
+Usage: bpftool [OPTIONS] OBJECT { COMMAND | help }
+       bpftool batch file FILE
+       bpftool version
 
-If btf__new() is called then there needs to be a corresponding btf__free().
+       OBJECT := { prog | map | link | cgroup | perf | net | feature | btf | gen | struct_ops | iter }
+       OPTIONS := { {-j|--json} [{-p|--pretty}] | {-d|--debug} | {-l|--legacy} |
+                    {-V|--version} }
++ bpftool --help
+Usage: bpftool [OPTIONS] OBJECT { COMMAND | help }
+       bpftool batch file FILE
+       bpftool version
 
-Fixes: f8dfeae009effc0b ("perf bpf: Show more BPF program info in print_bpf_prog_info()")
-Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20211106053733.3580931-2-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+       OBJECT := { prog | map | link | cgroup | perf | net | feature | btf | gen | struct_ops | iter }
+       OPTIONS := { {-j|--json} [{-p|--pretty}] | {-d|--debug} | {-l|--legacy} |
+                    {-V|--version} }
+
++ bpftool --legacy
+Usage: bpftool [OPTIONS] OBJECT { COMMAND | help }
+       bpftool batch file FILE
+       bpftool version
+
+       OBJECT := { prog | map | link | cgroup | perf | net | feature | btf | gen | struct_ops | iter }
+       OPTIONS := { {-j|--json} [{-p|--pretty}] | {-d|--debug} | {-l|--legacy} |
+                    {-V|--version} }
++ bpftool
+Usage: bpftool [OPTIONS] OBJECT { COMMAND | help }
+       bpftool batch file FILE
+       bpftool version
+
+       OBJECT := { prog | map | link | cgroup | perf | net | feature | btf | gen | struct_ops | iter }
+       OPTIONS := { {-j|--json} [{-p|--pretty}] | {-d|--debug} | {-l|--legacy} |
+                    {-V|--version} }
+
++ bpftool --legacy version
+bpftool v5.15.0
+features: libbfd, skeletons
++ bpftool version
+bpftool v5.15.0
+features: libbfd, libbpf_strict, skeletons
+
++ bpftool --json --legacy version
+{"version":"5.15.0","features":{"libbfd":true,"libbpf_strict":false,"skeletons":true}}
++ bpftool --json version
+{"version":"5.15.0","features":{"libbfd":true,"libbpf_strict":true,"skeletons":true}}
+
+v2:
+- fixes for -h and -V (Quentin Monnet)
+
+Suggested-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/perf/util/bpf-event.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/main.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index 1a7112a87736a..a410b3968b3af 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -576,7 +576,7 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
- 		synthesize_bpf_prog_name(name, KSYM_NAME_LEN, info, btf, 0);
- 		fprintf(fp, "# bpf_prog_info %u: %s addr 0x%llx size %u\n",
- 			info->id, name, prog_addrs[0], prog_lens[0]);
--		return;
-+		goto out;
- 	}
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 473791e87f7d..601d0ee5e6d3 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -93,6 +93,7 @@ static int do_version(int argc, char **argv)
+ 		jsonw_name(json_wtr, "features");
+ 		jsonw_start_object(json_wtr);	/* features */
+ 		jsonw_bool_field(json_wtr, "libbfd", has_libbfd);
++		jsonw_bool_field(json_wtr, "libbpf_strict", !legacy_libbpf);
+ 		jsonw_bool_field(json_wtr, "skeletons", has_skeletons);
+ 		jsonw_end_object(json_wtr);	/* features */
  
- 	fprintf(fp, "# bpf_prog_info %u:\n", info->id);
-@@ -586,4 +586,6 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
- 		fprintf(fp, "# \tsub_prog %u: %s addr 0x%llx size %u\n",
- 			i, name, prog_addrs[i], prog_lens[i]);
- 	}
-+out:
-+	btf__free(btf);
- }
+@@ -106,6 +107,10 @@ static int do_version(int argc, char **argv)
+ 			printf(" libbfd");
+ 			nb_features++;
+ 		}
++		if (!legacy_libbpf) {
++			printf("%s libbpf_strict", nb_features++ ? "," : "");
++			nb_features++;
++		}
+ 		if (has_skeletons)
+ 			printf("%s skeletons", nb_features++ ? "," : "");
+ 		printf("\n");
+@@ -414,9 +419,11 @@ int main(int argc, char **argv)
+ 				  options, NULL)) >= 0) {
+ 		switch (opt) {
+ 		case 'V':
+-			return do_version(argc, argv);
++			last_do_help = do_version;
++			break;
+ 		case 'h':
+-			return do_help(argc, argv);
++			last_do_help = do_help;
++			break;
+ 		case 'p':
+ 			pretty_output = true;
+ 			/* fall through */
+@@ -476,7 +483,7 @@ int main(int argc, char **argv)
+ 
+ 	argc -= optind;
+ 	argv += optind;
+-	if (argc < 0)
++	if (argc < 1)
+ 		usage();
+ 
+ 	ret = cmd_select(cmds, argc, argv, do_help);
 -- 
-2.33.0
-
-
+2.34.0.rc1.387.gb447b232ab-goog
 
