@@ -2,30 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6F06C433EF
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6002AC433FE
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A102C63215
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FCEB63215
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241360AbhKOWyx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S244858AbhKOWyx (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 15 Nov 2021 17:54:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46932 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:46928 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353534AbhKOWjQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1353536AbhKOWjQ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 15 Nov 2021 17:39:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E19A63248;
-        Mon, 15 Nov 2021 22:34:30 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E6B66324D;
+        Mon, 15 Nov 2021 22:34:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637015673;
-        bh=qM/W89BG+VlSYhVtnLQ3ihSIEFga4cV/skrgkwcP4Ak=;
+        s=k20201202; t=1637015665;
+        bh=fKn8nl4xMokijsaqlH5e4iD92f9ISlML84Gu26Ft1MU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ezrBkk765VVE7Wv7K2UNffqnhmFQLd926VuMNKGqYndwlwNyqdBVX42tL929Z5eXL
-         K1Cd2Pd2nhy5ZEeQC1o55K2+do/FcEGsCJZaQ4POXAXwMGCl2Bjjt1WoYoPD+F/rxL
-         EHHV/ajPATYxPqkvxL3XAsN+9LKWNdoWWeuP5lxiKVaIfenX90chNKrHbilDYVnXfl
-         3nTiSMzindEtVpO/13sTmvY1zqssehEjozactvgpcq3OpMylbRsrAz5X1FMsIKY8PJ
-         lyXUUxzGR1cYBJJVGkRzsY6wpN1wwQSa+yGZQjvvSuNi2EymKLXqMAWRd/VwQkEzdA
-         BE1uMNJcBqPHg==
+        b=s0VtsbWimr4t6f1n7/8goqBcsnUNEHQd2HPJe6Svs056CYE0lVGbePphZJCMQbXSi
+         3XwGW4GBYcBiZDST389+BTEKEaym+oTq1ZCN+5Pk360qvsBJ/DMEAqblJRQDV8d32r
+         ia6FOsMUneEMeEByeGUsbp91f6QlZUh26opAI4dkOI6pF4N+nbl24C4zoLTbRBcCBj
+         nS5pyyM/faEX6vqsRyvh4yebiNUgPdBCKooo5wz0rvA5h+ajiMK2aB+nrofSF/huf9
+         MI6LrJUYXgmKa4QX0N4r0nmodvy/nZl00uaKmVIX/jmJOx+JYQaAxhzslI024H2Jpi
+         9VLGICBCGqfJg==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -35,9 +35,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v18 bpf-next 11/23] bpf: introduce bpf_xdp_get_buff_len helper
-Date:   Mon, 15 Nov 2021 23:33:05 +0100
-Message-Id: <2ecd2d1abf41a14fbb7c9b7994feaa652caa2f1f.1637013639.git.lorenzo@kernel.org>
+Subject: [PATCH v18 bpf-next 09/23] bpf: introduce BPF_F_XDP_MB flag in prog_flags loading the ebpf program
+Date:   Mon, 15 Nov 2021 23:33:03 +0100
+Message-Id: <a529aaef48486deb1dac2ce0f058fdefea4c411a.1637013639.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1637013639.git.lorenzo@kernel.org>
 References: <cover.1637013639.git.lorenzo@kernel.org>
@@ -47,126 +47,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce bpf_xdp_get_buff_len helper in order to return the xdp buffer
-total size (linear and paged area)
+Introduce BPF_F_XDP_MB and the related field in bpf_prog_aux in order to
+notify the driver the loaded program support xdp multi-buffer.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h              | 14 ++++++++++++++
- include/uapi/linux/bpf.h       |  7 +++++++
- net/core/filter.c              | 15 +++++++++++++++
- tools/include/uapi/linux/bpf.h |  7 +++++++
- 4 files changed, 43 insertions(+)
+ include/linux/bpf.h            | 1 +
+ include/uapi/linux/bpf.h       | 5 +++++
+ kernel/bpf/syscall.c           | 4 +++-
+ tools/include/uapi/linux/bpf.h | 5 +++++
+ 4 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 798b84d86d97..067716d38ebc 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -145,6 +145,20 @@ xdp_get_shared_info_from_buff(struct xdp_buff *xdp)
- 	return (struct skb_shared_info *)xdp_data_hard_end(xdp);
- }
- 
-+static __always_inline unsigned int xdp_get_buff_len(struct xdp_buff *xdp)
-+{
-+	unsigned int len = xdp->data_end - xdp->data;
-+	struct skb_shared_info *sinfo;
-+
-+	if (likely(!xdp_buff_is_mb(xdp)))
-+		goto out;
-+
-+	sinfo = xdp_get_shared_info_from_buff(xdp);
-+	len += sinfo->xdp_frags_size;
-+out:
-+	return len;
-+}
-+
- struct xdp_frame {
- 	void *data;
- 	u16 len;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index df3410bff4b0..c1b5d3ec57e7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -869,6 +869,7 @@ struct bpf_prog_aux {
+ 	bool func_proto_unreliable;
+ 	bool sleepable;
+ 	bool tail_call_reachable;
++	bool xdp_mb;
+ 	struct hlist_node tramp_hlist;
+ 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
+ 	const struct btf_type *attach_func_proto;
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 875ae723eb6b..556621a3f7b4 100644
+index 6297eafdc40f..875ae723eb6b 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -4962,6 +4962,12 @@ union bpf_attr {
-  *		**-ENOENT** if *task->mm* is NULL, or no vma contains *addr*.
-  *		**-EBUSY** if failed to try lock mmap_lock.
-  *		**-EINVAL** for invalid **flags**.
-+ *
-+ * u64 bpf_xdp_get_buff_len(struct xdp_buff *xdp_md)
-+ *	Description
-+ *		Get the total size of a given xdp buff (linear and paged area)
-+ *	Return
-+ *		The total size of a given xdp buffer.
+@@ -1111,6 +1111,11 @@ enum bpf_link_type {
   */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5145,6 +5151,7 @@ union bpf_attr {
- 	FN(skc_to_unix_sock),		\
- 	FN(kallsyms_lookup_name),	\
- 	FN(find_vma),			\
-+	FN(xdp_get_buff_len),		\
- 	/* */
+ #define BPF_F_SLEEPABLE		(1U << 4)
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 46f09a8fba20..06364d652bad 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3784,6 +3784,19 @@ static const struct bpf_func_proto sk_skb_change_head_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- 	.arg3_type	= ARG_ANYTHING,
- };
++/* If BPF_F_XDP_MB is used in BPF_PROG_LOAD command, the loaded program
++ * fully support xdp multi-buffer
++ */
++#define BPF_F_XDP_MB		(1U << 5)
 +
-+BPF_CALL_1(bpf_xdp_get_buff_len, struct  xdp_buff*, xdp)
-+{
-+	return xdp_get_buff_len(xdp);
-+}
-+
-+static const struct bpf_func_proto bpf_xdp_get_buff_len_proto = {
-+	.func		= bpf_xdp_get_buff_len,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_CTX,
-+};
-+
- static unsigned long xdp_get_metalen(const struct xdp_buff *xdp)
- {
- 	return xdp_data_meta_unsupported(xdp) ? 0 :
-@@ -7471,6 +7484,8 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_xdp_redirect_map_proto;
- 	case BPF_FUNC_xdp_adjust_tail:
- 		return &bpf_xdp_adjust_tail_proto;
-+	case BPF_FUNC_xdp_get_buff_len:
-+		return &bpf_xdp_get_buff_len_proto;
- 	case BPF_FUNC_fib_lookup:
- 		return &bpf_xdp_fib_lookup_proto;
- 	case BPF_FUNC_check_mtu:
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * the following extensions:
+  *
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 50f96ea4452a..fbae37d5b329 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2202,7 +2202,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ 				 BPF_F_ANY_ALIGNMENT |
+ 				 BPF_F_TEST_STATE_FREQ |
+ 				 BPF_F_SLEEPABLE |
+-				 BPF_F_TEST_RND_HI32))
++				 BPF_F_TEST_RND_HI32 |
++				 BPF_F_XDP_MB))
+ 		return -EINVAL;
+ 
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
+@@ -2288,6 +2289,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ 	prog->aux->dst_prog = dst_prog;
+ 	prog->aux->offload_requested = !!attr->prog_ifindex;
+ 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
++	prog->aux->xdp_mb = attr->prog_flags & BPF_F_XDP_MB;
+ 
+ 	err = security_bpf_prog_alloc(prog->aux);
+ 	if (err)
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 875ae723eb6b..556621a3f7b4 100644
+index 6297eafdc40f..875ae723eb6b 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -4962,6 +4962,12 @@ union bpf_attr {
-  *		**-ENOENT** if *task->mm* is NULL, or no vma contains *addr*.
-  *		**-EBUSY** if failed to try lock mmap_lock.
-  *		**-EINVAL** for invalid **flags**.
-+ *
-+ * u64 bpf_xdp_get_buff_len(struct xdp_buff *xdp_md)
-+ *	Description
-+ *		Get the total size of a given xdp buff (linear and paged area)
-+ *	Return
-+ *		The total size of a given xdp buffer.
+@@ -1111,6 +1111,11 @@ enum bpf_link_type {
   */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5145,6 +5151,7 @@ union bpf_attr {
- 	FN(skc_to_unix_sock),		\
- 	FN(kallsyms_lookup_name),	\
- 	FN(find_vma),			\
-+	FN(xdp_get_buff_len),		\
- 	/* */
+ #define BPF_F_SLEEPABLE		(1U << 4)
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
++/* If BPF_F_XDP_MB is used in BPF_PROG_LOAD command, the loaded program
++ * fully support xdp multi-buffer
++ */
++#define BPF_F_XDP_MB		(1U << 5)
++
+ /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
+  * the following extensions:
+  *
 -- 
 2.31.1
 
