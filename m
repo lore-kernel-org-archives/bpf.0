@@ -2,30 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19BC3C433FE
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C173C43217
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03A586324A
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 788156321F
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:51:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237254AbhKOWyh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 17:54:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46810 "EHLO mail.kernel.org"
+        id S232752AbhKOWyp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 17:54:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46930 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351061AbhKOWiu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 17:38:50 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9544461BAA;
-        Mon, 15 Nov 2021 22:34:14 +0000 (UTC)
+        id S1353537AbhKOWjQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 17:39:16 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8108D6324E;
+        Mon, 15 Nov 2021 22:34:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637015657;
-        bh=exM1M9Gh43cQmFHFTmK3T571ddYNV/2Hx22b8g8TFuo=;
+        s=k20201202; t=1637015669;
+        bh=qY5DdSZWv4jcXWcIIMXiqwGuB+uIsQT0vjsVJj4CKFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mFbUN2Rkdq/YogdnOZSwlC0lt0ulpaNjLG6xQItR4WlOhMS5Q6j7NniWCjuKJ0J+c
-         QVaAkJG1PZraPO69k1RXxwYGUzpV8SjO2AjUD/XK7OdtAil4Teo3ju8fVKvbgofNlv
-         Xy1jbOg4aWd2po3R3Trv02GQL6qtDYjMEo3pHC+gNnSoUewk8/W3YjqwENRjlKJUNc
-         wZW/7srUNKayzDdF5u8oNNbFpmp2hzr92f7fPT4wPOiXxIrBjQC0LABzrf3WXM99Kr
-         4E9rPAsAseoFaEwH/3bvCI+gjkKZpGY5ojgZaqoEuUWq6+Yx/tW3wPEXZvUaq/HM3h
-         0ibBjR1PzqW5w==
+        b=iSSyklQ6047wqvDhJQGbrSzafQ8piEpMrv9T/Fn9pQHtGHV+j+TUOVWqQ3VhTbIJ7
+         duNX4KeQE96+JBBBlbjmLJHYl/4SAJXvu4ppfDutLx5Z54fpZ7c6zvd7EbSVA3qmiP
+         xTkUJ7S8j75lIw5zjrd7quL0gqNCUtehKOSCogHGqEEO+ep6T+GSHabUj/HuUbWg03
+         mB2w2LJr6B37GOzyEC/yMy9MmcF/Ksb8ydBEJB8HPrGu/L9vAfUdNsQwNui54WYtQ5
+         KwYJe8Bg2pHva2t8KUX0h9c97C2HVoQYCzg76UzgWD3iBOi2/R/hK5lwv0TdyzFOa9
+         wxDPRC75SPK9Q==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -35,9 +35,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v18 bpf-next 07/23] xdp: add multi-buff support to xdp_return_{buff/frame}
-Date:   Mon, 15 Nov 2021 23:33:01 +0100
-Message-Id: <98dc111d41b67e0b6c042f603eb4425c588150d3.1637013639.git.lorenzo@kernel.org>
+Subject: [PATCH v18 bpf-next 10/23] net: mvneta: enable jumbo frames if the loaded XDP program support mb
+Date:   Mon, 15 Nov 2021 23:33:04 +0100
+Message-Id: <08ac2e9f772bc1a559dbde7d0e694d56122decde.1637013639.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1637013639.git.lorenzo@kernel.org>
 References: <cover.1637013639.git.lorenzo@kernel.org>
@@ -47,138 +47,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Take into account if the received xdp_buff/xdp_frame is non-linear
-recycling/returning the frame memory to the allocator or into
-xdp_frame_bulk.
+Enable the capability to receive jumbo frames even if the interface is
+running in XDP mode if the loaded program declare to properly support
+xdp multi-buff. At same time reject a xdp program not supporting xdp
+multi-buffer if the driver is running in xdp multi-buffer mode.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h | 18 ++++++++++++++--
- net/core/xdp.c    | 54 ++++++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 69 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/marvell/mvneta.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index e594016eb193..798b84d86d97 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -306,10 +306,24 @@ void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
- static inline void xdp_release_frame(struct xdp_frame *xdpf)
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 8842c9c8c665..8b26d733b3cd 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -3750,6 +3750,7 @@ static void mvneta_percpu_disable(void *arg)
+ static int mvneta_change_mtu(struct net_device *dev, int mtu)
  {
- 	struct xdp_mem_info *mem = &xdpf->mem;
-+	struct skb_shared_info *sinfo;
-+	int i;
+ 	struct mvneta_port *pp = netdev_priv(dev);
++	struct bpf_prog *prog = pp->xdp_prog;
+ 	int ret;
  
- 	/* Curr only page_pool needs this */
--	if (mem->type == MEM_TYPE_PAGE_POOL)
--		__xdp_release_frame(xdpf->data, mem);
-+	if (mem->type != MEM_TYPE_PAGE_POOL)
-+		return;
-+
-+	if (likely(!xdp_frame_is_mb(xdpf)))
-+		goto out;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_release_frame(page_address(page), mem);
-+	}
-+out:
-+	__xdp_release_frame(xdpf->data, mem);
- }
- 
- int xdp_rxq_info_reg(struct xdp_rxq_info *xdp_rxq,
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 89183b2e3c07..7cfcc93116d7 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -374,12 +374,38 @@ static void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct,
- 
- void xdp_return_frame(struct xdp_frame *xdpf)
- {
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
-+	if (likely(!xdp_frame_is_mb(xdpf)))
-+		goto out;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdpf->mem, false, NULL);
-+	}
-+out:
- 	__xdp_return(xdpf->data, &xdpf->mem, false, NULL);
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame);
- 
- void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
- {
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
-+	if (likely(!xdp_frame_is_mb(xdpf)))
-+		goto out;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdpf->mem, true, NULL);
-+	}
-+out:
- 	__xdp_return(xdpf->data, &xdpf->mem, true, NULL);
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
-@@ -415,7 +441,7 @@ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
- 	struct xdp_mem_allocator *xa;
- 
- 	if (mem->type != MEM_TYPE_PAGE_POOL) {
--		__xdp_return(xdpf->data, &xdpf->mem, false, NULL);
-+		xdp_return_frame(xdpf);
- 		return;
+ 	if (!IS_ALIGNED(MVNETA_RX_PKT_SIZE(mtu), 8)) {
+@@ -3758,8 +3759,11 @@ static int mvneta_change_mtu(struct net_device *dev, int mtu)
+ 		mtu = ALIGN(MVNETA_RX_PKT_SIZE(mtu), 8);
  	}
  
-@@ -434,12 +460,38 @@ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
- 		bq->xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+-	if (pp->xdp_prog && mtu > MVNETA_MAX_RX_BUF_SIZE) {
+-		netdev_info(dev, "Illegal MTU value %d for XDP mode\n", mtu);
++	if (prog && !prog->aux->xdp_mb && mtu > MVNETA_MAX_RX_BUF_SIZE) {
++		netdev_info(dev,
++			    "Illegal MTU %d for XDP prog without multi-buf\n",
++			    mtu);
++
+ 		return -EINVAL;
  	}
  
-+	if (unlikely(xdp_frame_is_mb(xdpf))) {
-+		struct skb_shared_info *sinfo;
-+		int i;
-+
-+		sinfo = xdp_get_shared_info_from_frame(xdpf);
-+		for (i = 0; i < sinfo->nr_frags; i++) {
-+			skb_frag_t *frag = &sinfo->frags[i];
-+
-+			bq->q[bq->count++] = skb_frag_address(frag);
-+			if (bq->count == XDP_BULK_QUEUE_SIZE)
-+				xdp_flush_frame_bulk(bq);
-+		}
-+	}
- 	bq->q[bq->count++] = xdpf->data;
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
+@@ -4457,8 +4461,9 @@ static int mvneta_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
+ 	struct mvneta_port *pp = netdev_priv(dev);
+ 	struct bpf_prog *old_prog;
  
- void xdp_return_buff(struct xdp_buff *xdp)
- {
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
-+	if (likely(!xdp_buff_is_mb(xdp)))
-+		goto out;
-+
-+	sinfo = xdp_get_shared_info_from_buff(xdp);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdp->rxq->mem, true, xdp);
-+	}
-+out:
- 	__xdp_return(xdp->data, &xdp->rxq->mem, true, xdp);
- }
+-	if (prog && dev->mtu > MVNETA_MAX_RX_BUF_SIZE) {
+-		NL_SET_ERR_MSG_MOD(extack, "MTU too large for XDP");
++	if (prog && !prog->aux->xdp_mb && dev->mtu > MVNETA_MAX_RX_BUF_SIZE) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "prog does not support XDP multi-buff");
+ 		return -EOPNOTSUPP;
+ 	}
  
 -- 
 2.31.1
