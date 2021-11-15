@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 000CCC433EF
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 18:13:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3398C433EF
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 20:05:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD79761AA2
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 18:13:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A7DE61B97
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 20:05:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237015AbhKOSQl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 13:16:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49950 "EHLO mail.kernel.org"
+        id S233935AbhKOUHv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 15:07:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44634 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240695AbhKOSLr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 13:11:47 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EEB9063317;
-        Mon, 15 Nov 2021 17:47:55 +0000 (UTC)
+        id S244890AbhKOTSL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:18:11 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9CE786332C;
+        Mon, 15 Nov 2021 18:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1636998476;
-        bh=QeOx66bLaohTdP8iS3no5arKK1EF+YLTTkG3AQMRpUo=;
+        s=korg; t=1637000697;
+        bh=GWtHFQckl+yFlyGQ1kdPONnP5sWG9iA+kUgmhWRoimc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Jb2HN69OhqmKTu7S6RducJLBtUirHxHsVXOD+qgMG71LqRpE+awp1PiHnhE5bQXa
-         td3fp6odRlsECRtYzvyrBL1hlGN5nJXLzTTlaaxP5A3FH2hpzecsFFrb5p/4jfMvdS
-         RtkVcZty+lX5gXCTqSzUUMv26b4iQBLlI+HM4CEM=
+        b=V29K0XlvuaU2agk4ECI3IDbTR4ImyahnXpE46sUfEags2d4kea2x67hFb+HKTQHmF
+         YmaZqmKCsH6tcAvf6BQu986wednUbZ5hEF3k2h1r7TBCskh2JxXykW6QPeSs4DAWm3
+         VAHcGLKpLiLdZ+dxYWtyVavQGOo+RwW60Ka2Wlpc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -44,12 +44,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 523/575] perf bpf: Add missing free to bpf_event__print_bpf_prog_info()
-Date:   Mon, 15 Nov 2021 18:04:08 +0100
-Message-Id: <20211115165401.758780025@linuxfoundation.org>
+Subject: [PATCH 5.14 758/849] perf bpf: Add missing free to bpf_event__print_bpf_prog_info()
+Date:   Mon, 15 Nov 2021 18:04:01 +0100
+Message-Id: <20211115165445.893796427@linuxfoundation.org>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115165343.579890274@linuxfoundation.org>
-References: <20211115165343.579890274@linuxfoundation.org>
+In-Reply-To: <20211115165419.961798833@linuxfoundation.org>
+References: <20211115165419.961798833@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -91,10 +91,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index 3742511a08d15..c8101575dbf45 100644
+index 17a9844e4fbf8..53d6c6f449c9c 100644
 --- a/tools/perf/util/bpf-event.c
 +++ b/tools/perf/util/bpf-event.c
-@@ -557,7 +557,7 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
+@@ -564,7 +564,7 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
  		synthesize_bpf_prog_name(name, KSYM_NAME_LEN, info, btf, 0);
  		fprintf(fp, "# bpf_prog_info %u: %s addr 0x%llx size %u\n",
  			info->id, name, prog_addrs[0], prog_lens[0]);
@@ -103,7 +103,7 @@ index 3742511a08d15..c8101575dbf45 100644
  	}
  
  	fprintf(fp, "# bpf_prog_info %u:\n", info->id);
-@@ -567,4 +567,6 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
+@@ -574,4 +574,6 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
  		fprintf(fp, "# \tsub_prog %u: %s addr 0x%llx size %u\n",
  			i, name, prog_addrs[i], prog_lens[i]);
  	}
