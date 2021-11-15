@@ -2,78 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26B90C43217
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 17:22:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80439C433EF
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 17:33:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17707632BD
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 17:22:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69278632BB
+	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 17:33:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237061AbhKORZk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 12:25:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237832AbhKORYH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 12:24:07 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDEBC061220;
-        Mon, 15 Nov 2021 09:16:05 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id i194so15764323yba.6;
-        Mon, 15 Nov 2021 09:16:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mp3YXDLV3Lfsg1Y6ExDrGxZjyZli7UH88J1E2JBajHE=;
-        b=nIqjap/u/3V6NuD++3m4ct0uA2Q6kPAsQClcbqAXuTRfL/m542nxMFqwpJSYRC0n6+
-         dvh8pNSkpx4Q4TlkMqrWO2yQd6kPhSNLvf7nAN757kWEYqEawoYo6/FLbmklzZivFSlb
-         9xPEAGBOFjUmbrkbJns2dsSx0exPBaAj/LsCSodqn0K5OeMMBG7W0wwaKSR32zmleHZp
-         KFGnhE5mT059rH7I8ZPKyZEReXJmhjASFHkr7m85H+mdAEkvAfrnqr8Ux/KHxrxTWkVU
-         MYdVWytJEQxNp9U1fmgVzHiCPZSnDbDzBcRCNae/KYMbZC4QfmmTBWNjZeC+wHKo/fv9
-         Xkkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mp3YXDLV3Lfsg1Y6ExDrGxZjyZli7UH88J1E2JBajHE=;
-        b=nc3Yqj5JRTXvHRnY0gJ+iIq1es+/MTyeXPvPRFzuEezbO2VMoxrG652pWQ/d5pL4lT
-         CPabk0die2rhjppy+orzyH3pGd2Z2kTmbSV0GmUiqLzv2od4Qexs1C6Buu3KK7MJGxlv
-         +gr57bZNTvFDEBoIWmRm705Wcm6wcbZSKq40IzR80DfFBSUlrbV1cvPa8m8oLBIxru3y
-         01AXuZEUgdXZwrJT5lqhXLJbM6Hwogj6ATDT5mwhizYbrfJ2hb85xnqlxNiks1AJEzF9
-         B5Fg35Asr5I9P/x/iQHb+bk9819NeZDX0PU7CATal4zMcJgnowpW0YcaQoQoU6YFbT/U
-         voVg==
-X-Gm-Message-State: AOAM531ko8NaIw/dyTHm5mAZBw0m/6pHqUbWNMDihcBstk8dUQJ5Hw5j
-        2bulWN6PWGuQfeU8VFz/G1NkHlqTloFqxjxrT4E=
-X-Google-Smtp-Source: ABdhPJxnobNo5D+0u+zzJhwVSmPqW4DU4OOX8PuFrh/oilqnqYqXGgZupVBn9Zveom3O8UZ7WFrHJ8FahpJ4Sh8KPqs=
-X-Received: by 2002:a25:cc4c:: with SMTP id l73mr601999ybf.114.1636996564555;
- Mon, 15 Nov 2021 09:16:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20211115162008.25916-1-daniel@iogearbox.net> <20211115091338.5e1d6316@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211115091338.5e1d6316@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 15 Nov 2021 09:15:53 -0800
-Message-ID: <CAEf4BzaWfUDr1_CqLsCEbX1S9djgQp0236e+8ah3rYmDyg0CJQ@mail.gmail.com>
-Subject: Re: pull-request: bpf-next 2021-11-15
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S236738AbhKORfy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 12:35:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46732 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238199AbhKORdl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 12:33:41 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A4FA763240;
+        Mon, 15 Nov 2021 17:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1636996934;
+        bh=GvSspkA4aAwTBy4orDNsC9zBQ94xjBq/uOjI+Em/UxI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gn7+bEp/E0RMiehW+rGqGmZ+sJIT36Y6h7vVSfxfTZjNXvZVMg0iSG/bbfUiWgxuy
+         rjemOk9HIxkkkyGkfGDcOcDSo97r5xkm5ii4d0Uq1tUSiMQHVegZdLfoF5hRm7qpLh
+         +U+2OpXc/Sw1Y7sNcKWlo9+7am/iEF3yKSsztmP8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiri Olsa <jolsa@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 322/355] perf bpf: Add missing free to bpf_event__print_bpf_prog_info()
+Date:   Mon, 15 Nov 2021 18:04:06 +0100
+Message-Id: <20211115165324.149737613@linuxfoundation.org>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211115165313.549179499@linuxfoundation.org>
+References: <20211115165313.549179499@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 9:13 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Mon, 15 Nov 2021 17:20:08 +0100 Daniel Borkmann wrote:
-> >                 -c -MMD -o $@ $<
->
-> >                 -c -MMD $< -o $@
->
-> Out of curiosity did you switch the order on purpose?
+From: Ian Rogers <irogers@google.com>
 
-Yes, I wanted all Makefile rules to have -o at the end. It makes
-debugging Makefile verbose output much easier as it's more apparent
-which file each rule invocation generates.
+[ Upstream commit 88c42f4d6cb249eb68524282f8d4cc32f9059984 ]
+
+If btf__new() is called then there needs to be a corresponding btf__free().
+
+Fixes: f8dfeae009effc0b ("perf bpf: Show more BPF program info in print_bpf_prog_info()")
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20211106053733.3580931-2-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/bpf-event.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
+index f7ed5d122e229..c766813d56be0 100644
+--- a/tools/perf/util/bpf-event.c
++++ b/tools/perf/util/bpf-event.c
+@@ -467,7 +467,7 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
+ 		synthesize_bpf_prog_name(name, KSYM_NAME_LEN, info, btf, 0);
+ 		fprintf(fp, "# bpf_prog_info %u: %s addr 0x%llx size %u\n",
+ 			info->id, name, prog_addrs[0], prog_lens[0]);
+-		return;
++		goto out;
+ 	}
+ 
+ 	fprintf(fp, "# bpf_prog_info %u:\n", info->id);
+@@ -477,4 +477,6 @@ void bpf_event__print_bpf_prog_info(struct bpf_prog_info *info,
+ 		fprintf(fp, "# \tsub_prog %u: %s addr 0x%llx size %u\n",
+ 			i, name, prog_addrs[i], prog_lens[i]);
+ 	}
++out:
++	btf__free(btf);
+ }
+-- 
+2.33.0
+
+
+
