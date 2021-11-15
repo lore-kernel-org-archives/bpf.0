@@ -2,120 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82B8CC433EF
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 23:32:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3705CC433EF
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:18:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70FDF61A40
-	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 23:32:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FA7C614C8
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:18:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346015AbhKOXfU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 18:35:20 -0500
-Received: from www62.your-server.de ([213.133.104.62]:53340 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353101AbhKOXdO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 18:33:14 -0500
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mmlQO-000Ci8-7O; Tue, 16 Nov 2021 00:30:08 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1mmlQN-000GXA-PZ; Tue, 16 Nov 2021 00:30:07 +0100
-Subject: Re: [PATCH] bpf: Enable bpf support for reading branch records in
- powerpc
-To:     Kajol Jain <kjain@linux.ibm.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     acme@kernel.org, peterz@infradead.org, songliubraving@fb.com,
-        andrii@kernel.org, kafai@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, davem@davemloft.net, kpsingh@kernel.org,
-        hawk@kernel.org, kuba@kernel.org, maddy@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, linux-perf-users@vger.kernel.org,
-        rnsastry@linux.ibm.com
-References: <20211115044437.12047-1-kjain@linux.ibm.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5a185d6b-7090-23f0-1ec9-140a31ee5fb4@iogearbox.net>
-Date:   Tue, 16 Nov 2021 00:30:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1345071AbhKPAVi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 19:21:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24408 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351965AbhKOUje (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Nov 2021 15:39:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637008598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p4Qgk9BqdfmLLByf7+qq+OORA7tMlVVgID7iwPx2sJg=;
+        b=CY61NMdHQUJR1dXl0DLaayOkssF0+FxGFt8TQZrAdl8jNKC1x2QZJXpOZLg72UK7yN802L
+        FqLMW50H/BjyiRNoTDrI+N38STVhneghYP7jQxcQB/WOuUGZmnKfqHHTSwqxdcFIRMo38G
+        ohsNt7RVBelB5nIbd41nlbTvh/KXNlY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-590-7jjdhSTtPnine07XcaEjUQ-1; Mon, 15 Nov 2021 15:36:32 -0500
+X-MC-Unique: 7jjdhSTtPnine07XcaEjUQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DD9231006AA1;
+        Mon, 15 Nov 2021 20:36:30 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.40.208.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BA3A367847;
+        Mon, 15 Nov 2021 20:36:26 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id D23F33247FDD7;
+        Mon, 15 Nov 2021 21:36:25 +0100 (CET)
+Subject: [PATCH net-next 1/2] igc: AF_XDP zero-copy metadata adjust breaks
+ SKBs on XDP_PASS
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        anthony.l.nguyen@intel.com, jesse.brandeburg@intel.com,
+        intel-wired-lan@lists.osuosl.org, magnus.karlsson@intel.com,
+        bjorn@kernel.org
+Date:   Mon, 15 Nov 2021 21:36:25 +0100
+Message-ID: <163700858579.565980.15265721798644582439.stgit@firesoul>
+In-Reply-To: <163700856423.565980.10162564921347693758.stgit@firesoul>
+References: <163700856423.565980.10162564921347693758.stgit@firesoul>
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-In-Reply-To: <20211115044437.12047-1-kjain@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.3/26354/Mon Nov 15 10:21:07 2021)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/15/21 5:44 AM, Kajol Jain wrote:
-> Branch data available to bpf programs can be very useful to get
-> stack traces out of userspace applications.
-> 
-> Commit fff7b64355ea ("bpf: Add bpf_read_branch_records() helper")
-> added bpf support to capture branch records in x86. Enable this feature
-> for powerpc as well.
-> 
-> Commit 67306f84ca78 ("selftests/bpf: Add bpf_read_branch_records()
-> selftest") adds selftest corresponding to bpf branch read
-> function bpf_read_branch_records(). Used this selftest to
-> test bpf support, for reading branch records in powerpc.
-> 
-> Selftest result in power9 box before this patch changes:
-> 
-> [command]# ./test_progs -t perf_branches
-> Failed to load bpf_testmod.ko into the kernel: -8
-> WARNING! Selftests relying on bpf_testmod.ko will be skipped.
-> test_perf_branches_common:PASS:test_perf_branches_load 0 nsec
-> test_perf_branches_common:PASS:attach_perf_event 0 nsec
-> test_perf_branches_common:PASS:set_affinity 0 nsec
-> check_good_sample:PASS:output not valid 0 nsec
-> check_good_sample:FAIL:read_branches_size err -2
-> check_good_sample:FAIL:read_branches_stack err -2
-> check_good_sample:FAIL:read_branches_stack stack bytes written=-2
-> not multiple of struct size=24
-> check_good_sample:FAIL:read_branches_global err -2
-> check_good_sample:FAIL:read_branches_global global bytes written=-2
-> not multiple of struct size=24
-> check_good_sample:PASS:read_branches_size 0 nsec
->   #75/1 perf_branches_hw:FAIL
->   #75/2 perf_branches_no_hw:OK
->   #75 perf_branches:FAIL
-> Summary: 0/1 PASSED, 0 SKIPPED, 2 FAILED
-> 
-> Selftest result in power9 box after this patch changes:
-> 
-> [command]#: ./test_progs -t perf_branches
->   #75/1 perf_branches_hw:OK
->   #75/2 perf_branches_no_hw:OK
->   #75 perf_branches:OK
-> Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> Signed-off-by: Kajol Jain<kjain@linux.ibm.com>
-> ---
->   kernel/trace/bpf_trace.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index fdd14072fc3b..2b7343b64bb7 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1245,7 +1245,7 @@ static const struct bpf_func_proto bpf_perf_prog_read_value_proto = {
->   BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
->   	   void *, buf, u32, size, u64, flags)
->   {
-> -#ifndef CONFIG_X86
-> +#if !(defined(CONFIG_X86) || defined(CONFIG_PPC64))
+Driver already implicitly supports XDP metadata access in AF_XDP
+zero-copy mode, as xsk_buff_pool's xp_alloc() naturally set xdp_buff
+data_meta equal data.
 
-Can this really be enabled generically? Looking at 3925f46bb590 ("powerpc/perf: Enable
-branch stack sampling framework") it says POWER8 [and beyond]. Should there be a generic
-Kconfig symbol like ARCH_HAS_BRANCH_RECORDS that can be selected by archs instead?
+This works fine for XDP and AF_XDP, but if a BPF-prog adjust via
+bpf_xdp_adjust_meta() and choose to call XDP_PASS, then igc function
+igc_construct_skb_zc() will construct an invalid SKB packet. The
+function correctly include the xdp->data_meta area in the memcpy, but
+forgot to pull header to take metasize into account.
 
->   	return -ENOENT;
->   #else
->   	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
-> 
+Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+---
+ drivers/net/ethernet/intel/igc/igc_main.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 8e448288ee26..76b0a7311369 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2448,8 +2448,10 @@ static struct sk_buff *igc_construct_skb_zc(struct igc_ring *ring,
+ 
+ 	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+ 	memcpy(__skb_put(skb, totalsize), xdp->data_meta, totalsize);
+-	if (metasize)
++	if (metasize) {
+ 		skb_metadata_set(skb, metasize);
++		__skb_pull(skb, metasize);
++	}
+ 
+ 	return skb;
+ }
+
 
