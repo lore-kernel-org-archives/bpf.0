@@ -2,102 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 989CDC433EF
-	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:27:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42E3EC433F5
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:27:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 833F3619E8
-	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:27:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A2C7619E8
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:27:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348857AbhKPAag (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 19:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S1348952AbhKPAai (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 19:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238597AbhKOTaN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 14:30:13 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE1FC061224
-        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 11:18:56 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so686153pjb.1
-        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 11:18:56 -0800 (PST)
+        with ESMTP id S1346138AbhKOT36 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 15 Nov 2021 14:29:58 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0209AC061570
+        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 11:18:44 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id x131so15886382pfc.12
+        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 11:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PB5GUFs5f+m2nVEY35YykB5F9U2TeFXf/TB4jp9nzJQ=;
-        b=D7VdecOC+cJezG5p7C6xtYxueS6mvn4xFOVUnK+jnReCLBdCMsVGba+ON3vqoh6vgJ
-         kQUkZ24fwyN5t1uoL0+0s32hLF7sZ8dAimaj+ic3iqcsJzUhY1lJ3if35chqYD9scF/m
-         9E3Hu6tpb/Fu2Tn67srFFdPPSOCzlTQZIzuzmlHPaF2GV3B7cbTag94PpeHyjvcun5vn
-         mloVDrIq6X/HbqKtWwtBACsWPGxIcGpZ8eLQJrUwTdc0zhTsquislclyEQnh/lowWTKt
-         2ZcBFPChmUgt3k0JOZ3kFBFXYR+Z0vCi7I0x7RdJMNDAo4B/ZpkIPvzLEG1gzU8/eoeQ
-         2p5A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yBFzl6AYztgpQ7yNnKIREuF5XmnmDZIa7O89wcChpQI=;
+        b=IbrVY8y/0vKtqsfzaWMeyaRUOnt551g21vLj4mgeo7iUVDU8NL85wm09Vgai/kk/CB
+         27US3KDKT3KHDZGRHTa0SCgZ6x9gED05gP+lwGWujoKPF1+Q+MbCeEtJ90dXXpRVxAV+
+         VjE/UxTY37RUYmOEtNcTuvqDo3XanZuADr88Tbi+99eKseDsq0ctU61QvjepUwA/igk/
+         VZooe3A6gNl3g/hjghJOvX/B2tqU4BObCWfSOpAVjTYI4vKJWBXMZQSAfPef9iKUhja9
+         DEjOUVa6ursLC37ZmmA8S0cjeqTZRHR+UvaK5UzqmEQWVosQsJKFni4OxPx0GckawEFT
+         WWzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PB5GUFs5f+m2nVEY35YykB5F9U2TeFXf/TB4jp9nzJQ=;
-        b=GEYoup5iju0gNC3xFi5IV3Y371opczRe8t0tM97xuHvT8fSRqJLqTxt0tHifGKQdFF
-         bQxRp3SwqPhMAJy/+HE8q2xau76BszHfuHN6MhENZc0088GBBUST8NoL4qns282MBpHt
-         V8xUIOJCZqUZ6oBYpon6QYiQLZDlFhc7m6O56lgCIiZM7wT4DcAlsBriteTZkLFVJQec
-         Nqv97PGu2/FFP7XoaddEoBmeqt42R9XEjaK19vqTq8tfoaznxe4GntD24M5Nf7G+2Xiu
-         Vt6mL0trvObC4HBQNj/FkrmW9jq12Ob/toG/C8tTDVEI3hddtmpcQUc2OBgqhHGzqUUw
-         PzDQ==
-X-Gm-Message-State: AOAM532wqORiVhBoP59lJA8SgKyEC5ytIMYkWu696H8x4dBBQobC3tmL
-        A6agzCXSRdf3yDb7GEBeA2lDh87R+Ms=
-X-Google-Smtp-Source: ABdhPJwBy7ClxT6uoose4uzZr8owAW0WASdoKYcT8ko2VHi7Bf5iCHEaauHD7ldxMx61LXYM8aRlqg==
-X-Received: by 2002:a17:90a:e506:: with SMTP id t6mr1102891pjy.9.1637003935676;
-        Mon, 15 Nov 2021 11:18:55 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yBFzl6AYztgpQ7yNnKIREuF5XmnmDZIa7O89wcChpQI=;
+        b=LfBbDsQCJr0mH/SzBkXBoleeU8YJLpAruIkigdeL8kgjSq+PEDMwAuUhxJSdrd5Um/
+         pY+SwUx9wXJSZuL/5yDB3Xgy9nJXUqkYsHv/sI/YHM4K0eA2E4RQimd9s41O99uSZfj7
+         h7xfNsvoAoQUyc/c2DCEgS2ERy1x7rT93liXMpRxYRvvyEgf3UW5YQj0e9hN5vGkzUVf
+         dcQ7kThRbSkYwRz1P6jJVBgegAt7II8UF3UYg6HvVgQbCImqVOVHU31MIFQF0iZhmOKK
+         iw5pfaD8qsIavvQRrArgLtXs4fipL/FAqxCFYX5q2rBH9PK3RbNpyBRZoYJIOGNaXh8V
+         Zfaw==
+X-Gm-Message-State: AOAM5316og0SiCPVhC/XOUeIHvSOvASxYHwMF9JEGczFrwjJteiPp7B6
+        Y/XQSTIQml9sOvuckYDRGgeHAiTASoo=
+X-Google-Smtp-Source: ABdhPJxq+b3xghycKe5/ye8j/DO1Buv5TjxKR7uuADbVfDalbfLsOB5mzM1RTeEWJGaYUWKmNafwFw==
+X-Received: by 2002:a05:6a00:158a:b0:49f:be86:c78f with SMTP id u10-20020a056a00158a00b0049fbe86c78fmr35282215pfk.56.1637003924122;
+        Mon, 15 Nov 2021 11:18:44 -0800 (PST)
 Received: from localhost ([2405:201:6014:d064:502e:73f4:8af1:9522])
-        by smtp.gmail.com with ESMTPSA id on6sm111462pjb.47.2021.11.15.11.18.54
+        by smtp.gmail.com with ESMTPSA id h10sm17332967pfc.104.2021.11.15.11.18.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 11:18:55 -0800 (PST)
+        Mon, 15 Nov 2021 11:18:43 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v1 3/3] tools/resolve_btfids: Demote unresolved symbol message to debug
-Date:   Tue, 16 Nov 2021 00:48:40 +0530
-Message-Id: <20211115191840.496263-4-memxor@gmail.com>
+Subject: [PATCH bpf v1 0/3] Fixes for kfunc-mod regressions and warnings
+Date:   Tue, 16 Nov 2021 00:48:37 +0530
+Message-Id: <20211115191840.496263-1-memxor@gmail.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211115191840.496263-1-memxor@gmail.com>
-References: <20211115191840.496263-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1208; h=from:subject; bh=5zKu8YbLk2/tQC2/IPEz36iS/1TQBcHMJEOqg0OClAg=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhkrI2thqzTsu5si1jp+oNh+7smaM+3APoRJnr2xPo JqmtIDOJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYZKyNgAKCRBM4MiGSL8RyhjvD/ 0e6eYj7iw1u2n2ywhjs6AK8S6qBd+Sq+EHRv/+2XNivrMU5Q69e7QfbmWJmZvO6wUpBrqyWulJm7b+ X0wG//hEEqDDwlfqd7+oUJaRz0QsCdCkPHFhFRBubpDgCwF9vmcS/gt6YJA7cyBgmmeimFZk1j2q8+ n8S/YfZd9kbbmQ+NZENE4+3j5j7SwIoRZP3Ddl2V0IyTl3QzdhUKKDBcmn5ULinAowMYAdEM4F6F3v ztKoGfWApWLBAiEWO9HC273fttV84YLzL+Tbpq4YX/c+oOxsB/9Q8iEh+oQTL+vyx3bF+zlQ2thgng 289thkOlegbAogv/W2a4ekFpRE3hwdUoRgyfuQef4pM8oeBrtNIM5bhfNxR7gGv8nZ+vi4en6DrOMt vNrmhPvu7Z9C3ImI1lkIWu+Un2PgP652c326fcLfJsIFoZa5cqLF3apZT8RYIJ3Q2+is4y6fRPsv3b EXsQ2FlA3UWXZr2dSHJ0KgrgzOo26FR99ZDyDCr2EwciccB/3FLPVr4IuFahiTMMp9ms0YTZh460bl /Nz3KnYQMnSGETxXeCRSDUzLoy0PBVARPd9h+XFwq6v/BtS597GZcT+SfXpuyKfEgqems0ENsrtR0Q YOmNqDWown5eR99gPXb7toktT4cZEyvS9cfsoGzDxrWLFGQ/0VVgM0h1O72A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=593; h=from:subject; bh=dc9nJwyOePmLUw12ws0w+1YMYhfWpS84yVjyQ6vNURY=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhkrI2Q24lJ27Q+NxsgOr4mEU/q3WkHUmIsTuxZlXg pskWPQaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYZKyNgAKCRBM4MiGSL8Ryv3wEA CVV8SW9oZDiWv1FMvgRCyzg1n0/wHesvTpjeq+Oyy2pjwEGochA67XSbffqtOzV+TLk6bTJuLYPXk0 1eVeDH5Y8/NspqpHEtqKomIqm3RohKhVIJ6Y3rlSAWhYjD8qJXLumr7Dmz/RjRBIaXq6Nd+o76hamb HGCMqlKOL5b5ORp4OiZadri/mX9ZPSfLGMvi6+yWYtzyJFJWwpzF/69vgGu5jd9tmv+vuaOvHYAKS4 GLSEiZEtTfL2A8iIqD7BgyKKRdR1r7Tl8BRQrxVkozzz3DeLbmPpiUAcbhgeuN+cBNk6oa1oFlaaaR xg9ZRrG3fc7Q2tzSWcb4PebjAZEX3R+cSSlulNAkw2ullp7WFDrDUAmYV6iuv9oweFTRSJp3n7sEtY q+mfB46wEB+1wnfc6mQBWzJYjRczBx+ISd9plEQBwkkBRwgvIlG0gPVQJXgu6F9Lq8Xk/mvUJQKro8 TvXu/zlW8hQAiVY9B7C655SQ5iFuFW5CofB1ZuOThox/E9ypzssDoRG2fhQao0m3Jx748olnRYqTQI 2DSXpAbPfJY1WAtUd01D72f/YPIShLWACiTWgy4fhTc+OMvhbutVCGvNCJa87xl/C/RAN2U0ugG0tX ElMVFuw/WvJh7ArjVqcHkbMxhuTa/Y9MiZ7J8Ifs40MPyu22HQbktusNg3MQ==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-resolve_btfids prints a warning when it finds an unresolved symbol,
-(id == 0) in id_patch. This can be the case for BTF sets that are empty
-(due to disabled config options), hence printing warnings for certain
-builds, most recently seen in [0]. Hence, demote the warning to debug
-log level to avoid build time noise.
+This set includes fixes for two regressions and one build warning introduced by
+the kfunc for modules series.
 
-  [0]: https://lore.kernel.org/all/1b99ae14-abb4-d18f-cc6a-d7e523b25542@gmail.com
+Kumar Kartikeya Dwivedi (3):
+  bpf: Make CONFIG_DEBUG_INFO_BTF depend upon CONFIG_BPF_SYSCALL
+  bpf: Fix bpf_check_mod_kfunc_call for built-in modules
+  tools/resolve_btfids: Demote unresolved symbol message to debug
 
-Fixes: 0e32dfc80bae ("bpf: Enable TCP congestion control kfunc from modules")
-Reported-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- tools/bpf/resolve_btfids/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/btf.h             | 14 ++++++++++----
+ kernel/bpf/btf.c                | 11 ++---------
+ lib/Kconfig.debug               |  1 +
+ tools/bpf/resolve_btfids/main.c |  2 +-
+ 4 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index a59cb0ee609c..833bfcc9ccf6 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -569,7 +569,7 @@ static int id_patch(struct object *obj, struct btf_id *id)
- 	int i;
- 
- 	if (!id->id) {
--		pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
-+		pr_debug("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
- 	}
- 
- 	for (i = 0; i < id->addr_cnt; i++) {
 -- 
 2.33.1
 
