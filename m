@@ -2,30 +2,30 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2567BC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2311C43219
 	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E98D63215
+	by mail.kernel.org (Postfix) with ESMTP id A0AF263215
 	for <bpf@archiver.kernel.org>; Mon, 15 Nov 2021 22:52:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240216AbhKOWzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 17:55:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47430 "EHLO mail.kernel.org"
+        id S242048AbhKOWzY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 15 Nov 2021 17:55:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351168AbhKOWlU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1351198AbhKOWlU (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 15 Nov 2021 17:41:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 998B363257;
-        Mon, 15 Nov 2021 22:34:50 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D7BBE63259;
+        Mon, 15 Nov 2021 22:35:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637015693;
-        bh=C6oyFm/8T7ZEcZeAXZSEr9nFIpaWsK0NzFu8RPuh/to=;
+        s=k20201202; t=1637015718;
+        bh=I0Elc0hfA1titTsiSCoZYcE37ypgrqj8u2Re/+tTr0k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g24BDRWNv5bxPE/WS+JR6jRA6qkSBaBEy5DCU3P+yQ91flDBbnwh+alL5lfwPCivC
-         X7OxaOymQABDMIj/iGkL8GCnfHYY0qAvg+R+JWP7Sws9N6frmQv13NkAHG9bbiSxM1
-         swRnIWqa1xwhbDGGIuA9ZfK/0ydn8E7pcdaGXAs0DR7G9ZdRpgAvLCy/O5wFlw5iA/
-         pR7K9UAe4kkn1nYBssKk0bR5Znr2CoV1mnmWt6tyWANjc1MuwokY+5KXbFnKcueJCs
-         YbRncfY6XV2sLHiZqtgbZTHWhxrT/xt07yiAeX2nmWwVz+EG3Bmx7DXOiEiAzox60i
-         xw/nzaV8rGLIg==
+        b=j9DLO+YwSlaEggBAbtdJLSKmbF1GyKmgsYcwvaUODTixk157i3nOS1n5MsJJSEOzB
+         4qUZGXvsXMtxoVII4chFj3eLfRkBVqTQLbBa32zbNyQny+xGhferHBlLKL6KfLnyHo
+         MEQUTias1rqaaVpxDdhpCQ/oeRIvrpmsd/2A9hqoKNnHUw9SxjNmBntWiSxOIaqHrf
+         77InYzjpH6m4EP2gFGWDcjaBRCdw152h+nJNHhtRoDG5rUikUJizAFitp+/saJkwm6
+         r4kDLUg3odm1Tt3/5Ckzw3/81P2JEjlosSvAjAXqApGQO8xpvoCQQoZByRW0hE/yBq
+         P+9HceahneNjA==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -35,9 +35,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v18 bpf-next 16/23] bpf: test_run: add xdp_shared_info pointer in bpf_test_finish signature
-Date:   Mon, 15 Nov 2021 23:33:10 +0100
-Message-Id: <512555067134ea6110911913589570fbf0f94465.1637013639.git.lorenzo@kernel.org>
+Subject: [PATCH v18 bpf-next 21/23] bpf: selftests: introduce bpf_xdp_{load,store}_bytes selftest
+Date:   Mon, 15 Nov 2021 23:33:15 +0100
+Message-Id: <3369659c7ae5df147c890c8aa4555f94f5879529.1637013639.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <cover.1637013639.git.lorenzo@kernel.org>
 References: <cover.1637013639.git.lorenzo@kernel.org>
@@ -47,108 +47,152 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-introduce xdp_shared_info pointer in bpf_test_finish signature in order
-to copy back paged data from a xdp multi-buff frame to userspace buffer
+Introduce kernel selftest for new bpf_xdp_{load,store}_bytes helpers.
+and bpf_xdp_pointer/bpf_xdp_copy_buf utility routines.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- net/bpf/test_run.c | 48 +++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 39 insertions(+), 9 deletions(-)
+ .../bpf/prog_tests/xdp_adjust_frags.c         | 81 +++++++++++++++++++
+ .../bpf/progs/test_xdp_update_frags.c         | 42 ++++++++++
+ 2 files changed, 123 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 9cb5d5eced9a..e57c71085dd5 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -130,7 +130,8 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 
- static int bpf_test_finish(const union bpf_attr *kattr,
- 			   union bpf_attr __user *uattr, const void *data,
--			   u32 size, u32 retval, u32 duration)
-+			   struct skb_shared_info *sinfo, u32 size,
-+			   u32 retval, u32 duration)
- {
- 	void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
- 	int err = -EFAULT;
-@@ -145,8 +146,36 @@ static int bpf_test_finish(const union bpf_attr *kattr,
- 		err = -ENOSPC;
- 	}
- 
--	if (data_out && copy_to_user(data_out, data, copy_size))
--		goto out;
-+	if (data_out) {
-+		int len = sinfo ? copy_size - sinfo->xdp_frags_size : copy_size;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+new file mode 100644
+index 000000000000..53febbcb8fd4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+@@ -0,0 +1,81 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
 +
-+		if (copy_to_user(data_out, data, len))
-+			goto out;
++void test_xdp_update_frags(void)
++{
++	const char *file = "./test_xdp_update_frags.o";
++	__u32 duration, retval, size;
++	struct bpf_object *obj;
++	int err, prog_fd;
++	__u32 *offset;
++	__u8 *buf;
 +
-+		if (sinfo) {
-+			int i, offset = len, data_len;
++	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	if (CHECK_FAIL(err))
++		return;
 +
-+			for (i = 0; i < sinfo->nr_frags; i++) {
-+				skb_frag_t *frag = &sinfo->frags[i];
++	buf = malloc(128);
++	if (CHECK(!buf, "malloc()", "error:%s\n", strerror(errno)))
++		return;
 +
-+				if (offset >= copy_size) {
-+					err = -ENOSPC;
-+					break;
-+				}
++	memset(buf, 0, 128);
++	offset = (__u32 *)buf;
++	*offset = 16;
++	buf[*offset] = 0xaa;		/* marker at offset 16 */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 31 */
 +
-+				data_len = min_t(int, copy_size - offset,
-+						 skb_frag_size(frag));
++	err = bpf_prog_test_run(prog_fd, 1, buf, 128,
++				buf, &size, &retval, &duration);
 +
-+				if (copy_to_user(data_out + offset,
-+						 skb_frag_address(frag),
-+						 data_len))
-+					goto out;
++	/* test_xdp_update_frags: buf[16,31]: 0xaa -> 0xbb */
++	CHECK(err || retval != XDP_PASS || buf[16] != 0xbb || buf[31] != 0xbb,
++	      "128b", "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
 +
-+				offset += data_len;
-+			}
-+		}
-+	}
++	free(buf);
 +
- 	if (copy_to_user(&uattr->test.data_size_out, &size, sizeof(size)))
- 		goto out;
- 	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
-@@ -683,7 +712,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	/* bpf program can never convert linear skb to non-linear */
- 	if (WARN_ON_ONCE(skb_is_nonlinear(skb)))
- 		size = skb_headlen(skb);
--	ret = bpf_test_finish(kattr, uattr, skb->data, size, retval, duration);
-+	ret = bpf_test_finish(kattr, uattr, skb->data, NULL, size, retval,
-+			      duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct __sk_buff));
-@@ -851,8 +881,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		goto out;
- 
- 	size = xdp.data_end - xdp.data_meta + sinfo->xdp_frags_size;
--	ret = bpf_test_finish(kattr, uattr, xdp.data_meta, size, retval,
--			      duration);
-+	ret = bpf_test_finish(kattr, uattr, xdp.data_meta, sinfo, size,
-+			      retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, ctx,
- 				     sizeof(struct xdp_md));
-@@ -944,8 +974,8 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	if (ret < 0)
- 		goto out;
- 
--	ret = bpf_test_finish(kattr, uattr, &flow_keys, sizeof(flow_keys),
--			      retval, duration);
-+	ret = bpf_test_finish(kattr, uattr, &flow_keys, NULL,
-+			      sizeof(flow_keys), retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, user_ctx,
- 				     sizeof(struct bpf_flow_keys));
-@@ -1049,7 +1079,7 @@ int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kat
- 		user_ctx->cookie = sock_gen_cookie(ctx.selected_sk);
- 	}
- 
--	ret = bpf_test_finish(kattr, uattr, NULL, 0, retval, duration);
-+	ret = bpf_test_finish(kattr, uattr, NULL, NULL, 0, retval, duration);
- 	if (!ret)
- 		ret = bpf_ctx_finish(kattr, uattr, user_ctx, sizeof(*user_ctx));
- 
++	buf = malloc(9000);
++	if (CHECK(!buf, "malloc()", "error:%s\n", strerror(errno)))
++		return;
++
++	memset(buf, 0, 9000);
++	offset = (__u32 *)buf;
++	*offset = 5000;
++	buf[*offset] = 0xaa;		/* marker at offset 5000 (frag0) */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 5015 (frag0) */
++
++	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
++				buf, &size, &retval, &duration);
++
++	/* test_xdp_update_frags: buf[5000,5015]: 0xaa -> 0xbb */
++	CHECK(err || retval != XDP_PASS ||
++	      buf[5000] != 0xbb || buf[5015] != 0xbb,
++	      "9000b", "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
++
++	memset(buf, 0, 9000);
++	offset = (__u32 *)buf;
++	*offset = 3510;
++	buf[*offset] = 0xaa;		/* marker at offset 3510 (head) */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 3525 (frag0) */
++
++	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
++				buf, &size, &retval, &duration);
++
++	/* test_xdp_update_frags: buf[3510,3525]: 0xaa -> 0xbb */
++	CHECK(err || retval != XDP_PASS ||
++	      buf[3510] != 0xbb || buf[3525] != 0xbb,
++	      "9000b", "err %d errno %d retval %d size %d\n",
++	      err, errno, retval, size);
++
++	free(buf);
++
++	bpf_object__close(obj);
++}
++
++void test_xdp_adjust_frags(void)
++{
++	if (test__start_subtest("xdp_adjust_frags"))
++		test_xdp_update_frags();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c b/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
+new file mode 100644
+index 000000000000..5801f05219db
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of version 2 of the GNU General Public
++ * License as published by the Free Software Foundation.
++ */
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <bpf/bpf_helpers.h>
++
++int _version SEC("version") = 1;
++
++SEC("xdp_mb/xdp_adjust_frags")
++int _xdp_adjust_frags(struct xdp_md *xdp)
++{
++	__u8 *data_end = (void *)(long)xdp->data_end;
++	__u8 *data = (void *)(long)xdp->data;
++	__u8 val[16] = {};
++	__u32 offset;
++	int err;
++
++	if (data + sizeof(__u32) > data_end)
++		return XDP_DROP;
++
++	offset = *(__u32 *)data;
++	err = bpf_xdp_load_bytes(xdp, offset, val, sizeof(val));
++	if (err < 0)
++		return XDP_DROP;
++
++	if (val[0] != 0xaa || val[15] != 0xaa) /* marker */
++		return XDP_DROP;
++
++	val[0] = 0xbb; /* update the marker */
++	val[15] = 0xbb;
++	err = bpf_xdp_store_bytes(xdp, offset, val, sizeof(val));
++	if (err < 0)
++		return XDP_DROP;
++
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.31.1
 
