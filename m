@@ -2,478 +2,333 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A98AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9C1AC433F5
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 01:32:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7723D61205
-	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 00:42:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C620E61027
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 01:32:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352831AbhKPApm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 15 Nov 2021 19:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355644AbhKPAmC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 15 Nov 2021 19:42:02 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA304C073AE7
-        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 14:59:01 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id p18so5946688wmq.5
-        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 14:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nAJx7EdAneB2lJub8VevoB5opbG/2S93s6eur1gM+dw=;
-        b=5ZLnWlVJe9mPEB5qvSEOk4SqwWROx8dRteDty6PbJ300KRrxQSqijwYOtl1LMbyaAH
-         xVVqMdPffSWLYpAzdcpeCJzUlM0jzmHfJj33fUeFP3ZId/n7FSPd+h4mBARc163VrilN
-         UBZTyV1xrsWVJzAyxnANfAJAu60+PQNbQpoQhWj4TodWTHsiB0Y3Mu2CLVIRW/TlAFln
-         1bYskXCHJBGRN6FnY+Lg4b+59Nv/y9JEluusfad5wIa+lMG+dAhehLfN7kFgDvjKg/Y0
-         CutjC1RtTrA/mqqUre0OHoqfCAtI5zmkDsqXWhCK0xnoDLJS70RPzUIpzz3joKbR+Eqe
-         SNOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nAJx7EdAneB2lJub8VevoB5opbG/2S93s6eur1gM+dw=;
-        b=unGkUUzlSF4pQkvjReM0yAuiY0MjCFKx6xTrQWN8O99a+zdNT9+IcvFb3qlZkBy8Dv
-         PfNJdSOPmlBqr7J2eGEPe2k3Oe546mKw1maTETAwkruESu2Pmyo8QmDNxetj6+zMT+us
-         /zWQDikJc14zI0t+t4SebZAhdNZm6myHOv8/VJ6ahOqlMhK3kSgKV78TAESfWmM5PKpQ
-         OBL19er06Zkaq2vOQ5lykYlz5tse0RnyLkfy4GNWAWOm/1uj+00JbT9SRNzyXhtQpGcD
-         za7V9h9LyJuK6a4ACETKC1rvmuJ+ugwl3p3jOpKFcexz33SKVDoV5T8Bf0hrcxPuPC6g
-         ZfVw==
-X-Gm-Message-State: AOAM533cILL8/5ykGR1GDhkHBb8eUFwFxOWP4dNAytHkxrqfI4aMIA50
-        OyQXbDucHqf1IC1R7xV4i5V/iQ==
-X-Google-Smtp-Source: ABdhPJwuIHxXPf6QVF40JYKPBzovTLbbjTLA86ixBKg2bW/1I/U0btZlMqS+VFXoS+shGd2adWNvpA==
-X-Received: by 2002:a05:600c:1c87:: with SMTP id k7mr65649629wms.103.1637017140476;
-        Mon, 15 Nov 2021 14:59:00 -0800 (PST)
-Received: from localhost.localdomain ([149.86.89.157])
-        by smtp.gmail.com with ESMTPSA id y12sm15467619wrn.73.2021.11.15.14.58.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Nov 2021 14:59:00 -0800 (PST)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH bpf-next 2/3] bpftool: Update doc (use susbtitutions) and test_bpftool_synctypes.py
-Date:   Mon, 15 Nov 2021 22:58:43 +0000
-Message-Id: <20211115225844.33943-3-quentin@isovalent.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211115225844.33943-1-quentin@isovalent.com>
-References: <20211115225844.33943-1-quentin@isovalent.com>
+        id S1349492AbhKPBfh convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 15 Nov 2021 20:35:37 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21498 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1380835AbhKPBdu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 15 Nov 2021 20:33:50 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AG19fsY013607
+        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 17:30:53 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3cb86ws9wk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 15 Nov 2021 17:30:53 -0800
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Mon, 15 Nov 2021 17:30:52 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id CF6B9953A9DD; Mon, 15 Nov 2021 17:30:42 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next] selftests/bpf: add uprobe triggering overhead benchmarks
+Date:   Mon, 15 Nov 2021 17:30:41 -0800
+Message-ID: <20211116013041.4072571-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+X-FB-Source: Intern
+X-Proofpoint-GUID: BJQHFiH55K3WIU9i4XxdDxDxG51PJdzD
+X-Proofpoint-ORIG-GUID: BJQHFiH55K3WIU9i4XxdDxDxG51PJdzD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-15_16,2021-11-15_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111160004
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-test_bpftool_synctypes.py helps detecting inconsistencies in bpftool
-between the different list of types and options scattered in the
-sources, the documentation, and the bash completion. For options that
-apply to all bpftool commands, the script had a hardcoded list of
-values, and would use them to check whether the man pages are
-up-to-date. When writing the script, it felt acceptable to have this
-list in order to avoid to open and parse bpftool's main.h every time,
-and because the list of global options in bpftool doesn't change so
-often.
+Add benchmark to measure overhead of uprobes and uretprobes. Also have
+a baseline (no uprobe attached) benchmark.
 
-However, this is prone to omissions, and we recently added a new
--l|--legacy option which was described in common_options.rst, but not
-listed in the options summary of each manual page. The script did not
-complain, because it keeps comparing the hardcoded list to the (now)
-outdated list in the header file.
+On my dev machine, baseline benchmark can trigger 130M user_target()
+invocations. When uprobe is attached, this falls to just 700K. With
+uretprobe, we get down to 520K:
 
-To address the issue, this commit brings the following changes:
+  $ sudo ./bench trig-uprobe-base -a
+  Summary: hits  131.289 ± 2.872M/s
 
-- Options that are common to all bpftool commands (--json, --pretty, and
-  --debug) are moved to a dedicated file, and used in the definition of
-  a RST substitution. This substitution is used in the sources of all
-  the man pages.
+  # UPROBE
+  $ sudo ./bench -a trig-uprobe-without-nop
+  Summary: hits    0.729 ± 0.007M/s
 
-- This list of common options is updated, with the addition of the new
-  -l|--legacy option.
+  $ sudo ./bench -a trig-uprobe-with-nop
+  Summary: hits    1.798 ± 0.017M/s
 
-- The script test_bpftool_synctypes.py is updated to compare:
-    - Options specific to a command, found in C files, for the
-      interactive help messages, with the same specific options from the
-      relevant man page for that command.
-    - Common options, checked just once: the list in main.h is
-      compared with the new list in substitutions.rst.
+  # URETPROBE
+  $ sudo ./bench -a trig-uretprobe-without-nop
+  Summary: hits    0.508 ± 0.012M/s
 
-Cc: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+  $ sudo ./bench -a trig-uretprobe-with-nop
+  Summary: hits    0.883 ± 0.008M/s
+
+So there is almost 2.5x performance difference between probing nop vs
+non-nop instruction for entry uprobe. And 1.7x difference for uretprobe.
+
+This means that non-nop uprobe overhead is around 1.4 microseconds for uprobe
+and 2 microseconds for non-nop uretprobe.
+
+For nop variants, uprobe and uretprobe overhead is down to 0.556 and
+1.13 microseconds, respectively.
+
+For comparison, just doing a very low-overhead syscall (with no BPF
+programs attached anywhere) gives:
+
+  $ sudo ./bench trig-base -a
+  Summary: hits    4.830 ± 0.036M/s
+
+So uprobes are about 2.67x slower than pure context switch.
+
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../bpf/bpftool/Documentation/bpftool-btf.rst |  5 +-
- .../bpftool/Documentation/bpftool-cgroup.rst  |  5 +-
- .../bpftool/Documentation/bpftool-feature.rst |  4 +-
- .../bpf/bpftool/Documentation/bpftool-gen.rst |  5 +-
- .../bpftool/Documentation/bpftool-iter.rst    |  4 +-
- .../bpftool/Documentation/bpftool-link.rst    |  5 +-
- .../bpf/bpftool/Documentation/bpftool-map.rst |  5 +-
- .../bpf/bpftool/Documentation/bpftool-net.rst |  4 +-
- .../bpftool/Documentation/bpftool-perf.rst    |  4 +-
- .../bpftool/Documentation/bpftool-prog.rst    |  4 +-
- .../Documentation/bpftool-struct_ops.rst      |  4 +-
- tools/bpf/bpftool/Documentation/bpftool.rst   |  5 +-
- .../bpftool/Documentation/substitutions.rst   |  3 +
- .../selftests/bpf/test_bpftool_synctypes.py   | 70 +++++++++++++++++--
- 14 files changed, 102 insertions(+), 25 deletions(-)
- create mode 100644 tools/bpf/bpftool/Documentation/substitutions.rst
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ tools/testing/selftests/bpf/bench.c           |  10 ++
+ .../selftests/bpf/benchs/bench_trigger.c      | 146 ++++++++++++++++++
+ .../selftests/bpf/progs/trigger_bench.c       |   7 +
+ 4 files changed, 166 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-index 2d2ceb7163f6..342716f74ec4 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -9,13 +9,14 @@ tool for inspection of BTF data
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 0470802c907c..35684d61aaeb 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -533,7 +533,9 @@ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
+ $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
+ $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
+ $(OUTPUT)/bench: LDLIBS += -lm
+-$(OUTPUT)/bench: $(OUTPUT)/bench.o $(OUTPUT)/testing_helpers.o \
++$(OUTPUT)/bench: $(OUTPUT)/bench.o \
++		 $(OUTPUT)/testing_helpers.o \
++		 $(OUTPUT)/trace_helpers.o \
+ 		 $(OUTPUT)/bench_count.o \
+ 		 $(OUTPUT)/bench_rename.o \
+ 		 $(OUTPUT)/bench_trigger.o \
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index cc4722f693e9..c75e7ee28746 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -359,6 +359,11 @@ extern const struct bench bench_trig_kprobe;
+ extern const struct bench bench_trig_fentry;
+ extern const struct bench bench_trig_fentry_sleep;
+ extern const struct bench bench_trig_fmodret;
++extern const struct bench bench_trig_uprobe_base;
++extern const struct bench bench_trig_uprobe_with_nop;
++extern const struct bench bench_trig_uretprobe_with_nop;
++extern const struct bench bench_trig_uprobe_without_nop;
++extern const struct bench bench_trig_uretprobe_without_nop;
+ extern const struct bench bench_rb_libbpf;
+ extern const struct bench bench_rb_custom;
+ extern const struct bench bench_pb_libbpf;
+@@ -385,6 +390,11 @@ static const struct bench *benchs[] = {
+ 	&bench_trig_fentry,
+ 	&bench_trig_fentry_sleep,
+ 	&bench_trig_fmodret,
++	&bench_trig_uprobe_base,
++	&bench_trig_uprobe_with_nop,
++	&bench_trig_uretprobe_with_nop,
++	&bench_trig_uprobe_without_nop,
++	&bench_trig_uretprobe_without_nop,
+ 	&bench_rb_libbpf,
+ 	&bench_rb_custom,
+ 	&bench_pb_libbpf,
+diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+index f41a491a8cc0..049a5ad56f65 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
++++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2020 Facebook */
+ #include "bench.h"
+ #include "trigger_bench.skel.h"
++#include "trace_helpers.h"
  
- :Manual section: 8
+ /* BPF triggering benchmarks */
+ static struct trigger_ctx {
+@@ -107,6 +108,101 @@ static void *trigger_consumer(void *input)
+ 	return NULL;
+ }
  
-+.. include:: substitutions.rst
++/* make sure call is not inlined and not avoided by compiler, so __weak and
++ * inline asm volatile in the body of the function
++ *
++ * There is a performance difference between uprobing at nop location vs other
++ * instructions. So use two different targets, one of which starts with nop
++ * and another doesn't.
++ *
++ * GCC doesn't generate stack setup preample for these functions due to them
++ * having no input arguments and doing nothing in the body.
++ */
++__weak void uprobe_target_with_nop(void)
++{
++	asm volatile ("nop");
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **btf** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | {**-d** | **--debug** } |
--	{ **-B** | **--base-btf** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| | { **-B** | **--base-btf** } }
- 
- 	*COMMANDS* := { **dump** | **help** }
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-index b954faeb0f07..a17e9aa314fd 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
-@@ -9,13 +9,14 @@ tool for inspection and simple manipulation of eBPF progs
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++__weak void uprobe_target_without_nop(void)
++{
++	asm volatile ("");
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **cgroup** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
--	{ **-f** | **--bpffs** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } }
- 
- 	*COMMANDS* :=
- 	{ **show** | **list** | **tree** | **attach** | **detach** | **help** }
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-index b1471788a15f..4ce9a77bc1e0 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-@@ -9,12 +9,14 @@ tool for inspection of eBPF-related parameters for Linux kernel or net device
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++static void *uprobe_base_producer(void *input)
++{
++	while (true) {
++		uprobe_target_with_nop();
++		atomic_inc(&base_hits.value);
++	}
++	return NULL;
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **feature** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| }
- 
- 	*COMMANDS* := { **probe** | **help** }
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index 51e2e8de5208..bc276388f432 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -9,13 +9,14 @@ tool for BPF code-generation
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++static void *uprobe_producer_with_nop(void *input)
++{
++	while (true)
++		uprobe_target_with_nop();
++	return NULL;
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **gen** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
--	{ **-L** | **--use-loader** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| | { **-L** | **--use-loader** } }
- 
- 	*COMMAND* := { **object** | **skeleton** | **help** }
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-index 51914c9e8a54..84839d488621 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
-@@ -9,12 +9,14 @@ tool to create BPF iterators
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++static void *uprobe_producer_without_nop(void *input)
++{
++	while (true)
++		uprobe_target_without_nop();
++	return NULL;
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **iter** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| }
- 
- 	*COMMANDS* := { **pin** | **help** }
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-index 31371bcf605a..52a4eee4af54 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
-@@ -9,13 +9,14 @@ tool for inspection and simple manipulation of eBPF links
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++static void usetup(bool use_retprobe, bool use_nop)
++{
++	size_t uprobe_offset;
++	ssize_t base_addr;
++	struct bpf_link *link;
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **link** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
--	{ **-f** | **--bpffs** } | { **-n** | **--nomount** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
- 
- 	*COMMANDS* := { **show** | **list** | **pin** | **help** }
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index e22c918c069c..7c188a598444 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -9,13 +9,14 @@ tool for inspection and simple manipulation of eBPF maps
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++	setup_libbpf();
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **map** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
--	{ **-f** | **--bpffs** } | { **-n** | **--nomount** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
- 
- 	*COMMANDS* :=
- 	{ **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-index 6d1aa374529f..f4e0a516335a 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
-@@ -9,12 +9,14 @@ tool for inspection of netdev/tc related bpf prog attachments
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++	ctx.skel = trigger_bench__open_and_load();
++	if (!ctx.skel) {
++		fprintf(stderr, "failed to open skeleton\n");
++		exit(1);
++	}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **net** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| }
- 
- 	*COMMANDS* :=
- 	{ **show** | **list** | **attach** | **detach** | **help** }
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-perf.rst b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-index ad554806faa2..5fea633a82f1 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
-@@ -9,12 +9,14 @@ tool for inspection of perf related bpf prog attachments
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++	base_addr = get_base_addr();
++	if (use_nop)
++		uprobe_offset = get_uprobe_offset(&uprobe_target_with_nop, base_addr);
++	else
++		uprobe_offset = get_uprobe_offset(&uprobe_target_without_nop, base_addr);
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **perf** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| }
- 
- 	*COMMANDS* :=
- 	{ **show** | **list** | **help** }
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-index d31148571403..a2e9359e554c 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
-@@ -9,12 +9,14 @@ tool for inspection and simple manipulation of eBPF progs
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++	link = bpf_program__attach_uprobe(ctx.skel->progs.bench_trigger_uprobe,
++					  use_retprobe,
++					  -1 /* all PIDs */,
++					  "/proc/self/exe",
++					  uprobe_offset);
++	if (!link) {
++		fprintf(stderr, "failed to attach uprobe!\n");
++		exit(1);
++	}
++	ctx.skel->links.bench_trigger_uprobe = link;
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **prog** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } |
-+	*OPTIONS* := { |COMMON_OPTIONS| |
- 	{ **-f** | **--bpffs** } | { **-m** | **--mapcompat** } | { **-n** | **--nomount** } |
- 	{ **-L** | **--use-loader** } }
- 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-index 77b845b5ac61..ee53a122c0c7 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
-@@ -9,12 +9,14 @@ tool to register/unregister/introspect BPF struct_ops
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++static void uprobe_setup_with_nop()
++{
++	usetup(false, true);
++}
 +
- SYNOPSIS
- ========
- 
- 	**bpftool** [*OPTIONS*] **struct_ops** *COMMAND*
- 
--	*OPTIONS* := { { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
-+	*OPTIONS* := { |COMMON_OPTIONS| }
- 
- 	*COMMANDS* :=
- 	{ **show** | **list** | **dump** | **register** | **unregister** | **help** }
-diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
-index 1248b35e67ae..7084dd9fa2f8 100644
---- a/tools/bpf/bpftool/Documentation/bpftool.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool.rst
-@@ -9,6 +9,8 @@ tool for inspection and simple manipulation of eBPF programs and maps
- 
- :Manual section: 8
- 
-+.. include:: substitutions.rst
++static void uretprobe_setup_with_nop()
++{
++	usetup(true, true);
++}
 +
- SYNOPSIS
- ========
- 
-@@ -20,8 +22,7 @@ SYNOPSIS
- 
- 	*OBJECT* := { **map** | **program** | **cgroup** | **perf** | **net** | **feature** }
- 
--	*OPTIONS* := { { **-V** | **--version** } |
--	{ **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } }
-+	*OPTIONS* := { { **-V** | **--version** } | |COMMON_OPTIONS| }
- 
- 	*MAP-COMMANDS* :=
- 	{ **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
-diff --git a/tools/bpf/bpftool/Documentation/substitutions.rst b/tools/bpf/bpftool/Documentation/substitutions.rst
-new file mode 100644
-index 000000000000..ccf1ffa0686c
---- /dev/null
-+++ b/tools/bpf/bpftool/Documentation/substitutions.rst
-@@ -0,0 +1,3 @@
-+.. SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++static void uprobe_setup_without_nop()
++{
++	usetup(false, false);
++}
 +
-+.. |COMMON_OPTIONS| replace:: { **-j** | **--json** } [{ **-p** | **--pretty** }] | { **-d** | **--debug** } | { **-l** | **--legacy** }
-diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-index be54b7335a76..3f6e562565ec 100755
---- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-+++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-@@ -242,12 +242,6 @@ class FileExtractor(object):
-         end_marker = re.compile('}\\\\n')
-         return self.__get_description_list(start_marker, pattern, end_marker)
- 
--    def default_options(self):
--        """
--        Return the default options contained in HELP_SPEC_OPTIONS
--        """
--        return { '-j', '--json', '-p', '--pretty', '-d', '--debug' }
--
-     def get_bashcomp_list(self, block_name):
-         """
-         Search for and parse a list of type names from a variable in bash
-@@ -274,7 +268,56 @@ class SourceFileExtractor(FileExtractor):
-     defined in children classes.
-     """
-     def get_options(self):
--        return self.default_options().union(self.get_help_list_macro('HELP_SPEC_OPTIONS'))
-+        return self.get_help_list_macro('HELP_SPEC_OPTIONS')
++static void uretprobe_setup_without_nop()
++{
++	usetup(true, false);
++}
 +
-+class MainHeaderFileExtractor(SourceFileExtractor):
-+    """
-+    An extractor for bpftool's main.h
-+    """
-+    filename = os.path.join(BPFTOOL_DIR, 'main.h')
+ const struct bench bench_trig_base = {
+ 	.name = "trig-base",
+ 	.validate = trigger_validate,
+@@ -182,3 +278,53 @@ const struct bench bench_trig_fmodret = {
+ 	.report_progress = hits_drops_report_progress,
+ 	.report_final = hits_drops_report_final,
+ };
 +
-+    def get_common_options(self):
-+        """
-+        Parse the list of common options in main.h (options that apply to all
-+        commands), which looks to the lists of options in other source files
-+        but has different start and end markers:
++const struct bench bench_trig_uprobe_base = {
++	.name = "trig-uprobe-base",
++	.setup = NULL, /* no uprobe/uretprobe is attached */
++	.producer_thread = uprobe_base_producer,
++	.consumer_thread = trigger_consumer,
++	.measure = trigger_base_measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
 +
-+            "OPTIONS := { {-j|--json} [{-p|--pretty}] | {-d|--debug} | {-l|--legacy}"
++const struct bench bench_trig_uprobe_with_nop = {
++	.name = "trig-uprobe-with-nop",
++	.setup = uprobe_setup_with_nop,
++	.producer_thread = uprobe_producer_with_nop,
++	.consumer_thread = trigger_consumer,
++	.measure = trigger_measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
 +
-+        Return a set containing all options, such as:
++const struct bench bench_trig_uretprobe_with_nop = {
++	.name = "trig-uretprobe-with-nop",
++	.setup = uretprobe_setup_with_nop,
++	.producer_thread = uprobe_producer_with_nop,
++	.consumer_thread = trigger_consumer,
++	.measure = trigger_measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
 +
-+            {'-p', '-d', '--legacy', '--pretty', '--debug', '--json', '-l', '-j'}
-+        """
-+        start_marker = re.compile(f'"OPTIONS :=')
-+        pattern = re.compile('([\w-]+) ?(?:\||}[ }\]"])')
-+        end_marker = re.compile('#define')
++const struct bench bench_trig_uprobe_without_nop = {
++	.name = "trig-uprobe-without-nop",
++	.setup = uprobe_setup_without_nop,
++	.producer_thread = uprobe_producer_without_nop,
++	.consumer_thread = trigger_consumer,
++	.measure = trigger_measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
 +
-+        parser = InlineListParser(self.reader)
-+        parser.search_block(start_marker)
-+        return parser.parse(pattern, end_marker)
++const struct bench bench_trig_uretprobe_without_nop = {
++	.name = "trig-uretprobe-without-nop",
++	.setup = uretprobe_setup_without_nop,
++	.producer_thread = uprobe_producer_without_nop,
++	.consumer_thread = trigger_consumer,
++	.measure = trigger_measure,
++	.report_progress = hits_drops_report_progress,
++	.report_final = hits_drops_report_final,
++};
+diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
+index 9a4d09590b3d..2098f3f27f18 100644
+--- a/tools/testing/selftests/bpf/progs/trigger_bench.c
++++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
+@@ -52,3 +52,10 @@ int bench_trigger_fmodret(void *ctx)
+ 	__sync_add_and_fetch(&hits, 1);
+ 	return -22;
+ }
 +
-+class ManSubstitutionsExtractor(SourceFileExtractor):
-+    """
-+    An extractor for substitutions.rst
-+    """
-+    filename = os.path.join(BPFTOOL_DIR, 'Documentation/substitutions.rst')
-+
-+    def get_common_options(self):
-+        """
-+        Parse the list of common options in substitutions.rst (options that
-+        apply to all commands).
-+
-+        Return a set containing all options, such as:
-+
-+            {'-p', '-d', '--legacy', '--pretty', '--debug', '--json', '-l', '-j'}
-+        """
-+        start_marker = re.compile('\|COMMON_OPTIONS\| replace:: {')
-+        pattern = re.compile('\*\*([\w/-]+)\*\*')
-+        end_marker = re.compile('}$')
-+
-+        parser = InlineListParser(self.reader)
-+        parser.search_block(start_marker)
-+        return parser.parse(pattern, end_marker)
- 
- class ProgFileExtractor(SourceFileExtractor):
-     """
-@@ -580,6 +623,19 @@ def main():
-     verify(help_main_options, man_main_options,
-             f'Comparing {source_main_info.filename} (do_help() OPTIONS) and {man_main_info.filename} (OPTIONS):')
- 
-+    # Compare common options (options that apply to all commands)
-+
-+    main_hdr_info = MainHeaderFileExtractor()
-+    source_common_options = main_hdr_info.get_common_options()
-+    main_hdr_info.close()
-+
-+    man_substitutions = ManSubstitutionsExtractor()
-+    man_common_options = man_substitutions.get_common_options()
-+    man_substitutions.close()
-+
-+    verify(source_common_options, man_common_options,
-+            f'Comparing common options from {main_hdr_info.filename} (HELP_SPEC_OPTIONS) and {man_substitutions.filename}:')
-+
-     sys.exit(retval)
- 
- if __name__ == "__main__":
++SEC("uprobe/self/uprobe_target")
++int bench_trigger_uprobe(void *ctx)
++{
++	__sync_add_and_fetch(&hits, 1);
++	return 0;
++}
 -- 
-2.32.0
+2.30.2
 
