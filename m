@@ -2,114 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F2EC433F5
-	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 05:49:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7A10C433EF
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 05:58:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 079C463218
-	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 05:49:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8ABD360F38
+	for <bpf@archiver.kernel.org>; Tue, 16 Nov 2021 05:58:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbhKPFwh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 16 Nov 2021 00:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S240299AbhKPGBs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 16 Nov 2021 01:01:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237537AbhKPFw2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 16 Nov 2021 00:52:28 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8883EC0431B4;
-        Mon, 15 Nov 2021 20:44:14 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id u11so16368706plf.3;
-        Mon, 15 Nov 2021 20:44:14 -0800 (PST)
+        with ESMTP id S240160AbhKPGBm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 16 Nov 2021 01:01:42 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED89C06122F;
+        Mon, 15 Nov 2021 21:42:40 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso1281638pji.0;
+        Mon, 15 Nov 2021 21:42:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mCNGifWQwgCO6MjgMGcYLm048vx8sIaahNJu3cWTguI=;
-        b=Qck+Lm+FqWNkPQde4ZEYn4uB959Oy09juL7/YIim/M4bS9Ckf1UiI9segtFiiL3Avj
-         Ww2we8zlrA+LTCB/SOp1qrHbO7R1D0998KbdgGPWaaA34WhJnCgN4wXaTLJFi75xDvV4
-         ftlgsNBU4KlS+6Vp2BS3Xn2sEvtqED9XfjzK9oVh3DyKcSvkARqxX93oWFHTf+3V27G+
-         nTibEa325+e5ZekA71nkxopW5hOng8CPoeXYv6YYTYSF1aewIhAbmRBMY8XXESqDUb0L
-         2vOdrAY+VzTiKAkK61CPoYqo256KZP82R6si9CUMow6lbAYczlM8GT9bZkvqDL4hnaWy
-         j7tw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZiJH60W16gunzDy5ORNJzHgGIx+W/lmdguHzEJZNQTc=;
+        b=O85NyUsoiW6yAvdHx9ILdEwQiPiLRH/dVfS3A6VoLliYaupHGM4tClqLJ95tJa45ZE
+         7Zj7NyFUvbae52r7+ITMxeVdy1Od1yfztC7YDCYULqbajuP/cM0I/fyU91I7uzxkPZkb
+         IpF80167wo19h1x5d8aCyIKYNMgRheqIVC/GMg/UPqe1mjxk1S/5seWWEEwoAUKXj8DX
+         /3eDmrNIEi0u+yP1Qbd8RAV7g2tbMgM8FLa71CTiEZ+fKgyAGQMuUYJHpFq48BnIyIA7
+         YEkzbkwoP8reew3Vtdl8Y50FZAnLV3oQtH1lxN7UjsMMYavYvOUzCdhcxl6lyRnrtwvh
+         CwfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mCNGifWQwgCO6MjgMGcYLm048vx8sIaahNJu3cWTguI=;
-        b=eYTv7nRPWyx3Ook3PqCSm/K+D3lgmfV+imOC5JhbHarhM4YbzFH14xZHrgrjn3SUWm
-         pkHXgTdtBecbu2G7mLr9ElI0CUcuy7bnt+Utv1aV9g0HC23P17Mdjog/Pt+vBY5cdb7j
-         HyuUA0z2kKuftRSzRumdoGeGFSGHP3Avt3y0UO+FX9RFxBPGJfEDEHw9mekH4bgJzqbh
-         hRkXYZA4sEoX90Y4rRRUSjGPZv6YxBhyA0fvH29yaTYk9vSZ3fwylTJvVXCCLSG6D4sx
-         NmaZQPVz99htfXGUhXOLFyfwsOhTpnOGxBcIM9lH6uHMK5kjGmnkaFAthDp0SR5kUx7V
-         K0uA==
-X-Gm-Message-State: AOAM5309aGEbRtCARWG2ZZxgnMCu5Ye3tcdYYISdokZ18qd2orCsdkb9
-        Gze0Lvc/sZGHy9qh+ejgfBWiuHC1FqkxcDqiVFY=
-X-Google-Smtp-Source: ABdhPJyiBlRPlcwL7H8/3MpkBIECeFR+4mIKHKNQC7RshN/fytuthpKv8IZotRmMfJiVsf0OeCrWhs7DD2YhuULhCXk=
-X-Received: by 2002:a17:902:b588:b0:143:b732:834 with SMTP id
- a8-20020a170902b58800b00143b7320834mr28184227pls.22.1637037853973; Mon, 15
- Nov 2021 20:44:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20211113142227.566439-1-me@ubique.spb.ru> <20211113142227.566439-2-me@ubique.spb.ru>
- <87o86k6ep0.ffs@tglx>
-In-Reply-To: <87o86k6ep0.ffs@tglx>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 15 Nov 2021 20:44:02 -0800
-Message-ID: <CAADnVQJY9=mGVP9ZqpAsfmyhdgfyNBESc4Tr=+BG87TP682=9Q@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Forbid bpf_ktime_get_coarse_ns and
- bpf_timer_* in tracing progs
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZiJH60W16gunzDy5ORNJzHgGIx+W/lmdguHzEJZNQTc=;
+        b=owzKa6djrj4ZeUSnuCS0dqlOgDnZhEcOcY9quBjM8oFUiNzajVQgZ7Y9l2sEgRud2B
+         eP29UGZCDg8jRANXusMiQ2M/I/K2NHCXPgRisaetKNYj4wMc7TK+FZ8fT/ssUq4yrrdt
+         2WCvRjPR+ZKCexFhE2vEwbHpn2CvvJAPwm+ncAVR492PaqZ+hKm/GpB2krSr6yIMSX1P
+         5aGHIGu4X8dQGt/66cJHs+28N6kp044XTLqqqgQ/jSi8Qd5fpWshhGnBwwj9h2xU278d
+         vVr+MvT6Idp1Lui2c6FgvNeeeMGTc7IsuhZc0+C19LISz+xAiyYpukOlkno2TvsDOvpk
+         TbWA==
+X-Gm-Message-State: AOAM532/CEeNE3MKiUfFwHEBFbNH+qkoLp0buRtNUhKXkImFXeedcVKN
+        VTK8kTkryPvIsEnGhj7E9WPTSOl/y6E=
+X-Google-Smtp-Source: ABdhPJz3CAzWCScgu+wjIIaTr/6w+pL0qeMP/zUB+sZ54+WOpBoLekkuYi1hyqCE6LN1W5FhUR1vXw==
+X-Received: by 2002:a17:902:bc85:b0:143:954e:8548 with SMTP id bb5-20020a170902bc8500b00143954e8548mr40988891plb.82.1637041359666;
+        Mon, 15 Nov 2021 21:42:39 -0800 (PST)
+Received: from localhost ([2405:201:6014:d064:3d4e:6265:800c:dc84])
+        by smtp.gmail.com with ESMTPSA id n1sm16753963pfj.193.2021.11.15.21.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Nov 2021 21:42:39 -0800 (PST)
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Andrey Ignatov <rdna@fb.com>,
-        syzbot <syzbot+43fd005b5a1b4d10781e@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Pavel Emelyanov <ovzxemul@gmail.com>,
+        Alexander Mihalicyn <alexander@mihalicyn.com>,
+        Andrei Vagin <avagin@gmail.com>, criu@openvz.org,
+        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH bpf-next v1 0/8]  Introduce BPF iterators for io_uring and epoll
+Date:   Tue, 16 Nov 2021 11:12:29 +0530
+Message-Id: <20211116054237.100814-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3556; h=from:subject; bh=SlD5HGZzKxuIYkJkdaUqV0OTyvwRfj3yhC7ub0JOPQw=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhk0S6c8t+Ojz65eZNTVAFmrDa1s2rNuMB8kElx5ev mbNO73GJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYZNEugAKCRBM4MiGSL8RyminEA C0NadbANkkUkEjQcUwGjmXCSUIzxBrkI2yWAd/PMxxJzh24HSDYrJN79DMwQT7D6Kx/haZDhrWKhnE ciYBGgj+mvOzeunr1YNqER2UQAJCdhvPle9gQj2GhKgwfA46JBrtNJq5wwJhmZ3xUC9YH44ZKpb0yp lf3nD8Jf0IctZdz84xjAmGjzRwT5ztQL4e/DqSlBGFKXLLyKwaThpACzs1GCGib2ypazD9M+N3JfQ/ eRTZhzaiiwgaq5dRIQH/WPRYMOwCzgSDEci4QxXk7oNpHbe5EVTwjtsrGK28V4uGvnlKNUgruJn/FW e34WK2Nm/jcYeaiv/k0VqDiS2TST0cntKcI0xLFilO7c9Er1PEcGi6QwRCLl+YW0C5MabPW9BAQPMs buUZzIYmgezL/uHdz3PxGVhl+RHh/twYXbHmj97TpUnlmf89Hhoi92MP48TdiI5RnDBYxBZkPKmlwG 1765ZPSMPelJEWvtASTZnYM/WISA0d9zmnTXwLMEF1oo9onifadKMEwhBWpODCDUcW1gC+/EBujB3S Lf5/z9cvfnOFTFFJdPSBTp1z4dFB7hHc3AU/pNPv/8PONA2+K7Vnp1vTD+diQRGoKUjUcpURcbnG5X VbWv1Vajnha14dBkwK8/hr62tXkAdnkmfW1ztg+OtFzDLylI0hb+fNQCaZZg==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 6:02 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Dmitrii.
->
-> > @@ -4632,6 +4632,9 @@ union bpf_attr {
-> >   *           system boot, in nanoseconds. Does not include time the system
-> >   *           was suspended.
-> >   *
-> > + *           Tracing programs cannot use **bpf_ktime_get_coarse_ns**\() (but
-> > + *           this may change in the future).
->
-> Sorry no. This is a bug fix and there is no place for 'may change in the
-> future' nonsense. It's simply not possible right now and unless you have
-> a plan to make this work backed up by actual patches this comment is
-> worse than wishful thinking.
+ The CRIU [0] project developers are exploring potential uses of the BPF
+ subsystem to do complicated tasks that are difficult to add support for in the
+ kernel using existing interfaces.  Even if they are implemented using procfs,
+ or kcmp, it is difficult to make it perform well without having some kind of
+ programmable introspection into the kernel data structures. Moreover, for
+ procfs based state inspection, the output format once agreed upon is set in
+ stone and hard to extend, and at the same time inefficient to consume from
+ programs (where it is first converted from machine readable form to human
+ readable form, only to be converted again to machine readable form).  In
+ addition to this, kcmp based file set matching algorithm performs poorly since
+ each file in one set needs to be compared to each file in another set, to
+ determine struct file equivalence.
 
-No. The point of 'may' is that it actually may change.
-It's certainly realistic and probable.
-But based on the tone of your message it doesn't seem that
-you're interested in hearing the arguments in favor of it.
-So I just removed this comment to put this matter to rest.
+ This set adds a io_uring file iterator (for registered files), a io_uring ubuf
+ iterator (for registered buffers), and a epoll iterator (for registered items
+ (files, registered using EPOLL_CTL_ADD)) to overcome these limitations.  Using
+ existing task, task_file, task_vma iterators, all of these can be combined
+ together to significantly enhance and speed up the task dumping procedure.
 
-> > + *
-> >   *           See: **clock_gettime**\ (**CLOCK_MONOTONIC_COARSE**)
-> >   *   Return
-> >   *           Current *ktime*.
-> > @@ -4804,6 +4807,9 @@ union bpf_attr {
-> >   *           All other bits of *flags* are reserved.
-> >   *           The verifier will reject the program if *timer* is not from
-> >   *           the same *map*.
-> > + *
-> > + *           Tracing programs cannot use **bpf_timer_init**\() (but this may
-> > + *           change in the future).
->
-> This is even worse than the above because it cannot happen ever. Please
-> stop this nonsensical wishful thinking crap. It does not add any value,
-> it just adds confusion.
+ The two immediate use cases are io_uring checkpoint/restore support and epoll
+ checkpoint/restore support. The first is unimplemented, and the second is being
+ expedited using a new epoll iterator. In the future, more stages of the
+ checkpointing sequence can be offloaded to eBPF programs to reduce process
+ downtime, e.g. in pre-dump stage, before task is seized.
 
-I respectfully disagree, but I removed this comment as well.
-And force pushed the commits.
+ The io_uring file iterator is even more important now due to the advent of
+ descriptorless files in io_uring [1], which makes dumping a task's files a lot
+ more harder for CRIU, since there is no visibility into these hidden
+ descriptors that the task depends upon for operation. Similarly, the
+ io_uring_ubuf iterator is useful in case original VMA used in registering a
+ buffer has been destroyed.
+
+ Please see the individual patches for more details.
+
+   [0]: https://criu.org/Main_Page
+   [1]: https://lwn.net/Articles/863071
+
+Kumar Kartikeya Dwivedi (8):
+  io_uring: Implement eBPF iterator for registered buffers
+  bpf: Add bpf_page_to_pfn helper
+  io_uring: Implement eBPF iterator for registered files
+  epoll: Implement eBPF iterator for registered items
+  selftests/bpf: Add test for io_uring BPF iterators
+  selftests/bpf: Add test for epoll BPF iterator
+  selftests/bpf: Test partial reads for io_uring, epoll iterators
+  selftests/bpf: Fix btf_dump test for bpf_iter_link_info
+
+ fs/eventpoll.c                                | 196 +++++++++-
+ fs/io_uring.c                                 | 334 ++++++++++++++++
+ include/linux/bpf.h                           |   6 +
+ include/uapi/linux/bpf.h                      |  15 +
+ kernel/trace/bpf_trace.c                      |   2 +
+ scripts/bpf_doc.py                            |   2 +
+ tools/include/uapi/linux/bpf.h                |  15 +
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 362 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+ .../selftests/bpf/progs/bpf_iter_epoll.c      |  33 ++
+ .../selftests/bpf/progs/bpf_iter_io_uring.c   |  50 +++
+ 11 files changed, 1015 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_epoll.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_io_uring.c
+
+-- 
+2.33.1
+
