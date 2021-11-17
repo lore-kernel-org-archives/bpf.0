@@ -2,109 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7542AC4332F
-	for <bpf@archiver.kernel.org>; Wed, 17 Nov 2021 19:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA644C433F5
+	for <bpf@archiver.kernel.org>; Wed, 17 Nov 2021 19:41:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E03561AE3
-	for <bpf@archiver.kernel.org>; Wed, 17 Nov 2021 19:09:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0BB861B3D
+	for <bpf@archiver.kernel.org>; Wed, 17 Nov 2021 19:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240358AbhKQTMa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Nov 2021 14:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240355AbhKQTMa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 17 Nov 2021 14:12:30 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7E0C061766
-        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 11:09:31 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id z5so15743215edd.3
-        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 11:09:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nAnJBXzy+j+SKp6UpMgT2UvLgTzhaItKFp8lDVP8bOI=;
-        b=D/3ogEfrPySNe/eJXcy3nGapEBgOa+bO4XpTO1fHqcR4gIHauBxVp2s2PTCG9AaMaK
-         6HWXJWr8+wvWMSmhSClExdjqN7fIaWTvI88IJ4lZYAdC8nYnUZjTmKgMelEW/vM09ccU
-         Qks8YqTAJMBzwsuPvYilwCulORTIf0cXhHfvOl1OhxuXmyIY27x1FpiDzKLUaqgkYwKB
-         C4v3tbaU8kPkutz5A52B6ixWVsBCyKtWU+GHbDqkM/8L0FIBtcnKvUHfdrsn54sJNHuv
-         M4Jx0a+DRZ3mZ/77iFaGAc4PDOLRQcqNNvk+V2hm+kIow9E02xqjp0Qbp8qHiPFiZ+qY
-         E0/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nAnJBXzy+j+SKp6UpMgT2UvLgTzhaItKFp8lDVP8bOI=;
-        b=oNyZdZLBeRKSN2oLPGNXR6bEU16R4fBr7DTOiGgE6nIuML7S3pvRDa6V/f77QNKWyG
-         KmeW8j3wS9L0RNt3Rf+9AuI4JPhIkmYIYR8AUJb/1GJzCXusk52kBD4YEEFPFcivESvT
-         bb/UelA7a41CYRURVg4IS9Gn1AD/LqGzImJGgj2FX69YKfM1Y5hU7X8sUwL5pMLVj6rd
-         F5ZaSaXPjC7ymxer3+iJOMhRHJa943/6A7lHTfBwtTW8eT3CxBUP9MErvGqXxFRhSToz
-         Dh/Gwr7BkZejESNkwjz7mubVOEgmZ1fWAykx9vSss2iFF51GbyW9A0f1TazkDKsl5XP/
-         iKbA==
-X-Gm-Message-State: AOAM531tRylMNo/dcq0AoFdmi+4IZtZtReGa/lHNbiz3Yn7F7XanKM7v
-        Zk8Hcb2eiYbiUq1xQW7BU/eVZDDnFKCnXJo0DZDCxw==
-X-Google-Smtp-Source: ABdhPJwIlcvt3E3+hGdYyhRGnWjeE/5pkW4ELjc8AjM1yuatRjqoO/EXVWvQGxDOJO05Ugr9afaP14IXrq92digDejs=
-X-Received: by 2002:a05:6402:1a58:: with SMTP id bf24mr1604937edb.16.1637176169875;
- Wed, 17 Nov 2021 11:09:29 -0800 (PST)
+        id S230367AbhKQTo0 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 17 Nov 2021 14:44:26 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25720 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240567AbhKQToV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 17 Nov 2021 14:44:21 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AHJdrM8032602
+        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 11:41:21 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3ccuxsd2vu-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 11:41:21 -0800
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.14; Wed, 17 Nov 2021 11:41:20 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 0E5BB98F1136; Wed, 17 Nov 2021 11:41:17 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add btf_dedup case with duplicated structs within CU
+Date:   Wed, 17 Nov 2021 11:41:14 -0800
+Message-ID: <20211117194114.347675-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211117194114.347675-1-andrii@kernel.org>
+References: <20211117194114.347675-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com>
- <202111171049.3F9C5F1@keescook> <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
-In-Reply-To: <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Wed, 17 Nov 2021 11:09:14 -0800
-Message-ID: <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
-Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "Robert O'Callahan" <rocallahan@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-GUID: PAKJ2OHytBf8k86KYMSt6gCpg2fn23A3
+X-Proofpoint-ORIG-GUID: PAKJ2OHytBf8k86KYMSt6gCpg2fn23A3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-17_07,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ bulkscore=0 mlxlogscore=755 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 clxscore=1034 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111170086
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 11:05 AM Kyle Huey <me@kylehuey.com> wrote:
->
-> On Wed, Nov 17, 2021 at 10:51 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Wed, Nov 17, 2021 at 10:47:13AM -0800, Kyle Huey wrote:
-> > > rr, a userspace record and replay debugger[0], is completely broken on
-> > > 5.16rc1. I bisected this to 00b06da29cf9dc633cdba87acd3f57f4df3fd5c7.
-> > >
-> > > That patch makes two changes, it blocks sigaction from changing signal
-> > > handlers once the kernel has decided to force the program to take a
-> > > signal and it also stops notifying ptracers of the signal in the same
-> > > circumstances. The latter behavior is just wrong. There's no reason
-> > > that ptrace should not be able to observe and even change
-> > > (non-SIGKILL) forced signals.  It should be reverted.
-> > >
-> > > This behavior change is also observable in gdb. If you take a program
-> > > that sets SIGSYS to SIG_IGN and then raises a SIGSYS via
-> > > SECCOMP_RET_TRAP and run it under gdb on a good kernel gdb will stop
-> > > when the SIGSYS is raised, let you inspect program state, etc. After
-> > > the SA_IMMUTABLE change gdb won't stop until the program has already
-> > > died of SIGSYS.
-> >
-> > Ah, hm, this was trying to fix the case where a program trips
-> > SECCOMP_RET_KILL (which is a "fatal SIGSYS"), and had been unobservable
-> > before. I guess the fix was too broad...
->
-> Perhaps I don't understand precisely what you mean by this, but gdb's
-> behavior for a program that is SECCOMP_RET_KILLed was not changed by
-> this patch (the SIGSYS is not observed until after program exit before
-> or after this change).
+From: Jiri Olsa <jolsa@kernel.org>
 
-Ah, maybe that behavior changed in 5.15 (my "before" here is a 5.14
-kernel).  I would argue that the debugger seeing the SIGSYS for
-SECCOMP_RET_KILL is desirable though ...
+Add an artificial minimal example simulating compilers producing two
+different types within a single CU that correspond to identical struct
+definitions.
 
-- Kyle
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../bpf/prog_tests/btf_dedup_split.c          | 113 ++++++++++++++++++
+ 1 file changed, 113 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+index 9d3b8d7a1537..94ff9757557a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+@@ -314,6 +314,117 @@ static void test_split_struct_duped() {
+ 	btf__free(btf1);
+ }
+ 
++static void btf_add_dup_struct_in_cu(struct btf *btf, int start_id)
++{
++#define ID(n) (start_id + n)
++	btf__set_pointer_size(btf, 8); /* enforce 64-bit arch */
++
++	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);    /* [1] int */
++
++	btf__add_struct(btf, "s", 8);                   /* [2] struct s { */
++	btf__add_field(btf, "a", ID(3), 0, 0);          /*      struct anon a; */
++	btf__add_field(btf, "b", ID(4), 0, 0);          /*      struct anon b; */
++							/* } */
++
++	btf__add_struct(btf, "(anon)", 8);              /* [3] struct anon { */
++	btf__add_field(btf, "f1", ID(1), 0, 0);         /*      int f1; */
++	btf__add_field(btf, "f2", ID(1), 32, 0);        /*      int f2; */
++							/* } */
++
++	btf__add_struct(btf, "(anon)", 8);              /* [4] struct anon { */
++	btf__add_field(btf, "f1", ID(1), 0, 0);         /*      int f1; */
++	btf__add_field(btf, "f2", ID(1), 32, 0);        /*      int f2; */
++							/* } */
++#undef ID
++}
++
++static void test_split_dup_struct_in_cu()
++{
++	struct btf *btf1, *btf2;
++	int err;
++
++	/* generate the base data.. */
++	btf1 = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
++		return;
++
++	btf_add_dup_struct_in_cu(btf1, 0);
++
++	VALIDATE_RAW_BTF(
++			btf1,
++			"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++			"[2] STRUCT 's' size=8 vlen=2\n"
++			"\t'a' type_id=3 bits_offset=0\n"
++			"\t'b' type_id=4 bits_offset=0",
++			"[3] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=1 bits_offset=0\n"
++			"\t'f2' type_id=1 bits_offset=32",
++			"[4] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=1 bits_offset=0\n"
++			"\t'f2' type_id=1 bits_offset=32");
++
++	/* ..dedup them... */
++	err = btf__dedup(btf1, NULL, NULL);
++	if (!ASSERT_OK(err, "btf_dedup"))
++		goto cleanup;
++
++	VALIDATE_RAW_BTF(
++			btf1,
++			"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++			"[2] STRUCT 's' size=8 vlen=2\n"
++			"\t'a' type_id=3 bits_offset=0\n"
++			"\t'b' type_id=3 bits_offset=0",
++			"[3] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=1 bits_offset=0\n"
++			"\t'f2' type_id=1 bits_offset=32");
++
++	/* and add the same data on top of it */
++	btf2 = btf__new_empty_split(btf1);
++	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
++		goto cleanup;
++
++	btf_add_dup_struct_in_cu(btf2, 3);
++
++	VALIDATE_RAW_BTF(
++			btf2,
++			"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++			"[2] STRUCT 's' size=8 vlen=2\n"
++			"\t'a' type_id=3 bits_offset=0\n"
++			"\t'b' type_id=3 bits_offset=0",
++			"[3] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=1 bits_offset=0\n"
++			"\t'f2' type_id=1 bits_offset=32",
++			"[4] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++			"[5] STRUCT 's' size=8 vlen=2\n"
++			"\t'a' type_id=6 bits_offset=0\n"
++			"\t'b' type_id=7 bits_offset=0",
++			"[6] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=4 bits_offset=0\n"
++			"\t'f2' type_id=4 bits_offset=32",
++			"[7] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=4 bits_offset=0\n"
++			"\t'f2' type_id=4 bits_offset=32");
++
++	err = btf__dedup(btf2, NULL, NULL);
++	if (!ASSERT_OK(err, "btf_dedup"))
++		goto cleanup;
++
++	/* after dedup it should match the original data */
++	VALIDATE_RAW_BTF(
++			btf2,
++			"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++			"[2] STRUCT 's' size=8 vlen=2\n"
++			"\t'a' type_id=3 bits_offset=0\n"
++			"\t'b' type_id=3 bits_offset=0",
++			"[3] STRUCT '(anon)' size=8 vlen=2\n"
++			"\t'f1' type_id=1 bits_offset=0\n"
++			"\t'f2' type_id=1 bits_offset=32");
++
++cleanup:
++	btf__free(btf2);
++	btf__free(btf1);
++}
++
+ void test_btf_dedup_split()
+ {
+ 	if (test__start_subtest("split_simple"))
+@@ -322,4 +433,6 @@ void test_btf_dedup_split()
+ 		test_split_struct_duped();
+ 	if (test__start_subtest("split_fwd_resolve"))
+ 		test_split_fwd_resolve();
++	if (test__start_subtest("split_dup_struct_in_cu"))
++		test_split_dup_struct_in_cu();
+ }
+-- 
+2.30.2
+
