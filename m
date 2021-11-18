@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8972FC4332F
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:30:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB82C433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:30:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 759CD61B64
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:30:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D728961B1B
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:30:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344156AbhKRLc4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:32:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48170 "EHLO
+        id S1344176AbhKRLdD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 06:33:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51933 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343934AbhKRLaz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Nov 2021 06:30:55 -0500
+        by vger.kernel.org with ESMTP id S1344064AbhKRLbB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Nov 2021 06:31:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637234875;
+        s=mimecast20190719; t=1637234881;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lXDO1Q0PT1LV+IkN9FZ4WM7egV17pWLfXKegiEUMZIc=;
-        b=UC9jJV4le8Wk3oQcsm/r2HqLrvOeXhkSb/yctz4O0VbKCM81OYNi3Zg4zrWI/RCFm11SPQ
-        neoPzab+/bZecX3C8lYO34mvo2YlESIF1e6cHNE2qZGoLftIQ8WDdUNtiM+2FMDOvoaKBr
-        NldBTg2m18ejduwr/HMQPb3tRLfIbJQ=
+        bh=9S+q8pWMDFvdDxjJwU6rYEztkMBIcs++/6oEf507CaQ=;
+        b=Vb+xMTJxHjbeB8Gj4fjs3IlfE2QT9MJGWX1nku13PmqMctV28yrMy/eKari0VVL3tR0YIf
+        rp7THdUhvB53Cx3PvWjH5VteGKE/XAoyBm2BKu6OD0OHuYVazIWATGWHBUC8/yxbPLGDT8
+        bnlcQZxqEq4tEHxnsvpejHxNpic9vGE=
 Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
  [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-386-DaL3OgJ-P2Wh0wOaTR8HKA-1; Thu, 18 Nov 2021 06:27:54 -0500
-X-MC-Unique: DaL3OgJ-P2Wh0wOaTR8HKA-1
-Received: by mail-ed1-f69.google.com with SMTP id c1-20020aa7c741000000b003e7bf1da4bcso4955434eds.21
-        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 03:27:53 -0800 (PST)
+ us-mta-2-2m0tDZulPEKL7zrIOKd4hg-1; Thu, 18 Nov 2021 06:26:22 -0500
+X-MC-Unique: 2m0tDZulPEKL7zrIOKd4hg-1
+Received: by mail-ed1-f69.google.com with SMTP id k7-20020aa7c387000000b003e7ed87fb31so5039035edq.3
+        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 03:26:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lXDO1Q0PT1LV+IkN9FZ4WM7egV17pWLfXKegiEUMZIc=;
-        b=mgiuTpn/vwJMFKwUMBf5LBVKwljeFe0hPfErsizIVY02ABR57P/gTq9bFbTA4S+YsE
-         6Y9FbWt3arfnRL0trnA/ZbyUlQEFj6/OBP27ckycI42Ee8+MRAqus4PWjQ5je+OzJGqO
-         lRkBDsZg/vdr40ZzVwkXaOdv/lCUHQCsso7nIztesfkR6QyNmbOwyxdwuTk+ku0JTLgA
-         69Y3DhF96Hh8iSQxY+tRYu9Fvh1tORtYsdL11nt6QuQO1/it/T7EAT/qR/pHvqVFrJhY
-         k3FA23eGDPxYhb8WXXYjJR9/ODKpLZYTcU2m4VXbcZc/BNdwDx+rVcsS0re6BOZSMUBv
-         NMHg==
-X-Gm-Message-State: AOAM532E4Vqhxef8xbhOBzdePuempgIYJP2VqRENTqap/Ua/1zZ+Q6cQ
-        gtCkE5mys2U+I3BArSoTcCLv1L7WzUI4N0wRizdFWIys7Rh3XIl3OMnqpP6qvv8RZiXiUd2uC0q
-        YEIfl7pSUkJCt
-X-Received: by 2002:aa7:c3c8:: with SMTP id l8mr10099497edr.278.1637234872722;
-        Thu, 18 Nov 2021 03:27:52 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxxp5GicqeoqaM5YlhbpBraXwMCTAKIvVszs2h9J1eZ9tAsFbu6eJl3k82B7jE9zwk0fcFhQQ==
-X-Received: by 2002:aa7:c3c8:: with SMTP id l8mr10099379edr.278.1637234872055;
-        Thu, 18 Nov 2021 03:27:52 -0800 (PST)
+        bh=9S+q8pWMDFvdDxjJwU6rYEztkMBIcs++/6oEf507CaQ=;
+        b=YzAmBNxVrRdJFVu2Yhfa7fFSSZWxK1ZvNzgWq5JRIQlVcaIaDfE7i/x1hUGKU8mxtC
+         Ddw1yLtVSHF/whAtgS7w/0FnDdyvbDcU7IECnO0WniqQecTmSCnfPog6M5dqstVWdtLp
+         jqrhkyP4OEnL40q29LxNI2/cFJ0R+kVfxsuxenQB8DuvCYWbNI/euNSfV/y56sOEYCiy
+         Hsu6nzObomwgLa6X+cZw3ln1JpiF940VgDodPFP3ZeLNRaxzQi+gIa/NQcGzRpaCLBEp
+         wNGXqsElgwg9mLw6bpZFsliaKlk0unKFOT8n5TaQulakLt2i6xbzM2mFTfwAe6pBPj3z
+         xa8Q==
+X-Gm-Message-State: AOAM531oZ2mPlvzZ1LKTmjaHQCqv7MsSI1TjHRMP3IiALAQpiPM3DXDC
+        WexzGmkwwrAQSkrOiQUwK0qnryKO9lyp4dXnPl6I8XbmVdQokqZxZwH99rp1TIf2XOwPo+Ihnts
+        tHyasytwtaEpC
+X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr34545054ejc.385.1637234781217;
+        Thu, 18 Nov 2021 03:26:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxgmIk56biArqymQrAnbeMLfZmEiUWksIFVac/+dL5uyCKQcFWyXprnJ/2JdubpH4kbDMoLgw==
+X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr34545021ejc.385.1637234781062;
+        Thu, 18 Nov 2021 03:26:21 -0800 (PST)
 Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id em21sm1172772ejc.103.2021.11.18.03.27.51
+        by smtp.gmail.com with ESMTPSA id o12sm1418821edw.84.2021.11.18.03.26.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 03:27:51 -0800 (PST)
+        Thu, 18 Nov 2021 03:26:20 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>
-Subject: [PATCH bpf-next 29/29] selftests/bpf: Add attach multi func test
-Date:   Thu, 18 Nov 2021 12:24:55 +0100
-Message-Id: <20211118112455.475349-30-jolsa@kernel.org>
+Subject: [PATCH bpf-next 14/29] bpf: Add support to store multiple ids in bpf_tramp_id object
+Date:   Thu, 18 Nov 2021 12:24:40 +0100
+Message-Id: <20211118112455.475349-15-jolsa@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211118112455.475349-1-jolsa@kernel.org>
 References: <20211118112455.475349-1-jolsa@kernel.org>
@@ -76,336 +76,180 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding test code to check on trampolines spliting.
+Adding support to store multiple ids in bpf_tramp_id object,
+to have id for trampolines with multiple functions assigned.
 
-The tests attached various bpf_fetry_* functions in a way
-so there's always non trivial IDs intersection, that leads
-to trampoline splitting in kenrel code.
+Extra array of u32 values is allocated within bpf_tramp_id
+object allocation.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |   4 +-
- .../bpf/prog_tests/multi_attach_test.c        | 176 ++++++++++++++++++
- .../selftests/bpf/progs/multi_attach.c        | 105 +++++++++++
- 3 files changed, 284 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/multi_attach_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/multi_attach.c
+ include/linux/bpf.h     |  6 ++++--
+ kernel/bpf/syscall.c    |  6 +++---
+ kernel/bpf/trampoline.c | 39 +++++++++++++++++++++++++++++++--------
+ kernel/bpf/verifier.c   |  2 +-
+ 4 files changed, 39 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 48970e983250..095d966a747a 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -324,7 +324,8 @@ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
- LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		linked_vars.skel.h linked_maps.skel.h			\
- 		multi_fentry_test.skel.h multi_fexit_test.skel.h	\
--		multi_fentry_fexit_test.skel.h multi_mixed_test.skel.h
-+		multi_fentry_fexit_test.skel.h multi_mixed_test.skel.h	\
-+		multi_attach_test.skel.h
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2dbc00904a84..47e25d8be600 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -672,8 +672,10 @@ struct bpf_tramp_image {
+ };
  
- LSKELS := kfunc_call_test.c fentry_test.c fexit_test.c fexit_sleep.c \
- 	test_ringbuf.c atomics.c trace_printk.c trace_vprintk.c
-@@ -340,6 +341,7 @@ multi_fentry_test.skel.h-deps := multi_fentry.o multi_check.o
- multi_fexit_test.skel.h-deps := multi_fexit.o multi_check.o
- multi_fentry_fexit_test.skel.h-deps := multi_fentry_fexit.o multi_check.o
- multi_mixed_test.skel.h-deps := multi_mixed.o multi_check.o
-+multi_attach_test.skel.h-deps := multi_attach.o multi_check.o
+ struct bpf_tramp_id {
++	u32 max;
++	u32 cnt;
+ 	u32 obj_id;
+-	u32 btf_id;
++	u32 *id;
+ 	void *addr;
+ };
  
- LINKED_BPF_SRCS := $(patsubst %.o,%.c,$(foreach skel,$(LINKED_SKELS),$($(skel)-deps)))
+@@ -749,7 +751,7 @@ static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
+ 	return bpf_func(ctx, insnsi);
+ }
+ #ifdef CONFIG_BPF_JIT
+-struct bpf_tramp_id *bpf_tramp_id_alloc(void);
++struct bpf_tramp_id *bpf_tramp_id_alloc(u32 cnt);
+ void bpf_tramp_id_free(struct bpf_tramp_id *id);
+ bool bpf_tramp_id_is_empty(struct bpf_tramp_id *id);
+ int bpf_tramp_id_is_equal(struct bpf_tramp_id *a, struct bpf_tramp_id *b);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a65c1862ab68..216fcce07326 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2704,7 +2704,7 @@ static int bpf_tracing_link_fill_link_info(const struct bpf_link *link,
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/multi_attach_test.c b/tools/testing/selftests/bpf/prog_tests/multi_attach_test.c
-new file mode 100644
-index 000000000000..c183941215a6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/multi_attach_test.c
-@@ -0,0 +1,176 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <linux/btf_ids.h>
-+#include "multi_attach_test.skel.h"
-+#include <bpf/btf.h>
-+
-+static __u32 btf_ids[8];
-+
-+static int load_btf_ids(void)
+ 	info->tracing.attach_type = tr_link->attach_type;
+ 	info->tracing.target_obj_id = attach->id->obj_id;
+-	info->tracing.target_btf_id = attach->id->btf_id;
++	info->tracing.target_btf_id = attach->id->id[0];
+ 
+ 	return 0;
+ }
+@@ -2766,7 +2766,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 			goto out_put_prog;
+ 		}
+ 
+-		id = bpf_tramp_id_alloc();
++		id = bpf_tramp_id_alloc(1);
+ 		if (!id) {
+ 			err = -ENOMEM;
+ 			goto out_put_prog;
+@@ -2829,7 +2829,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 			goto out_unlock;
+ 		}
+ 
+-		id = bpf_tramp_id_alloc();
++		id = bpf_tramp_id_alloc(1);
+ 		if (!id) {
+ 			err = -ENOMEM;
+ 			goto out_unlock;
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 16fc4c14319b..d65f463c532d 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -60,27 +60,45 @@ void bpf_image_ksym_del(struct bpf_ksym *ksym)
+ 			   PAGE_SIZE, true, ksym->name);
+ }
+ 
++static bool bpf_tramp_id_is_multi(struct bpf_tramp_id *id)
 +{
-+	__u32 i, nr_types, cnt;
-+	struct btf *btf;
++	return id->cnt > 1;
++}
 +
-+	btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
-+		return -1;
-+
-+	nr_types = btf__get_nr_types(btf);
-+
-+	for (i = 1, cnt = 0; i <= nr_types && cnt < 8; i++) {
-+		const struct btf_type *t = btf__type_by_id(btf, i);
-+		const char *name;
-+
-+		if (!btf_is_func(t))
-+			continue;
-+
-+		name = btf__name_by_offset(btf, t->name_off);
-+		if (!name)
-+			continue;
-+		if (strncmp(name, "bpf_fentry_test", sizeof("bpf_fentry_test") - 1))
-+			continue;
-+
-+		btf_ids[cnt] = i;
-+		cnt++;
+ static u64 bpf_tramp_id_key(struct bpf_tramp_id *id)
+ {
+-	return ((u64) id->obj_id << 32) | id->btf_id;
++	if (bpf_tramp_id_is_multi(id))
++		return (u64) &id;
++	else
++		return ((u64) id->obj_id << 32) | id->id[0];
+ }
+ 
+ bool bpf_tramp_id_is_empty(struct bpf_tramp_id *id)
+ {
+-	return !id || (!id->obj_id && !id->btf_id);
++	return !id || id->cnt == 0;
+ }
+ 
+ int bpf_tramp_id_is_equal(struct bpf_tramp_id *a,
+ 			  struct bpf_tramp_id *b)
+ {
+-	return !memcmp(a, b, sizeof(*a));
++	return a->obj_id == b->obj_id && a->cnt == b->cnt &&
++	       !memcmp(a->id, b->id, a->cnt * sizeof(*a->id));
+ }
+ 
+-struct bpf_tramp_id *bpf_tramp_id_alloc(void)
++struct bpf_tramp_id *bpf_tramp_id_alloc(u32 max)
+ {
+ 	struct bpf_tramp_id *id;
+ 
+-	return kzalloc(sizeof(*id), GFP_KERNEL);
++	id = kzalloc(sizeof(*id), GFP_KERNEL);
++	if (id) {
++		id->id = kzalloc(sizeof(u32) * max, GFP_KERNEL);
++		if (!id->id) {
++			kfree(id);
++			return NULL;
++		}
++		id->max = max;
 +	}
-+
-+	btf__free(btf);
-+	return ASSERT_EQ(cnt, 8, "bpf_fentry_test_cnt") ? 0 : -1;
-+}
-+
-+static int link_prog_from_cnt(const struct bpf_program *prog, int from, int cnt)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	enum bpf_attach_type attach_type;
-+	int prog_fd, link_fd;
-+
-+	opts.multi.btf_ids = btf_ids + (from - 1);
-+	opts.multi.btf_ids_cnt = cnt;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (!ASSERT_GE(prog_fd, 0, "link_from_to_prog_fd"))
-+		return -1;
-+	attach_type = bpf_program__get_expected_attach_type(prog);
-+	link_fd = bpf_link_create(prog_fd, 0, attach_type, &opts);
-+	if (!ASSERT_GE(link_fd, 0, "link_from_to_link_fd"))
-+		return -1;
-+	return link_fd;
-+}
-+
-+static int prog_from_cnt(const struct bpf_program *prog, int *from, int *cnt)
-+{
-+	const char *sec;
-+	int err, to;
-+
-+	sec = bpf_program__section_name(prog);
-+	sec = strchr(sec, '/');
-+	if (!sec)
-+		return -1;
-+	sec++;
-+	err = sscanf(sec, "bpf_fentry_test%d-%d", from, &to);
-+	if (err != 2)
-+		return -1;
-+	*cnt = to - *from + 1;
-+	return 0;
-+}
-+
-+static int link_test(const struct bpf_program *prog1,
-+		     const struct bpf_program *prog2,
-+		     __u64 *test_result1, __u64 *test_result2,
-+		     bool do_close, int link_fd[2])
-+{
-+	int from1, cnt1, from2, cnt2, err;
-+	__u32 duration = 0, retval;
-+
-+	if (!ASSERT_OK(prog_from_cnt(prog1, &from1, &cnt1), "prog_from_cnt__prog1"))
-+		return -1;
-+
-+	if (!ASSERT_OK(prog_from_cnt(prog2, &from2, &cnt2), "prog_from_cnt__prog2"))
-+		return -1;
-+
-+	link_fd[0] = link_prog_from_cnt(prog1, from1, cnt1);
-+	if (link_fd[0] < 0)
-+		return -1;
-+
-+	link_fd[1] = link_prog_from_cnt(prog2, from2, cnt2);
-+	if (link_fd[1] < 0)
-+		return -1;
-+
-+	*test_result1 = 0;
-+	*test_result2 = 0;
-+
-+	err = bpf_prog_test_run(bpf_program__fd(prog1), 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(retval, 0, "test_run");
-+	ASSERT_EQ(*test_result1, cnt1, "test_result");
-+	ASSERT_EQ(*test_result2, cnt2, "test_result");
-+
-+	if (do_close) {
-+		close(link_fd[0]);
-+		close(link_fd[1]);
-+	}
-+	return err;
-+}
-+
-+void test_multi_attach_test(void)
-+{
-+	struct bpf_link *link7 = NULL, *link8 = NULL;
-+	int link_fd[6] = { -1 }, i, err;
-+	struct multi_attach_test *skel;
-+	__u32 duration = 0, retval;
-+
-+	for (i = 0; i < 6; i++)
-+		link_fd[i] = -1;
-+
-+	skel = multi_attach_test__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "multi_attach__load"))
++	return id;
+ }
+ 
+ void bpf_tramp_id_init(struct bpf_tramp_id *id,
+@@ -91,11 +109,15 @@ void bpf_tramp_id_init(struct bpf_tramp_id *id,
+ 		id->obj_id = tgt_prog->aux->id;
+ 	else
+ 		id->obj_id = btf_obj_id(btf);
+-	id->btf_id = btf_id;
++	id->id[0] = btf_id;
++	id->cnt = 1;
+ }
+ 
+ void bpf_tramp_id_free(struct bpf_tramp_id *id)
+ {
++	if (!id)
 +		return;
-+
-+	if (!ASSERT_OK(load_btf_ids(), "load_btf_ids"))
-+		goto cleanup;
-+
-+#define LINK_TEST(__prog1, __prog2, __close)			\
-+	err = link_test(skel->progs.test ## __prog1,		\
-+			skel->progs.test ## __prog2,		\
-+			&skel->bss->test_result ## __prog1,	\
-+			&skel->bss->test_result ## __prog2,	\
-+			__close, link_fd + __prog1 - 1);	\
-+	if (err)						\
-+		goto cleanup;
-+
-+	LINK_TEST(1, 2, true);
-+	LINK_TEST(3, 4, true);
-+	LINK_TEST(1, 3, true);
-+	LINK_TEST(2, 4, true);
-+
-+	LINK_TEST(1, 2, false);
-+	LINK_TEST(3, 4, false);
-+	LINK_TEST(5, 6, false);
-+
-+#undef LINK_TEST
-+
-+	link7 = bpf_program__attach(skel->progs.test7);
-+	if (!ASSERT_OK_PTR(link7, "multi_attach_check__test1_attach"))
-+		goto cleanup;
-+
-+	link8 = bpf_program__attach(skel->progs.test8);
-+	if (!ASSERT_OK_PTR(link7, "multi_attach_check__test2_attach"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run(bpf_program__fd(skel->progs.test7), 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(retval, 0, "test_run");
-+	ASSERT_EQ(skel->bss->test_result7, 1, "test_result7");
-+	ASSERT_EQ(skel->bss->test_result8, 1, "test_result8");
-+
-+cleanup:
-+	bpf_link__destroy(link8);
-+	bpf_link__destroy(link7);
-+	for (i = 0; i < 6; i++)
-+		close(link_fd[i]);
-+	multi_attach_test__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/multi_attach.c b/tools/testing/selftests/bpf/progs/multi_attach.c
-new file mode 100644
-index 000000000000..d403f5f1f27e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/multi_attach.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__hidden extern void multi_arg_check(__u64 *ctx, __u64 *test_result);
-+__hidden extern void multi_ret_check(void *ctx, __u64 *test_result);
-+
-+__u64 test_result1 = 0;
-+
-+SEC("fentry.multi/bpf_fentry_test1-5")
-+int BPF_PROG(test1, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f, int ret)
-+{
-+	multi_arg_check(ctx, &test_result1);
-+	return 0;
-+}
-+
-+__u64 test_result2 = 0;
-+
-+SEC("fentry.multi/bpf_fentry_test4-8")
-+int BPF_PROG(test2, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f, int ret)
-+{
-+	multi_arg_check(ctx, &test_result2);
-+	return 0;
-+}
-+
-+__u64 test_result3 = 0;
-+
-+SEC("fexit.multi/bpf_fentry_test1-5")
-+int BPF_PROG(test3, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f, int ret)
-+{
-+	__u64 arg_result = 0, ret_result = 0;
-+
-+	multi_arg_check(ctx, &arg_result);
-+	multi_ret_check(ctx, &ret_result);
-+
-+	if (arg_result && ret_result)
-+		test_result3 += 1;
-+	return 0;
-+}
-+
-+__u64 test_result4 = 0;
-+
-+SEC("fexit.multi/bpf_fentry_test4-8")
-+int BPF_PROG(test4, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f, int ret)
-+{
-+	__u64 arg_result = 0, ret_result = 0;
-+
-+	multi_arg_check(ctx, &arg_result);
-+	multi_ret_check(ctx, &ret_result);
-+
-+	if (arg_result && ret_result)
-+		test_result4 += 1;
-+	return 0;
-+}
-+
-+__u64 test_result5 = 0;
-+
-+SEC("fentry.multi/bpf_fentry_test1-8")
-+int BPF_PROG(test5, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f)
-+{
-+	multi_arg_check(ctx, &test_result5);
-+	return 0;
-+}
-+
-+__u64 test_result6 = 0;
-+
-+SEC("fexit.multi/bpf_fentry_test1-8")
-+int BPF_PROG(test6, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f)
-+{
-+	__u64 arg_result = 0, ret_result = 0;
-+
-+	multi_arg_check(ctx, &arg_result);
-+	multi_ret_check(ctx, &ret_result);
-+
-+	if (arg_result && ret_result)
-+		test_result6 += 1;
-+	return 0;
-+}
-+
-+__u64 test_result7 = 0;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(test7, int a)
-+{
-+	multi_arg_check(ctx, &test_result7);
-+	return 0;
-+}
-+
-+__u64 test_result8 = 0;
-+
-+SEC("fexit/bpf_fentry_test2")
-+int BPF_PROG(test8, int a, __u64 b, int ret)
-+{
-+	__u64 arg_result = 0, ret_result = 0;
-+
-+	multi_arg_check(ctx, &arg_result);
-+	multi_ret_check(ctx, &ret_result);
-+
-+	if (arg_result && ret_result)
-+		test_result8 += 1;
-+	return 0;
-+}
++	kfree(id->id);
+ 	kfree(id);
+ }
+ 
+@@ -362,7 +384,8 @@ bpf_tramp_image_alloc(struct bpf_tramp_id *id, u32 idx)
+ 	ksym = &im->ksym;
+ 	INIT_LIST_HEAD_RCU(&ksym->lnode);
+ 	key = bpf_tramp_id_key(id);
+-	snprintf(ksym->name, KSYM_NAME_LEN, "bpf_trampoline_%llu_%u", key, idx);
++	snprintf(ksym->name, KSYM_NAME_LEN, "bpf_trampoline_%llu_%u%s", key, idx,
++		 bpf_tramp_id_is_multi(id) ? "_multi" : "");
+ 	bpf_image_ksym_add(image, ksym);
+ 	return im;
+ 
+@@ -597,7 +620,7 @@ struct bpf_tramp_attach *bpf_tramp_attach(struct bpf_tramp_id *id,
+ 	if (!node)
+ 		goto out;
+ 
+-	err = bpf_check_attach_model(prog, tgt_prog, id->btf_id, &tr->func.model);
++	err = bpf_check_attach_model(prog, tgt_prog, id->id[0], &tr->func.model);
+ 	if (err)
+ 		goto out;
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index e05f39fd2708..1903d5d256b6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13995,7 +13995,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	id = bpf_tramp_id_alloc();
++	id = bpf_tramp_id_alloc(1);
+ 	if (!id)
+ 		return -ENOMEM;
+ 
 -- 
 2.31.1
 
