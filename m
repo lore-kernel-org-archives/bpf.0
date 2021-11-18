@@ -2,201 +2,169 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E403AC433F5
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 14:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E20C433FE
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 15:20:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC41C6128C
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 14:27:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A85B06126A
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 15:20:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbhKROaU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 09:30:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35730 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233068AbhKROaT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Nov 2021 09:30:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637245639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+mjVtw/CpZ9mnTSxomjiaZMKpdhiPPoco6lrom4G9Pk=;
-        b=EIkzqn7cQPKlFOHxCMdWNEpwE3qFj9JIxpvKWSTRxvLj8uv0L3YflOTfaOKP5f94yJCIcJ
-        8Ets389qo7p6fl+VACKRRn8XfVqCuWHcfoIG8MR/n5hQ7xUPmpZTupfXJrtVOx8+gv2Y62
-        +A1fhpOfx2zlQ90gbke35PaMFHjTBNk=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-297-wvYb8artPhGQEuyfYOU9Lw-1; Thu, 18 Nov 2021 09:27:17 -0500
-X-MC-Unique: wvYb8artPhGQEuyfYOU9Lw-1
-Received: by mail-ed1-f69.google.com with SMTP id w4-20020aa7cb44000000b003e7c0f7cfffso5442553edt.2
-        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 06:27:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+mjVtw/CpZ9mnTSxomjiaZMKpdhiPPoco6lrom4G9Pk=;
-        b=yJbGKmpmd9kPDumm1w8X2gCS/Ndi4qsuoUX6qX3mvMsEMz8nAUWBK55i5lPRenW+rl
-         AWUlKlHBautjRyCl4lZdABRlT9FcIZD3RvvawQwzgZUgs4DjL+Yb/nKnc4m64sUbJUxR
-         MOdCF6SreOK7sXztm6IMcwY+vYTT6PaipnvQV7wmuut1s2h8sYVTRynu+s28uDUtDIZa
-         vPrbnPSA/m7V4nw3PhbwkiAhbpSXMG0IRUuBd6HyR2bzD2KzYsY4CeBgUNb7sZXEYO8o
-         7UM5WAdh8t4cmiX9KJIeOoXpYPShj8VwX809yF9KtQuaY6VPzX45w5k4oBF9vF8SIr3L
-         moQw==
-X-Gm-Message-State: AOAM532U3HIBwya5XuYhdiF2nFwuXU6aXilRVXBT0PIVkHoQ3RN0DKLQ
-        W9Nx34ApfLL0SkwHxqANAJsfTUPO83wBsKR2iZfzdofUot1Ujg/NfQemJmfxo/tP9MkhIszpFqt
-        kqroonRC6v6Vt
-X-Received: by 2002:a17:907:7255:: with SMTP id ds21mr35033599ejc.42.1637245636663;
-        Thu, 18 Nov 2021 06:27:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyiLrS3pC4da7uc9pSZQzR6ZgTCJ2MvZLo2Mcp7ohwLe1l2H78xi2U23MvZtW33ojXBAntDAw==
-X-Received: by 2002:a17:907:7255:: with SMTP id ds21mr35033567ejc.42.1637245636438;
-        Thu, 18 Nov 2021 06:27:16 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id jl8sm1342621ejc.59.2021.11.18.06.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 06:27:16 -0800 (PST)
-Date:   Thu, 18 Nov 2021 15:27:14 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: accommodate DWARF/compiler bug with
- duplicated structs
-Message-ID: <YZZiwnWReYnthtzH@krava>
-References: <20211117194114.347675-1-andrii@kernel.org>
- <CAEf4Bza2NSV8MBb0jSokmUcrzy0SpLvY2uqu4mG9ObxnT-jQLw@mail.gmail.com>
+        id S231912AbhKRPXs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 10:23:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33480 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231841AbhKRPXr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Nov 2021 10:23:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC02961B62
+        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 15:20:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637248846;
+        bh=fDSaj4n747JDrUMPlz/uNu/yZWTaXEmTjYVO6855SdQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mBkZDfjzMRzfSMcNmqKbAooe07712jwjaiZCYt3eKcUEFNEIuGRAAgmOUtsiFhnlv
+         gl/po49mueHA4EB62rc4dGKzUWRu/11VbwlqCraQBDcyPZMhXF4BqjjZ6jwlyIq7rR
+         rW4MO+WnAFuc18X6nS3aQuXpSxKRxnsQdHrXDXcfRZnJ8PwdZHhrulndltVwrqgQcI
+         u0N62TsYA0vimtTzUpHRqbJ+lvb6d64/ZlFmCzCy8+cBWfZimDbBqV77YCVoZqaR6k
+         x3dr8a0/uKHjv2s9tEBAMYBoq/QjWVm3lDmntMQtNRFpxzqDrmsrz02NdCwnksnRA9
+         ANRNqzlfviwUw==
+Received: by mail-ed1-f52.google.com with SMTP id z5so28640768edd.3
+        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 07:20:46 -0800 (PST)
+X-Gm-Message-State: AOAM531hlKkAV/tod7xXldCYmNzgO+d5aAG19oZOOqzMUvLU9DYCQMCn
+        OISdxxUzSyUYh3JfyqgRRm29/W5PK02wJV8AdcnsBw==
+X-Google-Smtp-Source: ABdhPJxrIyECmt0iA265eD0cyb9vvkwUMTacYpNtXPpnWBgJ7E+nmyeeG6x9UlEBQtDG163W9048JAyA5Hp/brmfTAE=
+X-Received: by 2002:a17:907:7f1a:: with SMTP id qf26mr34115379ejc.543.1637248845008;
+ Thu, 18 Nov 2021 07:20:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bza2NSV8MBb0jSokmUcrzy0SpLvY2uqu4mG9ObxnT-jQLw@mail.gmail.com>
+References: <20211111161452.86864-1-lmb@cloudflare.com> <CAADnVQKWk5VNT9Z_Cy6COO9NMjkUg1p9gYTsPPzH-fi1qCrDiw@mail.gmail.com>
+ <CACAyw99EhJ8k4f3zeQMf3pRC+L=hQhK=Rb3UwSz19wt9gnMPrA@mail.gmail.com>
+ <20211118010059.c2mixoshcrcz4ywq@ast-mbp> <CAEf4Bza=ZipeiwhvUvLLs9r4dbOUQ6JQTAotmgF6tUr1DAc9pw@mail.gmail.com>
+ <CAEf4BzZTiyyKLg2y_dSvEEgzjSsCRCeRgt99DmFAHJyGqht8tw@mail.gmail.com> <06aa2d62d09bcd0a39898f7dcc7fb2fcdc262081.camel@linux.ibm.com>
+In-Reply-To: <06aa2d62d09bcd0a39898f7dcc7fb2fcdc262081.camel@linux.ibm.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Thu, 18 Nov 2021 16:20:34 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ5rTQH+NgxmNv+SYc+OdYKuOLHi=_8y1RVap+SjeQUAbw@mail.gmail.com>
+Message-ID: <CACYkzJ5rTQH+NgxmNv+SYc+OdYKuOLHi=_8y1RVap+SjeQUAbw@mail.gmail.com>
+Subject: Re: [PATCH bpf] selftests: bpf: check map in map pruning
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 17, 2021 at 11:42:58AM -0800, Andrii Nakryiko wrote:
-> On Wed, Nov 17, 2021 at 11:41 AM Andrii Nakryiko <andrii@kernel.org> wrote:
+On Thu, Nov 18, 2021 at 12:56 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+>
+> On Wed, 2021-11-17 at 17:38 -0800, Andrii Nakryiko wrote:
+> > On Wed, Nov 17, 2021 at 5:29 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Wed, Nov 17, 2021 at 5:01 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Wed, Nov 17, 2021 at 08:47:45AM +0000, Lorenz Bauer wrote:
+> > > > > On Sat, 13 Nov 2021 at 01:27, Alexei Starovoitov
+> > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > >
+> > > > > > Not sure how you've tested it, but it doesn't work in unpriv:
+> > > > > > $ test_verifier 789
+> > > > > > #789/u map in map state pruning FAIL
+> > > > > > processed 26 insns (limit 1000000) max_states_per_insn 0
+> > > > > > total_states
+> > > > > > 2 peak_states 2 mark_read 1
+> > > > > > #789/p map in map state pruning OK
+> > > > >
+> > > > > Strange, I have a script that I use for bisecting which uses a
+> > > > > minimal
+> > > > > .config + virtue to run a vm, plus I was debugging in gdb at the
+> > > > > same
+> > > > > time. I might have missed this, apologies.
+> > > > >
+> > > > > I guess vmtest.sh is the canonical way to run tests now?
+> > > >
+> > > > vmtest.sh runs test_progs only. That's the minimum bar that
+> > >
+> > > It runs test_progs by default, unless something else is requested.
+> > > You
+> > > can run anything inside it, e.g.:
+> > >
+> > > ./vmtest.sh -- ./test_maps
+> > >
+> > > BTW, we recently moved configs around in libbpf repo on Github, so
+> > > this script broke. I'm sending a fix in a few minutes, hopefully.
 > >
-> > According to [0], compilers sometimes might produce duplicate DWARF
-> > definitions for exactly the same struct/union within the same
-> > compilation unit (CU). We've had similar issues with identical arrays
-> > and handled them with a similar workaround in 6b6e6b1d09aa ("libbpf:
-> > Accomodate DWARF/compiler bug with duplicated identical arrays"). Do the
-> > same for struct/union by ensuring that two structs/unions are exactly
-> > the same, down to the integer values of field referenced type IDs.
-> 
-> Jiri, can you please try this in your setup and see if that handles
-> all situations or there are more complicated ones still. We'll need a
-> test for more complicated ones in that case :( Thanks.
+> > ... and of course it's not that simple. [0] recently changed how we
+> > build qemu image and vmtest.sh had some assumptions. Some trivial
+> > things I fixed, but I'm not too familiar with the init scripts stuff.
+> > Adding Ilya and KP to hopefully help with this. Ilya, KP, can you
+> > please help restore vmtest.sh functionality?
+> >
+> > After fixing few paths:
+> >
+> > diff --git a/tools/testing/selftests/bpf/vmtest.sh
+> > b/tools/testing/selftests/bpf/vmtest.sh
+> > index 027198768fad..7ea40108b85d 100755
+> > --- a/tools/testing/selftests/bpf/vmtest.sh
+> > +++ b/tools/testing/selftests/bpf/vmtest.sh
+> > @@ -13,8 +13,8 @@ DEFAULT_COMMAND="./test_progs"
+> >  MOUNT_DIR="mnt"
+> >  ROOTFS_IMAGE="root.img"
+> >  OUTPUT_DIR="$HOME/.bpf_selftests"
+> > -
+> > KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config
+> > "
+> > -
+> > KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/latest.config
+> > "
+> > +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/config-latest.x86_64
+> > "
+> > +KCONFIG_API_URL="https://api.github.com/repos/libbpf/libbpf/contents/travis-ci/vmtest/configs/config-latest.x86_64
+> > "
+> >  INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX
+> > "
+> >  NUM_COMPILE_JOBS="$(nproc)"
+> >  LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
+> > @@ -85,7 +85,7 @@ newest_rootfs_version()
+> >  {
+> >         {
+> >         for file in "${!URLS[@]}"; do
+> > -               if [[ $file =~ ^libbpf-vmtest-rootfs-(.*)\.tar\.zst$
+> > ]]; then
+> > +               if [[ $file =~
+> > ^x86_64/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
+> >                         echo "${BASH_REMATCH[1]}"
+> >                 fi
+> >         done
+> >
+> > ... the next problem is more severe. Script complains about missing
+> > /etc/rcS.d, if I just force-created it, when kernel boots we get:
+> >
+> >
+> > [    1.050803] ---[ end Kernel panic - not syncing: No working init
+> > found.  Try passing init= option to kernel. See Linux
+> > Documentation/admin-guide/init.rst for guidance. ]---
+> >
+> >
+> > Please help.
+> >
+> >   [0] https://github.com/libbpf/libbpf/pull/204
+>
+> I've posted a fix, please give it a try:
+>
+> https://lore.kernel.org/bpf/20211118115225.1349726-1-iii@linux.ibm.com/
+>
+> Missing was the ${ARCH} prefix when downloading the image, so it ended
+> up being empty. Now your ~/.bpf_selftests is poisoned with it, so
+> you'll need to run vmtest.sh with -i switch once in order to remove the
+> bad image.
 
-it seems to help largely, but I still see few modules (67 out of 780)
-that keep 'struct module' for some reason.. their struct module looks
-completely the same as is in vmlinux
-
-I uploaded one of the module with vmlinux in here:
-  http://people.redhat.com/~jolsa/kmodbtf/2/
-
-I will do some debugging and find out why it did not work in this module
-and try to come up with another test
-
-thanks,
-jirka
-
-> 
-> >
-> > Solving this more generically (allowing referenced types to be
-> > equivalent, but using different type IDs, all within a single CU)
-> > requires a huge complexity increase to handle many-to-many mappings
-> > between canonidal and candidate type graphs. Before we invest in that,
-> > let's see if this approach handles all the instances of this issue in
-> > practice. Thankfully it's pretty rare, it seems.
-> >
-> >   [0] https://lore.kernel.org/bpf/YXr2NFlJTAhHdZqq@krava/
-> >
-> > Reported-by: Jiri Olsa <jolsa@kernel.org>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  tools/lib/bpf/btf.c | 45 +++++++++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 41 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index b6be579e0dc6..e97217a77196 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -3477,8 +3477,8 @@ static long btf_hash_struct(struct btf_type *t)
-> >  }
-> >
-> >  /*
-> > - * Check structural compatibility of two FUNC_PROTOs, ignoring referenced type
-> > - * IDs. This check is performed during type graph equivalence check and
-> > + * Check structural compatibility of two STRUCTs/UNIONs, ignoring referenced
-> > + * type IDs. This check is performed during type graph equivalence check and
-> >   * referenced types equivalence is checked separately.
-> >   */
-> >  static bool btf_shallow_equal_struct(struct btf_type *t1, struct btf_type *t2)
-> > @@ -3851,6 +3851,31 @@ static int btf_dedup_identical_arrays(struct btf_dedup *d, __u32 id1, __u32 id2)
-> >         return btf_equal_array(t1, t2);
-> >  }
-> >
-> > +/* Check if given two types are identical STRUCT/UNION definitions */
-> > +static bool btf_dedup_identical_structs(struct btf_dedup *d, __u32 id1, __u32 id2)
-> > +{
-> > +       const struct btf_member *m1, *m2;
-> > +       struct btf_type *t1, *t2;
-> > +       int n, i;
-> > +
-> > +       t1 = btf_type_by_id(d->btf, id1);
-> > +       t2 = btf_type_by_id(d->btf, id2);
-> > +
-> > +       if (!btf_is_composite(t1) || btf_kind(t1) != btf_kind(t2))
-> > +               return false;
-> > +
-> > +       if (!btf_shallow_equal_struct(t1, t2))
-> > +               return false;
-> > +
-> > +       m1 = btf_members(t1);
-> > +       m2 = btf_members(t2);
-> > +       for (i = 0, n = btf_vlen(t1); i < n; i++, m1++, m2++) {
-> > +               if (m1->type != m2->type)
-> > +                       return false;
-> > +       }
-> > +       return true;
-> > +}
-> > +
-> >  /*
-> >   * Check equivalence of BTF type graph formed by candidate struct/union (we'll
-> >   * call it "candidate graph" in this description for brevity) to a type graph
-> > @@ -3962,6 +3987,8 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
-> >
-> >         hypot_type_id = d->hypot_map[canon_id];
-> >         if (hypot_type_id <= BTF_MAX_NR_TYPES) {
-> > +               if (hypot_type_id == cand_id)
-> > +                       return 1;
-> >                 /* In some cases compiler will generate different DWARF types
-> >                  * for *identical* array type definitions and use them for
-> >                  * different fields within the *same* struct. This breaks type
-> > @@ -3970,8 +3997,18 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
-> >                  * types within a single CU. So work around that by explicitly
-> >                  * allowing identical array types here.
-> >                  */
-> > -               return hypot_type_id == cand_id ||
-> > -                      btf_dedup_identical_arrays(d, hypot_type_id, cand_id);
-> > +               if (btf_dedup_identical_arrays(d, hypot_type_id, cand_id))
-> > +                       return 1;
-> > +               /* It turns out that similar situation can happen with
-> > +                * struct/union sometimes, sigh... Handle the case where
-> > +                * structs/unions are exactly the same, down to the referenced
-> > +                * type IDs. Anything more complicated (e.g., if referenced
-> > +                * types are different, but equivalent) is *way more*
-> > +                * complicated and requires a many-to-many equivalence mapping.
-> > +                */
-> > +               if (btf_dedup_identical_structs(d, hypot_type_id, cand_id))
-> > +                       return 1;
-> > +               return 0;
-> >         }
-> >
-> >         if (btf_dedup_hypot_map_add(d, canon_id, cand_id))
-> > --
-> > 2.30.2
-> >
-> 
-
+Thanks for taking a look and sending a fix.
