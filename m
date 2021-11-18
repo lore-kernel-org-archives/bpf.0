@@ -2,173 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A575C433EF
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 05:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17BB1C433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 07:12:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E891661B27
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 05:21:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F06CD6115C
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 07:12:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242410AbhKRFX6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 00:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242408AbhKRFXz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Nov 2021 00:23:55 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72109C061570
-        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 21:20:56 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id k22so6370744iol.13
-        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 21:20:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=eYMpAXZPsrFY37EnMtJWzWckYb5Sf/fIhaMihY1NPQs=;
-        b=M6nl0Z2DiaP7VV2GVkRgDVy76sENzHJR76oT+Urk0b+0nPF0bUso1rIx4boZYEk+b3
-         NG7kFgYuZYs921AWGAMtpGKwzzzcwU2c2bbq8dZ6nw6ZllLOmwbhc4vg2Bju63DmNXMl
-         kIQRtqvT98S5/N0rFZzMu7PHbAfUwoBxlU0vfP0Q5tj32Y/JpHHLqLKmOTN/lAHo8bEl
-         yhiuh1OKdR1B+sd6pesxrnadvOLWmmZlCC6y55n1uYSinSsn+kcBFKpgddX2zviwl8OZ
-         qmQ6xVmWbUdK2xx/Gsko7y6H1AFd0NUOV8aGiR2+9sAYXYHKf9LWmtfkFdsqhiTJwEYn
-         oaRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=eYMpAXZPsrFY37EnMtJWzWckYb5Sf/fIhaMihY1NPQs=;
-        b=TIS3uvS1n9PhlzO8x59j+53D19RPeJyKAucf28H15vH9FaLR6gL840kUGgD1TAQ2ru
-         nzzbYNgT7f6K0puL6vI2jJVNsjYzBWmkrgXb92qXeBwcFseEZTRDeQJ/A5sBvA9LmlvH
-         Xr4zZ1xsQddfEo8iNxbrt7Wrqtns10ORMOYxjbTe9dBz2IfnHeZcjAlE2HSOhd7mq1Rf
-         ppWpzoe4vt6z8WtZ00TWsl7fhxOqysQ9vT9050HPfMrxOszj31aKv40SMVGemT4OeGgX
-         v8bvW1XgiTn2BfKjgV+7EkXYiUB69PIVYRvpGUE8mzXWjgOCcPwW0wzVdpiSqnrS/X4Q
-         zKHA==
-X-Gm-Message-State: AOAM532jW7R5QrS4hsVsHo7X70dMv3zOWz3hHJ8IgiIq8FL1KaJ1H270
-        zHp98/sIf8cZeudsjKTfz6QDOauQ4mk=
-X-Google-Smtp-Source: ABdhPJzjNQi7E7ux6nQAC5aVVxFuz1EMrlDSNQ9Dv8wEBWxOL43ZYYLLdjX8CNyWPnC2Q+BkvemCDQ==
-X-Received: by 2002:a05:6638:1134:: with SMTP id f20mr18228480jar.6.1637212855211;
-        Wed, 17 Nov 2021 21:20:55 -0800 (PST)
-Received: from localhost ([172.243.151.11])
-        by smtp.gmail.com with ESMTPSA id g11sm1390141ioo.3.2021.11.17.21.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Nov 2021 21:20:54 -0800 (PST)
-Date:   Wed, 17 Nov 2021 21:20:46 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Jussi Maki <joamaki@gmail.com>
-Message-ID: <6195e2ae7a82f_2b4cc20884@john.notmuch>
-In-Reply-To: <CAEf4Bza6HHeVTFxrmPJRUgsLYU7g06MctMoAGy3ayKq8ES9FTQ@mail.gmail.com>
-References: <CAADnVQKEPYYrr6MUSKL4Fd7FYp0y5MQFoDteU5T++E6fySDADw@mail.gmail.com>
- <6191ee3e8a1e1_86942087@john.notmuch>
- <CAEf4Bza3OC1pAvVvwoPhyuixf8_VpA1w0F7HAsX09x2DSYbYbA@mail.gmail.com>
- <6195432baf114_1f40a208aa@john.notmuch>
- <CAEf4Bza6HHeVTFxrmPJRUgsLYU7g06MctMoAGy3ayKq8ES9FTQ@mail.gmail.com>
-Subject: Re: sockmap test is broken
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S243727AbhKRHPp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 02:15:45 -0500
+Received: from mail-eopbgr1300100.outbound.protection.outlook.com ([40.107.130.100]:59840
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243650AbhKRHOs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Nov 2021 02:14:48 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JTuDG6lG11PDbtwS2WX4X1tYXmxuwjPqIAIAkUsfiQJDj77bucYf9ZOtRYt7OgZw0vLEJtzAG0uiCd74b/x/xvw3zfkxCHGWr2yuZcznG2YNl/jrBC803O0JwibqZtQWviJFirMYbLKoHZZYyWDB2iHQlv5YBkEcW3Ut/o459zUULmfZK1XDj2WB8CumFgXFmMDa6/i+AQMHJWbTStqTUPTUSujQ7+pHPTFBeXCiuBg/Gn5tUpKY+ltXKp3DvjSuT97pzSIztuz4IXERLZzGDFbyKALK47cwtKWYmA40E+WFUkp1U4K0YFqEI7NohdT4f4778gWJ7bs6/VQ4vWrNNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xz4S2vwgc9spyHjppYLdM0fYGc5olDaIgqySHOWkIgE=;
+ b=dkWdaYezdHc0cpJCxIIGfe3B4hkRvqP8hKqp2ua+4HXEfGYjN8wCh5yp78xm3BrtzhfyhIxZR7q4ChHW9n8USfRY2y4Vikc9UMHnSv7SmuJaffCvU4vL7qYtFeQjTwmlJ+w13JIONV8xspPxXkm7f9Dui79FvQqZ4dVBKullObj14t3vnU1WfWPg8m88XbiD2wlrLLwo62DBiMrdxp+78Wf1AiG4NpkrAGCW1NRhl4f8VrBTUnsHnKmtArSQSW4gZTE14z+vnb8XBLhqbLml+arrI0GV8GDuWiPsNu+9wVUnEMkkOyg3u47fuJicIUKYlZeeb59eC+X0sY+fHPQbZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xz4S2vwgc9spyHjppYLdM0fYGc5olDaIgqySHOWkIgE=;
+ b=ILvHUsphdFHOVKkc2XUKpNtaMhdNa63nmm1f6kX09HcQv20YnV4Vqop22SAPOyrDIuJ+pqaG9HgNVKArYcstLIOOhnRhf//iCWrLjhaEdrKqFpf0Lyov+KZgewByK7BKEamid0z2Ze4J4s0e275bOTH97s8dtcbq9+GOK0nWJEI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com (2603:1096:202:2f::10)
+ by HK2PR06MB3427.apcprd06.prod.outlook.com (2603:1096:202:33::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.18; Thu, 18 Nov
+ 2021 07:11:42 +0000
+Received: from HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::814a:4668:a3bd:768]) by HK2PR06MB3492.apcprd06.prod.outlook.com
+ ([fe80::814a:4668:a3bd:768%7]) with mapi id 15.20.4713.021; Thu, 18 Nov 2021
+ 07:11:42 +0000
+From:   Guo Zhengkui <guozhengkui@vivo.com>
+To:     daniel@iogearbox.net
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        davemarchevsky@fb.com, guozhengkui@vivo.com,
+        john.fastabend@gmail.com, kafai@fb.com, kernel@vivo.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        shuah@kernel.org, songliubraving@fb.com, sunyucong@gmail.com,
+        yhs@fb.com
+Subject: Re: [PATCH] selftests/bpf: fix array_size.cocci warning
+Date:   Thu, 18 Nov 2021 15:11:28 +0800
+Message-Id: <20211118071128.13519-1-guozhengkui@vivo.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <8f387f33-51f7-feea-d366-ceb5bbed0b51@iogearbox.net>
+References: <8f387f33-51f7-feea-d366-ceb5bbed0b51@iogearbox.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0144.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:8f::24) To HK2PR06MB3492.apcprd06.prod.outlook.com
+ (2603:1096:202:2f::10)
+MIME-Version: 1.0
+Received: from localhost.localdomain (218.213.202.190) by SG2PR01CA0144.apcprd01.prod.exchangelabs.com (2603:1096:4:8f::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19 via Frontend Transport; Thu, 18 Nov 2021 07:11:39 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9b5de4e9-9d14-4a22-add6-08d9aa62ac01
+X-MS-TrafficTypeDiagnostic: HK2PR06MB3427:
+X-Microsoft-Antispam-PRVS: <HK2PR06MB3427A0D02C50E0034AF9741DC79B9@HK2PR06MB3427.apcprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: q/v64AVQCeSBHzmNEgQIdMvUozES8BMQaO81CR/D9hVezXakqnuixBbGLwoU1rchEj+PPfUMqNDPZfwQrWLRsLeUXd7NoVviW4KuDQdqlzJ+0JAbwBs4uPluN9zpE37SibrtJS4zqOAZYgLR3aINhjahrYcAqkHkrzBJtVnwymA4D/UMtRaeb+rbRz3zGqJdlRs8k32TQ+9LS2p6KBFUzDe6qI37p6rKjDIdBePfpmCnlhWIAgIAXS5WG6BxOS/fP2+rhJNYUoVoE5HjGMwahL8Pf7Xk37rF+j8+jIl/SbswBwEXbKlTjOSNAsbdyx7kv0Z1OWolE3s+yiX7YzYv/1tLUTtBqmIEBEeq19e9vsVfGekmIbyrSlJU208JtUFAH+Tkr3B4zEKNN1cC+kODHtIuKdGjv/o3Eaxyj+7hjaoN3OEkP5/UCM0UpzjGcwIAqL44bdfAakYl3JIDpUbF/O/2JSow9r5/sa95hwldStMaSE/j3VVVwOtLBLIyWQe5lIWfHVkjDabFby4MO/GNJzxaI4n/4Upuk38yCKiMl+FiqIHMHVykWX+x+mh9KkXkIwo6HeSx6/xEWJxsuBmkS51ofIna/HMFvc00pz91YFPNXXmVNvSqZRX9MZUaIFh5LMVzOaUL92oTEWxqH7CtOvzlIow4KpV67OMknqp0I6/rkohpxeG8tHL+4PMdhC8+HzCKg7/8tIgnNwEFzCy8Fg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3492.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6506007)(2616005)(2906002)(508600001)(6916009)(66946007)(66476007)(956004)(52116002)(4744005)(6486002)(6512007)(66556008)(86362001)(316002)(4326008)(5660300002)(26005)(38350700002)(8936002)(7416002)(1076003)(6666004)(8676002)(186003)(36756003)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TAYE/r2fTuFIk2UYs2cdJwrnyaiBA8sMTw/eAPS74RZh3Ay4rLdJ/iFpgdrE?=
+ =?us-ascii?Q?AnS0izd7nxDfJnU9kiZQ5Mnqks8xm8iWS1jM6WbKDkjuORtNP+3R7nzrdwT3?=
+ =?us-ascii?Q?xpZzWOjuK9gZMHi87FRUleZCX4CsKi3TrspT7Fc2SnTv7NYaIzTtsKaU7tBU?=
+ =?us-ascii?Q?AE8hO/Waf8wNaV7/0BW8jDoxeR/HZ9TtbYMTbSrOdQsk4zs+flne2Do23K2S?=
+ =?us-ascii?Q?17zMYuUw1wjQw1hQ4NeBAmJ6Qi7UBiih/hexDVCTqQGwxZL1l4QjGc4HukYv?=
+ =?us-ascii?Q?bRHdc0wma/MsZwjW3sT0ZtifuaMJK20i/b+L3WYHcm2587sw+YBlAvEjluel?=
+ =?us-ascii?Q?PcN7GtVPIi9ba3sCR0Tz831OZBKnu9hJS/+o5kBmjYLzLmsMCowwNUVIE8Gp?=
+ =?us-ascii?Q?SsgVMylPMDCbmV/847U9PFwK+EH8g+j7nRMCn4z7OA+Lvafwbnsizacut0oC?=
+ =?us-ascii?Q?EC44FkDsU/qrteK6o1VmFsG71j0DaByuCjG6GY8Jrtm0M5NHrhiFW8xupEZH?=
+ =?us-ascii?Q?CUj0Fv87rANDvbiq/+OpSdtY0/H3SRMLZM8KpQHnxR2W4FpW4YWoYjKCFei0?=
+ =?us-ascii?Q?tYixohtSHu2P5/xhbrvzQ/QtlTXSEsxdWDYripZdLJIBt+wbdqZvOxkvhg6Z?=
+ =?us-ascii?Q?01hYPTL87CNj+OwbMUC7T/qu93WfGCfvqhK6qgCaMW9tytjnVQfzXAOkjxxp?=
+ =?us-ascii?Q?liQENC4XoSEHvFCoRojGU2N6fTeJkbZYE/3hAVbmyHYIIN0XNwV3/1IevZ2o?=
+ =?us-ascii?Q?Qlfq+Ptl6rI77e9TfFrWT2NjYwO5k7Pg0ZWPuXo7rZSHiY9H2zFD6RA2XoFz?=
+ =?us-ascii?Q?YUSx8oaBw5k+6a7q6q1Hs8kCP+JJM+LhB7MelYZDe387YWzglzyExXxId5Xy?=
+ =?us-ascii?Q?wtupuUfjmakLHlHPRt+7aMBNWOA2N7+Xj8OdyIl4TDhcyh6TYfa49CTdeNjD?=
+ =?us-ascii?Q?Aq/+ym93q6smcX8vB+4qb0Qfm2Riv87tzqw6TmUcuLEI7afLyj2sOfVTKOtF?=
+ =?us-ascii?Q?tZ64SMkcuuUvlPLC4NLLuw31+ndG4m/A55T56MmLmgkcsdTvh0KyL/3xmeIN?=
+ =?us-ascii?Q?cCHb5xhtQBDBoDQXwllt6nE/kFyWRDRvaVU1oSDnbVa6GA/ISWD3PkvdOxwZ?=
+ =?us-ascii?Q?XSOEzBbipNKijkh0RGQaA9xR/fNqhaS51HpECdb+jJY6fkMCwwAKkJrI9jlr?=
+ =?us-ascii?Q?SPT0tq/n+ZGSI37RVjdhH+7Oe9FLqmZL4f+2hcdWnY1XmzaIDIhPvLBz7JDb?=
+ =?us-ascii?Q?gbHF3m9WBZBUqj2LbNznnbulnGUIn083G3r25EzKvdJacDCZXTYuFW2dAUDD?=
+ =?us-ascii?Q?MoWtW8G41tWHxbIECOk47SSYb92A5ZUJwc3LsVh8yPf1GP/83tqKsPT00/MK?=
+ =?us-ascii?Q?Zh4Mcf5adCVMYuNYJ9LG10beMdqWNECZYlPBlz2zmnceaiWiEd5biWQtNGoW?=
+ =?us-ascii?Q?OkPUjSo8SX6QoMIGZM/VvdGJ7p/O9bGqOVLKlJ8dA+96c3GDHXVtJCVxo9JH?=
+ =?us-ascii?Q?z0Sww7QTGEUgGDXUMqrVU0DFUuNjm+vSaJ+lNpzgl9kbEGp40l53taCq1TpU?=
+ =?us-ascii?Q?M9tze/FGekaZFD9gCK0Kyr0UrPyCl5igOOp6eONhW4jm8UMglHUj2Jqh+6ow?=
+ =?us-ascii?Q?+NFWW90HW5jCk7alkqA2hVA=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b5de4e9-9d14-4a22-add6-08d9aa62ac01
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3492.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 07:11:42.4091
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R8dASP/AAiCD/f8T7QPbK22aWDqUiMO0/1M95G2UwhSvVKVAKlPiYJIhXDZYR4a3ssAUDfZzKbBOMicCROVqkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR06MB3427
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko wrote:
-> On Wed, Nov 17, 2021 at 10:00 AM John Fastabend
-> <john.fastabend@gmail.com> wrote:
-> >
-> > Andrii Nakryiko wrote:
-> > > On Sun, Nov 14, 2021 at 9:21 PM John Fastabend <john.fastabend@gmail.com> wrote:
-> > > >
-> > > > Alexei Starovoitov wrote:
-> > > > > test_maps is failing in bpf tree:
-> > > > >
-> > > > > $ ./test_maps
-> > > > > Failed sockmap recv
-> > > > >
-> > > > > and causing BPF CI to stay red.
-> > > > >
-> > > > > Since bpf-next is fine, I suspect it is one of John's or Jussi's patches.
-> > > > >
-> > > > > Please take a look.
-> > > >
-> > > > I'll look into it thanks.
-> > >
-> > > Any updates, John? Should we just disable test_maps in CI to make it
-> > > useful again?
-> >
-> > I'm debugging this now. Hopefully I'll have a fix shortly (today I hope).
-> > Maybe, it makes sense to wait for EOD and if I still don't have the fix
-> > disable it then. Anyways fixing it is top of list now.
-> 
-> Sounds good, let's hope you find it and fix it today.
+> No need for the extra include. test_progs.h already includes bpf_util.h, please check
+> such trivialities before submission. Simple grep would have revealed use of ARRAY_SIZE()
+> in various places under tools/testing/selftests/bpf/prog_tests/.
 
-OK got the fix, but its fairly subtle. Whats happening is when socks are
-removed from a map their programs are not actually being removed. They
-continue to live with the sock for the lifetime of the socket or until
-the last reference held from BPF side is lost. At which point all progs
-are dropped and socket returns to normal/preBPF state. We never noticed
-it on our real use cases because once we move sockets into BPF we never
-release them until the socket is free. The fix is to null the set progs
-and then do the update_sk_prot call which will decide based on the
-configured programs what proto ops need to be set to.
+Actually, ARRAY_SIZE() in ./include/linux/kernel.h is diffrent from the one defined in bpf_util.h:
 
-So why did the sockmap test work earlier. Before I 'fixed' the logic to
-use a recv hook that didn't fall back into normal tcp recv handler the
-strparser was being detatched so no packets made it to the BPF layer and
-then eventually, with some delay and suboptimal code, we used to fall back
-to normal tcp stack recv hook. Packet would then end up being recieved
-via recv() and the test was happy. Per original patch its slightly racy
-to do this fallback because you don't know, maybe a packet shows up
-just as you do these checks and you consume it via old tcp handlers
-and skip over your parser or whatever BPF logic is there.
+./include/linux/kernel.h
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
 
-I'll test the below tomorrow and create a commit msg so we have a chance
-at recalling details in a month or so. Its a bit subtle to send out
-this evening I think and would like to run it through some of our
-own Cilium tests.
+./tools/testing/selftests/bpf/bpf_util.h
+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
-If your willing to wait another day we should be able to get the
-CI going again. Either way fix on its way soon just not tonight.
+__must_be_array() ensures arr is an array, which is better than the one defined in bpf_util.h
 
----
+> here are many more similar occurrences. Please just send one cleanup patch to reduce churn in the git log.
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 1ae52ac943f6..8eb671c827f9 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1124,6 +1124,8 @@ void sk_psock_start_strp(struct sock *sk, struct sk_psock *psock)
- 
- void sk_psock_stop_strp(struct sock *sk, struct sk_psock *psock)
- {
-+       psock_set_prog(&psock->progs.stream_parser, NULL);
-+
-        if (!psock->saved_data_ready)
-                return;
- 
-@@ -1212,6 +1214,9 @@ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
- 
- void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock)
- {
-+       psock_set_prog(&psock->progs.stream_verdict, NULL);
-+       psock_set_prog(&psock->progs.skb_verdict, NULL);
-+
-        if (!psock->saved_data_ready)
-                return;
- 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index f39ef79ced67..4ca4b11f4e5f 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -167,8 +167,11 @@ static void sock_map_del_link(struct sock *sk,
-                write_lock_bh(&sk->sk_callback_lock);
-                if (strp_stop)
-                        sk_psock_stop_strp(sk, psock);
--               else
-+               if (verdict_stop)
-                        sk_psock_stop_verdict(sk, psock);
-+
-+               if (psock->psock_update_sk_prot)
-+                       psock->psock_update_sk_prot(sk, psock, false);
-                write_unlock_bh(&sk->sk_callback_lock);
+Yes, I will commit another patch.
