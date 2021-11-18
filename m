@@ -2,111 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C51C433EF
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 16:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A47A8C433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 16:38:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39DE761A09
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 16:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EEDD61175
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 16:38:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbhKRQP5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 11:15:57 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:52056 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbhKRQP4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Nov 2021 11:15:56 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:38314)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mnk1u-000QC2-H2; Thu, 18 Nov 2021 09:12:54 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:43626 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mnk1t-009y16-0L; Thu, 18 Nov 2021 09:12:54 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Kyle Huey <me@kylehuey.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org,
-        Robert O'Callahan <rocallahan@gmail.com>
-References: <CAP045AoMY4xf8aC_4QU_-j7obuEPYgTcnQQP3Yxk=2X90jtpjw@mail.gmail.com>
-        <202111171049.3F9C5F1@keescook>
-        <CAP045Apg9AUZN_WwDd6AwxovGjCA++mSfzrWq-mZ7kXYS+GCfA@mail.gmail.com>
-        <CAP045AqjHRL=bcZeQ-O+-Yh4nS93VEW7Mu-eE2GROjhKOa-VxA@mail.gmail.com>
-        <87k0h6334w.fsf@email.froward.int.ebiederm.org>
-        <202111171341.41053845C3@keescook>
-        <CAHk-=wgkOGmkTu18hJQaJ4mk8hGZc16=gzGMgGGOd=uwpXsdyw@mail.gmail.com>
-        <CAP045ApYXxhiAfmn=fQM7_hD58T-yx724ctWFHO4UAWCD+QapQ@mail.gmail.com>
-        <CAHk-=wiCRbSvUi_TnQkokLeM==_+Tow0GsQXnV3UYwhsxirPwg@mail.gmail.com>
-        <CAP045AoqssLTKOqse1t1DG1HgK9h+goG8C3sqgOyOV3Wwq+LDA@mail.gmail.com>
-        <202111171728.D85A4E2571@keescook>
-Date:   Thu, 18 Nov 2021 10:10:18 -0600
-In-Reply-To: <202111171728.D85A4E2571@keescook> (Kees Cook's message of "Wed,
-        17 Nov 2021 17:32:20 -0800")
-Message-ID: <875ysp1m39.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S233519AbhKRQlP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 11:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233079AbhKRQlP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Nov 2021 11:41:15 -0500
+Received: from mx0a-00206401.pphosted.com (mx0a-00206401.pphosted.com [IPv6:2620:100:9001:15::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B68C061574;
+        Thu, 18 Nov 2021 08:38:15 -0800 (PST)
+Received: from pps.filterd (m0207806.ppops.net [127.0.0.1])
+        by mx0b-00206401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AI7OpVB017462;
+        Thu, 18 Nov 2021 08:37:58 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=default; bh=YYpfFPIIj9dhYIEnrzBE9rYOMhsJGQIWQLhSa7arJlQ=;
+ b=tSzVPPqdYjsMjFd2pp1W3cTAKDijV2oP/CPrrYaMjacgEv2bGpvox7Hw2Y7W4CPbPxF7
+ 5WryxV/i6wgHzVrs3xYFMqRjM6VpgvQD90SikQpAWumKeKNSE13FgAAa29BD8pq0ui/t
+ AsKK6XAzAEtAkukfyeLMq/z2PLtHBMkC45UU/b/RVYQvmZ40MALjd3krt0rS7QpD40nK
+ wI0Q4DOt6aU+23BPVL1c6bspwUhchErCpNgJWdFxOQOPlVZyf85tZFa01fXl7YEX2Oz+
+ hcDHLslVJ9QOhqZX4+iSa9jP0wOodh1MCa/Rwveqq6ASMStdgnUDdnBzlCdh1ZsM1K/J FA== 
+Received: from 04wpexch04.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
+        by mx0b-00206401.pphosted.com (PPS) with ESMTPS id 3cd6vchrdh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 Nov 2021 08:37:58 -0800
+Received: from 04wpexch03.crowdstrike.sys (10.100.11.93) by
+ 04wpexch04.crowdstrike.sys (10.100.11.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 18 Nov 2021 16:37:56 +0000
+Received: from 04wpexch03.crowdstrike.sys ([fe80::79d6:26ee:13ba:99d2]) by
+ 04wpexch03.crowdstrike.sys ([fe80::79d6:26ee:13ba:99d2%5]) with mapi id
+ 15.02.0922.019; Thu, 18 Nov 2021 16:37:56 +0000
+From:   Martin Kelly <martin.kelly@crowdstrike.com>
+To:     "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>
+CC:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kernel-team@fb.com" <kernel-team@fb.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "andrii@kernel.org" <andrii@kernel.org>
+Subject: RE: Re: Re: Clarification on bpftool dual licensing
+Thread-Topic: Re: Re: Clarification on bpftool dual licensing
+Thread-Index: AdfcmkxrvUCOA0cnRAq025lID2M8fg==
+Date:   Thu, 18 Nov 2021 16:37:55 +0000
+Deferred-Delivery: Thu, 18 Nov 2021 16:37:29 +0000
+Message-ID: <cb8074f8c8554ca480d6bb57f79535fc@crowdstrike.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.100.11.84]
+x-disclaimer: USA
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1mnk1t-009y16-0L;;;mid=<875ysp1m39.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19HyRikhcpll4xD3sce4HlUZw1iTZOuqps=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [REGRESSION] 5.16rc1: SA_IMMUTABLE breaks debuggers
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-18_12,2021-11-17_01,2020-04-07_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
-
-> On Wed, Nov 17, 2021 at 05:20:33PM -0800, Kyle Huey wrote:
->> Yeah that's one way to solve the problem. I think you're right that
->> fundamentally the problem here is that what SECCOMP_RET_KILL wants is
->> not really a signal. To the extent that it wants a signal, what it
->> really wants is SIGKILL, and the problem here is the code trying to
->> act like SIGKILL but call it SIGSYS. I assume the ship for fixing that
->> sailed years ago though.
->
-> Yeah, this was IIRC, a specific design choice (to distinguish a seccomp
-> KILL from a SIGKILL), as desired by the sandboxing folks, and instead
-> of using two different signals (one for KILL and one for TRAP), both
-> used SIGSYS, with the KILL variant being uncatchable.
-
-I see a general consensus on how to fix the regression.  Linus patch
-plus some tweaks.  I will get to work on that today.
-
-For v5.15 I think all that needs to get fixed is what Linus fixed
-and the force_sigsegv case.  That is my priority.
-
-
-
-For v5.16-rc1+ the instances that became force_fatal_signal need
-a careful review to figure out which semantics we want.
-
-
-Having a clear distinction between which forced signals we can let the
-debugger intercept and which ones we can not seems to be what needs to
-be added.
-
-
-Kyle thank you for your explanation of what breaks.  For future kernels
-I do need to do some work in this area and I will copy on the patches
-going forward.  In particular I strongly suspect that changing the
-sigaction and blocked state of the signal for these synchronous signals
-is the wrong thing to do, especially if the process is not killed.  I
-want to find another solution that does not break things but that also
-does not change the program state behind the programs back so things
-work differently under the debugger.
-
-Eric
-
+PiBPbiBXZWQsIE5vdiAxNywgMjAyMSBhdCA0OjMyIFBNIE1hcnRpbiBLZWxseQ0KPiA8bWFydGlu
+LmtlbGx5QGNyb3dkc3RyaWtlLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiA+DQo+ID4gPiBPbiBUdWUs
+IE5vdiAxNiwgMjAyMSBhdCAyOjE2IEFNIERhbmllbCBCb3JrbWFubg0KPiA8ZGFuaWVsQGlvZ2Vh
+cmJveC5uZXQ+DQo+ID4gPiB3cm90ZToNCj4gPiA+ID4NCj4gPiA+ID4gT24gMTEvMTUvMjEgNzoy
+MCBQTSwgTWFydGluIEtlbGx5IHdyb3RlOg0KPiA+ID4gPiA+IEhpLA0KPiA+ID4gPiA+DQo+ID4g
+PiA+ID4gSSBoYXZlIGEgcXVlc3Rpb24gcmVnYXJkaW5nIHRoZSBkdWFsIGxpY2Vuc2luZyBwcm92
+aXNpb24gb2YgYnBmdG9vbC4gSQ0KPiA+ID4gPiA+IHVuZGVyc3RhbmQgdGhhdCBicGZ0b29sIGNh
+biBiZSBkaXN0cmlidXRlZCBhcyBlaXRoZXIgR1BMIDIuMCBvciBCU0QgMi0NCj4gPiA+IGNsYXVz
+ZS4NCj4gPiA+ID4gPiBUaGF0IHNhaWQsIGJwZnRvb2wgY2FuIGFsc28gYXV0by1nZW5lcmF0ZSBC
+UEYgY29kZSB0aGF0IGdldHMgc3BlY2lmaWVkDQo+IGlubGluZQ0KPiA+ID4gPiA+IGluIHRoZSBz
+a2VsZXRvbiBoZWFkZXIgZmlsZSwgYW5kIGl0J3MgcG9zc2libGUgdGhhdCB0aGUgQlBGIGNvZGUg
+Z2VuZXJhdGVkDQo+IGlzDQo+ID4gPiA+ID4gR1BMLiBXaGF0IEknbSB3b25kZXJpbmcgaXMgd2hh
+dCBoYXBwZW5zIGlmIGJwZnRvb2wgZ2VuZXJhdGVzIEdQTC0NCj4gbGljZW5zZWQNCj4gPiA+IEJQ
+Rg0KPiA+ID4gPiA+IGNvZGUgaW5zaWRlIHRoZSBza2VsZXRvbiBoZWFkZXIsIHNvIHRoYXQgeW91
+IGdldCBhIGhlYWRlciBsaWtlIHRoaXM6DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBzb21ldGhpbmcu
+c2tlbC5oOg0KPiA+ID4gPiA+IC8qIHRoaXMgZmlsZSBpcyBCU0QgMi1jbGF1c2UsIGJ5IG5hdHVy
+ZSBvZiBkdWFsIGxpY2Vuc2luZyAqLw0KPiA+ID4gPg0KPiA+ID4gPiBGd2l3LCB0aGUgZ2VuZXJh
+dGVkIGhlYWRlciBjb250YWlucyBhbiBTUERYIGlkZW50aWZpZXI6DQo+ID4gPiA+DQo+ID4gPiA+
+ICAgLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IChMR1BMLTIuMSBPUiBCU0QtMi1DbGF1c2Up
+ICovDQo+ID4gPiA+ICAgLyogVEhJUyBGSUxFIElTIEFVVE9HRU5FUkFURUQhICovDQo+ID4gPiA+
+DQo+ID4gPiA+ID4gLyogVEhJUyBGSUxFIElTIEFVVE9HRU5FUkFURUQhICovDQo+ID4gPiA+ID4N
+Cj4gPiA+ID4gPiAvKiBzdGFuZGFyZCBza2VsZXRvbiBkZWZpbml0aW9ucyAqLw0KPiA+ID4gPiA+
+DQo+ID4gPiA+ID4gLi4uDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBzLT5kYXRhX3N6ID0gWFhYOw0K
+PiA+ID4gPiA+IHMtPmRhdGEgPSAodm9pZCAqKSJcDQo+ID4gPiA+ID4gPGVCUEYgYnl0ZWNvZGUs
+IHByb2R1Y2VkIGJ5IEdQTCAyLjAgc291cmNlcywgc3BlY2lmaWVkIGluIGJpbmFyeT4NCj4gPiA+
+ID4gPiAiOw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gTXkgZ3Vlc3MgaXMgdGhhdCwgYmFzZWQgb24g
+dGhlIGNob2ljZSB0byBkdWFsLWxpY2Vuc2UgYnBmdG9vbCwgdGhlIGhlYWRlcg0KPiBpcw0KPiA+
+ID4gPiA+IG1lYW50IHRvIHN0aWxsIGJlIEJTRCAyLWNsYXVzZSwgYW5kIHRoZSBzLT5kYXRhIGlu
+bGluZSBjb2RlJ3MgR1BMIGxpY2Vuc2UNCj4gaXMNCj4gPiA+ID4gPiBub3QgbWVhbnQgdG8gY2hh
+bmdlIHRoZSBsaWNlbnNpbmcgb2YgdGhlIGhlYWRlciBpdHNlbGYsIGJ1dCBJIHdhbnRlZCB0bw0K
+PiA+ID4NCj4gPiA+IFllcywgZGVmaW5pdGVseSB0aGF0IGlzIHRoZSBpbnRlbnQgKGJ1dCBub3Qg
+YSBsYXd5ZXIgZWl0aGVyKS4NCj4gPg0KPiA+ICBUaGFua3MgZXZlcnlvbmUsIHRoYXQncyB3aGF0
+IEkgYXNzdW1lZCBhcyB3ZWxsLiBBbnkgb2JqZWN0aW9uIHRvIGEgcGF0Y2gNCj4gY2xhcmlmeWlu
+ZyB0aGlzIG1vcmUgZXhwbGljaXRseT8NCj4gPg0KPiA+IE9uZSBvdGhlciwgcmVsYXRlZCBxdWVz
+dGlvbjogdm1saW51eC5oIChnZW5lcmF0ZWQgYnkgImJwZnRvb2wgYnRmIGR1bXAgZmlsZQ0KPiAv
+c3lzL2tlcm5lbC9idGYvdm1saW51eCBmb3JtYXQgYyIpLCBkb2VzIG5vdCBjdXJyZW50bHkgY29u
+dGFpbiBhIGxpY2Vuc2UNCj4gZGVjbGFyYXRpb24uIEkgYXNzdW1lIHRoaXMgd291bGQgaGF2ZSB0
+byBiZSBhIEdQTCBoZWFkZXIsIHNpbmNlIHZtbGludXguaA0KPiByZWZlcmVuY2VzIG1hbnkgR1BM
+J2QgTGludXgga2VybmVsIHN0cnVjdHMgYW5kIHNpbWlsYXIsIHRob3VnaCBhZ2FpbiBJJ20gbm90
+IGENCj4gbGF3eWVyIGFuZCB0aGVyZWZvcmUgYW0gbm90IGNlcnRhaW4uIFdvdWxkIHlvdSBhbGwg
+YWdyZWUgd2l0aCB0aGlzPyBJZiBzbywgYW55DQo+IG9iamVjdGlvbiB0byBhIHBhdGNoIGFkZGlu
+ZyBhbiBTUERYIGxpbmUgdG8gdGhlIGdlbmVyYXRlZCB2bWxpbnV4Lmg/DQo+DQo+IElzIHZtbGlu
+dXggRFdBUkYgZGF0YSBHUEwnZWQ/IEkgY2VydGFpbmx5IGhvcGUgbm90LiBTbyB2bWxpbnV4LmgN
+Cj4gc2hvdWxkbid0IGJlIGxpY2Vuc2VkIHVuZGVyIEdQTC4NCg0KSSBoYXZlIG5vIGlkZWE7IEkg
+aGFkIGFzc3VtZWQgdGhhdCBhIHN0cnVjdCBkZWZpbml0aW9uIGNvbWluZyBmcm9tIGEgR1BMLWxp
+Y2Vuc2VkIGhlYWRlciB3b3VsZCBoYXZlIHRvIGJlIEdQTCwgYnV0IGFnYWluLCBub3QgYSBsYXd5
+ZXIsIGFuZCBJIGNvdWxkIHRvdGFsbHkgYmUgd3JvbmcuIElmIG5vdCBHUEwgdGhvdWdoLCB3aGF0
+IHdvdWxkIHRoZSBsaWNlbnNlIGJlPyBJcyBpdCBqdXN0ICJvdXRwdXQgb2YgYSBwcm9ncmFtIiBh
+bmQgdGhlcmVmb3JlIGxpY2Vuc2UtbGVzcywgZXZlbiB0aG91Z2ggdGhlIG91dHB1dCBoYXBwZW5z
+IHRvIGJlIGNvZGU/DQo=
