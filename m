@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0C12C433F5
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1866C433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A716B61AFB
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:28:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA2E161A89
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:28:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343960AbhKRLb1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:31:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:52948 "EHLO
+        id S1344074AbhKRLbi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 06:31:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39627 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343964AbhKRL3a (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Nov 2021 06:29:30 -0500
+        by vger.kernel.org with ESMTP id S1343977AbhKRL3g (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 18 Nov 2021 06:29:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637234789;
+        s=mimecast20190719; t=1637234795;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rJqHmk+ZMyp6K5b8ACnyHPg6ZEhvFJYuOs2AT1VL5MI=;
-        b=fMb9m2x4tVYgMIenE/tOHs8nKTnX0XuDWLbkCgOiN0Z5N5MTn+AwCsabiPxbn4EdXInqEp
-        Jl2xN2EVyWILSzWw7awQ76gghlQj0wdXhIXyvRv8+HAlurkY4y1Qd7i3TumKy+8pi5aDkw
-        P/vEouKnZZ0OramkJDoRJNqymIGj0mU=
+        bh=3epWTENbvCHtKUodXQN7x8PcsitZYsEe+46k8+JKkuw=;
+        b=EqEyLAk8O0/WVdEAJ2VeTODrAzcobb94HE+bQptF1P2Mw8SJDcamdivQW81bTC2gonnCon
+        p8MDQxD2+xSQFNnIqYVx1w5phYfYkUUbAKpHPsJ7uPA2mpTEE6il+HpmPd8O2owz4vwqC6
+        yaW0n0giq5nv7qjwOduZ0m43G3pR3iE=
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
  [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-hB28at2zMNOwwgbXlLTm-Q-1; Thu, 18 Nov 2021 06:26:28 -0500
-X-MC-Unique: hB28at2zMNOwwgbXlLTm-Q-1
-Received: by mail-ed1-f70.google.com with SMTP id v9-20020a50d849000000b003dcb31eabaaso5006945edj.13
-        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 03:26:28 -0800 (PST)
+ us-mta-551-e2dkv0m8Mym1JvOVPGxW8A-1; Thu, 18 Nov 2021 06:26:34 -0500
+X-MC-Unique: e2dkv0m8Mym1JvOVPGxW8A-1
+Received: by mail-ed1-f70.google.com with SMTP id b15-20020aa7c6cf000000b003e7cf0f73daso4941910eds.22
+        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 03:26:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rJqHmk+ZMyp6K5b8ACnyHPg6ZEhvFJYuOs2AT1VL5MI=;
-        b=tXWxjQilCRKIFq1Y1I6f2OSDxuC/QRAwFiGyLNQzl/CG33xCiB7X3d+6/QREKF4+85
-         ybGSD3/ZmdDi7qTRf2y9vlp5lX8PX1n0OQRRWyUby1EqwSEZ7UkbadWfaMqgc8159Clp
-         fwynyDjl07Q4aBgxI9JzUePx3FD5lkk/bkjsX3YGAG2L8/nE1KBk21R/5yR/UaWYod3v
-         jqSV305Lx564Ws+i4UwWanHCi/zQ36wbcEKo8x88kEiWh8d4BqxJ/0IdxSe8hswOkBzp
-         qjeCnFScz7nrNzn8hznLgbfOKD17otCpHh6KbeXL7YPd3zCg/78QHKviwrWUxc+OZxYQ
-         HKUg==
-X-Gm-Message-State: AOAM532nHBFIQPZdu/oNK8rRprtTys4Dy3a3M3WQwiwv9KNIi375R52D
-        6lvvkB3EfylO9oGpVNwqnDF49iVFZFqqJbFXH/M5VdVw7juX2dMfyTQ2orhgWkHIwamATBjKQLD
-        CK6umQQrB4ucv
-X-Received: by 2002:a50:e089:: with SMTP id f9mr10346386edl.290.1637234787260;
-        Thu, 18 Nov 2021 03:26:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwjRG3EqPq6/SddZG4kWdHXZSl6WAkMfMmgkquhQDqfXX+KAqWQtWyPEbl+yp/g6O1neegfYw==
-X-Received: by 2002:a50:e089:: with SMTP id f9mr10346357edl.290.1637234787106;
-        Thu, 18 Nov 2021 03:26:27 -0800 (PST)
+        bh=3epWTENbvCHtKUodXQN7x8PcsitZYsEe+46k8+JKkuw=;
+        b=EqK7yCvGoy6Ns/ZI+CTzCeMTjXqCZjpl6SIgS2M/HNeFL5ayY9fe0P5LX36kWRB1tl
+         IEp/Ho/iCjavhcF9KC3Y0rZeDxxiGQmG3FDsLEqvK0wAALwJcgZAIwyJJc2HeqOCc/5X
+         Nkdd4WLP9Db1LgOX6e/qb0L9AaVl4XFrivUzqKm/j3yhVSX+nUjo5vNtDFnJck8rVoM7
+         I+2e0EddO6ouLXWaUAP6MU3871YNGuXRvcy/QU8KeiXdzc3JWSXjxtFXA2/9Btq9oXKC
+         hfxjVH58GFfOGG9ULiVm+/sbL5xL7W2LcrSq9uE5nYdsn6LEt0hI9RRD5FeM4F7h2Cz5
+         OuLw==
+X-Gm-Message-State: AOAM530yMJ/dGDRb8E0KLD1+BEKOg4FSQE+xlftjN5u0uuO8s19AbyoD
+        c0DkQ1fh6VhX4IqbUS1Cqsb+yyWuVCQajvkTAPQv7e/dE0qRnK5UXsHyR41Aox7Di4fqkPVDz9p
+        DMgIU+jMEX7rB
+X-Received: by 2002:a17:906:1b1b:: with SMTP id o27mr32358060ejg.279.1637234793206;
+        Thu, 18 Nov 2021 03:26:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwwE0ncH346VRzvKTbIPM8QsddzsSDJe16UTcm5Gaf9xaOqpV6H2g4PE0AH7tj4e8F9DksE7A==
+X-Received: by 2002:a17:906:1b1b:: with SMTP id o27mr32358042ejg.279.1637234793065;
+        Thu, 18 Nov 2021 03:26:33 -0800 (PST)
 Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id l26sm1403725eda.20.2021.11.18.03.26.26
+        by smtp.gmail.com with ESMTPSA id ho30sm1186939ejc.30.2021.11.18.03.26.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 03:26:26 -0800 (PST)
+        Thu, 18 Nov 2021 03:26:32 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>
-Subject: [PATCH bpf-next 15/29] bpf: Add support to store multiple addrs in bpf_tramp_id object
-Date:   Thu, 18 Nov 2021 12:24:41 +0100
-Message-Id: <20211118112455.475349-16-jolsa@kernel.org>
+Subject: [PATCH bpf-next 16/29] bpf: Add bpf_tramp_id_single function
+Date:   Thu, 18 Nov 2021 12:24:42 +0100
+Message-Id: <20211118112455.475349-17-jolsa@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211118112455.475349-1-jolsa@kernel.org>
 References: <20211118112455.475349-1-jolsa@kernel.org>
@@ -76,145 +76,128 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding support to store multiple addrs in bpf_tramp_id object,
-to provide address values for id values stored in the object.
-
-The id->addr[idx] returns address value for id->id[idx] id.
+Adding bpf_tramp_id_single function as interface to
+create trampoline with single ID and grouping together
+the trampoline allocation with init that is used on
+several places and save us few lines.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h     |  2 +-
- kernel/bpf/syscall.c    |  2 +-
- kernel/bpf/trampoline.c | 20 ++++++++++++--------
- kernel/bpf/verifier.c   |  2 +-
- 4 files changed, 15 insertions(+), 11 deletions(-)
+ include/linux/bpf.h     |  5 ++---
+ kernel/bpf/syscall.c    | 18 +++++++-----------
+ kernel/bpf/trampoline.c | 11 ++++++++---
+ kernel/bpf/verifier.c   |  3 +--
+ 4 files changed, 18 insertions(+), 19 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 47e25d8be600..13e9dcfd47e7 100644
+index 13e9dcfd47e7..894ee812e213 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -676,7 +676,7 @@ struct bpf_tramp_id {
- 	u32 cnt;
- 	u32 obj_id;
- 	u32 *id;
--	void *addr;
-+	void **addr;
- };
- 
- struct bpf_tramp_node {
+@@ -755,9 +755,8 @@ struct bpf_tramp_id *bpf_tramp_id_alloc(u32 cnt);
+ void bpf_tramp_id_free(struct bpf_tramp_id *id);
+ bool bpf_tramp_id_is_empty(struct bpf_tramp_id *id);
+ int bpf_tramp_id_is_equal(struct bpf_tramp_id *a, struct bpf_tramp_id *b);
+-void bpf_tramp_id_init(struct bpf_tramp_id *id,
+-		       const struct bpf_prog *tgt_prog,
+-		       struct btf *btf, u32 btf_id);
++struct bpf_tramp_id *bpf_tramp_id_single(const struct bpf_prog *tgt_prog,
++					 struct btf *btf, u32 btf_id);
+ int bpf_trampoline_link_prog(struct bpf_tramp_node *node, struct bpf_trampoline *tr);
+ int bpf_trampoline_unlink_prog(struct bpf_tramp_node *node, struct bpf_trampoline *tr);
+ void bpf_trampoline_put(struct bpf_trampoline *tr);
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 216fcce07326..0ae3b5b7419a 100644
+index 0ae3b5b7419a..8109b0fc7d2f 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -2853,7 +2853,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 		if (err)
+@@ -2766,12 +2766,6 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 			goto out_put_prog;
+ 		}
+ 
+-		id = bpf_tramp_id_alloc(1);
+-		if (!id) {
+-			err = -ENOMEM;
+-			goto out_put_prog;
+-		}
+-
+ 		tgt_prog = bpf_prog_get(tgt_prog_fd);
+ 		if (IS_ERR(tgt_prog)) {
+ 			err = PTR_ERR(tgt_prog);
+@@ -2779,7 +2773,11 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+ 			goto out_put_prog;
+ 		}
+ 
+-		bpf_tramp_id_init(id, tgt_prog, NULL, btf_id);
++		id = bpf_tramp_id_single(tgt_prog, NULL, btf_id);
++		if (!id) {
++			err = -ENOMEM;
++			goto out_put_prog;
++		}
+ 	}
+ 
+ 	link = kzalloc(sizeof(*link), GFP_USER);
+@@ -2829,14 +2827,12 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
  			goto out_unlock;
+ 		}
  
--		id->addr = (void *) tgt_info.tgt_addr;
-+		id->addr[0] = (void *) tgt_info.tgt_addr;
+-		id = bpf_tramp_id_alloc(1);
++		btf_id = prog->aux->attach_btf_id;
++		id = bpf_tramp_id_single(NULL, prog->aux->attach_btf, btf_id);
+ 		if (!id) {
+ 			err = -ENOMEM;
+ 			goto out_unlock;
+ 		}
+-
+-		btf_id = prog->aux->attach_btf_id;
+-		bpf_tramp_id_init(id, NULL, prog->aux->attach_btf, btf_id);
+ 	}
  
- 		attach = bpf_tramp_attach(id, tgt_prog, prog);
- 		if (IS_ERR(attach)) {
+ 	if (!prog->aux->dst_attach ||
 diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index d65f463c532d..d9675d619963 100644
+index d9675d619963..4a4ef9396b7e 100644
 --- a/kernel/bpf/trampoline.c
 +++ b/kernel/bpf/trampoline.c
-@@ -92,7 +92,10 @@ struct bpf_tramp_id *bpf_tramp_id_alloc(u32 max)
- 	id = kzalloc(sizeof(*id), GFP_KERNEL);
- 	if (id) {
- 		id->id = kzalloc(sizeof(u32) * max, GFP_KERNEL);
--		if (!id->id) {
-+		id->addr = kzalloc(sizeof(*id->addr) * max, GFP_KERNEL);
-+		if (!id->id || !id->addr) {
-+			kfree(id->id);
-+			kfree(id->addr);
- 			kfree(id);
- 			return NULL;
- 		}
-@@ -117,6 +120,7 @@ void bpf_tramp_id_free(struct bpf_tramp_id *id)
- {
- 	if (!id)
- 		return;
-+	kfree(id->addr);
- 	kfree(id->id);
- 	kfree(id);
+@@ -104,16 +104,21 @@ struct bpf_tramp_id *bpf_tramp_id_alloc(u32 max)
+ 	return id;
  }
-@@ -159,7 +163,7 @@ static int bpf_trampoline_module_get(struct bpf_trampoline *tr)
- 	int err = 0;
  
- 	preempt_disable();
--	mod = __module_text_address((unsigned long) tr->id->addr);
-+	mod = __module_text_address((unsigned long) tr->id->addr[0]);
- 	if (mod && !try_module_get(mod))
- 		err = -ENOENT;
- 	preempt_enable();
-@@ -187,7 +191,7 @@ static int is_ftrace_location(void *ip)
- 
- static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
+-void bpf_tramp_id_init(struct bpf_tramp_id *id,
+-		       const struct bpf_prog *tgt_prog,
+-		       struct btf *btf, u32 btf_id)
++struct bpf_tramp_id *bpf_tramp_id_single(const struct bpf_prog *tgt_prog,
++					 struct btf *btf, u32 btf_id)
  {
--	void *ip = tr->id->addr;
-+	void *ip = tr->id->addr[0];
- 	int ret;
++	struct bpf_tramp_id *id;
++
++	id = bpf_tramp_id_alloc(1);
++	if (!id)
++		return NULL;
+ 	if (tgt_prog)
+ 		id->obj_id = tgt_prog->aux->id;
+ 	else
+ 		id->obj_id = btf_obj_id(btf);
+ 	id->id[0] = btf_id;
+ 	id->cnt = 1;
++	return id;
+ }
  
- 	if (tr->func.ftrace_managed)
-@@ -202,7 +206,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
- 
- static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_addr)
- {
--	void *ip = tr->id->addr;
-+	void *ip = tr->id->addr[0];
- 	int ret;
- 
- 	if (tr->func.ftrace_managed)
-@@ -215,7 +219,7 @@ static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_ad
- /* first time registering */
- static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
- {
--	void *ip = tr->id->addr;
-+	void *ip = tr->id->addr[0];
- 	int ret;
- 
- 	ret = is_ftrace_location(ip);
-@@ -434,7 +438,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 
- 	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
- 					  &tr->func.model, flags, tprogs,
--					  tr->id->addr);
-+					  tr->id->addr[0]);
- 	if (err < 0)
- 		goto out;
- 
-@@ -503,7 +507,7 @@ int bpf_trampoline_link_prog(struct bpf_tramp_node *node, struct bpf_trampoline
- 			goto out;
- 		}
- 		tr->extension_prog = prog;
--		err = bpf_arch_text_poke(tr->id->addr, BPF_MOD_JUMP, NULL,
-+		err = bpf_arch_text_poke(tr->id->addr[0], BPF_MOD_JUMP, NULL,
- 					 prog->bpf_func);
- 		goto out;
- 	}
-@@ -539,7 +543,7 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_node *node, struct bpf_trampolin
- 	mutex_lock(&tr->mutex);
- 	if (kind == BPF_TRAMP_REPLACE) {
- 		WARN_ON_ONCE(!tr->extension_prog);
--		err = bpf_arch_text_poke(tr->id->addr, BPF_MOD_JUMP,
-+		err = bpf_arch_text_poke(tr->id->addr[0], BPF_MOD_JUMP,
- 					 tr->extension_prog->bpf_func, NULL);
- 		tr->extension_prog = NULL;
- 		goto out;
+ void bpf_tramp_id_free(struct bpf_tramp_id *id)
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1903d5d256b6..56c518efa2d2 100644
+index 56c518efa2d2..9914487f2281 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -14000,7 +14000,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+@@ -13995,11 +13995,10 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	id = bpf_tramp_id_alloc(1);
++	id = bpf_tramp_id_single(NULL, prog->aux->attach_btf, btf_id);
+ 	if (!id)
  		return -ENOMEM;
  
- 	bpf_tramp_id_init(id, tgt_prog, prog->aux->attach_btf, btf_id);
--	id->addr = (void *) tgt_info.tgt_addr;
-+	id->addr[0] = (void *) tgt_info.tgt_addr;
+-	bpf_tramp_id_init(id, tgt_prog, prog->aux->attach_btf, btf_id);
+ 	id->addr[0] = (void *) tgt_info.tgt_addr;
  
  	attach = bpf_tramp_attach(id, tgt_prog, prog);
- 	if (IS_ERR(attach)) {
 -- 
 2.31.1
 
