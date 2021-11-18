@@ -2,32 +2,32 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B4C9C433FE
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A0C4C43217
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8461260F26
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:36:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80C3061AFB
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:36:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344109AbhKRLjt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:39:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S1344118AbhKRLjw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 06:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344217AbhKRLjB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Nov 2021 06:39:01 -0500
+        with ESMTP id S1344218AbhKRLjC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Nov 2021 06:39:02 -0500
 Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C74AC061210;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21A71C06121D;
         Thu, 18 Nov 2021 03:35:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
         Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-        Content-Transfer-Encoding; bh=3i4Rp/q45W+TZIYLx/C3ZWYjrNyJFZoaEf
-        azRHAUX/o=; b=R7L6Vq068WV7uimSlqXh2xRnhfbz3P3uUPJ43k2X8EZXRHEj4b
-        Yq1efcLblCThAwNAEmRWo0kzIxW3/bi3pA763T/YIIQGCguwUso/Ck8LY1LG2dX2
-        1d+8Z8aLkb4Fw2StcKU7ylLXYT/3w9uzvCGFtcGkONca+cg8WoWW+DGAA=
+        Content-Transfer-Encoding; bh=rbQZNr9Zk60ZOWn30j1Z+KGvOfkoF30XH0
+        8/6qTXmn4=; b=WXCMztW/shRWATfJm+Zv8VZwO9+FrksBIB0V7Qb9tb3lCZK8Mz
+        tlHcUjZPscdZK1Ii3XyTr7XcIIesj2GnhBnje02tHjtCZhXXaA0li4ubuQx6MuEM
+        djfC7YHsc4HCx2vtck9gSpaiCDEClW2KTO/oh2zp+NT8fo46OdC171KEw=
 Received: from xhacker (unknown [101.86.18.22])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAHD99XOpZhwZ1cAQ--.27562S7;
-        Thu, 18 Nov 2021 19:34:56 +0800 (CST)
-Date:   Thu, 18 Nov 2021 19:25:14 +0800
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAHD99XOpZhwZ1cAQ--.27562S6;
+        Thu, 18 Nov 2021 19:34:55 +0800 (CST)
+Date:   Thu, 18 Nov 2021 19:22:00 +0800
 From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -48,18 +48,18 @@ Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: [PATCH 07/12] riscv: lib: uaccess: fold fixups into body
-Message-ID: <20211118192514.13d3e873@xhacker>
+Subject: [PATCH 01/12] riscv: remove unused __cmpxchg_user() macro
+Message-ID: <20211118192200.799d9249@xhacker>
 In-Reply-To: <20211118192130.48b8f04c@xhacker>
 References: <20211118192130.48b8f04c@xhacker>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LkAmygAHD99XOpZhwZ1cAQ--.27562S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFy3ur13GF4DZFW3AFy7ZFb_yoW8Ww13pw
-        1xur9rKw45Wrn7uFZ2yry5XF1rWa1fXF1UArW7Kw15ZrnFvr1vyFnYq39rWryDJFWrAF4x
-        WF9ayr4rGryYk37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBCb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+X-CM-TRANSID: LkAmygAHD99XOpZhwZ1cAQ--.27562S6
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryfXrWUJF1xKFykKr1fXrb_yoW5Jw4xpr
+        nIyrn7trW7Aa17C3W2ya18KF40ga1kGr95t34agFn7XF1DurWkXrs5Ar95ZrWDJa4UZ3W7
+        C3y5tr1fZr4kXwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBCb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
         0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
         8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28C
         jxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI
@@ -71,7 +71,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7KFy3ur13GF4DZFW3AFy7ZFb_yoW8Ww13pw
         GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI4
         8JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWx
         Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0x
-        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU775rUUUUU
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU7ApnDUUUU
 X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -79,64 +79,99 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Jisheng Zhang <jszhang@kernel.org>
 
-uaccess functions such __asm_copy_to_user(),  __arch_copy_from_user()
-and __clear_user() place their exception fixups in the `.fixup` section
-without any clear association with themselves. If we backtrace the
-fixup code, it will be symbolized as an offset from the nearest prior
-symbol.
-
-Similar as arm64 does, we must move fixups into the body of the
-functions themselves, after the usual fast-path returns.
-
-Inline assembly will be dealt with in subsequent patches.
+This macro is defined but not used, remove it.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/riscv/lib/uaccess.S | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ arch/riscv/include/asm/uaccess.h | 75 --------------------------------
+ 1 file changed, 75 deletions(-)
 
-diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
-index 55f80f84e23f..047f517ac780 100644
---- a/arch/riscv/lib/uaccess.S
-+++ b/arch/riscv/lib/uaccess.S
-@@ -173,6 +173,13 @@ ENTRY(__asm_copy_from_user)
- 	csrc CSR_STATUS, t6
- 	li	a0, 0
- 	ret
-+
-+	/* Exception fixup code */
-+10:
-+	/* Disable access to user memory */
-+	csrs CSR_STATUS, t6
-+	mv a0, t5
-+	ret
- ENDPROC(__asm_copy_to_user)
- ENDPROC(__asm_copy_from_user)
- EXPORT_SYMBOL(__asm_copy_to_user)
-@@ -218,19 +225,12 @@ ENTRY(__clear_user)
- 	addi a0, a0, 1
- 	bltu a0, a3, 5b
- 	j 3b
--ENDPROC(__clear_user)
--EXPORT_SYMBOL(__clear_user)
+diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+index f314ff44c48d..9f9219545e59 100644
+--- a/arch/riscv/include/asm/uaccess.h
++++ b/arch/riscv/include/asm/uaccess.h
+@@ -388,81 +388,6 @@ unsigned long __must_check clear_user(void __user *to, unsigned long n)
+ 		__clear_user(to, n) : n;
+ }
  
--	.section .fixup,"ax"
--	.balign 4
--	/* Fixup code for __copy_user(10) and __clear_user(11) */
--10:
--	/* Disable access to user memory */
--	csrs CSR_STATUS, t6
--	mv a0, t5
--	ret
-+	/* Exception fixup code */
- 11:
-+	/* Disable access to user memory */
- 	csrs CSR_STATUS, t6
- 	mv a0, a1
- 	ret
--	.previous
-+ENDPROC(__clear_user)
-+EXPORT_SYMBOL(__clear_user)
+-/*
+- * Atomic compare-and-exchange, but with a fixup for userspace faults.  Faults
+- * will set "err" to -EFAULT, while successful accesses return the previous
+- * value.
+- */
+-#define __cmpxchg_user(ptr, old, new, err, size, lrb, scb)	\
+-({								\
+-	__typeof__(ptr) __ptr = (ptr);				\
+-	__typeof__(*(ptr)) __old = (old);			\
+-	__typeof__(*(ptr)) __new = (new);			\
+-	__typeof__(*(ptr)) __ret;				\
+-	__typeof__(err) __err = 0;				\
+-	register unsigned int __rc;				\
+-	__enable_user_access();					\
+-	switch (size) {						\
+-	case 4:							\
+-		__asm__ __volatile__ (				\
+-		"0:\n"						\
+-		"	lr.w" #scb " %[ret], %[ptr]\n"		\
+-		"	bne          %[ret], %z[old], 1f\n"	\
+-		"	sc.w" #lrb " %[rc], %z[new], %[ptr]\n"	\
+-		"	bnez         %[rc], 0b\n"		\
+-		"1:\n"						\
+-		".section .fixup,\"ax\"\n"			\
+-		".balign 4\n"					\
+-		"2:\n"						\
+-		"	li %[err], %[efault]\n"			\
+-		"	jump 1b, %[rc]\n"			\
+-		".previous\n"					\
+-		".section __ex_table,\"a\"\n"			\
+-		".balign " RISCV_SZPTR "\n"			\
+-		"	" RISCV_PTR " 1b, 2b\n"			\
+-		".previous\n"					\
+-			: [ret] "=&r" (__ret),			\
+-			  [rc]  "=&r" (__rc),			\
+-			  [ptr] "+A" (*__ptr),			\
+-			  [err] "=&r" (__err)			\
+-			: [old] "rJ" (__old),			\
+-			  [new] "rJ" (__new),			\
+-			  [efault] "i" (-EFAULT));		\
+-		break;						\
+-	case 8:							\
+-		__asm__ __volatile__ (				\
+-		"0:\n"						\
+-		"	lr.d" #scb " %[ret], %[ptr]\n"		\
+-		"	bne          %[ret], %z[old], 1f\n"	\
+-		"	sc.d" #lrb " %[rc], %z[new], %[ptr]\n"	\
+-		"	bnez         %[rc], 0b\n"		\
+-		"1:\n"						\
+-		".section .fixup,\"ax\"\n"			\
+-		".balign 4\n"					\
+-		"2:\n"						\
+-		"	li %[err], %[efault]\n"			\
+-		"	jump 1b, %[rc]\n"			\
+-		".previous\n"					\
+-		".section __ex_table,\"a\"\n"			\
+-		".balign " RISCV_SZPTR "\n"			\
+-		"	" RISCV_PTR " 1b, 2b\n"			\
+-		".previous\n"					\
+-			: [ret] "=&r" (__ret),			\
+-			  [rc]  "=&r" (__rc),			\
+-			  [ptr] "+A" (*__ptr),			\
+-			  [err] "=&r" (__err)			\
+-			: [old] "rJ" (__old),			\
+-			  [new] "rJ" (__new),			\
+-			  [efault] "i" (-EFAULT));		\
+-		break;						\
+-	default:						\
+-		BUILD_BUG();					\
+-	}							\
+-	__disable_user_access();				\
+-	(err) = __err;						\
+-	__ret;							\
+-})
+-
+ #define HAVE_GET_KERNEL_NOFAULT
+ 
+ #define __get_kernel_nofault(dst, src, type, err_label)			\
 -- 
 2.33.0
 
