@@ -2,32 +2,32 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DBCBC433EF
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D261C433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7C6BB61AFB
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7189561AFB
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343955AbhKRLkU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        id S1344265AbhKRLkV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 06:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344047AbhKRLjl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 18 Nov 2021 06:39:41 -0500
+        with ESMTP id S1343953AbhKRLj2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Nov 2021 06:39:28 -0500
 Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62ACAC06122D;
-        Thu, 18 Nov 2021 03:35:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EF17C06122C;
+        Thu, 18 Nov 2021 03:35:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
         Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-        Content-Transfer-Encoding; bh=EW6iraQ65ROOPbIyDVgjglECaMsybXCJKB
-        ++hMb997E=; b=uirKa4+y7X4RNCZuik44UaSRBW26Hx9TnNkr/8yBG89LZTSoiV
-        eTFunT2kJJmEQ3BSII2FaH73CMY5GK7gMFT1gs/b0hS3COf09Sora5+VkxI3+ZiR
-        ozsFc6rRsAGd2MuVidkXdKvt559NU+40mFUxVG+/njtNky7E4iqqur5ec=
+        Content-Transfer-Encoding; bh=wixk569uf0n1TYoIXBryiuwd/MDJ0a4Am9
+        56c85iGKU=; b=MvS6qGPToVllxhrgTgj0zZspYFulGyu+P+eXk5vJmOpZd/puzj
+        HP+OVBd+r/FxfYHLK7STHyAUJAUnMVJM+wRpl/Lhit9yh2YR4WMXpfsgmOXx31CF
+        HmC6nUgHXY6t7q+al6Pq7DfOgrmFx4YhxGoZ1yX1bSxqFveEpZRB600aQ=
 Received: from xhacker (unknown [101.86.18.22])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAHD99XOpZhwZ1cAQ--.27562S2;
-        Thu, 18 Nov 2021 19:34:47 +0800 (CST)
-Date:   Thu, 18 Nov 2021 19:22:51 +0800
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygBnLsxMOpZhi51cAQ--.6032S6;
+        Thu, 18 Nov 2021 19:34:43 +0800 (CST)
+Date:   Thu, 18 Nov 2021 19:26:51 +0800
 From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -48,30 +48,30 @@ Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: [PATCH 03/12] riscv: switch to relative exception tables
-Message-ID: <20211118192251.749c04f7@xhacker>
+Subject: [PATCH 11/12] riscv: extable: add a dedicated uaccess handler
+Message-ID: <20211118192651.605d0c80@xhacker>
 In-Reply-To: <20211118192130.48b8f04c@xhacker>
 References: <20211118192130.48b8f04c@xhacker>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LkAmygAHD99XOpZhwZ1cAQ--.27562S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AFyfJFy8WF4kAFWfZry3twb_yoW7tr15pF
-        4DC3s5KrZ5Crn7u3Wak3yqgF1rGanY9a45KryrWr1UA3y2vrW8tws5t347uF1UAa18Za4F
-        9rySgr1jkw4UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUklb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
-        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr
-        0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU80_M3UUUU
-        U==
+X-CM-TRANSID: LkAmygBnLsxMOpZhi51cAQ--.6032S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3AFy3Zr1xZw4xCr13uF18uFg_yoW3ZF15pa
+        1qkr93KrW5KF1xuF97ta47ur1jgw48K3s0y3s7Kr1qv3W2k3W8CF1093s7ArykAayxAa4x
+        J3ySkr1rWr4fZrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBCb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUAVCq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28C
+        jxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI
+        8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E
+        87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42
+        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
+        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI4
+        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWx
+        Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0x
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU29mRUUUUU
 X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -79,186 +79,294 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Jisheng Zhang <jszhang@kernel.org>
 
-Similar as other architectures such as arm64, x86 and so on, use
-offsets relative to the exception table entry values rather than
-absolute addresses for both the exception locationand the fixup.
-
-However, RISCV label difference will actually produce two relocations,
-a pair of R_RISCV_ADD32 and R_RISCV_SUB32. Take below simple code for
-example:
-
-$ cat test.S
-.section .text
-1:
-        nop
-.section __ex_table,"a"
-        .balign 4
-        .long (1b - .)
-.previous
-
-$ riscv64-linux-gnu-gcc -c test.S
-$ riscv64-linux-gnu-readelf -r test.o
-Relocation section '.rela__ex_table' at offset 0x100 contains 2 entries:
-  Offset          Info           Type           Sym. Value    Sym. Name + Addend
-000000000000  000600000023 R_RISCV_ADD32     0000000000000000 .L1^B1 + 0
-000000000000  000500000027 R_RISCV_SUB32     0000000000000000 .L0  + 0
-
-The modpost will complain the R_RISCV_SUB32 relocation, so we need to
-patch modpost.c to skip this relocation for .rela__ex_table section.
-
-After this patch, the __ex_table section size of defconfig vmlinux is
-reduced from 7072 Bytes to 3536 Bytes.
+Inspired by commit 2e77a62cb3a6("arm64: extable: add a dedicated
+uaccess handler"), do similar to riscv to add a dedicated uaccess
+exception handler to update registers in exception context and
+subsequently return back into the function which faulted, so we remove
+the need for fixups specialized to each faulting instruction.
 
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- arch/riscv/include/asm/Kbuild    |  1 -
- arch/riscv/include/asm/extable.h | 25 +++++++++++++++++++++++++
- arch/riscv/include/asm/uaccess.h |  4 ++--
- arch/riscv/lib/uaccess.S         |  4 ++--
- arch/riscv/mm/extable.c          |  2 +-
- scripts/mod/modpost.c            | 15 +++++++++++++++
- scripts/sorttable.c              |  2 +-
- 7 files changed, 46 insertions(+), 7 deletions(-)
- create mode 100644 arch/riscv/include/asm/extable.h
+ arch/riscv/include/asm/asm-extable.h | 23 +++++++++
+ arch/riscv/include/asm/futex.h       | 23 +++------
+ arch/riscv/include/asm/uaccess.h     | 74 +++++++++-------------------
+ arch/riscv/mm/extable.c              | 27 ++++++++++
+ 4 files changed, 78 insertions(+), 69 deletions(-)
 
-diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 445ccc97305a..57b86fd9916c 100644
---- a/arch/riscv/include/asm/Kbuild
-+++ b/arch/riscv/include/asm/Kbuild
-@@ -1,6 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- generic-y += early_ioremap.h
--generic-y += extable.h
- generic-y += flat.h
- generic-y += kvm_para.h
- generic-y += user.h
-diff --git a/arch/riscv/include/asm/extable.h b/arch/riscv/include/asm/extable.h
-new file mode 100644
-index 000000000000..84760392fc69
---- /dev/null
-+++ b/arch/riscv/include/asm/extable.h
-@@ -0,0 +1,25 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_RISCV_EXTABLE_H
-+#define _ASM_RISCV_EXTABLE_H
+diff --git a/arch/riscv/include/asm/asm-extable.h b/arch/riscv/include/asm/asm-extable.h
+index 1b1f4ffd8d37..14be0673f5b5 100644
+--- a/arch/riscv/include/asm/asm-extable.h
++++ b/arch/riscv/include/asm/asm-extable.h
+@@ -5,6 +5,7 @@
+ #define EX_TYPE_NONE			0
+ #define EX_TYPE_FIXUP			1
+ #define EX_TYPE_BPF			2
++#define EX_TYPE_UACCESS_ERR_ZERO	3
+ 
+ #ifdef __ASSEMBLY__
+ 
+@@ -23,7 +24,9 @@
+ 
+ #else /* __ASSEMBLY__ */
+ 
++#include <linux/bits.h>
+ #include <linux/stringify.h>
++#include <asm/gpr-num.h>
+ 
+ #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
+ 	".pushsection	__ex_table, \"a\"\n"		\
+@@ -37,6 +40,26 @@
+ #define _ASM_EXTABLE(insn, fixup)	\
+ 	__ASM_EXTABLE_RAW(#insn, #fixup, __stringify(EX_TYPE_FIXUP), "0")
+ 
++#define EX_DATA_REG_ERR_SHIFT	0
++#define EX_DATA_REG_ERR		GENMASK(4, 0)
++#define EX_DATA_REG_ZERO_SHIFT	5
++#define EX_DATA_REG_ZERO	GENMASK(9, 5)
 +
-+/*
-+ * The exception table consists of pairs of relative offsets: the first
-+ * is the relative offset to an instruction that is allowed to fault,
-+ * and the second is the relative offset at which the program should
-+ * continue. No registers are modified, so it is entirely up to the
-+ * continuation code to figure out what to do.
-+ *
-+ * All the routines below use bits of fixup code that are out of line
-+ * with the main instruction path.  This means when everything is well,
-+ * we don't even have to jump over them.  Further, they do not intrude
-+ * on our cache or tlb entries.
-+ */
++#define EX_DATA_REG(reg, gpr)						\
++	"((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
 +
-+struct exception_table_entry {
-+	int insn, fixup;
-+};
++#define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)		\
++	__DEFINE_ASM_GPR_NUMS						\
++	__ASM_EXTABLE_RAW(#insn, #fixup, 				\
++			  __stringify(EX_TYPE_UACCESS_ERR_ZERO),	\
++			  "("						\
++			    EX_DATA_REG(ERR, err) " | "			\
++			    EX_DATA_REG(ZERO, zero)			\
++			  ")")
 +
-+#define ARCH_HAS_RELATIVE_EXTABLE
++#define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)			\
++	_ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)
 +
-+int fixup_exception(struct pt_regs *regs);
-+#endif
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* __ASM_ASM_EXTABLE_H */
+diff --git a/arch/riscv/include/asm/futex.h b/arch/riscv/include/asm/futex.h
+index 2e15e8e89502..fc8130f995c1 100644
+--- a/arch/riscv/include/asm/futex.h
++++ b/arch/riscv/include/asm/futex.h
+@@ -21,20 +21,14 @@
+ 
+ #define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)	\
+ {								\
+-	uintptr_t tmp;						\
+ 	__enable_user_access();					\
+ 	__asm__ __volatile__ (					\
+ 	"1:	" insn "				\n"	\
+ 	"2:						\n"	\
+-	"	.section .fixup,\"ax\"			\n"	\
+-	"	.balign 4				\n"	\
+-	"3:	li %[r],%[e]				\n"	\
+-	"	jump 2b,%[t]				\n"	\
+-	"	.previous				\n"	\
+-		_ASM_EXTABLE(1b, 3b)				\
++	_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %[r])			\
+ 	: [r] "+r" (ret), [ov] "=&r" (oldval),			\
+-	  [u] "+m" (*uaddr), [t] "=&r" (tmp)			\
+-	: [op] "Jr" (oparg), [e] "i" (-EFAULT)			\
++	  [u] "+m" (*uaddr)					\
++	: [op] "Jr" (oparg)					\
+ 	: "memory");						\
+ 	__disable_user_access();				\
+ }
+@@ -96,15 +90,10 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ 	"2:	sc.w.aqrl %[t],%z[nv],%[u]		\n"
+ 	"	bnez %[t],1b				\n"
+ 	"3:						\n"
+-	"	.section .fixup,\"ax\"			\n"
+-	"	.balign 4				\n"
+-	"4:	li %[r],%[e]				\n"
+-	"	jump 3b,%[t]				\n"
+-	"	.previous				\n"
+-		_ASM_EXTABLE(1b, 4b)			\
+-		_ASM_EXTABLE(2b, 4b)			\
++		_ASM_EXTABLE_UACCESS_ERR(1b, 3b, %[r])	\
++		_ASM_EXTABLE_UACCESS_ERR(2b, 3b, %[r])	\
+ 	: [r] "+r" (ret), [v] "=&r" (val), [u] "+m" (*uaddr), [t] "=&r" (tmp)
+-	: [ov] "Jr" (oldval), [nv] "Jr" (newval), [e] "i" (-EFAULT)
++	: [ov] "Jr" (oldval), [nv] "Jr" (newval)
+ 	: "memory");
+ 	__disable_user_access();
+ 
 diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
-index 714cd311d9f1..0f2c5b9d2e8f 100644
+index 40e6099af488..a4716c026386 100644
 --- a/arch/riscv/include/asm/uaccess.h
 +++ b/arch/riscv/include/asm/uaccess.h
-@@ -12,8 +12,8 @@
+@@ -81,22 +81,14 @@ static inline int __access_ok(unsigned long addr, unsigned long size)
  
- #define _ASM_EXTABLE(from, to)						\
- 	"	.pushsection	__ex_table, \"a\"\n"			\
--	"	.balign "	RISCV_SZPTR "	 \n"			\
--	"	" RISCV_PTR	"(" #from "), (" #to ")\n"		\
-+	"	.balign		4\n"					\
-+	"	.long		(" #from " - .), (" #to " - .)\n"	\
- 	"	.popsection\n"
+ #define __get_user_asm(insn, x, ptr, err)			\
+ do {								\
+-	uintptr_t __tmp;					\
+ 	__typeof__(x) __x;					\
+ 	__asm__ __volatile__ (					\
+ 		"1:\n"						\
+-		"	" insn " %1, %3\n"			\
++		"	" insn " %1, %2\n"			\
+ 		"2:\n"						\
+-		"	.section .fixup,\"ax\"\n"		\
+-		"	.balign 4\n"				\
+-		"3:\n"						\
+-		"	li %0, %4\n"				\
+-		"	li %1, 0\n"				\
+-		"	jump 2b, %2\n"				\
+-		"	.previous\n"				\
+-			_ASM_EXTABLE(1b, 3b)			\
+-		: "+r" (err), "=&r" (__x), "=r" (__tmp)		\
+-		: "m" (*(ptr)), "i" (-EFAULT));			\
++		_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %0, %1)	\
++		: "+r" (err), "=&r" (__x)			\
++		: "m" (*(ptr)));				\
+ 	(x) = __x;						\
+ } while (0)
  
- /*
-diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
-index 63bc691cff91..55f80f84e23f 100644
---- a/arch/riscv/lib/uaccess.S
-+++ b/arch/riscv/lib/uaccess.S
-@@ -7,8 +7,8 @@
- 100:
- 	\op \reg, \addr
- 	.section __ex_table,"a"
--	.balign RISCV_SZPTR
--	RISCV_PTR 100b, \lbl
-+	.balign 4
-+	.long (100b - .), (\lbl - .)
- 	.previous
- 	.endm
+@@ -108,27 +100,18 @@ do {								\
+ do {								\
+ 	u32 __user *__ptr = (u32 __user *)(ptr);		\
+ 	u32 __lo, __hi;						\
+-	uintptr_t __tmp;					\
+ 	__asm__ __volatile__ (					\
+ 		"1:\n"						\
+-		"	lw %1, %4\n"				\
++		"	lw %1, %3\n"				\
+ 		"2:\n"						\
+-		"	lw %2, %5\n"				\
++		"	lw %2, %4\n"				\
+ 		"3:\n"						\
+-		"	.section .fixup,\"ax\"\n"		\
+-		"	.balign 4\n"				\
+-		"4:\n"						\
+-		"	li %0, %6\n"				\
+-		"	li %1, 0\n"				\
+-		"	li %2, 0\n"				\
+-		"	jump 3b, %3\n"				\
+-		"	.previous\n"				\
+-			_ASM_EXTABLE(1b, 4b)			\
+-			_ASM_EXTABLE(2b, 4b)			\
+-		: "+r" (err), "=&r" (__lo), "=r" (__hi),	\
+-			"=r" (__tmp)				\
+-		: "m" (__ptr[__LSW]), "m" (__ptr[__MSW]),	\
+-			"i" (-EFAULT));				\
++		_ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 3b, %0, %1)	\
++		_ASM_EXTABLE_UACCESS_ERR_ZERO(2b, 3b, %0, %1)	\
++		: "+r" (err), "=&r" (__lo), "=r" (__hi)		\
++		: "m" (__ptr[__LSW]), "m" (__ptr[__MSW]))	\
++	if (err)						\
++		__hi = 0;					\
+ 	(x) = (__typeof__(x))((__typeof__((x)-(x)))(		\
+ 		(((u64)__hi << 32) | __lo)));			\
+ } while (0)
+@@ -216,21 +199,14 @@ do {								\
+ 
+ #define __put_user_asm(insn, x, ptr, err)			\
+ do {								\
+-	uintptr_t __tmp;					\
+ 	__typeof__(*(ptr)) __x = x;				\
+ 	__asm__ __volatile__ (					\
+ 		"1:\n"						\
+-		"	" insn " %z3, %2\n"			\
++		"	" insn " %z2, %1\n"			\
+ 		"2:\n"						\
+-		"	.section .fixup,\"ax\"\n"		\
+-		"	.balign 4\n"				\
+-		"3:\n"						\
+-		"	li %0, %4\n"				\
+-		"	jump 2b, %1\n"				\
+-		"	.previous\n"				\
+-			_ASM_EXTABLE(1b, 3b)			\
+-		: "+r" (err), "=r" (__tmp), "=m" (*(ptr))	\
+-		: "rJ" (__x), "i" (-EFAULT));			\
++		_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %0)		\
++		: "+r" (err), "=m" (*(ptr))			\
++		: "rJ" (__x));					\
+ } while (0)
+ 
+ #ifdef CONFIG_64BIT
+@@ -244,22 +220,16 @@ do {								\
+ 	uintptr_t __tmp;					\
+ 	__asm__ __volatile__ (					\
+ 		"1:\n"						\
+-		"	sw %z4, %2\n"				\
++		"	sw %z3, %1\n"				\
+ 		"2:\n"						\
+-		"	sw %z5, %3\n"				\
++		"	sw %z4, %2\n"				\
+ 		"3:\n"						\
+-		"	.section .fixup,\"ax\"\n"		\
+-		"	.balign 4\n"				\
+-		"4:\n"						\
+-		"	li %0, %6\n"				\
+-		"	jump 3b, %1\n"				\
+-		"	.previous\n"				\
+-			_ASM_EXTABLE(1b, 4b)			\
+-			_ASM_EXTABLE(2b, 4b)			\
+-		: "+r" (err), "=r" (__tmp),			\
++		_ASM_EXTABLE_UACCESS_ERR(1b, 3b, %0)		\
++		_ASM_EXTABLE_UACCESS_ERR(2b, 3b, %0)		\
++		: "+r" (err),					\
+ 			"=m" (__ptr[__LSW]),			\
+ 			"=m" (__ptr[__MSW])			\
+-		: "rJ" (__x), "rJ" (__x >> 32), "i" (-EFAULT));	\
++		: "rJ" (__x), "rJ" (__x >> 32));		\
+ } while (0)
+ #endif /* CONFIG_64BIT */
  
 diff --git a/arch/riscv/mm/extable.c b/arch/riscv/mm/extable.c
-index ddb7d3b99e89..d8d239c2c1bd 100644
+index 91e52c4bb33a..05978f78579f 100644
 --- a/arch/riscv/mm/extable.c
 +++ b/arch/riscv/mm/extable.c
-@@ -28,6 +28,6 @@ int fixup_exception(struct pt_regs *regs)
- 		return rv_bpf_fixup_exception(fixup, regs);
- #endif
+@@ -7,10 +7,12 @@
+  */
  
--	regs->epc = fixup->fixup;
-+	regs->epc = (unsigned long)&fixup->fixup + fixup->fixup;
- 	return 1;
- }
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index cb8ab7d91d30..6bfa33217914 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1830,6 +1830,14 @@ static int addend_mips_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
- 	return 0;
+ 
++#include <linux/bitfield.h>
+ #include <linux/extable.h>
+ #include <linux/module.h>
+ #include <linux/uaccess.h>
+ #include <asm/asm-extable.h>
++#include <asm/ptrace.h>
+ 
+ static inline unsigned long
+ get_ex_fixup(const struct exception_table_entry *ex)
+@@ -25,6 +27,29 @@ static bool ex_handler_fixup(const struct exception_table_entry *ex,
+ 	return true;
  }
  
-+#ifndef EM_RISCV
-+#define EM_RISCV		243
-+#endif
++static inline void regs_set_gpr(struct pt_regs *regs, unsigned int offset,
++				unsigned long val)
++{
++	if (unlikely(offset > MAX_REG_OFFSET))
++		return;
 +
-+#ifndef R_RISCV_SUB32
-+#define R_RISCV_SUB32		39
-+#endif
++	if (!offset)
++		*(unsigned long *)((unsigned long)regs + offset) = val;
++}
 +
- static void section_rela(const char *modname, struct elf_info *elf,
- 			 Elf_Shdr *sechdr)
++static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
++					struct pt_regs *regs)
++{
++	int reg_err = FIELD_GET(EX_DATA_REG_ERR, ex->data);
++	int reg_zero = FIELD_GET(EX_DATA_REG_ZERO, ex->data);
++
++	regs_set_gpr(regs, reg_err, -EFAULT);
++	regs_set_gpr(regs, reg_zero, 0);
++
++	regs->epc = get_ex_fixup(ex);
++	return true;
++}
++
+ bool fixup_exception(struct pt_regs *regs)
  {
-@@ -1866,6 +1874,13 @@ static void section_rela(const char *modname, struct elf_info *elf,
- 		r_sym = ELF_R_SYM(r.r_info);
- #endif
- 		r.r_addend = TO_NATIVE(rela->r_addend);
-+		switch (elf->hdr->e_machine) {
-+		case EM_RISCV:
-+			if (!strcmp("__ex_table", fromsec) &&
-+			    ELF_R_TYPE(r.r_info) == R_RISCV_SUB32)
-+				continue;
-+			break;
-+		}
- 		sym = elf->symtab_start + r_sym;
- 		/* Skip special sections */
- 		if (is_shndx_special(sym->st_shndx))
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index b7c2ad71f9cf..0c031e47a419 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -376,6 +376,7 @@ static int do_file(char const *const fname, void *addr)
- 	case EM_PARISC:
- 	case EM_PPC:
- 	case EM_PPC64:
-+	case EM_RISCV:
- 		custom_sort = sort_relative_table;
- 		break;
- 	case EM_ARCOMPACT:
-@@ -383,7 +384,6 @@ static int do_file(char const *const fname, void *addr)
- 	case EM_ARM:
- 	case EM_MICROBLAZE:
- 	case EM_MIPS:
--	case EM_RISCV:
- 	case EM_XTENSA:
- 		break;
- 	default:
+ 	const struct exception_table_entry *ex;
+@@ -38,6 +63,8 @@ bool fixup_exception(struct pt_regs *regs)
+ 		return ex_handler_fixup(ex, regs);
+ 	case EX_TYPE_BPF:
+ 		return ex_handler_bpf(ex, regs);
++	case EX_TYPE_UACCESS_ERR_ZERO:
++		return ex_handler_uaccess_err_zero(ex, regs);
+ 	}
+ 
+ 	BUG();
 -- 
 2.33.0
 
