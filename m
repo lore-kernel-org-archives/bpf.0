@@ -2,254 +2,192 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB82C433EF
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D89FC433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:36:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D728961B1B
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:30:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 468BD61AFB
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:36:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344176AbhKRLdD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:33:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:51933 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344064AbhKRLbB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 18 Nov 2021 06:31:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637234881;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9S+q8pWMDFvdDxjJwU6rYEztkMBIcs++/6oEf507CaQ=;
-        b=Vb+xMTJxHjbeB8Gj4fjs3IlfE2QT9MJGWX1nku13PmqMctV28yrMy/eKari0VVL3tR0YIf
-        rp7THdUhvB53Cx3PvWjH5VteGKE/XAoyBm2BKu6OD0OHuYVazIWATGWHBUC8/yxbPLGDT8
-        bnlcQZxqEq4tEHxnsvpejHxNpic9vGE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-2m0tDZulPEKL7zrIOKd4hg-1; Thu, 18 Nov 2021 06:26:22 -0500
-X-MC-Unique: 2m0tDZulPEKL7zrIOKd4hg-1
-Received: by mail-ed1-f69.google.com with SMTP id k7-20020aa7c387000000b003e7ed87fb31so5039035edq.3
-        for <bpf@vger.kernel.org>; Thu, 18 Nov 2021 03:26:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9S+q8pWMDFvdDxjJwU6rYEztkMBIcs++/6oEf507CaQ=;
-        b=YzAmBNxVrRdJFVu2Yhfa7fFSSZWxK1ZvNzgWq5JRIQlVcaIaDfE7i/x1hUGKU8mxtC
-         Ddw1yLtVSHF/whAtgS7w/0FnDdyvbDcU7IECnO0WniqQecTmSCnfPog6M5dqstVWdtLp
-         jqrhkyP4OEnL40q29LxNI2/cFJ0R+kVfxsuxenQB8DuvCYWbNI/euNSfV/y56sOEYCiy
-         Hsu6nzObomwgLa6X+cZw3ln1JpiF940VgDodPFP3ZeLNRaxzQi+gIa/NQcGzRpaCLBEp
-         wNGXqsElgwg9mLw6bpZFsliaKlk0unKFOT8n5TaQulakLt2i6xbzM2mFTfwAe6pBPj3z
-         xa8Q==
-X-Gm-Message-State: AOAM531oZ2mPlvzZ1LKTmjaHQCqv7MsSI1TjHRMP3IiALAQpiPM3DXDC
-        WexzGmkwwrAQSkrOiQUwK0qnryKO9lyp4dXnPl6I8XbmVdQokqZxZwH99rp1TIf2XOwPo+Ihnts
-        tHyasytwtaEpC
-X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr34545054ejc.385.1637234781217;
-        Thu, 18 Nov 2021 03:26:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxgmIk56biArqymQrAnbeMLfZmEiUWksIFVac/+dL5uyCKQcFWyXprnJ/2JdubpH4kbDMoLgw==
-X-Received: by 2002:a17:907:96aa:: with SMTP id hd42mr34545021ejc.385.1637234781062;
-        Thu, 18 Nov 2021 03:26:21 -0800 (PST)
-Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id o12sm1418821edw.84.2021.11.18.03.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Nov 2021 03:26:20 -0800 (PST)
-From:   Jiri Olsa <jolsa@redhat.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S1344079AbhKRLjp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 06:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344206AbhKRLiz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 18 Nov 2021 06:38:55 -0500
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14CA6C06120D;
+        Thu, 18 Nov 2021 03:35:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
+        Content-Transfer-Encoding; bh=u2o84AxwU8xhUErO2FYo4Qh1EzNzUfFohy
+        WOsjH5TgM=; b=FCw9PF9iQ0HmsuVEkUsMUR+WnYxOM6yTs3ro59rzdA/R+mHtGP
+        Lw4wRDt7BIyWivvAH8ysLNS3XpkAcFFZ6U2JuEGmWvAXnUMbndFKRTfgiDz6bvy3
+        4VUNrWxbPOyxIgM/BgISi5xuNZonEYDy4szSfYL3nKn97NPFrD6h4TWHU=
+Received: from xhacker (unknown [101.86.18.22])
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAHD99XOpZhwZ1cAQ--.27562S5;
+        Thu, 18 Nov 2021 19:34:53 +0800 (CST)
+Date:   Thu, 18 Nov 2021 19:25:45 +0800
+From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "=?UTF-8?B?Qmo=?= =?UTF-8?B?w7ZybiBUw7ZwZWw=?=" <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: [PATCH bpf-next 14/29] bpf: Add support to store multiple ids in bpf_tramp_id object
-Date:   Thu, 18 Nov 2021 12:24:40 +0100
-Message-Id: <20211118112455.475349-15-jolsa@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211118112455.475349-1-jolsa@kernel.org>
-References: <20211118112455.475349-1-jolsa@kernel.org>
+        KP Singh <kpsingh@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH 08/12] riscv: extable: consolidate definitions
+Message-ID: <20211118192545.349f59b7@xhacker>
+In-Reply-To: <20211118192130.48b8f04c@xhacker>
+References: <20211118192130.48b8f04c@xhacker>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LkAmygAHD99XOpZhwZ1cAQ--.27562S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxury3XrWrCw1rWFy5tFykuFg_yoW5ZF1kpF
+        4qkF95KrZ5Cr1xCw1ayF9F9r4UKan8Ww1ayry7uFyqvw42ya10yrn0gr9rtrykAa1kZFyx
+        Was29r45Wr4UZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBmb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
+        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcV
+        CY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv
+        6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
+        02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+        4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82
+        IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC2
+        0s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMI
+        IF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU7BMKDUUUU
+X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding support to store multiple ids in bpf_tramp_id object,
-to have id for trampolines with multiple functions assigned.
+From: Jisheng Zhang <jszhang@kernel.org>
 
-Extra array of u32 values is allocated within bpf_tramp_id
-object allocation.
+This is a riscv port of commit 819771cc2892 ("arm64: extable:
+consolidate definitions").
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+In subsequent patches we'll alter the structure and usage of struct
+exception_table_entry.
+
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- include/linux/bpf.h     |  6 ++++--
- kernel/bpf/syscall.c    |  6 +++---
- kernel/bpf/trampoline.c | 39 +++++++++++++++++++++++++++++++--------
- kernel/bpf/verifier.c   |  2 +-
- 4 files changed, 39 insertions(+), 14 deletions(-)
+ arch/riscv/include/asm/asm-extable.h | 33 ++++++++++++++++++++++++++++
+ arch/riscv/include/asm/futex.h       |  1 +
+ arch/riscv/include/asm/uaccess.h     |  7 +-----
+ arch/riscv/lib/uaccess.S             |  6 ++---
+ 4 files changed, 37 insertions(+), 10 deletions(-)
+ create mode 100644 arch/riscv/include/asm/asm-extable.h
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2dbc00904a84..47e25d8be600 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -672,8 +672,10 @@ struct bpf_tramp_image {
- };
- 
- struct bpf_tramp_id {
-+	u32 max;
-+	u32 cnt;
- 	u32 obj_id;
--	u32 btf_id;
-+	u32 *id;
- 	void *addr;
- };
- 
-@@ -749,7 +751,7 @@ static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
- 	return bpf_func(ctx, insnsi);
- }
- #ifdef CONFIG_BPF_JIT
--struct bpf_tramp_id *bpf_tramp_id_alloc(void);
-+struct bpf_tramp_id *bpf_tramp_id_alloc(u32 cnt);
- void bpf_tramp_id_free(struct bpf_tramp_id *id);
- bool bpf_tramp_id_is_empty(struct bpf_tramp_id *id);
- int bpf_tramp_id_is_equal(struct bpf_tramp_id *a, struct bpf_tramp_id *b);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a65c1862ab68..216fcce07326 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2704,7 +2704,7 @@ static int bpf_tracing_link_fill_link_info(const struct bpf_link *link,
- 
- 	info->tracing.attach_type = tr_link->attach_type;
- 	info->tracing.target_obj_id = attach->id->obj_id;
--	info->tracing.target_btf_id = attach->id->btf_id;
-+	info->tracing.target_btf_id = attach->id->id[0];
- 
- 	return 0;
- }
-@@ -2766,7 +2766,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 			goto out_put_prog;
- 		}
- 
--		id = bpf_tramp_id_alloc();
-+		id = bpf_tramp_id_alloc(1);
- 		if (!id) {
- 			err = -ENOMEM;
- 			goto out_put_prog;
-@@ -2829,7 +2829,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 			goto out_unlock;
- 		}
- 
--		id = bpf_tramp_id_alloc();
-+		id = bpf_tramp_id_alloc(1);
- 		if (!id) {
- 			err = -ENOMEM;
- 			goto out_unlock;
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 16fc4c14319b..d65f463c532d 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -60,27 +60,45 @@ void bpf_image_ksym_del(struct bpf_ksym *ksym)
- 			   PAGE_SIZE, true, ksym->name);
- }
- 
-+static bool bpf_tramp_id_is_multi(struct bpf_tramp_id *id)
-+{
-+	return id->cnt > 1;
-+}
+diff --git a/arch/riscv/include/asm/asm-extable.h b/arch/riscv/include/asm/asm-extable.h
+new file mode 100644
+index 000000000000..b790c02dbdda
+--- /dev/null
++++ b/arch/riscv/include/asm/asm-extable.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASM_ASM_EXTABLE_H
++#define __ASM_ASM_EXTABLE_H
 +
- static u64 bpf_tramp_id_key(struct bpf_tramp_id *id)
- {
--	return ((u64) id->obj_id << 32) | id->btf_id;
-+	if (bpf_tramp_id_is_multi(id))
-+		return (u64) &id;
-+	else
-+		return ((u64) id->obj_id << 32) | id->id[0];
- }
++#ifdef __ASSEMBLY__
++
++#define __ASM_EXTABLE_RAW(insn, fixup)		\
++	.pushsection	__ex_table, "a";	\
++	.balign		4;			\
++	.long		((insn) - .);		\
++	.long		((fixup) - .);		\
++	.popsection;
++
++	.macro		_asm_extable, insn, fixup
++	__ASM_EXTABLE_RAW(\insn, \fixup)
++	.endm
++
++#else /* __ASSEMBLY__ */
++
++#include <linux/stringify.h>
++
++#define __ASM_EXTABLE_RAW(insn, fixup)			\
++	".pushsection	__ex_table, \"a\"\n"		\
++	".balign	4\n"				\
++	".long		((" insn ") - .)\n"		\
++	".long		((" fixup ") - .)\n"		\
++	".popsection\n"
++
++#define _ASM_EXTABLE(insn, fixup) __ASM_EXTABLE_RAW(#insn, #fixup)
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* __ASM_ASM_EXTABLE_H */
+diff --git a/arch/riscv/include/asm/futex.h b/arch/riscv/include/asm/futex.h
+index 3191574e135c..2e15e8e89502 100644
+--- a/arch/riscv/include/asm/futex.h
++++ b/arch/riscv/include/asm/futex.h
+@@ -11,6 +11,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/errno.h>
+ #include <asm/asm.h>
++#include <asm/asm-extable.h>
  
- bool bpf_tramp_id_is_empty(struct bpf_tramp_id *id)
- {
--	return !id || (!id->obj_id && !id->btf_id);
-+	return !id || id->cnt == 0;
- }
+ /* We don't even really need the extable code, but for now keep it simple */
+ #ifndef CONFIG_MMU
+diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+index 0f2c5b9d2e8f..40e6099af488 100644
+--- a/arch/riscv/include/asm/uaccess.h
++++ b/arch/riscv/include/asm/uaccess.h
+@@ -8,14 +8,9 @@
+ #ifndef _ASM_RISCV_UACCESS_H
+ #define _ASM_RISCV_UACCESS_H
  
- int bpf_tramp_id_is_equal(struct bpf_tramp_id *a,
- 			  struct bpf_tramp_id *b)
- {
--	return !memcmp(a, b, sizeof(*a));
-+	return a->obj_id == b->obj_id && a->cnt == b->cnt &&
-+	       !memcmp(a->id, b->id, a->cnt * sizeof(*a->id));
- }
++#include <asm/asm-extable.h>
+ #include <asm/pgtable.h>		/* for TASK_SIZE */
  
--struct bpf_tramp_id *bpf_tramp_id_alloc(void)
-+struct bpf_tramp_id *bpf_tramp_id_alloc(u32 max)
- {
- 	struct bpf_tramp_id *id;
+-#define _ASM_EXTABLE(from, to)						\
+-	"	.pushsection	__ex_table, \"a\"\n"			\
+-	"	.balign		4\n"					\
+-	"	.long		(" #from " - .), (" #to " - .)\n"	\
+-	"	.popsection\n"
+-
+ /*
+  * User space memory access functions
+  */
+diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
+index 047f517ac780..8c475f4da308 100644
+--- a/arch/riscv/lib/uaccess.S
++++ b/arch/riscv/lib/uaccess.S
+@@ -1,15 +1,13 @@
+ #include <linux/linkage.h>
+ #include <asm-generic/export.h>
+ #include <asm/asm.h>
++#include <asm/asm-extable.h>
+ #include <asm/csr.h>
  
--	return kzalloc(sizeof(*id), GFP_KERNEL);
-+	id = kzalloc(sizeof(*id), GFP_KERNEL);
-+	if (id) {
-+		id->id = kzalloc(sizeof(u32) * max, GFP_KERNEL);
-+		if (!id->id) {
-+			kfree(id);
-+			return NULL;
-+		}
-+		id->max = max;
-+	}
-+	return id;
- }
+ 	.macro fixup op reg addr lbl
+ 100:
+ 	\op \reg, \addr
+-	.section __ex_table,"a"
+-	.balign 4
+-	.long (100b - .), (\lbl - .)
+-	.previous
++	_asm_extable	100b, \lbl
+ 	.endm
  
- void bpf_tramp_id_init(struct bpf_tramp_id *id,
-@@ -91,11 +109,15 @@ void bpf_tramp_id_init(struct bpf_tramp_id *id,
- 		id->obj_id = tgt_prog->aux->id;
- 	else
- 		id->obj_id = btf_obj_id(btf);
--	id->btf_id = btf_id;
-+	id->id[0] = btf_id;
-+	id->cnt = 1;
- }
- 
- void bpf_tramp_id_free(struct bpf_tramp_id *id)
- {
-+	if (!id)
-+		return;
-+	kfree(id->id);
- 	kfree(id);
- }
- 
-@@ -362,7 +384,8 @@ bpf_tramp_image_alloc(struct bpf_tramp_id *id, u32 idx)
- 	ksym = &im->ksym;
- 	INIT_LIST_HEAD_RCU(&ksym->lnode);
- 	key = bpf_tramp_id_key(id);
--	snprintf(ksym->name, KSYM_NAME_LEN, "bpf_trampoline_%llu_%u", key, idx);
-+	snprintf(ksym->name, KSYM_NAME_LEN, "bpf_trampoline_%llu_%u%s", key, idx,
-+		 bpf_tramp_id_is_multi(id) ? "_multi" : "");
- 	bpf_image_ksym_add(image, ksym);
- 	return im;
- 
-@@ -597,7 +620,7 @@ struct bpf_tramp_attach *bpf_tramp_attach(struct bpf_tramp_id *id,
- 	if (!node)
- 		goto out;
- 
--	err = bpf_check_attach_model(prog, tgt_prog, id->btf_id, &tr->func.model);
-+	err = bpf_check_attach_model(prog, tgt_prog, id->id[0], &tr->func.model);
- 	if (err)
- 		goto out;
- 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e05f39fd2708..1903d5d256b6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13995,7 +13995,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		return -EINVAL;
- 	}
- 
--	id = bpf_tramp_id_alloc();
-+	id = bpf_tramp_id_alloc(1);
- 	if (!id)
- 		return -ENOMEM;
- 
+ ENTRY(__asm_copy_to_user)
 -- 
-2.31.1
+2.33.0
+
 
