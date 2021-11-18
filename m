@@ -2,32 +2,32 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CAEC433EF
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E94CBC433EF
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5132D61AFB
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8E1560F26
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 11:37:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344238AbhKRLkH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 18 Nov 2021 06:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S1344229AbhKRLkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 18 Nov 2021 06:40:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344278AbhKRLj0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1344276AbhKRLj0 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 18 Nov 2021 06:39:26 -0500
 Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB3B8C06122A;
-        Thu, 18 Nov 2021 03:35:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 824D9C061228;
+        Thu, 18 Nov 2021 03:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
         Message-ID:In-Reply-To:References:MIME-Version:Content-Type:
-        Content-Transfer-Encoding; bh=acGBRsC1mPlgEjCeZ9BWTLelHsVwB7oeau
-        lWnupdhpA=; b=Q6x5hfPtFeIatClsRtXka/8NQGzp6ceYP+zBivNNL4CdqdCPg6
-        kP0HtUtJyvA+yMOZy+I86owbGSO74Y8O0er7/4NDIRHubpf35gFT2J0ZUEtbF5Ye
-        wJbqcMSLLigub9dJn4/qvvzjyD9tCy1M9WYRD3krfg87H8X/wGyDSKgwM=
+        Content-Transfer-Encoding; bh=LJbOL2lkgPcCNK1kJve2tTMVtgzUM+FtvA
+        S6z8MrxXs=; b=v3o+JKpLdkEZH4gJHYauPU4eHDqvyHo79NU5N+JqqzCpfnJmUL
+        iRYSVsmxYEz6Ut4uQEtS8aETCKPswI4wZ8s3mTMSi9g2kO5GP4YdmUvPZmUi+KaT
+        NIQDDL3F2IGeoYu7yGDp4x9o0ivppMSCXwB26wf0JTqzPrPTcDzoZMJe4=
 Received: from xhacker (unknown [101.86.18.22])
-        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygBnLsxMOpZhi51cAQ--.6032S4;
-        Thu, 18 Nov 2021 19:34:40 +0800 (CST)
-Date:   Thu, 18 Nov 2021 19:27:21 +0800
+        by newmailweb.ustc.edu.cn (Coremail) with SMTP id LkAmygAXHU1rOpZhPJ5cAQ--.266S2;
+        Thu, 18 Nov 2021 19:35:07 +0800 (CST)
+Date:   Thu, 18 Nov 2021 19:26:29 +0800
 From:   Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -48,31 +48,30 @@ Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kbuild@vger.kernel.org
-Subject: [PATCH 12/12] riscv: vmlinux.lds.S|vmlinux-xip.lds.S: remove
- `.fixup` section
-Message-ID: <20211118192721.6480c0e7@xhacker>
+Subject: [PATCH 10/12] riscv: add gpr-num.h
+Message-ID: <20211118192629.0a9dc6ad@xhacker>
 In-Reply-To: <20211118192130.48b8f04c@xhacker>
 References: <20211118192130.48b8f04c@xhacker>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LkAmygBnLsxMOpZhi51cAQ--.6032S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7GFyDXrW5CFWDKrWfJw1DJrb_yoWfZFb_G3
-        WxX3yxXr18Ca1IyasrGw1fWrn0y3yrKFykZw12vrWxGFn8Xrs0qw1ftF43Zas8ur9akr4f
-        AFyxJrZ2qr42qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbh8YjsxI4VWxJwAYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I
-        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7
-        IE14v26r15M28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CE
-        w4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6x
-        kF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE
-        c7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I
-        8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCF
-        s4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20x
-        vY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I
-        3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIx
-        AIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF
-        0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87
-        Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7iFxUUUUU
+X-CM-TRANSID: LkAmygAXHU1rOpZhPJ5cAQ--.266S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryfXrWUJrWDZw45AFW5Wrg_yoW5Xw4fpr
+        47JFyvyan8XFs8Jw1Yk3W8Cr17GF18tr1UtryjvryDGws0vF1fJ348JryfArZIyw45Za4v
+        gryxtFWDKw1F9FDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUklb7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+        C2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr
+        0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3JwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8-J55UUUU
+        U==
 X-CM-SenderInfo: xmv2xttqjtqzxdloh3xvwfhvlgxou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -80,36 +79,98 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Jisheng Zhang <jszhang@kernel.org>
 
+Next patch will use the gpr-num to pass the register number to exception
+fixup handler which sits in inline assembly routines.
+
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 ---
- arch/riscv/kernel/vmlinux-xip.lds.S | 1 -
- arch/riscv/kernel/vmlinux.lds.S     | 1 -
- 2 files changed, 2 deletions(-)
+ arch/riscv/include/asm/gpr-num.h | 77 ++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 arch/riscv/include/asm/gpr-num.h
 
-diff --git a/arch/riscv/kernel/vmlinux-xip.lds.S b/arch/riscv/kernel/vmlinux-xip.lds.S
-index f5ed08262139..75e0fa8a700a 100644
---- a/arch/riscv/kernel/vmlinux-xip.lds.S
-+++ b/arch/riscv/kernel/vmlinux-xip.lds.S
-@@ -45,7 +45,6 @@ SECTIONS
- 		ENTRY_TEXT
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
--		*(.fixup)
- 		_etext = .;
- 	}
- 	RO_DATA(L1_CACHE_BYTES)
-diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.lds.S
-index 0e5ae851929e..4e6c88aa4d87 100644
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -48,7 +48,6 @@ SECTIONS
- 		ENTRY_TEXT
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
--		*(.fixup)
- 		_etext = .;
- 	}
- 
+diff --git a/arch/riscv/include/asm/gpr-num.h b/arch/riscv/include/asm/gpr-num.h
+new file mode 100644
+index 000000000000..dfee2829fc7c
+--- /dev/null
++++ b/arch/riscv/include/asm/gpr-num.h
+@@ -0,0 +1,77 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASM_GPR_NUM_H
++#define __ASM_GPR_NUM_H
++
++#ifdef __ASSEMBLY__
++	.equ	.L__gpr_num_zero,	0
++	.equ	.L__gpr_num_ra,		1
++	.equ	.L__gpr_num_sp,		2
++	.equ	.L__gpr_num_gp,		3
++	.equ	.L__gpr_num_tp,		4
++	.equ	.L__gpr_num_t0,		5
++	.equ	.L__gpr_num_t1,		6
++	.equ	.L__gpr_num_t2,		7
++	.equ	.L__gpr_num_s0,		8
++	.equ	.L__gpr_num_s1,		9
++	.equ	.L__gpr_num_a0,		10
++	.equ	.L__gpr_num_a1,		11
++	.equ	.L__gpr_num_a2,		12
++	.equ	.L__gpr_num_a3,		13
++	.equ	.L__gpr_num_a4,		14
++	.equ	.L__gpr_num_a5,		15
++	.equ	.L__gpr_num_a6,		16
++	.equ	.L__gpr_num_a7,		17
++	.equ	.L__gpr_num_s2,		18
++	.equ	.L__gpr_num_s3,		19
++	.equ	.L__gpr_num_s4,		20
++	.equ	.L__gpr_num_s5,		21
++	.equ	.L__gpr_num_s6,		22
++	.equ	.L__gpr_num_s7,		23
++	.equ	.L__gpr_num_s8,		24
++	.equ	.L__gpr_num_s9,		25
++	.equ	.L__gpr_num_s10,	26
++	.equ	.L__gpr_num_s11,	27
++	.equ	.L__gpr_num_t3,		28
++	.equ	.L__gpr_num_t4,		29
++	.equ	.L__gpr_num_t5,		30
++	.equ	.L__gpr_num_t6,		31
++
++#else /* __ASSEMBLY__ */
++
++#define __DEFINE_ASM_GPR_NUMS					\
++"	.equ	.L__gpr_num_zero,	0\n"			\
++"	.equ	.L__gpr_num_ra,		1\n"			\
++"	.equ	.L__gpr_num_sp,		2\n"			\
++"	.equ	.L__gpr_num_gp,		3\n"			\
++"	.equ	.L__gpr_num_tp,		4\n"			\
++"	.equ	.L__gpr_num_t0,		5\n"			\
++"	.equ	.L__gpr_num_t1,		6\n"			\
++"	.equ	.L__gpr_num_t2,		7\n"			\
++"	.equ	.L__gpr_num_s0,		8\n"			\
++"	.equ	.L__gpr_num_s1,		9\n"			\
++"	.equ	.L__gpr_num_a0,		10\n"			\
++"	.equ	.L__gpr_num_a1,		11\n"			\
++"	.equ	.L__gpr_num_a2,		12\n"			\
++"	.equ	.L__gpr_num_a3,		13\n"			\
++"	.equ	.L__gpr_num_a4,		14\n"			\
++"	.equ	.L__gpr_num_a5,		15\n"			\
++"	.equ	.L__gpr_num_a6,		16\n"			\
++"	.equ	.L__gpr_num_a7,		17\n"			\
++"	.equ	.L__gpr_num_s2,		18\n"			\
++"	.equ	.L__gpr_num_s3,		19\n"			\
++"	.equ	.L__gpr_num_s4,		20\n"			\
++"	.equ	.L__gpr_num_s5,		21\n"			\
++"	.equ	.L__gpr_num_s6,		22\n"			\
++"	.equ	.L__gpr_num_s7,		23\n"			\
++"	.equ	.L__gpr_num_s8,		24\n"			\
++"	.equ	.L__gpr_num_s9,		25\n"			\
++"	.equ	.L__gpr_num_s10,	26\n"			\
++"	.equ	.L__gpr_num_s11,	27\n"			\
++"	.equ	.L__gpr_num_t3,		28\n"			\
++"	.equ	.L__gpr_num_t4,		29\n"			\
++"	.equ	.L__gpr_num_t5,		30\n"			\
++"	.equ	.L__gpr_num_t6,		31\n"
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* __ASM_GPR_NUM_H */
 -- 
 2.33.0
 
