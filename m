@@ -2,341 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29C38C433FE
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 01:07:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CE3AC433F5
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 01:08:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0CA0E61B3F
-	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 01:07:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18DF461B3F
+	for <bpf@archiver.kernel.org>; Thu, 18 Nov 2021 01:08:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242100AbhKRBKA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 17 Nov 2021 20:10:00 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:41902 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237831AbhKRBKA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 17 Nov 2021 20:10:00 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AHLeCJq006841
-        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 17:07:01 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=facebook;
- bh=PMnMl7JHz/z5Rj3SxfUQ4Ex8WNuSbKnTnshpFFtwRNc=;
- b=B+QQD/iH9OzAFcyXVI5ghWWU98HjN0ieKc6vy7PPMhijafHWRTvGdt5agXW8R0Sm/wqm
- 3GsExoBbafUL6BtMKcbCOfiV2nududcpqoghiwEbKvv4IdCbU7009bRLeACdwlYiqNvq
- /auhpnXJoMq4BEOIdiv9AgGjGvP/TJ+yizY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3ccyjw5ykm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 17 Nov 2021 17:07:01 -0800
-Received: from intmgw002.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Wed, 17 Nov 2021 17:07:00 -0800
-Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
-        id 13CE04F5FAE5; Wed, 17 Nov 2021 17:06:53 -0800 (PST)
-From:   Joanne Koong <joannekoong@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <kafai@fb.com>, <Kernel-team@fb.com>,
-        Joanne Koong <joannekoong@fb.com>
-Subject: [PATCH bpf-next 3/3] selftest/bpf/benchs: add bpf_for_each benchmark
-Date:   Wed, 17 Nov 2021 17:04:04 -0800
-Message-ID: <20211118010404.2415864-4-joannekoong@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211118010404.2415864-1-joannekoong@fb.com>
-References: <20211118010404.2415864-1-joannekoong@fb.com>
+        id S242098AbhKRBLT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 17 Nov 2021 20:11:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237831AbhKRBLR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 17 Nov 2021 20:11:17 -0500
+X-Greylist: delayed 2139 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 Nov 2021 17:08:18 PST
+Received: from mx0a-00206401.pphosted.com (mx0a-00206401.pphosted.com [IPv6:2620:100:9001:15::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E1C061570;
+        Wed, 17 Nov 2021 17:08:18 -0800 (PST)
+Received: from pps.filterd (m0207806.ppops.net [127.0.0.1])
+        by mx0b-00206401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AHIGOmd007251;
+        Wed, 17 Nov 2021 16:32:18 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=default; bh=E9sLE13DG/10KzQQ/ubPchdVW3nTVeEooj1hU69PEOM=;
+ b=OZrapIq3/9N3J/XFg0Me7yFTX84MjZeiBmVFw1E9RwpLE4mnnyINMdx+3UGPkBkQ5y6n
+ XmS2X/TIUW3cvpisx48WDdwslgyQALz5aVPddQJRY+6tTe2SSFtOu8M70oi6m9lrO4W+
+ zaLIaGBVRghyv770sDW6T+UJivW9QoiFzZZNwBH0uHv4xv+32f3b5p3HCpp6x81NObWk
+ gZ7RM0VGacxpHnBBiuB4lQPms3Epd7q2FbpUDcsXij1PYJSm0f+XyZD2L3uzL2TEvmnB
+ wyRfshK7gaeNX3cmOwuqruTXJmS8qN/Rkjs8B0npRgno1Ll3BvMuk7e/m0Z7deqk+41G ZQ== 
+Received: from 04wpexch03.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
+        by mx0b-00206401.pphosted.com (PPS) with ESMTPS id 3cd6vcgh4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 17 Nov 2021 16:32:18 -0800
+Received: from 04wpexch03.crowdstrike.sys (10.100.11.93) by
+ 04wpexch03.crowdstrike.sys (10.100.11.93) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 18 Nov 2021 00:32:17 +0000
+Received: from 04wpexch03.crowdstrike.sys ([fe80::79d6:26ee:13ba:99d2]) by
+ 04wpexch03.crowdstrike.sys ([fe80::79d6:26ee:13ba:99d2%5]) with mapi id
+ 15.02.0922.019; Thu, 18 Nov 2021 00:32:17 +0000
+From:   Martin Kelly <martin.kelly@crowdstrike.com>
+To:     "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kernel-team@fb.com" <kernel-team@fb.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "andrii@kernel.org" <andrii@kernel.org>
+Subject: RE: Re: Clarification on bpftool dual licensing
+Thread-Topic: Re: Clarification on bpftool dual licensing
+Thread-Index: AdfcC7I4ay3ZuRCwQHqFumJ1n8mnnw==
+Date:   Thu, 18 Nov 2021 00:31:52 +0000
+Deferred-Delivery: Thu, 18 Nov 2021 00:31:43 +0000
+Message-ID: <a126299d31954240a7490428feccb5b1@crowdstrike.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.100.11.84]
+x-disclaimer: USA
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: TTLYnmTFuDf1ZWmf0jJNv_-26oL16gT8
-X-Proofpoint-GUID: TTLYnmTFuDf1ZWmf0jJNv_-26oL16gT8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-17_09,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=999 mlxscore=0
- clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111180005
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add benchmark to measure the overhead of the bpf_for_each call
-for a specified number of iterations.
-
-Testing this on qemu on my dev machine on 1 thread, the data is
-as follows:
-
-        nr_iterations: 1
-bpf_for_each helper - total callbacks called:  42.949 =C2=B1 1.404M/s
-
-        nr_iterations: 10
-bpf_for_each helper - total callbacks called:  73.645 =C2=B1 2.077M/s
-
-        nr_iterations: 100
-bpf_for_each helper - total callbacks called:  73.058 =C2=B1 1.256M/s
-
-        nr_iterations: 500
-bpf_for_each helper - total callbacks called:  78.255 =C2=B1 2.845M/s
-
-        nr_iterations: 1000
-bpf_for_each helper - total callbacks called:  79.439 =C2=B1 1.805M/s
-
-        nr_iterations: 5000
-bpf_for_each helper - total callbacks called:  81.639 =C2=B1 2.053M/s
-
-        nr_iterations: 10000
-bpf_for_each helper - total callbacks called:  80.577 =C2=B1 1.824M/s
-
-        nr_iterations: 50000
-bpf_for_each helper - total callbacks called:  76.773 =C2=B1 1.578M/s
-
-        nr_iterations: 100000
-bpf_for_each helper - total callbacks called:  77.073 =C2=B1 2.200M/s
-
-        nr_iterations: 500000
-bpf_for_each helper - total callbacks called:  75.136 =C2=B1 0.552M/s
-
-        nr_iterations: 1000000
-bpf_for_each helper - total callbacks called:  76.364 =C2=B1 1.690M/s
-
-From this data, we can see that we are able to run the loop at
-least 40 million times per second on an empty callback function.
-
-From this data, we can also see that as the number of iterations
-increases, the overhead per iteration decreases and steadies towards
-a constant value.
-
-Signed-off-by: Joanne Koong <joannekoong@fb.com>
----
- tools/testing/selftests/bpf/Makefile          |   3 +-
- tools/testing/selftests/bpf/bench.c           |   4 +
- .../selftests/bpf/benchs/bench_for_each.c     | 105 ++++++++++++++++++
- .../bpf/benchs/run_bench_for_each.sh          |  16 +++
- .../selftests/bpf/progs/for_each_helper.c     |  13 +++
- 5 files changed, 140 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/benchs/bench_for_each.c
- create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_for_each=
-.sh
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index f49cb5fc85af..b55fc72b8ef0 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -537,7 +537,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o $(OUTPUT)/testing_=
-helpers.o \
- 		 $(OUTPUT)/bench_rename.o \
- 		 $(OUTPUT)/bench_trigger.o \
- 		 $(OUTPUT)/bench_ringbufs.o \
--		 $(OUTPUT)/bench_bloom_filter_map.o
-+		 $(OUTPUT)/bench_bloom_filter_map.o \
-+		 $(OUTPUT)/bench_for_each.o
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(LDFLAGS) -o $@ $(filter %.a %.o,$^) $(LDLIBS)
-=20
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
-s/bpf/bench.c
-index cc4722f693e9..d8b3d537a700 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -171,10 +171,12 @@ static const struct argp_option opts[] =3D {
-=20
- extern struct argp bench_ringbufs_argp;
- extern struct argp bench_bloom_map_argp;
-+extern struct argp bench_for_each_argp;
-=20
- static const struct argp_child bench_parsers[] =3D {
- 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
- 	{ &bench_bloom_map_argp, 0, "Bloom filter map benchmark", 0 },
-+	{ &bench_for_each_argp, 0, "bpf_for_each helper benchmark", 0 },
- 	{},
- };
-=20
-@@ -368,6 +370,7 @@ extern const struct bench bench_bloom_update;
- extern const struct bench bench_bloom_false_positive;
- extern const struct bench bench_hashmap_without_bloom;
- extern const struct bench bench_hashmap_with_bloom;
-+extern const struct bench bench_for_each_helper;
-=20
- static const struct bench *benchs[] =3D {
- 	&bench_count_global,
-@@ -394,6 +397,7 @@ static const struct bench *benchs[] =3D {
- 	&bench_bloom_false_positive,
- 	&bench_hashmap_without_bloom,
- 	&bench_hashmap_with_bloom,
-+	&bench_for_each_helper,
- };
-=20
- static void setup_benchmark()
-diff --git a/tools/testing/selftests/bpf/benchs/bench_for_each.c b/tools/=
-testing/selftests/bpf/benchs/bench_for_each.c
-new file mode 100644
-index 000000000000..3372d5b7d67b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/bench_for_each.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <argp.h>
-+#include "bench.h"
-+#include "for_each_helper.skel.h"
-+
-+/* BPF triggering benchmarks */
-+static struct ctx {
-+	struct for_each_helper *skel;
-+} ctx;
-+
-+static struct {
-+	__u32 nr_iters;
-+} args =3D {
-+	.nr_iters =3D 10,
-+};
-+
-+enum {
-+	ARG_NR_ITERS =3D 4000,
-+};
-+
-+static const struct argp_option opts[] =3D {
-+	{ "nr_iters", ARG_NR_ITERS, "nr_iters", 0,
-+		"Set number of iterations for the bpf_for_each helper"},
-+	{},
-+};
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case ARG_NR_ITERS:
-+		args.nr_iters =3D strtol(arg, NULL, 10);
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+/* exported into benchmark runner */
-+const struct argp bench_for_each_argp =3D {
-+	.options =3D opts,
-+	.parser =3D parse_arg,
-+};
-+
-+static void validate(void)
-+{
-+	if (env.consumer_cnt !=3D 1) {
-+		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
-+		exit(1);
-+	}
-+}
-+
-+static void *producer(void *input)
-+{
-+	while (true)
-+		/* trigger the bpf program */
-+		syscall(__NR_getpgid);
-+
-+	return NULL;
-+}
-+
-+static void *consumer(void *input)
-+{
-+	return NULL;
-+}
-+
-+static void measure(struct bench_res *res)
-+{
-+	res->hits =3D atomic_swap(&ctx.skel->bss->hits, 0);
-+}
-+
-+static void setup(void)
-+{
-+	struct bpf_link *link;
-+
-+	setup_libbpf();
-+
-+	ctx.skel =3D for_each_helper__open_and_load();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	link =3D bpf_program__attach(ctx.skel->progs.benchmark);
-+	if (!link) {
-+		fprintf(stderr, "failed to attach program!\n");
-+		exit(1);
-+	}
-+
-+	ctx.skel->bss->nr_iterations =3D args.nr_iters;
-+}
-+
-+const struct bench bench_for_each_helper =3D {
-+	.name =3D "for-each-helper",
-+	.validate =3D validate,
-+	.setup =3D setup,
-+	.producer_thread =3D producer,
-+	.consumer_thread =3D consumer,
-+	.measure =3D measure,
-+	.report_progress =3D hits_drops_report_progress,
-+	.report_final =3D hits_drops_report_final,
-+};
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_for_each.sh b/t=
-ools/testing/selftests/bpf/benchs/run_bench_for_each.sh
-new file mode 100755
-index 000000000000..5f11a1ad66d3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_for_each.sh
-@@ -0,0 +1,16 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ./benchs/run_common.sh
-+
-+set -eufo pipefail
-+
-+for t in 1 4 8 12 16; do
-+printf "\n"
-+for i in 1 10 100 500 1000 5000 10000 50000 100000 500000 1000000; do
-+subtitle "nr_iterations: $i, nr_threads: $t"
-+	summarize "bpf_for_each helper - total callbacks called: " \
-+	    "$($RUN_BENCH -p $t --nr_iters $i for-each-helper)"
-+	printf "\n"
-+done
-+done
-diff --git a/tools/testing/selftests/bpf/progs/for_each_helper.c b/tools/=
-testing/selftests/bpf/progs/for_each_helper.c
-index 4404d0cb32a6..b95551d99f75 100644
---- a/tools/testing/selftests/bpf/progs/for_each_helper.c
-+++ b/tools/testing/selftests/bpf/progs/for_each_helper.c
-@@ -14,6 +14,8 @@ struct callback_ctx {
- u32 nr_iterations;
- u32 stop_index =3D -1;
-=20
-+long hits;
-+
- /* Making these global variables so that the userspace program
-  * can verify the output through the skeleton
-  */
-@@ -67,3 +69,14 @@ int prog_invalid_flags(struct __sk_buff *skb)
-=20
- 	return 0;
- }
-+
-+SEC("fentry/__x64_sys_getpgid")
-+int benchmark(void *ctx)
-+{
-+	for (int i =3D 0; i < 1000; i++) {
-+		bpf_for_each(nr_iterations, empty_callback_fn, NULL, 0);
-+
-+		__sync_add_and_fetch(&hits, nr_iterations);
-+	}
-+	return 0;
-+}
---=20
-2.30.2
-
+Pg0KPiBPbiBUdWUsIE5vdiAxNiwgMjAyMSBhdCAyOjE2IEFNIERhbmllbCBCb3JrbWFubiA8ZGFu
+aWVsQGlvZ2VhcmJveC5uZXQ+DQo+IHdyb3RlOg0KPiA+DQo+ID4gT24gMTEvMTUvMjEgNzoyMCBQ
+TSwgTWFydGluIEtlbGx5IHdyb3RlOg0KPiA+ID4gSGksDQo+ID4gPg0KPiA+ID4gSSBoYXZlIGEg
+cXVlc3Rpb24gcmVnYXJkaW5nIHRoZSBkdWFsIGxpY2Vuc2luZyBwcm92aXNpb24gb2YgYnBmdG9v
+bC4gSQ0KPiA+ID4gdW5kZXJzdGFuZCB0aGF0IGJwZnRvb2wgY2FuIGJlIGRpc3RyaWJ1dGVkIGFz
+IGVpdGhlciBHUEwgMi4wIG9yIEJTRCAyLQ0KPiBjbGF1c2UuDQo+ID4gPiBUaGF0IHNhaWQsIGJw
+ZnRvb2wgY2FuIGFsc28gYXV0by1nZW5lcmF0ZSBCUEYgY29kZSB0aGF0IGdldHMgc3BlY2lmaWVk
+IGlubGluZQ0KPiA+ID4gaW4gdGhlIHNrZWxldG9uIGhlYWRlciBmaWxlLCBhbmQgaXQncyBwb3Nz
+aWJsZSB0aGF0IHRoZSBCUEYgY29kZSBnZW5lcmF0ZWQgaXMNCj4gPiA+IEdQTC4gV2hhdCBJJ20g
+d29uZGVyaW5nIGlzIHdoYXQgaGFwcGVucyBpZiBicGZ0b29sIGdlbmVyYXRlcyBHUEwtbGljZW5z
+ZWQNCj4gQlBGDQo+ID4gPiBjb2RlIGluc2lkZSB0aGUgc2tlbGV0b24gaGVhZGVyLCBzbyB0aGF0
+IHlvdSBnZXQgYSBoZWFkZXIgbGlrZSB0aGlzOg0KPiA+ID4NCj4gPiA+IHNvbWV0aGluZy5za2Vs
+Lmg6DQo+ID4gPiAvKiB0aGlzIGZpbGUgaXMgQlNEIDItY2xhdXNlLCBieSBuYXR1cmUgb2YgZHVh
+bCBsaWNlbnNpbmcgKi8NCj4gPg0KPiA+IEZ3aXcsIHRoZSBnZW5lcmF0ZWQgaGVhZGVyIGNvbnRh
+aW5zIGFuIFNQRFggaWRlbnRpZmllcjoNCj4gPg0KPiA+ICAgLyogU1BEWC1MaWNlbnNlLUlkZW50
+aWZpZXI6IChMR1BMLTIuMSBPUiBCU0QtMi1DbGF1c2UpICovDQo+ID4gICAvKiBUSElTIEZJTEUg
+SVMgQVVUT0dFTkVSQVRFRCEgKi8NCj4gPg0KPiA+ID4gLyogVEhJUyBGSUxFIElTIEFVVE9HRU5F
+UkFURUQhICovDQo+ID4gPg0KPiA+ID4gLyogc3RhbmRhcmQgc2tlbGV0b24gZGVmaW5pdGlvbnMg
+Ki8NCj4gPiA+DQo+ID4gPiAuLi4NCj4gPiA+DQo+ID4gPiBzLT5kYXRhX3N6ID0gWFhYOw0KPiA+
+ID4gcy0+ZGF0YSA9ICh2b2lkICopIlwNCj4gPiA+IDxlQlBGIGJ5dGVjb2RlLCBwcm9kdWNlZCBi
+eSBHUEwgMi4wIHNvdXJjZXMsIHNwZWNpZmllZCBpbiBiaW5hcnk+DQo+ID4gPiAiOw0KPiA+ID4N
+Cj4gPiA+IE15IGd1ZXNzIGlzIHRoYXQsIGJhc2VkIG9uIHRoZSBjaG9pY2UgdG8gZHVhbC1saWNl
+bnNlIGJwZnRvb2wsIHRoZSBoZWFkZXIgaXMNCj4gPiA+IG1lYW50IHRvIHN0aWxsIGJlIEJTRCAy
+LWNsYXVzZSwgYW5kIHRoZSBzLT5kYXRhIGlubGluZSBjb2RlJ3MgR1BMIGxpY2Vuc2UgaXMNCj4g
+PiA+IG5vdCBtZWFudCB0byBjaGFuZ2UgdGhlIGxpY2Vuc2luZyBvZiB0aGUgaGVhZGVyIGl0c2Vs
+ZiwgYnV0IEkgd2FudGVkIHRvDQo+DQo+IFllcywgZGVmaW5pdGVseSB0aGF0IGlzIHRoZSBpbnRl
+bnQgKGJ1dCBub3QgYSBsYXd5ZXIgZWl0aGVyKS4NCg0KIFRoYW5rcyBldmVyeW9uZSwgdGhhdCdz
+IHdoYXQgSSBhc3N1bWVkIGFzIHdlbGwuIEFueSBvYmplY3Rpb24gdG8gYSBwYXRjaCBjbGFyaWZ5
+aW5nIHRoaXMgbW9yZSBleHBsaWNpdGx5Pw0KDQpPbmUgb3RoZXIsIHJlbGF0ZWQgcXVlc3Rpb246
+IHZtbGludXguaCAoZ2VuZXJhdGVkIGJ5ICJicGZ0b29sIGJ0ZiBkdW1wIGZpbGUgL3N5cy9rZXJu
+ZWwvYnRmL3ZtbGludXggZm9ybWF0IGMiKSwgZG9lcyBub3QgY3VycmVudGx5IGNvbnRhaW4gYSBs
+aWNlbnNlIGRlY2xhcmF0aW9uLiBJIGFzc3VtZSB0aGlzIHdvdWxkIGhhdmUgdG8gYmUgYSBHUEwg
+aGVhZGVyLCBzaW5jZSB2bWxpbnV4LmggcmVmZXJlbmNlcyBtYW55IEdQTCdkIExpbnV4IGtlcm5l
+bCBzdHJ1Y3RzIGFuZCBzaW1pbGFyLCB0aG91Z2ggYWdhaW4gSSdtIG5vdCBhIGxhd3llciBhbmQg
+dGhlcmVmb3JlIGFtIG5vdCBjZXJ0YWluLiBXb3VsZCB5b3UgYWxsIGFncmVlIHdpdGggdGhpcz8g
+SWYgc28sIGFueSBvYmplY3Rpb24gdG8gYSBwYXRjaCBhZGRpbmcgYW4gU1BEWCBsaW5lIHRvIHRo
+ZSBnZW5lcmF0ZWQgdm1saW51eC5oPw0K
