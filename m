@@ -2,114 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57535C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAB0C433FE
 	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3802B61AED
+	by mail.kernel.org (Postfix) with ESMTP id A2F4B61AFF
 	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234941AbhKSSxz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Nov 2021 13:53:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59640 "EHLO mail.kernel.org"
+        id S230519AbhKSSx4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Nov 2021 13:53:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59676 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233284AbhKSSxu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S235134AbhKSSxu (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 19 Nov 2021 13:53:50 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4ABAE61A86;
-        Fri, 19 Nov 2021 18:50:47 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 57B1B61AD2;
+        Fri, 19 Nov 2021 18:50:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637347847;
-        bh=PStOTv82i8pael9g1fxcdETYpOj1sWI/gPQbeKPOwis=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WseMCbzNWirZm4T67HTcHhNITypIPr7Bdc1Oxy1MlT17j83xrSXyYxOaiPUo8skXS
-         twnbNqFqygpzcSQBh606v+xrQ8XkqsoBvpd8lAHAt/70tSMhAWLoITnVj5yAc5sVvO
-         r5HB6tWFMxNYg85LFVwe9sYm+fap6ZVIu4872tUO6tcZ06sZQQ6u1YDuLxT6Se+QhV
-         +jqNUjFzTaCuan9Z8RoGr4hPy1UXhBNtDhJsH+JTBWSSJ/FKRp9BZQeOBiLZYmez3w
-         aVqTVGF9XFNf6uhccTlBaxSgR5TaDUhwI2QLwlAW7Ma8QTH3LyQHKkx/1823GG+9IR
-         Ai8Czxui17Eng==
+        s=k20201202; t=1637347848;
+        bh=N89DVtM/C7GU55j1dJHLSOU+nswExmc+jtpbDvNOVZg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ml2N3fwZx99ea2S7w6WVGtmxbzaEjZXr/t17XhG6lZGuQ9wx5k9MoEvvR21FUQaua
+         TgEt5irp914mQCIeSyptzFB4c5VvvlbCTc9eV2LsohomS24HIIHvLZemXY+MjfheVY
+         0CimETYkATWT2VL7S+yITuZoia+9xl560N8liCPvZ9H8BukZBstBH/HD9DvJ5i+NoR
+         dSqAt2C6m8ScSxa6A7T+8omrGcFJIjar6hlynNtosGhghbfdKeU4Ggp/SkkvH1ahjL
+         oypFGnDvcI93L0JXeaZ7vgeuWONok6a3aUubyZGtCRmEnzz2CVltJvNcfqD3WydJLv
+         c9x1BFOsLctdg==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: [RFC bpf-next 0/6] bpf: remove the cgroup -> bpf header dependecy
-Date:   Fri, 19 Nov 2021 10:50:37 -0800
-Message-Id: <20211119185043.3937836-1-kuba@kernel.org>
+Subject: [RFC bpf-next 3/6] bpf: create a header for cgroup_storage_type()
+Date:   Fri, 19 Nov 2021 10:50:40 -0800
+Message-Id: <20211119185043.3937836-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211119185043.3937836-1-kuba@kernel.org>
+References: <20211119185043.3937836-1-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes to bpf.h tend to clog up our build systems. The netdev/bpf
-build bot does incremental builds to save time (reusing the build
-directory to only rebuild changed objects).
+cgroup_storage_type() is a static inline which needs to deference
+bpf_map. Move it to its own header so that we don't need to pull
+in bpf.h. It only has a couple of callers.
 
-This is the rough breakdown of how many objects needs to be rebuilt
-based on file touched:
-
-kernel.h      40633
-bpf.h         17881
-bpf-cgroup.h  17875
-skbuff.h      10696
-bpf-netns.h    7604
-netdevice.h    7452
-filter.h       5003
-tcp.h          4048
-sock.h         4959
-
-As the stats show touching bpf.h is _very_ expensive. Recent 20+ patch
-series from Jirka took 10 hours to build patch-by-patch on a 72 CPU VM.
-
-Bulk of the objects get rebuilt because MM includes cgroup headers.
-Luckily bpf-cgroup.h does not fundamentally depend on bpf.h so we
-can break that dependency and reduce the number of objects.
-
-With the patches applied touching bpf.h causes 5019 objects to be rebuilt
-(17881 / 5019 = 3.56x). That's pretty much down to filter.h plus noise.
-
-Sending as an RFC because:
- - bpf-link.h or bpf_link.h ?
- - we probably want the header include fixes to go via bpf first
-
-Jakub Kicinski (6):
-  treewide: add missing includes masked by cgroup -> bpf dependency
-  bpf: add header for enum bpf_cgroup_storage_type
-  bpf: create a header for cgroup_storage_type()
-  bpf: create a header for struct bpf_link
-  bpf: remove the cgroup -> bpf header dependecy
-  bpf: push down the bpf-link include
-
- block/fops.c                                  |  1 +
- drivers/gpu/drm/drm_gem_shmem_helper.c        |  1 +
- drivers/gpu/drm/i915/gt/intel_gtt.c           |  1 +
- drivers/gpu/drm/i915/i915_request.c           |  1 +
- drivers/gpu/drm/lima/lima_device.c            |  1 +
- drivers/gpu/drm/msm/msm_gem_shrinker.c        |  1 +
- drivers/gpu/drm/ttm/ttm_tt.c                  |  1 +
- .../net/ethernet/huawei/hinic/hinic_sriov.c   |  1 +
- .../ethernet/marvell/octeontx2/nic/otx2_ptp.c |  2 ++
- drivers/pci/controller/dwc/pci-exynos.c       |  1 +
- drivers/pci/controller/dwc/pcie-qcom-ep.c     |  1 +
- drivers/usb/cdns3/host.c                      |  1 +
- include/linux/bpf-cgroup-storage.h            | 17 ++++++++++++++
- include/linux/bpf-cgroup-types.h              | 13 +++++++++++
- include/linux/bpf-cgroup.h                    | 13 +++--------
- include/linux/bpf-link.h                      | 23 +++++++++++++++++++
- include/linux/bpf.h                           | 19 ++-------------
- include/linux/device/driver.h                 |  1 +
- include/linux/filter.h                        |  2 +-
- kernel/bpf/bpf_iter.c                         |  1 +
- kernel/bpf/helpers.c                          |  1 +
- kernel/bpf/local_storage.c                    |  1 +
- kernel/bpf/syscall.c                          |  1 +
- mm/damon/vaddr.c                              |  1 +
- mm/memory_hotplug.c                           |  1 +
- mm/swap_slots.c                               |  1 +
- net/core/dev.c                                |  1 +
- 27 files changed, 81 insertions(+), 28 deletions(-)
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ include/linux/bpf-cgroup-storage.h | 17 +++++++++++++++++
+ include/linux/bpf-cgroup.h         |  9 ---------
+ kernel/bpf/helpers.c               |  1 +
+ kernel/bpf/local_storage.c         |  1 +
+ 4 files changed, 19 insertions(+), 9 deletions(-)
  create mode 100644 include/linux/bpf-cgroup-storage.h
- create mode 100644 include/linux/bpf-cgroup-types.h
- create mode 100644 include/linux/bpf-link.h
 
+diff --git a/include/linux/bpf-cgroup-storage.h b/include/linux/bpf-cgroup-storage.h
+new file mode 100644
+index 000000000000..0e0f3409c586
+--- /dev/null
++++ b/include/linux/bpf-cgroup-storage.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _BPF_CGROUP_STORAGE_H
++#define _BPF_CGROUP_STORAGE_H
++
++#include <linux/bpf.h>
++#include <linux/bpf-cgroup.h>
++
++static inline enum bpf_cgroup_storage_type cgroup_storage_type(
++	struct bpf_map *map)
++{
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
++		return BPF_CGROUP_STORAGE_PERCPU;
++
++	return BPF_CGROUP_STORAGE_SHARED;
++}
++
++#endif
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 11820a430d6c..12474516e0be 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -194,15 +194,6 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
+ 					    int optname, void *optval,
+ 					    int *optlen, int retval);
+ 
+-static inline enum bpf_cgroup_storage_type cgroup_storage_type(
+-	struct bpf_map *map)
+-{
+-	if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
+-		return BPF_CGROUP_STORAGE_PERCPU;
+-
+-	return BPF_CGROUP_STORAGE_SHARED;
+-}
+-
+ struct bpf_cgroup_storage *
+ cgroup_storage_lookup(struct bpf_cgroup_storage_map *map,
+ 		      void *key, bool locked);
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 1ffd469c217f..352acea8e53a 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
+  */
+ #include <linux/bpf.h>
++#include <linux/bpf-cgroup-storage.h>
+ #include <linux/rcupdate.h>
+ #include <linux/random.h>
+ #include <linux/smp.h>
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 035e9e3a7132..195f9c13ef5b 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -1,5 +1,6 @@
+ //SPDX-License-Identifier: GPL-2.0
+ #include <linux/bpf-cgroup.h>
++#include <linux/bpf-cgroup-storage.h>
+ #include <linux/bpf.h>
+ #include <linux/bpf_local_storage.h>
+ #include <linux/btf.h>
 -- 
 2.31.1
 
