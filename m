@@ -2,124 +2,284 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F893C433EF
-	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EF1C433EF
+	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1341461A40
-	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:18:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D85E061AED
+	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbhKSSVe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Nov 2021 13:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232853AbhKSSVd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Nov 2021 13:21:33 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5627C061574
-        for <bpf@vger.kernel.org>; Fri, 19 Nov 2021 10:18:31 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id i12so11025181ila.12
-        for <bpf@vger.kernel.org>; Fri, 19 Nov 2021 10:18:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=tdLTFdg3pJJF3nSm4KjNclgDVRbzhV6EnwREp6ueFTY=;
-        b=lhfZJcd7yqAJ+yvZZWTnfrALDDiM0L3n1JHTxW5mRc5xfPrQtbgupYx57yed4UVluu
-         bK9hn8b7f8WpP3QdHhJGBD402ylpiueZ1e1GPcdWU+eRgDhtpcWmpr/uCCfuW7HAt3F/
-         Ztsh543LigI1IwGZn9Fk4g/H4DuaAM8RfjEL8o9GjZIT4tBjy2w7osN4jtz4PxpfGo4U
-         oC+dGvu/ZyOXIlhKDKPC0byuLhhgC0koZsXNEsIIK/XT5iwlljaBq0fSZpoNfep5hxOZ
-         nXuR6eHOSfrmMwwVIVc3zk/eS77rV4ZTcUzEqofJ/d9FzSKxAGELBoiokrOGvz4h8mGN
-         LV1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=tdLTFdg3pJJF3nSm4KjNclgDVRbzhV6EnwREp6ueFTY=;
-        b=GuuWxDlSnMvUwuF24JAOtOqGtr5xHpwSuGWPLHj8w7GkAAFN9FMMJos3vGMefx4OlY
-         +tZqvW8+Q3LKXt3EQIDZ/Vfw3ZXkr/tDTxp3wS5clGeXXzsjJX48McHgmQABREydaajy
-         S2TdEmCQBj+cZ72f8IEdCSm0S99XbKpVZQnror3+a7R3QRvzAGKDsreDYz/MgmDgpazV
-         rVv3OkQt/FFDja7vsTYj3NyBN7vUJzAyhj/U/ZO++kWx4U1h9Uh3RDBP4fI5iv0Y+tWS
-         MkDRuOS70jje8STBb6a62tBjD0ltgXdum5tPdsep6oS0NLh16nAcO44w6ItoxN2k+iMv
-         MbNw==
-X-Gm-Message-State: AOAM532TU6Z0uzQpxHsyXCu/zeukZqBWk+NR0jmY5rMj05ZMYStL+JzA
-        zOTxZthWHZ5ZxV6KfNRBT88=
-X-Google-Smtp-Source: ABdhPJyoDPwwyxz2KjkHc2jeLw5v5ar2gCSKRHzlUh5gEjazqPEX8hcmme8+B7InRT9CWFwsXYzifw==
-X-Received: by 2002:a05:6e02:1bcc:: with SMTP id x12mr6442953ilv.106.1637345911323;
-        Fri, 19 Nov 2021 10:18:31 -0800 (PST)
-Received: from localhost ([172.243.151.11])
-        by smtp.gmail.com with ESMTPSA id y6sm324276iln.74.2021.11.19.10.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 10:18:30 -0800 (PST)
-Date:   Fri, 19 Nov 2021 10:18:23 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Jussi Maki <joamaki@gmail.com>
-Message-ID: <6197ea6f350b7_56706208c2@john.notmuch>
-In-Reply-To: <6195e2ae7a82f_2b4cc20884@john.notmuch>
-References: <CAADnVQKEPYYrr6MUSKL4Fd7FYp0y5MQFoDteU5T++E6fySDADw@mail.gmail.com>
- <6191ee3e8a1e1_86942087@john.notmuch>
- <CAEf4Bza3OC1pAvVvwoPhyuixf8_VpA1w0F7HAsX09x2DSYbYbA@mail.gmail.com>
- <6195432baf114_1f40a208aa@john.notmuch>
- <CAEf4Bza6HHeVTFxrmPJRUgsLYU7g06MctMoAGy3ayKq8ES9FTQ@mail.gmail.com>
- <6195e2ae7a82f_2b4cc20884@john.notmuch>
-Subject: Re: sockmap test is broken
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S235393AbhKSSxy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Nov 2021 13:53:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59650 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234941AbhKSSxu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Nov 2021 13:53:50 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A08C961AA7;
+        Fri, 19 Nov 2021 18:50:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637347847;
+        bh=yiO3LS+plAagyLiX4Cm31hDvR4zUk5pxt01Oso+94UA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eHETl9Vxg5I1pyYUf/YFAxozAnlLYWO+EK7pdRl37jKCPnJe8Mz+7Q1q2iuIHlXfi
+         wJci3tS1G+CKVwIGso7FMbgEpprOa6acWNtfDKli10lOA9BwCr5geEbfDi68BD7uro
+         6nOCFhTEx0xk0ceDLuhlw1+U9u9UeyOFCULpIKDKVDdNxCv+qdBetoT23edmPJmjxX
+         oP0XpZ2iOZ1EmvX7HbsUdTOu4bg1SC6EZeK1BaOYkZSgVUPqsTg1lOmnSnLHAATev5
+         uSO8ak/PtwzVzX6rKUS/ZujWjWowIgue6VNNBsZoZXYXqVsPM/e4laRq8x1slUxvOs
+         s5921C4JP5q9Q==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: [RFC bpf-next 1/6] treewide: add missing includes masked by cgroup -> bpf dependency
+Date:   Fri, 19 Nov 2021 10:50:38 -0800
+Message-Id: <20211119185043.3937836-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211119185043.3937836-1-kuba@kernel.org>
+References: <20211119185043.3937836-1-kuba@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-John Fastabend wrote:
-> Andrii Nakryiko wrote:
-> > On Wed, Nov 17, 2021 at 10:00 AM John Fastabend
-> > <john.fastabend@gmail.com> wrote:
-> > >
-> > > Andrii Nakryiko wrote:
-> > > > On Sun, Nov 14, 2021 at 9:21 PM John Fastabend <john.fastabend@gmail.com> wrote:
-> > > > >
-> > > > > Alexei Starovoitov wrote:
-> > > > > > test_maps is failing in bpf tree:
-> > > > > >
-> > > > > > $ ./test_maps
-> > > > > > Failed sockmap recv
-> > > > > >
-> > > > > > and causing BPF CI to stay red.
-> > > > > >
-> > > > > > Since bpf-next is fine, I suspect it is one of John's or Jussi's patches.
-> > > > > >
-> > > > > > Please take a look.
-> > > > >
-> > > > > I'll look into it thanks.
-> > > >
-> > > > Any updates, John? Should we just disable test_maps in CI to make it
-> > > > useful again?
-> > >
-> > > I'm debugging this now. Hopefully I'll have a fix shortly (today I hope).
-> > > Maybe, it makes sense to wait for EOD and if I still don't have the fix
-> > > disable it then. Anyways fixing it is top of list now.
-> > 
-> > Sounds good, let's hope you find it and fix it today.
-> 
-> OK got the fix, but its fairly subtle. Whats happening is when socks are
-> removed from a map their programs are not actually being removed. They
-> continue to live with the sock for the lifetime of the socket or until
-> the last reference held from BPF side is lost. At which point all progs
-> are dropped and socket returns to normal/preBPF state. We never noticed
-> it on our real use cases because once we move sockets into BPF we never
-> release them until the socket is free. The fix is to null the set progs
-> and then do the update_sk_prot call which will decide based on the
-> configured programs what proto ops need to be set to.
+cgroup.h (therefore swap.h, therefore half of the universe)
+includes bpf.h which in turn includes module.h and slab.h.
+Since we're about to get rid of that dependency we need
+to clean things up.
 
-Fix posted here,
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ block/fops.c                                          | 1 +
+ drivers/gpu/drm/drm_gem_shmem_helper.c                | 1 +
+ drivers/gpu/drm/i915/gt/intel_gtt.c                   | 1 +
+ drivers/gpu/drm/i915/i915_request.c                   | 1 +
+ drivers/gpu/drm/lima/lima_device.c                    | 1 +
+ drivers/gpu/drm/msm/msm_gem_shrinker.c                | 1 +
+ drivers/gpu/drm/ttm/ttm_tt.c                          | 1 +
+ drivers/net/ethernet/huawei/hinic/hinic_sriov.c       | 1 +
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c | 2 ++
+ drivers/pci/controller/dwc/pci-exynos.c               | 1 +
+ drivers/pci/controller/dwc/pcie-qcom-ep.c             | 1 +
+ drivers/usb/cdns3/host.c                              | 1 +
+ include/linux/device/driver.h                         | 1 +
+ include/linux/filter.h                                | 2 +-
+ mm/damon/vaddr.c                                      | 1 +
+ mm/memory_hotplug.c                                   | 1 +
+ mm/swap_slots.c                                       | 1 +
+ 17 files changed, 18 insertions(+), 1 deletion(-)
 
-https://lore.kernel.org/bpf/20211119181418.353932-1-john.fastabend@gmail.com/
+diff --git a/block/fops.c b/block/fops.c
+index ad732a36f9b3..3cb1e81929bc 100644
+--- a/block/fops.c
++++ b/block/fops.c
+@@ -15,6 +15,7 @@
+ #include <linux/falloc.h>
+ #include <linux/suspend.h>
+ #include <linux/fs.h>
++#include <linux/module.h>
+ #include "blk.h"
+ 
+ static inline struct inode *bdev_file_inode(struct file *file)
+diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
+index 7b9f69f21f1e..bca0de92802e 100644
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c
++++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -9,6 +9,7 @@
+ #include <linux/shmem_fs.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
++#include <linux/module.h>
+ 
+ #ifdef CONFIG_X86
+ #include <asm/set_memory.h>
+diff --git a/drivers/gpu/drm/i915/gt/intel_gtt.c b/drivers/gpu/drm/i915/gt/intel_gtt.c
+index 67d14afa6623..b67f620c3d93 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gtt.c
++++ b/drivers/gpu/drm/i915/gt/intel_gtt.c
+@@ -6,6 +6,7 @@
+ #include <linux/slab.h> /* fault-inject.h is not standalone! */
+ 
+ #include <linux/fault-inject.h>
++#include <linux/sched/mm.h>
+ 
+ #include "gem/i915_gem_lmem.h"
+ #include "i915_trace.h"
+diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+index 820a1f38b271..89cccefeea63 100644
+--- a/drivers/gpu/drm/i915/i915_request.c
++++ b/drivers/gpu/drm/i915/i915_request.c
+@@ -29,6 +29,7 @@
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
+ #include <linux/sched/signal.h>
++#include <linux/sched/mm.h>
+ 
+ #include "gem/i915_gem_context.h"
+ #include "gt/intel_breadcrumbs.h"
+diff --git a/drivers/gpu/drm/lima/lima_device.c b/drivers/gpu/drm/lima/lima_device.c
+index 65fdca366e41..f74f8048af8f 100644
+--- a/drivers/gpu/drm/lima/lima_device.c
++++ b/drivers/gpu/drm/lima/lima_device.c
+@@ -4,6 +4,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/reset.h>
+ #include <linux/clk.h>
++#include <linux/slab.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/platform_device.h>
+ 
+diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+index 4a1420b05e97..086dacf2f26a 100644
+--- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
++++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <linux/vmalloc.h>
++#include <linux/sched/mm.h>
+ 
+ #include "msm_drv.h"
+ #include "msm_gem.h"
+diff --git a/drivers/gpu/drm/ttm/ttm_tt.c b/drivers/gpu/drm/ttm/ttm_tt.c
+index 7e83c00a3f48..79c870a3bef8 100644
+--- a/drivers/gpu/drm/ttm/ttm_tt.c
++++ b/drivers/gpu/drm/ttm/ttm_tt.c
+@@ -34,6 +34,7 @@
+ #include <linux/sched.h>
+ #include <linux/shmem_fs.h>
+ #include <linux/file.h>
++#include <linux/module.h>
+ #include <drm/drm_cache.h>
+ #include <drm/ttm/ttm_bo_driver.h>
+ 
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
+index a78c398bf5b2..01e7d3c0b68e 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
++++ b/drivers/net/ethernet/huawei/hinic/hinic_sriov.c
+@@ -8,6 +8,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/etherdevice.h>
+ #include <linux/netdevice.h>
++#include <linux/module.h>
+ 
+ #include "hinic_hw_dev.h"
+ #include "hinic_dev.h"
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
+index 0ef68fdd1f26..61c20907315f 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ptp.c
+@@ -5,6 +5,8 @@
+  *
+  */
+ 
++#include <linux/module.h>
++
+ #include "otx2_common.h"
+ #include "otx2_ptp.h"
+ 
+diff --git a/drivers/pci/controller/dwc/pci-exynos.c b/drivers/pci/controller/dwc/pci-exynos.c
+index c24dab383654..722dacdd5a17 100644
+--- a/drivers/pci/controller/dwc/pci-exynos.c
++++ b/drivers/pci/controller/dwc/pci-exynos.c
+@@ -19,6 +19,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/phy/phy.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/module.h>
+ 
+ #include "pcie-designware.h"
+ 
+diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+index 7b17da2f9b3f..cfe66bf04c1d 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
++++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+@@ -18,6 +18,7 @@
+ #include <linux/pm_domain.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
++#include <linux/module.h>
+ 
+ #include "pcie-designware.h"
+ 
+diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
+index 84dadfa726aa..9643b905e2d8 100644
+--- a/drivers/usb/cdns3/host.c
++++ b/drivers/usb/cdns3/host.c
+@@ -10,6 +10,7 @@
+  */
+ 
+ #include <linux/platform_device.h>
++#include <linux/slab.h>
+ #include "core.h"
+ #include "drd.h"
+ #include "host-export.h"
+diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+index a498ebcf4993..15e7c5e15d62 100644
+--- a/include/linux/device/driver.h
++++ b/include/linux/device/driver.h
+@@ -18,6 +18,7 @@
+ #include <linux/klist.h>
+ #include <linux/pm.h>
+ #include <linux/device/bus.h>
++#include <linux/module.h>
+ 
+ /**
+  * enum probe_type - device driver probe type to try
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index b6a216eb217a..2374c452e5e2 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -6,6 +6,7 @@
+ #define __LINUX_FILTER_H__
+ 
+ #include <linux/atomic.h>
++#include <linux/bpf.h>
+ #include <linux/refcount.h>
+ #include <linux/compat.h>
+ #include <linux/skbuff.h>
+@@ -26,7 +27,6 @@
+ 
+ #include <asm/byteorder.h>
+ #include <uapi/linux/filter.h>
+-#include <uapi/linux/bpf.h>
+ 
+ struct sk_buff;
+ struct sock;
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 35fe49080ee9..47f47f60440e 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -13,6 +13,7 @@
+ #include <linux/mmu_notifier.h>
+ #include <linux/page_idle.h>
+ #include <linux/pagewalk.h>
++#include <linux/sched/mm.h>
+ 
+ #include "prmtv-common.h"
+ 
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 852041f6be41..2a9627dc784c 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -35,6 +35,7 @@
+ #include <linux/memblock.h>
+ #include <linux/compaction.h>
+ #include <linux/rmap.h>
++#include <linux/module.h>
+ 
+ #include <asm/tlbflush.h>
+ 
+diff --git a/mm/swap_slots.c b/mm/swap_slots.c
+index 16f706c55d92..2b5531840583 100644
+--- a/mm/swap_slots.c
++++ b/mm/swap_slots.c
+@@ -30,6 +30,7 @@
+ #include <linux/swap_slots.h>
+ #include <linux/cpu.h>
+ #include <linux/cpumask.h>
++#include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ #include <linux/mutex.h>
+ #include <linux/mm.h>
+-- 
+2.31.1
 
-Thanks,
-John
