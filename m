@@ -2,36 +2,36 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAB0C433FE
-	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95DC4C4321E
+	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2F4B61AFF
-	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80F1261AE2
+	for <bpf@archiver.kernel.org>; Fri, 19 Nov 2021 18:50:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbhKSSx4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 19 Nov 2021 13:53:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59676 "EHLO mail.kernel.org"
+        id S233265AbhKSSx5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Nov 2021 13:53:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59710 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235134AbhKSSxu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 19 Nov 2021 13:53:50 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 57B1B61AD2;
-        Fri, 19 Nov 2021 18:50:48 +0000 (UTC)
+        id S235285AbhKSSxv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Nov 2021 13:53:51 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5CEEF61B1B;
+        Fri, 19 Nov 2021 18:50:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637347848;
-        bh=N89DVtM/C7GU55j1dJHLSOU+nswExmc+jtpbDvNOVZg=;
+        s=k20201202; t=1637347849;
+        bh=ObM+DPxauL3aoCOROfGo45d7GC/v0aHKnJhgv0atH2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ml2N3fwZx99ea2S7w6WVGtmxbzaEjZXr/t17XhG6lZGuQ9wx5k9MoEvvR21FUQaua
-         TgEt5irp914mQCIeSyptzFB4c5VvvlbCTc9eV2LsohomS24HIIHvLZemXY+MjfheVY
-         0CimETYkATWT2VL7S+yITuZoia+9xl560N8liCPvZ9H8BukZBstBH/HD9DvJ5i+NoR
-         dSqAt2C6m8ScSxa6A7T+8omrGcFJIjar6hlynNtosGhghbfdKeU4Ggp/SkkvH1ahjL
-         oypFGnDvcI93L0JXeaZ7vgeuWONok6a3aUubyZGtCRmEnzz2CVltJvNcfqD3WydJLv
-         c9x1BFOsLctdg==
+        b=MvuerhLDwUTMmQgEiJ9OoJy25NDWswPnNY3Q4vYkq7WtxHbsob41sHphJ2f36JokE
+         mCzFegfLCr8znxBYOLUxU5RPhzW7FiQ92IOxNEirXISf6IakgK45OgDE/bkw3AN/fe
+         Hxw25RRdLvP1VxRPhkBuOPF0SzU1PChTJOn9us5EoV8YVb7hrQP7XpKy88J8kfTr1Y
+         VHGVCaB7Jp/QtsBV44rtpLWWKPayDch1x1oQAf+6WXHI/SZwN5swle6AQ7+mr2e4Wt
+         LUAVOqBZxK4nQOMibVNTdXDeURGPdWTwkGhHhE+JmHxnnlZORkmGTM+jCflW3aAHrl
+         0ghwnfnyOSGGA==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: [RFC bpf-next 3/6] bpf: create a header for cgroup_storage_type()
-Date:   Fri, 19 Nov 2021 10:50:40 -0800
-Message-Id: <20211119185043.3937836-4-kuba@kernel.org>
+Subject: [RFC bpf-next 6/6] bpf: push down the bpf-link include
+Date:   Fri, 19 Nov 2021 10:50:43 -0800
+Message-Id: <20211119185043.3937836-7-kuba@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211119185043.3937836-1-kuba@kernel.org>
 References: <20211119185043.3937836-1-kuba@kernel.org>
@@ -41,85 +41,72 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-cgroup_storage_type() is a static inline which needs to deference
-bpf_map. Move it to its own header so that we don't need to pull
-in bpf.h. It only has a couple of callers.
+Turns out bpf_link is not dereferenced or embedded much.
+Since we have separated it out to its own header why not
+drop the include from bpf.h completely...
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- include/linux/bpf-cgroup-storage.h | 17 +++++++++++++++++
- include/linux/bpf-cgroup.h         |  9 ---------
- kernel/bpf/helpers.c               |  1 +
- kernel/bpf/local_storage.c         |  1 +
- 4 files changed, 19 insertions(+), 9 deletions(-)
- create mode 100644 include/linux/bpf-cgroup-storage.h
+ include/linux/bpf.h   | 2 +-
+ kernel/bpf/bpf_iter.c | 1 +
+ kernel/bpf/syscall.c  | 1 +
+ net/core/dev.c        | 1 +
+ 4 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/bpf-cgroup-storage.h b/include/linux/bpf-cgroup-storage.h
-new file mode 100644
-index 000000000000..0e0f3409c586
---- /dev/null
-+++ b/include/linux/bpf-cgroup-storage.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _BPF_CGROUP_STORAGE_H
-+#define _BPF_CGROUP_STORAGE_H
-+
-+#include <linux/bpf.h>
-+#include <linux/bpf-cgroup.h>
-+
-+static inline enum bpf_cgroup_storage_type cgroup_storage_type(
-+	struct bpf_map *map)
-+{
-+	if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
-+		return BPF_CGROUP_STORAGE_PERCPU;
-+
-+	return BPF_CGROUP_STORAGE_SHARED;
-+}
-+
-+#endif
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 11820a430d6c..12474516e0be 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -194,15 +194,6 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
- 					    int optname, void *optval,
- 					    int *optlen, int retval);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1302e0737699..114fd9ced5da 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -23,12 +23,12 @@
+ #include <linux/slab.h>
+ #include <linux/percpu-refcount.h>
+ #include <linux/bpf-cgroup-types.h>
+-#include <linux/bpf-link.h>
+ #include <linux/bpfptr.h>
  
--static inline enum bpf_cgroup_storage_type cgroup_storage_type(
--	struct bpf_map *map)
--{
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
--		return BPF_CGROUP_STORAGE_PERCPU;
--
--	return BPF_CGROUP_STORAGE_SHARED;
--}
--
- struct bpf_cgroup_storage *
- cgroup_storage_lookup(struct bpf_cgroup_storage_map *map,
- 		      void *key, bool locked);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 1ffd469c217f..352acea8e53a 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
-  */
+ struct bpf_verifier_env;
+ struct bpf_verifier_log;
+ struct perf_event;
++struct bpf_link;
+ struct bpf_prog;
+ struct bpf_prog_aux;
+ struct bpf_map;
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index b2ee45064e06..219eb181bc2c 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -5,6 +5,7 @@
+ #include <linux/anon_inodes.h>
+ #include <linux/filter.h>
  #include <linux/bpf.h>
-+#include <linux/bpf-cgroup-storage.h>
- #include <linux/rcupdate.h>
- #include <linux/random.h>
- #include <linux/smp.h>
-diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
-index 035e9e3a7132..195f9c13ef5b 100644
---- a/kernel/bpf/local_storage.c
-+++ b/kernel/bpf/local_storage.c
-@@ -1,5 +1,6 @@
- //SPDX-License-Identifier: GPL-2.0
- #include <linux/bpf-cgroup.h>
-+#include <linux/bpf-cgroup-storage.h>
- #include <linux/bpf.h>
- #include <linux/bpf_local_storage.h>
++#include <linux/bpf-link.h>
+ 
+ struct bpf_iter_target_info {
+ 	struct list_head list;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 50f96ea4452a..d5be38f8ce41 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5,6 +5,7 @@
+ #include <linux/bpf_trace.h>
+ #include <linux/bpf_lirc.h>
+ #include <linux/bpf_verifier.h>
++#include <linux/bpf-link.h>
  #include <linux/btf.h>
+ #include <linux/syscalls.h>
+ #include <linux/slab.h>
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 15ac064b5562..c29accce8319 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -93,6 +93,7 @@
+ #include <linux/skbuff.h>
+ #include <linux/kthread.h>
+ #include <linux/bpf.h>
++#include <linux/bpf-link.h>
+ #include <linux/bpf_trace.h>
+ #include <net/net_namespace.h>
+ #include <net/sock.h>
 -- 
 2.31.1
 
