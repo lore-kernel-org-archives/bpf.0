@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 063FAC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A884C4332F
 	for <bpf@archiver.kernel.org>; Sat, 20 Nov 2021 11:28:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237438AbhKTLbM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 20 Nov 2021 06:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S237480AbhKTLbO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 20 Nov 2021 06:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237389AbhKTLbG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 20 Nov 2021 06:31:06 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45F7C061574;
-        Sat, 20 Nov 2021 03:28:03 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id u17so10132458plg.9;
-        Sat, 20 Nov 2021 03:28:03 -0800 (PST)
+        with ESMTP id S237407AbhKTLbJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 20 Nov 2021 06:31:09 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3450C061574;
+        Sat, 20 Nov 2021 03:28:06 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id r5so10918093pgi.6;
+        Sat, 20 Nov 2021 03:28:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NXvWr7/n/dn/qU7871k4jVbZ4yqRH7KsA6t+jNRxS5w=;
-        b=bFQfNI4zaX/cX3ouONrppFc9YKLptBjPxzlAa57/2aqNreSUW7BufmQOVwKb8XlWx9
-         MPi+O1PqfJ7sDMHSCZ+uGA/BeAy3Vm7WUNtLXqpgmK1RZH4znPl3WNx6PArY/fqfqi5z
-         /7goWOQq36fVMpT4QPfQORv8H2cFJQ6bjnwqc7oDhaBhrPjQYRuG1zR18Dv4Suf7k+vy
-         7SUtVnBYXMAW0rCY4p/HVSF01tnp0cDf9IDn4ZHiL2f3rChJWYRTU5YjMJfGvhOPGmUU
-         fiaG8RIVrMWrz0TNV5tdYsxQTSY7dgxV+srOM8LSeDpzr4sYQi9aUff9ThJDz87hCR/k
-         /gOw==
+        bh=1oe3mAtCy57SvxrUI35nWEx465krMRGSksc4bk1sFUA=;
+        b=a/Ogd1caJnHgyw92yP4+Sy5vg9y3tFva7RDUZp/KgaMgifhmecvr+CS3ys80EQHlnJ
+         WZ5u82dkFpOU64C77RDhgKnWORvGO9aASyfYgZ8iECmn91ra5Kui4evt+zXaIhOiozmf
+         +VOKAhz2d2SpD4OSdcg36Mh8+Kzb5KpISqIcFB9ZMtOE7ZkeBW9qhktknkE2d8HgFdr4
+         +dMx6zIpDr0oBRy+CtHcwSzCqbnPnRhjGbuXLDVguG6jKSN3JFUfPk7YOpD+loAMk8wp
+         xo2504Nj2+vqkp8K5xM3isUSUAm8s6VCBfDg9svez5WftmSq7sRq7lllAe4nJSwsgc3h
+         HlOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NXvWr7/n/dn/qU7871k4jVbZ4yqRH7KsA6t+jNRxS5w=;
-        b=kqOCHakA4BHg4KPNFfonbzpe4/6sXkBFjcW/kQLL2Xe3ry7Xn49GKZNzQFEEfM7mZl
-         66P148omv/IiuaMBMJmtZxp16xVKiqpkJzdOSbEEwgb21M23YAy73uJYSVfDieJzQa/Q
-         Szx5fL/L0YQviHFTAHoT+uuGR+rg0fna+Jug2Sdm9CZYKt/h7U56thfleQ/UPMGCELyi
-         XONitXmp1deTAft7iapkNgNQzfX+0puPY8GgGex8JvgT89q93NbTlggwwxDKhFByQPz4
-         82D7+2pns1GqWtptj6hd4EMn+Byw/NjoC05mC434OSJNCdf4hM7D2PC08ns+361x6PEq
-         FwVg==
-X-Gm-Message-State: AOAM531Uzx1mykl/YeRvhuZ8p4eNFnAZOdZFG34fs8PufZwnoT7HLtkE
-        tfSvNGhj/dUiY2ihgMjdpY4=
-X-Google-Smtp-Source: ABdhPJwckAaKVrEN2V1fZZmajViBaj+hK5R4HtJRF86XY4oxgC2JPhuSPO4Kwsq5pBFTZqBgcv/o9g==
-X-Received: by 2002:a17:90b:512:: with SMTP id r18mr9057016pjz.64.1637407683486;
-        Sat, 20 Nov 2021 03:28:03 -0800 (PST)
+        bh=1oe3mAtCy57SvxrUI35nWEx465krMRGSksc4bk1sFUA=;
+        b=maBjh1kpdFJIWSla4i6ySyZKxaYhnNyigleQtjI0bpUzCnLFaJlo54pgC59u65EOFt
+         jhF57UPzFhUlFLQNheqoiK3BrivWTrg/YoZAQKOsmdwbshV/JThYl+wrP8/aVygbnBsk
+         nK7ALocv7UOwSlpf3HKxdQDz7PpTMIzReXwHmptl/gG8VxmCUC6WcAjhXa95TDFfmFAi
+         y1NCCFoibaz7goTQVobpa2cScpHqWRQBZ/JF+Muin4AblNwcj8Lq+Wl09NY0uPKFQ1zq
+         2w290A1Ge0iWjW10zURVv/lbgCrbAcNhARxQ96jhjsmoSBsFdWx2K+ymk8Ys3EH953Y7
+         tbOw==
+X-Gm-Message-State: AOAM5326oLQJxdbCcHPRh39IUwVDgXAn3RUvoawqiNYEHJKM/GFJDpT5
+        a7fv5npxxyMzlPzZnxlngz8=
+X-Google-Smtp-Source: ABdhPJw0Uf72DJptZW3n7FKi3LSyrN0KvK2sEAoBl7vohdSAsCWbkjYS+ap+McxE+4c7YPsB0+ZG4g==
+X-Received: by 2002:a05:6a00:848:b0:49f:b215:e002 with SMTP id q8-20020a056a00084800b0049fb215e002mr70218451pfk.47.1637407686283;
+        Sat, 20 Nov 2021 03:28:06 -0800 (PST)
 Received: from vultr.guest ([66.42.104.82])
-        by smtp.gmail.com with ESMTPSA id q17sm2835490pfu.117.2021.11.20.03.28.02
+        by smtp.gmail.com with ESMTPSA id q17sm2835490pfu.117.2021.11.20.03.28.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Nov 2021 03:28:03 -0800 (PST)
+        Sat, 20 Nov 2021 03:28:05 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     akpm@linux-foundation.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
@@ -54,7 +54,8 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         oliver.sang@intel.com, lkp@intel.com,
         Yafang Shao <laoar.shao@gmail.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         David Hildenbrand <david@redhat.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -65,11 +66,10 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Matthew Wilcox <willy@infradead.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
         Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 3/7] drivers/infiniband: replace open-coded string copy with get_task_comm
-Date:   Sat, 20 Nov 2021 11:27:34 +0000
-Message-Id: <20211120112738.45980-4-laoar.shao@gmail.com>
+Subject: [PATCH v2 5/7] samples/bpf/test_overhead_kprobe_kern: replace bpf_probe_read_kernel with bpf_probe_read_kernel_str to get task comm
+Date:   Sat, 20 Nov 2021 11:27:36 +0000
+Message-Id: <20211120112738.45980-6-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20211120112738.45980-1-laoar.shao@gmail.com>
 References: <20211120112738.45980-1-laoar.shao@gmail.com>
@@ -79,12 +79,13 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We'd better use the helper get_task_comm() rather than the open-coded
-strlcpy() to get task comm. As the comment above the hard-coded 16, we
-can replace it with TASK_COMM_LEN.
+bpf_probe_read_kernel_str() will add a nul terminator to the dst, then
+we don't care about if the dst size is big enough. This patch also
+replaces the hard-coded 16 with TASK_COMM_LEN to make it grepable.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Acked-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Reviewed-by: David Hildenbrand <david@redhat.com>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
@@ -99,36 +100,87 @@ Cc: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Kees Cook <keescook@chromium.org>
 Cc: Petr Mladek <pmladek@suse.com>
 ---
- drivers/infiniband/hw/qib/qib.h          | 2 +-
- drivers/infiniband/hw/qib/qib_file_ops.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ samples/bpf/offwaketime_kern.c          |  4 ++--
+ samples/bpf/test_overhead_kprobe_kern.c | 11 ++++++-----
+ samples/bpf/test_overhead_tp_kern.c     |  5 +++--
+ 3 files changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/infiniband/hw/qib/qib.h b/drivers/infiniband/hw/qib/qib.h
-index 9363bccfc6e7..a8e1c30c370f 100644
---- a/drivers/infiniband/hw/qib/qib.h
-+++ b/drivers/infiniband/hw/qib/qib.h
-@@ -196,7 +196,7 @@ struct qib_ctxtdata {
- 	pid_t pid;
- 	pid_t subpid[QLOGIC_IB_MAX_SUBCTXT];
- 	/* same size as task_struct .comm[], command that opened context */
--	char comm[16];
-+	char comm[TASK_COMM_LEN];
- 	/* pkeys set by this use of this ctxt */
- 	u16 pkeys[4];
- 	/* so file ops can get at unit */
-diff --git a/drivers/infiniband/hw/qib/qib_file_ops.c b/drivers/infiniband/hw/qib/qib_file_ops.c
-index 63854f4b6524..aa290928cf96 100644
---- a/drivers/infiniband/hw/qib/qib_file_ops.c
-+++ b/drivers/infiniband/hw/qib/qib_file_ops.c
-@@ -1321,7 +1321,7 @@ static int setup_ctxt(struct qib_pportdata *ppd, int ctxt,
- 	rcd->tid_pg_list = ptmp;
- 	rcd->pid = current->pid;
- 	init_waitqueue_head(&dd->rcd[ctxt]->wait);
--	strlcpy(rcd->comm, current->comm, sizeof(rcd->comm));
-+	get_task_comm(rcd->comm, current);
- 	ctxt_fp(fp) = rcd;
- 	qib_stats.sps_ctxts++;
- 	dd->freectxts--;
+diff --git a/samples/bpf/offwaketime_kern.c b/samples/bpf/offwaketime_kern.c
+index 4866afd054da..eb4d94742e6b 100644
+--- a/samples/bpf/offwaketime_kern.c
++++ b/samples/bpf/offwaketime_kern.c
+@@ -113,11 +113,11 @@ static inline int update_counts(void *ctx, u32 pid, u64 delta)
+ /* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
+ struct sched_switch_args {
+ 	unsigned long long pad;
+-	char prev_comm[16];
++	char prev_comm[TASK_COMM_LEN];
+ 	int prev_pid;
+ 	int prev_prio;
+ 	long long prev_state;
+-	char next_comm[16];
++	char next_comm[TASK_COMM_LEN];
+ 	int next_pid;
+ 	int next_prio;
+ };
+diff --git a/samples/bpf/test_overhead_kprobe_kern.c b/samples/bpf/test_overhead_kprobe_kern.c
+index f6d593e47037..8fdd2c9c56b2 100644
+--- a/samples/bpf/test_overhead_kprobe_kern.c
++++ b/samples/bpf/test_overhead_kprobe_kern.c
+@@ -6,6 +6,7 @@
+  */
+ #include <linux/version.h>
+ #include <linux/ptrace.h>
++#include <linux/sched.h>
+ #include <uapi/linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+@@ -22,17 +23,17 @@ int prog(struct pt_regs *ctx)
+ {
+ 	struct signal_struct *signal;
+ 	struct task_struct *tsk;
+-	char oldcomm[16] = {};
+-	char newcomm[16] = {};
++	char oldcomm[TASK_COMM_LEN] = {};
++	char newcomm[TASK_COMM_LEN] = {};
+ 	u16 oom_score_adj;
+ 	u32 pid;
+ 
+ 	tsk = (void *)PT_REGS_PARM1(ctx);
+ 
+ 	pid = _(tsk->pid);
+-	bpf_probe_read_kernel(oldcomm, sizeof(oldcomm), &tsk->comm);
+-	bpf_probe_read_kernel(newcomm, sizeof(newcomm),
+-			      (void *)PT_REGS_PARM2(ctx));
++	bpf_probe_read_kernel_str(oldcomm, sizeof(oldcomm), &tsk->comm);
++	bpf_probe_read_kernel_str(newcomm, sizeof(newcomm),
++				  (void *)PT_REGS_PARM2(ctx));
+ 	signal = _(tsk->signal);
+ 	oom_score_adj = _(signal->oom_score_adj);
+ 	return 0;
+diff --git a/samples/bpf/test_overhead_tp_kern.c b/samples/bpf/test_overhead_tp_kern.c
+index eaa32693f8fc..80edadacb692 100644
+--- a/samples/bpf/test_overhead_tp_kern.c
++++ b/samples/bpf/test_overhead_tp_kern.c
+@@ -4,6 +4,7 @@
+  * modify it under the terms of version 2 of the GNU General Public
+  * License as published by the Free Software Foundation.
+  */
++#include <linux/sched.h>
+ #include <uapi/linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+@@ -11,8 +12,8 @@
+ struct task_rename {
+ 	__u64 pad;
+ 	__u32 pid;
+-	char oldcomm[16];
+-	char newcomm[16];
++	char oldcomm[TASK_COMM_LEN];
++	char newcomm[TASK_COMM_LEN];
+ 	__u16 oom_score_adj;
+ };
+ SEC("tracepoint/task/task_rename")
 -- 
 2.17.1
 
