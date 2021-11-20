@@ -2,218 +2,185 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DCABC433EF
-	for <bpf@archiver.kernel.org>; Sat, 20 Nov 2021 01:15:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD657C433EF
+	for <bpf@archiver.kernel.org>; Sat, 20 Nov 2021 03:33:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbhKTBSq convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 19 Nov 2021 20:18:46 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62686 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234335AbhKTBSq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 19 Nov 2021 20:18:46 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AJHkmQj010595
-        for <bpf@vger.kernel.org>; Fri, 19 Nov 2021 17:15:41 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3ce68epxt8-13
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 19 Nov 2021 17:15:41 -0800
-Received: from intmgw001.27.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.14; Fri, 19 Nov 2021 17:15:02 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 3D57F9DD172B; Fri, 19 Nov 2021 17:14:58 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: mix legacy (maps) and modern (vars) BPF in one test
-Date:   Fri, 19 Nov 2021 17:14:55 -0800
-Message-ID: <20211120011455.3679237-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211120011455.3679237-1-andrii@kernel.org>
-References: <20211120011455.3679237-1-andrii@kernel.org>
+        id S234831AbhKTDgJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 19 Nov 2021 22:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234360AbhKTDgF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 19 Nov 2021 22:36:05 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E5CC06173E
+        for <bpf@vger.kernel.org>; Fri, 19 Nov 2021 19:33:01 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id m24so9563615pls.10
+        for <bpf@vger.kernel.org>; Fri, 19 Nov 2021 19:33:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=IEnoFM2S78w2/4v1vtXOkI2w0mmp3ovJnlD0eVLOwvw=;
+        b=pbIYWaAyCM29AblfAMxMdr29uhZ7VuzuMy4WGDNjdWkV+mr5uEn7irRGrSgxNoUaaQ
+         qxIQoswLiP/mU5xekTlaMVrBQ+jogY6I7vRAXQ7TZQ+1psfLw7NApGbEHxVjSbXN2om6
+         6SLgYnySpJ9F63cJER+lTlOndNB1yK3N4e5blbdk0lr0f08PlA7N36tmgqquNLf5q8p6
+         En5dWsWbIUknbND2raccWPm8JFLD4uSQndAlRQiP84VGksf1OkrTasOGgRfefftzff1F
+         pIVhWMjhH81KtPsrFpPcf/FFalajiDLR61ExEmGawtdRYCRJ3Q3VxEYv7pSbn6ZrM0Sa
+         FBvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=IEnoFM2S78w2/4v1vtXOkI2w0mmp3ovJnlD0eVLOwvw=;
+        b=ifdlJG+8j7TDE1w+uLg1qnlz6QwRFa9jrFVI+afw4M3qkM938WXYd3gtEOm8lcedr2
+         C8hUFn7BVpF7d7NkZHQH7A+5AjfwBHj/4/SzQ/1uHW7WRDvQ/Ukax55K54mVcpqbyV8W
+         mGLNrC3X6J2eDhr138bldXTj8SKZSXoa+2SYbmuqxrvV4Ho+Ms7hd8n1u03uwo8vIhJO
+         QQUzAKSDm7AZXpKcp80XkJhbTcPz/KSSee1Dwzj3Lstzdcrf5k9JPUINwkEt0dbqNC9v
+         HfuFJbWR+v0PsBR9uispnwaAr0qmuUTgjOHeS3n0MaD23McWHqKCYGhyzh8tYRNHS23l
+         VkcQ==
+X-Gm-Message-State: AOAM532+MNhkjbqpZtQSw8i8R1V45aCCJlz5+RTRCE10PsbzmnMDXVs8
+        kS+c7yeazNFgu26zlMukIuc=
+X-Google-Smtp-Source: ABdhPJxRigBAnTncDMqQTqhUJeYeafsX0MitMC/4WSHmTjetpNY3v7wVvoUk9d4aHYsExBeEqaREqw==
+X-Received: by 2002:a17:90b:351:: with SMTP id fh17mr6382132pjb.19.1637379180867;
+        Fri, 19 Nov 2021 19:33:00 -0800 (PST)
+Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:a858])
+        by smtp.gmail.com with ESMTPSA id me7sm13752360pjb.9.2021.11.19.19.33.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Nov 2021 19:33:00 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH v3 bpf-next 01/13] libbpf: Replace btf__type_by_id() with btf_type_by_id().
+Date:   Fri, 19 Nov 2021 19:32:43 -0800
+Message-Id: <20211120033255.91214-2-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211120033255.91214-1-alexei.starovoitov@gmail.com>
+References: <20211120033255.91214-1-alexei.starovoitov@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: XPOODZsQmk-C2sLKIx01xaKPbtwRoKyc
-X-Proofpoint-ORIG-GUID: XPOODZsQmk-C2sLKIx01xaKPbtwRoKyc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-19_16,2021-11-17_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- clxscore=1015 malwarescore=0 mlxlogscore=999 impostorscore=0
- suspectscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111200006
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add selftest that combines two BPF programs within single BPF object
-file such that one of the programs is using global variables, but can be
-skipped at runtime on old kernels that don't support global data.
-Another BPF program is written with the goal to be runnable on very old
-kernels and only relies on explicitly accessed BPF maps.
+From: Alexei Starovoitov <ast@kernel.org>
 
-Such test, run against old kernels (e.g., libbpf CI will run it against 4.9
-kernel that doesn't support global data), allows to test the approach
-and ensure that libbpf doesn't make unnecessary assumption about
-necessary kernel features.
+To prepare relo_core.c to be compiled in the kernel and the user space
+replace btf__type_by_id with btf_type_by_id.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+In libbpf btf__type_by_id and btf_type_by_id have different behavior.
+
+bpf_core_apply_relo_insn() needs behavior of uapi btf__type_by_id
+vs internal btf_type_by_id, but type_id range check is already done
+in bpf_core_apply_relo(), so it's safe to replace it everywhere.
+The kernel btf_type_by_id() does the check anyway. It doesn't hurt.
+
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../selftests/bpf/prog_tests/legacy_printk.c  | 65 +++++++++++++++++++
- .../selftests/bpf/progs/test_legacy_printk.c  | 65 +++++++++++++++++++
- 2 files changed, 130 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/legacy_printk.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_legacy_printk.c
+ tools/lib/bpf/btf.c             |  2 +-
+ tools/lib/bpf/libbpf_internal.h |  2 +-
+ tools/lib/bpf/relo_core.c       | 19 ++++++++-----------
+ 3 files changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/legacy_printk.c b/tools/testing/selftests/bpf/prog_tests/legacy_printk.c
-new file mode 100644
-index 000000000000..ec6e45f2a644
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/legacy_printk.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+#include <test_progs.h>
-+#include "test_legacy_printk.skel.h"
-+
-+static int execute_one_variant(bool legacy)
-+{
-+	struct test_legacy_printk *skel;
-+	int err, zero = 0, my_pid = getpid(), res, map_fd;
-+
-+	skel = test_legacy_printk__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return -errno;
-+
-+	bpf_program__set_autoload(skel->progs.handle_legacy, legacy);
-+	bpf_program__set_autoload(skel->progs.handle_modern, !legacy);
-+
-+	err = test_legacy_printk__load(skel);
-+	/* no ASSERT_OK, we expect one of two variants can fail here */
-+	if (err)
-+		goto err_out;
-+
-+	if (legacy) {
-+		map_fd = bpf_map__fd(skel->maps.my_pid_map);
-+		err = bpf_map_update_elem(map_fd, &zero, &my_pid, BPF_ANY);
-+		if (!ASSERT_OK(err, "my_pid_map_update"))
-+			goto err_out;
-+		err = bpf_map_lookup_elem(map_fd, &zero, &res);
-+	} else {
-+		skel->bss->my_pid_var = my_pid;
-+	}
-+
-+	err = test_legacy_printk__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto err_out;
-+
-+	usleep(1); /* trigger */
-+
-+	if (legacy) {
-+		map_fd = bpf_map__fd(skel->maps.res_map);
-+		err = bpf_map_lookup_elem(map_fd, &zero, &res);
-+		if (!ASSERT_OK(err, "res_map_lookup"))
-+			goto err_out;
-+	} else {
-+		res = skel->bss->res_var;
-+	}
-+
-+	if (!ASSERT_GT(res, 0, "res")) {
-+		err = -EINVAL;
-+		goto err_out;
-+	}
-+
-+err_out:
-+	test_legacy_printk__destroy(skel);
-+	return err;
-+}
-+
-+void test_legacy_printk(void)
-+{
-+	/* legacy variant should work everywhere */
-+	ASSERT_OK(execute_one_variant(true /* legacy */), "legacy_case");
-+
-+	/* execute modern variant, can fail the load on old kernels */
-+	execute_one_variant(false);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_legacy_printk.c b/tools/testing/selftests/bpf/progs/test_legacy_printk.c
-new file mode 100644
-index 000000000000..96d945781e77
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_legacy_printk.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2021 Facebook */
-+
-+#include <linux/bpf.h>
-+#define BPF_NO_GLOBAL_DATA
-+#include <bpf/bpf_helpers.h>
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, int);
-+	__uint(max_entries, 1);
-+} my_pid_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, int);
-+	__type(value, int);
-+	__uint(max_entries, 1);
-+} res_map SEC(".maps");
-+
-+volatile int my_pid_var = 0;
-+volatile int res_var = 0;
-+
-+SEC("tp/raw_syscalls/sys_enter")
-+int handle_legacy(void *ctx)
-+{
-+	int zero = 0, *my_pid, cur_pid, *my_res;
-+
-+	my_pid = bpf_map_lookup_elem(&my_pid_map, &zero);
-+	if (!my_pid)
-+		return 1;
-+
-+	cur_pid = bpf_get_current_pid_tgid() >> 32;
-+	if (cur_pid != *my_pid)
-+		return 1;
-+
-+	my_res = bpf_map_lookup_elem(&res_map, &zero);
-+	if (!my_res)
-+		return 1;
-+
-+	if (*my_res == 0)
-+		bpf_printk("Legacy-case bpf_printk test, pid %d\n", cur_pid);
-+	*my_res = 1;
-+
-+	return *my_res;
-+}
-+
-+SEC("tp/raw_syscalls/sys_enter")
-+int handle_modern(void *ctx)
-+{
-+	int zero = 0, cur_pid;
-+
-+	cur_pid = bpf_get_current_pid_tgid() >> 32;
-+	if (cur_pid != my_pid_var)
-+		return 1;
-+
-+	if (res_var == 0)
-+		bpf_printk("Modern-case bpf_printk test, pid %d\n", cur_pid);
-+	res_var = 1;
-+
-+	return res_var;
-+}
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index e97217a77196..4a1115eb39b4 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -454,7 +454,7 @@ const struct btf *btf__base_btf(const struct btf *btf)
+ }
+ 
+ /* internal helper returning non-const pointer to a type */
+-struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id)
++struct btf_type *btf_type_by_id(const struct btf *btf, __u32 type_id)
+ {
+ 	if (type_id == 0)
+ 		return &btf_void;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index f7ac349650a1..1e1250e1dfa3 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -172,7 +172,7 @@ static inline void *libbpf_reallocarray(void *ptr, size_t nmemb, size_t size)
+ struct btf;
+ struct btf_type;
+ 
+-struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id);
++struct btf_type *btf_type_by_id(const struct btf *btf, __u32 type_id);
+ const char *btf_kind_str(const struct btf_type *t);
+ const struct btf_type *skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
+ 
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index b5b8956a1be8..c0904f4cb514 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -51,7 +51,7 @@ static bool is_flex_arr(const struct btf *btf,
+ 		return false;
+ 
+ 	/* has to be the last member of enclosing struct */
+-	t = btf__type_by_id(btf, acc->type_id);
++	t = btf_type_by_id(btf, acc->type_id);
+ 	return acc->idx == btf_vlen(t) - 1;
+ }
+ 
+@@ -388,7 +388,7 @@ static int bpf_core_match_member(const struct btf *local_btf,
+ 		return 0;
+ 
+ 	local_id = local_acc->type_id;
+-	local_type = btf__type_by_id(local_btf, local_id);
++	local_type = btf_type_by_id(local_btf, local_id);
+ 	local_member = btf_members(local_type) + local_acc->idx;
+ 	local_name = btf__name_by_offset(local_btf, local_member->name_off);
+ 
+@@ -580,7 +580,7 @@ static int bpf_core_calc_field_relo(const char *prog_name,
+ 		return -EUCLEAN; /* request instruction poisoning */
+ 
+ 	acc = &spec->spec[spec->len - 1];
+-	t = btf__type_by_id(spec->btf, acc->type_id);
++	t = btf_type_by_id(spec->btf, acc->type_id);
+ 
+ 	/* a[n] accessor needs special handling */
+ 	if (!acc->name) {
+@@ -729,7 +729,7 @@ static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
+ 	case BPF_ENUMVAL_VALUE:
+ 		if (!spec)
+ 			return -EUCLEAN; /* request instruction poisoning */
+-		t = btf__type_by_id(spec->btf, spec->spec[0].type_id);
++		t = btf_type_by_id(spec->btf, spec->spec[0].type_id);
+ 		e = btf_enum(t) + spec->spec[0].idx;
+ 		*val = e->val;
+ 		break;
+@@ -805,8 +805,8 @@ static int bpf_core_calc_relo(const char *prog_name,
+ 		if (res->orig_sz != res->new_sz) {
+ 			const struct btf_type *orig_t, *new_t;
+ 
+-			orig_t = btf__type_by_id(local_spec->btf, res->orig_type_id);
+-			new_t = btf__type_by_id(targ_spec->btf, res->new_type_id);
++			orig_t = btf_type_by_id(local_spec->btf, res->orig_type_id);
++			new_t = btf_type_by_id(targ_spec->btf, res->new_type_id);
+ 
+ 			/* There are two use cases in which it's safe to
+ 			 * adjust load/store's mem size:
+@@ -1054,7 +1054,7 @@ static void bpf_core_dump_spec(int level, const struct bpf_core_spec *spec)
+ 	int i;
+ 
+ 	type_id = spec->root_type_id;
+-	t = btf__type_by_id(spec->btf, type_id);
++	t = btf_type_by_id(spec->btf, type_id);
+ 	s = btf__name_by_offset(spec->btf, t->name_off);
+ 
+ 	libbpf_print(level, "[%u] %s %s", type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
+@@ -1158,10 +1158,7 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
+ 	int i, j, err;
+ 
+ 	local_id = relo->type_id;
+-	local_type = btf__type_by_id(local_btf, local_id);
+-	if (!local_type)
+-		return -EINVAL;
+-
++	local_type = btf_type_by_id(local_btf, local_id);
+ 	local_name = btf__name_by_offset(local_btf, local_type->name_off);
+ 	if (!local_name)
+ 		return -EINVAL;
 -- 
 2.30.2
 
