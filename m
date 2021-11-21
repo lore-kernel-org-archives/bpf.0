@@ -2,108 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC317C4167B
-	for <bpf@archiver.kernel.org>; Sun, 21 Nov 2021 00:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D6BEC433EF
+	for <bpf@archiver.kernel.org>; Sun, 21 Nov 2021 01:46:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbhKUAe6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 20 Nov 2021 19:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57012 "EHLO
+        id S237571AbhKUBtN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 20 Nov 2021 20:49:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbhKUAe5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 20 Nov 2021 19:34:57 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683DBC061748
-        for <bpf@vger.kernel.org>; Sat, 20 Nov 2021 16:31:53 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id r130so12551033pfc.1
-        for <bpf@vger.kernel.org>; Sat, 20 Nov 2021 16:31:53 -0800 (PST)
+        with ESMTP id S237562AbhKUBtN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 20 Nov 2021 20:49:13 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428C5C06173E
+        for <bpf@vger.kernel.org>; Sat, 20 Nov 2021 17:46:08 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id t26so62107444lfk.9
+        for <bpf@vger.kernel.org>; Sat, 20 Nov 2021 17:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XxGWmTZwHsm0RN01kjRmL3HzDw86SFLpP/0ZpXpaZRc=;
-        b=mqLPe+mzN9Dl/E2s2wRLW9ghNZxzkxV9cQ7rzDcRi9/vEWM/1M/T9ZtHoNE4KsrZ5j
-         0dUrpsPnoEXXwUde09T2wZxbStgM88DZvGgmc0978ncxOd0TJDgINT5vSKtNkNjbTJUo
-         9aK6twgJ7kHLOHU+XH7Ad1bYAiBkodz9okdE0=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eC7ekTcNVcHToA7WbyMk8TOSIabpI8giHuuCFWYBVHY=;
+        b=ZLaZpQncZZfoAiI8KH3Z6X84qkK27pbn9jZmBbIsmzNChnaRDRQo0/rxwhCbcxMZln
+         A/L2fC3hg5lQ74xdjhEWlSJolhWBGICGVuov/cCwGc2IebcpF/pxu6AVPEJByavl2bIu
+         THIvhXCAqYYICY3jWybcDAjT8BNkrrR889btRCfUnCXJV6Sgrdh9RrDx6LTeMv7x/PQT
+         yXFPCTuFi14AlPH178sBL4sNovZEnFQcEA/yodB32eY6+5Sd11BJeVAg0XvPS5xYnJar
+         l56iwSUpsyARR72VnBfO5ZWoqq8P86ZZmkyQ6IKPPTdTb6eLOoRVPm5ylWem6I6R+0AV
+         CpAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=XxGWmTZwHsm0RN01kjRmL3HzDw86SFLpP/0ZpXpaZRc=;
-        b=zRzxDpXa7fg/MPNjcZvOWbiybyL/Nz6ul8MH62M0scaJXrZYrq79oD6iAUyPo226Wv
-         +umhOhpzjG7+6JypmSWzisORHNvjnZ4C7XV8etDKsfAI8cIpLVu5x8mwlLWVfXznlDaT
-         nQeY0B7JpyW1IiUQ2fYtsOeMziIj0fBtgroU7qiq2V/BNZvBRtxAqypfKW70jnx25wr/
-         4v/v5IUwjpydx65viQaz3eS2VKHm1d+fkLTmr3YgFPauLy3cvQ+w15M2OLlhGacnEcYP
-         mVG/CGKBEW0yQsVsUbPPXZjjoKuADbbiU0dYV8wsx6zDsAxHPeTLNza/Yn5mnmPwHtTo
-         tiwA==
-X-Gm-Message-State: AOAM531/u3babd8s4zN3CVKRPwM8jucQnP32U3dWGNOTokPXzFd2LKbb
-        2+xPN+LDasslQxsmjI6gOmrLqg==
-X-Google-Smtp-Source: ABdhPJx48K+tBtBfbJQf3sSRXIucI8Y6zCrUy5h3//aCrSN9nw8UbzVlU9gBgDoTvSGJtDP7M2mUdg==
-X-Received: by 2002:a05:6a00:2351:b0:47b:d092:d2e4 with SMTP id j17-20020a056a00235100b0047bd092d2e4mr73088775pfj.76.1637454712802;
-        Sat, 20 Nov 2021 16:31:52 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j127sm3932775pfg.14.2021.11.20.16.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Nov 2021 16:31:52 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eC7ekTcNVcHToA7WbyMk8TOSIabpI8giHuuCFWYBVHY=;
+        b=Tc2oV2g7itCJt2R3i/yMqIT1o8XNPBPsJKrh2A46MR/ZUuzCt2DoW5aJBF864VDz+i
+         2NLl0zk2rlgMZopHyzsRLCmBmroEENru1oH9DO8NDwzBQ9HbbjJBupPNIeOlFWPGE3Pl
+         Ac2SjIQ1dFrj0oy9t2BYIw5Zcs1jC8BYMSAWcCpLfIPYD+41EnVQZFv9Jq6eYj2MZLTC
+         P3LQHXet9DUu9XZP06O/MlL49N763wwjEqiyL/xwoG/12hXle81qfEvOhRbM9MDnT1Ki
+         bWjEvK6z82lg/MgS1Ey1pcX6Okm09PXbDGTTBCZ8zJMZzREqhcB9AEyakOl3RqC6YF7u
+         TxIw==
+X-Gm-Message-State: AOAM533W4BFmNro7QQ0SN19hAlgHikMNF6CtgigEhk20f8bmbph7BhVX
+        ysMCeteZ35ZFMenEtAoKTxztgD4aGjEM4J8FrqLwVw==
+X-Google-Smtp-Source: ABdhPJxfWi45CRv/695sTqDhdy6mX54xURuW0+JjIkOQYekJSB/icDp4YLBXjbdux+sf1/mczR3mZrREiZtrK5Xe6+E=
+X-Received: by 2002:a05:6512:6d1:: with SMTP id u17mr46632225lff.427.1637459166469;
+ Sat, 20 Nov 2021 17:46:06 -0800 (PST)
+MIME-Version: 1.0
+References: <20211119120521.18813-1-vincent.whitchurch@axis.com> <163742160874.26850.6419902452041932137.git-patchwork-notify@kernel.org>
+In-Reply-To: <163742160874.26850.6419902452041932137.git-patchwork-notify@kernel.org>
+From:   "Jiang Wang ." <jiang.wang@bytedance.com>
+Date:   Sat, 20 Nov 2021 17:45:55 -0800
+Message-ID: <CAP_N_Z_x9OCvGM4YyimdWLs-n90b=MHg2oVaTsNRo6DsXyQ53g@mail.gmail.com>
+Subject: Re: Re: [PATCH] af_unix: fix regression in read after shutdown
+To:     patchwork-bot+netdevbpf@kernel.org
+Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, kernel@axis.com,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kevin Hao <haokexin@gmail.com>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Vasily Averin <vvs@virtuozzo.com>,
-        linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2 net-next 0/2] skbuff: Switch structure bounds to struct_group()
-Date:   Sat, 20 Nov 2021 16:31:47 -0800
-Message-Id: <20211121003149.28397-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=654; h=from:subject; bh=JyIoux+3mSqRrP5c5yAm1k2PCuE3ujZ9X+hh+TTSdkw=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhmZN06M3ei451eaMBJ4tlO/hieAlz+BhYFDkIdlX1 eX61FpWJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYZmTdAAKCRCJcvTf3G3AJtbrD/ 9eR2KNvgCn/YPwypnUGU/RNNqA4O4bYEFLj4ElzB1qqQlG2RgJdcz+rq2yQisqqs16klI6tC11SBhN W7udXMhGJ+Py7w1vVEBAjVNZmGKGlJXE5U8WAHjfZcQac0sOe4DaoyxEKDhZ4dVEtfM9n+INWySh7M uDr1c3vaP+cgXlX5lMFiVoFtjG416sLde9ZZ8i/AAoEtj13SqOYM69cCvB3ZV5sD6z171ju8LuL8V0 0/gPsQggl4r2PI9mSi0ATgA4nL9uxPXZ+WimwvtpoW3euJOXl3R5qx7YEJpMVEhQb+h7bsHU8+554G Mr/5XtAumV32/xkgbaaZzuXsqDpE7wlAaVucANa3AQEj21s9tjkelAJu7HA0AlFNxD1vdytn7CWZlk pZMaqvAW5drzcrEzYLOo+fXRjVbz/qGY1eHIl8O1AdM1Yl5bxOyoHeJ6+Bh5Bgajfi3DtMZFSy3y9b OpoS11g+KF4T5o4t9R3wBjQCyP+hGBmGNCpm6N3kBHTnOLW1hoF9P7WSGHblOL5gn/lWS1rXatOn5H Vacu7NXyluL8MFDh6ynTM7+DGECqimJOIry6vmwHNkpv8jjqqF+jTWDoJGkFAn2/aA49Zpg/XonIcy 94jGLJObRNcJnXtDPIWtQUQA7/UNnVofu/gJMtbIHUh4j4L/74FL/AmwVMfg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Thanks for the fix.
 
-This is a pair of patches to add struct_group() to struct sk_buff. The
-first is needed to work around sparse-specific complaints, and is new
-for v2. The second patch is the same as originally sent as v1.
+Regards,
 
--Kees
+Jiang
 
-Kees Cook (2):
-  skbuff: Move conditional preprocessor directives out of struct sk_buff
-  skbuff: Switch structure bounds to struct_group()
-
- drivers/net/wireguard/queueing.h |  4 +--
- include/linux/skbuff.h           | 46 +++++++++++++++-----------------
- net/core/filter.c                | 10 +++----
- net/core/skbuff.c                | 14 ++++------
- 4 files changed, 33 insertions(+), 41 deletions(-)
-
--- 
-2.30.2
-
+On Sat, Nov 20, 2021 at 7:20 AM <patchwork-bot+netdevbpf@kernel.org> wrote:
+>
+> Hello:
+>
+> This patch was applied to netdev/net.git (master)
+> by David S. Miller <davem@davemloft.net>:
+>
+> On Fri, 19 Nov 2021 13:05:21 +0100 you wrote:
+> > On kernels before v5.15, calling read() on a unix socket after
+> > shutdown(SHUT_RD) or shutdown(SHUT_RDWR) would return the data
+> > previously written or EOF.  But now, while read() after
+> > shutdown(SHUT_RD) still behaves the same way, read() after
+> > shutdown(SHUT_RDWR) always fails with -EINVAL.
+> >
+> > This behaviour change was apparently inadvertently introduced as part of
+> > a bug fix for a different regression caused by the commit adding sockmap
+> > support to af_unix, commit 94531cfcbe79c359 ("af_unix: Add
+> > unix_stream_proto for sockmap").  Those commits, for unclear reasons,
+> > started setting the socket state to TCP_CLOSE on shutdown(SHUT_RDWR),
+> > while this state change had previously only been done in
+> > unix_release_sock().
+> >
+> > [...]
+>
+> Here is the summary with links:
+>   - af_unix: fix regression in read after shutdown
+>     https://git.kernel.org/netdev/net/c/f9390b249c90
+>
+> You are awesome, thank you!
+> --
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html
+>
+>
