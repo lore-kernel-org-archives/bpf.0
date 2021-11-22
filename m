@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FB42C43217
-	for <bpf@archiver.kernel.org>; Mon, 22 Nov 2021 19:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF760C28CFB
+	for <bpf@archiver.kernel.org>; Mon, 22 Nov 2021 19:24:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239853AbhKVT1G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Nov 2021 14:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        id S239912AbhKVT1F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Nov 2021 14:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239850AbhKVT1B (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S239853AbhKVT1B (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 22 Nov 2021 14:27:01 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52F5C061758
-        for <bpf@vger.kernel.org>; Mon, 22 Nov 2021 11:23:50 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so679098wme.4
-        for <bpf@vger.kernel.org>; Mon, 22 Nov 2021 11:23:50 -0800 (PST)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B20FC06175C
+        for <bpf@vger.kernel.org>; Mon, 22 Nov 2021 11:23:52 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id o29so16502912wms.2
+        for <bpf@vger.kernel.org>; Mon, 22 Nov 2021 11:23:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=n3LTkpgb4YE18mw3OKBtH3udDe7QlkxzG+PzZ1tUbsA=;
-        b=dgftq9xHELzP4x8nZQnYg2fvVYgxq+O8uUGW9nXLbnBHDHJBPWypWfKOjXWLq4S9iF
-         eg0v3LD9aaT7ORh8gV+EtUWTpfagf2hc9sXGyLdaFcgzkXQHHe14f6KoVxgUtxbP0DN4
-         2CbY7CrMHWfO1OkaCcHf25L/1eAI0zw6UJwSQS5HuBAXEkUzKB6b6mdy//mpWCnVhO6d
-         OLeprSGhW9MRJ3I7521ctm/H97FkG7iAyHF7HfywbJkOaYgI/KkgQapINuAE7rox6M8Q
-         Re4xGtoJxVCWZfz8zpWdj76EylB+J2eKiZIUqQX2EGRtf2D9uUss43mMul2XGxG68jec
-         X1Xg==
+        bh=20odS1sGlZOVOTVJ+h0ATXc3IjCp4ghIzYe7OtypAl4=;
+        b=Tn1lU0bD88IO+9yCRA6my8Iwn8DdSi2yjmwKm6kCVat9P4MZbf8fk8q1VWneE0TQMr
+         xnQSOZ+OGzgQUnaQRhJrBVw8vuNdWTbTKFLwx/nlO5xCaGq/zFUzcaPK9h51bWJxQ3ik
+         Per+P/IB5wRUmmxGrykwQfiRNOBPXSvqCf2mp0Pg+peiE5PtpEZCvU3IzL9SXBgoDSJT
+         9MjphdkIt/a4BQLYOUr3f4akQA/F2Zlwj5jXh+48xjNpBUj3LphtLWGQY7+K7piMHFmt
+         nk95BeGVt1G9J6C34OPzChTKQfutYPiyse4sOcDVW+7TmgMR8d6h5nhk55JdaisCqkwi
+         pgzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n3LTkpgb4YE18mw3OKBtH3udDe7QlkxzG+PzZ1tUbsA=;
-        b=VxXQ+yNazMM6Cdwyf3wwDqcoK/bwrZhi3xIeLNXhvIxVCAJVC9ORH9t647QCfgU5Bh
-         s7bDZC5CnudUIZEqrRSZjz+xs7ogLTjfX13JPekwymle1iCByn4AVU8mD04inYXgh3jM
-         tAX679nwpZVospNzNZ/IqzukO1YJpA64wmlz/NXOpIz3jyefLx8gpe6BOsg1CnoemrSu
-         iwXCjOzpxV9/8bE1xVjJ+zewo0qLVh/vDAbQ9BrI11ilJ8ZANKeg6dBuwLTgwtlgl1h8
-         YoU0EK+R7WdOeZSFenvhgKWr1OjTB/435U+4L0bygCpMUv8guF/NQgEd/krHStAJhsgb
-         IbgQ==
-X-Gm-Message-State: AOAM531bXEVPCPZ0XblS6WRkLXYbdCOS7jh3Dn9vhR0WhKDCrDzp2jOG
-        npdZaDvh4yrR8k9vh3vHFcGutQ==
-X-Google-Smtp-Source: ABdhPJzbS8DyPHc1CvkMU//eUj0YedlEnTZRKz7L0NzB22USJIXqjQbsaV2Sx+5qVvccDCi8q7lOvw==
-X-Received: by 2002:a05:600c:3658:: with SMTP id y24mr33315488wmq.161.1637609028936;
-        Mon, 22 Nov 2021 11:23:48 -0800 (PST)
+        bh=20odS1sGlZOVOTVJ+h0ATXc3IjCp4ghIzYe7OtypAl4=;
+        b=QLKbhdlXZPNc771Wa8u8gOfYG+hEZppBhZiinfIrv2wgiurmf7zwJy6oP+I4QnN9Y4
+         rbC2b+3yNYr8tJEBmoxL6Ve2y5QXtwA61kFPeJvEADfR6mDuFFyXBjVfTGc0mI9s4sOZ
+         1DZx2t+OsKJf0tvpgf6gCosxjPA+huvr8rNp18cfuHmg+hhLnGuGjNIkfxtpQdZ1MQWD
+         6KObKFzsrrEWgrNBS5e3926y9iTo8wV/IMGRaLHfbZtNb51dInyjJCfdQRseO7cXiWsF
+         GwdTNFCXo2zqu8x5CFOAywbC9Kxcf9/H9SnAknJ5DzGlQ48/TX6ymsbVcJ3FFrWsIiWR
+         p+PQ==
+X-Gm-Message-State: AOAM533KGn9/J94a34Rbz7Yd2cADuIMD8cjqJZXVATVDdH5NGbCnEuy9
+        +nfWmwFKIA15dedr1eJoYKVKXw==
+X-Google-Smtp-Source: ABdhPJwO+fR7TuysSgJw95qlWY88C/MS5DSdhnBIyjOi33oxzKHfxJ2yjFeNCmhCvb1o8azdpWmQhw==
+X-Received: by 2002:a05:600c:1e1c:: with SMTP id ay28mr33464993wmb.131.1637609030871;
+        Mon, 22 Nov 2021 11:23:50 -0800 (PST)
 Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id b188sm9916150wmd.45.2021.11.22.11.23.48
+        by smtp.gmail.com with ESMTPSA id b188sm9916150wmd.45.2021.11.22.11.23.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Nov 2021 11:23:48 -0800 (PST)
+        Mon, 22 Nov 2021 11:23:50 -0800 (PST)
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com
@@ -54,9 +54,9 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 3/6] tools/libbpf: Enable cross-building with clang
-Date:   Mon, 22 Nov 2021 19:20:17 +0000
-Message-Id: <20211122192019.1277299-4-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next 5/6] tools/runqslower: Enable cross-building with clang
+Date:   Mon, 22 Nov 2021 19:20:19 +0000
+Message-Id: <20211122192019.1277299-6-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211122192019.1277299-1-jean-philippe@linaro.org>
 References: <20211122192019.1277299-1-jean-philippe@linaro.org>
@@ -68,34 +68,34 @@ X-Mailing-List: bpf@vger.kernel.org
 
 Cross-building using clang requires passing the "-target" flag rather
 than using the CROSS_COMPILE prefix. Makefile.include transforms
-CROSS_COMPILE into CLANG_CROSS_FLAGS. Add them to the CFLAGS.
+CROSS_COMPILE into CLANG_CROSS_FLAGS. Add them to CFLAGS, and erase
+CROSS_COMPILE for the bpftool build, since it needs to be executed on
+the host.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/lib/bpf/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/bpf/runqslower/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 5f7086fae31c..fe9201862aed 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -90,6 +90,7 @@ override CFLAGS += -Werror -Wall
- override CFLAGS += $(INCLUDES)
- override CFLAGS += -fvisibility=hidden
- override CFLAGS += -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-+override CFLAGS += $(CLANG_CROSS_FLAGS)
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 8791d0e2762b..da6de16a3dfb 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -12,7 +12,7 @@ BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
+ BPF_DESTDIR := $(BPFOBJ_OUTPUT)
+ BPF_INCLUDE := $(BPF_DESTDIR)/include
+ INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
+-CFLAGS := -g -Wall
++CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
  
- # flags specific for shared library
- SHLIB_FLAGS := -DSHARED -fPIC
-@@ -162,7 +163,7 @@ $(BPF_HELPER_DEFS): $(srctree)/tools/include/uapi/linux/bpf.h
- $(OUTPUT)libbpf.so: $(OUTPUT)libbpf.so.$(LIBBPF_VERSION)
+ # Try to detect best kernel BTF source
+ KERNEL_REL := $(shell uname -r)
+@@ -88,4 +88,4 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(BPFOBJ_OU
  
- $(OUTPUT)libbpf.so.$(LIBBPF_VERSION): $(BPF_IN_SHARED) $(VERSION_SCRIPT)
--	$(QUIET_LINK)$(CC) $(LDFLAGS) \
-+	$(QUIET_LINK)$(CC) $(CLANG_CROSS_FLAGS) $(LDFLAGS) \
- 		--shared -Wl,-soname,libbpf.so.$(LIBBPF_MAJOR_VERSION) \
- 		-Wl,--version-script=$(VERSION_SCRIPT) $< -lelf -lz -o $@
- 	@ln -sf $(@F) $(OUTPUT)libbpf.so
+ $(DEFAULT_BPFTOOL): $(BPFOBJ) | $(BPFTOOL_OUTPUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT)   \
+-		    CC=$(HOSTCC) LD=$(HOSTLD)
++		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)
 -- 
 2.33.1
 
