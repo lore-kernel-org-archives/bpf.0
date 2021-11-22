@@ -2,91 +2,161 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F2FC4332F
-	for <bpf@archiver.kernel.org>; Sun, 21 Nov 2021 16:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C069EC433EF
+	for <bpf@archiver.kernel.org>; Mon, 22 Nov 2021 02:48:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238452AbhKUQ0k (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 21 Nov 2021 11:26:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:20369 "EHLO
+        id S232642AbhKVCv4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 21 Nov 2021 21:51:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38095 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238304AbhKUQ0j (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 21 Nov 2021 11:26:39 -0500
+        by vger.kernel.org with ESMTP id S230434AbhKVCvz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 21 Nov 2021 21:51:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637511813;
+        s=mimecast20190719; t=1637549329;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5o6/wBGbGY6DcbOKW8sJZyFNOEtnCAysm1b68CJVM+g=;
-        b=f/eRZKAZxiYr1bJyNUD6VP71vaIeslR83uXJaYAL8ZO5u/adAvn3HMZDe9v/dH1v5eW/Kj
-        i9cC0C7ZMz5HteVfceDbmUIgBIPaIBLughU7YYJ/0cZbWiFrBTCOxY0izitnj5P5YfOZgD
-        FeDoVj+GOkiikG6r6KFSHmaYHQuDnaw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bCpHgtK0TLoUoBYAl3rKsWf4v1EviHMP7QNyo8Nuefw=;
+        b=eO+1y7hhModGV9J3rCIiD4km7JibIdbZZuGNesyTUYp9O2diAMjY9NNPWCPSJ9zjAtt/zq
+        m69MjJaXNRamcy/qs+jqxc7OKpN2L4HvzGIQ3luNRJaURioCf1wjdcBwqNLj1/0+rUhVpa
+        0LvMbtdTPZf/y4b17XXwn/Q6Po+AktQ=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-4J9HxJ_TPf2uHCKYncaYYw-1; Sun, 21 Nov 2021 11:23:29 -0500
-X-MC-Unique: 4J9HxJ_TPf2uHCKYncaYYw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EAF0D18125C0;
-        Sun, 21 Nov 2021 16:23:24 +0000 (UTC)
-Received: from [10.22.8.49] (unknown [10.22.8.49])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5B4E60C5F;
-        Sun, 21 Nov 2021 16:23:18 +0000 (UTC)
-Message-ID: <97cf8c1f-2a1d-d505-9216-37a3da0fc7f6@redhat.com>
-Date:   Sun, 21 Nov 2021 11:22:56 -0500
+ us-mta-117-7YVlYKK0OmKErFPbxMpyHw-1; Sun, 21 Nov 2021 21:48:48 -0500
+X-MC-Unique: 7YVlYKK0OmKErFPbxMpyHw-1
+Received: by mail-lf1-f72.google.com with SMTP id z12-20020a0565120c0c00b004037427efb7so10960037lfu.1
+        for <bpf@vger.kernel.org>; Sun, 21 Nov 2021 18:48:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bCpHgtK0TLoUoBYAl3rKsWf4v1EviHMP7QNyo8Nuefw=;
+        b=zkg/LqDiiKy0IgEXaVlsfoSseFb/1riwbi8mcY8hZHcBG/bbzztJGpe+dBNLPL5TiQ
+         bY2W2lwB8VHRJxf5NRDkS9/fjQguw0bkV23cLWfUJqKVSsK/d7xZciyV0Mi/ujtrPJcN
+         kLURyazze/6ld4tYiCfJj+6tvoeLUh0gJZKST0L2FHnI7lQmlKZjyVy4ou34U4hjqgUC
+         khP9ZctEj1OZEJXVmXGCpDHUlX0A1A9hGCwY6Hfijh1SKfYw4dpKSTQDhxMsgqe+Q74I
+         FSCmvVt3s/Nibw7s3lfpDicFmf9puQQgd9C15krYhqsLar+UWEarm4MIZo95Qqg/d87k
+         XtKQ==
+X-Gm-Message-State: AOAM531mF/iWkc9cj4sKvMvNPxWK0mkuu50znG+k1v2xQf6eYtR2v+p5
+        6bHKhLyQmLQU1GottlW/Iu476YkJnepZs40THapzAUg6kSZZ9e7kl3brFMylpymv7lRJXEDqE8w
+        fXgeIvepaj5RR1kiy5R9/0E2xOWDC
+X-Received: by 2002:a2e:3012:: with SMTP id w18mr47494880ljw.217.1637549326835;
+        Sun, 21 Nov 2021 18:48:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzhMUoYJy/fa5HNf3Y1dZw9n8WaAFEGalW9iZHLhJvk00Yldk6U6avgseBmGbi5f8k7IKQdMCJIgKYGrl1mobY=
+X-Received: by 2002:a2e:3012:: with SMTP id w18mr47494851ljw.217.1637549326643;
+ Sun, 21 Nov 2021 18:48:46 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [syzbot] WARNING in cgroup_finalize_control
-Content-Language: en-US
-To:     syzbot <syzbot+9c08aaa363ca5784c9e9@syzkaller.appspotmail.com>,
-        andriin@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, christian@brauner.io,
-        coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
-        hannes@cmpxchg.org, john.fastabend@gmail.com, kaber@trash.net,
-        kadlec@blackhole.kfki.hu, kafai@fb.com, kpsingh@chromium.org,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        lizefan.x@bytedance.com, lizefan@huawei.com,
-        marcelo.leitner@gmail.com, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, nhorman@tuxdriver.com,
-        pablo@netfilter.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org,
-        vyasevich@gmail.com, yhs@fb.com
-References: <000000000000d6442705d143337a@google.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <000000000000d6442705d143337a@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <20211115153003.9140-1-arbn@yandex-team.com> <20211115153003.9140-6-arbn@yandex-team.com>
+ <CACGkMEumax9RFVNgWLv5GyoeQAmwo-UgAq=DrUd4yLxPAUUqBw@mail.gmail.com> <b163233f-090f-baaf-4460-37978cab4d55@yandex-team.com>
+In-Reply-To: <b163233f-090f-baaf-4460-37978cab4d55@yandex-team.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 22 Nov 2021 10:48:35 +0800
+Message-ID: <CACGkMEuNhRf8_nhAsJ68J4HFxGJcnjNyA8ZyktNcBhNGfSafmA@mail.gmail.com>
+Subject: Re: [PATCH 6/6] vhost_net: use RCU callbacks instead of synchronize_rcu()
+To:     Andrey Ryabinin <arbn@yandex-team.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        kvm <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-#syz fix: cgroup: Make rebind_subsystems() disable v2 controllers all at once
+On Fri, Nov 19, 2021 at 7:31 PM Andrey Ryabinin <arbn@yandex-team.com> wrote:
+>
+>
+>
+> On 11/16/21 8:00 AM, Jason Wang wrote:
+> > On Mon, Nov 15, 2021 at 11:32 PM Andrey Ryabinin <arbn@yandex-team.com> wrote:
+> >>
+> >> Currently vhost_net_release() uses synchronize_rcu() to synchronize
+> >> freeing with vhost_zerocopy_callback(). However synchronize_rcu()
+> >> is quite costly operation. It take more than 10 seconds
+> >> to shutdown qemu launched with couple net devices like this:
+> >>         -netdev tap,id=tap0,..,vhost=on,queues=80
+> >> because we end up calling synchronize_rcu() netdev_count*queues times.
+> >>
+> >> Free vhost net structures in rcu callback instead of using
+> >> synchronize_rcu() to fix the problem.
+> >
+> > I admit the release code is somehow hard to understand. But I wonder
+> > if the following case can still happen with this:
+> >
+> > CPU 0 (vhost_dev_cleanup)   CPU1
+> > (vhost_net_zerocopy_callback()->vhost_work_queue())
+> >                                                 if (!dev->worker)
+> > dev->worker = NULL
+> >
+> > wake_up_process(dev->worker)
+> >
+> > If this is true. It seems the fix is to move RCU synchronization stuff
+> > in vhost_net_ubuf_put_and_wait()?
+> >
+>
+> It all depends whether vhost_zerocopy_callback() can be called outside of vhost
+> thread context or not.
 
+I think the answer is yes, the callback will be mainly used in the
+zerocopy path when the underlayer NIC finishes the DMA of a packet.
 
-On 11/20/21 21:24, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
+> If it can run after vhost thread stopped, than the race you
+> describe seems possible and the fix in commit b0c057ca7e83 ("vhost: fix a theoretical race in device cleanup")
+> wasn't complete. I would fix it by calling synchronize_rcu() after vhost_net_flush()
+> and before vhost_dev_cleanup().
 >
-> commit 7ee285395b211cad474b2b989db52666e0430daf
-> Author: Waiman Long <longman@redhat.com>
-> Date:   Sat Sep 18 22:53:08 2021 +0000
+> As for the performance problem, it can be solved by replacing synchronize_rcu() with synchronize_rcu_expedited().
+
+Yes, that's another way, but see below.
+
 >
->      cgroup: Make rebind_subsystems() disable v2 controllers all at once
+> But now I'm not sure that this race is actually exists and that synchronize_rcu() needed at all.
+> I did a bit of testing and I only see callback being called from vhost thread:
 >
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12232c06b00000
-> start commit:   442489c21923 Merge tag 'timers-core-2020-08-04' of git://g..
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b3f0df8558780a7d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9c08aaa363ca5784c9e9
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14148c62900000
+> vhost-3724  3733 [002]  2701.768731: probe:vhost_zerocopy_callback: (ffffffff81af8c10)
+>         ffffffff81af8c11 vhost_zerocopy_callback+0x1 ([kernel.kallsyms])
+>         ffffffff81bb34f6 skb_copy_ubufs+0x256 ([kernel.kallsyms])
+>         ffffffff81bce621 __netif_receive_skb_core.constprop.0+0xac1 ([kernel.kallsyms])
+>         ffffffff81bd062d __netif_receive_skb_one_core+0x3d ([kernel.kallsyms])
+>         ffffffff81bd0748 netif_receive_skb+0x38 ([kernel.kallsyms])
+>         ffffffff819a2a1e tun_get_user+0xdce ([kernel.kallsyms])
+>         ffffffff819a2cf4 tun_sendmsg+0xa4 ([kernel.kallsyms])
+>         ffffffff81af9229 handle_tx_zerocopy+0x149 ([kernel.kallsyms])
+>         ffffffff81afaf05 handle_tx+0xc5 ([kernel.kallsyms])
+>         ffffffff81afce86 vhost_worker+0x76 ([kernel.kallsyms])
+>         ffffffff811581e9 kthread+0x169 ([kernel.kallsyms])
+>         ffffffff810018cf ret_from_fork+0x1f ([kernel.kallsyms])
+>                        0 [unknown] ([unknown])
 >
-> If the result looks correct, please mark the issue as fixed by replying with:
+
+From the call trace you can send packets between two TAP. Since the TX
+of TAP is synchronous so we can't see callback to be called out of
+vhost thread.
+
+In order to test it, we need 1) enable zerocopy
+(experimental_zcopytx=1) and 2) sending the packet to the real NIC
+with bridge or macvlan
+
+Zerocopy was disalbed due to a lot of isuses (098eadce3c62 "vhost_net:
+disable zerocopy by default"). So if we fix by moving it to
+vhost_net_ubuf_put_and_wait(), there won't be a synchronize_rcu() in
+the non-zerocopy path which seems to be sufficient. And we can use
+synchronize_rcu_expedited() on top if it is really needed.
+
+Thanks
+
+> This means that the callback can't run after kthread_stop() in vhost_dev_cleanup() and no synchronize_rcu() needed.
 >
-> #syz fix: cgroup: Make rebind_subsystems() disable v2 controllers all at once
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> I'm not confident that my quite limited testing cover all possible vhost_zerocopy_callback() callstacks.
 >
 
