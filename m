@@ -2,98 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED761C433EF
-	for <bpf@archiver.kernel.org>; Mon, 22 Nov 2021 07:06:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 565F0C433F5
+	for <bpf@archiver.kernel.org>; Mon, 22 Nov 2021 09:29:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbhKVHJd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 22 Nov 2021 02:09:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbhKVHJd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 22 Nov 2021 02:09:33 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32484C061714
-        for <bpf@vger.kernel.org>; Sun, 21 Nov 2021 23:06:27 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so16065813pju.3
-        for <bpf@vger.kernel.org>; Sun, 21 Nov 2021 23:06:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rhg9TzsQGoRy8u1OLujkUnb4ClXkAMqCNEBp1eYj7W4=;
-        b=WKXNZRlrfWoEvbd3Mt43sBZcp9wgXb3skAh5izBElWBnr0tpnYwGDQC+yAADHI2lDp
-         guE2Q2gc52+yEiuMw1pHyyFssT+vqM8WQpQ1NipliQseEEXYaAPQ01jYM4WAzUkOM0Fy
-         uPH0xcHFEHECpzFVJUX5i8n7bSrSOiL8lQVRlWutemDwWH5VeL4Qvsxux45xeaPtw0Pz
-         /Dgi9MKBk5NBcCloWvcxKqtDvQExoEq4tsvTryTf6bUOzwEQAfkBGhoBtFN3i/mUTzgZ
-         difrDbraEYN5ybP1wVX4W+049BvzleSGzETJWQPx86KyvMwQZM73EYtZ47AJn8pT+L30
-         Oc9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rhg9TzsQGoRy8u1OLujkUnb4ClXkAMqCNEBp1eYj7W4=;
-        b=Ch8eFMdHlzSEXDXVMd922MqROZd/T6OZKv/FKswTY82lkd/+AWefMd6bm5OHgNeVNb
-         yg5IWv0kbn/9tXv8/3PIJheY34Ko35bKTOsVhmpfoz+0Q3y36nOts/qdbYReGOOs+a53
-         VDP2gmQMUekuNoG5DB8RwNshwbBUUWpmj6p5PgG8rnIQp8FJLKoPTnc5nltsgoVnWEig
-         clPI/5gfg5oQTNI9hWkPyEFWeXhkPNA7CrozqpUe7cS8namxmw9Qy/AQOJcukrUyg+eD
-         Qose6hr4lXwC7O5gIieJg9qb3/P3ctsrb91EvGFoJy7hoHX0TT5ySYmNuk4kJdPghZXL
-         rP5w==
-X-Gm-Message-State: AOAM533o2CRuTyL+4LOPOEiOHxicIAhsKWLUsGiSkEfkvzJt/e3RHlSY
-        owU89TjK7e1qlw0cm9JMAnEfYw==
-X-Google-Smtp-Source: ABdhPJwAGuNBy2ut5ulgnJSYyO0MNQHn/zLEJfG36fGPimpq7gsDYUwwU4YvFRXGfyX0qYRyqpqKnQ==
-X-Received: by 2002:a17:90a:3009:: with SMTP id g9mr28516847pjb.205.1637564786708;
-        Sun, 21 Nov 2021 23:06:26 -0800 (PST)
-Received: from localhost.localdomain ([156.146.34.70])
-        by smtp.gmail.com with ESMTPSA id d9sm14281305pjs.2.2021.11.21.23.06.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Nov 2021 23:06:26 -0800 (PST)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Drew Fustini <dfustini@baylibre.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>
-Subject: [PATCH] selftests/bpf: Fix trivial typo
-Date:   Sun, 21 Nov 2021 23:05:30 -0800
-Message-Id: <20211122070528.837806-1-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.27.0
+        id S238851AbhKVJci (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 22 Nov 2021 04:32:38 -0500
+Received: from mga05.intel.com ([192.55.52.43]:53776 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230447AbhKVJch (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 22 Nov 2021 04:32:37 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10175"; a="320980423"
+X-IronPort-AV: E=Sophos;i="5.87,254,1631602800"; 
+   d="scan'208";a="320980423"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2021 01:29:31 -0800
+X-IronPort-AV: E=Sophos;i="5.87,254,1631602800"; 
+   d="scan'208";a="508879579"
+Received: from rmcdonax-mobl.ger.corp.intel.com (HELO localhost) ([10.252.19.217])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2021 01:29:13 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>, axboe@kernel.dk,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@linux.ie, daniel@ffwll.ch,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        yuq825@gmail.com, robdclark@gmail.com, sean@poorly.run,
+        christian.koenig@amd.com, ray.huang@amd.com, sgoutham@marvell.com,
+        gakula@marvell.com, sbhatta@marvell.com, hkelam@marvell.com,
+        jingoohan1@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com,
+        krzysztof.kozlowski@canonical.com, mani@kernel.org,
+        pawell@cadence.com, peter.chen@kernel.org, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sj@kernel.org, akpm@linux-foundation.org,
+        thomas.hellstrom@linux.intel.com, matthew.auld@intel.com,
+        colin.king@intel.com, geert@linux-m68k.org,
+        linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, lima@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH bpf] treewide: add missing includes masked by cgroup ->
+ bpf dependency
+In-Reply-To: <20211120035253.72074-1-kuba@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211120035253.72074-1-kuba@kernel.org>
+Date:   Mon, 22 Nov 2021 11:29:10 +0200
+Message-ID: <87fsroo7x5.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix trivial typo in comment from 'oveflow' to 'overflow'.
+On Fri, 19 Nov 2021, Jakub Kicinski <kuba@kernel.org> wrote:
+> cgroup.h (therefore swap.h, therefore half of the universe)
+> includes bpf.h which in turn includes module.h and slab.h.
+> Since we're about to get rid of that dependency we need
+> to clean things up.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: axboe@kernel.dk
+> CC: maarten.lankhorst@linux.intel.com
+> CC: mripard@kernel.org
+> CC: tzimmermann@suse.de
+> CC: airlied@linux.ie
+> CC: daniel@ffwll.ch
+> CC: jani.nikula@linux.intel.com
+> CC: joonas.lahtinen@linux.intel.com
+> CC: rodrigo.vivi@intel.com
+> CC: yuq825@gmail.com
+> CC: robdclark@gmail.com
+> CC: sean@poorly.run
+> CC: christian.koenig@amd.com
+> CC: ray.huang@amd.com
+> CC: sgoutham@marvell.com
+> CC: gakula@marvell.com
+> CC: sbhatta@marvell.com
+> CC: hkelam@marvell.com
+> CC: jingoohan1@gmail.com
+> CC: lorenzo.pieralisi@arm.com
+> CC: robh@kernel.org
+> CC: kw@linux.com
+> CC: bhelgaas@google.com
+> CC: krzysztof.kozlowski@canonical.com
+> CC: mani@kernel.org
+> CC: pawell@cadence.com
+> CC: peter.chen@kernel.org
+> CC: rogerq@kernel.org
+> CC: a-govindraju@ti.com
+> CC: gregkh@linuxfoundation.org
+> CC: ast@kernel.org
+> CC: daniel@iogearbox.net
+> CC: andrii@kernel.org
+> CC: kafai@fb.com
+> CC: songliubraving@fb.com
+> CC: yhs@fb.com
+> CC: john.fastabend@gmail.com
+> CC: kpsingh@kernel.org
+> CC: sj@kernel.org
+> CC: akpm@linux-foundation.org
+> CC: thomas.hellstrom@linux.intel.com
+> CC: matthew.auld@intel.com
+> CC: colin.king@intel.com
+> CC: geert@linux-m68k.org
+> CC: linux-block@vger.kernel.org
+> CC: dri-devel@lists.freedesktop.org
+> CC: intel-gfx@lists.freedesktop.org
+> CC: lima@lists.freedesktop.org
+> CC: linux-arm-msm@vger.kernel.org
+> CC: freedreno@lists.freedesktop.org
+> CC: linux-pci@vger.kernel.org
+> CC: linux-arm-kernel@lists.infradead.org
+> CC: linux-samsung-soc@vger.kernel.org
+> CC: linux-usb@vger.kernel.org
+> CC: bpf@vger.kernel.org
+> CC: linux-mm@kvack.org
+>
+> Well, let's see if this makes it thru email servers...
+> ---
+>  block/fops.c                                          | 1 +
+>  drivers/gpu/drm/drm_gem_shmem_helper.c                | 1 +
+>  drivers/gpu/drm/i915/gt/intel_gtt.c                   | 1 +
+>  drivers/gpu/drm/i915/i915_request.c                   | 1 +
 
-Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+For the i915 parts,
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index aa76360d8f49..87e907add701 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -761,7 +761,7 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- 	/* overflow bpf_sock_ops struct with final element nonzero/zero.
- 	 * Regardless of the value of the final field, we don't have all the
- 	 * data we need to display it, so we should trigger an overflow.
--	 * In other words oveflow checking should trump "is field zero?"
-+	 * In other words overflow checking should trump "is field zero?"
- 	 * checks because if we've overflowed, it shouldn't matter what the
- 	 * field is - we can't trust its value so shouldn't display it.
- 	 */
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+
+
 -- 
-2.27.0
-
+Jani Nikula, Intel Open Source Graphics Center
