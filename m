@@ -2,221 +2,211 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5796C433EF
-	for <bpf@archiver.kernel.org>; Tue, 23 Nov 2021 05:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB8FFC4332F
+	for <bpf@archiver.kernel.org>; Tue, 23 Nov 2021 07:44:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbhKWFHp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 23 Nov 2021 00:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbhKWFHp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 23 Nov 2021 00:07:45 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D0C061574
-        for <bpf@vger.kernel.org>; Mon, 22 Nov 2021 21:04:36 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so1853810pjb.5
-        for <bpf@vger.kernel.org>; Mon, 22 Nov 2021 21:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0k/+Khoh/C01w5eJ3x4FOWYn8PEeMb0txsyD9LtJLSw=;
-        b=Er/vEzx0URwj2888yfpgJfkvB7b9iMUVnEtcW322hIceCY1CHB5zGyZlYff9TF3O2M
-         IX0jD0/GiYiwouSTmjr/Oq4+3cSpoZiidz7nhnYW1pfljIwD5c4LqWhqUqMYzE6vnrIW
-         +GLadQ12oGjuMwLyFsxLFve1kXVajZSsBZLUdp7nOVLt+eRSU9vahVI4VLUvBhBvSwUJ
-         tl7qAWgd6RACitsjBcVRNWn+5lDvs4AqMo0iFl4ONpyP2oPqUSsyM/v2HM8nGTOg/iu4
-         mWRpYS6JS8Nz7I0dGNm68lSibK3HGUipNA0bz8oRrw/mjGwP7xc1c8NdMvDCBPFTZHdv
-         j4rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0k/+Khoh/C01w5eJ3x4FOWYn8PEeMb0txsyD9LtJLSw=;
-        b=Dzm3KThJPvvnumV3xf+ClbZSgCxpHqHsqRSQeXCBem98x30dOuspT6e+uglcX75e+K
-         g5ndhXcNrVxz5lJM8WmO3OClssJG98zskda/fSR8uTrpqb5/jxtWarIouEfQMNP8jOke
-         vfYZki9kStp8U3k2+4E8uaoNr3EwZ2fnyXw0aqYbXActvqZxcvg9fLW4GxDPk1nmqLGr
-         xSxVKFxSaVZC41gf3IxUJtWt9EMFTVJP90ROdtPPemFjXGsu924eI5XatG8h/VDzdFip
-         tGG1OduaCfXVMPfaeteBxfgz7zXOKFqoAkrFpDLj8bgZMRd8BuAZQtsJ/uqkMA917TVq
-         tmqw==
-X-Gm-Message-State: AOAM530cfxr639o37VbdJgdDRIwbAxWf4k1mtYbKucv+Liy4sYgQYXZS
-        JlB/lPR6BOFew9oAjxNN5Yz2OI9NCzLusy3ySAQ=
-X-Google-Smtp-Source: ABdhPJwJw9BHa7eW3hYHGNcwHz6dYRBT8W5E7ci6gOLSNWNrRW/n0UrNwSi+bOPyuT6nXRq8vUfnT6mVwKP6aIGqTco=
-X-Received: by 2002:a17:90a:1f45:: with SMTP id y5mr3241122pjy.138.1637643875731;
- Mon, 22 Nov 2021 21:04:35 -0800 (PST)
+        id S234345AbhKWHrs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 23 Nov 2021 02:47:48 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:45262 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234323AbhKWHrr (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 23 Nov 2021 02:47:47 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AN4NmBY022251;
+        Tue, 23 Nov 2021 07:44:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=7Izikt7bjG0cERrkxtMGGYIUF55KdaFWdipbuzLRGmM=;
+ b=bOAot3E6AnxIcv9A94dzcHKMqUnoa625+oMLbt38nIypt2ITZZgfmLp7AfDOK6fYjL8f
+ 0lvnpwkFLiMiA/CeHAGg39pz8B9qLmir/mXIX2q0P/3upOSoVaY/Q5+cCoOk+r5hZifr
+ gV2Bcnqyk1RrhsJyhVuAIsCGEGDvKSJhHvFSll6EzpZllhO2t0WrfOoMIcIhV3M2EFFe
+ wKLMyeoAz3OiRApaR551NU2dGYP5ZDmiDF/Q84KYRjDiR14U2iRA9OPpJE9asMR6h4IK
+ jd25Sm3osEVSWT8NITC/Au6UyDZXnEQynhNMt1jkz08CyazF8QGi4inE2hiUvDW5UUPl hQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cgs7tb00q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Nov 2021 07:44:18 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AN7YoVA006748;
+        Tue, 23 Nov 2021 07:44:18 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cgs7tb002-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Nov 2021 07:44:17 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AN7gGd8029841;
+        Tue, 23 Nov 2021 07:44:15 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3cern9m0cn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Nov 2021 07:44:15 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AN7b3BK62783776
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Nov 2021 07:37:03 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E0172A405C;
+        Tue, 23 Nov 2021 07:44:11 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8203BA4054;
+        Tue, 23 Nov 2021 07:44:05 +0000 (GMT)
+Received: from li-e8dccbcc-2adc-11b2-a85c-bc1f33b9b810.ibm.com (unknown [9.43.21.81])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Nov 2021 07:44:05 +0000 (GMT)
+Subject: Re: [PATCH v2] bpf: Remove config check to enable bpf support for
+ branch records
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Ziljstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        KP Singh <kpsingh@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        rnsastry@linux.ibm.com
+References: <20211118130507.170154-1-kjain@linux.ibm.com>
+ <CAEf4BzbDgCVLj0r=3iponPp81aVAGokhGti8WLfWKhHuTLdA8w@mail.gmail.com>
+ <ce150f51-ef50-de85-fc52-0f2ee3a3000f@linux.ibm.com>
+ <859f8b57-7ae2-3c68-5642-93bec7a59a20@iogearbox.net>
+ <CAEf4BzbP0hAJYr-dahNZqKe9wyYL6hD9FayS-qdQV+Lmyi_VTQ@mail.gmail.com>
+From:   kajoljain <kjain@linux.ibm.com>
+Message-ID: <814c0e79-b8fd-38f1-bf17-cbf0993479bf@linux.ibm.com>
+Date:   Tue, 23 Nov 2021 13:14:04 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211120033255.91214-1-alexei.starovoitov@gmail.com>
- <20211120033255.91214-7-alexei.starovoitov@gmail.com> <CAEf4BzZWiXEi3FmBsAScPpUnuHzVHL64hXrBj46HQAmx_qUH5Q@mail.gmail.com>
- <CAADnVQJ6Nt1v05dSjq4touYddPSjihMNZAPZMsux8vHBMu9WDg@mail.gmail.com>
- <CAEf4BzbzQR22NsWu_aRJu705ehsP3nL47ZW9MBygonna8KbNEw@mail.gmail.com>
- <CAADnVQLZASm0tUfLALeLmZbdmfUZq4umRpRDBT06a1cF1aJWhg@mail.gmail.com> <CAEf4BzYb6Cb5-g77rX6Unz29EYwRCHbGgaGJWZnpp2vhh8Z56g@mail.gmail.com>
-In-Reply-To: <CAEf4BzYb6Cb5-g77rX6Unz29EYwRCHbGgaGJWZnpp2vhh8Z56g@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 22 Nov 2021 21:04:24 -0800
-Message-ID: <CAADnVQ+-2=8-zd7dOrHbceke26repHC7_xgbf3cKGSmVHMi3vA@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 06/13] bpf: Add bpf_core_add_cands() and wire
- it into bpf_core_apply_relo_insn().
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAEf4BzbP0hAJYr-dahNZqKe9wyYL6hD9FayS-qdQV+Lmyi_VTQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: v7ir4QnkF6C65nsvbPFNGOpgqbtQ1UTr
+X-Proofpoint-ORIG-GUID: zuk4d111fp2t7655P5cJAQxqKC5sido5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-23_02,2021-11-22_02,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 phishscore=0 suspectscore=0 adultscore=0
+ spamscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
+ impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111230038
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 7:44 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Nov 22, 2021 at 7:15 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Nov 22, 2021 at 5:44 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Mon, Nov 22, 2021 at 4:43 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Mon, Nov 22, 2021 at 3:47 PM Andrii Nakryiko
-> > > > <andrii.nakryiko@gmail.com> wrote:
-> > > > >
-> > > > > On Fri, Nov 19, 2021 at 7:33 PM Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > >
-> > > > > > From: Alexei Starovoitov <ast@kernel.org>
-> > > > > >
-> > > > > > Given BPF program's BTF perform a linear search through kernel BTFs for
-> > > > > > a possible candidate.
-> > > > > > Then wire the result into bpf_core_apply_relo_insn().
-> > > > > >
-> > > > > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > > > > > ---
-> > > > > >  kernel/bpf/btf.c | 136 ++++++++++++++++++++++++++++++++++++++++++++++-
-> > > > > >  1 file changed, 135 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > >
-> > > > > [...]
-> > > > >
-> > > > > >  int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
-> > > > > >                    int relo_idx, void *insn)
-> > > > > >  {
-> > > > > > -       return -EOPNOTSUPP;
-> > > > > > +       if (relo->kind != BPF_CORE_TYPE_ID_LOCAL) {
-> > > > > > +               struct bpf_core_cand_list *cands;
-> > > > > > +
-> > > > > > +               cands = bpf_core_find_cands(ctx, relo->type_id);
-> > > > >
-> > > > > this is wrong for many reasons:
-> > > > >
-> > > > > 1. you will overwrite previous ctx->cands, if it was already set,
-> > > > > which leaks memory
-> > > > > 2. this list of candidates should be keyed by relo->type_id ("root
-> > > > > type"). Different root types get their own independent lists; so it
-> > > > > has to be some sort of look up table from type_id to a list of
-> > > > > candidates.
-> > > > >
-> > > > > 2) means that if you had a bunch of relos against struct task_struct,
-> > > > > you'll crate a list of candidates when processing first relo that
-> > > > > starts at task_struct. All the subsequent relos that have task_struct
-> > > > > as root type will re-used that list and potentially trim it down. If
-> > > > > there are some other relos against, say, struct mm_struct, they will
-> > > > > have their independent list of candidates.
-> > > >
-> > > > right.
-> > > > Your prior comment confused me. I didn't do this reuse of cands
-> > > > to avoid introducing hashtable here like libbpf does,
-> > > > since it does too little to actually help.
-> > >
-> > > Since when avoiding millions of iterations for each relocation is "too
-> > > little help"?
-> >
-> > because it is a premature optimization for a case that
-> > may or may not be relevant.
-> > If 180 sk_buff relocations somehow makes the loading too slow
-> > 180 relocations of 180 different types would produce exactly
-> > the same slow down and hashtable cache won't help.
->
-> Likelihood of using 180 different root types in real application is
-> very small. Using 180 relocations (either with explicit BPF_CORE_READ,
-> field accesses in fentry, or just through always_inline helpers doing
-> either and being inlined in multiple places) is very real in
-> real-world non-trivial applications. And the cost of optimizing that
-> in the kernel later is very high, you'll be waiting for a new kernel
-> release to get everywhere to rely on this optimization. The cost of
-> further optimizing this in libbpf is much smaller (and libbpf still
-> did the optimization from the get go and I stand by that decision).
->
-> If you think I'm making this up, we have one security-related BPF app
-> with 1076 CO-RE relocations across 11 BPF programs. It's using 22
-> different root types.
 
-I suspect you're talking about selftests/bpf/profiler* tests.
-bpftool prog load -L profile1.o
-[  873.449749] nr_core_relo 106
-[  873.614186] nr_core_relo 297
-[  874.107470] nr_core_relo 19
-[  874.144146] nr_core_relo 102
-[  874.306462] nr_core_relo 258
-[  874.692219] nr_core_relo 410
-[  875.329652] nr_core_relo 238
-[  875.689900] nr_core_relo 9
 
-8 different progs with a bunch of core relos.
-On a debug kernel with lockdep and kasan it takes 2.3 seconds to load
-while kernel bpf_core_add_cands() is doing that loop
-more than a thousand times.
-libbpf takes 1.7 seconds.
-So it's an extra 0.5 second due to the loop.
+On 11/20/21 4:15 AM, Andrii Nakryiko wrote:
+> On Fri, Nov 19, 2021 at 8:08 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>
+>> On 11/19/21 10:35 AM, kajoljain wrote:
+>>> On 11/19/21 4:18 AM, Andrii Nakryiko wrote:
+>>>> On Thu, Nov 18, 2021 at 5:10 AM Kajol Jain <kjain@linux.ibm.com> wrote:
+>>>>>
+>>>>> Branch data available to bpf programs can be very useful to get
+>>>>> stack traces out of userspace application.
+>>>>>
+>>>>> Commit fff7b64355ea ("bpf: Add bpf_read_branch_records() helper")
+>>>>> added bpf support to capture branch records in x86. Enable this feature
+>>>>> for other architectures as well by removing check specific to x86.
+>>>>> Incase any platform didn't support branch stack, it will return with
+>>>>> -EINVAL.
+>>>>>
+>>>>> Selftest 'perf_branches' result on power9 machine with branch stacks
+>>>>> support.
+>>>>>
+>>>>> Before this patch changes:
+>>>>> [command]# ./test_progs -t perf_branches
+>>>>>   #88/1 perf_branches/perf_branches_hw:FAIL
+>>>>>   #88/2 perf_branches/perf_branches_no_hw:OK
+>>>>>   #88 perf_branches:FAIL
+>>>>> Summary: 0/1 PASSED, 0 SKIPPED, 1 FAILED
+>>>>>
+>>>>> After this patch changes:
+>>>>> [command]# ./test_progs -t perf_branches
+>>>>>   #88/1 perf_branches/perf_branches_hw:OK
+>>>>>   #88/2 perf_branches/perf_branches_no_hw:OK
+>>>>>   #88 perf_branches:OK
+>>>>> Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+>>>>>
+>>>>> Selftest 'perf_branches' result on power9 machine which doesn't
+>>>>> support branch stack
+>>>>>
+>>>>> After this patch changes:
+>>>>> [command]# ./test_progs -t perf_branches
+>>>>>   #88/1 perf_branches/perf_branches_hw:SKIP
+>>>>>   #88/2 perf_branches/perf_branches_no_hw:OK
+>>>>>   #88 perf_branches:OK
+>>>>> Summary: 1/1 PASSED, 1 SKIPPED, 0 FAILED
+>>>>>
+>>>>> Fixes: fff7b64355eac ("bpf: Add bpf_read_branch_records() helper")
+>>>>> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+>>>>> Signed-off-by: Kajol Jain <kjain@linux.ibm.com>
+>>>>> ---
+>>>>>
+>>>>> Tested this patch changes on power9 machine using selftest
+>>>>> 'perf branches' which is added in commit 67306f84ca78 ("selftests/bpf:
+>>>>> Add bpf_read_branch_records()")
+>>>>>
+>>>>> Changelog:
+>>>>> v1 -> v2
+>>>>> - Inorder to add bpf support to capture branch record in
+>>>>>    powerpc, rather then adding config for powerpc, entirely
+>>>>>    remove config check from bpf_read_branch_records function
+>>>>>    as suggested by Peter Zijlstra
+>>>>
+>>>> what will be returned for architectures that don't support branch
+>>>> records? Will it be zero instead of -ENOENT?
+>>>
+>>> Hi Andrii,
+>>>       Incase any architecture doesn't support branch records and if it
+>>> tries to do branch sampling with sample type as
+>>> PERF_SAMPLE_BRANCH_STACK, perf_event_open itself will fail.
+>>>
+>>> And even if, perf_event_open succeeds  we have appropriate checks in
+>>> bpf_read_branch_records function, which will return -EINVAL for those
+>>> architectures.
+>>>
+>>> Reference from linux/kernel/trace/bpf_trace.c
+>>>
+>>> Here, br_stack will be empty, for unsupported architectures.
+>>>
+>>> BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, ctx,
+>>>          void *, buf, u32, size, u64, flags)
+>>> {
+>>> .....
+>>>       if (unlikely(flags & ~BPF_F_GET_BRANCH_RECORDS_SIZE))
+>>>               return -EINVAL;
+>>>
+>>>       if (unlikely(!br_stack))
+>>>               return -EINVAL;
+>>
+>> In that case for unsupported archs we should probably bail out with -ENOENT here
+>> as helper doc says '**-ENOENT** if architecture does not support branch records'
+>> (see bpf_read_branch_records() doc in include/uapi/linux/bpf.h).
+> 
+> Yep, I think so too.
+> 
 
-I haven't found the bug in lksel with core_kern.c + balancer_ingress yet.
-But just doing balancer_ingress (test_verif_scale2) as lskel I get:
-0m0.827s
+Hi Andrii/Daniel,
+     I agree, changing return type to -ENOENT make sense, I will update
+in next version of this patch.
 
-while verif_scale2 is 6 seconds!
+Thanks,
+Kajol Jain
 
-Turned out due to attr.prog_flags = BPF_F_TEST_RND_HI32
-without it it's 0m0.574s.
-
-So 0.25 sec is spent in the add_cands loop.
-
-> >
-> > > BTW, I've tried to measure how noticeable this will be and added
-> > > test_verif_scale2 to core_kern with only change to use vmlinux.h (so
-> > > that __sk_buff accesses are CO-RE relocated). I didn't manage to get
-> > > it loaded, so something else is going there. So please take a look, I
-> > > don't really know how to debug lskel stuff. Here are the changes:
-> >
-> > Looking. Thanks for the test.
-> >
-> > > > If we actually need to optimize this part of loading
-> > > > we better do persistent cache of
-> > > > name -> kernel btf_type-s
-> > > > and reuse it across different programs.
-> > >
-> > > You can't reuse it because the same type name in a BPF object BTF can
-> > > be resolved to different kernel types (e.g., if we still had
-> > > ring_buffer name collision),
-> >
-> > well and the candidate list will have two kernel types with the same name.
-> > Both kept in a cache.
-> > so cache_lookup("ring_buffer") will return two kernel types.
-> > That would be the case for all progs being loaded.
-> > What am I missing?
->
-> if there are two matching types with the same matching field but field
-> offsets are different (and thus there is ambiguity), that's an error.
-> So the correct (by current definition, at least) program has to result
-> in one of such two incompatible ring_buffer types and only one. If
-> there are multiple duplicates, though, (like task_struct and
-> task_struct___2) they will have identical sets of fields at the same
-> offsets, so both will remain possible candidates and that's not an
-> error. But for actually two different types, there can be only one
-> winner.
-
-I'm not proposing to cache the result of refined bpf_core_cand_list
-after bpf_core_apply_relo_insn() did its job.
-I'm saying the kernel can cache the result of the add_cands loop across
-vmlinux BTFs for all progs.
-The bpf_core_apply_relo_insn() will be called with a copy of
-bpf_core_cand_list from a cache.
-I'm thinking to keep this cache in 'struct btf'
+>>
+>>> ....
+>>> }
+>>>
+>>> Thanks,
+>>> Kajol Jain
