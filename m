@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F7E6C433F5
-	for <bpf@archiver.kernel.org>; Wed, 24 Nov 2021 08:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62893C433EF
+	for <bpf@archiver.kernel.org>; Wed, 24 Nov 2021 08:43:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241526AbhKXIqG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Nov 2021 03:46:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34006 "EHLO
+        id S241426AbhKXIqX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Nov 2021 03:46:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31967 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241540AbhKXIov (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 24 Nov 2021 03:44:51 -0500
+        by vger.kernel.org with ESMTP id S241454AbhKXIpE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 24 Nov 2021 03:45:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637743302;
+        s=mimecast20190719; t=1637743314;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VUpNCIf6I4xx/xoebeS2tiWidAHCtrV6dZkFUmxD4cc=;
-        b=FgoVu18gtjma/DGnyax3NdOfNuUcsnEIs3pT65b9wgdTNw5I1QIW8uZesEQtCb8MFUEg3r
-        xR+iWGT7iZEbcwqQuqXq8UsepfcVcSSTolbs5mRVNyGYpBLVJ+KZ40G0ELE2o1pFTJWfQJ
-        foCezp3zf4yzFTe4PwF5KDNmicv7B9E=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=miD27XMNAQX20tQlwxUdiFwuYzd6DEbiAXCQZyLHmF0=;
+        b=hDAP2QSsRXD4e6FqYulE5W1WkxoTvlIMK881huMRxnc6Hcyt6kC0N2f5giJpxGx4xiSqU6
+        gXw7juJhdAVGA5AwG60393a6iCPO0U7RheaVWoFduwpCybJwA/6gGCp+3NUaAGh44wF9sM
+        ghSPPX0YUHB3Pt/P7XpAUN6gYhNRckU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-153-hkzUUpD9MtCr8wKBBksL2A-1; Wed, 24 Nov 2021 03:41:40 -0500
-X-MC-Unique: hkzUUpD9MtCr8wKBBksL2A-1
-Received: by mail-wm1-f70.google.com with SMTP id n16-20020a05600c3b9000b003331973fdbbso1052979wms.0
-        for <bpf@vger.kernel.org>; Wed, 24 Nov 2021 00:41:40 -0800 (PST)
+ us-mta-453-McmQf2xMOnWfUF5ThH5gbg-1; Wed, 24 Nov 2021 03:41:53 -0500
+X-MC-Unique: McmQf2xMOnWfUF5ThH5gbg-1
+Received: by mail-wr1-f72.google.com with SMTP id k8-20020a5d5248000000b001763e7c9ce5so288531wrc.22
+        for <bpf@vger.kernel.org>; Wed, 24 Nov 2021 00:41:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VUpNCIf6I4xx/xoebeS2tiWidAHCtrV6dZkFUmxD4cc=;
-        b=lv5Ivr7JTkNpvPBnDZeIsESB29FG8lr6bI4fSU1DzHwGw5dInDG4D45M3ZTOuItUK9
-         X9074Tr7rDxBDYwIjJto2OBaYB64l3+xKeKux3BPkTAa8Zcsh1zsYfiKyyvOUfJG+mDU
-         z70wMy4EVUL1gAQtsf3Ar4derC1RPSCDHKxWH8JgYNdCz57zFufEwxd6Vj7yAp4vuPpW
-         tOxnQeoy79dnyoDMHBQssLVTo2+Vic/1pvfCmzxApuJ/I70bHH4TdXOoTeV52Vq950No
-         h1VEcQh4iXCCE8o6PL9Nr+R7S7wtNC23AR975awEgUwSH9YlswaR0LmifOn9iTc7ZIIE
-         xWPg==
-X-Gm-Message-State: AOAM532crSRftXimUuLHsgoMG9qh0l0lBaWgwO4HL+YZzgH0/yu3IfZa
-        gIVLEE3BBgky7T20U+odNJbdIUvSEai0I+3PyihoN/EmycAUxcFbsmBaZrJk9H0LfBnriVc9M5n
-        FC2Cfog2GYltd
-X-Received: by 2002:a5d:548f:: with SMTP id h15mr16213857wrv.99.1637743299420;
-        Wed, 24 Nov 2021 00:41:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyz1415SFxfiE43cMAnbGJQqe7kyuGSNL3YexfDBsTFRpB49fmucVAQmngtlVjsFf5uIYlC/A==
-X-Received: by 2002:a5d:548f:: with SMTP id h15mr16213828wrv.99.1637743299253;
-        Wed, 24 Nov 2021 00:41:39 -0800 (PST)
+        bh=miD27XMNAQX20tQlwxUdiFwuYzd6DEbiAXCQZyLHmF0=;
+        b=VVCA5uhq1WuxIJLlpXUasbiYMhWQZWcUgnLVTzbuc5Cik/A1HY00oYThrlsMhKaYP4
+         eXudXVEghHWm2sQ0x7gLdwlJAy/MKM/9QVjgaRoIrVk6woWNSVd5SYQOXrEAJlM6Ye1x
+         WDXoPrZYJyVRNAfXgWnoNW5x2ULxQDsJN2tTjxvDhzxCc15KqZ/k2UPTyS9/XHnlFUQK
+         TDJvL0H/pZJF99lJItDaHiwZ67DIUYt3LoPCB3/J3Uq5Oq0qTJnKrTqckeLCOjlcUK41
+         T+EuzfwEaPEti0f06ZhutvSEEMRJEmVxR/olGa9899CrPx0QdQZFyG30burYoK/iVAVW
+         5JKg==
+X-Gm-Message-State: AOAM533X/NE+59590KuFwhRBv+Fb3ePcl1YV4Ch2W7XyJj1DGZo7XHDE
+        gRIZmwCqbXTyTLr4bOWWLCtY9nQZ1UEefaMXxP99EeJAr9otZEZmgO/1sq7zGzWsVW2ytDVhZ0J
+        qvQ1yjYemUZsv
+X-Received: by 2002:a7b:c119:: with SMTP id w25mr12662424wmi.70.1637743311870;
+        Wed, 24 Nov 2021 00:41:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJys9b9shmlC+yWyQlkAXSnONwW8ns8tn4LbW4PScL3CEQ4SJ7TleKl0TMJaBFZl8dBf5EvPjA==
+X-Received: by 2002:a7b:c119:: with SMTP id w25mr12662393wmi.70.1637743311648;
+        Wed, 24 Nov 2021 00:41:51 -0800 (PST)
 Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id x4sm3649097wmi.3.2021.11.24.00.41.38
+        by smtp.gmail.com with ESMTPSA id b6sm3955860wmq.45.2021.11.24.00.41.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Nov 2021 00:41:38 -0800 (PST)
+        Wed, 24 Nov 2021 00:41:51 -0800 (PST)
 From:   Jiri Olsa <jolsa@redhat.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
@@ -70,9 +70,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Ravi Bangoria <ravi.bangoria@amd.com>
-Subject: [PATCH 3/8] libbpf: Add libbpf__kallsyms_parse function
-Date:   Wed, 24 Nov 2021 09:41:14 +0100
-Message-Id: <20211124084119.260239-4-jolsa@kernel.org>
+Subject: [PATCH 5/8] libbpf: Add support to attach multiple [ku]probes
+Date:   Wed, 24 Nov 2021 09:41:16 +0100
+Message-Id: <20211124084119.260239-6-jolsa@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211124084119.260239-1-jolsa@kernel.org>
 References: <20211124084119.260239-1-jolsa@kernel.org>
@@ -82,124 +82,173 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move the kallsyms parsing in internal libbpf__kallsyms_parse
-function, so it can be used from other places.
+Adding support to attach multiple [ku]probes.
 
-It will be used in following changes.
+Extending both bpf_kprobe_opts and bpf_uprobe_opts structs
+with config values to define multiple probes within single
+bpf_program__attach_[ku]probe_opts call.
+
+For mutiple probes in bpf_program__attach_kprobe_opts function
+the 'func_name' argument is ignored and probes are defined in
+bpf_kprobe_opts struct with:
+
+  struct {
+          /* probes count */
+          __u32 cnt;
+          /* function names array */
+          char **funcs;
+          /* address/offset values array */
+          union {
+                  __u64 *addrs;
+                  __u64 *offs;
+          };
+  } multi;
+
+For mutiple probes in bpf_program__attach_uprobe_opts function
+both 'binary_path' and 'func_offset' arguments are ignored and
+probes are defined in bpf_kprobe_opts struct with:
+
+  /* multi uprobe values */
+  struct {
+          /* probes count */
+          __u32 cnt;
+          /* paths names array */
+          const char **paths;
+          /* offsets values array */
+          __u64 *offs;
+  } multi;
+
+The multiple probes attachment is enabled when multi.cnt != 0.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/libbpf.c          | 62 ++++++++++++++++++++-------------
- tools/lib/bpf/libbpf_internal.h |  5 +++
- 2 files changed, 43 insertions(+), 24 deletions(-)
+ tools/include/uapi/linux/perf_event.h |  1 +
+ tools/lib/bpf/libbpf.c                | 30 +++++++++++++++++++++++++--
+ tools/lib/bpf/libbpf.h                | 25 ++++++++++++++++++++--
+ 3 files changed, 52 insertions(+), 4 deletions(-)
 
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index bd8860eeb291..eea80709d1ed 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -414,6 +414,7 @@ struct perf_event_attr {
+ 	union {
+ 		__u32		wakeup_events;	  /* wakeup every n events */
+ 		__u32		wakeup_watermark; /* bytes before wakeup   */
++		__u32		probe_cnt;	  /* number of [k,u] probes */
+ 	};
+ 
+ 	__u32			bp_type;
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index af405c38aadc..b55c0fbfcc03 100644
+index 34219a0c39a7..b570e93de735 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -6950,12 +6950,10 @@ static int bpf_object__sanitize_maps(struct bpf_object *obj)
- 	return 0;
- }
+@@ -9631,6 +9631,11 @@ struct perf_event_open_args {
+ 	uint64_t offset;
+ 	int pid;
+ 	size_t ref_ctr_off;
++	struct {
++		__u32 probe_cnt;
++		__u64 config1;
++		__u64 config2;
++	} multi;
+ };
  
--static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-+int libbpf__kallsyms_parse(void *arg, kallsyms_cb_t cb)
- {
- 	char sym_type, sym_name[500];
- 	unsigned long long sym_addr;
--	const struct btf_type *t;
--	struct extern_desc *ext;
- 	int ret, err = 0;
- 	FILE *f;
- 
-@@ -6974,35 +6972,51 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
- 		if (ret != 3) {
- 			pr_warn("failed to read kallsyms entry: %d\n", ret);
- 			err = -EINVAL;
--			goto out;
-+			break;
- 		}
- 
--		ext = find_extern_by_name(obj, sym_name);
--		if (!ext || ext->type != EXT_KSYM)
--			continue;
--
--		t = btf__type_by_id(obj->btf, ext->btf_id);
--		if (!btf_is_var(t))
--			continue;
--
--		if (ext->is_set && ext->ksym.addr != sym_addr) {
--			pr_warn("extern (ksym) '%s' resolution is ambiguous: 0x%llx or 0x%llx\n",
--				sym_name, ext->ksym.addr, sym_addr);
--			err = -EINVAL;
--			goto out;
--		}
--		if (!ext->is_set) {
--			ext->is_set = true;
--			ext->ksym.addr = sym_addr;
--			pr_debug("extern (ksym) %s=0x%llx\n", sym_name, sym_addr);
--		}
-+		err = cb(arg, sym_addr, sym_type, sym_name);
-+		if (err)
-+			break;
- 	}
- 
--out:
- 	fclose(f);
- 	return err;
- }
- 
-+static int kallsyms_cb(void *arg, unsigned long long sym_addr,
-+		       char sym_type, const char *sym_name)
-+{
-+	struct bpf_object *obj = arg;
-+	const struct btf_type *t;
-+	struct extern_desc *ext;
+ static int perf_event_open_probe(bool uprobe, struct perf_event_open_args *args)
+@@ -9667,8 +9672,15 @@ static int perf_event_open_probe(bool uprobe, struct perf_event_open_args *args)
+ 	attr.size = sizeof(attr);
+ 	attr.type = type;
+ 	attr.config |= (__u64)ref_ctr_off << PERF_UPROBE_REF_CTR_OFFSET_SHIFT;
+-	attr.config1 = ptr_to_u64(args->name); /* kprobe_func or uprobe_path */
+-	attr.config2 = args->offset;		 /* kprobe_addr or probe_offset */
 +
-+	ext = find_extern_by_name(obj, sym_name);
-+	if (!ext || ext->type != EXT_KSYM)
-+		return 0;
-+
-+	t = btf__type_by_id(obj->btf, ext->btf_id);
-+	if (!btf_is_var(t))
-+		return 0;
-+
-+	if (ext->is_set && ext->ksym.addr != sym_addr) {
-+		pr_warn("extern (ksym) '%s' resolution is ambiguous: 0x%llx or 0x%llx\n",
-+			sym_name, ext->ksym.addr, sym_addr);
-+		return -EINVAL;
++	if (args->multi.probe_cnt) {
++		attr.probe_cnt = args->multi.probe_cnt;
++		attr.config1 = args->multi.config1;
++		attr.config2 = args->multi.config2;
++	} else {
++		attr.config1 = ptr_to_u64(args->name); /* kprobe_func or uprobe_path */
++		attr.config2 = args->offset;	       /* kprobe_addr or probe_offset */
 +	}
-+	if (!ext->is_set) {
-+		ext->is_set = true;
-+		ext->ksym.addr = sym_addr;
-+		pr_debug("extern (ksym) %s=0x%llx\n", sym_name, sym_addr);
-+	}
-+	return 0;
-+}
-+
-+static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
-+{
-+	return libbpf__kallsyms_parse(obj, kallsyms_cb);
-+}
-+
- static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
- 			    __u16 kind, struct btf **res_btf,
- 			    struct module_btf **res_mod_btf)
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index f7ac349650a1..511cb09f593f 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -406,6 +406,11 @@ __s32 btf__find_by_name_kind_own(const struct btf *btf, const char *type_name,
  
- extern enum libbpf_strict_mode libbpf_mode;
+ 	/* pid filter is meaningful only for uprobes */
+ 	pfd = syscall(__NR_perf_event_open, &attr,
+@@ -9807,7 +9819,14 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+ 			.pid = -1,
+ 			.ref_ctr_off = 0,
+ 		};
++		__u32 probe_cnt = OPTS_GET(opts, multi.cnt, false);
  
-+typedef int (*kallsyms_cb_t)(void *arg, unsigned long long sym_addr,
-+			     char sym_type, const char *sym_name);
++		if (probe_cnt) {
++			args.multi.probe_cnt = probe_cnt;
++			args.multi.config1 = ptr_to_u64(OPTS_GET(opts, multi.funcs, false));
++			/* multi.addrs and multi.offs share the same array */
++			args.multi.config2 = ptr_to_u64(OPTS_GET(opts, multi.addrs, false));
++		}
+ 		pfd = perf_event_open_probe(false /* uprobe */, &args);
+ 	} else {
+ 		char probe_name[256];
+@@ -10006,6 +10025,13 @@ bpf_program__attach_uprobe_opts(const struct bpf_program *prog, pid_t pid,
+ 			.pid = pid,
+ 			.ref_ctr_off = ref_ctr_off,
+ 		};
++		__u32 probe_cnt = OPTS_GET(opts, multi.cnt, false);
 +
-+int libbpf__kallsyms_parse(void *arg, kallsyms_cb_t cb);
-+
- /* handle direct returned errors */
- static inline int libbpf_err(int ret)
- {
++		if (probe_cnt) {
++			args.multi.probe_cnt = probe_cnt;
++			args.multi.config1 = ptr_to_u64(OPTS_GET(opts, multi.paths, false));
++			args.multi.config2 = ptr_to_u64(OPTS_GET(opts, multi.offs, false));
++		}
+ 
+ 		pfd = perf_event_open_probe(true /* uprobe */, &args);
+ 	} else {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index d02139fec4ac..ae072882b5dd 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -321,9 +321,21 @@ struct bpf_kprobe_opts {
+ 	size_t offset;
+ 	/* kprobe is return probe */
+ 	bool retprobe;
++	/* multi kprobe values */
++	struct {
++		/* probes count */
++		__u32 cnt;
++		/* function names array */
++		char **funcs;
++		/* address/offset values array */
++		union {
++			__u64 *addrs;
++			__u64 *offs;
++		};
++	} multi;
+ 	size_t :0;
+ };
+-#define bpf_kprobe_opts__last_field retprobe
++#define bpf_kprobe_opts__last_field multi.addrs
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_kprobe(const struct bpf_program *prog, bool retprobe,
+@@ -344,9 +356,18 @@ struct bpf_uprobe_opts {
+ 	__u64 bpf_cookie;
+ 	/* uprobe is return probe, invoked at function return time */
+ 	bool retprobe;
++	/* multi uprobe values */
++	struct {
++		/* probes count */
++		__u32 cnt;
++		/* paths names array */
++		const char **paths;
++		/* offsets values array */
++		__u64 *offs;
++	} multi;
+ 	size_t :0;
+ };
+-#define bpf_uprobe_opts__last_field retprobe
++#define bpf_uprobe_opts__last_field multi.offs
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_uprobe(const struct bpf_program *prog, bool retprobe,
 -- 
 2.33.1
 
