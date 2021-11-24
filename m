@@ -2,65 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A445EC433F5
-	for <bpf@archiver.kernel.org>; Wed, 24 Nov 2021 17:38:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76D82C433F5
+	for <bpf@archiver.kernel.org>; Wed, 24 Nov 2021 18:01:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbhKXRlb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Nov 2021 12:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhKXRl3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Nov 2021 12:41:29 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FBBC061574
-        for <bpf@vger.kernel.org>; Wed, 24 Nov 2021 09:38:19 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id r25so13911510edq.7
-        for <bpf@vger.kernel.org>; Wed, 24 Nov 2021 09:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=K7kU/3v8PDN/H55Go4hCp9T1eZlcziQMopaRZ4NNkwU=;
-        b=VB6+EleCFueq99eiEnEmz4ji2hpAiIky+PsZTrSIKLC0alyPvFaWN9b/vd3BGc/ttu
-         8Y73TfkIyvhihPDXxes4wTWYi7S54OnJ3c79HXq/Z9RBfmJ7P21K545kpf7SNXO6mbhV
-         xg1FyFURbZb9HF8sxaa3lRb7mdk7+CffP54zk4fca4wLXUSAx58qR68JUDBjgee5QWbk
-         vJhccmguo5pw16Co/KP6/32+BE5TLA9emel9MKHnNC2QtR5CRTVyI+Blt0prpAgy38x6
-         RqqLP+xouBeGv8vfz9PqQ+yftuslPiMXFSvQMoQqTgOw7bWBQNe+7rwhLlNrEVFaa09t
-         c2nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=K7kU/3v8PDN/H55Go4hCp9T1eZlcziQMopaRZ4NNkwU=;
-        b=toqQvSfba+WO/9M9fsr7S4ls8dG9fmWWYnamtA4ZBIik/WbDCpUzkeugltVE5nUNNl
-         yfpGKsYDAZ08uW4iwjWr6G/ZkbdhWUc0QfW3ttlB6Dg22llSz08JGuTyVBdoJE8kbS4V
-         av0klfaoZvC04xt4EdER7ClN6pnAi2KIFmc/cJPJZReXN+BODxaEbbxCVpCV9vZDmvnp
-         lrKA3yo8hcRZ5GrMuB06OPt+oVa0/MT2Z22+dIEgqlfHsiqpGKKBuolyWZrJOI0lEW+L
-         1f8+n+SmVECSVPSuaaPcLVqpfMni2RuomMSh+JubLYsWA2VxEZksaVkBxQ7iZpHGgC6z
-         eLCQ==
-X-Gm-Message-State: AOAM532FNW/Fmi1KbOisnST5zYVlXxfLaoeO42rMwkvZR11E11Z+5rNt
-        wdV0utq9Y2swFXJz0LRxq6tq+GFQr0i0u3vVyFaG1Bh00bA=
-X-Google-Smtp-Source: ABdhPJzVDUYEgVL953CymDCtao64AGBKwMkhFbxte58mlQ8cj1PeDYYjNpaG1IoxOCfy5uzYKoDY9/jlXdW7txYVVTo=
-X-Received: by 2002:a17:907:7fa9:: with SMTP id qk41mr22473277ejc.422.1637775496845;
- Wed, 24 Nov 2021 09:38:16 -0800 (PST)
+        id S1350200AbhKXSEl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Nov 2021 13:04:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241542AbhKXSEg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Nov 2021 13:04:36 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AEDC60FD9;
+        Wed, 24 Nov 2021 18:01:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1637776886;
+        bh=wanx4a0c3he/yW/G8jdrXADz/DLKAo8Cw5+FuVygMTg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AlH9G0pC7NDqB0pLh5iRB9ihMk9S9yKJw5NIcZMTnHModNufyUn5KccDDwaHcDfEj
+         VBDJPTYCavX6YsBU+vtODzJhQXFCSRARm+dyFlVl2NpZl276WsNvS0cNue2Oz4ATn+
+         Pe5GJyLZUQExNfS+cgKu/sEMxX1WSkMCQJMqN4To=
+Date:   Wed, 24 Nov 2021 19:01:23 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vincent Li <vincent.mc.li@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>
+Subject: Re: bpf mailing list archive
+Message-ID: <YZ5988RpWezAi9Yq@kroah.com>
+References: <CAK3+h2zzrwv=S=CmgVo2e4Hubw8nvzbFhvpgyTiUh87O6APZrg@mail.gmail.com>
 MIME-Version: 1.0
-From:   Vincent Li <vincent.mc.li@gmail.com>
-Date:   Wed, 24 Nov 2021 09:38:05 -0800
-Message-ID: <CAK3+h2zzrwv=S=CmgVo2e4Hubw8nvzbFhvpgyTiUh87O6APZrg@mail.gmail.com>
-Subject: bpf mailing list archive
-To:     bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK3+h2zzrwv=S=CmgVo2e4Hubw8nvzbFhvpgyTiUh87O6APZrg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Wed, Nov 24, 2021 at 09:38:05AM -0800, Vincent Li wrote:
+> Hi,
+> 
+> I find it hard read bpf mailing list archive from
+> https://lore.kernel.org/bpf/, I don't have specific old email archive
+> subject to read, just want to read some random old bpf email for
+> learning, had to click older/next at the bottom of page, can't go back
+> in specific month/year range, is it possible to archive the bpf
+> mailing list in https://marc.info/, I find it useful :)
 
-I find it hard read bpf mailing list archive from
-https://lore.kernel.org/bpf/, I don't have specific old email archive
-subject to read, just want to read some random old bpf email for
-learning, had to click older/next at the bottom of page, can't go back
-in specific month/year range, is it possible to archive the bpf
-mailing list in https://marc.info/, I find it useful :)
+Clone the list from lore as instructed at the bottom of the page and
+then you can run tools on it to get your own local archive for searching
+and doing whatever you want to do with it.  Highly recommended, and much
+easier than trying to deal with the horrid marc.info interface.
 
-Regards,
+Also, if you don't know about them, tools like mairix and mu are both
+wonderful email search tools for large mailing lists, you might want to
+look into them after doing your clone of the mailing list archive.
 
-Vincent
+good luck!
+
+greg k-h
