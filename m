@@ -2,24 +2,24 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CA30C433F5
-	for <bpf@archiver.kernel.org>; Wed, 24 Nov 2021 13:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1A60C433EF
+	for <bpf@archiver.kernel.org>; Wed, 24 Nov 2021 13:47:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347461AbhKXNfn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 24 Nov 2021 08:35:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43336 "EHLO mail.kernel.org"
+        id S1352019AbhKXNvB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 24 Nov 2021 08:51:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42104 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351812AbhKXNdg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 24 Nov 2021 08:33:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86F1E61BE6;
-        Wed, 24 Nov 2021 12:53:44 +0000 (UTC)
+        id S1351480AbhKXNtb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 24 Nov 2021 08:49:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 05AFF63353;
+        Wed, 24 Nov 2021 13:03:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1637758425;
-        bh=s6LoJdA0yBdZfCmH1XLToBR43YG/thl1yu65YycWPFA=;
+        s=korg; t=1637759002;
+        bh=+VTHtgmTLJma6INwrMhFlKSmR9cER8AU8U0QToEs+hw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pa1qP9EsLz5LiIuLtaayk65jViSeE7uCdylkZxdI5UXlPinnr5ZMZmIznTuApAqp0
-         7FrGb3qpjWwzphOylCQ4qCsAzNiJZ0NoNUkGCkx1NPfQ9wWQs0vPVneceJSekKCRnB
-         5uyo8wcX5Tzr0K/ZQL1LCrQHiUPSlz44Hom/fVzY=
+        b=J7egISAjwyaMFDO8BiB8c0xjNCaricYR3FfKnz2d6/dGTkQaSCvbnN1XgIFWfihLr
+         DtKLm3MlLNrK3AR/+66jCKFXSk3EUmvJ9gObI6QcWpPb9eKfrjthH2gKAh7q0aneyR
+         Bdc0PYw+AKD9BhDYzEEve4y7IJmHxUaIakgscJ1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,12 +41,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 065/154] perf bpf: Avoid memory leak from perf_env__insert_btf()
-Date:   Wed, 24 Nov 2021 12:57:41 +0100
-Message-Id: <20211124115704.416438690@linuxfoundation.org>
+Subject: [PATCH 5.15 101/279] perf bpf: Avoid memory leak from perf_env__insert_btf()
+Date:   Wed, 24 Nov 2021 12:56:28 +0100
+Message-Id: <20211124115722.261423828@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211124115702.361983534@linuxfoundation.org>
-References: <20211124115702.361983534@linuxfoundation.org>
+In-Reply-To: <20211124115718.776172708@linuxfoundation.org>
+References: <20211124115718.776172708@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -97,10 +97,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index c8101575dbf45..4eb02762104ba 100644
+index a410b3968b3af..16ad0e6e9e9c5 100644
 --- a/tools/perf/util/bpf-event.c
 +++ b/tools/perf/util/bpf-event.c
-@@ -109,7 +109,11 @@ static int perf_env__fetch_btf(struct perf_env *env,
+@@ -120,7 +120,11 @@ static int perf_env__fetch_btf(struct perf_env *env,
  	node->data_size = data_size;
  	memcpy(node->data, data, data_size);
  
@@ -114,10 +114,10 @@ index c8101575dbf45..4eb02762104ba 100644
  }
  
 diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index f0dceb527ca38..d81ed1bc14bdc 100644
+index cf773f0dec384..5b24eb010336c 100644
 --- a/tools/perf/util/env.c
 +++ b/tools/perf/util/env.c
-@@ -71,12 +71,13 @@ out:
+@@ -74,12 +74,13 @@ out:
  	return node;
  }
  
@@ -132,7 +132,7 @@ index f0dceb527ca38..d81ed1bc14bdc 100644
  
  	down_write(&env->bpf_progs.lock);
  	p = &env->bpf_progs.btfs.rb_node;
-@@ -90,6 +91,7 @@ void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
+@@ -93,6 +94,7 @@ void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
  			p = &(*p)->rb_right;
  		} else {
  			pr_debug("duplicated btf %u\n", btf_id);
@@ -140,7 +140,7 @@ index f0dceb527ca38..d81ed1bc14bdc 100644
  			goto out;
  		}
  	}
-@@ -99,6 +101,7 @@ void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
+@@ -102,6 +104,7 @@ void perf_env__insert_btf(struct perf_env *env, struct btf_node *btf_node)
  	env->bpf_progs.btfs_cnt++;
  out:
  	up_write(&env->bpf_progs.lock);
@@ -149,10 +149,10 @@ index f0dceb527ca38..d81ed1bc14bdc 100644
  
  struct btf_node *perf_env__find_btf(struct perf_env *env, __u32 btf_id)
 diff --git a/tools/perf/util/env.h b/tools/perf/util/env.h
-index a129726520064..01378a955dd5e 100644
+index 1383876f72b37..163e5ec503a26 100644
 --- a/tools/perf/util/env.h
 +++ b/tools/perf/util/env.h
-@@ -143,7 +143,7 @@ void perf_env__insert_bpf_prog_info(struct perf_env *env,
+@@ -167,7 +167,7 @@ void perf_env__insert_bpf_prog_info(struct perf_env *env,
  				    struct bpf_prog_info_node *info_node);
  struct bpf_prog_info_node *perf_env__find_bpf_prog_info(struct perf_env *env,
  							__u32 prog_id);
