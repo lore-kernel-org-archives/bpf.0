@@ -2,38 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D218C433F5
-	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 09:20:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D901C433EF
+	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 09:38:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349336AbhKYJXV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Nov 2021 04:23:21 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:54716 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350483AbhKYJVU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Nov 2021 04:21:20 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 648EE1FD37;
-        Thu, 25 Nov 2021 09:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1637831888; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        id S1354197AbhKYJmG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Nov 2021 04:42:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:47335 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353950AbhKYJkG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 25 Nov 2021 04:40:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637833014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wwiQDOJPEAtzx84W81WwUuy+jKhgNVXmO5+Woa5hQic=;
-        b=M/Ek+AulDH/wV30n8i89uCsJvOx1LasGO0CEKw1mF3nTtKNvw6GHp/8BcGum68QkcGGe0Y
-        QNtXCVqyOlG6pGGmb6vvn2p2Cod/bdekR9z1FNTtZ93mC7vd9QvrjY4mBgWRpuTF1MGmg5
-        EevC5cXRISLOJ6H5f4vGzbUcE63Et+U=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id F35B4A3B81;
-        Thu, 25 Nov 2021 09:18:07 +0000 (UTC)
-Date:   Thu, 25 Nov 2021 10:18:07 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com,
+        bh=1j3sEyc7U5pLLP7CDKkBf36qc69o78zC3HxT76AE2R0=;
+        b=bxRJ0cHsxVoxBs1osi2vNK1d6yKSDIANe8hUIprtvQXyQakPTxZj/SOPZ0+va5e/YNIpVY
+        rb6YaaHCbSWIMMqm5xoBeS0xDjfGoN4HGNJ68DAsnEgQPNHKKOB+6LZ2myBieOASq1iAKG
+        AdFkwIJTwM1ZAax1+w2bMmUp8/wOZhs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-340-SQoEO-_QNgGIoZd8xzCKjg-1; Thu, 25 Nov 2021 04:36:53 -0500
+X-MC-Unique: SQoEO-_QNgGIoZd8xzCKjg-1
+Received: by mail-wm1-f70.google.com with SMTP id n16-20020a05600c3b9000b003331973fdbbso3196515wms.0
+        for <bpf@vger.kernel.org>; Thu, 25 Nov 2021 01:36:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=1j3sEyc7U5pLLP7CDKkBf36qc69o78zC3HxT76AE2R0=;
+        b=bWj1127/7J37ZbBhzMI8bSW25RoCNvw2SSGmzV31suQiXcavLqoCrYndpyTngV/PvV
+         VjoEByA84hRpx/mF3f0qtBJ1B1NQ0Gjb3QgcBLQPw6S3tm9iLNiHNvGWlFilxphcJy8e
+         WcVj3IFdkclptd9XsfBEs/Rqwi13NMBv88LMRCPcXMMKai9Ilafi87QluLKlEBp/URXl
+         WZYyIMDD9TEGaoV1TjJJUW6k0jAUXWQaihXDuQodsDhrCrseWbEmhysM/37x5TQPeUOG
+         JpsY53JJ8XmTQevNS7xtPfVmbn4jixlkIrkemSGbmTHLVqUKJ+OykYhAVgEXEPHxHY/7
+         ZfrA==
+X-Gm-Message-State: AOAM5302f4HkLhnD6UptJVb9gtmWkvbwfTeCEQbGcFRgqnJVpUt+WqNi
+        wj8XKjGghMQrsw8OnTT2D2C6+o0SQ5HEQTZZCsA0fTHQCvRyG6qbsbyLScuT4aiIikDStWQ5LAu
+        Teqz3GZsAssZV
+X-Received: by 2002:a1c:4c19:: with SMTP id z25mr5259389wmf.177.1637833011739;
+        Thu, 25 Nov 2021 01:36:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxNT7yd66eB6qLpcYDn59R65nZF06/c+i4fTo/9h0VU3346D4G4ZX5Keq0oDymUbsMTzkxV8g==
+X-Received: by 2002:a1c:4c19:: with SMTP id z25mr5259366wmf.177.1637833011529;
+        Thu, 25 Nov 2021 01:36:51 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c679e.dip0.t-ipconnect.de. [91.12.103.158])
+        by smtp.gmail.com with ESMTPSA id d2sm2428646wmb.31.2021.11.25.01.36.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Nov 2021 01:36:50 -0800 (PST)
+Message-ID: <435fab0b-d345-3698-79af-ff858181666a@redhat.com>
+Date:   Thu, 25 Nov 2021 10:36:49 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2] kthread: dynamically allocate memory to store
+ kthread's full name
+Content-Language: en-US
+To:     Yafang Shao <laoar.shao@gmail.com>, akpm@linux-foundation.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        oliver.sang@intel.com, lkp@intel.com,
+        Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -42,25 +74,50 @@ Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
         Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
         Peter Zijlstra <peterz@infradead.org>,
         Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v2] kthread: dynamically allocate memory to store
- kthread's full name
-Message-ID: <YZ9Uz3m42lfNR9pf@alley>
 References: <20211120112850.46047-1-laoar.shao@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
 In-Reply-To: <20211120112850.46047-1-laoar.shao@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat 2021-11-20 11:28:50, Yafang Shao wrote:
+On 20.11.21 12:28, Yafang Shao wrote:
 > When I was implementing a new per-cpu kthread cfs_migration, I found the
 > comm of it "cfs_migration/%u" is truncated due to the limitation of
-> TASK_COMM_LEN.
+> TASK_COMM_LEN. For example, the comm of the percpu thread on CPU10~19 are
+> all with the same name "cfs_migration/1", which will confuse the user. This
+> issue is not critical, because we can get the corresponding CPU from the
+> task's Cpus_allowed. But for kthreads correspoinding to other hardware
+> devices, it is not easy to get the detailed device info from task comm,
+> for example,
+> 
+>     jbd2/nvme0n1p2-
+>     xfs-reclaim/sdf
+> 
+> Currently there are so many truncated kthreads:
+> 
+>     rcu_tasks_kthre
+>     rcu_tasks_rude_
+>     rcu_tasks_trace
+>     poll_mpt3sas0_s
+>     ext4-rsv-conver
+>     xfs-reclaim/sd{a, b, c, ...}
+>     xfs-blockgc/sd{a, b, c, ...}
+>     xfs-inodegc/sd{a, b, c, ...}
+>     audit_send_repl
+>     ecryptfs-kthrea
+>     vfio-irqfd-clea
+>     jbd2/nvme0n1p2-
+>     ...
+> 
+> We can shorten these names to work around this problem, but it may be
+> not applied to all of the truncated kthreads. Take 'jbd2/nvme0n1p2-' for
+> example, it is a nice name, and it is not a good idea to shorten it.
 > 
 > One possible way to fix this issue is extending the task comm size, but
 > as task->comm is used in lots of places, that may cause some potential
@@ -73,12 +130,30 @@ On Sat 2021-11-20 11:28:50, Yafang Shao wrote:
 > 
 > After this change, the full name of these truncated kthreads will be
 > displayed via /proc/[pid]/comm:
+> 
+>     rcu_tasks_kthread
+>     rcu_tasks_rude_kthread
+>     rcu_tasks_trace_kthread
+>     poll_mpt3sas0_statu
+>     ext4-rsv-conversion
+>     xfs-reclaim/sdf1
+>     xfs-blockgc/sdf1
+>     xfs-inodegc/sdf1
+>     audit_send_reply
+>     ecryptfs-kthread
+>     vfio-irqfd-cleanup
+>     jbd2/nvme0n1p2-8
 
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+I do wonder if that could break some user space that assumes these names
+have maximum length ..
 
-Looks good to me:
+But LGTM
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Best Regards,
-Petr
+
+-- 
+Thanks,
+
+David / dhildenb
+
