@@ -2,269 +2,324 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BC6FC433EF
-	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 11:58:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E722DC433EF
+	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 14:36:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240326AbhKYMBT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Nov 2021 07:01:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:38952 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235081AbhKYL7T (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Nov 2021 06:59:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637841367;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zn5qUDNHigeTHkfOIEeNHxGhyTGmOPHFVQziaWMqPvM=;
-        b=aeJ6eK25GzeZU9x8GJIoFRRYMIhOKi3XTHMKa40e7VIsZGdKb3n0c1Mzi6GiGWWnG1Q6tj
-        PV9Oyz5ZixOsB0LQm9LMJqy1zOVTUtqWFoq5+OQ7qobJdzdJ2zlOs3EuhEsDYdLSdq0NTV
-        sGr7e8o1wWcusTOu5sSqd3A09wpmSM4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-540-fZQv0__-PXimP7llq225bg-1; Thu, 25 Nov 2021 06:56:06 -0500
-X-MC-Unique: fZQv0__-PXimP7llq225bg-1
-Received: by mail-ed1-f71.google.com with SMTP id q17-20020aa7da91000000b003e7c0641b9cso5315959eds.12
-        for <bpf@vger.kernel.org>; Thu, 25 Nov 2021 03:56:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Zn5qUDNHigeTHkfOIEeNHxGhyTGmOPHFVQziaWMqPvM=;
-        b=jpAhYzXzCBqJ+YpdAOXNS+faOyEGYNY0mJqsRbu6SKunlfzDVsn45WtGYgu2gMqNW9
-         jjo4AN05xAmvps/o8lo7Ly10Mxks2umRZK4JseN9zQ9OQnPkD/vp1Th79v0QwzPDQyfI
-         3W0uoCcs2Pw1k0gov5zrP8dj/19RjKl//yDHjVpPr63xXd9tDDBG9L0Qv87bzK9l4eH+
-         30vJMi8zIRDtNrFW4a3+Lk+LG1cDq1n8/KzbH3N4Aqm1WOyAxkL1CXuQaBQr50IsYgT2
-         uYAzDa6EU7QscAkPf45BequXCynQ+ZgR1Rb05xDEmAjy+LkqgxEzLmxXA0QYZf/9cnma
-         LRCg==
-X-Gm-Message-State: AOAM530oq8F9f57q1A/AO8LQ3kOaXy2gfH/fVko41438k9omAHfiN9xq
-        Af3NvmU1ZfkGUiLEsfB3paKNeeWQ7duU2epstmJw67pfFn6FYjZza1q6DIulp0L4CrIMgyGv+kY
-        0H4zwLWQ1YN0N
-X-Received: by 2002:a17:906:4904:: with SMTP id b4mr29488590ejq.174.1637841364378;
-        Thu, 25 Nov 2021 03:56:04 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxy2FXQerCQWL0wz8KKtmO9VIUCLeFCt/3u04ynCT2Qttsffm9/94f9BQjkCB8lwUvJzBQCww==
-X-Received: by 2002:a17:906:4904:: with SMTP id b4mr29488392ejq.174.1637841362580;
-        Thu, 25 Nov 2021 03:56:02 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id ne33sm1507828ejc.6.2021.11.25.03.56.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Nov 2021 03:56:01 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 2A0F21802A0; Thu, 25 Nov 2021 12:56:01 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+        id S1355038AbhKYOj2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Nov 2021 09:39:28 -0500
+Received: from mail-bn8nam11on2048.outbound.protection.outlook.com ([40.107.236.48]:6752
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1347649AbhKYOh2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Nov 2021 09:37:28 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mNEZ97fIRVle38av3VGMKPUlNyiDLH9rzemM51qiAN8lexwMNlY+3/HR8c1z5kBvFSJAi8SzA/DwnAMUcaTTgAZ8Ug0Set6hla3KVBYVQm6gcZ75GHeCuMRvCcT7zYT5pc0GeGHDBQFXcSM6/xs3VP4+9Sw/SkiYc27l9OZkAET14eMwQ3lm8ZvCy9yIzel1NwFFUo8LqhLLxzAWTmzzZy4kpxCQ4Ok6+GbLZNBwpLlJnYeINWQ/B0kfIEQ2pPWCtVzBs4L9Q91kPRcTN1Iq40CcCLnsCgSOhnOI8AlwuIzh58XpfJrbsJ/0GOVTsgQISNhLwM2tmK0PkL62NudwzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q7E1QnrLGsJfobaR4D2SIjWe35pxhcuK+pJKWRzSvuw=;
+ b=LG/jfUdg99ZZTzWQ1ou4iOxjOYRkGgWhR3PbQdovK22KvFuxnP3iKkao/cWsHAOjxGq+bTaJvyink0pS++1sDC4Z8Bkq8PwdX/WzemiCEj7p9J8eEp3HgQhXfo4w8sZ8O5FTbjd9/jzPcoXqlN2x0+QrsDEgNMnzCHiQomB8zxFTw6+cCQHw5IpDL2fYvW9q9Me1/iNsLwXVTpZhESwSufjeCfzuDhPQyJ8EEl9fkF78lzYeaGanYIg0vOWL+NsP7SEUMyDcXkMi8h4bC6pkZErEm4hCitWEb6C3XH7GQOvZ41yithG5ZDnb8LCEY9RvLbykGV0Im4Wr+12Q7YbqTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.112.34) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q7E1QnrLGsJfobaR4D2SIjWe35pxhcuK+pJKWRzSvuw=;
+ b=Nr/7eFA+EBXYFUHrxnXztothkkyEyTiKHT5tGNY6ceVOOZIMlnlX6jKVnUmzA1j1Qlzf+P+vUfP5l9B4XJj40GgEMj9gTbX2fgKLEN3PU8Q1tjujRzW/PYKpEAFTpcver4j8JRwAn/UTRgAdRBzqHmFNkN1Q147Vd4drzrRZYJYeV6x9UUnX0bNZxBZp/FSZGOtS/SR73prbzZ7zwNfBMCZZ3HbcUF3/fQJfWdrT2ykkk540xvmpZBujr4LlOTXNbO48Ym7LpPXJbzIVgF6Oq7X12P9kGHwVa6cSa5Z8iCUv5tyAIMuhA+IOJ/9sxRIas2UD1SwgEp51TVJuL9tWDg==
+Received: from CO2PR04CA0202.namprd04.prod.outlook.com (2603:10b6:104:5::32)
+ by DM5PR12MB2360.namprd12.prod.outlook.com (2603:10b6:4:bb::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Thu, 25 Nov
+ 2021 14:34:14 +0000
+Received: from CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:104:5:cafe::81) by CO2PR04CA0202.outlook.office365.com
+ (2603:10b6:104:5::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend
+ Transport; Thu, 25 Nov 2021 14:34:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.112.34; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (216.228.112.34) by
+ CO1NAM11FT052.mail.protection.outlook.com (10.13.174.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4734.22 via Frontend Transport; Thu, 25 Nov 2021 14:34:14 +0000
+Received: from [172.27.15.34] (172.20.187.6) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 25 Nov
+ 2021 14:34:06 +0000
+Message-ID: <3e673e1a-2711-320b-f0be-2432cf4bbe9c@nvidia.com>
+Date:   Thu, 25 Nov 2021 16:34:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH bpf-next 09/10] bpf: Add a helper to issue timestamp
+ cookies in XDP
+Content-Language: en-US
+To:     Yonghong Song <yhs@fb.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Lorenz Bauer <lmb@cloudflare.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
         David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
- per-channel statistics
-In-Reply-To: <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
-References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
- <20211123163955.154512-22-alexandr.lobakin@intel.com>
- <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 25 Nov 2021 12:56:01 +0100
-Message-ID: <87bl28bga6.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Brendan Jackman <jackmanb@google.com>,
+        "Florent Revest" <revest@chromium.org>,
+        Joe Stringer <joe@cilium.io>, Tariq Toukan <tariqt@nvidia.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        <clang-built-linux@googlegroups.com>
+References: <20211019144655.3483197-1-maximmi@nvidia.com>
+ <20211019144655.3483197-10-maximmi@nvidia.com>
+ <CACAyw9_MT-+n_b1pLYrU+m6OicgRcndEBiOwb5Kc1w0CANd_9A@mail.gmail.com>
+ <87y26nekoc.fsf@toke.dk> <1901a631-25c0-158d-b37f-df6d23d8e8ab@nvidia.com>
+ <103c5154-cc29-a5ab-3c30-587fc0fbeae2@fb.com>
+ <1b9b3c40-f933-59c3-09e6-aa6c3dda438f@nvidia.com>
+ <68a63a77-f856-1690-cb60-327fc753b476@fb.com>
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+In-Reply-To: <68a63a77-f856-1690-cb60-327fc753b476@fb.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.20.187.6]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6c2855b4-d273-4c6c-7097-08d9b020a79b
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2360:
+X-Microsoft-Antispam-PRVS: <DM5PR12MB2360CA708F6A32EC90D8110DDC629@DM5PR12MB2360.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: esV5TYoR2qsTNqZ8Qvk8ws89YpGJ8tMP2LdAUbRMkdicpx76+OY1JycUCzYZtPIS1WKkM5OWb+6xwjF/w2UppOOw/KQ+SPzlxBVf4WQfSXLpICYfSWtiAzyUEyOI9vDPzpLk8sAowhq2Zt0c4xDc+OIlkgFzPrtrbx2W/xCUgKfoJ3r6kANuOXT4gYroQoOHR+reSwnYTGgCGOxR79CHOo6bqjDEYsFmxfO3TIGeYTOp+YJpxRKN0NrPCBc8VVYlO7f8sWiISFNthdR8r2j96Bk3RcM3UzttW3jhoffUX22QTddZN+rzDHz84Jceqky8MnTa9ANZBMM99wS2mywwQ9lqHg2py7L/uLZ5Lep5Sk5VxTf1lYd8J3YfSDGt2S1uxP5nW6tXmwfM+6FTPxKDutRi0/4vsH3AcBRFdipQPALkXvGNm+OR2PUALeaa7LC1Xihksj74R2k70fHlm9Pmqifp0WdAwgFLWTmhLPJ+5TDJjiyjmzzUfGt8eqNvZ0LvwezXTCELjoJ2TxD8AnHPjBF/UxAtvfMF8CROhdvNXCuP6Z6NNKGBc04hsM5pkJK0C0uPIj1XhqQrPAO03mbrMFcBu9/FfWU16P2QgH4QZUBdnTVIO/cl0QsnkOQXcbVil4y8csnjRg1GeytsauVgEhLk8o/eolZhSfV/tprvR+CLffyf4RMljO1/ARdhCGRS3URg44YboKx1TFZu1fSp/gW4PBo6ejULupScphYswww=
+X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(5660300002)(2616005)(31686004)(6666004)(508600001)(336012)(2906002)(31696002)(7416002)(16576012)(8676002)(8936002)(82310400004)(36860700001)(110136005)(54906003)(66574015)(316002)(186003)(426003)(356005)(36756003)(47076005)(7636003)(70206006)(16526019)(4001150100001)(70586007)(4326008)(26005)(53546011)(86362001)(83380400001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 14:34:14.5730
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c2855b4-d273-4c6c-7097-08d9b020a79b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2360
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
+On 2021-11-09 09:11, Yonghong Song wrote:
+> 
+> 
+> On 11/3/21 7:02 AM, Maxim Mikityanskiy wrote:
+>> On 2021-11-03 04:10, Yonghong Song wrote:
+>>>
+>>>
+>>> On 11/1/21 4:14 AM, Maxim Mikityanskiy wrote:
+>>>> On 2021-10-20 19:16, Toke Høiland-Jørgensen wrote:
+>>>>> Lorenz Bauer <lmb@cloudflare.com> writes:
+>>>>>
+>>>>>>> +bool cookie_init_timestamp_raw(struct tcphdr *th, __be32 *tsval, 
+>>>>>>> __be32 *tsecr)
+>>>>>>
+>>>>>> I'm probably missing context, Is there something in this function 
+>>>>>> that
+>>>>>> means you can't implement it in BPF?
+>>>>>
+>>>>> I was about to reply with some other comments but upon closer 
+>>>>> inspection
+>>>>> I ended up at the same conclusion: this helper doesn't seem to be 
+>>>>> needed
+>>>>> at all?
+>>>>
+>>>> After trying to put this code into BPF (replacing the underlying 
+>>>> ktime_get_ns with ktime_get_mono_fast_ns), I experienced issues with 
+>>>> passing the verifier.
+>>>>
+>>>> In addition to comparing ptr to end, I had to add checks that 
+>>>> compare ptr to data_end, because the verifier can't deduce that end 
+>>>> <= data_end. More branches will add a certain slowdown (not measured).
+>>>>
+>>>> A more serious issue is the overall program complexity. Even though 
+>>>> the loop over the TCP options has an upper bound, and the pointer 
+>>>> advances by at least one byte every iteration, I had to limit the 
+>>>> total number of iterations artificially. The maximum number of 
+>>>> iterations that makes the verifier happy is 10. With more 
+>>>> iterations, I have the following error:
+>>>>
+>>>> BPF program is too large. Processed 1000001 insn
+>>>>
+>>>>                         processed 1000001 insns (limit 1000000) 
+>>>> max_states_per_insn 29 total_states 35489 peak_states 596 mark_read 45
+>>>>
+>>>> I assume that BPF_COMPLEXITY_LIMIT_INSNS (1 million) is the 
+>>>> accumulated amount of instructions that the verifier can process in 
+>>>> all branches, is that right? It doesn't look realistic that my 
+>>>> program can run 1 million instructions in a single run, but it might 
+>>>> be that if you take all possible flows and add up the instructions 
+>>>> from these flows, it will exceed 1 million.
+>>>>
+>>>> The limitation of maximum 10 TCP options might be not enough, given 
+>>>> that valid packets are permitted to include more than 10 NOPs. An 
+>>>> alternative of using bpf_load_hdr_opt and calling it three times 
+>>>> doesn't look good either, because it will be about three times 
+>>>> slower than going over the options once. So maybe having a helper 
+>>>> for that is better than trying to fit it into BPF?
+>>>>
+>>>> One more interesting fact is the time that it takes for the verifier 
+>>>> to check my program. If it's limited to 10 iterations, it does it 
+>>>> pretty fast, but if I try to increase the number to 11 iterations, 
+>>>> it takes several minutes for the verifier to reach 1 million 
+>>>> instructions and print the error then. I also tried grouping the 
+>>>> NOPs in an inner loop to count only 10 real options, and the 
+>>>> verifier has been running for a few hours without any response. Is 
+>>>> it normal? 
+>>>
+>>> Maxim, this may expose a verifier bug. Do you have a reproducer I can 
+>>> access? I would like to debug this to see what is the root case. Thanks!
+>>
+>> Thanks, I appreciate your help in debugging it. The reproducer is 
+>> based on the modified XDP program from patch 10 in this series. You'll 
+>> need to apply at least patches 6, 7, 8 from this series to get new BPF 
+>> helpers needed for the XDP program (tell me if that's a problem, I can 
+>> try to remove usage of new helpers, but it will affect the program 
+>> length and may produce different results in the verifier).
+>>
+>> See the C code of the program that passes the verifier (compiled with 
+>> clang version 12.0.0-1ubuntu1) in the bottom of this email. If you 
+>> increase the loop boundary from 10 to at least 11 in 
+>> cookie_init_timestamp_raw(), it fails the verifier after a few minutes. 
+> 
+> I tried to reproduce with latest llvm (llvm-project repo),
+> loop boundary 10 is okay and 11 exceeds the 1M complexity limit. For 10,
+> the number of verified instructions is 563626 (more than 0.5M) so it is
+> totally possible that one more iteration just blows past the limit.
 
-> Hi Alexander,
->
-> On 11/23/21 5:39 PM, Alexander Lobakin wrote:
+So, does it mean that the verifying complexity grows exponentially with 
+increasing the number of loop iterations (options parsed)?
+
+Is it a good enough reason to keep this code as a BPF helper, rather 
+than trying to fit it into the BPF program?
+
+> 
+>> If you apply this tiny change, it fails the verifier after about 3 hours:
+>>
+>> --- a/samples/bpf/syncookie_kern.c
+>> +++ b/samples/bpf/syncookie_kern.c
+>> @@ -167,6 +167,7 @@ static __always_inline bool cookie_init_
+>>       for (i = 0; i < 10; i++) {
+>>           u8 opcode, opsize;
+>>
+>> +skip_nop:
+>>           if (ptr >= end)
+>>               break;
+>>           if (ptr + 1 > data_end)
+>> @@ -178,7 +179,7 @@ static __always_inline bool cookie_init_
+>>               break;
+>>           if (opcode == TCPOPT_NOP) {
+>>               ++ptr;
+>> -            continue;
+>> +            goto skip_nop;
+>>           }
+>>
+>>           if (ptr + 1 >= end)
+> 
+> I tried this as well, with latest llvm, and got the following errors
+> in ~30 seconds:
+> 
+> ......
+> 536: (79) r2 = *(u64 *)(r10 -96)
+> 537: R0=inv(id=0,umax_value=255,var_off=(0x0; 0xff)) 
+> R1=pkt(id=9,off=499,r=518,umax_value=60,var_off=(0x0; 0x3c)) 
+> R2=pkt_end(id=0,off=0,imm=0) 
+> R3=pkt(id=27,off=14,r=0,umin_value=20,umax_value=120,var_off=(0x0; 
+> 0x7c),s32_min_value=0,s32_max_value=124,u32_max_value=124) R4=invP3 
+> R5=inv1 R6=ctx(id=0,off=0,imm=0) R7=pkt(id=9,off=519,r=518,umax_va^C
+> [yhs@devbig309.ftw3 ~/work/bpf-next/samples/bpf] tail -f log
+> 550: (55) if r0 != 0x4 goto pc+4
+> The sequence of 8193 jumps is too complex.
+> verification time 30631375 usec
+> stack depth 160
+> processed 330595 insns (limit 1000000) max_states_per_insn 4 
+> total_states 20377 peak_states 100 mark_read 37
+> 
+> With llvm12, I got the similar verification error:
+> 
+> The sequence of 8193 jumps is too complex.
+> processed 330592 insns (limit 1000000) max_states_per_insn 4 
+> total_states 20378 peak_states 101 mark_read 37
+> 
+> Could you check again with your experiment which takes 3 hours to
+> fail? What is the verification failure log?
+
+The log is similar:
+
+...
+; if (opsize == TCPOLEN_WINDOW) {
+460: (55) if r8 != 0x3 goto pc+31
+ 
+R0_w=pkt(id=28132,off=4037,r=0,umin_value=20,umax_value=2610,var_off=(0x0; 
+0x3ffff),s32_min_value=0,s32_max_value=262143,u32_max_value=262143) 
+R1=inv0 
+R2=pkt(id=27,off=14,r=0,umin_value=20,umax_value=120,var_off=(0x0; 
+0x7c),s32_min_value=0,s32_max_value=124,u32_max_value=124) R3_w=inv3 
+R4_w=inv9 R5=inv0 R6=ctx(id=0,off=0,imm=0) 
+R7_w=pkt(id=44,off=4047,r=4039,umin_value=18,umax_value=2355,var_off=(0x0; 
+0x1ffff),s32_min_value=0,s32_max_value=131071,u32_max_value=131071) 
+R8_w=invP3 R9=inv0 R10=fp0 fp-16=????mmmm fp-24=00000000 fp-64=????mmmm 
+fp-72=mmmmmmmm fp-80=mmmmmmmm fp-88=pkt fp-96=pkt_end fp-104=pkt 
+fp-112=pkt fp-120=inv20 fp-128=mmmmmmmm fp-136_w=inv14 fp-144=pkt
+; if (ptr + TCPOLEN_WINDOW > data_end)
+461: (bf) r3 = r7
+462: (07) r3 += -7
+; if (ptr + TCPOLEN_WINDOW > data_end)
+463: (79) r8 = *(u64 *)(r10 -96)
+464: (2d) if r3 > r8 goto pc+56
+The sequence of 8193 jumps is too complex.
+processed 414429 insns (limit 1000000) max_states_per_insn 4 
+total_states 8097 peak_states 97 mark_read 49
+
+libbpf: -- END LOG --
+libbpf: failed to load program 'syncookie_xdp'
+libbpf: failed to load object '.../samples/bpf/syncookie_kern.o'
+Error: bpf_prog_load: Unknown error 4007
+
+real    189m49.659s
+user    0m0.012s
+sys     189m26.322s
+
+Ubuntu clang version 12.0.0-1ubuntu1
+
+I wonder why it takes only 30 seconds for you. As I understand, the 
+expectation is less than 1 second anyway, but the difference between 30 
+seconds and 3 hours is huge. Maybe some kernel config options matter 
+(KASAN?)
+
+Is it expected that increasing the loop length linearly increases the 
+verifying complexity exponentially? Is there any mitigation?
+
+Thanks,
+Max
+
+>>
+>> --cut--
+>>
+>> // SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
+>> /* Copyright (c) 2021, NVIDIA CORPORATION & AFFILIATES. All rights 
+>> reserved. */
+>>
 > [...]
->
-> Just commenting on ice here as one example (similar applies to other drivers):
->
->> diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
->> index 1dd7e84f41f8..7dc287bc3a1a 100644
->> --- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
->> +++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.c
->> @@ -258,6 +258,8 @@ static void ice_clean_xdp_irq(struct ice_tx_ring *xdp_ring)
->>   		xdp_ring->next_dd = ICE_TX_THRESH - 1;
->>   	xdp_ring->next_to_clean = ntc;
->>   	ice_update_tx_ring_stats(xdp_ring, total_pkts, total_bytes);
->> +	xdp_update_tx_drv_stats(&xdp_ring->xdp_stats->xdp_tx, total_pkts,
->> +				total_bytes);
->>   }
->> 
->>   /**
->> @@ -277,6 +279,7 @@ int ice_xmit_xdp_ring(void *data, u16 size, struct ice_tx_ring *xdp_ring)
->>   		ice_clean_xdp_irq(xdp_ring);
->> 
->>   	if (!unlikely(ICE_DESC_UNUSED(xdp_ring))) {
->> +		xdp_update_tx_drv_full(&xdp_ring->xdp_stats->xdp_tx);
->>   		xdp_ring->tx_stats.tx_busy++;
->>   		return ICE_XDP_CONSUMED;
->>   	}
->> diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
->> index ff55cb415b11..62ef47a38d93 100644
->> --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
->> +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
->> @@ -454,42 +454,58 @@ ice_construct_skb_zc(struct ice_rx_ring *rx_ring, struct xdp_buff **xdp_arr)
->>    * @xdp: xdp_buff used as input to the XDP program
->>    * @xdp_prog: XDP program to run
->>    * @xdp_ring: ring to be used for XDP_TX action
->> + * @lrstats: onstack Rx XDP stats
->>    *
->>    * Returns any of ICE_XDP_{PASS, CONSUMED, TX, REDIR}
->>    */
->>   static int
->>   ice_run_xdp_zc(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
->> -	       struct bpf_prog *xdp_prog, struct ice_tx_ring *xdp_ring)
->> +	       struct bpf_prog *xdp_prog, struct ice_tx_ring *xdp_ring,
->> +	       struct xdp_rx_drv_stats_local *lrstats)
->>   {
->>   	int err, result = ICE_XDP_PASS;
->>   	u32 act;
->> 
->> +	lrstats->bytes += xdp->data_end - xdp->data;
->> +	lrstats->packets++;
->> +
->>   	act = bpf_prog_run_xdp(xdp_prog, xdp);
->> 
->>   	if (likely(act == XDP_REDIRECT)) {
->>   		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
->> -		if (err)
->> +		if (err) {
->> +			lrstats->redirect_errors++;
->>   			goto out_failure;
->> +		}
->> +		lrstats->redirect++;
->>   		return ICE_XDP_REDIR;
->>   	}
->> 
->>   	switch (act) {
->>   	case XDP_PASS:
->> +		lrstats->pass++;
->>   		break;
->>   	case XDP_TX:
->>   		result = ice_xmit_xdp_buff(xdp, xdp_ring);
->> -		if (result == ICE_XDP_CONSUMED)
->> +		if (result == ICE_XDP_CONSUMED) {
->> +			lrstats->tx_errors++;
->>   			goto out_failure;
->> +		}
->> +		lrstats->tx++;
->>   		break;
->>   	default:
->>   		bpf_warn_invalid_xdp_action(act);
->> -		fallthrough;
->> +		lrstats->invalid++;
->> +		goto out_failure;
->>   	case XDP_ABORTED:
->> +		lrstats->aborted++;
->>   out_failure:
->>   		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
->> -		fallthrough;
->> +		result = ICE_XDP_CONSUMED;
->> +		break;
->>   	case XDP_DROP:
->>   		result = ICE_XDP_CONSUMED;
->> +		lrstats->drop++;
->>   		break;
->>   	}
->
-> Imho, the overall approach is way too bloated. I can see the
-> packets/bytes but now we have 3 counter updates with return codes
-> included and then the additional sync of the on-stack counters into
-> the ring counters via xdp_update_rx_drv_stats(). So we now need
-> ice_update_rx_ring_stats() as well as xdp_update_rx_drv_stats() which
-> syncs 10 different stat counters via u64_stats_add() into the per ring
-> ones. :/
->
-> I'm just taking our XDP L4LB in Cilium as an example: there we already
-> count errors and export them via per-cpu map that eventually lead to
-> XDP_DROP cases including the /reason/ which caused the XDP_DROP (e.g.
-> Prometheus can then scrape these insights from all the nodes in the
-> cluster). Given the different action codes are very often application
-> specific, there's not much debugging that you can do when /only/
-> looking at `ip link xdpstats` to gather insight on *why* some of these
-> actions were triggered (e.g. fib lookup failure, etc). If really of
-> interest, then maybe libxdp could have such per-action counters as
-> opt-in in its call chain..
-
-To me, standardising these counters is less about helping people debug
-their XDP programs (as you say, you can put your own telemetry into
-those), and more about making XDP less "mystical" to the system
-administrator (who may not be the same person who wrote the XDP
-programs). So at the very least, they need to indicate "where are the
-packets going", which means at least counters for DROP, REDIRECT and TX
-(+ errors for tx/redirect) in addition to the "processed by XDP" initial
-counter. Which in the above means 'pass', 'invalid' and 'aborted' could
-be dropped, I guess; but I don't mind terribly keeping them either given
-that there's no measurable performance impact.
-
-> But then it also seems like above in ice_xmit_xdp_ring() we now need
-> to bump counters twice just for sake of ethtool vs xdp counters which
-> sucks a bit, would be nice to only having to do it once:
-
-This I agree with, and while I can see the layering argument for putting
-them into 'ip' and rtnetlink instead of ethtool, I also worry that these
-counters will simply be lost in obscurity, so I do wonder if it wouldn't
-be better to accept the "layering violation" and keeping them all in the
-'ethtool -S' output?
-
-[...]
-
-> +  xdp-channel0-rx_xdp_redirect: 7
-> +  xdp-channel0-rx_xdp_redirect_errors: 8
-> +  xdp-channel0-rx_xdp_tx: 9
-> +  xdp-channel0-rx_xdp_tx_errors: 10
-> +  xdp-channel0-tx_xdp_xmit_packets: 11
-> +  xdp-channel0-tx_xdp_xmit_bytes: 12
-> +  xdp-channel0-tx_xdp_xmit_errors: 13
-> +  xdp-channel0-tx_xdp_xmit_full: 14
->
->  From a user PoV to avoid confusion, maybe should be made more clear that the latter refers
-> to xsk.
-
-+1, these should probably be xdp-channel0-tx_xsk_* or something like
-that...
-
--Toke
 
