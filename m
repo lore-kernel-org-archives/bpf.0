@@ -2,164 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F195C433F5
-	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 14:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AE30C433EF
+	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 16:13:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349901AbhKYOwU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Nov 2021 09:52:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22248 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355921AbhKYOuU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 25 Nov 2021 09:50:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637851628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r0YfT7b8wVOeig/3+IUDAZI2A/DKcXL2UWIWBuICztQ=;
-        b=ej9W3Fbf/IUcF9HbEuPoaqklwj3tyoT4a5DQQfJ+2UwZUs/c+3qa4sklIhVj5s+gA/Nvrf
-        fhN0bk1hIe0S8/Z5Z2AkqAdOiPPUTo2EWJFC/yl/IOFf60vMMKRjUZw6MOxjrpSQZ0CGW6
-        BwXdiuk7fA6WQGi7h++Sb9A/2d1dKZg=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-348-puaTqF-HPLynKxlt5HNPpA-1; Thu, 25 Nov 2021 09:47:07 -0500
-X-MC-Unique: puaTqF-HPLynKxlt5HNPpA-1
-Received: by mail-wm1-f70.google.com with SMTP id z138-20020a1c7e90000000b003319c5f9164so5085154wmc.7
-        for <bpf@vger.kernel.org>; Thu, 25 Nov 2021 06:47:07 -0800 (PST)
+        id S234707AbhKYQQv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Nov 2021 11:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233537AbhKYQOv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Nov 2021 11:14:51 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC30AC061A3F
+        for <bpf@vger.kernel.org>; Thu, 25 Nov 2021 07:59:17 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id m24so4842966pls.10
+        for <bpf@vger.kernel.org>; Thu, 25 Nov 2021 07:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IVT/h/b1JxXgPsghZbme6MV/FB5PifGmFBJ6WbiXN8U=;
+        b=mBA310ouSV2pzyNALCaaR62JWArRGnIAL5pcXXyHshM6yx1Lpf0y0mbWaFTCAay2fd
+         NKGvOgd18u46/e/rR9P6TCUZShhKCrW+/4UG4BCMqOubFV6vHl0ontxZ/1Rg67TECkrD
+         IgMnEyRLxM/k0PnSaEslQLsLZabeFAupFkvlX92JVFeXS8+au/b9UGMsLuilFT4GuX8Q
+         geM+OXizmPRk+fVgX0nMPZHY34Buw+3VgZ+SF9aXmdboVBcvSneGF9K4JXGenQ1KcLAK
+         ThmB0KdzHCEE91f59JPQUZr2l8aKevpW75sMt6ud2LaDdWoX5WeKnFfQCC1IMmxidDBZ
+         uYNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=r0YfT7b8wVOeig/3+IUDAZI2A/DKcXL2UWIWBuICztQ=;
-        b=dJdk9bfZQTX55gMrVKSfiV6+ulM6/O686xiGNRqa4lLonIQERFKehYlV6R5bXIYXbr
-         hMgiAGOgPiBv51zzW8f7gCQRpzcwcGKFHt7AxyP2dT4SqzuhTf01W8BiPrACBSMD7thI
-         dYD1MSSeS3EB+4o1xAEcGvLwaSQt/EA3tMo9jJM0u9WUUG+/iNbSix+uCBFMSPy4ovPo
-         gEoWgRysQ0hnPfu0t9j9xJbbco8Rk5VGElRUZRfuau9ldEJyQWBlH8on/UfNhLlIlv+7
-         cuMb8dNRxSKTMLbYIgdDb4C7qEjAYtxhTy2UD+xw+mpD8qnX/s/p3JIPdILWApDtOMfc
-         W6iA==
-X-Gm-Message-State: AOAM530XHwcuTOsUC5UUWbAmx3EfYnnFoesqDvOM9erm+HmziqhjkPR2
-        +d2RGWidRMfxOOVnFQBvE4ynqmVnRkgNyd/RUedLiJRzwzrTz3ccwjgm2loCUj+xVvnnhL4EQgB
-        c2gEtKmqo+WUA
-X-Received: by 2002:a7b:c763:: with SMTP id x3mr7962968wmk.31.1637851626023;
-        Thu, 25 Nov 2021 06:47:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWw5wfsPq7LRSM9hRLSA4XFFZZK0hqXGaWJlTIAPX0085VuaF1bzZGOZEdl44rHrNuL6HnNg==
-X-Received: by 2002:a7b:c763:: with SMTP id x3mr7962942wmk.31.1637851625817;
-        Thu, 25 Nov 2021 06:47:05 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c679e.dip0.t-ipconnect.de. [91.12.103.158])
-        by smtp.gmail.com with ESMTPSA id be3sm9930088wmb.1.2021.11.25.06.47.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Nov 2021 06:47:05 -0800 (PST)
-Message-ID: <68615778-08cc-6216-1def-764dff112a72@redhat.com>
-Date:   Thu, 25 Nov 2021 15:47:04 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IVT/h/b1JxXgPsghZbme6MV/FB5PifGmFBJ6WbiXN8U=;
+        b=my1BOxw6k8u+eN1PgtpSwIVmERnJQ67Mnf0ah/8PVAKa4L+EfYcQPB3/Bnp40hLzn9
+         IzHtzMyZbvTC8+Cei0nzzlq3Sr+lOna0BtL7pq68OszWHvmpJVYZxCZCpIDcoVyYoXqi
+         rajdv8qsh2RQEB8+zd1C0RWg/xcvf5jd315Ovp/y6iCqY061lZtebwaDyzqXrPDSAttS
+         Mzxwdh6ZcFvRrLcAGtIYVpS/Du33yX6hIe17ZCqILe4zovAnQ8cOAMwChNoOcGzyDpQ4
+         i473tECihbpKxejyNiZjHrcpEmdLHiiCl16RYVxr34cF6wBjAooqfwUsn1zH/xGrg5TS
+         jp2g==
+X-Gm-Message-State: AOAM532983iHBi3cD+7Z/5AEGtTgefm2KYzi9XUXd7MXuI/q7MVYDCfZ
+        osztXu5C5srZZRrJIWP5pgIH0uVo2EPoMcGxvZs=
+X-Google-Smtp-Source: ABdhPJzOI5UrU+4xlknefr2amNHx+hymVWs98IjoAUyQ3buD1ZmrzUhLA2BNeP7CTsdNj4hQXTC79ApGINK3CsXxdnA=
+X-Received: by 2002:a17:902:b588:b0:143:b732:834 with SMTP id
+ a8-20020a170902b58800b00143b7320834mr30907940pls.22.1637855957399; Thu, 25
+ Nov 2021 07:59:17 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2] kthread: dynamically allocate memory to store
- kthread's full name
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>, akpm@linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        oliver.sang@intel.com, lkp@intel.com,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+References: <20211120165528.197359-1-kuba@kernel.org> <CAPhsuW4g1PhdczQh=iqDR_CzB=6FoM4QPF9DmknEP0hZ_Ac3TA@mail.gmail.com>
+ <d4c52f8f-7efb-3d2a-8f2e-c983cd0c8cce@arm.com> <CAPhsuW6CMBymKpOMdL-bianESBLfbKa5JwmFypKL3dx4k0rmSQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW6CMBymKpOMdL-bianESBLfbKa5JwmFypKL3dx4k0rmSQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 25 Nov 2021 08:59:06 -0700
+Message-ID: <CAADnVQ+2kPhfG_DOrYpibDfs-COC5AHyKEDbqPNWnPhLhrV=uA@mail.gmail.com>
+Subject: Re: [PATCH bpf] cacheinfo: move get_cpu_cacheinfo_id() back out
+To:     Song Liu <song@kernel.org>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>, reinette.chatre@intel.com,
+        bpf <bpf@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>
-References: <20211120112850.46047-1-laoar.shao@gmail.com>
- <435fab0b-d345-3698-79af-ff858181666a@redhat.com> <YZ+hsx52TyDuHvE1@alley>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YZ+hsx52TyDuHvE1@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Will Deacon <will@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 25.11.21 15:46, Petr Mladek wrote:
-> On Thu 2021-11-25 10:36:49, David Hildenbrand wrote:
->> On 20.11.21 12:28, Yafang Shao wrote:
->>> When I was implementing a new per-cpu kthread cfs_migration, I found the
->>> comm of it "cfs_migration/%u" is truncated due to the limitation of
->>> TASK_COMM_LEN. For example, the comm of the percpu thread on CPU10~19 are
->>> all with the same name "cfs_migration/1", which will confuse the user. This
->>> issue is not critical, because we can get the corresponding CPU from the
->>> task's Cpus_allowed. But for kthreads correspoinding to other hardware
->>> devices, it is not easy to get the detailed device info from task comm,
->>> for example,
->>>
->>>     jbd2/nvme0n1p2-
->>>     xfs-reclaim/sdf
->>>
->>> Currently there are so many truncated kthreads:
->>>
->>>     rcu_tasks_kthre
->>>     rcu_tasks_rude_
->>>     rcu_tasks_trace
->>>     poll_mpt3sas0_s
->>>     ext4-rsv-conver
->>>     xfs-reclaim/sd{a, b, c, ...}
->>>     xfs-blockgc/sd{a, b, c, ...}
->>>     xfs-inodegc/sd{a, b, c, ...}
->>>     audit_send_repl
->>>     ecryptfs-kthrea
->>>     vfio-irqfd-clea
->>>     jbd2/nvme0n1p2-
->>>     ...
->>>
->>> We can shorten these names to work around this problem, but it may be
->>> not applied to all of the truncated kthreads. Take 'jbd2/nvme0n1p2-' for
->>> example, it is a nice name, and it is not a good idea to shorten it.
->>>
->>> One possible way to fix this issue is extending the task comm size, but
->>> as task->comm is used in lots of places, that may cause some potential
->>> buffer overflows. Another more conservative approach is introducing a new
->>> pointer to store kthread's full name if it is truncated, which won't
->>> introduce too much overhead as it is in the non-critical path. Finally we
->>> make a dicision to use the second approach. See also the discussions in
->>> this thread:
->>> https://lore.kernel.org/lkml/20211101060419.4682-1-laoar.shao@gmail.com/
->>>
->>> After this change, the full name of these truncated kthreads will be
->>> displayed via /proc/[pid]/comm:
->>>
->>>     rcu_tasks_kthread
->>>     rcu_tasks_rude_kthread
->>>     rcu_tasks_trace_kthread
->>>     poll_mpt3sas0_statu
->>>     ext4-rsv-conversion
->>>     xfs-reclaim/sdf1
->>>     xfs-blockgc/sdf1
->>>     xfs-inodegc/sdf1
->>>     audit_send_reply
->>>     ecryptfs-kthread
->>>     vfio-irqfd-cleanup
->>>     jbd2/nvme0n1p2-8
->>
->> I do wonder if that could break some user space that assumes these names
->> have maximum length ..
-> 
-> There is high chance that we will be on the safe side. Workqueue
-> kthreads already provided longer names. They are even dynamic
-> because the currently handled workqueue name is part of the name,
-> see wq_worker_comm().
+On Wed, Nov 24, 2021 at 1:14 AM Song Liu <song@kernel.org> wrote:
+>
+> On Tue, Nov 23, 2021 at 8:49 AM James Morse <james.morse@arm.com> wrote:
+> >
+> > Hello,
+> >
+> > On 23/11/2021 17:45, Song Liu wrote:
+> > > On Sat, Nov 20, 2021 at 6:55 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > >>
+> > >> This commit more or less reverts commit 709c4362725a ("cacheinfo:
+> > >> Move resctrl's get_cache_id() to the cacheinfo header file").
+> > >>
+> > >> There are no users of the static inline helper outside of resctrl/core.c
+> > >> and cpu.h is a pretty heavy include, it pulls in device.h etc. This
+> > >> trips up architectures like riscv which want to access cacheinfo
+> > >> in low level headers like elf.h.
+> > >>
+> > >> Link: https://lore.kernel.org/all/20211120035253.72074-1-kuba@kernel.org/
+> > >> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> > >> ---
+> >
+> > >> x86 resctrl folks, does this look okay?
+> > >>
+> > >> I'd like to do some bpf header cleanups in -next which this is blocking.
+> > >> How would you like to handle that? This change looks entirely harmless,
+> > >> can I get an ack and take this via bpf/netdev to Linus ASAP so it
+> > >> propagates to all trees?
+> > >
+> > > Does this patch target the bpf tree, or the bpf-next tree? If we want to unblock
+> > > bpf header cleanup in -next, we can simply include it in a set for bpf-next.
+> >
+> >
+> > Some background: this is part of the mpam tree that wires up resctrl for arm64. This patch
+> > floated to the top and got merged with some cleanup as it was independent of the wider
+> > resctrl changes.
+> >
+> > If the cpu.h include is the problem, I can't see what that is needed for. It almost
+> > certainly came in with a lockdep annotation that got replaced by a comment instead.
+>
+> Thanks for the information.
+>
+> I can ack the patch for the patch itself.
+>
+> Acked-by: Song Liu <songliubraving@fb.com>
+>
+> But I am not sure whether we should ship it via bpf tree. It seems to
+> me that the
+> only reason we ship it via bpf tree is to get it to upstream ASAP?
+>
+> Alexei/Daniel/Andrii, what do you think about this?
 
-Great, thanks!
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+I don't completely understand why it cannot go via -next along
+with other patches, but if Jakub needs it asap here is my
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+and probably the fastest is for Jakub to take it via net tree directly.
