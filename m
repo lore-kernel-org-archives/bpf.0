@@ -2,68 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F339C433EF
-	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 09:49:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4ACBC433F5
+	for <bpf@archiver.kernel.org>; Thu, 25 Nov 2021 10:12:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354119AbhKYJwm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 25 Nov 2021 04:52:42 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:55683 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348015AbhKYJum (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 25 Nov 2021 04:50:42 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J0Chx2Xtwz4xcb;
-        Thu, 25 Nov 2021 20:47:29 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     ast@kernel.org, daniel@iogearbox.net, naveen.n.rao@linux.ibm.com,
-        mpe@ellerman.id.au, christophe.leroy@csgroup.eu,
-        Hari Bathini <hbathini@linux.ibm.com>
-Cc:     songliubraving@fb.com, yhs@fb.com, andrii@kernel.org,
-        john.fastabend@gmail.com, bpf@vger.kernel.org, paulus@samba.org,
-        kpsingh@kernel.org, kafai@fb.com, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-In-Reply-To: <20211012123056.485795-1-hbathini@linux.ibm.com>
-References: <20211012123056.485795-1-hbathini@linux.ibm.com>
-Subject: Re: [RESEND PATCH v4 0/8] bpf powerpc: Add BPF_PROBE_MEM support in powerpc JIT compiler
-Message-Id: <163783298812.1228879.148537426457628310.b4-ty@ellerman.id.au>
-Date:   Thu, 25 Nov 2021 20:36:28 +1100
+        id S1354398AbhKYKPX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 25 Nov 2021 05:15:23 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:43622 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354391AbhKYKNW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 25 Nov 2021 05:13:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1637835012;
+  x=1669371012;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GdIrusbwRXXLYGW13kTKv3iwu2ddLrB+iTcqiTjJaeo=;
+  b=jajnKAODDJwFxONv7H5T9Qay8wejY2kquQX/fSlORGliWeym1PwFAoaX
+   c+hyYHlj5mL9IdgHRChiHz0W+fpW6Z0S1J/jruCVLNumsKzTIKYXQNndT
+   SZrgyEBkd9x2yqf12eC11Gq7qUmN0D7Z3Ii0llbwI3uv7hkk6S7PHYN5D
+   YQZ9KD/4Aoy4D8FOAMFtzMkX34JbDP8p71KdWu1o4s8Af4w0pBu8e3ivk
+   2lnq6TqqavbaUAdIFxwQqJ4YexQGCVR6n9JTmxsNvu3KKxw6bAZj4lVli
+   UG+e3drTpZek+n8GmfUBw64JH6b6uocq4peGodIA4gfYQoGNyfv3NsOpT
+   Q==;
+Date:   Thu, 25 Nov 2021 11:10:07 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, kernel <kernel@axis.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH] af_unix: fix regression in read after shutdown
+Message-ID: <20211125101007.GA13511@axis.com>
+References: <20211119120521.18813-1-vincent.whitchurch@axis.com>
+ <YZ19J+jZrOXxR1oR@unknown>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YZ19J+jZrOXxR1oR@unknown>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 12 Oct 2021 18:00:48 +0530, Hari Bathini wrote:
-> Patch #1 & #2 are simple cleanup patches. Patch #3 refactors JIT
-> compiler code with the aim to simplify adding BPF_PROBE_MEM support.
-> Patch #4 introduces PPC_RAW_BRANCH() macro instead of open coding
-> branch instruction. Patch #5 & #7 add BPF_PROBE_MEM support for PPC64
-> & PPC32 JIT compilers respectively. Patch #6 & #8 handle bad userspace
-> pointers for PPC64 & PPC32 cases respectively.
+On Wed, Nov 24, 2021 at 12:45:43AM +0100, Cong Wang wrote:
+> On Fri, Nov 19, 2021 at 01:05:21PM +0100, Vincent Whitchurch wrote:
+> > On kernels before v5.15, calling read() on a unix socket after
+> > shutdown(SHUT_RD) or shutdown(SHUT_RDWR) would return the data
+> > previously written or EOF.  But now, while read() after
+> > shutdown(SHUT_RD) still behaves the same way, read() after
+> > shutdown(SHUT_RDWR) always fails with -EINVAL.
 > 
-> [...]
+> Maybe just lift the socket tate check in unix_stream_read_generic()?
 
-Applied to powerpc/next.
+That would have have handled the specific case of read(2) on
+SOCK_STREAM, but the sk->sk_state is checked in many other places in
+af_unix.c so there would still be userspace-visible behaviour changes in
+several other situations, which could cause regressions.  Just to give
+one such example, the sendfile(2) call in the following program gets
+killed by SIGPIPE on earlier kernels but would now instead start to
+return -ENOTCONN:
 
-[1/8] bpf powerpc: Remove unused SEEN_STACK
-      https://git.kernel.org/powerpc/c/c9ce7c36e4870bd307101ba7a00a39d9aad270f3
-[2/8] bpf powerpc: Remove extra_pass from bpf_jit_build_body()
-      https://git.kernel.org/powerpc/c/04c04205bc35d0ecdc57146995ca9eb957d4f379
-[3/8] bpf powerpc: refactor JIT compiler code
-      https://git.kernel.org/powerpc/c/efa95f031bf38c85cf865413335a3dc044e3194e
-[4/8] powerpc/ppc-opcode: introduce PPC_RAW_BRANCH() macro
-      https://git.kernel.org/powerpc/c/f15a71b3880bf07b40810644e5ac6f177c2a7c8f
-[5/8] bpf ppc64: Add BPF_PROBE_MEM support for JIT
-      https://git.kernel.org/powerpc/c/983bdc0245a29cdefcd30d9d484d3edbc4b6d787
-[6/8] bpf ppc64: Access only if addr is kernel address
-      https://git.kernel.org/powerpc/c/9c70c7147ffec31de67d33243570a533b29f9759
-[7/8] bpf ppc32: Add BPF_PROBE_MEM support for JIT
-      https://git.kernel.org/powerpc/c/23b51916ee129833453d8a3d6bde0ff392f82fce
-[8/8] bpf ppc32: Access only if addr is kernel address
-      https://git.kernel.org/powerpc/c/e919c0b2323bedec00e1ecc6280498ff81f59b15
+#include <err.h>
+#include <errno.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/unistd.h>
+#include <sys/sendfile.h>
+#include <sys/types.h>
+#include <fcntl.h>
 
-cheers
+int main(int argc, char *argv[]) {
+  int sock[2];
+  int ret;
+
+  ret = socketpair(AF_UNIX, SOCK_STREAM, 0, sock);
+  if (ret < 0)
+    err(1, "socketpair");
+
+  ret = shutdown(sock[0], SHUT_RDWR);
+  if (ret < 0)
+    err(1, "shutdown");
+
+  ssize_t bytes = sendfile(sock[0], open(argv[0], O_RDONLY), NULL, 16);
+  if (bytes < 0)
+    err(1, "sendfile");
+
+  printf("sendfile %zd bytes\n", bytes);
+
+  return 0;
+}
+
+> > 
+> > This behaviour change was apparently inadvertently introduced as part of
+> > a bug fix for a different regression caused by the commit adding sockmap
+> > support to af_unix, commit 94531cfcbe79c359 ("af_unix: Add
+> > unix_stream_proto for sockmap").  Those commits, for unclear reasons,
+> > started setting the socket state to TCP_CLOSE on shutdown(SHUT_RDWR),
+> 
+> Not sure why it is unclear here, for an connection oriented socket, it
+> can be closed for just one direction, in this case we want to prevent it
+> from being redirected in sockmap, hence the point of the commits.
+
+I must admit I'm not really familiar with either af_unix.c or sockmap,
+but clearly the existing code in af_unix.c does not expect sk_state to
+be changed in shutdown.  If we want to prevent UNIX sockets which have
+had shutdown(SHUT_RDWR) called on then from being redirect to sockmap,
+then maybe some other flag should be used to achieve that?
+
+(Also, I wonder why the code added by the patch handled SHUT_RDWR
+ differently from a SHUT_RD followed by a SHUT_WR?)
+
+> > while this state change had previously only been done in
+> > unix_release_sock().
+> > 
+> > Restore the original behaviour.  The sockmap tests in
+> > tests/selftests/bpf continue to pass after this patch.
+> 
+> Isn't this because we don't have shutdown() in sockmap tests?
+
+That may well be the case, I just assumed that the tests added along
+with the new feature were comprehensive.
