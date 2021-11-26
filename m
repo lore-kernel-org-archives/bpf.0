@@ -2,89 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84533C4332F
-	for <bpf@archiver.kernel.org>; Fri, 26 Nov 2021 11:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33756C433FE
+	for <bpf@archiver.kernel.org>; Fri, 26 Nov 2021 12:05:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238127AbhKZLY5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Nov 2021 06:24:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26512 "EHLO
+        id S1377263AbhKZMId (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Nov 2021 07:08:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:23487 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238145AbhKZLWz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 26 Nov 2021 06:22:55 -0500
+        by vger.kernel.org with ESMTP id S1376874AbhKZMGd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Nov 2021 07:06:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637925582;
+        s=mimecast20190719; t=1637928200;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VP2wsyySLKig79PhgG1vpE6dmyB/yBoLf1Bs2JAB+/A=;
-        b=cRaseYftY+VMz75PhlE6T2mDShA7Ccf2eH1TFkG5xVCjWbz4BGNLmxQofzzfxqIftVohxR
-        Ciwu0arcz2/pwJ9hP/ZnxWqCKI3246VTlAdIMB1RWT+EBx0RcYh5h7esyBtA0fjYSn9LYR
-        CFOVYH8zj5Xhkb8ZOtrtZ/+95p1vmVI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+GVX98ikHeZ7eJCoOXrjvQJfNzLzuoPo0mWyUsTqXrE=;
+        b=eTCIVqL9Vcs4xlVAO7ON78mspo//SNLNWlIVmcagUZWKWJzKATelniovwnsdntQvGhD2v0
+        gsdDQTvNw0M0ve1otho3AdzaT/pRV7R2cxQQWhPBGkB72WzBRiWioH0vWu49Ipw/dlLpzW
+        UnnQty0wNGA0KDixxQLRwsh+hmWxYDo=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-x8yMdHCFMlyA4jV8o0C42A-1; Fri, 26 Nov 2021 06:19:37 -0500
-X-MC-Unique: x8yMdHCFMlyA4jV8o0C42A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 03D6F185302E;
-        Fri, 26 Nov 2021 11:19:36 +0000 (UTC)
-Received: from gerbillo.fritz.box (unknown [10.39.194.163])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A24B260BF4;
-        Fri, 26 Nov 2021 11:19:34 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     netdev@vger.kernel.org
+ us-mta-32-iEClaDfiOqmfygC6AsFA7Q-1; Fri, 26 Nov 2021 07:03:19 -0500
+X-MC-Unique: iEClaDfiOqmfygC6AsFA7Q-1
+Received: by mail-ed1-f69.google.com with SMTP id bx28-20020a0564020b5c00b003e7c42443dbso7843993edb.15
+        for <bpf@vger.kernel.org>; Fri, 26 Nov 2021 04:03:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=+GVX98ikHeZ7eJCoOXrjvQJfNzLzuoPo0mWyUsTqXrE=;
+        b=0uCaBrGM36vrHKRF5Y4CXn1NwRUIaELcniFyg0tjeR5Wnny2N4Ge1DZ8c09AsbQxVK
+         QWeZvHanh+MuzsNobtgbmFiSUCm7J3q0LpAbdSM+CK39OzCda6KIyrfoiF06tJV5b6c3
+         4ZN8U4p+Omm6P0v61H7OIHqrjoZI2ltyElwKY2RA3Y4hn1XWAyqMrNiS+9GetyxT1PiU
+         prum3RmCjc2OMCr5XNp2/+ZED5OX0pk+DapJItu3Nfn+h0SmE9FpjD29NG5yfjXVwpX6
+         Gwf8qL3y0WUIci/kxrLK41wvH/y7eXiKuKQS7bbdfyorav6WXRZ87gUJWsYsI7Wy067j
+         iRfQ==
+X-Gm-Message-State: AOAM530BwZadTlNOg0k46YQxsGMo+FRetNoDgxFb/gJjytL0jTUxiI8Y
+        JdOI4vEItZGZO2JQPQgxwQwWIfEtLDz0lQONHfIyOdCCV/qAWdZWN+YLPU+6ihbDzn1X05qshFg
+        csltcJGnZXMFX
+X-Received: by 2002:aa7:c946:: with SMTP id h6mr47811428edt.190.1637928196860;
+        Fri, 26 Nov 2021 04:03:16 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQA6Z+BWdbXXyqxo121uGQ8KKTBdbgLCQrPsB9Lo/Twf7z/WcPPdkcCsl+v1t+q1ZS/vGzvw==
+X-Received: by 2002:aa7:c946:: with SMTP id h6mr47811353edt.190.1637928196355;
+        Fri, 26 Nov 2021 04:03:16 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id hq9sm3068890ejc.119.2021.11.26.04.03.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Nov 2021 04:03:15 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 1E4581802A0; Fri, 26 Nov 2021 13:03:15 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH net-next v2 1/2] bpf: do not WARN in bpf_warn_invalid_xdp_action()
-Date:   Fri, 26 Nov 2021 12:19:10 +0100
-Message-Id: <1817b31eac5f1b10abb2870ff09ed6af4814ef01.1637924200.git.pabeni@redhat.com>
-In-Reply-To: <cover.1637924200.git.pabeni@redhat.com>
+        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/2] bpf: let bpf_warn_invalid_xdp_action()
+ report more info
+In-Reply-To: <277a9483b38f9016bc78ce66707753681684fbd7.1637924200.git.pabeni@redhat.com>
 References: <cover.1637924200.git.pabeni@redhat.com>
+ <277a9483b38f9016bc78ce66707753681684fbd7.1637924200.git.pabeni@redhat.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 26 Nov 2021 13:03:15 +0100
+Message-ID: <87wnkv9la4.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The WARN_ONCE() in bpf_warn_invalid_xdp_action() can be triggered by
-any bugged program, and even attaching a correct program to a NIC
-not supporting the given action.
+Paolo Abeni <pabeni@redhat.com> writes:
 
-The resulting splat, beyond polluting the logs, fouls automated tools:
-e.g. a syzkaller reproducers using an XDP program returning an
-unsupported action will never pass validation.
+> In non trivial scenarios, the action id alone is not sufficient
+> to identify the program causing the warning. Before the previous
+> patch, the generated stack-trace pointed out at least the
+> involved device driver.
+>
+> Let's additionally include the program name and id, and the
+> relevant device name.
+>
+> If the user needs additional infos, he can fetch them via a
+> kernel probe, leveraging the arguments added here.
+>
+> v1 -> v2:
+>  - do not include the device name for maps caller (Toke)
+>
+> rfc -> v1:
+>  - do not print the attach type, print the program name
+>
+> Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 
-Replace the WARN_ONCE with a less intrusive pr_warn_once().
-
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
----
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 8271624a19aa..5631acf3f10c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8185,9 +8185,9 @@ void bpf_warn_invalid_xdp_action(u32 act)
- {
- 	const u32 act_max = XDP_REDIRECT;
- 
--	WARN_ONCE(1, "%s XDP return value %u, expect packet loss!\n",
--		  act > act_max ? "Illegal" : "Driver unsupported",
--		  act);
-+	pr_warn_once("%s XDP return value %u, expect packet loss!\n",
-+		     act > act_max ? "Illegal" : "Driver unsupported",
-+		     act);
- }
- EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
- 
--- 
-2.33.1
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
