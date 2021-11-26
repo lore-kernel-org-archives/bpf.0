@@ -2,96 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65FA3C433F5
-	for <bpf@archiver.kernel.org>; Fri, 26 Nov 2021 13:42:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0023DC433F5
+	for <bpf@archiver.kernel.org>; Fri, 26 Nov 2021 15:27:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349302AbhKZNpq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Nov 2021 08:45:46 -0500
-Received: from mga17.intel.com ([192.55.52.151]:9348 "EHLO mga17.intel.com"
+        id S1354545AbhKZPaU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Nov 2021 10:30:20 -0500
+Received: from mga04.intel.com ([192.55.52.120]:57026 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377590AbhKZNnp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Nov 2021 08:43:45 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="216373468"
+        id S1350039AbhKZP2U (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Nov 2021 10:28:20 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10180"; a="234409781"
 X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="216373468"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 05:40:32 -0800
+   d="scan'208";a="234409781"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2021 07:25:07 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,266,1631602800"; 
-   d="scan'208";a="555268935"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga008.fm.intel.com with ESMTP; 26 Nov 2021 05:40:30 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AQDeS5e002392;
-        Fri, 26 Nov 2021 13:40:29 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, kuba@kernel.org, davem@davemloft.net,
-        bpf@vger.kernel.org, anthony.l.nguyen@intel.com,
-        magnus.karlsson@intel.com
-Subject: Re: [PATCH net] ice: xsk: clear status_error0 for each allocated desc
-Date:   Fri, 26 Nov 2021 14:39:54 +0100
-Message-Id: <20211126133954.145249-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211126143848.17490-1-maciej.fijalkowski@intel.com>
-References: <20211126143848.17490-1-maciej.fijalkowski@intel.com>
+   d="scan'208";a="498435813"
+Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
+  by orsmga007.jf.intel.com with ESMTP; 26 Nov 2021 07:25:05 -0800
+Date:   Fri, 26 Nov 2021 16:25:04 +0100
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        bjorn@kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        bpf@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>, magnus.karlsson@intel.com
+Subject: Re: [Intel-wired-lan] [PATCH net-next 1/2] igc: AF_XDP zero-copy
+ metadata adjust breaks SKBs on XDP_PASS
+Message-ID: <YaD8UHOxHasBkqEW@boxer>
+References: <163700856423.565980.10162564921347693758.stgit@firesoul>
+ <163700858579.565980.15265721798644582439.stgit@firesoul>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <163700858579.565980.15265721798644582439.stgit@firesoul>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Date: Fri, 26 Nov 2021 15:38:48 +0100
+On Mon, Nov 15, 2021 at 09:36:25PM +0100, Jesper Dangaard Brouer wrote:
+> Driver already implicitly supports XDP metadata access in AF_XDP
+> zero-copy mode, as xsk_buff_pool's xp_alloc() naturally set xdp_buff
+> data_meta equal data.
+> 
+> This works fine for XDP and AF_XDP, but if a BPF-prog adjust via
+> bpf_xdp_adjust_meta() and choose to call XDP_PASS, then igc function
+> igc_construct_skb_zc() will construct an invalid SKB packet. The
+> function correctly include the xdp->data_meta area in the memcpy, but
+> forgot to pull header to take metasize into account.
+> 
+> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-> Fix a bug in which the receiving of packets can stop in the zero-copy
-> driver. Ice HW ignores 3 lower bits from QRX_TAIL register, which means
-> that tail is bumped only on intervals of 8. Currently with XSK RX
-> batching in place, ice_alloc_rx_bufs_zc() clears the status_error0 only
-> of the last descriptor that has been allocated/taken from the XSK buffer
-> pool. status_error0 includes DD bit that is looked upon by the
-> ice_clean_rx_irq_zc() to tell if a descriptor can be processed.
-> 
-> The bug can be triggered when driver updates the ntu but not the
-> QRX_TAIL, so HW wouldn't have a chance to write to the ready
-> descriptors. Later on driver moves the ntc to the mentioned set of
-> descriptors and interprets them as a ready to be processed, since
-> corresponding DD bits were not cleared nor any writeback has happened
-> that would clear it. This can then lead to ntc == ntu case which means
-> that ring is empty and no further packet processing.
-> 
-> Fix the XSK traffic hang that can be observed when l2fwd scenario from
-> xdpsock is used by making sure that status_error0 is cleared for each
-> descriptor that is fed to HW and therefore we are sure that driver will
-> not processed non-valid DD bits. This will also prevent the driver from
-> processing the descriptors that were allocated in favor of the
-> previously processed ones, but writeback didn't happen yet.
-> 
-> Fixes: db804cfc21e9 ("ice: Use the xsk batched rx allocation interface")
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Great catch. Will take a look at other ZC enabled Intel drivers if they
+are affected as well.
 
 Thanks!
 
 > ---
->  drivers/net/ethernet/intel/ice/ice_xsk.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/net/ethernet/intel/igc/igc_main.c |    4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-> index ff55cb415b11..bb9a80847298 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-> @@ -383,6 +383,7 @@ bool ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
->  	while (i--) {
->  		dma = xsk_buff_xdp_get_dma(*xdp);
->  		rx_desc->read.pkt_addr = cpu_to_le64(dma);
-> +		rx_desc->wb.status_error0 = 0;
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 8e448288ee26..76b0a7311369 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -2448,8 +2448,10 @@ static struct sk_buff *igc_construct_skb_zc(struct igc_ring *ring,
 >  
->  		rx_desc++;
->  		xdp++;
-> -- 
-> 2.31.1
-
-Al
+>  	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+>  	memcpy(__skb_put(skb, totalsize), xdp->data_meta, totalsize);
+> -	if (metasize)
+> +	if (metasize) {
+>  		skb_metadata_set(skb, metasize);
+> +		__skb_pull(skb, metasize);
+> +	}
+>  
+>  	return skb;
+>  }
+> 
+> 
+> _______________________________________________
+> Intel-wired-lan mailing list
+> Intel-wired-lan@osuosl.org
+> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
