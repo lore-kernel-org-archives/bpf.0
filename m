@@ -2,233 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2703FC433EF
-	for <bpf@archiver.kernel.org>; Fri, 26 Nov 2021 15:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AAF7C433F5
+	for <bpf@archiver.kernel.org>; Fri, 26 Nov 2021 15:34:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378034AbhKZPa2 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 26 Nov 2021 10:30:28 -0500
-Received: from proxmox-new.maurer-it.com ([94.136.29.106]:65452 "EHLO
-        proxmox-new.maurer-it.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345647AbhKZP21 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Nov 2021 10:28:27 -0500
-X-Greylist: delayed 501 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Nov 2021 10:28:26 EST
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-        by proxmox-new.maurer-it.com (Proxmox) with ESMTP id D6F90459D1;
-        Fri, 26 Nov 2021 16:16:51 +0100 (CET)
-Date:   Fri, 26 Nov 2021 16:16:41 +0100
-From:   Fabian =?iso-8859-1?q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>
-Subject: Re: [PATCH v4 bpf-next 3/5] kbuild: build kernel module BTFs if BTF
- is enabled and pahole supports it
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Starovoitov, Alexei" <ast@fb.com>, bpf <bpf@vger.kernel.org>,
-        "Allan, Bruce W" <bruce.w.allan@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "jeyu@kernel.org" <jeyu@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-References: <20201110011932.3201430-1-andrii@kernel.org>
-        <20201110011932.3201430-4-andrii@kernel.org>
-        <B51AA745-00B6-4F2A-A7F0-461E845C8414@fb.com>
-        <SN6PR11MB2751CF60B28D5788B0C15B5AB5E30@SN6PR11MB2751.namprd11.prod.outlook.com>
-        <CAEf4BzYSN+XnaA4V3jTLEmoUZO=Yxwp7OAwAY+HOvVEKT5kRFA@mail.gmail.com>
-        <20201116132409.4a5b8e0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201116132409.4a5b8e0b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S1377908AbhKZPiG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Nov 2021 10:38:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45972 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349699AbhKZPgF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 26 Nov 2021 10:36:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637940772;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=t1+6lLBKzRsOvvoLZavbDMeX/0SVAxdl2+X6EFyhRfA=;
+        b=Z0D2cbgl1d/O52LG6dk6OhwcvgBEDbsVFKAOObngv/X2zeiGKdy5f2zt/vic1SK8jADdY7
+        CmMg+GlmxFS/KD7TRZBc5r7FKTKDX0T5UEmQ27EBfiDdEwtYrGK8LvodP2GyaAimwXYIDU
+        VPvmao3r3M4o3nuUwv8j77hSTumG5Ws=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-407-Uf0zYklOOmeOe3O2WFQLEA-1; Fri, 26 Nov 2021 10:32:50 -0500
+X-MC-Unique: Uf0zYklOOmeOe3O2WFQLEA-1
+Received: by mail-wr1-f71.google.com with SMTP id d3-20020adfa343000000b0018ed6dd4629so1749296wrb.2
+        for <bpf@vger.kernel.org>; Fri, 26 Nov 2021 07:32:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=t1+6lLBKzRsOvvoLZavbDMeX/0SVAxdl2+X6EFyhRfA=;
+        b=LJXzu2VndBzH1E1xtVzd0J+IW7NzQiUs48Jk/mhahqYQJAg0L1pG3EvHGERbIYcC3E
+         r0h8+aRbpKf3ywDewAI7WHxKKYPabTA4TngAa5/XxOKLDW74FMjt3cgqVODRxSxCatyQ
+         QRUgaiDyb5baKEUv5YhjI6lz2kyM2tvzDOR3H1Lr9yLOjwA1EKW4D2mOdhX0+P5Za56z
+         DC/9CcDqkGrPb0wcR+U/sdUPBkuWaR3gi9ctgfW+Izr+aFmpvYPEQ+3ZGhR03K4UbgjE
+         wADLMqkf20GYPmm3bEOR97Ij5g1dT8S8TmZ8kwwiBFOBB6f6Dwnlo/9oz62odRlC3Z6r
+         NJUA==
+X-Gm-Message-State: AOAM530I650h4vh/jrCBp4cyrJWecDcGq5uNfn5PHZLFCRyDZIy2Zmme
+        /BtK+YgVud7BIcmwlL0hIW+/lHQED1Bx9v5gJmar/kp8lG31eyUhivM+eqB4vvdEsf6jgUIjbr5
+        yeiDfRDPh6DT+
+X-Received: by 2002:adf:fb09:: with SMTP id c9mr14519911wrr.223.1637940769683;
+        Fri, 26 Nov 2021 07:32:49 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwgfSH4rBkDxJpw/E0R3JU0oHbTtNz0X3Ozh45JI/JWmFIsykZ0b2AySxDMJwQ9RLbXRKFf9Q==
+X-Received: by 2002:adf:fb09:: with SMTP id c9mr14519899wrr.223.1637940769532;
+        Fri, 26 Nov 2021 07:32:49 -0800 (PST)
+Received: from [192.168.2.13] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
+        by smtp.gmail.com with ESMTPSA id h17sm11479193wmb.44.2021.11.26.07.32.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Nov 2021 07:32:49 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <66f62ef7-f4c6-08df-a8e1-dbbe34b9b125@redhat.com>
+Date:   Fri, 26 Nov 2021 16:32:47 +0100
 MIME-Version: 1.0
-User-Agent: astroid/0.15.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1637926692.uyvrkty41j.astroid@nora.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, bjorn@kernel.org,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>, magnus.karlsson@intel.com
+Subject: Re: [Intel-wired-lan] [PATCH net-next 1/2] igc: AF_XDP zero-copy
+ metadata adjust breaks SKBs on XDP_PASS
+Content-Language: en-US
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+References: <163700856423.565980.10162564921347693758.stgit@firesoul>
+ <163700858579.565980.15265721798644582439.stgit@firesoul>
+ <YaD8UHOxHasBkqEW@boxer>
+In-Reply-To: <YaD8UHOxHasBkqEW@boxer>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On November 16, 2020 10:24 pm, Jakub Kicinski wrote:
-> On Mon, 16 Nov 2020 12:34:17 -0800 Andrii Nakryiko wrote:
->> > This change, commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled and pahole
->> > supports it") currently in net-next, linux-next, etc. breaks the use-case of compiling only a specific
->> > kernel module (both in-tree and out-of-tree, e.g. 'make M=drivers/net/ethernet/intel/ice') after
->> > first doing a 'make modules_prepare'.  Previously, that use-case would result in a warning noting
->> > "Symbol info of vmlinux is missing. Unresolved symbol check will be entirely skipped" but now it
->> > errors out after noting "No rule to make target 'vmlinux', needed by '<...>.ko'.  Stop."
->> >
->> > Is that intentional?  
->> 
->> I wasn't aware of such a use pattern, so definitely not intentional.
->> But vmlinux is absolutely necessary to generate the module BTF. So I'm
->> wondering what's the proper fix here? Leave it as is (that error
->> message is actually surprisingly descriptive, btw)? Force vmlinux
->> build? Or skip BTF generation for that module?
+
+
+On 26/11/2021 16.25, Maciej Fijalkowski wrote:
+> On Mon, Nov 15, 2021 at 09:36:25PM +0100, Jesper Dangaard Brouer wrote:
+>> Driver already implicitly supports XDP metadata access in AF_XDP
+>> zero-copy mode, as xsk_buff_pool's xp_alloc() naturally set xdp_buff
+>> data_meta equal data.
+>>
+>> This works fine for XDP and AF_XDP, but if a BPF-prog adjust via
+>> bpf_xdp_adjust_meta() and choose to call XDP_PASS, then igc function
+>> igc_construct_skb_zc() will construct an invalid SKB packet. The
+>> function correctly include the xdp->data_meta area in the memcpy, but
+>> forgot to pull header to take metasize into account.
+>>
+>> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
+>> Signed-off-by: Jesper Dangaard Brouer<brouer@redhat.com>
+> Acked-by: Maciej Fijalkowski<maciej.fijalkowski@intel.com>
 > 
-> For an external out-of-tree module there is no guarantee that vmlinux
-> will even be on the system, no? So only the last option can work in
-> that case.
+> Great catch. Will take a look at other ZC enabled Intel drivers if they
+> are affected as well.
 
-a year late to the party, but it seems to me that this patch 
-series/features also missed another, not yet fixed scenario. I have to 
-admit I am not very well-versed in BTF/BPF matters though, so please 
-take the analysis below with a grain of salt or two ;)
-
-(am subscribed to LKML/netdev, but not the bpf list, so please keep me 
-CCed if discussion moves there! apologies if too many people are CCed 
-here, feel free to trim down to relevant people/lists)
-
-many distros do their own tracking of kernel <-> module ABI (usually 
-these checks use Module.symvers and some combination of lists/symbols/.. 
-to skip/ignore[0]).
-
-depending on detected changes, a kernel update can either
-- bump ABI, resulting in a new kernel/modules package that is installed 
-  next to the current one
-- keep ABI, resulting in an updated kernel/modules package that is 
-  installed over/instead of the current one
-
-the former case is obviously not an issue, since the modules and vmlinux 
-image shipped in that (set of) package(s) match. but in the later case 
-of updated, compatible kernel image + modules with unchanged ABI
-(which is important, as it allows shipping fixed modules that are 
-loadable for a compatible, older, booted kernel image), the following is 
-possible:
-- install kernel+modules with ABI 1
-- boot kernel with ABI 1
-- install ABI-compatible upgrade (e.g. a security fix)
-- load module
-- BTF validation fails, because the base_btf (loaded at boot time) and 
-  the offsets in the module's .BTF section (loaded at module load time) 
-  aren't matching
-
-of course the validation might also not fail but the parsed BTF info 
-might be bogus, or the base_btf might be similar enough that validation 
-passes and the parsed BTF data is correct.
-
-in our case the symptoms look like this (exact details vary with kernel 
-builds/modules, but likely not relevant):
-
-Nov 24 11:39:11 host kernel: BPF:         type_id=7 bits_offset=0
-Nov 24 11:39:11 host kernel: BPF:
-Nov 24 11:39:11 host kernel: BPF:Invalid name
-Nov 24 11:39:11 host kernel: BPF:
-Nov 24 11:39:11 host kernel: failed to validate module [overlay] BTF: -22
-
-where the booted kernel and the (attempted to get) loaded module are not 
-from the same build, but the Module.symvers is matching and loading 
-should thus work. adding some more debug logging reveals that the root 
-cause is the module's BTF start_str_off being, well, off, since it's derived 
-from vmlinux' BTF/base_btf. if it is too big, the name/type lookups will 
-wrongly look in the base_btf, if it's too small, the name/type lookups 
-will be offset within the module or wrongly look inside the module when 
-they should look inside base_btf/vmlinux. in any case, random garbage is 
-the result, usually tripping up some validation check (e.g. the first 
-byte not being 0 when checking a name). but even if it's correct (old 
-and new vmlinux image have the same nr_types/hdr.str_len), there is no 
-guarantuee that the offsets into base_btf are pointing at the right 
-stuff.
-
-example with debug logging patched in, note the garbled names, and 
-offset slightly below the (wrong) start_str_off:
-
-----8<----
-
-BPF:magic: 0xeb9f
-
-BPF:version: 1
-
-BPF:flags: 0x0
-
-BPF:hdr_len: 24
-
-BPF:type_off: 0
-
-BPF:type_len: 9264
-
-BPF:str_off: 9264
-
-BPF:str_len: 5511
-
-BPF:btf_total_size: 14799
-
-BPF:[106314] STRUCT rimary_device
-BPF:size=56 vlen=14
-BPF:
-
-BPF:offset at call: 1915394
-BPF:offset too small, choosing base_btf: 1915397
-
-BPF:offset after base_btf: 1915394
-
-BPF:     ce type_id=49 bits_offset=0
-BPF:
-
-BPF:offset at call: 1915403
-BPF:offset after base_btf: 6
-
-BPF:     nfig type_id=49 bits_offset=64
-BPF:
-
-BPF:offset at call: 1915412
-BPF:offset after base_btf: 15
-
-BPF:     rdir type_id=49 bits_offset=128
-BPF:
-
-BPF:offset at call: 768428
-BPF:offset too small, choosing base_btf: 1915397
-
-BPF:offset after base_btf: 768428
-
-BPF:     _dio type_id=56 bits_offset=192
-BPF:
-
-BPF:offset at call: 1915420
-BPF:offset after base_btf: 23
-
-BPF:     erdir type_id=56 bits_offset=200
-BPF:
-
-BPF:offset at call: 1915433
-BPF:offset after base_btf: 36
-
-BPF:first char wrong - 0
-
-BPF:      type_id=56 bits_offset=208
-BPF:
-BPF:Invalid name STRUCT MEMBER (name offset 1915433)
-BPF:
-
-failed to validate module [overlay] BTF: -22
-
----->8----
-
-also note how it's only after a few botched entries that a check 
-actually trips up - not sure what the impliciations for crafted BTF info 
-are, but might be worthy a closer look by someone more knowledgable as 
-well..
-
-it seems to me this can be solved on the distro/user side by tracking 
-vmlinux BTF infos as part of the ABI tracking (how stable are those 
-compared to the existing interfaces making up the kernel <-> module 
-ABI/Module.symvers? does this effectively mean bumping ABI for any 
-change anyway?) or by disabling CONFIG_DEBUG_INFO_BTF_MODULES.
-
-on the kernel/libbpf side it could maybe be solved by storing a hash of 
-the base_btf data used to generate the split BTF-sections inside the 
-modules, and skip BTF loading/validating if another base_btf is 
-currently loaded (so BTF is best-effort, if the booted kernel and the 
-module are matching it works, if not module loading works but no BTF 
-support). this might be a good safe-guard for split-BTF in general?
-
-I'd appreciate input on how to proceed (we were recently hit by this in 
-a downstream Debian derivative, and will disable BTF info for modules as 
-an interim measure).
-
-thanks!
-
-0: e.g., Debian's: https://salsa.debian.org/kernel-team/linux/-/blob/master/debian/bin/abiupdate.py
+Thanks a lot for taking this task!!! :-)
+--Jesper
 
