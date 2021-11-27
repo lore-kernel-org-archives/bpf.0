@@ -2,94 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0695FC433EF
-	for <bpf@archiver.kernel.org>; Sat, 27 Nov 2021 15:33:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 447A1C4332F
+	for <bpf@archiver.kernel.org>; Sat, 27 Nov 2021 16:34:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbhK0PhE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 27 Nov 2021 10:37:04 -0500
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:38648 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347347AbhK0PfE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 27 Nov 2021 10:35:04 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UyTp5Uj_1638027102;
-Received: from VM20210331-25.tbsite.net(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0UyTp5Uj_1638027102)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 27 Nov 2021 23:31:46 +0800
-From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     cuibixuan@linux.alibaba.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Subject: [PATCH -next] bpf: Add oversize check before call kvmalloc()
-Date:   Sat, 27 Nov 2021 23:31:42 +0800
-Message-Id: <1638027102-22686-1-git-send-email-cuibixuan@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S240101AbhK0Qhh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 27 Nov 2021 11:37:37 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:43566 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232089AbhK0Qfh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 27 Nov 2021 11:35:37 -0500
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638030741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=20++19QWPyUsjpenZUCm7ez/h0n8l7tkfH+uxMaAehY=;
+        b=TxX5dvPWWKkN3kLUaxqMndux9D9F9bZpayusCWfAhIpUiY5N9Dtgu/Mvgxgob9K/Jdw9M/
+        j8cmFYkVxZOm0lPpB94PQUVehY8y5bO5Yhmla8XHfRZcU1SKvOvXe/dIWjvoLiSML2WcZc
+        zCClaxNyWT8eNi5x7rybE7Ev8Kzyn5CfFKlRp77eD4SqwxyrVWcr1B++nC/emc486g9kJ5
+        IkzPIH9vrm3Bd7MH46i7quxdodv+nKAolbkPcaJQFFDjObLclAY1xMeTV58aPbthJYstNn
+        iJaLDIdT64TWdZujjWFMWrD16pJmGzPp2p+4bs+OI1DDuUioxiWihZdaLti42A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638030741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=20++19QWPyUsjpenZUCm7ez/h0n8l7tkfH+uxMaAehY=;
+        b=qKLObmWTCjAqXBx0OJtFzrbtHgOW8nJfEtWJ+oWYDbiMNGxTkvADvuu94n8otp/1COmLLM
+        FA0stFQkzPsC/4DQ==
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH doc 1/2] Documentation/locking/locktypes: Update migrate_disable() bits.
+Date:   Sat, 27 Nov 2021 17:31:59 +0100
+Message-Id: <20211127163200.10466-2-bigeasy@linutronix.de>
+In-Reply-To: <20211127163200.10466-1-bigeasy@linutronix.de>
+References: <20211127163200.10466-1-bigeasy@linutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") add
-the oversize check. When the allocation is larger than what kvmalloc()
-supports, the following warning triggered:
+The initial implementation of migrate_disable() for mainline was a
+wrapper around preempt_disable(). RT kernels substituted this with
+a real migrate disable implementation.
 
-WARNING: CPU: 1 PID: 372 at mm/util.c:597 kvmalloc_node+0x111/0x120
-mm/util.c:597
-Modules linked in:
-CPU: 1 PID: 372 Comm: syz-executor.4 Not tainted 5.15.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 01/01/2011
-RIP: 0010:kvmalloc_node+0x111/0x120 mm/util.c:597
-Code: 01 00 00 00 4c 89 e7 e8 7d f7 0c 00 49 89 c5 e9 69 ff ff ff e8 60
-20 d1 ff 41 89 ed 41 81 cd 00 20 01 00 eb 95 e8 4f 20 d1 ff <0f> 0b e9
-4c ff ff ff 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 36
-RSP: 0018:ffffc90002bf7c98 EFLAGS: 00010216
-RAX: 00000000000000ec RBX: 1ffff9200057ef9f RCX: ffffc9000ac63000
-RDX: 0000000000040000 RSI: ffffffff81a6a621 RDI: 0000000000000003
-RBP: 0000000000102cc0 R08: 000000007fffffff R09: 00000000ffffffff
-R10: ffffffff81a6a5de R11: 0000000000000000 R12: 00000000ffff9aaa
-R13: 0000000000000000 R14: 00000000ffffffff R15: 0000000000000000
-FS:  00007f05f2573700(0000) GS:ffff8880b9d00000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2f424000 CR3: 0000000027d2c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvmalloc include/linux/slab.h:741 [inline]
- map_lookup_elem kernel/bpf/syscall.c:1090 [inline]
- __sys_bpf+0x3a5b/0x5f00 kernel/bpf/syscall.c:4603
- __do_sys_bpf kernel/bpf/syscall.c:4722 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4720 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4720
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+Later on mainline gained true migrate disable support, but the
+documentation was not updated.
 
-The type of 'value_size' is u32, its value may exceed INT_MAX.
+Update the documentation, remove the claims about migrate_disable()
+mapping to preempt_disable() on non-PREEMPT_RT kernels.
 
-Reported-by: syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com
-Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+Fixes: 74d862b682f51 ("sched: Make migrate_disable/enable() independent of =
+RT")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/bpf/syscall.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/locking/locktypes.rst | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1033ee8..f5bc380 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1094,6 +1094,10 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	}
- 
- 	value_size = bpf_map_value_size(map);
-+	if (value_size > INT_MAX) {
-+		err = -EINVAL;
-+		goto err_put;
-+	}
- 
- 	err = -ENOMEM;
- 	value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
--- 
-1.8.3.1
+diff --git a/Documentation/locking/locktypes.rst b/Documentation/locking/lo=
+cktypes.rst
+index ddada4a537493..4fd7b70fcde19 100644
+--- a/Documentation/locking/locktypes.rst
++++ b/Documentation/locking/locktypes.rst
+@@ -439,11 +439,9 @@ not allow to acquire p->lock because get_cpu_ptr() imp=
+licitly disables
+   spin_lock(&p->lock);
+   p->count +=3D this_cpu_read(var2);
+=20
+-On a non-PREEMPT_RT kernel migrate_disable() maps to preempt_disable()
+-which makes the above code fully equivalent. On a PREEMPT_RT kernel
+ migrate_disable() ensures that the task is pinned on the current CPU which
+ in turn guarantees that the per-CPU access to var1 and var2 are staying on
+-the same CPU.
++the same CPU while the task remains preemptible.
+=20
+ The migrate_disable() substitution is not valid for the following
+ scenario::
+@@ -456,9 +454,8 @@ The migrate_disable() substitution is not valid for the=
+ following
+     p =3D this_cpu_ptr(&var1);
+     p->val =3D func2();
+=20
+-While correct on a non-PREEMPT_RT kernel, this breaks on PREEMPT_RT because
+-here migrate_disable() does not protect against reentrancy from a
+-preempting task. A correct substitution for this case is::
++This breaks because migrate_disable() does not protect against reentrancy =
+from
++a preempting task. A correct substitution for this case is::
+=20
+   func()
+   {
+--=20
+2.34.0
 
