@@ -2,50 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F289C433EF
-	for <bpf@archiver.kernel.org>; Sat, 27 Nov 2021 03:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BB9C433FE
+	for <bpf@archiver.kernel.org>; Sat, 27 Nov 2021 03:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243108AbhK0DEK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 26 Nov 2021 22:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S1351627AbhK0D0C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 26 Nov 2021 22:26:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbhK0DCK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 26 Nov 2021 22:02:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABEBAC09B133;
-        Fri, 26 Nov 2021 17:53:22 -0800 (PST)
+        with ESMTP id S231804AbhK0DYC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 26 Nov 2021 22:24:02 -0500
+X-Greylist: delayed 366 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 26 Nov 2021 18:11:42 PST
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DF8C08EB1E;
+        Fri, 26 Nov 2021 18:11:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEE4BB829B3;
-        Sat, 27 Nov 2021 01:53:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48E65C53FC9;
-        Sat, 27 Nov 2021 01:53:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 26164CE21ED;
+        Sat, 27 Nov 2021 02:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C1FC53FCD;
+        Sat, 27 Nov 2021 02:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637977998;
-        bh=pngvY9BmN7/mTvr7zxnHowe65NC+KzPQJX8BHpNymIM=;
+        s=k20201202; t=1637978733;
+        bh=4YiSAorf5qAH+UlLNY8UbMZaD2SA/pzWA0hjPnnjqvo=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Kuo80bvd8GcQTmOi6KcZ6W37cHytQz025Uk9jW0RyBHP2EgNci5ra7iIOST/d6AVA
-         Hmqv772HvMRjv665YIpNHJhCzLYBX2hUcV+TGOQsziJcAX2SFm0cQLblMcra9x7/uG
-         T8+JdlqbMa6u9hE84PGVBDUKYrDObjg03KAh8SHNcETzTugb5Ua8ynHXqQvSCy9EPp
-         PZa8CzMEKZo2u3FpJIMI1iXKbdH0IT9SH7IXlMXqSrkasoYsc2OcJx5FdcccWBnV+s
-         u6gqkIYwG/WA7yppN3hhO108j15XJ/mUr4ZwxhWK9lQVBsjM95S6ZTAlpyQmRGw5v8
-         B4u0NTH8T4m+g==
-Received: by mail-yb1-f182.google.com with SMTP id g17so24444430ybe.13;
-        Fri, 26 Nov 2021 17:53:18 -0800 (PST)
-X-Gm-Message-State: AOAM531sBISKXolKmZ3MAMQgM4m8Ijfk+5XUYww6K6ksRaFQQusB80q1
-        1zv1HqgUB27qjoU3d07vamFewIV0CGeSBlNHaxI=
-X-Google-Smtp-Source: ABdhPJx8JDPiOft5BZu0DjN7blNEA873efOWUHc1bP58SyR86fCSnlbM2C1c/u0ZPE3JLRerHlpmbzQ/TX3jgONq6Sk=
-X-Received: by 2002:a25:69cc:: with SMTP id e195mr19853758ybc.456.1637977997463;
- Fri, 26 Nov 2021 17:53:17 -0800 (PST)
+        b=liJKODFHBeeC/EN6c80lpFdDXtRy6zOgMqQhq+giq5uAwUi8Tr0GIUrlynyDb0DT0
+         dTRPV2oRIoiniKGc7Fu4hKn5qKfso/bGiol2fqU6OCGgZNaWSS+gGiw8HstAbqGRwp
+         W+j2Phk9idhksslpLfrwNuKNPiWsX7ydq7IQQaMwbwB6fGgGhsh/DyaVqEbbe+qrSN
+         ssc8epoiVaZfAU3WUys2NXIJDPEoqhnh+l6s/g+rSHsTYetRootARLG1Esxfk+jdYH
+         xbwrJVdA6CHHc1bcfcbLuGsn+XRDT6KBfYcGt3YUvEcHm/e908jRcgI5U2jKIXYRhp
+         EuPWrEL4znweA==
+Received: by mail-yb1-f181.google.com with SMTP id v138so24565941ybb.8;
+        Fri, 26 Nov 2021 18:05:33 -0800 (PST)
+X-Gm-Message-State: AOAM5329s+K1x8IyxXOIWoQeiRqzpHTbZJLdu2kIeIZ90omx5qDZxPk7
+        T6L4vtWl/2LAeVM2B3UCEt9Q/d2rC/reTtb121Y=
+X-Google-Smtp-Source: ABdhPJztzbw8hnomzFIS0CCsf3IrGX4M9KMZbZ3/960gU+gBiNhrdsLVMhangiRDNRgrWC5SfSxd4/e1pcB2fDH2G9E=
+X-Received: by 2002:a25:af82:: with SMTP id g2mr20212763ybh.509.1637978732227;
+ Fri, 26 Nov 2021 18:05:32 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1637682120.git.dave@dtucker.co.uk> <fb36291f5998c98faa1bd02ce282d940813c8efd.1637684071.git.dave@dtucker.co.uk>
-In-Reply-To: <fb36291f5998c98faa1bd02ce282d940813c8efd.1637684071.git.dave@dtucker.co.uk>
+References: <fb36291f5998c98faa1bd02ce282d940813c8efd.1637684071.git.dave@dtucker.co.uk>
+ <9b20a6e558008b8d422db1008dd2b5c8ff18ce46.1637684071.git.dave@dtucker.co.uk>
+In-Reply-To: <9b20a6e558008b8d422db1008dd2b5c8ff18ce46.1637684071.git.dave@dtucker.co.uk>
 From:   Song Liu <song@kernel.org>
-Date:   Fri, 26 Nov 2021 17:53:06 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW4jbVn2FQCDob2bUW1OTnG2P_Rqw-y5mKe9SmzezeF9gA@mail.gmail.com>
-Message-ID: <CAPhsuW4jbVn2FQCDob2bUW1OTnG2P_Rqw-y5mKe9SmzezeF9gA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] bpf, docs: add kernel version to map_cgroup_storage
+Date:   Fri, 26 Nov 2021 18:05:21 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7p4BaoYNRKxvCW7MumBbR7kiszu2auHHsAM1Bbct7RPQ@mail.gmail.com>
+Message-ID: <CAPhsuW7p4BaoYNRKxvCW7MumBbR7kiszu2auHHsAM1Bbct7RPQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/2] bpf, docs: document BPF_MAP_TYPE_ARRAY
 To:     Dave Tucker <dave@dtucker.co.uk>
 Cc:     bpf <bpf@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -63,9 +65,27 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Tue, Nov 23, 2021 at 8:24 AM Dave Tucker <dave@dtucker.co.uk> wrote:
 >
-> This adds the version at which this map became available to use in the
-> documentation
+> This commit adds documentation for the BPF_MAP_TYPE_ARRAY including
+> kernel version introduced, usage and examples.
+> It also documents BPF_MAP_TYPE_PERCPU_ARRAY since this is similar.
 >
 > Signed-off-by: Dave Tucker <dave@dtucker.co.uk>
 
+It will be great to add an example with BPF_F_MMAPABLE, but I guess we can
+do that in a follow up patch. So
+
 Acked-by: Song Liu <songliubraving@fb.com>
+
+With one nitpick.
+
+[...]
+
+> +
+> +When calling ``bpf_map_update_elem()`` the flags ``BPF_NOEXIST`` can not be used for these maps.
+> \ No newline at end of file
+
+nit: Maybe add a newline at the end?
+
+> --
+> 2.33.1
+>
