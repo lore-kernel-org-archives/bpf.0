@@ -2,163 +2,221 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36851C433EF
-	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 10:16:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49E11C433FE
+	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 11:53:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbhK2KTr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Nov 2021 05:19:47 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10164 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232318AbhK2KRp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 05:17:45 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AT9lO29006206;
-        Mon, 29 Nov 2021 10:13:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=bTykWiZilsgvIEF8053GRPR7j2ZWFDbGpwj1KiG5Zb8=;
- b=ZRE/D4iZlWQha3YL2zQJ5zfjlQOQWX3mJjlDDOtDsbip+iNART4SQ9TYsBVlt6sQ9Lvg
- lhcgSJ/vR8ria0U2HK7ve1FWaeu13ghyyPlTALSRwVqkoO5J4f+oRgQ3GJ1jENxs4mlD
- wBCb/yvDvJfJrIqHSupTFsxkmGEVI8h2KHSVa4efgopiXMJNh2WvFLOJ1Lp9kiK1Zx2e
- YoMGsqehghyuHXuDSSMvq/2AR6MJAfB5XHx5vadvs6QPCRefk3mCDyGkHdvUQXt0KudR
- EzqoKVBLFwyoApWg7k40rBgQ0UjvJDgR2H5t8gDOMcDc24QUtZA4STRUEYv8NTKgCZ7f Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmvht8gh0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 10:13:39 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AT9nGP2013939;
-        Mon, 29 Nov 2021 10:13:38 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmvht8gg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 10:13:38 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATADJsi020937;
-        Mon, 29 Nov 2021 10:13:35 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3ckca9ajq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 10:13:35 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATADWKX22544770
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 10:13:32 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83AC611C04A;
-        Mon, 29 Nov 2021 10:13:32 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E328911C04C;
-        Mon, 29 Nov 2021 10:13:31 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 29 Nov 2021 10:13:31 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com,
+        id S238692AbhK2L4t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Nov 2021 06:56:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54916 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231951AbhK2Lys (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 06:54:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638186690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o1hbT83UZyzEpMcYnWEfjfHejJ/ev9mdgbjpKbK1VxE=;
+        b=jPSCvnH3AmIEJgnraLey8Z5aFFc8AIeOcFcsX+DzhdtTb0SAGz8twzNMycBFyTfseM1MSS
+        8w+KBStygLCLMuokWtNVxaJiSfRKO+isstyAF4hpUsR6KCkexSxNid9nv4QxiUG0bDtO4c
+        Kw91vHSrw0dewmGQCdIUe1mphja4ZQA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-541-mMWarPM4OJWmLqMloT1wMg-1; Mon, 29 Nov 2021 06:51:29 -0500
+X-MC-Unique: mMWarPM4OJWmLqMloT1wMg-1
+Received: by mail-ed1-f70.google.com with SMTP id p4-20020aa7d304000000b003e7ef120a37so13438733edq.16
+        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 03:51:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=o1hbT83UZyzEpMcYnWEfjfHejJ/ev9mdgbjpKbK1VxE=;
+        b=ZX5qbTeJ4sNO3EnqFb1yBwMlSrVcywIUTt+PRxwDyNMGlddcy+6eut0Swux55viMen
+         1l8oM+5HADYB9kc99tZXDd35Q23+mnK59skpGhr3FYRuSzOxX6hoDkaCRK7gLLA5FDpS
+         ZODx7Ly30rBhDb3flptzWg0E+JH2mRGyFKOj2ulzXb22hYQb2TUNSW3D2mcCvwyQgvye
+         zP7yr1FFKEmPLqbt5CMMWvy6Qy75rKrVyxXCEh/jI6jOlsqoIOeYeT2ThRWxxQXyAoT5
+         APl4nvS1e1cGr7RIt8eAeDHPnAVnJtuLAhsdC6+xAxQyksz0GKuGP6AOEwTq4lbgZHbl
+         HgXw==
+X-Gm-Message-State: AOAM530AMYitE3CfnWNZ+jx5FMl1lu1SAWRAPMQgnzoWeRCVpvJ03NUn
+        4k+LiWYezWZge3wvprCdZRVFJp8J9HVhs+w+jCAu51K15O/hp/S/Ey0+2TGSqBKZ/+eeJSo3Wce
+        eLJZw/T9zz1Ii
+X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr72820085edz.36.1638186687999;
+        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy//h6DqzMZ3cIjns1ItOPHoyCEI8XwGnDfYQ/w255YG7ez18OJaBJc76mESug2RLwzmhwD5w==
+X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr72820014edz.36.1638186687643;
+        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id z1sm9056421edq.54.2021.11.29.03.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 6858F1802A0; Mon, 29 Nov 2021 12:51:26 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-Date:   Mon, 29 Nov 2021 11:13:31 +0100
-In-Reply-To: <20211120112738.45980-8-laoar.shao@gmail.com> (Yafang Shao's
-        message of "Sat, 20 Nov 2021 11:27:38 +0000")
-Message-ID: <yt9d35nf1d84.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
+ per-channel statistics
+In-Reply-To: <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211123163955.154512-22-alexandr.lobakin@intel.com>
+ <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
+ <87bl28bga6.fsf@toke.dk>
+ <20211125170708.127323-1-alexandr.lobakin@intel.com>
+ <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20211125204007.133064-1-alexandr.lobakin@intel.com>
+ <87sfvj9k13.fsf@toke.dk>
+ <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 29 Nov 2021 12:51:26 +0100
+Message-ID: <878rx79o3l.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tCV3Q3i4lUvrnwlJ9X-_0skwr0F3PEoJ
-X-Proofpoint-ORIG-GUID: 9MlKZj6a0c4TU5bozMc3VrKzCk8L9suc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_07,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111290049
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-Yafang Shao <laoar.shao@gmail.com> writes:
-
-> As the sched:sched_switch tracepoint args are derived from the kernel,
-> we'd better make it same with the kernel. So the macro TASK_COMM_LEN is
-> converted to type enum, then all the BPF programs can get it through BTF.
+> On 11/26/21 7:06 PM, Jakub Kicinski wrote:
+>> On Fri, 26 Nov 2021 13:30:16 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrot=
+e:
+>>>>> TBH I wasn't following this thread too closely since I saw Daniel
+>>>>> nacked it already. I do prefer rtnl xstats, I'd just report them
+>>>>> in -s if they are non-zero. But doesn't sound like we have an agreeme=
+nt
+>>>>> whether they should exist or not.
+>>>>
+>>>> Right, just -s is fine, if we drop the per-channel approach.
+>>>
+>>> I agree that adding them to -s is fine (and that resolves my "no one
+>>> will find them" complain as well). If it crowds the output we could also
+>>> default to only output'ing a subset, and have the more detailed
+>>> statistics hidden behind a verbose switch (or even just in the JSON
+>>> output)?
+>>>
+>>>>> Can we think of an approach which would make cloudflare and cilium
+>>>>> happy? Feels like we're trying to make the slightly hypothetical
+>>>>> admin happy while ignoring objections of very real users.
+>>>>
+>>>> The initial idea was to only uniform the drivers. But in general
+>>>> you are right, 10 drivers having something doesn't mean it's
+>>>> something good.
+>>>
+>>> I don't think it's accurate to call the admin use case "hypothetical".
+>>> We're expending a significant effort explaining to people that XDP can
+>>> "eat" your packets, and not having any standard statistics makes this
+>>> way harder. We should absolutely cater to our "early adopters", but if
+>>> we want XDP to see wider adoption, making it "less weird" is critical!
+>>=20
+>> Fair. In all honesty I said that hoping to push for a more flexible
+>> approach hidden entirely in BPF, and not involving driver changes.
+>> Assuming the XDP program has more fine grained stats we should be able
+>> to extract those instead of double-counting. Hence my vague "let's work
+>> with apps" comment.
+>>=20
+>> For example to a person familiar with the workload it'd be useful to
+>> know if program returned XDP_DROP because of configured policy or
+>> failure to parse a packet. I don't think that sort distinction is
+>> achievable at the level of standard stats.
 >
-> The BPF program which wants to use TASK_COMM_LEN should include the header
-> vmlinux.h. Regarding the test_stacktrace_map and test_tracepoint, as the
-> type defined in linux/bpf.h are also defined in vmlinux.h, so we don't
-> need to include linux/bpf.h again.
+> Agree on the additional context. How often have you looked at tc clsact
+> /dropped/ stats specifically when you debug a more complex BPF program
+> there?
 >
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Petr Mladek <pmladek@suse.com>
-> ---
->  include/linux/sched.h                                   | 9 +++++++--
->  tools/testing/selftests/bpf/progs/test_stacktrace_map.c | 6 +++---
->  tools/testing/selftests/bpf/progs/test_tracepoint.c     | 6 +++---
->  3 files changed, 13 insertions(+), 8 deletions(-)
+>    # tc -s qdisc show clsact dev foo
+>    qdisc clsact ffff: parent ffff:fff1
+>     Sent 6800 bytes 120 pkt (dropped 0, overlimits 0 requeues 0)
+>     backlog 0b 0p requeues 0
 >
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 78c351e35fec..cecd4806edc6 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -274,8 +274,13 @@ struct task_group;
->  
->  #define get_current_state()	READ_ONCE(current->__state)
->  
-> -/* Task command name length: */
-> -#define TASK_COMM_LEN			16
-> +/*
-> + * Define the task command name length as enum, then it can be visible to
-> + * BPF programs.
-> + */
-> +enum {
-> +	TASK_COMM_LEN = 16,
-> +};
+> Similarly, XDP_PASS counters may be of limited use as well for same reason
+> (and I think we might not even have a tc counter equivalent for it).
+>
+>> The information required by the admin is higher level. As you say the
+>> primary concern there is "how many packets did XDP eat".
+>
+> Agree. Above said, for XDP_DROP I would see one use case where you compare
+> different drivers or bond vs no bond as we did in the past in [0] when
+> testing against a packet generator (although I don't see bond driver cove=
+red
+> in this series here yet where it aggregates the XDP stats from all bond s=
+lave
+> devs).
+>
+> On a higher-level wrt "how many packets did XDP eat", it would make sense
+> to have the stats for successful XDP_{TX,REDIRECT} given these are out
+> of reach from a BPF prog PoV - we can only count there how many times we
+> returned with XDP_TX but not whether the pkt /successfully made it/.
+>
+> In terms of error cases, could we just standardize all drivers on the beh=
+avior
+> of e.g. mlx5e_xdp_handle(), meaning, a failure from XDP_{TX,REDIRECT} will
+> hit the trace_xdp_exception() and then fallthrough to bump a drop counter
+> (same as we bump in XDP_DROP then). So the drop counter will account for
+> program drops but also driver-related drops.
+>
+> At some later point the trace_xdp_exception() could be extended with an e=
+rror
+> code that the driver would propagate (given some of them look quite simil=
+ar
+> across drivers, fwiw), and then whoever wants to do further processing wi=
+th
+> them can do so via bpftrace or other tooling.
+>
+> So overall wrt this series: from the lrstats we'd be /dropping/ the pass,
+> tx_errors, redirect_errors, invalid, aborted counters. And we'd be /keepi=
+ng/
+> bytes & packets counters that XDP sees, (driver-)successful tx & redirect
+> counters as well as drop counter. Also, XDP bytes & packets counters shou=
+ld
+> not be counted twice wrt ethtool stats.
 
-This breaks the trigger-field-variable-support.tc from the ftrace test
-suite at least on s390:
+This sounds reasonable to me, and I also like the error code to
+tracepoint idea :)
 
-echo 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm) if next_comm=="ping"'
-linux/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc: line 15: echo: write error: Invalid argument
+-Toke
 
-I added a debugging line into check_synth_field():
-
-[   44.091037] field->size 16, hist_field->size 16, field->is_signed 1, hist_field->is_signed 0
-
-Note the difference in the signed field.
-
-Regards
-Sven
