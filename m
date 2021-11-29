@@ -2,154 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22FABC433FE
-	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 14:41:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC311C433FE
+	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 14:50:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378425AbhK2Oox (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Nov 2021 09:44:53 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:9322 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378882AbhK2Omo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 09:42:44 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATELQk5004373;
-        Mon, 29 Nov 2021 14:38:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : content-type :
- mime-version; s=pp1; bh=psXxLdwgVEfnMFpvXcmOhsuzbnixwOwpECiDllB2p2s=;
- b=UrUjl8gxrQqUiuM9ig65LsK8IPLa9BMrdxtleUAK4SgasupVKzbLE94r022+ZnjMGu7i
- nqBkSuKlF9kZXMpDW8Fw14NsV6oqYZSyQtG6rim+p43Q8/gjbqY0AFnp2du4mOOCFwWS
- D1UdtOn49Y/IcLKhW40JUsTcHg8Ii/DMwbVXECqrrW172FbGL1Z8zRBQSSndvvyW3yyA
- BK1OjUopyF3GSexF1rLfB4wayFAdZ8YQWt3e2qUxB0tRe3hVfEA8mPSjS5QelBe2AMBm
- 2VhOwceKNO+qPTGGWixhqY6xZU/mqr+4S7po081C7eMhMUwkhudu1SZTFlH6jEPRUOKd vw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn0j8rdyf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 14:38:49 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1ATEMXKM008522;
-        Mon, 29 Nov 2021 14:38:49 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn0j8rdxt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 14:38:49 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATESIiO020879;
-        Mon, 29 Nov 2021 14:38:46 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxjnx71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 14:38:46 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATEVIQE36504026
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 14:31:18 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A25252052;
-        Mon, 29 Nov 2021 14:38:44 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id ABFAF52059;
-        Mon, 29 Nov 2021 14:38:43 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
+        id S234029AbhK2Oxc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Nov 2021 09:53:32 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:47462 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345713AbhK2OvP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:51:15 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E929F6155F;
+        Mon, 29 Nov 2021 14:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AD3C004E1;
+        Mon, 29 Nov 2021 14:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638197277;
+        bh=CoopZV0b/bKiDlV+HhvUfNkMdjiGJvIMlADMRIGNB4I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rYabvzP1gx9omCtgDIauPYZdStR3jR6UpWkgTE6hmLhH4cRWrQHf6TxS28YeH+RKr
+         SRcur0lcx5xMeZ+8gBonuXpPN+wFYA1Lnq5+OdnzLkc8KNVKvQ8FTjiUENH4dADxoG
+         /CQRR1zslN7soB04e2Atkf4XOvb5euaKzwtxmB7CrfEi+/pw8J501IDFdgTQfoX+qh
+         aU4MOGaSBGWP/0MNcgDm38CsdUb3iakU5Lv602Tqilqvw1F59jAhtD4rzXmCOi1oyk
+         ChqJVkhxVGeMImLerX7GfVKOyFo1URKOnTAfJ/U54kUQVPz3vbu3h0tj4JGlrxsuaC
+         gexT8LLb6/BNw==
+Date:   Mon, 29 Nov 2021 06:47:55 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-        <yt9d35nf1d84.fsf@linux.ibm.com>
-        <CALOAHbDtqpkN4D0vHvGxTSpQkksMWtFm3faMy0n+pazxN_RPPg@mail.gmail.com>
-        <yt9d35nfvy8s.fsf@linux.ibm.com>
-        <54e1b56c-e424-a4b3-4d61-3018aa095f36@redhat.com>
-Date:   Mon, 29 Nov 2021 15:38:43 +0100
-In-Reply-To: <54e1b56c-e424-a4b3-4d61-3018aa095f36@redhat.com> (David
-        Hildenbrand's message of "Mon, 29 Nov 2021 15:32:26 +0100")
-Message-ID: <yt9dy257uivg.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ETDg9BFbTme7HiDfY2tb_B3LhNdBNEJU
-X-Proofpoint-GUID: UY2W4q60_I3lDZdKPxr3dXpyNLCmd1d5
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, petrm@nvidia.com,
+        nikolay@nvidia.com
+Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
+ per-channel statistics
+Message-ID: <20211129064755.539099c0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <YaPCbaMVaVlxXcHC@shredder>
+References: <20211123163955.154512-22-alexandr.lobakin@intel.com>
+        <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
+        <87bl28bga6.fsf@toke.dk>
+        <20211125170708.127323-1-alexandr.lobakin@intel.com>
+        <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20211125204007.133064-1-alexandr.lobakin@intel.com>
+        <87sfvj9k13.fsf@toke.dk>
+        <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <87ee72ah56.fsf@toke.dk>
+        <20211126111431.4a2ed007@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <YaPCbaMVaVlxXcHC@shredder>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_08,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- spamscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- clxscore=1015 bulkscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111290073
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+On Sun, 28 Nov 2021 19:54:53 +0200 Ido Schimmel wrote:
+> > > Right, sure, I am also totally fine with having only a somewhat
+> > > restricted subset of stats available at the interface level and make
+> > > everything else be BPF-based. I'm hoping we can converge of a common
+> > > understanding of what this "minimal set" should be :)
+> > > 
+> > > Agreed. My immediate thought is that "XDP packets are interface packets"
+> > > but that is certainly not what we do today, so not sure if changing it
+> > > at this point would break things?  
+> > 
+> > I'd vote for taking the risk and trying to align all the drivers.  
+> 
+> I agree. I think IFLA_STATS64 in RTM_NEWLINK should contain statistics
+> of all the packets seen by the netdev. The breakdown into software /
+> hardware / XDP should be reported via RTM_NEWSTATS.
 
-David Hildenbrand <david@redhat.com> writes:
-> On 29.11.21 15:21, Sven Schnelle wrote:
->> Yafang Shao <laoar.shao@gmail.com> writes:
->>> Thanks for the report and debugging!
->>> Seems we should explicitly define it as signed ?
->>> Could you pls. help verify it?
->>>
->>> diff --git a/include/linux/sched.h b/include/linux/sched.h
->>> index cecd4806edc6..44d36c6af3e1 100644
->>> --- a/include/linux/sched.h
->>> +++ b/include/linux/sched.h
->>> @@ -278,7 +278,7 @@ struct task_group;
->>>   * Define the task command name length as enum, then it can be visible to
->>>   * BPF programs.
->>>   */
->>> -enum {
->>> +enum SignedEnum {
->>>         TASK_COMM_LEN = 16,
->>>  };
->> 
->> Umm no. What you're doing here is to define the name of the enum as
->> 'SignedEnum'. This doesn't change the type. I think before C++0x you
->> couldn't force an enum type.
->
-> I think there are only some "hacks" to modify the type with GCC. For
-> example, with "__attribute__((packed))" we can instruct GCC to use the
-> smallest type possible for the defined enum values.
+Hm, in the offload case "seen by the netdev" may be unclear. For 
+the offload case I believe our recommendation was phrased more like 
+"all packets which would be seen by the netdev if there was no
+routing/tc offload", right?
 
-Yes, i meant no way that the standard defines. You could force it to
-signed by having a negative member.
+> Currently, for soft devices such as VLANs, bridges and GRE, user space
+> only sees statistics of packets forwarded by software, which is quite
+> useless when forwarding is offloaded from the kernel to hardware.
+> 
+> Petr is working on exposing hardware statistics for such devices via
+> rtnetlink. Unlike XDP (?), we need to be able to let user space enable /
+> disable hardware statistics as we have a limited number of hardware
+> counters and they can also reduce the bandwidth when enabled. We are
+> thinking of adding a new RTM_SETSTATS for that:
+> 
+> # ip stats set dev swp1 hw_stats on
 
-> I think with some fake entries one can eventually instruct GCC to use an
-> unsigned type in some cases:
->
-> https://stackoverflow.com/questions/14635833/is-there-a-way-to-make-an-enum-unsigned-in-the-c90-standard-misra-c-2004-compl
->
-> enum {
-> 	TASK_COMM_LEN = 16,
-> 	TASK_FORCE_UNSIGNED = 0x80000000,
-> };
->
-> Haven't tested it, though, and I'm not sure if we should really do that
-> ... :)
+Does it belong on the switch port? Not the netdev we want to track?
 
-TBH, i would vote for reverting the change. defining an array size as
-enum feels really odd.
+> For query, something like (under discussion):
+> 
+> # ip stats show dev swp1 // all groups
+> # ip stats show dev swp1 group link
+> # ip stats show dev swp1 group offload // all sub-groups
+> # ip stats show dev swp1 group offload sub-group cpu
+> # ip stats show dev swp1 group offload sub-group hw
+> 
+> Like other iproute2 commands, these follow the nesting of the
+> RTM_{NEW,GET}STATS uAPI.
 
-Regards
-Sven
+But we do have IFLA_STATS_LINK_OFFLOAD_XSTATS, isn't it effectively 
+the same use case?
+
+> Looking at patch #1 [1], I think that whatever you decide to expose for
+> XDP can be queried via:
+> 
+> # ip stats show dev swp1 group xdp
+> # ip stats show dev swp1 group xdp sub-group regular
+> # ip stats show dev swp1 group xdp sub-group xsk
+> 
+> Regardless, the following command should show statistics of all the
+> packets seen by the netdev:
+> 
+> # ip -s link show dev swp1
+> 
+> There is a PR [2] for node_exporter to use rtnetlink to fetch netdev
+> statistics instead of the old proc interface. It should be possible to
+> extend it to use RTM_*STATS for more fine-grained statistics.
+> 
+> [1] https://lore.kernel.org/netdev/20211123163955.154512-2-alexandr.lobakin@intel.com/
+> [2] https://github.com/prometheus/node_exporter/pull/2074
+
+Nice!
