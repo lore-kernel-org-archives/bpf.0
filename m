@@ -2,179 +2,171 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB270C4332F
-	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 14:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FC22C433F5
+	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 14:41:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379077AbhK2Oh5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Nov 2021 09:37:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44459 "EHLO
+        id S1345682AbhK2Oob (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Nov 2021 09:44:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36939 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378729AbhK2Oft (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 09:35:49 -0500
+        by vger.kernel.org with ESMTP id S1378559AbhK2Om1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 09:42:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638196350;
+        s=mimecast20190719; t=1638196748;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dJBe9OPhF+PV6aWNoM1mTqTJe8Q2yU80n+V/5mpDDnU=;
-        b=esvDb6ohWl78ETcyTeSR5bYc85pwmFQANFgNEQx3lum3ThhKu9cuOVpVb/CGBV7prXEuMk
-        V7n2apwuDvDJCG29zS4e6Ye4YU3yjqvUkF6gA+Mc/zRYns2mDrmwMlHh7gLrutpVrosJa8
-        NYbCBgNdWqdNTEZsbICJz/cJth5k6/M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=O7S5OjizQijBIczl+/4wBXHSjD2sJgr/PTbq1lX6VZ4=;
+        b=TCoA7YA80hmw9WZYfAzAqzGZSTex6KWKrAVmxjsiJSXpGfpP0GpVhBk8hPkLY/Flm/dKYE
+        EB98jMTQLTJPxZYUBkPVaOZqqxt5z43jal7ZV9DZn6H6QWH8bgOeieQY0c/XqzNUcM8n+m
+        sz/e26dXQ7E70XrRWDGgW9kSnuB9Akg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-540-XNA0PZM5PQ-OHMNfIotFJw-1; Mon, 29 Nov 2021 09:32:29 -0500
-X-MC-Unique: XNA0PZM5PQ-OHMNfIotFJw-1
-Received: by mail-wm1-f72.google.com with SMTP id 138-20020a1c0090000000b00338bb803204so8690983wma.1
-        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 06:32:29 -0800 (PST)
+ us-mta-331-kR6cOvCyMM2TjrCSdklPjg-1; Mon, 29 Nov 2021 09:39:07 -0500
+X-MC-Unique: kR6cOvCyMM2TjrCSdklPjg-1
+Received: by mail-ed1-f72.google.com with SMTP id v22-20020a50a456000000b003e7cbfe3dfeso13891301edb.11
+        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 06:39:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=dJBe9OPhF+PV6aWNoM1mTqTJe8Q2yU80n+V/5mpDDnU=;
-        b=XQhJroUi7znafyp51MALe04NOSnXh5upFt7R9FT+r2cUhwf6/hf2GUOq7iYVxiGyen
-         CVs9M1dfuohBwQ4aVtNRNuX6jNBYaPdS4OSbzD+2zVH3d/RS5ljLymd3hX3E+lD49THZ
-         kixF8ORYlJXxOA/UgxtO9wJig1/DCAAppn6LTJUAbKUx+7z7xL/hPKtPUaHDEzP+yvO6
-         dZegZ+6ZpP2AREu+0OlpXUgaGs3bc60bwBSNWpZ7nJRgktRyfj42rFPtIbIii3LZhJEr
-         T/FvrspADGr0tAqFaIxkYNZMQXEk3/fS8tMF+ooEYPYhV3ZLSFfQjeMa4ZvgnsKgz2cp
-         3vZw==
-X-Gm-Message-State: AOAM531Sb+zF72sFRB9YgawL1tWcNbmmCLXAXreWL+dfytSwxvr1fqZO
-        p+27JTSLMlXDKiWTGKHemAEWcsNHKvm4EO0rjzly5W5CVqls/8962IpXMqic/GaJALfD8q4tpOV
-        dZIgn8bLCDJEh
-X-Received: by 2002:adf:d18f:: with SMTP id v15mr33386198wrc.447.1638196348158;
-        Mon, 29 Nov 2021 06:32:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyA3jxLgz2qFbocjn5aqKjjz597XHuns2HayZngv2iHRT5zC+cXCqeSgXjkuMRuWEvUCgQECw==
-X-Received: by 2002:adf:d18f:: with SMTP id v15mr33386167wrc.447.1638196347945;
-        Mon, 29 Nov 2021 06:32:27 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c6664.dip0.t-ipconnect.de. [91.12.102.100])
-        by smtp.gmail.com with ESMTPSA id l8sm21215902wmc.40.2021.11.29.06.32.26
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=O7S5OjizQijBIczl+/4wBXHSjD2sJgr/PTbq1lX6VZ4=;
+        b=6UmhbTeg5/63feOt3thhhhXckycva443RuNgLvpvbx/ukLT0ywwj1LziIcv1Lk3DjW
+         W8K0v/X4sWf8jfkG3uMwOB6ZuaooqFqHMNxesNl24EXaTLVSQXb7FsjZkWOFGINtuhRU
+         /y52GTCvWgI+uZ75I60RnuKKMNq3toIhuQzbk9nrRW6GqHIxngXYiMXerLporZSUj7v3
+         V6CzxuPhr4CIYEZ8bJecnIqj8G6O/otgcYSrAhUecSqj26OrKrQnSLQ+A5YEENd7kC/R
+         DAMXCWiCi2SHjrsSHpyGSHmflza0nGZ8etfWk4fi00fAPPH7LgWuk2OdeuBj47AG3Lb4
+         ysPA==
+X-Gm-Message-State: AOAM533LK4P6qeLpR1jSZwzEZHi/qDf/KrY/NIapakm82gHWKb/jfknp
+        FXnww6gTAdz9poBqH7d8L6DDvqQz+jls8U4JufOgt39pO7cBK3qVCN8gHeItcW231vd8gRWe4YX
+        UhZKza4H7/neB
+X-Received: by 2002:a17:907:6e8e:: with SMTP id sh14mr60718724ejc.536.1638196745918;
+        Mon, 29 Nov 2021 06:39:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx6bdVXynDkMurbo0wdDJkXKq7sUHLsLuYlZSX0wdDkgLTI+lyg0CzaDm0yWoDDUyjO4luUjQ==
+X-Received: by 2002:a17:907:6e8e:: with SMTP id sh14mr60718710ejc.536.1638196745735;
+        Mon, 29 Nov 2021 06:39:05 -0800 (PST)
+Received: from [192.168.2.13] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
+        by smtp.gmail.com with ESMTPSA id hg19sm7327636ejc.1.2021.11.29.06.39.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 06:32:27 -0800 (PST)
-Message-ID: <54e1b56c-e424-a4b3-4d61-3018aa095f36@redhat.com>
-Date:   Mon, 29 Nov 2021 15:32:26 +0100
+        Mon, 29 Nov 2021 06:39:05 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <6de05aea-9cf4-c938-eff2-9e3b138512a4@redhat.com>
+Date:   Mon, 29 Nov 2021 15:39:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.2.0
+Cc:     brouer@redhat.com, bpf@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        anthony.l.nguyen@intel.com, jesse.brandeburg@intel.com,
+        intel-wired-lan@lists.osuosl.org, magnus.karlsson@intel.com,
+        bjorn@kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 2/2] igc: enable XDP metadata in driver
 Content-Language: en-US
-To:     Sven Schnelle <svens@linux.ibm.com>,
-        Yafang Shao <laoar.shao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
- <20211120112738.45980-8-laoar.shao@gmail.com>
- <yt9d35nf1d84.fsf@linux.ibm.com>
- <CALOAHbDtqpkN4D0vHvGxTSpQkksMWtFm3faMy0n+pazxN_RPPg@mail.gmail.com>
- <yt9d35nfvy8s.fsf@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
- with TASK_COMM_LEN
-In-Reply-To: <yt9d35nfvy8s.fsf@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+References: <163700856423.565980.10162564921347693758.stgit@firesoul>
+ <163700859087.565980.3578855072170209153.stgit@firesoul>
+ <20211126161649.151100-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20211126161649.151100-1-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 29.11.21 15:21, Sven Schnelle wrote:
-> Hi,
+
+
+On 26/11/2021 17.16, Alexander Lobakin wrote:
+> From: Jesper Dangaard Brouer <brouer@redhat.com>
+> Date: Mon, 15 Nov 2021 21:36:30 +0100
 > 
-> Yafang Shao <laoar.shao@gmail.com> writes:
+>> Enabling the XDP bpf_prog access to data_meta area is a very small
+>> change. Hint passing 'true' to xdp_prepare_buff().
+>>
+>> The SKB layers can also access data_meta area, which required more
+>> driver changes to support. Reviewers, notice the igc driver have two
+>> different functions that can create SKBs, depending on driver config.
+>>
+>> Hint for testers, ethtool priv-flags legacy-rx enables
+>> the function igc_construct_skb()
+>>
+>>   ethtool --set-priv-flags DEV legacy-rx on
+>>
+>> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+>> ---
+>>   drivers/net/ethernet/intel/igc/igc_main.c |   29 +++++++++++++++++++----------
+>>   1 file changed, 19 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+>> index 76b0a7311369..b516f1b301b4 100644
+>> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+>> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+>> @@ -1718,24 +1718,26 @@ static void igc_add_rx_frag(struct igc_ring *rx_ring,
+>>   
+>>   static struct sk_buff *igc_build_skb(struct igc_ring *rx_ring,
+>>   				     struct igc_rx_buffer *rx_buffer,
+>> -				     union igc_adv_rx_desc *rx_desc,
+>> -				     unsigned int size)
+>> +				     struct xdp_buff *xdp)
+>>   {
+>> -	void *va = page_address(rx_buffer->page) + rx_buffer->page_offset;
+>> +	unsigned int size = xdp->data_end - xdp->data;
+>>   	unsigned int truesize = igc_get_rx_frame_truesize(rx_ring, size);
+>> +	unsigned int metasize = xdp->data - xdp->data_meta;
+>>   	struct sk_buff *skb;
+>>   
+>>   	/* prefetch first cache line of first page */
+>> -	net_prefetch(va);
+>> +	net_prefetch(xdp->data);
 > 
->> On Mon, Nov 29, 2021 at 6:13 PM Sven Schnelle <svens@linux.ibm.com> wrote:
->>>> diff --git a/include/linux/sched.h b/include/linux/sched.h
->>>> index 78c351e35fec..cecd4806edc6 100644
->>>> --- a/include/linux/sched.h
->>>> +++ b/include/linux/sched.h
->>>> @@ -274,8 +274,13 @@ struct task_group;
->>>>
->>>>  #define get_current_state()  READ_ONCE(current->__state)
->>>>
->>>> -/* Task command name length: */
->>>> -#define TASK_COMM_LEN                        16
->>>> +/*
->>>> + * Define the task command name length as enum, then it can be visible to
->>>> + * BPF programs.
->>>> + */
->>>> +enum {
->>>> +     TASK_COMM_LEN = 16,
->>>> +};
->>>
->>> This breaks the trigger-field-variable-support.tc from the ftrace test
->>> suite at least on s390:
->>>
->>> echo
->>> 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm)
->>> if next_comm=="ping"'
->>> linux/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc: line 15: echo: write error: Invalid argument
->>>
->>> I added a debugging line into check_synth_field():
->>>
->>> [   44.091037] field->size 16, hist_field->size 16, field->is_signed 1, hist_field->is_signed 0
->>>
->>> Note the difference in the signed field.
->>>
->>
->> Hi Sven,
->>
->> Thanks for the report and debugging!
->> Seems we should explicitly define it as signed ?
->> Could you pls. help verify it?
->>
->> diff --git a/include/linux/sched.h b/include/linux/sched.h
->> index cecd4806edc6..44d36c6af3e1 100644
->> --- a/include/linux/sched.h
->> +++ b/include/linux/sched.h
->> @@ -278,7 +278,7 @@ struct task_group;
->>   * Define the task command name length as enum, then it can be visible to
->>   * BPF programs.
->>   */
->> -enum {
->> +enum SignedEnum {
->>         TASK_COMM_LEN = 16,
->>  };
+> I'd prefer prefetching xdp->data_meta here. GRO layer accesses it.
+> Maximum meta size for now is 32, so at least 96 bytes of the frame
+> will stil be prefetched.
+
+Prefetch works for "full" cachelines. Intel CPUs often prefect two 
+cache-lines, when doing this, thus I guess we still get xdp->data.
+
+I don't mind prefetching xdp->data_meta, but (1) I tried to keep the 
+change minimal as current behavior was data area I kept that. (2) 
+xdp->data starts on a cacheline and we know NIC hardware have touched 
+that, it is not a full-cache-miss due to DDIO/DCA it is known to be in 
+L3 cache (gain is around 2-3 ns in my machine for data prefetch).
+Given this is only a 2.5 Gbit/s driver/HW I doubt this make any difference.
+
+Tony is it worth resending a V2 of this patch?
+
+>>   
+>>   	/* build an skb around the page buffer */
+>> -	skb = build_skb(va - IGC_SKB_PAD, truesize);
+>> +	skb = build_skb(xdp->data_hard_start, truesize);
+>>   	if (unlikely(!skb))
+>>   		return NULL;
+>>   
+>>   	/* update pointers within the skb to store the data */
+>> -	skb_reserve(skb, IGC_SKB_PAD);
+>> +	skb_reserve(skb, xdp->data - xdp->data_hard_start);
+>>   	__skb_put(skb, size);
+>> +	if (metasize)
+>> +		skb_metadata_set(skb, metasize);
+>>   
+>>   	igc_rx_buffer_flip(rx_buffer, truesize);
+>>   	return skb;
+>> @@ -1746,6 +1748,7 @@ static struct sk_buff *igc_construct_skb(struct igc_ring *rx_ring,
+>>   					 struct xdp_buff *xdp,
+>>   					 ktime_t timestamp)
+>>   {
+>> +	unsigned int metasize = xdp->data - xdp->data_meta;
+>>   	unsigned int size = xdp->data_end - xdp->data;
+>>   	unsigned int truesize = igc_get_rx_frame_truesize(rx_ring, size);
+>>   	void *va = xdp->data;
+>> @@ -1756,7 +1759,7 @@ static struct sk_buff *igc_construct_skb(struct igc_ring *rx_ring,
+>>   	net_prefetch(va);
 > 
-> Umm no. What you're doing here is to define the name of the enum as
-> 'SignedEnum'. This doesn't change the type. I think before C++0x you
-> couldn't force an enum type.
-
-I think there are only some "hacks" to modify the type with GCC. For
-example, with "__attribute__((packed))" we can instruct GCC to use the
-smallest type possible for the defined enum values.
-
-I think with some fake entries one can eventually instruct GCC to use an
-unsigned type in some cases:
-
-https://stackoverflow.com/questions/14635833/is-there-a-way-to-make-an-enum-unsigned-in-the-c90-standard-misra-c-2004-compl
-
-enum {
-	TASK_COMM_LEN = 16,
-	TASK_FORCE_UNSIGNED = 0x80000000,
-};
-
-Haven't tested it, though, and I'm not sure if we should really do that
-... :)
-
--- 
-Thanks,
-
-David / dhildenb
+> ...here as well.
+> 
 
