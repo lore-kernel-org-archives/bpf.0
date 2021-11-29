@@ -2,143 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82254C433EF
-	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 20:40:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76DF2C433FE
+	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 22:09:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbhK2UoD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Nov 2021 15:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
+        id S232570AbhK2WMa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Nov 2021 17:12:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbhK2UmC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:42:02 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE63C0698E5;
-        Mon, 29 Nov 2021 09:17:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9A04DCE131E;
-        Mon, 29 Nov 2021 17:17:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE23C53FC7;
-        Mon, 29 Nov 2021 17:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638206235;
-        bh=EJ/491y2sXQi1g7e++9dtTCnZ+NIW/pxkeKhPGvQhr4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r5sBkG6jS8z1zsNlYMyawzFPioGjVixsVOw0Ii/uoxSHvPUJ8zkb9vwhsUGZB1SjC
-         b5EPq7n6lHSPSWRbJI5Wim0jnfb4TpFra84ABPIm40GZIbacR4r0CjUUUOUA0Q7URx
-         mKyzQC07M5H2ZvE3JrUq4r5HxdQrt04MiTLdNQ5icIIqiAMoT35yQCNlZW46XMphD/
-         bDOvL8HxJJ/DT9H6LkybSYXMQ/OSKO4aynUXfIJXJNT3hbNwneqPcxnOCH/nec0Fw/
-         nYyQDuf7GwKxHFHh10RyPRwPGoQHEEqL19lCbB6BFGNV4F4jf+S5XYpKzUl2NqfTeg
-         MYL0mKOyVagGg==
-Date:   Mon, 29 Nov 2021 09:17:13 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Petr Machata <petrm@nvidia.com>
-Cc:     Ido Schimmel <idosch@idosch.org>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
-        <toke@redhat.com>,
-        "Alexander Lobakin" <alexandr.lobakin@intel.com>,
+        with ESMTP id S231492AbhK2WKa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:10:30 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFF1C043AD2;
+        Mon, 29 Nov 2021 12:50:59 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso27293265ota.5;
+        Mon, 29 Nov 2021 12:50:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pJBTR3BH6vzrkacIA76MPyr7dPfgB6U0dNhSAI4N4Ow=;
+        b=kca9GB/UCYu/dIREElCnm6R+uO8PYnBQSUu5QC9nBgCepubV7A9WvE9bv0WzRHXcKH
+         l5JEhAY7xZk3yAoXwirrzDRrGOkI6xu6+bSass6mcGggN6gTduzROcT6CSI/A3SOTZl/
+         ZVgevoFT2H/kFgAiKazJ6baFaROT1pWEUScjF/DRfv/3pJILr7HVhmLG0w778cq6iDhG
+         624tQPYtKod9U3QgxgibN3njIu2Az4TJHYYGnymVcVkO3eVYFzKglkpp0qIJcnWPI1ud
+         mbd6bJdw5K/4MXnqvkai+8eUOpfoN09fX9arVlIcULGrnC63V11yrcZNm30erZFfUeHt
+         mjWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pJBTR3BH6vzrkacIA76MPyr7dPfgB6U0dNhSAI4N4Ow=;
+        b=afctQqt7LdVONkaaQ+q55LpmrbLZiTrRx4LxgyrpvYeC5wgGPi6kzUqxnR3hQLKGzC
+         zFoTw5hcjLEdaoFqXCh0VjjAojBSsFuJGnMhL9LmnnqreGBW+OQCxDj3yKqd2th5a97g
+         ZS0YxaeBRgdX4LNrr2M/r/5TsdZE31SqK4Somjrw0CccmDWBxeMCNXDa26eI2nB3oUVS
+         kRvDYBdRGu2GV7fdNkg6KB9KfrUs5PDhdlD1glKCrT4m3h47joERaIbjcDnFi7GbXjKA
+         +ng2uPsEwQvs/ctcSbbcQ56csITQo9QihilSCF10xKKbxjLSMCc2vhJPYjOVaKDDAyE0
+         dXOw==
+X-Gm-Message-State: AOAM531y427Y8tWD0PxuWdniC1WolpcTJrJzudwQjKsXAqpjdRICWYbZ
+        xIe6Uhn/Tb//PM4F1WAC2ee00N6dbRc=
+X-Google-Smtp-Source: ABdhPJw/AOSYVMeVke9r4fhDJ9GYRZc0SXypBrljMQAVMd5lAKeZ7m4mJPYSkgxynWY48hhD6+pfQg==
+X-Received: by 2002:a05:6830:1be9:: with SMTP id k9mr46292294otb.123.1638219058858;
+        Mon, 29 Nov 2021 12:50:58 -0800 (PST)
+Received: from localhost ([2600:1700:65a0:ab60:fb28:e684:3c51:f69c])
+        by smtp.gmail.com with ESMTPSA id o6sm2436638oou.41.2021.11.29.12.50.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 12:50:58 -0800 (PST)
+Date:   Mon, 29 Nov 2021 12:50:57 -0800
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Song Liu <song@kernel.org>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cong Wang <cong.wang@bytedance.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jesse Brandeburg" <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Shay Agroskin" <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        "David Arinzon" <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        "Saeed Bishara" <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        "Claudiu Manoil" <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "Martin Habets" <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <nikolay@nvidia.com>
-Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
- per-channel statistics
-Message-ID: <20211129091713.2dc8462f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <87sfveq48z.fsf@nvidia.com>
-References: <20211123163955.154512-22-alexandr.lobakin@intel.com>
-        <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
-        <87bl28bga6.fsf@toke.dk>
-        <20211125170708.127323-1-alexandr.lobakin@intel.com>
-        <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20211125204007.133064-1-alexandr.lobakin@intel.com>
-        <87sfvj9k13.fsf@toke.dk>
-        <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87ee72ah56.fsf@toke.dk>
-        <20211126111431.4a2ed007@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <YaPCbaMVaVlxXcHC@shredder>
-        <20211129064755.539099c0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <874k7vq7tl.fsf@nvidia.com>
-        <20211129080502.53f7d316@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87sfveq48z.fsf@nvidia.com>
+        Jakub Sitnicki <jakub@cloudflare.com>
+Subject: Re: [PATCH bpf] libbpf: fix missing section "sk_skb/skb_verdict"
+Message-ID: <YaU9Mdv+7kEa4JOJ@unknown>
+References: <20211126204108.11530-1-xiyou.wangcong@gmail.com>
+ <CAPhsuW4zR5Yuwuywd71fdfP1YXX5cw6uNmhqULHy8BhfcbEAAQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW4zR5Yuwuywd71fdfP1YXX5cw6uNmhqULHy8BhfcbEAAQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 29 Nov 2021 18:08:12 +0100 Petr Machata wrote:
-> Jakub Kicinski <kuba@kernel.org> writes:
-> > On Mon, 29 Nov 2021 16:51:02 +0100 Petr Machata wrote:  
-> >> IFLA_STATS_LINK_OFFLOAD_XSTATS is a nest. Currently it carries just
-> >> CPU_HIT stats. The idea is to carry HW stats as well in that group.  
+On Fri, Nov 26, 2021 at 04:20:34PM -0800, Song Liu wrote:
+> On Fri, Nov 26, 2021 at 12:45 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
 > >
-> > Hm, the expectation was that the HW stats == total - SW. I believe that
-> > still holds true for you, even if HW stats are not "complete" (e.g.
-> > user enabled them after device was already forwarding for a while).
-> > Is the concern about backward compat or such?  
+> > From: Cong Wang <cong.wang@bytedance.com>
+> >
+> > When BPF_SK_SKB_VERDICT was introduced, I forgot to add
+> > a section mapping for it in libbpf.
+> >
+> > Fixes: a7ba4558e69a ("sock_map: Introduce BPF_SK_SKB_VERDICT")
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: John Fastabend <john.fastabend@gmail.com>
+> > Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> > Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 > 
-> I guess you could call it backward compat. But not only. I think a
-> typical user doing "ip -s l sh", including various scripts, wants to see
-> the full picture and not worry what's going on where. Physical
-> netdevices already do that, and by extension bond and team of physical
-> netdevices. It also makes sense from the point of view of an offloaded
-> datapath as an implementation detail that you would ideally not notice.
+> The patch looks good to me. But seems the selftests are OK without this. So,
+> do we really need this?
+> 
 
-Agreed.
+Not sure if I understand this question.
 
-> For those who care to know about the offloaded datapath, it would be
-> nice to have the option to request either just the SW stats, or just the
-> HW stats. A logical place to put these would be under the OFFLOAD_XSTATS
-> nest of the RTM_GETSTATS message, but maybe the SW ones should be up
-> there next to IFLA_STATS_LINK_64. (After all it's going to be
-> independent from not only offload datapath, but also XDP.)
+At least BPF_SK_SKB_STREAM_PARSER and BPF_SK_SKB_STREAM_VERDICT are already
+there, so either we should remove all of them or add BPF_SK_SKB_VERDICT for
+completeness.
 
-What I'm getting at is that I thought IFLA_OFFLOAD_XSTATS_CPU_HIT
-should be sufficient from uAPI perspective in terms of reporting.
-User space can do the simple math to calculate the "SW stats" if 
-it wants to. We may well be talking about the same thing, so maybe
-let's wait for the code?
+Or are you suggesting we should change it back in selftests too? Note, it was
+changed by Andrii in commit 15669e1dcd75fe6d51e495f8479222b5884665b6:
 
-> This way you get the intuitive default behavior, but still have a way to
-> e.g. request just the SW stats without hitting the HW, or just request
-> the HW stats if that's what you care about.
+-SEC("sk_skb/skb_verdict")
++SEC("sk_skb")
 
+Thanks.
