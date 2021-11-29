@@ -2,57 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F0C7C4332F
-	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 22:40:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32C0BC433EF
+	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 22:40:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234785AbhK2WnT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S234804AbhK2WnT (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 29 Nov 2021 17:43:19 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44854 "EHLO
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39558 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234476AbhK2Wmm (ORCPT
+        by vger.kernel.org with ESMTP id S234484AbhK2Wmm (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 17:42:42 -0500
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1ATIlEuT032320
-        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 14:39:21 -0800
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1ATIlB4x032204
+        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 14:39:20 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=DWuMcgzsePvnDOqpUfTPzKKcBrmFwGkrHsCnNzQ1+7A=;
- b=Ctu3ijULxikA9QQoEZ6M4BixRFQGsP5fhpke3OLJPzQMn5FL2P3kmYvNpgIpwoICUtUV
- uLJAYbh1gzk9//BnS6g0LohGXNfWr6QJuBchmeBrrHa4jJhiBNKwc7WVsa6IMwO8Aqv3
- +2xxfi76ltwnzWTyPmMgVqB5/0fYlPfG2BE= 
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=facebook;
+ bh=pr0VB0oy4MQhVPuDiKPO7NJLtAuY/ihjJS5dz6mCwXc=;
+ b=oRitHy8gAaXWIm6HmjMrAWog2RyGE9eiYnqo4mu9TqzZz72R9tdlZAtmRd4LtiU9WjWx
+ bt5hYo1WbyOuEy3ULp6a+kNj/YJ42uc03HhHt5qOWnbOKdI9jmbcbgTHNvUxb/ufFVYb
+ KVIY1jOvuk3dUy0vLRaKn29qbyiTl9uTni0= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 3cmna6778y-1
+        by m0089730.ppops.net with ESMTP id 3cmna6778n-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 14:39:20 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 29 Nov 2021 14:39:12 -0800
+ 15.1.2308.20; Mon, 29 Nov 2021 14:39:07 -0800
 Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
-        id 59FDC570A529; Mon, 29 Nov 2021 14:39:00 -0800 (PST)
+        id 236B9570A522; Mon, 29 Nov 2021 14:39:00 -0800 (PST)
 From:   Joanne Koong <joannekoong@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <Kernel-team@fb.com>, Joanne Koong <joannekoong@fb.com>
-Subject: [PATCH v3 bpf-next 3/4] selftests/bpf: measure bpf_loop verifier performance
-Date:   Mon, 29 Nov 2021 14:37:24 -0800
-Message-ID: <20211129223725.2770730-4-joannekoong@fb.com>
+Subject: [PATCH v3 bpf-next 0/4] Add bpf_loop helper
+Date:   Mon, 29 Nov 2021 14:37:21 -0800
+Message-ID: <20211129223725.2770730-1-joannekoong@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211129223725.2770730-1-joannekoong@fb.com>
-References: <20211129223725.2770730-1-joannekoong@fb.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
-Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: sbN1BCd6ap6Cv5zSbVyDCaeQ71X0mqt_
-X-Proofpoint-ORIG-GUID: sbN1BCd6ap6Cv5zSbVyDCaeQ71X0mqt_
+X-Proofpoint-GUID: GxmJIiu1Ma5Zuz7e2cUdVVxF8ynmfTzc
+X-Proofpoint-ORIG-GUID: GxmJIiu1Ma5Zuz7e2cUdVVxF8ynmfTzc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-29_11,2021-11-28_01,2020-04-07_01
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- impostorscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=832
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 mlxlogscore=645
  spamscore=0 bulkscore=0 malwarescore=0 clxscore=1015 phishscore=0
  mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2110150000 definitions=main-2111290107
@@ -61,344 +59,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch tests bpf_loop in pyperf and strobemeta, and measures the
-verifier performance of replacing the traditional for loop
-with bpf_loop.
+This patchset add a new helper, bpf_loop.
 
-The results are as follows:
+One of the complexities of using for loops in bpf programs is that the ve=
+rifier
+needs to ensure that in every possibility of the loop logic, the loop wil=
+l always
+terminate. As such, there is a limit on how many iterations the loop can =
+do.
 
-~strobemeta~
+The bpf_loop helper moves the loop logic into the kernel and can thereby
+guarantee that the loop will always terminate. The bpf_loop helper simpli=
+fies
+a lot of the complexity the verifier needs to check, as well as removes t=
+he
+constraint on the number of loops able to be run.
 
-Baseline
-    verification time 6808200 usec
-    stack depth 496
-    processed 554252 insns (limit 1000000) max_states_per_insn 16
-    total_states 15878 peak_states 13489  mark_read 3110
-    #192 verif_scale_strobemeta:OK (unrolled loop)
+From the test results, we see that using bpf_loop in place
+of the traditional for loop led to a decrease in verification time
+and number of bpf instructions by ~99%. The benchmark results show
+that as the number of iterations increases, the overhead per iteration
+decreases.
 
-Using bpf_loop
-    verification time 31589 usec
-    stack depth 96+400
-    processed 1513 insns (limit 1000000) max_states_per_insn 2
-    total_states 106 peak_states 106 mark_read 60
-    #193 verif_scale_strobemeta_bpf_loop:OK
+The high-level overview of the patches -
+Patch 1 - kernel-side + API changes for adding bpf_loop
+Patch 2 - tests
+Patch 3 - use bpf_loop in strobemeta + pyperf600 and measure verifier per=
+formance
+Patch 4 - benchmark for throughput + latency of bpf_loop call
 
-~pyperf600~
+v2 -> v3:
+~ Rerun benchmarks on physical machine, update results
+~ Propagate original error codes in the verifier
 
-Baseline
-    verification time 29702486 usec
-    stack depth 368
-    processed 626838 insns (limit 1000000) max_states_per_insn 7
-    total_states 30368 peak_states 30279 mark_read 748
-    #182 verif_scale_pyperf600:OK (unrolled loop)
+v1 -> v2:
+~ Change helper name to bpf_loop (instead of bpf_for_each)
+~ Set max nr_loops (~8 million loops) for bpf_loop call
+~ Split tests + strobemeta/pyperf600 changes into two patches
+~ Add new ops_report_final helper for outputting throughput and latency
 
-Using bpf_loop
-    verification time 148488 usec
-    stack depth 320+40
-    processed 10518 insns (limit 1000000) max_states_per_insn 10
-    total_states 705 peak_states 517 mark_read 38
-    #183 verif_scale_pyperf600_bpf_loop:OK
 
-Using the bpf_loop helper led to approximately a 99% decrease
-in the verification time and in the number of instructions.
+Joanne Koong (4):
+  bpf: Add bpf_loop helper
+  selftests/bpf: Add bpf_loop test
+  selftests/bpf: measure bpf_loop verifier performance
+  selftest/bpf/benchs: add bpf_loop benchmark
 
-Signed-off-by: Joanne Koong <joannekoong@fb.com>
----
- .../bpf/prog_tests/bpf_verif_scale.c          | 12 +++
- tools/testing/selftests/bpf/progs/pyperf.h    | 71 +++++++++++++++++-
- .../selftests/bpf/progs/pyperf600_bpf_loop.c  |  6 ++
- .../testing/selftests/bpf/progs/strobemeta.h  | 75 ++++++++++++++++++-
- .../selftests/bpf/progs/strobemeta_bpf_loop.c |  9 +++
- 5 files changed, 169 insertions(+), 4 deletions(-)
+ include/linux/bpf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  25 ++++
+ kernel/bpf/bpf_iter.c                         |  35 +++++
+ kernel/bpf/helpers.c                          |   2 +
+ kernel/bpf/verifier.c                         |  88 ++++++-----
+ tools/include/uapi/linux/bpf.h                |  25 ++++
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ tools/testing/selftests/bpf/bench.c           |  37 +++++
+ tools/testing/selftests/bpf/bench.h           |   2 +
+ .../selftests/bpf/benchs/bench_bpf_loop.c     | 105 +++++++++++++
+ .../bpf/benchs/run_bench_bpf_loop.sh          |  15 ++
+ .../selftests/bpf/benchs/run_common.sh        |  15 ++
+ .../selftests/bpf/prog_tests/bpf_loop.c       | 138 ++++++++++++++++++
+ .../bpf/prog_tests/bpf_verif_scale.c          |  12 ++
+ tools/testing/selftests/bpf/progs/bpf_loop.c  |  99 +++++++++++++
+ .../selftests/bpf/progs/bpf_loop_bench.c      |  26 ++++
+ tools/testing/selftests/bpf/progs/pyperf.h    |  71 ++++++++-
+ .../selftests/bpf/progs/pyperf600_bpf_loop.c  |   6 +
+ .../testing/selftests/bpf/progs/strobemeta.h  |  75 +++++++++-
+ .../selftests/bpf/progs/strobemeta_bpf_loop.c |   9 ++
+ 20 files changed, 751 insertions(+), 39 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_loop=
+.sh
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_loop.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_loop.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_loop_bench.c
  create mode 100644 tools/testing/selftests/bpf/progs/pyperf600_bpf_loop.=
 c
  create mode 100644 tools/testing/selftests/bpf/progs/strobemeta_bpf_loop=
 .c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/t=
-ools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-index 27f5d8ea7964..1fb16f8dad56 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -115,6 +115,12 @@ void test_verif_scale_pyperf600()
- 	scale_test("pyperf600.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
-=20
-+void test_verif_scale_pyperf600_bpf_loop(void)
-+{
-+	/* use the bpf_loop helper*/
-+	scale_test("pyperf600_bpf_loop.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false)=
-;
-+}
-+
- void test_verif_scale_pyperf600_nounroll()
- {
- 	/* no unroll at all.
-@@ -165,6 +171,12 @@ void test_verif_scale_strobemeta()
- 	scale_test("strobemeta.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
-=20
-+void test_verif_scale_strobemeta_bpf_loop(void)
-+{
-+	/* use the bpf_loop helper*/
-+	scale_test("strobemeta_bpf_loop.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false=
-);
-+}
-+
- void test_verif_scale_strobemeta_nounroll1()
- {
- 	/* no unroll, tiny loops */
-diff --git a/tools/testing/selftests/bpf/progs/pyperf.h b/tools/testing/s=
-elftests/bpf/progs/pyperf.h
-index 2fb7adafb6b6..1ed28882daf3 100644
---- a/tools/testing/selftests/bpf/progs/pyperf.h
-+++ b/tools/testing/selftests/bpf/progs/pyperf.h
-@@ -159,6 +159,59 @@ struct {
- 	__uint(value_size, sizeof(long long) * 127);
- } stackmap SEC(".maps");
-=20
-+#ifdef USE_BPF_LOOP
-+struct process_frame_ctx {
-+	int cur_cpu;
-+	int32_t *symbol_counter;
-+	void *frame_ptr;
-+	FrameData *frame;
-+	PidData *pidData;
-+	Symbol *sym;
-+	Event *event;
-+	bool done;
-+};
-+
-+#define barrier_var(var) asm volatile("" : "=3Dr"(var) : "0"(var))
-+
-+static int process_frame_callback(__u32 i, struct process_frame_ctx *ctx=
-)
-+{
-+	int zero =3D 0;
-+	void *frame_ptr =3D ctx->frame_ptr;
-+	PidData *pidData =3D ctx->pidData;
-+	FrameData *frame =3D ctx->frame;
-+	int32_t *symbol_counter =3D ctx->symbol_counter;
-+	int cur_cpu =3D ctx->cur_cpu;
-+	Event *event =3D ctx->event;
-+	Symbol *sym =3D ctx->sym;
-+
-+	if (frame_ptr && get_frame_data(frame_ptr, pidData, frame, sym)) {
-+		int32_t new_symbol_id =3D *symbol_counter * 64 + cur_cpu;
-+		int32_t *symbol_id =3D bpf_map_lookup_elem(&symbolmap, sym);
-+
-+		if (!symbol_id) {
-+			bpf_map_update_elem(&symbolmap, sym, &zero, 0);
-+			symbol_id =3D bpf_map_lookup_elem(&symbolmap, sym);
-+			if (!symbol_id) {
-+				ctx->done =3D true;
-+				return 1;
-+			}
-+		}
-+		if (*symbol_id =3D=3D new_symbol_id)
-+			(*symbol_counter)++;
-+
-+		barrier_var(i);
-+		if (i >=3D STACK_MAX_LEN)
-+			return 1;
-+
-+		event->stack[i] =3D *symbol_id;
-+
-+		event->stack_len =3D i + 1;
-+		frame_ptr =3D frame->f_back;
-+	}
-+	return 0;
-+}
-+#endif /* USE_BPF_LOOP */
-+
- #ifdef GLOBAL_FUNC
- __noinline
- #elif defined(SUBPROGS)
-@@ -228,11 +281,26 @@ int __on_event(struct bpf_raw_tracepoint_args *ctx)
- 		int32_t* symbol_counter =3D bpf_map_lookup_elem(&symbolmap, &sym);
- 		if (symbol_counter =3D=3D NULL)
- 			return 0;
-+#ifdef USE_BPF_LOOP
-+	struct process_frame_ctx ctx =3D {
-+		.cur_cpu =3D cur_cpu,
-+		.symbol_counter =3D symbol_counter,
-+		.frame_ptr =3D frame_ptr,
-+		.frame =3D &frame,
-+		.pidData =3D pidData,
-+		.sym =3D &sym,
-+		.event =3D event,
-+	};
-+
-+	bpf_loop(STACK_MAX_LEN, process_frame_callback, &ctx, 0);
-+	if (ctx.done)
-+		return 0;
-+#else
- #ifdef NO_UNROLL
- #pragma clang loop unroll(disable)
- #else
- #pragma clang loop unroll(full)
--#endif
-+#endif /* NO_UNROLL */
- 		/* Unwind python stack */
- 		for (int i =3D 0; i < STACK_MAX_LEN; ++i) {
- 			if (frame_ptr && get_frame_data(frame_ptr, pidData, &frame, &sym)) {
-@@ -251,6 +319,7 @@ int __on_event(struct bpf_raw_tracepoint_args *ctx)
- 				frame_ptr =3D frame.f_back;
- 			}
- 		}
-+#endif /* USE_BPF_LOOP */
- 		event->stack_complete =3D frame_ptr =3D=3D NULL;
- 	} else {
- 		event->stack_complete =3D 1;
-diff --git a/tools/testing/selftests/bpf/progs/pyperf600_bpf_loop.c b/too=
-ls/testing/selftests/bpf/progs/pyperf600_bpf_loop.c
-new file mode 100644
-index 000000000000..bde8baed4ca6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/pyperf600_bpf_loop.c
-@@ -0,0 +1,6 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2021 Facebook
-+
-+#define STACK_MAX_LEN 600
-+#define USE_BPF_LOOP
-+#include "pyperf.h"
-diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testi=
-ng/selftests/bpf/progs/strobemeta.h
-index 60c93aee2f4a..753718595c26 100644
---- a/tools/testing/selftests/bpf/progs/strobemeta.h
-+++ b/tools/testing/selftests/bpf/progs/strobemeta.h
-@@ -445,6 +445,48 @@ static __always_inline void *read_map_var(struct str=
-obemeta_cfg *cfg,
- 	return payload;
- }
-=20
-+#ifdef USE_BPF_LOOP
-+enum read_type {
-+	READ_INT_VAR,
-+	READ_MAP_VAR,
-+	READ_STR_VAR,
-+};
-+
-+struct read_var_ctx {
-+	struct strobemeta_payload *data;
-+	void *tls_base;
-+	struct strobemeta_cfg *cfg;
-+	void *payload;
-+	/* value gets mutated */
-+	struct strobe_value_generic *value;
-+	enum read_type type;
-+};
-+
-+static int read_var_callback(__u32 index, struct read_var_ctx *ctx)
-+{
-+	switch (ctx->type) {
-+	case READ_INT_VAR:
-+		if (index >=3D STROBE_MAX_INTS)
-+			return 1;
-+		read_int_var(ctx->cfg, index, ctx->tls_base, ctx->value, ctx->data);
-+		break;
-+	case READ_MAP_VAR:
-+		if (index >=3D STROBE_MAX_MAPS)
-+			return 1;
-+		ctx->payload =3D read_map_var(ctx->cfg, index, ctx->tls_base,
-+					    ctx->value, ctx->data, ctx->payload);
-+		break;
-+	case READ_STR_VAR:
-+		if (index >=3D STROBE_MAX_STRS)
-+			return 1;
-+		ctx->payload +=3D read_str_var(ctx->cfg, index, ctx->tls_base,
-+					     ctx->value, ctx->data, ctx->payload);
-+		break;
-+	}
-+	return 0;
-+}
-+#endif /* USE_BPF_LOOP */
-+
- /*
-  * read_strobe_meta returns NULL, if no metadata was read; otherwise ret=
-urns
-  * pointer to *right after* payload ends
-@@ -475,11 +517,36 @@ static void *read_strobe_meta(struct task_struct *t=
-ask,
- 	 */
- 	tls_base =3D (void *)task;
-=20
-+#ifdef USE_BPF_LOOP
-+	struct read_var_ctx ctx =3D {
-+		.cfg =3D cfg,
-+		.tls_base =3D tls_base,
-+		.value =3D &value,
-+		.data =3D data,
-+		.payload =3D payload,
-+	};
-+	int err;
-+
-+	ctx.type =3D READ_INT_VAR;
-+	err =3D bpf_loop(STROBE_MAX_INTS, read_var_callback, &ctx, 0);
-+	if (err !=3D STROBE_MAX_INTS)
-+		return NULL;
-+
-+	ctx.type =3D READ_STR_VAR;
-+	err =3D bpf_loop(STROBE_MAX_STRS, read_var_callback, &ctx, 0);
-+	if (err !=3D STROBE_MAX_STRS)
-+		return NULL;
-+
-+	ctx.type =3D READ_MAP_VAR;
-+	err =3D bpf_loop(STROBE_MAX_MAPS, read_var_callback, &ctx, 0);
-+	if (err !=3D STROBE_MAX_MAPS)
-+		return NULL;
-+#else
- #ifdef NO_UNROLL
- #pragma clang loop unroll(disable)
- #else
- #pragma unroll
--#endif
-+#endif /* NO_UNROLL */
- 	for (int i =3D 0; i < STROBE_MAX_INTS; ++i) {
- 		read_int_var(cfg, i, tls_base, &value, data);
- 	}
-@@ -487,7 +554,7 @@ static void *read_strobe_meta(struct task_struct *tas=
-k,
- #pragma clang loop unroll(disable)
- #else
- #pragma unroll
--#endif
-+#endif /* NO_UNROLL */
- 	for (int i =3D 0; i < STROBE_MAX_STRS; ++i) {
- 		payload +=3D read_str_var(cfg, i, tls_base, &value, data, payload);
- 	}
-@@ -495,10 +562,12 @@ static void *read_strobe_meta(struct task_struct *t=
-ask,
- #pragma clang loop unroll(disable)
- #else
- #pragma unroll
--#endif
-+#endif /* NO_UNROLL */
- 	for (int i =3D 0; i < STROBE_MAX_MAPS; ++i) {
- 		payload =3D read_map_var(cfg, i, tls_base, &value, data, payload);
- 	}
-+#endif /* USE_BPF_LOOP */
-+
- 	/*
- 	 * return pointer right after end of payload, so it's possible to
- 	 * calculate exact amount of useful data that needs to be sent
-diff --git a/tools/testing/selftests/bpf/progs/strobemeta_bpf_loop.c b/to=
-ols/testing/selftests/bpf/progs/strobemeta_bpf_loop.c
-new file mode 100644
-index 000000000000..e6f9f920e68a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/strobemeta_bpf_loop.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+// Copyright (c) 2021 Facebook
-+
-+#define STROBE_MAX_INTS 2
-+#define STROBE_MAX_STRS 25
-+#define STROBE_MAX_MAPS 100
-+#define STROBE_MAX_MAP_ENTRIES 20
-+#define USE_BPF_LOOP
-+#include "strobemeta.h"
 --=20
 2.30.2
 
