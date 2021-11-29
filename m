@@ -2,123 +2,286 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10D89C433EF
-	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 12:32:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4488FC433EF
+	for <bpf@archiver.kernel.org>; Mon, 29 Nov 2021 13:44:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377033AbhK2Mfh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Nov 2021 07:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244883AbhK2Mdh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:33:37 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C37C0619DC
-        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 03:17:17 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id o13so35832485wrs.12
-        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 03:17:17 -0800 (PST)
+        id S233799AbhK2NsD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Nov 2021 08:48:03 -0500
+Received: from smtp-fw-9103.amazon.com ([207.171.188.200]:54059 "EHLO
+        smtp-fw-9103.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233864AbhK2NqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:46:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rMp9H8jRFfH7llkB2xQVwKBEFjMHtmUdm+dWrw4nySU=;
-        b=K0z8uEjoQRnumItTYpzbCf/F4g6/WoBOfEAP7nXpsPYHT7L6o6XxRdwW3Z6LjloS+O
-         WPhlbW2dQAy1mXGwlb6SnfjoxvHXz1zVqUFPkg7zKkOhG2SOjqld7xvQsQ5mUmIHbE4S
-         gV7AmNXFlH5mlv492RC75g+m5E1Zp2YHW2KBp/WZ8lutVmyP5KF9gji5wiuLs0qyEVSc
-         u/u2iDKisfWIq5LnkPWLWtC/c9+Hq2SSzdicSoMqp/41rmoWdomXRYJNYm9g8YH/pNTw
-         lqkg5XsQB4WB0kjOcUqEL7B4XCf1NRVadri3NjhMpqWPJVFPTleYHyUO1FRhNd2/JEYN
-         xkPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rMp9H8jRFfH7llkB2xQVwKBEFjMHtmUdm+dWrw4nySU=;
-        b=nOEQ2rUv1L3f1B4hf+802XG/j5H4IbcgJP+Ckyr5zIRDdMzK816FpadkdJBAxUo9gs
-         XdCyAIUmJ8E4UkuJ85mx+aFcdlDdUe0FpT01U3c19mGiziiQ7W8RprEG/wj3KMvCIh7U
-         PK//XmzbEQJZLWKbwHqAWj+CrNFa2zJlBZJMycBJ4Xyn3Gaf4Lgzb/evXaLEaq/0e3Pr
-         qpUhUk3X8tBxNam13oK1tHeUINOSKWVZNV//QSj8BjytCEcQstPFA7T8nGVKbzMuhiUf
-         UnSf2m6T++vatz28vABAqWNnnxKeMr2vrNzcVdeX4kT58AeTtRuJzt/ce71kL2gidXmh
-         3A/A==
-X-Gm-Message-State: AOAM531w5Jjylei8tG3NdQV99hrl2uHUjdKvy8rp79LszTwGDxNHd3sY
-        3MuTUztQdHV2GW3W9Zpg2uAcZdrwdoRPbw==
-X-Google-Smtp-Source: ABdhPJyNPhBxP9qKjIS1TTNVSBvBZw8o1KBSGHV+QiiUPUkZLPIY17BtUbGVHBZm0XnXtJN1Q+7sBQ==
-X-Received: by 2002:adf:dbd2:: with SMTP id e18mr32554783wrj.478.1638184636436;
-        Mon, 29 Nov 2021 03:17:16 -0800 (PST)
-Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id b197sm14292269wmb.24.2021.11.29.03.17.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 03:17:16 -0800 (PST)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        quentin@isovalent.com, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next] selftests/bpf: Build testing_helpers.o out of tree
-Date:   Mon, 29 Nov 2021 11:15:10 +0000
-Message-Id: <20211129111508.404367-1-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.34.0
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1638193366; x=1669729366;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version;
+  bh=l3Vd2FTMtFtZXp/Facb53CtPcmlcKwfaaP4IcJhGKLs=;
+  b=LpPFi2aHIVBZf56QvenWBakhe4ClAU/mA0hadBh+kn7jLcfksVR7fEFr
+   IncSJhgv79wPViNvOtwDmu1r3C643i7w+Aiz70GlZk/ExUvizGuddn7Yn
+   L2godYUOVM9Rs3oXpybPBL5i4mheZT/hUGhk0Lp0ppUspLD89vh8NDyvk
+   g=;
+X-IronPort-AV: E=Sophos;i="5.87,273,1631577600"; 
+   d="scan'208";a="974812256"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6435a935.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 29 Nov 2021 13:42:30 +0000
+Received: from EX13D28EUC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-6435a935.us-west-2.amazon.com (Postfix) with ESMTPS id CBDB04215C;
+        Mon, 29 Nov 2021 13:42:29 +0000 (UTC)
+Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.162.100) by
+ EX13D28EUC001.ant.amazon.com (10.43.164.4) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.26; Mon, 29 Nov 2021 13:42:11 +0000
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211123163955.154512-4-alexandr.lobakin@intel.com>
+User-agent: mu4e 1.7.5; emacs 28.0.50
+From:   Shay Agroskin <shayagr@amazon.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "Michal Swiatkowski" <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Arthur Kiyanovski" <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        "Noam Dagan" <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "Ioana Ciornei" <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        "Leon Romanovsky" <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "Martin Habets" <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "Lorenzo Bianconi" <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        "Sergey Ryazanov" <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, <netdev@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>
+Subject: Re: [PATCH v2 net-next 03/26] ena: implement generic XDP statistics
+ callbacks
+Date:   Mon, 29 Nov 2021 15:34:19 +0200
+In-Reply-To: <20211123163955.154512-4-alexandr.lobakin@intel.com>
+Message-ID: <pj41zlh7bvyt75.fsf@u570694869fb251.ant.amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; format=flowed
+X-Originating-IP: [10.43.162.100]
+X-ClientProxiedBy: EX13D01UWA002.ant.amazon.com (10.43.160.74) To
+ EX13D28EUC001.ant.amazon.com (10.43.164.4)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add $(OUTPUT) prefix to testing_helpers.o, so it can be built out of
-tree when necessary. At the moment, in addition to being built in-tree
-even when out-of-tree is required, testing_helpers.o is not built with
-the right recipe when cross-building.
 
-Fixes: f87c1930ac29 ("selftests/bpf: Merge test_stub.c into testing_helpers.c")
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
----
- tools/testing/selftests/bpf/Makefile | 32 ++++++++++++++--------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+Alexander Lobakin <alexandr.lobakin@intel.com> writes:
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 35684d61aaeb..082f6aeec1d9 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -192,22 +192,22 @@ TEST_GEN_PROGS_EXTENDED += $(DEFAULT_BPFTOOL)
+> ena driver has 6 XDP counters collected per-channel. Add 
+> callbacks
+> for getting the number of channels and those counters using 
+> generic
+> XDP stats infra.
+>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+> ---
+>  drivers/net/ethernet/amazon/ena/ena_netdev.c | 53 
+>  ++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
+> b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> index 7d5d885d85d5..83e9b85cc998 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> @@ -3313,12 +3313,65 @@ static void ena_get_stats64(struct 
+> net_device *netdev,
+>  	stats->tx_errors = 0;
+>  }
+>
+> +static int ena_get_xdp_stats_nch(const struct net_device 
+> *netdev, u32 attr_id)
+> +{
+> +	const struct ena_adapter *adapter = netdev_priv(netdev);
+> +
+> +	switch (attr_id) {
+> +	case IFLA_XDP_XSTATS_TYPE_XDP:
+> +		return adapter->num_io_queues;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ena_get_xdp_stats(const struct net_device *netdev, 
+> u32 attr_id,
+> +			     void *attr_data)
+> +{
+> +	const struct ena_adapter *adapter = netdev_priv(netdev);
+> +	struct ifla_xdp_stats *xdp_stats = attr_data;
+> +	u32 i;
+> +
+> +	switch (attr_id) {
+> +	case IFLA_XDP_XSTATS_TYPE_XDP:
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	for (i = 0; i < adapter->num_io_queues; i++) {
+> +		const struct u64_stats_sync *syncp;
+> +		const struct ena_stats_rx *stats;
+> +		u32 start;
+> +
+> +		stats = &adapter->rx_ring[i].rx_stats;
+> +		syncp = &adapter->rx_ring[i].syncp;
+> +
+> +		do {
+> +			start = u64_stats_fetch_begin_irq(syncp);
+> +
+> +			xdp_stats->drop = stats->xdp_drop;
+> +			xdp_stats->pass = stats->xdp_pass;
+> +			xdp_stats->tx = stats->xdp_tx;
+> +			xdp_stats->redirect = stats->xdp_redirect;
+> +			xdp_stats->aborted = stats->xdp_aborted;
+> +			xdp_stats->invalid = stats->xdp_invalid;
+> +		} while (u64_stats_fetch_retry_irq(syncp, start));
+> +
+> +		xdp_stats++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+Hi,
+thank you for the time you took in adding ENA support, this code 
+doesn't update the XDP TX queues (which only available when an XDP 
+program is loaded).
+
+In theory the following patch should fix it, but I was unable to 
+compile your version of iproute2 and test the patch properly. Can 
+you please let me know if I need to do anything special to bring 
+up your version of iproute2 and test this patch?
+
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
+b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 7d5d885d8..4e89a7d60 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -3313,12 +3313,85 @@ static void ena_get_stats64(struct 
+net_device *netdev,
+ 	stats->tx_errors = 0;
+ }
  
- $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOBJ)
- 
--$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_sock: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_sock_addr: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_sockmap: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c testing_helpers.o
--$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_sock_fields: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_sysctl: cgroup_helpers.c testing_helpers.o
--$(OUTPUT)/test_tag: testing_helpers.o
--$(OUTPUT)/test_lirc_mode2_user: testing_helpers.o
--$(OUTPUT)/xdping: testing_helpers.o
--$(OUTPUT)/flow_dissector_load: testing_helpers.o
--$(OUTPUT)/test_maps: testing_helpers.o
--$(OUTPUT)/test_verifier: testing_helpers.o
-+$(OUTPUT)/test_dev_cgroup: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_sock: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_sock_addr: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_sockmap: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_cgroup_storage: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_sock_fields: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_sysctl: cgroup_helpers.c $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_tag: $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_lirc_mode2_user: $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/xdping: $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/flow_dissector_load: $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_maps: $(OUTPUT)/testing_helpers.o
-+$(OUTPUT)/test_verifier: $(OUTPUT)/testing_helpers.o
- 
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
--- 
-2.34.0
++static int ena_get_xdp_stats_nch(const struct net_device *netdev, 
+u32 attr_id)
++{
++	const struct ena_adapter *adapter = netdev_priv(netdev);
++
++	switch (attr_id) {
++	case IFLA_XDP_XSTATS_TYPE_XDP:
++		return adapter->num_io_queues;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ena_get_xdp_stats(const struct net_device *netdev, u32 
+attr_id,
++			     void *attr_data)
++{
++	const struct ena_adapter *adapter = netdev_priv(netdev);
++	struct ifla_xdp_stats *xdp_stats = attr_data;
++	const struct u64_stats_sync *syncp;
++	u32 start;
++	u32 i;
++
++	switch (attr_id) {
++	case IFLA_XDP_XSTATS_TYPE_XDP:
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	for (i = 0; i < adapter->num_io_queues; i++) {
++		const struct ena_stats_rx *rx_stats;
++
++		rx_stats = &adapter->rx_ring[i].rx_stats;
++		syncp = &adapter->rx_ring[i].syncp;
++
++		do {
++			start = u64_stats_fetch_begin_irq(syncp);
++
++			xdp_stats->drop = rx_stats->xdp_drop;
++			xdp_stats->pass = rx_stats->xdp_pass;
++			xdp_stats->tx = rx_stats->xdp_tx;
++			xdp_stats->redirect = 
+rx_stats->xdp_redirect;
++			xdp_stats->aborted = 
+rx_stats->xdp_aborted;
++			xdp_stats->invalid = 
+rx_stats->xdp_invalid;
++		} while (u64_stats_fetch_retry_irq(syncp, start));
++
++		xdp_stats++;
++	}
++
++	xdp_stats = attr_data;
++	/* xdp_num_queues can be 0 if an XDP program isn't loaded 
+*/
++	for (i = 0; i < adapter->xdp_num_queues; i++) {
++		const struct ena_stats_tx *tx_stats;
++
++		tx_stats = 
+&adapter->rx_ring[i].xdp_ring->tx_stats;
++		syncp = &adapter->rx_ring[i].xdp_ring->syncp;
++
++		do {
++			start = u64_stats_fetch_begin_irq(syncp);
++
++			xdp_stats->xmit_packets = tx_stats->cnt;
++			xdp_stats->xmit_bytes = tx_stats->bytes;
++			xdp_stats->xmit_errors = 
+tx_stats->dma_mapping_err +
++ 
+tx_stats->prepare_ctx_err;
++		} while (u64_stats_fetch_retry_irq(syncp, start));
++
++		xdp_stats++;
++	}
++
++	return 0;
++}
++
+ static const struct net_device_ops ena_netdev_ops = {
+ 	.ndo_open		= ena_open,
+ 	.ndo_stop		= ena_close,
+ 	.ndo_start_xmit		= ena_start_xmit,
+ 	.ndo_select_queue	= ena_select_queue,
+ 	.ndo_get_stats64	= ena_get_stats64,
++	.ndo_get_xdp_stats_nch	= ena_get_xdp_stats_nch,
++	.ndo_get_xdp_stats	= ena_get_xdp_stats,
+ 	.ndo_tx_timeout		= ena_tx_timeout,
+ 	.ndo_change_mtu		= ena_change_mtu,
+ 	.ndo_set_mac_address	= NULL,
+
 
