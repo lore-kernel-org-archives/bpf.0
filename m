@@ -2,144 +2,445 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B65BC433F5
-	for <bpf@archiver.kernel.org>; Tue, 30 Nov 2021 03:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D076EC433EF
+	for <bpf@archiver.kernel.org>; Tue, 30 Nov 2021 03:07:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbhK3DK3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 29 Nov 2021 22:10:29 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35816 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237771AbhK3DK2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 22:10:28 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATIlDSp001978
-        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 19:07:10 -0800
+        id S237782AbhK3DKb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 29 Nov 2021 22:10:31 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:27930 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237777AbhK3DKa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 29 Nov 2021 22:10:30 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1ATIlNoW001041
+        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 19:07:12 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=facebook;
- bh=HuAe6Fk18W9xajGa3KF5hbZ4WOJp1GzXISq21nGa26k=;
- b=bhH/BXR3rhub3ciwGqF6V5vWGml2ZJ0027MoSFIaZoS5jfATk5mWr+XHm69J7wMUK3gm
- eyGU+FInNtaXAGSMJgDMcPOHtAKryBmLSxy3UKjzXwKpv97iOG6ayTdfB5d+Ny8duHBZ
- h4WyDSOo4wf2DfVv+aOXDinepzABLWa+6/Y= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=facebook;
+ bh=Dr1OEgsXFdauNhKiduBqXeitGL2lF8QArm3AlrMhT8E=;
+ b=Fxh0FyMjf5PY7tjReEP6+gbuA/h3o0QFFcOLAMMjpKEMhoJfyKg1EMGJrxtzghvs/vG9
+ bjBcxdypase2Re0yz7qV9ZtncNlQBACJmLVHPXeIZL8eW6M1Ht7XljbT0AGQWUO3jzMZ
+ VN3KVGSjYYxwlqOw23Suvd9Cz+Xmlf2+wAk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3cmyfkwcpb-1
+        by m0001303.ppops.net with ESMTP id 3cms5jyp5c-18
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 19:07:10 -0800
-Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 29 Nov 2021 19:07:11 -0800
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.20; Mon, 29 Nov 2021 19:07:08 -0800
 Received: by devbig612.frc2.facebook.com (Postfix, from userid 115148)
-        id 04FD2572D0C3; Mon, 29 Nov 2021 19:06:58 -0800 (PST)
+        id 442BD572D0CB; Mon, 29 Nov 2021 19:06:59 -0800 (PST)
 From:   Joanne Koong <joannekoong@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <Kernel-team@fb.com>, Joanne Koong <joannekoong@fb.com>
-Subject: [PATCH v4 bpf-next 0/4] Add bpf_loop helper
-Date:   Mon, 29 Nov 2021 19:06:18 -0800
-Message-ID: <20211130030622.4131246-1-joannekoong@fb.com>
+Subject: [PATCH v4 bpf-next 4/4] selftest/bpf/benchs: Add bpf_loop benchmark
+Date:   Mon, 29 Nov 2021 19:06:22 -0800
+Message-ID: <20211130030622.4131246-5-joannekoong@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211130030622.4131246-1-joannekoong@fb.com>
+References: <20211130030622.4131246-1-joannekoong@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: in9Y6Y3Ik0mHjl8AwuEdQnvHX7sM4xno
-X-Proofpoint-GUID: in9Y6Y3Ik0mHjl8AwuEdQnvHX7sM4xno
+X-Proofpoint-ORIG-GUID: BQqIDK1fcpdEv4Il59Vldb9vA47iMQmt
+X-Proofpoint-GUID: BQqIDK1fcpdEv4Il59Vldb9vA47iMQmt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-30_03,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- mlxlogscore=746 priorityscore=1501 lowpriorityscore=0 phishscore=0
- suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111300016
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ impostorscore=0 spamscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111300017
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset add a new helper, bpf_loop.
+Add benchmark to measure the throughput and latency of the bpf_loop
+call.
 
-One of the complexities of using for loops in bpf programs is that the ve=
-rifier
-needs to ensure that in every possibility of the loop logic, the loop wil=
-l always
-terminate. As such, there is a limit on how many iterations the loop can =
-do.
+Testing this on my dev machine on 1 thread, the data is as follows:
 
-The bpf_loop helper moves the loop logic into the kernel and can thereby
-guarantee that the loop will always terminate. The bpf_loop helper simpli=
-fies
-a lot of the complexity the verifier needs to check, as well as removes t=
-he
-constraint on the number of loops able to be run.
+        nr_loops: 10
+bpf_loop - throughput: 198.519 =C2=B1 0.155 M ops/s, latency: 5.037 ns/op
 
-From the test results, we see that using bpf_loop in place
-of the traditional for loop led to a decrease in verification time
-and number of bpf instructions by ~99%. The benchmark results show
-that as the number of iterations increases, the overhead per iteration
-decreases.
+        nr_loops: 100
+bpf_loop - throughput: 247.448 =C2=B1 0.305 M ops/s, latency: 4.041 ns/op
 
-The high-level overview of the patches -
-Patch 1 - kernel-side + API changes for adding bpf_loop
-Patch 2 - tests
-Patch 3 - use bpf_loop in strobemeta + pyperf600 and measure verifier per=
-formance
-Patch 4 - benchmark for throughput + latency of bpf_loop call
+        nr_loops: 500
+bpf_loop - throughput: 260.839 =C2=B1 0.380 M ops/s, latency: 3.834 ns/op
 
-v3 -> v4:
-~ Address nits: use usleep for triggering bpf programs, fix copyright sty=
-le
+        nr_loops: 1000
+bpf_loop - throughput: 262.806 =C2=B1 0.629 M ops/s, latency: 3.805 ns/op
 
-v2 -> v3:
-~ Rerun benchmarks on physical machine, update results
-~ Propagate original error codes in the verifier
+        nr_loops: 5000
+bpf_loop - throughput: 264.211 =C2=B1 1.508 M ops/s, latency: 3.785 ns/op
 
-v1 -> v2:
-~ Change helper name to bpf_loop (instead of bpf_for_each)
-~ Set max nr_loops (~8 million loops) for bpf_loop call
-~ Split tests + strobemeta/pyperf600 changes into two patches
-~ Add new ops_report_final helper for outputting throughput and latency
+        nr_loops: 10000
+bpf_loop - throughput: 265.366 =C2=B1 3.054 M ops/s, latency: 3.768 ns/op
 
-Joanne Koong (4):
-  bpf: Add bpf_loop helper
-  selftests/bpf: Add bpf_loop test
-  selftests/bpf: Measure bpf_loop verifier performance
-  selftest/bpf/benchs: Add bpf_loop benchmark
+        nr_loops: 50000
+bpf_loop - throughput: 235.986 =C2=B1 20.205 M ops/s, latency: 4.238 ns/o=
+p
 
- include/linux/bpf.h                           |   1 +
- include/uapi/linux/bpf.h                      |  25 +++
- kernel/bpf/bpf_iter.c                         |  35 +++++
- kernel/bpf/helpers.c                          |   2 +
- kernel/bpf/verifier.c                         |  88 +++++++----
- tools/include/uapi/linux/bpf.h                |  25 +++
+        nr_loops: 100000
+bpf_loop - throughput: 264.482 =C2=B1 0.279 M ops/s, latency: 3.781 ns/op
+
+        nr_loops: 500000
+bpf_loop - throughput: 309.773 =C2=B1 87.713 M ops/s, latency: 3.228 ns/o=
+p
+
+        nr_loops: 1000000
+bpf_loop - throughput: 262.818 =C2=B1 4.143 M ops/s, latency: 3.805 ns/op
+
+From this data, we can see that the latency per loop decreases as the
+number of loops increases. On this particular machine, each loop had an
+overhead of about ~4 ns, and we were able to run ~250 million loops
+per second.
+
+Signed-off-by: Joanne Koong <joannekoong@fb.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
  tools/testing/selftests/bpf/Makefile          |   4 +-
- tools/testing/selftests/bpf/bench.c           |  37 +++++
+ tools/testing/selftests/bpf/bench.c           |  37 ++++++
  tools/testing/selftests/bpf/bench.h           |   2 +
- .../selftests/bpf/benchs/bench_bpf_loop.c     | 105 +++++++++++++
- .../bpf/benchs/run_bench_bpf_loop.sh          |  15 ++
- .../selftests/bpf/benchs/run_common.sh        |  15 ++
- .../selftests/bpf/prog_tests/bpf_loop.c       | 145 ++++++++++++++++++
- .../bpf/prog_tests/bpf_verif_scale.c          |  12 ++
- tools/testing/selftests/bpf/progs/bpf_loop.c  | 112 ++++++++++++++
- .../selftests/bpf/progs/bpf_loop_bench.c      |  26 ++++
- tools/testing/selftests/bpf/progs/pyperf.h    |  71 ++++++++-
- .../selftests/bpf/progs/pyperf600_bpf_loop.c  |   6 +
- .../testing/selftests/bpf/progs/strobemeta.h  |  75 ++++++++-
- .../selftests/bpf/progs/strobemeta_bpf_loop.c |   9 ++
- 20 files changed, 771 insertions(+), 39 deletions(-)
+ .../selftests/bpf/benchs/bench_bpf_loop.c     | 105 ++++++++++++++++++
+ .../bpf/benchs/run_bench_bpf_loop.sh          |  15 +++
+ .../selftests/bpf/benchs/run_common.sh        |  15 +++
+ .../selftests/bpf/progs/bpf_loop_bench.c      |  26 +++++
+ 7 files changed, 203 insertions(+), 1 deletion(-)
  create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
  create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_loop=
 .sh
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_loop.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_loop.c
  create mode 100644 tools/testing/selftests/bpf/progs/bpf_loop_bench.c
- create mode 100644 tools/testing/selftests/bpf/progs/pyperf600_bpf_loop.=
-c
- create mode 100644 tools/testing/selftests/bpf/progs/strobemeta_bpf_loop=
-.c
 
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+index 35684d61aaeb..a6c0e92c86a1 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -531,6 +531,7 @@ $(OUTPUT)/bench_trigger.o: $(OUTPUT)/trigger_bench.sk=
+el.h
+ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
+ 			    $(OUTPUT)/perfbuf_bench.skel.h
+ $(OUTPUT)/bench_bloom_filter_map.o: $(OUTPUT)/bloom_filter_bench.skel.h
++$(OUTPUT)/bench_bpf_loop.o: $(OUTPUT)/bpf_loop_bench.skel.h
+ $(OUTPUT)/bench.o: bench.h testing_helpers.h $(BPFOBJ)
+ $(OUTPUT)/bench: LDLIBS +=3D -lm
+ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+@@ -540,7 +541,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(OUTPUT)/bench_rename.o \
+ 		 $(OUTPUT)/bench_trigger.o \
+ 		 $(OUTPUT)/bench_ringbufs.o \
+-		 $(OUTPUT)/bench_bloom_filter_map.o
++		 $(OUTPUT)/bench_bloom_filter_map.o \
++		 $(OUTPUT)/bench_bpf_loop.o
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+=20
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
+s/bpf/bench.c
+index c75e7ee28746..3d6082b97a56 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -134,6 +134,39 @@ void hits_drops_report_final(struct bench_res res[],=
+ int res_cnt)
+ 	       total_ops_mean, total_ops_stddev);
+ }
+=20
++void ops_report_progress(int iter, struct bench_res *res, long delta_ns)
++{
++	double hits_per_sec, hits_per_prod;
++
++	hits_per_sec =3D res->hits / 1000000.0 / (delta_ns / 1000000000.0);
++	hits_per_prod =3D hits_per_sec / env.producer_cnt;
++
++	printf("Iter %3d (%7.3lfus): ", iter, (delta_ns - 1000000000) / 1000.0)=
+;
++
++	printf("hits %8.3lfM/s (%7.3lfM/prod)\n", hits_per_sec, hits_per_prod);
++}
++
++void ops_report_final(struct bench_res res[], int res_cnt)
++{
++	double hits_mean =3D 0.0, hits_stddev =3D 0.0;
++	int i;
++
++	for (i =3D 0; i < res_cnt; i++)
++		hits_mean +=3D res[i].hits / 1000000.0 / (0.0 + res_cnt);
++
++	if (res_cnt > 1)  {
++		for (i =3D 0; i < res_cnt; i++)
++			hits_stddev +=3D (hits_mean - res[i].hits / 1000000.0) *
++				       (hits_mean - res[i].hits / 1000000.0) /
++				       (res_cnt - 1.0);
++
++		hits_stddev =3D sqrt(hits_stddev);
++	}
++	printf("Summary: throughput %8.3lf \u00B1 %5.3lf M ops/s (%7.3lfM ops/p=
+rod), ",
++	       hits_mean, hits_stddev, hits_mean / env.producer_cnt);
++	printf("latency %8.3lf ns/op\n", 1000.0 / hits_mean * env.producer_cnt)=
+;
++}
++
+ const char *argp_program_version =3D "benchmark";
+ const char *argp_program_bug_address =3D "<bpf@vger.kernel.org>";
+ const char argp_program_doc[] =3D
+@@ -171,10 +204,12 @@ static const struct argp_option opts[] =3D {
+=20
+ extern struct argp bench_ringbufs_argp;
+ extern struct argp bench_bloom_map_argp;
++extern struct argp bench_bpf_loop_argp;
+=20
+ static const struct argp_child bench_parsers[] =3D {
+ 	{ &bench_ringbufs_argp, 0, "Ring buffers benchmark", 0 },
+ 	{ &bench_bloom_map_argp, 0, "Bloom filter map benchmark", 0 },
++	{ &bench_bpf_loop_argp, 0, "bpf_loop helper benchmark", 0 },
+ 	{},
+ };
+=20
+@@ -373,6 +408,7 @@ extern const struct bench bench_bloom_update;
+ extern const struct bench bench_bloom_false_positive;
+ extern const struct bench bench_hashmap_without_bloom;
+ extern const struct bench bench_hashmap_with_bloom;
++extern const struct bench bench_bpf_loop;
+=20
+ static const struct bench *benchs[] =3D {
+ 	&bench_count_global,
+@@ -404,6 +440,7 @@ static const struct bench *benchs[] =3D {
+ 	&bench_bloom_false_positive,
+ 	&bench_hashmap_without_bloom,
+ 	&bench_hashmap_with_bloom,
++	&bench_bpf_loop,
+ };
+=20
+ static void setup_benchmark()
+diff --git a/tools/testing/selftests/bpf/bench.h b/tools/testing/selftest=
+s/bpf/bench.h
+index 624c6b11501f..50785503756b 100644
+--- a/tools/testing/selftests/bpf/bench.h
++++ b/tools/testing/selftests/bpf/bench.h
+@@ -59,6 +59,8 @@ void hits_drops_report_progress(int iter, struct bench_=
+res *res, long delta_ns);
+ void hits_drops_report_final(struct bench_res res[], int res_cnt);
+ void false_hits_report_progress(int iter, struct bench_res *res, long de=
+lta_ns);
+ void false_hits_report_final(struct bench_res res[], int res_cnt);
++void ops_report_progress(int iter, struct bench_res *res, long delta_ns)=
+;
++void ops_report_final(struct bench_res res[], int res_cnt);
+=20
+ static inline __u64 get_time_ns() {
+ 	struct timespec t;
+diff --git a/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c b/tools/=
+testing/selftests/bpf/benchs/bench_bpf_loop.c
+new file mode 100644
+index 000000000000..d0a6572bfab6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/benchs/bench_bpf_loop.c
+@@ -0,0 +1,105 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include <argp.h>
++#include "bench.h"
++#include "bpf_loop_bench.skel.h"
++
++/* BPF triggering benchmarks */
++static struct ctx {
++	struct bpf_loop_bench *skel;
++} ctx;
++
++static struct {
++	__u32 nr_loops;
++} args =3D {
++	.nr_loops =3D 10,
++};
++
++enum {
++	ARG_NR_LOOPS =3D 4000,
++};
++
++static const struct argp_option opts[] =3D {
++	{ "nr_loops", ARG_NR_LOOPS, "nr_loops", 0,
++		"Set number of loops for the bpf_loop helper"},
++	{},
++};
++
++static error_t parse_arg(int key, char *arg, struct argp_state *state)
++{
++	switch (key) {
++	case ARG_NR_LOOPS:
++		args.nr_loops =3D strtol(arg, NULL, 10);
++		break;
++	default:
++		return ARGP_ERR_UNKNOWN;
++	}
++
++	return 0;
++}
++
++/* exported into benchmark runner */
++const struct argp bench_bpf_loop_argp =3D {
++	.options =3D opts,
++	.parser =3D parse_arg,
++};
++
++static void validate(void)
++{
++	if (env.consumer_cnt !=3D 1) {
++		fprintf(stderr, "benchmark doesn't support multi-consumer!\n");
++		exit(1);
++	}
++}
++
++static void *producer(void *input)
++{
++	while (true)
++		/* trigger the bpf program */
++		syscall(__NR_getpgid);
++
++	return NULL;
++}
++
++static void *consumer(void *input)
++{
++	return NULL;
++}
++
++static void measure(struct bench_res *res)
++{
++	res->hits =3D atomic_swap(&ctx.skel->bss->hits, 0);
++}
++
++static void setup(void)
++{
++	struct bpf_link *link;
++
++	setup_libbpf();
++
++	ctx.skel =3D bpf_loop_bench__open_and_load();
++	if (!ctx.skel) {
++		fprintf(stderr, "failed to open skeleton\n");
++		exit(1);
++	}
++
++	link =3D bpf_program__attach(ctx.skel->progs.benchmark);
++	if (!link) {
++		fprintf(stderr, "failed to attach program!\n");
++		exit(1);
++	}
++
++	ctx.skel->bss->nr_loops =3D args.nr_loops;
++}
++
++const struct bench bench_bpf_loop =3D {
++	.name =3D "bpf-loop",
++	.validate =3D validate,
++	.setup =3D setup,
++	.producer_thread =3D producer,
++	.consumer_thread =3D consumer,
++	.measure =3D measure,
++	.report_progress =3D ops_report_progress,
++	.report_final =3D ops_report_final,
++};
+diff --git a/tools/testing/selftests/bpf/benchs/run_bench_bpf_loop.sh b/t=
+ools/testing/selftests/bpf/benchs/run_bench_bpf_loop.sh
+new file mode 100755
+index 000000000000..d4f5f73b356b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/benchs/run_bench_bpf_loop.sh
+@@ -0,0 +1,15 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ./benchs/run_common.sh
++
++set -eufo pipefail
++
++for t in 1 4 8 12 16; do
++for i in 10 100 500 1000 5000 10000 50000 100000 500000 1000000; do
++subtitle "nr_loops: $i, nr_threads: $t"
++	summarize_ops "bpf_loop: " \
++	    "$($RUN_BENCH -p $t --nr_loops $i bpf-loop)"
++	printf "\n"
++done
++done
+diff --git a/tools/testing/selftests/bpf/benchs/run_common.sh b/tools/tes=
+ting/selftests/bpf/benchs/run_common.sh
+index 9a16be78b180..6c5e6023a69f 100644
+--- a/tools/testing/selftests/bpf/benchs/run_common.sh
++++ b/tools/testing/selftests/bpf/benchs/run_common.sh
+@@ -33,6 +33,14 @@ function percentage()
+ 	echo "$*" | sed -E "s/.*Percentage\s=3D\s+([0-9]+\.[0-9]+).*/\1/"
+ }
+=20
++function ops()
++{
++	echo -n "throughput: "
++	echo -n "$*" | sed -E "s/.*throughput\s+([0-9]+\.[0-9]+ =C2=B1 [0-9]+\.=
+[0-9]+\sM\sops\/s).*/\1/"
++	echo -n -e ", latency: "
++	echo "$*" | sed -E "s/.*latency\s+([0-9]+\.[0-9]+\sns\/op).*/\1/"
++}
++
+ function total()
+ {
+ 	echo "$*" | sed -E "s/.*total operations\s+([0-9]+\.[0-9]+ =C2=B1 [0-9]=
++\.[0-9]+M\/s).*/\1/"
+@@ -52,6 +60,13 @@ function summarize_percentage()
+ 	printf "%-20s %s%%\n" "$bench" "$(percentage $summary)"
+ }
+=20
++function summarize_ops()
++{
++	bench=3D"$1"
++	summary=3D$(echo $2 | tail -n1)
++	printf "%-20s %s\n" "$bench" "$(ops $summary)"
++}
++
+ function summarize_total()
+ {
+ 	bench=3D"$1"
+diff --git a/tools/testing/selftests/bpf/progs/bpf_loop_bench.c b/tools/t=
+esting/selftests/bpf/progs/bpf_loop_bench.c
+new file mode 100644
+index 000000000000..9dafdc244462
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_loop_bench.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2021 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++u32 nr_loops;
++long hits;
++
++static int empty_callback(__u32 index, void *data)
++{
++	return 0;
++}
++
++SEC("fentry/__x64_sys_getpgid")
++int benchmark(void *ctx)
++{
++	for (int i =3D 0; i < 1000; i++) {
++		bpf_loop(nr_loops, empty_callback, NULL, 0);
++
++		__sync_add_and_fetch(&hits, nr_loops);
++	}
++	return 0;
++}
 --=20
 2.30.2
 
