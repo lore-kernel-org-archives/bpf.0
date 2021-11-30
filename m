@@ -2,83 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70155C433F5
-	for <bpf@archiver.kernel.org>; Tue, 30 Nov 2021 11:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E109EC433FE
+	for <bpf@archiver.kernel.org>; Tue, 30 Nov 2021 12:20:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241068AbhK3MA7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Nov 2021 07:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232343AbhK3L7R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:59:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4B1C0613B6;
-        Tue, 30 Nov 2021 03:55:44 -0800 (PST)
+        id S232553AbhK3MXb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Nov 2021 07:23:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55196 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237270AbhK3MXa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:23:30 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E99A0CE18BA;
-        Tue, 30 Nov 2021 11:55:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F48C53FC1;
-        Tue, 30 Nov 2021 11:55:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61079B818AB;
+        Tue, 30 Nov 2021 12:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1853EC53FD3;
+        Tue, 30 Nov 2021 12:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638273341;
-        bh=Ocr5jJvga2fTrYuwB4nW6CxeA7OdZ+6l9qbMPW89eIM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sDUhwUuzprPpX4/CxXSoCOXBdwEvozvD2AM3rPuLFLfEDWFocEfnIZzljay/86Gjh
-         9t0ljd9kNYZvjd/062UsDEIG9qwiFR2ojOPVsYwiTaNxeblB7wUl/sRbrfoyNbX7qA
-         3TXq612vofYFCoqzIhMBpxkUA4QX5i0lT2q7/+b6hClM2qWDRLAJsODLqvVr7QrIYU
-         8vZHO4QeZFOTf5RfDPA7vdAG5XKssms9QwvFGUkplHwTROVV75+NPI/Jk1NDycvf7k
-         LhLJrdN1pfHWu2nZMfphN9UoIeVd98cWPMrxH9dhmjnMqoG+jUpPleJCM8LbxUE1mw
-         V1DUY4DW9KFNA==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, shayagr@amazon.com,
-        john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
-        echaudro@redhat.com, jasowang@redhat.com,
-        alexander.duyck@gmail.com, saeed@kernel.org,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v19 bpf-next 23/23] xdp: disable XDP_REDIRECT for xdp multi-buff
-Date:   Tue, 30 Nov 2021 12:53:07 +0100
-Message-Id: <df855fe05b80746fa7f657fce78b24d582f133cb.1638272239.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1638272238.git.lorenzo@kernel.org>
-References: <cover.1638272238.git.lorenzo@kernel.org>
+        s=k20201202; t=1638274809;
+        bh=KKGscqz2GT9cYg5Qa0tAq4MUqlpoum9QwbrX2J9dTJU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Egm7xbgQ6IrhXaKkvxQpUHk5vWck/kVZhwWLcJu81vKf+gWejGxTknlMJRXt8K/eP
+         h3gZjtpBRlE5Qr5v7+e25OYYxmMeRzMwegkVM31XRg/uDwvJbxHx0CqzI0C6OhYkzp
+         YEztBbcESdQWExLiSqSEvaPp7mtuxglgJOgB8aNLdo6SCnXox490VQ05JK+dmni1xk
+         y/0wHMvPCcPf226znbwjrfmiUiRVVPl4MJ9r+9b9FK7CqtU5RED4GRrY9vKXN/zHID
+         s+GDKD5rbVnsXuW+VQdOh+GZpkd4bQNkLLStqWFzp3bweSuDKkMB1MZIacU99uwHaN
+         p7/NZUeFrcJgw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F292960A50;
+        Tue, 30 Nov 2021 12:20:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 1/1] ice: xsk: clear status_error0 for each allocated desc
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163827480898.28928.8800569496106543318.git-patchwork-notify@kernel.org>
+Date:   Tue, 30 Nov 2021 12:20:08 +0000
+References: <20211129231746.2767739-1-anthony.l.nguyen@intel.com>
+In-Reply-To: <20211129231746.2767739-1-anthony.l.nguyen@intel.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, maciej.fijalkowski@intel.com,
+        netdev@vger.kernel.org, magnus.karlsson@intel.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        bpf@vger.kernel.org, alexandr.lobakin@intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-XDP_REDIRECT is not fully supported yet for xdp multi-buff since not
-all XDP capable drivers can map non-linear xdp_frame in ndo_xdp_xmit
-so disable it for the moment.
+Hello:
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- net/core/filter.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index b70725313442..a87d835d1122 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4189,6 +4189,13 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 	struct bpf_map *map;
- 	int err;
- 
-+	/* XDP_REDIRECT is not fully supported yet for xdp multi-buff since
-+	 * not all XDP capable drivers can map non-linear xdp_frame in
-+	 * ndo_xdp_xmit.
-+	 */
-+	if (unlikely(xdp_buff_is_mb(xdp)))
-+		return -EOPNOTSUPP;
-+
- 	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
- 	ri->map_type = BPF_MAP_TYPE_UNSPEC;
- 
+On Mon, 29 Nov 2021 15:17:46 -0800 you wrote:
+> From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> 
+> Fix a bug in which the receiving of packets can stop in the zero-copy
+> driver. Ice HW ignores 3 lower bits from QRX_TAIL register, which means
+> that tail is bumped only on intervals of 8. Currently with XSK RX
+> batching in place, ice_alloc_rx_bufs_zc() clears the status_error0 only
+> of the last descriptor that has been allocated/taken from the XSK buffer
+> pool. status_error0 includes DD bit that is looked upon by the
+> ice_clean_rx_irq_zc() to tell if a descriptor can be processed.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,1/1] ice: xsk: clear status_error0 for each allocated desc
+    https://git.kernel.org/netdev/net/c/d1ec975f9fa6
+
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
