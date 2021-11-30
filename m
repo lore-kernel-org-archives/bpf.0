@@ -2,85 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E7FBC433F5
-	for <bpf@archiver.kernel.org>; Tue, 30 Nov 2021 13:57:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0048C433F5
+	for <bpf@archiver.kernel.org>; Tue, 30 Nov 2021 14:07:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbhK3OAx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Nov 2021 09:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbhK3OAx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:00:53 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2427C061748
-        for <bpf@vger.kernel.org>; Tue, 30 Nov 2021 05:57:32 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id x32so52807505ybi.12
-        for <bpf@vger.kernel.org>; Tue, 30 Nov 2021 05:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i8mC6OqW0NDo60h/ey+ips1XwWpcV67dhd9iu/BhDz0=;
-        b=WRlEVbKlNULbDO6M6gbl896ndTKr+un9IDkTKhxYx3kDhMjanE6bsjMsPGAzq97Hs9
-         crYTXwAvhcyMq0NWjblhRU+XgfOOV8KfhaRjJK5IdAOTnu2vDmQtmO7FOn8mSBDsKa4m
-         YW5rnK8qkBbukBswLIUOA56UjHBAV5lJj+siep6KiR6wcCMAEFsdlxJxGMWoJ0cU2ZeO
-         EpGx1VdKsIXJbD+GHuwD4rtflOshZHkR4BLyyawq8g2S9UDZi/AWRB+14W+nxsqaUXTR
-         /EoGaAHK0pdgbtQ6FUYKHkvKvtWBroMuvCqWmhqPx5vLQF26e030cQ3Su0fjv+eMkVZZ
-         jovQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i8mC6OqW0NDo60h/ey+ips1XwWpcV67dhd9iu/BhDz0=;
-        b=r+NJUsnAZFlOc9gSFJbqKQ6EWk1BWNTUk/XxAvtoyuClSa1FYo8ieGauaEHgTP/AqR
-         ErRGtYQRQN3kVUhcgWrMsLJPRpD4BuPYHHYVVzOZi8AhyP8UzH4nZphel/DGl9hJAjB5
-         vThqbZ4B0YXJl52NKrejqg3AIUQB0/5u3DcpFl6Htkjb+b4x/EC/r5IFsKgZkiC0WlGu
-         HpY9eLdeNxB+SCr/HXKVBcVI/DzDnUjUy44LkefKiq0yfkR3Q9uYwy75pubaOfOeByvr
-         7vqiD6P/Wsd3aD0kzj1O96Drjoe2QyHOT5Q87EWQeAffIwZ88G9F1PKdqqjxzX+akBFb
-         uSMg==
-X-Gm-Message-State: AOAM531tFnI2EGcP+BzddJn2bbfGjJizITKQkn74XmcqFG+MNrVaqJLT
-        MAWciLFZQKxOyDpt/VzeqL06gRlR/PPD6kaiYeXaIlJW+VsusQ==
-X-Google-Smtp-Source: ABdhPJy/BtczKyJzappms/4cO8+1NIBYpHuseK0gvuukRHbl9fVIpSbl33dqQ/eIMS4vDHBMIe0jGEVN1VclOswS83I=
-X-Received: by 2002:a25:94d:: with SMTP id u13mr14311330ybm.723.1638280651971;
- Tue, 30 Nov 2021 05:57:31 -0800 (PST)
+        id S236375AbhK3OKV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Nov 2021 09:10:21 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16326 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233194AbhK3OKU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:10:20 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3PCR2dvqz91PG;
+        Tue, 30 Nov 2021 22:06:27 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 30 Nov
+ 2021 22:06:58 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <houtao1@huawei.com>
+Subject: [PATCH bpf-next 1/5] bpf: add bpf_strncmp helper
+Date:   Tue, 30 Nov 2021 22:22:11 +0800
+Message-ID: <20211130142215.1237217-2-houtao1@huawei.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20211130142215.1237217-1-houtao1@huawei.com>
+References: <20211130142215.1237217-1-houtao1@huawei.com>
 MIME-Version: 1.0
-References: <CAKXUXMyEqSsA1Xez+6nbdQTqbKJZFUVGtzG6Xb2aDDcTHCe8sg@mail.gmail.com>
-In-Reply-To: <CAKXUXMyEqSsA1Xez+6nbdQTqbKJZFUVGtzG6Xb2aDDcTHCe8sg@mail.gmail.com>
-From:   Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Date:   Tue, 30 Nov 2021 14:57:21 +0100
-Message-ID: <CAM1=_QQBfO_RQuYFrhdvZeM+KbY+5w=YVHTfb-zZQsN4fiBMcw@mail.gmail.com>
-Subject: Re: Reference to non-existing symbol WAR_R10000 in arch/mips/net/bpf_jit_comp.h
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Lukas,
+The helper compares two strings: one string is a null-terminated
+read-only string, and another string has const max storage size
+but doesn't need to be null-terminated. It can be used to compare
+file name in tracing or LSM program.
 
-On Mon, Nov 29, 2021 at 7:39 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
->
-> Dear Johan,
->
-> In arch/mips/net/bpf_jit_comp.h and introduced with commit commit
-> 72570224bb8f ("mips, bpf: Add JIT workarounds for CPU errata"), there
-> is an ifdef that refers to a non-existing symbol WAR_R10000. Did you
-> intend to refer to WAR_R10000_LLSC instead?
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ include/linux/bpf.h            |  1 +
+ include/uapi/linux/bpf.h       | 11 +++++++++++
+ kernel/bpf/helpers.c           | 16 ++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 11 +++++++++++
+ 4 files changed, 39 insertions(+)
 
-You are right, that is a typo. I will prepare a patch with a fix.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a7cbc29b0994..685c8fe5c0be 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2165,6 +2165,7 @@ extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
+ extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
+ extern const struct bpf_func_proto bpf_kallsyms_lookup_name_proto;
+ extern const struct bpf_func_proto bpf_find_vma_proto;
++extern const struct bpf_func_proto bpf_strncmp_proto;
+ 
+ const struct bpf_func_proto *tracing_prog_func_proto(
+   enum bpf_func_id func_id, const struct bpf_prog *prog);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a69e4b04ffeb..afdc52efa4a1 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4957,6 +4957,16 @@ union bpf_attr {
+  *		**-ENOENT** if *task->mm* is NULL, or no vma contains *addr*.
+  *		**-EBUSY** if failed to try lock mmap_lock.
+  *		**-EINVAL** for invalid **flags**.
++ *
++ * long bpf_strncmp(const char *s1, u32 s1_sz, const char *s2)
++ *	Description
++ *		Do strncmp() between **s1** and **s2**. **s1** doesn't need
++ *		to be null-terminated and **s1_sz** is the maximum storage
++ *		size of **s1**. **s2** must be a read-only string.
++ *	Return
++ *		An integer less than, equal to, or greater than zero
++ *		if the first **s1_sz** bytes of **s1** is found to be
++ *		less than, to match, or be greater than **s2**.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5140,6 +5150,7 @@ union bpf_attr {
+ 	FN(skc_to_unix_sock),		\
+ 	FN(kallsyms_lookup_name),	\
+ 	FN(find_vma),			\
++	FN(strncmp),			\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 1ffd469c217f..a7d3a8d48e00 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -565,6 +565,20 @@ const struct bpf_func_proto bpf_strtoul_proto = {
+ };
+ #endif
+ 
++BPF_CALL_3(bpf_strncmp, const char *, s1, u32, s1_sz, const char *, s2)
++{
++	return strncmp(s1, s2, s1_sz);
++}
++
++const struct bpf_func_proto bpf_strncmp_proto = {
++	.func		= bpf_strncmp,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_MEM,
++	.arg2_type	= ARG_CONST_SIZE,
++	.arg3_type	= ARG_PTR_TO_CONST_STR,
++};
++
+ BPF_CALL_4(bpf_get_ns_current_pid_tgid, u64, dev, u64, ino,
+ 	   struct bpf_pidns_info *, nsdata, u32, size)
+ {
+@@ -1378,6 +1392,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_ringbuf_query_proto;
+ 	case BPF_FUNC_for_each_map_elem:
+ 		return &bpf_for_each_map_elem_proto;
++	case BPF_FUNC_strncmp:
++		return &bpf_strncmp_proto;
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index a69e4b04ffeb..afdc52efa4a1 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4957,6 +4957,16 @@ union bpf_attr {
+  *		**-ENOENT** if *task->mm* is NULL, or no vma contains *addr*.
+  *		**-EBUSY** if failed to try lock mmap_lock.
+  *		**-EINVAL** for invalid **flags**.
++ *
++ * long bpf_strncmp(const char *s1, u32 s1_sz, const char *s2)
++ *	Description
++ *		Do strncmp() between **s1** and **s2**. **s1** doesn't need
++ *		to be null-terminated and **s1_sz** is the maximum storage
++ *		size of **s1**. **s2** must be a read-only string.
++ *	Return
++ *		An integer less than, equal to, or greater than zero
++ *		if the first **s1_sz** bytes of **s1** is found to be
++ *		less than, to match, or be greater than **s2**.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5140,6 +5150,7 @@ union bpf_attr {
+ 	FN(skc_to_unix_sock),		\
+ 	FN(kallsyms_lookup_name),	\
+ 	FN(find_vma),			\
++	FN(strncmp),			\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+-- 
+2.29.2
 
-Thanks for catching!
-Johan
-
->
-> This issue was identified with the script ./scripts/checkkconfigsymbols.py.
->
-> Best regards,
->> Lukas
