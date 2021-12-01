@@ -2,100 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 527F4C433F5
-	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 22:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 456B6C433EF
+	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 23:28:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343789AbhLAWnr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Dec 2021 17:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353690AbhLAWnr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:43:47 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141EEC061748
-        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 14:40:25 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id v1so107951658edx.2
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 14:40:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hfIZoz2xAzJu9RJOcxVN05bOnQSiOzrtGJ6tZtujJ7k=;
-        b=ke/buHpkMGIU8nJsWW8PSZuSAK7uIWC/r6SbtBu4Uv/24qVZZSyRTxMKrkNWAo+i3H
-         +2GLeNy2KDcNTt+zsDwg3Xl3Qn55wJYq6MtvXm8NsvMKifW1b1JLwAfZe3oxyV2Ind6k
-         hBdnxEJm1cTSJJEcP8s2HMt4aPI/wqj7duhPdWsP9x2v+ckLuXImOh7veOQmW+706Ar7
-         91rrX9t2StQW4DQuSGmsk41e8ZwK3ghHxur5wu1qyQktK2BHkm4IDQQtldxyUNvaazFx
-         888Z+dIzEV0iz8xaZJ03qyzXpngU1jZ+btGXsb8LcJHznAuhYKPRcilr02kzELcylUbS
-         7nLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hfIZoz2xAzJu9RJOcxVN05bOnQSiOzrtGJ6tZtujJ7k=;
-        b=aBWHkNuy8QnHHF5EwFDkjT3X5kSCmUgXbla67lm8zH46DuKzT/hHo0gHduCYuqFiIl
-         wB6fFKflNsZxu8ie3jLY7MF0hWB5UyDKJBjtIkZefR6yZVDNGXI1UTVZhUQMCJXOHOMD
-         2aO2som3dDHQrG0wyKS92pf++DxfvWhgQLkWgwcXZRv2N/p/ojaZzQRLOZhEYzWtjDjT
-         ac94SkgBCbrc1MwH0k+PVH0828fyYdFzxH9cf7EapnZ5S99MlAlCrnvQwIVsVZsq8Msg
-         NFCnRRt2pSrlfyWLKjBKuJ3hdNvhyOZDVugxArVeW3PNsnnHG+4ajpp/c3pjpIasLG6j
-         ChCw==
-X-Gm-Message-State: AOAM533WIbrNKqkailyrsByLrb8H4xLhNYwZgVEiRYvjlwPAIiH4KnUk
-        E1lsra6UOCX3DtKnxs9LLC/H0Y5hmZqpEDJ3PxA8ag==
-X-Google-Smtp-Source: ABdhPJwcQm80JXZ9dN+4odxG+WqdpUV/QCphx+Zj2vxhdc55hbIzo8yH8LoaeH7WwX075CWWylAaJW1rMyEGBbFVJZA=
-X-Received: by 2002:a05:6402:1a27:: with SMTP id be7mr12352590edb.187.1638398423438;
- Wed, 01 Dec 2021 14:40:23 -0800 (PST)
+        id S1343978AbhLAXb6 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 1 Dec 2021 18:31:58 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48696 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240449AbhLAXb5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 1 Dec 2021 18:31:57 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1LciVQ026376
+        for <bpf@vger.kernel.org>; Wed, 1 Dec 2021 15:28:35 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3cpd6atnub-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 15:28:35 -0800
+Received: from intmgw001.25.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 15:28:34 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 0B2EBB7A0ABA; Wed,  1 Dec 2021 15:28:29 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/9] libbpf: add API to get/set log_level at per-program level
+Date:   Wed, 1 Dec 2021 15:28:17 -0800
+Message-ID: <20211201232824.3166325-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211201232824.3166325-1-andrii@kernel.org>
+References: <20211201232824.3166325-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <20211130012948.380602-1-haoluo@google.com> <20211130012948.380602-4-haoluo@google.com>
- <20211201203046.saxv5hl7zz3wzyvv@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20211201203046.saxv5hl7zz3wzyvv@ast-mbp.dhcp.thefacebook.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 1 Dec 2021 14:40:12 -0800
-Message-ID: <CA+khW7ibeg4fGz1D=aZ8yF6me0_yif_Hm_FHA=+RPxw+YnW=tA@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v2 3/9] bpf: Replace RET_XXX_OR_NULL with
- RET_XXX | PTR_MAYBE_NULL
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-FB-Source: Intern
+X-Proofpoint-ORIG-GUID: UF7GAc1XphBZsX6catxzSd3vJBJIuLsL
+X-Proofpoint-GUID: UF7GAc1XphBZsX6catxzSd3vJBJIuLsL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ suspectscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112010122
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 12:30 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Nov 29, 2021 at 05:29:42PM -0800, Hao Luo wrote:
-> >       /* update return register (already marked as written above) */
-> > -     if (fn->ret_type == RET_INTEGER) {
-> > +     ret_type = fn->ret_type;
-> > +     if (ret_type == RET_INTEGER) {
-> >               /* sets type to SCALAR_VALUE */
-> >               mark_reg_unknown(env, regs, BPF_REG_0);
-> > -     } else if (fn->ret_type == RET_VOID) {
-> > +     } else if (ret_type == RET_VOID) {
-> >               regs[BPF_REG_0].type = NOT_INIT;
-> > -     } else if (fn->ret_type == RET_PTR_TO_MAP_VALUE_OR_NULL ||
-> > -                fn->ret_type == RET_PTR_TO_MAP_VALUE) {
-> > +     } else if (BPF_BASE_TYPE(ret_type) == RET_PTR_TO_MAP_VALUE) {
-> >               /* There is no offset yet applied, variable or fixed */
-> >               mark_reg_known_zero(env, regs, BPF_REG_0);
-> >               /* remember map_ptr, so that check_map_access()
-> > @@ -6530,28 +6536,27 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
-> >               }
-> >               regs[BPF_REG_0].map_ptr = meta.map_ptr;
-> >               regs[BPF_REG_0].map_uid = meta.map_uid;
-> > -             if (fn->ret_type == RET_PTR_TO_MAP_VALUE) {
-> > +             if (ret_type_may_be_null(fn->ret_type)) {
->
-> it should have been ret_type here?
->
+Add bpf_program__set_log_level() and bpf_program__log_level() to fetch
+and adjust log_level sent during BPF_PROG_LOAD command. This allows to
+selectively request more or less verbose output in BPF verifier log.
 
-Yes. I think fn->ret_type and ret_type are the same here. I can
-replace it with 'ret_type' in the next version.
+Also bump libbpf version to 0.7 and make these APIs the first in v0.7.
 
-> > +                     regs[BPF_REG_0].type = PTR_TO_MAP_VALUE_OR_NULL;
-> > +             } else {
-> >                       regs[BPF_REG_0].type = PTR_TO_MAP_VALUE;
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c         | 14 ++++++++++++++
+ tools/lib/bpf/libbpf.h         |  2 ++
+ tools/lib/bpf/libbpf.map       |  6 ++++++
+ tools/lib/bpf/libbpf_version.h |  2 +-
+ 4 files changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 5a2f5a6ae2f9..d40c83cc7152 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8422,6 +8422,20 @@ int bpf_program__set_flags(struct bpf_program *prog, __u32 flags)
+ 	return 0;
+ }
+ 
++__u32 bpf_program__log_level(const struct bpf_program *prog)
++{
++	return prog->log_level;
++}
++
++int bpf_program__set_log_level(struct bpf_program *prog, __u32 log_level)
++{
++	if (prog->obj->loaded)
++		return libbpf_err(-EBUSY);
++
++	prog->log_level = log_level;
++	return 0;
++}
++
+ #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
+ 	.sec = sec_pfx,							    \
+ 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index d02139fec4ac..148fa85bab33 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -499,6 +499,8 @@ bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ 
+ LIBBPF_API __u32 bpf_program__flags(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_flags(struct bpf_program *prog, __u32 flags);
++LIBBPF_API __u32 bpf_program__log_level(const struct bpf_program *prog);
++LIBBPF_API int bpf_program__set_log_level(struct bpf_program *prog, __u32 log_level);
+ 
+ LIBBPF_API int
+ bpf_program__set_attach_target(struct bpf_program *prog, int attach_prog_fd,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 623002b83b2b..715df3a27389 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -419,3 +419,9 @@ LIBBPF_0.6.0 {
+ 		perf_buffer__new_raw;
+ 		perf_buffer__new_raw_deprecated;
+ } LIBBPF_0.5.0;
++
++LIBBPF_0.7.0 {
++	global:
++		bpf_program__log_level;
++		bpf_program__set_log_level;
++};
+diff --git a/tools/lib/bpf/libbpf_version.h b/tools/lib/bpf/libbpf_version.h
+index dd56d76f291c..0fefefc3500b 100644
+--- a/tools/lib/bpf/libbpf_version.h
++++ b/tools/lib/bpf/libbpf_version.h
+@@ -4,6 +4,6 @@
+ #define __LIBBPF_VERSION_H
+ 
+ #define LIBBPF_MAJOR_VERSION 0
+-#define LIBBPF_MINOR_VERSION 6
++#define LIBBPF_MINOR_VERSION 7
+ 
+ #endif /* __LIBBPF_VERSION_H */
+-- 
+2.30.2
+
