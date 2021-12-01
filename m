@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF5FCC433F5
-	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 18:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 000EEC43217
+	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 18:13:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239327AbhLASQJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Dec 2021 13:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S1352234AbhLASQP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Dec 2021 13:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352228AbhLASOx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:14:53 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEBBC06175B
-        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 10:11:14 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id b13so18363514plg.2
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 10:11:14 -0800 (PST)
+        with ESMTP id S1352263AbhLASPE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:15:04 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB39BC0613F3
+        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 10:11:28 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id n8so18352973plf.4
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 10:11:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Pyoh1aqHOvFXmvU6PIRcmfSQDw/GoPES6LSMSJtar9U=;
-        b=S4aEsFbP6ti+z8ZEydLjvt4wzRLJ3rkm1HICnB1//Dn9hmpamnoys7DGzpXWtAmaG1
-         AoYkz56Jg/E2Q4tx7zIQ91bRM8LLapKofbQIMTjZpGP902S2k7KbJQM1sTwanI6XEe88
-         QdDCI2Nost3Y9UKQUcdREY7Qt3rY8B2Zv9OeBy75XHTdr1Mek6A3AWfmxZxFWQj2BBYr
-         f5lxrvL4FqVlyxlgba3IOZBzOQiSfpGMgXEpkbllraS+8/i5O0peRl+UQRPq4Yc1/niB
-         YATwnSC+zrUdkg3OXgXV8mSizt9WOCLXcRn7lJaI/DR87OevoMiHXn2VkHTW2fiYEB/2
-         /RlA==
+        bh=dIi8s5XGIUokbgHYRYNlQaxnDLZTghamDXqG7hIZzX0=;
+        b=Ihl3J40zSh5ZJbhk8eq4yzlJXcFNSLm3aeSRoso5IzKtvM8l24jGpP4mRy0zBgcSqO
+         pgW3aFjQzOn5bXxW9hPSMG8fROschhju7HiVHZrBrAL8its80z01yCBKsxjfKEi9iLvR
+         SzOChQFipshHesnhL31KfuRUBMUNG4+gveNFAWaV6tq1mjEjd5ROkQxNPaGg3sDO1cYY
+         uohZd5PtW4V6AqgtGMgaccmVInpyipoA5MSUeFNpZVD66qfAaoX/bmrgyv2buHEfj8Us
+         efeEi6rUa5R+kqjXbjqZ8he7GiWQOBjkaweAabtEwhEGGWOZKMTUVfVMRXCDLpXNjjvf
+         GeRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Pyoh1aqHOvFXmvU6PIRcmfSQDw/GoPES6LSMSJtar9U=;
-        b=O24jQON/gpYmsojWlVdeAXmuK7w1OX3aHElE0oWcev0SmwaIUfZrBrwQ004Q/K2gtA
-         tRRWHvpL2JkBSlOqqyGU3JWZsJVFCSHH4X1TtQq9k/f2hbp3j2gSnYUTbKP4Fh6nrgEA
-         UzapkbNTI81YbIUwAik3d1QUKX6UPlQ4gRW6KkHbhRFNZSFx2DqMND5GW7l2PWQ7v8Tf
-         3gb+i6/I5IUs8aqmqAZgbsPYCjOZqRlC96pJNSqsoPT42KRR4m2yUX71ooGWfaSeRVHh
-         x09OQcWutG51JzGEch226zFw8u0+S7fvSkRH7iFMB/nduRQZJwp5H2ek6/SBak382yqi
-         /niA==
-X-Gm-Message-State: AOAM532WfEthgfyJ7eOrFm7Z1UiS0I9zrS9GK3+fKjZ5UXpA1v2Yazkc
-        yEmW3q1aGdVRuDfm6K6TvfntAQ955mA=
-X-Google-Smtp-Source: ABdhPJydflVkZEo8cZL9xIIY1obplnRkjSTtf7IsfJaCJa22sucFWZTNNnG8NgNW7HXPuSKMATrDdA==
-X-Received: by 2002:a17:90b:3845:: with SMTP id nl5mr9596641pjb.102.1638382273867;
-        Wed, 01 Dec 2021 10:11:13 -0800 (PST)
+        bh=dIi8s5XGIUokbgHYRYNlQaxnDLZTghamDXqG7hIZzX0=;
+        b=a5NZWUtJAFyclgIZ+5sfPeaEOyTAhq6ukxfLU+rHaCiGta54ukHCcostQK4/ZS5t6F
+         rkyLIMNW/O+rxa7ZOcsp64ekGfH/hT0uhqn9nSMLVwpYfmhrh8C0b/rOOrIcMp+4HUy2
+         YhrLIsBmVzYHnO7uruQey8WyKYLRNi7GNnM8nuphSEkYhn9qHVpLQPit5K/WQRGUd6HP
+         R1y+c5pkOMTbrHjRAgc1KSdD9kEfTj02ZWjj12uPMZaRiZFseds336wkiN4dHcCZTswn
+         I7u4imAZmyPIiJbnOZqJoBk6f96F6z37j4epDpxrtH/gfEquIcPHSuHXlykGLbYUgNyy
+         Qp9Q==
+X-Gm-Message-State: AOAM530cRtJAgTjYpavn7Q+pspr04V7+WG/PetB8vqhV9jpbXrRERyOV
+        uCsM8k8MDZD2rFkMq1jODIw=
+X-Google-Smtp-Source: ABdhPJzsMkTe4D8W96kHw9eEnWzYTszH51WPZ3/MOhb2bIRwThA6qHSxcp5ceMPEey15MfdCE0wHBA==
+X-Received: by 2002:a17:902:db01:b0:141:ea12:2176 with SMTP id m1-20020a170902db0100b00141ea122176mr9508770plx.44.1638382288154;
+        Wed, 01 Dec 2021 10:11:28 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:620c])
-        by smtp.gmail.com with ESMTPSA id a6sm5823pjd.40.2021.12.01.10.11.13
+        by smtp.gmail.com with ESMTPSA id ne22sm13889pjb.18.2021.12.01.10.11.27
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Dec 2021 10:11:13 -0800 (PST)
+        Wed, 01 Dec 2021 10:11:27 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 11/17] libbpf: Clean gen_loader's attach kind.
-Date:   Wed,  1 Dec 2021 10:10:34 -0800
-Message-Id: <20211201181040.23337-12-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 16/17] selftests/bpf: Revert CO-RE removal in test_ksyms_weak.
+Date:   Wed,  1 Dec 2021 10:10:39 -0800
+Message-Id: <20211201181040.23337-17-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
 References: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
@@ -65,34 +65,29 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The gen_loader has to clear attach_kind otherwise the programs
-without attach_btf_id will fail load if they follow programs
-with attach_btf_id.
+The commit 087cba799ced ("selftests/bpf: Add weak/typeless ksym test for light skeleton")
+added test_ksyms_weak to light skeleton testing, but remove CO-RE access.
+Revert that part of commit, since light skeleton can use CO-RE in the kernel.
 
-Fixes: 67234743736a ("libbpf: Generate loader program out of BPF ELF file.")
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/gen_loader.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/test_ksyms_weak.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index ed0e949790da..21dfb930f1d2 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -1005,9 +1005,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 	debug_ret(gen, "prog_load %s insn_cnt %d", attr.prog_name, attr.insn_cnt);
- 	/* successful or not, close btf module FDs used in extern ksyms and attach_btf_obj_fd */
- 	cleanup_relos(gen, insns_off);
--	if (gen->attach_kind)
-+	if (gen->attach_kind) {
- 		emit_sys_close_blob(gen,
- 				    attr_field(prog_load_attr, attach_btf_obj_fd));
-+		gen->attach_kind = 0;
-+	}
- 	emit_check_err(gen);
- 	/* remember prog_fd in the stack, if successful */
- 	emit(gen, BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_7,
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
+index 8eadbd4caf7a..5f8379aadb29 100644
+--- a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
++++ b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
+@@ -38,7 +38,7 @@ int pass_handler(const void *ctx)
+ 	/* tests existing symbols. */
+ 	rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, 0);
+ 	if (rq)
+-		out__existing_typed = 0;
++		out__existing_typed = rq->cpu;
+ 	out__existing_typeless = (__u64)&bpf_prog_active;
+ 
+ 	/* tests non-existent symbols. */
 -- 
 2.30.2
 
