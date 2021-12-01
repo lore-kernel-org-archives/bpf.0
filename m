@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 000EEC43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4C2C4332F
 	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 18:13:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352234AbhLASQP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Dec 2021 13:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S1352180AbhLASQK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Dec 2021 13:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352263AbhLASPE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:15:04 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB39BC0613F3
-        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 10:11:28 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id n8so18352973plf.4
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 10:11:28 -0800 (PST)
+        with ESMTP id S1352247AbhLASO5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:14:57 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB48C061763
+        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 10:11:19 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id r5so24393220pgi.6
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 10:11:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dIi8s5XGIUokbgHYRYNlQaxnDLZTghamDXqG7hIZzX0=;
-        b=Ihl3J40zSh5ZJbhk8eq4yzlJXcFNSLm3aeSRoso5IzKtvM8l24jGpP4mRy0zBgcSqO
-         pgW3aFjQzOn5bXxW9hPSMG8fROschhju7HiVHZrBrAL8its80z01yCBKsxjfKEi9iLvR
-         SzOChQFipshHesnhL31KfuRUBMUNG4+gveNFAWaV6tq1mjEjd5ROkQxNPaGg3sDO1cYY
-         uohZd5PtW4V6AqgtGMgaccmVInpyipoA5MSUeFNpZVD66qfAaoX/bmrgyv2buHEfj8Us
-         efeEi6rUa5R+kqjXbjqZ8he7GiWQOBjkaweAabtEwhEGGWOZKMTUVfVMRXCDLpXNjjvf
-         GeRQ==
+        bh=c9n2wOm/ug9o4NdtOtycz1rv7HYkNG/izLJFHlHF/VM=;
+        b=C0LdCvjB3PrzgNz8mg/FT6lY5441py8+lPENqdFATcuZZZsJ2zrsg3WJF8q1ziYsQs
+         dqvnXtopRL9FMB2cDa6JnT4H3T6WiSxyJz4CCXVlQm0kBN7trERUdfjhjsHELIcnUPqw
+         pceAYKmIGY/Pj8pc1zKeL/qdg+h9roTAqpx1jqoN3FPwh326Rgg7Rrt5RKkpcEWmIyjg
+         O5iTmglb4x9MsI60e3IVBmYF5C0miqnJjyfz46NieHe8Nmt7hHseyK9QWyYG3f9nEoXH
+         iFg6hnYYaByj9I0ZjgQ8coqiAUfxshJ5nhFfdQW1HIgT/3NDyphxMZjg0AvhhvfurmG8
+         WzGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dIi8s5XGIUokbgHYRYNlQaxnDLZTghamDXqG7hIZzX0=;
-        b=a5NZWUtJAFyclgIZ+5sfPeaEOyTAhq6ukxfLU+rHaCiGta54ukHCcostQK4/ZS5t6F
-         rkyLIMNW/O+rxa7ZOcsp64ekGfH/hT0uhqn9nSMLVwpYfmhrh8C0b/rOOrIcMp+4HUy2
-         YhrLIsBmVzYHnO7uruQey8WyKYLRNi7GNnM8nuphSEkYhn9qHVpLQPit5K/WQRGUd6HP
-         R1y+c5pkOMTbrHjRAgc1KSdD9kEfTj02ZWjj12uPMZaRiZFseds336wkiN4dHcCZTswn
-         I7u4imAZmyPIiJbnOZqJoBk6f96F6z37j4epDpxrtH/gfEquIcPHSuHXlykGLbYUgNyy
-         Qp9Q==
-X-Gm-Message-State: AOAM530cRtJAgTjYpavn7Q+pspr04V7+WG/PetB8vqhV9jpbXrRERyOV
-        uCsM8k8MDZD2rFkMq1jODIw=
-X-Google-Smtp-Source: ABdhPJzsMkTe4D8W96kHw9eEnWzYTszH51WPZ3/MOhb2bIRwThA6qHSxcp5ceMPEey15MfdCE0wHBA==
-X-Received: by 2002:a17:902:db01:b0:141:ea12:2176 with SMTP id m1-20020a170902db0100b00141ea122176mr9508770plx.44.1638382288154;
-        Wed, 01 Dec 2021 10:11:28 -0800 (PST)
+        bh=c9n2wOm/ug9o4NdtOtycz1rv7HYkNG/izLJFHlHF/VM=;
+        b=5of/tBOCpF0klvWIr/K83aXrgft9H9M7Teec9GsqgkydFwQSd5EJCGQMqS/qaCgRR9
+         4XNKOfpZ4TmKmEBVfZBTIDQtn+3PSxxMtFLXTsXrLsE4eEOFDAGhRjjNfzt1rr4u7QNq
+         amou/uHoO42o4asbCTlMRqT46rBer5z53GwQ6r6MveKVWmLui/+a0Yc8cScZlXs4vwgE
+         fIj5o2RAoBls7vUXVHYK05tLWhTPyK/MDWtpKpl+HQObhgwmwGSFEvYU3iSHYHLO19rW
+         ulHTQU1+bfq/hISWOsH2UlBAL6mGZCGjRONd57DcpwgD0+cLAIH8eh1mJsmYTXbzGPx5
+         UDJA==
+X-Gm-Message-State: AOAM531kiWXO9anXkIyuF7whvyR1deyhduOP64kc2/CV6qSnuPzlXzkc
+        Eq2q2dr/NEL9Yg/g0mQ61ew=
+X-Google-Smtp-Source: ABdhPJwLqRkqVjguqIKpfRzCrFO7aJnizcf12U+8GzzYGbZKDqouFacCC9G9Tagsml+/g2wKFf5sTw==
+X-Received: by 2002:a63:2d03:: with SMTP id t3mr5781621pgt.428.1638382279308;
+        Wed, 01 Dec 2021 10:11:19 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:620c])
-        by smtp.gmail.com with ESMTPSA id ne22sm13889pjb.18.2021.12.01.10.11.27
+        by smtp.gmail.com with ESMTPSA id j15sm502494pfh.35.2021.12.01.10.11.18
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Dec 2021 10:11:27 -0800 (PST)
+        Wed, 01 Dec 2021 10:11:19 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 16/17] selftests/bpf: Revert CO-RE removal in test_ksyms_weak.
-Date:   Wed,  1 Dec 2021 10:10:39 -0800
-Message-Id: <20211201181040.23337-17-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 13/17] selftests/bpf: Improve inner_map test coverage.
+Date:   Wed,  1 Dec 2021 10:10:36 -0800
+Message-Id: <20211201181040.23337-14-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
 References: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
@@ -65,29 +65,68 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The commit 087cba799ced ("selftests/bpf: Add weak/typeless ksym test for light skeleton")
-added test_ksyms_weak to light skeleton testing, but remove CO-RE access.
-Revert that part of commit, since light skeleton can use CO-RE in the kernel.
+Check that hash and array inner maps are properly initialized.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_ksyms_weak.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/map_ptr_kern.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-index 8eadbd4caf7a..5f8379aadb29 100644
---- a/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-+++ b/tools/testing/selftests/bpf/progs/test_ksyms_weak.c
-@@ -38,7 +38,7 @@ int pass_handler(const void *ctx)
- 	/* tests existing symbols. */
- 	rq = (struct rq *)bpf_per_cpu_ptr(&runqueues, 0);
- 	if (rq)
--		out__existing_typed = 0;
-+		out__existing_typed = rq->cpu;
- 	out__existing_typeless = (__u64)&bpf_prog_active;
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+index b1b711d9b214..b64df94ec476 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -334,9 +334,11 @@ static inline int check_lpm_trie(void)
+ 	return 1;
+ }
  
- 	/* tests non-existent symbols. */
++#define INNER_MAX_ENTRIES 1234
++
+ struct inner_map {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
++	__uint(max_entries, INNER_MAX_ENTRIES);
+ 	__type(key, __u32);
+ 	__type(value, __u32);
+ } inner_map SEC(".maps");
+@@ -348,7 +350,7 @@ struct {
+ 	__type(value, __u32);
+ 	__array(values, struct {
+ 		__uint(type, BPF_MAP_TYPE_ARRAY);
+-		__uint(max_entries, 1);
++		__uint(max_entries, INNER_MAX_ENTRIES);
+ 		__type(key, __u32);
+ 		__type(value, __u32);
+ 	});
+@@ -360,8 +362,13 @@ static inline int check_array_of_maps(void)
+ {
+ 	struct bpf_array *array_of_maps = (struct bpf_array *)&m_array_of_maps;
+ 	struct bpf_map *map = (struct bpf_map *)&m_array_of_maps;
++	struct bpf_array *inner_map;
++	int key = 0;
+ 
+ 	VERIFY(check_default(&array_of_maps->map, map));
++	inner_map = bpf_map_lookup_elem(array_of_maps, &key);
++	VERIFY(inner_map != 0);
++	VERIFY(inner_map->map.max_entries == INNER_MAX_ENTRIES);
+ 
+ 	return 1;
+ }
+@@ -382,8 +389,13 @@ static inline int check_hash_of_maps(void)
+ {
+ 	struct bpf_htab *hash_of_maps = (struct bpf_htab *)&m_hash_of_maps;
+ 	struct bpf_map *map = (struct bpf_map *)&m_hash_of_maps;
++	struct bpf_htab *inner_map;
++	int key = 2;
+ 
+ 	VERIFY(check_default(&hash_of_maps->map, map));
++	inner_map = bpf_map_lookup_elem(hash_of_maps, &key);
++	VERIFY(inner_map != 0);
++	VERIFY(inner_map->map.max_entries == INNER_MAX_ENTRIES);
+ 
+ 	return 1;
+ }
 -- 
 2.30.2
 
