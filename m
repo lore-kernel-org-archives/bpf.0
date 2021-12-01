@@ -2,48 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52D4AC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6EF3C433FE
 	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 23:29:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353782AbhLAXcV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 1 Dec 2021 18:32:21 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33500 "EHLO
+        id S1353778AbhLAXcX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 1 Dec 2021 18:32:23 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37724 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353778AbhLAXcK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 1 Dec 2021 18:32:10 -0500
+        by vger.kernel.org with ESMTP id S1344113AbhLAXcU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 1 Dec 2021 18:32:20 -0500
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1LdIpb006034
-        for <bpf@vger.kernel.org>; Wed, 1 Dec 2021 15:28:48 -0800
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1LdEhk005768
+        for <bpf@vger.kernel.org>; Wed, 1 Dec 2021 15:28:59 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3cp6tm5nj5-6
+        by mx0a-00082601.pphosted.com with ESMTP id 3cp6tm5njv-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 15:28:48 -0800
-Received: from intmgw001.37.frc1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 15:28:59 -0800
+Received: from intmgw003.48.prn1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 15:28:26 -0800
+ 15.1.2308.20; Wed, 1 Dec 2021 15:28:34 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id E6352B7A0AB0; Wed,  1 Dec 2021 15:28:24 -0800 (PST)
+        id 178F0B7A0AC1; Wed,  1 Dec 2021 15:28:31 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 0/9] Deprecate bpf_prog_load_xattr() API
-Date:   Wed, 1 Dec 2021 15:28:15 -0800
-Message-ID: <20211201232824.3166325-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/9] bpftool: migrate off of deprecated bpf_create_map_xattr() API
+Date:   Wed, 1 Dec 2021 15:28:18 -0800
+Message-ID: <20211201232824.3166325-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211201232824.3166325-1-andrii@kernel.org>
+References: <20211201232824.3166325-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
+Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: 1kkcpD-tHr1BF1YNdNmQ0sQ4gKD3H8zD
-X-Proofpoint-GUID: 1kkcpD-tHr1BF1YNdNmQ0sQ4gKD3H8zD
+X-Proofpoint-ORIG-GUID: L1OA86GHFuSDz26TIIDBQijaQV4btj6r
+X-Proofpoint-GUID: L1OA86GHFuSDz26TIIDBQijaQV4btj6r
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
  definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
  priorityscore=1501 adultscore=0 impostorscore=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=935 suspectscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=736 suspectscore=0
  phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112010122
 X-FB-Internal: deliver
@@ -51,63 +53,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Few lines in the last patch to mark bpf_prog_load_xattr() deprecated required
-a decent amount of clean ups in all the other patches. samples/bpf is big part
-of the clean up.
+Switch to bpf_map_create() API instead.
 
-This patch set also bumps libbpf version to 0.7, as libbpf v0.6 release will
-be cut shortly.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/bpf/bpftool/map.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-Andrii Nakryiko (9):
-  libbpf: use __u32 fields in bpf_map_create_opts
-  libbpf: add API to get/set log_level at per-program level
-  bpftool: migrate off of deprecated bpf_create_map_xattr() API
-  selftests/bpf: remove recently reintroduced legacy btf__dedup() use
-  selftests/bpf: mute xdpxceiver.c's deprecation warnings
-  selftests/bpf: remove all the uses of deprecated bpf_prog_load_xattr()
-  samples/bpf: clean up samples/bpf build failes
-  samples/bpf: get rid of deprecated libbpf API uses
-  libbpf: deprecate bpf_prog_load_xattr() API
-
- samples/bpf/Makefile                          | 13 ++++-
- samples/bpf/Makefile.target                   | 11 ----
- samples/bpf/cookie_uid_helper_example.c       | 14 +++--
- samples/bpf/fds_example.c                     | 24 +++++---
- samples/bpf/hbm_kern.h                        |  2 -
- samples/bpf/lwt_len_hist_kern.c               |  7 ---
- samples/bpf/map_perf_test_user.c              | 15 +++--
- samples/bpf/sock_example.c                    | 12 ++--
- samples/bpf/sockex1_user.c                    | 15 ++++-
- samples/bpf/sockex2_user.c                    | 14 ++++-
- samples/bpf/test_cgrp2_array_pin.c            |  4 +-
- samples/bpf/test_cgrp2_attach.c               | 13 +++--
- samples/bpf/test_cgrp2_sock.c                 |  8 ++-
- samples/bpf/test_lru_dist.c                   | 11 ++--
- samples/bpf/trace_output_user.c               |  4 +-
- samples/bpf/xdp_sample_pkts_user.c            | 22 +++----
- samples/bpf/xdpsock_ctrl_proc.c               |  3 +
- samples/bpf/xdpsock_user.c                    |  3 +
- samples/bpf/xsk_fwd.c                         |  3 +
- tools/bpf/bpftool/map.c                       | 23 ++++----
- tools/lib/bpf/bpf.h                           |  8 +--
- tools/lib/bpf/libbpf.c                        | 14 +++++
- tools/lib/bpf/libbpf.h                        |  3 +
- tools/lib/bpf/libbpf.map                      |  6 ++
- tools/lib/bpf/libbpf_common.h                 |  5 ++
- tools/lib/bpf/libbpf_version.h                |  2 +-
- .../bpf/prog_tests/bpf_verif_scale.c          | 30 +++++++---
- .../bpf/prog_tests/btf_dedup_split.c          |  4 +-
- .../bpf/prog_tests/connect_force_port.c       | 17 +++---
- .../selftests/bpf/prog_tests/kfree_skb.c      | 58 ++++++-------------
- .../bpf/prog_tests/sockopt_inherit.c          | 12 ++--
- .../selftests/bpf/prog_tests/sockopt_multi.c  | 12 ++--
- .../selftests/bpf/prog_tests/tcp_rtt.c        | 21 +++----
- .../bpf/prog_tests/test_global_funcs.c        | 28 ++++++---
- tools/testing/selftests/bpf/test_sock_addr.c  | 33 +++++++----
- .../selftests/bpf/xdp_redirect_multi.c        | 15 ++---
- tools/testing/selftests/bpf/xdpxceiver.c      |  6 ++
- 37 files changed, 293 insertions(+), 202 deletions(-)
-
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 25b258804f11..cc530a229812 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1261,7 +1261,10 @@ static int do_pin(int argc, char **argv)
+ 
+ static int do_create(int argc, char **argv)
+ {
+-	struct bpf_create_map_attr attr = { NULL, };
++	LIBBPF_OPTS(bpf_map_create_opts, attr);
++	enum bpf_map_type map_type = BPF_MAP_TYPE_UNSPEC;
++	__u32 key_size = 0, value_size = 0, max_entries = 0;
++	const char *map_name = NULL;
+ 	const char *pinfile;
+ 	int err = -1, fd;
+ 
+@@ -1276,30 +1279,30 @@ static int do_create(int argc, char **argv)
+ 		if (is_prefix(*argv, "type")) {
+ 			NEXT_ARG();
+ 
+-			if (attr.map_type) {
++			if (map_type) {
+ 				p_err("map type already specified");
+ 				goto exit;
+ 			}
+ 
+-			attr.map_type = map_type_from_str(*argv);
+-			if ((int)attr.map_type < 0) {
++			map_type = map_type_from_str(*argv);
++			if ((int)map_type < 0) {
+ 				p_err("unrecognized map type: %s", *argv);
+ 				goto exit;
+ 			}
+ 			NEXT_ARG();
+ 		} else if (is_prefix(*argv, "name")) {
+ 			NEXT_ARG();
+-			attr.name = GET_ARG();
++			map_name = GET_ARG();
+ 		} else if (is_prefix(*argv, "key")) {
+-			if (parse_u32_arg(&argc, &argv, &attr.key_size,
++			if (parse_u32_arg(&argc, &argv, &key_size,
+ 					  "key size"))
+ 				goto exit;
+ 		} else if (is_prefix(*argv, "value")) {
+-			if (parse_u32_arg(&argc, &argv, &attr.value_size,
++			if (parse_u32_arg(&argc, &argv, &value_size,
+ 					  "value size"))
+ 				goto exit;
+ 		} else if (is_prefix(*argv, "entries")) {
+-			if (parse_u32_arg(&argc, &argv, &attr.max_entries,
++			if (parse_u32_arg(&argc, &argv, &max_entries,
+ 					  "max entries"))
+ 				goto exit;
+ 		} else if (is_prefix(*argv, "flags")) {
+@@ -1340,14 +1343,14 @@ static int do_create(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	if (!attr.name) {
++	if (!map_name) {
+ 		p_err("map name not specified");
+ 		goto exit;
+ 	}
+ 
+ 	set_max_rlimit();
+ 
+-	fd = bpf_create_map_xattr(&attr);
++	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, &attr);
+ 	if (fd < 0) {
+ 		p_err("map create failed: %s", strerror(errno));
+ 		goto exit;
 -- 
 2.30.2
 
