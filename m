@@ -2,98 +2,161 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C51CAC433EF
-	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 04:24:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 091F1C433EF
+	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 04:33:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241794AbhLAE2L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 30 Nov 2021 23:28:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
+        id S232805AbhLAEhP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 30 Nov 2021 23:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346608AbhLAE1i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 30 Nov 2021 23:27:38 -0500
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9FDC06175B;
-        Tue, 30 Nov 2021 20:24:04 -0800 (PST)
-Received: by mail-pf1-x444.google.com with SMTP id n26so23004876pff.3;
-        Tue, 30 Nov 2021 20:24:04 -0800 (PST)
+        with ESMTP id S230301AbhLAEhP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 30 Nov 2021 23:37:15 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419FEC061574;
+        Tue, 30 Nov 2021 20:33:55 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v138so59478047ybb.8;
+        Tue, 30 Nov 2021 20:33:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y7IcXh7hkKTNMPxt6YZo1bjq2Oa0ASN2LOQPZecX9IA=;
-        b=G+voL6wJw3c+eMoG3p9xj5cgifda2ejkqCJqCQLLeSaGHJ+JKnfVBotRvVX/0sOx7I
-         6C7aicypaCP+nfwUqw+9GgnLaR2+E0Z9BaOMfv5bxQ/+EiZP9sEE2pDKFhmbp50KMs1i
-         WCLE0WBK5FO9w9UtFchHY1Sf2OIuxQao92ENqR5m8o70J7D/TD5/ffzmblQ6eg3adjbx
-         kx7AGLbanbtH/jgwLvctaEdQlBzpXpf0aufSTxSocbY6r2+CE+20IiWSqy1KK3Cr4SSe
-         DX1ODKLbUZL45dcKPm3Sxm7cmEQfhNT3qin/o1eFpYV2+Pl3PaZ9kcURRsH2PeAJepX/
-         DI9w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HgPlX08iVhCHw9hxpajnttorkNd49rlMPuyi3Twywfg=;
+        b=T+vYrxRqRC4OruAQddpJR6OllDmjwh/akcDo4VNt57UMAF/kWKnumEBUV7qtw0qFZl
+         FoI05FLG0S2XmpE3kCrS3MpXfDiZNiaznB0665x5sYKIyD3kkmTow4pNvjkSmwjTwY+Y
+         yYp4Nr+wQUwgZC3ioghY0kDapKvPXccEnpEmYlLbydhnA6IkajRPc22XbCBLuKlnZX26
+         pm7Jm79bXBpOUx6Z8PBX2BJm/juS9bFo77OvF/XbZn7YlH7Qu5l/T/UpRyBjcwhtZtUX
+         u1ajki7w/aCuTKA3LC5cNr3rJs2d1Gs9f90h0iylWPkJB6hL9WvzHZJOzhFaw/lwXrA2
+         mNCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y7IcXh7hkKTNMPxt6YZo1bjq2Oa0ASN2LOQPZecX9IA=;
-        b=Ae+ZirFiA8s+tt0Sl9LaLA16zBKM19rg3lOBCEslue1UdYr24K1ofI6ATFiJSHHBqL
-         b06GEodYBrjrFhCqyQG5kjWFN6OwYNwC+6IZy9sryXTZORuUzaa9hYO5VfHWZ8b4sx5l
-         BS71DleUw2fMO2Zm5CEFJtHsiN3LOL9qZxWabTE++XVpXp086DCY60++ZGADRs5uahxa
-         CnhYrsY3nJQW7F5jx2DAgth8IJFpJA7SzpFEXUhihUSUvl1jE5xDRnWMUQE4GzcRFYV0
-         yo8wSU3lj4huP1B0VF2oBg16jHyrAZqlNvM61yvlLOl7Y8VW5tK40yhx1XKInPHvRuku
-         cn0w==
-X-Gm-Message-State: AOAM532zWHr+Y0TOkwpszeRXEZrgu4WAT+5sB9U6eL2P8QtSeZahn5CK
-        3R5IpdExtliTIZym3reak1VSIcIv29s=
-X-Google-Smtp-Source: ABdhPJxLaJnjlMXWkC24b57twGFlBGMgy582WfgYrQLbB/lD8ZTWNvk/AyBOttqbm/xjQsyogkyLLw==
-X-Received: by 2002:a05:6a00:234a:b0:49f:c0f7:f474 with SMTP id j10-20020a056a00234a00b0049fc0f7f474mr3616842pfj.64.1638332644067;
-        Tue, 30 Nov 2021 20:24:04 -0800 (PST)
-Received: from localhost ([2405:201:6014:d064:3d4e:6265:800c:dc84])
-        by smtp.gmail.com with ESMTPSA id g1sm8435444pgm.23.2021.11.30.20.24.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 20:24:03 -0800 (PST)
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Pavel Emelyanov <ovzxemul@gmail.com>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Andrei Vagin <avagin@gmail.com>, criu@openvz.org,
-        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH bpf-next v3 09/10] selftests/bpf: Fix btf_dump test for bpf_iter_link_info
-Date:   Wed,  1 Dec 2021 09:53:32 +0530
-Message-Id: <20211201042333.2035153-10-memxor@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211201042333.2035153-1-memxor@gmail.com>
-References: <20211201042333.2035153-1-memxor@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HgPlX08iVhCHw9hxpajnttorkNd49rlMPuyi3Twywfg=;
+        b=JbjqrYodD02JaIfLpamE9dhY8DvyS9j5HGUUlRi33vmkYb7ku1Ed19fE1WYE4qW1I9
+         bnOB9RsKcVoW8YeDJhtHGRaygetjmO3yChFK4JBTp2RqVO4R0kgNgBDGVIB4LVZUKY38
+         /8izSnwnaadRJO9enbVYbBgSYik5WtUe+M16pg2KpRzKRWCjkjg2TONxxrOLwRcvK2zn
+         jdxw9WbAmHEUNs1J9HaJzQRmHnr/aKCQvgh9t6VPnAZjzYsepkc75ZUavxcwTG4jKIv7
+         YSiA4d869PkxDGkDO/w3ldtmHMcTyxxcug5B0PB4wXUsHEm/Kpgyxh45eomtks1Eg1vZ
+         2YGg==
+X-Gm-Message-State: AOAM530FbCjSlURzo4bhrQfpdPiFdi4E0NhylN9VB7aoFfxxyccj9Jnx
+        M4JQP7WsV6aftl3GTwB9DCU1MsuoHglTyxnec3Q=
+X-Google-Smtp-Source: ABdhPJwIybvmDal0P6G8pbyJ9J48JU2pvinGXabx2uP2lP6LGxPKm7TZntqnx3xIOfea2p+QrqTrLCDJwNfJxoayTBU=
+X-Received: by 2002:a25:54e:: with SMTP id 75mr4245787ybf.393.1638333234508;
+ Tue, 30 Nov 2021 20:33:54 -0800 (PST)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1199; h=from:subject; bh=QE4SyOAFzzmkq+EmLnqIhi3J/rXlE8epdKkKQ0ddjk0=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBhpvYyHodypS5dcJxgGWq6Gcm01FTC9AoUN7RCDrNE /m9lpO2JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYab2MgAKCRBM4MiGSL8RysTEEA DCmZCmJmDZDxqlorY0oGjDyVOz8xicGLWGmSH307rEylOEUw85KOGpd3eIMfiK/Nnqg9rK5s2wHPyc /ARNL1eox1+ygPgQQUQ0haEENVe149mNIY/bB5clUNBw+8dhw26Jt+Vy2LepNOEYDIAsIC+y/s374r qh6XZm2I8MsXRuSTgWWdV71OsJ221i9gMWFW+H/ReIFwLFg1Nh5n6suRxc+bv6FdTUpn7zERR7kxxO v4c6C8k3f2fuhfQ9JMcnWu4QSiJsYfGQWVShUA/alh0W6ah9MvRYJvyfpUUL+v7ObgbCYbicBIb/pl RC4aSphiHmGciptihLOImE6FmlEw3HAdz/kIpPtLarR6fEXgAIGfeClA8LIu5YtJRj/v6eh3WK4vI0 J8nawV0icVnf9wjjMvRdKF2Ge8cYv8lmHVYnGGiLK61qeGrq0BtCBxBycYrFRmS5Kv07SSlfwqAnHm I0T+D5giFEj0fLONEz1X8U0h1tHGpnrH4Ha/YSt0LDHHQ0ZPN6uWHJhAQwls+gcoVHrc9QFxrt/amO hNfMhKbhGZuCEkRNYHpVDJFOf7452KtXXmLPHWomWisxX7E/c0Kha4lYlLFFJlH6wg1bBnRHVYyadm 8CK3YEOupz+hdjA4nV9A70shbJW6vHjAjpWhf9B1PR22DK1pa0fRWf4Rd+Bw==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+References: <20211126204108.11530-1-xiyou.wangcong@gmail.com>
+ <CAPhsuW4zR5Yuwuywd71fdfP1YXX5cw6uNmhqULHy8BhfcbEAAQ@mail.gmail.com>
+ <YaU9Mdv+7kEa4JOJ@unknown> <CAPhsuW4M5Zf9ryWihNSc6DPnXAq0PDJReD2-exxNZp4PDvsSXQ@mail.gmail.com>
+ <CAM_iQpVrv8C9opCCMb9ZYtemp32vdv8No2XDwYmDAaCgPtq+RA@mail.gmail.com>
+In-Reply-To: <CAM_iQpVrv8C9opCCMb9ZYtemp32vdv8No2XDwYmDAaCgPtq+RA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 30 Nov 2021 20:33:43 -0800
+Message-ID: <CAEf4BzZUdE+gsgiLRRissh1Vskf2Ea4WT3gAseV1b9cvNnaBVQ@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: fix missing section "sk_skb/skb_verdict"
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Song Liu <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since we changed the definition while adding io_uring and epoll iterator
-support, adjust the selftest to check against the updated definition.
+On Tue, Nov 30, 2021 at 8:19 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+>
+> On Tue, Nov 30, 2021 at 3:33 PM Song Liu <song@kernel.org> wrote:
+> >
+> > On Mon, Nov 29, 2021 at 12:51 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+> > >
+> > > On Fri, Nov 26, 2021 at 04:20:34PM -0800, Song Liu wrote:
+> > > > On Fri, Nov 26, 2021 at 12:45 PM Cong Wang <xiyou.wangcong@gmail.com> wrote:
+> > > > >
+> > > > > From: Cong Wang <cong.wang@bytedance.com>
+> > > > >
+> > > > > When BPF_SK_SKB_VERDICT was introduced, I forgot to add
+> > > > > a section mapping for it in libbpf.
+> > > > >
+> > > > > Fixes: a7ba4558e69a ("sock_map: Introduce BPF_SK_SKB_VERDICT")
+> > > > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > > > Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> > > > > Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> > > >
+> > > > The patch looks good to me. But seems the selftests are OK without this. So,
+> > > > do we really need this?
+> > > >
+> > >
+> > > Not sure if I understand this question.
+> > >
+> > > At least BPF_SK_SKB_STREAM_PARSER and BPF_SK_SKB_STREAM_VERDICT are already
+> > > there, so either we should remove all of them or add BPF_SK_SKB_VERDICT for
+> > > completeness.
+> > >
+> > > Or are you suggesting we should change it back in selftests too? Note, it was
+> > > changed by Andrii in commit 15669e1dcd75fe6d51e495f8479222b5884665b6:
+> > >
+> > > -SEC("sk_skb/skb_verdict")
+> > > +SEC("sk_skb")
+> >
+> > Yes, I noticed that Andrii made the change, and it seems to work
+> > as-is. Therefore,
+> > I had the question "do we really need it".
+>
+> Same question from me: why still keep sk_skb/stream_parser and
+> sk_skb/stream_verdict? ;) I don't see any reason these two are more
+> special than sk_skb/skb_verdict, therefore we should either keep all
+> of them or remove all of them.
+>
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/btf_dump.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+"sk_skb/skb_verdict" was treated by libbpf *exactly* the same way as
+"sk_skb". Which means the attach type was set to BPF_PROG_TYPE_SK_SKB
+and expected_attach_type was 0 (not BPF_SK_SKB_VERDICT!). So that
+program is definitely not a BPF_SK_SKB_VERDICT, libbpf pre-1.0 just
+has a sloppy prefix matching logic.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-index 9e26903f9170..1678b2c49f78 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-@@ -736,7 +736,9 @@ static void test_btf_dump_struct_data(struct btf *btf, struct btf_dump *d,
- 
- 	/* union with nested struct */
- 	TEST_BTF_DUMP_DATA(btf, d, "union", str, union bpf_iter_link_info, BTF_F_COMPACT,
--			   "(union bpf_iter_link_info){.map = (struct){.map_fd = (__u32)1,},}",
-+			   "(union bpf_iter_link_info){.map = (struct){.map_fd = (__u32)1,},"
-+			   ".io_uring = (struct){.io_uring_fd = (__u32)1,},"
-+			   ".epoll = (struct){.epoll_fd = (__u32)1,},}",
- 			   { .map = { .map_fd = 1 }});
- 
- 	/* struct skb with nested structs/unions; because type output is so
--- 
-2.34.1
+So Song's point is valid, we currently don't have selftests that tests
+BPF_SK_SKB_VERDICT expected attach type, so it would be good to add
+it. Or make sure that existing test that was supposed to test it is
+actually testing it.
 
+> >
+> > If we do need to differentiate skb_verdict from just sk_skb, could you
+>
+> Are you sure sk_skb is a real attach type?? To me, it is an umbrella to
+> catch all of them:
+>
+> SEC_DEF("sk_skb",               SK_SKB, 0, SEC_NONE | SEC_SLOPPY_PFX),
+>
+> whose expected_attach_type is 0. The reason why it works is
+> probably because we don't check BPF_PROG_TYPE_SK_SKB in
+> bpf_prog_load_check_attach().
+
+We don't check expected_attach_type in prog_load, but
+sock_map_prog_update in net/core/sock_map.c is checking expected
+attach type and should return -EOPNOTSUPP. But given that no test is
+failing our tests don't even try to attach anything, I assume. Which
+makes them not so great at actually testing anything. Please see if
+you can improve that.
+
+>
+> > please add a
+> > case selftest for skb_verdict?
+>
+> Ah, sure, I didn't know we have sec_name_test.
+>
+> >
+> > Also, maybe we can name it as "sk_skb/verdict" to avoid duplication?
+>
+> At least we used to call it sk_skb/skb_verdict before commit 15669e1dcd.
+
+As I mentioned above, it could have been called "sk_skb!dontcare" and
+that would still work (and still does if strict mode is not enabled
+for libbpf). For consistency with UAPI expected_attach_type enum it
+should be called "sk_skb/verdict" because BPF_SK_SKB_VERDICT vs
+BPF_SK_SKB_STREAM_VERDICT vs BPF_SK_SKB_STREAM_PARSER.
+
+>
+> Thanks.
