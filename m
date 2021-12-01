@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A665C433FE
-	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 18:11:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39ECAC433F5
+	for <bpf@archiver.kernel.org>; Wed,  1 Dec 2021 18:12:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352203AbhLASOj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Dec 2021 13:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S238589AbhLASQH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Dec 2021 13:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352172AbhLASO1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:14:27 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012BCC061757
-        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 10:11:03 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id b13so18363096plg.2
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 10:11:02 -0800 (PST)
+        with ESMTP id S1352196AbhLASOe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:14:34 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF19C061756
+        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 10:11:11 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y8so18352623plg.1
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 10:11:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+NV2TwGE4OL7a3Z4OpLT80XMTQsK00mjK9IZRa9hLPc=;
-        b=j9ZHzX9AhuHtE5qrk3wWkCQfPfS9q2tiVfOxY1PyMZtUSXpaXxiHOMxlPg5y/KUwwV
-         Mhiz47aHu3cw19LlDON88WYYLLbIiQDz4CNFMbzUUTnndIwNktLHKk5ktrXGe+prrnmc
-         eBtazvOHNgc6O1x13DVFc18L0iAzPZnJLJJbqZ6l9lXoFeOX2ZMFziet+I2BMVs7zsGM
-         2mCkKdrs2kKVrXU3wNLXrcf0m6HQW6yTP0px9T8duYQ0rWRqi38icyW2vcpXGU/8h9bg
-         e5kInR8EZLdp494MwOTJWWuSkbxb5JbyxFuhaO8fy/Ppb4YI8CKiMWjxucko4uoa/IWw
-         wMrw==
+        bh=E4rMfK6neMwhgriI/J6F8bhbT9hfxo5D8J1Y+YO7YQQ=;
+        b=J3aM2L17J5yW+IgJy7DGXHOpHjIVxCT3K6XZfHMEN62lJsVYSJjBCA8Q5xMsu8EVlo
+         RBFwN2WDcRFBVk7hGMdh8crtUjS8gGsmOUXr8THi/jXwEQ+PET5yFx2TbmcYEl4dSjgW
+         wX3ImvNvz+ad6WMOBlmDNH7iWJVCPncRhhTExGPFnCv414XrpIxPxPq0GbiuGdj2N4js
+         Crr5tJrP2PTD6AYq653ST1NJLnC6m/eZH30fZDVZ+Evtv5Vkg3G44YiJqMoBON9tapao
+         8CzZiGqbKawzf5NJ98dHez9ynRlosAibD1CChWs3jtG+DV+wyEfF+H2pctVleAxlI51C
+         Caag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+NV2TwGE4OL7a3Z4OpLT80XMTQsK00mjK9IZRa9hLPc=;
-        b=LB5+k/uIgFNw9pzxdH+XoVVaTajG3qBxYHhLXuP2CRyZSAvdul/WKR9Jo55Gq6TrC7
-         Z9A/uUF81BcyTPUmwNNjhosZR0Z8EQatd/3PlsTk+i4skgUnGQS/Q312koxz1qX9sZ4v
-         0G5H9MzbrmxNTQUedYaUsKS2bK99Y57EJcl6xdURjkVUlKtFMm6HiO8w7G3F5HitHAxZ
-         e3gvHFdWdiJ5pS39CW+RoMy+3ORkwCNrw+XoiLcQA/aiEFp0ntkcFDbciYiaCw0oD3CC
-         rJczbh3S1ZECjq955yM0JqJOP1IrAOzEXAX5FyKfjW3NXYFoiiKarGmYvGrePnAIlJGM
-         9Dqw==
-X-Gm-Message-State: AOAM532gWm1AhdNJfmLWJMCSrLm4vBM53Qld/pIHAxWj8dRhzU/+yO6t
-        dIBIVbU0U3uPEFP26ax0ZnU=
-X-Google-Smtp-Source: ABdhPJzYWutMpJCGY3f5f+a+NZZwO8trqRjpm+AQ5ftJCiWiIDgHo+7B1zNJeBEXoj0O14kSGH6IoQ==
-X-Received: by 2002:a17:902:bb97:b0:144:d5cb:969f with SMTP id m23-20020a170902bb9700b00144d5cb969fmr9430070pls.36.1638382262517;
-        Wed, 01 Dec 2021 10:11:02 -0800 (PST)
+        bh=E4rMfK6neMwhgriI/J6F8bhbT9hfxo5D8J1Y+YO7YQQ=;
+        b=jgePj2qsAPwskJ1FmMvq7THLYX84pzBhRbiCUzR+5kgVObRuSwsXknk2RYF0brkyc9
+         O0PX3NZX3aoQT1/W+LRTbkeFQUoki0wwt+oWecqMAxB5QwfyFzD+APlD+SUKx16ln+06
+         zzcVusAZpZmPDSoZU7SLwf6xTATTJ7Q6PjTFA027O9hf1muu79nRfeOdLtWoCCdVNKMZ
+         ijrE6DX77tk2mTI2doNdK1ncIctRpbPaoj5kgL739H0o5YcnsqnY+P1UtVbnEV9XwP9Y
+         tO+Jw9eA8VgO4/PvJ8A03qRCpVyaOxZvdMU2m0gqtFQIlnXcm/u/r2XFwuRvdYFuqe2g
+         Cnuw==
+X-Gm-Message-State: AOAM53159mQSZkCzwObSbnX2Lx6s/z4GJVUmNo/ADA+/a7ln6CkrE/xR
+        iusjIG9TDaZi3ldqNWUEUTo=
+X-Google-Smtp-Source: ABdhPJyN6NF7IAA8d1Aq3x4rGNqJwTAgCN23+y0lQJGZZugGsBLF8GIK15UzE+2YWVGedoALrLWDMA==
+X-Received: by 2002:a17:902:d703:b0:144:e012:d550 with SMTP id w3-20020a170902d70300b00144e012d550mr9415756ply.38.1638382271156;
+        Wed, 01 Dec 2021 10:11:11 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:620c])
-        by smtp.gmail.com with ESMTPSA id m6sm330054pgs.18.2021.12.01.10.11.01
+        by smtp.gmail.com with ESMTPSA id i5sm328035pgo.36.2021.12.01.10.11.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Dec 2021 10:11:02 -0800 (PST)
+        Wed, 01 Dec 2021 10:11:10 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH v5 bpf-next 07/17] libbpf: Cleanup struct bpf_core_cand.
-Date:   Wed,  1 Dec 2021 10:10:30 -0800
-Message-Id: <20211201181040.23337-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH v5 bpf-next 10/17] libbpf: Support init of inner maps in light skeleton.
+Date:   Wed,  1 Dec 2021 10:10:33 -0800
+Message-Id: <20211201181040.23337-11-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
 References: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
@@ -63,108 +63,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Remove two redundant fields from struct bpf_core_cand.
+Add ability to initialize inner maps in light skeleton.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- tools/lib/bpf/libbpf.c    | 30 +++++++++++++++++-------------
- tools/lib/bpf/relo_core.h |  2 --
- 2 files changed, 17 insertions(+), 15 deletions(-)
+ tools/lib/bpf/bpf_gen_internal.h |  1 +
+ tools/lib/bpf/gen_loader.c       | 27 +++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c           |  6 +++---
+ 3 files changed, 31 insertions(+), 3 deletions(-)
 
+diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+index 9d57fa84664b..9dd5f76692ef 100644
+--- a/tools/lib/bpf/bpf_gen_internal.h
++++ b/tools/lib/bpf/bpf_gen_internal.h
+@@ -67,5 +67,6 @@ void bpf_gen__record_attach_target(struct bpf_gen *gen, const char *name, enum b
+ void bpf_gen__record_extern(struct bpf_gen *gen, const char *name, bool is_weak,
+ 			    bool is_typeless, int kind, int insn_idx);
+ void bpf_gen__record_relo_core(struct bpf_gen *gen, const struct bpf_core_relo *core_relo);
++void bpf_gen__populate_outer_map(struct bpf_gen *gen, int outer_map_idx, int key, int inner_map_idx);
+ 
+ #endif
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 87d385e892ab..ed0e949790da 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -1053,6 +1053,33 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *pvalue,
+ 	emit_check_err(gen);
+ }
+ 
++void bpf_gen__populate_outer_map(struct bpf_gen *gen, int outer_map_idx, int slot,
++				 int inner_map_idx)
++{
++	int attr_size = offsetofend(union bpf_attr, flags);
++	int map_update_attr, key;
++	union bpf_attr attr;
++
++	memset(&attr, 0, attr_size);
++	pr_debug("gen: populate_outer_map: outer %d key %d inner %d\n",
++		 outer_map_idx, slot, inner_map_idx);
++
++	key = add_data(gen, &slot, sizeof(slot));
++
++	map_update_attr = add_data(gen, &attr, attr_size);
++	move_blob2blob(gen, attr_field(map_update_attr, map_fd), 4,
++		       blob_fd_array_off(gen, outer_map_idx));
++	emit_rel_store(gen, attr_field(map_update_attr, key), key);
++	emit_rel_store(gen, attr_field(map_update_attr, value),
++		       blob_fd_array_off(gen, inner_map_idx));
++
++	/* emit MAP_UPDATE_ELEM command */
++	emit_sys_bpf(gen, BPF_MAP_UPDATE_ELEM, map_update_attr, attr_size);
++	debug_ret(gen, "populate_outer_map outer %d key %d inner %d",
++		  outer_map_idx, slot, inner_map_idx);
++	emit_check_err(gen);
++}
++
+ void bpf_gen__map_freeze(struct bpf_gen *gen, int map_idx)
+ {
+ 	int attr_size = offsetofend(union bpf_attr, map_fd);
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9eaf2d9820e6..96792d6e6fc1 100644
+index 831c12e00813..1341ce539662 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -5179,15 +5179,18 @@ static int bpf_core_add_cands(struct bpf_core_cand *local_cand,
- 			      struct bpf_core_cand_list *cands)
- {
- 	struct bpf_core_cand *new_cands, *cand;
--	const struct btf_type *t;
--	const char *targ_name;
-+	const struct btf_type *t, *local_t;
-+	const char *targ_name, *local_name;
- 	size_t targ_essent_len;
- 	int n, i;
+@@ -4971,9 +4971,9 @@ static int init_map_in_map_slots(struct bpf_object *obj, struct bpf_map *map)
+ 		fd = bpf_map__fd(targ_map);
  
-+	local_t = btf__type_by_id(local_cand->btf, local_cand->id);
-+	local_name = btf__str_by_offset(local_cand->btf, local_t->name_off);
-+
- 	n = btf__type_cnt(targ_btf);
- 	for (i = targ_start_id; i < n; i++) {
- 		t = btf__type_by_id(targ_btf, i);
--		if (btf_kind(t) != btf_kind(local_cand->t))
-+		if (btf_kind(t) != btf_kind(local_t))
- 			continue;
- 
- 		targ_name = btf__name_by_offset(targ_btf, t->name_off);
-@@ -5198,12 +5201,12 @@ static int bpf_core_add_cands(struct bpf_core_cand *local_cand,
- 		if (targ_essent_len != local_essent_len)
- 			continue;
- 
--		if (strncmp(local_cand->name, targ_name, local_essent_len) != 0)
-+		if (strncmp(local_name, targ_name, local_essent_len) != 0)
- 			continue;
- 
- 		pr_debug("CO-RE relocating [%d] %s %s: found target candidate [%d] %s %s in [%s]\n",
--			 local_cand->id, btf_kind_str(local_cand->t),
--			 local_cand->name, i, btf_kind_str(t), targ_name,
-+			 local_cand->id, btf_kind_str(local_t),
-+			 local_name, i, btf_kind_str(t), targ_name,
- 			 targ_btf_name);
- 		new_cands = libbpf_reallocarray(cands->cands, cands->len + 1,
- 					      sizeof(*cands->cands));
-@@ -5212,8 +5215,6 @@ static int bpf_core_add_cands(struct bpf_core_cand *local_cand,
- 
- 		cand = &new_cands[cands->len];
- 		cand->btf = targ_btf;
--		cand->t = t;
--		cand->name = targ_name;
- 		cand->id = i;
- 
- 		cands->cands = new_cands;
-@@ -5320,18 +5321,21 @@ bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 l
- 	struct bpf_core_cand local_cand = {};
- 	struct bpf_core_cand_list *cands;
- 	const struct btf *main_btf;
-+	const struct btf_type *local_t;
-+	const char *local_name;
- 	size_t local_essent_len;
- 	int err, i;
- 
- 	local_cand.btf = local_btf;
--	local_cand.t = btf__type_by_id(local_btf, local_type_id);
--	if (!local_cand.t)
-+	local_cand.id = local_type_id;
-+	local_t = btf__type_by_id(local_btf, local_type_id);
-+	if (!local_t)
- 		return ERR_PTR(-EINVAL);
- 
--	local_cand.name = btf__name_by_offset(local_btf, local_cand.t->name_off);
--	if (str_is_empty(local_cand.name))
-+	local_name = btf__name_by_offset(local_btf, local_t->name_off);
-+	if (str_is_empty(local_name))
- 		return ERR_PTR(-EINVAL);
--	local_essent_len = bpf_core_essential_name_len(local_cand.name);
-+	local_essent_len = bpf_core_essential_name_len(local_name);
- 
- 	cands = calloc(1, sizeof(*cands));
- 	if (!cands)
-diff --git a/tools/lib/bpf/relo_core.h b/tools/lib/bpf/relo_core.h
-index f410691cc4e5..4f864b8e33b7 100644
---- a/tools/lib/bpf/relo_core.h
-+++ b/tools/lib/bpf/relo_core.h
-@@ -8,8 +8,6 @@
- 
- struct bpf_core_cand {
- 	const struct btf *btf;
--	const struct btf_type *t;
--	const char *name;
- 	__u32 id;
- };
- 
+ 		if (obj->gen_loader) {
+-			pr_warn("// TODO map_update_elem: idx %td key %d value==map_idx %td\n",
+-				map - obj->maps, i, targ_map - obj->maps);
+-			return -ENOTSUP;
++			bpf_gen__populate_outer_map(obj->gen_loader,
++						    map - obj->maps, i,
++						    targ_map - obj->maps);
+ 		} else {
+ 			err = bpf_map_update_elem(map->fd, &i, &fd, 0);
+ 		}
 -- 
 2.30.2
 
