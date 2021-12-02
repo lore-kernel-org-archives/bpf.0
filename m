@@ -2,367 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C47EFC433FE
-	for <bpf@archiver.kernel.org>; Thu,  2 Dec 2021 00:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6F4AC433F5
+	for <bpf@archiver.kernel.org>; Thu,  2 Dec 2021 01:01:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354019AbhLBAHu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Dec 2021 19:07:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51377 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353970AbhLBAHc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 1 Dec 2021 19:07:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638403446;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=06j+7gHempL9IdsXmq8SYxnXXYon7FIwMCRzsyscV9A=;
-        b=Z5O3dji6OGSEBC/J+YS8qQaU/P5E1sgO9IN8XNc9SMcFXSZb0eFgNYRVKWv8dXrGWGGb+D
-        vkQMBt1gUHzoUgVpNT5omFAKNnM8VOc3Y5BJkFXJy12YKc0eBl1pM1AwAYu1BALDtxqfkw
-        rgLWWrThQwlUYXkhe57Edd6TVJcn5dw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-277-f5nk1WIoN6S5DpJVv3n5Og-1; Wed, 01 Dec 2021 19:04:05 -0500
-X-MC-Unique: f5nk1WIoN6S5DpJVv3n5Og-1
-Received: by mail-ed1-f72.google.com with SMTP id m12-20020a056402430c00b003e9f10bbb7dso21819810edc.18
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 16:04:04 -0800 (PST)
+        id S234053AbhLBBFI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Dec 2021 20:05:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232366AbhLBBFH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Dec 2021 20:05:07 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C41DC061574
+        for <bpf@vger.kernel.org>; Wed,  1 Dec 2021 17:01:46 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id f186so68592390ybg.2
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 17:01:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=pNq/j1Bm8IV0LlBYNBG1hyGx+nyGBOW5XMLtrMtLJh4=;
+        b=OClEfBdvODItKj7L3YC7gwK0/r9Q96VxEWq9pkuxdz9xhdqhc/soXTQ6fnlyowjV3o
+         kSGA7fOy2kk3dfPdVG/WrBu3s8M2FqNHNNCwvWHchWbnmT+msoaNdFIyunuFdhbiVmI2
+         LNTLVoUUtVW9rOgpDSlfzgv57lNmJlPX66U9I4crc/DuzqWkgae3GiFum/7yQ51RgW4k
+         V22dmwmgAbY2z0UChZa4G+5pIfuqau3cz6bXPu6cDC4TmUui8Bfte0MxlQkOOf9Ee8OR
+         aG007mxiEDMKZbZbBQ0d2HtDSzz3C4YdEJIjgZwn/ZGse8ZVTKfSd+XJpOtGI83WUsZ8
+         nmSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=06j+7gHempL9IdsXmq8SYxnXXYon7FIwMCRzsyscV9A=;
-        b=C9lcdkJD/1znGCgRyUxKEgDS26U/XINs7hA/Qj2OcwgikwSWNHhAd4G7ygoObAiiOX
-         pNpyDz9PuJjUVEKSRozl+z1rb8iRlgeC5dbjku8B+6xwlna79JMgLPCdwSbWaw08iK0L
-         lLTcUde8TbTjIdFUiwifTL2iWQFfP/sIjL9lrIYGbLgWd6A/Lio1vIhFT7XdBN2T4OON
-         H+KXVvndFx7q6d0pzqNI70ulwmJtInbfgdqXw94OIhe9mURMcKNhjV2qDD7hCtWFGpcm
-         Wk+FR3+u1jAMEuayBww6HZiRdj4V/GU0HKoP+jymEpRC1d1Jwc4+x9TyU/jLoP8rLq8K
-         z84w==
-X-Gm-Message-State: AOAM530eCBxVOx72Z8eUxuGHwA21hh0sGa64phKheoaLGV9ZtPADerj8
-        CXqsfw4QqxKQWu8KIc38Ije9HwJtEZPyIx3cZlUPiWyixBoAlXmp/hFUjgXUoqhvp3JgC5hJpFp
-        cKqQcYlxXfsxS
-X-Received: by 2002:a17:907:98f6:: with SMTP id ke22mr10821017ejc.500.1638403442844;
-        Wed, 01 Dec 2021 16:04:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJypRXYfDUMPmfyC6INng9VHJzWhJNLcJcTPchSayKiWEbCjbfpmDg8y84uQUhPFeoqDYWOmIA==
-X-Received: by 2002:a17:907:98f6:: with SMTP id ke22mr10820911ejc.500.1638403441890;
-        Wed, 01 Dec 2021 16:04:01 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id c8sm744776edu.60.2021.12.01.16.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 16:04:01 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5190A1802A0; Thu,  2 Dec 2021 01:03:59 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 4/8] xdp: Move conversion to xdp_frame out of map functions
-Date:   Thu,  2 Dec 2021 01:02:25 +0100
-Message-Id: <20211202000232.380824-5-toke@redhat.com>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211202000232.380824-1-toke@redhat.com>
-References: <20211202000232.380824-1-toke@redhat.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=pNq/j1Bm8IV0LlBYNBG1hyGx+nyGBOW5XMLtrMtLJh4=;
+        b=x6W2ttnyVppFmW550YsrUR94dPvQA0XiaeGYCEEIwR2NcRPH3ekXaymYQcaFykthTX
+         dLNoWIgWkICsIPePwKu6m8r3Xuz6YjnJF2tvofsDOIFUMXxtUgJLrEtd70rvpkxO2vhc
+         mI0x7UZHCg40CPtH+NU7cGXyZDYgiMK8GNmTts/Md02ZFL5kZ5iSRzPhzyIaLBPo83sC
+         rgZmXIL63B5UmbCAymZq7yC0jaPj2AnoFj3r+5pyh4DhLkhdAoyjJKmSWDSX6GgxusMK
+         c/hysOSbieZE+i5kYqKoLlP4CSDGKndVzC085vWAq3Yc9W9OBfa+ci/rp3QOO3ze7Hnr
+         kSVQ==
+X-Gm-Message-State: AOAM533CjoUdebVOkkeQonDTHNA0Zb+6Sc6O68PgBMwyZJqyH944fVY8
+        o/Rt1gAHmj7yU3QjX/hmKEUsOd7TPkv1ub8R+HQpOM6txPQ=
+X-Google-Smtp-Source: ABdhPJxS90KCz+v6q002hMBre7lvcGRMaKgjw5hpF2NL8olG/UIgjyWGaIy3BF3PSVGbE0eyPVwcfWbn1G1LSaB2Xho=
+X-Received: by 2002:a25:2c92:: with SMTP id s140mr11315228ybs.308.1638406904936;
+ Wed, 01 Dec 2021 17:01:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 1 Dec 2021 17:01:33 -0800
+Message-ID: <CAEf4BzZS02bE+qZfmOP-DqyRsLMxXjePs+DsT_i5wtO6J6eW+w@mail.gmail.com>
+Subject: [ANNOUNCEMENT] libbpf v0.6 release
+To:     bpf <bpf@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        grantseltzer <grantseltzer@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-All map redirect functions except XSK maps convert xdp_buff to xdp_frame
-before enqueueing it. So move this conversion of out the map functions
-and into xdp_do_redirect(). This removes a bit of duplicated code, but more
-importantly it makes it possible to support caller-allocated xdp_frame
-structures, which will be added in a subsequent commit.
+libbpf v0.6 was just released ([0]). This is a pretty big release with
+both new features and a whole bunch of API deprecations and clean ups.
+So please take a look and give it a try! And please report any issues
+and bugs we might have missed during preparation of this release.
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/linux/bpf.h | 20 ++++++++++----------
- kernel/bpf/cpumap.c |  8 +-------
- kernel/bpf/devmap.c | 32 +++++++++++---------------------
- net/core/filter.c   | 23 +++++++++++++++++------
- 4 files changed, 39 insertions(+), 44 deletions(-)
+I'd like to also call out the documentation effort started by Grant
+Seltzer. Thank you! I encourage everyone to contribute to this effort
+so that the libbpf v1.0 release documentation is in a great shape.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cad0829710be..cd756294446f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1621,17 +1621,17 @@ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
- struct btf *bpf_get_btf_vmlinux(void);
- 
- /* Map specifics */
--struct xdp_buff;
-+struct xdp_frame;
- struct sk_buff;
- struct bpf_dtab_netdev;
- struct bpf_cpu_map_entry;
- 
- void __dev_flush(void);
--int dev_xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-+int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx);
--int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
-+int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx);
--int dev_map_enqueue_multi(struct xdp_buff *xdp, struct net_device *dev_rx,
-+int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
- 			  struct bpf_map *map, bool exclude_ingress);
- int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
- 			     struct bpf_prog *xdp_prog);
-@@ -1640,7 +1640,7 @@ int dev_map_redirect_multi(struct net_device *dev, struct sk_buff *skb,
- 			   bool exclude_ingress);
- 
- void __cpu_map_flush(void);
--int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_buff *xdp,
-+int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx);
- int cpu_map_generic_redirect(struct bpf_cpu_map_entry *rcpu,
- 			     struct sk_buff *skb);
-@@ -1810,26 +1810,26 @@ static inline void __dev_flush(void)
- {
- }
- 
--struct xdp_buff;
-+struct xdp_frame;
- struct bpf_dtab_netdev;
- struct bpf_cpu_map_entry;
- 
- static inline
--int dev_xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-+int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx)
- {
- 	return 0;
- }
- 
- static inline
--int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
-+int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx)
- {
- 	return 0;
- }
- 
- static inline
--int dev_map_enqueue_multi(struct xdp_buff *xdp, struct net_device *dev_rx,
-+int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
- 			  struct bpf_map *map, bool exclude_ingress)
- {
- 	return 0;
-@@ -1857,7 +1857,7 @@ static inline void __cpu_map_flush(void)
- }
- 
- static inline int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu,
--				  struct xdp_buff *xdp,
-+				  struct xdp_frame *xdpf,
- 				  struct net_device *dev_rx)
- {
- 	return 0;
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 585b2b77ccc4..12798b2c68d9 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -746,15 +746,9 @@ static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf)
- 		list_add(&bq->flush_node, flush_list);
- }
- 
--int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_buff *xdp,
-+int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx)
- {
--	struct xdp_frame *xdpf;
--
--	xdpf = xdp_convert_buff_to_frame(xdp);
--	if (unlikely(!xdpf))
--		return -EOVERFLOW;
--
- 	/* Info needed when constructing SKB on remote CPU */
- 	xdpf->dev_rx = dev_rx;
- 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index f02d04540c0c..f29f439fac76 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -467,24 +467,19 @@ static void bq_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
- 	bq->q[bq->count++] = xdpf;
- }
- 
--static inline int __xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-+static inline int __xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
- 				struct net_device *dev_rx,
- 				struct bpf_prog *xdp_prog)
- {
--	struct xdp_frame *xdpf;
- 	int err;
- 
- 	if (!dev->netdev_ops->ndo_xdp_xmit)
- 		return -EOPNOTSUPP;
- 
--	err = xdp_ok_fwd_dev(dev, xdp->data_end - xdp->data);
-+	err = xdp_ok_fwd_dev(dev, xdpf->len);
- 	if (unlikely(err))
- 		return err;
- 
--	xdpf = xdp_convert_buff_to_frame(xdp);
--	if (unlikely(!xdpf))
--		return -EOVERFLOW;
--
- 	bq_enqueue(dev, xdpf, dev_rx, xdp_prog);
- 	return 0;
- }
-@@ -520,27 +515,27 @@ static u32 dev_map_bpf_prog_run_skb(struct sk_buff *skb, struct bpf_dtab_netdev
- 	return act;
- }
- 
--int dev_xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-+int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx)
- {
--	return __xdp_enqueue(dev, xdp, dev_rx, NULL);
-+	return __xdp_enqueue(dev, xdpf, dev_rx, NULL);
- }
- 
--int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
-+int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
- 		    struct net_device *dev_rx)
- {
- 	struct net_device *dev = dst->dev;
- 
--	return __xdp_enqueue(dev, xdp, dev_rx, dst->xdp_prog);
-+	return __xdp_enqueue(dev, xdpf, dev_rx, dst->xdp_prog);
- }
- 
--static bool is_valid_dst(struct bpf_dtab_netdev *obj, struct xdp_buff *xdp)
-+static bool is_valid_dst(struct bpf_dtab_netdev *obj, struct xdp_frame *xdpf)
- {
- 	if (!obj ||
- 	    !obj->dev->netdev_ops->ndo_xdp_xmit)
- 		return false;
- 
--	if (xdp_ok_fwd_dev(obj->dev, xdp->data_end - xdp->data))
-+	if (xdp_ok_fwd_dev(obj->dev, xdpf->len))
- 		return false;
- 
- 	return true;
-@@ -586,14 +581,13 @@ static int get_upper_ifindexes(struct net_device *dev, int *indexes)
- 	return n;
- }
- 
--int dev_map_enqueue_multi(struct xdp_buff *xdp, struct net_device *dev_rx,
-+int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
- 			  struct bpf_map *map, bool exclude_ingress)
- {
- 	struct bpf_dtab *dtab = container_of(map, struct bpf_dtab, map);
- 	struct bpf_dtab_netdev *dst, *last_dst = NULL;
- 	int excluded_devices[1+MAX_NEST_DEV];
- 	struct hlist_head *head;
--	struct xdp_frame *xdpf;
- 	int num_excluded = 0;
- 	unsigned int i;
- 	int err;
-@@ -603,15 +597,11 @@ int dev_map_enqueue_multi(struct xdp_buff *xdp, struct net_device *dev_rx,
- 		excluded_devices[num_excluded++] = dev_rx->ifindex;
- 	}
- 
--	xdpf = xdp_convert_buff_to_frame(xdp);
--	if (unlikely(!xdpf))
--		return -EOVERFLOW;
--
- 	if (map->map_type == BPF_MAP_TYPE_DEVMAP) {
- 		for (i = 0; i < map->max_entries; i++) {
- 			dst = rcu_dereference_check(dtab->netdev_map[i],
- 						    rcu_read_lock_bh_held());
--			if (!is_valid_dst(dst, xdp))
-+			if (!is_valid_dst(dst, xdpf))
- 				continue;
- 
- 			if (is_ifindex_excluded(excluded_devices, num_excluded, dst->dev->ifindex))
-@@ -634,7 +624,7 @@ int dev_map_enqueue_multi(struct xdp_buff *xdp, struct net_device *dev_rx,
- 			head = dev_map_index_hash(dtab, i);
- 			hlist_for_each_entry_rcu(dst, head, index_hlist,
- 						 lockdep_is_held(&dtab->index_lock)) {
--				if (!is_valid_dst(dst, xdp))
-+				if (!is_valid_dst(dst, xdpf))
- 					continue;
- 
- 				if (is_ifindex_excluded(excluded_devices, num_excluded,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index fe27c91e3758..1e86130a913a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3964,12 +3964,24 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 	enum bpf_map_type map_type = ri->map_type;
- 	void *fwd = ri->tgt_value;
- 	u32 map_id = ri->map_id;
-+	struct xdp_frame *xdpf;
- 	struct bpf_map *map;
- 	int err;
- 
- 	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
- 	ri->map_type = BPF_MAP_TYPE_UNSPEC;
- 
-+	if (map_type == BPF_MAP_TYPE_XSKMAP) {
-+		err = __xsk_map_redirect(fwd, xdp);
-+		goto out;
-+	}
-+
-+	xdpf = xdp_convert_buff_to_frame(xdp);
-+	if (unlikely(!xdpf)) {
-+		err = -EOVERFLOW;
-+		goto err;
-+	}
-+
- 	switch (map_type) {
- 	case BPF_MAP_TYPE_DEVMAP:
- 		fallthrough;
-@@ -3977,17 +3989,15 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 		map = READ_ONCE(ri->map);
- 		if (unlikely(map)) {
- 			WRITE_ONCE(ri->map, NULL);
--			err = dev_map_enqueue_multi(xdp, dev, map,
-+			err = dev_map_enqueue_multi(xdpf, dev, map,
- 						    ri->flags & BPF_F_EXCLUDE_INGRESS);
- 		} else {
--			err = dev_map_enqueue(fwd, xdp, dev);
-+			err = dev_map_enqueue(fwd, xdpf, dev);
- 		}
- 		break;
- 	case BPF_MAP_TYPE_CPUMAP:
--		err = cpu_map_enqueue(fwd, xdp, dev);
-+		err = cpu_map_enqueue(fwd, xdpf, dev);
- 		break;
--	case BPF_MAP_TYPE_XSKMAP:
--		err = __xsk_map_redirect(fwd, xdp);
- 		break;
- 	case BPF_MAP_TYPE_UNSPEC:
- 		if (map_id == INT_MAX) {
-@@ -3996,7 +4006,7 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 				err = -EINVAL;
- 				break;
- 			}
--			err = dev_xdp_enqueue(fwd, xdp, dev);
-+			err = dev_xdp_enqueue(fwd, xdpf, dev);
- 			break;
- 		}
- 		fallthrough;
-@@ -4004,6 +4014,7 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 		err = -EBADRQC;
- 	}
- 
-+out:
- 	if (unlikely(err))
- 		goto err;
- 
--- 
-2.34.0
+Thanks a lot to all the contributors sending fixes and new features
+and all the users asking and answering libbpf and BPF questions,
+adopting and testing libbpf, and overall improving the BPF ecosystem!
 
+## Important updates towards Libbpf 1.0
+  - a first big batch of deprecated APIs; compiler will let you know
+or grep for "LIBBPF_DEPRECATED". Please also double-check
+https://github.com/libbpf/libbpf/wiki/Libbpf-1.0-migration-guide.
+  - documentation for a bunch of APIs added, available on
+https://libbpf.readthedocs.io/en/latest/api.html;
+  - libbpf version APIs added: compile-time
+`LIBBPF_MAJOR_VERSION`/`LIBBPF_MINOR_VERSION` and runtime
+`libbpf_major_version()`/`libbpf_minor_version()`/`libbpf_version_string()`;
+  - stricter logic for `SEC()` definition handling (opt-in until
+libbpf v1.0); see
+https://github.com/libbpf/libbpf/wiki/Libbpf:-the-road-to-v1.0#stricter-and-more-uniform-bpf-program-section-name-sec-handling
+for details.
+  - function name will be used when pinning if
+`LIBBPF_STRICT_SEC_NAME` strict mode flag is specified;
+
+## New features and APIs:
+  - support custom `.rodata.*` and `.data.*` data sections;
+  - `bpf_program__attach_kprobe()` and `bpf_program__attach_uprobe()`
+supports older kernels now (don't forget about `bpf_link__destroy()`
+when you are done!);
+  - `BPF_MAP_TYPE_PROG_ARRAY` can be initialized statically with
+syntax similar to map-in-map initialization (see
+https://github.com/libbpf/libbpf/commit/472c0726e84d821186a315889c885b23895b155e
+for an example);
+  - libbpf-less "light" skeleton gained new capabilities and got a
+bunch of fixes;
+  - BTF support for `BTF_KIND_DECL_TAG` and `BTF_KIND_TYPE_TAG`;
+  - new `bpf_prog_load()` and `bpf_map_create()` APIs supersede a
+whole zoo of to-be-deprecated APIs;
+  - support for writable raw tracepoints (`SEC("raw_tp.w/...")`) added;
+  - `btf__add_btf()` API for appending entire contents of BTF to
+another BTF object;
+  - `bpf_program__insns()` and `bpf_program__insn_cnt()` to access
+underlying BPF assembly instructions; can be used for inspection or
+BPF program cloning.
+  - a bunch of older APIs (`perf_buffer__new()`, `btf__dedup()`,
+`btf_dump__new()`, etc) were modernized to use OPTS infrastructure.
+
+## BPF-side APIs and features:
+  - unstable BPF helpers (kernel function calls) support for kernel modules;
+  - `bpf_trace_vprintk()` helper and corresponding `bpf_printk()`
+macro enhancements. Note, `bpf_printk()` will now attempt to use
+static global functions, so on very old kernels this might break
+existing programs. Please `#define BPF_NO_GLOBAL_DATA` before
+`#include <bpf/bpf_helpers.h>` if that's the case for you.
+  - `bpf_get_branch_snapshot()` helper;
+  - `bpf_skc_to_unix_sock()` helper;
+  - `bpf_find_vma()` helper;
+  - `SEC("tc")` added as a replacement for `SEC("classifier")`.
+
+## Bug fixes and compatibility improvements:
+  - libbpf now guarantees that all FDs for BPF programs, maps, BTFs,
+and links are strictly greater than 0, which is important for some BPF
+UAPIs;
+  - no need to use `__uint(key_size, ...)` for special BPF maps (e.g.,
+`BPF_MAP_PERF_EVENT_ARRAY`). Libbpf automatically downgrades
+`__type(key, int)` into key_size, if a map doesn't support BTF types
+for keys and values;
+  - endianness fixes in `BPF_CORE_READ_BITFIELD_PROBED()` macro;
+  - `btf_dump__dump_type_data()` improvements for handling unaligned data;
+  - various fixes and improvements found though fuzzing and sanitizers.
+
+**Full Changelog**: https://github.com/libbpf/libbpf/compare/v0.5.0...v0.6.0
+
+  [0] https://github.com/libbpf/libbpf/releases/tag/v0.6.0
+
+-- Andrii
