@@ -2,74 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54DC7C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE5BFC4332F
 	for <bpf@archiver.kernel.org>; Thu,  2 Dec 2021 00:04:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353996AbhLBAHp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Dec 2021 19:07:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42363 "EHLO
+        id S1354073AbhLBAHq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Dec 2021 19:07:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51587 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354078AbhLBAHc (ORCPT
+        by vger.kernel.org with ESMTP id S1354091AbhLBAHc (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 1 Dec 2021 19:07:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638403447;
+        s=mimecast20190719; t=1638403445;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HeYVFn3C/kHLoloeDuy+DYyyuZygKIHXuCGMV5j00so=;
-        b=dsZhx2YBoSsLcfeXi/O565XNTZxvUKTck3dsV2e4ok1DziSYUldq21viULmssHnMV4HRVL
-        wQYYlIhzWRwkqOJ261RqbeiNNZoYDVUHVQr7cHKkHi75KE8AMGmuV9Q8UswNY2o2DndRcC
-        65s674n7JjKkC3/D0xaNsEiYCfiTjIU=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=2W/44qFKQfDTqcBT48p2Uxe3qzLn64OCXa3a4zfm4NU=;
+        b=cd90q82GGK2DRuzC1vpEyq2JgCZvGR3umY3YstBva6aP/uF4xLpZz2C3IBnhCmHz5dR+Im
+        qnBO8R00VSRRtZ3w8x72QcF0k9SqGwNEUpNNGh5D0j39LtxPd6ZOUCCFTJK9LZPd7Ohug+
+        kWXi1Us8nYoU/0P5r7dQscwxnjnb9Ls=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-149-qWzmnLRMPauaICgb-PReRw-1; Wed, 01 Dec 2021 19:04:06 -0500
-X-MC-Unique: qWzmnLRMPauaICgb-PReRw-1
-Received: by mail-ed1-f72.google.com with SMTP id eg20-20020a056402289400b003eb56fcf6easo21746649edb.20
-        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 16:04:06 -0800 (PST)
+ us-mta-497-qgwGnaZXNDmNKq8vEKzTHg-1; Wed, 01 Dec 2021 19:04:04 -0500
+X-MC-Unique: qgwGnaZXNDmNKq8vEKzTHg-1
+Received: by mail-ed1-f71.google.com with SMTP id s12-20020a50ab0c000000b003efdf5a226fso15666414edc.10
+        for <bpf@vger.kernel.org>; Wed, 01 Dec 2021 16:04:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HeYVFn3C/kHLoloeDuy+DYyyuZygKIHXuCGMV5j00so=;
-        b=HRjE1PQrC9WAjvEpkkvZL+m0J1+jYTniVGyzkMjyfwM4hvVr6AiMya3c7rWRD69pCY
-         z4tl2cs84BKKeoH8Q3Ynwyl71DkY44l/qOr2w53W77KUlM3m3XwpoE091AiMXE00nbuT
-         XRoXdoTPJry1iei9Gg6GyfGXIBPmiMdzGRlZs3MsIi0R/7jjTiM0guFF7hWa/YsddAFw
-         aQhw3LjUaf/H+3hd6FYfgVrpKkoWqZ8m2sg/1W3pNO3SsIygXq0MR1SvgF/TeavkbFXh
-         IvfKjuCmoBMkP7LWoLUn2qDGJNYkWWfFlwiInADxGTaJuhke9atUbagloUljeARrE7JQ
-         46qA==
-X-Gm-Message-State: AOAM531+EGHbiw+ionAlfAJ8d34ukBTPCV5YxiGBDq8Tm6HxjM5dtSNj
-        NUfH6k66KIDpjhdVs6BHpk4vwBho1igkCs99msQkIL9s36SyNndEXAsN1xrPlLfIOSejbgx6epr
-        T6R6I+6QYVftN
-X-Received: by 2002:a05:6402:3551:: with SMTP id f17mr12489402edd.129.1638403445485;
-        Wed, 01 Dec 2021 16:04:05 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyeJBPV+unSKdbOtAmXJoB0/EgM0fv5RUBXQLvMLIVG5oNj32Uxu53MfmcDbzk7sEbsJk/8Mw==
-X-Received: by 2002:a05:6402:3551:: with SMTP id f17mr12489354edd.129.1638403445214;
-        Wed, 01 Dec 2021 16:04:05 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id m25sm739413edj.80.2021.12.01.16.04.04
+        bh=2W/44qFKQfDTqcBT48p2Uxe3qzLn64OCXa3a4zfm4NU=;
+        b=IkRSbyRXxRWQvfShJvGzIsBw0Nqj1Pk2nWBOkf36A5S874X4p/scn90iIbsqlh39Wl
+         5brd9+7oU4OBEVTVyfvAu05RfFbiKL7WxjnfIiNMdBcJYWgzxLbOZf5Gdg9bxrgOY40r
+         2Sl6lGNNN/Z82ATc0H9NqagAcwA3x/iqd/kYc/KBB8oJHRACGcCjuAxLPs5UbRYjXq21
+         ChwYqoxT4DbctXCms44Pr78OwQfVcmywjFLLC5CRpIZD76JJj5CRTmYdznPrYZHP4X+a
+         yICkRhkR2+owDxxUhgnkGQlNn2bPSuS+2sQE4KtKZKYChYDRsvONQLFk+queONjOZVer
+         MZxw==
+X-Gm-Message-State: AOAM533m6vAW+D5SKIwKKDbCV14Bwc0OEctTdj6FuqNZpdTJqb6rhRVh
+        /fmddAhMMojWOoNJrYyrJLA1mOuY430LmN7+KNFLyOLb+1+rWCS/EA5xa3f0pjXMHw3qG2q6fMx
+        TTEmMmdGVHiDz
+X-Received: by 2002:aa7:cd99:: with SMTP id x25mr13243269edv.249.1638403442822;
+        Wed, 01 Dec 2021 16:04:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwaREVZ/SRhsyoyTktsxFg17mRvv7Dgk0J4972XycW57VidbMbXnUBgWi8xHahFE5RWUaaZjA==
+X-Received: by 2002:aa7:cd99:: with SMTP id x25mr13243161edv.249.1638403442070;
+        Wed, 01 Dec 2021 16:04:02 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id w5sm802906edc.58.2021.12.01.16.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 16:04:04 -0800 (PST)
+        Wed, 01 Dec 2021 16:04:01 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 126401802A0; Thu,  2 Dec 2021 01:04:04 +0100 (CET)
+        id B11C31802A2; Thu,  2 Dec 2021 01:04:00 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf-next 7/8] selftests/bpf: Add selftest for XDP_REDIRECT in bpf_prog_run()
-Date:   Thu,  2 Dec 2021 01:02:28 +0100
-Message-Id: <20211202000232.380824-8-toke@redhat.com>
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next 5/8] xdp: add xdp_do_redirect_frame() for pre-computed xdp_frames
+Date:   Thu,  2 Dec 2021 01:02:26 +0100
+Message-Id: <20211202000232.380824-6-toke@redhat.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211202000232.380824-1-toke@redhat.com>
 References: <20211202000232.380824-1-toke@redhat.com>
@@ -80,138 +79,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds a selftest for the XDP_REDIRECT facility in bpf_prog_run, that
-redirects packets into a veth and counts them using an XDP program on the
-other side of the veth pair.
+Add an xdp_do_redirect_frame() variant which supports pre-computed
+xdp_frame structures. This will be used in bpf_prog_run() to avoid having
+to write to the xdp_frame structure when the XDP program doesn't modify the
+frame boundaries.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- .../bpf/prog_tests/xdp_do_redirect.c          | 74 +++++++++++++++++++
- .../bpf/progs/test_xdp_do_redirect.c          | 34 +++++++++
- 2 files changed, 108 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+ include/linux/filter.h |  4 ++++
+ net/core/filter.c      | 28 +++++++++++++++++++++-------
+ 2 files changed, 25 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-new file mode 100644
-index 000000000000..c2effcf076a6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include <net/if.h>
-+#include "test_xdp_do_redirect.skel.h"
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index b6a216eb217a..845452c83e0f 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1022,6 +1022,10 @@ int xdp_do_generic_redirect(struct net_device *dev, struct sk_buff *skb,
+ int xdp_do_redirect(struct net_device *dev,
+ 		    struct xdp_buff *xdp,
+ 		    struct bpf_prog *prog);
++int xdp_do_redirect_frame(struct net_device *dev,
++			  struct xdp_buff *xdp,
++			  struct xdp_frame *xdpf,
++			  struct bpf_prog *prog);
+ void xdp_do_flush(void);
+ 
+ /* The xdp_do_flush_map() helper has been renamed to drop the _map suffix, as
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 1e86130a913a..d8fe74cc8b66 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3957,14 +3957,13 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+ }
+ EXPORT_SYMBOL_GPL(xdp_master_redirect);
+ 
+-int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+-		    struct bpf_prog *xdp_prog)
++static int __xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
++			     struct xdp_frame *xdpf, struct bpf_prog *xdp_prog)
+ {
+ 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+ 	enum bpf_map_type map_type = ri->map_type;
+ 	void *fwd = ri->tgt_value;
+ 	u32 map_id = ri->map_id;
+-	struct xdp_frame *xdpf;
+ 	struct bpf_map *map;
+ 	int err;
+ 
+@@ -3976,10 +3975,12 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 		goto out;
+ 	}
+ 
+-	xdpf = xdp_convert_buff_to_frame(xdp);
+-	if (unlikely(!xdpf)) {
+-		err = -EOVERFLOW;
+-		goto err;
++	if (!xdpf) {
++		xdpf = xdp_convert_buff_to_frame(xdp);
++		if (unlikely(!xdpf)) {
++			err = -EOVERFLOW;
++			goto err;
++		}
+ 	}
+ 
+ 	switch (map_type) {
+@@ -4024,8 +4025,21 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
+ 	return err;
+ }
 +
-+#define SYS(fmt, ...)						\
-+	({							\
-+		char cmd[1024];					\
-+		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
-+		if (!ASSERT_OK(system(cmd), cmd))		\
-+			goto fail;				\
-+	})
-+
-+#define NUM_PKTS 10
-+void test_xdp_do_redirect(void)
++int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
++		    struct bpf_prog *xdp_prog)
 +{
-+	struct test_xdp_do_redirect *skel = NULL;
-+	struct ipv6_packet data = pkt_v6;
-+	struct xdp_md ctx_in = { .data_end = sizeof(data) };
-+	__u8 dst_mac[ETH_ALEN] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
-+	__u8 src_mac[ETH_ALEN] = {0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &data,
-+			    .data_size_in = sizeof(data),
-+			    .ctx_in = &ctx_in,
-+			    .ctx_size_in = sizeof(ctx_in),
-+			    .flags = BPF_F_TEST_XDP_DO_REDIRECT,
-+			    .repeat = NUM_PKTS,
-+		);
-+	int err, prog_fd, ifindex_src, ifindex_dst;
-+	struct bpf_link *link;
-+
-+	memcpy(data.eth.h_dest, dst_mac, ETH_ALEN);
-+	memcpy(data.eth.h_source, src_mac, ETH_ALEN);
-+
-+	skel = test_xdp_do_redirect__open();
-+	if (!ASSERT_OK_PTR(skel, "skel"))
-+		return;
-+
-+	SYS("ip link add veth_src type veth peer name veth_dst");
-+	SYS("ip link set dev veth_src up");
-+	SYS("ip link set dev veth_dst up");
-+
-+	ifindex_src = if_nametoindex("veth_src");
-+	ifindex_dst = if_nametoindex("veth_dst");
-+	if (!ASSERT_NEQ(ifindex_src, 0, "ifindex_src") ||
-+	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
-+		goto fail;
-+
-+	memcpy(skel->rodata->expect_dst, dst_mac, ETH_ALEN);
-+	skel->rodata->ifindex_out = ifindex_src;
-+
-+	if (!ASSERT_OK(test_xdp_do_redirect__load(skel), "load"))
-+		goto fail;
-+
-+	link = bpf_program__attach_xdp(skel->progs.xdp_count_pkts, ifindex_dst);
-+	if (!ASSERT_OK_PTR(link, "prog_attach"))
-+		goto fail;
-+	skel->links.xdp_count_pkts = link;
-+
-+	prog_fd = bpf_program__fd(skel->progs.xdp_redirect_notouch);
-+	err = bpf_prog_test_run_opts(prog_fd, &opts);
-+	if (!ASSERT_OK(err, "prog_run"))
-+		goto fail;
-+
-+	/* wait for the packets to be flushed */
-+	kern_sync_rcu();
-+
-+	ASSERT_EQ(skel->bss->pkts_seen, NUM_PKTS, "pkt_count");
-+fail:
-+	system("ip link del dev veth_src");
-+	test_xdp_do_redirect__destroy(skel);
++	return __xdp_do_redirect(dev, xdp, NULL, xdp_prog);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-new file mode 100644
-index 000000000000..254ebf523f37
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define ETH_ALEN 6
-+const volatile int ifindex_out;
-+const volatile __u8 expect_dst[ETH_ALEN];
-+volatile int pkts_seen = 0;
-+
-+SEC("xdp")
-+int xdp_redirect_notouch(struct xdp_md *xdp)
+ EXPORT_SYMBOL_GPL(xdp_do_redirect);
+ 
++int xdp_do_redirect_frame(struct net_device *dev, struct xdp_buff *xdp,
++			  struct xdp_frame *xdpf, struct bpf_prog *xdp_prog)
 +{
-+	return bpf_redirect(ifindex_out, 0);
++	return __xdp_do_redirect(dev, xdp, xdpf, xdp_prog);
 +}
++EXPORT_SYMBOL_GPL(xdp_do_redirect_frame);
 +
-+SEC("xdp")
-+int xdp_count_pkts(struct xdp_md *xdp)
-+{
-+	void *data = (void *)(long)xdp->data;
-+	void *data_end = (void *)(long)xdp->data_end;
-+	struct ethhdr *eth = data;
-+	int i;
-+
-+	if (eth + 1 > data_end)
-+		return XDP_ABORTED;
-+
-+	for (i = 0; i < ETH_ALEN; i++)
-+		if (expect_dst[i] != eth->h_dest[i])
-+			return XDP_ABORTED;
-+	pkts_seen++;
-+	return XDP_DROP;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ static int xdp_do_generic_redirect_map(struct net_device *dev,
+ 				       struct sk_buff *skb,
+ 				       struct xdp_buff *xdp,
 -- 
 2.34.0
 
