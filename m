@@ -2,121 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DC40C433F5
-	for <bpf@archiver.kernel.org>; Fri,  3 Dec 2021 22:20:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCECC433FE
+	for <bpf@archiver.kernel.org>; Fri,  3 Dec 2021 23:00:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353969AbhLCWYE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 3 Dec 2021 17:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S1359667AbhLCXDe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 3 Dec 2021 18:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353945AbhLCWYE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Dec 2021 17:24:04 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F61C061751;
-        Fri,  3 Dec 2021 14:20:40 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id np3so3345185pjb.4;
-        Fri, 03 Dec 2021 14:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yL7RKkkwc77P9ncxY65Uf0b3dLn3VOdzIJznqDCTPWw=;
-        b=LZy58+s7rxrkEbEGW3TafumF64IqxWDPFctiglxc+jUx3+1G0B4laet8osfwgUwcjc
-         HwsMk4woSPoiALAvldcda56uP3ff2s0n4nZii7zaTA8la/EgNoHVqG9Loegd246pCqte
-         +LE2q28fjY+zNeXolnz1IHCJCcn59Rrpk2mgHvb0ylStt/WI4ao6gnqJ0gpL3wYcu5/v
-         IfDB7LWNLS2NkpBJfx39n6rlbY0GyLSRsKfcsoBEH/IGR/YDO8apQVgTPjN8KP6pOl6p
-         dqWTn4j0ujtmX25jvm0M2nCAzwOAzwtxN+ptbyOaOUNdvA9zfuk5NUhbP4LKY5z1exER
-         dL/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yL7RKkkwc77P9ncxY65Uf0b3dLn3VOdzIJznqDCTPWw=;
-        b=imLIXhgDFw9o/e1sXqBlnBcD3loUasDjcrOafQ22G8exyRfp6VbVFoRDsmoH77ZjeT
-         fQn2qo04pcDJFDyZ3C6P4qS9HelYpCB6QMmecXaYyFG8iFC/dp23py8A22Q7HYDI1LOY
-         uJvwjczvK2yiCl10rQzVyxrK1KlQ/SQ86X4qDZoRXPJKITtPX4eBFWCIW3lKxOkbksWo
-         FEWtdesahDPy27EhaaxxKYZfGkpk+BJZNKZNEYdxZeRHocY9sZwg6RCWCLVMpZstOdZT
-         ya3ry1hauJlOjlruuzJcQmlFarQPSo12hM9N9G/S/OwWYYvhDwEMxSABgWrkHAO9gPCx
-         lzzw==
-X-Gm-Message-State: AOAM532ONqLHnw0iFyMk3nTQYw/LVHKIZLwojig9eBhjVnPTRISjVAhx
-        Pj1lqRd9utF0+ADrHyryVgs2gTZVf3CBWduCRBU=
-X-Google-Smtp-Source: ABdhPJw7bvGYNsMeqCLbvqAR+CPiJoEle+OS9gtDGiea6s+tmZBMv7XPh7qzMOkyUAINI2Htp6c/ZRnyZAGz4uXmgTA=
-X-Received: by 2002:a17:90b:4c03:: with SMTP id na3mr17403831pjb.62.1638570039613;
- Fri, 03 Dec 2021 14:20:39 -0800 (PST)
+        with ESMTP id S233523AbhLCXDe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Dec 2021 18:03:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1582FC061751;
+        Fri,  3 Dec 2021 15:00:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C6C862D36;
+        Fri,  3 Dec 2021 23:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05A46C53FCD;
+        Fri,  3 Dec 2021 23:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638572409;
+        bh=PRIzoZduL+FH2eXDCg1xVMlQjUQQpSiAYkeeKFxrpbU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mBpLFAQsly/O4ZH1amCQV5Hr/n+l/qXbg52aY4XnmjvSGv8VfDeHa0R5YLDcvPt1H
+         smeLLjD102JA28V/dtlikF9Zmr2w91pnroqr4esKpLdinsIM2KqKbw8uyWErK0wgr0
+         Zegc3nKuKU9HhxbMyP/mo89RqI/Y89mgwzLFOLF5bunZ6YqC5FVXsdKmSJmHPoruAq
+         vwzbqHV0CbQH1I5BnTmgRyB7sfsaXLzvrRT0KojOqlyZ8+YTaO0IXFkIIR1qYaD4SI
+         iUfAfnoH7x8lxo7Uf3iW6vJfrfDsoSzJEd/FEo/m/OttLOcKK9+hze+OQFZeA+ZhIU
+         FyP19AC07opPA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D83E360A50;
+        Fri,  3 Dec 2021 23:00:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20211203191844.69709-1-mcroce@linux.microsoft.com>
- <CAADnVQLDEPxOvGn8CxwcG7phy26BKuOqpSQ5j7yZhZeEVoCC4w@mail.gmail.com>
- <CAFnufp1_p8XCUf-RdHpByKnR9MfXQoDWw6Pvm_dtuH4nD6dZnQ@mail.gmail.com>
- <CAADnVQ+DSGoF2YoTrp2kTLoFBNAgdU8KbcCupicrVGCWvdxZ7w@mail.gmail.com> <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
-In-Reply-To: <86e70da74cb34b59c53b1e5e4d94375c1ef30aa1.camel@debian.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 3 Dec 2021 14:20:28 -0800
-Message-ID: <CAADnVQLCmbUJD29y2ovD+SV93r8jon2-f+fJzJFp6qZOUTWA4w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] bpf: add signature
-To:     Luca Boccassi <bluca@debian.org>
-Cc:     Matteo Croce <mcroce@linux.microsoft.com>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        keyrings@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf: Fix the test_task_vma selftest to support output
+ shorter than 1 kB
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163857240888.22727.1341673704180599136.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Dec 2021 23:00:08 +0000
+References: <20211130181811.594220-1-maximmi@nvidia.com>
+In-Reply-To: <20211130181811.594220-1-maximmi@nvidia.com>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        revest@chromium.org, davemarchevsky@fb.com,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 2:06 PM Luca Boccassi <bluca@debian.org> wrote:
->
-> On Fri, 2021-12-03 at 11:37 -0800, Alexei Starovoitov wrote:
-> > On Fri, Dec 3, 2021 at 11:36 AM Matteo Croce
-> > <mcroce@linux.microsoft.com> wrote:
-> > >
-> > > On Fri, Dec 3, 2021 at 8:22 PM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Fri, Dec 3, 2021 at 11:18 AM Matteo Croce
-> > > > <mcroce@linux.microsoft.com> wrote:
-> > > > >
-> > > > > From: Matteo Croce <mcroce@microsoft.com>
-> > > > >
-> > > > > This series add signature verification for BPF files.
-> > > > > The first patch implements the signature validation in the
-> > > > > kernel,
-> > > > > the second patch optionally makes the signature mandatory,
-> > > > > the third adds signature generation to bpftool.
-> > > >
-> > > > Matteo,
-> > > >
-> > > > I think I already mentioned that it's no-go as-is.
-> > > > We've agreed to go with John's suggestion.
-> > >
-> > > Hi,
-> > >
-> > > my previous attempt was loading a whole ELF file and parsing it in
-> > > kernel.
-> > > In this series I just validate the instructions against a
-> > > signature,
-> > > as with kernel CO-RE libbpf doesn't need to mangle it.
-> > >
-> > > Which suggestion? I think I missed this one..
-> >
-> > This talk and discussion:
-> > https://linuxplumbersconf.org/event/11/contributions/947/
->
-> Thanks for the link - but for those of us who don't have ~5 hours to
-> watch a video recording, would you mind sharing a one line summary,
-> please? Is there an alternative patch series implementing BPF signing
-> that you can link us so that we can look at it? Just a link or
-> googlable reference would be more than enough.
+Hello:
 
-It's not 5 hours and you have to read slides and watch
-John's presentation to follow the conversation.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue, 30 Nov 2021 20:18:11 +0200 you wrote:
+> The test for bpf_iter_task_vma assumes that the output will be longer
+> than 1 kB, as the comment above the loop says. Due to this assumption,
+> the loop becomes infinite if the output turns to be shorter than 1 kB.
+> The return value of read_fd_into_buffer is 0 when the end of file was
+> reached, and len isn't being increased any more.
+> 
+> This commit adds a break on EOF to handle short output correctly. For
+> the reference, this is the contents that I get when running test_progs
+> under vmtest.sh, and it's shorter than 1 kB:
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf] bpf: Fix the test_task_vma selftest to support output shorter than 1 kB
+    https://git.kernel.org/bpf/bpf-next/c/da54ab14953c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
