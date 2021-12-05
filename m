@@ -2,207 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D67C4332F
-	for <bpf@archiver.kernel.org>; Sun,  5 Dec 2021 20:33:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C5D9C433F5
+	for <bpf@archiver.kernel.org>; Sun,  5 Dec 2021 20:33:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238673AbhLEUg1 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 5 Dec 2021 15:36:27 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53252 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238690AbhLEUg1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 5 Dec 2021 15:36:27 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B5ATN4t026402
-        for <bpf@vger.kernel.org>; Sun, 5 Dec 2021 12:32:59 -0800
+        id S238682AbhLEUg3 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 5 Dec 2021 15:36:29 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:23480 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238690AbhLEUg3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 5 Dec 2021 15:36:29 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1B552xue029240
+        for <bpf@vger.kernel.org>; Sun, 5 Dec 2021 12:33:01 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3crqwjtqh8-1
+        by m0001303.ppops.net with ESMTP id 3crpx6jyy6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 05 Dec 2021 12:32:59 -0800
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 05 Dec 2021 12:33:01 -0800
+Received: from intmgw001.38.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 5 Dec 2021 12:32:51 -0800
+ 15.1.2308.20; Sun, 5 Dec 2021 12:33:00 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 23E8ABFD7794; Sun,  5 Dec 2021 12:32:40 -0800 (PST)
+        id 93244BFD77C3; Sun,  5 Dec 2021 12:32:58 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 01/11] libbpf: add OPTS-based bpf_btf_load() API
-Date:   Sun, 5 Dec 2021 12:32:24 -0800
-Message-ID: <20211205203234.1322242-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 10/11] selftests/bpf: remove the only use of deprecated bpf_object__load_xattr()
+Date:   Sun, 5 Dec 2021 12:32:33 -0800
+Message-ID: <20211205203234.1322242-11-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211205203234.1322242-1-andrii@kernel.org>
 References: <20211205203234.1322242-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: lBl1oDmLf-LdOySfdArNwrNPCt-9vEvE
-X-Proofpoint-ORIG-GUID: lBl1oDmLf-LdOySfdArNwrNPCt-9vEvE
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: 6sfCeI3fiXKI8lSElziwaUCeuj_XTCZg
+X-Proofpoint-ORIG-GUID: 6sfCeI3fiXKI8lSElziwaUCeuj_XTCZg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-05_10,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- spamscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 malwarescore=0
- suspectscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2021-12-05_11,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ priorityscore=1501 adultscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=999 bulkscore=0 clxscore=1015 mlxscore=0 malwarescore=0
+ suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2112050123
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to previous bpf_prog_load() and bpf_map_create() APIs, add
-bpf_btf_load() API which is taking optional OPTS struct. Schedule
-bpf_load_btf() for deprecation in v0.8 ([0]).
-
-This makes naming consistent with BPF_BTF_LOAD command, sets up an API
-for extensibility in the future, moves options parameters (log-related
-fields) into optional options, and also allows to pass log_level
-directly. It also removes higher-level retry logic with auto-allocated
-buffer from low-level API. Customer is expected to handle that on their
-own, if desired. This is similar to bpf_prog_load() behavior.
-
-  [0] Closes: https://github.com/libbpf/libbpf/issues/419
+Switch from bpf_object__load_xattr() to bpf_object__load() and
+kernel_log_level in bpf_object_open_opts.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/bpf.c           | 46 ++++++++++++++++++++++++++++-------
- tools/lib/bpf/bpf.h           | 19 +++++++++++++--
- tools/lib/bpf/libbpf.map      |  1 +
- tools/lib/bpf/libbpf_probes.c |  2 +-
- 4 files changed, 56 insertions(+), 12 deletions(-)
+ tools/testing/selftests/bpf/testing_helpers.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 4e7836e1a7b5..27d77d29dad6 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -1044,24 +1044,52 @@ int bpf_raw_tracepoint_open(const char *name, int prog_fd)
- 	return libbpf_err_errno(fd);
- }
- 
--int bpf_load_btf(const void *btf, __u32 btf_size, char *log_buf, __u32 log_buf_size,
--		 bool do_log)
-+int bpf_btf_load(const void *btf_data, size_t btf_size, const struct bpf_btf_load_opts *opts)
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+index 0f1c37ac6f2c..795b6798ccee 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -88,13 +88,15 @@ int extra_prog_load_log_flags = 0;
+ int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
+ 		       struct bpf_object **pobj, int *prog_fd)
  {
--	union bpf_attr attr = {};
-+	const size_t attr_sz = offsetofend(union bpf_attr, btf_log_level);
-+	union bpf_attr attr;
-+	char *log_buf;
-+	size_t log_size;
-+	__u32 log_level;
- 	int fd;
+-	struct bpf_object_load_attr attr = {};
++	LIBBPF_OPTS(bpf_object_open_opts, opts,
++		.kernel_log_level = extra_prog_load_log_flags,
++	);
+ 	struct bpf_object *obj;
+ 	struct bpf_program *prog;
+ 	__u32 flags;
+ 	int err;
  
--	attr.btf = ptr_to_u64(btf);
-+	memset(&attr, 0, attr_sz);
-+
-+	if (!OPTS_VALID(opts, bpf_btf_load_opts))
-+		return libbpf_err(-EINVAL);
-+
-+	log_buf = OPTS_GET(opts, log_buf, NULL);
-+	log_size = OPTS_GET(opts, log_size, 0);
-+	log_level = OPTS_GET(opts, log_level, 0);
-+
-+	if (log_size > UINT_MAX)
-+		return libbpf_err(-EINVAL);
-+	if (log_size && !log_buf)
-+		return libbpf_err(-EINVAL);
-+
-+	attr.btf = ptr_to_u64(btf_data);
- 	attr.btf_size = btf_size;
-+	attr.btf_log_buf = ptr_to_u64(log_buf);
-+	attr.btf_log_size = (__u32)log_size;
-+	attr.btf_log_level = log_level;
-+
-+	fd = sys_bpf_fd(BPF_BTF_LOAD, &attr, attr_sz);
-+	return libbpf_err_errno(fd);
-+}
-+
-+int bpf_load_btf(const void *btf, __u32 btf_size, char *log_buf, __u32 log_buf_size, bool do_log)
-+{
-+	LIBBPF_OPTS(bpf_btf_load_opts, opts);
-+	int fd;
+-	obj = bpf_object__open(file);
++	obj = bpf_object__open_file(file, &opts);
+ 	if (!obj)
+ 		return -errno;
  
- retry:
- 	if (do_log && log_buf && log_buf_size) {
--		attr.btf_log_level = 1;
--		attr.btf_log_size = log_buf_size;
--		attr.btf_log_buf = ptr_to_u64(log_buf);
-+		opts.log_buf = log_buf;
-+		opts.log_size = log_buf_size;
-+		opts.log_level = 1;
- 	}
+@@ -110,9 +112,7 @@ int bpf_prog_test_load(const char *file, enum bpf_prog_type type,
+ 	flags = bpf_program__flags(prog) | BPF_F_TEST_RND_HI32;
+ 	bpf_program__set_flags(prog, flags);
  
--	fd = sys_bpf_fd(BPF_BTF_LOAD, &attr, sizeof(attr));
--
-+	fd = bpf_btf_load(btf, btf_size, &opts);
- 	if (fd < 0 && !do_log && log_buf && log_buf_size) {
- 		do_log = true;
- 		goto retry;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index f79e5fbcf1c1..5f7d9636643d 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -213,6 +213,23 @@ LIBBPF_API int bpf_verify_program(enum bpf_prog_type type,
- 				  char *log_buf, size_t log_buf_sz,
- 				  int log_level);
+-	attr.obj = obj;
+-	attr.log_level = extra_prog_load_log_flags;
+-	err = bpf_object__load_xattr(&attr);
++	err = bpf_object__load(obj);
+ 	if (err)
+ 		goto err_out;
  
-+struct bpf_btf_load_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+
-+	/* kernel log options */
-+	char *log_buf;
-+	__u32 log_level;
-+	__u32 log_size;
-+};
-+#define bpf_btf_load_opts__last_field log_size
-+
-+LIBBPF_API int bpf_btf_load(const void *btf_data, size_t btf_size,
-+			    const struct bpf_btf_load_opts *opts);
-+
-+LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_btf_load() instead")
-+LIBBPF_API int bpf_load_btf(const void *btf, __u32 btf_size, char *log_buf,
-+			    __u32 log_buf_size, bool do_log);
-+
- LIBBPF_API int bpf_map_update_elem(int fd, const void *key, const void *value,
- 				   __u64 flags);
- 
-@@ -340,8 +357,6 @@ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
- 			      __u32 query_flags, __u32 *attach_flags,
- 			      __u32 *prog_ids, __u32 *prog_cnt);
- LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
--LIBBPF_API int bpf_load_btf(const void *btf, __u32 btf_size, char *log_buf,
--			    __u32 log_buf_size, bool do_log);
- LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
- 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
- 				 __u64 *probe_offset, __u64 *probe_addr);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 715df3a27389..08cdfe840436 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -422,6 +422,7 @@ LIBBPF_0.6.0 {
- 
- LIBBPF_0.7.0 {
- 	global:
-+		bpf_btf_load;
- 		bpf_program__log_level;
- 		bpf_program__set_log_level;
- };
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 41f2be47c2ea..4bdec69523a7 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -164,7 +164,7 @@ int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 	memcpy(raw_btf + hdr.hdr_len, raw_types, hdr.type_len);
- 	memcpy(raw_btf + hdr.hdr_len + hdr.type_len, str_sec, hdr.str_len);
- 
--	btf_fd = bpf_load_btf(raw_btf, btf_len, NULL, 0, false);
-+	btf_fd = bpf_btf_load(raw_btf, btf_len, NULL);
- 
- 	free(raw_btf);
- 	return btf_fd;
 -- 
 2.30.2
 
