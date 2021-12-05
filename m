@@ -2,273 +2,225 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6B83C433F5
-	for <bpf@archiver.kernel.org>; Sun,  5 Dec 2021 20:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBBF8C433EF
+	for <bpf@archiver.kernel.org>; Sun,  5 Dec 2021 20:32:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238661AbhLEUgX convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 5 Dec 2021 15:36:23 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:13506 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238673AbhLEUgW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 5 Dec 2021 15:36:22 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B5742WB012756
-        for <bpf@vger.kernel.org>; Sun, 5 Dec 2021 12:32:54 -0800
+        id S238668AbhLEUgZ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 5 Dec 2021 15:36:25 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35012 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238682AbhLEUgZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 5 Dec 2021 15:36:25 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B5JihnM011858
+        for <bpf@vger.kernel.org>; Sun, 5 Dec 2021 12:32:57 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3crrpwjhhb-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3crqwjtqh4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 05 Dec 2021 12:32:54 -0800
-Received: from intmgw001.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 05 Dec 2021 12:32:57 -0800
+Received: from intmgw003.48.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Sun, 5 Dec 2021 12:32:51 -0800
+ 15.1.2308.20; Sun, 5 Dec 2021 12:32:56 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 5FABABFD77AE; Sun,  5 Dec 2021 12:32:50 -0800 (PST)
+        id 44EC3BFD77A8; Sun,  5 Dec 2021 12:32:46 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 06/11] libbpf: add per-program log buffer setter and getter
-Date:   Sun, 5 Dec 2021 12:32:29 -0800
-Message-ID: <20211205203234.1322242-7-andrii@kernel.org>
+Subject: [PATCH bpf-next 04/11] libbpf: improve logging around BPF program loading
+Date:   Sun, 5 Dec 2021 12:32:27 -0800
+Message-ID: <20211205203234.1322242-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211205203234.1322242-1-andrii@kernel.org>
 References: <20211205203234.1322242-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: vwvmvRn16a_3Yd0dQY3JQXlOEb-jv0pC
-X-Proofpoint-GUID: vwvmvRn16a_3Yd0dQY3JQXlOEb-jv0pC
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: W1Cer4l8WACMQnW_LWlvcp_UEevKhk6L
+X-Proofpoint-ORIG-GUID: W1Cer4l8WACMQnW_LWlvcp_UEevKhk6L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-05_11,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- suspectscore=0 malwarescore=0 mlxlogscore=999 spamscore=0 bulkscore=0
- adultscore=0 phishscore=0 impostorscore=0 clxscore=1034 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112050124
+ definitions=2021-12-05_10,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ spamscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112050123
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow to set user-provided log buffer on a per-program basis ([0]). This
-gives great deal of flexibility in terms of which programs are loaded
-with logging enabled and where corresponding logs go.
+Add missing "prog '%s': " prefixes in few places and use consistently
+markers for beginning and end of program load logs. Here's an example of
+log output:
 
-Log buffer set with bpf_program__set_log_buf() overrides kernel_log_buf
-and kernel_log_size settings set at bpf_object open time through
-bpf_object_open_opts, if any.
+libbpf: prog 'handler': BPF program load failed: Permission denied
+libbpf: -- BEGIN PROG LOAD LOG ---
+arg#0 reference type('UNKNOWN ') size cannot be determined: -22
+; out1 = in1;
+0: (18) r1 = 0xffffc9000cdcc000
+2: (61) r1 = *(u32 *)(r1 +0)
 
-Adjust bpf_object_load_prog_instance() logic to not perform own log buf
-allocation and load retry if custom log buffer is provided by the user.
+...
 
-  [0] Closes: https://github.com/libbpf/libbpf/issues/418
+81: (63) *(u32 *)(r4 +0) = r5
+ R1_w=map_value(id=0,off=16,ks=4,vs=20,imm=0) R4=map_value(id=0,off=400,ks=4,vs=16,imm=0)
+invalid access to map value, value_size=16 off=400 size=4
+R4 min value is outside of the allowed memory range
+processed 63 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
+ -- END PROG LOAD LOG --
+libbpf: failed to load program 'handler'
+libbpf: failed to load object 'test_skeleton'
+
+The entire verifier log, including BEGIN and END markers are now always
+youtput during a single print callback call. This should make it much
+easier to post-process or parse it, if necessary. It's not an explicit
+API guarantee, but it can be reasonably expected to stay like that.
+
+Also __bpf_object__open is renamed to bpf_object_open() as it's always
+an adventure to find the exact function that implements bpf_object's
+open phase, so drop the double underscored and use internal libbpf
+naming convention.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c   | 86 ++++++++++++++++++++++++++++++++--------
- tools/lib/bpf/libbpf.h   |  7 ++++
- tools/lib/bpf/libbpf.map |  2 +
- 3 files changed, 78 insertions(+), 17 deletions(-)
+ tools/lib/bpf/libbpf.c                        | 38 +++++++++----------
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |  6 ++-
+ 2 files changed, 23 insertions(+), 21 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 3fd4e3d5a11f..00807bf8719f 100644
+index 38999e9c08e0..f07ff39a9d20 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -331,7 +331,11 @@ struct bpf_program {
+@@ -6662,8 +6662,10 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
+ 	ret = bpf_prog_load(prog->type, prog_name, license, insns, insns_cnt, &load_attr);
  
- 	struct reloc_desc *reloc_desc;
- 	int nr_reloc;
--	int log_level;
-+
-+	/* BPF verifier log settings */
-+	char *log_buf;
-+	size_t log_size;
-+	__u32 log_level;
- 
- 	struct {
- 		int nr;
-@@ -713,6 +717,9 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
- 	prog->instances.fds = NULL;
- 	prog->instances.nr = -1;
- 
-+	/* inherit object's log_level */
-+	prog->log_level = obj->log_level;
-+
- 	prog->sec_name = strdup(sec_name);
- 	if (!prog->sec_name)
- 		goto errout;
-@@ -6591,8 +6598,10 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 	const char *prog_name = NULL;
- 	char *cp, errmsg[STRERR_BUFSIZE];
- 	size_t log_buf_size = 0;
--	char *log_buf = NULL;
-+	char *log_buf = NULL, *tmp;
- 	int btf_fd, ret, err;
-+	bool own_log_buf = true;
-+	__u32 log_level = prog->log_level;
- 
- 	if (prog->type == BPF_PROG_TYPE_UNSPEC) {
- 		/*
-@@ -6627,7 +6636,7 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 		load_attr.line_info_rec_size = prog->line_info_rec_size;
- 		load_attr.line_info_cnt = prog->line_info_cnt;
- 	}
--	load_attr.log_level = prog->log_level;
-+	load_attr.log_level = log_level;
- 	load_attr.prog_flags = prog->prog_flags;
- 	load_attr.fd_array = obj->fd_array;
- 
-@@ -6648,21 +6657,42 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 		*prog_fd = -1;
- 		return 0;
- 	}
--retry_load:
--	if (log_buf_size) {
--		log_buf = malloc(log_buf_size);
--		if (!log_buf)
--			return -ENOMEM;
- 
--		*log_buf = 0;
-+retry_load:
-+	/* if log_level is zero, we don't request logs initiallly even if
-+	 * custom log_buf is specified; if the program load fails, then we'll
-+	 * bump log_level to 1 and use either custom log_buf or we'll allocate
-+	 * our own and retry the load to get details on what failed
-+	 */
-+	if (log_level) {
-+		if (prog->log_buf) {
-+			log_buf = prog->log_buf;
-+			log_buf_size = prog->log_size;
-+			own_log_buf = false;
-+		} else if (obj->log_buf) {
-+			log_buf = obj->log_buf;
-+			log_buf_size = obj->log_size;
-+			own_log_buf = false;
-+		} else {
-+			log_buf_size = max((size_t)BPF_LOG_BUF_SIZE, log_buf_size * 2);
-+			tmp = realloc(log_buf, log_buf_size);
-+			if (!tmp) {
-+				ret = -ENOMEM;
-+				goto out;
-+			}
-+			log_buf = tmp;
-+			log_buf[0] = '\0';
-+			own_log_buf = true;
-+		}
- 	}
- 
- 	load_attr.log_buf = log_buf;
- 	load_attr.log_size = log_buf_size;
--	ret = bpf_prog_load(prog->type, prog_name, license, insns, insns_cnt, &load_attr);
-+	load_attr.log_level = log_level;
- 
-+	ret = bpf_prog_load(prog->type, prog_name, license, insns, insns_cnt, &load_attr);
  	if (ret >= 0) {
--		if (log_buf && load_attr.log_level) {
-+		if (log_level && own_log_buf) {
- 			pr_debug("prog '%s': -- BEGIN PROG LOAD LOG --\n%s-- END PROG LOAD LOG --\n",
- 				 prog->name, log_buf);
- 		}
-@@ -6690,19 +6720,20 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 		goto out;
- 	}
+-		if (log_buf && load_attr.log_level)
+-			pr_debug("verifier log:\n%s", log_buf);
++		if (log_buf && load_attr.log_level) {
++			pr_debug("prog '%s': -- BEGIN PROG LOAD LOG --\n%s-- END PROG LOAD LOG --\n",
++				 prog->name, log_buf);
++		}
  
--	if (!log_buf || errno == ENOSPC) {
--		log_buf_size = max((size_t)BPF_LOG_BUF_SIZE,
--				   log_buf_size << 1);
--		free(log_buf);
-+	if (log_level == 0) {
-+		log_level = 1;
+ 		if (obj->has_rodata && kernel_supports(obj, FEAT_PROG_BIND_MAP)) {
+ 			struct bpf_map *map;
+@@ -6676,8 +6678,8 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
+ 
+ 				if (bpf_prog_bind_map(ret, bpf_map__fd(map), NULL)) {
+ 					cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+-					pr_warn("prog '%s': failed to bind .rodata map: %s\n",
+-						prog->name, cp);
++					pr_warn("prog '%s': failed to bind map '%s': %s\n",
++						prog->name, map->real_name, cp);
+ 					/* Don't fail hard if can't bind rodata. */
+ 				}
+ 			}
+@@ -6691,23 +6693,22 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
+ 	if (!log_buf || errno == ENOSPC) {
+ 		log_buf_size = max((size_t)BPF_LOG_BUF_SIZE,
+ 				   log_buf_size << 1);
+-
+ 		free(log_buf);
  		goto retry_load;
  	}
-+	/* on ENOSPC, increase log buffer size, unless custom log_buf is specified */
-+	if (own_log_buf && errno == ENOSPC && log_buf_size < UINT_MAX / 2)
-+		goto retry_load;
- 
- 	ret = -errno;
+ 	ret = errno ? -errno : -LIBBPF_ERRNO__LOAD;
  	cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
- 	pr_warn("prog '%s': BPF program load failed: %s\n", prog->name, cp);
+-	pr_warn("load bpf program failed: %s\n", cp);
++	pr_warn("prog '%s': BPF program load failed: %s\n", prog->name, cp);
  	pr_perm_msg(ret);
  
--	if (log_buf && log_buf[0] != '\0') {
-+	if (own_log_buf && log_buf && log_buf[0] != '\0') {
- 		pr_warn("prog '%s': -- BEGIN PROG LOAD LOG --\n%s-- END PROG LOAD LOG --\n",
- 			prog->name, log_buf);
- 	}
-@@ -6712,7 +6743,8 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 	}
- 
- out:
--	free(log_buf);
-+	if (own_log_buf)
-+		free(log_buf);
- 	return ret;
- }
- 
-@@ -8498,6 +8530,26 @@ int bpf_program__set_log_level(struct bpf_program *prog, __u32 log_level)
+ 	if (log_buf && log_buf[0] != '\0') {
+ 		ret = -LIBBPF_ERRNO__VERIFY;
+-		pr_warn("-- BEGIN DUMP LOG ---\n");
+-		pr_warn("\n%s\n", log_buf);
+-		pr_warn("-- END LOG --\n");
+-	} else if (insns_cnt >= BPF_MAXINSNS) {
+-		pr_warn("Program too large (%d insns), at most %d insns\n",
+-			insns_cnt, BPF_MAXINSNS);
++		pr_warn("prog '%s': -- BEGIN PROG LOAD LOG --\n%s-- END PROG LOAD LOG --\n",
++			prog->name, log_buf);
++	}
++	if (insns_cnt >= BPF_MAXINSNS) {
++		pr_warn("prog '%s': program too large (%d insns), at most %d insns\n",
++			prog->name, insns_cnt, BPF_MAXINSNS);
+ 		ret = -LIBBPF_ERRNO__PROG2BIG;
+ 	} else if (prog->type != BPF_PROG_TYPE_KPROBE) {
+ 		/* Wrong program type? */
+@@ -6931,9 +6932,8 @@ static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object
  	return 0;
  }
  
-+const char *bpf_program__log_buf(const struct bpf_program *prog, size_t *log_size)
-+{
-+	*log_size = prog->log_size;
-+	return prog->log_buf;
-+}
-+
-+int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log_size)
-+{
-+	if (log_size && !log_buf)
-+		return -EINVAL;
-+	if (prog->log_size > UINT_MAX)
-+		return -EINVAL;
-+	if (prog->obj->loaded)
-+		return -EBUSY;
-+
-+	prog->log_buf = log_buf;
-+	prog->log_size = log_size;
-+	return 0;
-+}
-+
- #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
- 	.sec = sec_pfx,							    \
- 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index ae7cda7ad731..82fd61b674c5 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -538,8 +538,15 @@ bpf_program__set_expected_attach_type(struct bpf_program *prog,
+-static struct bpf_object *
+-__bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
+-		   const struct bpf_object_open_opts *opts)
++static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf, size_t obj_buf_sz,
++					  const struct bpf_object_open_opts *opts)
+ {
+ 	const char *obj_name, *kconfig, *btf_tmp_path;
+ 	struct bpf_object *obj;
+@@ -7033,7 +7033,7 @@ __bpf_object__open_xattr(struct bpf_object_open_attr *attr, int flags)
+ 		return NULL;
  
- LIBBPF_API __u32 bpf_program__flags(const struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_flags(struct bpf_program *prog, __u32 flags);
-+
-+/* Per-program log level and log buffer getters/setters.
-+ * See bpf_object_open_opts comments regarding log_level and log_buf
-+ * interactions.
-+ */
- LIBBPF_API __u32 bpf_program__log_level(const struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_log_level(struct bpf_program *prog, __u32 log_level);
-+LIBBPF_API const char *bpf_program__log_buf(const struct bpf_program *prog, size_t *log_size);
-+LIBBPF_API int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log_size);
+ 	pr_debug("loading %s\n", attr->file);
+-	return __bpf_object__open(attr->file, NULL, 0, &opts);
++	return bpf_object_open(attr->file, NULL, 0, &opts);
+ }
  
- LIBBPF_API int
- bpf_program__set_attach_target(struct bpf_program *prog, int attach_prog_fd,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 08cdfe840436..4d483af7dba6 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -423,6 +423,8 @@ LIBBPF_0.6.0 {
- LIBBPF_0.7.0 {
- 	global:
- 		bpf_btf_load;
-+		bpf_program__log_buf;
- 		bpf_program__log_level;
-+		bpf_program__set_log_buf;
- 		bpf_program__set_log_level;
- };
+ struct bpf_object *bpf_object__open_xattr(struct bpf_object_open_attr *attr)
+@@ -7059,7 +7059,7 @@ bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts)
+ 
+ 	pr_debug("loading %s\n", path);
+ 
+-	return libbpf_ptr(__bpf_object__open(path, NULL, 0, opts));
++	return libbpf_ptr(bpf_object_open(path, NULL, 0, opts));
+ }
+ 
+ struct bpf_object *
+@@ -7069,7 +7069,7 @@ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+ 	if (!obj_buf || obj_buf_sz == 0)
+ 		return libbpf_err_ptr(-EINVAL);
+ 
+-	return libbpf_ptr(__bpf_object__open(NULL, obj_buf, obj_buf_sz, opts));
++	return libbpf_ptr(bpf_object_open(NULL, obj_buf, obj_buf_sz, opts));
+ }
+ 
+ struct bpf_object *
+@@ -7086,7 +7086,7 @@ bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
+ 	if (!obj_buf || obj_buf_sz == 0)
+ 		return errno = EINVAL, NULL;
+ 
+-	return libbpf_ptr(__bpf_object__open(NULL, obj_buf, obj_buf_sz, &opts));
++	return libbpf_ptr(bpf_object_open(NULL, obj_buf, obj_buf_sz, &opts));
+ }
+ 
+ static int bpf_object_unload(struct bpf_object *obj)
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+index 94e03df69d71..8daca0ac909f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
+@@ -217,14 +217,16 @@ static bool found;
+ static int libbpf_debug_print(enum libbpf_print_level level,
+ 			      const char *format, va_list args)
+ {
+-	char *log_buf;
++	const char *log_buf;
+ 
+ 	if (level != LIBBPF_WARN ||
+-	    strcmp(format, "libbpf: \n%s\n")) {
++	    !strstr(format, "-- BEGIN PROG LOAD LOG --")) {
+ 		vprintf(format, args);
+ 		return 0;
+ 	}
+ 
++	/* skip prog_name */
++	va_arg(args, char *);
+ 	log_buf = va_arg(args, char *);
+ 	if (!log_buf)
+ 		goto out;
 -- 
 2.30.2
 
