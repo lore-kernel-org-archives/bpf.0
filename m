@@ -2,137 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91BB2C433F5
-	for <bpf@archiver.kernel.org>; Sun,  5 Dec 2021 07:26:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFC66C433EF
+	for <bpf@archiver.kernel.org>; Sun,  5 Dec 2021 19:43:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbhLEH3a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 5 Dec 2021 02:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56756 "EHLO
+        id S235693AbhLETqe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 5 Dec 2021 14:46:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbhLEH3a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 5 Dec 2021 02:29:30 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065AC061751;
-        Sat,  4 Dec 2021 23:26:02 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id m186so8129175qkb.4;
-        Sat, 04 Dec 2021 23:26:02 -0800 (PST)
+        with ESMTP id S233648AbhLETqd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 5 Dec 2021 14:46:33 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661FBC061714
+        for <bpf@vger.kernel.org>; Sun,  5 Dec 2021 11:43:06 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id d10so25594249ybn.0
+        for <bpf@vger.kernel.org>; Sun, 05 Dec 2021 11:43:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zowSszGCjMgYZHdPz1ZCQ1VnEOEblLnUPR7Gj0ga0Vs=;
-        b=H8L2+8nVJ1TzoM56VfiynvmoGFyaKEcyjMd1peEexDpDjB9ClTekh46kJx5dHglpsN
-         LEnfx63YLMZOjFknCW+9ZNJocppmoS3NwNLzYuv7CvaeJvq0RXniwrT+olAZ9h/3aOD/
-         8VL6fGXO3kxlVOTdYGfWjhHcWlb/AN0MEBYJ1H+8lrYCxV1yN63EAYVLHaDO1k4OrLQ4
-         vVQppnxQ5JynrTKFam9ElX1hiZGq1BA6v4jh9D/Al6M140wUyxGa2TtFyVM9On32QaXP
-         rhe+1LJWKyiL9g6Ddc8BJQNrENHUyco6Kyd2O+6yZ7lo0TWWojZGsKlKtFsUy97h2MbY
-         VjAg==
+        bh=0AVM4yIRDu8U1dh9ScIMMlKQ5XzVTFXT9XFu1gd2wUw=;
+        b=lzcMgoVA6+rR1Hk6zU9pS0fGfwbM6WyFw32lpPIqF3JRxU9vfFdCDGP2RD9rK5rj6J
+         XdrxwqJ3xUvM7B+81yuGpGgHQWHFrpn0m2rxNcc+pf9b3ndn+2bMtLkax6a4GYT7pCZJ
+         Jbbn4kxzQtOsjxu3eNdLwp98+7LMcJmwQAwE/XGd+4kOEkRsR4pmwCJcR00MbQQBd1Ml
+         3CgMaLsj4lYnwq7qu9vfbYIkVMdPjRFGGee5E3rxehx4rWhYNzouNOCdyE/HWWVyDCp9
+         /BsUUe8Hnc+ZjalYuvXM+IgTX9fAxBSA7AESuW1E4r4mX+RYs397i4HV5jszYU7ytFi2
+         8cAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zowSszGCjMgYZHdPz1ZCQ1VnEOEblLnUPR7Gj0ga0Vs=;
-        b=XK+sOOWQoZ2OgnQeNcEJX6b1jNKf9Rv7K/Bx3CsgFzac85gbyNv6e479Uc1PsfawJp
-         kuFf6hNCWQdRcmfCBvCAVJZ33I0pY8bFUejfEm5lamQLlXuGg+1rvBUvxv0MMOKxadMN
-         8ZRBCJBakwr0YTwb49dvwgkvEAso/qifN1jaYk/DFmHFtanTQ8vl9kHHFto6njqC+8ZJ
-         s4bgttFNsHyw8Wz03sFAN/WJWwLcWvfzTxqULOtwxN+4NA9VUTShAMDBzIwSGfPeby+9
-         KGrJFjUlB28nBRak6xg5mptFtH4ABhzWhUiXPaPB1bmTHoJTjaAGtNK+jHq2v8/H2DQV
-         mlng==
-X-Gm-Message-State: AOAM533maehMG5PBkGcqcz66WpuRv4zoRGIic4ZAYWHCrGIdlex2YCxi
-        t2E5euImzsyOml2EdrFA03ncQ0E86Fh+7vkirkA=
-X-Google-Smtp-Source: ABdhPJxJLKvaTSR4/NERlECHBcz96OgqGrG1jCo7M7WsfQN7m2yL5KJ1ECd+GDH+HUX2k6HIT1BhZZN0LElX5ftUrQ4=
-X-Received: by 2002:a05:620a:2148:: with SMTP id m8mr26529583qkm.435.1638689161996;
- Sat, 04 Dec 2021 23:26:01 -0800 (PST)
+        bh=0AVM4yIRDu8U1dh9ScIMMlKQ5XzVTFXT9XFu1gd2wUw=;
+        b=jA7AhDiwq0Y8HwhWi7tTEeQF5ZppEzMygORCgptAvlHBzd/2DLoxnrOCcxfBNr1Kbf
+         NlmuUm73/djRUXRksO1xWh+Vz+VHPHnCAoIZn+Q4DkJz+AgBhEpv+wMo5u3gb1q6Yj+m
+         PD5pilKaxTjO6EfWMC6Mz/DQTweFnOgwww4yH+Iv2N3LlHOaZm1uEcu5CYLx74VRRuWk
+         TNAhEvXtsWFZGl69+1+Ps5R0TbYDWulVP1xK+RMfzvSCcNgKU4zuu7evlAwICWBZT8Dt
+         T7bTFWlDEZ9v1bKHgz36ccxQcNB7THlMp7qrdPO1urn/SfW/2ngm/tnPAhHwDMh3tcAb
+         gOZA==
+X-Gm-Message-State: AOAM533h6dp5jKYo0LX9PXONbUW5/2Qb1oQX6tl2bVxTQi2PKcBq8gSS
+        Y8OVSquw/8Tj/MzHDAUZzYziIC4cHcCVebR0vXY=
+X-Google-Smtp-Source: ABdhPJyjBLK/pKjPU9Mg4BYrhAQWUVxR5ofqDdc5O9YAliKyxF5oP+aIdP0WZ5edsiMP1keXMJH6Z1cES3ds/6hYn9c=
+X-Received: by 2002:a25:6d4:: with SMTP id 203mr37843383ybg.83.1638733385574;
+ Sun, 05 Dec 2021 11:43:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20211204095256.78042-1-laoar.shao@gmail.com> <20211204095256.78042-6-laoar.shao@gmail.com>
- <CAADnVQLS4Ev7xChqCMbbJiFZ_kYSB+rbiVT6AJotheFJb1f5=w@mail.gmail.com>
- <CALOAHbCud62ivvoRuz1SV-d3sL9Y9knEga0N-jiXnM3SYzWxNA@mail.gmail.com> <CAADnVQLu+RWSeMfOe5eBuTsp9gxPsFC_bRTXoWmvWP+Lv_rZzQ@mail.gmail.com>
-In-Reply-To: <CAADnVQLu+RWSeMfOe5eBuTsp9gxPsFC_bRTXoWmvWP+Lv_rZzQ@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Sun, 5 Dec 2021 15:25:27 +0800
-Message-ID: <CALOAHbBv-_5uF=T4MyC_6J08PRX6KTGora4FArdYKLC0dOy8HQ@mail.gmail.com>
-Subject: Re: [PATCH -mm 5/5] bpf/progs: replace hard-coded 16 with TASK_COMM_LEN
+References: <20211204194623.27779-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20211204194623.27779-1-alexei.starovoitov@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Sun, 5 Dec 2021 11:42:54 -0800
+Message-ID: <CAEf4BzZz=QSEqGWQaqjh73Mjd0Zk+f2vsDN0Goa+k3ooefHYDA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: Add debug mode for gen_loader.
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Dec 5, 2021 at 11:13 AM Alexei Starovoitov
+On Sat, Dec 4, 2021 at 11:46 AM Alexei Starovoitov
 <alexei.starovoitov@gmail.com> wrote:
 >
-> On Sat, Dec 4, 2021 at 6:45 PM Yafang Shao <laoar.shao@gmail.com> wrote:
-> >
-> > On Sun, Dec 5, 2021 at 12:44 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Sat, Dec 4, 2021 at 1:53 AM Yafang Shao <laoar.shao@gmail.com> wrote:
-> > > >
-> > > >  static int process_sample(void *ctx, void *data, size_t len)
-> > > >  {
-> > > > -       struct sample *s = data;
-> > > > +       struct sample_ringbuf *s = data;
-> > >
-> > > This is becoming pointless churn.
-> > > Nack.
-> > >
-> > > > index 145028b52ad8..7b1bb73c3501 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_kernel.c
-> > > > @@ -1,8 +1,7 @@
-> > > >  // SPDX-License-Identifier: GPL-2.0
-> > > >  // Copyright (c) 2019 Facebook
-> > > >
-> > > > -#include <linux/bpf.h>
-> > > > -#include <stdint.h>
-> > > > +#include <vmlinux.h>
-> > > >  #include <stdbool.h>
-> > > >  #include <bpf/bpf_helpers.h>
-> > > >  #include <bpf/bpf_core_read.h>
-> > > > @@ -23,11 +22,11 @@ struct core_reloc_kernel_output {
-> > > >         int comm_len;
-> > > >  };
-> > > >
-> > > > -struct task_struct {
-> > > > +struct task_struct_reloc {
-> > >
-> > > Churn that is not even compile tested.
-> >
-> > It is strange that I have successfully compiled it....
-> > Below is the compile log,
-> >
-> > $ cat make.log | grep test_core_reloc_kernel
-> >   CLNG-BPF [test_maps] test_core_reloc_kernel.o
-> >   GEN-SKEL [test_progs] test_core_reloc_kernel.skel.h
-> >   CLNG-BPF [test_maps] test_core_reloc_kernel.o
-> >   GEN-SKEL [test_progs-no_alu32] test_core_reloc_kernel.skel.h
-> >
-> > Also there's no error in the compile log.
+> From: Alexei Starovoitov <ast@kernel.org>
 >
-> and ran the tests too?
+> Make -d flag functional for gen_loader style program loading.
+>
+> For example:
+> $ bpftool prog load -L -d test_d_path.o
+> ... // will print:
+> libbpf: loading ./test_d_path.o
+> libbpf: elf: section(3) fentry/security_inode_getattr, size 280, link 0, flags 6, type=1
+> ...
+> libbpf: prog 'prog_close': found data map 0 (test_d_p.bss, sec 7, off 0) for insn 30
+> libbpf: gen: load_btf: size 5376
+> libbpf: gen: map_create: test_d_p.bss idx 0 type 2 value_type_id 118
+> libbpf: map 'test_d_p.bss': created successfully, fd=0
+> libbpf: gen: map_update_elem: idx 0
+> libbpf: sec 'fentry/filp_close': found 1 CO-RE relocations
+> libbpf: record_relo_core: prog 1 insn[15] struct file 0:1 final insn_idx 15
+> libbpf: gen: prog_load: type 26 insns_cnt 35 progi_idx 0
+> libbpf: gen: find_attach_tgt security_inode_getattr 12
+> libbpf: gen: prog_load: type 26 insns_cnt 37 progi_idx 1
+> libbpf: gen: find_attach_tgt filp_close 12
+> libbpf: gen: finish 0
+> ... // at this point libbpf finished generating loader program
+>    0: (bf) r6 = r1
+>    1: (bf) r1 = r10
+>    2: (07) r1 += -136
+>    3: (b7) r2 = 136
+>    4: (b7) r3 = 0
+>    5: (85) call bpf_probe_read_kernel#113
+>    6: (05) goto pc+104
+> ... // this is the assembly dump of the loader program
+>  390: (63) *(u32 *)(r6 +44) = r0
+>  391: (18) r1 = map[idx:0]+5584
+>  393: (61) r0 = *(u32 *)(r1 +0)
+>  394: (63) *(u32 *)(r6 +24) = r0
+>  395: (b7) r0 = 0
+>  396: (95) exit
+> err 0  // the loader program was loaded and executed successfully
+> (null)
+> func#0 @0
+> ...  // CO-RE in the kernel logs:
+> CO-RE relocating STRUCT file: found target candidate [500]
+> prog '': relo #0: kind <byte_off> (0), spec is [8] STRUCT file.f_path (0:1 @ offset 16)
+> prog '': relo #0: matching candidate #0 [500] STRUCT file.f_path (0:1 @ offset 16)
+> prog '': relo #0: patched insn #15 (ALU/ALU64) imm 16 -> 16
+> vmlinux_cand_cache:[11]file(500),
+> module_cand_cache:
+> ... // verifier logs when it was checking test_d_path.o program:
+> R1 type=ctx expected=fp
+> 0: R1=ctx(id=0,off=0,imm=0) R10=fp0
+> ; int BPF_PROG(prog_close, struct file *file, void *id)
+> 0: (79) r6 = *(u64 *)(r1 +0)
+> func 'filp_close' arg0 has btf_id 500 type STRUCT 'file'
+> 1: R1=ctx(id=0,off=0,imm=0) R6_w=ptr_file(id=0,off=0,imm=0) R10=fp0
+> ; pid_t pid = bpf_get_current_pid_tgid() >> 32;
+> 1: (85) call bpf_get_current_pid_tgid#14
+>
+> ... // if there are multiple programs being loaded by the loader program
+> ... // only the last program in the elf file will be printed, since
+> ... // the same verifier log_buf is used for all PROG_LOAD commands.
+>
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>  tools/bpf/bpftool/prog.c | 18 ++++++++++--------
+>  1 file changed, 10 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index e47e8b06cc3d..b9f42e9e9067 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1779,12 +1779,14 @@ static int try_loader(struct gen_loader_opts *gen)
+>         ctx = alloca(ctx_sz);
+>         memset(ctx, 0, ctx_sz);
+>         ctx->sz = ctx_sz;
+> -       ctx->log_level = 1;
+> -       ctx->log_size = log_buf_sz;
+> -       log_buf = malloc(log_buf_sz);
+> -       if (!log_buf)
+> -               return -ENOMEM;
+> -       ctx->log_buf = (long) log_buf;
+> +       if (verifier_logs) {
+> +               ctx->log_level = 1 + 2 + 4;
+> +               ctx->log_size = log_buf_sz;
+> +               log_buf = malloc(log_buf_sz);
 
-My bad. I thought it was just a name change, which will work well if
-it can be compiled successfully.
-But it seems the task_struct in this file is a dummy struct, which
-will be relocated to the real task_struct defined in the kernel.
-We can't include vmlinux.h in this file, as it is for the relocation test.
+if verifier_logs is false, log_buf will now be left uninitialized and
+passed like that into free(log_buf), crashing or corrupting memory.
+I've fixed it up by NULL initializaing and pushed to bpf-next.
 
--- 
-Thanks
-Yafang
+> +               if (!log_buf)
+> +                       return -ENOMEM;
+> +               ctx->log_buf = (long) log_buf;
+> +       }
+>         opts.ctx = ctx;
+>         opts.data = gen->data;
+>         opts.data_sz = gen->data_sz;
+> @@ -1793,9 +1795,9 @@ static int try_loader(struct gen_loader_opts *gen)
+>         fds_before = count_open_fds();
+>         err = bpf_load_and_run(&opts);
+>         fd_delta = count_open_fds() - fds_before;
+> -       if (err < 0) {
+> +       if (err < 0 || verifier_logs) {
+>                 fprintf(stderr, "err %d\n%s\n%s", err, opts.errstr, log_buf);
+> -               if (fd_delta)
+> +               if (fd_delta && err < 0)
+>                         fprintf(stderr, "loader prog leaked %d FDs\n",
+>                                 fd_delta);
+>         }
+> --
+> 2.30.2
+>
