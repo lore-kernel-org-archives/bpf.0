@@ -2,271 +2,161 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60C9DC433F5
-	for <bpf@archiver.kernel.org>; Mon,  6 Dec 2021 19:57:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57BEAC433F5
+	for <bpf@archiver.kernel.org>; Mon,  6 Dec 2021 20:04:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349242AbhLFUBG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 6 Dec 2021 15:01:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:48788 "EHLO
+        id S1348967AbhLFUHd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 6 Dec 2021 15:07:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43430 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1349572AbhLFUAo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 6 Dec 2021 15:00:44 -0500
+        by vger.kernel.org with ESMTP id S245430AbhLFUHd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 6 Dec 2021 15:07:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638820634;
+        s=mimecast20190719; t=1638821043;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=sL3D1WB/9Yy1suI5mATprV109LO2M6XsXaqz/s17rxU=;
-        b=bXbdRkDtC2mxZkD7u3C8seG9cKotsZ1oUMjmREjrHdaUwGRuGBOmhDi9T1nmIHCnodLqBg
-        vguzIywcxKeBIgwTchJqDqugFXd0xoyPiWYNjyjZk5QEcDuKUHKx1kRhNttL5g5WVfn4df
-        0LQoBrwrb96ln92GKOT639plLlcrNvs=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=homnGmGUR/BIFldb2E+WbiDxvtTVJPsIY0ZfkvjSS2w=;
+        b=VjPUZGKdEfIqhJwLohwPQs+SsaFMYU0EC9E+ChMB81bCHD9s8LAwbADzwESPxw2D9EAQHz
+        P2Bpg4eHQh/ZzLO9aIhfRMfWPh1o43SW+TROfCPPeBAEuiW/VwQh142BhBi+YG8+V7BKzV
+        N/e4RGORi+o7QlvQFQ1Dk/4BTQlfKWU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-84-v_soClTjPjiY5LqoSWMzLA-1; Mon, 06 Dec 2021 14:57:12 -0500
-X-MC-Unique: v_soClTjPjiY5LqoSWMzLA-1
-Received: by mail-wm1-f72.google.com with SMTP id 138-20020a1c0090000000b00338bb803204so6609184wma.1
-        for <bpf@vger.kernel.org>; Mon, 06 Dec 2021 11:57:12 -0800 (PST)
+ us-mta-200-gNIMrd9IM0eghG7l5xi61Q-1; Mon, 06 Dec 2021 15:04:02 -0500
+X-MC-Unique: gNIMrd9IM0eghG7l5xi61Q-1
+Received: by mail-wr1-f69.google.com with SMTP id q7-20020adff507000000b0017d160d35a8so2306339wro.4
+        for <bpf@vger.kernel.org>; Mon, 06 Dec 2021 12:04:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sL3D1WB/9Yy1suI5mATprV109LO2M6XsXaqz/s17rxU=;
-        b=bGIpJb7w7EaoHFy4NCRUPsmkG1jblDYoqDoS6QHcKoItq6OGXe5hf/+OBeLI+wUOWw
-         64LQT8MyvAuKvM0EnMY02SQaBzDvh9vrMtAu8tuzD5l9TI71aqY/Qhk5dFRepeOnpLQe
-         mf6RY7lzBZ1kQ/vz7FJnM54ZV35D1ei7a/mQaZDFb4EKTMoBFZTNLtYQsHEo2xO3g3/d
-         XeYvQ20JVZtteBQMRKp1IY7rIf8dHbqvDmpESrbtcjD+kmxFfk9P+QsdwSwzYAOWSYQc
-         inv+BWbUPBul9LLOC8tS0AjUTT9LhDxKV6OWCXL9A+ymRSM+G++TT+Z2pETAaMdanE7s
-         ylWw==
-X-Gm-Message-State: AOAM533fCWnc4NAfX5gxIpAOZWxUlOlmfNR1syPUFsNDUMBNWXMHzEnR
-        howR5itd+LpChatGbu+qSOpO/yNSaUinnQ8UUrkhLeriynywKMvJRFT98a4Ouy7/NOOdV2SPY8E
-        NuRd1X8+fWbbV
-X-Received: by 2002:a1c:488:: with SMTP id 130mr815235wme.157.1638820631212;
-        Mon, 06 Dec 2021 11:57:11 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwwkVvGKJSs8kSbzJ5A4iK/zDTE+kdNiGmq8OfxslW/COEIFNXrj8aZjVD96TzfbqVMixCWwQ==
-X-Received: by 2002:a1c:488:: with SMTP id 130mr815183wme.157.1638820630882;
-        Mon, 06 Dec 2021 11:57:10 -0800 (PST)
+        bh=homnGmGUR/BIFldb2E+WbiDxvtTVJPsIY0ZfkvjSS2w=;
+        b=dI+EACC24UoY7r81cETr8ccnIGMYgMrCENL/FLNMsu80exYgK1Jhdl/8/UR6wKa+h4
+         mIekjTBFFpGG1/ROH5Af9XjodQo5B1RSx5zXcQjSQSHH1YgOuIMB+Bcnhfd0t/uD38GR
+         4fYRCHr+f2S/IwQBXtk7HGmQxiePYk03x5mFQW/jGuD0MlAfcdPIE7fIq6+Wk17u6q9m
+         xVSvdDr4ep8x4i1O/LWkbxTnoPswTE0erF+xnS6XYEkViO0VE+TDFqi6tRJ76hk9xriG
+         SOqNwSK7Pl4b1Q7cHsVFrrSv4s2pMvAxUkDyAsUUOZ4NUYhysm6MIMwqkH6Z7QtrkUek
+         FDmw==
+X-Gm-Message-State: AOAM533Kzuo20ti2HksFjE+IBH+sKKXpyFSZ+ZOmR/yJW8wcGaG1IqRu
+        IXWxOl0w39NT2z6hVo9seqzEZWW/vRzY1FmAwgmC//aUPBP5OaCC2AJ2shU2oLae2piPNsvS3iO
+        6cREK+ckfg1vI
+X-Received: by 2002:a7b:c38b:: with SMTP id s11mr904623wmj.29.1638821041108;
+        Mon, 06 Dec 2021 12:04:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyB1+wLfulvJEFaUelODhZ83Wi1pEhYDJw/oaLSRjgW6VNto0HITHLLmqlrbrF7zEaZactGiA==
+X-Received: by 2002:a7b:c38b:: with SMTP id s11mr904530wmj.29.1638821040465;
+        Mon, 06 Dec 2021 12:04:00 -0800 (PST)
 Received: from localhost (net-37-182-17-175.cust.vodafonedsl.it. [37.182.17.175])
-        by smtp.gmail.com with ESMTPSA id e8sm12038083wrr.26.2021.12.06.11.57.10
+        by smtp.gmail.com with ESMTPSA id x1sm12109403wru.40.2021.12.06.12.03.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 11:57:10 -0800 (PST)
-Date:   Mon, 6 Dec 2021 20:57:08 +0100
+        Mon, 06 Dec 2021 12:03:59 -0800 (PST)
+Date:   Mon, 6 Dec 2021 21:03:58 +0100
 From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, shayagr@amazon.com,
-        dsahern@kernel.org, brouer@redhat.com, echaudro@redhat.com,
-        jasowang@redhat.com, alexander.duyck@gmail.com, saeed@kernel.org,
+To:     Zvi Effron <zeffron@riotgames.com>
+Cc:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, brouer@redhat.com, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        shayagr@amazon.com, john.fastabend@gmail.com, dsahern@kernel.org,
+        echaudro@redhat.com, jasowang@redhat.com,
+        alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: Re: [PATCH v19 bpf-next 12/23] bpf: add multi-buff support to the
- bpf_xdp_adjust_tail() API
-Message-ID: <Ya5rFFqzXy5adxbs@lore-desk>
+Subject: Re: [PATCH v19 bpf-next 23/23] xdp: disable XDP_REDIRECT for xdp
+ multi-buff
+Message-ID: <Ya5srnSIkt+bgJaC@lore-desk>
 References: <cover.1638272238.git.lorenzo@kernel.org>
- <81319e52462c07361dbf99b9ec1748b41cdcf9fa.1638272238.git.lorenzo@kernel.org>
- <61ad94bde1ea6_50c22081e@john.notmuch>
- <Ya4nI6DKPmGOpfMf@lore-desk>
- <61ae458a58d73_88182082b@john.notmuch>
+ <df855fe05b80746fa7f657fce78b24d582f133cb.1638272239.git.lorenzo@kernel.org>
+ <88f9b4e9-9074-a507-426d-7c947f1e2b13@redhat.com>
+ <CAC1LvL1U1=Qb9Em5=uwC=RQw0pKPQ+dCdURgURbLgGAJkXm0eg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hOQqi1YYOcr53TRN"
+        protocol="application/pgp-signature"; boundary="qbA3iRlZxQw4vN4L"
 Content-Disposition: inline
-In-Reply-To: <61ae458a58d73_88182082b@john.notmuch>
+In-Reply-To: <CAC1LvL1U1=Qb9Em5=uwC=RQw0pKPQ+dCdURgURbLgGAJkXm0eg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
---hOQqi1YYOcr53TRN
+--qbA3iRlZxQw4vN4L
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-> Lorenzo Bianconi wrote:
-> > > Lorenzo Bianconi wrote:
-> > > > From: Eelco Chaudron <echaudro@redhat.com>
-> > > >=20
-> > > > This change adds support for tail growing and shrinking for XDP mul=
-ti-buff.
-> > > >=20
-> > > > When called on a multi-buffer packet with a grow request, it will w=
-ork
-> > > > on the last fragment of the packet. So the maximum grow size is the
-> > > > last fragments tailroom, i.e. no new buffer will be allocated.
-> > > > A XDP mb capable driver is expected to set frag_size in xdp_rxq_inf=
-o data
-> > > > structure to notify the XDP core the fragment size. frag_size set t=
-o 0 is
-> > > > interpreted by the XDP core as tail growing is not allowed.
-> > > > Introduce __xdp_rxq_info_reg utility routine to initialize frag_siz=
-e field.
-> > > >=20
-> > > > When shrinking, it will work from the last fragment, all the way do=
-wn to
-> > > > the base buffer depending on the shrinking size. It's important to =
-mention
-> > > > that once you shrink down the fragment(s) are freed, so you can not=
- grow
-> > > > again to the original size.
-> > > >=20
-> > > > Acked-by: Jakub Kicinski <kuba@kernel.org>
-> > > > Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > > Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
-> > > > ---
+> On Mon, Dec 6, 2021 at 11:11 AM Jesper Dangaard Brouer
+> <jbrouer@redhat.com> wrote:
+> >
+> > On 30/11/2021 12.53, Lorenzo Bianconi wrote:
+> > > XDP_REDIRECT is not fully supported yet for xdp multi-buff since not
+> > > all XDP capable drivers can map non-linear xdp_frame in ndo_xdp_xmit
+> > > so disable it for the moment.
+> > >
+> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > ---
+> > >   net/core/filter.c | 7 +++++++
+> > >   1 file changed, 7 insertions(+)
+> > >
+> > > diff --git a/net/core/filter.c b/net/core/filter.c
+> > > index b70725313442..a87d835d1122 100644
+> > > --- a/net/core/filter.c
+> > > +++ b/net/core/filter.c
+> > > @@ -4189,6 +4189,13 @@ int xdp_do_redirect(struct net_device *dev, st=
+ruct xdp_buff *xdp,
+> > >       struct bpf_map *map;
+> > >       int err;
+> > >
+> > > +     /* XDP_REDIRECT is not fully supported yet for xdp multi-buff s=
+ince
+> > > +      * not all XDP capable drivers can map non-linear xdp_frame in
+> > > +      * ndo_xdp_xmit.
+> > > +      */
+> > > +     if (unlikely(xdp_buff_is_mb(xdp)))
+> > > +             return -EOPNOTSUPP;
+> > > +
+> >
+> > This approach also exclude 'cpumap' use-case, which you AFAIK have added
+> > MB support for in this patchset.
+> >
+> > Generally this check is hopefully something we can remove again, once
+> > drivers add MB ndo_xdp_xmit support.
+> >
 >=20
-> [...]
->=20
-> pasting full function here to help following along.
->=20
-> +
-> +static int bpf_xdp_mb_shrink_tail(struct xdp_buff *xdp, int offset)
-> +{
-> +	struct skb_shared_info *sinfo =3D xdp_get_shared_info_from_buff(xdp);
-> +	int i, n_frags_free =3D 0, len_free =3D 0;
-> +
-> +	if (unlikely(offset > (int)xdp_get_buff_len(xdp) - ETH_HLEN))
-> +		return -EINVAL;
-> +
-> +	for (i =3D sinfo->nr_frags - 1; i >=3D 0 && offset > 0; i--) {
-> +		skb_frag_t *frag =3D &sinfo->frags[i];
-> +		int size =3D skb_frag_size(frag);
-> +		int shrink =3D min_t(int, offset, size);
-> +
-> +		len_free +=3D shrink;
-> +		offset -=3D shrink;
-> +
-> +		if (unlikely(size =3D=3D shrink)) {
-> +			struct page *page =3D skb_frag_page(frag);
-> +
-> +			__xdp_return(page_address(page), &xdp->rxq->mem,
-> +				     false, NULL);
-> +			n_frags_free++;
-> +		} else {
-> +			skb_frag_size_set(frag, size - shrink);
-> +			break;
-> +		}
-> +	}
-> +	sinfo->nr_frags -=3D n_frags_free;
-> +	sinfo->xdp_frags_size -=3D len_free;
-> +
-> +	if (unlikely(offset > 0)) {
-> +		xdp_buff_clear_mb(xdp);
-> +		xdp->data_end -=3D offset;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->=20
-> > >=20
-> > > hmm whats the case for offset to !=3D 0? Seems with initial unlikely
-> > > check and shrinking while walking backwards through the frags it
-> > > should be zero? Maybe a comment would help?
-> >=20
-> > Looking at the code, offset can be > 0 here whenever we reduce the mb f=
-rame to
-> > a legacy frame (so whenever offset will move the boundary into the line=
-ar
-> > area).
->=20
-> But still missing if we need to clear the mb bit or not when we shrink do=
-wn
-> to a single frag. I think its fine, but worth double checking. As an exam=
-ple
-> consider I shrink 2k from a 3k pkt with two frags, one full 2k and another
-> 1k extra,
->=20
-> On the first run through,
->=20
->  i =3D 1;
->  offset =3D 2k
->=20
-> +	for (i =3D sinfo->nr_frags - 1; i >=3D 0 && offset > 0; i--) {
-> +		skb_frag_t *frag =3D &sinfo->frags[i];
-> +		int size =3D skb_frag_size(frag);
-> +		int shrink =3D min_t(int, offset, size);
->=20
-> shrink =3D 1k; // min_t(int, offset, size) -> size
->=20
-> +
-> +		len_free +=3D shrink;
-> +		offset -=3D shrink;
->=20
-> offset =3D 1k
->=20
-> +		if (unlikely(size =3D=3D shrink)) {
-> +			struct page *page =3D skb_frag_page(frag);
-> +
-> +			__xdp_return(page_address(page), &xdp->rxq->mem,
-> +				     false, NULL);
-> +			n_frags_free++;
->=20
-> Will free the frag
->=20
-> Then next run through
->=20
-> i =3D 0;
-> offset =3D 1k;
->=20
-> +		skb_frag_t *frag =3D &sinfo->frags[i];
-> +		int size =3D skb_frag_size(frag);
-> +		int shrink =3D min_t(int, offset, size);
->=20
-> shrink =3D 1k; // min_t(int, offset, size) -> offset
->=20
-> +
-> +		len_free +=3D shrink;
-> +		offset -=3D shrink;
->=20
-> offset =3D 0k
->=20
-> +
-> +		if (unlikely(size =3D=3D shrink)) { ...
-> +		} else {
-> +			skb_frag_size_set(frag, size - shrink);
-> +			break;
-> +		}
->=20
-> Then later there is the check 'if (unlikely(offset > 0) { ...}', but that
-> wont hit this case and we shrunk it back to a single frag. Did we want
-> to clear the mb in this case? I'm not seeing how it harms things to have
-> the mb bit set just trying to follow code here.
+> What happens in the future when a new driver is added without (in its int=
+ial
+> version) MB ndo_xdp_xmit support? Is MB support for ndo_xdp_xmit going to=
+ be a
+> requirement for a driver (with ndo_xdp_xmit) to be accepted to the kernel?
 
-If I followed correctly your example, we will have sinfo->nr_frags =3D 1 at=
- the
-end of the processing (since the first fragment has 2k size), right?
-If so mb bit must be set to 1. Am I missing something?
-Re-looking at the code I guess we should clear mb bit using sinfo->nr_frags
-instead:
-
-	if (!sinfo->nr_frags)
-		xdp_buff_clear_mb(xdp);
-
-Agree?
-
-Regards,
-Lorenzo
+I think the optimal solution would be export the driver XDP capabilities (A=
+FAIK
+there is an ogoing effort for this, but it is not available yet).
 
 >=20
-> Would offset > 0 indicate we weren't able to shrink the xdp buff enough
-> for some reason. Need some coffee perhaps.
+> I'm not arguing against removing this check in the future, I'm just wonde=
+ring
+> if we need a different mechanism than outright prohibiting XDP_REDIRECT w=
+ith MB
+> to protect against the redirected device not having MB support?
 >=20
-> Thanks,
-> John
+> >
+> > >       ri->map_id =3D 0; /* Valid map id idr range: [1,INT_MAX[ */
+> > >       ri->map_type =3D BPF_MAP_TYPE_UNSPEC;
+> > >
+> > >
+> >
 >=20
 
---hOQqi1YYOcr53TRN
+--qbA3iRlZxQw4vN4L
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYa5rFAAKCRA6cBh0uS2t
-rAPmAQCw3qlOwQ4AECWUfuNGM+s/hDHQ3e5wt0RqbLpfSR9ThgD/XLRSBEG/jDXs
-05b1gtNYMwXk/OSCJM7ZmvEwRbVp6Q8=
-=bbI4
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYa5srgAKCRA6cBh0uS2t
+rBbMAQC+gqYQi8eaFZnyxyFJyEYU9JbyfPSutoB6IViPVE9OvgEAtddmv3l5L4SZ
+kt82g41U8ODMemPqhlRNQZR1DlLiFwk=
+=oZbs
 -----END PGP SIGNATURE-----
 
---hOQqi1YYOcr53TRN--
+--qbA3iRlZxQw4vN4L--
 
