@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5666C433F5
-	for <bpf@archiver.kernel.org>; Tue,  7 Dec 2021 20:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13343C433EF
+	for <bpf@archiver.kernel.org>; Tue,  7 Dec 2021 20:56:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbhLGU7y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Dec 2021 15:59:54 -0500
-Received: from mga11.intel.com ([192.55.52.93]:56457 "EHLO mga11.intel.com"
+        id S231721AbhLGU74 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Dec 2021 15:59:56 -0500
+Received: from mga02.intel.com ([134.134.136.20]:30789 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230045AbhLGU7w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:59:52 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="235198636"
+        id S231552AbhLGU7x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Dec 2021 15:59:53 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="224942864"
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="235198636"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:56:21 -0800
+   d="scan'208";a="224942864"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:56:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="657847200"
+   d="scan'208";a="751520639"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Dec 2021 12:56:17 -0800
+  by fmsmga005.fm.intel.com with ESMTP; 07 Dec 2021 12:56:13 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7Ku9ki018910;
-        Tue, 7 Dec 2021 20:56:15 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7Ku9kf018910;
+        Tue, 7 Dec 2021 20:56:12 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -45,9 +45,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Vedang Patel <vedang.patel@intel.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH v3 net-next 5/9] ice: respect metadata on XSK Rx to skb
-Date:   Tue,  7 Dec 2021 21:55:32 +0100
-Message-Id: <20211207205536.563550-6-alexandr.lobakin@intel.com>
+Subject: [PATCH v3 net-next 2/9] i40e: respect metadata on XSK Rx to skb
+Date:   Tue,  7 Dec 2021 21:55:29 +0100
+Message-Id: <20211207205536.563550-3-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211207205536.563550-1-alexandr.lobakin@intel.com>
 References: <20211207205536.563550-1-alexandr.lobakin@intel.com>
@@ -63,37 +63,38 @@ Copy it along with the frame headers. Account its size on skb
 allocation, and when copying just treat it as a part of the frame
 and do a pull after to "move" it to the "reserved" zone.
 net_prefetch() xdp->data_meta and align the copy size to speed-up
-memcpy() a little and better match ice_costruct_skb().
+memcpy() a little and better match i40e_costruct_skb().
 
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Fixes: 0a714186d3c0 ("i40e: add AF_XDP zero-copy Rx support")
 Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 14 ++++++++++----
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 14 ++++++++++----
  1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index f0bd8e1953bf..57e49e652439 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -428,18 +428,24 @@ static struct sk_buff *
- ice_construct_skb_zc(struct ice_rx_ring *rx_ring, struct xdp_buff **xdp_arr)
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 9564906b7da8..0e8cf275e084 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -240,19 +240,25 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
+ 					     struct xdp_buff *xdp)
  {
- 	struct xdp_buff *xdp = *xdp_arr;
 +	unsigned int totalsize = xdp->data_end - xdp->data_meta;
  	unsigned int metasize = xdp->data - xdp->data_meta;
 -	unsigned int datasize = xdp->data_end - xdp->data;
  	struct sk_buff *skb;
  
--	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
 +	net_prefetch(xdp->data_meta);
 +
+ 	/* allocate a skb to store the frags */
+-	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
 +	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, totalsize,
  			       GFP_ATOMIC | __GFP_NOWARN);
  	if (unlikely(!skb))
- 		return NULL;
+ 		goto out;
  
 -	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
 -	if (metasize)
@@ -105,8 +106,8 @@ index f0bd8e1953bf..57e49e652439 100644
 +		__skb_pull(skb, metasize);
 +	}
  
+ out:
  	xsk_buff_free(xdp);
- 	*xdp_arr = NULL;
 -- 
 2.33.1
 
