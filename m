@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6AFEC4332F
-	for <bpf@archiver.kernel.org>; Tue,  7 Dec 2021 20:56:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71498C4321E
+	for <bpf@archiver.kernel.org>; Tue,  7 Dec 2021 20:56:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbhLGU7x (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Dec 2021 15:59:53 -0500
-Received: from mga03.intel.com ([134.134.136.65]:25433 "EHLO mga03.intel.com"
+        id S234798AbhLGVAL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Dec 2021 16:00:11 -0500
+Received: from mga04.intel.com ([192.55.52.120]:31627 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229905AbhLGU7u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Dec 2021 15:59:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="237628544"
+        id S233640AbhLGVAF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Dec 2021 16:00:05 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10191"; a="236423611"
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="237628544"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:56:19 -0800
+   d="scan'208";a="236423611"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2021 12:56:22 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,295,1631602800"; 
-   d="scan'208";a="461430109"
+   d="scan'208";a="515821867"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga003.jf.intel.com with ESMTP; 07 Dec 2021 12:56:14 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 07 Dec 2021 12:56:18 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7Ku9kg018910;
-        Tue, 7 Dec 2021 20:56:13 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B7Ku9kj018910;
+        Tue, 7 Dec 2021 20:56:16 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -43,11 +43,10 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Jithu Joseph <jithu.joseph@intel.com>,
         Andre Guedes <andre.guedes@intel.com>,
         Vedang Patel <vedang.patel@intel.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH v3 net-next 3/9] ice: respect metadata in legacy-rx/ice_construct_skb()
-Date:   Tue,  7 Dec 2021 21:55:30 +0100
-Message-Id: <20211207205536.563550-4-alexandr.lobakin@intel.com>
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v3 net-next 6/9] igc: don't reserve excessive XDP_PACKET_HEADROOM on XSK Rx to skb
+Date:   Tue,  7 Dec 2021 21:55:33 +0100
+Message-Id: <20211207205536.563550-7-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211207205536.563550-1-alexandr.lobakin@intel.com>
 References: <20211207205536.563550-1-alexandr.lobakin@intel.com>
@@ -57,64 +56,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In "legacy-rx" mode represented by ice_construct_skb(), we can
-still use XDP (and XDP metadata), but after XDP_PASS the metadata
-will be lost as it doesn't get copied to the skb.
-Copy it along with the frame headers. Account its size on skb
-allocation, and when copying just treat it as a part of the frame
-and do a pull after to "move" it to the "reserved" zone.
-Point net_prefetch() to xdp->data_meta instead of data. This won't
-change anything when the meta is not here, but will save some cache
-misses otherwise.
+{__,}napi_alloc_skb() allocates and reserves additional NET_SKB_PAD
++ NET_IP_ALIGN for any skb.
+OTOH, igc_construct_skb_zc() currently allocates and reserves
+additional `xdp->data_meta - xdp->data_hard_start`, which is about
+XDP_PACKET_HEADROOM for XSK frames.
+There's no need for that at all as the frame is post-XDP and will
+go only to the networking stack core.
+Pass the size of the actual data only (+ meta) to
+__napi_alloc_skb() and don't reserve anything. This will give
+enough headroom for stack processing.
+Also, net_prefetch() xdp->data_meta and align the copy size to
+speed-up memcpy() a little and better match igc_costruct_skb().
 
-Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/intel/igc/igc_main.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index bc3ba19dc88f..d724b6376c43 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -968,15 +968,17 @@ static struct sk_buff *
- ice_construct_skb(struct ice_rx_ring *rx_ring, struct ice_rx_buf *rx_buf,
- 		  struct xdp_buff *xdp)
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 142c57b7a451..a2e8d43be3a1 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -2446,19 +2446,20 @@ static int igc_clean_rx_irq(struct igc_q_vector *q_vector, const int budget)
+ static struct sk_buff *igc_construct_skb_zc(struct igc_ring *ring,
+ 					    struct xdp_buff *xdp)
  {
-+	unsigned int metasize = xdp->data - xdp->data_meta;
- 	unsigned int size = xdp->data_end - xdp->data;
- 	unsigned int headlen;
++	unsigned int totalsize = xdp->data_end - xdp->data_meta;
+ 	unsigned int metasize = xdp->data - xdp->data_meta;
+-	unsigned int datasize = xdp->data_end - xdp->data;
+-	unsigned int totalsize = metasize + datasize;
  	struct sk_buff *skb;
  
- 	/* prefetch first cache line of first page */
--	net_prefetch(xdp->data);
+-	skb = __napi_alloc_skb(&ring->q_vector->napi,
+-			       xdp->data_end - xdp->data_hard_start,
 +	net_prefetch(xdp->data_meta);
- 
- 	/* allocate a skb to store the frags */
--	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, ICE_RX_HDR_SIZE,
-+	skb = __napi_alloc_skb(&rx_ring->q_vector->napi,
-+			       ICE_RX_HDR_SIZE + metasize,
++
++	skb = __napi_alloc_skb(&ring->q_vector->napi, totalsize,
  			       GFP_ATOMIC | __GFP_NOWARN);
  	if (unlikely(!skb))
  		return NULL;
-@@ -988,8 +990,13 @@ ice_construct_skb(struct ice_rx_ring *rx_ring, struct ice_rx_buf *rx_buf,
- 		headlen = eth_get_headlen(skb->dev, xdp->data, ICE_RX_HDR_SIZE);
  
- 	/* align pull length to size of long to optimize memcpy performance */
--	memcpy(__skb_put(skb, headlen), xdp->data, ALIGN(headlen,
--							 sizeof(long)));
-+	memcpy(__skb_put(skb, headlen + metasize), xdp->data_meta,
-+	       ALIGN(headlen + metasize, sizeof(long)));
+-	skb_reserve(skb, xdp->data_meta - xdp->data_hard_start);
+-	memcpy(__skb_put(skb, totalsize), xdp->data_meta, totalsize);
++	memcpy(__skb_put(skb, totalsize), xdp->data_meta,
++	       ALIGN(totalsize, sizeof(long)));
 +
-+	if (metasize) {
-+		skb_metadata_set(skb, metasize);
-+		__skb_pull(skb, metasize);
-+	}
- 
- 	/* if we exhaust the linear part then add what is left as a frag */
- 	size -= headlen;
+ 	if (metasize) {
+ 		skb_metadata_set(skb, metasize);
+ 		__skb_pull(skb, metasize);
 -- 
 2.33.1
 
