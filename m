@@ -2,146 +2,212 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CADC433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Dec 2021 00:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D047C433F5
+	for <bpf@archiver.kernel.org>; Thu,  9 Dec 2021 00:31:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbhLIAel convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Dec 2021 19:34:41 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9402 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S241496AbhLIAeh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Dec 2021 19:34:37 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1B8HpSPk031969
-        for <bpf@vger.kernel.org>; Wed, 8 Dec 2021 16:31:04 -0800
+        id S241307AbhLIAep convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Dec 2021 19:34:45 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:54752 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238646AbhLIAen (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Dec 2021 19:34:43 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8Mn2mb026694
+        for <bpf@vger.kernel.org>; Wed, 8 Dec 2021 16:31:10 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3ctqvb6968-2
+        by mx0a-00082601.pphosted.com with ESMTP id 3cu5u5rgv0-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Dec 2021 16:31:04 -0800
-Received: from intmgw001.46.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 08 Dec 2021 16:31:10 -0800
+Received: from intmgw001.05.prn6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 16:31:03 -0800
+ 15.1.2308.20; Wed, 8 Dec 2021 16:31:09 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D5287C51D6D2; Wed,  8 Dec 2021 16:30:51 -0800 (PST)
+        id 147EAC51D6F6; Wed,  8 Dec 2021 16:31:00 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 08/12] libbpf: deprecate bpf_object__load_xattr()
-Date:   Wed, 8 Dec 2021 16:30:29 -0800
-Message-ID: <20211209003033.3962657-9-andrii@kernel.org>
+Subject: [PATCH bpf-next 12/12] bpftool: switch bpf_object__load_xattr() to bpf_object__load()
+Date:   Wed, 8 Dec 2021 16:30:33 -0800
+Message-ID: <20211209003033.3962657-13-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211209003033.3962657-1-andrii@kernel.org>
 References: <20211209003033.3962657-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-ORIG-GUID: F46SNZ-YTtvWJ5ReD0oN03k_RKEy_GA1
-X-Proofpoint-GUID: F46SNZ-YTtvWJ5ReD0oN03k_RKEy_GA1
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: 3W657t2B0lGW7uk7ePdbeJlRoV-BIv7i
+X-Proofpoint-ORIG-GUID: 3W657t2B0lGW7uk7ePdbeJlRoV-BIv7i
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-08_08,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 bulkscore=0
- malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 clxscore=1015
- suspectscore=0 spamscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112090000
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112090000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Deprecate non-extensible bpf_object__load_xattr() in v0.8 ([0]).
-
-With log_level control through bpf_object_open_opts or
-bpf_program__set_log_level(), we are finally at the point where
-bpf_object__load_xattr() doesn't provide any functionality that can't be
-accessed through other (better) ways. The other feature,
-target_btf_path, is also controllable through bpf_object_open_opts.
-
-  [0] Closes: https://github.com/libbpf/libbpf/issues/289
+Switch all the uses of to-be-deprecated bpf_object__load_xattr() into
+a simple bpf_object__load() calls with optional log_level passed through
+open_opts.kernel_log_level, if -d option is specified.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 23 ++++++++++-------------
- tools/lib/bpf/libbpf.h |  1 +
- 2 files changed, 11 insertions(+), 13 deletions(-)
+ tools/bpf/bpftool/gen.c        | 11 ++++-------
+ tools/bpf/bpftool/prog.c       | 24 ++++++++++--------------
+ tools/bpf/bpftool/struct_ops.c | 15 +++++++--------
+ 3 files changed, 21 insertions(+), 29 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index e3e56bebd014..18d95c6a89fe 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -7462,14 +7462,10 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 	return 0;
- }
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 997a2865e04a..b4695df2ea3d 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -486,7 +486,6 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
  
--int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
-+static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const char *target_btf_path)
+ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *header_guard)
  {
--	struct bpf_object *obj;
- 	int err, i;
+-	struct bpf_object_load_attr load_attr = {};
+ 	DECLARE_LIBBPF_OPTS(gen_loader_opts, opts);
+ 	struct bpf_map *map;
+ 	char ident[256];
+@@ -496,12 +495,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 	if (err)
+ 		return err;
  
--	if (!attr)
--		return libbpf_err(-EINVAL);
--	obj = attr->obj;
- 	if (!obj)
- 		return libbpf_err(-EINVAL);
+-	load_attr.obj = obj;
+-	if (verifier_logs)
+-		/* log_level1 + log_level2 + stats, but not stable UAPI */
+-		load_attr.log_level = 1 + 2 + 4;
+-
+-	err = bpf_object__load_xattr(&load_attr);
++	err = bpf_object__load(obj);
+ 	if (err) {
+ 		p_err("failed to load object file");
+ 		goto out;
+@@ -719,6 +713,9 @@ static int do_skeleton(int argc, char **argv)
+ 	if (obj_name[0] == '\0')
+ 		get_obj_name(obj_name, file);
+ 	opts.object_name = obj_name;
++	if (verifier_logs)
++		/* log_level1 + log_level2 + stats, but not stable UAPI */
++		opts.kernel_log_level = 1 + 2 + 4;
+ 	obj = bpf_object__open_mem(obj_data, file_sz, &opts);
+ 	err = libbpf_get_error(obj);
+ 	if (err) {
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 45ccc254e69f..f874896c4154 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1464,7 +1464,6 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts,
+ 		.relaxed_maps = relaxed_maps,
+ 	);
+-	struct bpf_object_load_attr load_attr = { 0 };
+ 	enum bpf_attach_type expected_attach_type;
+ 	struct map_replace *map_replace = NULL;
+ 	struct bpf_program *prog = NULL, *pos;
+@@ -1598,6 +1597,10 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
  
-@@ -7479,7 +7475,7 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
+ 	set_max_rlimit();
+ 
++	if (verifier_logs)
++		/* log_level1 + log_level2 + stats, but not stable UAPI */
++		open_opts.kernel_log_level = 1 + 2 + 4;
++
+ 	obj = bpf_object__open_file(file, &open_opts);
+ 	if (libbpf_get_error(obj)) {
+ 		p_err("failed to open object file");
+@@ -1677,12 +1680,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 		goto err_close_obj;
  	}
  
- 	if (obj->gen_loader)
--		bpf_gen__init(obj->gen_loader, attr->log_level);
-+		bpf_gen__init(obj->gen_loader, extra_log_level);
- 
- 	err = bpf_object__probe_loading(obj);
- 	err = err ? : bpf_object__load_vmlinux_btf(obj, false);
-@@ -7488,8 +7484,8 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- 	err = err ? : bpf_object__sanitize_maps(obj);
- 	err = err ? : bpf_object__init_kern_struct_ops_maps(obj);
- 	err = err ? : bpf_object__create_maps(obj);
--	err = err ? : bpf_object__relocate(obj, obj->btf_custom_path ? : attr->target_btf_path);
--	err = err ? : bpf_object__load_progs(obj, attr->log_level);
-+	err = err ? : bpf_object__relocate(obj, obj->btf_custom_path ? : target_btf_path);
-+	err = err ? : bpf_object__load_progs(obj, extra_log_level);
- 	err = err ? : bpf_object_init_prog_arrays(obj);
- 
- 	if (obj->gen_loader) {
-@@ -7534,13 +7530,14 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- 	return libbpf_err(err);
- }
- 
--int bpf_object__load(struct bpf_object *obj)
-+int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
+-	load_attr.obj = obj;
+-	if (verifier_logs)
+-		/* log_level1 + log_level2 + stats, but not stable UAPI */
+-		load_attr.log_level = 1 + 2 + 4;
+-
+-	err = bpf_object__load_xattr(&load_attr);
++	err = bpf_object__load(obj);
+ 	if (err) {
+ 		p_err("failed to load object file");
+ 		goto err_close_obj;
+@@ -1809,7 +1807,6 @@ static int do_loader(int argc, char **argv)
  {
--	struct bpf_object_load_attr attr = {
--		.obj = obj,
--	};
-+	return bpf_object_load(attr->obj, attr->log_level, attr->target_btf_path);
-+}
+ 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts);
+ 	DECLARE_LIBBPF_OPTS(gen_loader_opts, gen);
+-	struct bpf_object_load_attr load_attr = {};
+ 	struct bpf_object *obj;
+ 	const char *file;
+ 	int err = 0;
+@@ -1818,6 +1815,10 @@ static int do_loader(int argc, char **argv)
+ 		return -1;
+ 	file = GET_ARG();
  
--	return bpf_object__load_xattr(&attr);
-+int bpf_object__load(struct bpf_object *obj)
-+{
-+	return bpf_object_load(obj, 0, NULL);
- }
++	if (verifier_logs)
++		/* log_level1 + log_level2 + stats, but not stable UAPI */
++		open_opts.kernel_log_level = 1 + 2 + 4;
++
+ 	obj = bpf_object__open_file(file, &open_opts);
+ 	if (libbpf_get_error(obj)) {
+ 		p_err("failed to open object file");
+@@ -1828,12 +1829,7 @@ static int do_loader(int argc, char **argv)
+ 	if (err)
+ 		goto err_close_obj;
  
- static int make_parent_dir(const char *path)
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index dacde55bebff..a8b894dae633 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -214,6 +214,7 @@ struct bpf_object_load_attr {
+-	load_attr.obj = obj;
+-	if (verifier_logs)
+-		/* log_level1 + log_level2 + stats, but not stable UAPI */
+-		load_attr.log_level = 1 + 2 + 4;
+-
+-	err = bpf_object__load_xattr(&load_attr);
++	err = bpf_object__load(obj);
+ 	if (err) {
+ 		p_err("failed to load object file");
+ 		goto err_close_obj;
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index cbdca37a53f0..2f693b082bdb 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -479,7 +479,7 @@ static int do_unregister(int argc, char **argv)
  
- /* Load/unload object into/from kernel */
- LIBBPF_API int bpf_object__load(struct bpf_object *obj);
-+LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_object__load() instead")
- LIBBPF_API int bpf_object__load_xattr(struct bpf_object_load_attr *attr);
- LIBBPF_DEPRECATED_SINCE(0, 6, "bpf_object__unload() is deprecated, use bpf_object__close() instead")
- LIBBPF_API int bpf_object__unload(struct bpf_object *obj);
+ static int do_register(int argc, char **argv)
+ {
+-	struct bpf_object_load_attr load_attr = {};
++	LIBBPF_OPTS(bpf_object_open_opts, open_opts);
+ 	const struct bpf_map_def *def;
+ 	struct bpf_map_info info = {};
+ 	__u32 info_len = sizeof(info);
+@@ -494,18 +494,17 @@ static int do_register(int argc, char **argv)
+ 
+ 	file = GET_ARG();
+ 
+-	obj = bpf_object__open(file);
++	if (verifier_logs)
++		/* log_level1 + log_level2 + stats, but not stable UAPI */
++		open_opts.kernel_log_level = 1 + 2 + 4;
++
++	obj = bpf_object__open_file(file, &open_opts);
+ 	if (libbpf_get_error(obj))
+ 		return -1;
+ 
+ 	set_max_rlimit();
+ 
+-	load_attr.obj = obj;
+-	if (verifier_logs)
+-		/* log_level1 + log_level2 + stats, but not stable UAPI */
+-		load_attr.log_level = 1 + 2 + 4;
+-
+-	if (bpf_object__load_xattr(&load_attr)) {
++	if (bpf_object__load(obj)) {
+ 		bpf_object__close(obj);
+ 		return -1;
+ 	}
 -- 
 2.30.2
 
