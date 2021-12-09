@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB35DC4332F
-	for <bpf@archiver.kernel.org>; Thu,  9 Dec 2021 00:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA3BFC433EF
+	for <bpf@archiver.kernel.org>; Thu,  9 Dec 2021 00:30:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbhLIAeR convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Dec 2021 19:34:17 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44516 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241476AbhLIAeR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Dec 2021 19:34:17 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8IqHah006634
-        for <bpf@vger.kernel.org>; Wed, 8 Dec 2021 16:30:44 -0800
+        id S241476AbhLIAeX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Dec 2021 19:34:23 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29728 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241474AbhLIAeX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 8 Dec 2021 19:34:23 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with SMTP id 1B8Gf0eq000570
+        for <bpf@vger.kernel.org>; Wed, 8 Dec 2021 16:30:50 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3ctqvtp98q-6
+        by m0001303.ppops.net with ESMTP id 3cu0ed2yj7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Dec 2021 16:30:44 -0800
-Received: from intmgw003.48.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 08 Dec 2021 16:30:50 -0800
+Received: from intmgw002.48.prn1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 16:30:43 -0800
+ 15.1.2308.20; Wed, 8 Dec 2021 16:30:48 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D24A6C51D603; Wed,  8 Dec 2021 16:30:40 -0800 (PST)
+        id BE716C51D65A; Wed,  8 Dec 2021 16:30:47 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 03/12] libbpf: allow passing preallocated log_buf when loading BTF into kernel
-Date:   Wed, 8 Dec 2021 16:30:24 -0800
-Message-ID: <20211209003033.3962657-4-andrii@kernel.org>
+Subject: [PATCH bpf-next 06/12] libbpf: preserve kernel error code and remove kprobe prog type guessing
+Date:   Wed, 8 Dec 2021 16:30:27 -0800
+Message-ID: <20211209003033.3962657-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211209003033.3962657-1-andrii@kernel.org>
 References: <20211209003033.3962657-1-andrii@kernel.org>
@@ -38,196 +38,78 @@ Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: quSmFopDzZsfKeMxBANwtny7ZzlWCQVe
-X-Proofpoint-ORIG-GUID: quSmFopDzZsfKeMxBANwtny7ZzlWCQVe
+X-Proofpoint-ORIG-GUID: 8Eue8OQD2bFOwxaNHYiVY2qLHYlBTWG8
+X-Proofpoint-GUID: 8Eue8OQD2bFOwxaNHYiVY2qLHYlBTWG8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-08_08,2021-12-08_01,2021-12-02_01
 X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- priorityscore=1501 spamscore=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ mlxscore=0 bulkscore=0 suspectscore=0 adultscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2110150000 definitions=main-2112090000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add libbpf-internal btf_load_into_kernel() that allows to pass
-preallocated log_buf and custom log_level to be passed into kernel
-during BPF_BTF_LOAD call. When custom log_buf is provided,
-btf_load_into_kernel() won't attempt an retry with automatically
-allocated internal temporary buffer to capture BTF validation log.
+Instead of rewriting error code returned by the kernel of prog load with
+libbpf-sepcific variants pass through the original error.
 
-It's important to note the relation between log_buf and log_level, which
-slightly deviates from stricter kernel logic. From kernel's POV, if
-log_buf is specified, log_level has to be > 0, and vice versa. While
-kernel has good reasons to request such "sanity, this, in practice, is
-a bit unconvenient and restrictive for libbpf's high-level bpf_object APIs.
+There is now also no need to have a backup generic -LIBBPF_ERRNO__LOAD
+fallback error as bpf_prog_load() guarantees that errno will be properly
+set no matter what.
 
-So libbpf will allow to set non-NULL log_buf and log_level == 0. This is
-fine and means to attempt to load BTF without logging requested, but if
-it failes, retry the load with custom log_buf and log_level 1. Similar
-logic will be implemented for program loading. In practice this means
-that users can provide custom log buffer just in case error happens, but
-not really request slower verbose logging all the time. This is also
-consistent with libbpf behavior when custom log_buf is not set: libbpf
-first tries to load everything with log_level=0, and only if error
-happens allocates internal log buffer and retries with log_level=1.
-
-Also, while at it, make BTF validation log more obvious and follow the log
-pattern libbpf is using for dumping BPF verifier log during
-BPF_PROG_LOAD. BTF loading resulting in an error will look like this:
-
-libbpf: BTF loading error: -22
-libbpf: -- BEGIN BTF LOAD LOG ---
-magic: 0xeb9f
-version: 1
-flags: 0x0
-hdr_len: 24
-type_off: 0
-type_len: 1040
-str_off: 1040
-str_len: 2063598257
-btf_total_size: 1753
-Total section length too long
--- END BTF LOAD LOG --
-libbpf: Error loading .BTF into kernel: -22. BTF is optional, ignoring.
-
-This makes it much easier to find relevant parts in libbpf log output.
+Also drop a completely outdated and pretty useless BPF_PROG_TYPE_KPROBE
+guess logic. It's not necessary and neither it's helpful in modern BPF
+applications.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.c             | 78 +++++++++++++++++++++++----------
- tools/lib/bpf/libbpf_internal.h |  1 +
- 2 files changed, 56 insertions(+), 23 deletions(-)
+ tools/lib/bpf/libbpf.c | 19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 0d7b16eab569..e171424192ae 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1124,54 +1124,86 @@ struct btf *btf__parse_split(const char *path, struct btf *base_btf)
- 
- static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endian);
- 
--int btf__load_into_kernel(struct btf *btf)
-+int btf_load_into_kernel(struct btf *btf, char *log_buf, size_t log_sz, __u32 log_level)
- {
--	__u32 log_buf_size = 0, raw_size;
--	char *log_buf = NULL;
-+	LIBBPF_OPTS(bpf_btf_load_opts, opts);
-+	__u32 buf_sz = 0, raw_size;
-+	char *buf = NULL, *tmp;
- 	void *raw_data;
- 	int err = 0;
- 
- 	if (btf->fd >= 0)
- 		return libbpf_err(-EEXIST);
-+	if (log_sz && !log_buf)
-+		return libbpf_err(-EINVAL);
- 
--retry_load:
--	if (log_buf_size) {
--		log_buf = malloc(log_buf_size);
--		if (!log_buf)
--			return libbpf_err(-ENOMEM);
--
--		*log_buf = 0;
--	}
--
-+	/* cache native raw data representation */
- 	raw_data = btf_get_raw_data(btf, &raw_size, false);
- 	if (!raw_data) {
- 		err = -ENOMEM;
- 		goto done;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index f07ff39a9d20..3fd4e3d5a11f 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -6696,34 +6696,19 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
+ 		free(log_buf);
+ 		goto retry_load;
  	}
--	/* cache native raw data representation */
- 	btf->raw_size = raw_size;
- 	btf->raw_data = raw_data;
- 
--	btf->fd = bpf_load_btf(raw_data, raw_size, log_buf, log_buf_size, false);
-+retry_load:
-+	/* if log_level is 0, we won't provide log_buf/log_size to the kernel,
-+	 * initially. Only if BTF loading fails, we bump log_level to 1 and
-+	 * retry, using either auto-allocated or custom log_buf. This way
-+	 * non-NULL custom log_buf provides a buffer just in case, but hopes
-+	 * for successful load and no need for log_buf.
-+	 */
-+	if (log_level) {
-+		/* if caller didn't provide custom log_buf, we'll keep
-+		 * allocating our own progressively bigger buffers for BTF
-+		 * verification log
-+		 */
-+		if (!log_buf) {
-+			buf_sz = max((__u32)BPF_LOG_BUF_SIZE, buf_sz * 2);
-+			tmp = realloc(buf, buf_sz);
-+			if (!tmp) {
-+				err = -ENOMEM;
-+				goto done;
-+			}
-+			buf = tmp;
-+			buf[0] = '\0';
-+		}
+-	ret = errno ? -errno : -LIBBPF_ERRNO__LOAD;
 +
-+		opts.log_buf = log_buf ? log_buf : buf;
-+		opts.log_size = log_buf ? log_sz : buf_sz;
-+		opts.log_level = log_level;
-+	}
-+
-+	btf->fd = bpf_btf_load(raw_data, raw_size, &opts);
- 	if (btf->fd < 0) {
--		if (!log_buf || errno == ENOSPC) {
--			log_buf_size = max((__u32)BPF_LOG_BUF_SIZE,
--					   log_buf_size << 1);
--			free(log_buf);
-+		/* time to turn on verbose mode and try again */
-+		if (log_level == 0) {
-+			log_level = 1;
- 			goto retry_load;
- 		}
-+		/* only retry if caller didn't provide custom log_buf, but
-+		 * make sure we can never overflow buf_sz
-+		 */
-+		if (!log_buf && errno == ENOSPC && buf_sz <= UINT_MAX / 2)
-+			goto retry_load;
++	ret = -errno;
+ 	cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
+ 	pr_warn("prog '%s': BPF program load failed: %s\n", prog->name, cp);
+ 	pr_perm_msg(ret);
  
- 		err = -errno;
--		pr_warn("Error loading BTF: %s(%d)\n", strerror(errno), errno);
--		if (*log_buf)
--			pr_warn("%s\n", log_buf);
--		goto done;
-+		pr_warn("BTF loading error: %d\n", err);
-+		/* don't print out contents of custom log_buf */
-+		if (!log_buf && buf[0])
-+			pr_warn("-- BEGIN BTF LOAD LOG ---\n%s\n-- END BTF LOAD LOG --\n", buf);
+ 	if (log_buf && log_buf[0] != '\0') {
+-		ret = -LIBBPF_ERRNO__VERIFY;
+ 		pr_warn("prog '%s': -- BEGIN PROG LOAD LOG --\n%s-- END PROG LOAD LOG --\n",
+ 			prog->name, log_buf);
+ 	}
+ 	if (insns_cnt >= BPF_MAXINSNS) {
+ 		pr_warn("prog '%s': program too large (%d insns), at most %d insns\n",
+ 			prog->name, insns_cnt, BPF_MAXINSNS);
+-		ret = -LIBBPF_ERRNO__PROG2BIG;
+-	} else if (prog->type != BPF_PROG_TYPE_KPROBE) {
+-		/* Wrong program type? */
+-		int fd;
+-
+-		load_attr.expected_attach_type = 0;
+-		load_attr.log_buf = NULL;
+-		load_attr.log_size = 0;
+-		fd = bpf_prog_load(BPF_PROG_TYPE_KPROBE, prog_name, license,
+-				   insns, insns_cnt, &load_attr);
+-		if (fd >= 0) {
+-			close(fd);
+-			ret = -LIBBPF_ERRNO__PROGTYPE;
+-			goto out;
+-		}
  	}
  
- done:
--	free(log_buf);
-+	free(buf);
- 	return libbpf_err(err);
- }
-+
-+int btf__load_into_kernel(struct btf *btf)
-+{
-+	return btf_load_into_kernel(btf, NULL, 0, 0);
-+}
-+
- int btf__load(struct btf *) __attribute__((alias("btf__load_into_kernel")));
- 
- int btf__fd(const struct btf *btf)
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 6f143e9e810c..355c41019aed 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -277,6 +277,7 @@ int parse_cpu_mask_str(const char *s, bool **mask, int *mask_sz);
- int parse_cpu_mask_file(const char *fcpu, bool **mask, int *mask_sz);
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len);
-+int btf_load_into_kernel(struct btf *btf, char *log_buf, size_t log_sz, __u32 log_level);
- 
- struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf);
- void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
+ out:
 -- 
 2.30.2
 
