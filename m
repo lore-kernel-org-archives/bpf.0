@@ -2,132 +2,179 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B64BDC433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Dec 2021 00:51:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1EEC433EF
+	for <bpf@archiver.kernel.org>; Thu,  9 Dec 2021 00:53:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241540AbhLIAz0 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 8 Dec 2021 19:55:26 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:5562 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233448AbhLIAz0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 8 Dec 2021 19:55:26 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B8I2MAF008960
-        for <bpf@vger.kernel.org>; Wed, 8 Dec 2021 16:51:53 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3ctqvtpcfv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 08 Dec 2021 16:51:53 -0800
-Received: from intmgw002.46.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 8 Dec 2021 16:51:52 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 49110C523F54; Wed,  8 Dec 2021 16:49:25 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 01/12] libbpf: fix bpf_prog_load() log_buf logic for log_level 0
-Date:   Wed, 8 Dec 2021 16:49:09 -0800
-Message-ID: <20211209004920.4085377-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211209004920.4085377-1-andrii@kernel.org>
-References: <20211209004920.4085377-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-FB-Source: Intern
-X-Proofpoint-GUID: K0B_PWNK6yBqnoaoi7oZiF_6HiLtbFPt
-X-Proofpoint-ORIG-GUID: K0B_PWNK6yBqnoaoi7oZiF_6HiLtbFPt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-08_08,2021-12-08_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- priorityscore=1501 spamscore=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 impostorscore=0 adultscore=0 phishscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112090002
-X-FB-Internal: deliver
+        id S241616AbhLIA4v (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Dec 2021 19:56:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233448AbhLIA4u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Dec 2021 19:56:50 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2987FC061746;
+        Wed,  8 Dec 2021 16:53:18 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id m9so4949701iop.0;
+        Wed, 08 Dec 2021 16:53:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=yxalUBrs2WbqmCd/2i918DO3+hRWPvQ5gXQagl2i1gM=;
+        b=AAFVqrKxPeuTvfvbaks7/6neg0ZOf2csSOpZAu9aKGgp823920QdJ+MjgLbgOtb7d1
+         /RntPW67jqyUHqM4cd9cOC4bAPjbtaq1L42/mFnJC6vZxyzFwwYYPcic3pp2aZqn1MfW
+         sb268TDP30eGq5DFuHXXFRiZoNAgfYC3zizXtJinYxeeIPx3o4msjIl0nrYue78o6+iS
+         M6RrFUwwIM32HvhuMx0E0sQIBfcokuKjfZbzDpGeE/MGlTRSqrxOVXZDeTst6mJ0xCoC
+         PfIQf+p8PrF6pYdfthpj6pE4B+9ILdV6uF7hyjTB6mlZLCqzVlo9EPy3I0EAajvaf1+v
+         1J/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=yxalUBrs2WbqmCd/2i918DO3+hRWPvQ5gXQagl2i1gM=;
+        b=jEPcKu4DJah5pK8qPuY+fvo9VCPkJULBs3r1T0pvPgsDrfYm34ezYiS2Psd+rr2krP
+         Je/TAoQO1UpyHzjkhn3HHNXoSgkNRqvE8vo5L338Sp+o2SIhn4ZFk3Q9urjQSNtl8vks
+         fEsDcpwNumvAsqApZGysYUGXIpljAoMHr9DCSjP/e6HrdUxY1HA4mKgbpixzHINbrVlG
+         lRJZStQQa8hjY6J8GY9C+hj88XkLG3xKuaZuGikCOYurXJin58xMSGO33EYeYO8GdjqV
+         No33LxHIVwmsiA6aNIZxjHjr+WuahsvNjtSbcB2iqPKGftN0uaSq1DA9if5FzZTJbzSB
+         7xFQ==
+X-Gm-Message-State: AOAM531ztdyBj20MOZLdgP9zN3WofAH2BWRMeMKv5trvP+1NRjobpkw3
+        1uqFw+kvlvlZJ2xpLcQDK6o=
+X-Google-Smtp-Source: ABdhPJwPWztgp8ZlMhhDZWgq90+aMuxMQ4U0fX4rzC75ZtyUoHifdZvJx47AC+YAVDpTeyRXLbK21g==
+X-Received: by 2002:a05:6602:2cce:: with SMTP id j14mr10665103iow.67.1639011197500;
+        Wed, 08 Dec 2021 16:53:17 -0800 (PST)
+Received: from localhost ([172.243.151.11])
+        by smtp.gmail.com with ESMTPSA id h11sm2825405ili.30.2021.12.08.16.53.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 16:53:16 -0800 (PST)
+Date:   Wed, 08 Dec 2021 16:53:10 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <61b1537634e07_979572086f@john.notmuch>
+In-Reply-To: <20211202000232.380824-7-toke@redhat.com>
+References: <20211202000232.380824-1-toke@redhat.com>
+ <20211202000232.380824-7-toke@redhat.com>
+Subject: RE: [PATCH bpf-next 6/8] bpf: Add XDP_REDIRECT support to XDP for
+ bpf_prog_run()
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To unify libbpf APIs behavior w.r.t. log_buf and log_level, fix
-bpf_prog_load() to follow the same logic as bpf_btf_load() and
-high-level bpf_object__load() API will follow in the subsequent patches:
-  - if log_level is 0 and non-NULL log_buf is provided by a user, attempt
-    load operation initially with no log_buf and log_level set;
-  - if successful, we are done, return new FD;
-  - on error, retry the load operation with log_level bumped to 1 and
-    log_buf set; this way verbose logging will be requested only when we
-    are sure that there is a failure, but will be fast in the
-    common/expected success case.
+Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> This adds support for doing real redirects when an XDP program returns
+> XDP_REDIRECT in bpf_prog_run(). To achieve this, we create a page pool
+> instance while setting up the test run, and feed pages from that into t=
+he
+> XDP program. The setup cost of this is amortised over the number of
+> repetitions specified by userspace.
+> =
 
-Of course, user can still specify log_level > 0 from the very beginning
-to force log collection.
+> To support performance testing use case, we further optimise the setup =
+step
+> so that all pages in the pool are pre-initialised with the packet data,=
+ and
+> pre-computed context and xdp_frame objects stored at the start of each
+> page. This makes it possible to entirely avoid touching the page conten=
+t on
+> each XDP program invocation, and enables sending up to 11.5 Mpps/core o=
+n my
+> test box.
+> =
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/bpf.c | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+> Because the data pages are recycled by the page pool, and the test runn=
+er
+> doesn't re-initialise them for each run, subsequent invocations of the =
+XDP
+> program will see the packet data in the state it was after the last tim=
+e it
+> ran on that particular page. This means that an XDP program that modifi=
+es
+> the packet before redirecting it has to be careful about which assumpti=
+ons
+> it makes about the packet content, but that is only an issue for the mo=
+st
+> naively written programs.
+> =
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 4e7836e1a7b5..c7627fc18952 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -303,10 +303,6 @@ int bpf_prog_load_v0_6_0(enum bpf_prog_type prog_type,
- 	if (log_level && !log_buf)
- 		return libbpf_err(-EINVAL);
- 
--	attr.log_level = log_level;
--	attr.log_buf = ptr_to_u64(log_buf);
--	attr.log_size = log_size;
--
- 	func_info_rec_size = OPTS_GET(opts, func_info_rec_size, 0);
- 	func_info = OPTS_GET(opts, func_info, NULL);
- 	attr.func_info_rec_size = func_info_rec_size;
-@@ -321,6 +317,12 @@ int bpf_prog_load_v0_6_0(enum bpf_prog_type prog_type,
- 
- 	attr.fd_array = ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
- 
-+	if (log_level) {
-+		attr.log_buf = ptr_to_u64(log_buf);
-+		attr.log_size = log_size;
-+		attr.log_level = log_level;
-+	}
-+
- 	fd = sys_bpf_prog_load(&attr, sizeof(attr), attempts);
- 	if (fd >= 0)
- 		return fd;
-@@ -366,16 +368,17 @@ int bpf_prog_load_v0_6_0(enum bpf_prog_type prog_type,
- 			goto done;
- 	}
- 
--	if (log_level || !log_buf)
--		goto done;
-+	if (log_level == 0 && !log_buf) {
-+		/* log_level == 0 with non-NULL log_buf requires retrying on error
-+		 * with log_level == 1 and log_buf/log_buf_size set, to get details of
-+		 * failure
-+		 */
-+		attr.log_buf = ptr_to_u64(log_buf);
-+		attr.log_size = log_size;
-+		attr.log_level = 1;
- 
--	/* Try again with log */
--	log_buf[0] = 0;
--	attr.log_buf = ptr_to_u64(log_buf);
--	attr.log_size = log_size;
--	attr.log_level = 1;
--
--	fd = sys_bpf_prog_load(&attr, sizeof(attr), attempts);
-+		fd = sys_bpf_prog_load(&attr, sizeof(attr), attempts);
-+	}
- done:
- 	/* free() doesn't affect errno, so we don't need to restore it */
- 	free(finfo);
--- 
-2.30.2
+> Previous uses of bpf_prog_run() for XDP returned the modified packet da=
+ta
+> and return code to userspace, which is a different semantic then this n=
+ew
+> redirect mode. For this reason, the caller has to set the new
+> BPF_F_TEST_XDP_DO_REDIRECT flag when calling bpf_prog_run() to opt in t=
+o
+> the different semantics. Enabling this flag is only allowed if not sett=
+ing
+> ctx_out and data_out in the test specification, since it means frames w=
+ill
+> be redirected somewhere else, so they can't be returned.
+> =
 
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
+
+[...]
+
+> +static int bpf_test_run_xdp_redirect(struct bpf_test_timer *t,
+> +				     struct bpf_prog *prog, struct xdp_buff *orig_ctx)
+> +{
+> +	void *data, *data_end, *data_meta;
+> +	struct xdp_frame *frm;
+> +	struct xdp_buff *ctx;
+> +	struct page *page;
+> +	int ret, err =3D 0;
+> +
+> +	page =3D page_pool_dev_alloc_pages(t->xdp.pp);
+> +	if (!page)
+> +		return -ENOMEM;
+> +
+> +	ctx =3D ctx_from_page(page);
+> +	data =3D ctx->data;
+> +	data_meta =3D ctx->data_meta;
+> +	data_end =3D ctx->data_end;
+> +
+> +	ret =3D bpf_prog_run_xdp(prog, ctx);
+> +	if (ret =3D=3D XDP_REDIRECT) {
+> +		frm =3D (struct xdp_frame *)(ctx + 1);
+> +		/* if program changed pkt bounds we need to update the xdp_frame */
+
+Because this reuses the frame repeatedly is there any issue with also
+updating the ctx each time? Perhaps if the prog keeps shrinking
+the pkt it might wind up with 0 len pkt? Just wanted to ask.
+
+> +		if (unlikely(data !=3D ctx->data ||
+> +			     data_meta !=3D ctx->data_meta ||
+> +			     data_end !=3D ctx->data_end))
+> +			xdp_update_frame_from_buff(ctx, frm);
+> +
+> +		err =3D xdp_do_redirect_frame(ctx->rxq->dev, ctx, frm, prog);
+> +		if (err)
+> +			ret =3D err;
+> +	}
+> +	if (ret !=3D XDP_REDIRECT)
+> +		xdp_return_buff(ctx);
+> +
+> +	if (++t->xdp.frame_cnt >=3D NAPI_POLL_WEIGHT) {
+> +		xdp_do_flush();
+> +		t->xdp.frame_cnt =3D 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +=
