@@ -2,73 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7C59C433EF
-	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 14:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8E63C433EF
+	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 14:21:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242053AbhLJOYg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 09:24:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50964 "EHLO
+        id S242051AbhLJOYp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 09:24:45 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26159 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242012AbhLJOYa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Dec 2021 09:24:30 -0500
+        by vger.kernel.org with ESMTP id S242041AbhLJOYb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Dec 2021 09:24:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639146054;
+        s=mimecast20190719; t=1639146056;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xDXI2dfRgWUXP7V439OsHy/fTRVufq6CwTbb4xhL8Gk=;
-        b=AV9wRFbHW8xqo48QmiiwXSssP2hwfVhmKB/vUlWXcbWGXndgLBUxW8qZIXu1bohE65lQnW
-        ZpqTE+Z0mUvvkKSapH3CKj1zWDyB1ADXBks9xN4Z3cK/H5+Iv2oV4jFnjZLSjNqwCsvthi
-        fJNxToQNA5YUju+s9Oc30fxFdGJjcUE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=QjcRR7f+rn5uUWe2h52nnyd4QYkieJyXqD42mwjol5g=;
+        b=AXTYVpGDvtf2ZKKL16WfI3lLCaMM2a9Yundsji1m1t09PUjHNF+fSuZRhkMCebFED55u11
+        I9uti5X04Bxl16GwAaf2oj4BxjtX20LZqa2XHNxrLCzPmq2BBsz3bvoNHc0yOt/3oEezQj
+        /UaWA9ozJTiNMNU9+YbWHvDSpAXWvBQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-E_tNrqYGPSKoVL-0L6Xpcw-1; Fri, 10 Dec 2021 09:20:53 -0500
-X-MC-Unique: E_tNrqYGPSKoVL-0L6Xpcw-1
-Received: by mail-ed1-f70.google.com with SMTP id b15-20020aa7c6cf000000b003e7cf0f73daso8270508eds.22
-        for <bpf@vger.kernel.org>; Fri, 10 Dec 2021 06:20:53 -0800 (PST)
+ us-mta-167-hwPva-iKNt-j9zNzSWzf5g-1; Fri, 10 Dec 2021 09:20:55 -0500
+X-MC-Unique: hwPva-iKNt-j9zNzSWzf5g-1
+Received: by mail-ed1-f71.google.com with SMTP id c1-20020aa7c741000000b003e7bf1da4bcso8245585eds.21
+        for <bpf@vger.kernel.org>; Fri, 10 Dec 2021 06:20:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xDXI2dfRgWUXP7V439OsHy/fTRVufq6CwTbb4xhL8Gk=;
-        b=PeSm7jtAJRjvGxHS01FiIdpmW97iyOBc7fMtPXZLCvP13mNJt1b5u/XqLhKigyu0UN
-         Sv/pXJ7azMD2byDr7jBIJ+2Z2u/CxwGBcAbskyuOJyotFsAVXVy+zEqdc+WAxO3DSjnS
-         9YUkKz61myGfvrCCVr5FOzgb9+A3Z7we9RhSwuFOMD76sDeG86F+hOVCkAkF+Ce5h0nj
-         VqC13M50TMPrMa1omPQsQ+2acCY1WXGkvHX+cr0Jf3zvkefB3MJnJFinD5D8vhSu0D+h
-         M9VHlFijj4LLIlKFYJgpeUAJREmjKQHs4y9LVcyPeI0Bj9FOczus+5TSjrud0D4me6Yv
-         m2cQ==
-X-Gm-Message-State: AOAM5317PIgyAYq59gFCLj9pK0oNkY1E3iwCTu2X2DHbP3XH1tG7JyPs
-        Kmd+RwGzOkhwqGkhw+G50BTETFiCGwglHsMx6KqWj0a6BWSjMMSg9M2G4/nnNcjRqH0jKeERzSu
-        JbXZxf1mz8bGy
-X-Received: by 2002:a17:907:d22:: with SMTP id gn34mr24360714ejc.195.1639146051986;
-        Fri, 10 Dec 2021 06:20:51 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxMLX7J6MZeVskX7VpmSVxcjp887Hr28rKuKjXRBf7JVAt1i0ui7eAVeaJx8UTRbCp/prQKzA==
-X-Received: by 2002:a17:907:d22:: with SMTP id gn34mr24360664ejc.195.1639146051623;
-        Fri, 10 Dec 2021 06:20:51 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ht7sm1614735ejc.27.2021.12.10.06.20.46
+        bh=QjcRR7f+rn5uUWe2h52nnyd4QYkieJyXqD42mwjol5g=;
+        b=mqjnsZE4Jxe+LU8dOWq0BXW46DIUlbzeWOHDdUmBWdtqiPARi4BCJYzkEINoCdIPeY
+         uswcSeq4E73p/+5cfIChm8bGcn7G6i6GlBOuVFiZdU6XSbk6dM3927ymqhYugRxxn7+N
+         jS3T+UxO0znCZjUkdkPPFCStwfnkY3pW9Iz7dkiQudeFcVQnjNBIhja/NGkRJj4O0BeP
+         t1iYWeiYdXpsL+2FNuwnAuDunb6E2YNREO9CVcuTD9t6cNiFotF857b5iHKGzKKdP7V3
+         xMljVYG228uiaS320b+ONsdM8WPzLgjuzo63PGkOLFLySnM+JoXjm9fOstGH/GdhDyC5
+         UptA==
+X-Gm-Message-State: AOAM530VCZCqBHJj+jBl7WpddLV4UiWJrarhymHCLQtY9o8qvTv9QQas
+        qWNOWTQ8OoPwNPVk1+cglJWSbg6hEgoJbfvnEcpznNLDqK5mKPYt+vv79fRR1cXDcVVPwZ11Uax
+        f/Z2v76fN7pJe
+X-Received: by 2002:a17:907:d07:: with SMTP id gn7mr25365103ejc.553.1639146053434;
+        Fri, 10 Dec 2021 06:20:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzZOG+kJObxvq2Im9a37l/7397A1hIOt6R3nAh9PLA+SE0nAI7qK1eFaQNcTcodicizGDVjzQ==
+X-Received: by 2002:a17:907:d07:: with SMTP id gn7mr25364958ejc.553.1639146052178;
+        Fri, 10 Dec 2021 06:20:52 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id m25sm1486912edj.80.2021.12.10.06.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 10 Dec 2021 06:20:48 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 936F6180499; Fri, 10 Dec 2021 15:20:46 +0100 (CET)
+        id AD648180471; Fri, 10 Dec 2021 15:20:47 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/8] xdp: Allow registering memory model without rxq reference
-Date:   Fri, 10 Dec 2021 15:20:03 +0100
-Message-Id: <20211210142008.76981-4-toke@redhat.com>
+Subject: [PATCH bpf-next v2 5/8] xdp: add xdp_do_redirect_frame() for pre-computed xdp_frames
+Date:   Fri, 10 Dec 2021 15:20:05 +0100
+Message-Id: <20211210142008.76981-6-toke@redhat.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211210142008.76981-1-toke@redhat.com>
 References: <20211210142008.76981-1-toke@redhat.com>
@@ -79,201 +79,134 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The functions that register an XDP memory model take a struct xdp_rxq as
-parameter, but the RXQ is not actually used for anything other than pulling
-out the struct xdp_mem_info that it embeds. So refactor the register
-functions and export variants that just take a pointer to the xdp_mem_info.
-
-This is in preparation for enabling XDP_REDIRECT in bpf_prog_run(), using a
-page_pool instance that is not connected to any network device.
+Add an xdp_do_redirect_frame() variant which supports pre-computed
+xdp_frame structures. This will be used in bpf_prog_run() to avoid having
+to write to the xdp_frame structure when the XDP program doesn't modify the
+frame boundaries.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/net/xdp.h |  3 ++
- net/core/xdp.c    | 92 +++++++++++++++++++++++++++++++----------------
- 2 files changed, 65 insertions(+), 30 deletions(-)
+ include/linux/filter.h |  4 +++
+ net/core/filter.c      | 65 +++++++++++++++++++++++++++++++++++-------
+ 2 files changed, 58 insertions(+), 11 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 447f9b1578f3..8f0812e4996d 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -260,6 +260,9 @@ bool xdp_rxq_info_is_reg(struct xdp_rxq_info *xdp_rxq);
- int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 			       enum xdp_mem_type type, void *allocator);
- void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq);
-+int xdp_reg_mem_model(struct xdp_mem_info *mem,
-+		      enum xdp_mem_type type, void *allocator);
-+void xdp_unreg_mem_model(struct xdp_mem_info *mem);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index b6a216eb217a..845452c83e0f 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1022,6 +1022,10 @@ int xdp_do_generic_redirect(struct net_device *dev, struct sk_buff *skb,
+ int xdp_do_redirect(struct net_device *dev,
+ 		    struct xdp_buff *xdp,
+ 		    struct bpf_prog *prog);
++int xdp_do_redirect_frame(struct net_device *dev,
++			  struct xdp_buff *xdp,
++			  struct xdp_frame *xdpf,
++			  struct bpf_prog *prog);
+ void xdp_do_flush(void);
  
- /* Drivers not supporting XDP metadata can use this helper, which
-  * rejects any room expansion for metadata as a result.
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 143388c6d9dd..2901bb7004cc 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -110,20 +110,15 @@ static void mem_allocator_disconnect(void *allocator)
- 	mutex_unlock(&mem_id_lock);
+ /* The xdp_do_flush_map() helper has been renamed to drop the _map suffix, as
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bfa4ffbced35..629188642b4e 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3957,26 +3957,44 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
  }
+ EXPORT_SYMBOL_GPL(xdp_master_redirect);
  
--void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
-+void xdp_unreg_mem_model(struct xdp_mem_info *mem)
+-int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+-		    struct bpf_prog *xdp_prog)
++static inline int __xdp_do_redirect_xsk(struct bpf_redirect_info *ri,
++					struct net_device *dev,
++					struct xdp_buff *xdp,
++					struct bpf_prog *xdp_prog)
  {
- 	struct xdp_mem_allocator *xa;
--	int type = xdp_rxq->mem.type;
--	int id = xdp_rxq->mem.id;
-+	int type = mem->type;
-+	int id = mem->id;
+-	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+ 	enum bpf_map_type map_type = ri->map_type;
+ 	void *fwd = ri->tgt_value;
+ 	u32 map_id = ri->map_id;
+-	struct xdp_frame *xdpf;
+-	struct bpf_map *map;
+ 	int err;
  
- 	/* Reset mem info to defaults */
--	xdp_rxq->mem.id = 0;
--	xdp_rxq->mem.type = 0;
--
--	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
--		WARN(1, "Missing register, driver bug");
--		return;
+ 	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
+ 	ri->map_type = BPF_MAP_TYPE_UNSPEC;
+ 
+-	if (map_type == BPF_MAP_TYPE_XSKMAP) {
+-		err = __xsk_map_redirect(fwd, xdp);
+-		goto out;
 -	}
-+	mem->id = 0;
-+	mem->type = 0;
- 
- 	if (id == 0)
- 		return;
-@@ -135,6 +130,17 @@ void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
- 		rcu_read_unlock();
- 	}
- }
-+EXPORT_SYMBOL_GPL(xdp_unreg_mem_model);
++	err = __xsk_map_redirect(fwd, xdp);
++	if (unlikely(err))
++		goto err;
 +
-+void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
-+{
-+	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
-+		WARN(1, "Missing register, driver bug");
-+		return;
-+	}
-+
-+	xdp_unreg_mem_model(&xdp_rxq->mem);
-+}
- EXPORT_SYMBOL_GPL(xdp_rxq_info_unreg_mem_model);
- 
- void xdp_rxq_info_unreg(struct xdp_rxq_info *xdp_rxq)
-@@ -259,28 +265,24 @@ static bool __is_supported_mem_type(enum xdp_mem_type type)
- 	return true;
- }
- 
--int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
--			       enum xdp_mem_type type, void *allocator)
-+static struct xdp_mem_allocator *__xdp_reg_mem_model(struct xdp_mem_info *mem,
-+						     enum xdp_mem_type type,
-+						     void *allocator)
- {
- 	struct xdp_mem_allocator *xdp_alloc;
- 	gfp_t gfp = GFP_KERNEL;
- 	int id, errno, ret;
- 	void *ptr;
- 
--	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
--		WARN(1, "Missing register, driver bug");
--		return -EFAULT;
--	}
--
- 	if (!__is_supported_mem_type(type))
--		return -EOPNOTSUPP;
-+		return ERR_PTR(-EOPNOTSUPP);
- 
--	xdp_rxq->mem.type = type;
-+	mem->type = type;
- 
- 	if (!allocator) {
- 		if (type == MEM_TYPE_PAGE_POOL)
--			return -EINVAL; /* Setup time check page_pool req */
--		return 0;
-+			return ERR_PTR(-EINVAL); /* Setup time check page_pool req */
-+		return NULL;
- 	}
- 
- 	/* Delay init of rhashtable to save memory if feature isn't used */
-@@ -290,13 +292,13 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 		mutex_unlock(&mem_id_lock);
- 		if (ret < 0) {
- 			WARN_ON(1);
--			return ret;
-+			return ERR_PTR(ret);
- 		}
- 	}
- 
- 	xdp_alloc = kzalloc(sizeof(*xdp_alloc), gfp);
- 	if (!xdp_alloc)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	mutex_lock(&mem_id_lock);
- 	id = __mem_id_cyclic_get(gfp);
-@@ -304,15 +306,15 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 		errno = id;
- 		goto err;
- 	}
--	xdp_rxq->mem.id = id;
--	xdp_alloc->mem  = xdp_rxq->mem;
-+	mem->id = id;
-+	xdp_alloc->mem = *mem;
- 	xdp_alloc->allocator = allocator;
- 
- 	/* Insert allocator into ID lookup table */
- 	ptr = rhashtable_insert_slow(mem_id_ht, &id, &xdp_alloc->node);
- 	if (IS_ERR(ptr)) {
--		ida_simple_remove(&mem_id_pool, xdp_rxq->mem.id);
--		xdp_rxq->mem.id = 0;
-+		ida_simple_remove(&mem_id_pool, mem->id);
-+		mem->id = 0;
- 		errno = PTR_ERR(ptr);
- 		goto err;
- 	}
-@@ -322,13 +324,43 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 
- 	mutex_unlock(&mem_id_lock);
- 
--	trace_mem_connect(xdp_alloc, xdp_rxq);
--	return 0;
-+	return xdp_alloc;
- err:
- 	mutex_unlock(&mem_id_lock);
- 	kfree(xdp_alloc);
--	return errno;
-+	return ERR_PTR(errno);
-+}
-+
-+int xdp_reg_mem_model(struct xdp_mem_info *mem,
-+		      enum xdp_mem_type type, void *allocator)
-+{
-+	struct xdp_mem_allocator *xdp_alloc;
-+
-+	xdp_alloc = __xdp_reg_mem_model(mem, type, allocator);
-+	if (IS_ERR(xdp_alloc))
-+		return PTR_ERR(xdp_alloc);
++	_trace_xdp_redirect_map(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index);
 +	return 0;
++err:
++	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
++	return err;
 +}
-+EXPORT_SYMBOL_GPL(xdp_reg_mem_model);
 +
-+int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
-+			       enum xdp_mem_type type, void *allocator)
++static __always_inline int __xdp_do_redirect_frame(struct bpf_redirect_info *ri,
++						   struct net_device *dev,
++						   struct xdp_frame *xdpf,
++						   struct bpf_prog *xdp_prog)
 +{
-+	struct xdp_mem_allocator *xdp_alloc;
++	enum bpf_map_type map_type = ri->map_type;
++	void *fwd = ri->tgt_value;
++	u32 map_id = ri->map_id;
++	struct bpf_map *map;
++	int err;
 +
-+	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
-+		WARN(1, "Missing register, driver bug");
-+		return -EFAULT;
-+	}
-+
-+	xdp_alloc = __xdp_reg_mem_model(&xdp_rxq->mem, type, allocator);
-+	if (IS_ERR(xdp_alloc))
-+		return PTR_ERR(xdp_alloc);
-+
-+	trace_mem_connect(xdp_alloc, xdp_rxq);
-+	return 0;
++	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
++	ri->map_type = BPF_MAP_TYPE_UNSPEC;
+ 
+-	xdpf = xdp_convert_buff_to_frame(xdp);
+ 	if (unlikely(!xdpf)) {
+ 		err = -EOVERFLOW;
+ 		goto err;
+@@ -4013,7 +4031,6 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 		err = -EBADRQC;
+ 	}
+ 
+-out:
+ 	if (unlikely(err))
+ 		goto err;
+ 
+@@ -4023,8 +4040,34 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
+ 	return err;
  }
 +
- EXPORT_SYMBOL_GPL(xdp_rxq_info_reg_mem_model);
++int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
++		    struct bpf_prog *xdp_prog)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++	enum bpf_map_type map_type = ri->map_type;
++
++	if (map_type == BPF_MAP_TYPE_XSKMAP)
++		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
++
++	return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
++				       xdp_prog);
++}
+ EXPORT_SYMBOL_GPL(xdp_do_redirect);
  
- /* XDP RX runs under NAPI protection, and in different delivery error
++int xdp_do_redirect_frame(struct net_device *dev, struct xdp_buff *xdp,
++			  struct xdp_frame *xdpf, struct bpf_prog *xdp_prog)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++	enum bpf_map_type map_type = ri->map_type;
++
++	if (map_type == BPF_MAP_TYPE_XSKMAP)
++		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
++
++	return __xdp_do_redirect_frame(ri, dev, xdpf, xdp_prog);
++}
++EXPORT_SYMBOL_GPL(xdp_do_redirect_frame);
++
+ static int xdp_do_generic_redirect_map(struct net_device *dev,
+ 				       struct sk_buff *skb,
+ 				       struct xdp_buff *xdp,
 -- 
 2.34.0
 
