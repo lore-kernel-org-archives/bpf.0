@@ -2,51 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FCD2C433F5
-	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 02:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D6EEC433F5
+	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 02:23:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbhLJCFW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Dec 2021 21:05:22 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:39104 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbhLJCFW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Dec 2021 21:05:22 -0500
+        id S235917AbhLJC12 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Dec 2021 21:27:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49804 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235867AbhLJC11 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Dec 2021 21:27:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA671CE2832;
-        Fri, 10 Dec 2021 02:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6165BC004DD;
-        Fri, 10 Dec 2021 02:01:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51EDCB82644;
+        Fri, 10 Dec 2021 02:23:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A3CC004DD;
+        Fri, 10 Dec 2021 02:23:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639101705;
-        bh=SXmQe5WrM6g41Qmvq9I6gcho6Cqv58rsLN+1+V8bmuk=;
+        s=k20201202; t=1639103030;
+        bh=sDvHbMkdEtVxoJxzEdCAcqFbVX6sMbRNns13Pf7NKvk=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=coU282+4jqhRwK7sGRshcxpvU1tvnDYwm1pjf57aAUH0CnVFsVUb/dgJUIRgNZ5tx
-         oD7K+KAaozn+Kg56HwdrD70dqSyUZ9NVyafqy3AcJkFsja/DDPI2conLvhrgID2au8
-         eyLOR6bvLNoyZQKByNiA7wazUbphYL+Jfy00IQG4qwu/vPjjBTOTmgCoN4QeZ40V8A
-         quufCy+20oQurQk2dxYyjO6jEkbJvRgZ/Rfz9dKxye7dpKwlP56whH+V8D+kLnHll9
-         jsGQXi4W/M6tp3yJuM+bkKLTYxqDyKiW7uLNxVL3KkcqArUrI5JddcgSBIhXqYG3IT
-         jN+w53cQjEP9A==
-Date:   Thu, 9 Dec 2021 18:01:43 -0800
+        b=nzfYAcuT4yEEmborXhhfKAul2zMtptaLcsGMcspeh/QAd7192R/Y+gOpaEyMItYKj
+         Lhpu7pPupRUgweHOXgciUCWcMg8fu44rX9wWoXlVnv26jBxCeC5L81r9q2YSKVYyhM
+         IN6Dg6zgF5FZjj64OM6cVpGKSl5JSADEcbDwqEKmk0cX3wxAIuY/2k08+jZiwdSK6i
+         tg3QwAy3Z8wL78kHRKbTmdZjSpXo4oPFfiZwHxwG3B+fS3V2eYtnIpiJXtxZF7gTuW
+         GlaRcvF1mvIfkkSFkO1gRItxq0mS9phb8JzDthO+HTjlkw12owctJk6utZm09Ql4Gt
+         oDPFxU9Dr4qVw==
+Date:   Thu, 9 Dec 2021 18:23:49 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Mathieu Jadin <mathjadin@gmail.com>
-Cc:     bpf@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
-        netdev@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Ido Schimmel <idosch@idosch.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Joe Stringer <joe@cilium.io>, David Ahern <dsahern@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Subject: Re: [PATCH bpf-next v2 1/3] net: Parse IPv6 ext headers from TCP
- sock_ops
-Message-ID: <20211209180143.6466e43a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211207225635.113904-1-mathjadin@gmail.com>
-References: <20211207225635.113904-1-mathjadin@gmail.com>
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: return EOPNOTSUPP when JIT is needed and not
+ possible
+Message-ID: <20211209182349.038ac2b8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <b294e66b-0bac-008b-52b4-6f1a90215baa@iogearbox.net>
+References: <20211209134038.41388-1-cascardo@canonical.com>
+        <61b2536e5161d_6bfb2089@john.notmuch>
+        <YbJZoK+qBEiLAxxM@shredder>
+        <b294e66b-0bac-008b-52b4-6f1a90215baa@iogearbox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -54,17 +51,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue,  7 Dec 2021 23:56:33 +0100 Mathieu Jadin wrote:
-> Add a flag that, if set, triggers the call of eBPF program for each
-> packet holding an IPv6 extension header. Also add a sock_ops operator
-> that identifies such call.
+On Fri, 10 Dec 2021 00:03:40 +0100 Daniel Borkmann wrote:
+> > Similar issue was discussed in the past. See:
+> > https://lore.kernel.org/netdev/20191204.125135.750458923752225025.davem@davemloft.net/  
 > 
-> This change uses skb_data and skb_data_end introduced for TCP options'
-> parsing but these pointer cover the IPv6 header and its extension
-> headers.
-> 
-> For instance, this change allows to read an eBPF sock_ops program to
-> read complex Segment Routing Headers carrying complex messages in TLV or
-> observing its intermediate segments as soon as they are received.
+> With regards to ENOTSUPP exposure, if the consensus is that we should fix all
+> occurences over to EOPNOTSUPP even if they've been exposed for quite some time
+> (Jakub?), 
 
-Can you share example use cases this opens up?
+Did you mean me? :) In case you did - I think we should avoid it 
+for new code but changing existing now seems risky. Alexei and Andrii
+would know best but quick search of code bases at work reveals some
+scripts looking for ENOTSUPP.
+
+Thadeu, what motivated the change?
+
+If we're getting those changes fixes based on checkpatch output maybe 
+there is a way to mute the checkpatch warnings when it's not run on a 
+diff?
+
+> we could give this patch a try maybe via bpf-next and see if anyone complains.
+> 
+> Thadeu, I think you also need to fix up BPF selftests as test_verifier, to mention
+> one example (there are also bunch of others under tools/testing/selftests/), is
+> checking for ENOTSUPP specifically..
