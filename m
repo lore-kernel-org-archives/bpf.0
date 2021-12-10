@@ -2,108 +2,216 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D605C433F5
-	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 14:26:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C275C433F5
+	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 14:27:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241994AbhLJOaL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 09:30:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57469 "EHLO
+        id S242152AbhLJObO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 09:31:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57167 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234631AbhLJOaJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Dec 2021 09:30:09 -0500
+        by vger.kernel.org with ESMTP id S242149AbhLJObO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Dec 2021 09:31:14 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639146394;
+        s=mimecast20190719; t=1639146458;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=noxZ/W/0Xblh7NLRVhPVVF1MXLgMaduXPJ/ayJxQT44=;
-        b=YSFJnZ1kfyt10dXunST5dxeGarAzCxjJO3nfVsgevh6IVkTVyBHhXG284tGj4ug8sAxmcv
-        95uEj3Sej2vf0bH3gYUhAV6NKtVKQuOT4NXA5DouWlvqWsKm+NmL0zMjB9FY2GI3IL1Iue
-        kRYXuL/XRHRvZM/VpZZMJheyln/WEao=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=HeYVFn3C/kHLoloeDuy+DYyyuZygKIHXuCGMV5j00so=;
+        b=RxMZ4QstZEIf/6ZGDCwJ6mR8Hh1fXb59wt64OEGl9KnNuqmNWFMjQ9b3+QpUupvPHmy80o
+        PJ7ZIXIXZ4kg6v2sFohDEfQ+C3Iz1ZXVZolwHTvCCvFLh2esb6u24TloXH5tVVbSaAlZ46
+        0e4Wv7CHLBcBMzoUS2HztOqbKPxb/Ec=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-218-srEbJkiLMkOgnOCtxFLzQQ-1; Fri, 10 Dec 2021 09:26:33 -0500
-X-MC-Unique: srEbJkiLMkOgnOCtxFLzQQ-1
-Received: by mail-ed1-f71.google.com with SMTP id q17-20020aa7da91000000b003e7c0641b9cso8320894eds.12
-        for <bpf@vger.kernel.org>; Fri, 10 Dec 2021 06:26:33 -0800 (PST)
+ us-mta-152-EddzMFlZOU2L-oSS1Zrr-w-1; Fri, 10 Dec 2021 09:27:37 -0500
+X-MC-Unique: EddzMFlZOU2L-oSS1Zrr-w-1
+Received: by mail-ed1-f69.google.com with SMTP id d13-20020a056402516d00b003e7e67a8f93so8402261ede.0
+        for <bpf@vger.kernel.org>; Fri, 10 Dec 2021 06:27:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=noxZ/W/0Xblh7NLRVhPVVF1MXLgMaduXPJ/ayJxQT44=;
-        b=BZCOOJikKgUE2RiD9aH5H1YFONFR2nC1DAfC4Vsh8UbT1pc6H/wZ2nn3S5b0TOqD47
-         /dzuai2iyIh5COOFMItWAkCEy39aMFjlHkNRs7f2D/G453GmfZNHdoIgreOVgz96+WQ8
-         ruTuaHBdDPqO2aNm4Koxoqf6hwAHuNHvygiwMmoVHmEoOQbnAhhewpfQr5eilc9JaIim
-         N5uFAqz2BMzFhruLX1kNize2xUOTEUlFhU6l5TiuAtjBWakMYfvSY9JPtVitDJM6Voqw
-         ijUfwPCK9yqVp9TcGwwNSIsm4M+yYZ8vsmieQg+b2YxkbYbgZlg9mkkV1iDskIFeP5oE
-         xezQ==
-X-Gm-Message-State: AOAM531kH6mqnj6SCAoHeDJDbgSEp6hIkLH9h1BFn/VAEqi/q4q1WaX1
-        U2z+QzLWYJvfyHQQTyt3D3VxkzNyxNR4FLRei95X6ZtbPHRdGpNEuU6ZtdWMewzRg1MaRJucbC9
-        viJ0uEE/qzTzV
-X-Received: by 2002:a05:6402:50ca:: with SMTP id h10mr37679208edb.70.1639146391877;
-        Fri, 10 Dec 2021 06:26:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyTXnanOiDzBPfrU73QKrpktq3WDMTp3GvxqnQWsi3ADVa6J+V1WYizuPyjjSzVXe0txRMJtA==
-X-Received: by 2002:a05:6402:50ca:: with SMTP id h10mr37679166edb.70.1639146391541;
-        Fri, 10 Dec 2021 06:26:31 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id z22sm1567067edd.78.2021.12.10.06.26.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=HeYVFn3C/kHLoloeDuy+DYyyuZygKIHXuCGMV5j00so=;
+        b=4906sADThr7kJudyXmbm72yM2tbKa9nVgXgEldVzeGgIJ/yB0mowK7DwL9YccG+zfW
+         hICBsobY1H+NvXEfrTkbzTTCHPvNyRnQNiX4H/vs1JrRGq3OwEkIE6nNp/Rgf9Q5otFN
+         klMfnHyQlAJubijpNAh+nnmGBK+fszNfWpz1CN/uYMYlTQq1T6t9E9oBYm4WjBg1Hhor
+         rPLZ7upgua4IRFQL6p97REpPNd80gWK0n1zQsGjRyRU4P13zMpa6Dc8I6VXgVJ7lLlq6
+         5ohBa8ZlNXZv45pjgp0wyy72zGS9mg8Fk/4FEITX32aFBxhaZC8PeeIWzEVnY00CjdGA
+         UtDg==
+X-Gm-Message-State: AOAM533SuDX3w+lMG4OS7y1u7oyom4tPnTIB3hEa09hciXY3i/Xyg2D8
+        JRXLTX9Vw/sohbeO8brwXtSVPWi3KTYs20AWezSUjQOM/HmQRbR6CNmkIpf5NGfST2nr+XcCdrZ
+        Hx/Ly4OpLGzsU
+X-Received: by 2002:a05:6402:5156:: with SMTP id n22mr39515625edd.222.1639146455837;
+        Fri, 10 Dec 2021 06:27:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxinPCiE2Kz0RkR9yMgt+6KLn4ZFACvVqNCbU6KsM8lYXopuZ55BTLBL2yWwTu1MciwC+uIkA==
+X-Received: by 2002:a05:6402:5156:: with SMTP id n22mr39515418edd.222.1639146454079;
+        Fri, 10 Dec 2021 06:27:34 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id f7sm1542117edw.44.2021.12.10.06.27.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 06:26:30 -0800 (PST)
+        Fri, 10 Dec 2021 06:27:33 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 52BAF180471; Fri, 10 Dec 2021 15:26:30 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Yihao Han <hanyihao@vivo.com>, Alexei Starovoitov <ast@kernel.org>,
+        id DA2E51804A2; Fri, 10 Dec 2021 15:20:48 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: Re: [PATCH v2] samples/bpf: xdpsock: fix swap.cocci warning
-In-Reply-To: <20211209092250.56430-1-hanyihao@vivo.com>
-References: <20211209092250.56430-1-hanyihao@vivo.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 10 Dec 2021 15:26:30 +0100
-Message-ID: <877dccwn6x.fsf@toke.dk>
+        KP Singh <kpsingh@kernel.org>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 7/8] selftests/bpf: Add selftest for XDP_REDIRECT in bpf_prog_run()
+Date:   Fri, 10 Dec 2021 15:20:07 +0100
+Message-Id: <20211210142008.76981-8-toke@redhat.com>
+X-Mailer: git-send-email 2.34.0
+In-Reply-To: <20211210142008.76981-1-toke@redhat.com>
+References: <20211210142008.76981-1-toke@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Yihao Han <hanyihao@vivo.com> writes:
+This adds a selftest for the XDP_REDIRECT facility in bpf_prog_run, that
+redirects packets into a veth and counts them using an XDP program on the
+other side of the veth pair.
 
-> Fix following swap.cocci warning:
-> ./samples/bpf/xdpsock_user.c:528:22-23:
-> WARNING opportunity for swap()
->
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ .../bpf/prog_tests/xdp_do_redirect.c          | 74 +++++++++++++++++++
+ .../bpf/progs/test_xdp_do_redirect.c          | 34 +++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
 
-Erm, did this get applied without anyone actually trying to compile
-samples? I'm getting build errors as:
-
-  CC  /home/build/linux/samples/bpf/xsk_fwd.o
-/home/build/linux/samples/bpf/xsk_fwd.c: In function =E2=80=98swap_mac_addr=
-esses=E2=80=99:
-/home/build/linux/samples/bpf/xsk_fwd.c:658:9: warning: implicit declaratio=
-n of function =E2=80=98swap=E2=80=99; did you mean =E2=80=98swab=E2=80=99? =
-[-Wimplicit-function-declaration]
-  658 |         swap(*src_addr, *dst_addr);
-      |         ^~~~
-      |         swab
-
-/usr/bin/ld: /home/build/linux/samples/bpf/xsk_fwd.o: in function `thread_f=
-unc':
-xsk_fwd.c:(.text+0x440): undefined reference to `swap'
-collect2: error: ld returned 1 exit status
-
-
-Could we maybe get samples/bpf added to the BPF CI builds? :)
-
--Toke
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+new file mode 100644
+index 000000000000..c2effcf076a6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++#include <net/if.h>
++#include "test_xdp_do_redirect.skel.h"
++
++#define SYS(fmt, ...)						\
++	({							\
++		char cmd[1024];					\
++		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
++		if (!ASSERT_OK(system(cmd), cmd))		\
++			goto fail;				\
++	})
++
++#define NUM_PKTS 10
++void test_xdp_do_redirect(void)
++{
++	struct test_xdp_do_redirect *skel = NULL;
++	struct ipv6_packet data = pkt_v6;
++	struct xdp_md ctx_in = { .data_end = sizeof(data) };
++	__u8 dst_mac[ETH_ALEN] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
++	__u8 src_mac[ETH_ALEN] = {0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .data_in = &data,
++			    .data_size_in = sizeof(data),
++			    .ctx_in = &ctx_in,
++			    .ctx_size_in = sizeof(ctx_in),
++			    .flags = BPF_F_TEST_XDP_DO_REDIRECT,
++			    .repeat = NUM_PKTS,
++		);
++	int err, prog_fd, ifindex_src, ifindex_dst;
++	struct bpf_link *link;
++
++	memcpy(data.eth.h_dest, dst_mac, ETH_ALEN);
++	memcpy(data.eth.h_source, src_mac, ETH_ALEN);
++
++	skel = test_xdp_do_redirect__open();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
++
++	SYS("ip link add veth_src type veth peer name veth_dst");
++	SYS("ip link set dev veth_src up");
++	SYS("ip link set dev veth_dst up");
++
++	ifindex_src = if_nametoindex("veth_src");
++	ifindex_dst = if_nametoindex("veth_dst");
++	if (!ASSERT_NEQ(ifindex_src, 0, "ifindex_src") ||
++	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
++		goto fail;
++
++	memcpy(skel->rodata->expect_dst, dst_mac, ETH_ALEN);
++	skel->rodata->ifindex_out = ifindex_src;
++
++	if (!ASSERT_OK(test_xdp_do_redirect__load(skel), "load"))
++		goto fail;
++
++	link = bpf_program__attach_xdp(skel->progs.xdp_count_pkts, ifindex_dst);
++	if (!ASSERT_OK_PTR(link, "prog_attach"))
++		goto fail;
++	skel->links.xdp_count_pkts = link;
++
++	prog_fd = bpf_program__fd(skel->progs.xdp_redirect_notouch);
++	err = bpf_prog_test_run_opts(prog_fd, &opts);
++	if (!ASSERT_OK(err, "prog_run"))
++		goto fail;
++
++	/* wait for the packets to be flushed */
++	kern_sync_rcu();
++
++	ASSERT_EQ(skel->bss->pkts_seen, NUM_PKTS, "pkt_count");
++fail:
++	system("ip link del dev veth_src");
++	test_xdp_do_redirect__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+new file mode 100644
+index 000000000000..254ebf523f37
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++#define ETH_ALEN 6
++const volatile int ifindex_out;
++const volatile __u8 expect_dst[ETH_ALEN];
++volatile int pkts_seen = 0;
++
++SEC("xdp")
++int xdp_redirect_notouch(struct xdp_md *xdp)
++{
++	return bpf_redirect(ifindex_out, 0);
++}
++
++SEC("xdp")
++int xdp_count_pkts(struct xdp_md *xdp)
++{
++	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(long)xdp->data_end;
++	struct ethhdr *eth = data;
++	int i;
++
++	if (eth + 1 > data_end)
++		return XDP_ABORTED;
++
++	for (i = 0; i < ETH_ALEN; i++)
++		if (expect_dst[i] != eth->h_dest[i])
++			return XDP_ABORTED;
++	pkts_seen++;
++	return XDP_DROP;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.34.0
 
