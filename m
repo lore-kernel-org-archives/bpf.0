@@ -2,62 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C3DFC4332F
-	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 14:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A22C7C4332F
+	for <bpf@archiver.kernel.org>; Fri, 10 Dec 2021 14:20:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241895AbhLJOY1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 09:24:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33482 "EHLO
+        id S241993AbhLJOYa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 09:24:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:43296 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241916AbhLJOY0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 10 Dec 2021 09:24:26 -0500
+        by vger.kernel.org with ESMTP id S241916AbhLJOY2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 10 Dec 2021 09:24:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639146050;
+        s=mimecast20190719; t=1639146053;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=inldrrFWMBfx9w9N+cfMF1H6SahHY5P4j07Q73Gy3mY=;
-        b=JSZZxroQtUF7ewbDB8d78RtrH+Bos7QA7Ig9uf8DgRLs4IyYyV/VR/Qo1A4Bnz7C5huo3y
-        xJ/qV+vRbiU0jj3bzMw+6OYkxnCcnq4o9q8pPLYWKjFDln0PKRHo5laVxE7YzFhoSiCIAI
-        Jgh5lUvbn7bdgQDTZj8K29QpbgM8xyU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ds6QTVDpGNxBUDXmv5+fit0E/Kglxb7++rnaRLkBHbc=;
+        b=iE8RJDq0IYTExwhzi3PjLjI7o7eN6yvlLRcKz3s4sXDblojyF6K9gkRuBrjLVR3Xybo8s1
+        EKCkA9alz/XP8sP5r8RCtIeKsMYz4//TqSeQWbcVAri27fFRIjtpY4Ic6SUi1YqpNLRka8
+        CYPlwDAeURf8lFHSLUrDxFKpfmMuaDk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-311-xDS6JHLQOja3Rk9be00DDg-1; Fri, 10 Dec 2021 09:20:49 -0500
-X-MC-Unique: xDS6JHLQOja3Rk9be00DDg-1
-Received: by mail-ed1-f70.google.com with SMTP id v10-20020aa7d9ca000000b003e7bed57968so8267244eds.23
-        for <bpf@vger.kernel.org>; Fri, 10 Dec 2021 06:20:49 -0800 (PST)
+ us-mta-318-v7GSMmmuOCamwfj2DK6WHg-1; Fri, 10 Dec 2021 09:20:51 -0500
+X-MC-Unique: v7GSMmmuOCamwfj2DK6WHg-1
+Received: by mail-ed1-f72.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so8292074edw.6
+        for <bpf@vger.kernel.org>; Fri, 10 Dec 2021 06:20:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=inldrrFWMBfx9w9N+cfMF1H6SahHY5P4j07Q73Gy3mY=;
-        b=MmN4sl5XCW3jiW0JK35hW6/jkBhomwdv4YqHoMPvma43bDQCWDXMiwQN/035GxGkQQ
-         jJPOnuP6zLmtNWIF+qAJsTkBibev6H2Jc3tjpEGuwD9sxRBt1pCljrQGvJrv/E76MUbm
-         C6w33c14BQ7lMyoktXW+jAnxUjYlNHCZjfsRYg9i6fdDMPmELcCYfippd7kni4M8aVjO
-         FD0F2SlbMNOlRdKz5MqmebQPVcXQAiTH5r+NFJv6SVhNLTLZMjmM/fTSy0KRnP95uXat
-         0ge4SiJns0HfDWz4hfLhgc0UuFsRLLEA+SqU+ZwuhoeNwdsskOGAfKRIlyREeQeNj0zS
-         MmxA==
-X-Gm-Message-State: AOAM530v3nDPtfGaOnsMYOmoiG7MpADqWd+bEHMaQjCA7C51Fm8PPwFw
-        ThRKBeN4sXqXMi2Gs8sStwRLcD72PPqsNy0Y7Jm4zsvk3E4kHWwD2475Ye51bmw3inawH0SX0G7
-        ZIGlqpXzqiR7u
-X-Received: by 2002:a05:6402:3590:: with SMTP id y16mr37782034edc.343.1639146047543;
-        Fri, 10 Dec 2021 06:20:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwFzY/2j3WiPlnRWoTpp6uz7oWK/Lpvfu/BI23ciXeezCU/cjvU3njcgaIPU5f2TT2CakyrTg==
-X-Received: by 2002:a05:6402:3590:: with SMTP id y16mr37781917edc.343.1639146046602;
-        Fri, 10 Dec 2021 06:20:46 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id f17sm1582816edq.39.2021.12.10.06.20.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ds6QTVDpGNxBUDXmv5+fit0E/Kglxb7++rnaRLkBHbc=;
+        b=wLvPwWg/4MPzDfwuKvGN5RsuWgqoAoZaf5JVxH2qKe1J8srF7y27iJyChT17GSZbZS
+         SkmUR9OYtC76HKM62NsfQg+E+1DZop/dfU8oBlaTOAmEyeCZYrnWHatQPqg5RjIGvfrN
+         UQjXfV4noHQqYhBPLz5FOnHnrhcOrUGWsqqYVU/8h7/BupcuUTWLVff9NiKTw3aj4nrt
+         4CSnpyms2Nm7hY3bKrL3YLt4Iu5HRGO6a7fLk6MV4iMSZGvbDGo3+VsomrgrLRgSK2WG
+         SCItN1u4G9gZMuUAKbYWg545/0KkL3fRq3sMOYSOWcSU2NUe2d8k2uGr2woWS42eDJSd
+         asEg==
+X-Gm-Message-State: AOAM533hKKAUJXZetCuRnVNupSxM+SxBFdb3Fh8ZibhqGa2THnVFQ5Jc
+        poM2MrQmEMow+mZkdBaCm0eh5ovXx7Tk+vdYp9xSZqXq8KpMB9ZTr7l8ZNJpSql+fiS8+TEKeOZ
+        LlD49gI97H4qk
+X-Received: by 2002:a05:6402:5206:: with SMTP id s6mr38974933edd.113.1639146048422;
+        Fri, 10 Dec 2021 06:20:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyQPNrwxoHeJ1zBX5rusBPXaetulvlR989nHBOFQocmTs6DRCihkQMrxhf/jAXHz/ufPxjaLg==
+X-Received: by 2002:a05:6402:5206:: with SMTP id s6mr38974881edd.113.1639146048057;
+        Fri, 10 Dec 2021 06:20:48 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id qw27sm1690236ejc.101.2021.12.10.06.20.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 06:20:45 -0800 (PST)
+        Fri, 10 Dec 2021 06:20:46 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 48C6D180450; Fri, 10 Dec 2021 15:20:45 +0100 (CET)
+        id 23013180496; Fri, 10 Dec 2021 15:20:46 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+To:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
@@ -65,10 +67,12 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         KP Singh <kpsingh@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/8] Add support for transmitting packets using XDP in bpf_prog_run()
-Date:   Fri, 10 Dec 2021 15:20:00 +0100
-Message-Id: <20211210142008.76981-1-toke@redhat.com>
+Subject: [PATCH bpf-next v2 2/8] page_pool: Store the XDP mem id
+Date:   Fri, 10 Dec 2021 15:20:02 +0100
+Message-Id: <20211210142008.76981-3-toke@redhat.com>
 X-Mailer: git-send-email 2.34.0
+In-Reply-To: <20211210142008.76981-1-toke@redhat.com>
+References: <20211210142008.76981-1-toke@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -76,72 +80,83 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds support for transmitting packets using XDP in
-bpf_prog_run(), by enabling the xdp_do_redirect() callback so XDP programs
-can perform "real" redirects to devices or maps, using an opt-in flag when
-executing the program.
+Store the XDP mem ID inside the page_pool struct so it can be retrieved
+later for use in bpf_prog_run().
 
-The primary use case for this is testing the redirect map types and the
-ndo_xdp_xmit driver operation without generating external traffic. But it
-turns out to also be useful for creating a programmable traffic generator.
-The last patch adds a sample traffic generator to bpf/samples, which
-can transmit up to 11.5 Mpps/core on my test machine.
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ include/net/page_pool.h | 9 +++++++--
+ net/core/page_pool.c    | 4 +++-
+ net/core/xdp.c          | 2 +-
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-To transmit the frames, the new mode instantiates a page_pool structure in
-bpf_prog_run() and initialises the pages with the data passed in by
-userspace. These pages can then be redirected using the normal redirection
-mechanism, and the existing page_pool code takes care of returning and
-recycling them. The setup is optimised for high performance with a high
-number of repetitions to support stress testing and the traffic generator
-use case; see patch 6 for details.
-
-The series is structured as follows: Patches 1-2 adds a few features to
-page_pool that are needed for the usage in bpf_prog_run(). Similarly,
-patches 3-5 performs a couple of preparatory refactorings of the XDP
-redirect and memory management code. Patch 6 adds the support to
-bpf_prog_run() itself, patch 7 adds a selftest, and patch 8 adds the
-traffic generator example to samples/bpf.
-
-v2:
-- Split up up __xdp_do_redirect to avoid passing two pointers to it (John)
-- Always reset context pointers before each test run (John)
-- Use get_mac_addr() from xdp_sample_user.h instead of rolling our own (Kumar)
-- Fix wrong offset for metadata pointer
-
-Toke Høiland-Jørgensen (8):
-  page_pool: Add callback to init pages when they are allocated
-  page_pool: Store the XDP mem id
-  xdp: Allow registering memory model without rxq reference
-  xdp: Move conversion to xdp_frame out of map functions
-  xdp: add xdp_do_redirect_frame() for pre-computed xdp_frames
-  bpf: Add XDP_REDIRECT support to XDP for bpf_prog_run()
-  selftests/bpf: Add selftest for XDP_REDIRECT in bpf_prog_run()
-  samples/bpf: Add xdp_trafficgen sample
-
- include/linux/bpf.h                           |  20 +-
- include/linux/filter.h                        |   4 +
- include/net/page_pool.h                       |  11 +-
- include/net/xdp.h                             |   3 +
- include/uapi/linux/bpf.h                      |   2 +
- kernel/bpf/Kconfig                            |   1 +
- kernel/bpf/cpumap.c                           |   8 +-
- kernel/bpf/devmap.c                           |  32 +-
- net/bpf/test_run.c                            | 218 ++++++++-
- net/core/filter.c                             |  73 ++-
- net/core/page_pool.c                          |   6 +-
- net/core/xdp.c                                |  94 ++--
- samples/bpf/.gitignore                        |   1 +
- samples/bpf/Makefile                          |   4 +
- samples/bpf/xdp_redirect.bpf.c                |  34 ++
- samples/bpf/xdp_trafficgen_user.c             | 421 ++++++++++++++++++
- tools/include/uapi/linux/bpf.h                |   2 +
- .../bpf/prog_tests/xdp_do_redirect.c          |  74 +++
- .../bpf/progs/test_xdp_do_redirect.c          |  34 ++
- 19 files changed, 948 insertions(+), 94 deletions(-)
- create mode 100644 samples/bpf/xdp_trafficgen_user.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index a71201854c41..6bc0409c4ffd 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -96,6 +96,7 @@ struct page_pool {
+ 	unsigned int frag_offset;
+ 	struct page *frag_page;
+ 	long frag_users;
++	u32 xdp_mem_id;
+ 
+ 	/*
+ 	 * Data structure for allocation side
+@@ -170,9 +171,12 @@ bool page_pool_return_skb_page(struct page *page);
+ 
+ struct page_pool *page_pool_create(const struct page_pool_params *params);
+ 
++struct xdp_mem_info;
++
+ #ifdef CONFIG_PAGE_POOL
+ void page_pool_destroy(struct page_pool *pool);
+-void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
++void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
++			   struct xdp_mem_info *mem);
+ void page_pool_release_page(struct page_pool *pool, struct page *page);
+ void page_pool_put_page_bulk(struct page_pool *pool, void **data,
+ 			     int count);
+@@ -182,7 +186,8 @@ static inline void page_pool_destroy(struct page_pool *pool)
+ }
+ 
+ static inline void page_pool_use_xdp_mem(struct page_pool *pool,
+-					 void (*disconnect)(void *))
++					 void (*disconnect)(void *),
++					 struct xdp_mem_info *mem)
+ {
+ }
+ static inline void page_pool_release_page(struct page_pool *pool,
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index fb5a90b9d574..2605467251f1 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -695,10 +695,12 @@ static void page_pool_release_retry(struct work_struct *wq)
+ 	schedule_delayed_work(&pool->release_dw, DEFER_TIME);
+ }
+ 
+-void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *))
++void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
++			   struct xdp_mem_info *mem)
+ {
+ 	refcount_inc(&pool->user_cnt);
+ 	pool->disconnect = disconnect;
++	pool->xdp_mem_id = mem->id;
+ }
+ 
+ void page_pool_destroy(struct page_pool *pool)
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 5ddc29f29bad..143388c6d9dd 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -318,7 +318,7 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+ 	}
+ 
+ 	if (type == MEM_TYPE_PAGE_POOL)
+-		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect);
++		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect, mem);
+ 
+ 	mutex_unlock(&mem_id_lock);
+ 
 -- 
 2.34.0
 
