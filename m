@@ -2,113 +2,161 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3083DC433F5
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3999BC433F5
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbhLKSgD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Dec 2021 13:36:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:60032 "EHLO
+        id S231764AbhLKSna (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Dec 2021 13:43:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51058 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231733AbhLKSgD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:36:03 -0500
+        by vger.kernel.org with ESMTP id S231753AbhLKSn3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:43:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639247762;
+        s=mimecast20190719; t=1639248209;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ajlmog3xH6YXGMfi/eJM6BOlcjlzkfu8C1zEPFmZomM=;
-        b=Lmo/S7B7XxqmsWv4ZyWhLh+mTzN1LBINvPIm7H75/zmxX/fKw7dHJHVJ7MuXhM3aCrLCqO
-        FdlXMI9fB098hlyWgO5JCP4c3EZC/KVg0NMJ8jJMgi606M5HfLJ679ONodzWvm0pfQDtLh
-        u2VRHWNvnxc3tm1N4jn1z8JA8XgY+rs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=qcwg+nWK33eezODa4kU9dVrDqx3dQGYFOytiCKq/aAc=;
+        b=iAEZ9HmjIOBozEI2+CmEwSeTbYtB9bRor0nagkcOYPIP0oNngh4nE4yJMPc3CsXIKVNQsI
+        YTRVKIdOau04teJg/rPRLq2lKeLxqmq3gOSxlGVpZVsY7j4vR0Or6O5XiGMEE8+AE1fU+z
+        4xpwztQ/4qqTNWyy1GlKSVtBvAlLs88=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-2S08qbE5NUa0_FBBJuJthA-1; Sat, 11 Dec 2021 13:36:01 -0500
-X-MC-Unique: 2S08qbE5NUa0_FBBJuJthA-1
-Received: by mail-ed1-f71.google.com with SMTP id d13-20020a056402516d00b003e7e67a8f93so10853193ede.0
-        for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:36:01 -0800 (PST)
+ us-mta-321-LIiw_QjtOWG-XHHKbJ-tbQ-1; Sat, 11 Dec 2021 13:43:27 -0500
+X-MC-Unique: LIiw_QjtOWG-XHHKbJ-tbQ-1
+Received: by mail-ed1-f69.google.com with SMTP id w18-20020a056402071200b003e61cbafdb4so10816935edx.4
+        for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:43:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Ajlmog3xH6YXGMfi/eJM6BOlcjlzkfu8C1zEPFmZomM=;
-        b=3sr3qD0Jc7hkpOofex6QejS2c3yryHeDCWJx+34hQSDBFB7s081wp3oCepc4Gh/hV5
-         ajZC8+lMRO/hFeX5I/vES2FHM0NgaXGG/Q3Z4p+68s+8JyApmjQAzIo7IDVGCCerImxp
-         95KZvMF7h+1swI1P/1G5s+5K0NV2IiylOpBNtKp2wy5ZZ72Qt/BhPwfT6Y+9YcBT6UPp
-         XgyhjwZ9ZYF4egn9xLJMDFJD6zbaSgNK+r0F3Q6EdFuRfBJ9dmEmVXIEnMsp9cl1zy4X
-         VwCm7B+yD0QudfRTChyaLAkJJXs5TqbA51Cyio4U1ESlMGKrYMMbJ+gaM6NuB3oyGINP
-         T89w==
-X-Gm-Message-State: AOAM5308lr9fyJklloCqW92KSzLQL+phgxJu0HgWtAKGvCIW/aLyBr1o
-        GAlnT8LwkbsBVIOlJh5TUb6PjHb3LZ27P8WH1GLAouiPlvCjcoY7xpX9Wi2iM9RdACrmr11inE1
-        XjpqLE6drIl6b
-X-Received: by 2002:a17:906:4bcf:: with SMTP id x15mr32858840ejv.273.1639247759927;
-        Sat, 11 Dec 2021 10:35:59 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxAFqc5JuXJpR1PDi7k/x9dO4ZE+BE0VTGlDb2bqnamOUNKbVBx1kYG1eQmBCh9kyvI7D29gw==
-X-Received: by 2002:a17:906:4bcf:: with SMTP id x15mr32858809ejv.273.1639247759610;
-        Sat, 11 Dec 2021 10:35:59 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id q7sm3522535edr.9.2021.12.11.10.35.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qcwg+nWK33eezODa4kU9dVrDqx3dQGYFOytiCKq/aAc=;
+        b=HUEu5TDFeccX7ERIVRwEuepabRpoUJNHeFUW+05062PP82GP3x8pTeo7cmQnRxEB88
+         mAxdPJ/wcx7qps6N1IAciM4V1IZGL4bfzYEVdvWfw41jbPsp28P83G0M71Q5M5etsciP
+         7dgnZCtIHUBB7KHuQc27vvETMV0QS4HSUYIiiYTCuNr5mM/B8I+iuh00dgYU/M3I98Wc
+         5SazNwyy8TvUykpdXHjREV7mRQ71IZkqg6g3T2lc+N4klYPRm+Qvjf/MUkoaFzeO+qk8
+         4/srOBVox8p0NrN80eEc+stXaAZc2D7+pyR0Zzqk4vq4QubIOb7CrYsg37UPMycxOY//
+         Pwnw==
+X-Gm-Message-State: AOAM533HCj4saSjFZQrDuiHdBl2PzCUtz3exvCbpIBckMlVM+yiE7KeR
+        PHgmvg90vQ/ZWG4dVCQ/VmqG4oJ1L6medAsNhmyKdddKUJqb1rSveeFQq2fXHrsB1bLPzXB/odN
+        e3rc6lQ6Sp7Y5
+X-Received: by 2002:aa7:c78f:: with SMTP id n15mr48033421eds.344.1639248206070;
+        Sat, 11 Dec 2021 10:43:26 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWRuiBUX4M5Ep+VigFUEs7adY4I00LONshztoYorReVzl4HiamOizhk1fAsU/tLwm9Y8++sw==
+X-Received: by 2002:aa7:c78f:: with SMTP id n15mr48033336eds.344.1639248205162;
+        Sat, 11 Dec 2021 10:43:25 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id cw20sm3391613ejc.90.2021.12.11.10.43.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:35:58 -0800 (PST)
+        Sat, 11 Dec 2021 10:43:24 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 156FE180471; Sat, 11 Dec 2021 19:35:58 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        id DCACF1804A1; Sat, 11 Dec 2021 19:43:23 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Florian Westphal <fw@strlen.de>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 7/9] net/netfilter: Add unstable CT lookup
- helpers for XDP and TC-BPF
-In-Reply-To: <YbPcxjdsdqepEQAJ@salvia>
-References: <20211210130230.4128676-1-memxor@gmail.com>
- <20211210130230.4128676-8-memxor@gmail.com> <YbNtmlaeqPuHHRgl@salvia>
- <20211210153129.srb6p2ebzhl5yyzh@apollo.legion> <YbPcxjdsdqepEQAJ@salvia>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Sat, 11 Dec 2021 19:35:58 +0100
-Message-ID: <87pmq3ugz5.fsf@toke.dk>
+        KP Singh <kpsingh@kernel.org>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 3/8] page_pool: Store the XDP mem id
+Date:   Sat, 11 Dec 2021 19:41:37 +0100
+Message-Id: <20211211184143.142003-4-toke@redhat.com>
+X-Mailer: git-send-email 2.34.0
+In-Reply-To: <20211211184143.142003-1-toke@redhat.com>
+References: <20211211184143.142003-1-toke@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pablo Neira Ayuso <pablo@netfilter.org> writes:
+Store the XDP mem ID inside the page_pool struct so it can be retrieved
+later for use in bpf_prog_run().
 
-> On Fri, Dec 10, 2021 at 09:01:29PM +0530, Kumar Kartikeya Dwivedi wrote:
->> On Fri, Dec 10, 2021 at 08:39:14PM IST, Pablo Neira Ayuso wrote:
->> > On Fri, Dec 10, 2021 at 06:32:28PM +0530, Kumar Kartikeya Dwivedi wrote:
->> > [...]
->> > >  net/netfilter/nf_conntrack_core.c | 252 ++++++++++++++++++++++++++++++
->> > >  7 files changed, 497 insertions(+), 1 deletion(-)
->> > >
->> > [...]
->> > > diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
->> > > index 770a63103c7a..85042cb6f82e 100644
->> > > --- a/net/netfilter/nf_conntrack_core.c
->> > > +++ b/net/netfilter/nf_conntrack_core.c
->> >
->> > Please, keep this new code away from net/netfilter/nf_conntrack_core.c
->> 
->> Ok. Can it be a new file under net/netfilter, or should it live elsewhere?
->
-> IPVS and OVS use conntrack for already quite a bit of time and they
-> keep their code in their respective folders.
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ include/net/page_pool.h | 9 +++++++--
+ net/core/page_pool.c    | 4 +++-
+ net/core/xdp.c          | 2 +-
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
-Those are users, though. This is adding a different set of exported
-functions, like a BPF version of EXPORT_SYMBOL(). We don't put those
-outside the module where the code lives either...
-
-I can buy not wanting to bloat nf_conntrack_core.c, but what's the
-problem with adding a net/netfilter_nf_conntrack_bpf.c that gets linked
-into the same kmod?
-
--Toke
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index a71201854c41..6bc0409c4ffd 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -96,6 +96,7 @@ struct page_pool {
+ 	unsigned int frag_offset;
+ 	struct page *frag_page;
+ 	long frag_users;
++	u32 xdp_mem_id;
+ 
+ 	/*
+ 	 * Data structure for allocation side
+@@ -170,9 +171,12 @@ bool page_pool_return_skb_page(struct page *page);
+ 
+ struct page_pool *page_pool_create(const struct page_pool_params *params);
+ 
++struct xdp_mem_info;
++
+ #ifdef CONFIG_PAGE_POOL
+ void page_pool_destroy(struct page_pool *pool);
+-void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
++void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
++			   struct xdp_mem_info *mem);
+ void page_pool_release_page(struct page_pool *pool, struct page *page);
+ void page_pool_put_page_bulk(struct page_pool *pool, void **data,
+ 			     int count);
+@@ -182,7 +186,8 @@ static inline void page_pool_destroy(struct page_pool *pool)
+ }
+ 
+ static inline void page_pool_use_xdp_mem(struct page_pool *pool,
+-					 void (*disconnect)(void *))
++					 void (*disconnect)(void *),
++					 struct xdp_mem_info *mem)
+ {
+ }
+ static inline void page_pool_release_page(struct page_pool *pool,
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index c3b134a86ec9..8442a7965602 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -695,10 +695,12 @@ static void page_pool_release_retry(struct work_struct *wq)
+ 	schedule_delayed_work(&pool->release_dw, DEFER_TIME);
+ }
+ 
+-void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *))
++void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
++			   struct xdp_mem_info *mem)
+ {
+ 	refcount_inc(&pool->user_cnt);
+ 	pool->disconnect = disconnect;
++	pool->xdp_mem_id = mem->id;
+ }
+ 
+ void page_pool_destroy(struct page_pool *pool)
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index ac476c84a986..2901bb7004cc 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -320,7 +320,7 @@ static struct xdp_mem_allocator *__xdp_reg_mem_model(struct xdp_mem_info *mem,
+ 	}
+ 
+ 	if (type == MEM_TYPE_PAGE_POOL)
+-		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect);
++		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect, mem);
+ 
+ 	mutex_unlock(&mem_id_lock);
+ 
+-- 
+2.34.0
 
