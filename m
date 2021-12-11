@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC60C433FE
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C961C4321E
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243475AbhLKCHJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
+        id S244705AbhLKCHL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:07:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345767AbhLKCGV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1345771AbhLKCGV (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 10 Dec 2021 21:06:21 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE50C061A32;
-        Fri, 10 Dec 2021 18:02:35 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id t5so34878540edd.0;
-        Fri, 10 Dec 2021 18:02:35 -0800 (PST)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4B5C0698CC;
+        Fri, 10 Dec 2021 18:02:38 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x10so17836079edd.5;
+        Fri, 10 Dec 2021 18:02:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
         bh=jSOiAUnjL0sqDtqDJjyAlAPssniWR5UdQu2Q1V5jU0Y=;
-        b=fswQ97Wcxtp2wBUU0NNqr4e5qtEt2wxMipkKlX51lJ7thGxDhGRbXzPl5a8UnUOZJo
-         vTz6I2CtEs5FNovwXcdQwsNpDT6LSCenUh5TAUnyrz4C8U5pZ4f4+Ii+cLuGYIwedZKp
-         Ipn6CvDYG97df8XwBF+KmQJuW9D1Gg8UjJhGTtml1R4ypu4K65m8L99f7d1VX3BxZlk6
-         okAn07h8o104ws2vM0Q+FHMhzT2+0IW3PV9a7vTKVvU4ogHEyV5XcY2d2DWvr73rLG8t
-         d92vpBShZuqv1fVULFognxbtv3rObxF8b02BQnPLrIdc2TDAVR4jpDqjzgaj5v7Glvra
-         enCg==
+        b=Crp3Yut0/N+yvIaOhWU6HVxGwccy059ls2SoLwEru0z9WtZs3h3QABH5rNQw9wHsiG
+         vmteiT2F73YzenfRLgg3QY4TA30kjFiHuOrL/8frOs9bbcHzUwbdAvwdwdpclc4wubD/
+         ncp9zs7O1fz9/Twy5+iSxN3NuaCNHyqu77SCAMBpHzcvuBBgRJ2vXIQWm/maCcxAYfum
+         hRDhQ2G7hSyhLCYMOifvsqTU/oT3sAwqpLlQzMZEUahi2z69IKDa8MeZF/b0yXijZARC
+         ZL8Nv8iGooIxF2GoBrbnDty9TEio7y4YF6UwzrUzhTCCvSPm0w/JrX4PO+DnPA061M75
+         symA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
         bh=jSOiAUnjL0sqDtqDJjyAlAPssniWR5UdQu2Q1V5jU0Y=;
-        b=xoiKAxOgJaroCZrh7skPbgQ9deWYzsQjzjTE8ZU1eG9+5Y19m2tg0VpBPqTAoXrlOW
-         lLXEoOFXmoaFNB0EnuDN/xaTXhWkaWk9C5Shu1y5kwrAxbdpGTDWjL52pQ0ZQqGz43/H
-         OlbVA2GXO7oCkeY6Nj6l9vClUhSh1oZoL3gyWf5TScS7fpFxfOAa7knTJOjIukNttZT2
-         rsea2P1NQK3gkVS4ma+mx3I0JsoUvmIvpQQKfEBiuMPMx8S7ayUJj9FH4CUJ0Wk+TISW
-         XTvgPY+jLiFeA8Z0WFixBs45ghZAHK+Ho55sT2T1W6KI5xZ9BAwu1xMNErmRLjPwzHoc
-         CFoA==
-X-Gm-Message-State: AOAM531EUtnCVRaXNtDcdWDrkcWSla8mSxdKlIQ8cuyyGoqMuLUFtqFx
-        CKsVMwHgITiARjcg9c6RraQ=
-X-Google-Smtp-Source: ABdhPJyH30N0QLA/u5dg4t+TkIy8vjgfMU7GtezDE/9IRLwhjoo6vbIbpDynSVI23j1oEpYqTXhMfg==
-X-Received: by 2002:a05:6402:2c4:: with SMTP id b4mr42427988edx.265.1639188154061;
-        Fri, 10 Dec 2021 18:02:34 -0800 (PST)
+        b=EM2yy7dg/4qGcmylVDJLqdUVEb1Xssl3Zbx6z8T7gZiNrPoUODv2smBuYkLeJ0K0UU
+         TmomsIKd0en1zkrfwQWQn2ZolUh77FCY/Tt3IOh3RZEwDHxGfyRt3cWiGCP5eY03WeUk
+         OGtXjMVqwc/+tFC0x88NalIyeAMEAa3ZL2Wlr6VcofszKYXTrBAdWsY8QM7qgp8G2zyl
+         1d2ADkKdk/DIv9JPPk/EXaVXR2/3u4YM4RI3fA/i2yUWuSLXTF7aPhywo8796gk+viuH
+         m1O4sgzxvOhW1fsVWqRHcd97H5BBvdgPC2yIM30bx7GycE2Hcq3ZLyJZkyPznG2cpu8q
+         y/qw==
+X-Gm-Message-State: AOAM5329SMzlWmVvvwKcVxLXcMF2uk1IFbqa7+wTKK+iVAKtoEa+YC1R
+        iM0NCxNmfBqR2bRCOtIVj6M=
+X-Google-Smtp-Source: ABdhPJyKzPYeQTUedcSfmbugqCKAjGRFoITwVY7jxlKZJCXeXPcl4wM/a7PeRXLveXXL+aoLPwZnvw==
+X-Received: by 2002:a17:907:d8e:: with SMTP id go14mr28995630ejc.366.1639188156513;
+        Fri, 10 Dec 2021 18:02:36 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.32
+        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:33 -0800 (PST)
+        Fri, 10 Dec 2021 18:02:36 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -63,9 +63,9 @@ To:     Andrew Lunn <andrew@lunn.ch>,
         KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 11/14] net: dsa: qca8k: add support for mdio read/write in Ethernet packet
-Date:   Sat, 11 Dec 2021 03:01:47 +0100
-Message-Id: <20211211020155.10114-16-ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v3 12/15] net: dsa: qca8k: add support for mdio read/write in Ethernet packet
+Date:   Sat, 11 Dec 2021 03:01:49 +0100
+Message-Id: <20211211020155.10114-18-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
 References: <20211211020155.10114-1-ansuelsmth@gmail.com>
