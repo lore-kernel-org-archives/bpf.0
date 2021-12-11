@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1AA7C433F5
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 429E0C433F5
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346131AbhLKCHR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S1346136AbhLKCHV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345765AbhLKCGU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1345754AbhLKCGU (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 10 Dec 2021 21:06:20 -0500
 Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66315C061353;
-        Fri, 10 Dec 2021 18:02:34 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id y12so34435145eda.12;
-        Fri, 10 Dec 2021 18:02:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB81C0698C9;
+        Fri, 10 Dec 2021 18:02:32 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id x10so17835644edd.5;
+        Fri, 10 Dec 2021 18:02:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=X4wMhrUN84KeHeknaHhQMPltoPDB0WqcvrysGGLndQ4=;
-        b=oQNowIzeyAus8FbCJ0S7EbiSWNDIrQDGgIim3wS7+w4LVM095Lbt1KEA2a4V0c2DlB
-         MPCN4fKzQM92rFe/LmI6lGJPcX8rVkd70tPJZoOxirn7z+twalseAZW79vO4LdxD1qu1
-         WLW6D5/MXctjmVTLUz+4gL1prpUlMSTHacfL/SmXQ5oc7EG22rv8Kd3t6ReEfcDlnvDT
-         BhWCi5tGXiiFLrCB/nDkhZFBs/VrkyZdeM39ca5A+f1qxUHHlbgO8NTD/ZlAQy9+oyE0
-         MiSmehhx70sSE578Lpd4/ojwrxMKRkGS1M6INB3zOQvuQiT5aAjMCSSMWhjnZxnSxgbD
-         pvmQ==
+        bh=Ug17C0BlF8flc3ASDfigJVcIU3yUjGTjLhKNa+SJZOg=;
+        b=QXRFy1zGMEzwHGscx1GDGZRc4MaB8MYQzjpC5KwwlPayCCbZF0J/nzRYWcXowNqlKm
+         TyOGi/6PO8+0nq3MweqViBugKISnW8R+i2BVrV7NgCqqc7p9uclhd9+87BjM5Wj0l2GC
+         0+RIEz/EOP1lIUtXWq46SLgu4rSNRzgdgnEbAp5pZ6/zmKg5NmUpg24eYyLWtUNA4jaE
+         s1M9NUQdv0F7/W7m3eNwvmScx190aF82fUQ8jv6LNiwaMf/RVSKxIvVtuDfXyr3JKO6l
+         a9GpF+zN4YIFtcarM7kWhw8FwQZnAKIYzYZVlPevz1GKx1zhmkmd+/+0fntRa1RELLT1
+         jl3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=X4wMhrUN84KeHeknaHhQMPltoPDB0WqcvrysGGLndQ4=;
-        b=HVQ1rWSbB/Ik86TSjDFOvVu/e8G8srnMJIWq+XPW2/3L+MU5xg5HYhtDP+3U64aEhf
-         R3ydoHU1+piv0eQAtOWrW/rDoEuQz+jkS/ZJhE3CkL//C27A8m7CvLP4SVhQhsT/bzB3
-         ypIOpVkGsJLU500Db2ZlxhYaH7dbD3bn6gsGLKG+5oN0PsQjI63/3sQU24r8snJL7KXS
-         EPK1poc2im26aSyYirYd6CNrTKWeRGQDxlOj+2dYgr8PJpZdpHT2QFu360smr7DYJqJp
-         QfW2wHpfpgsFalw0dOYQ5rkCnQGGGURlmxrgFyMZk3IykxWjJ4/APzDLpOJVVk/VWi/a
-         9LAQ==
-X-Gm-Message-State: AOAM532LK7O5LLcow0mLAKTMTnW8P9SbHklU+IWrGJHWPa0zrHEIXFY1
-        qTQ0pX5r1QqcqPn/o3Mnioo=
-X-Google-Smtp-Source: ABdhPJyeM3LUiV+uVrBngFJqG3aws6IotQ/CLaGNUbbStgHx+hIxd+qrZyLb+TC6Tev0l9d6PFLDNg==
-X-Received: by 2002:a05:6402:1d50:: with SMTP id dz16mr44234607edb.309.1639188152875;
-        Fri, 10 Dec 2021 18:02:32 -0800 (PST)
+        bh=Ug17C0BlF8flc3ASDfigJVcIU3yUjGTjLhKNa+SJZOg=;
+        b=023O4h8yAoovXSEBsXGG9xhWikVQKUKGDIYgmP+cNjQdXF2lbKkFuL4edBbgfTKEAR
+         lxZwSpzmXWryv4YB5lVeXs2EWTobubE0h2MJrmernoXdGdkRyKX1Tk4FUg5iTYchgGB6
+         2vEoDnQcjXjfnDACskxklYOMgvMJ7Hmd9uKtQyRk/LWEM/KPYOHYh4RG2Zl0vSRoZ3G5
+         I88NxR92y9TLh72Pd0umTX8RreG7iYuK7q3BOppPG+xj7U85te3wgRBQmS2yffpbFwCa
+         IGwY5JzJjFPYwbpGNMHr2tYTChPtAbzwCzk0fHNhRWDyp4bElLv/D/ps2i78KaosQA9R
+         WuvA==
+X-Gm-Message-State: AOAM533b8xgE9x4CdSAJH0MEBF0zhsFGcSE1nY7Df2EZVm3Mr60YwSDS
+        7nFC9XWUGyw2AzLmwmoUqcc=
+X-Google-Smtp-Source: ABdhPJwnbH7tLeSECimzcf5Evgd6qKjZpjiI2Pze20Skrtt/WPuhYi+MtSyk98T5yx2a9Dj6srN5sQ==
+X-Received: by 2002:a50:d543:: with SMTP id f3mr42655692edj.56.1639188150539;
+        Fri, 10 Dec 2021 18:02:30 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.31
+        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:32 -0800 (PST)
+        Fri, 10 Dec 2021 18:02:30 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -63,9 +63,9 @@ To:     Andrew Lunn <andrew@lunn.ch>,
         KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 10/15] net: dsa: tag_qca: add support for handling mdio Ethernet and MIB packet
-Date:   Sat, 11 Dec 2021 03:01:46 +0100
-Message-Id: <20211211020155.10114-15-ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v3 09/14] net: dsa: tag_qca: add support for handling mdio Ethernet and MIB packet
+Date:   Sat, 11 Dec 2021 03:01:44 +0100
+Message-Id: <20211211020155.10114-13-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
 References: <20211211020155.10114-1-ansuelsmth@gmail.com>
@@ -86,7 +86,7 @@ Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
  1 file changed, 50 insertions(+), 2 deletions(-)
 
 diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
-index b91f9f1b2deb..7edc198fdb60 100644
+index b8b05d54a74c..ded4d024d791 100644
 --- a/net/dsa/tag_qca.c
 +++ b/net/dsa/tag_qca.c
 @@ -32,11 +32,15 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
