@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED4D9C4332F
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:43:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C41EC43217
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:43:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbhLKSnh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Dec 2021 13:43:37 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:46622 "EHLO
+        id S231759AbhLKSnk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Dec 2021 13:43:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:44167 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231760AbhLKSna (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:43:30 -0500
+        by vger.kernel.org with ESMTP id S231777AbhLKSne (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:43:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639248209;
+        s=mimecast20190719; t=1639248213;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YKGdcsrGGsfL9IqUuswtI/8NYS6Yd2LQe5Uj78i7ME8=;
-        b=Ola4TpgweGa7CEDVqG4ucj/JFCOLuN8ydGXsjTDFtYzObKJa/UjXEsp3alPna8QOrN5GjR
-        BLXzCvZOjelNoJnjt1i/VhClZM51tl7MHK7TmUWyEBCgSE92cG+Sc0XfRdNomh7fDLjAy9
-        X3/uNVpZyMpU53G88jx4S1oy+diYp+Y=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=HeYVFn3C/kHLoloeDuy+DYyyuZygKIHXuCGMV5j00so=;
+        b=geGTyEphYTeL/svx9gTKE03sJ6t87KYf8oK3Bz09WOposa8O3qG9+keK4bQZ8/4R4yCMhP
+        ECh2/Xo7tBnaVOx8WgyjLiPAmc6MvRxUsamtBGLJThDuX6A+hCeS84VMXbgAWuuJpszS7s
+        0jRCTD1faGvXIn2Gh95PLr2zyw51RZA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-579-zTvxwi3VNd2_MB_do-3hfg-1; Sat, 11 Dec 2021 13:43:28 -0500
-X-MC-Unique: zTvxwi3VNd2_MB_do-3hfg-1
-Received: by mail-ed1-f72.google.com with SMTP id a3-20020a05640213c300b003e7d12bb925so10842613edx.9
-        for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:43:28 -0800 (PST)
+ us-mta-176-dkbKlRjAOBq58wBw3SvYFg-1; Sat, 11 Dec 2021 13:43:32 -0500
+X-MC-Unique: dkbKlRjAOBq58wBw3SvYFg-1
+Received: by mail-ed1-f70.google.com with SMTP id w4-20020aa7cb44000000b003e7c0f7cfffso10828922edt.2
+        for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:43:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YKGdcsrGGsfL9IqUuswtI/8NYS6Yd2LQe5Uj78i7ME8=;
-        b=NlXlv2J1cn4lfvIkKuuqtXRPSVviPL0EnVBKIKtyb7+4zgWH/YiWldoExN94eNXUdw
-         giWsnl7tNzoin1vBQW/59EtlB9jRa5C9oxBeq2bKNdetH/cIXy8fzId6J3zbuNcbmHRa
-         yULUZlwgx1goQOV0/baSnc4d7rbzqe8UgoOo+MeQNBpoG9fNmkscZFX6xvDBRs+N8A4y
-         3aR588TcaN8/Zr0a66fLjhTN27x8KloP3OTtMr4vGmxgVvMyy/Gsz3sIfazt4cY63ZNE
-         ipnPaJuhpWW69kR6490bj8gGoHTy/20W36sF9lKGmYGFMHqIqqTGXkRAud5pRBfUPpkc
-         Yt6A==
-X-Gm-Message-State: AOAM531ecAsT25WfoQfpYv8lHgVOt3iEZrSwj4Vtc0X8dZxWQame7QOt
-        xrz9qlKy80yH4veMG7Zmh0ipiL6BELP3/MYbffDzP3NsqLSl9iOhIXu3gHZ9QTqD2VE5TpWj2k8
-        89U0Qn/UsoWbo
-X-Received: by 2002:a50:e0c9:: with SMTP id j9mr49332371edl.336.1639248206729;
-        Sat, 11 Dec 2021 10:43:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy155dYLxcn2rzl6A/QgkXsI2OS7AM7FGp8XniIzyJK2b1r2oVHcBKBMayKv3jM/vXeuhpMdg==
-X-Received: by 2002:a50:e0c9:: with SMTP id j9mr49332244edl.336.1639248205437;
-        Sat, 11 Dec 2021 10:43:25 -0800 (PST)
+        bh=HeYVFn3C/kHLoloeDuy+DYyyuZygKIHXuCGMV5j00so=;
+        b=xWtHRNGt5YxCmpz+6xmS+YTiaoeMe3EBQDDId7NlNyaU7nCelQ7g7V+hEDdf6A+Fz4
+         oP6c3x0823/jm9gHsX9YGJ5CRhFl2SLExbp0okEnpoop11Y3+MO9eYYsgmJMpL79ic6W
+         D+7kfyfTWCGxO8juB3ejI4EIKr+NTIv4jxBWne1FIHBCiPllzR5qOBiWQ5lYX6eBWB3+
+         g7XvUHSB1cpkXG6Zmop/JOZWsrTqLn1HJxeT3m+2DQmWQAgPb6V2uiNRBS0MoCl/whcP
+         UtrMU8B4ir5abmnCd9jlu46Mziq5dLCakGOJ7Md2ZtxqQsnzgHgV995c0MBG6Gt8EGwX
+         wm0g==
+X-Gm-Message-State: AOAM532CXxP0C2wBTx41BHQkLpAyda7k8jMllwGCR/f+w55WfrVmmVYQ
+        +6idjYZT1ZOWkM00CQCt5kziSHy/47tePaxDksjNhsvJYSjr4P0jzPpw6QdsgV5rYOtKLEmk6Er
+        +1zn138zpGTJN
+X-Received: by 2002:a05:6402:169a:: with SMTP id a26mr49742956edv.292.1639248210371;
+        Sat, 11 Dec 2021 10:43:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwvn2/kx/sy4X+uNEui7KNBiPnV187X8Fb6NiDQQ+3mYCw+ye/2jt3PYs599SBvbT546KuWgA==
+X-Received: by 2002:a05:6402:169a:: with SMTP id a26mr49742824edv.292.1639248209030;
+        Sat, 11 Dec 2021 10:43:29 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id m16sm3484473edd.61.2021.12.11.10.43.24
+        by smtp.gmail.com with ESMTPSA id h7sm3838937ede.40.2021.12.11.10.43.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:43:24 -0800 (PST)
+        Sat, 11 Dec 2021 10:43:27 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id F3CAF180496; Sat, 11 Dec 2021 19:43:22 +0100 (CET)
+        id 3B6B5180496; Sat, 11 Dec 2021 19:43:26 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -65,10 +65,11 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/8] xdp: Allow registering memory model without rxq reference
-Date:   Sat, 11 Dec 2021 19:41:35 +0100
-Message-Id: <20211211184143.142003-2-toke@redhat.com>
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next v3 7/8] selftests/bpf: Add selftest for XDP_REDIRECT in bpf_prog_run()
+Date:   Sat, 11 Dec 2021 19:41:41 +0100
+Message-Id: <20211211184143.142003-8-toke@redhat.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211211184143.142003-1-toke@redhat.com>
 References: <20211211184143.142003-1-toke@redhat.com>
@@ -79,201 +80,138 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The functions that register an XDP memory model take a struct xdp_rxq as
-parameter, but the RXQ is not actually used for anything other than pulling
-out the struct xdp_mem_info that it embeds. So refactor the register
-functions and export variants that just take a pointer to the xdp_mem_info.
-
-This is in preparation for enabling XDP_REDIRECT in bpf_prog_run(), using a
-page_pool instance that is not connected to any network device.
+This adds a selftest for the XDP_REDIRECT facility in bpf_prog_run, that
+redirects packets into a veth and counts them using an XDP program on the
+other side of the veth pair.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/net/xdp.h |  3 ++
- net/core/xdp.c    | 92 +++++++++++++++++++++++++++++++----------------
- 2 files changed, 65 insertions(+), 30 deletions(-)
+ .../bpf/prog_tests/xdp_do_redirect.c          | 74 +++++++++++++++++++
+ .../bpf/progs/test_xdp_do_redirect.c          | 34 +++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 447f9b1578f3..8f0812e4996d 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -260,6 +260,9 @@ bool xdp_rxq_info_is_reg(struct xdp_rxq_info *xdp_rxq);
- int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 			       enum xdp_mem_type type, void *allocator);
- void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq);
-+int xdp_reg_mem_model(struct xdp_mem_info *mem,
-+		      enum xdp_mem_type type, void *allocator);
-+void xdp_unreg_mem_model(struct xdp_mem_info *mem);
- 
- /* Drivers not supporting XDP metadata can use this helper, which
-  * rejects any room expansion for metadata as a result.
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 5ddc29f29bad..ac476c84a986 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -110,20 +110,15 @@ static void mem_allocator_disconnect(void *allocator)
- 	mutex_unlock(&mem_id_lock);
- }
- 
--void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
-+void xdp_unreg_mem_model(struct xdp_mem_info *mem)
- {
- 	struct xdp_mem_allocator *xa;
--	int type = xdp_rxq->mem.type;
--	int id = xdp_rxq->mem.id;
-+	int type = mem->type;
-+	int id = mem->id;
- 
- 	/* Reset mem info to defaults */
--	xdp_rxq->mem.id = 0;
--	xdp_rxq->mem.type = 0;
--
--	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
--		WARN(1, "Missing register, driver bug");
--		return;
--	}
-+	mem->id = 0;
-+	mem->type = 0;
- 
- 	if (id == 0)
- 		return;
-@@ -135,6 +130,17 @@ void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
- 		rcu_read_unlock();
- 	}
- }
-+EXPORT_SYMBOL_GPL(xdp_unreg_mem_model);
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+new file mode 100644
+index 000000000000..c2effcf076a6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++#include <net/if.h>
++#include "test_xdp_do_redirect.skel.h"
 +
-+void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
++#define SYS(fmt, ...)						\
++	({							\
++		char cmd[1024];					\
++		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
++		if (!ASSERT_OK(system(cmd), cmd))		\
++			goto fail;				\
++	})
++
++#define NUM_PKTS 10
++void test_xdp_do_redirect(void)
 +{
-+	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
-+		WARN(1, "Missing register, driver bug");
++	struct test_xdp_do_redirect *skel = NULL;
++	struct ipv6_packet data = pkt_v6;
++	struct xdp_md ctx_in = { .data_end = sizeof(data) };
++	__u8 dst_mac[ETH_ALEN] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55};
++	__u8 src_mac[ETH_ALEN] = {0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .data_in = &data,
++			    .data_size_in = sizeof(data),
++			    .ctx_in = &ctx_in,
++			    .ctx_size_in = sizeof(ctx_in),
++			    .flags = BPF_F_TEST_XDP_DO_REDIRECT,
++			    .repeat = NUM_PKTS,
++		);
++	int err, prog_fd, ifindex_src, ifindex_dst;
++	struct bpf_link *link;
++
++	memcpy(data.eth.h_dest, dst_mac, ETH_ALEN);
++	memcpy(data.eth.h_source, src_mac, ETH_ALEN);
++
++	skel = test_xdp_do_redirect__open();
++	if (!ASSERT_OK_PTR(skel, "skel"))
 +		return;
-+	}
 +
-+	xdp_unreg_mem_model(&xdp_rxq->mem);
-+}
- EXPORT_SYMBOL_GPL(xdp_rxq_info_unreg_mem_model);
- 
- void xdp_rxq_info_unreg(struct xdp_rxq_info *xdp_rxq)
-@@ -259,28 +265,24 @@ static bool __is_supported_mem_type(enum xdp_mem_type type)
- 	return true;
- }
- 
--int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
--			       enum xdp_mem_type type, void *allocator)
-+static struct xdp_mem_allocator *__xdp_reg_mem_model(struct xdp_mem_info *mem,
-+						     enum xdp_mem_type type,
-+						     void *allocator)
- {
- 	struct xdp_mem_allocator *xdp_alloc;
- 	gfp_t gfp = GFP_KERNEL;
- 	int id, errno, ret;
- 	void *ptr;
- 
--	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
--		WARN(1, "Missing register, driver bug");
--		return -EFAULT;
--	}
--
- 	if (!__is_supported_mem_type(type))
--		return -EOPNOTSUPP;
-+		return ERR_PTR(-EOPNOTSUPP);
- 
--	xdp_rxq->mem.type = type;
-+	mem->type = type;
- 
- 	if (!allocator) {
- 		if (type == MEM_TYPE_PAGE_POOL)
--			return -EINVAL; /* Setup time check page_pool req */
--		return 0;
-+			return ERR_PTR(-EINVAL); /* Setup time check page_pool req */
-+		return NULL;
- 	}
- 
- 	/* Delay init of rhashtable to save memory if feature isn't used */
-@@ -290,13 +292,13 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 		mutex_unlock(&mem_id_lock);
- 		if (ret < 0) {
- 			WARN_ON(1);
--			return ret;
-+			return ERR_PTR(ret);
- 		}
- 	}
- 
- 	xdp_alloc = kzalloc(sizeof(*xdp_alloc), gfp);
- 	if (!xdp_alloc)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	mutex_lock(&mem_id_lock);
- 	id = __mem_id_cyclic_get(gfp);
-@@ -304,15 +306,15 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 		errno = id;
- 		goto err;
- 	}
--	xdp_rxq->mem.id = id;
--	xdp_alloc->mem  = xdp_rxq->mem;
-+	mem->id = id;
-+	xdp_alloc->mem = *mem;
- 	xdp_alloc->allocator = allocator;
- 
- 	/* Insert allocator into ID lookup table */
- 	ptr = rhashtable_insert_slow(mem_id_ht, &id, &xdp_alloc->node);
- 	if (IS_ERR(ptr)) {
--		ida_simple_remove(&mem_id_pool, xdp_rxq->mem.id);
--		xdp_rxq->mem.id = 0;
-+		ida_simple_remove(&mem_id_pool, mem->id);
-+		mem->id = 0;
- 		errno = PTR_ERR(ptr);
- 		goto err;
- 	}
-@@ -322,13 +324,43 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
- 
- 	mutex_unlock(&mem_id_lock);
- 
--	trace_mem_connect(xdp_alloc, xdp_rxq);
--	return 0;
-+	return xdp_alloc;
- err:
- 	mutex_unlock(&mem_id_lock);
- 	kfree(xdp_alloc);
--	return errno;
-+	return ERR_PTR(errno);
-+}
++	SYS("ip link add veth_src type veth peer name veth_dst");
++	SYS("ip link set dev veth_src up");
++	SYS("ip link set dev veth_dst up");
 +
-+int xdp_reg_mem_model(struct xdp_mem_info *mem,
-+		      enum xdp_mem_type type, void *allocator)
++	ifindex_src = if_nametoindex("veth_src");
++	ifindex_dst = if_nametoindex("veth_dst");
++	if (!ASSERT_NEQ(ifindex_src, 0, "ifindex_src") ||
++	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
++		goto fail;
++
++	memcpy(skel->rodata->expect_dst, dst_mac, ETH_ALEN);
++	skel->rodata->ifindex_out = ifindex_src;
++
++	if (!ASSERT_OK(test_xdp_do_redirect__load(skel), "load"))
++		goto fail;
++
++	link = bpf_program__attach_xdp(skel->progs.xdp_count_pkts, ifindex_dst);
++	if (!ASSERT_OK_PTR(link, "prog_attach"))
++		goto fail;
++	skel->links.xdp_count_pkts = link;
++
++	prog_fd = bpf_program__fd(skel->progs.xdp_redirect_notouch);
++	err = bpf_prog_test_run_opts(prog_fd, &opts);
++	if (!ASSERT_OK(err, "prog_run"))
++		goto fail;
++
++	/* wait for the packets to be flushed */
++	kern_sync_rcu();
++
++	ASSERT_EQ(skel->bss->pkts_seen, NUM_PKTS, "pkt_count");
++fail:
++	system("ip link del dev veth_src");
++	test_xdp_do_redirect__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+new file mode 100644
+index 000000000000..254ebf523f37
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++#define ETH_ALEN 6
++const volatile int ifindex_out;
++const volatile __u8 expect_dst[ETH_ALEN];
++volatile int pkts_seen = 0;
++
++SEC("xdp")
++int xdp_redirect_notouch(struct xdp_md *xdp)
 +{
-+	struct xdp_mem_allocator *xdp_alloc;
-+
-+	xdp_alloc = __xdp_reg_mem_model(mem, type, allocator);
-+	if (IS_ERR(xdp_alloc))
-+		return PTR_ERR(xdp_alloc);
-+	return 0;
++	return bpf_redirect(ifindex_out, 0);
 +}
-+EXPORT_SYMBOL_GPL(xdp_reg_mem_model);
 +
-+int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
-+			       enum xdp_mem_type type, void *allocator)
++SEC("xdp")
++int xdp_count_pkts(struct xdp_md *xdp)
 +{
-+	struct xdp_mem_allocator *xdp_alloc;
++	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(long)xdp->data_end;
++	struct ethhdr *eth = data;
++	int i;
 +
-+	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
-+		WARN(1, "Missing register, driver bug");
-+		return -EFAULT;
-+	}
++	if (eth + 1 > data_end)
++		return XDP_ABORTED;
 +
-+	xdp_alloc = __xdp_reg_mem_model(&xdp_rxq->mem, type, allocator);
-+	if (IS_ERR(xdp_alloc))
-+		return PTR_ERR(xdp_alloc);
++	for (i = 0; i < ETH_ALEN; i++)
++		if (expect_dst[i] != eth->h_dest[i])
++			return XDP_ABORTED;
++	pkts_seen++;
++	return XDP_DROP;
++}
 +
-+	trace_mem_connect(xdp_alloc, xdp_rxq);
-+	return 0;
- }
-+
- EXPORT_SYMBOL_GPL(xdp_rxq_info_reg_mem_model);
- 
- /* XDP RX runs under NAPI protection, and in different delivery error
++char _license[] SEC("license") = "GPL";
 -- 
 2.34.0
 
