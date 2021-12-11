@@ -2,14 +2,14 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3999BC433F5
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:43:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F9C9C433FE
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:43:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbhLKSna (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231750AbhLKSna (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 11 Dec 2021 13:43:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51058 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50424 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231753AbhLKSn3 (ORCPT
+        by vger.kernel.org with ESMTP id S231755AbhLKSn3 (ORCPT
         <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:43:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1639248209;
@@ -17,59 +17,58 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=qcwg+nWK33eezODa4kU9dVrDqx3dQGYFOytiCKq/aAc=;
-        b=iAEZ9HmjIOBozEI2+CmEwSeTbYtB9bRor0nagkcOYPIP0oNngh4nE4yJMPc3CsXIKVNQsI
-        YTRVKIdOau04teJg/rPRLq2lKeLxqmq3gOSxlGVpZVsY7j4vR0Or6O5XiGMEE8+AE1fU+z
-        4xpwztQ/4qqTNWyy1GlKSVtBvAlLs88=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=QjcRR7f+rn5uUWe2h52nnyd4QYkieJyXqD42mwjol5g=;
+        b=Xb92E9mq54MWY1qya5jvDcJ4T+Y0UpEMYTaJJyV++LrYvVUzUEs58pObJUNQDK0cBXp17j
+        CknwM0psaCg/mtxLcidJ2SIv1CND/G46ZYjxaabDdIhbIkS5X3cUD5H63lx+LZJHXlvmgK
+        D+VedG/9j5JG8R2A5OMbyjz9ROePQPU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-LIiw_QjtOWG-XHHKbJ-tbQ-1; Sat, 11 Dec 2021 13:43:27 -0500
-X-MC-Unique: LIiw_QjtOWG-XHHKbJ-tbQ-1
-Received: by mail-ed1-f69.google.com with SMTP id w18-20020a056402071200b003e61cbafdb4so10816935edx.4
+ us-mta-87-LDDrnM2EPv6a--tGnzDKyw-1; Sat, 11 Dec 2021 13:43:28 -0500
+X-MC-Unique: LDDrnM2EPv6a--tGnzDKyw-1
+Received: by mail-ed1-f72.google.com with SMTP id v22-20020a50a456000000b003e7cbfe3dfeso10806617edb.11
         for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:43:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qcwg+nWK33eezODa4kU9dVrDqx3dQGYFOytiCKq/aAc=;
-        b=HUEu5TDFeccX7ERIVRwEuepabRpoUJNHeFUW+05062PP82GP3x8pTeo7cmQnRxEB88
-         mAxdPJ/wcx7qps6N1IAciM4V1IZGL4bfzYEVdvWfw41jbPsp28P83G0M71Q5M5etsciP
-         7dgnZCtIHUBB7KHuQc27vvETMV0QS4HSUYIiiYTCuNr5mM/B8I+iuh00dgYU/M3I98Wc
-         5SazNwyy8TvUykpdXHjREV7mRQ71IZkqg6g3T2lc+N4klYPRm+Qvjf/MUkoaFzeO+qk8
-         4/srOBVox8p0NrN80eEc+stXaAZc2D7+pyR0Zzqk4vq4QubIOb7CrYsg37UPMycxOY//
-         Pwnw==
-X-Gm-Message-State: AOAM533HCj4saSjFZQrDuiHdBl2PzCUtz3exvCbpIBckMlVM+yiE7KeR
-        PHgmvg90vQ/ZWG4dVCQ/VmqG4oJ1L6medAsNhmyKdddKUJqb1rSveeFQq2fXHrsB1bLPzXB/odN
-        e3rc6lQ6Sp7Y5
-X-Received: by 2002:aa7:c78f:: with SMTP id n15mr48033421eds.344.1639248206070;
+        bh=QjcRR7f+rn5uUWe2h52nnyd4QYkieJyXqD42mwjol5g=;
+        b=f+2D7CMzaE94H+Q++q3J2eOvzsoteNqIQ68AhJHJkrKN2FlKmKsnLw3PpECyFUA2pl
+         89auVz9TpNrSttxzta60eS7QUuL5H6P2jUhO1updSMFFXg5LwaHW1y9Uw/Eb3jcoLybz
+         /3sa6N4iuec5i/5jQlWhIcf0W1bseM7YLVzp0+9DAn84rUGeciUddnd2CFMd8PTyDvVQ
+         dN/AeLr55P086LFhf7j4VvZWOIaYt0xNqBgvjBA/3kNqnNAhPMmDl7/166ZQH3liMngs
+         wsiyQvEpiQ9T6nxPCSojMgTolObCR8iqiy//SlqL6o3H2GikS1xv6xD1htXbksUTmPb8
+         EZow==
+X-Gm-Message-State: AOAM5312KKmYcyENjPbGH2JsfxhtBIXeomnzPBXdYr3ata5xv8fNHtj/
+        MjjLM6ygfJ2z0nUQOX6uP+5sDN6LskagLnjLpu1zOxLIQdJVAv/g6D/Pds5WsaEMg2ZNG/78O8o
+        /qlBzcoP3kmsd
+X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr47863924edc.273.1639248206597;
         Sat, 11 Dec 2021 10:43:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwWRuiBUX4M5Ep+VigFUEs7adY4I00LONshztoYorReVzl4HiamOizhk1fAsU/tLwm9Y8++sw==
-X-Received: by 2002:aa7:c78f:: with SMTP id n15mr48033336eds.344.1639248205162;
-        Sat, 11 Dec 2021 10:43:25 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id cw20sm3391613ejc.90.2021.12.11.10.43.24
+X-Google-Smtp-Source: ABdhPJyHzvcy8eKnwdYixJkMlG0TURRUjVVluIF20ruu7dNAh0k5ESkcu0mH4ODck8cui5f9PLxcpw==
+X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr47863891edc.273.1639248206284;
+        Sat, 11 Dec 2021 10:43:26 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ch28sm3492673edb.72.2021.12.11.10.43.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Dec 2021 10:43:24 -0800 (PST)
+        Sat, 11 Dec 2021 10:43:25 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id DCACF1804A1; Sat, 11 Dec 2021 19:43:23 +0100 (CET)
+        id 0105D1804A2; Sat, 11 Dec 2021 19:43:24 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/8] page_pool: Store the XDP mem id
-Date:   Sat, 11 Dec 2021 19:41:37 +0100
-Message-Id: <20211211184143.142003-4-toke@redhat.com>
+Subject: [PATCH bpf-next v3 5/8] xdp: add xdp_do_redirect_frame() for pre-computed xdp_frames
+Date:   Sat, 11 Dec 2021 19:41:39 +0100
+Message-Id: <20211211184143.142003-6-toke@redhat.com>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211211184143.142003-1-toke@redhat.com>
 References: <20211211184143.142003-1-toke@redhat.com>
@@ -80,83 +79,134 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Store the XDP mem ID inside the page_pool struct so it can be retrieved
-later for use in bpf_prog_run().
+Add an xdp_do_redirect_frame() variant which supports pre-computed
+xdp_frame structures. This will be used in bpf_prog_run() to avoid having
+to write to the xdp_frame structure when the XDP program doesn't modify the
+frame boundaries.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/net/page_pool.h | 9 +++++++--
- net/core/page_pool.c    | 4 +++-
- net/core/xdp.c          | 2 +-
- 3 files changed, 11 insertions(+), 4 deletions(-)
+ include/linux/filter.h |  4 +++
+ net/core/filter.c      | 65 +++++++++++++++++++++++++++++++++++-------
+ 2 files changed, 58 insertions(+), 11 deletions(-)
 
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index a71201854c41..6bc0409c4ffd 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -96,6 +96,7 @@ struct page_pool {
- 	unsigned int frag_offset;
- 	struct page *frag_page;
- 	long frag_users;
-+	u32 xdp_mem_id;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index b6a216eb217a..845452c83e0f 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1022,6 +1022,10 @@ int xdp_do_generic_redirect(struct net_device *dev, struct sk_buff *skb,
+ int xdp_do_redirect(struct net_device *dev,
+ 		    struct xdp_buff *xdp,
+ 		    struct bpf_prog *prog);
++int xdp_do_redirect_frame(struct net_device *dev,
++			  struct xdp_buff *xdp,
++			  struct xdp_frame *xdpf,
++			  struct bpf_prog *prog);
+ void xdp_do_flush(void);
  
- 	/*
- 	 * Data structure for allocation side
-@@ -170,9 +171,12 @@ bool page_pool_return_skb_page(struct page *page);
+ /* The xdp_do_flush_map() helper has been renamed to drop the _map suffix, as
+diff --git a/net/core/filter.c b/net/core/filter.c
+index bfa4ffbced35..629188642b4e 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3957,26 +3957,44 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+ }
+ EXPORT_SYMBOL_GPL(xdp_master_redirect);
  
- struct page_pool *page_pool_create(const struct page_pool_params *params);
+-int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+-		    struct bpf_prog *xdp_prog)
++static inline int __xdp_do_redirect_xsk(struct bpf_redirect_info *ri,
++					struct net_device *dev,
++					struct xdp_buff *xdp,
++					struct bpf_prog *xdp_prog)
+ {
+-	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+ 	enum bpf_map_type map_type = ri->map_type;
+ 	void *fwd = ri->tgt_value;
+ 	u32 map_id = ri->map_id;
+-	struct xdp_frame *xdpf;
+-	struct bpf_map *map;
+ 	int err;
  
-+struct xdp_mem_info;
+ 	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
+ 	ri->map_type = BPF_MAP_TYPE_UNSPEC;
+ 
+-	if (map_type == BPF_MAP_TYPE_XSKMAP) {
+-		err = __xsk_map_redirect(fwd, xdp);
+-		goto out;
+-	}
++	err = __xsk_map_redirect(fwd, xdp);
++	if (unlikely(err))
++		goto err;
 +
- #ifdef CONFIG_PAGE_POOL
- void page_pool_destroy(struct page_pool *pool);
--void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
-+void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
-+			   struct xdp_mem_info *mem);
- void page_pool_release_page(struct page_pool *pool, struct page *page);
- void page_pool_put_page_bulk(struct page_pool *pool, void **data,
- 			     int count);
-@@ -182,7 +186,8 @@ static inline void page_pool_destroy(struct page_pool *pool)
- }
++	_trace_xdp_redirect_map(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index);
++	return 0;
++err:
++	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
++	return err;
++}
++
++static __always_inline int __xdp_do_redirect_frame(struct bpf_redirect_info *ri,
++						   struct net_device *dev,
++						   struct xdp_frame *xdpf,
++						   struct bpf_prog *xdp_prog)
++{
++	enum bpf_map_type map_type = ri->map_type;
++	void *fwd = ri->tgt_value;
++	u32 map_id = ri->map_id;
++	struct bpf_map *map;
++	int err;
++
++	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
++	ri->map_type = BPF_MAP_TYPE_UNSPEC;
  
- static inline void page_pool_use_xdp_mem(struct page_pool *pool,
--					 void (*disconnect)(void *))
-+					 void (*disconnect)(void *),
-+					 struct xdp_mem_info *mem)
- {
- }
- static inline void page_pool_release_page(struct page_pool *pool,
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index c3b134a86ec9..8442a7965602 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -695,10 +695,12 @@ static void page_pool_release_retry(struct work_struct *wq)
- 	schedule_delayed_work(&pool->release_dw, DEFER_TIME);
- }
- 
--void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *))
-+void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *),
-+			   struct xdp_mem_info *mem)
- {
- 	refcount_inc(&pool->user_cnt);
- 	pool->disconnect = disconnect;
-+	pool->xdp_mem_id = mem->id;
- }
- 
- void page_pool_destroy(struct page_pool *pool)
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index ac476c84a986..2901bb7004cc 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -320,7 +320,7 @@ static struct xdp_mem_allocator *__xdp_reg_mem_model(struct xdp_mem_info *mem,
+-	xdpf = xdp_convert_buff_to_frame(xdp);
+ 	if (unlikely(!xdpf)) {
+ 		err = -EOVERFLOW;
+ 		goto err;
+@@ -4013,7 +4031,6 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 		err = -EBADRQC;
  	}
  
- 	if (type == MEM_TYPE_PAGE_POOL)
--		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect);
-+		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect, mem);
+-out:
+ 	if (unlikely(err))
+ 		goto err;
  
- 	mutex_unlock(&mem_id_lock);
+@@ -4023,8 +4040,34 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
+ 	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
+ 	return err;
+ }
++
++int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
++		    struct bpf_prog *xdp_prog)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++	enum bpf_map_type map_type = ri->map_type;
++
++	if (map_type == BPF_MAP_TYPE_XSKMAP)
++		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
++
++	return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
++				       xdp_prog);
++}
+ EXPORT_SYMBOL_GPL(xdp_do_redirect);
  
++int xdp_do_redirect_frame(struct net_device *dev, struct xdp_buff *xdp,
++			  struct xdp_frame *xdpf, struct bpf_prog *xdp_prog)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++	enum bpf_map_type map_type = ri->map_type;
++
++	if (map_type == BPF_MAP_TYPE_XSKMAP)
++		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
++
++	return __xdp_do_redirect_frame(ri, dev, xdpf, xdp_prog);
++}
++EXPORT_SYMBOL_GPL(xdp_do_redirect_frame);
++
+ static int xdp_do_generic_redirect_map(struct net_device *dev,
+ 				       struct sk_buff *skb,
+ 				       struct xdp_buff *xdp,
 -- 
 2.34.0
 
