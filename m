@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 429E0C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE7EDC433EF
 	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346136AbhLKCHV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
+        id S1346084AbhLKCHI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345754AbhLKCGU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:06:20 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB81C0698C9;
-        Fri, 10 Dec 2021 18:02:32 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x10so17835644edd.5;
-        Fri, 10 Dec 2021 18:02:32 -0800 (PST)
+        with ESMTP id S1345777AbhLKCGV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Dec 2021 21:06:21 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32161C0698CE;
+        Fri, 10 Dec 2021 18:02:39 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id x10so17836144edd.5;
+        Fri, 10 Dec 2021 18:02:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ug17C0BlF8flc3ASDfigJVcIU3yUjGTjLhKNa+SJZOg=;
-        b=QXRFy1zGMEzwHGscx1GDGZRc4MaB8MYQzjpC5KwwlPayCCbZF0J/nzRYWcXowNqlKm
-         TyOGi/6PO8+0nq3MweqViBugKISnW8R+i2BVrV7NgCqqc7p9uclhd9+87BjM5Wj0l2GC
-         0+RIEz/EOP1lIUtXWq46SLgu4rSNRzgdgnEbAp5pZ6/zmKg5NmUpg24eYyLWtUNA4jaE
-         s1M9NUQdv0F7/W7m3eNwvmScx190aF82fUQ8jv6LNiwaMf/RVSKxIvVtuDfXyr3JKO6l
-         a9GpF+zN4YIFtcarM7kWhw8FwQZnAKIYzYZVlPevz1GKx1zhmkmd+/+0fntRa1RELLT1
-         jl3A==
+        bh=G+El3VU7kFi+f+gSiUl3JhZawQPXtAaFeZtpDHNPJt4=;
+        b=Fy/am/hIzudEgAzEnUSGP0lUmPDNqqaOT/6Zh2vJa7oAmRbIjiZviyz1gaX9j0ixZQ
+         Q1Q31oUaUZvk0ZCjNUvM7qPZT3bdew0hLazye9FlVFjLYn374ByrRIe/p1zaBXD+uJRi
+         76XTrvOi6NQpGfoxxQEeVhNwh9K4L5G+7SFrpuJYSjl+r2tXsATFnoGoQW+pib507UUQ
+         vYa1qZtt+nfaW/C/bnBmLHTaTycjFxyV7u7FbaGwYFJTuIOjTBjKVuAXtGgCF2aZYO+o
+         T5Ncgr5GSXEnG8P/qidZfP8C+JpPEwemgEovTpHRZ4uQNtxTEyXwwzBMslTH6Ub8giBr
+         Mfmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ug17C0BlF8flc3ASDfigJVcIU3yUjGTjLhKNa+SJZOg=;
-        b=023O4h8yAoovXSEBsXGG9xhWikVQKUKGDIYgmP+cNjQdXF2lbKkFuL4edBbgfTKEAR
-         lxZwSpzmXWryv4YB5lVeXs2EWTobubE0h2MJrmernoXdGdkRyKX1Tk4FUg5iTYchgGB6
-         2vEoDnQcjXjfnDACskxklYOMgvMJ7Hmd9uKtQyRk/LWEM/KPYOHYh4RG2Zl0vSRoZ3G5
-         I88NxR92y9TLh72Pd0umTX8RreG7iYuK7q3BOppPG+xj7U85te3wgRBQmS2yffpbFwCa
-         IGwY5JzJjFPYwbpGNMHr2tYTChPtAbzwCzk0fHNhRWDyp4bElLv/D/ps2i78KaosQA9R
-         WuvA==
-X-Gm-Message-State: AOAM533b8xgE9x4CdSAJH0MEBF0zhsFGcSE1nY7Df2EZVm3Mr60YwSDS
-        7nFC9XWUGyw2AzLmwmoUqcc=
-X-Google-Smtp-Source: ABdhPJwnbH7tLeSECimzcf5Evgd6qKjZpjiI2Pze20Skrtt/WPuhYi+MtSyk98T5yx2a9Dj6srN5sQ==
-X-Received: by 2002:a50:d543:: with SMTP id f3mr42655692edj.56.1639188150539;
-        Fri, 10 Dec 2021 18:02:30 -0800 (PST)
+        bh=G+El3VU7kFi+f+gSiUl3JhZawQPXtAaFeZtpDHNPJt4=;
+        b=AzRVqoRhfK2VZUMbIXrr/08/2uRseyVmYMc+ThB40247+AUu2/yK7qGAtZU5d0vo7s
+         pVt1f8cKafuqj3u6YHPUzxgTJlc3773a7JabfjR0/9et1HZtu5ZP/yXNXs6Ffk0k0EJO
+         hrNWtXPGpfAov9mt/Z7+z3DSvKJUq+kRouWMHaKQCEfaXoXC3ysFZEtRMfSeILkyQOCw
+         DqPeEkMZZvUnznSsffD2RC4rDuOyHf2z4fXWYLxsT1I1EbU6QDETpXzS5Ii3J9qgp+PQ
+         FCIvtK65VzJQnmFFJzSmT3VHdVYXrd4hoIbpKG1knzr2fmwvpG0mvPuIzTJ4RT+tIpCf
+         2p1Q==
+X-Gm-Message-State: AOAM533C0+6Yr91Xm6CnVsCNdc5B+8HzcZ4EMJzFGgjmLSC4Hv4eZLiB
+        N5aGYDOd1aph77mLPdvLzd8=
+X-Google-Smtp-Source: ABdhPJz+itcEf+MBjBAM5A2JoTH5tjABvSfeQYjiEiPqpoNOJ1giOFe+2lB71D6WEtsSoWjGl0KGSw==
+X-Received: by 2002:a17:906:3085:: with SMTP id 5mr27661554ejv.365.1639188157629;
+        Fri, 10 Dec 2021 18:02:37 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.29
+        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:30 -0800 (PST)
+        Fri, 10 Dec 2021 18:02:37 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -63,9 +63,9 @@ To:     Andrew Lunn <andrew@lunn.ch>,
         KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 09/14] net: dsa: tag_qca: add support for handling mdio Ethernet and MIB packet
-Date:   Sat, 11 Dec 2021 03:01:44 +0100
-Message-Id: <20211211020155.10114-13-ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v3 12/14] net: dsa: qca8k: add support for mib autocast in Ethernet packet
+Date:   Sat, 11 Dec 2021 03:01:50 +0100
+Message-Id: <20211211020155.10114-19-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
 References: <20211211020155.10114-1-ansuelsmth@gmail.com>
@@ -75,102 +75,205 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add connect/disconnect helper to assign private struct to the cpu port
-dsa priv.
-Add support for Ethernet mdio packet and MIB packet if the dsa driver
-provide an handler to correctly parse and elaborate the data.
+The switch can autocast MIB counter using Ethernet packet.
+Add support for this and provide a handler for the tagger.
+The switch will send packet with MIB counter for each port, the switch
+will use completion API to wait for the correct packet to be received
+and will complete the task only when each packet is received.
+Although the handler will drop all the other packet, we still have to
+consume each MIB packet to complete the request. This is done to prevent
+mixed data with concurrent ethtool request.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- net/dsa/tag_qca.c | 52 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 50 insertions(+), 2 deletions(-)
+ drivers/net/dsa/qca8k.c | 102 +++++++++++++++++++++++++++++++++++++++-
+ drivers/net/dsa/qca8k.h |  18 ++++++-
+ 2 files changed, 117 insertions(+), 3 deletions(-)
 
-diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
-index b8b05d54a74c..ded4d024d791 100644
---- a/net/dsa/tag_qca.c
-+++ b/net/dsa/tag_qca.c
-@@ -32,11 +32,15 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
+diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
+index 0f1a604f015e..624df3b0fd9f 100644
+--- a/drivers/net/dsa/qca8k.c
++++ b/drivers/net/dsa/qca8k.c
+@@ -794,7 +794,10 @@ qca8k_mib_init(struct qca8k_priv *priv)
+ 	int ret;
  
- static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
- {
-+	struct dsa_port *dp = dev->dsa_ptr;
-+	struct tag_qca_priv *priv;
- 	u16  hdr, pk_type;
- 	__be16 *phdr;
- 	int port;
- 	u8 ver;
+ 	mutex_lock(&priv->reg_mutex);
+-	ret = regmap_set_bits(priv->regmap, QCA8K_REG_MIB, QCA8K_MIB_FLUSH | QCA8K_MIB_BUSY);
++	ret = regmap_update_bits(priv->regmap, QCA8K_REG_MIB,
++				 QCA8K_MIB_FUNC | QCA8K_MIB_BUSY,
++				 FIELD_PREP(QCA8K_MIB_FUNC, QCA8K_MIB_FLUSH) |
++				 QCA8K_MIB_BUSY);
+ 	if (ret)
+ 		goto exit;
  
-+	priv = dp->ds->tagger_data;
-+
- 	if (unlikely(!pskb_may_pull(skb, QCA_HDR_LEN)))
- 		return NULL;
- 
-@@ -51,9 +55,19 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
- 	/* Get pk type */
- 	pk_type = FIELD_GET(QCA_HDR_RECV_TYPE, hdr);
- 
--	/* MDIO read/write packet */
--	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK)
-+	/* Ethernet MDIO read/write packet */
-+	if (pk_type == QCA_HDR_RECV_TYPE_RW_REG_ACK) {
-+		if (priv->rw_reg_ack_handler)
-+			priv->rw_reg_ack_handler(dp, skb);
-+		return NULL;
-+	}
-+
-+	/* Ethernet MIB counter packet */
-+	if (pk_type == QCA_HDR_RECV_TYPE_MIB) {
-+		if (priv->mib_autocast_handler)
-+			priv->mib_autocast_handler(dp, skb);
- 		return NULL;
-+	}
- 
- 	/* Remove QCA tag and recalculate checksum */
- 	skb_pull_rcsum(skb, QCA_HDR_LEN);
-@@ -69,9 +83,43 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
- 	return skb;
+@@ -1865,6 +1868,97 @@ qca8k_get_strings(struct dsa_switch *ds, int port, u32 stringset, uint8_t *data)
+ 			ETH_GSTRING_LEN);
  }
  
-+static int qca_tag_connect(struct dsa_switch_tree *dst)
++static void qca8k_mib_autocast_handler(struct dsa_port *dp, struct sk_buff *skb)
 +{
-+	struct tag_qca_priv *priv;
-+	struct dsa_port *dp;
++	const struct qca8k_match_data *match_data;
++	struct qca8k_mib_hdr_data *mib_hdr_data;
++	struct qca8k_priv *priv = dp->ds->priv;
++	const struct qca8k_mib_desc *mib;
++	struct mib_ethhdr *mib_ethhdr;
++	int i, mib_len, offset = 0;
++	u64 *data;
++	u8 port;
 +
-+	list_for_each_entry(dp, &dst->ports, list) {
-+		if (dp->ds->tagger_data)
++	mib_ethhdr = (struct mib_ethhdr *)skb_mac_header(skb);
++	mib_hdr_data = &priv->mib_hdr_data;
++
++	/* The switch autocast every port. Ignore other packet and
++	 * parse only the requested one.
++	 */
++	port = FIELD_GET(QCA_HDR_RECV_SOURCE_PORT, ntohs(mib_ethhdr->hdr));
++	if (port != mib_hdr_data->req_port)
++		goto exit;
++
++	match_data = device_get_match_data(priv->dev);
++	data = mib_hdr_data->data;
++
++	for (i = 0; i < match_data->mib_count; i++) {
++		mib = &ar8327_mib[i];
++
++		/* First 3 mib are present in the skb head */
++		if (i < 3) {
++			data[i] = mib_ethhdr->data[i];
 +			continue;
++		}
 +
-+		priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+		if (!priv)
-+			return -ENOMEM;
++		mib_len = sizeof(uint32_t);
 +
-+		dp->ds->tagger_data = priv;
++		/* Some mib are 64 bit wide */
++		if (mib->size == 2)
++			mib_len = sizeof(uint64_t);
++
++		/* Copy the mib value from packet to the */
++		memcpy(data + i, skb->data + offset, mib_len);
++
++		/* Set the offset for the next mib */
++		offset += mib_len;
 +	}
 +
-+	return 0;
++exit:
++	/* Complete on receiving all the mib packet */
++	if (refcount_dec_and_test(&mib_hdr_data->port_parsed))
++		complete(&mib_hdr_data->rw_done);
 +}
 +
-+static void qca_tag_disconnect(struct dsa_switch_tree *dst)
++static int
++qca8k_get_ethtool_stats_eth(struct dsa_switch *ds, int port, u64 *data)
 +{
-+	struct dsa_port *dp;
++	struct dsa_port *dp = dsa_to_port(ds, port);
++	struct qca8k_mib_hdr_data *mib_hdr_data;
++	struct qca8k_priv *priv = ds->priv;
++	int ret;
 +
-+	list_for_each_entry(dp, &dst->ports, list) {
-+		if (dp->ds->tagger_data)
-+			continue;
++	mib_hdr_data = &priv->mib_hdr_data;
 +
-+		kfree(dp->ds->tagger_data);
-+		dp->ds->tagger_data = NULL;
-+	}
++	mutex_lock(&mib_hdr_data->mutex);
++
++	reinit_completion(&mib_hdr_data->rw_done);
++
++	mib_hdr_data->req_port = dp->index;
++	mib_hdr_data->data = data;
++	refcount_set(&mib_hdr_data->port_parsed, QCA8K_NUM_PORTS);
++
++	mutex_lock(&priv->reg_mutex);
++
++	/* Send mib autocast request */
++	ret = regmap_update_bits(priv->regmap, QCA8K_REG_MIB,
++				 QCA8K_MIB_FUNC | QCA8K_MIB_BUSY,
++				 FIELD_PREP(QCA8K_MIB_FUNC, QCA8K_MIB_CAST) |
++				 QCA8K_MIB_BUSY);
++
++	mutex_unlock(&priv->reg_mutex);
++
++	if (ret)
++		goto exit;
++
++	ret = wait_for_completion_timeout(&mib_hdr_data->rw_done, QCA8K_ETHERNET_TIMEOUT);
++
++	mutex_unlock(&mib_hdr_data->mutex);
++
++exit:
++	return ret;
 +}
 +
- static const struct dsa_device_ops qca_netdev_ops = {
- 	.name	= "qca",
- 	.proto	= DSA_TAG_PROTO_QCA,
-+	.connect = qca_tag_connect,
-+	.disconnect = qca_tag_disconnect,
- 	.xmit	= qca_tag_xmit,
- 	.rcv	= qca_tag_rcv,
- 	.needed_headroom = QCA_HDR_LEN,
+ static void
+ qca8k_get_ethtool_stats(struct dsa_switch *ds, int port,
+ 			uint64_t *data)
+@@ -1876,6 +1970,10 @@ qca8k_get_ethtool_stats(struct dsa_switch *ds, int port,
+ 	u32 hi = 0;
+ 	int ret;
+ 
++	if (priv->master_oper &&
++	    qca8k_get_ethtool_stats_eth(ds, port, data) > 0)
++		return;
++
+ 	match_data = of_device_get_match_data(priv->dev);
+ 
+ 	for (i = 0; i < match_data->mib_count; i++) {
+@@ -2572,7 +2670,7 @@ static int qca8k_connect_tag_protocol(struct dsa_switch *ds,
+ 		init_completion(&qca8k_priv->mdio_hdr_data.rw_done);
+ 
+ 		priv->rw_reg_ack_handler = qca8k_rw_reg_ack_handler;
+-
++		priv->mib_autocast_handler = qca8k_mib_autocast_handler;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
+diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
+index 307c56466082..e46320487834 100644
+--- a/drivers/net/dsa/qca8k.h
++++ b/drivers/net/dsa/qca8k.h
+@@ -66,7 +66,7 @@
+ #define QCA8K_REG_MODULE_EN				0x030
+ #define   QCA8K_MODULE_EN_MIB				BIT(0)
+ #define QCA8K_REG_MIB					0x034
+-#define   QCA8K_MIB_FLUSH				BIT(24)
++#define   QCA8K_MIB_FUNC				GENMASK(26, 24)
+ #define   QCA8K_MIB_CPU_KEEP				BIT(20)
+ #define   QCA8K_MIB_BUSY				BIT(17)
+ #define QCA8K_MDIO_MASTER_CTRL				0x3c
+@@ -316,6 +316,12 @@ enum qca8k_vlan_cmd {
+ 	QCA8K_VLAN_READ = 6,
+ };
+ 
++enum qca8k_mid_cmd {
++	QCA8K_MIB_FLUSH = 1,
++	QCA8K_MIB_FLUSH_PORT = 2,
++	QCA8K_MIB_CAST = 3,
++};
++
+ struct ar8xxx_port_status {
+ 	int enabled;
+ };
+@@ -339,6 +345,15 @@ struct qca8k_mdio_hdr_data {
+ 	u32 data[4];
+ };
+ 
++struct qca8k_mib_hdr_data {
++	struct completion rw_done;
++	struct mutex mutex; /* Process one command at time */
++	refcount_t port_parsed; /* Counter to track parsed port */
++	u8 req_port;
++	u64 *data; /* pointer to ethtool data */
++	bool ready;
++};
++
+ struct qca8k_ports_config {
+ 	bool sgmii_rx_clk_falling_edge;
+ 	bool sgmii_tx_clk_falling_edge;
+@@ -366,6 +381,7 @@ struct qca8k_priv {
+ 	struct gpio_desc *reset_gpio;
+ 	unsigned int port_mtu[QCA8K_NUM_PORTS];
+ 	struct qca8k_mdio_hdr_data mdio_hdr_data;
++	struct qca8k_mib_hdr_data mib_hdr_data;
+ };
+ 
+ struct qca8k_mib_desc {
 -- 
 2.32.0
 
