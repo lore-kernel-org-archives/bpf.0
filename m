@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83B81C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3511C433EF
 	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345699AbhLKCGe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48358 "EHLO
+        id S1345795AbhLKCGf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345793AbhLKCGK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:06:10 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3799C0698C6;
-        Fri, 10 Dec 2021 18:02:29 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y12so34434807eda.12;
-        Fri, 10 Dec 2021 18:02:29 -0800 (PST)
+        with ESMTP id S1345789AbhLKCGJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Dec 2021 21:06:09 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A6AC061D76;
+        Fri, 10 Dec 2021 18:02:27 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id w1so35038344edc.6;
+        Fri, 10 Dec 2021 18:02:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ghuRnkH4HtqhvLP+gWI52+wo0xajxLGtqW/dt5vEnHs=;
-        b=nS4B475V/BtF/y8qJgMVAZEhrcHzT65dzmhgsBvkhJnbA/QrNujuCqeBqGKM4kGYBX
-         pZAloqg545HWz2LlLH46WES9pndeieYQGJ4Rhw+tE6UI2LuMerbklXhaTx4txfzfj0fj
-         raT59dhzwdmFb5GcdjZCc4TqartSFO8XdPjVnQSiQ6No11W/Df0VbBdJgAbfBfnYP4Fw
-         QTWmrT9JVekdl8IUzK1LgGwTznF0kHPw9DJOr5as40oo0hGoU8jHEJGOFZzQZ2ggP0pd
-         pmXX8qnrCFdJXocWofCrDmlWdfFMn/59okjxjNv1IBjlsAoZpCqEoKFMuvb5V4d81ze4
-         y5yg==
+        bh=XMNmsVbZ++MHzR0SNpTs4rnf9cjrjDzn4muZEXZ4TMk=;
+        b=h2rDtHVCDMnR39f0WCy4t4URa4EXDrJjIN9jRBrs1BLjYmeH2NP5NJIM/CrSrylHo9
+         DpjdWoMTRtw92HRcXOLHvkwT5syGfHLmtUiw+9LKRBW14xb2Agq9nQ+j75Se1ZV+FmrM
+         R1o7ZCUNPeZsnEbGMm2wBcQVRJmdV3BUcD2iAuni8P3SVuCcLadI55YT6+jSlCT1Z1IS
+         +kdkBGodowWCbefN81O9Qqa4mJ+QMwUn7/YYT+cSwFR2E6q1ADqdf2PXhMPvMIACegBo
+         f9ayEOtZUPqU4FZ8g7r40uvRhhONOR4deHaps1lyaUVg6DEWgqeZUYhAQvLh4pwy0tNS
+         Rynw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ghuRnkH4HtqhvLP+gWI52+wo0xajxLGtqW/dt5vEnHs=;
-        b=cEANi3TAbG0jpFt/9M8Ihb8OJg2Pr6weEvw/Hjqu5QdB1aab5IC42Tq2bgxFtC5Ga5
-         8veUZ0C5qzR0Ts/Vwg9HtV8U1WRX9BEHzNAx7RDyjNTX7zAcCmmUuIXyHCvzdbkLP3H0
-         Kfu8F3+Y4jsnrCugkyZuKZ5tcsUbpv6Px+/70F70l9CVkun4tHhHowpGNUcjE3aVXL4A
-         /az+jF/O3ljN+9ON3dkW/lhuPZvUybPRLjaFLbf204KlALTEO1N8HyO4HGu/+KZWdvVQ
-         ZWpPuyzy0uQu/Z6W4N3HtPGYF282xV/yA2azNIuWPq7zEEjPOzrsLSnMk3IPGaOX6svR
-         DBfg==
-X-Gm-Message-State: AOAM533s4Vc6o3OxDM3Tq0wyV3+olgibdLolgF7B9nmbcZV9DpDvhiwa
-        S5KwqPiaV6xHzTr4QezzOs0=
-X-Google-Smtp-Source: ABdhPJz8KPqUbSlsHZSB6VCmbRZgDLadSVhcO9dVFS9cQQ6V0WBRItszh3Iy/ODYONGnGKmlXPpa9A==
-X-Received: by 2002:a17:907:7d8b:: with SMTP id oz11mr29117019ejc.507.1639188148282;
-        Fri, 10 Dec 2021 18:02:28 -0800 (PST)
+        bh=XMNmsVbZ++MHzR0SNpTs4rnf9cjrjDzn4muZEXZ4TMk=;
+        b=44JCzKdne1ezE62Jtdy+IkMQ7crtCpk9DUrAi6ZzaX4A1VGfefpdP3k2wqt+zrXbRD
+         tKL40h+jGF7L06bM6k5zXljaE+nXKm01v+kUpH7RZ785Bhs763ms/+eNrtUWH81E9CPA
+         0RkA0wLzpI9hjBbNu9UZZ4ExeG+CfbddoszbBwTCqTJ1672ueMM+MZLwYKSx+yQuVeSa
+         9CNOiefyYGDizt30rPPC024hKx/MwWjZyMsrwpoFJEQZzQ/zOtic5ydlGOmGv+G0jRv0
+         2xXFyiP4kcHMfA2flsZU3tkDqT9HYlDtJzOAAbBxA47hIAtASVhBfs8nihlVK2BRVBeb
+         PXqA==
+X-Gm-Message-State: AOAM532SgPkd7KPFq2DMg8CQ35W1Lh2UZj0aEZpDi30nAgG9qxmFBbyf
+        l6EKkazZA3iav/ttt7Fp2TjUZ5EdbMML9A==
+X-Google-Smtp-Source: ABdhPJxdNv8+4oicE/VXmSwpPKKQSX56uGekkvqbt9sCEU8kx2RMLYUqB/p4VVHY7hs/1HKUz7adkw==
+X-Received: by 2002:a17:907:7ba8:: with SMTP id ne40mr28419164ejc.391.1639188145947;
+        Fri, 10 Dec 2021 18:02:25 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.27
+        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:28 -0800 (PST)
+        Fri, 10 Dec 2021 18:02:25 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -63,9 +63,9 @@ To:     Andrew Lunn <andrew@lunn.ch>,
         KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 08/15] net: dsa: tag_qca: add define for handling mdio Ethernet packet
-Date:   Sat, 11 Dec 2021 03:01:42 +0100
-Message-Id: <20211211020155.10114-11-ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v3 07/14] net: dsa: tag_qca: add define for handling mdio Ethernet packet
+Date:   Sat, 11 Dec 2021 03:01:40 +0100
+Message-Id: <20211211020155.10114-9-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
 References: <20211211020155.10114-1-ansuelsmth@gmail.com>
@@ -145,7 +145,7 @@ index c02d2d39ff4a..578a4aeafd92 100644
 +
  #endif /* __TAG_QCA_H */
 diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
-index f8df49d5956f..b91f9f1b2deb 100644
+index 34e565e00ece..b8b05d54a74c 100644
 --- a/net/dsa/tag_qca.c
 +++ b/net/dsa/tag_qca.c
 @@ -32,10 +32,10 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
