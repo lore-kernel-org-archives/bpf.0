@@ -2,76 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F9C9C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1CFCC4332F
 	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 18:43:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbhLKSna (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Dec 2021 13:43:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50424 "EHLO
+        id S231771AbhLKSnc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Dec 2021 13:43:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:39155 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231755AbhLKSn3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:43:29 -0500
+        by vger.kernel.org with ESMTP id S231758AbhLKSna (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 11 Dec 2021 13:43:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1639248209;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QjcRR7f+rn5uUWe2h52nnyd4QYkieJyXqD42mwjol5g=;
-        b=Xb92E9mq54MWY1qya5jvDcJ4T+Y0UpEMYTaJJyV++LrYvVUzUEs58pObJUNQDK0cBXp17j
-        CknwM0psaCg/mtxLcidJ2SIv1CND/G46ZYjxaabDdIhbIkS5X3cUD5H63lx+LZJHXlvmgK
-        D+VedG/9j5JG8R2A5OMbyjz9ROePQPU=
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Eu8tHVFbR3OhhxKHk08d7P6coxTGoivQlep7ShPJrZE=;
+        b=M9t113zDzrBcoTGcxJJm9x3IVbkgkQPr4zZw22oVsehj6VH8FXBFmte7xk4B5rElDhqZk9
+        c9opLHdHiELDdNakGIlAX6oS2yGTVr82sw1UqDaR+t9qX4zsjNKVt/M+UL4a7Eo65ep8LP
+        caXn+F2AsdSPogBKoFJx2RRYdy2i4eE=
 Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
  [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-87-LDDrnM2EPv6a--tGnzDKyw-1; Sat, 11 Dec 2021 13:43:28 -0500
-X-MC-Unique: LDDrnM2EPv6a--tGnzDKyw-1
-Received: by mail-ed1-f72.google.com with SMTP id v22-20020a50a456000000b003e7cbfe3dfeso10806617edb.11
-        for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:43:27 -0800 (PST)
+ us-mta-383-CNyMx0n7N92cxgVbG6eJ8A-1; Sat, 11 Dec 2021 13:43:28 -0500
+X-MC-Unique: CNyMx0n7N92cxgVbG6eJ8A-1
+Received: by mail-ed1-f72.google.com with SMTP id l15-20020a056402124f00b003e57269ab87so10757263edw.6
+        for <bpf@vger.kernel.org>; Sat, 11 Dec 2021 10:43:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QjcRR7f+rn5uUWe2h52nnyd4QYkieJyXqD42mwjol5g=;
-        b=f+2D7CMzaE94H+Q++q3J2eOvzsoteNqIQ68AhJHJkrKN2FlKmKsnLw3PpECyFUA2pl
-         89auVz9TpNrSttxzta60eS7QUuL5H6P2jUhO1updSMFFXg5LwaHW1y9Uw/Eb3jcoLybz
-         /3sa6N4iuec5i/5jQlWhIcf0W1bseM7YLVzp0+9DAn84rUGeciUddnd2CFMd8PTyDvVQ
-         dN/AeLr55P086LFhf7j4VvZWOIaYt0xNqBgvjBA/3kNqnNAhPMmDl7/166ZQH3liMngs
-         wsiyQvEpiQ9T6nxPCSojMgTolObCR8iqiy//SlqL6o3H2GikS1xv6xD1htXbksUTmPb8
-         EZow==
-X-Gm-Message-State: AOAM5312KKmYcyENjPbGH2JsfxhtBIXeomnzPBXdYr3ata5xv8fNHtj/
-        MjjLM6ygfJ2z0nUQOX6uP+5sDN6LskagLnjLpu1zOxLIQdJVAv/g6D/Pds5WsaEMg2ZNG/78O8o
-        /qlBzcoP3kmsd
-X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr47863924edc.273.1639248206597;
-        Sat, 11 Dec 2021 10:43:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyHzvcy8eKnwdYixJkMlG0TURRUjVVluIF20ruu7dNAh0k5ESkcu0mH4ODck8cui5f9PLxcpw==
-X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr47863891edc.273.1639248206284;
-        Sat, 11 Dec 2021 10:43:26 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ch28sm3492673edb.72.2021.12.11.10.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Eu8tHVFbR3OhhxKHk08d7P6coxTGoivQlep7ShPJrZE=;
+        b=HmD8WnacUr7NHNaA4Vzp1Gpn6xQ28J40TO8Ryz49oSM2sQK92YAaOdrZ4Vkd50VcYc
+         6AIO07qz1RwdDKaQ1wIOJuBqKU7OCGlvxKniRF5LUmpr/QxasWZ9viHyiDPxHQaP8y6n
+         FdGaW31JUTshlEwihV5+nDYfTiuAnTKKfDzWId2XGu/Wqk6szOtDT/A0lQc+AbL7lpjz
+         0e4nlT609W4w/RCUDGCupjTZqVXslplpVdE537Km+YgjJ0NdlBCV6llOsa7W/eRFv5yw
+         mnkuKRxpcYy0ZmUVhq8XH2bI8e7JbY9qPvnYRQ6SPKUy+Om3raBLkL7OYAJel0FmLKQb
+         HsFg==
+X-Gm-Message-State: AOAM5305IBeXN5iu1WrL2loVT+qmy7U9Cs820t8ovOwIC2D+m1XjVDgw
+        UMjsaTEneVd9c00BhWCBhJ2zQtXLYvd/Uf08al91RurjnZfnwW3ZSfhto/nGvChzlJdFqQtADLF
+        TZipKko8E6f1u
+X-Received: by 2002:a17:906:7109:: with SMTP id x9mr31813414ejj.559.1639248205812;
         Sat, 11 Dec 2021 10:43:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw27h0xuBSmxD9o3caYYK1urvEKCVvaXzV1wyUbxugqm8Q90giGbsI/T1mzl0ldfJ/5iipfUA==
+X-Received: by 2002:a17:906:7109:: with SMTP id x9mr31813341ejj.559.1639248204962;
+        Sat, 11 Dec 2021 10:43:24 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id d18sm3460679edj.23.2021.12.11.10.43.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Dec 2021 10:43:24 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 0105D1804A2; Sat, 11 Dec 2021 19:43:24 +0100 (CET)
+        id 7D8C4180471; Sat, 11 Dec 2021 19:43:22 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
+        KP Singh <kpsingh@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 5/8] xdp: add xdp_do_redirect_frame() for pre-computed xdp_frames
-Date:   Sat, 11 Dec 2021 19:41:39 +0100
-Message-Id: <20211211184143.142003-6-toke@redhat.com>
+Subject: [PATCH bpf-next v3 0/8] Add support for transmitting packets using XDP in bpf_prog_run()
+Date:   Sat, 11 Dec 2021 19:41:34 +0100
+Message-Id: <20211211184143.142003-1-toke@redhat.com>
 X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211211184143.142003-1-toke@redhat.com>
-References: <20211211184143.142003-1-toke@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,134 +76,78 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add an xdp_do_redirect_frame() variant which supports pre-computed
-xdp_frame structures. This will be used in bpf_prog_run() to avoid having
-to write to the xdp_frame structure when the XDP program doesn't modify the
-frame boundaries.
+This series adds support for transmitting packets using XDP in
+bpf_prog_run(), by enabling the xdp_do_redirect() callback so XDP programs
+can perform "real" redirects to devices or maps, using an opt-in flag when
+executing the program.
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/linux/filter.h |  4 +++
- net/core/filter.c      | 65 +++++++++++++++++++++++++++++++++++-------
- 2 files changed, 58 insertions(+), 11 deletions(-)
+The primary use case for this is testing the redirect map types and the
+ndo_xdp_xmit driver operation without generating external traffic. But it
+turns out to also be useful for creating a programmable traffic generator.
+The last patch adds a sample traffic generator to bpf/samples, which
+can transmit up to 11.5 Mpps/core on my test machine.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index b6a216eb217a..845452c83e0f 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1022,6 +1022,10 @@ int xdp_do_generic_redirect(struct net_device *dev, struct sk_buff *skb,
- int xdp_do_redirect(struct net_device *dev,
- 		    struct xdp_buff *xdp,
- 		    struct bpf_prog *prog);
-+int xdp_do_redirect_frame(struct net_device *dev,
-+			  struct xdp_buff *xdp,
-+			  struct xdp_frame *xdpf,
-+			  struct bpf_prog *prog);
- void xdp_do_flush(void);
- 
- /* The xdp_do_flush_map() helper has been renamed to drop the _map suffix, as
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bfa4ffbced35..629188642b4e 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3957,26 +3957,44 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
- }
- EXPORT_SYMBOL_GPL(xdp_master_redirect);
- 
--int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
--		    struct bpf_prog *xdp_prog)
-+static inline int __xdp_do_redirect_xsk(struct bpf_redirect_info *ri,
-+					struct net_device *dev,
-+					struct xdp_buff *xdp,
-+					struct bpf_prog *xdp_prog)
- {
--	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
- 	enum bpf_map_type map_type = ri->map_type;
- 	void *fwd = ri->tgt_value;
- 	u32 map_id = ri->map_id;
--	struct xdp_frame *xdpf;
--	struct bpf_map *map;
- 	int err;
- 
- 	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
- 	ri->map_type = BPF_MAP_TYPE_UNSPEC;
- 
--	if (map_type == BPF_MAP_TYPE_XSKMAP) {
--		err = __xsk_map_redirect(fwd, xdp);
--		goto out;
--	}
-+	err = __xsk_map_redirect(fwd, xdp);
-+	if (unlikely(err))
-+		goto err;
-+
-+	_trace_xdp_redirect_map(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index);
-+	return 0;
-+err:
-+	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
-+	return err;
-+}
-+
-+static __always_inline int __xdp_do_redirect_frame(struct bpf_redirect_info *ri,
-+						   struct net_device *dev,
-+						   struct xdp_frame *xdpf,
-+						   struct bpf_prog *xdp_prog)
-+{
-+	enum bpf_map_type map_type = ri->map_type;
-+	void *fwd = ri->tgt_value;
-+	u32 map_id = ri->map_id;
-+	struct bpf_map *map;
-+	int err;
-+
-+	ri->map_id = 0; /* Valid map id idr range: [1,INT_MAX[ */
-+	ri->map_type = BPF_MAP_TYPE_UNSPEC;
- 
--	xdpf = xdp_convert_buff_to_frame(xdp);
- 	if (unlikely(!xdpf)) {
- 		err = -EOVERFLOW;
- 		goto err;
-@@ -4013,7 +4031,6 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 		err = -EBADRQC;
- 	}
- 
--out:
- 	if (unlikely(err))
- 		goto err;
- 
-@@ -4023,8 +4040,34 @@ int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
- 	_trace_xdp_redirect_map_err(dev, xdp_prog, fwd, map_type, map_id, ri->tgt_index, err);
- 	return err;
- }
-+
-+int xdp_do_redirect(struct net_device *dev, struct xdp_buff *xdp,
-+		    struct bpf_prog *xdp_prog)
-+{
-+	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-+	enum bpf_map_type map_type = ri->map_type;
-+
-+	if (map_type == BPF_MAP_TYPE_XSKMAP)
-+		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
-+
-+	return __xdp_do_redirect_frame(ri, dev, xdp_convert_buff_to_frame(xdp),
-+				       xdp_prog);
-+}
- EXPORT_SYMBOL_GPL(xdp_do_redirect);
- 
-+int xdp_do_redirect_frame(struct net_device *dev, struct xdp_buff *xdp,
-+			  struct xdp_frame *xdpf, struct bpf_prog *xdp_prog)
-+{
-+	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-+	enum bpf_map_type map_type = ri->map_type;
-+
-+	if (map_type == BPF_MAP_TYPE_XSKMAP)
-+		return __xdp_do_redirect_xsk(ri, dev, xdp, xdp_prog);
-+
-+	return __xdp_do_redirect_frame(ri, dev, xdpf, xdp_prog);
-+}
-+EXPORT_SYMBOL_GPL(xdp_do_redirect_frame);
-+
- static int xdp_do_generic_redirect_map(struct net_device *dev,
- 				       struct sk_buff *skb,
- 				       struct xdp_buff *xdp,
+To transmit the frames, the new mode instantiates a page_pool structure in
+bpf_prog_run() and initialises the pages with the data passed in by
+userspace. These pages can then be redirected using the normal redirection
+mechanism, and the existing page_pool code takes care of returning and
+recycling them. The setup is optimised for high performance with a high
+number of repetitions to support stress testing and the traffic generator
+use case; see patch 6 for details.
+
+The series is structured as follows: Patches 1-2 adds a few features to
+page_pool that are needed for the usage in bpf_prog_run(). Similarly,
+patches 3-5 performs a couple of preparatory refactorings of the XDP
+redirect and memory management code. Patch 6 adds the support to
+bpf_prog_run() itself, patch 7 adds a selftest, and patch 8 adds the
+traffic generator example to samples/bpf.
+
+v3:
+- Reorder patches to make sure they all build individually (Patchwork)
+- Remove a couple of unused variables (Patchwork)
+- Remove unlikely() annotation in slow path and add back John's ACK that I
+  accidentally dropped for v2 (John)
+
+v2:
+- Split up up __xdp_do_redirect to avoid passing two pointers to it (John)
+- Always reset context pointers before each test run (John)
+- Use get_mac_addr() from xdp_sample_user.h instead of rolling our own (Kumar)
+- Fix wrong offset for metadata pointer
+
+Toke Høiland-Jørgensen (8):
+  xdp: Allow registering memory model without rxq reference
+  page_pool: Add callback to init pages when they are allocated
+  page_pool: Store the XDP mem id
+  xdp: Move conversion to xdp_frame out of map functions
+  xdp: add xdp_do_redirect_frame() for pre-computed xdp_frames
+  bpf: Add XDP_REDIRECT support to XDP for bpf_prog_run()
+  selftests/bpf: Add selftest for XDP_REDIRECT in bpf_prog_run()
+  samples/bpf: Add xdp_trafficgen sample
+
+ include/linux/bpf.h                           |  20 +-
+ include/linux/filter.h                        |   4 +
+ include/net/page_pool.h                       |  11 +-
+ include/net/xdp.h                             |   3 +
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/Kconfig                            |   1 +
+ kernel/bpf/cpumap.c                           |   8 +-
+ kernel/bpf/devmap.c                           |  32 +-
+ net/bpf/test_run.c                            | 217 ++++++++-
+ net/core/filter.c                             |  73 ++-
+ net/core/page_pool.c                          |   6 +-
+ net/core/xdp.c                                |  94 ++--
+ samples/bpf/.gitignore                        |   1 +
+ samples/bpf/Makefile                          |   4 +
+ samples/bpf/xdp_redirect.bpf.c                |  34 ++
+ samples/bpf/xdp_trafficgen_user.c             | 421 ++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                |   2 +
+ .../bpf/prog_tests/xdp_do_redirect.c          |  74 +++
+ .../bpf/progs/test_xdp_do_redirect.c          |  34 ++
+ 19 files changed, 947 insertions(+), 94 deletions(-)
+ create mode 100644 samples/bpf/xdp_trafficgen_user.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+
 -- 
 2.34.0
 
