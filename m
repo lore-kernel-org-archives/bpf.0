@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3DA0C433F5
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE1A9C433FE
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:02:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345762AbhLKCGU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S1345812AbhLKCGW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbhLKCGI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:06:08 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCEDC061714;
-        Fri, 10 Dec 2021 18:02:23 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id x15so36045034edv.1;
-        Fri, 10 Dec 2021 18:02:23 -0800 (PST)
+        with ESMTP id S1345784AbhLKCGJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Dec 2021 21:06:09 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34938C061D5F;
+        Fri, 10 Dec 2021 18:02:25 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x15so36045244edv.1;
+        Fri, 10 Dec 2021 18:02:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MsFfAGLof3Dm9/LrR3eo50ukODDBjEJuAPZhIodAjb8=;
-        b=H7Ipv3u+6+S3eEvDoI6LyEtyl9WL3LaAV9Y5t5ns7VvFske1+/sSP8h1Xq0pFxCvJs
-         LtnhD4gaUrq+43Cf0WUTiQJbmvq+nfA0pGQtIeejOSNPTwjHMRGwGmQRyyU+9dgMX648
-         Hbn0MYrVo++b28V7bi3OFVqs7u6FUFf4pvueWAn8kJSqUKqRMzdqdtceIkCnlXzEWo6F
-         +oemCssXGoushIjaMa4++GkQhAxbsLw/RxR/ba/4SdJ5ZHYwk8piYswWzrI18kf1Qyr1
-         tENmIqS3uxPdBRg0we9Q7WR2eDyhDxtFzXPHaMiefUNzPLNMLNx2FCPwDn3VOW/ysDy5
-         r77A==
+        bh=q2SJGM9ouzR0OJAtC1TTZL0Ns4pieplKsZlkIeRm9ng=;
+        b=YFuSLd/tIolAWkWUvrc5QMNMqdz2hbM+Nsx+UsNO/Xrvs9wNtr0ZZbzXdMgUr+co5i
+         hKHMmJgt92w9hSCAZvn3/mPkEq27Xv51tA7N/0uIPvDxDMDEYkdipYzT/OIbpl5NS9/A
+         Fhcvp+ybiwf2N51UNmmCEpGNVR+ukZJ507ZybzROtZoTAwLtztMa3yxhrjCl9fSgFTgn
+         jChjY3JL/p9XF4rah3HcBRjVPoS1n7tYvK+bMMNEOSD3iE9ccFBV4fckgMPxyLMhbUFg
+         5bf31mkMOzBEBJ545lgqUYqmG0JrEX7CWLnWMn2IaR9RFdmdvWgRzgfDrFqbRXbKblTQ
+         lUIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MsFfAGLof3Dm9/LrR3eo50ukODDBjEJuAPZhIodAjb8=;
-        b=PSjGXY6rqVzTxrRmry1H6cvUGJrjgWPUqNW3/SA4t8dg7zU9E4uo5yVzgi7NCQBYbX
-         zuJ2ZTJrhN1CL+b+g3+OCiWAmJM6FZKsI+RkiBsaqE/Gvaz5EYWHXONe/MkFkPuTQR6o
-         bQTwxLTqncrkTTMY4fv0I7JoFdAlUxp/3X5OEN+HNKSn2ToJA2AWONtOOQFKRs9WCBUP
-         yEpNAVYgwGV61x0TJRYJNLvEbQ1Kzi5tFXAuiGiB18MM2vw11mcTH+fq3jqJtU8govAL
-         2fNBicvDGTWsS/hyrdfmxl6LLgSBNkjUmRw+3paw4MPqFfWUT+9/TVH9FlZKNgtRg5Sh
-         rSKg==
-X-Gm-Message-State: AOAM5324C19bRjtJK7mlLLiDLHstZxa59CidwIW87x5Wl71KlbcHjB5E
-        6q3cem9gB1cA5wa5h6jM+i0f+w2EKZRIRA==
-X-Google-Smtp-Source: ABdhPJx/2z0MX3VHpvYqYPXQQ1Igm3zjDVnnLvgGVBK/jENd6zK9sjWHU+U5qbXPEJhweaqgZUtTmA==
-X-Received: by 2002:aa7:d4c3:: with SMTP id t3mr44776130edr.268.1639188141321;
-        Fri, 10 Dec 2021 18:02:21 -0800 (PST)
+        bh=q2SJGM9ouzR0OJAtC1TTZL0Ns4pieplKsZlkIeRm9ng=;
+        b=Q1igsk+M6l0RD+gXu5GC3dc2gl/5SPKuHp57defc0d5dHVfzhaGd3w5qIDzhcMMPn+
+         JS5IpXycdAmbWMgbZ6dmau12OmnT1QUCVXyv+Yfge/kqSYXiegxHlZ9OIwF7Rqc8+UXe
+         93ZICmAxR9pVhulXqk4/6BCJmeepMks+XxFa9LJmnmedhVvjOAXyntYm6a0c8+WOINX+
+         6sQocyVpuRoIV7FynY2uc7UFpV/FmzwuXoELQ8XOCaMuIvF9lxeMpqYgNz6k62WeHiao
+         PMJxxO1eiPv+N88CAuL0Bpzvfa8IlVL5ofSqNJIs6pMmEHfAQ6eJMY/OU+2Z7Z5+4YQH
+         yfeQ==
+X-Gm-Message-State: AOAM532K3SlIUqzg73DSkSZ0OK6Ubg/8WdvnxsvXt1WfU3foaAvG0s0a
+        vg+U73G2BCXHjcLqpwQODkI=
+X-Google-Smtp-Source: ABdhPJwgJglpGh1keabI/ZozLzL4/lm2S6gTtP9l0SPNbHEt8wauR3RvKBt5W1pPId3gwC0vQ09Z/g==
+X-Received: by 2002:a17:906:dc8d:: with SMTP id cs13mr28589224ejc.276.1639188143645;
+        Fri, 10 Dec 2021 18:02:23 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.20
+        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:21 -0800 (PST)
+        Fri, 10 Dec 2021 18:02:23 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -62,11 +62,10 @@ To:     Andrew Lunn <andrew@lunn.ch>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 04/15] net: dsa: replay master state events in dsa_tree_{setup,teardown}_master
-Date:   Sat, 11 Dec 2021 03:01:36 +0100
-Message-Id: <20211211020155.10114-5-ansuelsmth@gmail.com>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v3 06/15] net: dsa: tag_qca: move define to include linux/dsa
+Date:   Sat, 11 Dec 2021 03:01:38 +0100
+Message-Id: <20211211020155.10114-7-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
 References: <20211211020155.10114-1-ansuelsmth@gmail.com>
@@ -76,83 +75,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Move tag_qca define to include dir linux/dsa as the qca8k require access
+to the tagger define to support in-band mdio read/write using ethernet
+packet.
 
-In order for switch driver to be able to make simple and reliable use of
-the master tracking operations, they must also be notified of the
-initial state of the DSA master, not just of the changes. This is
-because they might enable certain features only during the time when
-they know that the DSA master is up and running.
-
-Therefore, this change explicitly checks the state of the DSA master
-under the same rtnl_mutex as we were holding during the
-dsa_master_setup() and dsa_master_teardown() call. The idea being that
-if the DSA master became operational in between the moment in which it
-became a DSA master (dsa_master_setup set dev->dsa_ptr) and the moment
-when we checked for the master being up, there is a chance that we
-would emit a ->master_state_change() call with no actual state change.
-We need to avoid that by serializing the concurrent netdevice event with
-us. If the netdevice event started before, we force it to finish before
-we begin, because we take rtnl_lock before making netdev_uses_dsa()
-return true. So we also handle that early event and do nothing on it.
-Similarly, if the dev_open() attempt is concurrent with us, it will
-attempt to take the rtnl_mutex, but we're holding it. We'll see that
-the master flag IFF_UP isn't set, then when we release the rtnl_mutex
-we'll process the NETDEV_UP notifier.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- net/dsa/dsa2.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ include/linux/dsa/tag_qca.h | 21 +++++++++++++++++++++
+ net/dsa/tag_qca.c           | 16 +---------------
+ 2 files changed, 22 insertions(+), 15 deletions(-)
+ create mode 100644 include/linux/dsa/tag_qca.h
 
-diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-index 90e29dd42d3d..76cf9ee1153c 100644
---- a/net/dsa/dsa2.c
-+++ b/net/dsa/dsa2.c
-@@ -1034,9 +1034,18 @@ static int dsa_tree_setup_master(struct dsa_switch_tree *dst)
- 
- 	list_for_each_entry(dp, &dst->ports, list) {
- 		if (dsa_port_is_cpu(dp)) {
--			err = dsa_master_setup(dp->master, dp);
-+			struct net_device *master = dp->master;
-+			bool admin_up = (master->flags & IFF_UP) &&
-+					!qdisc_tx_is_noop(master);
+diff --git a/include/linux/dsa/tag_qca.h b/include/linux/dsa/tag_qca.h
+new file mode 100644
+index 000000000000..c02d2d39ff4a
+--- /dev/null
++++ b/include/linux/dsa/tag_qca.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
-+			err = dsa_master_setup(master, dp);
- 			if (err)
- 				return err;
++#ifndef __TAG_QCA_H
++#define __TAG_QCA_H
 +
-+			/* Replay master state event */
-+			dsa_tree_master_admin_state_change(dst, master, admin_up);
-+			dsa_tree_master_oper_state_change(dst, master,
-+							  netif_oper_up(master));
- 		}
- 	}
- 
-@@ -1051,9 +1060,19 @@ static void dsa_tree_teardown_master(struct dsa_switch_tree *dst)
- 
- 	rtnl_lock();
- 
--	list_for_each_entry(dp, &dst->ports, list)
--		if (dsa_port_is_cpu(dp))
--			dsa_master_teardown(dp->master);
-+	list_for_each_entry(dp, &dst->ports, list) {
-+		if (dsa_port_is_cpu(dp)) {
-+			struct net_device *master = dp->master;
++#define QCA_HDR_LEN	2
++#define QCA_HDR_VERSION	0x2
 +
-+			/* Synthesizing an "admin down" state is sufficient for
-+			 * the switches to get a notification if the master is
-+			 * currently up and running.
-+			 */
-+			dsa_tree_master_admin_state_change(dst, master, false);
++#define QCA_HDR_RECV_VERSION		GENMASK(15, 14)
++#define QCA_HDR_RECV_PRIORITY		GENMASK(13, 11)
++#define QCA_HDR_RECV_TYPE		GENMASK(10, 6)
++#define QCA_HDR_RECV_FRAME_IS_TAGGED	BIT(3)
++#define QCA_HDR_RECV_SOURCE_PORT	GENMASK(2, 0)
 +
-+			dsa_master_teardown(master);
-+		}
-+	}
++#define QCA_HDR_XMIT_VERSION		GENMASK(15, 14)
++#define QCA_HDR_XMIT_PRIORITY		GENMASK(13, 11)
++#define QCA_HDR_XMIT_CONTROL		GENMASK(10, 8)
++#define QCA_HDR_XMIT_FROM_CPU		BIT(7)
++#define QCA_HDR_XMIT_DP_BIT		GENMASK(6, 0)
++
++#endif /* __TAG_QCA_H */
+diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
+index 55fa6b96b4eb..34e565e00ece 100644
+--- a/net/dsa/tag_qca.c
++++ b/net/dsa/tag_qca.c
+@@ -5,24 +5,10 @@
  
- 	rtnl_unlock();
- }
+ #include <linux/etherdevice.h>
+ #include <linux/bitfield.h>
++#include <linux/dsa/tag_qca.h>
+ 
+ #include "dsa_priv.h"
+ 
+-#define QCA_HDR_LEN	2
+-#define QCA_HDR_VERSION	0x2
+-
+-#define QCA_HDR_RECV_VERSION		GENMASK(15, 14)
+-#define QCA_HDR_RECV_PRIORITY		GENMASK(13, 11)
+-#define QCA_HDR_RECV_TYPE		GENMASK(10, 6)
+-#define QCA_HDR_RECV_FRAME_IS_TAGGED	BIT(3)
+-#define QCA_HDR_RECV_SOURCE_PORT	GENMASK(2, 0)
+-
+-#define QCA_HDR_XMIT_VERSION		GENMASK(15, 14)
+-#define QCA_HDR_XMIT_PRIORITY		GENMASK(13, 11)
+-#define QCA_HDR_XMIT_CONTROL		GENMASK(10, 8)
+-#define QCA_HDR_XMIT_FROM_CPU		BIT(7)
+-#define QCA_HDR_XMIT_DP_BIT		GENMASK(6, 0)
+-
+ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct dsa_port *dp = dsa_slave_to_port(dev);
 -- 
 2.32.0
 
