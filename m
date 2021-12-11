@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8E5C433F5
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA5AEC433F5
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:02:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345832AbhLKCGX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:06:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S1345717AbhLKCGd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:06:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345707AbhLKCGJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:06:09 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1289DC061D5E;
-        Fri, 10 Dec 2021 18:02:24 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id x15so36045140edv.1;
-        Fri, 10 Dec 2021 18:02:23 -0800 (PST)
+        with ESMTP id S1345791AbhLKCGK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Dec 2021 21:06:10 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FD0C0698C4;
+        Fri, 10 Dec 2021 18:02:28 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id r25so34767523edq.7;
+        Fri, 10 Dec 2021 18:02:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vnLY6KdcrRoSIU2HsNb3g6e/hZnKqFQfK2cCOCiEGu8=;
-        b=HJlumZ+HefxSOJVV5UjMjjMxPwMEYipl5oxLFM9krlRNnZ6cEDqhjBUI4eHkWIevZM
-         c2PsUiKye2JkIrhjLVhbKpQoQBm7CLrCpd1qzs4EqHUOxKitRAhVyzF2Jf7U1ouX5Tpb
-         tmzZUZnZLa6ESlNVIEZPWJSaApJLjBcZViQ9DT7XrpK3i6TVoVmqgxsRAZ8+jI/QsJtT
-         a1RwkbO38zay8dKowIKvBh479HIMN0w/AjWSLH244c2VOMxToTHgUxh4Fb5dVHufq2Px
-         YjZkbPnJi4z7mNcYp2jrXwC/GdCLCesBZFeG2+bbjIx4FFfcOxp5lQN9a+Ez4crSz6JJ
-         jDpg==
+        bh=6wPaNBOfuu/zzxVfLMdAXuf2rVrwWZl2wf2bIvpeLVc=;
+        b=hUkm1d5layslJ7erVvX+QsI7wgZ7agcgOpJpe+W0imIBoDSw+GgXEgOk+msKi3uaXm
+         pMKWO2cW3VV8ey33aNL9YuhVEW9W3rHpPrG6IwAOQWetjb0uIROeGA/vKAnXVxyY5gZR
+         OqfxPSZtGxnVw+H+o85FZSFAnyi/SzKynqpTSJhosUycZXwHSpo69dUydRnVMEUni/r2
+         exMatouKoANFOiIgHQRwFBNVBTLUXiQaFeP+cDUaLi3amgj0mLdHyk+o3nxzQ9pXQ9aJ
+         oIRQf7D437ydZoHZbf8VhB+j+bOaGMppyBBxYkmfK2iMnGtvROdlupAzNssO9aJGhf3Q
+         LJgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vnLY6KdcrRoSIU2HsNb3g6e/hZnKqFQfK2cCOCiEGu8=;
-        b=qfHqEQzlb2roef17/5QnkA4qD1Sp8y7VZfZUTeffpYRt9dCBp/Cjl21SIWs+krmuda
-         W/Y6X6PXGQk55G11Y13oeETifC3LhOrKLqBI5Isd7d6z042vMWL2f/OqeDlQUKeB5nI+
-         utN9W881MViKNlzBUkX7JYb19I4TMs5diCvkeU6ijyBXCw6mHmF+fKjqiEtrbuEH0YMz
-         OjeFR70F2AFXjRn/mH8IZrkWb+O7hPEXJDD/x109HYWdQhY5NqQDvEETxgo/7RN6uUZI
-         M9diIKtJQtctamN+qChtg3ea7uAgQ4pNgIU7seMaDR9hc39JzAISQTEtNXIj94B3ch6U
-         132A==
-X-Gm-Message-State: AOAM5323dnzy/r6flGYynWturoG5t6goDSCR69hSNl3sdTPIiCk+3Myf
-        ZVPa/PL7emXJKJINxZ6kkJg=
-X-Google-Smtp-Source: ABdhPJxKtTH3raEYOBoNGofyuITcbYcMbec8BbxAFqHMZNmSsbGYiSOZw4Od63Vmu3JrAk3DrtMzWg==
-X-Received: by 2002:a05:6402:169a:: with SMTP id a26mr44863761edv.292.1639188142511;
-        Fri, 10 Dec 2021 18:02:22 -0800 (PST)
+        bh=6wPaNBOfuu/zzxVfLMdAXuf2rVrwWZl2wf2bIvpeLVc=;
+        b=M2s6uH27NFc/ZpiPzbR5Fip8PuNhU6kGnO1rIwwnVl55UuU/ehV8wOB69nZHI8jcBD
+         DEiASC46NDX/+WZKPHADbNYdKBdAy5hhJg9vmwowiRo0TNoa8kMinShAECkxfIYYN4hq
+         +7n+6LvwOG5YnxkbSnl6G4QMin5iGoX89Or935cAxbhm2zT/HrO0Vriighujhtu1rWvd
+         2xFXt+3cqvDPixW26GUIpHvofpbh+6ZBHc4XfxywaVP92NtZjOzIr6Fsm3ZdHBN6Kukb
+         B0WU6SgcTyuaZBUgEA9Nauwu0JsXbEFL79UOW3VpMRdFR+YH8lA11cSxJG/Y3SL8BTmm
+         aJLg==
+X-Gm-Message-State: AOAM5333hwPNcdFKG4+5iC+54VHqp6JLdNFpT2pe6SqgW9iGLBDvIos1
+        VxK9EI0iTo9mybslKwSX5x24Rg0b5/zowg==
+X-Google-Smtp-Source: ABdhPJznz1utVfKBzk9uHvHjT/M2qoqYIHCf8UYLM5RU2B2KKw65W80PfeBCGBxLaXomChye1RaELA==
+X-Received: by 2002:a17:906:9753:: with SMTP id o19mr28946754ejy.243.1639188147106;
+        Fri, 10 Dec 2021 18:02:27 -0800 (PST)
 Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.21
+        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:22 -0800 (PST)
+        Fri, 10 Dec 2021 18:02:26 -0800 (PST)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
@@ -63,9 +63,9 @@ To:     Andrew Lunn <andrew@lunn.ch>,
         KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 05/15] net: dsa: tag_qca: convert to FIELD macro
-Date:   Sat, 11 Dec 2021 03:01:37 +0100
-Message-Id: <20211211020155.10114-6-ansuelsmth@gmail.com>
+Subject: [net-next RFC PATCH v3 08/14] net: dsa: tag_qca: add define for handling MIB packet
+Date:   Sat, 11 Dec 2021 03:01:41 +0100
+Message-Id: <20211211020155.10114-10-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
 References: <20211211020155.10114-1-ansuelsmth@gmail.com>
@@ -75,87 +75,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert driver to FIELD macro to drop redundant define.
+Add struct to correctly parse a mib Ethernet packet.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- net/dsa/tag_qca.c | 34 +++++++++++++++-------------------
- 1 file changed, 15 insertions(+), 19 deletions(-)
+ include/linux/dsa/tag_qca.h | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/net/dsa/tag_qca.c b/net/dsa/tag_qca.c
-index 1ea9401b8ace..55fa6b96b4eb 100644
---- a/net/dsa/tag_qca.c
-+++ b/net/dsa/tag_qca.c
-@@ -4,29 +4,24 @@
-  */
+diff --git a/include/linux/dsa/tag_qca.h b/include/linux/dsa/tag_qca.h
+index 578a4aeafd92..f3369b939107 100644
+--- a/include/linux/dsa/tag_qca.h
++++ b/include/linux/dsa/tag_qca.h
+@@ -59,4 +59,21 @@ struct mdio_ethhdr {
+ 	u16 hdr;		/* qca hdr */
+ } __packed;
  
- #include <linux/etherdevice.h>
-+#include <linux/bitfield.h>
- 
- #include "dsa_priv.h"
- 
- #define QCA_HDR_LEN	2
- #define QCA_HDR_VERSION	0x2
- 
--#define QCA_HDR_RECV_VERSION_MASK	GENMASK(15, 14)
--#define QCA_HDR_RECV_VERSION_S		14
--#define QCA_HDR_RECV_PRIORITY_MASK	GENMASK(13, 11)
--#define QCA_HDR_RECV_PRIORITY_S		11
--#define QCA_HDR_RECV_TYPE_MASK		GENMASK(10, 6)
--#define QCA_HDR_RECV_TYPE_S		6
-+#define QCA_HDR_RECV_VERSION		GENMASK(15, 14)
-+#define QCA_HDR_RECV_PRIORITY		GENMASK(13, 11)
-+#define QCA_HDR_RECV_TYPE		GENMASK(10, 6)
- #define QCA_HDR_RECV_FRAME_IS_TAGGED	BIT(3)
--#define QCA_HDR_RECV_SOURCE_PORT_MASK	GENMASK(2, 0)
--
--#define QCA_HDR_XMIT_VERSION_MASK	GENMASK(15, 14)
--#define QCA_HDR_XMIT_VERSION_S		14
--#define QCA_HDR_XMIT_PRIORITY_MASK	GENMASK(13, 11)
--#define QCA_HDR_XMIT_PRIORITY_S		11
--#define QCA_HDR_XMIT_CONTROL_MASK	GENMASK(10, 8)
--#define QCA_HDR_XMIT_CONTROL_S		8
-+#define QCA_HDR_RECV_SOURCE_PORT	GENMASK(2, 0)
++enum mdio_cmd {
++	MDIO_WRITE = 0x0,
++	MDIO_READ
++};
 +
-+#define QCA_HDR_XMIT_VERSION		GENMASK(15, 14)
-+#define QCA_HDR_XMIT_PRIORITY		GENMASK(13, 11)
-+#define QCA_HDR_XMIT_CONTROL		GENMASK(10, 8)
- #define QCA_HDR_XMIT_FROM_CPU		BIT(7)
--#define QCA_HDR_XMIT_DP_BIT_MASK	GENMASK(6, 0)
-+#define QCA_HDR_XMIT_DP_BIT		GENMASK(6, 0)
- 
- static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
- {
-@@ -40,8 +35,9 @@ static struct sk_buff *qca_tag_xmit(struct sk_buff *skb, struct net_device *dev)
- 	phdr = dsa_etype_header_pos_tx(skb);
- 
- 	/* Set the version field, and set destination port information */
--	hdr = QCA_HDR_VERSION << QCA_HDR_XMIT_VERSION_S |
--		QCA_HDR_XMIT_FROM_CPU | BIT(dp->index);
-+	hdr = FIELD_PREP(QCA_HDR_XMIT_VERSION, QCA_HDR_VERSION);
-+	hdr |= QCA_HDR_XMIT_FROM_CPU;
-+	hdr |= FIELD_PREP(QCA_HDR_XMIT_DP_BIT, BIT(dp->index));
- 
- 	*phdr = htons(hdr);
- 
-@@ -62,7 +58,7 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
- 	hdr = ntohs(*phdr);
- 
- 	/* Make sure the version is correct */
--	ver = (hdr & QCA_HDR_RECV_VERSION_MASK) >> QCA_HDR_RECV_VERSION_S;
-+	ver = FIELD_GET(QCA_HDR_RECV_VERSION, hdr);
- 	if (unlikely(ver != QCA_HDR_VERSION))
- 		return NULL;
- 
-@@ -71,7 +67,7 @@ static struct sk_buff *qca_tag_rcv(struct sk_buff *skb, struct net_device *dev)
- 	dsa_strip_etype_header(skb, QCA_HDR_LEN);
- 
- 	/* Get source port information */
--	port = (hdr & QCA_HDR_RECV_SOURCE_PORT_MASK);
-+	port = FIELD_GET(QCA_HDR_RECV_SOURCE_PORT, hdr);
- 
- 	skb->dev = dsa_master_find_slave(dev, 0, port);
- 	if (!skb->dev)
++struct mib_ethhdr {
++	u32 data[3];		/* first 3 mib counter */
++	__be16 hdr;		/* qca hdr */
++} __packed;
++
++struct tag_qca_priv {
++	void (*rw_reg_ack_handler)(struct dsa_port *dp,
++				   struct sk_buff *skb);
++	void (*mib_autocast_handler)(struct dsa_port *dp,
++				     struct sk_buff *skb);
++};
++
+ #endif /* __TAG_QCA_H */
 -- 
 2.32.0
 
