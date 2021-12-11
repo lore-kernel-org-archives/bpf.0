@@ -2,134 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A84B6C433EF
-	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:03:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 560E0C433F5
+	for <bpf@archiver.kernel.org>; Sat, 11 Dec 2021 02:21:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238064AbhLKCHZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Dec 2021 21:07:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S239181AbhLKCZR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Dec 2021 21:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345757AbhLKCGU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Dec 2021 21:06:20 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC48C0617A2;
-        Fri, 10 Dec 2021 18:02:33 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y13so34776693edd.13;
-        Fri, 10 Dec 2021 18:02:33 -0800 (PST)
+        with ESMTP id S233583AbhLKCZQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Dec 2021 21:25:16 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8FC061714;
+        Fri, 10 Dec 2021 18:21:40 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso10281902wmr.4;
+        Fri, 10 Dec 2021 18:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jpcobtTbBZ1w887AMWL3/EJGu3y4OL0zdgkB+Vu4530=;
-        b=GVLidNvstcOFcXce1MeoCrlsHcR30MahiQS0EDAtDs3XpSPZOUWN/17qHPCX54MpCh
-         glJ7FROHD5OEHIvu6BOrQQk9VHQ8IdcSrDaJG2MkP6BGHxq1HapqgBvALi3K9y06m0lh
-         gFuhvhEJDXvtvYEe9ky/zSQ20mVx+MHTcqAFzUr5ROgfWGIw0XDSRZisok443NijBfDE
-         J1CCtRUUoyVhFEbjYIepjy7rFgxbpwP7YutUnyyQ7ipybLsj0rnHqf+F9xLCxDhvtQMw
-         AUiw2loa8Tp3WNYf8ID90XttreOyBLf8yCxLIpnEbf+wpZKg/uQu3fbjE4u42HX4M+co
-         brXw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/6yvBb+/c9OeTvJt4mvrjb1eKqBxOO4eWlVO74xpdFA=;
+        b=dU/sLd/KkLsc1OLM1LXrGZF8C3ro1RTFkh5dZNGw21BGyZalONWfgFG19D8uWvwrLq
+         APJz4LPDx9EHYz5wx5D0GWC4ghMWXmFJmAcdSPIjKpNr5cAeiS/ofiMUgu/5hl6q6SxP
+         pTH6IbqJMtb4zhDO3ypmtHf8mlIXO8Q/Ks/pKDM/pQzDCL7RNCDXE6PYQqXQI57tdlCF
+         UNiHbLtX6+EXUx4yFXqeZb8FW0p2bpmoTH3asv6ww6pIvbR6qMclhmQdULVx4DfgJJ46
+         JyCpCULzgqwlOcfy+g5z9IzOKxziRFM04eNKMRs3WiO2+6awStpO3CRKgJRjqaSfKJYY
+         0ALQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jpcobtTbBZ1w887AMWL3/EJGu3y4OL0zdgkB+Vu4530=;
-        b=1iKZtUzO9656R+3U37T6eOsGBig3MYe8uBFHi9l3NS1k4fgfNzgdb2wmNrYozvn7dX
-         vaZt66UT4dE4xYVKxr4OjOVuCKqM4GFBaaqOKljl5p8BPt9unDCmJNz+T00AZg7PgunJ
-         txgW8UePPKmYS1zQO15DQvLqDaoBiXWh02KTXf1gnxDSt3R6QHSRuFDhBFcg06vMySPN
-         +Z3n23JGYW4VKr4TSzUS1GFCqQ/NdoTj+ga0LFKAA/q14DyfMhpoFE4skpTW8KiDL+R4
-         KbBYyD5zKql/A9n8bsJ6jD0jcMZJiEMm2ZTjpCzESepns7b12nKTHCzkhtVWZEkDI477
-         300g==
-X-Gm-Message-State: AOAM5337MPVKaQJ0JFPiB0XWVepRzZOlS0swaoi5K8tXUq9hk3GbjdPD
-        9Eu/7UflGi7YhdHMJLlSUn0=
-X-Google-Smtp-Source: ABdhPJx4rvGrwOx7ayqzXup2KfFTclQPuHSJ8dd9TxM3d5P/QnJK2VNsLITyuFIxjcy0CANWpe0m5Q==
-X-Received: by 2002:a17:907:9707:: with SMTP id jg7mr27089113ejc.533.1639188151714;
-        Fri, 10 Dec 2021 18:02:31 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id p13sm2265956eds.38.2021.12.10.18.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 18:02:31 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/6yvBb+/c9OeTvJt4mvrjb1eKqBxOO4eWlVO74xpdFA=;
+        b=xQH4b+j0hdv/vQBJeTcl8SphRl0gu1phl/ZQd/brjc77d5KYHtE896PIMWfGSahSg1
+         H0fUIKMHrwzswsu/z4JvuATRJqolvgvooY8+Aqf1n3vJYithKNpNq7JPL0ASW9LMgYBw
+         K0aeyU1WQU/06syThuQ0Lw9dcr2tMu5UbTD3plTuNQSFHjehcz9JFAPs1qDzXBPdVhHp
+         UbhajZIT1OHkw6TMwbfHpUKlJXx4cobxbV9eTZzsWc28Txfmhkd407PWVP0SPu8zXgbB
+         D0j/jwvRZs0VNuosa1it+xriM0LuYLw0YO614UKeyAiWCWHuR1vKi5snMYZaM9UJKxmR
+         EtMQ==
+X-Gm-Message-State: AOAM5310poerDpoII2K2uJy50gqKc4WewPVhX5tOgxd6OFvDt5L7jdq7
+        tXvMS3qYidLfk3AINODvmaM4BLegXc8=
+X-Google-Smtp-Source: ABdhPJxdYMdqc3P6ViD1PV9Ls9B84yNVrmZKnjk0LAJtDpqiCr6quPSKIj/HxMFjUn1JrytkYtUufw==
+X-Received: by 2002:a7b:c008:: with SMTP id c8mr21090564wmb.87.1639189299434;
+        Fri, 10 Dec 2021 18:21:39 -0800 (PST)
+Received: from [192.168.8.198] ([185.69.145.149])
+        by smtp.gmail.com with ESMTPSA id j40sm350276wms.19.2021.12.10.18.21.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Dec 2021 18:21:39 -0800 (PST)
+Message-ID: <fa707ef9-d612-a3a4-1b2a-fc2b28a3ec5f@gmail.com>
+Date:   Sat, 11 Dec 2021 02:20:13 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [BPF PATCH for-next] cgroup/bpf: fast path for not loaded skb BPF
+ filtering
+Content-Language: en-US
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next RFC PATCH v3 10/14] net: dsa: qca8k: add tracking state of master port
-Date:   Sat, 11 Dec 2021 03:01:45 +0100
-Message-Id: <20211211020155.10114-14-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211211020155.10114-1-ansuelsmth@gmail.com>
-References: <20211211020155.10114-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
+References: <d77b08bf757a8ea8dab3a495885c7de6ff6678da.1639102791.git.asml.silence@gmail.com>
+ <20211211003838.7u4lcqghcq2gqvho@kafai-mbp.dhcp.thefacebook.com>
+ <5f7d2f60-b833-04e5-7710-fdd2ef3b6f67@gmail.com>
+ <20211211015656.tvufcnh5k4rrc7sw@kafai-mbp.dhcp.thefacebook.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20211211015656.tvufcnh5k4rrc7sw@kafai-mbp.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-MDIO/MIB Ethernet require the master port and the tagger availabale to
-correctly work. Use the new api master_state_change to track when master
-is operational or not and set a bool in qca8k_priv.
-This bool will later be used by mdio read/write and mib request to
-correctly use the working function.
+On 12/11/21 01:56, Martin KaFai Lau wrote:
+> On Sat, Dec 11, 2021 at 01:15:05AM +0000, Pavel Begunkov wrote:
+>> On 12/11/21 00:38, Martin KaFai Lau wrote:
+>>> On Fri, Dec 10, 2021 at 02:23:34AM +0000, Pavel Begunkov wrote:
+>>>> cgroup_bpf_enabled_key static key guards from overhead in cases where
+>>>> no cgroup bpf program of a specific type is loaded in any cgroup. Turn
+>>>> out that's not always good enough, e.g. when there are many cgroups but
+>>>> ones that we're interesting in are without bpf. It's seen in server
+>>>> environments, but the problem seems to be even wider as apparently
+>>>> systemd loads some BPF affecting my laptop.
+>>>>
+>>>> Profiles for small packet or zerocopy transmissions over fast network
+>>>> show __cgroup_bpf_run_filter_skb() taking 2-3%, 1% of which is from
+>>>> migrate_disable/enable(), and similarly on the receiving side. Also
+>>>> got +4-5% of t-put for local testing.
+>>>>
+>>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>>>> ---
+>>>>    include/linux/bpf-cgroup.h | 24 +++++++++++++++++++++---
+>>>>    kernel/bpf/cgroup.c        | 23 +++++++----------------
+>>>>    2 files changed, 28 insertions(+), 19 deletions(-)
+>>>>
+>>>> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+>>>> index 11820a430d6c..99b01201d7db 100644
+>>>> --- a/include/linux/bpf-cgroup.h
+>>>> +++ b/include/linux/bpf-cgroup.h
+>>>> @@ -141,6 +141,9 @@ struct cgroup_bpf {
+>>>>    	struct list_head progs[MAX_CGROUP_BPF_ATTACH_TYPE];
+>>>>    	u32 flags[MAX_CGROUP_BPF_ATTACH_TYPE];
+>>>> +	/* for each type tracks whether effective prog array is not empty */
+>>>> +	unsigned long enabled_mask;
+>>>> +
+>>>>    	/* list of cgroup shared storages */
+>>>>    	struct list_head storages;
+>>>> @@ -219,11 +222,25 @@ int bpf_percpu_cgroup_storage_copy(struct bpf_map *map, void *key, void *value);
+>>>>    int bpf_percpu_cgroup_storage_update(struct bpf_map *map, void *key,
+>>>>    				     void *value, u64 flags);
+>>>> +static inline bool __cgroup_bpf_type_enabled(struct cgroup_bpf *cgrp_bpf,
+>>>> +					     enum cgroup_bpf_attach_type atype)
+>>>> +{
+>>>> +	return test_bit(atype, &cgrp_bpf->enabled_mask);
+>>>> +}
+>>>> +
+>>>> +#define CGROUP_BPF_TYPE_ENABLED(sk, atype)				       \
+>>>> +({									       \
+>>>> +	struct cgroup *__cgrp = sock_cgroup_ptr(&(sk)->sk_cgrp_data);	       \
+>>>> +									       \
+>>>> +	__cgroup_bpf_type_enabled(&__cgrp->bpf, (atype));		       \
+>>>> +})
+>>> I think it should directly test if the array is empty or not instead of
+>>> adding another bit.
+>>>
+>>> Can the existing __cgroup_bpf_prog_array_is_empty(cgrp, ...) test be used instead?
+>>
+>> That was the first idea, but it's still heavier than I'd wish. 0.3%-0.7%
+>> in profiles, something similar in reqs/s. rcu_read_lock/unlock() pair is
+>> cheap but anyway adds 2 barrier()s, and with bitmasks we can inline
+>> the check.
+> It sounds like there is opportunity to optimize
+> __cgroup_bpf_prog_array_is_empty().
+> 
+> How about using rcu_access_pointer(), testing with &empty_prog_array.hdr,
+> and then inline it?  The cgroup prog array cannot be all
+> dummy_bpf_prog.prog.  If that could be the case, it should be replaced
+> with &empty_prog_array.hdr earlier, so please check.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca8k.c | 13 +++++++++++++
- drivers/net/dsa/qca8k.h |  1 +
- 2 files changed, 14 insertions(+)
+I'd need to expose and export empty_prog_array, but that should do.
+Will try it out, thanks
 
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index 039694518788..905fae26e05b 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -2383,6 +2383,18 @@ qca8k_port_lag_leave(struct dsa_switch *ds, int port,
- 	return qca8k_lag_refresh_portmap(ds, port, lag, true);
- }
- 
-+static void
-+qca8k_master_change(struct dsa_switch *ds, const struct net_device *master,
-+		    bool operational)
-+{
-+	struct qca8k_priv *priv = ds->priv;
-+
-+	if (operational)
-+		priv->master_oper = true;
-+	else
-+		priv->master_oper = false;
-+}
-+
- static const struct dsa_switch_ops qca8k_switch_ops = {
- 	.get_tag_protocol	= qca8k_get_tag_protocol,
- 	.setup			= qca8k_setup,
-@@ -2418,6 +2430,7 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
- 	.get_phy_flags		= qca8k_get_phy_flags,
- 	.port_lag_join		= qca8k_port_lag_join,
- 	.port_lag_leave		= qca8k_port_lag_leave,
-+	.master_state_change	= qca8k_master_change,
- };
- 
- static int qca8k_read_switch_id(struct qca8k_priv *priv)
-diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-index ab4a417b25a9..fb98536bf3e8 100644
---- a/drivers/net/dsa/qca8k.h
-+++ b/drivers/net/dsa/qca8k.h
-@@ -342,6 +342,7 @@ struct qca8k_priv {
- 	u8 mirror_rx;
- 	u8 mirror_tx;
- 	u8 lag_hash_mode;
-+	bool master_oper; /* Track if mdio/mib Ethernet is available */
- 	bool legacy_phy_port_mapping;
- 	struct qca8k_ports_config ports_config;
- 	struct regmap *regmap;
 -- 
-2.32.0
-
+Pavel Begunkov
