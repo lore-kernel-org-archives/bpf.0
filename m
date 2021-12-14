@@ -2,590 +2,313 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25CBCC43217
-	for <bpf@archiver.kernel.org>; Tue, 14 Dec 2021 14:04:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91A3CC433EF
+	for <bpf@archiver.kernel.org>; Tue, 14 Dec 2021 14:13:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbhLNOE1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Dec 2021 09:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbhLNOEY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Dec 2021 09:04:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5F0C061748;
-        Tue, 14 Dec 2021 06:04:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=1fbP9knwSJtYJ0eYYinVfDjbJ9/akyQ2d/bIXP/jOT8=; b=hMJn28ehoqSKsyEE27K002GQ/8
-        IyP19hqrdzASSOmOTSuLVPSCd9eWEK0OQlAhsEBpbLgjdMvcUre9TmE9HwLULH4SbslCXWAzbR7Dh
-        lzLs6K4hsrnZkwSg6nSitNRruMs8aw29nY3rlNP2x6QHtEOpWPMXVdyjJrpzxXQ5BmHhsZBP8A6LR
-        Tzw+z52mXIUqQBt5QwZ/wU86j2vkv482LiKovzE+QhEhtF7Qpv+Gn+n5FwMnYqnzbcceVIsS+MglF
-        4B4YbRk17BwRfrMWvWA6qwbJiIAaYYRPbI8Di/9+gncQYebIFZg+Xvrw96yZRA9yB2+IZ7kfu8vJH
-        /Yiu+7fQ==;
-Received: from [2001:4bb8:180:a1c8:4ccb:3bf7:77a2:141f] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mx8PX-00DlVJ-AR; Tue, 14 Dec 2021 14:04:08 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 2/4] bpf, docs: Move the introduction to eBPF into a separate document
-Date:   Tue, 14 Dec 2021 15:04:00 +0100
-Message-Id: <20211214140402.288101-3-hch@lst.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211214140402.288101-1-hch@lst.de>
-References: <20211214140402.288101-1-hch@lst.de>
+        id S234775AbhLNONw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Dec 2021 09:13:52 -0500
+Received: from mail-mw2nam10on2057.outbound.protection.outlook.com ([40.107.94.57]:34465
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230093AbhLNONw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Dec 2021 09:13:52 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lJMSFePiyhWSdHxt50DtKaw3Zsi0d+iCmYyjQFiZ1s2/95vDlt0AtAStxdOMJsUL1c2H7FM/bg5O58BRLNE515g0HHy4wkYd5uoWrJ5L+TaVXvdC8rN72148ai8wnKbG7sETadyk2V/R4kmhu/OCm4f20Del5MqjONDn+NTke+lB3ub3UbV8xFvqVjt7Yriw8Qt19E9x5DQHC9TtpzuGaizp9tXWxecTWAaVCl3vIMKMfdNyb7BCE+tj6Y9Qqii1JhoucllOMGQzjlH9B0uU+lu+bRJ1Bz8xsdbT4oCAfrqSndYZ98FGGdY5JAXplCKCnIn8jRcH5CgtX/FiSGoDpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jI4WpIhh6FbO6JmRstnOxlJF8mBHcSMELo86z3HyMWQ=;
+ b=ENrek3sc1nizryISNUbhAhogi5VOqugLjCRW/DIDM6jLZzbW5zO21pEm9Vg0dEiogQC1I7/b6AyjCdWX7Kc6GjfXf24wuItZBgclBAsFfzyhDNNSffDiDppHygrryxcZQIeUIOzxF8Z+3alErRJZXsPeHxPb4TxjtUZIR4q3nym66nqMnysL2mya6O1go7WZ7WO3gWybQaTkdDn5jZ6ILV6QmOLorsp4fkFlqnZE/0ufK1q6ioDqWEnWOpvMfQTBv8DpWCBfX+cLIQ+dXSKx8aXSbi0Nbnu7Clm/xcBVkFTA0nWDkWyx9q7YbkaLfcFlQFXLIL/m28Lethw6kdo0eQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 203.18.50.14) smtp.rcpttodomain=strlen.de smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jI4WpIhh6FbO6JmRstnOxlJF8mBHcSMELo86z3HyMWQ=;
+ b=CSpzmKt5yLf61Eklid0Pmj8KyH2hyAjWOy+8z9uEvmSnBAYKGCO9MCPRoUrpqKRrDn+h63N/F+D4ZdPMw76KQtr/Soea442Lh11hdhO+9NQG48UChzSmGLNxj4XQrUnLuzdG5rMvdqUDqjOQZKfK6TRscPcRR9Pby/8Y5Iq3FUNRwljfARZhxHUsjC6C69hOr4mTmi+RLnEBO0mYyq5gZ3wXzbRDRy4vttycLxlLqd/MyhFnSugrqVjiqjsYppCpJmL4fuviMB2GEl7HTOFn4f6r3tF9UqfJwy3KWFlK8Af1P40xxy9AqBfCaAamOfzya/G2tgNeZdXv3pXBpG4jxw==
+Received: from DM6PR03CA0002.namprd03.prod.outlook.com (2603:10b6:5:40::15) by
+ DM5PR12MB1625.namprd12.prod.outlook.com (2603:10b6:4:b::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4778.16; Tue, 14 Dec 2021 14:13:49 +0000
+Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:40:cafe::8f) by DM6PR03CA0002.outlook.office365.com
+ (2603:10b6:5:40::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.14 via Frontend
+ Transport; Tue, 14 Dec 2021 14:13:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 203.18.50.14)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 203.18.50.14 as permitted sender) receiver=protection.outlook.com;
+ client-ip=203.18.50.14; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (203.18.50.14) by
+ DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.4778.13 via Frontend Transport; Tue, 14 Dec 2021 14:13:49 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by HKMAIL103.nvidia.com
+ (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 14 Dec
+ 2021 14:13:23 +0000
+Received: from [172.27.13.97] (172.20.187.5) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Tue, 14 Dec 2021
+ 06:13:16 -0800
+Message-ID: <da66687b-17fb-caa6-b5aa-7dff6b7bcb63@nvidia.com>
+Date:   Tue, 14 Dec 2021 16:13:13 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH bpf-next v3 9/9] selftests/bpf: Add test for unstable CT
+ lookup API
+Content-Language: en-US
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Florian Westphal <fw@strlen.de>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        <netdev@vger.kernel.org>, <netfilter-devel@vger.kernel.org>
+References: <20211210130230.4128676-1-memxor@gmail.com>
+ <20211210130230.4128676-10-memxor@gmail.com>
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+In-Reply-To: <20211210130230.4128676-10-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.20.187.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e489ad6a-fc63-4ac0-9ffe-08d9bf0bf33b
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1625:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB162522AB0B2FBF2B78B1A597DC759@DM5PR12MB1625.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +vpZ7GGdb0QmsZaG1z7CydjfkAzDfc7pbY6CSsCjfHxvlmC/ye+dxOSwjbpYyDm0sFn/ZfbSBeaL86lecoZoYEkaDUOHNFiF1A2Rv0pSL1Lg5d0Zw+7CsWOBfXennV3lGmW4Q4/gbJFzBV67K58zdPSvRB3QoO5IvnMvC1Mq72TPn+TYzfqpq6+kjSY4os5Eo5/TYTvMVes+/iLR81CFAX5CktDb5uTrbpB4XAGEc5B2Sas/gsK493xwvzDk4AohRoAl3WxDv78iKfz3/L5KWTUjS8GxeD45Fw4/HqVU3ET/Bcy1xLgGvQpHPaM/upbvJZ0ptHaTYhrpodmEmr4Yq42e0Ty87b2gWhlBldek8RauSAqUlLzAHMllG1p8yjO2XaH79oD6jOofzfbJY0tcBglyl6YiG72PfFwmaD5JIvda3FZkTBSYq0BOniSxZqDUS1ipUuHIAJJ/TA6A617mlt8/cY/uiIGgikKAcoSWpvwG4TWjRQv8joMlwbvqO6UXOXiYAv5fGJhb0r1ISE5U64itCwi7/hD0MvFsJSYs2li1YNfceoLNhrmbFGdeGPN1dmtx2z2kHPS9e3IBQ4Q0rqKClzWy16m17jGl1pIDrVB371CV5VXCEsqBqS8ojuhw0ptkfBTiQLmvofT/JE7LmZdSum/H0gTbXfTfP8JA+u37V4MzQsl8KSIy8+iy6mCo+ZTR3zZWSrKy1SmLfAR3lRcpXghFlMdjR1wq9cvmYDuswPibW9XEY6FPyNCfcjGtNtWTTbR2AaoJjRApQBjMtU0V2fvmr5+8q/jgc/9PiAnQEiT6sl+MynmLcWQhkJgrHYchzQZXjyXNt6EFcEBjoA==
+X-Forefront-Antispam-Report: CIP:203.18.50.14;CTRY:HK;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:hkhybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(70206006)(336012)(86362001)(70586007)(426003)(4001150100001)(6916009)(2906002)(26005)(4326008)(36756003)(16526019)(34020700004)(186003)(54906003)(16576012)(53546011)(316002)(2616005)(83380400001)(7636003)(508600001)(356005)(5660300002)(7416002)(40460700001)(82310400004)(6666004)(8936002)(47076005)(31696002)(36860700001)(8676002)(31686004)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Dec 2021 14:13:49.1421
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e489ad6a-fc63-4ac0-9ffe-08d9bf0bf33b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[203.18.50.14];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1625
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Split the introductory that explain eBPF vs classic BPF and how it maps
-to hardware from the instruction set specification into a standalone
-document.  Because this introduction was the only place explaining the
-register set and calling conventins keep those in the main instruction
-set document after a small refactoring.
+On 2021-12-10 15:02, Kumar Kartikeya Dwivedi wrote:
+> This tests that we return errors as documented, and also that the kfunc
+> calls work from both XDP and TC hooks.
+> 
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>   tools/testing/selftests/bpf/config            |   4 +
+>   .../testing/selftests/bpf/prog_tests/bpf_nf.c |  48 ++++++++
+>   .../testing/selftests/bpf/progs/test_bpf_nf.c | 113 ++++++++++++++++++
+>   3 files changed, 165 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> 
+> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+> index 5192305159ec..4a2a47fcd6ef 100644
+> --- a/tools/testing/selftests/bpf/config
+> +++ b/tools/testing/selftests/bpf/config
+> @@ -46,3 +46,7 @@ CONFIG_IMA_READ_POLICY=y
+>   CONFIG_BLK_DEV_LOOP=y
+>   CONFIG_FUNCTION_TRACER=y
+>   CONFIG_DYNAMIC_FTRACE=y
+> +CONFIG_NETFILTER=y
+> +CONFIG_NF_DEFRAG_IPV4=y
+> +CONFIG_NF_DEFRAG_IPV6=y
+> +CONFIG_NF_CONNTRACK=y
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> new file mode 100644
+> index 000000000000..56e8d745b8c8
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> @@ -0,0 +1,48 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <network_helpers.h>
+> +#include "test_bpf_nf.skel.h"
+> +
+> +enum {
+> +	TEST_XDP,
+> +	TEST_TC_BPF,
+> +};
+> +
+> +void test_bpf_nf_ct(int mode)
+> +{
+> +	struct test_bpf_nf *skel;
+> +	int prog_fd, err, retval;
+> +
+> +	skel = test_bpf_nf__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "test_bpf_nf__open_and_load"))
+> +		return;
+> +
+> +	if (mode == TEST_XDP)
+> +		prog_fd = bpf_program__fd(skel->progs.nf_xdp_ct_test);
+> +	else
+> +		prog_fd = bpf_program__fd(skel->progs.nf_skb_ct_test);
+> +
+> +	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4), NULL, NULL,
+> +				(__u32 *)&retval, NULL);
+> +	if (!ASSERT_OK(err, "bpf_prog_test_run"))
+> +		goto end;
+> +
+> +	ASSERT_EQ(skel->bss->test_einval_bpf_tuple, -EINVAL, "Test EINVAL for NULL bpf_tuple");
+> +	ASSERT_EQ(skel->bss->test_einval_reserved, -EINVAL, "Test EINVAL for reserved not set to 0");
+> +	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
+> +	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
+> +	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
+> +	ASSERT_EQ(skel->bss->test_enonet_netns_id, -ENONET, "Test ENONET for bad but valid netns_id");
+> +	ASSERT_EQ(skel->bss->test_enoent_lookup, -ENOENT, "Test ENOENT for failed lookup");
+> +	ASSERT_EQ(skel->bss->test_eafnosupport, -EAFNOSUPPORT,"Test EAFNOSUPPORT for invalid len__tuple");
+> +end:
+> +	test_bpf_nf__destroy(skel);
+> +}
+> +
+> +void test_bpf_nf(void)
+> +{
+> +	if (test__start_subtest("xdp-ct"))
+> +		test_bpf_nf_ct(TEST_XDP);
+> +	if (test__start_subtest("tc-bpf-ct"))
+> +		test_bpf_nf_ct(TEST_TC_BPF);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> new file mode 100644
+> index 000000000000..7cfff245b24f
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -0,0 +1,113 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +
+> +#define EAFNOSUPPORT 97
+> +#define EPROTO 71
+> +#define ENONET 64
+> +#define EINVAL 22
+> +#define ENOENT 2
+> +
+> +int test_einval_bpf_tuple = 0;
+> +int test_einval_reserved = 0;
+> +int test_einval_netns_id = 0;
+> +int test_einval_len_opts = 0;
+> +int test_eproto_l4proto = 0;
+> +int test_enonet_netns_id = 0;
+> +int test_enoent_lookup = 0;
+> +int test_eafnosupport = 0;
+> +
+> +struct nf_conn *bpf_xdp_ct_lookup(struct xdp_md *, struct bpf_sock_tuple *, u32,
+> +				  struct bpf_ct_opts *, u32) __weak __ksym;
+> +struct nf_conn *bpf_skb_ct_lookup(struct __sk_buff *, struct bpf_sock_tuple *, u32,
+> +				  struct bpf_ct_opts *, u32) __weak __ksym;
+> +void bpf_ct_release(struct nf_conn *) __weak __ksym;
+> +
+> +#define nf_ct_test(func, ctx)                                                  \
+> +	({                                                                     \
+> +		struct bpf_ct_opts opts_def = { .l4proto = IPPROTO_TCP,        \
+> +						.netns_id = -1 };              \
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- Documentation/bpf/index.rst           |   1 +
- Documentation/bpf/instruction-set.rst | 255 ++------------------------
- Documentation/bpf/intro.rst           | 238 ++++++++++++++++++++++++
- 3 files changed, 254 insertions(+), 240 deletions(-)
- create mode 100644 Documentation/bpf/intro.rst
+I noticed that when CONFIG_NF_CONNTRACK=m, struct bpf_ct_opts doesn't 
+get added to vmlinux.h. What is the right way to get definitions of 
+structs from modules in BPF programs? Are they supposed to be part of 
+vmlinux.h?
 
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index 91ba5a62026ba..5346c822531b8 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -12,6 +12,7 @@ that goes into great technical depth about the BPF Architecture.
- .. toctree::
-    :maxdepth: 1
- 
-+   intro
-    instruction-set
-    verifier
-    libbpf/index
-diff --git a/Documentation/bpf/instruction-set.rst b/Documentation/bpf/instruction-set.rst
-index fa469078301be..fa5eaaf7d27c3 100644
---- a/Documentation/bpf/instruction-set.rst
-+++ b/Documentation/bpf/instruction-set.rst
-@@ -3,246 +3,21 @@
- eBPF Instruction Set
- ====================
- 
--eBPF is designed to be JITed with one to one mapping, which can also open up
--the possibility for GCC/LLVM compilers to generate optimized eBPF code through
--an eBPF backend that performs almost as fast as natively compiled code.
--
--Some core changes of the eBPF format from classic BPF:
--
--- Number of registers increase from 2 to 10:
--
--  The old format had two registers A and X, and a hidden frame pointer. The
--  new layout extends this to be 10 internal registers and a read-only frame
--  pointer. Since 64-bit CPUs are passing arguments to functions via registers
--  the number of args from eBPF program to in-kernel function is restricted
--  to 5 and one register is used to accept return value from an in-kernel
--  function. Natively, x86_64 passes first 6 arguments in registers, aarch64/
--  sparcv9/mips64 have 7 - 8 registers for arguments; x86_64 has 6 callee saved
--  registers, and aarch64/sparcv9/mips64 have 11 or more callee saved registers.
--
--  Therefore, eBPF calling convention is defined as:
--
--    * R0	- return value from in-kernel function, and exit value for eBPF program
--    * R1 - R5	- arguments from eBPF program to in-kernel function
--    * R6 - R9	- callee saved registers that in-kernel function will preserve
--    * R10	- read-only frame pointer to access stack
--
--  Thus, all eBPF registers map one to one to HW registers on x86_64, aarch64,
--  etc, and eBPF calling convention maps directly to ABIs used by the kernel on
--  64-bit architectures.
--
--  On 32-bit architectures JIT may map programs that use only 32-bit arithmetic
--  and may let more complex programs to be interpreted.
--
--  R0 - R5 are scratch registers and eBPF program needs spill/fill them if
--  necessary across calls. Note that there is only one eBPF program (== one
--  eBPF main routine) and it cannot call other eBPF functions, it can only
--  call predefined in-kernel functions, though.
--
--- Register width increases from 32-bit to 64-bit:
--
--  Still, the semantics of the original 32-bit ALU operations are preserved
--  via 32-bit subregisters. All eBPF registers are 64-bit with 32-bit lower
--  subregisters that zero-extend into 64-bit if they are being written to.
--  That behavior maps directly to x86_64 and arm64 subregister definition, but
--  makes other JITs more difficult.
--
--  32-bit architectures run 64-bit eBPF programs via interpreter.
--  Their JITs may convert BPF programs that only use 32-bit subregisters into
--  native instruction set and let the rest being interpreted.
--
--  Operation is 64-bit, because on 64-bit architectures, pointers are also
--  64-bit wide, and we want to pass 64-bit values in/out of kernel functions,
--  so 32-bit eBPF registers would otherwise require to define register-pair
--  ABI, thus, there won't be able to use a direct eBPF register to HW register
--  mapping and JIT would need to do combine/split/move operations for every
--  register in and out of the function, which is complex, bug prone and slow.
--  Another reason is the use of atomic 64-bit counters.
--
--- Conditional jt/jf targets replaced with jt/fall-through:
--
--  While the original design has constructs such as ``if (cond) jump_true;
--  else jump_false;``, they are being replaced into alternative constructs like
--  ``if (cond) jump_true; /* else fall-through */``.
--
--- Introduces bpf_call insn and register passing convention for zero overhead
--  calls from/to other kernel functions:
--
--  Before an in-kernel function call, the eBPF program needs to
--  place function arguments into R1 to R5 registers to satisfy calling
--  convention, then the interpreter will take them from registers and pass
--  to in-kernel function. If R1 - R5 registers are mapped to CPU registers
--  that are used for argument passing on given architecture, the JIT compiler
--  doesn't need to emit extra moves. Function arguments will be in the correct
--  registers and BPF_CALL instruction will be JITed as single 'call' HW
--  instruction. This calling convention was picked to cover common call
--  situations without performance penalty.
--
--  After an in-kernel function call, R1 - R5 are reset to unreadable and R0 has
--  a return value of the function. Since R6 - R9 are callee saved, their state
--  is preserved across the call.
--
--  For example, consider three C functions::
--
--    u64 f1() { return (*_f2)(1); }
--    u64 f2(u64 a) { return f3(a + 1, a); }
--    u64 f3(u64 a, u64 b) { return a - b; }
--
--  GCC can compile f1, f3 into x86_64::
--
--    f1:
--	movl $1, %edi
--	movq _f2(%rip), %rax
--	jmp  *%rax
--    f3:
--	movq %rdi, %rax
--	subq %rsi, %rax
--	ret
--
--  Function f2 in eBPF may look like::
--
--    f2:
--	bpf_mov R2, R1
--	bpf_add R1, 1
--	bpf_call f3
--	bpf_exit
--
--  If f2 is JITed and the pointer stored to ``_f2``. The calls f1 -> f2 -> f3 and
--  returns will be seamless. Without JIT, __bpf_prog_run() interpreter needs to
--  be used to call into f2.
--
--  For practical reasons all eBPF programs have only one argument 'ctx' which is
--  already placed into R1 (e.g. on __bpf_prog_run() startup) and the programs
--  can call kernel functions with up to 5 arguments. Calls with 6 or more arguments
--  are currently not supported, but these restrictions can be lifted if necessary
--  in the future.
--
--  On 64-bit architectures all register map to HW registers one to one. For
--  example, x86_64 JIT compiler can map them as ...
--
--  ::
--
--    R0 - rax
--    R1 - rdi
--    R2 - rsi
--    R3 - rdx
--    R4 - rcx
--    R5 - r8
--    R6 - rbx
--    R7 - r13
--    R8 - r14
--    R9 - r15
--    R10 - rbp
--
--  ... since x86_64 ABI mandates rdi, rsi, rdx, rcx, r8, r9 for argument passing
--  and rbx, r12 - r15 are callee saved.
--
--  Then the following eBPF pseudo-program::
--
--    bpf_mov R6, R1 /* save ctx */
--    bpf_mov R2, 2
--    bpf_mov R3, 3
--    bpf_mov R4, 4
--    bpf_mov R5, 5
--    bpf_call foo
--    bpf_mov R7, R0 /* save foo() return value */
--    bpf_mov R1, R6 /* restore ctx for next call */
--    bpf_mov R2, 6
--    bpf_mov R3, 7
--    bpf_mov R4, 8
--    bpf_mov R5, 9
--    bpf_call bar
--    bpf_add R0, R7
--    bpf_exit
--
--  After JIT to x86_64 may look like::
--
--    push %rbp
--    mov %rsp,%rbp
--    sub $0x228,%rsp
--    mov %rbx,-0x228(%rbp)
--    mov %r13,-0x220(%rbp)
--    mov %rdi,%rbx
--    mov $0x2,%esi
--    mov $0x3,%edx
--    mov $0x4,%ecx
--    mov $0x5,%r8d
--    callq foo
--    mov %rax,%r13
--    mov %rbx,%rdi
--    mov $0x6,%esi
--    mov $0x7,%edx
--    mov $0x8,%ecx
--    mov $0x9,%r8d
--    callq bar
--    add %r13,%rax
--    mov -0x228(%rbp),%rbx
--    mov -0x220(%rbp),%r13
--    leaveq
--    retq
--
--  Which is in this example equivalent in C to::
--
--    u64 bpf_filter(u64 ctx)
--    {
--	return foo(ctx, 2, 3, 4, 5) + bar(ctx, 6, 7, 8, 9);
--    }
--
--  In-kernel functions foo() and bar() with prototype: u64 (*)(u64 arg1, u64
--  arg2, u64 arg3, u64 arg4, u64 arg5); will receive arguments in proper
--  registers and place their return value into ``%rax`` which is R0 in eBPF.
--  Prologue and epilogue are emitted by JIT and are implicit in the
--  interpreter. R0-R5 are scratch registers, so eBPF program needs to preserve
--  them across the calls as defined by calling convention.
--
--  For example the following program is invalid::
--
--    bpf_mov R1, 1
--    bpf_call foo
--    bpf_mov R0, R1
--    bpf_exit
--
--  After the call the registers R1-R5 contain junk values and cannot be read.
--  An in-kernel verifier.rst is used to validate eBPF programs.
--
--Also in the new design, eBPF is limited to 4096 insns, which means that any
--program will terminate quickly and will only call a fixed number of kernel
--functions. Original BPF and eBPF are two operand instructions,
--which helps to do one-to-one mapping between eBPF insn and x86 insn during JIT.
--
--The input context pointer for invoking the interpreter function is generic,
--its content is defined by a specific use case. For seccomp register R1 points
--to seccomp_data, for converted BPF filters R1 points to a skb.
--
--A program, that is translated internally consists of the following elements::
--
--  op:16, jt:8, jf:8, k:32    ==>    op:8, dst_reg:4, src_reg:4, off:16, imm:32
--
--So far 87 eBPF instructions were implemented. 8-bit 'op' opcode field
--has room for new instructions. Some of them may use 16/24/32 byte encoding. New
--instructions must be multiple of 8 bytes to preserve backward compatibility.
--
--eBPF is a general purpose RISC instruction set. Not every register and
--every instruction are used during translation from original BPF to eBPF.
--For example, socket filters are not using ``exclusive add`` instruction, but
--tracing filters may do to maintain counters of events, for example. Register R9
--is not used by socket filters either, but more complex filters may be running
--out of registers and would have to resort to spill/fill to stack.
--
--eBPF can be used as a generic assembler for last step performance
--optimizations, socket filters and seccomp are using it as assembler. Tracing
--filters may use it as assembler to generate code from kernel. In kernel usage
--may not be bounded by security considerations, since generated eBPF code
--may be optimizing internal code path and not being exposed to the user space.
--Safety of eBPF can come from the verifier.rst. In such use cases as
--described, it may be used as safe instruction set.
--
--Just like the original BPF, eBPF runs within a controlled environment,
--is deterministic and the kernel can easily prove that. The safety of the program
--can be determined in two steps: first step does depth-first-search to disallow
--loops and other CFG validation; second step starts from the first insn and
--descends all possible paths. It simulates execution of every insn and observes
--the state change of registers and stack.
-+Registers and calling convention
-+================================
-+
-+eBPF has 10 general purpose registers and a read-only frame pointer register,
-+all of which are 64-bits wide.
-+
-+The eBPF calling convention is defined as:
-+
-+ * R0: return value from function calls, and exit value for eBPF programs
-+ * R1 - R5: arguments for function calls
-+ * R6 - R9: callee saved registers that function calls will preserve
-+ * R10: read-only frame pointer to access stack
-+
-+R0 - R5 are scratch registers and eBPF programs needs to spill/fill them if
-+necessary across calls.
- 
- eBPF opcode encoding
- ====================
-diff --git a/Documentation/bpf/intro.rst b/Documentation/bpf/intro.rst
-new file mode 100644
-index 0000000000000..918d7b0ce3a77
---- /dev/null
-+++ b/Documentation/bpf/intro.rst
-@@ -0,0 +1,238 @@
-+
-+====================
-+Introduction to eBPF
-+====================
-+
-+eBPF is designed to be JITed with one to one mapping, which can also open up
-+the possibility for GCC/LLVM compilers to generate optimized eBPF code through
-+an eBPF backend that performs almost as fast as natively compiled code.
-+
-+Some core changes of the eBPF format from classic BPF:
-+
-+- Number of registers increase from 2 to 10:
-+
-+  The old format had two registers A and X, and a hidden frame pointer. The
-+  new layout extends this to be 10 internal registers and a read-only frame
-+  pointer. Since 64-bit CPUs are passing arguments to functions via registers
-+  the number of args from eBPF program to in-kernel function is restricted
-+  to 5 and one register is used to accept return value from an in-kernel
-+  function. Natively, x86_64 passes first 6 arguments in registers, aarch64/
-+  sparcv9/mips64 have 7 - 8 registers for arguments; x86_64 has 6 callee saved
-+  registers, and aarch64/sparcv9/mips64 have 11 or more callee saved registers.
-+
-+  Thus, all eBPF registers map one to one to HW registers on x86_64, aarch64,
-+  etc, and eBPF calling convention maps directly to ABIs used by the kernel on
-+  64-bit architectures.
-+
-+  On 32-bit architectures JIT may map programs that use only 32-bit arithmetic
-+  and may let more complex programs to be interpreted.
-+
-+  R0 - R5 are scratch registers and eBPF program needs spill/fill them if
-+  necessary across calls. Note that there is only one eBPF program (== one
-+  eBPF main routine) and it cannot call other eBPF functions, it can only
-+  call predefined in-kernel functions, though.
-+
-+- Register width increases from 32-bit to 64-bit:
-+
-+  Still, the semantics of the original 32-bit ALU operations are preserved
-+  via 32-bit subregisters. All eBPF registers are 64-bit with 32-bit lower
-+  subregisters that zero-extend into 64-bit if they are being written to.
-+  That behavior maps directly to x86_64 and arm64 subregister definition, but
-+  makes other JITs more difficult.
-+
-+  32-bit architectures run 64-bit eBPF programs via interpreter.
-+  Their JITs may convert BPF programs that only use 32-bit subregisters into
-+  native instruction set and let the rest being interpreted.
-+
-+  Operation is 64-bit, because on 64-bit architectures, pointers are also
-+  64-bit wide, and we want to pass 64-bit values in/out of kernel functions,
-+  so 32-bit eBPF registers would otherwise require to define register-pair
-+  ABI, thus, there won't be able to use a direct eBPF register to HW register
-+  mapping and JIT would need to do combine/split/move operations for every
-+  register in and out of the function, which is complex, bug prone and slow.
-+  Another reason is the use of atomic 64-bit counters.
-+
-+- Conditional jt/jf targets replaced with jt/fall-through:
-+
-+  While the original design has constructs such as ``if (cond) jump_true;
-+  else jump_false;``, they are being replaced into alternative constructs like
-+  ``if (cond) jump_true; /* else fall-through */``.
-+
-+- Introduces bpf_call insn and register passing convention for zero overhead
-+  calls from/to other kernel functions:
-+
-+  Before an in-kernel function call, the eBPF program needs to
-+  place function arguments into R1 to R5 registers to satisfy calling
-+  convention, then the interpreter will take them from registers and pass
-+  to in-kernel function. If R1 - R5 registers are mapped to CPU registers
-+  that are used for argument passing on given architecture, the JIT compiler
-+  doesn't need to emit extra moves. Function arguments will be in the correct
-+  registers and BPF_CALL instruction will be JITed as single 'call' HW
-+  instruction. This calling convention was picked to cover common call
-+  situations without performance penalty.
-+
-+  After an in-kernel function call, R1 - R5 are reset to unreadable and R0 has
-+  a return value of the function. Since R6 - R9 are callee saved, their state
-+  is preserved across the call.
-+
-+  For example, consider three C functions::
-+
-+    u64 f1() { return (*_f2)(1); }
-+    u64 f2(u64 a) { return f3(a + 1, a); }
-+    u64 f3(u64 a, u64 b) { return a - b; }
-+
-+  GCC can compile f1, f3 into x86_64::
-+
-+    f1:
-+	movl $1, %edi
-+	movq _f2(%rip), %rax
-+	jmp  *%rax
-+    f3:
-+	movq %rdi, %rax
-+	subq %rsi, %rax
-+	ret
-+
-+  Function f2 in eBPF may look like::
-+
-+    f2:
-+	bpf_mov R2, R1
-+	bpf_add R1, 1
-+	bpf_call f3
-+	bpf_exit
-+
-+  If f2 is JITed and the pointer stored to ``_f2``. The calls f1 -> f2 -> f3 and
-+  returns will be seamless. Without JIT, __bpf_prog_run() interpreter needs to
-+  be used to call into f2.
-+
-+  For practical reasons all eBPF programs have only one argument 'ctx' which is
-+  already placed into R1 (e.g. on __bpf_prog_run() startup) and the programs
-+  can call kernel functions with up to 5 arguments. Calls with 6 or more arguments
-+  are currently not supported, but these restrictions can be lifted if necessary
-+  in the future.
-+
-+  On 64-bit architectures all register map to HW registers one to one. For
-+  example, x86_64 JIT compiler can map them as ...
-+
-+  ::
-+
-+    R0 - rax
-+    R1 - rdi
-+    R2 - rsi
-+    R3 - rdx
-+    R4 - rcx
-+    R5 - r8
-+    R6 - rbx
-+    R7 - r13
-+    R8 - r14
-+    R9 - r15
-+    R10 - rbp
-+
-+  ... since x86_64 ABI mandates rdi, rsi, rdx, rcx, r8, r9 for argument passing
-+  and rbx, r12 - r15 are callee saved.
-+
-+  Then the following eBPF pseudo-program::
-+
-+    bpf_mov R6, R1 /* save ctx */
-+    bpf_mov R2, 2
-+    bpf_mov R3, 3
-+    bpf_mov R4, 4
-+    bpf_mov R5, 5
-+    bpf_call foo
-+    bpf_mov R7, R0 /* save foo() return value */
-+    bpf_mov R1, R6 /* restore ctx for next call */
-+    bpf_mov R2, 6
-+    bpf_mov R3, 7
-+    bpf_mov R4, 8
-+    bpf_mov R5, 9
-+    bpf_call bar
-+    bpf_add R0, R7
-+    bpf_exit
-+
-+  After JIT to x86_64 may look like::
-+
-+    push %rbp
-+    mov %rsp,%rbp
-+    sub $0x228,%rsp
-+    mov %rbx,-0x228(%rbp)
-+    mov %r13,-0x220(%rbp)
-+    mov %rdi,%rbx
-+    mov $0x2,%esi
-+    mov $0x3,%edx
-+    mov $0x4,%ecx
-+    mov $0x5,%r8d
-+    callq foo
-+    mov %rax,%r13
-+    mov %rbx,%rdi
-+    mov $0x6,%esi
-+    mov $0x7,%edx
-+    mov $0x8,%ecx
-+    mov $0x9,%r8d
-+    callq bar
-+    add %r13,%rax
-+    mov -0x228(%rbp),%rbx
-+    mov -0x220(%rbp),%r13
-+    leaveq
-+    retq
-+
-+  Which is in this example equivalent in C to::
-+
-+    u64 bpf_filter(u64 ctx)
-+    {
-+	return foo(ctx, 2, 3, 4, 5) + bar(ctx, 6, 7, 8, 9);
-+    }
-+
-+  In-kernel functions foo() and bar() with prototype: u64 (*)(u64 arg1, u64
-+  arg2, u64 arg3, u64 arg4, u64 arg5); will receive arguments in proper
-+  registers and place their return value into ``%rax`` which is R0 in eBPF.
-+  Prologue and epilogue are emitted by JIT and are implicit in the
-+  interpreter. R0-R5 are scratch registers, so eBPF program needs to preserve
-+  them across the calls as defined by calling convention.
-+
-+  For example the following program is invalid::
-+
-+    bpf_mov R1, 1
-+    bpf_call foo
-+    bpf_mov R0, R1
-+    bpf_exit
-+
-+  After the call the registers R1-R5 contain junk values and cannot be read.
-+  An in-kernel verifier.rst is used to validate eBPF programs.
-+
-+Also in the new design, eBPF is limited to 4096 insns, which means that any
-+program will terminate quickly and will only call a fixed number of kernel
-+functions. Original BPF and eBPF are two operand instructions,
-+which helps to do one-to-one mapping between eBPF insn and x86 insn during JIT.
-+
-+The input context pointer for invoking the interpreter function is generic,
-+its content is defined by a specific use case. For seccomp register R1 points
-+to seccomp_data, for converted BPF filters R1 points to a skb.
-+
-+A program, that is translated internally consists of the following elements::
-+
-+  op:16, jt:8, jf:8, k:32    ==>    op:8, dst_reg:4, src_reg:4, off:16, imm:32
-+
-+So far 87 eBPF instructions were implemented. 8-bit 'op' opcode field
-+has room for new instructions. Some of them may use 16/24/32 byte encoding. New
-+instructions must be multiple of 8 bytes to preserve backward compatibility.
-+
-+eBPF is a general purpose RISC instruction set. Not every register and
-+every instruction are used during translation from original BPF to eBPF.
-+For example, socket filters are not using ``exclusive add`` instruction, but
-+tracing filters may do to maintain counters of events, for example. Register R9
-+is not used by socket filters either, but more complex filters may be running
-+out of registers and would have to resort to spill/fill to stack.
-+
-+eBPF can be used as a generic assembler for last step performance
-+optimizations, socket filters and seccomp are using it as assembler. Tracing
-+filters may use it as assembler to generate code from kernel. In kernel usage
-+may not be bounded by security considerations, since generated eBPF code
-+may be optimizing internal code path and not being exposed to the user space.
-+Safety of eBPF can come from the verifier.rst. In such use cases as
-+described, it may be used as safe instruction set.
-+
-+Just like the original BPF, eBPF runs within a controlled environment,
-+is deterministic and the kernel can easily prove that. The safety of the program
-+can be determined in two steps: first step does depth-first-search to disallow
-+loops and other CFG validation; second step starts from the first insn and
-+descends all possible paths. It simulates execution of every insn and observes
-+the state change of registers and stack.
--- 
-2.30.2
+> +		struct bpf_sock_tuple bpf_tuple;                               \
+> +		struct nf_conn *ct;                                            \
+> +                                                                               \
+> +		__builtin_memset(&bpf_tuple, 0, sizeof(bpf_tuple.ipv4));       \
+> +		ct = func(ctx, NULL, 0, &opts_def, sizeof(opts_def));          \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_einval_bpf_tuple = opts_def.error;                \
+> +                                                                               \
+> +		opts_def.reserved[0] = 1;                                      \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
+> +			  sizeof(opts_def));                                   \
+> +		opts_def.reserved[0] = 0;                                      \
+> +		opts_def.l4proto = IPPROTO_TCP;                                \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_einval_reserved = opts_def.error;                 \
+> +                                                                               \
+> +		opts_def.netns_id = -2;                                        \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
+> +			  sizeof(opts_def));                                   \
+> +		opts_def.netns_id = -1;                                        \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_einval_netns_id = opts_def.error;                 \
+> +                                                                               \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
+> +			  sizeof(opts_def) - 1);                               \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_einval_len_opts = opts_def.error;                 \
+> +                                                                               \
+> +		opts_def.l4proto = IPPROTO_ICMP;                               \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
+> +			  sizeof(opts_def));                                   \
+> +		opts_def.l4proto = IPPROTO_TCP;                                \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_eproto_l4proto = opts_def.error;                  \
+> +                                                                               \
+> +		opts_def.netns_id = 0xf00f;                                    \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
+> +			  sizeof(opts_def));                                   \
+> +		opts_def.netns_id = -1;                                        \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_enonet_netns_id = opts_def.error;                 \
+> +                                                                               \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
+> +			  sizeof(opts_def));                                   \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_enoent_lookup = opts_def.error;                   \
+> +                                                                               \
+> +		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4) - 1,         \
+> +			  &opts_def, sizeof(opts_def));                        \
+> +		if (ct)                                                        \
+> +			bpf_ct_release(ct);                                    \
+> +		else                                                           \
+> +			test_eafnosupport = opts_def.error;                    \
+> +	})
+> +
+> +SEC("xdp")
+> +int nf_xdp_ct_test(struct xdp_md *ctx)
+> +{
+> +	nf_ct_test(bpf_xdp_ct_lookup, ctx);
+> +	return 0;
+> +}
+> +
+> +SEC("tc")
+> +int nf_skb_ct_test(struct __sk_buff *ctx)
+> +{
+> +	nf_ct_test(bpf_skb_ct_lookup, ctx);
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
 
