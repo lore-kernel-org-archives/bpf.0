@@ -2,111 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94C39C433EF
-	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 19:22:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A703C433F5
+	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 19:22:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbhLOTWt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Dec 2021 14:22:49 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55492 "EHLO
+        id S238768AbhLOTWy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Dec 2021 14:22:54 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49348 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234497AbhLOTWs (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 15 Dec 2021 14:22:48 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BFIA3fQ030297
-        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 11:22:48 -0800
+        by vger.kernel.org with ESMTP id S234497AbhLOTWx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 15 Dec 2021 14:22:53 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BFIA0sT007886
+        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 11:22:53 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=d5EvIozOcZEBn8N2xzH/mHHjdBKZ06xoIvAbP1NvHKg=;
- b=nT+qK8DMa6r8n4aDr9Dsi/RNUqxw1cfbuxsHB9uODD4GlLgkVrD+Qxk5W7keGHSbz1Vv
- oUpTDO9qUMZSQFkQc7RusDEY3vycGpD4w22MtnNCd2wVj+yTGPA3YDLX4FcER1aF3y7W
- iudHXcmnP+0Cys541FC7+CHQaKE+R3lbbZ4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3cybm7cydn-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=KrpxOaqHtMfiTB7lDbjujjGAiKhZbFGqNgWzrSGDZKc=;
+ b=hySYY50w7AmO+ZzmeLr2QOR8sL5b17zWeZt8Tktr7RTZ5cm5GSw0aYHhQwlvSh8L98h7
+ uDrKeD3RPaa+dRJZ86obKdRtYy9uxz7k2AaxFQXK8XSO8uR2Oyw33en6HK2Viw3ha80+
+ PO2vIGMFxoPqcK/yBoldrESy2ojUxTBt3gI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3cyeadc01h-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 11:22:48 -0800
-Received: from intmgw001.05.prn6.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 11:22:52 -0800
+Received: from intmgw002.46.prn1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 11:22:44 -0800
+ 15.1.2308.20; Wed, 15 Dec 2021 11:22:51 -0800
 Received: by devbig921.prn2.facebook.com (Postfix, from userid 132113)
-        id 0AA6C6B96B3; Wed, 15 Dec 2021 11:22:43 -0800 (PST)
+        id AD4306B96C8; Wed, 15 Dec 2021 11:22:49 -0800 (PST)
 From:   Christy Lee <christylee@fb.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
 CC:     <bpf@vger.kernel.org>, <kernel-team@fb.com>, <christylee@fb.com>,
         <christyc.y.lee@gmail.com>
-Subject: [PATCH v2 bpf-next 0/3] Improve verifier log readability
-Date:   Wed, 15 Dec 2021 11:22:22 -0800
-Message-ID: <20211215192225.1278237-1-christylee@fb.com>
+Subject: [PATCH v2 bpf-next 3/3] Only output backtracking information in log level 2
+Date:   Wed, 15 Dec 2021 11:22:25 -0800
+Message-ID: <20211215192225.1278237-4-christylee@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211215192225.1278237-1-christylee@fb.com>
+References: <20211215192225.1278237-1-christylee@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-FB-Source: Intern
-X-Proofpoint-GUID: pHlKjHzJiRNMFWJIcJX4Uqwi0rOtWTX5
-X-Proofpoint-ORIG-GUID: pHlKjHzJiRNMFWJIcJX4Uqwi0rOtWTX5
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: Z97aEpOmULawsXkhJ2hGJa4P0hMGdNrZ
+X-Proofpoint-GUID: Z97aEpOmULawsXkhJ2hGJa4P0hMGdNrZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-15_11,2021-12-14_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=990
- clxscore=1015 adultscore=0 bulkscore=0 impostorscore=0 spamscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112150107
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ impostorscore=0 spamscore=0 priorityscore=1501 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2112150107
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Simplify verifier logs and improve readability.
+Backtracking information is very verbose, don't print it in log
+level 1 to improve readability.
 
-Changelog:
-----------
-v1 -> v2:
-v1: https://lore.kernel.org/bpf/20211213182117.682461-1-christylee@fb.com/
+Signed-off-by: Christy Lee <christylee@fb.com>
+---
+ kernel/bpf/verifier.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Patch 2/3:
-* Verifier will skip insn_idx when the insn is longer than 8 bytes,
-  example:
-  0000000000000000 <good_prog>:
-       0:	18 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00	r2 =3D 0 ll
-       2:	63 12 00 00 00 00 00 00	*(u32 *)(r2 + 0) =3D r1
-       3:	61 20 04 00 00 00 00 00	r0 =3D *(u32 *)(r2 + 4)
-       4:	95 00 00 00 00 00 00 00	exit
-  It's incorrect to check that prev_insn_idx =3D insn_idx - 1, skip this
-  check and print the verifier state on the correct line.
-  Before:
-  0: R1=3Dctx(id=3D0,off=3D0,imm=3D0) R10=3Dfp0
-  ; a[0] =3D (int)(long)ctx;
-  0: (18) r2 =3D 0xffffc900006de000
-  2: R2_w=3Dmap_value(id=3D0,off=3D0,ks=3D4,vs=3D16,imm=3D0)
-  2: (63) *(u32 *)(r2 +0) =3D r1
-  After:
-  0: R1=3Dctx(id=3D0,off=3D0,imm=3D0) R10=3Dfp0
-  ; a[0] =3D (int)(long)ctx;
-  0: (18) r2 =3D 0xffffc900006de000 ; R2_w=3Dmap_value(id=3D0,off=3D0,ks=3D=
-4,vs=3D16,imm=3D0)
-  2: (63) *(u32 *)(r2 +0) =3D r1
-* Track previous line logging length in env, allow aligning intsruction
-  from anywhere in the verifier
-* Fixed bug where the verifier printed verifier state after checking
-  source memory access but before check destination memory access,
-  this ensures the aligned verifier state contains all scratched
-  registers
-
-Patch 3/3:
-* Added one more case where we should only log in log_level=3D2
-
-Christy Lee (3):
-  Only print scratched registers and stack slots to verifier logs
-  Right align verifier states in verifier logs
-  Only output backtracking information in log level 2
-
- include/linux/bpf_verifier.h                  |  10 +
- kernel/bpf/verifier.c                         | 131 +++++++++--
- .../testing/selftests/bpf/prog_tests/align.c  | 214 +++++++++---------
- 3 files changed, 232 insertions(+), 123 deletions(-)
-
---
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a8f1426b0367..2cb86972ed35 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2398,7 +2398,7 @@ static int backtrack_insn(struct bpf_verifier_env *=
+env, int idx,
+=20
+ 	if (insn->code =3D=3D 0)
+ 		return 0;
+-	if (env->log.level & BPF_LOG_LEVEL) {
++	if (env->log.level & BPF_LOG_LEVEL2) {
+ 		verbose(env, "regs=3D%x stack=3D%llx before ", *reg_mask, *stack_mask)=
+;
+ 		verbose(env, "%d: ", idx);
+ 		print_bpf_insn(&cbs, insn, env->allow_ptr_leaks);
+@@ -2656,7 +2656,7 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int regno,
+ 		DECLARE_BITMAP(mask, 64);
+ 		u32 history =3D st->jmp_history_cnt;
+=20
+-		if (env->log.level & BPF_LOG_LEVEL)
++		if (env->log.level & BPF_LOG_LEVEL2)
+ 			verbose(env, "last_idx %d first_idx %d\n", last_idx, first_idx);
+ 		for (i =3D last_idx;;) {
+ 			if (skip_first) {
+@@ -2743,7 +2743,7 @@ static int __mark_chain_precision(struct bpf_verifi=
+er_env *env, int regno,
+ 				new_marks =3D true;
+ 			reg->precise =3D true;
+ 		}
+-		if (env->log.level & BPF_LOG_LEVEL) {
++		if (env->log.level & BPF_LOG_LEVEL2) {
+ 			mark_verifier_state_scratched(env);
+ 			verbose(env, "parent %s regs=3D%x stack=3D%llx marks:",
+ 				new_marks ? "didn't have" : "already had",
+--=20
 2.30.2
+
