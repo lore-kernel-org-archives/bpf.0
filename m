@@ -2,212 +2,169 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F139C433FE
-	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 18:12:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72262C433F5
+	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 18:22:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240543AbhLOSMg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Dec 2021 13:12:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40496 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbhLOSMf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Dec 2021 13:12:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 762E161A24;
-        Wed, 15 Dec 2021 18:12:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1C7C36AEA;
-        Wed, 15 Dec 2021 18:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639591954;
-        bh=WwyqEtjUotmnanbN1E83H06sbRzb9ghbZ1H2nit9uhk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KGS/jaC5JApsm4oaLQ43CX23xNEtGG2wGvxeE9BrdOeZHvheibwmuCWKhOvL1TYAi
-         e6Aa4pkLrfB/qKIc4RcqqdmslDgammhk7DO7zHcdQ2cVYafhJwqB0niNODEihk1nEd
-         Qxy6tIlZS0lKlOZ1HxqAous9DzYieztghIk5R8sXxERwtUT3BjOBjrE4pq5LACy/T9
-         fsXQSNlS2fjuuPGELQPD0A+j4Ps2iiLdwGX0BcSrA1WLg8P9YMndeq/PqNX888xsZm
-         x+eYecn1lWsCnEpAFdpanBvpHBZCWA1vF5gG/7Z+YDE5tW2Qe0FrnKl4a425+dPfAA
-         Kft/LNEYBXvqQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org
-Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, rostedt@goodmis.org,
-        mingo@redhat.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, cgroups@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/3] add missing bpf-cgroup.h includes
-Date:   Wed, 15 Dec 2021 10:12:30 -0800
-Message-Id: <20211215181231.1053479-3-kuba@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211215181231.1053479-1-kuba@kernel.org>
-References: <20211215181231.1053479-1-kuba@kernel.org>
+        id S245585AbhLOSWZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Dec 2021 13:22:25 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:54182 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343684AbhLOSWZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Dec 2021 13:22:25 -0500
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C278420B717B;
+        Wed, 15 Dec 2021 10:22:24 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C278420B717B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639592544;
+        bh=1yoFqk1NIOkk1E9u0o3iSqiMDfatwHvp5iTqOCmKgtY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bf0H/kwsMKg63IRp8BW+THyjUdhxTHL5yS9FiikFL0udxs17+DTmIYjI4r1wWMtv/
+         O76T/ruJSnjKcOPFC9ei+mSDpncazi2yFC1mU+TCz4r5AeR76kd9h5pNB3pQu8dfqu
+         Cu6YkXKRABB9k05EjaPv0WSEs2hvLK9DLa/9hkMY=
+Received: by mail-pl1-f177.google.com with SMTP id b13so17218529plg.2;
+        Wed, 15 Dec 2021 10:22:24 -0800 (PST)
+X-Gm-Message-State: AOAM5312SNDj/Tq7TPn8Gi+zd/gb/mCkl+4bLnehTwyUgZMQ6dPorQol
+        NGZMlyDfac7DtjT4JdvupVl3ryj6EVZ5dM1IjqI=
+X-Google-Smtp-Source: ABdhPJxsssypnvz2ZNv9Io3lsaJWpF0ZvHLmzNTjwbRdVDkBnOjhXXBGyg7j1DosghtsK9FYLquvc576DMDU3SMikKc=
+X-Received: by 2002:a17:90a:aa88:: with SMTP id l8mr1194298pjq.20.1639592544248;
+ Wed, 15 Dec 2021 10:22:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
+ <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+ <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com> <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
+In-Reply-To: <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Wed, 15 Dec 2021 19:21:48 +0100
+X-Gmail-Original-Message-ID: <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+Message-ID: <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We're about to break the cgroup-defs.h -> bpf-cgroup.h dependency,
-make sure those who actually need more than the definition of
-struct cgroup_bpf include bpf-cgroup.h explicitly.
+On Wed, Dec 15, 2021 at 6:29 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Dec 15, 2021 at 6:54 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+> > >
+> > > Maybe do a level check here?
+> > > Since calling it and immediately returning doesn't conserve
+> > > the stack.
+> > > If it gets called it can finish fine, but
+> > > calling it again would be too much.
+> > > In other words checking the level here gives us
+> > > room for one more frame.
+> > >
+> >
+> > I thought that the compiler was smart enough to return before
+> > allocating most of the frame.
+> > I tried and this is true only with gcc, not with clang.
+>
+> Interesting. That's a surprise.
+> Could you share the asm that gcc generates?
+>
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: ast@kernel.org
-CC: daniel@iogearbox.net
-CC: andrii@kernel.org
-CC: kafai@fb.com
-CC: songliubraving@fb.com
-CC: yhs@fb.com
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: tj@kernel.org
-CC: lizefan.x@bytedance.com
-CC: hannes@cmpxchg.org
-CC: rostedt@goodmis.org
-CC: mingo@redhat.com
-CC: yoshfuji@linux-ipv6.org
-CC: dsahern@kernel.org
-CC: jmorris@namei.org
-CC: serge@hallyn.com
-CC: bpf@vger.kernel.org
-CC: cgroups@vger.kernel.org
-CC: linux-security-module@vger.kernel.org
----
- kernel/bpf/helpers.c        | 1 +
- kernel/bpf/syscall.c        | 1 +
- kernel/bpf/verifier.c       | 1 +
- kernel/cgroup/cgroup.c      | 1 +
- kernel/trace/trace_kprobe.c | 1 +
- kernel/trace/trace_uprobe.c | 1 +
- net/ipv4/udp.c              | 1 +
- net/ipv6/udp.c              | 1 +
- net/socket.c                | 1 +
- security/device_cgroup.c    | 1 +
- 10 files changed, 10 insertions(+)
+Sure,
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 8babae03d30a..34d6f91dec1c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
-  */
- #include <linux/bpf.h>
-+#include <linux/bpf-cgroup.h>
- #include <linux/rcupdate.h>
- #include <linux/random.h>
- #include <linux/smp.h>
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ddd81d543203..da07bdf71697 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
-  */
- #include <linux/bpf.h>
-+#include <linux/bpf-cgroup.h>
- #include <linux/bpf_trace.h>
- #include <linux/bpf_lirc.h>
- #include <linux/bpf_verifier.h>
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d74e8a99412e..f0604796132f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2018 Covalent IO, Inc. http://covalent.io
-  */
- #include <uapi/linux/btf.h>
-+#include <linux/bpf-cgroup.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/slab.h>
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 919194de39c8..cd4c23f7e3df 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -30,6 +30,7 @@
- 
- #include "cgroup-internal.h"
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/cred.h>
- #include <linux/errno.h>
- #include <linux/init_task.h>
-diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-index 33272a7b6912..4e1257f50aa3 100644
---- a/kernel/trace/trace_kprobe.c
-+++ b/kernel/trace/trace_kprobe.c
-@@ -7,6 +7,7 @@
-  */
- #define pr_fmt(fmt)	"trace_kprobe: " fmt
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/security.h>
- #include <linux/module.h>
- #include <linux/uaccess.h>
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index f5f0039d31e5..4f35514a48f3 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -7,6 +7,7 @@
-  */
- #define pr_fmt(fmt)	"trace_uprobe: " fmt
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/security.h>
- #include <linux/ctype.h>
- #include <linux/module.h>
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 69d30053fed9..99536127650b 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -74,6 +74,7 @@
- 
- #define pr_fmt(fmt) "UDP: " fmt
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/uaccess.h>
- #include <asm/ioctls.h>
- #include <linux/memblock.h>
-diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-index 6a0e569f0bb8..ba8986d12413 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -17,6 +17,7 @@
-  *      YOSHIFUJI Hideaki @USAGI:	convert /proc/net/udp6 to seq_file.
-  */
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/errno.h>
- #include <linux/types.h>
- #include <linux/socket.h>
-diff --git a/net/socket.c b/net/socket.c
-index 7f64a6eccf63..721a5a1b1106 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -52,6 +52,7 @@
-  *	Based upon Swansea University Computer Society NET3.039
-  */
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/ethtool.h>
- #include <linux/mm.h>
- #include <linux/socket.h>
-diff --git a/security/device_cgroup.c b/security/device_cgroup.c
-index 04375df52fc9..842889f3dcb7 100644
---- a/security/device_cgroup.c
-+++ b/security/device_cgroup.c
-@@ -5,6 +5,7 @@
-  * Copyright 2007 IBM Corp
-  */
- 
-+#include <linux/bpf-cgroup.h>
- #include <linux/device_cgroup.h>
- #include <linux/cgroup.h>
- #include <linux/ctype.h>
+This is the gcc x86_64 asm on a stripped down
+bpf_core_types_are_compat() with a 1k struct on the stack:
+
+bpf_core_types_are_compat:
+test esi, esi
+jle .L69
+push r15
+push r14
+push r13
+push r12
+push rbp
+mov rbp, rdi
+push rbx
+mov ebx, esi
+sub rsp, 9112
+[...]
+.L69:
+or eax, -1
+ret
+
+This latest clang:
+
+bpf_core_types_are_compat: # @bpf_core_types_are_compat
+push rbp
+push r15
+push r14
+push rbx
+sub rsp, 1000
+mov r14d, -1
+test esi, esi
+jle .LBB0_7
+[...]
+.LBB0_7:
+mov eax, r14d
+add rsp, 1000
+pop rbx
+pop r14
+pop r15
+pop rbp
+ret
+
+> > > > +                       err = __bpf_core_types_are_compat(local_btf, local_id,
+> > > > +                                                         targ_btf, targ_id,
+> > > > +                                                         level - 1);
+> > > > +                       if (err <= 0)
+> > > > +                               return err;
+> > > > +               }
+> > > > +
+> > > > +               /* tail recurse for return type check */
+> > > > +               btf_type_skip_modifiers(local_btf, local_type->type, &local_id);
+> > > > +               btf_type_skip_modifiers(targ_btf, targ_type->type, &targ_id);
+> > > > +               goto recur;
+> > > > +       }
+> > > > +       default:
+> > > > +               pr_warn("unexpected kind %s relocated, local [%d], target [%d]\n",
+> > > > +                       btf_type_str(local_type), local_id, targ_id);
+> > >
+> > > That should be bpf_log() instead.
+> > >
+> >
+> > To do that I need a struct bpf_verifier_log, which is not present
+> > there, neither in bpf_core_spec_match() or bpf_core_apply_relo_insn().
+>
+> It is there. See:
+>         err = bpf_core_apply_relo_insn((void *)ctx->log, insn, ...
+>
+> > Should we drop the message at all?
+>
+> Passing it into bpf_core_spec_match() and further into
+> bpf_core_types_are_compat() is probably unnecessary.
+> All callers have an error check with a log right after.
+> So I think we won't lose anything if we drop this log.
+>
+
+Nice.
+
+> >
+> > > > +               return 0;
+> > > > +       }
+> > > > +}
+> > >
+> > > Please add tests that exercise this logic by enabling
+> > > additional lskels and a new test that hits the recursion limit.
+> > > I suspect we don't have such case in selftests.
+> > >
+> > > Thanks!
+> >
+> > Will do!
+>
+> Thanks!
+
+
+
 -- 
-2.31.1
-
+per aspera ad upstream
