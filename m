@@ -2,93 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65B64C433FE
-	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 01:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76725C433F5
+	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 02:31:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238706AbhLOBUl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Dec 2021 20:20:41 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:29131 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbhLOBUl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Dec 2021 20:20:41 -0500
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JDHRR1NWMz1DK4k;
-        Wed, 15 Dec 2021 09:17:39 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 09:20:34 +0800
-Received: from [10.67.109.184] (10.67.109.184) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 15 Dec 2021 09:20:34 +0800
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Daniel Borkmann <daniel@iogearbox.net>, <ast@kernel.org>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <shuah@kernel.org>
-CC:     <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20211214135555.125348-1-pulehui@huawei.com>
- <9063be69-fbd9-c0a5-9271-c6d4281c71ef@iogearbox.net>
-From:   Pu Lehui <pulehui@huawei.com>
-Message-ID: <30aa8ea2-3752-d711-50f8-4b3d49cad56f@huawei.com>
-Date:   Wed, 15 Dec 2021 09:20:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S235326AbhLOCbv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Dec 2021 21:31:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235193AbhLOCbv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Dec 2021 21:31:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E531CC061574
+        for <bpf@vger.kernel.org>; Tue, 14 Dec 2021 18:31:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80F696179F
+        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 02:31:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFE6C3460D;
+        Wed, 15 Dec 2021 02:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639535509;
+        bh=cCTLnOSDMiTu9pWEs/PeBoBxdZB4leyPkdVnN7/DQhU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Q1aa+Drc9q1ziMIGGkq6sRxyG8fZMnQfNAbggELXAGDJsdar8/OHElXxB6XWmOa3D
+         Y9kv0d1KeNdznDvBjfLq/Xaym1APkQXscuv2R+dO2/CuPfUCNzqjx0AcNM/rx8JFqc
+         azFqXGpOQR7INcMcJs1iplkLYMyjMFXptU81leQCT8Ny2zZLZzfDG+QMZxmPcsY5uu
+         TTT2PiQL/TdF4keCHBNL+Eb+joVFlfVfSV5LM9j3gUqfGIfwHT/EIUnHZ6NcHO0gmH
+         POFueR7DengLRxKFk60Y3jwEJs8gEo+moBXl678Td8fU5zeXMdhp0fSe+JTvd1xVMz
+         39HMDHpT6sM1Q==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org
+Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH bpf-next v2 2/4] bpf: create a header for inline helpers
+Date:   Tue, 14 Dec 2021 18:31:24 -0800
+Message-Id: <20211215023126.659200-3-kuba@kernel.org>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211215023126.659200-1-kuba@kernel.org>
+References: <20211215023126.659200-1-kuba@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <9063be69-fbd9-c0a5-9271-c6d4281c71ef@iogearbox.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.184]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021/12/15 4:01, Daniel Borkmann wrote:
-> On 12/14/21 2:55 PM, Pu Lehui wrote:
->> When building bpf selftests on arm64, the following error will occur:
->>
->> progs/loop2.c:20:7: error: incomplete definition of type 'struct
->> user_pt_regs'
->>
->> Some archs, like arm64 and riscv, use userspace pt_regs in
->> bpf_tracing.h, which causes build failure when bpf prog use
->> macro in bpf_tracing.h. So let's use vmlinux.h directly.
->>
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> 
-> Looks like this lets CI fail, did you run the selftests also with 
-> vmtest.sh to
-> double check?
-> 
-> https://github.com/kernel-patches/bpf/runs/4521708490?check_suite_focus=true 
-> :
-> 
-> [...]
-> #189 verif_scale_loop6:FAIL
-> libbpf: prog 'trace_virtqueue_add_sgs': BPF program load failed: 
-> Argument list too long
-> libbpf: prog 'trace_virtqueue_add_sgs': -- BEGIN PROG LOAD LOG --
-> R1 type=ctx expected=fp
-> BPF program is too large. Processed 1000001 insn
-> verification time 12250995 usec
-> stack depth 88
-> processed 1000001 insns (limit 1000000) max_states_per_insn 107 
-> total_states 21739 peak_states 2271 mark_read 6
-> -- END PROG LOAD LOG --
-> libbpf: failed to load program 'trace_virtqueue_add_sgs'
-> libbpf: failed to load object 'loop6.o'
-> scale_test:FAIL:expect_success unexpected error: -7 (errno 7)
-> Summary: 221/986 PASSED, 8 SKIPPED, 1 FAILED
-> [...]
-> 
-> Please take a look and fix in your patch, thanks!
-> .
-Sorry for my negligence, I'll take a look and fix it.
+static inlines are notorious for creating inter-header dependencies.
+Create a dedicated header where we can place include-heavy inlines
+for bpf.
+
+Put cgroup_storage_type() there. It needs to deference bpf_map and
+access cgroup types thus creating a dependency between cgroup and
+bpf.
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ include/linux/bpf-cgroup.h  |  9 ---------
+ include/linux/bpf-inlines.h | 17 +++++++++++++++++
+ kernel/bpf/helpers.c        |  1 +
+ kernel/bpf/local_storage.c  |  1 +
+ 4 files changed, 19 insertions(+), 9 deletions(-)
+ create mode 100644 include/linux/bpf-inlines.h
+
+diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+index 11820a430d6c..12474516e0be 100644
+--- a/include/linux/bpf-cgroup.h
++++ b/include/linux/bpf-cgroup.h
+@@ -194,15 +194,6 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
+ 					    int optname, void *optval,
+ 					    int *optlen, int retval);
+ 
+-static inline enum bpf_cgroup_storage_type cgroup_storage_type(
+-	struct bpf_map *map)
+-{
+-	if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
+-		return BPF_CGROUP_STORAGE_PERCPU;
+-
+-	return BPF_CGROUP_STORAGE_SHARED;
+-}
+-
+ struct bpf_cgroup_storage *
+ cgroup_storage_lookup(struct bpf_cgroup_storage_map *map,
+ 		      void *key, bool locked);
+diff --git a/include/linux/bpf-inlines.h b/include/linux/bpf-inlines.h
+new file mode 100644
+index 000000000000..73d8429d22f1
+--- /dev/null
++++ b/include/linux/bpf-inlines.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _BPF_INLINES_H
++#define _BPF_INLINES_H
++
++#include <linux/bpf.h>
++#include <linux/bpf-cgroup.h>
++
++static inline enum bpf_cgroup_storage_type cgroup_storage_type(
++	struct bpf_map *map)
++{
++	if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
++		return BPF_CGROUP_STORAGE_PERCPU;
++
++	return BPF_CGROUP_STORAGE_SHARED;
++}
++
++#endif
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 8babae03d30a..d33216287b4d 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2011-2014 PLUMgrid, http://plumgrid.com
+  */
+ #include <linux/bpf.h>
++#include <linux/bpf-inlines.h>
+ #include <linux/rcupdate.h>
+ #include <linux/random.h>
+ #include <linux/smp.h>
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 035e9e3a7132..bc8cfe03a37e 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -1,5 +1,6 @@
+ //SPDX-License-Identifier: GPL-2.0
+ #include <linux/bpf-cgroup.h>
++#include <linux/bpf-inlines.h>
+ #include <linux/bpf.h>
+ #include <linux/bpf_local_storage.h>
+ #include <linux/btf.h>
+-- 
+2.31.1
+
