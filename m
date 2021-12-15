@@ -2,81 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03D4CC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A82BC43217
 	for <bpf@archiver.kernel.org>; Wed, 15 Dec 2021 02:31:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235251AbhLOCbw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S235193AbhLOCbw (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 14 Dec 2021 21:31:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50968 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbhLOCbv (ORCPT <rfc822;bpf@vger.kernel.org>);
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235446AbhLOCbv (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 14 Dec 2021 21:31:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A527AC061574
+        for <bpf@vger.kernel.org>; Tue, 14 Dec 2021 18:31:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 837886179F
-        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 02:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2545C3460B;
-        Wed, 15 Dec 2021 02:31:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 592ABB81C53
+        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 02:31:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFCACC34600;
+        Wed, 15 Dec 2021 02:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639535510;
-        bh=iitfXktrLNP9o39lllAFXBBikGwWFAaW2/MflXzJ6i4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oaQrsHG37pIPsrM4rPdaC8Vda6jNFx9BFQG0IeRAdZD5yZH3lb12BpyQ9MtL6IunD
-         NG1R2nOK1gwRrqljF7gyIh65qDKvUEj8bMzzwHqYVqLy+qmfTNsAAn1W3BfVu9WnF6
-         AJU7dzIisxKWJuZVnzV+b7/KCOadlAyNmH7z+OETOcHxflXyg/KvGbhUjNeiGsWAqd
-         MUxcMJ7GpQQnE4BHPKTF8ayiTPqB6oUZR6PfyXzTTQScDmIhpHtnt0isXGrpCmuzll
-         sOPAn+gyjePcWr9DXEVlxmTONVUOu7WmbiwC+kJDKcGUUG3cmlodkf2pvN1UNuokkW
-         Tr+6S+KxDE4yQ==
+        s=k20201202; t=1639535509;
+        bh=qQZ58uqiiflLyK14ieCNsXegd6xSqUcPwXM02cfZupg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XMaDKBBh+OBuqmlRV9qjJ2MHmkAg8OAsIUXBnaOpdWrcHGL28dxAAGJb2gK3fJ1lk
+         7w5/9iIGKZM0vOIO/4cNCUuQCJ202DHH+YfH6fVek0NwZKsdtPDSWFMmAHsZdEI0fN
+         vvpeyQpLb+oK9jazedUyttBapNZlWli0Bx6V+jL+UFZK2TSQkaLRa1zYNUYE4W7ZC8
+         QEbpGMR/7p6r8y6PFCYjSSteJu5WfTtrG9hABguIt9WXrgxamRP/+CvtZcqnhMXvA5
+         v3PbCQ2fki517lFo7QjpBhgVnUEQnhf3OlxdLFr3+6w0/MKj46a2GchTUxnMIGA3LV
+         ZkZSGtkk0yNow==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org
 Cc:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH bpf-next v2 4/4] bpf: remove the cgroup -> bpf header dependecy
-Date:   Tue, 14 Dec 2021 18:31:26 -0800
-Message-Id: <20211215023126.659200-5-kuba@kernel.org>
+Subject: [PATCH bpf-next v2 0/4] bpf: remove the cgroup -> bpf header dependecy
+Date:   Tue, 14 Dec 2021 18:31:22 -0800
+Message-Id: <20211215023126.659200-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211215023126.659200-1-kuba@kernel.org>
-References: <20211215023126.659200-1-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now that the stage has been set and actors are in place
-remove the header dependency between cgroup and bpf.h.
+Changes to bpf.h tend to clog up our build systems. The netdev/bpf
+build bot does incremental builds to save time (reusing the build
+directory to only rebuild changed objects).
 
-This reduces the incremental build size of x86 allmodconfig
-after bpf.h was touched from ~17k objects rebuilt to ~5k objects.
-bpf.h is 2.2kLoC and is modified relatively often.
+This is the rough breakdown of how many objects needs to be rebuilt
+based on file touched:
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- include/linux/bpf-cgroup.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+kernel.h      40633
+bpf.h         17881
+bpf-cgroup.h  17875
+skbuff.h      10696
+bpf-netns.h    7604
+netdevice.h    7452
+filter.h       5003
+tcp.h          4048
+sock.h         4959
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 12474516e0be..4c932d47e7f2 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -2,7 +2,8 @@
- #ifndef _BPF_CGROUP_H
- #define _BPF_CGROUP_H
- 
--#include <linux/bpf.h>
-+#include <linux/bpf-cgroup-types.h>
-+#include <linux/bpf-link.h>
- #include <linux/errno.h>
- #include <linux/jump_label.h>
- #include <linux/percpu.h>
-@@ -16,6 +17,7 @@ struct cgroup;
- struct sk_buff;
- struct bpf_map;
- struct bpf_prog;
-+struct bpf_prog_aux;
- struct bpf_sock_ops_kern;
- struct bpf_cgroup_storage;
- struct ctl_table;
+As the stats show touching bpf.h is _very_ expensive.
+
+Bulk of the objects get rebuilt because MM includes cgroup headers.
+Luckily bpf-cgroup.h does not fundamentally depend on bpf.h so we
+can break that dependency and reduce the number of objects.
+
+With the patches applied touching bpf.h causes 5019 objects to be rebuilt
+(17881 / 5019 = 3.56x). That's pretty much down to filter.h plus noise.
+
+v2:
+Try to make the new headers wider in scope. Collapse bpf-link and
+bpf-cgroup-types into one header, which may serve as "BPF kernel
+API" header in the future if needed. Rename bpf-cgroup-storage.h
+to bpf-inlines.h.
+
+Add a fix for the s390 build issue.
+
+Jakub Kicinski (4):
+  bpf: add header for enum bpf_cgroup_storage_type and bpf_link
+  bpf: create a header for inline helpers
+  add includes masked by cgroup -> bpf dependency
+  bpf: remove the cgroup -> bpf header dependecy
+
+ arch/s390/mm/hugetlbpage.c       |  1 +
+ include/linux/bpf-cgroup-types.h | 29 +++++++++++++++++++++++++++++
+ include/linux/bpf-cgroup.h       | 13 +++----------
+ include/linux/bpf-inlines.h      | 17 +++++++++++++++++
+ include/linux/bpf.h              | 18 +-----------------
+ kernel/bpf/helpers.c             |  1 +
+ kernel/bpf/local_storage.c       |  1 +
+ 7 files changed, 53 insertions(+), 27 deletions(-)
+ create mode 100644 include/linux/bpf-cgroup-types.h
+ create mode 100644 include/linux/bpf-inlines.h
+
 -- 
 2.31.1
 
