@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9F29C433F5
-	for <bpf@archiver.kernel.org>; Thu, 16 Dec 2021 02:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9393FC4332F
+	for <bpf@archiver.kernel.org>; Thu, 16 Dec 2021 02:04:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232754AbhLPCE4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 15 Dec 2021 21:04:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42284 "EHLO
+        id S232757AbhLPCE6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 15 Dec 2021 21:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbhLPCEv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 15 Dec 2021 21:04:51 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E14DC06173E
-        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 18:04:51 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id b15-20020a170902d50f00b00148ba062739so667331plg.4
-        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 18:04:51 -0800 (PST)
+        with ESMTP id S232752AbhLPCEz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 15 Dec 2021 21:04:55 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC51C06173E
+        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 18:04:55 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id p7-20020ac84087000000b002b60be80b27so31885127qtl.18
+        for <bpf@vger.kernel.org>; Wed, 15 Dec 2021 18:04:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=GzqM2Pf0GVu2BjeMt9xL/QOJ5vyR5g48GeIwW8tZ/Y8=;
-        b=hAM2QkKBNxae3JMGSO9TrKg0p1tptyvQVitwfIntxxdthfQ3jZpzcSsjYy8TNLjqhq
-         hFbnoR0KY/lV3pgRmY7PGBWfh8n+wQ7Yo1wqq9L+Lq9C+nEbycBYKyNcHhGI7Aof8Vka
-         m0GHdNAW9L91vvKCn8j4IFcsPX8ZN5hqk7LiqTsaI/TnwUdeT2GHmf/p9gnBT5NL+YTc
-         FM40uaKMeWsVAEO/PKvGmcekQwdsX1UYVwE6HVswFQp0jxkjDshECtUM/bqLqmYcf3UJ
-         RdodB1vm8sRU9CJIss4718Pbpo9MZT3hKLgupBX5e+Vb1+0acf+dE3NrT78rOT2e+k99
-         95cA==
+        bh=SHQRpvxALgFJ5KDvUh7/4T3a3BFoLhOd9nT0Uk/uSZA=;
+        b=Dy29Lq7vgvtHO3uHeQT6Jyn5yv5fL5Ym6bwVnHdd0RO/6hyxJ+tMB9/O6JQrA0wJDy
+         BCgqDjeRcPRiLgLgmvV3HtvN0fJlcYc3RY8KfAkJcYu//SXk9Xe7rBtJVaLWCT0SpQ3V
+         YxDHAbiERmnBuNBsUzy3Hvje8OatQAGm8aqH4BcbsQ5CzOMORq6ik9XhTR7ouQLh6sRk
+         G+hdyCAcfgVWcM3E8oxlno3nnGq9VmyNX2FqlBSm3UArYegF3ac3cSXAA9lTibYIZ5zp
+         cv/5t/V0L12qF//tSqYBV5nJn9EK9RklCKDgrD1eQdbfm33lzeb92u82MvTSfvoN0qxd
+         dIbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=GzqM2Pf0GVu2BjeMt9xL/QOJ5vyR5g48GeIwW8tZ/Y8=;
-        b=cPmG2wXhZytx2RgfD2qLujiT/gZYM6RvHbx0Oq7g5Q7zVU2eTh9fnclgLJ2U+QPcPd
-         emYSvopmTqxJg6oluiGB2KVP8CV7HM3+uZfu5Djgl5PRA92GBFUAPkJICD4eJPSs1aUh
-         IDRtawXOg5vGFOp69iBesaZnVQuSL6HJ9U2Ef5SIoxOcoYyRe/Gj3plHM9ei5D7RKJWV
-         /RRBvjyns9020l988d4ZpirZXOoF83/9gfAiLrM+ngNb5aeNMyH/TsaLNZQR2xdgoAXB
-         7vPpGVaFNvzZxxcQ5eGXCVpxKJxQ4nqsSp13yy1K98TBo8lS52W23qEwP4Hq99cvvA2p
-         klqw==
-X-Gm-Message-State: AOAM532qiAQrAit5ueKirdn3rMKbkgmnShmD8Ehh1iBpZbNVE0Ku6GEm
-        H1AaWT8oASg+5DYY+YWg982MBFwbQ9xiK/PUOifj4F8+Qs/l3Y2SAP8orLotMhkSgFytwCnag9Q
-        8a4tXhw3Y/gy3tqQ60JaWVMEIXF5cBveuQSVDtvX8cAZ502dh64EHLEgCHZhayA4=
-X-Google-Smtp-Source: ABdhPJy8BfOJ7wN2CFBI8yg2BLQqiND4EfB2pPJG5XwArqjpJuyp323VXhnDrUfuENNxJ5+h2n25X0/0Zb7o0w==
+        bh=SHQRpvxALgFJ5KDvUh7/4T3a3BFoLhOd9nT0Uk/uSZA=;
+        b=aRPM0lVZrfLXcDDiHzNi77iftInhsTo2IIX11iFbH2Be9IfziHShuVbiD+IJsA2rts
+         m9Rp/tHDJ8zFuCq0tLf+Ns2maosp3oKn5raH53zqhQz/vvNEmHB8xqlA5nWY/v7NON1J
+         CVzDnn0T8tzuuMunzNTSuJVKFchcuyWywGxvrCB7Ul9ugGOliV7w/3to87fglTvyqVM+
+         BSRa71YN6xOl/YGhmvts9EeIp3ZCgMoco/FnEsuPbvjXF9nUt3q4w94qTVyCpIzgsKvO
+         oV2ayxJjG3m0luS0+zKWSnTSaOW7/tXtjXlPQ9X1ZMzBy1Ikod4LR3g8k1G4Ebl7I3Ib
+         /w0w==
+X-Gm-Message-State: AOAM533I+SnK9Qczf4KREcunYxh56kZ8a9+47iVHjxVXs5FlicBKn45A
+        eCx1J8+L4yCNS409o7tegdZz26uZdKKe1en0dECYyQczEBaNqH4ycSbhk5u5JoiZdligbKGVOsV
+        +Lfu60M1maSmD9AvZeLi3koCg9tJ8ng6J538NOJBnPG/7nO1etVWaLJRkMFUB9EE=
+X-Google-Smtp-Source: ABdhPJw0TR8UsnkqizV9tt2jguUSApslNDdOkuibNlhFPvAw+P1WySxZOAFP5fQu15Y8QnlHYbu1TNFZTyhmdg==
 X-Received: from zhuyifei-kvm.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2edc])
- (user=zhuyifei job=sendgmr) by 2002:a17:90a:5883:: with SMTP id
- j3mr3210605pji.13.1639620290851; Wed, 15 Dec 2021 18:04:50 -0800 (PST)
-Date:   Thu, 16 Dec 2021 02:04:27 +0000
+ (user=zhuyifei job=sendgmr) by 2002:a05:622a:164b:: with SMTP id
+ y11mr15011659qtj.87.1639620294268; Wed, 15 Dec 2021 18:04:54 -0800 (PST)
+Date:   Thu, 16 Dec 2021 02:04:29 +0000
 In-Reply-To: <cover.1639619851.git.zhuyifei@google.com>
-Message-Id: <b4013fd5d16bed0b01977c1fafdeae12e1de61fb.1639619851.git.zhuyifei@google.com>
+Message-Id: <4f20b77cb46812dbc2bdcd7e3fa87c7573bde55e.1639619851.git.zhuyifei@google.com>
 Mime-Version: 1.0
 References: <cover.1639619851.git.zhuyifei@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH v2 bpf-next 3/5] bpf: Add cgroup helpers bpf_{get,set}_retval
- to get/set syscall return value
+Subject: [PATCH v2 bpf-next 5/5] selftests/bpf: Update sockopt_sk test to the
+ use bpf_set_retval
 From:   YiFei Zhu <zhuyifei@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Stanislav Fomichev <sdf@google.com>,
@@ -65,221 +65,149 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The helpers continue to use int for retval because all the hooks
-are int-returning rather than long-returning. The return value of
-bpf_set_retval is int for future-proofing, in case in the future
-there may be errors trying to set the retval.
+The tests would break without this patch, because at one point it calls
+  getsockopt(fd, SOL_TCP, TCP_ZEROCOPY_RECEIVE, &buf, &optlen)
+This getsockopt receives the kernel-set -EINVAL. Prior to this patch
+series, the eBPF getsockopt hook's -EPERM would override kernel's
+-EINVAL, however, after this patch series, return 0's automatic
+-EPERM will not; the eBPF prog has to explicitly bpf_set_retval(-EPERM)
+if that is wanted.
 
-After the previous patch, if a program rejects a syscall by
-returning 0, an -EPERM will be generated no matter if the retval
-is already set to -err. This patch change it being forced only if
-retval is not -err. This is because we want to support, for
-example, invoking bpf_set_retval(-EINVAL) and return 0, and have
-the syscall return value be -EINVAL not -EPERM.
-
-For BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY, the prior behavior is
-that, if the return value is NET_XMIT_DROP, the packet is silently
-dropped. We preserve this behavior for backward compatibility
-reasons, so even if an errno is set, the errno does not return to
-caller. However, setting a non-err to retval cannot propagate so
-this is not allowed and we return a -EFAULT in that case.
+I also removed the explicit mentions of EPERM in the comments in the
+prog.
 
 Signed-off-by: YiFei Zhu <zhuyifei@google.com>
 Reviewed-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/linux/bpf.h            | 10 +++++----
- include/uapi/linux/bpf.h       | 18 ++++++++++++++++
- kernel/bpf/cgroup.c            | 38 +++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h | 18 ++++++++++++++++
- 4 files changed, 79 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/sockopt_sk.c     |  2 +-
+ .../testing/selftests/bpf/progs/sockopt_sk.c  | 32 +++++++++----------
+ 2 files changed, 17 insertions(+), 17 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index ef52b4f73cad..9925d1473cd4 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1247,7 +1247,7 @@ BPF_PROG_RUN_ARRAY_CG_FLAGS(const struct bpf_prog_array __rcu *array_rcu,
- 	while ((prog = READ_ONCE(item->prog))) {
- 		run_ctx.prog_item = item;
- 		func_ret = run_prog(prog, ctx);
--		if (!(func_ret & 1))
-+		if (!(func_ret & 1) && !IS_ERR_VALUE((long)run_ctx.retval))
- 			run_ctx.retval = -EPERM;
- 		*(ret_flags) |= (func_ret >> 1);
- 		item++;
-@@ -1277,7 +1277,7 @@ BPF_PROG_RUN_ARRAY_CG(const struct bpf_prog_array __rcu *array_rcu,
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
- 	while ((prog = READ_ONCE(item->prog))) {
- 		run_ctx.prog_item = item;
--		if (!run_prog(prog, ctx))
-+		if (!run_prog(prog, ctx) && !IS_ERR_VALUE((long)run_ctx.retval))
- 			run_ctx.retval = -EPERM;
- 		item++;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+index 4b937e5dbaca..164aa5020bf1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
+@@ -177,7 +177,7 @@ static int getsetsockopt(void)
+ 	optlen = sizeof(buf.zc);
+ 	errno = 0;
+ 	err = getsockopt(fd, SOL_TCP, TCP_ZEROCOPY_RECEIVE, &buf, &optlen);
+-	if (errno != EPERM) {
++	if (errno != EINVAL) {
+ 		log_err("Unexpected getsockopt(TCP_ZEROCOPY_RECEIVE) err=%d errno=%d",
+ 			err, errno);
+ 		goto err;
+diff --git a/tools/testing/selftests/bpf/progs/sockopt_sk.c b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+index 79c8139b63b8..d0298dccedcd 100644
+--- a/tools/testing/selftests/bpf/progs/sockopt_sk.c
++++ b/tools/testing/selftests/bpf/progs/sockopt_sk.c
+@@ -73,17 +73,17 @@ int _getsockopt(struct bpf_sockopt *ctx)
+ 		 */
+ 
+ 		if (optval + sizeof(struct tcp_zerocopy_receive) > optval_end)
+-			return 0; /* EPERM, bounds check */
++			return 0; /* bounds check */
+ 
+ 		if (((struct tcp_zerocopy_receive *)optval)->address != 0)
+-			return 0; /* EPERM, unexpected data */
++			return 0; /* unexpected data */
+ 
+ 		return 1;
  	}
-@@ -1337,7 +1337,7 @@ BPF_PROG_RUN_ARRAY(const struct bpf_prog_array __rcu *array_rcu,
-  *   0: NET_XMIT_SUCCESS  skb should be transmitted
-  *   1: NET_XMIT_DROP     skb should be dropped and cn
-  *   2: NET_XMIT_CN       skb should be transmitted and cn
-- *   3: -EPERM            skb should be dropped
-+ *   3: -err              skb should be dropped
-  */
- #define BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY(array, ctx, func)		\
- 	({						\
-@@ -1346,10 +1346,12 @@ BPF_PROG_RUN_ARRAY(const struct bpf_prog_array __rcu *array_rcu,
- 		u32 _ret;				\
- 		_ret = BPF_PROG_RUN_ARRAY_CG_FLAGS(array, ctx, func, 0, &_flags); \
- 		_cn = _flags & BPF_RET_SET_CN;		\
-+		if (_ret && !IS_ERR_VALUE((long)_ret))	\
-+			_ret = -EFAULT;			\
- 		if (!_ret)				\
- 			_ret = (_cn ? NET_XMIT_CN : NET_XMIT_SUCCESS);	\
- 		else					\
--			_ret = (_cn ? NET_XMIT_DROP : -EPERM);		\
-+			_ret = (_cn ? NET_XMIT_DROP : _ret);		\
- 		_ret;					\
- 	})
  
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b0383d371b9a..140702c56938 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5018,6 +5018,22 @@ union bpf_attr {
-  *
-  *	Return
-  *		The number of arguments of the traced function.
-+ *
-+ * int bpf_get_retval(void)
-+ *	Description
-+ *		Get the syscall's return value that will be returned to userspace.
-+ *
-+ *		This helper is currently supported by cgroup programs only.
-+ *	Return
-+ *		The syscall's return value.
-+ *
-+ * int bpf_set_retval(int retval)
-+ *	Description
-+ *		Set the syscall's return value that will be returned to userspace.
-+ *
-+ *		This helper is currently supported by cgroup programs only.
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5206,6 +5222,8 @@ union bpf_attr {
- 	FN(get_func_arg),		\
- 	FN(get_func_ret),		\
- 	FN(get_func_arg_cnt),		\
-+	FN(get_retval),			\
-+	FN(set_retval),			\
- 	/* */
+ 	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
+ 		if (optval + 1 > optval_end)
+-			return 0; /* EPERM, bounds check */
++			return 0; /* bounds check */
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 63e9a43c1018..f0a1e219b310 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1044,7 +1044,7 @@ int cgroup_bpf_prog_query(const union bpf_attr *attr,
-  *   NET_XMIT_DROP       (1)	- drop packet and notify TCP to call cwr
-  *   NET_XMIT_CN         (2)	- continue with packet output and notify TCP
-  *				  to call cwr
-- *   -EPERM			- drop packet
-+ *   -err			- drop packet
-  *
-  * For ingress packets, this function will return -EPERM if any
-  * attached program was found and if it returned != 1 during execution.
-@@ -1080,6 +1080,8 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
- 	} else {
- 		ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[atype], skb,
- 					    __bpf_prog_run_save_cb, 0);
-+		if (ret && !IS_ERR_VALUE((long)ret))
-+			ret = -EFAULT;
+ 		ctx->retval = 0; /* Reset system call return value to zero */
+ 
+@@ -96,24 +96,24 @@ int _getsockopt(struct bpf_sockopt *ctx)
+ 		 * bytes of data.
+ 		 */
+ 		if (optval_end - optval != page_size)
+-			return 0; /* EPERM, unexpected data size */
++			return 0; /* unexpected data size */
+ 
+ 		return 1;
  	}
- 	bpf_restore_data_end(skb, saved_data_end);
- 	__skb_pull(skb, offset);
-@@ -1205,6 +1207,36 @@ int __cgroup_bpf_check_dev_permission(short dev_type, u32 major, u32 minor,
- 	return ret;
- }
  
-+BPF_CALL_0(bpf_get_retval)
-+{
-+	struct bpf_cg_run_ctx *ctx =
-+		container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
-+
-+	return ctx->retval;
-+}
-+
-+static const struct bpf_func_proto bpf_get_retval_proto = {
-+	.func		= bpf_get_retval,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+};
-+
-+BPF_CALL_1(bpf_set_retval, int, retval)
-+{
-+	struct bpf_cg_run_ctx *ctx =
-+		container_of(current->bpf_ctx, struct bpf_cg_run_ctx, run_ctx);
-+
-+	ctx->retval = retval;
-+	return 0;
-+}
-+
-+static const struct bpf_func_proto bpf_set_retval_proto = {
-+	.func		= bpf_set_retval,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_ANYTHING,
-+};
-+
- static const struct bpf_func_proto *
- cgroup_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1217,6 +1249,10 @@ cgroup_base_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_get_current_cgroup_id_proto;
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_event_output_data_proto;
-+	case BPF_FUNC_get_retval:
-+		return &bpf_get_retval_proto;
-+	case BPF_FUNC_set_retval:
-+		return &bpf_set_retval_proto;
- 	default:
- 		return bpf_base_func_proto(func_id);
+ 	if (ctx->level != SOL_CUSTOM)
+-		return 0; /* EPERM, deny everything except custom level */
++		return 0; /* deny everything except custom level */
+ 
+ 	if (optval + 1 > optval_end)
+-		return 0; /* EPERM, bounds check */
++		return 0; /* bounds check */
+ 
+ 	storage = bpf_sk_storage_get(&socket_storage_map, ctx->sk, 0,
+ 				     BPF_SK_STORAGE_GET_F_CREATE);
+ 	if (!storage)
+-		return 0; /* EPERM, couldn't get sk storage */
++		return 0; /* couldn't get sk storage */
+ 
+ 	if (!ctx->retval)
+-		return 0; /* EPERM, kernel should not have handled
++		return 0; /* kernel should not have handled
+ 			   * SOL_CUSTOM, something is wrong!
+ 			   */
+ 	ctx->retval = 0; /* Reset system call return value to zero */
+@@ -152,7 +152,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		/* Overwrite SO_SNDBUF value */
+ 
+ 		if (optval + sizeof(__u32) > optval_end)
+-			return 0; /* EPERM, bounds check */
++			return 0; /* bounds check */
+ 
+ 		*(__u32 *)optval = 0x55AA;
+ 		ctx->optlen = 4;
+@@ -164,7 +164,7 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		/* Always use cubic */
+ 
+ 		if (optval + 5 > optval_end)
+-			return 0; /* EPERM, bounds check */
++			return 0; /* bounds check */
+ 
+ 		memcpy(optval, "cubic", 5);
+ 		ctx->optlen = 5;
+@@ -175,10 +175,10 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 	if (ctx->level == SOL_IP && ctx->optname == IP_FREEBIND) {
+ 		/* Original optlen is larger than PAGE_SIZE. */
+ 		if (ctx->optlen != page_size * 2)
+-			return 0; /* EPERM, unexpected data size */
++			return 0; /* unexpected data size */
+ 
+ 		if (optval + 1 > optval_end)
+-			return 0; /* EPERM, bounds check */
++			return 0; /* bounds check */
+ 
+ 		/* Make sure we can trim the buffer. */
+ 		optval[0] = 0;
+@@ -189,21 +189,21 @@ int _setsockopt(struct bpf_sockopt *ctx)
+ 		 * bytes of data.
+ 		 */
+ 		if (optval_end - optval != page_size)
+-			return 0; /* EPERM, unexpected data size */
++			return 0; /* unexpected data size */
+ 
+ 		return 1;
  	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b0383d371b9a..140702c56938 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5018,6 +5018,22 @@ union bpf_attr {
-  *
-  *	Return
-  *		The number of arguments of the traced function.
-+ *
-+ * int bpf_get_retval(void)
-+ *	Description
-+ *		Get the syscall's return value that will be returned to userspace.
-+ *
-+ *		This helper is currently supported by cgroup programs only.
-+ *	Return
-+ *		The syscall's return value.
-+ *
-+ * int bpf_set_retval(int retval)
-+ *	Description
-+ *		Set the syscall's return value that will be returned to userspace.
-+ *
-+ *		This helper is currently supported by cgroup programs only.
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5206,6 +5222,8 @@ union bpf_attr {
- 	FN(get_func_arg),		\
- 	FN(get_func_ret),		\
- 	FN(get_func_arg_cnt),		\
-+	FN(get_retval),			\
-+	FN(set_retval),			\
- 	/* */
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+ 	if (ctx->level != SOL_CUSTOM)
+-		return 0; /* EPERM, deny everything except custom level */
++		return 0; /* deny everything except custom level */
+ 
+ 	if (optval + 1 > optval_end)
+-		return 0; /* EPERM, bounds check */
++		return 0; /* bounds check */
+ 
+ 	storage = bpf_sk_storage_get(&socket_storage_map, ctx->sk, 0,
+ 				     BPF_SK_STORAGE_GET_F_CREATE);
+ 	if (!storage)
+-		return 0; /* EPERM, couldn't get sk storage */
++		return 0; /* couldn't get sk storage */
+ 
+ 	storage->val = optval[0];
+ 	ctx->optlen = -1; /* BPF has consumed this option, don't call kernel
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
