@@ -2,146 +2,220 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E871C433FE
-	for <bpf@archiver.kernel.org>; Thu, 16 Dec 2021 14:42:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB740C433F5
+	for <bpf@archiver.kernel.org>; Thu, 16 Dec 2021 16:02:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238120AbhLPOmf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Dec 2021 09:42:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
+        id S238657AbhLPQCn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Dec 2021 11:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbhLPOmf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Dec 2021 09:42:35 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28226C06173F
-        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 06:42:35 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id e128so35456685iof.1
-        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 06:42:35 -0800 (PST)
+        with ESMTP id S233061AbhLPQCn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:02:43 -0500
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E4DC061574
+        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 08:02:42 -0800 (PST)
+Received: by mail-ot1-x334.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso29566515otf.0
+        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 08:02:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=90t3NH6y3rHFem3c05354TVkhqLDF/TSYMRbi9fk4K0=;
-        b=DrebHczD6kxSqJFBYodZSklsRzBgT5lHDYXVWZ0RsVZxfJgn2SZWC4f4dyH/6YiVCM
-         5FjeK1lqOWkSa6wfHdzLh8zeizJWsc+x50mNvaWh0hNYpKvUZ9OZ09Do+tpMlTGyilD5
-         qNc72AgtlcBS029yZ6rY9FWnFX6pHWs0PeEw0=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f7Ms3/NjYTVXeMpuo9p2D0JJypu1gMyq1J2UTpPACoA=;
+        b=OPktM2YuvURqVFi42hashuIfU2swdBppFQ9dYy09Cpz7SQJ3cH2KPYIXPl7qwLUKrw
+         TB8+QYk5NVEkk6d+OvM8gvJuWKTfnKoMSyeP+gnf1Ti10+mLtSO7hoGOxcu/DQXezKTI
+         YxSUIyTGzRqsOiHVadK1TLEimV8EvovtrMyn9EL1VJzQRe2P3rGEPJ+5MJjef/6KjwM1
+         zCuFNEpNNByzMEhLKBOYTuVG4E4YHbOu2ONHKsVA0IEu/m5/5/VEaXDYD61+r0pA6cqk
+         VE6UHZkx1aYdCIAnHqqT4RIplZvh4jYr0PN4LkwDYe4XROqH+j4qLrqWD+FFKteTMaLb
+         D3Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=90t3NH6y3rHFem3c05354TVkhqLDF/TSYMRbi9fk4K0=;
-        b=SLNgYXHHh2LwPb5GHrrXErSP+YLrGeKpy0vX1dvnaBjXEVQlKfs/eXbnptqdk2Ri9t
-         yJbaIAipy5JqLyzK0T7RnDgy8d6ez1DwmKtYqsO7Be32sk3nDiztgKX2vFbfXLIAt6d8
-         06cdZNG573fx+7Ke0cRRQ3kWGvSqde6VoE9T+EsX6rUCzpXTHBwUfoi1tW1m/rXt2+H/
-         UdCs+drUcxgBU+G4kD5NlzRfzADSV2RL5oE2CUOMjvStqtwwaTg+axTEyVFKYIu8Rybx
-         q+oaw9FeRwvTGBKKQONCIe2Pf1Pd7ed3Cj3ri/+VtRvr+nhtKgpqUXjuT8Pza+JzZYhS
-         BQLQ==
-X-Gm-Message-State: AOAM533y31UJOKkpKTUC/fgdDHIClXejZpln0t0PKOuVgmJOpBa4d5k/
-        BOHFZyK9FU8+pazZSFWDRWVv4A==
-X-Google-Smtp-Source: ABdhPJzgIGkU86mMhl+z1BhmlrPdA9HVQEegcOWPq7ug2X32i8/WPm46kYkgC4VpVIOBK4P6cZTF2w==
-X-Received: by 2002:a6b:2bc3:: with SMTP id r186mr9543325ior.167.1639665754388;
-        Thu, 16 Dec 2021 06:42:34 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f10sm2743677iob.7.2021.12.16.06.42.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 06:42:34 -0800 (PST)
-Subject: Re: [PATCH] selftests/bpf: remove ARRAY_SIZE defines from tests
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f7Ms3/NjYTVXeMpuo9p2D0JJypu1gMyq1J2UTpPACoA=;
+        b=gjoshbVrf78aLhn73Z2fMTLEQQQcppZDdKMFw4I0VUn2jrS0dQnqAKs9i2dd702SMo
+         KIGrCmx2U1RT05S8G0doF5b3KHyfweY1jFYElzZlywGPtO0sjgV3eMkj8SJP4x5VfWc/
+         pZBYePscMN/LHj4b9rmmE6XXkNcHkwqYoFSJHwQkP6x0BneNXBndQzi0jo1LqEUMaMnj
+         EORHjSwIpEajfi7CwLrb2iyWDqIv22at47hZYDByIhxq98Oc27NjZTmkqjhvsaqLexcn
+         k6dp76AZPcFI72EWqXm6cAfwDnGNFW/pZ3x4J0QkXFA+1sIIklPILpXAY6UJgImLiUIr
+         aX6Q==
+X-Gm-Message-State: AOAM532D40WgHWJBAt56efZV+kMmdD2PAHvwi4FkDW6JXwaYU0AHrThM
+        6PAWBzwqzzuGi7hTJPYEfCxSBSGIcvU/uUNaIdceZyON2CQ=
+X-Google-Smtp-Source: ABdhPJyLdThygHlMyyUcWD8lCckOiTVdXw4F9M/EjIGJLcm+JE7nIWMS852Q5OeR/sbrpZo/gEFZPQJjcEnlLJhFn/E=
+X-Received: by 2002:a05:6830:2646:: with SMTP id f6mr13387601otu.182.1639670562068;
+ Thu, 16 Dec 2021 08:02:42 -0800 (PST)
+MIME-Version: 1.0
+References: <20211215192225.1278237-1-christylee@fb.com> <20211215192225.1278237-2-christylee@fb.com>
+ <CAEf4BzbNG3u2EOs3dnqkFyykj3QwZmBvn4vRFjuW_74H4ZmWCA@mail.gmail.com> <CAPqJDZpuZ586TawooQhxZGvOqgF4yCjT0yOLEXAUer8eJDO7gw@mail.gmail.com>
+In-Reply-To: <CAPqJDZpuZ586TawooQhxZGvOqgF4yCjT0yOLEXAUer8eJDO7gw@mail.gmail.com>
+From:   Christy Lee <christyc.y.lee@gmail.com>
+Date:   Thu, 16 Dec 2021 08:02:30 -0800
+Message-ID: <CAPqJDZpyO_dK8YA+trbrQWsriJmQF3e1gczTVpXYquiDNjWd5g@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 1/3] Only print scratched registers and stack
+ slots to verifier logs
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
+Cc:     Christy Lee <christylee@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211210173433.13247-1-skhan@linuxfoundation.org>
- <CAADnVQ+Fnn-NuGoLq1ZYbHM=kR_W01GB1DCFOnQTHhgfDOrnaA@mail.gmail.com>
- <d367441f-bba0-30eb-787a-89b0c06a65dd@linuxfoundation.org>
- <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d3c1b7f4-5363-c23e-4837-5eaf07f63ebc@linuxfoundation.org>
-Date:   Thu, 16 Dec 2021 07:42:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
-MIME-Version: 1.0
-In-Reply-To: <CAEf4BzahZhCEroeMWNTu-kGsuFCDaNCvbkiFW7ci0EUOWTwmqQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/15/21 9:04 PM, Andrii Nakryiko wrote:
-> On Tue, Dec 14, 2021 at 12:27 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 12/11/21 6:53 PM, Alexei Starovoitov wrote:
->>> On Fri, Dec 10, 2021 at 9:34 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>>
->>>> ARRAY_SIZE is defined in multiple test files. Remove the definitions
->>>> and include header file for the define instead.
->>>>
->>>> Remove ARRAY_SIZE define and add include bpf_util.h to bring in the
->>>> define.
->>>>
->>>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->>>> ---
->>>>    tools/testing/selftests/bpf/progs/netif_receive_skb.c | 5 +----
->>>>    tools/testing/selftests/bpf/progs/profiler.inc.h      | 5 +----
->>>>    tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 5 +----
->>>>    tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 +---
->>>>    tools/testing/selftests/bpf/progs/test_sysctl_prog.c  | 5 +----
->>>>    5 files changed, 5 insertions(+), 19 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
->>>> index 1d8918dfbd3f..7a5ebd330689 100644
->>>> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
->>>> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
->>>> @@ -5,6 +5,7 @@
->>>>    #include <bpf/bpf_helpers.h>
->>>>    #include <bpf/bpf_tracing.h>
->>>>    #include <bpf/bpf_core_read.h>
->>>> +#include <bpf/bpf_util.h>
->>>
->>> It doesn't look like you've built it.
->>>
->>> progs/test_sysctl_prog.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
->>> #include <bpf/bpf_util.h>
->>>            ^~~~~~~~~~~~~~~~
->>>     CLNG-BPF [test_maps] socket_cookie_prog.o
->>> progs/test_sysctl_loop2.c:11:10: fatal error: 'bpf/bpf_util.h' file not found
->>> #include <bpf/bpf_util.h>
->>>            ^~~~~~~~~~~~~~~~
->>> 1 error generated.
->>> In file included from progs/profiler2.c:6:
->>> progs/profiler.inc.h:7:10: fatal error: 'bpf/bpf_util.h' file not found
->>> #include <bpf/bpf_util.h>
->>>            ^~~~~~~~~~~~~~~~
->>>
->>
->> Sorry about that. I built it - I think something is wrong in my env. Build
->> fails complaining about not finding vmlinux - I overlooked that the failure
->> happened before it got to progs.
->>
->> Error: failed to load BTF from .../vmlinux: No such file or directory
-> 
-> Please make sure that you build vmlinux before you build selftests,
-> BPF selftests use vmlinux to generate vmlinux.h with all kernel types
-> (among other things). So please also make sure that all the setting in
-> selftests/bpf/config were used in your Kconfig.
-> 
->>
+On Thu, Dec 16, 2021 at 7:48 AM Christy Lee <christyc.y.lee@gmail.com> wrote:
 
-The problem in my env. is that I don't have CONFIG_DEBUG_INFO_BTF in
-my config and then don't have the dwarves and llvm-strip on my system.
-Pains of upgrading.
+Apologies, resending this because the previous email was not plain text.
 
-I am all set now. On the other hand the vmlinux.h is a mess. It has
-no guards for defines and including stdio.h and this generated
-vmlinux.h causes all sorts of problems.
-
-thanks,
--- Shuah
+>
+>
+> On Wed, Dec 15, 2021 at 11:02 PM Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+>>
+>> On Wed, Dec 15, 2021 at 11:23 AM Christy Lee <christylee@fb.com> wrote:
+>>
+> [...]
+>>
+>>
+>> Looks good to me, but see a few nits below. They can be ignored or
+>> addressed as a follow up.
+>>
+>>
+>> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>>
+>> >  include/linux/bpf_verifier.h                  |  7 +++
+>> >  kernel/bpf/verifier.c                         | 62 ++++++++++++++++++-
+>> >  .../testing/selftests/bpf/prog_tests/align.c  | 30 ++++-----
+>> >  3 files changed, 82 insertions(+), 17 deletions(-)
+>> >
+>> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> > index 182b16a91084..c555222c97d6 100644
+>> > --- a/include/linux/bpf_verifier.h
+>> > +++ b/include/linux/bpf_verifier.h
+>> > @@ -474,6 +474,13 @@ struct bpf_verifier_env {
+>> >         /* longest register parentage chain walked for liveness marking */
+>> >         u32 longest_mark_read_walk;
+>> >         bpfptr_t fd_array;
+>> > +
+>> > +       /* bit mask to keep track of whether a register has been accessed
+>> > +        * since the last time the function state was pritned
+>>
+>> typo: printed
+>>
+>> > +        */
+>> > +       u32 scratched_regs;
+>> > +       /* Same as scratched_regs but for stack slots */
+>> > +       u64 scratched_stack_slots;
+>> >  };
+>> >
+>> >  __printf(2, 0) void bpf_verifier_vlog(struct bpf_verifier_log *log,
+>>
+>> [...]
+>>
+>> > +       mark_stack_slot_scratched(env, spi);
+>> >         if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) &&
+>> >             !register_is_null(reg) && env->bpf_capable) {
+>> >                 if (dst_reg != BPF_REG_FP) {
+>> > @@ -2957,6 +3004,7 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+>> >                 slot = -i - 1;
+>> >                 spi = slot / BPF_REG_SIZE;
+>> >                 stype = &state->stack[spi].slot_type[slot % BPF_REG_SIZE];
+>> > +               mark_stack_slot_scratched(env, spi);
+>> >
+>> >                 if (!env->allow_ptr_leaks
+>> >                                 && *stype != NOT_INIT
+>> > @@ -6009,8 +6057,10 @@ static int __check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+>> >         *insn_idx = env->subprog_info[subprog].start - 1;
+>> >
+>> >         if (env->log.level & BPF_LOG_LEVEL) {
+>> > +               mark_verifier_state_scratched(env);
+>> >                 verbose(env, "caller:\n");
+>> >                 print_verifier_state(env, caller);
+>>
+>> In all but one cases you call mark_verifier_state_scratched(env)
+>> before calling print_verifier_state(). Instead of sort of artificially
+>> scratch entire state, I'd add a bool flag to print_verifier_state() to
+>> control whether we want to take into account scratch masks or not. It
+>> would also make sure that we will never forget to scratch it where
+>> necessary (you'll have to make a conscious decision on each
+>> print_verifier_state() call).
+>
+> Good idea! I'll do that.
+>>
+>>
+>> > +               mark_verifier_state_scratched(env);
+>> >                 verbose(env, "callee:\n");
+>> >                 print_verifier_state(env, callee);
+>> >         }
+>>
+>> [...]
+>>
+>> > @@ -161,13 +161,13 @@ static struct bpf_align_test tests[] = {
+>> >                 },
+>> >                 .prog_type = BPF_PROG_TYPE_SCHED_CLS,
+>> >                 .matches = {
+>> > -                       {7, "R0_w=pkt(id=0,off=8,r=8,imm=0)"},
+>> > +                       {6, "R0_w=pkt(id=0,off=8,r=8,imm=0)"},
+>> >                         {7, "R3_w=inv(id=0,umax_value=255,var_off=(0x0; 0xff))"},
+>> >                         {8, "R3_w=inv(id=0,umax_value=510,var_off=(0x0; 0x1fe))"},
+>> >                         {9, "R3_w=inv(id=0,umax_value=1020,var_off=(0x0; 0x3fc))"},
+>> >                         {10, "R3_w=inv(id=0,umax_value=2040,var_off=(0x0; 0x7f8))"},
+>> >                         {11, "R3_w=inv(id=0,umax_value=4080,var_off=(0x0; 0xff0))"},
+>>
+> These would be very useful features, I'll address them as a follow up.
+>>
+>> consider this a feature request (unless people disagree), but these
+>> "_value" suffixes for umin/umax/s32_min/etc are just noise and don't
+>> contribute anything but extra visual noise. I'd remove them. map_value
+>> is ok, probably (because we should have map_key, I guess).
+>>
+>> > -                       {18, "R3=pkt_end(id=0,off=0,imm=0)"},
+>> > +                       {13, "R3_w=pkt_end(id=0,off=0,imm=0)"},
+>> >                         {18, "R4_w=inv(id=0,umax_value=255,var_off=(0x0; 0xff))"},
+>> >                         {19, "R4_w=inv(id=0,umax_value=8160,var_off=(0x0; 0x1fe0))"},
+>> >                         {20, "R4_w=inv(id=0,umax_value=4080,var_off=(0x0; 0xff0))"},
+>> > @@ -234,10 +234,10 @@ static struct bpf_align_test tests[] = {
+>> >                 },
+>> >                 .prog_type = BPF_PROG_TYPE_SCHED_CLS,
+>> >                 .matches = {
+>> > -                       {4, "R5_w=pkt(id=0,off=0,r=0,imm=0)"},
+>> > +                       {3, "R5_w=pkt(id=0,off=0,r=0,imm=0)"},
+>>
+>> another improvement suggestion: all these id=0 is also noise. I'd make
+>> sure that cases where we do care about ids always use id > 0 (I think
+>> that might be the case already) and just never output id=0
+>>
+>>
+>> >                         {5, "R5_w=pkt(id=0,off=14,r=0,imm=0)"},
+>> >                         {6, "R4_w=pkt(id=0,off=14,r=0,imm=0)"},
+>> > -                       {10, "R2=pkt(id=0,off=0,r=18,imm=0)"},
+>> > +                       {9, "R2=pkt(id=0,off=0,r=18,imm=0)"},
+>> >                         {10, "R5=pkt(id=0,off=14,r=18,imm=0)"},
+>> >                         {10, "R4_w=inv(id=0,umax_value=255,var_off=(0x0; 0xff))"},
+>> >                         {14, "R4_w=inv(id=0,umax_value=65535,var_off=(0x0; 0xffff))"},
+>>
+>> Another thing that always confuses me is the use of "inv" to denote
+>> scalar. I could never understand why it's not a "scalar" or just
+>> nothing. Especially for cases when we have known value. We'll see
+>> "R4=inv4". So confusing. Maybe let's just drop the inv, so we'll have:
+>>
+>> R4=4
+>>
+>> or (taking into the account all the above suggestions)
+>>
+>> R4=(umax=65535,var_off=(0x0; 0xffff))
+>>
+>> I don't think we lose anything by dropping "inv", but "scalar" would
+>> be still better (even if slightly longer).
+>>
+>>
+>> > @@ -296,7 +296,7 @@ static struct bpf_align_test tests[] = {
+>> >                         /* Calculated offset in R6 has unknown value, but known
+>> >                          * alignment of 4.
+>> >                          */
+>> > -                       {8, "R2_w=pkt(id=0,off=0,r=8,imm=0)"},
+>> > +                       {6, "R2_w=pkt(id=0,off=0,r=8,imm=0)"},
+>> >                         {8, "R6_w=inv(id=0,umax_value=1020,var_off=(0x0; 0x3fc))"},
+>> >                         /* Offset is added to packet pointer R5, resulting in
+>> >                          * known fixed offset, and variable offset from R6.
+>>
+>> [...]
