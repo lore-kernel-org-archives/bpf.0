@@ -2,129 +2,290 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8A46C433FE
-	for <bpf@archiver.kernel.org>; Thu, 16 Dec 2021 13:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51DDCC433EF
+	for <bpf@archiver.kernel.org>; Thu, 16 Dec 2021 14:00:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbhLPNWG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Dec 2021 08:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbhLPNWF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Dec 2021 08:22:05 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1A4C061574;
-        Thu, 16 Dec 2021 05:22:05 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id x15so87838339edv.1;
-        Thu, 16 Dec 2021 05:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=60XSf9cHzUxT6ZkrcHjpgYMJcYBfPDQTULwlGLQzSnM=;
-        b=kCx+JYRzpt9IsbUnF/BkdXilxvx4imVH7NBWYFmU9VtfhpKLH1EM4q0RvV1irbcAt2
-         4OUo4eyzE7sMOK6tRXsc4xLVv/qtM792nz5NtADQWBjrap89Y/9E/DZxSBIHu7325r/R
-         hIC/sGcS9qEiPwBXZAW5NovkyMWfLumPUtQmunPWnVoQUBiERx3rk/VkbLYBfkwVGO9y
-         EsKuunqOtjcdR6HyMyyx/bPiRPdWzMwghOLxbC9p5Js1T6rGt75sjMvVBIJB63A2ZgLe
-         5aMLTapxYRh8oYTA1blPPWVmnTomQhw8jhKlzJ1REvymCEuTgBEiSQF+CTWuRXtm5xsl
-         2mGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=60XSf9cHzUxT6ZkrcHjpgYMJcYBfPDQTULwlGLQzSnM=;
-        b=3F5Tup9UV2RED/P0mk5FA7AM5/ufsoxvyuKPjqylUTbFn7Mvgx82LG+2wzoJT/mKXo
-         xDMWxl0QgvNOnbc64WYV/5YdqLzYmrsfLpXo+lhV5hX03c0dcR3Yxujbj0DgwWwxvZKJ
-         kseEn2OxP+g0ThWs4gMx8USbqhAgmkFahl+GwNPRIWa8WGiC6ktBAHl41hgDpxNhO9f4
-         0D6ZoEzKYRKso9r2uktbC00fLcQOCjQ7v56MiXShu7AJNShQPRuPXOa5FSK0gd+XrfB+
-         SZ/2zYSVA6gPJHuPx/GzTevqvUZIcPRuCUTldA01u4qAKUXph+X2MwQVKMjOl/nDb9od
-         5Iyg==
-X-Gm-Message-State: AOAM533jfoUxBFP7DXZji6SqJrP5NcF3es96+NI9fuG40Mkfl6FJZvPU
-        opTYy7h01uH4MqaUfUcCfvs=
-X-Google-Smtp-Source: ABdhPJzNKXQY5diG8Cxb9pHPRUB7F1RD08f1ZucgR2b3lGFQEqnZF+Gahv7l9l3FM9jf/FfHySZvDQ==
-X-Received: by 2002:a05:6402:1768:: with SMTP id da8mr20810877edb.252.1639660923591;
-        Thu, 16 Dec 2021 05:22:03 -0800 (PST)
-Received: from [192.168.8.198] ([185.69.144.117])
-        by smtp.gmail.com with ESMTPSA id sd2sm1857108ejc.22.2021.12.16.05.22.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 05:22:02 -0800 (PST)
-Message-ID: <7ca623df-73ed-9191-bec7-a4728f2f95e6@gmail.com>
-Date:   Thu, 16 Dec 2021 13:21:26 +0000
+        id S237348AbhLPOAH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Dec 2021 09:00:07 -0500
+Received: from mga02.intel.com ([134.134.136.20]:12138 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237394AbhLPOAF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Dec 2021 09:00:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639663205; x=1671199205;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zPzIwWxDSN173cPFdxBj88MnfdPH02ZA4jCczimPiEQ=;
+  b=e6w2KUvFG8GHLuvr9agGk9VQFreHbA/S9xAywQ79sGJdNQ5Zm07hA2tG
+   xGZYpgiC1UhRJOEPlJ32rAyHLP3H7bl4GQi0MZxZzQxOIS3arpEZp4LZs
+   C1dXyFxtK0MJH5nJgldO/puCrwiOKokEPeHFBQkAm+QWfQ1EscLDYHa+U
+   hBdIZZiLyGGPNM5+Lw9VD7T+ZGl4oMbnw8FprFG0JUacXgLNR9/9BLIk7
+   iH3zTiI8wMnP8LIZi7RqXm3owYJKrlfckDzMchIy5dn9KpdXKPt4/+YmC
+   4epQi1bRspB9B4rVnHn5fG3B4w6srZfPZ29d6czvFlq8ZN25zJWRuRB7D
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10199"; a="226779257"
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="226779257"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 06:00:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,211,1635231600"; 
+   d="scan'208";a="545988200"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orsmga001.jf.intel.com with ESMTP; 16 Dec 2021 06:00:03 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com
+Subject: [PATCH bpf-next v2 1/4] i40e: xsk: move tmp desc array from driver to pool
+Date:   Thu, 16 Dec 2021 14:59:55 +0100
+Message-Id: <20211216135958.3434-2-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211216135958.3434-1-maciej.fijalkowski@intel.com>
+References: <20211216135958.3434-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] cgroup/bpf: fast path skb BPF filtering
-Content-Language: en-US
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org
-References: <462ce9402621f5e32f08cc8acbf3d9da4d7d69ca.1639579508.git.asml.silence@gmail.com>
- <Yboc/G18R1Vi1eQV@google.com>
- <b2af633d-aaae-d0c5-72f9-0688b76b4505@gmail.com>
- <Ybom69OyOjsR7kmZ@google.com>
- <634c2c87-84c9-0254-3f12-7d993037495c@gmail.com>
- <Yboy2WwaREgo95dy@google.com>
- <e729a63a-cded-da9c-3860-a90013b87e2d@gmail.com>
- <CAKH8qBv+GsPz3JTTmLZ+Q2iMSC3PS+bE1xOLbxZyjfno7hqpSA@mail.gmail.com>
- <92f69969-42dc-204a-4138-16fdaaebb78d@gmail.com>
- <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAKH8qBuZxBen871AWDK1eDcxJenK7UkSQCZQsHCPhk6nk9e=Ng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/15/21 22:07, Stanislav Fomichev wrote:
-> On Wed, Dec 15, 2021 at 11:55 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> On 12/15/21 19:15, Stanislav Fomichev wrote:
->>> On Wed, Dec 15, 2021 at 10:54 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>>>
->>>> On 12/15/21 18:24, sdf@google.com wrote:
-[...]
->>>>> I can probably do more experiments on my side once your patch is
->>>>> accepted. I'm mostly concerned with getsockopt(TCP_ZEROCOPY_RECEIVE).
->>>>> If you claim there is visible overhead for a direct call then there
->>>>> should be visible benefit to using CGROUP_BPF_TYPE_ENABLED there as
->>>>> well.
->>>>
->>>> Interesting, sounds getsockopt might be performance sensitive to
->>>> someone.
->>>>
->>>> FWIW, I forgot to mention that for testing tx I'm using io_uring
->>>> (for both zc and not) with good submission batching.
->>>
->>> Yeah, last time I saw 2-3% as well, but it was due to kmalloc, see
->>> more details in 9cacf81f8161, it was pretty visible under perf.
->>> That's why I'm a bit skeptical of your claims of direct calls being
->>> somehow visible in these 2-3% (even skb pulls/pushes are not 2-3%?).
->>
->> migrate_disable/enable together were taking somewhat in-between
->> 1% and 1.5% in profiling, don't remember the exact number. The rest
->> should be from rcu_read_lock/unlock() in BPF_PROG_RUN_ARRAY_CG_FLAGS()
->> and other extra bits on the way.
-> 
-> You probably have a preemptiple kernel and preemptible rcu which most
-> likely explains why you see the overhead and I won't (non-preemptible
-> kernel in our env, rcu_read_lock is essentially a nop, just a compiler
-> barrier).
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Right. For reference tried out non-preemptible, perf shows the function
-taking 0.8% with a NIC and 1.2% with a dummy netdev.
+Move desc_array from the driver to the pool. The reason behind this is
+that we can then reuse this array as a temporary storage for
+descriptors in both the zero-copy case and the SKB case. No need to
+have two, but it needs to be in the pool as the SKB case assumes
+unmodified drivers.
 
+i40e is the only driver that has a batched Tx zero-copy
+implementation, so no need to touch any other driver.
 
->> I'm skeptical I'll be able to measure inlining one function,
->> variability between boots/runs is usually greater and would hide it.
-> 
-> Right, that's why I suggested to mirror what we do in set/getsockopt
-> instead of the new extra CGROUP_BPF_TYPE_ENABLED. But I'll leave it up
-> to you, Martin and the rest.
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 11 -----------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h |  1 -
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c  |  4 ++--
+ include/net/xdp_sock_drv.h                  |  5 ++---
+ include/net/xsk_buff_pool.h                 |  1 +
+ net/xdp/xsk.c                               | 13 ++++++-------
+ net/xdp/xsk_buff_pool.c                     |  7 +++++++
+ net/xdp/xsk_queue.h                         | 12 ++++++------
+ 8 files changed, 24 insertions(+), 30 deletions(-)
 
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index 10a83e5385c7..d3a4a33977ee 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -830,8 +830,6 @@ void i40e_free_tx_resources(struct i40e_ring *tx_ring)
+ 	i40e_clean_tx_ring(tx_ring);
+ 	kfree(tx_ring->tx_bi);
+ 	tx_ring->tx_bi = NULL;
+-	kfree(tx_ring->xsk_descs);
+-	tx_ring->xsk_descs = NULL;
+ 
+ 	if (tx_ring->desc) {
+ 		dma_free_coherent(tx_ring->dev, tx_ring->size,
+@@ -1433,13 +1431,6 @@ int i40e_setup_tx_descriptors(struct i40e_ring *tx_ring)
+ 	if (!tx_ring->tx_bi)
+ 		goto err;
+ 
+-	if (ring_is_xdp(tx_ring)) {
+-		tx_ring->xsk_descs = kcalloc(I40E_MAX_NUM_DESCRIPTORS, sizeof(*tx_ring->xsk_descs),
+-					     GFP_KERNEL);
+-		if (!tx_ring->xsk_descs)
+-			goto err;
+-	}
+-
+ 	u64_stats_init(&tx_ring->syncp);
+ 
+ 	/* round up to nearest 4K */
+@@ -1463,8 +1454,6 @@ int i40e_setup_tx_descriptors(struct i40e_ring *tx_ring)
+ 	return 0;
+ 
+ err:
+-	kfree(tx_ring->xsk_descs);
+-	tx_ring->xsk_descs = NULL;
+ 	kfree(tx_ring->tx_bi);
+ 	tx_ring->tx_bi = NULL;
+ 	return -ENOMEM;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.h b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+index bfc2845c99d1..f6d91fa1562e 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+@@ -390,7 +390,6 @@ struct i40e_ring {
+ 	u16 rx_offset;
+ 	struct xdp_rxq_info xdp_rxq;
+ 	struct xsk_buff_pool *xsk_pool;
+-	struct xdp_desc *xsk_descs;      /* For storing descriptors in the AF_XDP ZC path */
+ } ____cacheline_internodealigned_in_smp;
+ 
+ static inline bool ring_uses_build_skb(struct i40e_ring *ring)
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index ea06e957393e..1a505cf8a6ad 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -467,11 +467,11 @@ static void i40e_set_rs_bit(struct i40e_ring *xdp_ring)
+  **/
+ static bool i40e_xmit_zc(struct i40e_ring *xdp_ring, unsigned int budget)
+ {
+-	struct xdp_desc *descs = xdp_ring->xsk_descs;
++	struct xdp_desc *descs = xdp_ring->xsk_pool->tx_descs;
+ 	u32 nb_pkts, nb_processed = 0;
+ 	unsigned int total_bytes = 0;
+ 
+-	nb_pkts = xsk_tx_peek_release_desc_batch(xdp_ring->xsk_pool, descs, budget);
++	nb_pkts = xsk_tx_peek_release_desc_batch(xdp_ring->xsk_pool, budget);
+ 	if (!nb_pkts)
+ 		return true;
+ 
+diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+index 443d45951564..4aa031849668 100644
+--- a/include/net/xdp_sock_drv.h
++++ b/include/net/xdp_sock_drv.h
+@@ -13,7 +13,7 @@
+ 
+ void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries);
+ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc);
+-u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *desc, u32 max);
++u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max);
+ void xsk_tx_release(struct xsk_buff_pool *pool);
+ struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
+ 					    u16 queue_id);
+@@ -142,8 +142,7 @@ static inline bool xsk_tx_peek_desc(struct xsk_buff_pool *pool,
+ 	return false;
+ }
+ 
+-static inline u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *desc,
+-						 u32 max)
++static inline u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max)
+ {
+ 	return 0;
+ }
+diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
+index ddeefc4a1040..5554ee75e7da 100644
+--- a/include/net/xsk_buff_pool.h
++++ b/include/net/xsk_buff_pool.h
+@@ -60,6 +60,7 @@ struct xsk_buff_pool {
+ 	 */
+ 	dma_addr_t *dma_pages;
+ 	struct xdp_buff_xsk *heads;
++	struct xdp_desc *tx_descs;
+ 	u64 chunk_mask;
+ 	u64 addrs_cnt;
+ 	u32 free_list_cnt;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index f16074eb53c7..e86a8fd0c7b3 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -343,9 +343,9 @@ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc)
+ }
+ EXPORT_SYMBOL(xsk_tx_peek_desc);
+ 
+-static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, struct xdp_desc *descs,
+-					u32 max_entries)
++static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, u32 max_entries)
+ {
++	struct xdp_desc *descs = pool->tx_descs;
+ 	u32 nb_pkts = 0;
+ 
+ 	while (nb_pkts < max_entries && xsk_tx_peek_desc(pool, &descs[nb_pkts]))
+@@ -355,8 +355,7 @@ static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, struct xdp_d
+ 	return nb_pkts;
+ }
+ 
+-u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *descs,
+-				   u32 max_entries)
++u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
+ {
+ 	struct xdp_sock *xs;
+ 	u32 nb_pkts;
+@@ -365,7 +364,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
+ 	if (!list_is_singular(&pool->xsk_tx_list)) {
+ 		/* Fallback to the non-batched version */
+ 		rcu_read_unlock();
+-		return xsk_tx_peek_release_fallback(pool, descs, max_entries);
++		return xsk_tx_peek_release_fallback(pool, max_entries);
+ 	}
+ 
+ 	xs = list_first_or_null_rcu(&pool->xsk_tx_list, struct xdp_sock, tx_list);
+@@ -374,7 +373,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
+ 		goto out;
+ 	}
+ 
+-	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, descs, pool, max_entries);
++	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, pool, max_entries);
+ 	if (!nb_pkts) {
+ 		xs->tx->queue_empty_descs++;
+ 		goto out;
+@@ -386,7 +385,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
+ 	 * packets. This avoids having to implement any buffering in
+ 	 * the Tx path.
+ 	 */
+-	nb_pkts = xskq_prod_reserve_addr_batch(pool->cq, descs, nb_pkts);
++	nb_pkts = xskq_prod_reserve_addr_batch(pool->cq, pool->tx_descs, nb_pkts);
+ 	if (!nb_pkts)
+ 		goto out;
+ 
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 90c4e1e819d3..15f02f02a743 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -37,6 +37,7 @@ void xp_destroy(struct xsk_buff_pool *pool)
+ 	if (!pool)
+ 		return;
+ 
++	kvfree(pool->tx_descs);
+ 	kvfree(pool->heads);
+ 	kvfree(pool);
+ }
+@@ -58,6 +59,12 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
+ 	if (!pool->heads)
+ 		goto out;
+ 
++	if (xs->tx) {
++		pool->tx_descs = kcalloc(xs->tx->nentries, sizeof(*pool->tx_descs), GFP_KERNEL);
++		if (!pool->tx_descs)
++			goto out;
++	}
++
+ 	pool->chunk_mask = ~((u64)umem->chunk_size - 1);
+ 	pool->addrs_cnt = umem->size;
+ 	pool->heads_cnt = umem->chunks;
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index e9aa2c236356..638138fbe475 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -205,11 +205,11 @@ static inline bool xskq_cons_read_desc(struct xsk_queue *q,
+ 	return false;
+ }
+ 
+-static inline u32 xskq_cons_read_desc_batch(struct xsk_queue *q,
+-					    struct xdp_desc *descs,
+-					    struct xsk_buff_pool *pool, u32 max)
++static inline u32 xskq_cons_read_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
++					    u32 max)
+ {
+ 	u32 cached_cons = q->cached_cons, nb_entries = 0;
++	struct xdp_desc *descs = pool->tx_descs;
+ 
+ 	while (cached_cons != q->cached_prod && nb_entries < max) {
+ 		struct xdp_rxtx_ring *ring = (struct xdp_rxtx_ring *)q->ring;
+@@ -282,12 +282,12 @@ static inline bool xskq_cons_peek_desc(struct xsk_queue *q,
+ 	return xskq_cons_read_desc(q, desc, pool);
+ }
+ 
+-static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xdp_desc *descs,
+-					    struct xsk_buff_pool *pool, u32 max)
++static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
++					    u32 max)
+ {
+ 	u32 entries = xskq_cons_nb_entries(q, max);
+ 
+-	return xskq_cons_read_desc_batch(q, descs, pool, entries);
++	return xskq_cons_read_desc_batch(q, pool, entries);
+ }
+ 
+ /* To improve performance in the xskq_cons_release functions, only update local state here.
 -- 
-Pavel Begunkov
+2.33.1
+
