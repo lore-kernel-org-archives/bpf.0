@@ -2,49 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66483C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0805EC433FE
 	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 19:32:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240661AbhLQTcR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S240647AbhLQTcR (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 17 Dec 2021 14:32:17 -0500
 Received: from mga01.intel.com ([192.55.52.88]:11893 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236806AbhLQTcR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:32:17 -0500
+        id S240636AbhLQTcQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Dec 2021 14:32:16 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639769537; x=1671305537;
+  t=1639769536; x=1671305536;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+06WBHU9Dii7ShSfMT92XaLwM4dNa8THGohMSOQH8+8=;
-  b=F6820CTys8xFRNZ6Ntf6GdB471g3u7SIlLjl7yVg6gXhHD+xDIf/JAVs
-   GuPTbeueI/wohmXat80B9OVNlclf6Xn1aNFvBoD1tc1mA5G9TiIy80tMq
-   fZJD4BYW7oIu4f+I1jy0+eyqANBN10QrJWywXfI25eVqLkgch1B72cCEB
-   zlRozu3pPxmpHiJfSENlRrFsTNHhLglIGL1XPHZSCvrmDcH6TIB6fb8mH
-   0Qdmz2+BN1nCF5aebQldEIiyjxkF/KMihxfgxiRx76RjXqdwX9GcQT/SX
-   ifxXrTKQdhZ0eC6f1hbSVeBrpg0tFiSA4crDMSUtDiiuU1RWtNBtUIts8
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="263998128"
+  bh=Asnr9C3rtJ1yxCwhycrfdfNm6aHEMncqw36oi8G+ikk=;
+  b=PbD0xMFzu9LjUGqn2gbRys3iWCpY94QqSN9ybnQxYY+oMLT+usCUT/Jp
+   P4dMtYFFcu5LPIhfmfFr1QK/tDXKZBUt08s9yjrVjfFv9ikl6L+NwwHdN
+   QUI6k3apdCDi526TLiDY24RQUgVkX+3rQmwlVhoeR9tf7sbcYgHPMzaqx
+   PMnNXdSRu1FoQkackVXLnCkMRm5AfToyIuLcOjTmZmN42RnI0j6Dgd5AE
+   E+YaEIxrd/pmn0lmAIlWQeIjwq/zJnbdmERguYwDUMYO7uXkZz8suBmo1
+   eoSqE0FUJDF7dWSC9FTSPFu6pxSG0SQ3ZtjtdYkJK2baxOpM9sG18ilpx
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="263998120"
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="263998128"
+   d="scan'208";a="263998120"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 11:32:13 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="754659453"
+   d="scan'208";a="754659446"
 Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Dec 2021 11:32:13 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 17 Dec 2021 11:32:12 -0800
 From:   Tony Nguyen <anthony.l.nguyen@intel.com>
 To:     davem@davemloft.net, kuba@kernel.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         netdev@vger.kernel.org, anthony.l.nguyen@intel.com,
-        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
         Kiran Bhandare <kiranx.bhandare@intel.com>
-Subject: [PATCH net 3/6] ice: remove dead store on XSK hotpath
-Date:   Fri, 17 Dec 2021 11:31:11 -0800
-Message-Id: <20211217193114.392106-4-anthony.l.nguyen@intel.com>
+Subject: [PATCH net 1/6] ice: xsk: return xsk buffers back to pool when cleaning the ring
+Date:   Fri, 17 Dec 2021 11:31:09 -0800
+Message-Id: <20211217193114.392106-2-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211217193114.392106-1-anthony.l.nguyen@intel.com>
 References: <20211217193114.392106-1-anthony.l.nguyen@intel.com>
@@ -54,34 +53,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-The 'if (ntu == rx_ring->count)' block in ice_alloc_rx_buffers_zc()
-was previously residing in the loop, but after introducing the
-batched interface it is used only to wrap-around the NTU descriptor,
-thus no more need to assign 'xdp'.
+Currently we only NULL the xdp_buff pointer in the internal SW ring but
+we never give it back to the xsk buffer pool. This means that buffers
+can be leaked out of the buff pool and never be used again.
 
-Fixes: db804cfc21e9 ("ice: Use the xsk batched rx allocation interface")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Add missing xsk_buff_free() call to the routine that is supposed to
+clean the entries that are left in the ring so that these buffers in the
+umem can be used by other sockets.
+
+Also, only go through the space that is actually left to be cleaned
+instead of a whole ring.
+
+Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Tested-by: Kiran Bhandare <kiranx.bhandare@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index c124229d98fe..27f5f64dcbd6 100644
+index bb9a80847298..8593717a755e 100644
 --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
 +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -397,7 +397,6 @@ bool ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
- 	ntu += nb_buffs;
- 	if (ntu == rx_ring->count) {
- 		rx_desc = ICE_RX_DESC(rx_ring, 0);
--		xdp = rx_ring->xdp_buf;
- 		ntu = 0;
- 	}
+@@ -811,14 +811,14 @@ bool ice_xsk_any_rx_ring_ena(struct ice_vsi *vsi)
+  */
+ void ice_xsk_clean_rx_ring(struct ice_rx_ring *rx_ring)
+ {
+-	u16 i;
+-
+-	for (i = 0; i < rx_ring->count; i++) {
+-		struct xdp_buff **xdp = &rx_ring->xdp_buf[i];
++	u16 count_mask = rx_ring->count - 1;
++	u16 ntc = rx_ring->next_to_clean;
++	u16 ntu = rx_ring->next_to_use;
  
+-		if (!xdp)
+-			continue;
++	for ( ; ntc != ntu; ntc = (ntc + 1) & count_mask) {
++		struct xdp_buff **xdp = &rx_ring->xdp_buf[ntc];
+ 
++		xsk_buff_free(*xdp);
+ 		*xdp = NULL;
+ 	}
+ }
 -- 
 2.31.1
 
