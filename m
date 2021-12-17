@@ -2,127 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21CAEC433EF
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 16:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F8AFC433F5
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 16:51:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbhLQQp1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Dec 2021 11:45:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47516 "EHLO
+        id S235767AbhLQQvN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Dec 2021 11:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbhLQQpZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:45:25 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F590C061574;
-        Fri, 17 Dec 2021 08:45:25 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id g17so7998546ybe.13;
-        Fri, 17 Dec 2021 08:45:25 -0800 (PST)
+        with ESMTP id S231258AbhLQQvN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Dec 2021 11:51:13 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FD7C061574
+        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 08:51:12 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id v138so8162332ybb.8
+        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 08:51:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=m7Y7ckw+IgW4yU6GDHbrZEnkRBsrFfzHCVFkQQiHxak=;
-        b=kcyeSOnDd9J0q0McHdlTwt2+/AaFjyYI8vm8T3n5p7L2MFKyooEiDZXin00Vkh2QHA
-         gln30x7Ctw47OckybLamsXsvHYyt02zS89/Z1cMj9XqHqu2igcYveTXj7nikEKn+TOFN
-         8nMbon5bb/PxrXi7WxNId9RXz+YrBRxzqjsW/IcwVym7CGhE+sgcHXt1d5fwJ3086H5u
-         SBV6vpaVm6D5wvf9v1V6BSUCLmaqsWbpq2TRgwGMQ1XN/Tluu2qQVw2c0suY143k727i
-         qCLnLwrAJ6YMRQhYz0dl9FYkE4xUuQxAbUS4+qghM+lH6goboXo7USCaZeu1RzdUxE8J
-         WF1A==
+        bh=wy1hD1NtN3aIYhaK0EXbIDD96mHBKbesLioQtcUcYdU=;
+        b=c3tRzLrkC/yuIe7i6fv4q/KHFz8PyxMh1GZi/anKopd70WAG/nqs2CIWbflCGER80M
+         6GYHElaQJ9kFA2LXel5kefhyvwJzZgljsMS+o5r8qvmCojv8Fk+5yg3xfAypBr1RiVdK
+         c5th1vrbx0ZXTsT9yK3y7t2cyfBFBNIGloqZqWfp1FY6Yi88mtBsDzhhurr/drH+eSgo
+         ZmiV9Q5ZRKh3nfNgs1c7QL15/CcS+tppxyghcT4O9yTkjE9ElVdkvflD84fXMn17ehY5
+         mMhMRDkfqrNVAW5X24FKiR/Yc+8WNQx9Dt8MoBQG+U4de+YH3hjFUAlcXwkFm4kO2afE
+         yqSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=m7Y7ckw+IgW4yU6GDHbrZEnkRBsrFfzHCVFkQQiHxak=;
-        b=YvxsYW715qbaHGxUBtpsAtk6nAIN8Hh2s1z0gGWrwLoSEUUJ83uQ34mklslrLRIYr1
-         o+y7nvT03j2AiCV6XyDdFhdOzd3BM3pDtkyEbLkSRXiNTHZBl6D36rKz9jXapV742pHt
-         G4iC7usjPmWvvyN6be/yEulW7nJRbIO5whVSqiOc8+nGEJB8Ri7rWSECCaCA/6Kmghep
-         cazk6gMuM3CNeK8DQndAuSxd90gnd5yk6gth0Lm8PJHQLNKEYNsNXjFTeTz+FcaldksB
-         XqiWQsD1lmaSmWY3gCIjQ8tQOaATfAM/ublZXGQG5xFRi9VhUaR52CmTdS3IenMqzvx1
-         CMqw==
-X-Gm-Message-State: AOAM533+DxwTUOojaYOjNRAprIZNd9f1/ACR6++N0fmNpaBl2WM9S8VM
-        ZSZs8ylucBk2vTwZdWrZCEQ7XpWAJjOpGwPaWG4=
-X-Google-Smtp-Source: ABdhPJzfKY1BO8ehGRFdS69WpfFRf+Rny7uieyPckkgvNhRP9CTEpoL1kfBsBWCeBrYRSpnHy6RCQHVZuZ/MXgnkvwg=
-X-Received: by 2002:a25:3c9:: with SMTP id 192mr5496379ybd.766.1639759524593;
- Fri, 17 Dec 2021 08:45:24 -0800 (PST)
+        bh=wy1hD1NtN3aIYhaK0EXbIDD96mHBKbesLioQtcUcYdU=;
+        b=FY+Ab9FmOP1QQX/uR3tN2D33Bf2Uyw8aNU7uwK6khcbBsVTa8zzmhWhaQvTLqgLSa8
+         mRcLVNFirASH3bpj1z3Ar/S8PuyYF7VfYFacyqUq7zfO44SMMLQzccs55MWRL/3GgMuW
+         WPuZhPKZZdX4Q2PDLXqHmQuxdrs9fhbYWg8ZcxvvEImqhjfUisxX4AMlinqm9LNNbiEo
+         3x85JpV1p2WKaVu5Fyv6eBChOe0TgO8zYTPiZ4yBKHbqQkt0KwuJfSLSK9gy++4W/dJE
+         OaWvEMxYsZkXQb56avDDSogkcK1PElfP7ty3/CwZreAAKFTEdnLbrHdGU0PnwnsqvKXq
+         tKIA==
+X-Gm-Message-State: AOAM5332Q7cljaa2ZPF8ngwqMQIv76o/oyLXIWGqPM9g9bW6qGByyDYa
+        stIZcYOuHtrqeNJIuzB93eU3l2WngenFs4Lj9Sk=
+X-Google-Smtp-Source: ABdhPJx87cO9rtCYzg5Cgsro4PHrx2Hj3LUWIeE9OFt03xMDzbrwAh+CpB2Q5idtAkl7pQIa2KTZ3rW1tNQRvsNQrDQ=
+X-Received: by 2002:a25:ac12:: with SMTP id w18mr2597976ybi.362.1639759872163;
+ Fri, 17 Dec 2021 08:51:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214135555.125348-1-pulehui@huawei.com> <CAEf4BzaQcHV3iY5XqEbt3ptw+KejVVEZ8gSmW7u46=xHnsTaPA@mail.gmail.com>
- <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
-In-Reply-To: <a83777e4-528f-8adb-33e4-a0fea8d544a0@huawei.com>
+References: <20211217141140.GA26351@Mem>
+In-Reply-To: <20211217141140.GA26351@Mem>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 17 Dec 2021 08:45:13 -0800
-Message-ID: <CAEf4BzZf2UBgO=uaOOhPFEdJV9Jo7x3KAC3G9Wa1RVdmOD35nA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix building error when using
- userspace pt_regs
-To:     Pu Lehui <pulehui@huawei.com>
+Date:   Fri, 17 Dec 2021 08:51:01 -0800
+Message-ID: <CAEf4BzYxLcZRq685reGkNRBWNpxLWnEt3u_J1pBCb1ptrU0z1A@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpftool: Flush tracelog output
+To:     Paul Chaignon <paul@isovalent.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 6:25 PM Pu Lehui <pulehui@huawei.com> wrote:
+On Fri, Dec 17, 2021 at 6:11 AM Paul Chaignon <paul@isovalent.com> wrote:
 >
+> The output of bpftool prog tracelog is currently buffered, which is
+> inconvenient when piping the output into other commands. A simple
+> tracelog | grep will typically not display anything. This patch fixes it
+> by flushing the tracelog output after each line from the trace_pipe file.
 >
+> Fixes: 30da46b5dc3a ("tools: bpftool: add a command to dump the trace pipe")
+> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: Paul Chaignon <paul@isovalent.com>
+> ---
+> Changes in v2:
+>   - Resending to fix a format error.
 >
-> On 2021/12/16 12:06, Andrii Nakryiko wrote:
-> > On Tue, Dec 14, 2021 at 5:54 AM Pu Lehui <pulehui@huawei.com> wrote:
-> >>
-> >> When building bpf selftests on arm64, the following error will occur:
-> >>
-> >> progs/loop2.c:20:7: error: incomplete definition of type 'struct
-> >> user_pt_regs'
-> >>
-> >> Some archs, like arm64 and riscv, use userspace pt_regs in
-> >> bpf_tracing.h, which causes build failure when bpf prog use
-> >> macro in bpf_tracing.h. So let's use vmlinux.h directly.
-> >
-> > We could probably also extend bpf_tracing.h to work with
-> > kernel-defined pt_regs, just like we do for x86 (see __KERNEL__ and
-> > __VMLINUX_H__ checks). It's more work, but will benefit other end
-> > users, not just selftests.
-> >
-> It might change a lot. We can use header file directory generated by
-> "make headers_install" to fix it.
+>  tools/bpf/bpftool/tracelog.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/bpf/bpftool/tracelog.c b/tools/bpf/bpftool/tracelog.c
+> index e80a5c79b38f..b310229abb07 100644
+> --- a/tools/bpf/bpftool/tracelog.c
+> +++ b/tools/bpf/bpftool/tracelog.c
+> @@ -158,6 +158,7 @@ int do_tracelog(int argc, char **argv)
+>                         jsonw_string(json_wtr, buff);
+>                 else
+>                         printf("%s", buff);
+> +               fflush(stdout);
 
-We don't have dependency on "make headers_install" and I'd rather not add it.
+maybe it's better to
 
-What do you mean by "change a lot"?
+setlinebuf(stdout);
 
+for the entire bpftool instead?
+
+
+>         }
 >
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -294,7 +294,8 @@ MENDIAN=$(if
-> $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->   CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
->   BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) \
->              -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR) \
-> -            -I$(abspath $(OUTPUT)/../usr/include)
-> +            -I$(abspath $(OUTPUT)/../usr/include) \
-> +            -I../../../../usr/include
-> >>
-> >> Signed-off-by: Pu Lehui <pulehui@huawei.com>
-> >> ---
-> >>   tools/testing/selftests/bpf/progs/loop1.c     |  8 ++------
-> >>   tools/testing/selftests/bpf/progs/loop2.c     |  8 ++------
-> >>   tools/testing/selftests/bpf/progs/loop3.c     |  8 ++------
-> >>   tools/testing/selftests/bpf/progs/loop6.c     | 20 ++++++-------------
-> >>   .../selftests/bpf/progs/test_overhead.c       |  8 ++------
-> >>   .../selftests/bpf/progs/test_probe_user.c     |  6 +-----
-> >>   6 files changed, 15 insertions(+), 43 deletions(-)
-> >>
-> >
-> > [...]
-> > .
-> >
+>         fclose(trace_pipe_fd);
+> --
+> 2.25.1
+>
