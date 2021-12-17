@@ -2,188 +2,278 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D3D6C433EF
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 00:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1A7DC433F5
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 00:27:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbhLQAVk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Dec 2021 19:21:40 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18558 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229504AbhLQAVj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Dec 2021 19:21:39 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 1BGHNjZ7024050;
-        Thu, 16 Dec 2021 16:21:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=mWI5kALHQSM85kyL/x7CLfnm4UpqRekrOpNvBQ4zt9c=;
- b=BgMKgi5ZoARPw2n8j+GNS5e1/alRCVVns0a0+ofbyS+cEc0PjZ6Jsm54ZHSN8/W+5vJ+
- oBZ+gNu+DwlhQLcbdtenVjo2WAivoQkDkTrR0L2lEnfBzSrvzPt9rhLPAZ5QMTzZ01Fq
- U7r0qFAzu/fDKw1CiK5xrz3Rs8sBPdafMTk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3d00nn6w9n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 16 Dec 2021 16:21:26 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 16 Dec 2021 16:21:26 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QIXYvnaWnPNwX2ljlqvciF1sFCHVI3dNKHfZAGldP/KKcB3eH7DqSRJWV+BdRwFXdc09jnAbe7o89hGnxKw1Tj09/T7C/gIln3n1y2cE5QnZOJp5wJMCfkuvh2L7wkJ2Y49Vfjh+sRMy3e9lHrHwGjkVxEqnSgM1kP6SE/Vm2ggqXg9FZ1XJv9mhBHpWH1X33RvlWcOBweEVhVdOakTbh95bddpY8iZg3j65zIMufYxeOU1YdKQ54/sOacEzNGNd6j06AgPOxQpr2RRDRyyKM11MW+LM/WetCEN9oazH8vsNnEelfaUXeAraAiEco82lJ1EK+2pDqOUT3xzTkbktmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mWI5kALHQSM85kyL/x7CLfnm4UpqRekrOpNvBQ4zt9c=;
- b=PMKfKZIC6r+6BXWuGGhC6sgO0uZnBUMz83r65rwo8ozlp3wRejPLkdcMqPPW3VjfAEu4QU8hHb0svXjQEH09VdDHU6m2an2QoHeYA6CReBcwM/e0F/ft0OoWgBnnk+WlW/3jHbAMdTqmAOnwxsQ8tLEZVfABslg6agIcSMXHc551ADtVafq2cOf/KutFxlq5FmM4Pq+/++w5ERvnFSrr/nNESpiiPijWIS+9kUuW8rYGEGDnh4ixh61m97Lo/eTmVGNFXSHaArYmKPQlauf9Gsf7NXbIiCRbKLszJ2vy84I9kyseFw5u8CkRwWGrI7QI5+1esL+sja70W6p9yDJHkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from DM6PR15MB4039.namprd15.prod.outlook.com (2603:10b6:5:2b2::20)
- by DM5PR15MB1596.namprd15.prod.outlook.com (2603:10b6:3:cf::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4801.14; Fri, 17 Dec 2021 00:21:24 +0000
-Received: from DM6PR15MB4039.namprd15.prod.outlook.com
- ([fe80::755e:51ae:f6c:3953]) by DM6PR15MB4039.namprd15.prod.outlook.com
- ([fe80::755e:51ae:f6c:3953%7]) with mapi id 15.20.4778.018; Fri, 17 Dec 2021
- 00:21:24 +0000
-Message-ID: <b183b2b8-3bff-f647-678f-40b479c9c5c5@fb.com>
-Date:   Thu, 16 Dec 2021 19:21:21 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: add libbpf feature-probing
- API selftests
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
-        <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <kernel-team@fb.com>
-References: <20211216070442.1492204-1-andrii@kernel.org>
- <20211216070442.1492204-3-andrii@kernel.org>
-From:   Dave Marchevsky <davemarchevsky@fb.com>
-In-Reply-To: <20211216070442.1492204-3-andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR10CA0006.namprd10.prod.outlook.com
- (2603:10b6:208:120::19) To DM6PR15MB4039.namprd15.prod.outlook.com
- (2603:10b6:5:2b2::20)
+        id S230357AbhLQA14 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Dec 2021 19:27:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46421 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230510AbhLQA1z (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 16 Dec 2021 19:27:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639700875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cz25tWtikPGBWsk5uNIbzq0PBz1i8lhEsb1TeVq2zEY=;
+        b=UUxgFKV9j3dVuMrOF73dEq/8/UQYqbbByQbMBq6UnP4F9KZE1M1UOcloH9xvH5lGf7igVM
+        EkzA0VwHYo1+pNhFLK2C454RaA7pMhCnCHYl2pxoNUZFbIrADzjk+tXWeZ+Ix5k6nMSyhr
+        QFQnNNfD/wstzQ4zSlkfup8EBvFU4L8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-336-2qJ0kfEuMSKaMdKKzHViAg-1; Thu, 16 Dec 2021 19:27:54 -0500
+X-MC-Unique: 2qJ0kfEuMSKaMdKKzHViAg-1
+Received: by mail-ed1-f72.google.com with SMTP id d13-20020a056402516d00b003e7e67a8f93so459842ede.0
+        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 16:27:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cz25tWtikPGBWsk5uNIbzq0PBz1i8lhEsb1TeVq2zEY=;
+        b=Rs+dyW2KjZB6eKqRfIVC5u32rXHJ25LA4PIm1KTm/1mv+P7kqYILJijWVNTypAhKj+
+         onfXpM8h9yK8tJ8fcA2HjIb1UeRl95s0mKNMLsgfUpJ3Klm9vyn1R6pdti6G7ZbkLQK9
+         MJViDPjdFIXVhJDbXZn+HLH3TlPE+emcBtlKdNiDHWKw+ErZLIDADLX79qzTIJ3s7e+s
+         t7jTwurY50BjmKN2uDuBuYryyA5O1yVTuC0JDLpFIDQrqInEVeHjMpeHrKK/fJVe9xGj
+         6zKQAr3wUa7qZjK99kxi4YCB2hxWi5xCC2hx+cjPi2BvbAc6yKe6rULo2NnNsu7y9UIX
+         BjCw==
+X-Gm-Message-State: AOAM532KfTCi1w9QiK0Scaayb4MjPu0dAFPbXlSR7R8IpRBSZywQUsX7
+        5j+pQWkBJHlQLl/AFriFtt7K10IWz5D1WKPyXrwiHxXGWEA0KYg+kDA4v6uZ94mJMq/TNeMeos1
+        ciFg/UXnE1ce9
+X-Received: by 2002:a17:906:d550:: with SMTP id cr16mr447276ejc.544.1639700872731;
+        Thu, 16 Dec 2021 16:27:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw9+FtEtrmxJvR4bcKu+vf2qonpqVWD+6Z49H9RBUIoiu/lxFCgUfajtbXRBnZ8CaaW7yuIdg==
+X-Received: by 2002:a17:906:d550:: with SMTP id cr16mr447255ejc.544.1639700872258;
+        Thu, 16 Dec 2021 16:27:52 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id r25sm2867760edt.21.2021.12.16.16.27.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 16:27:51 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A520E180441; Fri, 17 Dec 2021 01:27:50 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v4 1/7] xdp: Allow registering memory model without rxq reference
+Date:   Fri, 17 Dec 2021 01:27:35 +0100
+Message-Id: <20211217002741.146797-2-toke@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211217002741.146797-1-toke@redhat.com>
+References: <20211217002741.146797-1-toke@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aabc6217-8999-477b-a48e-08d9c0f328df
-X-MS-TrafficTypeDiagnostic: DM5PR15MB1596:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR15MB159610CA2D74C465B196D9AEA0789@DM5PR15MB1596.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v0kmKN6czQh4sca9FDQonROXeGfy+ZED4Ibf3daw00k1m8jRzY//2Pz3tuwV7cJjVWbUq3GptqZ5y77ncveAA67fbzQqFkGewJbSROlFNp/QhpelZ8zqr37qfe+j+RZfkShy6anKDGSMdRcvKcyl7AcIu4rrmgVU0IUohNDRmX4A/vr2C+RSaGMnY3IW2R13KlLq0d8s1c7iYRZtSGp0ThvGOeiYDIdhMhNv36CDQXEmo9CVRG1Azl89h6pcUms63ommRx/BAYgY+YGvKNUNJImSwnbbQA9+4AcQ+A0ckp1nTe4rgizrxtuRcYDPYyfhoQPmRnrQAl8mCEmlFgHgT0AAoIepRbq7mnPoa0Vcl46CHmlSkAnoUHAT+FS87lJhmOOFOK8kBz7425bT+wxU0Qh4pRPVf9pQbrOP2qqoQBgdza+tYqnVXLsQJglWP7nXvEnGxBSO4QNgfyNR1inIbZM+WoIP6znnA/Arv195MafNRmI9nja2de9gcG1s87cZQsx4jEnE8h3wjTt5Vn2qKnDA9T27Ulest8Msv1TCDqfOdfsvsHMEqsRx94l/m6MWuQQg2lSrHV0T2x7+Lj4dX/pPy9yzSABcxB9LsyYeQ0i/MxeTYRScMmz3+r3bgmnfCkO96PoGk9tIdf63X6AKRSk6H02fovNIpV0hjpTWjzpNrVFfpbwwdpDp/OjnK7g3ZP33TAmYsDEMScqmf1GBVFW27bCsVWwZFt0ydvsQLlE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB4039.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(2906002)(83380400001)(31686004)(4326008)(316002)(8676002)(86362001)(66476007)(66556008)(66946007)(53546011)(6506007)(186003)(6512007)(31696002)(6666004)(36756003)(508600001)(2616005)(38100700002)(6486002)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UU5kMEN6TitoWmdVMlZuL2MrU2lGbkEwK0xZazRmL1k4TjBKMjhBb2ZGVVlp?=
- =?utf-8?B?bXJ3aEhZd2U0ZnlqK1pKTEc0OWFaK2F3U3VjMFIraDJTNFJ2bUZhaExDbDV4?=
- =?utf-8?B?QnRjeEZCWlhjTVVHeURWeStIb09kNUltYnY1VVVNbUI5ODJqOW5qbFBQV2x3?=
- =?utf-8?B?UUd0STJ1OFpyV3QyQkpnZG1VaTNMM05YV3JBc2g4Z25BMkJGZks2ZkFQR0dN?=
- =?utf-8?B?UVAxM2QySjAxZW5rcVE5RFNMeEsyZktyd012MTR5MStNSWV3bUg4aWl3dUxT?=
- =?utf-8?B?TTBUbk9pcytQT21qa3pnZXhLSFhTSzJOTTN0WGNTYkh5SkZSZXk5QVFvY2pQ?=
- =?utf-8?B?VW5JMTVtK24ySGVVT3RPbFpnT2FyU2FkVVE2RzJTNE9pUlNXQlNLaGVRQmVw?=
- =?utf-8?B?dnpJOE9OcU1OODVqRjBxYXA2UllxdnI0d1lIWllhMVRrc0R4ejZUbmJQa2V5?=
- =?utf-8?B?VXZuR3RKTW5HTHNRNE0xaTNGKzRBUTZ3eE8zZVlzNi9zaEw1S3J0UWFvRkhS?=
- =?utf-8?B?QWRjTThzakI4TnBUTHQwU0pZWDdUQWNsT2d0YVYvWFdtbFBiV1lrV1REbFht?=
- =?utf-8?B?ZFh0NTJXclRvN25KV01Vbm1NYWYxdWIyRGtmVW9EMkdwVm9VM1JwTGhFelNU?=
- =?utf-8?B?VjlTWUdMZk5ValNETEk4WTc5VDdXTWs1Tnk2ZFhBaEJFa3dla3NHVDMvdDdk?=
- =?utf-8?B?Wml0dERRS1o2UzBGRVdpWThWUlZDc0ttUklEREt0NkVUY000UzQvQ1pkTXdF?=
- =?utf-8?B?R3ZBZW1XWFozWlNVZUEwWnpnS1R1d0xhUldmdkM2bkovTTdxbm1GUEQ1WEF2?=
- =?utf-8?B?eU1xb0JuMkpNcXBOK2Y4UlNKZ3REVHVMbzNCakgwUGN4NUYyaHNNa0taY0U5?=
- =?utf-8?B?T3pyRWlpR2E4SDBDNER3YjFUQnNIOGZReW1rcDNLenBXTXBDUk1iQklDTyt0?=
- =?utf-8?B?bmY5K2FWTjFSSEZzd2FFRGJoUmdLSjV2Z1hieFI0Zm9UR2xad3V4amFDYmhB?=
- =?utf-8?B?aGl1UmYwQXZTV3ZnaTlGSjBMVVdRUThwQUc3SzgzN2RodU0rL0l3N3ErSTRV?=
- =?utf-8?B?UUtIa1h4Ky9Ib2lPUXVzd0xveGpneXlNbG1JZmcwclQvVE5LenZiT2RWeGNz?=
- =?utf-8?B?Z2U0VHVzQlBWSzNjblkzTXlvdTNjcGorRVo5elNuRnU0RFI5OFhUTkpmMGVR?=
- =?utf-8?B?TzhGYnVmYnhPSDhIa2NNbEJERE1HV1FocVNRUHpBRXZ3UDlMUFdpTzdrdWUz?=
- =?utf-8?B?YzlYV2pBQ3l2WnVMSWc4bFR2aTBDMWFOZDZ6Mjl1Zk1DOTRxTUF1RWFScHBl?=
- =?utf-8?B?c3BKSU10a2FlRTZOTWpQVHpNSE9xSDVSanJaSks0NkFuTUFid2czZ09zUFU1?=
- =?utf-8?B?UEl6VmJrOUJVNlcxaDdwRDZ2M0lkVDZPYTZHSi9nbmZCdk9GYkNFRUpVQ1Vw?=
- =?utf-8?B?MDI2b2FyLzVhZUFza0ZBRHM3OXgxWVd3UW1UUjkzdFhYMEt2dHR3cmNvYWFC?=
- =?utf-8?B?OE1sMHoxY20rQnduREhhWnhsNXJIY1Q4TUpRZlBkbVozTVRMSE16WUg4d2VU?=
- =?utf-8?B?SkdKVGhkSjRZMmlJUFRUSlhoVGI3bExlYkdFckRIUUg4RjBMRXJEaUxmUlJH?=
- =?utf-8?B?Uzh3bnNseUJlNEwvY0o3ZkE4TTFkRk41ZklQc3M0VlVhU1RHUkVCNTFndUov?=
- =?utf-8?B?RTRTc0FsRjVqMUFERGRGL0lMQlpYUUlpaFNXeG5VUUM3MEdQcTVFSmRBTWJl?=
- =?utf-8?B?TnhSRkNCQitXZlpBaTFlenNORTh1ODdoVXVPVmRQYjhXaFVCd05pSFlMR2FO?=
- =?utf-8?B?Q1FFMlpOVTRaenNyUUdSZS9ORTlaRUwvMW1XVzNiWmphdEFpMzhPWElYcG5r?=
- =?utf-8?B?NVlYUFh1cHBxNk81UmhtN2Izdnl6K0hVUFlkL0tVNnlESjhGUlBkdXowdlFK?=
- =?utf-8?B?WnF4QmNkbmJsMWN1UUdFV29mR084WVRWMk5NQkpLOGZVaURXUkwzQ1M0YnBq?=
- =?utf-8?B?Q0lQRU50VlU3TVpPZ0k1RVljdmoraWtWVktONGRPcWZRdGh4Q1hHaWN4a0hZ?=
- =?utf-8?B?LzhBTHJKMnY2U0haQldBaExqRzF3SmRxUkNUYkhXOXlPcC9IMitWWGRSL09O?=
- =?utf-8?B?SEU1VjlKcmVXSi9kQnRyd05LOERydklsbW5XTHVBazY5Q2RvOXpxbCtXbWlR?=
- =?utf-8?Q?EmUblwFOcH2bdZuaSJfADBP6g4qnZITOSCuTnuxLsQ5g?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: aabc6217-8999-477b-a48e-08d9c0f328df
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB4039.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2021 00:21:24.6072
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1PCJ5LUJfQ4ZRrQpZpED4bVBEurF2qfhhx8vqrOsYqx/c9uenqjE7ohCsbk/oFYJ6tHUphgqbqwpLmGJdEq0og==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1596
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: 8ZcYntoONZq-Ub2pz6S8xbmZinHQR-61
-X-Proofpoint-ORIG-GUID: 8ZcYntoONZq-Ub2pz6S8xbmZinHQR-61
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-16_09,2021-12-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- mlxscore=0 adultscore=0 priorityscore=1501 mlxlogscore=755 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112170000
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/16/21 2:04 AM, Andrii Nakryiko wrote:   
-> Add selftests for prog/map/prog+helper feature probing APIs. Prog and
-> map selftests are designed in such a way that they will always test all
-> the possible prog/map types, based on running kernel's vmlinux BTF enum
-> definition. This way we'll always be sure that when adding new BPF
-> program types or map types, libbpf will be always updated accordingly to
-> be able to feature-detect them.
-> 
-> BPF prog_helper selftest will have to be manually extended with
-> interesting and important prog+helper combinations, it's easy, but can't
-> be completely automated.
-> 
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
+The functions that register an XDP memory model take a struct xdp_rxq as
+parameter, but the RXQ is not actually used for anything other than pulling
+out the struct xdp_mem_info that it embeds. So refactor the register
+functions and export variants that just take a pointer to the xdp_mem_info.
 
-[...]
+This is in preparation for enabling XDP_REDIRECT in bpf_prog_run(), using a
+page_pool instance that is not connected to any network device.
 
-> +	for (e = btf_enum(t), i = 0, n = btf_vlen(t); i < n; e++, i++) {
-> +		const char *prog_type_name = btf__str_by_offset(btf, e->name_off);
-> +		enum bpf_prog_type prog_type = (enum bpf_prog_type)e->val;
-> +		int res;
-> +
-> +		if (prog_type == BPF_PROG_TYPE_UNSPEC)
-> +			continue;
-> +
-> +		if (!test__start_subtest(prog_type_name))
-> +			continue;
-> +
-> +		res = libbpf_probe_bpf_prog_type(prog_type, NULL);
-> +		ASSERT_EQ(res, 1, prog_type_name);
-> +	}
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ include/net/xdp.h |  3 ++
+ net/core/xdp.c    | 92 +++++++++++++++++++++++++++++++----------------
+ 2 files changed, 65 insertions(+), 30 deletions(-)
 
-I like how easy BTF makes this.
-Maybe worth trying to probe one-past-the-end of enum to confirm it fails as
-expected?
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 447f9b1578f3..8f0812e4996d 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -260,6 +260,9 @@ bool xdp_rxq_info_is_reg(struct xdp_rxq_info *xdp_rxq);
+ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+ 			       enum xdp_mem_type type, void *allocator);
+ void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq);
++int xdp_reg_mem_model(struct xdp_mem_info *mem,
++		      enum xdp_mem_type type, void *allocator);
++void xdp_unreg_mem_model(struct xdp_mem_info *mem);
+ 
+ /* Drivers not supporting XDP metadata can use this helper, which
+  * rejects any room expansion for metadata as a result.
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 5ddc29f29bad..ac476c84a986 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -110,20 +110,15 @@ static void mem_allocator_disconnect(void *allocator)
+ 	mutex_unlock(&mem_id_lock);
+ }
+ 
+-void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
++void xdp_unreg_mem_model(struct xdp_mem_info *mem)
+ {
+ 	struct xdp_mem_allocator *xa;
+-	int type = xdp_rxq->mem.type;
+-	int id = xdp_rxq->mem.id;
++	int type = mem->type;
++	int id = mem->id;
+ 
+ 	/* Reset mem info to defaults */
+-	xdp_rxq->mem.id = 0;
+-	xdp_rxq->mem.type = 0;
+-
+-	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
+-		WARN(1, "Missing register, driver bug");
+-		return;
+-	}
++	mem->id = 0;
++	mem->type = 0;
+ 
+ 	if (id == 0)
+ 		return;
+@@ -135,6 +130,17 @@ void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
+ 		rcu_read_unlock();
+ 	}
+ }
++EXPORT_SYMBOL_GPL(xdp_unreg_mem_model);
++
++void xdp_rxq_info_unreg_mem_model(struct xdp_rxq_info *xdp_rxq)
++{
++	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
++		WARN(1, "Missing register, driver bug");
++		return;
++	}
++
++	xdp_unreg_mem_model(&xdp_rxq->mem);
++}
+ EXPORT_SYMBOL_GPL(xdp_rxq_info_unreg_mem_model);
+ 
+ void xdp_rxq_info_unreg(struct xdp_rxq_info *xdp_rxq)
+@@ -259,28 +265,24 @@ static bool __is_supported_mem_type(enum xdp_mem_type type)
+ 	return true;
+ }
+ 
+-int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+-			       enum xdp_mem_type type, void *allocator)
++static struct xdp_mem_allocator *__xdp_reg_mem_model(struct xdp_mem_info *mem,
++						     enum xdp_mem_type type,
++						     void *allocator)
+ {
+ 	struct xdp_mem_allocator *xdp_alloc;
+ 	gfp_t gfp = GFP_KERNEL;
+ 	int id, errno, ret;
+ 	void *ptr;
+ 
+-	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
+-		WARN(1, "Missing register, driver bug");
+-		return -EFAULT;
+-	}
+-
+ 	if (!__is_supported_mem_type(type))
+-		return -EOPNOTSUPP;
++		return ERR_PTR(-EOPNOTSUPP);
+ 
+-	xdp_rxq->mem.type = type;
++	mem->type = type;
+ 
+ 	if (!allocator) {
+ 		if (type == MEM_TYPE_PAGE_POOL)
+-			return -EINVAL; /* Setup time check page_pool req */
+-		return 0;
++			return ERR_PTR(-EINVAL); /* Setup time check page_pool req */
++		return NULL;
+ 	}
+ 
+ 	/* Delay init of rhashtable to save memory if feature isn't used */
+@@ -290,13 +292,13 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+ 		mutex_unlock(&mem_id_lock);
+ 		if (ret < 0) {
+ 			WARN_ON(1);
+-			return ret;
++			return ERR_PTR(ret);
+ 		}
+ 	}
+ 
+ 	xdp_alloc = kzalloc(sizeof(*xdp_alloc), gfp);
+ 	if (!xdp_alloc)
+-		return -ENOMEM;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	mutex_lock(&mem_id_lock);
+ 	id = __mem_id_cyclic_get(gfp);
+@@ -304,15 +306,15 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+ 		errno = id;
+ 		goto err;
+ 	}
+-	xdp_rxq->mem.id = id;
+-	xdp_alloc->mem  = xdp_rxq->mem;
++	mem->id = id;
++	xdp_alloc->mem = *mem;
+ 	xdp_alloc->allocator = allocator;
+ 
+ 	/* Insert allocator into ID lookup table */
+ 	ptr = rhashtable_insert_slow(mem_id_ht, &id, &xdp_alloc->node);
+ 	if (IS_ERR(ptr)) {
+-		ida_simple_remove(&mem_id_pool, xdp_rxq->mem.id);
+-		xdp_rxq->mem.id = 0;
++		ida_simple_remove(&mem_id_pool, mem->id);
++		mem->id = 0;
+ 		errno = PTR_ERR(ptr);
+ 		goto err;
+ 	}
+@@ -322,13 +324,43 @@ int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
+ 
+ 	mutex_unlock(&mem_id_lock);
+ 
+-	trace_mem_connect(xdp_alloc, xdp_rxq);
+-	return 0;
++	return xdp_alloc;
+ err:
+ 	mutex_unlock(&mem_id_lock);
+ 	kfree(xdp_alloc);
+-	return errno;
++	return ERR_PTR(errno);
++}
++
++int xdp_reg_mem_model(struct xdp_mem_info *mem,
++		      enum xdp_mem_type type, void *allocator)
++{
++	struct xdp_mem_allocator *xdp_alloc;
++
++	xdp_alloc = __xdp_reg_mem_model(mem, type, allocator);
++	if (IS_ERR(xdp_alloc))
++		return PTR_ERR(xdp_alloc);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(xdp_reg_mem_model);
++
++int xdp_rxq_info_reg_mem_model(struct xdp_rxq_info *xdp_rxq,
++			       enum xdp_mem_type type, void *allocator)
++{
++	struct xdp_mem_allocator *xdp_alloc;
++
++	if (xdp_rxq->reg_state != REG_STATE_REGISTERED) {
++		WARN(1, "Missing register, driver bug");
++		return -EFAULT;
++	}
++
++	xdp_alloc = __xdp_reg_mem_model(&xdp_rxq->mem, type, allocator);
++	if (IS_ERR(xdp_alloc))
++		return PTR_ERR(xdp_alloc);
++
++	trace_mem_connect(xdp_alloc, xdp_rxq);
++	return 0;
+ }
++
+ EXPORT_SYMBOL_GPL(xdp_rxq_info_reg_mem_model);
+ 
+ /* XDP RX runs under NAPI protection, and in different delivery error
+-- 
+2.34.1
 
-Regardless,
-
-Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
-
-> +cleanup:
-> +	btf__free(btf);
-> +}
-
-[...]
