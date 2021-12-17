@@ -2,538 +2,168 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12BEBC433EF
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 00:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4711BC433EF
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 00:32:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbhLQA2K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Dec 2021 19:28:10 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:21944 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230396AbhLQA2B (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 16 Dec 2021 19:28:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1639700880;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4GGO6N4bCUKxV1eNBvyBL2tJVvDzjOAuLukvcKL/rog=;
-        b=emDr6jGVVsPeU2fqpN05TX1IXQIzMo+3ahAORSkAG22kkDBX82Q7aLQBlxuVGSyFD1u9Ai
-        x2HY/7WWERRyvshlr5hauGOO/X/MF3HRsmcuRIugLGZf3WdV7uNdaqIqoeGQto6M8mZQ09
-        aletqxnqDwSGLpL1790im8BM5fv1dBI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-220-8TvghYogOm-57z4voujIlA-1; Thu, 16 Dec 2021 19:27:59 -0500
-X-MC-Unique: 8TvghYogOm-57z4voujIlA-1
-Received: by mail-ed1-f70.google.com with SMTP id n11-20020aa7c68b000000b003e7d68e9874so413727edq.8
-        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 16:27:59 -0800 (PST)
+        id S229587AbhLQAcB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Dec 2021 19:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229563AbhLQAcB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Dec 2021 19:32:01 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B071C061574
+        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 16:32:00 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id y17-20020a2586d1000000b005f6596e8760so1428344ybm.17
+        for <bpf@vger.kernel.org>; Thu, 16 Dec 2021 16:32:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=V///VcFEBhjR6GeGnFgf0YY+klBa/s9b1Wa6vUmP1t4=;
+        b=lMY15nnYkFC67MnTKRrxVsvfsvp1c6DUsxTl2p8Y2WMnVexVIOI2uZpNOg+VgxgL2M
+         GyR5t2ofUH652cAOrCyMjltPANAXNmdxLNtMD2PBVELOWQGV/2p+QrMZXouGdE0lPaiP
+         SOV5M906w8in40oKMlHGl2QV+UXVLNDzM0zqRDp/b6v5ZC7Fb0iNn0+yvzR8ZSoCyjT7
+         Gf6XlidNChGkvnLV+LMZedIixZGP89hQOxfRN7fCKe6NxgZxvCO8GEqFPhEtkOqGBUj1
+         fhdS0wlUJiyEvCeVUpnCE/WNB/VXMFUFLSsD/v7Cfw6Pif3jDWLTeCusLOdxAFCng2Up
+         zzMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4GGO6N4bCUKxV1eNBvyBL2tJVvDzjOAuLukvcKL/rog=;
-        b=Rhm0lhM9WDtJVtvHQgq/1ur/AAV0dSyNKRnUwRxpGE4FOokpxEtEjdxY5Et7l45V8+
-         gpO8c+ty6xTEmowKQ72TTJdnll6c+JRnrfHH5kWntCgEX0buszvs9c7DxlU65s9nbMfb
-         dIQNLtTtjVrCaANoTVsDDJTsKIpZ6Iejri0qxuLZRTWnkGsO5GLHvxoICr0huIE0/Ewo
-         tKSsVDzBuTzfPjvi0kPQ/vk29USweYPUdCmxsWegU/GOLmrWfxy9PyjAg0LZ3e2dfHrN
-         qQcqOVVqJMEkMid5sod8jlDKMO7wHgpwUWY3WxC2K40ysmt9rnKgZQZ/t7185+ZIVLji
-         9rUQ==
-X-Gm-Message-State: AOAM533FZxa66g4cUiQjiPBgsChDPii61uSOegtBwNxw+dMMEDvo0Ef6
-        GxiV5N8V/f3k7aFybVMEyG7PIghCGfM/jGNKdB2G/CijGv+iDBKRUoNIxDnoHdwypYs7WKiK0NG
-        wDt9Rc3o+bDlh
-X-Received: by 2002:a05:6402:1c1a:: with SMTP id ck26mr423072edb.253.1639700876674;
-        Thu, 16 Dec 2021 16:27:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyYgKyxq2mw1CjfRkp1NAdTcIWOX2tshBAqMu8+GKwP5Z4Mgdf6+3IFaA2+KqiLEV7tAaXyxA==
-X-Received: by 2002:a05:6402:1c1a:: with SMTP id ck26mr423017edb.253.1639700875779;
-        Thu, 16 Dec 2021 16:27:55 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id e15sm2878171edq.46.2021.12.16.16.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 16:27:54 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 89F4718044B; Fri, 17 Dec 2021 01:27:53 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=V///VcFEBhjR6GeGnFgf0YY+klBa/s9b1Wa6vUmP1t4=;
+        b=hyVitlxySjzTvGAkLpZT15Ep9jtlFHYG2SU/4XqScYMEvh0Er5gpm7qfrZq7bxOWbw
+         mf0pKrVp9K+rF00vvZt00JqFzGH3OaL+v2JzC0W5SA+gcKv/Ino/2AKD23oWQmvFpDak
+         FJhwg0b/kEKZCpV9+5nlS9TaNa0oLqvEAbN9DR+7hWEWy0RgdiD2Cx73c6j9buSzgxyY
+         L0muYsd0T3+7W1Q8YFAfL+X6G6G03icY+PwHCUNs29pGs9jND72McHTU9K5BxsTvkDdo
+         M89bv5djYkV5D3iAlUiVC4od6fMo15kXHVEVd53+IGo07B2A1Awa5upnYmC1o1qy/8/r
+         AB7Q==
+X-Gm-Message-State: AOAM530P1UpMBTs3YzPgyMGtOUNVY4C2GLrETTQY4U/3naBZvn4o6zfq
+        1dXtofa27OLm7aPmJy5xJMzmeoqYRQo=
+X-Google-Smtp-Source: ABdhPJx4tLgI4kg7SD9rKQCSLQbYtCHKkMQEprqokIi4WhctnsZSS51YehKmZH8rDJOxCY9C6muKhkCSM0g=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:9064:adcd:ab38:7d29])
+ (user=haoluo job=sendgmr) by 2002:a05:6902:120e:: with SMTP id
+ s14mr853207ybu.397.1639701119438; Thu, 16 Dec 2021 16:31:59 -0800 (PST)
+Date:   Thu, 16 Dec 2021 16:31:43 -0800
+Message-Id: <20211217003152.48334-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
+Subject: [PATCH bpf-next v2 0/9] Introduce composable bpf types
+From:   Hao Luo <haoluo@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v4 6/7] bpf: Add "live packet" mode for XDP in bpf_prog_run()
-Date:   Fri, 17 Dec 2021 01:27:40 +0100
-Message-Id: <20211217002741.146797-7-toke@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211217002741.146797-1-toke@redhat.com>
-References: <20211217002741.146797-1-toke@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        bpf@vger.kernel.org, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds support for running XDP programs through bpf_prog_run() in a mode
-that enables live packet processing of the resulting frames. Previous uses
-of bpf_prog_run() for XDP returned the XDP program return code and the
-modified packet data to userspace, which is useful for unit testing of XDP
-programs.
+This patch set consists of two changes:
 
-This patch adds a new mode with different semantics. When enabled through
-the new BPF_F_TEST_XDP_LIVE_FRAMES flag, the XDP program return codes will
-be honoured: returning XDP_PASS will result in the frame being injected
-into the networking stack as if it came from the selected networking
-interface, while returning XDP_TX and XDP_REDIRECT will result in the frame
-being transmitted out an egress interface. XDP_TX is translated into an
-XDP_REDIRECT operation, since the real XDP_TX action is only possible from
-within the network drivers themselves, not from the process context where
-bpf_prog_run() is executed.
+ - a cleanup of arg_type, ret_type and reg_type which try to make those
+   types composable. (patch 1/9 - patch 6/9)
+ - a bug fix that prevents bpf programs from writing kernel memory.
+   (patch 7/9 - patch 9/9)
 
-To achieve this new mode of operation, we create a page pool instance while
-setting up the test run, and feed pages from that into the XDP program. The
-setup cost of this is amortised over the number of repetitions specified by
-userspace.
+The purpose of the cleanup is to find a scalable way to express type
+nullness and read-onliness. This patchset introduces two flags that
+can be applied on all three types: PTR_MAYBE_NULL and MEM_RDONLY.
+Previous types such as ARG_XXX_OR_NULL can now be written as
 
-To support performance testing use case, we further optimise the setup step
-so that all pages in the pool are pre-initialised with the packet data, and
-pre-computed context and xdp_frame objects stored at the start of each
-page. This makes it possible to entirely avoid touching the page content on
-each XDP program invocation, and enables sending up to 11.5 Mpps/core on my
-test box.
+ ARG_XXX | PTR_MAYBE_NULL
 
-Because the data pages are recycled by the page pool, and the test runner
-doesn't re-initialise them for each run, subsequent invocations of the XDP
-program will see the packet data in the state it was after the last time it
-ran on that particular page. This means that an XDP program that modifies
-the packet before redirecting it has to be careful about which assumptions
-it makes about the packet content, but that is only an issue for the most
-naively written programs.
+Similarly, PTR_TO_RDONLY_BUF is now "PTR_TO_BUF | MEM_RDONLY".
 
-Enabling the new flag is only allowed when not setting ctx_out and data_out
-in the test specification, since using it means frames will be redirected
-somewhere else, so they can't be returned.
+Flags can be composed, as ARGs can be both MEM_RDONLY and MAYBE_NULL.
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/uapi/linux/bpf.h       |   2 +
- kernel/bpf/Kconfig             |   1 +
- net/bpf/test_run.c             | 287 ++++++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |   2 +
- 4 files changed, 284 insertions(+), 8 deletions(-)
+ ARG_PTR_TO_MEM | PTR_MAYBE_NULL | MEM_RDONLY
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b0383d371b9a..5ef20deaf49f 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1225,6 +1225,8 @@ enum {
+Based on this new composable types, patch 7/9 applies MEM_RDONLY on
+PTR_TO_MEM, in order to tag the returned memory from per_cpu_ptr as
+read-only. Therefore fixing a previous bug that one can leverage
+per_cpu_ptr to modify kernel memory within BPF programs.
+
+Patch 8/9 generalizes the use of MEM_RDONLY further by tagging a set of
+helper arguments ARG_PTR_TO_MEM with MEM_RDONLY. Some helper functions
+may override their arguments, such as bpf_d_path, bpf_snprintf. In this
+patch, we narrow the ARG_PTR_TO_MEM to be compatible with only a subset
+of memory types. This prevents these helpers from writing read-only
+memories. For the helpers that do not write its arguments, we add tag
+MEM_RDONLY to allow taking a RDONLY memory as argument.
+
+Changes since v1:
+ - use %u to print base_type(type) instead of %lu. (Andrii, patch 3/9)
+ - improve reg_type_str() by appending '_or_null' and prepending 'rdonly_'.
+   use preallocated buffer in 'bpf_env'.
+ - unified handling of the previous XXX_OR_NULL in adjust_ptr_min_max_vals
+   (Andrii, patch 4/9)
+ - move PTR_TO_MAP_KEY up to PTR_TO_MAP_VALUE so that we don't have
+   to change to drivers that assume the numeric values of bpf_reg.
+   (patch 4/9)
+ - reintroduce the typo from previous commits in fixes tags (Andrii, patch 7/9)
+ - extensive comments on the reason behind folding flags in
+   check_reg_type (Andrii, patch 8/9)
  
- /* If set, run the test on the cpu specified by bpf_attr.test.cpu */
- #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
-+/* If set, XDP frames will be transmitted after processing */
-+#define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
- 
- /* type for BPF_ENABLE_STATS */
- enum bpf_stats_type {
-diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
-index d24d518ddd63..c8c920020d11 100644
---- a/kernel/bpf/Kconfig
-+++ b/kernel/bpf/Kconfig
-@@ -30,6 +30,7 @@ config BPF_SYSCALL
- 	select TASKS_TRACE_RCU
- 	select BINARY_PRINTF
- 	select NET_SOCK_MSG if NET
-+	select PAGE_POOL if NET
- 	default n
- 	help
- 	  Enable the bpf() system call that allows to manipulate BPF programs
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 46dd95755967..11543819f0ef 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -14,6 +14,7 @@
- #include <net/sock.h>
- #include <net/tcp.h>
- #include <net/net_namespace.h>
-+#include <net/page_pool.h>
- #include <linux/error-injection.h>
- #include <linux/smp.h>
- #include <linux/sock_diag.h>
-@@ -52,10 +53,11 @@ static void bpf_test_timer_leave(struct bpf_test_timer *t)
- 	rcu_read_unlock();
- }
- 
--static bool bpf_test_timer_continue(struct bpf_test_timer *t, u32 repeat, int *err, u32 *duration)
-+static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
-+				    u32 repeat, int *err, u32 *duration)
- 	__must_hold(rcu)
- {
--	t->i++;
-+	t->i += iterations;
- 	if (t->i >= repeat) {
- 		/* We're done. */
- 		t->time_spent += ktime_get_ns() - t->time_start;
-@@ -87,6 +89,267 @@ static bool bpf_test_timer_continue(struct bpf_test_timer *t, u32 repeat, int *e
- 	return false;
- }
- 
-+/* We put this struct at the head of each page with a context and frame
-+ * initialised when the page is allocated, so we don't have to do this on each
-+ * repetition of the test run.
-+ */
-+struct xdp_page_head {
-+	struct xdp_buff orig_ctx;
-+	struct xdp_buff ctx;
-+	struct xdp_frame frm;
-+	u8 data[];
-+};
-+
-+struct xdp_test_data {
-+	struct xdp_buff *orig_ctx;
-+	struct xdp_rxq_info rxq;
-+	struct net_device *dev;
-+	struct page_pool *pp;
-+	u32 frame_cnt;
-+};
-+
-+#define TEST_XDP_FRAME_SIZE (PAGE_SIZE - sizeof(struct xdp_page_head)	\
-+			     - sizeof(struct skb_shared_info))
-+#define TEST_XDP_BATCH 64
-+
-+static void xdp_test_run_init_page(struct page *page, void *arg)
-+{
-+	struct xdp_page_head *head = phys_to_virt(page_to_phys(page));
-+	struct xdp_buff *new_ctx, *orig_ctx;
-+	u32 headroom = XDP_PACKET_HEADROOM;
-+	struct xdp_test_data *xdp = arg;
-+	size_t frm_len, meta_len;
-+	struct xdp_frame *frm;
-+	void *data;
-+
-+	orig_ctx = xdp->orig_ctx;
-+	frm_len = orig_ctx->data_end - orig_ctx->data_meta;
-+	meta_len = orig_ctx->data - orig_ctx->data_meta;
-+	headroom -= meta_len;
-+
-+	new_ctx = &head->ctx;
-+	frm = &head->frm;
-+	data = &head->data;
-+	memcpy(data + headroom, orig_ctx->data_meta, frm_len);
-+
-+	xdp_init_buff(new_ctx, TEST_XDP_FRAME_SIZE, &xdp->rxq);
-+	xdp_prepare_buff(new_ctx, data, headroom, frm_len, true);
-+	new_ctx->data_meta = new_ctx->data + meta_len;
-+
-+	xdp_update_frame_from_buff(new_ctx, frm);
-+	frm->mem = new_ctx->rxq->mem;
-+
-+	memcpy(&head->orig_ctx, new_ctx, sizeof(head->orig_ctx));
-+}
-+
-+static int xdp_test_run_setup(struct xdp_test_data *xdp, struct xdp_buff *orig_ctx)
-+{
-+	struct xdp_mem_info mem = {};
-+	struct page_pool *pp;
-+	int err;
-+	struct page_pool_params pp_params = {
-+		.order = 0,
-+		.flags = 0,
-+		.pool_size = NAPI_POLL_WEIGHT * 2,
-+		.nid = NUMA_NO_NODE,
-+		.max_len = TEST_XDP_FRAME_SIZE,
-+		.init_callback = xdp_test_run_init_page,
-+		.init_arg = xdp,
-+	};
-+
-+	pp = page_pool_create(&pp_params);
-+	if (IS_ERR(pp))
-+		return PTR_ERR(pp);
-+
-+	/* will copy 'mem.id' into pp->xdp_mem_id */
-+	err = xdp_reg_mem_model(&mem, MEM_TYPE_PAGE_POOL, pp);
-+	if (err) {
-+		page_pool_destroy(pp);
-+		return err;
-+	}
-+	xdp->pp = pp;
-+
-+	/* We create a 'fake' RXQ referencing the original dev, but with an
-+	 * xdp_mem_info pointing to our page_pool
-+	 */
-+	xdp_rxq_info_reg(&xdp->rxq, orig_ctx->rxq->dev, 0, 0);
-+	xdp->rxq.mem.type = MEM_TYPE_PAGE_POOL;
-+	xdp->rxq.mem.id = pp->xdp_mem_id;
-+	xdp->dev = orig_ctx->rxq->dev;
-+	xdp->orig_ctx = orig_ctx;
-+
-+	return 0;
-+}
-+
-+static void xdp_test_run_teardown(struct xdp_test_data *xdp)
-+{
-+	struct xdp_mem_info mem = {
-+		.id = xdp->pp->xdp_mem_id,
-+		.type = MEM_TYPE_PAGE_POOL,
-+	};
-+
-+	xdp_unreg_mem_model(&mem);
-+}
-+
-+static bool ctx_was_changed(struct xdp_page_head *head)
-+{
-+	return head->orig_ctx.data != head->ctx.data ||
-+		head->orig_ctx.data_meta != head->ctx.data_meta ||
-+		head->orig_ctx.data_end != head->ctx.data_end;
-+}
-+
-+static void reset_ctx(struct xdp_page_head *head)
-+{
-+	if (likely(!ctx_was_changed(head)))
-+		return;
-+
-+	head->ctx.data = head->orig_ctx.data;
-+	head->ctx.data_meta = head->orig_ctx.data_meta;
-+	head->ctx.data_end = head->orig_ctx.data_end;
-+	xdp_update_frame_from_buff(&head->ctx, &head->frm);
-+}
-+
-+static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
-+			   struct net_device *dev)
-+{
-+	gfp_t gfp = __GFP_ZERO | GFP_ATOMIC;
-+	void *skbs[TEST_XDP_BATCH];
-+	int i, n;
-+	LIST_HEAD(list);
-+
-+	n = kmem_cache_alloc_bulk(skbuff_head_cache, gfp, nframes, skbs);
-+	if (unlikely(n == 0)) {
-+		for (i = 0; i < nframes; i++)
-+			xdp_return_frame(frames[i]);
-+		return -ENOMEM;
-+	}
-+
-+	for (i = 0; i < nframes; i++) {
-+		struct xdp_frame *xdpf = frames[i];
-+		struct sk_buff *skb = skbs[i];
-+
-+		skb = __xdp_build_skb_from_frame(xdpf, skb, dev);
-+		if (!skb) {
-+			xdp_return_frame(xdpf);
-+			continue;
-+		}
-+
-+		list_add_tail(&skb->list, &list);
-+	}
-+	netif_receive_skb_list(&list);
-+	return 0;
-+}
-+
-+static int xdp_test_run_batch(struct xdp_test_data *xdp, struct bpf_prog *prog,
-+			      u32 repeat)
-+{
-+	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-+	int err = 0, act, ret, i, nframes = 0, batch_sz;
-+	struct xdp_frame *frames[TEST_XDP_BATCH];
-+	struct xdp_page_head *head;
-+	struct xdp_frame *frm;
-+	bool redirect = false;
-+	struct xdp_buff *ctx;
-+	struct page *page;
-+
-+	batch_sz = min_t(u32, repeat, TEST_XDP_BATCH);
-+	xdp_set_return_frame_no_direct();
-+
-+	for (i = 0; i < batch_sz; i++) {
-+		page = page_pool_dev_alloc_pages(xdp->pp);
-+		if (!page) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
-+
-+		head = phys_to_virt(page_to_phys(page));
-+		reset_ctx(head);
-+		ctx = &head->ctx;
-+		frm = &head->frm;
-+		xdp->frame_cnt++;
-+
-+		act = bpf_prog_run_xdp(prog, ctx);
-+
-+		/* if program changed pkt bounds we need to update the xdp_frame */
-+		if (unlikely(ctx_was_changed(head))) {
-+			err = xdp_update_frame_from_buff(ctx, frm);
-+			if (err) {
-+				xdp_return_buff(ctx);
-+				goto out;
-+			}
-+		}
-+
-+		switch (act) {
-+		case XDP_TX:
-+			/* we can't do a real XDP_TX since we're not in the
-+			 * driver, so turn it into a REDIRECT back to the same
-+			 * index
-+			 */
-+			ri->tgt_index = xdp->dev->ifindex;
-+			ri->map_id = INT_MAX;
-+			ri->map_type = BPF_MAP_TYPE_UNSPEC;
-+			fallthrough;
-+		case XDP_REDIRECT:
-+			redirect = true;
-+			err = xdp_do_redirect_frame(xdp->dev, ctx, frm, prog);
-+			if (err) {
-+				xdp_return_buff(ctx);
-+				goto out;
-+			}
-+			break;
-+		case XDP_PASS:
-+			frames[nframes++] = frm;
-+			break;
-+		default:
-+			bpf_warn_invalid_xdp_action(NULL, prog, act);
-+			fallthrough;
-+		case XDP_DROP:
-+			xdp_return_buff(ctx);
-+			break;
-+		}
-+	}
-+
-+out:
-+	if (redirect)
-+		xdp_do_flush();
-+	if (nframes) {
-+		ret = xdp_recv_frames(frames, nframes, xdp->dev);
-+		if (ret)
-+			err = ret;
-+	}
-+
-+	xdp_clear_return_frame_no_direct();
-+	return err;
-+}
-+
-+static int bpf_test_run_xdp_live(struct bpf_prog *prog, struct xdp_buff *ctx,
-+				 u32 repeat, u32 *time)
-+
-+{
-+	struct bpf_test_timer t = { .mode = NO_MIGRATE };
-+	struct xdp_test_data xdp = {};
-+	int ret;
-+
-+	if (!repeat)
-+		repeat = 1;
-+
-+	ret = xdp_test_run_setup(&xdp, ctx);
-+	if (ret)
-+		return ret;
-+
-+	bpf_test_timer_enter(&t);
-+	do {
-+		xdp.frame_cnt = 0;
-+		ret = xdp_test_run_batch(&xdp, prog, repeat - t.i);
-+		if (unlikely(ret < 0))
-+			break;
-+	} while (bpf_test_timer_continue(&t, xdp.frame_cnt, repeat, &ret, time));
-+	bpf_test_timer_leave(&t);
-+
-+	xdp_test_run_teardown(&xdp);
-+	return ret;
-+}
-+
- static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 			u32 *retval, u32 *time, bool xdp)
- {
-@@ -118,7 +381,7 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
- 			*retval = bpf_prog_run_xdp(prog, ctx);
- 		else
- 			*retval = bpf_prog_run(prog, ctx);
--	} while (bpf_test_timer_continue(&t, repeat, &ret, time));
-+	} while (bpf_test_timer_continue(&t, 1, repeat, &ret, time));
- 	bpf_reset_run_ctx(old_ctx);
- 	bpf_test_timer_leave(&t);
- 
-@@ -757,13 +1020,14 @@ static void xdp_convert_buff_to_md(struct xdp_buff *xdp, struct xdp_md *xdp_md)
- int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			  union bpf_attr __user *uattr)
- {
-+	bool do_live = (kattr->test.flags & BPF_F_TEST_XDP_LIVE_FRAMES);
- 	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 	u32 headroom = XDP_PACKET_HEADROOM;
- 	u32 size = kattr->test.data_size_in;
- 	u32 repeat = kattr->test.repeat;
- 	struct netdev_rx_queue *rxqueue;
- 	struct xdp_buff xdp = {};
--	u32 retval, duration;
-+	u32 retval = 0, duration;
- 	struct xdp_md *ctx;
- 	u32 max_data_sz;
- 	void *data;
-@@ -773,6 +1037,9 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	    prog->expected_attach_type == BPF_XDP_CPUMAP)
- 		return -EINVAL;
- 
-+	if (kattr->test.flags & ~BPF_F_TEST_XDP_LIVE_FRAMES)
-+		return -EINVAL;
-+
- 	ctx = bpf_ctx_init(kattr, sizeof(struct xdp_md));
- 	if (IS_ERR(ctx))
- 		return PTR_ERR(ctx);
-@@ -781,7 +1048,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		/* There can't be user provided data before the meta data */
- 		if (ctx->data_meta || ctx->data_end != size ||
- 		    ctx->data > ctx->data_end ||
--		    unlikely(xdp_metalen_invalid(ctx->data)))
-+		    unlikely(xdp_metalen_invalid(ctx->data)) ||
-+		    (do_live && (kattr->test.data_out || kattr->test.ctx_out)))
- 			goto free_ctx;
- 		/* Meta data is allocated from the headroom */
- 		headroom -= ctx->data;
-@@ -807,7 +1075,10 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 
- 	if (repeat > 1)
- 		bpf_prog_change_xdp(NULL, prog);
--	ret = bpf_test_run(prog, &xdp, repeat, &retval, &duration, true);
-+	if (do_live)
-+		ret = bpf_test_run_xdp_live(prog, &xdp, repeat, &duration);
-+	else
-+		ret = bpf_test_run(prog, &xdp, repeat, &retval, &duration, true);
- 	/* We convert the xdp_buff back to an xdp_md before checking the return
- 	 * code so the reference count of any held netdevice will be decremented
- 	 * even if the test run failed.
-@@ -905,7 +1176,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	do {
- 		retval = bpf_flow_dissect(prog, &ctx, eth->h_proto, ETH_HLEN,
- 					  size, flags);
--	} while (bpf_test_timer_continue(&t, repeat, &ret, &duration));
-+	} while (bpf_test_timer_continue(&t, 1, repeat, &ret, &duration));
- 	bpf_test_timer_leave(&t);
- 
- 	if (ret < 0)
-@@ -1000,7 +1271,7 @@ int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kat
- 	do {
- 		ctx.selected_sk = NULL;
- 		retval = BPF_PROG_SK_LOOKUP_RUN_ARRAY(progs, ctx, bpf_prog_run);
--	} while (bpf_test_timer_continue(&t, repeat, &ret, &duration));
-+	} while (bpf_test_timer_continue(&t, 1, repeat, &ret, &duration));
- 	bpf_test_timer_leave(&t);
- 
- 	if (ret < 0)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b0383d371b9a..5ef20deaf49f 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1225,6 +1225,8 @@ enum {
- 
- /* If set, run the test on the cpu specified by bpf_attr.test.cpu */
- #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
-+/* If set, XDP frames will be transmitted after processing */
-+#define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
- 
- /* type for BPF_ENABLE_STATS */
- enum bpf_stats_type {
+Changes since RFC v2:
+ - renamed BPF_BASE_TYPE to a more succinct name base_type and move its
+   definition to bpf_verifier.h. Same for BPF_TYPE_FLAG. (Alexei)
+ - made checking MEM_RDONLY in check_reg_type() universal (Alexei)
+ - ran through majority of test_progs and fixed bugs in RFC v2:
+   - fixed incorrect BPF_BASE_TYPE_MASK. The high bit of GENMASK should
+     be BITS - 1, rather than BITS. patch 1/9.
+   - fixed incorrect conditions when checking ARG_PTR_TO_MAP_VALUE in
+     check_func_arg(). See patch 2/9.
+   - fixed a bug where PTR_TO_BTF_ID may be combined with MEM_RDONLY,
+     causing the check in check_mem_access() to fall through to the
+     'else' branch. See check_helper_call() in patch 7/9.
+ - fixed build failure on netronome driver. Entries in bpf_reg_type have
+   been ordered. patch 4/9.
+ - fixed build warnings of using '%d' to print base_type. patch 4/9
+ - unify arg_type_may_be_null() and reg_type_may_be_null() into a single
+   type_may_be_null().
+
+Previous versions:
+
+ v1:
+   https://lwn.net/Articles/877938/
+
+ RFC v2:
+   https://lwn.net/Articles/877171/
+
+ RFC v1:
+   https://lore.kernel.org/bpf/20211109003052.3499225-1-haoluo@google.com/T/
+   https://lore.kernel.org/bpf/20211109021624.1140446-8-haoluo@google.com/T/
+
+Hao Luo (9):
+  bpf: Introduce composable reg, ret and arg types.
+  bpf: Replace ARG_XXX_OR_NULL with ARG_XXX | PTR_MAYBE_NULL
+  bpf: Replace RET_XXX_OR_NULL with RET_XXX | PTR_MAYBE_NULL
+  bpf: Replace PTR_TO_XXX_OR_NULL with PTR_TO_XXX | PTR_MAYBE_NULL
+  bpf: Introduce MEM_RDONLY flag
+  bpf: Convert PTR_TO_MEM_OR_NULL to composable types.
+  bpf: Make per_cpu_ptr return rdonly PTR_TO_MEM.
+  bpf: Add MEM_RDONLY for helper args that are pointers to rdonly mem.
+  bpf/selftests: Test PTR_TO_RDONLY_MEM
+
+ include/linux/bpf.h                           | 101 +++-
+ include/linux/bpf_verifier.h                  |  17 +
+ kernel/bpf/btf.c                              |  12 +-
+ kernel/bpf/cgroup.c                           |   2 +-
+ kernel/bpf/helpers.c                          |  12 +-
+ kernel/bpf/map_iter.c                         |   4 +-
+ kernel/bpf/ringbuf.c                          |   2 +-
+ kernel/bpf/syscall.c                          |   2 +-
+ kernel/bpf/verifier.c                         | 491 +++++++++---------
+ kernel/trace/bpf_trace.c                      |  26 +-
+ net/core/bpf_sk_storage.c                     |   2 +-
+ net/core/filter.c                             |  64 +--
+ net/core/sock_map.c                           |   2 +-
+ .../selftests/bpf/prog_tests/ksyms_btf.c      |  14 +
+ .../bpf/progs/test_ksyms_btf_write_check.c    |  29 ++
+ 15 files changed, 444 insertions(+), 336 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_btf_write_check.c
+
 -- 
-2.34.1
+2.34.1.173.g76aa8bc2d0-goog
 
