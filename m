@@ -2,200 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03E11C433EF
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 19:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED8CDC433F5
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 19:32:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbhLQTb5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Dec 2021 14:31:57 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:45810 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236806AbhLQTbz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:31:55 -0500
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8F0A820B7179;
-        Fri, 17 Dec 2021 11:31:55 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8F0A820B7179
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1639769515;
-        bh=cRv1WcSt0W5cSKayHF2tip8g7TX35i59/0QbRgNWzaU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MhexrEl8xul/7EJEmQ9ctKSu/OqP5hTSgYLkcxOxbtlRaEmLVeMC0umttpEf1DccD
-         5q05nUXhBgAv/XGu6USkDMeZn48vsVdskq8//9qkBP5FlvUqe+eBrfQRO6/47hBvyc
-         y5FSZka5hwe/uuCmg8nTgipQq+dNld6NvVlSP6zI=
-Received: by mail-pg1-f180.google.com with SMTP id r138so3041586pgr.13;
-        Fri, 17 Dec 2021 11:31:55 -0800 (PST)
-X-Gm-Message-State: AOAM530hNRZAk4LCVJ9lPG8s2ijwRjlKCNtdGxoVkSr/nHxaG96Ki6n6
-        ivnctV1gn2e4SM4eXhVEUnDHwtJyCL6CiWoWHO0=
-X-Google-Smtp-Source: ABdhPJwNH6xujiXnHflsTggNnsem9wvT8MU14S2o6N2NLP2AwJNCHyFv/iBlkfPk4xcTbpnyfBCTlPfGaBbnWmZmrx8=
-X-Received: by 2002:a63:ec54:: with SMTP id r20mr3946441pgj.455.1639769515003;
- Fri, 17 Dec 2021 11:31:55 -0800 (PST)
+        id S240646AbhLQTcQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Dec 2021 14:32:16 -0500
+Received: from mga01.intel.com ([192.55.52.88]:11893 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236806AbhLQTcQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Dec 2021 14:32:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639769535; x=1671305535;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Pi8h12IJp5AE4bDHDl0qXaJW262s7CUCnwSucE0hipE=;
+  b=Q2stVNxXj0lgapEUBoYb+IbwjQcsgaDy8lZNOjVS5E8GQIqUeF0KuNXQ
+   MX/+9OV+o2qAUDlEgm2xkjitrGVMUZVAAUsJvDb1X/Pp4XU5IYKIsYJxj
+   0f/ped5vMYNzNkHCod3WPyxPhjREB2p2ptkY2GbDx4S7vprdwGybxGDxg
+   a8t+cADskOFm1pEVDzMfkRj7tyme4XQoPOGz5JZQAsLYZQTJmfcVcdCZV
+   U2eRL35Q2RweZL92y6OcLJao0sC3jqM82ZqGmzz62w9zga1sIonRXMoeJ
+   LpNbK/nsCkm6Gv3ywHK3KAo/CCbRoogoPh0g+UP8QjYIPbUTVCthbLjL0
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="263998118"
+X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
+   d="scan'208";a="263998118"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 11:32:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
+   d="scan'208";a="754659443"
+Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
+  by fmsmga006.fm.intel.com with ESMTP; 17 Dec 2021 11:32:12 -0800
+From:   Tony Nguyen <anthony.l.nguyen@intel.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Tony Nguyen <anthony.l.nguyen@intel.com>, netdev@vger.kernel.org,
+        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, bpf@vger.kernel.org
+Subject: [PATCH net 0/6][pull request] Intel Wired LAN Driver Updates 2021-12-17
+Date:   Fri, 17 Dec 2021 11:31:08 -0800
+Message-Id: <20211217193114.392106-1-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
- <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
- <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
- <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com> <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
-In-Reply-To: <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
-From:   Matteo Croce <mcroce@linux.microsoft.com>
-Date:   Fri, 17 Dec 2021 20:31:18 +0100
-X-Gmail-Original-Message-ID: <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
-Message-ID: <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
- On Wed, Dec 15, 2021 at 7:21 PM Matteo Croce
-<mcroce@linux.microsoft.com> wrote:
->
-> On Wed, Dec 15, 2021 at 6:29 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Wed, Dec 15, 2021 at 6:54 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
-> > > >
-> > > > Maybe do a level check here?
-> > > > Since calling it and immediately returning doesn't conserve
-> > > > the stack.
-> > > > If it gets called it can finish fine, but
-> > > > calling it again would be too much.
-> > > > In other words checking the level here gives us
-> > > > room for one more frame.
-> > > >
-> > >
-> > > I thought that the compiler was smart enough to return before
-> > > allocating most of the frame.
-> > > I tried and this is true only with gcc, not with clang.
-> >
-> > Interesting. That's a surprise.
-> > Could you share the asm that gcc generates?
-> >
->
-> Sure,
->
-> This is the gcc x86_64 asm on a stripped down
-> bpf_core_types_are_compat() with a 1k struct on the stack:
->
-> bpf_core_types_are_compat:
-> test esi, esi
-> jle .L69
-> push r15
-> push r14
-> push r13
-> push r12
-> push rbp
-> mov rbp, rdi
-> push rbx
-> mov ebx, esi
-> sub rsp, 9112
-> [...]
-> .L69:
-> or eax, -1
-> ret
->
-> This latest clang:
->
-> bpf_core_types_are_compat: # @bpf_core_types_are_compat
-> push rbp
-> push r15
-> push r14
-> push rbx
-> sub rsp, 1000
-> mov r14d, -1
-> test esi, esi
-> jle .LBB0_7
-> [...]
-> .LBB0_7:
-> mov eax, r14d
-> add rsp, 1000
-> pop rbx
-> pop r14
-> pop r15
-> pop rbp
-> ret
->
-> > > > > +                       err = __bpf_core_types_are_compat(local_btf, local_id,
-> > > > > +                                                         targ_btf, targ_id,
-> > > > > +                                                         level - 1);
-> > > > > +                       if (err <= 0)
-> > > > > +                               return err;
-> > > > > +               }
-> > > > > +
-> > > > > +               /* tail recurse for return type check */
-> > > > > +               btf_type_skip_modifiers(local_btf, local_type->type, &local_id);
-> > > > > +               btf_type_skip_modifiers(targ_btf, targ_type->type, &targ_id);
-> > > > > +               goto recur;
-> > > > > +       }
-> > > > > +       default:
-> > > > > +               pr_warn("unexpected kind %s relocated, local [%d], target [%d]\n",
-> > > > > +                       btf_type_str(local_type), local_id, targ_id);
-> > > >
-> > > > That should be bpf_log() instead.
-> > > >
-> > >
-> > > To do that I need a struct bpf_verifier_log, which is not present
-> > > there, neither in bpf_core_spec_match() or bpf_core_apply_relo_insn().
-> >
-> > It is there. See:
-> >         err = bpf_core_apply_relo_insn((void *)ctx->log, insn, ...
-> >
-> > > Should we drop the message at all?
-> >
-> > Passing it into bpf_core_spec_match() and further into
-> > bpf_core_types_are_compat() is probably unnecessary.
-> > All callers have an error check with a log right after.
-> > So I think we won't lose anything if we drop this log.
-> >
->
-> Nice.
->
-> > >
-> > > > > +               return 0;
-> > > > > +       }
-> > > > > +}
-> > > >
-> > > > Please add tests that exercise this logic by enabling
-> > > > additional lskels and a new test that hits the recursion limit.
-> > > > I suspect we don't have such case in selftests.
-> > > >
-> > > > Thanks!
-> > >
-> > > Will do!
-> >
-> > Thanks!
->
+Maciej Fijalkowski says:
 
-Hi,
+It seems that previous [0] Rx fix was not enough and there are still
+issues with AF_XDP Rx ZC support in ice driver. Elza reported that for
+multiple XSK sockets configured on a single netdev, some of them were
+becoming dead after a while. We have spotted more things that needed to
+be addressed this time. More of information can be found in particular
+commit messages.
 
-I'm writing a test which exercise that function.
-I can succesfully trigger a call to __bpf_core_types_are_compat() with
-these  calls:
+It also carries Alexandr's patch that was sent previously which was
+overlapping with this set.
 
-bpf_core_type_id_kernel(struct sk_buff);
-bpf_core_type_exists(struct sk_buff);
-bpf_core_type_size(struct sk_buff);
+[0]: https://lore.kernel.org/bpf/20211129231746.2767739-1-anthony.l.nguyen@intel.com/
 
-but the kind will obviously be BTF_KIND_STRUCT.
-I'm trying to do the same with kind BTF_KIND_FUNC_PROTO instead with:
+The following are changes since commit 8ca4090fec0217bcb89531c8be80fcfa66a397a1:
+  Merge git://git.kernel.org/pub/scm/linux/kernel/git/pablo/nf
+and are available in the git repository at:
+  git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue 100GbE
 
-void func_proto(int, unsigned int);
-bpf_core_type_id_kernel(func_proto);
+Alexander Lobakin (1):
+  ice: remove dead store on XSK hotpath
 
-but I get a clang crash[1], while just checking the existence with:
+Maciej Fijalkowski (5):
+  ice: xsk: return xsk buffers back to pool when cleaning the ring
+  ice: xsk: allocate separate memory for XDP SW ring
+  ice: xsk: do not clear status_error0 for ntu + nb_buffs descriptor
+  ice: xsk: allow empty Rx descriptors on XSK ZC data path
+  ice: xsk: fix cleaned_count setting
 
-typedef int (*func_proto_typedef)(struct sk_buff *);
-bpf_core_type_exists(func_proto_typedef);
+ drivers/net/ethernet/intel/ice/ice_base.c | 17 ++++++
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 19 ++++---
+ drivers/net/ethernet/intel/ice/ice_txrx.h |  1 -
+ drivers/net/ethernet/intel/ice/ice_xsk.c  | 66 +++++++++++------------
+ 4 files changed, 62 insertions(+), 41 deletions(-)
 
-I don't reach even bpf_core_spec_match().
-
-Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
-
-[1] https://github.com/llvm/llvm-project/issues/52779
-
-Regards,
 -- 
-per aspera ad upstream
+2.31.1
+
