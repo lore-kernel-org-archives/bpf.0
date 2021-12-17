@@ -2,103 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 544DFC433EF
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 16:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E4DC433F5
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 17:10:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239427AbhLQQzg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Dec 2021 11:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S239156AbhLQRKI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Dec 2021 12:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235644AbhLQQzg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 11:55:36 -0500
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Dec 2021 08:55:36 PST
-Received: from mail.smart-cactus.org (schildkroeter.smart-cactus.org [IPv6:2a01:4f8:161:4431::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B5AC06173E;
-        Fri, 17 Dec 2021 08:55:36 -0800 (PST)
-Received: from localhost.localdomain (unknown [IPv6:2001:470:e438:2:747b:446d:1213:d2e0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: ben@smart-cactus.org)
-        by mail.smart-cactus.org (Postfix) with ESMTPSA id 73C32A5C05ED;
-        Fri, 17 Dec 2021 16:45:34 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 11:45:32 -0500
-From:   Ben Gamari <ben@smart-cactus.org>
-To:     bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Sampling of non-C-like stacks with eBPF and perf_events?
-Message-ID: <87o85ftc3p.fsf@smart-cactus.org>
+        with ESMTP id S236000AbhLQRKH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Dec 2021 12:10:07 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4574C061574
+        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 09:10:07 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id g17so8200505ybe.13
+        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 09:10:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2NXI5t6aoXhcKhTIxJdzLfmmJ5dydU4kcM0avMhBjUw=;
+        b=jq5PFymXdHvj1Xp1Cffm9xVIFcKC5mE71HZBkbC6d9Ql1zNRZXGESCOcnXEUOhoaRn
+         PsTkkRvfYLobcA4iz+1rlBHe1b0Oa/E7DW1Oc+UMqa+FVIvQi3VU69DVQRf7jisjvwTn
+         lR0LXkQAPdFnSdrkTg0e03VG28nmkQPtyEgUCfTZI0SdZWkHlyDl0j//EKZoDzNrnh/4
+         43tCWpNIjdaJpBYf7ngc9Ex773qPL3hPTuv6FXa+T71+rh3qiJI151JJjVYePW0oNdEV
+         +0pleB9yzO9IPzYuLfbMn/kRe4AHMX0sTsE3XcuvqV80yc02UVJNfW9TUqe3V9/WYVoJ
+         keTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2NXI5t6aoXhcKhTIxJdzLfmmJ5dydU4kcM0avMhBjUw=;
+        b=BCfDQipDE8F8cdtzlKnqXAN7L1ZIxvJxJUbrYeDZ7N8kvEVlQ50ZqLfkFfC85ns6TC
+         Tmyso55Ebj9itHw+uDjJhyDWzaD48jkgz3hk5Vv3/xkhvaFWCm6HueVjMTUYeMzPhdNE
+         MF6mArixHjWrDI0DhbYeT0fKTlSTAQgjYrzr5bqHMnzpCFOqxliFQtEg0UzzbkFZ/0Ye
+         EzxiV0uGmMuW0o9zdAkIURUGTfq9yL/P4cCWtN//NVyrYEVaSnbvj+oiRjkuu5cdCFNk
+         aB5TdfnTPw5HCfaBS3y9217Ed4/riSThUhwTSAKTm7VDtGy1AUYqGFCgv+fiVhU8Os3f
+         rVUw==
+X-Gm-Message-State: AOAM531udoAaQeS+q/bzQO/ELdMrrbWjGLtjy5q1941e/oPtGubNUpVy
+        Hm2921s+SpG5MAa79EMcK1ur5xkmm6kpUEGGX8S9SrBeztwJ6Q==
+X-Google-Smtp-Source: ABdhPJzefFXjDIn7NnphWKmOBoxPO+Kg2Aykn+f7XG0iAug82nleUcUpPp9RcV5wk/RHfcoLElGQ9Km3VsYRbN7f/PU=
+X-Received: by 2002:a25:2a89:: with SMTP id q131mr6025990ybq.436.1639761006933;
+ Fri, 17 Dec 2021 09:10:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <20211216070442.1492204-1-andrii@kernel.org> <20211216070442.1492204-3-andrii@kernel.org>
+ <b183b2b8-3bff-f647-678f-40b479c9c5c5@fb.com> <CAEf4BzZydhBisHacU9Rjf1ZWik1_aUeiy6ANRfaUkebo7cYq5Q@mail.gmail.com>
+In-Reply-To: <CAEf4BzZydhBisHacU9Rjf1ZWik1_aUeiy6ANRfaUkebo7cYq5Q@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 17 Dec 2021 09:09:55 -0800
+Message-ID: <CAEf4BzaDJOj-7B_OvUzLvhVTgcMrZ-QLRBKNXMa3p+2WXzrEQw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] selftests/bpf: add libbpf feature-probing
+ API selftests
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+On Thu, Dec 16, 2021 at 4:42 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Dec 16, 2021 at 4:21 PM Dave Marchevsky <davemarchevsky@fb.com> wrote:
+> >
+> > On 12/16/21 2:04 AM, Andrii Nakryiko wrote:
+> > > Add selftests for prog/map/prog+helper feature probing APIs. Prog and
+> > > map selftests are designed in such a way that they will always test all
+> > > the possible prog/map types, based on running kernel's vmlinux BTF enum
+> > > definition. This way we'll always be sure that when adding new BPF
+> > > program types or map types, libbpf will be always updated accordingly to
+> > > be able to feature-detect them.
+> > >
+> > > BPF prog_helper selftest will have to be manually extended with
+> > > interesting and important prog+helper combinations, it's easy, but can't
+> > > be completely automated.
+> > >
+> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > ---
+> >
+> > [...]
+> >
+> > > +     for (e = btf_enum(t), i = 0, n = btf_vlen(t); i < n; e++, i++) {
+> > > +             const char *prog_type_name = btf__str_by_offset(btf, e->name_off);
+> > > +             enum bpf_prog_type prog_type = (enum bpf_prog_type)e->val;
+> > > +             int res;
+> > > +
+> > > +             if (prog_type == BPF_PROG_TYPE_UNSPEC)
+> > > +                     continue;
+> > > +
+> > > +             if (!test__start_subtest(prog_type_name))
+> > > +                     continue;
+> > > +
+> > > +             res = libbpf_probe_bpf_prog_type(prog_type, NULL);
+> > > +             ASSERT_EQ(res, 1, prog_type_name);
+> > > +     }
+> >
+> > I like how easy BTF makes this.
+> > Maybe worth trying to probe one-past-the-end of enum to confirm it fails as
+> > expected?
+> >
+>
+> Yeah, sure, not a bad idea, I'll add in v2.
 
-Hi all,
+Couldn't do it :( Because selftest is using running kernel's BTF to
+find out maximum BPF map type. But that maximum on a slightly outdated
+kernel could be something that libbpf actually knows about and
+supports (because it was compiled against the latest kernel UAPI
+headers). So at run time libbpf returns 0 (correct answer, not
+map/prog is not supported), but not the expected -EOPNOTSUPP. And I
+don't want to hardcode the maximum enum values (like
+BPF_MAP_TYPE_BLOOM_FILTER, as of now), because every time we add new
+map we'll need to fix selftests in the same patch, which is a bit
+annoying, I think.
 
-I have recently been exploring the possibility of using a
-BPF_PROG_TYPE_PERF_EVENT program to implement stack sampling for
-languages which do not use the platform's %sp for their stack pointer
-(in my case, GHC/Haskell [1], which on x86-64 uses %rbp for its stack
-pointer). Specifically, the idea is to use a sampling perf_events
-session with an eBPF overflow handler which locates the
-currently-running thread's stack and records it in the sample ringbuffer
-(see [2] for my current attempt). At this point I only care about
-user-space samples.
+If we had equivalents of __BPF_FUNC_MAX_ID for bpf_map_type and
+bpf_prog_type, we could have just used those constants, so maybe we
+should do that instead?
 
-However, I quickly ran up against the fact that perf_event's stack
-sampling logic (namely perf_output_sample_ustack) is called from an IRQ
-context. This appears to preclude use of a sleepable BPF program, which
-would be necessary to use bpf_copy_from_user. Indeed, the fact that the
-usual stack sampling logic uses copy_from_user_inatomic rather than
-copy_from_user suggests that this isn't a safe context for sleeping.
+Regardless, I'm sending selftests as they are right now and we can
+follow up with UAPI additions and selftests improvements separately.
 
-So, I'm at this point a bit unclear on how to proceed. I can see a few
-possible directions forward, although none are particularly enticing:
-
-* Add a bpf_copy_from_user_atomic helper, which can be called from a
-  non-sleepable context like a perf_events overflow handler. This would
-  take the same set_fs() and pagefault_disable() precautions as
-  perf_output_sample_ustack to ensure that the access is safe and aborts
-  on fault.
-
-* Introduce a new BPF program type,
-  BPF_PROG_TYPE_PERF_EVENT_STACK_LOCATOR, which can be invoked by
-  perf_output_sample_ustack to locate the stack to be sampled.
-
-Do either of these ideas sound upstreamable? Perhaps there are other
-ideas on how to attack this general problem? I do not believe Haskell is
-alone in its struggle with the current inflexibility of stack sampling;
-the JVM introduced framepointer support specifically to allow callgraph
-sampling; however, dedicating a register and code to this seems like an
-unfortunate compromise, especially on x86-64 where registers are already
-fairly precious.
-
-Any thoughts or suggestions would be greatly appreciated.
-
-Cheers,
-
-- Ben
-
-
-[1] https://www.haskell.org/ghc/
-[2] https://gitlab.haskell.org/bgamari/hs-bpf-prof/
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEg5ai+U8IKhnDQZiPCIdltPrJkTcFAmG8vnoACgkQCIdltPrJ
-kTfukgf+N739FsXjUEqkJe2kzicnVWpjtKXBg0vSuRb/uSh3IBQLzZEA7U85unXU
-dKSNVBrrVS7XsD7IJzt27xGAMEDS7eOLyLg/ih7L2Kvt0wBCnTEg9jyUOBxWhtyl
-uel34RDSAbyrQmxzstV2LhEbCQ0BA3a9BVO1M/Y8TDjS8cPJ8q8sD6PPo5ipucnQ
-OEX41gGdNx8hLTl0HKQtBcdE2+rwheZ+H2dMpCiPFpCci5TIce1A+BmHolodV4Vf
-Wd2llcFp9oPzCPEGytv3G/TJ9/bkkKof8A9wVANYLw7Fxp+D+e8pgxJIFYjIRV7/
-My9hztP6fDmeNsxq+7/OYhWDiUYGSw==
-=tF2b
------END PGP SIGNATURE-----
---=-=-=--
+>
+> > Regardless,
+> >
+> > Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
+> >
+> > > +cleanup:
+> > > +     btf__free(btf);
+> > > +}
+> >
+> > [...]
