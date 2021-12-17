@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2226FC433FE
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 18:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 143DDC433EF
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 18:57:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239966AbhLQS5G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Dec 2021 13:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
+        id S240155AbhLQS5N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Dec 2021 13:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240562AbhLQS5F (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:57:05 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBEFC06173E
-        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 10:57:03 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id t13so6070865uad.9
-        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 10:57:03 -0800 (PST)
+        with ESMTP id S240436AbhLQS5K (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:57:10 -0500
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2703DC061574
+        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 10:57:10 -0800 (PST)
+Received: by mail-ua1-x929.google.com with SMTP id p37so6123856uae.8
+        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 10:57:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=igWWpEe5MAQvcBbmdLN5vO3AN2tXnobBBKMBqsURkL4=;
-        b=bLaUqUKw5cpQ7ZnRNiuguWiqsSLk7bUF7lxRma0UDh+DTwXpEN4ZOOKJZK8wW2uJQ2
-         6XduWaqSUkbycqO3gLq5OyZVNrOZYrtMtYHeA6KSmCWWXFJFvDy0yZ/EQcgaoc5+VWtD
-         XDY8D/5zOKEswZM4505lDoGtcCfrAvjNw752U=
+        bh=G/GPdGidHC8T+01PfwI96dDour/nMEcpbiFscAB6RZk=;
+        b=ldG2wmGTsC0IsQbXLV75KjDjU2nI05gt5lS4fyW6BCZa6ZdyV8QkULXp2V2XTs2CeL
+         Ygfi9AebTI/M+ZGPcPHaxNWipg3XvjsXXwQRCxnmdqBORgbinnrWO+gWXvh20hwJq+M4
+         XSOfz3oLasFd0KkdR0Me1xvAOvSfTk/7XXimY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=igWWpEe5MAQvcBbmdLN5vO3AN2tXnobBBKMBqsURkL4=;
-        b=hWR8aDWKQiL2LlrS/hL9+6I6LlKSgB1CNJ6TtXcUgYzHyCcsCSzMHJaKEHJMhvKG3R
-         n5VsvGXRdgvHNmgtzABeuZI6Wiuewq1H7OjN3tv4NmywAn51UUmWRtHbqnzTjDNdf/Gp
-         jCWemv+v4MoX5CDb2WN56cpcWYkO/E+tjM8unXwysktsJE+9y+csx2eXeVXAjeXHAKCB
-         i4+xBSd3JSwTE2G/HmuawLF17EKZGw7eQ746rCbAF87qKNxCrxJGU6octsk0uB1h3EbW
-         uWO0mMbvwgxoIeEFPCurRdomffACVdzcVUWOH00rRrew8CLeHfVi3MJYQPeQtaEL7E/7
-         W4Vg==
-X-Gm-Message-State: AOAM532N/Vg+FoQhvOWXQrLPNKQNwpbkNoWuJlY43BHA/AyyZRx+cX3d
-        GShiMe1jjbTaf5Ur/w2Inf8Y8g==
-X-Google-Smtp-Source: ABdhPJwzHi0uO/EaSJ9HgWYbGJ7ordqs0D4gI6+b8G3fsnin7TsZf/OrdEY4tQPJgCWlvzJA/k1mAA==
-X-Received: by 2002:ab0:15af:: with SMTP id i44mr1745086uae.17.1639767421492;
-        Fri, 17 Dec 2021 10:57:01 -0800 (PST)
+        bh=G/GPdGidHC8T+01PfwI96dDour/nMEcpbiFscAB6RZk=;
+        b=3btH/YtVfLnHDV4M9sJ1uzCZZnXRub2qqWvysNfGA/G6HqWvAT6rgEjvMw9Qny1Aq/
+         s+IAMOa/4nwRLKQ6MNBDpIPRgdUma9JrCtIdDD5PJ55HqeJPUJGtUmfWXVNneBUKPeDD
+         gyYu4U3EPrrN6CnQLN2noXi/edaYVSeGgtPp4Tv5KkS+gZ0dg1il1MFeniql70Y9KvhD
+         IgLcUIHwqd2QH6lNuTYp/o0x9UqYppFEAuSIY/zXwn97fm0UO4p3yTlKqVDCVxwaQAwv
+         d88ToVISzpU1R1umt3wMsAem0Pf3tOw7Rwh6wRB8s2pU4HQ8z6jCUi5G+wjm+bxAKl8f
+         UNbQ==
+X-Gm-Message-State: AOAM531QL/8MtlS0n0FrvhuW3bHHu8mJv0sn/1ILlZZJJF4gPPlvO50J
+        sV1bQe8xjfHkeCe+UB2twprsSg==
+X-Google-Smtp-Source: ABdhPJy6eOEgpQDvtHjJrD3+3Dh2FYOB2qKk4GKQlaM5LYcwBKS1Qld6HxCtPylq4JjbkpbRPXEnHw==
+X-Received: by 2002:a05:6102:3554:: with SMTP id e20mr1636059vss.50.1639767427868;
+        Fri, 17 Dec 2021 10:57:07 -0800 (PST)
 Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id l125sm1382575vke.40.2021.12.17.10.57.00
+        by smtp.gmail.com with ESMTPSA id l125sm1382575vke.40.2021.12.17.10.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 10:57:01 -0800 (PST)
+        Fri, 17 Dec 2021 10:57:06 -0800 (PST)
 From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Rafael David Tinoco <rafaeldtinoco@gmail.com>,
         Lorenzo Fontana <lorenzo.fontana@elastic.co>,
         Leonardo Di Donato <leonardo.didonato@elastic.co>
-Subject: [PATCH bpf-next v3 1/3] libbpf: split bpf_core_apply_relo()
-Date:   Fri, 17 Dec 2021 13:56:52 -0500
-Message-Id: <20211217185654.311609-2-mauricio@kinvolk.io>
+Subject: [PATCH bpf-next v3 3/3] bpftool: Implement btfgen
+Date:   Fri, 17 Dec 2021 13:56:54 -0500
+Message-Id: <20211217185654.311609-4-mauricio@kinvolk.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211217185654.311609-1-mauricio@kinvolk.io>
 References: <20211217185654.311609-1-mauricio@kinvolk.io>
@@ -66,370 +66,966 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BTFGen needs to run the core relocation logic in order to understand
-what are the types in the target BTF that involved in a given
-relocation.
+The BTFGen's goal is to produce a BTF file that contains **only** the
+information that is needed by an eBPF program. This algorithm does a
+first step collecting the types involved for each relocation present on
+the object and "marking" them as needed. Types are collected in
+different ways according to the type relocation, for field based
+relocations only the union and structures members involved are
+considered, for type based relocations the whole types are added, enum
+field relocations are not supported in this iteration yet.
 
-Currently bpf_core_apply_relo() calculates and **applies** a relocation
-to an instruction. Having both operations in the same function makes it
-difficult to only calculate the relocation without patching the
-instruction. This commit splits that logic in two different phases: (1)
-calculate the relocation and (2) patch the instruction.
+A second step generates a BTF file from the "marked" types. This step
+accesses the original BTF file extracting the types and their members
+that were "marked" as needed in the first step.
 
-For the first phase bpf_core_apply_relo() is renamed to
-bpf_core_calc_relo_res() who is now only on charge of calculating the
-relocation, the second phase uses the already existing
-bpf_core_patch_insn(). bpf_object__relocate_core() uses both of them and
-the BTFGen will use only bpf_core_calc_relo_res().
+This command is implemented under the "gen" command in bpftool and the
+syntax is the following:
+
+$ bpftool gen btf INPUT OUTPUT OBJECT(S)
+
+INPUT can be either a single BTF file or a folder containing BTF files,
+when it's a folder, a BTF file is generated for each BTF file contained
+in this folder. OUTPUT is the file (or folder) where generated files are
+stored and OBJECT(S) is the list of bpf objects we want to generate the
+BTF file(s) for (each generated BTF file contains all the types needed
+by all the objects).
 
 Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
 Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
 Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
 ---
- kernel/bpf/btf.c          | 11 +++++-
- tools/lib/bpf/libbpf.c    | 54 ++++++++++++++++-----------
- tools/lib/bpf/relo_core.c | 77 +++++++++++----------------------------
- tools/lib/bpf/relo_core.h | 42 ++++++++++++++++++---
- 4 files changed, 99 insertions(+), 85 deletions(-)
+ tools/bpf/bpftool/gen.c | 892 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 892 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index a17de71abd2e..5a8f6ef6a341 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6734,6 +6734,7 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- {
- 	bool need_cands = relo->kind != BPF_CORE_TYPE_ID_LOCAL;
- 	struct bpf_core_cand_list cands = {};
-+	struct bpf_core_relo_res targ_res;
- 	struct bpf_core_spec *specs;
- 	int err;
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index b4695df2ea3d..2794fe88f609 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -5,6 +5,7 @@
+ #define _GNU_SOURCE
+ #endif
+ #include <ctype.h>
++#include <dirent.h>
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <linux/err.h>
+@@ -14,6 +15,7 @@
+ #include <unistd.h>
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
++#include <bpf/libbpf_internal.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/mman.h>
+@@ -1084,6 +1086,7 @@ static int do_help(int argc, char **argv)
+ 	fprintf(stderr,
+ 		"Usage: %1$s %2$s object OUTPUT_FILE INPUT_FILE [INPUT_FILE...]\n"
+ 		"       %1$s %2$s skeleton FILE [name OBJECT_NAME]\n"
++		"       %1$s %2$s btf INPUT OUTPUT OBJECT(S)\n"
+ 		"       %1$s %2$s help\n"
+ 		"\n"
+ 		"       " HELP_SPEC_OPTIONS " |\n"
+@@ -1094,9 +1097,898 @@ static int do_help(int argc, char **argv)
+ 	return 0;
+ }
  
-@@ -6778,8 +6779,14 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- 		 */
- 	}
- 
--	err = bpf_core_apply_relo_insn((void *)ctx->log, insn, relo->insn_off / 8,
--				       relo, relo_idx, ctx->btf, &cands, specs);
-+	err = bpf_core_calc_relo_insn((void *)ctx->log, relo, relo_idx, ctx->btf, &cands, specs,
-+				      &targ_res);
-+	if (err)
++static int btf_save_raw(const struct btf *btf, const char *path)
++{
++	const void *data;
++	FILE *f = NULL;
++	__u32 data_sz;
++	int err = 0;
++
++	data = btf__raw_data(btf, &data_sz);
++	if (!data) {
++		err = -ENOMEM;
 +		goto out;
++	}
 +
-+	err = bpf_core_patch_insn((void *)ctx->log, insn, relo->insn_off / 8, relo, relo_idx,
-+				  &targ_res);
++	f = fopen(path, "wb");
++	if (!f) {
++		err = -errno;
++		goto out;
++	}
 +
- out:
- 	kfree(specs);
- 	if (need_cands) {
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index cf862a19222b..77e2df13715a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5498,11 +5498,12 @@ static int record_relo_core(struct bpf_program *prog,
- 	return 0;
- }
- 
--static int bpf_core_apply_relo(struct bpf_program *prog,
--			       const struct bpf_core_relo *relo,
--			       int relo_idx,
--			       const struct btf *local_btf,
--			       struct hashmap *cand_cache)
-+static int bpf_core_calc_relo_res(struct bpf_program *prog,
-+				  const struct bpf_core_relo *relo,
-+				  int relo_idx,
-+				  const struct btf *local_btf,
-+				  struct hashmap *cand_cache,
-+				  struct bpf_core_relo_res *targ_res)
- {
- 	struct bpf_core_spec specs_scratch[3] = {};
- 	const void *type_key = u32_as_hash_key(relo->type_id);
-@@ -5511,20 +5512,7 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 	const struct btf_type *local_type;
- 	const char *local_name;
- 	__u32 local_id = relo->type_id;
--	struct bpf_insn *insn;
--	int insn_idx, err;
--
--	if (relo->insn_off % BPF_INSN_SZ)
--		return -EINVAL;
--	insn_idx = relo->insn_off / BPF_INSN_SZ;
--	/* adjust insn_idx from section frame of reference to the local
--	 * program's frame of reference; (sub-)program code is not yet
--	 * relocated, so it's enough to just subtract in-section offset
--	 */
--	insn_idx = insn_idx - prog->sec_insn_off;
--	if (insn_idx >= prog->insns_cnt)
--		return -EINVAL;
--	insn = &prog->insns[insn_idx];
-+	int err;
- 
- 	local_type = btf__type_by_id(local_btf, local_id);
- 	if (!local_type)
-@@ -5536,6 +5524,7 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 
- 	if (prog->obj->gen_loader) {
- 		const char *spec_str = btf__name_by_offset(local_btf, relo->access_str_off);
-+		int insn_idx = relo->insn_off / BPF_INSN_SZ;
- 
- 		pr_debug("record_relo_core: prog %td insn[%d] %s %s %s final insn_idx %d\n",
- 			prog - prog->obj->programs, relo->insn_off / 8,
-@@ -5559,19 +5548,21 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 		}
- 	}
- 
--	return bpf_core_apply_relo_insn(prog_name, insn, insn_idx, relo,
--					relo_idx, local_btf, cands, specs_scratch);
-+	return bpf_core_calc_relo_insn(prog_name, relo, relo_idx, local_btf, cands,
-+				       specs_scratch, targ_res);
- }
- 
- static int
- bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- {
- 	const struct btf_ext_info_sec *sec;
-+	struct bpf_core_relo_res targ_res;
- 	const struct bpf_core_relo *rec;
- 	const struct btf_ext_info *seg;
- 	struct hashmap_entry *entry;
- 	struct hashmap *cand_cache = NULL;
- 	struct bpf_program *prog;
-+	struct bpf_insn *insn;
- 	const char *sec_name;
- 	int i, err = 0, insn_idx, sec_idx;
- 
-@@ -5636,12 +5627,31 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			if (!prog->load)
- 				continue;
- 
--			err = bpf_core_apply_relo(prog, rec, i, obj->btf, cand_cache);
-+			err = bpf_core_calc_relo_res(prog, rec, i, obj->btf, cand_cache, &targ_res);
- 			if (err) {
- 				pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
- 					prog->name, i, err);
- 				goto out;
- 			}
++	if (fwrite(data, 1, data_sz, f) != data_sz) {
++		err = -errno;
++		goto out;
++	}
 +
-+			if (rec->insn_off % BPF_INSN_SZ)
-+				return -EINVAL;
-+			insn_idx = rec->insn_off / BPF_INSN_SZ;
-+			/* adjust insn_idx from section frame of reference to the local
-+			 * program's frame of reference; (sub-)program code is not yet
-+			 * relocated, so it's enough to just subtract in-section offset
-+			 */
-+			insn_idx = insn_idx - prog->sec_insn_off;
-+			if (insn_idx >= prog->insns_cnt)
-+				return -EINVAL;
-+			insn = &prog->insns[insn_idx];
++out:
++	if (f)
++		fclose(f);
++	return libbpf_err(err);
++}
 +
-+			err = bpf_core_patch_insn(prog->name, insn, insn_idx, rec, i, &targ_res);
-+			if (err) {
-+				pr_warn("prog '%s': relo #%d: failed to patch insn #%u: %d\n",
-+					prog->name, i, insn_idx, err);
-+				goto out;
-+			}
- 		}
- 	}
- 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 910865e29edc..4f3552468624 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -775,31 +775,6 @@ static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
- 	return 0;
- }
- 
--struct bpf_core_relo_res
--{
--	/* expected value in the instruction, unless validate == false */
--	__u32 orig_val;
--	/* new value that needs to be patched up to */
--	__u32 new_val;
--	/* relocation unsuccessful, poison instruction, but don't fail load */
--	bool poison;
--	/* some relocations can't be validated against orig_val */
--	bool validate;
--	/* for field byte offset relocations or the forms:
--	 *     *(T *)(rX + <off>) = rY
--	 *     rX = *(T *)(rY + <off>),
--	 * we remember original and resolved field size to adjust direct
--	 * memory loads of pointers and integers; this is necessary for 32-bit
--	 * host kernel architectures, but also allows to automatically
--	 * relocate fields that were resized from, e.g., u32 to u64, etc.
--	 */
--	bool fail_memsz_adjust;
--	__u32 orig_sz;
--	__u32 orig_type_id;
--	__u32 new_sz;
--	__u32 new_type_id;
--};
--
- /* Calculate original and target relocation values, given local and target
-  * specs and relocation kind. These values are calculated for each candidate.
-  * If there are multiple candidates, resulting values should all be consistent
-@@ -951,9 +926,9 @@ static int insn_bytes_to_bpf_size(__u32 sz)
-  * 5. *(T *)(rX + <off>) = rY, where T is one of {u8, u16, u32, u64};
-  * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
-  */
--static int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
--			       int insn_idx, const struct bpf_core_relo *relo,
--			       int relo_idx, const struct bpf_core_relo_res *res)
-+int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
-+			int insn_idx, const struct bpf_core_relo *relo,
-+			int relo_idx, const struct bpf_core_relo_res *res)
- {
- 	__u32 orig_val, new_val;
- 	__u8 class;
-@@ -1177,18 +1152,18 @@ static void bpf_core_dump_spec(const char *prog_name, int level, const struct bp
-  *    between multiple relocations for the same type ID and is updated as some
-  *    of the candidates are pruned due to structural incompatibility.
-  */
--int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
--			     int insn_idx,
--			     const struct bpf_core_relo *relo,
--			     int relo_idx,
--			     const struct btf *local_btf,
--			     struct bpf_core_cand_list *cands,
--			     struct bpf_core_spec *specs_scratch)
-+int bpf_core_calc_relo_insn(const char *prog_name,
-+			    const struct bpf_core_relo *relo,
-+			    int relo_idx,
-+			    const struct btf *local_btf,
-+			    struct bpf_core_cand_list *cands,
-+			    struct bpf_core_spec *specs_scratch,
-+			    struct bpf_core_relo_res *targ_res)
- {
- 	struct bpf_core_spec *local_spec = &specs_scratch[0];
- 	struct bpf_core_spec *cand_spec = &specs_scratch[1];
- 	struct bpf_core_spec *targ_spec = &specs_scratch[2];
--	struct bpf_core_relo_res cand_res, targ_res;
-+	struct bpf_core_relo_res cand_res;
- 	const struct btf_type *local_type;
- 	const char *local_name;
- 	__u32 local_id;
-@@ -1223,12 +1198,12 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 	/* TYPE_ID_LOCAL relo is special and doesn't need candidate search */
- 	if (relo->kind == BPF_CORE_TYPE_ID_LOCAL) {
- 		/* bpf_insn's imm value could get out of sync during linking */
--		memset(&targ_res, 0, sizeof(targ_res));
--		targ_res.validate = false;
--		targ_res.poison = false;
--		targ_res.orig_val = local_spec->root_type_id;
--		targ_res.new_val = local_spec->root_type_id;
--		goto patch_insn;
-+		memset(targ_res, 0, sizeof(*targ_res));
-+		targ_res->validate = true;
-+		targ_res->poison = false;
-+		targ_res->orig_val = local_spec->root_type_id;
-+		targ_res->new_val = local_spec->root_type_id;
-+		return 0;
- 	}
- 
- 	/* libbpf doesn't support candidate search for anonymous types */
-@@ -1262,7 +1237,7 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 			return err;
- 
- 		if (j == 0) {
--			targ_res = cand_res;
-+			*targ_res = cand_res;
- 			*targ_spec = *cand_spec;
- 		} else if (cand_spec->bit_offset != targ_spec->bit_offset) {
- 			/* if there are many field relo candidates, they
-@@ -1272,7 +1247,8 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 				prog_name, relo_idx, cand_spec->bit_offset,
- 				targ_spec->bit_offset);
- 			return -EINVAL;
--		} else if (cand_res.poison != targ_res.poison || cand_res.new_val != targ_res.new_val) {
-+		} else if (cand_res.poison != targ_res->poison ||
-+			   cand_res.new_val != targ_res->new_val) {
- 			/* all candidates should result in the same relocation
- 			 * decision and value, otherwise it's dangerous to
- 			 * proceed due to ambiguity
-@@ -1280,7 +1256,7 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 			pr_warn("prog '%s': relo #%d: relocation decision ambiguity: %s %u != %s %u\n",
- 				prog_name, relo_idx,
- 				cand_res.poison ? "failure" : "success", cand_res.new_val,
--				targ_res.poison ? "failure" : "success", targ_res.new_val);
-+				targ_res->poison ? "failure" : "success", targ_res->new_val);
- 			return -EINVAL;
- 		}
- 
-@@ -1314,19 +1290,10 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 			 prog_name, relo_idx);
- 
- 		/* calculate single target relo result explicitly */
--		err = bpf_core_calc_relo(prog_name, relo, relo_idx, local_spec, NULL, &targ_res);
-+		err = bpf_core_calc_relo(prog_name, relo, relo_idx, local_spec, NULL, targ_res);
- 		if (err)
- 			return err;
- 	}
- 
--patch_insn:
--	/* bpf_core_patch_insn() should know how to handle missing targ_spec */
--	err = bpf_core_patch_insn(prog_name, insn, insn_idx, relo, relo_idx, &targ_res);
--	if (err) {
--		pr_warn("prog '%s': relo #%d: failed to patch insn #%u: %d\n",
--			prog_name, relo_idx, relo->insn_off / 8, err);
--		return -EINVAL;
--	}
--
- 	return 0;
- }
-diff --git a/tools/lib/bpf/relo_core.h b/tools/lib/bpf/relo_core.h
-index 17799819ad7c..a28bf3711ce2 100644
---- a/tools/lib/bpf/relo_core.h
-+++ b/tools/lib/bpf/relo_core.h
-@@ -44,14 +44,44 @@ struct bpf_core_spec {
- 	__u32 bit_offset;
- };
- 
--int bpf_core_apply_relo_insn(const char *prog_name,
--			     struct bpf_insn *insn, int insn_idx,
--			     const struct bpf_core_relo *relo, int relo_idx,
--			     const struct btf *local_btf,
--			     struct bpf_core_cand_list *cands,
--			     struct bpf_core_spec *specs_scratch);
-+struct bpf_core_relo_res {
-+	/* expected value in the instruction, unless validate == false */
-+	__u32 orig_val;
-+	/* new value that needs to be patched up to */
-+	__u32 new_val;
-+	/* relocation unsuccessful, poison instruction, but don't fail load */
-+	bool poison;
-+	/* some relocations can't be validated against orig_val */
-+	bool validate;
-+	/* for field byte offset relocations or the forms:
-+	 *     *(T *)(rX + <off>) = rY
-+	 *     rX = *(T *)(rY + <off>),
-+	 * we remember original and resolved field size to adjust direct
-+	 * memory loads of pointers and integers; this is necessary for 32-bit
-+	 * host kernel architectures, but also allows to automatically
-+	 * relocate fields that were resized from, e.g., u32 to u64, etc.
-+	 */
-+	bool fail_memsz_adjust;
-+	__u32 orig_sz;
-+	__u32 orig_type_id;
-+	__u32 new_sz;
-+	__u32 new_type_id;
++struct btf_reloc_member {
++	struct btf_member *member;
++	int idx;
 +};
 +
- int bpf_core_types_are_compat(const struct btf *local_btf, __u32 local_id,
- 			      const struct btf *targ_btf, __u32 targ_id);
- 
- size_t bpf_core_essential_name_len(const char *name);
++struct btf_reloc_type {
++	struct btf_type *type;
++	unsigned int id;
++	bool added_by_all;
 +
-+int bpf_core_calc_relo_insn(const char *prog_name,
-+			    const struct bpf_core_relo *relo, int relo_idx,
-+			    const struct btf *local_btf,
-+			    struct bpf_core_cand_list *cands,
-+			    struct bpf_core_spec *specs_scratch,
-+			    struct bpf_core_relo_res *targ_res);
++	struct hashmap *members;
++};
 +
-+int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
-+			int insn_idx, const struct bpf_core_relo *relo,
-+			int relo_idx, const struct bpf_core_relo_res *res);
++struct btf_reloc_info {
++	struct hashmap *types;
++	struct hashmap *ids_map;
 +
- #endif
++	struct btf *src_btf;
++};
++
++static size_t bpf_reloc_info_hash_fn(const void *key, void *ctx)
++{
++	return (size_t)key;
++}
++
++static bool bpf_reloc_info_equal_fn(const void *k1, const void *k2, void *ctx)
++{
++	return k1 == k2;
++}
++
++static void *uint_as_hash_key(int x)
++{
++	return (void *)(uintptr_t)x;
++}
++
++static void bpf_reloc_type_free(struct btf_reloc_type *type)
++{
++	struct hashmap_entry *entry;
++	size_t bkt;
++
++	if (IS_ERR_OR_NULL(type))
++		return;
++
++	if (!IS_ERR_OR_NULL(type->members)) {
++		hashmap__for_each_entry(type->members, entry, bkt) {
++			free(entry->value);
++		}
++		hashmap__free(type->members);
++	}
++
++	free(type);
++}
++
++static void btfgen_reloc_info_free(struct btf_reloc_info *info)
++{
++	struct hashmap_entry *entry;
++	size_t bkt;
++
++	if (!info)
++		return;
++
++	hashmap__free(info->ids_map);
++
++	if (!IS_ERR_OR_NULL(info->types)) {
++		hashmap__for_each_entry(info->types, entry, bkt) {
++			bpf_reloc_type_free(entry->value);
++		}
++		hashmap__free(info->types);
++	}
++
++	btf__free(info->src_btf);
++
++	free(info);
++}
++
++static struct btf_reloc_info *
++btfgen_reloc_info_new(const char *targ_btf_path)
++{
++	struct btf_reloc_info *info;
++	struct btf *src_btf;
++	struct hashmap *ids_map;
++	struct hashmap *types;
++
++	info = calloc(1, sizeof(*info));
++	if (!info)
++		return ERR_PTR(-ENOMEM);
++
++	src_btf = btf__parse(targ_btf_path, NULL);
++	if (libbpf_get_error(src_btf)) {
++		btfgen_reloc_info_free(info);
++		return (void *) src_btf;
++	}
++
++	info->src_btf = src_btf;
++
++	ids_map = hashmap__new(bpf_reloc_info_hash_fn, bpf_reloc_info_equal_fn, NULL);
++	if (IS_ERR(ids_map)) {
++		btfgen_reloc_info_free(info);
++		return (void *) ids_map;
++	}
++
++	info->ids_map = ids_map;
++
++	types = hashmap__new(bpf_reloc_info_hash_fn, bpf_reloc_info_equal_fn, NULL);
++	if (IS_ERR(types)) {
++		btfgen_reloc_info_free(info);
++		return (void *) types;
++	}
++
++	info->types = types;
++
++	return info;
++}
++
++/* Return id for type in new btf instance */
++static unsigned int btf_reloc_id_get(struct btf_reloc_info *info, unsigned int old)
++{
++	uintptr_t new = 0;
++
++	/* deal with BTF_KIND_VOID */
++	if (old == 0)
++		return 0;
++
++	if (!hashmap__find(info->ids_map, uint_as_hash_key(old), (void **)&new)) {
++		/* return id for void as it's possible that the ID we're looking for is
++		 * the type of a pointer that we're not adding.
++		 */
++		return 0;
++	}
++
++	return (unsigned int)(uintptr_t)new;
++}
++
++/* Add new id map to the list of mappings */
++static int btf_reloc_id_add(struct btf_reloc_info *info, unsigned int old, unsigned int new)
++{
++	return hashmap__add(info->ids_map, uint_as_hash_key(old), uint_as_hash_key(new));
++}
++
++/*
++ * Put type in the list. If the type already exists it's returned, otherwise a
++ * new one is created and added to the list. This is called recursively adding
++ * all the types that are needed for the current one.
++ */
++static struct btf_reloc_type *btf_reloc_put_type(struct btf *btf,
++						 struct btf_reloc_info *info,
++						 struct btf_type *btf_type,
++						 unsigned int id)
++{
++	struct btf_reloc_type *reloc_type, *tmp;
++	struct btf_array *array;
++	unsigned int child_id;
++	int err;
++
++	/* check if we already have this type */
++	if (hashmap__find(info->types, uint_as_hash_key(id), (void **) &reloc_type))
++		return reloc_type;
++
++
++	/* do nothing. void is implicit in BTF */
++	if (id == 0)
++		return NULL;
++
++	reloc_type = calloc(1, sizeof(*reloc_type));
++	if (!reloc_type)
++		return ERR_PTR(-ENOMEM);
++
++	reloc_type->type = btf_type;
++	reloc_type->id = id;
++
++	/* append this type to the relocation type's list before anything else */
++	err = hashmap__add(info->types, uint_as_hash_key(reloc_type->id), reloc_type);
++	if (err)
++		return ERR_PTR(err);
++
++	/* complex types might need further processing */
++	switch (btf_kind(reloc_type->type)) {
++	/* already processed */
++	case BTF_KIND_UNKN:
++	case BTF_KIND_INT:
++	case BTF_KIND_FLOAT:
++	/* processed by callee */
++	case BTF_KIND_STRUCT:
++	case BTF_KIND_UNION:
++	/* doesn't need resolution. If the data of the pointer is used
++	 * then it'll added by the caller in another relocation.
++	 */
++	case BTF_KIND_PTR:
++		break;
++	/* needs resolution */
++	case BTF_KIND_CONST:
++	case BTF_KIND_VOLATILE:
++	case BTF_KIND_TYPEDEF:
++		child_id = btf_type->type;
++		btf_type = (struct btf_type *) btf__type_by_id(btf, child_id);
++		if (!btf_type)
++			return ERR_PTR(-EINVAL);
++
++		tmp = btf_reloc_put_type(btf, info, btf_type, child_id);
++		if (IS_ERR(tmp))
++			return tmp;
++		break;
++	/* needs resolution */
++	case BTF_KIND_ARRAY:
++		array = btf_array(reloc_type->type);
++
++		/* add type for array type */
++		btf_type = (struct btf_type *) btf__type_by_id(btf, array->type);
++		tmp = btf_reloc_put_type(btf, info, btf_type, array->type);
++		if (IS_ERR(tmp))
++			return tmp;
++
++		/* add type for array's index type */
++		btf_type = (struct btf_type *) btf__type_by_id(btf, array->index_type);
++		tmp = btf_reloc_put_type(btf, info, btf_type, array->index_type);
++		if (IS_ERR(tmp))
++			return tmp;
++
++		break;
++	/* tells if some other type needs to be handled */
++	default:
++		p_err("unsupported relocation: %d", reloc_type->id);
++		return ERR_PTR(-EINVAL);
++	}
++
++	return reloc_type;
++}
++
++/* Return pointer to btf_reloc_type by id */
++static struct btf_reloc_type *btf_reloc_get_type(struct btf_reloc_info *info, int id)
++{
++	struct btf_reloc_type *type = NULL;
++
++	if (!hashmap__find(info->types, uint_as_hash_key(id), (void **)&type))
++		return ERR_PTR(-ENOENT);
++
++	return type;
++}
++
++static int bpf_reloc_type_add_member(struct btf_reloc_info *info,
++				     struct btf_reloc_type *reloc_type,
++				     struct btf_member *btf_member, int idx)
++{
++	struct btf_reloc_member *reloc_member;
++	int err;
++
++	/* create new members hashmap for this relocation type if needed */
++	if (reloc_type->members == NULL) {
++		struct hashmap *tmp = hashmap__new(bpf_reloc_info_hash_fn,
++						   bpf_reloc_info_equal_fn,
++						   NULL);
++		if (IS_ERR(tmp))
++			return PTR_ERR(tmp);
++
++		reloc_type->members = tmp;
++	}
++	/* add given btf_member as a member of the parent relocation_type's type */
++	reloc_member = calloc(1, sizeof(*reloc_member));
++	if (!reloc_member)
++		return -ENOMEM;
++	reloc_member->member = btf_member;
++	reloc_member->idx = idx;
++	/* add given btf_member as member to given relocation type */
++	err = hashmap__add(reloc_type->members, uint_as_hash_key(reloc_member->idx), reloc_member);
++	if (err) {
++		free(reloc_member);
++		if (err != -EEXIST)
++			return err;
++	}
++
++	return 0;
++}
++
++/*
++ * Same as btf_reloc_put_type, but adding all fields, from given complex type, recursively
++ */
++static int btf_reloc_put_type_all(struct btf *btf,
++				  struct btf_reloc_info *info,
++				  struct btf_type *btf_type,
++				  unsigned int id)
++{
++	struct btf_reloc_type *reloc_type;
++	struct btf_array *array;
++	unsigned int child_id;
++	struct btf_member *m;
++	int err, i, n;
++
++	if (id == 0)
++		return 0;
++
++	if (!hashmap__find(info->types, uint_as_hash_key(id), (void **) &reloc_type)) {
++		reloc_type = calloc(1, sizeof(*reloc_type));
++		if (!reloc_type)
++			return -ENOMEM;
++
++		reloc_type->type = btf_type;
++		reloc_type->id = id;
++		/* avoid infinite recursion and yet be able to add all
++		 * fields/members for types also managed by this function twin
++		 * brother btf_reloc_put_type()
++		 */
++		reloc_type->added_by_all = true;
++
++		err = hashmap__add(info->types, uint_as_hash_key(reloc_type->id), reloc_type);
++		if (err)
++			return err;
++	} else {
++		if (reloc_type->added_by_all)
++			return 0;
++
++		reloc_type->added_by_all = true;
++	}
++
++	switch (btf_kind(reloc_type->type)) {
++	case BTF_KIND_UNKN:
++	case BTF_KIND_INT:
++	case BTF_KIND_FLOAT:
++	case BTF_KIND_ENUM:
++		/* not a complex type, already solved */
++		break;
++	case BTF_KIND_STRUCT:
++	case BTF_KIND_UNION:
++		n = btf_vlen(btf_type);
++		m = btf_members(btf_type);
++		for (i = 0; i < n; i++, m++) {
++			btf_type = (struct btf_type *) btf__type_by_id(btf, m->type);
++			if (!btf_type)
++				return -EINVAL;
++
++			/* add all member types */
++			err = btf_reloc_put_type_all(btf, info, btf_type, m->type);
++			if (err)
++				return err;
++
++			/* add all members */
++			err = bpf_reloc_type_add_member(info, reloc_type, m, i);
++			if (err)
++				return err;
++		}
++		break;
++	case BTF_KIND_PTR:
++	case BTF_KIND_CONST:
++	case BTF_KIND_VOLATILE:
++	case BTF_KIND_TYPEDEF:
++		/* modifier types */
++		child_id = btf_type->type;
++		btf_type = (struct btf_type *) btf__type_by_id(btf, child_id);
++		if (!btf_type)
++			return -EINVAL;
++
++		err = btf_reloc_put_type_all(btf, info, btf_type, child_id);
++		if (err)
++			return err;
++		break;
++	case BTF_KIND_ARRAY:
++		array = btf_array(btf_type);
++
++		/* add array member type */
++		btf_type = (struct btf_type *) btf__type_by_id(btf, array->type);
++		if (!btf_type)
++			return -EINVAL;
++		err = btf_reloc_put_type_all(btf, info, btf_type, array->type);
++		if (err)
++			return err;
++
++		/* add array index type */
++		btf_type = (struct btf_type *) btf__type_by_id(btf, array->index_type);
++		if (!btf_type)
++			return -EINVAL;
++		err = btf_reloc_put_type_all(btf, info, btf_type, array->type);
++		if (err)
++			return err;
++		break;
++	default:
++		p_err("unsupported kind (all): %s (%d)",
++		      btf_kind_str(reloc_type->type), reloc_type->id);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static int btf_reloc_info_gen_field(struct btf_reloc_info *info, struct bpf_core_spec *targ_spec)
++{
++	struct btf *btf = (struct btf *) info->src_btf;
++	struct btf_reloc_type *reloc_type;
++	struct btf_member *btf_member;
++	struct btf_type *btf_type;
++	struct btf_array *array;
++	unsigned int id;
++	int idx, err;
++
++	btf_type = (struct btf_type *) btf__type_by_id(btf, targ_spec->root_type_id);
++
++	/* create reloc type for root type */
++	reloc_type = btf_reloc_put_type(btf, info, btf_type, targ_spec->root_type_id);
++	if (IS_ERR(reloc_type))
++		return PTR_ERR(reloc_type);
++
++	/* add types for complex types (arrays, unions, structures) */
++	for (int i = 1; i < targ_spec->raw_len; i++) {
++		/* skip typedefs and mods */
++		while (btf_is_mod(btf_type) || btf_is_typedef(btf_type)) {
++			id = btf_type->type;
++			reloc_type = btf_reloc_get_type(info, id);
++			if (IS_ERR(reloc_type))
++				return PTR_ERR(reloc_type);
++			btf_type = (struct btf_type *) btf__type_by_id(btf, id);
++		}
++
++		switch (btf_kind(btf_type)) {
++		case BTF_KIND_STRUCT:
++		case BTF_KIND_UNION:
++			idx = targ_spec->raw_spec[i];
++			btf_member = btf_members(btf_type) + idx;
++			btf_type =  (struct btf_type *) btf__type_by_id(btf, btf_member->type);
++
++			/* add member to relocation type */
++			err = bpf_reloc_type_add_member(info, reloc_type, btf_member, idx);
++			if (err)
++				return err;
++			/* add relocation type */
++			reloc_type = btf_reloc_put_type(btf, info, btf_type, btf_member->type);
++			if (IS_ERR(reloc_type))
++				return PTR_ERR(reloc_type);
++			break;
++		case BTF_KIND_ARRAY:
++			array = btf_array(btf_type);
++			reloc_type = btf_reloc_get_type(info, array->type);
++			if (IS_ERR(reloc_type))
++				return PTR_ERR(reloc_type);
++			btf_type = (struct btf_type *) btf__type_by_id(btf, array->type);
++			break;
++		default:
++			p_err("spec type wasn't handled");
++			return -1;
++		}
++	}
++
++	return 0;
++}
++
++static int btf_reloc_info_gen_type(struct btf_reloc_info *info, struct bpf_core_spec *targ_spec)
++{
++	struct btf *btf = (struct btf *) info->src_btf;
++	struct btf_type *btf_type;
++	int err = 0;
++
++	btf_type = (struct btf_type *) btf__type_by_id(btf, targ_spec->root_type_id);
++
++	return btf_reloc_put_type_all(btf, info, btf_type, targ_spec->root_type_id);
++}
++
++static int btf_reloc_info_gen_enumval(struct btf_reloc_info *info, struct bpf_core_spec *targ_spec)
++{
++	p_err("untreated enumval based relocation");
++	return -EOPNOTSUPP;
++}
++
++static int btf_reloc_info_gen(struct btf_reloc_info *info, struct bpf_core_spec *res)
++{
++	if (core_relo_is_type_based(res->relo_kind))
++		return btf_reloc_info_gen_type(info, res);
++
++	if (core_relo_is_enumval_based(res->relo_kind))
++		return btf_reloc_info_gen_enumval(info, res);
++
++	if (core_relo_is_field_based(res->relo_kind))
++		return btf_reloc_info_gen_field(info, res);
++
++	return -EINVAL;
++}
++
++#define BPF_INSN_SZ (sizeof(struct bpf_insn))
++
++static int btfgen_obj_reloc_info_gen(struct btf_reloc_info *reloc_info, struct bpf_object *obj)
++{
++	const struct btf_ext_info_sec *sec;
++	const struct bpf_core_relo *rec;
++	const struct btf_ext_info *seg;
++	struct hashmap *cand_cache;
++	int err, insn_idx, sec_idx;
++	struct bpf_program *prog;
++	struct btf_ext *btf_ext;
++	const char *sec_name;
++	size_t nr_programs;
++	struct btf *btf;
++	unsigned int i;
++
++	btf = bpf_object__btf(obj);
++	btf_ext = bpf_object__btf_ext(obj);
++
++	if (btf_ext->core_relo_info.len == 0)
++		return 0;
++
++	cand_cache = bpf_core_create_cand_cache();
++	if (IS_ERR(cand_cache))
++		return PTR_ERR(cand_cache);
++
++	bpf_object_set_vmlinux_override(obj, reloc_info->src_btf);
++
++	seg = &btf_ext->core_relo_info;
++	for_each_btf_ext_sec(seg, sec) {
++		bool prog_found;
++
++		sec_name = btf__name_by_offset(btf, sec->sec_name_off);
++		if (str_is_empty(sec_name)) {
++			err = -EINVAL;
++			goto out;
++		}
++
++		prog_found = false;
++		nr_programs = bpf_object__get_nr_programs(obj);
++		for (i = 0; i < nr_programs; i++)	{
++			prog = bpf_object__get_program(obj, i);
++			if (strcmp(bpf_program__section_name(prog), sec_name) == 0) {
++				prog_found = true;
++				break;
++			}
++		}
++
++		if (!prog_found) {
++			pr_warn("sec '%s': failed to find a BPF program\n", sec_name);
++			err = -EINVAL;
++			goto out;
++		}
++
++		sec_idx = bpf_program__sec_idx(prog);
++
++		for_each_btf_ext_rec(seg, sec, i, rec) {
++			struct bpf_core_relo_res targ_res;
++			struct bpf_core_spec targ_spec;
++
++			insn_idx = rec->insn_off / BPF_INSN_SZ;
++
++			prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
++			if (!prog) {
++				pr_warn("sec '%s': failed to find program at insn #%d for CO-RE offset relocation #%d\n",
++					sec_name, insn_idx, i);
++				err = -EINVAL;
++				goto out;
++			}
++
++			err = bpf_core_calc_relo_res(prog, rec, i, btf, cand_cache, &targ_res,
++						     &targ_spec);
++			if (err)
++				goto out;
++
++			err = btf_reloc_info_gen(reloc_info, &targ_spec);
++			if (err)
++				goto out;
++		}
++	}
++
++out:
++	bpf_core_free_cand_cache(cand_cache);
++
++	return err;
++}
++
++static struct btf *btfgen_reloc_info_get_btf(struct btf_reloc_info *info)
++{
++	struct hashmap_entry *entry;
++	struct btf *btf_new;
++	size_t bkt;
++	int err;
++
++	btf_new = btf__new_empty();
++	if (IS_ERR(btf_new)) {
++		p_err("failed to allocate btf structure");
++		return btf_new;
++	}
++
++	/* first pass: add all types and add their new ids to the ids map */
++	hashmap__for_each_entry(info->types, entry, bkt) {
++		struct btf_reloc_type *reloc_type = entry->value;
++		struct btf_type *btf_type = reloc_type->type;
++		int new_id;
++
++		/* add members for struct and union */
++		if (btf_is_struct(btf_type) || btf_is_union(btf_type)) {
++			struct hashmap_entry *member_entry;
++			struct btf_type *btf_type_cpy;
++			int nmembers, index;
++			size_t new_size;
++
++			nmembers = reloc_type->members ? hashmap__size(reloc_type->members) : 0;
++			new_size = sizeof(struct btf_type) + nmembers * sizeof(struct btf_member);
++
++			btf_type_cpy = malloc(new_size);
++			if (!btf_type_cpy) {
++				err = -ENOMEM;
++				goto out;
++			}
++
++			/* copy header */
++			memcpy(btf_type_cpy, btf_type, sizeof(*btf_type_cpy));
++
++			/* copy only members that are needed */
++			index = 0;
++			if (nmembers > 0) {
++				size_t bkt2;
++
++				hashmap__for_each_entry(reloc_type->members, member_entry, bkt2) {
++					struct btf_reloc_member *reloc_member;
++					struct btf_member *btf_member;
++
++					reloc_member = member_entry->value;
++					btf_member = btf_members(btf_type) + reloc_member->idx;
++
++					memcpy(btf_members(btf_type_cpy) + index, btf_member,
++					       sizeof(struct btf_member));
++
++					index++;
++				}
++			}
++
++			/* set new vlen */
++			btf_type_cpy->info = btf_type_info(btf_kind(btf_type_cpy), nmembers,
++							   btf_kflag(btf_type_cpy));
++
++			err = btf__add_type(btf_new, info->src_btf, btf_type_cpy);
++			free(btf_type_cpy);
++		} else {
++			err = btf__add_type(btf_new, info->src_btf, btf_type);
++		}
++
++		if (err < 0)
++			goto out;
++
++		new_id = err;
++
++		/* add ID mapping */
++		err = btf_reloc_id_add(info, reloc_type->id, new_id);
++		if (err)
++			goto out;
++	}
++
++	/* second pass: fix up type ids */
++	for (unsigned int i = 0; i < btf__type_cnt(btf_new); i++) {
++		struct btf_member *btf_member;
++		struct btf_type *btf_type;
++		struct btf_param *params;
++		struct btf_array *array;
++
++		btf_type = (struct btf_type *) btf__type_by_id(btf_new, i);
++
++		switch (btf_kind(btf_type)) {
++		case BTF_KIND_STRUCT:
++		case BTF_KIND_UNION:
++			for (unsigned short j = 0; j < btf_vlen(btf_type); j++) {
++				btf_member = btf_members(btf_type) + j;
++				btf_member->type = btf_reloc_id_get(info, btf_member->type);
++			}
++			break;
++		case BTF_KIND_PTR:
++		case BTF_KIND_TYPEDEF:
++		case BTF_KIND_VOLATILE:
++		case BTF_KIND_CONST:
++		case BTF_KIND_RESTRICT:
++		case BTF_KIND_FUNC:
++		case BTF_KIND_VAR:
++			btf_type->type = btf_reloc_id_get(info, btf_type->type);
++			break;
++		case BTF_KIND_ARRAY:
++			array = btf_array(btf_type);
++			array->index_type = btf_reloc_id_get(info, array->index_type);
++			array->type = btf_reloc_id_get(info, array->type);
++			break;
++		case BTF_KIND_FUNC_PROTO:
++			btf_type->type = btf_reloc_id_get(info, btf_type->type);
++			params = btf_params(btf_type);
++			for (unsigned short j = 0; j < btf_vlen(btf_type); j++)
++				params[j].type = btf_reloc_id_get(info, params[j].type);
++			break;
++		default:
++			break;
++		}
++	}
++
++	return btf_new;
++
++out:
++	btf__free(btf_new);
++	return ERR_PTR(err);
++}
++
++static int is_file(const char *path)
++{
++	struct stat st;
++
++	if (stat(path, &st) < 0)
++		return -1;
++
++	switch (st.st_mode & S_IFMT) {
++	case S_IFDIR:
++		return 0;
++	case S_IFREG:
++		return 1;
++	default:
++		return -1;
++	}
++
++	return -1;
++}
++
++static int generate_btf(const char *src_btf, const char *dst_btf, const char *objspaths[])
++{
++	struct btf_reloc_info *reloc_info;
++	struct btf *btf_new = NULL;
++	struct bpf_object *obj;
++	int err;
++
++	struct bpf_object_open_opts ops = {
++		.sz = sizeof(ops),
++		.btf_custom_path = src_btf,
++	};
++
++	reloc_info = btfgen_reloc_info_new(src_btf);
++	err = libbpf_get_error(reloc_info);
++	if (err) {
++		p_err("failed to allocate info structure");
++		goto out;
++	}
++
++	for (int i = 0; objspaths[i] != NULL; i++) {
++		printf("OBJ : %s\n", objspaths[i]);
++		obj = bpf_object__open_file(objspaths[i], &ops);
++		err = libbpf_get_error(obj);
++		if (err) {
++			p_err("error opening object: %s", strerror(errno));
++			goto out;
++		}
++
++		err = btfgen_obj_reloc_info_gen(reloc_info, obj);
++		if (err)
++			goto out;
++
++		bpf_object__close(obj);
++	}
++
++	btf_new = btfgen_reloc_info_get_btf(reloc_info);
++	err = libbpf_get_error(btf_new);
++	if (err) {
++		p_err("error generating btf: %s", strerror(errno));
++		goto out;
++	}
++
++	printf("DBTF: %s\n", dst_btf);
++	err = btf_save_raw(btf_new, dst_btf);
++	if (err) {
++		p_err("error saving btf file: %s", strerror(errno));
++		goto out;
++	}
++
++out:
++	if (!libbpf_get_error(btf_new))
++		btf__free(btf_new);
++	btfgen_reloc_info_free(reloc_info);
++
++	return err;
++}
++
++static int do_gen_btf(int argc, char **argv)
++{
++	char src_btf_path[PATH_MAX], dst_btf_path[PATH_MAX];
++	bool input_is_file, output_is_file = false;
++	const char *input, *output;
++	const char **objs = NULL;
++	struct dirent *dir;
++	DIR *d = NULL;
++	int i, err;
++
++	if (!REQ_ARGS(3)) {
++		usage();
++		return -1;
++	}
++
++	input = GET_ARG();
++	err = is_file(input);
++	if (err < 0) {
++		p_err("failed to stat %s: %s", input, strerror(errno));
++		return err;
++	}
++	input_is_file = err;
++
++	output = GET_ARG();
++	err = is_file(output);
++	if (err != 0)
++		output_is_file = true;
++
++	objs = (const char **) malloc((argc + 1) * sizeof(*objs));
++	if (!objs)
++		return -ENOMEM;
++
++	i = 0;
++	while (argc > 0)
++		objs[i++] = GET_ARG();
++
++	objs[i] = NULL;
++
++	// single BTF file
++	if (input_is_file) {
++		char *d_input;
++
++		printf("SBTF: %s\n", input);
++
++		if (output_is_file) {
++			err = generate_btf(input, output, objs);
++			goto out;
++		}
++		d_input = strdup(input);
++		snprintf(dst_btf_path, sizeof(dst_btf_path), "%s/%s", output,
++			 basename(d_input));
++		free(d_input);
++		err = generate_btf(input, dst_btf_path, objs);
++		goto out;
++	}
++
++	if (output_is_file) {
++		p_err("can't have just one file as output");
++		err = -EINVAL;
++		goto out;
++	}
++
++	// directory with BTF files
++	d = opendir(input);
++	if (!d) {
++		p_err("error opening input dir: %s", strerror(errno));
++		err = -errno;
++		goto out;
++	}
++
++	while ((dir = readdir(d)) != NULL) {
++		if (dir->d_type != DT_REG)
++			continue;
++
++		if (strncmp(dir->d_name + strlen(dir->d_name) - 4, ".btf", 4))
++			continue;
++
++		snprintf(src_btf_path, sizeof(src_btf_path), "%s/%s", input, dir->d_name);
++		snprintf(dst_btf_path, sizeof(dst_btf_path), "%s/%s", output, dir->d_name);
++
++		printf("SBTF: %s\n", src_btf_path);
++
++		err = generate_btf(src_btf_path, dst_btf_path, objs);
++		if (err)
++			goto out;
++	}
++
++out:
++	if (!err)
++		printf("STAT: done!\n");
++	free(objs);
++	closedir(d);
++	return err;
++}
++
+ static const struct cmd cmds[] = {
+ 	{ "object",	do_object },
+ 	{ "skeleton",	do_skeleton },
++	{ "btf",	do_gen_btf},
+ 	{ "help",	do_help },
+ 	{ 0 }
+ };
 -- 
 2.25.1
 
