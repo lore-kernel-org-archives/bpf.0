@@ -2,119 +2,200 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D0BFC433EF
-	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 19:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03E11C433EF
+	for <bpf@archiver.kernel.org>; Fri, 17 Dec 2021 19:32:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbhLQTWj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Dec 2021 14:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbhLQTWj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 14:22:39 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B93C061574
-        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 11:22:38 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so2148296wmd.5
-        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 11:22:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z/5vZLI1+nIArprhfqZZqy/HfknMjwFNbzysDd4yCuw=;
-        b=FBPQ77vifzN7SDFr/X/Afss7f9Hj2fd3qx/hy9nPkGQ8TG562qCICjl4vFSBYABxbP
-         OxPDEJrASV2NUtGV7anEe13RoXfgp+K2Mt31YX42cSAAKP/qeYPMcZKHxAdXfuZ/IsoR
-         j3B8bF0S9F2APd9f9y9eiBTqUHXSrM5/ARiRU99sY+rFIeEYh+fSl8OQV4Z6sJnM9aQH
-         rmpr9RPmVxIuvY2W88Xnpi09i6eh/e0wWA1okeCs9pToyzIP8YPtx/011MXUMaORwv8n
-         R7cP0S5eyM8//ODYpF5xdNj6CqDQi5HQlSf689Cw5nxdMxRpq4lS5HHBEJkLntHaght5
-         009A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z/5vZLI1+nIArprhfqZZqy/HfknMjwFNbzysDd4yCuw=;
-        b=PYCtKIfR/CdhVmcIu+oF2LEgPaUhCIDwzKDMY4b2Uz1xS52w846+6RTVrZw7nXSsMi
-         /B5lLXAEElQyiY+6GoLEFgW0pPq9PFx8t/4KcE1pH+h/cchEDjN3k5yes8ikUgeBrjMC
-         wUIPwl3G/CjnnlwNh3ACxhBKojly2qEkqzwp6gn9GqJhPaEfSQllTXushEpgEmq03ICO
-         yyyCUE1vKpmvtI4p9i44+VaGOxqEFgtnqpg6LpQLUn1aNyznhLUuITvWdcDMzDyOcBq+
-         2O39Usc9aNpaEN8yxtRR5wwQFI16PE2uvA0hvbhh7CzT2RNCizeeBOXzv0wzNVVxNWz+
-         AA6w==
-X-Gm-Message-State: AOAM531OEvbyvEY5b7MOuEVmvV5859XxbFt6ggYw0yMrDuT5AYCYtdH3
-        1mcKHQI1LDJKmEvAaGXFSmKM
-X-Google-Smtp-Source: ABdhPJzz2l41HvddwHESHO4/9eSGtS9L+jyAywAWxC8Cft+pJC5GmmSlhgVtFCZ5hJuhF9sCCK5/rQ==
-X-Received: by 2002:a05:600c:c1:: with SMTP id u1mr10706381wmm.163.1639768957211;
-        Fri, 17 Dec 2021 11:22:37 -0800 (PST)
-Received: from Mem (2a01cb088160fc0089020d359cf3dd66.ipv6.abo.wanadoo.fr. [2a01:cb08:8160:fc00:8902:d35:9cf3:dd66])
-        by smtp.gmail.com with ESMTPSA id h1sm8217114wrf.33.2021.12.17.11.22.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 11:22:36 -0800 (PST)
-Date:   Fri, 17 Dec 2021 20:22:35 +0100
-From:   Paul Chaignon <paul@isovalent.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Probe for bounded loop support
-Message-ID: <20211217192235.GA40254@Mem>
-References: <CAHMuVOB16tif6TRjdNVN9YjGc-UpOOwuo35SM+vY7Bf5=1+oiQ@mail.gmail.com>
- <CAEf4BzZZKC_rq8h=NiWByCCxJN9GGWsqGgcGbcUJA6L5duR5Hg@mail.gmail.com>
+        id S239284AbhLQTb5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 17 Dec 2021 14:31:57 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:45810 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236806AbhLQTbz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 17 Dec 2021 14:31:55 -0500
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8F0A820B7179;
+        Fri, 17 Dec 2021 11:31:55 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8F0A820B7179
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1639769515;
+        bh=cRv1WcSt0W5cSKayHF2tip8g7TX35i59/0QbRgNWzaU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MhexrEl8xul/7EJEmQ9ctKSu/OqP5hTSgYLkcxOxbtlRaEmLVeMC0umttpEf1DccD
+         5q05nUXhBgAv/XGu6USkDMeZn48vsVdskq8//9qkBP5FlvUqe+eBrfQRO6/47hBvyc
+         y5FSZka5hwe/uuCmg8nTgipQq+dNld6NvVlSP6zI=
+Received: by mail-pg1-f180.google.com with SMTP id r138so3041586pgr.13;
+        Fri, 17 Dec 2021 11:31:55 -0800 (PST)
+X-Gm-Message-State: AOAM530hNRZAk4LCVJ9lPG8s2ijwRjlKCNtdGxoVkSr/nHxaG96Ki6n6
+        ivnctV1gn2e4SM4eXhVEUnDHwtJyCL6CiWoWHO0=
+X-Google-Smtp-Source: ABdhPJwNH6xujiXnHflsTggNnsem9wvT8MU14S2o6N2NLP2AwJNCHyFv/iBlkfPk4xcTbpnyfBCTlPfGaBbnWmZmrx8=
+X-Received: by 2002:a63:ec54:: with SMTP id r20mr3946441pgj.455.1639769515003;
+ Fri, 17 Dec 2021 11:31:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZZKC_rq8h=NiWByCCxJN9GGWsqGgcGbcUJA6L5duR5Hg@mail.gmail.com>
+References: <20211210172034.13614-1-mcroce@linux.microsoft.com>
+ <CAADnVQJRVpL0HL=Lz8_e-ZU5y0WrQ_Z0KvQXF2w8rE660Jr62g@mail.gmail.com>
+ <CAFnufp33Dm_5gffiFYQ+Maf4Bj9fE3WLMpFf3cJ=F5mm71mTEQ@mail.gmail.com>
+ <CAADnVQ+OeO=f1rzv_F9HFQmJCcJ7=FojkOuZWvx7cT-XLjVDcQ@mail.gmail.com> <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+In-Reply-To: <CAFnufp3c3pdxu=hse4_TdFU_UZPeQySGH16ie13uTT=3w-TFjA@mail.gmail.com>
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+Date:   Fri, 17 Dec 2021 20:31:18 +0100
+X-Gmail-Original-Message-ID: <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
+Message-ID: <CAFnufp35YbxhbQR7stq39WOhAZm4LYHu6FfYBeHJ8-xRSo7TnQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: limit bpf_core_types_are_compat() recursion
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 08:12:23AM -0800, Andrii Nakryiko wrote:
-> On Fri, Dec 17, 2021 at 4:12 AM Paul Chaignon <paul@isovalent.com> wrote:
+ On Wed, Dec 15, 2021 at 7:21 PM Matteo Croce
+<mcroce@linux.microsoft.com> wrote:
+>
+> On Wed, Dec 15, 2021 at 6:29 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > This patch introduces a new probe to check whether the verifier supports
-> > bounded loops as introduced in commit 2589726d12a1 ("bpf: introduce
-> > bounded loops"). This patch will allow BPF users such as Cilium to probe
-> > for loop support on startup and only unconditionally unroll loops on
-> > older kernels.
+> > On Wed, Dec 15, 2021 at 6:54 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+> > > >
+> > > > Maybe do a level check here?
+> > > > Since calling it and immediately returning doesn't conserve
+> > > > the stack.
+> > > > If it gets called it can finish fine, but
+> > > > calling it again would be too much.
+> > > > In other words checking the level here gives us
+> > > > room for one more frame.
+> > > >
+> > >
+> > > I thought that the compiler was smart enough to return before
+> > > allocating most of the frame.
+> > > I tried and this is true only with gcc, not with clang.
 > >
-> > Reviewed-by: Quentin Monnet <quentin@isovalent.com>
-> > Signed-off-by: Paul Chaignon <paul@isovalent.com>
-> > ---
-> >  tools/lib/bpf/libbpf.h        |  1 +
-> >  tools/lib/bpf/libbpf.map      |  1 +
-> >  tools/lib/bpf/libbpf_probes.c | 20 ++++++++++++++++++++
-> >  3 files changed, 22 insertions(+)
+> > Interesting. That's a surprise.
+> > Could you share the asm that gcc generates?
 > >
-> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > index 42b2f36fd9f0..3621aaaff67c 100644
-> > --- a/tools/lib/bpf/libbpf.h
-> > +++ b/tools/lib/bpf/libbpf.h
-> > @@ -1058,6 +1058,7 @@ LIBBPF_API bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex);
-> >  LIBBPF_API bool bpf_probe_helper(enum bpf_func_id id,
-> >                                  enum bpf_prog_type prog_type, __u32 ifindex);
-> >  LIBBPF_API bool bpf_probe_large_insn_limit(__u32 ifindex);
-> > +LIBBPF_API bool bpf_probe_bounded_loops(__u32 ifindex);
+>
+> Sure,
+>
+> This is the gcc x86_64 asm on a stripped down
+> bpf_core_types_are_compat() with a 1k struct on the stack:
+>
+> bpf_core_types_are_compat:
+> test esi, esi
+> jle .L69
+> push r15
+> push r14
+> push r13
+> push r12
+> push rbp
+> mov rbp, rdi
+> push rbx
+> mov ebx, esi
+> sub rsp, 9112
+> [...]
+> .L69:
+> or eax, -1
+> ret
+>
+> This latest clang:
+>
+> bpf_core_types_are_compat: # @bpf_core_types_are_compat
+> push rbp
+> push r15
+> push r14
+> push rbx
+> sub rsp, 1000
+> mov r14d, -1
+> test esi, esi
+> jle .LBB0_7
+> [...]
+> .LBB0_7:
+> mov eax, r14d
+> add rsp, 1000
+> pop rbx
+> pop r14
+> pop r15
+> pop rbp
+> ret
+>
+> > > > > +                       err = __bpf_core_types_are_compat(local_btf, local_id,
+> > > > > +                                                         targ_btf, targ_id,
+> > > > > +                                                         level - 1);
+> > > > > +                       if (err <= 0)
+> > > > > +                               return err;
+> > > > > +               }
+> > > > > +
+> > > > > +               /* tail recurse for return type check */
+> > > > > +               btf_type_skip_modifiers(local_btf, local_type->type, &local_id);
+> > > > > +               btf_type_skip_modifiers(targ_btf, targ_type->type, &targ_id);
+> > > > > +               goto recur;
+> > > > > +       }
+> > > > > +       default:
+> > > > > +               pr_warn("unexpected kind %s relocated, local [%d], target [%d]\n",
+> > > > > +                       btf_type_str(local_type), local_id, targ_id);
+> > > >
+> > > > That should be bpf_log() instead.
+> > > >
+> > >
+> > > To do that I need a struct bpf_verifier_log, which is not present
+> > > there, neither in bpf_core_spec_match() or bpf_core_apply_relo_insn().
 > >
-> 
-> Nope, see [0], I'm removing bpf_probe_large_insn_limit, so no new
-> ad-hoc feature probing APIs, please. There has to be some system to
-> this. If you want to add it to bpftool, go ahead, but keep it inside
-> bpftool code only. In practice I'd use CO-RE feature detection from
-> the BPF program side to pick the best implementation. Worst case, I'd
-> add two BPF program implementations and picked one or the other
-> (bpf_program__set_autoload(false) to disable one of them) after doing
-> feature detection from the process, not relying on shelling out to
-> bpftool.
+> > It is there. See:
+> >         err = bpf_core_apply_relo_insn((void *)ctx->log, insn, ...
+> >
+> > > Should we drop the message at all?
+> >
+> > Passing it into bpf_core_spec_match() and further into
+> > bpf_core_types_are_compat() is probably unnecessary.
+> > All callers have an error check with a log right after.
+> > So I think we won't lose anything if we drop this log.
+> >
+>
+> Nice.
+>
+> > >
+> > > > > +               return 0;
+> > > > > +       }
+> > > > > +}
+> > > >
+> > > > Please add tests that exercise this logic by enabling
+> > > > additional lskels and a new test that hits the recursion limit.
+> > > > I suspect we don't have such case in selftests.
+> > > >
+> > > > Thanks!
+> > >
+> > > Will do!
+> >
+> > Thanks!
+>
 
-Thanks for the pointer, I wasn't aware of that ongoing work.
+Hi,
 
-For CO-RE feature detection, do you have in mind a bpf_core_field_exists
-call to check one of the bpf_func_state fields introduced in the same
-commit as bounded loop support, or is there some other CO-RE magic I'm
-not aware of?
+I'm writing a test which exercise that function.
+I can succesfully trigger a call to __bpf_core_types_are_compat() with
+these  calls:
 
-In any case, I don't think we can assume BTF support in Cilium yet
-(soon, hopefully). I'll probably resend as a bpftool-only patch.
+bpf_core_type_id_kernel(struct sk_buff);
+bpf_core_type_exists(struct sk_buff);
+bpf_core_type_size(struct sk_buff);
 
-> 
->   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20211216070442.1492204-2-andrii@kernel.org/
+but the kind will obviously be BTF_KIND_STRUCT.
+I'm trying to do the same with kind BTF_KIND_FUNC_PROTO instead with:
 
-[...]
+void func_proto(int, unsigned int);
+bpf_core_type_id_kernel(func_proto);
+
+but I get a clang crash[1], while just checking the existence with:
+
+typedef int (*func_proto_typedef)(struct sk_buff *);
+bpf_core_type_exists(func_proto_typedef);
+
+I don't reach even bpf_core_spec_match().
+
+Which is a simple way to generate a BTF_KIND_FUNC_PROTO BTF field?
+
+[1] https://github.com/llvm/llvm-project/issues/52779
+
+Regards,
+-- 
+per aspera ad upstream
