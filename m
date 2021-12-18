@@ -2,143 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3615EC433EF
-	for <bpf@archiver.kernel.org>; Sat, 18 Dec 2021 01:44:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E85DC433F5
+	for <bpf@archiver.kernel.org>; Sat, 18 Dec 2021 12:30:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbhLRBoP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 17 Dec 2021 20:44:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S231822AbhLRMaM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 18 Dec 2021 07:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbhLRBoP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 17 Dec 2021 20:44:15 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695FEC061574
-        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 17:44:15 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id f18-20020a17090aa79200b001ad9cb23022so4434204pjq.4
-        for <bpf@vger.kernel.org>; Fri, 17 Dec 2021 17:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fSHRWeCblGYobnhDMs41erQYGXWVDLZ4Kl0P4n8z1Y8=;
-        b=MHMl3CYqeXruvE6vNjptA8+NbPZjOM6s351hMqhTl/0CzX6tjTGENw6NkT01/Yum0V
-         G1TAiT5+qL5qyfcUb2KRkbXYi7VL8xeG9qSFRdXydktARIw918wdlLoGM55irc7V3AwQ
-         4VwKuhaVbTBsETp1+/AXv3ChkUWpszfYst95Mx3Z1HFKZ/5G2BcLqtSsd5pF9YcqJqLG
-         WbSNu+H04XzWgZvX2g98Rueod1WcThYLRhcukTWJxCtPLN5qANmdUxS0Jxfyng+ypsn1
-         qFHnMU9TZOm0YaR9TnN8NRCb7RlwxmydTCZRD/to6sk7KS/6UP/4cIcXZSnCDUPMvt7W
-         tQNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fSHRWeCblGYobnhDMs41erQYGXWVDLZ4Kl0P4n8z1Y8=;
-        b=ytYwQCUf27aK8Iv37ioTFFD2RsqwZpHG3XCYvk8lO0yB/CQbT7CiY4XgVtK3i8Ja9y
-         HcDGvWQnqH35Yl+Vgzjf+V0Z1l2cUn3inLRP8EfyjRKThg6olr8k2jGNS7xz0uwkOD46
-         Z5RumahblHdld2IBaxRJOcL0GDD31Jy2XM8aUTHJJK+I+Vvhr7TAhvbkQxQZS0SFntNI
-         4x0fSw09ZjOLgFo9jqiMGayGjdvLMSLPZcVKL3LxcJk+p1rxc7tlGzeeKzFqnXU4xjPg
-         8oU6LO/wOfIRj7bfo4/8UWeD74fxxDRaXIVw53FHEC7xDS6WwOMwULtB8lm/GKRylpa2
-         5d/Q==
-X-Gm-Message-State: AOAM530QyrnHJb7n9+s86CZmKeU1GgmxY7Aw0Ur5S55zMcmxA1MteNqO
-        8du9pduliq072TMwqX3s0hI=
-X-Google-Smtp-Source: ABdhPJw1kPdfn1q9W5cbHeESnwr0EMfBK9mUY28aMecbqhlJRh8r3mMfIVtMQfwp9Z6LAlXlrHB4Gg==
-X-Received: by 2002:a17:90b:314b:: with SMTP id ip11mr14927249pjb.133.1639791854770;
-        Fri, 17 Dec 2021 17:44:14 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:dd94])
-        by smtp.gmail.com with ESMTPSA id j7sm11445128pfc.74.2021.12.17.17.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 17:44:14 -0800 (PST)
-Date:   Fri, 17 Dec 2021 17:44:12 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Cc:     Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
-        Mark Wielaard <mark@klomp.org>
-Subject: Re: [PATCH bpf-next v2 00/11] bpf: add support for new btf kind
- BTF_KIND_TAG
-Message-ID: <20211218014412.rlbpsvtcqsemtiyk@ast-mbp.dhcp.thefacebook.com>
-References: <20210913155122.3722704-1-yhs@fb.com>
- <b59428f2-28cf-f1fd-a02c-730c3a5e453f@fb.com>
- <87sfy82zvd.fsf@oracle.com>
- <fc6e80ec-a823-bee4-7451-2b4d497a64af@fb.com>
- <87ilvncy5x.fsf@oracle.com>
+        with ESMTP id S231806AbhLRMaM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 18 Dec 2021 07:30:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0761C061574;
+        Sat, 18 Dec 2021 04:30:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D32460AD2;
+        Sat, 18 Dec 2021 12:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2EE9C36AE8;
+        Sat, 18 Dec 2021 12:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639830610;
+        bh=Eq3jgzuqBJJvtHt11kUu/GJ7HRGqHoVN9uNM7owmRBk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=P1zkYQaaEAUfONQoDU48loAiAP4QDUaKLnuXNhEXMV4Xd/aGtBRbuKyPm+10OB06x
+         yayahyxPD0qAHwK+DfsuQeCsi09ztRSiRD6TCyZhZc1f3oxX7hgsvAGWvMpSPp0gCO
+         hLQ1LuJ855dmAsl8YWD2BTVoUQcCMJOr8y7eaH9XoDGPFz5+j3dm6UZcvrAT6vq4wf
+         vRg1nsoAB/Z/lvIHD6G17/270Mn9aa4CjzrOdU/iG+epnWH49f0ZM6SkAo4f2qtW6f
+         khsgvk7oiiK7x7DNzKrxNOHCbX+YePEceUPuNbazQNda54NCFhagxNyd0NMUpsneBe
+         li+EKVIbZm0aQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C0FC160A4F;
+        Sat, 18 Dec 2021 12:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ilvncy5x.fsf@oracle.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/6][pull request] Intel Wired LAN Driver Updates
+ 2021-12-17
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163983061078.29880.10453820135462050582.git-patchwork-notify@kernel.org>
+Date:   Sat, 18 Dec 2021 12:30:10 +0000
+References: <20211217193114.392106-1-anthony.l.nguyen@intel.com>
+In-Reply-To: <20211217193114.392106-1-anthony.l.nguyen@intel.com>
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 11:40:10AM +0100, Jose E. Marchesi wrote:
+Hello:
+
+This series was applied to netdev/net.git (master)
+by Tony Nguyen <anthony.l.nguyen@intel.com>:
+
+On Fri, 17 Dec 2021 11:31:08 -0800 you wrote:
+> Maciej Fijalkowski says:
 > 
-> 2) The need for DWARF to convey free-text tags on certain elements, such
->    as members of struct types.
+> It seems that previous [0] Rx fix was not enough and there are still
+> issues with AF_XDP Rx ZC support in ice driver. Elza reported that for
+> multiple XSK sockets configured on a single netdev, some of them were
+> becoming dead after a while. We have spotted more things that needed to
+> be addressed this time. More of information can be found in particular
+> commit messages.
 > 
->    The motivation for this was originally the way the Linux kernel
->    generates its BTF information, using pahole, using DWARF as a source.
->    As we discussed in our last exchange on this topic, this is
->    accidental, i.e. if the kernel switched to generate BTF directly from
->    the compiler and the linker could merge/deduplicate BTF, there would
->    be no need for using DWARF to act as the "unwilling conveyer" of this
->    information.  There are additional benefits of this second approach.
->    Thats why we didn't plan to add these extended DWARF DIEs to GCC.
-> 
->    However, it now seems that a DWARF consumer, the drgn project, would
->    also benefit from having such a support in DWARF to distinguish
->    between different kind of pointers.
+> [...]
 
-drgn can use .percpu section in vmlinux for global percpu vars.
-For pointers the annotation is indeed necessary.
+Here is the summary with links:
+  - [net,1/6] ice: xsk: return xsk buffers back to pool when cleaning the ring
+    https://git.kernel.org/netdev/net/c/afe8a3ba85ec
+  - [net,2/6] ice: xsk: allocate separate memory for XDP SW ring
+    https://git.kernel.org/netdev/net/c/617f3e1b588c
+  - [net,3/6] ice: remove dead store on XSK hotpath
+    https://git.kernel.org/netdev/net/c/0708b6facb4d
+  - [net,4/6] ice: xsk: do not clear status_error0 for ntu + nb_buffs descriptor
+    https://git.kernel.org/netdev/net/c/8b51a13c37c2
+  - [net,5/6] ice: xsk: allow empty Rx descriptors on XSK ZC data path
+    https://git.kernel.org/netdev/net/c/8bea15ab7485
+  - [net,6/6] ice: xsk: fix cleaned_count setting
+    https://git.kernel.org/netdev/net/c/dcbaf72aa423
 
->    So it seems to me that now we have two use-cases for adding support
->    for these free-text tags to DWARF, as a proper extension to the
->    format, strictly unrelated to BTF, BPF or even the kernel, since:
->    - This is not kernel specific.
->    - This is not directly related to BTF.
->    - This is not directly related to BPF.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-__percpu annotation is kernel specific.
-__user and __rcu are kernel specific too.
-Only BPF and BTF can meaningfully consume all three.
-drgn can consume __percpu.
 
-In that sense if GCC follows LLVM and emits compiler specific DWARF tag
-pahole can convert it to the same BTF regardless whether kernel
-was compiled with clang or gcc.
-drgn can consume dwarf generated by clang or gcc as well even when BTF
-is not there. That is the fastest way forward.
-
-In that sense it would be nice to have common DWARF tag for pointer
-annotations, but it's not mandatory. The time is the most valuable asset.
-Implementing GCC specific DWARF tag doesn't require committee voting
-and the mailing list bikeshedding.
-
-> 3) Addition of C-family language-level constructions to specify
->    free-text tags on certain language elements, such as struct fields.
-> 
->    These are the attributes, or built-ins or whatever syntax.
-> 
->    Note that, strictly speaking:
->    - This is orthogonal to both DWARF and BTF, and any other supported
->      debugging format, which may or may not be expressive enough to
->      convey the free-form text tag.
->    - This is not specific to BPF.
-> 
->    Therefore I would avoid any reference to BTF or BPF in the attribute
->    names.  Something like `__attribute__((btf_tag("arbitrary_str")))'
->    makes very little sense to me; the attribute name ought to be more
->    generic.
-
-Let's agree to disagree.
-When BPF ISA was designed we didn't go to Intel, Arm, Mips, etc in order to
-come up with the best ISA that would JIT to those architectures the best
-possible way. Same thing with btf_tag. Today it is specific to BTF and BPF
-only. Hence it's called this way. Whenever actual users will appear that need
-free-text tags on a struct field then and only then will be the time to discuss
-generic tag name. Just because "free-text tag on a struct field" sounds generic
-it doesn't mean that it has any use case beyond what we're using it for in BPF
-land. It goes back to the point of coding now instead of talking about coding.
-If gcc wants to call it __attribute__((my_precious_gcc_tag("arbitrary_str")))
-go ahead and code it this way. The include/linux/compiler.h can accommodate it.
