@@ -2,235 +2,179 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 870ACC433EF
-	for <bpf@archiver.kernel.org>; Tue, 21 Dec 2021 15:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81AF4C433EF
+	for <bpf@archiver.kernel.org>; Tue, 21 Dec 2021 17:48:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbhLUPyE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Dec 2021 10:54:04 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11882 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229449AbhLUPyE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 21 Dec 2021 10:54:04 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1BL9ptEA011609;
-        Tue, 21 Dec 2021 07:54:01 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=tkILQ4ZFWkGkdfTPBkmT0Os8HfmxWzNWs2yW0nCbZqw=;
- b=U2fTVoGujbJsohid6uBIaWYABq3Hd6E8oCnqNL1YCZRLCSNw/fcVDOn+gTA7vSttOLn8
- jRmEMBQYLlGJzVH0xPItssLFXjoztiOGs6EveoXP3NnUmV7bPHsYpwC6QaNLngtHJZc7
- jEqvjgHzaVtkIT8PLE8gRzRnAunIr4G+4Xc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3d3cmhtcka-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 21 Dec 2021 07:54:00 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 21 Dec 2021 07:54:00 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ls2P/y4g0c+Js5EbNtciPqSBEDdNUYRI8D5kiFsBHDv68sWn7zXFUf9qogONPkWxa8YFTiJpQwCgqj6cggiji4rljsY24upxb21pSEm9N0fUgmU/H4Liz+/8yFUXlvO1n3UQtUGcLBPfXu6i6FgWS0djxlWE4LdfSW+VausbNqPvCZDJPM0e0VgMT1LIwYC+XOKFDViTJZsZcs9sEnJTfSgekY4hpeTVPMSycuSQYu2qsW9sUVy6/JHujxo8UjXEoRuoXGWJ2YiAn8CyOScHmapnjk2iUqGfhV3rXvBW+6dqX8+d3WMGsqylspOg+uCARY2bwkCSN9rtm8r/CbW+Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tkILQ4ZFWkGkdfTPBkmT0Os8HfmxWzNWs2yW0nCbZqw=;
- b=Ah+vyDNvZLJt7PXuCvU/m/1SaB2aQCYifzjUZ1CfCOi/tZzdja1So8RRfhtvMGL7Og1ma1+fIKCuq69zLnF7wulrimccyxTD8p25IT+iqfSrwl8JfGfI4xCHecoiQSILK6fRcM4YUVKRVt0wbqq3SmCF/mu8HwMRTFV9WRa+SzVyf1XjcIH+Vvw0C86BIm6t/cqmFnYYlnQz5WtXwMB8V+3DqcCt51h7H+3QFzi1YN5zvBitLjPTkPZsA6MWc2OJUTudgsLTSXmGTFMnoi33WvCziJl1U8fnbWzrII0GY+QnaJLjDHOc9kDyn783GdrVQaKAt98C2Rc1fBph16kXnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SA1PR15MB4738.namprd15.prod.outlook.com (2603:10b6:806:19d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.15; Tue, 21 Dec
- 2021 15:53:54 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::b4ef:3f1:c561:fc26]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::b4ef:3f1:c561:fc26%5]) with mapi id 15.20.4801.020; Tue, 21 Dec 2021
- 15:53:54 +0000
-Message-ID: <5e8cf0c3-1d76-848a-cad0-f39d0167e347@fb.com>
-Date:   Tue, 21 Dec 2021 07:53:51 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.4.0
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Add
- BPF_KPROBE_SYSCALL/BPF_KRETPROBE_SYSCALL macros
-Content-Language: en-US
-To:     Hengqi Chen <hengqi.chen@gmail.com>, <bpf@vger.kernel.org>,
-        <andrii@kernel.org>
-References: <20211221055312.3371414-1-hengqi.chen@gmail.com>
- <20211221055312.3371414-2-hengqi.chen@gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20211221055312.3371414-2-hengqi.chen@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-X-ClientProxiedBy: MW4PR04CA0367.namprd04.prod.outlook.com
- (2603:10b6:303:81::12) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 816a876a-4c9c-4941-7288-08d9c49a1740
-X-MS-TrafficTypeDiagnostic: SA1PR15MB4738:EE_
-X-Microsoft-Antispam-PRVS: <SA1PR15MB4738FFE1BCCE9A9F3D33616BD37C9@SA1PR15MB4738.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4zmYw63GYNpda0iz6BDEW6qS7fEncnnKJfIRJBltrvOIVsyjMFU1bVj50M5lyISYF/MPenftNhA6apnIKmmy5d50CvyMlPx+AghTfRb9XG3ODI1YGDcNEp0z5jsTjgh08KImqkso/LuCtognYD33/+0/SDE3KVW+ppWm8N5Gs2oa8pyuxugBDf4/+idqd6aPXD+8aW7KOfmOsQeXQiAuFFU0qfMVlWLnJAh31dwgmXn4fguSW4BV+6GbVB+Or5mPOgtVG9gGdxCGxtVVwnzEnuSSYSal70W7j8zhLl/z8qxd1S6nFTugR04Ssej4OTOCEu4Od1XnFl0Kw7AjimV/1TYkzx+JqaLZhzgkT6hO4NkIQkYsaSRxNpiWqhD2Zwb8aYN3JFoM+lWPoclo+GuYRoaAzZQzRs528oF+H/YKW1medIaWP4PudJdljAVIpREHk1obczo/7vVdhlLtw+67Sv0AsWREgOXBupAvJuDlDVKlxEibu3DOKBU3aFk6oG83ZDr+vDw9ajbgJW9r5hAnl6nr8jkJ8+ts1oRzU6wN1epbJl0qvkURjCLGJcyeIBUcmpDybRauFKJd+v/bjXC8QmpGLdjF4TqycXEfxXHuJtoEP7HvD3i8Nr+6J+f6pkrHlCuBLcmg6YXDuIuaKBm5UPrBJ1/qj8z2JWggd7xONXCH+FL3QR456q8GAzVUH6BJu7+yeOWJpnMBAheb66dlM8LTinV16fWo1NQpG4WQin2O3Io+UTaCvxMvhaMLKXwcuwTQmlrkNiTYk8fXcp/Hwa8wK+MHrJaQTF8HQ9VsV4K2pxjPB4Pxpng7bJW5Hwl/dCKWjjKMzA5lfEVSJuF5RXqsNY+VfcchYFxnIoHr3ek=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(52116002)(38100700002)(316002)(45080400002)(6512007)(66946007)(36756003)(2906002)(966005)(8676002)(186003)(6486002)(5660300002)(6506007)(53546011)(31686004)(2616005)(86362001)(6666004)(83380400001)(31696002)(66476007)(66556008)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TzEvSWh0bGN4NjJQQm1oN3p6dHl3TkJkbFpPVXozZmNIWnB0dGJ0L2JhbHpE?=
- =?utf-8?B?SGc2RkZhWk15N2lveUtpeHVtbEwwMEtSVmkvR3gya2VCbWZDem5xOEJKeFpJ?=
- =?utf-8?B?aWZXL1dwcFF4UDYxbFMxZk1wZ2VPVEZBaVcwNjdwT2ZtS1psSVozWVc1dC9q?=
- =?utf-8?B?R3AyS0NoQTRLQVMxWXN5VE9QUjdtdHNSSzlSNW1ER05PeklITGJPRW02MDhy?=
- =?utf-8?B?MER4VCtNR2k4RVMyYk9LcmdTR25DMlBhbkRuMCtsTUl0blV1b0U3SHZyUjBr?=
- =?utf-8?B?YW1qTS96blZGSlVPdmMxY1o0amV4NmxCajFhWEdBcTFYZExjTWdObXNLUU9T?=
- =?utf-8?B?OGYxNi9oRnFrMGZWTTlpSFRGNWw2cE5wZE9kdW5qcXI2VG5JVExoZzdqczE1?=
- =?utf-8?B?K0dsMkdEQkE1eUxFbURYVHB0a3hrOFdQd2VhbWYrbDR1NmxLMTR3ckFIZGd2?=
- =?utf-8?B?QTVIN3VPRGtueWhMMWdEQm1HV2hFbnBOSysvZkljMHVkcVBJZ2JmUHRnTnJ6?=
- =?utf-8?B?aWRyajI5NU50YjAycHVOMEIrK21paXBhQ0ptUHJqWEVGYkNiTnNlVG02ZDhV?=
- =?utf-8?B?TUdHRVNxdDBaSytrci9pdEV1TERPakhBRHkzUkRNdGMwZjFzems3YmNLRGoz?=
- =?utf-8?B?VGlCN1ZDTHl0Tno1eXZFUm5TU29RL2ZhSy9FSzA5L2MzcElIalZ6RFExNzJo?=
- =?utf-8?B?SVo0QTBPMnN3SXhsdVVpb1pRd1MyNTlKczBvYnl2aEY5OGFLb3NwZGpJdGd5?=
- =?utf-8?B?TS9TanI2U2RLbklFYWZOU0FSemZFR0daQStDa29wQ21Jb1c3MWpMaE9udlB2?=
- =?utf-8?B?RTI2aDFacU5Delk5YnZQSml0UCsyNWp5UnU3OWZTMW5sK3FWaDFEMFczaEZJ?=
- =?utf-8?B?RXViejRBZ0NHMXZUcUpwcHUwTkNFUTNYUGxOekV3T01UTnNCcHZYSTJEQ2E0?=
- =?utf-8?B?eEtucWVjZ0ZPK0xpc3NJM3ZTUnZsREFDeW03WEh4MjU2elM5cVg3eTBtSG1M?=
- =?utf-8?B?T1RONGVVcU1TbUw1QU53aHNxSTMvMmUrY2RLcklUNFlRTG5jMmJHeGFqQ0J4?=
- =?utf-8?B?KzJJcHFtaUFFN0NnazhGWDl0N0VOMzFFWGtGMXA1bjRnbXMzNW9xVllBalJU?=
- =?utf-8?B?WWlMaTh0VmlwcGtwTS9PUlJJRzkrZndmejVlL25nUXZ5MXE3NkY3cnhoZkhY?=
- =?utf-8?B?ZVNDWlhBejRrdXdTS2ZCOHNxVnI4MUNLRFoxYkpJQnhZTHNxU1ZTSW1DQXBB?=
- =?utf-8?B?NHk4ZFh2T0JCVnRQZTc2VlFJUEoxaXdueGJ4bE8vVnM4RjN4TkwzUlIxODFi?=
- =?utf-8?B?R3FvZWVwZCtvWVJBbnRNSG1yQzdJSjNnWU9mekJPUU5uS21xMXdZQ3MwVVBQ?=
- =?utf-8?B?U1ppRVRsNEtUbi9ma3FJcm9YSk1mQUFhdEQ0OXBhc2lOM3pheHdMSkZkZUFu?=
- =?utf-8?B?VVNhNy92YzNFWksvb2dzdTFBdGIyTEZTMkp2dnRmZlV0UXMyekEyR3hwSkFR?=
- =?utf-8?B?R2xZYkFjckNEaEJuQU82Wm9lY2N5YmhhUDg3TVlqMWgwR0xNdVBrKy8vTzRY?=
- =?utf-8?B?SzJ3dExWMVhDNTV1R3B0ZW9BZFlLUmlxOUlqYTRJUzc0RHkrbjcyLzkwQnI0?=
- =?utf-8?B?N215NEcxdWhnd1Z4VlN4NVlmN0VWdDQ3WUd4WnZtUGpKQ05jejNTKzMwK1du?=
- =?utf-8?B?dkxJVVFTbzFYdE1zWFR0dDVFd04vaytXTW5IUlkrWXV1TGkxdDVmWE5YNnpU?=
- =?utf-8?B?MmFIbDVRWUhNVVk1RExIaWh0WjhhRkY5ZDJqbUp2RlpGeHk5VElhUE9YK1FJ?=
- =?utf-8?B?TmFYdlgxNDFSamVFZnN6ZkozQXIvTHRIVEJsSm1NMDRNZFNUNnFENEVHZ3ls?=
- =?utf-8?B?TFd2WXZTNjMrYkY2d3FOZ2o4SncvT2lVMXBnMHhWT0F3dlZUVUpvVjN1a3Er?=
- =?utf-8?B?cTFiZFRJcGNsLy8rTGtqdzVpOFdUTm5zY0I2UVpTb01yUXU0K21zUktXWHc5?=
- =?utf-8?B?eVpQaUdwaW4zT0UxUXRDTE5MMU9sUDJ0Z3NLaUkzcGZwS3QyQXFwUDdha2dw?=
- =?utf-8?B?OXNDbWJyT3BCeG5uYzdyVjBXNXV5Yzl6VnNkQlJLVktpSXdDbTd3aGZiczRw?=
- =?utf-8?Q?zJQVawu3V+YCnJyPfPIg9cDMK?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 816a876a-4c9c-4941-7288-08d9c49a1740
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2021 15:53:54.4836
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VVc4pSXspjb3uEUWXhm2X+zorco/SY7WWps3qv6iPggVEidrmlXJkNkORG23HeO3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4738
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: SGAXC4h-tOQE0y4qrxPQKO0RylL9T-z6
-X-Proofpoint-GUID: SGAXC4h-tOQE0y4qrxPQKO0RylL9T-z6
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S240568AbhLURsp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Dec 2021 12:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhLURsp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Dec 2021 12:48:45 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A04EC061574
+        for <bpf@vger.kernel.org>; Tue, 21 Dec 2021 09:48:44 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id v7so21178539wrv.12
+        for <bpf@vger.kernel.org>; Tue, 21 Dec 2021 09:48:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K8JOqHiScHpqiHuqTHVGGm6hHTyzSlgS9c4/UNUturw=;
+        b=O0UUhUA3ZftuPSlrSycuKX70d7fFOlIJtUQKAJoMIOgkFcYSq3tCf6eOCRU0mAezuo
+         sHTincvT58ByLKwJ3mpATtJ8orWyPD83N41ioIluDdQ04u6cxfbE4zL/XUNWzTYX+Dzn
+         ogaN2TTTclVA85GWMDwVgc5wG1UDpYm8Hv0pyQzNm4JFJ/lS4kLK5ZGStYcJVFwzAxqS
+         Zu5IPH8j/E1KfdBaKm1PjH15lBzQCDy+I9zzn54QrZUqQLoNtpwC5P/iG75oPbozVEaP
+         GjCpYf+oYfPGcGd2lXCdKZ2SDu/D9EUDvT67BifrPTa+qfpVWL5AC9871d94DUdl7Ypg
+         DZ9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K8JOqHiScHpqiHuqTHVGGm6hHTyzSlgS9c4/UNUturw=;
+        b=MOAZeYeq7xreEe4p1Rz4BZktgibO6P82EXlNsPGnI5QbR+kQtZgs09CyElmJUHLjQC
+         qZWbMpNPwZssyZ9cmRg6vX4QMYMgBzdmWZF4vn+oyusvj5g/OSZo0Yh8iN+Daw6TkFJp
+         9yPku2xl3BLW+ojbCW8z8dBlSsgp8/VYAYYBDG776WGMnFbkRyHp76pMamqdNo/t765J
+         8/IX2qSPSrrAK+bn+k+H0T32TVPZVMjDyy8CVi5ZMdQgoaRVxdHxJlR8iMx/byy7nxM0
+         nA3t1QVHyuBA8WBZ1AZ8TrCJIBbqtv4r+xMWMGBwRUvCi5/WQp6jxmH1TNZua6mE+2gL
+         ew/w==
+X-Gm-Message-State: AOAM533dLitoI9Bl4pSQjvhmOMRj259z4/BjJbhHfCvW6a5XPyfqPCnp
+        H2r7XLPXmTIPxydXBk9I6IIKMno781zKA6lu
+X-Google-Smtp-Source: ABdhPJwQTOnHSt0Qry8vfpvtdqWm5libZ0Qu/ew/sQtS5WpBQ0LiCbm5+3hxANVky0DY2vMNmolvTQ==
+X-Received: by 2002:a5d:65d1:: with SMTP id e17mr3528355wrw.379.1640108922926;
+        Tue, 21 Dec 2021 09:48:42 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:815e:f1ac:2c59:353f])
+        by smtp.gmail.com with ESMTPSA id l2sm11864416wru.83.2021.12.21.09.48.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Dec 2021 09:48:42 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, joe@cilium.io,
+        fam.zheng@bytedance.com, cong.wang@bytedance.com,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH] bpf/scripts: add warning if the correct number of helpers are not auto-generated
+Date:   Tue, 21 Dec 2021 17:48:07 +0000
+Message-Id: <20211221174807.1079680-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-21_04,2021-12-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 suspectscore=0
- bulkscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0 malwarescore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112210077
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Currently bpf_helper_defs.h is auto-generated using function documentation
+present in bpf.h. If the documentation for the helper is missing
+or doesn't follow a specific format for e.g. if a function is documented
+as:
+ * long bpf_kallsyms_lookup_name( const char *name, int name_sz, int flags, u64 *res )
+instead of
+ * long bpf_kallsyms_lookup_name(const char *name, int name_sz, int flags, u64 *res)
+(notice the extra space at the start and end of function arguments)
+then that helper is not dumped in the auto-generated header and results in
+an invalid call during eBPF runtime, even if all the code specific to the
+helper is correct.
 
+This patch checks the number of functions documented within the header file
+with those present as part of #define __BPF_FUNC_MAPPER and generates a
+warning in the header file if they don't match. It is not needed with the
+currently documented upstream functions, but can help in debugging
+when developing new helpers when there might be missing or misformatted
+documentation.
 
-On 12/20/21 9:53 PM, Hengqi Chen wrote:
-> Add syscall-specific variants of BPF_KPROBE/BPF_KRETPROBE named
-> BPF_KPROBE_SYSCALL/BPF_KRETPROBE_SYSCALL ([0]). These new macros
-> hide the underlying way of getting syscall input arguments and
-> return values. With these new macros, the following code:
-> 
->      SEC("kprobe/__x64_sys_close")
->      int BPF_KPROBE(do_sys_close, struct pt_regs *regs)
->      {
->          int fd;
-> 
->          fd = PT_REGS_PARM1_CORE(regs);
->          /* do something with fd */
->      }
-> 
-> can be written as:
-> 
->      SEC("kprobe/__x64_sys_close")
->      int BPF_KPROBE_SYSCALL(do_sys_close, int fd)
->      {
->          /* do something with fd */
->      }
-> 
->    [0] Closes: https://github.com/libbpf/libbpf/issues/425
-> 
-> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-> ---
->   tools/lib/bpf/bpf_tracing.h | 45 +++++++++++++++++++++++++++++++++++++
->   1 file changed, 45 insertions(+)
-> 
-> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> index db05a5937105..eb4b567e443f 100644
-> --- a/tools/lib/bpf/bpf_tracing.h
-> +++ b/tools/lib/bpf/bpf_tracing.h
-> @@ -489,4 +489,49 @@ typeof(name(0)) name(struct pt_regs *ctx)				    \
->   }									    \
->   static __always_inline typeof(name(0)) ____##name(struct pt_regs *ctx, ##args)
-> 
-> +#define ___bpf_syscall_args0() ctx, regs
-> +#define ___bpf_syscall_args1(x) \
-> +	___bpf_syscall_args0(), (void *)PT_REGS_PARM1_CORE(regs)
-> +#define ___bpf_syscall_args2(x, args...) \
-> +	___bpf_syscall_args1(args), (void *)PT_REGS_PARM2_CORE(regs)
-> +#define ___bpf_syscall_args3(x, args...) \
-> +	___bpf_syscall_args2(args), (void *)PT_REGS_PARM3_CORE(regs)
-> +#define ___bpf_syscall_args4(x, args...) \
-> +	___bpf_syscall_args3(args), (void *)PT_REGS_PARM4_CORE(regs)
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+---
+ scripts/bpf_doc.py | 46 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 44 insertions(+), 2 deletions(-)
 
-We probably need to use a syscall variant of PT_REGS_PARAM4 here, see
-https://lore.kernel.org/bpf/TYCPR01MB59360988D96E23FBA97DAE0AF57C9@TYCPR01MB5936.jpnprd01.prod.outlook.com/
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index a6403ddf5de7..736bd853155b 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -87,6 +87,8 @@ class HeaderParser(object):
+         self.line = ''
+         self.helpers = []
+         self.commands = []
++        self.desc_unique_helpers = set()
++        self.define_unique_helpers = []
+ 
+     def parse_element(self):
+         proto    = self.parse_symbol()
+@@ -193,19 +195,41 @@ class HeaderParser(object):
+             except NoSyscallCommandFound:
+                 break
+ 
+-    def parse_helpers(self):
++    def parse_desc_helpers(self):
+         self.seek_to('* Start of BPF helper function descriptions:',
+                      'Could not find start of eBPF helper descriptions list')
+         while True:
+             try:
+                 helper = self.parse_helper()
+                 self.helpers.append(helper)
++                proto = helper.proto_break_down()
++                if proto['name'] not in self.desc_unique_helpers:
++                    self.desc_unique_helpers.add(proto['name'])
+             except NoHelperFound:
+                 break
+ 
++    def parse_define_helpers(self):
++        # Parse the number of FN(...) in #define __BPF_FUNC_MAPPER to compare
++        # later with the number of unique function names present in description
++        self.seek_to('#define __BPF_FUNC_MAPPER(FN)',
++                     'Could not find start of eBPF helper definition list')
++        # Searches for either one or more FN(\w+) defines or a backslash for newline
++        p = re.compile('\s*(FN\(\w+\))+|\\\\')
++        fn_defines_str = ''
++        while True:
++            capture = p.match(self.line)
++            if capture:
++                fn_defines_str += self.line
++            else:
++                break
++            self.line = self.reader.readline()
++        # Find the number of occurences of FN(\w+)
++        self.define_unique_helpers = len(re.findall('FN\(\w+\)', fn_defines_str))
++
+     def run(self):
+         self.parse_syscall()
+-        self.parse_helpers()
++        self.parse_desc_helpers()
++        self.parse_define_helpers()
+         self.reader.close()
+ 
+ ###############################################################################
+@@ -509,6 +533,8 @@ class PrinterHelpers(Printer):
+     """
+     def __init__(self, parser):
+         self.elements = parser.helpers
++        self.desc_unique_helpers = parser.desc_unique_helpers
++        self.define_unique_helpers = parser.define_unique_helpers
+ 
+     type_fwds = [
+             'struct bpf_fib_lookup',
+@@ -628,6 +654,22 @@ class PrinterHelpers(Printer):
+ /* Forward declarations of BPF structs */'''
+ 
+         print(header)
++
++        nr_desc_unique_helpers = len(self.desc_unique_helpers)
++        nr_define_unique_helpers = len(self.define_unique_helpers)
++        if nr_desc_unique_helpers != nr_define_unique_helpers:
++            header_warning = '''
++#warning The number of unique helpers in description (%d) don\'t match the number of unique helpers defined in __BPF_FUNC_MAPPER (%d)
++''' % (nr_desc_unique_helpers, nr_define_unique_helpers)
++            if nr_desc_unique_helpers < nr_define_unique_helpers:
++                # Function description is parsed until no helper is found (which can be due to
++                # misformatting). Hence, only print the first missing/misformatted function.
++                header_warning += '''
++#warning The description for %s is not present or formatted correctly.
++''' % (self.define_unique_helpers[nr_desc_unique_helpers])
++            print(header_warning)
++
++
+         for fwd in self.type_fwds:
+             print('%s;' % fwd)
+         print('')
+-- 
+2.25.1
 
-> +#define ___bpf_syscall_args5(x, args...) \
-> +	___bpf_syscall_args4(args), (void *)PT_REGS_PARM5_CORE(regs)
-> +#define ___bpf_syscall_args(args...) \
-> +	___bpf_apply(___bpf_syscall_args, ___bpf_narg(args))(args)
-> +
-> +/*
-> + * BPF_KPROBE_SYSCALL is a variant of BPF_KPROBE, which is intended for
-> + * tracing syscall functions. It hides the underlying platform-specific
-> + * low-level way of getting syscall input arguments from struct pt_regs, and
-> + * provides a familiar typed and named function arguments syntax and
-> + * semantics of accessing syscall input paremeters.
-> + *
-> + * Original struct pt_regs* context is preserved as 'ctx' argument. This might
-> + * be necessary when using BPF helpers like bpf_perf_event_output().
-> + */
-> +#define BPF_KPROBE_SYSCALL(name, args...)				    \
-> +name(struct pt_regs *ctx);						    \
-> +static __attribute__((always_inline)) typeof(name(0))			    \
-> +____##name(struct pt_regs *ctx, struct pt_regs *regs, ##args);		    \
-> +typeof(name(0)) name(struct pt_regs *ctx)				    \
-> +{									    \
-> +	_Pragma("GCC diagnostic push")					    \
-> +	_Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
-> +	struct pt_regs *regs = PT_REGS_PARM1(ctx);			    \
-> +	return ____##name(___bpf_syscall_args(args));			    \
-> +	_Pragma("GCC diagnostic pop")					    \
-> +}									    \
-> +static __attribute__((always_inline)) typeof(name(0))			    \
-> +____##name(struct pt_regs *ctx, struct pt_regs *regs, ##args)
-> +
-> +/*
-> + * BPF_KRETPROBE_SYSCALL is just an alias to BPF_KRETPROBE,
-> + * it provides optional return value (in addition to `struct pt_regs *ctx`)
-> + */
-> +#define BPF_KRETPROBE_SYSCALL BPF_KRETPROBE
-> +
->   #endif
-> --
-> 2.30.2
