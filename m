@@ -2,189 +2,242 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69679C433EF
-	for <bpf@archiver.kernel.org>; Wed, 22 Dec 2021 13:44:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 776F3C433EF
+	for <bpf@archiver.kernel.org>; Wed, 22 Dec 2021 14:55:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbhLVNo5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Dec 2021 08:44:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23882 "EHLO
+        id S1343598AbhLVOz6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Dec 2021 09:55:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33260 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234159AbhLVNo5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 22 Dec 2021 08:44:57 -0500
+        by vger.kernel.org with ESMTP id S237161AbhLVOz6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 22 Dec 2021 09:55:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1640180696;
+        s=mimecast20190719; t=1640184957;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=EUX0ogKpf3d14pHpuY30V0wv60QYvAzDmFZeRw8TXic=;
-        b=HvqWn3xliTo9gmnK3Ni/QVq5tLG2XP78f8kBKpDocDjq2On/meDkU4zz4JhI6bLdvPjeEf
-        f/SHuBx7m4wHrZOOgRJTNZK8WwQlR4fxQaW1Awhg1l5hfDo9tjO2ebPED1Y1jbO2s1sI84
-        C+KzI1En4JMm12AB1fo7vpGHRW1Rnog=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=nkcjVw5y18pCBW7twaTfbXiufW/aX23gdHn1VVALoHM=;
+        b=MFa2fq4qRxD69s14UFffnjuw95703hZ9kTFNGERaypYxD4i0yXXPn+trTPz3QcfjNuOLs8
+        kHL2pKWxw4+PEYk94hS9m79I+eafIoc2nlmnJmafGqAB+IjhHPu2ovhXIeiw3xSoYt0lBO
+        UfdQC5dzDO3sg8fER2HAPqej7gPgZu0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-251-Njhx80XTNLiXNsTLyvyrng-1; Wed, 22 Dec 2021 08:44:55 -0500
-X-MC-Unique: Njhx80XTNLiXNsTLyvyrng-1
-Received: by mail-ed1-f70.google.com with SMTP id ch27-20020a0564021bdb00b003f8389236f8so1847996edb.19
-        for <bpf@vger.kernel.org>; Wed, 22 Dec 2021 05:44:55 -0800 (PST)
+ us-mta-151-YsKO8MaSPUq1ckW8zdgudg-1; Wed, 22 Dec 2021 09:55:56 -0500
+X-MC-Unique: YsKO8MaSPUq1ckW8zdgudg-1
+Received: by mail-wm1-f71.google.com with SMTP id az35-20020a05600c602300b00345812649ddso830708wmb.8
+        for <bpf@vger.kernel.org>; Wed, 22 Dec 2021 06:55:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=EUX0ogKpf3d14pHpuY30V0wv60QYvAzDmFZeRw8TXic=;
-        b=J4QqOOnIcDeJ/Mptx0/g6kADEDSUdfwsJvDXpYwZchmdKFjlsQexzqmR1LkBEo1RXa
-         +79Zd3bLFYJhlpC0DdimpWxPqzz2iMs+S8mRARKUgGnPSg2sGM+LHHdmx+pbRvovzpMF
-         d5cTgp+ErsE1rsI2GfpHPMHghaUwUEBVMK3QWa4je5jYx3HZJGpemYU5Lv8zAtChIIrs
-         AexCM+shJvUlxhh7ZACN6xhdHMVZjGYZtmScXWleHaYNUbt1VKQH8tQOloIPGrpX0YX8
-         ggGkw1Qmjh6E+mXqbaukecmnzpAJZd/2HMUdhy9RxLnt9SekPLfOuBiC2wqspx9iPApd
-         Ww7A==
-X-Gm-Message-State: AOAM532xXJ+dPOGjjtFVAN7LBGvMq/MhwJnrXCfU4DhBWZQjmxbpLrOh
-        T0jCcwk4i+uGhf2FVQwbC2H3NVPOYNeBvsRMYUdasgt0mXwCthLY7L57n1oHOKGt01Cbq68+uqN
-        OHAcUzi0a9lWo
-X-Received: by 2002:a17:907:8a06:: with SMTP id sc6mr931761ejc.214.1640180694379;
-        Wed, 22 Dec 2021 05:44:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzH2Ch4giRTpV+TGELmHFEzgTDQlBiWQMnDDaSrIPTcmLp/t4Ey8yKkKy7hlVrNJH2pmznoPA==
-X-Received: by 2002:a17:907:8a06:: with SMTP id sc6mr931742ejc.214.1640180694125;
-        Wed, 22 Dec 2021 05:44:54 -0800 (PST)
+        bh=nkcjVw5y18pCBW7twaTfbXiufW/aX23gdHn1VVALoHM=;
+        b=Qs0SNfjxUlz13fRFTBSmiqqAtsFcw46lU9PlbFMLqkiQiWN5/shdwQq4bYAbQjYgSb
+         njFvAu2GtOZ+YpohAW9b47oRo3agDvtOHxfRlG2Lo0NtTp/HGL31zH53UEzqYPMebVD6
+         vwI2wjl7BOjZyIGpOdJywmW54ddYipIyYY77GACzffPk6kw6N72IVbWU3wEYUkNZwJE7
+         qTbvWJ29GlaujLxyPLJ1b0f7LFugTJkXTrtRPnjGKQCbp/48JIYJ88eNotRIlMIJB3Gr
+         6+QsDhjZrhuw2uBS7SD2KtMFC4mmlmCbHBOFkHxvh2eXX6HX8gLNQomoo3m7xGDMc8WJ
+         qGcw==
+X-Gm-Message-State: AOAM531YPxeLFlN9dTuB8p6FjZhjaKjetRNFTSoq83IT4MhaKeklhMJb
+        Ulu2DVAD9H318eccNG6v3o2EqET+AXlUTB65hO7Rrt0uxN1+CdVBfe5WhtbBbOBh88n46M86v+z
+        hfvn4UCGzKBxI
+X-Received: by 2002:a05:600c:3583:: with SMTP id p3mr1199524wmq.180.1640184954931;
+        Wed, 22 Dec 2021 06:55:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwLc7RwzSjL/80WBJG1n0biyiRv2yFlANjarJDEnXGWFzq54S0uBOLI1V92R09MH0grQXy0PQ==
+X-Received: by 2002:a05:600c:3583:: with SMTP id p3mr1199508wmq.180.1640184954684;
+        Wed, 22 Dec 2021 06:55:54 -0800 (PST)
 Received: from krava ([83.240.60.218])
-        by smtp.gmail.com with ESMTPSA id 12sm742338eja.187.2021.12.22.05.44.53
+        by smtp.gmail.com with ESMTPSA id u19sm2049256wmq.30.2021.12.22.06.55.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Dec 2021 05:44:53 -0800 (PST)
-Date:   Wed, 22 Dec 2021 14:44:52 +0100
+        Wed, 22 Dec 2021 06:55:54 -0800 (PST)
+Date:   Wed, 22 Dec 2021 15:55:52 +0100
 From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Christy Lee <christyc.y.lee@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>,
-        He Kuang <hekuang@huawei.com>, Wang Nan <wangnan0@huawei.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: Re: [PATCH bpf-next 2/2] perf: stop using deprecated
- bpf__object_next() API
-Message-ID: <YcMr1LeP6zUBdCiK@krava>
-References: <20211216222108.110518-1-christylee@fb.com>
- <20211216222108.110518-3-christylee@fb.com>
- <YcGO271nDvfMeSlK@krava>
- <CAEf4BzZpNvEtfsVHUJGfwi_1xM+7-ohBPKPrRo--X=fYkYLrsw@mail.gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com
+Subject: Re: [PATCH v2 bpf-next 4/9] libbpf: ensure btf_dump__new() and
+ btf_dump_opts are future-proof
+Message-ID: <YcM8eAFRIlLZmE59@krava>
+References: <20211111053624.190580-1-andrii@kernel.org>
+ <20211111053624.190580-5-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzZpNvEtfsVHUJGfwi_1xM+7-ohBPKPrRo--X=fYkYLrsw@mail.gmail.com>
+In-Reply-To: <20211111053624.190580-5-andrii@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 01:58:14PM -0800, Andrii Nakryiko wrote:
-> On Tue, Dec 21, 2021 at 12:23 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Thu, Dec 16, 2021 at 02:21:08PM -0800, Christy Lee wrote:
-> > > bpf__object_next is deprecated, track bpf_objects directly in
-> > > perf instead.
-> > >
-> > > Signed-off-by: Christy Lee <christylee@fb.com>
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > > ---
-> > >  tools/perf/util/bpf-loader.c | 72 +++++++++++++++++++++++++++---------
-> > >  tools/perf/util/bpf-loader.h |  1 +
-> > >  2 files changed, 55 insertions(+), 18 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-> > > index 528aeb0ab79d..9e3988fd719a 100644
-> > > --- a/tools/perf/util/bpf-loader.c
-> > > +++ b/tools/perf/util/bpf-loader.c
-> > > @@ -29,9 +29,6 @@
-> > >
-> > >  #include <internal/xyarray.h>
-> > >
-> > > -/* temporarily disable libbpf deprecation warnings */
-> > > -#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-> > > -
-> > >  static int libbpf_perf_print(enum libbpf_print_level level __attribute__((unused)),
-> > >                             const char *fmt, va_list args)
-> > >  {
-> > > @@ -49,6 +46,36 @@ struct bpf_prog_priv {
-> > >       int *type_mapping;
-> > >  };
-> > >
-> > > +struct bpf_perf_object {
-> > > +     struct bpf_object *obj;
-> > > +     struct list_head list;
-> > > +};
-> > > +
-> > > +static LIST_HEAD(bpf_objects_list);
-> >
-> > hum, so this duplicates libbpf's bpf_objects_list,
-> > how do objects get on this list?
+On Wed, Nov 10, 2021 at 09:36:19PM -0800, Andrii Nakryiko wrote:
+> Change btf_dump__new() and corresponding struct btf_dump_ops structure
+> to be extensible by using OPTS "framework" ([0]). Given we don't change
+> the names, we use a similar approach as with bpf_prog_load(), but this
+> time we ended up with two APIs with the same name and same number of
+> arguments, so overloading based on number of arguments with
+> ___libbpf_override() doesn't work.
 > 
-> yep, this list needs to be updated on perf side each time
-> bpf_object__open() (and any variant of open) is called.
+> Instead, use "overloading" based on types. In this particular case,
+> print callback has to be specified, so we detect which argument is
+> a callback. If it's 4th (last) argument, old implementation of API is
+> used by user code. If not, it must be 2nd, and thus new implementation
+> is selected. The rest is handled by the same symbol versioning approach.
 > 
-> >
-> > could you please put more comments in changelog
-> > and share how you tested this?
+> btf_ext argument is dropped as it was never used and isn't necessary
+> either. If in the future we'll need btf_ext, that will be added into
+> OPTS-based struct btf_dump_opts.
 > 
-> I actually have no idea how to test this as well, can you please share
-> some ideas?
+> struct btf_dump_opts is reused for both old API and new APIs. ctx field
+> is marked deprecated in v0.7+ and it's put at the same memory location
+> as OPTS's sz field. Any user of new-style btf_dump__new() will have to
+> set sz field and doesn't/shouldn't use ctx, as ctx is now passed along
+> the callback as mandatory input argument, following the other APIs in
+> libbpf that accept callbacks consistently.
 > 
-
-I don't use it, I just know it's there.. that's why I asked ;-)
-
-it's possible to specify bpf program on the perf command line
-to be attached to event, like:
-
-      # cat tools/perf/examples/bpf/hello.c
-      #include <stdio.h>
-    
-      int syscall_enter(openat)(void *args)
-      {
-              puts("Hello, world\n");
-              return 0;
-      }
-    
-      license(GPL);
-      #
-      # perf trace -e openat,tools/perf/examples/bpf/hello.c cat /etc/passwd > /dev/null
-         0.016 (         ): __bpf_stdout__:Hello, world
-         0.018 ( 0.010 ms): cat/9079 openat(dfd: CWD, filename: /etc/ld.so.cache, flags: CLOEXEC) = 3
-         0.057 (         ): __bpf_stdout__:Hello, world
-         0.059 ( 0.011 ms): cat/9079 openat(dfd: CWD, filename: /lib64/libc.so.6, flags: CLOEXEC) = 3
-         0.417 (         ): __bpf_stdout__:Hello, world
-         0.419 ( 0.009 ms): cat/9079 openat(dfd: CWD, filename: /etc/passwd) = 3
-      #
-
-I took that example from commit message
-
+> Again, this is quite ugly in implementation, but is done in the name of
+> backwards compatibility and uniform and extensible future APIs (at the
+> same time, sigh). And it will be gone in libbpf 1.0.
 > 
-> BTW, while we are at it, Jiri, do you have any good ideas on how to
-> remove perf's usage of bpf_program__set_priv() and
-> bpf_program__set_prep() APIs in perf code base? These APIs are
-> deprecated as well, but seems like perf relies on them pretty heavily.
-> What would be the best way to stop using them?
+>   [0] Closes: https://github.com/libbpf/libbpf/issues/283
 > 
-> For set_priv(), I think it should be totally fine to maintain a
-> separate lookup hash table by `struct bpf_program *` or its name, that
-> shouldn't be hard.
-
-ok, so there's no alternative api for this one then
-
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  tools/lib/bpf/btf.h      | 51 ++++++++++++++++++++++++++++++++++++----
+>  tools/lib/bpf/btf_dump.c | 31 +++++++++++++++++-------
+>  tools/lib/bpf/libbpf.map |  2 ++
+>  3 files changed, 71 insertions(+), 13 deletions(-)
 > 
-> But for set_prep(), what does perf use it for? I assume for cloning
-> BPF programs, right? Anything else besides that? If it's just for
-> cloning, libbpf provides bpf_program__insns() API to get access to
-> underlying bpf_insn array, do you think it's possible to switch perf
-> to that instead?
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index 6aae4f62ee0b..45310c65e865 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
+> @@ -267,15 +267,58 @@ LIBBPF_API int btf__dedup_deprecated(struct btf *btf, struct btf_ext *btf_ext, c
+>  struct btf_dump;
+>  
+>  struct btf_dump_opts {
+> -	void *ctx;
+> +	union {
+> +		size_t sz;
+> +		void *ctx; /* DEPRECATED: will be gone in v1.0 */
+> +	};
+>  };
+>  
+>  typedef void (*btf_dump_printf_fn_t)(void *ctx, const char *fmt, va_list args);
+>  
+>  LIBBPF_API struct btf_dump *btf_dump__new(const struct btf *btf,
+> -					  const struct btf_ext *btf_ext,
+> -					  const struct btf_dump_opts *opts,
+> -					  btf_dump_printf_fn_t printf_fn);
+> +					  btf_dump_printf_fn_t printf_fn,
+> +					  void *ctx,
+> +					  const struct btf_dump_opts *opts);
+> +
+> +LIBBPF_API struct btf_dump *btf_dump__new_v0_6_0(const struct btf *btf,
+> +						 btf_dump_printf_fn_t printf_fn,
+> +						 void *ctx,
+> +						 const struct btf_dump_opts *opts);
+> +
+> +LIBBPF_API struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
+> +						     const struct btf_ext *btf_ext,
+> +						     const struct btf_dump_opts *opts,
+> +						     btf_dump_printf_fn_t printf_fn);
+> +
+> +/* Choose either btf_dump__new() or btf_dump__new_deprecated() based on the
+> + * type of 4th argument. If it's btf_dump's print callback, use deprecated
+> + * API; otherwise, choose the new btf_dump__new(). ___libbpf_override()
+> + * doesn't work here because both variants have 4 input arguments.
+> + *
+> + * (void *) casts are necessary to avoid compilation warnings about type
+> + * mismatches, because even though __builtin_choose_expr() only ever evaluates
+> + * one side the other side still has to satisfy type constraints (this is
+> + * compiler implementation limitation which might be lifted eventually,
+> + * according to the documentation). So passing struct btf_ext in place of
+> + * btf_dump_printf_fn_t would be generating compilation warning.  Casting to
+> + * void * avoids this issue.
+> + *
+> + * Also, two type compatibility checks for a function and function pointer are
+> + * required because passing function reference into btf_dump__new() as
+> + * btf_dump__new(..., my_callback, ...) and as btf_dump__new(...,
+> + * &my_callback, ...) (not explicit ampersand in the latter case) actually
+> + * differs as far as __builtin_types_compatible_p() is concerned. Thus two
+> + * checks are combined to detect callback argument.
+> + *
+> + * The rest works just like in case of ___libbpf_override() usage with symbol
+> + * versioning.
+> + */
+> +#define btf_dump__new(a1, a2, a3, a4) __builtin_choose_expr(				\
+> +	__builtin_types_compatible_p(typeof(a4), btf_dump_printf_fn_t) ||		\
+> +	__builtin_types_compatible_p(typeof(a4), void(void *, const char *, va_list)),	\
+> +	btf_dump__new_deprecated((void *)a1, (void *)a2, (void *)a3, (void *)a4),	\
+> +	btf_dump__new((void *)a1, (void *)a2, (void *)a3, (void *)a4))
 
-look like it's used to generate prologs for programs:
-  a08357d8dc7d perf bpf: Generate prologue for BPF programs
+hi,
+this change breaks bpftrace g++ build that includes btf.h,
+because there's no typeof and __builtin_types_compatible_p in c++
 
-the author Wang Nan haven't touched that for some time,
-I'm cc-ing other folks that were involved..  Arnaldo? ;-)
+I guess there could be some c++ solution doing similar check,
+but I wonder we want to polute btf.h with that, I'll need to
+check on that
 
-if nobody volunteers, I can check on that
+I think I can add some detection code to bpftrace, to find out
+which version of btf_dump__new to use
 
+the build error can be generated with test_cpp.cpp below,
+so far I'm using __cplusplus ifdef in btf.h to workaround
+the issue 
+
+thoughts?
+
+thanks,
 jirka
+
+
+---
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 742a2bf71c5e..bd2d77979571 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -314,11 +314,13 @@ LIBBPF_API struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
+  * The rest works just like in case of ___libbpf_override() usage with symbol
+  * versioning.
+  */
++#ifndef __cplusplus
+ #define btf_dump__new(a1, a2, a3, a4) __builtin_choose_expr(				\
+ 	__builtin_types_compatible_p(typeof(a4), btf_dump_printf_fn_t) ||		\
+ 	__builtin_types_compatible_p(typeof(a4), void(void *, const char *, va_list)),	\
+ 	btf_dump__new_deprecated((void *)a1, (void *)a2, (void *)a3, (void *)a4),	\
+ 	btf_dump__new((void *)a1, (void *)a2, (void *)a3, (void *)a4))
++#endif
+ 
+ LIBBPF_API void btf_dump__free(struct btf_dump *d);
+ 
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index a8d2e9a87fbf..e00201de2890 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -7,9 +7,15 @@
+ 
+ /* do nothing, just make sure we can link successfully */
+ 
++static void dump_printf(void *ctx, const char *fmt, va_list args)
++{
++}
++
+ int main(int argc, char *argv[])
+ {
++	struct btf_dump_opts opts = { };
+ 	struct test_core_extern *skel;
++	struct btf *btf;
+ 
+ 	/* libbpf.h */
+ 	libbpf_set_print(NULL);
+@@ -18,7 +24,8 @@ int main(int argc, char *argv[])
+ 	bpf_prog_get_fd_by_id(0);
+ 
+ 	/* btf.h */
+-	btf__new(NULL, 0);
++	btf = btf__new(NULL, 0);
++	btf_dump__new(btf, dump_printf, nullptr, &opts);
+ 
+ 	/* BPF skeleton */
+ 	skel = test_core_extern__open_and_load();
 
