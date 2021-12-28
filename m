@@ -2,89 +2,179 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10A0EC433EF
-	for <bpf@archiver.kernel.org>; Mon, 27 Dec 2021 20:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3FCC433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Dec 2021 14:45:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbhL0UeY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Dec 2021 15:34:24 -0500
-Received: from mga05.intel.com ([192.55.52.43]:32592 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229843AbhL0UeX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Dec 2021 15:34:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640637263; x=1672173263;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iG1ggZ11L9JNjcVM2LtagDTWszVONzK5iQFTRN1NBe4=;
-  b=Cf5UncOdawXp9ha85Ukg1xQKVxOHJNJO4CUUKUYH4u+mRipybY5m4UTs
-   yU9EsLFPTltzonRXnKMplHluMy/V6+ZluyEooH7EcJZdSLpCM04TksCNd
-   UgqzryOzWE1KG7qXrdVHdFHvcDUyNyh8S0P/B4nlQfglonDY6p3c1wxla
-   rxWfcieLfItHqcM9g7nN+HxApGHiDXfFaY9B9BkPa1VwR/2kpMvXcs4Ia
-   0h/Cp7nIEft0aEShUlZsEg1oJT54Nka3y19R5FqJQv9PBZGaXbscnr7qc
-   lg+qb4cpi56v+Bh2Lvot47BYDYuULjqxa9VkEn+9V+Td/cUVV05Lj9iFm
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="327592401"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="327592401"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 12:34:23 -0800
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="523405879"
-Received: from krausnex-mobl.ger.corp.intel.com (HELO [10.255.195.237]) ([10.255.195.237])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 12:34:18 -0800
-Message-ID: <e7145513-1808-fb59-35cc-37169ecec047@linux.intel.com>
-Date:   Mon, 27 Dec 2021 22:34:10 +0200
+        id S234163AbhL1Oph (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Dec 2021 09:45:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34337 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233186AbhL1Opg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 28 Dec 2021 09:45:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1640702735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rkR3Og/uvPg2B0LclcpSelNSBv7NaBt9VBoAHT0i0tE=;
+        b=FEQrGRiU5MSGmJ6VFL6pp7KaXGiTm3N5TOGewhrR1YW3XT3pkCbfL1yqUzgOFsDu5dIVDE
+        3MY4KAgs3YcPZ18GGxVdxJJ4N/Rl35UWWX7AiZJw6fxwpgVxttsNOFUKtUlpNHbcj2zXVb
+        DEo3OGqJG4hT6F0HJlAGOo7PU4TVN5A=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-LVTebH9ZPoaHwvcYGxNM6Q-1; Tue, 28 Dec 2021 09:45:33 -0500
+X-MC-Unique: LVTebH9ZPoaHwvcYGxNM6Q-1
+Received: by mail-qk1-f198.google.com with SMTP id bl6-20020a05620a1a8600b0046803c08cccso11560298qkb.15
+        for <bpf@vger.kernel.org>; Tue, 28 Dec 2021 06:45:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rkR3Og/uvPg2B0LclcpSelNSBv7NaBt9VBoAHT0i0tE=;
+        b=r0SG2l7WJ8/cd9c7AASM2ui6M9wopvNehD9nFxxWRaKej3A4INbK7IpE60BbhH0/UO
+         HQKcHtf6UkJEELfDnTVp6MSw0yNJGH+vTsPc3H6shou0uo2js9IAE87zEWVtT9skRw53
+         F+/PSwXj+7W2UIQeT9zFNXJi6Me+m/VezJXE2f4VfUb6p+pgXVSFOpjSxmXU4TDkKKsI
+         Xh1ixRzc32lFd5IYhQVbM2ywRJu8Ow+/djvIbSov7VOQWizAMZ7t7s2mJG7SZWEKMv/p
+         PxPa4X4PFsgFFqJlG33PWZRqkAwa1h0I3pRBr8UGMxgXaVdl3MUaKEYjNgnVXhmr/LPt
+         9C+g==
+X-Gm-Message-State: AOAM5307HXlybvfrGuod1V8a4iTf33FkBVB2omqbEvpnbtGAtl8N6hyq
+        J4KgsL9CFppe5JKYEN/VE3Gckzl8pV76Yjiy+QUERAnryNkzVI/fmEKzNI92ZpmVSIudf5QdpZM
+        c0pJIR6b+35fL
+X-Received: by 2002:a05:622a:245:: with SMTP id c5mr18382560qtx.189.1640702733298;
+        Tue, 28 Dec 2021 06:45:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJymnTJG22e2FOSz5RSgDUOTP0uTlCGK6R859we9rbRw9gTQEhMlQB5Mq1DKLRe8rVCpyUvBTw==
+X-Received: by 2002:a05:622a:245:: with SMTP id c5mr18382524qtx.189.1640702733085;
+        Tue, 28 Dec 2021 06:45:33 -0800 (PST)
+Received: from localhost (net-2-32-198-212.cust.dsl.teletu.it. [2.32.198.212])
+        by smtp.gmail.com with ESMTPSA id z8sm16079872qta.50.2021.12.28.06.45.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Dec 2021 06:45:32 -0800 (PST)
+Date:   Tue, 28 Dec 2021 15:45:20 +0100
+From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
+        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        shayagr@amazon.com, john.fastabend@gmail.com, dsahern@kernel.org,
+        brouer@redhat.com, echaudro@redhat.com, jasowang@redhat.com,
+        alexander.duyck@gmail.com, saeed@kernel.org,
+        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
+        tirthendu.sarkar@intel.com, toke@redhat.com
+Subject: Re: [PATCH v20 bpf-next 00/23] mvneta: introduce XDP multi-buffer
+ support
+Message-ID: <YcsjAP383AmEb4pQ@localhost.localdomain>
+References: <cover.1639162845.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [Intel-wired-lan] [PATCH v4 net-next 6/9] igc: don't reserve
- excessive XDP_PACKET_HEADROOM on XSK Rx to skb
-Content-Language: en-US
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        intel-wired-lan@lists.osuosl.org
-Cc:     Song Liu <songliubraving@fb.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org
-References: <20211208140702.642741-1-alexandr.lobakin@intel.com>
- <20211208140702.642741-7-alexandr.lobakin@intel.com>
-From:   "Kraus, NechamaX" <nechamax.kraus@linux.intel.com>
-In-Reply-To: <20211208140702.642741-7-alexandr.lobakin@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OBmxxoznn81budC6"
+Content-Disposition: inline
+In-Reply-To: <cover.1639162845.git.lorenzo@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 12/8/2021 16:06, Alexander Lobakin wrote:
-> {__,}napi_alloc_skb() allocates and reserves additional NET_SKB_PAD
-> + NET_IP_ALIGN for any skb.
-> OTOH, igc_construct_skb_zc() currently allocates and reserves
-> additional `xdp->data_meta - xdp->data_hard_start`, which is about
-> XDP_PACKET_HEADROOM for XSK frames.
-> There's no need for that at all as the frame is post-XDP and will
-> go only to the networking stack core.
-> Pass the size of the actual data only (+ meta) to
-> __napi_alloc_skb() and don't reserve anything. This will give
-> enough headroom for stack processing.
-> Also, net_prefetch() xdp->data_meta and align the copy size to
-> speed-up memcpy() a little and better match igc_costruct_skb().
-> 
-> Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-> ---
->   drivers/net/ethernet/intel/igc/igc_main.c | 13 +++++++------
->   1 file changed, 7 insertions(+), 6 deletions(-)
->
-Tested-by: Nechama Kraus <nechamax.kraus@linux.intel.com>
+
+--OBmxxoznn81budC6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+[...]
+>=20
+> Eelco Chaudron (3):
+>   bpf: add multi-buff support to the bpf_xdp_adjust_tail() API
+>   bpf: add multi-buffer support to xdp copy helpers
+>   bpf: selftests: update xdp_adjust_tail selftest to include
+>     multi-buffer
+>=20
+> Lorenzo Bianconi (19):
+>   net: skbuff: add size metadata to skb_shared_info for xdp
+>   xdp: introduce flags field in xdp_buff/xdp_frame
+>   net: mvneta: update mb bit before passing the xdp buffer to eBPF layer
+>   net: mvneta: simplify mvneta_swbm_add_rx_fragment management
+>   net: xdp: add xdp_update_skb_shared_info utility routine
+>   net: marvell: rely on xdp_update_skb_shared_info utility routine
+>   xdp: add multi-buff support to xdp_return_{buff/frame}
+>   net: mvneta: add multi buffer support to XDP_TX
+>   bpf: introduce BPF_F_XDP_MB flag in prog_flags loading the ebpf
+>     program
+>   net: mvneta: enable jumbo frames if the loaded XDP program support mb
+>   bpf: introduce bpf_xdp_get_buff_len helper
+>   bpf: move user_size out of bpf_test_init
+>   bpf: introduce multibuff support to bpf_prog_test_run_xdp()
+>   bpf: test_run: add xdp_shared_info pointer in bpf_test_finish
+>     signature
+>   libbpf: Add SEC name for xdp_mb programs
+>   net: xdp: introduce bpf_xdp_pointer utility routine
+>   bpf: selftests: introduce bpf_xdp_{load,store}_bytes selftest
+>   bpf: selftests: add CPUMAP/DEVMAP selftests for xdp multi-buff
+>   xdp: disable XDP_REDIRECT for xdp multi-buff
+>=20
+> Toke Hoiland-Jorgensen (1):
+>   bpf: generalise tail call map compatibility check
+
+Hi Alexei and Daniel,
+
+I noticed this series's state is now set to "New, archived" in patchwork.
+Is it due to conflicts? Do I need to repost?
+
+Regards,
+Lorenzo
+
+>=20
+>  drivers/net/ethernet/marvell/mvneta.c         | 204 +++++++++------
+>  include/linux/bpf.h                           |  32 ++-
+>  include/linux/skbuff.h                        |   1 +
+>  include/net/xdp.h                             | 108 +++++++-
+>  include/uapi/linux/bpf.h                      |  30 +++
+>  kernel/bpf/arraymap.c                         |   4 +-
+>  kernel/bpf/core.c                             |  28 +-
+>  kernel/bpf/cpumap.c                           |   8 +-
+>  kernel/bpf/devmap.c                           |   3 +-
+>  kernel/bpf/syscall.c                          |  25 +-
+>  kernel/trace/bpf_trace.c                      |   3 +
+>  net/bpf/test_run.c                            | 115 +++++++--
+>  net/core/filter.c                             | 244 +++++++++++++++++-
+>  net/core/xdp.c                                |  78 +++++-
+>  tools/include/uapi/linux/bpf.h                |  30 +++
+>  tools/lib/bpf/libbpf.c                        |   8 +
+>  .../bpf/prog_tests/xdp_adjust_frags.c         | 103 ++++++++
+>  .../bpf/prog_tests/xdp_adjust_tail.c          | 131 ++++++++++
+>  .../selftests/bpf/prog_tests/xdp_bpf2bpf.c    | 151 ++++++++---
+>  .../bpf/prog_tests/xdp_cpumap_attach.c        |  65 ++++-
+>  .../bpf/prog_tests/xdp_devmap_attach.c        |  56 ++++
+>  .../bpf/progs/test_xdp_adjust_tail_grow.c     |  10 +-
+>  .../bpf/progs/test_xdp_adjust_tail_shrink.c   |  32 ++-
+>  .../selftests/bpf/progs/test_xdp_bpf2bpf.c    |   2 +-
+>  .../bpf/progs/test_xdp_update_frags.c         |  42 +++
+>  .../bpf/progs/test_xdp_with_cpumap_helpers.c  |   6 +
+>  .../progs/test_xdp_with_cpumap_mb_helpers.c   |  27 ++
+>  .../bpf/progs/test_xdp_with_devmap_helpers.c  |   7 +
+>  .../progs/test_xdp_with_devmap_mb_helpers.c   |  27 ++
+>  29 files changed, 1368 insertions(+), 212 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_fra=
+gs.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_update_fra=
+gs.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_cpuma=
+p_mb_helpers.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_with_devma=
+p_mb_helpers.c
+>=20
+> --=20
+> 2.33.1
+>=20
+
+--OBmxxoznn81budC6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYcsi/QAKCRA6cBh0uS2t
+rGmbAQDHOc/OZzf/gfVAAoRISlZ5td+5tfcYlbM5TI7e8l27WwD+I2h0bEOExp09
+ezm0HeWE3RNNaz7VvO5S1zyxqHDKJAI=
+=bmeW
+-----END PGP SIGNATURE-----
+
+--OBmxxoznn81budC6--
 
