@@ -2,73 +2,64 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F20BC4332F
-	for <bpf@archiver.kernel.org>; Mon,  3 Jan 2022 09:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81177C433F5
+	for <bpf@archiver.kernel.org>; Mon,  3 Jan 2022 12:53:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232553AbiACJ5R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Jan 2022 04:57:17 -0500
-Received: from verein.lst.de ([213.95.11.211]:46058 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229742AbiACJ5R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Jan 2022 04:57:17 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id E26BD68AA6; Mon,  3 Jan 2022 10:57:12 +0100 (CET)
-Date:   Mon, 3 Jan 2022 10:57:12 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 3/4] bpf, docs: Generate nicer tables for instruction
- encodings
-Message-ID: <20220103095712.GA29880@lst.de>
-References: <20211223101906.977624-1-hch@lst.de> <20211223101906.977624-4-hch@lst.de> <20211231004324.wvfqqgntnpswhzby@ast-mbp>
+        id S232045AbiACMx1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Jan 2022 07:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229514AbiACMxZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Jan 2022 07:53:25 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC88C061761
+        for <bpf@vger.kernel.org>; Mon,  3 Jan 2022 04:53:24 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id m21so136737549edc.0
+        for <bpf@vger.kernel.org>; Mon, 03 Jan 2022 04:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=ioJ4Uhc6PcJ1xzRvOkmd3MgKuZ4E6KgfhV/AnhvGCS0=;
+        b=OscO9XPJD5JDzCLzixSQumHTDox94LJeSQ0Qcr4qZEi/K8VyC1mKWUKeieM4j6cfX1
+         8L4RGiPEol+KZrMfKfkncAidQZLPSTjtkxxe3xeoqbY8DZMOY0cUBCChoKTkWI9Qf8R2
+         ecKVFM2EQSHZu80EsBmaP+XsN4QOVRtFJyAY22ZC+ZYXaJ7YkWeOg1Gta40XioBnQ1YD
+         r3PKPgpa4rLhDrOVtwhxNX7mx3Biciiz2cCEVXtlWo9kt+WDbpA0jamBZmbasxlGupZJ
+         gMm4lIEtUASZCakzi27QRGmfnokzpVFCiv3yhV1plQFXHR4+k1KqukJeQmDYUOKWDidw
+         81GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=ioJ4Uhc6PcJ1xzRvOkmd3MgKuZ4E6KgfhV/AnhvGCS0=;
+        b=5TzOOPyhKpVhXFT5jipUJquW8QW+t5Z9bwRwMr/kOW6rQ+PkkmwNIEQTV8Mw0CnO+q
+         PqNG4UR+vAD2iDSTdvzhe49FDjwsEolsTqsHAyrcd6//Dq6KyZLAUAttzQfocW8qnJKM
+         7RbJgL/vWpe/XSHX668Ahc5klXFfHhhProvDPWaI5bYpyS4hFLO/ob+arxqt26uGF758
+         Mh40lYugaoc/ZHwI1qTeAbvXMONr+Cc9j8jKLdjezztFTYNUN5PGFVM03WG7AWd/HvVj
+         Yj2PtxFewC1K/C866w5KIuxZtPM4yiACv6ADindhu4NDT4TKNEV5eFkyI0GielUCFoJh
+         w/Lg==
+X-Gm-Message-State: AOAM532a9axNFrSyqRaMR3a9zwhyRhA1YjhqnffG9X6D2WTnorxpxHsT
+        pPtINUuYyk2DgEedoAkCOB03v0vL7m8o3euiwz6ymJFe
+X-Google-Smtp-Source: ABdhPJz5SfPoGOVP0Cp2zi76H2PbXNNjLwjefJ5z3LQ6sXPqJIcBzUzt/ll74vsFA2fSRloTMsmjW3fZWVaBbCckgDw=
+X-Received: by 2002:aa7:c941:: with SMTP id h1mr44800824edt.319.1641214403073;
+ Mon, 03 Jan 2022 04:53:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211231004324.wvfqqgntnpswhzby@ast-mbp>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+From:   His Shadow <shadowpilot34@gmail.com>
+Date:   Mon, 3 Jan 2022 15:53:12 +0300
+Message-ID: <CAK7W0xe9VVbyVykzTK8X8ieg4UgRJEtrvEyKgLjBO+iVFV41+A@mail.gmail.com>
+Subject: eBPF sockhash datastructure and stream_parser/stream_verdict programs
+To:     bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 30, 2021 at 04:43:24PM -0800, Alexei Starovoitov wrote:
-> > +  ========  =====  =========================
-> > +  code      value  description
-> > +  ========  =====  =========================
-> > +  BPF_JA    0x00   BPF_JMP only
-> >    BPF_JEQ   0x10
-> >    BPF_JGT   0x20
-> >    BPF_JGE   0x30
-> >    BPF_JSET  0x40
-> 
-> Not your fault, but the new table looks odd with
-> only some opcodes documented.
-> Same issue with BPF_ALU table.
-> In the past the documented opcodes were for eBPF only and
-> not documented in both, so it wasn't that bad.
-> At least there was a reason for discrepancy.
-> Now it just odd.
-> May be add a comment to all rows?
-
-Yes, having the description everywhere would be good.  But I'll have to
-do research to actually figure out what should go in there for some.
-
-> > +  =============  =====  =====================
-> > +  mode modifier  value  description
-> > +  =============  =====  =====================
-> > +  BPF_IMM        0x00   used for 64-bit mov
-> > +  BPF_ABS        0x20
-> > +  BPF_IND        0x40
-> > +  BPF_MEM        0x60
-> 
-> May be say here that ABS and IND are legacy for compat with classic only?
-> and MEM is the most common modifier for load/store?
-
-Sure.
+Greeetings. Here's the problem. I've written a simple program, that,
+when a connection is established, it establishes a connection to a
+predetermined target and starts routing traffic between a user
+connection and a new connection.
+I've tried to use ebpf stream_parser/verdict programs for this,
+however there's a problem: when a connection to my program is
+established, client sends the data immediately, however there's a
+delay, while I establish a connection to the target. So stream_verdict
+never gets called, because the data is already in the socket receive
+queue(or maybe I'm misunderstanding something). Is there a way around
+this? Should I use something else, like skb_msg verdict?
