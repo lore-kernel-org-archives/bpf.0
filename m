@@ -2,96 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 173D2C433EF
-	for <bpf@archiver.kernel.org>; Tue,  4 Jan 2022 00:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08C71C433F5
+	for <bpf@archiver.kernel.org>; Tue,  4 Jan 2022 01:27:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiADA4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Jan 2022 19:56:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbiADA4a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Jan 2022 19:56:30 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30E4C061761
-        for <bpf@vger.kernel.org>; Mon,  3 Jan 2022 16:56:29 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id u21so44004752oie.10
-        for <bpf@vger.kernel.org>; Mon, 03 Jan 2022 16:56:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=M0Uwuc7pP5poUiBOIu/sezUZR16RCfuF9o0myYNiTeQ=;
-        b=Y5S7SogglNw6gXi3vO8lz5Z76v4nJNjiTpw+3QEoYbgqOiS2OPSYkrUD6PfVQU0SPr
-         3sweYiS2c7CiaxQj40XJSiIXb/wBeaB2xg6QorGC1FjXzaUWbpkZZyBGY6mVxnVXY2oc
-         MTdeE++tMe5RDpKyFno567wM+Qodooa3h/I0n2Hlu5uzPDODnUHeUCXJ/wvymdhJQ9mM
-         miQuoa15K5342ZeyhAb3GJOCXwd6YtSq7YzB2GfyjoajYUFg2NClxgZxZJ39fSsaMBiM
-         8GtaqE7U67WK3j36MQdIlPjtS6YUKiNrexGmZLO2QpZFVmlqnksqg7ZtDmCGBJc2d6Nv
-         fhDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M0Uwuc7pP5poUiBOIu/sezUZR16RCfuF9o0myYNiTeQ=;
-        b=4xlBATl8FIkjy9YhZ/YyfMnj/txMLCHmXl7UWAQVVaAXyLV9ej7CMMpDZQelCyy+nc
-         u3/yF1SAc2sfUTwXKrMOzqpLHesgsjQRvELIgDA6GTEmIz8uuHUtidRJePuzf6kHJ+YX
-         jF1ektkpCauIbRHrY0xfwUq0NeyyaZ/KEInMprlE49HLhuq3piDBdsSqZMlcJrUlLIOk
-         WDZf884gglsF4V2FTWIlD79D1glD2FfIOVQfqBQSn6zBVX9v4nLVk+5QX/5VauKY5GKl
-         BEEZhPovZS6Bu7aRdQ0EZa2WnvVZFLdBg+TWk6jzmzYr1ilWy4j24L29CAy/9tEIuyff
-         yIkQ==
-X-Gm-Message-State: AOAM532S9BO6IVIrcb8l4c9g5HhxEKONgzrq0UYzmw5eyCOskvYjpBES
-        ywYazgNuLhbOartVIdt8fJi4Jjj8j5M=
-X-Google-Smtp-Source: ABdhPJyWIue+MIW1IKkOvNYmObqzHLelzMLPMWfTpVKMKMfT46HNR/iY4PYCuKrYkClmFwFQr4iOGQ==
-X-Received: by 2002:a05:6808:144d:: with SMTP id x13mr38931977oiv.25.1641257789307;
-        Mon, 03 Jan 2022 16:56:29 -0800 (PST)
-Received: from localhost ([2600:1700:65a0:ab60:73a2:abf:ebbe:9103])
-        by smtp.gmail.com with ESMTPSA id bi20sm9660799oib.29.2022.01.03.16.56.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 16:56:29 -0800 (PST)
-Date:   Mon, 3 Jan 2022 16:56:28 -0800
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Jhonny Knaak de Vargas <jhonny.knaak@protonmail.com>
-Cc:     bpf@vger.kernel.org
-Subject: Re: Some questions about EBPF
-Message-ID: <YdObPAA6L43g4QZX@pop-os.localdomain>
-References: <f9526881379a8d5f2c27e2fe5843885d648b31ec.camel@protonmail.com>
+        id S231727AbiADB1Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Jan 2022 20:27:24 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:31065 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229617AbiADB1X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Jan 2022 20:27:23 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JSZdS28Xsz1DKM0;
+        Tue,  4 Jan 2022 09:23:56 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 4 Jan
+ 2022 09:27:20 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <houtao1@huawei.com>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH bpf] bpf, arm64: calculate offset as byte-offset for bpf line info
+Date:   Tue, 4 Jan 2022 09:42:36 +0800
+Message-ID: <20220104014236.1512639-1-houtao1@huawei.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9526881379a8d5f2c27e2fe5843885d648b31ec.camel@protonmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jan 02, 2022 at 08:02:01PM +0000, Jhonny Knaak de Vargas wrote:
-> Hi,
-> Got some quick questions,
-> Consider that I am a newbie just studying.
-> 
-> 1. How can I subscribe to the list? This link seems to not be valid
-> anymore http://vger.kernel.org/vger-lists.html#bpf
+The bpf line info for arm64 is broken due to two reasons:
+(1) insn_to_jit_off passed to bpf_prog_fill_jited_linfo() is
+    calculated in instruction granularity instead of bytes
+    granularity.
+(2) insn_to_jit_off only considers the body itself and ignores
+    prologue before the body.
 
-It should work.
+So fix it by calculating offset as byte-offset and do build_prologue()
+first in the first JIT pass.
 
-> 
-> 2. What I want to do:
-> 	My idea is from user space set the pid of a process to the bpf
-> program on the kernel side.
-> 	On the kernel side I want to have a variable which will have
-> that PID that came from user space. Now,I want to identify writes to
-> memory that process owns.
-> 
->    Question:
-> 	I am not sure if I should be looking to use kernel headers for
-> identifying the memory pages of a process or should I be reading /proc?
-> 
-> 	Can you guys please give me some tips on how to achieve that?
+Fixes: 37ab566c178d ("bpf: arm64: Enable arm64 jit to provide bpf_line_info")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
 
-Where exactly do you hook for identifying memory writes?
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 148ca51325bb..d7a6d4b523c9 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -24,6 +24,8 @@
+ 
+ #include "bpf_jit.h"
+ 
++#define INSN_SZ (sizeof(u32))
++
+ #define TMP_REG_1 (MAX_BPF_JIT_REG + 0)
+ #define TMP_REG_2 (MAX_BPF_JIT_REG + 1)
+ #define TCALL_CNT (MAX_BPF_JIT_REG + 2)
+@@ -154,10 +156,11 @@ static inline int bpf2a64_offset(int bpf_insn, int off,
+ 	bpf_insn++;
+ 	/*
+ 	 * Whereas arm64 branch instructions encode the offset
+-	 * from the branch itself, so we must subtract 1 from the
++	 * from the branch itself, so we must subtract 4 from the
+ 	 * instruction offset.
+ 	 */
+-	return ctx->offset[bpf_insn + off] - (ctx->offset[bpf_insn] - 1);
++	return (ctx->offset[bpf_insn + off] -
++		(ctx->offset[bpf_insn] - INSN_SZ)) / INSN_SZ;
+ }
+ 
+ static void jit_fill_hole(void *area, unsigned int size)
+@@ -955,13 +958,14 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 		const struct bpf_insn *insn = &prog->insnsi[i];
+ 		int ret;
+ 
++		/* BPF line info needs byte-offset instead of insn-offset */
+ 		if (ctx->image == NULL)
+-			ctx->offset[i] = ctx->idx;
++			ctx->offset[i] = ctx->idx * INSN_SZ;
+ 		ret = build_insn(insn, ctx, extra_pass);
+ 		if (ret > 0) {
+ 			i++;
+ 			if (ctx->image == NULL)
+-				ctx->offset[i] = ctx->idx;
++				ctx->offset[i] = ctx->idx * INSN_SZ;
+ 			continue;
+ 		}
+ 		if (ret)
+@@ -973,7 +977,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 	 * instruction (end of program)
+ 	 */
+ 	if (ctx->image == NULL)
+-		ctx->offset[i] = ctx->idx;
++		ctx->offset[i] = ctx->idx * INSN_SZ;
+ 
+ 	return 0;
+ }
+@@ -1058,15 +1062,18 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 		goto out_off;
+ 	}
+ 
+-	/* 1. Initial fake pass to compute ctx->idx. */
+-
+-	/* Fake pass to fill in ctx->offset. */
+-	if (build_body(&ctx, extra_pass)) {
++	/*
++	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
++	 *
++	 * BPF line info needs ctx->offset[i] to be the byte offset
++	 * of instruction[i] in jited image, so build prologue first.
++	 */
++	if (build_prologue(&ctx, was_classic)) {
+ 		prog = orig_prog;
+ 		goto out_off;
+ 	}
+ 
+-	if (build_prologue(&ctx, was_classic)) {
++	if (build_body(&ctx, extra_pass)) {
+ 		prog = orig_prog;
+ 		goto out_off;
+ 	}
+-- 
+2.27.0
 
-I guess it may already provide some context for you to follow to find
-out the process.
-
-And you can always use eBPF map to communicate with user-space to filter
-processes with PID's.
-
-Thanks.
