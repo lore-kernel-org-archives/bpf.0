@@ -2,84 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38EA3C433EF
-	for <bpf@archiver.kernel.org>; Tue,  4 Jan 2022 01:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69935C433F5
+	for <bpf@archiver.kernel.org>; Tue,  4 Jan 2022 03:48:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiADBej (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Jan 2022 20:34:39 -0500
-Received: from smtp-fw-80006.amazon.com ([99.78.197.217]:59191 "EHLO
-        smtp-fw-80006.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiADBej (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Jan 2022 20:34:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1641260079; x=1672796079;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=p0DyDQ+vWEwJliI3fARijsd3UJqqtNYA35ktKFWmfQA=;
-  b=do1RnvfFXT5aB+TIsV4NwNNZkEJ/1Mj1/ruJfDVDKYSKwf6wU3b0aCmb
-   XssEb9ZFNEIk8LcJ9XJz30AKLtGCJCvM63oTZurFbzP5uxNB2+XUhpAdr
-   4T7kn6gC1oQ8B2zy3pxdc9UaB/4PhMU+YCOOGEC2Wvn9Y9eti1ljaSwJT
-   w=;
-X-IronPort-AV: E=Sophos;i="5.88,258,1635206400"; 
-   d="scan'208";a="52418794"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-1cb212d9.us-west-2.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP; 04 Jan 2022 01:34:39 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2c-1cb212d9.us-west-2.amazon.com (Postfix) with ESMTPS id 11FB2C0950;
-        Tue,  4 Jan 2022 01:34:39 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.26; Tue, 4 Jan 2022 01:34:37 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.161.97) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.26; Tue, 4 Jan 2022 01:34:34 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-CC:     Martin KaFai Lau <kafai@fb.com>,
-        Benjamin Herrenschmidt <benh@amazon.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next 6/6] selftest/bpf: Fix a stale comment.
-Date:   Tue, 4 Jan 2022 10:31:53 +0900
-Message-ID: <20220104013153.97906-7-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220104013153.97906-1-kuniyu@amazon.co.jp>
-References: <20220104013153.97906-1-kuniyu@amazon.co.jp>
+        id S231499AbiADDse (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Jan 2022 22:48:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231165AbiADDse (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Jan 2022 22:48:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF11C061761;
+        Mon,  3 Jan 2022 19:48:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFF58B81097;
+        Tue,  4 Jan 2022 03:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39C52C36AED;
+        Tue,  4 Jan 2022 03:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641268111;
+        bh=5LCZIuAEU9VEEYcUacketTtZ45/TX/jS7+iR46o4+b4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hBLX91dPaJ5m7coXPc0vYUzoTQvDz5OEqG/JGstFAz8r5oQtT4ldw6W0A4ub81Ls3
+         /HxkH731k2CDr55eQBRAI1sFwd2Frx4L/2nFKPlxDM2Le7fWDWymrymYG5Fg1PYnNx
+         is0owU/UfAz7GZcmFWj6M6bzEDB/lRTwzTxIwXQ7l/iEi/I4++uhjKfAPzItwDLelB
+         K/rU03Y6gQeoCXzvn5oIGhyaJjmr0Rt3CrM47cOoB6z5T/DOEKQvZzCL5e4+AAvkj9
+         6ld3TIIAh/adL3LyeIm3nKoilUgZJ2b4sXQSZ0yybzNcOEVRwmpxTiaDlwDHVYwRfB
+         P8CyNdYhFuJaA==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        saeedm@nvidia.com, leon@kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH net-next] net: fixup build after bpf header changes
+Date:   Mon,  3 Jan 2022 19:48:27 -0800
+Message-Id: <20220104034827.1564167-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.97]
-X-ClientProxiedBy: EX13D19UWA004.ant.amazon.com (10.43.160.102) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The commit b8a58aa6fccc ("af_unix: Cut unix_validate_addr() out of
-unix_mkname().") moved the bound test part into unix_validate_addr().
+Recent bpf-next merge brought in header changes which uncovered
+includes missing in net-next which were not present in bpf-next.
+Build problems happen only on less-popular arches like hppa,
+sparc, alpha etc.
 
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+I could repro the build problem with ice but not the mlx5 problem
+Abdul was reporting. mlx5 does look like it should include filter.h,
+anyway.
+
+Reported-by: Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Fixes: e63a02348958 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next")
+Link: https://lore.kernel.org/all/7c03768d-d948-c935-a7ab-b1f963ac7eed@linux.vnet.ibm.com/
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+CC: jesse.brandeburg@intel.com
+CC: anthony.l.nguyen@intel.com
+CC: saeedm@nvidia.com
+CC: leon@kernel.org
+CC: intel-wired-lan@lists.osuosl.org
+CC: linux-rdma@vger.kernel.org
+CC: bpf@vger.kernel.org
+---
+ drivers/net/ethernet/intel/ice/ice_nvm.c          | 2 ++
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-index c21e3f545371..e6aefae38894 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-@@ -63,7 +63,7 @@ int dump_unix(struct bpf_iter__unix *ctx)
- 			BPF_SEQ_PRINTF(seq, " @");
+diff --git a/drivers/net/ethernet/intel/ice/ice_nvm.c b/drivers/net/ethernet/intel/ice/ice_nvm.c
+index cd739a2c64e8..4eb0599714f4 100644
+--- a/drivers/net/ethernet/intel/ice/ice_nvm.c
++++ b/drivers/net/ethernet/intel/ice/ice_nvm.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2018, Intel Corporation. */
  
- 			for (i = 1; i < len; i++) {
--				/* unix_mkname() tests this upper bound. */
-+				/* unix_validate_addr() tests this upper bound. */
- 				if (i >= sizeof(struct sockaddr_un))
- 					break;
++#include <linux/vmalloc.h>
++
+ #include "ice_common.h"
  
+ /**
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index efcf9d30b131..31c911182498 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -37,6 +37,7 @@
+ #include <net/geneve.h>
+ #include <linux/bpf.h>
+ #include <linux/if_bridge.h>
++#include <linux/filter.h>
+ #include <net/page_pool.h>
+ #include <net/xdp_sock_drv.h>
+ #include "eswitch.h"
 -- 
-2.30.2
+2.31.1
 
