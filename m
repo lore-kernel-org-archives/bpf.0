@@ -2,114 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E291BC433EF
-	for <bpf@archiver.kernel.org>; Wed,  5 Jan 2022 18:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B93DBC433F5
+	for <bpf@archiver.kernel.org>; Wed,  5 Jan 2022 19:50:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242835AbiAESVB convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 5 Jan 2022 13:21:01 -0500
-Received: from msx.hs-osnabrueck.de ([131.173.88.34]:56403 "EHLO
-        msx.hs-osnabrueck.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242840AbiAESU7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Jan 2022 13:20:59 -0500
-Received: from sea-01.fhos.de (localhost.localdomain [127.0.0.1])
-        by localhost (Email Security Appliance) with SMTP id 55C0D731207_1D5E186B;
-        Wed,  5 Jan 2022 18:20:54 +0000 (GMT)
-Received: from msx.hs-osnabrueck.de (Sinabung.FHOS.DE [192.168.179.75])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (Client CN "msx.hs-osnabrueck.de", Issuer "DFN-Verein Global Issuing CA" (not verified))
-        by sea-01.fhos.de (Sophos Email Appliance) with ESMTPS id 26DCF72E6CC_1D5E186F;
-        Wed,  5 Jan 2022 18:20:54 +0000 (GMT)
-Received: from ROCKENSTEIN.FHOS.DE (192.168.179.25) by Sinabung.FHOS.DE
- (192.168.179.75) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 5 Jan
- 2022 19:20:53 +0100
-Received: from ROCKENSTEIN.FHOS.DE ([fe80::d109:b519:b2eb:52b4]) by
- Rockenstein.FHOS.DE ([fe80::d109:b519:b2eb:52b4%12]) with mapi id
- 15.00.1497.026; Wed, 5 Jan 2022 19:20:53 +0100
-From:   "Buchberger, Dennis" <dennis.buchberger@hs-osnabrueck.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: AW: [Extern] Re: Problem loading eBPF program on Kernel 4.18 (best
- with CO:RE): -EINVAL
-Thread-Topic: [Extern] Re: Problem loading eBPF program on Kernel 4.18 (best
- with CO:RE): -EINVAL
-Thread-Index: AQHYAhp5eI29nHop60CO4GOJmoPCtqxULQ4AgAAwfxc=
-Date:   Wed, 5 Jan 2022 18:20:53 +0000
-Message-ID: <1641406853508.18736@hs-osnabrueck.de>
-References: <1641377010132.82356@hs-osnabrueck.de>,<YdV2NgMG/EWwJVQn@kroah.com>
-In-Reply-To: <YdV2NgMG/EWwJVQn@kroah.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [192.168.179.139]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S243702AbiAETuv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Jan 2022 14:50:51 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50874 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243740AbiAETuL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Jan 2022 14:50:11 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 871F9618EC;
+        Wed,  5 Jan 2022 19:50:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7811C36AF2;
+        Wed,  5 Jan 2022 19:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641412210;
+        bh=nJ8IvB9Omo4tRFb0UMgMVVVhno371eQE/tSIlUryzLk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OFyPEqGqDSXAc9+aLzLgfwgxBq2qDip1F2SU4/G7NCHX07Z3Sj5ZDFvV5Mbk2A6Td
+         4O1eodCHVW5m3Y6Z6+0mcguFyCV/eKCJ4PoNrdX7dIieNKHR6tV5rwGgrPcSVcIVIv
+         IZgKyCCKCHY4LdTJFAVwBy82b9KiTI1H9hmNaYQ9wa5yKpvbHgcGIXdfKHioLYe72w
+         VDODo81yriDrmH6eeeQkmwWyGLCEQpp6c/SBog0bi+jH385xo6omE3Y/CodnBSG1/5
+         8/p7vSwjf4+sv1Fxcohs2RLTFh9qX3zcBuLo1bwtqo0Pe80zjUAEgROwUwNM4DHiv3
+         ROR1nSrev1RxA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD8ADF79408;
+        Wed,  5 Jan 2022 19:50:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-SASI-RCODE: 200
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf,
+ sockmap: fix return codes from tcp_bpf_recvmsg_parser()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164141220983.28548.2255582640543203112.git-patchwork-notify@kernel.org>
+Date:   Wed, 05 Jan 2022 19:50:09 +0000
+References: <20220104205918.286416-1-john.fastabend@gmail.com>
+In-Reply-To: <20220104205918.286416-1-john.fastabend@gmail.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, joamaki@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
->> Hello :)
->>
->> I am currently having a problem and hope you can help me: My goal is to develop a BPF-program (see below) on a development machine and then deploy it to another machine to run it there using BPF CO:RE.
->> But the program does not load; bpf_object__load returns -EINVAL.
->>
->> Development machine:
->> - Ubuntu 20.04 LTS
->> - Linux 5.4.0-90-generic x86_64
->> - Kernel compiled with CONFIG_DEBUG_INFO_BTF=y, so BTF is available under /sys/kernel/btf/vmlinux
->> - clang version: 10.0.0-4ubuntu1
->> - llc version: 10.0.0
->>
->> Target machine:
->> - Ubuntu 18.10
->> - Linux 4.18.0-25-generic x86_64
->
-> 4.18 is very old and obsolete and insecure and only supported by the
-> vendor you are paying support from.  Please upgrade to a more modern
-> kernel (4.18 was released way back in 2018), if you wish to get help
-> from the kernel community.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Tue,  4 Jan 2022 12:59:18 -0800 you wrote:
+> Applications can be confused slightly because we do not always return the
+> same error code as expected, e.g. what the TCP stack normally returns. For
+> example on a sock err sk->sk_err instead of returning the sock_error we
+> return EAGAIN. This usually means the application will 'try again'
+> instead of aborting immediately. Another example, when a shutdown event
+> is received we should immediately abort instead of waiting for data when
+> the user provides a timeout.
 > 
-> Actually, the vendor you are paying for support to stay at this old
-> kernel version should be able to provide help to you, why not ask them?
-> 
-> thanks,
-> 
-> greg k-h
+> [...]
 
-Ubuntu 18.04 LTS is still out there and did not reach its end of maintenance; 18.10 is even a bit newer. So yes, it is not up to date, but I would not consider it very old or obsolete.
-Actually, I am a student and not paying any vendor I could ask.
+Here is the summary with links:
+  - [bpf-next] bpf, sockmap: fix return codes from tcp_bpf_recvmsg_parser()
+    https://git.kernel.org/bpf/bpf-next/c/5b2c5540b811
 
-BPF CO:RE stands for Compile Once, Run >Everywhere<, so I do wonder why it does not work - it should, no matter wether it is kernel 4.18 or another one, should't it?.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-I just get started to eBPF programming and find it difficult to get documentation and examples on how to do it in a not-deprecated way without using bcc, bpftrace or skeletons.
-
-It is quite a simple program, why does it fail getting loaded on 4.18 but not on 5.4?:
-
-SEC("kprobe/")
-int trace_func_entry(struct pt_regs *ctx) {
-    u64 pid_tgid = bpf_get_current_pid_tgid();
-    u32 pid = pid_tgid;
-
-    int arg1;
-    int arg2;
-
-    arg1 = BPF_CORE_READ(ctx, di);
-    arg2 = PT_REGS_PARM2_CORE(ctx);
-
-    __u32 key = 0;
-    struct stack_trace_t* data;
-    data = bpf_map_lookup_elem(&stackdata_map, &key);
-	if (!data)
-		return 0;
-
-    size_t max_len = MAX_STACK_RAWTP * sizeof(__u64);
-    data->user_stack_size = bpf_get_stack(ctx, data->user_stack, max_len, BPF_F_USER_STACK);
-    return 0;
-}
-
-Thanks for any help
-Dennis
 
