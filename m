@@ -2,121 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31C39C433EF
-	for <bpf@archiver.kernel.org>; Thu,  6 Jan 2022 02:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34051C433F5
+	for <bpf@archiver.kernel.org>; Thu,  6 Jan 2022 02:31:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344833AbiAFC3Z convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 5 Jan 2022 21:29:25 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35168 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344850AbiAFC2x (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 5 Jan 2022 21:28:53 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 205N7PXc005928
-        for <bpf@vger.kernel.org>; Wed, 5 Jan 2022 18:28:53 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ddmqsgtmh-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 05 Jan 2022 18:28:52 -0800
-Received: from twshared7572.23.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 18:28:51 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id EA94B273E541A; Wed,  5 Jan 2022 18:25:50 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        Song Liu <song@kernel.org>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v3 bpf-next 4/7] bpf: add a pointer of bpf_binary_header to bpf_prog
-Date:   Wed, 5 Jan 2022 18:25:30 -0800
-Message-ID: <20220106022533.2950016-5-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220106022533.2950016-1-song@kernel.org>
-References: <20220106022533.2950016-1-song@kernel.org>
+        id S1344748AbiAFCba (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Jan 2022 21:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344731AbiAFCb2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Jan 2022 21:31:28 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3152EC061245
+        for <bpf@vger.kernel.org>; Wed,  5 Jan 2022 18:31:28 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id y11so1434497iod.6
+        for <bpf@vger.kernel.org>; Wed, 05 Jan 2022 18:31:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ypEjZS1xqSg6XwrznZf02X8HJG4g3PvWsbV5zTT1rgQ=;
+        b=RFqdr12/F36nS3YTeCLiJvTmWyz8F1K8+jgXUoj6b2L1HnxbLNyDPZpc7xRNFV6Zlv
+         rMEnB/gnJ5OdP8eiU+8+wpMiWIVh/6gtekebIu71JQBUJl5bhWYMbpI5VGhUqDvLZ+7C
+         UtLp+Gfy9olOsyddE2+A64i0rjV6mPLU+RIGbQD99YPI1Z23wXOJX2WpCBQ/l4HKKtih
+         LCs8lVblJ+UsdlAN54JG587d+TW08v9OCP3q1CptDGEDrH9GrxapQttwhb8B56AtMU4s
+         3hdkqydGLJE2JXEwzSdolPe5lzjJ3/DMr/5ezykIUhzo/OoTcB9zMCkpzPTttWsmbFa5
+         q/AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ypEjZS1xqSg6XwrznZf02X8HJG4g3PvWsbV5zTT1rgQ=;
+        b=7tC8/YVz8ofkYdnWzi5ZoOD/VDjQACLoFDARfvU8V0v0sbLkU/CJ6Psxnlpc9NWEMe
+         d//17pEz6vmPvcSPrpdyABfBkKk6qfrnwB+KyGJmUmIFjSjYNbAIoc+NN6sZpo5GLl0A
+         zXBZ76qGrnkTk6P6ElPr4WFtQhJP8ncMFE1Li2vHMBHv2wi53P8UYDzXqV2rsyLyGBo1
+         ToHmJwfAMEuhhjh9ZrWpEnY9ARDAee8/cORxrNjRP1grez5QEWxdTR/VWhMANCYidPW6
+         EPQZxoxs9oyhVCJAAZ94zAx6ATMfN2tu4ZAfLAC5cpJO7cdNLqZbdPYu0L9Yx2l8O8+1
+         KzxQ==
+X-Gm-Message-State: AOAM531DDomVujtfPXpcblXAYKWApy2H3L05BFMjykKaPjRYuvVQuW8E
+        LttBnW8qKz30wg6Iz46iYhXWiWVNBGXQCPYKL8IlS4jT
+X-Google-Smtp-Source: ABdhPJzdsRpb0p7N1cqJEXXLF8ztXpdhfZqngE4dI7bLzO07UOsi3eymhVYc8YDkCY9p7vr/hFQ/qqltRGsau3C7kbQ=
+X-Received: by 2002:a6b:3b51:: with SMTP id i78mr26644809ioa.63.1641436287527;
+ Wed, 05 Jan 2022 18:31:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: SsESG9ip5BGyIhB65xDlP2VMDcLf4Oly
-X-Proofpoint-GUID: SsESG9ip5BGyIhB65xDlP2VMDcLf4Oly
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-05_08,2022-01-04_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 adultscore=0
- malwarescore=0 priorityscore=1501 spamscore=0 phishscore=0 suspectscore=0
- bulkscore=0 lowpriorityscore=0 impostorscore=0 mlxscore=0 clxscore=1015
- mlxlogscore=429 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2112160000 definitions=main-2201060011
-X-FB-Internal: deliver
+References: <20211225203717.35718-1-grantseltzer@gmail.com>
+ <b572def1-cfdc-6ae3-3772-d92660170fda@gmail.com> <CAO658oVFNA7JMPozQTF4vw5TDdwSu6dR_KdxgKvER8BNhiL9aA@mail.gmail.com>
+In-Reply-To: <CAO658oVFNA7JMPozQTF4vw5TDdwSu6dR_KdxgKvER8BNhiL9aA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 5 Jan 2022 18:31:16 -0800
+Message-ID: <CAEf4BzZY4W_TifFqt7aV-f=uS-kZKRgGmxD7Xs3=Dn0Gw+qBhA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] libbpf: Add documentation for bpf_map batch operations
+To:     Grant Seltzer Richman <grantseltzer@gmail.com>
+Cc:     Hengqi Chen <hengqi.chen@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With sub page allocation, we cannot simply use bpf_func & PAGE_MASK to
-find the bpf_binary_header. Add a pointer to struct bpf_prog to avoid
-this logic.
+On Mon, Jan 3, 2022 at 10:09 AM Grant Seltzer Richman
+<grantseltzer@gmail.com> wrote:
+>
+> On Mon, Dec 27, 2021 at 7:25 AM Hengqi Chen <hengqi.chen@gmail.com> wrote=
+:
+> >
+> >
+> >
+> > On 2021/12/26 4:37 AM, grantseltzer wrote:
+> > > From: Grant Seltzer <grantseltzer@gmail.com>
+> > >
+> > > This adds documentation for:
+> > >
+> > > - bpf_map_delete_batch()
+> > > - bpf_map_lookup_batch()
+> > > - bpf_map_lookup_and_delete_batch()
+> > > - bpf_map_update_batch()
+> > >
+> > > Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
+> > > ---
+> > >  tools/lib/bpf/bpf.c |   4 +-
+> > >  tools/lib/bpf/bpf.h | 112 ++++++++++++++++++++++++++++++++++++++++++=
++-
+> > >  2 files changed, 112 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> > > index 9b64eed2b003..25f3d6f85fe5 100644
+> > > --- a/tools/lib/bpf/bpf.c
+> > > +++ b/tools/lib/bpf/bpf.c
+> > > @@ -691,7 +691,7 @@ static int bpf_map_batch_common(int cmd, int fd, =
+void  *in_batch,
+> > >       return libbpf_err_errno(ret);
+> > >  }
+> > >
+> > > -int bpf_map_delete_batch(int fd, void *keys, __u32 *count,
+> > > +int bpf_map_delete_batch(int fd, const void *keys, __u32 *count,
+> >
+> > Maybe you should drop these const qualifier changes.
+>
+> Can you help me understand the benefit of using the const qualifier in
+> this context? I added it at Andrii's suggestion without proper
+> understanding. I understand that it will properly convey that the keys
+> or values aren't output parameters like in other batch operation
+> functions, I don't think it would change where the underlying data is
+> stored, just the pointer variable.
+>
+> Is it worth it to have seperate 'common' functions for the sake of
+> having a const qualifier?
+> >
+> > All batch operations use `bpf_map_batch_common`, which has the followin=
+g signature:
+> >
+> > static int bpf_map_batch_common(int cmd, int fd, void  *in_batch,
+> >                                 void *out_batch, void *keys, void *valu=
+es,
+> >                                 __u32 *count,
+> >                                 const struct bpf_map_batch_opts *opts)
+> >
+> > Adding these const qualifiers causes the following error:
+> >
+> > bpf.c:698:15: error: passing argument 5 of =E2=80=98bpf_map_batch_commo=
+n=E2=80=99 discards
+> > =E2=80=98const=E2=80=99 qualifier from pointer target type [-Werror=3Dd=
+iscarded-qualifiers]
 
-Use this point for x86_64. If the pointer is not set by the jit engine,
-fall back to original logic.
+we can either forcefully cast to (void *) internally when calling
+bpf_map_batch_common(), or just make bpf_map_batch_common() take const
+void *. It's a bit misleading, but either way it just gets converted
+to u64.
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- arch/x86/net/bpf_jit_comp.c |  2 ++
- include/linux/filter.h      | 10 ++++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+I think it's more important to have public API reflect the guarantees
+correctly, so if public API specifies that something is `const void *`
+that means that no one is overwriting the contents of that memory.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index ce1f86f245c9..fe4f08e25a1d 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2339,6 +2339,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 			if (header)
- 				bpf_jit_binary_free(header);
- 			prog = orig_prog;
-+			header = NULL;
- 			goto out_addrs;
- 		}
- 		if (image) {
-@@ -2406,6 +2407,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	if (tmp_blinded)
- 		bpf_jit_prog_release_other(prog, prog == orig_prog ?
- 					   tmp : orig_prog);
-+	prog->hdr = header;
- 	return prog;
- }
- 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 6d73d89c99a4..b5c7e12f7675 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -584,6 +584,7 @@ struct bpf_prog {
- 					    const struct bpf_insn *insn);
- 	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
- 	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
-+	struct bpf_binary_header *hdr;
- 	/* Instructions for interpreter */
- 	union {
- 		DECLARE_FLEX_ARRAY(struct sock_filter, insns);
-@@ -893,9 +894,14 @@ static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
- static inline struct bpf_binary_header *
- bpf_jit_binary_hdr(const struct bpf_prog *fp)
- {
--	unsigned long real_start = (unsigned long)fp->bpf_func;
--	unsigned long addr = real_start & PAGE_MASK;
-+	unsigned long real_start;
-+	unsigned long addr;
- 
-+	if (fp->hdr)
-+		return fp->hdr;
-+
-+	real_start = (unsigned long)fp->bpf_func;
-+	addr = real_start & PAGE_MASK;
- 	return (void *)addr;
- }
- 
--- 
-2.30.2
+> >
+> > >                        const struct bpf_map_batch_opts *opts)
+> > >  {
+> > >       return bpf_map_batch_common(BPF_MAP_DELETE_BATCH, fd, NULL,
+> > > @@ -715,7 +715,7 @@ int bpf_map_lookup_and_delete_batch(int fd, void =
+*in_batch, void *out_batch,
+> > >                                   count, opts);
+> > >  }
+> > >
 
+[...]
