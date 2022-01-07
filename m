@@ -2,274 +2,332 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE13EC433F5
-	for <bpf@archiver.kernel.org>; Fri,  7 Jan 2022 21:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDA46C43217
+	for <bpf@archiver.kernel.org>; Fri,  7 Jan 2022 21:54:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiAGVaO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jan 2022 16:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiAGVaN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jan 2022 16:30:13 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25103C061574;
-        Fri,  7 Jan 2022 13:30:13 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 19so8736183ioz.4;
-        Fri, 07 Jan 2022 13:30:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6HN4dTXPcZ8eKGhT5FJ+Y5CkYFpTLx4O2n6/0dOuA1o=;
-        b=GbvUTfZt3m7T0+djugBR3kaKWeLimoBcDcEhEzdaWwlH1XTKwkEPGT1m5dTmYeevza
-         NVgpM1VagPSGAaLQGSJMTmTJl3iHROVef6yDpjKS2gA4GmKHGzeRrKi5C3jPgS67dyxX
-         UruFOTq9rRmdyStc00fHjqcj5PV2qiTr3DDJ/sZGuFONbJ4qrnkVSDFaIjQ1m1mBj2Wa
-         2V5IE/XS6DcNA7dhYL7ujYybb9/ZdQ9oMtaTmc2rBLsG1DpxTLLoTuVFbqIuYfSi3DjE
-         6smrGnRV98XXLQgquLTdy+KX8qIxH80aYvcLEEg9nwMACNP0rfEWMxLOpVInB0VD8iIf
-         S1VQ==
+        id S230243AbiAGVyt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jan 2022 16:54:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:28281 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230221AbiAGVys (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jan 2022 16:54:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641592488;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j+vG9Qa9OkGa6HWCa2Inpz3+8aGl216Qd1qEl2tq6fs=;
+        b=Y27UVpTwZ2fZXzlMELr7DW3YphYpJ5KBNB/Fmqq6puAGXxgcdreH+KmLlJXJ95AJllWq0G
+        E2iQpTepTEwrYknz7AI/H4vjpjwAmy+aJFH8Q8HAD4eOu7H04jLRO4CDXWYFaCnP5/fMZT
+        okbKsALgsr/SaTWu4GYGcDHb6kL/ieA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-557-80DQZwFrPaCwbESbOCvI4Q-1; Fri, 07 Jan 2022 16:54:45 -0500
+X-MC-Unique: 80DQZwFrPaCwbESbOCvI4Q-1
+Received: by mail-ed1-f69.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so5742459edb.4
+        for <bpf@vger.kernel.org>; Fri, 07 Jan 2022 13:54:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6HN4dTXPcZ8eKGhT5FJ+Y5CkYFpTLx4O2n6/0dOuA1o=;
-        b=DzUkAszl7w8kRuubXDZ7McZ4t/7J2oNdLdVbU/FfPwzech08lz6nEpzR3y4C2XHQer
-         cyo2ivGmdRAu9t8TnCSl8NZKLGVVYHFfoH6/Ql2rgQZsn3genUt8BivJRyjUiQIpFj0q
-         mCDPmDOIRmXXQS69Z2r72g6sQkEa1sLZ+t6HqlvIi+GoaLCJIAYBz4epKYRpifNBWhrC
-         8W7hPj1Z6bm1NDV4B8Nvxc2qT7FuiuqcLeQ4g6V38utO+Q9kqmWGLsNbn/DthGZvuHhL
-         gIurLvUdGyrkajfh/ElWe/PrVZp52dfiWv3q/5OO4041nxB2tF5Z/lfd1VUrCpjKEhTF
-         pVYA==
-X-Gm-Message-State: AOAM533WrotyYD8BvkXmSth/SlOSGFR/SAEGGZY4qBEVj2HOSm7rqYTa
-        UXcbbBn7aZoTdwuHPjmh/zMksOyJuRLerKI+CBo=
-X-Google-Smtp-Source: ABdhPJz7z+8WsDi96aSjkDk3o2eNLz4gaxG2ENN0+Dced6+NEhL5imD8VFBmBhW0kiKlkI8Tel/bUOiH/Va0AzxyGqw=
-X-Received: by 2002:a02:ce8f:: with SMTP id y15mr26091179jaq.234.1641591012484;
- Fri, 07 Jan 2022 13:30:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20220107183049.311134-1-toke@redhat.com> <20220107183049.311134-2-toke@redhat.com>
- <CAEf4BzadXK+DiiVEgkZNuDA8=QdVZGSqPsAia7g39GTnQqSpQg@mail.gmail.com> <87v8yv8cl9.fsf@toke.dk>
-In-Reply-To: <87v8yv8cl9.fsf@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 7 Jan 2022 13:30:01 -0800
-Message-ID: <CAEf4BzaqLAX6gwU=zY=gWeBFiTE6fWmuzFoP4yOnMqC+tjafGg@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/2] bpf/selftests: Add check for updating XDP
- bpf_link with wrong program type
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=j+vG9Qa9OkGa6HWCa2Inpz3+8aGl216Qd1qEl2tq6fs=;
+        b=dnKFzdAovZvC2t1aBT07K7cPc6nvLsn+RqToWtymcTg80Igz0YnXCcbksep38vaGXv
+         lAiWitn+NAGT11Y3vYW2QHZaqZk8W62Vd2EoN0tW0Wh4arAFHLSHEgojt2RwnxUwb22C
+         mrgYdiQ+Btu0xNQqfXHdLFmNN+/6Z2hVWVee1lF97ScDUDP2EIP1a7goJH2xOXoqsJAo
+         3earmZbBsJawceQ4ctCYieqkjLPfVNi5931gSpu3DP8ojxOH5M9rsvN/tYfhxhMEPQep
+         6EhHr9w6oRlmCFcu9DuhbBLKaHmjzVL9QjAClM4FMOxy9c+VFKj5Xs3/euaPiG1kd2YK
+         Yh6Q==
+X-Gm-Message-State: AOAM530/tXcnvPHfedP9Uka70fNRrguh9LIMnvUTEDwritvAABt+Iuct
+        fF+WfKNE//90IVU6D1QomNHqLuyN/Yh+3db8YGTCIE1ubNWIStB/cawixHnx+ozy6fZbEKoc3Lu
+        QKDWl2FMlsssv
+X-Received: by 2002:a17:907:d29:: with SMTP id gn41mr53650754ejc.124.1641592483864;
+        Fri, 07 Jan 2022 13:54:43 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy40LQrWwZFXRylXH/1vsdIoGMX06eJwTDefuArTsBOPiSVY2fwcREoSGAW4tVQUZG1f2FVzA==
+X-Received: by 2002:a17:907:d29:: with SMTP id gn41mr53650733ejc.124.1641592483510;
+        Fri, 07 Jan 2022 13:54:43 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id ho14sm1726455ejc.73.2022.01.07.13.54.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 13:54:42 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 2F50A181F2E; Fri,  7 Jan 2022 22:54:42 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next v7 2/3] selftests/bpf: Move open_netns() and close_netns() into network_helpers.c
+Date:   Fri,  7 Jan 2022 22:54:37 +0100
+Message-Id: <20220107215438.321922-3-toke@redhat.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220107215438.321922-1-toke@redhat.com>
+References: <20220107215438.321922-1-toke@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 1:23 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
-t.com> wrote:
->
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
-> > On Fri, Jan 7, 2022 at 10:31 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
-redhat.com> wrote:
-> >>
-> >> Add a check to the xdp_link selftest that the kernel rejects replacing=
- an
-> >> XDP program with a different program type on link update. Convert the
-> >> selftest to use the preferred ASSERT_* macros while we're at it.
-> >>
-> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >> ---
-> >>  .../selftests/bpf/prog_tests/xdp_link.c       | 62 +++++++++---------=
+These will also be used by the xdp_do_redirect test being added in the next
+commit.
+
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ tools/testing/selftests/bpf/network_helpers.c | 86 ++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  9 ++
+ .../selftests/bpf/prog_tests/tc_redirect.c    | 87 -------------------
+ 3 files changed, 95 insertions(+), 87 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 6db1af8fdee7..2bb1f9b3841d 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -1,18 +1,25 @@
+ // SPDX-License-Identifier: GPL-2.0-only
++#define _GNU_SOURCE
++
+ #include <errno.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <sched.h>
+ 
+ #include <arpa/inet.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
+ 
+ #include <linux/err.h>
+ #include <linux/in.h>
+ #include <linux/in6.h>
++#include <linux/limits.h>
+ 
+ #include "bpf_util.h"
+ #include "network_helpers.h"
++#include "test_progs.h"
+ 
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+@@ -356,3 +363,82 @@ char *ping_command(int family)
+ 	}
+ 	return "ping";
+ }
++
++struct nstoken {
++	int orig_netns_fd;
++};
++
++static int setns_by_fd(int nsfd)
++{
++	int err;
++
++	err = setns(nsfd, CLONE_NEWNET);
++	close(nsfd);
++
++	if (!ASSERT_OK(err, "setns"))
++		return err;
++
++	/* Switch /sys to the new namespace so that e.g. /sys/class/net
++	 * reflects the devices in the new namespace.
++	 */
++	err = unshare(CLONE_NEWNS);
++	if (!ASSERT_OK(err, "unshare"))
++		return err;
++
++	/* Make our /sys mount private, so the following umount won't
++	 * trigger the global umount in case it's shared.
++	 */
++	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
++	if (!ASSERT_OK(err, "remount private /sys"))
++		return err;
++
++	err = umount2("/sys", MNT_DETACH);
++	if (!ASSERT_OK(err, "umount2 /sys"))
++		return err;
++
++	err = mount("sysfs", "/sys", "sysfs", 0, NULL);
++	if (!ASSERT_OK(err, "mount /sys"))
++		return err;
++
++	err = mount("bpffs", "/sys/fs/bpf", "bpf", 0, NULL);
++	if (!ASSERT_OK(err, "mount /sys/fs/bpf"))
++		return err;
++
++	return 0;
++}
++
++struct nstoken *open_netns(const char *name)
++{
++	int nsfd;
++	char nspath[PATH_MAX];
++	int err;
++	struct nstoken *token;
++
++	token = malloc(sizeof(struct nstoken));
++	if (!ASSERT_OK_PTR(token, "malloc token"))
++		return NULL;
++
++	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
++	if (!ASSERT_GE(token->orig_netns_fd, 0, "open /proc/self/ns/net"))
++		goto fail;
++
++	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name);
++	nsfd = open(nspath, O_RDONLY | O_CLOEXEC);
++	if (!ASSERT_GE(nsfd, 0, "open netns fd"))
++		goto fail;
++
++	err = setns_by_fd(nsfd);
++	if (!ASSERT_OK(err, "setns_by_fd"))
++		goto fail;
++
++	return token;
++fail:
++	free(token);
++	return NULL;
++}
++
++void close_netns(struct nstoken *token)
++{
++	ASSERT_OK(setns_by_fd(token->orig_netns_fd), "setns_by_fd");
++	free(token);
++}
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index d198181a5648..a4b3b2f9877b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -55,4 +55,13 @@ int make_sockaddr(int family, const char *addr_str, __u16 port,
+ 		  struct sockaddr_storage *addr, socklen_t *len);
+ char *ping_command(int family);
+ 
++struct nstoken;
++/**
++ * open_netns() - Switch to specified network namespace by name.
++ *
++ * Returns token with which to restore the original namespace
++ * using close_netns().
++ */
++struct nstoken *open_netns(const char *name);
++void close_netns(struct nstoken *token);
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index c2426df58e17..0a13c7eb40f3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -17,10 +17,8 @@
+ #include <linux/if_tun.h>
+ #include <linux/limits.h>
+ #include <linux/sysctl.h>
+-#include <sched.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+-#include <sys/mount.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+ 
+@@ -84,91 +82,6 @@ static int write_file(const char *path, const char *newval)
+ 	return 0;
+ }
+ 
+-struct nstoken {
+-	int orig_netns_fd;
+-};
 -
-> >>  .../selftests/bpf/progs/test_xdp_link.c       |  6 ++
-> >>  2 files changed, 37 insertions(+), 31 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools=
-/testing/selftests/bpf/prog_tests/xdp_link.c
-> >> index 983ab0b47d30..8660e68383ea 100644
-> >> --- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-> >> @@ -8,46 +8,47 @@
-> >>
-> >>  void serial_test_xdp_link(void)
-> >>  {
-> >> -       __u32 duration =3D 0, id1, id2, id0 =3D 0, prog_fd1, prog_fd2,=
- err;
-> >>         DECLARE_LIBBPF_OPTS(bpf_xdp_set_link_opts, opts, .old_fd =3D -=
-1);
-> >>         struct test_xdp_link *skel1 =3D NULL, *skel2 =3D NULL;
-> >> +       __u32 id1, id2, id0 =3D 0, prog_fd1, prog_fd2;
-> >>         struct bpf_link_info link_info;
-> >>         struct bpf_prog_info prog_info;
-> >>         struct bpf_link *link;
-> >> +       int err;
-> >>         __u32 link_info_len =3D sizeof(link_info);
-> >>         __u32 prog_info_len =3D sizeof(prog_info);
-> >>
-> >>         skel1 =3D test_xdp_link__open_and_load();
-> >> -       if (CHECK(!skel1, "skel_load", "skeleton open and load failed\=
-n"))
-> >> +       if (!ASSERT_OK_PTR(skel1, "skel_load"))
-> >>                 goto cleanup;
-> >>         prog_fd1 =3D bpf_program__fd(skel1->progs.xdp_handler);
-> >>
-> >>         skel2 =3D test_xdp_link__open_and_load();
-> >> -       if (CHECK(!skel2, "skel_load", "skeleton open and load failed\=
-n"))
-> >> +       if (!ASSERT_OK_PTR(skel2, "skel_load"))
-> >>                 goto cleanup;
-> >>         prog_fd2 =3D bpf_program__fd(skel2->progs.xdp_handler);
-> >>
-> >>         memset(&prog_info, 0, sizeof(prog_info));
-> >>         err =3D bpf_obj_get_info_by_fd(prog_fd1, &prog_info, &prog_inf=
-o_len);
-> >> -       if (CHECK(err, "fd_info1", "failed %d\n", -errno))
-> >> +       if (!ASSERT_OK(err, "fd_info1"))
-> >>                 goto cleanup;
-> >>         id1 =3D prog_info.id;
-> >>
-> >>         memset(&prog_info, 0, sizeof(prog_info));
-> >>         err =3D bpf_obj_get_info_by_fd(prog_fd2, &prog_info, &prog_inf=
-o_len);
-> >> -       if (CHECK(err, "fd_info2", "failed %d\n", -errno))
-> >> +       if (!ASSERT_OK(err, "fd_info2"))
-> >>                 goto cleanup;
-> >>         id2 =3D prog_info.id;
-> >>
-> >>         /* set initial prog attachment */
-> >>         err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd1, XDP_FLA=
-GS_REPLACE, &opts);
-> >> -       if (CHECK(err, "fd_attach", "initial prog attach failed: %d\n"=
-, err))
-> >> +       if (!ASSERT_OK(err, "fd_attach"))
-> >>                 goto cleanup;
-> >>
-> >>         /* validate prog ID */
-> >>         err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-> >> -       CHECK(err || id0 !=3D id1, "id1_check",
-> >> -             "loaded prog id %u !=3D id1 %u, err %d", id0, id1, err);
-> >> +       if (!ASSERT_OK(err, "id1_check_err") || !ASSERT_EQ(id0, id1, "=
-id1_check_val"))
-> >> +               goto cleanup;
-> >>
-> >>         /* BPF link is not allowed to replace prog attachment */
-> >>         link =3D bpf_program__attach_xdp(skel1->progs.xdp_handler, IFI=
-NDEX_LO);
-> >> @@ -62,7 +63,7 @@ void serial_test_xdp_link(void)
-> >>         /* detach BPF program */
-> >>         opts.old_fd =3D prog_fd1;
-> >>         err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, XDP_FLAGS_REP=
-LACE, &opts);
-> >> -       if (CHECK(err, "prog_detach", "failed %d\n", err))
-> >> +       if (!ASSERT_OK(err, "prog_detach"))
-> >>                 goto cleanup;
-> >>
-> >>         /* now BPF link should attach successfully */
-> >> @@ -73,24 +74,23 @@ void serial_test_xdp_link(void)
-> >>
-> >>         /* validate prog ID */
-> >>         err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-> >> -       if (CHECK(err || id0 !=3D id1, "id1_check",
-> >> -                 "loaded prog id %u !=3D id1 %u, err %d", id0, id1, e=
-rr))
-> >> +       if (!ASSERT_OK(err, "id1_check_err") || !ASSERT_EQ(id0, id1, "=
-id1_check_val"))
-> >>                 goto cleanup;
-> >>
-> >>         /* BPF prog attach is not allowed to replace BPF link */
-> >>         opts.old_fd =3D prog_fd1;
-> >>         err =3D bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd2, XDP_FLA=
-GS_REPLACE, &opts);
-> >> -       if (CHECK(!err, "prog_attach_fail", "unexpected success\n"))
-> >> +       if (!ASSERT_ERR(err, "prog_attach_fail"))
-> >>                 goto cleanup;
-> >>
-> >>         /* Can't force-update when BPF link is active */
-> >>         err =3D bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd2, 0);
-> >> -       if (CHECK(!err, "prog_update_fail", "unexpected success\n"))
-> >> +       if (!ASSERT_ERR(err, "prog_update_fail"))
-> >>                 goto cleanup;
-> >>
-> >>         /* Can't force-detach when BPF link is active */
-> >>         err =3D bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-> >> -       if (CHECK(!err, "prog_detach_fail", "unexpected success\n"))
-> >> +       if (!ASSERT_ERR(err, "prog_detach_fail"))
-> >>                 goto cleanup;
-> >>
-> >>         /* BPF link is not allowed to replace another BPF link */
-> >> @@ -110,40 +110,40 @@ void serial_test_xdp_link(void)
-> >>         skel2->links.xdp_handler =3D link;
-> >>
-> >>         err =3D bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-> >> -       if (CHECK(err || id0 !=3D id2, "id2_check",
-> >> -                 "loaded prog id %u !=3D id2 %u, err %d", id0, id1, e=
-rr))
-> >> +       if (!ASSERT_OK(err, "id2_check_err") || !ASSERT_EQ(id0, id2, "=
-id2_check_val"))
-> >>                 goto cleanup;
-> >>
-> >>         /* updating program under active BPF link works as expected */
-> >>         err =3D bpf_link__update_program(link, skel1->progs.xdp_handle=
-r);
-> >> -       if (CHECK(err, "link_upd", "failed: %d\n", err))
-> >> +       if (!ASSERT_OK(err, "link_upd"))
-> >>                 goto cleanup;
-> >>
-> >>         memset(&link_info, 0, sizeof(link_info));
-> >>         err =3D bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info,=
- &link_info_len);
-> >> -       if (CHECK(err, "link_info", "failed: %d\n", err))
-> >> +       if (!ASSERT_OK(err, "link_info"))
-> >> +               goto cleanup;
-> >> +
-> >> +       if (!ASSERT_EQ(link_info.type, BPF_LINK_TYPE_XDP, "link_type")=
- ||
-> >> +           !ASSERT_EQ(link_info.prog_id, id1, "link_prog_id") ||
-> >> +           !ASSERT_EQ(link_info.xdp.ifindex, IFINDEX_LO, "link_ifinde=
-x"))
-> >>                 goto cleanup;
-> >>
-> >> -       CHECK(link_info.type !=3D BPF_LINK_TYPE_XDP, "link_type",
-> >> -             "got %u !=3D exp %u\n", link_info.type, BPF_LINK_TYPE_XD=
-P);
-> >> -       CHECK(link_info.prog_id !=3D id1, "link_prog_id",
-> >> -             "got %u !=3D exp %u\n", link_info.prog_id, id1);
-> >> -       CHECK(link_info.xdp.ifindex !=3D IFINDEX_LO, "link_ifindex",
-> >> -             "got %u !=3D exp %u\n", link_info.xdp.ifindex, IFINDEX_L=
-O);
-> >
-> > these checks were done unconditionally (and all of them), even if one
-> > of the fails. Why did you do goto cleanup for those. Similarly below.
-> > It's much cleaner to just have three ASSERT_EQ() statements one after
-> > the other with no if() goto cleanup;
->
-> Because I figured the absence of a 'goto cleanup' was an oversight :)
+-static int setns_by_fd(int nsfd)
+-{
+-	int err;
+-
+-	err = setns(nsfd, CLONE_NEWNET);
+-	close(nsfd);
+-
+-	if (!ASSERT_OK(err, "setns"))
+-		return err;
+-
+-	/* Switch /sys to the new namespace so that e.g. /sys/class/net
+-	 * reflects the devices in the new namespace.
+-	 */
+-	err = unshare(CLONE_NEWNS);
+-	if (!ASSERT_OK(err, "unshare"))
+-		return err;
+-
+-	/* Make our /sys mount private, so the following umount won't
+-	 * trigger the global umount in case it's shared.
+-	 */
+-	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
+-	if (!ASSERT_OK(err, "remount private /sys"))
+-		return err;
+-
+-	err = umount2("/sys", MNT_DETACH);
+-	if (!ASSERT_OK(err, "umount2 /sys"))
+-		return err;
+-
+-	err = mount("sysfs", "/sys", "sysfs", 0, NULL);
+-	if (!ASSERT_OK(err, "mount /sys"))
+-		return err;
+-
+-	err = mount("bpffs", "/sys/fs/bpf", "bpf", 0, NULL);
+-	if (!ASSERT_OK(err, "mount /sys/fs/bpf"))
+-		return err;
+-
+-	return 0;
+-}
+-
+-/**
+- * open_netns() - Switch to specified network namespace by name.
+- *
+- * Returns token with which to restore the original namespace
+- * using close_netns().
+- */
+-static struct nstoken *open_netns(const char *name)
+-{
+-	int nsfd;
+-	char nspath[PATH_MAX];
+-	int err;
+-	struct nstoken *token;
+-
+-	token = malloc(sizeof(struct nstoken));
+-	if (!ASSERT_OK_PTR(token, "malloc token"))
+-		return NULL;
+-
+-	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
+-	if (!ASSERT_GE(token->orig_netns_fd, 0, "open /proc/self/ns/net"))
+-		goto fail;
+-
+-	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name);
+-	nsfd = open(nspath, O_RDONLY | O_CLOEXEC);
+-	if (!ASSERT_GE(nsfd, 0, "open netns fd"))
+-		goto fail;
+-
+-	err = setns_by_fd(nsfd);
+-	if (!ASSERT_OK(err, "setns_by_fd"))
+-		goto fail;
+-
+-	return token;
+-fail:
+-	free(token);
+-	return NULL;
+-}
+-
+-static void close_netns(struct nstoken *token)
+-{
+-	ASSERT_OK(setns_by_fd(token->orig_netns_fd), "setns_by_fd");
+-	free(token);
+-}
+-
+ static int netns_setup_namespaces(const char *verb)
+ {
+ 	const char * const *ns = namespaces;
+-- 
+2.34.1
 
-Nope, completely intentional. There are cases when we need to goto
-(e.g., we got invalid pointer or something, so it will crash if we
-continue testing). But for cases when we have a bunch of different
-properties to validate, I think it's cleaner to validate all of them
-unconditionally with no ifs. If any of them is wrong, the test will be
-marked failed anyways. But we'll also see all invalid values, not just
-the first one, which helps with testing. It's also easier to follow
-sequential code. We do this in multiple tests, it's not a coincidence.
-
->
-> Not sure why you think it's cleaner, but I don't have any strong opinion
-> about it either way, so I can respin get rid of the containing ifs if
-> you prefer...
-
-Yes, please do. It would be also nice if you could split selftest
-change into two: one adding new test step (checking that invalid
-update fails) and another that converts CHECKs to ASSERTs. Thanks!
-
-
->
-> -Toke
->
