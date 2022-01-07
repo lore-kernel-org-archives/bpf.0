@@ -2,116 +2,220 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9C40C433F5
-	for <bpf@archiver.kernel.org>; Fri,  7 Jan 2022 07:36:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE0AC433EF
+	for <bpf@archiver.kernel.org>; Fri,  7 Jan 2022 09:25:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbiAGHg3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jan 2022 02:36:29 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:31004 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235128AbiAGHg2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jan 2022 02:36:28 -0500
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2076cMtQ017958;
-        Fri, 7 Jan 2022 07:36:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=U36coC2K3bgPp6+lil/Brl/6/u+WSFE+iAHncxbWons=;
- b=tUGpS0kfHYxht0KG7Ak6UAx9gTVn046T2aNhAfdgzxj4x34PNcnY5QzWSr1ZHFmh1QiI
- TE6iowSvlrg2PVzdSVXhgTeEII0Bi58NUnxr6EIDJ072p7E/zPjYsfbvjbeHCBfIVvcJ
- KoCT4L1vS461Fv4iIyCQNUBEsY+58AQiU/Nh/NICtgUsPVlGFXXA8S3Tasu7Qjo78YfU
- l+kEuGawp4rsp2wicX+xT3lQXGHI7g/9Hs1cK1F782FS29iIOr5iWvDrYEnYznFs4zEC
- TOHrEfefBfvu/1nlSskPBcGMkgTYabEShfmbsim6BeluAQDr7mhfwWeoa/xQdygNQx18 Sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3de5bqk32k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jan 2022 07:36:08 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2077MNHt004346;
-        Fri, 7 Jan 2022 07:36:08 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3de5bqk31n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jan 2022 07:36:07 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2077YFa4020341;
-        Fri, 7 Jan 2022 07:36:05 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3de5gfuu0e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 07 Jan 2022 07:36:05 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2077a3A638535464
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jan 2022 07:36:03 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0AC16AE056;
-        Fri,  7 Jan 2022 07:36:03 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CB02AE053;
-        Fri,  7 Jan 2022 07:36:02 +0000 (GMT)
-Received: from localhost (unknown [9.43.90.227])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jan 2022 07:36:02 +0000 (GMT)
-Date:   Fri, 07 Jan 2022 13:06:01 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 00/13] powerpc/bpf: Some fixes and updates
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     bpf@vger.kernel.org, Hari Bathini <hbathini@linux.ibm.com>,
-        johan.almbladh@anyfinetworks.com, Jiri Olsa <jolsa@redhat.com>,
-        linuxppc-dev@lists.ozlabs.org, song@kernel.org, ykaliuta@redhat.com
-References: <cover.1641468127.git.naveen.n.rao@linux.vnet.ibm.com>
-        <f4f3437d-084f-0858-8795-76e4a0fa5627@iogearbox.net>
-In-Reply-To: <f4f3437d-084f-0858-8795-76e4a0fa5627@iogearbox.net>
+        id S1346404AbiAGJZZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jan 2022 04:25:25 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:40748 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231910AbiAGJZZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Jan 2022 04:25:25 -0500
+Received: from loongson-pc (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxOMruBthh5m0AAA--.418S2;
+        Fri, 07 Jan 2022 17:25:04 +0800 (CST)
+Date:   Fri, 7 Jan 2022 17:25:02 +0800
+From:   Huang Pei <huangpei@loongson.cn>
+To:     Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        paulburton@kernel.org, kafai@fb.com, songliubraving@fb.com,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        tsbogend@alpha.franken.de, chenhuacai@kernel.org,
+        jiaxun.yang@flygoat.com, yangtiezhu@loongson.cn,
+        tony.ambardar@gmail.com, bpf@vger.kernel.org,
+        linux-mips@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 5/7] mips: bpf: Add JIT workarounds for CPU errata
+Message-ID: <20220107092456.kq6t2fdaf2bq36db@loongson-pc>
+References: <20211005165408.2305108-1-johan.almbladh@anyfinetworks.com>
+ <20211005165408.2305108-6-johan.almbladh@anyfinetworks.com>
 MIME-Version: 1.0
-User-Agent: astroid/v0.16-1-g4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1641540707.ewk8tpqmvl.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JWN2KhdmtEzlXJvEgi-GbCZczd7eVmr9
-X-Proofpoint-ORIG-GUID: _a4BW3tAt9FMOboixZVikopQ3TVDhfvs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-07_02,2022-01-06_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 adultscore=0 phishscore=0
- mlxlogscore=949 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201070053
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211005165408.2305108-6-johan.almbladh@anyfinetworks.com>
+User-Agent: NeoMutt/20180716
+X-CM-TRANSID: AQAAf9DxOMruBthh5m0AAA--.418S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKr18GFW7tFWDGw1kGryfZwb_yoW7Aw15pF
+        yUCwn3Cr9Fqr1DZFyrAF45Xr1Sgr4SqF47Cayak340qr9agFn3KF18KF45XrZ8uryDA34r
+        JrZ0vF98u3s3A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjEoGJ
+        UUUUU==
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Daniel,
+Hi, for Loongson3 errata, we need another sycn for cmpxchg
 
-Daniel Borkmann wrote:
-> Hi Naveen,
->=20
-> On 1/6/22 12:45 PM, Naveen N. Rao wrote:
->> A set of fixes and updates to powerpc BPF JIT:
->> - Patches 1-3 fix issues with the existing powerpc JIT and are tagged
->>    for -stable.
->> - Patch 4 fixes a build issue with bpf selftests on powerpc.
->> - Patches 5-9 handle some corner cases and make some small improvements.
->> - Patches 10-13 optimize how function calls are handled in ppc64.
->>=20
->> Patches 7 and 8 were previously posted, and while patch 7 has no
->> changes, patch 8 has been reworked to handle BPF_EXIT differently.
->=20
-> Is the plan to route these via ppc trees? Fwiw, patch 1 and 4 look generi=
-c
-> and in general good to me, we could also take these two via bpf-next tree
-> given outside of arch/powerpc/? Whichever works best.
+ @@ -414,12 +415,13 @@ static void emit_cmpxchg_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
+  	u8 t1 = MIPS_R_T6;
+  	u8 t2 = MIPS_R_T7;
+  
+ +	LLSC_sync(ctx);
+  	emit(ctx, lld, t1, off, dst);
+  	emit(ctx, bne, t1, r0, 12);
+  	emit(ctx, move, t2, src);      /* Delay slot */
+  	emit(ctx, scd, t2, off, dst);
+ -	emit(ctx, beqz, t2, -20);
+ -	emit(ctx, move, r0, t1);      /* Delay slot */
+ +	emit(ctx, LLSC_beqz, t2, -20 - LLSC_offset);
+ +	emit(ctx, move, r0, t1);       /* Delay slot */
+ +	LLSC_sync(ctx);	
+  
+On Tue, Oct 05, 2021 at 06:54:06PM +0200, Johan Almbladh wrote:
+> This patch adds workarounds for the following CPU errata to the MIPS
+> eBPF JIT, if enabled in the kernel configuration.
+> 
+>   - R10000 ll/sc weak ordering
+>   - Loongson-3 ll/sc weak ordering
+>   - Loongson-2F jump hang
+> 
+> The Loongson-2F nop errata is implemented in uasm, which the JIT uses,
+> so no additional mitigations are needed for that.
+> 
+> Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+> ---
+>  arch/mips/net/bpf_jit_comp.c   |  6 ++++--
+>  arch/mips/net/bpf_jit_comp.h   | 26 +++++++++++++++++++++++++-
+>  arch/mips/net/bpf_jit_comp64.c | 10 ++++++----
+>  3 files changed, 35 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/mips/net/bpf_jit_comp.c b/arch/mips/net/bpf_jit_comp.c
+> index 7eb95fc57710..b17130d510d4 100644
+> --- a/arch/mips/net/bpf_jit_comp.c
+> +++ b/arch/mips/net/bpf_jit_comp.c
+> @@ -404,6 +404,7 @@ void emit_alu_r(struct jit_context *ctx, u8 dst, u8 src, u8 op)
+>  /* Atomic read-modify-write (32-bit) */
+>  void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+>  {
+> +	LLSC_sync(ctx);
+>  	emit(ctx, ll, MIPS_R_T9, off, dst);
+>  	switch (code) {
+>  	case BPF_ADD:
+> @@ -427,7 +428,7 @@ void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+>  		break;
+>  	}
+>  	emit(ctx, sc, MIPS_R_T8, off, dst);
+> -	emit(ctx, beqz, MIPS_R_T8, -16);
+> +	emit(ctx, LLSC_beqz, MIPS_R_T8, -16 - LLSC_offset);
+>  	emit(ctx, nop); /* Delay slot */
+>  
+>  	if (code & BPF_FETCH) {
+> @@ -439,11 +440,12 @@ void emit_atomic_r(struct jit_context *ctx, u8 dst, u8 src, s16 off, u8 code)
+>  /* Atomic compare-and-exchange (32-bit) */
+>  void emit_cmpxchg_r(struct jit_context *ctx, u8 dst, u8 src, u8 res, s16 off)
+>  {
+> +	LLSC_sync(ctx);
+>  	emit(ctx, ll, MIPS_R_T9, off, dst);
+>  	emit(ctx, bne, MIPS_R_T9, res, 12);
+>  	emit(ctx, move, MIPS_R_T8, src);     /* Delay slot */
+>  	emit(ctx, sc, MIPS_R_T8, off, dst);
+> -	emit(ctx, beqz, MIPS_R_T8, -20);
+> +	emit(ctx, LLSC_beqz, MIPS_R_T8, -20 - LLSC_offset);
+>  	emit(ctx, move, res, MIPS_R_T9);     /* Delay slot */
+>  	clobber_reg(ctx, res);
+>  }
+> diff --git a/arch/mips/net/bpf_jit_comp.h b/arch/mips/net/bpf_jit_comp.h
+> index 44787cf377dd..6f3a7b07294b 100644
+> --- a/arch/mips/net/bpf_jit_comp.h
+> +++ b/arch/mips/net/bpf_jit_comp.h
+> @@ -87,7 +87,7 @@ struct jit_context {
+>  };
+>  
+>  /* Emit the instruction if the JIT memory space has been allocated */
+> -#define emit(ctx, func, ...)					\
+> +#define __emit(ctx, func, ...)					\
+>  do {								\
+>  	if ((ctx)->target != NULL) {				\
+>  		u32 *p = &(ctx)->target[ctx->jit_index];	\
+> @@ -95,6 +95,30 @@ do {								\
+>  	}							\
+>  	(ctx)->jit_index++;					\
+>  } while (0)
+> +#define emit(...) __emit(__VA_ARGS__)
+> +
+> +/* Workaround for R10000 ll/sc errata */
+> +#ifdef CONFIG_WAR_R10000
+> +#define LLSC_beqz	beqzl
+> +#else
+> +#define LLSC_beqz	beqz
+> +#endif
+> +
+> +/* Workaround for Loongson-3 ll/sc errata */
+> +#ifdef CONFIG_CPU_LOONGSON3_WORKAROUNDS
+> +#define LLSC_sync(ctx)	emit(ctx, sync, 0)
+> +#define LLSC_offset	4
+> +#else
+> +#define LLSC_sync(ctx)
+> +#define LLSC_offset	0
+> +#endif
+> +
+> +/* Workaround for Loongson-2F jump errata */
+> +#ifdef CONFIG_CPU_JUMP_WORKAROUNDS
+> +#define JALR_MASK	0xffffffffcfffffffULL
+> +#else
+> +#define JALR_MASK	(~0ULL)
+> +#endif
+>  
+>  /*
+>   * Mark a BPF register as accessed, it needs to be
+> diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
+> index ca49d3ef7ff4..1f1f7b87f213 100644
+> --- a/arch/mips/net/bpf_jit_comp64.c
+> +++ b/arch/mips/net/bpf_jit_comp64.c
+> @@ -375,6 +375,7 @@ static void emit_atomic_r64(struct jit_context *ctx,
+>  	u8 t1 = MIPS_R_T6;
+>  	u8 t2 = MIPS_R_T7;
+>  
+> +	LLSC_sync(ctx);
+>  	emit(ctx, lld, t1, off, dst);
+>  	switch (code) {
+>  	case BPF_ADD:
+> @@ -398,7 +399,7 @@ static void emit_atomic_r64(struct jit_context *ctx,
+>  		break;
+>  	}
+>  	emit(ctx, scd, t2, off, dst);
+> -	emit(ctx, beqz, t2, -16);
+> +	emit(ctx, LLSC_beqz, t2, -16 - LLSC_offset);
+>  	emit(ctx, nop); /* Delay slot */
+>  
+>  	if (code & BPF_FETCH) {
+> @@ -414,12 +415,13 @@ static void emit_cmpxchg_r64(struct jit_context *ctx, u8 dst, u8 src, s16 off)
+>  	u8 t1 = MIPS_R_T6;
+>  	u8 t2 = MIPS_R_T7;
+>  
+> +	LLSC_sync(ctx);
+>  	emit(ctx, lld, t1, off, dst);
+>  	emit(ctx, bne, t1, r0, 12);
+>  	emit(ctx, move, t2, src);      /* Delay slot */
+>  	emit(ctx, scd, t2, off, dst);
+> -	emit(ctx, beqz, t2, -20);
+> -	emit(ctx, move, r0, t1);      /* Delay slot */
+> +	emit(ctx, LLSC_beqz, t2, -20 - LLSC_offset);
+> +	emit(ctx, move, r0, t1);       /* Delay slot */
+>  
+>  	clobber_reg(ctx, r0);
+>  }
+> @@ -443,7 +445,7 @@ static int emit_call(struct jit_context *ctx, const struct bpf_insn *insn)
+>  	push_regs(ctx, ctx->clobbered & JIT_CALLER_REGS, 0, 0);
+>  
+>  	/* Emit function call */
+> -	emit_mov_i64(ctx, tmp, addr);
+> +	emit_mov_i64(ctx, tmp, addr & JALR_MASK);
+>  	emit(ctx, jalr, MIPS_R_RA, tmp);
+>  	emit(ctx, nop); /* Delay slot */
+>  
+> -- 
+> 2.30.2
+> 
 
-Yes, I would like to route this through the powerpc tree. Though patches=20
-1 and 4 are generic, they primarily affect powerpc and I do not see=20
-conflicting changes in bpf-next. Request you to please ack those patches=20
-so that Michael can take it through the powerpc tree.
-
-
-Thanks!
-- Naveen
