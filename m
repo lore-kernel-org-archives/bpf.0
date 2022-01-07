@@ -2,138 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A091C433FE
-	for <bpf@archiver.kernel.org>; Fri,  7 Jan 2022 18:10:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61082C433EF
+	for <bpf@archiver.kernel.org>; Fri,  7 Jan 2022 18:31:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240699AbiAGSKl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Jan 2022 13:10:41 -0500
-Received: from mout.perfora.net ([74.208.4.197]:56811 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240523AbiAGSKk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Jan 2022 13:10:40 -0500
-Received: from localhost.localdomain ([194.191.235.54]) by mrelay.perfora.net
- (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id 1MY6bJ-1ms0S53enN-00YRgs;
- Fri, 07 Jan 2022 19:03:45 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        id S1348765AbiAGSbK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Jan 2022 13:31:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22108 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241055AbiAGSbI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 7 Jan 2022 13:31:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641580267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=CnnFuMGhB5JyFl3Jry+SDDf7d1TYi2ACAz22LLK65xE=;
+        b=bCQE51Uyh7x/eEChs9Um11b5i7zbeU19NlXZF8LNz1CW6D6NB0UAJNQVJRKCa8d84CEAUg
+        f7Mujx+fytc9tiLKx+kTpIM6tBSJMsJoFF1+ayX+jke0r1VCeh+U5y6OpH6FsM16AXPda+
+        dPiUUeNEoreSk+dQIkoFE8axOddR2vs=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-sC02aEXYMfCh2bl_8s0LJg-1; Fri, 07 Jan 2022 13:31:06 -0500
+X-MC-Unique: sC02aEXYMfCh2bl_8s0LJg-1
+Received: by mail-ed1-f71.google.com with SMTP id h11-20020a05640250cb00b003fa024f87c2so5365962edb.4
+        for <bpf@vger.kernel.org>; Fri, 07 Jan 2022 10:31:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CnnFuMGhB5JyFl3Jry+SDDf7d1TYi2ACAz22LLK65xE=;
+        b=tDMyIv/fSxFhAOPGxMFk/weKjb0HPii8ThqPzPEc5HPQEpXH4TcamcUAcMdcF4afve
+         ZsMyu5gRWN588hn3uKfhcvhyWRI80vNlfk6QJKTavgkBgn61MOsGOmsEFAcuc5a+1NSx
+         lwiecyGH6vK2M1vj3ECmFXfvKYFE/A0RZsrniZ//qw+8LSf9OtzsRZO3SZyqALzY+Gqv
+         ccZ1eokKiMpK0KBRNQ68xHcxsLgIJsfaFeXzWPmRowE82xDu5kC8rwkdXh5lv0F7Enag
+         ZYie1t5JjuIgw7gjMrdRdoNgeWDQxQ0ks7w/RVU1nwpqMVuAxvAUiY25t6aO6gCKfGoq
+         SAJA==
+X-Gm-Message-State: AOAM533SlOvKbXYnFjvnQEBnPmV+zwgyJ5MRWP33WGn4nIslL2GfrT9T
+        yWrym5CA3etFXTMmTZOeqalsO+P7nA+HLIqyBZwb48KyH7mqH0nlGJBs4Tk97wifAeW3rRhQdsS
+        lQRoiaHOnKxFL
+X-Received: by 2002:a05:6402:28e:: with SMTP id l14mr2378929edv.396.1641580265228;
+        Fri, 07 Jan 2022 10:31:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxOjDvG04fHiqW1oMWTPMiyPLrLIZvdP2d1EgvGYDfE3UckOVJN/UxvqyJ1rQW3vEZHpke8HQ==
+X-Received: by 2002:a05:6402:28e:: with SMTP id l14mr2378909edv.396.1641580264843;
+        Fri, 07 Jan 2022 10:31:04 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 1sm1614361ejo.192.2022.01.07.10.31.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jan 2022 10:31:04 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 617CF181F2A; Fri,  7 Jan 2022 19:31:03 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lucas Stach <dev@lynxeye.de>, Martin KaFai Lau <kafai@fb.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        =?UTF-8?q?Oliver=20St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v1 00/14] arm64: prepare and add verdin imx8m mini support
-Date:   Fri,  7 Jan 2022 19:03:00 +0100
-Message-Id: <20220107180314.1816515-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.33.1
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf 1/2] xdp: check prog type before updating BPF link
+Date:   Fri,  7 Jan 2022 19:30:48 +0100
+Message-Id: <20220107183049.311134-1-toke@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:lQAYnaUngUYQ76uILRN84VPgMhmWpzCUfkc68N9mfHP4fOWz9oG
- srl/W09VoexdO/nFLY0mzed7FqBOJPadFZqt/OIN3041PKAPxqnCQJNEY1DKDFtHBKL2YwP
- kp+6wSJMkeNyKxfobFhY3qke5JUzQ16a2+qm2po2aK/ANj/EBn5SwC4WCCXIrCAj/8BFK10
- 5fNu6Iv0Vj8xvzCnz0Kyg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0IwuyNRbEsc=:Jy2tkBEW4PLk6bjhWL7qhS
- 9wUDXKFgD5OpK5Imkis0alQcUy5nOdvowQiQSnPUtnxHZYF1uo2ZquuDUZ2XIaVXxX2AxpiTc
- 0Qb+Jw/TXqGEeCMbKH+pLnq+YdwZAWn9EzeO9SzuNjSaPeg8KvJX2UjyUmy0oURVm6eVrb3rq
- UH32x9+M7FlI8/EnWk3uDYhd6Ks/xwluh2OCu287JTF79/eyTucKwc9tDZHabWnO5OKliC+/+
- QZP8TkxFYoIOvW7jBHXdHqDybsFoVYjz9RKt+qj++FoJLsQ6LDK6eAgUFzA4CDbwqw44NzwiP
- HWbmtyLBmOca0s/GAWGpLVi6KUxh26A3cNhpgw7rPdkdYvTaP/hj3rjHhCvhX3YJqwT/BYFlj
- ECyqiEpq8CZuBTW99AVBpc/i4xfChyoxWCECBwhRqL+LaiAZ2a9/PJ+AIqv5372JtfIH703za
- dj5QsgSVQnbmMcV3X3wXIMbyE5ZPBHlVfWM+JjAiau0qYFsCsU+DgNGeX2wAd5yIAEtSWwfrB
- uYT5ut4kcg0GBEhfLdPy1yyDJK1/yUSWzUt20nPVWVwlYFtc+hYlXSrrANCpsk+hGnbGX2Ma9
- iTsiNkqis9Ixm3orId5eQSDMDpCmxv1c9tpy0ks7qf+OYR4uPtHO7rPB5Y0lQmu81ga6p4Ayf
- uEVuh2ovTteBvQONK/CBzpp9CQTD/ajZS9m6emAXOEK3BqEJsVpsHftu4Mf71T4aBQoE=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+The bpf_xdp_link_update() function didn't check the program type before
+updating the program, which made it possible to install any program type as
+an XDP program, which is obviously not good. Syzbot managed to trigger this
+by swapping in an LWT program on the XDP hook which would crash in a helper
+call.
 
+Fix this by adding a check and bailing out if the types don't match.
 
-Fix strange hex notation and gpio-hog example, rebuild default
-configuration, enable various relevant configuration options mainly to
-be built as modules, add toradex,verdin-imx8mm et al. to dt-bindings and
-finally add initial support for verdin imx8m mini.
+Fixes: 026a4c28e1db ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
+Reported-by: syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ net/core/dev.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-Marcel Ziswiler (14):
-  arm64: dts: imx8mm: fix strange hex notation
-  dt-bindings: gpio: fix gpio-hog example
-  arm64: defconfig: rebuild default configuration
-  arm64: defconfig: enable bpf/cgroup firewalling
-  arm64: defconfig: build imx-sdma as a module
-  arm64: defconfig: build r8169 as a module
-  arm64: defconfig: build ads1015 adc driver as a module
-  arm64: defconfig: build lm75 temperature sensor driver as a module
-  arm64: defconfig: build mcp251xfd can as a module
-  arm64: defconfig: build sdio mwifiex as a module
-  arm64: defconfig: build nxp bluetooth as modules
-  arm64: defconfig: build nuvoton nau8822 as module
-  dt-bindings: arm: fsl: add toradex,verdin-imx8mm et al.
-  arm64: dts: freescale: add initial support for verdin imx8m mini
-
- .../devicetree/bindings/arm/fsl.yaml          |   21 +
- .../devicetree/bindings/gpio/gpio.txt         |    2 +-
- arch/arm64/boot/dts/freescale/Makefile        |    4 +
- .../arm64/boot/dts/freescale/imx8mm-pinfunc.h |    6 +-
- .../dts/freescale/imx8mm-verdin-dahlia.dtsi   |  143 ++
- .../boot/dts/freescale/imx8mm-verdin-dev.dtsi |   67 +
- .../imx8mm-verdin-nonwifi-dahlia.dts          |   18 +
- .../freescale/imx8mm-verdin-nonwifi-dev.dts   |   18 +
- .../dts/freescale/imx8mm-verdin-nonwifi.dtsi  |   75 +
- .../freescale/imx8mm-verdin-wifi-dahlia.dts   |   18 +
- .../dts/freescale/imx8mm-verdin-wifi-dev.dts  |   18 +
- .../dts/freescale/imx8mm-verdin-wifi.dtsi     |   95 ++
- .../boot/dts/freescale/imx8mm-verdin.dtsi     | 1277 +++++++++++++++++
- arch/arm64/configs/defconfig                  |  148 +-
- 14 files changed, 1820 insertions(+), 90 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c4708e2487fb..2078d04c6482 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -9656,6 +9656,12 @@ static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *new_prog,
+ 		goto out_unlock;
+ 	}
+ 	old_prog = link->prog;
++	if (old_prog->type != new_prog->type ||
++	    old_prog->expected_attach_type != new_prog->expected_attach_type) {
++		err = -EINVAL;
++		goto out_unlock;
++	}
++
+ 	if (old_prog == new_prog) {
+ 		/* no-op, don't disturb drivers */
+ 		bpf_prog_put(new_prog);
 -- 
-2.33.1
+2.34.1
 
