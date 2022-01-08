@@ -2,56 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C2EC433F5
-	for <bpf@archiver.kernel.org>; Sat,  8 Jan 2022 19:37:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF115C433F5
+	for <bpf@archiver.kernel.org>; Sat,  8 Jan 2022 20:29:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbiAHThS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 8 Jan 2022 14:37:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbiAHThS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 Jan 2022 14:37:18 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02302C06173F;
-        Sat,  8 Jan 2022 11:37:18 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id pf13so731799pjb.0;
-        Sat, 08 Jan 2022 11:37:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nxb5DyF/d3hj7nuFxr4i+Ddo95augfcOCVYd8xEXoGw=;
-        b=kH1QFSklddjDlMxYFRdfYlENHuD2dQuuhYnte0ClAwcCbV2/+t+qQJYGuu+BMqOs/7
-         0xrb/Ilc3PESpwn4CzoHa3qAXHVZpD+VMyXx6UBuy4CPKalqcm5aKeEMMEHbabXrm+Fn
-         9ap39RLdjThme+4Vl2NEqo8vUO+X4yYwMrxshEqnMQJdn8upZu9YRC8y9igPkVWSByrE
-         ZYMS+IupDGCxhjZSJCf8hiLiIk3mMbbBCDrIBSVxbHK1jIwiHGwgXSdwEt87HI3mFUJO
-         HuTgHla36wFxUXhDI5AOVkqYB1ALBx59aH7ZDTWlnMlLX47+J36dbEViPJKpRM2xo4ZM
-         6m9Q==
+        id S232805AbiAHU3y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 8 Jan 2022 15:29:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:55416 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229822AbiAHU3x (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 8 Jan 2022 15:29:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641673793;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dh/KH9uD8FIprLuXVq8Q8sWK983oPsbIjBghc2ryCqg=;
+        b=hCyLv17oTkLyU+N/NdffysERau1YhH11UPtL3diti4jU6BZtKhnxbFZzRI1diauaZJwvFG
+        LmDip2HC8u8iTvhC4CBzk6sDToLKy0QjtifXOAzS3+k0upUnbRJt617BXKFcISb9sorJi9
+        dPY2JNadXzDKH7H0hnjKH552Ow9FiFc=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-617-fS9GvxqaPO2JJnF7aL977w-1; Sat, 08 Jan 2022 15:29:51 -0500
+X-MC-Unique: fS9GvxqaPO2JJnF7aL977w-1
+Received: by mail-ed1-f69.google.com with SMTP id h6-20020a056402280600b003f9967993aeso7229719ede.10
+        for <bpf@vger.kernel.org>; Sat, 08 Jan 2022 12:29:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nxb5DyF/d3hj7nuFxr4i+Ddo95augfcOCVYd8xEXoGw=;
-        b=jm5woghGqqnGY0+YdU0lRmRGIAGqg+WPn1dHN8Yxq0VAMN1I38gxO2RHrtv8UFb1OC
-         sTe7T+AVNgz6GPayK2GjaJ7/T0i0fbFLQnng76bULZQMBlaG4OLfoJg1ZyAtPDTkoINL
-         5LxWuF3m/HH/luIJlRyyg6wyVsF0ZiFOKVR8UAwAjSUC8HY1DZ0ib/R67V2xwxgj5M9j
-         Gqrby6JpIEh5ZL82FlsLblOzcm/pZRRPrl6HupQg7KSjS6iXE5Pl3h6T4pOpACMViueX
-         C2pjPHVzfLHIfQhrU47HvfFX1o/fL4EJqFkh01lEsUVhU00fdpC7PQzI6i9yj6WwLR3/
-         +aAQ==
-X-Gm-Message-State: AOAM532TjtEwxpzJ23MdLI7JH+3YwpOBn2Xlhfri8VKKr32gV5U6skNb
-        dF/dC+TcWl6X187BQDYXWeAP1hlWWzV9lLr6NJE=
-X-Google-Smtp-Source: ABdhPJy4dz0+Dr7pib1OQSP8CSCxjw1qXEcwn7w/0CFU2j2hOQsuZZMr/TKiZZ59IN0ucEMgC3V5FV0BxYvmvar+KFk=
-X-Received: by 2002:a17:902:860c:b0:149:1017:25f0 with SMTP id
- f12-20020a170902860c00b00149101725f0mr67896704plo.116.1641670637470; Sat, 08
- Jan 2022 11:37:17 -0800 (PST)
-MIME-Version: 1.0
-References: <20220107221115.326171-1-toke@redhat.com>
-In-Reply-To: <20220107221115.326171-1-toke@redhat.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 8 Jan 2022 11:37:06 -0800
-Message-ID: <CAADnVQLBDwUEcf63Jd2ohe0k5xKAcFaUmPL6tC-h937pSTzcCg@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/3] xdp: check prog type before updating BPF link
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Dh/KH9uD8FIprLuXVq8Q8sWK983oPsbIjBghc2ryCqg=;
+        b=ngBty6NR30gKy307vVsk44jdAEydbxRktx2SaVvmCV8c/Vgw4QPcbDjtK6lDiV0PqI
+         2wAe1RdnPH5xwt2DOTyrgekxR0JuWDNg+kulwBwNGUKzo/rzWqgIZoOD2c2S50C9Mwbl
+         9Q1ukMK9EYvCofxVfFQmc1sRw29bmFkftZ0l0eePr9hDEdCUdel2xQKhGDLAsFugijxp
+         kLZjHzDzAN5frkE18cSbLvB4TFbZf2MFc1gqDxtIEoKtTQ2Vm3qtCUf6axZyJ3nAh7Wx
+         vfbsXkFlHh4T7fTHHaRUPne/y6AYoqOTQ0Y1rWdYE4sEiIdj4qC53dA3Im44F19XCTMM
+         YYcg==
+X-Gm-Message-State: AOAM5332A4yNp7t0EuRzOvDuFm/gLJoiwPKgEmWZ+p4+ufw7+3FeeP+E
+        eaLtR22RL8P/vmHWUlX5bbiU/TP/4qX8m394oGeE3IFuq5GGFUHSixyUV3wI/VHDdMg3VPHx/+e
+        3K8Alt4822qvR
+X-Received: by 2002:a17:906:f1c1:: with SMTP id gx1mr55930398ejb.554.1641673790475;
+        Sat, 08 Jan 2022 12:29:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwTr5VGtDdGiudJAk1ztySeNuhP9qd+XBHQLnY8va9CaPUamGD8dX8c6oZmwI31EEz+qeH68Q==
+X-Received: by 2002:a17:906:f1c1:: with SMTP id gx1mr55930389ejb.554.1641673790115;
+        Sat, 08 Jan 2022 12:29:50 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id g9sm1134615edb.53.2022.01.08.12.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Jan 2022 12:29:49 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id C0956181F2A; Sat,  8 Jan 2022 21:29:48 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         "David S. Miller" <davem@davemloft.net>,
@@ -61,36 +64,83 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        syzbot <syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
         Network Development <netdev@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next v7 3/3] selftests/bpf: Add selftest for
+ XDP_REDIRECT in bpf_prog_run()
+In-Reply-To: <CAADnVQ+oqGuvm1FCnXUrfPcvNFF5iwK-FeajLO0PpnifNNZ05g@mail.gmail.com>
+References: <20220107215438.321922-1-toke@redhat.com>
+ <20220107215438.321922-4-toke@redhat.com>
+ <CAADnVQ+oqGuvm1FCnXUrfPcvNFF5iwK-FeajLO0PpnifNNZ05g@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Sat, 08 Jan 2022 21:29:48 +0100
+Message-ID: <87h7ae7yyr.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 7, 2022 at 2:11 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
-t.com> wrote:
->
-> The bpf_xdp_link_update() function didn't check the program type before
-> updating the program, which made it possible to install any program type =
-as
-> an XDP program, which is obviously not good. Syzbot managed to trigger th=
-is
-> by swapping in an LWT program on the XDP hook which would crash in a help=
-er
-> call.
->
-> Fix this by adding a check and bailing out if the types don't match.
->
-> Fixes: 026a4c28e1db ("bpf, xdp: Implement LINK_UPDATE for BPF XDP link")
-> Reported-by: syzbot+983941aa85af6ded1fd9@syzkaller.appspotmail.com
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Thanks a lot for the quick fix!
-The merge window is about to begin.
-We will land it as soon as possible when bpf tree will be ready
-to accept fixes.
+> On Fri, Jan 7, 2022 at 1:54 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>> +
+>> +#define NUM_PKTS 1000000
+>
+> It takes 7 seconds on my kvm with kasan and lockdep
+> and will take much longer in BPF CI.
+> So it needs to be lower otherwise CI will struggle.
+
+OK, I'll lower it.
+
+>> +       /* The XDP program we run with bpf_prog_run() will cycle through=
+ all
+>> +        * three xmit (PASS/TX/REDIRECT) return codes starting from abov=
+e, and
+>> +        * ending up with PASS, so we should end up with two packets on =
+the dst
+>> +        * iface and NUM_PKTS-2 in the TC hook. We match the packets on =
+the UDP
+>> +        * payload.
+>> +        */
+>
+> could you keep cycling through all return codes?
+> That should make the test stronger.
+
+Can do.
+
+>> +
+>> +       /* We enable forwarding in the test namespace because that will =
+cause
+>> +        * the packets that go through the kernel stack (with XDP_PASS) =
+to be
+>> +        * forwarded back out the same interface (because of the packet =
+dst
+>> +        * combined with the interface addresses). When this happens, the
+>> +        * regular forwarding path will end up going through the same
+>> +        * veth_xdp_xmit() call as the XDP_REDIRECT code, which can caus=
+e a
+>> +        * deadlock if it happens on the same CPU. There's a local_bh_di=
+sable()
+>> +        * in the test_run code to prevent this, but an earlier version =
+of the
+>> +        * code didn't have this, so we keep the test behaviour to make =
+sure the
+>> +        * bug doesn't resurface.
+>> +        */
+>> +       SYS("sysctl -qw net.ipv6.conf.all.forwarding=3D1");
+>
+> Does it mean that without forwarding=3D1 the kernel will dead lock ?!
+
+No, the deadlock is referring to the lockdep warning you posted. Which I
+fixed by moving around the local_bh_disable(); that comment is just
+meant to explain why the forwarding sysctl is set (so that the code path
+is still exercised even though it's no longer faulty). Reading it again
+now I can see that this was not entirely clear, will try to improve the
+wording :)
+
+-Toke
+
