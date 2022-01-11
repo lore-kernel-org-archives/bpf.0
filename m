@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 662C0C433EF
-	for <bpf@archiver.kernel.org>; Tue, 11 Jan 2022 18:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35720C4321E
+	for <bpf@archiver.kernel.org>; Tue, 11 Jan 2022 18:07:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350125AbiAKSG6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 11 Jan 2022 13:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
+        id S1345293AbiAKSHI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 11 Jan 2022 13:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350387AbiAKSGB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 11 Jan 2022 13:06:01 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3B4C034005;
-        Tue, 11 Jan 2022 10:05:18 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id q14so18434045plx.4;
-        Tue, 11 Jan 2022 10:05:18 -0800 (PST)
+        with ESMTP id S1345133AbiAKSGb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 11 Jan 2022 13:06:31 -0500
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30626C03400B;
+        Tue, 11 Jan 2022 10:05:24 -0800 (PST)
+Received: by mail-pj1-x1043.google.com with SMTP id 59-20020a17090a09c100b001b34a13745eso6712390pjo.5;
+        Tue, 11 Jan 2022 10:05:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yPVZrGJSFLRS6MIPiaFyGFav5aw9HfAuGJBQzAxNJDU=;
-        b=JJBBKtcNCdnhlXBMnR+bvpnszX6d76upuZPiuGSYDEA3KUrfwiHrXhpUS+C9Ap6iN/
-         EsCZDKn+V5VM1L7PDdT0JqFHlFNltxlusu2U68wQnc6UURPW3FVr3ebKTVqdK/pE28Q4
-         fwQpUoRw024JLQRliC/nyE4mGVhzvQ6gGz/X+Cgy+sqkbA5AloqtWhQcgHMLcj7o6ctD
-         Oxk9VvlfjvflDn6USRhkRrW7ZCaLrP09QIR4Ox7UnExAJTSaJAoUkNPehggewH/4P3Sv
-         Qob9ScMr4ulIi5JafAzniUlFgQVpWQ0bYjyKck5C4FGbsZZo/baljd2ku27oIRW0xvAj
-         wDmQ==
+        bh=H3yfHHm/dC6wV51xeH/AQZWfLUZAIsM4sDRbBI0TaOw=;
+        b=MoMIXxaF6FNiuu8t7bLdrExLb0aHuj9Qr1vgO+QgEvt3JL5zmLqZbvmb5wbY4RbmMr
+         P3V8iUFZOsp76Ng5KI7+7CBTwRVp6FHzzDBEflIy2pYwdzeXqvAifzTuhKmUzoVqedYo
+         v/iI2Uk9J5vH7gh7v2764t2yAg9bzaP8K/yVDlg0yPtfiwmQM1S+5JmueeHhVK5UqLCx
+         pSOqKrGDDW52VTsTrILNuKzlPaiQvyZgmDAN+ZL2re/mUDet74D6X8P740N8txQVLmVW
+         Lf+XnaVyZ8idW69nt+X1+mPUuBSHKQDH0JYxws/1ZY8iXUBWXiO/gxzVxigP2jV2k/bm
+         kxfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yPVZrGJSFLRS6MIPiaFyGFav5aw9HfAuGJBQzAxNJDU=;
-        b=2HcH1HHNFbs+gogYjPE/CYHs4fX61wADEr+G+yfN4fMbxTDrSF4YzjgBY8983fufVI
-         vhlYkvP8yW/14v4Ql1ec5/lDKW0drZz+K2+Zep1WKd0/438btNS00ISZ3hg5qz+X0On1
-         Lqrtqjt4ErJ0uSTkxA7t0Svdzch/pDJaHsFAnQ7V/A1QRN+fnBwVRlj/9etvR6xzGtIO
-         UXoUo7fqotNz6fFcIIKdKZkdLcdqANQQB3UL8YG+t1Xb4kw2z0zz0Prx6zs6CHZrqcfM
-         4YuweOjg7zxPWCS77SkQXGPM+B76kC/WdF9xQu2IiRli5zWV1C1qtxZWjgrdLxE3aHN0
-         /yUA==
-X-Gm-Message-State: AOAM531/K/j/dQXE7UmBDOHn6I5oPjHiRoX5/b4Lt+eRMbh90cTwS/gu
-        4/k4DWfvE7W5L+A6IAuk5ptCtywvZhSgnQ==
-X-Google-Smtp-Source: ABdhPJx52lH0L2/XyyuNoAmZ5VAhEW0h1lMh/iCjIKnFIowMHuqHEpSwhMyjPZtJ57vQg08Mxk370g==
-X-Received: by 2002:a17:90a:460f:: with SMTP id w15mr4426509pjg.123.1641924317446;
-        Tue, 11 Jan 2022 10:05:17 -0800 (PST)
+        bh=H3yfHHm/dC6wV51xeH/AQZWfLUZAIsM4sDRbBI0TaOw=;
+        b=HnIZ+0eE0rzbqVQcZbBe7qzdWXuRl6JRyQhu4Xsi0mSCksSiSwJwzE2V1JCBHhvM2z
+         xVthVvV4E0OBgkDXjudqZhCXpYEBUi+Ps8vW91ng/vAcS4FcWXB6hguQfa5VH+XGHSin
+         AAUb5y6vZxurR08/tkNr+yIwg6jqbrWKi07gh1sVN53L1jOKRtdJCaxkAlPes25/mvsc
+         KBPtdH3GIfNF7IeMTxCeqYA9wgITEh9kMWdtDkZZ2Sljn488CvdL/wkdPBGhvT8aiXK+
+         dGpJXp2WWq9R6/XOzQh8Ad8ikgZeJhEBxdHv1x5qDjtvGhI7+4SNZqowl9YoLawnb2sM
+         XAuQ==
+X-Gm-Message-State: AOAM530z4b3MHZ5Ol9TUIXutDqMqPMWrurkDn8ZGmnZHTQKqez4e6jCR
+        dfbIgUcJTF9rH7CJEmp+/ttpQyLN3gV1Mw==
+X-Google-Smtp-Source: ABdhPJztjMKhLqpycWPAiiXfCQx7HLpUO3BrzSq6UelX+5vEeXysWyOshcgRakqPnsnHCyIatuHdZg==
+X-Received: by 2002:a17:902:bcc1:b0:149:a13f:af62 with SMTP id o1-20020a170902bcc100b00149a13faf62mr5434711pls.147.1641924323500;
+        Tue, 11 Jan 2022 10:05:23 -0800 (PST)
 Received: from localhost ([2405:201:6014:d064:502e:73f4:8af1:9522])
-        by smtp.gmail.com with ESMTPSA id h5sm11426927pfi.46.2022.01.11.10.05.16
+        by smtp.gmail.com with ESMTPSA id s9sm2960947pjn.2.2022.01.11.10.05.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 10:05:17 -0800 (PST)
+        Tue, 11 Jan 2022 10:05:23 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,209 +60,364 @@ Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
         Florian Westphal <fw@strlen.de>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next v7 07/10] selftests/bpf: Add test for unstable CT lookup API
-Date:   Tue, 11 Jan 2022 23:34:25 +0530
-Message-Id: <20220111180428.931466-8-memxor@gmail.com>
+Subject: [PATCH bpf-next v7 09/10] selftests/bpf: Extend kfunc selftests
+Date:   Tue, 11 Jan 2022 23:34:27 +0530
+Message-Id: <20220111180428.931466-10-memxor@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220111180428.931466-1-memxor@gmail.com>
 References: <20220111180428.931466-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8429; h=from:subject; bh=MBQICqrG+a3pqkvnxVBoDyjAg1t3txFFGYd3KBFCLtU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBh3caj9BbKUvHCnIWf7yQ60wl78R6gMFoTU7Qav50x ByYaS2uJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYd3GowAKCRBM4MiGSL8Ryq2/D/ 4yNtB7QsSjFwJlpnCxdiPycWX/tdKNAQ6sV413mooIAjB3MkcilO6L8rOLp7pZAuqY19Mu17RRMCgp 0BEJEGaYF9kLEE+8gqyJBMgIVBiqg39E3M6j/RcqoBVKrfUC0K9Xbrf4isaUiG644MYIT6qFlFv7Uf qQpldefggygajk6YehTGhgaE+OftcysPkIFFx7mLgzWV7Uwb+03XbBcVWntDPkSvxvrJJ5GrZ3+mjA EX6MCsWX2HbrS/SxlSD7M++i2zsOIWVsi7zSWhGAr/uA0SI/Jm7dnR7IxNj0Z280/D/JCWODSbNGyj OndzWH2NflS+EGtYNlRaZgeMyG+sKrHihGNrs9PEG7wJYawvY+mgxFGCOXpOamEL+x82NpHywfrbOW 2lzbXD06zLvOMQ8YugrtGcf4nBqtNkn9xfyAAUjTChP6pd8ftJh3RkOSurEvFugOmSQB+0BhM26nob 8k61FuezpaGTlsz1ELUsC4Hlh3r8ubjQ7CH2tbjzXBL5XHw3AAIFe3b/Tj9cSz1+EXeckXSEPVYFKh 09XOcwJTDjKxEWqrbfhzsFYYYRYfrGFHK29lX017eMSGCY2EbZMrAmcF/0ApzZHn4aI1OhYO35BYlI /SgWbkGHzXwLjsS1a8zEcT+UYay5ornXX0hXfHBRcLUkCaCeBgzE9c4vHuCw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10297; h=from:subject; bh=V4N8OYIp0Q0iUeJaK6wmENfeM8WFrnU4WDanDAZzvaA=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBh3cakh6bm+JL41xBTqXMNQUd6UAiAlasaVmwEksmi LoNq+zKJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYd3GpAAKCRBM4MiGSL8RyvZsD/ 4otJzApFP7wpqoDXN2ssq4C9788NdshQ7kLPaLb3X598GmrSiyph43Dl/viAnaH1EBr2quI+eDrMrs jxQ9z5RjtWklcMxstk20OI+WmiuWuPAYe7Jz3yhafixCMsnTWLPapBp3f18F/GQvNa47tuv8vN0go+ MeGQoSc19uN/6o8bo7dutaYVOeEh82DghmwDRCzkkU9YV41AAPmiU+Anlk6OweadCmFMZ20k0244e8 GY6bES99sXPh2u5/Ltvdyb3uFWDS5i2LhwsOEWevRrrf1OboosARXayVXmRbjt5+siuD2fP2peq9nt SOk5mQ0RTnhssTc/b3UCXBwFtcatLC8yUyT+MaY2+IwXRGdTMbpraYkNvlwS7odl2Cc7WZnC/p0HJE wOrM77p+a5Uur8BslteEoHQgY05KoQTso/Jq0He9/YwfS8U+0J2ShHka2cgNYZT2gxeuGmGaGiTDXN 8ug7PejUebKMFqdAp/oBFgroctbxvm37V6Ni5x/T7XEbxMpdYQqtpLhX0XdEDETlvSLIPLWikddJ9A slgB9MPm2t0YqSRCUYTM1cG357vBnPsGsgrXLFsSp69B0ALwkRgk83KsNnR7VLS8rgh2PCk7k4X8wc XGxL559VTFigqE0R26ZThWDDkcFC4GK0mBEhn0RxO+mwOWGG7fr8Lk/fXwKg==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This tests that we return errors as documented, and also that the kfunc
-calls work from both XDP and TC hooks.
+Use the prog_test kfuncs to test the referenced PTR_TO_BTF_ID kfunc
+support, and PTR_TO_CTX, PTR_TO_MEM argument passing support. Also
+testing the various failure cases for invalid kfunc prototypes.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/testing/selftests/bpf/config            |   4 +
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  48 ++++++++
- .../testing/selftests/bpf/progs/test_bpf_nf.c | 105 ++++++++++++++++++
- 3 files changed, 157 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_nf.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_bpf_nf.c
+ net/bpf/test_run.c                            | 129 +++++++++++++++++-
+ .../selftests/bpf/prog_tests/kfunc_call.c     |   6 +
+ .../selftests/bpf/progs/kfunc_call_test.c     |  52 ++++++-
+ tools/testing/selftests/bpf/verifier/calls.c  |  75 ++++++++++
+ 4 files changed, 258 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index f6287132fa89..32d80e77e910 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -48,3 +48,7 @@ CONFIG_IMA_READ_POLICY=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_FUNCTION_TRACER=y
- CONFIG_DYNAMIC_FTRACE=y
-+CONFIG_NETFILTER=y
-+CONFIG_NF_DEFRAG_IPV4=y
-+CONFIG_NF_DEFRAG_IPV6=y
-+CONFIG_NF_CONNTRACK=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-new file mode 100644
-index 000000000000..e3166a81e989
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "test_bpf_nf.skel.h"
-+
-+enum {
-+	TEST_XDP,
-+	TEST_TC_BPF,
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 7796a8c747a0..93ba56507240 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -233,6 +233,105 @@ struct sock * noinline bpf_kfunc_call_test3(struct sock *sk)
+ 	return sk;
+ }
+ 
++struct prog_test_ref_kfunc {
++	int a;
++	int b;
++	struct prog_test_ref_kfunc *next;
 +};
 +
-+void test_bpf_nf_ct(int mode)
++static struct prog_test_ref_kfunc prog_test_struct = {
++	.a = 42,
++	.b = 108,
++	.next = &prog_test_struct,
++};
++
++noinline struct prog_test_ref_kfunc *
++bpf_kfunc_call_test_acquire(unsigned long *scalar_ptr)
 +{
-+	struct test_bpf_nf *skel;
-+	int prog_fd, err, retval;
-+
-+	skel = test_bpf_nf__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_bpf_nf__open_and_load"))
-+		return;
-+
-+	if (mode == TEST_XDP)
-+		prog_fd = bpf_program__fd(skel->progs.nf_xdp_ct_test);
-+	else
-+		prog_fd = bpf_program__fd(skel->progs.nf_skb_ct_test);
-+
-+	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4), NULL, NULL,
-+				(__u32 *)&retval, NULL);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run"))
-+		goto end;
-+
-+	ASSERT_EQ(skel->bss->test_einval_bpf_tuple, -EINVAL, "Test EINVAL for NULL bpf_tuple");
-+	ASSERT_EQ(skel->bss->test_einval_reserved, -EINVAL, "Test EINVAL for reserved not set to 0");
-+	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
-+	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
-+	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
-+	ASSERT_EQ(skel->bss->test_enonet_netns_id, -ENONET, "Test ENONET for bad but valid netns_id");
-+	ASSERT_EQ(skel->bss->test_enoent_lookup, -ENOENT, "Test ENOENT for failed lookup");
-+	ASSERT_EQ(skel->bss->test_eafnosupport, -EAFNOSUPPORT, "Test EAFNOSUPPORT for invalid len__tuple");
-+end:
-+	test_bpf_nf__destroy(skel);
++	/* randomly return NULL */
++	if (get_jiffies_64() % 2)
++		return NULL;
++	return &prog_test_struct;
 +}
 +
-+void test_bpf_nf(void)
++noinline void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p)
 +{
-+	if (test__start_subtest("xdp-ct"))
-+		test_bpf_nf_ct(TEST_XDP);
-+	if (test__start_subtest("tc-bpf-ct"))
-+		test_bpf_nf_ct(TEST_TC_BPF);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-new file mode 100644
-index 000000000000..d6d4002ad69c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0
++
++struct prog_test_pass1 {
++	int x0;
++	struct {
++		int x1;
++		struct {
++			int x2;
++			struct {
++				int x3;
++			};
++		};
++	};
++};
++
++struct prog_test_pass2 {
++	int len;
++	short arr1[4];
++	struct {
++		char arr2[4];
++		unsigned long arr3[8];
++	} x;
++};
++
++struct prog_test_fail1 {
++	void *p;
++	int x;
++};
++
++struct prog_test_fail2 {
++	int x8;
++	struct prog_test_pass1 x;
++};
++
++struct prog_test_fail3 {
++	int len;
++	char arr1[2];
++	char arr2[0];
++};
++
++noinline void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb)
++{
++}
++
++noinline void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p)
++{
++}
++
++noinline void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p)
++{
++}
++
++noinline void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
++{
++}
++
++noinline void bpf_kfunc_call_test_fail2(struct prog_test_fail2 *p)
++{
++}
++
++noinline void bpf_kfunc_call_test_fail3(struct prog_test_fail3 *p)
++{
++}
++
++noinline void bpf_kfunc_call_test_mem_len_pass1(void *mem, int mem__sz)
++{
++}
++
++noinline void bpf_kfunc_call_test_mem_len_fail1(void *mem, int len)
++{
++}
++
++noinline void bpf_kfunc_call_test_mem_len_fail2(u64 *mem, int len)
++{
++}
++
+ __diag_pop();
+ 
+ ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
+@@ -241,8 +340,31 @@ BTF_SET_START(test_sk_check_kfunc_ids)
+ BTF_ID(func, bpf_kfunc_call_test1)
+ BTF_ID(func, bpf_kfunc_call_test2)
+ BTF_ID(func, bpf_kfunc_call_test3)
++BTF_ID(func, bpf_kfunc_call_test_acquire)
++BTF_ID(func, bpf_kfunc_call_test_release)
++BTF_ID(func, bpf_kfunc_call_test_pass_ctx)
++BTF_ID(func, bpf_kfunc_call_test_pass1)
++BTF_ID(func, bpf_kfunc_call_test_pass2)
++BTF_ID(func, bpf_kfunc_call_test_fail1)
++BTF_ID(func, bpf_kfunc_call_test_fail2)
++BTF_ID(func, bpf_kfunc_call_test_fail3)
++BTF_ID(func, bpf_kfunc_call_test_mem_len_pass1)
++BTF_ID(func, bpf_kfunc_call_test_mem_len_fail1)
++BTF_ID(func, bpf_kfunc_call_test_mem_len_fail2)
+ BTF_SET_END(test_sk_check_kfunc_ids)
+ 
++BTF_SET_START(test_sk_acquire_kfunc_ids)
++BTF_ID(func, bpf_kfunc_call_test_acquire)
++BTF_SET_END(test_sk_acquire_kfunc_ids)
++
++BTF_SET_START(test_sk_release_kfunc_ids)
++BTF_ID(func, bpf_kfunc_call_test_release)
++BTF_SET_END(test_sk_release_kfunc_ids)
++
++BTF_SET_START(test_sk_ret_null_kfunc_ids)
++BTF_ID(func, bpf_kfunc_call_test_acquire)
++BTF_SET_END(test_sk_ret_null_kfunc_ids)
++
+ static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
+ 			   u32 headroom, u32 tailroom)
+ {
+@@ -1063,8 +1185,11 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
+ }
+ 
+ static const struct btf_kfunc_id_set bpf_prog_test_kfunc_set = {
+-	.owner     = THIS_MODULE,
+-	.check_set = &test_sk_check_kfunc_ids,
++	.owner        = THIS_MODULE,
++	.check_set    = &test_sk_check_kfunc_ids,
++	.acquire_set  = &test_sk_acquire_kfunc_ids,
++	.release_set  = &test_sk_release_kfunc_ids,
++	.ret_null_set = &test_sk_ret_null_kfunc_ids,
+ };
+ 
+ static int __init bpf_prog_test_run_init(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+index 7d7445ccc141..b39a4f09aefd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfunc_call.c
+@@ -27,6 +27,12 @@ static void test_main(void)
+ 	ASSERT_OK(err, "bpf_prog_test_run(test2)");
+ 	ASSERT_EQ(retval, 3, "test2-retval");
+ 
++	prog_fd = skel->progs.kfunc_call_test_ref_btf_id.prog_fd;
++	err = bpf_prog_test_run(prog_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				NULL, NULL, (__u32 *)&retval, NULL);
++	ASSERT_OK(err, "bpf_prog_test_run(test_ref_btf_id)");
++	ASSERT_EQ(retval, 0, "test_ref_btf_id-retval");
++
+ 	kfunc_call_test_lskel__destroy(skel);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/kfunc_call_test.c b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+index 8a8cf59017aa..5aecbb9fdc68 100644
+--- a/tools/testing/selftests/bpf/progs/kfunc_call_test.c
++++ b/tools/testing/selftests/bpf/progs/kfunc_call_test.c
+@@ -1,13 +1,20 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2021 Facebook */
+-#include <linux/bpf.h>
 +#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_helpers.h>
+-#include "bpf_tcp_helpers.h"
+ 
+ extern int bpf_kfunc_call_test2(struct sock *sk, __u32 a, __u32 b) __ksym;
+ extern __u64 bpf_kfunc_call_test1(struct sock *sk, __u32 a, __u64 b,
+ 				  __u32 c, __u64 d) __ksym;
+ 
++extern struct prog_test_ref_kfunc *bpf_kfunc_call_test_acquire(unsigned long *sp) __ksym;
++extern void bpf_kfunc_call_test_release(struct prog_test_ref_kfunc *p) __ksym;
++extern void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
++extern void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
++extern void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
++extern void bpf_kfunc_call_test_mem_len_pass1(void *mem, int len) __ksym;
++extern void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
 +
-+#define EAFNOSUPPORT 97
-+#define EPROTO 71
-+#define ENONET 64
-+#define EINVAL 22
-+#define ENOENT 2
-+
-+int test_einval_bpf_tuple = 0;
-+int test_einval_reserved = 0;
-+int test_einval_netns_id = 0;
-+int test_einval_len_opts = 0;
-+int test_eproto_l4proto = 0;
-+int test_enonet_netns_id = 0;
-+int test_enoent_lookup = 0;
-+int test_eafnosupport = 0;
-+
-+struct nf_conn *bpf_xdp_ct_lookup(struct xdp_md *, struct bpf_sock_tuple *, u32,
-+				  struct bpf_ct_opts *, u32) __ksym;
-+struct nf_conn *bpf_skb_ct_lookup(struct __sk_buff *, struct bpf_sock_tuple *, u32,
-+				  struct bpf_ct_opts *, u32) __ksym;
-+void bpf_ct_release(struct nf_conn *) __ksym;
-+
-+#define nf_ct_test(func, ctx)                                                  \
-+	({                                                                     \
-+		struct bpf_ct_opts opts_def = { .l4proto = IPPROTO_TCP,        \
-+						.netns_id = -1 };              \
-+		struct bpf_sock_tuple bpf_tuple;                               \
-+		struct nf_conn *ct;                                            \
-+		__builtin_memset(&bpf_tuple, 0, sizeof(bpf_tuple.ipv4));       \
-+		ct = func(ctx, NULL, 0, &opts_def, sizeof(opts_def));          \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_einval_bpf_tuple = opts_def.error;                \
-+		opts_def.reserved[0] = 1;                                      \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
-+			  sizeof(opts_def));                                   \
-+		opts_def.reserved[0] = 0;                                      \
-+		opts_def.l4proto = IPPROTO_TCP;                                \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_einval_reserved = opts_def.error;                 \
-+		opts_def.netns_id = -2;                                        \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
-+			  sizeof(opts_def));                                   \
-+		opts_def.netns_id = -1;                                        \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_einval_netns_id = opts_def.error;                 \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
-+			  sizeof(opts_def) - 1);                               \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_einval_len_opts = opts_def.error;                 \
-+		opts_def.l4proto = IPPROTO_ICMP;                               \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
-+			  sizeof(opts_def));                                   \
-+		opts_def.l4proto = IPPROTO_TCP;                                \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_eproto_l4proto = opts_def.error;                  \
-+		opts_def.netns_id = 0xf00f;                                    \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
-+			  sizeof(opts_def));                                   \
-+		opts_def.netns_id = -1;                                        \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_enonet_netns_id = opts_def.error;                 \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,  \
-+			  sizeof(opts_def));                                   \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_enoent_lookup = opts_def.error;                   \
-+		ct = func(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4) - 1,         \
-+			  &opts_def, sizeof(opts_def));                        \
-+		if (ct)                                                        \
-+			bpf_ct_release(ct);                                    \
-+		else                                                           \
-+			test_eafnosupport = opts_def.error;                    \
-+	})
-+
-+SEC("xdp")
-+int nf_xdp_ct_test(struct xdp_md *ctx)
+ SEC("tc")
+ int kfunc_call_test2(struct __sk_buff *skb)
+ {
+@@ -44,4 +51,45 @@ int kfunc_call_test1(struct __sk_buff *skb)
+ 	return ret;
+ }
+ 
++SEC("tc")
++int kfunc_call_test_ref_btf_id(struct __sk_buff *skb)
 +{
-+	nf_ct_test(bpf_xdp_ct_lookup, ctx);
-+	return 0;
++	struct prog_test_ref_kfunc *pt;
++	unsigned long s = 0;
++	int ret = 0;
++
++	pt = bpf_kfunc_call_test_acquire(&s);
++	if (pt) {
++		if (pt->a != 42 || pt->b != 108)
++			ret = -1;
++		bpf_kfunc_call_test_release(pt);
++	}
++	return ret;
 +}
 +
 +SEC("tc")
-+int nf_skb_ct_test(struct __sk_buff *ctx)
++int kfunc_call_test_pass(struct __sk_buff *skb)
 +{
-+	nf_ct_test(bpf_skb_ct_lookup, ctx);
++	struct prog_test_pass1 p1 = {};
++	struct prog_test_pass2 p2 = {};
++	short a = 0;
++	__u64 b = 0;
++	long c = 0;
++	char d = 0;
++	int e = 0;
++
++	bpf_kfunc_call_test_pass_ctx(skb);
++	bpf_kfunc_call_test_pass1(&p1);
++	bpf_kfunc_call_test_pass2(&p2);
++
++	bpf_kfunc_call_test_mem_len_pass1(&a, sizeof(a));
++	bpf_kfunc_call_test_mem_len_pass1(&b, sizeof(b));
++	bpf_kfunc_call_test_mem_len_pass1(&c, sizeof(c));
++	bpf_kfunc_call_test_mem_len_pass1(&d, sizeof(d));
++	bpf_kfunc_call_test_mem_len_pass1(&e, sizeof(e));
++	bpf_kfunc_call_test_mem_len_fail2(&b, -1);
++
 +	return 0;
 +}
 +
-+char _license[] SEC("license") = "GPL";
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+index d7b74eb28333..829be2b9e08e 100644
+--- a/tools/testing/selftests/bpf/verifier/calls.c
++++ b/tools/testing/selftests/bpf/verifier/calls.c
+@@ -21,6 +21,81 @@
+ 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
+ 	.result  = ACCEPT,
+ },
++{
++	"calls: invalid kfunc call: ptr_to_mem to struct with non-scalar",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = REJECT,
++	.errstr = "arg#0 pointer type STRUCT prog_test_fail1 must point to scalar",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_kfunc_call_test_fail1", 2 },
++	},
++},
++{
++	"calls: invalid kfunc call: ptr_to_mem to struct with nesting depth > 4",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = REJECT,
++	.errstr = "max struct nesting depth exceeded\narg#0 pointer type STRUCT prog_test_fail2",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_kfunc_call_test_fail2", 2 },
++	},
++},
++{
++	"calls: invalid kfunc call: ptr_to_mem to struct with FAM",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = REJECT,
++	.errstr = "arg#0 pointer type STRUCT prog_test_fail3 must point to scalar",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_kfunc_call_test_fail3", 2 },
++	},
++},
++{
++	"calls: invalid kfunc call: reg->type != PTR_TO_CTX",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = REJECT,
++	.errstr = "arg#0 expected pointer to ctx, but got PTR",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_kfunc_call_test_pass_ctx", 2 },
++	},
++},
++{
++	"calls: invalid kfunc call: void * not allowed in func proto without mem size arg",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
++	.result = REJECT,
++	.errstr = "arg#0 pointer type UNKNOWN  must point to scalar",
++	.fixup_kfunc_btf_id = {
++		{ "bpf_kfunc_call_test_mem_len_fail1", 2 },
++	},
++},
+ {
+ 	"calls: basic sanity",
+ 	.insns = {
 -- 
 2.34.1
 
