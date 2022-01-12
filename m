@@ -2,110 +2,265 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F62DC433F5
-	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 07:34:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CFF8C433FE
+	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 10:01:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351216AbiALHeD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Jan 2022 02:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
+        id S1352367AbiALKBf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Jan 2022 05:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351213AbiALHeC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Jan 2022 02:34:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B378FC06173F;
-        Tue, 11 Jan 2022 23:34:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E6EFB81DDD;
-        Wed, 12 Jan 2022 07:34:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD50EC36AE9;
-        Wed, 12 Jan 2022 07:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641972840;
-        bh=katItcAdlIg1VGt12/hCRr+LeICzVsuaMib2lQWOzyI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JCK9Eaqtu1se7xDxHwSZE0k9cZHqZJpt3dd3i/+RmEzcrQGfK8Ht8FRJFQ1fCPTMr
-         vl0S1e1jJrCth141cPiBkIXHpfiIhnHBFfUEaQ/uNkAYhQewg8GxeOVlGKhIuzu9C1
-         nfG9q0n8Z7WGki8vqIB0xNbi6RhIgNSR57ltVOH9aG4ur78CMlID+55fOa2mu8rMIW
-         KYC3Y2kHSASWIDmkwIeWYCzKvQTdco4loYa3dkG1wRsyXsfJEIUumYdcR4mEl2eej5
-         +b7E79Pe/oeZAFMOH58YSNWZ1OJnrkbcgmTft1lpW/UL3j73ebTYKxJqxwVOvBvE2C
-         8uFqL4QfhplzA==
-Date:   Wed, 12 Jan 2022 16:33:53 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH 0/6] fprobe: Introduce fprobe function entry/exit
- probe
-Message-Id: <20220112163353.4da6a6b9c6eef69dbda50324@kernel.org>
-In-Reply-To: <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
-References: <20220104080943.113249-1-jolsa@kernel.org>
-        <164191321766.806991.7930388561276940676.stgit@devnote2>
-        <20220111223944.jbi3mxedwifxwyz5@ast-mbp.lan>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        with ESMTP id S239371AbiALKBG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Jan 2022 05:01:06 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9DAC061748
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 02:01:05 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id d19so3284267wrb.0
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 02:01:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=m0duNmEDi9QruU4ZoxBug508vCw5m/al6Jv5Uvf3yxs=;
+        b=ntiCFpiaiuRt+EfiKKvjSWSj1vMHi/irsGMZDT92QgAYmAXUCRdRtXurk71wmxeyg4
+         iOSbrw/5ocyOpUMu7WANqS/7mJy9BX2yySqeAU57LRV+UeDd56r4+ccWLapE58rknN9R
+         iH4cGd5XULcmSwVGfyNGN8xElG7jBw5uRhiRhDvaSHz+qBZaogxraFPpJLcAMS171ngY
+         8enAnd1EJKZZulOZK5sLVtuzwtq6wqeoHMO4upimDc6W65qwc30FCsUxTrjh69I4BCit
+         pOwKZvGin7ZoqRzV7YIs2S4QzVyfkIQQ/2ZBc5wDzQHIpFYu6X7xle1nshCcjbmWpydM
+         r9TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m0duNmEDi9QruU4ZoxBug508vCw5m/al6Jv5Uvf3yxs=;
+        b=SQifGeuY+27MKJe7+alY+qS5FEN+fmI7iggX9HclLBU3fzuqNrzlc9/7PwmzRuqstk
+         gNxqAvtcAJEXz9nGOkdlqhjJpKEr90qaspG7RiprRud5b6IsRpIcAXh9evQ7sngowMcp
+         BSqqx41P7nfS9odnWNBIcOObpT6X+jFPjU+sm0btfawl7y0ZloWmy3KUdu2pL8hTorCx
+         gXZVX7VRCPWpltYBEFlaIcwi5cok/MkreyRSCpCtZyVFP7YAoEzaaB3frMBTwBpplP0R
+         Lf/2Yf24e+0LiBO0kd6frKhpZLsj9evZYLkk//UwacJh2BftZ+15rKEWRuFuW6OHMU2Z
+         Swdg==
+X-Gm-Message-State: AOAM532xU6IMZk9hnEyZoNdskP2BmRbaOgnJ7xkZsdvfWFTQAVuoWoxg
+        Vm8HTfhhEjhDWIGeWb4HtWTiL/S81hSnIw==
+X-Google-Smtp-Source: ABdhPJzWzWwG/zhwukvO4/fHlcg/wUHdHaU3jI/nznJjYzQclW7jz5/ce9Elpnl+zD2c9+WfHGZgXw==
+X-Received: by 2002:a05:6000:1b89:: with SMTP id r9mr1791790wru.21.1641981664035;
+        Wed, 12 Jan 2022 02:01:04 -0800 (PST)
+Received: from [192.168.1.8] ([149.86.79.168])
+        by smtp.gmail.com with ESMTPSA id w7sm5991420wrv.96.2022.01.12.02.01.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jan 2022 02:01:03 -0800 (PST)
+Message-ID: <e5ad3ed1-3d4e-f4cc-6eb9-073c0cca11d4@isovalent.com>
+Date:   Wed, 12 Jan 2022 10:01:02 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH v5] bpf/scripts: add an error if the correct number of
+ helpers are not generated
+Content-Language: en-GB
+To:     Usama Arif <usama.arif@bytedance.com>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, joe@cilium.io,
+        fam.zheng@bytedance.com, cong.wang@bytedance.com,
+        alexei.starovoitov@gmail.com, song@kernel.org
+References: <20220111184418.196442-1-usama.arif@bytedance.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220111184418.196442-1-usama.arif@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Alexei,
-
-On Tue, 11 Jan 2022 14:39:44 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-
-> On Wed, Jan 12, 2022 at 12:00:17AM +0900, Masami Hiramatsu wrote:
-> > Hi Jiri,
-> > 
-> > Here is a short series of patches, which shows what I replied
-> > to your series.
-> > 
-> > This introduces the fprobe, the function entry/exit probe with
-> > multiple probe point support. This also introduces the rethook
-> > for hooking function return, which I cloned from kretprobe.
-> > 
-> > I also rewrite your [08/13] bpf patch to use this fprobe instead
-> > of kprobes. I didn't tested that one, but the sample module seems
-> > to work. Please test bpf part with your libbpf updates.
-> > 
-> > BTW, while implementing the fprobe, I introduced the per-probe
-> > point private data, but I'm not sure why you need it. It seems
-> > that data is not used from bpf...
-> > 
-> > If this is good for you, I would like to proceed this with
-> > the rethook and rewrite the kretprobe to use the rethook to
-> > hook the functions. That should be much cleaner (and easy to
-> > prepare for the fgraph tracer integration)
+2022-01-11 18:44 UTC+0000 ~ Usama Arif <usama.arif@bytedance.com>
+> Currently bpf_helper_defs.h and the bpf helpers man page are auto-generated
+> using function documentation present in bpf.h. If the documentation for the
+> helper is missing or doesn't follow a specific format for e.g. if a function
+> is documented as:
+>  * long bpf_kallsyms_lookup_name( const char *name, int name_sz, int flags, u64 *res )
+> instead of
+>  * long bpf_kallsyms_lookup_name(const char *name, int name_sz, int flags, u64 *res)
+> (notice the extra space at the start and end of function arguments)
+> then that helper is not dumped in the auto-generated header and results in
+> an invalid call during eBPF runtime, even if all the code specific to the
+> helper is correct.
 > 
-> What is the speed of attach/detach of thousands fprobes?
+> This patch checks the number of functions documented within the header file
+> with those present as part of #define __BPF_FUNC_MAPPER and generates an
+> error in the header file and the man page if they don't match. It is not
+> needed with the currently documented upstream functions, but can help in
+> debugging when developing new helpers when there might be missing or
+> misformatted documentation.
+> 
+> Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+> 
+> ---
+> v4->v5:
+> - Converted warning to error incase of missing/misformatted helper doc
+>   (suggested by Song Liu)
 
-I've treaked my example module and it shows below result;
+I don't think it was converted to an error in the sense that Song meant
+it? Unless I'm missing something you simply changed the message so that
+it prints "error" instead of "warning", but the script still goes on
+without returning any error code, and a failure won't be detected by the
+CI for example.
 
-/lib/modules/5.16.0-rc4+/kernel/samples/fprobe # time insmod ./fprobe_example.ko
- symbol='btrfs_*'
-[  187.095925] fprobe_init: 1028 symbols found
-[  188.521694] fprobe_init: Planted fprobe at btrfs_*
-real	0m 1.47s
-user	0m 0.00s
-sys	0m 1.36s
+Could you make the script break out on errors, and print a message to
+stderr so that it's visible even if the generated output is redirected
+to a file, please?
 
-I think using ftrace_set_filter_ips() can make it faster.
-(maybe it needs to drop per-probe point private data, that
-prevents fprobe to use that interface)
+> 
+> v3->v4:
+> - Added comments to make code clearer
+> - Added warning to man page as well (suggested by Quentin Monnet)
+> 
+> v2->v3:
+> - Removed check if value is already in set (suggested by Song Liu)
+> 
+> v1->v2:
+> - Fix CI error reported by Alexei Starovoitov
+> ---
+>  scripts/bpf_doc.py | 74 +++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 70 insertions(+), 4 deletions(-)
+> 
+> diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+> index a6403ddf5de7..adf08fa963a4 100755
+> --- a/scripts/bpf_doc.py
+> +++ b/scripts/bpf_doc.py
+> @@ -87,6 +87,8 @@ class HeaderParser(object):
+>          self.line = ''
+>          self.helpers = []
+>          self.commands = []
+> +        self.desc_unique_helpers = set()
+> +        self.define_unique_helpers = []
+>  
+>      def parse_element(self):
+>          proto    = self.parse_symbol()
+> @@ -193,19 +195,42 @@ class HeaderParser(object):
+>              except NoSyscallCommandFound:
+>                  break
+>  
+> -    def parse_helpers(self):
+> +    def parse_desc_helpers(self):
+>          self.seek_to('* Start of BPF helper function descriptions:',
+>                       'Could not find start of eBPF helper descriptions list')
+>          while True:
+>              try:
+>                  helper = self.parse_helper()
+>                  self.helpers.append(helper)
+> +                proto = helper.proto_break_down()
+> +                self.desc_unique_helpers.add(proto['name'])
+>              except NoHelperFound:
+>                  break
+>  
+> +    def parse_define_helpers(self):
+> +        # Parse the number of FN(...) in #define __BPF_FUNC_MAPPER to compare
+> +        # later with the number of unique function names present in description.
+> +        # Note: seek_to(..) discards the first line below the target search text,
+> +        # resulting in FN(unspec) being skipped and not added to self.define_unique_helpers.
+> +        self.seek_to('#define __BPF_FUNC_MAPPER(FN)',
+> +                     'Could not find start of eBPF helper definition list')
+> +        # Searches for either one or more FN(\w+) defines or a backslash for newline
+> +        p = re.compile('\s*(FN\(\w+\))+|\\\\')
+> +        fn_defines_str = ''
+> +        while True:
+> +            capture = p.match(self.line)
+> +            if capture:
+> +                fn_defines_str += self.line
+> +            else:
+> +                break
+> +            self.line = self.reader.readline()
+> +        # Find the number of occurences of FN(\w+)
+> +        self.define_unique_helpers = re.findall('FN\(\w+\)', fn_defines_str)
+> +
+>      def run(self):
+>          self.parse_syscall()
+> -        self.parse_helpers()
+> +        self.parse_desc_helpers()
+> +        self.parse_define_helpers()
+>          self.reader.close()
+>  
+>  ###############################################################################
+> @@ -305,9 +330,11 @@ class PrinterHelpersRST(PrinterRST):
+>      """
+>      def __init__(self, parser):
+>          self.elements = parser.helpers
+> +        self.desc_unique_helpers = parser.desc_unique_helpers
+> +        self.define_unique_helpers = parser.define_unique_helpers
+>  
+>      def print_header(self):
+> -        header = '''\
+> +        header_name = '''\
+>  ===========
+>  BPF-HELPERS
+>  ===========
+> @@ -317,6 +344,8 @@ list of eBPF helper functions
+>  
+>  :Manual section: 7
+>  
+> +'''
+> +        header_description = '''
+>  DESCRIPTION
+>  ===========
+>  
+> @@ -349,7 +378,27 @@ HELPERS
+>  =======
+>  '''
+>          PrinterRST.print_license(self)
+> -        print(header)
+> +
+> +        print(header_name)
+> +
+> +        # Add an error if the correct number of helpers are not auto-generated.
+> +        nr_desc_unique_helpers = len(self.desc_unique_helpers)
+> +        nr_define_unique_helpers = len(self.define_unique_helpers)
+> +        if nr_desc_unique_helpers != nr_define_unique_helpers:
+> +            header_error = '''
+> +.. error::
+> +    The number of unique helpers in description (%d) don\'t match the number of unique helpers defined in __BPF_FUNC_MAPPER (%d)
 
-Thank you,
+don\'t -> doesn\'t
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> +''' % (nr_desc_unique_helpers, nr_define_unique_helpers)
+> +            if nr_desc_unique_helpers < nr_define_unique_helpers:
+> +                # Function description is parsed until no helper is found (which can be due to
+> +                # misformatting). Hence, only print the first missing/misformatted function.
+> +                header_error += '''
+> +.. error::
+> +    The description for %s is not present or formatted correctly.
+> +''' % (self.define_unique_helpers[nr_desc_unique_helpers])
+> +            print(header_error)
+> +
+> +        print(header_description)
+>  
+>      def print_footer(self):
+>          footer = '''
+> @@ -509,6 +558,8 @@ class PrinterHelpers(Printer):
+>      """
+>      def __init__(self, parser):
+>          self.elements = parser.helpers
+> +        self.desc_unique_helpers = parser.desc_unique_helpers
+> +        self.define_unique_helpers = parser.define_unique_helpers
+>  
+>      type_fwds = [
+>              'struct bpf_fib_lookup',
+> @@ -628,6 +679,21 @@ class PrinterHelpers(Printer):
+>  /* Forward declarations of BPF structs */'''
+>  
+>          print(header)
+> +
+> +        nr_desc_unique_helpers = len(self.desc_unique_helpers)
+> +        nr_define_unique_helpers = len(self.define_unique_helpers)
+> +        if nr_desc_unique_helpers != nr_define_unique_helpers:
+> +            header_error = '''
+> +#error The number of unique helpers in description (%d) don\'t match the number of unique helpers defined in __BPF_FUNC_MAPPER (%d)
+> +''' % (nr_desc_unique_helpers, nr_define_unique_helpers)
+> +            if nr_desc_unique_helpers < nr_define_unique_helpers:
+> +                # Function description is parsed until no helper is found (which can be due to
+> +                # misformatting). Hence, only print the first missing/misformatted function.
+> +                header_error += '''
+> +#error The description for %s is not present or formatted correctly.
+> +''' % (self.define_unique_helpers[nr_desc_unique_helpers])
+> +            print(header_error)
+> +
+>          for fwd in self.type_fwds:
+>              print('%s;' % fwd)
+>          print('')
+
