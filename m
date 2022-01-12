@@ -2,59 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72200C433F5
-	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 18:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B983CC433EF
+	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 18:10:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356052AbiALSKY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Jan 2022 13:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
+        id S244179AbiALSK1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Jan 2022 13:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356075AbiALSJe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Jan 2022 13:09:34 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33393C029820
-        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 10:08:46 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id h11so6433798uar.5
-        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 10:08:46 -0800 (PST)
+        with ESMTP id S1356136AbiALSJy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Jan 2022 13:09:54 -0500
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE13AC06118C
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 10:09:38 -0800 (PST)
+Received: by mail-ua1-x936.google.com with SMTP id l15so6369637uai.11
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 10:09:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZoRMNrUNftcTbOM+Yn81o2eUmB5Q3ng+/5gzfhuob30=;
-        b=WoN33fngJ9NdXK4V2RpEQa3gR/1b2BGruGnRe/tz/QPQbHjNBq+CRAFAsQFuynZxBM
-         UOE74fnJtvt8CUydqbtvCG/rCRPA+NBaZ8G0vKgz0oY/16zhWUbRPMyL7hS5f3C9R7a7
-         7qtLMtCV9H2Myfi76Gmks5KqOE1KKgHHHtWWz4VcSwj6xLCuvWXa6y9Tp+HhTLdnAPJQ
-         H02fSZFL272950uQhm6e4ILTS2atiM9/Me4o3hQCjC4H5Y4sBHoVGPrSwqhwhLupiRhr
-         ME5T5n6t/M4+aCveZVerqTKxkqvbfQrMVhHKObRXQp5NhW8aNmNrgjDJY2p6DpbZJH9q
-         X2xQ==
+        bh=RrVsAsvO3D7WLJP8VoagnnBtokXlR5KaoCYpWZZ+S6g=;
+        b=QyT7lmiM4MWwNqhlQNOfaW9erGjhLEq4pdbvMCDGT5LsOgfCXPMxi4APOTDRsYnGoB
+         pPcR7M09KhL3RPgClDMnlMcD0iTO71mYDe7lCuVoo4NPukAM0KdbP8rIVUA7F0edC+CY
+         E4rTVVbP/a/5qTtPBlw1YdRgkjI9JSUbBKb+lhE2wsa00TBuk90wDjRkLZZzLQxwsfFa
+         /sSKyFQxrxZutMKUd1Rz2A7LRE3XDC47DRPm4jJF64DBxWofkY5OZl2mv5QOwixecbLu
+         3v9yW40BRmo0MmJxvFrLvLvfglDXXFkrJ/b+T/dbA8F8Xig+CnlHmRNKT2tpK1J/rj9x
+         mw6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ZoRMNrUNftcTbOM+Yn81o2eUmB5Q3ng+/5gzfhuob30=;
-        b=wmiYOx5W0yM0mlosX9354irMImef+b9VKQ5AWORs8Vd2gvtSGVBPUara33GyqH1aKf
-         bOzZPeMwrlju1zYNw1RyvxRz1m4Ve2ew/wuVwgB+LDBJJFzQ00WtMnBvWhRC8BYoGUi/
-         v1ZVk7b3n7K+oGvTFmrp5m56EoKbCfGyzZ7b7ghqLUgBooKlsd1P7lx1tsEv77iL9wew
-         jX8FJXcnDUHsdD9OAE4VaE+tbjE3X1DVJ3EU5ln+bvd4d0/giB2kKna6d7g57xefO5Fz
-         N6bLEL/gDq1RWGcU4rcUL0H7wkwLxOnei6RSd40yOFBgut4psKlS6Np18nU7sN+LWYgo
-         1TIw==
-X-Gm-Message-State: AOAM532BXni4mEa2EkcRbHLdow7+jpphrabt51GulFyca5NwIyjq0XF/
-        R4jUrYfFpBji5NlPvPnwFrOXnw==
-X-Google-Smtp-Source: ABdhPJw0K+YW+tlmlgeWNbkhC+1z7mdIn1FnR4FiZ4v8E4z2iHGcG334SnVYu3haMLrk2qcq8DA6UQ==
-X-Received: by 2002:a67:f497:: with SMTP id o23mr690750vsn.70.1642010925311;
-        Wed, 12 Jan 2022 10:08:45 -0800 (PST)
+        bh=RrVsAsvO3D7WLJP8VoagnnBtokXlR5KaoCYpWZZ+S6g=;
+        b=xKtjKS37h3vkKkP3h84eDfMwSVi3TJTvRDLD0A4Azum8YLhwNI9r1CZRKj8f/HT1/M
+         ARlP85w2dZMt81nSFqoqEaMwUGhakCRpRZpMADYt6lFG/aqBuPSlfQWAAw6OUT1drRm+
+         k3quMSa2mME/fcMMks5NcNv+LJ0E6t2J9ZBXKhQ8e8O/za9H2vw1g+SnpzCHzP8KLLQK
+         UVi/2ybrn3A44PzvniYTM/lA5+xHNvzq/LV5H+Pm6Ddm8C+p/4PXLvk8QVubY2exriCA
+         b4u3FsXI0EomCA7MRa7CPCEGApcjBkuPzO2HlQcBJRucExZEsmmyCj57wsHBNIE+eavY
+         xFrg==
+X-Gm-Message-State: AOAM531Acq1+E7ZdwQbOjFl7WUBc3ly3lpAGc6Hf/nDt8LyUV/VMjCUM
+        Zvj/lkk46JKjmeS8Ry32bzcTPw==
+X-Google-Smtp-Source: ABdhPJwrdnXS74LH2P//Rph783Mk3d+YCMDm6hkSUTni5HY9pRQEPXpGP4gADoLr57ZeR6srN9wtOA==
+X-Received: by 2002:a67:ba17:: with SMTP id l23mr638199vsn.33.1642010977839;
+        Wed, 12 Jan 2022 10:09:37 -0800 (PST)
 Received: from [192.168.1.8] ([149.86.74.57])
-        by smtp.gmail.com with ESMTPSA id 188sm298229vkb.24.2022.01.12.10.08.43
+        by smtp.gmail.com with ESMTPSA id d4sm275686vkf.39.2022.01.12.10.09.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jan 2022 10:08:44 -0800 (PST)
-Message-ID: <c1d96b78-5eda-6999-bd22-55514f4900dc@isovalent.com>
-Date:   Wed, 12 Jan 2022 18:08:42 +0000
+        Wed, 12 Jan 2022 10:09:37 -0800 (PST)
+Message-ID: <c902c194-06f9-52e5-abf1-a96682eca519@isovalent.com>
+Date:   Wed, 12 Jan 2022 18:09:35 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.4.1
-Subject: Re: [PATCH bpf-next v4 2/8] libbpf: Implement changes needed for
- BTFGen in bpftool
+Subject: Re: [PATCH bpf-next v4 7/8] bpftool: Implement relocations recording
+ for BTFGen
 Content-Language: en-GB
 To:     =?UTF-8?Q?Mauricio_V=c3=a1squez?= <mauricio@kinvolk.io>,
         netdev@vger.kernel.org, bpf@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Lorenzo Fontana <lorenzo.fontana@elastic.co>,
         Leonardo Di Donato <leonardo.didonato@elastic.co>
 References: <20220112142709.102423-1-mauricio@kinvolk.io>
- <20220112142709.102423-3-mauricio@kinvolk.io>
+ <20220112142709.102423-8-mauricio@kinvolk.io>
 From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20220112142709.102423-3-mauricio@kinvolk.io>
+In-Reply-To: <20220112142709.102423-8-mauricio@kinvolk.io>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -75,37 +75,180 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 2022-01-12 09:27 UTC-0500 ~ Mauricio Vásquez <mauricio@kinvolk.io>
-> This commit extends libbpf with the features that are needed to
-> implement BTFGen:
+> This commit implements the logic to record the relocation information
+> for the different kind of relocations.
 > 
-> - Implement bpf_core_create_cand_cache() and bpf_core_free_cand_cache()
-> to handle candidates cache.
-> - Expose bpf_core_add_cands() and bpf_core_free_cands to handle
-> candidates list.
-> - Expose bpf_core_calc_relo_insn() to bpftool.
+> btfgen_record_field_relo() uses the target specification to save all the
+> types that are involved in a field-based CO-RE relocation. In this case
+> types resolved and added recursively (using btfgen_put_type()).
+> Only the struct and union members and their types) involved in the
+> relocation are added to optimize the size of the generated BTF file.
+> 
+> On the other hand, btfgen_record_type_relo() saves the types involved in
+> a type-based CO-RE relocation. In this case all the members for the
+> struct and union types are added. This is not strictly required since
+> libbpf doesn't use them while performing this kind of relocation,
+> however that logic could change on the future. Additionally, we expect
+> that the number of this kind of relocations in an BPF object to be very
+> low, hence the impact on the size of the generated BTF should be
+> negligible.
+> 
+> Finally, btfgen_record_enumval_relo() saves the whole enum type for
+> enum-based relocations.
 > 
 > Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
 > Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
 > Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 > Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
 > ---
->  tools/lib/bpf/Makefile          |  2 +-
->  tools/lib/bpf/libbpf.c          | 43 +++++++++++++++++++++------------
->  tools/lib/bpf/libbpf_internal.h | 12 +++++++++
->  3 files changed, 41 insertions(+), 16 deletions(-)
+>  tools/bpf/bpftool/gen.c | 260 +++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 257 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index f947b61b2107..dba019ee2832 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -239,7 +239,7 @@ install_lib: all_cmd
->  
->  SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h	     \
->  	    bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h	     \
-> -	    skel_internal.h libbpf_version.h
-> +	    skel_internal.h libbpf_version.h relo_core.h libbpf_internal.h
->  GEN_HDRS := $(BPF_GENERATED)
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index cef0ea99d4d9..8c13dde0b74d 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -1207,19 +1228,252 @@ btfgen_new_info(const char *targ_btf_path)
 
-I don't think these headers should be added to libbpf's SRC_HDRS. If we
-must make them available to bpftool, we probably want to copy them
-explicitly through LIBBPF_INTERNAL_HDRS in bpftool's Makefile.
+> +static struct btfgen_type *
+> +_btfgen_put_type(struct btf *btf, struct btfgen_info *info, struct btf_type *btf_type,
+> +		 unsigned int id, bool all_members)
+> +{
+> +	struct btfgen_type *btfgen_type, *tmp;
+> +	struct btf_array *array;
+> +	unsigned int child_id;
+> +	struct btf_member *m;
+> +	int err, i, n;
+> +
+> +	/* check if we already have this type */
+> +	if (hashmap__find(info->types, uint_as_hash_key(id), (void **) &btfgen_type)) {
+> +		if (!all_members || btfgen_type->all_members)
+> +			return btfgen_type;
+> +	} else {
+> +		btfgen_type = calloc(1, sizeof(*btfgen_type));
+> +		if (!btfgen_type)
+> +			return NULL;
+> +
+> +		btfgen_type->type = btf_type;
+> +		btfgen_type->id = id;
+> +
+> +		/* append this type to the types list before anything else */
+> +		err = hashmap__add(info->types, uint_as_hash_key(btfgen_type->id), btfgen_type);
+> +		if (err) {
+> +			free(btfgen_type);
+> +			return NULL;
+> +		}
+> +	}
+> +
+> +	/* avoid infinite recursion and yet be able to add all
+> +	 * fields/members for types also managed by this function
+> +	 */
+> +	btfgen_type->all_members = all_members;
+> +
+> +
+
+Nit: double blank line.
+
+> +	/* recursively add other types needed by it */
+> +	switch (btf_kind(btfgen_type->type)) {
+> +	case BTF_KIND_UNKN:
+> +	case BTF_KIND_INT:
+
+>  static int btfgen_record_field_relo(struct btfgen_info *info, struct bpf_core_spec *targ_spec)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct btf *btf = (struct btf *) info->src_btf;
+> +	struct btfgen_type *btfgen_type;
+> +	struct btf_member *btf_member;
+> +	struct btf_type *btf_type;
+> +	struct btf_array *array;
+> +	unsigned int id;
+> +	int idx, err;
+> +
+> +	btf_type = (struct btf_type *) btf__type_by_id(btf, targ_spec->root_type_id);
+> +
+> +	/* create btfgen_type for root type */
+> +	btfgen_type = btfgen_put_type(btf, info, btf_type, targ_spec->root_type_id);
+> +	if (!btfgen_type)
+> +		return -errno;
+> +
+> +	/* add types for complex types (arrays, unions, structures) */
+> +	for (int i = 1; i < targ_spec->raw_len; i++) {
+> +		/* skip typedefs and mods */
+> +		while (btf_is_mod(btf_type) || btf_is_typedef(btf_type)) {
+> +			id = btf_type->type;
+> +			btfgen_type = btfgen_get_type(info, id);
+> +			if (!btfgen_type)
+> +				return -ENOENT;
+> +			btf_type = (struct btf_type *) btf__type_by_id(btf, id);
+> +		}
+> +
+> +		switch (btf_kind(btf_type)) {
+> +		case BTF_KIND_STRUCT:
+> +		case BTF_KIND_UNION:
+> +			idx = targ_spec->raw_spec[i];
+> +			btf_member = btf_members(btf_type) + idx;
+> +			btf_type = (struct btf_type *) btf__type_by_id(btf, btf_member->type);
+> +
+> +			/* add member to relocation type */
+> +			err = btfgen_add_member(btfgen_type, btf_member, idx);
+> +			if (err)
+> +				return err;
+> +			/* put btfgen type */
+> +			btfgen_type = btfgen_put_type(btf, info, btf_type, btf_member->type);
+> +			if (!btfgen_type)
+> +				return -errno;
+> +			break;
+> +		case BTF_KIND_ARRAY:
+> +			array = btf_array(btf_type);
+> +			btfgen_type = btfgen_get_type(info, array->type);
+> +			if (!btfgen_type)
+> +				return -ENOENT;
+> +			btf_type = (struct btf_type *) btf__type_by_id(btf, array->type);
+> +			break;
+> +		default:
+> +			p_err("spec type wasn't handled");
+
+This message might benefit from a bit more context (step, type number?).
+
+> +			return -EINVAL;
+> +		}
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static int btfgen_record_type_relo(struct btfgen_info *info, struct bpf_core_spec *targ_spec)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct btf *btf = (struct btf *) info->src_btf;
+> +	struct btfgen_type *btfgen_type;
+> +	struct btf_type *btf_type;
+> +
+> +	btf_type = (struct btf_type *) btf__type_by_id(btf, targ_spec->root_type_id);
+> +
+> +	btfgen_type = btfgen_put_type_all(btf, info, btf_type, targ_spec->root_type_id);
+> +	return btfgen_type ?  0 : -errno;
+
+Nit: double space in "?  0".
+
+>  }
+>  
+>  static int btfgen_record_enumval_relo(struct btfgen_info *info, struct bpf_core_spec *targ_spec)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct btf *btf = (struct btf *) info->src_btf;
+> +	struct btfgen_type *btfgen_type;
+> +	struct btf_type *btf_type;
+> +
+> +	btf_type = (struct btf_type *) btf__type_by_id(btf, targ_spec->root_type_id);
+> +
+> +	btfgen_type = btfgen_put_type_all(btf, info, btf_type, targ_spec->root_type_id);
+> +	return btfgen_type ?  0 : -errno;
+
+Nit: double space in "?  0".
+
+>  }
+>  
+>  static int btfgen_record_reloc(struct btfgen_info *info, struct bpf_core_spec *res)
+
