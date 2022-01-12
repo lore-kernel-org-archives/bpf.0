@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB54C433FE
-	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 14:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B856C433EF
+	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 14:27:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354104AbiALO1t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Jan 2022 09:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S1354122AbiALO1u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Jan 2022 09:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354143AbiALO11 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Jan 2022 09:27:27 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8797C06175C
-        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 06:27:20 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id i8so3209117qtw.0
-        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 06:27:20 -0800 (PST)
+        with ESMTP id S1354148AbiALO1f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Jan 2022 09:27:35 -0500
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94A23C061245
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 06:27:25 -0800 (PST)
+Received: by mail-qv1-xf2f.google.com with SMTP id r6so3009649qvr.13
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 06:27:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mMJ7CAtkh8neADG+ZdmCPKmqxfEVI9IMD/3a1+r/7z0=;
-        b=dvPZKwZmpOr6rQ7kjEV23P3ZkenMGKR7bmQ0UatOAlWfbh7trXz3chm/FajdWGIWEZ
-         CZ2XbYSKkxeT+0wKy0GXJhv0cWBbb6sldxIkiYCCOvOdT3cnO3rcuqJMYTeKV37sbRmY
-         UsNMFAVNTfp/cqB5D/xbNpTHUVklwYGi6iliw=
+        bh=4IsVb9B9OD9HxbWBjwrwutVLUxC8m+FYRJd9a2MlORE=;
+        b=QoSNuZmz52Hkl9O7B34ixhlxJLgwZGYTaDPOTehc/2FzgdhwlvrLXJQjCni1p9ZnY6
+         zAzbO9LRP7MU4XjNFfWrV2fGtPag8cKcVxiwHS8HVWra3o+11wSd3dSSZMtQpp8VkXZv
+         4WPfJVfrdKLw3Fzf9K6op4/FJCecF1zpmSSh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mMJ7CAtkh8neADG+ZdmCPKmqxfEVI9IMD/3a1+r/7z0=;
-        b=Xeh93I5muHPUpf4GSf+BGw9vuRWjKkKU9y5F1NJHg26ri+t+dRPP/o/dl1YB19ujvw
-         ho0uKoeAKS7zN305Q5TWEt6X+H5racpj7peWhwE9dsZGwypsQw8/kKVH3CHERl/nSbla
-         gv9KgjaPzalEOsflFft7Q14MqE3An1x5VGUfRy+ST/MuLEIUTAEgzW9uSxKJn10ffMv/
-         cVgTDtEN8ahOINdQ5qXdUoqheX0C+fOoVjw3ypWsIvsYbP2vEXaGaynSK5e6a00vnMYl
-         H1FZTfdHRfnFjkJ1x70Ju5WpVS82cqGrXjAXl0fB2dLlJcvIzT/X5d+9hmNlctBo8Trd
-         vrpQ==
-X-Gm-Message-State: AOAM533YMZ4fWvUmbQCCuAyk8NYZAkpSLHEBkBgtC49WBgbAlRFO325E
-        mUalp6hsvH281H//3QFV9iYScA==
-X-Google-Smtp-Source: ABdhPJzCeeAf3pz4HrESFMOweXd6tDn8jeli3il98bEtCHWEpAyeQlNv/wjXwZdOeAMvn95ANzlBvQ==
-X-Received: by 2002:a05:622a:1813:: with SMTP id t19mr7915214qtc.256.1641997638963;
-        Wed, 12 Jan 2022 06:27:18 -0800 (PST)
+        bh=4IsVb9B9OD9HxbWBjwrwutVLUxC8m+FYRJd9a2MlORE=;
+        b=WoHgsKwO6csGzuZb2jbeg06Mng2NNYZ+oXDuMVzxY8nFwn37vDNY+ft4REnggEx4cp
+         GGQkbGhyQylyiiLp75KJLPwA+Ln+5FPYOdwc2wsFxE4f8DeJXcz+3wuf0fo9molueTuc
+         WqqZGunu/XLpnA2879rGQggsX3vkvTcs3r6QHrWL/eeB6ITB7evElaqJJcbdbgOyoqJ4
+         351Oi3RgFleRSbp9HyuCWFs7Z91eBRrNtauqxUnKGxb9IIolElKLo32oSLSjjnwL5DH2
+         wQwvCjC6XLHy18p5bMTf3hRaKN0fVbcCpIPfEzO6jKfP91W36lxJXQORHpdjX5FD/Fcg
+         PWLA==
+X-Gm-Message-State: AOAM531fEPjn6WgEOKXjEq7sb9bHNQwKDLJT7lc7Ku+1MtbrvzGQru0g
+        niT1Zc8WWpE8sZqHeFX9hFcrjQ==
+X-Google-Smtp-Source: ABdhPJxgVxaxUN+fzXiEYHiS6XJQn0OP4HrG8KaLG5D5JMMfw7DyrySF8l++HZbE7WQkN6aLysuD6w==
+X-Received: by 2002:a05:6214:1d27:: with SMTP id f7mr8326545qvd.107.1641997644047;
+        Wed, 12 Jan 2022 06:27:24 -0800 (PST)
 Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id h11sm8776690qko.59.2022.01.12.06.27.17
+        by smtp.gmail.com with ESMTPSA id h11sm8776690qko.59.2022.01.12.06.27.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jan 2022 06:27:18 -0800 (PST)
+        Wed, 12 Jan 2022 06:27:23 -0800 (PST)
 From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Rafael David Tinoco <rafaeldtinoco@gmail.com>,
         Lorenzo Fontana <lorenzo.fontana@elastic.co>,
         Leonardo Di Donato <leonardo.didonato@elastic.co>
-Subject: [PATCH bpf-next v4 2/8] libbpf: Implement changes needed for BTFGen in bpftool
-Date:   Wed, 12 Jan 2022 09:27:03 -0500
-Message-Id: <20220112142709.102423-3-mauricio@kinvolk.io>
+Subject: [PATCH bpf-next v4 4/8] bpftool: Implement btf_save_raw()
+Date:   Wed, 12 Jan 2022 09:27:05 -0500
+Message-Id: <20220112142709.102423-5-mauricio@kinvolk.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220112142709.102423-1-mauricio@kinvolk.io>
 References: <20220112142709.102423-1-mauricio@kinvolk.io>
@@ -66,146 +66,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit extends libbpf with the features that are needed to
-implement BTFGen:
-
-- Implement bpf_core_create_cand_cache() and bpf_core_free_cand_cache()
-to handle candidates cache.
-- Expose bpf_core_add_cands() and bpf_core_free_cands to handle
-candidates list.
-- Expose bpf_core_calc_relo_insn() to bpftool.
+Helper function to save a BTF object to a file.
 
 Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
 Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
 Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
 ---
- tools/lib/bpf/Makefile          |  2 +-
- tools/lib/bpf/libbpf.c          | 43 +++++++++++++++++++++------------
- tools/lib/bpf/libbpf_internal.h | 12 +++++++++
- 3 files changed, 41 insertions(+), 16 deletions(-)
+ tools/bpf/bpftool/gen.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index f947b61b2107..dba019ee2832 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -239,7 +239,7 @@ install_lib: all_cmd
- 
- SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h	     \
- 	    bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h	     \
--	    skel_internal.h libbpf_version.h
-+	    skel_internal.h libbpf_version.h relo_core.h libbpf_internal.h
- GEN_HDRS := $(BPF_GENERATED)
- 
- INSTALL_PFX := $(DESTDIR)$(prefix)/include/bpf
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 4959c03a46f4..344b8b8e8a50 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5185,18 +5185,18 @@ size_t bpf_core_essential_name_len(const char *name)
- 	return n;
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index cdeb1047d79d..5a74fb68dc84 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -1096,6 +1096,36 @@ static int do_help(int argc, char **argv)
+ 	return 0;
  }
  
--static void bpf_core_free_cands(struct bpf_core_cand_list *cands)
-+void bpf_core_free_cands(struct bpf_core_cand_list *cands)
- {
- 	free(cands->cands);
- 	free(cands);
- }
- 
--static int bpf_core_add_cands(struct bpf_core_cand *local_cand,
--			      size_t local_essent_len,
--			      const struct btf *targ_btf,
--			      const char *targ_btf_name,
--			      int targ_start_id,
--			      struct bpf_core_cand_list *cands)
-+int bpf_core_add_cands(struct bpf_core_cand *local_cand,
-+		       size_t local_essent_len,
-+		       const struct btf *targ_btf,
-+		       const char *targ_btf_name,
-+		       int targ_start_id,
-+		       struct bpf_core_cand_list *cands)
- {
- 	struct bpf_core_cand *new_cands, *cand;
- 	const struct btf_type *t, *local_t;
-@@ -5567,6 +5567,24 @@ static int bpf_core_resolve_relo(struct bpf_program *prog,
- 				       targ_res);
- }
- 
-+struct hashmap *bpf_core_create_cand_cache(void)
++static int btf_save_raw(const struct btf *btf, const char *path)
 +{
-+	return hashmap__new(bpf_core_hash_fn, bpf_core_equal_fn, NULL);
-+}
++	const void *data;
++	FILE *f = NULL;
++	__u32 data_sz;
++	int err = 0;
 +
-+void bpf_core_free_cand_cache(struct hashmap *cand_cache)
-+{
-+	struct hashmap_entry *entry;
-+	int i;
-+
-+	if (!IS_ERR_OR_NULL(cand_cache)) {
-+		hashmap__for_each_entry(cand_cache, entry, i) {
-+			bpf_core_free_cands(entry->value);
-+		}
-+		hashmap__free(cand_cache);
++	data = btf__raw_data(btf, &data_sz);
++	if (!data) {
++		err = -ENOMEM;
++		goto out;
 +	}
++
++	f = fopen(path, "wb");
++	if (!f) {
++		err = -errno;
++		goto out;
++	}
++
++	if (fwrite(data, 1, data_sz, f) != data_sz) {
++		err = -errno;
++		goto out;
++	}
++
++out:
++	if (f)
++		fclose(f);
++	return err;
 +}
 +
- static int
- bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ /* Create BTF file for a set of BPF objects */
+ static int btfgen(const char *src_btf, const char *dst_btf, const char *objspaths[])
  {
-@@ -5574,7 +5592,6 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 	struct bpf_core_relo_res targ_res;
- 	const struct bpf_core_relo *rec;
- 	const struct btf_ext_info *seg;
--	struct hashmap_entry *entry;
- 	struct hashmap *cand_cache = NULL;
- 	struct bpf_program *prog;
- 	struct bpf_insn *insn;
-@@ -5593,7 +5610,7 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 		}
- 	}
- 
--	cand_cache = hashmap__new(bpf_core_hash_fn, bpf_core_equal_fn, NULL);
-+	cand_cache = bpf_core_create_cand_cache();
- 	if (IS_ERR(cand_cache)) {
- 		err = PTR_ERR(cand_cache);
- 		goto out;
-@@ -5697,12 +5714,8 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 	btf__free(obj->btf_vmlinux_override);
- 	obj->btf_vmlinux_override = NULL;
- 
--	if (!IS_ERR_OR_NULL(cand_cache)) {
--		hashmap__for_each_entry(cand_cache, entry, i) {
--			bpf_core_free_cands(entry->value);
--		}
--		hashmap__free(cand_cache);
--	}
-+	bpf_core_free_cand_cache(cand_cache);
-+
- 	return err;
- }
- 
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 1565679eb432..0c258c252919 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -526,4 +526,16 @@ static inline int ensure_good_fd(int fd)
- 	return fd;
- }
- 
-+struct hashmap;
-+
-+struct hashmap *bpf_core_create_cand_cache(void);
-+void bpf_core_free_cand_cache(struct hashmap *cand_cache);
-+int bpf_core_add_cands(struct bpf_core_cand *local_cand,
-+		       size_t local_essent_len,
-+		       const struct btf *targ_btf,
-+		       const char *targ_btf_name,
-+		       int targ_start_id,
-+		       struct bpf_core_cand_list *cands);
-+void bpf_core_free_cands(struct bpf_core_cand_list *cands);
-+
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 -- 
 2.25.1
 
