@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC5ACC4332F
-	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 19:35:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A2EC433FE
+	for <bpf@archiver.kernel.org>; Wed, 12 Jan 2022 19:35:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345002AbiALTfe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Jan 2022 14:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S1344980AbiALTfg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Jan 2022 14:35:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344980AbiALTeh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 12 Jan 2022 14:34:37 -0500
+        with ESMTP id S1345037AbiALTei (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 12 Jan 2022 14:34:38 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E3AC06175C
-        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 11:34:33 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id b186-20020a25cbc3000000b00611b032ccadso2008103ybg.16
-        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 11:34:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C975C06175D
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 11:34:37 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id s7-20020a5b0447000000b005fb83901511so6455101ybp.11
+        for <bpf@vger.kernel.org>; Wed, 12 Jan 2022 11:34:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=sXsPIbfQ05P0repzOjAvu6+3E/heYEca8fbLMQGQFvE=;
-        b=eIszKj/bJsq4MSpl2KdXXCMpeInuz7TCbSlRyIMwFVY3bRNz/lntXbEFFUzB5A7Oun
-         w10muHZYycXkBxUxsdAns4p1+uXvYqyCtRIGsLijOLRrI+0Fh3eN4qiELS/g6ETXmRcK
-         /RmSO2k1jN+y5RN06/Wa+1gMuURB0kg2ZOLynuRlDuio4eazXgwAuCcnImse9BXSFlcH
-         y0mZD3nBc/JZ1xUwsgButvxyiF6T069zbBnQSYR0t9c7KHCXnGUoWWgILlx2+Z7oVPjf
-         VaspeQq488lLPI/Fw0IC6/Qi9eU3BSj31vKZiQRk9EDuMhwDQz256RadfKAGoSYq0/au
-         C7ww==
+        bh=bFDryb9jb8NTEZANKT/JVNtftTgumdYcR8KASxgiLpk=;
+        b=bR+DLsaq9kSX33xNRUHjrYaQ6qufxnkmK5pN16WDYuMAQnGQaUcWFwgH2aogVLm/c7
+         ay86ib8+WKUE+4OhsdbCPW3kr/MCWpCaZbo7VVksfbZ/S2YrD7f+c6l5ZAVXrwaoxCuL
+         cdlDy//YjymqQVrIiYaXYbZIVuLEf3mF+WTXxie+OwZecI2Bexvrjue6U+e+vZWcPIwK
+         TdqxXyHqxzZIaYOqqY1L6a/SL5c7z8IuDXxPNbsvs03fnHsw+60wU2Wble+tJD7lTPoD
+         dSSEhvYbIvvQVmXAH7MxypL1K4QhjAFsJtNOZBkRHG8Zg51Oh73+3u+oMB35vysIJhE7
+         nZcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=sXsPIbfQ05P0repzOjAvu6+3E/heYEca8fbLMQGQFvE=;
-        b=i8Ix1cwRdl6ORWHQPL8g2OgjcGCd5BnCS0Z53SX9JnjP12O4+ZqzLh+CaBik7WPJVX
-         UZaqpvAS+wn2lRH9Rigm5Uc/+szUaug7zaaRwFm+PBbxm8+3BKLtG3wVuim8kd9yLyRM
-         svUmbewqyVHgdHJoCeEA2bhV84Iz86QV5VVR77E9+55YepNYNNXSJ7zyGpHGDk437cf9
-         0Q5bhyF8ryMmElgwC9O0SQq0RJnmmB42gzuRzY0l38dwSeZNo8qnKcBg7WnUZtt+SRwB
-         Gv8UtjEOBYQfnkIBOtQNzM3k1nxlq9217ieFtN2as3jUQ6lJ0tSab+8h8hLlItBhPjtq
-         2Yrg==
-X-Gm-Message-State: AOAM531tBDANKT+CyC+HqVEVA/WU12RIM19CkkS28rHr4cDlR6/fgILb
-        8uIOz7Pd58fX3boXHF70JzqEsNgSplc=
-X-Google-Smtp-Source: ABdhPJw0zf1Y9MRjaIH7OfOhMBCdMo0tqMsEMEdjL2ycKYqwBGswR+jq+f6+ccR7WOXa+suYPw5Bz891o/I=
+        bh=bFDryb9jb8NTEZANKT/JVNtftTgumdYcR8KASxgiLpk=;
+        b=ADziLVJxdxiFC7AZO8rIUU6w8q/xJth69E3PpcdhBLC1fT381TDeDq2egvSjmsBC6z
+         xmKCBkwyt8nICXwVyiRZDGyrb3+29bkk6uzasT30KETwkbyw5N+5ABLA4cMWY946DZKq
+         sVlMjSJczD4wmTmGB00ja4T3Mgyu4mj6tt501DyJB4X8ok8JznQjHrrwfdmDV0/sE2iv
+         ztgufSn4IopcbsYo/MrgFY6jIq0/8gcEExe2dovAT/R/qTFUZ482yCZpL1CN1FsoVk0P
+         TBa58Yf0VcQxfseRHyxIabHMUdT3dxft0qWdsNk16KDijOkLvjfHh1eGA/vq0MDYMita
+         MqGg==
+X-Gm-Message-State: AOAM53282fXV8ceq91jNNajlhS0gYYKCqXZkgQ8lVn7N/yCzoJ+t+eK1
+        lekyEymMCAN94/MDJVEyUUX4zYazb1A=
+X-Google-Smtp-Source: ABdhPJzFuYFVq3J+/T5SXF1WhAQS0ayfrMP1JMGYicdMFrSs4pBd/5Jewu2HAT9K/32HE09uzT6azwbZeU4=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:ddf2:9aea:6994:df79])
- (user=haoluo job=sendgmr) by 2002:a25:b2a4:: with SMTP id k36mr1601492ybj.567.1642016072371;
- Wed, 12 Jan 2022 11:34:32 -0800 (PST)
-Date:   Wed, 12 Jan 2022 11:31:48 -0800
+ (user=haoluo job=sendgmr) by 2002:a25:8b0e:: with SMTP id i14mr1527309ybl.218.1642016076868;
+ Wed, 12 Jan 2022 11:34:36 -0800 (PST)
+Date:   Wed, 12 Jan 2022 11:31:50 -0800
 In-Reply-To: <20220112193152.3058718-1-haoluo@google.com>
-Message-Id: <20220112193152.3058718-5-haoluo@google.com>
+Message-Id: <20220112193152.3058718-7-haoluo@google.com>
 Mime-Version: 1.0
 References: <20220112193152.3058718-1-haoluo@google.com>
 X-Mailer: git-send-email 2.34.1.703.g22d0c6ccf7-goog
-Subject: [PATCH RESEND RFC bpf-next v1 4/8] bpf: Support removing kernfs entries
+Subject: [PATCH RESEND RFC bpf-next v1 6/8] libbpf: Support of bpf_view prog type.
 From:   Hao Luo <haoluo@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -66,65 +66,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a bpf object has been exposed in kernfs, there should be a way
-to remove it. Kernfs doesn't implement unlink, therefore one can not
-remove the entry in a normal way. To remove the file, we can allow
-writing a special command to the new entry, which can trigger a
-remove_self() for removal.
-
-So far there are two ways to remove an entry that is created by pinning
-bpf objects in kernfs:
-
- 1. unpin the object from bpffs.
- 2. write a special command to the kernfs entry.
+The previous patch introdued a new program type bpf_view. This
+patch adds support for bpf_view in libbpf.
 
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- kernel/bpf/kernfs_node.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ tools/lib/bpf/libbpf.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/kernel/bpf/kernfs_node.c b/kernel/bpf/kernfs_node.c
-index c1c45f7b948b..3d331d8357db 100644
---- a/kernel/bpf/kernfs_node.c
-+++ b/kernel/bpf/kernfs_node.c
-@@ -9,6 +9,9 @@
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 7f10dd501a52..0d458e34d82c 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8570,6 +8570,7 @@ static struct bpf_link *attach_raw_tp(const struct bpf_program *prog, long cooki
+ static struct bpf_link *attach_trace(const struct bpf_program *prog, long cookie);
+ static struct bpf_link *attach_lsm(const struct bpf_program *prog, long cookie);
+ static struct bpf_link *attach_iter(const struct bpf_program *prog, long cookie);
++static struct bpf_link *attach_view(const struct bpf_program *prog, long cookie);
  
- /* file_operations for kernfs file system */
+ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE | SEC_SLOPPY_PFX),
+@@ -8599,6 +8600,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("lsm/",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
+ 	SEC_DEF("lsm.s/",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
+ 	SEC_DEF("iter/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter),
++	SEC_DEF("view/",		TRACING, BPF_TRACE_VIEW, SEC_ATTACH_BTF, attach_view),
+ 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
+ 	SEC_DEF("xdp_devmap/",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
+ 	SEC_DEF("xdp_cpumap/",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
+@@ -8896,6 +8898,7 @@ static int bpf_object__collect_st_ops_relos(struct bpf_object *obj,
+ #define BTF_TRACE_PREFIX "btf_trace_"
+ #define BTF_LSM_PREFIX "bpf_lsm_"
+ #define BTF_ITER_PREFIX "bpf_iter_"
++#define BTF_VIEW_PREFIX "bpf_view_"
+ #define BTF_MAX_NAME_SIZE 128
  
-+/* Command for removing a kernfs entry */
-+#define REMOVE_CMD "rm"
-+
- /* Handler when the watched inode is freed. */
- static void kn_watch_free_inode(void *obj, enum bpf_type type, void *kn)
- {
-@@ -22,8 +25,27 @@ static const struct notify_ops notify_ops = {
- 	.free_inode = kn_watch_free_inode,
- };
+ void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
+@@ -8914,6 +8917,10 @@ void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
+ 		*prefix = BTF_ITER_PREFIX;
+ 		*kind = BTF_KIND_FUNC;
+ 		break;
++	case BPF_TRACE_VIEW:
++		*prefix = BTF_VIEW_PREFIX;
++		*kind = BTF_KIND_FUNC;
++		break;
+ 	default:
+ 		*prefix = "";
+ 		*kind = BTF_KIND_FUNC;
+@@ -10575,6 +10582,20 @@ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+ 	}
+ }
  
-+static ssize_t bpf_generic_write(struct kernfs_open_file *of, char *buf,
-+				 size_t bytes, loff_t off)
++static struct bpf_link *attach_view(const struct bpf_program *prog, long cookie)
 +{
-+	if (sysfs_streq(buf, REMOVE_CMD)) {
-+		kernfs_remove_self(of->kn);
-+		return bytes;
-+	}
++	const char *target_name;
++	const char *prefix = "view/";
++	int btf_id;
 +
-+	return -EINVAL;
++	target_name = prog->sec_name + strlen(prefix);
++	btf_id = libbpf_find_vmlinux_btf_id(target_name, BPF_TRACE_VIEW);
++	if (btf_id < 0)
++		return libbpf_err_ptr(btf_id);
++
++	return bpf_program__attach_fd(prog, 0, btf_id, "view");
 +}
 +
-+static ssize_t bpf_generic_read(struct kernfs_open_file *of, char *buf,
-+				size_t bytes, loff_t off)
-+{
-+	return -EIO;
-+}
-+
- /* Kernfs file operations for bpf created files. */
- static const struct kernfs_ops bpf_generic_ops = {
-+	.write          = bpf_generic_write,
-+	.read           = bpf_generic_read,
- };
- 
- /* Test whether a given dentry is a kernfs entry. */
+ struct bpf_link *
+ bpf_program__attach_iter(const struct bpf_program *prog,
+ 			 const struct bpf_iter_attach_opts *opts)
 -- 
 2.34.1.448.ga2b2bfdf31-goog
 
