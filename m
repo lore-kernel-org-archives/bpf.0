@@ -2,54 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E292C433FE
-	for <bpf@archiver.kernel.org>; Thu, 13 Jan 2022 23:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74FEDC4332F
+	for <bpf@archiver.kernel.org>; Thu, 13 Jan 2022 23:33:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiAMXdG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S235556AbiAMXdG (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 13 Jan 2022 18:33:06 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29226 "EHLO
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35312 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230181AbiAMXdF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Jan 2022 18:33:05 -0500
+        by vger.kernel.org with ESMTP id S235555AbiAMXdG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Jan 2022 18:33:06 -0500
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20DN6Mpw006692
-        for <bpf@vger.kernel.org>; Thu, 13 Jan 2022 15:33:04 -0800
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20DN6Kap006592
+        for <bpf@vger.kernel.org>; Thu, 13 Jan 2022 15:33:05 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=38wPiwz0SQBaVW/c4knZ9z2HmHAMBBcstg4uMh3b9eU=;
- b=E75ZbAZxZUdSBTgCBr0jyyRLBIw0yFnv0Lb/0RhZpve8Z+RuaMRO5gnA9s+E+RzuDcKH
- hIbazp7oImIIbFsieg2ffgk0c5zK8USyFhUt9QmwqFQFejN8O8PAndNvHVJw89vOuNOg
- foMDniUzHbqTJ2vLFqHC2GzAwO+sVRHTjUk= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=CQDO9m7TzsaaJ0OOYKFSMCqU3OyAfpjxhml18kcgnGg=;
+ b=XxWEaWgdJvisWa2OF+lT66aj/ZJy8JGLtXEkoXWHPuO4uuFFxEkbWTsd2k7/MIhPVVTb
+ 3wFo2oGYNzEGGrBNxj5ZVn0b9nRA1t79QUgK66GwPSUIxOglNVtGsy8vtnfGPDm8lMBk
+ h19TBmiB9lEkirDkYtaFEVgbgTa9FTcsqf4= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3djapgp4pu-7
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3djapgp4pw-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Jan 2022 15:33:04 -0800
-Received: from twshared29821.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 13 Jan 2022 15:33:05 -0800
+Received: from twshared13036.24.prn2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 13 Jan 2022 15:33:04 -0800
+ 15.1.2308.20; Thu, 13 Jan 2022 15:33:03 -0800
 Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
-        id EEDC98F97AA5; Thu, 13 Jan 2022 15:32:56 -0800 (PST)
+        id 1859D8F97AB4; Thu, 13 Jan 2022 15:33:01 -0800 (PST)
 From:   Kenny Yu <kennyyu@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
         <daniel@iogearbox.net>, <yhs@fb.com>
 CC:     Kenny Yu <kennyyu@fb.com>
-Subject: [PATCH bpf-next 0/3] Add bpf_access_process_vm helper and sleepable bpf iterator programs
-Date:   Thu, 13 Jan 2022 15:31:55 -0800
-Message-ID: <20220113233158.1582743-1-kennyyu@fb.com>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add test for sleepable bpf iterator programs
+Date:   Thu, 13 Jan 2022 15:31:58 -0800
+Message-ID: <20220113233158.1582743-4-kennyyu@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220113233158.1582743-1-kennyyu@fb.com>
+References: <20220113233158.1582743-1-kennyyu@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: OasTz1oO4x1llAmyRyzsiAVqRzVdgzOv
-X-Proofpoint-ORIG-GUID: OasTz1oO4x1llAmyRyzsiAVqRzVdgzOv
+X-Proofpoint-GUID: IT4jJ1YVzulHg83IIgaMHxtwTe4WI867
+X-Proofpoint-ORIG-GUID: IT4jJ1YVzulHg83IIgaMHxtwTe4WI867
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-13_10,2022-01-13_01,2021-12-02_01
 X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
  priorityscore=1501 impostorscore=0 phishscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=595 lowpriorityscore=0 clxscore=1015 adultscore=0 spamscore=0
+ mlxlogscore=899 lowpriorityscore=0 clxscore=1015 adultscore=0 spamscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2201130140
 X-FB-Internal: deliver
@@ -57,32 +60,120 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series makes the following changes:
-* Adds a new bpf helper `bpf_access_process_vm` to read user space
-  memory from a different task.
-* Adds the ability to create sleepable bpf iterator programs.
+This adds a test for bpf iterator programs to make use of sleepable
+bpf helpers.
 
-As an example of how this will be used, at Meta we are using bpf task ite=
-rator
-programs and this new bpf helper to read C++ async stack traces of a runn=
-ing
-process for debugging C++ binaries in production.
+Signed-off-by: Kenny Yu <kennyyu@fb.com>
+---
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 16 ++++++
+ .../selftests/bpf/progs/bpf_iter_task.c       | 54 +++++++++++++++++++
+ 2 files changed, 70 insertions(+)
 
-Kenny Yu (3):
-  bpf: Add bpf_access_process_vm() helper
-  libbpf: Add "iter.s" section for sleepable bpf iterator programs
-  selftests/bpf: Add test for sleepable bpf iterator programs
-
- include/linux/bpf.h                           |  1 +
- include/uapi/linux/bpf.h                      | 10 +++++
- kernel/bpf/helpers.c                          | 19 ++++++++
- kernel/trace/bpf_trace.c                      |  2 +
- tools/include/uapi/linux/bpf.h                | 10 +++++
- tools/lib/bpf/libbpf.c                        |  1 +
- .../selftests/bpf/prog_tests/bpf_iter.c       | 16 +++++++
- .../selftests/bpf/progs/bpf_iter_task.c       | 43 +++++++++++++++++++
- 8 files changed, 102 insertions(+)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+index b84f859b1267..fcda0ecd8746 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -138,6 +138,20 @@ static void test_task(void)
+ 	bpf_iter_task__destroy(skel);
+ }
+=20
++static void test_task_sleepable(void)
++{
++	struct bpf_iter_task *skel;
++
++	skel =3D bpf_iter_task__open_and_load();
++	if (CHECK(!skel, "bpf_iter_task__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_task_sleepable);
++
++	bpf_iter_task__destroy(skel);
++}
++
+ static void test_task_stack(void)
+ {
+ 	struct bpf_iter_task_stack *skel;
+@@ -1252,6 +1266,8 @@ void test_bpf_iter(void)
+ 		test_bpf_map();
+ 	if (test__start_subtest("task"))
+ 		test_task();
++	if (test__start_subtest("task_sleepable"))
++		test_task_sleepable();
+ 	if (test__start_subtest("task_stack"))
+ 		test_task_stack();
+ 	if (test__start_subtest("task_file"))
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+index c86b93f33b32..bb4b63043533 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2020 Facebook */
+ #include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+@@ -23,3 +24,56 @@ int dump_task(struct bpf_iter__task *ctx)
+ 	BPF_SEQ_PRINTF(seq, "%8d %8d\n", task->tgid, task->pid);
+ 	return 0;
+ }
++
++// New helper added
++static long (*bpf_access_process_vm)(
++	struct task_struct *tsk,
++	unsigned long addr,
++	void *buf,
++	int len,
++	unsigned int gup_flags) =3D (void *)186;
++
++// Copied from include/linux/mm.h
++#define FOLL_REMOTE 0x2000 /* we are working on non-current tsk/mm */
++
++SEC("iter.s/task")
++int dump_task_sleepable(struct bpf_iter__task *ctx)
++{
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct task_struct *task =3D ctx->task;
++	static const char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
++	struct pt_regs *regs;
++	void *ptr;
++	uint32_t user_data =3D 0;
++	int numread;
++
++	if (task =3D=3D (void *)0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	regs =3D (struct pt_regs *)bpf_task_pt_regs(task);
++	if (regs =3D=3D (void *)0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++	ptr =3D (void *)PT_REGS_IP(regs);
++
++	// Try to read the contents of the task's instruction pointer from the
++	// remote task's address space.
++	numread =3D bpf_access_process_vm(task,
++					(unsigned long)ptr,
++					(void *)&user_data,
++					sizeof(uint32_t),
++					FOLL_REMOTE);
++	if (numread !=3D sizeof(uint32_t)) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	if (ctx->meta->seq_num =3D=3D 0)
++		BPF_SEQ_PRINTF(seq, "    tgid      gid     data\n");
++
++	BPF_SEQ_PRINTF(seq, "%8d %8d %8d\n", task->tgid, task->pid, user_data);
++	return 0;
++}
 --=20
 2.30.2
 
