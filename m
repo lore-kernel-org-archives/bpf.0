@@ -2,168 +2,185 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D883EC433FE
-	for <bpf@archiver.kernel.org>; Fri, 14 Jan 2022 14:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B1E6C433F5
+	for <bpf@archiver.kernel.org>; Fri, 14 Jan 2022 14:47:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiANOUu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jan 2022 09:20:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56628 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbiANOUp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:20:45 -0500
+        id S229748AbiANOrL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jan 2022 09:47:11 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50212 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231920AbiANOrL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jan 2022 09:47:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6AD05B825FD;
-        Fri, 14 Jan 2022 14:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC6F8C36AF3;
-        Fri, 14 Jan 2022 14:20:41 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="UpmILH5D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1642170040;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cncAl1lhYlaogYKmR5zQjCe3rwFoN6Y6kAe4crZ9kvU=;
-        b=UpmILH5DoSXmwuy6cHRdFXeBPVq/cj/NSwzm10lYJ3bJ5PSjhNLkisMY3OxAnV0Ue73wTs
-        +r5+f8RZURvO9Zxq59N7Qb4WUOmzKZcYP+Savgy+8IB7WwC/ZWhyq+a8yt9CJlpKno2dMw
-        81DdppmXajYhlwMDlAX/KZezx1DdFds=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 378e8146 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 14 Jan 2022 14:20:40 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
-        Hannes Frederic Sowa <hannes@stressinduktion.org>,
-        Fernando Gont <fgont@si6networks.com>,
-        Erik Kline <ek@google.com>,
-        Lorenzo Colitti <lorenzo@google.com>
-Subject: [PATCH RFC v2 2/3] ipv6: move from sha1 to blake2s in address calculation
-Date:   Fri, 14 Jan 2022 15:20:14 +0100
-Message-Id: <20220114142015.87974-3-Jason@zx2c4.com>
-In-Reply-To: <20220114142015.87974-1-Jason@zx2c4.com>
-References: <20220114142015.87974-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C03E861E96;
+        Fri, 14 Jan 2022 14:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C81C36AE5;
+        Fri, 14 Jan 2022 14:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1642171630;
+        bh=qHWrUmeiZSefYYwS58iqTPXzITzDmFN48zXbQXZimWs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kdQgPnfDGxD87/z11qY6V9c3zmpICJbRX00TrZn1aTGgnGpmrHT27bf+ibRb3nY6F
+         9wM9CF2zkvP7AIHBk3YrpygLhSXOplR3ROk5BI/IEjzKkbomUK0U+2Vz/+quhHu/8a
+         NO9Xw60LjQ7XBBXhSnW8iRqWTAh3JOKLBOsN4TPX8FJcYqWCvxpkQ+AUnH+D+Ukqqr
+         T7hYoxQ9Fesf4Ckh8eokUYo1CzsIcQh1GMKvX96hMV+9lK4ooA3Zn1mUTNBhse0MuL
+         EqgVG42K6zUzShv+Y8p1KjrDMOUPT1/a6yfZvJ07HwzxAqJ2SxikbC+R/imbVe+xLP
+         9ahuXzQr6nZ9A==
+Date:   Fri, 14 Jan 2022 23:47:04 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v2 0/8] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-Id: <20220114234704.41f28e8b5e63368c655d848e@kernel.org>
+In-Reply-To: <YeAatqQTKsrxmUkS@krava>
+References: <164199616622.1247129.783024987490980883.stgit@devnote2>
+        <Yd77SYWgtrkhFIYz@krava>
+        <YeAatqQTKsrxmUkS@krava>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BLAKE2s is faster and more secure. SHA-1 has been broken for a long time
-now. This also removes some code complexity, and lets us potentially
-remove sha1 from lib, which would further reduce vmlinux size. This also
-lets us use the secret in the proper field for a secret, rather than the
-prepending done in the prior construction.
+Hi Jiri and Alexei,
 
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
-Cc: Hannes Frederic Sowa <hannes@stressinduktion.org>
-Cc: Fernando Gont <fgont@si6networks.com>
-Cc: Erik Kline <ek@google.com>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- net/ipv6/addrconf.c | 56 ++++++++++++---------------------------------
- 1 file changed, 14 insertions(+), 42 deletions(-)
+On Thu, 13 Jan 2022 13:27:34 +0100
+Jiri Olsa <jolsa@redhat.com> wrote:
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 3eee17790a82..47048aafebd3 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -61,7 +61,7 @@
- #include <linux/delay.h>
- #include <linux/notifier.h>
- #include <linux/string.h>
--#include <linux/hash.h>
-+#include <crypto/blake2s.h>
- 
- #include <net/net_namespace.h>
- #include <net/sock.h>
-@@ -3224,61 +3224,33 @@ static int ipv6_generate_stable_address(struct in6_addr *address,
- 					u8 dad_count,
- 					const struct inet6_dev *idev)
- {
--	static DEFINE_SPINLOCK(lock);
--	static __u32 digest[SHA1_DIGEST_WORDS];
--	static __u32 workspace[SHA1_WORKSPACE_WORDS];
--
--	static union {
--		char __data[SHA1_BLOCK_SIZE];
--		struct {
--			struct in6_addr secret;
--			__be32 prefix[2];
--			unsigned char hwaddr[MAX_ADDR_LEN];
--			u8 dad_count;
--		} __packed;
--	} data;
--
--	struct in6_addr secret;
--	struct in6_addr temp;
- 	struct net *net = dev_net(idev->dev);
--
--	BUILD_BUG_ON(sizeof(data.__data) != sizeof(data));
-+	const struct in6_addr *secret;
-+	struct blake2s_state hash;
-+	struct in6_addr proposal;
- 
- 	if (idev->cnf.stable_secret.initialized)
--		secret = idev->cnf.stable_secret.secret;
-+		secret = &idev->cnf.stable_secret.secret;
- 	else if (net->ipv6.devconf_dflt->stable_secret.initialized)
--		secret = net->ipv6.devconf_dflt->stable_secret.secret;
-+		secret = &net->ipv6.devconf_dflt->stable_secret.secret;
- 	else
- 		return -1;
- 
- retry:
--	spin_lock_bh(&lock);
--
--	sha1_init(digest);
--	memset(&data, 0, sizeof(data));
--	memset(workspace, 0, sizeof(workspace));
--	memcpy(data.hwaddr, idev->dev->perm_addr, idev->dev->addr_len);
--	data.prefix[0] = address->s6_addr32[0];
--	data.prefix[1] = address->s6_addr32[1];
--	data.secret = secret;
--	data.dad_count = dad_count;
--
--	sha1_transform(digest, data.__data, workspace);
--
--	temp = *address;
--	temp.s6_addr32[2] = (__force __be32)digest[0];
--	temp.s6_addr32[3] = (__force __be32)digest[1];
--
--	spin_unlock_bh(&lock);
-+	blake2s_init_key(&hash, sizeof(proposal.s6_addr32[2]) * 2, secret, sizeof(*secret));
-+	blake2s_update(&hash, (u8 *)&address->s6_addr32[0], sizeof(address->s6_addr32[0]) * 2);
-+	blake2s_update(&hash, idev->dev->perm_addr, idev->dev->addr_len);
-+	blake2s_update(&hash, (u8 *)&dad_count, sizeof(dad_count));
-+	blake2s_final(&hash, (u8 *)&proposal.s6_addr32[2]);
- 
--	if (ipv6_reserved_interfaceid(temp)) {
-+	if (ipv6_reserved_interfaceid(proposal)) {
- 		dad_count++;
--		if (dad_count > dev_net(idev->dev)->ipv6.sysctl.idgen_retries)
-+		if (dad_count > net->ipv6.sysctl.idgen_retries)
- 			return -1;
- 		goto retry;
- 	}
- 
--	*address = temp;
-+	*address = proposal;
- 	return 0;
- }
- 
+> On Wed, Jan 12, 2022 at 05:01:15PM +0100, Jiri Olsa wrote:
+> > On Wed, Jan 12, 2022 at 11:02:46PM +0900, Masami Hiramatsu wrote:
+> > > Hi Jiri and Alexei,
+> > > 
+> > > Here is the 2nd version of fprobe. This version uses the
+> > > ftrace_set_filter_ips() for reducing the registering overhead.
+> > > Note that this also drops per-probe point private data, which
+> > > is not used anyway.
+> > > 
+> > > This introduces the fprobe, the function entry/exit probe with
+> > > multiple probe point support. This also introduces the rethook
+> > > for hooking function return as same as kretprobe does. This
+> > 
+> > nice, I was going through the multi-user-graph support 
+> > and was wondering that this might be a better way
+> > 
+> > > abstraction will help us to generalize the fgraph tracer,
+> > > because we can just switch it from rethook in fprobe, depending
+> > > on the kernel configuration.
+> > > 
+> > > The patch [1/8] and [7/8] are from your series[1]. Other libbpf
+> > > patches will not be affected by this change.
+> > 
+> > I'll try the bpf selftests on top of this
+> 
+> I'm getting crash and stall when running bpf selftests,
+> the fprobe sample module works fine, I'll check on that
+
+I've tried to build tools/testing/selftests/bpf on my machine,
+but I got below errors. Would you know how I can setup to build
+the bpf selftests correctly? (I tried "make M=samples/bpf", but same result)
+
+~/ksrc/linux/tools/testing/selftests/bpf$ make 
+[...]
+  CLANG   /home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool/pid_iter.bpf.o
+skeleton/pid_iter.bpf.c:35:10: error: incomplete definition of type 'struct bpf_link'
+                return BPF_CORE_READ((struct bpf_link *)ent, id);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:403:2: note: expanded from macro 'BPF_CORE_READ'
+        ___type((src), a, ##__VA_ARGS__) __r;                               \
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:274:29: note: expanded from macro '___type'
+#define ___type(...) typeof(___arrow(__VA_ARGS__))
+                            ^~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:272:23: note: expanded from macro '___arrow'
+#define ___arrow(...) ___apply(___arrow, ___narg(__VA_ARGS__))(__VA_ARGS__)
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:223:25: note: expanded from macro '___concat'
+#define ___concat(a, b) a ## b
+                        ^
+<scratch space>:16:1: note: expanded from here
+___arrow2
+^
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:263:26: note: expanded from macro '___arrow2'
+#define ___arrow2(a, b) a->b
+                        ~^
+skeleton/pid_iter.bpf.c:35:32: note: forward declaration of 'struct bpf_link'
+                return BPF_CORE_READ((struct bpf_link *)ent, id);
+                                             ^
+skeleton/pid_iter.bpf.c:35:10: error: incomplete definition of type 'struct bpf_link'
+                return BPF_CORE_READ((struct bpf_link *)ent, id);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:404:2: note: expanded from macro 'BPF_CORE_READ'
+        BPF_CORE_READ_INTO(&__r, (src), a, ##__VA_ARGS__);                  \
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:311:2: note: expanded from macro 'BPF_CORE_READ_INTO'
+        ___core_read(bpf_core_read, bpf_core_read,                          \
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:302:2: note: expanded from macro '___core_read'
+        ___apply(___core_read, ___empty(__VA_ARGS__))(fn, fn_ptr, dst,      \
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:296:2: note: expanded from macro '___core_read0'
+        ___read(fn, dst, ___type(src), src, a);
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:277:59: note: expanded from macro '___read'
+        read_fn((void *)(dst), sizeof(*(dst)), &((src_type)(src))->accessor)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:206:79: note: expanded from macro 'bpf_core_read'
+        bpf_probe_read_kernel(dst, sz, (const void *)__builtin_preserve_access_index(src))
+                                                                                     ^~~
+skeleton/pid_iter.bpf.c:35:32: note: forward declaration of 'struct bpf_link'
+                return BPF_CORE_READ((struct bpf_link *)ent, id);
+                                             ^
+skeleton/pid_iter.bpf.c:35:10: error: returning 'void' from a function with incompatible result type '__u32' (aka 'unsigned int')
+                return BPF_CORE_READ((struct bpf_link *)ent, id);
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool//bootstrap/libbpf//include/bpf/bpf_core_read.h:402:36: note: expanded from macro 'BPF_CORE_READ'
+#define BPF_CORE_READ(src, a, ...) ({                                       \
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+skeleton/pid_iter.bpf.c:42:17: warning: declaration of 'struct bpf_iter__task_file' will not be visible outside of this function [-Wvisibility]
+int iter(struct bpf_iter__task_file *ctx)
+                ^
+skeleton/pid_iter.bpf.c:44:25: error: incomplete definition of type 'struct bpf_iter__task_file'
+        struct file *file = ctx->file;
+                            ~~~^
+skeleton/pid_iter.bpf.c:42:17: note: forward declaration of 'struct bpf_iter__task_file'
+int iter(struct bpf_iter__task_file *ctx)
+                ^
+skeleton/pid_iter.bpf.c:45:32: error: incomplete definition of type 'struct bpf_iter__task_file'
+        struct task_struct *task = ctx->task;
+                                   ~~~^
+skeleton/pid_iter.bpf.c:42:17: note: forward declaration of 'struct bpf_iter__task_file'
+int iter(struct bpf_iter__task_file *ctx)
+                ^
+skeleton/pid_iter.bpf.c:76:19: error: incomplete definition of type 'struct bpf_iter__task_file'
+        bpf_seq_write(ctx->meta->seq, &e, sizeof(e));
+                      ~~~^
+skeleton/pid_iter.bpf.c:42:17: note: forward declaration of 'struct bpf_iter__task_file'
+int iter(struct bpf_iter__task_file *ctx)
+                ^
+1 warning and 6 errors generated.
+make[1]: *** [Makefile:188: /home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/build/bpftool/pid_iter.bpf.o] Error 1
+make: *** [Makefile:219: /home/mhiramat/ksrc/linux/tools/testing/selftests/bpf/tools/sbin/bpftool] Error 2
+
+
+Thank you,
+
 -- 
-2.34.1
-
+Masami Hiramatsu <mhiramat@kernel.org>
