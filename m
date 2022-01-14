@@ -2,158 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA35C433EF
-	for <bpf@archiver.kernel.org>; Fri, 14 Jan 2022 14:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29C27C433F5
+	for <bpf@archiver.kernel.org>; Fri, 14 Jan 2022 14:20:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241568AbiANOQu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 14 Jan 2022 09:16:50 -0500
-Received: from mout.perfora.net ([74.208.4.194]:35039 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241561AbiANOQh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 14 Jan 2022 09:16:37 -0500
-Received: from localhost.localdomain ([81.221.144.115]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MDzNh-1n7blH0XmR-00HPF9;
- Fri, 14 Jan 2022 15:15:28 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chester Lin <clin@suse.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lucas Stach <dev@lynxeye.de>, Martin KaFai Lau <kafai@fb.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Walle <michael@walle.cc>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        =?UTF-8?q?Oliver=20St=C3=A4bler?= <oliver.staebler@bytesatwork.ch>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Will Deacon <will@kernel.org>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH v2 00/11] arm64: prepare and add verdin imx8m mini support
-Date:   Fri, 14 Jan 2022 15:14:56 +0100
-Message-Id: <20220114141507.395271-1-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.33.1
+        id S235301AbiANOUi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 14 Jan 2022 09:20:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233052AbiANOUh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 14 Jan 2022 09:20:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADD0C061574;
+        Fri, 14 Jan 2022 06:20:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FF6461D0D;
+        Fri, 14 Jan 2022 14:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479CBC36AE5;
+        Fri, 14 Jan 2022 14:20:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Of2CtCO7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1642170033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p73GT/WOIEJH2mM8NA3RLurQZTMni+o2wzFAvGzs/BI=;
+        b=Of2CtCO7ODBOXhxJzAEn+WoBbYl0u+pO6pGwtBslsFhg4aDeAmh2ikSM5Aff8hGuZh11Hk
+        uw7iqGI74SPQqXchCG4HoFGEtNzOZaTLUAsgYI+OFYrbTq1TIkJsQbsNk+Eg8GS6UaZe+V
+        ATHmLo1f6B0OK2wnCKHeDjA2QmWX9pI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 11951d38 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 14 Jan 2022 14:20:32 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>, Erik Kline <ek@google.com>,
+        Fernando Gont <fgont@si6networks.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Hannes Frederic Sowa <hannes@stressinduktion.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>,
+        Lorenzo Colitti <lorenzo@google.com>
+Subject: [PATCH RFC v2 0/3] remove remaining users of SHA-1
+Date:   Fri, 14 Jan 2022 15:20:12 +0100
+Message-Id: <20220114142015.87974-1-Jason@zx2c4.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:qvE0E69fR3U8SG8guukfvjMfmFHtZUCRsqWEl8F+pYrI0Ep53um
- rqRdbFy9zCwgeP8Higi+PW6l3hNVFaQ/IgKdlD/Zua4XPmCBAdcLhf3ZBxQxJyPnfsuxHW+
- seLE8kF2gjRf+mt2BOZ9T+UR+WFt5gOpcTyzzCN/xJTBttwfb8D2dvvuqFQ0qkuWlN6WSie
- cH+M2m7z8JzJ9nbeQW7Gg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sIvfkNPuiaI=:R2VPpHu2TucjxHx9nUCJqd
- 9NFVV92twZUheUe/14OH/tJh70MsMWxzVYF5HWCSFhD+Skt5nvser05zMberpHVW/ePDKBTxV
- xaPuyCVjRxQBlf4ePDGPFx46gLkyUSItg/hI3VAs9jBoro5K7/vOtFKv95Vvykwa669TBas31
- HNTanFRKnBFclhEqPMgn5cXMgzS1jwBFR0+53u/9ttokno3i4A/1WJFFOptyTRLB6B0ppO6is
- Bt4YzeecP+O4sTm02M3bVue/FgDj7zjn1XBOVdBLVhOQmTVSq0YT1R7Jgn/j53EOQD2TIPu9u
- 5bJW2QPQihyeHcrRjVw0CZXOLEFb6Q+LNiQlTi8ZB1fCSE2Qyd2PwZnsn6i7bw11qk5EsazVq
- mS3Fvey/e7qqozba0iTVJ0jx8qCcXWBqImtjHc8rMoi3XBuBOzBplJKhjHVTkbAQKqK065kOf
- PGJzOuCHOPfCe8k38a6Sfw//+umdKtQ1797C1ypZlJKN1PkHkkQZEgD+tGIDsR02pmpWpwkRh
- j0bCUC4qIeZygs+jzME+tiw5cxA4AJquCeNTag5eAmQwaZ/5QIPUVbhSrnqM0YMbgi79pxnRX
- 6QX4u4PrYsH291zva8ZsDCJ1uIVbx66xRqPgmeBAYtudOPm6VWBVlqdWj6ZNjGf+qw7ckNmF3
- LX1oFSQdiVzxUD8SkVwQzsDH3Rr57cX/WuQn4Jhyx6GpWSYBr7LPC7mI75UZXQKfYHAU=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hi,
 
+There are currently two remaining users of SHA-1 left in the kernel: bpf
+tag generation, and ipv6 address calculation. In an effort to reduce
+code size and rid ourselves of insecure primitives, this RFC patchset
+moves to using the more secure BLAKE2s function. I wanted to get your
+feedback on how feasible this patchset is, and if there is some
+remaining attachment to SHA-1, why exactly, and what could be done to
+mitigate it. Rather than sending a mailing list post just asking, "what
+do you think?" I figured it'd be easier to send this as an RFC patchset,
+so you see specifically what I mean.
 
-Fix strange hex notation and gpio-hog example, rebuild default
-configuration, enable various relevant configuration options mainly to
-be built as modules, add toradex,verdin-imx8mm et al. to dt-bindings and
-finally, add initial support for Verdin iMX8M Mini.
+Version 2 makes the ipv6 handling a bit cleaner and fixes a build
+warning from the last commit. Since this is just an RFC-for-discussion,
+there's not technically a need to be sending this, but from the looks of
+it, a real solution here might involve a bit more heavy lifting, so I
+wanted to at least get my latest on the list in case others want to play
+around with solutions in this space too. Also, the original recipient
+list was too narrow, so this v2 expands that a bit.
 
-Changes in v2:
-- Added Laurent's reviewed-by tag.
-- Added Rob's ack.
-- New patch following full defconfig analysis as requested by Krzysztof.
-- New patch following full defconfig analysis as requested by Krzysztof.
-- Done full defconfig analysis as requested by Krzysztof.
-- Add Song's acked-by tag.
-- A similar change got accepted for imx_v6_v7_defconfig. Further
-discussion may be found in [1].
-[1] https://lore.kernel.org/lkml/20210920144938.314588-6-marcel@ziswiler.com/
-- Explain why enabling it may be a good idea as requested by Krzysztof.
-- Explain why enabling these may make sense and squash them relevant
-  changes as requested by Krzysztof.
-- Add Rob's acked-by tag.
-- Fix Colibri vs. Verdin copy/paste mistake. Thanks to Francesco Dolcini
-  <francesco.dolcini@toradex.com> for pointing that out to me.
-- Remove bootargs which will be filled in by the bootloader as requested
-  by Krzysztof.
-- Remove the previously #ifdefed-out spi-nor as requested by Krzysztof.
-- Fix capitalisation in cover-letter.
+Thoughts? Comments?
 
-Marcel Ziswiler (11):
-  arm64: dts: imx8mm: fix strange hex notation
-  dt-bindings: gpio: fix gpio-hog example
-  arm64: defconfig: enable taskstats configuration
-  arm64: defconfig: enable pcieaer configuration
-  arm64: defconfig: rebuild default configuration
-  arm64: defconfig: enable bpf/cgroup firewalling
-  arm64: defconfig: build imx-sdma as a module
-  arm64: defconfig: build r8169 as a module
-  arm64: defconfig: enable verdin-imx8mm relevant drivers as modules
-  dt-bindings: arm: fsl: add toradex,verdin-imx8mm et al.
-  arm64: dts: freescale: add initial support for verdin imx8m mini
+Thanks,
+Jason
 
- .../devicetree/bindings/arm/fsl.yaml          |   21 +
- .../devicetree/bindings/gpio/gpio.txt         |    2 +-
- arch/arm64/boot/dts/freescale/Makefile        |    4 +
- .../arm64/boot/dts/freescale/imx8mm-pinfunc.h |    6 +-
- .../dts/freescale/imx8mm-verdin-dahlia.dtsi   |  143 ++
- .../boot/dts/freescale/imx8mm-verdin-dev.dtsi |   67 +
- .../imx8mm-verdin-nonwifi-dahlia.dts          |   18 +
- .../freescale/imx8mm-verdin-nonwifi-dev.dts   |   18 +
- .../dts/freescale/imx8mm-verdin-nonwifi.dtsi  |   75 +
- .../freescale/imx8mm-verdin-wifi-dahlia.dts   |   18 +
- .../dts/freescale/imx8mm-verdin-wifi-dev.dts  |   18 +
- .../dts/freescale/imx8mm-verdin-wifi.dtsi     |   95 ++
- .../boot/dts/freescale/imx8mm-verdin.dtsi     | 1267 +++++++++++++++++
- arch/arm64/configs/defconfig                  |  123 +-
- 14 files changed, 1806 insertions(+), 69 deletions(-)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-dev.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-nonwifi.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dahlia.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi-dev.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin-wifi.dtsi
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Erik Kline <ek@google.com>
+Cc: Fernando Gont <fgont@si6networks.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Hannes Frederic Sowa <hannes@stressinduktion.org>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Jean-Philippe Aumasson <jeanphilippe.aumasson@gmail.com>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+
+Jason A. Donenfeld (3):
+  bpf: move from sha1 to blake2s in tag calculation
+  ipv6: move from sha1 to blake2s in address calculation
+  crypto: sha1_generic - import lib/sha1.c locally
+
+ crypto/sha1_generic.c | 182 +++++++++++++++++++++++++++++++++++++
+ include/crypto/sha1.h |  10 ---
+ kernel/bpf/core.c     |  39 +-------
+ lib/Makefile          |   2 +-
+ lib/sha1.c            | 204 ------------------------------------------
+ net/ipv6/addrconf.c   |  56 +++---------
+ 6 files changed, 201 insertions(+), 292 deletions(-)
+ delete mode 100644 lib/sha1.c
 
 -- 
-2.33.1
+2.34.1
 
