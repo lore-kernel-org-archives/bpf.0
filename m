@@ -2,65 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C1BC433EF
-	for <bpf@archiver.kernel.org>; Sun, 16 Jan 2022 10:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E69AC433EF
+	for <bpf@archiver.kernel.org>; Mon, 17 Jan 2022 00:05:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiAPKmm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 16 Jan 2022 05:42:42 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:40517 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbiAPKmk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 16 Jan 2022 05:42:40 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JcBSY444sz4y4p;
-        Sun, 16 Jan 2022 21:42:37 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     ykaliuta@redhat.com, Jiri Olsa <jolsa@redhat.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        bpf@vger.kernel.org, song@kernel.org,
-        johan.almbladh@anyfinetworks.com
-In-Reply-To: <cover.1641468127.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1641468127.git.naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH 00/13] powerpc/bpf: Some fixes and updates
-Message-Id: <164232966375.2885693.16633538158150214426.b4-ty@ellerman.id.au>
-Date:   Sun, 16 Jan 2022 21:41:03 +1100
+        id S236465AbiAQAFZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 16 Jan 2022 19:05:25 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:45931 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236448AbiAQAFZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 16 Jan 2022 19:05:25 -0500
+Received: by mail-il1-f200.google.com with SMTP id k14-20020a056e021a8e00b002b4b2388c48so10553546ilv.12
+        for <bpf@vger.kernel.org>; Sun, 16 Jan 2022 16:05:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=n0Q0139SFG+a05PCBICqsbFwpyWDdadFRS7jqfWkpqs=;
+        b=fBzpu+Mp80+fbzG/u7u0ECE7jtPSMvxcqhsMnzJ4yMsfTnvKx8H3wFKcoh8hYAReEL
+         1Ma384iZnjBYVUGawuQ+WuYjL/s7VTlwOvl5yRL0aV8TKOKaV2q/Kf0zm4MZWLiZKq6Q
+         mvEocyyK1kyw1AzA+QZ2+Xv2Sd9+CFjlEGGqPP00pXbv3sjxsEI+sCKSXx+5JNeGjkjL
+         cI0VMbBF9TaGMBEQgTIAvHJUGBliSuos45VlaOGZ+3CmYTTnVmnLLsFlcwaz8DBIYBZK
+         DYZfTlt09Y0opet6jBqTO7MHwCPtMWev/K8MWtgSfcOr4Gh5GaILEMKFJD9KWz1Wrz5t
+         Cq9Q==
+X-Gm-Message-State: AOAM5314H6Flif1wVej+i6WsefRzUpJ0CgszCskIz/FmX3iP/KPzhj6N
+        9ao2rJUbFpf/8MHEU9shae6OORFkYUOasKO/BgxNQloDPzgz
+X-Google-Smtp-Source: ABdhPJxRLwLRgnFdUfT5aRwInjv9Q6N05LgHNwf1utr7rzaw6YiUKz8+e1THu35ngdTY2XLsKkVxVrcUy7xIUJ5NgBcyCI8nNUGD
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1c2f:: with SMTP id m15mr9296065ilh.206.1642377924688;
+ Sun, 16 Jan 2022 16:05:24 -0800 (PST)
+Date:   Sun, 16 Jan 2022 16:05:24 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9c00e05d5bbe887@google.com>
+Subject: [syzbot] WARNING in __cleanup_sighand
+From:   syzbot <syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+        axboe@kernel.dk, bpf@vger.kernel.org, christian@brauner.io,
+        daniel@iogearbox.net, david@redhat.com, ebiederm@xmission.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        legion@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 6 Jan 2022 17:15:04 +0530, Naveen N. Rao wrote:
-> A set of fixes and updates to powerpc BPF JIT:
-> - Patches 1-3 fix issues with the existing powerpc JIT and are tagged
->   for -stable.
-> - Patch 4 fixes a build issue with bpf selftests on powerpc.
-> - Patches 5-9 handle some corner cases and make some small improvements.
-> - Patches 10-13 optimize how function calls are handled in ppc64.
-> 
-> [...]
+Hello,
 
-Patches 1-4, and 8 applied to powerpc/fixes.
+syzbot found the following issue on:
 
-[01/13] bpf: Guard against accessing NULL pt_regs in bpf_get_task_stack()
-        https://git.kernel.org/powerpc/c/b992f01e66150fc5e90be4a96f5eb8e634c8249e
-[02/13] powerpc32/bpf: Fix codegen for bpf-to-bpf calls
-        https://git.kernel.org/powerpc/c/fab07611fb2e6a15fac05c4583045ca5582fd826
-[03/13] powerpc/bpf: Update ldimm64 instructions during extra pass
-        https://git.kernel.org/powerpc/c/f9320c49993ca3c0ec0f9a7026b313735306bb8b
-[04/13] tools/bpf: Rename 'struct event' to avoid naming conflict
-        https://git.kernel.org/powerpc/c/88a71086c48ae98e93c0208044827621e9717f7e
-[08/13] powerpc64/bpf: Limit 'ldbrx' to processors compliant with ISA v2.06
-        https://git.kernel.org/powerpc/c/3f5f766d5f7f95a69a630da3544a1a0cee1cdddf
+HEAD commit:    79e06c4c4950 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1285ed28700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=afd3ce8cd5cf174b
+dashboard link: https://syzkaller.appspot.com/bug?extid=985a662ba46639a7897f
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-cheers
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+985a662ba46639a7897f@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3640 at kernel/sched/wait.c:245 __wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:246
+Modules linked in:
+CPU: 0 PID: 3640 Comm: syz-executor.3 Not tainted 5.16.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__wake_up_pollfree+0x1c7/0x1d0 kernel/sched/wait.c:245
+Code: 0d 00 00 c6 44 08 0f 00 65 48 8b 04 25 28 00 00 00 48 3b 84 24 a0 00 00 00 75 13 48 8d 65 d8 5b 41 5c 41 5d 41 5e 41 5f 5d c3 <0f> 0b eb a7 e8 60 3e b0 08 55 41 57 41 56 41 55 41 54 53 48 83 ec
+RSP: 0018:ffffc900028cf760 EFLAGS: 00010097
+RAX: ffff88801ec1b130 RBX: 0000000000000046 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000001
+RBP: ffffc900028cf848 R08: dffffc0000000000 R09: ffffed100850025a
+R10: ffffed100850025a R11: 0000000000000000 R12: 0000000000000000
+R13: ffffc900028cf7a0 R14: 1ffff92000519ef4 R15: ffff888042801308
+FS:  0000555556549400(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fed83b131b8 CR3: 000000004a82a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 000000000000802e DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __cleanup_sighand+0x48/0xa0 kernel/fork.c:1590
+ __exit_signal kernel/exit.c:159 [inline]
+ release_task+0x115f/0x15d0 kernel/exit.c:200
+ wait_task_zombie kernel/exit.c:1114 [inline]
+ wait_consider_task+0x1995/0x2fb0 kernel/exit.c:1341
+ do_wait_thread kernel/exit.c:1404 [inline]
+ do_wait+0x291/0x9d0 kernel/exit.c:1521
+ kernel_wait4+0x2a3/0x3c0 kernel/exit.c:1684
+ __do_sys_wait4 kernel/exit.c:1712 [inline]
+ __se_sys_wait4 kernel/exit.c:1708 [inline]
+ __x64_sys_wait4+0x130/0x1e0 kernel/exit.c:1708
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f2aff29e487
+Code: 89 7c 24 10 48 89 4c 24 18 e8 35 50 02 00 4c 8b 54 24 18 8b 54 24 14 41 89 c0 48 8b 74 24 08 8b 7c 24 10 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 89 44 24 10 e8 65 50 02 00 8b 44
+RSP: 002b:00007ffeabee34f0 EFLAGS: 00000293 ORIG_RAX: 000000000000003d
+RAX: ffffffffffffffda RBX: 0000000000000932 RCX: 00007f2aff29e487
+RDX: 0000000040000001 RSI: 00007ffeabee357c RDI: 00000000ffffffff
+RBP: 00007ffeabee357c R08: 0000000000000000 R09: 0000000000000010
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000032
+R13: 00000000000af2e3 R14: 0000000000000009 R15: 00007ffeabee35e0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
