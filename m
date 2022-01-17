@@ -2,84 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11537C433FE
-	for <bpf@archiver.kernel.org>; Mon, 17 Jan 2022 10:27:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 709C0C433F5
+	for <bpf@archiver.kernel.org>; Mon, 17 Jan 2022 14:08:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238580AbiAQK1X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 05:27:23 -0500
-Received: from foss.arm.com ([217.140.110.172]:56264 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233639AbiAQK1X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 05:27:23 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0227A6D;
-        Mon, 17 Jan 2022 02:27:23 -0800 (PST)
-Received: from [10.57.36.133] (unknown [10.57.36.133])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 613943F73D;
-        Mon, 17 Jan 2022 02:27:20 -0800 (PST)
-Subject: Re: [PATCH] perf record/arm-spe: Override attr->sample_period for
- non-libpfm4 events
-To:     James Clark <james.clark@arm.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Cc:     Chase Conklin <chase.conklin@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Ian Rogers <irogers@google.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Stephane Eranian <eranian@google.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, "acme@kernel.org" <acme@kernel.org>
-References: <20220114212102.179209-1-german.gomez@arm.com>
- <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
-From:   German Gomez <german.gomez@arm.com>
-Message-ID: <35a4f70f-d7ef-6e3c-dc79-aa09d87f0271@arm.com>
-Date:   Mon, 17 Jan 2022 10:27:11 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S232136AbiAQOI0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jan 2022 09:08:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:26421 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230445AbiAQOI0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 17 Jan 2022 09:08:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642428505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wkCYchSMuUOmtyeTT3Zz6bJxZRZtIoKHl9Dc6+V27ng=;
+        b=FgHmSyi02zgNIaxKVVtITQhknRDdlEz0kUHCBKmt99FRPUmnq8PaMXwVfSJQw79Qv3lHGP
+        YgCuwAKEATpbsnzLh0VDXNZm0ogx8+DjzZ6k2K9HzwElklppL67dT1YdVyC8AeyXIDckGz
+        d2ZImg3q5dLcfd4KKxRXu2E7jU9VaAw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-17bYCHA0PXKShv9fflHigg-1; Mon, 17 Jan 2022 09:08:19 -0500
+X-MC-Unique: 17bYCHA0PXKShv9fflHigg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A77A3E768;
+        Mon, 17 Jan 2022 14:08:17 +0000 (UTC)
+Received: from thinkpad.fritz.box (unknown [10.40.194.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 62F0A7B6E0;
+        Mon, 17 Jan 2022 14:08:16 +0000 (UTC)
+From:   Felix Maurer <fmaurer@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     sdf@google.com, kafai@fb.com, ast@kernel.org
+Subject: [PATCH bpf] selftests: bpf: Fix bind on used port
+Date:   Mon, 17 Jan 2022 15:07:28 +0100
+Message-Id: <20220117140728.167736-1-fmaurer@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <c2b960eb-a25e-7ce7-ee4b-2be557d8a213@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi James,
+The bind_perm BPF selftest failed when port 111/tcp was already in use
+during the test. To fix this, the test now runs in its own network name
+space.
 
-On 17/01/2022 09:59, James Clark wrote:
->
-> On 14/01/2022 21:21, German Gomez wrote:
->> A previous commit preventing attr->sample_period values from being
->> overridden in pfm events changed a related behaviour in arm_spe.
->>
->> Before this patch:
->> perf record -c 10000 -e arm_spe_0// -- sleep 1
->>
->> Would not yield an SPE event with period=10000, because the arm-spe code
-> Just to clarify, this seems like it should say "Would yield", not "Would not yield",
-> as in it was previously working?
+To use unshare, it is necessary to reorder the includes. The style of
+the includes is adapted to be consistent with the other prog_tests.
 
-"this patch" refers to the patch I'm sending, not the one it's fixing.
-I might have to rewrite this to make it more clear. How about:
+Fixes: 8259fdeb30326 ("selftests/bpf: Verify that rebinding to port < 1024 from BPF works")
+Signed-off-by: Felix Maurer <fmaurer@redhat.com>
+---
+ .../selftests/bpf/prog_tests/bind_perm.c      | 22 ++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-===
-A previous patch preventing "attr->sample_period" values from being
-overridden in pfm events changed a related behaviour in arm-spe.
+diff --git a/tools/testing/selftests/bpf/prog_tests/bind_perm.c b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
+index d0f06e40c16d..cbd739d36e4d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bind_perm.c
++++ b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
+@@ -1,13 +1,26 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <test_progs.h>
+-#include "bind_perm.skel.h"
+-
++#define _GNU_SOURCE
++#include <sched.h>
++#include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <sys/capability.h>
+ 
++#include "test_progs.h"
++#include "bind_perm.skel.h"
++
+ static int duration;
+ 
++static int create_netns(void)
++{
++	if (CHECK(unshare(CLONE_NEWNET), "create netns",
++		  "unshare(CLONE_NEWNET): %s (%d)",
++		  strerror(errno), errno))
++		return -1;
++
++	return 0;
++}
++
+ void try_bind(int family, int port, int expected_errno)
+ {
+ 	struct sockaddr_storage addr = {};
+@@ -75,6 +88,9 @@ void test_bind_perm(void)
+ 	struct bind_perm *skel;
+ 	int cgroup_fd;
+ 
++	if (create_netns())
++		return;
++
+ 	cgroup_fd = test__join_cgroup("/bind_perm");
+ 	if (CHECK(cgroup_fd < 0, "cg-join", "errno %d", errno))
+ 		return;
+-- 
+2.34.1
 
-Before said patch:
-perf record -c 10000 -e arm_spe_0// -- sleep 1
-
-Would yield an SPE event with period=10000. After the patch, the period
-in "-c 10000" was being ignored because the arm-spe code initializes
-sample_period to a non-zero value.
-
-This patch restores the previous behaviour for non-libpfm4 events.
-===
-
-Thanks for the review,
-German
