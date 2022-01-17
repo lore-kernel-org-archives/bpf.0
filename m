@@ -2,32 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FEBC43219
-	for <bpf@archiver.kernel.org>; Mon, 17 Jan 2022 17:30:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22192C433EF
+	for <bpf@archiver.kernel.org>; Mon, 17 Jan 2022 17:30:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238197AbiAQRan (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 12:30:43 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45938 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239321AbiAQRaf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 12:30:35 -0500
+        id S237891AbiAQRav (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jan 2022 12:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235416AbiAQRap (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Jan 2022 12:30:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD4EC06161C;
+        Mon, 17 Jan 2022 09:30:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD33560B52;
-        Mon, 17 Jan 2022 17:30:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B60C36AF2;
-        Mon, 17 Jan 2022 17:30:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B209B81136;
+        Mon, 17 Jan 2022 17:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E989AC36AF2;
+        Mon, 17 Jan 2022 17:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642440634;
-        bh=kzjtGk8moyVLKEZgG2O6yGRBwFiHkRvLQIrzHnRjC/w=;
+        s=k20201202; t=1642440642;
+        bh=GSpew77zpmCrRi9J+U4C3iTXWcSs13uv6djfuzD/Krs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s6ra3t1naloapDdHFRzQuhOeOaeeBJ3yTaU2Xzvhc0NV8ztSV4hHqnMIvvmi50nlm
-         8LSf4TbIcWDhacL0qVKUjUNfmgh9tQ2B8aEbgvR03w4zXMNjMkIvgzX/VhZ1vj9SRr
-         b/ptzhonl61UzDmFjrTqsw2YlLGZyHW0oNg5grPRTZs+JnEGJrGVMIJo6bjEJxjK3o
-         73JiA7duzlAxPXO8Q0xyiONLUBY54L44n3HVHBvUQ5+dTAHvSoRs4WN/zxQpyHRE7n
-         +FdO0wReTGk7xUzDNYGFwErZQ+/KbXInYd/bNxNHJiLS/sJn9ceLNHkVcahmgZKUgN
-         QunHW932TzrNw==
+        b=u0OcSL3toGQQW3exoVd8zAC8gpZjnCh6d8QSvD/9hHR3dcRya7Y3R/6eHq9CsfkJs
+         JgjvUnZk67xIwCph4BMAG/978v3T6Fte7kb0r0bzO4OdE9Efsv1TCrghheLmAQ2B+Q
+         6ooJivoYYb4iq58CbJQffR2f2wiu783+Wn9TYH+F39Q7yf1CaEONhZurjdgApP4nF8
+         ItTPzxY6vkUXHTqF7KR4eSBTC55RIax/ePHsh1s0zu/KMBXcKIt6jWEFsMvnM+1WKI
+         wmqFLH0IKUZJdYvfzT2xdD6/GATzhw0vgXthybh1jNjcRzJwSDorKZK9gsx2ebPRDN
+         QXCMnRujmstbQ==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -37,9 +40,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
         tirthendu.sarkar@intel.com, toke@redhat.com
-Subject: [PATCH v22 bpf-next 19/23] bpf: generalise tail call map compatibility check
-Date:   Mon, 17 Jan 2022 18:28:31 +0100
-Message-Id: <2e702db189683545e088b74f7d95eb396a329f64.1642439548.git.lorenzo@kernel.org>
+Subject: [PATCH v22 bpf-next 21/23] bpf: selftests: introduce bpf_xdp_{load,store}_bytes selftest
+Date:   Mon, 17 Jan 2022 18:28:33 +0100
+Message-Id: <15c86807d206da193aa8cdf891530a67084612e4.1642439548.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1642439548.git.lorenzo@kernel.org>
 References: <cover.1642439548.git.lorenzo@kernel.org>
@@ -49,263 +52,171 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Hoiland-Jorgensen <toke@redhat.com>
+Introduce kernel selftest for new bpf_xdp_{load,store}_bytes helpers.
+and bpf_xdp_pointer/bpf_xdp_copy_buf utility routines.
 
-The check for tail call map compatibility ensures that tail calls only
-happen between maps of the same type. To ensure backwards compatibility for
-XDP multi-frags we need a similar type of check for cpumap and devmap
-programs, so move the state from bpf_array_aux into bpf_map, add
-xdp_has_frags to the check, and apply the same check to cpumap and devmap.
-
+Acked-by: Toke Hoiland-Jorgensen <toke@redhat.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
-Co-developed-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Toke Hoiland-Jorgensen <toke@redhat.com>
 ---
- include/linux/bpf.h   | 30 +++++++++++++++++++-----------
- kernel/bpf/arraymap.c |  4 +---
- kernel/bpf/core.c     | 28 ++++++++++++++--------------
- kernel/bpf/cpumap.c   |  8 +++++---
- kernel/bpf/devmap.c   |  3 ++-
- kernel/bpf/syscall.c  | 21 +++++++++++----------
- 6 files changed, 52 insertions(+), 42 deletions(-)
+ .../bpf/prog_tests/xdp_adjust_frags.c         | 98 +++++++++++++++++++
+ .../bpf/progs/test_xdp_update_frags.c         | 42 ++++++++
+ 2 files changed, 140 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 909fa29981fd..251c5e27805e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -194,6 +194,17 @@ struct bpf_map {
- 	struct work_struct work;
- 	struct mutex freeze_mutex;
- 	atomic64_t writecnt;
-+	/* 'Ownership' of program-containing map is claimed by the first program
-+	 * that is going to use this map or by the first program which FD is
-+	 * stored in the map to make sure that all callers and callees have the
-+	 * same prog type, JITed flag and xdp_has_frags flag.
-+	 */
-+	struct {
-+		spinlock_t lock;
-+		enum bpf_prog_type type;
-+		bool jited;
-+		bool xdp_has_frags;
-+	} owner;
- };
- 
- static inline bool map_value_has_spin_lock(const struct bpf_map *map)
-@@ -995,16 +1006,6 @@ struct bpf_prog_aux {
- };
- 
- struct bpf_array_aux {
--	/* 'Ownership' of prog array is claimed by the first program that
--	 * is going to use this map or by the first program which FD is
--	 * stored in the map to make sure that all callers and callees have
--	 * the same prog type and JITed flag.
--	 */
--	struct {
--		spinlock_t lock;
--		enum bpf_prog_type type;
--		bool jited;
--	} owner;
- 	/* Programs with direct jumps into programs part of this array. */
- 	struct list_head poke_progs;
- 	struct bpf_map *map;
-@@ -1179,7 +1180,14 @@ struct bpf_event_entry {
- 	struct rcu_head rcu;
- };
- 
--bool bpf_prog_array_compatible(struct bpf_array *array, const struct bpf_prog *fp);
-+static inline bool map_type_contains_progs(struct bpf_map *map)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+new file mode 100644
+index 000000000000..956d1ff23902
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_frags.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++
++void test_xdp_update_frags(void)
 +{
-+	return map->map_type == BPF_MAP_TYPE_PROG_ARRAY ||
-+	       map->map_type == BPF_MAP_TYPE_DEVMAP ||
-+	       map->map_type == BPF_MAP_TYPE_CPUMAP;
++	const char *file = "./test_xdp_update_frags.o";
++	__u32 duration, retval, size;
++	struct bpf_program *prog;
++	struct bpf_object *obj;
++	int err, prog_fd;
++	__u32 *offset;
++	__u8 *buf;
++
++	obj = bpf_object__open(file);
++	if (libbpf_get_error(obj))
++		return;
++
++	prog = bpf_object__next_program(obj, NULL);
++	if (bpf_object__load(obj))
++		return;
++
++	prog_fd = bpf_program__fd(prog);
++
++	buf = malloc(128);
++	if (ASSERT_TRUE(buf, "alloc buf 128b"))
++		goto out;
++
++	memset(buf, 0, 128);
++	offset = (__u32 *)buf;
++	*offset = 16;
++	buf[*offset] = 0xaa;		/* marker at offset 16 (head) */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 31 (head) */
++
++	err = bpf_prog_test_run(prog_fd, 1, buf, 128,
++				buf, &size, &retval, &duration);
++
++	/* test_xdp_update_frags: buf[16,31]: 0xaa -> 0xbb */
++	ASSERT_OK(err || retval != XDP_PASS ||
++		  buf[16] != 0xbb || buf[31] != 0xbb,
++		  "xdp_update_frags buf[16,31]");
++	free(buf);
++
++	buf = malloc(9000);
++	if (ASSERT_TRUE(buf, "alloc buf 9Kb"))
++		goto out;
++
++	memset(buf, 0, 9000);
++	offset = (__u32 *)buf;
++	*offset = 5000;
++	buf[*offset] = 0xaa;		/* marker at offset 5000 (frag0) */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 5015 (frag0) */
++
++	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
++				buf, &size, &retval, &duration);
++
++	/* test_xdp_update_frags: buf[5000,5015]: 0xaa -> 0xbb */
++	ASSERT_OK(err || retval != XDP_PASS ||
++		  buf[5000] != 0xbb || buf[5015] != 0xbb,
++		  "xdp_update_frags buf[5000,5015]");
++
++	memset(buf, 0, 9000);
++	offset = (__u32 *)buf;
++	*offset = 3510;
++	buf[*offset] = 0xaa;		/* marker at offset 3510 (head) */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 3525 (frag0) */
++
++	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
++				buf, &size, &retval, &duration);
++
++	/* test_xdp_update_frags: buf[3510,3525]: 0xaa -> 0xbb */
++	ASSERT_OK(err || retval != XDP_PASS ||
++		  buf[3510] != 0xbb || buf[3525] != 0xbb,
++		  "xdp_update_frags buf[3510,3525]");
++
++	memset(buf, 0, 9000);
++	offset = (__u32 *)buf;
++	*offset = 7606;
++	buf[*offset] = 0xaa;		/* marker at offset 7606 (frag0) */
++	buf[*offset + 15] = 0xaa;	/* marker at offset 7621 (frag1) */
++
++	err = bpf_prog_test_run(prog_fd, 1, buf, 9000,
++				buf, &size, &retval, &duration);
++
++	/* test_xdp_update_frags: buf[7606,7621]: 0xaa -> 0xbb */
++	ASSERT_OK(err || retval != XDP_PASS ||
++		  buf[7606] != 0xbb || buf[7621] != 0xbb,
++		  "xdp_update_frags buf[7606,7621]");
++	free(buf);
++out:
++	bpf_object__close(obj);
 +}
 +
-+bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp);
- int bpf_prog_calc_tag(struct bpf_prog *fp);
- 
- const struct bpf_func_proto *bpf_get_trace_printk_proto(void);
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index c7a5be3bf8be..7f145aefbff8 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -837,13 +837,12 @@ static int fd_array_map_delete_elem(struct bpf_map *map, void *key)
- static void *prog_fd_array_get_ptr(struct bpf_map *map,
- 				   struct file *map_file, int fd)
- {
--	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 	struct bpf_prog *prog = bpf_prog_get(fd);
- 
- 	if (IS_ERR(prog))
- 		return prog;
- 
--	if (!bpf_prog_array_compatible(array, prog)) {
-+	if (!bpf_prog_map_compatible(map, prog)) {
- 		bpf_prog_put(prog);
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -1071,7 +1070,6 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
- 	INIT_WORK(&aux->work, prog_array_map_clear_deferred);
- 	INIT_LIST_HEAD(&aux->poke_progs);
- 	mutex_init(&aux->poke_mutex);
--	spin_lock_init(&aux->owner.lock);
- 
- 	map = array_map_alloc(attr);
- 	if (IS_ERR(map)) {
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index de3e5bc6781f..0a1cfd8544b9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1829,28 +1829,30 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- }
- #endif
- 
--bool bpf_prog_array_compatible(struct bpf_array *array,
--			       const struct bpf_prog *fp)
-+bool bpf_prog_map_compatible(struct bpf_map *map,
-+			     const struct bpf_prog *fp)
- {
- 	bool ret;
- 
- 	if (fp->kprobe_override)
- 		return false;
- 
--	spin_lock(&array->aux->owner.lock);
--
--	if (!array->aux->owner.type) {
-+	spin_lock(&map->owner.lock);
-+	if (!map->owner.type) {
- 		/* There's no owner yet where we could check for
- 		 * compatibility.
- 		 */
--		array->aux->owner.type  = fp->type;
--		array->aux->owner.jited = fp->jited;
-+		map->owner.type  = fp->type;
-+		map->owner.jited = fp->jited;
-+		map->owner.xdp_has_frags = fp->aux->xdp_has_frags;
- 		ret = true;
- 	} else {
--		ret = array->aux->owner.type  == fp->type &&
--		      array->aux->owner.jited == fp->jited;
-+		ret = map->owner.type  == fp->type &&
-+		      map->owner.jited == fp->jited &&
-+		      map->owner.xdp_has_frags == fp->aux->xdp_has_frags;
- 	}
--	spin_unlock(&array->aux->owner.lock);
-+	spin_unlock(&map->owner.lock);
++void test_xdp_adjust_frags(void)
++{
++	if (test__start_subtest("xdp_adjust_frags"))
++		test_xdp_update_frags();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c b/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
+new file mode 100644
+index 000000000000..2a3496d8e327
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_update_frags.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of version 2 of the GNU General Public
++ * License as published by the Free Software Foundation.
++ */
++#include <linux/bpf.h>
++#include <linux/if_ether.h>
++#include <bpf/bpf_helpers.h>
 +
- 	return ret;
- }
- 
-@@ -1862,13 +1864,11 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
- 	mutex_lock(&aux->used_maps_mutex);
- 	for (i = 0; i < aux->used_map_cnt; i++) {
- 		struct bpf_map *map = aux->used_maps[i];
--		struct bpf_array *array;
- 
--		if (map->map_type != BPF_MAP_TYPE_PROG_ARRAY)
-+		if (!map_type_contains_progs(map))
- 			continue;
- 
--		array = container_of(map, struct bpf_array, map);
--		if (!bpf_prog_array_compatible(array, fp)) {
-+		if (!bpf_prog_map_compatible(map, fp)) {
- 			ret = -EINVAL;
- 			goto out;
- 		}
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index b3e6b9422238..650e5d21f90d 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -397,7 +397,8 @@ static int cpu_map_kthread_run(void *data)
- 	return 0;
- }
- 
--static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
-+static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu,
-+				      struct bpf_map *map, int fd)
- {
- 	struct bpf_prog *prog;
- 
-@@ -405,7 +406,8 @@ static int __cpu_map_load_bpf_program(struct bpf_cpu_map_entry *rcpu, int fd)
- 	if (IS_ERR(prog))
- 		return PTR_ERR(prog);
- 
--	if (prog->expected_attach_type != BPF_XDP_CPUMAP) {
-+	if (prog->expected_attach_type != BPF_XDP_CPUMAP ||
-+	    !bpf_prog_map_compatible(map, prog)) {
- 		bpf_prog_put(prog);
- 		return -EINVAL;
- 	}
-@@ -457,7 +459,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
- 	rcpu->map_id = map->id;
- 	rcpu->value.qsize  = value->qsize;
- 
--	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, fd))
-+	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, map, fd))
- 		goto free_ptr_ring;
- 
- 	/* Setup kthread */
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index fe019dbdb3f0..038f6d7a83e4 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -858,7 +858,8 @@ static struct bpf_dtab_netdev *__dev_map_alloc_node(struct net *net,
- 					     BPF_PROG_TYPE_XDP, false);
- 		if (IS_ERR(prog))
- 			goto err_put_dev;
--		if (prog->expected_attach_type != BPF_XDP_DEVMAP)
-+		if (prog->expected_attach_type != BPF_XDP_DEVMAP ||
-+		    !bpf_prog_map_compatible(&dtab->map, prog))
- 			goto err_put_prog;
- 	}
- 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e3c9deb7e25f..2c50d26814d9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -556,16 +556,15 @@ static unsigned long bpf_map_memory_footprint(const struct bpf_map *map)
- 
- static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- {
--	const struct bpf_map *map = filp->private_data;
--	const struct bpf_array *array;
--	u32 type = 0, jited = 0;
--
--	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY) {
--		array = container_of(map, struct bpf_array, map);
--		spin_lock(&array->aux->owner.lock);
--		type  = array->aux->owner.type;
--		jited = array->aux->owner.jited;
--		spin_unlock(&array->aux->owner.lock);
-+	struct bpf_map *map = filp->private_data;
-+	u32 type = 0, jited = 0, xdp_has_frags = 0;
++int _version SEC("version") = 1;
 +
-+	if (map_type_contains_progs(map)) {
-+		spin_lock(&map->owner.lock);
-+		type  = map->owner.type;
-+		jited = map->owner.jited;
-+		xdp_has_frags = map->owner.xdp_has_frags;
-+		spin_unlock(&map->owner.lock);
- 	}
- 
- 	seq_printf(m,
-@@ -590,6 +589,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
- 	if (type) {
- 		seq_printf(m, "owner_prog_type:\t%u\n", type);
- 		seq_printf(m, "owner_jited:\t%u\n", jited);
-+		seq_printf(m, "owner_xdp_has_frags:\t%u\n", xdp_has_frags);
- 	}
- }
- #endif
-@@ -874,6 +874,7 @@ static int map_create(union bpf_attr *attr)
- 	atomic64_set(&map->refcnt, 1);
- 	atomic64_set(&map->usercnt, 1);
- 	mutex_init(&map->freeze_mutex);
-+	spin_lock_init(&map->owner.lock);
- 
- 	map->spin_lock_off = -EINVAL;
- 	map->timer_off = -EINVAL;
++SEC("xdp.frags")
++int xdp_adjust_frags(struct xdp_md *xdp)
++{
++	__u8 *data_end = (void *)(long)xdp->data_end;
++	__u8 *data = (void *)(long)xdp->data;
++	__u8 val[16] = {};
++	__u32 offset;
++	int err;
++
++	if (data + sizeof(__u32) > data_end)
++		return XDP_DROP;
++
++	offset = *(__u32 *)data;
++	err = bpf_xdp_load_bytes(xdp, offset, val, sizeof(val));
++	if (err < 0)
++		return XDP_DROP;
++
++	if (val[0] != 0xaa || val[15] != 0xaa) /* marker */
++		return XDP_DROP;
++
++	val[0] = 0xbb; /* update the marker */
++	val[15] = 0xbb;
++	err = bpf_xdp_store_bytes(xdp, offset, val, sizeof(val));
++	if (err < 0)
++		return XDP_DROP;
++
++	return XDP_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.34.1
 
