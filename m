@@ -2,84 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A157C433EF
-	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 03:48:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D02CC433EF
+	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 06:42:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbiARDs2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 22:48:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46150 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346960AbiARCkT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:40:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 655DFB811CF;
-        Tue, 18 Jan 2022 02:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DC2C36AEB;
-        Tue, 18 Jan 2022 02:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473617;
-        bh=Adkz8tW47vbwofh7NrAPeUglOkNTCxORjd0loYPv954=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GL1euMVLqEJ4bRV+YoXRBZdaMGs1r3aWBL7al51zKAAW/f4R9NJtYgdoKCnbDSRFo
-         LHv+lFQgFiUmLPyqf2kI1Jm10/TUPyDMYqeyq7gw2JTQw3qHsTBsC9PI6WOf8azWBR
-         0JlZ5r2V6ZIcNA12VMQdaNVB7Gf7UKBpW/vQuNf2+yscx3CdUYJleTtAGOfVxFstMA
-         NIKpu/TE2weIc93999/KrZYKqzQxcUAYxspUC9Jjyhv8/UsPe+tdMLuCpdW3X00Lm2
-         XwVxJuqAK1Ao2Y7lkTQrlVzE8NwtaAXe/YYXDWuM/G2MjchPXzS08auCz/1tsUBfRp
-         krD3GdINLcgBw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Hengqi Chen <hengqi.chen@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        daniel@iogearbox.net, davemarchevsky@fb.com,
-        john.fastabend@gmail.com, ntspring@fb.com, vfedorenko@novek.ru,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 005/116] selftests/bpf: Fix bpf_object leak in skb_ctx selftest
-Date:   Mon, 17 Jan 2022 21:38:16 -0500
-Message-Id: <20220118024007.1950576-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
-References: <20220118024007.1950576-1-sashal@kernel.org>
+        id S234449AbiARGmn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Jan 2022 01:42:43 -0500
+Received: from helcar.hmeau.com ([216.24.177.18]:59642 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230021AbiARGmm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Jan 2022 01:42:42 -0500
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1n9iCJ-0007NZ-N3; Tue, 18 Jan 2022 17:42:28 +1100
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 18 Jan 2022 17:42:28 +1100
+Date:   Tue, 18 Jan 2022 17:42:28 +1100
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     geert@linux-m68k.org, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org, tytso@mit.edu,
+        gregkh@linuxfoundation.org, jeanphilippe.aumasson@gmail.com,
+        ardb@kernel.org
+Subject: Re: [PATCH crypto v3 0/2] reduce code size from blake2s on m68k and
+ other small platforms
+Message-ID: <YeZhVGczxcBl0sI9@gondor.apana.org.au>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9rxdksVZkN4DF_GabsEPrSDrKbo1cVQs77B_s-e2jZ64A@mail.gmail.com>
+X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.kernel,apana.lists.os.linux.netdev
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Excellent, thanks for the breakdown. So this shaves off ~4k, which was
+> about what we were shooting for here, so I think indeed this series
+> accomplishes its goal of counteracting the addition of BLAKE2s.
+> Hopefully Herbert will apply this series for 5.17.
 
-[ Upstream commit 8c7a95520184b6677ca6075e12df9c208d57d088 ]
+As the patches that triggered this weren't part of the crypto
+tree, this will have to go through the random tree if you want
+them for 5.17.
 
-skb_ctx selftest didn't close bpf_object implicitly allocated by
-bpf_prog_test_load() helper. Fix the problem by explicitly calling
-bpf_object__close() at the end of the test.
+Otherwise if you're happy to wait then I can pull them through
+cryptodev.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
-Link: https://lore.kernel.org/bpf/20211107165521.9240-10-andrii@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index fafeddaad6a99..23915be6172d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -105,4 +105,6 @@ void test_skb_ctx(void)
- 		   "ctx_out_mark",
- 		   "skb->mark == %u, expected %d\n",
- 		   skb.mark, 10);
-+
-+	bpf_object__close(obj);
- }
+Cheers,
 -- 
-2.34.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
