@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF05BC433F5
-	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 02:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60FB8C433F5
+	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 02:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344717AbiARChR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 21:37:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S1346593AbiARCtK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jan 2022 21:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245652AbiARCdq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:33:46 -0500
+        with ESMTP id S1345785AbiARCcC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:32:02 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E682C061796;
-        Mon, 17 Jan 2022 18:32:22 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24622C061574;
+        Mon, 17 Jan 2022 18:31:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 33B28B81243;
-        Tue, 18 Jan 2022 02:32:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FE8C36AE3;
-        Tue, 18 Jan 2022 02:32:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D3282B81235;
+        Tue, 18 Jan 2022 02:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07862C36AE3;
+        Tue, 18 Jan 2022 02:31:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473139;
-        bh=Adkz8tW47vbwofh7NrAPeUglOkNTCxORjd0loYPv954=;
+        s=k20201202; t=1642473068;
+        bh=UD6Ht1hPoWlejkDH/Gzpu/erG3jhCpBQYjkRtuiDRoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dRyh79iGAnN2/4K3b30xfxJkZrp7/mh+SxxU6wFcOmJVRu96PWSFexEJ88C7uG/S+
-         B1nk9sCVHR5IzGPdL4WytiJujOqKK+zZ6Ap8qQc6c3fEqJvr4QS5uFDPvhFtbcW1lU
-         AENhUuvylNJYjPcAy2peSOQ1gwwGq4HAKz6ZtkuWGfxJAzMM5yrLR13zO2MTTcnfEM
-         JvTrU/GYJZKZgGZqiRbJLFHfdbn0CbcuTg3zWvGXja1NSZaN3dOTUhVA8dzKSKIsXx
-         hpxZl4nBU7EHcrPL+DTafmVKVZmQIGl6Fvc1rCxk8EyOIEY99wQTexuP8k1Ado3kSW
-         +qICaVywWMVlg==
+        b=YY2PPF1YKEL1WvF4w9OqHK/Lz1WYGHSDwlrlbyGBNs7UQI9sMB7j/+iicMgcexGTt
+         trvanExfZ7CGL51fdRsxXf91AnOeIMogVDJ1rd5CuwRV3PwBJRgypS6V9dY4aCpcNr
+         Qbu4yZWST0gxt2go+aqglQ33rrRWsvqA0AlFdRded8mclpE/nGCHP4EsUXIuzLkuB8
+         mtKUWoVTfTAOGriDKynt1VVP4nKX8rFwY8EvAnHEAEncb3vmv7Dd+2Q7BjxkZtq7lF
+         NgZVvxrV1SOsgXgWiG59N3A6cL5I0kghaVWc+FeKEJMX8GcijNLEzvKHGwXJ9Ij33a
+         kB3JMCXGA+UIw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Hengqi Chen <hengqi.chen@gmail.com>,
+Cc:     Jiri Olsa <jolsa@redhat.com>, Hangbin Liu <haliu@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jussi Maki <joamaki@gmail.com>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        daniel@iogearbox.net, davemarchevsky@fb.com, kafai@fb.com,
-        ntspring@fb.com, vfedorenko@novek.ru,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 010/188] selftests/bpf: Fix bpf_object leak in skb_ctx selftest
-Date:   Mon, 17 Jan 2022 21:28:54 -0500
-Message-Id: <20220118023152.1948105-10-sashal@kernel.org>
+        ast@kernel.org, andrii@kernel.org, yhs@fb.com, sunyucong@gmail.com,
+        sdf@google.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.16 199/217] bpf/selftests: Fix namespace mount setup in tc_redirect
+Date:   Mon, 17 Jan 2022 21:19:22 -0500
+Message-Id: <20220118021940.1942199-199-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
-References: <20220118023152.1948105-1-sashal@kernel.org>
+In-Reply-To: <20220118021940.1942199-1-sashal@kernel.org>
+References: <20220118021940.1942199-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -55,34 +55,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Jiri Olsa <jolsa@redhat.com>
 
-[ Upstream commit 8c7a95520184b6677ca6075e12df9c208d57d088 ]
+[ Upstream commit 5e22dd18626726028a93ff1350a8a71a00fd843d ]
 
-skb_ctx selftest didn't close bpf_object implicitly allocated by
-bpf_prog_test_load() helper. Fix the problem by explicitly calling
-bpf_object__close() at the end of the test.
+The tc_redirect umounts /sys in the new namespace, which can be
+mounted as shared and cause global umount. The lazy umount also
+takes down mounted trees under /sys like debugfs, which won't be
+available after sysfs mounts again and could cause fails in other
+tests.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
-Link: https://lore.kernel.org/bpf/20211107165521.9240-10-andrii@kernel.org
+  # cat /proc/self/mountinfo | grep debugfs
+  34 23 0:7 / /sys/kernel/debug rw,nosuid,nodev,noexec,relatime shared:14 - debugfs debugfs rw
+  # cat /proc/self/mountinfo | grep sysfs
+  23 86 0:22 / /sys rw,nosuid,nodev,noexec,relatime shared:2 - sysfs sysfs rw
+  # mount | grep debugfs
+  debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+
+  # ./test_progs -t tc_redirect
+  #164 tc_redirect:OK
+  Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+
+  # mount | grep debugfs
+  # cat /proc/self/mountinfo | grep debugfs
+  # cat /proc/self/mountinfo | grep sysfs
+  25 86 0:22 / /sys rw,relatime shared:2 - sysfs sysfs rw
+
+Making the sysfs private under the new namespace so the umount won't
+trigger the global sysfs umount.
+
+Reported-by: Hangbin Liu <haliu@redhat.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jussi Maki <joamaki@gmail.com>
+Link: https://lore.kernel.org/bpf/20220104121030.138216-1-jolsa@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/skb_ctx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/tc_redirect.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-index fafeddaad6a99..23915be6172d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
-@@ -105,4 +105,6 @@ void test_skb_ctx(void)
- 		   "ctx_out_mark",
- 		   "skb->mark == %u, expected %d\n",
- 		   skb.mark, 10);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index 4b18b73df10b6..c2426df58e172 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -105,6 +105,13 @@ static int setns_by_fd(int nsfd)
+ 	if (!ASSERT_OK(err, "unshare"))
+ 		return err;
+ 
++	/* Make our /sys mount private, so the following umount won't
++	 * trigger the global umount in case it's shared.
++	 */
++	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
++	if (!ASSERT_OK(err, "remount private /sys"))
++		return err;
 +
-+	bpf_object__close(obj);
- }
+ 	err = umount2("/sys", MNT_DETACH);
+ 	if (!ASSERT_OK(err, "umount2 /sys"))
+ 		return err;
 -- 
 2.34.1
 
