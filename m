@@ -2,52 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9DF2C433EF
-	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 03:41:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A157C433EF
+	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 03:48:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244601AbiARDlz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 22:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352911AbiARDER (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 22:04:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E89C02525E;
-        Mon, 17 Jan 2022 18:48:06 -0800 (PST)
+        id S239661AbiARDs2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:48:28 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46150 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346960AbiARCkT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:40:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE6E6612CE;
-        Tue, 18 Jan 2022 02:48:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7DD8C36AEF;
-        Tue, 18 Jan 2022 02:48:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 655DFB811CF;
+        Tue, 18 Jan 2022 02:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DC2C36AEB;
+        Tue, 18 Jan 2022 02:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642474085;
-        bh=xAngeKfXCJtF/25f0h8+pSD9XBwTu6oIqZSVUBcS/cQ=;
+        s=k20201202; t=1642473617;
+        bh=Adkz8tW47vbwofh7NrAPeUglOkNTCxORjd0loYPv954=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YGAzQC4hAK+kjM5cpXtld1hcnXg9d+GSMnRqYXnN+w+yjdeo+Ex/jGlni3/8qyi3n
-         PWX+KgGOAqy7ThKvGwzNCr5eOopUz61ePsRXYKeT1aEIsASYCAxcailZu7iY+5JmhG
-         +wiq/TSNqYEDEBc/nLs0SJpWthVwKa1M7Ts53ChmT0NjFBmMfzQtESrkHiiql5WHLt
-         DkZ6zwIFmq87e9BpvGF6vn85Er7LJm4llCZw3ZMJXXTQ1CopRv8yjWjgJn34/Xflt5
-         CWuIUhgsCOi11pG4rfBlfzdDrAiAj3xz97mQy3RZ93aZcO4NvXNnYliDgqlPidQ+UV
-         1zcdx3c1EU3VQ==
+        b=GL1euMVLqEJ4bRV+YoXRBZdaMGs1r3aWBL7al51zKAAW/f4R9NJtYgdoKCnbDSRFo
+         LHv+lFQgFiUmLPyqf2kI1Jm10/TUPyDMYqeyq7gw2JTQw3qHsTBsC9PI6WOf8azWBR
+         0JlZ5r2V6ZIcNA12VMQdaNVB7Gf7UKBpW/vQuNf2+yscx3CdUYJleTtAGOfVxFstMA
+         NIKpu/TE2weIc93999/KrZYKqzQxcUAYxspUC9Jjyhv8/UsPe+tdMLuCpdW3X00Lm2
+         XwVxJuqAK1Ao2Y7lkTQrlVzE8NwtaAXe/YYXDWuM/G2MjchPXzS08auCz/1tsUBfRp
+         krD3GdINLcgBw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Hengqi Chen <hengqi.chen@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, davemarchevsky@fb.com,
+        john.fastabend@gmail.com, ntspring@fb.com, vfedorenko@novek.ru,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 28/59] bpf: Do not WARN in bpf_warn_invalid_xdp_action()
-Date:   Mon, 17 Jan 2022 21:46:29 -0500
-Message-Id: <20220118024701.1952911-28-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 005/116] selftests/bpf: Fix bpf_object leak in skb_ctx selftest
+Date:   Mon, 17 Jan 2022 21:38:16 -0500
+Message-Id: <20220118024007.1950576-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024701.1952911-1-sashal@kernel.org>
-References: <20220118024701.1952911-1-sashal@kernel.org>
+In-Reply-To: <20220118024007.1950576-1-sashal@kernel.org>
+References: <20220118024007.1950576-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -55,46 +52,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 2cbad989033bff0256675c38f96f5faab852af4b ]
+[ Upstream commit 8c7a95520184b6677ca6075e12df9c208d57d088 ]
 
-The WARN_ONCE() in bpf_warn_invalid_xdp_action() can be triggered by
-any bugged program, and even attaching a correct program to a NIC
-not supporting the given action.
+skb_ctx selftest didn't close bpf_object implicitly allocated by
+bpf_prog_test_load() helper. Fix the problem by explicitly calling
+bpf_object__close() at the end of the test.
 
-The resulting splat, beyond polluting the logs, fouls automated tools:
-e.g. a syzkaller reproducers using an XDP program returning an
-unsupported action will never pass validation.
-
-Replace the WARN_ONCE with a less intrusive pr_warn_once().
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Link: https://lore.kernel.org/bpf/016ceec56e4817ebb2a9e35ce794d5c917df572c.1638189075.git.pabeni@redhat.com
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+Link: https://lore.kernel.org/bpf/20211107165521.9240-10-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/skb_ctx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 01496c7cb42d7..7d68c98a00aa8 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5534,9 +5534,9 @@ void bpf_warn_invalid_xdp_action(u32 act)
- {
- 	const u32 act_max = XDP_REDIRECT;
- 
--	WARN_ONCE(1, "%s XDP return value %u, expect packet loss!\n",
--		  act > act_max ? "Illegal" : "Driver unsupported",
--		  act);
-+	pr_warn_once("%s XDP return value %u, expect packet loss!\n",
-+		     act > act_max ? "Illegal" : "Driver unsupported",
-+		     act);
+diff --git a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+index fafeddaad6a99..23915be6172d6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
++++ b/tools/testing/selftests/bpf/prog_tests/skb_ctx.c
+@@ -105,4 +105,6 @@ void test_skb_ctx(void)
+ 		   "ctx_out_mark",
+ 		   "skb->mark == %u, expected %d\n",
+ 		   skb.mark, 10);
++
++	bpf_object__close(obj);
  }
- EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
- 
 -- 
 2.34.1
 
