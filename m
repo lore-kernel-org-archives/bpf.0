@@ -2,52 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E15E8C43217
-	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 02:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4F3DC433EF
+	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 02:37:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245680AbiARCeM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 21:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344079AbiARC2w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:28:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC63C0612AD;
-        Mon, 17 Jan 2022 18:26:03 -0800 (PST)
+        id S1344690AbiARChN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jan 2022 21:37:13 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43664 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345962AbiARCcT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:32:19 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2E0F60AE3;
-        Tue, 18 Jan 2022 02:26:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9579C36AEB;
-        Tue, 18 Jan 2022 02:26:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2970CB81235;
+        Tue, 18 Jan 2022 02:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B010BC36AE3;
+        Tue, 18 Jan 2022 02:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642472762;
-        bh=v4GfyUoxO/3i7wg7IBAZoBsHea3YJJ73B4jQ4QK/cWc=;
+        s=k20201202; t=1642473136;
+        bh=2tE7hxKGMOMC5KAqc0el4iqpnPASZIZxwjjzSAZrSyQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jmtH46wVrTx+CCCwsFGwTY5DZiIRwqLuCcKTYrTtjkXV/75cfXRQFad7PELcUg5EE
-         AeJWrJ5RXEgdfoFybDwKS3vsSopCObasYvwUxfmFJ743+UqnIJK/8C3wmtJIEs4pHk
-         2xlaJssl0LN5uWQaqR4xhKHda/jcwvSYK1IUYCFD3isRB9pJrer1pcxlbYx36+quXb
-         kLyu4IEtKIH5iQGd/araTzjcNSbJs3nBEAO6C1nES40KzhQKK4GmXkinN/aNpZu7Yc
-         p7cC0Yk1iqGdZa/UyTQ6edZbMDg8M0t5UtcQCydecN0tTs1hQPzTvguEluwu9V12ss
-         8csQ/Eft94XVQ==
+        b=NfzuODy+goaTFfscNkKdb/88iTrStnaUA4eAtz9uHp7IK/g0ciVitiNiUcloFqJ7q
+         uHgj04oc55MYD0JkT3L1BBuMi0CWMQh2lmuvFsBZ1IkORj9pHnQxizqoxvzj5FJd+m
+         Y9XIZrpmovVPv/Ym6NJCqgBSZIOM/UGytNwe1sMXSKIo0vLPjjnDkuwdoMAcr3539Q
+         chsk6WH8kj+wSiLrAC1ttwAMubD1EpvzXhMK3M36r2r9sZ3pGkvdqJI6/ge/rTvL/d
+         Vo/uZULpp/WYjyENwzBUjwjUEbY+C3P2u1RyutHLSJFVktDi/4QzksMFBsic4PbPAq
+         DDmKVxrPFOV2Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 129/217] bpf: Do not WARN in bpf_warn_invalid_xdp_action()
-Date:   Mon, 17 Jan 2022 21:18:12 -0500
-Message-Id: <20220118021940.1942199-129-sashal@kernel.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Hengqi Chen <hengqi.chen@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, kuniyu@amazon.co.jp, edumazet@google.com,
+        sunyucong@gmail.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 009/188] selftests/bpf: Destroy XDP link correctly
+Date:   Mon, 17 Jan 2022 21:28:53 -0500
+Message-Id: <20220118023152.1948105-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118021940.1942199-1-sashal@kernel.org>
-References: <20220118021940.1942199-1-sashal@kernel.org>
+In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
+References: <20220118023152.1948105-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -55,46 +51,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 2cbad989033bff0256675c38f96f5faab852af4b ]
+[ Upstream commit f91231eeeed752119f49eb6620cae44ec745a007 ]
 
-The WARN_ONCE() in bpf_warn_invalid_xdp_action() can be triggered by
-any bugged program, and even attaching a correct program to a NIC
-not supporting the given action.
+bpf_link__detach() was confused with bpf_link__destroy() and leaves
+leaked FD in the process. Fix the problem.
 
-The resulting splat, beyond polluting the logs, fouls automated tools:
-e.g. a syzkaller reproducers using an XDP program returning an
-unsupported action will never pass validation.
-
-Replace the WARN_ONCE with a less intrusive pr_warn_once().
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Link: https://lore.kernel.org/bpf/016ceec56e4817ebb2a9e35ce794d5c917df572c.1638189075.git.pabeni@redhat.com
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Reviewed-by: Hengqi Chen <hengqi.chen@gmail.com>
+Link: https://lore.kernel.org/bpf/20211107165521.9240-9-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 6102f093d59a5..04032f64e01bc 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8185,9 +8185,9 @@ void bpf_warn_invalid_xdp_action(u32 act)
+diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+index 59adb4715394f..3c85247f96f95 100644
+--- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+@@ -204,8 +204,8 @@ static int pass_ack(struct migrate_reuseport_test_case *test_case)
  {
- 	const u32 act_max = XDP_REDIRECT;
+ 	int err;
  
--	WARN_ONCE(1, "%s XDP return value %u, expect packet loss!\n",
--		  act > act_max ? "Illegal" : "Driver unsupported",
--		  act);
-+	pr_warn_once("%s XDP return value %u, expect packet loss!\n",
-+		     act > act_max ? "Illegal" : "Driver unsupported",
-+		     act);
- }
- EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
+-	err = bpf_link__detach(test_case->link);
+-	if (!ASSERT_OK(err, "bpf_link__detach"))
++	err = bpf_link__destroy(test_case->link);
++	if (!ASSERT_OK(err, "bpf_link__destroy"))
+ 		return -1;
  
+ 	test_case->link = NULL;
 -- 
 2.34.1
 
