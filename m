@@ -2,49 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9475AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 02:49:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C01AFC433EF
+	for <bpf@archiver.kernel.org>; Tue, 18 Jan 2022 03:06:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344785AbiARCtT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Jan 2022 21:49:19 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:38444 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348723AbiARCpy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Jan 2022 21:45:54 -0500
+        id S1349355AbiARDGn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Jan 2022 22:06:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345808AbiARCsj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Jan 2022 21:48:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACE6C0612E1;
+        Mon, 17 Jan 2022 18:39:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A908612E9;
-        Tue, 18 Jan 2022 02:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C0EC36AE3;
-        Tue, 18 Jan 2022 02:45:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6ADC611F1;
+        Tue, 18 Jan 2022 02:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B29C36AE3;
+        Tue, 18 Jan 2022 02:39:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642473953;
-        bh=HOVjiGuJLSrGgAuWUGQwZudQWNHmplGt08zBeWR6DBg=;
+        s=k20201202; t=1642473567;
+        bh=TElkjlzuCBV3Gc3JqGNMR1z/jwiZxTMPgmvaZtwLM8E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hiK/fKfaA58nbx37hW6AZlvw5vENaFC/rOcm7BV/gPM1p1VqrxQWXGEPinY1cHbBQ
-         QVhXZM3xDqMUgOYNNchLZJ8wq8PR1Fyp5mveq2FjhVNclT3GGpNYm61Ieaz+ZZZmBV
-         a4jcx4N2dmyYimDt10KnhVftC6mRIb3GpzRPo8OXYo4BTSacydlQKxmEIYHABA2fgS
-         SDF2qX+ocUqVc/cQDfS5ZAEe2RR6pM4vVIT2T8cGa+Q/9Ik3oHweJPULNiG8lvv35+
-         NH71ATt5dkk/Rgt72NgG+5oDIW4WhXg+Ca4lDFEk5o/wVyDj0xwXSu10Swgsz4/PqL
-         TIkiFJMeqRrXQ==
+        b=EBezdbPkcVrepUvg7wRmaMzioOrSPHTCiI45/LtOdQG5561V7l6bX79TJJt/meVn/
+         cB1QJO+esTevI8jMONtAcYzET7vNIR+89fBvgH7hXTsGUXsPc8Lm9cUz8pKanwZYbk
+         3by+pLYSjIGILaKPdxxGQ/ay/MxKBGPDfA5HA/qr3O8EHVC6VgpI7OxZ/SFFI4hN1q
+         vmsooVRB3sdfGnktPArJB8nA+lWiKa4zo5kUNd43HMVej7QW1A3z0DpWJcS//DISD7
+         F62yQBbpIjwCktSZ+0Fklp49Enbjrj2Cyeew9bY6k9SlAry18ImLPTMViQraO9pliX
+         mkM1ecMVjAWFA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paolo Abeni <pabeni@redhat.com>,
+Cc:     Jiri Olsa <jolsa@redhat.com>, Hangbin Liu <haliu@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 38/73] bpf: Do not WARN in bpf_warn_invalid_xdp_action()
-Date:   Mon, 17 Jan 2022 21:43:57 -0500
-Message-Id: <20220118024432.1952028-38-sashal@kernel.org>
+        Jussi Maki <joamaki@gmail.com>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        ast@kernel.org, andrii@kernel.org, yhs@fb.com, sdf@google.com,
+        sunyucong@gmail.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 170/188] bpf/selftests: Fix namespace mount setup in tc_redirect
+Date:   Mon, 17 Jan 2022 21:31:34 -0500
+Message-Id: <20220118023152.1948105-170-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220118024432.1952028-1-sashal@kernel.org>
-References: <20220118024432.1952028-1-sashal@kernel.org>
+In-Reply-To: <20220118023152.1948105-1-sashal@kernel.org>
+References: <20220118023152.1948105-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -52,46 +55,63 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+From: Jiri Olsa <jolsa@redhat.com>
 
-[ Upstream commit 2cbad989033bff0256675c38f96f5faab852af4b ]
+[ Upstream commit 5e22dd18626726028a93ff1350a8a71a00fd843d ]
 
-The WARN_ONCE() in bpf_warn_invalid_xdp_action() can be triggered by
-any bugged program, and even attaching a correct program to a NIC
-not supporting the given action.
+The tc_redirect umounts /sys in the new namespace, which can be
+mounted as shared and cause global umount. The lazy umount also
+takes down mounted trees under /sys like debugfs, which won't be
+available after sysfs mounts again and could cause fails in other
+tests.
 
-The resulting splat, beyond polluting the logs, fouls automated tools:
-e.g. a syzkaller reproducers using an XDP program returning an
-unsupported action will never pass validation.
+  # cat /proc/self/mountinfo | grep debugfs
+  34 23 0:7 / /sys/kernel/debug rw,nosuid,nodev,noexec,relatime shared:14 - debugfs debugfs rw
+  # cat /proc/self/mountinfo | grep sysfs
+  23 86 0:22 / /sys rw,nosuid,nodev,noexec,relatime shared:2 - sysfs sysfs rw
+  # mount | grep debugfs
+  debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
 
-Replace the WARN_ONCE with a less intrusive pr_warn_once().
+  # ./test_progs -t tc_redirect
+  #164 tc_redirect:OK
+  Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
 
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+  # mount | grep debugfs
+  # cat /proc/self/mountinfo | grep debugfs
+  # cat /proc/self/mountinfo | grep sysfs
+  25 86 0:22 / /sys rw,relatime shared:2 - sysfs sysfs rw
+
+Making the sysfs private under the new namespace so the umount won't
+trigger the global sysfs umount.
+
+Reported-by: Hangbin Liu <haliu@redhat.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Link: https://lore.kernel.org/bpf/016ceec56e4817ebb2a9e35ce794d5c917df572c.1638189075.git.pabeni@redhat.com
+Cc: Jussi Maki <joamaki@gmail.com>
+Link: https://lore.kernel.org/bpf/20220104121030.138216-1-jolsa@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/filter.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/tc_redirect.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5ebc973ed4c50..0ef3a8a63afc0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6910,9 +6910,9 @@ void bpf_warn_invalid_xdp_action(u32 act)
- {
- 	const u32 act_max = XDP_REDIRECT;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index e7201ba29ccd6..47e3159729d21 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -105,6 +105,13 @@ static int setns_by_fd(int nsfd)
+ 	if (!ASSERT_OK(err, "unshare"))
+ 		return err;
  
--	WARN_ONCE(1, "%s XDP return value %u, expect packet loss!\n",
--		  act > act_max ? "Illegal" : "Driver unsupported",
--		  act);
-+	pr_warn_once("%s XDP return value %u, expect packet loss!\n",
-+		     act > act_max ? "Illegal" : "Driver unsupported",
-+		     act);
- }
- EXPORT_SYMBOL_GPL(bpf_warn_invalid_xdp_action);
- 
++	/* Make our /sys mount private, so the following umount won't
++	 * trigger the global umount in case it's shared.
++	 */
++	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
++	if (!ASSERT_OK(err, "remount private /sys"))
++		return err;
++
+ 	err = umount2("/sys", MNT_DETACH);
+ 	if (!ASSERT_OK(err, "umount2 /sys"))
+ 		return err;
 -- 
 2.34.1
 
