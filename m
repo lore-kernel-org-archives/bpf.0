@@ -2,106 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9618C433EF
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 18:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0EAFC433FE
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 18:03:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356568AbiASSD2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jan 2022 13:03:28 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33990 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1351948AbiASSD1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 13:03:27 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JFeGkg010643
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:27 -0800
+        id S1356593AbiASSD3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jan 2022 13:03:29 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35146 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1351948AbiASSD2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 13:03:28 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20JFs57u015553
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:28 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=qsCotZfH67ZTPCRxowLGImiyWeI1Fs0srixQFq5qU3c=;
- b=PAAudPb7/LJ5/VKDgsthJN3lv8OoZZCN2ysHqMcETf6DHPFWW6AJg2/E3D5TtPQPszPc
- mVkg1kjLKWsujh+tYDSCXnt9k1vVjq38EV21Lp4nlZAVmrjqnPEr+EnesPEWh6CeKhuK
- caVWrWFstDulm24lindViaxGAnTXtGMqhyU= 
+ bh=ExiJ+FZgoWr29oL/n0m0aknMr0820ovZMGzMev+iIWg=;
+ b=khflFKmaw6rpDQo3Mn5Jc2Ehv9xIctxgHl+aH40UNj/8YKJW6940QdSD6enCzkYb17pj
+ kmcs6ypX4wsalS4hle+vIm5+azTLUxzgm3XfSpUOVz9S5bWbFa2uigRtQ6LeGa9sVMFb
+ HU0X8zQOCqv5GHYrnsHS0i4hcdgp+VOkY+c= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dp99dvypt-2
+        by m0001303.ppops.net (PPS) with ESMTPS id 3dp6j8numn-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:27 -0800
-Received: from twshared2974.18.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:28 -0800
+Received: from twshared14302.24.prn2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 10:03:26 -0800
-Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
-        id 2A2D3942E655; Wed, 19 Jan 2022 10:03:17 -0800 (PST)
-From:   Kenny Yu <kennyyu@fb.com>
-To:     <kennyyu@fb.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <yhs@fb.com>,
-        <alexei.starovoitov@gmail.com>, <phoenix1987@gmail.com>
-Subject: [PATCH v3 bpf-next 0/3] Add bpf_access_process_vm helper and sleepable bpf iterator programs
-Date:   Wed, 19 Jan 2022 10:02:51 -0800
-Message-ID: <20220119180254.3174340-1-kennyyu@fb.com>
+ 15.1.2308.20; Wed, 19 Jan 2022 10:03:23 -0800
+Received: by devbig921.prn2.facebook.com (Postfix, from userid 132113)
+        id 03E9E1EDF9A7; Wed, 19 Jan 2022 10:00:33 -0800 (PST)
+From:   Christy Lee <christylee@fb.com>
+To:     <andrii@kernel.org>, <acme@kernel.org>, <jolsa@redhat.com>
+CC:     <christylee@fb.com>, <christyc.y.lee@gmail.com>,
+        <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <kernel-team@fb.com>, <wangnan0@huawei.com>,
+        <bobo.shaobowang@huawei.com>, <yuehaibing@huawei.com>
+Subject: [PATCH bpf-next v3 1/2] perf: stop using deprecated bpf_prog_load() API
+Date:   Wed, 19 Jan 2022 10:00:22 -0800
+Message-ID: <20220119180023.835496-2-christylee@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220113233158.1582743-1-kennyyu@fb.com>
-References: <20220113233158.1582743-1-kennyyu@fb.com>
+In-Reply-To: <20220119180023.835496-1-christylee@fb.com>
+References: <20220119180023.835496-1-christylee@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: V_UNOQczwY24dE-DjsVgOKD5cHucqzgO
-X-Proofpoint-GUID: V_UNOQczwY24dE-DjsVgOKD5cHucqzgO
+X-Proofpoint-GUID: M5jlKlIBBbdpghtkTFF9xwwSyzUeAFxF
+X-Proofpoint-ORIG-GUID: M5jlKlIBBbdpghtkTFF9xwwSyzUeAFxF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
- impostorscore=0 malwarescore=0 mlxlogscore=706 mlxscore=0 adultscore=0
- suspectscore=0 clxscore=1015 phishscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201190102
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ clxscore=1015 suspectscore=0 bulkscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201190102
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series makes the following changes:
-* Adds a new bpf helper `bpf_access_process_vm` to read user space
-  memory from a different task.
-* Adds the ability to create sleepable bpf iterator programs.
+bpf_prog_load() API is deprecated, remove perf's usage of the deprecated
+function.
 
-As an example of how this will be used, at Meta we are using bpf task
-iterator programs and this new bpf helper to read C++ async stack traces =
-of
-a running process for debugging C++ binaries in production.
+Signed-off-by: Christy Lee <christylee@fb.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/perf/tests/bpf.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-Changes since v2:
-* Reorder arguments in `bpf_access_process_vm` to match existing related
-  bpf helpers (e.g. `bpf_probe_read_kernel`, `bpf_probe_read_user`,
-  `bpf_copy_from_user`).
-* `flags` argument is provided for future extensibility and is not
-  currently used, and we always invoke `access_process_vm` with no flags.
-* Merge bpf helper patch and `bpf_iter_run_prog` patch together for bette=
-r
-  bisectability in case of failures.
-* Clean up formatting and comments in selftests.
-
-Changes since v1:
-* Fixed "Invalid wait context" issue in `bpf_iter_run_prog` by using
-  `rcu_read_lock_trace()` for sleepable bpf iterator programs.
-
-Kenny Yu (3):
-  bpf: Add bpf_access_process_vm() helper
-  libbpf: Add "iter.s" section for sleepable bpf iterator programs
-  selftests/bpf: Add test for sleepable bpf iterator programs
-
- include/linux/bpf.h                           |  1 +
- include/uapi/linux/bpf.h                      | 10 +++++
- kernel/bpf/bpf_iter.c                         | 20 ++++++---
- kernel/bpf/helpers.c                          | 19 ++++++++
- kernel/trace/bpf_trace.c                      |  2 +
- tools/include/uapi/linux/bpf.h                | 10 +++++
- tools/lib/bpf/libbpf.c                        |  1 +
- .../selftests/bpf/prog_tests/bpf_iter.c       | 16 +++++++
- .../selftests/bpf/progs/bpf_iter_task.c       | 43 +++++++++++++++++++
- 9 files changed, 117 insertions(+), 5 deletions(-)
-
+diff --git a/tools/perf/tests/bpf.c b/tools/perf/tests/bpf.c
+index 573490530194..57b9591f7cbb 100644
+--- a/tools/perf/tests/bpf.c
++++ b/tools/perf/tests/bpf.c
+@@ -281,8 +281,8 @@ static int __test__bpf(int idx)
+=20
+ static int check_env(void)
+ {
++	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+ 	int err;
+-	unsigned int kver_int;
+ 	char license[] =3D "GPL";
+=20
+ 	struct bpf_insn insns[] =3D {
+@@ -290,19 +290,13 @@ static int check_env(void)
+ 		BPF_EXIT_INSN(),
+ 	};
+=20
+-	err =3D fetch_kernel_version(&kver_int, NULL, 0);
++	err =3D fetch_kernel_version(&opts.kern_version, NULL, 0);
+ 	if (err) {
+ 		pr_debug("Unable to get kernel version\n");
+ 		return err;
+ 	}
+-
+-/* temporarily disable libbpf deprecation warnings */
+-#pragma GCC diagnostic push
+-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+-	err =3D bpf_load_program(BPF_PROG_TYPE_KPROBE, insns,
+-			       ARRAY_SIZE(insns),
+-			       license, kver_int, NULL, 0);
+-#pragma GCC diagnostic pop
++	err =3D bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL, license, insns,
++			    ARRAY_SIZE(insns), &opts);
+ 	if (err < 0) {
+ 		pr_err("Missing basic BPF support, skip this test: %s\n",
+ 		       strerror(errno));
 --=20
 2.30.2
 
