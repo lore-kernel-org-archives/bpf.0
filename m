@@ -2,182 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F187C433F5
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 01:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5AB4C433F5
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 03:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbiASBkp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Jan 2022 20:40:45 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16722 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350518AbiASBkn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Jan 2022 20:40:43 -0500
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JdpCW6bDVzZfGM;
-        Wed, 19 Jan 2022 09:36:55 +0800 (CST)
-Received: from dggpeml500011.china.huawei.com (7.185.36.84) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 09:40:40 +0800
-Received: from DESKTOP-9883QJJ.china.huawei.com (10.136.114.155) by
- dggpeml500011.china.huawei.com (7.185.36.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 09:40:40 +0800
-From:   Di Zhu <zhudi2@huawei.com>
-To:     <andrii.nakryiko@gmail.com>, <ast@kernel.org>,
-        <davem@davemloft.net>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <jakub@cloudflare.com>
-CC:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhudi2@huawei.com>, <luzhihao@huawei.com>, <rose.chen@huawei.com>
-Subject: [PATCH bpf-next v6 2/2] selftests: bpf: test BPF_PROG_QUERY for progs attached to sockmap
-Date:   Wed, 19 Jan 2022 09:40:05 +0800
-Message-ID: <20220119014005.1209-2-zhudi2@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220119014005.1209-1-zhudi2@huawei.com>
-References: <20220119014005.1209-1-zhudi2@huawei.com>
+        id S1351348AbiASDtH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Jan 2022 22:49:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240579AbiASDtF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Jan 2022 22:49:05 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5BDC061574;
+        Tue, 18 Jan 2022 19:49:05 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id f24so1321423ioc.0;
+        Tue, 18 Jan 2022 19:49:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4UkxrBWYZSHawQTKo6vwK9yH1igAtKMWj2abRvMD+YI=;
+        b=T0zpgWhJrFnk0wjQLYJc5BzM1/07cFpSGt8a/3JaSPi7XrtakCXfc/98x9hmnpIqx7
+         YP1PF/AP4tNbeCfoTBF2Y77I8sSKD0bw9u2WD0FIKReKM244pte/Fy0oUJ5x8hT1gzBT
+         m8D0Abij5O2QgNG9vW6albgFGQaVF1YLXkYuAZT2OQaZ4us/4+ACEbg/doaOsQzhfQyH
+         d8x+fqGFqeBqncfhDso7r3MGjqdakKgtkoDxyn7HGX5OcuxXSdZrU53iKY2bQ8vVFPci
+         OsDS0m5AnNzP1ZUUeMewXoCP/SOXYd3rZlbp77/6qHPfvaeCQMooydKqljwS2qNVZZjd
+         CMmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4UkxrBWYZSHawQTKo6vwK9yH1igAtKMWj2abRvMD+YI=;
+        b=ld1puUgpNhvkCiWSZE3tSnd+X4d5nNBE3jGiFG65gs+oU5tTcWBAT2wSrFxfqyT22z
+         NefCpl6OIbQocm2yoRcVdyi1ckoRT49u1bEGNqGLdwk6q+NwKP6N0gEUOWJsA3QfKvro
+         44l2G7iub/xJKMvzQKnGMYA+Kkpw24+9iXUGGJR7om0GnvLUC0BykI2rHHTq7jUnWKKm
+         idGT912uQpJBVCVm2Ofr85yLa2nsjfb/EduvTzfc55qj0TAuDH5lGGjvax4J/KhXRxq5
+         6ca6ZNJ8DTsfdJddZTlFkAs57eOTASo6xIsVOECYaZjhkVh3EjoPFg4Ur6Nc2F6VNcVq
+         hCcQ==
+X-Gm-Message-State: AOAM533VyDv09hVyS+dWn0u4sspoOZGO0t/gcbIvXQ6FnUlNl3aYl4Et
+        uj3tKmY4lWOheDcMXSyApVdURSTF3M+SsBkrjLM=
+X-Google-Smtp-Source: ABdhPJzV6neFI7xxV3nldyPBGl6r9A9iZQoYrX6MwwBhbzp/vHpNHoDkZt8OHUGcg8fUjpAJyliTo/DWjcQ3ZduxsTc=
+X-Received: by 2002:a02:ca03:: with SMTP id i3mr13198575jak.234.1642564144774;
+ Tue, 18 Jan 2022 19:49:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.136.114.155]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500011.china.huawei.com (7.185.36.84)
-X-CFilter-Loop: Reflected
+References: <20220104121030.138216-1-jolsa@kernel.org> <CAEf4BzZK1=zdy1_ZdwWXK7Ryk+uWQeSApcpxFT9yMp4bRNanDQ@mail.gmail.com>
+ <Ydabtmk+BmzIxKwJ@krava> <YeXCsTWsvE+a1cld@krava>
+In-Reply-To: <YeXCsTWsvE+a1cld@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 18 Jan 2022 19:48:52 -0800
+Message-ID: <CAEf4BzbdOsyDFzXuAgEiQnZYQWTwcXUAT+8hJAN-=KJi2t60ag@mail.gmail.com>
+Subject: Re: [PATCH] bpf/selftests: Fix namespace mount setup in tc_redirect
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jussi Maki <joamaki@gmail.com>, Hangbin Liu <haliu@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add test for querying progs attached to sockmap. we use an existing
-libbpf query interface to query prog cnt before and after progs
-attaching to sockmap and check whether the queried prog id is right.
+On Mon, Jan 17, 2022 at 11:25 AM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Thu, Jan 06, 2022 at 08:35:18AM +0100, Jiri Olsa wrote:
+> > On Wed, Jan 05, 2022 at 12:40:34PM -0800, Andrii Nakryiko wrote:
+> > > On Tue, Jan 4, 2022 at 4:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > >
+> > > > The tc_redirect umounts /sys in the new namespace, which can be
+> > > > mounted as shared and cause global umount. The lazy umount also
+> > > > takes down mounted trees under /sys like debugfs, which won't be
+> > > > available after sysfs mounts again and could cause fails in other
+> > > > tests.
+> > > >
+> > > >   # cat /proc/self/mountinfo | grep debugfs
+> > > >   34 23 0:7 / /sys/kernel/debug rw,nosuid,nodev,noexec,relatime shared:14 - debugfs debugfs rw
+> > > >   # cat /proc/self/mountinfo | grep sysfs
+> > > >   23 86 0:22 / /sys rw,nosuid,nodev,noexec,relatime shared:2 - sysfs sysfs rw
+> > > >   # mount | grep debugfs
+> > > >   debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+> > > >
+> > > >   # ./test_progs -t tc_redirect
+> > > >   #164 tc_redirect:OK
+> > > >   Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+> > > >
+> > > >   # mount | grep debugfs
+> > > >   # cat /proc/self/mountinfo | grep debugfs
+> > > >   # cat /proc/self/mountinfo | grep sysfs
+> > > >   25 86 0:22 / /sys rw,relatime shared:2 - sysfs sysfs rw
+> > > >
+> > > > Making the sysfs private under the new namespace so the umount won't
+> > > > trigger the global sysfs umount.
+> > >
+> > > Hey Jiri,
+> > >
+> > > Thanks for the fix. Did you try making tc_redirect non-serial again
+> > > (s/serial_test_tc_redirect/test_tc_redirect/) and doing parallelized
+> > > test_progs run (./test_progs -j) in a tight loop for a while? I
+> > > suspect this might have been an issue forcing us to make this test
+> > > serial in the first place, so now that it's fixed, we can make
+> > > parallel test_progs a bit faster.
+> >
+> > hi,
+> > right, will try
+>
+> so I can't reproduce the issue in the first place - that means without my
+> fix and with reverted serial_test_tc_redirect change - by running parallelized
+> test_progs, could you guys try it?
+>
 
-Signed-off-by: Di Zhu <zhudi2@huawei.com>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 66 +++++++++++++++++++
- .../bpf/progs/test_sockmap_progs_query.c      | 24 +++++++
- 2 files changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
+I tried it for a bunch of iterations and didn't repro it either.
+Doesn't mean much as CI's environment is different, but I think it
+might be worth making it parallel again and see if it reproes in CI
+again.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 85db0f4cdd95..1ab57cdc4ae4 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -8,6 +8,7 @@
- #include "test_sockmap_update.skel.h"
- #include "test_sockmap_invalid_update.skel.h"
- #include "test_sockmap_skb_verdict_attach.skel.h"
-+#include "test_sockmap_progs_query.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
-@@ -315,6 +316,63 @@ static void test_sockmap_skb_verdict_attach(enum bpf_attach_type first,
- 	test_sockmap_skb_verdict_attach__destroy(skel);
- }
- 
-+static __u32 query_prog_id(int prog_fd)
-+{
-+	struct bpf_prog_info info = {};
-+	__u32 info_len = sizeof(info);
-+	int err;
-+
-+	err = bpf_obj_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_obj_get_info_by_fd") ||
-+	    !ASSERT_EQ(info_len, sizeof(info), "bpf_obj_get_info_by_fd"))
-+		return 0;
-+
-+	return info.id;
-+}
-+
-+static void test_sockmap_progs_query(enum bpf_attach_type attach_type)
-+{
-+	struct test_sockmap_progs_query *skel;
-+	int err, map_fd, verdict_fd, duration = 0;
-+	__u32 attach_flags = 0;
-+	__u32 prog_ids[3] = {};
-+	__u32 prog_cnt = 3;
-+
-+	skel = test_sockmap_progs_query__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_sockmap_progs_query__open_and_load"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.sock_map);
-+
-+	if (attach_type == BPF_SK_MSG_VERDICT)
-+		verdict_fd = bpf_program__fd(skel->progs.prog_skmsg_verdict);
-+	else
-+		verdict_fd = bpf_program__fd(skel->progs.prog_skb_verdict);
-+
-+	err = bpf_prog_query(map_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	ASSERT_OK(err, "bpf_prog_query failed");
-+	ASSERT_EQ(attach_flags,  0, "wrong attach_flags on query");
-+	ASSERT_EQ(prog_cnt, 0, "wrong program count on query");
-+
-+	err = bpf_prog_attach(verdict_fd, map_fd, attach_type, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach failed"))
-+		goto out;
-+
-+	prog_cnt = 1;
-+	err = bpf_prog_query(map_fd, attach_type, 0 /* query flags */,
-+			     &attach_flags, prog_ids, &prog_cnt);
-+	ASSERT_OK(err, "bpf_prog_query failed");
-+	ASSERT_EQ(attach_flags, 0, "wrong attach_flags on query");
-+	ASSERT_EQ(prog_cnt, 1, "wrong program count on query");
-+	ASSERT_EQ(prog_ids[0], query_prog_id(verdict_fd),
-+		  "wrong prog_ids on query");
-+
-+	bpf_prog_detach2(verdict_fd, map_fd, attach_type);
-+out:
-+	test_sockmap_progs_query__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -341,4 +399,12 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_attach(BPF_SK_SKB_STREAM_VERDICT,
- 						BPF_SK_SKB_VERDICT);
- 	}
-+	if (test__start_subtest("sockmap msg_verdict progs query"))
-+		test_sockmap_progs_query(BPF_SK_MSG_VERDICT);
-+	if (test__start_subtest("sockmap stream_parser progs query"))
-+		test_sockmap_progs_query(BPF_SK_SKB_STREAM_PARSER);
-+	if (test__start_subtest("sockmap stream_verdict progs query"))
-+		test_sockmap_progs_query(BPF_SK_SKB_STREAM_VERDICT);
-+	if (test__start_subtest("sockmap skb_verdict progs query"))
-+		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
-new file mode 100644
-index 000000000000..9d58d61c0dee
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_progs_query.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} sock_map SEC(".maps");
-+
-+SEC("sk_skb")
-+int prog_skb_verdict(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
-+SEC("sk_msg")
-+int prog_skmsg_verdict(struct sk_msg_md *msg)
-+{
-+	return SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.27.0
-
+> jirka
+>
