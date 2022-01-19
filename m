@@ -2,112 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0EAFC433FE
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 18:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25B4EC4332F
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 18:03:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356593AbiASSD3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jan 2022 13:03:29 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35146 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1351948AbiASSD2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 13:03:28 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20JFs57u015553
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:28 -0800
+        id S1356610AbiASSDa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jan 2022 13:03:30 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22190 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351948AbiASSDa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 13:03:30 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JGn3tU013535
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:29 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=ExiJ+FZgoWr29oL/n0m0aknMr0820ovZMGzMev+iIWg=;
- b=khflFKmaw6rpDQo3Mn5Jc2Ehv9xIctxgHl+aH40UNj/8YKJW6940QdSD6enCzkYb17pj
- kmcs6ypX4wsalS4hle+vIm5+azTLUxzgm3XfSpUOVz9S5bWbFa2uigRtQ6LeGa9sVMFb
- HU0X8zQOCqv5GHYrnsHS0i4hcdgp+VOkY+c= 
+ bh=+uwt8erlza9mfrtHn/G6VyuVDE8Zr5xMraO6ecZ94Ss=;
+ b=qHhvcL2QLk0BVsrrSaQotrJO8WI+s8dagqIec5D65BpYP5oQ2Z25beCH6xIflKvkGsCI
+ j/dTMAqvX9yqA/Lo8/9GkAogSc1RC2FaIHw/0FH8GWJa34hDR5gDRV12cdJa5r/q9fpL
+ 2xGudQln5xWIZF8XADMsHpfI/UxJQ2GylgI= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3dp6j8numn-9
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dpad3vpj1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:28 -0800
-Received: from twshared14302.24.prn2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 10:03:29 -0800
+Received: from twshared18912.14.frc2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 10:03:23 -0800
-Received: by devbig921.prn2.facebook.com (Postfix, from userid 132113)
-        id 03E9E1EDF9A7; Wed, 19 Jan 2022 10:00:33 -0800 (PST)
-From:   Christy Lee <christylee@fb.com>
-To:     <andrii@kernel.org>, <acme@kernel.org>, <jolsa@redhat.com>
-CC:     <christylee@fb.com>, <christyc.y.lee@gmail.com>,
-        <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-        <kernel-team@fb.com>, <wangnan0@huawei.com>,
-        <bobo.shaobowang@huawei.com>, <yuehaibing@huawei.com>
-Subject: [PATCH bpf-next v3 1/2] perf: stop using deprecated bpf_prog_load() API
-Date:   Wed, 19 Jan 2022 10:00:22 -0800
-Message-ID: <20220119180023.835496-2-christylee@fb.com>
+ 15.1.2308.20; Wed, 19 Jan 2022 10:03:28 -0800
+Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
+        id DA8F8942E788; Wed, 19 Jan 2022 10:03:22 -0800 (PST)
+From:   Kenny Yu <kennyyu@fb.com>
+To:     <kennyyu@fb.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <yhs@fb.com>,
+        <alexei.starovoitov@gmail.com>, <phoenix1987@gmail.com>
+Subject: [PATCH v3 bpf-next 2/3] libbpf: Add "iter.s" section for sleepable bpf iterator programs
+Date:   Wed, 19 Jan 2022 10:02:53 -0800
+Message-ID: <20220119180254.3174340-3-kennyyu@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220119180023.835496-1-christylee@fb.com>
-References: <20220119180023.835496-1-christylee@fb.com>
+In-Reply-To: <20220119180254.3174340-1-kennyyu@fb.com>
+References: <20220113233158.1582743-1-kennyyu@fb.com>
+ <20220119180254.3174340-1-kennyyu@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: M5jlKlIBBbdpghtkTFF9xwwSyzUeAFxF
-X-Proofpoint-ORIG-GUID: M5jlKlIBBbdpghtkTFF9xwwSyzUeAFxF
+X-Proofpoint-GUID: pqPAExupQlrJCfUvgsQ6WljJSfZcVipy
+X-Proofpoint-ORIG-GUID: pqPAExupQlrJCfUvgsQ6WljJSfZcVipy
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-19_10,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- clxscore=1015 suspectscore=0 bulkscore=0 phishscore=0 spamscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201190102
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 impostorscore=0
+ adultscore=0 suspectscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ spamscore=0 clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=799
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201190102
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_prog_load() API is deprecated, remove perf's usage of the deprecated
-function.
+This adds a new bpf section "iter.s" to allow bpf iterator programs to
+be sleepable.
 
-Signed-off-by: Christy Lee <christylee@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Kenny Yu <kennyyu@fb.com>
 ---
- tools/perf/tests/bpf.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+ tools/lib/bpf/libbpf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/tests/bpf.c b/tools/perf/tests/bpf.c
-index 573490530194..57b9591f7cbb 100644
---- a/tools/perf/tests/bpf.c
-+++ b/tools/perf/tests/bpf.c
-@@ -281,8 +281,8 @@ static int __test__bpf(int idx)
-=20
- static int check_env(void)
- {
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts);
- 	int err;
--	unsigned int kver_int;
- 	char license[] =3D "GPL";
-=20
- 	struct bpf_insn insns[] =3D {
-@@ -290,19 +290,13 @@ static int check_env(void)
- 		BPF_EXIT_INSN(),
- 	};
-=20
--	err =3D fetch_kernel_version(&kver_int, NULL, 0);
-+	err =3D fetch_kernel_version(&opts.kern_version, NULL, 0);
- 	if (err) {
- 		pr_debug("Unable to get kernel version\n");
- 		return err;
- 	}
--
--/* temporarily disable libbpf deprecation warnings */
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--	err =3D bpf_load_program(BPF_PROG_TYPE_KPROBE, insns,
--			       ARRAY_SIZE(insns),
--			       license, kver_int, NULL, 0);
--#pragma GCC diagnostic pop
-+	err =3D bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL, license, insns,
-+			    ARRAY_SIZE(insns), &opts);
- 	if (err < 0) {
- 		pr_err("Missing basic BPF support, skip this test: %s\n",
- 		       strerror(errno));
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index fdb3536afa7d..9ec40835bce8 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8599,6 +8599,7 @@ static const struct bpf_sec_def section_defs[] =3D =
+{
+ 	SEC_DEF("lsm/",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
+ 	SEC_DEF("lsm.s/",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, at=
+tach_lsm),
+ 	SEC_DEF("iter/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter)=
+,
++	SEC_DEF("iter.s/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF | SEC_SLEEP=
+ABLE, attach_iter),
+ 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
+ 	SEC_DEF("xdp_devmap/",		XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
+ 	SEC_DEF("xdp_cpumap/",		XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
 --=20
 2.30.2
 
