@@ -2,121 +2,215 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C66C433F5
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 10:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D84D6C433EF
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 11:44:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbiASKZf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jan 2022 05:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
+        id S240799AbiASLoz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jan 2022 06:44:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238936AbiASKYa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Jan 2022 05:24:30 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2838BC061574;
-        Wed, 19 Jan 2022 02:24:30 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id h206-20020a1c21d7000000b0034d95625e1fso5297258wmh.4;
-        Wed, 19 Jan 2022 02:24:30 -0800 (PST)
+        with ESMTP id S236274AbiASLoy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Jan 2022 06:44:54 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F199C061574
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 03:44:54 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id p18so4848174wmg.4
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 03:44:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=23T4xOW2I0F1J8h1VBHMXa/Hl9U+ZT3rpxlsT4/aGfc=;
-        b=YsEHE2FoxTIEDYdQkjHZoP/fMCSt7QDmBQ4JdVPHxM4mlnOCzYop6XchK4rNHKQtf+
-         EB550obMnV3f5ZhHcIk/AxpQ8rIFuitjP2WoGDxLwZPMERXqneeB/TZ8sQCaB/Na7dAD
-         gBFFTaU95S2gXYoC1ejMoGbHiqPSliY7DgwtbQkFJB0qfSMMdRfOMiiSSiPIlGi9YkfW
-         SF6KUmqLmY0Vm9eUK4+qdupPRPxxj4ZT74ftdKfK9m/t115DOzfVBBOGbky0j7JF+4xS
-         /laydDlP6PnfNM7FjGBWQC6AyMUnubEMwTk5FqFL60694tozYxQKd8zFSgAVHk04Owxb
-         LpWw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P2olozTnL0fd6vOuIap15VEddI74R/yFQRqbWrihBOI=;
+        b=l8IJpoP8WPCKpt0iB5lozsf8ifl/g7oaTAmvQt4Dn8BaMavMWHhH39kqX+XVYtTn4E
+         gOABhs+8ywrjY0xrXlU+OpGgvEDHNkzriYXzmhB3j6+9Q2AVTVTihd0z0+zjf61Jqbhk
+         vT3pc8snQS4k4FT70GyxSdSeBo2lL03CJAqPhQ9XQDp5j6/GPaQ6/QLugx6LCoKJQpEN
+         JRxe6yDTsmXKeNZ22sdOeuk5WpeuL8w0AtMTqyLFpKHmkjgvKmbgVoAzpOr+5EF55TaN
+         gimGspOFE9z2nukA/kn2OHNITs+P4inKMLxM7QQmraBoUlIjYSlurjCIwFwXhjzqYJ2q
+         E7EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=23T4xOW2I0F1J8h1VBHMXa/Hl9U+ZT3rpxlsT4/aGfc=;
-        b=wp71PNOw7uY9/OJcFWEXNEREiiehw2o2wtyR0AoKRfpKxjOVNAeuHDsU1xQhR+e/pf
-         4vTLMgzUjcBEyzK6XVxR5IaAis1Q4HLs/k5aKuk3I941zWh4DmpY7sGlfLzZlB4wswj/
-         ibNtmpIIO90BCA+e7IE54qfvDQPO27MCokYnZGddxbpFxldZCdzepuIoaGugLW54xs56
-         oD8iMR7P+yrCYxQNXecxtfpAL46IQFs+voh3rL2sVh1SNaKN7Sj4zujtnNvX3UxnCpdg
-         tfElr111tKLjJGKQb3yiZOPvW1hxw65giPYVy9B5zNqOVgtRXkIaJAzqxBrx9cCFhyIg
-         1ghA==
-X-Gm-Message-State: AOAM530N5Q7n+yD6DH151KyOplkCydNiKxJMv71N/7JN4E21sKh96hvL
-        k0N3MKJuyq9P6kVac7v15wO+2kXi812TE7t8E44=
-X-Google-Smtp-Source: ABdhPJyQ5Tdq7m8t7iLiOJAS4JTEijMM4at1JFtGA1ZF2R8mUGyIx8zXbXyxAiL39Qfm4S+aXM2whQ60Ky+y/NvZSKQ=
-X-Received: by 2002:adf:d08b:: with SMTP id y11mr27706022wrh.384.1642587868723;
- Wed, 19 Jan 2022 02:24:28 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=P2olozTnL0fd6vOuIap15VEddI74R/yFQRqbWrihBOI=;
+        b=em+r7V1O/GW7bNM3EfZaWrgn0v2t8DV7IOQepkjBHAXyLC6Zp2EMleyA0H2JFyki9T
+         41bAUfSufzPfvWYEp4cQWsveceV+Z8HKJlZIbOp8QF2HHgLv4xNCRMw42XC+snDbfMnn
+         Vdqr3PEJORpEtMdmjEPZDolEmoN76k8CS359vYcDLGxAri2MmHlUt/p/eeAaqrYagyX0
+         ubqDfQ9JdOGUUhTiN5B0bYCu8KT6wvowiUNuA2MJesdSI9ZaQhhoMEys6dxsKPNZvyGG
+         WhdwOqPrPdczsZ5ypc3AE0ygV3/nBicWhpJRqvsTQP173I0g9XGFeZnupVaGM2hIzzAH
+         /B2Q==
+X-Gm-Message-State: AOAM530fD9Gb5fDZRWaQDUDWtzmaHJCea63+g1ig7fHpU4Sk8e3PFbrl
+        TJV4aoT4tF93r5qxqkhJcHE1+QX4OavR0w==
+X-Google-Smtp-Source: ABdhPJymLjmvfAV3JyBHao8RNDBIW37v/yUH5ozoHJAreOnCIsL9HXHmQN4DnFaTWTFRsiC2vcqQeA==
+X-Received: by 2002:a7b:cb18:: with SMTP id u24mr3142793wmj.15.1642592692782;
+        Wed, 19 Jan 2022 03:44:52 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:d40a:ebf3:7c3b:c5af])
+        by smtp.gmail.com with ESMTPSA id f8sm12250295wry.23.2022.01.19.03.44.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 03:44:52 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, fam.zheng@bytedance.com,
+        cong.wang@bytedance.com, song@kernel.org, quentin@isovalent.com,
+        andrii.nakryiko@gmail.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH bpf-next v3 1/3] uapi/bpf: Add missing description and returns for helper documentation
+Date:   Wed, 19 Jan 2022 11:44:40 +0000
+Message-Id: <20220119114442.1452088-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220110165208.1826-1-jszhang@kernel.org> <Ydxljv2Q4YNDYRTx@xhacker>
-In-Reply-To: <Ydxljv2Q4YNDYRTx@xhacker>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Wed, 19 Jan 2022 11:24:16 +0100
-Message-ID: <CAJ+HfNiS7Ss0FJowPUrrKvuC+1Kn9gXb=VqNoqh3eWJDu=m4Mg@mail.gmail.com>
-Subject: Re: [PATCH riscv-next] riscv: bpf: Fix eBPF's exception tables
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, palmer@rivosinc.com,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Netdev <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jisheng/Palmer,
+Both description and returns section will become mandatory
+for helpers and syscalls in a later commit to generate man pages.
 
-On Mon, 10 Jan 2022 at 18:05, Jisheng Zhang <jszhang@kernel.org> wrote:
->
-> On Tue, Jan 11, 2022 at 12:52:08AM +0800, Jisheng Zhang wrote:
-> > eBPF's exception tables needs to be modified to relative synchronously.
-> >
-> > Suggested-by: Tong Tiangen <tongtiangen@huawei.com>
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+This commit also adds in the documentation that BPF_PROG_RUN is
+an alias for BPF_PROG_TEST_RUN for anyone searching for the
+syscall in the generated man pages.
 
-Nice catch, and apologies for the slow response.
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+---
+ include/uapi/linux/bpf.h       | 15 +++++++++++++++
+ tools/include/uapi/linux/bpf.h | 15 +++++++++++++++
+ 2 files changed, 30 insertions(+)
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b0383d371b9a..a9c96c21330a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -330,6 +330,8 @@ union bpf_iter_link_info {
+  *			*ctx_out*, *data_in* and *data_out* must be NULL.
+  *			*repeat* must be zero.
+  *
++ *		BPF_PROG_RUN is an alias for BPF_PROG_TEST_RUN.
++ *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+@@ -1775,6 +1777,8 @@ union bpf_attr {
+  * 		0 on success, or a negative error in case of failure.
+  *
+  * u64 bpf_get_current_pid_tgid(void)
++ * 	Description
++ * 		Get the current pid and tgid.
+  * 	Return
+  * 		A 64-bit integer containing the current tgid and pid, and
+  * 		created as such:
+@@ -1782,6 +1786,8 @@ union bpf_attr {
+  * 		*current_task*\ **->pid**.
+  *
+  * u64 bpf_get_current_uid_gid(void)
++ * 	Description
++ * 		Get the current uid and gid.
+  * 	Return
+  * 		A 64-bit integer containing the current GID and UID, and
+  * 		created as such: *current_gid* **<< 32 \|** *current_uid*.
+@@ -2256,6 +2262,8 @@ union bpf_attr {
+  * 		The 32-bit hash.
+  *
+  * u64 bpf_get_current_task(void)
++ * 	Description
++ * 		Get the current task.
+  * 	Return
+  * 		A pointer to the current task struct.
+  *
+@@ -2369,6 +2377,8 @@ union bpf_attr {
+  * 		indicate that the hash is outdated and to trigger a
+  * 		recalculation the next time the kernel tries to access this
+  * 		hash or when the **bpf_get_hash_recalc**\ () helper is called.
++ * 	Return
++ * 		void.
+  *
+  * long bpf_get_numa_node_id(void)
+  * 	Description
+@@ -2466,6 +2476,8 @@ union bpf_attr {
+  * 		A 8-byte long unique number or 0 if *sk* is NULL.
+  *
+  * u32 bpf_get_socket_uid(struct sk_buff *skb)
++ * 	Description
++ * 		Get the owner UID of the socked associated to *skb*.
+  * 	Return
+  * 		The owner UID of the socket associated to *skb*. If the socket
+  * 		is **NULL**, or if it is not a full socket (i.e. if it is a
+@@ -3240,6 +3252,9 @@ union bpf_attr {
+  * 		The id is returned or 0 in case the id could not be retrieved.
+  *
+  * u64 bpf_get_current_cgroup_id(void)
++ * 	Description
++ * 		Get the current cgroup id based on the cgroup within which
++ * 		the current task is running.
+  * 	Return
+  * 		A 64-bit integer containing the current cgroup id based
+  * 		on the cgroup within which the current task is running.
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b0383d371b9a..a9c96c21330a 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -330,6 +330,8 @@ union bpf_iter_link_info {
+  *			*ctx_out*, *data_in* and *data_out* must be NULL.
+  *			*repeat* must be zero.
+  *
++ *		BPF_PROG_RUN is an alias for BPF_PROG_TEST_RUN.
++ *
+  *	Return
+  *		Returns zero on success. On error, -1 is returned and *errno*
+  *		is set appropriately.
+@@ -1775,6 +1777,8 @@ union bpf_attr {
+  * 		0 on success, or a negative error in case of failure.
+  *
+  * u64 bpf_get_current_pid_tgid(void)
++ * 	Description
++ * 		Get the current pid and tgid.
+  * 	Return
+  * 		A 64-bit integer containing the current tgid and pid, and
+  * 		created as such:
+@@ -1782,6 +1786,8 @@ union bpf_attr {
+  * 		*current_task*\ **->pid**.
+  *
+  * u64 bpf_get_current_uid_gid(void)
++ * 	Description
++ * 		Get the current uid and gid.
+  * 	Return
+  * 		A 64-bit integer containing the current GID and UID, and
+  * 		created as such: *current_gid* **<< 32 \|** *current_uid*.
+@@ -2256,6 +2262,8 @@ union bpf_attr {
+  * 		The 32-bit hash.
+  *
+  * u64 bpf_get_current_task(void)
++ * 	Description
++ * 		Get the current task.
+  * 	Return
+  * 		A pointer to the current task struct.
+  *
+@@ -2369,6 +2377,8 @@ union bpf_attr {
+  * 		indicate that the hash is outdated and to trigger a
+  * 		recalculation the next time the kernel tries to access this
+  * 		hash or when the **bpf_get_hash_recalc**\ () helper is called.
++ * 	Return
++ * 		void.
+  *
+  * long bpf_get_numa_node_id(void)
+  * 	Description
+@@ -2466,6 +2476,8 @@ union bpf_attr {
+  * 		A 8-byte long unique number or 0 if *sk* is NULL.
+  *
+  * u32 bpf_get_socket_uid(struct sk_buff *skb)
++ * 	Description
++ * 		Get the owner UID of the socked associated to *skb*.
+  * 	Return
+  * 		The owner UID of the socket associated to *skb*. If the socket
+  * 		is **NULL**, or if it is not a full socket (i.e. if it is a
+@@ -3240,6 +3252,9 @@ union bpf_attr {
+  * 		The id is returned or 0 in case the id could not be retrieved.
+  *
+  * u64 bpf_get_current_cgroup_id(void)
++ * 	Description
++ * 		Get the current cgroup id based on the cgroup within which
++ * 		the current task is running.
+  * 	Return
+  * 		A 64-bit integer containing the current cgroup id based
+  * 		on the cgroup within which the current task is running.
+-- 
+2.25.1
 
-> > ---
-> >  arch/riscv/net/bpf_jit_comp64.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_c=
-omp64.c
-> > index 69bab7e28f91..44c97535bc15 100644
-> > --- a/arch/riscv/net/bpf_jit_comp64.c
-> > +++ b/arch/riscv/net/bpf_jit_comp64.c
-> > @@ -498,7 +498,7 @@ static int add_exception_handler(const struct bpf_i=
-nsn *insn,
-> >       offset =3D pc - (long)&ex->insn;
-> >       if (WARN_ON_ONCE(offset >=3D 0 || offset < INT_MIN))
-> >               return -ERANGE;
-> > -     ex->insn =3D pc;
-> > +     ex->insn =3D offset;
->
-> Hi Palmer,
->
-> Tong pointed out this issue but there was something wrong with my email
-> forwarding address, so I didn't get his reply. Today, I searched on
-> lore.kernel.org just found his reply, sorry for inconvenience.
->
-
-AFAIK, Jisheng's extable work is still in Palmer's for-next tree.
-
-Daniel/Alexei: This eBPF must follow commit 1f77ed9422cb ("riscv:
-switch to relative extable and other improvements"), which is in
-Palmer's tree. It cannot go via bpf-next.
-
-Palmer, please pull this to your for-next tree.
-
-
-Thanks,
-Bj=C3=B6rn
