@@ -2,79 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6E82C433EF
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 22:51:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93A86C433EF
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 22:58:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357609AbiASWv1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jan 2022 17:51:27 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:31028 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229716AbiASWv0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 17:51:26 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JIs85d030881
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 14:51:25 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=ejyZFdyQ3OKGeyUtYkIB3U3AnhSKEXqTOV6qYnJdmWU=;
- b=HrS5Auy6GfEyDeTKoUrFu3+scqBfGjvDNHhRzegjks0zNSYHI6VXD6adRQYJK6x8iiV8
- 0y6bXfDlK4tU4aNzI+pfRJET4OQQeZGQGO2QVmADXtOeh35rPRzItZihUUyRl/plw56U
- d6Mm3mk+H4KgL3W2SHdFulp8S/MAWu/1J6I= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dpafj6gww-11
+        id S1357661AbiASW6B convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 19 Jan 2022 17:58:01 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9108 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1357645AbiASW56 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 17:57:58 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JIs7cN000616
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 14:57:57 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dp89yf2xq-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 14:51:25 -0800
-Received: from twshared10140.39.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 14:57:56 -0800
+Received: from twshared13036.24.prn2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 14:51:18 -0800
-Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
-        id 1EEA1945BA44; Wed, 19 Jan 2022 14:51:12 -0800 (PST)
-From:   Kenny Yu <kennyyu@fb.com>
-To:     <alexei.starovoitov@gmail.com>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <kennyyu@fb.com>, <phoenix1987@gmail.com>,
-        <yhs@fb.com>
-Subject: Re: [PATCH v3 bpf-next 1/3] bpf: Add bpf_access_process_vm() helper
-Date:   Wed, 19 Jan 2022 14:51:10 -0800
-Message-ID: <20220119225110.2026595-1-kennyyu@fb.com>
+ 15.1.2308.20; Wed, 19 Jan 2022 14:57:55 -0800
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id D20BAFB338A1; Wed, 19 Jan 2022 14:57:49 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 1/4] selftests/bpf: fail build on compilation warning
+Date:   Wed, 19 Jan 2022 14:57:38 -0800
+Message-ID: <20220119225741.2944240-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <CAADnVQKDfacNQD8WCp-mmQeyWd6Y09_b41L1=E3b3A6+GCyH+w@mail.gmail.com>
-References: <CAADnVQKDfacNQD8WCp-mmQeyWd6Y09_b41L1=E3b3A6+GCyH+w@mail.gmail.com>
+In-Reply-To: <20220119225741.2944240-1-andrii@kernel.org>
+References: <20220119225741.2944240-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: fL7G0YGVuzl7UkMABSUqddCKzefSMBpk
-X-Proofpoint-GUID: fL7G0YGVuzl7UkMABSUqddCKzefSMBpk
+X-Proofpoint-ORIG-GUID: FZHWXIdNOJ-D_7WB_dINxKvS4SALDcxD
+X-Proofpoint-GUID: FZHWXIdNOJ-D_7WB_dINxKvS4SALDcxD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-19_12,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 suspectscore=0 mlxscore=0 phishscore=0
- adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=906 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201190121
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 adultscore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=497
+ impostorscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201190122
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> > +BPF_CALL_5(bpf_access_process_vm, void *, dst, u32, size,
-> > +          const void __user *, user_ptr, struct task_struct *, tsk,
-> > +          u32, flags)
-> > +{
-> > +       /* flags is not used yet */
-> > +       return access_process_vm(tsk, (unsigned long)user_ptr, dst, s=
-ize, 0);
-> > +}
->
-> Though the 'flags' argument is unused the helper has to check
-> that it's zero and return -EINVAL otherwise.
-> If we don't do this we won't be able to change the behavior later
-> due to backward compatibility.
+It's very easy to miss compilation warnings without -Werror, which is
+not set for selftests. libbpf and bpftool are already strict about this,
+so make selftests/bpf also treat compilation warnings as errors to catch
+such regressions early.
 
-Thanks for the feedback! Will fix.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Kenny
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 42ffc24e9e71..945f92d71db3 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -21,7 +21,7 @@ endif
+ 
+ BPF_GCC		?= $(shell command -v bpf-gcc;)
+ SAN_CFLAGS	?=
+-CFLAGS += -g -O0 -rdynamic -Wall $(GENFLAGS) $(SAN_CFLAGS)		\
++CFLAGS += -g -O0 -rdynamic -Wall -Werror $(GENFLAGS) $(SAN_CFLAGS)	\
+ 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
+ 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
+ LDFLAGS += $(SAN_CFLAGS)
+@@ -292,7 +292,7 @@ IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null | \
+ MENDIAN=$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
+ 
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG))
+-BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 			\
++BPF_CFLAGS = -g -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN) 		\
+ 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
+ 	     -I$(abspath $(OUTPUT)/../usr/include)
+ 
+-- 
+2.30.2
+
