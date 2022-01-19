@@ -2,137 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57086C433EF
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 12:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E08C433EF
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 12:35:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239232AbiASMMx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jan 2022 07:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbiASMMx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:12:53 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83ECC061574
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 04:12:52 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id bu18so8552904lfb.5
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 04:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AMAX++J32gttDcd4ezfSvaj25iJYc5sobnRtT5oJ+bg=;
-        b=bfzQzaJw/g3/z+p530phx478SwFjNOaZOlccMuynN/b8UOigOIgJJhN5DtDFw+xcLZ
-         ivfjvQFcxwOEklg2lhj9p+6PckW8NuVuCK2ZEales3zbOID55OIPTC/jm4iwmYl0OU8G
-         HTmEuEeYdU1v6nN7fWTXbIebwMtKLQSTGynac=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AMAX++J32gttDcd4ezfSvaj25iJYc5sobnRtT5oJ+bg=;
-        b=xjfo7ZEy1vffdPn2AM3Goo6wgxnlmA040mMBy50MiNadyxyUwVpy0Pby0++N85HfXi
-         JEwQIA6jTM3cYWUgIskwAvQst+XiGEDtFtFiFI/CEAJQQLvvBXVPnORjrR8RJgNUNYgF
-         YrAu8VbwnU9HgxStck97GJZJJKF6bkjW8RAfocUofdGY3Nkgt4dXT06H/mmxEVasq+H5
-         ufCXTCqxEtdScTRLOfT30ZV+89kUScIF/tvq7x9wwnjoY+xu77emSWqoFrU8wCCUpvge
-         wJj5RIAqi4/npqJzKdvXrCKYPXzdXujT/D7DyfTlaYyzTo3oimz+4uTwSvpjeY2flo3t
-         yU+w==
-X-Gm-Message-State: AOAM531LUFa1Jc/LfoEPfFiSmSAG5ZX2qgHzaFEuXp13vZqmrfWFr1+I
-        yOnYDf8TUDxw3zDWNI61bAhWVuUte3TGa86HkOi5VEOaB42z6A==
-X-Google-Smtp-Source: ABdhPJwPT9VPUXoTET6Q00SwEc4q3qLROUclrQiLabWAlDwaJpp5rBgzB1JvjG1tfMSnzWij0eWgWJCjau5mqtuwMWE=
-X-Received: by 2002:a2e:9f41:: with SMTP id v1mr21837857ljk.274.1642594371071;
- Wed, 19 Jan 2022 04:12:51 -0800 (PST)
+        id S1354497AbiASMfO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jan 2022 07:35:14 -0500
+Received: from mail.citri.com.pl ([104.161.32.81]:39660 "EHLO
+        mail.citri.com.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354492AbiASMe4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Jan 2022 07:34:56 -0500
+Received: by mail.citri.com.pl (Postfix, from userid 1001)
+        id CA1D665778; Wed, 19 Jan 2022 09:45:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citri.com.pl; s=mail;
+        t=1642581963; bh=DNMbOdv+WSLiNjXhzbiIyU6jsq7/XseznX1ICZz5vW0=;
+        h=Date:From:To:Subject:From;
+        b=Pfx6DaWpZiDuVOcUC52D0o5NH+/7U2kpk/i9ib71zyEpbQzf+VXG6YfVrKBpvz98A
+         wVTfXBxoVwJm+Wssbu6SSw+DGc19wvgdQpTW9Z3A980YRa+iVrCXda90VogBFcXv6z
+         tmm5i0upFCp1QyzCp4YQAaB4yWQh42gp5n92EPnf4LmU0QYd06Az/dlJHuv7yfg3ce
+         DQ9Gx39M9bFZDOyBSe+0qNwiSQB70Zr0v1wIs4sFYxx8LPpF4eyHvjgLBSJoSElx+n
+         nZCwXQW9/mwwSNsxA5lF/ndNXUtPlLr0o6a4y8L2b9YCyVyd3O2Yt1fsN73i3f/lX5
+         JGIV6AyMJ4swg==
+Received: by mail.citri.com.pl for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 08:45:45 GMT
+Message-ID: <20220119084500-0.1.q.adb.0.09llbgbi7d@citri.com.pl>
+Date:   Wed, 19 Jan 2022 08:45:45 GMT
+From:   =?UTF-8?Q? "Maciej_Szcz=C4=99sny" ?= 
+        <maciej.szczesny@citri.com.pl>
+To:     <bpf@vger.kernel.org>
+Subject: Wycena paneli fotowoltaicznych
+X-Mailer: mail.citri.com.pl
 MIME-Version: 1.0
-References: <CAK-59YH9+w4VMuHC2ECUsChZ=0nJRmQeKkcAwXFt2ugfmWHZWA@mail.gmail.com>
-In-Reply-To: <CAK-59YH9+w4VMuHC2ECUsChZ=0nJRmQeKkcAwXFt2ugfmWHZWA@mail.gmail.com>
-From:   =?UTF-8?Q?Mauricio_V=C3=A1squez_Bernal?= <mauricio@kinvolk.io>
-Date:   Wed, 19 Jan 2022 07:12:40 -0500
-Message-ID: <CAHap4zuEEq841zejx24mtQGx66BmOOBjXu12om4g8PjN=Sx8ig@mail.gmail.com>
-Subject: Re: How do I implement bpf_prog_test_run with BPF CO-RE?
-To:     Pony Sew <poony20115@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 2:16 AM Pony Sew <poony20115@gmail.com> wrote:
->
-> Hello.
-> It seems like before bpf_prog_test_run is called, you need to call
-> bpf_prog_load. But in BPF CO-RE program, we already have
-> <program>_bpf__open and <program>_bpf__load which basically does the
-> same thing. My code look approximately like this:
->
-> -----test1_load.c---------------
-> #include <cgreen/cgreen.h>
->
-> Ensure(Load, load_test){
->     /* should I call bpf_prog_load here? */
+Dzie=C5=84 dobry,
 
-bpf_prog_test_run() needs prog_fd. You're already calling
-bpf_firewall_bpf__load() in bpf_firewall.c, you can get the program fd
-by using
-prog_fd = obj->progs.<program>.prog_fd;
+dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
+irm=C4=85.
 
->     bpf_prog_test_run(/* parameters */);
->     /* what about bpf_object__close? */
-> }
->
-> TestSuite *load_tests() {
->     TestSuite *suite = create_test_suite();
->     return suite;
-> }
->
-> -----bpf_firewall.bpf.c---------
->  #include "vmlinux.h"
->  #include <bpf/bpf_helpers.h>
->
-> SEC("xdp_prog")
-> int xdp_prog_main(struct xdp_md *ctx){
->     /* main program */
-> }
->
->  char LICENSE[] SEC("license") = "GPL";
->
-> ------bpf_firewall.c---------------
-> #include <cgreen/cgreen.h>
-> #include <bpf/libbpf.h>
-> #include <bpf/bpf.h>
-> #include "bpf_firewall.skel.h"
->
-> TestSuite *load_tests();
->
-> int main(int argc, char **argv) {
->     struct bpf_firewall_bpf *obj;
->     int err = 0;
->
->     obj = bpf_firewall_bpf__open();
->
->     err = bpf_firewall_bpf__load(obj);
->
->     err = bpf_firewall_bpf__attach(obj);
+=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
+ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
 
-I don't think you need to call __attach() if you only want to perform
-some tests with bpf_prog_test_run.
+Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
+ropozycji?
 
->
->     TestSuite *suite = create_test_suite();
->     add_suite(suite, load_tests());
->     run_test_suite(suite, create_text_reporter());
->
->     bpf_firewall_bpf__destroy(obj);
->     return 0;
-> }
->
-> How do I implement bpf_prog_test_run with BPF CO-RE?
 
-You don't need to worry about it. You're using the skeleton and hence
-libbpf underneath, it'll take care of performing all CO-RE relocations
-when loading the program.
-
-This approach is used many times in tools/testing/selftests/bpf, for
-instance tools/testing/selftests/bpf/prog_tests/map_ptr.c does exactly
-what you're looking for.
-
->
-> Best regards,
-> Poony.
+Pozdrawiam,
+Maciej Szcz=C4=99sny
