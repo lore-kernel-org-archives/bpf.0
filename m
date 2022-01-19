@@ -2,52 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E08C433EF
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 12:35:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DA98C433F5
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 13:12:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354497AbiASMfO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Jan 2022 07:35:14 -0500
-Received: from mail.citri.com.pl ([104.161.32.81]:39660 "EHLO
-        mail.citri.com.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354492AbiASMe4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Jan 2022 07:34:56 -0500
-Received: by mail.citri.com.pl (Postfix, from userid 1001)
-        id CA1D665778; Wed, 19 Jan 2022 09:45:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citri.com.pl; s=mail;
-        t=1642581963; bh=DNMbOdv+WSLiNjXhzbiIyU6jsq7/XseznX1ICZz5vW0=;
-        h=Date:From:To:Subject:From;
-        b=Pfx6DaWpZiDuVOcUC52D0o5NH+/7U2kpk/i9ib71zyEpbQzf+VXG6YfVrKBpvz98A
-         wVTfXBxoVwJm+Wssbu6SSw+DGc19wvgdQpTW9Z3A980YRa+iVrCXda90VogBFcXv6z
-         tmm5i0upFCp1QyzCp4YQAaB4yWQh42gp5n92EPnf4LmU0QYd06Az/dlJHuv7yfg3ce
-         DQ9Gx39M9bFZDOyBSe+0qNwiSQB70Zr0v1wIs4sFYxx8LPpF4eyHvjgLBSJoSElx+n
-         nZCwXQW9/mwwSNsxA5lF/ndNXUtPlLr0o6a4y8L2b9YCyVyd3O2Yt1fsN73i3f/lX5
-         JGIV6AyMJ4swg==
-Received: by mail.citri.com.pl for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 08:45:45 GMT
-Message-ID: <20220119084500-0.1.q.adb.0.09llbgbi7d@citri.com.pl>
-Date:   Wed, 19 Jan 2022 08:45:45 GMT
-From:   =?UTF-8?Q? "Maciej_Szcz=C4=99sny" ?= 
-        <maciej.szczesny@citri.com.pl>
-To:     <bpf@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.citri.com.pl
+        id S1354664AbiASNMo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jan 2022 08:12:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354498AbiASNMo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Jan 2022 08:12:44 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025EBC061574
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 05:12:44 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id q75so2577219pgq.5
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 05:12:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3wq4ZPTeRMdXbVzGOWrhmREoieqegm0DsXPzXmnOvJY=;
+        b=pP5s4TT12LRLPibqa6VaiTXrIKZbV9ljhfL5XFBRtbF/1x133ut4mb//C7KdU1ETBR
+         +pcI6XEIvjcDu1gjCazO3sLwWuxuEzLK8XqxWatb97b1nWwz9B5f9TSe4RZRJ9iEPerm
+         1RSJdM9tmy84ZQEqfyHto+oAiaxh/3tCXR1dq6FfHwQeKIirU1TciNvDzPVZWzIMaywo
+         NHejxlldfqRU6gBst9MXSDXjwIYDlCFhzMIa1REEB8oVWO4XuE/gucAiVRfOVZcRofWJ
+         E9dcBos6ggUBloDuCoktowjW2pvBPDe+VKkz8Qoe/Wu5ryuQsy9dmvhqbBskKR3+GzpW
+         Cx/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=3wq4ZPTeRMdXbVzGOWrhmREoieqegm0DsXPzXmnOvJY=;
+        b=GvBg7eCXFar6xdKzQO+l/QCP31MnXxelWwuFQbBQA570KqViiVGaGAfzRUM83oN0hu
+         n0l1UJMN8BgiiC2PhCCHBRSjiV+O36byq8xk5mIz6xlkAWHlztJXZpksgyZ0UoosAqh2
+         5iAIVYP0RiI8b9NQL2U2Y/yUeZar+ImCxYWVAHOfyTkqKfYFkjfQ/5Kar1nGTmSGu6pY
+         Sk1sBhb0DCXE2wV+HsCKAxbmC6vTN6N+Ac012nSwk8nCQS/wYYRYIQ1HSa2mmZ7qHJnJ
+         sDqprNTKkjoXzfSe8tuDRcJlzggzfyF00kt1X5cZvGCbagLPGFB4msu2ngAFFVOiUqJL
+         8ZkQ==
+X-Gm-Message-State: AOAM531wzh/jddYJOMHHU3UgS4OBgIYV8/ZC3o3uJdk3xJIb/dARHuvu
+        LkSQF5UaCXZx26bCH2dj2lI=
+X-Google-Smtp-Source: ABdhPJyVrzH3RDvRLmVFjc2J3ICi3as6BPB78Mm0nlFHGGBd2xR/x1Xlq6HaNcr9GbDFudALYgfrzQ==
+X-Received: by 2002:a62:1c12:0:b0:4bc:6d81:b402 with SMTP id c18-20020a621c12000000b004bc6d81b402mr30552716pfc.40.1642597963518;
+        Wed, 19 Jan 2022 05:12:43 -0800 (PST)
+Received: from ktada-Stealth-15M-A11UEK.. (fpa446d38e.knge002.ap.nuro.jp. [164.70.211.142])
+        by smtp.gmail.com with ESMTPSA id v13sm3603208pjd.13.2022.01.19.05.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jan 2022 05:12:42 -0800 (PST)
+Sender: KENTA TADA <kenta.tada.s@gmail.com>
+From:   Kenta Tada <Kenta.Tada@sony.com>
+To:     andrii@kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, Kenta Tada <Kenta.Tada@sony.com>
+Subject: [PATCH v4 0/3] Fix the incorrect register read for syscalls on x86_64
+Date:   Wed, 19 Jan 2022 22:12:06 +0900
+Message-Id: <20220119131209.36092-1-Kenta.Tada@sony.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Currently, rcx is read as the fourth parameter of syscall on x86_64.
+But x86_64 Linux System Call convention uses r10 actually.
+This commit adds the wrapper for users who want to access to
+syscall params to analyze the user space.
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Changelog:
+----------
+v1 -> v2:
+- Rebase to current bpf-next
+https://lore.kernel.org/bpf/20211222213924.1869758-1-andrii@kernel.org/
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+v2 -> v3:
+- Modify the definition of SYSCALL macros for only targeted archs.
+- Define __BPF_TARGET_MISSING variants for completeness.
+- Remove CORE variants. These macros will not be used.
+- Add a selftest.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+v3 -> v4:
+- Modify a selftest not to use serial tests.
+- Modify a selftest to use ASSERT_EQ().
+- Extract syscall wrapper for all the other tests.
+- Add CORE variants.
 
+Kenta Tada (3):
+  libbpf: Extract syscall wrapper
+  libbpf: Fix the incorrect register read for syscalls on x86_64
+  libbpf: Add a test to confirm PT_REGS_PARM4_SYSCALL
 
-Pozdrawiam,
-Maciej Szcz=C4=99sny
+ tools/lib/bpf/bpf_tracing.h                   | 34 +++++++++++++
+ .../bpf/prog_tests/test_bpf_syscall_macro.c   | 49 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/bpf_misc.h  | 19 +++++++
+ .../selftests/bpf/progs/bpf_syscall_macro.c   | 51 +++++++++++++++++++
+ .../selftests/bpf/progs/test_probe_user.c     | 15 +-----
+ 5 files changed, 154 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_misc.h
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
+
+-- 
+2.32.0
+
