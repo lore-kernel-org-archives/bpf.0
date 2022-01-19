@@ -2,180 +2,170 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEC65C433EF
-	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 23:06:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60DA7C4332F
+	for <bpf@archiver.kernel.org>; Wed, 19 Jan 2022 23:06:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235743AbiASXGv convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 19 Jan 2022 18:06:51 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:51246 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243409AbiASXGj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 18:06:39 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JIs6kR031096
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 15:06:39 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dp197t7rv-16
+        id S244737AbiASXGw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Jan 2022 18:06:52 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25110 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243366AbiASXGm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 19 Jan 2022 18:06:42 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20JIs87E030844
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 15:06:41 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=QQVM3WqmxAMOMYSTl+HcWUNnl5I34hitJkHaevHvggE=;
+ b=aLZ6Bm4KtIbWRE9AMiGuhapXBxhbRMkokWQcsSDB3ynoI80yKy+sY3RI59tJHiawnpeG
+ t2PSq7PLOx9i8N3g0EgX4eCc5O5zMF7Md7U7sSHJwyYCkMvSkGkCoGXfLxsxw0fgQsW1
+ a3LLz5UwSgWtlkMW5/s1pzUQL7FMg5YddEw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dpafj6kd3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 15:06:39 -0800
-Received: from twshared18912.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 15:06:41 -0800
+Received: from twshared3399.25.prn2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 19 Jan 2022 15:06:35 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 7741228220C6B; Wed, 19 Jan 2022 15:06:29 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v4 bpf-next 2/7] bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
-Date:   Wed, 19 Jan 2022 15:06:15 -0800
-Message-ID: <20220119230620.3137425-3-song@kernel.org>
+ 15.1.2308.20; Wed, 19 Jan 2022 15:06:40 -0800
+Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
+        id 457C1945C590; Wed, 19 Jan 2022 14:59:39 -0800 (PST)
+From:   Kenny Yu <kennyyu@fb.com>
+To:     <kennyyu@fb.com>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
+        <daniel@iogearbox.net>, <yhs@fb.com>, <phoenix1987@gmail.com>,
+        <alexei.starovoitov@gmail.com>
+Subject: [PATCH v4 bpf-next 3/3] selftests/bpf: Add test for sleepable bpf iterator programs
+Date:   Wed, 19 Jan 2022 14:59:29 -0800
+Message-ID: <20220119225929.2312908-4-kennyyu@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220119230620.3137425-1-song@kernel.org>
-References: <20220119230620.3137425-1-song@kernel.org>
+In-Reply-To: <20220119225929.2312908-1-kennyyu@fb.com>
+References: <20220113233158.1582743-1-kennyyu@fb.com>
+ <20220119225929.2312908-1-kennyyu@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: tKi377nrclnwIjXqugHbUK8TVUfMOKiN
-X-Proofpoint-GUID: tKi377nrclnwIjXqugHbUK8TVUfMOKiN
+X-Proofpoint-ORIG-GUID: M-Am-ofhQvafmk-RyezCdQqQeD-c3aNJ
+X-Proofpoint-GUID: M-Am-ofhQvafmk-RyezCdQqQeD-c3aNJ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-19_12,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 bulkscore=0
- malwarescore=0 suspectscore=0 priorityscore=1501 clxscore=1034
- impostorscore=0 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- phishscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 suspectscore=0 mlxscore=0 phishscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=898 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2201190122
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+This adds a test for bpf iterator programs to make use of sleepable
+bpf helpers.
 
-This enables sub-page memory charge and allocation.
-
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Kenny Yu <kennyyu@fb.com>
 ---
- include/linux/bpf.h     |  4 ++--
- kernel/bpf/core.c       | 19 +++++++++----------
- kernel/bpf/trampoline.c |  6 +++---
- 3 files changed, 14 insertions(+), 15 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 16 +++++++
+ .../selftests/bpf/progs/bpf_iter_task.c       | 44 +++++++++++++++++++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 6d7346c54d83..920940f7be22 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -827,8 +827,8 @@ void bpf_image_ksym_add(void *data, struct bpf_ksym *ksym);
- void bpf_image_ksym_del(struct bpf_ksym *ksym);
- void bpf_ksym_add(struct bpf_ksym *ksym);
- void bpf_ksym_del(struct bpf_ksym *ksym);
--int bpf_jit_charge_modmem(u32 pages);
--void bpf_jit_uncharge_modmem(u32 pages);
-+int bpf_jit_charge_modmem(u32 size);
-+void bpf_jit_uncharge_modmem(u32 size);
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
- #else
- static inline int bpf_trampoline_link_prog(struct bpf_prog *prog,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index de3e5bc6781f..495e3b2c36ff 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -808,7 +808,7 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
- 	return slot;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+index b84f859b1267..fcda0ecd8746 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -138,6 +138,20 @@ static void test_task(void)
+ 	bpf_iter_task__destroy(skel);
  }
- 
--static atomic_long_t bpf_jit_current;
-+static atomic64_t bpf_jit_current;
- 
- /* Can be overridden by an arch's JIT compiler if it has a custom,
-  * dedicated BPF backend memory area, or if neither of the two
-@@ -833,12 +833,11 @@ static int __init bpf_jit_charge_init(void)
- }
- pure_initcall(bpf_jit_charge_init);
- 
--int bpf_jit_charge_modmem(u32 pages)
-+int bpf_jit_charge_modmem(u32 size)
+=20
++static void test_task_sleepable(void)
++{
++	struct bpf_iter_task *skel;
++
++	skel =3D bpf_iter_task__open_and_load();
++	if (CHECK(!skel, "bpf_iter_task__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	do_dummy_read(skel->progs.dump_task_sleepable);
++
++	bpf_iter_task__destroy(skel);
++}
++
+ static void test_task_stack(void)
  {
--	if (atomic_long_add_return(pages, &bpf_jit_current) >
--	    (bpf_jit_limit >> PAGE_SHIFT)) {
-+	if (atomic64_add_return(size, &bpf_jit_current) > bpf_jit_limit) {
- 		if (!bpf_capable()) {
--			atomic_long_sub(pages, &bpf_jit_current);
-+			atomic64_sub(size, &bpf_jit_current);
- 			return -EPERM;
- 		}
- 	}
-@@ -846,9 +845,9 @@ int bpf_jit_charge_modmem(u32 pages)
+ 	struct bpf_iter_task_stack *skel;
+@@ -1252,6 +1266,8 @@ void test_bpf_iter(void)
+ 		test_bpf_map();
+ 	if (test__start_subtest("task"))
+ 		test_task();
++	if (test__start_subtest("task_sleepable"))
++		test_task_sleepable();
+ 	if (test__start_subtest("task_stack"))
+ 		test_task_stack();
+ 	if (test__start_subtest("task_file"))
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+index c86b93f33b32..81a86b3b7086 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+@@ -2,6 +2,7 @@
+ /* Copyright (c) 2020 Facebook */
+ #include "bpf_iter.h"
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
+@@ -23,3 +24,46 @@ int dump_task(struct bpf_iter__task *ctx)
+ 	BPF_SEQ_PRINTF(seq, "%8d %8d\n", task->tgid, task->pid);
  	return 0;
  }
- 
--void bpf_jit_uncharge_modmem(u32 pages)
-+void bpf_jit_uncharge_modmem(u32 size)
- {
--	atomic_long_sub(pages, &bpf_jit_current);
-+	atomic64_sub(size, &bpf_jit_current);
- }
- 
- void *__weak bpf_jit_alloc_exec(unsigned long size)
-@@ -879,11 +878,11 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 	size = round_up(proglen + sizeof(*hdr) + 128, PAGE_SIZE);
- 	pages = size / PAGE_SIZE;
- 
--	if (bpf_jit_charge_modmem(pages))
-+	if (bpf_jit_charge_modmem(size))
- 		return NULL;
- 	hdr = bpf_jit_alloc_exec(size);
- 	if (!hdr) {
--		bpf_jit_uncharge_modmem(pages);
-+		bpf_jit_uncharge_modmem(size);
- 		return NULL;
- 	}
- 
-@@ -906,7 +905,7 @@ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
- 	u32 pages = hdr->pages;
- 
- 	bpf_jit_free_exec(hdr);
--	bpf_jit_uncharge_modmem(pages);
-+	bpf_jit_uncharge_modmem(pages << PAGE_SHIFT);
- }
- 
- /* This symbol is only overridden by archs that have different
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 4b6974a195c1..e76a488c09c3 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -213,7 +213,7 @@ static void __bpf_tramp_image_put_deferred(struct work_struct *work)
- 	im = container_of(work, struct bpf_tramp_image, work);
- 	bpf_image_ksym_del(&im->ksym);
- 	bpf_jit_free_exec(im->image);
--	bpf_jit_uncharge_modmem(1);
-+	bpf_jit_uncharge_modmem(PAGE_SIZE);
- 	percpu_ref_exit(&im->pcref);
- 	kfree_rcu(im, rcu);
- }
-@@ -310,7 +310,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
- 	if (!im)
- 		goto out;
- 
--	err = bpf_jit_charge_modmem(1);
-+	err = bpf_jit_charge_modmem(PAGE_SIZE);
- 	if (err)
- 		goto out_free_im;
- 
-@@ -332,7 +332,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
- out_free_image:
- 	bpf_jit_free_exec(im->image);
- out_uncharge:
--	bpf_jit_uncharge_modmem(1);
-+	bpf_jit_uncharge_modmem(PAGE_SIZE);
- out_free_im:
- 	kfree(im);
- out:
--- 
++
++SEC("iter.s/task")
++int dump_task_sleepable(struct bpf_iter__task *ctx)
++{
++	struct seq_file *seq =3D ctx->meta->seq;
++	struct task_struct *task =3D ctx->task;
++	static const char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
++	struct pt_regs *regs;
++	void *ptr;
++	uint32_t user_data =3D 0;
++	int numread;
++
++	if (task =3D=3D (void *)0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	regs =3D (struct pt_regs *)bpf_task_pt_regs(task);
++	if (regs =3D=3D (void *)0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++	ptr =3D (void *)PT_REGS_IP(regs);
++
++	/* Try to read the contents of the task's instruction pointer from the
++	 * remote task's address space.
++	 */
++	numread =3D bpf_access_process_vm(&user_data,
++					sizeof(uint32_t),
++					ptr,
++					task,
++					0);
++	if (numread !=3D sizeof(uint32_t)) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	if (ctx->meta->seq_num =3D=3D 0)
++		BPF_SEQ_PRINTF(seq, "    tgid      gid     data\n");
++
++	BPF_SEQ_PRINTF(seq, "%8d %8d %8d\n", task->tgid, task->pid, user_data);
++	return 0;
++}
+--=20
 2.30.2
 
