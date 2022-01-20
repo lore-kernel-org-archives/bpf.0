@@ -2,19 +2,19 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 346BAC433F5
-	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:43:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1AF6C433F5
+	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:43:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232105AbiATGnL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jan 2022 01:43:11 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:49799 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358770AbiATGnK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:43:10 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2KlUbq_1642660987;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2KlUbq_1642660987)
+        id S1358785AbiATGnP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jan 2022 01:43:15 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:56311 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358770AbiATGnM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:43:12 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R961e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2L1lSQ_1642660989;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2L1lSQ_1642660989)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 20 Jan 2022 14:43:07 +0800
+          Thu, 20 Jan 2022 14:43:09 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,9 +25,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v2 03/12] virtio: queue_reset: struct virtio_config_ops add callbacks for queue_reset
-Date:   Thu, 20 Jan 2022 14:42:54 +0800
-Message-Id: <20220120064303.106639-4-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v2 05/12] virito: queue_reset: pci: move the per queue irq logic from vp_del_vqs to vp_del_vq
+Date:   Thu, 20 Jan 2022 14:42:56 +0800
+Message-Id: <20220120064303.106639-6-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220120064303.106639-1-xuanzhuo@linux.alibaba.com>
 References: <20220120064303.106639-1-xuanzhuo@linux.alibaba.com>
@@ -37,65 +37,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Performing reset on a queue is divided into two steps:
+Move irq's processing logic into vp_del_vq(), so that this function can
+handle a vq's del operation independently.
 
-1. reset_vq: reset one vq
-2. enable_reset_vq: re-enable the reset queue
-
-In the first step, these tasks will be completed:
-    1. notify the hardware queue to reset
-    2. recycle the buffer from vq
-    3. delete the vq
-
-So add two callbacks reset_vq, enable_reset_vq to struct
-virtio_config_ops. The parameters of enable_reset_vq are similar to
-those of find_vqs.
+In the subsequent patches that supports queue reset, I have the
+need to delete a vq separately.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- include/linux/virtio_config.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/virtio/virtio_pci_common.c | 25 +++++++++++++------------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-index 4d107ad31149..e50a377c27a0 100644
---- a/include/linux/virtio_config.h
-+++ b/include/linux/virtio_config.h
-@@ -74,8 +74,22 @@ struct virtio_shm_region {
-  * @set_vq_affinity: set the affinity for a virtqueue (optional).
-  * @get_vq_affinity: get the affinity for a virtqueue (optional).
-  * @get_shm_region: get a shared memory region based on the index.
-+ * @reset_vq: reset a queue individually
-+ *	vdev: the device
-+ *	queue_index: the queue index
-+ *	callback: callback to free unused bufs
-+ *	data: pass to callback
-+ *	returns 0 on success or error status
-+ * @enable_reset_vq: enable a reset queue
-+ *	vdev: the device
-+ *	queue_index: the queue index
-+ *	callback: callback for the virtqueue, NULL for vq that do not need a callback
-+ *	name: virtqueue names (mainly for debugging), NULL for vq unused by driver
-+ *	ctx: ctx
-+ *	returns vq on success or error status
-  */
- typedef void vq_callback_t(struct virtqueue *);
-+typedef void vq_reset_callback_t(struct virtio_device *vdev, void *buf, void *data);
- struct virtio_config_ops {
- 	void (*enable_cbs)(struct virtio_device *vdev);
- 	void (*get)(struct virtio_device *vdev, unsigned offset,
-@@ -100,6 +114,12 @@ struct virtio_config_ops {
- 			int index);
- 	bool (*get_shm_region)(struct virtio_device *vdev,
- 			       struct virtio_shm_region *region, u8 id);
-+	int (*reset_vq)(struct virtio_device *vdev, u16 queue_index,
-+			vq_reset_callback_t *callback, void *data);
-+	struct virtqueue *(*enable_reset_vq)(struct virtio_device *vdev,
-+					     u16 queue_index,
-+					     vq_callback_t *callback,
-+					     const char *name, const bool *ctx);
- };
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index fdbde1db5ec5..cb1eec0a6bf3 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -248,6 +248,17 @@ static void vp_del_vq(struct virtqueue *vq)
+ 	struct virtio_pci_vq_info *info = vp_dev->vqs[vq->index];
+ 	unsigned long flags;
  
- /* If driver didn't advertise the feature, it will never appear. */
++	if (vp_dev->per_vq_vectors) {
++		int v = vp_dev->vqs[vq->index]->msix_vector;
++
++		if (v != VIRTIO_MSI_NO_VECTOR) {
++			int irq = pci_irq_vector(vp_dev->pci_dev, v);
++
++			irq_set_affinity_hint(irq, NULL);
++			free_irq(irq, vq);
++		}
++	}
++
+ 	spin_lock_irqsave(&vp_dev->lock, flags);
+ 	list_del(&info->node);
+ 	spin_unlock_irqrestore(&vp_dev->lock, flags);
+@@ -263,19 +274,9 @@ void vp_del_vqs(struct virtio_device *vdev)
+ 	struct virtqueue *vq, *n;
+ 	int i;
+ 
+-	list_for_each_entry_safe(vq, n, &vdev->vqs, list) {
+-		if (vp_dev->per_vq_vectors) {
+-			int v = vp_dev->vqs[vq->index]->msix_vector;
+-
+-			if (v != VIRTIO_MSI_NO_VECTOR) {
+-				int irq = pci_irq_vector(vp_dev->pci_dev, v);
+-
+-				irq_set_affinity_hint(irq, NULL);
+-				free_irq(irq, vq);
+-			}
+-		}
++	list_for_each_entry_safe(vq, n, &vdev->vqs, list)
+ 		vp_del_vq(vq);
+-	}
++
+ 	vp_dev->per_vq_vectors = false;
+ 
+ 	if (vp_dev->intx_enabled) {
 -- 
 2.31.0
 
