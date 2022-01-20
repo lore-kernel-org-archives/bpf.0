@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65E48C433EF
-	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:06:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BBECC433F5
+	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:06:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358656AbiATGGD convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 20 Jan 2022 01:06:03 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53220 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358659AbiATGGA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:06:00 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K1FR6Q006671
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 22:05:59 -0800
+        id S234298AbiATGGI convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 20 Jan 2022 01:06:08 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36330 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358659AbiATGGF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:06:05 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K3RW4S011677
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 22:06:04 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dpwwt95w2-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dpyup0mqr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 22:05:59 -0800
-Received: from twshared18912.14.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Jan 2022 22:06:04 -0800
+Received: from twshared13036.24.prn2.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 19 Jan 2022 22:05:57 -0800
+ 15.1.2308.20; Wed, 19 Jan 2022 22:06:03 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D1C26FB9D57B; Wed, 19 Jan 2022 22:05:46 -0800 (PST)
+        id F0854FB9D583; Wed, 19 Jan 2022 22:05:50 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 2/4] selftests/bpf: convert remaining legacy map definitions
-Date:   Wed, 19 Jan 2022 22:05:27 -0800
-Message-ID: <20220120060529.1890907-3-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 4/4] docs/bpf: update BPF map definition example
+Date:   Wed, 19 Jan 2022 22:05:29 -0800
+Message-ID: <20220120060529.1890907-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220120060529.1890907-1-andrii@kernel.org>
 References: <20220120060529.1890907-1-andrii@kernel.org>
@@ -37,231 +37,79 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: j7hFj4ZIJSI0H__H57snE9YhkaaDtmZO
-X-Proofpoint-ORIG-GUID: j7hFj4ZIJSI0H__H57snE9YhkaaDtmZO
+X-Proofpoint-ORIG-GUID: uWyWFcycAV0cfDJuYDl_Ww7WCgZ3bp6L
+X-Proofpoint-GUID: uWyWFcycAV0cfDJuYDl_Ww7WCgZ3bp6L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-20_02,2022-01-19_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 adultscore=3
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 phishscore=0 bulkscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2110150000 definitions=main-2201200030
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Converted few remaining legacy BPF map definition to BTF-defined ones.
-For the remaining two bpf_map_def-based legacy definitions that we want
-to keep for testing purposes until libbpf 1.0 release, guard them in
-pragma to suppres deprecation warnings which will be added in libbpf in
-the next commit.
+Use BTF-defined map definition in the documentation example.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../bpf/progs/freplace_cls_redirect.c         | 12 +++++-----
- .../selftests/bpf/progs/sample_map_ret0.c     | 24 +++++++++----------
- .../selftests/bpf/progs/test_btf_haskv.c      |  3 +++
- .../selftests/bpf/progs/test_btf_newkv.c      |  3 +++
- .../selftests/bpf/progs/test_btf_nokv.c       | 12 +++++-----
- .../bpf/progs/test_skb_cgroup_id_kern.c       | 12 +++++-----
- .../testing/selftests/bpf/progs/test_tc_edt.c | 12 +++++-----
- .../bpf/progs/test_tcp_check_syncookie_kern.c | 12 +++++-----
- 8 files changed, 48 insertions(+), 42 deletions(-)
+ Documentation/bpf/btf.rst | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c b/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-index 68a5a9db928a..7e94412d47a5 100644
---- a/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-@@ -7,12 +7,12 @@
- #include <bpf/bpf_endian.h>
- #include <bpf/bpf_helpers.h>
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 1ebf4c5c7ddc..ab08852e53ae 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -565,18 +565,15 @@ A map can be created with ``btf_fd`` and specified key/value type id.::
+ In libbpf, the map can be defined with extra annotation like below:
+ ::
  
--struct bpf_map_def SEC("maps") sock_map = {
--	.type = BPF_MAP_TYPE_SOCKMAP,
--	.key_size = sizeof(int),
--	.value_size = sizeof(int),
--	.max_entries = 2,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__type(key, int);
-+	__type(value, int);
-+	__uint(max_entries, 2);
-+} sock_map SEC(".maps");
+-    struct bpf_map_def SEC("maps") btf_map = {
+-        .type = BPF_MAP_TYPE_ARRAY,
+-        .key_size = sizeof(int),
+-        .value_size = sizeof(struct ipv_counts),
+-        .max_entries = 4,
+-    };
+-    BPF_ANNOTATE_KV_PAIR(btf_map, int, struct ipv_counts);
++    struct {
++        __uint(type, BPF_MAP_TYPE_ARRAY);
++        __type(key, int);
++        __type(value, struct ipv_counts);
++        __uint(max_entries, 4);
++    } btf_map SEC(".maps");
  
- SEC("freplace/cls_redirect")
- int freplace_cls_redirect_test(struct __sk_buff *skb)
-diff --git a/tools/testing/selftests/bpf/progs/sample_map_ret0.c b/tools/testing/selftests/bpf/progs/sample_map_ret0.c
-index 1612a32007b6..495990d355ef 100644
---- a/tools/testing/selftests/bpf/progs/sample_map_ret0.c
-+++ b/tools/testing/selftests/bpf/progs/sample_map_ret0.c
-@@ -2,19 +2,19 @@
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
+-Here, the parameters for macro BPF_ANNOTATE_KV_PAIR are map name, key and
+-value types for the map. During ELF parsing, libbpf is able to extract
+-key/value type_id's and assign them to BPF_MAP_CREATE attributes
+-automatically.
++During ELF parsing, libbpf is able to extract key/value type_id's and assign
++them to BPF_MAP_CREATE attributes automatically.
  
--struct bpf_map_def SEC("maps") htab = {
--	.type = BPF_MAP_TYPE_HASH,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(long),
--	.max_entries = 2,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, __u32);
-+	__type(value, long);
-+	__uint(max_entries, 2);
-+} htab SEC(".maps");
+ .. _BPF_Prog_Load:
  
--struct bpf_map_def SEC("maps") array = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(long),
--	.max_entries = 2,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, long);
-+	__uint(max_entries, 2);
-+} array SEC(".maps");
+@@ -824,13 +821,12 @@ structure has bitfields. For example, for the following map,::
+            ___A b1:4;
+            enum A b2:4;
+       };
+-      struct bpf_map_def SEC("maps") tmpmap = {
+-           .type = BPF_MAP_TYPE_ARRAY,
+-           .key_size = sizeof(__u32),
+-           .value_size = sizeof(struct tmp_t),
+-           .max_entries = 1,
+-      };
+-      BPF_ANNOTATE_KV_PAIR(tmpmap, int, struct tmp_t);
++      struct {
++           __uint(type, BPF_MAP_TYPE_ARRAY);
++           __type(key, int);
++           __type(value, struct tmp_t);
++           __uint(max_entries, 1);
++      } tmpmap SEC(".maps");
  
- /* Sample program which should always load for testing control paths. */
- SEC(".text") int func()
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_haskv.c b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-index 160ead6c67b2..07c94df13660 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-@@ -9,12 +9,15 @@ struct ipv_counts {
- 	unsigned int v6;
- };
- 
-+#pragma GCC diagnostic push
-+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
- struct bpf_map_def SEC("maps") btf_map = {
- 	.type = BPF_MAP_TYPE_ARRAY,
- 	.key_size = sizeof(int),
- 	.value_size = sizeof(struct ipv_counts),
- 	.max_entries = 4,
- };
-+#pragma GCC diagnostic pop
- 
- BPF_ANNOTATE_KV_PAIR(btf_map, int, struct ipv_counts);
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_newkv.c b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-index 1884a5bd10f5..762671a2e90c 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-@@ -9,6 +9,8 @@ struct ipv_counts {
- 	unsigned int v6;
- };
- 
-+#pragma GCC diagnostic push
-+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
- /* just to validate we can handle maps in multiple sections */
- struct bpf_map_def SEC("maps") btf_map_legacy = {
- 	.type = BPF_MAP_TYPE_ARRAY,
-@@ -16,6 +18,7 @@ struct bpf_map_def SEC("maps") btf_map_legacy = {
- 	.value_size = sizeof(long long),
- 	.max_entries = 4,
- };
-+#pragma GCC diagnostic pop
- 
- BPF_ANNOTATE_KV_PAIR(btf_map_legacy, int, struct ipv_counts);
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_nokv.c b/tools/testing/selftests/bpf/progs/test_btf_nokv.c
-index 15e0f9945fe4..1dabb88f8cb4 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_nokv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_nokv.c
-@@ -8,12 +8,12 @@ struct ipv_counts {
- 	unsigned int v6;
- };
- 
--struct bpf_map_def SEC("maps") btf_map = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.key_size = sizeof(int),
--	.value_size = sizeof(struct ipv_counts),
--	.max_entries = 4,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(struct ipv_counts));
-+	__uint(max_entries, 4);
-+} btf_map SEC(".maps");
- 
- __attribute__((noinline))
- int test_long_fname_2(void)
-diff --git a/tools/testing/selftests/bpf/progs/test_skb_cgroup_id_kern.c b/tools/testing/selftests/bpf/progs/test_skb_cgroup_id_kern.c
-index c304cd5b8cad..37aacc66cd68 100644
---- a/tools/testing/selftests/bpf/progs/test_skb_cgroup_id_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_skb_cgroup_id_kern.c
-@@ -10,12 +10,12 @@
- 
- #define NUM_CGROUP_LEVELS	4
- 
--struct bpf_map_def SEC("maps") cgroup_ids = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(__u64),
--	.max_entries = NUM_CGROUP_LEVELS,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+	__uint(max_entries, NUM_CGROUP_LEVELS);
-+} cgroup_ids SEC(".maps");
- 
- static __always_inline void log_nth_level(struct __sk_buff *skb, __u32 level)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_edt.c b/tools/testing/selftests/bpf/progs/test_tc_edt.c
-index bf28814bfde5..950a70b61e74 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_edt.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_edt.c
-@@ -17,12 +17,12 @@
- #define THROTTLE_RATE_BPS (5 * 1000 * 1000)
- 
- /* flow_key => last_tstamp timestamp used */
--struct bpf_map_def SEC("maps") flow_map = {
--	.type = BPF_MAP_TYPE_HASH,
--	.key_size = sizeof(uint32_t),
--	.value_size = sizeof(uint64_t),
--	.max_entries = 1,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, uint32_t);
-+	__type(value, uint64_t);
-+	__uint(max_entries, 1);
-+} flow_map SEC(".maps");
- 
- static inline int throttle_flow(struct __sk_buff *skb)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-index cd747cd93dbe..6edebce563b5 100644
---- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-@@ -16,12 +16,12 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- 
--struct bpf_map_def SEC("maps") results = {
--	.type = BPF_MAP_TYPE_ARRAY,
--	.key_size = sizeof(__u32),
--	.value_size = sizeof(__u32),
--	.max_entries = 3,
--};
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+	__uint(max_entries, 3);
-+} results SEC(".maps");
- 
- static __always_inline __s64 gen_syncookie(void *data_end, struct bpf_sock *sk,
- 					   void *iph, __u32 ip_size,
+ bpftool is able to pretty print like below:
+ ::
 -- 
 2.30.2
 
