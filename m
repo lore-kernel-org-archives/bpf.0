@@ -2,19 +2,19 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFA4AC433EF
-	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20B08C4332F
+	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:43:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358811AbiATGnf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jan 2022 01:43:35 -0500
-Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:9917 "EHLO
-        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358797AbiATGnT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:43:19 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2LW0bb_1642660986;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2LW0bb_1642660986)
+        id S1358787AbiATGng (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jan 2022 01:43:36 -0500
+Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:60604 "EHLO
+        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358799AbiATGnU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:43:20 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2KlUde_1642660994;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2KlUde_1642660994)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 20 Jan 2022 14:43:06 +0800
+          Thu, 20 Jan 2022 14:43:15 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,9 +25,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v2 02/12] virtio: queue_reset: add VIRTIO_F_RING_RESET
-Date:   Thu, 20 Jan 2022 14:42:53 +0800
-Message-Id: <20220120064303.106639-3-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v2 10/12] virtio_net: virtnet_tx_timeout() stop ref sq->vq
+Date:   Thu, 20 Jan 2022 14:43:01 +0800
+Message-Id: <20220120064303.106639-11-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220120064303.106639-1-xuanzhuo@linux.alibaba.com>
 References: <20220120064303.106639-1-xuanzhuo@linux.alibaba.com>
@@ -37,37 +37,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added VIRTIO_F_RING_RESET, it came from here
-https://github.com/oasis-tcs/virtio-spec/issues/124
+Make virtnet_tx_timeout() no longer refer to vq directly. Because sq->vq
+may be equal to NULL after implementing rx/tx queue disable/enable.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- include/uapi/linux/virtio_config.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/net/virtio_net.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-index b5eda06f0d57..0862be802ff8 100644
---- a/include/uapi/linux/virtio_config.h
-+++ b/include/uapi/linux/virtio_config.h
-@@ -52,7 +52,7 @@
-  * rest are per-device feature bits.
-  */
- #define VIRTIO_TRANSPORT_F_START	28
--#define VIRTIO_TRANSPORT_F_END		38
-+#define VIRTIO_TRANSPORT_F_END		41
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 97eb4dddba1f..2add7fe749b8 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2692,7 +2692,7 @@ static void virtnet_tx_timeout(struct net_device *dev, unsigned int txqueue)
+ 	u64_stats_update_end(&sq->stats.syncp);
  
- #ifndef VIRTIO_CONFIG_NO_LEGACY
- /* Do we get callbacks when the ring is completely used, even if we've
-@@ -92,4 +92,9 @@
-  * Does the device support Single Root I/O Virtualization?
-  */
- #define VIRTIO_F_SR_IOV			37
-+
-+/*
-+ * This feature indicates that the driver can reset a queue individually.
-+ */
-+#define VIRTIO_F_RING_RESET		40
- #endif /* _UAPI_LINUX_VIRTIO_CONFIG_H */
+ 	netdev_err(dev, "TX timeout on queue: %u, sq: %s, vq: 0x%x, name: %s, %u usecs ago\n",
+-		   txqueue, sq->name, sq->vq->index, sq->vq->name,
++		   txqueue, sq->name, txq2vq(sq - vi->sq), sq->name,
+ 		   jiffies_to_usecs(jiffies - READ_ONCE(txq->trans_start)));
+ }
+ 
 -- 
 2.31.0
 
