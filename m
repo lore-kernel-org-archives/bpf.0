@@ -2,19 +2,19 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 635F6C433EF
-	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CFCFC433F5
+	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 06:43:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358792AbiATGnQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jan 2022 01:43:16 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:56338 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358781AbiATGnM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:43:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2L1lSE_1642660988;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2L1lSE_1642660988)
+        id S1358770AbiATGnS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jan 2022 01:43:18 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:46550 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358782AbiATGnN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 01:43:13 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2KWFJl_1642660990;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2KWFJl_1642660990)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 20 Jan 2022 14:43:08 +0800
+          Thu, 20 Jan 2022 14:43:11 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,9 +25,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v2 04/12] virtio: queue_reset: pci: update struct virtio_pci_common_cfg and option functions
-Date:   Thu, 20 Jan 2022 14:42:55 +0800
-Message-Id: <20220120064303.106639-5-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v2 06/12] virtio: queue_reset: pci: add independent function to enable msix vq
+Date:   Thu, 20 Jan 2022 14:42:57 +0800
+Message-Id: <20220120064303.106639-7-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220120064303.106639-1-xuanzhuo@linux.alibaba.com>
 References: <20220120064303.106639-1-xuanzhuo@linux.alibaba.com>
@@ -37,78 +37,105 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add queue_reset in virtio_pci_common_cfg, and add related operation
-functions.
+Extract the vp_enable_vq_msix() function from vp_find_vqs_msix() . Used
+to enable a msix vq individually.
+
+In the subsequent patches that supports queue reset, I have the
+need to enable a vq separately.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/virtio/virtio_pci_modern_dev.c | 28 ++++++++++++++++++++++++++
- include/linux/virtio_pci_modern.h      |  2 ++
- include/uapi/linux/virtio_pci.h        |  1 +
- 3 files changed, 31 insertions(+)
+ drivers/virtio/virtio_pci_common.c | 61 ++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
-index e11ed748e661..be02f812a2f6 100644
---- a/drivers/virtio/virtio_pci_modern_dev.c
-+++ b/drivers/virtio/virtio_pci_modern_dev.c
-@@ -463,6 +463,34 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index cb1eec0a6bf3..5afe207ce28a 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -311,6 +311,40 @@ void vp_del_vqs(struct virtio_device *vdev)
+ 	vp_dev->vqs = NULL;
  }
- EXPORT_SYMBOL_GPL(vp_modern_set_status);
  
-+/*
-+ * vp_modern_get_queue_reset - get the queue reset status
-+ * @mdev: the modern virtio-pci device
-+ * @index: queue index
-+ */
-+int vp_modern_get_queue_reset(struct virtio_pci_modern_device *mdev, u16 index)
++static struct virtqueue *vp_enable_vq_msix(struct virtio_device *vdev,
++					   int queue_index,
++					   vq_callback_t *callback,
++					   const char * const name,
++					   bool ctx,
++					   u16 msix_vec)
 +{
-+	struct virtio_pci_common_cfg __iomem *cfg = mdev->common;
++	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
++	struct virtqueue *vq;
++	int err;
 +
-+	vp_iowrite16(index, &cfg->queue_select);
-+	return vp_ioread16(&cfg->queue_reset);
++	vq = vp_setup_vq(vdev, queue_index, callback, name, ctx, msix_vec);
++	if (IS_ERR(vq))
++		return vq;
++
++	if (!vp_dev->per_vq_vectors || msix_vec == VIRTIO_MSI_NO_VECTOR)
++		return vq;
++
++	/* allocate per-vq irq if available and necessary */
++	snprintf(vp_dev->msix_names[msix_vec],
++		 sizeof *vp_dev->msix_names,
++		 "%s-%s", dev_name(&vp_dev->vdev.dev), name);
++
++	err = request_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec),
++			  vring_interrupt, IRQF_NO_AUTOEN,
++			  vp_dev->msix_names[msix_vec], vq);
++	if (err) {
++		vp_del_vq(vq);
++		return ERR_PTR(err);
++	}
++
++	return vq;
 +}
-+EXPORT_SYMBOL_GPL(vp_modern_get_queue_reset);
 +
-+/*
-+ * vp_modern_set_queue_reset - reset the queue
-+ * @mdev: the modern virtio-pci device
-+ * @index: queue index
-+ */
-+void vp_modern_set_queue_reset(struct virtio_pci_modern_device *mdev, u16 index)
-+{
-+	struct virtio_pci_common_cfg __iomem *cfg = mdev->common;
-+
-+	vp_iowrite16(index, &cfg->queue_select);
-+	vp_iowrite16(1, &cfg->queue_reset);
-+}
-+EXPORT_SYMBOL_GPL(vp_modern_set_queue_reset);
-+
- /*
-  * vp_modern_queue_vector - set the MSIX vector for a specific virtqueue
-  * @mdev: the modern virtio-pci device
-diff --git a/include/linux/virtio_pci_modern.h b/include/linux/virtio_pci_modern.h
-index eb2bd9b4077d..cc4154dd7b28 100644
---- a/include/linux/virtio_pci_modern.h
-+++ b/include/linux/virtio_pci_modern.h
-@@ -106,4 +106,6 @@ void __iomem * vp_modern_map_vq_notify(struct virtio_pci_modern_device *mdev,
- 				       u16 index, resource_size_t *pa);
- int vp_modern_probe(struct virtio_pci_modern_device *mdev);
- void vp_modern_remove(struct virtio_pci_modern_device *mdev);
-+int vp_modern_get_queue_reset(struct virtio_pci_modern_device *mdev, u16 index);
-+void vp_modern_set_queue_reset(struct virtio_pci_modern_device *mdev, u16 index);
- #endif
-diff --git a/include/uapi/linux/virtio_pci.h b/include/uapi/linux/virtio_pci.h
-index 492c89f56c6a..bf10f349087f 100644
---- a/include/uapi/linux/virtio_pci.h
-+++ b/include/uapi/linux/virtio_pci.h
-@@ -165,6 +165,7 @@ struct virtio_pci_common_cfg {
- 	__le32 queue_used_lo;		/* read-write */
- 	__le32 queue_used_hi;		/* read-write */
- 	__le16 queue_notify_data;	/* read-write */
-+	__le16 queue_reset;		/* read-write */
- };
+ static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
+ 		struct virtqueue *vqs[], vq_callback_t *callbacks[],
+ 		const char * const names[], bool per_vq_vectors,
+@@ -320,6 +354,7 @@ static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+ 	u16 msix_vec;
+ 	int i, err, nvectors, allocated_vectors, queue_idx = 0;
++	struct virtqueue *vq;
  
- /* Fields in VIRTIO_PCI_CAP_PCI_CFG: */
+ 	vp_dev->vqs = kcalloc(nvqs, sizeof(*vp_dev->vqs), GFP_KERNEL);
+ 	if (!vp_dev->vqs)
+@@ -355,28 +390,14 @@ static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
+ 			msix_vec = allocated_vectors++;
+ 		else
+ 			msix_vec = VP_MSIX_VQ_VECTOR;
+-		vqs[i] = vp_setup_vq(vdev, queue_idx++, callbacks[i], names[i],
+-				     ctx ? ctx[i] : false,
+-				     msix_vec);
+-		if (IS_ERR(vqs[i])) {
+-			err = PTR_ERR(vqs[i]);
+-			goto error_find;
+-		}
+-
+-		if (!vp_dev->per_vq_vectors || msix_vec == VIRTIO_MSI_NO_VECTOR)
+-			continue;
+ 
+-		/* allocate per-vq irq if available and necessary */
+-		snprintf(vp_dev->msix_names[msix_vec],
+-			 sizeof *vp_dev->msix_names,
+-			 "%s-%s",
+-			 dev_name(&vp_dev->vdev.dev), names[i]);
+-		err = request_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec),
+-				  vring_interrupt, IRQF_NO_AUTOEN,
+-				  vp_dev->msix_names[msix_vec],
+-				  vqs[i]);
+-		if (err)
++		vq = vp_enable_vq_msix(vdev, queue_idx++, callbacks[i],
++				       names[i], ctx ? ctx[i] : false, msix_vec);
++		if (IS_ERR(vq)) {
++			err = PTR_ERR(vq);
+ 			goto error_find;
++		}
++		vqs[i] = vq;
+ 	}
+ 	return 0;
+ 
 -- 
 2.31.0
 
