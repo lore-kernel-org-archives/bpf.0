@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92CAAC433FE
-	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 17:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF33C43217
+	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 17:30:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiATRae (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jan 2022 12:30:34 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19268 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230362AbiATRaF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 12:30:05 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 20K5P2Ni017202
-        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 09:30:03 -0800
+        id S230362AbiATRaf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jan 2022 12:30:35 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37968 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231317AbiATRaI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 12:30:08 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K9YPYW021292
+        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 09:30:07 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=U6Fh+Njx4klpYuhi/kc4exEJV9AhwN1VOoJi813Znfc=;
- b=kg/ApoGy/jhazv7MYKz4v4d7DC262hNwXJRVTluSbdoYERzZEgYX86MUJRi48zaUIe5f
- jknATIqJOqivu2b59iyyOItIR9RCTmf/rE2GmiHQq3QkO9EVZiz6EQvUQQQa2i7kF4Xz
- 90CfsB350iiCbKbZBkLpnd/nYSzhWmUNPpY= 
+ bh=+IkdYh09MP7ydjauiIiQReGVbOvPT093ggijwGTaiq0=;
+ b=ECFuSec0Qr6A4msf0ceW+jYYkPYUvTYudJXduFZexaZWhrF+FJko3+dkQqxHPKhwEHQd
+ hD40xyPjELuamwwhrL7IyiyLjpUR5R+MJ93EErU8Qc7MzGNki9EZqE7ZMDkqWuZ/QmSH
+ s7OW+WR3NHgGrFmItHlSruTIVejPVS7RIVU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3dq1jhkmfr-11
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dq56xjp28-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 09:30:03 -0800
-Received: from twshared13036.24.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 09:30:07 -0800
+Received: from twshared14140.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 20 Jan 2022 09:30:02 -0800
+ 15.1.2308.20; Thu, 20 Jan 2022 09:29:55 -0800
 Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
-        id 8936994F45C4; Thu, 20 Jan 2022 09:29:57 -0800 (PST)
+        id 7302794F45BC; Thu, 20 Jan 2022 09:29:53 -0800 (PST)
 From:   Kenny Yu <kennyyu@fb.com>
 To:     <kennyyu@fb.com>
 CC:     <alexei.starovoitov@gmail.com>, <andrii@kernel.org>,
         <ast@kernel.org>, <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
         <phoenix1987@gmail.com>, <yhs@fb.com>
-Subject: [PATCH v5 bpf-next 3/3] selftests/bpf: Add test for sleepable bpf iterator programs
-Date:   Thu, 20 Jan 2022 09:29:42 -0800
-Message-ID: <20220120172942.246805-4-kennyyu@fb.com>
+Subject: [PATCH v5 bpf-next 1/3] bpf: Add bpf_access_process_vm() helper
+Date:   Thu, 20 Jan 2022 09:29:40 -0800
+Message-ID: <20220120172942.246805-2-kennyyu@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220120172942.246805-1-kennyyu@fb.com>
 References: <20220113233158.1582743-1-kennyyu@fb.com>
@@ -47,131 +47,216 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: l6In7M9CTDNwPbJXoPBHU3ss6A8-hcJO
-X-Proofpoint-GUID: l6In7M9CTDNwPbJXoPBHU3ss6A8-hcJO
+X-Proofpoint-GUID: h9Fhz5ySRFtv8MZTCMLtbXV4zHRTf0Wa
+X-Proofpoint-ORIG-GUID: h9Fhz5ySRFtv8MZTCMLtbXV4zHRTf0Wa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-20_06,2022-01-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxlogscore=877
- lowpriorityscore=0 phishscore=0 spamscore=0 bulkscore=0 malwarescore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2201200090
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ bulkscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ suspectscore=0 clxscore=1015 mlxlogscore=999 phishscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2201200090
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds a test for bpf iterator programs to make use of sleepable
-bpf helpers.
+This adds a helper for bpf programs to access the memory of other
+tasks. This also adds the ability for bpf iterator programs to
+be sleepable.
+
+This changes `bpf_iter_run_prog` to use the appropriate synchronization f=
+or
+sleepable bpf programs. With sleepable bpf iterator programs, we can no
+longer use `rcu_read_lock()` and must use `rcu_read_lock_trace()` instead
+to protect the bpf program.
+
+As an example use case at Meta, we are using a bpf task iterator program
+and this new helper to print C++ async stack traces for all threads of
+a given process.
 
 Signed-off-by: Kenny Yu <kennyyu@fb.com>
 ---
- .../selftests/bpf/prog_tests/bpf_iter.c       | 19 ++++++++
- .../selftests/bpf/progs/bpf_iter_task.c       | 47 +++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ include/linux/bpf.h            |  1 +
+ include/uapi/linux/bpf.h       | 11 +++++++++++
+ kernel/bpf/bpf_iter.c          | 20 +++++++++++++++-----
+ kernel/bpf/helpers.c           | 23 +++++++++++++++++++++++
+ kernel/trace/bpf_trace.c       |  2 ++
+ tools/include/uapi/linux/bpf.h | 11 +++++++++++
+ 6 files changed, 63 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
-sting/selftests/bpf/prog_tests/bpf_iter.c
-index b84f859b1267..f6fb4f95513d 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -138,6 +138,23 @@ static void test_task(void)
- 	bpf_iter_task__destroy(skel);
- }
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index dce54eb0aae8..29f174c08126 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2220,6 +2220,7 @@ extern const struct bpf_func_proto bpf_kallsyms_loo=
+kup_name_proto;
+ extern const struct bpf_func_proto bpf_find_vma_proto;
+ extern const struct bpf_func_proto bpf_loop_proto;
+ extern const struct bpf_func_proto bpf_strncmp_proto;
++extern const struct bpf_func_proto bpf_access_process_vm_proto;
 =20
-+static void test_task_sleepable(void)
-+{
-+	struct bpf_iter_task *skel;
-+
-+	skel =3D bpf_iter_task__open_and_load();
-+	if (CHECK(!skel, "bpf_iter_task__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
-+
-+	do_dummy_read(skel->progs.dump_task_sleepable);
-+
-+	ASSERT_GT(skel->bss->num_success_access_process_vm, 0,
-+		  "num_success_access_process_vm");
-+
-+	bpf_iter_task__destroy(skel);
-+}
-+
- static void test_task_stack(void)
+ const struct bpf_func_proto *tracing_prog_func_proto(
+   enum bpf_func_id func_id, const struct bpf_prog *prog);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index fe2272defcd9..2ac56e2512df 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5049,6 +5049,16 @@ union bpf_attr {
+  *		This helper is currently supported by cgroup programs only.
+  *	Return
+  *		0 on success, or a negative error in case of failure.
++ *
++ * long bpf_access_process_vm(void *dst, u32 size, const void *user_ptr,=
+ struct task_struct *tsk, u64 flags)
++ *	Description
++ *		Read *size* bytes from user space address *user_ptr* in *tsk*'s
++ *		address space, and stores the data in *dst*. *flags* is not
++ *		used yet and is provided for future extensibility. This is a
++ *		wrapper of **access_process_vm**\ ().
++ *	Return
++ *		The number of bytes written to the buffer, or a negative error
++ *		in case of failure.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5239,6 +5249,7 @@ union bpf_attr {
+ 	FN(get_func_arg_cnt),		\
+ 	FN(get_retval),			\
+ 	FN(set_retval),			\
++	FN(access_process_vm),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index b7aef5b3416d..110029ede71e 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -5,6 +5,7 @@
+ #include <linux/anon_inodes.h>
+ #include <linux/filter.h>
+ #include <linux/bpf.h>
++#include <linux/rcupdate_trace.h>
+=20
+ struct bpf_iter_target_info {
+ 	struct list_head list;
+@@ -684,11 +685,20 @@ int bpf_iter_run_prog(struct bpf_prog *prog, void *=
+ctx)
  {
- 	struct bpf_iter_task_stack *skel;
-@@ -1252,6 +1269,8 @@ void test_bpf_iter(void)
- 		test_bpf_map();
- 	if (test__start_subtest("task"))
- 		test_task();
-+	if (test__start_subtest("task_sleepable"))
-+		test_task_sleepable();
- 	if (test__start_subtest("task_stack"))
- 		test_task_stack();
- 	if (test__start_subtest("task_file"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_task.c
-index c86b93f33b32..3fa735af96f7 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2020 Facebook */
- #include "bpf_iter.h"
- #include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
+ 	int ret;
 =20
- char _license[] SEC("license") =3D "GPL";
+-	rcu_read_lock();
+-	migrate_disable();
+-	ret =3D bpf_prog_run(prog, ctx);
+-	migrate_enable();
+-	rcu_read_unlock();
++	if (prog->aux->sleepable) {
++		rcu_read_lock_trace();
++		migrate_disable();
++		might_fault();
++		ret =3D bpf_prog_run(prog, ctx);
++		migrate_enable();
++		rcu_read_unlock_trace();
++	} else {
++		rcu_read_lock();
++		migrate_disable();
++		ret =3D bpf_prog_run(prog, ctx);
++		migrate_enable();
++		rcu_read_unlock();
++	}
 =20
-@@ -23,3 +24,49 @@ int dump_task(struct bpf_iter__task *ctx)
- 	BPF_SEQ_PRINTF(seq, "%8d %8d\n", task->tgid, task->pid);
- 	return 0;
- }
-+
-+int num_success_access_process_vm =3D 0;
-+
-+SEC("iter.s/task")
-+int dump_task_sleepable(struct bpf_iter__task *ctx)
+ 	/* bpf program can only return 0 or 1:
+ 	 *  0 : okay
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 01cfdf40c838..9d7e86edc48e 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -16,6 +16,7 @@
+ #include <linux/pid_namespace.h>
+ #include <linux/proc_ns.h>
+ #include <linux/security.h>
++#include <linux/btf_ids.h>
+=20
+ #include "../../lib/kstrtox.h"
+=20
+@@ -671,6 +672,28 @@ const struct bpf_func_proto bpf_copy_from_user_proto=
+ =3D {
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+=20
++BPF_CALL_5(bpf_access_process_vm, void *, dst, u32, size,
++	   const void __user *, user_ptr, struct task_struct *, tsk,
++	   u64, flags)
 +{
-+	struct seq_file *seq =3D ctx->meta->seq;
-+	struct task_struct *task =3D ctx->task;
-+	static const char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
-+	struct pt_regs *regs;
-+	void *ptr;
-+	uint32_t user_data =3D 0;
-+	int numread;
-+
-+	if (task =3D=3D (void *)0) {
-+		BPF_SEQ_PRINTF(seq, "%s\n", info);
-+		return 0;
-+	}
-+
-+	regs =3D (struct pt_regs *)bpf_task_pt_regs(task);
-+	if (regs =3D=3D (void *)0) {
-+		BPF_SEQ_PRINTF(seq, "%s\n", info);
-+		return 0;
-+	}
-+	ptr =3D (void *)PT_REGS_IP(regs);
-+
-+	/* Try to read the contents of the task's instruction pointer from the
-+	 * remote task's address space.
-+	 */
-+	numread =3D bpf_access_process_vm(&user_data,
-+					sizeof(uint32_t),
-+					ptr,
-+					task,
-+					0);
-+	if (numread !=3D sizeof(uint32_t)) {
-+		BPF_SEQ_PRINTF(seq, "%s\n", info);
-+		return 0;
-+	}
-+	++num_success_access_process_vm;
-+
-+	if (ctx->meta->seq_num =3D=3D 0)
-+		BPF_SEQ_PRINTF(seq, "    tgid      gid     data\n");
-+
-+	BPF_SEQ_PRINTF(seq, "%8d %8d %8d\n", task->tgid, task->pid, user_data);
-+	return 0;
++	/* flags is not used yet */
++	if (flags)
++		return -EINVAL;
++	return access_process_vm(tsk, (unsigned long)user_ptr, dst, size, 0);
 +}
++
++const struct bpf_func_proto bpf_access_process_vm_proto =3D {
++	.func		=3D bpf_access_process_vm,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_INTEGER,
++	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
++	.arg3_type	=3D ARG_ANYTHING,
++	.arg4_type	=3D ARG_PTR_TO_BTF_ID,
++	.arg4_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
++	.arg5_type	=3D ARG_ANYTHING
++};
++
+ BPF_CALL_2(bpf_per_cpu_ptr, const void *, ptr, u32, cpu)
+ {
+ 	if (cpu >=3D nr_cpu_ids)
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 21aa30644219..1a6a81ce2e36 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1257,6 +1257,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
+nst struct bpf_prog *prog)
+ 		return &bpf_find_vma_proto;
+ 	case BPF_FUNC_trace_vprintk:
+ 		return bpf_get_trace_vprintk_proto();
++	case BPF_FUNC_access_process_vm:
++		return prog->aux->sleepable ? &bpf_access_process_vm_proto : NULL;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index fe2272defcd9..2ac56e2512df 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5049,6 +5049,16 @@ union bpf_attr {
+  *		This helper is currently supported by cgroup programs only.
+  *	Return
+  *		0 on success, or a negative error in case of failure.
++ *
++ * long bpf_access_process_vm(void *dst, u32 size, const void *user_ptr,=
+ struct task_struct *tsk, u64 flags)
++ *	Description
++ *		Read *size* bytes from user space address *user_ptr* in *tsk*'s
++ *		address space, and stores the data in *dst*. *flags* is not
++ *		used yet and is provided for future extensibility. This is a
++ *		wrapper of **access_process_vm**\ ().
++ *	Return
++ *		The number of bytes written to the buffer, or a negative error
++ *		in case of failure.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5239,6 +5249,7 @@ union bpf_attr {
+ 	FN(get_func_arg_cnt),		\
+ 	FN(get_retval),			\
+ 	FN(set_retval),			\
++	FN(access_process_vm),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
 --=20
 2.30.2
 
