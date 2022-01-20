@@ -2,261 +2,391 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AF33C43217
-	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 17:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1DD7C433FE
+	for <bpf@archiver.kernel.org>; Thu, 20 Jan 2022 18:16:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiATRaf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Jan 2022 12:30:35 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:37968 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231317AbiATRaI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Jan 2022 12:30:08 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20K9YPYW021292
-        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 09:30:07 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=+IkdYh09MP7ydjauiIiQReGVbOvPT093ggijwGTaiq0=;
- b=ECFuSec0Qr6A4msf0ceW+jYYkPYUvTYudJXduFZexaZWhrF+FJko3+dkQqxHPKhwEHQd
- hD40xyPjELuamwwhrL7IyiyLjpUR5R+MJ93EErU8Qc7MzGNki9EZqE7ZMDkqWuZ/QmSH
- s7OW+WR3NHgGrFmItHlSruTIVejPVS7RIVU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dq56xjp28-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 09:30:07 -0800
-Received: from twshared14140.35.frc1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 20 Jan 2022 09:29:55 -0800
-Received: by devbig014.vll3.facebook.com (Postfix, from userid 7377)
-        id 7302794F45BC; Thu, 20 Jan 2022 09:29:53 -0800 (PST)
-From:   Kenny Yu <kennyyu@fb.com>
-To:     <kennyyu@fb.com>
-CC:     <alexei.starovoitov@gmail.com>, <andrii@kernel.org>,
-        <ast@kernel.org>, <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
-        <phoenix1987@gmail.com>, <yhs@fb.com>
-Subject: [PATCH v5 bpf-next 1/3] bpf: Add bpf_access_process_vm() helper
-Date:   Thu, 20 Jan 2022 09:29:40 -0800
-Message-ID: <20220120172942.246805-2-kennyyu@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220120172942.246805-1-kennyyu@fb.com>
-References: <20220113233158.1582743-1-kennyyu@fb.com>
- <20220120172942.246805-1-kennyyu@fb.com>
+        id S243997AbiATSQO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Jan 2022 13:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232699AbiATSQN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Jan 2022 13:16:13 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEA4C061574
+        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 10:16:13 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id d3so24739895lfv.13
+        for <bpf@vger.kernel.org>; Thu, 20 Jan 2022 10:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=J9x2NG+LgE4kaD5UG5LUL0GB0NdPSyzMtwcN6xwlv9c=;
+        b=UuAosnS4uZq9DoXlhTBm4j5l2w1d3uzS1YTDRfj9LBQyPwlz6lHwa3/ypLEr5zmS7k
+         pt/lZDx7hlGBC3crCBzVwmp8t2ixX5/2a0nkfDSp4Kru+pSVPKZtUWhqQYcVdiN5HiUO
+         WpBGKcJpqU7V4pg5PTUGwatPlL+giv/QcjBc3qGRjWYM34j4EdkN+kNyDOqhr54G64ry
+         WWzRfIpb+bYWwx/wBMHhTNpDyimr/Mld0kgdo/BCjycjgRXREiZ8gzJzne/VND60di8c
+         b3wv3kQRT+j0JNBpWPwbhpQzAdrDopXsBMpjb7d3wS2tLfFVQDndXur5qLVBLLAmStJt
+         nU+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J9x2NG+LgE4kaD5UG5LUL0GB0NdPSyzMtwcN6xwlv9c=;
+        b=EdUxvnGA09PI3hxR088i9lyow0RnvNLsSl4yXdBosZh0XOTOd6NSugADbdzM0Hl6IH
+         +lmq9TZfzNU7kDwObxClOq1tOX+6qwRl0aaxdcI4FX8SUJcAIOtlzXNssTBhG/AW8BTM
+         C/bkE+vGyNmcDRNnKBjxNy/BWanrinHb0ttnxAWqslDasDVlig60Qs2FlSPQrwfh/8Y9
+         hn2I4nb+FOP0CTMF4EpP0Yhg+3ZrXcyrwxT/ZslJAfQ1E41ksrf0hqEqYIzhyYjVCaIs
+         Bxr76X4mqB865dxBdq8BUhof16P2FYprTNYzg0+WlfSRKWCBjodLJrP8NbL9/s0R/ZNW
+         UpYg==
+X-Gm-Message-State: AOAM533xJRQx/ontNXYF9AUkx1QKwGHyRglhqbOnWW9YBYQewEiao+qB
+        qEuyeOR7+o/b+VHy0/6woM2K24KlzqPTJPYsZIgy/btBfQvEndp0js8=
+X-Google-Smtp-Source: ABdhPJybBrwpc3UAc6Gu9IhMW/l96xRVYL7rrYuA41iXQZChzao9yTwmwptotwP66Tm7Frroc0/+6+Z/W8qqzY+Uz2w=
+X-Received: by 2002:a05:6512:130f:: with SMTP id x15mr242448lfu.587.1642702571197;
+ Thu, 20 Jan 2022 10:16:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: h9Fhz5ySRFtv8MZTCMLtbXV4zHRTf0Wa
-X-Proofpoint-ORIG-GUID: h9Fhz5ySRFtv8MZTCMLtbXV4zHRTf0Wa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-20_06,2022-01-20_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- bulkscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
- suspectscore=0 clxscore=1015 mlxlogscore=999 phishscore=0
- priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2201200090
-X-FB-Internal: deliver
+References: <20211118192130.48b8f04c@xhacker> <20211118192651.605d0c80@xhacker>
+In-Reply-To: <20211118192651.605d0c80@xhacker>
+From:   Mayuresh Chitale <mchitale@ventanamicro.com>
+Date:   Thu, 20 Jan 2022 23:45:34 +0530
+Message-ID: <CAN37VV6vfee+T18UkbDLe1ts87+Zvg25oQR1+VJD3e6SJFPPiA@mail.gmail.com>
+Subject: Re: [PATCH 11/12] riscv: extable: add a dedicated uaccess handler
+To:     Jisheng Zhang <jszhang3@mail.ustc.edu.cn>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds a helper for bpf programs to access the memory of other
-tasks. This also adds the ability for bpf iterator programs to
-be sleepable.
+Hello Jisheng,
 
-This changes `bpf_iter_run_prog` to use the appropriate synchronization f=
-or
-sleepable bpf programs. With sleepable bpf iterator programs, we can no
-longer use `rcu_read_lock()` and must use `rcu_read_lock_trace()` instead
-to protect the bpf program.
+Just wanted to inform you that this patch breaks the writev02 test
+case in LTP and if it is reverted then the test passes. If we run the
+test through strace then we see that the test hangs and following is
+the last line printed by strace:
 
-As an example use case at Meta, we are using a bpf task iterator program
-and this new helper to print C++ async stack traces for all threads of
-a given process.
+"writev(3, [{iov_base=0x7fff848a6000, iov_len=8192}, {iov_base=NULL,
+iov_len=0}]"
 
-Signed-off-by: Kenny Yu <kennyyu@fb.com>
----
- include/linux/bpf.h            |  1 +
- include/uapi/linux/bpf.h       | 11 +++++++++++
- kernel/bpf/bpf_iter.c          | 20 +++++++++++++++-----
- kernel/bpf/helpers.c           | 23 +++++++++++++++++++++++
- kernel/trace/bpf_trace.c       |  2 ++
- tools/include/uapi/linux/bpf.h | 11 +++++++++++
- 6 files changed, 63 insertions(+), 5 deletions(-)
+Thanks,
+Mayuresh.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index dce54eb0aae8..29f174c08126 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2220,6 +2220,7 @@ extern const struct bpf_func_proto bpf_kallsyms_loo=
-kup_name_proto;
- extern const struct bpf_func_proto bpf_find_vma_proto;
- extern const struct bpf_func_proto bpf_loop_proto;
- extern const struct bpf_func_proto bpf_strncmp_proto;
-+extern const struct bpf_func_proto bpf_access_process_vm_proto;
-=20
- const struct bpf_func_proto *tracing_prog_func_proto(
-   enum bpf_func_id func_id, const struct bpf_prog *prog);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index fe2272defcd9..2ac56e2512df 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5049,6 +5049,16 @@ union bpf_attr {
-  *		This helper is currently supported by cgroup programs only.
-  *	Return
-  *		0 on success, or a negative error in case of failure.
-+ *
-+ * long bpf_access_process_vm(void *dst, u32 size, const void *user_ptr,=
- struct task_struct *tsk, u64 flags)
-+ *	Description
-+ *		Read *size* bytes from user space address *user_ptr* in *tsk*'s
-+ *		address space, and stores the data in *dst*. *flags* is not
-+ *		used yet and is provided for future extensibility. This is a
-+ *		wrapper of **access_process_vm**\ ().
-+ *	Return
-+ *		The number of bytes written to the buffer, or a negative error
-+ *		in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5239,6 +5249,7 @@ union bpf_attr {
- 	FN(get_func_arg_cnt),		\
- 	FN(get_retval),			\
- 	FN(set_retval),			\
-+	FN(access_process_vm),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index b7aef5b3416d..110029ede71e 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -5,6 +5,7 @@
- #include <linux/anon_inodes.h>
- #include <linux/filter.h>
- #include <linux/bpf.h>
-+#include <linux/rcupdate_trace.h>
-=20
- struct bpf_iter_target_info {
- 	struct list_head list;
-@@ -684,11 +685,20 @@ int bpf_iter_run_prog(struct bpf_prog *prog, void *=
-ctx)
- {
- 	int ret;
-=20
--	rcu_read_lock();
--	migrate_disable();
--	ret =3D bpf_prog_run(prog, ctx);
--	migrate_enable();
--	rcu_read_unlock();
-+	if (prog->aux->sleepable) {
-+		rcu_read_lock_trace();
-+		migrate_disable();
-+		might_fault();
-+		ret =3D bpf_prog_run(prog, ctx);
-+		migrate_enable();
-+		rcu_read_unlock_trace();
-+	} else {
-+		rcu_read_lock();
-+		migrate_disable();
-+		ret =3D bpf_prog_run(prog, ctx);
-+		migrate_enable();
-+		rcu_read_unlock();
-+	}
-=20
- 	/* bpf program can only return 0 or 1:
- 	 *  0 : okay
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 01cfdf40c838..9d7e86edc48e 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -16,6 +16,7 @@
- #include <linux/pid_namespace.h>
- #include <linux/proc_ns.h>
- #include <linux/security.h>
-+#include <linux/btf_ids.h>
-=20
- #include "../../lib/kstrtox.h"
-=20
-@@ -671,6 +672,28 @@ const struct bpf_func_proto bpf_copy_from_user_proto=
- =3D {
- 	.arg3_type	=3D ARG_ANYTHING,
- };
-=20
-+BPF_CALL_5(bpf_access_process_vm, void *, dst, u32, size,
-+	   const void __user *, user_ptr, struct task_struct *, tsk,
-+	   u64, flags)
-+{
-+	/* flags is not used yet */
-+	if (flags)
-+		return -EINVAL;
-+	return access_process_vm(tsk, (unsigned long)user_ptr, dst, size, 0);
-+}
-+
-+const struct bpf_func_proto bpf_access_process_vm_proto =3D {
-+	.func		=3D bpf_access_process_vm,
-+	.gpl_only	=3D false,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
-+	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
-+	.arg3_type	=3D ARG_ANYTHING,
-+	.arg4_type	=3D ARG_PTR_TO_BTF_ID,
-+	.arg4_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
-+	.arg5_type	=3D ARG_ANYTHING
-+};
-+
- BPF_CALL_2(bpf_per_cpu_ptr, const void *, ptr, u32, cpu)
- {
- 	if (cpu >=3D nr_cpu_ids)
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 21aa30644219..1a6a81ce2e36 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1257,6 +1257,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
-nst struct bpf_prog *prog)
- 		return &bpf_find_vma_proto;
- 	case BPF_FUNC_trace_vprintk:
- 		return bpf_get_trace_vprintk_proto();
-+	case BPF_FUNC_access_process_vm:
-+		return prog->aux->sleepable ? &bpf_access_process_vm_proto : NULL;
- 	default:
- 		return bpf_base_func_proto(func_id);
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index fe2272defcd9..2ac56e2512df 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5049,6 +5049,16 @@ union bpf_attr {
-  *		This helper is currently supported by cgroup programs only.
-  *	Return
-  *		0 on success, or a negative error in case of failure.
-+ *
-+ * long bpf_access_process_vm(void *dst, u32 size, const void *user_ptr,=
- struct task_struct *tsk, u64 flags)
-+ *	Description
-+ *		Read *size* bytes from user space address *user_ptr* in *tsk*'s
-+ *		address space, and stores the data in *dst*. *flags* is not
-+ *		used yet and is provided for future extensibility. This is a
-+ *		wrapper of **access_process_vm**\ ().
-+ *	Return
-+ *		The number of bytes written to the buffer, or a negative error
-+ *		in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5239,6 +5249,7 @@ union bpf_attr {
- 	FN(get_func_arg_cnt),		\
- 	FN(get_retval),			\
- 	FN(set_retval),			\
-+	FN(access_process_vm),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
---=20
-2.30.2
 
+On Thu, Nov 18, 2021 at 5:05 PM Jisheng Zhang <jszhang3@mail.ustc.edu.cn> wrote:
+>
+> From: Jisheng Zhang <jszhang@kernel.org>
+>
+> Inspired by commit 2e77a62cb3a6("arm64: extable: add a dedicated
+> uaccess handler"), do similar to riscv to add a dedicated uaccess
+> exception handler to update registers in exception context and
+> subsequently return back into the function which faulted, so we remove
+> the need for fixups specialized to each faulting instruction.
+>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/asm-extable.h | 23 +++++++++
+>  arch/riscv/include/asm/futex.h       | 23 +++------
+>  arch/riscv/include/asm/uaccess.h     | 74 +++++++++-------------------
+>  arch/riscv/mm/extable.c              | 27 ++++++++++
+>  4 files changed, 78 insertions(+), 69 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/asm-extable.h b/arch/riscv/include/asm/asm-extable.h
+> index 1b1f4ffd8d37..14be0673f5b5 100644
+> --- a/arch/riscv/include/asm/asm-extable.h
+> +++ b/arch/riscv/include/asm/asm-extable.h
+> @@ -5,6 +5,7 @@
+>  #define EX_TYPE_NONE                   0
+>  #define EX_TYPE_FIXUP                  1
+>  #define EX_TYPE_BPF                    2
+> +#define EX_TYPE_UACCESS_ERR_ZERO       3
+>
+>  #ifdef __ASSEMBLY__
+>
+> @@ -23,7 +24,9 @@
+>
+>  #else /* __ASSEMBLY__ */
+>
+> +#include <linux/bits.h>
+>  #include <linux/stringify.h>
+> +#include <asm/gpr-num.h>
+>
+>  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)     \
+>         ".pushsection   __ex_table, \"a\"\n"            \
+> @@ -37,6 +40,26 @@
+>  #define _ASM_EXTABLE(insn, fixup)      \
+>         __ASM_EXTABLE_RAW(#insn, #fixup, __stringify(EX_TYPE_FIXUP), "0")
+>
+> +#define EX_DATA_REG_ERR_SHIFT  0
+> +#define EX_DATA_REG_ERR                GENMASK(4, 0)
+> +#define EX_DATA_REG_ZERO_SHIFT 5
+> +#define EX_DATA_REG_ZERO       GENMASK(9, 5)
+> +
+> +#define EX_DATA_REG(reg, gpr)                                          \
+> +       "((.L__gpr_num_" #gpr ") << " __stringify(EX_DATA_REG_##reg##_SHIFT) ")"
+> +
+> +#define _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)          \
+> +       __DEFINE_ASM_GPR_NUMS                                           \
+> +       __ASM_EXTABLE_RAW(#insn, #fixup,                                \
+> +                         __stringify(EX_TYPE_UACCESS_ERR_ZERO),        \
+> +                         "("                                           \
+> +                           EX_DATA_REG(ERR, err) " | "                 \
+> +                           EX_DATA_REG(ZERO, zero)                     \
+> +                         ")")
+> +
+> +#define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)                     \
+> +       _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)
+> +
+>  #endif /* __ASSEMBLY__ */
+>
+>  #endif /* __ASM_ASM_EXTABLE_H */
+> diff --git a/arch/riscv/include/asm/futex.h b/arch/riscv/include/asm/futex.h
+> index 2e15e8e89502..fc8130f995c1 100644
+> --- a/arch/riscv/include/asm/futex.h
+> +++ b/arch/riscv/include/asm/futex.h
+> @@ -21,20 +21,14 @@
+>
+>  #define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)     \
+>  {                                                              \
+> -       uintptr_t tmp;                                          \
+>         __enable_user_access();                                 \
+>         __asm__ __volatile__ (                                  \
+>         "1:     " insn "                                \n"     \
+>         "2:                                             \n"     \
+> -       "       .section .fixup,\"ax\"                  \n"     \
+> -       "       .balign 4                               \n"     \
+> -       "3:     li %[r],%[e]                            \n"     \
+> -       "       jump 2b,%[t]                            \n"     \
+> -       "       .previous                               \n"     \
+> -               _ASM_EXTABLE(1b, 3b)                            \
+> +       _ASM_EXTABLE_UACCESS_ERR(1b, 2b, %[r])                  \
+>         : [r] "+r" (ret), [ov] "=&r" (oldval),                  \
+> -         [u] "+m" (*uaddr), [t] "=&r" (tmp)                    \
+> -       : [op] "Jr" (oparg), [e] "i" (-EFAULT)                  \
+> +         [u] "+m" (*uaddr)                                     \
+> +       : [op] "Jr" (oparg)                                     \
+>         : "memory");                                            \
+>         __disable_user_access();                                \
+>  }
+> @@ -96,15 +90,10 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+>         "2:     sc.w.aqrl %[t],%z[nv],%[u]              \n"
+>         "       bnez %[t],1b                            \n"
+>         "3:                                             \n"
+> -       "       .section .fixup,\"ax\"                  \n"
+> -       "       .balign 4                               \n"
+> -       "4:     li %[r],%[e]                            \n"
+> -       "       jump 3b,%[t]                            \n"
+> -       "       .previous                               \n"
+> -               _ASM_EXTABLE(1b, 4b)                    \
+> -               _ASM_EXTABLE(2b, 4b)                    \
+> +               _ASM_EXTABLE_UACCESS_ERR(1b, 3b, %[r])  \
+> +               _ASM_EXTABLE_UACCESS_ERR(2b, 3b, %[r])  \
+>         : [r] "+r" (ret), [v] "=&r" (val), [u] "+m" (*uaddr), [t] "=&r" (tmp)
+> -       : [ov] "Jr" (oldval), [nv] "Jr" (newval), [e] "i" (-EFAULT)
+> +       : [ov] "Jr" (oldval), [nv] "Jr" (newval)
+>         : "memory");
+>         __disable_user_access();
+>
+> diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
+> index 40e6099af488..a4716c026386 100644
+> --- a/arch/riscv/include/asm/uaccess.h
+> +++ b/arch/riscv/include/asm/uaccess.h
+> @@ -81,22 +81,14 @@ static inline int __access_ok(unsigned long addr, unsigned long size)
+>
+>  #define __get_user_asm(insn, x, ptr, err)                      \
+>  do {                                                           \
+> -       uintptr_t __tmp;                                        \
+>         __typeof__(x) __x;                                      \
+>         __asm__ __volatile__ (                                  \
+>                 "1:\n"                                          \
+> -               "       " insn " %1, %3\n"                      \
+> +               "       " insn " %1, %2\n"                      \
+>                 "2:\n"                                          \
+> -               "       .section .fixup,\"ax\"\n"               \
+> -               "       .balign 4\n"                            \
+> -               "3:\n"                                          \
+> -               "       li %0, %4\n"                            \
+> -               "       li %1, 0\n"                             \
+> -               "       jump 2b, %2\n"                          \
+> -               "       .previous\n"                            \
+> -                       _ASM_EXTABLE(1b, 3b)                    \
+> -               : "+r" (err), "=&r" (__x), "=r" (__tmp)         \
+> -               : "m" (*(ptr)), "i" (-EFAULT));                 \
+> +               _ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %0, %1)   \
+> +               : "+r" (err), "=&r" (__x)                       \
+> +               : "m" (*(ptr)));                                \
+>         (x) = __x;                                              \
+>  } while (0)
+>
+> @@ -108,27 +100,18 @@ do {                                                              \
+>  do {                                                           \
+>         u32 __user *__ptr = (u32 __user *)(ptr);                \
+>         u32 __lo, __hi;                                         \
+> -       uintptr_t __tmp;                                        \
+>         __asm__ __volatile__ (                                  \
+>                 "1:\n"                                          \
+> -               "       lw %1, %4\n"                            \
+> +               "       lw %1, %3\n"                            \
+>                 "2:\n"                                          \
+> -               "       lw %2, %5\n"                            \
+> +               "       lw %2, %4\n"                            \
+>                 "3:\n"                                          \
+> -               "       .section .fixup,\"ax\"\n"               \
+> -               "       .balign 4\n"                            \
+> -               "4:\n"                                          \
+> -               "       li %0, %6\n"                            \
+> -               "       li %1, 0\n"                             \
+> -               "       li %2, 0\n"                             \
+> -               "       jump 3b, %3\n"                          \
+> -               "       .previous\n"                            \
+> -                       _ASM_EXTABLE(1b, 4b)                    \
+> -                       _ASM_EXTABLE(2b, 4b)                    \
+> -               : "+r" (err), "=&r" (__lo), "=r" (__hi),        \
+> -                       "=r" (__tmp)                            \
+> -               : "m" (__ptr[__LSW]), "m" (__ptr[__MSW]),       \
+> -                       "i" (-EFAULT));                         \
+> +               _ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 3b, %0, %1)   \
+> +               _ASM_EXTABLE_UACCESS_ERR_ZERO(2b, 3b, %0, %1)   \
+> +               : "+r" (err), "=&r" (__lo), "=r" (__hi)         \
+> +               : "m" (__ptr[__LSW]), "m" (__ptr[__MSW]))       \
+> +       if (err)                                                \
+> +               __hi = 0;                                       \
+>         (x) = (__typeof__(x))((__typeof__((x)-(x)))(            \
+>                 (((u64)__hi << 32) | __lo)));                   \
+>  } while (0)
+> @@ -216,21 +199,14 @@ do {                                                              \
+>
+>  #define __put_user_asm(insn, x, ptr, err)                      \
+>  do {                                                           \
+> -       uintptr_t __tmp;                                        \
+>         __typeof__(*(ptr)) __x = x;                             \
+>         __asm__ __volatile__ (                                  \
+>                 "1:\n"                                          \
+> -               "       " insn " %z3, %2\n"                     \
+> +               "       " insn " %z2, %1\n"                     \
+>                 "2:\n"                                          \
+> -               "       .section .fixup,\"ax\"\n"               \
+> -               "       .balign 4\n"                            \
+> -               "3:\n"                                          \
+> -               "       li %0, %4\n"                            \
+> -               "       jump 2b, %1\n"                          \
+> -               "       .previous\n"                            \
+> -                       _ASM_EXTABLE(1b, 3b)                    \
+> -               : "+r" (err), "=r" (__tmp), "=m" (*(ptr))       \
+> -               : "rJ" (__x), "i" (-EFAULT));                   \
+> +               _ASM_EXTABLE_UACCESS_ERR(1b, 2b, %0)            \
+> +               : "+r" (err), "=m" (*(ptr))                     \
+> +               : "rJ" (__x));                                  \
+>  } while (0)
+>
+>  #ifdef CONFIG_64BIT
+> @@ -244,22 +220,16 @@ do {                                                              \
+>         uintptr_t __tmp;                                        \
+>         __asm__ __volatile__ (                                  \
+>                 "1:\n"                                          \
+> -               "       sw %z4, %2\n"                           \
+> +               "       sw %z3, %1\n"                           \
+>                 "2:\n"                                          \
+> -               "       sw %z5, %3\n"                           \
+> +               "       sw %z4, %2\n"                           \
+>                 "3:\n"                                          \
+> -               "       .section .fixup,\"ax\"\n"               \
+> -               "       .balign 4\n"                            \
+> -               "4:\n"                                          \
+> -               "       li %0, %6\n"                            \
+> -               "       jump 3b, %1\n"                          \
+> -               "       .previous\n"                            \
+> -                       _ASM_EXTABLE(1b, 4b)                    \
+> -                       _ASM_EXTABLE(2b, 4b)                    \
+> -               : "+r" (err), "=r" (__tmp),                     \
+> +               _ASM_EXTABLE_UACCESS_ERR(1b, 3b, %0)            \
+> +               _ASM_EXTABLE_UACCESS_ERR(2b, 3b, %0)            \
+> +               : "+r" (err),                                   \
+>                         "=m" (__ptr[__LSW]),                    \
+>                         "=m" (__ptr[__MSW])                     \
+> -               : "rJ" (__x), "rJ" (__x >> 32), "i" (-EFAULT)); \
+> +               : "rJ" (__x), "rJ" (__x >> 32));                \
+>  } while (0)
+>  #endif /* CONFIG_64BIT */
+>
+> diff --git a/arch/riscv/mm/extable.c b/arch/riscv/mm/extable.c
+> index 91e52c4bb33a..05978f78579f 100644
+> --- a/arch/riscv/mm/extable.c
+> +++ b/arch/riscv/mm/extable.c
+> @@ -7,10 +7,12 @@
+>   */
+>
+>
+> +#include <linux/bitfield.h>
+>  #include <linux/extable.h>
+>  #include <linux/module.h>
+>  #include <linux/uaccess.h>
+>  #include <asm/asm-extable.h>
+> +#include <asm/ptrace.h>
+>
+>  static inline unsigned long
+>  get_ex_fixup(const struct exception_table_entry *ex)
+> @@ -25,6 +27,29 @@ static bool ex_handler_fixup(const struct exception_table_entry *ex,
+>         return true;
+>  }
+>
+> +static inline void regs_set_gpr(struct pt_regs *regs, unsigned int offset,
+> +                               unsigned long val)
+> +{
+> +       if (unlikely(offset > MAX_REG_OFFSET))
+> +               return;
+> +
+> +       if (!offset)
+> +               *(unsigned long *)((unsigned long)regs + offset) = val;
+> +}
+> +
+> +static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
+> +                                       struct pt_regs *regs)
+> +{
+> +       int reg_err = FIELD_GET(EX_DATA_REG_ERR, ex->data);
+> +       int reg_zero = FIELD_GET(EX_DATA_REG_ZERO, ex->data);
+> +
+> +       regs_set_gpr(regs, reg_err, -EFAULT);
+> +       regs_set_gpr(regs, reg_zero, 0);
+> +
+> +       regs->epc = get_ex_fixup(ex);
+> +       return true;
+> +}
+> +
+>  bool fixup_exception(struct pt_regs *regs)
+>  {
+>         const struct exception_table_entry *ex;
+> @@ -38,6 +63,8 @@ bool fixup_exception(struct pt_regs *regs)
+>                 return ex_handler_fixup(ex, regs);
+>         case EX_TYPE_BPF:
+>                 return ex_handler_bpf(ex, regs);
+> +       case EX_TYPE_UACCESS_ERR_ZERO:
+> +               return ex_handler_uaccess_err_zero(ex, regs);
+>         }
+>
+>         BUG();
+> --
+> 2.33.0
+>
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
