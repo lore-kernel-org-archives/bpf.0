@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D846C433EF
-	for <bpf@archiver.kernel.org>; Fri, 21 Jan 2022 19:49:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68525C433EF
+	for <bpf@archiver.kernel.org>; Fri, 21 Jan 2022 19:49:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiAUTtq convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 21 Jan 2022 14:49:46 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49456 "EHLO
+        id S232590AbiAUTtz convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 21 Jan 2022 14:49:55 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36684 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231700AbiAUTtn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Jan 2022 14:49:43 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LIWwgF009108
-        for <bpf@vger.kernel.org>; Fri, 21 Jan 2022 11:49:42 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dqpewvcen-3
+        by vger.kernel.org with ESMTP id S232396AbiAUTtp (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 21 Jan 2022 14:49:45 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20LFwQ6g030606
+        for <bpf@vger.kernel.org>; Fri, 21 Jan 2022 11:49:44 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dqhyr5ht0-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 21 Jan 2022 11:49:42 -0800
-Received: from twshared3115.02.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 21 Jan 2022 11:49:44 -0800
+Received: from twshared11487.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 21 Jan 2022 11:49:40 -0800
+ 15.1.2308.21; Fri, 21 Jan 2022 11:49:43 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 473A4284A5F23; Fri, 21 Jan 2022 11:49:37 -0800 (PST)
+        id 0F080284A5F16; Fri, 21 Jan 2022 11:49:34 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH v6 bpf-next 4/7] bpf: add a pointer of bpf_binary_header to bpf_prog
-Date:   Fri, 21 Jan 2022 11:49:23 -0800
-Message-ID: <20220121194926.1970172-5-song@kernel.org>
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH v6 bpf-next 2/7] bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
+Date:   Fri, 21 Jan 2022 11:49:21 -0800
+Message-ID: <20220121194926.1970172-3-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220121194926.1970172-1-song@kernel.org>
 References: <20220121194926.1970172-1-song@kernel.org>
@@ -40,83 +40,133 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: AG6wQkUk5gObLFiaDYLuJ0rm0xTbakHT
-X-Proofpoint-GUID: AG6wQkUk5gObLFiaDYLuJ0rm0xTbakHT
+X-Proofpoint-ORIG-GUID: nD44ZXRqXQQ-zqvYj71NBQ3BdscuSVXN
+X-Proofpoint-GUID: nD44ZXRqXQQ-zqvYj71NBQ3BdscuSVXN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-21_09,2022-01-21_01,2021-12-02_01
 X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 impostorscore=0
- malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0
- mlxlogscore=867 spamscore=0 phishscore=0 clxscore=1015 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=999 lowpriorityscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 spamscore=0 mlxscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2201210128
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With sub page allocation, we cannot simply use bpf_func & PAGE_MASK to
-find the bpf_binary_header. Add a pointer to struct bpf_prog to avoid
-this logic.
+From: Song Liu <songliubraving@fb.com>
 
-Use this point for x86_64. If the pointer is not set by the jit engine,
-fall back to original logic.
+This enables sub-page memory charge and allocation.
 
-Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c |  2 ++
- include/linux/filter.h      | 10 ++++++++--
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ include/linux/bpf.h     |  4 ++--
+ kernel/bpf/core.c       | 17 ++++++++---------
+ kernel/bpf/trampoline.c |  6 +++---
+ 3 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index ce1f86f245c9..fe4f08e25a1d 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2339,6 +2339,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 			if (header)
- 				bpf_jit_binary_free(header);
- 			prog = orig_prog;
-+			header = NULL;
- 			goto out_addrs;
- 		}
- 		if (image) {
-@@ -2406,6 +2407,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	if (tmp_blinded)
- 		bpf_jit_prog_release_other(prog, prog == orig_prog ?
- 					   tmp : orig_prog);
-+	prog->hdr = header;
- 	return prog;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index dce54eb0aae8..9232db5014a3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -827,8 +827,8 @@ void bpf_image_ksym_add(void *data, struct bpf_ksym *ksym);
+ void bpf_image_ksym_del(struct bpf_ksym *ksym);
+ void bpf_ksym_add(struct bpf_ksym *ksym);
+ void bpf_ksym_del(struct bpf_ksym *ksym);
+-int bpf_jit_charge_modmem(u32 pages);
+-void bpf_jit_uncharge_modmem(u32 pages);
++int bpf_jit_charge_modmem(u32 size);
++void bpf_jit_uncharge_modmem(u32 size);
+ bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
+ #else
+ static inline int bpf_trampoline_link_prog(struct bpf_prog *prog,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index de3e5bc6781f..b9c6a426a7dd 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -833,12 +833,11 @@ static int __init bpf_jit_charge_init(void)
  }
+ pure_initcall(bpf_jit_charge_init);
  
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 5855eb474c62..27ea68604c22 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -584,6 +584,7 @@ struct bpf_prog {
- 					    const struct bpf_insn *insn);
- 	struct bpf_prog_aux	*aux;		/* Auxiliary fields */
- 	struct sock_fprog_kern	*orig_prog;	/* Original BPF program */
-+	struct bpf_binary_header *hdr;
- 	/* Instructions for interpreter */
- 	union {
- 		DECLARE_FLEX_ARRAY(struct sock_filter, insns);
-@@ -893,9 +894,14 @@ static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
- static inline struct bpf_binary_header *
- bpf_jit_binary_hdr(const struct bpf_prog *fp)
+-int bpf_jit_charge_modmem(u32 pages)
++int bpf_jit_charge_modmem(u32 size)
  {
--	unsigned long real_start = (unsigned long)fp->bpf_func;
--	unsigned long addr = real_start & PAGE_MASK;
-+	unsigned long real_start;
-+	unsigned long addr;
- 
-+	if (fp->hdr)
-+		return fp->hdr;
-+
-+	real_start = (unsigned long)fp->bpf_func;
-+	addr = real_start & PAGE_MASK;
- 	return (void *)addr;
+-	if (atomic_long_add_return(pages, &bpf_jit_current) >
+-	    (bpf_jit_limit >> PAGE_SHIFT)) {
++	if (atomic_long_add_return(size, &bpf_jit_current) > bpf_jit_limit) {
+ 		if (!bpf_capable()) {
+-			atomic_long_sub(pages, &bpf_jit_current);
++			atomic_long_sub(size, &bpf_jit_current);
+ 			return -EPERM;
+ 		}
+ 	}
+@@ -846,9 +845,9 @@ int bpf_jit_charge_modmem(u32 pages)
+ 	return 0;
  }
  
+-void bpf_jit_uncharge_modmem(u32 pages)
++void bpf_jit_uncharge_modmem(u32 size)
+ {
+-	atomic_long_sub(pages, &bpf_jit_current);
++	atomic_long_sub(size, &bpf_jit_current);
+ }
+ 
+ void *__weak bpf_jit_alloc_exec(unsigned long size)
+@@ -879,11 +878,11 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
+ 	size = round_up(proglen + sizeof(*hdr) + 128, PAGE_SIZE);
+ 	pages = size / PAGE_SIZE;
+ 
+-	if (bpf_jit_charge_modmem(pages))
++	if (bpf_jit_charge_modmem(size))
+ 		return NULL;
+ 	hdr = bpf_jit_alloc_exec(size);
+ 	if (!hdr) {
+-		bpf_jit_uncharge_modmem(pages);
++		bpf_jit_uncharge_modmem(size);
+ 		return NULL;
+ 	}
+ 
+@@ -906,7 +905,7 @@ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
+ 	u32 pages = hdr->pages;
+ 
+ 	bpf_jit_free_exec(hdr);
+-	bpf_jit_uncharge_modmem(pages);
++	bpf_jit_uncharge_modmem(pages << PAGE_SHIFT);
+ }
+ 
+ /* This symbol is only overridden by archs that have different
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 4b6974a195c1..e76a488c09c3 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -213,7 +213,7 @@ static void __bpf_tramp_image_put_deferred(struct work_struct *work)
+ 	im = container_of(work, struct bpf_tramp_image, work);
+ 	bpf_image_ksym_del(&im->ksym);
+ 	bpf_jit_free_exec(im->image);
+-	bpf_jit_uncharge_modmem(1);
++	bpf_jit_uncharge_modmem(PAGE_SIZE);
+ 	percpu_ref_exit(&im->pcref);
+ 	kfree_rcu(im, rcu);
+ }
+@@ -310,7 +310,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
+ 	if (!im)
+ 		goto out;
+ 
+-	err = bpf_jit_charge_modmem(1);
++	err = bpf_jit_charge_modmem(PAGE_SIZE);
+ 	if (err)
+ 		goto out_free_im;
+ 
+@@ -332,7 +332,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
+ out_free_image:
+ 	bpf_jit_free_exec(im->image);
+ out_uncharge:
+-	bpf_jit_uncharge_modmem(1);
++	bpf_jit_uncharge_modmem(PAGE_SIZE);
+ out_free_im:
+ 	kfree(im);
+ out:
 -- 
 2.30.2
 
