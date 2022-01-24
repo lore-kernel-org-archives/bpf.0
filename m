@@ -2,129 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD2DEC433EF
-	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 22:43:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2DFEC433EF
+	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 22:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579308AbiAXWnV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 17:43:21 -0500
-Received: from mga05.intel.com ([192.55.52.43]:61240 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1583831AbiAXWdB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jan 2022 17:33:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643063580; x=1674599580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fxf9gxg/X1RfJSgX8EYRn9ZdFJkbiAutWxK6z4YLqo8=;
-  b=VVJ/lUY+K5Zv2ppMm2ibdlaX2+/F3Dba+gzfvUKMqZkWSDD/1Syds6Y3
-   31r5uDvcW7e7fRECAcxGGGudXwOf//269HCNmoT3F3MivmyRi9dWmTOiD
-   68Snp1oXmLXGHMwm8q/YtiEuwCq+MFoFnVhsTDMjGxV0f4Kr30L+IPn8h
-   ciARJTk+hrtpXylzaPpq9TTxxxHFHqs7OuoeAcLogK6zL/AmIiWFVVOcc
-   0W33bsafNN1Rs3bfmz6+3H4TLICfpE62dFoDXy8yjMIIOdAy+XByIzeqf
-   60WxCFqTvBgq6CgGRlqvXAHjKylLnBzfSjNwM54uEkoGZREoJLTCgz4yY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="332516879"
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="332516879"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 14:24:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,313,1635231600"; 
-   d="scan'208";a="695588184"
-Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 14:24:10 -0800
-Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nC7kv-000Iz8-KA; Mon, 24 Jan 2022 22:24:09 +0000
-Date:   Tue, 25 Jan 2022 06:23:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: Re: [PATCH v4 4/9] rethook: x86: Add rethook x86 implementation
-Message-ID: <202201250509.MSbKNePn-lkp@intel.com>
-References: <164304060913.1680787.1167309209346264268.stgit@devnote2>
+        id S1579392AbiAXWnY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 17:43:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1835937AbiAXWhs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 17:37:48 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF222C02B872
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 12:59:57 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id q9-20020a7bce89000000b00349e697f2fbso242311wmj.0
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 12:59:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=LelPLFVyiMTpw5yA1vIPFMWw4VOWdiJSPS8F5u+bLEc=;
+        b=qRZb3pM+5b2VNWc/AzABp2OqhydpmI2RSTdUgZsB+pKt3vGNMqDrBgXP/MKGbxYyHg
+         wWnY5BfxqqcbIUq6wPMF9Wrl3cFRKva373rvxCvgG/CE3dvo9GQkBwHGCDK8CsN8vWpD
+         7ThNJfRa6Vr+Tbjs2BXWAheDIeoqp5RiCRk8u1cD2qULgAiilowza9Apg/0qECxnejBa
+         Fad6dKu/8fVBAYJjbuNnYB1rOP9vDJdi1naj3nqGx/sHOem74ASUXGbfnLBjY2QkTYNc
+         WTA2kK8IEaUhDo+ifHdp9FaYSgg8bYW1d5pV0BY6wa5HAyUByZbm4iPldXhv8wz416yY
+         ASyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=LelPLFVyiMTpw5yA1vIPFMWw4VOWdiJSPS8F5u+bLEc=;
+        b=BWoxKAfkW8dEX9rk4N+R36YxbS0X7Q5rabjN5h6gTU/AxAfCMb/wen36NdUzxC3Gys
+         zKqy4jHqvh0hAlcdTOl2gsmc4ERStDFXwJ/2Hezwv/6XZhTxzm4yko2P6K2Ud5OJFWDf
+         V3eE7pLqHnZVTSqxDK240nKPw2OKnTMo0Q85rSsNnNJFg73qbbuoWor8IXZ68A6LgKOL
+         IX2bR7kcO9Re31uefcCc7yrXqT5FGJJncmrofWh9pr/iou2A4NSf9aeSztP6ZwmS//t9
+         OE576ZBG5pVPq8vGLaIUS5BEgCXMvQRUoFe1l8KUd1p3dEiSdvXERYGbbyAXjN5SlGBv
+         cWng==
+X-Gm-Message-State: AOAM532QgkkOg6c7CzLCe7FYciLKDhNCO8Q1HTjrxY3JZRt3mdHZxvhr
+        0i6tGuVyczeLMv8nZ3JHNO4qiI7G4vq+uEX7NTHN8g==
+X-Google-Smtp-Source: ABdhPJzQ2EdezBI/cadxJvyRuRdpwrqFMtyGwYYsP71DbnBy25EekbaOkxmdTf3MKawF+mMAoyzlm2azpJ+IBoCSdG0=
+X-Received: by 2002:a05:600c:3503:: with SMTP id h3mr110888wmq.164.1643057996298;
+ Mon, 24 Jan 2022 12:59:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164304060913.1680787.1167309209346264268.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 24 Jan 2022 12:59:44 -0800
+Message-ID: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
+Subject: [Question] How to reliably get BuildIDs from bpf prog
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Blake Jones <blakejones@google.com>,
+        Alexey Alexandrov <aalexand@google.com>,
+        Namhyung Kim <namhyung@google.com>,
+        Ian Rogers <irogers@google.com>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Masami,
+Dear BPF experts,
 
-I love your patch! Yet something to improve:
+I'm working on collecting some kernel performance data using BPF
+tracing prog. Our performance profiling team wants to associate the
+data with user stack information. One of the requirements is to
+reliably get BuildIDs from bpf_get_stackid() and other similar helpers
+[1].
 
-[auto build test ERROR on rostedt-trace/for-next]
-[also build test ERROR on tip/x86/core linus/master v5.17-rc1 next-20220124]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+As part of an early investigation, we found that there are a couple
+issues that make bpf_get_stackid() much less reliable than we'd like
+for our use:
 
-url:    https://github.com/0day-ci/linux/commits/Masami-Hiramatsu/fprobe-Introduce-fprobe-function-entry-exit-probe/20220125-001253
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220125/202201250509.MSbKNePn-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/6366c7f830e71242dd9538fbdb09acdccea6e786
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu/fprobe-Introduce-fprobe-function-entry-exit-probe/20220125-001253
-        git checkout 6366c7f830e71242dd9538fbdb09acdccea6e786
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/
+1. The first page of many binaries (which contains the ELF headers and
+thus the BuildID that we need) is often not in memory. The failure of
+find_get_page() (called from build_id_parse()) is higher than we would
+want.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+2. When anonymous huge pages are used to hold some regions of process
+text, build_id_parse() also fails to get a BuildID because
+vma->vm_file is NULL.
 
-All errors (new ones prefixed by >>):
+These two issues are critical blockers for us to use BPF in
+production. Can we do better? What do other users do to reliably get
+build ids?
 
-   In file included from arch/x86/kernel/process.c:48:
-   arch/x86/include/asm/unwind.h: In function 'unwind_recover_kretprobe':
->> arch/x86/include/asm/unwind.h:113:17: error: 'struct unwind_state' has no member named 'kr_cur'
-     113 |           &state->kr_cur);
-         |                 ^~
-   arch/x86/kernel/process.c: At top level:
-   arch/x86/kernel/process.c:887:13: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-     887 | void __init arch_post_acpi_subsys_init(void)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
---
-   In file included from arch/x86/kernel/unwind_guess.c:7:
-   arch/x86/include/asm/unwind.h: In function 'unwind_recover_kretprobe':
->> arch/x86/include/asm/unwind.h:113:17: error: 'struct unwind_state' has no member named 'kr_cur'
-     113 |           &state->kr_cur);
-         |                 ^~
+Thanks very much,
+Hao
 
-
-vim +113 arch/x86/include/asm/unwind.h
-
-   106	
-   107	static inline
-   108	unsigned long unwind_recover_kretprobe(struct unwind_state *state,
-   109					       unsigned long addr, unsigned long *addr_p)
-   110	{
-   111		if (IS_ENABLED(CONFIG_RETHOOK) && is_rethook_trampoline(addr))
-   112			return rethook_find_ret_addr(state->task, (unsigned long)addr_p,
- > 113						     &state->kr_cur);
-   114	#ifdef CONFIG_KRETPROBES
-   115		return is_kretprobe_trampoline(addr) ?
-   116			kretprobe_find_ret_addr(state->task, addr_p, &state->kr_cur) :
-   117			addr;
-   118	#else
-   119		return addr;
-   120	#endif
-   121	}
-   122	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[1] https://man7.org/linux/man-pages/man7/bpf-helpers.7.html
