@@ -2,231 +2,216 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 911B9C4321E
-	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 17:20:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD73FC433EF
+	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 17:21:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244422AbiAXRUd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 12:20:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56166 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244398AbiAXRUc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jan 2022 12:20:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51872612FA;
-        Mon, 24 Jan 2022 17:20:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038A7C340E7;
-        Mon, 24 Jan 2022 17:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643044831;
-        bh=2stwZ5ekO5a4ROCROuQftRDYtnk3zAKl0kZa60Avkjo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AGXAnDlImLxMK98x2PuAQzTnmgxmraT+LgGG1n/bQRN/TRI8wMk7xM2ss7ndGZXRo
-         cZNQOMc6URKADHZeJ/UyZ6RZaKbSmN9TQ34LyK9msKFGLCZHuNzu6Nc9XjgbUF1vAY
-         RkYVIG7q6zEdlbY8azjyewJSwETUOdl7ZLvZsdPi3HAKk55DjMYuWPr6yaz2+YIBR7
-         TKJAfBmUtOZ/2h8Xno58IDqaG2nZX5HvuixLFB2eFt0ZGja3B2GNTfRJh2vBBWoDyO
-         V4R08GC2mKmOwb+g3Amk5dwVmjgKB8Z//z5AF0eVehT6ZNVdaR+asiPsCAykBwOMaJ
-         8acaUPVPZ8z9A==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, dsahern@kernel.org,
-        komachi.yoshiki@gmail.com, brouer@redhat.com, toke@redhat.com,
-        memxor@gmail.com, andrii.nakryiko@gmail.com
-Subject: [RFC bpf-next 1/2] net: bridge: add unstable br_fdb_find_port_from_ifindex helper
-Date:   Mon, 24 Jan 2022 18:20:15 +0100
-Message-Id: <720907692575488526f06edc2cf5c8f783777d4f.1643044381.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1643044381.git.lorenzo@kernel.org>
-References: <cover.1643044381.git.lorenzo@kernel.org>
+        id S244603AbiAXRVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 12:21:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244415AbiAXRUj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 12:20:39 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D716C061748
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 09:20:39 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id v74so13354633pfc.1
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 09:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uvbVlssiuOL2o7l4VGo9wAQ7yG1g9QxFoYPbSYFtdqo=;
+        b=b8kkFS5/WqRt/uGkxgdO4EPtPACa7K4UyA5rdihYBP0zQfEvfu9Hc7L6wke4IFyhtQ
+         9F3JxaZcx3rKTh3OX8pgIvYfgQCZqMuNZnRymYeySn88lJEFnMJ1FFqAGqDns740oe0g
+         y5gJShOglcZEdDYr2VYR12OQOXlCAACHa0JQ0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uvbVlssiuOL2o7l4VGo9wAQ7yG1g9QxFoYPbSYFtdqo=;
+        b=GtSVqQpRXnWNITS/UACcYba3q3q12EQO/xNFbp7H5OK8lxfMSJG8cGhAJwWCDOU6/e
+         ASSF2FOplbEg9cZWvPN2GXZZCZCoB8uwJYQq8ftUsbes/DHn6RYjVHoouogQsBBRB+Wl
+         UhxsjxPQujF3VeuepxLz0OLVxsnjgnST+OajQf55FNvhA7scIGf3a/xKLu2tivCSOa/G
+         XMYAbS/mVZznfX2mrIVyOS4JglA3epUy7UM2xWn6AAkv3YlJ5eo95bdxrHeVFqGiOLhR
+         c5bG92Fmzebx4mi5xAvZBztVUTdo/cr6cgSIjNhWA7rYawjm4qhlp0VOKxzhm6XGBwYY
+         dBiQ==
+X-Gm-Message-State: AOAM5318dbJ6uktpm8KNV8Yqvu05y+zfis0zusYh1zBfBIfqyQp5gbbB
+        a1vc9iuDM4fqrUkDcwziB+s3Ig==
+X-Google-Smtp-Source: ABdhPJwOxnazNMZcXd19bSVJ9MoN8ZvyCdEePmDJfQKMV6Sw4mYioXg78RY4Q74VmtnF7JqMgDdW1Q==
+X-Received: by 2002:a63:204a:: with SMTP id r10mr12454750pgm.502.1643044838506;
+        Mon, 24 Jan 2022 09:20:38 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l26sm12555173pgm.73.2022.01.24.09.20.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jan 2022 09:20:38 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Saeed Mahameed <saeedm@nvidia.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH v2 RESEND] net/mlx5e: Avoid field-overflowing memcpy()
+Date:   Mon, 24 Jan 2022 09:20:28 -0800
+Message-Id: <20220124172028.2410761-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6160; h=from:subject; bh=VQqeo576slnncrVuQigWvgwHbkmaogPwolkC5v46MpQ=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBh7t/bEEizP4HPXunI0lIL+G351adCgzYP8rg/gvyC Pv5SX/WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYe7f2wAKCRCJcvTf3G3AJm6VD/ 9jlPxoUFcLSoP71xgroQBRupcIYrG31w6xXFGdiZs8oSKGJPTYGWEbRd+EcSiDEc0WILjMWRh5qlq3 xCKyFF0jgopugVAQ5bOoCAAuYlm+OxpDaV9qq3aU7ITc7dbSwgB36A/qFxX8fVBv9RisFb0iJPwZp6 5u/67EShGoip2rkulhk4qSkLBaqGB6x/lK4Jego5xxn3iMBBkNK2H3sAD+uTDqpDde44GHbvRK5O/w hG+d4vQSXKy9IotXNQTD0cak7N0d/KXigldG6jUkLX7PX1I95EQHO80E4YzUzE5PizdAPK0FoghAAq ThRukak3eD7WZwU+Ls8P+fL/3EDVFFb6z0mr9ZLs7lcAMbsy17qxZJgQw+p8X+/RMZwM9SZoE2IdHd AR1WKqub7atfYkCGBMCvRBjqaVtBPkU3v6ID9nnN+U67xPc8vedjC6qeHJ3A6aWMxV5qd9+0cWejQE 4iAqY3HzPuwttaOoYs1PUBReTmMmk8QfHBPNMGFurW8HBEfIhgg7j4cAo0mDFuNIYuCCf5Dqo9zFF6 5Z6gsWMiM+yN8zjJUDV/zYHO4grzBp/BUM1Wli/iGpuKUWg9DBmUbdd+en8GTGeghoCHAIk6D1aemY UjQkOLAF0Kyi3rp7rjcTWXjtBLEiPlGZCGnCGloSwEG0DUWTfSh34Ny1lSLQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to bpf_xdp_ct_lookup routine, introduce
-br_fdb_find_port_from_ifindex unstable helper in order to accelerate
-linux bridge with XDP. br_fdb_find_port_from_ifindex will perform a
-lookup in the associated bridge fdb table and it will return the
-output ifindex if the destination address is associated to a bridge
-port or -ENODEV for BOM traffic or if lookup fails.
+In preparation for FORTIFY_SOURCE performing compile-time and run-time
+field bounds checking for memcpy(), memmove(), and memset(), avoid
+intentionally writing across neighboring fields.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Use flexible arrays instead of zero-element arrays (which look like they
+are always overflowing) and split the cross-field memcpy() into two halves
+that can be appropriately bounds-checked by the compiler.
+
+We were doing:
+
+	#define ETH_HLEN  14
+	#define VLAN_HLEN  4
+	...
+	#define MLX5E_XDP_MIN_INLINE (ETH_HLEN + VLAN_HLEN)
+	...
+        struct mlx5e_tx_wqe      *wqe  = mlx5_wq_cyc_get_wqe(wq, pi);
+	...
+        struct mlx5_wqe_eth_seg  *eseg = &wqe->eth;
+        struct mlx5_wqe_data_seg *dseg = wqe->data;
+	...
+	memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
+
+target is wqe->eth.inline_hdr.start (which the compiler sees as being
+2 bytes in size), but copying 18, intending to write across start
+(really vlan_tci, 2 bytes). The remaining 16 bytes get written into
+wqe->data[0], covering byte_count (4 bytes), lkey (4 bytes), and addr
+(8 bytes).
+
+struct mlx5e_tx_wqe {
+        struct mlx5_wqe_ctrl_seg   ctrl;                 /*     0    16 */
+        struct mlx5_wqe_eth_seg    eth;                  /*    16    16 */
+        struct mlx5_wqe_data_seg   data[];               /*    32     0 */
+
+        /* size: 32, cachelines: 1, members: 3 */
+        /* last cacheline: 32 bytes */
+};
+
+struct mlx5_wqe_eth_seg {
+        u8                         swp_outer_l4_offset;  /*     0     1 */
+        u8                         swp_outer_l3_offset;  /*     1     1 */
+        u8                         swp_inner_l4_offset;  /*     2     1 */
+        u8                         swp_inner_l3_offset;  /*     3     1 */
+        u8                         cs_flags;             /*     4     1 */
+        u8                         swp_flags;            /*     5     1 */
+        __be16                     mss;                  /*     6     2 */
+        __be32                     flow_table_metadata;  /*     8     4 */
+        union {
+                struct {
+                        __be16     sz;                   /*    12     2 */
+                        u8         start[2];             /*    14     2 */
+                } inline_hdr;                            /*    12     4 */
+                struct {
+                        __be16     type;                 /*    12     2 */
+                        __be16     vlan_tci;             /*    14     2 */
+                } insert;                                /*    12     4 */
+                __be32             trailer;              /*    12     4 */
+        };                                               /*    12     4 */
+
+        /* size: 16, cachelines: 1, members: 9 */
+        /* last cacheline: 16 bytes */
+};
+
+struct mlx5_wqe_data_seg {
+        __be32                     byte_count;           /*     0     4 */
+        __be32                     lkey;                 /*     4     4 */
+        __be64                     addr;                 /*     8     8 */
+
+        /* size: 16, cachelines: 1, members: 3 */
+        /* last cacheline: 16 bytes */
+};
+
+So, split the memcpy() so the compiler can reason about the buffer
+sizes.
+
+"pahole" shows no size nor member offset changes to struct mlx5e_tx_wqe
+nor struct mlx5e_umr_wqe. "objdump -d" shows no meaningful object
+code changes (i.e. only source line number induced differences and
+optimizations).
+
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-rdma@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- net/bridge/br.c         | 21 +++++++++++++
- net/bridge/br_fdb.c     | 67 +++++++++++++++++++++++++++++++++++------
- net/bridge/br_private.h | 12 ++++++++
- 3 files changed, 91 insertions(+), 9 deletions(-)
+Since this results in no binary differences, I will carry this in my tree
+unless someone else wants to pick it up. It's one of the last remaining
+clean-ups needed for the next step in memcpy() hardening.
+---
+ drivers/net/ethernet/mellanox/mlx5/core/en.h     | 6 +++---
+ drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 4 +++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/net/bridge/br.c b/net/bridge/br.c
-index 1fac72cc617f..d2d1c2341d9c 100644
---- a/net/bridge/br.c
-+++ b/net/bridge/br.c
-@@ -16,6 +16,8 @@
- #include <net/llc.h>
- #include <net/stp.h>
- #include <net/switchdev.h>
-+#include <linux/btf.h>
-+#include <linux/btf_ids.h>
- 
- #include "br_private.h"
- 
-@@ -365,6 +367,17 @@ static const struct stp_proto br_stp_proto = {
- 	.rcv	= br_stp_rcv,
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+index 812e6810cb3b..c14e06ca64d8 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
+@@ -224,7 +224,7 @@ static inline int mlx5e_get_max_num_channels(struct mlx5_core_dev *mdev)
+ struct mlx5e_tx_wqe {
+ 	struct mlx5_wqe_ctrl_seg ctrl;
+ 	struct mlx5_wqe_eth_seg  eth;
+-	struct mlx5_wqe_data_seg data[0];
++	struct mlx5_wqe_data_seg data[];
  };
  
-+#if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF) || IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
-+BTF_SET_START(br_xdp_fdb_check_kfunc_ids)
-+BTF_ID(func, br_fdb_find_port_from_ifindex)
-+BTF_SET_END(br_xdp_fdb_check_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set br_xdp_fdb_kfunc_set = {
-+	.owner     = THIS_MODULE,
-+	.check_set = &br_xdp_fdb_check_kfunc_ids,
-+};
-+#endif
-+
- static int __init br_init(void)
- {
- 	int err;
-@@ -417,6 +430,14 @@ static int __init br_init(void)
- 		"need this.\n");
- #endif
+ struct mlx5e_rx_wqe_ll {
+@@ -241,8 +241,8 @@ struct mlx5e_umr_wqe {
+ 	struct mlx5_wqe_umr_ctrl_seg   uctrl;
+ 	struct mlx5_mkey_seg           mkc;
+ 	union {
+-		struct mlx5_mtt inline_mtts[0];
+-		struct mlx5_klm inline_klms[0];
++		DECLARE_FLEX_ARRAY(struct mlx5_mtt, inline_mtts);
++		DECLARE_FLEX_ARRAY(struct mlx5_klm, inline_klms);
+ 	};
+ };
  
-+#if (IS_ENABLED(CONFIG_DEBUG_INFO_BTF) || IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES))
-+	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &br_xdp_fdb_kfunc_set);
-+	if (err < 0) {
-+		br_netlink_fini();
-+		goto err_out6;
-+	}
-+#endif
-+
- 	return 0;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+index 338d65e2c9ce..56e10c84a706 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
+@@ -341,8 +341,10 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
  
- err_out6:
-diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-index 6ccda68bd473..cd3afa240298 100644
---- a/net/bridge/br_fdb.c
-+++ b/net/bridge/br_fdb.c
-@@ -235,30 +235,79 @@ static struct net_bridge_fdb_entry *br_fdb_find(struct net_bridge *br,
- 	return fdb;
- }
- 
--struct net_device *br_fdb_find_port(const struct net_device *br_dev,
--				    const unsigned char *addr,
--				    __u16 vid)
-+static struct net_device *
-+__br_fdb_find_port(const struct net_device *br_dev,
-+		   const unsigned char *addr,
-+		   __u16 vid, bool ts_update)
- {
- 	struct net_bridge_fdb_entry *f;
--	struct net_device *dev = NULL;
- 	struct net_bridge *br;
- 
--	ASSERT_RTNL();
--
- 	if (!netif_is_bridge_master(br_dev))
- 		return NULL;
- 
- 	br = netdev_priv(br_dev);
--	rcu_read_lock();
- 	f = br_fdb_find_rcu(br, addr, vid);
--	if (f && f->dst)
--		dev = f->dst->dev;
-+
-+	if (f && f->dst) {
-+		f->updated = jiffies;
-+		f->used = f->updated;
-+		return f->dst->dev;
-+	}
-+	return NULL;
-+}
-+
-+struct net_device *br_fdb_find_port(const struct net_device *br_dev,
-+				    const unsigned char *addr,
-+				    __u16 vid)
-+{
-+	struct net_device *dev;
-+
-+	ASSERT_RTNL();
-+
-+	rcu_read_lock();
-+	dev = __br_fdb_find_port(br_dev, addr, vid, false);
- 	rcu_read_unlock();
- 
- 	return dev;
- }
- EXPORT_SYMBOL_GPL(br_fdb_find_port);
- 
-+int br_fdb_find_port_from_ifindex(struct xdp_md *xdp_ctx,
-+				  struct bpf_fdb_lookup *opt,
-+				  u32 opt__sz)
-+{
-+	struct xdp_buff *ctx = (struct xdp_buff *)xdp_ctx;
-+	struct net_bridge_port *port;
-+	struct net_device *dev;
-+	int ret = -ENODEV;
-+
-+	BUILD_BUG_ON(sizeof(struct bpf_fdb_lookup) != NF_BPF_FDB_OPTS_SZ);
-+	if (!opt || opt__sz != sizeof(struct bpf_fdb_lookup))
-+		return -ENODEV;
-+
-+	rcu_read_lock();
-+
-+	dev = dev_get_by_index_rcu(dev_net(ctx->rxq->dev), opt->ifindex);
-+	if (!dev)
-+		goto out;
-+
-+	if (unlikely(!netif_is_bridge_port(dev)))
-+		goto out;
-+
-+	port = br_port_get_check_rcu(dev);
-+	if (unlikely(!port || !port->br))
-+		goto out;
-+
-+	dev = __br_fdb_find_port(port->br->dev, opt->addr, opt->vid, true);
-+	if (dev)
-+		ret = dev->ifindex;
-+out:
-+	rcu_read_unlock();
-+
-+	return ret;
-+}
-+
- struct net_bridge_fdb_entry *br_fdb_find_rcu(struct net_bridge *br,
- 					     const unsigned char *addr,
- 					     __u16 vid)
-diff --git a/net/bridge/br_private.h b/net/bridge/br_private.h
-index 2661dda1a92b..64d4f1727da2 100644
---- a/net/bridge/br_private.h
-+++ b/net/bridge/br_private.h
-@@ -18,6 +18,7 @@
- #include <linux/if_vlan.h>
- #include <linux/rhashtable.h>
- #include <linux/refcount.h>
-+#include <linux/bpf.h>
- 
- #define BR_HASH_BITS 8
- #define BR_HASH_SIZE (1 << BR_HASH_BITS)
-@@ -2094,4 +2095,15 @@ void br_do_proxy_suppress_arp(struct sk_buff *skb, struct net_bridge *br,
- void br_do_suppress_nd(struct sk_buff *skb, struct net_bridge *br,
- 		       u16 vid, struct net_bridge_port *p, struct nd_msg *msg);
- struct nd_msg *br_is_nd_neigh_msg(struct sk_buff *skb, struct nd_msg *m);
-+
-+#define NF_BPF_FDB_OPTS_SZ	12
-+struct bpf_fdb_lookup {
-+	u8	addr[ETH_ALEN]; /* ETH_ALEN */
-+	u16	vid;
-+	u32	ifindex;
-+};
-+
-+int br_fdb_find_port_from_ifindex(struct xdp_md *xdp_ctx,
-+				  struct bpf_fdb_lookup *opt,
-+				  u32 opt__sz);
- #endif
+ 	/* copy the inline part if required */
+ 	if (sq->min_inline_mode != MLX5_INLINE_MODE_NONE) {
+-		memcpy(eseg->inline_hdr.start, xdptxd->data, MLX5E_XDP_MIN_INLINE);
++		memcpy(eseg->inline_hdr.start, xdptxd->data, sizeof(eseg->inline_hdr.start));
+ 		eseg->inline_hdr.sz = cpu_to_be16(MLX5E_XDP_MIN_INLINE);
++		memcpy(dseg, xdptxd->data + sizeof(eseg->inline_hdr.start),
++		       MLX5E_XDP_MIN_INLINE - sizeof(eseg->inline_hdr.start));
+ 		dma_len  -= MLX5E_XDP_MIN_INLINE;
+ 		dma_addr += MLX5E_XDP_MIN_INLINE;
+ 		dseg++;
 -- 
-2.34.1
+2.30.2
 
