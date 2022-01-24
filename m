@@ -2,118 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 959ECC4321E
-	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 19:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE9FC433EF
+	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 20:12:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357757AbiAXTvn convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 24 Jan 2022 14:51:43 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45286 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355699AbiAXTnQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 24 Jan 2022 14:43:16 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20OHVl6B026525
-        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 11:43:16 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dssy0bjeq-13
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 11:43:16 -0800
-Received: from twshared10426.24.prn2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 24 Jan 2022 11:43:11 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 5D33EFF02B0E; Mon, 24 Jan 2022 11:43:07 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 6/7] samples/bpf: use preferred getters/setters instead of deprecated ones
-Date:   Mon, 24 Jan 2022 11:42:53 -0800
-Message-ID: <20220124194254.2051434-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220124194254.2051434-1-andrii@kernel.org>
-References: <20220124194254.2051434-1-andrii@kernel.org>
+        id S1379626AbiAXUMD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 15:12:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49662 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378266AbiAXUGn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 15:06:43 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E42CB8124F;
+        Mon, 24 Jan 2022 20:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C61C340E5;
+        Mon, 24 Jan 2022 20:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643054800;
+        bh=8qphzB9DIKFYeekh22vyIkpyTJNnlON5enOGNgmM+ZM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XHtu7o+AGXFMas5iaCTdivZ6VNdOZPxB8S64VaEPBQIKfmyQ+rFC/PL1eUSeOQ3bO
+         kcvu10d05oBhQJqCEgJVxbVy42gUbBOH6pc3/bHGfWbfQXPZBlt0vqN+UP/WSGnQnl
+         NYxhXv70r36mAvNN4PdTOgsFJkVVn6O5y6t8gvRo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Chase Conklin <chase.conklin@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.10 508/563] perf evsel: Override attr->sample_period for non-libpfm4 events
+Date:   Mon, 24 Jan 2022 19:44:33 +0100
+Message-Id: <20220124184042.036113932@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
+References: <20220124184024.407936072@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 2-TuXbaeFgWO1tkmJtCssCKVe3dpEwPs
-X-Proofpoint-ORIG-GUID: 2-TuXbaeFgWO1tkmJtCssCKVe3dpEwPs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-24_09,2022-01-24_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
- spamscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 bulkscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=829 suspectscore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201240129
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use preferred setter and getter APIs instead of deprecated ones.
+From: German Gomez <german.gomez@arm.com>
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+commit 3606c0e1a1050d397ad759a62607e419fd8b0ccb upstream.
+
+A previous patch preventing "attr->sample_period" values from being
+overridden in pfm events changed a related behaviour in arm-spe.
+
+Before said patch:
+
+  perf record -c 10000 -e arm_spe_0// -- sleep 1
+
+Would yield an SPE event with period=10000. After the patch, the period
+in "-c 10000" was being ignored because the arm-spe code initializes
+sample_period to a non-zero value.
+
+This patch restores the previous behaviour for non-libpfm4 events.
+
+Fixes: ae5dcc8abe31 (“perf record: Prevent override of attr->sample_period for libpfm4 events”)
+Reported-by: Chase Conklin <chase.conklin@arm.com>
+Signed-off-by: German Gomez <german.gomez@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20220118144054.2541-1-german.gomez@arm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- samples/bpf/map_perf_test_user.c    | 2 +-
- samples/bpf/xdp_redirect_cpu_user.c | 2 +-
- samples/bpf/xdp_sample_user.c       | 2 +-
- samples/bpf/xdp_sample_user.h       | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ tools/perf/util/evsel.c |   25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/samples/bpf/map_perf_test_user.c b/samples/bpf/map_perf_test_user.c
-index 319fd31522f3..e69651a6902f 100644
---- a/samples/bpf/map_perf_test_user.c
-+++ b/samples/bpf/map_perf_test_user.c
-@@ -413,7 +413,7 @@ static void fixup_map(struct bpf_object *obj)
- 		for (i = 0; i < NR_TESTS; i++) {
- 			if (!strcmp(test_map_names[i], name) &&
- 			    (check_test_flags(i))) {
--				bpf_map__resize(map, num_map_entries);
-+				bpf_map__set_max_entries(map, num_map_entries);
- 				continue;
- 			}
- 		}
-diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
-index a81704d3317b..5f74a70a9021 100644
---- a/samples/bpf/xdp_redirect_cpu_user.c
-+++ b/samples/bpf/xdp_redirect_cpu_user.c
-@@ -70,7 +70,7 @@ static void print_avail_progs(struct bpf_object *obj)
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1014,6 +1014,17 @@ struct evsel_config_term *__evsel__get_c
+ 	return found_term;
+ }
  
- 	printf(" Programs to be used for -p/--progname:\n");
- 	bpf_object__for_each_program(pos, obj) {
--		if (bpf_program__is_xdp(pos)) {
-+		if (bpf_program__type(pos) == BPF_PROG_TYPE_XDP) {
- 			if (!strncmp(bpf_program__name(pos), "xdp_prognum",
- 				     sizeof("xdp_prognum") - 1))
- 				printf(" %s\n", bpf_program__name(pos));
-diff --git a/samples/bpf/xdp_sample_user.c b/samples/bpf/xdp_sample_user.c
-index ae70a7943d85..c4332d068b91 100644
---- a/samples/bpf/xdp_sample_user.c
-+++ b/samples/bpf/xdp_sample_user.c
-@@ -1218,7 +1218,7 @@ int sample_setup_maps(struct bpf_map **maps)
- 		default:
- 			return -EINVAL;
- 		}
--		if (bpf_map__resize(sample_map[i], sample_map_count[i]) < 0)
-+		if (bpf_map__set_max_entries(sample_map[i], sample_map_count[i]) < 0)
- 			return -errno;
- 	}
- 	sample_map[MAP_DEVMAP_XMIT_MULTI] = maps[MAP_DEVMAP_XMIT_MULTI];
-diff --git a/samples/bpf/xdp_sample_user.h b/samples/bpf/xdp_sample_user.h
-index 5f44b877ecf5..f45051679977 100644
---- a/samples/bpf/xdp_sample_user.h
-+++ b/samples/bpf/xdp_sample_user.h
-@@ -61,7 +61,7 @@ static inline char *safe_strncpy(char *dst, const char *src, size_t size)
- 
- #define __attach_tp(name)                                                      \
- 	({                                                                     \
--		if (!bpf_program__is_tracing(skel->progs.name))                \
-+		if (bpf_program__type(skel->progs.name) != BPF_PROG_TYPE_TRACING)\
- 			return -EINVAL;                                        \
- 		skel->links.name = bpf_program__attach(skel->progs.name);      \
- 		if (!skel->links.name)                                         \
--- 
-2.30.2
++static void evsel__set_default_freq_period(struct record_opts *opts,
++					   struct perf_event_attr *attr)
++{
++	if (opts->freq) {
++		attr->freq = 1;
++		attr->sample_freq = opts->freq;
++	} else {
++		attr->sample_period = opts->default_interval;
++	}
++}
++
+ /*
+  * The enable_on_exec/disabled value strategy:
+  *
+@@ -1080,14 +1091,12 @@ void evsel__config(struct evsel *evsel,
+ 	 * We default some events to have a default interval. But keep
+ 	 * it a weak assumption overridable by the user.
+ 	 */
+-	if (!attr->sample_period) {
+-		if (opts->freq) {
+-			attr->freq		= 1;
+-			attr->sample_freq	= opts->freq;
+-		} else {
+-			attr->sample_period = opts->default_interval;
+-		}
+-	}
++	if ((evsel->is_libpfm_event && !attr->sample_period) ||
++	    (!evsel->is_libpfm_event && (!attr->sample_period ||
++					 opts->user_freq != UINT_MAX ||
++					 opts->user_interval != ULLONG_MAX)))
++		evsel__set_default_freq_period(opts, attr);
++
+ 	/*
+ 	 * If attr->freq was set (here or earlier), ask for period
+ 	 * to be sampled.
+
 
