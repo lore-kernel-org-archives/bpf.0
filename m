@@ -2,29 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE9FC433EF
-	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 20:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A29DC43217
+	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 20:59:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379626AbiAXUMD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 15:12:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49662 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378266AbiAXUGn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jan 2022 15:06:43 -0500
+        id S1347723AbiAXU7S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 15:59:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42268 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1391681AbiAXUsW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 15:48:22 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E42CB8124F;
-        Mon, 24 Jan 2022 20:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C61C340E5;
-        Mon, 24 Jan 2022 20:06:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A5760C3E;
+        Mon, 24 Jan 2022 20:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623B1C340E5;
+        Mon, 24 Jan 2022 20:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1643054800;
-        bh=8qphzB9DIKFYeekh22vyIkpyTJNnlON5enOGNgmM+ZM=;
+        s=korg; t=1643057301;
+        bh=eipPTW4zUA2Y7C6/tT/Xx48Qu8AVSVvCdWRcAwJbjbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XHtu7o+AGXFMas5iaCTdivZ6VNdOZPxB8S64VaEPBQIKfmyQ+rFC/PL1eUSeOQ3bO
-         kcvu10d05oBhQJqCEgJVxbVy42gUbBOH6pc3/bHGfWbfQXPZBlt0vqN+UP/WSGnQnl
-         NYxhXv70r36mAvNN4PdTOgsFJkVVn6O5y6t8gvRo=
+        b=mDdknbIGQysdIcgik43P379chCn2IYSxtxjZ/H+yf2L3x8UfDGw3662PxvrwaTwIn
+         YsLCeGmwsPDraojRWxDj2WZ2Rv5A7UaQ2OuCuf28OylHrRyGCVjdo6Fr/hI9kwS950
+         q3mY5ejd8JOElUJayRiepTn6t8AEXvva2dLQJNMA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,12 +41,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Stephane Eranian <eranian@google.com>,
         Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.10 508/563] perf evsel: Override attr->sample_period for non-libpfm4 events
-Date:   Mon, 24 Jan 2022 19:44:33 +0100
-Message-Id: <20220124184042.036113932@linuxfoundation.org>
+Subject: [PATCH 5.15 768/846] perf evsel: Override attr->sample_period for non-libpfm4 events
+Date:   Mon, 24 Jan 2022 19:44:45 +0100
+Message-Id: <20220124184127.452102489@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220124184024.407936072@linuxfoundation.org>
-References: <20220124184024.407936072@linuxfoundation.org>
+In-Reply-To: <20220124184100.867127425@linuxfoundation.org>
+References: <20220124184100.867127425@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -97,8 +97,8 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/tools/perf/util/evsel.c
 +++ b/tools/perf/util/evsel.c
-@@ -1014,6 +1014,17 @@ struct evsel_config_term *__evsel__get_c
- 	return found_term;
+@@ -1047,6 +1047,17 @@ void __weak arch_evsel__set_sample_weigh
+ 	evsel__set_sample_bit(evsel, WEIGHT);
  }
  
 +static void evsel__set_default_freq_period(struct record_opts *opts,
@@ -115,7 +115,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  /*
   * The enable_on_exec/disabled value strategy:
   *
-@@ -1080,14 +1091,12 @@ void evsel__config(struct evsel *evsel,
+@@ -1113,14 +1124,12 @@ void evsel__config(struct evsel *evsel,
  	 * We default some events to have a default interval. But keep
  	 * it a weak assumption overridable by the user.
  	 */
