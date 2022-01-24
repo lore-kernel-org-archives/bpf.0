@@ -2,121 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1993DC433EF
-	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 10:37:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A912C433FE
+	for <bpf@archiver.kernel.org>; Mon, 24 Jan 2022 11:42:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbiAXKhe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 05:37:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S237795AbiAXLmb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 06:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbiAXKhd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jan 2022 05:37:33 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B1C061748
-        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 02:37:33 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id r10so24724339edt.1
-        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 02:37:32 -0800 (PST)
+        with ESMTP id S237756AbiAXLma (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 06:42:30 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6648BC06173B;
+        Mon, 24 Jan 2022 03:42:30 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id n23so10652408ljg.1;
+        Mon, 24 Jan 2022 03:42:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rSQeUpcdlaVxnlyHPZlA/Ygg7QddjkAcIgXh5+dK4ZA=;
-        b=E7O+yFPXvOVsUYSz5zQWo2D9xtg2H9UXlQ/JIEjYlqzFFujW2FXR+rOUbFixqb7Jkz
-         Wfk/OrqKKQWA8d4CjyOBoCP81Zko9goCKO7TNH0/1vTgTNgorhJqUlVoKkYpbXZeEUpV
-         9NB9AOG+qstYRWdjMmRIYPs15/2Xtghvqt8it/7WXoKRwwLZjJNcZHHa0FMu7rxXvmgP
-         dECAy3gFD9OMGs+HH3bSmTZVb4+jQfEwrkz3lBw9mZTvvH+SiMCozWU4Xqf+jf9kicKn
-         eTRi0QzYUU78TFKg6S2WxE5aC3LsxcKI089As6Fdq427ctQ6+2ju96BZezLkrvlWkFTo
-         L1pA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fK9aIW3UzZKCiVlPcUGVx7E5P904jn6nRwrBK6XG390=;
+        b=SHY2Esua8OM6IcNOWmZSipT6NmfJ5XXVc6fq772y50OV7AwoMaMlaZtUuWflyZN/ks
+         I1V53kzPMUIX/Q74lBSdrjNa6Ea+vN9cewBpEDS7gHNhZv+Eod2x5lbIiGYa/alwoDFH
+         iavIL6VuEXyTreUbYUmTIx3rguCEG1DAbzU/jDYdxwrNEMCQjqoNljxSjSvWQ1JpHIo9
+         TglGoCJMtcyq21wR+Ea+YGauvKsj6vRjb6h8NcgfdePQSxqxJjMykG23sP0KD1kpT5js
+         7ETNe1ryFgT8Su6djjj816kIMTonGHyxe7P2Y7xp4zHrKrsrjU3d64UBs1H3IT2TijwY
+         KKWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rSQeUpcdlaVxnlyHPZlA/Ygg7QddjkAcIgXh5+dK4ZA=;
-        b=b2ox9++d5eTyP+6iWXsJkAiS3PP5Dq0sRTOcC6cH/I36sbUKTupyiCZgg/d2V+7hCF
-         ip6yTUcnY3ahqWnaIx0YDoUXqOWJzkxmVe4j9qNe375JrRa9311rPu/59yS0sZ5UWa+y
-         8S+iDpgvaK1+2xdo9LAQGVno5WBYCko4YnC7zqfiWhcIIVKhetkwpI2RC4ipYOmaE2y8
-         qkYdUKQ3YO9JiESIi4hu5EbZ0W5ykb9kVRaaidn6W0ULaEGkycQ/wYu1eKAiD+9V3UnO
-         eOXJ7lOEIc7q+hY+j0BDhQnH7UoUGcmlXTgbmxinzDaX2ceQpcFuc5/zzTuVGsm8Kz7J
-         jRbg==
-X-Gm-Message-State: AOAM530+FwTZW3tM8dO2Ehxtuc2YXB2LUBZy0JZcfW1hizISlxEtMLX9
-        YfLL+eevE6F2oXwMIzAtNa23Ew==
-X-Google-Smtp-Source: ABdhPJyR81z+nPMmqT+s+6dYEX7jRS7cDIaT4GXBCfwJpdqDc6v9er/YadU9xc6kuBfX2Zm0MzhDig==
-X-Received: by 2002:a05:6402:34c1:: with SMTP id w1mr10663162edc.403.1643020651530;
-        Mon, 24 Jan 2022 02:37:31 -0800 (PST)
-Received: from [192.168.1.8] ([149.86.95.103])
-        by smtp.gmail.com with ESMTPSA id oz3sm4690259ejb.219.2022.01.24.02.37.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jan 2022 02:37:30 -0800 (PST)
-Message-ID: <15f76929-a953-e540-014f-170dd95dddb1@isovalent.com>
-Date:   Mon, 24 Jan 2022 10:37:30 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fK9aIW3UzZKCiVlPcUGVx7E5P904jn6nRwrBK6XG390=;
+        b=JAfs2CT/7gzIDW6iJrl5NgkyWSGWVo2zI0TU8Sq8xYhQKlC3Yq6BtY5yKcx49s2JnK
+         +472rJpIzjqg0m7GovenpdM2Hkm1ATMypePsCE5OYu7XZSOcRWDvhr8bHzVWrPbogHZX
+         oEmcfFlxU0C1vJaUbNeG7ttrNozguexlcasv7OsqPs+EmXmY8doI7pPw81DEtkIA/5Pk
+         0GqS170KJrTGVbNtKnDla8vHe8LoxCI1w6AAheyD6AcR/VSifpa7OVGRvpp2gxPlU/Ee
+         sWvBLyO60bJrhDg0FaiHutZWggoAiUakUidJF6Vkm8qsFtKfnREKDRrichVrU5VxDNPJ
+         vf8w==
+X-Gm-Message-State: AOAM5315ZnhtDzoDwhZ2j+BmRAPMxfPvKdVK7pxD470gupJ+nlvyQIAv
+        1tGFszPXxJjR1pPpaupOcpu6banYaIpdJ7IUTXh5nAtmIjiUXQ==
+X-Google-Smtp-Source: ABdhPJygjNVUHkoE8BDdEVfMhS670G5P+BPcwj16DBpSv47hRzzoonZhVcPwh2uM6ogAzS3ZF5ftkeOF9pTJYZdpWKM=
+X-Received: by 2002:a2e:b747:: with SMTP id k7mr11089297ljo.182.1643024548694;
+ Mon, 24 Jan 2022 03:42:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: Bpftool mirror now available
-Content-Language: en-GB
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Dave Thaler <dthaler@microsoft.com>
-References: <267a35a6-a045-c025-c2d9-78afbf6fc325@isovalent.com>
- <CAEf4Bzbu4wc9anr19yG1AtFEcnxFsBrznynkrVZajQT1x_o6cA@mail.gmail.com>
- <ac3f95ed-bead-e8ea-b477-edcbd809452c@isovalent.com>
- <CAEf4BzaiUbAT4hBKTVYadGdygccA3c6jgPsu8VW9sLo+4Ofsvw@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <CAEf4BzaiUbAT4hBKTVYadGdygccA3c6jgPsu8VW9sLo+4Ofsvw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <000000000000367c2205d2549cb9@google.com> <0000000000009fa8ee05d60428f1@google.com>
+In-Reply-To: <0000000000009fa8ee05d60428f1@google.com>
+From:   Vegard Nossum <vegard.nossum@gmail.com>
+Date:   Mon, 24 Jan 2022 12:42:16 +0100
+Message-ID: <CAOMGZ=E9Gmv6Fb_pi4p9RhQ_MvJVYs_6rkf37XfG0DYEMFNbNA@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+To:     syzbot <syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, "David S. Miller" <davem@davemloft.net>,
+        fgheet255t@gmail.com, hawk@kernel.org, jakub@cloudflare.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        lmb@cloudflare.com, Linux Netdev List <netdev@vger.kernel.org>,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-2022-01-20 11:07 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> On Thu, Jan 20, 2022 at 4:35 AM Quentin Monnet <quentin@isovalent.com> wrote:
->>
->> 2022-01-19 22:25 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
->>> On Wed, Jan 19, 2022 at 6:47 AM Quentin Monnet <quentin@isovalent.com> wrote:
->>
->> [...]
->>
->>>> 2. Because it is easier to compile and ship, this mirror should
->>>> hopefully simplify bpftool packaging for distributions.
->>>
->>> Right, I hope disto packagers will be quick to adopt the new mirror
->>> repo for packaging bpftool. Let's figure out bpftool versioning schema
->>> as a next step. Given bpftool heavily relies on libbpf and isn't
->>> really coupled to kernel versions, it makes sense for bpftool to
->>> reflect libbpf version rather than kernel's. WDYT?
->>
->> Personally, I don't mind finding another scheme, as long as we keep it
->> consistent between the reference sources in the kernel repo and the mirror.
->>
->> I also agree that it would make sense to align it to libbpf, but that
->> would mean going backward on the numbers (current version is 5.16.0,
->> libbpf's is 0.7.0) and this will mess up with every script trying to
->> compare versions. We could maybe add a prefix to indicate that the
->> scheme has changed ('l_0.7.0), but similarly, it would break a good
->> number of tools that expect semantic versioning, I don't think this is
->> any better.
->>
->> The other alternative I see would be to pick a different major version
->> number and arbitrarily declare that bpftool's version is aligned on
->> libbpf's, but with a difference of 6 for the version number. So we would
->> start at 6.7.0 and reach 7.0.0 when libbpf 1.0.0 is released. This is
->> not ideal, but we would keep some consistency, and we can always add the
->> version of libbpf used for the build to "bpftool version"'s output. How
->> would you feel about it? Did you have something else in mind?
-> 
-> Yeah, this off-by-6 major version difference seems ok-ish to me, I
-> don't mind that. Another alternative is to have a completely
-> independent versioning (and report used libbpf version in bpftool
-> --version output  separately). But I think divorcing it from kernel
-> version is a must, too much confusion.
+On Thu, 20 Jan 2022 at 15:17, syzbot
+<syzbot+5027de09e0964fd78ce1@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 218d747a4142f281a256687bb513a135c905867b
+> Author: John Fastabend <john.fastabend@gmail.com>
+> Date:   Tue Jan 4 21:46:45 2022 +0000
+>
+>     bpf, sockmap: Fix double bpf_prog_put on error case in map_link
 
-Right, let's not tie it to libbpf either, having an independent
-versioning scheme is probably the best solution indeed. I'll send a
-patchset shortly to update the version and also print the one from libbpf.
+I can confirm the above commit fixes the issue, but it references a
+slightly different report. Looks like the only difference is
+__bpf_prog_put instead of bpf_prog_put:
 
-Thanks,
-Quentin
+KASAN: vmalloc-out-of-bounds Read in __bpf_prog_put
+KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
+
+However, looking at the stack traces for the two bugs shows that
+__bpf_prog_put() is really the location for both reports, see:
+
+https://syzkaller.appspot.com/bug?id=797cd651dd0d9bd921e4fa51b792f5afdc3f390f
+ kasan_report.cold+0x83/0xdf mm/kasan/report.c:450 mm/kasan/report.c:450
+ __bpf_prog_put.constprop.0+0x1dd/0x220 kernel/bpf/syscall.c:1812
+kernel/bpf/syscall.c:1812
+ bpf_prog_put kernel/bpf/syscall.c:1829 [inline]
+ bpf_prog_put kernel/bpf/syscall.c:1829 [inline] kernel/bpf/syscall.c:1837
+
+vs.
+
+https://syzkaller.appspot.com/bug?extid=bb73e71cf4b8fd376a4f
+ kasan_report+0x19a/0x1f0 mm/kasan/report.c:450 mm/kasan/report.c:450
+ __bpf_prog_put kernel/bpf/syscall.c:1812 [inline]
+ __bpf_prog_put kernel/bpf/syscall.c:1812 [inline] kernel/bpf/syscall.c:1829
+ bpf_prog_put+0x8c/0x4f0 kernel/bpf/syscall.c:1829 kernel/bpf/syscall.c:1829
+
+Looks to me like the compiler's inlining decision caused syzbot to see
+__bpf_prog_put() instead of bpf_prog_put(), but I can't tell if it's
+because it got inlined or because of the .constprop.0 suffix... I
+guess syzbot skips the [inline] entries when deciding which function
+to report the bug in?
+
+In any case:
+
+#syz dup: KASAN: vmalloc-out-of-bounds Read in bpf_prog_put
+
+
+Vegard
