@@ -2,117 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18223C4321E
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 03:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45F85C4332F
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 03:15:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343844AbiAYDKW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
+        id S1345457AbiAYDK0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 22:10:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385568AbiAXXsq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jan 2022 18:48:46 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B090C0419C8;
-        Mon, 24 Jan 2022 13:44:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JjNlv5dl4z4yHs;
-        Tue, 25 Jan 2022 08:43:55 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1643060636;
-        bh=ZkOTg+PQZOto/jxd0gHdYNssTz91wrZxO1zggumS00Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aln8qIoFF8b8KzHXY4Ci3oIfL6C1CflWgj/Rd1bbUyjAYboOiMCqSt1iMZNIgY9Mb
-         2zacFBL0uPBLgFcOiLMlqUt2BkwpYgnv3Ma6eY9zdrOkRzIl2Lca4qfgff8B63wPRX
-         HKxJkqTKuWGuKesruP490b6DNV6bPCulmf954D2m1UpaljwTlDbSSZ4uVLVwGKrpof
-         LoRkIP7CR7mB5Wne52fRbW+FjF+mXDgHgqJn1ag8JGuqNR6QDPut905gBJvLTy9cQG
-         PXd3EPgxjiyghPVMWF1h+C2AvwY1o6SX+RJ0cmNTrn4AqQnfsKLKE5te05vvbSKOLn
-         cfiRVxW7Zh3Dw==
-Date:   Tue, 25 Jan 2022 08:43:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with Linus' tree
-Message-ID: <20220125084353.5fc682d9@canb.auug.org.au>
+        with ESMTP id S3411960AbiAYAfP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 19:35:15 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780A8C0DED57
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 14:18:54 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id h7so3459811iof.3
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 14:18:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VpMGjm8B3WeQMaK4KBi8d6s9JCr8gZTs3NSZcb1bGSQ=;
+        b=XI1pHUfc2pW4d8HUSJpdwe0ZSCnnSPQ8O+n1C42U4hfjvT8URX//WPVfnh2kJe8wmk
+         1YThtR3VCxkEg94JYIep02cKn/PVStVVLkpBGB0dgVVpwXhywz3ZQCK45ZxZhL9LyXGR
+         fGvqSG2ML3l7pmSJIfeo/IFARSDGxhh+xU6wT5CjBkq7latN9JfFcergZ1PLNismmISD
+         4zEJgiv4zESLjbr2W0/dGhhJr5dYScLB9VUSwuQQOsCXJYUmJWbi6WR9a/4f5Yti9us2
+         ZdU0pR3lUAfQkXIoIhuQ/bz8rpjlXcSEuNgAr2qpxw2hZMp98vKiSFTkGrUXTz3LiqJ/
+         BEAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VpMGjm8B3WeQMaK4KBi8d6s9JCr8gZTs3NSZcb1bGSQ=;
+        b=q8uQgnId46nryAD8VFW30OEt7ngxiR0fjglW2NUdwhKsv66J5EEdtOeKtqC/JAy3/V
+         tP5Y4KenB/Hgx2ooxdXYi7KHiuKA+PKkL9wZu+crCJ2DeGZRn7Tba0BuZflyIGRzNm3u
+         3otOaKwM+0KkVvU/dzKYnFwOxJWE5ricKsBK/cxQd6QEtndWZH2tEX7HvPu+viDGPW/V
+         Km+d/qNigJdW6sHQeo2VzQ2T4H8gnpr128J0Z1orE1fplO8ti2ANjcL5dM+GBRI6zg3y
+         vrCSF0k1qa5r5PuQzAbtMV6nA8oOQsAiyWjitY+wuaf47FddzRWZbp14KS0Vyc11LJXc
+         XlOw==
+X-Gm-Message-State: AOAM533NRyedx0LGqiqsa73DB5oM8a+2hdtrlWyYXZEq2SUqHAXHkkHe
+        fnqQWBrQEZcNQnzprFIA0y9f4R4H4NhLn+Kad3I=
+X-Google-Smtp-Source: ABdhPJyG2fqPBpjeOKqyG+4tYytdBCXyZZcqJqqu7Jvct7PgGL6+8lUYsMreYGwxZSOE5WkHDsIw6Z0vGN/jck4lEjg=
+X-Received: by 2002:a5d:9f01:: with SMTP id q1mr9310438iot.144.1643062733876;
+ Mon, 24 Jan 2022 14:18:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xJqTwuSaouszgSpnNlM3wk0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20220113233158.1582743-1-kennyyu@fb.com> <20220124185403.468466-1-kennyyu@fb.com>
+ <20220124185403.468466-3-kennyyu@fb.com>
+In-Reply-To: <20220124185403.468466-3-kennyyu@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 24 Jan 2022 14:18:42 -0800
+Message-ID: <CAEf4BzbQQNH1=UGNLBhb8bXZzdE7uHviJ3k8vEKDg_72407aYg@mail.gmail.com>
+Subject: Re: [PATCH v7 bpf-next 2/4] bpf: Add bpf_copy_from_user_task() helper
+To:     Kenny Yu <kennyyu@fb.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Gabriele <phoenix1987@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
---Sig_/xJqTwuSaouszgSpnNlM3wk0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jan 24, 2022 at 10:54 AM Kenny Yu <kennyyu@fb.com> wrote:
+>
+> This adds a helper for bpf programs to read the memory of other
+> tasks.
+>
+> As an example use case at Meta, we are using a bpf task iterator program
+> and this new helper to print C++ async stack traces for all threads of
+> a given process.
+>
+> Signed-off-by: Kenny Yu <kennyyu@fb.com>
+> ---
 
-Hi all,
+LGTM.
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-  include/linux/bpf_verifier.h
+>  include/linux/bpf.h            |  1 +
+>  include/uapi/linux/bpf.h       | 11 +++++++++++
+>  kernel/bpf/helpers.c           | 34 ++++++++++++++++++++++++++++++++++
+>  kernel/trace/bpf_trace.c       |  2 ++
+>  tools/include/uapi/linux/bpf.h | 11 +++++++++++
+>  5 files changed, 59 insertions(+)
+>
 
-between commit:
+[...]
 
-  be80a1d3f9db ("bpf: Generalize check_ctx_reg for reuse with other types")
+> +       ret = access_process_vm(tsk, (unsigned long)user_ptr, dst, size, 0);
+> +       if (ret == size)
+> +               return 0;
+> +
+> +       memset(dst, 0, size);
+> +       /* Return -EFAULT for partial read */
+> +       return (ret < 0) ? ret : -EFAULT;
 
-from Linus' tree and commit:
+nit: unnecessary ()
 
-  d583691c47dc ("bpf: Introduce mem, size argument pair support for kfunc")
+> +}
+> +
+> +const struct bpf_func_proto bpf_copy_from_user_task_proto = {
+> +       .func           = bpf_copy_from_user_task,
+> +       .gpl_only       = false,
+> +       .ret_type       = RET_INTEGER,
+> +       .arg1_type      = ARG_PTR_TO_UNINIT_MEM,
+> +       .arg2_type      = ARG_CONST_SIZE_OR_ZERO,
+> +       .arg3_type      = ARG_ANYTHING,
+> +       .arg4_type      = ARG_PTR_TO_BTF_ID,
+> +       .arg4_btf_id    = &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+> +       .arg5_type      = ARG_ANYTHING
+> +};
+> +
 
-from the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/bpf_verifier.h
-index e9993172f892,ac4797155412..000000000000
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@@ -519,8 -519,10 +519,10 @@@ bpf_prog_offload_replace_insn(struct bp
-  void
-  bpf_prog_offload_remove_insns(struct bpf_verifier_env *env, u32 off, u32 =
-cnt);
- =20
- -int check_ctx_reg(struct bpf_verifier_env *env,
- -		  const struct bpf_reg_state *reg, int regno);
- +int check_ptr_off_reg(struct bpf_verifier_env *env,
- +		      const struct bpf_reg_state *reg, int regno);
-+ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg=
-_state *reg,
-+ 			     u32 regno);
-  int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
-  		   u32 regno, u32 mem_size);
- =20
-
---Sig_/xJqTwuSaouszgSpnNlM3wk0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmHvHZoACgkQAVBC80lX
-0GyjPAf/afQFcqFrWODtd6LIcDAuOpFlLbPE4b//f8oTwsJZvWIMmE8i50CFSf5u
-UnAgolVEivNANlUmGfGF98sYvv06b9q0VIE63u1B2suV9J9OsFtzTtmCF9Sw8Gsi
-zY8Gq8mShYOETKpwEf3deRDx6JC7sp5M7kQtg9W+75RNZfvvUvu2r0DAErxJsvhg
-mR91JCR2o6QrJhRN7MsYVs506632Gc00sPx3gk32aRyEhEwmxXEGG0wbTNqcykz4
-X79YDv90iopGuwofTvUPEAbDhOyyeajDgJLxALleROKh/dg6MZ9oI+0yENnJyjHR
-t7GtJbtQUV+NkWJUi6q9oJ1p+Hi4lg==
-=HokY
------END PGP SIGNATURE-----
-
---Sig_/xJqTwuSaouszgSpnNlM3wk0--
+[...]
