@@ -2,216 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7BA6C433F5
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 16:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94FE3C433EF
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 16:08:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbiAYQIS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jan 2022 11:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349336AbiAYQHF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:07:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617F3C06173B;
-        Tue, 25 Jan 2022 08:07:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3B606143D;
-        Tue, 25 Jan 2022 16:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DEAC340E0;
-        Tue, 25 Jan 2022 16:07:00 +0000 (UTC)
-Date:   Tue, 25 Jan 2022 11:06:59 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/9] ftrace: Add ftrace_set_filter_ips function
-Message-ID: <20220125110659.2cc8df29@gandalf.local.home>
-In-Reply-To: <164311270629.1933078.4596694198103138848.stgit@devnote2>
-References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
-        <164311270629.1933078.4596694198103138848.stgit@devnote2>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1377662AbiAYQIZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jan 2022 11:08:25 -0500
+Received: from mga18.intel.com ([134.134.136.126]:4805 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346846AbiAYQHH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:07:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643126825; x=1674662825;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=6T5/IoHsRo8fBpGFCMqevm9DsrHTuEd/m8MoI++MhFY=;
+  b=Mt+zRyfrgZIVRRYza3A1wjQozh5pbbk8GqOsaBbfbbrPeevF4oRbrQgP
+   IcUdVZurCyyjB9FFY5ByJRvymyZMwyRr7gPwPPfhpPNwI2IltEPUDi9YY
+   myiDqcqAgg1oGT8BB8H5QpZ2fsZiR8CaBEoSPBrTww4gv7/9RTBZ5WwXN
+   rGycPwXlMErzLoGPAsK/LNegkj9RrI/Gh7OM4e1guN9hgGcDGTNmP7UxA
+   259zidP1m8MLroX4n5tknCntlrLY1CN41Vpq5ohmyFjn06+VaSLmcYaXa
+   i2a1sCIY8cIG/mQRszo31od7Xh130dzA3HNUzJIzC28Vls9eaXbF1Uodf
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="229911651"
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="229911651"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:05:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
+   d="scan'208";a="534789281"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by orsmga008.jf.intel.com with ESMTP; 25 Jan 2022 08:05:00 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
+Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com,
+        alexandr.lobakin@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf-next v5 6/8] ice: xsk: avoid potential dead AF_XDP Tx processing
+Date:   Tue, 25 Jan 2022 17:04:44 +0100
+Message-Id: <20220125160446.78976-7-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220125160446.78976-1-maciej.fijalkowski@intel.com>
+References: <20220125160446.78976-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 25 Jan 2022 21:11:46 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Commit 9610bd988df9 ("ice: optimize XDP_TX workloads") introduced
+@next_dd and @next_rs to ice_tx_ring struct. Currently, their state is
+not restored in ice_clean_tx_ring(), which was not causing any troubles
+as the XDP rings are gone after we're done with XDP prog on interface.
 
-> From: Jiri Olsa <jolsa@redhat.com>
-> 
-> Adding ftrace_set_filter_ips function to be able to set filter on
-> multiple ip addresses at once.
-> 
-> With the kprobe multi attach interface we have cases where we need to
-> initialize ftrace_ops object with thousands of functions, so having
-> single function diving into ftrace_hash_move_and_update_ops with
-> ftrace_lock is faster.
-> 
-> The functions ips are passed as unsigned long array with count.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/ftrace.h |    3 +++
->  kernel/trace/ftrace.c  |   53 ++++++++++++++++++++++++++++++++++++++++--------
->  2 files changed, 47 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 9999e29187de..60847cbce0da 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -512,6 +512,8 @@ struct dyn_ftrace {
->  
->  int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
->  			 int remove, int reset);
-> +int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
-> +			  unsigned int cnt, int remove, int reset);
->  int ftrace_set_filter(struct ftrace_ops *ops, unsigned char *buf,
->  		       int len, int reset);
->  int ftrace_set_notrace(struct ftrace_ops *ops, unsigned char *buf,
-> @@ -802,6 +804,7 @@ static inline unsigned long ftrace_location(unsigned long ip)
->  #define ftrace_regex_open(ops, flag, inod, file) ({ -ENODEV; })
->  #define ftrace_set_early_filter(ops, buf, enable) do { } while (0)
->  #define ftrace_set_filter_ip(ops, ip, remove, reset) ({ -ENODEV; })
-> +#define ftrace_set_filter_ips(ops, ips, cnt, remove, reset) ({ -ENODEV; })
->  #define ftrace_set_filter(ops, buf, len, reset) ({ -ENODEV; })
->  #define ftrace_set_notrace(ops, buf, len, reset) ({ -ENODEV; })
->  #define ftrace_free_filter(ops) do { } while (0)
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index be5f6b32a012..39350aa38649 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -4958,7 +4958,7 @@ ftrace_notrace_write(struct file *file, const char __user *ubuf,
->  }
->  
->  static int
-> -ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
-> +__ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
->  {
->  	struct ftrace_func_entry *entry;
->  
-> @@ -4976,9 +4976,25 @@ ftrace_match_addr(struct ftrace_hash *hash, unsigned long ip, int remove)
->  	return add_hash_entry(hash, ip);
->  }
->  
-> +static int
-> +ftrace_match_addr(struct ftrace_hash *hash, unsigned long *ips,
-> +		  unsigned int cnt, int remove)
-> +{
-> +	unsigned int i;
-> +	int err;
-> +
-> +	for (i = 0; i < cnt; i++) {
-> +		err = __ftrace_match_addr(hash, ips[i], remove);
-> +		if (err)
-> +			return err;
+For upcoming usage of mentioned fields in AF_XDP, this might expose us
+to a potential dead Tx side. Scenario would look like following (based
+on xdpsock):
 
-On error should we revert what was done?
+- two xdpsock instances are spawned in Tx mode
+- one of them is killed
+- XDP prog is kept on interface due to the other xdpsock still running
+  * this means that XDP rings stayed in place
+- xdpsock is launched again on same queue id that was terminated on
+- @next_dd and @next_rs setting is bogus, therefore transmit side is
+  broken
 
-			goto err;
-> +	}
-> +	return 0;
+To protect us from the above, restore the initial @next_rs and @next_dd
+values when cleaning the Tx ring.
 
-err:
-	for (i--; i >= 0; i--)
-		__ftrace_match_addr(hash, ips[i], !remove);
-	return err;
+Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Although it may not matter as it looks like it is only used on a temporary
-hash. But either it should be commented that is the case, or we do the above
-just to be more robust.
-
-> +}
-> +
->  static int
->  ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
-> -		unsigned long ip, int remove, int reset, int enable)
-> +		unsigned long *ips, unsigned int cnt,
-> +		int remove, int reset, int enable)
->  {
->  	struct ftrace_hash **orig_hash;
->  	struct ftrace_hash *hash;
-> @@ -5008,8 +5024,8 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
->  		ret = -EINVAL;
->  		goto out_regex_unlock;
->  	}
-> -	if (ip) {
-> -		ret = ftrace_match_addr(hash, ip, remove);
-> +	if (ips) {
-> +		ret = ftrace_match_addr(hash, ips, cnt, remove);
->  		if (ret < 0)
->  			goto out_regex_unlock;
->  	}
-> @@ -5026,10 +5042,10 @@ ftrace_set_hash(struct ftrace_ops *ops, unsigned char *buf, int len,
->  }
->  
->  static int
-> -ftrace_set_addr(struct ftrace_ops *ops, unsigned long ip, int remove,
-> -		int reset, int enable)
-> +ftrace_set_addr(struct ftrace_ops *ops, unsigned long *ips, unsigned int cnt,
-> +		int remove, int reset, int enable)
->  {
-> -	return ftrace_set_hash(ops, NULL, 0, ip, remove, reset, enable);
-> +	return ftrace_set_hash(ops, NULL, 0, ips, cnt, remove, reset, enable);
->  }
->  
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-> @@ -5634,10 +5650,29 @@ int ftrace_set_filter_ip(struct ftrace_ops *ops, unsigned long ip,
->  			 int remove, int reset)
->  {
->  	ftrace_ops_init(ops);
-> -	return ftrace_set_addr(ops, ip, remove, reset, 1);
-> +	return ftrace_set_addr(ops, &ip, 1, remove, reset, 1);
->  }
->  EXPORT_SYMBOL_GPL(ftrace_set_filter_ip);
->  
-> +/**
-> + * ftrace_set_filter_ips - set a functions to filter on in ftrace by addresses
-
-		- set functions to filter on ...
-
--- Steve
-
-> + * @ops - the ops to set the filter with
-> + * @ips - the array of addresses to add to or remove from the filter.
-> + * @cnt - the number of addresses in @ips
-> + * @remove - non zero to remove ips from the filter
-> + * @reset - non zero to reset all filters before applying this filter.
-> + *
-> + * Filters denote which functions should be enabled when tracing is enabled
-> + * If @ips array or any ip specified within is NULL , it fails to update filter.
-> + */
-> +int ftrace_set_filter_ips(struct ftrace_ops *ops, unsigned long *ips,
-> +			  unsigned int cnt, int remove, int reset)
-> +{
-> +	ftrace_ops_init(ops);
-> +	return ftrace_set_addr(ops, ips, cnt, remove, reset, 1);
-> +}
-> +EXPORT_SYMBOL_GPL(ftrace_set_filter_ips);
-> +
->  /**
->   * ftrace_ops_set_global_filter - setup ops to use global filters
->   * @ops - the ops which will use the global filters
-> @@ -5659,7 +5694,7 @@ static int
->  ftrace_set_regex(struct ftrace_ops *ops, unsigned char *buf, int len,
->  		 int reset, int enable)
->  {
-> -	return ftrace_set_hash(ops, buf, len, 0, 0, reset, enable);
-> +	return ftrace_set_hash(ops, buf, len, NULL, 0, 0, reset, enable);
->  }
->  
->  /**
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index e661d0e45b9b..73f60493209d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -173,6 +173,8 @@ void ice_clean_tx_ring(struct ice_tx_ring *tx_ring)
+ 
+ 	tx_ring->next_to_use = 0;
+ 	tx_ring->next_to_clean = 0;
++	tx_ring->next_dd = ICE_RING_QUARTER(tx_ring) - 1;
++	tx_ring->next_rs = ICE_RING_QUARTER(tx_ring) - 1;
+ 
+ 	if (!tx_ring->netdev)
+ 		return;
+-- 
+2.33.1
 
