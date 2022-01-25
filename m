@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7B5C28CF5
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 12:23:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9584C5DF62
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 12:23:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241221AbiAZMXn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 07:23:43 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:16928 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241218AbiAZMXn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:23:43 -0500
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JkN830FDPzZfXT;
-        Wed, 26 Jan 2022 20:19:47 +0800 (CST)
+        id S241219AbiAZMXo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 07:23:44 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:30307 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241220AbiAZMXo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:23:44 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JkNCc39MGzbkFg;
+        Wed, 26 Jan 2022 20:22:52 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 26 Jan
- 2022 20:23:41 +0800
+ 2022 20:23:42 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -29,10 +29,12 @@ CC:     Ard Biesheuvel <ard.biesheuvel@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <houtao1@huawei.com>
-Subject: [PATCH bpf-next v2 0/2] bpf, arm64: fix bpf line info
-Date:   Tue, 25 Jan 2022 18:57:05 +0800
-Message-ID: <20220125105707.292449-1-houtao1@huawei.com>
+Subject: [PATCH bpf-next v2 2/2] bpf, arm64: calculate offset as byte-offset for bpf line info
+Date:   Tue, 25 Jan 2022 18:57:07 +0800
+Message-ID: <20220125105707.292449-3-houtao1@huawei.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220125105707.292449-1-houtao1@huawei.com>
+References: <20220125105707.292449-1-houtao1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -44,36 +46,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+insn_to_jit_off passed to bpf_prog_fill_jited_linfo() is calculated
+in instruction granularity instead of bytes granularity, but bpf
+line info requires byte offset, so fixing it by calculating offset
+as byte-offset.
 
-The patchset addresses two issues in bpf line info for arm64:
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ arch/arm64/net/bpf_jit_comp.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-(1) insn_to_jit_off only considers the body itself and ignores
-     prologue before the body. Fixed in patch #1.
-
-(2) insn_to_jit_off passed to bpf_prog_fill_jited_linfo() is
-     calculated in instruction granularity instead of bytes
-     granularity. Fixed in patch #2.
-
-Comments are always welcome.
-
-Regards,
-Tao
-
-Change Log:
-v2:
- * split into two independent patches (from Daniel)
- * use AARCH64_INSN_SIZE instead of defining INSN_SIZE
-
-v1: https://lore.kernel.org/bpf/20220104014236.1512639-1-houtao1@huawei.com
-
-Hou Tao (2):
-  bpf, arm64: call build_prologue() first in first JIT pass
-  bpf, arm64: calculate offset as byte-offset for bpf line info
-
- arch/arm64/net/bpf_jit_comp.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
-
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 6a83f3070985..7b94e0c5e134 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -152,10 +152,12 @@ static inline int bpf2a64_offset(int bpf_insn, int off,
+ 	bpf_insn++;
+ 	/*
+ 	 * Whereas arm64 branch instructions encode the offset
+-	 * from the branch itself, so we must subtract 1 from the
++	 * from the branch itself, so we must subtract 4 from the
+ 	 * instruction offset.
+ 	 */
+-	return ctx->offset[bpf_insn + off] - (ctx->offset[bpf_insn] - 1);
++	return (ctx->offset[bpf_insn + off] -
++		(ctx->offset[bpf_insn] - AARCH64_INSN_SIZE)) /
++		AARCH64_INSN_SIZE;
+ }
+ 
+ static void jit_fill_hole(void *area, unsigned int size)
+@@ -946,13 +948,14 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 		const struct bpf_insn *insn = &prog->insnsi[i];
+ 		int ret;
+ 
++		/* BPF line info needs byte-offset instead of insn-offset */
+ 		if (ctx->image == NULL)
+-			ctx->offset[i] = ctx->idx;
++			ctx->offset[i] = ctx->idx * AARCH64_INSN_SIZE;
+ 		ret = build_insn(insn, ctx, extra_pass);
+ 		if (ret > 0) {
+ 			i++;
+ 			if (ctx->image == NULL)
+-				ctx->offset[i] = ctx->idx;
++				ctx->offset[i] = ctx->idx * AARCH64_INSN_SIZE;
+ 			continue;
+ 		}
+ 		if (ret)
+@@ -964,7 +967,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
+ 	 * instruction (end of program)
+ 	 */
+ 	if (ctx->image == NULL)
+-		ctx->offset[i] = ctx->idx;
++		ctx->offset[i] = ctx->idx * AARCH64_INSN_SIZE;
+ 
+ 	return 0;
+ }
 -- 
 2.27.0
 
