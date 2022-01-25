@@ -2,474 +2,387 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9C4AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 16:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03ED9C433EF
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 16:24:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387350AbiAYQI2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jan 2022 11:08:28 -0500
-Received: from mga18.intel.com ([134.134.136.126]:4809 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1357659AbiAYQHJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jan 2022 11:07:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643126828; x=1674662828;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Tq3FHmDOhJCoFoBG/XYX3o5ZjY5i497MgPP+uf6xjS8=;
-  b=HlSpu2bO5J8QXmC275wwfDwGZw5+jcEKHOjvwmSQV/Nh+gVYmeGhl5iS
-   7FpNdN/wwbPZyg3HciLFW6VMG6Y6CumU3O22HuAqNd7jZgUlfTLTzp/yx
-   NB8yDHrZ2+QDMqw3MucmE7GVrnUnkRQ57JX4wsLto4efQeEfqxOmvNKjm
-   vc3Aag1bYsnqbt5LiO8yLPKtevOG1NG5qJcZmelvr61YVggfjD7xFydLQ
-   2l9+HJltdTvCmJz5uBLK3P7Nuv7zK0y0+w3H4IdSaVclRxNJNDUOyT6OY
-   0xpeXaNUuLw0XZTcNHNottFsamKIsbin8PwxsZDzKiQJ8Af1hMvRBkzqc
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="229911661"
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="229911661"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 08:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,315,1635231600"; 
-   d="scan'208";a="534789304"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orsmga008.jf.intel.com with ESMTP; 25 Jan 2022 08:05:02 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com,
-        alexandr.lobakin@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next v5 7/8] ice: xsk: improve AF_XDP ZC Tx and use batching API
-Date:   Tue, 25 Jan 2022 17:04:45 +0100
-Message-Id: <20220125160446.78976-8-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220125160446.78976-1-maciej.fijalkowski@intel.com>
-References: <20220125160446.78976-1-maciej.fijalkowski@intel.com>
+        id S234115AbiAYQYO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jan 2022 11:24:14 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:41876 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344995AbiAYQVh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jan 2022 11:21:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59942615F1;
+        Tue, 25 Jan 2022 16:21:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97203C340E0;
+        Tue, 25 Jan 2022 16:21:30 +0000 (UTC)
+Date:   Tue, 25 Jan 2022 11:21:23 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 2/9] fprobe: Add ftrace based probe APIs
+Message-ID: <20220125112123.515b7450@gandalf.local.home>
+In-Reply-To: <164311271777.1933078.9066058105807126444.stgit@devnote2>
+References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
+        <164311271777.1933078.9066058105807126444.stgit@devnote2>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Apply the logic that was done for regular XDP from commit 9610bd988df9
-("ice: optimize XDP_TX workloads") to the ZC side of the driver. On top
-of that, introduce batching to Tx that is inspired by i40e's
-implementation with adjustments to the cleaning logic - take into the
-account NAPI budget in ice_clean_xdp_irq_zc().
+On Tue, 25 Jan 2022 21:11:57 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Separating the stats structs onto separate cache lines seemed to improve
-the performance.
+> The fprobe is a wrapper API for ftrace function tracer.
+> Unlike kprobes, this probes only supports the function entry, but
+> it can probe multiple functions by one fprobe. The usage is almost
+> same as the kprobe, user will specify the function names by
+> fprobe::syms, the number of syms by fprobe::nentry,
+> and the user handler by fprobe::entry_handler.
+> 
+> struct fprobe fp = { 0 };
+> const char *targets[] = { "func1", "func2", "func3"};
+> 
+> fp.handler = user_handler;
+> fp.nentry = ARRAY_SIZE(targets);
+> fp.syms = targets;
+> 
+> ret = register_fprobe(&fp);
+> 
+> CAUTION: if user entry handler changes registers including
+> ip address, it will be applied when returns from the
+> entry handler. So user handler must recover it.
 
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_txrx.c |   2 +-
- drivers/net/ethernet/intel/ice/ice_txrx.h |   6 +-
- drivers/net/ethernet/intel/ice/ice_xsk.c  | 256 ++++++++++++++--------
- drivers/net/ethernet/intel/ice/ice_xsk.h  |  27 ++-
- 4 files changed, 190 insertions(+), 101 deletions(-)
+Can you rephrase the above, I'm not sure what you mean by it.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 73f60493209d..7d8824b4c8ff 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -1462,7 +1462,7 @@ int ice_napi_poll(struct napi_struct *napi, int budget)
- 		bool wd;
- 
- 		if (tx_ring->xsk_pool)
--			wd = ice_clean_tx_irq_zc(tx_ring, budget);
-+			wd = ice_xmit_zc(tx_ring, ICE_DESC_UNUSED(tx_ring), budget);
- 		else if (ice_ring_is_xdp(tx_ring))
- 			wd = true;
- 		else
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
-index 611dd7c4a631..666db35a2919 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.h
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
-@@ -322,17 +322,17 @@ struct ice_tx_ring {
- 	u16 count;			/* Number of descriptors */
- 	u16 q_index;			/* Queue number of ring */
- 	/* stats structs */
--	struct ice_q_stats	stats;
--	struct u64_stats_sync syncp;
- 	struct ice_txq_stats tx_stats;
--
- 	/* CL3 - 3rd cacheline starts here */
-+	struct ice_q_stats	stats;
-+	struct u64_stats_sync syncp;
- 	struct rcu_head rcu;		/* to avoid race on free */
- 	DECLARE_BITMAP(xps_state, ICE_TX_NBITS);	/* XPS Config State */
- 	struct ice_channel *ch;
- 	struct ice_ptp_tx *tx_tstamps;
- 	spinlock_t tx_lock;
- 	u32 txq_teid;			/* Added Tx queue TEID */
-+	/* CL4 - 4th cacheline starts here */
- #define ICE_TX_FLAGS_RING_XDP		BIT(0)
- 	u8 flags;
- 	u8 dcb_tc;			/* Traffic class of ring */
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index b12079a7ef8a..8b6acb4afb7f 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -679,134 +679,212 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
- }
- 
- /**
-- * ice_xmit_zc - Completes AF_XDP entries, and cleans XDP entries
-+ * ice_clean_xdp_tx_buf - Free and unmap XDP Tx buffer
-  * @xdp_ring: XDP Tx ring
-- * @budget: max number of frames to xmit
-+ * @tx_buf: Tx buffer to clean
-+ */
-+static void
-+ice_clean_xdp_tx_buf(struct ice_tx_ring *xdp_ring, struct ice_tx_buf *tx_buf)
-+{
-+	xdp_return_frame((struct xdp_frame *)tx_buf->raw_buf);
-+	dma_unmap_single(xdp_ring->dev, dma_unmap_addr(tx_buf, dma),
-+			 dma_unmap_len(tx_buf, len), DMA_TO_DEVICE);
-+	dma_unmap_len_set(tx_buf, len, 0);
-+}
-+
-+/**
-+ * ice_clean_xdp_irq_zc - Reclaim resources after transmit completes on XDP ring
-+ * @xdp_ring: XDP ring to clean
-+ * @napi_budget: amount of descriptors that NAPI allows us to clean
-  *
-- * Returns true if cleanup/transmission is done.
-+ * Returns count of cleaned descriptors
-  */
--static bool ice_xmit_zc(struct ice_tx_ring *xdp_ring, int budget)
-+static u16 ice_clean_xdp_irq_zc(struct ice_tx_ring *xdp_ring, int napi_budget)
- {
--	struct ice_tx_desc *tx_desc = NULL;
--	bool work_done = true;
--	struct xdp_desc desc;
--	dma_addr_t dma;
-+	u16 tx_thresh = ICE_RING_QUARTER(xdp_ring);
-+	int budget = napi_budget / tx_thresh;
-+	u16 ntc = xdp_ring->next_to_clean;
-+	u16 next_dd = xdp_ring->next_dd;
-+	u16 cleared_dds = 0;
- 
--	while (likely(budget-- > 0)) {
-+	do {
-+		struct ice_tx_desc *next_dd_desc;
-+		u16 desc_cnt = xdp_ring->count;
- 		struct ice_tx_buf *tx_buf;
-+		u32 xsk_frames;
-+		u16 i;
- 
--		if (unlikely(!ICE_DESC_UNUSED(xdp_ring))) {
--			xdp_ring->tx_stats.tx_busy++;
--			work_done = false;
--			break;
--		}
--
--		tx_buf = &xdp_ring->tx_buf[xdp_ring->next_to_use];
--
--		if (!xsk_tx_peek_desc(xdp_ring->xsk_pool, &desc))
-+		next_dd_desc = ICE_TX_DESC(xdp_ring, next_dd);
-+		if (!(next_dd_desc->cmd_type_offset_bsz &
-+		    cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE)))
- 			break;
- 
--		dma = xsk_buff_raw_get_dma(xdp_ring->xsk_pool, desc.addr);
--		xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma,
--						 desc.len);
-+		cleared_dds++;
-+		xsk_frames = 0;
- 
--		tx_buf->bytecount = desc.len;
-+		for (i = 0; i < tx_thresh; i++) {
-+			tx_buf = &xdp_ring->tx_buf[ntc];
- 
--		tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_to_use);
--		tx_desc->buf_addr = cpu_to_le64(dma);
--		tx_desc->cmd_type_offset_bsz =
--			ice_build_ctob(ICE_TXD_LAST_DESC_CMD, 0, desc.len, 0);
-+			if (tx_buf->raw_buf) {
-+				ice_clean_xdp_tx_buf(xdp_ring, tx_buf);
-+				tx_buf->raw_buf = NULL;
-+			} else {
-+				xsk_frames++;
-+			}
- 
--		xdp_ring->next_to_use++;
--		if (xdp_ring->next_to_use == xdp_ring->count)
--			xdp_ring->next_to_use = 0;
--	}
-+			ntc++;
-+			if (ntc >= xdp_ring->count)
-+				ntc = 0;
-+		}
-+		if (xsk_frames)
-+			xsk_tx_completed(xdp_ring->xsk_pool, xsk_frames);
-+		next_dd_desc->cmd_type_offset_bsz = 0;
-+		next_dd = next_dd + tx_thresh;
-+		if (next_dd >= desc_cnt)
-+			next_dd = tx_thresh - 1;
-+	} while (budget--);
- 
--	if (tx_desc) {
--		ice_xdp_ring_update_tail(xdp_ring);
--		xsk_tx_release(xdp_ring->xsk_pool);
--	}
-+	xdp_ring->next_to_clean = ntc;
-+	xdp_ring->next_dd = next_dd;
- 
--	return budget > 0 && work_done;
-+	return cleared_dds * tx_thresh;
- }
- 
- /**
-- * ice_clean_xdp_tx_buf - Free and unmap XDP Tx buffer
-- * @xdp_ring: XDP Tx ring
-- * @tx_buf: Tx buffer to clean
-+ * ice_xmit_pkt - produce a single HW Tx descriptor out of AF_XDP descriptor
-+ * @xdp_ring: XDP ring to produce the HW Tx descriptor on
-+ * @desc: AF_XDP descriptor to pull the DMA address and length from
-+ * @total_bytes: bytes accumulator that will be used for stats update
-  */
--static void
--ice_clean_xdp_tx_buf(struct ice_tx_ring *xdp_ring, struct ice_tx_buf *tx_buf)
-+static void ice_xmit_pkt(struct ice_tx_ring *xdp_ring, struct xdp_desc *desc,
-+			 unsigned int *total_bytes)
- {
--	xdp_return_frame((struct xdp_frame *)tx_buf->raw_buf);
--	dma_unmap_single(xdp_ring->dev, dma_unmap_addr(tx_buf, dma),
--			 dma_unmap_len(tx_buf, len), DMA_TO_DEVICE);
--	dma_unmap_len_set(tx_buf, len, 0);
-+	struct ice_tx_desc *tx_desc;
-+	dma_addr_t dma;
-+
-+	dma = xsk_buff_raw_get_dma(xdp_ring->xsk_pool, desc->addr);
-+	xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, desc->len);
-+
-+	tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_to_use++);
-+	tx_desc->buf_addr = cpu_to_le64(dma);
-+	tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
-+						      0, desc->len, 0);
-+
-+	*total_bytes += desc->len;
- }
- 
- /**
-- * ice_clean_tx_irq_zc - Completes AF_XDP entries, and cleans XDP entries
-- * @xdp_ring: XDP Tx ring
-- * @budget: NAPI budget
-- *
-- * Returns true if cleanup/tranmission is done.
-+ * ice_xmit_pkt_batch - produce a batch of HW Tx descriptors out of AF_XDP descriptors
-+ * @xdp_ring: XDP ring to produce the HW Tx descriptors on
-+ * @descs: AF_XDP descriptors to pull the DMA addresses and lengths from
-+ * @total_bytes: bytes accumulator that will be used for stats update
-  */
--bool ice_clean_tx_irq_zc(struct ice_tx_ring *xdp_ring, int budget)
-+static void ice_xmit_pkt_batch(struct ice_tx_ring *xdp_ring, struct xdp_desc *descs,
-+			       unsigned int *total_bytes)
- {
--	int total_packets = 0, total_bytes = 0;
--	s16 ntc = xdp_ring->next_to_clean;
-+	u16 tx_thresh = ICE_RING_QUARTER(xdp_ring);
-+	u16 ntu = xdp_ring->next_to_use;
- 	struct ice_tx_desc *tx_desc;
--	struct ice_tx_buf *tx_buf;
--	u32 xsk_frames = 0;
--	bool xmit_done;
-+	u32 i;
- 
--	tx_desc = ICE_TX_DESC(xdp_ring, ntc);
--	tx_buf = &xdp_ring->tx_buf[ntc];
--	ntc -= xdp_ring->count;
-+	loop_unrolled_for(i = 0; i < PKTS_PER_BATCH; i++) {
-+		dma_addr_t dma;
- 
--	do {
--		if (!(tx_desc->cmd_type_offset_bsz &
--		      cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE)))
--			break;
-+		dma = xsk_buff_raw_get_dma(xdp_ring->xsk_pool, descs[i].addr);
-+		xsk_buff_raw_dma_sync_for_device(xdp_ring->xsk_pool, dma, descs[i].len);
- 
--		total_bytes += tx_buf->bytecount;
--		total_packets++;
-+		tx_desc = ICE_TX_DESC(xdp_ring, ntu++);
-+		tx_desc->buf_addr = cpu_to_le64(dma);
-+		tx_desc->cmd_type_offset_bsz = ice_build_ctob(ICE_TX_DESC_CMD_EOP,
-+							      0, descs[i].len, 0);
- 
--		if (tx_buf->raw_buf) {
--			ice_clean_xdp_tx_buf(xdp_ring, tx_buf);
--			tx_buf->raw_buf = NULL;
--		} else {
--			xsk_frames++;
--		}
-+		*total_bytes += descs[i].len;
-+	}
- 
--		tx_desc->cmd_type_offset_bsz = 0;
--		tx_buf++;
--		tx_desc++;
--		ntc++;
-+	xdp_ring->next_to_use = ntu;
- 
--		if (unlikely(!ntc)) {
--			ntc -= xdp_ring->count;
--			tx_buf = xdp_ring->tx_buf;
--			tx_desc = ICE_TX_DESC(xdp_ring, 0);
--		}
-+	if (xdp_ring->next_to_use > xdp_ring->next_rs) {
-+		tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_rs);
-+		tx_desc->cmd_type_offset_bsz |=
-+			cpu_to_le64(ICE_TX_DESC_CMD_RS << ICE_TXD_QW1_CMD_S);
-+		xdp_ring->next_rs += tx_thresh;
-+	}
-+}
- 
--		prefetch(tx_desc);
-+/**
-+ * ice_fill_tx_hw_ring - produce the number of Tx descriptors onto ring
-+ * @xdp_ring: XDP ring to produce the HW Tx descriptors on
-+ * @descs: AF_XDP descriptors to pull the DMA addresses and lengths from
-+ * @nb_pkts: count of packets to be send
-+ * @total_bytes: bytes accumulator that will be used for stats update
-+ */
-+static void ice_fill_tx_hw_ring(struct ice_tx_ring *xdp_ring, struct xdp_desc *descs,
-+				u32 nb_pkts, unsigned int *total_bytes)
-+{
-+	u16 tx_thresh = ICE_RING_QUARTER(xdp_ring);
-+	u32 batched, leftover, i;
-+
-+	batched = ALIGN_DOWN(nb_pkts, PKTS_PER_BATCH);
-+	leftover = nb_pkts & (PKTS_PER_BATCH - 1);
-+	for (i = 0; i < batched; i += PKTS_PER_BATCH)
-+		ice_xmit_pkt_batch(xdp_ring, &descs[i], total_bytes);
-+	for (; i < batched + leftover; i++)
-+		ice_xmit_pkt(xdp_ring, &descs[i], total_bytes);
-+
-+	if (xdp_ring->next_to_use > xdp_ring->next_rs) {
-+		struct ice_tx_desc *tx_desc;
-+
-+		tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_rs);
-+		tx_desc->cmd_type_offset_bsz |=
-+			cpu_to_le64(ICE_TX_DESC_CMD_RS << ICE_TXD_QW1_CMD_S);
-+		xdp_ring->next_rs += tx_thresh;
-+	}
-+}
- 
--	} while (likely(--budget));
-+/**
-+ * ice_xmit_zc - take entries from XSK Tx ring and place them onto HW Tx ring
-+ * @xdp_ring: XDP ring to produce the HW Tx descriptors on
-+ * @budget: number of free descriptors on HW Tx ring that can be used
-+ * @napi_budget: amount of descriptors that NAPI allows us to clean
-+ *
-+ * Returns true if there is no more work that needs to be done, false otherwise
-+ */
-+bool ice_xmit_zc(struct ice_tx_ring *xdp_ring, u32 budget, int napi_budget)
-+{
-+	struct xdp_desc *descs = xdp_ring->xsk_pool->tx_descs;
-+	u16 tx_thresh = ICE_RING_QUARTER(xdp_ring);
-+	u32 nb_pkts, nb_processed = 0;
-+	unsigned int total_bytes = 0;
-+
-+	if (budget < tx_thresh)
-+		budget += ice_clean_xdp_irq_zc(xdp_ring, napi_budget);
-+
-+	nb_pkts = xsk_tx_peek_release_desc_batch(xdp_ring->xsk_pool, budget);
-+	if (!nb_pkts)
-+		return true;
-+
-+	if (xdp_ring->next_to_use + nb_pkts >= xdp_ring->count) {
-+		struct ice_tx_desc *tx_desc;
-+
-+		nb_processed = xdp_ring->count - xdp_ring->next_to_use;
-+		ice_fill_tx_hw_ring(xdp_ring, descs, nb_processed, &total_bytes);
-+		tx_desc = ICE_TX_DESC(xdp_ring, xdp_ring->next_rs);
-+		tx_desc->cmd_type_offset_bsz |=
-+			cpu_to_le64(ICE_TX_DESC_CMD_RS << ICE_TXD_QW1_CMD_S);
-+		xdp_ring->next_rs = tx_thresh - 1;
-+		xdp_ring->next_to_use = 0;
-+	}
- 
--	ntc += xdp_ring->count;
--	xdp_ring->next_to_clean = ntc;
-+	ice_fill_tx_hw_ring(xdp_ring, &descs[nb_processed], nb_pkts - nb_processed,
-+			    &total_bytes);
- 
--	if (xsk_frames)
--		xsk_tx_completed(xdp_ring->xsk_pool, xsk_frames);
-+	ice_xdp_ring_update_tail(xdp_ring);
-+	ice_update_tx_ring_stats(xdp_ring, nb_pkts, total_bytes);
- 
- 	if (xsk_uses_need_wakeup(xdp_ring->xsk_pool))
- 		xsk_set_tx_need_wakeup(xdp_ring->xsk_pool);
- 
--	ice_update_tx_ring_stats(xdp_ring, total_packets, total_bytes);
--	xmit_done = ice_xmit_zc(xdp_ring, ICE_DFLT_IRQ_WORK);
--
--	return budget > 0 && xmit_done;
-+	return nb_pkts < budget;
- }
- 
- /**
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.h b/drivers/net/ethernet/intel/ice/ice_xsk.h
-index 4c7bd8e9dfc4..0cbb5793b5b8 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.h
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.h
-@@ -6,19 +6,37 @@
- #include "ice_txrx.h"
- #include "ice.h"
- 
-+#define PKTS_PER_BATCH 8
-+
-+#ifdef __clang__
-+#define loop_unrolled_for _Pragma("clang loop unroll_count(8)") for
-+#elif __GNUC__ >= 4
-+#define loop_unrolled_for _Pragma("GCC unroll 8") for
-+#else
-+#define loop_unrolled_for for
-+#endif
-+
- struct ice_vsi;
- 
- #ifdef CONFIG_XDP_SOCKETS
- int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool,
- 		       u16 qid);
- int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget);
--bool ice_clean_tx_irq_zc(struct ice_tx_ring *xdp_ring, int budget);
- int ice_xsk_wakeup(struct net_device *netdev, u32 queue_id, u32 flags);
- bool ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count);
- bool ice_xsk_any_rx_ring_ena(struct ice_vsi *vsi);
- void ice_xsk_clean_rx_ring(struct ice_rx_ring *rx_ring);
- void ice_xsk_clean_xdp_ring(struct ice_tx_ring *xdp_ring);
-+bool ice_xmit_zc(struct ice_tx_ring *xdp_ring, u32 budget, int napi_budget);
- #else
-+static inline bool
-+ice_xmit_zc(struct ice_tx_ring __always_unused *xdp_ring,
-+	    u32 __always_unused budget,
-+	    int __always_unused napi_budget)
-+{
-+	return false;
-+}
-+
- static inline int
- ice_xsk_pool_setup(struct ice_vsi __always_unused *vsi,
- 		   struct xsk_buff_pool __always_unused *pool,
-@@ -34,13 +52,6 @@ ice_clean_rx_irq_zc(struct ice_rx_ring __always_unused *rx_ring,
- 	return 0;
- }
- 
--static inline bool
--ice_clean_tx_irq_zc(struct ice_tx_ring __always_unused *xdp_ring,
--		    int __always_unused budget)
--{
--	return false;
--}
--
- static inline bool
- ice_alloc_rx_bufs_zc(struct ice_rx_ring __always_unused *rx_ring,
- 		     u16 __always_unused count)
--- 
-2.33.1
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  Changes in v4:
+>   - Fix a memory leak when symbol lookup failed.
+>   - Use ftrace location address instead of symbol address.
+>   - Convert the given symbol address to ftrace location automatically.
+>   - Rename fprobe::ftrace to fprobe::ops.
+>   - Update the Kconfig description.
+> ---
+>  include/linux/fprobe.h |   80 ++++++++++++++++++++++++++++
+>  kernel/trace/Kconfig   |   12 ++++
+>  kernel/trace/Makefile  |    1 
+>  kernel/trace/fprobe.c  |  135 ++++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 228 insertions(+)
+>  create mode 100644 include/linux/fprobe.h
+>  create mode 100644 kernel/trace/fprobe.c
+> 
+> diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
+> new file mode 100644
+> index 000000000000..f7de332b08c2
+> --- /dev/null
+> +++ b/include/linux/fprobe.h
+> @@ -0,0 +1,80 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* Simple ftrace probe wrapper */
+> +#ifndef _LINUX_FPROBE_H
+> +#define _LINUX_FPROBE_H
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/ftrace.h>
+> +
+> +/**
+> + * struct fprobe - ftrace based probe.
+> + * @syms: The array of symbols to probe.
+> + * @addrs: The array of ftrace address of the symbols.
+> + * @nentry: The number of entries of @syms or @addrs.
+> + * @ops: The ftrace_ops.
+> + * @nmissed: The counter for missing events.
+> + * @flags: The status flag.
+> + * @entry_handler: The callback function for function entry.
+> + *
+> + * User must set either @syms or @addrs, but not both. If user sets
+> + * only @syms, the @addrs are generated when registering the fprobe.
+> + * That auto-generated @addrs will be freed when unregistering.
+> + */
+> +struct fprobe {
+> +	const char		**syms;
+> +	unsigned long		*addrs;
+> +	unsigned int		nentry;
+> +
+> +	struct ftrace_ops	ops;
+> +	unsigned long		nmissed;
+> +	unsigned int		flags;
+> +	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+> +};
+> +
+> +#define FPROBE_FL_DISABLED	1
+> +
+> +static inline bool fprobe_disabled(struct fprobe *fp)
+> +{
+> +	return (fp) ? fp->flags & FPROBE_FL_DISABLED : false;
+> +}
+> +
+> +#ifdef CONFIG_FPROBE
+> +int register_fprobe(struct fprobe *fp);
+> +int unregister_fprobe(struct fprobe *fp);
+> +#else
+> +static inline int register_fprobe(struct fprobe *fp)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +static inline int unregister_fprobe(struct fprobe *fp)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif
+> +
+> +/**
+> + * disable_fprobe() - Disable fprobe
+> + * @fp: The fprobe to be disabled.
+> + *
+> + * This will soft-disable @fp. Note that this doesn't remove the ftrace
+> + * hooks from the function entry.
+> + */
+> +static inline void disable_fprobe(struct fprobe *fp)
+> +{
+> +	if (fp)
+> +		fp->flags |= FPROBE_FL_DISABLED;
+> +}
+> +
+> +/**
+> + * enable_fprobe() - Enable fprobe
+> + * @fp: The fprobe to be enabled.
+> + *
+> + * This will soft-enable @fp.
+> + */
+> +static inline void enable_fprobe(struct fprobe *fp)
+> +{
+> +	if (fp)
+> +		fp->flags &= ~FPROBE_FL_DISABLED;
+> +}
+> +
+> +#endif
+> diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> index 420ff4bc67fd..23483dd474b0 100644
+> --- a/kernel/trace/Kconfig
+> +++ b/kernel/trace/Kconfig
+> @@ -223,6 +223,18 @@ config DYNAMIC_FTRACE_WITH_ARGS
+>  	depends on DYNAMIC_FTRACE
+>  	depends on HAVE_DYNAMIC_FTRACE_WITH_ARGS
+>  
+> +config FPROBE
+> +	bool "Kernel Function Probe (fprobe)"
+> +	depends on FUNCTION_TRACER
+> +	depends on DYNAMIC_FTRACE_WITH_REGS
+> +	default n
+> +	help
+> +	  This option enables kernel function probe (fprobe) based on ftrace,
+> +	  which is similar to kprobes, but probes only for kernel function
+> +	  entries and it can probe multiple functions by one fprobe.
+> +
+> +	  If unsure, say N.
+> +
+>  config FUNCTION_PROFILER
+>  	bool "Kernel function profiler"
+>  	depends on FUNCTION_TRACER
+> diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+> index bedc5caceec7..79255f9de9a4 100644
+> --- a/kernel/trace/Makefile
+> +++ b/kernel/trace/Makefile
+> @@ -97,6 +97,7 @@ obj-$(CONFIG_PROBE_EVENTS) += trace_probe.o
+>  obj-$(CONFIG_UPROBE_EVENTS) += trace_uprobe.o
+>  obj-$(CONFIG_BOOTTIME_TRACING) += trace_boot.o
+>  obj-$(CONFIG_FTRACE_RECORD_RECURSION) += trace_recursion_record.o
+> +obj-$(CONFIG_FPROBE) += fprobe.o
+>  
+>  obj-$(CONFIG_TRACEPOINT_BENCHMARK) += trace_benchmark.o
+>  
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> new file mode 100644
+> index 000000000000..748cc34765c1
+> --- /dev/null
+> +++ b/kernel/trace/fprobe.c
+> @@ -0,0 +1,135 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * fprobe - Simple ftrace probe wrapper for function entry.
+> + */
+> +#define pr_fmt(fmt) "fprobe: " fmt
+> +
+> +#include <linux/fprobe.h>
+> +#include <linux/kallsyms.h>
+> +#include <linux/kprobes.h>
+> +#include <linux/slab.h>
+> +#include <linux/sort.h>
+> +
+> +static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> +			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> +{
+> +	struct fprobe *fp;
+> +	int bit;
+> +
+> +	fp = container_of(ops, struct fprobe, ops);
+> +	if (fprobe_disabled(fp))
+> +		return;
+> +
+> +	bit = ftrace_test_recursion_trylock(ip, parent_ip);
+> +	if (bit < 0) {
+> +		fp->nmissed++;
+> +		return;
+> +	}
+> +
+> +	if (fp->entry_handler)
+> +		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
+> +
+> +	ftrace_test_recursion_unlock(bit);
+> +}
+> +NOKPROBE_SYMBOL(fprobe_handler);
+> +
+> +/* Convert ftrace location address from symbols */
+> +static int convert_func_addresses(struct fprobe *fp)
+> +{
+> +	unsigned long addr, size;
+> +	unsigned int i;
+> +
+> +	/* Convert symbols to symbol address */
+> +	if (fp->syms) {
+> +		fp->addrs = kcalloc(fp->nentry, sizeof(*fp->addrs), GFP_KERNEL);
+> +		if (!fp->addrs)
+> +			return -ENOMEM;
+> +
+> +		for (i = 0; i < fp->nentry; i++) {
+> +			fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
+> +			if (!fp->addrs[i])	/* Maybe wrong symbol */
+> +				goto error;
+> +		}
+> +	}
+
+I wonder if we should just copy the addrs when fp->syms is not set, and
+not have to worry about not freeing addrs (see below). This will make
+things easier to maintain. Or better yet, have the syms and addrs passed
+in, and then we assign it.
+
+static int convert_func_addresses(struct fprobe *fp, const char **syms,
+				  unsigned long *addrs)
+{
+	unsigned int i;
+
+	fp->addrs = kcalloc(fp->nentry, sizeof(*fp->addrs), GFP_KERNEL);
+	if (!fp->addrs)
+		return -ENOMEM;
+
+	if (syms) {
+		for (i = 0; i < fp->nentry; i++) {
+			fp->addrs[i] = kallsyms_lookup_name(fp->syms[i]);
+			if (!fp->addrs[i])	/* Maybe wrong symbol */
+				goto error;
+		}
+	} else {
+		memcpy(fp->addrs, addrs, fp->nentry * sizeof(*addrs));
+	}
+
+> +
+> +	/* Convert symbol address to ftrace location. */
+> +	for (i = 0; i < fp->nentry; i++) {
+> +		if (!kallsyms_lookup_size_offset(fp->addrs[i], &size, NULL))
+> +			size = MCOUNT_INSN_SIZE;
+> +		addr = ftrace_location_range(fp->addrs[i], fp->addrs[i] + size);
+> +		if (!addr) /* No dynamic ftrace there. */
+> +			goto error;
+> +		fp->addrs[i] = addr;
+> +	}
+> +
+> +	return 0;
+> +
+> +error:
+> +	kfree(fp->addrs);
+
+The above doesn't check if fp->syms was set, so if it wasn't we just freed
+the addrs that was passed in. Again, I think these should be passed into
+the register function as separate parameters and not via the fp handle.
+
+> +	fp->addrs = NULL;
+> +	return -ENOENT;
+> +}
+> +
+> +/**
+> + * register_fprobe() - Register fprobe to ftrace
+> + * @fp: A fprobe data structure to be registered.
+> + *
+> + * This expects the user set @fp::entry_handler, @fp::syms or @fp:addrs,
+> + * and @fp::nentry. If @fp::addrs are set, that will be updated to point
+> + * the ftrace location. If @fp::addrs are NULL, this will generate it
+> + * from @fp::syms.
+> + * Note that you do not set both of @fp::addrs and @fp::syms.
+
+Again, I think this should pass in the syms and addrs as parameters.
+
+-- Steve
+
+> + */
+> +int register_fprobe(struct fprobe *fp)
+> +{
+> +	int ret;
+> +
+> +	if (!fp || !fp->nentry || (!fp->syms && !fp->addrs) ||
+> +	    (fp->syms && fp->addrs))
+> +		return -EINVAL;
+> +
+> +	ret = convert_func_addresses(fp);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	fp->nmissed = 0;
+> +	fp->ops.func = fprobe_handler;
+> +	fp->ops.flags = FTRACE_OPS_FL_SAVE_REGS;
+> +
+> +	ret = ftrace_set_filter_ips(&fp->ops, fp->addrs, fp->nentry, 0, 0);
+> +	if (!ret)
+> +		ret = register_ftrace_function(&fp->ops);
+> +
+> +	if (ret < 0 && fp->syms) {
+> +		kfree(fp->addrs);
+> +		fp->addrs = NULL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(register_fprobe);
+> +
+> +/**
+> + * unregister_fprobe() - Unregister fprobe from ftrace
+> + * @fp: A fprobe data structure to be unregistered.
+> + *
+> + * Unregister fprobe (and remove ftrace hooks from the function entries).
+> + * If the @fp::addrs are generated by register_fprobe(), it will be removed
+> + * automatically.
+> + */
+> +int unregister_fprobe(struct fprobe *fp)
+> +{
+> +	int ret;
+> +
+> +	if (!fp || !fp->nentry || !fp->addrs)
+> +		return -EINVAL;
+> +
+> +	ret = unregister_ftrace_function(&fp->ops);
+> +
+> +	if (!ret && fp->syms) {
+> +		kfree(fp->addrs);
+> +		fp->addrs = NULL;
+> +	}
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(unregister_fprobe);
 
