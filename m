@@ -2,224 +2,147 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5454DC433EF
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 12:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60681C433EF
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 12:16:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381865AbiAYMPz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jan 2022 07:15:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382605AbiAYMNU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jan 2022 07:13:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A32C061747;
-        Tue, 25 Jan 2022 04:13:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7B9061045;
-        Tue, 25 Jan 2022 12:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DADF3C340E0;
-        Tue, 25 Jan 2022 12:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643112794;
-        bh=b5cSC0Voo0MtqAVukvSA69tutmiwlNEMrP3tolpDRq4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cSkL/zAVxxzQoOb8a00HFf0oPxaR4Sau2iyES9yvhVQl+U4vg7Wo412NCMBAtd5m2
-         ZrjoPfmLsM4jSBGqqj9miVQWSMxx5K/HKbZsNV1zPG0/22R/D46ykiM05JrOcd7eUs
-         v/sw6ZwB3mHeWxMw/Azo7UpdwehjRIsAtzcRxNCaTU2MEQQfIUbX1x8JGkc607wAzr
-         S5+ckQ4mLm8hZR0K97jbjbvsDgukWJRqLJSkq3eX/3vziDwxoFWHvOqc6bEvQNpwnE
-         gDbH4tUxYpXXvxOytY/6W+r1fmY/sTIpEcVT9/OLw9BnBWGXaD+3nGyp02ICszwf9e
-         KBsTKFmLW2eSg==
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v5 8/9] fprobe: Add sample program for fprobe
-Date:   Tue, 25 Jan 2022 21:13:08 +0900
-Message-Id: <164311278812.1933078.12587581102251178058.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <164311269435.1933078.6963769885544050138.stgit@devnote2>
-References: <164311269435.1933078.6963769885544050138.stgit@devnote2>
-User-Agent: StGit/0.19
+        id S1348659AbiAYMQG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jan 2022 07:16:06 -0500
+Received: from mga06.intel.com ([134.134.136.31]:23168 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1379384AbiAYMKC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jan 2022 07:10:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643112602; x=1674648602;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=WbtdMQpA0b/hAmGDVIfi73Bnwrx+JLFaahziTy+BY6o=;
+  b=mEE7tmrMYpkwI0LcXEiYwiDCV97KT5KwdqOBplEUIfzPzedzNBU089Wn
+   AwmTOVqglbRauZAUyH5QIkCWX3ajZpk1JmhOqn6jpJCefUuZd75yLmh0V
+   SbnJYRM9jWABwrlFdg5V3HzjeTinsUDJ1gP/X0VVnVgK7KIMKf1CIkVkS
+   uEg82HUMyGHH8BG/xrSSKKDRmBGBsZIbYNPQC5W7T7I/w+y4FmuPY0jmw
+   2DqsNKWHmjONwjaCICCJMLDAemDmByttVHjNZKVrP/wz5SJPcArWF9E1d
+   GD/lV12DYbXXQWS6zpX73DPV8oTYZC7bJJLOanI6+eugnrD2K6yQgACFA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="307000647"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="307000647"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2022 04:02:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="532395674"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga007.fm.intel.com with ESMTP; 25 Jan 2022 04:02:55 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 20PC2sVD027873;
+        Tue, 25 Jan 2022 12:02:54 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        netdev@vger.kernel.org, magnus.karlsson@intel.com
+Subject: Re: [PATCH bpf-next v4 2/8] ice: xsk: force rings to be sized to power of 2
+Date:   Tue, 25 Jan 2022 13:00:33 +0100
+Message-Id: <20220125120033.748345-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <Ye/j0FjYCeJlbWR/@boxer>
+References: <20220124165547.74412-1-maciej.fijalkowski@intel.com> <20220124165547.74412-3-maciej.fijalkowski@intel.com> <20220125112306.746139-1-alexandr.lobakin@intel.com> <Ye/e9GqLkuekqFos@boxer> <20220125114202.748079-1-alexandr.lobakin@intel.com> <Ye/j0FjYCeJlbWR/@boxer>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a sample program for the fprobe.
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Tue, 25 Jan 2022 12:49:36 +0100
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- Changes in v2:
-  - Fix infinit loop for multiple symbols.
-  - Fix memory leaks for copied string and entry array.
-  - Update for new fprobe APIs.
-  - Fix style issues.
----
- samples/Kconfig                 |    7 +++
- samples/Makefile                |    1 
- samples/fprobe/Makefile         |    3 +
- samples/fprobe/fprobe_example.c |  103 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 114 insertions(+)
- create mode 100644 samples/fprobe/Makefile
- create mode 100644 samples/fprobe/fprobe_example.c
+> On Tue, Jan 25, 2022 at 12:42:02PM +0100, Alexander Lobakin wrote:
+> > From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> > Date: Tue, 25 Jan 2022 12:28:52 +0100
+> > 
+> > > On Tue, Jan 25, 2022 at 12:23:06PM +0100, Alexander Lobakin wrote:
+> > > > From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> > > > Date: Mon, 24 Jan 2022 17:55:41 +0100
+> > > > 
+> > > > > With the upcoming introduction of batching to XSK data path,
+> > > > > performance wise it will be the best to have the ring descriptor count
+> > > > > to be aligned to power of 2.
+> > > > > 
+> > > > > Check if rings sizes that user is going to attach the XSK socket fulfill
+> > > > > the condition above. For Tx side, although check is being done against
+> > > > > the Tx queue and in the end the socket will be attached to the XDP
+> > > > > queue, it is fine since XDP queues get the ring->count setting from Tx
+> > > > > queues.
+> > > > > 
+> > > > > Suggested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > > > > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> > > > > ---
+> > > > >  drivers/net/ethernet/intel/ice/ice_xsk.c | 9 +++++++++
+> > > > >  1 file changed, 9 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+> > > > > index 2388837d6d6c..0350f9c22c62 100644
+> > > > > --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
+> > > > > +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+> > > > > @@ -327,6 +327,14 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+> > > > >  	bool if_running, pool_present = !!pool;
+> > > > >  	int ret = 0, pool_failure = 0;
+> > > > >  
+> > > > > +	if (!is_power_of_2(vsi->rx_rings[qid]->count) ||
+> > > > > +	    !is_power_of_2(vsi->tx_rings[qid]->count)) {
+> > > > > +		netdev_err(vsi->netdev,
+> > > > > +			   "Please align ring sizes at idx %d to power of 2\n", qid);
+> > > > 
+> > > > Ideally I'd pass xdp->extack from ice_xdp() to print this message
+> > > > directly in userspace (note that NL_SET_ERR_MSG{,_MOD}() don't
+> > > > support string formatting, but the user already knows QID at this
+> > > > point).
+> > > 
+> > > I thought about that as well but it seemed to me kinda off to have a
+> > > single extack usage in here. Updating the rest of error paths in
+> > > ice_xsk_pool_setup() to make use of extack is a candidate for a separate
+> > > patch to me.
+> > > 
+> > > WDYT?
+> > 
+> > The rest uses string formatting to print the error code, and thus
+> > would lose their meaning. This one to me is more of the same kind
+> > as let's say "MTU too large for XDP" message, i.e. user config
+> > constraints check fail. But I'm fine if you'd prefer to keep a
+> > single source of output messages throughout the function.
+> 
+> Doubling the logs wouldn't hurt - keep current netdev_err with ret codes
+> and have more meaningful messages carried up to userspace via
+> NL_SET_ERR_MSG_MOD.
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 43d2e9aa557f..e010c2c1256c 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -73,6 +73,13 @@ config SAMPLE_HW_BREAKPOINT
- 	help
- 	  This builds kernel hardware breakpoint example modules.
- 
-+config SAMPLE_FPROBE
-+	tristate "Build fprobe examples -- loadable modules only"
-+	depends on FPROBE && m
-+	help
-+	  This builds a fprobe example module. This module has an option 'symbol'.
-+	  You can specify a probed symbol or symbols separated with ','.
-+
- config SAMPLE_KFIFO
- 	tristate "Build kfifo examples -- loadable modules only"
- 	depends on m
-diff --git a/samples/Makefile b/samples/Makefile
-index 4bcd6b93bffa..4f73fe7aa473 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -32,3 +32,4 @@ obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
- subdir-$(CONFIG_SAMPLE_WATCHDOG)	+= watchdog
- subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
- obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
-+obj-$(CONFIG_SAMPLE_FPROBE)		+= fprobe/
-diff --git a/samples/fprobe/Makefile b/samples/fprobe/Makefile
-new file mode 100644
-index 000000000000..ecccbfa6e99b
---- /dev/null
-+++ b/samples/fprobe/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_SAMPLE_FPROBE) += fprobe_example.o
-diff --git a/samples/fprobe/fprobe_example.c b/samples/fprobe/fprobe_example.c
-new file mode 100644
-index 000000000000..c28320537f98
---- /dev/null
-+++ b/samples/fprobe/fprobe_example.c
-@@ -0,0 +1,103 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Here's a sample kernel module showing the use of fprobe to dump a
-+ * stack trace and selected registers when kernel_clone() is called.
-+ *
-+ * For more information on theory of operation of kprobes, see
-+ * Documentation/trace/kprobes.rst
-+ *
-+ * You will see the trace data in /var/log/messages and on the console
-+ * whenever kernel_clone() is invoked to create a new process.
-+ */
-+
-+#define pr_fmt(fmt) "%s: " fmt, __func__
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/fprobe.h>
-+#include <linux/slab.h>
-+
-+#define MAX_SYMBOL_LEN 4096
-+struct fprobe sample_probe;
-+static char symbol[MAX_SYMBOL_LEN] = "kernel_clone";
-+module_param_string(symbol, symbol, sizeof(symbol), 0644);
-+
-+static void sample_entry_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+{
-+	pr_info("Enter <%pS> ip = 0x%p\n", (void *)ip, (void *)ip);
-+}
-+
-+static void sample_exit_handler(struct fprobe *fp, unsigned long ip, struct pt_regs *regs)
-+{
-+	unsigned long rip = instruction_pointer(regs);
-+
-+	pr_info("Return from <%pS> ip = 0x%p to rip = 0x%p (%pS)\n",
-+		(void *)ip, (void *)ip, (void *)rip, (void *)rip);
-+}
-+
-+static char *symbuf;
-+
-+static int __init fprobe_init(void)
-+{
-+	const char **syms;
-+	char *p;
-+	int ret, count, i;
-+
-+	sample_probe.entry_handler = sample_entry_handler;
-+	sample_probe.exit_handler = sample_exit_handler;
-+
-+	if (strchr(symbol, ',')) {
-+		symbuf = kstrdup(symbol, GFP_KERNEL);
-+		if (!symbuf)
-+			return -ENOMEM;
-+		p = symbuf;
-+		count = 1;
-+		while ((p = strchr(++p, ',')) != NULL)
-+			count++;
-+	} else {
-+		count = 1;
-+		symbuf = symbol;
-+	}
-+	pr_info("%d symbols found\n", count);
-+
-+	syms = kcalloc(count, sizeof(char *), GFP_KERNEL);
-+	if (!syms) {
-+		ret = -ENOMEM;
-+		goto error;
-+	}
-+
-+	p = symbuf;
-+	for (i = 0; i < count; i++)
-+		syms[i] = strsep(&p, ",");
-+
-+	sample_probe.syms = syms;
-+	sample_probe.nentry = count;
-+
-+	ret = register_fprobe(&sample_probe);
-+	if (ret < 0) {
-+		pr_err("register_fprobe failed, returned %d\n", ret);
-+		goto error;
-+	}
-+	pr_info("Planted fprobe at %s\n", symbol);
-+	return 0;
-+
-+error:
-+	if (symbuf != symbol)
-+		kfree(symbuf);
-+	return ret;
-+}
-+
-+static void __exit fprobe_exit(void)
-+{
-+	unregister_fprobe(&sample_probe);
-+
-+	kfree(sample_probe.syms);
-+	if (symbuf != symbol)
-+		kfree(symbuf);
-+
-+	pr_info("fprobe at %s unregistered\n", symbol);
-+}
-+
-+module_init(fprobe_init)
-+module_exit(fprobe_exit)
-+MODULE_LICENSE("GPL");
+Ah, right, this works as well. Let's leave it as it is for now then.
 
+> 
+> > 
+> > > 
+> > > > 
+> > > > > +		pool_failure = -EINVAL;
+> > > > > +		goto failure;
+> > > > > +	}
+> > > > > +
+> > > > >  	if_running = netif_running(vsi->netdev) && ice_is_xdp_ena_vsi(vsi);
+> > > > >  
+> > > > >  	if (if_running) {
+> > > > > @@ -349,6 +357,7 @@ int ice_xsk_pool_setup(struct ice_vsi *vsi, struct xsk_buff_pool *pool, u16 qid)
+> > > > >  			netdev_err(vsi->netdev, "ice_qp_ena error = %d\n", ret);
+> > > > >  	}
+> > > > >  
+> > > > > +failure:
+> > > > >  	if (pool_failure) {
+> > > > >  		netdev_err(vsi->netdev, "Could not %sable buffer pool, error = %d\n",
+> > > > >  			   pool_present ? "en" : "dis", pool_failure);
+> > > > > -- 
+> > > > > 2.33.1
+> > > > 
+> > > > Thanks,
+> > > > Al
+> > 
+> > Al
+
+Al
