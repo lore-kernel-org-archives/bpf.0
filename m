@@ -2,119 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E91A0C433F5
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 06:55:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48523C433F5
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 06:58:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376770AbiAYGyx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jan 2022 01:54:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376960AbiAYGwE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jan 2022 01:52:04 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568CCC0419D2;
-        Mon, 24 Jan 2022 21:21:40 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id h12so18743179pjq.3;
-        Mon, 24 Jan 2022 21:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2JyjXhsZHrYi9l/DoJTaQgjCKN4lD5LnNO41dT9vNks=;
-        b=SeWhln3X4+SoMhpZU+pjXcqQ0y1Pm6fDTjhiHF8opWSSWcMpymGPTTmwhedeVyuIYm
-         BrIMDsEOvf8qdVKDWkOsTi0XxDM9CaPQVPQiAa3CM5C5CcitkQYVp1EQSHTdy14vRuRp
-         mN3ybN6shHshovx9QBMN25j03uj04XQT+qmLS8+7LeoBXPCI4YNNk2dGP7w1yjb1reho
-         +kFWHLmEeryjmpwEG43M0dn2Qkx0YopIIELYZBVk6DcQGmHlJnW6ZTkjlqQg1PTfQTim
-         5RMVR3Hu7kBCV/SyNTy0zBXkFY3DCREvTgWlkkDZJU0/JxmqQHQXRZoBfPW2Ivgm9VIb
-         fnWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2JyjXhsZHrYi9l/DoJTaQgjCKN4lD5LnNO41dT9vNks=;
-        b=rxE2HwACPRLcpepLfkc9RxslZ+T28wt4mpxuOphr3nntZWwB/BDNpzxIuKHqwZ9v6t
-         664zpX/+PgcxKQNGqRFf4MKycHWWGEqBz6iDn0fA6vOpyCEZW9R7wtGT47A6ndl3PH+Q
-         LzZE9+1qZwpMT51T5FermIq3otJTVpo/u7W04p5Ak8xppw8lMT/PGKYM9g8917Qt9xv0
-         5/evKnGIp4QwsKiqAPbx6dVKAST8Pam9d6VpkvFMMzdJRYZLs58ueeaidCypPRAtJs8R
-         AY0qbdJrnuM9ejnbQaPGe55q7MuZGpdAI2G5jKesWUtq3YBLZcjsa6ye+l8LTSalam2N
-         jizw==
-X-Gm-Message-State: AOAM532d14Ymb4jUWzvFF9eKX6Vx9MqzLBbzbe6H+d81DSSqJ7uMr04E
-        eO/Ee3JfkGik8kAhG5hyDFk/tgMEGwzGk7HqXt4=
-X-Google-Smtp-Source: ABdhPJzhmi79JGKGRPuYnoxbQJpn2/dNIGOqCLfn+2p6JavciXjFEjoRJ2CYqqHW7AIvi8+sKVxt6L+HkH/sflr3dGs=
-X-Received: by 2002:a17:90b:3b4c:: with SMTP id ot12mr1826113pjb.62.1643088099826;
- Mon, 24 Jan 2022 21:21:39 -0800 (PST)
+        id S1351847AbiAYG6f (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jan 2022 01:58:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46164 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3423436AbiAYEK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 23:10:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6562B8122F
+        for <bpf@vger.kernel.org>; Tue, 25 Jan 2022 04:10:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6EE1BC340E6;
+        Tue, 25 Jan 2022 04:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643083810;
+        bh=cqNWi2ZW7SAJM3xyjUTZ6MZAl2VGzxpEHzmTdkwL62A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Rf1p8i0UhC7ruYbRYKuP/m2chys3rY9UylK1QsIQwFMor7lxMnvivF4TdhatUj9bX
+         EGRe8y7iRz9Cvl842HrswGbmSA0mPbqCug5dN2FbKpzmfrIXcbzzukxstR7JcwyzV7
+         GFviaWJsq27vsWVE4v21jM9MV41Zwo7WN6lVHSEGtkrSa7JIUz7ocubohWxvnMNblW
+         kyTMRUVWSHxyoCMaxg+4X/nnZXJVWQ+2HwPLg0ihVZTq7eiqh7ld2Q2PrjDRLl1HKM
+         mHAdHGlD6ezr5t7Zhq9Xu45cb5QUIyiwnJ+xEJwdPWTQmijmS6pJDwQtFtpASBOBRO
+         wnSCRSi3AmPOw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 56C4CF607B4;
+        Tue, 25 Jan 2022 04:10:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220121194926.1970172-1-song@kernel.org> <20220121194926.1970172-7-song@kernel.org>
- <CAADnVQK6+gWTUDo2z1H6AE5_DtuBBetW+VTwwKz03tpVdfuoHA@mail.gmail.com>
- <7393B983-3295-4B14-9528-B7BD04A82709@fb.com> <CAADnVQJLHXaU7tUJN=EM-Nt28xtu4vw9+Ox_uQsjh-E-4VNKoA@mail.gmail.com>
- <5407DA0E-C0F8-4DA9-B407-3DE657301BB2@fb.com> <CAADnVQLOpgGG9qfR4EAgzrdMrfSg9ftCY=9psR46GeBWP7aDvQ@mail.gmail.com>
- <5F4DEFB2-5F5A-4703-B5E5-BBCE05CD3651@fb.com> <CAADnVQLXGu_eF8VT6NmxKVxOHmfx7C=mWmmWF8KmsjFXg6P5OA@mail.gmail.com>
- <5E70BF53-E3FB-4F7A-B55D-199C54A8FDCA@fb.com> <adec88f9-b3e6-bfe4-c09e-54825a60f45d@linux.ibm.com>
- <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com>
-In-Reply-To: <2AAC8B8C-96F1-400F-AFA6-D4AF41EC82F4@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 24 Jan 2022 21:21:28 -0800
-Message-ID: <CAADnVQKgdMMeONmjUhbq_3X39t9HNQWteDuyWVfcxmTerTnaMw@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next 6/7] bpf: introduce bpf_prog_pack allocator
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>, Song Liu <song@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>, X86 ML <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v7 bpf-next 0/4] Add bpf_copy_from_user_task helper and
+ sleepable bpf iterator programs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164308381034.4179.1054700872398715511.git-patchwork-notify@kernel.org>
+Date:   Tue, 25 Jan 2022 04:10:10 +0000
+References: <20220124185403.468466-1-kennyyu@fb.com>
+In-Reply-To: <20220124185403.468466-1-kennyyu@fb.com>
+To:     Kenny Yu <kennyyu@fb.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, yhs@fb.com, alexei.starovoitov@gmail.com,
+        andrii.nakryiko@gmail.com, phoenix1987@gmail.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:27 AM Song Liu <songliubraving@fb.com> wrote:
-> >
-> > Are arches expected to allocate rw buffers in different ways? If not,
-> > I would consider putting this into the common code as well. Then
-> > arch-specific code would do something like
-> >
-> >  header = bpf_jit_binary_alloc_pack(size, &prg_buf, &prg_addr, ...);
-> >  ...
-> >  /*
-> >   * Generate code into prg_buf, the code should assume that its first
-> >   * byte is located at prg_addr.
-> >   */
-> >  ...
-> >  bpf_jit_binary_finalize_pack(header, prg_buf);
-> >
-> > where bpf_jit_binary_finalize_pack() would copy prg_buf to header and
-> > free it.
+Hello:
 
-It feels right, but bpf_jit_binary_finalize_pack() sounds 100% arch
-dependent. The only thing it will do is perform a copy via text_poke.
-What else?
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> I think this should work.
->
-> We will need an API like: bpf_arch_text_copy, which uses text_poke_copy()
-> for x86_64 and s390_kernel_write() for x390. We will use bpf_arch_text_copy
-> to
->   1) write header->size;
->   2) do finally copy in bpf_jit_binary_finalize_pack().
+On Mon, 24 Jan 2022 10:53:59 -0800 you wrote:
+> This patch series makes the following changes:
+> * Adds a new bpf helper `bpf_copy_from_user_task` to read user space
+>   memory from a different task.
+> * Adds the ability to create sleepable bpf iterator programs.
+> 
+> As an example of how this will be used, at Meta we are using bpf task
+> iterator programs and this new bpf helper to read C++ async stack traces of
+> a running process for debugging C++ binaries in production.
+> 
+> [...]
 
-we can combine all text_poke operations into one.
+Here is the summary with links:
+  - [v7,bpf-next,1/4] bpf: Add support for bpf iterator programs to use sleepable helpers
+    https://git.kernel.org/bpf/bpf-next/c/b77fb25dcb34
+  - [v7,bpf-next,2/4] bpf: Add bpf_copy_from_user_task() helper
+    https://git.kernel.org/bpf/bpf-next/c/376040e47334
+  - [v7,bpf-next,3/4] libbpf: Add "iter.s" section for sleepable bpf iterator programs
+    https://git.kernel.org/bpf/bpf-next/c/a8b77f7463a5
+  - [v7,bpf-next,4/4] selftests/bpf: Add test for sleepable bpf iterator programs
+    https://git.kernel.org/bpf/bpf-next/c/45105c2eb751
 
-Can we add an 'image' pointer into struct bpf_binary_header ?
-Then do:
-int bpf_jit_binary_alloc_pack(size, &ro_hdr, &rw_hdr);
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-ro_hdr->image would be the address used to compute offsets by JIT.
-rw_hdr->image would point to kvmalloc-ed area for emitting insns.
-rw_hdr->size would already be populated.
 
-The JITs would write insns into rw_hdr->image including 'int 3' insns.
-At the end the JIT will do text_poke_copy(ro_hdr, rw_hdr, rw_hdr->size);
-That would be the only copy that will transfer everything into final
-location.
-Then kvfree(rw_hdr)
-
-wdyt?
