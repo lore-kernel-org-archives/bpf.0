@@ -2,252 +2,222 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87FCFC43217
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 04:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A05E7C433EF
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 04:38:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245625AbiAYEi1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 23:38:27 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42368 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S248462AbiAYD7G (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 24 Jan 2022 22:59:06 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20P0RH8B028857;
-        Mon, 24 Jan 2022 19:58:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=wRB3lCMn+UC1SmE8GJn3XS08vpXhaJvJCxk8WktO0Oc=;
- b=TsviL3qrSN8QnKS5txuz+7dvqLh82ZCzkcfoxVtmJgKnydTpA8ovqlRslVxGrbDaIOPa
- nHSqeU/z6laXoUc3n3pPzN023DSK1jasuO9zR2ifEWtm0Yh4qqGXnYIT4Mzp5W9AQ3jx
- gMm2bpQoqZx5A4Zf6uk+TOxWcEdGhy4uH+k= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dsrtsxpxv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 24 Jan 2022 19:58:33 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 24 Jan 2022 19:58:32 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PWDNQGBWYUuVs+Yqx8cc8sm/k8hFmuo3Vtq4fmrRvtaF293b1OQ4+sDpce8eNtIJAEottMHiwrE7m6Wyi02yXq1btJ/ovTsWVOc+A+0rTiTJm1b9LoiHe3aECsgD5OKu7+lYWX0h939gS+8XYgKqyLqIm8Zpds7pczDHi7Npxe/JVkrYyQrEYwM72G0K1rv4x3BovbJs8JJ0xD/0kKth/qcFvS+Meigo0QbmWtuQdo9197Vq+WPZG10ejq4vchnAgdoEzVYBDmuLM/yGDrFdkXTV7gVYpcOqVAqpcVb3IVg7cHnFYJ5xahCykMRkwfq3qnEf4DefWFvi34ZFNP59PQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wRB3lCMn+UC1SmE8GJn3XS08vpXhaJvJCxk8WktO0Oc=;
- b=f8hHvTr6+Oz3ecqvEBbs8s7KDo7EldZ2PnUSh10TLILxDIIVZvvfEvnxPukAEn4ysQY0bkn4HsVlAMWxTBeoL6JPf3g2yDgSLwiuZbLxoZFHu7m3OWbykwvPkNoP+bethgoq/PubHlp7hsRJFrO/Z6NiYXNCNKmMo3AWWUVxbaBtxHWVrkR33sMjI64pe871a2Kxqz53wGyuhlgi9Na3mLD/KegtH3FsjRi/yeYto6o4Fbp5TN85fsI+OuYuv38VTXf/BmjHbfn5z8nLn/MpFDAFoWK/uxGdPWZJQu7RAd/LFIjKuHrLksfccOtMkuuyPBwQF3OcYGhP8pDReHEKhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MW5PR15MB5124.namprd15.prod.outlook.com (2603:10b6:303:191::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4909.17; Tue, 25 Jan
- 2022 03:58:30 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::11fa:b11a:12b5:a7f0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::11fa:b11a:12b5:a7f0%6]) with mapi id 15.20.4909.017; Tue, 25 Jan 2022
- 03:58:29 +0000
-Message-ID: <61e04a73-bc4d-b250-31fe-93df4100c923@fb.com>
-Date:   Mon, 24 Jan 2022 19:58:25 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.0
-Subject: Re: [PATCH bpf-next v2 00/11] bpf: add support for new btf kind
- BTF_KIND_TAG
-Content-Language: en-US
-To:     "Jose E. Marchesi" <jose.marchesi@oracle.com>
-CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Mark Wielaard <mark@klomp.org>
-References: <20210913155122.3722704-1-yhs@fb.com>
- <b59428f2-28cf-f1fd-a02c-730c3a5e453f@fb.com> <87sfy82zvd.fsf@oracle.com>
- <fc6e80ec-a823-bee4-7451-2b4d497a64af@fb.com> <87ilvncy5x.fsf@oracle.com>
- <20211218014412.rlbpsvtcqsemtiyk@ast-mbp.dhcp.thefacebook.com>
- <7122dbee-8091-8cd1-d3e4-d5625d5d6529@fb.com> <87czlr4ndp.fsf@oracle.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <87czlr4ndp.fsf@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0207.namprd04.prod.outlook.com
- (2603:10b6:303:86::32) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        id S1358094AbiAYEim (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 23:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S253634AbiAYEdH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Jan 2022 23:33:07 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273BBC06176D;
+        Mon, 24 Jan 2022 19:13:42 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id o12so27001259eju.13;
+        Mon, 24 Jan 2022 19:13:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ivBaPA0R2xGHgAcixmHyX5HNKPDkPQG35LIw/TIU16o=;
+        b=Q+b4DIhxL8LbXNFxHPsE0+GdM0/Oda0/lsIMTXCz5JgrVJ/GEcG3sMtTxYKRBY63E2
+         4LT5AhtlujNW1UJgs3zYyHo1X5Rk6szJp85Y05wDnXu+qnUzzAHIsSXdvfkfcewm3j4R
+         LK/mR/JJuRstDWjsZ6x/GPWeIP/qF4FZw1+khfrqb4jUYUmfUe089YxzYai7cJoDA72h
+         Nx+wVT4Z4hAjlR+NfZot8zXTLqNMxj6Ve+bZXTA8Ty9SLwcOPWyHEAdaMkberniv2VkG
+         0pt93nJCgCrcz9tTctKXtioXkcABN0NXBhwOcku0TAoREKhsb0Lf4gpTB7R89QOb9Vr2
+         tJFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ivBaPA0R2xGHgAcixmHyX5HNKPDkPQG35LIw/TIU16o=;
+        b=m30kAlmMvxVji8mkUddFd+DdND5z02e6P67rbLH6wb3Cfca8JldZQM+2ho5o6Eu242
+         /kIdO29soeJB3pUeahWFICbH+EzzyeAwXh3QYpk03AdtCPjNpf6pm+jj1FdbV6E7nBnN
+         3VFUl8WYUQKfZLXm/IBOdVkMu4XcfQzQRVXT2lK1wcFar4mhnn5N/DNQUxO8EapNQtzL
+         q2DfbIKsUVPcweN/hSvNOr/ZlFi6aADvpfk4nVM42f67qs9QN6vTZlLKpqDZ3Pnrvp8X
+         dJOMGwpeI2OqDPNp/aowa8ccTsx6iwhvpdb4Lj1xKdqLddPS4A9675rAXIfMrS00D8kF
+         06VA==
+X-Gm-Message-State: AOAM532QzDNvX43Vc5f1xq7LxxiqB3Tylos2a+ldwoUmV9EdeHtE7iAo
+        M3oNZ2zEB5uZowsR3+6Ijc4g4GIU/IJ5IKjv14c=
+X-Google-Smtp-Source: ABdhPJxfQpFj4wSo+5WJnCbnJbiiH1inTmzryC1G9al3TAqFcH3uVDs/BWTwUTa2M8wIstuAQCedA72lrEkiXGqm3go=
+X-Received: by 2002:a17:906:17d5:: with SMTP id u21mr14538687eje.348.1643080420569;
+ Mon, 24 Jan 2022 19:13:40 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 001c147c-80bc-4775-4725-08d9dfb6f27a
-X-MS-TrafficTypeDiagnostic: MW5PR15MB5124:EE_
-X-Microsoft-Antispam-PRVS: <MW5PR15MB51248591770FC53D74216A0BD35F9@MW5PR15MB5124.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4UBCyWBF4AGM8Sk3sHEoRNwpTWVo9EstQqHkSUcy6mk+FXtBI7gdGgfsQCibsA/KM+PqudDeLYpCShrakLCViIoxkp6mW8MRDIzua0+msD8cZN1JPTgojE2yGgR+YpPfnWAanoBQy0MX4VwNxPLdmiRURNZUTh9NxgX6sk3/7nug535grvL+w+FaTb1uBoUwnAY4aaXL1rzf8AZeDoUL7e/CcxTF0rvHgLYXa1HzFwlbA9GxGZQypasEEl7lfSIXa6d5lJ5i8IgLM7pxpc50DqiUPEJyUV0YLV9WsVhuLSZN4i9bjV1VS7gDsbSzRaoUsFybxsNgtOzOsn+tr4RtKpiTLF8cWAYSo5yH+HCx9yk+wQFuGMofebSgQ3u2jZrJLLCf345600MaiIT69fT/Z8ctSpMNRgT48jrgg6DOyNkD/mCipfNED85gfy/3bMg8gkFxSfGu8mbc9ZTvzWUdOx4X40UhLmEgJPrV2odkRQBStZ+CqA8hEn0bFk05yUglFjsB5tA3rs2js8hTb5adPDJqLK6jC8M8SXC10p9b/gJOWIWeVp4/MdR8YCw3AKR+GGzuZyewmwTfkeRnLAak8PSr98M0BuTgfY5N/l+wzRsHDJ2AKmabSLi4NybEIHzXPj5ZJaqpUm1Ha1qxVJEpPFvzO01WR3cmWl6B0cSJ33kjvdX7KQkZQbKxGVs+X/RLDh/rpx6dIgWAE+bLPiYQ19Bh9aTrVU8J0h7vGcsFuP0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6666004)(31686004)(8936002)(2906002)(6486002)(186003)(5660300002)(66556008)(66476007)(66946007)(8676002)(508600001)(36756003)(83380400001)(6916009)(53546011)(52116002)(316002)(31696002)(6512007)(4326008)(2616005)(86362001)(54906003)(6506007)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UjFhMzJoa2VSYjZDTnBoZ0hMTXg1MVJvMUdLRmRyU2p6cWFsaDFWeUtEUlpZ?=
- =?utf-8?B?TlZKZllMdGtiMGV1MElVbXpJYkJ3QWdBbVlRZGx3THJJaFJwNHVTMWhDWTVK?=
- =?utf-8?B?Vk5oZEErMXZXaVVGYU9pVEd3RHhGVTEzL25jT0NYWnoraG1aempmZDlZUk5w?=
- =?utf-8?B?YnkyN0h4ZVRNQWdLTFFDbFR0ZGw1NURvNEhURVJlendja3RjaU5Qa25PZmcz?=
- =?utf-8?B?NUxnTU92STlRbm5BK2RFYUVHMENwRVZ0RkQrVHRUVFFFSkYyTkxlWm9RRnZI?=
- =?utf-8?B?WkNpT0xLaFZsUXk5VllqMkM1L1ZTQVJsaWJVMG0xT1YvSGc0cVdKZDdDcXFH?=
- =?utf-8?B?S2M3bFRmYlZjOVduYXlSSS8wL1ZKNkVpcUM3elhKRDdNcHo5N25aTDFhdjln?=
- =?utf-8?B?dTJHRVplL1RtV0VaVmVkR2d3Qno4Q29LVk9xTFJPMnlHZS8wWlFYWlN3VFBT?=
- =?utf-8?B?OG1RNFRWWndhdFdOUjdpQkxGRUJZb21Feksyc3hSSHNUYzlDRVM2b2NYTzNX?=
- =?utf-8?B?dGpIVDRjNlg5dGl3c05lakp6c3BYbjJ1eENvOUQxdXo3bkJvRG1YdG02RlJG?=
- =?utf-8?B?NDhJRUpTeE1FMTh4ckFRSkJFdm9ubytVOGpCZzg4YVNnalJSc1ZVc2pUMFNW?=
- =?utf-8?B?OGhDN0hGZ0xKc0I1QjBLZEY2QUdOOFdvclFlb2dyd1RlTUI4YURQUHJpellC?=
- =?utf-8?B?OXd3eDVjdjFxRWtKQjRwU05NMTBDTmRSaThQbWZ3UEJPN0FGekpYeDFhQnRQ?=
- =?utf-8?B?S3NyUVFqbEtlMWxiR1Bldk9wUmFScVpkT0NKYVF4UGNITjMrcFY0bkUxTVNM?=
- =?utf-8?B?YjMvL0JrY00yamx0azd0VXQ2QXJlU3ZGcnBIMkhOSG1heHRKRzdHeDJrSktr?=
- =?utf-8?B?anAreDhway9mZ0liSXAzUUpaNlAwM3dPdGNIOWVEajFZelBrdXRreGxTajU3?=
- =?utf-8?B?RDJHMjlSSG5zdm9sOXZld2x4c29aZlJVbWFPUzVYQVRRSTlmMnJTZkJDZkox?=
- =?utf-8?B?SEtKN0h3WTltQW02R2ttaUg4ZEFLR1dBQVJZSVdraDBsOGhoamZab1Z3YXJK?=
- =?utf-8?B?Qi9aQ2ZHeHBnNk5pSUJjSTJKZEh3WnAyY3BxNmJad0lYVUxTa0NnNEJFQ005?=
- =?utf-8?B?RmFzdEV4NE4vQ3ZhTmtadDlNNWFLSnJhZHVHdzRESDNKbGw1RHpPQkZtR0RE?=
- =?utf-8?B?L050bjFxdE1HSUo4REZYTnlEWkxiQ1BVTDRmN3BjU0JkNGN1cy92NFhtWlRa?=
- =?utf-8?B?ZG9GY25KaThCZmZtcEVVUGVlQlFCN0JYSVhtOGlkbCt4RTRzcUdEZXJSK1pz?=
- =?utf-8?B?elZrWXozblA3cEFWLy9wODB0aEFjSm5odWlSb0V5TmdKbHEwNDJHQm9NeG03?=
- =?utf-8?B?SDlRb08xOTRwV2lWVjJxQ1NwczgwRTJUbUQxSURYLzViTFZtS04wWWRZZnc0?=
- =?utf-8?B?QlVnRDlGeC9COTY4M0pwd1lMTVBtcHFGNFBkMFFDZk90VTU3N3g4UmcyRTRn?=
- =?utf-8?B?MU5reFJUcG0zbGZ5SGtQVGNLTkRZcGNUSEJWckN2R21VdXRadWxjdUZvWVFh?=
- =?utf-8?B?K0ZWdllCNVpDNHZzTk5xUm11b2Y0dGpKNktwYXlWVkJGV2NCODJCeGdLTXVm?=
- =?utf-8?B?am9KWkd0S0E0eXV5K0RpdFZKUGhnek1mN3VLQW5PeUR2NEhPY05sRmlLYzZp?=
- =?utf-8?B?TDY4WUltMmZmdkJyNHBLNG9UMlZGS3RXUlgzVkxwSFVGbG5wYjcxQThhdTJL?=
- =?utf-8?B?dGZwcmFiN2VVdXFKL2pJSG1ZN0JvQU8rVEZRVzdFRmd1VUVZV1JMOENIUmlq?=
- =?utf-8?B?VjRQeEdoVU5BWmV4cG92VTN5NEl4TzlTY3o1bGtWUjlyKzIyN1FBbDkreCtG?=
- =?utf-8?B?NVVURUQyTERvMVQwb0tmbStwUDFqcitxc0NERTRVbzlCaENYUnMrTE1pak5x?=
- =?utf-8?B?RUYydmpHQXR6b0kwYjUvU09GYTE5c1FYYkFiMk92RmE1UlZuVmtDRGd0S2g1?=
- =?utf-8?B?WloxYS9vWEpCaStqYVc3THZDVFoyQUMxbUNMcitvSit1WnJDQWRuZ2Q0Njkz?=
- =?utf-8?B?Qk1PUkhUb0h3aGNYQzAzNXZCNzFFb3dkK0tqWENsdU9nb0VLYXIxZlpyTk5O?=
- =?utf-8?Q?Trm9ggtVZFv65eksMC0q+aYwP?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 001c147c-80bc-4775-4725-08d9dfb6f27a
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2022 03:58:29.7277
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qpppTFxyJbREv3kRZcDtQpL32F9vdBPvryl4J/eiugAj0OLnMcjmntXuINxNQOL6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR15MB5124
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: _eP9HXwflUeKeYgc43WJMOS9S1HZhaJJ
-X-Proofpoint-ORIG-GUID: _eP9HXwflUeKeYgc43WJMOS9S1HZhaJJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-25_01,2022-01-24_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 bulkscore=0
- priorityscore=1501 mlxlogscore=799 lowpriorityscore=0 spamscore=0
- impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2201250021
-X-FB-Internal: deliver
+References: <20220113070245.791577-1-imagedong@tencent.com>
+ <CAADnVQKNCqUzPJAjSHMFr-Ewwtv5Cs3UCQpthaKDTd+YNRWqqg@mail.gmail.com>
+ <CADxym3bJZrcGHKH8=kKBkxh848dijAZ56n0fm_DvEh6Bbnrezg@mail.gmail.com>
+ <20220120041754.scj3hsrxmwckl7pd@ast-mbp.dhcp.thefacebook.com>
+ <CADxym3b-Q6LyjKqTFcrssK9dVJ8hL6QkMb0MzLyn64r4LS=xtw@mail.gmail.com>
+ <CAADnVQKaaPKPkqYfhcM=YNCxodBL_ME6CMk3DPXF_Kq2zoyM=w@mail.gmail.com> <20220125003522.dqbesxtfppoxcg2s@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220125003522.dqbesxtfppoxcg2s@kafai-mbp.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 25 Jan 2022 11:09:13 +0800
+Message-ID: <CADxym3a+tGhG2L4NdTydW7F7F7XP3Bwzd_XgNdqnKYVY5y_7tg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add document for 'dst_port' of 'struct bpf_sock'
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Mengen Sun <mengensun@tencent.com>, flyingpeng@tencent.com,
+        mungerjiang@tencent.com, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Jan 25, 2022 at 8:35 AM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Thu, Jan 20, 2022 at 09:17:27PM -0800, Alexei Starovoitov wrote:
+> > On Thu, Jan 20, 2022 at 6:18 AM Menglong Dong <menglong8.dong@gmail.com> wrote:
+> > >
+> > > On Thu, Jan 20, 2022 at 12:17 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Thu, Jan 20, 2022 at 11:02:27AM +0800, Menglong Dong wrote:
+> > > > > Hello!
+> > > > >
+> > > > > On Thu, Jan 20, 2022 at 6:03 AM Alexei Starovoitov
+> > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > >
+> > > > > [...]
+> > > > > >
+> > > > > > Looks like
+> > > > > >  __sk_buff->remote_port
+> > > > > >  bpf_sock_ops->remote_port
+> > > > > >  sk_msg_md->remote_port
+> > > > > > are doing the right thing,
+> > > > > > but bpf_sock->dst_port is not correct?
+> > > > > >
+> > > > > > I think it's better to fix it,
+> > > > > > but probably need to consolidate it with
+> > > > > > convert_ctx_accesses() that deals with narrow access.
+> > > > > > I suspect reading u8 from three flavors of 'remote_port'
+> > > > > > won't be correct.
+> > > > >
+> > > > > What's the meaning of 'narrow access'? Do you mean to
+> > > > > make 'remote_port' u16? Or 'remote_port' should be made
+> > > > > accessible with u8? In fact, '*((u16 *)&skops->remote_port + 1)'
+> > > > > won't work, as it only is accessible with u32.
+> > > >
+> > > > u8 access to remote_port won't pass the verifier,
+> > > > but u8 access to dst_port will.
+> > > > Though it will return incorrect data.
+> > > > See how convert_ctx_accesses() handles narrow loads.
+> > > > I think we need to generalize it for different endian fields.
+> > >
+> > > Yeah, I understand narrower load in convert_ctx_accesses()
+> > > now. Seems u8 access to dst_port can't pass the verifier too,
+> > > which can be seen form bpf_sock_is_valid_access():
+> > >
+> > > $    switch (off) {
+> > > $    case offsetof(struct bpf_sock, state):
+> > > $    case offsetof(struct bpf_sock, family):
+> > > $    case offsetof(struct bpf_sock, type):
+> > > $    case offsetof(struct bpf_sock, protocol):
+> > > $    case offsetof(struct bpf_sock, dst_port):  // u8 access is not allowed
+> > > $    case offsetof(struct bpf_sock, src_port):
+> > > $    case offsetof(struct bpf_sock, rx_queue_mapping):
+> > > $    case bpf_ctx_range(struct bpf_sock, src_ip4):
+> > > $    case bpf_ctx_range_till(struct bpf_sock, src_ip6[0], src_ip6[3]):
+> > > $    case bpf_ctx_range(struct bpf_sock, dst_ip4):
+> > > $    case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
+> > > $        bpf_ctx_record_field_size(info, size_default);
+> > > $        return bpf_ctx_narrow_access_ok(off, size, size_default);
+> > > $    }
+> > >
+> > > I'm still not sure what should we do now. Should we make all
+> > > remote_port and dst_port narrower accessable and endianness
+> > > right? For example the remote_port in struct bpf_sock_ops:
+> > >
+> > > --- a/net/core/filter.c
+> > > +++ b/net/core/filter.c
+> > > @@ -8414,6 +8414,7 @@ static bool sock_ops_is_valid_access(int off, int size,
+> > >                                 return false;
+> > >                         info->reg_type = PTR_TO_PACKET_END;
+> > >                         break;
+> > > +               case bpf_ctx_range(struct bpf_sock_ops, remote_port):
+> >
+> > Ahh. bpf_sock_ops don't have it.
+> > But bpf_sk_lookup and sk_msg_md have it.
+> >
+> > bpf_sk_lookup->remote_port
+> > supports narrow access.
+> >
+> > When it accesses sport from bpf_sk_lookup_kern.
+> >
+> > and we have tests that do u8 access from remote_port.
+> > See verifier/ctx_sk_lookup.c
+> >
+> > >                 case offsetof(struct bpf_sock_ops, skb_tcp_flags):
+> > >                         bpf_ctx_record_field_size(info, size_default);
+> > >                         return bpf_ctx_narrow_access_ok(off, size,
+> > >
+> > > If remote_port/dst_port are made narrower accessable, the
+> > > result will be right. Therefore, *((u16*)&sk->remote_port) will
+> > > be the port with network byte order. And the port in host byte
+> > > order can be get with:
+> > > bpf_ntohs(*((u16*)&sk->remote_port))
+> > > or
+> > > bpf_htonl(sk->remote_port)
+> >
+> > So u8, u16, u32 will work if we make them narrow-accessible, right?
+> >
+> > The summary if I understood it:
+> > . only bpf_sk_lookup->remote_port is doing it correctly for u8,u16,u32 ?
+> > . bpf_sock->dst_port is not correct for u32,
+> >   since it's missing bpf_ctx_range() ?
+> > . __sk_buff->remote_port
+> >  bpf_sock_ops->remote_port
+> >  sk_msg_md->remote_port
+> >  correct for u32 access only. They don't support narrow access.
+> >
+> > but wait
+> > we have a test for bpf_sock->dst_port in progs/test_sock_fields.c.
+> > How does it work then?
+> >
+> > I think we need more eyes on the problem.
+> > cc-ing more experts.
+> iiuc,  I think both bpf_sk_lookup and bpf_sock allow narrow access.
+> bpf_sock only allows ((__u8 *)&bpf_sock->dst_port)[0] but
+> not ((__u8 *)&bpf_sock->dst_port)[1].  bpf_sk_lookup allows reading
+> a byte at [0], [1], [2], and [3].
+>
+> The test_sock_fields.c currently works because it is comparing
+> with another __u16: "sk->dst_port == srv_sa6.sin6_port".
+> It should also work with bpf_ntohS() which usually is what the
+> userspace program expects when dealing with port instead of using bpf_ntohl()?
+> Thus, I think we can keep the lower 16 bits way that bpf_sock->dst_port
+> and bpf_sk_lookup->remote_port (and also bpf_sock_addr->user_port ?) are
+> using.  Also, changing it to the upper 16 bits will break existing
+> bpf progs.
+>
+> For narrow access with any number of bytes at any offset may be useful
+> for IP[6] addr.  Not sure about the port though.  Ideally it should only
+> allow sizeof(__u16) read at offset 0.  However, I think at this point it makes
+> sense to make them consistent with how bpf_sk_lookup does it also,
+> i.e. allow byte [0], [1], [2], and [3] access.
 
+I don't think it makes much sense to make dst_port allow byte [0],
+[1], [2], and [3] access. The whole part of dst_port is in host byte
+order, byte access can make the result inconsistent. For example,
+byte[2],byte[3] are the port part for big endian, but byte[0],byte[1]
+for little endian. Am I right?
 
-On 12/20/21 1:49 AM, Jose E. Marchesi wrote:
-> 
->> On 12/17/21 5:44 PM, Alexei Starovoitov wrote:
->>> On Fri, Dec 17, 2021 at 11:40:10AM +0100, Jose E. Marchesi wrote:
->>>>
->>>> 2) The need for DWARF to convey free-text tags on certain elements, such
->>>>      as members of struct types.
->>>>
->>>>      The motivation for this was originally the way the Linux kernel
->>>>      generates its BTF information, using pahole, using DWARF as a source.
->>>>      As we discussed in our last exchange on this topic, this is
->>>>      accidental, i.e. if the kernel switched to generate BTF directly from
->>>>      the compiler and the linker could merge/deduplicate BTF, there would
->>>>      be no need for using DWARF to act as the "unwilling conveyer" of this
->>>>      information.  There are additional benefits of this second approach.
->>>>      Thats why we didn't plan to add these extended DWARF DIEs to GCC.
->>>>
->>>>      However, it now seems that a DWARF consumer, the drgn project, would
->>>>      also benefit from having such a support in DWARF to distinguish
->>>>      between different kind of pointers.
->>> drgn can use .percpu section in vmlinux for global percpu vars.
->>> For pointers the annotation is indeed necessary.
->>>
->>>>      So it seems to me that now we have two use-cases for adding support
->>>>      for these free-text tags to DWARF, as a proper extension to the
->>>>      format, strictly unrelated to BTF, BPF or even the kernel, since:
->>>>      - This is not kernel specific.
->>>>      - This is not directly related to BTF.
->>>>      - This is not directly related to BPF.
->>> __percpu annotation is kernel specific.
->>> __user and __rcu are kernel specific too.
->>> Only BPF and BTF can meaningfully consume all three.
->>> drgn can consume __percpu.
->>> In that sense if GCC follows LLVM and emits compiler specific DWARF
->>> tag
->>> pahole can convert it to the same BTF regardless whether kernel
->>> was compiled with clang or gcc.
->>> drgn can consume dwarf generated by clang or gcc as well even when BTF
->>> is not there. That is the fastest way forward.
->>> In that sense it would be nice to have common DWARF tag for pointer
->>> annotations, but it's not mandatory. The time is the most valuable asset.
->>> Implementing GCC specific DWARF tag doesn't require committee voting
->>> and the mailing list bikeshedding.
->>>
->>>> 3) Addition of C-family language-level constructions to specify
->>>>      free-text tags on certain language elements, such as struct fields.
->>>>
->>>>      These are the attributes, or built-ins or whatever syntax.
->>>>
->>>>      Note that, strictly speaking:
->>>>      - This is orthogonal to both DWARF and BTF, and any other supported
->>>>        debugging format, which may or may not be expressive enough to
->>>>        convey the free-form text tag.
->>>>      - This is not specific to BPF.
->>>>
->>>>      Therefore I would avoid any reference to BTF or BPF in the attribute
->>>>      names.  Something like `__attribute__((btf_tag("arbitrary_str")))'
->>>>      makes very little sense to me; the attribute name ought to be more
->>>>      generic.
->>> Let's agree to disagree.
->>> When BPF ISA was designed we didn't go to Intel, Arm, Mips, etc in order to
->>> come up with the best ISA that would JIT to those architectures the best
->>> possible way. Same thing with btf_tag. Today it is specific to BTF and BPF
->>> only. Hence it's called this way. Whenever actual users will appear that need
->>> free-text tags on a struct field then and only then will be the time to discuss
->>> generic tag name. Just because "free-text tag on a struct field" sounds generic
->>> it doesn't mean that it has any use case beyond what we're using it for in BPF
->>> land. It goes back to the point of coding now instead of talking about coding.
->>> If gcc wants to call it __attribute__((my_precious_gcc_tag("arbitrary_str")))
->>> go ahead and code it this way. The include/linux/compiler.h can accommodate it.
->>
->> Just want to add a little bit context for this. In the beginning when
->> we proposed to add the attribute, we named as a generic name like
->> 'tag' (or something like that). But eventually upstream suggested
->> 'btf_tag' since the use case we proposed is for bpf. At that point, we
->> don't know drgn use cases yet. Even with that, the use cases are still
->> just for linux kernel.
->>
->> At that time, some *similar* use cases did came up, e.g., for
->> swift<->C++ conversion encoding ("tag name", "attribute info") for
->> attributes in the source code, will help a lot. But they will use a
->> different "tag name" than btf_tag to differentiate.
-> 
-> Thanks for the info.
-> 
-> I find it very interesting that the LLVM people prefers to have several
-> "use case specific" tag names instead of something more generic, which
-> is the exact opposite of what I would have done :) They may have
-> appealing reasons for doing so.  Do you have a pointer to the dicussion
-> you had upstream at hand?
-> 
-> Anyway, I will taste the waters with the other GCC hackers about both
-> DIEs and attribute and see what we can come out with.  Thanks again for
-> reaching out Yonghong.
+So how about it if we do these:
+- keep what remote_port and dst_port do
+- make all remote_port (bpf_sock_ops, __sk_buff, sk_msg_md,
+  etc) consistent in byte access
+- document dst_port for it's different with remote_port
 
-Hi, Jose,
+Glad to hear some better idea :/
 
-Any progress on gcc btf_tag support discussion? If possible, could
-you add me to the discussion mailing list so I may help to move
-the project forward? Thanks a lot!
-
-Yonghong
+>
+> would love to hear how others think about it.
