@@ -2,114 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F431C2BA4C
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 12:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7B5C28CF5
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 12:23:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241103AbiAZMKB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 07:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241101AbiAZMKB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:10:01 -0500
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5595FC06161C;
-        Wed, 26 Jan 2022 04:10:01 -0800 (PST)
-Received: by mail-pl1-x642.google.com with SMTP id j16so11648003plx.4;
-        Wed, 26 Jan 2022 04:10:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AEzAoHuhPGPKCGh3cWJjJrGXHXVQzmvhoLSTyK087Xo=;
-        b=djMVuKsI0YKi8jRlWCDcM3ROIbZoH//glenypM9jc7sLmeCe/EE75Y67qRrzAf3wQP
-         QUobivH6WxoG9ejnNkyis1z3Jf46rdvKV7V2W3ttwBKNfuyoNAyUMIBSaurN+y6UYFmm
-         NVhUjhZGlh0F4MQW6fuIZqv3iIKXwHD+7sUKTw9LzoI4OoSO74QRpxtGqMf2MIVDqMbI
-         agGnOSaI6mF2rB8YbiD39ItlFrnyCv+mSU123nGp2x0E17DtbzhA9fwphSrJz4pi+THm
-         sozAj6KeeguRAfAJerosUnbKNCaqMDE2tAGjnZPFKcdJtzOKZSovKzaQHvbcJtOXaEow
-         fEIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AEzAoHuhPGPKCGh3cWJjJrGXHXVQzmvhoLSTyK087Xo=;
-        b=ucFFgr5M+eolCZoyfgLebYGRSNJwXNVOuJwNYueTxJ60elXkemnZYDL4sLUnxLXJc2
-         UOUc1WDDNHjcKbm4OIASwezgWLsPWDG+nmYFO8TRRloi+/rrH1ch5bW5+iKkkO8BaATb
-         wdf/KM0I6UyaM65UiEI5GlRgyJQmhXXoIs+xg9sBHjVeLNCnZ9X/aEu7dtBPleFRPg0f
-         h/JItQ4SSYPMPxLb/Wi0Omx598uuRoI+4jjwc5K4uURXZ+PNnCZ9+yohsC+S/iEkTlni
-         uLYzhOAcBE9PCxmFdElaKWehJfxhI1g3bMx1GSKIJdAqmDgfJnl91zhYtmlwjTwRJv2p
-         BXYQ==
-X-Gm-Message-State: AOAM533UPcmYAreym8FLCJP/YzcHRPkAkIRUKFOb90iFLG9E71Idjm3v
-        mzLn5Yigi4reCsi2GXXgaFs=
-X-Google-Smtp-Source: ABdhPJxncV8VOSnug4ym2aL2nT/IZC7T0uIUIvLBVm9RqV/h+fb+P0gfjEnvrMXmbIV133KdjmCRIg==
-X-Received: by 2002:a17:90a:7e8a:: with SMTP id j10mr8400366pjl.13.1643199000857;
-        Wed, 26 Jan 2022 04:10:00 -0800 (PST)
-Received: from localhost ([2405:201:6014:d064:3d4e:6265:800c:dc84])
-        by smtp.gmail.com with ESMTPSA id h9sm1886487pfe.101.2022.01.26.04.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 04:10:00 -0800 (PST)
-Date:   Wed, 26 Jan 2022 17:38:09 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Nikolay Aleksandrov <nikolay@nvidia.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, lorenzo.bianconi@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, dsahern@kernel.org,
-        komachi.yoshiki@gmail.com, brouer@redhat.com, toke@redhat.com,
-        andrii.nakryiko@gmail.com, Roopa Prabhu <roopa@nvidia.com>,
-        "bridge@lists.linux-foundation.org" 
-        <bridge@lists.linux-foundation.org>,
-        Ido Schimmel <idosch@idosch.org>
-Subject: Re: [RFC bpf-next 1/2] net: bridge: add unstable
- br_fdb_find_port_from_ifindex helper
-Message-ID: <20220126120809.ihs2wko74dm4r3pi@apollo.legion>
-References: <cover.1643044381.git.lorenzo@kernel.org>
- <720907692575488526f06edc2cf5c8f783777d4f.1643044381.git.lorenzo@kernel.org>
- <61553c87-a3d3-07ae-8c2f-93cf0cb52263@nvidia.com>
- <YfEwLrB6JqNpdUc0@lore-desk>
+        id S241221AbiAZMXn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 07:23:43 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:16928 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241218AbiAZMXn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:23:43 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4JkN830FDPzZfXT;
+        Wed, 26 Jan 2022 20:19:47 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 26 Jan
+ 2022 20:23:41 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     Ard Biesheuvel <ard.biesheuvel@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <houtao1@huawei.com>
+Subject: [PATCH bpf-next v2 0/2] bpf, arm64: fix bpf line info
+Date:   Tue, 25 Jan 2022 18:57:05 +0800
+Message-ID: <20220125105707.292449-1-houtao1@huawei.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YfEwLrB6JqNpdUc0@lore-desk>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 04:57:42PM IST, Lorenzo Bianconi wrote:
-> > On 24/01/2022 19:20, Lorenzo Bianconi wrote:
-> > > Similar to bpf_xdp_ct_lookup routine, introduce
-> > > br_fdb_find_port_from_ifindex unstable helper in order to accelerate
-> > > linux bridge with XDP. br_fdb_find_port_from_ifindex will perform a
-> > > lookup in the associated bridge fdb table and it will return the
-> > > output ifindex if the destination address is associated to a bridge
-> > > port or -ENODEV for BOM traffic or if lookup fails.
-> > >
-> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > ---
-> > >  net/bridge/br.c         | 21 +++++++++++++
-> > >  net/bridge/br_fdb.c     | 67 +++++++++++++++++++++++++++++++++++------
-> > >  net/bridge/br_private.h | 12 ++++++++
-> > >  3 files changed, 91 insertions(+), 9 deletions(-)
-> > >
-> >
-> > Hi Lorenzo,
->
-> Hi Nikolay,
->
-> thx for the review.
->
-> [...]
->
-> I guess at the time I sent the series it was just in bpf-next but now it should
-> be in net-next too.
-> I do not think we need a unregister here.
-> @Kumar: agree?
->
+Hi,
 
-Yes, no need to call unregister (hence there is no unregister).
+The patchset addresses two issues in bpf line info for arm64:
 
-> > [...]
+(1) insn_to_jit_off only considers the body itself and ignores
+     prologue before the body. Fixed in patch #1.
 
+(2) insn_to_jit_off passed to bpf_prog_fill_jited_linfo() is
+     calculated in instruction granularity instead of bytes
+     granularity. Fixed in patch #2.
 
+Comments are always welcome.
 
---
-Kartikeya
+Regards,
+Tao
+
+Change Log:
+v2:
+ * split into two independent patches (from Daniel)
+ * use AARCH64_INSN_SIZE instead of defining INSN_SIZE
+
+v1: https://lore.kernel.org/bpf/20220104014236.1512639-1-houtao1@huawei.com
+
+Hou Tao (2):
+  bpf, arm64: call build_prologue() first in first JIT pass
+  bpf, arm64: calculate offset as byte-offset for bpf line info
+
+ arch/arm64/net/bpf_jit_comp.c | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
+
+-- 
+2.27.0
+
