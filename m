@@ -2,123 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56DBFC2BA4C
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 03:15:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 265D5C4167E
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 03:15:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242149AbiAYDKb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Jan 2022 22:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3412038AbiAYAfe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Jan 2022 19:35:34 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E47BC0617A4
-        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 14:19:30 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id o10so15253492ilh.0
-        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 14:19:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=THQAUN1mbEudksIDDLPlW1QcJyiqdIPagdOlq/nWl68=;
-        b=N0Q7pEz89wajTQyGT34jsiXokry693HX1d/6w9o68POeEL8q2BRjMv+sKQTsI4gErG
-         KmpgO7wgcvFAFFIqyan7LEsl8Uv07ZavMglwtF29yLw/GGCd6dMPMz2vTmjU5hh+pKnu
-         yzoOfkvzzGD3/AMR5e+BfuKcvU9tb7begoXDEVJgvv8BQGW0kjvLsvPOTj+bPiOUztGQ
-         HiFfVl078xESly6WoD4Zp3RdEQppfbTCCZExmen2iAnDAWtpyAs8ssZAD8fZ/ujiwo55
-         4weve12HC+A4z7jMowYtHoXKoVqpSm/j4EbhnQRKVOXGxTDcAoNAzC/5/dZW5OXC3zox
-         2Z7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=THQAUN1mbEudksIDDLPlW1QcJyiqdIPagdOlq/nWl68=;
-        b=STjWsEDWyqQ72fF6a/twRmlg4zC+c58vNuA8IepM71rHzDu0AJlTpEi44Vm6nsrovU
-         lYl33hHXApXSAMpOtdOFBUBOzShpsy2kJYugmTGSjdhdV9A+dsmjjh5t1FJgRHMiDJ+5
-         smsFbDCdt8J1kCT8CF96LY4n+a8HUyjrJf9iuTZ+GgGpZcxhOOCuwbPVO/z7ly3T/tin
-         u/SZ8ZjztO981H7wfDUwju3Rf0AnXvLEHLowEGDXgS7R+hIBuunTAnMZuWi0T4nDNggL
-         Jty9lS04y8aGO+W9w70V2JpSxo03RBTRks1pT6eawNLmNWxkSMLroO/EggtYdD6Yceez
-         0thQ==
-X-Gm-Message-State: AOAM530/grZyBNpCGeSQq5xYuaJEBi44oMne3E6Qp0z0B2J5LauR/g5Z
-        Gj8wyE45VZjWNZaCRiyZISbS2VnprOzRigorsnWFJu/Dbgk=
-X-Google-Smtp-Source: ABdhPJyG1XdeGNpFeSpUzgr19rqvHdDDAXUevKiy+/Q9edpnQapIsLcNy9CLeVN079axBcaKX7TLHC6+2WB+9W4+D4I=
-X-Received: by 2002:a92:db0b:: with SMTP id b11mr9789637iln.98.1643062769974;
- Mon, 24 Jan 2022 14:19:29 -0800 (PST)
+        id S242611AbiAYDKm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Jan 2022 22:10:42 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39550 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S3415259AbiAYA7k (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 24 Jan 2022 19:59:40 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20P0RLKb029128
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 16:59:40 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=PVEUvBqgjDTmVGIHjcmGjRxY9qT0P0GdiCgOCN08cqg=;
+ b=R9yLBGCMBKVJ7otWmhsWqiIdmH9+8sjiXY0l8l3iiobDRTvQOxqCfKsOVxVg7tFuKb8B
+ fS6d9JN1gdCEeusm+86Xdg5Emb92WTP6nvJ8MJO01m/HHRNMuV+zHql8xIoArKY20iic
+ jEPFAMSpS1SvQfQDk3cH0PZsZqoiYhHw2D4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dsrtswyn8-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 24 Jan 2022 16:59:40 -0800
+Received: from twshared3399.25.prn2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 24 Jan 2022 16:59:39 -0800
+Received: by devbig921.prn2.facebook.com (Postfix, from userid 132113)
+        id 3CF3B22A47A1; Mon, 24 Jan 2022 16:59:32 -0800 (PST)
+From:   Christy Lee <christylee@fb.com>
+To:     <andrii@kernel.org>, <arnaldo.melo@gmail.com>,
+        <christyc.y.lee@gmail.com>
+CC:     <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <kernel-team@fb.com>, Christy Lee <christylee@fb.com>
+Subject: [PATCH bpf-next 1/2] libbpf: mark bpf_object__open_buffer() API deprecated
+Date:   Mon, 24 Jan 2022 16:59:22 -0800
+Message-ID: <20220125005923.418339-2-christylee@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220125005923.418339-1-christylee@fb.com>
+References: <20220125005923.418339-1-christylee@fb.com>
 MIME-Version: 1.0
-References: <20220113233158.1582743-1-kennyyu@fb.com> <20220124185403.468466-1-kennyyu@fb.com>
- <20220124185403.468466-2-kennyyu@fb.com>
-In-Reply-To: <20220124185403.468466-2-kennyyu@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 24 Jan 2022 14:19:18 -0800
-Message-ID: <CAEf4BzYOZtORr63NbnTwcgob+aoNhk-Y_v4PpQiZenGHS-FHJw@mail.gmail.com>
-Subject: Re: [PATCH v7 bpf-next 1/4] bpf: Add support for bpf iterator
- programs to use sleepable helpers
-To:     Kenny Yu <kennyyu@fb.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Gabriele <phoenix1987@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: zTxTb2c9hlO4WiFZwKW7mBvBVFGNtzlg
+X-Proofpoint-ORIG-GUID: zTxTb2c9hlO4WiFZwKW7mBvBVFGNtzlg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-24_10,2022-01-24_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 bulkscore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 adultscore=0 malwarescore=0 phishscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2201250005
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 10:54 AM Kenny Yu <kennyyu@fb.com> wrote:
->
-> This patch allows bpf iterator programs to use sleepable helpers by
-> changing `bpf_iter_run_prog` to use the appropriate synchronization.
-> With sleepable bpf iterator programs, we can no longer use
-> `rcu_read_lock()` and must use `rcu_read_lock_trace()` instead
-> to protect the bpf program.
->
-> Signed-off-by: Kenny Yu <kennyyu@fb.com>
-> ---
+Deprecate bpf_object__open_buffer() API in favor of the unified
+opts bpf_object__open_mem() API.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Christy Lee <christylee@fb.com>
+---
+ tools/lib/bpf/libbpf.h | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 94670066de62..281cb19591e5 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -180,6 +180,7 @@ bpf_object__open_mem(const void *obj_buf, size_t obj_=
+buf_sz,
+ 		     const struct bpf_object_open_opts *opts);
+=20
+ /* deprecated bpf_object__open variants */
++LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_object__open_mem() instead")
+ LIBBPF_API struct bpf_object *
+ bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
+ 			const char *name);
+--=20
+2.30.2
 
->  kernel/bpf/bpf_iter.c | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
->
-> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-> index b7aef5b3416d..110029ede71e 100644
-> --- a/kernel/bpf/bpf_iter.c
-> +++ b/kernel/bpf/bpf_iter.c
-> @@ -5,6 +5,7 @@
->  #include <linux/anon_inodes.h>
->  #include <linux/filter.h>
->  #include <linux/bpf.h>
-> +#include <linux/rcupdate_trace.h>
->
->  struct bpf_iter_target_info {
->         struct list_head list;
-> @@ -684,11 +685,20 @@ int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx)
->  {
->         int ret;
->
-> -       rcu_read_lock();
-> -       migrate_disable();
-> -       ret = bpf_prog_run(prog, ctx);
-> -       migrate_enable();
-> -       rcu_read_unlock();
-> +       if (prog->aux->sleepable) {
-> +               rcu_read_lock_trace();
-> +               migrate_disable();
-> +               might_fault();
-> +               ret = bpf_prog_run(prog, ctx);
-> +               migrate_enable();
-> +               rcu_read_unlock_trace();
-> +       } else {
-> +               rcu_read_lock();
-> +               migrate_disable();
-> +               ret = bpf_prog_run(prog, ctx);
-> +               migrate_enable();
-> +               rcu_read_unlock();
-> +       }
->
->         /* bpf program can only return 0 or 1:
->          *  0 : okay
-> --
-> 2.30.2
->
