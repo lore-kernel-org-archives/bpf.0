@@ -2,107 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B87FBC433F5
-	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 07:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7DCCC433F5
+	for <bpf@archiver.kernel.org>; Tue, 25 Jan 2022 07:11:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442392AbiAYHKk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Jan 2022 02:10:40 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54032 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442405AbiAYHIP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:08:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BFE87CE1764;
-        Tue, 25 Jan 2022 07:07:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D93C340E6;
-        Tue, 25 Jan 2022 07:07:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643094477;
-        bh=u4sZb43o6v9pvDvs7BsPPpiWoB/VBKMPiOOl3tPLaEs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GftWM3c1oIqLFALD23owKTErEZfdczcMT8uVPxGLP1FOkBmR1KtCfQlDYB8d6riL8
-         DPO4fVeV5rN4oKIV/NGuFFriOPq0d9MNMXrycCIeRnZtIDSC888/FqYqeJAd1loBtA
-         hXx+UyrWJRWu5z0Liq3idU4Acw4Krc4kyOXxUymIUCtW2CeSt/my0j5CtcpE11hz82
-         efA+jIDbZ5nwan6om754XfkbxhyZ1x7WanhNeGUoHS6K4izmm/GuBYsh/FFkJyAM+d
-         4eJsnOwPf+hR2epbDvchWReD02znUZ4KI+EtbSobJIn5nlYbvmni6AuNhx6MRAVv3e
-         3cd7v/zi0KY/A==
-Received: by mail-yb1-f169.google.com with SMTP id r65so55267861ybc.11;
-        Mon, 24 Jan 2022 23:07:57 -0800 (PST)
-X-Gm-Message-State: AOAM532Eymuk8g76qQJeJ6llUNBNDzuA8/8PA7ajb2YILHgMD/VEIpmI
-        9+2GPoYApt17FypcDiJAlIx31dcZcOAgMwd6Ajk=
-X-Google-Smtp-Source: ABdhPJxhRopogeep+UB2H+4fwzAnBfxW+obMKHyynYJuQjl+/u9U0011KEHGoECdFaAAZ+09H1f4CSH4mTvEV+mXA4s=
-X-Received: by 2002:a25:fd6:: with SMTP id 205mr29018898ybp.654.1643094475930;
- Mon, 24 Jan 2022 23:07:55 -0800 (PST)
+        id S237946AbiAYHLm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Jan 2022 02:11:42 -0500
+Received: from mga12.intel.com ([192.55.52.136]:32031 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1354655AbiAYHIp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Jan 2022 02:08:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643094525; x=1674630525;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   in-reply-to;
+  bh=TM+0Jr1Vw3weZTr6/c/RHKFMaebSsOXjgJtgqb35HWw=;
+  b=DK/XbBW6zXaBg6Y1YuFM6xvERmPlY2d9buDZ9dA/dQvkxV2NpY/5r6vH
+   bzg70CITiAdWS0u4iuS2aIv1TXFBcII8+4DdPOPAKRq73WSgLPfmb273G
+   2TQJY6Vb1/w8RPTWuiD4k6CQc7nJ216PUHHz5albARzNXpNsq0SnKXvky
+   9FLoUZlO5u/pAf5T55QBfMlQeKKWfLw3WqYes7/NJAnsGk3S46/EmaKKR
+   zdP1GXjcZHT35zyN+lTcqEzfIOd77r4NzGvJtPQL2uYaMoNG8VFNlqr1v
+   hgfot6lsuPNW7qg4DtxEkvPc6BdaZXfuQRV1uqJYB+6siAcCo+4MXYqoY
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10237"; a="226216544"
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="226216544"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2022 23:05:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,314,1635231600"; 
+   d="scan'208";a="695727805"
+Received: from lkp-server01.sh.intel.com (HELO 276f1b88eecb) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Jan 2022 23:05:27 -0800
+Received: from kbuild by 276f1b88eecb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nCFtO-000JTE-P0; Tue, 25 Jan 2022 07:05:26 +0000
+Date:   Tue, 25 Jan 2022 15:05:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Julia Lawall <julia.lawall@lip6.fr>, bpf@vger.kernel.org,
+        kbuild-all@lists.01.org
+Subject: [PATCH bpf-next] bpf: fix flexible_array.cocci warnings
+Message-ID: <20220125070519.GA56817@inn2.lkp.intel.com>
 MIME-Version: 1.0
-References: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
-In-Reply-To: <CA+khW7gh=vO8m-_SVnwWwj7kv+EDeUPcuWFqebf2Zmi9T_oEAQ@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 24 Jan 2022 23:07:45 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
-Message-ID: <CAPhsuW7F4KritXPXixoPSw4zbCsqpfZaYBuw5BgD+KKXaoeGxg@mail.gmail.com>
-Subject: Re: [Question] How to reliably get BuildIDs from bpf prog
-To:     Hao Luo <haoluo@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Blake Jones <blakejones@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Namhyung Kim <namhyung@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP01T76-KHKgqAippfyL0aa5Vc4dZGvH4VO+qKrQB-bBpp=YfA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 24, 2022 at 2:43 PM Hao Luo <haoluo@google.com> wrote:
->
-> Dear BPF experts,
->
-> I'm working on collecting some kernel performance data using BPF
-> tracing prog. Our performance profiling team wants to associate the
-> data with user stack information. One of the requirements is to
-> reliably get BuildIDs from bpf_get_stackid() and other similar helpers
-> [1].
->
-> As part of an early investigation, we found that there are a couple
-> issues that make bpf_get_stackid() much less reliable than we'd like
-> for our use:
->
-> 1. The first page of many binaries (which contains the ELF headers and
-> thus the BuildID that we need) is often not in memory. The failure of
-> find_get_page() (called from build_id_parse()) is higher than we would
-> want.
+From: kernel test robot <lkp@intel.com>
 
-Our top use case of bpf_get_stack() is called from NMI, so there isn't
-much we can do. Maybe it is possible to improve it by changing the
-layout of the binary and the libraries? Specifically, if the text is
-also in the first page, it is likely to stay in memory?
+net/bpf/test_run.c:296:6-10: WARNING use flexible-array member instead (https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays)
 
-> 2. When anonymous huge pages are used to hold some regions of process
-> text, build_id_parse() also fails to get a BuildID because
-> vma->vm_file is NULL.
 
-How did the text get in anonymous memory? I guess it is NOT from JIT?
-We had a hack to use transparent huge page for application text. The
-hack looks like:
+ Zero-length and one-element arrays are deprecated, see
+ Documentation/process/deprecated.rst
+ Flexible-array members should be used instead.
 
-"At run time, the application creates an 8MB temporary buffer and the
-hot section of the executable memory is copied to it. The 8MB region in
-the executable memory is then converted to a huge page (by way of an
-mmap() to anonymous pages and an madvise() to create a huge page), the
-data is copied back to it, and it is made executable again using
-mprotect()."
+Generated by: scripts/coccinelle/misc/flexible_array.cocci
 
-If your case is the same (or similar), it can probably be fixed with
-CONFIG_READ_ONLY_THP_FOR_FS, and modified user space.
+Fixes: c1ff181ffabc ("selftests/bpf: Extend kfunc selftests")
+CC: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
 
-Thanks,
-Song
+ test_run.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -293,7 +293,7 @@ struct prog_test_fail2 {
+ struct prog_test_fail3 {
+ 	int len;
+ 	char arr1[2];
+-	char arr2[0];
++	char arr2[];
+ };
+ 
+ noinline void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb)
