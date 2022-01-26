@@ -2,19 +2,19 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C77ADC63682
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BEE7C636CF
 	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 07:36:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237932AbiAZHgA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S237906AbiAZHgA (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 26 Jan 2022 02:36:00 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:35563 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237870AbiAZHfw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 02:35:52 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2uAwTM_1643182548;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2uAwTM_1643182548)
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:34955 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237920AbiAZHfs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 02:35:48 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2uVHmm_1643182545;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2uVHmm_1643182545)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 26 Jan 2022 15:35:49 +0800
+          Wed, 26 Jan 2022 15:35:46 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,9 +25,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v3 14/17] virtio_net: virtnet_tx_timeout() fix style
-Date:   Wed, 26 Jan 2022 15:35:30 +0800
-Message-Id: <20220126073533.44994-15-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v3 11/17] virtio_pci: queue_reset: release vq by vp_dev->vqs
+Date:   Wed, 26 Jan 2022 15:35:27 +0800
+Message-Id: <20220126073533.44994-12-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
 References: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
@@ -37,28 +37,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Replace priv with vi which is commonly used in the virtio-net module.
+In the process of queue reset, vq leaves vdev->vqs, so the original
+processing logic may miss some vq. So modify the processing method of
+releasing vq. Release vq by listing vqs.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/virtio/virtio_pci_common.c | 22 ++++++++++++++++++----
+ drivers/virtio/virtio_pci_common.h |  2 ++
+ 2 files changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 569eecfbc2cd..97eb4dddba1f 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2683,8 +2683,8 @@ static int virtnet_set_features(struct net_device *dev,
- 
- static void virtnet_tx_timeout(struct net_device *dev, unsigned int txqueue)
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index fdbde1db5ec5..6b2573ec1ae8 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -260,12 +260,20 @@ static void vp_del_vq(struct virtqueue *vq)
+ void vp_del_vqs(struct virtio_device *vdev)
  {
--	struct virtnet_info *priv = netdev_priv(dev);
--	struct send_queue *sq = &priv->sq[txqueue];
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	struct send_queue *sq = &vi->sq[txqueue];
- 	struct netdev_queue *txq = netdev_get_tx_queue(dev, txqueue);
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+-	struct virtqueue *vq, *n;
+-	int i;
++	struct virtio_pci_vq_info *info;
++	struct virtqueue *vq;
++	int i, v;
++
++	for (i = 0; i < vp_dev->nvqs; ++i) {
++
++		info = vp_dev->vqs[i];
++		if (!info)
++			continue;
++
++		vq = info->vq;
  
- 	u64_stats_update_begin(&sq->stats.syncp);
+-	list_for_each_entry_safe(vq, n, &vdev->vqs, list) {
+ 		if (vp_dev->per_vq_vectors) {
+-			int v = vp_dev->vqs[vq->index]->msix_vector;
++			v = info->msix_vector;
+ 
+ 			if (v != VIRTIO_MSI_NO_VECTOR) {
+ 				int irq = pci_irq_vector(vp_dev->pci_dev, v);
+@@ -275,6 +283,7 @@ void vp_del_vqs(struct virtio_device *vdev)
+ 			}
+ 		}
+ 		vp_del_vq(vq);
++		vp_dev->vqs[i] = NULL;
+ 	}
+ 	vp_dev->per_vq_vectors = false;
+ 
+@@ -308,6 +317,7 @@ void vp_del_vqs(struct virtio_device *vdev)
+ 	vp_dev->msix_affinity_masks = NULL;
+ 	kfree(vp_dev->vqs);
+ 	vp_dev->vqs = NULL;
++	vp_dev->nvqs = 0;
+ }
+ 
+ static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
+@@ -324,6 +334,8 @@ static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
+ 	if (!vp_dev->vqs)
+ 		return -ENOMEM;
+ 
++	vp_dev->nvqs = nvqs;
++
+ 	if (per_vq_vectors) {
+ 		/* Best option: one for change interrupt, one per vq. */
+ 		nvectors = 1;
+@@ -395,6 +407,8 @@ static int vp_find_vqs_intx(struct virtio_device *vdev, unsigned nvqs,
+ 	if (!vp_dev->vqs)
+ 		return -ENOMEM;
+ 
++	vp_dev->nvqs = nvqs;
++
+ 	err = request_irq(vp_dev->pci_dev->irq, vp_interrupt, IRQF_SHARED,
+ 			dev_name(&vdev->dev), vp_dev);
+ 	if (err)
+diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci_common.h
+index 23f6c5c678d5..392d990b7c73 100644
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -60,6 +60,8 @@ struct virtio_pci_device {
+ 	/* array of all queues for house-keeping */
+ 	struct virtio_pci_vq_info **vqs;
+ 
++	u32 nvqs;
++
+ 	/* MSI-X support */
+ 	int msix_enabled;
+ 	int intx_enabled;
 -- 
 2.31.0
 
