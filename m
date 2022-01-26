@@ -2,42 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96526C2BA4C
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 19:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4541AC28CF5
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 19:20:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244417AbiAZTUy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 14:20:54 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7942 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236295AbiAZTUx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 14:20:53 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20QE5s2J030556
-        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 11:20:53 -0800
+        id S244421AbiAZTU4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 14:20:56 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9896 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244419AbiAZTU4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 14:20:56 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20QE6OfF022474
+        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 11:20:56 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=DCMSFmJbLQ91HXUrcnvneW49VuxbN1I/B/x+Vf9XN4I=;
- b=FrL9/44B6pNGiXw6R5m9F32FgCIBTI3Z69Xm2KPWRtEvJt3eclrgc5zw5DaZhhW7cmle
- dV4feVdu5SBcxFp2vyusBh0w2qchCWESvHD6fUs6Ay+qKKEQbQbrIaNWUqvlmospmCM/
- h+ZwOiLQvofBJDgJMEswNUj69oxF9g2KVaI= 
+ bh=kOzyqO/MbhURvOVT/R7eq5BEaZfp4ec5ZULV1e+NT8g=;
+ b=XbfbUBsrO67h2pzMzlF996fwsFEAWClGNG9QQJaB9KK2IZEnrBcHbDSLaN2ix3Qcmp9y
+ byHLVx+VH+voG9LwDhhWrckSccNLP27BY+L4MyQl0fPaMibtWyyZVTES31olRJznZ8ZG
+ 4tZ6bc9ytOnkBjjde1QqayChMYp5joGcAAU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dtgsva2pr-5
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dtfjgjc1g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 11:20:53 -0800
-Received: from twshared14630.35.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 11:20:56 -0800
+Received: from twshared29821.14.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 26 Jan 2022 11:20:50 -0800
+ 15.1.2308.21; Wed, 26 Jan 2022 11:20:55 -0800
 Received: by devvm1744.ftw0.facebook.com (Postfix, from userid 460691)
-        id 4BAEF2C7F867; Wed, 26 Jan 2022 11:20:45 -0800 (PST)
+        id 09D1D2C7F8A3; Wed, 26 Jan 2022 11:20:52 -0800 (PST)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <dwarves@vger.kernel.org>, <arnaldo.melo@gmail.com>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <bpf@vger.kernel.org>, Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH dwarves v4 1/4] dwarf_loader: Receive per-thread data on worker threads.
-Date:   Wed, 26 Jan 2022 11:20:36 -0800
-Message-ID: <20220126192039.2840752-2-kuifeng@fb.com>
+Subject: [PATCH dwarves v4 4/4] libbpf: Update libbpf to a new revision.
+Date:   Wed, 26 Jan 2022 11:20:39 -0800
+Message-ID: <20220126192039.2840752-5-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220126192039.2840752-1-kuifeng@fb.com>
 References: <20220126192039.2840752-1-kuifeng@fb.com>
@@ -45,148 +45,138 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6m7PhPLcSlt5un-RsbGpKaRSkDoYZnER
-X-Proofpoint-GUID: 6m7PhPLcSlt5un-RsbGpKaRSkDoYZnER
+X-Proofpoint-GUID: rSfCNEBelErRQoU6KiZQvXHSx8aBRYof
+X-Proofpoint-ORIG-GUID: rSfCNEBelErRQoU6KiZQvXHSx8aBRYof
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-01-26_07,2022-01-26_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxlogscore=999
- malwarescore=0 phishscore=0 priorityscore=1501 clxscore=1015
- impostorscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
+ bulkscore=0 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 impostorscore=0 priorityscore=1501
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2201260115
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add arguments to steal and thread_exit callbacks of conf_load to
-receive per-thread data.
+Replace deprecated APIs with new ones.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
 ---
- btf_loader.c   | 2 +-
- ctf_loader.c   | 2 +-
- dwarf_loader.c | 4 ++--
- dwarves.h      | 5 +++--
- pahole.c       | 3 ++-
- pdwtags.c      | 3 ++-
- pfunct.c       | 4 +++-
- 7 files changed, 14 insertions(+), 9 deletions(-)
+ btf_encoder.c | 20 ++++++++++----------
+ btf_loader.c  |  2 +-
+ lib/bpf       |  2 +-
+ 3 files changed, 12 insertions(+), 12 deletions(-)
 
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 56a76f5d7275..fa29824f11fb 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -172,7 +172,7 @@ __attribute ((format (printf, 5, 6)))
+ static void btf__log_err(const struct btf *btf, int kind, const char *na=
+me,
+ 			 bool output_cr, const char *fmt, ...)
+ {
+-	fprintf(stderr, "[%u] %s %s", btf__get_nr_types(btf) + 1,
++	fprintf(stderr, "[%u] %s %s", btf__type_cnt(btf),
+ 		btf_kind_str[kind], name ?: "(anon)");
+=20
+ 	if (fmt && *fmt) {
+@@ -203,7 +203,7 @@ static void btf_encoder__log_type(const struct btf_en=
+coder *encoder, const struc
+ 	out =3D err ? stderr : stdout;
+=20
+ 	fprintf(out, "[%u] %s %s",
+-		btf__get_nr_types(btf), btf_kind_str[kind],
++		btf__type_cnt(btf) - 1, btf_kind_str[kind],
+ 		btf__printable_name(btf, t->name_off));
+=20
+ 	if (fmt && *fmt) {
+@@ -449,10 +449,10 @@ static int btf_encoder__add_field(struct btf_encode=
+r *encoder, const char *name,
+ 	int err;
+=20
+ 	err =3D btf__add_field(btf, name, type, offset, bitfield_size);
+-	t =3D btf__type_by_id(btf, btf__get_nr_types(btf));
++	t =3D btf__type_by_id(btf, btf__type_cnt(btf) - 1);
+ 	if (err) {
+ 		fprintf(stderr, "[%u] %s %s's field '%s' offset=3D%u bit_size=3D%u typ=
+e=3D%u Error emitting field\n",
+-			btf__get_nr_types(btf), btf_kind_str[btf_kind(t)],
++			btf__type_cnt(btf) - 1, btf_kind_str[btf_kind(t)],
+ 			btf__printable_name(btf, t->name_off),
+ 			name, offset, bitfield_size, type);
+ 	} else {
+@@ -899,9 +899,9 @@ static int btf_encoder__write_raw_file(struct btf_enc=
+oder *encoder)
+ 	const void *raw_btf_data;
+ 	int fd, err;
+=20
+-	raw_btf_data =3D btf__get_raw_data(encoder->btf, &raw_btf_size);
++	raw_btf_data =3D btf__raw_data(encoder->btf, &raw_btf_size);
+ 	if (raw_btf_data =3D=3D NULL) {
+-		fprintf(stderr, "%s: btf__get_raw_data failed!\n", __func__);
++		fprintf(stderr, "%s: btf__raw_data failed!\n", __func__);
+ 		return -1;
+ 	}
+=20
+@@ -976,7 +976,7 @@ static int btf_encoder__write_elf(struct btf_encoder =
+*encoder)
+ 		}
+ 	}
+=20
+-	raw_btf_data =3D btf__get_raw_data(btf, &raw_btf_size);
++	raw_btf_data =3D btf__raw_data(btf, &raw_btf_size);
+=20
+ 	if (btf_data) {
+ 		/* Existing .BTF section found */
+@@ -1043,10 +1043,10 @@ int btf_encoder__encode(struct btf_encoder *encod=
+er)
+ 		btf_encoder__add_datasec(encoder, PERCPU_SECTION);
+=20
+ 	/* Empty file, nothing to do, so... done! */
+-	if (btf__get_nr_types(encoder->btf) =3D=3D 0)
++	if (btf__type_cnt(encoder->btf) =3D=3D 1)
+ 		return 0;
+=20
+-	if (btf__dedup(encoder->btf, NULL, NULL)) {
++	if (btf__dedup(encoder->btf, NULL)) {
+ 		fprintf(stderr, "%s: btf__dedup failed!\n", __func__);
+ 		return -1;
+ 	}
+@@ -1403,7 +1403,7 @@ void btf_encoder__delete(struct btf_encoder *encode=
+r)
+=20
+ int btf_encoder__encode_cu(struct btf_encoder *encoder, struct cu *cu)
+ {
+-	uint32_t type_id_off =3D btf__get_nr_types(encoder->btf);
++	uint32_t type_id_off =3D btf__type_cnt(encoder->btf) - 1;
+ 	struct llvm_annotation *annot;
+ 	int btf_type_id, tag_type_id;
+ 	uint32_t core_id;
 diff --git a/btf_loader.c b/btf_loader.c
-index 7a5b16ff393e..b61cadd55127 100644
+index b61cadd55127..b5d444643adf 100644
 --- a/btf_loader.c
 +++ b/btf_loader.c
-@@ -624,7 +624,7 @@ static int cus__load_btf(struct cus *cus, struct conf=
-_load *conf, const char *fi
- 	 * The app stole this cu, possibly deleting it,
- 	 * so forget about it
- 	 */
--	if (conf && conf->steal && conf->steal(cu, conf))
-+	if (conf && conf->steal && conf->steal(cu, conf, NULL))
- 		return 0;
+@@ -399,7 +399,7 @@ static int btf__load_types(struct btf *btf, struct cu=
+ *cu)
+ 	uint32_t type_index;
+ 	int err;
 =20
- 	cus__add(cus, cu);
-diff --git a/ctf_loader.c b/ctf_loader.c
-index 7c34739afdce..de6d4dbfce97 100644
---- a/ctf_loader.c
-+++ b/ctf_loader.c
-@@ -722,7 +722,7 @@ int ctf__load_file(struct cus *cus, struct conf_load =
-*conf,
- 	 * The app stole this cu, possibly deleting it,
- 	 * so forget about it
- 	 */
--	if (conf && conf->steal && conf->steal(cu, conf))
-+	if (conf && conf->steal && conf->steal(cu, conf, NULL))
- 		return 0;
+-	for (type_index =3D 1; type_index <=3D btf__get_nr_types(btf); type_ind=
+ex++) {
++	for (type_index =3D 1; type_index < btf__type_cnt(btf); type_index++) {
+ 		const struct btf_type *type_ptr =3D btf__type_by_id(btf, type_index);
+ 		uint32_t type =3D btf_kind(type_ptr);
 =20
- 	cus__add(cus, cu);
-diff --git a/dwarf_loader.c b/dwarf_loader.c
-index e30b03c1c541..bf9ea3765419 100644
---- a/dwarf_loader.c
-+++ b/dwarf_loader.c
-@@ -2686,7 +2686,7 @@ static int cu__finalize(struct cu *cu, struct conf_=
-load *conf)
- {
- 	cu__for_all_tags(cu, class_member__cache_byte_size, conf);
- 	if (conf && conf->steal) {
--		return conf->steal(cu, conf);
-+		return conf->steal(cu, conf, NULL);
- 	}
- 	return LSK__KEEPIT;
- }
-@@ -2930,7 +2930,7 @@ static void *dwarf_cus__process_cu_thread(void *arg=
-)
- 			goto out_abort;
- 	}
-=20
--	if (dcus->conf->thread_exit && dcus->conf->thread_exit() !=3D 0)
-+	if (dcus->conf->thread_exit && dcus->conf->thread_exit(dcus->conf, NULL=
-) !=3D 0)
- 		goto out_abort;
-=20
- 	return (void *)DWARF_CB_OK;
-diff --git a/dwarves.h b/dwarves.h
-index 52d162d67456..9a8e4de8843a 100644
---- a/dwarves.h
-+++ b/dwarves.h
-@@ -48,8 +48,9 @@ struct conf_fprintf;
-  */
- struct conf_load {
- 	enum load_steal_kind	(*steal)(struct cu *cu,
--					 struct conf_load *conf);
--	int			(*thread_exit)(void);
-+					 struct conf_load *conf,
-+					 void *thr_data);
-+	int			(*thread_exit)(struct conf_load *conf, void *thr_data);
- 	void			*cookie;
- 	char			*format_path;
- 	int			nr_jobs;
-diff --git a/pahole.c b/pahole.c
-index f3a51cb2fe74..f3eeaaca4cdf 100644
---- a/pahole.c
-+++ b/pahole.c
-@@ -2799,7 +2799,8 @@ out:
- static struct type_instance *header;
-=20
- static enum load_steal_kind pahole_stealer(struct cu *cu,
--					   struct conf_load *conf_load)
-+					   struct conf_load *conf_load,
-+					   void *thr_data)
- {
- 	int ret =3D LSK__DELETE;
-=20
-diff --git a/pdwtags.c b/pdwtags.c
-index 2b5ba1bf6745..8b1d6f1c96cb 100644
---- a/pdwtags.c
-+++ b/pdwtags.c
-@@ -72,7 +72,8 @@ static int cu__emit_tags(struct cu *cu)
- }
-=20
- static enum load_steal_kind pdwtags_stealer(struct cu *cu,
--					    struct conf_load *conf_load __maybe_unused)
-+					    struct conf_load *conf_load __maybe_unused,
-+					    void *thr_data __maybe_unused)
- {
- 	cu__emit_tags(cu);
- 	return LSK__DELETE;
-diff --git a/pfunct.c b/pfunct.c
-index 5485622e639b..314915b774f4 100644
---- a/pfunct.c
-+++ b/pfunct.c
-@@ -489,7 +489,9 @@ int elf_symtabs__show(char *filenames[])
- 	return EXIT_SUCCESS;
- }
-=20
--static enum load_steal_kind pfunct_stealer(struct cu *cu, struct conf_lo=
-ad *conf_load __maybe_unused)
-+static enum load_steal_kind pfunct_stealer(struct cu *cu,
-+					   struct conf_load *conf_load __maybe_unused,
-+					   void *thr_data __maybe_unused)
- {
-=20
- 	if (function_name) {
+diff --git a/lib/bpf b/lib/bpf
+index 94a49850c5ee..393a058d061d 160000
+--- a/lib/bpf
++++ b/lib/bpf
+@@ -1 +1 @@
+-Subproject commit 94a49850c5ee61ea02dfcbabf48013391e8cecdf
++Subproject commit 393a058d061d49d5c3055fa9eefafb4c0c31ccc3
 --=20
 2.30.2
 
