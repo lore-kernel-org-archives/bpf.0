@@ -2,98 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB69EC433F5
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 21:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FD24C433F5
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 21:48:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232513AbiAZV3E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 16:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbiAZV3B (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jan 2022 16:29:01 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29669C061749;
-        Wed, 26 Jan 2022 13:29:01 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id s5so1438172ejx.2;
-        Wed, 26 Jan 2022 13:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BMc1fVwckCRvw/Dv/tBaShtNrcGUAklyobw2nHDvO1c=;
-        b=MsVGuWWcvHFMYVGkvCKoWrVQUUqS/sftypg2xHuw4tAh/9GAZkcw0g9UGyx7c+skzd
-         mbYm3JtBOWoohyvkr0LwnVj3TwL65K4Q11h1KAbR9cHb4AOwXKvO9WwSn5h+6jrTq+Xp
-         3rFgZ3zwFXEfkOzuCyvF9+/5rZfRPDs9a2cUJ7po0WBNqbeQJhc6mJzSz0cg2AOu1/px
-         z98xiUGzjxBykAIHzkfBi9zFzJs14Jq0wUFtA/RX7n4IExyGjdXD/f6iHryO3Cn5Heb3
-         hopKtJXpQyRzQZnbUan8qKcova43qkWDy0UBFVczoeOenRG5vtLAHNdoQeG0Wcq6Bmrd
-         e+xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BMc1fVwckCRvw/Dv/tBaShtNrcGUAklyobw2nHDvO1c=;
-        b=gz0b5lJs/l2Q/TdqKbQ0kxFjoj6RCly7iPILTB6hdYll4JCy23DFO+00svzZn7ciEF
-         3N1cklV/oBWEedMOXc71gxz3sgANJvtJ5e5DkgM7p1OW5Z02rgqYCyr+myrb2wYqu+mn
-         qWBm4wpigR3DZ7lylBj0XUxAwNDmF+2PW0uKFpnaMqU17MgELuqcDWuEs9W6i+CaZCC5
-         V9ZPdPsEOCD37z7dLgV2PqHEezkxYM0g8tdJe+FFg4k62ISUDAq3Fbqbq5JIm67Ovv3D
-         6o3/3LRmXYY1vURBqI/giWY6HxcWtkxL5AmcDlfoYGb9PrwSu9vCNpdufvPf/owKQCTz
-         XcZw==
-X-Gm-Message-State: AOAM532e0FGQ31FzPszy9ubjeixbdQVMVZOftJKNjia8CiRMZkxY4FVF
-        jPnLa92Xu5w+8Yvqq5E/LmM=
-X-Google-Smtp-Source: ABdhPJzdEjQQ+/H3DwGTHrLsu06c4n+nkpYjsBjq20ffSS0UfipHwGGIo6GftST34IpxfACJvjR+1A==
-X-Received: by 2002:a17:906:31cc:: with SMTP id f12mr495303ejf.115.1643232539521;
-        Wed, 26 Jan 2022 13:28:59 -0800 (PST)
-Received: from [192.168.8.198] ([85.255.234.222])
-        by smtp.gmail.com with ESMTPSA id fy40sm7718078ejc.36.2022.01.26.13.28.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jan 2022 13:28:59 -0800 (PST)
-Message-ID: <fbc8acbe-4c12-9c68-0418-51e97457d30b@gmail.com>
-Date:   Wed, 26 Jan 2022 21:28:46 +0000
+        id S232744AbiAZVsX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 16:48:23 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32004 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230126AbiAZVsX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 16:48:23 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 20QL24wK005673
+        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 13:48:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=vb1bqpvevvJw77qKF/pvSupfkGkXKoZ8kOt2CxtKzJY=;
+ b=JpUHIGmfhngZXmnQ0jTMrK6Qo/x/IaD49W1ccypxgEiLfbK+AJdMCscAfE4/IYHQ8rZL
+ o/blmzfr4KQx0ePv9trSXLMDWNfviCs2kQpE6YlsKsX1OdkLCtbo2KNpFGqV9jJhnxrM
+ GqlUD9X+gKsTXB8nVdeTekmiLOl02qWYXQ4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dtguhu02v-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 13:48:22 -0800
+Received: from twshared18912.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 26 Jan 2022 13:48:21 -0800
+Received: by devvm1744.ftw0.facebook.com (Postfix, from userid 460691)
+        id 278812C9AA2C; Wed, 26 Jan 2022 13:48:16 -0800 (PST)
+From:   Kui-Feng Lee <kuifeng@fb.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>
+CC:     Kui-Feng Lee <kuifeng@fb.com>
+Subject: [PATCH bpf-next 2/5] bpf: Detect if a program needs its program ID.
+Date:   Wed, 26 Jan 2022 13:48:06 -0800
+Message-ID: <20220126214809.3868787-3-kuifeng@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220126214809.3868787-1-kuifeng@fb.com>
+References: <20220126214809.3868787-1-kuifeng@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH for-next v4] cgroup/bpf: fast path skb BPF filtering
-Content-Language: en-US
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>, linux-kernel@vger.kernel.org,
-        Stanislav Fomichev <sdf@google.com>
-References: <94e36de3cc2b579e45f95c189a6f5378bf1480ac.1643156174.git.asml.silence@gmail.com>
- <20220126203055.3xre2m276g2q2tkx@kafai-mbp.dhcp.thefacebook.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20220126203055.3xre2m276g2q2tkx@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: AM2kU1n6Q4jmL4IwTP94go5HDeM9o3fP
+X-Proofpoint-ORIG-GUID: AM2kU1n6Q4jmL4IwTP94go5HDeM9o3fP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-26_08,2022-01-26_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ suspectscore=0 spamscore=0 phishscore=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
+ impostorscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2201260126
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/26/22 20:30, Martin KaFai Lau wrote:
-> On Wed, Jan 26, 2022 at 12:22:13AM +0000, Pavel Begunkov wrote:
->>   #define BPF_CGROUP_RUN_PROG_INET_INGRESS(sk, skb)			      \
->>   ({									      \
->>   	int __ret = 0;							      \
->> -	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS))		      \
->> +	if (cgroup_bpf_enabled(CGROUP_INET_INGRESS) && sk &&		      \
->  From reading sk_filter_trim_cap() where this will be called, sk cannot be NULL.
-> If yes, the new sk test is not needed.
+Scan BPF bytecode to detect if a program calls any functions requiring
+a program ID.  So far, bpf_get_attach_cookie() is the only function
+that needs a program ID.
 
-Well, there is no sane way to verify how it's used considering
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ include/linux/filter.h  | 3 ++-
+ kernel/bpf/trampoline.c | 7 ++++---
+ kernel/bpf/verifier.c   | 3 +++
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
-EXPORT_SYMBOL(__cgroup_bpf_run_filter_skb);
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index d23e999dc032..4433c5d1bc19 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -572,7 +572,8 @@ struct bpf_prog {
+ 				has_callchain_buf:1, /* callchain buffer allocated? */
+ 				enforce_expected_attach_type:1, /* Enforce expected_attach_type chec=
+king at attach time */
+ 				call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid()=
+ */
+-				call_get_func_ip:1; /* Do we call get_func_ip() */
++				call_get_func_ip:1, /* Do we call get_func_ip() */
++				need_prog_id:1; /* Do we need program ID? */
+ 	enum bpf_prog_type	type;		/* Type of BPF program */
+ 	enum bpf_attach_type	expected_attach_type; /* For some prog types */
+ 	u32			len;		/* Number of filter blocks */
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 4b6974a195c1..c65622e4216c 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -181,7 +181,7 @@ static int register_fentry(struct bpf_trampoline *tr,=
+ void *new_addr)
+ }
+=20
+ static struct bpf_tramp_progs *
+-bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bo=
+ol *ip_arg)
++bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bo=
+ol *ip_arg, bool *prog_id)
+ {
+ 	const struct bpf_prog_aux *aux;
+ 	struct bpf_tramp_progs *tprogs;
+@@ -200,6 +200,7 @@ bpf_trampoline_get_progs(const struct bpf_trampoline =
+*tr, int *total, bool *ip_a
+=20
+ 		hlist_for_each_entry(aux, &tr->progs_hlist[kind], tramp_hlist) {
+ 			*ip_arg |=3D aux->prog->call_get_func_ip;
++			*prog_id |=3D aux->prog->need_prog_id;
+ 			*progs++ =3D aux->prog;
+ 		}
+ 	}
+@@ -344,10 +345,10 @@ static int bpf_trampoline_update(struct bpf_trampol=
+ine *tr)
+ 	struct bpf_tramp_image *im;
+ 	struct bpf_tramp_progs *tprogs;
+ 	u32 flags =3D BPF_TRAMP_F_RESTORE_REGS;
+-	bool ip_arg =3D false;
++	bool ip_arg =3D false, prog_id =3D false;
+ 	int err, total;
+=20
+-	tprogs =3D bpf_trampoline_get_progs(tr, &total, &ip_arg);
++	tprogs =3D bpf_trampoline_get_progs(tr, &total, &ip_arg, &prog_id);
+ 	if (IS_ERR(tprogs))
+ 		return PTR_ERR(tprogs);
+=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ff91f5038010..0359242e2a81 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6812,6 +6812,9 @@ static int check_helper_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn
+ 		env->prog->call_get_func_ip =3D true;
+ 	}
+=20
++	if (func_id =3D=3D BPF_FUNC_get_attach_cookie)
++		env->prog->need_prog_id =3D true;
++
+ 	if (changes_data)
+ 		clear_all_pkt_pointers(env);
+ 	return 0;
+--=20
+2.30.2
 
-but can remove the check if nobody cares
-
-
-> Others lgtm.
-> 
->> +	    cgroup_bpf_sock_enabled(sk, CGROUP_INET_INGRESS)) 	      \
->>   		__ret = __cgroup_bpf_run_filter_skb(sk, skb,		      \
->>   						    CGROUP_INET_INGRESS); \
->>   									      \
-
--- 
-Pavel Begunkov
