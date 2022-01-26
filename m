@@ -2,106 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF975C2BA4C
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 12:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F431C2BA4C
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 12:10:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241056AbiAZMFk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 07:05:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S241103AbiAZMKB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 07:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbiAZMFj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jan 2022 07:05:39 -0500
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C30BC06161C;
-        Wed, 26 Jan 2022 04:05:39 -0800 (PST)
-Received: by mail-pj1-x1044.google.com with SMTP id o11so5774607pjf.0;
-        Wed, 26 Jan 2022 04:05:39 -0800 (PST)
+        with ESMTP id S241101AbiAZMKB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jan 2022 07:10:01 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5595FC06161C;
+        Wed, 26 Jan 2022 04:10:01 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id j16so11648003plx.4;
+        Wed, 26 Jan 2022 04:10:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ZARXyeQlg5luOscbsmArF8xVktdStoU7fcfRA8fZs8I=;
-        b=JayHx62MZ+0zcrjWO1RAPU3RqTz9Bz61ccATR2p+3qMcvidz/I9DLqC3siKcQVK8gP
-         UjajrXNOo54Fp3GtJFxnDd1H8fq/1rCP23zZI5XqncDWtYnKUCTpxQCnPnlp0JNOhJV/
-         8OQ9u0hiN0XVwlLhGzdf6W3xem2TMrkNDqoviS+N0sOypRhOlN627QOkYyuAn0l/G2Pa
-         M4efcltDxoKA+fIhjlNIU23KJuJN+zyhDhjmlSf31tT0YQmd/DtYZAl2AEo8XkAy0qc5
-         0B73P/vpq7m6cMd1cSjzP//+AAnj6tzCYJ8i736Kzhfj3vWEuQfemWiP+aMzRdB1a/mx
-         f1Sw==
+        bh=AEzAoHuhPGPKCGh3cWJjJrGXHXVQzmvhoLSTyK087Xo=;
+        b=djMVuKsI0YKi8jRlWCDcM3ROIbZoH//glenypM9jc7sLmeCe/EE75Y67qRrzAf3wQP
+         QUobivH6WxoG9ejnNkyis1z3Jf46rdvKV7V2W3ttwBKNfuyoNAyUMIBSaurN+y6UYFmm
+         NVhUjhZGlh0F4MQW6fuIZqv3iIKXwHD+7sUKTw9LzoI4OoSO74QRpxtGqMf2MIVDqMbI
+         agGnOSaI6mF2rB8YbiD39ItlFrnyCv+mSU123nGp2x0E17DtbzhA9fwphSrJz4pi+THm
+         sozAj6KeeguRAfAJerosUnbKNCaqMDE2tAGjnZPFKcdJtzOKZSovKzaQHvbcJtOXaEow
+         fEIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ZARXyeQlg5luOscbsmArF8xVktdStoU7fcfRA8fZs8I=;
-        b=GHBFFsG4VrVjAvqolHetHAPjfkfRtoN2ToAweitW2840W6GbxwXrtI3RKv733VMHH3
-         kcBGrkdSdMbrr2/0pEsmLyhReb5JgNd38C2T2RYV4jeOY+lj4/yLbIVx8uaX0NOTDzkb
-         tQOf/4eU53AMlcwHsXns03ZRKvQBYxIu57nTITU5mKxK5f1gMTo/hQC/ZHLqAN3E2ShK
-         2nz9JmclrV4UK1m0GMUFvYoDwoIUKP9aoJxBMHRNFz8RFbwWoXkE2UrxNhE80t4924wB
-         K4H7Ux9EjQaagU5O2DoZpxk17UPtmwObhqz2ai0GH0k4E1vcFZDRpStVjsWkuho76UKN
-         y4sw==
-X-Gm-Message-State: AOAM532wsBP3YxxG+0q1H4+D/3vUu+1ir7P7GQj+POe7vtR4IH5mYvDO
-        YMTOCU7UtRE9DGjUia5ThZU=
-X-Google-Smtp-Source: ABdhPJx06AZgoeK3Rdg74ijUBLl5ANnsa5saw8byqAabmNu2S63YN13jRwnPoQjiElRhDCBiizllHg==
-X-Received: by 2002:a17:90b:4f44:: with SMTP id pj4mr8417288pjb.167.1643198738903;
-        Wed, 26 Jan 2022 04:05:38 -0800 (PST)
+        bh=AEzAoHuhPGPKCGh3cWJjJrGXHXVQzmvhoLSTyK087Xo=;
+        b=ucFFgr5M+eolCZoyfgLebYGRSNJwXNVOuJwNYueTxJ60elXkemnZYDL4sLUnxLXJc2
+         UOUc1WDDNHjcKbm4OIASwezgWLsPWDG+nmYFO8TRRloi+/rrH1ch5bW5+iKkkO8BaATb
+         wdf/KM0I6UyaM65UiEI5GlRgyJQmhXXoIs+xg9sBHjVeLNCnZ9X/aEu7dtBPleFRPg0f
+         h/JItQ4SSYPMPxLb/Wi0Omx598uuRoI+4jjwc5K4uURXZ+PNnCZ9+yohsC+S/iEkTlni
+         uLYzhOAcBE9PCxmFdElaKWehJfxhI1g3bMx1GSKIJdAqmDgfJnl91zhYtmlwjTwRJv2p
+         BXYQ==
+X-Gm-Message-State: AOAM533UPcmYAreym8FLCJP/YzcHRPkAkIRUKFOb90iFLG9E71Idjm3v
+        mzLn5Yigi4reCsi2GXXgaFs=
+X-Google-Smtp-Source: ABdhPJxncV8VOSnug4ym2aL2nT/IZC7T0uIUIvLBVm9RqV/h+fb+P0gfjEnvrMXmbIV133KdjmCRIg==
+X-Received: by 2002:a17:90a:7e8a:: with SMTP id j10mr8400366pjl.13.1643199000857;
+        Wed, 26 Jan 2022 04:10:00 -0800 (PST)
 Received: from localhost ([2405:201:6014:d064:3d4e:6265:800c:dc84])
-        by smtp.gmail.com with ESMTPSA id n4sm4987900pjf.0.2022.01.26.04.05.38
+        by smtp.gmail.com with ESMTPSA id h9sm1886487pfe.101.2022.01.26.04.10.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jan 2022 04:05:38 -0800 (PST)
-Date:   Wed, 26 Jan 2022 17:33:47 +0530
+        Wed, 26 Jan 2022 04:10:00 -0800 (PST)
+Date:   Wed, 26 Jan 2022 17:38:09 +0530
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, dsahern@kernel.org,
-        komachi.yoshiki@gmail.com, brouer@redhat.com,
-        andrii.nakryiko@gmail.com
+Cc:     Nikolay Aleksandrov <nikolay@nvidia.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, lorenzo.bianconi@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, dsahern@kernel.org,
+        komachi.yoshiki@gmail.com, brouer@redhat.com, toke@redhat.com,
+        andrii.nakryiko@gmail.com, Roopa Prabhu <roopa@nvidia.com>,
+        "bridge@lists.linux-foundation.org" 
+        <bridge@lists.linux-foundation.org>,
+        Ido Schimmel <idosch@idosch.org>
 Subject: Re: [RFC bpf-next 1/2] net: bridge: add unstable
  br_fdb_find_port_from_ifindex helper
-Message-ID: <20220126120347.cp3xvuxkwyi2o5wx@apollo.legion>
+Message-ID: <20220126120809.ihs2wko74dm4r3pi@apollo.legion>
 References: <cover.1643044381.git.lorenzo@kernel.org>
  <720907692575488526f06edc2cf5c8f783777d4f.1643044381.git.lorenzo@kernel.org>
- <878rv558fy.fsf@toke.dk>
- <YfEzl0wL+51wa6z7@lore-desk>
+ <61553c87-a3d3-07ae-8c2f-93cf0cb52263@nvidia.com>
+ <YfEwLrB6JqNpdUc0@lore-desk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YfEzl0wL+51wa6z7@lore-desk>
+In-Reply-To: <YfEwLrB6JqNpdUc0@lore-desk>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 26, 2022 at 05:12:15PM IST, Lorenzo Bianconi wrote:
-> > [ snip to focus on the API ]
+On Wed, Jan 26, 2022 at 04:57:42PM IST, Lorenzo Bianconi wrote:
+> > On 24/01/2022 19:20, Lorenzo Bianconi wrote:
+> > > Similar to bpf_xdp_ct_lookup routine, introduce
+> > > br_fdb_find_port_from_ifindex unstable helper in order to accelerate
+> > > linux bridge with XDP. br_fdb_find_port_from_ifindex will perform a
+> > > lookup in the associated bridge fdb table and it will return the
+> > > output ifindex if the destination address is associated to a bridge
+> > > port or -ENODEV for BOM traffic or if lookup fails.
+> > >
+> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > ---
+> > >  net/bridge/br.c         | 21 +++++++++++++
+> > >  net/bridge/br_fdb.c     | 67 +++++++++++++++++++++++++++++++++++------
+> > >  net/bridge/br_private.h | 12 ++++++++
+> > >  3 files changed, 91 insertions(+), 9 deletions(-)
+> > >
 > >
-> > > +int br_fdb_find_port_from_ifindex(struct xdp_md *xdp_ctx,
-> > > +				  struct bpf_fdb_lookup *opt,
-> > > +				  u32 opt__sz)
-> > > +{
-> > > +	struct xdp_buff *ctx = (struct xdp_buff *)xdp_ctx;
-> > > +	struct net_bridge_port *port;
-> > > +	struct net_device *dev;
-> > > +	int ret = -ENODEV;
-> > > +
-> > > +	BUILD_BUG_ON(sizeof(struct bpf_fdb_lookup) != NF_BPF_FDB_OPTS_SZ);
-> > > +	if (!opt || opt__sz != sizeof(struct bpf_fdb_lookup))
-> > > +		return -ENODEV;
-> >
-> > Why is the BUILD_BUG_ON needed? Or why is the NF_BPF_FDB_OPTS_SZ
-> > constant even needed?
+> > Hi Lorenzo,
 >
-> I added it to be symmetric with respect to ct counterpart
-
-But the constant needs to be an enum, not a define, otherwise it will not be
-emitted to BTF, I added it so that one could easily check the struct 'version'
-(because sizeof is not relocated in BPF programs).
-
-Yes, bpf_core_field_exists and would also work, but the size is fixed anyway and
-we need to check it, so it felt better to give it a name and also make it
-visible to BPF programs at the same time.
-
+> Hi Nikolay,
 >
->  [...]
+> thx for the review.
+>
+> [...]
+>
+> I guess at the time I sent the series it was just in bpf-next but now it should
+> be in net-next too.
+> I do not think we need a unregister here.
+> @Kumar: agree?
+>
+
+Yes, no need to call unregister (hence there is no unregister).
+
+> > [...]
+
+
 
 --
 Kartikeya
