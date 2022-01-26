@@ -2,112 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73C25C3526D
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 06:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7889BC2BA4C
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 07:35:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235205AbiAZGN2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 01:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiAZGN2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jan 2022 01:13:28 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9770BC06161C;
-        Tue, 25 Jan 2022 22:13:27 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id i14so18756453ila.11;
-        Tue, 25 Jan 2022 22:13:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CSYmlZQa0IaWT/qL+jT1l6pxc0f984J7li9TgluA20o=;
-        b=DcyDzDt3CRxHhBEU5u//5poH2cpJtT6SF4Jo08K8+An7daQafsdXFN/6mWB0YBRTsA
-         XFBmh6yPgttBsU8yaOGYHpnrydPFpxW4TDAn7cAydeRij09cBZA7w/OL7AkpfPQefjKw
-         VJYI6jaY8xiRaU5hOR6/JcymcHuJtXWgBjibDZudOtVWX1f1pjtuwEnmHa/PSGhvzaFX
-         Y+IHG05pdf2WA4LJuoPscJMVixqIB9dZbuoRbdQs0cHpf2fAYc4P8H/bP1oi3EaqZLwZ
-         b/UBNjoQE5fnnLL/v3t+umG1CZf9ekBL9vu0nbpMLqrqVqzE0qiaFeoapeItyD8nq/yR
-         0vwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CSYmlZQa0IaWT/qL+jT1l6pxc0f984J7li9TgluA20o=;
-        b=q78Qlc5mwc3bGvuRUjFz8Wlz9owjhSjoX+RgD9sHU7lnIXYOJ655WkDiQ6XZMOUF55
-         LXcI8XQgK4qVzTJUHhDKy398da0RxErVjgxGXsj0S/W3KxAKu0xEZ9BZI6xeksLc76hX
-         1PsZU7FhJWU/REiCEnpLD74KI0RIwv87Jq2V0Xose11wa1E32q6njx8YKaEKK67owhs+
-         qcYhbupx/Tel1WRUg4Z0u+1p1ZUGigYwi5w94ekg3axswVyROjqpQX5y4suVJivE7G61
-         w7vnlr9DFSq0c+haX1qpqGh9LLYbGrb8CPko4Vh4NJtT+tmCY16oODoZMif2qATEaO1y
-         MiFQ==
-X-Gm-Message-State: AOAM531J4Pd71SSvw9uM0lpgmySyShIRd03vbfEIb9eK+DWfmICJAMLL
-        oLNvzdgk1N6ChHRh22Nf9aw9XLemZkq4F9HgUBA=
-X-Google-Smtp-Source: ABdhPJyqtDX4KyOT5+g3DIRBgl27MBpzyDUDNdtz7Sfz9hPZsityiQQ9yD5y8nU0fibdtBgLMoF/DYoJJi99MXoVCek=
-X-Received: by 2002:a05:6e02:1c01:: with SMTP id l1mr14102334ilh.239.1643177607010;
- Tue, 25 Jan 2022 22:13:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20220126040509.1862767-1-kuifeng@fb.com> <20220126040509.1862767-3-kuifeng@fb.com>
-In-Reply-To: <20220126040509.1862767-3-kuifeng@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 25 Jan 2022 22:13:14 -0800
-Message-ID: <CAEf4BzbRHe+KiqcP0zsq64LMCWxOJGJBrEWHrV-gccMeQ6g7dA@mail.gmail.com>
-Subject: Re: [PATCH dwarves v3 2/4] dwarf_loader: Prepare and pass per-thread
- data to worker threads.
-To:     Kui-Feng Lee <kuifeng@fb.com>
-Cc:     dwarves@vger.kernel.org,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        id S237871AbiAZHfj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 02:35:39 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:43101 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237870AbiAZHfg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 02:35:36 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2uVHkt_1643182533;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2uVHkt_1643182533)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 26 Jan 2022 15:35:33 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+Subject: [PATCH v3 00/17] virtio pci support VIRTIO_F_RING_RESET
+Date:   Wed, 26 Jan 2022 15:35:16 +0800
+Message-Id: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 25, 2022 at 8:07 PM Kui-Feng Lee <kuifeng@fb.com> wrote:
->
-> Add interfaces to allow users of dwarf_loader to prepare and pass
-> per-thread data to steal-functions running on worker threads.
->
-> Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
-> ---
+================================================================================
+The virtio spec already supports the virtio queue reset function. This patch set
+is to add this function to the kernel. The relevant virtio spec information is
+here:
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+    https://github.com/oasis-tcs/virtio-spec/issues/124
 
->  dwarf_loader.c | 58 +++++++++++++++++++++++++++++++++++++++-----------
->  dwarves.h      |  4 ++++
->  2 files changed, 49 insertions(+), 13 deletions(-)
->
+Also regarding MMIO support for queue reset, I plan to support it after this
+patch is passed.
 
-[...]
+#14-#17 is the disable/enable function of rx/tx pair implemented by virtio-net
+using the new helper. This function is not currently referenced by other
+functions. It is more to show the usage of the new helper, I not sure if they
+are going to be merged together.
 
->  static int dwarf_cus__threaded_process_cus(struct dwarf_cus *dcus)
->  {
->         pthread_t threads[dcus->conf->nr_jobs];
-> +       struct dwarf_thread dthr[dcus->conf->nr_jobs];
-> +       void *thread_data[dcus->conf->nr_jobs];
-> +       int res;
->         int i;
->
-> +       if (dcus->conf->threads_prepare) {
-> +               res = dcus->conf->threads_prepare(dcus->conf, dcus->conf->nr_jobs, thread_data);
-> +               if (res != 0)
-> +                       return res;
-> +       } else
-> +               memset(thread_data, 0, sizeof(void *) * dcus->conf->nr_jobs);
+Please review. Thanks.
 
-at least in kernel code style, if one branch of if/else has {}, the
-other has to have {} as well, even if it's a single-line statement
+v3:
+  1. keep vq, irq unreleased
 
-> +
->         for (i = 0; i < dcus->conf->nr_jobs; ++i) {
-> -               dcus->error = pthread_create(&threads[i], NULL, dwarf_cus__process_cu_thread, dcus);
-> +               dthr[i].dcus = dcus;
-> +               dthr[i].data = thread_data[i];
-> +
-> +               dcus->error = pthread_create(&threads[i], NULL,
-> +                                            dwarf_cus__process_cu_thread,
-> +                                            &dthr[i]);
->                 if (dcus->error)
->                         goto out_join;
->         }
+Xuan Zhuo (17):
+  virtio_pci: struct virtio_pci_common_cfg add queue_notify_data
+  virtio: queue_reset: add VIRTIO_F_RING_RESET
+  virtio: queue_reset: struct virtio_config_ops add callbacks for
+    queue_reset
+  virtio: queue_reset: add helper
+  vritio_ring: queue_reset: extract the release function of the vq ring
+  virtio_ring: queue_reset: split: add __vring_init_virtqueue()
+  virtio_ring: queue_reset: split: support enable reset queue
+  virtio_ring: queue_reset: packed: support enable reset queue
+  virtio_ring: queue_reset: add vring_reset_virtqueue()
+  virtio_pci: queue_reset: update struct virtio_pci_common_cfg and
+    option functions
+  virtio_pci: queue_reset: release vq by vp_dev->vqs
+  virtio_pci: queue_reset: setup_vq use vring_setup_virtqueue()
+  virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
+  virtio_net: virtnet_tx_timeout() fix style
+  virtio_net: virtnet_tx_timeout() stop ref sq->vq
+  virtio_net: split free_unused_bufs()
+  virtio_net: support pair disable/enable
 
-[...]
+ drivers/net/virtio_net.c               | 220 ++++++++++++++++++++++---
+ drivers/virtio/virtio_pci_common.c     |  62 ++++---
+ drivers/virtio/virtio_pci_common.h     |  11 +-
+ drivers/virtio/virtio_pci_legacy.c     |   5 +-
+ drivers/virtio/virtio_pci_modern.c     | 120 +++++++++++++-
+ drivers/virtio/virtio_pci_modern_dev.c |  28 ++++
+ drivers/virtio/virtio_ring.c           | 144 +++++++++++-----
+ include/linux/virtio.h                 |   1 +
+ include/linux/virtio_config.h          |  75 ++++++++-
+ include/linux/virtio_pci_modern.h      |   2 +
+ include/linux/virtio_ring.h            |  42 +++--
+ include/uapi/linux/virtio_config.h     |   7 +-
+ include/uapi/linux/virtio_pci.h        |   2 +
+ 13 files changed, 618 insertions(+), 101 deletions(-)
+
+--
+2.31.0
+
