@@ -2,19 +2,19 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A5DDC63697
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A56C636C8
 	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 07:35:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237873AbiAZHfl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S237874AbiAZHfl (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 26 Jan 2022 02:35:41 -0500
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:40462 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237878AbiAZHfj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 02:35:39 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2uVHlA_1643182535;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2uVHlA_1643182535)
+Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:34290 "EHLO
+        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237881AbiAZHfk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 Jan 2022 02:35:40 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V2ubkjl_1643182537;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V2ubkjl_1643182537)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 26 Jan 2022 15:35:36 +0800
+          Wed, 26 Jan 2022 15:35:38 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -25,9 +25,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v3 02/17] virtio: queue_reset: add VIRTIO_F_RING_RESET
-Date:   Wed, 26 Jan 2022 15:35:18 +0800
-Message-Id: <20220126073533.44994-3-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v3 04/17] virtio: queue_reset: add helper
+Date:   Wed, 26 Jan 2022 15:35:20 +0800
+Message-Id: <20220126073533.44994-5-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
 References: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
@@ -37,37 +37,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Added VIRTIO_F_RING_RESET, it came from here
-https://github.com/oasis-tcs/virtio-spec/issues/124
+Add helper for virtio queue reset.
+
+* virtio_reset_vq: reset a queue individually
+* virtio_enable_resetq: enable a reset queue
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- include/uapi/linux/virtio_config.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ include/linux/virtio_config.h | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/include/uapi/linux/virtio_config.h b/include/uapi/linux/virtio_config.h
-index b5eda06f0d57..0862be802ff8 100644
---- a/include/uapi/linux/virtio_config.h
-+++ b/include/uapi/linux/virtio_config.h
-@@ -52,7 +52,7 @@
-  * rest are per-device feature bits.
-  */
- #define VIRTIO_TRANSPORT_F_START	28
--#define VIRTIO_TRANSPORT_F_END		38
-+#define VIRTIO_TRANSPORT_F_END		41
+diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+index 51dd8461d1b6..3c971d9a0a59 100644
+--- a/include/linux/virtio_config.h
++++ b/include/linux/virtio_config.h
+@@ -260,6 +260,38 @@ int virtio_find_vqs_ctx(struct virtio_device *vdev, unsigned nvqs,
+ 				      desc);
+ }
  
- #ifndef VIRTIO_CONFIG_NO_LEGACY
- /* Do we get callbacks when the ring is completely used, even if we've
-@@ -92,4 +92,9 @@
-  * Does the device support Single Root I/O Virtualization?
-  */
- #define VIRTIO_F_SR_IOV			37
-+
-+/*
-+ * This feature indicates that the driver can reset a queue individually.
++/**
++ * virtio_reset_vq - reset a queue individually
++ * @param: struct virtio_reset_vq
++ *
++ * returns 0 on success or error status
++ *
 + */
-+#define VIRTIO_F_RING_RESET		40
- #endif /* _UAPI_LINUX_VIRTIO_CONFIG_H */
++static inline
++int virtio_reset_vq(struct virtio_reset_vq *param)
++{
++	if (!param->vdev->config->reset_vq)
++		return -ENOENT;
++
++	return param->vdev->config->reset_vq(param);
++}
++
++/**
++ * virtio_enable_resetq - enable a reset queue
++ * @param: struct virtio_reset_vq
++ *
++ * returns vq on success or error status
++ *
++ */
++static inline
++struct virtqueue *virtio_enable_resetq(struct virtio_reset_vq *param)
++{
++	if (!param->vdev->config->enable_reset_vq)
++		return ERR_PTR(-ENOENT);
++
++	return param->vdev->config->enable_reset_vq(param);
++}
++
+ /**
+  * virtio_device_ready - enable vq use in probe function
+  * @vdev: the device
 -- 
 2.31.0
 
