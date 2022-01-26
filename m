@@ -2,132 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79F4DC2BA4C
-	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 09:49:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74F1CC28CF5
+	for <bpf@archiver.kernel.org>; Wed, 26 Jan 2022 11:09:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbiAZJtz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Jan 2022 04:49:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232742AbiAZJtz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Jan 2022 04:49:55 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A812AC06161C
-        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 01:49:54 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id q127so5776872ljq.2
-        for <bpf@vger.kernel.org>; Wed, 26 Jan 2022 01:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nsYmZZVmVWqgaLKAmBGCRvkPtBIIUYO7KDL76PCx8zY=;
-        b=fjELwJfGvWtFkfklukvBIQ3ks4Y3vrDw0wHWgLA2ad2D9t8u16gxYhTo7fwIf8HMQv
-         Z1WUIDnxts7VKzpvVkSFz5K3O9k6r128BRXxycL9ra4As8+tYjW2Qxkpvi3N3U/Q2QzC
-         z5H4++UeDhnbAjqraFN2gvcI+1wp9f7NEGeoE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nsYmZZVmVWqgaLKAmBGCRvkPtBIIUYO7KDL76PCx8zY=;
-        b=m//IqMzXdeRDa7R82grS5zbOawZ2CedznwPD/Y1g5j0KzQeCJ1xOMlo3QZNIdqjQhz
-         37OIzdd6/BOPI6mShtQLxrMdTJ2/oeOwFyR1qlNqH9HVakfmilGJA6drf4P7vojfhrRi
-         Z8zMtlJFXhoi7eNsTtW85nOlF8bnDbGwX41ejEkVYw+/UwKGK6Tx2V1ArOhoL/ugfzKm
-         PcvRxZvwjb3opRApn7TRVMVmBj2bOoCK3mvGPMmpzihu8nBpYwYHs/iZfp2xGOzWmsN/
-         ychYcYbwyr/zAcbCJnc22t5EuQLUa933/vX0Z3QJYjkE5ZQZH1Uzqf9AV9H8lvE+dv7w
-         XrVg==
-X-Gm-Message-State: AOAM530e6Mb+Em7ch3DE174J4kJpmfsstaElQxg73F4LhbnguNLKwUVG
-        2O+PHchb3mY8Ige2gS7nhOqQPHCcLNoJN4e9Fj4mAQ==
-X-Google-Smtp-Source: ABdhPJxYlr85SblyBnozf1GKr6NTo2JW/LSIixbq1P1TK1EWw8J1poyqjpZITrAU14nn+s+iNIthF8KizZRPvvdKRVI=
-X-Received: by 2002:a2e:9e0a:: with SMTP id e10mr17200025ljk.121.1643190592988;
- Wed, 26 Jan 2022 01:49:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20220124151146.376446-1-maximmi@nvidia.com> <20220124151146.376446-3-maximmi@nvidia.com>
-In-Reply-To: <20220124151146.376446-3-maximmi@nvidia.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Wed, 26 Jan 2022 09:49:42 +0000
-Message-ID: <CACAyw9_mA-yBWbU6Sf8hq6P46PfiTpEZYTGSKmNG6ZiFWGz=ZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/4] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
+        id S240483AbiAZLJW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Jan 2022 06:09:22 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:33250 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240491AbiAZLJV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Jan 2022 06:09:21 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DB8B618CA;
+        Wed, 26 Jan 2022 11:09:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D563C340E3;
+        Wed, 26 Jan 2022 11:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643195361;
+        bh=/zWncPmKwzXMZGHZvCSwS6Snn34KR1tN9vb7JKiM7T0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q267gzkyR7eaQ8SFeGSWEWz71T7iffwrNfqZFfL+jbp7N7cS3VYfxm3RnUTTo5YXz
+         Tuw99yUEAPLsiMXQS+V4ynhQBOsGMMZdzBbzzWIH0uf6HK83D0m1ihmKq6RxNLOj/E
+         BTzUKgFDd5IL/CeVF8wRiwNIqFZr/o+Cb1GmfiQRCSvpX2er5mzAhrteXdM4CvNo4Z
+         nJP7a9C74K2lpgLClUR5cUVKMsmIoNPJWsPAVrV2ojP7RMQ5J3HwyI3iHaQ0PHMdFK
+         tw+tP6M1pst1kUucafw+F+MVsF4YfTtldl3yAreuDveGsj5+GczDqo+5AGkqcK/h7l
+         a0V+HtYRrIfTA==
+Date:   Wed, 26 Jan 2022 12:09:17 +0100
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Nikolay Aleksandrov <nikolay@nvidia.com>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Eric Dumazet <edumazet@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yoshiki Komachi <komachi.yoshiki@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        "bridge@lists.linux-foundation.org" 
+        <bridge@lists.linux-foundation.org>,
+        Ido Schimmel <idosch@idosch.org>
+Subject: Re: [RFC bpf-next 1/2] net: bridge: add unstable
+ br_fdb_find_port_from_ifindex helper
+Message-ID: <YfEr3Soy8YuJczHk@lore-desk>
+References: <cover.1643044381.git.lorenzo@kernel.org>
+ <720907692575488526f06edc2cf5c8f783777d4f.1643044381.git.lorenzo@kernel.org>
+ <61553c87-a3d3-07ae-8c2f-93cf0cb52263@nvidia.com>
+ <CAADnVQLv=45+Symc-8Y9QuzOAG40e3XkvVxQ-ibO-HOCyJhETw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kFCkJi5WGm1W4ka3"
+Content-Disposition: inline
+In-Reply-To: <CAADnVQLv=45+Symc-8Y9QuzOAG40e3XkvVxQ-ibO-HOCyJhETw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 24 Jan 2022 at 15:13, Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
->
-> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
-> validates the address family of the socket. It supports IPv4 packets in
-> AF_INET6 dual-stack sockets.
->
-> On the other hand, bpf_tcp_check_syncookie looks only at the address
-> family of the socket, ignoring the real IP version in headers, and
-> validates only the packet size. This implementation has some drawbacks:
->
-> 1. Packets are not validated properly, allowing a BPF program to trick
->    bpf_tcp_check_syncookie into handling an IPv6 packet on an IPv4
->    socket.
->
-> 2. Dual-stack sockets fail the checks on IPv4 packets. IPv4 clients end
->    up receiving a SYNACK with the cookie, but the following ACK gets
->    dropped.
->
-> This patch fixes these issues by changing the checks in
-> bpf_tcp_check_syncookie to match the ones in bpf_tcp_gen_syncookie. IP
-> version from the header is taken into account, and it is validated
-> properly with address family.
->
-> Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
-> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  net/core/filter.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 05efa691b796..780e635fb52a 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -6774,24 +6774,33 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
->         if (!th->ack || th->rst || th->syn)
->                 return -ENOENT;
->
-> +       if (unlikely(iph_len < sizeof(struct iphdr)))
-> +               return -EINVAL;
-> +
->         if (tcp_synq_no_recent_overflow(sk))
->                 return -ENOENT;
->
->         cookie = ntohl(th->ack_seq) - 1;
->
-> -       switch (sk->sk_family) {
-> -       case AF_INET:
-> -               if (unlikely(iph_len < sizeof(struct iphdr)))
-> +       /* Both struct iphdr and struct ipv6hdr have the version field at the
-> +        * same offset so we can cast to the shorter header (struct iphdr).
-> +        */
-> +       switch (((struct iphdr *)iph)->version) {
-> +       case 4:
-> +               if (sk->sk_family == AF_INET6 && ipv6_only_sock(sk))
->                         return -EINVAL;
 
-Wouldn't this allow an arbitrary value for sk->sk_family, since there
-is no further check that sk_family is AF_INET?
+--kFCkJi5WGm1W4ka3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+> On Mon, Jan 24, 2022 at 10:32 AM Nikolay Aleksandrov <nikolay@nvidia.com>=
+ wrote:
+> > >
+> > > +int br_fdb_find_port_from_ifindex(struct xdp_md *xdp_ctx,
+> > > +                               struct bpf_fdb_lookup *opt,
+> > > +                               u32 opt__sz)
+> > > +{
+> > > +     struct xdp_buff *ctx =3D (struct xdp_buff *)xdp_ctx;
+> > > +     struct net_bridge_port *port;
+> > > +     struct net_device *dev;
+> > > +     int ret =3D -ENODEV;
+> > > +
+> > > +     BUILD_BUG_ON(sizeof(struct bpf_fdb_lookup) !=3D NF_BPF_FDB_OPTS=
+_SZ);
+> > > +     if (!opt || opt__sz !=3D sizeof(struct bpf_fdb_lookup))
+> > > +             return -ENODEV;
+> > > +
+> > > +     rcu_read_lock();
+> > > +
+> > > +     dev =3D dev_get_by_index_rcu(dev_net(ctx->rxq->dev), opt->ifind=
+ex);
+> > > +     if (!dev)
+> > > +             goto out;
+>=20
+> imo that is way too much wrapping for an unstable helper.
+> The dev lookup is not cheap.
+>=20
+> With all the extra checks the XDP acceleration gets reduced.
+> I think it would be better to use kprobe/fentry on bridge
+> functions that operate on fdb and replicate necessary
+> data into bpf map.
+> Then xdp prog would do a single cheap lookup from that map
+> to figure out 'port'.
 
-www.cloudflare.com
+ack, right. This is a very interesting approach. I will investigate it. Tha=
+nks.
+
+Regards,
+Lorenzo
+
+--kFCkJi5WGm1W4ka3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYfEr3QAKCRA6cBh0uS2t
+rI/BAQC9L141LtGoDrESrDY1ii4/RP/UGl82ndKb1Ap3thTqwQD/X6/s02kMpW3J
+LqMH3nrhFBuZEt8OpC7T95rtRIf85Qc=
+=PuxP
+-----END PGP SIGNATURE-----
+
+--kFCkJi5WGm1W4ka3--
