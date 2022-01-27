@@ -2,145 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B70CBC433EF
-	for <bpf@archiver.kernel.org>; Thu, 27 Jan 2022 08:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DFCCC433EF
+	for <bpf@archiver.kernel.org>; Thu, 27 Jan 2022 08:17:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237676AbiA0IKh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Jan 2022 03:10:37 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:17818 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237086AbiA0IKg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Jan 2022 03:10:36 -0500
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4JktXT58QPz9sTK;
-        Thu, 27 Jan 2022 16:09:13 +0800 (CST)
-Received: from [10.174.176.117] (10.174.176.117) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 27 Jan 2022 16:10:33 +0800
-Subject: Re: [PATCH bpf-next 2/2] arm64, bpf: support more atomic operations
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>
+        id S230231AbiA0IRa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Jan 2022 03:17:30 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:32065 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237716AbiA0IR3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Jan 2022 03:17:29 -0500
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JktdQ6Ypfz1FD6m;
+        Thu, 27 Jan 2022 16:13:30 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 27 Jan
+ 2022 16:17:25 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
 CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        "David S . Miller" <davem@davemloft.net>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Julien Thierry <jthierry@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220121135632.136976-1-houtao1@huawei.com>
- <20220121135632.136976-3-houtao1@huawei.com>
- <61f23655411bc_57f032084@john.notmuch>
-From:   Hou Tao <houtao1@huawei.com>
-Message-ID: <8b67fa3d-f83c-85a5-5159-70b0f913833a@huawei.com>
-Date:   Thu, 27 Jan 2022 16:10:33 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Brendan Jackman <jackmanb@google.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <houtao1@huawei.com>
+Subject: [PATCH bpf-next] bpf, x86: remove unnecessary handling of BPF_SUB atomic op
+Date:   Thu, 27 Jan 2022 16:32:40 +0800
+Message-ID: <20220127083240.1425481-1-houtao1@huawei.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <61f23655411bc_57f032084@john.notmuch>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.176.117]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  dggpeml500025.china.huawei.com (7.185.36.35)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+According to the LLVM commit (https://reviews.llvm.org/D72184),
+sync_fetch_and_sub() is implemented as a negation followed by
+sync_fetch_and_add(), so there will be no BPF_SUB op and just
+remove it.
 
-On 1/27/2022 2:06 PM, John Fastabend wrote:
-> Hou Tao wrote:
->> Atomics for eBPF patch series adds support for atomic[64]_fetch_add,
->> atomic[64]_[fetch_]{and,or,xor} and atomic[64]_{xchg|cmpxchg}, but
->> it only add support for x86-64, so support these atomic operations
->> for arm64 as well.
->>
->> +static int emit_lse_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
->> +{
->> +	const u8 code = insn->code;
->> +	const u8 dst = bpf2a64[insn->dst_reg];
->> +	const u8 src = bpf2a64[insn->src_reg];
->> +	const u8 tmp = bpf2a64[TMP_REG_1];
->> +	const u8 tmp2 = bpf2a64[TMP_REG_2];
->> +	const bool isdw = BPF_SIZE(code) == BPF_DW;
->> +	const s16 off = insn->off;
->> +	u8 reg;
->> +
->> +	if (!off) {
->> +		reg = dst;
->> +	} else {
->> +		emit_a64_mov_i(1, tmp, off, ctx);
->> +		emit(A64_ADD(1, tmp, tmp, dst), ctx);
->> +		reg = tmp;
->> +	}
->> +
->> +	switch (insn->imm) {
-> Diff'ing X86 implementation which has a BPF_SUB case how is it avoided
-> here?
-I think it is just left over from patchset [1], because according to the LLVM
-commit [2]
-__sync_fetch_and_sub(&addr, value) is implemented by __sync_fetch_and_add(&addr,
--value).
-I will post a patch to remove it.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-[1]: https://lore.kernel.org/bpf/20210114181751.768687-1-jackmanb@google.com/
-[2]: https://reviews.llvm.org/D72184
->> +	/* lock *(u32/u64 *)(dst_reg + off) <op>= src_reg */
->> +	case BPF_ADD:
->> +		emit(A64_STADD(isdw, reg, src), ctx);
->> +		break;
->> +	case BPF_AND:
->> +		emit(A64_MVN(isdw, tmp2, src), ctx);
->> +		emit(A64_STCLR(isdw, reg, tmp2), ctx);
->> +		break;
->> +	case BPF_OR:
->> +		emit(A64_STSET(isdw, reg, src), ctx);
->> +		break;
->> +	case BPF_XOR:
->> +		emit(A64_STEOR(isdw, reg, src), ctx);
->> +		break;
->> +	/* src_reg = atomic_fetch_add(dst_reg + off, src_reg) */
->> +	case BPF_ADD | BPF_FETCH:
->> +		emit(A64_LDADDAL(isdw, src, reg, src), ctx);
->> +		break;
->> +	case BPF_AND | BPF_FETCH:
->> +		emit(A64_MVN(isdw, tmp2, src), ctx);
->> +		emit(A64_LDCLRAL(isdw, src, reg, tmp2), ctx);
->> +		break;
->> +	case BPF_OR | BPF_FETCH:
->> +		emit(A64_LDSETAL(isdw, src, reg, src), ctx);
->> +		break;
->> +	case BPF_XOR | BPF_FETCH:
->> +		emit(A64_LDEORAL(isdw, src, reg, src), ctx);
->> +		break;
->> +	/* src_reg = atomic_xchg(dst_reg + off, src_reg); */
->> +	case BPF_XCHG:
->> +		emit(A64_SWPAL(isdw, src, reg, src), ctx);
->> +		break;
->> +	/* r0 = atomic_cmpxchg(dst_reg + off, r0, src_reg); */
->> +	case BPF_CMPXCHG:
->> +		emit(A64_CASAL(isdw, src, reg, bpf2a64[BPF_REG_0]), ctx);
->> +		break;
->> +	default:
->> +		pr_err_once("unknown atomic op code %02x\n", insn->imm);
->> +		return -EINVAL;
-> Was about to suggest maybe EFAULT to align with x86, but on second
-> thought seems arm jit uses EINVAL more universally so best to be
-> self consistent. Just an observation.
-OK. So I will still return -EINVAL for invalid atomic operation.
->
->> +	}
->> +
->> +	return 0;
->> +}
->> +
-> .
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index ce1f86f245c9..5d643ebb1e56 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -787,7 +787,6 @@ static int emit_atomic(u8 **pprog, u8 atomic_op,
+ 	/* emit opcode */
+ 	switch (atomic_op) {
+ 	case BPF_ADD:
+-	case BPF_SUB:
+ 	case BPF_AND:
+ 	case BPF_OR:
+ 	case BPF_XOR:
+-- 
+2.29.2
 
