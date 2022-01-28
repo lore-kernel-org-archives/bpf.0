@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B9FAC433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7288AC4332F
 	for <bpf@archiver.kernel.org>; Fri, 28 Jan 2022 22:33:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351731AbiA1Wdy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1351733AbiA1Wdy (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 28 Jan 2022 17:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351725AbiA1Wdq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Jan 2022 17:33:46 -0500
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B094C061714
-        for <bpf@vger.kernel.org>; Fri, 28 Jan 2022 14:33:46 -0800 (PST)
-Received: by mail-qk1-x72f.google.com with SMTP id c189so6892910qkg.11
-        for <bpf@vger.kernel.org>; Fri, 28 Jan 2022 14:33:46 -0800 (PST)
+        with ESMTP id S1351748AbiA1Wdx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Jan 2022 17:33:53 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804B7C061753
+        for <bpf@vger.kernel.org>; Fri, 28 Jan 2022 14:33:52 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id j12so6192634qtr.2
+        for <bpf@vger.kernel.org>; Fri, 28 Jan 2022 14:33:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zboTB+gKjaUipv6bhtEkvOejOZfrL7tfSs3YeB6sfpg=;
-        b=FfP+4KBovOSins0Vos6ZmyagFRAwh+Dg5jdRKx7//gjKPIKPM1PB5MMat9iWpWoaUb
-         5Ic015DqXHwqwCzHRSVfu0dwEJIM1vWeDMg38bwA4MqMufLYw8R8eVjfuebVftNlIXO6
-         lmRksfGl3Cete6kTrsITzprEpwLOJk3+wCI6U=
+        bh=drECL07TLned7ySWqvu3I4souQyvtIZYsb6xvlPbqBU=;
+        b=efNwnq2l+kfsdSWhCHPt8NmXSdMjJp+8LkTkteulbf6X7nseczonLERo0nJvKpVkv5
+         3m8TSrqzGvjA//ohVvhc8+QmIJQurzjr6ZjW/k2fbcBUeV9/slkp9NMyfn9O+oAeJhDX
+         hMaqAqug4saj63Dbphtz1u1ErEW/pknYlhKu4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zboTB+gKjaUipv6bhtEkvOejOZfrL7tfSs3YeB6sfpg=;
-        b=ORjIC90rVCrWi+ZPBQS2zDaxmn3jBxKDnF5UWeiboq+tRjwzxGkx7XoWflWyMJhwB3
-         IuvUTMuGF3XCSxI6kzdRtMUnkEDFES8n/34SljhfdxMWY0Sm0KooLHe2uFCi866OpRoq
-         6H2QdDeHioEJzirLe25qFqvdefFdOKdlufuPmgC0zQcGcAmRBmtmkG8X4QsB9lPb5h6Y
-         mHLF9gInGlmgpH8bIL99tMBEnfiSRuSqSXLtEXKvkIsIcKwyKaL+Qqp91V4KsQPQc08e
-         fXWTOuPX8TBQs6lBg7Scc4+U3znRuv1TmnlohBHkUJPRq0QTVeg21nlkaZ8Hp/URfKi0
-         WKPw==
-X-Gm-Message-State: AOAM532Uy0hmkyCfALVJ6y/FjyQjiu9EQ4yjD6Vx0EsmDcK1yychQstg
-        RDaDKm73+wuZ47eDKEatVkIi9Q==
-X-Google-Smtp-Source: ABdhPJzbGvnqBijB7q++PYdrDsCMZQdWePHGBBoSkTWDyN29wYO/1YGQd4JerNNhObnYjGS/gInmwg==
-X-Received: by 2002:a05:620a:2986:: with SMTP id r6mr7369941qkp.311.1643409224684;
-        Fri, 28 Jan 2022 14:33:44 -0800 (PST)
+        bh=drECL07TLned7ySWqvu3I4souQyvtIZYsb6xvlPbqBU=;
+        b=nuWD9s2VziFoup+h4lwtvln2HO9fC1y8ag+PEqokdKrY5RWAT0njIhZKSLA1lb2ukN
+         2lVGN89OBFi4UzjP7up+/QBuwhuO8+K7KZ7wqRn2HalZHo/V8vacrs1netRWq83rsLZ4
+         nwLRmwJcazBTBkPhROZUS1+iEdgMp18jRvCj3USJejwyhDc1ZZkXbUeTFIpqrW7R2CyJ
+         vCuIAnuDVLLAirphpY+HHG9RfMCSxsfXEN87u7Myl4DHpBtdHxwND3C77IaeGpGYHR1E
+         igeDZGWngkGdCSdX4+9oRLsGb3Y9OEPJkKVjQUuKKjN1YZlX37U9tbIE8Pwj7gUXC5zX
+         +Irg==
+X-Gm-Message-State: AOAM533iaXgZtmbkAilmzLlMvqmuxxdiQYh60gDgR0fEVH/jNzijEzKA
+        6cUbMldWFqGzrR8j/WAe5ZlbIg==
+X-Google-Smtp-Source: ABdhPJyYqwFtCHqNipsGLxBFC1o6mkLTYwRe7nvfr9wo4/pntEnCXKcIsOQUGfQR1Rrxzzl2DW6HZQ==
+X-Received: by 2002:a05:622a:2d6:: with SMTP id a22mr7699236qtx.149.1643409230887;
+        Fri, 28 Jan 2022 14:33:50 -0800 (PST)
 Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id i18sm3723972qka.80.2022.01.28.14.33.43
+        by smtp.gmail.com with ESMTPSA id i18sm3723972qka.80.2022.01.28.14.33.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 14:33:44 -0800 (PST)
+        Fri, 28 Jan 2022 14:33:50 -0800 (PST)
 From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Rafael David Tinoco <rafaeldtinoco@gmail.com>,
         Lorenzo Fontana <lorenzo.fontana@elastic.co>,
         Leonardo Di Donato <leonardo.didonato@elastic.co>
-Subject: [PATCH bpf-next v5 7/9] bpftool: Implement btfgen_get_btf()
-Date:   Fri, 28 Jan 2022 17:33:10 -0500
-Message-Id: <20220128223312.1253169-8-mauricio@kinvolk.io>
+Subject: [PATCH bpf-next v5 9/9] selftest/bpf: Implement tests for bpftool gen min_core_btf
+Date:   Fri, 28 Jan 2022 17:33:12 -0500
+Message-Id: <20220128223312.1253169-10-mauricio@kinvolk.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220128223312.1253169-1-mauricio@kinvolk.io>
 References: <20220128223312.1253169-1-mauricio@kinvolk.io>
@@ -66,197 +66,493 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The last part of the BTFGen algorithm is to create a new BTF object with
-all the types that were recorded in the previous steps.
-
-This function performs two different steps:
-1. Add the types to the new BTF object by using btf__add_type(). Some
-special logic around struct and unions is implemented to only add the
-members that are really used in the field-based relocations. The type
-ID on the new and old BTF objects is stored on a map.
-2. Fix all the type IDs on the new BTF object by using the IDs saved in
-the previous step.
+This commit implements some integration tests for "BTFGen". The goal
+of such tests is to verify that the generated BTF file contains the
+expected types.
 
 Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
 Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
 Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
 ---
- tools/bpf/bpftool/gen.c | 158 +++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 157 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ .../selftests/bpf/progs/btfgen_btf_source.c   |  12 +
+ .../bpf/progs/btfgen_primitives_array.c       |  39 +++
+ .../bpf/progs/btfgen_primitives_struct.c      |  40 +++
+ .../bpf/progs/btfgen_primitives_struct2.c     |  44 ++++
+ .../bpf/progs/btfgen_primitives_union.c       |  32 +++
+ tools/testing/selftests/bpf/test_bpftool.c    | 228 ++++++++++++++++++
+ 8 files changed, 399 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/btfgen_btf_source.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btfgen_primitives_array.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btfgen_primitives_struct.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btfgen_primitives_struct2.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btfgen_primitives_union.c
+ create mode 100644 tools/testing/selftests/bpf/test_bpftool.c
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 7413ec808a80..55e6f640cbbb 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -1599,10 +1599,166 @@ static int btfgen_record_obj(struct btfgen_info *info, const char *obj_path)
- 	return err;
- }
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 1dad8d617da8..308cd5b9cfc4 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -41,3 +41,4 @@ test_cpp
+ *.tmp
+ xdpxceiver
+ xdp_redirect_multi
++test_bpftool
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 945f92d71db3..afc9bff6545d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -38,7 +38,8 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+ 	test_sock test_sockmap get_cgroup_id_user \
+ 	test_cgroup_storage \
+ 	test_tcpnotify_user test_sysctl \
+-	test_progs-no_alu32
++	test_progs-no_alu32 \
++	test_bpftool
  
-+static unsigned int btfgen_get_id(struct hashmap *ids, unsigned int old)
+ # Also test bpf-gcc, if present
+ ifneq ($(BPF_GCC),)
+@@ -212,6 +213,7 @@ $(OUTPUT)/xdping: $(TESTING_HELPERS)
+ $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
+ $(OUTPUT)/test_maps: $(TESTING_HELPERS)
+ $(OUTPUT)/test_verifier: $(TESTING_HELPERS)
++$(OUTPUT)/test_bpftool:
+ 
+ BPFTOOL ?= $(DEFAULT_BPFTOOL)
+ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
+diff --git a/tools/testing/selftests/bpf/progs/btfgen_btf_source.c b/tools/testing/selftests/bpf/progs/btfgen_btf_source.c
+new file mode 100644
+index 000000000000..772d5d1e2788
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btfgen_btf_source.c
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "core_reloc_types.h"
++
++// structure made of primitive types
++void f0(struct core_reloc_primitives x) {}
++
++// union made of primite types
++void f1(union a_union x) {}
++
++// arrays
++void f2(struct core_reloc_arrays x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btfgen_primitives_array.c b/tools/testing/selftests/bpf/progs/btfgen_primitives_array.c
+new file mode 100644
+index 000000000000..aa514d1bcd96
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btfgen_primitives_array.c
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <stdint.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	char in[256];
++	char out[256];
++} data = {};
++
++struct core_reloc_arrays_substruct {
++	int c;
++	int d;
++};
++
++struct core_reloc_arrays {
++	int a[5];
++	char b[2][3][4];
++	struct core_reloc_arrays_substruct c[3];
++	struct core_reloc_arrays_substruct d[1][2];
++	struct core_reloc_arrays_substruct f[][2];
++};
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
++SEC("raw_tracepoint/sys_enter")
++int test_btfgen_primitives(void *ctx)
 +{
-+	uintptr_t new = 0;
++	struct core_reloc_arrays *in = (void *)&data.in;
++	struct core_reloc_arrays *out = (void *)&data.out;
 +
-+	/* deal with BTF_KIND_VOID */
-+	if (old == 0)
-+		return 0;
++	if (CORE_READ(&out->a[0], &in->a[0]))
++		return 1;
 +
-+	if (!hashmap__find(ids, uint_as_hash_key(old), (void **)&new)) {
-+		/* return id for void as it's possible that the ID we're looking for is
-+		 * the type of a pointer that we're not adding.
-+		 */
-+		return 0;
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/btfgen_primitives_struct.c b/tools/testing/selftests/bpf/progs/btfgen_primitives_struct.c
+new file mode 100644
+index 000000000000..b761d020fa4d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btfgen_primitives_struct.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <stdint.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	char in[256];
++	char out[256];
++} data = {};
++
++enum core_reloc_primitives_enum {
++	A = 0,
++	B = 1,
++};
++
++struct core_reloc_primitives {
++	char a;
++	int b;
++	enum core_reloc_primitives_enum c;
++	void *d;
++	int (*f)(const char *);
++};
++
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
++SEC("raw_tracepoint/sys_enter")
++int test_btfgen_primitives(void *ctx)
++{
++	struct core_reloc_primitives *in = (void *)&data.in;
++	struct core_reloc_primitives *out = (void *)&data.out;
++
++	if (CORE_READ(&out->a, &in->a))
++		return 1;
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/btfgen_primitives_struct2.c b/tools/testing/selftests/bpf/progs/btfgen_primitives_struct2.c
+new file mode 100644
+index 000000000000..fe67c9a24a7f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btfgen_primitives_struct2.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/* This is almost the same as btfgen_primitives_struct.c but in this one
++ * a different field is accessed
++ */
++
++#include <linux/bpf.h>
++#include <stdint.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	char in[256];
++	char out[256];
++} data = {};
++
++enum core_reloc_primitives_enum {
++	A = 0,
++	B = 1,
++};
++
++struct core_reloc_primitives {
++	char a;
++	int b;
++	enum core_reloc_primitives_enum c;
++	void *d;
++	int (*f)(const char *);
++};
++
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
++SEC("raw_tracepoint/sys_enter")
++int test_btfgen_primitives(void *ctx)
++{
++	struct core_reloc_primitives *in = (void *)&data.in;
++	struct core_reloc_primitives *out = (void *)&data.out;
++
++	if (CORE_READ(&out->b, &in->b))
++		return 1;
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/btfgen_primitives_union.c b/tools/testing/selftests/bpf/progs/btfgen_primitives_union.c
+new file mode 100644
+index 000000000000..d4690c9e963c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btfgen_primitives_union.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <stdint.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	char in[256];
++	char out[256];
++} data = {};
++
++union a_union {
++	int y;
++	int z;
++};
++
++#define CORE_READ(dst, src) bpf_core_read(dst, sizeof(*(dst)), src)
++
++SEC("raw_tracepoint/sys_enter")
++int test_btfgen_primitives(void *ctx)
++{
++	union a_union *in = (void *)&data.in;
++	union a_union *out = (void *)&data.out;
++
++	if (CORE_READ(&out->y, &in->y))
++		return 1;
++
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/test_bpftool.c b/tools/testing/selftests/bpf/test_bpftool.c
+new file mode 100644
+index 000000000000..ca7facc582d5
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_bpftool.c
+@@ -0,0 +1,228 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <stdio.h>
++#include <string.h>
++#include <assert.h>
++#include <stdlib.h>
++#include <linux/limits.h>
++
++#include <bpf/libbpf.h>
++#include <bpf/btf.h>
++
++#include "bpf_util.h"
++
++static int run_btfgen(const char *src_btf, const char *dst_btf, const char *objspaths[])
++{
++	char command[4096];
++	int ret, i, n;
++
++	n = snprintf(command, sizeof(command),
++		     "./tools/build/bpftool/bpftool gen min_core_btf %s %s", src_btf, dst_btf);
++	assert(n >= 0 && n < sizeof(command));
++
++	for (i = 0; objspaths[i] != NULL; i++) {
++		assert(sizeof(command) - strlen(command) > strlen(objspaths[i]) + 1);
++		strcat(command, " ");
++		strcat(command, objspaths[i]);
 +	}
 +
-+	return (unsigned int)(uintptr_t)new;
++	printf("Executing bpftool: %s\n", command);
++	printf("---\n");
++	ret = system(command);
++	printf("---\n");
++	return ret;
 +}
 +
-+static int btfgen_add_id(struct hashmap *ids, unsigned int old, unsigned int new)
++struct btfgen_test {
++	const char *descr;
++	const char *src_btf;
++	const char *bpfobj[16];
++	void (*run_test)(struct btf *btf);
++};
++
++static void check_btfgen_primitive_struct(struct btf *btf)
 +{
-+	return hashmap__add(ids, uint_as_hash_key(old), uint_as_hash_key(new));
++	struct btf_member *members;
++	const struct btf_type *t;
++	int id;
++
++	assert(btf__type_cnt(btf) == 3);
++
++	id = btf__find_by_name_kind(btf, "core_reloc_primitives", BTF_KIND_STRUCT);
++	assert(id > 0);
++
++	t = btf__type_by_id(btf, id);
++	assert(btf_vlen(t) == 1);
++
++	members = btf_members(t);
++
++	id = btf__find_by_name_kind(btf, "char", BTF_KIND_INT);
++	assert(id > 0);
++
++	/* the type of the struct member must be the char */
++	assert(members[0].type == id);
 +}
 +
- /* Generate BTF from relocation information previously recorded */
- static struct btf *btfgen_get_btf(struct btfgen_info *info)
- {
--	return ERR_PTR(-EOPNOTSUPP);
-+	struct hashmap_entry *entry;
-+	struct btf *btf_new = NULL;
-+	struct hashmap *ids = NULL;
-+	size_t bkt;
-+	int err = 0;
++static void check_btfgen_primitive_union(struct btf *btf)
++{
++	struct btf_member *members;
++	const struct btf_type *t;
++	int id;
 +
-+	btf_new = btf__new_empty();
-+	if (libbpf_get_error(btf_new))
-+		goto err_out;
++	/* void, a_union and int*/
++	assert(btf__type_cnt(btf) == 3);
 +
-+	ids = hashmap__new(btfgen_hash_fn, btfgen_equal_fn, NULL);
-+	if (IS_ERR(ids)) {
-+		errno = -PTR_ERR(ids);
-+		goto err_out;
++	id = btf__find_by_name_kind(btf, "a_union", BTF_KIND_UNION);
++	assert(id > 0);
++
++	t = btf__type_by_id(btf, id);
++	assert(btf_vlen(t) == 1);
++
++	members = btf_members(t);
++
++	id = btf__find_by_name_kind(btf, "int", BTF_KIND_INT);
++	assert(id > 0);
++
++	/* the type of the union member must be the integer */
++	assert(members[0].type == id);
++}
++
++static void check_btfgen_primitive_array(struct btf *btf)
++{
++	int array_id, array_type_id, array_index_type_id;
++	struct btf_array *array;
++
++	/* void, struct, array, int (array index type) and int (array type) */
++	assert(btf__type_cnt(btf) == 5);
++
++	array_id = btf__find_by_name_kind(btf, "", BTF_KIND_ARRAY);
++	assert(array_id > 0);
++
++	array = btf_array(btf__type_by_id(btf, array_id));
++
++	array_type_id = btf__find_by_name_kind(btf, "int", BTF_KIND_INT);
++	assert(array_type_id > 0);
++
++	array_index_type_id = btf__find_by_name_kind(btf, "__ARRAY_SIZE_TYPE__", BTF_KIND_INT);
++	assert(array_index_type_id > 0);
++
++	/* check that array types are the correct ones */
++	assert(array->type == array_type_id);
++	assert(array->index_type == array_index_type_id);
++}
++
++/* If there are relocations in two different BPF objects involving
++ * different members of the same struct, then the generated BTF should
++ * contain a single instance of such struct with both fields.
++ */
++static void check_btfgen_primitive_structs_different_objects(struct btf *btf)
++{
++	struct btf_member *members;
++	const struct btf_type *t;
++	int struct_id, char_id, int_id;
++
++	/* void, struct, int and char */
++	assert(btf__type_cnt(btf) == 4);
++
++	struct_id = btf__find_by_name_kind(btf, "core_reloc_primitives", BTF_KIND_STRUCT);
++	assert(struct_id > 0);
++
++	t = btf__type_by_id(btf, struct_id);
++	assert(btf_vlen(t) == 2);
++
++	members = btf_members(t);
++
++	char_id = btf__find_by_name_kind(btf, "char", BTF_KIND_INT);
++	assert(char_id > 0);
++
++	int_id = btf__find_by_name_kind(btf, "int", BTF_KIND_INT);
++	assert(int_id > 0);
++
++	for (int i = 0; i < btf_vlen(t); i++) {
++		const char *name = btf__str_by_offset(btf, members[i].name_off);
++
++		if (!strcmp("a", name))
++			assert(members[i].type == char_id);
++		else if (!strcmp("b", name))
++			assert(members[i].type == int_id);
++	}
++}
++
++static struct btfgen_test btfgen_tests[] = {
++	{
++		"primitive struct",
++		"btfgen_btf_source.o",
++		{
++			"btfgen_primitives_struct.o",
++		},
++		check_btfgen_primitive_struct,
++	},
++	{
++		"primitive union",
++		"btfgen_btf_source.o",
++		{
++			"btfgen_primitives_union.o",
++		},
++		check_btfgen_primitive_union,
++	},
++	{
++		"primitive array",
++		"btfgen_btf_source.o",
++		{
++			"btfgen_primitives_array.o",
++		},
++		check_btfgen_primitive_array,
++	},
++	{
++		"primitive structs in different objects",
++		"btfgen_btf_source.o",
++		{
++			"btfgen_primitives_struct.o",
++			"btfgen_primitives_struct2.o",
++		},
++		check_btfgen_primitive_structs_different_objects,
++	},
++};
++
++void test_gen_min_core_btf(void)
++{
++	char target_path[PATH_MAX];
++	struct btfgen_test *test;
++	struct btf *dst_btf;
++	int ret;
++
++	for (int i = 0; i < ARRAY_SIZE(btfgen_tests); i++) {
++		char dir_path[] = "/tmp/btfgen-XXXXXX";
++
++		test = &btfgen_tests[i];
++
++		printf("Running %s\n", test->descr);
++
++		mkdtemp(dir_path);
++
++		snprintf(target_path, sizeof(target_path), "%s/foo.btf", dir_path);
++
++		ret = run_btfgen(test->src_btf, target_path, test->bpfobj);
++		assert(ret == 0);
++
++		dst_btf = btf__parse(target_path, NULL);
++		assert(dst_btf != NULL);
++
++		test->run_test(dst_btf);
++
++		printf("Test %s: PASS\n", test->descr);
 +	}
 +
-+	/* first pass: add all types and add their new ids to the ids map */
-+	hashmap__for_each_entry(info->types, entry, bkt) {
-+		struct btfgen_type *btfgen_type = entry->value;
-+		struct btf_type *btf_type = btfgen_type->type;
-+		int new_id;
++	printf("%s: PASS\n", __func__);
++}
 +
-+		/* we're adding BTF_KIND_VOID to the list but it can't be added to
-+		 * the generated BTF object, hence we skip it here.
-+		 */
-+		if (btfgen_type->id == 0)
-+			continue;
++int main(void)
++{
++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
 +
-+		/* add members for struct and union */
-+		if (btf_is_struct(btf_type) || btf_is_union(btf_type)) {
-+			struct hashmap_entry *member_entry;
-+			struct btf_type *btf_type_cpy;
-+			int nmembers, index;
-+			size_t new_size;
++	test_gen_min_core_btf();
 +
-+			nmembers = btfgen_type->members ? hashmap__size(btfgen_type->members) : 0;
-+			new_size = sizeof(struct btf_type) + nmembers * sizeof(struct btf_member);
++	printf("test_bpftool: OK\n");
 +
-+			btf_type_cpy = malloc(new_size);
-+			if (!btf_type_cpy)
-+				goto err_out;
-+
-+			/* copy header */
-+			memcpy(btf_type_cpy, btf_type, sizeof(*btf_type_cpy));
-+
-+			/* copy only members that are needed */
-+			index = 0;
-+			if (nmembers > 0) {
-+				size_t bkt2;
-+
-+				hashmap__for_each_entry(btfgen_type->members, member_entry, bkt2) {
-+					struct btfgen_member *btfgen_member;
-+					struct btf_member *btf_member;
-+
-+					btfgen_member = member_entry->value;
-+					btf_member = btf_members(btf_type) + btfgen_member->idx;
-+
-+					memcpy(btf_members(btf_type_cpy) + index, btf_member,
-+					       sizeof(struct btf_member));
-+
-+					index++;
-+				}
-+			}
-+
-+			/* set new vlen */
-+			btf_type_cpy->info = btf_type_info(btf_kind(btf_type_cpy), nmembers,
-+							   btf_kflag(btf_type_cpy));
-+
-+			err = btf__add_type(btf_new, info->src_btf, btf_type_cpy);
-+			free(btf_type_cpy);
-+		} else {
-+			err = btf__add_type(btf_new, info->src_btf, btf_type);
-+		}
-+
-+		if (err < 0)
-+			goto err_out;
-+
-+		new_id = err;
-+
-+		/* add ID mapping */
-+		err = btfgen_add_id(ids, btfgen_type->id, new_id);
-+		if (err)
-+			goto err_out;
-+	}
-+
-+	/* second pass: fix up type ids */
-+	for (unsigned int i = 0; i < btf__type_cnt(btf_new); i++) {
-+		struct btf_member *btf_member;
-+		struct btf_type *btf_type;
-+		struct btf_param *params;
-+		struct btf_array *array;
-+
-+		btf_type = (struct btf_type *) btf__type_by_id(btf_new, i);
-+
-+		switch (btf_kind(btf_type)) {
-+		case BTF_KIND_STRUCT:
-+		case BTF_KIND_UNION:
-+			for (unsigned short j = 0; j < btf_vlen(btf_type); j++) {
-+				btf_member = btf_members(btf_type) + j;
-+				btf_member->type = btfgen_get_id(ids, btf_member->type);
-+			}
-+			break;
-+		case BTF_KIND_PTR:
-+		case BTF_KIND_TYPEDEF:
-+		case BTF_KIND_VOLATILE:
-+		case BTF_KIND_CONST:
-+		case BTF_KIND_RESTRICT:
-+		case BTF_KIND_FUNC:
-+		case BTF_KIND_VAR:
-+			btf_type->type = btfgen_get_id(ids, btf_type->type);
-+			break;
-+		case BTF_KIND_ARRAY:
-+			array = btf_array(btf_type);
-+			array->index_type = btfgen_get_id(ids, array->index_type);
-+			array->type = btfgen_get_id(ids, array->type);
-+			break;
-+		case BTF_KIND_FUNC_PROTO:
-+			btf_type->type = btfgen_get_id(ids, btf_type->type);
-+			params = btf_params(btf_type);
-+			for (unsigned short j = 0; j < btf_vlen(btf_type); j++)
-+				params[j].type = btfgen_get_id(ids, params[j].type);
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	hashmap__free(ids);
-+	return btf_new;
-+
-+err_out:
-+	btf__free(btf_new);
-+	hashmap__free(ids);
-+	return NULL;
- }
- 
- /* Create BTF file for a set of BPF objects.
++	return 0;
++}
 -- 
 2.25.1
 
