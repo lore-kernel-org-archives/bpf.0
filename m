@@ -2,169 +2,204 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20951C433EF
-	for <bpf@archiver.kernel.org>; Fri, 28 Jan 2022 14:43:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C002C433F5
+	for <bpf@archiver.kernel.org>; Fri, 28 Jan 2022 15:17:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349426AbiA1OnB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Jan 2022 09:43:01 -0500
-Received: from www62.your-server.de ([213.133.104.62]:58490 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349397AbiA1Omz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Jan 2022 09:42:55 -0500
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nDSSX-0000FP-76; Fri, 28 Jan 2022 15:42:41 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nDSSW-000Tvp-Qt; Fri, 28 Jan 2022 15:42:40 +0100
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: check whether s32 is
- sufficient for kfunc offset
-To:     Hou Tao <houtao1@huawei.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220127071532.384888-1-houtao1@huawei.com>
- <20220127071532.384888-3-houtao1@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <ba562bf9-c328-1258-940f-b4d9a3169776@iogearbox.net>
-Date:   Fri, 28 Jan 2022 15:42:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20220127071532.384888-3-houtao1@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26436/Fri Jan 28 10:22:17 2022)
+        id S243672AbiA1PRJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Jan 2022 10:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242121AbiA1PRC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Jan 2022 10:17:02 -0500
+Received: from forwardcorp1p.mail.yandex.net (forwardcorp1p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b6:217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51CAC061714;
+        Fri, 28 Jan 2022 07:17:01 -0800 (PST)
+Received: from sas1-3cba3404b018.qloud-c.yandex.net (sas1-3cba3404b018.qloud-c.yandex.net [IPv6:2a02:6b8:c08:bd26:0:640:3cba:3404])
+        by forwardcorp1p.mail.yandex.net (Yandex) with ESMTP id ECDAA2E126C;
+        Fri, 28 Jan 2022 18:16:55 +0300 (MSK)
+Received: from sas1-9d43635d01d6.qloud-c.yandex.net (sas1-9d43635d01d6.qloud-c.yandex.net [2a02:6b8:c08:793:0:640:9d43:635d])
+        by sas1-3cba3404b018.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id u7ORZg515c-GsHS93j1;
+        Fri, 28 Jan 2022 18:16:55 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1643383015; bh=nvIS+XjMM1FsEGmdhedLIjy6DcBqplNYuRUynacDwG4=;
+        h=References:Date:Subject:To:From:Message-Id:In-Reply-To:Cc;
+        b=eorY3pzvN3lNCBfZfOdQFDVGsCY2zaIvBb85UIwpFC/QoXzwNaaIqXzSN+sk/lA2N
+         UVhnO6/4G6bJjmJXOOPXJYZzXdlyM+KlqkAUbpS3dlukiCwZc8QxDwwSsmOud9dffW
+         KMTE0VRlbFCJys6SQhZ9MB40MUDDHDyF32Nbdyq4=
+Authentication-Results: sas1-3cba3404b018.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Received: from vmhmukos.sas.yp-c.yandex.net (vmhmukos.sas.yp-c.yandex.net [2a02:6b8:c10:288:0:696:6af:0])
+        by sas1-9d43635d01d6.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id IrjHL3bpzz-GsIOSIEZ;
+        Fri, 28 Jan 2022 18:16:54 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Akhmat Karakotov <hmukos@yandex-team.ru>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        eric.dumazet@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, tom@herbertland.com,
+        hmukos@yandex-team.ru, zeil@yandex-team.ru, mitradir@yandex-team.ru
+Subject: [PATCH net-next v3 1/4] txhash: Make rethinking txhash behavior configurable via sysctl
+Date:   Fri, 28 Jan 2022 18:15:59 +0300
+Message-Id: <20220128151602.2748-2-hmukos@yandex-team.ru>
+In-Reply-To: <20220128151602.2748-1-hmukos@yandex-team.ru>
+References: <20220128151602.2748-1-hmukos@yandex-team.ru>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/27/22 8:15 AM, Hou Tao wrote:
-> In add_kfunc_call(), bpf_kfunc_desc->imm with type s32 is used to
-> represent the offset of called kfunc from __bpf_call_base, so
-> add a test to ensure that the offset will not be overflowed.
-> 
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
+Add a per ns sysctl that controls the txhash rethink behavior,
+sk_rethink_txhash. When enabled, the same behavior is retained, when
+disabled, rethink is not performed. Sysctl is enabled by default.
 
-Thanks for looking into this!
+Signed-off-by: Akhmat Karakotov <hmukos@yandex-team.ru>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+---
+ include/net/netns/core.h    |  1 +
+ include/net/sock.h          | 34 +++++++++++++++++++++-------------
+ include/uapi/linux/socket.h |  3 +++
+ net/core/net_namespace.c    |  2 ++
+ net/core/sysctl_net_core.c  | 14 ++++++++++++--
+ 5 files changed, 39 insertions(+), 15 deletions(-)
 
-> ---
->   .../selftests/bpf/prog_tests/ksyms_module.c   | 72 +++++++++++++++++++
->   1 file changed, 72 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_module.c b/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
-> index d490ad80eccb..ce0cd3446931 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
-> @@ -6,6 +6,76 @@
->   #include "test_ksyms_module.lskel.h"
->   #include "test_ksyms_module.skel.h"
->   
-> +/* Most logic comes from bpf_object__read_kallsyms_file() */
-> +static int test_find_func_in_kallsyms(const char *func, unsigned long *addr)
-> +{
-> +	/* Same as KSYM_NAME_LEN */
-> +	char sym_name[128];
-> +	char sym_type;
-> +	unsigned long sym_addr;
-> +	int ret, err;
-> +	FILE *f;
-> +
-> +	f = fopen("/proc/kallsyms", "r");
-> +	if (!f)
-> +		return -errno;
-> +
-> +	err = -ENOENT;
-> +	while (true) {
-> +		ret = fscanf(f, "%lx %c %127s%*[^\n]\n",
-> +			     &sym_addr, &sym_type, sym_name);
-> +		if (ret == EOF && feof(f))
-> +			break;
-> +
-> +		if (ret != 3) {
-> +			err = -EINVAL;
-> +			break;
-> +		}
-> +
-> +		if ((sym_type == 't' || sym_type == 'T') &&
-> +		    !strcmp(sym_name, func)) {
-> +			*addr = sym_addr;
-> +			err = 0;
-> +			break;
-> +		}
-> +	}
-> +
-> +	fclose(f);
-> +	return err;
-> +}
-
-Could we just reuse kallsyms_find() from trace_helpers.c which is also used
-in couple of other prog_tests already?
-
-> +
-> +/*
-> + * Check whether or not s32 in bpf_kfunc_desc is sufficient
-> + * to represent the offset between bpf_testmod_test_mod_kfunc
-> + * and __bpf_call_base.
-> + */
-> +void test_ksyms_module_valid_offset(void)
-> +{
-> +	unsigned long kfunc_addr;
-> +	unsigned long base_addr;
-> +	int used_offset;
-> +	long actual_offset;
-> +	int err;
-> +
-> +	if (!env.has_testmod) {
-> +		test__skip();
-> +		return;
-> +	}
-> +
-> +	err = test_find_func_in_kallsyms("bpf_testmod_test_mod_kfunc",
-> +					 &kfunc_addr);
-> +	if (!ASSERT_OK(err, "find kfunc addr"))
-> +		return;
-> +
-> +	err = test_find_func_in_kallsyms("__bpf_call_base", &base_addr);
-> +	if (!ASSERT_OK(err, "find base addr"))
-> +		return;
-> +
-> +	used_offset = kfunc_addr - base_addr;
-> +	actual_offset = kfunc_addr - base_addr;
-> +	ASSERT_EQ((long)used_offset, actual_offset, "kfunc offset overflowed");
-
-Is the above also executed in case bpf_jit_supports_kfunc_call() falls back to
-the default __weak callback, returning false? If yes, then the ASSERT_EQ() may
-fail on archs like s390, ppc, etc where the offset may not be enough.
-
-> +}
-> +
->   void test_ksyms_module_lskel(void)
->   {
->   	struct test_ksyms_module_lskel *skel;
-> @@ -55,6 +125,8 @@ void test_ksyms_module_libbpf(void)
->   
->   void test_ksyms_module(void)
->   {
-> +	if (test__start_subtest("valid_offset"))
-> +		test_ksyms_module_valid_offset();
->   	if (test__start_subtest("lskel"))
->   		test_ksyms_module_lskel();
->   	if (test__start_subtest("libbpf"))
-> 
+diff --git a/include/net/netns/core.h b/include/net/netns/core.h
+index 36c2d998a43c..00760e4efed7 100644
+--- a/include/net/netns/core.h
++++ b/include/net/netns/core.h
+@@ -10,6 +10,7 @@ struct netns_core {
+ 	struct ctl_table_header	*sysctl_hdr;
+ 
+ 	int	sysctl_somaxconn;
++	u8	sysctl_txrehash;
+ 
+ #ifdef CONFIG_PROC_FS
+ 	int __percpu *sock_inuse;
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 66a9a90f9558..cc83140d6502 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -577,6 +577,18 @@ static inline bool sk_user_data_is_nocopy(const struct sock *sk)
+ 			   __tmp | SK_USER_DATA_NOCOPY);		\
+ })
+ 
++static inline
++struct net *sock_net(const struct sock *sk)
++{
++	return read_pnet(&sk->sk_net);
++}
++
++static inline
++void sock_net_set(struct sock *sk, struct net *net)
++{
++	write_pnet(&sk->sk_net, net);
++}
++
+ /*
+  * SK_CAN_REUSE and SK_NO_REUSE on a socket mean that the socket is OK
+  * or not whether his port will be reused by someone else. SK_FORCE_REUSE
+@@ -1942,10 +1954,18 @@ static inline void sk_set_txhash(struct sock *sk)
+ 
+ static inline bool sk_rethink_txhash(struct sock *sk)
+ {
+-	if (sk->sk_txhash) {
++	u8 rehash;
++
++	if (!sk->sk_txhash)
++		return false;
++
++	rehash = READ_ONCE(sock_net(sk)->core.sysctl_txrehash);
++
++	if (rehash) {
+ 		sk_set_txhash(sk);
+ 		return true;
+ 	}
++
+ 	return false;
+ }
+ 
+@@ -2596,18 +2616,6 @@ static inline void sk_eat_skb(struct sock *sk, struct sk_buff *skb)
+ 	__kfree_skb(skb);
+ }
+ 
+-static inline
+-struct net *sock_net(const struct sock *sk)
+-{
+-	return read_pnet(&sk->sk_net);
+-}
+-
+-static inline
+-void sock_net_set(struct sock *sk, struct net *net)
+-{
+-	write_pnet(&sk->sk_net, net);
+-}
+-
+ static inline bool
+ skb_sk_is_prefetched(struct sk_buff *skb)
+ {
+diff --git a/include/uapi/linux/socket.h b/include/uapi/linux/socket.h
+index eb0a9a5b6e71..0accd6102ece 100644
+--- a/include/uapi/linux/socket.h
++++ b/include/uapi/linux/socket.h
+@@ -31,4 +31,7 @@ struct __kernel_sockaddr_storage {
+ 
+ #define SOCK_BUF_LOCK_MASK (SOCK_SNDBUF_LOCK | SOCK_RCVBUF_LOCK)
+ 
++#define SOCK_TXREHASH_DISABLED	0
++#define SOCK_TXREHASH_ENABLED	1
++
+ #endif /* _UAPI_LINUX_SOCKET_H */
+diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+index a448a9b5bb2d..de7bf682092c 100644
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -359,6 +359,8 @@ static __net_init int setup_net(struct net *net, struct user_namespace *user_ns)
+ static int __net_init net_defaults_init_net(struct net *net)
+ {
+ 	net->core.sysctl_somaxconn = SOMAXCONN;
++	net->core.sysctl_txrehash = SOCK_TXREHASH_ENABLED;
++
+ 	return 0;
+ }
+ 
+diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+index c8496c1142c9..01491631b20e 100644
+--- a/net/core/sysctl_net_core.c
++++ b/net/core/sysctl_net_core.c
+@@ -592,6 +592,15 @@ static struct ctl_table netns_core_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.proc_handler	= proc_dointvec_minmax
+ 	},
++	{
++		.procname	= "txrehash",
++		.data		= &init_net.core.sysctl_txrehash,
++		.maxlen		= sizeof(u8),
++		.mode		= 0644,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++		.proc_handler	= proc_dou8vec_minmax,
++	},
+ 	{ }
+ };
+ 
+@@ -610,7 +619,7 @@ __setup("fb_tunnels=", fb_tunnels_only_for_init_net_sysctl_setup);
+ 
+ static __net_init int sysctl_core_net_init(struct net *net)
+ {
+-	struct ctl_table *tbl;
++	struct ctl_table *tbl, *tmp;
+ 
+ 	tbl = netns_core_table;
+ 	if (!net_eq(net, &init_net)) {
+@@ -618,7 +627,8 @@ static __net_init int sysctl_core_net_init(struct net *net)
+ 		if (tbl == NULL)
+ 			goto err_dup;
+ 
+-		tbl[0].data = &net->core.sysctl_somaxconn;
++		for (tmp = tbl; tmp->procname; tmp++)
++			tmp->data += (char *)net - (char *)&init_net;
+ 
+ 		/* Don't export any sysctls to unprivileged users */
+ 		if (net->user_ns != &init_user_ns) {
+-- 
+2.17.1
 
