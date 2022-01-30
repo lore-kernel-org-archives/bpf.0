@@ -2,124 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5879C433EF
-	for <bpf@archiver.kernel.org>; Sun, 30 Jan 2022 11:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E3BC433F5
+	for <bpf@archiver.kernel.org>; Sun, 30 Jan 2022 12:25:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236399AbiA3L6R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 30 Jan 2022 06:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50794 "EHLO
+        id S1354775AbiA3MZk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 30 Jan 2022 07:25:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347001AbiA3L6R (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 30 Jan 2022 06:58:17 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C886CC061714
-        for <bpf@vger.kernel.org>; Sun, 30 Jan 2022 03:58:16 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e2so20090913wra.2
-        for <bpf@vger.kernel.org>; Sun, 30 Jan 2022 03:58:16 -0800 (PST)
+        with ESMTP id S1354767AbiA3MZj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 30 Jan 2022 07:25:39 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35320C061741
+        for <bpf@vger.kernel.org>; Sun, 30 Jan 2022 04:25:38 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id k25so33832012ejp.5
+        for <bpf@vger.kernel.org>; Sun, 30 Jan 2022 04:25:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=references:user-agent:from:to:cc:subject:in-reply-to:date
          :message-id:mime-version;
-        bh=CwGvYUvvwY+1O4rU4KEaLaTm1ToMNJe5IjL6iva8kjo=;
-        b=eCoROuCgBOOirJZOOq8/Xpq+dxaxJgweubsJMhdUTEcK4IRNCfl1zsRRAmzfcIi4N1
-         XbLwjyHJp72oVz+/VQMIQRqkxxtFIILvh2uEImGKEHIb1oGJpQDv8TvrUyjzRC5OccKz
-         tw8kRkfdg68LqVF0hg3CZVZ4w888qw37OYWS0=
+        bh=PMTYH8vYxJzYzIKQ4wJ1Cn/QVbnABT43BbzXgdJrWQI=;
+        b=apo0H/0Dyl2t3hk8E0D2z85aDd6iOJNXpJKyEbBY7/JTNGPCdkbdnzGkICjahHHvdg
+         ikbaCSmfvGWZBU6IZXUhNElfru0/txxioJdYFDH5e/cXST9poMaEGPF58kTHE38lu4h0
+         h8EdekFT0o5IRjk4tqQ0MYnPW0lGioEBYLaYk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:references:user-agent:from:to:cc:subject
          :in-reply-to:date:message-id:mime-version;
-        bh=CwGvYUvvwY+1O4rU4KEaLaTm1ToMNJe5IjL6iva8kjo=;
-        b=GbI6vCgraxYUrmKMSlviZeu8582HDP39A3bqhyReYta9RGR+ukdXxHQNAqYjTPTgi/
-         V0Uq8OQq0Vf4O34ZIVMAcqMW3j5O+tTPZPI33v67X2gkWh4tCO1BeVxJToErv8qi7dyb
-         Ro1NTrWNg6RJhzBRQTuTJWLbTlF1+Ur4M7XhqVAdw7CyECji1MhRyvS+7BkIig6/dhzx
-         zkrXu+ji3K1unaZrOwrceXo/aSzZIeTb4ni0GKMygrSZ/oLXgTVJDdNfhfaBmFyzaJz9
-         qoOjRnWuq6vktWUh8iaoewO5qdG17M6WfoGPnekov5/6D0wkDSnmiyuFJD3lpieTkG6V
-         1Vew==
-X-Gm-Message-State: AOAM5316gWA9VSQeW8w35csQinr5tFp/qmvsXDCvk43t9FlIQYLu26iA
-        hKzzC2Wa/ng1y0IJNeUtY4hxdg==
-X-Google-Smtp-Source: ABdhPJyx1TNa/rchQWCDsQ2cFQRCcqNdJmglEsfw/6LQ5EYQh29hDlSr/+LwIdbGC31H2nDa5L7iYQ==
-X-Received: by 2002:a05:6000:1a8c:: with SMTP id f12mr3047334wry.153.1643543895356;
-        Sun, 30 Jan 2022 03:58:15 -0800 (PST)
-Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0e00.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::e00])
-        by smtp.gmail.com with ESMTPSA id s9sm8950701wrr.84.2022.01.30.03.58.14
+        bh=PMTYH8vYxJzYzIKQ4wJ1Cn/QVbnABT43BbzXgdJrWQI=;
+        b=NgD/HVvHks+OAsCJgOw3JaX95zwWSeTmmgEZjsrVGGdc81khBU68o5HANAGzQHz1a9
+         dufCJtDmqphQ56B8xD2VBXV8FRZEb9K/8wMtHGm441ZENjonYqsvXmz38UyZrpfxeA1q
+         AkWpHuzBoTcG2v5k643jee0fmuVYBn/lvju6JCCuhiAyoi9v2Zq1iKWorSajpXyhW4sC
+         qms3k5pwTb6ewEn7t7aovipfIOYQtefB+oeDltTkNMzZXGhgWxZ6N6W5K14Yecotkvl4
+         rov2MB5tt8arY9Ux6YBpeUpvM0xBTR4jgHxU8jMV2b1tsCwXnf8dYKg15U0ABFRKaYPS
+         A6/A==
+X-Gm-Message-State: AOAM532Oz37SsK+TH4ntePlZRbC9DjV4FqsbaiHpLzd8QbtUCqKw/wU/
+        g3A1cDlOPdTyRcg79kEkW360YQ==
+X-Google-Smtp-Source: ABdhPJy3rWsVAeaHCILbvxyPLUIcCktog468JC/fPRiLCOsjiBYoYIRU/3dSm2dhcMilSbKwZrs6iA==
+X-Received: by 2002:a17:906:730a:: with SMTP id di10mr13618818ejc.489.1643545536662;
+        Sun, 30 Jan 2022 04:25:36 -0800 (PST)
+Received: from cloudflare.com ([2a01:110f:4809:d800::e00])
+        by smtp.gmail.com with ESMTPSA id s19sm13891576edr.23.2022.01.30.04.25.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jan 2022 03:58:14 -0800 (PST)
-References: <20220127172448.155686-1-jakub@cloudflare.com>
- <20220127172448.155686-2-jakub@cloudflare.com>
- <CAADnVQ+96ORKkbUA-Y7xiYV=TxSTh=p78f+t8TR4SN=YBMoEPA@mail.gmail.com>
+        Sun, 30 Jan 2022 04:25:36 -0800 (PST)
+References: <20220130030352.2710479-1-hefengqing@huawei.com>
+ <CAADnVQLsom4MQq2oonzfCqrHbhfg9y7YMPCk6Wg6r4bp3Su03g@mail.gmail.com>
 User-agent: mu4e 1.1.0; emacs 27.2
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>,
+Cc:     He Fengqing <hefengqing@huawei.com>,
+        Marek Majkowski <marek@cloudflare.com>,
         Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Make dst_port field in struct
- bpf_sock 16-bit wide
-In-reply-to: <CAADnVQ+96ORKkbUA-Y7xiYV=TxSTh=p78f+t8TR4SN=YBMoEPA@mail.gmail.com>
-Date:   Sun, 30 Jan 2022 12:58:13 +0100
-Message-ID: <871r0psaei.fsf@cloudflare.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [bpf-next] bpf: Add CAP_NET_ADMIN for sk_lookup program type
+In-reply-to: <CAADnVQLsom4MQq2oonzfCqrHbhfg9y7YMPCk6Wg6r4bp3Su03g@mail.gmail.com>
+Date:   Sun, 30 Jan 2022 13:25:35 +0100
+Message-ID: <87zgndqukg.fsf@cloudflare.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 07:17 PM CET, Alexei Starovoitov wrote:
-> On Thu, Jan 27, 2022 at 9:24 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+On Sun, Jan 30, 2022 at 04:24 AM CET, Alexei Starovoitov wrote:
+> On Sat, Jan 29, 2022 at 6:16 PM He Fengqing <hefengqing@huawei.com> wrote:
 >>
->> Menglong Dong reports that the documentation for the dst_port field in
->> struct bpf_sock is inaccurate and confusing. From the BPF program PoV, the
->> field is a zero-padded 16-bit integer in network byte order. The value
->> appears to the BPF user as if laid out in memory as so:
->>
->>   offsetof(struct bpf_sock, dst_port) + 0  <port MSB>
->>                                       + 8  <port LSB>
->>                                       +16  0x00
->>                                       +24  0x00
->>
->> 32-, 16-, and 8-bit wide loads from the field are all allowed, but only if
->> the offset into the field is 0.
->>
->> 32-bit wide loads from dst_port are especially confusing. The loaded value,
->> after converting to host byte order with bpf_ntohl(dst_port), contains the
->> port number in the upper 16-bits.
->>
->> Remove the confusion by splitting the field into two 16-bit fields. For
->> backward compatibility, allow 32-bit wide loads from offsetof(struct
->> bpf_sock, dst_port).
->>
->> While at it, allow loads 8-bit loads at offset [0] and [1] from dst_port.
->>
->> Reported-by: Menglong Dong <imagedong@tencent.com>
->> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
->> ---
->>  include/uapi/linux/bpf.h | 3 ++-
->>  net/core/filter.c        | 9 ++++++++-
->>  2 files changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
->> index 4a2f7041ebae..027e84b18b51 100644
->> --- a/include/uapi/linux/bpf.h
->> +++ b/include/uapi/linux/bpf.h
->> @@ -5574,7 +5574,8 @@ struct bpf_sock {
->>         __u32 src_ip4;
->>         __u32 src_ip6[4];
->>         __u32 src_port;         /* host byte order */
->> -       __u32 dst_port;         /* network byte order */
->> +       __be16 dst_port;        /* network byte order */
->> +       __u16 zero_padding;
+>> SK_LOOKUP program type was introduced in commit e9ddbb7707ff
+>> ("bpf: Introduce SK_LOOKUP program type with a dedicated attach point"),
+>> but the commit did not add SK_LOOKUP program type in net admin prog type.
+>> I think SK_LOOKUP program type should need CAP_NET_ADMIN, so add SK_LOOKUP
+>> program type in net_admin_prog_type.
 >
-> I was wondering can we do '__u16 :16' here ?
+> I'm afraid it's too late to change.
+>
+> Jakub, Marek, wdyt?
 
-Great idea. Now done in v2:
+That's definitely an oversight on my side, considering that CAP_BPF came
+in 5.8, and sk_lookup program first appeared in 5.9.
 
-https://lore.kernel.org/bpf/20220130115518.213259-1-jakub@cloudflare.com/
+Today it's possible to build a usable sk_lookup program without
+CAP_NET_ADMIN if you go for REUSEPORT_SOCKARRAY map instead of
+SOCKMAP/HASH.
 
-> Should we do the same for bpf_sk_lookup->remote_port as well
-> for consistency?
-
-I can tend to that this upcoming week.
+Best I can come up is a "phase it out" approach. Put the CAP_NET_ADMIN
+load-time check behind a config option, defaulting to true?, and wait
+for it to become obsolete.
