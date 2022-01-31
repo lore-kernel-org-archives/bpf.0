@@ -2,40 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 125C7C433F5
-	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 05:03:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C934C433EF
+	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 09:36:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357732AbiAaFDB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Jan 2022 00:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S237340AbiAaJgv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Jan 2022 04:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357744AbiAaFCn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:02:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8C9C061714;
-        Sun, 30 Jan 2022 21:02:17 -0800 (PST)
+        with ESMTP id S237158AbiAaJgu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 Jan 2022 04:36:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C41C061714;
+        Mon, 31 Jan 2022 01:36:50 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C748B82996;
-        Mon, 31 Jan 2022 05:02:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C21C340E8;
-        Mon, 31 Jan 2022 05:02:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 642B96131E;
+        Mon, 31 Jan 2022 09:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08142C340E8;
+        Mon, 31 Jan 2022 09:36:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643605334;
-        bh=uT6ZPcB2j337Im93b4k6DOtcrtN7D6MyuN6ZnTAQx7w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BulBOrCF7XoPOTgNOZQRUKgeKGp2fr6bhVXPI0n5t4ZH+m9zxbU7jJGj20HFI7PPv
-         FMw4Gid64kipFjMFtnszNfEHAaRkjqxm2uaMMDyAOlE1ZY1bKBWBNW1knHlE95D2xw
-         xPLUT/UQEiMkJgLvYx+SEVfT/uGl22Br9Tf6aYWznQr8wvqEvzeU/ETC7ZJl+LmrPj
-         5mipK2azznmGF+gEXjWTTewO56+tYZ88oGLhHVdZiwfpZIlal53R2vKja/Oa63x5ly
-         rGudVBwPgU/armadZgJt6PKeQ69rxpXJnVcWLdockjrYsqME+TwkYjvqQyu3t3t7us
-         c6+r5xrN1Ql+A==
+        s=k20201202; t=1643621808;
+        bh=vMgDCjwqfRkV/E2kGVpMD+Erf3jfq9HqYRlJlo+kis4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TNUlBD0pk1UDcpPQZaGZ1h96kgmTo9QxdayWPNe2geVkbaok6ra37jbJ+/N51S79K
+         /A4lD6sPbzO5oTbg6nh155o/FHLuatoOtqSTIAOtgw6wtGB2xy7AwhVSe5V3BhuY/z
+         kaMuXjZ/LpDHRvjUAtnk9w+1ygZzLhqTiHnn9KHqLnpnC4UvQkdjutCj6C3P/FreYS
+         nG73t8GIZvtdT59DDBKa35VGMOoDNyy2TYV6iAZvoBDf6AzUjHin8SEKpcbHkKdJIO
+         fXY/FxUQUfdtZdxiBRoq7H98sJJmLSlyhaYJk2JuynKvzfTLtbrVNTe0gV1yZtpYHX
+         YzKqhoedV7RFg==
+Date:   Mon, 31 Jan 2022 18:36:42 +0900
 From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
@@ -44,136 +45,127 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Steven Rostedt <rostedt@goodmis.org>,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v7 09/10] fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
-Date:   Mon, 31 Jan 2022 14:02:09 +0900
-Message-Id: <164360532920.65877.12281577388256600302.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
+        "David S . Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH v7 00/10] fprobe: Introduce fprobe function entry/exit
+ probe
+Message-Id: <20220131183642.aba575006314b3988110a7e5@kernel.org>
 In-Reply-To: <164360522462.65877.1891020292202285106.stgit@devnote2>
 References: <164360522462.65877.1891020292202285106.stgit@devnote2>
-User-Agent: StGit/0.19
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce FPROBE_FL_KPROBE_SHARED flag for sharing fprobe callback with
-kprobes safely from the viewpoint of recursion.
+Hi Jiri,
 
-Since the recursion safety of the fprobe (and ftrace) is a bit different
-from the kprobes, this may cause an issue if user wants to run the same
-code from the fprobe and the kprobes.
+On Mon, 31 Jan 2022 14:00:24 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-The kprobes has per-cpu 'current_kprobe' variable which protects the
-kprobe handler from recursion in any case. On the other hand, the fprobe
-uses only ftrace_test_recursion_trylock(), which will allow interrupt
-context calls another (or same) fprobe during the fprobe user handler is
-running.
+> Hi,
+> 
+> Here is the 7th version of fprobe. This version fixes unregister_fprobe()
+> ensures that exit_handler is not called after returning from the
+> unregister_fprobe(), and fixes some comments and documents.
+> 
+> The previous version is here[1];
+> 
+> [1] https://lore.kernel.org/all/164338031590.2429999.6203979005944292576.stgit@devnote2/T/#u
+> 
+> This series introduces the fprobe, the function entry/exit probe
+> with multiple probe point support. This also introduces the rethook
+> for hooking function return as same as the kretprobe does. This
+> abstraction will help us to generalize the fgraph tracer,
+> because we can just switch to it from the rethook in fprobe,
+> depending on the kernel configuration.
+> 
+> The patch [1/10] is from Jiri's series[2].
+> 
+> [2] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+> 
+> And the patch [9/10] adds the FPROBE_FL_KPROBE_SHARED flag for the case
+> if user wants to share the same code (or share a same resource) on the
+> fprobe and the kprobes.
 
-This is not a matter in cases if the common callback shared among the
-kprobes and the fprobe has its own recursion detection, or it can handle
-the recursion in the different contexts (normal/interrupt/NMI.)
-But if it relies on the 'current_kprobe' recursion lock, it has to check
-kprobe_running() and use kprobe_busy_*() APIs.
+If you want to work on this series, I pushed my working branch on here;
 
-Fprobe has FPROBE_FL_KPROBE_SHARED flag to do this. If your common callback
-code will be shared with kprobes, please set FPROBE_FL_KPROBE_SHARED
-*before* registering the fprobe, like;
+https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git/ kprobes/fprobe
 
- fprobe.flags = FPROBE_FL_KPROBE_SHARED;
+Thank you,
 
- register_fprobe(&fprobe, "func*", NULL);
+> 
+> Thank you,
+> 
+> ---
+> 
+> Jiri Olsa (1):
+>       ftrace: Add ftrace_set_filter_ips function
+> 
+> Masami Hiramatsu (9):
+>       fprobe: Add ftrace based probe APIs
+>       rethook: Add a generic return hook
+>       rethook: x86: Add rethook x86 implementation
+>       ARM: rethook: Add rethook arm implementation
+>       arm64: rethook: Add arm64 rethook implementation
+>       fprobe: Add exit_handler support
+>       fprobe: Add sample program for fprobe
+>       fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+>       docs: fprobe: Add fprobe description to ftrace-use.rst
+> 
+> 
+>  Documentation/trace/fprobe.rst                |  171 +++++++++++++
+>  Documentation/trace/index.rst                 |    1 
+>  arch/arm/Kconfig                              |    1 
+>  arch/arm/include/asm/stacktrace.h             |    4 
+>  arch/arm/kernel/stacktrace.c                  |    6 
+>  arch/arm/probes/Makefile                      |    1 
+>  arch/arm/probes/rethook.c                     |   71 +++++
+>  arch/arm64/Kconfig                            |    1 
+>  arch/arm64/include/asm/stacktrace.h           |    2 
+>  arch/arm64/kernel/probes/Makefile             |    1 
+>  arch/arm64/kernel/probes/rethook.c            |   25 ++
+>  arch/arm64/kernel/probes/rethook_trampoline.S |   87 ++++++
+>  arch/arm64/kernel/stacktrace.c                |    7 -
+>  arch/x86/Kconfig                              |    1 
+>  arch/x86/include/asm/unwind.h                 |    8 +
+>  arch/x86/kernel/Makefile                      |    1 
+>  arch/x86/kernel/kprobes/common.h              |    1 
+>  arch/x86/kernel/rethook.c                     |  115 ++++++++
+>  include/linux/fprobe.h                        |   97 +++++++
+>  include/linux/ftrace.h                        |    3 
+>  include/linux/kprobes.h                       |    3 
+>  include/linux/rethook.h                       |  100 +++++++
+>  include/linux/sched.h                         |    3 
+>  kernel/exit.c                                 |    2 
+>  kernel/fork.c                                 |    3 
+>  kernel/trace/Kconfig                          |   26 ++
+>  kernel/trace/Makefile                         |    2 
+>  kernel/trace/fprobe.c                         |  341 +++++++++++++++++++++++++
+>  kernel/trace/ftrace.c                         |   58 ++++
+>  kernel/trace/rethook.c                        |  313 +++++++++++++++++++++++
+>  samples/Kconfig                               |    7 +
+>  samples/Makefile                              |    1 
+>  samples/fprobe/Makefile                       |    3 
+>  samples/fprobe/fprobe_example.c               |  120 +++++++++
+>  34 files changed, 1572 insertions(+), 14 deletions(-)
+>  create mode 100644 Documentation/trace/fprobe.rst
+>  create mode 100644 arch/arm/probes/rethook.c
+>  create mode 100644 arch/arm64/kernel/probes/rethook.c
+>  create mode 100644 arch/arm64/kernel/probes/rethook_trampoline.S
+>  create mode 100644 arch/x86/kernel/rethook.c
+>  create mode 100644 include/linux/fprobe.h
+>  create mode 100644 include/linux/rethook.h
+>  create mode 100644 kernel/trace/fprobe.c
+>  create mode 100644 kernel/trace/rethook.c
+>  create mode 100644 samples/fprobe/Makefile
+>  create mode 100644 samples/fprobe/fprobe_example.c
+> 
+> --
+> Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
 
-This will protect your common callback from the nested call.
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- include/linux/fprobe.h  |   12 ++++++++++++
- include/linux/kprobes.h |    3 +++
- kernel/trace/fprobe.c   |   19 ++++++++++++++++++-
- 3 files changed, 33 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-index acfdcc37acf6..94b9386d7267 100644
---- a/include/linux/fprobe.h
-+++ b/include/linux/fprobe.h
-@@ -26,13 +26,25 @@ struct fprobe {
- 	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
- };
- 
-+/* This fprobe is soft-disabled. */
- #define FPROBE_FL_DISABLED	1
- 
-+/*
-+ * This fprobe handler will be shared with kprobes.
-+ * This flag must be set before registering.
-+ */
-+#define FPROBE_FL_KPROBE_SHARED	2
-+
- static inline bool fprobe_disabled(struct fprobe *fp)
- {
- 	return (fp) ? fp->flags & FPROBE_FL_DISABLED : false;
- }
- 
-+static inline bool fprobe_shared_with_kprobes(struct fprobe *fp)
-+{
-+	return (fp) ? fp->flags & FPROBE_FL_KPROBE_SHARED : false;
-+}
-+
- #ifdef CONFIG_FPROBE
- int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter);
- int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num);
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index 8c8f7a4d93af..efe4fc364f6a 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -433,6 +433,9 @@ static inline struct kprobe *kprobe_running(void)
- {
- 	return NULL;
- }
-+#define kprobe_busy_begin()	do {} while (0)
-+#define kprobe_busy_end()	do {} while (0)
-+
- static inline int register_kprobe(struct kprobe *p)
- {
- 	return -EOPNOTSUPP;
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index d733c0d9cb09..4881b98f35ab 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -56,6 +56,20 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- }
- NOKPROBE_SYMBOL(fprobe_handler);
- 
-+static void fprobe_kprobe_handler(unsigned long ip, unsigned long parent_ip,
-+				  struct ftrace_ops *ops, struct ftrace_regs *fregs)
-+{
-+	struct fprobe *fp = container_of(ops, struct fprobe, ops);
-+
-+	if (unlikely(kprobe_running())) {
-+		fp->nmissed++;
-+		return;
-+	}
-+	kprobe_busy_begin();
-+	fprobe_handler(ip, parent_ip, ops, fregs);
-+	kprobe_busy_end();
-+}
-+
- static void fprobe_exit_handler(struct rethook_node *rh, void *data,
- 				struct pt_regs *regs)
- {
-@@ -109,7 +123,10 @@ static unsigned long *get_ftrace_locations(const char **syms, int num)
- static void fprobe_init(struct fprobe *fp)
- {
- 	fp->nmissed = 0;
--	fp->ops.func = fprobe_handler;
-+	if (fprobe_shared_with_kprobes(fp))
-+		fp->ops.func = fprobe_kprobe_handler;
-+	else
-+		fp->ops.func = fprobe_handler;
- 	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
- }
- 
-
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
