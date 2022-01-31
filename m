@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41946C433EF
-	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 22:05:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 155CAC433F5
+	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 22:05:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiAaWFn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Jan 2022 17:05:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57800 "EHLO
+        id S231191AbiAaWFt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Jan 2022 17:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbiAaWFm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 Jan 2022 17:05:42 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5A1C061714
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 14:05:42 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id n32so14054211pfv.11
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 14:05:42 -0800 (PST)
+        with ESMTP id S231145AbiAaWFs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 Jan 2022 17:05:48 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E20C061714
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 14:05:48 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id h20-20020a17090adb9400b001b518bf99ffso563707pjv.1
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 14:05:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YMeC4Hp3/UlZ5o1F0WtmLn15DBc41UEux4Lq6UGhsvg=;
-        b=BeN2hpU22HNDAFn+FagJx2NO+qU+6LheXbxfOm/k/4FA2IVSuhqBn5J4nUiVNEe5Bi
-         FhimjPWHMyISbo5nuwTFqQA77FhttmyWHM2dCd9ic3sNX6uF5rsYEo1ou14EDJZ0HUAy
-         MhWFaEumMxyra1TaKNE/VDGoCU1W/VCJb1TEQrGwkOf1WLmmNbLzj8rKF5x9N+zYKxbc
-         /5JpGCNEXECF2yPFsy8B/27a7QRroVBwpQGkBenFCo2WH52xYScjmL0g9bgQcgJlXFYB
-         4VVmD3WxE+XC/kr06+zRXP01ipDeN9zZd/Hah+Y82KQH4Z3ilalGCLqmolOrrCCGaDXx
-         X4ag==
+        bh=PhqyUCno5avnlYlJWrXkwopIrnAwzhUTkOu2zMw9Wps=;
+        b=dbPYFFRAtdsa0QgYfdgieYyQOPPNFTbGZrZIS4ueXltlgss0nNczhC3EXGo08Pt0EX
+         Gr2SOhYMxkWwSVCnDW3aKma73vxr/TREADmMKoBoBCqRsfBJmEhwbGoPhUxde+8TPjSg
+         ErnZTq94GpR/siZORySzqTqb/Lvmd12q6rOejcqKZpMDLidkkGJa6/zvH4SUgxsJHWwA
+         gyjh3y63UFk7lqSgZIo7Iftx86V2kg005g/8vAK+eOh4NPZrBEJHo34VnrbWlHLfYmFg
+         FT6rRh5+x9w/vZSxhNse2LsIbOOlX+Dbeb/J/BftrnWfxPu7EKXtgjxyTvvJqpkOVEpf
+         qM9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YMeC4Hp3/UlZ5o1F0WtmLn15DBc41UEux4Lq6UGhsvg=;
-        b=dt4JMKZ6zSYY6DJqPr0HXSkoaXgN+hQYba94j+aABr6MmzSRSdpUcI1BTHPDFIdHjL
-         PWd2hRwbX1BZGB9IT7UJGdEzeUZhl5Hm8DquMfnNWEygAs6rSJagn4U4DjP0V3Ncdg5G
-         YG7tbiWAB3jKI2HUCEay8RYKJmS4yfcHiTzbWfhS9QTfkDzXToZR38aJEdVqNlxJaOMI
-         dCXgjdOubjHIuySepKI1PrK6U4aDqBo8G5OHILlduaUKBOg8RmaOn3de+MdPr5CehkYV
-         d0vu8xTBP+CM59D9Vuk2AZH6lp5kTILYPrdK5Z+pL8WfWtbkCP5JOn7OIvzMjgnFLnbq
-         Khyw==
-X-Gm-Message-State: AOAM530YygrwCAS/4GsF8XnSJFr3Yubyqi7Rh8Th57iKFxWBMX0rilQ5
-        B658fzIXHL9BbRUDJfBlmOQ=
-X-Google-Smtp-Source: ABdhPJxe47+yVtYKeQX0jhXhmw/nTdd3PXPU61364TyrsubeNjP1HU1GLySU1Z8xB3ws+sBaL60yfQ==
-X-Received: by 2002:a63:85c6:: with SMTP id u189mr18132379pgd.437.1643666742312;
-        Mon, 31 Jan 2022 14:05:42 -0800 (PST)
+        bh=PhqyUCno5avnlYlJWrXkwopIrnAwzhUTkOu2zMw9Wps=;
+        b=jGQ1BxmoFniTgZpkLMtTbNfuvHw3xYK7p968Mlo11qgrgjISMwd5B6DlbwRuADmHI6
+         MJZ8vMilQ2JedJazS5mfGVTVoNUsTzMYcgSOCRbwhMXvBHmpj+BLqbrlTQxqZyftlQWS
+         AtTq66nq2CmMwDGSOm2oXGrvCNnfB7TexRLyROct5yLQCGEkRIFr4R0rice2VTsb5FbS
+         TcaSETRqc9EUFDfTxRqPsn5pgdWS55Vlh4BTTTzQN2v8vk0kL0rHGUsbaAKdehlxhsYQ
+         ev51PCHEpo9UGaj7laT3+Bg0Jqd8MFHs6N7N6WKzDi7r5QBqcsSuFznNZEBp0zioWL4C
+         MgBQ==
+X-Gm-Message-State: AOAM533Fgk+PQ3gXhYh3ay+D80chpaBZDoBmqRRMTdb39lEqouK5PhWx
+        n1iyfbk1en2tEeSmm3CjQ/s=
+X-Google-Smtp-Source: ABdhPJwpiFWoVB/fXDxXUec5xwPdU0jRFh+GQvCVNNN/SIF5nO2c5SbXTVAL8VOAAGatMkxuaBDFLA==
+X-Received: by 2002:a17:90a:5204:: with SMTP id v4mr27001572pjh.47.1643666748283;
+        Mon, 31 Jan 2022 14:05:48 -0800 (PST)
 Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:78b6])
-        by smtp.gmail.com with ESMTPSA id c26sm28440592pgb.53.2022.01.31.14.05.41
+        by smtp.gmail.com with ESMTPSA id mm24sm290495pjb.20.2022.01.31.14.05.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 14:05:42 -0800 (PST)
+        Mon, 31 Jan 2022 14:05:47 -0800 (PST)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
         kernel-team@fb.com
-Subject: [PATCH bpf-next 4/7] bpf: Remove unnecessary setrlimit from bpf preload.
-Date:   Mon, 31 Jan 2022 14:05:25 -0800
-Message-Id: <20220131220528.98088-5-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 6/7] bpf: Open code obj_get_info_by_fd in bpf preload.
+Date:   Mon, 31 Jan 2022 14:05:27 -0800
+Message-Id: <20220131220528.98088-7-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220131220528.98088-1-alexei.starovoitov@gmail.com>
 References: <20220131220528.98088-1-alexei.starovoitov@gmail.com>
@@ -65,34 +65,50 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-BPF programs and maps are memcg accounted. setrlimit is obsolete.
-Remove its use from bpf preload.
+Open code obj_get_info_by_fd in bpf preload.
+It's the last part of libbpf that preload/iterators were using.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/preload/iterators/iterators.c | 2 --
- 1 file changed, 2 deletions(-)
+ kernel/bpf/preload/iterators/iterators.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/preload/iterators/iterators.c b/kernel/bpf/preload/iterators/iterators.c
-index 5d872a705470..2ec85fc6984f 100644
+index 23b74916fb84..4dafe0f4f2b2 100644
 --- a/kernel/bpf/preload/iterators/iterators.c
 +++ b/kernel/bpf/preload/iterators/iterators.c
-@@ -37,7 +37,6 @@ static int send_link_to_kernel(struct bpf_link *link, const char *link_name)
+@@ -16,6 +16,22 @@
+ int to_kernel = -1;
+ int from_kernel = 0;
  
- int main(int argc, char **argv)
++static int __bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len)
++{
++	union bpf_attr attr;
++	int err;
++
++	memset(&attr, 0, sizeof(attr));
++	attr.info.bpf_fd = bpf_fd;
++	attr.info.info_len = *info_len;
++	attr.info.info = (long) info;
++
++	err = skel_sys_bpf(BPF_OBJ_GET_INFO_BY_FD, &attr, sizeof(attr));
++	if (!err)
++		*info_len = attr.info.info_len;
++	return err;
++}
++
+ static int send_link_to_kernel(int link_fd, const char *link_name)
  {
--	struct rlimit rlim = { RLIM_INFINITY, RLIM_INFINITY };
- 	struct iterators_bpf *skel;
- 	int err, magic;
- 	int debug_fd;
-@@ -55,7 +54,6 @@ int main(int argc, char **argv)
- 		printf("bad start magic %d\n", magic);
- 		return 1;
- 	}
--	setrlimit(RLIMIT_MEMLOCK, &rlim);
- 	/* libbpf opens BPF object and loads it into the kernel */
- 	skel = iterators_bpf__open_and_load();
- 	if (!skel) {
+ 	struct bpf_preload_info obj = {};
+@@ -23,7 +39,7 @@ static int send_link_to_kernel(int link_fd, const char *link_name)
+ 	__u32 info_len = sizeof(info);
+ 	int err;
+ 
+-	err = bpf_obj_get_info_by_fd(link_fd, &info, &info_len);
++	err = __bpf_obj_get_info_by_fd(link_fd, &info, &info_len);
+ 	if (err)
+ 		return err;
+ 	obj.link_id = info.id;
 -- 
 2.30.2
 
