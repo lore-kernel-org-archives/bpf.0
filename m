@@ -2,140 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14AC7C433F5
-	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 13:15:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B93B0C433EF
+	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 13:33:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiAaNPP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Jan 2022 08:15:15 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:49212 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234808AbiAaNPP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 31 Jan 2022 08:15:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643634914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4FeGLRifRzLE6TznX8Ku8/uOBOutTsIkvk9v4ykgx0E=;
-        b=dCGF+7RbscA2RVTZ4Uiv/bNNf/9PEYENOt8LzloDFQVjnpWtH7RVBjMhJyKDciRxkkR9UH
-        zvpgzvBX0CcwrEP56yyKhb00kUM/UFm94BIaz4CC7JvANKmSCBal1izjN5vlLLYcieLBPV
-        saPlYaExox4gEoKP0fZhtgV2fr+EEhs=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-A7f_1vv2MbuhLc0PyIe2Pw-1; Mon, 31 Jan 2022 08:15:13 -0500
-X-MC-Unique: A7f_1vv2MbuhLc0PyIe2Pw-1
-Received: by mail-ot1-f72.google.com with SMTP id h36-20020a9d2f27000000b0059e33f1f8a0so7953162otb.19
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 05:15:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=4FeGLRifRzLE6TznX8Ku8/uOBOutTsIkvk9v4ykgx0E=;
-        b=ZA860ZDDUTjyGYOO0eVjVwzSYW4kKEOEFYjn9jHbUAOOj9FSkSd0vr04pSw8+v/sUp
-         rEJm4JypR/WNkOAPPDz7yJhQDJnRwFU5jGXHGiauMrtroIvWesVV28EkXypkPJ5a/+3/
-         VoZiD5cLmEWsXOjwOo6dtal1uFfMO+Qpizry51xC7tcpxwT01qyR4KZNd7dj+qEUCmFo
-         az4Jd/11xd2FjndjrvII/wNMQrOiSwopowxx9FWJg0QXT2PDE4bRi4JCgd7Xax02XtOU
-         j6hivq/krk7+7Oz5rmWbe5/vxpotoG79Nd1FFiOm7Pg5P8NdDfed1yjFIpkO2PXIXKFL
-         O+yQ==
-X-Gm-Message-State: AOAM532KJS0PSuEWfyqZ45ywpDAA2JrjRsqxae1bStg+C5rAbboxLE2q
-        ZD1uAnnHUK0SmUP3uaO82grIfrXEMk6rpKXLSmRcwJzK9RX+wtcYY9v6y/fxeyUjD5qr0M7FU0+
-        Rkr4xYoJW1X0i
-X-Received: by 2002:a05:6808:23c6:: with SMTP id bq6mr17754656oib.99.1643634912235;
-        Mon, 31 Jan 2022 05:15:12 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwg+PlgnvIqsLU9wdXdToRYaNCz/5k5B8bAtO1B3Ld/EJlpN9xGPW04bWDX+KnYUCyo0PUyZg==
-X-Received: by 2002:a05:6808:23c6:: with SMTP id bq6mr17754636oib.99.1643634911837;
-        Mon, 31 Jan 2022 05:15:11 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id e5sm13714981oti.59.2022.01.31.05.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jan 2022 05:15:11 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 87CF81806B4; Mon, 31 Jan 2022 14:15:07 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Pirko <jiri@mellanox.com>
-Subject: Re: [RFC] failing selftests/bpf/test_offload.py
-In-Reply-To: <20220130225101.47514-1-jolsa@kernel.org>
-References: <20220130225101.47514-1-jolsa@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 31 Jan 2022 14:15:07 +0100
-Message-ID: <87k0egt5b8.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S233957AbiAaNdG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Jan 2022 08:33:06 -0500
+Received: from forwardcorp1o.mail.yandex.net ([95.108.205.193]:53608 "EHLO
+        forwardcorp1o.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379024AbiAaNbo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 31 Jan 2022 08:31:44 -0500
+Received: from sas1-3cba3404b018.qloud-c.yandex.net (sas1-3cba3404b018.qloud-c.yandex.net [IPv6:2a02:6b8:c08:bd26:0:640:3cba:3404])
+        by forwardcorp1o.mail.yandex.net (Yandex) with ESMTP id 6F9872E0C6A;
+        Mon, 31 Jan 2022 16:31:40 +0300 (MSK)
+Received: from sas1-9d43635d01d6.qloud-c.yandex.net (sas1-9d43635d01d6.qloud-c.yandex.net [2a02:6b8:c08:793:0:640:9d43:635d])
+        by sas1-3cba3404b018.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id 50xm73fQr6-VaGiP9N4;
+        Mon, 31 Jan 2022 16:31:40 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1643635900; bh=/QTiU1RXcrb5KfRgFKqKXsNjxtJAMyFB7TOvTGUsdCk=;
+        h=Date:Subject:To:From:Message-Id:Cc;
+        b=eLj6tEpTScTeJWaxbo0zVoiA7ZeYuvn3xN3RjyD9SpBIx2/lnKLNMjCzWnr5WA0/4
+         BejLm7DnhFmnBem2l/t/N5Q50wIrbw8rTH/sKen57DIxWJzrAExAuYg10WmfCEE/oX
+         Tt0ncmqHiqPqLeB7qnVBBr7CJ9tGfmgQizZGRfSI=
+Authentication-Results: sas1-3cba3404b018.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Received: from vmhmukos.sas.yp-c.yandex.net (vmhmukos.sas.yp-c.yandex.net [2a02:6b8:c10:288:0:696:6af:0])
+        by sas1-9d43635d01d6.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id KT3glRaQ9Z-VaIONEH0;
+        Mon, 31 Jan 2022 16:31:36 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 2
+From:   Akhmat Karakotov <hmukos@yandex-team.ru>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+        eric.dumazet@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, tom@herbertland.com,
+        hmukos@yandex-team.ru, zeil@yandex-team.ru, mitradir@yandex-team.ru
+Subject: [PATCH net-next v5 0/5] Make hash rethink configurable
+Date:   Mon, 31 Jan 2022 16:31:20 +0300
+Message-Id: <20220131133125.32007-1-hmukos@yandex-team.ru>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jiri Olsa <jolsa@redhat.com> writes:
+As it was shown in the report by Alexander Azimov, hash rethink at the
+client-side may lead to connection timeout toward stateful anycast
+services. Tom Herbert created a patchset to address this issue by applying
+hash rethink only after a negative routing event (3RTOs) [1]. This change
+also affects server-side behavior, which we found undesirable. This
+patchset changes defaults in a way to make them safe: hash rethink at the
+client-side is disabled and enabled at the server-side upon each RTO
+event or in case of duplicate acknowledgments.
 
-> hi,
-> I have failing test_offload.py with following output:
->
->   # ./test_offload.py
->   ...
->   Test bpftool bound info reporting (own ns)...
->   FAIL: 3 BPF maps loaded, expected 2
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 1177, in <module>
->       check_dev_info(False, "")
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 645, in check_dev_info
->       maps = bpftool_map_list(expected=2, ns=ns)
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 190, in bpftool_map_list
->       fail(True, "%d BPF maps loaded, expected %d" %
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 86, in fail
->       tb = "".join(traceback.extract_stack().format())
->
-> it fails to detect maps from bpftool's feature detection,
-> that did not make it yet through deferred removal
->
-> with the fix below I have this subtest passed, but it fails
-> further on:
->
->   # ./test_offload.py
->   ...
->   Test bpftool bound info reporting (own ns)...
->   Test bpftool bound info reporting (other ns)...
->   Test bpftool bound info reporting (remote ns)...
->   Test bpftool bound info reporting (back to own ns)...
->   Test bpftool bound info reporting (removed dev)...
->   Test map update (no flags)...
->   Test map update (exists)...
->   Test map update (noexist)...
->   Test map dump...
->   Test map dump...
->   Traceback (most recent call last):
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 1251, in <module>
->       _, entries = bpftool("map dump id %d" % (m["id"]))
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 169, in bpftool
->       return tool("bpftool", args, {"json":"-p"}, JSON=JSON, ns=ns,
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 155, in tool
->       ret, stdout = cmd(ns + name + " " + params + args,
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 109, in cmd
->       return cmd_result(proc, include_stderr=include_stderr, fail=fail)
->     File "/root/bpf-next/tools/testing/selftests/bpf/./test_offload.py", line 131, in cmd_result
->       raise Exception("Command failed: %s\n%s" % (proc.args, stderr))
->   Exception: Command failed: bpftool -p map dump id 4325
->
-> the test seems to expect maps having BTF loaded, which for some reason
-> did not happen, so the test fails with bpftool pretty dump fail
->
-> the test loads the object with 'ip link ...', which I never touched,
-> so I wanted ask first before I dive in, perhaps I miss some setup
->
-> thoughts? ;-)
+This patchset provides two options to change default behaviour. The hash
+rethink may be disabled at the server-side by the new sysctl option.
+Changes in the sysctl option don't affect default behavior at the
+client-side.
 
-It looks like the test_offload.py has been using 'bpftool -p' since its
-inception (in commit: 417ec26477a5 ("selftests/bpf: add offload test
-based on netdevsim") introduced in December 2017), so this sounds like a
-regression in bpftool?
+Hash rethink can also be enabled/disabled with socket option or bpf
+syscalls which ovewrite both default and sysctl settings. This socket
+option is available on both client and server-side. This should provide
+mechanics to enable hash rethink inside administrative domain, such as DC,
+where hash rethink at the client-side can be desirable.
 
--Toke
+[1] https://lore.kernel.org/netdev/20210809185314.38187-1-tom@herbertland.com/
+
+v2:
+	- Changed sysctl default to ENABLED in all patches. Reduced sysctl
+	  and socket option size to u8. Fixed netns bug reported by kernel
+	  test robot.
+
+v3:
+	- Fixed bug with bad u8 comparison. Moved sk_txrehash to use less
+	  bytes in struct. Added WRITE_ONCE() in setsockopt in and
+	  READ_ONCE() in tcp_rtx_synack.
+
+v4:
+	- Rebase and add documentation for sysctl option.
+
+v5:
+	- Move sk_txrehash out of busy poll ifdef.
+
+
+Akhmat Karakotov (5):
+  txhash: Make rethinking txhash behavior configurable via sysctl
+  txhash: Add socket option to control TX hash rethink behavior
+  txhash: Add txrehash sysctl description
+  bpf: Add SO_TXREHASH setsockopt
+  tcp: Change SYN ACK retransmit behaviour to account for rehash
+
+ Documentation/admin-guide/sysctl/net.rst |  9 ++++++++
+ arch/alpha/include/uapi/asm/socket.h     |  2 ++
+ arch/mips/include/uapi/asm/socket.h      |  2 ++
+ arch/parisc/include/uapi/asm/socket.h    |  2 ++
+ arch/sparc/include/uapi/asm/socket.h     |  2 ++
+ include/net/netns/core.h                 |  1 +
+ include/net/sock.h                       | 28 +++++++++++++-----------
+ include/uapi/asm-generic/socket.h        |  2 ++
+ include/uapi/linux/socket.h              |  4 ++++
+ net/core/filter.c                        | 10 +++++++++
+ net/core/net_namespace.c                 |  2 ++
+ net/core/sock.c                          | 14 ++++++++++++
+ net/core/sysctl_net_core.c               | 14 ++++++++++--
+ net/ipv4/inet_connection_sock.c          |  3 +++
+ net/ipv4/tcp_output.c                    |  4 +++-
+ 15 files changed, 83 insertions(+), 16 deletions(-)
+
+-- 
+2.17.1
 
