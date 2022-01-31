@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A361C433FE
-	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 05:02:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1E7DC433EF
+	for <bpf@archiver.kernel.org>; Mon, 31 Jan 2022 05:02:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239010AbiAaFCy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Jan 2022 00:02:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S1357649AbiAaFC4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Jan 2022 00:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357683AbiAaFCd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 Jan 2022 00:02:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A77BC061756;
-        Sun, 30 Jan 2022 21:01:53 -0800 (PST)
+        with ESMTP id S1357745AbiAaFCn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 Jan 2022 00:02:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88BF9C06173B;
+        Sun, 30 Jan 2022 21:02:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCAEF611AD;
-        Mon, 31 Jan 2022 05:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19EB2C340E8;
-        Mon, 31 Jan 2022 05:01:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44E16B80ADD;
+        Mon, 31 Jan 2022 05:02:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA649C340E8;
+        Mon, 31 Jan 2022 05:02:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643605312;
-        bh=u5HSB42qpYb2fuxkTMvjkgmWhlnboq1+fVbTsi9o21k=;
+        s=k20201202; t=1643605346;
+        bh=oB3OHV7PT9qKuceHnY4r/cZGELfQzY+D6DiCbhHAX1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rnRDwaC9g3mtq41ilziR1PF3d57XIG3ZASZWjTVOBrpZQbNnO6dKzaI4IUfDSgkgE
-         K2sXLB5vLHUeXB+PAn+ZwHjyvUQMUkePJUtLTBK+wyaPi/nGh1eJe7O7nAqyglLnIU
-         oKS2BwZTOKOSkV1R7U3BqVNOmZY4jS1nWu28YgWWK9fE+TgVUtNOvs8OFmmGg3+prp
-         vlKiYcFBYNJTUB+N+oqusG3BE5oYfRkm2BjEgjBpZcswc0jtjCgXL0F8qsjHqQTNNY
-         /kNDNxyaFOqp83cCloocnGNRbR+C28ztxxcwr8fKPbzX4O9S9PVt1YuSY7XKowwyNy
-         JYZlKAXxSlC3w==
+        b=stcJQUVqdMu01XowloYJx3Jf29eO7j7FCgn1lX2GsQ7/cHHT0NujCfEXtOmgP659G
+         Ngy1ZmZGe/OqEATUU0m7h0ds1iBWLYFrgOI8cxNc2yH/TwRJpZrECzng/2iALrnnTl
+         w90Nd54DmZCigZPJ44EA72wRG6H4yfMaMxBudidrs2TTVnDAQ48JVbgomLozAJFs0l
+         SOE/PEH2YU6vSX6XuH/QPaEqA5EBLM2d9rbvk0j/3KVEL4UsgkgM0gBqbHiqFjSYfI
+         Uw0F3L0yQGe3rVufvzzt8bug3IOetbS+18ek4W91VraGFlZb9r4SYDx+vCl/XE6Bdm
+         cP1wK4cfvkCNQ==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -45,9 +45,9 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v7 07/10] fprobe: Add exit_handler support
-Date:   Mon, 31 Jan 2022 14:01:46 +0900
-Message-Id: <164360530646.65877.3880301440622084582.stgit@devnote2>
+Subject: [PATCH v7 10/10] docs: fprobe: Add fprobe description to ftrace-use.rst
+Date:   Mon, 31 Jan 2022 14:02:20 +0900
+Message-Id: <164360534036.65877.17482125933683080.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <164360522462.65877.1891020292202285106.stgit@devnote2>
 References: <164360522462.65877.1891020292202285106.stgit@devnote2>
@@ -59,292 +59,210 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add exit_handler to fprobe. fprobe + rethook allows us to hook the kernel
-function return. The rethook will be enabled only if the
-fprobe::exit_handler is set.
+Add a documentation of fprobe for the user who needs
+this interface.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
  Changes in v7:
-  - Fix unregister_fprobe() to ensure the rethook handlers are
-    finished when it returns.
-  - Update Kconfig help.
+  - Clarify unregister_fprobe() guarantee the callbacks will no
+    longer being called after that.
+  - Fix some wording.
  Changes in v6:
-  - Update according to the fprobe update.
- Changes in v5:
-  - Add dependency for HAVE_RETHOOK.
- Changes in v4:
-  - Check fprobe is disabled in the exit handler.
- Changes in v3:
-  - Make sure to clear rethook->data before free.
-  - Handler checks the data is not NULL.
-  - Free rethook only if the rethook is using.
+  - Update document according to the latest spec.
 ---
- include/linux/fprobe.h |    6 ++
- kernel/trace/Kconfig   |    9 ++-
- kernel/trace/fprobe.c  |  130 ++++++++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 130 insertions(+), 15 deletions(-)
+ Documentation/trace/fprobe.rst |  171 ++++++++++++++++++++++++++++++++++++++++
+ Documentation/trace/index.rst  |    1 
+ 2 files changed, 172 insertions(+)
+ create mode 100644 Documentation/trace/fprobe.rst
 
-diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
-index b920dc1b2969..acfdcc37acf6 100644
---- a/include/linux/fprobe.h
-+++ b/include/linux/fprobe.h
-@@ -5,19 +5,25 @@
- 
- #include <linux/compiler.h>
- #include <linux/ftrace.h>
-+#include <linux/rethook.h>
- 
- /**
-  * struct fprobe - ftrace based probe.
-  * @ops: The ftrace_ops.
-  * @nmissed: The counter for missing events.
-  * @flags: The status flag.
-+ * @rethook: The rethook data structure. (internal data)
-  * @entry_handler: The callback function for function entry.
-+ * @exit_handler: The callback function for function exit.
-  */
- struct fprobe {
- 	struct ftrace_ops	ops;
- 	unsigned long		nmissed;
- 	unsigned int		flags;
-+	struct rethook		*rethook;
+diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
+new file mode 100644
+index 000000000000..4275e95e16bc
+--- /dev/null
++++ b/Documentation/trace/fprobe.rst
+@@ -0,0 +1,171 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- 	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
-+	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
- };
- 
- #define FPROBE_FL_DISABLED	1
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index 9e66fd29d94e..1a0f42561bf7 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -245,11 +245,14 @@ config FPROBE
- 	bool "Kernel Function Probe (fprobe)"
- 	depends on FUNCTION_TRACER
- 	depends on DYNAMIC_FTRACE_WITH_REGS
-+	depends on HAVE_RETHOOK
-+	select RETHOOK
- 	default n
- 	help
--	  This option enables kernel function probe (fprobe) based on ftrace,
--	  which is similar to kprobes, but probes only for kernel function
--	  entries and it can probe multiple functions by one fprobe.
-+	  This option enables kernel function probe (fprobe) based on ftrace.
-+	  The fprobe is similar to kprobes, but probes only for kernel function
-+	  entries and exits. This also can probe multiple functions by one
-+	  fprobe.
- 
- 	  If unsure, say N.
- 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index b5d4f8baaf43..d733c0d9cb09 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -8,12 +8,22 @@
- #include <linux/fprobe.h>
- #include <linux/kallsyms.h>
- #include <linux/kprobes.h>
-+#include <linux/rethook.h>
- #include <linux/slab.h>
- #include <linux/sort.h>
- 
-+#include "trace.h"
++==================================
++Fprobe - Function entry/exit probe
++==================================
 +
-+struct fprobe_rethook_node {
-+	struct rethook_node node;
-+	unsigned long entry_ip;
-+};
++.. Author: Masami Hiramatsu <mhiramat@kernel.org>
 +
- static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- 			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
- {
-+	struct fprobe_rethook_node *fpr;
-+	struct rethook_node *rh;
- 	struct fprobe *fp;
- 	int bit;
- 
-@@ -30,10 +40,37 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
- 	if (fp->entry_handler)
- 		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
- 
-+	if (fp->exit_handler) {
-+		rh = rethook_try_get(fp->rethook);
-+		if (!rh) {
-+			fp->nmissed++;
-+			goto out;
-+		}
-+		fpr = container_of(rh, struct fprobe_rethook_node, node);
-+		fpr->entry_ip = ip;
-+		rethook_hook(rh, ftrace_get_regs(fregs));
-+	}
++Introduction
++============
 +
-+out:
- 	ftrace_test_recursion_unlock(bit);
- }
- NOKPROBE_SYMBOL(fprobe_handler);
- 
-+static void fprobe_exit_handler(struct rethook_node *rh, void *data,
-+				struct pt_regs *regs)
-+{
-+	struct fprobe *fp = (struct fprobe *)data;
-+	struct fprobe_rethook_node *fpr;
++Instead of using ftrace full feature, if you only want to attach callbacks
++on function entry and exit, similar to the kprobes and kretprobes, you can
++use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
++instrumentation for multiple functions with single handler. This document
++describes how to use fprobe.
 +
-+	if (!fp || fprobe_disabled(fp))
-+		return;
++The usage of fprobe
++===================
 +
-+	fpr = container_of(rh, struct fprobe_rethook_node, node);
++The fprobe is a wrapper of ftrace (+ kretprobe-like return callback) to
++attach callbacks to multiple function entry and exit. User needs to set up
++the `struct fprobe` and pass it to `register_fprobe()`.
 +
-+	fp->exit_handler(fp, fpr->entry_ip, regs);
-+}
-+NOKPROBE_SYMBOL(fprobe_exit_handler);
++Typically, `fprobe` data structure is initialized with the `entry_handler`
++and/or `exit_handler` as below.
 +
- /* Convert ftrace location address from symbols */
- static unsigned long *get_ftrace_locations(const char **syms, int num)
- {
-@@ -76,6 +113,48 @@ static void fprobe_init(struct fprobe *fp)
- 	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
- }
- 
-+static int fprobe_init_rethook(struct fprobe *fp, int num)
-+{
-+	int i, size;
++.. code-block:: c
 +
-+	if (num < 0)
-+		return -EINVAL;
++ struct fprobe fp = {
++        .entry_handler  = my_entry_callback,
++        .exit_handler   = my_exit_callback,
++ };
 +
-+	if (!fp->exit_handler) {
-+		fp->rethook = NULL;
-+		return 0;
-+	}
++To enable the fprobe, call one of register_fprobe(), register_fprobe_ips(), and
++register_fprobe_syms(). These register the fprobe with different type of
++parameters.
 +
-+	/* Initialize rethook if needed */
-+	size = num * num_possible_cpus() * 2;
-+	if (size < 0)
-+		return -E2BIG;
++The register_fprobe() enables a fprobe by function-name filters.
++E.g. this enables @fp on "func*()" function except "func2()".::
 +
-+	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler);
-+	for (i = 0; i < size; i++) {
-+		struct rethook_node *node;
++  register_fprobe(&fp, "func*", "func2");
 +
-+		node = kzalloc(sizeof(struct fprobe_rethook_node), GFP_KERNEL);
-+		if (!node) {
-+			rethook_free(fp->rethook);
-+			fp->rethook = NULL;
-+			return -ENOMEM;
-+		}
-+		rethook_add_node(fp->rethook, node);
-+	}
-+	return 0;
-+}
++The register_fprobe_ips() enables a fprobe by ftrace-location addresses.
++E.g.
 +
-+static void fprobe_fail_cleanup(struct fprobe *fp)
-+{
-+	if (fp->rethook) {
-+		/* Don't need to cleanup rethook->handler because this is not used. */
-+		rethook_free(fp->rethook);
-+		fp->rethook = NULL;
-+	}
-+	ftrace_free_filter(&fp->ops);
-+}
++.. code-block:: c
 +
- /**
-  * register_fprobe() - Register fprobe to ftrace by pattern.
-  * @fp: A fprobe data structure to be registered.
-@@ -89,6 +168,7 @@ static void fprobe_init(struct fprobe *fp)
-  */
- int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter)
- {
-+	struct ftrace_hash *hash;
- 	unsigned char *str;
- 	int ret, len;
- 
-@@ -113,10 +193,21 @@ int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter
- 			goto out;
- 	}
- 
--	ret = register_ftrace_function(&fp->ops);
-+	/* TODO:
-+	 * correctly calculate the total number of filtered symbols
-+	 * from both filter and notfilter.
-+	 */
-+	hash = fp->ops.local_hash.filter_hash;
-+	if (WARN_ON_ONCE(!hash))
-+		goto out;
++  unsigned long ips[] = { 0x.... };
 +
-+	ret = fprobe_init_rethook(fp, (int)hash->count);
-+	if (!ret)
-+		ret = register_ftrace_function(&fp->ops);
++  register_fprobe_ips(&fp, ips, ARRAY_SIZE(ips));
 +
- out:
- 	if (ret)
--		ftrace_free_filter(&fp->ops);
-+		fprobe_fail_cleanup(fp);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(register_fprobe);
-@@ -144,12 +235,15 @@ int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num)
- 	fprobe_init(fp);
- 
- 	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
-+	if (ret)
-+		return ret;
++And the register_fprobe_syms() enables a fprobe by symbol names.
++E.g.
 +
-+	ret = fprobe_init_rethook(fp, num);
- 	if (!ret)
- 		ret = register_ftrace_function(&fp->ops);
- 
- 	if (ret)
--		ftrace_free_filter(&fp->ops);
--
-+		fprobe_fail_cleanup(fp);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(register_fprobe_ips);
-@@ -180,14 +274,16 @@ int register_fprobe_syms(struct fprobe *fp, const char **syms, int num)
- 		return PTR_ERR(addrs);
- 
- 	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
-+	kfree(addrs);
- 	if (ret)
--		goto out;
--	ret = register_ftrace_function(&fp->ops);
--	if (ret)
--		ftrace_free_filter(&fp->ops);
-+		return ret;
- 
--out:
--	kfree(addrs);
-+	ret = fprobe_init_rethook(fp, num);
-+	if (!ret)
-+		ret = register_ftrace_function(&fp->ops);
++.. code-block:: c
 +
-+	if (ret)
-+		fprobe_fail_cleanup(fp);
- 
- 	return ret;
- }
-@@ -208,10 +304,20 @@ int unregister_fprobe(struct fprobe *fp)
- 	if (!fp || fp->ops.func != fprobe_handler)
- 		return -EINVAL;
- 
-+	/*
-+	 * rethook_free() starts disabling the rethook, but the rethook handlers
-+	 * may be running on other processors at this point. To make sure that all
-+	 * current running handlers are finished, call unregister_ftrace_function()
-+	 * after this.
-+	 */
-+	if (fp->rethook)
-+		rethook_free(fp->rethook);
++  char syms[] = {"func1", "func2", "func3"};
 +
- 	ret = unregister_ftrace_function(&fp->ops);
-+	if (ret < 0)
-+		return ret;
- 
--	if (!ret)
--		ftrace_free_filter(&fp->ops);
-+	ftrace_free_filter(&fp->ops);
- 
- 	return ret;
- }
++  register_fprobe_syms(&fp, syms, ARRAY_SIZE(syms));
++
++To disable (remove from functions) this fprobe, call::
++
++  unregister_fprobe(&fp);
++
++You can temporally (soft) disable the fprobe by::
++
++  disable_fprobe(&fp);
++
++and resume by::
++
++  enable_fprobe(&fp);
++
++The above is defined by including the header::
++
++  #include <linux/fprobe.h>
++
++Same as ftrace, the registered callback will start being called some time
++after the register_fprobe() is called and before it returns. See
++:file:`Documentation/trace/ftrace.rst`.
++
++Also, the unregister_fprobe() will guarantee that the both enter and exit
++handlers are no longer being called by functions after unregister_fprobe()
++returns as same as unregister_ftrace_function().
++
++The fprobe entry/exit handler
++=============================
++
++The prototype of the entry/exit callback function is as follows:
++
++.. code-block:: c
++
++ void callback_func(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
++
++Note that both entry and exit callback has same ptototype. The @entry_ip is
++saved at function entry and passed to exit handler.
++
++@fp
++        This is the address of `fprobe` data structure related to this handler.
++        You can embed the `fprobe` to your data structure and get it by
++        container_of() macro from @fp. The @fp must not be NULL.
++
++@entry_ip
++        This is the entry address of the traced function (both entry and exit).
++
++@regs
++        This is the `pt_regs` data structure at the entry and exit. Note that
++        the instruction pointer of @regs may be different from the @entry_ip
++        in the entry_handler. If you need traced instruction pointer, you need
++        to use @entry_ip. On the other hand, in the exit_handler, the instruction
++        pointer of @regs is set to the currect return address.
++
++Share the callbacks with kprobes
++================================
++
++Since the recursion safety of the fprobe (and ftrace) is a bit different
++from the kprobes, this may cause an issue if user wants to run the same
++code from the fprobe and the kprobes.
++
++The kprobes has per-cpu 'current_kprobe' variable which protects the
++kprobe handler from recursion in any case. On the other hand, the fprobe
++uses only ftrace_test_recursion_trylock(), which will allow interrupt
++context calls another (or same) fprobe during the fprobe user handler is
++running.
++
++This is not a matter in cases if the common callback shared among the
++kprobes and the fprobe has its own recursion detection, or it can handle
++the recursion in the different contexts (normal/interrupt/NMI.)
++But if it relies on the 'current_kprobe' recursion lock, it has to check
++kprobe_running() and use kprobe_busy_*() APIs.
++
++Fprobe has FPROBE_FL_KPROBE_SHARED flag to do this. If your common callback
++code will be shared with kprobes, please set FPROBE_FL_KPROBE_SHARED
++*before* registering the fprobe, like:
++
++.. code-block:: c
++
++ fprobe.flags = FPROBE_FL_KPROBE_SHARED;
++
++ register_fprobe(&fprobe, "func*", NULL);
++
++This will protect your common callback from the nested call.
++
++The missed counter
++==================
++
++The `fprobe` data structure has `fprobe::nmissed` counter field as same as
++kprobes.
++This counter counts up when;
++
++ - fprobe fails to take ftrace_recursion lock. This usually means that a function
++   which is traced by other ftrace users is called from the entry_handler.
++
++ - fprobe fails to setup the function exit because of the shortage of rethook
++   (the shadow stack for hooking the function return.)
++
++Since `fprobe::nmissed` field is counted up in both case, the former case
++will skip both of entry and exit callback, and the latter case will skip exit
++callback, but in both case the counter is just increased by 1.
++
++Note that if you set the FTRACE_OPS_FL_RECURSION and/or FTRACE_OPS_FL_RCU to
++`fprobe::ops::flags` (ftrace_ops::flags) when registering the fprobe, this
++counter may not work correctly, because those will skip fprobe's callback.
++
++
++Functions and structures
++========================
++
++.. kernel-doc:: include/linux/fprobe.h
++.. kernel-doc:: kernel/trace/fprobe.c
++
+diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
+index 3769b9b7aed8..b9f3757f8269 100644
+--- a/Documentation/trace/index.rst
++++ b/Documentation/trace/index.rst
+@@ -9,6 +9,7 @@ Linux Tracing Technologies
+    tracepoint-analysis
+    ftrace
+    ftrace-uses
++   fprobe
+    kprobes
+    kprobetrace
+    uprobetracer
 
