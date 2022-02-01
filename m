@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14720C433EF
-	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1454CC433EF
+	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:31:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiBAGbJ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 01:31:09 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63758 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234139AbiBAGbI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 01:31:08 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21111W8V008005
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:31:07 -0800
+        id S234105AbiBAGbS convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 01:31:18 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47228 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234212AbiBAGbP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 01:31:15 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 21111LE3015746
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:31:14 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxq3gak0s-6
+        by m0001303.ppops.net (PPS) with ESMTPS id 3dxkbrm8gf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:31:07 -0800
-Received: from twshared7500.02.ash7.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:31:14 -0800
+Received: from twshared7634.08.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 31 Jan 2022 22:31:04 -0800
+ 15.1.2308.21; Mon, 31 Jan 2022 22:31:13 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 171FC290EC8DE; Mon, 31 Jan 2022 22:28:11 -0800 (PST)
+        id 2C995290EC8FE; Mon, 31 Jan 2022 22:28:17 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        <iii@linux.ibm.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v8 bpf-next 1/9] x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
-Date:   Mon, 31 Jan 2022 22:27:55 -0800
-Message-ID: <20220201062803.2675204-2-song@kernel.org>
+        <iii@linux.ibm.com>, Song Liu <song@kernel.org>
+Subject: [PATCH v8 bpf-next 4/9] bpf: use prog->jited_len in  bpf_prog_ksym_set_addr()
+Date:   Mon, 31 Jan 2022 22:27:58 -0800
+Message-ID: <20220201062803.2675204-5-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
 References: <20220201062803.2675204-1-song@kernel.org>
@@ -40,46 +40,49 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: QCWRo91cv6kD2qeGNE-9KJaEwHNORN_O
-X-Proofpoint-ORIG-GUID: QCWRo91cv6kD2qeGNE-9KJaEwHNORN_O
+X-Proofpoint-GUID: daiHLCk26HkVNlw8iR2Sl-tLIyKGk_Kj
+X-Proofpoint-ORIG-GUID: daiHLCk26HkVNlw8iR2Sl-tLIyKGk_Kj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-01_02,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
- clxscore=1015 spamscore=0 impostorscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=910 mlxscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202010033
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202010033
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+Using prog->jited_len is simpler and more accurate than current
+estimation (header + header->size).
 
-This enables module_alloc() to allocate huge page for 2MB+ requests.
-To check the difference of this change, we need enable config
-CONFIG_PTDUMP_DEBUGFS, and call module_alloc(2MB). Before the change,
-/sys/kernel/debug/page_tables/kernel shows pte for this map. With the
-change, /sys/kernel/debug/page_tables/ show pmd for thie map.
-
-Signed-off-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Song Liu <song@kernel.org>
 ---
- arch/x86/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/bpf/core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 6fddb63271d9..e0e0d00cf103 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -159,6 +159,7 @@ config X86
- 	select HAVE_ALIGNED_STRUCT_PAGE		if SLUB
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HUGE_VMAP		if X86_64 || X86_PAE
-+	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN			if X86_64
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 14199228a6f0..e3fe53df0a71 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -537,13 +537,10 @@ long bpf_jit_limit_max __read_mostly;
+ static void
+ bpf_prog_ksym_set_addr(struct bpf_prog *prog)
+ {
+-	const struct bpf_binary_header *hdr = bpf_jit_binary_hdr(prog);
+-	unsigned long addr = (unsigned long)hdr;
+-
+ 	WARN_ON_ONCE(!bpf_prog_ebpf_jited(prog));
+ 
+ 	prog->aux->ksym.start = (unsigned long) prog->bpf_func;
+-	prog->aux->ksym.end   = addr + hdr->size;
++	prog->aux->ksym.end   = prog->aux->ksym.start + prog->jited_len;
+ }
+ 
+ static void
 -- 
 2.30.2
 
