@@ -2,145 +2,165 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B283C433F5
-	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:34:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D47CC433F5
+	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:46:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234290AbiBAGeL convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 01:34:11 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43136 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234258AbiBAGeK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 01:34:10 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21111Srg007842
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:34:09 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxq3gakcm-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:34:09 -0800
-Received: from twshared7500.02.ash7.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 31 Jan 2022 22:34:07 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 7CDBA290EC8F4; Mon, 31 Jan 2022 22:28:15 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        <iii@linux.ibm.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v8 bpf-next 3/9] bpf: use size instead of pages in bpf_binary_header
-Date:   Mon, 31 Jan 2022 22:27:57 -0800
-Message-ID: <20220201062803.2675204-4-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
-References: <20220201062803.2675204-1-song@kernel.org>
+        id S234391AbiBAGqF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Feb 2022 01:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233800AbiBAGqF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Feb 2022 01:46:05 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47705C061714
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:46:05 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id q204so19950795iod.8
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:46:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GKXQllTgkw6x+PZBxEMZeyV5chqnFD3N98BoA3ZCWQs=;
+        b=TDjL/w4/sfVqCKxzp1mpaaxqHnNxLn2zQZQq28tCgP2II8mvSNQ7mci5PQ+bgbDATf
+         dQe78WylhDxbJqmH294i4NRZpSmV76zO2VlCET/wp20HgbyKm2HAfe3XZjRA/EPIxwPD
+         sO4oGck7Qa2f3PADL0cOVyHkEWE2JBqBLOvmTfryxhm0ORcw+K9q+K4LIsfVM+DFsE3q
+         XdPzh4Ky4Ydpp2hxqKhKVkfQtsOQP2XvXSEMvYiYxbAyncozktIb1xHL4DC0GL290RRQ
+         jB4YXAisUS/uik0Nb3/Ps5U2IhX41x8Djc830fUNfOSB11kEkD0xx3MXtUE8LQMMXvv6
+         FoWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GKXQllTgkw6x+PZBxEMZeyV5chqnFD3N98BoA3ZCWQs=;
+        b=IpKVkpzndeuxRcmnOWat7sfMpvH5CqknXzQPJbqjb9ZuFRW1WMqkwSktXfLlpU+m4C
+         6NGEJtO8XbF5Lj8HiKM32YzMciYq5DpqPdleui9+p4Ek7APC9nT0Gn6UjYDldvwVmR/i
+         Fk9OVIZsXxSU8wDfiBWt7vj+OTjz+b/As9jtfJ2T/cjItMo6GeWKMbwQog6faePmQTnC
+         miVl8ND3w/TqDJTSmAWBbfhJXmeN3GyqLKGVqS/nksKYK/pAXSrXftNf8byN8DLlGbUX
+         ZBxZjDK8IKbOEYfhHy9geaepv+pX7tYBs3LUyHwmZHg3nnsFr/e9yfhz7o//E787j/1A
+         Lz5Q==
+X-Gm-Message-State: AOAM533cVi9OaLOSwPEJYy9eFDc1bWor7I4pWwY94QzfnspR1avlyd4n
+        jS1kMgUtGbRZYoFvG/jR9+UtoFUbK55i0YwrF1c=
+X-Google-Smtp-Source: ABdhPJxveDBwzchgdtUU+04EJm9/k6dK1eooWIIJIzsJj3I0CErFtBRpwmpkuGGoI/0nO8sYTkfoZIeVFkIPLirToRE=
+X-Received: by 2002:a05:6602:2e88:: with SMTP id m8mr6623765iow.79.1643697964481;
+ Mon, 31 Jan 2022 22:46:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: cjr56qtbUBS1ilo-tw1UXffHRi3r6afi
-X-Proofpoint-ORIG-GUID: cjr56qtbUBS1ilo-tw1UXffHRi3r6afi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_02,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
- clxscore=1015 spamscore=0 impostorscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=850 mlxscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202010033
-X-FB-Internal: deliver
+References: <20220126214809.3868787-1-kuifeng@fb.com> <CAADnVQKkJCj+_aoJN2YtS3-Hc68uk1S2vN=5+0M0Q9KRVuxqoQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKkJCj+_aoJN2YtS3-Hc68uk1S2vN=5+0M0Q9KRVuxqoQ@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 31 Jan 2022 22:45:53 -0800
+Message-ID: <CAEf4BzYFFnBnLu0ue8HoeZDD6V3DBKZFFKSA7VnL=duQgqc-nQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] Attach a cookie to a tracing program.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kui-Feng Lee <kuifeng@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
+On Wed, Jan 26, 2022 at 9:17 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Jan 26, 2022 at 1:48 PM Kui-Feng Lee <kuifeng@fb.com> wrote:
+> >
+> > Allow users to attach a 64-bits cookie to a BPF program when link it
+> > to fentry, fexit, or fmod_ret of a function.
+> >
+> > This changeset includes several major changes.
+> >
+> >  - Add a new field bpf_cookie to struct raw_tracepoint, so that a user
+> >    can attach a cookie to a program.
+> >
+> >  - Store flags in trampoline frames to provide the flexibility of
+> >    storing more values in these frames.
+> >
+> >  - Store the program ID of the current BPF program in the trampoline
+> >    frame.
+> >
+> >  - The implmentation of bpf_get_attach_cookie() for tracing programs
+> >    to read the attached cookie.
+>
+> flags, prog_id, cookie... I don't follow what's going on here.
+>
+> cookie is supposed to be per link.
+> Doing it for fentry only will be inconvenient for users.
+> For existing kprobes there is no good place to store it. iirc.
 
-This is necessary to charge sub page memory for the BPF program.
+Hm... are you talking about current kprobes? We already have
+bpf_cookie support for them. We store it in the associated perf_event,
+it's actually pretty convenient.
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- include/linux/filter.h |  6 +++---
- kernel/bpf/core.c      | 11 +++++------
- 2 files changed, 8 insertions(+), 9 deletions(-)
+> For multi attach kprobes there won't be a good place either.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index d23e999dc032..5855eb474c62 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -548,7 +548,7 @@ struct sock_fprog_kern {
- #define BPF_IMAGE_ALIGNMENT 8
- 
- struct bpf_binary_header {
--	u32 pages;
-+	u32 size;
- 	u8 image[] __aligned(BPF_IMAGE_ALIGNMENT);
- };
- 
-@@ -886,8 +886,8 @@ static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
- static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
- {
- 	set_vm_flush_reset_perms(hdr);
--	set_memory_ro((unsigned long)hdr, hdr->pages);
--	set_memory_x((unsigned long)hdr, hdr->pages);
-+	set_memory_ro((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
-+	set_memory_x((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
- }
- 
- static inline struct bpf_binary_header *
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 6ca0550c4b24..14199228a6f0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -543,7 +543,7 @@ bpf_prog_ksym_set_addr(struct bpf_prog *prog)
- 	WARN_ON_ONCE(!bpf_prog_ebpf_jited(prog));
- 
- 	prog->aux->ksym.start = (unsigned long) prog->bpf_func;
--	prog->aux->ksym.end   = addr + hdr->pages * PAGE_SIZE;
-+	prog->aux->ksym.end   = addr + hdr->size;
- }
- 
- static void
-@@ -866,7 +866,7 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 		     bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	struct bpf_binary_header *hdr;
--	u32 size, hole, start, pages;
-+	u32 size, hole, start;
- 
- 	WARN_ON_ONCE(!is_power_of_2(alignment) ||
- 		     alignment > BPF_IMAGE_ALIGNMENT);
-@@ -876,7 +876,6 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 	 * random section of illegal instructions.
- 	 */
- 	size = round_up(proglen + sizeof(*hdr) + 128, PAGE_SIZE);
--	pages = size / PAGE_SIZE;
- 
- 	if (bpf_jit_charge_modmem(size))
- 		return NULL;
-@@ -889,7 +888,7 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 	/* Fill space with illegal/arch-dep instructions. */
- 	bpf_fill_ill_insns(hdr, size);
- 
--	hdr->pages = pages;
-+	hdr->size = size;
- 	hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
- 		     PAGE_SIZE - sizeof(*hdr));
- 	start = (get_random_int() % hole) & ~(alignment - 1);
-@@ -902,10 +901,10 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
- 
- void bpf_jit_binary_free(struct bpf_binary_header *hdr)
- {
--	u32 pages = hdr->pages;
-+	u32 size = hdr->size;
- 
- 	bpf_jit_free_exec(hdr);
--	bpf_jit_uncharge_modmem(pages << PAGE_SHIFT);
-+	bpf_jit_uncharge_modmem(size);
- }
- 
- /* This symbol is only overridden by archs that have different
--- 
-2.30.2
+As Jiri mentioned, for multi-attach kprobes the idea was to keep a
+sorted array of ips and associated cookies to do log(N) search in
+bpf_get_attach_cookie() helper.
 
+For multi-attach fentry, we could use the same approach if we let
+either bpf_link or bpf_prog available to fentry/fexit program at
+runtime. Kui-Feng seems to be storing prog_id in BPF trampoline
+generated code, I don't think that's the best approach, it would be
+probably better to store bpf_link or bpf_prog pointer, whichever is
+more convenient. I think we can't attach the same BPF program twice to
+the same BPF trampoline, so storing this array of ip -> cookie
+mappings in bpf_prog would work (because the mapping is unique), but
+might be a more cumbersome. Storing bpf_link is conceptually better,
+probably, but I haven't thought through if there are any problems if
+we support updating bpf_link's underlying program.
+
+But keep in mind, this patch set is basically an RFC to arrive at the
+best approach that will also be compatible with multi-attach
+fentry/fexit. Though it seems like we'll first need to establish the
+need for bpf_cookie (I thought that was not controversial, my bad),
+which is fine, see below.
+
+> I think cookie should be out of band.
+> Maybe lets try a resizable map[ip]->cookie and don't add
+> 'cookie' arrays to multi-kprobe attach,
+> 'cookie' field to kprobe, fentry, and other attach apis.
+> Adding 'cookie' to all of them is quite a bit of churn for kernel
+> and user space.
+
+We don't need all BPF program types, but anything that's useful for
+generic tracing is much more powerful with cookies. We have them for
+kprobe, uprobe and perf_event programs already. For multi-attach
+kprobe/kretprobe and fentry/fexit they are essentially a must to let
+users use those BPF program types to their fullest.
+
+> I think resizable bpf map[u64]->u64 solves this problem.
+> Maybe cookie isn't even needed.
+> If the bpf prog can have a clean map[bpf_get_func_ip()] that
+> doesn't have to be sized up front it will address the need.
+
+You mean for users to maintain their own BPF map and pre-populated it
+before attaching their BPF programs? Or did I misunderstand?
+
+Sizing such a BPF map is just one problem.
+
+Figuring out the correct IP to use as a key is another and arguably
+bigger hassle. Everyone will be forced to consult kallsyms, even if
+their use case is simple and they don't need to parse kallsyms at all.
+Normally, for fentry/fexit programs, users don't even need kallsyms,
+as vmlinux BTF is used to find BTF ID and that's enough to load and
+attach fentry/fexit.
+
+And while for kprobe/fentry programs it's inconvenient but can be done
+with a bunch of extra work, for uprobes there are situations where
+it's impossible to know IP at all. One very specific example is USDTs
+in shared library. If user needs to attach to USDT defined in a shared
+library across *any* PID (current and future), it's impossible to do
+without BPF cookie support, because each different process will load
+shared library at unknown base address, so it's impossible to
+calculate upfront any absolute IP to look up by. This is the reason
+BCC allows to attach to USDTs in shared library only for one specific
+process (i.e., PID has to be specified in such a case).
+
+
+Or did you propose to maintain such IP -> cookie mapping inside the
+kernel during bpf_link creation? I think the key would have to be at
+least a (link ID, IP) pair, no? The question is whether it's going to
+be more convenient to get link ID and IP for all supported BPF
+programs at runtime and whether it will cause the same or more amount
+of churn?
