@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A52C433EF
-	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 20:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07049C433F5
+	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 20:55:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbiBAUzt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Feb 2022 15:55:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S234734AbiBAUzw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Feb 2022 15:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbiBAUzp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Feb 2022 15:55:45 -0500
+        with ESMTP id S231216AbiBAUzu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Feb 2022 15:55:50 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C98FC06173B
-        for <bpf@vger.kernel.org>; Tue,  1 Feb 2022 12:55:45 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e130-20020a255088000000b006126feb051eso35548323ybb.18
-        for <bpf@vger.kernel.org>; Tue, 01 Feb 2022 12:55:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19A6C06174A
+        for <bpf@vger.kernel.org>; Tue,  1 Feb 2022 12:55:49 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id c76-20020a25c04f000000b00613e2c514e2so34888595ybf.21
+        for <bpf@vger.kernel.org>; Tue, 01 Feb 2022 12:55:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=zPUB3NCEXXiz6+mubQFrvt3pkt+Hiu6v49aq+5qNgdA=;
-        b=nG2n54JlmG3+OOeTvBCYp5mh4jCaq3qOEY+zPFz6IXJegkVJgfuonqSpBZGtMzingX
-         yTVHeIhvqQA/FTsbVjtbDL0QTZAKpJsOURMN4I9KfajdtTGBq7iJ4tHi+/P6ql3ctOez
-         shL0NIZaY8GB4DTeo5YH0ZuKZVBFHI5qU61ICzxLJ67nJh06c4lRWGVhYwB+jRI9B1y8
-         hiSDf90S8zMxkLelqfRgF81OaPW2GFcGfIYmAlTdwoUfEWKjg2kpmVLQkamLXfpP+hp/
-         c6lxssgkd0eZE+4bz68vPp4EQedKA8jRElaKZzK+Tto1VoudK57mtTzCM/svm7+Y8MsN
-         GRmQ==
+        bh=TrRMtZ7rpWFBy3mN9jukrWT5/O4hvi4cjTw+7/27mDs=;
+        b=BPfKMhRpkmr59DmiYl06B1vd1XGK2BTPFlXloc47Xbchd+K/D+0T1O0zu3r4KG8C+J
+         MJ/jYs/i09fQ+Cew4BlHmC+o3+WajaBpAGlrdUGMA5vUBqPiFevv4KSVLTJus8MkWVqY
+         RuD/0Z0NzzF4XEAwu4Ut3Vx4z9TYtxa1XmuQ8j4mB9KNcFx4NqmqTTyTVmFb6pO9Y4Mi
+         mhXSXxERDH4vv8UFz50UA6wr4aeDcnSobbJty/OmrZ1sw4QlPzFtIhCzosR2M9DQ6YoG
+         Pedp3zA2Hnkm5ncjXAJ9tHGc7IbOi8BvkurHiApQh8C2x4IpF3Hr4EeUYH9pjYaH5m/+
+         nsig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=zPUB3NCEXXiz6+mubQFrvt3pkt+Hiu6v49aq+5qNgdA=;
-        b=BDT4M3fffCHySWvZzilp0FI0HSKUbT8yTnTtxcYyTTN/i4M8li9WZehKUxuxD7P9bD
-         tTT3OiMjENdNjo826Ow5EyzR8r2CAn7cKz6PAAymmHx9LQGN+oSOcvYeOS1HnlLAZsTR
-         DnAtp/NcDYiToxMNtL5ndk2lrGn/FnqLgX2RgmQAI4MC21U49bR/Qw86mLAeVsA0umYU
-         tNGbm1y3+crVmOiBHKIhpaa3nOZEG+9K1yRVE7ZkbEsw0spAVDSWbmaX6N6ENzX7jwXH
-         xM90Ol/OzPzERev4WWdz8wqndR2qUA7lqz8keuSzil8CNIrC3TG1Bf4jP6da5k/OSbhp
-         OGFA==
-X-Gm-Message-State: AOAM531Y/PlNIZiwCE853kUq2dqmR6CQtKnNXfcT2n1h27r9+4UTO30D
-        RWp3QkX2EaQqxHibg0ZitkTdjmsbuSQ=
-X-Google-Smtp-Source: ABdhPJze7Krj8ejwFo366WPCbYzzm4Q3Mfn9Q5H6bxPKSCgnl/JbAbBlyieQcUP4BCeZgDYjNJPloFr1RKI=
+        bh=TrRMtZ7rpWFBy3mN9jukrWT5/O4hvi4cjTw+7/27mDs=;
+        b=tpkDqWn8jlmbd9BVi0EthrG7DtQTOctl6bGpFx3v/wY1oU87CiIhy0AZ4CWvJpmnrf
+         JIaSKlrJCY8MK85y2HOK+74ZLE1dxG8qG+FIC3YaE3BEFZrZ3RTLEqV/7ytVvDpOyczW
+         3gPSDKhNIcmJUgMJVkF1vYbSl0OBX/st5201ohfLy9uLWBqOz3SAPpswfOdmEYYzFUJs
+         5cp+RcYOsip1HFZ5p0tT7P3g+XNyrXjBgPdKD79qcRdBg4BZURVGf8E+TJJ+/+QLlApb
+         DJw7s4wtsX3mBsZBYaJELsJLcNsRuzaSxMuieqYPOgQWhBo1NFswDc2KqYzWCJblFZky
+         OukA==
+X-Gm-Message-State: AOAM530kCloRiTeHJ/UhLABpDUJaJsgZNtsTnBzbMosMcGWhh7UsFPT2
+        YMhgE3SjKTE/X2+oUcgAc4O+fg8b+7g=
+X-Google-Smtp-Source: ABdhPJzyYTbnOcjPUT6K25yIzD0kbUD9e8z1MZA8T/wWw87xYomk8IAVurjv9l7i2v1Png4zCo10PSVDCeg=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:1cdb:a263:2495:80fd])
- (user=haoluo job=sendgmr) by 2002:a25:557:: with SMTP id 84mr38786815ybf.637.1643748944511;
- Tue, 01 Feb 2022 12:55:44 -0800 (PST)
-Date:   Tue,  1 Feb 2022 12:55:31 -0800
+ (user=haoluo job=sendgmr) by 2002:a0d:d782:: with SMTP id z124mr93207ywd.28.1643748949022;
+ Tue, 01 Feb 2022 12:55:49 -0800 (PST)
+Date:   Tue,  1 Feb 2022 12:55:33 -0800
 In-Reply-To: <20220201205534.1962784-1-haoluo@google.com>
-Message-Id: <20220201205534.1962784-3-haoluo@google.com>
+Message-Id: <20220201205534.1962784-5-haoluo@google.com>
 Mime-Version: 1.0
 References: <20220201205534.1962784-1-haoluo@google.com>
 X-Mailer: git-send-email 2.35.0.rc2.247.g8bbb082509-goog
-Subject: [PATCH RFC bpf-next v2 2/5] bpf: Introduce inherit list for dir tag.
+Subject: [PATCH RFC bpf-next v2 4/5] bpf: Pin cgroup_view
 From:   Hao Luo <haoluo@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -66,254 +66,148 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Embed a list of bpf objects in a directory's tag. This list is
-shared by all the directories in the tagged hierarchy.
+When pinning cgroup_view iter into bpffs, the pinning adds a tag to
+the parent directory, indicating the underneath directory hierarchy
+is a replicate of the cgroup hierarchy. Each of the directory connects
+to a cgroup directory. Whenever a subdirectory is created, if there is
+a subcgroup of the same name exists, the subdirectory will be populated
+with entries holding a list of bpf objects registered in the tag's
+inherit list. The inherit list is formed by the objects pinned in the
+top level tagged directory. For example,
 
-When a new tagged directory is created, it will be prepopulated
-with the objects in the inherit list. When the directory is
-removed, the inherited objects will be removed automatically.
+ bpf_obj_pin(cgroup_view_link, "/sys/fs/bpf/A/obj");
 
-Because the whole tagged hierarchy share the same list, all the
-directories in the hierarchy have the same set of objects to be
-prepopulated.
+pins a link in A. A becomes tagged and the link object is registered
+in the inherit list of A's tag.
+
+ mkdir("/sys/fs/bpf/A/B");
+
+When A/B is created, B inherits the pinned objects in A. B is populated
+with objects.
+
+ > ls /sys/fs/bpf/A/B
+ obj
+
+Currently, only pinning cgroup_view link can tag a directory. And once
+tagged, only rmdir can remove the tag.
 
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- kernel/bpf/inode.c | 110 +++++++++++++++++++++++++++++++++++++++++----
- kernel/bpf/inode.h |  33 ++++++++++++++
- 2 files changed, 135 insertions(+), 8 deletions(-)
+ kernel/bpf/inode.c | 84 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
 diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index ecc357009df5..9ae17a2bf779 100644
+index 9ae17a2bf779..b71840bf979d 100644
 --- a/kernel/bpf/inode.c
 +++ b/kernel/bpf/inode.c
-@@ -24,13 +24,6 @@
- #include "preload/bpf_preload.h"
- #include "inode.h"
- 
--enum bpf_type {
--	BPF_TYPE_UNSPEC	= 0,
--	BPF_TYPE_PROG,
--	BPF_TYPE_MAP,
--	BPF_TYPE_LINK,
--};
--
- static void *bpf_any_get(void *raw, enum bpf_type type)
- {
- 	switch (type) {
-@@ -69,6 +62,20 @@ static void bpf_any_put(void *raw, enum bpf_type type)
+@@ -71,6 +71,7 @@ static void free_obj_list(struct kref *kref)
+ 	list_for_each_entry(e, &list->list, list) {
+ 		list_del_rcu(&e->list);
+ 		bpf_any_put(e->obj, e->type);
++		kfree(e->name.name);
+ 		kfree(e);
  	}
+ 	kfree(list);
+@@ -486,9 +487,20 @@ static int bpf_mkmap(struct dentry *dentry, umode_t mode, void *arg)
+ 			     &bpffs_map_fops : &bpffs_obj_fops);
  }
  
-+static void free_obj_list(struct kref *kref)
-+{
-+	struct obj_list *list;
-+	struct bpf_inherit_entry *e;
++static int
++bpf_inherit_object(struct dentry *dentry, umode_t mode, void *obj,
++		   enum bpf_type type);
 +
-+	list = container_of(kref, struct obj_list, refcnt);
-+	list_for_each_entry(e, &list->list, list) {
-+		list_del_rcu(&e->list);
-+		bpf_any_put(e->obj, e->type);
-+		kfree(e);
-+	}
-+	kfree(list);
-+}
-+
- static void *bpf_fd_probe_obj(u32 ufd, enum bpf_type *type)
+ static int bpf_mklink(struct dentry *dentry, umode_t mode, void *arg)
  {
- 	void *raw;
-@@ -100,6 +107,10 @@ static const struct inode_operations bpf_prog_iops = { };
- static const struct inode_operations bpf_map_iops  = { };
- static const struct inode_operations bpf_link_iops  = { };
- 
-+static int bpf_mkprog(struct dentry *dentry, umode_t mode, void *arg);
-+static int bpf_mkmap(struct dentry *dentry, umode_t mode, void *arg);
-+static int bpf_mklink(struct dentry *dentry, umode_t mode, void *arg);
+ 	struct bpf_link *link = arg;
++	int err;
 +
- static struct inode *bpf_get_inode(struct super_block *sb,
- 				   const struct inode *dir,
- 				   umode_t mode)
-@@ -184,12 +195,62 @@ static int tag_dir_inode(const struct bpf_dir_tag *tag,
- 	}
- 
- 	t->type = tag->type;
-+	t->inherit_objects = tag->inherit_objects;
-+	kref_get(&t->inherit_objects->refcnt);
- 	t->private = kn;
- 
- 	inode->i_private = t;
- 	return 0;
- }
- 
-+/* populate_dir - populate directory with bpf objects in a tag's
-+ * inherit_objects.
-+ * @dir: dentry of the directory.
-+ * @inode: inode of the direcotry.
-+ *
-+ * Called from mkdir. Must be called after dentry has been finalized.
-+ */
-+static int populate_dir(struct dentry *dir, struct inode *inode)
-+{
-+	struct bpf_dir_tag *tag = inode_tag(inode);
-+	struct bpf_inherit_entry *e;
-+	struct dentry *child;
-+	int ret;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(e, &tag->inherit_objects->list, list) {
-+		child = lookup_one_len_unlocked(e->name.name, dir,
-+						strlen(e->name.name));
-+		if (unlikely(IS_ERR(child))) {
-+			ret = PTR_ERR(child);
-+			break;
-+		}
-+
-+		switch (e->type) {
-+		case BPF_TYPE_PROG:
-+			ret = bpf_mkprog(child, e->mode, e->obj);
-+			break;
-+		case BPF_TYPE_MAP:
-+			ret = bpf_mkmap(child, e->mode, e->obj);
-+			break;
-+		case BPF_TYPE_LINK:
-+			ret = bpf_mklink(child, e->mode, e->obj);
-+			break;
-+		default:
-+			ret = -EPERM;
-+			break;
-+		}
-+		dput(child);
-+		if (ret)
-+			break;
-+
-+		/* To match bpf_any_put in bpf_free_inode. */
-+		bpf_any_get(e->obj, e->type);
-+	}
-+	rcu_read_unlock();
-+	return ret;
-+}
-+
- static void bpf_dentry_finalize(struct dentry *dentry, struct inode *inode,
- 				struct inode *dir)
- {
-@@ -227,6 +288,12 @@ static int bpf_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 	inc_nlink(dir);
- 
- 	bpf_dentry_finalize(dentry, inode, dir);
-+
-+	if (tag) {
-+		err = populate_dir(dentry, inode);
++	if (bpf_link_support_inherit(link)) {
++		err = bpf_inherit_object(dentry, mode, link, BPF_TYPE_LINK);
 +		if (err)
 +			return err;
 +	}
- 	return 0;
- }
  
-@@ -463,6 +530,30 @@ static int bpf_symlink(struct user_namespace *mnt_userns, struct inode *dir,
- 	return 0;
- }
+ 	return bpf_mkobj_ops(dentry, mode, arg, &bpf_link_iops,
+ 			     bpf_link_is_iter(link) ?
+@@ -586,6 +598,78 @@ static const struct inode_operations bpf_dir_iops = {
+ 	.unlink		= simple_unlink,
+ };
  
-+/* unpopulate_dir - remove pre-populated entries from directory.
-+ * @dentry: dentry of directory
-+ * @inode: inode of directory
++/* bpf_inherit_object - register an object in a diretory tag's inherit list
++ * @dentry: dentry of the location to pin
++ * @mode: mode of created file entry
++ * @obj: bpf object
++ * @type: type of bpf object
 + *
-+ * Called from rmdir.
++ * Could be called from bpf_obj_do_pin() or from mkdir().
 + */
-+static void unpopulate_dir(struct dentry *dentry, struct inode *inode)
++static int bpf_inherit_object(struct dentry *dentry, umode_t mode,
++			      void *obj, enum bpf_type type)
 +{
-+	struct bpf_dir_tag *tag = inode_tag(inode);
++	struct inode *dir = d_inode(dentry->d_parent);
++	struct obj_list *inherits;
 +	struct bpf_inherit_entry *e;
-+	struct dentry *child;
++	struct bpf_dir_tag *tag;
++	const char *name;
++	bool queued = false, new_tag = false;
 +
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(e, &tag->inherit_objects->list, list) {
-+		child = d_hash_and_lookup(dentry, &e->name);
-+		if (unlikely(IS_ERR(child)))
-+			continue;
++	/* allocate bpf_dir_tag */
++	tag = inode_tag(dir);
++	if (!tag) {
++		new_tag = true;
++		tag = kzalloc(sizeof(struct bpf_dir_tag), GFP_KERNEL);
++		if (unlikely(!tag))
++			return -ENOMEM;
 +
-+		simple_unlink(inode, child);
-+		dput(child);
++		tag->type = BPF_DIR_KERNFS_REP;
++		inherits = kzalloc(sizeof(struct obj_list), GFP_KERNEL);
++		if (unlikely(!inherits)) {
++			kfree(tag);
++			return -ENOMEM;
++		}
++
++		kref_init(&inherits->refcnt);
++		INIT_LIST_HEAD(&inherits->list);
++		tag->inherit_objects = inherits;
++		/* initial tag points to the default root cgroup. */
++		tag->private = cgrp_dfl_root.kf_root->kn;
++		dir->i_private = tag;
++	} else {
++		inherits = tag->inherit_objects;
 +	}
-+	rcu_read_unlock();
++
++	list_for_each_entry_rcu(e, &inherits->list, list) {
++		if (!strcmp(dentry->d_name.name, e->name.name)) {
++			queued = true;
++			break;
++		}
++	}
++
++	/* queue in tag's inherit_list. */
++	if (!queued) {
++		e = kzalloc(sizeof(struct bpf_inherit_entry), GFP_KERNEL);
++		if (!e) {
++			if (new_tag) {
++				kfree(tag);
++				kfree(inherits);
++			}
++			return -ENOMEM;
++		}
++
++		INIT_LIST_HEAD(&e->list);
++		e->mode = mode;
++		e->obj = obj;
++		e->type = type;
++		name = kstrdup(dentry->d_name.name, GFP_USER | __GFP_NOWARN);
++		e->name = (struct qstr)QSTR_INIT(name, strlen(name));
++		list_add_rcu(&e->list, &inherits->list);
++	}
++	return 0;
 +}
 +
- static void untag_dir_inode(struct inode *dir)
- {
- 	struct bpf_dir_tag *tag = inode_tag(dir);
-@@ -471,13 +562,16 @@ static void untag_dir_inode(struct inode *dir)
- 
- 	dir->i_private = NULL;
- 	kernfs_put(tag->private);
-+	kref_put(&tag->inherit_objects->refcnt, free_obj_list);
- 	kfree(tag);
- }
- 
- static int bpf_rmdir(struct inode *dir, struct dentry *dentry)
- {
--	if (inode_tag(dir))
-+	if (inode_tag(dir)) {
-+		unpopulate_dir(dentry, dir);
- 		untag_dir_inode(dir);
-+	}
- 
- 	return simple_rmdir(dir, dentry);
- }
-diff --git a/kernel/bpf/inode.h b/kernel/bpf/inode.h
-index 2cfeef39e861..a8207122643d 100644
---- a/kernel/bpf/inode.h
-+++ b/kernel/bpf/inode.h
-@@ -4,11 +4,42 @@
- #ifndef __BPF_INODE_H_
- #define __BPF_INODE_H_
- 
-+#include <linux/bpf.h>
-+#include <linux/fs.h>
-+
-+enum bpf_type {
-+	BPF_TYPE_UNSPEC	= 0,
-+	BPF_TYPE_PROG,
-+	BPF_TYPE_MAP,
-+	BPF_TYPE_LINK,
-+};
-+
- enum tag_type {
- 	/* The directory is a replicate of a kernfs directory hierarchy. */
- 	BPF_DIR_KERNFS_REP = 0,
- };
- 
-+/* Entry for bpf_dir_tag->inherit_objects.
-+ *
-+ * When a new directory is created from a tagged directory, the new directory
-+ * will be populated with bpf objects in the tag's inherit_objects list. Each
-+ * entry holds a reference of a bpf object and the information needed to
-+ * recreate the object's entry in the new directory.
-+ */
-+struct bpf_inherit_entry {
-+	struct list_head list;
-+	void *obj; /* bpf object to inherit. */
-+	enum bpf_type type; /* type of the object (prog, map or link). */
-+	struct qstr name;  /* name of the entry. */
-+	umode_t mode;  /* access mode of the entry. */
-+};
-+
-+struct obj_list {
-+	struct list_head list;
-+	struct kref refcnt;
-+	struct inode *root;
-+};
-+
- /* A tag for bpffs directories. It carries special information about a
-  * directory. For example, BPF_DIR_KERNFS_REP denotes that the directory is
-  * a replicate of a kernfs hierarchy. Pinning a certain type of objects tags
-@@ -16,6 +47,8 @@ enum tag_type {
-  */
- struct bpf_dir_tag {
- 	enum tag_type type;
-+	/* list of bpf objects that a directory inherits from its parent. */
-+	struct obj_list *inherit_objects;
- 	void *private;  /* tag private data */
- };
- 
+ /* pin iterator link into bpffs */
+ static int bpf_iter_link_pin_kernel(struct dentry *parent,
+ 				    const char *name, struct bpf_link *link)
 -- 
 2.35.0.rc2.247.g8bbb082509-goog
 
