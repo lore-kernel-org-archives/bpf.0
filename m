@@ -2,259 +2,158 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78FEFC433F5
-	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 17:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56FB3C43217
+	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 17:37:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240172AbiBARKf convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 12:10:35 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54536 "EHLO
+        id S241544AbiBARhg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Feb 2022 12:37:36 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:13002 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239969AbiBARKd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 12:10:33 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 211GAhwZ016073
-        for <bpf@vger.kernel.org>; Tue, 1 Feb 2022 09:10:33 -0800
+        by vger.kernel.org with ESMTP id S234997AbiBARhf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 12:37:35 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 211HDn01009651
+        for <bpf@vger.kernel.org>; Tue, 1 Feb 2022 09:37:35 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=t4NuetAYswQ+lUddUIrlJvQ2uPnk+3JZMzLR+vtzotk=;
+ b=gjhdhvVKcoXQGCYp+whWmou5yQN7wkFwMJrHKMq5X/xoVdjzdi9Mqi9GpC4jGwoKr4BE
+ nzyQXzuEiluKTCST8k1a0rwr9zdLRueyBKPfHasWOYJs2GhELHLKKsGKgL31IQUg73S1
+ DekdM/JJE5FhQC6BPCsJJNrckt4Qikps44M= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxm2p7by4-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxvmpc6c7-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Feb 2022 09:10:33 -0800
-Received: from twshared29821.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Feb 2022 09:37:35 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 1 Feb 2022 09:10:31 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 8CC292914E0A5; Tue,  1 Feb 2022 09:07:36 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        <iii@linux.ibm.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v8 bpf-next 9/9] bpf, x86_64: use bpf_jit_binary_pack_alloc
-Date:   Mon, 31 Jan 2022 22:28:03 -0800
-Message-ID: <20220201062803.2675204-10-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
-References: <20220201062803.2675204-1-song@kernel.org>
+ 15.1.2308.21; Tue, 1 Feb 2022 09:37:33 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TRmVmqojfUc/2fF/5ToihSvVbHVFCOGHTpashM8vHtkpt+HD/FKJBuUWsbtY9IY+lWJSA0021KddGfRnfBFzmcQnBJgAPGsFfa1iG9sNj0e/TWXKxvqnxsqp/KUaM06miLcVgH2CHbaPBaF8OULbhmj9CxZ2480kexGyeJQ9UvGvfdfKpCwh6Ue+anscV8F5IzJSborQnH8a8wT8mkTG9bLL0fftRfJCdhfm/SOStaoHblY9E/Q3nobdd1Kcwc9kD/mvn1zM9mOSmeZMPvV9hUOFSv1iQZpUttbZiFBFnKXvYrL8Ib3bPxERQH4mv8jud2XGJ+t6X4h1FPWg9sPp7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t4NuetAYswQ+lUddUIrlJvQ2uPnk+3JZMzLR+vtzotk=;
+ b=bH9ppaBN6u/HO42YZWm0ciJHx2VEwDZQNbPlOKa8US83dJfTOSlQc0+LeWCgQrdHKgVhQHOnZrl9TfhQE1PC8IG9Md5QZybRrm966DC+6OwHlfqKKmvU0bn2WWSlqdwOBZrzEdqB5fkvINYwLPFR1dMQR14MZz1bT3G5QL4ZSo6h5T4mya9YPNAUw6DtfZK4GNmRYy5yCKtnr8jO1W6nphGoJMJUx9OdTWpTCmaE0GDqv0WkCpTX/rs7yFaSOOcwdWUfJ75jf9JxwFre8ZlNnB4ESft5/UzXeIUP4BfXEqP8AkiIcNDtLK+0Rt1GO2jdFopMlGfQl31B2XvmUU3G2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from BY5PR15MB3651.namprd15.prod.outlook.com (2603:10b6:a03:1f7::15)
+ by BYAPR15MB3029.namprd15.prod.outlook.com (2603:10b6:a03:fd::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4930.22; Tue, 1 Feb
+ 2022 17:37:32 +0000
+Received: from BY5PR15MB3651.namprd15.prod.outlook.com
+ ([fe80::74e2:d175:a6f7:cf24]) by BY5PR15MB3651.namprd15.prod.outlook.com
+ ([fe80::74e2:d175:a6f7:cf24%6]) with mapi id 15.20.4930.022; Tue, 1 Feb 2022
+ 17:37:32 +0000
+From:   Kui-Feng Lee <kuifeng@fb.com>
+To:     "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>,
+        "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
+CC:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 0/5] Attach a cookie to a tracing program.
+Thread-Topic: [PATCH bpf-next 0/5] Attach a cookie to a tracing program.
+Thread-Index: AQHYEv59zmTihbq3R0eshpelP+wgtqx2VESAgAf0dYCAALYRgA==
+Date:   Tue, 1 Feb 2022 17:37:31 +0000
+Message-ID: <8f1d25d8c01d7397192e3c034330c5f757eabea0.camel@fb.com>
+References: <20220126214809.3868787-1-kuifeng@fb.com>
+         <CAADnVQKkJCj+_aoJN2YtS3-Hc68uk1S2vN=5+0M0Q9KRVuxqoQ@mail.gmail.com>
+         <CAEf4BzYFFnBnLu0ue8HoeZDD6V3DBKZFFKSA7VnL=duQgqc-nQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzYFFnBnLu0ue8HoeZDD6V3DBKZFFKSA7VnL=duQgqc-nQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a60001ba-198c-46ec-e16c-08d9e5a986a0
+x-ms-traffictypediagnostic: BYAPR15MB3029:EE_
+x-microsoft-antispam-prvs: <BYAPR15MB3029E2DD4C486D75D57BBAF3CC269@BYAPR15MB3029.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: c+Q6muSl0FLxt3+sY3h29MtlZOQAkimQ3NedeRj30YeHautu6tlAatH8RUdjksWNtGGjv2epHRSojfB3fRe/hwMyERXNQ9EPh+sMuEk4I4Q4VmAfv5HBsEOBVlK20iYo43Z/RFbIM/WUQNteO/39qm5mA9VA63ozQUguh+67/BgOleMq51Ycr5O5rK93Iq2LyDp5y3pkIKnZFKE/nC4SrYsJfrQdridCliJa+1QsHY52BLoT8KAcoafFIsAdfnRzZ/aQsEUsORHarFfHOYWmQ81PbWzqzfyuNl/JXc2Qjze5L76y2R9DTX38FxZaSSQLKseNxPWO3qnkfhwd0hu3Zt0YSlZum8i/iJQVEtazCZZhHXwOckNXqz+MCAOz6NKrTHHCvqQzhs4APvZLjGhBggB0tN/1janBJ7thITJEpDD/qnxYquaRt9RKR2cAVjpeOI+zkyO+PCR5R0Z6exp65Jv3CBOy3kxWF71FLt8dqHa8Y1O9kFuFQUNhGcUiAm7uAJgNzCWDojU/scifyoT7wPkfihVjshOS3GxZ/4LJLf9oPdufhJ1ZR9kheh/xvf16BF4M49MgH39abN7rRBcfL7QBTZSR7atdoabZ8d6DkZryvzLLHP0bSiHzc/QLXpRcYE/ySzCfDPHVkArf5Swfq9kcmyh4q1a6NJgTZ9LCz/JH7BzGaBFJHrdDsvkM/r5gHJBwuz4mtTJBjf1JjSx3kg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3651.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(5660300002)(6512007)(186003)(4744005)(2906002)(2616005)(122000001)(86362001)(316002)(38070700005)(38100700002)(8936002)(91956017)(6486002)(110136005)(54906003)(71200400001)(508600001)(8676002)(4326008)(66556008)(36756003)(66446008)(66946007)(76116006)(64756008)(66476007)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b21XL0MrSEhTdjk1ZGVzY044SEUweE9LU2VsdkJyTkg2Z0paMWR5a0VURUMw?=
+ =?utf-8?B?V2FqSmkxT0dqTUorWlY3dnNIcWdtZE1acC9qSjd3VUw1WlhIbWhXU3cycGYw?=
+ =?utf-8?B?VlZWMFF2U1N2MzJrRU9oZEU2aEpVTVMzRUg4RTNtTXlYb2NkYmZlb0xFdnM3?=
+ =?utf-8?B?NDY4NUdscDlHblpRUWJhejdqcDFhQW5pcW5nd3RGcURFb2phTkF0QXhNMjBL?=
+ =?utf-8?B?YzQ4c3BtdGNvSTU4UmRnMk1DdDlBUis3MHJNR0cweFRHTEJzQlhSeFRKWXBO?=
+ =?utf-8?B?bjFxZ3NPMlhuTFVwMUQzLzI3eXAxWjlTTEZjUVJkcStyZ1phdXQ4STdrUjNM?=
+ =?utf-8?B?ejNVTWQ1TDdPNEM3Rk5GRVE1b1hIMCtqS1VMbUpjeStzcTNiakwxY2lXeEZk?=
+ =?utf-8?B?bHpzeWUxQXRRVjVvZmQ3d204Yk14K0YwbGVFb0NXWW5Cc0ozVVVCYVgwSDc0?=
+ =?utf-8?B?RDk0TnR3TnFkbVZyYm1Dd3Rqb2hoN2t4czk1THJVYS9ZR2JGb2ZOblpSdUd5?=
+ =?utf-8?B?aTZsaEJzUjl1bFBmc0drSDZ4OGxna2VBSE41VEh6NHN6NldEd21QblorOXBC?=
+ =?utf-8?B?UTlYNkZ0dWgyL3hxa044YjB5VStOOWJoV3dKOHlzbElzMlJIMHgrUEg1NTBD?=
+ =?utf-8?B?MmJsakM1MzczejVZQjBnVktJNE9aRVM4Um5tVmFBd0RhZTVJN0pRSHRrL3lH?=
+ =?utf-8?B?UmpEKzhvT2Jydk0weXVZazRCMkFLVFk0S3NncFJPVkNyQjhtL2g5ZEx5MUpN?=
+ =?utf-8?B?d1ZoN2F5czlVM2dLSmdNRE5rVFJ6YWFpRy9VR0hJUTFocU8xZGo5d3E3MFVw?=
+ =?utf-8?B?c3hIbmlTZXRPUmtuZXBVSUNyOGJWKzFiczNSeEdLMXZldCtZN093Y3FlWnM5?=
+ =?utf-8?B?SXc2dXFtREpDQzIxcWxLVjk4WGtrZnNFclJ5NEhCSTFkNjNRdVdURlFKSHJH?=
+ =?utf-8?B?cEEzWFFNS2Zmd1EvaHUwMVduelFVbElMamZNN2R1WlVPNXh2RCtTbEhNVzI1?=
+ =?utf-8?B?NGVVMkhRc0g1QWZLeG1MMWpOSDZFSDdzMGl3UVg5QUowbVBkQkxzYUY2MkdL?=
+ =?utf-8?B?UUJ3NFROZFp1Rm5NcFZ5L3ZDSXlQSE1mTWcwRHhoZ0dOdXNqZEtuMHhNMW1D?=
+ =?utf-8?B?WG9qZjNoR3lQazN5SVM3OVJrMVNhNEMyeGgyTmFDYnZKUXNlT3VsN05ZdUZD?=
+ =?utf-8?B?YmpEYmlHR3l4b2d5cUJPN0loV1ppM1FwVlA2aWpjQlpmM3Q5YWtxOTZMRGRX?=
+ =?utf-8?B?bGx6N0FLc2tpSkwrbVJLTy82U0Qzdmc5M24wVE5VWTl4YUNCcGs5ZTJ5Y3pp?=
+ =?utf-8?B?OVJLa05lbHNRNWpzSlVuSnBzczc2WFpUdXZBcTI2MFZzcGozdHRBNXFZclRz?=
+ =?utf-8?B?aGZwZmV1Sm0weUliMXVmS1piMjJuVGZFZ040YTRCWDZrcksrc1JTQnVPV0RU?=
+ =?utf-8?B?TTFsZ080S21iTEloemRHM3U4MnFHRXNEdXR1R1kva2FQcXVLL25nVDNRQjQy?=
+ =?utf-8?B?QldzMWF1UlV6YUpCaUFQdTlPUXVTOXI3MGJGNWJySmxpeCs5dVFYNFlXczhW?=
+ =?utf-8?B?d1pXcms5UUk0WXZOU2psaHlDQU44Zk9VU3RDQ1lIK25FSHE2bzVJMDdyVVp1?=
+ =?utf-8?B?dDVxSlo2aGMvVHNjOWo1N0VuSnpPcytaM09UYzBjMExDRHhCRUNVeEphOTJq?=
+ =?utf-8?B?Z2tQZVFIVVUwbUc5VEJzZ0JLejVHY2ZRR2VhYlJhOXA2MHlvQVRrbWFZSlh2?=
+ =?utf-8?B?TjR2T2MvL3dtU2k4VEtNOWsyUmJMNWtnT3RWMlJGMzJmSHRabnR5cllmYTls?=
+ =?utf-8?B?SWZxb3Q5SGYzZDV1WXVrM2QxTUtYTkpPSTR2T2hNREJibFRqdm1qdFA2alIz?=
+ =?utf-8?B?cmFLbFo0NEZpdW4rMHNHZSsyb29SVk9ySjRwN0NHUmxZRTVXWWJmL3k1T0pj?=
+ =?utf-8?B?Ti9LU3FOTTZIemZibGt6TG5tOTNZNmU3V1dzMkUzZUhYbTZsYTJkeGZWcTc5?=
+ =?utf-8?B?UmdseVppSjFXeFFHQXRmaXJCakJKZU43eWJGVWVsa2FyeFgzUVQreVVTQkdF?=
+ =?utf-8?B?UDArblhQQnJUakVhWlFCcFBtT3orMnlpWitMalRjY28yZk10TUJKampwZXkx?=
+ =?utf-8?B?dDZQVFhDUnhzRGduQjVLTjJhNUVNanZ1Z2ZkMllRYWFwSXczWTlHVlovZk9q?=
+ =?utf-8?B?eXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2BC365DC1065BE40B0E64E63E36E6164@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 8YhR3AYY_0jFehF7DtKfGaSeqxY-0u_7
-X-Proofpoint-ORIG-GUID: 8YhR3AYY_0jFehF7DtKfGaSeqxY-0u_7
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3651.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a60001ba-198c-46ec-e16c-08d9e5a986a0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Feb 2022 17:37:31.9466
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QqCTMadt2Z7nMPF/KYC4mpDq4ourTVgIH6nQwfqbCyHsnvd4uVZti+0h4lAJGX2e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3029
+X-OriginatorOrg: fb.com
+X-Proofpoint-ORIG-GUID: AiXPZ6WJzM4JChlJqBYqB3tH1WdSh1pj
+X-Proofpoint-GUID: AiXPZ6WJzM4JChlJqBYqB3tH1WdSh1pj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-01_08,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- phishscore=0 impostorscore=0 bulkscore=0 mlxlogscore=935 suspectscore=0
- priorityscore=1501 spamscore=0 adultscore=0 lowpriorityscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202010096
+ definitions=2022-02-01_09,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 spamscore=0 bulkscore=0
+ impostorscore=0 adultscore=0 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ suspectscore=0 mlxlogscore=794 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202010098
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Song Liu <songliubraving@fb.com>
-
-Use bpf_jit_binary_pack_alloc in x86_64 jit. The jit engine first writes
-the program to the rw buffer. When the jit is done, the program is copied
-to the final location with bpf_jit_binary_pack_finalize.
-
-Note that we need to do bpf_tail_call_direct_fixup after finalize.
-Therefore, the text_live = false logic in __bpf_arch_text_poke is no
-longer needed.
-
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- arch/x86/net/bpf_jit_comp.c | 58 ++++++++++++++++++++-----------------
- 1 file changed, 31 insertions(+), 27 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index c13d148f7396..643f38b91e30 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -330,8 +330,7 @@ static int emit_jump(u8 **pprog, void *func, void *ip)
- }
- 
- static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
--				void *old_addr, void *new_addr,
--				const bool text_live)
-+				void *old_addr, void *new_addr)
- {
- 	const u8 *nop_insn = x86_nops[5];
- 	u8 old_insn[X86_PATCH_SIZE];
-@@ -365,10 +364,7 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		goto out;
- 	ret = 1;
- 	if (memcmp(ip, new_insn, X86_PATCH_SIZE)) {
--		if (text_live)
--			text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
--		else
--			memcpy(ip, new_insn, X86_PATCH_SIZE);
-+		text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
- 		ret = 0;
- 	}
- out:
-@@ -384,7 +380,7 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		/* BPF poking in modules is not supported */
- 		return -EINVAL;
- 
--	return __bpf_arch_text_poke(ip, t, old_addr, new_addr, true);
-+	return __bpf_arch_text_poke(ip, t, old_addr, new_addr);
- }
- 
- #define EMIT_LFENCE()	EMIT3(0x0F, 0xAE, 0xE8)
-@@ -558,24 +554,15 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
- 		mutex_lock(&array->aux->poke_mutex);
- 		target = array->ptrs[poke->tail_call.key];
- 		if (target) {
--			/* Plain memcpy is used when image is not live yet
--			 * and still not locked as read-only. Once poke
--			 * location is active (poke->tailcall_target_stable),
--			 * any parallel bpf_arch_text_poke() might occur
--			 * still on the read-write image until we finally
--			 * locked it as read-only. Both modifications on
--			 * the given image are under text_mutex to avoid
--			 * interference.
--			 */
- 			ret = __bpf_arch_text_poke(poke->tailcall_target,
- 						   BPF_MOD_JUMP, NULL,
- 						   (u8 *)target->bpf_func +
--						   poke->adj_off, false);
-+						   poke->adj_off);
- 			BUG_ON(ret < 0);
- 			ret = __bpf_arch_text_poke(poke->tailcall_bypass,
- 						   BPF_MOD_JUMP,
- 						   (u8 *)poke->tailcall_target +
--						   X86_PATCH_SIZE, NULL, false);
-+						   X86_PATCH_SIZE, NULL);
- 			BUG_ON(ret < 0);
- 		}
- 		WRITE_ONCE(poke->tailcall_target_stable, true);
-@@ -866,7 +853,7 @@ static void emit_nops(u8 **pprog, int len)
- 
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
- 
--static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
-+static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 *rw_image,
- 		  int oldproglen, struct jit_context *ctx, bool jmp_padding)
- {
- 	bool tail_call_reachable = bpf_prog->aux->tail_call_reachable;
-@@ -893,8 +880,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 	push_callee_regs(&prog, callee_regs_used);
- 
- 	ilen = prog - temp;
--	if (image)
--		memcpy(image + proglen, temp, ilen);
-+	if (rw_image)
-+		memcpy(rw_image + proglen, temp, ilen);
- 	proglen += ilen;
- 	addrs[0] = proglen;
- 	prog = temp;
-@@ -1323,6 +1310,9 @@ st:			if (is_imm8(insn->off))
- 					pr_err("extable->insn doesn't fit into 32-bit\n");
- 					return -EFAULT;
- 				}
-+				/* switch ex to rw buffer for writes */
-+				ex = (void *)rw_image + ((void *)ex - (void *)image);
-+
- 				ex->insn = delta;
- 
- 				ex->data = EX_TYPE_BPF;
-@@ -1705,7 +1695,7 @@ st:			if (is_imm8(insn->off))
- 				pr_err("bpf_jit: fatal error\n");
- 				return -EFAULT;
- 			}
--			memcpy(image + proglen, temp, ilen);
-+			memcpy(rw_image + proglen, temp, ilen);
- 		}
- 		proglen += ilen;
- 		addrs[i] = proglen;
-@@ -2246,6 +2236,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs)
- }
- 
- struct x64_jit_data {
-+	struct bpf_binary_header *rw_header;
- 	struct bpf_binary_header *header;
- 	int *addrs;
- 	u8 *image;
-@@ -2258,6 +2249,7 @@ struct x64_jit_data {
- 
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- {
-+	struct bpf_binary_header *rw_header = NULL;
- 	struct bpf_binary_header *header = NULL;
- 	struct bpf_prog *tmp, *orig_prog = prog;
- 	struct x64_jit_data *jit_data;
-@@ -2266,6 +2258,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	bool tmp_blinded = false;
- 	bool extra_pass = false;
- 	bool padding = false;
-+	u8 *rw_image = NULL;
- 	u8 *image = NULL;
- 	int *addrs;
- 	int pass;
-@@ -2301,6 +2294,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		oldproglen = jit_data->proglen;
- 		image = jit_data->image;
- 		header = jit_data->header;
-+		rw_header = jit_data->rw_header;
-+		rw_image = (void *)rw_header + ((void *)image - (void *)header);
- 		extra_pass = true;
- 		padding = true;
- 		goto skip_init_addrs;
-@@ -2331,12 +2326,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	for (pass = 0; pass < MAX_PASSES || image; pass++) {
- 		if (!padding && pass >= PADDING_PASSES)
- 			padding = true;
--		proglen = do_jit(prog, addrs, image, oldproglen, &ctx, padding);
-+		proglen = do_jit(prog, addrs, image, rw_image, oldproglen, &ctx, padding);
- 		if (proglen <= 0) {
- out_image:
- 			image = NULL;
- 			if (header)
--				bpf_jit_binary_free(header);
-+				bpf_jit_binary_pack_free(header, rw_header);
- 			prog = orig_prog;
- 			goto out_addrs;
- 		}
-@@ -2360,8 +2355,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 				sizeof(struct exception_table_entry);
- 
- 			/* allocate module memory for x86 insns and extable */
--			header = bpf_jit_binary_alloc(roundup(proglen, align) + extable_size,
--						      &image, align, jit_fill_hole);
-+			header = bpf_jit_binary_pack_alloc(roundup(proglen, align) + extable_size,
-+							   &image, align, &rw_header, &rw_image,
-+							   jit_fill_hole);
- 			if (!header) {
- 				prog = orig_prog;
- 				goto out_addrs;
-@@ -2377,14 +2373,22 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 
- 	if (image) {
- 		if (!prog->is_func || extra_pass) {
-+			/*
-+			 * bpf_jit_binary_pack_finalize fails in two scenarios:
-+			 *   1) header is not pointing to proper module memory;
-+			 *   2) the arch doesn't support bpf_arch_text_copy().
-+			 *
-+			 * Both cases are serious bugs that we should not continue.
-+			 */
-+			BUG_ON(bpf_jit_binary_pack_finalize(prog, header, rw_header));
- 			bpf_tail_call_direct_fixup(prog);
--			bpf_jit_binary_lock_ro(header);
- 		} else {
- 			jit_data->addrs = addrs;
- 			jit_data->ctx = ctx;
- 			jit_data->proglen = proglen;
- 			jit_data->image = image;
- 			jit_data->header = header;
-+			jit_data->rw_header = rw_header;
- 		}
- 		prog->bpf_func = (void *)image;
- 		prog->jited = 1;
--- 
-2.30.2
-
+T24gTW9uLCAyMDIyLTAxLTMxIGF0IDIyOjQ1IC0wODAwLCBBbmRyaWkgTmFrcnlpa28gd3JvdGU6
+DQouLi4uLi4gY3V0IC4uLi4uLg0KPiBGb3IgbXVsdGktYXR0YWNoIGZlbnRyeSwgd2UgY291bGQg
+dXNlIHRoZSBzYW1lIGFwcHJvYWNoIGlmIHdlIGxldA0KPiBlaXRoZXIgYnBmX2xpbmsgb3IgYnBm
+X3Byb2cgYXZhaWxhYmxlIHRvIGZlbnRyeS9mZXhpdCBwcm9ncmFtIGF0DQo+IHJ1bnRpbWUuIEt1
+aS1GZW5nIHNlZW1zIHRvIGJlIHN0b3JpbmcgcHJvZ19pZCBpbiBCUEYgdHJhbXBvbGluZQ0KPiBn
+ZW5lcmF0ZWQgY29kZSwgSSBkb24ndCB0aGluayB0aGF0J3MgdGhlIGJlc3QgYXBwcm9hY2gsIGl0
+IHdvdWxkIGJlDQo+IHByb2JhYmx5IGJldHRlciB0byBzdG9yZSBicGZfbGluayBvciBicGZfcHJv
+ZyBwb2ludGVyLCB3aGljaGV2ZXIgaXMNCj4gbW9yZSBjb252ZW5pZW50LiBJIHRoaW5rIHdlIGNh
+bid0IGF0dGFjaCB0aGUgc2FtZSBCUEYgcHJvZ3JhbSB0d2ljZQ0KPiB0bw0KDQpGWUksIHRoZSBw
+cm9nX2lkIHVzZWQgaXMgY2FzdGluZyBmcm9tIGEgYnBmX3Byb2cgcG9pbnRlci4gIEl0IGdldHMg
+YQ0KYnBmX3Byb2cgYnkgY2FzdGluZyBhIHByb2dfaWQgYmFjay4NCg0K
