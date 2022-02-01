@@ -2,153 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C2BCC43217
-	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 05:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8AAFC433EF
+	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:31:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiBAFuO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Feb 2022 00:50:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233712AbiBAFuO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Feb 2022 00:50:14 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE62C061714
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 21:50:13 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id q11so5217706ild.11
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 21:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2KHA7BkydmzBg2tGpIVbQsCK2ZlzH1qs5ahJoG0Cobk=;
-        b=fo+U8PDqGdTAyPxwMPmK8x+LLHhm3w+7ytsJWSuCXuqj0HUWIKNTdTS9UPd1zN+VD/
-         XkqhIjcyCUghR5Zmt4ham3iMCf8PKjkmbHGAFJkAZ52mdePdfrfnb8KQVOXsCUeeBvW2
-         CrAc+Y3kT0wmpaGEwfdHGVi3SZzoJyqwXGqIxFMUGQJS3ht3vuPMy5DcECUZqrrwz8I+
-         xiFvXgfjzBSXvajFBg9plCYdpQP+tf7VSfq7FsgFMWpuwTpK8uM0nM7SZgFoAPoRGSHI
-         w+sNDVwzUalamNPgoyAdqn7ujhd/0uz+NbBo5nj6NUzshFCG6t8eWITTf/1J+JN66fYe
-         J6fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2KHA7BkydmzBg2tGpIVbQsCK2ZlzH1qs5ahJoG0Cobk=;
-        b=NCJvPQaMNOA//QiQKHhNmcyUMS0n20fFkRsP5jrdr2PvIJLtPKmLr7jKZpdpsnwFjd
-         fHAUpv1BOrJIp26xkZ8qRxtt00HrWZ8fyTWnh53rffY+iQN5MjuqzjkZCKXud0sxtOqI
-         Zr93H2m03HEsEh/8x+xiYwmdOauQFSPGAn42wxcot2Up+ZXSE8MN4qF51EFRVb6IGdxb
-         uc8dGk3vSDuqkOWR/VXMGhTOiGMa/LypizOJwkLIPdOQdikKk/uxdRK0/0958HkJzlPg
-         3Xhhzqpdf1dEtcwWhWXQDWVeqtLkEN946NgFhpAKzNm828M0s1EIjcp13wV6QUL/pljM
-         f1nQ==
-X-Gm-Message-State: AOAM530JV5l/EEMQq2Wd1wdUccA8rdw3KLaCIYTLWFvMBthsUUX48A/u
-        nTJAkDiuXIxmOc4ReUKxATKrXl3brCgoFJSpDZA=
-X-Google-Smtp-Source: ABdhPJyZaztgXuDDoYcNQ3ArWT/8mJrd0nxTbfPyYNfQ8+Fky2VZdnUi0ZZL2jVnhrdmR5mwtSPSS/E5mM73s688i8E=
-X-Received: by 2002:a05:6e02:190e:: with SMTP id w14mr14063363ilu.71.1643694612310;
- Mon, 31 Jan 2022 21:50:12 -0800 (PST)
+        id S234106AbiBAGbG convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 01:31:06 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:45364 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233841AbiBAGbF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 01:31:05 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21111NRv008572
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:31:05 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxer3x19u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:31:05 -0800
+Received: from twshared7500.02.ash7.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 31 Jan 2022 22:31:04 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 454A3290EC903; Mon, 31 Jan 2022 22:28:19 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
+        <iii@linux.ibm.com>, Song Liu <song@kernel.org>
+Subject: [PATCH v8 bpf-next 5/9] x86/alternative: introduce text_poke_copy
+Date:   Mon, 31 Jan 2022 22:27:59 -0800
+Message-ID: <20220201062803.2675204-6-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
+References: <20220201062803.2675204-1-song@kernel.org>
 MIME-Version: 1.0
-References: <d456931681fe2344ae56225a698a0bd1d5c63b88.1643375942.git.lorenzo@kernel.org>
-In-Reply-To: <d456931681fe2344ae56225a698a0bd1d5c63b88.1643375942.git.lorenzo@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 31 Jan 2022 21:50:01 -0800
-Message-ID: <CAEf4Bzbt--iLcctUq+D_CXY0qyDRi3_uWc=vvOV4z-eQvum2cA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next] libbpf: deprecate xdp_cpumap and xdp_devmap
- sec definitions
-To:     Lorenzo Bianconi <lorenzo@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        john fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: I-AkjYdIk-BGGyOb4Ulzmlv1aDRjl_p2
+X-Proofpoint-ORIG-GUID: I-AkjYdIk-BGGyOb4Ulzmlv1aDRjl_p2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-01_02,2022-01-31_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 lowpriorityscore=0
+ mlxlogscore=389 impostorscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202010033
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jan 28, 2022 at 5:29 AM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
->
-> Deprecate xdp_cpumap xdp_devmap sec definitions.
-> Introduce xdp/devmap and xdp/cpumap definitions according to the standard
-> for SEC("") in libbpf:
-> - prog_type.prog_flags/attach_place
-> Update cpumap/devmap samples and kselftests
->
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
-> Changes since v1:
-> - refer to Libbpf-1.0-migration-guide in the warning rised by libbpf
-> ---
->  samples/bpf/xdp_redirect_cpu.bpf.c                   |  8 ++++----
->  samples/bpf/xdp_redirect_map.bpf.c                   |  2 +-
->  samples/bpf/xdp_redirect_map_multi.bpf.c             |  2 +-
->  tools/lib/bpf/libbpf.c                               | 12 ++++++++++--
->  .../bpf/progs/test_xdp_with_cpumap_frags_helpers.c   |  2 +-
->  .../bpf/progs/test_xdp_with_cpumap_helpers.c         |  2 +-
->  .../bpf/progs/test_xdp_with_devmap_frags_helpers.c   |  2 +-
->  .../bpf/progs/test_xdp_with_devmap_helpers.c         |  2 +-
->  .../selftests/bpf/progs/xdp_redirect_multi_kern.c    |  2 +-
+This will be used by BPF jit compiler to dump JITed binary to a RX huge
+page, and thus allow multiple BPF programs sharing the a huge (2MB) page.
 
-Please split samples/bpf, selftests/bpf, and libbpf changes into
-separate patches. We keep them separate whenever possible.
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ arch/x86/include/asm/text-patching.h |  1 +
+ arch/x86/kernel/alternative.c        | 34 ++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
->  9 files changed, 21 insertions(+), 13 deletions(-)
->
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index b7421780e4e9..4cc18ba1b75e 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -44,6 +44,7 @@ extern void text_poke_early(void *addr, const void *opcode, size_t len);
+ extern void *text_poke(void *addr, const void *opcode, size_t len);
+ extern void text_poke_sync(void);
+ extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
++extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
+ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
+ 
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 5007c3ffe96f..018b61febf0e 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1102,6 +1102,40 @@ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
+ 	return __text_poke(addr, opcode, len);
+ }
+ 
++/**
++ * text_poke_copy - Copy instructions into (an unused part of) RX memory
++ * @addr: address to modify
++ * @opcode: source of the copy
++ * @len: length to copy, could be more than 2x PAGE_SIZE
++ *
++ * Not safe against concurrent execution; useful for JITs to dump
++ * new code blocks into unused regions of RX memory. Can be used in
++ * conjunction with synchronize_rcu_tasks() to wait for existing
++ * execution to quiesce after having made sure no existing functions
++ * pointers are live.
++ */
++void *text_poke_copy(void *addr, const void *opcode, size_t len)
++{
++	unsigned long start = (unsigned long)addr;
++	size_t patched = 0;
++
++	if (WARN_ON_ONCE(core_kernel_text(start)))
++		return NULL;
++
++	mutex_lock(&text_mutex);
++	while (patched < len) {
++		unsigned long ptr = start + patched;
++		size_t s;
++
++		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
++
++		__text_poke((void *)ptr, opcode + patched, s);
++		patched += s;
++	}
++	mutex_unlock(&text_mutex);
++	return addr;
++}
++
+ static void do_sync_core(void *info)
+ {
+ 	sync_core();
+-- 
+2.30.2
 
-[...]
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 4ce94f4ed34a..ba003cabe4a4 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -237,6 +237,8 @@ enum sec_def_flags {
->         SEC_SLOPPY_PFX = 16,
->         /* BPF program support non-linear XDP buffer */
->         SEC_XDP_FRAGS = 32,
-> +       /* deprecated sec definitions not supposed to be used */
-> +       SEC_DEPRECATED = 64,
->  };
->
->  struct bpf_sec_def {
-> @@ -6575,6 +6577,10 @@ static int libbpf_preload_prog(struct bpf_program *prog,
->         if (prog->type == BPF_PROG_TYPE_XDP && (def & SEC_XDP_FRAGS))
->                 opts->prog_flags |= BPF_F_XDP_HAS_FRAGS;
->
-> +       if (def & SEC_DEPRECATED)
-> +               pr_warn("sec '%s' is deprecated, please take a look at https://github.com/libbpf/libbpf/wiki/Libbpf-1.0-migration-guide\n",
-> +                       prog->sec_name);
-> +
-
-Please add a link directly to [0]. I just added a new section listing
-xdp_devmap and xdp_cpumap. I also added SEC("classifier") ->
-SEC("tc"), so let's mark SEC("classifier") as deprecated as well in
-the next revision?
-
-Daniel, does that sound reasonable to you or should we leave
-SEC("classifier") intact?
-
-Let's use also the syntax consistent with the code people write.
-Something like "SEC(\"%s\") is deprecated, please see
-https://github.com/libbpf/libbpf/wiki/Libbpf-1.0-migration-guide#bpf-program-sec-annotation-deprecations
-for details"?
-
-  [0] https://github.com/libbpf/libbpf/wiki/Libbpf-1.0-migration-guide#bpf-program-sec-annotation-deprecations
-
->         if ((prog->type == BPF_PROG_TYPE_TRACING ||
->              prog->type == BPF_PROG_TYPE_LSM ||
->              prog->type == BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
-> @@ -8618,9 +8624,11 @@ static const struct bpf_sec_def section_defs[] = {
->         SEC_DEF("iter.s/",              TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_iter),
->         SEC_DEF("syscall",              SYSCALL, 0, SEC_SLEEPABLE),
->         SEC_DEF("xdp.frags/devmap",     XDP, BPF_XDP_DEVMAP, SEC_XDP_FRAGS),
-> -       SEC_DEF("xdp_devmap/",          XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
-> +       SEC_DEF("xdp/devmap",           XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE),
-> +       SEC_DEF("xdp_devmap/",          XDP, BPF_XDP_DEVMAP, SEC_ATTACHABLE | SEC_DEPRECATED),
->         SEC_DEF("xdp.frags/cpumap",     XDP, BPF_XDP_CPUMAP, SEC_XDP_FRAGS),
-> -       SEC_DEF("xdp_cpumap/",          XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
-> +       SEC_DEF("xdp/cpumap",           XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE),
-> +       SEC_DEF("xdp_cpumap/",          XDP, BPF_XDP_CPUMAP, SEC_ATTACHABLE | SEC_DEPRECATED),
->         SEC_DEF("xdp.frags",            XDP, BPF_XDP, SEC_XDP_FRAGS),
->         SEC_DEF("xdp",                  XDP, BPF_XDP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
->         SEC_DEF("perf_event",           PERF_EVENT, 0, SEC_NONE | SEC_SLOPPY_PFX),
-
-[...]
