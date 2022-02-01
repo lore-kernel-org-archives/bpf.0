@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 959F6C433FE
-	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B283C433F5
+	for <bpf@archiver.kernel.org>; Tue,  1 Feb 2022 06:34:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234262AbiBAGeI convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 01:34:08 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7024 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234258AbiBAGeI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 01:34:08 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21111LYF027398
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:34:08 -0800
+        id S234290AbiBAGeL convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Feb 2022 01:34:11 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43136 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234258AbiBAGeK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Feb 2022 01:34:10 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21111Srg007842
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:34:09 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxjtrvm1m-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3dxq3gakcm-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:34:08 -0800
-Received: from twshared19733.18.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 31 Jan 2022 22:34:09 -0800
+Received: from twshared7500.02.ash7.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.21; Mon, 31 Jan 2022 22:34:07 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id CB44D290EC913; Mon, 31 Jan 2022 22:28:23 -0800 (PST)
+        id 7CDBA290EC8F4; Mon, 31 Jan 2022 22:28:15 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kernel-team@fb.com>, <peterz@infradead.org>, <x86@kernel.org>,
-        <iii@linux.ibm.com>, Song Liu <song@kernel.org>
-Subject: [PATCH v8 bpf-next 7/9] bpf: introduce bpf_prog_pack allocator
-Date:   Mon, 31 Jan 2022 22:28:01 -0800
-Message-ID: <20220201062803.2675204-8-song@kernel.org>
+        <iii@linux.ibm.com>, Song Liu <songliubraving@fb.com>
+Subject: [PATCH v8 bpf-next 3/9] bpf: use size instead of pages in bpf_binary_header
+Date:   Mon, 31 Jan 2022 22:27:57 -0800
+Message-ID: <20220201062803.2675204-4-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220201062803.2675204-1-song@kernel.org>
 References: <20220201062803.2675204-1-song@kernel.org>
@@ -40,175 +40,107 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: DHcUZpP8qWOSgP3Lh3uUo_L7HZV8fvup
-X-Proofpoint-ORIG-GUID: DHcUZpP8qWOSgP3Lh3uUo_L7HZV8fvup
+X-Proofpoint-GUID: cjr56qtbUBS1ilo-tw1UXffHRi3r6afi
+X-Proofpoint-ORIG-GUID: cjr56qtbUBS1ilo-tw1UXffHRi3r6afi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-01_02,2022-01-31_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- priorityscore=1501 adultscore=0 suspectscore=0 mlxlogscore=909 spamscore=0
- lowpriorityscore=0 mlxscore=0 phishscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202010033
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
+ clxscore=1015 spamscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=850 mlxscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202010033
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Most BPF programs are small, but they consume a page each. For systems
-with busy traffic and many BPF programs, this could add significant
-pressure to instruction TLB.
+From: Song Liu <songliubraving@fb.com>
 
-Introduce bpf_prog_pack allocator to pack multiple BPF programs in a huge
-page. The memory is then allocated in 64 byte chunks.
+This is necessary to charge sub page memory for the BPF program.
 
-Memory allocated by bpf_prog_pack allocator is RO protected after initial
-allocation. To write to it, the user (jit engine) need to use text poke
-API.
-
-Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/core.c | 127 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ include/linux/filter.h |  6 +++---
+ kernel/bpf/core.c      | 11 +++++------
+ 2 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a5ec480f9862..7ae590897b73 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -805,6 +805,133 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
- 	return slot;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index d23e999dc032..5855eb474c62 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -548,7 +548,7 @@ struct sock_fprog_kern {
+ #define BPF_IMAGE_ALIGNMENT 8
+ 
+ struct bpf_binary_header {
+-	u32 pages;
++	u32 size;
+ 	u8 image[] __aligned(BPF_IMAGE_ALIGNMENT);
+ };
+ 
+@@ -886,8 +886,8 @@ static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
+ static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+ {
+ 	set_vm_flush_reset_perms(hdr);
+-	set_memory_ro((unsigned long)hdr, hdr->pages);
+-	set_memory_x((unsigned long)hdr, hdr->pages);
++	set_memory_ro((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
++	set_memory_x((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
  }
  
-+/*
-+ * BPF program pack allocator.
-+ *
-+ * Most BPF programs are pretty small. Allocating a hole page for each
-+ * program is sometime a waste. Many small bpf program also adds pressure
-+ * to instruction TLB. To solve this issue, we introduce a BPF program pack
-+ * allocator. The prog_pack allocator uses HPAGE_PMD_SIZE page (2MB on x86)
-+ * to host BPF programs.
-+ */
-+#define BPF_PROG_PACK_SIZE	HPAGE_PMD_SIZE
-+#define BPF_PROG_CHUNK_SHIFT	6
-+#define BPF_PROG_CHUNK_SIZE	(1 << BPF_PROG_CHUNK_SHIFT)
-+#define BPF_PROG_CHUNK_MASK	(~(BPF_PROG_CHUNK_SIZE - 1))
-+#define BPF_PROG_CHUNK_COUNT	(BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE)
-+
-+struct bpf_prog_pack {
-+	struct list_head list;
-+	void *ptr;
-+	unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
-+};
-+
-+#define BPF_PROG_MAX_PACK_PROG_SIZE	HPAGE_PMD_SIZE
-+#define BPF_PROG_SIZE_TO_NBITS(size)	(round_up(size, BPF_PROG_CHUNK_SIZE) / BPF_PROG_CHUNK_SIZE)
-+
-+static DEFINE_MUTEX(pack_mutex);
-+static LIST_HEAD(pack_list);
-+
-+static struct bpf_prog_pack *alloc_new_pack(void)
-+{
-+	struct bpf_prog_pack *pack;
-+
-+	pack = kzalloc(sizeof(*pack), GFP_KERNEL);
-+	if (!pack)
-+		return NULL;
-+	pack->ptr = module_alloc(BPF_PROG_PACK_SIZE);
-+	if (!pack->ptr) {
-+		kfree(pack);
-+		return NULL;
-+	}
-+	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
-+	list_add_tail(&pack->list, &pack_list);
-+
-+	set_vm_flush_reset_perms(pack->ptr);
-+	set_memory_ro((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	set_memory_x((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	return pack;
-+}
-+
-+static void *bpf_prog_pack_alloc(u32 size)
-+{
-+	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
-+	struct bpf_prog_pack *pack;
-+	unsigned long pos;
-+	void *ptr = NULL;
-+
-+	if (size > BPF_PROG_MAX_PACK_PROG_SIZE) {
-+		size = round_up(size, PAGE_SIZE);
-+		ptr = module_alloc(size);
-+		if (ptr) {
-+			set_vm_flush_reset_perms(ptr);
-+			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
-+			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
-+		}
-+		return ptr;
-+	}
-+	mutex_lock(&pack_mutex);
-+	list_for_each_entry(pack, &pack_list, list) {
-+		pos = bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
-+						 nbits, 0);
-+		if (pos < BPF_PROG_CHUNK_COUNT)
-+			goto found_free_area;
-+	}
-+
-+	pack = alloc_new_pack();
-+	if (!pack)
-+		goto out;
-+
-+	pos = 0;
-+
-+found_free_area:
-+	bitmap_set(pack->bitmap, pos, nbits);
-+	ptr = (void *)(pack->ptr) + (pos << BPF_PROG_CHUNK_SHIFT);
-+
-+out:
-+	mutex_unlock(&pack_mutex);
-+	return ptr;
-+}
-+
-+static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
-+{
-+	struct bpf_prog_pack *pack = NULL, *tmp;
-+	unsigned int nbits;
-+	unsigned long pos;
-+	void *pack_ptr;
-+
-+	if (hdr->size > BPF_PROG_MAX_PACK_PROG_SIZE) {
-+		module_memfree(hdr);
-+		return;
-+	}
-+
-+	pack_ptr = (void *)((unsigned long)hdr & ~(BPF_PROG_PACK_SIZE - 1));
-+	mutex_lock(&pack_mutex);
-+
-+	list_for_each_entry(tmp, &pack_list, list) {
-+		if (tmp->ptr == pack_ptr) {
-+			pack = tmp;
-+			break;
-+		}
-+	}
-+
-+	if (WARN_ONCE(!pack, "bpf_prog_pack bug\n"))
-+		goto out;
-+
-+	nbits = BPF_PROG_SIZE_TO_NBITS(hdr->size);
-+	pos = ((unsigned long)hdr - (unsigned long)pack_ptr) >> BPF_PROG_CHUNK_SHIFT;
-+
-+	bitmap_clear(pack->bitmap, pos, nbits);
-+	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
-+				       BPF_PROG_CHUNK_COUNT, 0) == 0) {
-+		list_del(&pack->list);
-+		module_memfree(pack->ptr);
-+		kfree(pack);
-+	}
-+out:
-+	mutex_unlock(&pack_mutex);
-+}
-+
- static atomic_long_t bpf_jit_current;
+ static inline struct bpf_binary_header *
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 6ca0550c4b24..14199228a6f0 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -543,7 +543,7 @@ bpf_prog_ksym_set_addr(struct bpf_prog *prog)
+ 	WARN_ON_ONCE(!bpf_prog_ebpf_jited(prog));
  
- /* Can be overridden by an arch's JIT compiler if it has a custom,
+ 	prog->aux->ksym.start = (unsigned long) prog->bpf_func;
+-	prog->aux->ksym.end   = addr + hdr->pages * PAGE_SIZE;
++	prog->aux->ksym.end   = addr + hdr->size;
+ }
+ 
+ static void
+@@ -866,7 +866,7 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
+ 		     bpf_jit_fill_hole_t bpf_fill_ill_insns)
+ {
+ 	struct bpf_binary_header *hdr;
+-	u32 size, hole, start, pages;
++	u32 size, hole, start;
+ 
+ 	WARN_ON_ONCE(!is_power_of_2(alignment) ||
+ 		     alignment > BPF_IMAGE_ALIGNMENT);
+@@ -876,7 +876,6 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
+ 	 * random section of illegal instructions.
+ 	 */
+ 	size = round_up(proglen + sizeof(*hdr) + 128, PAGE_SIZE);
+-	pages = size / PAGE_SIZE;
+ 
+ 	if (bpf_jit_charge_modmem(size))
+ 		return NULL;
+@@ -889,7 +888,7 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
+ 	/* Fill space with illegal/arch-dep instructions. */
+ 	bpf_fill_ill_insns(hdr, size);
+ 
+-	hdr->pages = pages;
++	hdr->size = size;
+ 	hole = min_t(unsigned int, size - (proglen + sizeof(*hdr)),
+ 		     PAGE_SIZE - sizeof(*hdr));
+ 	start = (get_random_int() % hole) & ~(alignment - 1);
+@@ -902,10 +901,10 @@ bpf_jit_binary_alloc(unsigned int proglen, u8 **image_ptr,
+ 
+ void bpf_jit_binary_free(struct bpf_binary_header *hdr)
+ {
+-	u32 pages = hdr->pages;
++	u32 size = hdr->size;
+ 
+ 	bpf_jit_free_exec(hdr);
+-	bpf_jit_uncharge_modmem(pages << PAGE_SHIFT);
++	bpf_jit_uncharge_modmem(size);
+ }
+ 
+ /* This symbol is only overridden by archs that have different
 -- 
 2.30.2
 
