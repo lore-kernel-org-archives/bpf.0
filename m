@@ -2,99 +2,203 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 654B1C433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Feb 2022 12:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE8ECC433FE
+	for <bpf@archiver.kernel.org>; Wed,  2 Feb 2022 12:28:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbiBBM0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Feb 2022 07:26:49 -0500
-Received: from www62.your-server.de ([213.133.104.62]:58456 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344136AbiBBM0t (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Feb 2022 07:26:49 -0500
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nFEig-000Gr5-Hl; Wed, 02 Feb 2022 13:26:42 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nFEig-000O4J-6a; Wed, 02 Feb 2022 13:26:42 +0100
-Subject: Re: [PATCH bpf-next v2] bpf: use VM_MAP instead of VM_ALLOC for
- ringbuf
-To:     Hou Tao <hotforest@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
+        id S245699AbiBBM24 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Feb 2022 07:28:56 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:46532 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229955AbiBBM24 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Feb 2022 07:28:56 -0500
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1643804934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uxK2Br+YSRgI8layahcCJx/qLAO0UkG+gJh96tUahN0=;
+        b=kaTIMGt1u8YwJHjfZz40FPcEepCRDvWM2zASqyzskNmcFdvhgLpgXEXQj+xSYbfCMAaC/n
+        meBxkx7tkzWLx7WYmHOkUVc3iN0qpFsXk1TIh/EcJv+HHYZjZUKyfN76xc9UN/UCz+pI39
+        ZAuPGMHWbtpEs3sNpzDSD+6Xqub8PMUhAKyzXARrFT2TOw4iv/nWcRAL24Q212rR4q47SN
+        g5Vsm8HOVIf3WdDAeIUkN/0Hp4JzDhypOlIa69Mw16e0J1XrONTERAZzTbplMv9FMzJhjo
+        AVubCJSnfDKKF7Xp31Tz8EOCT51piP6V51WhThsoHEoI6jP4D1XzfFPMXtJGzQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1643804934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uxK2Br+YSRgI8layahcCJx/qLAO0UkG+gJh96tUahN0=;
+        b=dcOMhmhZoxT1bMa0qCKsJ14XIaEdRnOin1N4DHVjjYpOpJFnE7TP59FA08b7F5CRmZuvMU
+        Und4qPBKeZqRQqDg==
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, houtao1@huawei.com,
-        syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com,
-        Andrey Konovalov <andreyknvl@google.com>
-References: <20220202060158.6260-1-houtao1@huawei.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <c6c74927-0199-617a-c4b2-bb4d0a733906@iogearbox.net>
-Date:   Wed, 2 Feb 2022 13:26:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH net-next 3/4] net: dev: Makes sure netif_rx() can be invoked in any context.
+Date:   Wed,  2 Feb 2022 13:28:47 +0100
+Message-Id: <20220202122848.647635-4-bigeasy@linutronix.de>
+In-Reply-To: <20220202122848.647635-1-bigeasy@linutronix.de>
+References: <20220202122848.647635-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20220202060158.6260-1-houtao1@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26441/Wed Feb  2 10:43:13 2022)
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-[ +Andrey ]
+Dave suggested a while ago (eleven years by now) "Let's make netif_rx()
+work in all contexts and get rid of netif_rx_ni()". Eric agreed and
+pointed out that modern devices should use netif_receive_skb() to avoid
+the overhead.
+In the meantime someone added another variant, netif_rx_any_context(),
+which behaves as suggested.
 
-On 2/2/22 7:01 AM, Hou Tao wrote:
-> After commit 2fd3fb0be1d1 ("kasan, vmalloc: unpoison VM_ALLOC pages
-> after mapping"), non-VM_ALLOC mappings will be marked as accessible
-> in __get_vm_area_node() when KASAN is enabled. But now the flag for
-> ringbuf area is VM_ALLOC, so KASAN will complain out-of-bound access
-> after vmap() returns. Because the ringbuf area is created by mapping
-> allocated pages, so use VM_MAP instead.
-> 
-> After the change, info in /proc/vmallocinfo also changes from
->    [start]-[end]   24576 ringbuf_map_alloc+0x171/0x290 vmalloc user
-> to
->    [start]-[end]   24576 ringbuf_map_alloc+0x171/0x290 vmap user
-> 
-> Reported-by: syzbot+5ad567a418794b9b5983@syzkaller.appspotmail.com
-> Signed-off-by: Hou Tao <houtao1@huawei.com>
-> ---
-> v2:
->    * explain why VM_ALLOC will lead to vmalloc-oob access
+netif_rx() must be invoked with disabled bottom halves to ensure that
+pending softirqs, which were raised within the function, are handled.
+netif_rx_ni() can be invoked only from process context (bottom halves
+must be enabled) because the function handles pending softirqs without
+checking if bottom halves were disabled or not.
+netif_rx_any_context() invokes on the former functions by checking
+in_interrupts().
 
-Do you know which tree commit 2fd3fb0be1d1 is, looks like it's neither
-in bpf nor in bpf-next tree at the moment.
+netif_rx() could be taught to handle both cases (disabled and enabled
+bottom halves) by simply disabling bottom halves while invoking
+netif_rx_internal(). The local_bh_enable() invocation will then invoke
+pending softirqs only if the BH-disable counter drops to zero.
 
-Either way, I presume this fix should be routed via bpf tree rather
-than bpf-next? (I can add Fixes tag while applying.)
+Add a local_bh_disable() section in netif_rx() to ensure softirqs are
+handled if needed. Make netif_rx_ni() and netif_rx_any_context() invoke
+netif_rx() so they can be removed once they are no more users left.
 
->    * add Reported-by tag
-> v1: https://lore.kernel.org/bpf/CANUnq3a+sT_qtO1wNQ3GnLGN7FLvSSgvit2UVgqQKRpUvs85VQ@mail.gmail.com/T/#t
-> ---
->   kernel/bpf/ringbuf.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-> index 638d7fd7b375..710ba9de12ce 100644
-> --- a/kernel/bpf/ringbuf.c
-> +++ b/kernel/bpf/ringbuf.c
-> @@ -104,7 +104,7 @@ static struct bpf_ringbuf *bpf_ringbuf_area_alloc(size_t data_sz, int numa_node)
->   	}
->   
->   	rb = vmap(pages, nr_meta_pages + 2 * nr_data_pages,
-> -		  VM_ALLOC | VM_USERMAP, PAGE_KERNEL);
-> +		  VM_MAP | VM_USERMAP, PAGE_KERNEL);
->   	if (rb) {
->   		kmemleak_not_leak(pages);
->   		rb->pages = pages;
-> 
+Link: https://lkml.kernel.org/r/20100415.020246.218622820.davem@davemloft.n=
+et
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ include/linux/netdevice.h  | 13 +++++++++++--
+ include/trace/events/net.h | 14 --------------
+ net/core/dev.c             | 34 ++--------------------------------
+ 3 files changed, 13 insertions(+), 48 deletions(-)
+
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index e490b84732d16..4086f312f814e 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3669,8 +3669,17 @@ u32 bpf_prog_run_generic_xdp(struct sk_buff *skb, st=
+ruct xdp_buff *xdp,
+ void generic_xdp_tx(struct sk_buff *skb, struct bpf_prog *xdp_prog);
+ int do_xdp_generic(struct bpf_prog *xdp_prog, struct sk_buff *skb);
+ int netif_rx(struct sk_buff *skb);
+-int netif_rx_ni(struct sk_buff *skb);
+-int netif_rx_any_context(struct sk_buff *skb);
++
++static inline int netif_rx_ni(struct sk_buff *skb)
++{
++	return netif_rx(skb);
++}
++
++static inline int netif_rx_any_context(struct sk_buff *skb)
++{
++	return netif_rx(skb);
++}
++
+ int netif_receive_skb(struct sk_buff *skb);
+ int netif_receive_skb_core(struct sk_buff *skb);
+ void netif_receive_skb_list_internal(struct list_head *head);
+diff --git a/include/trace/events/net.h b/include/trace/events/net.h
+index 78c448c6ab4c5..032b431b987b6 100644
+--- a/include/trace/events/net.h
++++ b/include/trace/events/net.h
+@@ -260,13 +260,6 @@ DEFINE_EVENT(net_dev_rx_verbose_template, netif_rx_ent=
+ry,
+ 	TP_ARGS(skb)
+ );
+=20
+-DEFINE_EVENT(net_dev_rx_verbose_template, netif_rx_ni_entry,
+-
+-	TP_PROTO(const struct sk_buff *skb),
+-
+-	TP_ARGS(skb)
+-);
+-
+ DECLARE_EVENT_CLASS(net_dev_rx_exit_template,
+=20
+ 	TP_PROTO(int ret),
+@@ -312,13 +305,6 @@ DEFINE_EVENT(net_dev_rx_exit_template, netif_rx_exit,
+ 	TP_ARGS(ret)
+ );
+=20
+-DEFINE_EVENT(net_dev_rx_exit_template, netif_rx_ni_exit,
+-
+-	TP_PROTO(int ret),
+-
+-	TP_ARGS(ret)
+-);
+-
+ DEFINE_EVENT(net_dev_rx_exit_template, netif_receive_skb_list_exit,
+=20
+ 	TP_PROTO(int ret),
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 0d13340ed4054..f43d0580fa11d 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4834,47 +4834,17 @@ int netif_rx(struct sk_buff *skb)
+ {
+ 	int ret;
+=20
++	local_bh_disable();
+ 	trace_netif_rx_entry(skb);
+=20
+ 	ret =3D netif_rx_internal(skb);
+ 	trace_netif_rx_exit(ret);
++	local_bh_enable();
+=20
+ 	return ret;
+ }
+ EXPORT_SYMBOL(netif_rx);
+=20
+-int netif_rx_ni(struct sk_buff *skb)
+-{
+-	int err;
+-
+-	trace_netif_rx_ni_entry(skb);
+-
+-	preempt_disable();
+-	err =3D netif_rx_internal(skb);
+-	if (local_softirq_pending())
+-		do_softirq();
+-	preempt_enable();
+-	trace_netif_rx_ni_exit(err);
+-
+-	return err;
+-}
+-EXPORT_SYMBOL(netif_rx_ni);
+-
+-int netif_rx_any_context(struct sk_buff *skb)
+-{
+-	/*
+-	 * If invoked from contexts which do not invoke bottom half
+-	 * processing either at return from interrupt or when softrqs are
+-	 * reenabled, use netif_rx_ni() which invokes bottomhalf processing
+-	 * directly.
+-	 */
+-	if (in_interrupt())
+-		return netif_rx(skb);
+-	else
+-		return netif_rx_ni(skb);
+-}
+-EXPORT_SYMBOL(netif_rx_any_context);
+-
+ static __latent_entropy void net_tx_action(struct softirq_action *h)
+ {
+ 	struct softnet_data *sd =3D this_cpu_ptr(&softnet_data);
+--=20
+2.34.1
 
