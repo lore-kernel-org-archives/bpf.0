@@ -2,407 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D49BDC433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Feb 2022 22:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A3BCC433FE
+	for <bpf@archiver.kernel.org>; Wed,  2 Feb 2022 23:12:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242439AbiBBW7z convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Feb 2022 17:59:55 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48794 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233672AbiBBW7y (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Feb 2022 17:59:54 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 212LX4Mg019015
-        for <bpf@vger.kernel.org>; Wed, 2 Feb 2022 14:59:54 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3dybqp8bvc-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Feb 2022 14:59:53 -0800
-Received: from twshared1259.42.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Feb 2022 14:59:38 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 53B32103F6E6B; Wed,  2 Feb 2022 14:59:30 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 5/6] selftests/bpf: redo the switch to new libbpf XDP APIs
-Date:   Wed, 2 Feb 2022 14:59:15 -0800
-Message-ID: <20220202225916.3313522-6-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220202225916.3313522-1-andrii@kernel.org>
-References: <20220202225916.3313522-1-andrii@kernel.org>
+        id S1348002AbiBBXMV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Feb 2022 18:12:21 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:39759 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235256AbiBBXMV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Feb 2022 18:12:21 -0500
+Received: by mail-io1-f69.google.com with SMTP id p65-20020a6bbf44000000b00604c0757591so579069iof.6
+        for <bpf@vger.kernel.org>; Wed, 02 Feb 2022 15:12:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=htmVlWGuHKKb3tjIfvhIeE41rcc33nqlNcOJ/WR1NFg=;
+        b=eeaD8rvA/LjDxpxq0TnbKAbG5jDHWp06qYnMYxgeIcDqYnKDBnYEe9bkb5qCaEtdFD
+         KOZRxoawXH9QIvQ9fvrE3FdqZhC9ADV6JIWKhReDDQlqxkYqBmPiiHl5z2GCLdJmbIWm
+         xMxRW/geT2qBk5++UT36sNqbXXnB8tk1omCGqh3NcSNCwz6QUvQCZb3Rg329P1uM9Eqi
+         /6kFYV/D5wqCmEsziwh/jtbuyYlDZPPTegPrRa/VU3t7lCyVS67wvZi+gta4AiRn1zrk
+         KMwYooKMLZb0a0EZzCHcod4aJLaDfUFjvsiLiZYsIMsMb39DtVHgQX8nOb/+lQXJHv+w
+         eFEg==
+X-Gm-Message-State: AOAM533DjT4ZPTt4jWZFY8EGDO/SGDaKozNLqEG+icO+xohLDIel9Id7
+        91gwLEgqfnc/ycEp5GyRR3k9RRJR1+1BAqUeZ0OxY/ecd3Jb
+X-Google-Smtp-Source: ABdhPJwfLeBxifdPwKYe9fuxoJzEo+ppyRuD/M/W85+SkRlpjuuPSlnJBOjJ4+VpsKr+HEvsxw1SN6i8HmPmbinpLwQ5GEtxpIJv
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 3yFZKIm7I0qFWmj1l_Ibf1QsGrF7JfCS
-X-Proofpoint-ORIG-GUID: 3yFZKIm7I0qFWmj1l_Ibf1QsGrF7JfCS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-02_11,2022-02-01_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 priorityscore=1501
- malwarescore=0 mlxlogscore=515 mlxscore=0 impostorscore=0 bulkscore=0
- adultscore=0 phishscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202020124
-X-FB-Internal: deliver
+X-Received: by 2002:a02:70c3:: with SMTP id f186mr17553128jac.155.1643843539556;
+ Wed, 02 Feb 2022 15:12:19 -0800 (PST)
+Date:   Wed, 02 Feb 2022 15:12:19 -0800
+In-Reply-To: <00000000000061d7eb05d7057144@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003de3e105d7112674@google.com>
+Subject: Re: [syzbot] WARNING in bpf_prog_test_run_xdp
+From:   syzbot <syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch to using new bpf_xdp_*() APIs across all selftests. Take
-advantage of a more straightforward and user-friendly semantics of
-old_prog_fd (0 means "don't care") in few places.
+syzbot has found a reproducer for the following issue on:
 
-This is a redo of 544356524dd6 ("selftests/bpf: switch to new libbpf XDP
-APIs"), which was previously reverted to minimize conflicts during bpf
-and bpf-next tree merge.
+HEAD commit:    dd5152ab338c Merge branch 'bpf-btf-dwarf5'
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=138d300c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b210f94c3ec14b22
+dashboard link: https://syzkaller.appspot.com/bug?extid=79fd1ab62b382be6f337
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d37f00700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14745624700000
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/xdp_attach.c     | 29 +++++++++----------
- .../bpf/prog_tests/xdp_cpumap_attach.c        |  8 ++---
- .../bpf/prog_tests/xdp_devmap_attach.c        |  8 ++---
- .../selftests/bpf/prog_tests/xdp_info.c       | 14 ++++-----
- .../selftests/bpf/prog_tests/xdp_link.c       | 26 ++++++++---------
- .../selftests/bpf/xdp_redirect_multi.c        |  8 ++---
- tools/testing/selftests/bpf/xdping.c          |  4 +--
- 7 files changed, 47 insertions(+), 50 deletions(-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+79fd1ab62b382be6f337@syzkaller.appspotmail.com
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-index c6fa390e3aa1..62aa3edda5e6 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_attach.c
-@@ -11,8 +11,7 @@ void serial_test_xdp_attach(void)
- 	const char *file = "./test_xdp.o";
- 	struct bpf_prog_info info = {};
- 	int err, fd1, fd2, fd3;
--	DECLARE_LIBBPF_OPTS(bpf_xdp_set_link_opts, opts,
--			    .old_fd = -1);
-+	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
- 
- 	len = sizeof(info);
- 
-@@ -38,49 +37,47 @@ void serial_test_xdp_attach(void)
- 	if (CHECK_FAIL(err))
- 		goto out_2;
- 
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd1, XDP_FLAGS_REPLACE,
--				       &opts);
-+	err = bpf_xdp_attach(IFINDEX_LO, fd1, XDP_FLAGS_REPLACE, &opts);
- 	if (CHECK(err, "load_ok", "initial load failed"))
- 		goto out_close;
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- 	if (CHECK(err || id0 != id1, "id1_check",
- 		  "loaded prog id %u != id1 %u, err %d", id0, id1, err))
- 		goto out_close;
- 
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd2, XDP_FLAGS_REPLACE,
--				       &opts);
-+	err = bpf_xdp_attach(IFINDEX_LO, fd2, XDP_FLAGS_REPLACE, &opts);
- 	if (CHECK(!err, "load_fail", "load with expected id didn't fail"))
- 		goto out;
- 
--	opts.old_fd = fd1;
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd2, 0, &opts);
-+	opts.old_prog_fd = fd1;
-+	err = bpf_xdp_attach(IFINDEX_LO, fd2, 0, &opts);
- 	if (CHECK(err, "replace_ok", "replace valid old_fd failed"))
- 		goto out;
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- 	if (CHECK(err || id0 != id2, "id2_check",
- 		  "loaded prog id %u != id2 %u, err %d", id0, id2, err))
- 		goto out_close;
- 
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, fd3, 0, &opts);
-+	err = bpf_xdp_attach(IFINDEX_LO, fd3, 0, &opts);
- 	if (CHECK(!err, "replace_fail", "replace invalid old_fd didn't fail"))
- 		goto out;
- 
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, 0, &opts);
-+	err = bpf_xdp_detach(IFINDEX_LO, 0, &opts);
- 	if (CHECK(!err, "remove_fail", "remove invalid old_fd didn't fail"))
- 		goto out;
- 
--	opts.old_fd = fd2;
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, 0, &opts);
-+	opts.old_prog_fd = fd2;
-+	err = bpf_xdp_detach(IFINDEX_LO, 0, &opts);
- 	if (CHECK(err, "remove_ok", "remove valid old_fd failed"))
- 		goto out;
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- 	if (CHECK(err || id0 != 0, "unload_check",
- 		  "loaded prog id %u != 0, err %d", id0, err))
- 		goto out_close;
- out:
--	bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-+	bpf_xdp_detach(IFINDEX_LO, 0, NULL);
- out_close:
- 	bpf_object__close(obj3);
- out_2:
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-index 13aabb3b6cf2..b353e1f3acb5 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-@@ -24,11 +24,11 @@ void test_xdp_with_cpumap_helpers(void)
- 		return;
- 
- 	prog_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_OK(err, "Generic attach of program with 8-byte CPUMAP"))
- 		goto out_close;
- 
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, -1, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
- 	ASSERT_OK(err, "XDP program detach");
- 
- 	prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
-@@ -46,9 +46,9 @@ void test_xdp_with_cpumap_helpers(void)
- 	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to cpumap entry prog_id");
- 
- 	/* can not attach BPF_XDP_CPUMAP program to a device */
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_CPUMAP program"))
--		bpf_set_link_xdp_fd(IFINDEX_LO, -1, XDP_FLAGS_SKB_MODE);
-+		bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
- 
- 	val.qsize = 192;
- 	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-index 2a784ccd3136..463a72fc3e70 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-@@ -26,11 +26,11 @@ static void test_xdp_with_devmap_helpers(void)
- 		return;
- 
- 	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_OK(err, "Generic attach of program with 8-byte devmap"))
- 		goto out_close;
- 
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, -1, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
- 	ASSERT_OK(err, "XDP program detach");
- 
- 	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
-@@ -48,9 +48,9 @@ static void test_xdp_with_devmap_helpers(void)
- 	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
- 
- 	/* can not attach BPF_XDP_DEVMAP program to a device */
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_DEVMAP program"))
--		bpf_set_link_xdp_fd(IFINDEX_LO, -1, XDP_FLAGS_SKB_MODE);
-+		bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
- 
- 	val.ifindex = 1;
- 	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_info.c b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-index abe48e82e1dc..0d01ff6cb91a 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_info.c
-@@ -14,13 +14,13 @@ void serial_test_xdp_info(void)
- 
- 	/* Get prog_id for XDP_ATTACHED_NONE mode */
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &prog_id, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &prog_id);
- 	if (CHECK(err, "get_xdp_none", "errno=%d\n", errno))
- 		return;
- 	if (CHECK(prog_id, "prog_id_none", "unexpected prog_id=%u\n", prog_id))
- 		return;
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &prog_id, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_query_id(IFINDEX_LO, XDP_FLAGS_SKB_MODE, &prog_id);
- 	if (CHECK(err, "get_xdp_none_skb", "errno=%d\n", errno))
- 		return;
- 	if (CHECK(prog_id, "prog_id_none_skb", "unexpected prog_id=%u\n",
-@@ -37,32 +37,32 @@ void serial_test_xdp_info(void)
- 	if (CHECK(err, "get_prog_info", "errno=%d\n", errno))
- 		goto out_close;
- 
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (CHECK(err, "set_xdp_skb", "errno=%d\n", errno))
- 		goto out_close;
- 
- 	/* Get prog_id for single prog mode */
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &prog_id, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &prog_id);
- 	if (CHECK(err, "get_xdp", "errno=%d\n", errno))
- 		goto out;
- 	if (CHECK(prog_id != info.id, "prog_id", "prog_id not available\n"))
- 		goto out;
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &prog_id, XDP_FLAGS_SKB_MODE);
-+	err = bpf_xdp_query_id(IFINDEX_LO, XDP_FLAGS_SKB_MODE, &prog_id);
- 	if (CHECK(err, "get_xdp_skb", "errno=%d\n", errno))
- 		goto out;
- 	if (CHECK(prog_id != info.id, "prog_id_skb", "prog_id not available\n"))
- 		goto out;
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &prog_id, XDP_FLAGS_DRV_MODE);
-+	err = bpf_xdp_query_id(IFINDEX_LO, XDP_FLAGS_DRV_MODE, &prog_id);
- 	if (CHECK(err, "get_xdp_drv", "errno=%d\n", errno))
- 		goto out;
- 	if (CHECK(prog_id, "prog_id_drv", "unexpected prog_id=%u\n", prog_id))
- 		goto out;
- 
- out:
--	bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-+	bpf_xdp_detach(IFINDEX_LO, 0, NULL);
- out_close:
- 	bpf_object__close(obj);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index b2b357f8c74c..3e9d5c5521f0 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -8,9 +8,9 @@
- 
- void serial_test_xdp_link(void)
- {
--	DECLARE_LIBBPF_OPTS(bpf_xdp_set_link_opts, opts, .old_fd = -1);
- 	struct test_xdp_link *skel1 = NULL, *skel2 = NULL;
- 	__u32 id1, id2, id0 = 0, prog_fd1, prog_fd2;
-+	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
- 	struct bpf_link_info link_info;
- 	struct bpf_prog_info prog_info;
- 	struct bpf_link *link;
-@@ -41,12 +41,12 @@ void serial_test_xdp_link(void)
- 	id2 = prog_info.id;
- 
- 	/* set initial prog attachment */
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd1, XDP_FLAGS_REPLACE, &opts);
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_fd1, XDP_FLAGS_REPLACE, &opts);
- 	if (!ASSERT_OK(err, "fd_attach"))
- 		goto cleanup;
- 
- 	/* validate prog ID */
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- 	if (!ASSERT_OK(err, "id1_check_err") || !ASSERT_EQ(id0, id1, "id1_check_val"))
- 		goto cleanup;
- 
-@@ -55,14 +55,14 @@ void serial_test_xdp_link(void)
- 	if (!ASSERT_ERR_PTR(link, "link_attach_should_fail")) {
- 		bpf_link__destroy(link);
- 		/* best-effort detach prog */
--		opts.old_fd = prog_fd1;
--		bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, XDP_FLAGS_REPLACE, &opts);
-+		opts.old_prog_fd = prog_fd1;
-+		bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_REPLACE, &opts);
- 		goto cleanup;
- 	}
- 
- 	/* detach BPF program */
--	opts.old_fd = prog_fd1;
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, -1, XDP_FLAGS_REPLACE, &opts);
-+	opts.old_prog_fd = prog_fd1;
-+	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_REPLACE, &opts);
- 	if (!ASSERT_OK(err, "prog_detach"))
- 		goto cleanup;
- 
-@@ -73,23 +73,23 @@ void serial_test_xdp_link(void)
- 	skel1->links.xdp_handler = link;
- 
- 	/* validate prog ID */
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- 	if (!ASSERT_OK(err, "id1_check_err") || !ASSERT_EQ(id0, id1, "id1_check_val"))
- 		goto cleanup;
- 
- 	/* BPF prog attach is not allowed to replace BPF link */
--	opts.old_fd = prog_fd1;
--	err = bpf_set_link_xdp_fd_opts(IFINDEX_LO, prog_fd2, XDP_FLAGS_REPLACE, &opts);
-+	opts.old_prog_fd = prog_fd1;
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_fd2, XDP_FLAGS_REPLACE, &opts);
- 	if (!ASSERT_ERR(err, "prog_attach_fail"))
- 		goto cleanup;
- 
- 	/* Can't force-update when BPF link is active */
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, prog_fd2, 0);
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_fd2, 0, NULL);
- 	if (!ASSERT_ERR(err, "prog_update_fail"))
- 		goto cleanup;
- 
- 	/* Can't force-detach when BPF link is active */
--	err = bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
-+	err = bpf_xdp_detach(IFINDEX_LO, 0, NULL);
- 	if (!ASSERT_ERR(err, "prog_detach_fail"))
- 		goto cleanup;
- 
-@@ -109,7 +109,7 @@ void serial_test_xdp_link(void)
- 		goto cleanup;
- 	skel2->links.xdp_handler = link;
- 
--	err = bpf_get_link_xdp_id(IFINDEX_LO, &id0, 0);
-+	err = bpf_xdp_query_id(IFINDEX_LO, 0, &id0);
- 	if (!ASSERT_OK(err, "id2_check_err") || !ASSERT_EQ(id0, id2, "id2_check_val"))
- 		goto cleanup;
- 
-diff --git a/tools/testing/selftests/bpf/xdp_redirect_multi.c b/tools/testing/selftests/bpf/xdp_redirect_multi.c
-index 51c8224b4ccc..aaedbf4955c3 100644
---- a/tools/testing/selftests/bpf/xdp_redirect_multi.c
-+++ b/tools/testing/selftests/bpf/xdp_redirect_multi.c
-@@ -32,12 +32,12 @@ static void int_exit(int sig)
- 	int i;
- 
- 	for (i = 0; ifaces[i] > 0; i++) {
--		if (bpf_get_link_xdp_id(ifaces[i], &prog_id, xdp_flags)) {
--			printf("bpf_get_link_xdp_id failed\n");
-+		if (bpf_xdp_query_id(ifaces[i], xdp_flags, &prog_id)) {
-+			printf("bpf_xdp_query_id failed\n");
- 			exit(1);
- 		}
- 		if (prog_id)
--			bpf_set_link_xdp_fd(ifaces[i], -1, xdp_flags);
-+			bpf_xdp_detach(ifaces[i], xdp_flags, NULL);
- 	}
- 
- 	exit(0);
-@@ -210,7 +210,7 @@ int main(int argc, char **argv)
- 		}
- 
- 		/* bind prog_fd to each interface */
--		ret = bpf_set_link_xdp_fd(ifindex, prog_fd, xdp_flags);
-+		ret = bpf_xdp_attach(ifindex, prog_fd, xdp_flags, NULL);
- 		if (ret) {
- 			printf("Set xdp fd failed on %d\n", ifindex);
- 			goto err_out;
-diff --git a/tools/testing/selftests/bpf/xdping.c b/tools/testing/selftests/bpf/xdping.c
-index baa870a759a2..c567856fd1bc 100644
---- a/tools/testing/selftests/bpf/xdping.c
-+++ b/tools/testing/selftests/bpf/xdping.c
-@@ -29,7 +29,7 @@ static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
- 
- static void cleanup(int sig)
- {
--	bpf_set_link_xdp_fd(ifindex, -1, xdp_flags);
-+	bpf_xdp_detach(ifindex, xdp_flags, NULL);
- 	if (sig)
- 		exit(1);
- }
-@@ -203,7 +203,7 @@ int main(int argc, char **argv)
- 
- 	printf("XDP setup disrupts network connectivity, hit Ctrl+C to quit\n");
- 
--	if (bpf_set_link_xdp_fd(ifindex, prog_fd, xdp_flags) < 0) {
-+	if (bpf_xdp_attach(ifindex, prog_fd, xdp_flags, NULL) < 0) {
- 		fprintf(stderr, "Link set xdp fd failed for %s\n", ifname);
- 		goto done;
- 	}
--- 
-2.30.2
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 check_copy_size include/linux/thread_info.h:230 [inline]
+WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 copy_from_user include/linux/uaccess.h:191 [inline]
+WARNING: CPU: 1 PID: 3596 at include/linux/thread_info.h:230 bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
+Modules linked in:
+CPU: 1 PID: 3596 Comm: syz-executor589 Not tainted 5.16.0-syzkaller-11587-gdd5152ab338c #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:check_copy_size include/linux/thread_info.h:230 [inline]
+RIP: 0010:copy_from_user include/linux/uaccess.h:191 [inline]
+RIP: 0010:bpf_prog_test_run_xdp+0xec7/0x1150 net/bpf/test_run.c:978
+Code: fd 06 48 c1 e5 0c 48 01 c5 e8 b5 71 0d fa 49 81 fe ff ff ff 7f 0f 86 08 fe ff ff 4c 8b 74 24 60 4c 8b 7c 24 68 e8 09 6f 0d fa <0f> 0b 41 bc f2 ff ff ff e9 02 fb ff ff 4c 8b 74 24 60 4c 8b 7c 24
+RSP: 0018:ffffc90002acfb40 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 00000000fffff0de RCX: 0000000000000000
+RDX: ffff88801ad5ba00 RSI: ffffffff876ae697 RDI: 0000000000000003
+RBP: ffff88801e32b000 R08: 000000007fffffff R09: ffffffff8d9399d7
+R10: ffffffff876ae67b R11: 000000000000001f R12: 0000000000000dc0
+R13: ffff888019342000 R14: 0000000000000000 R15: ffffc90000d6e000
+FS:  00005555560c8300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000280 CR3: 000000001df60000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ bpf_prog_test_run kernel/bpf/syscall.c:3356 [inline]
+ __sys_bpf+0x1858/0x59a0 kernel/bpf/syscall.c:4658
+ __do_sys_bpf kernel/bpf/syscall.c:4744 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4742 [inline]
+ __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4742
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd2338db1d9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd14e00248 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd2338db1d9
+RDX: 0000000000000048 RSI: 00000000200013c0 RDI: 000000000000000a
+RBP: 00007fd23389f1c0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fd23389f250
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
