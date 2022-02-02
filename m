@@ -2,256 +2,126 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BB0FC433FE
-	for <bpf@archiver.kernel.org>; Wed,  2 Feb 2022 13:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B02C433EF
+	for <bpf@archiver.kernel.org>; Wed,  2 Feb 2022 14:19:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344746AbiBBNyk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Feb 2022 08:54:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:51105 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1344736AbiBBNy2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Feb 2022 08:54:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1643810067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ndZKvuTAfuQTlyvC6PEP1xi3KVMCTEpQydu3XzbTIRw=;
-        b=B+F3+zJYMQGXEcQEKAbkiBr4Xwk3mI8zsaxPXEudX+YwaZuKxJ2WARBO3SZ1JCrdts7Y9n
-        gw5lghS74xdgUTXd0FJ5E/uQkwPfbbZ4WM3NrqXSnECQWeU3MGXjnDz3n1n94M2LqpRjPL
-        G7mdP9lq5ixEUzif55s1rbQYcHe5nE4=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-167-c1sGtNiRP-SP8x2o0tTlEQ-1; Wed, 02 Feb 2022 08:54:26 -0500
-X-MC-Unique: c1sGtNiRP-SP8x2o0tTlEQ-1
-Received: by mail-ed1-f69.google.com with SMTP id n7-20020a05640205c700b0040b7be76147so5931470edx.10
-        for <bpf@vger.kernel.org>; Wed, 02 Feb 2022 05:54:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ndZKvuTAfuQTlyvC6PEP1xi3KVMCTEpQydu3XzbTIRw=;
-        b=AZ4dMR7/v4ELSQpJXrIzGGnUxiPBBCgzVRmSiesFWwVzNRo+PJW2by6wQeL+dwug3n
-         T2Nzy/rZagwabTlDIpWfbdSBDNZ5jdxuf+6GXysJNVs2np4g0AhOB1YxpP6oHSqyHdeD
-         nJ6gwlZ35e168b345t9BuPmvoPbn8Phb02q4/NlbTcwsYMGJqahUiZbY4KYvWVvkq8Pi
-         776JkAxcQvuplacQCfKXpvTO7UehSWMG0qGxw3BhLW6+FGxpeU3h3d5vwVmzCavdecRb
-         sE94FKUztwd2ce7VyYY7n8FJeTcWZhTjzIvHzuhYld0UbL1V0r/BGqlCB9fFLJtuhVlk
-         YA3w==
-X-Gm-Message-State: AOAM532HiknwH+uYjt0SvfKR/g8/rMM3DD5IBfalQo3pQtlaO9JrLID1
-        V9cd6Gc5vD3G8puQyF1tVoZRAExhbOJSuI0WZzRj34/s+0AOj6QsEbBJxnkBuRoKzWX5HkZ2a27
-        rti71IJXk+6ZK
-X-Received: by 2002:a05:6402:16cf:: with SMTP id r15mr30306470edx.406.1643810065536;
-        Wed, 02 Feb 2022 05:54:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6fmv5Qiwb3TMVnK4uiLl9uYsqBio1+nlTWUQc1NRXW+Y88hbgmFWbH25fj5/DYfJhAAS34w==
-X-Received: by 2002:a05:6402:16cf:: with SMTP id r15mr30306452edx.406.1643810065387;
-        Wed, 02 Feb 2022 05:54:25 -0800 (PST)
-Received: from krava.redhat.com (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id kw5sm8493321ejc.140.2022.02.02.05.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Feb 2022 05:54:24 -0800 (PST)
-From:   Jiri Olsa <jolsa@redhat.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S1344850AbiBBOTj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Feb 2022 09:19:39 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33542 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344866AbiBBOTa (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 2 Feb 2022 09:19:30 -0500
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 212CeQUR014759;
+        Wed, 2 Feb 2022 14:19:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=I/mu5q+yvmG72n6jgiUrdW1v/7+WWly2Iyic2t43xGM=;
+ b=B/PxEW5tTEw5bD4fVdftFiHbB3iuXajf9bOWzNDascqj3J8XrzebbgsMXrv4DUcb2Yi6
+ U2D4TJfp+gHW+4/i3vSoz/bfe/RcCh9Te5buHMW1rYzG6qI/OPSbcptf/2jgysQacfnW
+ 6B5c6qT646dCbWrXmHCs+9e37bRHmNKfFcPKcNbPJY7bQ64FsuffqVY0EmS+eV/chaFs
+ hwxugL3KufNQG965ET6eIiAJX6UbDrj8eILY7UEg0T3K5uRWVox835DH7aJaX6LKgA7m
+ 7SQR+vYSBjll2XnzE79Tb2Uw/dg9M3vVqSel/iUwR6rqSIihmz/1yEBC0D9Q4qmUqJgc Bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dysraajw0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 14:19:12 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 212DTPwq039381;
+        Wed, 2 Feb 2022 14:19:11 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3dysraajvf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 14:19:11 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 212EDFBa024347;
+        Wed, 2 Feb 2022 14:19:09 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3dvw79wuj3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Feb 2022 14:19:09 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 212EJ6jC19202548
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Feb 2022 14:19:06 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A07DA405C;
+        Wed,  2 Feb 2022 14:19:06 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 28161A405B;
+        Wed,  2 Feb 2022 14:19:06 +0000 (GMT)
+Received: from localhost (unknown [9.171.17.127])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  2 Feb 2022 14:19:06 +0000 (GMT)
+Date:   Wed, 2 Feb 2022 15:19:04 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jiri Olsa <olsajiri@gmail.com>
-Subject: [PATCH 8/8] selftest/bpf: Add fprobe test for bpf_cookie values
-Date:   Wed,  2 Feb 2022 14:53:33 +0100
-Message-Id: <20220202135333.190761-9-jolsa@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220202135333.190761-1-jolsa@kernel.org>
-References: <20220202135333.190761-1-jolsa@kernel.org>
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        bpf@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH bpf-next 1/3] s390/bpf: Add orig_gpr2 to user_pt_regs
+Message-ID: <your-ad-here.call-01643811544-ext-7630@work.hours>
+References: <20220201234200.1836443-1-iii@linux.ibm.com>
+ <20220201234200.1836443-2-iii@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220201234200.1836443-2-iii@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -c-zP2TbeIo64_0GHL2mTTLecR0WhRce
+X-Proofpoint-GUID: AO7uChh7Mb66jT9nnVDE2i5Go14J2dPj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-02_06,2022-02-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1011
+ lowpriorityscore=0 spamscore=0 mlxlogscore=944 mlxscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202020078
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding bpf_cookie test for kprobe attached by fprobe link.
+On Wed, Feb 02, 2022 at 12:41:58AM +0100, Ilya Leoshkevich wrote:
+> user_pt_regs is used by eBPF in order to access userspace registers -
+> see commit 466698e654e8 ("s390/bpf: correct broken uapi for
+> BPF_PROG_TYPE_PERF_EVENT program type"). In order to access the first
+> syscall argument from eBPF programs, we need to export orig_gpr2.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../selftests/bpf/prog_tests/bpf_cookie.c     | 73 +++++++++++++++++++
- .../selftests/bpf/progs/fprobe_bpf_cookie.c   | 62 ++++++++++++++++
- 2 files changed, 135 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c
+> diff --git a/arch/s390/include/asm/ptrace.h b/arch/s390/include/asm/ptrace.h
+> index 4ffa8e7f0ed3..c8698e643904 100644
+> --- a/arch/s390/include/asm/ptrace.h
+> +++ b/arch/s390/include/asm/ptrace.h
+> @@ -83,9 +83,9 @@ struct pt_regs {
+>  			unsigned long args[1];
+>  			psw_t psw;
+>  			unsigned long gprs[NUM_GPRS];
+> +			unsigned long orig_gpr2;
+>  		};
+>  	};
+> -	unsigned long orig_gpr2;
+>  	union {
+>  		struct {
+>  			unsigned int int_code;
+> diff --git a/arch/s390/include/uapi/asm/ptrace.h b/arch/s390/include/uapi/asm/ptrace.h
+> index ad64d673b5e6..b3dec603f507 100644
+> --- a/arch/s390/include/uapi/asm/ptrace.h
+> +++ b/arch/s390/include/uapi/asm/ptrace.h
+> @@ -295,6 +295,7 @@ typedef struct {
+>  	unsigned long args[1];
+>  	psw_t psw;
+>  	unsigned long gprs[NUM_GPRS];
+> +	unsigned long orig_gpr2;
+>  } user_pt_regs;
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index cd10df6cd0fc..bf70d859c598 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -7,6 +7,7 @@
- #include <unistd.h>
- #include <test_progs.h>
- #include "test_bpf_cookie.skel.h"
-+#include "fprobe_bpf_cookie.skel.h"
- 
- /* uprobe attach point */
- static void trigger_func(void)
-@@ -63,6 +64,76 @@ static void kprobe_subtest(struct test_bpf_cookie *skel)
- 	bpf_link__destroy(retlink2);
- }
- 
-+static void fprobe_subtest(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
-+	int err, prog_fd, link1_fd = -1, link2_fd = -1;
-+	struct fprobe_bpf_cookie *skel = NULL;
-+	__u32 duration = 0, retval;
-+	__u64 addrs[8], cookies[8];
-+
-+	skel = fprobe_bpf_cookie__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
-+		goto cleanup;
-+
-+	kallsyms_find("bpf_fentry_test1", &addrs[0]);
-+	kallsyms_find("bpf_fentry_test2", &addrs[1]);
-+	kallsyms_find("bpf_fentry_test3", &addrs[2]);
-+	kallsyms_find("bpf_fentry_test4", &addrs[3]);
-+	kallsyms_find("bpf_fentry_test5", &addrs[4]);
-+	kallsyms_find("bpf_fentry_test6", &addrs[5]);
-+	kallsyms_find("bpf_fentry_test7", &addrs[6]);
-+	kallsyms_find("bpf_fentry_test8", &addrs[7]);
-+
-+	cookies[0] = 1;
-+	cookies[1] = 2;
-+	cookies[2] = 3;
-+	cookies[3] = 4;
-+	cookies[4] = 5;
-+	cookies[5] = 6;
-+	cookies[6] = 7;
-+	cookies[7] = 8;
-+
-+	opts.fprobe.addrs = (__u64) &addrs;
-+	opts.fprobe.cnt = 8;
-+	opts.fprobe.bpf_cookies = (__u64) &cookies;
-+	prog_fd = bpf_program__fd(skel->progs.test2);
-+
-+	link1_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
-+	if (!ASSERT_GE(link1_fd, 0, "link1_fd"))
-+		return;
-+
-+	cookies[0] = 8;
-+	cookies[1] = 7;
-+	cookies[2] = 6;
-+	cookies[3] = 5;
-+	cookies[4] = 4;
-+	cookies[5] = 3;
-+	cookies[6] = 2;
-+	cookies[7] = 1;
-+
-+	opts.flags = BPF_F_FPROBE_RETURN;
-+	prog_fd = bpf_program__fd(skel->progs.test3);
-+
-+	link2_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
-+	if (!ASSERT_GE(link2_fd, 0, "link2_fd"))
-+		goto cleanup;
-+
-+	prog_fd = bpf_program__fd(skel->progs.test1);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(retval, 0, "test_run");
-+
-+	ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
-+	ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
-+
-+cleanup:
-+	close(link1_fd);
-+	close(link2_fd);
-+	fprobe_bpf_cookie__destroy(skel);
-+}
-+
- static void uprobe_subtest(struct test_bpf_cookie *skel)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
-@@ -249,6 +320,8 @@ void test_bpf_cookie(void)
- 
- 	if (test__start_subtest("kprobe"))
- 		kprobe_subtest(skel);
-+	if (test__start_subtest("rawkprobe"))
-+		fprobe_subtest();
- 	if (test__start_subtest("uprobe"))
- 		uprobe_subtest(skel);
- 	if (test__start_subtest("tracepoint"))
-diff --git a/tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c b/tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c
-new file mode 100644
-index 000000000000..42cb109e5a30
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c
-@@ -0,0 +1,62 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+extern const void bpf_fentry_test1 __ksym;
-+extern const void bpf_fentry_test2 __ksym;
-+extern const void bpf_fentry_test3 __ksym;
-+extern const void bpf_fentry_test4 __ksym;
-+extern const void bpf_fentry_test5 __ksym;
-+extern const void bpf_fentry_test6 __ksym;
-+extern const void bpf_fentry_test7 __ksym;
-+extern const void bpf_fentry_test8 __ksym;
-+
-+/* No tests, just to trigger bpf_fentry_test* through tracing test_run */
-+SEC("fentry/bpf_modify_return_test")
-+int BPF_PROG(test1)
-+{
-+	return 0;
-+}
-+
-+__u64 test2_result = 0;
-+
-+SEC("kprobe/bpf_fentry_test*")
-+int test2(struct pt_regs *ctx)
-+{
-+	__u64 cookie = bpf_get_attach_cookie(ctx);
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test2_result += (const void *) addr == &bpf_fentry_test1 && cookie == 1;
-+	test2_result += (const void *) addr == &bpf_fentry_test2 && cookie == 2;
-+	test2_result += (const void *) addr == &bpf_fentry_test3 && cookie == 3;
-+	test2_result += (const void *) addr == &bpf_fentry_test4 && cookie == 4;
-+	test2_result += (const void *) addr == &bpf_fentry_test5 && cookie == 5;
-+	test2_result += (const void *) addr == &bpf_fentry_test6 && cookie == 6;
-+	test2_result += (const void *) addr == &bpf_fentry_test7 && cookie == 7;
-+	test2_result += (const void *) addr == &bpf_fentry_test8 && cookie == 8;
-+
-+	return 0;
-+}
-+
-+__u64 test3_result = 0;
-+
-+SEC("kretprobe/bpf_fentry_test*")
-+int test3(struct pt_regs *ctx)
-+{
-+	__u64 cookie = bpf_get_attach_cookie(ctx);
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	test3_result += (const void *) addr == &bpf_fentry_test1 && cookie == 8;
-+	test3_result += (const void *) addr == &bpf_fentry_test2 && cookie == 7;
-+	test3_result += (const void *) addr == &bpf_fentry_test3 && cookie == 6;
-+	test3_result += (const void *) addr == &bpf_fentry_test4 && cookie == 5;
-+	test3_result += (const void *) addr == &bpf_fentry_test5 && cookie == 4;
-+	test3_result += (const void *) addr == &bpf_fentry_test6 && cookie == 3;
-+	test3_result += (const void *) addr == &bpf_fentry_test7 && cookie == 2;
-+	test3_result += (const void *) addr == &bpf_fentry_test8 && cookie == 1;
-+
-+	return 0;
-+}
--- 
-2.34.1
+It could be a good opportunity to get rid of that "args[1]" which is not
+used for syscall parameters handling since commit baa071588c3f ("[S390]
+cleanup system call parameter setup") [v2.6.37], as well as completely
+unused now, and shouldn't really be exported to eBPF. And luckily eBPF
+never used it.
 
+So, how about reusing "args[1]" slot for orig_gpr2 instead?
