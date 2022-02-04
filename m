@@ -2,116 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C1BC433EF
-	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 22:58:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE27C4332F
+	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 22:58:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238208AbiBDW6a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Feb 2022 17:58:30 -0500
-Received: from mout.perfora.net ([74.208.4.194]:44975 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1358303AbiBDW6U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:58:20 -0500
-Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MU0AR-1mpTor0C4v-00Qfkx;
- Fri, 04 Feb 2022 23:57:48 +0100
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Song Liu <songliubraving@fb.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        id S1359413AbiBDW6c (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Feb 2022 17:58:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:41560 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1377743AbiBDW62 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 4 Feb 2022 17:58:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644015507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mbIIMwTtHOK23EwwQeYMceH1azwmVKWfuX9oObuKyeQ=;
+        b=VHDgkptulo/cGYPfID8D2UMrlrYZG9O2zGNfyMRj3ujoZ754gughxyG6p3I3n6UVCegA3D
+        FYEDUr19Dt16a9gqvbFIv573VOkl+3R5A0oQnXabhYFawNUpWDRFDs1Mt8a4UoTlpzdx0K
+        cuRQmb2JS175qGMjx8ihEY/1DtJ46Ms=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-482-9ACKAKIIOvKjm_zUYGTgoA-1; Fri, 04 Feb 2022 17:58:26 -0500
+X-MC-Unique: 9ACKAKIIOvKjm_zUYGTgoA-1
+Received: by mail-ed1-f71.google.com with SMTP id o25-20020a056402039900b0040631c2a67dso3944237edv.19
+        for <bpf@vger.kernel.org>; Fri, 04 Feb 2022 14:58:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mbIIMwTtHOK23EwwQeYMceH1azwmVKWfuX9oObuKyeQ=;
+        b=lxq3vZZOiy1IyrkraF6Pw6ew6HneJexdn2VvtHuzlVj6T2L77kcP0u69cpcQcUXSr1
+         kv5YZlb84SP2s02x47BRXqmXNISeHFpnr+HV8WnWku93I4cZMz1cL+HOxhJ8n1XCXyNq
+         ktJCDqYP/r+zcRZYJ5sKEXgjLzkWvVOH1ub7IkSf5RrZZ3whOZ9Hkz/pdDLwz82x6iVW
+         sV4q7E+t1kGvycFQqEex1eQ0jeO6Wk3zpSLk50dWzZqAr0B6YfG+rTXPyCuC5zK/68P5
+         ynBBgEq2PH3YztWwOvpHylV03+mv7DM/M4h3gQoSL95JjyZWCBUk6qAarnIZcbfY0aeg
+         OXWw==
+X-Gm-Message-State: AOAM530hN2PCzQgeJ/1hiGEr1CLNHv89VKOnRXBdhQehyBWwJQpgiywC
+        Ym+jCqbV+CC/dqW3wCpk/e1H7qYpeUlatKxrDBncn9KaqGU1m/4oZDYL1z9hJkAupjz7HPPGhcR
+        /QzR/u60EztKE
+X-Received: by 2002:a05:6402:51cd:: with SMTP id r13mr1484385edd.381.1644015505106;
+        Fri, 04 Feb 2022 14:58:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJw6tau51Apvgacqbwdn4SWF8Jr0PsmIu6xyu/W/a+95B28zPUpQ9oEEbT8VgbdxwucI7AZomQ==
+X-Received: by 2002:a05:6402:51cd:: with SMTP id r13mr1484378edd.381.1644015504962;
+        Fri, 04 Feb 2022 14:58:24 -0800 (PST)
+Received: from krava.redhat.com ([83.240.63.12])
+        by smtp.gmail.com with ESMTPSA id u1sm1064907ejj.215.2022.02.04.14.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Feb 2022 14:58:24 -0800 (PST)
+From:   Jiri Olsa <jolsa@redhat.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Martin KaFai Lau <kafai@fb.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Olof Johansson <olof@lixom.net>,
-        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v4 06/12] arm64: defconfig: enable bpf/cgroup firewalling
-Date:   Fri,  4 Feb 2022 23:57:00 +0100
-Message-Id: <20220204225706.1539818-7-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220204225706.1539818-1-marcel@ziswiler.com>
-References: <20220204225706.1539818-1-marcel@ziswiler.com>
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Pirko <jiri@mellanox.com>
+Subject: [PATCH bpf-next 1/3] libbpf: Add names for auxiliary maps
+Date:   Fri,  4 Feb 2022 23:58:21 +0100
+Message-Id: <20220204225823.339548-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:kFkz1tuDGKgCmRQ8VMyzBmIGg2GLrG/LHFH3FRZfa1NcI8bbkqn
- RYQdzlQ9qRCegvAA0aT4N3aMrOKVGuQdQOqPZHhm0gszO1/d+3SfSr2gEKo/doZeIJIlXWc
- Ki82wSAcu76QJXkPpqw8KFIhB/DmKL7+KTF+WKuqLTaPm9T9boeeWtfvwbtZ3hb1E+YsavM
- DlNptzGHYziTpvkYIkeXg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9EkdvJbUnKM=:BaAWlmA/99knQ7NcJl0isg
- n33hHWUjr3Y0jwFBusw9sz/3WScgFip0L/jONrFiPOsv/UfLkZeJcuJmPodNgVwDZO6uHshd/
- MrNugB4WxI0I+LI7rVQIT/wYKp3gkgIhMKPImzcrhVGE2j+Rlad+bc7SexKAMhm39uFqGEzGr
- disVIcH4w6gOK17d+zUpc4+IDBbHv6qtM05dDOP9uZEsb78ut7j9lMxfaAxdZBzpq2prbXFn0
- 3YE+WTP580YIUPhxLcwZy/rOjOEHerURislEa0NcPS4LtKiz731lF2usnI+HS4gFplSTCOwKw
- SU45y8X031sdbTSYGdF4gEgeivgY9S/VKD5UD0wpb6//mvBAHE0mfNhgpzooGVDNxY4D4xWU2
- IA4PGZho1rEX9eHa7gdayqWrbQK5aXyuBDMC5pt4+hWf2H5OxVsjLKmJbKuVNYBegvwyxBwAY
- dwoZPe/gfhxHe2952XqHLqYymBFtsdQxv0zqjpqMCqda5hGJRA8A0lpXimoeZc7e4MNGCXpel
- znejXWnc975BfYAb1hgTZVvOw5mZPlDrBJqYRssu4dxgrkvXFna+mnnMViaipEYYcQ5GMGpWq
- ty1j6B4rie0QBfAUEHHLpUE+X3C6H/xlQiBrNZATT20OyNRoJ5qUeR+9XuuJX+u6e7rcv4i/N
- +kRzZ14X+j0B0qeVh2ir5L2oVDk+9TF75sIjIlnui0ABUK/2i8KCPZV3/RiMMAF8kmuRnRjrp
- XisjfdhB3lRrAPbl
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Adding names for maps that bpftool uses for various detections.
+These maps can appear in final map show output (due to deferred
+removal in kernel) so some tests (like test_offload.py) needs
+to filter them out.
 
-This avoids the following systemd warning:
-
-[    2.618538] systemd[1]: system-getty.slice: unit configures an IP
- firewall, but the local system does not support BPF/cgroup firewalling.
-[    2.630916] systemd[1]: (This warning is only shown for the first
- unit using IP firewalling.)
-
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
+ tools/lib/bpf/libbpf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-(no changes since v3)
-
-Changes in v3:
-- Add Krzysztof's reviewed-by tag.
-
-Changes in v2:
-- Add Song's acked-by tag.
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 530ad076b5cb..444fec9ec73a 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -3,6 +3,7 @@ CONFIG_POSIX_MQUEUE=y
- CONFIG_AUDIT=y
- CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_BPF_JIT=y
- CONFIG_PREEMPT=y
- CONFIG_IRQ_TIME_ACCOUNTING=y
-@@ -22,6 +23,7 @@ CONFIG_CPUSETS=y
- CONFIG_CGROUP_DEVICE=y
- CONFIG_CGROUP_CPUACCT=y
- CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
- CONFIG_USER_NS=y
- CONFIG_SCHED_AUTOGROUP=y
- CONFIG_BLK_DEV_INITRD=y
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 904cdf83002b..38294ce935d6 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4412,7 +4412,7 @@ static int probe_kern_global_data(void)
+ 	};
+ 	int ret, map, insn_cnt = ARRAY_SIZE(insns);
+ 
+-	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, sizeof(int), 32, 1, NULL);
++	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "global_data", sizeof(int), 32, 1, NULL);
+ 	if (map < 0) {
+ 		ret = -errno;
+ 		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
+@@ -4545,7 +4545,7 @@ static int probe_kern_array_mmap(void)
+ 	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
+ 	int fd;
+ 
+-	fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, sizeof(int), sizeof(int), 1, &opts);
++	fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "array_mmap", sizeof(int), sizeof(int), 1, &opts);
+ 	return probe_fd(fd);
+ }
+ 
+@@ -4592,7 +4592,7 @@ static int probe_prog_bind_map(void)
+ 	};
+ 	int ret, map, prog, insn_cnt = ARRAY_SIZE(insns);
+ 
+-	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, sizeof(int), 32, 1, NULL);
++	map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "bind_map_detect", sizeof(int), 32, 1, NULL);
+ 	if (map < 0) {
+ 		ret = -errno;
+ 		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
 -- 
-2.33.1
+2.34.1
 
