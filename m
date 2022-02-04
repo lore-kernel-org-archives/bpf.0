@@ -2,144 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF6A5C433EF
-	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 22:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98C1BC433EF
+	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 22:58:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355901AbiBDWza (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Feb 2022 17:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353208AbiBDWz2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:55:28 -0500
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1264C061354;
-        Fri,  4 Feb 2022 14:55:27 -0800 (PST)
-Received: by mail-il1-x12d.google.com with SMTP id a17so1096392iln.11;
-        Fri, 04 Feb 2022 14:55:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FfyvWXugls19n5QGes78MZc5as0hWnBXVAGvk5Nfgac=;
-        b=RAw6c2Q5Dcui3AOnZZXhD036N058VYR4lElHs8GEQ2WVqJwnpQ4ura/NvpCNhasI/4
-         VPvVLLixzQslxcyvMIdyLey3JKyO/fqZBNyEuLQkpb2f8XJnck5l5QEPbozHi8hKtmAU
-         TI1hm2oCaZFeJWJcGNa2M7v1wdPkrzZba5rsx16SEPv8t3yppKnDwF6N1UdwJn+6qEOS
-         FwbIqUAqCC/tU5xvFtwqpg/ah7Ev9JfTynKYQA2yD5lCPQ/AuQ9kJURvaIp8c0s4zjmR
-         2sZhCvVTwirtBa8Lf+A3V+xBD1TdjshfB72NMSMtZG6yFPzcaq03P+Reip2bxjrEYpVS
-         WuFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FfyvWXugls19n5QGes78MZc5as0hWnBXVAGvk5Nfgac=;
-        b=02X1jW+J2YmVHwC2ZKy4igdsD/NInTdll9McsGjqqQo3fRqUAwP3CKWx1LJpz4vx5t
-         bUF1ZMlv+nltNbJyH2ZhN/PfxB71WlhnhhlO0rofyeZxJS01z1/S0q7aAtTlUODLDU/J
-         ybICB1W6wkoPBxk2vmBQIl+n/+QbHVoQVJsNxxK1p6R3Og2ttHMnhBSVxbjhRYwT1UbD
-         1Zhpv3rUBW9BDBsQWBLNto1zEp7P32CGiXAL68kVWp3fHROzSCTPRYlm4uWbtWf9Ca+s
-         367HgMuyuws8YdJ+z9UYFb9GpwTr4t4bpfUwE6O/YQkJm4xsMmAmCGETgjmEEMwBOJwA
-         29pw==
-X-Gm-Message-State: AOAM5325ENNBCF97BLnwx9gcXnFBDDaXtDbsZ69yT2J0zEV5LSXcaRyy
-        bcpSjFaSUGLc+T9DCn1N19LNzqEfZsVIXiCu9gc=
-X-Google-Smtp-Source: ABdhPJw2BR6dDe0s58mpo+4e5DIOgMQCUhwb321n86gjOy67FDR7BcJbpzMfqu1zyCVDP6135mQpymsdgAHXJvnAA8c=
-X-Received: by 2002:a05:6e02:1b81:: with SMTP id h1mr675396ili.239.1644015327125;
- Fri, 04 Feb 2022 14:55:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20220204220435.301896-1-mauricio@kinvolk.io>
-In-Reply-To: <20220204220435.301896-1-mauricio@kinvolk.io>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Feb 2022 14:55:16 -0800
-Message-ID: <CAEf4Bza+vB-rJD9NNphsU8UbiD06JH9wLzDvX5ZCKnLALSPNpw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: Fix strict mode calculation
-To:     =?UTF-8?Q?Mauricio_V=C3=A1squez?= <mauricio@kinvolk.io>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        id S238208AbiBDW6a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Feb 2022 17:58:30 -0500
+Received: from mout.perfora.net ([74.208.4.194]:44975 "EHLO mout.perfora.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1358303AbiBDW6U (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Feb 2022 17:58:20 -0500
+Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MU0AR-1mpTor0C4v-00Qfkx;
+ Fri, 04 Feb 2022 23:57:48 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Song Liu <songliubraving@fb.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Arnd Bergmann <arnd@arndb.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Olof Johansson <olof@lixom.net>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v4 06/12] arm64: defconfig: enable bpf/cgroup firewalling
+Date:   Fri,  4 Feb 2022 23:57:00 +0100
+Message-Id: <20220204225706.1539818-7-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220204225706.1539818-1-marcel@ziswiler.com>
+References: <20220204225706.1539818-1-marcel@ziswiler.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:kFkz1tuDGKgCmRQ8VMyzBmIGg2GLrG/LHFH3FRZfa1NcI8bbkqn
+ RYQdzlQ9qRCegvAA0aT4N3aMrOKVGuQdQOqPZHhm0gszO1/d+3SfSr2gEKo/doZeIJIlXWc
+ Ki82wSAcu76QJXkPpqw8KFIhB/DmKL7+KTF+WKuqLTaPm9T9boeeWtfvwbtZ3hb1E+YsavM
+ DlNptzGHYziTpvkYIkeXg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:9EkdvJbUnKM=:BaAWlmA/99knQ7NcJl0isg
+ n33hHWUjr3Y0jwFBusw9sz/3WScgFip0L/jONrFiPOsv/UfLkZeJcuJmPodNgVwDZO6uHshd/
+ MrNugB4WxI0I+LI7rVQIT/wYKp3gkgIhMKPImzcrhVGE2j+Rlad+bc7SexKAMhm39uFqGEzGr
+ disVIcH4w6gOK17d+zUpc4+IDBbHv6qtM05dDOP9uZEsb78ut7j9lMxfaAxdZBzpq2prbXFn0
+ 3YE+WTP580YIUPhxLcwZy/rOjOEHerURislEa0NcPS4LtKiz731lF2usnI+HS4gFplSTCOwKw
+ SU45y8X031sdbTSYGdF4gEgeivgY9S/VKD5UD0wpb6//mvBAHE0mfNhgpzooGVDNxY4D4xWU2
+ IA4PGZho1rEX9eHa7gdayqWrbQK5aXyuBDMC5pt4+hWf2H5OxVsjLKmJbKuVNYBegvwyxBwAY
+ dwoZPe/gfhxHe2952XqHLqYymBFtsdQxv0zqjpqMCqda5hGJRA8A0lpXimoeZc7e4MNGCXpel
+ znejXWnc975BfYAb1hgTZVvOw5mZPlDrBJqYRssu4dxgrkvXFna+mnnMViaipEYYcQ5GMGpWq
+ ty1j6B4rie0QBfAUEHHLpUE+X3C6H/xlQiBrNZATT20OyNRoJ5qUeR+9XuuJX+u6e7rcv4i/N
+ +kRzZ14X+j0B0qeVh2ir5L2oVDk+9TF75sIjIlnui0ABUK/2i8KCPZV3/RiMMAF8kmuRnRjrp
+ XisjfdhB3lRrAPbl
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 2:05 PM Mauricio V=C3=A1squez <mauricio@kinvolk.io> =
-wrote:
->
-> The correct formula to get all possible values is
-> ((__LIBBPF_STRICT_LAST - 1) * 2 - 1) as stated in
-> libbpf_set_strict_mode().
->
-> Fixes: 93b8952d223a ("libbpf: deprecate legacy BPF map definitions")
->
-> Signed-off-by: Mauricio V=C3=A1squez <mauricio@kinvolk.io>
-> ---
->  tools/bpf/bpftool/main.c                     |  6 +++++-
->  tools/testing/selftests/bpf/prog_tests/btf.c | 10 ++++++++--
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-please split changes to bpftool and separately selftests/bpf (and in
-v2 you'll have a separate libbpf patch as well).
+This avoids the following systemd warning:
 
->  2 files changed, 13 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index 9d01fa9de033..c5b27e41d1e9 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-> @@ -483,8 +483,12 @@ int main(int argc, char **argv)
->                 /* Allow legacy map definitions for skeleton generation.
->                  * It will still be rejected if users use LIBBPF_STRICT_A=
-LL
->                  * mode for loading generated skeleton.
-> +                *
-> +                * __LIBBPF_STRICT_LAST is the last power-of-2 value used=
- + 1, so to
-> +                * get all possible values we compensate last +1, and the=
-n (2*x - 1)
-> +                * to get the bit mask
->                  */
-> -               mode =3D (__LIBBPF_STRICT_LAST - 1) & ~LIBBPF_STRICT_MAP_=
-DEFINITIONS;
-> +               mode =3D ((__LIBBPF_STRICT_LAST - 1) * 2 - 1) & ~LIBBPF_S=
-TRICT_MAP_DEFINITIONS;
->                 ret =3D libbpf_set_strict_mode(mode);
->                 if (ret)
->                         p_err("failed to enable libbpf strict mode: %d", =
-ret);
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
-/selftests/bpf/prog_tests/btf.c
-> index 14f9b6136794..90d5cd4f504c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> @@ -4533,6 +4533,7 @@ static void do_test_file(unsigned int test_num)
->         struct btf_ext *btf_ext =3D NULL;
->         struct bpf_prog_info info =3D {};
->         struct bpf_object *obj =3D NULL;
-> +       enum libbpf_strict_mode mode;
->         struct bpf_func_info *finfo;
->         struct bpf_program *prog;
->         __u32 info_len, rec_size;
-> @@ -4560,8 +4561,13 @@ static void do_test_file(unsigned int test_num)
->         has_btf_ext =3D btf_ext !=3D NULL;
->         btf_ext__free(btf_ext);
->
-> -       /* temporary disable LIBBPF_STRICT_MAP_DEFINITIONS to test legacy=
- maps */
-> -       libbpf_set_strict_mode((__LIBBPF_STRICT_LAST - 1) & ~LIBBPF_STRIC=
-T_MAP_DEFINITIONS);
-> +       /* temporary disable LIBBPF_STRICT_MAP_DEFINITIONS to test legacy=
- maps
-> +        * __LIBBPF_STRICT_LAST is the last power-of-2 value used + 1, so=
- to
-> +        * get all possible values we compensate last +1, and then (2*x -=
- 1)
-> +        * to get the bit mask
-> +        */
-> +       mode =3D ((__LIBBPF_STRICT_LAST - 1) * 2 - 1) & ~LIBBPF_STRICT_MA=
-P_DEFINITIONS
-> +       libbpf_set_strict_mode(mode);
->         obj =3D bpf_object__open(test->file);
->         err =3D libbpf_get_error(obj);
->         if (CHECK(err, "obj: %d", err))
-> --
-> 2.25.1
->
+[    2.618538] systemd[1]: system-getty.slice: unit configures an IP
+ firewall, but the local system does not support BPF/cgroup firewalling.
+[    2.630916] systemd[1]: (This warning is only shown for the first
+ unit using IP firewalling.)
+
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+---
+
+(no changes since v3)
+
+Changes in v3:
+- Add Krzysztof's reviewed-by tag.
+
+Changes in v2:
+- Add Song's acked-by tag.
+
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 530ad076b5cb..444fec9ec73a 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -3,6 +3,7 @@ CONFIG_POSIX_MQUEUE=y
+ CONFIG_AUDIT=y
+ CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BPF_SYSCALL=y
+ CONFIG_BPF_JIT=y
+ CONFIG_PREEMPT=y
+ CONFIG_IRQ_TIME_ACCOUNTING=y
+@@ -22,6 +23,7 @@ CONFIG_CPUSETS=y
+ CONFIG_CGROUP_DEVICE=y
+ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_CGROUP_PERF=y
++CONFIG_CGROUP_BPF=y
+ CONFIG_USER_NS=y
+ CONFIG_SCHED_AUTOGROUP=y
+ CONFIG_BLK_DEV_INITRD=y
+-- 
+2.33.1
+
