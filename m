@@ -2,254 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D280C433FE
-	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 14:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D438CC433F5
+	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 14:50:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359056AbiBDOIv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Feb 2022 09:08:51 -0500
-Received: from mail.toke.dk ([45.145.95.12]:52747 "EHLO mail.toke.dk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231415AbiBDOIv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Feb 2022 09:08:51 -0500
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1643983728; bh=zktssZMQDJ73AzssbeXUo5LVMZBopiTomeDktQdcLkY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=i+4JKHFh4qc+mDhvkRHB8FVjsM2A37uN2tmcNOivmP9JVYyHP/fogjMxbxk0PAoOf
-         MFzCrRT/yAHOWI5KKrf4ktXYFsuv6T5tsHqk2UwgJ0rc1DQOYUmBjJw+RX8Ck0H2BY
-         0gd+cdx6cIPB7YmI8EwT0GEgohQkrelyA2R9n/vGgORhc5YFEN5jdJ3hF9qCaVp0qd
-         7Ivc3uVpNEicX9xq6dpEiu/vtYbrELL01MP5qieXZB3OTh4D9FB17Q1Shf1jhnZ+S8
-         Kx+9Gzl9BwJnK+OD0YwHS0+sT1gsv8Uig0yfxwAMvMbHvl3eKa0g2UY9TFTLsU0xvQ
-         SS8L4/9xlvz1A==
-To:     John Fastabend <john.fastabend@gmail.com>,
-        Maxim Mikityanskiy <maximmi@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        id S1359320AbiBDOur (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Feb 2022 09:50:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6428 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233343AbiBDOuq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 4 Feb 2022 09:50:46 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214D8DRk022406;
+        Fri, 4 Feb 2022 14:50:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=Ja3OC2q3TDApsQm4GnQZqFA0Yp1B1OYhdYj+AGkaqKY=;
+ b=D1Tdk2M2WiOLb0lbU28+zBhv6UDABslhHzrB9ur8iZCNT4PquxeImw3vE/sNxbnFX7pw
+ ZLKDbpHuf9veFjSavNh1g3rcU8e8XZTNtcWKKSJE2kTgKCbyYPfkg2wSuRH9p9J9XkR5
+ kLoRF5JlB2Flp9XaLlDAwITNMhIYKviPy5AKqep1jpsuVofbNPRu7TTRp5eNvLt3G5mM
+ kBqKOBFrvjb5aXJg+xAxf6sC14J6naEfXdpQcp4kOv0Hoq1+xrH7pmaKjJ+TfC05Kdqv
+ M/bS8x5tnCr/2d08zOJHRPpux2dtv6iM+2M0pWfyqP3vSuewQ9HlC099Mp+oO0ks18Su Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0rj5phhd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Feb 2022 14:50:27 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 214EALI0029509;
+        Fri, 4 Feb 2022 14:50:27 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0rj5phgx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Feb 2022 14:50:27 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 214EjWYi002486;
+        Fri, 4 Feb 2022 14:50:25 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3e0r10dumx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Feb 2022 14:50:25 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 214EeQXa46793158
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 4 Feb 2022 14:40:26 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F9C252050;
+        Fri,  4 Feb 2022 14:50:22 +0000 (GMT)
+Received: from heavy.lan (unknown [9.171.78.41])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id A920952051;
+        Fri,  4 Feb 2022 14:50:21 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: [PATCH bpf-next v2 2/3] bpf: Add helpers to issue and check SYN
- cookies in XDP
-In-Reply-To: <61fc9483dfbe7_1d27c208e7@john.notmuch>
-References: <20220124151340.376807-1-maximmi@nvidia.com>
- <20220124151340.376807-3-maximmi@nvidia.com>
- <61efacc6980f4_274ca2083e@john.notmuch>
- <8f5fecac-ce6e-adc8-305b-a2ee76328bce@nvidia.com>
- <61f850bdf1b23_8597208f8@john.notmuch>
- <61f852711e15a_92e0208ac@john.notmuch>
- <9cef58de-1f84-5988-92f8-fcdd3c61f689@nvidia.com>
- <61fc9483dfbe7_1d27c208e7@john.notmuch>
-Date:   Fri, 04 Feb 2022 15:08:48 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87a6f6bu6n.fsf@toke.dk>
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 01/11] arm64/bpf: Add orig_x0 to user_pt_regs
+Date:   Fri,  4 Feb 2022 15:50:08 +0100
+Message-Id: <20220204145018.1983773-2-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220204145018.1983773-1-iii@linux.ibm.com>
+References: <20220204145018.1983773-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kfAQ3JEA7qcMLp0UVATQOBnif_f80CxC
+X-Proofpoint-GUID: NXJG3NllExqVt2wX8bgWpCnP03a5Dn16
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-04_05,2022-02-03_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 phishscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ mlxlogscore=998 impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202040082
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-John Fastabend <john.fastabend@gmail.com> writes:
+orig_x0 is needed in order to access the first syscall argument from
+eBPF programs.
 
-> Maxim Mikityanskiy wrote:
->> On 2022-01-31 23:19, John Fastabend wrote:
->> > John Fastabend wrote:
->> >> Maxim Mikityanskiy wrote:
->> >>> On 2022-01-25 09:54, John Fastabend wrote:
->> >>>> Maxim Mikityanskiy wrote:
->> >>>>> The new helpers bpf_tcp_raw_{gen,check}_syncookie allow an XDP program
->> >>>>> to generate SYN cookies in response to TCP SYN packets and to check
->> >>>>> those cookies upon receiving the first ACK packet (the final packet of
->> >>>>> the TCP handshake).
->> >>>>>
->> >>>>> Unlike bpf_tcp_{gen,check}_syncookie these new helpers don't need a
->> >>>>> listening socket on the local machine, which allows to use them together
->> >>>>> with synproxy to accelerate SYN cookie generation.
->> >>>>>
->> >>>>> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
->> >>>>> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
->> >>>>> ---
->> >>>>
->> >>>> [...]
->> >>>>
->> >>>>> +
->> >>>>> +BPF_CALL_4(bpf_tcp_raw_check_syncookie, void *, iph, u32, iph_len,
->> >>>>> +	   struct tcphdr *, th, u32, th_len)
->> >>>>> +{
->> >>>>> +#ifdef CONFIG_SYN_COOKIES
->> >>>>> +	u32 cookie;
->> >>>>> +	int ret;
->> >>>>> +
->> >>>>> +	if (unlikely(th_len < sizeof(*th)))
->> >>>>> +		return -EINVAL;
->> >>>>> +
->> >>>>> +	if (!th->ack || th->rst || th->syn)
->> >>>>> +		return -EINVAL;
->> >>>>> +
->> >>>>> +	if (unlikely(iph_len < sizeof(struct iphdr)))
->> >>>>> +		return -EINVAL;
->> >>>>> +
->> >>>>> +	cookie = ntohl(th->ack_seq) - 1;
->> >>>>> +
->> >>>>> +	/* Both struct iphdr and struct ipv6hdr have the version field at the
->> >>>>> +	 * same offset so we can cast to the shorter header (struct iphdr).
->> >>>>> +	 */
->> >>>>> +	switch (((struct iphdr *)iph)->version) {
->> >>>>> +	case 4:
->> >>>>
->> >>>> Did you consider just exposing __cookie_v4_check() and __cookie_v6_check()?
->> >>>
->> >>> No, I didn't, I just implemented it consistently with
->> >>> bpf_tcp_check_syncookie, but let's consider it.
->> >>>
->> >>> I can't just pass a pointer from BPF without passing the size, so I
->> >>> would need some wrappers around __cookie_v{4,6}_check anyway. The checks
->> >>> for th_len and iph_len would have to stay in the helpers. The check for
->> >>> TCP flags (ACK, !RST, !SYN) could be either in the helper or in BPF. The
->> >>> switch would obviously be gone.
->> >>
->> >> I'm not sure you would need the len checks in helper, they provide
->> >> some guarantees I guess, but the void * is just memory I don't see
->> >> any checks on its size. It could be the last byte of a value for
->> >> example?
->> 
->> The verifier makes sure that the packet pointer and the size come 
->> together in function parameters (see check_arg_pair_ok). It also makes 
->> sure that the memory region defined by these two parameters is valid, 
->> i.e. in our case it belongs to packet data.
->> 
->> Now that the helper got a valid memory region, its length is still 
->> arbitrary. The helper has to check it's big enough to contain a TCP 
->> header, before trying to access its fields. Hence the checks in the helper.
->> 
->> > I suspect we need to add verifier checks here anyways to ensure we don't
->> > walk off the end of a value unless something else is ensuring the iph
->> > is inside a valid memory block.
->> 
->> The verifier ensures that the [iph; iph+iph_len) is valid memory, but 
->> the helper still has to check that struct iphdr fits into this region. 
->> Otherwise iph_len could be too small, and the helper would access memory 
->> outside of the valid region.
->
-> Thanks for the details this all makes sense. See response to
-> other mail about adding new types. Replied to the wrong email
-> but I think the context is not lost.
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ arch/arm64/include/asm/ptrace.h      | 2 +-
+ arch/arm64/include/uapi/asm/ptrace.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Keeping my reply here in an attempt to de-fork :)
+diff --git a/arch/arm64/include/asm/ptrace.h b/arch/arm64/include/asm/ptrace.h
+index 41b332c054ab..1be22f7870f8 100644
+--- a/arch/arm64/include/asm/ptrace.h
++++ b/arch/arm64/include/asm/ptrace.h
+@@ -183,9 +183,9 @@ struct pt_regs {
+ 			u64 sp;
+ 			u64 pc;
+ 			u64 pstate;
++			u64 orig_x0;
+ 		};
+ 	};
+-	u64 orig_x0;
+ #ifdef __AARCH64EB__
+ 	u32 unused2;
+ 	s32 syscallno;
+diff --git a/arch/arm64/include/uapi/asm/ptrace.h b/arch/arm64/include/uapi/asm/ptrace.h
+index 758ae984ff97..3c118c5b0893 100644
+--- a/arch/arm64/include/uapi/asm/ptrace.h
++++ b/arch/arm64/include/uapi/asm/ptrace.h
+@@ -90,6 +90,7 @@ struct user_pt_regs {
+ 	__u64		sp;
+ 	__u64		pc;
+ 	__u64		pstate;
++	__u64		orig_x0;
+ };
+ 
+ struct user_fpsimd_state {
+-- 
+2.34.1
 
->> >>>
->> >>> The bottom line is that it would be the same code, but without the
->> >>> switch, and repeated twice. What benefit do you see in this approach?
->> >>
->> >> The only benefit would be to shave some instructions off the program.
->> >> XDP is about performance so I figure we shouldn't be adding arbitrary
->> >> stuff here. OTOH you're already jumping into a helper so it might
->> >> not matter at all.
->> >>
->> >>>   From my side, I only see the ability to drop one branch at the expense
->> >>> of duplicating the code above the switch (th_len and iph_len checks).
->> >>
->> >> Just not sure you need the checks either, can you just assume the user
->> >> gives good data?
->> 
->> No, since the BPF program would be able to trick the kernel into reading 
->> from an invalid location (see the explanation above).
->> 
->> >>>
->> >>>> My code at least has already run the code above before it would ever call
->> >>>> this helper so all the other bits are duplicate.
->> >>>
->> >>> Sorry, I didn't quite understand this part. What "your code" are you
->> >>> referring to?
->> >>
->> >> Just that the XDP code I maintain has a if ipv4 {...} else ipv6{...}
->> >> structure
->> 
->> Same for my code (see the last patch in the series).
->> 
->> Splitting into two helpers would allow to drop the extra switch in the 
->> helper, however:
->> 
->> 1. The code will be duplicated for the checks.
->
-> See response wrt PTR_TO_IP, PTR_TO_TCP types.
-
-So about that (quoting some context from your other email):
-
-> We could have some new mem types, PTR_TO_IPV4, PTR_TO_IPv6, and PTR_TO_TCP.
-> Then we simplify the helper signatures to just,
->
->   bpf_tcp_raw_check_syncookie_v4(iph, tcph);
->   bpf_tcp_raw_check_syncookie_v6(iph, tcph);
->
-> And the verifier "knows" what a v4/v6 header is and does the mem
-> check at verification time instead of run time.
-
-I think this could probably be achieved with PTR_TO_BTF arguments to the
-helper (if we define appropriate struct types that the program can use
-for each header type)?
-
-It doesn't really guard against pointing into the wrong bit of the
-packet (or somewhere else entirely), so the header can still contain
-garbage, but at least the len check should be handled automatically with
-PTR_TO_BTF, and we avoid the need to define a whole bunch of new
-PTR_TO_* types...
-
->> 2. It won't be consistent with bpf_tcp_check_syncookie (and all other 
->> existing helpers - as far as I see, there is no split for IPv4/IPv6).
->
-> This does seem useful to me.
-
-If it's consistency we're after we could split the others as well? I
-guess the main drawback here is code bloat (can't inline the functions
-as they need to be available for BPF_CALL, so we either get duplicates
-or an additional function call overhead for the old helper if it just
-calls the new ones).
-
->> 3. It's easier to misuse, e.g., pass an IPv6 header to the IPv4 helper. 
->> This point is controversial, since it shouldn't pose any additional 
->> security threat, but in my opinion, it's better to be foolproof. That 
->> means, I'd add the IP version check even to the separate helpers, which 
->> defeats the purpose of separating them.
->
-> Not really convinced that we need to guard against misuse. This is
-> down in XDP space its not a place we should be adding extra insns
-> to stop developers from hurting themselves, just as a general
-> rule.
-
-Yeah, I think in general for XDP, if you pass garbage data to the
-helpers to get to keep the pieces when it breaks. We need to make sure
-the *kernel* doesn't misbehave (i.e., no crashing, and no invalid state
-being created inside the kernel), but it's up to the XDP program author
-to use the API correctly...
-
->> Given these points, I'd prefer to keep it a single helper. However, if 
->> you have strong objections, I can split it.
->
-> I think (2) is the strongest argument combined with the call is
-> heavy operation and saving some cycles maybe isn't terribly
-> important, but its XDP land again and insns matter IMO. I'm on
-> the fence maybe others have opinions?
-
-It's not a very strong opinion, but I think in general, optimising for
-performance in XDP is the right thing to do. That's kinda what it's for :)
-
--Toke
