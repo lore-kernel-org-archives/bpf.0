@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C1AC433EF
-	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 14:50:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94BC7C433EF
+	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 14:50:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359374AbiBDOuv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Feb 2022 09:50:51 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45108 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242053AbiBDOuu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 4 Feb 2022 09:50:50 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214D8NIg022226;
-        Fri, 4 Feb 2022 14:50:34 GMT
+        id S232383AbiBDOux (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Feb 2022 09:50:53 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:48858 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229837AbiBDOuw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 4 Feb 2022 09:50:52 -0500
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214EJ2Rj010510;
+        Fri, 4 Feb 2022 14:50:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=RyIsaSht4ME4RAkgUxN9DV1aMZFztxliTdNTD1x1VVU=;
- b=onn4fxDq2/dZmxihnsz5WB3Jbe3+aVe7gpkULzViae+8/VXUY5rcvwm+zvwNonJe3+ib
- +ukglPYUgRmvbGt+YwQJTh19eunDw6QB4Crz1ZSf4kRANrcnwlYm2LCXOG1VAQKeZzE0
- /UVWFAgj+HhtF4fx659ieVHs2gl4ZGSUh4dvXJfY3hW1De69R36bt+ZYhB9yH/JvXZT6
- NbcnB5mt9S6MHsUBWRqK92Y9FQsyx0kXUCcNKYeyyJLGoj9OsZ0Liimp4Fwb+i2mAkBN
- XbTXnB0v6FsfZSL6lx2l/e4fop8myXCPDHdKjJ8pPNGnbljM52qWZpvGWQsq1C1XIyRK ZA== 
+ bh=uIh2G1x4JyR73nMGQdKkH45MWB4kdfqJMXs2TAuzun0=;
+ b=dVRyqjUFRBF4wnbaLaFr9Zb4lMKtMUjeby7fJQ7VuqFPHrFWZVwvM68ccpWiDJnbngH+
+ Ku3m24it1a5hUD2yj+6zF2QGhw6biHHw1dDt1KQPuLikCVZRirwsGmiytO3kLZt1owbX
+ CEzgkkwDjygcmUsaLKux3AcOhLOUom3UJ9Xxf/f7/gbOb8dm9czzx0AJvsCV29OGTN51
+ qwoMKkh03+zxlbEagnrvm2EEx++gGlFAfrLNMw/2CS5cgEgMst1htkQW0xK9yuNpypMm
+ lEFbHtwSk+mP/9pknhNiziy9K0hPmnHjvSUr56AUuq3eXKJDh0PrHfMPW5kQLKZWkeUh 6g== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0rj5phm4-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0qx3yfgc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 04 Feb 2022 14:50:35 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 214EcE8l001862;
+        Fri, 4 Feb 2022 14:50:34 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0qx3yffq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 04 Feb 2022 14:50:34 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 214DYAIt009629;
-        Fri, 4 Feb 2022 14:50:34 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0rj5phkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 14:50:33 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 214ElXuR007317;
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 214Ekmmw018429;
         Fri, 4 Feb 2022 14:50:32 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3e0r0x5j09-1
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3e0r0n5jcm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 14:50:32 +0000
+        Fri, 04 Feb 2022 14:50:31 +0000
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 214EoS9540370542
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 214EoQRr46072252
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Feb 2022 14:50:28 GMT
+        Fri, 4 Feb 2022 14:50:26 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B6B1252057;
-        Fri,  4 Feb 2022 14:50:28 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 0D38252050;
+        Fri,  4 Feb 2022 14:50:26 +0000 (GMT)
 Received: from heavy.lan (unknown [9.171.78.41])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1972752051;
-        Fri,  4 Feb 2022 14:50:28 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6905C52057;
+        Fri,  4 Feb 2022 14:50:25 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,51 +64,59 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>
 Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 08/11] libbpf: Fix accessing syscall arguments on powerpc
-Date:   Fri,  4 Feb 2022 15:50:15 +0100
-Message-Id: <20220204145018.1983773-9-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 05/11] libbpf: Add PT_REGS_SYSCALL_REGS macro
+Date:   Fri,  4 Feb 2022 15:50:12 +0100
+Message-Id: <20220204145018.1983773-6-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220204145018.1983773-1-iii@linux.ibm.com>
 References: <20220204145018.1983773-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: WvIEND6i9Dt6ArDyg2uLubtOA1zX1BA-
-X-Proofpoint-GUID: LsN_5SS_47tzb01zeqvksbJXhForfvd1
+X-Proofpoint-ORIG-GUID: 5JvOflJ95fDtw92M5vQYDON--6nZyeXk
+X-Proofpoint-GUID: z_LYIL4S1Sur5_dim_Zr3N0JPQ5wc1AN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-04_05,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 phishscore=0 spamscore=0 malwarescore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=935
+ lowpriorityscore=0 phishscore=0 clxscore=1015 impostorscore=0 adultscore=0
+ mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2202040082
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-powerpc's syscall handlers get "unpacked" arguments instead of a
-struct pt_regs pointer. Indicate this to libbpf using
-PT_REGS_SYSCALL_REGS macro.
+Some architectures pass a pointer to struct pt_regs to syscall
+handlers, others unpack it into individual function parameters.
+Introduce a macro to describe what a particular arch does, using
+`passing pt_regs *` as a default.
 
-Reported-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/lib/bpf/bpf_tracing.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/lib/bpf/bpf_tracing.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index 317bee0fd8e4..f9d22ea0af97 100644
+index 30f0964f8c9e..08d2990c006f 100644
 --- a/tools/lib/bpf/bpf_tracing.h
 +++ b/tools/lib/bpf/bpf_tracing.h
-@@ -181,6 +181,7 @@
- #define __PT_RC_REG gpr[3]
- #define __PT_SP_REG sp
- #define __PT_IP_REG nip
-+#define PT_REGS_SYSCALL_REGS(ctx) ctx
+@@ -334,6 +334,15 @@ struct pt_regs;
  
- #elif defined(bpf_target_sparc)
+ #endif /* defined(bpf_target_defined) */
  
++/*
++ * When invoked from a syscall handler kprobe, returns a pointer to a
++ * struct pt_regs containing syscall arguments and suitable for passing to
++ * PT_REGS_PARMn_SYSCALL() and PT_REGS_PARMn_CORE_SYSCALL().
++ */
++#ifndef PT_REGS_SYSCALL_REGS
++#define PT_REGS_SYSCALL_REGS(ctx) ((struct pt_regs *)PT_REGS_PARM1(ctx))
++#endif
++
+ #ifndef ___bpf_concat
+ #define ___bpf_concat(a, b) a ## b
+ #endif
 -- 
 2.34.1
 
