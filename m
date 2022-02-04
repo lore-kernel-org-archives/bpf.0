@@ -2,119 +2,170 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C8FAC433F5
-	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 11:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 072F6C433F5
+	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 12:21:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358441AbiBDLg3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Feb 2022 06:36:29 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45848 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358414AbiBDLg3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 4 Feb 2022 06:36:29 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214B89Y7017439;
-        Fri, 4 Feb 2022 11:35:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=X1HNFXhkXdkesPv1MpBDPoT7h0htw8qKbG2WUQD1oKg=;
- b=pnvNNs6RKYBvhZeYx1N8hWwfYfug/Qy3hiCmpK8qcQP9jBc1twG3SpgxPiTGhFTh4/V0
- CAnkrgjdqqSfMkXouBFfwCUCB1Cihb/gi9Gce22m0JozeRLVJjQX+pyrXFdriPUk1XOD
- d4bc4cV6MSXEBvj/kkZcaHzws6aBBT76iPQIDdlAtF2sWK8Wj1cQYzS8f6fIpcenTfLa
- JP+DQKfLcJIAN3L87Ld0MDCzZZaNe6hQVGjCSm7diMPA9ggmRwWmwsObdD5vngisyJDG
- qku5G8KafEkqIvk5IXznxjb6zX6EGCc3njlqitaNwQ+yu7UuuQ+aMe/D8fHU6AGHUhGN ZA== 
+        id S242729AbiBDMVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Feb 2022 07:21:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44596 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S237442AbiBDMVU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 4 Feb 2022 07:21:20 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 214C2k0s010672;
+        Fri, 4 Feb 2022 12:21:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=p6xh0B50MyKktXD9mqzDssA1flJde3H7ifL0xvIukTI=;
+ b=I9dcoz94DpoBTP1bOC5txGEqpSTosVe2l70pVVBHI3tTxbyxkY/zF6H+6Eqt3PN1q8Dy
+ nWYCEf+2P5v1tZiHWHyA08K4buQ+6fVJ2Fh4Q+uJOmyNFrpSm7Py5ZwUS9Hfu27pl0wk
+ dS+z2fR9FJgIcGv8P6GnhZ9bDVGxT/baG/xiciniwsqZFwDaugV2Za6D/puOHIX3aLxf
+ LYGaVfDl8gm8pmWpqz+ln1UDmLTqXKladK++VujFnRJm6hg6kMrwACCARiWq99maRBaR
+ z5284oJObelNsS3GNOtmRTZdoUUZ6kPtJ7Yk9zH2VnwYamET6VAH5nmQ/rdMFcZL1Nft ag== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0qx93k5u-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e109evbmy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 11:35:49 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 214BZmei018740;
-        Fri, 4 Feb 2022 11:35:48 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e0qx93k5c-1
+        Fri, 04 Feb 2022 12:21:01 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 214C5pId007060;
+        Fri, 4 Feb 2022 12:21:00 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e109evbmj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 11:35:48 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 214BX4HR005579;
-        Fri, 4 Feb 2022 11:35:47 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e0r0sm4sn-1
+        Fri, 04 Feb 2022 12:21:00 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 214CDMC1018121;
+        Fri, 4 Feb 2022 12:20:59 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e0r0u4fxe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Feb 2022 11:35:46 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 214BZhLI44957992
+        Fri, 04 Feb 2022 12:20:59 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 214CKt6E47317424
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 4 Feb 2022 11:35:43 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9A6B311C052;
-        Fri,  4 Feb 2022 11:35:43 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5684511C05E;
-        Fri,  4 Feb 2022 11:35:41 +0000 (GMT)
-Received: from li-NotSettable.ibm.com.com (unknown [9.43.69.119])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  4 Feb 2022 11:35:41 +0000 (GMT)
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
+        Fri, 4 Feb 2022 12:20:55 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 948B1A4053;
+        Fri,  4 Feb 2022 12:20:55 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DDDD9A4040;
+        Fri,  4 Feb 2022 12:20:54 +0000 (GMT)
+Received: from [9.171.78.41] (unknown [9.171.78.41])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  4 Feb 2022 12:20:54 +0000 (GMT)
+Message-ID: <80a92fcc73e537b56491f8313574bea6dfa1c1c8.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next 1/3] s390/bpf: Add orig_gpr2 to user_pt_regs
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        bpf@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Luke Nelson <luke.r.nels@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Hari Bathini <hbathini@linux.ibm.com>
-Subject: [PATCH bpf-next 0/3] selftests/bpf: Fix tests on non-x86 architectures
-Date:   Fri,  4 Feb 2022 17:05:17 +0530
-Message-Id: <cover.1643973917.git.naveen.n.rao@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Date:   Fri, 04 Feb 2022 13:20:54 +0100
+In-Reply-To: <1643962017.hhlhw119x7.naveen@linux.ibm.com>
+References: <20220201234200.1836443-1-iii@linux.ibm.com>
+         <20220201234200.1836443-2-iii@linux.ibm.com> <YfrmO+pcSqrrbC3E@osiris>
+         <1643952491.peuih6eln6.naveen@linux.ibm.com>
+         <1643962017.hhlhw119x7.naveen@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 2ZegYgVT-HFumoWmtqWzR2cuxRaKLBV7
-X-Proofpoint-ORIG-GUID: 4GCwTyPK2n-Vq5W-DSPCMBNsBKkTk4U8
+X-Proofpoint-GUID: gp5d65zmly870au4PPLZoUcU2YOPdAIv
+X-Proofpoint-ORIG-GUID: 9RE9Ze-a9B3DQCsmYNNC6_ng5tGI4W04
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-04_04,2022-02-03_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 phishscore=0 malwarescore=0
- impostorscore=0 spamscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202040063
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=972 clxscore=1011
+ phishscore=0 impostorscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202040067
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The first patch fixes an issue with bpf_syscall_macro test to work 
-properly on architectures that don't have a syscall wrapper. The second 
-patch updates SYS_PREFIX for architectures without a syscall wrapper.
-The final patch fixes some of the tests to use correct syscall entry 
-names on non-x86 architectures. 
+On Fri, 2022-02-04 at 08:21 +0000, Naveen N. Rao wrote:
+> Naveen N. Rao wrote:
+> > Hi Heiko,
+> > 
+> > Heiko Carstens wrote:
+> > > On Wed, Feb 02, 2022 at 12:41:58AM +0100, Ilya Leoshkevich wrote:
+> > > > user_pt_regs is used by eBPF in order to access userspace
+> > > > registers -
+> > > > see commit 466698e654e8 ("s390/bpf: correct broken uapi for
+> > > > BPF_PROG_TYPE_PERF_EVENT program type"). In order to access the
+> > > > first
+> > > > syscall argument from eBPF programs, we need to export
+> > > > orig_gpr2.
+> > > > 
+> > > > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> > > > ---
+> > > >  arch/s390/include/asm/ptrace.h      | 2 +-
+> > > >  arch/s390/include/uapi/asm/ptrace.h | 1 +
+> > > >  2 files changed, 2 insertions(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/arch/s390/include/asm/ptrace.h
+> > > > b/arch/s390/include/asm/ptrace.h
+> > > > index 4ffa8e7f0ed3..c8698e643904 100644
+> > > > --- a/arch/s390/include/asm/ptrace.h
+> > > > +++ b/arch/s390/include/asm/ptrace.h
+> > > > @@ -83,9 +83,9 @@ struct pt_regs {
+> > > >                         unsigned long args[1];
+> > > >                         psw_t psw;
+> > > >                         unsigned long gprs[NUM_GPRS];
+> > > > +                       unsigned long orig_gpr2;
+> > > >                 };
+> > > >         };
+> > > > -       unsigned long orig_gpr2;
+> > > >         union {
+> > > >                 struct {
+> > > >                         unsigned int int_code;
+> > > > diff --git a/arch/s390/include/uapi/asm/ptrace.h
+> > > > b/arch/s390/include/uapi/asm/ptrace.h
+> > > > index ad64d673b5e6..b3dec603f507 100644
+> > > > --- a/arch/s390/include/uapi/asm/ptrace.h
+> > > > +++ b/arch/s390/include/uapi/asm/ptrace.h
+> > > > @@ -295,6 +295,7 @@ typedef struct {
+> > > >         unsigned long args[1];
+> > > >         psw_t psw;
+> > > >         unsigned long gprs[NUM_GPRS];
+> > > > +       unsigned long orig_gpr2;
+> > > >  } user_pt_regs;
+> > > 
+> > > Isn't this broken on nearly all architectures? I just checked
+> > > powerpc,
+> > > arm64, and riscv. While powerpc seems to mirror pt_regs as
+> > > user_pt_regs,
+> > > and therefore exports orig_gpr3, the bpf macros still seem to
+> > > access the
+> > > wrong location to access the first syscall parameter(?).
+> > 
+> > On powerpc, gpr[3] continues to be valid on syscall entry (so this
+> > test 
+> > passes on powerpc), though orig_gpr3 will remain valid throughout.
+> 
+> Hmm.. we can't use orig_gpr3 since we don't use a syscall wrapper.
+> All 
+> system calls just receive the parameters directly.
+> 
+> - Naveen
 
-- Naveen
-
-
-Naveen N. Rao (3):
-  selftests/bpf: Use correct pt_regs on architectures without syscall
-    wrapper
-  selftests/bpf: Use "__se_" prefix on architectures without syscall
-    wrapper
-  selftests/bpf: Fix tests to use arch-dependent syscall entry points
-
- tools/testing/selftests/bpf/progs/bloom_filter_bench.c | 7 ++++---
- tools/testing/selftests/bpf/progs/bloom_filter_map.c   | 5 +++--
- tools/testing/selftests/bpf/progs/bpf_loop.c           | 9 +++++----
- tools/testing/selftests/bpf/progs/bpf_loop_bench.c     | 3 ++-
- tools/testing/selftests/bpf/progs/bpf_misc.h           | 2 +-
- tools/testing/selftests/bpf/progs/bpf_syscall_macro.c  | 4 ++++
- tools/testing/selftests/bpf/progs/fexit_sleep.c        | 9 +++++----
- tools/testing/selftests/bpf/progs/perfbuf_bench.c      | 3 ++-
- tools/testing/selftests/bpf/progs/ringbuf_bench.c      | 3 ++-
- tools/testing/selftests/bpf/progs/test_ringbuf.c       | 3 ++-
- tools/testing/selftests/bpf/progs/trace_printk.c       | 3 ++-
- tools/testing/selftests/bpf/progs/trace_vprintk.c      | 3 ++-
- tools/testing/selftests/bpf/progs/trigger_bench.c      | 9 +++++----
- 13 files changed, 39 insertions(+), 24 deletions(-)
-
-
-base-commit: 227a0713b319e7a8605312dee1c97c97a719a9fc
--- 
-2.34.1
-
+Right, I ran into this yesterday as well.
+I solved it in v2
+(https://lore.kernel.org/bpf/20220204041955.1958263-1-iii@linux.ibm.com/)
+by introducing a macro that hides whether or not an arch uses a syscall
+wrapper.
