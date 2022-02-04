@@ -2,89 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17AFCC433F5
-	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 22:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B09F0C433EF
+	for <bpf@archiver.kernel.org>; Fri,  4 Feb 2022 23:04:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbiBDW7j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Feb 2022 17:59:39 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44814 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiBDW7j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Feb 2022 17:59:39 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: usama.anjum)
-        with ESMTPSA id 8B0DF1F4705B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644015578;
-        bh=J0wycOSxzaDqvcAyKwCYXObRCBOWXbIMVDr84hTsOEk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=goLaU8BCbkBFs6Zt1lY7YiPBKr8TOOMHjPbzSaGP7IIBlhK2nTiWOcpawtEo959Zh
-         rbjvKkXvuM1aHIFtK/cxvWDMSPCl+e34l10SRYEboOjAGQtiGKhzTQEgIp4pMKR3Bz
-         5qMdKR8UsHYMXZMTnhDEOYvYkUirgctWi9uLn2eNZfvcE1E8QdiFqUTCehzP30jrUH
-         PC4VvH/c0uy3PDH/R2FFij+WIvz5XSh6i5/7byNWOKOUdDq3/0UbTm8Jweme242wno
-         iVp/PyA3wD3vvoCbc9atJwuKkgCVpjkMaXuUEsXDLw+hyWpRk+xfR4tvChaxd1elFH
-         wAm6ZlifjslMw==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S1377841AbiBDXEe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Feb 2022 18:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376312AbiBDXEd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Feb 2022 18:04:33 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9C5DF2D306;
+        Fri,  4 Feb 2022 15:04:32 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id 9so9308844iou.2;
+        Fri, 04 Feb 2022 15:04:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1pu0d3Yf+q8xwC8OB6WG8Zu+IuarbmMd83H8xXGaDAA=;
+        b=AvaK0n/Yfmy2XVA1XWg5y+qZ03Q0D0UV3wjhdcEk41jPkroj3o+yldgJx3fID0JWH4
+         YwzM/hzDJoCQ3OeVWY8RmqN9w5LJPWz9Dp4INgJuPoGzGMXIM/mQPhvFzaLHCdxmvV5p
+         Nita63CWaHMZpp8mxdWpQlWrZck438+iTSueDYwh4fejwjOG6fr+COO5kTpalRo/gjUP
+         L2Tqlg1K4jkZyLuHfW0M70Rmt6XPK/uj+jksaGWtuagti9DV+M6ryf6sD8wNm6BK2km6
+         KukznX/0wf5SFWNyPvxslzMtsZZqq5xVaLT7JSWW7vHBKsY4QwV/JMfdmZGap8O8NH1X
+         9+nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1pu0d3Yf+q8xwC8OB6WG8Zu+IuarbmMd83H8xXGaDAA=;
+        b=ypmUhAOqUQMCGVdwyePXfoMVkYkbya7cCj9gKHDx3jAF/IZf9VksTqYnZFMo0ds9CX
+         qByv4PYE1ikywK+sSCuaT7iIn6le79G1mBa5FfjYeFECBaZszYZwxHgDSAN3HJSj6/4u
+         LgmnunbjqWYBxl0WR4lxvhBr7ho4azVCpTq019tA1FWqt9wmAke8Sb2UpPSf376tx/b8
+         K3yTetIZAWrbZwRNq/HN/hOfd7lPRnhn+SkrAnw5tQ0a8PsHHIVmQR9FAplG2CDHfrJx
+         6vV21QSZ0rbTrehU8vz/n/0ngmIzT/7APcIIiCEX5SqKqJatBXfWAZoRpvPSEXvjzHnH
+         KlyQ==
+X-Gm-Message-State: AOAM533PVYItITtC4alilCD9RlU9tXbwGE/o8jJHAt+x39DAcG4M+Gsr
+        6q9egGGxhQ+4EAsfYyRJEL+J++INNNqcigyNqS8=
+X-Google-Smtp-Source: ABdhPJxGn6X0tnh1ZZV2A823OiJ7fsZdLht1/AEVhJFQddEJRHLe30NZvNA9qCihSXQalGEmXF/wHrx/+33+QHD6cIs=
+X-Received: by 2002:a02:2422:: with SMTP id f34mr626422jaa.237.1644015872355;
+ Fri, 04 Feb 2022 15:04:32 -0800 (PST)
+MIME-Version: 1.0
+References: <20220204225823.339548-1-jolsa@kernel.org>
+In-Reply-To: <20220204225823.339548-1-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 4 Feb 2022 15:04:21 -0800
+Message-ID: <CAEf4BzY66WPKQbDe74AKZ6nFtZjq5e+G3Ji2egcVytB9R6_sGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] libbpf: Add names for auxiliary maps
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH] selftests: Fix build when $(O) points to a relative path
-Date:   Sat,  5 Feb 2022 03:58:17 +0500
-Message-Id: <20220204225817.3918648-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        KP Singh <kpsingh@chromium.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Pirko <jiri@mellanox.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Build of bpf and tc-testing selftests fails when the relative path of
-the build directory is specified.
+On Fri, Feb 4, 2022 at 2:58 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> Adding names for maps that bpftool uses for various detections.
+> These maps can appear in final map show output (due to deferred
+> removal in kernel) so some tests (like test_offload.py) needs
+> to filter them out.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/lib/bpf/libbpf.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 904cdf83002b..38294ce935d6 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -4412,7 +4412,7 @@ static int probe_kern_global_data(void)
+>         };
+>         int ret, map, insn_cnt = ARRAY_SIZE(insns);
+>
+> -       map = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, sizeof(int), 32, 1, NULL);
+> +       map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "global_data", sizeof(int), 32, 1, NULL);
 
-make -C tools/testing/selftests O=build0
-make[1]: Entering directory '/linux_mainline/tools/testing/selftests/bpf'
-../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
-make[1]: Entering directory '/linux_mainline/tools/testing/selftests/tc-testing'
-../../../scripts/Makefile.include:4: *** O=build0 does not exist.  Stop.
+some old kernel versions don't support map names, so you can't just
+blindly specify them and log error
 
-The fix is same as mentioned in commit 150a27328b68 ("bpf, preload: Fix
-build when $(O) points to a relative path").
+I'd rather fix test_offload.py instead of "fixing" libbpf.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 4eda7c7c15694..aa0faf132c35a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -178,6 +178,7 @@ all: khdr
- 		BUILD_TARGET=$$BUILD/$$TARGET;			\
- 		mkdir $$BUILD_TARGET  -p;			\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
-+				O=$(abs_objtree)		\
- 				$(if $(FORCE_TARGETS),|| exit);	\
- 		ret=$$((ret * $$?));				\
- 	done; exit $$ret;
-@@ -185,7 +186,8 @@ all: khdr
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests \
-+				O=$(abs_objtree);		    \
- 	done;
- 
- hotplug:
--- 
-2.30.2
-
+>         if (map < 0) {
+>                 ret = -errno;
+>                 cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
+> @@ -4545,7 +4545,7 @@ static int probe_kern_array_mmap(void)
+>         LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_MMAPABLE);
+>         int fd;
+>
+> -       fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, sizeof(int), sizeof(int), 1, &opts);
+> +       fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "array_mmap", sizeof(int), sizeof(int), 1, &opts);
+>         return probe_fd(fd);
+>  }
+>
+> @@ -4592,7 +4592,7 @@ static int probe_prog_bind_map(void)
+>         };
+>         int ret, map, prog, insn_cnt = ARRAY_SIZE(insns);
+>
+> -       map = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, sizeof(int), 32, 1, NULL);
+> +       map = bpf_map_create(BPF_MAP_TYPE_ARRAY, "bind_map_detect", sizeof(int), 32, 1, NULL);
+>         if (map < 0) {
+>                 ret = -errno;
+>                 cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
+> --
+> 2.34.1
+>
