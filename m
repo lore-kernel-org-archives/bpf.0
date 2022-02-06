@@ -2,127 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AEE9C43219
-	for <bpf@archiver.kernel.org>; Sun,  6 Feb 2022 04:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90004C433EF
+	for <bpf@archiver.kernel.org>; Sun,  6 Feb 2022 04:31:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiBFE3Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 5 Feb 2022 23:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S229452AbiBFEbl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 5 Feb 2022 23:31:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiBFE3X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 5 Feb 2022 23:29:23 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AC0C06173B;
-        Sat,  5 Feb 2022 20:29:21 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id z5so8613460plg.8;
-        Sat, 05 Feb 2022 20:29:21 -0800 (PST)
+        with ESMTP id S229640AbiBFEbj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 5 Feb 2022 23:31:39 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C77C0612A4;
+        Sat,  5 Feb 2022 20:31:39 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id g15-20020a17090a67cf00b001b7d5b6bedaso10048777pjm.4;
+        Sat, 05 Feb 2022 20:31:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jdhw7mSR7V7cNcaM0UCeu+GU2bmiq3T19a9N118Zppg=;
-        b=Cd+ijFk/74tk8ZNujs8fsDYd1sTXI5V/wGkDR0Fi92TrXWNha4DUr2B62eZNiFm4lw
-         lornrc25uXGBV8m9I7uqUKok5hGpfLrnjmPt3u1ZAFfeKVXtpqOkOCJO/EWgx7vrWJdC
-         2WF5ogO26iW7WTGKMGpEJCJHESEVdlI/DG5JWyEXLoLBDVvyvDEwTUW7/RkDop7INl44
-         LckVO0k9clUROBR5+IgXhfP2UEB3gr23nWPfxBaoldKDCj015MM60H/CEiKLVTh2EH24
-         nTFIlyztZGJ2gDziCu6w5Q09K/7k9n5eCid3hIs94RwI4c7UFNw/xvjtTykZ7uImKVAl
-         KBow==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vC14xuAwLUgO0ZY1RnnsKKL6V5krh89PI7ayQM1Ks3s=;
+        b=okezRA0Grqz/tzghW4Wy1w/9fqEZi2qYKrGWDc6NzvQky0EW7kqlFKvBkgcftNAa7k
+         DX5FiOvqMknoEtuKPub0bwYxp63bqa7Aam1lvNRMQOYyf247k34Ylres9c2QxgovL8U6
+         xoWX4111jzWJT1Zeim0ytqxXVdJqUyeno+yOnr2ygBJSEr22dicX4Sh+c4rkdQhPKig9
+         +3f7zJZXvQyQFU0oJod44bOrNWSEN4iV5IwQC/KTiEfvwytZa+z3/+onIZmX25+MJzK9
+         UYftrtGdmaGMy/qemm+/sWefF9Lk+F1R+n4a43vk3slPIhGMoQ4lLaxNIOzICOxBTOAE
+         HXGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jdhw7mSR7V7cNcaM0UCeu+GU2bmiq3T19a9N118Zppg=;
-        b=dixe0EsVrjLPWcomXwFVfdeclgc46Ei/g3+zP2aTNNxQJxzcnap9dqSDhfLW5RqSEl
-         kgk4Qt3Yssu6JSFWkS+b+Zi8/BMs2/NBR/zzJCzFTFx6zIrLWh0FlNfdBxlYg00j6DU5
-         KHBMiaiD23ppilF52kaR5xq6o0DwohKPxJbDAmn9lVeAUj1G0CfMpcPOIV3Uvpxta83h
-         /Mcsbj1MvASdATbPZiwFI5C6fFwe/xizfqeOl1svodQgfDKqrS5yzNgH/ZnrAMwHTAWF
-         Y+5CFMZcXXz4VaMiqtUHafhbYIfxY5M+muOGo1esFARZjezL5+mcllapVLLY1jg+DpDd
-         5YPQ==
-X-Gm-Message-State: AOAM5303UEZwtxnqrDMw3kMP6gG6avflh7MzxSFlPxMo+5zoFxq1MnZ2
-        GTPG6czZXc/C/FRjGe8wPeeyVOsffDzIMlo6OLqdS8Xe
-X-Google-Smtp-Source: ABdhPJxSbBYDlrcxjq4UdQFxjJ6+qrQz4UnDrLrww5Fn3AkoCYVzGO+fdu52p+w79IDqfhZo1gZK2VPPm5RnUpN047Y=
-X-Received: by 2002:a17:90b:4ac6:: with SMTP id mh6mr7409716pjb.138.1644121761313;
- Sat, 05 Feb 2022 20:29:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
- <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
- <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
- <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com> <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
-In-Reply-To: <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 5 Feb 2022 20:29:10 -0800
-Message-ID: <CAADnVQ+-29CS7nSXghKMgZjKte84L0nRDegUE0ObFm3d7E=eWw@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
- cgroup_view link
-To:     Hao Luo <haoluo@google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vC14xuAwLUgO0ZY1RnnsKKL6V5krh89PI7ayQM1Ks3s=;
+        b=10+PdTE6YIzkgTSZS1kTndoZ7h0dhBOluQ1m/2w0uCSxEfcSOyBJVybo4ty5L7vt2m
+         6zFu89gpN3QCaFvWxytAP+3PTPrcSuUaV7nCOoCoCgRB2/Zq/gBDhsG0jvNumxlbsfBW
+         bl+vPg/tyIpRadk3laO6B8XgNdxJNsZU630Bg1w9+/yIDbyHh2UaHe/XfbzrH9gJfRnz
+         CiJivkD3WIX+YkZFLa4uMB/C//7AxS1QGirhjeWb4q8norJ2iirOWtRgNCjROXFp/Je8
+         F8DJm0cuDLM1JWocM1azRFm2OUvfqSQmu0deVh1Crxi5RVPPnb7IUcwTF9YcbnV7VXbi
+         8MFA==
+X-Gm-Message-State: AOAM530zPX2SEWEQaEN2D26ZYdFB9vktGbbPvY6OQnwwU+1BwyJ7CliR
+        K2uhR4VtAW4Etz3sNe2M3Ec=
+X-Google-Smtp-Source: ABdhPJxHemv7/4d2TTNW99w74pq5dNA87ejaG5CQ+pJwq+F1Tg/hbMbjVv+k9a2PdXXdmmgKdlikog==
+X-Received: by 2002:a17:90a:c095:: with SMTP id o21mr8327250pjs.117.1644121898710;
+        Sat, 05 Feb 2022 20:31:38 -0800 (PST)
+Received: from localhost (61-224-163-139.dynamic-ip.hinet.net. [61.224.163.139])
+        by smtp.gmail.com with ESMTPSA id y8sm5069938pgs.31.2022.02.05.20.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 20:31:38 -0800 (PST)
+From:   Hou Tao <hotforest@gmail.com>
+X-Google-Original-From: Hou Tao <houtao1@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Joe Burton <jevburton.kernel@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, houtao1@huawei.com
+Subject: [PATCH bpf-next v4 2/2] selftests/bpf: check whether s32 is sufficient for kfunc offset
+Date:   Sun,  6 Feb 2022 12:31:07 +0800
+Message-Id: <20220206043107.18549-3-houtao1@huawei.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220206043107.18549-1-houtao1@huawei.com>
+References: <20220206043107.18549-1-houtao1@huawei.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > > In our use case, we can't ask the users who create cgroups to do the
-> > > pinning. Pinning requires root privilege. In our use case, we have
-> > > non-root users who can create cgroup directories and still want to
-> > > read bpf stats. They can't do pinning by themselves. This is why
-> > > inheritance is a requirement for us. With inheritance, they only need
-> > > to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
-> > > operation is required. Patch 1-4 are needed to implement inheritance.
-> > >
-> > > It's also not a good idea in our use case to add a userspace
-> > > privileged process to monitor cgroupfs operations and perform the
-> > > pinning. It's more complex and has a higher maintenance cost and
-> > > runtime overhead, compared to the solution of asking whoever makes
-> > > cgroups to mkdir in bpffs. The other problem is: if there are nodes in
-> > > the data center that don't have the userspace process deployed, the
-> > > stats will be unavailable, which is a no-no for some of our users.
-> >
-> > The commit log says that there will be a daemon that does that
-> > monitoring of cgroupfs. And that daemon needs to mkdir
-> > directories in bpffs when a new cgroup is created, no?
-> > The kernel is only doing inheritance of bpf progs into
-> > new dirs. I think that daemon can pin as well.
-> >
-> > The cgroup creation is typically managed by an agent like systemd.
-> > Sounds like you have your own agent that creates cgroups?
-> > If so it has to be privileged and it can mkdir in bpffs and pin too ?
->
-> Ah, yes, we have our own daemon to manage cgroups. That daemon creates
-> the top-level cgroup for each job to run inside. However, the job can
-> create its own cgroups inside the top-level cgroup, for fine grained
-> resource control. This doesn't go through the daemon. The job-created
-> cgroups don't have the pinned objects and this is a no-no for our
-> users.
+In add_kfunc_call(), bpf_kfunc_desc->imm with type s32 is used to
+represent the offset of called kfunc from __bpf_call_base, so
+add a test to ensure that the offset will not be overflowed.
 
-We can whitelist certain tracepoints to be sleepable and extend
-tp_btf prog type to include everything from prog_type_syscall.
-Such prog would attach to cgroup_mkdir and cgroup_release
-and would call bpf_sys_bpf() helper to pin progs in new bpffs dirs.
-We can allow prog_type_syscall to do mkdir in bpffs as well.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ .../selftests/bpf/prog_tests/ksyms_module.c   | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-This feature could be useful for similar monitoring/introspection tasks.
-We can write a program that would monitor bpf prog load/unload
-and would pin an iterator prog that would show debug info about a prog.
-Like cat /sys/fs/bpf/progs.debug shows a list of loaded progs.
-With this feature we can implement:
-ls /sys/fs/bpf/all_progs.debug/
-and each loaded prog would have a corresponding file.
-The file name would be a program name, for example.
-cat /sys/fs/bpf/all_progs.debug/my_prog
-would pretty print info about 'my_prog' bpf program.
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_module.c b/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
+index a1ebac70ec29..8055fbbf720b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
+@@ -3,9 +3,49 @@
+ 
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include <trace_helpers.h>
+ #include "test_ksyms_module.lskel.h"
+ #include "test_ksyms_module.skel.h"
+ 
++/*
++ * Check whether or not s32 in bpf_kfunc_desc is sufficient
++ * to represent the offset between bpf_testmod_test_mod_kfunc
++ * and __bpf_call_base.
++ */
++static void test_ksyms_module_valid_offset(void)
++{
++	struct test_ksyms_module *skel;
++	unsigned long long kfunc_addr;
++	unsigned long long base_addr;
++	long long actual_offset;
++	int used_offset;
++	int err;
++
++	if (!env.has_testmod) {
++		test__skip();
++		return;
++	}
++
++	/* Ensure kfunc call is supported */
++	skel = test_ksyms_module__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_ksyms_module__open"))
++		return;
++
++	err = kallsyms_find("bpf_testmod_test_mod_kfunc", &kfunc_addr);
++	if (!ASSERT_OK(err, "find kfunc addr"))
++		goto cleanup;
++
++	err = kallsyms_find("__bpf_call_base", &base_addr);
++	if (!ASSERT_OK(err, "find base addr"))
++		goto cleanup;
++
++	used_offset = kfunc_addr - base_addr;
++	actual_offset = kfunc_addr - base_addr;
++	ASSERT_EQ((long long)used_offset, actual_offset, "kfunc offset overflowed");
++cleanup:
++	test_ksyms_module__destroy(skel);
++}
++
+ static void test_ksyms_module_lskel(void)
+ {
+ 	struct test_ksyms_module_lskel *skel;
+@@ -62,6 +102,8 @@ static void test_ksyms_module_libbpf(void)
+ 
+ void test_ksyms_module(void)
+ {
++	if (test__start_subtest("valid_offset"))
++		test_ksyms_module_valid_offset();
+ 	if (test__start_subtest("lskel"))
+ 		test_ksyms_module_lskel();
+ 	if (test__start_subtest("libbpf"))
+-- 
+2.35.1
 
-This way the kernfs/cgroupfs specific logic from patches 1-4
-will not be necessary.
-
-wdyt?
