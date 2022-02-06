@@ -2,108 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E0CEC433F5
-	for <bpf@archiver.kernel.org>; Sat,  5 Feb 2022 20:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07B1AC433EF
+	for <bpf@archiver.kernel.org>; Sun,  6 Feb 2022 04:31:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbiBEUqw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 5 Feb 2022 15:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S229584AbiBFEbT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 5 Feb 2022 23:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbiBEUqw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 5 Feb 2022 15:46:52 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12715C061348
-        for <bpf@vger.kernel.org>; Sat,  5 Feb 2022 12:46:51 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id w7so11874102ioj.5
-        for <bpf@vger.kernel.org>; Sat, 05 Feb 2022 12:46:51 -0800 (PST)
+        with ESMTP id S229452AbiBFEbS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 5 Feb 2022 23:31:18 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94726C06173B;
+        Sat,  5 Feb 2022 20:31:18 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id on2so1216516pjb.4;
+        Sat, 05 Feb 2022 20:31:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M9N2jXLn+S5MkUBFgcBd2oA+wekY4hWmrLo2DP2fH+c=;
-        b=GeMbgvrKgWeabysnDujwtnCIADOwlMbusYGIU4uhqyuy1Ua+r7Jp1iS815ClC3D/MD
-         RZVoEmUvQhOLDv6qvrpZv8leCXYz/cFKuiUsqMB3zQ5H9aLOHjvAeXkSQvwtMWTCqhbz
-         48igrE2psVBNlR7kOww29Tt4w1yVi1D3UkFi389K6urnD3cHp1/HCnESRjXs+i7YaoP3
-         BdWZUaR4upRmLKpxMlqFk3tl82qAPvErB28tpGvmVP2kGpy+0E0esKkl/QXaaJK/Hcmw
-         FcOL1PK0XCff1mpZ16eJ/CVQ2PIC/kZTSILet2QF3o3KBJaAF/o9jm7TEHCSX158f+a3
-         w/dw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RUijhOjd1nWaq8bBd+e7fKkRlf3hDD9ZgGUieQmhTZU=;
+        b=pt4/pOwtjeXG0CPKhFPxYdGyVQLwfXNl9IXVzCcLMJDGGNtDEWyOix9CkXWiVx+KO7
+         vSbexJBrgH7pjJPuwC3YVdSAKMtGDyUjaaZsXwM1NoN0JEPWUbHi2zdkEtzu6OBqidG7
+         0529B54xARy9WsceWxyVfrR2JKL2EtjlZAxz5at47knBErldO7g7dx4otZJ8YQTApv4c
+         jrMOlN8YChzSjj5sQatsVTmlf7W+Obch1LckrBCwLrgpR7UScJ7aywscPjTFNSUcbsQy
+         btbd9SJ5ox4lWT0BJ+yRNQUr6q+1m+3aiRd07eOW/qtrOHj+zzvx3TwVw9sye0YqOe/T
+         ixsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M9N2jXLn+S5MkUBFgcBd2oA+wekY4hWmrLo2DP2fH+c=;
-        b=nLiT55Kuu2vB/Cegj4Eczj6OkqDPXjEm+g7yr1uu70CroMALbbpv5yEMki42+EgfuY
-         y7YtO89Bx9Gs2eq4xRNQmlXsUPE5e56jzwu+kJC+dEPrTPTmmIwTan7CiXt6YMTeBb3O
-         LZsbyrZf0A8pgz6LEF8YRmOIpPENC3hUvWLEu2XtnsfK9ZahCUoqObwtTgWPPOrEhRgY
-         rg3FowDd0OIjExLKXdjYzVeGoQi9PAJ92Iu5j68DvuYYEZAHxBNXkDOpdS3t4hhDsjKY
-         DdFmf6pTIMvvxvWJ1hDLbyUHGQcUmwC2a9326CygWt98a0w3D1Ic4eiuzpy2FgFaJERj
-         T4BQ==
-X-Gm-Message-State: AOAM531yDMjTqg9X5lzIKwHjJTYNNGJdbSrKHRZ2m+xa9Rw6hHosH0/k
-        nyNnNDD+I8itzXU6UzGUdsgrfkg5EAXjGTfslvc=
-X-Google-Smtp-Source: ABdhPJyQxhkC3kf0c3W+tGFvv/4T0Zth4VpBL0JMstHwyYs94Sm2V8VtO0vFGZdR7TGgqRmAaL0//kITPPeGun4beYU=
-X-Received: by 2002:a5e:a806:: with SMTP id c6mr2304130ioa.112.1644094010311;
- Sat, 05 Feb 2022 12:46:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RUijhOjd1nWaq8bBd+e7fKkRlf3hDD9ZgGUieQmhTZU=;
+        b=JnfFWPxMhNka8e0z4LqfQH1k03JUp49cz3X3gD5CRCKbYUPrkP63fqycClynO3AkOB
+         lxn1TqZ284TEd8OzmJzvPHAOx4Q/cb9g5tf0Q6ilNb3GNL4Np6kYEYygWNXcvKPBfDun
+         /vKSLD7G5d10R60hUYorcWLzTu/WqyCtxZUkhQKVOebgRi73+0RRjLutfqwiV+qMNobO
+         dXk9LpLzUbEfWMRRWVOYAs2gh/niCRzl3bEHIhI78Ai7c0HZIz0Tzz/xKRxevDWPiL3F
+         Kma+TT/o+Ls+2722CcRtbp/YriT8/5mKwNA7aSuYdOx+bwU0wS1yGI+fFK8lsk7cv/My
+         EbSQ==
+X-Gm-Message-State: AOAM531eQaJrz1XscYMi+4q7eGzD2TZnC/NnykPVia3G5DxOszfc+Gcn
+        bQyzETB8nW+NtRebx1Ln2w0=
+X-Google-Smtp-Source: ABdhPJygy475aNP1rsPQmWj5YvFmJGACNExCwpOYKIIQgl7KYaHVyGpIhT5pKbD0Eoi7cpj8K1NW6A==
+X-Received: by 2002:a17:90a:6a0a:: with SMTP id t10mr7179411pjj.227.1644121877128;
+        Sat, 05 Feb 2022 20:31:17 -0800 (PST)
+Received: from localhost (61-224-163-139.dynamic-ip.hinet.net. [61.224.163.139])
+        by smtp.gmail.com with ESMTPSA id mr7sm4134871pjb.32.2022.02.05.20.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Feb 2022 20:31:16 -0800 (PST)
+From:   Hou Tao <hotforest@gmail.com>
+X-Google-Original-From: Hou Tao <houtao1@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, houtao1@huawei.com
+Subject: [PATCH bpf-next v4 0/2] selftests: add test for kfunc call
+Date:   Sun,  6 Feb 2022 12:31:05 +0800
+Message-Id: <20220206043107.18549-1-houtao1@huawei.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <cover.1643973917.git.naveen.n.rao@linux.vnet.ibm.com>
-In-Reply-To: <cover.1643973917.git.naveen.n.rao@linux.vnet.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sat, 5 Feb 2022 12:46:39 -0800
-Message-ID: <CAEf4BzYAK3g1ELm7UeTDMJWquX2CUS3PJnzRx4i-LLBTVKH2mA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] selftests/bpf: Fix tests on non-x86 architectures
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Hari Bathini <hbathini@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 3:36 AM Naveen N. Rao
-<naveen.n.rao@linux.vnet.ibm.com> wrote:
->
-> The first patch fixes an issue with bpf_syscall_macro test to work
-> properly on architectures that don't have a syscall wrapper. The second
-> patch updates SYS_PREFIX for architectures without a syscall wrapper.
-> The final patch fixes some of the tests to use correct syscall entry
-> names on non-x86 architectures.
->
-> - Naveen
->
->
-> Naveen N. Rao (3):
->   selftests/bpf: Use correct pt_regs on architectures without syscall
->     wrapper
->   selftests/bpf: Use "__se_" prefix on architectures without syscall
->     wrapper
->   selftests/bpf: Fix tests to use arch-dependent syscall entry points
->
+Hi,
 
-Ilya's patch set made the first patch unnecessary, but I've applied
-2nd and 3rd to bpf-next, thanks!
+The patchset add a test for kfunc call to ensure s32 is sufficient for
+kfunc offset. Patch #1 unexports the subtests in ksyms_module.c to fix
+the confusion in test output and patch #2 adds a test in ksyms_module.c
+to ensure s32 is sufficient for kfunc offset.
 
+Change Log:
+v4:
+ * remove merged patch "bpf, arm64: enable kfunc call"
+ * rebased on bpf-next
 
->  tools/testing/selftests/bpf/progs/bloom_filter_bench.c | 7 ++++---
->  tools/testing/selftests/bpf/progs/bloom_filter_map.c   | 5 +++--
->  tools/testing/selftests/bpf/progs/bpf_loop.c           | 9 +++++----
->  tools/testing/selftests/bpf/progs/bpf_loop_bench.c     | 3 ++-
->  tools/testing/selftests/bpf/progs/bpf_misc.h           | 2 +-
->  tools/testing/selftests/bpf/progs/bpf_syscall_macro.c  | 4 ++++
->  tools/testing/selftests/bpf/progs/fexit_sleep.c        | 9 +++++----
->  tools/testing/selftests/bpf/progs/perfbuf_bench.c      | 3 ++-
->  tools/testing/selftests/bpf/progs/ringbuf_bench.c      | 3 ++-
->  tools/testing/selftests/bpf/progs/test_ringbuf.c       | 3 ++-
->  tools/testing/selftests/bpf/progs/trace_printk.c       | 3 ++-
->  tools/testing/selftests/bpf/progs/trace_vprintk.c      | 3 ++-
->  tools/testing/selftests/bpf/progs/trigger_bench.c      | 9 +++++----
->  13 files changed, 39 insertions(+), 24 deletions(-)
->
->
-> base-commit: 227a0713b319e7a8605312dee1c97c97a719a9fc
-> --
-> 2.34.1
->
+v3: https://lore.kernel.org/bpf/20220130092917.14544-1-hotforest@gmail.com
+  * patch #2: newly-addded to unexport unnecessary subtests
+  * patch #3: use kallsyms_find() instead of reimplementing it.
+  * patch #3: ensure kfunc call is supported before checking
+              whether s32 will be overflowed or not.
+
+v2: https://lore.kernel.org/bpf/20220127071532.384888-1-houtao1@huawei.com
+  * add a test to check whether imm will be overflowed for kfunc call
+
+v1: https://lore.kernel.org/bpf/20220119144942.305568-1-houtao1@huawei.com
+
+Hou Tao (2):
+  selftests/bpf: do not export subtest as standalone test
+  selftests/bpf: check whether s32 is sufficient for kfunc offset
+
+ .../selftests/bpf/prog_tests/ksyms_module.c   | 46 ++++++++++++++++++-
+ .../bpf/prog_tests/xdp_adjust_frags.c         |  6 ---
+ .../bpf/prog_tests/xdp_adjust_tail.c          |  4 +-
+ .../bpf/prog_tests/xdp_cpumap_attach.c        |  4 +-
+ .../bpf/prog_tests/xdp_devmap_attach.c        |  2 +-
+ 5 files changed, 49 insertions(+), 13 deletions(-)
+
+-- 
+2.35.1
+
