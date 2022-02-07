@@ -2,58 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42F53C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60644C4332F
 	for <bpf@archiver.kernel.org>; Mon,  7 Feb 2022 14:59:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358623AbiBGO5E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 09:57:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S1348039AbiBGO5C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 09:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442509AbiBGOwS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 09:52:18 -0500
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDCAC0401C1
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 06:52:16 -0800 (PST)
-Received: by mail-vk1-xa2e.google.com with SMTP id y192so7940232vkc.8
-        for <bpf@vger.kernel.org>; Mon, 07 Feb 2022 06:52:16 -0800 (PST)
+        with ESMTP id S1442520AbiBGOwY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 09:52:24 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4928C0401C2
+        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 06:52:23 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id g18so13049773uak.5
+        for <bpf@vger.kernel.org>; Mon, 07 Feb 2022 06:52:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xjCnOU0sLvWX+vekLxUSA4g/zhKs1G47jm1FsaM9SkY=;
-        b=avISx7AaE3dddYOA5hk9MWO/39e1yUX4nZZIuwMN/T+U2M6SC+lHp5EPEbzsvVdlsX
-         uX/w9sHAauQduMNXqxpSIPTEIrDaqcx1/pJ/AUapN1wVuwWdW4ZeulQLamNUZbqvACtN
-         td3rUUqWcai8mQ1ODsY/T23oHO6djLAsQqg0w=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Mtx2YBw2ZJ4lWpSF8NYCcRXkDCZX1esZEmumdIEB7tc=;
+        b=U9paWWLNk2naINhsgRGAFDCSxBYYkUqv8/GYR8vpcrB6Pp9fyJC1JBpm3S5vT4qBpf
+         op5bIGf2ej/q6x+AFkX/k6bpdkpG97moFbU8uwTTdRNN+jJqFBGjzbdi61KH/0BrZR/R
+         8ZfQCc9wP8nl5sV1yXdgl/5f4qQjC0+Lnz5fo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xjCnOU0sLvWX+vekLxUSA4g/zhKs1G47jm1FsaM9SkY=;
-        b=xO0OggYOD/IB9WYfvZKWKHYjd2K6Am8tBxgDfN7lE2oWi1hcfjJ/WCVrvaku1xLKrr
-         fs6uPLcqo19akSnzV7LnfAxxb4Uu8gqw6FF7zpzXk5rEY+YTvcXvfbNxxGmy2NpoAtE3
-         UXugQ/rJoVlsNs4sUNCx0Mfgi2RXDTC5wsMAMzPMjMqrQDzGIsInnCXFRMK4ZcB/AfbN
-         Tqsm+3bHawuMtPSyV3v86hDsh+AwSY+BSEKqPmg+ev2ipTnHfJi3cMdYeraTT6BW0WC7
-         MoKtrr+qwEPLLrUYJB2MG6OuWLbTvh8e1vEMPcIVPwEeeZCNgf5apFE/ojT39XtWFweo
-         w77A==
-X-Gm-Message-State: AOAM533RESRmr34Kda59KkzXqY4Jwed+dd6ptxdIr8L284/cQ8xTm+Jn
-        Ev8S/8XUZVijHXLiVjn0x864Iw==
-X-Google-Smtp-Source: ABdhPJy8fboLlgBsr7NTyQTdbL6k86RpEJ9ALKHfTiQ8ly9f0OpXci9S+ZlTSMzOkryZUrHCngj/2w==
-X-Received: by 2002:ac5:c94f:: with SMTP id s15mr5005605vkm.35.1644245535145;
-        Mon, 07 Feb 2022 06:52:15 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Mtx2YBw2ZJ4lWpSF8NYCcRXkDCZX1esZEmumdIEB7tc=;
+        b=Uf0I5Z0OsB0KpfWCgNs/QFEVsrKy7Ez8NsUgtOPxB/WaUh2Muqp5oNlQB3ocSXY6my
+         5s9Y5BGmAiuGanUf3Y1UP/DwEwl4h3bSHTec09qvLHe5mHKmXqgQ2qrF/INZoj4zqQ0X
+         qaCFPjJaiwtItouse7tUhKGGGIEZ5Cm+9G19VrxbhHvdEuw3ihECWIhJfkrXtDnuITTZ
+         Zs7QLY4zNYw293pbNZN8eJaLZ2eYmRhWPFOlvo1sUTAzbMOzQsTsLAxHvB3d+cYGexXo
+         F7wvlTQqEZ69c7ty/vI1/9ritCHdFfgIePICeA9luuZpMFzOm6M7HJ+il481aT5KWXuF
+         aYDQ==
+X-Gm-Message-State: AOAM533US1NYRkdnbvaw8AwAYSOeKYss8kK4xwG5c3FEIcojgbSNfReL
+        LrO8tMu4G/opc4q2TgrAyKAPBv1i/PYW1g==
+X-Google-Smtp-Source: ABdhPJzeQG9FgL2MZ4q9NP9LpbIoI173m00Efi+GPRo9FgOW6LMbiyuUzW1kbiJEpnKsjaRQxlBjHA==
+X-Received: by 2002:a67:f8d7:: with SMTP id c23mr4266012vsp.35.1644245541813;
+        Mon, 07 Feb 2022 06:52:21 -0800 (PST)
 Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id r14sm581347vke.20.2022.02.07.06.52.13
+        by smtp.gmail.com with ESMTPSA id r14sm581347vke.20.2022.02.07.06.52.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 06:52:14 -0800 (PST)
+        Mon, 07 Feb 2022 06:52:21 -0800 (PST)
 From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 0/3] bpf: Fix strict mode calculation
-Date:   Mon,  7 Feb 2022 09:50:49 -0500
-Message-Id: <20220207145052.124421-1-mauricio@kinvolk.io>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Fix strict mode calculation
+Date:   Mon,  7 Feb 2022 09:50:52 -0500
+Message-Id: <20220207145052.124421-4-mauricio@kinvolk.io>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220207145052.124421-1-mauricio@kinvolk.io>
+References: <20220207145052.124421-1-mauricio@kinvolk.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -61,26 +63,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series fixes a bad calculation of strict mode in two places. It
-also updates libbpf to make it easier for the users to disable a
-specific LIBBPF_STRICT_* flag.
+"(__LIBBPF_STRICT_LAST - 1) & ~LIBBPF_STRICT_MAP_DEFINITIONS" is wrong
+as it is equal to 0 (LIBBPF_STRICT_NONE). Let's use
+"LIBBPF_STRICT_ALL & ~LIBBPF_STRICT_MAP_DEFINITIONS" now that the
+previous commit makes it possible in libbpf.
 
-v1 -> v2:
-- remove check in libbpf_set_strict_mode()
-- split in different commits
+Fixes: 93b8952d223a ("libbpf: deprecate legacy BPF map definitions")
 
-v1: https://lore.kernel.org/bpf/20220204220435.301896-1-mauricio@kinvolk.io/
-
-Mauricio Vásquez (3):
-  libbpf: Remove mode check in libbpf_set_strict_mode()
-  bpftool: Fix strict mode calculation
-  selftests/bpf: Fix strict mode calculation
-
- tools/bpf/bpftool/main.c                     | 5 +----
- tools/lib/bpf/libbpf.c                       | 8 --------
+Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
+---
  tools/testing/selftests/bpf/prog_tests/btf.c | 2 +-
- 3 files changed, 2 insertions(+), 13 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 14f9b6136794..4b93789acd86 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -4561,7 +4561,7 @@ static void do_test_file(unsigned int test_num)
+ 	btf_ext__free(btf_ext);
+ 
+ 	/* temporary disable LIBBPF_STRICT_MAP_DEFINITIONS to test legacy maps */
+-	libbpf_set_strict_mode((__LIBBPF_STRICT_LAST - 1) & ~LIBBPF_STRICT_MAP_DEFINITIONS);
++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL & ~LIBBPF_STRICT_MAP_DEFINITIONS);
+ 	obj = bpf_object__open(test->file);
+ 	err = libbpf_get_error(obj);
+ 	if (CHECK(err, "obj: %d", err))
 -- 
 2.25.1
 
