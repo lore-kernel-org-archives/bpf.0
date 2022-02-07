@@ -2,117 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 173EEC433F5
-	for <bpf@archiver.kernel.org>; Mon,  7 Feb 2022 22:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A478C433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 01:06:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiBGWLY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 17:11:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S230023AbiBHBFo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 20:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238499AbiBGWLX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 17:11:23 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CFCC061355
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 14:11:22 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id m17so12330897ilj.12
-        for <bpf@vger.kernel.org>; Mon, 07 Feb 2022 14:11:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SsOQ9LUap2p4+car5kLzEWJjUPh80TmKSTQhE7aPkoQ=;
-        b=WySfExzJN78EO03XiJzMwmtN0jyYHLpiGdrnkd1fmFLZ7CCqSQ4h9Vqp99r/qrCOP1
-         l29Tq7IJuxRIGkC+C+cag9yFGZxbrOMgOHT7aKL6yzH0a5yoPVubyW7C/dpIc87+kiFU
-         qnbATF/g1f3iY6f/VBgPxYDGlt+7XAOQQPicshYzRa6WqGmRGLPN4XnlXGUpgNr6lHI5
-         QTmEJfWyP90fjcTXc5Af4Ksf/N5PaY7uDaZkQLJaqi2yAGi2MQf5t3CVyEU87fb9afdr
-         hUo0cfx3CZOsE4pLbXbj8soPb7Vx+RiTIF0dZnWzZlJyKppbe0Iz3o7wR9FR38xNkGY0
-         Jdrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SsOQ9LUap2p4+car5kLzEWJjUPh80TmKSTQhE7aPkoQ=;
-        b=J9d4TIOeHnXjO8wy2jXt0cnY/ko7OHH3jholeqdoTnihdQ5fxUWYUzH7gbXn+/1Hro
-         dmA8bhvMO6ZgFPSDWO/p3EiDioWJLgyApNfTGrHvrq+9iGJd+eiRuqVjQr8zRBZc0IoX
-         IsBi6gpZErXPk5QfEGuMH7lZAw5EXd2arLKFNSEWawnpeto85BEH5S8Dyc0YFKwaSUpv
-         0DdE/oHHwYKysWVChc3N1qfTt1nckwj+GG87HWdc8zEjBTdXdn2ZDrUo7CyCc9GKRhwu
-         sNuireVIzS6Yi2A66qc/XP8NKZm6Nts73ouyDH1JizAkPsVqchNG+mprJwVOaxwNFaGU
-         XfgQ==
-X-Gm-Message-State: AOAM5302Af4fhhxYsTBgg1V9LVffrFReWJVz8Qwzn9/MYccS8y+md/VL
-        zfbWqOsek+7I4d1GH3a9LGKdidQC9JLHhX8HhWu1MTg1QA8=
-X-Google-Smtp-Source: ABdhPJxPei5C6iZF2IcOH8/SwwIc2ZOGmdCdSzWU8oEznSYTATysXbcUXA2bBCil4TtAczo9mqJYNPRCyak+rtUpHEU=
-X-Received: by 2002:a05:6e02:190e:: with SMTP id w14mr724459ilu.71.1644271882330;
- Mon, 07 Feb 2022 14:11:22 -0800 (PST)
+        with ESMTP id S1343527AbiBGXc4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 18:32:56 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E21C0612A4;
+        Mon,  7 Feb 2022 15:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644276776; x=1675812776;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8LcijeoOvZZoueOfarN7zBuLICOw8GrA65of4YyERrI=;
+  b=UrpdR30cZH7FeVTCJG2kYBfY+UrzrapW7gfvoIAQOM+bZrb/9Okp33XJ
+   xStVvyYxjTzcR7WQ5bqxH6vdRtLEu6TgNNF514pEtbxdUecR7n01zCEm4
+   BA3b2ZAVN3igA4lOOxFv6Li/t6ejjOKMyLbTqmYd/7wfBeGMet9aFp+YS
+   gWMx9ceurHFzttHEyobteqBsBM8sH6c0+Og4zFryqY9zqamMkJ2KpVrYn
+   TUkfPmcIRYviEG4fcGZVvEMj59jKJOkDWiybWpiHRzel1420llUAUBp7R
+   O4ZVBmb9boihOmIVn3rVtII2kzRKaEPeHR4bhGxzZPG+/hUnEcZAMSulL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="335232072"
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="335232072"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:32:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
+   d="scan'208";a="772948623"
+Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Feb 2022 15:32:55 -0800
+From:   Tony Nguyen <anthony.l.nguyen@intel.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     Corinna Vinschen <vinschen@redhat.com>, netdev@vger.kernel.org,
+        anthony.l.nguyen@intel.com, sasha.neftin@intel.com,
+        vitaly.lifshits@intel.com, maciej.fijalkowski@intel.com,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
+        Lennert Buytenhek <buytenh@arista.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
+Subject: [PATCH net-next 1/2] igc: avoid kernel warning when changing RX ring parameters
+Date:   Mon,  7 Feb 2022 15:32:45 -0800
+Message-Id: <20220207233246.1172958-2-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220207233246.1172958-1-anthony.l.nguyen@intel.com>
+References: <20220207233246.1172958-1-anthony.l.nguyen@intel.com>
 MIME-Version: 1.0
-References: <20220204181146.8429-1-9erthalion6@gmail.com>
-In-Reply-To: <20220204181146.8429-1-9erthalion6@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Feb 2022 14:11:11 -0800
-Message-ID: <CAEf4BzYiT-HRn9bLy=qoyOhOQ1ESCB3mB97xt98JWapgB_nbBw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] bpftool: Add bpf_cookie to link output
-To:     Dmitrii Dolgov <9erthalion6@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Feb 4, 2022 at 10:12 AM Dmitrii Dolgov <9erthalion6@gmail.com> wrote:
->
-> Commit 82e6b1eee6a8 ("bpf: Allow to specify user-provided bpf_cookie for
-> BPF perf links") introduced the concept of user specified bpf_cookie,
-> which could be accessed by BPF programs using bpf_get_attach_cookie().
-> For troubleshooting purposes it is convenient to expose bpf_cookie via
-> bpftool as well, so there is no need to meddle with the target BPF
-> program itself.
->
->     $ bpftool link
->     1: type 7  prog 5  bpf_cookie 123
->         pids bootstrap(87)
->
-> Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
-> ---
-> Changes in v2:
->     - Display bpf_cookie in bpftool link command instead perf
->
->     Previous discussion: https://lore.kernel.org/bpf/20220127082649.12134-1-9erthalion6@gmail.com
+From: Corinna Vinschen <vinschen@redhat.com>
 
+Calling ethtool changing the RX ring parameters like this:
 
-So I think this change is pretty straightforward and I don't mind it,
-but I'm not clear how this approach will scale to multi-attach kprobe
-and fentry programs. For those, users will be specifying many bpf
-cookies, one per each target attach function. At that point we'll have
-a bunch of cookies sorted by the attach function IP (not necessarily
-in the original order). I don't think it will be all that useful and
-interesting to the end user. We won't be storing original function
-names (too much memory for storing something that most probably won't
-be ever queried), so restoring original order and original function
-names will be hard. If we don't think this through, we'll end up with
-kernel API that works for just one simple use case.
+  $ ethtool -G eth0 rx 1024
 
-Can you please describe your use case which motivated this feature in
-the first place to better understand the importance of this?
+on igc triggers kernel warnings like this:
 
-BTW, bpftool can technically implement this today without kernel
-changes by fetching such bpf_cookies from the kernel using its pid
-iterator BPF program. See skeleton/pid_iter.bpf.c for pointers. I
-wonder if it would make more sense to start with doing this purely on
-the bpftool side first.
-
-As an aside (and probably something more generally useful), it seems
-like we have a bpf_iter__bpf_map iterator, but we don't have prog and
-link iterators implemented. Would it be a good idea to add that to the
-kernel? Yonghong, Alexei, any thoughts?
-
->
->  include/uapi/linux/bpf.h       |  3 +++
->  kernel/bpf/syscall.c           | 13 +++++++++++++
->  tools/bpf/bpftool/link.c       |  2 ++
->  tools/include/uapi/linux/bpf.h |  3 +++
->  4 files changed, 21 insertions(+)
->
-
+[  225.198467] ------------[ cut here ]------------
+[  225.198473] Missing unregister, handled but fix driver
+[  225.198485] WARNING: CPU: 7 PID: 959 at net/core/xdp.c:168
+xdp_rxq_info_reg+0x79/0xd0
 [...]
+[  225.198601] Call Trace:
+[  225.198604]  <TASK>
+[  225.198609]  igc_setup_rx_resources+0x3f/0xe0 [igc]
+[  225.198617]  igc_ethtool_set_ringparam+0x30e/0x450 [igc]
+[  225.198626]  ethnl_set_rings+0x18a/0x250
+[  225.198631]  genl_family_rcv_msg_doit+0xca/0x110
+[  225.198637]  genl_rcv_msg+0xce/0x1c0
+[  225.198640]  ? rings_prepare_data+0x60/0x60
+[  225.198644]  ? genl_get_cmd+0xd0/0xd0
+[  225.198647]  netlink_rcv_skb+0x4e/0xf0
+[  225.198652]  genl_rcv+0x24/0x40
+[  225.198655]  netlink_unicast+0x20e/0x330
+[  225.198659]  netlink_sendmsg+0x23f/0x480
+[  225.198663]  sock_sendmsg+0x5b/0x60
+[  225.198667]  __sys_sendto+0xf0/0x160
+[  225.198671]  ? handle_mm_fault+0xb2/0x280
+[  225.198676]  ? do_user_addr_fault+0x1eb/0x690
+[  225.198680]  __x64_sys_sendto+0x20/0x30
+[  225.198683]  do_syscall_64+0x38/0x90
+[  225.198687]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  225.198693] RIP: 0033:0x7f7ae38ac3aa
+
+igc_ethtool_set_ringparam() copies the igc_ring structure but neglects to
+reset the xdp_rxq_info member before calling igc_setup_rx_resources().
+This in turn calls xdp_rxq_info_reg() with an already registered xdp_rxq_info.
+
+Make sure to unregister the xdp_rxq_info structure first in
+igc_setup_rx_resources.
+
+Fixes: 73f1071c1d29 ("igc: Add support for XDP_TX action")
+Reported-by: Lennert Buytenhek <buytenh@arista.com>
+Signed-off-by: Corinna Vinschen <vinschen@redhat.com>
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Tested-by: Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+---
+ drivers/net/ethernet/intel/igc/igc_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index b965fb809d84..74b2c590ed5d 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -505,6 +505,9 @@ int igc_setup_rx_resources(struct igc_ring *rx_ring)
+ 	u8 index = rx_ring->queue_index;
+ 	int size, desc_len, res;
+ 
++	/* XDP RX-queue info */
++	if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
++		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+ 	res = xdp_rxq_info_reg(&rx_ring->xdp_rxq, ndev, index,
+ 			       rx_ring->q_vector->napi.napi_id);
+ 	if (res < 0) {
+-- 
+2.31.1
+
