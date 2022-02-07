@@ -2,128 +2,199 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19562C433F5
-	for <bpf@archiver.kernel.org>; Mon,  7 Feb 2022 18:03:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EA06C433F5
+	for <bpf@archiver.kernel.org>; Mon,  7 Feb 2022 18:11:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240085AbiBGSDd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 13:03:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S236865AbiBGSKn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 13:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344917AbiBGR52 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 12:57:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C79B9C0401DA
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 09:57:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644256646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6nSrsLxKO5uzyOgVc1p4ANil8NgYxSlUbB/IGZjdK54=;
-        b=i0A+yv7SUBCkA6Jvbn59lU+adTrdEOlPVHt0QmkQw+G41Qp5oxSccGJx46cylHt9KMwuT8
-        Qhxy+hXIxAOXxETu0jBcRw2txT0FvWhrYVZBJ4/9GMRLUFi1OktmSyiVnB6RS0ykQmFz7J
-        WiX47W3FDLIGlOvPKavgOfJchBEdr6M=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-663-vsbmz64ON6-K1Sny252Arw-1; Mon, 07 Feb 2022 12:57:25 -0500
-X-MC-Unique: vsbmz64ON6-K1Sny252Arw-1
-Received: by mail-wr1-f71.google.com with SMTP id l27-20020adfa39b000000b001e315c20064so1114653wrb.10
-        for <bpf@vger.kernel.org>; Mon, 07 Feb 2022 09:57:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=6nSrsLxKO5uzyOgVc1p4ANil8NgYxSlUbB/IGZjdK54=;
-        b=x0s5oLUqR12FMnBJSgopWkKVj3/A7kl+9u/oYVkX4q0PNLTXRwmRjt5z9t0LB9s+r7
-         hNj7xWnnN1v1y5ijv5iXTz44ieXNJvYdiQD0vFX91NL1dtsJwb/373+JNBYqr3oJXbR+
-         lNAgh3x+0UV1UwkPEITnR2YVrbGUg48dPIfCdBCYlz1e00H24M7Q1IKAKEC04p0sJsTt
-         /0Sm6wpkYFaCZehqesRplceX6CknwIwm0HeF2LzdRcRf7jo8rxzLahqNRmFvQaArV6x4
-         +/4BY0yfWaD28m2SzdfE5uq2V6N57CF0CjLoBP0YJ+siuhHKuE8WjPZThgnPOTiMgmn7
-         v8oA==
-X-Gm-Message-State: AOAM532RlSEuOHgAN7ICSZbswwwm9qyIXHwLQLLuoJBNoCNVXeDVxA/0
-        Yr+4YxsBzTeTW4vO9g61mtvjf33morchKWcEVip32SErHgfzD0ICg+Dgc4egn8rMNq97roUXwgO
-        2VsnaO+LkqLkI
-X-Received: by 2002:a5d:67cf:: with SMTP id n15mr451477wrw.673.1644256643373;
-        Mon, 07 Feb 2022 09:57:23 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzQgEs8mKMebfCPlVO2orIk3HGeddGG7PAsLFaQwiVuH4PXW2fVM1ru4fUOVlXYizg6VNg/kg==
-X-Received: by 2002:a5d:67cf:: with SMTP id n15mr451462wrw.673.1644256643183;
-        Mon, 07 Feb 2022 09:57:23 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id l24sm27332wms.24.2022.02.07.09.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Feb 2022 09:57:22 -0800 (PST)
-Date:   Mon, 7 Feb 2022 18:57:20 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yinjun Zhang <yinjun.zhang@corigine.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, niklas.soderlund@corigine.com,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH bpf] bpftool: fix the error when lookup in no-btf maps
-Message-ID: <YgFdgOVdEWUx63Ik@krava>
-References: <1644249625-22479-1-git-send-email-yinjun.zhang@corigine.com>
- <CAEf4BzbjVnkb8Oz67p3jDhL-Pv9RG-wq1A7KMV06zowRK9psew@mail.gmail.com>
+        with ESMTP id S1346159AbiBGSEA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 13:04:00 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE5AC0401D9;
+        Mon,  7 Feb 2022 10:03:59 -0800 (PST)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 217H9Z5K009304;
+        Mon, 7 Feb 2022 09:24:02 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=yWBT6xgztT/xbZVl6bnBjsRXCtHbH1Iy0YYSswWCZE4=;
+ b=PgA4KxKJCYNzrXtJb+NlD7h+A7yZkV7LmCWPkBACskJsY3ac7vHHbH2eZoU7yEKWu7Om
+ E0kyLUleDn9GHoCsYITnqCS8lO5PWvgP8RXvMDHTN1oOly7TLzmcRKhoFTfDw40l5SVO
+ OZfQWGgqrEQGJLKDhOlmv4CNJc3bEWXXtMc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e365cgu4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 07 Feb 2022 09:24:01 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 7 Feb 2022 09:24:01 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cjqbxGsH/TlGPP3wFGUtPmhPVTFNrZZBx/0w3EWvr0jFpbTvFx4li2xgW0fY3WxEt2E98VKQvxx+cWBvvWFEWWWKI+bGIuVhJ34huplTt2MZBsyXMpy+N7zoz+wPkn8Hjc+u1NoetHX9MoKTgX3IHV4kKnaHKGJ/5j3hwSV5UUZHa4fjG6Fw6uaVxDIKbxKP+7Y2AKCe+VR5PISd44V+6jrLVFMljewDKyfR2AgTArR1B27qpiu/sSpR4cchqJIq5B8cIc6avYE2ZGVsat2dRD6Cragrb6yglBsV8uAZlmNdftgUp5T0mQQ4ZoQ35XUKR5xiX7Aup8kw9/WVq6zI6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yWBT6xgztT/xbZVl6bnBjsRXCtHbH1Iy0YYSswWCZE4=;
+ b=SZGmjBK9jsVSYSyIKu6IP5tta+7REI7yzn0yPanTKBESObRv7eO4vWukJXAo8QfTuEXUK1i2T/zI/MMYXx7YESdwW85An/KlIx02njDYfqn5Fp3vh3eeQYN/FlksnNo9AEobpTWnao5v+Ph3ZsCd/Ry0WSY+139HLRBb3oPVQeTXfbKJ2fjjj8BCLt0FLmIi3l2QMVxJnxxyW5SYMtoivsZEe6JpaNi8h60H5vL5QswBamzewTpgPdL1hi6cOeNLweCzd6evdklqa40ZhtnsPrdUd86ZlxCMwDA4XZN41N4WGZfLcYLhIEHT/DFttkOk03MWIBvMEtYQ0EEg4ObpGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by BN8PR15MB2753.namprd15.prod.outlook.com (2603:10b6:408:c8::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Mon, 7 Feb
+ 2022 17:23:59 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::11fa:b11a:12b5:a7f0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::11fa:b11a:12b5:a7f0%6]) with mapi id 15.20.4951.019; Mon, 7 Feb 2022
+ 17:23:59 +0000
+Message-ID: <b87a7735-3303-3797-535e-a7753cc21ba6@fb.com>
+Date:   Mon, 7 Feb 2022 09:23:53 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.5.1
+Subject: Re: [PATCH bpf-next 1/2] bpf: test_run: fix overflow in xdp frags
+ parsing
+Content-Language: en-US
+To:     Stanislav Fomichev <sdf@google.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        syzbot <syzkaller@googlegroups.com>
+References: <20220204235849.14658-1-sdf@google.com>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <20220204235849.14658-1-sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR1701CA0023.namprd17.prod.outlook.com
+ (2603:10b6:301:14::33) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzbjVnkb8Oz67p3jDhL-Pv9RG-wq1A7KMV06zowRK9psew@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6ed4511d-01f8-4b40-84be-08d9ea5ea091
+X-MS-TrafficTypeDiagnostic: BN8PR15MB2753:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR15MB2753D6E241E0829FEAD67445D32C9@BN8PR15MB2753.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: o+i8Lmg7hUL2p4OcyIlYYp1jx5XjFUH47wWFsipQo+2Da8nTpv1wqBhgccZ3735MccXESywoTGcKj+99YAHWZL+T8KumS/b1GRWgtpRSYlfXrZbRFZHtZ/IP+gCtekrDoVn102u5DKn2a4L7kWVE3zs6R2LE4MkYggAZbWWT9Jx/Qb748mCDepvvLt0LtC3xswXm6DYuiccDAaVM2C4bv/PeNqQfecrsT2D60OD37NBc4afspIyWJHruPFCKLYhrlPB6fmFOWSFdw6lrL436rcP4axV8o4p9uED1L+RdHkquTLvFm8++QMRfzGO4zUeImbKhSLzXNTheUPHiPE4MQXaWAIgjcPV8B0919NO5RUtHlc+WwpraezU0FmTBaAoZyDLsnzTJOlKiT4efLrAls1SdDQIsMF7HrA+lGJcKH/70KoSYC9jZgc36xj7QADgs9nUwL2IZ2gUqvzTC828KzNRatPsXMntEoW+syJwcUO6TWQKp24FNK5zrEV/u8HnuoEPXLrNJ6oT2r3EmX0Sz58VSVU7F2FJIK4ZWcsuCotQc0F3fLUYp3mIdbBJNqyL5U17NFordaW6P+lEChWPccXG7HcQ//XpO3TE0KCXCDrW/bw7r4Jshz6CTxiYiSQgJJb2w2WHfmI1VHH2h6BynhQRoSLFFvbpvmTQKLUpP4/mfPQpd0HOAKEUc0QycG1SHwEqSh/2lcwH6c0+Lqyp7SUFG30oHDCFf38NAHXo/Hn0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(8936002)(8676002)(66946007)(4326008)(66476007)(66556008)(83380400001)(6666004)(86362001)(52116002)(53546011)(6486002)(508600001)(186003)(45080400002)(2616005)(31696002)(6512007)(316002)(54906003)(36756003)(31686004)(2906002)(5660300002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1gwcXdMYjIvbVhOUHdGRDhXMHhoY01YdUs2VmsvMFREVHp5SnBKbllyV3lx?=
+ =?utf-8?B?Wm5RcGNnRnhkamQzVzlqaXBKNmhrQVVUTTZyVUNzR0NDWGt4RXg1QlZYWThp?=
+ =?utf-8?B?dzhUV1p0TTl6YVJ0cit1alFrYVBxVFZzK1pEZzFnbjVyckJtZzBva09tbExF?=
+ =?utf-8?B?YzVGTDllY00wYUxpU0pkOU4xSGhMbjVzdExXamdNQWlSTDNVVGlFQk9BUWt0?=
+ =?utf-8?B?cU01QWRYd2JmdFhrYjBVc21SZGRpcXByaThySWZIMlVqTTNDZVJkRnFMVW51?=
+ =?utf-8?B?SXM3ZTlheVUvVEMrY09IMmlYZmprcGxuZkQ3Smh5VXhpc3pvd1Q1S3hpdzJl?=
+ =?utf-8?B?OWUvUkJ6VTZCOUJhNVAvSGhIazhiaDdWYzJyMnVKT1VFcVNPUnU4dW5wbkpp?=
+ =?utf-8?B?NVRJTzdyNDdrcXYva1ZBSFJGSlFLU01JZ3piSzFLM2dJR09WZlVoS283TlBV?=
+ =?utf-8?B?cmZTeE5xbDJUQkRBNFhZeFJ4bEFEdWUxdjNldENEY1Bla3EzZ3JkcHVLblRI?=
+ =?utf-8?B?MzhhYkkrRG16SG9NMmp4SndCaUtIOXRtYm15a2UwSTBsUmVkRkpqb2FGbGsz?=
+ =?utf-8?B?ZTlKNis4cUdlRzhvdUZPZ0g1YTNxbmhQU0hCSmhvY3ltaU4raXVlZk1LMy9K?=
+ =?utf-8?B?R0xBaUJmZ1pBMmFFYWdIaVMybk1kWkNJcERCOXAvM3M2ME5xbVFhdE5SUDZs?=
+ =?utf-8?B?Yy9OOXFpaFI5T2F4UHhud0QrTU53RXFValRBWktYRmtUOFd3NUJOR3JXOS9l?=
+ =?utf-8?B?Qk5XNmRxMlJ3YmdsTi93OWsyWnZhdlBjVmZtMHkyZ0RFcDBHeGJESk1VVEx0?=
+ =?utf-8?B?cjdOOW16dUtPbWpCODNwaGxwU01rWDU2bm1EL1BndHl3Nk9VNzNxdVA4Z0Vo?=
+ =?utf-8?B?RkxiL0hTeExrYldpODhXM0xkcEdZSDlESFpGa0JqK28rMFY4QUlpWGlEbUtC?=
+ =?utf-8?B?YXpabjh3MHZNVHF5eFo5Z2J6d1ZsVXNzUUR2Wkl6cHdWbGUvaWo5YTNoWk1B?=
+ =?utf-8?B?RENGR2UvOUc4WnR5ZmdjVlYwZTMwUHRtMnBiMUxTN1djYThzWEVKOWdXZTNU?=
+ =?utf-8?B?aFBINS9mVEdYWUt1TWgwcXRpUnc2T2hhUHAyY0F4WkNNT3lGT1h2L3VqREU4?=
+ =?utf-8?B?OFdER1V4dE8yWi9XcVUzSkJOWTJDT1hVcjZwbnZKVmlsR0FsM25EU0lOMjRu?=
+ =?utf-8?B?T21WYzIrQXhUZ0xwdVdTdTYvKzVuTUhweUk3QmtSY2xHUnVXOWhDQlZzbDh2?=
+ =?utf-8?B?bm1GOHUyc0psRzBiNkU2U0xUVjFobFAvaHl5dkN1MVZaTEo1Q1Zxa2kveDlG?=
+ =?utf-8?B?SWJER3B2U3ZTb3dZTC9KOFBBS0Zrdi94N0FKQUw4S2NrbzdaaG4wR1REaGpB?=
+ =?utf-8?B?UGQ4Y2pkRjQ5c3o1SERvalk5ZFlZVVFvZFlVa1BMY0svcG9IWmU0SXhsT2xY?=
+ =?utf-8?B?bWtTaDg5TEQ5ajhoRFQ5dTVhZ09YVk9wTEkzV1pSVUdsQWZKUkxyNVZsNzIz?=
+ =?utf-8?B?RXpPeWdEbG9kdGJIVWhtZzY3aEcxOVVDWEcrYU1rNWdWbUlNdHlrRndwaEJy?=
+ =?utf-8?B?YzhHMG11RE9JUjBPaGxCbEloM1pJUGZmUjIwSXF1T2lIMVQ4SFp3REJNVXJC?=
+ =?utf-8?B?ZDRVNzgwM2FnUzIzL2F6Wk1oaE8yYXpHb2t4cExyQzMwRFpFN1ZuYkV3cmI2?=
+ =?utf-8?B?L2pMMjdxaHF4cG5Jdm9tTnVMb0dJc0o0S3djL3EyQ0JyVi9aTlRYdTl5TUIv?=
+ =?utf-8?B?QkFTWXNOUG9NaURrNEF5TkVqSWdlT0hLSXpjTE4wbUlNalE0UFJqU094R21R?=
+ =?utf-8?B?ZFdZTVY5ZEwyUGM1SkY0U1BwTWR5cm9yTjQ0bEFaNWwyWlBrQ1NQMThMWExE?=
+ =?utf-8?B?VjhoVWxiQ1hwSkkraU9MMjQ2TE1aanVXalBCUm9GdzZ6TlEreCt5VWR1Z28w?=
+ =?utf-8?B?TU03a0sxbVFCa1JhVEJWNEY0djk3cUJtZnA5SFR0cTFlTzBBUkdjZ1VuL21Z?=
+ =?utf-8?B?Y3B4ZkR4c2x0TFpVdWh2clp2THhsZFFHZlp5MnZXZ1JCRVoxSEFMVWlUSmJk?=
+ =?utf-8?B?N2t6b3RYakVXT0loVXNrRm5ZcGNSaWYwaG04VUxjRkVQZTdjSTh5OWhxMHI1?=
+ =?utf-8?B?c004OHA3UWlOeUw4cHBxNkZTVWtUeDZjRDhnWDlKM3V6Y2oxTHFiT2M4am1j?=
+ =?utf-8?B?TkE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ed4511d-01f8-4b40-84be-08d9ea5ea091
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2022 17:23:59.2602
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1vyGE3ODeI646Z+Ddhm40IyL3tfX1YIJnJCLnL5ZKYM6dunSnO7GTGdGX6XycKTl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB2753
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: dy3cIuIRlWffrkqYgIpqY8-RxiVEyf-A
+X-Proofpoint-ORIG-GUID: dy3cIuIRlWffrkqYgIpqY8-RxiVEyf-A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-07_06,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1011
+ phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0
+ mlxlogscore=701 malwarescore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202070108
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 07, 2022 at 09:42:25AM -0800, Andrii Nakryiko wrote:
-> On Mon, Feb 7, 2022 at 8:00 AM Yinjun Zhang <yinjun.zhang@corigine.com> wrote:
-> >
-> > When reworking btf__get_from_id() in commit a19f93cfafdf the error
-> > handling when calling bpf_btf_get_fd_by_id() changed. Before the rework
-> > if bpf_btf_get_fd_by_id() failed the error would not be propagated to
-> > callers of btf__get_from_id(), after the rework it is. This lead to a
-> > change in behavior in print_key_value() that now prints an error when
-> > trying to lookup keys in maps with no btf available.
-> >
-> > Fix this by following the way used in dumping maps to allow to look up
-> > keys in no-btf maps, by which it decides whether and where to get the
-> > btf info according to the btf value type.
-> >
-> > Fixes: a19f93cfafdf ("libbpf: Add internal helper to load BTF data by FD")
-> > Signed-off-by: Yinjun Zhang <yinjun.zhang@corigine.com>
-> > Reviewed-by: Niklas Söderlund <niklas.soderlund@corigine.com>
-> > Signed-off-by: Simon Horman <simon.horman@corigine.com>
-> > ---
-> >  tools/bpf/bpftool/map.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> > index cc530a229812..4fc772d66e3a 100644
-> > --- a/tools/bpf/bpftool/map.c
-> > +++ b/tools/bpf/bpftool/map.c
-> > @@ -1054,11 +1054,9 @@ static void print_key_value(struct bpf_map_info *info, void *key,
-> >         json_writer_t *btf_wtr;
-> >         struct btf *btf;
-> >
-> > -       btf = btf__load_from_kernel_by_id(info->btf_id);
-> > -       if (libbpf_get_error(btf)) {
-> > -               p_err("failed to get btf");
-> > +       btf = get_map_kv_btf(info);
-> > +       if (libbpf_get_error(btf))
+
+
+On 2/4/22 3:58 PM, Stanislav Fomichev wrote:
+> When kattr->test.data_size_in > INT_MAX, signed min_t will assign
+> negative value to data_len. This negative value then gets passed
+> over to copy_from_user where it is converted to (big) unsigned.
 > 
-> See discussion in [0], it seems relevant.
+> Use unsigned min_t to avoid this overflow.
 > 
->   [0] https://lore.kernel.org/bpf/20220204225823.339548-3-jolsa@kernel.org/
+> usercopy: Kernel memory overwrite attempt detected to wrapped address
+> (offset 0, size 18446612140539162846)!
+> ------------[ cut here ]------------
+> kernel BUG at mm/usercopy.c:102!
+> invalid opcode: 0000 [#1] SMP KASAN
+> Modules linked in:
+> CPU: 0 PID: 3781 Comm: syz-executor226 Not tainted 4.15.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> RIP: 0010:usercopy_abort+0xbd/0xbf mm/usercopy.c:102
+> RSP: 0018:ffff8801e9703a38 EFLAGS: 00010286
+> RAX: 000000000000006c RBX: ffffffff84fc7040 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff816560a2 RDI: ffffed003d2e0739
+> RBP: ffff8801e9703a90 R08: 000000000000006c R09: 0000000000000001
+> R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff84fc73a0
+> R13: ffffffff84fc7180 R14: ffffffff84fc7040 R15: ffffffff84fc7040
+> FS:  00007f54e0bec300(0000) GS:ffff8801f6600000(0000)
+> knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000000020000280 CR3: 00000001e90ea000 CR4: 00000000003426f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   check_bogus_address mm/usercopy.c:155 [inline]
+>   __check_object_size mm/usercopy.c:263 [inline]
+>   __check_object_size.cold+0x8c/0xad mm/usercopy.c:253
+>   check_object_size include/linux/thread_info.h:112 [inline]
+>   check_copy_size include/linux/thread_info.h:143 [inline]
+>   copy_from_user include/linux/uaccess.h:142 [inline]
+>   bpf_prog_test_run_xdp+0xe57/0x1240 net/bpf/test_run.c:989
+>   bpf_prog_test_run kernel/bpf/syscall.c:3377 [inline]
+>   __sys_bpf+0xdf2/0x4a50 kernel/bpf/syscall.c:4679
+>   SYSC_bpf kernel/bpf/syscall.c:4765 [inline]
+>   SyS_bpf+0x26/0x50 kernel/bpf/syscall.c:4763
+>   do_syscall_64+0x21a/0x3e0 arch/x86/entry/common.c:305
+>   entry_SYSCALL_64_after_hwframe+0x46/0xbb
+> 
+> Cc: Lorenzo Bianconi <lorenzo@kernel.org>
+> Fixes: 1c1949982524 ("bpf: introduce frags support to bpf_prog_test_run_xdp()")
+> Reported-by: syzbot <syzkaller@googlegroups.com>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-I checked and this patch does not fix the problem for me,
-but looks like similar issue, do you have test case for this?
-
-mine is to dump any no-btf map with -p option
-
-thanks,
-jirka
-
+Acked-by: Yonghong Song <yhs@fb.com>
