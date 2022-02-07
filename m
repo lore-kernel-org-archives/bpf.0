@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B564C433EF
-	for <bpf@archiver.kernel.org>; Mon,  7 Feb 2022 19:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F183C4332F
+	for <bpf@archiver.kernel.org>; Mon,  7 Feb 2022 19:04:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239380AbiBGTDR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 14:03:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S237769AbiBGTDi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 14:03:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiBGS7o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 13:59:44 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96755C0401DA;
-        Mon,  7 Feb 2022 10:59:43 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id y84so18173613iof.0;
-        Mon, 07 Feb 2022 10:59:43 -0800 (PST)
+        with ESMTP id S235237AbiBGS7b (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 13:59:31 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABF2C0401E2;
+        Mon,  7 Feb 2022 10:59:30 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id m185so9836199iof.10;
+        Mon, 07 Feb 2022 10:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xfYZRl1OVTWfdQ/sU41tVKebTENh4xaVI8jBkhFXtXA=;
-        b=j4S6T16yFNPY+sUSBFplFg0FzkMzMrACtaQtim6kwigBrUHuUzkiDmj0/LITb40ipY
-         GTXKl4MW4nng6H9V69eZiPjTP0Qvjald5+Ud9LN19KhxvQRI8AOeudLelGLMlTT8ksiN
-         6aQBrMubY6jccwfPijFso67SSZY+i9654ASmkNDAEugaLfMU3T34VMfWAe7mB2NmRGs8
-         G6OMoAgIQfMDLs/bs6oFPXhu3PbFcNxHhaN7PQMg2U9N+v0RNkLX6c6kJn+7aQYcrVqm
-         zsljFWLdWzMYQ6Sla06vdAwLXcAQQQOdYDCz/O483u+wVwsWw19IQcu/gQZv/A5V4MbT
-         NFHw==
+        bh=p5GJUhqoBZKVBO/8R0d/5vUo6i8ZBWVBkYqNLYhElO8=;
+        b=ChvNyJebeZEzCBm65NSTxDwcm0+EoeNZz6fnhElk4Q1fex4qX0HSUngNK8fXpIW7cT
+         nfJYNhBXgUzj1QkXSvQimCYQCP0zGkhhhkXRhRd5idBnx8rF18VZBtQFped0iSMPseXb
+         PqdcH2bxvDbWMzsqY1b+GqogMpHKEyW7H+5hYklzo6nyyEby6z6o5H/9BGtVmmN4Avyt
+         404hInAjcVVqnpbJR065oYJIML9+F8KoBPSru7wm4p1tMAV6ztfs08dzzCKjjeUdi9ld
+         bnEGsMpJXCk4r2BsZ6r+qcmmGZTxs8XZGeNtWFE7Daux86vbTcly6OjAHzbKWYZ6H6rH
+         Mfbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xfYZRl1OVTWfdQ/sU41tVKebTENh4xaVI8jBkhFXtXA=;
-        b=vgif5SNOoo07D5zTTnikgxnL/0waMuOOCM5nNN6BbLJqsmzAu7lDGdbxSra4/PcCFm
-         VmBjVKYb9GPyoJzEG4i/dK/qVQJQ/qE/OKiRuQbJTt6BirtpEJgwh87cyM3QKFdEcMhT
-         LvYNma0Tgn34cn2LGhXwsr34LIGgFENaSAghM+SCSysH6clix0FEDB1BuQxtKMZUn346
-         vd3qZ434gxbuw1n7GUySyZUug5hHr4b9WhGQxtyK8lBBrTriK/VwA/lvQcagRRARAzYi
-         W7XRxB7S+4MD0txijYvPQuO6J8xsejx8uGode58JPIxy2YbpNaiQs/FzZdMYB6c0g+ii
-         XmYg==
-X-Gm-Message-State: AOAM531kC4D9IHR45TT4Il/vpSSuylRiu3gVBIgeT/XgowZFxBO903Pt
-        2iaEjVWyeRlJmjhN6loMdNRqYBT8IXquILVyFB8=
-X-Google-Smtp-Source: ABdhPJwQewAXb9sKMxkioejbd4BT7Ed/oAXnQ522zaUYajnj6KqoYKS/vnOH5ADXp3tYzjbFSkV1XlRoe0kkC9/NVVA=
-X-Received: by 2002:a05:6638:d88:: with SMTP id l8mr530684jaj.234.1644260383051;
- Mon, 07 Feb 2022 10:59:43 -0800 (PST)
+        bh=p5GJUhqoBZKVBO/8R0d/5vUo6i8ZBWVBkYqNLYhElO8=;
+        b=F0sRPcNtwYSjcRt3wFwocrvdd06wobZbpj+WeBFGFLBQ9Vx4Nrlb+f1yx+coFUD3Wt
+         MEQNkM0Io6PXKxx3YDkQNyuX63vyEiDyl3UkddwPt2XJKPrcQg/tv22g5B36Z/4VXp2M
+         3YnMRL8aZyQKYNsJCr8eO5yTE1lhLtC74zPMEMfEPjy8ITVuD/OMolckOB5fbQe/Aqdl
+         7/lhjGkHpWdn81FCHO+c56xZG8jqi09VjaLIdOKMGa9z9KLU/1M7xrH9CnnXPltVpqJq
+         6D/VyHOX2oT4XGbKWY2ybHtuV5M8yb3yPR257tMdJlxiGx0lICQlcwWeHz7MbI+Rcbz/
+         uaVA==
+X-Gm-Message-State: AOAM532uWTUnhSMzGIIQmp1Gh9zvu0TztLC9aCo6bGbAgTJbJ/5GMEtb
+        TpSBhoA/0l+eyHsxNLwHdkOx/4bPOclMxU4ymOeyHjOf
+X-Google-Smtp-Source: ABdhPJzLSAmF/W74GX1w5Qqm7ogNnubYQHxdqFdwzd47NMaCrDI/EKitqlbOHw1LnJg1/ETnys+vMb3jPwQ1jEBCrvo=
+X-Received: by 2002:a5e:a806:: with SMTP id c6mr449118ioa.112.1644260369518;
+ Mon, 07 Feb 2022 10:59:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220202135333.190761-1-jolsa@kernel.org> <20220202135333.190761-9-jolsa@kernel.org>
-In-Reply-To: <20220202135333.190761-9-jolsa@kernel.org>
+References: <20220202135333.190761-1-jolsa@kernel.org> <20220202135333.190761-3-jolsa@kernel.org>
+In-Reply-To: <20220202135333.190761-3-jolsa@kernel.org>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 7 Feb 2022 10:59:32 -0800
-Message-ID: <CAEf4Bzbi3t_zZL2=8NyBeJ9q95ODH7pXF+EybtgBQp7LTyfr6Q@mail.gmail.com>
-Subject: Re: [PATCH 8/8] selftest/bpf: Add fprobe test for bpf_cookie values
+Date:   Mon, 7 Feb 2022 10:59:18 -0800
+Message-ID: <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com>
+Subject: Re: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe link
 To:     Jiri Olsa <jolsa@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -68,122 +68,100 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 2, 2022 at 5:54 AM Jiri Olsa <jolsa@redhat.com> wrote:
+On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
-> Adding bpf_cookie test for kprobe attached by fprobe link.
+> Adding support to call get_func_ip_fprobe helper from kprobe
+> programs attached by fprobe link.
+>
+> Also adding support to inline it, because it's single load
+> instruction.
 >
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  .../selftests/bpf/prog_tests/bpf_cookie.c     | 73 +++++++++++++++++++
->  .../selftests/bpf/progs/fprobe_bpf_cookie.c   | 62 ++++++++++++++++
->  2 files changed, 135 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/fprobe_bpf_cookie.c
+>  kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
+>  kernel/trace/bpf_trace.c | 16 +++++++++++++++-
+>  2 files changed, 33 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> index cd10df6cd0fc..bf70d859c598 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> @@ -7,6 +7,7 @@
->  #include <unistd.h>
->  #include <test_progs.h>
->  #include "test_bpf_cookie.skel.h"
-> +#include "fprobe_bpf_cookie.skel.h"
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1ae41d0cf96c..a745ded00635 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+>                         continue;
+>                 }
 >
->  /* uprobe attach point */
->  static void trigger_func(void)
-> @@ -63,6 +64,76 @@ static void kprobe_subtest(struct test_bpf_cookie *skel)
->         bpf_link__destroy(retlink2);
->  }
+> -               /* Implement bpf_get_func_ip inline. */
+> +               /* Implement tracing bpf_get_func_ip inline. */
+>                 if (prog_type == BPF_PROG_TYPE_TRACING &&
+>                     insn->imm == BPF_FUNC_get_func_ip) {
+>                         /* Load IP address from ctx - 16 */
+> @@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+>                         continue;
+>                 }
 >
-> +static void fprobe_subtest(void)
+> +               /* Implement kprobe/fprobe bpf_get_func_ip inline. */
+> +               if (prog_type == BPF_PROG_TYPE_KPROBE &&
+> +                   eatype == BPF_TRACE_FPROBE &&
+> +                   insn->imm == BPF_FUNC_get_func_ip) {
+> +                       /* Load IP address from ctx (struct pt_regs) ip */
+> +                       insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
+> +                                                 offsetof(struct pt_regs, ip));
+
+Isn't this architecture-specific? I'm starting to dislike this
+inlining whole more and more. It's just a complication in verifier
+without clear real-world benefits. We are clearly prematurely
+optimizing here. In practice you'll just call bpf_get_func_ip() once
+and that's it. Function call overhead will be negligible compare to
+other *userful* work you'll be doing in your BPF program.
+
+
+> +
+> +                       new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
+> +                       if (!new_prog)
+> +                               return -ENOMEM;
+> +
+> +                       env->prog = prog = new_prog;
+> +                       insn      = new_prog->insnsi + i + delta;
+> +                       continue;
+> +               }
+> +
+>  patch_call_imm:
+>                 fn = env->ops->get_func_proto(insn->imm, env->prog);
+>                 /* all functions that have prototype and verifier allowed
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index a2024ba32a20..28e59e31e3db 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1036,6 +1036,19 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
+>         .arg1_type      = ARG_PTR_TO_CTX,
+>  };
+>
+> +BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
 > +{
-> +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts);
-> +       int err, prog_fd, link1_fd = -1, link2_fd = -1;
-> +       struct fprobe_bpf_cookie *skel = NULL;
-> +       __u32 duration = 0, retval;
-> +       __u64 addrs[8], cookies[8];
-> +
-> +       skel = fprobe_bpf_cookie__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
-> +               goto cleanup;
-> +
-> +       kallsyms_find("bpf_fentry_test1", &addrs[0]);
-> +       kallsyms_find("bpf_fentry_test2", &addrs[1]);
-> +       kallsyms_find("bpf_fentry_test3", &addrs[2]);
-> +       kallsyms_find("bpf_fentry_test4", &addrs[3]);
-> +       kallsyms_find("bpf_fentry_test5", &addrs[4]);
-> +       kallsyms_find("bpf_fentry_test6", &addrs[5]);
-> +       kallsyms_find("bpf_fentry_test7", &addrs[6]);
-> +       kallsyms_find("bpf_fentry_test8", &addrs[7]);
-> +
-> +       cookies[0] = 1;
-> +       cookies[1] = 2;
-> +       cookies[2] = 3;
-> +       cookies[3] = 4;
-> +       cookies[4] = 5;
-> +       cookies[5] = 6;
-> +       cookies[6] = 7;
-> +       cookies[7] = 8;
-> +
-> +       opts.fprobe.addrs = (__u64) &addrs;
-
-we should have ptr_to_u64() for test_progs, but if not, let's either
-add it or it should be (__u64)(uintptr_t)&addrs. Otherwise we'll be
-getting compilation warnings on some architectures.
-
-> +       opts.fprobe.cnt = 8;
-> +       opts.fprobe.bpf_cookies = (__u64) &cookies;
-> +       prog_fd = bpf_program__fd(skel->progs.test2);
-> +
-> +       link1_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
-> +       if (!ASSERT_GE(link1_fd, 0, "link1_fd"))
-> +               return;
-> +
-> +       cookies[0] = 8;
-> +       cookies[1] = 7;
-> +       cookies[2] = 6;
-> +       cookies[3] = 5;
-> +       cookies[4] = 4;
-> +       cookies[5] = 3;
-> +       cookies[6] = 2;
-> +       cookies[7] = 1;
-> +
-> +       opts.flags = BPF_F_FPROBE_RETURN;
-> +       prog_fd = bpf_program__fd(skel->progs.test3);
-> +
-> +       link2_fd = bpf_link_create(prog_fd, 0, BPF_TRACE_FPROBE, &opts);
-> +       if (!ASSERT_GE(link2_fd, 0, "link2_fd"))
-> +               goto cleanup;
-> +
-> +       prog_fd = bpf_program__fd(skel->progs.test1);
-> +       err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-> +                               NULL, NULL, &retval, &duration);
-> +       ASSERT_OK(err, "test_run");
-> +       ASSERT_EQ(retval, 0, "test_run");
-> +
-> +       ASSERT_EQ(skel->bss->test2_result, 8, "test2_result");
-> +       ASSERT_EQ(skel->bss->test3_result, 8, "test3_result");
-> +
-> +cleanup:
-> +       close(link1_fd);
-> +       close(link2_fd);
-> +       fprobe_bpf_cookie__destroy(skel);
+> +       /* This helper call is inlined by verifier. */
+> +       return regs->ip;
 > +}
 > +
->  static void uprobe_subtest(struct test_bpf_cookie *skel)
+> +static const struct bpf_func_proto bpf_get_func_ip_proto_fprobe = {
+> +       .func           = bpf_get_func_ip_fprobe,
+> +       .gpl_only       = false,
+> +       .ret_type       = RET_INTEGER,
+> +       .arg1_type      = ARG_PTR_TO_CTX,
+> +};
+> +
+>  BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
 >  {
->         DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
-> @@ -249,6 +320,8 @@ void test_bpf_cookie(void)
+>         struct bpf_trace_run_ctx *run_ctx;
+> @@ -1279,7 +1292,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>                 return &bpf_override_return_proto;
+>  #endif
+>         case BPF_FUNC_get_func_ip:
+> -               return &bpf_get_func_ip_proto_kprobe;
+> +               return prog->expected_attach_type == BPF_TRACE_FPROBE ?
+> +                       &bpf_get_func_ip_proto_fprobe : &bpf_get_func_ip_proto_kprobe;
+>         case BPF_FUNC_get_attach_cookie:
+>                 return &bpf_get_attach_cookie_proto_trace;
+>         default:
+> --
+> 2.34.1
 >
->         if (test__start_subtest("kprobe"))
->                 kprobe_subtest(skel);
-> +       if (test__start_subtest("rawkprobe"))
-
-kprobe.multi?
-
-> +               fprobe_subtest();
->         if (test__start_subtest("uprobe"))
->                 uprobe_subtest(skel);
->         if (test__start_subtest("tracepoint"))
-
-[...]
