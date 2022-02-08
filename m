@@ -2,155 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA23FC433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE843C433F5
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiBHWWV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:22:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S1356370AbiBHWWc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387192AbiBHWGI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:06:08 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5448C0612BC
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 14:06:07 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id s18so804620ioa.12
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 14:06:07 -0800 (PST)
+        with ESMTP id S1386603AbiBHU7F (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 15:59:05 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39149C0612B8;
+        Tue,  8 Feb 2022 12:59:05 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id w1so400970plb.6;
+        Tue, 08 Feb 2022 12:59:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WiGyLg8cWadUpUV/dzImwc2YaiNNyLLzayweJorPV2g=;
-        b=K8N2Xk5fXpj1dSzgipi45E6OlRo4tBgkgPty/ybzKtLMLsr87B9ogjUtjjxXxYbDJF
-         xxe1Sl9Xc3c9tyR9p02SWCT9a4K7GVPB6jAdsIFBbtZWgJayi+PsqgYFj2s7kBXb8MtP
-         5kgyYaYoBA50D3SQa7VMRXoI91GQSM3wt/pce+t1h5NBqs7TePXDpK+TXs8iJcpbaft0
-         xESP44JQuRl2Mu0gkiERUihf4/swNbF92CoZ6YPEjfbe2jh9zIQiZzA7BdStimusRdaH
-         qmrLXSLdjz7BxlfnxKq/3QwxICB59LEso0LgHrNaOzu6Ah/5tGJv9frNpktPuqNLfCmo
-         ZsGQ==
+        bh=QbUbLD297C9LHR9dKbjFBfXBQLTZCqp5XODbPA8494E=;
+        b=GR3YHCi59fIouyPxReubqzheXrTudQk8/YISzRbx4NacvXM05rBWHuJ61rR8tYCLA0
+         /m/EGzBX8ZStMf/SRU/EVwZFqXcvWdk5PqtYHVf4qq5uF4DheElf0lCpP8+3ZdEJo1ok
+         xHRAVI03hoyT5/eRqyJwp5m4XnVN6qMnbgTGosGxrfRxA1R//55sNkTr4syLelgvlWCh
+         cRGVe1wxx0A/c3g1DX6lTRwHtCvfzSdRYdQaFMxONmINvYoX3ivwhYno4i3/yH+zWpIA
+         iKfq3AOruZz4M+Z7njLWWYGZ0VXof/ioEDOD19omHbYq48IaDvFS6I7dRq0iYcqgBr6E
+         ejKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WiGyLg8cWadUpUV/dzImwc2YaiNNyLLzayweJorPV2g=;
-        b=MSISM5dhN1zeNrCFm0bUdQG+gMaavf5e8s0sC1SCxb6PNWeuV1aDRaM2CbQ6HO13Bf
-         RA5tGiwxUPmj3oqPGVICRkWRW2bLQXBRXG3zmvYd4QhGK8xuN5bmirSEBzSF95B/R/Ar
-         aqI9r4sn/gwR80JfezjI67BdHV/Q15tai4cLykg5v7G7mgY56GwP1NSTGlFtmqA5pxt6
-         YC0Eo5DQAWIC30myAAvb2mRKH0jEud766jhNWP2VOQBX7aZtY4v9TFV32kzHBK4nC5uQ
-         Ml2jZYUBM233u+o6KSTNooROe4pFaalTHHrMvgSFdUMv8KYkXHiLSPJwHh2n/XIDpfgG
-         YDtA==
-X-Gm-Message-State: AOAM530N+/nrNZYxWVZ49O49jOCqcq/7CY5glaJDJFaucE9yWOdX5MtP
-        /vWnMTSp0s2iKtKOuIFnkZpI+B4pu7aK/glxhJA=
-X-Google-Smtp-Source: ABdhPJztLzdHcNkzyUCG1EVRSAMQ4cWv9ApMM2+cE6RHBVwrW4JWyPU+eBovXNXfzMIEMtXGRfZ9qJqvrZBuyoq0CXk=
-X-Received: by 2002:a02:7417:: with SMTP id o23mr3270031jac.145.1644357966993;
- Tue, 08 Feb 2022 14:06:06 -0800 (PST)
+        bh=QbUbLD297C9LHR9dKbjFBfXBQLTZCqp5XODbPA8494E=;
+        b=UxfHKaJSIPFAX4zhIzClxVRstrywFPJnHZNzE2Xvc4PHWWicadi9xFvGih4aBI1hlz
+         oo+HOe/hlU8SsgU6B2v0vxagGoXn6XBH0J98hXwr2eYwOKKeTByopH+0DdizulyqosRn
+         8Fyh7T2ydfGWGb0JRK9XjbqQWyWYYw4B4BRT6j8D44ZfSoIrBeOjqwT74MXJ8EZTvLC9
+         XDe0euCloeBlMCctIqVf2NTvkYumdQEWL89i6CC2mwh6lrI75jnlflH8Bm1gUpfGAOj8
+         mNtiNH1/jLnLwIlXg017/zI7yjNzJ8NpZUPF9DLAh2w/YJKmMFb+qKic70x93RSE7BWo
+         LSng==
+X-Gm-Message-State: AOAM530Xfikj01FTh4fZHXv4lbdaLTDVM0oV0t966BhhWh7G509y3CE1
+        0POjabtg0zaQlZxykcREuitA4Gt177k2tqYDxkQ=
+X-Google-Smtp-Source: ABdhPJxB9Dam2j36CTMuCJ2pZ2vVkd4UZ4Fg1UbAby9D6k8q7VQ3EJ0LqOpgDc1mS5cuYaJaw1yOv5DkASUbVUl/4BI=
+X-Received: by 2002:a17:902:b682:: with SMTP id c2mr6335748pls.126.1644353944609;
+ Tue, 08 Feb 2022 12:59:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208051635.2160304-1-iii@linux.ibm.com> <20220208051635.2160304-6-iii@linux.ibm.com>
-In-Reply-To: <20220208051635.2160304-6-iii@linux.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Feb 2022 14:05:55 -0800
-Message-ID: <CAEf4BzZCYa-wz5B7pwvo6R84vs70YFxJddSvA_FwCGDnUrHXFg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 05/14] libbpf: Generalize overriding syscall
- parameter access macros
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+References: <20220207131459.504292-2-jakub@cloudflare.com> <202202080631.n8UjqRXy-lkp@intel.com>
+ <CAADnVQKGF=YaKvzWZFO1c9bO63XHoiD=i-w-chCeSbaNoRfdwg@mail.gmail.com> <87y22lqeeb.fsf@cloudflare.com>
+In-Reply-To: <87y22lqeeb.fsf@cloudflare.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 8 Feb 2022 12:58:53 -0800
+Message-ID: <CAADnVQJ997daVetpma+FAtasJ3NsZskwvU7+-o4A=YhTydf98Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Make remote_port field in struct
+ bpf_sk_lookup 16-bit wide
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
+        kbuild-all@lists.01.org,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>, bpf <bpf@vger.kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 7, 2022 at 9:16 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+On Tue, Feb 8, 2022 at 12:42 PM Jakub Sitnicki <jakub@cloudflare.com> wrote:
 >
-> Instead of conditionally overriding PT_REGS_PARM4_SYSCALL, provide
-> default fallbacks for all __PT_PARMn_REG_SYSCALL macros, so that
-> architectures can simply override a specific syscall parameter macro.
-> Also allow completely overriding PT_REGS_PARM1_SYSCALL for
-> non-trivial access sequences.
+> On Tue, Feb 08, 2022 at 08:28 PM CET, Alexei Starovoitov wrote:
+> > On Mon, Feb 7, 2022 at 2:05 PM kernel test robot <lkp@intel.com> wrote:
+> >> 7c32e8f8bc33a5f Lorenz Bauer 2021-03-03  1148
+> >> 7c32e8f8bc33a5f Lorenz Bauer 2021-03-03 @1149   if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
+> >
+> > Jakub,
+> > are you planning to respin and remove that check?
 >
-> Co-developed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> ---
->  tools/lib/bpf/bpf_tracing.h | 48 +++++++++++++++++++++++++------------
->  1 file changed, 33 insertions(+), 15 deletions(-)
+> Yes, certainly. Just didn't get to it today.
 >
-> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> index da7e8d5c939c..82f1e935d549 100644
-> --- a/tools/lib/bpf/bpf_tracing.h
-> +++ b/tools/lib/bpf/bpf_tracing.h
-> @@ -265,25 +265,43 @@ struct pt_regs;
->
->  #endif
->
-> -#define PT_REGS_PARM1_SYSCALL(x) PT_REGS_PARM1(x)
-> -#define PT_REGS_PARM2_SYSCALL(x) PT_REGS_PARM2(x)
-> -#define PT_REGS_PARM3_SYSCALL(x) PT_REGS_PARM3(x)
-> -#ifdef __PT_PARM4_REG_SYSCALL
-> +#ifndef __PT_PARM1_REG_SYSCALL
-> +#define __PT_PARM1_REG_SYSCALL __PT_PARM1_REG
-> +#endif
-> +#ifndef __PT_PARM2_REG_SYSCALL
-> +#define __PT_PARM2_REG_SYSCALL __PT_PARM2_REG
-> +#endif
-> +#ifndef __PT_PARM3_REG_SYSCALL
-> +#define __PT_PARM3_REG_SYSCALL __PT_PARM3_REG
-> +#endif
-> +#ifndef __PT_PARM4_REG_SYSCALL
-> +#define __PT_PARM4_REG_SYSCALL __PT_PARM4_REG
-> +#endif
-> +#ifndef __PT_PARM5_REG_SYSCALL
-> +#define __PT_PARM5_REG_SYSCALL __PT_PARM5_REG
-> +#endif
-> +
-> +#ifndef PT_REGS_PARM1_SYSCALL
-> +#define PT_REGS_PARM1_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM1_REG_SYSCALL)
-> +#endif
-> +#ifndef PT_REGS_PARM2_SYSCALL
-> +#define PT_REGS_PARM2_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM2_REG_SYSCALL)
-> +#endif
-> +#ifndef PT_REGS_PARM3_SYSCALL
-> +#define PT_REGS_PARM3_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM3_REG_SYSCALL)
-> +#endif
-> +#ifndef PT_REGS_PARM4_SYSCALL
->  #define PT_REGS_PARM4_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM4_REG_SYSCALL)
-> -#else /* __PT_PARM4_REG_SYSCALL */
-> -#define PT_REGS_PARM4_SYSCALL(x) PT_REGS_PARM4(x)
->  #endif
-> -#define PT_REGS_PARM5_SYSCALL(x) PT_REGS_PARM5(x)
-> +#ifndef PT_REGS_PARM5_SYSCALL
-> +#define PT_REGS_PARM5_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM5_REG_SYSCALL)
-> +#endif
->
-> -#define PT_REGS_PARM1_CORE_SYSCALL(x) PT_REGS_PARM1_CORE(x)
-> -#define PT_REGS_PARM2_CORE_SYSCALL(x) PT_REGS_PARM2_CORE(x)
-> -#define PT_REGS_PARM3_CORE_SYSCALL(x) PT_REGS_PARM3_CORE(x)
-> -#ifdef __PT_PARM4_REG_SYSCALL
-> +#define PT_REGS_PARM1_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM1_REG_SYSCALL)
-> +#define PT_REGS_PARM2_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM2_REG_SYSCALL)
-> +#define PT_REGS_PARM3_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM3_REG_SYSCALL)
->  #define PT_REGS_PARM4_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM4_REG_SYSCALL)
-> -#else /* __PT_PARM4_REG_SYSCALL */
-> -#define PT_REGS_PARM4_CORE_SYSCALL(x) PT_REGS_PARM4_CORE(x)
-> -#endif
-> -#define PT_REGS_PARM5_CORE_SYSCALL(x) PT_REGS_PARM5_CORE(x)
-> +#define PT_REGS_PARM5_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM5_REG_SYSCALL)
->
+> Can either respin the series or send a follow-up. Whatever works.
 
-No, please don't do it. It makes CORE variants too rigid. We agreed w/
-Naveen that the way you did it in v2 is better and more flexible and
-in v3 you did it the other way. Why?
-
->  #else /* defined(bpf_target_defined) */
->
-> --
-> 2.34.1
->
+I think respin is better.
