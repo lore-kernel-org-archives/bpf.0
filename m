@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F8F7C433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:32:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DCB4C433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:32:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245477AbiBHFcp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 00:32:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S1346974AbiBHFcq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 00:32:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiBHFRI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:17:08 -0500
+        with ESMTP id S231899AbiBHFRP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 00:17:15 -0500
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388FDC0401ED
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32D4C0401EA
+        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:12 -0800 (PST)
 Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21825G8B026074;
-        Tue, 8 Feb 2022 05:16:49 GMT
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2181Ldw1025943;
+        Tue, 8 Feb 2022 05:16:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=3SxgNsDeQ7rBzsM6xPJZIocw9r9nx9vPWrpummsON18=;
- b=GTWRacssjebveXFaptOLwkFs96vkxo20khmM0IxxVC6+zROdTDy/FuopetG91QEuuQ1G
- kvIpxNKGr+SZhp8INkV2JbdbztCN7kYoc58lh/c7vibAD7oQXc676txY/Q8eZFG3U5FR
- jmwxR9wBh179x1AYxL4QQYKAauSDaH/7dG30N8KWus1Rppg4AXb7UPtlP/Q12T5+dq/u
- azfVHbPPNYN2mZ1uO5kd0Izp6QnF+9vl3KGa02klCeQle6xDoQ7cYd7TH2gS0xkKbi7f
- sfSCz4oo1M3FWofOd+Tody1RfLPD1J1NjpMSjXV0BI22vzpybwr6S3zGr7iGav7yODkj bQ== 
+ bh=3EvM/rCmWiuVwBkzj6vPS6ZG0crmPQkuKBSqKxfzS3E=;
+ b=BLyP61LStaXJiAx6fTMIVOn6IbeckCpv+x47H4QbTFfS0HbjLFcXdE3+tk5ACdt102Q7
+ SLD4LMIbWQERv3AvuwqKHiTTldERn+CrJ3a8dVwWkMldkhbPgtq8CzGLUILt/oQpo3z/
+ DoD5kGGGgUUcKA7VosbwYrPQ2b2Ayod7/o4CWNSo8WYk9lj6PO7br0u7W/O/IryFra41
+ dfqikmNjAKvJ0Awf3fBoLhFSXmvp/SAfYNXRZdMWbfVRaN7qNz1IjTnMwlropJOTo885
+ //7Cisnfzvfi9CATbknHfz9CvBm6CGnS3PBccz2dRkHEWxrmrF3zWg1esxM7FoF0FA69 hQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22m6fnum-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22m6fnww-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:49 +0000
+        Tue, 08 Feb 2022 05:16:55 +0000
 Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2184w8Oa016924;
-        Tue, 8 Feb 2022 05:16:49 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22m6fntu-1
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2185Dc1D005149;
+        Tue, 8 Feb 2022 05:16:55 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3e22m6fnwf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:48 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185Ck8H000993;
-        Tue, 8 Feb 2022 05:16:47 GMT
+        Tue, 08 Feb 2022 05:16:54 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185EDB7029315;
+        Tue, 8 Feb 2022 05:16:53 GMT
 Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma02fra.de.ibm.com with ESMTP id 3e1gv99bad-1
+        by ppma06fra.de.ibm.com with ESMTP id 3e1ggj1g6c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:46 +0000
+        Tue, 08 Feb 2022 05:16:52 +0000
 Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2185GeUs35193250
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2185GlPW38601110
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 05:16:40 GMT
+        Tue, 8 Feb 2022 05:16:47 GMT
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1759A11C05C;
-        Tue,  8 Feb 2022 05:16:40 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A24AC11C04A;
+        Tue,  8 Feb 2022 05:16:47 +0000 (GMT)
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 69EE611C050;
-        Tue,  8 Feb 2022 05:16:39 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 0DC5911C04C;
+        Tue,  8 Feb 2022 05:16:47 +0000 (GMT)
 Received: from heavy.lan (unknown [9.171.78.41])
         by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 05:16:39 +0000 (GMT)
+        Tue,  8 Feb 2022 05:16:46 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,17 +71,17 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         Mark Rutland <mark.rutland@arm.com>
 Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v4 02/14] selftests/bpf: Fix a potential offsetofend redefinition in test_cls_redirect
-Date:   Tue,  8 Feb 2022 06:16:23 +0100
-Message-Id: <20220208051635.2160304-3-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v4 10/14] libbpf: Move data structure manipulation macros to bpf_common_helpers.h
+Date:   Tue,  8 Feb 2022 06:16:31 +0100
+Message-Id: <20220208051635.2160304-11-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220208051635.2160304-1-iii@linux.ibm.com>
 References: <20220208051635.2160304-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5Mi2AUc-EuK2PfwQ3Kzqa1_up7GEkgkx
-X-Proofpoint-ORIG-GUID: cRnFVHfDZo67QEsIq5wYdTMyLcYHHhFW
+X-Proofpoint-GUID: iaYnX2_5Oy0urX8XKbhvjQBev_xaWupT
+X-Proofpoint-ORIG-GUID: DMz5srp1Q7EcldplnN2X3QxzJAmdr0T3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-08_01,2022-02-07_02,2021-12-02_01
@@ -94,30 +94,126 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If one of the included headers defines offsetofend macro,
-test_cls_redirect would fail to build. Wrap the offsetofend definition
-in #ifdef to avoid that.
+These macros are useful for both libbpf and bpf progs, so put them into
+a separate header dedicated to this use case.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/progs/test_cls_redirect.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/lib/bpf/Makefile                 |  2 +-
+ tools/lib/bpf/bpf_common_helpers.h     | 30 ++++++++++++++++++++++++++
+ tools/lib/bpf/bpf_helpers.h            | 15 +------------
+ tools/testing/selftests/bpf/bpf_util.h | 10 +--------
+ 4 files changed, 33 insertions(+), 24 deletions(-)
+ create mode 100644 tools/lib/bpf/bpf_common_helpers.h
 
-diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-index 2833ad722cb7..ed1b9c90a66b 100644
---- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-@@ -28,8 +28,10 @@
- #define INLINING __always_inline
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index b8b37fe76006..60b06c22e0a1 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -239,7 +239,7 @@ install_lib: all_cmd
+ 
+ SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h	     \
+ 	    bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h	     \
+-	    skel_internal.h libbpf_version.h
++	    skel_internal.h libbpf_version.h bpf_common_helpers.h
+ GEN_HDRS := $(BPF_GENERATED)
+ 
+ INSTALL_PFX := $(DESTDIR)$(prefix)/include/bpf
+diff --git a/tools/lib/bpf/bpf_common_helpers.h b/tools/lib/bpf/bpf_common_helpers.h
+new file mode 100644
+index 000000000000..79db303b6ae2
+--- /dev/null
++++ b/tools/lib/bpf/bpf_common_helpers.h
+@@ -0,0 +1,30 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
++#ifndef __BPF_COMMON_HELPERS__
++#define __BPF_COMMON_HELPERS__
++
++/*
++ * Helper macros that can be used both by libbpf and bpf progs.
++ */
++
++#ifndef offsetof
++#define offsetof(TYPE, MEMBER) ((unsigned long)&((TYPE *)0)->MEMBER)
++#endif
++
++#ifndef sizeof_field
++#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
++#endif
++
++#ifndef offsetofend
++#define offsetofend(TYPE, MEMBER) \
++	(offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
++#endif
++
++#ifndef container_of
++#define container_of(ptr, type, member)				\
++	({							\
++		void *__mptr = (void *)(ptr);			\
++		((type *)(__mptr - offsetof(type, member)));	\
++	})
++#endif
++
++#endif
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 44df982d2a5c..1e8b609c1000 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -2,6 +2,7 @@
+ #ifndef __BPF_HELPERS__
+ #define __BPF_HELPERS__
+ 
++#include "bpf_common_helpers.h"
+ /*
+  * Note that bpf programs need to include either
+  * vmlinux.h (auto-generated from BTF) or linux/types.h
+@@ -61,20 +62,6 @@
+ #define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
  #endif
  
-+#ifndef offsetofend
- #define offsetofend(TYPE, MEMBER) \
- 	(offsetof(TYPE, MEMBER) + sizeof((((TYPE *)0)->MEMBER)))
-+#endif
+-/*
+- * Helper macros to manipulate data structures
+- */
+-#ifndef offsetof
+-#define offsetof(TYPE, MEMBER)	((unsigned long)&((TYPE *)0)->MEMBER)
+-#endif
+-#ifndef container_of
+-#define container_of(ptr, type, member)				\
+-	({							\
+-		void *__mptr = (void *)(ptr);			\
+-		((type *)(__mptr - offsetof(type, member)));	\
+-	})
+-#endif
+-
+ /*
+  * Helper macro to throw a compilation error if __bpf_unreachable() gets
+  * built into the resulting code. This works given BPF back end does not
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index a3352a64c067..bc0b741b1eef 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -6,6 +6,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++#include <bpf/bpf_common_helpers.h>
+ #include <bpf/libbpf.h> /* libbpf_num_possible_cpus */
  
- #define IP_OFFSET_MASK (0x1FFF)
- #define IP_MF (0x2000)
+ static inline unsigned int bpf_num_possible_cpus(void)
+@@ -31,13 +32,4 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ # define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+ #endif
+ 
+-#ifndef sizeof_field
+-#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
+-#endif
+-
+-#ifndef offsetofend
+-#define offsetofend(TYPE, MEMBER) \
+-	(offsetof(TYPE, MEMBER)	+ sizeof_field(TYPE, MEMBER))
+-#endif
+-
+ #endif /* __BPF_UTIL__ */
 -- 
 2.34.1
 
