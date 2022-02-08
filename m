@@ -2,52 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF58C433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 02:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F374C43217
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 02:40:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345936AbiBHCaP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 21:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S1345392AbiBHCkf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 21:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345937AbiBHCaO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:30:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B27C06109E;
-        Mon,  7 Feb 2022 18:30:13 -0800 (PST)
+        with ESMTP id S1346020AbiBHCkX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 21:40:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 444FFC061A73;
+        Mon,  7 Feb 2022 18:40:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 136236147C;
-        Tue,  8 Feb 2022 02:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 72329C340ED;
-        Tue,  8 Feb 2022 02:30:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE7361467;
+        Tue,  8 Feb 2022 02:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 347A3C340ED;
+        Tue,  8 Feb 2022 02:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644287412;
-        bh=2NrfmZ5nHmEtw6Xj9n4lzXjnH/mIJFd6e08LaVoVHTA=;
+        s=k20201202; t=1644288009;
+        bh=HPhn2NkAb2CG1r2WDNSZ88ot6nNlDKxaq3OQtzYG+Mw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=haisEjIwxQHs//x1HxPEfguZW7dj1XRID0//W6L8OevWkQM7b3yhKEWew7FrpbFA0
-         VOBHUXXX4p880IG+JYY26jwBfAfAKXGrjlm8i5HIGXtHbUPT+LWdgSEjSIS+3fBHKd
-         QqcsWJ0nN3o6HoPe2Urws+03yueAuL03859xX9FNsvMAemwnjLgR/1V0LBz1e2OWAD
-         Swi39YLTKIxjT07FSThLDul6NhpYHZ6ohIkt22S3yAM+PPpLaLeSbO6fS4X6P2675z
-         dcvsqfVr0s8N6J4Ek3GALKJOidPcjeC8Bi/iTrqzFhfQYAdxmrPf4bk4uTzbCjLc8G
-         I/E4365Fl5NrA==
+        b=sEkp73zSHcQGhoqECzB9Ixytm4dZKbStIxLS9+TmUlHQd3JcsXh7bS9v+fhbekGz/
+         dAeuK0QStf2BzREF98uhX1R2lEsRVh14X5YzyL2ckavt3ccalbTK7bMOzUDy5v5Sgr
+         DH6tIYzKpztdGOtKhftPZ5C54uJ/x+6teTzAQgwIIKKAjjHGRBbdjo4LodrJkEtEni
+         EEWROJHBckIkNl9pvpbKsNIntfGmuPWpqbwVNdz8Hoi+LDGCJoy8w2Eltki6tDe9EO
+         H7bpwmX1R6GuuCTV5DQg/lK/7yBJS3hlkG7TyXf85ByVOwWFPKwN0WHpZPhpI12ktd
+         L+VvhGLqH7/7w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 57C16E6BB76;
-        Tue,  8 Feb 2022 02:30:12 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1DF8FE6BB76;
+        Tue,  8 Feb 2022 02:40:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v9 bpf-next 0/9] bpf_prog_pack allocator
+Subject: Re: [PATCH bpf-next 1/2] bpf: test_run: fix overflow in xdp frags parsing
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164428741235.20223.1353999217126442524.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Feb 2022 02:30:12 +0000
-References: <20220204185742.271030-1-song@kernel.org>
-In-Reply-To: <20220204185742.271030-1-song@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kernel-team@fb.com, peterz@infradead.org,
-        x86@kernel.org, iii@linux.ibm.com
+Message-Id: <164428800911.23844.1146882378173833308.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Feb 2022 02:40:09 +0000
+References: <20220204235849.14658-1-sdf@google.com>
+In-Reply-To: <20220204235849.14658-1-sdf@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, lorenzo@kernel.org,
+        syzkaller@googlegroups.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -57,35 +56,23 @@ Hello:
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 4 Feb 2022 10:57:33 -0800 you wrote:
-> Changes v8 => v9:
-> 1. Fix an error with multi function program, in 4/9.
+On Fri,  4 Feb 2022 15:58:48 -0800 you wrote:
+> When kattr->test.data_size_in > INT_MAX, signed min_t will assign
+> negative value to data_len. This negative value then gets passed
+> over to copy_from_user where it is converted to (big) unsigned.
 > 
-> Changes v7 => v8:
-> 1. Rebase and fix conflicts.
-> 2. Lock text_mutex for text_poke_copy. (Daniel)
+> Use unsigned min_t to avoid this overflow.
+> 
+> usercopy: Kernel memory overwrite attempt detected to wrapped address
+> (offset 0, size 18446612140539162846)!
 > 
 > [...]
 
 Here is the summary with links:
-  - [v9,bpf-next,1/9] x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP
-    https://git.kernel.org/bpf/bpf-next/c/fac54e2bfb5b
-  - [v9,bpf-next,2/9] bpf: use bytes instead of pages for bpf_jit_[charge|uncharge]_modmem
-    https://git.kernel.org/bpf/bpf-next/c/3486bedd9919
-  - [v9,bpf-next,3/9] bpf: use size instead of pages in bpf_binary_header
-    https://git.kernel.org/bpf/bpf-next/c/ed2d9e1a26cc
-  - [v9,bpf-next,4/9] bpf: use prog->jited_len in bpf_prog_ksym_set_addr()
-    https://git.kernel.org/bpf/bpf-next/c/d00c6473b1ee
-  - [v9,bpf-next,5/9] x86/alternative: introduce text_poke_copy
-    https://git.kernel.org/bpf/bpf-next/c/0e06b4037168
-  - [v9,bpf-next,6/9] bpf: introduce bpf_arch_text_copy
-    https://git.kernel.org/bpf/bpf-next/c/ebc1415d9b4f
-  - [v9,bpf-next,7/9] bpf: introduce bpf_prog_pack allocator
-    https://git.kernel.org/bpf/bpf-next/c/57631054fae6
-  - [v9,bpf-next,8/9] bpf: introduce bpf_jit_binary_pack_[alloc|finalize|free]
-    https://git.kernel.org/bpf/bpf-next/c/33c9805860e5
-  - [v9,bpf-next,9/9] bpf, x86_64: use bpf_jit_binary_pack_alloc
-    https://git.kernel.org/bpf/bpf-next/c/1022a5498f6f
+  - [bpf-next,1/2] bpf: test_run: fix overflow in xdp frags parsing
+    https://git.kernel.org/bpf/bpf-next/c/9d63b59d1e9d
+  - [bpf-next,2/2] bpf: test_run: fix overflow in bpf_test_finish frags parsing
+    https://git.kernel.org/bpf/bpf-next/c/5d1e9f437df5
 
 You are awesome, thank you!
 -- 
