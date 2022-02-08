@@ -2,97 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 629B7C43219
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 02:40:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A26AC433EF
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 02:47:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345349AbiBHCke (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 21:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S1344213AbiBHCrd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 21:47:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346016AbiBHCkU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 21:40:20 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A83DC061355;
-        Mon,  7 Feb 2022 18:40:06 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id om7so1658145pjb.5;
-        Mon, 07 Feb 2022 18:40:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=86PbrZKbZvLla8kmVYV+8hVSLQZGTzn/6xh5EbYOAj4=;
-        b=fcR2K65BIaGAKiryhCoJh/eGKykysyx/7VBsPrAt9DVxhQqqgUizS4IL/QxjqQuY53
-         XYdv3YMOccCLt8wImkU5xPlHfo/++sQvdAufd/A6RFnjURFxxp7mFvzp5ry9atiLrsRK
-         BdXSWB6IxNsx/XUA0Cy8PqHfZMOimpIVQgw4BarMS/HZ/wIohaD/usv0jZP2WmlNym/b
-         PCrZw50zAXxEFEGIwBoO/OkYHjbLCqYn83XxhQTcgnLDUZCq9GrzKsBD3B7W3NHFN55d
-         SzRVhpz+xLNzOwPMtOaa5grGp7LrDC6oEsUQ7Zcn2wxVsTmq3+9WE21hxQtt56Ux+dsy
-         99fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=86PbrZKbZvLla8kmVYV+8hVSLQZGTzn/6xh5EbYOAj4=;
-        b=PT+FPLUGl7EiTPK1RDZ3lnvoOftCsVeECIcwOLKRpFNwAoYw0hwpBMnGyNvGK3PGpL
-         2puJWWOyJHKv+3t7VoZV7UOhRk/pXM/A4MNPAAkPrkYE/Ogu59QxefHqF6EdjBr3EJND
-         7iMuzwPgpdUg89532AbNBxPdOQT/+t185FD0rSrVBBeOv+U+k68glWu8+DsxjYraTvDQ
-         cdacjm4QqrL5Zmnjgm7YM9l9t1z+W0VvFxebD8vTwzoZOT65L68hfRJcIVmJm31Ll6cV
-         j4omW1OaDv4632SNz2hdYNr8BW+P4OQyusGL8mvLoFb7G0HdWy/Hy3ZGk4tjt1XSbTXM
-         cwdg==
-X-Gm-Message-State: AOAM533S3PDivWDMzjQsFn9ZLg/l+NNYAgjd/OnzMOQ4GtLKpUu76H8L
-        ylOstTECEtJL3vyXDWWAxrknX3bQ9cYZuGRx+r8=
-X-Google-Smtp-Source: ABdhPJyV012NbxVh/J9M5daJXHmHwJBOHf9FFPsYK2o7fmjuwGkJzXawQ44kZCYOWDBLeUkqHfA6woRW8D0ouQFdz78=
-X-Received: by 2002:a17:902:ced1:: with SMTP id d17mr2360713plg.78.1644288005882;
- Mon, 07 Feb 2022 18:40:05 -0800 (PST)
-MIME-Version: 1.0
-References: <705a05194508bc0c1b0c1a5de081bbb60f2693a5.1643712078.git.lorenzo@kernel.org>
-In-Reply-To: <705a05194508bc0c1b0c1a5de081bbb60f2693a5.1643712078.git.lorenzo@kernel.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 7 Feb 2022 18:39:54 -0800
-Message-ID: <CAADnVQJoWF8co=9YNdvQkziwsOAoqw=p134aHTL9YZ82=QJcRA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] net: veth: account total xdp_frame len running ndo_xdp_xmit
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        with ESMTP id S229888AbiBHCrc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 21:47:32 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72F4C061355;
+        Mon,  7 Feb 2022 18:47:31 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jt6pY3zj2zYkdJ;
+        Tue,  8 Feb 2022 10:46:29 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 8 Feb 2022 10:47:29 +0800
+Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: check whether s32 is
+ sufficient for kfunc offset
+To:     Yonghong Song <yhs@fb.com>, Hou Tao <hotforest@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Toshiaki Makita <toshiaki.makita1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20220206043107.18549-1-houtao1@huawei.com>
+ <20220206043107.18549-3-houtao1@huawei.com>
+ <585256c2-318f-3895-8175-e7d7cbe1cd4f@fb.com>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <c8ae6afe-d383-12b9-10df-57dc1da9b566@huawei.com>
+Date:   Tue, 8 Feb 2022 10:47:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <585256c2-318f-3895-8175-e7d7cbe1cd4f@fb.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 2:46 AM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
->
-> Introduce xdp_get_frame_len utility routine to get the xdp_frame full
-> length and account total frame size running XDP_REDIRECT of a
-> non-linear xdp frame into a veth device.
->
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  drivers/net/veth.c |  4 ++--
->  include/net/xdp.h  | 14 ++++++++++++++
->  2 files changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 354a963075c5..22ecaf8b8f98 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -493,7 +493,7 @@ static int veth_xdp_xmit(struct net_device *dev, int n,
->                 struct xdp_frame *frame = frames[i];
->                 void *ptr = veth_xdp_to_ptr(frame);
->
-> -               if (unlikely(frame->len > max_len ||
-> +               if (unlikely(xdp_get_frame_len(frame) > max_len ||
->                              __ptr_ring_produce(&rq->xdp_ring, ptr)))
->                         break;
+Hi,
 
-Looks correct, but could you explain what happens without this fix?
+On 2/8/2022 2:33 AM, Yonghong Song wrote:
+>
+>
+> On 2/5/22 8:31 PM, Hou Tao wrote:
+>> In add_kfunc_call(), bpf_kfunc_desc->imm with type s32 is used to
+>> represent the offset of called kfunc from __bpf_call_base, so
+>> add a test to ensure that the offset will not be overflowed.
+>>
+>> Signed-off-by: Hou Tao <houtao1@huawei.com>
+>> ---
+>>   .../selftests/bpf/prog_tests/ksyms_module.c   | 42 +++++++++++++++++++
+>>   1 file changed, 42 insertions(+)
+>>
+[...]
+>> +    /* Ensure kfunc call is supported */
+>> +    skel = test_ksyms_module__open_and_load();
+>> +    if (!ASSERT_OK_PTR(skel, "test_ksyms_module__open"))
+>> +        return;
+>> +
+>> +    err = kallsyms_find("bpf_testmod_test_mod_kfunc", &kfunc_addr);
+>> +    if (!ASSERT_OK(err, "find kfunc addr"))
+>> +        goto cleanup;
+>> +
+>> +    err = kallsyms_find("__bpf_call_base", &base_addr);
+>> +    if (!ASSERT_OK(err, "find base addr"))
+>> +        goto cleanup;
+>> +
+>> +    used_offset = kfunc_addr - base_addr;
+>> +    actual_offset = kfunc_addr - base_addr;
+>> +    ASSERT_EQ((long long)used_offset, actual_offset, "kfunc offset
+>> overflowed");
+>
+> I am a little bit confused about motivation here. Maybe I missed something. If
+> we indeed have kfunc offset overflow,
+> should kernel verifier just reject the program? Specially,
+> we should make the above test_ksyms_module__open_and_load()
+> fail?
+In add_kfunc_call(), the calculation of imm doesn't consider the overflow
+of s32. So test_ksyms_module__open_and_load() will succeed. I think the
+better solution is to put the overflow check in add_kfunc_call(), so will
+drop this patch and add the overflow check in add_kfunc_call() instead.
 
-Any other drivers might have the same issue?
+Regards,
+Tao
+
+[...]
