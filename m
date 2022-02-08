@@ -2,80 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D07CC4167D
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88500C43219
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386785AbiBHWW6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S1386347AbiBHWXA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386493AbiBHUmI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:42:08 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2402CC0613CB
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 12:42:07 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id o17so617033ljp.1
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 12:42:07 -0800 (PST)
+        with ESMTP id S1386337AbiBHUKb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 15:10:31 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD241C0613CB
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 12:10:30 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id k25so961867ejp.5
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 12:10:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=1arNLeaBe5R3++hUI9/c4FXwtGni/EUby5Sin47pTdk=;
-        b=Lb7EmKUMUybeoFQm61QwAXKAIUC96MWw5KHpW6AXfdODIb97hzU4gI1Jaum5QRmbJD
-         I5Uy4zR+U1GCM4wXIgjANF4btuzAUtWHC44SOc56L7XL0ZZaVd6luXrADm0RItW0MYGf
-         qMSECZalMnz6eRPrXJzUORG7Hmx3dWAKi4/3I=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xhuOnoHjMqmnwg4AI//Ql5Lv0seonbuD/Fbn72VEBa4=;
+        b=NHQNoyAa2GtK9dOezJmPjk9HjqN/b7KSf04Fz4HKOU0Ntpw+9s9uUrrAdgLkQl0PeD
+         +GPhZxYGpeivloFlsT1//01ZZyY7FHM5yx9Zm+BwANau48paOb5XGOzcyludCVj5kKaH
+         0GJLdciKC1Sf3WXvdW3JDJqbplsy2zbzC/2vdUbE+aRylst7aFygC8BIBGckTEQLzBHR
+         1JEjYIaCNjsijri8c6643DYdPq7W8L29Z2gW/lDvDbcY9pSCGwEijzdZiwJaB6+88Bqo
+         CXGf018rdrNheIVtrSE5iISwGhc3pO0rOFPldI2wGuXF/6ME2xjj9i79A9/8r7bBb8NW
+         53NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=1arNLeaBe5R3++hUI9/c4FXwtGni/EUby5Sin47pTdk=;
-        b=O81Q1mZ8PSLuxC/1yExHuNT2ghu9z0zfX7wq8m9I3h4rXOMs2VbRIcKLql3A/AEpIZ
-         /FY6g2fNWH/YY5uV0LF/6IHbDQZzWIHm6NKjITcx5tEgx1mZScDkL2pdw/8oc7HYNKd4
-         3WFCBvawhAU8IGN8WOJYyrzymYzFsCRcSnKaOkjG/Zgm9APC0NKCGA+4oBI6nsnQAnry
-         87X9WUHQEkb6LU2ZduSXR4tOquf+kKfAUQjz98nmEbu+0MzNiNODId/WMSD1pVyd48Ef
-         uxWwsC3qIu04C6WyN6kCWg9BJvyVWXbax2BILylUhEX0JkuH7muhYBOHI8AyrRm992TE
-         C86w==
-X-Gm-Message-State: AOAM532Y0d1gAwWZWBhAHQSMI3Nes3bhOox2XkkEhBZQTIEFsl4k5Kck
-        tym5uSXw02+DrLI0iSFU9xoEog==
-X-Google-Smtp-Source: ABdhPJyxVwpRL74mQEbdgzHrBRw1AQc1y8JfoA1keQTYYNxstmTY9HZuC7hb70h9WGhv/VfOqUrgLw==
-X-Received: by 2002:a2e:bf08:: with SMTP id c8mr3872583ljr.281.1644352925372;
-        Tue, 08 Feb 2022 12:42:05 -0800 (PST)
-Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0e00.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::e00])
-        by smtp.gmail.com with ESMTPSA id m17sm2052933lfr.24.2022.02.08.12.42.04
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xhuOnoHjMqmnwg4AI//Ql5Lv0seonbuD/Fbn72VEBa4=;
+        b=B9qOzz2wA8g8CKzoiiAv9Ljfs0Z7pSVUTZVSvHGZt+nL2NO8bpyPwyBWywK4dU+Ehy
+         vLBC0kXxGf4ReRa+bevFOpiVkvbzU+rT24e5K9/Cq9alnp0vLfPV6Bk+aYIctpWUIcPU
+         si9Uhb4lVmOG63tLtBPdn2YsOqPM7jE/QBi1BaKRJckPOVBqeH0x1wYDWFu86wGbwBDR
+         FG9AeXHGNWpbDfr8M5LHlWMeTxSgckICz8LjgtznMTrXVDX6ywObX5JSh+V5rHubKmtb
+         6ZDQY0aPnpnWtyjXzzQS/IV5rGd45lHzzzdf5Ofy6EmPZ9wpdSYyA9lWak+wC183sT/v
+         IVLA==
+X-Gm-Message-State: AOAM5323kgouTp5QTK0dRFOsc5AyN7Wv1bskdgre1HJpbdonRT4ffN36
+        MWap19NQ9flaxcQu0ou5QLIDYOQwKGo0BA==
+X-Google-Smtp-Source: ABdhPJySLlk4crAU+IMHCu9q24AB5xzpd3UVDpxpN4g4FFc1wmTToCNfTeUoLUp6vb0ItLzJePyzQQ==
+X-Received: by 2002:a17:907:1b05:: with SMTP id mp5mr4994504ejc.527.1644351029158;
+        Tue, 08 Feb 2022 12:10:29 -0800 (PST)
+Received: from erthalion.local (dslb-178-012-046-224.178.012.pools.vodafone-ip.de. [178.12.46.224])
+        by smtp.gmail.com with ESMTPSA id a17sm5342539edt.92.2022.02.08.12.10.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 12:42:05 -0800 (PST)
-References: <20220207131459.504292-2-jakub@cloudflare.com>
- <202202080631.n8UjqRXy-lkp@intel.com>
- <CAADnVQKGF=YaKvzWZFO1c9bO63XHoiD=i-w-chCeSbaNoRfdwg@mail.gmail.com>
-User-agent: mu4e 1.1.0; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
-        kbuild-all@lists.01.org,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Tue, 08 Feb 2022 12:10:28 -0800 (PST)
+Date:   Tue, 8 Feb 2022 21:10:07 +0100
+From:   Dmitry Dolgov <9erthalion6@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Make remote_port field in struct
- bpf_sk_lookup 16-bit wide
-In-reply-to: <CAADnVQKGF=YaKvzWZFO1c9bO63XHoiD=i-w-chCeSbaNoRfdwg@mail.gmail.com>
-Date:   Tue, 08 Feb 2022 21:42:04 +0100
-Message-ID: <87y22lqeeb.fsf@cloudflare.com>
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [RFC PATCH v2] bpftool: Add bpf_cookie to link output
+Message-ID: <20220208201007.6iv7mimcjoxcqzqa@erthalion.local>
+References: <20220204181146.8429-1-9erthalion6@gmail.com>
+ <CAEf4BzYiT-HRn9bLy=qoyOhOQ1ESCB3mB97xt98JWapgB_nbBw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYiT-HRn9bLy=qoyOhOQ1ESCB3mB97xt98JWapgB_nbBw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 08:28 PM CET, Alexei Starovoitov wrote:
-> On Mon, Feb 7, 2022 at 2:05 PM kernel test robot <lkp@intel.com> wrote:
->> 7c32e8f8bc33a5f Lorenz Bauer 2021-03-03  1148
->> 7c32e8f8bc33a5f Lorenz Bauer 2021-03-03 @1149   if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
+> On Mon, Feb 07, 2022 at 02:11:11PM -0800, Andrii Nakryiko wrote:
+> On Fri, Feb 4, 2022 at 10:12 AM Dmitrii Dolgov <9erthalion6@gmail.com> wrote:
+> >
+> > Commit 82e6b1eee6a8 ("bpf: Allow to specify user-provided bpf_cookie for
+> > BPF perf links") introduced the concept of user specified bpf_cookie,
+> > which could be accessed by BPF programs using bpf_get_attach_cookie().
+> > For troubleshooting purposes it is convenient to expose bpf_cookie via
+> > bpftool as well, so there is no need to meddle with the target BPF
+> > program itself.
+> >
+> >     $ bpftool link
+> >     1: type 7  prog 5  bpf_cookie 123
+> >         pids bootstrap(87)
+> >
+> > Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
+> > ---
+> > Changes in v2:
+> >     - Display bpf_cookie in bpftool link command instead perf
+> >
+> >     Previous discussion: https://lore.kernel.org/bpf/20220127082649.12134-1-9erthalion6@gmail.com
 >
-> Jakub,
-> are you planning to respin and remove that check?
+>
+> So I think this change is pretty straightforward and I don't mind it,
+> but I'm not clear how this approach will scale to multi-attach kprobe
+> and fentry programs. For those, users will be specifying many bpf
+> cookies, one per each target attach function. At that point we'll have
+> a bunch of cookies sorted by the attach function IP (not necessarily
+> in the original order). I don't think it will be all that useful and
+> interesting to the end user. We won't be storing original function
+> names (too much memory for storing something that most probably won't
+> be ever queried), so restoring original order and original function
+> names will be hard. If we don't think this through, we'll end up with
+> kernel API that works for just one simple use case.
+>
+> Can you please describe your use case which motivated this feature in
+> the first place to better understand the importance of this?
 
-Yes, certainly. Just didn't get to it today.
-
-Can either respin the series or send a follow-up. Whatever works.
+The use case is pretty theoretical at the moment, I'm trying to
+understand how to get more visibility about bpf_cookie usage. Let me try
+to do the same only in bpftool, while pondering if multi-attach programs
+case could be somehow meaningfully addressed as well.
