@@ -2,142 +2,174 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B81BCC433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:32:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C279AC433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:32:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiBHFca (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 00:32:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S243960AbiBHFci (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 00:32:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiBHFDb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:03:31 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B232C0401DC;
-        Mon,  7 Feb 2022 21:03:30 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id 10so4981877plj.1;
-        Mon, 07 Feb 2022 21:03:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D7TPg7igy8jX8i2IC5l48LueyTmlMqu2/RJJ5raSOkc=;
-        b=nYoWxiV0dpeHGymcX1/LiH0Q2uLhPdSw9W1eorADlHjdoaGELcCZ4EEHCJECi2sCOu
-         63cLRobdP2k2KEH9g2zkBuUU+yXU+DUGvk4esMKLOQvFP1VJ3PnY6IhvmUXLUo2sU/mH
-         Fj05qx2iGcLgYkhzS/b1yK5tn6UJX/KIXWxwQp/zkK4S+3qh1RgkKBpJpBuYCU99dP5a
-         Q9R1EY3jcKqLcnep3Dw0jwTf5anuxpP+G7TlFFPnkjJDBG+A/QN3NYSE7WykIxJ/LlAJ
-         wEa1XekRbvsU0SkYiJpx+XmCV3L4FZBROV8sdxk98rLfvOjWSdN2pqpGxVy5cVdiBMZl
-         K+Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D7TPg7igy8jX8i2IC5l48LueyTmlMqu2/RJJ5raSOkc=;
-        b=bSMeRPFiB4O4FMjryCjDdq09DLAHhGVMYao6q/yaRWF2iE7/3RYxhIOYaS6a9z48AY
-         BN0yvQg2CEZtdQaL/r6liRWvJ7aL3M+ZdU6ZkHKePscliBjDcYp/OVNlKToteOTHGHvJ
-         KW3Tm24sBMtSDXQ/354zpmgwO2HgH3Dz7/E32m6IDWMPNgVtUpAK3YtUZw3PQf0JNsHh
-         3MHyStGi+aw2R39e4/t4epK0z/l5FlmC4PCvtkTWRbLTKOBtjNgGCT49QAkUa9wC1ASE
-         OebA3NdMK9cb0mM28Brxtw/g4wnHxE6KLdtH35vGTzykB6I6+6fbMO9ThDMqS6S852n4
-         1sgg==
-X-Gm-Message-State: AOAM533NdJaaa2abVInsDSxDUb42AS8UoqOooiyIXRAKjQcC8vAcJu1R
-        Gt4D3fJ3WXSVkMx9jSA+bcU=
-X-Google-Smtp-Source: ABdhPJx8O5PSUs5MOOvZEKvj+v+OcwylIZAba/0DAfzEACWL/FTp9ttHKw0a0Uductr+7QzFLHFKIQ==
-X-Received: by 2002:a17:902:7ec8:: with SMTP id p8mr2850589plb.165.1644296609885;
-        Mon, 07 Feb 2022 21:03:29 -0800 (PST)
-Received: from [10.0.2.64] ([209.37.97.194])
-        by smtp.googlemail.com with ESMTPSA id a38sm1862369pfx.121.2022.02.07.21.03.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 21:03:29 -0800 (PST)
-Message-ID: <f1d1f29b-45e8-1ba3-bdbd-4c892b6a4e0f@gmail.com>
-Date:   Mon, 7 Feb 2022 21:03:27 -0800
+        with ESMTP id S231909AbiBHFRP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 00:17:15 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A76C0401ED
+        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:13 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2182jWpY010661;
+        Tue, 8 Feb 2022 05:16:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=9BV0umtU4uqmUlD8CjFKbc/UsAQ3TN3IGw58+vupHC4=;
+ b=kQ6sLKaWIern85/1ublYPyvFEe5jDLZY6itXG/KrEeQ6gYLDVTHTyND7IhEpyWynDvaq
+ zrwmeTb1qnts6cgWjrv4NoXHaneUA62QMr/MgAZ3mrjP+jEqEmoFKKHPjcz289JJ0tgU
+ CLO308HYhqbIY46r5xFpgDp14iVIQwjsuba1vT62Arz74xhg8Wtd9Tcr9F/+PZggM8zS
+ odQoqfw0MK6MIGoitvxpNke/MfbMvByIsKwpBx82TSDpcDjcxjda1NTsjfeilq4EL8jd
+ 8S5e1Sx1xQ7LfOCsOUk5WnffUsJFmBTWUUHIglPQU4zZK+AHpV7RTLjNBVzBLQCt5IW+ 8w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22qf868g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 05:16:55 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21856UCn023865;
+        Tue, 8 Feb 2022 05:16:55 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22qf867v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 05:16:54 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185EEMF029344;
+        Tue, 8 Feb 2022 05:16:52 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3e1ggj1g6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 05:16:52 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2185GhSc48497046
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 8 Feb 2022 05:16:43 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E26B11C04A;
+        Tue,  8 Feb 2022 05:16:43 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C21711C052;
+        Tue,  8 Feb 2022 05:16:42 +0000 (GMT)
+Received: from heavy.lan (unknown [9.171.78.41])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  8 Feb 2022 05:16:42 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v4 05/14] libbpf: Generalize overriding syscall parameter access macros
+Date:   Tue,  8 Feb 2022 06:16:26 +0100
+Message-Id: <20220208051635.2160304-6-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220208051635.2160304-1-iii@linux.ibm.com>
+References: <20220208051635.2160304-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH 2/2] net: tun: track dropped skb via kfree_skb_reason()
-Content-Language: en-US
-To:     Dongli Zhang <dongli.zhang@oracle.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220208035510.1200-1-dongli.zhang@oracle.com>
- <20220208035510.1200-3-dongli.zhang@oracle.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20220208035510.1200-3-dongli.zhang@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ZmSsgwT3gMQEz2tVgYzrf_LClhSuCsJq
+X-Proofpoint-GUID: kSmJ0LR4A8BbUq0O4n4Ggt6dyrLbCpJk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-08_01,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ adultscore=0 malwarescore=0 clxscore=1015 suspectscore=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202080025
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/7/22 7:55 PM, Dongli Zhang wrote:
-> The TUN can be used as vhost-net backend. E.g, the tun_net_xmit() is the
-> interface to forward the skb from TUN to vhost-net/virtio-net.
-> 
-> However, there are many "goto drop" in the TUN driver. Therefore, the
-> kfree_skb_reason() is involved at each "goto drop" to help userspace
-> ftrace/ebpf to track the reason for the loss of packets.
-> 
-> Cc: Joao Martins <joao.m.martins@oracle.com>
-> Cc: Joe Jin <joe.jin@oracle.com>
-> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
-> ---
->  drivers/net/tun.c          | 33 +++++++++++++++++++++++++--------
->  include/linux/skbuff.h     |  6 ++++++
->  include/trace/events/skb.h |  6 ++++++
->  3 files changed, 37 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index fed85447701a..d67f2419dbb4 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1062,13 +1062,16 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->  	struct netdev_queue *queue;
->  	struct tun_file *tfile;
->  	int len = skb->len;
-> +	int drop_reason = SKB_DROP_REASON_NOT_SPECIFIED;
+Instead of conditionally overriding PT_REGS_PARM4_SYSCALL, provide
+default fallbacks for all __PT_PARMn_REG_SYSCALL macros, so that
+architectures can simply override a specific syscall parameter macro.
+Also allow completely overriding PT_REGS_PARM1_SYSCALL for
+non-trivial access sequences.
 
+Co-developed-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ tools/lib/bpf/bpf_tracing.h | 48 +++++++++++++++++++++++++------------
+ 1 file changed, 33 insertions(+), 15 deletions(-)
 
->  
->  	rcu_read_lock();
->  	tfile = rcu_dereference(tun->tfiles[txq]);
->  
->  	/* Drop packet if interface is not attached */
-> -	if (!tfile)
-> +	if (!tfile) {
-> +		drop_reason = SKB_DROP_REASON_DEV_NOT_ATTACHED;
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index da7e8d5c939c..82f1e935d549 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -265,25 +265,43 @@ struct pt_regs;
+ 
+ #endif
+ 
+-#define PT_REGS_PARM1_SYSCALL(x) PT_REGS_PARM1(x)
+-#define PT_REGS_PARM2_SYSCALL(x) PT_REGS_PARM2(x)
+-#define PT_REGS_PARM3_SYSCALL(x) PT_REGS_PARM3(x)
+-#ifdef __PT_PARM4_REG_SYSCALL
++#ifndef __PT_PARM1_REG_SYSCALL
++#define __PT_PARM1_REG_SYSCALL __PT_PARM1_REG
++#endif
++#ifndef __PT_PARM2_REG_SYSCALL
++#define __PT_PARM2_REG_SYSCALL __PT_PARM2_REG
++#endif
++#ifndef __PT_PARM3_REG_SYSCALL
++#define __PT_PARM3_REG_SYSCALL __PT_PARM3_REG
++#endif
++#ifndef __PT_PARM4_REG_SYSCALL
++#define __PT_PARM4_REG_SYSCALL __PT_PARM4_REG
++#endif
++#ifndef __PT_PARM5_REG_SYSCALL
++#define __PT_PARM5_REG_SYSCALL __PT_PARM5_REG
++#endif
++
++#ifndef PT_REGS_PARM1_SYSCALL
++#define PT_REGS_PARM1_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM1_REG_SYSCALL)
++#endif
++#ifndef PT_REGS_PARM2_SYSCALL
++#define PT_REGS_PARM2_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM2_REG_SYSCALL)
++#endif
++#ifndef PT_REGS_PARM3_SYSCALL
++#define PT_REGS_PARM3_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM3_REG_SYSCALL)
++#endif
++#ifndef PT_REGS_PARM4_SYSCALL
+ #define PT_REGS_PARM4_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM4_REG_SYSCALL)
+-#else /* __PT_PARM4_REG_SYSCALL */
+-#define PT_REGS_PARM4_SYSCALL(x) PT_REGS_PARM4(x)
+ #endif
+-#define PT_REGS_PARM5_SYSCALL(x) PT_REGS_PARM5(x)
++#ifndef PT_REGS_PARM5_SYSCALL
++#define PT_REGS_PARM5_SYSCALL(x) (__PT_REGS_CAST(x)->__PT_PARM5_REG_SYSCALL)
++#endif
+ 
+-#define PT_REGS_PARM1_CORE_SYSCALL(x) PT_REGS_PARM1_CORE(x)
+-#define PT_REGS_PARM2_CORE_SYSCALL(x) PT_REGS_PARM2_CORE(x)
+-#define PT_REGS_PARM3_CORE_SYSCALL(x) PT_REGS_PARM3_CORE(x)
+-#ifdef __PT_PARM4_REG_SYSCALL
++#define PT_REGS_PARM1_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM1_REG_SYSCALL)
++#define PT_REGS_PARM2_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM2_REG_SYSCALL)
++#define PT_REGS_PARM3_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM3_REG_SYSCALL)
+ #define PT_REGS_PARM4_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM4_REG_SYSCALL)
+-#else /* __PT_PARM4_REG_SYSCALL */
+-#define PT_REGS_PARM4_CORE_SYSCALL(x) PT_REGS_PARM4_CORE(x)
+-#endif
+-#define PT_REGS_PARM5_CORE_SYSCALL(x) PT_REGS_PARM5_CORE(x)
++#define PT_REGS_PARM5_CORE_SYSCALL(x) BPF_CORE_READ(__PT_REGS_CAST(x), __PT_PARM5_REG_SYSCALL)
+ 
+ #else /* defined(bpf_target_defined) */
+ 
+-- 
+2.34.1
 
-That is going to be a confusing reason code (tap device existed to get
-here) and does not really explain this error.
-
-
->  		goto drop;
-> +	}
->  
->  	if (!rcu_dereference(tun->steering_prog))
->  		tun_automq_xmit(tun, skb);
-> @@ -1078,19 +1081,27 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->  	/* Drop if the filter does not like it.
->  	 * This is a noop if the filter is disabled.
->  	 * Filter can be enabled only for the TAP devices. */
-> -	if (!check_filter(&tun->txflt, skb))
-> +	if (!check_filter(&tun->txflt, skb)) {
-> +		drop_reason = SKB_DROP_REASON_TAP_RUN_FILTER;
-
-just SKB_DROP_REASON_TAP_FILTER
-
->  		goto drop;
-> +	}
->  
->  	if (tfile->socket.sk->sk_filter &&
-> -	    sk_filter(tfile->socket.sk, skb))
-> +	    sk_filter(tfile->socket.sk, skb)) {
-> +		drop_reason = SKB_DROP_REASON_SKB_TRIM;
-
-SKB_DROP_REASON_SOCKET_FILTER
-
-The remainder of your changes feels like another variant of your
-previous "function / line" reason code. You are creating new reason
-codes for every goto failure with a code based name. The reason needs to
-be the essence of the failure in a user friendly label.
