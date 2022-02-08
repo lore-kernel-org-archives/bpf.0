@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BB08C433EF
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F123C433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386493AbiBHWW7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
+        id S1386424AbiBHWXD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387253AbiBHWOR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:14:17 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BD1C0612B8
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 14:14:16 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id s18so826331ioa.12
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 14:14:16 -0800 (PST)
+        with ESMTP id S1387226AbiBHWGp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 17:06:45 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0C0C0612B8
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 14:06:44 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id p11so203622ils.1
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 14:06:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2LdxQlBQ8/TvLVNrRm8ZrnrXZDWaEwW134kzxx2JltA=;
-        b=AHhc9mW0C7kdRN9BuXvhiZ8Y9ZgZWcdp31GpN+Mai+5uvcgeX9fliTP7rNSsg3AKJz
-         BdzQCv7PJaIjg9JkKhnNLiYwQw3WpXzlvtaDbByCebMGX+UVPQm/UzlRypvPnY0YJsLz
-         CTtPCmCsgsrU5n/eWXxFm7s6mztrSOZgUDVj/41RCLEpjh7AqvsCB7ZMS3/HltAlKf+i
-         F23fmn1X3BSTM/PWViicIMQGQwC94q9qinb60h5ztXhzRhZRqo6HxyNrGi579DhtNJ2Y
-         u76sYHDhZeKh42U1akabgj0yCvQaJBF4A0wt2z2MEBByx50QB9bpwcnPI9GSYEGk/sS/
-         PmkA==
+        bh=Ro4jkBv5KbYqCqJzSpxJ6/IsNgdcc/t2D847RvDWEvo=;
+        b=EEabqDx3omVAd3PVGxrQXkokLmI8FYqmdk1ptQZKMvnm86UHlVUHt5btpgsfICQPVM
+         1XNWixcorIcyf2pf8PTAqXz+GfxFezbk7zYjkSb2G/yTZHbxcCF+oYBXwXarEGgA4AVk
+         HV6b9uHuWfkA1Sm1+MWdD5jT91R6+jfAZtzIDqfxdsKHJd/tetv1dTBC9mMG4B/cKm6g
+         n52GMWIDjaNHST9voUHNJZAixx0/+cPdrHle3XEIDATouyGUU3g7bw2xWqCZvqBDYCGr
+         165IXsyFsXO3Lk3Ub34TKsUf81NtYBOfmZ0L0wkz8J/qJrn58GCksiwkLdXQB+1dHNL2
+         lPnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2LdxQlBQ8/TvLVNrRm8ZrnrXZDWaEwW134kzxx2JltA=;
-        b=D2oD/8C05t41nmrC+J4ABN22UJWFgk4x8tRyF9VXCiCV/ZQnrRwj99S5oypS4KEFCl
-         qBSGhM7UQ8gPC/gqqriK863cOM9Cz+MnKiqa/SfLqaoUGKHWp3mUWnu9u4C16CZq6iwB
-         1Wd9HnKN4ArEEKdvEfj9iC1OcyanpcAEVGCOdXNHlAn37nauCHGuGrSO0s+ThK/Fjngx
-         Dt80G140spXBNeXu24zKkL/Av4PojcGj2bnvpEaBji3e6ptscqalfF3TyUTKMb3dyueS
-         FzkdVX1OAYq3va2aIax4FTJA8Zr6R3tgEQlw34zVjVAKG5VNCSEZiQdc50CuStvtJlP/
-         EX8w==
-X-Gm-Message-State: AOAM531uo2e/BVWq/coK/INaF4WCc7W943rj1dEu8ZZsyUK8sIMobf1r
-        qGnR3siVCjOXHjbXEEJAAD1ME5Dm3eMDrGQAQI0=
-X-Google-Smtp-Source: ABdhPJycHV0quE5lOaCgu0k2/FXwj2k+V49tRBJHLAzLvgFkXnKaoboR+8rjWZNEJrAt4gVC7Zempr2pVCCa4DJ90Is=
-X-Received: by 2002:a02:1181:: with SMTP id 123mr3109351jaf.93.1644358455557;
- Tue, 08 Feb 2022 14:14:15 -0800 (PST)
+        bh=Ro4jkBv5KbYqCqJzSpxJ6/IsNgdcc/t2D847RvDWEvo=;
+        b=m21NLspImI2q7Ow5uW9CBwK+ggqb5huanecU0HZ1mgyONhedmOnJDR0sevJhqwsI/m
+         7xzh4FkvnHbJK8fTZ/p8yklq8TzB0bJNmVQsEfiNc7PcnYQtuBrKq3Dhpi2RaYZ5kkrD
+         zafYdz/zA1ygvdja7nJeDv6L4+27lGqu9K4+m1SQDtXVhtfmu/m12gAvRcz4CRBobOG0
+         JsB2GCEXzD3O8pPigb1+rwfkP+0sLOYilFlGVN/ZC9gYVPMVF96K6pjQFU4AjsjUipfx
+         FZfZZzkgyHHkasNMhTvhY+X80hk3r5QX+RgzwsB8IjGCHt33eagBUFvi6AQqU0aounn1
+         azKg==
+X-Gm-Message-State: AOAM5338iZrttvIHeoTrAmzOib1rJkid6Eldn3ZJzuOCQ0RuqR9hAt8d
+        U9vyvPTbqT9m9dDropQJgmFIp2DkJHeRr4/LO5U=
+X-Google-Smtp-Source: ABdhPJwP2zHhU2G4Tcrj+Er7JLyW9brETzVlWthawo1v7JXcZYm24R6IIvcXiKJ3Dxov9v9L8zQUNmbZYQHfxv0dhGg=
+X-Received: by 2002:a05:6e02:1b81:: with SMTP id h1mr3366772ili.239.1644358003929;
+ Tue, 08 Feb 2022 14:06:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208051635.2160304-1-iii@linux.ibm.com> <20220208051635.2160304-11-iii@linux.ibm.com>
-In-Reply-To: <20220208051635.2160304-11-iii@linux.ibm.com>
+References: <20220208051635.2160304-1-iii@linux.ibm.com> <20220208051635.2160304-4-iii@linux.ibm.com>
+In-Reply-To: <20220208051635.2160304-4-iii@linux.ibm.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Feb 2022 14:14:04 -0800
-Message-ID: <CAEf4BzbWqzWDhvZqT9WqMhwXpnRX7m85XTHQ3zacwmtdhJJDeg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 10/14] libbpf: Move data structure
- manipulation macros to bpf_common_helpers.h
+Date:   Tue, 8 Feb 2022 14:06:32 -0800
+Message-ID: <CAEf4BzYO+5+bbqv2ESuZnZfP2YOpGAAeLF5izg_Go4p4in4U2w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/14] selftests/bpf: Compile
+ bpf_syscall_macro test also with user headers
 To:     Ilya Leoshkevich <iii@linux.ibm.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -70,131 +70,166 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Mon, Feb 7, 2022 at 9:16 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
 >
-> These macros are useful for both libbpf and bpf progs, so put them into
-> a separate header dedicated to this use case.
+> Verify that using linux/ptrace.h instead of vmlinux.h works fine.
+> Since without vmlinux.h and with CO-RE it's not possible to access the
+> first syscall argument on arm64 and s390x, and any syscall arguments on
+> Intel, skip the corresponding checks.
 >
 > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 > ---
->  tools/lib/bpf/Makefile                 |  2 +-
->  tools/lib/bpf/bpf_common_helpers.h     | 30 ++++++++++++++++++++++++++
->  tools/lib/bpf/bpf_helpers.h            | 15 +------------
->  tools/testing/selftests/bpf/bpf_util.h | 10 +--------
->  4 files changed, 33 insertions(+), 24 deletions(-)
->  create mode 100644 tools/lib/bpf/bpf_common_helpers.h
+>  ...call_macro.c => test_bpf_syscall_macro_common.h} |  8 +++++++-
+>  .../bpf/prog_tests/test_bpf_syscall_macro_kernel.c  | 13 +++++++++++++
+>  .../bpf/prog_tests/test_bpf_syscall_macro_user.c    | 13 +++++++++++++
+>  ...f_syscall_macro.c => bpf_syscall_macro_common.h} |  8 ++++++--
+>  .../selftests/bpf/progs/bpf_syscall_macro_kernel.c  |  4 ++++
+>  .../selftests/bpf/progs/bpf_syscall_macro_user.c    | 10 ++++++++++
+>  6 files changed, 53 insertions(+), 3 deletions(-)
+>  rename tools/testing/selftests/bpf/prog_tests/{test_bpf_syscall_macro.c => test_bpf_syscall_macro_common.h} (89%)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_kernel.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_user.c
+>  rename tools/testing/selftests/bpf/progs/{bpf_syscall_macro.c => bpf_syscall_macro_common.h} (87%)
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_syscall_macro_kernel.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_syscall_macro_user.c
 >
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index b8b37fe76006..60b06c22e0a1 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -239,7 +239,7 @@ install_lib: all_cmd
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_common.h
+> similarity index 89%
+> rename from tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c
+> rename to tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_common.h
+> index f5f4c8adf539..9f2a395abff7 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_common.h
+> @@ -2,7 +2,6 @@
+>  /* Copyright 2022 Sony Group Corporation */
+>  #include <sys/prctl.h>
+>  #include <test_progs.h>
+> -#include "bpf_syscall_macro.skel.h"
 >
->  SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h      \
->             bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h         \
-> -           skel_internal.h libbpf_version.h
-> +           skel_internal.h libbpf_version.h bpf_common_helpers.h
+>  void test_bpf_syscall_macro(void)
+>  {
+> @@ -46,7 +45,13 @@ void test_bpf_syscall_macro(void)
+>         ASSERT_EQ(skel->bss->arg5, exp_arg5, "syscall_arg5");
+>
+>         /* check whether args of syscall are copied correctly for CORE variants */
+> +#if defined(__BPF_SYSCALL_MACRO_KERNEL_SKEL_H__) || \
+> +               (!defined(__s390__) && !defined(__aarch64__) && \
+> +                !defined(__i386__) && !defined(__x86_64__))
 
-Wait, how did we get from fixing s390x syscall arg fetching to
-exposing a new public API header from libbpf?... I feel like I missed
-a few revisions and discussion threads.
+All this is horrible, please no. I think we have better ways to do it
+with CO-RE.
 
->  GEN_HDRS := $(BPF_GENERATED)
+>         ASSERT_EQ(skel->bss->arg1_core, exp_arg1, "syscall_arg1_core_variant");
+> +#endif
+> +#if defined(__BPF_SYSCALL_MACRO_KERNEL_SKEL_H__) || \
+> +               (!defined(__i386__) && !defined(__x86_64__))
+>         ASSERT_EQ(skel->bss->arg2_core, exp_arg2, "syscall_arg2_core_variant");
+>         ASSERT_EQ(skel->bss->arg3_core, exp_arg3, "syscall_arg3_core_variant");
+>         /* it cannot copy arg4 when uses PT_REGS_PARM4_CORE on x86_64 */
+> @@ -57,6 +62,7 @@ void test_bpf_syscall_macro(void)
+>  #endif
+>         ASSERT_EQ(skel->bss->arg4_core, exp_arg4, "syscall_arg4_core_variant");
+>         ASSERT_EQ(skel->bss->arg5_core, exp_arg5, "syscall_arg5_core_variant");
+> +#endif
 >
->  INSTALL_PFX := $(DESTDIR)$(prefix)/include/bpf
-> diff --git a/tools/lib/bpf/bpf_common_helpers.h b/tools/lib/bpf/bpf_common_helpers.h
+>  cleanup:
+>         bpf_syscall_macro__destroy(skel);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_kernel.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_kernel.c
 > new file mode 100644
-> index 000000000000..79db303b6ae2
+> index 000000000000..7ceabd62bb0f
 > --- /dev/null
-> +++ b/tools/lib/bpf/bpf_common_helpers.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-> +#ifndef __BPF_COMMON_HELPERS__
-> +#define __BPF_COMMON_HELPERS__
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_kernel.c
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "bpf_syscall_macro_kernel.skel.h"
 > +
-> +/*
-> + * Helper macros that can be used both by libbpf and bpf progs.
-> + */
+> +void test_bpf_syscall_macro_kernel(void);
 > +
-> +#ifndef offsetof
-> +#define offsetof(TYPE, MEMBER) ((unsigned long)&((TYPE *)0)->MEMBER)
-> +#endif
+> +#define test_bpf_syscall_macro test_bpf_syscall_macro_kernel
+> +#define bpf_syscall_macro bpf_syscall_macro_kernel
+> +#define bpf_syscall_macro__open bpf_syscall_macro_kernel__open
+> +#define bpf_syscall_macro__load bpf_syscall_macro_kernel__load
+> +#define bpf_syscall_macro__attach bpf_syscall_macro_kernel__attach
+> +#define bpf_syscall_macro__destroy bpf_syscall_macro_kernel__destroy
 > +
-> +#ifndef sizeof_field
-> +#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
-> +#endif
+> +#include "test_bpf_syscall_macro_common.h"
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_user.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_user.c
+> new file mode 100644
+> index 000000000000..f31558f14e7e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_syscall_macro_user.c
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "bpf_syscall_macro_user.skel.h"
 > +
-> +#ifndef offsetofend
-> +#define offsetofend(TYPE, MEMBER) \
-> +       (offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
-> +#endif
+> +void test_bpf_syscall_macro_user(void);
 > +
-> +#ifndef container_of
-> +#define container_of(ptr, type, member)                                \
-> +       ({                                                      \
-> +               void *__mptr = (void *)(ptr);                   \
-> +               ((type *)(__mptr - offsetof(type, member)));    \
-> +       })
-> +#endif
+> +#define test_bpf_syscall_macro test_bpf_syscall_macro_user
+> +#define bpf_syscall_macro bpf_syscall_macro_user
+> +#define bpf_syscall_macro__open bpf_syscall_macro_user__open
+> +#define bpf_syscall_macro__load bpf_syscall_macro_user__load
+> +#define bpf_syscall_macro__attach bpf_syscall_macro_user__attach
+> +#define bpf_syscall_macro__destroy bpf_syscall_macro_user__destroy
 > +
-> +#endif
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index 44df982d2a5c..1e8b609c1000 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -2,6 +2,7 @@
->  #ifndef __BPF_HELPERS__
->  #define __BPF_HELPERS__
->
-> +#include "bpf_common_helpers.h"
->  /*
->   * Note that bpf programs need to include either
->   * vmlinux.h (auto-generated from BTF) or linux/types.h
-> @@ -61,20 +62,6 @@
->  #define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
->  #endif
->
-> -/*
-> - * Helper macros to manipulate data structures
-> - */
-> -#ifndef offsetof
-> -#define offsetof(TYPE, MEMBER) ((unsigned long)&((TYPE *)0)->MEMBER)
-> -#endif
-> -#ifndef container_of
-> -#define container_of(ptr, type, member)                                \
-> -       ({                                                      \
-> -               void *__mptr = (void *)(ptr);                   \
-> -               ((type *)(__mptr - offsetof(type, member)));    \
-> -       })
-> -#endif
+> +#include "test_bpf_syscall_macro_common.h"
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h
+> similarity index 87%
+> rename from tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
+> rename to tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h
+> index f5c6ef2ff6d1..8717605358d3 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h
+> @@ -1,7 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright 2022 Sony Group Corporation */
+> -#include <vmlinux.h>
 > -
->  /*
->   * Helper macro to throw a compilation error if __bpf_unreachable() gets
->   * built into the resulting code. This works given BPF back end does not
-> diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-> index a3352a64c067..bc0b741b1eef 100644
-> --- a/tools/testing/selftests/bpf/bpf_util.h
-> +++ b/tools/testing/selftests/bpf/bpf_util.h
-> @@ -6,6 +6,7 @@
->  #include <stdlib.h>
->  #include <string.h>
->  #include <errno.h>
-> +#include <bpf/bpf_common_helpers.h>
->  #include <bpf/libbpf.h> /* libbpf_num_possible_cpus */
+>  #include <bpf/bpf_core_read.h>
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_tracing.h>
+> @@ -46,12 +44,18 @@ int BPF_KPROBE(handle_sys_prctl)
+>         bpf_probe_read_kernel(&arg5, sizeof(arg5), &PT_REGS_PARM5_SYSCALL(real_regs));
 >
->  static inline unsigned int bpf_num_possible_cpus(void)
-> @@ -31,13 +32,4 @@ static inline unsigned int bpf_num_possible_cpus(void)
->  # define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
->  #endif
+>         /* test for the CORE variant of PT_REGS_PARM */
+> +#if defined(__KERNEL__) || defined(__VMLINUX_H__) || \
+> +               (!defined(bpf_target_s390) && !defined(bpf_target_arm64) && \
+> +                !defined(bpf_target_x86))
+>         arg1_core = PT_REGS_PARM1_CORE_SYSCALL(real_regs);
+> +#endif
+> +#if defined(__KERNEL__) || defined(__VMLINUX_H__) || !defined(bpf_target_x86)
+>         arg2_core = PT_REGS_PARM2_CORE_SYSCALL(real_regs);
+>         arg3_core = PT_REGS_PARM3_CORE_SYSCALL(real_regs);
+>         arg4_core_cx = PT_REGS_PARM4_CORE(real_regs);
+>         arg4_core = PT_REGS_PARM4_CORE_SYSCALL(real_regs);
+>         arg5_core = PT_REGS_PARM5_CORE_SYSCALL(real_regs);
+> +#endif
 >
-> -#ifndef sizeof_field
-> -#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
-> -#endif
-> -
-> -#ifndef offsetofend
-> -#define offsetofend(TYPE, MEMBER) \
-> -       (offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
-> -#endif
-> -
->  #endif /* __BPF_UTIL__ */
+>         return 0;
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_syscall_macro_kernel.c b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_kernel.c
+> new file mode 100644
+> index 000000000000..1affac21266d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_kernel.c
+> @@ -0,0 +1,4 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <vmlinux.h>
+> +
+> +#include "bpf_syscall_macro_common.h"
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_syscall_macro_user.c b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_user.c
+> new file mode 100644
+> index 000000000000..1c078d528e8c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_user.c
+> @@ -0,0 +1,10 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/ptrace.h>
+> +#include <linux/types.h>
+> +#include <sys/types.h>
+> +
+> +#include "bpf_syscall_macro_common.h"
+> +
+> +#if defined(__KERNEL__) || defined(__VMLINUX_H__)
+> +#error This test must be compiled with userspace headers
+> +#endif
 > --
 > 2.34.1
 >
