@@ -2,87 +2,69 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD47AC4332F
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC104C35278
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:26:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbiBHWXL convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 8 Feb 2022 17:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
+        id S230024AbiBHW0u convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 8 Feb 2022 17:26:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387171AbiBHWF2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 17:05:28 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293A1C0612BC
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 14:05:28 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 218LtQXQ013422
-        for <bpf@vger.kernel.org>; Tue, 8 Feb 2022 14:05:27 -0800
+        with ESMTP id S1387415AbiBHWXz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 17:23:55 -0500
+X-Greylist: delayed 1048 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 14:22:48 PST
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930E9C03E95C
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 14:22:48 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 218M0uas027070
+        for <bpf@vger.kernel.org>; Tue, 8 Feb 2022 14:05:30 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e3puw4p5j-1
+        by m0001303.ppops.net (PPS) with ESMTPS id 3e30xsvq21-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 14:05:27 -0800
-Received: from twshared22811.39.frc1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 14:05:29 -0800
+Received: from twshared12416.02.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 14:05:26 -0800
+ 15.1.2308.21; Tue, 8 Feb 2022 14:05:28 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 4977529B2C7D2; Tue,  8 Feb 2022 14:05:18 -0800 (PST)
+        id E553829B2C796; Tue,  8 Feb 2022 14:05:13 -0800 (PST)
 From:   Song Liu <song@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, Song Liu <song@kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH bpf-next 2/2] bpf: fix bpf_prog_pack build HPAGE_PMD_SIZE
-Date:   Tue, 8 Feb 2022 14:05:09 -0800
-Message-ID: <20220208220509.4180389-3-song@kernel.org>
+        <kernel-team@fb.com>, Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next 0/2] fix bpf_prog_pack build errors
+Date:   Tue, 8 Feb 2022 14:05:07 -0800
+Message-ID: <20220208220509.4180389-1-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220208220509.4180389-1-song@kernel.org>
-References: <20220208220509.4180389-1-song@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: erJUz58sglTRj9Mv6zXrmrHkPVkWaV-P
-X-Proofpoint-ORIG-GUID: erJUz58sglTRj9Mv6zXrmrHkPVkWaV-P
+X-Proofpoint-ORIG-GUID: 5NSt7rH2C0vO3uu__DbTOIfJbsh9aebp
+X-Proofpoint-GUID: 5NSt7rH2C0vO3uu__DbTOIfJbsh9aebp
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-08_06,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- mlxlogscore=935 phishscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 priorityscore=1501 impostorscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080129
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 lowpriorityscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
+ mlxlogscore=528 suspectscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202080129
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix build with CONFIG_TRANSPARENT_HUGEPAGE=n with BPF_PROG_PACK_SIZE as
-PAGE_SIZE.
+Fix build errors reported by kernel test robot.
 
-Fixes: 57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Song Liu <song@kernel.org>
----
- kernel/bpf/core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Song Liu (2):
+  bpf: fix leftover header->pages in sparc and powerpc code.
+  bpf: fix bpf_prog_pack build HPAGE_PMD_SIZE
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 306aa63fa58e..9519264ab1ee 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -814,7 +814,11 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
-  * allocator. The prog_pack allocator uses HPAGE_PMD_SIZE page (2MB on x86)
-  * to host BPF programs.
-  */
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
- #define BPF_PROG_PACK_SIZE	HPAGE_PMD_SIZE
-+#else
-+#define BPF_PROG_PACK_SIZE	PAGE_SIZE
-+#endif
- #define BPF_PROG_CHUNK_SHIFT	6
- #define BPF_PROG_CHUNK_SIZE	(1 << BPF_PROG_CHUNK_SHIFT)
- #define BPF_PROG_CHUNK_MASK	(~(BPF_PROG_CHUNK_SIZE - 1))
--- 
+ arch/powerpc/net/bpf_jit_comp.c  | 2 +-
+ arch/sparc/net/bpf_jit_comp_64.c | 2 +-
+ kernel/bpf/core.c                | 4 ++++
+ 3 files changed, 6 insertions(+), 2 deletions(-)
+
+--
 2.30.2
-
