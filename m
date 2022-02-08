@@ -2,92 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 918A3C433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 01:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D29CC433F5
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 02:25:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241100AbiBHBro (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Feb 2022 20:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S1345665AbiBHCZE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Feb 2022 21:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235830AbiBHBZw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Feb 2022 20:25:52 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3B3C061A73
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 17:25:50 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Jt4xp1k1HzdZTT;
-        Tue,  8 Feb 2022 09:22:38 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
- (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 8 Feb
- 2022 09:25:45 +0800
-From:   Hou Tao <houtao1@huawei.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>
-CC:     Ard Biesheuvel <ard.biesheuvel@arm.com>,
-        Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <houtao1@huawei.com>
-Subject: [PATCH bpf-next v3 1/2] bpf, arm64: call build_prologue() first in first JIT pass
-Date:   Tue, 8 Feb 2022 09:25:38 +0800
-Message-ID: <20220208012539.491753-2-houtao1@huawei.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220208012539.491753-1-houtao1@huawei.com>
-References: <20220208012539.491753-1-houtao1@huawei.com>
+        with ESMTP id S237161AbiBHCZD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Feb 2022 21:25:03 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5C4C061355;
+        Mon,  7 Feb 2022 18:25:02 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id v74so16327533pfc.1;
+        Mon, 07 Feb 2022 18:25:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3G8YOrqUzsTlTI15DjqXBpfXvuVK4sljmpP/LCYK0/c=;
+        b=GKp8kmConophuOANe8xofD+H2P2IqqDnxQizstMBgT0mr/zpm60aXgXA8V1i5SAeqL
+         dIDZrsbqoR9AefzAXd6Hp66IXV/+TwMoBRhU4Su3Cw9CQK7XdIxe1QP4BWXYX9PiyAw2
+         g7C6F6iH+vjdF6LYsV+ZoSnczw9obqXHFMltm9okJCQd0RLUwPJEYhdWz5uxOxIpQ4km
+         pG+WqJ9o9JQIGj3C3ihPSvLodMFu5B8GvMnoknE6gywFFKsXbCemNGNrAWPxSfytb3Gd
+         Zmqy9+6XTT7rR/dFbOwkvOsyaK5UtiDqpeB3EXVV7PyrpSEVhI1Zi++4lSxMsT0NcV46
+         sRWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3G8YOrqUzsTlTI15DjqXBpfXvuVK4sljmpP/LCYK0/c=;
+        b=FoL2cjFufeBwFi7RI9MhOwW511LR6qo1J0CfItAG+jRWxoDo3X5td+t45ALZNBVnPC
+         CR9ppPaK7cU3gYP79j78POxNdHllZECwgIzBm/fcLsfm37bYTa/licbq564h4k5Yi3yV
+         Wu3bfHKonCLq+f0/5PrRVZ70nw2yFRFAxWuaavULKIcFfqtCDTQwGvy9IXpb5fdsGt+B
+         hGRH88Zcwa03m4vmzy7vbLLjYqacAYtHNRbEQx3dsITq2OoY5NrBp3qhDJNMALU3UVyQ
+         SspPY+/EGaw+FN0qC5yEtYz0AMmPNw9+TCe70D+pK65iSEEnA/UJzNxIh+SEed3WcUYD
+         huwQ==
+X-Gm-Message-State: AOAM533rbQfl+h1Nt8Fk+oytMi/0rQGQmZai3ddVyzrqxTWzTAyXd2nq
+        oDIi4Mncp6GbGUGIUi1hKGWIECpYV28=
+X-Google-Smtp-Source: ABdhPJy8CYGVawYIbkv74vc6JHLYnnU8a072YR+KP4Up6fIjNVfCZYvscLQgDmFdi4FGxqNp/9kzRw==
+X-Received: by 2002:a05:6a00:1a50:: with SMTP id h16mr2254023pfv.74.1644287101863;
+        Mon, 07 Feb 2022 18:25:01 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:b5e4])
+        by smtp.gmail.com with ESMTPSA id t24sm13588334pfg.92.2022.02.07.18.25.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 18:25:01 -0800 (PST)
+Date:   Mon, 7 Feb 2022 18:24:59 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kernel-team@fb.com, peterz@infradead.org,
+        x86@kernel.org, iii@linux.ibm.com, Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH v9 bpf-next 9/9] bpf, x86_64: use
+ bpf_jit_binary_pack_alloc
+Message-ID: <20220208022459.ufooz7cjbk6u3k6o@ast-mbp.dhcp.thefacebook.com>
+References: <20220204185742.271030-1-song@kernel.org>
+ <20220204185742.271030-10-song@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220204185742.271030-10-song@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF line info needs ctx->offset to be the instruction offset
-in the whole jited image instead of the body itself, so also
-call build_prologue() first in first JIT pass.
+On Fri, Feb 04, 2022 at 10:57:42AM -0800, Song Liu wrote:
+>  	if (image) {
+>  		if (!prog->is_func || extra_pass) {
+> +			/*
+> +			 * bpf_jit_binary_pack_finalize fails in two scenarios:
+> +			 *   1) header is not pointing to proper module memory;
+> +			 *   2) the arch doesn't support bpf_arch_text_copy().
+> +			 *
+> +			 * Both cases are serious bugs that we should not continue.
+> +			 */
+> +			BUG_ON(bpf_jit_binary_pack_finalize(prog, header, rw_header));
+>  			bpf_tail_call_direct_fixup(prog);
+> -			bpf_jit_binary_lock_ro(header);
 
-Fixes: 37ab566c178d ("bpf: arm64: Enable arm64 jit to provide bpf_line_info")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- arch/arm64/net/bpf_jit_comp.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+BUG_ON is discouraged.
+It should only be used when the kernel absolutely cannot continue.
+Here ro/rw_headers will be freed. We can WARN and goto out_addrs without drama.
+Please send a follow up.
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 2375ed3e4c8a..68b35c83e637 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1190,15 +1190,18 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		goto out_off;
- 	}
- 
--	/* 1. Initial fake pass to compute ctx->idx. */
--
--	/* Fake pass to fill in ctx->offset. */
--	if (build_body(&ctx, extra_pass)) {
-+	/*
-+	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
-+	 *
-+	 * BPF line info needs ctx->offset[i] to be the offset of
-+	 * instruction[i] in jited image, so build prologue first.
-+	 */
-+	if (build_prologue(&ctx, was_classic)) {
- 		prog = orig_prog;
- 		goto out_off;
- 	}
- 
--	if (build_prologue(&ctx, was_classic)) {
-+	if (build_body(&ctx, extra_pass)) {
- 		prog = orig_prog;
- 		goto out_off;
- 	}
--- 
-2.27.0
-
+The rest looks great. Applied to bpf-next.
