@@ -2,213 +2,170 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A970C433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CE5BC433EF
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386053AbiBHWWr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S236989AbiBHWWv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:22:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387019AbiBHVq3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 16:46:29 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C335C0612B8
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 13:46:28 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218IEcqN037855;
-        Tue, 8 Feb 2022 21:46:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=gZwTVrwZf0ZG+Z9rE00ySQ4L05xX5EZaiyhA4ytQ9Ag=;
- b=QAGahdND10ITSwQZ55NIvF9618uHcUxArX/Gz+G+nQfHlcn9M9uzn/8OGDAsbEMsmklI
- CZruYOtB8sF/0LoOLwgA1IUuLWw/Ex7eWX09y6UhQ/UNIUgsSHI6Tf8Lcp2LTFX04AaM
- MQPxYznvHPzpDU7nc3XN1+JlDO4FP2TwDLcFUOL0M4W088s4yRD9qhrYuBzCZZzcchIK
- Kc17xFVD+00Zoz0+yvg+I5BaLMdUoolbVO3bFCI1ujx16qXSAsqq1FYA94y+W0mik7qH
- UD/l8GXZuSlJkJoeMiZrUEnZYVNL/hm3PyUj13mWfywkiEYaw/C2Zkq9d+Grg8o4QkKC Ig== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3wmjv1js-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 21:46:07 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 218LiIRD021416;
-        Tue, 8 Feb 2022 21:46:06 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3wmjv1jd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 21:46:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 218Lan9R029975;
-        Tue, 8 Feb 2022 21:46:04 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggk1gj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 21:46:04 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 218Lk1xs37814712
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 21:46:01 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0AC19A4054;
-        Tue,  8 Feb 2022 21:46:01 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6292EA405B;
-        Tue,  8 Feb 2022 21:46:00 +0000 (GMT)
-Received: from [9.171.78.41] (unknown [9.171.78.41])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 21:46:00 +0000 (GMT)
-Message-ID: <ee69bf0200fa21f2bab34384d57c32f126993d93.camel@linux.ibm.com>
-Subject: Re: [PATCH bpf-next v4 14/14] arm64: add a comment that warns that
- orig_x0 should not be moved
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>, bpf <bpf@vger.kernel.org>
-Date:   Tue, 08 Feb 2022 22:46:00 +0100
-In-Reply-To: <CAADnVQLELpdhZba0GQdY6G-F6Ce4jnb_QnrJwc8F6yjMnLcEAw@mail.gmail.com>
-References: <20220208051635.2160304-1-iii@linux.ibm.com>
-         <20220208051635.2160304-15-iii@linux.ibm.com>
-         <20220208192522.risaxa7debgxx5kz@ast-mbp.dhcp.thefacebook.com>
-         <bb17e7657ada2577664caa6d0b9fbfcabf2f1676.camel@linux.ibm.com>
-         <CAADnVQLELpdhZba0GQdY6G-F6Ce4jnb_QnrJwc8F6yjMnLcEAw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
+        with ESMTP id S1386918AbiBHVU4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 16:20:56 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118A8C0612B8;
+        Tue,  8 Feb 2022 13:20:56 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id e28so672764pfj.5;
+        Tue, 08 Feb 2022 13:20:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZM1nSLJ2yy0XCOnwkMPhCfHL7dFUtelFO2BPDuqjW0Y=;
+        b=GGu0TYe+F6jFKwY3Qz7/AocnUpRrUOF913L1zofAIQt1UG6+oeIoLnQhezQdyrf5FW
+         twYJEH+murJL4QGvZhN9YOrUs8cf5dTvrKSdk66ZzFDoSmXXqCXOSHErIsApOXJxLgns
+         sH5nFwMY56z1kyzyMMCQpSLCKozzdDBJ+VH3JX7a284jJKbJBxUrWqXSNnXnfZw893Ev
+         J+mJiR32sX9jYB5tocb0ij60fqujUeR2oFQlxebhCKvJ+tEJi9tV8Axtj5xQD5/67uoQ
+         mYT1/siSGgv2yACF0F1vMDB2pDB+VYNgx8gl1dva0NwzLjv5Vg73lwoTgJkjCvoQ2fp2
+         2GxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZM1nSLJ2yy0XCOnwkMPhCfHL7dFUtelFO2BPDuqjW0Y=;
+        b=JRe7Op2GL6zGANzYfNI8h+v0DisF1pxFRvxxYEMun88jShZ2yhcPaq9Nk4RLQdqCVe
+         E1cSwgFKybobQZH/shOaPHVM4V4L63ff3T0x6AcJNloTzyC/gnYfBUHEx/7+NNkcaKcu
+         5g+Pq2WCEUtn4g9HFmVeW5xXIKvH0zAyfCOWDXEKEhAv86ZBjKJ6TkD0VYZJSfljriRf
+         n1CxULMG+ksFnwoIC6EIY+IaiGpPfH/8Aqt7rCoZQzz2H7s0g1tt8i+NtyBgD52+MCYy
+         eXu2ANX6LuOSG9jH4uJG7H9Xp+0AotM8LOlZs/t2BJzKI6alXj2dJMFkvqZE7eGC5KsG
+         MGyw==
+X-Gm-Message-State: AOAM532OK7OdjnMS+yaIJ9u5CDRUwmGrHUdlx+5tqVyhdkJgTrxYLXgo
+        FsgNfdMHJ3w0/DfScD8m5UFTwRT60JdwGiFPWrU=
+X-Google-Smtp-Source: ABdhPJzLQ5OiBxETJ/n/pCVvGcsULw94LLCVu0lToYc6JXrDk7g5/B162zMjS/B4zCByuRgoxv3Qm0ohGX36u9EmKz0=
+X-Received: by 2002:a05:6a00:2301:: with SMTP id h1mr6195909pfh.77.1644355255463;
+ Tue, 08 Feb 2022 13:20:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -wjpIgaxsB7kyERpW1VH2JO-g9aYAjd4
-X-Proofpoint-ORIG-GUID: eR-KqeOLoFRLpJnPDzONjvQyuLvw8ks0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-08_06,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=743 adultscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 clxscore=1015 mlxscore=0
- priorityscore=1501 phishscore=0 suspectscore=0 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080125
+References: <20220201205534.1962784-1-haoluo@google.com> <20220201205534.1962784-6-haoluo@google.com>
+ <20220203180414.blk6ou3ccmod2qck@ast-mbp.dhcp.thefacebook.com>
+ <CA+khW7jkJbvQrTx4oPJAoBZ0EOCtr3C2PKbrzhxj-7euBK8ojg@mail.gmail.com>
+ <CAADnVQLZZ3SM2CDxnzgOnDgRtGU7+6wT9u5v4oFas5MnZF6DsQ@mail.gmail.com>
+ <CA+khW7i+TScwPZ6-rcFKiXtxMm8hiZYJGH-wYb=7jBvDWg8pJQ@mail.gmail.com>
+ <CAADnVQ+-29CS7nSXghKMgZjKte84L0nRDegUE0ObFm3d7E=eWw@mail.gmail.com> <CA+khW7iWd5MzZW_mCfgqHESi8okjNRiRMr0TM=CQzLkMsa_a5g@mail.gmail.com>
+In-Reply-To: <CA+khW7iWd5MzZW_mCfgqHESi8okjNRiRMr0TM=CQzLkMsa_a5g@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 8 Feb 2022 13:20:44 -0800
+Message-ID: <CAADnVQJcTAgcbwrOWO8EnbTdAcQ91HQmtpn7aKJGwHc=mEpJ1g@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next v2 5/5] selftests/bpf: test for pinning for
+ cgroup_view link
+To:     Hao Luo <haoluo@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Joe Burton <jevburton.kernel@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 2022-02-08 at 13:11 -0800, Alexei Starovoitov wrote:
-> On Tue, Feb 8, 2022 at 11:46 AM Ilya Leoshkevich <iii@linux.ibm.com>
-> wrote:
-> > 
-> > On Tue, 2022-02-08 at 11:25 -0800, Alexei Starovoitov wrote:
-> > > On Tue, Feb 08, 2022 at 06:16:35AM +0100, Ilya Leoshkevich wrote:
-> > > > orig_x0's location is used by libbpf tracing macros, therefore
-> > > > it
-> > > > should not be moved.
-> > > > 
-> > > > Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > > > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > > > ---
-> > > >  arch/arm64/include/asm/ptrace.h | 4 ++++
-> > > >  1 file changed, 4 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/include/asm/ptrace.h
-> > > > b/arch/arm64/include/asm/ptrace.h
-> > > > index 41b332c054ab..7e34c3737839 100644
-> > > > --- a/arch/arm64/include/asm/ptrace.h
-> > > > +++ b/arch/arm64/include/asm/ptrace.h
-> > > > @@ -185,6 +185,10 @@ struct pt_regs {
-> > > >                         u64 pstate;
-> > > >                 };
-> > > >         };
-> > > > +       /*
-> > > > +        * orig_x0 is not exposed via struct user_pt_regs, but
-> > > > its
-> > > > location is
-> > > > +        * assumed by libbpf's tracing macros, so it should not
-> > > > be
-> > > > moved.
-> > > > +        */
-> > > 
-> > > In other words this comment is saying that the layout is ABI.
-> > > That's not the case. orig_x0 here and equivalent on s390 can be
-> > > moved.
-> > > It will break bpf progs written without CO-RE and that is
-> > > expected.
-> > > Non CO-RE programs often do all kinds of bpf_probe_read_kernel
-> > > and
-> > > will be breaking when kernel layout is changing.
-> > > I suggest to drop this patch and patch 12.
-> > 
-> > Yeah, that was the intention here: to promote orig_x0 to ABI using
-> > a
-> > comment, since doing this by extending user_pt_regs turned out to
-> > be
-> > infeasible. I'm actually ok with not doing this, since programs
-> > compiled with kernel headers and using CO-RE macros will be fine.
-> 
-> The comment like this doesn't convert kernel internal struct into
-> ABI.
-> The comment is just wrong. BPF progs access many kernel data structs.
-> s390's and arm64's struct pr_regs is not special in that sense.
-> It's an internal struct.
-> 
-> > As you say, we don't care about programs that don't use CO-RE too
-> > much
-> > here - if they break after an incompatible kernel change, fine.
-> 
-> Before CO-RE was introduced bpf progs included kernel headers
-> and were breaking when kernel changes. Nothing new here.
-> See the history of bcc tools. Some of them are littered
-> with ifdef VERSION ==.
-> 
-> > The question now is - how much do we care about programs that are
-> 
-> > compiled with userspace headers? Andrii suggested to use
-> > offsetofend to
-> > make syscall macros work there, however, this now requires this ABI
-> > promotion.
-> 
-> Today s390 and arm64 have user_pt_regs as a first field in pt_regs.
-> That is kernel internal behavior and that part can change if arch
-> maintainers have a need for that.
-> bpf progs without CO-RE would have to be adjusted when kernel
-> changes.
-> Even with CO-RE it's ok to rename pt_regs->orig_gpr2 on s390.
-> The progs with CO-RE will break too. The authors of tracing bpf progs
-> have to expect that sooner or later their progs will break and they
-> would have to adjust them.
+On Tue, Feb 8, 2022 at 12:07 PM Hao Luo <haoluo@google.com> wrote:
+>
+> On Sat, Feb 5, 2022 at 8:29 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Feb 4, 2022 at 10:27 AM Hao Luo <haoluo@google.com> wrote:
+> > > >
+> > > > > In our use case, we can't ask the users who create cgroups to do the
+> > > > > pinning. Pinning requires root privilege. In our use case, we have
+> > > > > non-root users who can create cgroup directories and still want to
+> > > > > read bpf stats. They can't do pinning by themselves. This is why
+> > > > > inheritance is a requirement for us. With inheritance, they only need
+> > > > > to mkdir in cgroupfs and bpffs (unprivileged operations), no pinning
+> > > > > operation is required. Patch 1-4 are needed to implement inheritance.
+> > > > >
+> > > > > It's also not a good idea in our use case to add a userspace
+> > > > > privileged process to monitor cgroupfs operations and perform the
+> > > > > pinning. It's more complex and has a higher maintenance cost and
+> > > > > runtime overhead, compared to the solution of asking whoever makes
+> > > > > cgroups to mkdir in bpffs. The other problem is: if there are nodes in
+> > > > > the data center that don't have the userspace process deployed, the
+> > > > > stats will be unavailable, which is a no-no for some of our users.
+> > > >
+> > > > The commit log says that there will be a daemon that does that
+> > > > monitoring of cgroupfs. And that daemon needs to mkdir
+> > > > directories in bpffs when a new cgroup is created, no?
+> > > > The kernel is only doing inheritance of bpf progs into
+> > > > new dirs. I think that daemon can pin as well.
+> > > >
+> > > > The cgroup creation is typically managed by an agent like systemd.
+> > > > Sounds like you have your own agent that creates cgroups?
+> > > > If so it has to be privileged and it can mkdir in bpffs and pin too ?
+> > >
+> > > Ah, yes, we have our own daemon to manage cgroups. That daemon creates
+> > > the top-level cgroup for each job to run inside. However, the job can
+> > > create its own cgroups inside the top-level cgroup, for fine grained
+> > > resource control. This doesn't go through the daemon. The job-created
+> > > cgroups don't have the pinned objects and this is a no-no for our
+> > > users.
+> >
+> > We can whitelist certain tracepoints to be sleepable and extend
+> > tp_btf prog type to include everything from prog_type_syscall.
+> > Such prog would attach to cgroup_mkdir and cgroup_release
+> > and would call bpf_sys_bpf() helper to pin progs in new bpffs dirs.
+> > We can allow prog_type_syscall to do mkdir in bpffs as well.
+> >
+> > This feature could be useful for similar monitoring/introspection tasks.
+> > We can write a program that would monitor bpf prog load/unload
+> > and would pin an iterator prog that would show debug info about a prog.
+> > Like cat /sys/fs/bpf/progs.debug shows a list of loaded progs.
+> > With this feature we can implement:
+> > ls /sys/fs/bpf/all_progs.debug/
+> > and each loaded prog would have a corresponding file.
+> > The file name would be a program name, for example.
+> > cat /sys/fs/bpf/all_progs.debug/my_prog
+> > would pretty print info about 'my_prog' bpf program.
+> >
+> > This way the kernfs/cgroupfs specific logic from patches 1-4
+> > will not be necessary.
+> >
+> > wdyt?
+>
+> Thanks Alexei. I gave it more thought in the last couple of days.
+> Actually I think it's a good idea, more flexible. It gets rid of the
+> need of a user space daemon for monitoring cgroup creation and
+> destruction. We could monitor task creations and exits as well, so
+> that we can export per-task information (e.g. task_vma_iter) more
+> efficiently.
 
-When it comes to authors of tracing bpf progs, I agree that eventually
-they will have to adjust their code, CO-RE or not. However, in patch 13
-I introduce the following libbpf macro:
+Yep. Monitoring task creation and exposing via bpf_iter sounds
+useful too.
 
-#if defined(__KERNEL__) || defined(__VMLINUX_H__)
-...
-#else
-#define PT_REGS_PARM1_SYSCALL(x) \
-	(*(unsigned long *)(((char *)(x) + \
-			     offsetofend(struct user_pt_regs,
-pstate))))
+> A couple of thoughts when thinking about the details:
+>
+> - Regarding parameterized pinning, I don't think we can have one
+> single bpf_iter_link object, but with different parameters. Because
+> parameters are part of the bpf_iter_link (bpf_iter_aux_info). So every
+> time we pin, we have to attach iter in order to get a new link object
+> first. So we need to add attach and detach in bpf_sys_bpf().
 
-If we merge this series without freezing orig_x0's offset, in case of
-an incompatible kernel change the users of PT_REGS_PARMn_SYSCALL and
-BPF_KPROBE_SYSCALL, who build against userspace headers, will not
-simply have to update their code - they will have to upgrade libbpf.
-It's also not clear how PT_REGS_PARM1_SYSCALL in the upgraded libbpf 
-will even look like, given that it would need to work on both old and
-new kernels.
+Makes sense.
+I'm adding bpf_link_create to bpf_sys_bpf as part of
+the "lskel for kernel" patch set.
+The detach is sys_close. It's already available.
 
-I've also briefly looked into MIPS' ptrace.h, and it looks as if their
-user_pt_regs has no relationship to kernel pt_regs. IIUC this means
-that it's not possible to correctly implement PT_REGS_PARMn_SYSCALL
-using MIPS userspace headers.
+> - We also need to add those syscalls for cleanup: (1) unlink for
+> removing pinned obj and (2) rmdir for removing the directory in
+> prog_type_syscall.
 
-So I wonder whether we should allow using PT_REGS_PARMn_SYSCALL and
-BPF_KPROBE_SYSCALL with userspace headers at all? Would it make sense
-to simply fail the compilation if PT_REGS_PARMn_SYSCALL is used without
-including kernel headers?
+Yes. These two would be needed.
+And obj_pin too.
+
+> With these extensions, we can shift some of the bpf operations
+> currently performed in system daemons into the kernel. IMHO it's a
+> great thing, making system monitoring more flexible.
+
+Awesome. Sounds like we're converging :)
