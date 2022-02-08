@@ -2,108 +2,199 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88500C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BB08C433EF
 	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386347AbiBHWXA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S1386493AbiBHWW7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386337AbiBHUKb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:10:31 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD241C0613CB
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 12:10:30 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id k25so961867ejp.5
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 12:10:30 -0800 (PST)
+        with ESMTP id S1387253AbiBHWOR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 17:14:17 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BD1C0612B8
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 14:14:16 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id s18so826331ioa.12
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 14:14:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xhuOnoHjMqmnwg4AI//Ql5Lv0seonbuD/Fbn72VEBa4=;
-        b=NHQNoyAa2GtK9dOezJmPjk9HjqN/b7KSf04Fz4HKOU0Ntpw+9s9uUrrAdgLkQl0PeD
-         +GPhZxYGpeivloFlsT1//01ZZyY7FHM5yx9Zm+BwANau48paOb5XGOzcyludCVj5kKaH
-         0GJLdciKC1Sf3WXvdW3JDJqbplsy2zbzC/2vdUbE+aRylst7aFygC8BIBGckTEQLzBHR
-         1JEjYIaCNjsijri8c6643DYdPq7W8L29Z2gW/lDvDbcY9pSCGwEijzdZiwJaB6+88Bqo
-         CXGf018rdrNheIVtrSE5iISwGhc3pO0rOFPldI2wGuXF/6ME2xjj9i79A9/8r7bBb8NW
-         53NQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2LdxQlBQ8/TvLVNrRm8ZrnrXZDWaEwW134kzxx2JltA=;
+        b=AHhc9mW0C7kdRN9BuXvhiZ8Y9ZgZWcdp31GpN+Mai+5uvcgeX9fliTP7rNSsg3AKJz
+         BdzQCv7PJaIjg9JkKhnNLiYwQw3WpXzlvtaDbByCebMGX+UVPQm/UzlRypvPnY0YJsLz
+         CTtPCmCsgsrU5n/eWXxFm7s6mztrSOZgUDVj/41RCLEpjh7AqvsCB7ZMS3/HltAlKf+i
+         F23fmn1X3BSTM/PWViicIMQGQwC94q9qinb60h5ztXhzRhZRqo6HxyNrGi579DhtNJ2Y
+         u76sYHDhZeKh42U1akabgj0yCvQaJBF4A0wt2z2MEBByx50QB9bpwcnPI9GSYEGk/sS/
+         PmkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xhuOnoHjMqmnwg4AI//Ql5Lv0seonbuD/Fbn72VEBa4=;
-        b=B9qOzz2wA8g8CKzoiiAv9Ljfs0Z7pSVUTZVSvHGZt+nL2NO8bpyPwyBWywK4dU+Ehy
-         vLBC0kXxGf4ReRa+bevFOpiVkvbzU+rT24e5K9/Cq9alnp0vLfPV6Bk+aYIctpWUIcPU
-         si9Uhb4lVmOG63tLtBPdn2YsOqPM7jE/QBi1BaKRJckPOVBqeH0x1wYDWFu86wGbwBDR
-         FG9AeXHGNWpbDfr8M5LHlWMeTxSgckICz8LjgtznMTrXVDX6ywObX5JSh+V5rHubKmtb
-         6ZDQY0aPnpnWtyjXzzQS/IV5rGd45lHzzzdf5Ofy6EmPZ9wpdSYyA9lWak+wC183sT/v
-         IVLA==
-X-Gm-Message-State: AOAM5323kgouTp5QTK0dRFOsc5AyN7Wv1bskdgre1HJpbdonRT4ffN36
-        MWap19NQ9flaxcQu0ou5QLIDYOQwKGo0BA==
-X-Google-Smtp-Source: ABdhPJySLlk4crAU+IMHCu9q24AB5xzpd3UVDpxpN4g4FFc1wmTToCNfTeUoLUp6vb0ItLzJePyzQQ==
-X-Received: by 2002:a17:907:1b05:: with SMTP id mp5mr4994504ejc.527.1644351029158;
-        Tue, 08 Feb 2022 12:10:29 -0800 (PST)
-Received: from erthalion.local (dslb-178-012-046-224.178.012.pools.vodafone-ip.de. [178.12.46.224])
-        by smtp.gmail.com with ESMTPSA id a17sm5342539edt.92.2022.02.08.12.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 12:10:28 -0800 (PST)
-Date:   Tue, 8 Feb 2022 21:10:07 +0100
-From:   Dmitry Dolgov <9erthalion6@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: Re: [RFC PATCH v2] bpftool: Add bpf_cookie to link output
-Message-ID: <20220208201007.6iv7mimcjoxcqzqa@erthalion.local>
-References: <20220204181146.8429-1-9erthalion6@gmail.com>
- <CAEf4BzYiT-HRn9bLy=qoyOhOQ1ESCB3mB97xt98JWapgB_nbBw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2LdxQlBQ8/TvLVNrRm8ZrnrXZDWaEwW134kzxx2JltA=;
+        b=D2oD/8C05t41nmrC+J4ABN22UJWFgk4x8tRyF9VXCiCV/ZQnrRwj99S5oypS4KEFCl
+         qBSGhM7UQ8gPC/gqqriK863cOM9Cz+MnKiqa/SfLqaoUGKHWp3mUWnu9u4C16CZq6iwB
+         1Wd9HnKN4ArEEKdvEfj9iC1OcyanpcAEVGCOdXNHlAn37nauCHGuGrSO0s+ThK/Fjngx
+         Dt80G140spXBNeXu24zKkL/Av4PojcGj2bnvpEaBji3e6ptscqalfF3TyUTKMb3dyueS
+         FzkdVX1OAYq3va2aIax4FTJA8Zr6R3tgEQlw34zVjVAKG5VNCSEZiQdc50CuStvtJlP/
+         EX8w==
+X-Gm-Message-State: AOAM531uo2e/BVWq/coK/INaF4WCc7W943rj1dEu8ZZsyUK8sIMobf1r
+        qGnR3siVCjOXHjbXEEJAAD1ME5Dm3eMDrGQAQI0=
+X-Google-Smtp-Source: ABdhPJycHV0quE5lOaCgu0k2/FXwj2k+V49tRBJHLAzLvgFkXnKaoboR+8rjWZNEJrAt4gVC7Zempr2pVCCa4DJ90Is=
+X-Received: by 2002:a02:1181:: with SMTP id 123mr3109351jaf.93.1644358455557;
+ Tue, 08 Feb 2022 14:14:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYiT-HRn9bLy=qoyOhOQ1ESCB3mB97xt98JWapgB_nbBw@mail.gmail.com>
+References: <20220208051635.2160304-1-iii@linux.ibm.com> <20220208051635.2160304-11-iii@linux.ibm.com>
+In-Reply-To: <20220208051635.2160304-11-iii@linux.ibm.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 8 Feb 2022 14:14:04 -0800
+Message-ID: <CAEf4BzbWqzWDhvZqT9WqMhwXpnRX7m85XTHQ3zacwmtdhJJDeg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 10/14] libbpf: Move data structure
+ manipulation macros to bpf_common_helpers.h
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> On Mon, Feb 07, 2022 at 02:11:11PM -0800, Andrii Nakryiko wrote:
-> On Fri, Feb 4, 2022 at 10:12 AM Dmitrii Dolgov <9erthalion6@gmail.com> wrote:
-> >
-> > Commit 82e6b1eee6a8 ("bpf: Allow to specify user-provided bpf_cookie for
-> > BPF perf links") introduced the concept of user specified bpf_cookie,
-> > which could be accessed by BPF programs using bpf_get_attach_cookie().
-> > For troubleshooting purposes it is convenient to expose bpf_cookie via
-> > bpftool as well, so there is no need to meddle with the target BPF
-> > program itself.
-> >
-> >     $ bpftool link
-> >     1: type 7  prog 5  bpf_cookie 123
-> >         pids bootstrap(87)
-> >
-> > Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
-> > ---
-> > Changes in v2:
-> >     - Display bpf_cookie in bpftool link command instead perf
-> >
-> >     Previous discussion: https://lore.kernel.org/bpf/20220127082649.12134-1-9erthalion6@gmail.com
+On Mon, Feb 7, 2022 at 9:16 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
 >
+> These macros are useful for both libbpf and bpf progs, so put them into
+> a separate header dedicated to this use case.
 >
-> So I think this change is pretty straightforward and I don't mind it,
-> but I'm not clear how this approach will scale to multi-attach kprobe
-> and fentry programs. For those, users will be specifying many bpf
-> cookies, one per each target attach function. At that point we'll have
-> a bunch of cookies sorted by the attach function IP (not necessarily
-> in the original order). I don't think it will be all that useful and
-> interesting to the end user. We won't be storing original function
-> names (too much memory for storing something that most probably won't
-> be ever queried), so restoring original order and original function
-> names will be hard. If we don't think this through, we'll end up with
-> kernel API that works for just one simple use case.
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+>  tools/lib/bpf/Makefile                 |  2 +-
+>  tools/lib/bpf/bpf_common_helpers.h     | 30 ++++++++++++++++++++++++++
+>  tools/lib/bpf/bpf_helpers.h            | 15 +------------
+>  tools/testing/selftests/bpf/bpf_util.h | 10 +--------
+>  4 files changed, 33 insertions(+), 24 deletions(-)
+>  create mode 100644 tools/lib/bpf/bpf_common_helpers.h
 >
-> Can you please describe your use case which motivated this feature in
-> the first place to better understand the importance of this?
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index b8b37fe76006..60b06c22e0a1 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -239,7 +239,7 @@ install_lib: all_cmd
+>
+>  SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h      \
+>             bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h         \
+> -           skel_internal.h libbpf_version.h
+> +           skel_internal.h libbpf_version.h bpf_common_helpers.h
 
-The use case is pretty theoretical at the moment, I'm trying to
-understand how to get more visibility about bpf_cookie usage. Let me try
-to do the same only in bpftool, while pondering if multi-attach programs
-case could be somehow meaningfully addressed as well.
+Wait, how did we get from fixing s390x syscall arg fetching to
+exposing a new public API header from libbpf?... I feel like I missed
+a few revisions and discussion threads.
+
+>  GEN_HDRS := $(BPF_GENERATED)
+>
+>  INSTALL_PFX := $(DESTDIR)$(prefix)/include/bpf
+> diff --git a/tools/lib/bpf/bpf_common_helpers.h b/tools/lib/bpf/bpf_common_helpers.h
+> new file mode 100644
+> index 000000000000..79db303b6ae2
+> --- /dev/null
+> +++ b/tools/lib/bpf/bpf_common_helpers.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+> +#ifndef __BPF_COMMON_HELPERS__
+> +#define __BPF_COMMON_HELPERS__
+> +
+> +/*
+> + * Helper macros that can be used both by libbpf and bpf progs.
+> + */
+> +
+> +#ifndef offsetof
+> +#define offsetof(TYPE, MEMBER) ((unsigned long)&((TYPE *)0)->MEMBER)
+> +#endif
+> +
+> +#ifndef sizeof_field
+> +#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
+> +#endif
+> +
+> +#ifndef offsetofend
+> +#define offsetofend(TYPE, MEMBER) \
+> +       (offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
+> +#endif
+> +
+> +#ifndef container_of
+> +#define container_of(ptr, type, member)                                \
+> +       ({                                                      \
+> +               void *__mptr = (void *)(ptr);                   \
+> +               ((type *)(__mptr - offsetof(type, member)));    \
+> +       })
+> +#endif
+> +
+> +#endif
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 44df982d2a5c..1e8b609c1000 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -2,6 +2,7 @@
+>  #ifndef __BPF_HELPERS__
+>  #define __BPF_HELPERS__
+>
+> +#include "bpf_common_helpers.h"
+>  /*
+>   * Note that bpf programs need to include either
+>   * vmlinux.h (auto-generated from BTF) or linux/types.h
+> @@ -61,20 +62,6 @@
+>  #define KERNEL_VERSION(a, b, c) (((a) << 16) + ((b) << 8) + ((c) > 255 ? 255 : (c)))
+>  #endif
+>
+> -/*
+> - * Helper macros to manipulate data structures
+> - */
+> -#ifndef offsetof
+> -#define offsetof(TYPE, MEMBER) ((unsigned long)&((TYPE *)0)->MEMBER)
+> -#endif
+> -#ifndef container_of
+> -#define container_of(ptr, type, member)                                \
+> -       ({                                                      \
+> -               void *__mptr = (void *)(ptr);                   \
+> -               ((type *)(__mptr - offsetof(type, member)));    \
+> -       })
+> -#endif
+> -
+>  /*
+>   * Helper macro to throw a compilation error if __bpf_unreachable() gets
+>   * built into the resulting code. This works given BPF back end does not
+> diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+> index a3352a64c067..bc0b741b1eef 100644
+> --- a/tools/testing/selftests/bpf/bpf_util.h
+> +++ b/tools/testing/selftests/bpf/bpf_util.h
+> @@ -6,6 +6,7 @@
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <errno.h>
+> +#include <bpf/bpf_common_helpers.h>
+>  #include <bpf/libbpf.h> /* libbpf_num_possible_cpus */
+>
+>  static inline unsigned int bpf_num_possible_cpus(void)
+> @@ -31,13 +32,4 @@ static inline unsigned int bpf_num_possible_cpus(void)
+>  # define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+>  #endif
+>
+> -#ifndef sizeof_field
+> -#define sizeof_field(TYPE, MEMBER) sizeof((((TYPE *)0)->MEMBER))
+> -#endif
+> -
+> -#ifndef offsetofend
+> -#define offsetofend(TYPE, MEMBER) \
+> -       (offsetof(TYPE, MEMBER) + sizeof_field(TYPE, MEMBER))
+> -#endif
+> -
+>  #endif /* __BPF_UTIL__ */
+> --
+> 2.34.1
+>
