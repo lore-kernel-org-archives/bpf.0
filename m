@@ -2,140 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24F7DC433EF
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D07CC4167D
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:23:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386375AbiBHWW5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S1386785AbiBHWW6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386785AbiBHVL3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 16:11:29 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8F6C0612B8
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 13:11:28 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id e28so636785pfj.5
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 13:11:28 -0800 (PST)
+        with ESMTP id S1386493AbiBHUmI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 15:42:08 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2402CC0613CB
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 12:42:07 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id o17so617033ljp.1
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 12:42:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7DfbRZgZsdz/DxBsQpcuhrCMQc1HtHknEbFAsG/47FQ=;
-        b=Hsy4hQGOLIj8PYdGZOApNZlrgmvZnl4D4PFJ8iIR7e9TtEndo8D3puSk4cmDg7iCMv
-         GdC1GycX1gcJefzNB18/RhvRUAJ4Bmy6Ae3Cm96HCdQb+CBkBrN9bKaMRS2kegZr+vP3
-         gsjkMKsved8zDS77XOHkJjsoaMumLBdNjphzPz8t4C52sLKyTPaiy46sFqKqRcOaNhvJ
-         2Yv/r9F5GskJ9e9kdhC4ImsXsrVI2AMel1ymWFCMqdroC23jpx3ujn5yCAkqpu/JSLFY
-         xsXqSA9B/4RR65UoF4/+jHwbcNktLkhJd4Ix48jdDMp+B0wY5R44QwtTweIMOXYbvnDZ
-         HdBQ==
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=1arNLeaBe5R3++hUI9/c4FXwtGni/EUby5Sin47pTdk=;
+        b=Lb7EmKUMUybeoFQm61QwAXKAIUC96MWw5KHpW6AXfdODIb97hzU4gI1Jaum5QRmbJD
+         I5Uy4zR+U1GCM4wXIgjANF4btuzAUtWHC44SOc56L7XL0ZZaVd6luXrADm0RItW0MYGf
+         qMSECZalMnz6eRPrXJzUORG7Hmx3dWAKi4/3I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7DfbRZgZsdz/DxBsQpcuhrCMQc1HtHknEbFAsG/47FQ=;
-        b=SWx17oDc1isvoVYNPWQzyaS4vBJ6LwVse8PHxr/bhDsFjm99OKeqZVBnL6T1k9/hHH
-         KizGiN9I4gY8IEQhhy+DWTLInUmEEUPj21RWviJrnzgXJ0v0NMvW3daffirZ/Ah3SgOW
-         OeYSYlfBEuYwdoj58YVcm6eRiof9MiXdicbYRbRiZXHo0irNgoGZwF4P1lFZHPN7FzHv
-         2x5Rzgu0HHNWhrZ0JJ9+rHjbikB4RhwUmTrS/vaQfM/ifzSFU75WYWL8KjgPw9bu2h3k
-         xOgPdLbCUKk4JcYYBumXRRBFzN1eEiIJMzfj8g170JWHssfNtoAH1NzgfR2aOvlmiyWb
-         DuuA==
-X-Gm-Message-State: AOAM532tVnXQfefxM3DY/ccFdjN+YvzSvQSx/JS3Tz2ag5SXi/tfNeyb
-        8ojOWDe1hkQ2c0z6Sp2MF1mZVCA9PxCf+8EfBGA=
-X-Google-Smtp-Source: ABdhPJwJYSXTH+76CDmjBCDBL7fntx+qO2MSW8Zcc11zg0F72vuWqOxZQSAYY6OR1KxYmVwOqtfk1eTYXRpkmRrnOKw=
-X-Received: by 2002:a65:6e04:: with SMTP id bd4mr4922441pgb.375.1644354687960;
- Tue, 08 Feb 2022 13:11:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20220208051635.2160304-1-iii@linux.ibm.com> <20220208051635.2160304-15-iii@linux.ibm.com>
- <20220208192522.risaxa7debgxx5kz@ast-mbp.dhcp.thefacebook.com> <bb17e7657ada2577664caa6d0b9fbfcabf2f1676.camel@linux.ibm.com>
-In-Reply-To: <bb17e7657ada2577664caa6d0b9fbfcabf2f1676.camel@linux.ibm.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 8 Feb 2022 13:11:16 -0800
-Message-ID: <CAADnVQLELpdhZba0GQdY6G-F6Ce4jnb_QnrJwc8F6yjMnLcEAw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 14/14] arm64: add a comment that warns that
- orig_x0 should not be moved
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=1arNLeaBe5R3++hUI9/c4FXwtGni/EUby5Sin47pTdk=;
+        b=O81Q1mZ8PSLuxC/1yExHuNT2ghu9z0zfX7wq8m9I3h4rXOMs2VbRIcKLql3A/AEpIZ
+         /FY6g2fNWH/YY5uV0LF/6IHbDQZzWIHm6NKjITcx5tEgx1mZScDkL2pdw/8oc7HYNKd4
+         3WFCBvawhAU8IGN8WOJYyrzymYzFsCRcSnKaOkjG/Zgm9APC0NKCGA+4oBI6nsnQAnry
+         87X9WUHQEkb6LU2ZduSXR4tOquf+kKfAUQjz98nmEbu+0MzNiNODId/WMSD1pVyd48Ef
+         uxWwsC3qIu04C6WyN6kCWg9BJvyVWXbax2BILylUhEX0JkuH7muhYBOHI8AyrRm992TE
+         C86w==
+X-Gm-Message-State: AOAM532Y0d1gAwWZWBhAHQSMI3Nes3bhOox2XkkEhBZQTIEFsl4k5Kck
+        tym5uSXw02+DrLI0iSFU9xoEog==
+X-Google-Smtp-Source: ABdhPJyxVwpRL74mQEbdgzHrBRw1AQc1y8JfoA1keQTYYNxstmTY9HZuC7hb70h9WGhv/VfOqUrgLw==
+X-Received: by 2002:a2e:bf08:: with SMTP id c8mr3872583ljr.281.1644352925372;
+        Tue, 08 Feb 2022 12:42:05 -0800 (PST)
+Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0e00.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::e00])
+        by smtp.gmail.com with ESMTPSA id m17sm2052933lfr.24.2022.02.08.12.42.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 12:42:05 -0800 (PST)
+References: <20220207131459.504292-2-jakub@cloudflare.com>
+ <202202080631.n8UjqRXy-lkp@intel.com>
+ <CAADnVQKGF=YaKvzWZFO1c9bO63XHoiD=i-w-chCeSbaNoRfdwg@mail.gmail.com>
+User-agent: mu4e 1.1.0; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
+        kbuild-all@lists.01.org,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Make remote_port field in struct
+ bpf_sk_lookup 16-bit wide
+In-reply-to: <CAADnVQKGF=YaKvzWZFO1c9bO63XHoiD=i-w-chCeSbaNoRfdwg@mail.gmail.com>
+Date:   Tue, 08 Feb 2022 21:42:04 +0100
+Message-ID: <87y22lqeeb.fsf@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 11:46 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+On Tue, Feb 08, 2022 at 08:28 PM CET, Alexei Starovoitov wrote:
+> On Mon, Feb 7, 2022 at 2:05 PM kernel test robot <lkp@intel.com> wrote:
+>> 7c32e8f8bc33a5f Lorenz Bauer 2021-03-03  1148
+>> 7c32e8f8bc33a5f Lorenz Bauer 2021-03-03 @1149   if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
 >
-> On Tue, 2022-02-08 at 11:25 -0800, Alexei Starovoitov wrote:
-> > On Tue, Feb 08, 2022 at 06:16:35AM +0100, Ilya Leoshkevich wrote:
-> > > orig_x0's location is used by libbpf tracing macros, therefore it
-> > > should not be moved.
-> > >
-> > > Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> > > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > > ---
-> > >  arch/arm64/include/asm/ptrace.h | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/include/asm/ptrace.h
-> > > b/arch/arm64/include/asm/ptrace.h
-> > > index 41b332c054ab..7e34c3737839 100644
-> > > --- a/arch/arm64/include/asm/ptrace.h
-> > > +++ b/arch/arm64/include/asm/ptrace.h
-> > > @@ -185,6 +185,10 @@ struct pt_regs {
-> > >                         u64 pstate;
-> > >                 };
-> > >         };
-> > > +       /*
-> > > +        * orig_x0 is not exposed via struct user_pt_regs, but its
-> > > location is
-> > > +        * assumed by libbpf's tracing macros, so it should not be
-> > > moved.
-> > > +        */
-> >
-> > In other words this comment is saying that the layout is ABI.
-> > That's not the case. orig_x0 here and equivalent on s390 can be
-> > moved.
-> > It will break bpf progs written without CO-RE and that is expected.
-> > Non CO-RE programs often do all kinds of bpf_probe_read_kernel and
-> > will be breaking when kernel layout is changing.
-> > I suggest to drop this patch and patch 12.
->
-> Yeah, that was the intention here: to promote orig_x0 to ABI using a
-> comment, since doing this by extending user_pt_regs turned out to be
-> infeasible. I'm actually ok with not doing this, since programs
-> compiled with kernel headers and using CO-RE macros will be fine.
+> Jakub,
+> are you planning to respin and remove that check?
 
-The comment like this doesn't convert kernel internal struct into ABI.
-The comment is just wrong. BPF progs access many kernel data structs.
-s390's and arm64's struct pr_regs is not special in that sense.
-It's an internal struct.
+Yes, certainly. Just didn't get to it today.
 
-> As you say, we don't care about programs that don't use CO-RE too much
-> here - if they break after an incompatible kernel change, fine.
-
-Before CO-RE was introduced bpf progs included kernel headers
-and were breaking when kernel changes. Nothing new here.
-See the history of bcc tools. Some of them are littered
-with ifdef VERSION ==.
-
-> The question now is - how much do we care about programs that are
-
-> compiled with userspace headers? Andrii suggested to use offsetofend to
-> make syscall macros work there, however, this now requires this ABI
-> promotion.
-
-Today s390 and arm64 have user_pt_regs as a first field in pt_regs.
-That is kernel internal behavior and that part can change if arch
-maintainers have a need for that.
-bpf progs without CO-RE would have to be adjusted when kernel changes.
-Even with CO-RE it's ok to rename pt_regs->orig_gpr2 on s390.
-The progs with CO-RE will break too. The authors of tracing bpf progs
-have to expect that sooner or later their progs will break and they
-would have to adjust them.
+Can either respin the series or send a follow-up. Whatever works.
