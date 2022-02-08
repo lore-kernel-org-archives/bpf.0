@@ -2,187 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C738FC433EF
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 12:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21A20C41535
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 13:16:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347570AbiBHMHF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 07:07:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S1349374AbiBHNQF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 08:16:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347758AbiBHMHB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 07:07:01 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1D1C03FED0
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 04:06:58 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id s21so23365830ejx.12
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 04:06:58 -0800 (PST)
+        with ESMTP id S1376347AbiBHM52 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 07:57:28 -0500
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E253EC03FEC0
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 04:57:27 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id f6so3242136vsa.5
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 04:57:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bysXayoj/ZOqXC0/8UAT3GEQ7MEmhAEIOcxkwiZ3yAY=;
-        b=VQMyTU4CXnn06uzQHW3sjNfiXj1subUzOFgdW3kbOYxPbFUPR9AUYedox4V4h5j/jS
-         3FmyJ+OOEaQ5VY3JlpYojxUBYuAJ14tPfw/k9FTfIPkwPhUudUdsZqs8U8cRuvw12K3/
-         p9Kv/eL1NLkgHE7x5h5nPetQuIU2o4hHyBFd7mNBIvaeLGz5RUE4k4myHh8eAf+j89OA
-         E1B6ukeH3zf8ugb6fv9xUTxGKzP/+2YQKqGPqzdGGPng+njUKQPwKWaNE1Pj5UezghLs
-         jF0BHvJF02bn00KPZMEKQqAe8TvEhIr3jnH8DEUkNL7Hn/bmE2oaFrER5wOCNP7bTA+C
-         Av7Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QZ2ThHzP4ksA4NOQgohi764WWAj9VnjVAoaKOn8fduI=;
+        b=EMNBfmRp2wjXy+C2nQjYiC4DxNdDT0Ya2c9ZJSm2s/IK+XPPjo+cGsdCTvp9u90FsG
+         tRqCGtNC3wCccHPKhPWChFxncjU99ntTEaBdEPB03bc9P8/U8FYgUFY7vdSZAP+LL66n
+         8muVbJxDU+xxi+GmHrXwjsvugC3kqxn9ef9hdQsp10IXD+NVENGlrxBTWY+UFPNoHPf4
+         RHbN11vXN69TDV8BidyZ8l4EP8cJ2ab/NHOkJSAN5IKDoyD0sZA7xP4PaeLcrr5DiYd4
+         g91AF4JgLxIiEs01Ea2luKoKeXr9sBtd2/KBDK+xVx2Jy59x8WCPTibulnNVsHC01Xk4
+         ZNtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bysXayoj/ZOqXC0/8UAT3GEQ7MEmhAEIOcxkwiZ3yAY=;
-        b=5P25FeyiJRfVKV3khU8SmO2TwEJZyt6nZTwfX/6r4e6i/azAd2jxF9eXLy55aBEcwE
-         wdXIeEIoud2mLO1vnqra37onOQRbJoAQL+BEOHuE/IQIBHOyaTA7MCVmmZD2b/WdAVl0
-         d5gWyGqS8ZnBz4RkUui2mL9hHL9KDBC5v63ppaCkW+e+6E9OICh85+WLANLA8aAqnkhh
-         5dVLjV0cQJgUxkPG9IyS1HusxrRgJnvMT/NqAEUa/Rcl6+YB7/E0w2JYoQ0wghNOso08
-         mb2+mbdNtePTOpR2liuEDPnL5RQHnKDHfjc8qpvD4fvcB16XFPziwsoYwGt2f20x4K6v
-         pXRA==
-X-Gm-Message-State: AOAM532Bv+EuFVQKKE1gukCO1hgbVo/sh5DFK1HydXufkg7gk5il8zyI
-        r8UTuu8R5NXWjT3m26LnBW6R9w==
-X-Google-Smtp-Source: ABdhPJy1VMXQiImoWz6SJVctnTicPlW8qYp1+ulx7E1TdRYZI0rTwKDFz0yENg3CU95v+/g4MAvdRQ==
-X-Received: by 2002:a17:907:7f0e:: with SMTP id qf14mr3479255ejc.152.1644322016601;
-        Tue, 08 Feb 2022 04:06:56 -0800 (PST)
-Received: from localhost.localdomain ([149.86.77.242])
-        by smtp.gmail.com with ESMTPSA id m17sm5567351edr.62.2022.02.08.04.06.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:06:56 -0800 (PST)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 3/3] bpftool: Update versioning scheme, align on libbpf's version number
-Date:   Tue,  8 Feb 2022 12:06:48 +0000
-Message-Id: <20220208120648.49169-4-quentin@isovalent.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220208120648.49169-1-quentin@isovalent.com>
-References: <20220208120648.49169-1-quentin@isovalent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QZ2ThHzP4ksA4NOQgohi764WWAj9VnjVAoaKOn8fduI=;
+        b=gDlP8n3qkXivAp/8xYHKUtYgh8CeacMf1z0Sp+e7yPjK/xfkT9ajbBM2lMw6WLw6vF
+         QVXFLQM0/WPGKYImupLGyooo+WkcQyEpNJabsLIJsdX76vrHcx/vQdibIO4H8ksTp7+7
+         L0lug70uLhCKIrYjHKTX1eNxikcQ6yy6iEKEvAgklTskZRPdC1CoeyhdmELnty1bGCGW
+         TlqbakPjKjKe9Gj9eDgb7cAw0t7bb2wwlhqss/t8HYWY0N4toc+DUSJUUpR+BbfxUpBI
+         hurrqvUADQMfC+gxh9+Ot+KEts/YqHQe220FVI9TLRj5B6z2jhor+loBl/LCmUiR/v7I
+         jUfQ==
+X-Gm-Message-State: AOAM530kskhAzK30n9SdnU/BM+8fGxiucLrLWenm7R3mkuFSRH+dOMoB
+        yNoL0i2ngSqXkalKbkaKzsO1e4i9oguq9yMKdTytAg==
+X-Google-Smtp-Source: ABdhPJwzYnmI8xSLok/uyBrzIkBQJkWypFop0Iw7jyMCJjojRBeCCoicMZcYrBL6mMytDpkckHcQi/Zv4nuSY6mysaM=
+X-Received: by 2002:a67:e146:: with SMTP id o6mr1574855vsl.12.1644325046779;
+ Tue, 08 Feb 2022 04:57:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220208025511.1019-1-lina.wang@mediatek.com> <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+In-Reply-To: <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Tue, 8 Feb 2022 04:57:14 -0800
+Message-ID: <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
+Subject: Re: [PATCH] net: fix wrong network header length
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Kernel hackers <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Willem Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since the notion of versions was introduced for bpftool, it has been
-following the version number of the kernel (using the version number
-corresponding to the tree in which bpftool's sources are located). The
-rationale was that bpftool's features are loosely tied to BPF features
-in the kernel, and that we could defer versioning to the kernel
-repository itself.
+On Tue, Feb 8, 2022 at 12:25 AM Paolo Abeni <pabeni@redhat.com> wrote:
+>
+> Hello,
+>
+> On Tue, 2022-02-08 at 10:55 +0800, Lina Wang wrote:
+> > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is enable,
+> > several skbs are gathered in skb_shinfo(skb)->frag_list. The first skb's
+> > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> > network_header\transport_header\mac_header have been updated as ipv4 acts,
+> > but other skbs in frag_list didnot update anything, just ipv6 packets.
+> >
+> > udp_queue_rcv_skb will call skb_segment_list to traverse other skbs in
+> > frag_list and make sure right udp payload is delivered to user space.
+> > Unfortunately, other skbs in frag_list who are still ipv6 packets are
+> > updated like the first skb and will have wrong transport header length.
+> >
+> > e.g.before bpf_skb_proto_6_to_4,the first skb and other skbs in frag_list
+> > has the same network_header(24)& transport_header(64), after
+> > bpf_skb_proto_6_to_4, ipv6 protocol has been changed to ipv4, the first
+> > skb's network_header is 44,transport_header is 64, other skbs in frag_list
+> > didnot change.After skb_segment_list, the other skbs in frag_list has
+> > different network_header(24) and transport_header(44), so there will be 20
+> > bytes difference,that is difference between ipv6 header and ipv4 header.
+>
+> > Actually, there are two solutions to fix it, one is traversing all skbs
+> > and changing every skb header in bpf_skb_proto_6_to_4, the other is
+> > modifying frag_list skb's header in skb_segment_list.
+>
+> I don't think the above should be addressed into the GSO layer. The
+> ebpf program is changing the GRO packet in arbitrary way violating the
+> GSO packet constraint - arguably, it's corrupting the packet.
+>
+> I think it would be better change the bpf_skb_proto_6_to_4() to
+> properly handle FRAGLIST GSO packets.
+>
+> If traversing the segments become too costly, you can try replacing
+> GRO_FRAGLIST with GRO_UDP_FWD.
 
-But this versioning scheme is confusing today, because a bpftool binary
-should be able to work with both older and newer kernels, even if some
-of its recent features won't be available on older systems. Furthermore,
-if bpftool is ported to other systems in the future, keeping a
-Linux-based version number is not a good option.
+Yeah, I don't know...
 
-Looking at other options, we could either have a totally independent
-scheme for bpftool, or we could align it on libbpf's version number
-(with an offset on the major version number, to avoid going backwards).
-The latter comes with a few drawbacks:
+I've considered that we could perhaps fix the 6to4 helper, and 4to6 helper...
+but then I think every *other* helper / code path that plays games
+with the packet header needs fixing as well,
+ie. everything dealing with encap/decap, vlan, etc..
 
-- We may want bpftool releases in-between two libbpf versions. We can
-  always append pre-release numbers to distinguish versions, although
-  those won't look as "official" as something with a proper release
-  number. But at the same time, having bpftool with version numbers that
-  look "official" hasn't really been an issue so far.
+At that point it seems to me like it's worth fixing here rather than
+in all those other places.
 
-- If no new feature lands in bpftool for some time, we may move from
-  e.g. 6.7.0 to 6.8.0 when libbpf levels up and have two different
-  versions which are in fact the same.
+In general it seems gro fraglist as implemented is just a bad idea...
+Packets (and things we treat like packets) really should only have 1 header.
+GRO fraglist - as implemented - violates this pretty fundamental assumption.
+As such it seems to be on the gro fraglist implementation to deal with it.
+That to me seems to mean it should be fixed here, and not elsewhere.
 
-- Following libbpf's versioning scheme sounds better than kernel's, but
-  ultimately it doesn't make too much sense either, because even though
-  bpftool uses the lib a lot, its behaviour is not that much conditioned
-  by the internal evolution of the library (or by new APIs that it may
-  not use).
-
-Having an independent versioning scheme solves the above, but at the
-cost of heavier maintenance. Developers will likely forget to increase
-the numbers when adding features or bug fixes, and we would take the
-risk of having to send occasional "catch-up" patches just to update the
-version number.
-
-Based on these considerations, this patch aligns bpftool's version
-number on libbpf's. This is not a perfect solution, but 1) it's
-certainly an improvement over the current scheme, 2) the issues raised
-above are all minor at the moment, and 3) we can still move to an
-independent scheme in the future if we realise we need it.
-
-Given that libbpf is currently at version 0.7.0, and bpftool, before
-this patch, was at 5.16, we use an offset of 6 for the major version,
-bumping bpftool to 6.7.0.
-
-It remains possible to manually override the version number by setting
-BPFTOOL_VERSION when calling make.
-
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
-Contrarily to the previous discussion and to what the first patch of the
-set does, I chose not to use the libbpf_version_string() API from libbpf
-to compute the version for bpftool. There were three reasons for that:
-
-- I don't feel comfortable having bpftool's version number computed at
-  runtime. Somehow it really feels like we should now it when we compile
-  it. We link statically against libbpf today, but if we were to support
-  dynamic linking in the future we may forget to update and would have
-  bpftool's version changing based on the libbpf version installed
-  beside it, which does not make sense.
-
-- We cannot get the patch version for libbpf, the current API only
-  returns the major and minor version numbers (we could fix it, although
-  I'm not sure if desirable to expose the patch number).
-
-- I found it less elegant to compute the version strings in the code,
-  which meant malloc() and error handling just for printing a version
-  number, and having a separate case for when $(BPFTOOL_VERSION) is
-  defined, whereas passing a macro from the Makefile makes things
-  straightforwards.
----
- tools/bpf/bpftool/Makefile | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 83369f55df61..8dd30abff3d9 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -7,14 +7,21 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
-+BPF_DIR = $(srctree)/tools/lib/bpf
-+
-+# bpftool's version is libbpf's with a fixed offset for the major version.
-+# This is because bpftool's version was higher than libbpf's when we adopted
-+# this scheme.
-+BPFTOOL_MAJOR_OFFSET := 6
-+LIBBPF_VERSION := $(shell make -r --no-print-directory -sC $(BPF_DIR) libbpfversion)
-+BPFTOOL_VERSION ?= $(shell lv="$(LIBBPF_VERSION)"; echo "$$((${lv%%.*} + $(BPFTOOL_MAJOR_OFFSET))).$${lv#*.}")
-+
- ifeq ($(V),1)
-   Q =
- else
-   Q = @
- endif
- 
--BPF_DIR = $(srctree)/tools/lib/bpf
--
- ifneq ($(OUTPUT),)
-   _OUTPUT := $(OUTPUT)
- else
-@@ -39,10 +46,6 @@ LIBBPF_BOOTSTRAP := $(LIBBPF_BOOTSTRAP_OUTPUT)libbpf.a
- LIBBPF_INTERNAL_HDRS := $(addprefix $(LIBBPF_HDRS_DIR)/,hashmap.h nlattr.h)
- LIBBPF_BOOTSTRAP_INTERNAL_HDRS := $(addprefix $(LIBBPF_BOOTSTRAP_HDRS_DIR)/,hashmap.h)
- 
--ifeq ($(BPFTOOL_VERSION),)
--BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
--endif
--
- $(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP_OUTPUT) $(LIBBPF_HDRS_DIR) $(LIBBPF_BOOTSTRAP_HDRS_DIR):
- 	$(QUIET_MKDIR)mkdir -p $@
- 
--- 
-2.32.0
-
+(btw. wrt. this commit itself, it seems like the diff should be a signed int)
