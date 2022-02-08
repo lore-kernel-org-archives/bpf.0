@@ -2,281 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D272AC433EF
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20098C43219
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 22:22:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382013AbiBHWWC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 17:22:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
+        id S1381547AbiBHWWH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 17:22:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386391AbiBHUVd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 15:21:33 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6447C0613CB
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 12:21:31 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id o8-20020a92dac8000000b002bdff13c2f0so6672357ilq.7
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 12:21:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=TaQwE2DFiZTHkuTB9gFHxb0jFiUgExXwgy+A0Sjpojg=;
-        b=bLbzd0ve90E5k2t41LSgPBQd85XvD8tobZY8EepGjT1p+o58fmyuew6e6d1fWDGFmT
-         kbqfHnJ06ii5bgMFBsnWCTw+C/zDMPMTvBQeV3+cPtYpK4/47VaM7LQFbhumBTUxHZim
-         rucOxJytQ3CoMnRTyqehYP/5UlqOg2cEJ9Ik+ua/mlNUdc/WtgFJdq+pZItUjB8wDc1f
-         JzFccoirdBtd+39QvfvmdPZhzYMLotj/ZL4SoKbAuX9Ut69xPqcDLAqZzT4M6CutMHvl
-         hMl6zWKpCfup8bYZXluH61jwEz5eHOd0ZsHREBbcsGRUeHFjHMuTGaOL8OL9LDE/BWG/
-         ksRg==
-X-Gm-Message-State: AOAM531J9CxTJM2AjMg8j05zObLWJ7TM9oZr6A5rob/vAtEkxS1OLMyA
-        zoTUv19TMYpvUn+InvtlwNpwkL44V2XpkQ6Iqp5Zvsj2K0Kw
-X-Google-Smtp-Source: ABdhPJwAVRTcWd8gAG6rv+1tIP3j1Wp4NlKNx+pkGdIW2URUSM4oWubQcegGkCjTmblLU4xyteAIKdcNHVJ/vB1Anc0NCup1HmkG
+        with ESMTP id S1386998AbiBHVkK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 16:40:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7B5C0612B8;
+        Tue,  8 Feb 2022 13:40:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DD4161638;
+        Tue,  8 Feb 2022 21:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 851FEC340EE;
+        Tue,  8 Feb 2022 21:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644356408;
+        bh=H7c2nk0Uo1AfUDbhAwMbIB5dfEpZKr1ih26waXCPdkw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Ta0MhK4FEzO/B+Zhb+wFo9bUMnuqfTnbiFGIZEanjltQXJMI6HooCfrkX7J0o2dOZ
+         FLgt83qPS7pHq0YuRio1H+YQ5ijSECBmucIJfHRkTMUNbaVIYyJ6QJvzaiSwl4QuuU
+         R1t8J+AIMMIa8jbOxOXYqRTZrwj9kqhy/Q9QIw9QEzUK1OhNhAtv34gqUDfBfPjmHA
+         ol3uWiSS5GCdaoysBiolKAG7IYMazBFiRUpbARAMiopuMmINz9uZFQhhUj6Mhh7AGb
+         L7Kjm7qiB3l5zR/sQrKL63jOAd5i5+AsADx0itB3jY+6WIKgfgMXcAym76/BMJzuF1
+         Xqmh1sIYVUipg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6E43DE5D084;
+        Tue,  8 Feb 2022 21:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Received: by 2002:a02:6f48:: with SMTP id b8mr3107880jae.9.1644351690964;
- Tue, 08 Feb 2022 12:21:30 -0800 (PST)
-Date:   Tue, 08 Feb 2022 12:21:30 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006d045e05d78776f6@google.com>
-Subject: [syzbot] BUG: MAX_LOCK_DEPTH too low! (3)
-From:   syzbot <syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, guwen@linux.alibaba.com,
-        john.fastabend@gmail.com, kafai@fb.com, kgraul@linux.ibm.com,
-        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] libbpf: Fix signedness bug in btf_dump_array_data()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164435640844.13285.18161344073556869381.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Feb 2022 21:40:08 +0000
+References: <20220208071552.GB10495@kili>
+In-Reply-To: <20220208071552.GB10495@kili>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     ast@kernel.org, alan.maguire@oracle.com, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Hello:
 
-syzbot found the following issue on:
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-HEAD commit:    ed14fc7a79ab net: sparx5: Fix get_stat64 crash in tcpdump
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=175bd324700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b4a89edfcc8f7c74
-dashboard link: https://syzkaller.appspot.com/bug?extid=4de3c0e8a263e1e499bc
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f97334700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16b54958700000
+On Tue, 8 Feb 2022 10:15:52 +0300 you wrote:
+> The btf__resolve_size() function returns negative error codes so
+> "elem_size" must be signed for the error handling to work.
+> 
+> Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  tools/lib/bpf/btf_dump.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-The issue was bisected to:
+Here is the summary with links:
+  - libbpf: Fix signedness bug in btf_dump_array_data()
+    https://git.kernel.org/bpf/bpf-next/c/4172843ed4a3
 
-commit 341adeec9adad0874f29a0a1af35638207352a39
-Author: Wen Gu <guwen@linux.alibaba.com>
-Date:   Wed Jan 26 15:33:04 2022 +0000
-
-    net/smc: Forward wakeup to smc socket waitqueue after fallback
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11c2637c700000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=13c2637c700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c2637c700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4de3c0e8a263e1e499bc@syzkaller.appspotmail.com
-Fixes: 341adeec9ada ("net/smc: Forward wakeup to smc socket waitqueue after fallback")
-
-BUG: MAX_LOCK_DEPTH too low!
-turning off the locking correctness validator.
-depth: 48  max: 48!
-48 locks held by syz-executor417/3783:
- #0: ffff888070db8810 (&sb->s_type->i_mutex_key#11){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:777 [inline]
- #0: ffff888070db8810 (&sb->s_type->i_mutex_key#11){+.+.}-{3:3}, at: __sock_release+0x86/0x280 net/socket.c:649
- #1: ffff88801d4f7578 (&smc->clcsock_release_lock){+.+.}-{3:3}, at: smc_clcsock_release+0x71/0xe0 net/smc/smc_close.c:30
- #2: ffff8880739bc930 (k-sk_lock-AF_INET){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1668 [inline]
- #2: ffff8880739bc930 (k-sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_close+0x1e/0xc0 net/ipv4/tcp.c:2921
- #3: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #4: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #5: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #6: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #7: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #8: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #9: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #10: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #11: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #12: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #13: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #14: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #15: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #16: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #17: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #18: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #19: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #20: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #21: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #22: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #23: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #24: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #25: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #26: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #27: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #28: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #29: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #30: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #31: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #32: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #33: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #34: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #35: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #36: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #37: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #38: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #39: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #40: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #41: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #42: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #43: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #44: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #45: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #46: ffffffff8bb83c20 (rcu_read_lock){....}-{1:2}, at: smc_fback_forward_wakeup+0x0/0x540 net/smc/af_smc.c:2890
- #47: ffff888070db8c58 (&ei->socket.wq.wait){..-.}-{2:2}, at: add_wait_queue+0x42/0x260 kernel/sched/wait.c:23
-INFO: lockdep is turned off.
-CPU: 0 PID: 3783 Comm: syz-executor417 Not tainted 5.17.0-rc2-syzkaller-00168-ged14fc7a79ab #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __lock_acquire+0x18fd/0x5470 kernel/locking/lockdep.c:5045
- lock_acquire kernel/locking/lockdep.c:5639 [inline]
- lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5604
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x39/0x50 kernel/locking/spinlock.c:162
- add_wait_queue+0x42/0x260 kernel/sched/wait.c:23
- smc_fback_forward_wakeup+0x15b/0x540 net/smc/af_smc.c:617
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- smc_fback_forward_wakeup+0x161/0x540 net/smc/af_smc.c:618
- smc_fback_error_report+0x82/0xa0 net/smc/af_smc.c:664
- sk_error_report+0x35/0x310 net/core/sock.c:340
- tcp_disconnect+0x14e3/0x1e80 net/ipv4/tcp.c:3096
- __tcp_close+0xe65/0x12b0 net/ipv4/tcp.c:2792
- tcp_close+0x29/0xc0 net/ipv4/tcp.c:2922
- inet_release+0x12e/0x280 net/ipv4/af_inet.c:428
- __sock_release net/socket.c:650 [inline]
- sock_release+0x87/0x1b0 net/socket.c:678
- smc_clcsock_release+0xb3/0xe0 net/smc/smc_close.c:34
- __smc_release+0x35e/0x5b0 net/smc/af_smc.c:172
- smc_release+0x17f/0x530 net/smc/af_smc.c:209
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1318
- __fput+0x286/0x9f0 fs/file_table.c:311
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- exit_task_work include/linux/task_work.h:32 [inline]
- do_exit+0xb29/0x2a30 kernel/exit.c:806
- do_group_exit+0xd2/0x2f0 kernel/exit.c:935
- get_signal+0x4b0/0x28c0 kernel/signal.c:2862
- arch_do_signal_or_restart+0x2a9/0x1c40 arch/x86/kernel/signal.c:868
- handle_signal_work kernel/entry/common.c:148 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:172 [inline]
- exit_to_user_mode_prepare+0x17d/0x290 kernel/entry/common.c:207
- __syscall_exit_to_user_mode_work kernel/entry/common.c:289 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:300
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f41e18579a9
-Code: Unable to access opcode bytes at RIP 0x7f41e185797f.
-RSP: 002b:00007f41e17e8318 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: 0000000000000001 RBX: 00007f41e18df3f8 RCX: 00007f41e18579a9
-RDX: 00000000000f4240 RSI: 0000000000000081 RDI: 00007f41e18df3fc
-RBP: 00007f41e18df3f0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f41e18ad074
-R13: 00007ffefdec9ecf R14: 00007f41e17e8400 R15: 0000000000022000
- </TASK>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
