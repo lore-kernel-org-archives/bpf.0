@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5E81C433EF
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:33:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6524C433F5
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:33:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347095AbiBHFcw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 00:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
+        id S1347053AbiBHFc7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 00:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiBHFRO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:17:14 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864C9C0401E9
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:12 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2182I3PN021119;
-        Tue, 8 Feb 2022 05:16:54 GMT
+        with ESMTP id S231920AbiBHFRP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 00:17:15 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC1AC0401F0
+        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:15 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21858jmQ015969;
+        Tue, 8 Feb 2022 05:16:58 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=9Qd6UpMF3oJo+XUqq9Ez4PY7I6X62OEtlCTwwlWOB3I=;
- b=nwCku9xjRGXgwN9cGN2IG959S9UuW1/G6ZC3CgudbWZeV5wFUiqRMSu6vRuGa+F6avfC
- OVr68f0scV0REGuOawAeiTrcCJc79CfIpzytiSR4IafzAXP2eg0YaCt8EhbHcozd7T4Z
- VbOMvPgGcpW/Sp0rgdG/vG58h5ZHcmSZBUUDE0ed2X/xJN1ll4lmjE5GbZEA5Aj2sQbj
- 8Jqs/qtMn7QPfow09y1wY4IT6j0BrrfSvszQ2ZDnpuDEgMsfugUr0mZ+Ien2Hfiwn9Vo
- ma/79Ok776mldpxxp1hjJu3zZRWYIXJ6A3SE/FwcEd3TL8B42lNWh3Dwsty67cRagot7 8A== 
+ bh=dMbyH2Z4ecASSiIwPCMuVBECi5JSlT96nxGowBgANpk=;
+ b=QhZa59ldmzH98C5RViHitlK5AlAGa6iUv+bTKvntu+t4WM72VCugcvyLOC0JTE6Pr/Ce
+ 6xurVxmKbmfKFmOXjxFdBXnUAGXxRdDoE87pJDERl6J/5crOCPP8GYROE9hQJl9ImlxK
+ CNE9BroBUQnXTDlkyGRRmYO2l2C6DiMKuZERWCuCGMgBSfFTbFStmdo8vjGNFgyRKT8/
+ P7IMY7Z5cOLSGcx6YniPc4CDgOFQZNghNWnqiAUFl9z3GIKvrPjg0zXYZlnvzLI5zYjS
+ k05cPJzLI9pwmm1BZyQ1rsj5pa8gsl4i3lggZkb67YX7a2gFevjqLm9TeeIIRBXeT5PE rQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm4js41-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3e1tcttq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 05:16:57 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2184s8hI017160;
+        Tue, 8 Feb 2022 05:16:57 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3e1tctsw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Feb 2022 05:16:57 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185CTfb022070;
+        Tue, 8 Feb 2022 05:16:54 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggjtf41-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Tue, 08 Feb 2022 05:16:54 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2185GTbp016590;
-        Tue, 8 Feb 2022 05:16:53 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm4js3a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:53 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185COoq022043;
-        Tue, 8 Feb 2022 05:16:52 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3e1ggjtf3n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:51 +0000
 Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2185GjeM46268712
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2185GnmT37290272
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 05:16:45 GMT
+        Tue, 8 Feb 2022 05:16:49 GMT
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D933111C04C;
-        Tue,  8 Feb 2022 05:16:45 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id C39DD11C058;
+        Tue,  8 Feb 2022 05:16:49 +0000 (GMT)
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41A8011C069;
-        Tue,  8 Feb 2022 05:16:45 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 2328811C04A;
+        Tue,  8 Feb 2022 05:16:49 +0000 (GMT)
 Received: from heavy.lan (unknown [9.171.78.41])
         by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 05:16:45 +0000 (GMT)
+        Tue,  8 Feb 2022 05:16:49 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,84 +71,53 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         Mark Rutland <mark.rutland@arm.com>
 Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v4 08/14] libbpf: Use struct pt_regs when compiling with kernel headers
-Date:   Tue,  8 Feb 2022 06:16:29 +0100
-Message-Id: <20220208051635.2160304-9-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v4 12/14] s390: add a comment that warns that orig_gpr2 should not be moved
+Date:   Tue,  8 Feb 2022 06:16:33 +0100
+Message-Id: <20220208051635.2160304-13-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220208051635.2160304-1-iii@linux.ibm.com>
 References: <20220208051635.2160304-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Uet0BPsgthsOvfvki21-hFZj0xGK88zb
-X-Proofpoint-GUID: 7F8L9nOuqSz32NoUU9HEfKsKY0fKKrrV
+X-Proofpoint-GUID: 7gz8XkxM81BmU8iKLsbEDvyb-cEltnpf
+X-Proofpoint-ORIG-GUID: EVftoteCgMrTMzDMF4dn9NRm4iBKZkG7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-08_01,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- mlxlogscore=921 clxscore=1015 adultscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 suspectscore=0 mlxscore=0
+ phishscore=0 spamscore=0 mlxlogscore=876 lowpriorityscore=0 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2202080025
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii says: "... with CO-RE and vmlinux.h it would be more reliable
-and straightforward to just stick to kernel-internal struct pt_regs
-everywhere ...".
+orig_gpr2's location is used by libbpf tracing macros, therefore it
+should not be moved.
 
-Actually, if vmlinux.h is available, then it's ok to do so for both
-CO-RE and non-CO-RE cases, since the beginning of struct pt_regs must
-match (struct) user_pt_regs, which must never change.
-
-Implement this by not defining __PT_REGS_CAST if the user included
-vmlinux.h.
-
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/lib/bpf/bpf_tracing.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/s390/include/asm/ptrace.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-index 7a015ee8fb11..07e291d77e83 100644
---- a/tools/lib/bpf/bpf_tracing.h
-+++ b/tools/lib/bpf/bpf_tracing.h
-@@ -118,8 +118,11 @@
- 
- #define __BPF_ARCH_HAS_SYSCALL_WRAPPER
- 
-+#if !defined(__KERNEL__) && !defined(__VMLINUX_H__)
- /* s390 provides user_pt_regs instead of struct pt_regs to userspace */
- #define __PT_REGS_CAST(x) ((const user_pt_regs *)(x))
-+#endif
-+
- #define __PT_PARM1_REG gprs[2]
- #define __PT_PARM2_REG gprs[3]
- #define __PT_PARM3_REG gprs[4]
-@@ -148,8 +151,11 @@
- 
- #define __BPF_ARCH_HAS_SYSCALL_WRAPPER
- 
-+#if !defined(__KERNEL__) && !defined(__VMLINUX_H__)
- /* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
- #define __PT_REGS_CAST(x) ((const struct user_pt_regs *)(x))
-+#endif
-+
- #define __PT_PARM1_REG regs[0]
- #define __PT_PARM2_REG regs[1]
- #define __PT_PARM3_REG regs[2]
-@@ -207,7 +213,10 @@
- 
- #elif defined(bpf_target_riscv)
- 
-+#if !defined(__KERNEL__) && !defined(__VMLINUX_H__)
- #define __PT_REGS_CAST(x) ((const struct user_regs_struct *)(x))
-+#endif
-+
- #define __PT_PARM1_REG a0
- #define __PT_PARM2_REG a1
- #define __PT_PARM3_REG a2
+diff --git a/arch/s390/include/asm/ptrace.h b/arch/s390/include/asm/ptrace.h
+index 4ffa8e7f0ed3..3c356ec59abc 100644
+--- a/arch/s390/include/asm/ptrace.h
++++ b/arch/s390/include/asm/ptrace.h
+@@ -85,6 +85,10 @@ struct pt_regs {
+ 			unsigned long gprs[NUM_GPRS];
+ 		};
+ 	};
++	/*
++	 * orig_gpr2 is not exposed via user_pt_regs, but its location is
++	 * assumed by libbpf's tracing macros, so it should not be moved.
++	 */
+ 	unsigned long orig_gpr2;
+ 	union {
+ 		struct {
 -- 
 2.34.1
 
