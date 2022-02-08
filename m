@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5850AC4167B
-	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:33:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E709C4167D
+	for <bpf@archiver.kernel.org>; Tue,  8 Feb 2022 05:33:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235383AbiBHFdF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S231598AbiBHFdF (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 8 Feb 2022 00:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiBHFRP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 00:17:15 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63900C0401EE
-        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:13 -0800 (PST)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2182IG2M021390;
-        Tue, 8 Feb 2022 05:16:55 GMT
+        with ESMTP id S231826AbiBHFRH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 00:17:07 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40442C0401DC
+        for <bpf@vger.kernel.org>; Mon,  7 Feb 2022 21:17:06 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2183kfFD024697;
+        Tue, 8 Feb 2022 05:16:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=HR4g4dcgdAOIxXBvfmG4lQLe6l4SHdf1pDAgzAmfyqo=;
- b=KjpdEBt91RVCHvx2/EDbXNBCetMfz9lQVtpANt+q9dAbwKEy2plKIqhuP5Cl1eqtLFpD
- fEZaL9tW/pu4X0zNn6wrSYfCkFq2xhO4SOF1tYMJ6e0Cn2RGlr2qEOzIvf+prb1fBSrn
- Y9iY7h4LNhbuTmPIeNnKDPwddW44IHRyPNdxVuHtidEdUUaJYXZui0evw94fEUWIEw9S
- gRoYUND5aE4K6L+jMd7NhCyYNJbmtDFGoEbc/sDym903OKj0vKr4GlEnD6q6wm6QA118
- JBFBS4+Rdc4lS/iyi56gja++7HzvIB4QyNk+UZ5ofHN/RX1XDrAep3Jxn0XENwwoplw0 RA== 
+ bh=+LjoE0NZmu4eTgC5xdsneOk1/jfO4/mdoy6UnZQR+Ic=;
+ b=g+W0u+8gnVA22WOwj2TlZTrSADsqgubramFzyA4CezgeNw3pydo6evhQr+4F2IYXMmHD
+ cq783MSukwMk0qeGfDEpt3QAHIa5mA2OT04wc0DrAx2M5tBrflkGZlvmRuoh1U6K1SK0
+ 3I6raDVrCV5IIUCyjM8zjjDsiSRfo1PLZLQzZX+sww55Stp2mgeiLpZ0YmNQY0WckUnt
+ NsBJosIv/edBC3zuvCimh03C9XCN8By1Xq/RB35K37dV3aUYOFUt/3c2PyBy1e5wVCHN
+ PM+PzMzbl//X9RNkEEW0vQe31w8X7+w0tEqVy/bsTBe3XA214FJqEudD2fJdjRWQrXg/ dQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm4js4u-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22vm7jut-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:55 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2185GtuH021148;
-        Tue, 8 Feb 2022 05:16:55 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3e3fm4js40-1
+        Tue, 08 Feb 2022 05:16:46 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21856Rb2007777;
+        Tue, 8 Feb 2022 05:16:46 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e22vm7jua-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:55 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185CCNI019236;
-        Tue, 8 Feb 2022 05:16:53 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3e1gv99dk7-1
+        Tue, 08 Feb 2022 05:16:46 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2185Cmb8027187;
+        Tue, 8 Feb 2022 05:16:44 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04fra.de.ibm.com with ESMTP id 3e2ygq0a8x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 08 Feb 2022 05:16:53 +0000
+        Tue, 08 Feb 2022 05:16:44 +0000
 Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2185GjD643581820
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21856Y8W33423648
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 8 Feb 2022 05:16:45 GMT
+        Tue, 8 Feb 2022 05:06:34 GMT
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBE6711C04A;
-        Tue,  8 Feb 2022 05:16:44 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id EC5B311C04A;
+        Tue,  8 Feb 2022 05:16:38 +0000 (GMT)
 Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 500E111C052;
-        Tue,  8 Feb 2022 05:16:44 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 627E111C050;
+        Tue,  8 Feb 2022 05:16:38 +0000 (GMT)
 Received: from heavy.lan (unknown [9.171.78.41])
         by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  8 Feb 2022 05:16:44 +0000 (GMT)
+        Tue,  8 Feb 2022 05:16:38 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -71,97 +71,62 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
         Mark Rutland <mark.rutland@arm.com>
 Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v4 07/14] selftests/bpf: Use PT_REGS_SYSCALL_REGS in bpf_syscall_macro
-Date:   Tue,  8 Feb 2022 06:16:28 +0100
-Message-Id: <20220208051635.2160304-8-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v4 01/14] selftests/bpf: Fix an endianness issue in bpf_syscall_macro test
+Date:   Tue,  8 Feb 2022 06:16:22 +0100
+Message-Id: <20220208051635.2160304-2-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220208051635.2160304-1-iii@linux.ibm.com>
 References: <20220208051635.2160304-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: vYdPpaRmaNJdZHYxS4rIzt-_FE4PCI0X
-X-Proofpoint-GUID: bjMZQ5rEt0XQI7DspuIakKIdjmYSZ3TO
+X-Proofpoint-GUID: Ksisi07XxLHbPAlOtypoxnTqCa43V7TW
+X-Proofpoint-ORIG-GUID: LDValFMcSf8JvQC1LJSYhuGLTurJnu17
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-08_01,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- mlxlogscore=999 clxscore=1015 adultscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202080025
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 phishscore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
+ definitions=main-2202080025
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure that PT_REGS_SYSCALL_REGS works correctly, and also remove some
-duplication.
+bpf_syscall_macro reads a long argument into an int variable, which
+produces a wrong value on big-endian systems. Fix by reading the
+argument into an intermediate long variable first.
 
+Fixes: 77fc0330dfe5 ("selftests/bpf: Add a test to confirm PT_REGS_PARM4_SYSCALL")
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h              | 4 ----
- .../selftests/bpf/progs/bpf_syscall_macro_common.h        | 2 +-
- tools/testing/selftests/bpf/progs/test_probe_user.c       | 8 +-------
- 3 files changed, 2 insertions(+), 12 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_syscall_macro.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 5bb11fe595a4..9f2937b5e819 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -3,16 +3,12 @@
- #define __BPF_MISC_H__
+diff --git a/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c b/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
+index c8e60220cda8..f5c6ef2ff6d1 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
++++ b/tools/testing/selftests/bpf/progs/bpf_syscall_macro.c
+@@ -28,6 +28,7 @@ int BPF_KPROBE(handle_sys_prctl)
+ {
+ 	struct pt_regs *real_regs;
+ 	pid_t pid = bpf_get_current_pid_tgid() >> 32;
++	unsigned long tmp;
  
- #if defined(__TARGET_ARCH_x86)
--#define SYSCALL_WRAPPER 1
- #define SYS_PREFIX "__x64_"
- #elif defined(__TARGET_ARCH_s390)
--#define SYSCALL_WRAPPER 1
- #define SYS_PREFIX "__s390x_"
- #elif defined(__TARGET_ARCH_arm64)
--#define SYSCALL_WRAPPER 1
- #define SYS_PREFIX "__arm64_"
- #else
--#define SYSCALL_WRAPPER 0
- #define SYS_PREFIX "__se_"
- #endif
- 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h
-index 8717605358d3..95c2f1904f81 100644
---- a/tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_syscall_macro_common.h
-@@ -31,7 +31,7 @@ int BPF_KPROBE(handle_sys_prctl)
  	if (pid != filter_pid)
  		return 0;
- 
--	real_regs = (struct pt_regs *)PT_REGS_PARM1(ctx);
-+	real_regs = PT_REGS_SYSCALL_REGS(ctx);
+@@ -35,7 +36,9 @@ int BPF_KPROBE(handle_sys_prctl)
+ 	real_regs = (struct pt_regs *)PT_REGS_PARM1(ctx);
  
  	/* test for PT_REGS_PARM */
- 
-diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/testing/selftests/bpf/progs/test_probe_user.c
-index 702578a5e496..b2531f587c87 100644
---- a/tools/testing/selftests/bpf/progs/test_probe_user.c
-+++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
-@@ -14,18 +14,12 @@ static struct sockaddr_in old;
- SEC("kprobe/" SYS_PREFIX "sys_connect")
- int BPF_KPROBE(handle_sys_connect)
- {
--#if SYSCALL_WRAPPER == 1
- 	struct pt_regs *real_regs;
--#endif
- 	struct sockaddr_in new;
- 	void *ptr;
- 
--#if SYSCALL_WRAPPER == 0
--	ptr = (void *)PT_REGS_PARM2(ctx);
--#else
--	real_regs = (struct pt_regs *)PT_REGS_PARM1(ctx);
-+	real_regs = PT_REGS_SYSCALL_REGS(ctx);
- 	bpf_probe_read_kernel(&ptr, sizeof(ptr), &PT_REGS_PARM2(real_regs));
--#endif
- 
- 	bpf_probe_read_user(&old, sizeof(old), ptr);
- 	__builtin_memset(&new, 0xab, sizeof(new));
+-	bpf_probe_read_kernel(&arg1, sizeof(arg1), &PT_REGS_PARM1_SYSCALL(real_regs));
++
++	bpf_probe_read_kernel(&tmp, sizeof(tmp), &PT_REGS_PARM1_SYSCALL(real_regs));
++	arg1 = tmp;
+ 	bpf_probe_read_kernel(&arg2, sizeof(arg2), &PT_REGS_PARM2_SYSCALL(real_regs));
+ 	bpf_probe_read_kernel(&arg3, sizeof(arg3), &PT_REGS_PARM3_SYSCALL(real_regs));
+ 	bpf_probe_read_kernel(&arg4_cx, sizeof(arg4_cx), &PT_REGS_PARM4(real_regs));
 -- 
 2.34.1
 
