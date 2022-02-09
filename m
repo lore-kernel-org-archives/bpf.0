@@ -2,195 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C2DDC433EF
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 02:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A30C4332F
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 02:39:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241226AbiBICjZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 21:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S241434AbiBICj0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 21:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241323AbiBIAwi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:52:38 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF736C061576
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 16:52:37 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id x4so815292plb.4
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 16:52:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=czRTT56tb0CcrVHiiatHDJLx3pD9bKo0chH15xPS/g8=;
-        b=hqXC8FSympw+nsaw0iiZ6QoiiPbaX1/vyjK6mc8T0HMoBKa2euB1nGZdjKlOD0uQgO
-         zHtKBzM2mP5XZWa8rVy43v2yx66+Er/fwaddsXOn3JWkNvaka4wiIBfO85hSwBCC8TC/
-         2phwLmQIwLEgdGSQOZWWSloDU1yijwq4waXCfZuXmDvot/oj5AMvK44cinaHg2ZQHd1D
-         vx3/3Vf+QGt5Ng3cCYFvvTp6K3jhwk977GkFYqKonl8VNRR1DXQ8/V46PLlbb3k22frO
-         fPINCWq2X1Pay6k0cF36tUJXuwIqeWi9tTnhR+eO1YphpqotUEQxGTcVR/pv/yVhMB2Q
-         lm4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=czRTT56tb0CcrVHiiatHDJLx3pD9bKo0chH15xPS/g8=;
-        b=0+nAAiJy61xCUNa7J4AJtHgg3DJe0lCClcHeQshDUTO0tPN/SOBim2NQWfVUa80xpN
-         OmOUyJ28bVKsvp39Ds24mghrCIKp5hhiF6m+YnXJGlQ4U2Hch4NyP0ibTK+3lVxt689m
-         SyYQqIiWcrp6eW1w2Soqu2yP6foPfWOWKtBcPcVV08oAXRGrBLIVkbJgStxT2pxtgyeR
-         yB4yvE9DYFPxZ6ZymbdpeDV32rXBWhdKm5aAzosu9u8oA3kazrbEzQsbyLV/7YO6y3FT
-         dDj6EMo1TaaTUQK9fL1GqBMQI1Z1IBDtJwQMUtiXyoqfAtUx67SZ4IPce4teq4c3VytU
-         orIg==
-X-Gm-Message-State: AOAM533iohScABlivOciLhchbbqAFw+9GRK+qHg9w9eD/cXHhoIhlT7N
-        BJLcLHeOcb6sTwPedzOYci8=
-X-Google-Smtp-Source: ABdhPJxwiVew7FrYwi/9hh4ruoowuHDFtty4/FFI40nZofvs9qFLbZyBxkE9I7xVoVHr8WHT1KOQtQ==
-X-Received: by 2002:a17:90a:f491:: with SMTP id bx17mr666510pjb.3.1644367957444;
-        Tue, 08 Feb 2022 16:52:37 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:cbf])
-        by smtp.gmail.com with ESMTPSA id 13sm4891733pfx.122.2022.02.08.16.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 16:52:36 -0800 (PST)
-Date:   Tue, 8 Feb 2022 16:52:35 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
-        bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v2 bpf-next 3/5] bpftool: Generalize light skeleton
- generation.
-Message-ID: <20220209005235.jqc3ox557oceuwsb@ast-mbp.dhcp.thefacebook.com>
-References: <20220208191306.6136-1-alexei.starovoitov@gmail.com>
- <20220208191306.6136-4-alexei.starovoitov@gmail.com>
- <8a126b25-b8d0-3838-ecaa-0613c9e4894e@fb.com>
+        with ESMTP id S244818AbiBICSM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 21:18:12 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA770C06157B
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 18:18:11 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 218N4PTc024620;
+        Wed, 9 Feb 2022 02:18:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=sW9RKrEfmwrfb4ksbZiGdYlC4GP27dN4LUsLIV5cD2c=;
+ b=lf0aTakGS0MEPwnn7Pjw1OmMXUzkd2d2N+3WOe2uA7gv8vWGzC9uXtxpig1Yp73dwZQV
+ ZnK+RjsnZPYTHNnWN/ewb7A7lzUhro713iMOSw0dgsrV7tWVvB+tatNgL00naVT4zeEo
+ tKT/2WuCQ8WjroEOWjwYE1p2DtEvzuBz72xyeUZwbukNn91blkPVgEF0PyN3iV62hng2
+ nSrFqWwWz9TnWR5d+e5ORuErFiBv9J7JXzBWw2JV1Hfau3gilQSEDoyWqEde/pvhN7Jr
+ 22/4V7D138+NnHjuJOYmDy3h5lnNumPEJCt7iC6qL4ogiBe0bS8prRfzYjvpEP6yfrAo 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3npsxgug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 02:17:59 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 219288dB004443;
+        Wed, 9 Feb 2022 02:17:59 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3e3npsxgtr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 02:17:59 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2192CdO6022510;
+        Wed, 9 Feb 2022 02:17:56 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03ams.nl.ibm.com with ESMTP id 3e1gv9jhu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Feb 2022 02:17:56 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2192HrvX48562434
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 9 Feb 2022 02:17:53 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4CEA6A405B;
+        Wed,  9 Feb 2022 02:17:53 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC4CCA405C;
+        Wed,  9 Feb 2022 02:17:52 +0000 (GMT)
+Received: from heavy.lan (unknown [9.171.78.41])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Feb 2022 02:17:52 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     bpf@vger.kernel.org, Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v5 05/10] libbpf: Fix riscv register names
+Date:   Wed,  9 Feb 2022 03:17:40 +0100
+Message-Id: <20220209021745.2215452-6-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220209021745.2215452-1-iii@linux.ibm.com>
+References: <20220209021745.2215452-1-iii@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a126b25-b8d0-3838-ecaa-0613c9e4894e@fb.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kV_HIcwDcdbY-1jRzM8suLybMptLehkD
+X-Proofpoint-GUID: YvU-v2kQeEuMdcA2U4PFnkHhTR51cvfO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-08_08,2022-02-07_02,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ spamscore=0 bulkscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 mlxscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202090014
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 04:25:15PM -0800, Yonghong Song wrote:
-> 
-> 
-> On 2/8/22 11:13 AM, Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
-> > 
-> > Generealize light skeleton by hiding mmap details in skel_internal.h
-> > In this form generated lskel.h is usable both by user space and by the kernel.
-> > 
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > ---
-> >   tools/bpf/bpftool/gen.c | 45 ++++++++++++++++++++++++-----------------
-> >   1 file changed, 27 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> > index eacfc6a2060d..903abbf077ce 100644
-> > --- a/tools/bpf/bpftool/gen.c
-> > +++ b/tools/bpf/bpftool/gen.c
-> > @@ -472,7 +472,7 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
-> >   			continue;
-> >   		if (bpf_map__is_internal(map) &&
-> >   		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-> > -			printf("\tmunmap(skel->%1$s, %2$zd);\n",
-> > +			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zd);\n",
-> >   			       ident, bpf_map_mmap_sz(map));
-> >   		codegen("\
-> >   			\n\
-> > @@ -481,7 +481,7 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
-> >   	}
-> >   	codegen("\
-> >   		\n\
-> > -			free(skel);					    \n\
-> > +			skel_free(skel);				    \n\
-> >   		}							    \n\
-> >   		",
-> >   		obj_name);
-> > @@ -525,7 +525,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
-> >   		{							    \n\
-> >   			struct %1$s *skel;				    \n\
-> >   									    \n\
-> > -			skel = calloc(sizeof(*skel), 1);		    \n\
-> > +			skel = skel_alloc(sizeof(*skel));		    \n\
-> >   			if (!skel)					    \n\
-> >   				goto cleanup;				    \n\
-> >   			skel->ctx.sz = (void *)&skel->links - (void *)skel; \n\
-> > @@ -544,18 +544,12 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
-> >   		codegen("\
-> >   			\n\
-> > -				skel->%1$s =					 \n\
-> > -					mmap(NULL, %2$zd, PROT_READ | PROT_WRITE,\n\
-> > -					     MAP_SHARED | MAP_ANONYMOUS, -1, 0); \n\
-> > -				if (skel->%1$s == (void *) -1)			 \n\
-> > -					goto cleanup;				 \n\
-> > -				memcpy(skel->%1$s, (void *)\"\\			 \n\
-> > -			", ident, bpf_map_mmap_sz(map));
-> > +				skel->%1$s = skel_prep_map_data((void *)\"\\	 \n\
-> > +			", ident);
-> >   		mmap_data = bpf_map__initial_value(map, &mmap_size);
-> >   		print_hex(mmap_data, mmap_size);
-> > -		printf("\", %2$zd);\n"
-> > -		       "\tskel->maps.%1$s.initial_value = (__u64)(long)skel->%1$s;\n",
-> > -		       ident, mmap_size);
-> > +		printf("\", %1$zd, %2$zd);\n",
-> > +		       bpf_map_mmap_sz(map), mmap_size);
-> >   	}
-> >   	codegen("\
-> >   		\n\
-> > @@ -592,6 +586,24 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
-> >   	codegen("\
-> >   		\n\
-> >   		\";							    \n\
-> > +		");
-> > +	bpf_object__for_each_map(map, obj) {
-> > +		size_t mmap_size = 0;
-> > +
-> > +		if (!get_map_ident(map, ident, sizeof(ident)))
-> > +			continue;
-> > +
-> > +		if (!bpf_map__is_internal(map) ||
-> > +		    !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-> > +			continue;
-> > +
-> > +		bpf_map__initial_value(map, &mmap_size);
-> > +		printf("\tskel->maps.%1$s.initial_value ="
-> > +		       " skel_prep_init_value((void **)&skel->%1$s, %2$zd, %3$zd);\n",
-> > +		       ident, bpf_map_mmap_sz(map), mmap_size);
-> > +	}
-> > +	codegen("\
-> > +		\n\
-> >   			err = bpf_load_and_run(&opts);			    \n\
-> >   			if (err < 0)					    \n\
-> >   				return err;				    \n\
-> > @@ -611,9 +623,8 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
-> >   		else
-> >   			mmap_flags = "PROT_READ | PROT_WRITE";
-> > -		printf("\tskel->%1$s =\n"
-> > -		       "\t\tmmap(skel->%1$s, %2$zd, %3$s, MAP_SHARED | MAP_FIXED,\n"
-> > -		       "\t\t\tskel->maps.%1$s.map_fd, 0);\n",
-> > +		printf("\tskel->%1$s = skel_finalize_map_data(&skel->maps.%1$s.initial_value,\n"
-> > +		       "\t\t\t%2$zd, %3$s, skel->maps.%1$s.map_fd);\n",
-> >   		       ident, bpf_map_mmap_sz(map), mmap_flags);
-> >   	}
-> >   	codegen("\
-> > @@ -751,8 +762,6 @@ static int do_skeleton(int argc, char **argv)
-> >   		#ifndef %2$s						    \n\
-> >   		#define %2$s						    \n\
-> >   									    \n\
-> > -		#include <stdlib.h>					    \n\
-> > -		#include <bpf/bpf.h>					    \n\
-> 
-> I noticed that in patch2, the "bpf.h" is used instead of <bpf/bpf.h>.
-> Any particular reason for this or it is a bug fix?
+riscv registers are accessed via struct user_regs_struct, not struct
+pt_regs. The program counter member in this struct is called pc, not
+epc. The frame pointer is called s0, not fp.
 
-skel_internal.h didn't include bpf.h directly.
-gen_loader.c needs it. It does:
-#include "skel_internal.h"
-because gen_loader.c is part of libbpf.
-libbpf sources cannot do #include <bpf/...>
+Fixes: 3cc31d794097 ("libbpf: Normalize PT_REGS_xxx() macro definitions")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ tools/lib/bpf/bpf_tracing.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-If skel_internal.h did
-#include <bpf/bpf.h>
-there would be a build error:
-In file included from gen_loader.c:15:
-skel_internal.h:17:10: fatal error: bpf/bpf.h: No such file or directory
- #include <bpf/bpf.h>
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 20bc63770c9f..03e501ac8f60 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -210,10 +210,10 @@
+ #define __PT_PARM4_REG a3
+ #define __PT_PARM5_REG a4
+ #define __PT_RET_REG ra
+-#define __PT_FP_REG fp
++#define __PT_FP_REG s0
+ #define __PT_RC_REG a5
+ #define __PT_SP_REG sp
+-#define __PT_IP_REG epc
++#define __PT_IP_REG pc
+ 
+ #endif
+ 
+-- 
+2.34.1
 
-Hence #include "bpf.h" in skel_internal.h
-So it works for libbpf's gen_loader.c and for generated lskel.h too.
