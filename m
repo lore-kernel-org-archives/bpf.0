@@ -2,105 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF35C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DB85C43219
 	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbiBIFqJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 00:46:09 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58774 "EHLO
+        id S235655AbiBIFqP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 00:46:15 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiBIFjv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:39:51 -0500
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F10C0045A1
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:39:48 -0800 (PST)
-Received: by mail-il1-x12b.google.com with SMTP id m8so844456ilg.7
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:39:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kqQXyrjAsKa/Xf75OvQvRpTW5bHmnbZZCd0DV2cM2GY=;
-        b=QIkd2IZTdL/W+Ykr+tx3xA846UD75tn80tBL/KVAtBaynjOz/YLLa4+PZO1WAQ4d1I
-         g7WPhF9z0Kikn4osTKwjuc9Rh/0w/GXkGG6enLJV3QY63bS4yr4ebb2ZOsscyj24cqK9
-         Xrp5Jccp7jozj70EYtVoZL0lIZ9abnU4Uu9La8xFocMMiWCb1cOwe+PHfXfv+dmwhUn/
-         jvXBOSaqIOZ07OedfFZDZs6KMAgEXEQLIpe0+lk5wqD2mwQ4dmXymPj+4PIdroqDBgrK
-         aEreAEYq/g0cPPX8VHdxLQy8eycZROGzvAgAaMDmeo0Rpkgt0x9PtOGb4o2U/awtS8Qu
-         Td4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kqQXyrjAsKa/Xf75OvQvRpTW5bHmnbZZCd0DV2cM2GY=;
-        b=5VuU78f+hmYfaqCw98VqmkOQ/DeSdo4l2/L1cxNPT7CHQof7uelvwfgQftbBw2WbEK
-         siDwPCNDqkFYL6eyGRTkQXQABIiVzDCt6FYtae/ufP+0D7HB1pv9ect9c5jgc6hKlus2
-         tliAYHtecTrwD2rtrZCyy+eicGh9OHLuzKusVsUnX2JDEt6wtns/dkGAT95mpdXwi9xG
-         6EgentUiez7swK2GjnjdxYq4lPchRdU1N9FduEP91C8zoS9XKjZ6Eb8i5L5JN/K9SJwX
-         HjFMmTGVxfAwiaHyAdxIz1/pd5UubYosMbIJBSomWNA9pr06yO+zfNya6ZT4oEayIzEI
-         6oEQ==
-X-Gm-Message-State: AOAM532Hyz7agmSIGVZiKihA8W6sam/ufdpFLMRDOMOnVe8EGfHdmvuJ
-        suevHUppRVnE0rqupMnRF4ZH1qMm90tDarqcmX0=
-X-Google-Smtp-Source: ABdhPJynq9sLryBwvT8+r2fKtKlBAOa9ReVhMrJxGjhz2PRrIKNdGH47nynxfBieToxcybJ7geuHkztdPvhgj1d/3p0=
-X-Received: by 2002:a05:6e02:1bcd:: with SMTP id x13mr331440ilv.98.1644385181714;
- Tue, 08 Feb 2022 21:39:41 -0800 (PST)
+        with ESMTP id S238369AbiBIFkL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 00:40:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557ABC02C45D
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:40:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 684EDB81F01
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 05:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16391C340EB;
+        Wed,  9 Feb 2022 05:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644385212;
+        bh=zfi8cJ8t0LVPU+gv8zq8w4CAfHlLUVENeP3xx4ZPh8A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=B6OMKj1fkisGLrgIzevh8EMEPL0mVh44iZGPHzpIx21yo9fCUtpmK0Gwk5Ez1rhhN
+         PiJQiHkbep9P9a01yemsZJvB1l280Cw0xaZQlIMKSiqV1Ew6u50xYA6Mg+ESEoO6RP
+         f3iPn5Sc+xrppsaZZXLx5cnLbVJ6w+5ROALBuHnTmb0mn4tTx1+vZ8EHijzuWJlsOs
+         6xoeImlJs+tlOGVFNCpDrTxortNI+O2/OTGaq8zYZrFuz+q6L6F5e7rhToHgwg2Y33
+         GgVg7szqEmK3e+P5HOV5mfHJa0By8/wk2i+dCSBOCCb1JJVtA6J/dX2WMkCRaplpYu
+         LnGBDe+80ZpDA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F2679E5D07D;
+        Wed,  9 Feb 2022 05:40:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220209021745.2215452-1-iii@linux.ibm.com> <20220209021745.2215452-9-iii@linux.ibm.com>
-In-Reply-To: <20220209021745.2215452-9-iii@linux.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Feb 2022 21:39:30 -0800
-Message-ID: <CAEf4BzZHg2Ju1jkUYeCTgWpubFLOBJDG-QzD91QRxfC8Op3cww@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 08/10] libbpf: Allow overriding PT_REGS_PARM1{_CORE}_SYSCALL
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v5 00/10] Fix accessing syscall arguments
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164438521198.19906.9141954700062717431.git-patchwork-notify@kernel.org>
+Date:   Wed, 09 Feb 2022 05:40:11 +0000
+References: <20220209021745.2215452-1-iii@linux.ibm.com>
+In-Reply-To: <20220209021745.2215452-1-iii@linux.ibm.com>
 To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii.nakryiko@gmail.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com,
+        agordeev@linux.ibm.com, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 6:18 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> arm64 and s390 need a special way to access the first syscall argument.
->
-> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> ---
->  tools/lib/bpf/bpf_tracing.h | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> index 41a015ee6bfb..f364f1f4710e 100644
-> --- a/tools/lib/bpf/bpf_tracing.h
-> +++ b/tools/lib/bpf/bpf_tracing.h
-> @@ -269,7 +269,9 @@ struct pt_regs;
->
->  #endif
->
-> +#ifndef PT_REGS_PARM1_SYSCALL
->  #define PT_REGS_PARM1_SYSCALL(x) PT_REGS_PARM1(x)
-> +#endif
->  #define PT_REGS_PARM2_SYSCALL(x) PT_REGS_PARM2(x)
->  #define PT_REGS_PARM3_SYSCALL(x) PT_REGS_PARM3(x)
->  #ifdef __PT_PARM4_REG_SYSCALL
-> @@ -279,7 +281,9 @@ struct pt_regs;
->  #endif
->  #define PT_REGS_PARM5_SYSCALL(x) PT_REGS_PARM5(x)
->
-> +#ifndef PT_REGS_PARM1_CORE_SYSCALL
->  #define PT_REGS_PARM1_CORE_SYSCALL(x) PT_REGS_PARM1_CORE(x)
-> +#endif
->  #define PT_REGS_PARM2_CORE_SYSCALL(x) PT_REGS_PARM2_CORE(x)
->  #define PT_REGS_PARM3_CORE_SYSCALL(x) PT_REGS_PARM3_CORE(x)
->  #ifdef __PT_PARM4_REG_SYSCALL
+Hello:
 
-I've changed PARM4 handling to be the same as for PARM1 for
-consistency (and flexibility, if we ever need as much)
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Wed,  9 Feb 2022 03:17:35 +0100 you wrote:
+> libbpf now has macros to access syscall arguments in an
+> architecture-agnostic manner, but unfortunately they have a number of
+> issues on non-Intel arches, which this series aims to fix.
+> 
+> v1: https://lore.kernel.org/bpf/20220201234200.1836443-1-iii@linux.ibm.com/
+> v1 -> v2:
+> * Put orig_gpr2 in place of args[1] on s390 (Vasily).
+> * Fix arm64, powerpc and riscv (Heiko).
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v5,01/10] selftests/bpf: Fix an endianness issue in bpf_syscall_macro test
+    https://git.kernel.org/bpf/bpf-next/c/4fc49b51ab9d
+  - [bpf-next,v5,02/10] libbpf: Add PT_REGS_SYSCALL_REGS macro
+    https://git.kernel.org/bpf/bpf-next/c/c5a1ffa0da76
+  - [bpf-next,v5,03/10] selftests/bpf: Use PT_REGS_SYSCALL_REGS in bpf_syscall_macro
+    https://git.kernel.org/bpf/bpf-next/c/3f928cab927c
+  - [bpf-next,v5,04/10] libbpf: Fix accessing syscall arguments on powerpc
+    https://git.kernel.org/bpf/bpf-next/c/f07f1503469b
+  - [bpf-next,v5,05/10] libbpf: Fix riscv register names
+    https://git.kernel.org/bpf/bpf-next/c/5c101153bfd6
+  - [bpf-next,v5,06/10] libbpf: Fix accessing syscall arguments on riscv
+    https://git.kernel.org/bpf/bpf-next/c/cf0b5b276923
+  - [bpf-next,v5,07/10] selftests/bpf: Skip test_bpf_syscall_macro:syscall_arg1 on arm64 and s390
+    https://git.kernel.org/bpf/bpf-next/c/9e45a377f29b
+  - [bpf-next,v5,08/10] libbpf: Allow overriding PT_REGS_PARM1{_CORE}_SYSCALL
+    https://git.kernel.org/bpf/bpf-next/c/60d16c5ccb81
+  - [bpf-next,v5,09/10] libbpf: Fix accessing the first syscall argument on arm64
+    https://git.kernel.org/bpf/bpf-next/c/fbca4a2f6497
+  - [bpf-next,v5,10/10] libbpf: Fix accessing the first syscall argument on s390
+    https://git.kernel.org/bpf/bpf-next/c/1f22a6f9f9a0
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> --
-> 2.34.1
->
