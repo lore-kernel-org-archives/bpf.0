@@ -2,80 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D4E7C433F5
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 07:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 040FBC433EF
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 08:13:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237608AbiBIHa3 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 9 Feb 2022 02:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S237621AbiBIINi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 03:13:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiBIHa3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 02:30:29 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C25EC05CB80
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 23:30:33 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 218LvOBA027881
-        for <bpf@vger.kernel.org>; Tue, 8 Feb 2022 22:39:26 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e3n0c7g6h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 22:39:25 -0800
-Received: from twshared1259.42.prn1.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 8 Feb 2022 22:39:25 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 0552310884D89; Tue,  8 Feb 2022 22:39:10 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next] libbpf: fix compilation warning due to mismatched printf format
-Date:   Tue, 8 Feb 2022 22:39:09 -0800
-Message-ID: <20220209063909.1268319-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232976AbiBIINh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 03:13:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D03C0613CA;
+        Wed,  9 Feb 2022 00:13:41 -0800 (PST)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644394417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=55uGoGOXVXr/CU8B27DFis8x7dmdIhagfD04+QtdGKE=;
+        b=3+yEFeh10cYu5vUeIpDHieFs5MceAnDxBorFsWmfogLGt0eWfHb59KdEbEM0DWc0KAaton
+        xzwSjOicl+6G+7jsTAXnTA+5uAh9Q8ffun8gLTjrA/Rqq+9jDO/xJME528y15Bhe7HH0mO
+        jYiPo7TPKCv8P9ofBhxg52OHDSkTjoz+HlXvAszQcP7kMI5mddlOp02ysf2gDm8JJuccKW
+        H6mb/dDFm3DEtBbKtJdewebRqGxsD2PtWQac7e0VN1XMuYqjELzTqibdMrWo4Cny/dgVfg
+        Q/jBXW5eHOj+oeFcqA9tvptq9Rm5mVKNF0AYuWYkYUx7yh6LKrroLLiZzwnnXg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644394417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=55uGoGOXVXr/CU8B27DFis8x7dmdIhagfD04+QtdGKE=;
+        b=wHScDZQ/cdiHJvpfbuvWktHrSwQyJTN7VtNF+NVmSCpBo+joZ0AEQBBt7B/KpIsOoTx6GN
+        aKObuN34IrsnOxCQ==
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, vinschen@redhat.com,
+        maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next 0/2][pull request] 1GbE Intel Wired LAN Driver
+ Updates 2022-02-07
+In-Reply-To: <20220208211305.47dc605f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20220207233246.1172958-1-anthony.l.nguyen@intel.com>
+ <20220208211305.47dc605f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Date:   Wed, 09 Feb 2022 09:13:36 +0100
+Message-ID: <87sfssv4nj.fsf@kurt>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 3TsX_nek3aiilxa4W35y78FBFNe3GBTd
-X-Proofpoint-GUID: 3TsX_nek3aiilxa4W35y78FBFNe3GBTd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_03,2022-02-07_02,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=576
- adultscore=0 spamscore=0 clxscore=1015 malwarescore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202090046
-X-FB-Internal: deliver
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On ppc64le architecture __s64 is long int and requires %ld. Cast to
-ssize_t and use %zd to avoid architecture-specific specifiers.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 4172843ed4a3 ("libbpf: Fix signedness bug in btf_dump_array_data()")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/btf_dump.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi Tony,
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 55aed9e398c3..07ebe70d3a30 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1869,7 +1869,8 @@ static int btf_dump_array_data(struct btf_dump *d,
- 	elem_type = skip_mods_and_typedefs(d->btf, elem_type_id, NULL);
- 	elem_size = btf__resolve_size(d->btf, elem_type_id);
- 	if (elem_size <= 0) {
--		pr_warn("unexpected elem size %lld for array type [%u]\n", elem_size, id);
-+		pr_warn("unexpected elem size %zd for array type [%u]\n",
-+			(ssize_t)elem_size, id);
- 		return -EINVAL;
- 	}
- 
--- 
-2.30.2
+On Tue Feb 08 2022, Jakub Kicinski wrote:
+> On Mon,  7 Feb 2022 15:32:44 -0800 Tony Nguyen wrote:
+>> Corinna Vinschen says:
+>>=20
+>> Fix the kernel warning "Missing unregister, handled but fix driver"
+>> when running, e.g.,
+>>=20
+>>   $ ethtool -G eth0 rx 1024
+>>=20
+>> on igc.  Remove memset hack from igb and align igb code to igc.
+>
+> Why -next?
 
+Can we get these patches into net, please? The mentioned igc problem
+exists on v5.15-LTS too.
+
+FWIW, Tested-by: Kurt Kanzenbach <kurt@linutronix.de>
+
+Thanks,
+Kurt
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmIDd7ATHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgsicD/4ycIDiu4QnmSz8HaG/e2dSm7sS/xul
+CFKxPpWpqSBFNCEjEDy6BTE9eXjJNEw5qDDKwDQU7t8UpycwbEsfTc7rM505DZBP
+t81ZpWia5RXXJgxBCpFaPebIflc8Uqx5hEZJCgEDyDZT+fxTp8toLx/zX+jvHeQC
+UytdCOtIiTU2JNSVbDQSqcF7M3fIKCgqT0O01vDIzejF3e7o3iI5VDVH79RaW/Qj
+wIjKFeQ9tJCLWMoabpH/O6AZo9veYrDE4EtxIGc4QwEeISrXJVqtXhU7keccQ/wk
+echpZ0I+ai15jdBbfVAl6RA/cSefIQfVhhxC8ypaZ5xy2kLN0BCCK6z8Ytavx9La
+ERLw1BW85s9r8KI5mbRBHdYx7WxZHtp3znCK26kGzsinAPCid48O1QwUkEqWrD0J
+rKqYlOG/hvlt/1wDBVB8mpZDzuDphzgK+9lN9DUAi1TKQR0NWqXInaIVU+i8qU8Q
+vrcMhTn9KrgVBU/UNhctCDjQ4SAv6zudIh1dKYSVdG7XtAjgsZPJU9WrqOIlXz7y
+QWEyvUMJRFSNIjTEo7stx1RzjbulA5QPd3lazk0ko2fvW+Fgwu1pCnhDlcGBxmRN
+16uFP7450SP4ky5iPy16xr5gc0IB7VJjz5MHiFQseMJWZlGimzwLNS/5RIdUWMF7
+2rK+dk14l1Isvg==
+=68Ih
+-----END PGP SIGNATURE-----
+--=-=-=--
