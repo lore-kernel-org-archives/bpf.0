@@ -2,226 +2,397 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E164BC433EF
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 054DAC433F5
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiBIFqH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 00:46:07 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60012 "EHLO
+        id S235381AbiBIFqI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 00:46:08 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238705AbiBIFkX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:40:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C5B9C035452
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644385189;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KdjkngOKMA7bg2oJfUtSkQw+6lC1kyEXHsbHAdltn3U=;
-        b=Zrd4BeC3p7uCF7cRFnyXm0aZBpI7N+b8x+7xkcXa5eZXEtOUXeVlkCKRLV0qpHU6QbA5HC
-        BoENYUI777fuUBdfWSkEA0UHAlgbB2gfYT0nNiHPaH8IGrYW9KIY+OdKYTzL9lg5wWBAhb
-        PAz4qgZI6FUrT2ZuE4D6XKZkPR5+paY=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-524-uC0vs1DfMiWZQyKXY0sgbw-1; Wed, 09 Feb 2022 00:39:48 -0500
-X-MC-Unique: uC0vs1DfMiWZQyKXY0sgbw-1
-Received: by mail-lj1-f199.google.com with SMTP id n9-20020a2e82c9000000b002435af2e8b9so607074ljh.20
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:39:48 -0800 (PST)
+        with ESMTP id S232922AbiBIFnU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 00:43:20 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF0DC02B67C
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:43:23 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id k17so1347431plk.0
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:43:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GbVcXmIPmQyLODgw0PJDs9iU4v+QvE3xVvMgCxPsVro=;
+        b=hvD9kOe7VVUmZXcG6+vtrQfOH/xCF2/q0H/0PsFOEZCjjrohMUbGgnOWBV0P7GJ2EO
+         AEDY9htSHqPWJ1bTGQRFne4WTuwcyRt0Ab8Pa3ZMQnLga2Z22i11oymRt0V6h8RMMj4b
+         Aiv+TB3CwsczBYgbzZ3CN87X462dpktw/VoG0Y7iULeIPi43yc3dba5axKiRgpFtaiSa
+         v+JOKGncNLT0IcbR3wwmww9cPdfn5pG/SYlviKBlE9swoJyJnaQ7Xe0Nt7eIbzfTOfXw
+         ro8/A5G6Mh+a8GHwwex24o17Xukq4EWAhr0z2epWF2Fj0+8ZO9itCgU5JDG93LemPpST
+         ojZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KdjkngOKMA7bg2oJfUtSkQw+6lC1kyEXHsbHAdltn3U=;
-        b=Q3I6ATpwpL0U1nE5xEv3S6KOd49hFvKBeeWFQU8T3zVDdnvgayLkZcBA3QI7tOH5K/
-         WHgnkmr/7iUFJKeFJ2JIPnPqiC+sTloAELlBnQbCz57z7yw9csXl0xhsXd/boaralzsG
-         eodGpcDdTHhphPXDvTCSYmjs/7x2aSagaXHs83p21bswKzWn30ZOEzVegUkPjLe3OwOf
-         Fqx+NGonIf2ChxCXiUZUeJbtPel/hMV6wuA1G09qkHWj0j+bHjiI56LbWDaApE4QOJec
-         +VM1DcuZXeK/GxctCKS4bWzX+nZwEAsxaUkyqWatLvC/E3las8VoDwjU/3/HXE1stgOT
-         0nFw==
-X-Gm-Message-State: AOAM532V4GioKCcKGCgCZmfkcRAHGQ1gAADnBWU6NreEwzM30PGpdsLE
-        B7Ob3MHXlqlDZ2F2/D06Ge3f1e7pA1RrrYI+TqotVw8dWfZu6azXr4sx4AZYyDFLsuyfjoPY0V3
-        Uw+TAD8AGsDrjgXrLW74rgguxQ6Bm
-X-Received: by 2002:a05:6512:3986:: with SMTP id j6mr507291lfu.84.1644385186741;
-        Tue, 08 Feb 2022 21:39:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzZ9V3a+WzslPsO4MNBWqkV/COHINFv3Uj3aM34m0bEvE0naK1G1+iv8ZX11UDJsX92pxLP529TE7r9laOD8mw=
-X-Received: by 2002:a05:6512:3986:: with SMTP id j6mr507283lfu.84.1644385186483;
- Tue, 08 Feb 2022 21:39:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GbVcXmIPmQyLODgw0PJDs9iU4v+QvE3xVvMgCxPsVro=;
+        b=kBd3MLMoViHK5jLblSCYlz96HWy/6MMuRJQgIYc8HQJoQ5iuXi+wRv5XRAjzlxm6a1
+         RpOTxPnImxQiKqenbSza2sVexrSFATIvLsHUhH8gBoEMAdTCaWxu2kW0WWdeM43l8m/z
+         8cAd46XzYzA7iFK9kMbinXV9Rch3sRtiYb8jSKOja5gP+WfDSNOIiDfO09WeGPJnxSFR
+         mxUEgJ/CCjQHPJxoq6CUmdnT3eqXx/zgn4jJzGG1jArgHDUV/6m5MD+mAklNtX6Tyalm
+         lwMXEHHCjOu3VM2bHAfZM8kZD/XGOg4suPwKdHVd7nLft2dJtlzmFzI6rilwJ390vGcR
+         DBFQ==
+X-Gm-Message-State: AOAM533nEsUFpzw9z3I+zh5jO4gDa9c5jpYM4BH4wvaBrJ+szkCOlfpl
+        q3Dmhb17fJEoMsT0dtl9dos=
+X-Google-Smtp-Source: ABdhPJwRoCt+Y2bLBwNUFfjBEg3bxLAKXsiNY5OoaeTXK8s/4wmzxbGzi7lFfYekdEnrdZyJWzkQbA==
+X-Received: by 2002:a17:902:eb8c:: with SMTP id q12mr659498plg.131.1644385403226;
+        Tue, 08 Feb 2022 21:43:23 -0800 (PST)
+Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:cbf])
+        by smtp.gmail.com with ESMTPSA id x126sm4458205pfb.117.2022.02.08.21.43.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 21:43:22 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH v3 bpf-next 2/5] libbpf: Prepare light skeleton for the kernel.
+Date:   Tue,  8 Feb 2022 21:43:12 -0800
+Message-Id: <20220209054315.73833-3-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
+References: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
 MIME-Version: 1.0
-References: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
- <CACGkMEspyHTmcSaq9fgpU88VCZGzu21Khp9H+fqL-pb5GLdEpA@mail.gmail.com>
- <1644213739.5846965-1-xuanzhuo@linux.alibaba.com> <7d1e2d5b-a9a1-cbb7-4d80-89df1cb7bf15@redhat.com>
- <1644290085.868939-2-xuanzhuo@linux.alibaba.com> <1644306673.8360631-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1644306673.8360631-1-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 9 Feb 2022 13:39:34 +0800
-Message-ID: <CACGkMEsnupEVKukgdom85gUwbGoLcHT8bM9OqR_U11DzGdz1rw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/17] virtio pci support VIRTIO_F_RING_RESET
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 3:56 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote=
-:
->
-> On Tue, 08 Feb 2022 11:14:45 +0800, Xuan Zhuo <xuanzhuo@linux.alibaba.com=
-> wrote:
-> > On Tue, 8 Feb 2022 10:59:48 +0800, Jason Wang <jasowang@redhat.com> wro=
-te:
-> > >
-> > > =E5=9C=A8 2022/2/7 =E4=B8=8B=E5=8D=882:02, Xuan Zhuo =E5=86=99=E9=81=
-=93:
-> > > > On Mon, 7 Feb 2022 11:39:36 +0800, Jason Wang <jasowang@redhat.com>=
- wrote:
-> > > >> On Wed, Jan 26, 2022 at 3:35 PM Xuan Zhuo <xuanzhuo@linux.alibaba.=
-com> wrote:
-> > > >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > >>> The virtio spec already supports the virtio queue reset function.=
- This patch set
-> > > >>> is to add this function to the kernel. The relevant virtio spec i=
-nformation is
-> > > >>> here:
-> > > >>>
-> > > >>>      https://github.com/oasis-tcs/virtio-spec/issues/124
-> > > >>>
-> > > >>> Also regarding MMIO support for queue reset, I plan to support it=
- after this
-> > > >>> patch is passed.
-> > > >>>
-> > > >>> #14-#17 is the disable/enable function of rx/tx pair implemented =
-by virtio-net
-> > > >>> using the new helper.
-> > > >> One thing that came to mind is the steering. E.g if we disable an =
-RX,
-> > > >> should we stop steering packets to that queue?
->
-> Regarding this spec, if there are multiple queues disabled at the same ti=
-me, it
-> will be a troublesome problem for the backend to select the queue,
+From: Alexei Starovoitov <ast@kernel.org>
 
-I don't understand this, for such a kind of backend or device it can
-simply claim not to support this feature.
+Prepare light skeleton to be used in the kernel module and in the user space.
+The look and feel of lskel.h is mostly the same with the difference that for
+user space the skel->rodata is the same pointer before and after skel_load
+operation, while in the kernel the skel->rodata after skel_open and the
+skel->rodata after skel_load are different pointers.
+Typical usage of skeleton remains the same for kernel and user space:
+skel = my_bpf__open();
+skel->rodata->my_global_var = init_val;
+err = my_bpf__load(skel);
+err = my_bpf__attach(skel);
+// access skel->rodata->my_global_var;
+// access skel->bss->another_var;
 
-> so I want to
-> directly define that only one queue is allowed to reset at the same time,=
- do you
-> think this is appropriate?
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ tools/lib/bpf/gen_loader.c    |  15 ++-
+ tools/lib/bpf/skel_internal.h | 195 ++++++++++++++++++++++++++++++----
+ 2 files changed, 189 insertions(+), 21 deletions(-)
 
-This sounds very complicated. E.g how can we define an API that can
-reset more than one queues? (currently PCI only support MMIO access).
-
->
-> In terms of the implementation of backend queue reselection, it would be =
-more
-> convenient to implement if we drop packets directly. Do you think we must
-> implement this reselection function?
-
-Rethink of this. It should be fine and much simpler.
-
-Thanks
-
->
-> Thanks.
->
-> > > > Yes, we should reselect a queue.
-> > > >
-> > > > Thanks.
-> > >
-> > >
-> > > Maybe a spec patch for that?
-> >
-> > Yes, I also realized this. Although virtio-net's disable/enable is impl=
-emented
-> > based on queue reset, virtio-net still has to define its own flag and d=
-efine
-> > some more detailed implementations.
-> >
-> > I'll think about it and post a spec patch.
-> >
-> > Thanks.
-> >
-> > >
-> > > Thanks
-> > >
-> > >
-> > > >
-> > > >> Thanks
-> > > >>
-> > > >>> This function is not currently referenced by other
-> > > >>> functions. It is more to show the usage of the new helper, I not =
-sure if they
-> > > >>> are going to be merged together.
-> > > >>>
-> > > >>> Please review. Thanks.
-> > > >>>
-> > > >>> v3:
-> > > >>>    1. keep vq, irq unreleased
-> > > >>>
-> > > >>> Xuan Zhuo (17):
-> > > >>>    virtio_pci: struct virtio_pci_common_cfg add queue_notify_data
-> > > >>>    virtio: queue_reset: add VIRTIO_F_RING_RESET
-> > > >>>    virtio: queue_reset: struct virtio_config_ops add callbacks fo=
-r
-> > > >>>      queue_reset
-> > > >>>    virtio: queue_reset: add helper
-> > > >>>    vritio_ring: queue_reset: extract the release function of the =
-vq ring
-> > > >>>    virtio_ring: queue_reset: split: add __vring_init_virtqueue()
-> > > >>>    virtio_ring: queue_reset: split: support enable reset queue
-> > > >>>    virtio_ring: queue_reset: packed: support enable reset queue
-> > > >>>    virtio_ring: queue_reset: add vring_reset_virtqueue()
-> > > >>>    virtio_pci: queue_reset: update struct virtio_pci_common_cfg a=
-nd
-> > > >>>      option functions
-> > > >>>    virtio_pci: queue_reset: release vq by vp_dev->vqs
-> > > >>>    virtio_pci: queue_reset: setup_vq use vring_setup_virtqueue()
-> > > >>>    virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
-> > > >>>    virtio_net: virtnet_tx_timeout() fix style
-> > > >>>    virtio_net: virtnet_tx_timeout() stop ref sq->vq
-> > > >>>    virtio_net: split free_unused_bufs()
-> > > >>>    virtio_net: support pair disable/enable
-> > > >>>
-> > > >>>   drivers/net/virtio_net.c               | 220 ++++++++++++++++++=
-++++---
-> > > >>>   drivers/virtio/virtio_pci_common.c     |  62 ++++---
-> > > >>>   drivers/virtio/virtio_pci_common.h     |  11 +-
-> > > >>>   drivers/virtio/virtio_pci_legacy.c     |   5 +-
-> > > >>>   drivers/virtio/virtio_pci_modern.c     | 120 +++++++++++++-
-> > > >>>   drivers/virtio/virtio_pci_modern_dev.c |  28 ++++
-> > > >>>   drivers/virtio/virtio_ring.c           | 144 +++++++++++-----
-> > > >>>   include/linux/virtio.h                 |   1 +
-> > > >>>   include/linux/virtio_config.h          |  75 ++++++++-
-> > > >>>   include/linux/virtio_pci_modern.h      |   2 +
-> > > >>>   include/linux/virtio_ring.h            |  42 +++--
-> > > >>>   include/uapi/linux/virtio_config.h     |   7 +-
-> > > >>>   include/uapi/linux/virtio_pci.h        |   2 +
-> > > >>>   13 files changed, 618 insertions(+), 101 deletions(-)
-> > > >>>
-> > > >>> --
-> > > >>> 2.31.0
-> > > >>>
-> > >
-> > _______________________________________________
-> > Virtualization mailing list
-> > Virtualization@lists.linux-foundation.org
-> > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
->
+diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+index 8ecef1088ba2..927745b08014 100644
+--- a/tools/lib/bpf/gen_loader.c
++++ b/tools/lib/bpf/gen_loader.c
+@@ -1043,18 +1043,27 @@ void bpf_gen__map_update_elem(struct bpf_gen *gen, int map_idx, void *pvalue,
+ 	value = add_data(gen, pvalue, value_size);
+ 	key = add_data(gen, &zero, sizeof(zero));
+ 
+-	/* if (map_desc[map_idx].initial_value)
+-	 *    copy_from_user(value, initial_value, value_size);
++	/* if (map_desc[map_idx].initial_value) {
++	 *    if (ctx->flags & BPF_SKEL_KERNEL)
++	 *        bpf_probe_read_kernel(value, value_size, initial_value);
++	 *    else
++	 *        bpf_copy_from_user(value, value_size, initial_value);
++	 * }
+ 	 */
+ 	emit(gen, BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_6,
+ 			      sizeof(struct bpf_loader_ctx) +
+ 			      sizeof(struct bpf_map_desc) * map_idx +
+ 			      offsetof(struct bpf_map_desc, initial_value)));
+-	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 4));
++	emit(gen, BPF_JMP_IMM(BPF_JEQ, BPF_REG_3, 0, 8));
+ 	emit2(gen, BPF_LD_IMM64_RAW_FULL(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE,
+ 					 0, 0, 0, value));
+ 	emit(gen, BPF_MOV64_IMM(BPF_REG_2, value_size));
++	emit(gen, BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6,
++			      offsetof(struct bpf_loader_ctx, flags)));
++	emit(gen, BPF_JMP_IMM(BPF_JSET, BPF_REG_0, BPF_SKEL_KERNEL, 2));
+ 	emit(gen, BPF_EMIT_CALL(BPF_FUNC_copy_from_user));
++	emit(gen, BPF_JMP_IMM(BPF_JA, 0, 0, 1));
++	emit(gen, BPF_EMIT_CALL(BPF_FUNC_probe_read_kernel));
+ 
+ 	map_update_attr = add_data(gen, &attr, attr_size);
+ 	move_blob2blob(gen, attr_field(map_update_attr, map_fd), 4,
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index dcd3336512d4..a431144c922c 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -3,9 +3,19 @@
+ #ifndef __SKEL_INTERNAL_H
+ #define __SKEL_INTERNAL_H
+ 
++#ifdef __KERNEL__
++#include <linux/fdtable.h>
++#include <linux/mm.h>
++#include <linux/mman.h>
++#include <linux/slab.h>
++#include <linux/bpf.h>
++#else
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ #include <sys/mman.h>
++#include <stdlib.h>
++#include "bpf.h"
++#endif
+ 
+ #ifndef __NR_bpf
+ # if defined(__mips__) && defined(_ABIO32)
+@@ -25,24 +35,23 @@
+  * requested during loader program generation.
+  */
+ struct bpf_map_desc {
+-	union {
+-		/* input for the loader prog */
+-		struct {
+-			__aligned_u64 initial_value;
+-			__u32 max_entries;
+-		};
+-		/* output of the loader prog */
+-		struct {
+-			int map_fd;
+-		};
+-	};
++	/* output of the loader prog */
++	int map_fd;
++	/* input for the loader prog */
++	__u32 max_entries;
++	__aligned_u64 initial_value;
+ };
+ struct bpf_prog_desc {
+ 	int prog_fd;
+ };
+ 
++enum {
++	BPF_SKEL_KERNEL = (1ULL << 0),
++};
++
+ struct bpf_loader_ctx {
+-	size_t sz;
++	__u32 sz;
++	__u32 flags;
+ 	__u32 log_level;
+ 	__u32 log_size;
+ 	__u64 log_buf;
+@@ -57,12 +66,154 @@ struct bpf_load_and_run_opts {
+ 	const char *errstr;
+ };
+ 
++long bpf_sys_bpf(__u32 cmd, void *attr, __u32 attr_size);
++
+ static inline int skel_sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
+ 			  unsigned int size)
+ {
++#ifdef __KERNEL__
++	return bpf_sys_bpf(cmd, attr, size);
++#else
+ 	return syscall(__NR_bpf, cmd, attr, size);
++#endif
++}
++
++#ifdef __KERNEL__
++static inline int close(int fd)
++{
++	return close_fd(fd);
+ }
+ 
++static inline void *skel_alloc(size_t size)
++{
++	struct bpf_loader_ctx *ctx = kzalloc(size, GFP_KERNEL);
++
++	if (!ctx)
++		return NULL;
++	ctx->flags |= BPF_SKEL_KERNEL;
++	return ctx;
++}
++
++static inline void skel_free(const void *p)
++{
++	kfree(p);
++}
++
++/* skel->bss/rodata maps are populated in three steps.
++ *
++ * For kernel use:
++ * skel_prep_map_data() allocates kernel memory that kernel module can directly access.
++ * skel_prep_init_value() copies rodata pointer into map.rodata.initial_value.
++ * The loader program will perform probe_read_kernel() from maps.rodata.initial_value.
++ * skel_finalize_map_data() sets skel->rodata to point to actual value in a bpf map and
++ * does maps.rodata.initial_value = ~0ULL to signal skel_free_map_data() that kvfree
++ * is not nessary.
++ *
++ * For user space:
++ * skel_prep_map_data() mmaps anon memory into skel->rodata that can be accessed directly.
++ * skel_prep_init_value() copies rodata pointer into map.rodata.initial_value.
++ * The loader program will perform copy_from_user() from maps.rodata.initial_value.
++ * skel_finalize_map_data() remaps bpf array map value from the kernel memory into
++ * skel->rodata address.
++ *
++ * The "bpftool gen skeleton -L" command generates lskel.h that is suitable for
++ * both kernel and user space. The generated loader program does
++ * either bpf_probe_read_kernel() or bpf_copy_from_user() from initial_value
++ * depending on bpf_loader_ctx->flags.
++ */
++static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
++{
++	if (addr != ~0ULL)
++		kvfree(p);
++	/* When addr == ~0ULL the 'p' points to
++	 * ((struct bpf_array *)map)->value. See skel_finalize_map_data.
++	 */
++}
++
++static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
++{
++	void *addr;
++
++	addr = kvmalloc(val_sz, GFP_KERNEL);
++	if (!addr)
++		return NULL;
++	memcpy(addr, val, val_sz);
++	return addr;
++}
++
++static inline __u64 skel_prep_init_value(void **addr, size_t mmap_sz, size_t val_sz)
++{
++	return (__u64) (long) *addr;
++}
++
++static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
++{
++	struct bpf_map *map;
++	void *addr = NULL;
++
++	kvfree((void *) (long) *init_val);
++	*init_val = ~0ULL;
++
++	/* At this point bpf_load_and_run() finished without error and
++	 * 'fd' is a valid bpf map FD. All sanity checks below should succeed.
++	 */
++	map = bpf_map_get(fd);
++	if (IS_ERR(map))
++		return NULL;
++	if (map->map_type != BPF_MAP_TYPE_ARRAY)
++		goto out;
++	addr = ((struct bpf_array *)map)->value;
++	/* the addr stays valid, since FD is not closed */
++out:
++	bpf_map_put(map);
++	return addr;
++}
++
++#else
++
++static inline void *skel_alloc(size_t size)
++{
++	return calloc(1, size);
++}
++
++static inline void skel_free(void *p)
++{
++	free(p);
++}
++
++static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
++{
++	munmap(p, sz);
++}
++
++static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
++{
++	void *addr;
++
++	addr = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
++		    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	if (addr == (void *) -1)
++		return NULL;
++	memcpy(addr, val, val_sz);
++	return addr;
++}
++
++static inline __u64 skel_prep_init_value(void **addr, size_t mmap_sz, size_t val_sz)
++{
++	return (__u64) (long) *addr;
++}
++
++static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
++{
++	void *addr;
++
++	addr = mmap((void *) (long) *init_val, mmap_sz, flags, MAP_SHARED | MAP_FIXED, fd, 0);
++	if (addr == (void *) -1)
++		return NULL;
++	return addr;
++}
++#endif
++
+ static inline int skel_closenz(int fd)
+ {
+ 	if (fd > 0)
+@@ -136,22 +287,28 @@ static inline int skel_link_create(int prog_fd, int target_fd,
+ 	return skel_sys_bpf(BPF_LINK_CREATE, &attr, attr_sz);
+ }
+ 
++#ifdef __KERNEL__
++#define set_err
++#else
++#define set_err err = -errno
++#endif
++
+ static inline int bpf_load_and_run(struct bpf_load_and_run_opts *opts)
+ {
+ 	int map_fd = -1, prog_fd = -1, key = 0, err;
+ 	union bpf_attr attr;
+ 
+-	map_fd = skel_map_create(BPF_MAP_TYPE_ARRAY, "__loader.map", 4, opts->data_sz, 1);
++	err = map_fd = skel_map_create(BPF_MAP_TYPE_ARRAY, "__loader.map", 4, opts->data_sz, 1);
+ 	if (map_fd < 0) {
+ 		opts->errstr = "failed to create loader map";
+-		err = -errno;
++		set_err;
+ 		goto out;
+ 	}
+ 
+ 	err = skel_map_update_elem(map_fd, &key, opts->data, 0);
+ 	if (err < 0) {
+ 		opts->errstr = "failed to update loader map";
+-		err = -errno;
++		set_err;
+ 		goto out;
+ 	}
+ 
+@@ -166,10 +323,10 @@ static inline int bpf_load_and_run(struct bpf_load_and_run_opts *opts)
+ 	attr.log_size = opts->ctx->log_size;
+ 	attr.log_buf = opts->ctx->log_buf;
+ 	attr.prog_flags = BPF_F_SLEEPABLE;
+-	prog_fd = skel_sys_bpf(BPF_PROG_LOAD, &attr, sizeof(attr));
++	err = prog_fd = skel_sys_bpf(BPF_PROG_LOAD, &attr, sizeof(attr));
+ 	if (prog_fd < 0) {
+ 		opts->errstr = "failed to load loader prog";
+-		err = -errno;
++		set_err;
+ 		goto out;
+ 	}
+ 
+@@ -181,10 +338,12 @@ static inline int bpf_load_and_run(struct bpf_load_and_run_opts *opts)
+ 	if (err < 0 || (int)attr.test.retval < 0) {
+ 		opts->errstr = "failed to execute loader prog";
+ 		if (err < 0) {
+-			err = -errno;
++			set_err;
+ 		} else {
+ 			err = (int)attr.test.retval;
++#ifndef __KERNEL__
+ 			errno = -err;
++#endif
+ 		}
+ 		goto out;
+ 	}
+-- 
+2.30.2
 
