@@ -2,127 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA55DC433FE
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 18:23:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66FB4C41535
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 18:47:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232200AbiBISWz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 13:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S240673AbiBISr0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 13:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiBISWy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 13:22:54 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776F6C0613C9;
-        Wed,  9 Feb 2022 10:22:57 -0800 (PST)
-From:   Kurt Kanzenbach <kurt@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1644430974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A86IBeeLUSrWGQ06+Ga1gd252D1ZKm4v5y6HcJDp4gc=;
-        b=NjhPDVKNu3q7zNIPAbO+9JO+JYLbwPbMxylaMclZr7OtpkTIFzS4vUBT3O7RHaL8qA3R64
-        7KSJ/hfa+XIWxy7AWTE1XErauo4hfNKqscphhz/e53XOjU6JDUgc4VAtF2uxPDcAB2IiJK
-        DNDFSLcxpjED/Ip0fv6aEcc+5+w5ck3ttF/mt9WfgGnk7ikTUBJeflrh7FDwpOocHXXw/s
-        00jN5dMSUtphwbglgnqnRNLUNzDomwrkqRIEcv6vexJVQeyiZ4wA5DyjTOye+WPALZhwBk
-        SJvvI+qZi0NeVHzBBmVy4GZt8UQpfy6NhLO52RIfPSmx7b6E/42olDXTUJS+Mw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1644430974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A86IBeeLUSrWGQ06+Ga1gd252D1ZKm4v5y6HcJDp4gc=;
-        b=7belRedt8Nsd8BWn7/JW4Opy7hSjI57EpyXJqZbf8xl2cdFuRoUwEjDD3wJVzyXOh7U6N4
-        BhG10VGadnCm4HAg==
-To:     "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>
-Cc:     "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "vinschen@redhat.com" <vinschen@redhat.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        "hawk@kernel.org" <hawk@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next 0/2][pull request] 1GbE Intel Wired LAN Driver
- Updates 2022-02-07
-In-Reply-To: <699b8636cafcfa82a99cf290e3cffbab91b6afbb.camel@intel.com>
-References: <20220207233246.1172958-1-anthony.l.nguyen@intel.com>
- <20220208211305.47dc605f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <87sfssv4nj.fsf@kurt>
- <699b8636cafcfa82a99cf290e3cffbab91b6afbb.camel@intel.com>
-Date:   Wed, 09 Feb 2022 19:22:53 +0100
-Message-ID: <877da32936.fsf@kurt>
+        with ESMTP id S241146AbiBISqd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 13:46:33 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5BAC03BFF6
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 10:43:47 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id j14so4737606lja.3
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 10:43:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ixFgM/dV6WHZoJnxQBJHzIb0ge+sZ4sIjS2A0qNB+sI=;
+        b=QvIa4tB80ySgiEJK/seLckPEkEK/dRtG68E8pd+WTel95NcOpmyUHHS1wTiLJ643Fa
+         i5FX4TO0ijWikDFzniSWy/VO+VdzxVGMYQpUAe2VlGx2ORWPp7L202MMxPTlln8MZpho
+         6yvhfaFJbWPovPIkYpNG65Fk013wJ/MXKmfX4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ixFgM/dV6WHZoJnxQBJHzIb0ge+sZ4sIjS2A0qNB+sI=;
+        b=gVZgRvHfMxT0chbFZCo5H0b7lsCiykvw31DgT0n4uaegl18LmIlmWVhARLWMJ9nX1t
+         lTxwHqwSp5e3uyJ5DzrXPfzQGojgsNP4CgrvfpK1Q6+QmsgKVadcdMvqXZrI1sY8a9Hl
+         PKNB439o3UO9Kn4AdwTC5xroOjHFxEQnvcXGbyEq+G9gkmeFoffqh/z4wtTXEZDBHlay
+         QSJS8h8h6bbBqSFqdGshg0wUebQ1z7TS2yZ3axyUWLTjzPpZltZd53bU1aW0bP1xANZ0
+         dce2a0s7jLP8//FcvfiAo6z5flf6R+KjLuYtn7Lo/rYDSBUbQY53XN3pKf9yMgSTyloK
+         t0vA==
+X-Gm-Message-State: AOAM530oJndVaQk4HNqtogEM3tNQkyt/cY6AjNl0QT92NwMUkdN3/MfT
+        FDtHePN+tk+3l0B+1dHSoNw1d6lCxsAzKg==
+X-Google-Smtp-Source: ABdhPJzXCtafQU5ZqmX4+EWkBXxr48P1HBlw6bpR50TrhUFSgXjhhQ9lUYB+mGWzD+6QaMOBmwVPcw==
+X-Received: by 2002:a05:651c:1509:: with SMTP id e9mr2377671ljf.347.1644432216015;
+        Wed, 09 Feb 2022 10:43:36 -0800 (PST)
+Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0e00.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::e00])
+        by smtp.gmail.com with ESMTPSA id u7sm2593879lju.6.2022.02.09.10.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 10:43:35 -0800 (PST)
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team@cloudflare.com, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover 4-byte load from remote_port in bpf_sk_lookup
+Date:   Wed,  9 Feb 2022 19:43:33 +0100
+Message-Id: <20220209184333.654927-3-jakub@cloudflare.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220209184333.654927-1-jakub@cloudflare.com>
+References: <20220209184333.654927-1-jakub@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha512; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Extend the context access tests for sk_lookup prog to cover the surprising
+case of a 4-byte load from the remote_port field, where the expected value
+is actually shifted by 16 bits.
 
-On Wed Feb 09 2022, Anthony L. Nguyen wrote:
-> On Wed, 2022-02-09 at 09:13 +0100, Kurt Kanzenbach wrote:
->> Hi Tony,
->>=20
->> On Tue Feb 08 2022, Jakub Kicinski wrote:
->> > On Mon,=C2=A0 7 Feb 2022 15:32:44 -0800 Tony Nguyen wrote:
->> > > Corinna Vinschen says:
->> > >=20
->> > > Fix the kernel warning "Missing unregister, handled but fix
->> > > driver"
->> > > when running, e.g.,
->> > >=20
->> > > =C2=A0 $ ethtool -G eth0 rx 1024
->> > >=20
->> > > on igc.=C2=A0 Remove memset hack from igb and align igb code to igc.
->> >=20
->> > Why -next?
->
-> As the original submission was targeting -next, I carried that forward.
-> Since the warning said it was handled, I thought it was ok to go there.
->
->> Can we get these patches into net, please? The mentioned igc problem
->> exists on v5.15-LTS too.
->
-> I'll follow the igc patch and submit a request to stable when it hits
-> Linus' tree.
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ tools/include/uapi/linux/bpf.h                     | 3 ++-
+ tools/testing/selftests/bpf/progs/test_sk_lookup.c | 6 ++++++
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-OK, thanks!
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index a7f0ddedac1f..afe3d0d7f5f2 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6453,7 +6453,8 @@ struct bpf_sk_lookup {
+ 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
+ 	__u32 remote_ip4;	/* Network byte order */
+ 	__u32 remote_ip6[4];	/* Network byte order */
+-	__u32 remote_port;	/* Network byte order */
++	__be16 remote_port;	/* Network byte order */
++	__u16 :16;		/* Zero padding */
+ 	__u32 local_ip4;	/* Network byte order */
+ 	__u32 local_ip6[4];	/* Network byte order */
+ 	__u32 local_port;	/* Host byte order */
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+index 83b0aaa52ef7..bf5b7caefdd0 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+@@ -392,6 +392,7 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ {
+ 	struct bpf_sock *sk;
+ 	int err, family;
++	__u32 val_u32;
+ 	bool v4;
+ 
+ 	v4 = (ctx->family == AF_INET);
+@@ -418,6 +419,11 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ 	if (LSW(ctx->remote_port, 0) != SRC_PORT)
+ 		return SK_DROP;
+ 
++	/* Load from remote_port field with zero padding (backward compatibility) */
++	val_u32 = *(__u32 *)&ctx->remote_port;
++	if (val_u32 != bpf_htonl(bpf_ntohs(SRC_PORT) << 16))
++		return SK_DROP;
++
+ 	/* Narrow loads from local_port field. Expect DST_PORT. */
+ 	if (LSB(ctx->local_port, 0) != ((DST_PORT >> 0) & 0xff) ||
+ 	    LSB(ctx->local_port, 1) != ((DST_PORT >> 8) & 0xff) ||
+-- 
+2.31.1
 
-> For igb, as it sounds like things are working, just not
-> with the preferred method, so I don't plan on sending that to stable.
-> Or is there an issue there that this patch needs to go to stable as
-> well?
-
-igb is fine, as it uses the memset() approach.
-
-Thanks,
-Kurt
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmIEBn0THGt1cnRAbGlu
-dXRyb25peC5kZQAKCRDBk9HyqkZzgvkhD/sEUO6Gfy/o4//6cn3b/MU4zBBqew/c
-AWoQPoLcDhN8v6zgeva6ZFBw/mQjBS1af2V2iY5PZp13iO8xz2dMtmdYOT0i9zzD
-M3/spGJir+kbEP8iHkYkZaLuBw7OuMS20xS40LAmDwOE5i22Ho779ZxbI8WTj1xP
-ibuOjwnwSye7sE7+fmsoRV0KXsnvW7Zz2jqq8fY78l+ODLyDLCzgySKKIFzCaLmf
-K1pi2MZVdDzoIb9ilk/EYfODxapKfUn53+gwEmuRtfH5aB4bwhqKua+HOlHz4IkT
-c+ZuhGDn2S/FsFlgR0K4068vWl6U6PgQQXtrFU9i4FatLDcXZC6A8yGLYXCxDgYN
-YJ+ERt0Aju9KCK3f165IxOexisYBA6zsJXGpDRQSQg/URxv4zQyzMEjKxpqUBqbX
-mT4rID6IXZY+roCBeW2GjHhIHg4XwBGK0Ba0lB049aqorcdm3qsBZsDIriyRu2ty
-up7A/x5zBNjF/ZgqZ9bYtIWWx0DF5/faFsJ8wNr6tFw+QR5671M6XeZrEOPzKuGJ
-xRf7B33ZX91gwk1/bfGAdkxmqxOwIraU8GFEzXlxkyKv4sOoogH25pVA9KaqSXeR
-g88lFglPwzNoAvMODN0hlIrXZ+Ut8WqbTtkeuZy8ZwhZUvGGXPGQp0RA0Au07A5S
-zy4UnivtentrtQ==
-=Qbx6
------END PGP SIGNATURE-----
---=-=-=--
