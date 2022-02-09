@@ -2,113 +2,239 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B830C433F5
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:26:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41FF3C433F5
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:28:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiBIW0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 17:26:04 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:54584 "EHLO
+        id S235673AbiBIW21 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 17:28:27 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235393AbiBIW0C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:26:02 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2FBDF28A66;
-        Wed,  9 Feb 2022 14:26:04 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id j4so176495plj.8;
-        Wed, 09 Feb 2022 14:26:04 -0800 (PST)
+        with ESMTP id S235491AbiBIW2Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 17:28:25 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1320AE01A237
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 14:27:43 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id s1so3321043qtw.9
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 14:27:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4dNHW4tpxBvXPWZnL5sCZ8U5aYka6vht5SmsbV4tumY=;
-        b=bACtZzVfc0CrmRFmpIMHjt4J4pWr1u55BXfG+7o+a0laPtH2QJSKd4qsRnpenYh144
-         9iT3+1HeuaoJjkbwOO4/EAFcleMa8CoAAzjgj01c1TSOltLDEzKkEjwoHHUx61N0lqoZ
-         hxU/7iIrfmKRvMiII68xxpSYsT2Ei8J4OhGPkYf9FleF1L+/+RL16Rk9t1FuGF0WVEtA
-         ACBDcLZt4jrGVew+hOoPSqr22of9oppgeS4lotkrdCfIxXr85fIlojZRdb2FE/Z2mZss
-         7v1oJPDjr2VD1F0fpEN2sP8h8YClJOF92OqWZCBQHqWngLt4afv3i0DJPJ5HSqFq9/14
-         W3Dg==
+        d=kinvolk.io; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xcPa28Cy25WoANEeaXLZrreqoOMkyJYWDgWdVWp2OFg=;
+        b=KRYe4me4LxBtrqLehSrA1W8X+pX/NYEM2eLB9UMXoDlMnAWiHJR5cukTm9PvwH3IDs
+         4jHnDxD0xvkIfX+kpGxKS6MHudso0USaN63XSB1acRYnpDiw+Ac714BUhWlGdDP6ix+O
+         FE4uYcSb1tEksiobfBXnhhIVm2tgh+qp+4eUA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4dNHW4tpxBvXPWZnL5sCZ8U5aYka6vht5SmsbV4tumY=;
-        b=LOl8bWKj7eeN9e0x+2UYp0gzkLbCZErRTF+kHFebEgEGErDCC5h/Icf8mCPrsRZ8G0
-         BbgqBZDXea+aNhTyPEOJIGLg41BEMYk+fH5K176NlNlwmI8DJHGZu8MyBFZkDQSNQQS/
-         KhIzE0ETkEi68OJMW8Ei+VercaGaZuWif4II7uVTI5zSi9ivOkwbzDm/Jh/OZtXnme2u
-         kOf7zLsyDNEhQBPRBcOCxO1nQE5MifBn9c+0kt6lsMp+DUJpxStlEqBJYVeuJTkpMZ69
-         a+j4K2mdZV2P9RHfGYEYhsME48vk69PgV18CIgKMMtBMwAuxWSJ2BGsonScTjVNalVrX
-         nMRw==
-X-Gm-Message-State: AOAM533oEKlc1u+ak9vlvXGq/rfULdNLSknzCtZC8xXUDmFA1pFhR9UN
-        F9/jJQkxF0q3q5hh+8IpuAtVYLpEa31yrp6zQW4=
-X-Google-Smtp-Source: ABdhPJzpxPjkL7xftOLRWEV4hqgMO5cA90ZjicAGos41l5LyxiY/ECZxXBNCMrHDbWShz/zj3OfW7qfT2kYYAODBxkQ=
-X-Received: by 2002:a17:90b:4ac6:: with SMTP id mh6mr5065544pjb.138.1644445564033;
- Wed, 09 Feb 2022 14:26:04 -0800 (PST)
-MIME-Version: 1.0
-References: <YgPz8akQ4+qBz7nf@google.com> <20220209210207.dyhi6queg223tsuy@kafai-mbp.dhcp.thefacebook.com>
- <YgQ3au11pALDjyub@google.com>
-In-Reply-To: <YgQ3au11pALDjyub@google.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 9 Feb 2022 14:25:52 -0800
-Message-ID: <CAADnVQKVes3eKcDsFp=TZXRkteMU=WdmqWvXkW7RSMARbnoqxw@mail.gmail.com>
-Subject: Re: Override default socket policy per cgroup
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xcPa28Cy25WoANEeaXLZrreqoOMkyJYWDgWdVWp2OFg=;
+        b=3jG6XHQQwWI4ZqVd4JB8rKORyfDejUv57i4Cwe+7f88PMBrC3GkzAgcrmoAw1+b/CK
+         rHZIpxmWG2avBurhuWKkb3Vwaq94rIRE8DqwAPrdlRGw4l147bzzpFP88Lq6gxQS6RX8
+         XmjBkf5UTNg7lBj5F7+Fx2uPVRQ7ia6N2dsQ/8zx22cEASMIhEiHR/eBA4nJk91VPi1H
+         yrKAOxORzYDsBZYQbtjhtF8xzN4yMVlTbrrgqFUAHdNh59SNfaQn08XVI6vc2xx11H9h
+         0dBOFXUk2bb9DHuUh6VwbrnI/4066mPqAkNVL+LJWxBzQqIgI2dbslE/1EyDx4SpVwau
+         3nVA==
+X-Gm-Message-State: AOAM532J56HvXuAkqunIRh5an4WIS6vh5nxK4FqvghmICt26ZayVWliQ
+        EkR7kEVIpXVu/Ds3FX8rw7PS+g==
+X-Google-Smtp-Source: ABdhPJz1rAv6qaa1pM9fKMBVr5EVj2gP9AjXVC36XcmNwn56/9SBP7cyzQe4Sj0KTrFe7c4KGxjeWw==
+X-Received: by 2002:ac8:41cf:: with SMTP id o15mr2938178qtm.254.1644445661960;
+        Wed, 09 Feb 2022 14:27:41 -0800 (PST)
+Received: from localhost.localdomain ([181.136.110.101])
+        by smtp.gmail.com with ESMTPSA id h6sm9706287qtx.65.2022.02.09.14.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 14:27:41 -0800 (PST)
+From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Rafael David Tinoco <rafaeldtinoco@gmail.com>,
+        Lorenzo Fontana <lorenzo.fontana@elastic.co>,
+        Leonardo Di Donato <leonardo.didonato@elastic.co>
+Subject: [PATCH bpf-next v6 5/7] bpftool: Implement btfgen_get_btf()
+Date:   Wed,  9 Feb 2022 17:26:44 -0500
+Message-Id: <20220209222646.348365-6-mauricio@kinvolk.io>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220209222646.348365-1-mauricio@kinvolk.io>
+References: <20220209222646.348365-1-mauricio@kinvolk.io>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 1:51 PM <sdf@google.com> wrote:
->
-> On 02/09, Martin KaFai Lau wrote:
-> > On Wed, Feb 09, 2022 at 09:03:45AM -0800, sdf@google.com wrote:
-> > > Let's say I want to set some default sk_priority for all sockets in a
-> > > specific cgroup. I can do it right now using cgroup/sock_create, but it
-> > > applies only to AF_INET{,6} sockets. I'd like to do the same for raw
-> > > (AF_PACKET) sockets and cgroup/sock_create doesn't trigger for them :-(
-> > Other than AF_PACKET and INET[6], do you have use cases for other
-> > families?
->
-> No, I only need AF_PACKET for now. But I feel like we should create
-> a more extensible hook point this time (if we go this route).
->
-> > > (1) My naive approach would be to add another cgroup/sock_post_create
-> > > which runs late from __sock_create and triggers on everything.
-> > >
-> > > (2) Another approach might be to move BPF_CGROUP_RUN_PROG_INET_SOCK and
-> > > make it work with AF_PACKET. This might be not 100% backwards compatible
-> > > but I'd assume that most users should look at the socket family before
-> > > doing anything. (in this case it feels like we can extend
-> > > sock_bind/release for af_packets as well, just for accounting purposes,
-> > > without any way to override the target ifindex).
-> > If adding a hook at __sock_create, I think having a new
-> > CGROUP_POST_SOCK_CREATE
-> > may be better instead of messing with the current inet assumption
-> > in CGROUP_'INET'_SOCK_CREATE.  Running all CGROUP_*_SOCK_CREATE at
-> > __sock_create could be a nice cleanup such that a few lines can be
-> > removed from inet[6]_create but an extra family check will be needed.
->
-> SG. Hopefully I can at least reuse exiting progtype and just introduce
-> new hook point in __sock_create.
+The last part of the BTFGen algorithm is to create a new BTF object with
+all the types that were recorded in the previous steps.
 
-Can you take a look at what it would take to add cgroup scope
-to bpf_lsm ?
-__sock_create() already has
-security_socket_create and security_socket_post_create
-in the right places.
+This function performs two different steps:
+1. Add the types to the new BTF object by using btf__add_type(). Some
+special logic around struct and unions is implemented to only add the
+members that are really used in the field-based relocations. The type
+ID on the new and old BTF objects is stored on a map.
+2. Fix all the type IDs on the new BTF object by using the IDs saved in
+the previous step.
 
-bpf_lsm cannot write directly into PTR_TO_BTF_ID like the 1st 'sock' pointer.
-We can whitelist the write for certain cases.
-Maybe prototype it with bpf_lsm and use
-bpf_current_task_under_cgroup() helper to limit the scope
-before implementing cgroup-scoped bpf_lsm?
+Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
+Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
+Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
+Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
+---
+ tools/bpf/bpftool/gen.c | 136 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 135 insertions(+), 1 deletion(-)
 
-There were cases in the past where bpf_lsm hook was in the ideal
-spot, but lack of cgroup scoping was a show stopper.
-This use case is another example and motivation to extend
-what bpf can do with lsm hooks. That's better than
-adding a new bpf_cgroup hook in the same location.
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index c3e34db2ec8a..1efc7f3c64b2 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -1481,10 +1481,144 @@ static int btfgen_record_obj(struct btfgen_info *info, const char *obj_path)
+ 	return err;
+ }
+ 
++static unsigned int btfgen_get_id(struct hashmap *ids, unsigned int old)
++{
++	uintptr_t new;
++
++	if (!hashmap__find(ids, uint_as_hash_key(old), (void **)&new))
++		/* return id for BTF_KIND_VOID as it's possible that the
++		 * ID we're looking for is the type of a pointer that
++		 * we're not adding.
++		 */
++		return 0;
++
++	return (unsigned int)(uintptr_t)new;
++}
++
++static int btfgen_add_id(struct hashmap *ids, unsigned int old, unsigned int new)
++{
++	return hashmap__add(ids, uint_as_hash_key(old), uint_as_hash_key(new));
++}
++
++static int btfgen_remap_id(__u32 *type_id, void *ctx)
++{
++	struct hashmap *ids = ctx;
++
++	*type_id = btfgen_get_id(ids, *type_id);
++
++	return 0;
++}
++
+ /* Generate BTF from relocation information previously recorded */
+ static struct btf *btfgen_get_btf(struct btfgen_info *info)
+ {
+-	return ERR_PTR(-EOPNOTSUPP);
++	struct btf *btf_new = NULL;
++	struct hashmap *ids = NULL;
++	unsigned int i;
++	int err = 0;
++
++	btf_new = btf__new_empty();
++	if (!btf_new) {
++		err = -errno;
++		goto err_out;
++	}
++
++	ids = hashmap__new(btfgen_hash_fn, btfgen_equal_fn, NULL);
++	if (IS_ERR(ids)) {
++		err = PTR_ERR(ids);
++		goto err_out;
++	}
++
++	/* first pass: add all marked types to btf_new and add their new ids to the ids map */
++	for (i = 1; i < btf__type_cnt(info->marked_btf); i++) {
++		const struct btf_type *cloned_type, *btf_type;
++		int new_id;
++
++		cloned_type = btf__type_by_id(info->marked_btf, i);
++
++		if (cloned_type->name_off != MARKED)
++			continue;
++
++		btf_type = btf__type_by_id(info->src_btf, i);
++
++		/* add members for struct and union */
++		if (btf_is_struct(btf_type) || btf_is_union(btf_type)) {
++			struct btf_type *btf_type_cpy;
++			int nmembers = 0, idx_dst, idx_src;
++			size_t new_size;
++
++			/* calculate nmembers */
++			for (idx_src = 0; idx_src < btf_vlen(cloned_type); idx_src++) {
++				struct btf_member *cloned_m = btf_members(cloned_type) + idx_src;
++
++				if (cloned_m->name_off == MARKED)
++					nmembers++;
++			}
++
++			new_size = sizeof(struct btf_type) + nmembers * sizeof(struct btf_member);
++
++			btf_type_cpy = malloc(new_size);
++			if (!btf_type_cpy)
++				goto err_out;
++
++			/* copy btf type */
++			*btf_type_cpy = *btf_type;
++
++			idx_dst = 0;
++			for (idx_src = 0; idx_src < btf_vlen(cloned_type); idx_src++) {
++				struct btf_member *btf_member_src, *btf_member_dst;
++				struct btf_member *cloned_m = btf_members(cloned_type) + idx_src;
++
++				/* copy only members that are marked as used */
++				if (cloned_m->name_off != MARKED)
++					continue;
++
++				btf_member_src = btf_members(btf_type) + idx_src;
++				btf_member_dst = btf_members(btf_type_cpy) + idx_dst;
++
++				*btf_member_dst = *btf_member_src;
++
++				idx_dst++;
++			}
++
++			/* set new vlen */
++			btf_type_cpy->info = btf_type_info(btf_kind(btf_type_cpy), nmembers,
++							   btf_kflag(btf_type_cpy));
++
++			err = btf__add_type(btf_new, info->src_btf, btf_type_cpy);
++			free(btf_type_cpy);
++		} else {
++			err = btf__add_type(btf_new, info->src_btf, btf_type);
++		}
++
++		if (err < 0)
++			goto err_out;
++
++		new_id = err;
++
++		/* add ID mapping */
++		err = btfgen_add_id(ids, i, new_id);
++		if (err)
++			goto err_out;
++	}
++
++	/* second pass: fix up type ids */
++	for (i = 1; i < btf__type_cnt(btf_new); i++) {
++		struct btf_type *btf_type = (struct btf_type *) btf__type_by_id(btf_new, i);
++
++		err = btf_type_visit_type_ids(btf_type, btfgen_remap_id, ids);
++		if (err)
++			goto err_out;
++	}
++
++	hashmap__free(ids);
++	return btf_new;
++
++err_out:
++	btf__free(btf_new);
++	hashmap__free(ids);
++	errno = -err;
++	return NULL;
+ }
+ 
+ /* Create minimized BTF file for a set of BPF objects.
+-- 
+2.25.1
+
