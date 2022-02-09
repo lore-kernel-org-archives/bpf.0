@@ -2,206 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00DF3C433FE
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:28:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D05E4C433EF
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:38:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235639AbiBIW2u (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 17:28:50 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57966 "EHLO
+        id S236112AbiBIWiV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 17:38:21 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235599AbiBIW2Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:28:25 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1937E01A2DE
-        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 14:27:45 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id x5so3312734qtw.10
-        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 14:27:45 -0800 (PST)
+        with ESMTP id S236259AbiBIWiQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 17:38:16 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B194DF28A5A
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 14:38:18 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id c5-20020a25f305000000b0061dd6123f18so7849957ybs.17
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 14:38:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+q//gu5C97YlNqxm+yauLZBIzY4Rq1ySJmMuhxJxuLQ=;
-        b=ZhTHc4OvqnTHOkc1wWQ7H6pL7ziN0Fmalr2jn/AfiZfzoAG1cJyesWUj3PLgQlAJBj
-         RYR9DTO1bo0CwXZO2vTDf9kQLQAPLL4pYwU9iR4LRmT8/2SLXNxZDnsKhbuXst6+WeHw
-         C2dHPX0VpAf+HfK1CEXsKyiTz+q2jNKc+OfKM=
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=Ib123V5iLfjbHcZ4PIw5eMxrsJC+gSwDpXVK3o+dB3g=;
+        b=S9ncoterRMsBZv0Ny234MoaDJTDDS3NyLulE0TB3sbEpy2yvZjoBt0dxyXquO9VPLZ
+         u/oB2oTPAfMp1D03l1U074OIkZBCxo0QhZNGVGzhciQm0x/FrItEwZhUSdP5JdCMF2ZT
+         dwot++JnORcrakDGnFA5rRcqlmKBYeOddD/j6kO0yAiN45ECI+IOTzGfiSMqqx7Oyd9B
+         +moP3fK0OO6vurQZX2i7ppdv/JPwYxgA4KTfKmtM+0p4toeF4ti8rbxSS7FbbwRr7HCY
+         rYYfVsydz3ByHNwvLCdVfQ2A7YkK1z90fz/u/rDk/7K8jG0EPVMIFps13Oese/C+4yJU
+         dKlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+q//gu5C97YlNqxm+yauLZBIzY4Rq1ySJmMuhxJxuLQ=;
-        b=OdSBECAA+0JRpXksJ1XEfIYnXghgCDmFUWkxumt4tAZbYlznIE+GnAMtmXYHSTXr/R
-         /1prTM0sCdjIlTaR0Cf3vqhK6XGa4mzYzRJFOApLXSPOZy1BEi5Sv5pa6CHHNOuP65fT
-         xqUbmQGfsHIk7S4mLYfrx3oqhO32A/VOF0ebdTOG6Xq8DqvKhwJjwes4mqkrwOwJ7sc2
-         S5afE8sjsKKmLCbd3qITU+joMmV9GDruBOv/bmdFk8vI2Lvatde+ZmyUbdJfWFtFgi6K
-         vVpajH7d0Td260aj3yU0CwXXJOUleBnwe04kXImQbOnz+ZxWPzlq1s0aSpYTjV8YF1Jz
-         gQhA==
-X-Gm-Message-State: AOAM5305/rkD6jJmZ99WthPdSPsX0HtSMUtDuk7L2I4NGoYuffdlHjeU
-        xUplh9k9J7HqvyNXTcgDF/5NMA==
-X-Google-Smtp-Source: ABdhPJwuXVg7QqZBlNWf3V3ppilboCOrV8vZrYOM7cEw/+UR9trVNB6OKEswgJp10Rv7JeqQFavk3A==
-X-Received: by 2002:ac8:7d4d:: with SMTP id h13mr2996911qtb.489.1644445663991;
-        Wed, 09 Feb 2022 14:27:43 -0800 (PST)
-Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id h6sm9706287qtx.65.2022.02.09.14.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:27:43 -0800 (PST)
-From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=Ib123V5iLfjbHcZ4PIw5eMxrsJC+gSwDpXVK3o+dB3g=;
+        b=OI0IG/Kr3cRHWQTryeeKnGwPdAI7J/oCTW1y5w73qQ49coyaU+M9Y8/mAkinW9UssJ
+         9KihSrDQxyFtqFjGfdGsQ9x286n6qtwOP0+ocdDHHf10K3krT0N+G4gY5evQI4QbV+LW
+         UBTxDgvndw5vcYBHGqEmplgdD5g1VUYR207/obD0YFI8HG6B2kH6wUxtZOvbq7R81eLe
+         XtGdyiqEdamZ8z4S/sIgIog6hSnquKKGcfIQBGDJ2qDQVlhQcCeh7Cyi4KwLGftzSuFJ
+         NLtB2UR5LtynwKSjlN0U50LE6Be3G1rq+tUwmknZ4ykXkxeWXQPVTROKOpNbxvQmSMvT
+         uyLQ==
+X-Gm-Message-State: AOAM530EcdoYWZIJJpfnCDB4BlFgfnB4stj833C6RHTG/yPRiKp2WMiw
+        NT3wh2QK6IaDlvr/kgFVs9yfRLg=
+X-Google-Smtp-Source: ABdhPJx15MYjWWMuxTVtlE7hisOqrWbFhN/8ONrpccG5UN1JHLZpdqbiClritO5ewf/2VC8rH8XIfW4=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:4d3:1afe:7eeb:c0e6])
+ (user=sdf job=sendgmr) by 2002:a25:fe07:: with SMTP id k7mr4328312ybe.589.1644446297749;
+ Wed, 09 Feb 2022 14:38:17 -0800 (PST)
+Date:   Wed, 9 Feb 2022 14:38:15 -0800
+In-Reply-To: <CAADnVQKVes3eKcDsFp=TZXRkteMU=WdmqWvXkW7RSMARbnoqxw@mail.gmail.com>
+Message-Id: <YgRCVxaYirEDudjM@google.com>
+Mime-Version: 1.0
+References: <YgPz8akQ4+qBz7nf@google.com> <20220209210207.dyhi6queg223tsuy@kafai-mbp.dhcp.thefacebook.com>
+ <YgQ3au11pALDjyub@google.com> <CAADnVQKVes3eKcDsFp=TZXRkteMU=WdmqWvXkW7RSMARbnoqxw@mail.gmail.com>
+Subject: Re: Override default socket policy per cgroup
+From:   sdf@google.com
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Rafael David Tinoco <rafaeldtinoco@gmail.com>,
-        Lorenzo Fontana <lorenzo.fontana@elastic.co>,
-        Leonardo Di Donato <leonardo.didonato@elastic.co>
-Subject: [PATCH bpf-next v6 6/7] bpftool: gen min_core_btf explanation and examples
-Date:   Wed,  9 Feb 2022 17:26:45 -0500
-Message-Id: <20220209222646.348365-7-mauricio@kinvolk.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220209222646.348365-1-mauricio@kinvolk.io>
-References: <20220209222646.348365-1-mauricio@kinvolk.io>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Rafael David Tinoco <rafaeldtinoco@gmail.com>
+On 02/09, Alexei Starovoitov wrote:
+> On Wed, Feb 9, 2022 at 1:51 PM <sdf@google.com> wrote:
+> >
+> > On 02/09, Martin KaFai Lau wrote:
+> > > On Wed, Feb 09, 2022 at 09:03:45AM -0800, sdf@google.com wrote:
+> > > > Let's say I want to set some default sk_priority for all sockets in  
+> a
+> > > > specific cgroup. I can do it right now using cgroup/sock_create,  
+> but it
+> > > > applies only to AF_INET{,6} sockets. I'd like to do the same for raw
+> > > > (AF_PACKET) sockets and cgroup/sock_create doesn't trigger for  
+> them :-(
+> > > Other than AF_PACKET and INET[6], do you have use cases for other
+> > > families?
+> >
+> > No, I only need AF_PACKET for now. But I feel like we should create
+> > a more extensible hook point this time (if we go this route).
+> >
+> > > > (1) My naive approach would be to add another  
+> cgroup/sock_post_create
+> > > > which runs late from __sock_create and triggers on everything.
+> > > >
+> > > > (2) Another approach might be to move BPF_CGROUP_RUN_PROG_INET_SOCK  
+> and
+> > > > make it work with AF_PACKET. This might be not 100% backwards  
+> compatible
+> > > > but I'd assume that most users should look at the socket family  
+> before
+> > > > doing anything. (in this case it feels like we can extend
+> > > > sock_bind/release for af_packets as well, just for accounting  
+> purposes,
+> > > > without any way to override the target ifindex).
+> > > If adding a hook at __sock_create, I think having a new
+> > > CGROUP_POST_SOCK_CREATE
+> > > may be better instead of messing with the current inet assumption
+> > > in CGROUP_'INET'_SOCK_CREATE.  Running all CGROUP_*_SOCK_CREATE at
+> > > __sock_create could be a nice cleanup such that a few lines can be
+> > > removed from inet[6]_create but an extra family check will be needed.
+> >
+> > SG. Hopefully I can at least reuse exiting progtype and just introduce
+> > new hook point in __sock_create.
 
-Add "min_core_btf" feature explanation and one example of how to use it
-to bpftool-gen man page.
+> Can you take a look at what it would take to add cgroup scope
+> to bpf_lsm ?
+> __sock_create() already has
+> security_socket_create and security_socket_post_create
+> in the right places.
 
-Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
-Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
-Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
-Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
----
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 93 +++++++++++++++++++
- 1 file changed, 93 insertions(+)
+> bpf_lsm cannot write directly into PTR_TO_BTF_ID like the 1st 'sock'  
+> pointer.
+> We can whitelist the write for certain cases.
+> Maybe prototype it with bpf_lsm and use
+> bpf_current_task_under_cgroup() helper to limit the scope
+> before implementing cgroup-scoped bpf_lsm?
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index bc276388f432..4e654b16dfd0 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -25,6 +25,7 @@ GEN COMMANDS
- 
- |	**bpftool** **gen object** *OUTPUT_FILE* *INPUT_FILE* [*INPUT_FILE*...]
- |	**bpftool** **gen skeleton** *FILE* [**name** *OBJECT_NAME*]
-+|	**bpftool** **gen min_core_btf** *INPUT* *OUTPUT* *OBJECT* [*OBJECT*...]
- |	**bpftool** **gen help**
- 
- DESCRIPTION
-@@ -149,6 +150,26 @@ DESCRIPTION
- 		  (non-read-only) data from userspace, with same simplicity
- 		  as for BPF side.
- 
-+	**bpftool** **gen min_core_btf** *INPUT* *OUTPUT* *OBJECT* [*OBJECT*...]
-+		  Generate a minimum BTF file as *OUTPUT*, derived from a given
-+		  *INPUT* BTF file, containing all needed BTF types so one, or
-+		  more, given eBPF objects CO-RE relocations may be satisfied.
-+
-+		  When kernels aren't compiled with CONFIG_DEBUG_INFO_BTF,
-+		  libbpf, when loading an eBPF object, has to rely in external
-+		  BTF files to be able to calculate CO-RE relocations.
-+
-+		  Usually, an external BTF file is built from existing kernel
-+		  DWARF data using pahole. It contains all the types used by
-+		  its respective kernel image and, because of that, is big.
-+
-+		  The min_core_btf feature builds smaller BTF files, customized
-+		  to one or multiple eBPF objects, so they can be distributed
-+		  together with an eBPF CO-RE based application, turning the
-+		  application portable to different kernel versions.
-+
-+		  Check examples bellow for more information how to use it.
-+
- 	**bpftool gen help**
- 		  Print short help message.
- 
-@@ -215,7 +236,9 @@ This is example BPF application with two BPF programs and a mix of BPF maps
- and global variables. Source code is split across two source code files.
- 
- **$ clang -target bpf -g example1.bpf.c -o example1.bpf.o**
-+
- **$ clang -target bpf -g example2.bpf.c -o example2.bpf.o**
-+
- **$ bpftool gen object example.bpf.o example1.bpf.o example2.bpf.o**
- 
- This set of commands compiles *example1.bpf.c* and *example2.bpf.c*
-@@ -329,3 +352,73 @@ BPF ELF object file *example.bpf.o*.
-   my_static_var: 7
- 
- This is a stripped-out version of skeleton generated for above example code.
-+
-+min_core_btf
-+------------
-+
-+**$ bpftool btf dump file ./5.4.0-example.btf format raw**
-+
-+::
-+
-+  [1] INT 'long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
-+  [2] CONST '(anon)' type_id=1
-+  [3] VOLATILE '(anon)' type_id=1
-+  [4] ARRAY '(anon)' type_id=1 index_type_id=21 nr_elems=2
-+  [5] PTR '(anon)' type_id=8
-+  [6] CONST '(anon)' type_id=5
-+  [7] INT 'char' size=1 bits_offset=0 nr_bits=8 encoding=(none)
-+  [8] CONST '(anon)' type_id=7
-+  [9] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)
-+  <long output>
-+
-+**$ bpftool btf dump file ./one.bpf.o format raw**
-+
-+::
-+
-+  [1] PTR '(anon)' type_id=2
-+  [2] STRUCT 'trace_event_raw_sys_enter' size=64 vlen=4
-+        'ent' type_id=3 bits_offset=0
-+        'id' type_id=7 bits_offset=64
-+        'args' type_id=9 bits_offset=128
-+        '__data' type_id=12 bits_offset=512
-+  [3] STRUCT 'trace_entry' size=8 vlen=4
-+        'type' type_id=4 bits_offset=0
-+        'flags' type_id=5 bits_offset=16
-+        'preempt_count' type_id=5 bits_offset=24
-+  <long output>
-+
-+**$ bpftool gen min_core_btf ./5.4.0-example.btf ./5.4.0-smaller.btf ./one.bpf.o**
-+
-+**$ bpftool btf dump file ./5.4.0-smaller.btf format raw**
-+
-+::
-+
-+  [1] TYPEDEF 'pid_t' type_id=6
-+  [2] STRUCT 'trace_event_raw_sys_enter' size=64 vlen=1
-+        'args' type_id=4 bits_offset=128
-+  [3] STRUCT 'task_struct' size=9216 vlen=2
-+        'pid' type_id=1 bits_offset=17920
-+        'real_parent' type_id=7 bits_offset=18048
-+  [4] ARRAY '(anon)' type_id=5 index_type_id=8 nr_elems=6
-+  [5] INT 'long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
-+  [6] TYPEDEF '__kernel_pid_t' type_id=8
-+  [7] PTR '(anon)' type_id=3
-+  [8] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
-+  <end>
-+
-+Now, the "5.4.0-smaller.btf" file may be used by libbpf as an external BTF file
-+when loading the "one.bpf.o" object into the "5.4.0-example" kernel. Note that
-+the generated BTF file won't allow other eBPF objects to be loaded, just the
-+ones given to min_core_btf.
-+
-+::
-+
-+  struct bpf_object *obj = NULL;
-+  struct bpf_object_open_opts openopts = {};
-+
-+  openopts.sz = sizeof(struct bpf_object_open_opts);
-+  openopts.btf_custom_path = "./5.4.0-smaller.btf";
-+
-+  obj = bpf_object__open_file("./one.bpf.o", &openopts);
-+
-+  ...
--- 
-2.25.1
+> There were cases in the past where bpf_lsm hook was in the ideal
+> spot, but lack of cgroup scoping was a show stopper.
+> This use case is another example and motivation to extend
+> what bpf can do with lsm hooks. That's better than
+> adding a new bpf_cgroup hook in the same location.
 
+Cool, if you think we can whitelist some writes in lsm/fentry that
+might be a perfect solution (especially if it gets per-cgroup scope).
+I'll try to look in that, thanks!
