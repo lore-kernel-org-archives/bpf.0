@@ -2,126 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A313C43217
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A8ECC433FE
 	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235585AbiBIFqM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 00:46:12 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58788 "EHLO
+        id S235412AbiBIFqJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 00:46:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236669AbiBIFjv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:39:51 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB380C00438B
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:39:49 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id m8so844530ilg.7
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:39:49 -0800 (PST)
+        with ESMTP id S232786AbiBIFnT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 00:43:19 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E185FC0043F8
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:43:20 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id r19so2426455pfh.6
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:43:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lxnioln6o+F7clc5D4CXpZgXwRHr0MI68/7pSnQ50Gs=;
-        b=McwurSd7SQeof7Spy/1Q4edxuMql/ZWi/i08hUz+n0CrNpE298+HO+CmUEXblNTzoE
-         ac87iCIbJXpZHgPAqHS5pxxXJmg4hSc9jaPDZeSRE8zk0mmAep4Djq2A5ic9lE05x+GW
-         cCiev/9Y0ITOZoBhYgQpQBJ3w+a+vNCI0kq3/eXGneHWAmTo1kYYsPBsnbETlmlXKTik
-         6fyXVV9+GxWuPMu0PEn3eekMOhC6ySiqerEcCbORoCLoCwxkQ81+Ll/6bReoenj6cJai
-         uy282lIp/zEJ0zyuLWdf+SMR62blOCqxCGC6qdxekh3hHrWmrpGVDp9zKWljdbsX/za/
-         WLmA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yXEpBl9Bjx/UIuskvPdDre+BWHevTDTuWJ/EW9M/Hi4=;
+        b=bQJj+w1lYiBRRzB1sFapQSASZqt/IuXMS9ieGZvg6+nNXpXb0jpLcHnHYgEDFeXOOg
+         QkGI1BUJNrp4PFO4rJGc2z1bbiEXAs3sti3ZnRCmWkikIu7jYUOCq1FhGXT9fU56/Znw
+         zMqu2vZcrQ2NBoINjiB5iuw3jAXCO/fG4SFSbIAS64cZTNyNKn5sTrH0zEHK7ffwrtlU
+         4uLzWv1BgDUXX8Ev53pEpUhOigB4qUd0w3XC7mwpVG1ZptpW1QSxpHt9H0wUzcXEH65g
+         qwexP1Fs49oqQU5AnEqHDZlYEUq2SL3/aTROXitIgNwFJM5ULRMi7df2OCoe1M7olTl1
+         mXqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lxnioln6o+F7clc5D4CXpZgXwRHr0MI68/7pSnQ50Gs=;
-        b=oB4qmF5e7imveVy6D8jNOGWW4TI5017Ac3XpczZhwe6ZFjG91otRiU8FoAMkmFZ5xx
-         qp37yR28zeOdW0mg+ZfIh1dK/PT/u3l7DkaxYyyqy7PRXjzTWtneBB1T2ij5AGhpal+C
-         Dixlf/y9B1ouzBW6WoMY6GZTyRsEYVVLmJqew7WkbLXsyAPFK1KZ+dXZSwzUOzO6oAqP
-         PeAopB8bUPTPsj9BLIDzPSiYFkM2vo6ZLvWyFLWH0CEwwlvrnzI+/DeM5O1QU+EJ7SX5
-         uHU208GvlX7MFlmSdlkZ3F098F3zN4nWa/X/JcqbdGIjZCZ/3hg5wEqwYzquUuaw+zZq
-         l2Tw==
-X-Gm-Message-State: AOAM53278h5jQKgkVIwKfaiHZNxacOtIYxKVQWK5Cq6jzyrXupwKLWn1
-        U+ZT9uuRQ5FUVwSwYji+PYIo6tNj/WeRFE1sbbg=
-X-Google-Smtp-Source: ABdhPJzPp4K104g7x7PxGUctGaTDPSmviH1lWrKCIexnTj7V6X439Z1v4DQTGFHqC1Em4jYYJD6wYiQHllq9pCppRc0=
-X-Received: by 2002:a05:6e02:1b81:: with SMTP id h1mr330005ili.239.1644385186634;
- Tue, 08 Feb 2022 21:39:46 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yXEpBl9Bjx/UIuskvPdDre+BWHevTDTuWJ/EW9M/Hi4=;
+        b=mVRr/Ympsmd7bszieGK8MEaVKFDkN/RChsWGLI0pBn3efOXkQ4f5nWi8y2xucF2cHK
+         HXT3NzChwGJOO96vvozvR+oySLjJcxyLJqgykzIiVSNmP38PcihyCyFuwEqEqZn15bnX
+         aMFh+cshcvqGGB9h9hiB7NROTgyBsGIrz4zRCIpZcStko7MmW2VFfAnHJg4Nbcko1XBd
+         leNCMBMuAzwWdsdvrNtP5s8CawH6X5KYjjT856dkPupZdjcbHtBUDsUlMaJZQvF/L7gc
+         I/wKnKyIuzI6Zp1NpUUdsgJC9IvxNvQNe5wKd3uc3S2duDxouadpFmj1mc5ATLosdlal
+         WKQg==
+X-Gm-Message-State: AOAM530hDFzz5TExMzkGGz9q0hsfjThAadCWgmkxaIe9gzC4HgnA5coX
+        cId6MgNOqGQI4gGboSY+m5M=
+X-Google-Smtp-Source: ABdhPJxwPAIfpw9zDBm3BOTkRvnf1oK0HbIDMQwLwokBL3S6eI76K+FaN5X76atdgx5YEFoq4no8LA==
+X-Received: by 2002:a65:5c84:: with SMTP id a4mr644773pgt.258.1644385400310;
+        Tue, 08 Feb 2022 21:43:20 -0800 (PST)
+Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:cbf])
+        by smtp.gmail.com with ESMTPSA id nn5sm4543607pjb.2.2022.02.08.21.43.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 21:43:19 -0800 (PST)
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH v3 bpf-next 1/5] bpf: Extend sys_bpf commands for bpf_syscall programs.
+Date:   Tue,  8 Feb 2022 21:43:11 -0800
+Message-Id: <20220209054315.73833-2-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
+References: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
 MIME-Version: 1.0
-References: <20220209021745.2215452-1-iii@linux.ibm.com> <20220209021745.2215452-10-iii@linux.ibm.com>
-In-Reply-To: <20220209021745.2215452-10-iii@linux.ibm.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Feb 2022 21:39:35 -0800
-Message-ID: <CAEf4BzYunGCapVMZVFznh_qsRmOPdunvk2ZZfJOVVo29vrZwOw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 09/10] libbpf: Fix accessing the first syscall
- argument on arm64
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Feb 8, 2022 at 6:18 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
->
-> On arm64, the first syscall argument should be accessed via orig_x0
-> (see arch/arm64/include/asm/syscall.h). Currently regs[0] is used
-> instead, leading to bpf_syscall_macro test failure.
->
-> orig_x0 cannot be added to struct user_pt_regs, since its layout is a
-> part of the ABI. Therefore provide access to it only through
-> PT_REGS_PARM1_CORE_SYSCALL() by using a struct pt_regs flavor.
->
-> Reported-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> ---
->  tools/lib/bpf/bpf_tracing.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
-> index f364f1f4710e..928f85f7961c 100644
-> --- a/tools/lib/bpf/bpf_tracing.h
-> +++ b/tools/lib/bpf/bpf_tracing.h
-> @@ -142,8 +142,18 @@
->
->  #elif defined(bpf_target_arm64)
->
-> +struct pt_regs___arm64 {
-> +       unsigned long orig_x0;
-> +} __attribute__((preserve_access_index));
-> +
+From: Alexei Starovoitov <ast@kernel.org>
 
-I just realized that this will probably break anyone who's using old
-Clang to compile a non-CORE BPF program because preserve_access_index
-attribute will be unknown.
+bpf_sycall programs can be used directly by the kernel modules
+to load programs and create maps via kernel skeleton.
+. Export bpf_sys_bpf syscall wrapper to be used in kernel skeleton.
+. Export bpf_map_get to be used in kernel skeleton.
+. Allow prog_run cmd for bpf_syscall programs with recursion check.
+. Enable link_create and raw_tp_open cmds.
 
-But we don't have to use __attribute__((preserve_access_index)) here,
-because we use BPF_CORE_READ() in those macro, which will make
-accesses CO-RE-relocatable anyways. So I dropped
-__attribute__((preserve_access_index)) for better backwards
-compatibility.
+Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ kernel/bpf/syscall.c | 38 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 4 deletions(-)
 
->  /* arm64 provides struct user_pt_regs instead of struct pt_regs to userspace */
->  #define __PT_REGS_CAST(x) ((const struct user_pt_regs *)(x))
-> +#define PT_REGS_PARM1_SYSCALL(x) ({ \
-> +       _Pragma("GCC error \"PT_REGS_PARM1_SYSCALL() is not supported on arm64, use PT_REGS_PARM1_CORE_SYSCALL() instead\""); \
-> +       0l; \
-> +})
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 72ce1edde950..49f88b30662a 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -985,6 +985,7 @@ struct bpf_map *bpf_map_get(u32 ufd)
+ 
+ 	return map;
+ }
++EXPORT_SYMBOL(bpf_map_get);
+ 
+ struct bpf_map *bpf_map_get_with_uref(u32 ufd)
+ {
+@@ -4756,23 +4757,52 @@ static bool syscall_prog_is_valid_access(int off, int size,
+ 	return true;
+ }
+ 
+-BPF_CALL_3(bpf_sys_bpf, int, cmd, void *, attr, u32, attr_size)
++BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ {
++	struct bpf_prog * __maybe_unused prog;
++
+ 	switch (cmd) {
+ 	case BPF_MAP_CREATE:
+ 	case BPF_MAP_UPDATE_ELEM:
+ 	case BPF_MAP_FREEZE:
+ 	case BPF_PROG_LOAD:
+ 	case BPF_BTF_LOAD:
++	case BPF_LINK_CREATE:
++	case BPF_RAW_TRACEPOINT_OPEN:
+ 		break;
+-	/* case BPF_PROG_TEST_RUN:
+-	 * is not part of this list to prevent recursive test_run
+-	 */
++#ifdef CONFIG_BPF_JIT /* __bpf_prog_enter_sleepable used by trampoline and JIT */
++	case BPF_PROG_TEST_RUN:
++		if (attr->test.data_in || attr->test.data_out ||
++		    attr->test.ctx_out || attr->test.duration ||
++		    attr->test.repeat || attr->test.flags)
++			return -EINVAL;
++
++		prog = bpf_prog_get_type(attr->test.prog_fd, BPF_PROG_TYPE_SYSCALL);
++		if (IS_ERR(prog))
++			return PTR_ERR(prog);
++
++		if (attr->test.ctx_size_in < prog->aux->max_ctx_offset ||
++		    attr->test.ctx_size_in > U16_MAX) {
++			bpf_prog_put(prog);
++			return -EINVAL;
++		}
++
++		if (!__bpf_prog_enter_sleepable(prog)) {
++			/* recursion detected */
++			bpf_prog_put(prog);
++			return -EBUSY;
++		}
++		attr->test.retval = bpf_prog_run(prog, (void *) (long) attr->test.ctx_in);
++		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats */);
++		bpf_prog_put(prog);
++		return 0;
++#endif
+ 	default:
+ 		return -EINVAL;
+ 	}
+ 	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size);
+ }
++EXPORT_SYMBOL(bpf_sys_bpf);
+ 
+ static const struct bpf_func_proto bpf_sys_bpf_proto = {
+ 	.func		= bpf_sys_bpf,
+-- 
+2.30.2
 
-I shortened message to just "use PT_REGS_PARM1_CORE_SYSCALL() instead"
-and made it into a single-liner
-
-> +#define PT_REGS_PARM1_CORE_SYSCALL(x) \
-> +       BPF_CORE_READ((const struct pt_regs___arm64 *)(x), orig_x0)
-
-also made this into a single-liner
-
-
->  #define __PT_PARM1_REG regs[0]
->  #define __PT_PARM2_REG regs[1]
->  #define __PT_PARM3_REG regs[2]
-> --
-> 2.34.1
->
