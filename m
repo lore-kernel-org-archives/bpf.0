@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D85C433F5
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FFD4C4332F
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:28:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbiBIW2d (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 17:28:33 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59302 "EHLO
+        id S235721AbiBIW2e (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 17:28:34 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235851AbiBIW2Y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:28:24 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70FC1DF838
-        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 14:27:32 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id 200so3096922qki.2
-        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 14:27:32 -0800 (PST)
+        with ESMTP id S235601AbiBIW2Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 17:28:25 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670F7E01645B
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 14:27:48 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id j12so3371510qtr.2
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 14:27:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Hk75HQixjBgYteD3wu68c7ddwNDtfzUNbwLB6J1iel0=;
-        b=U+lMrrs6wiMIg9TVKFE4wLa9hsB2uxILlCRogdU0htIn+2cfTaLccTDWHIqZlf7Sme
-         wGxtirb9z0vBPivO2JK6mwWlIjXC+tFSzoPyQU4bSf/B/m7XdEBEiMyvzEuDbJskx9zz
-         1uLVqkJ5wMrGixp3UHmBOxO8pRfsz3UjFBKHk=
+        bh=kTBJ1Pql1z9VTh/Shv6+u258Fz4OzaJBfE1p/mIR/xk=;
+        b=Oa8IeBWnsdLRbrHtaHc1jMJxjRgFqEo1MKfKh9LagsiF3U5gHAy60XoONhXFvgWsQI
+         90X4XGvbl8g2QrW876tEqXxJ4n0zmnlhL2QLwOdj8Z1aJyeGlO6Hg66uXglovcU2XrBq
+         sJ/7HdVRDgM1oHl2bmKfabRJBCskqzcg3vuTQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Hk75HQixjBgYteD3wu68c7ddwNDtfzUNbwLB6J1iel0=;
-        b=08rn5IFG0mf4lG5h70IrtzYXhrHlsG0UEzKf6RgeO5GrcFwMat0Yvwc6/XZWa/cZsU
-         SIAQD5Rf0/luYnJ2Pl1MzsdhPZvVTf/jZQxoJRKp1NcmVp7VaAS8HHcbwGGDZIboQ1R1
-         H9ia9YjByLvS3SJGw+TnzMEnPbPVXaNn1MnuSg0MYDQXgVdA22cbkRVqryow3A0JozUe
-         wIP0laWp9FNcbBARaJxmtBZltOvL4icGiTDQu3g37l7fL7R4BvroGFPWWQgE+qDhE9YO
-         aLQ1m0zlDZMhFTfdcloBoGlykv72vUrZ9kcAJGvvUGarmM5baZ7ULSSjQaxNvrfPDA3Y
-         5T0Q==
-X-Gm-Message-State: AOAM533SwwtgUoJPddyq/EjN1ypmaPQsDRZR+x6zwhgEDh4JAnPHGLl1
-        2JcfHzcJsxT6o60qISWdSKeaNQ==
-X-Google-Smtp-Source: ABdhPJxNh49jI4X/Ahn4cjn6FTCHUNR3QDNPqkhHBeQf1/vlA5U53gF2FBst0eptuX7lYgALzrUgMA==
-X-Received: by 2002:a05:620a:2a10:: with SMTP id o16mr2368701qkp.762.1644445650743;
-        Wed, 09 Feb 2022 14:27:30 -0800 (PST)
+        bh=kTBJ1Pql1z9VTh/Shv6+u258Fz4OzaJBfE1p/mIR/xk=;
+        b=aWlnqVRLIWqVPKUyi+DK5H+KpicRytbtHrOaHsun6ZxK58jnXLRAM5pYoXw2VMEoVs
+         ccQL8vTyrl2hmVy+YUDGJxPuOVcN0kSuf3jHrTjFLZxausr9jrlD85YKGRbch04tE1Mw
+         /Le8XyF1eX/mQfGu78Tml680sgrHsAtt1jl++V7E5NEqn3Oae8B2qCWRkw6CS3Ix6Vdw
+         PFXiaEcvCUtGFDJv0AGdERF/f/oZJLHS376V0n9VXK3pj6IgGg8B1Jw0KUwj7itaeTMK
+         IHkbSApNoVLnGIj330BxRPz86NvXBusUsFEe0OetySA+QIvWnW30zYWrM8/tLLTRLmVH
+         qwXw==
+X-Gm-Message-State: AOAM531mefRx6Av6kglhnlW6WqYYE233Ejes8WLrVZt7K6bM0lENG+L8
+        Rhw9MY2aNN3ia4w+qjdj8JtUAw==
+X-Google-Smtp-Source: ABdhPJz48N3gIue1a+5AB2HgSeqz3q1RcamQcQmnJaNRN3bI8739fyCxPhGVmU8xRfpsIxd/yTUGBA==
+X-Received: by 2002:ac8:5bc5:: with SMTP id b5mr2990286qtb.572.1644445666831;
+        Wed, 09 Feb 2022 14:27:46 -0800 (PST)
 Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id h6sm9706287qtx.65.2022.02.09.14.27.29
+        by smtp.gmail.com with ESMTPSA id h6sm9706287qtx.65.2022.02.09.14.27.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 14:27:30 -0800 (PST)
+        Wed, 09 Feb 2022 14:27:46 -0800 (PST)
 From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Rafael David Tinoco <rafaeldtinoco@gmail.com>,
         Lorenzo Fontana <lorenzo.fontana@elastic.co>,
         Leonardo Di Donato <leonardo.didonato@elastic.co>
-Subject: [PATCH bpf-next v6 1/7] libbpf: split bpf_core_apply_relo()
-Date:   Wed,  9 Feb 2022 17:26:40 -0500
-Message-Id: <20220209222646.348365-2-mauricio@kinvolk.io>
+Subject: [PATCH bpf-next v6 7/7] selftests/bpf: Test "bpftool gen min_core_btf"
+Date:   Wed,  9 Feb 2022 17:26:46 -0500
+Message-Id: <20220209222646.348365-8-mauricio@kinvolk.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220209222646.348365-1-mauricio@kinvolk.io>
 References: <20220209222646.348365-1-mauricio@kinvolk.io>
@@ -66,408 +66,109 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BTFGen needs to run the core relocation logic in order to understand
-what are the types involved in a given relocation.
+This commit reuses the core_reloc test to check if the BTF files
+generated with "bpftool gen min_core_btf" are correct. This introduces
+test_core_btfgen() that runs all the core_reloc tests, but this time
+the source BTF files are generated by using "bpftool gen min_core_btf".
 
-Currently bpf_core_apply_relo() calculates and **applies** a relocation
-to an instruction. Having both operations in the same function makes it
-difficult to only calculate the relocation without patching the
-instruction. This commit splits that logic in two different phases: (1)
-calculate the relocation and (2) patch the instruction.
-
-For the first phase bpf_core_apply_relo() is renamed to
-bpf_core_calc_relo_insn() who is now only on charge of calculating the
-relocation, the second phase uses the already existing
-bpf_core_patch_insn(). bpf_object__relocate_core() uses both of them and
-the BTFGen will use only bpf_core_calc_relo_insn().
+The goal of this test is to check that the generated files are usable,
+and not to check if the algorithm is creating an optimized BTF file.
 
 Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
 Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
 Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
 ---
- kernel/bpf/btf.c          | 13 +++++--
- tools/lib/bpf/libbpf.c    | 71 ++++++++++++++++++++---------------
- tools/lib/bpf/relo_core.c | 79 ++++++++++++---------------------------
- tools/lib/bpf/relo_core.h | 42 ++++++++++++++++++---
- 4 files changed, 109 insertions(+), 96 deletions(-)
+ .../selftests/bpf/prog_tests/core_reloc.c     | 46 ++++++++++++++++++-
+ 1 file changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 11740b300de9..f1d3d2a2f5f6 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7225,6 +7225,7 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- {
- 	bool need_cands = relo->kind != BPF_CORE_TYPE_ID_LOCAL;
- 	struct bpf_core_cand_list cands = {};
-+	struct bpf_core_relo_res targ_res;
- 	struct bpf_core_spec *specs;
- 	int err;
- 
-@@ -7264,13 +7265,19 @@ int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
- 		cands.len = cc->cnt;
- 		/* cand_cache_mutex needs to span the cache lookup and
- 		 * copy of btf pointer into bpf_core_cand_list,
--		 * since module can be unloaded while bpf_core_apply_relo_insn
-+		 * since module can be unloaded while bpf_core_calc_relo_insn
- 		 * is working with module's btf.
- 		 */
- 	}
- 
--	err = bpf_core_apply_relo_insn((void *)ctx->log, insn, relo->insn_off / 8,
--				       relo, relo_idx, ctx->btf, &cands, specs);
-+	err = bpf_core_calc_relo_insn((void *)ctx->log, relo, relo_idx, ctx->btf, &cands, specs,
-+				      &targ_res);
-+	if (err)
-+		goto out;
-+
-+	err = bpf_core_patch_insn((void *)ctx->log, insn, relo->insn_off / 8, relo, relo_idx,
-+				  &targ_res);
-+
- out:
- 	kfree(specs);
- 	if (need_cands) {
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 2262bcdfee92..d3c457fb045e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5530,11 +5530,12 @@ static int record_relo_core(struct bpf_program *prog,
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index b8bdd1c3efca..10a1d5fb788e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -2,6 +2,7 @@
+ #include <test_progs.h>
+ #include "progs/core_reloc_types.h"
+ #include "bpf_testmod/bpf_testmod.h"
++#include <linux/limits.h>
+ #include <sys/mman.h>
+ #include <sys/syscall.h>
+ #include <bpf/btf.h>
+@@ -354,6 +355,8 @@ static int duration = 0;
+ 	.fails = true,							\
  }
  
--static int bpf_core_apply_relo(struct bpf_program *prog,
--			       const struct bpf_core_relo *relo,
--			       int relo_idx,
--			       const struct btf *local_btf,
--			       struct hashmap *cand_cache)
-+static int bpf_core_resolve_relo(struct bpf_program *prog,
-+				 const struct bpf_core_relo *relo,
-+				 int relo_idx,
-+				 const struct btf *local_btf,
-+				 struct hashmap *cand_cache,
-+				 struct bpf_core_relo_res *targ_res)
++#define BTFGEN_BTF_PATH "/tmp/btfgen.btf"
++
+ struct core_reloc_test_case;
+ 
+ typedef int (*setup_test_fn)(struct core_reloc_test_case *test);
+@@ -836,7 +839,21 @@ static size_t roundup_page(size_t sz)
+ 	return (sz + page_size - 1) / page_size * page_size;
+ }
+ 
+-void test_core_reloc(void)
++static int run_btfgen(const char *src_btf, const char *dst_btf, const char *objpath)
++{
++	char command[4096];
++	int n;
++
++	n = snprintf(command, sizeof(command),
++		     "./tools/build/bpftool/bpftool gen min_core_btf %s %s %s",
++		     src_btf, dst_btf, objpath);
++	if (n < 0 || n >= sizeof(command))
++		return -1;
++
++	return system(command);
++}
++
++static void _test_core_reloc(bool btfgen)
  {
- 	struct bpf_core_spec specs_scratch[3] = {};
- 	const void *type_key = u32_as_hash_key(relo->type_id);
-@@ -5543,20 +5544,7 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 	const struct btf_type *local_type;
- 	const char *local_name;
- 	__u32 local_id = relo->type_id;
--	struct bpf_insn *insn;
--	int insn_idx, err;
--
--	if (relo->insn_off % BPF_INSN_SZ)
--		return -EINVAL;
--	insn_idx = relo->insn_off / BPF_INSN_SZ;
--	/* adjust insn_idx from section frame of reference to the local
--	 * program's frame of reference; (sub-)program code is not yet
--	 * relocated, so it's enough to just subtract in-section offset
--	 */
--	insn_idx = insn_idx - prog->sec_insn_off;
--	if (insn_idx >= prog->insns_cnt)
--		return -EINVAL;
--	insn = &prog->insns[insn_idx];
-+	int err;
- 
- 	local_type = btf__type_by_id(local_btf, local_id);
- 	if (!local_type)
-@@ -5566,15 +5554,6 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 	if (!local_name)
- 		return -EINVAL;
- 
--	if (prog->obj->gen_loader) {
--		const char *spec_str = btf__name_by_offset(local_btf, relo->access_str_off);
--
--		pr_debug("record_relo_core: prog %td insn[%d] %s %s %s final insn_idx %d\n",
--			prog - prog->obj->programs, relo->insn_off / 8,
--			btf_kind_str(local_type), local_name, spec_str, insn_idx);
--		return record_relo_core(prog, relo, insn_idx);
--	}
--
- 	if (relo->kind != BPF_CORE_TYPE_ID_LOCAL &&
- 	    !hashmap__find(cand_cache, type_key, (void **)&cands)) {
- 		cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
-@@ -5591,19 +5570,21 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
+ 	const size_t mmap_sz = roundup_page(sizeof(struct data));
+ 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts);
+@@ -863,6 +880,22 @@ void test_core_reloc(void)
+ 			continue;
  		}
- 	}
  
--	return bpf_core_apply_relo_insn(prog_name, insn, insn_idx, relo,
--					relo_idx, local_btf, cands, specs_scratch);
-+	return bpf_core_calc_relo_insn(prog_name, relo, relo_idx, local_btf, cands, specs_scratch,
-+				       targ_res);
- }
- 
- static int
- bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- {
- 	const struct btf_ext_info_sec *sec;
-+	struct bpf_core_relo_res targ_res;
- 	const struct bpf_core_relo *rec;
- 	const struct btf_ext_info *seg;
- 	struct hashmap_entry *entry;
- 	struct hashmap *cand_cache = NULL;
- 	struct bpf_program *prog;
-+	struct bpf_insn *insn;
- 	const char *sec_name;
- 	int i, err = 0, insn_idx, sec_idx;
- 
-@@ -5654,6 +5635,8 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			 sec_name, sec->num_info);
- 
- 		for_each_btf_ext_rec(seg, sec, i, rec) {
-+			if (rec->insn_off % BPF_INSN_SZ)
-+				return -EINVAL;
- 			insn_idx = rec->insn_off / BPF_INSN_SZ;
- 			prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
- 			if (!prog) {
-@@ -5668,12 +5651,38 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			if (!prog->load)
- 				continue;
- 
--			err = bpf_core_apply_relo(prog, rec, i, obj->btf, cand_cache);
-+			/* adjust insn_idx from section frame of reference to the local
-+			 * program's frame of reference; (sub-)program code is not yet
-+			 * relocated, so it's enough to just subtract in-section offset
-+			 */
-+			insn_idx = insn_idx - prog->sec_insn_off;
-+			if (insn_idx >= prog->insns_cnt)
-+				return -EINVAL;
-+			insn = &prog->insns[insn_idx];
-+
-+			if (prog->obj->gen_loader) {
-+				err = record_relo_core(prog, rec, insn_idx);
-+				if (err) {
-+					pr_warn("prog '%s': relo #%d: failed to record relocation: %d\n",
-+						prog->name, i, err);
-+					goto out;
-+				}
++		/* generate a "minimal" BTF file and use it as source */
++		if (btfgen) {
++			if (!test_case->btf_src_file || test_case->fails) {
++				test__skip();
 +				continue;
 +			}
 +
-+			err = bpf_core_resolve_relo(prog, rec, i, obj->btf, cand_cache, &targ_res);
- 			if (err) {
- 				pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
- 					prog->name, i, err);
- 				goto out;
- 			}
++			unlink(BTFGEN_BTF_PATH);
++			err = run_btfgen(test_case->btf_src_file, BTFGEN_BTF_PATH,
++					 test_case->bpf_obj_file);
++			if (!ASSERT_OK(err, "run_btfgen"))
++				goto cleanup;
 +
-+			err = bpf_core_patch_insn(prog->name, insn, insn_idx, rec, i, &targ_res);
-+			if (err) {
-+				pr_warn("prog '%s': relo #%d: failed to patch insn #%u: %d\n",
-+					prog->name, i, insn_idx, err);
-+				goto out;
-+			}
++			test_case->btf_src_file = BTFGEN_BTF_PATH;
++		}
++
+ 		if (test_case->setup) {
+ 			err = test_case->setup(test_case);
+ 			if (CHECK(err, "test_setup", "test #%d setup failed: %d\n", i, err))
+@@ -954,8 +987,19 @@ void test_core_reloc(void)
+ 			CHECK_FAIL(munmap(mmap_data, mmap_sz));
+ 			mmap_data = NULL;
  		}
++		unlink(BTFGEN_BTF_PATH);
+ 		bpf_link__destroy(link);
+ 		link = NULL;
+ 		bpf_object__close(obj);
  	}
- 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 910865e29edc..f946f23eab20 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -775,31 +775,6 @@ static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
- 	return 0;
  }
- 
--struct bpf_core_relo_res
--{
--	/* expected value in the instruction, unless validate == false */
--	__u32 orig_val;
--	/* new value that needs to be patched up to */
--	__u32 new_val;
--	/* relocation unsuccessful, poison instruction, but don't fail load */
--	bool poison;
--	/* some relocations can't be validated against orig_val */
--	bool validate;
--	/* for field byte offset relocations or the forms:
--	 *     *(T *)(rX + <off>) = rY
--	 *     rX = *(T *)(rY + <off>),
--	 * we remember original and resolved field size to adjust direct
--	 * memory loads of pointers and integers; this is necessary for 32-bit
--	 * host kernel architectures, but also allows to automatically
--	 * relocate fields that were resized from, e.g., u32 to u64, etc.
--	 */
--	bool fail_memsz_adjust;
--	__u32 orig_sz;
--	__u32 orig_type_id;
--	__u32 new_sz;
--	__u32 new_type_id;
--};
--
- /* Calculate original and target relocation values, given local and target
-  * specs and relocation kind. These values are calculated for each candidate.
-  * If there are multiple candidates, resulting values should all be consistent
-@@ -951,9 +926,9 @@ static int insn_bytes_to_bpf_size(__u32 sz)
-  * 5. *(T *)(rX + <off>) = rY, where T is one of {u8, u16, u32, u64};
-  * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
-  */
--static int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
--			       int insn_idx, const struct bpf_core_relo *relo,
--			       int relo_idx, const struct bpf_core_relo_res *res)
-+int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
-+			int insn_idx, const struct bpf_core_relo *relo,
-+			int relo_idx, const struct bpf_core_relo_res *res)
- {
- 	__u32 orig_val, new_val;
- 	__u8 class;
-@@ -1128,7 +1103,7 @@ static void bpf_core_dump_spec(const char *prog_name, int level, const struct bp
- }
- 
- /*
-- * CO-RE relocate single instruction.
-+ * Calculate CO-RE relocation target result.
-  *
-  * The outline and important points of the algorithm:
-  * 1. For given local type, find corresponding candidate target types.
-@@ -1177,18 +1152,18 @@ static void bpf_core_dump_spec(const char *prog_name, int level, const struct bp
-  *    between multiple relocations for the same type ID and is updated as some
-  *    of the candidates are pruned due to structural incompatibility.
-  */
--int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
--			     int insn_idx,
--			     const struct bpf_core_relo *relo,
--			     int relo_idx,
--			     const struct btf *local_btf,
--			     struct bpf_core_cand_list *cands,
--			     struct bpf_core_spec *specs_scratch)
-+int bpf_core_calc_relo_insn(const char *prog_name,
-+			    const struct bpf_core_relo *relo,
-+			    int relo_idx,
-+			    const struct btf *local_btf,
-+			    struct bpf_core_cand_list *cands,
-+			    struct bpf_core_spec *specs_scratch,
-+			    struct bpf_core_relo_res *targ_res)
- {
- 	struct bpf_core_spec *local_spec = &specs_scratch[0];
- 	struct bpf_core_spec *cand_spec = &specs_scratch[1];
- 	struct bpf_core_spec *targ_spec = &specs_scratch[2];
--	struct bpf_core_relo_res cand_res, targ_res;
-+	struct bpf_core_relo_res cand_res;
- 	const struct btf_type *local_type;
- 	const char *local_name;
- 	__u32 local_id;
-@@ -1223,12 +1198,12 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 	/* TYPE_ID_LOCAL relo is special and doesn't need candidate search */
- 	if (relo->kind == BPF_CORE_TYPE_ID_LOCAL) {
- 		/* bpf_insn's imm value could get out of sync during linking */
--		memset(&targ_res, 0, sizeof(targ_res));
--		targ_res.validate = false;
--		targ_res.poison = false;
--		targ_res.orig_val = local_spec->root_type_id;
--		targ_res.new_val = local_spec->root_type_id;
--		goto patch_insn;
-+		memset(targ_res, 0, sizeof(*targ_res));
-+		targ_res->validate = false;
-+		targ_res->poison = false;
-+		targ_res->orig_val = local_spec->root_type_id;
-+		targ_res->new_val = local_spec->root_type_id;
-+		return 0;
- 	}
- 
- 	/* libbpf doesn't support candidate search for anonymous types */
-@@ -1262,7 +1237,7 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 			return err;
- 
- 		if (j == 0) {
--			targ_res = cand_res;
-+			*targ_res = cand_res;
- 			*targ_spec = *cand_spec;
- 		} else if (cand_spec->bit_offset != targ_spec->bit_offset) {
- 			/* if there are many field relo candidates, they
-@@ -1272,7 +1247,8 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 				prog_name, relo_idx, cand_spec->bit_offset,
- 				targ_spec->bit_offset);
- 			return -EINVAL;
--		} else if (cand_res.poison != targ_res.poison || cand_res.new_val != targ_res.new_val) {
-+		} else if (cand_res.poison != targ_res->poison ||
-+			   cand_res.new_val != targ_res->new_val) {
- 			/* all candidates should result in the same relocation
- 			 * decision and value, otherwise it's dangerous to
- 			 * proceed due to ambiguity
-@@ -1280,7 +1256,7 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 			pr_warn("prog '%s': relo #%d: relocation decision ambiguity: %s %u != %s %u\n",
- 				prog_name, relo_idx,
- 				cand_res.poison ? "failure" : "success", cand_res.new_val,
--				targ_res.poison ? "failure" : "success", targ_res.new_val);
-+				targ_res->poison ? "failure" : "success", targ_res->new_val);
- 			return -EINVAL;
- 		}
- 
-@@ -1314,19 +1290,10 @@ int bpf_core_apply_relo_insn(const char *prog_name, struct bpf_insn *insn,
- 			 prog_name, relo_idx);
- 
- 		/* calculate single target relo result explicitly */
--		err = bpf_core_calc_relo(prog_name, relo, relo_idx, local_spec, NULL, &targ_res);
-+		err = bpf_core_calc_relo(prog_name, relo, relo_idx, local_spec, NULL, targ_res);
- 		if (err)
- 			return err;
- 	}
- 
--patch_insn:
--	/* bpf_core_patch_insn() should know how to handle missing targ_spec */
--	err = bpf_core_patch_insn(prog_name, insn, insn_idx, relo, relo_idx, &targ_res);
--	if (err) {
--		pr_warn("prog '%s': relo #%d: failed to patch insn #%u: %d\n",
--			prog_name, relo_idx, relo->insn_off / 8, err);
--		return -EINVAL;
--	}
--
- 	return 0;
- }
-diff --git a/tools/lib/bpf/relo_core.h b/tools/lib/bpf/relo_core.h
-index 17799819ad7c..a28bf3711ce2 100644
---- a/tools/lib/bpf/relo_core.h
-+++ b/tools/lib/bpf/relo_core.h
-@@ -44,14 +44,44 @@ struct bpf_core_spec {
- 	__u32 bit_offset;
- };
- 
--int bpf_core_apply_relo_insn(const char *prog_name,
--			     struct bpf_insn *insn, int insn_idx,
--			     const struct bpf_core_relo *relo, int relo_idx,
--			     const struct btf *local_btf,
--			     struct bpf_core_cand_list *cands,
--			     struct bpf_core_spec *specs_scratch);
-+struct bpf_core_relo_res {
-+	/* expected value in the instruction, unless validate == false */
-+	__u32 orig_val;
-+	/* new value that needs to be patched up to */
-+	__u32 new_val;
-+	/* relocation unsuccessful, poison instruction, but don't fail load */
-+	bool poison;
-+	/* some relocations can't be validated against orig_val */
-+	bool validate;
-+	/* for field byte offset relocations or the forms:
-+	 *     *(T *)(rX + <off>) = rY
-+	 *     rX = *(T *)(rY + <off>),
-+	 * we remember original and resolved field size to adjust direct
-+	 * memory loads of pointers and integers; this is necessary for 32-bit
-+	 * host kernel architectures, but also allows to automatically
-+	 * relocate fields that were resized from, e.g., u32 to u64, etc.
-+	 */
-+	bool fail_memsz_adjust;
-+	__u32 orig_sz;
-+	__u32 orig_type_id;
-+	__u32 new_sz;
-+	__u32 new_type_id;
-+};
 +
- int bpf_core_types_are_compat(const struct btf *local_btf, __u32 local_id,
- 			      const struct btf *targ_btf, __u32 targ_id);
- 
- size_t bpf_core_essential_name_len(const char *name);
++void test_core_reloc(void)
++{
++	_test_core_reloc(false);
++}
 +
-+int bpf_core_calc_relo_insn(const char *prog_name,
-+			    const struct bpf_core_relo *relo, int relo_idx,
-+			    const struct btf *local_btf,
-+			    struct bpf_core_cand_list *cands,
-+			    struct bpf_core_spec *specs_scratch,
-+			    struct bpf_core_relo_res *targ_res);
-+
-+int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
-+			int insn_idx, const struct bpf_core_relo *relo,
-+			int relo_idx, const struct bpf_core_relo_res *res);
-+
- #endif
++void test_core_btfgen(void)
++{
++	_test_core_reloc(true);
++}
 -- 
 2.25.1
 
