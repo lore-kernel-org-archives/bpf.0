@@ -2,200 +2,226 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45ACEC43219
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:47:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E164BC433EF
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:49:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbiBIFqF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 00:46:05 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36888 "EHLO
+        id S235125AbiBIFqH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 00:46:07 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbiBIFnW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:43:22 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8150C033254
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:43:26 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id a11-20020a17090a740b00b001b8b506c42fso4192233pjg.0
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qDd6O2Hs1f+j69m+PHz/HDfRMdHuvEJ3v5002RScnFs=;
-        b=koimXrkp9MHL5RqfPXfIpSSBasRJiAPwqIerL6bTHMjqd7qomw0gFc2QSTzYV75mQD
-         O709qbkF9UJFXPJt/KhzPvUbJMy4Y8CnqtR+YOOXIV5f+JuiLBoN1AiNmMJ+1Jj8wdnM
-         SmuBNUdqeKjXPChc4OdENJ9X5/qzP2JtiUsDB7LofBxgyT8AF+OFACXcXxXGKjlbuY9Y
-         FZNyeFw3HxBks98Boiq9UIeZcfq9vn/10JX1FmgGdW/NfWo3s0Pe+sIh7OVOhaUQLuOS
-         JA1ZkjvcmCEeDbaHV55rRP2+cw+txJNdr2zjsN4MMC3ctaw5VSW0ZPDu36VyBehlbk3v
-         SI7g==
+        with ESMTP id S238705AbiBIFkX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 00:40:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C5B9C035452
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:40:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644385189;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KdjkngOKMA7bg2oJfUtSkQw+6lC1kyEXHsbHAdltn3U=;
+        b=Zrd4BeC3p7uCF7cRFnyXm0aZBpI7N+b8x+7xkcXa5eZXEtOUXeVlkCKRLV0qpHU6QbA5HC
+        BoENYUI777fuUBdfWSkEA0UHAlgbB2gfYT0nNiHPaH8IGrYW9KIY+OdKYTzL9lg5wWBAhb
+        PAz4qgZI6FUrT2ZuE4D6XKZkPR5+paY=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-524-uC0vs1DfMiWZQyKXY0sgbw-1; Wed, 09 Feb 2022 00:39:48 -0500
+X-MC-Unique: uC0vs1DfMiWZQyKXY0sgbw-1
+Received: by mail-lj1-f199.google.com with SMTP id n9-20020a2e82c9000000b002435af2e8b9so607074ljh.20
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:39:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qDd6O2Hs1f+j69m+PHz/HDfRMdHuvEJ3v5002RScnFs=;
-        b=3NRYhTfEt2X9LggaQHAWSj2bS3yWDfCUGhQa96sEc7e9a0hVKkgPyg4cqn1BV9gAAE
-         EFhHQpyMJmfYi913cUv/zCDYVHAVkdwv0E2CY64ebkt3ati7o5zYKfTz5gmXYxKV2Pm4
-         Llhcg1O+3Yw6phqfzbAjfWLsRYTRMnDEt8CcP08HnL1/i1FXgtbH2CR4ONni6hNU4gvM
-         yDVfRn+Wi0WMSGVBHpgmQW7W+r6nt4jucfQYhV16GdQH9ZRJElK9X4PmwXHydWXdd94k
-         q3DIxOm8zvnZ+f2CzMV5ySaRwCxHOOthpH/uDwVB/jlE/1Xxsk/PaP7NTp9a1uA27Mms
-         Y1HQ==
-X-Gm-Message-State: AOAM531wAEHgQgIYM6/aPq3CmdVoY+g4mMz0WZukT2ia1RE7v31upHn6
-        frfX1LqP9BaJYEbDWnhQSM22MidfS5Y=
-X-Google-Smtp-Source: ABdhPJwVGLxl8zc7fA1QRj12ODZj6eCiVB+Djc5+yPUFfv1+IQr49dZDplPqqjWBUQfptmgEAYcJ9g==
-X-Received: by 2002:a17:902:ec82:: with SMTP id x2mr647708plg.139.1644385406141;
-        Tue, 08 Feb 2022 21:43:26 -0800 (PST)
-Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:cbf])
-        by smtp.gmail.com with ESMTPSA id z13sm18344717pfj.23.2022.02.08.21.43.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 21:43:25 -0800 (PST)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 3/5] bpftool: Generalize light skeleton generation.
-Date:   Tue,  8 Feb 2022 21:43:13 -0800
-Message-Id: <20220209054315.73833-4-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
-References: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KdjkngOKMA7bg2oJfUtSkQw+6lC1kyEXHsbHAdltn3U=;
+        b=Q3I6ATpwpL0U1nE5xEv3S6KOd49hFvKBeeWFQU8T3zVDdnvgayLkZcBA3QI7tOH5K/
+         WHgnkmr/7iUFJKeFJ2JIPnPqiC+sTloAELlBnQbCz57z7yw9csXl0xhsXd/boaralzsG
+         eodGpcDdTHhphPXDvTCSYmjs/7x2aSagaXHs83p21bswKzWn30ZOEzVegUkPjLe3OwOf
+         Fqx+NGonIf2ChxCXiUZUeJbtPel/hMV6wuA1G09qkHWj0j+bHjiI56LbWDaApE4QOJec
+         +VM1DcuZXeK/GxctCKS4bWzX+nZwEAsxaUkyqWatLvC/E3las8VoDwjU/3/HXE1stgOT
+         0nFw==
+X-Gm-Message-State: AOAM532V4GioKCcKGCgCZmfkcRAHGQ1gAADnBWU6NreEwzM30PGpdsLE
+        B7Ob3MHXlqlDZ2F2/D06Ge3f1e7pA1RrrYI+TqotVw8dWfZu6azXr4sx4AZYyDFLsuyfjoPY0V3
+        Uw+TAD8AGsDrjgXrLW74rgguxQ6Bm
+X-Received: by 2002:a05:6512:3986:: with SMTP id j6mr507291lfu.84.1644385186741;
+        Tue, 08 Feb 2022 21:39:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzZ9V3a+WzslPsO4MNBWqkV/COHINFv3Uj3aM34m0bEvE0naK1G1+iv8ZX11UDJsX92pxLP529TE7r9laOD8mw=
+X-Received: by 2002:a05:6512:3986:: with SMTP id j6mr507283lfu.84.1644385186483;
+ Tue, 08 Feb 2022 21:39:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220126073533.44994-1-xuanzhuo@linux.alibaba.com>
+ <CACGkMEspyHTmcSaq9fgpU88VCZGzu21Khp9H+fqL-pb5GLdEpA@mail.gmail.com>
+ <1644213739.5846965-1-xuanzhuo@linux.alibaba.com> <7d1e2d5b-a9a1-cbb7-4d80-89df1cb7bf15@redhat.com>
+ <1644290085.868939-2-xuanzhuo@linux.alibaba.com> <1644306673.8360631-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1644306673.8360631-1-xuanzhuo@linux.alibaba.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 9 Feb 2022 13:39:34 +0800
+Message-ID: <CACGkMEsnupEVKukgdom85gUwbGoLcHT8bM9OqR_U11DzGdz1rw@mail.gmail.com>
+Subject: Re: [PATCH v3 00/17] virtio pci support VIRTIO_F_RING_RESET
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue, Feb 8, 2022 at 3:56 PM Xuan Zhuo <xuanzhuo@linux.alibaba.com> wrote=
+:
+>
+> On Tue, 08 Feb 2022 11:14:45 +0800, Xuan Zhuo <xuanzhuo@linux.alibaba.com=
+> wrote:
+> > On Tue, 8 Feb 2022 10:59:48 +0800, Jason Wang <jasowang@redhat.com> wro=
+te:
+> > >
+> > > =E5=9C=A8 2022/2/7 =E4=B8=8B=E5=8D=882:02, Xuan Zhuo =E5=86=99=E9=81=
+=93:
+> > > > On Mon, 7 Feb 2022 11:39:36 +0800, Jason Wang <jasowang@redhat.com>=
+ wrote:
+> > > >> On Wed, Jan 26, 2022 at 3:35 PM Xuan Zhuo <xuanzhuo@linux.alibaba.=
+com> wrote:
+> > > >>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > >>> The virtio spec already supports the virtio queue reset function.=
+ This patch set
+> > > >>> is to add this function to the kernel. The relevant virtio spec i=
+nformation is
+> > > >>> here:
+> > > >>>
+> > > >>>      https://github.com/oasis-tcs/virtio-spec/issues/124
+> > > >>>
+> > > >>> Also regarding MMIO support for queue reset, I plan to support it=
+ after this
+> > > >>> patch is passed.
+> > > >>>
+> > > >>> #14-#17 is the disable/enable function of rx/tx pair implemented =
+by virtio-net
+> > > >>> using the new helper.
+> > > >> One thing that came to mind is the steering. E.g if we disable an =
+RX,
+> > > >> should we stop steering packets to that queue?
+>
+> Regarding this spec, if there are multiple queues disabled at the same ti=
+me, it
+> will be a troublesome problem for the backend to select the queue,
 
-Generealize light skeleton by hiding mmap details in skel_internal.h
-In this form generated lskel.h is usable both by user space and by the kernel.
+I don't understand this, for such a kind of backend or device it can
+simply claim not to support this feature.
 
-Note that previously #include <bpf/bpf.h> was in *.lskel.h file.
-To avoid #ifdef-s in a generated lskel.h the include of bpf.h is moved
-to skel_internal.h, but skel_internal.h is also used by gen_loader.c
-which is part of libbpf. Therefore skel_internal.h does #include "bpf.h"
-in case of user space, so gen_loader.c and lskel.h have necessary definitions.
+> so I want to
+> directly define that only one queue is allowed to reset at the same time,=
+ do you
+> think this is appropriate?
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
----
- tools/bpf/bpftool/gen.c | 55 +++++++++++++++++++++++++++--------------
- 1 file changed, 37 insertions(+), 18 deletions(-)
+This sounds very complicated. E.g how can we define an API that can
+reset more than one queues? (currently PCI only support MMIO access).
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index eacfc6a2060d..9e0b45bdc5cb 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -472,7 +472,7 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
- 			continue;
- 		if (bpf_map__is_internal(map) &&
- 		    (bpf_map__map_flags(map) & BPF_F_MMAPABLE))
--			printf("\tmunmap(skel->%1$s, %2$zd);\n",
-+			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zd);\n",
- 			       ident, bpf_map_mmap_sz(map));
- 		codegen("\
- 			\n\
-@@ -481,7 +481,7 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
- 	}
- 	codegen("\
- 		\n\
--			free(skel);					    \n\
-+			skel_free(skel);				    \n\
- 		}							    \n\
- 		",
- 		obj_name);
-@@ -525,7 +525,7 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 		{							    \n\
- 			struct %1$s *skel;				    \n\
- 									    \n\
--			skel = calloc(sizeof(*skel), 1);		    \n\
-+			skel = skel_alloc(sizeof(*skel));		    \n\
- 			if (!skel)					    \n\
- 				goto cleanup;				    \n\
- 			skel->ctx.sz = (void *)&skel->links - (void *)skel; \n\
-@@ -544,18 +544,14 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 
- 		codegen("\
- 			\n\
--				skel->%1$s =					 \n\
--					mmap(NULL, %2$zd, PROT_READ | PROT_WRITE,\n\
--					     MAP_SHARED | MAP_ANONYMOUS, -1, 0); \n\
--				if (skel->%1$s == (void *) -1)			 \n\
--					goto cleanup;				 \n\
--				memcpy(skel->%1$s, (void *)\"\\			 \n\
--			", ident, bpf_map_mmap_sz(map));
-+				skel->%1$s = skel_prep_map_data((void *)\"\\	 \n\
-+			", ident);
- 		mmap_data = bpf_map__initial_value(map, &mmap_size);
- 		print_hex(mmap_data, mmap_size);
--		printf("\", %2$zd);\n"
--		       "\tskel->maps.%1$s.initial_value = (__u64)(long)skel->%1$s;\n",
--		       ident, mmap_size);
-+		printf("\", %1$zd, %2$zd);\n"
-+		       "	if (!skel->%3$s)\n"
-+		       "		goto cleanup;\n",
-+		       bpf_map_mmap_sz(map), mmap_size, ident);
- 	}
- 	codegen("\
- 		\n\
-@@ -592,6 +588,24 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 	codegen("\
- 		\n\
- 		\";							    \n\
-+		");
-+	bpf_object__for_each_map(map, obj) {
-+		size_t mmap_size = 0;
-+
-+		if (!get_map_ident(map, ident, sizeof(ident)))
-+			continue;
-+
-+		if (!bpf_map__is_internal(map) ||
-+		    !(bpf_map__map_flags(map) & BPF_F_MMAPABLE))
-+			continue;
-+
-+		bpf_map__initial_value(map, &mmap_size);
-+		printf("\tskel->maps.%1$s.initial_value ="
-+		       " skel_prep_init_value((void **)&skel->%1$s, %2$zd, %3$zd);\n",
-+		       ident, bpf_map_mmap_sz(map), mmap_size);
-+	}
-+	codegen("\
-+		\n\
- 			err = bpf_load_and_run(&opts);			    \n\
- 			if (err < 0)					    \n\
- 				return err;				    \n\
-@@ -611,14 +625,21 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 		else
- 			mmap_flags = "PROT_READ | PROT_WRITE";
- 
--		printf("\tskel->%1$s =\n"
--		       "\t\tmmap(skel->%1$s, %2$zd, %3$s, MAP_SHARED | MAP_FIXED,\n"
--		       "\t\t\tskel->maps.%1$s.map_fd, 0);\n",
-+		codegen("\
-+		\n\
-+			skel->%1$s = skel_finalize_map_data(&skel->maps.%1$s.initial_value,  \n\
-+							%2$zd, %3$s, skel->maps.%1$s.map_fd);\n\
-+			if (!skel->%1$s)				    \n\
-+				goto cleanup;				    \n\
-+			",
- 		       ident, bpf_map_mmap_sz(map), mmap_flags);
- 	}
- 	codegen("\
- 		\n\
- 			return 0;					    \n\
-+		cleanup: __attribute__((__unused__));			    \n\
-+			%1$s__destroy(skel);				    \n\
-+			return -ENOMEM;					    \n\
- 		}							    \n\
- 									    \n\
- 		static inline struct %1$s *				    \n\
-@@ -751,8 +772,6 @@ static int do_skeleton(int argc, char **argv)
- 		#ifndef %2$s						    \n\
- 		#define %2$s						    \n\
- 									    \n\
--		#include <stdlib.h>					    \n\
--		#include <bpf/bpf.h>					    \n\
- 		#include <bpf/skel_internal.h>				    \n\
- 									    \n\
- 		struct %1$s {						    \n\
--- 
-2.30.2
+>
+> In terms of the implementation of backend queue reselection, it would be =
+more
+> convenient to implement if we drop packets directly. Do you think we must
+> implement this reselection function?
+
+Rethink of this. It should be fine and much simpler.
+
+Thanks
+
+>
+> Thanks.
+>
+> > > > Yes, we should reselect a queue.
+> > > >
+> > > > Thanks.
+> > >
+> > >
+> > > Maybe a spec patch for that?
+> >
+> > Yes, I also realized this. Although virtio-net's disable/enable is impl=
+emented
+> > based on queue reset, virtio-net still has to define its own flag and d=
+efine
+> > some more detailed implementations.
+> >
+> > I'll think about it and post a spec patch.
+> >
+> > Thanks.
+> >
+> > >
+> > > Thanks
+> > >
+> > >
+> > > >
+> > > >> Thanks
+> > > >>
+> > > >>> This function is not currently referenced by other
+> > > >>> functions. It is more to show the usage of the new helper, I not =
+sure if they
+> > > >>> are going to be merged together.
+> > > >>>
+> > > >>> Please review. Thanks.
+> > > >>>
+> > > >>> v3:
+> > > >>>    1. keep vq, irq unreleased
+> > > >>>
+> > > >>> Xuan Zhuo (17):
+> > > >>>    virtio_pci: struct virtio_pci_common_cfg add queue_notify_data
+> > > >>>    virtio: queue_reset: add VIRTIO_F_RING_RESET
+> > > >>>    virtio: queue_reset: struct virtio_config_ops add callbacks fo=
+r
+> > > >>>      queue_reset
+> > > >>>    virtio: queue_reset: add helper
+> > > >>>    vritio_ring: queue_reset: extract the release function of the =
+vq ring
+> > > >>>    virtio_ring: queue_reset: split: add __vring_init_virtqueue()
+> > > >>>    virtio_ring: queue_reset: split: support enable reset queue
+> > > >>>    virtio_ring: queue_reset: packed: support enable reset queue
+> > > >>>    virtio_ring: queue_reset: add vring_reset_virtqueue()
+> > > >>>    virtio_pci: queue_reset: update struct virtio_pci_common_cfg a=
+nd
+> > > >>>      option functions
+> > > >>>    virtio_pci: queue_reset: release vq by vp_dev->vqs
+> > > >>>    virtio_pci: queue_reset: setup_vq use vring_setup_virtqueue()
+> > > >>>    virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
+> > > >>>    virtio_net: virtnet_tx_timeout() fix style
+> > > >>>    virtio_net: virtnet_tx_timeout() stop ref sq->vq
+> > > >>>    virtio_net: split free_unused_bufs()
+> > > >>>    virtio_net: support pair disable/enable
+> > > >>>
+> > > >>>   drivers/net/virtio_net.c               | 220 ++++++++++++++++++=
+++++---
+> > > >>>   drivers/virtio/virtio_pci_common.c     |  62 ++++---
+> > > >>>   drivers/virtio/virtio_pci_common.h     |  11 +-
+> > > >>>   drivers/virtio/virtio_pci_legacy.c     |   5 +-
+> > > >>>   drivers/virtio/virtio_pci_modern.c     | 120 +++++++++++++-
+> > > >>>   drivers/virtio/virtio_pci_modern_dev.c |  28 ++++
+> > > >>>   drivers/virtio/virtio_ring.c           | 144 +++++++++++-----
+> > > >>>   include/linux/virtio.h                 |   1 +
+> > > >>>   include/linux/virtio_config.h          |  75 ++++++++-
+> > > >>>   include/linux/virtio_pci_modern.h      |   2 +
+> > > >>>   include/linux/virtio_ring.h            |  42 +++--
+> > > >>>   include/uapi/linux/virtio_config.h     |   7 +-
+> > > >>>   include/uapi/linux/virtio_pci.h        |   2 +
+> > > >>>   13 files changed, 618 insertions(+), 101 deletions(-)
+> > > >>>
+> > > >>> --
+> > > >>> 2.31.0
+> > > >>>
+> > >
+> > _______________________________________________
+> > Virtualization mailing list
+> > Virtualization@lists.linux-foundation.org
+> > https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+>
 
