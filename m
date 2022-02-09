@@ -2,128 +2,82 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D05E4C433EF
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 22:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CDAC433FE
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 23:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236112AbiBIWiV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 17:38:21 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:55568 "EHLO
+        id S232075AbiBIXQS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 18:16:18 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236259AbiBIWiQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 17:38:16 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B194DF28A5A
-        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 14:38:18 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id c5-20020a25f305000000b0061dd6123f18so7849957ybs.17
-        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 14:38:18 -0800 (PST)
+        with ESMTP id S232538AbiBIXQO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 18:16:14 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A87E051119
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 15:16:02 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id y8so4310198pfa.11
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 15:16:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ib123V5iLfjbHcZ4PIw5eMxrsJC+gSwDpXVK3o+dB3g=;
-        b=S9ncoterRMsBZv0Ny234MoaDJTDDS3NyLulE0TB3sbEpy2yvZjoBt0dxyXquO9VPLZ
-         u/oB2oTPAfMp1D03l1U074OIkZBCxo0QhZNGVGzhciQm0x/FrItEwZhUSdP5JdCMF2ZT
-         dwot++JnORcrakDGnFA5rRcqlmKBYeOddD/j6kO0yAiN45ECI+IOTzGfiSMqqx7Oyd9B
-         +moP3fK0OO6vurQZX2i7ppdv/JPwYxgA4KTfKmtM+0p4toeF4ti8rbxSS7FbbwRr7HCY
-         rYYfVsydz3ByHNwvLCdVfQ2A7YkK1z90fz/u/rDk/7K8jG0EPVMIFps13Oese/C+4yJU
-         dKlA==
+        bh=YiEPjANCsoc2fvs2Pw5lmjLT2HWBxHyAt8A18o33Kq4=;
+        b=hqVZmcvQ9KIz4xNdDtIYwsY+XgYR4zlFlrVA/sPYEwZkc+zDZKn6aDqtYI3B8G2BlH
+         567ZenDQFW7wdYqppOJd4bFFSR+Xe1tWPrifLGASZtmYt+XmhR77AukFMuIeydXr/Eff
+         gIaOrCytOExEW+4ug843hVLKnicR8zN+91rkVp1L+5TCGTUuwcSlhHlv2hjKZIChO873
+         J0O9V5xrInKHppL3txp33YL0myBCUNBNu93Sk2h3PUOxB2JEqeRAPDjVWvg4nYX1HdVW
+         0/ECNvw2gUfrW1ckImQW0URJxda+strhDVFuMhyz7EJWBC/XbFNwcTCJhN32OCSYpB4e
+         XKfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Ib123V5iLfjbHcZ4PIw5eMxrsJC+gSwDpXVK3o+dB3g=;
-        b=OI0IG/Kr3cRHWQTryeeKnGwPdAI7J/oCTW1y5w73qQ49coyaU+M9Y8/mAkinW9UssJ
-         9KihSrDQxyFtqFjGfdGsQ9x286n6qtwOP0+ocdDHHf10K3krT0N+G4gY5evQI4QbV+LW
-         UBTxDgvndw5vcYBHGqEmplgdD5g1VUYR207/obD0YFI8HG6B2kH6wUxtZOvbq7R81eLe
-         XtGdyiqEdamZ8z4S/sIgIog6hSnquKKGcfIQBGDJ2qDQVlhQcCeh7Cyi4KwLGftzSuFJ
-         NLtB2UR5LtynwKSjlN0U50LE6Be3G1rq+tUwmknZ4ykXkxeWXQPVTROKOpNbxvQmSMvT
-         uyLQ==
-X-Gm-Message-State: AOAM530EcdoYWZIJJpfnCDB4BlFgfnB4stj833C6RHTG/yPRiKp2WMiw
-        NT3wh2QK6IaDlvr/kgFVs9yfRLg=
-X-Google-Smtp-Source: ABdhPJx15MYjWWMuxTVtlE7hisOqrWbFhN/8ONrpccG5UN1JHLZpdqbiClritO5ewf/2VC8rH8XIfW4=
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:4d3:1afe:7eeb:c0e6])
- (user=sdf job=sendgmr) by 2002:a25:fe07:: with SMTP id k7mr4328312ybe.589.1644446297749;
- Wed, 09 Feb 2022 14:38:17 -0800 (PST)
-Date:   Wed, 9 Feb 2022 14:38:15 -0800
-In-Reply-To: <CAADnVQKVes3eKcDsFp=TZXRkteMU=WdmqWvXkW7RSMARbnoqxw@mail.gmail.com>
-Message-Id: <YgRCVxaYirEDudjM@google.com>
-Mime-Version: 1.0
-References: <YgPz8akQ4+qBz7nf@google.com> <20220209210207.dyhi6queg223tsuy@kafai-mbp.dhcp.thefacebook.com>
- <YgQ3au11pALDjyub@google.com> <CAADnVQKVes3eKcDsFp=TZXRkteMU=WdmqWvXkW7RSMARbnoqxw@mail.gmail.com>
-Subject: Re: Override default socket policy per cgroup
-From:   sdf@google.com
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YiEPjANCsoc2fvs2Pw5lmjLT2HWBxHyAt8A18o33Kq4=;
+        b=ZU4zOiRkghyH/mNZROKoQGrb6CFtoH0rpoXruVg22rmnyVyt/oqgmcBjWdQh3kPYE/
+         uJ2L+MD1e6obGLrJGemGRDwaQQ7DdXU3aQONc2WRV7s+TauD5yIl6C6cwGzAgSet53/Y
+         LHtq+8VtN0/KzpMF1fl9lBfuTKFN6Ph6XG+DxiYD91VcuyZNu1xqqWv2MaIJIf96ID4H
+         s1XSS26PZcRn73Vwlu4+6ETh1bx2xUjwAwEiCH59KGZo/e2XzlhIiu34w+V7u0pZ8lc5
+         pBUjuiP+hJH2UToP9F6Ks1/ePs+PZljD3Wuteii38gYK3aElgBW1vjndUEkWj26ZgS3G
+         kJYw==
+X-Gm-Message-State: AOAM532NIXUQjqHbc0U0uH79+ZqrGgTOH7yuOeHzTTqHcoOPyE5OobDK
+        81Rht8Ml1534mBhTshoSoUoDrXyG1MNQtCT6owM=
+X-Google-Smtp-Source: ABdhPJxEdG4ur4ylaLNRzR5K30mupRQBn3ND5IT9dLTuXtrYTdBfIPt5P8fAW3MojSOg39I8d76Vn9GNLugV0Soaa7o=
+X-Received: by 2002:a63:2c4e:: with SMTP id s75mr3720688pgs.497.1644448562155;
+ Wed, 09 Feb 2022 15:16:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
+ <20220209054315.73833-3-alexei.starovoitov@gmail.com> <2e1afed6-680e-e311-d94a-b8fb28d93bbf@fb.com>
+In-Reply-To: <2e1afed6-680e-e311-d94a-b8fb28d93bbf@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 9 Feb 2022 15:15:50 -0800
+Message-ID: <CAADnVQ+nR_J9VO597aWQjiGWU_taU-P1FVvNxhZv15kaWi5AZQ@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 2/5] libbpf: Prepare light skeleton for the kernel.
+To:     Yonghong Song <yhs@fb.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 02/09, Alexei Starovoitov wrote:
-> On Wed, Feb 9, 2022 at 1:51 PM <sdf@google.com> wrote:
-> >
-> > On 02/09, Martin KaFai Lau wrote:
-> > > On Wed, Feb 09, 2022 at 09:03:45AM -0800, sdf@google.com wrote:
-> > > > Let's say I want to set some default sk_priority for all sockets in  
-> a
-> > > > specific cgroup. I can do it right now using cgroup/sock_create,  
-> but it
-> > > > applies only to AF_INET{,6} sockets. I'd like to do the same for raw
-> > > > (AF_PACKET) sockets and cgroup/sock_create doesn't trigger for  
-> them :-(
-> > > Other than AF_PACKET and INET[6], do you have use cases for other
-> > > families?
-> >
-> > No, I only need AF_PACKET for now. But I feel like we should create
-> > a more extensible hook point this time (if we go this route).
-> >
-> > > > (1) My naive approach would be to add another  
-> cgroup/sock_post_create
-> > > > which runs late from __sock_create and triggers on everything.
-> > > >
-> > > > (2) Another approach might be to move BPF_CGROUP_RUN_PROG_INET_SOCK  
-> and
-> > > > make it work with AF_PACKET. This might be not 100% backwards  
-> compatible
-> > > > but I'd assume that most users should look at the socket family  
-> before
-> > > > doing anything. (in this case it feels like we can extend
-> > > > sock_bind/release for af_packets as well, just for accounting  
-> purposes,
-> > > > without any way to override the target ifindex).
-> > > If adding a hook at __sock_create, I think having a new
-> > > CGROUP_POST_SOCK_CREATE
-> > > may be better instead of messing with the current inet assumption
-> > > in CGROUP_'INET'_SOCK_CREATE.  Running all CGROUP_*_SOCK_CREATE at
-> > > __sock_create could be a nice cleanup such that a few lines can be
-> > > removed from inet[6]_create but an extra family check will be needed.
-> >
-> > SG. Hopefully I can at least reuse exiting progtype and just introduce
-> > new hook point in __sock_create.
+On Wed, Feb 9, 2022 at 8:49 AM Yonghong Song <yhs@fb.com> wrote:
+> > +
+> > +static inline __u64 skel_prep_init_value(void **addr, size_t mmap_sz, size_t val_sz)
+> > +{
+> > +     return (__u64) (long) *addr;
+> > +}
+>
+> The above is user space lskel definition for skel_prep_init_value.
+> Below the kernel space lskel definition:
+>
+> +static inline __u64 skel_prep_init_value(void **addr, size_t mmap_sz,
+> size_t val_sz)
+> +{
+> +       return (__u64) (long) *addr;
+> +}
+>
+> First they are identical and second this function is simple enough can
+> we do actual inlining during lskel code generation?
 
-> Can you take a look at what it would take to add cgroup scope
-> to bpf_lsm ?
-> __sock_create() already has
-> security_socket_create and security_socket_post_create
-> in the right places.
-
-> bpf_lsm cannot write directly into PTR_TO_BTF_ID like the 1st 'sock'  
-> pointer.
-> We can whitelist the write for certain cases.
-> Maybe prototype it with bpf_lsm and use
-> bpf_current_task_under_cgroup() helper to limit the scope
-> before implementing cgroup-scoped bpf_lsm?
-
-> There were cases in the past where bpf_lsm hook was in the ideal
-> spot, but lack of cgroup scoping was a show stopper.
-> This use case is another example and motivation to extend
-> what bpf can do with lsm hooks. That's better than
-> adding a new bpf_cgroup hook in the same location.
-
-Cool, if you think we can whitelist some writes in lsm/fentry that
-might be a perfect solution (especially if it gets per-cgroup scope).
-I'll try to look in that, thanks!
+Sure. Will do.
