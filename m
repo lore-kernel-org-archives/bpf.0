@@ -2,61 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7179C433F5
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 00:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB637C433EF
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 00:35:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240044AbiBIAcv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Feb 2022 19:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S240260AbiBIAf4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Feb 2022 19:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiBIAcs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Feb 2022 19:32:48 -0500
-X-Greylist: delayed 8394 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 16:32:47 PST
-Received: from smtp.hosts.co.uk (smtp.hosts.co.uk [85.233.160.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480C9C06157B;
-        Tue,  8 Feb 2022 16:32:46 -0800 (PST)
-Received: from host81-132-12-162.range81-132.btcentralplus.com ([81.132.12.162] helo=[192.168.1.218])
-        by smtp.hosts.co.uk with esmtpa (Exim)
-        (envelope-from <antlists@youngman.org.uk>)
-        id 1nHYjC-0006Ve-Bl; Tue, 08 Feb 2022 22:12:50 +0000
-Message-ID: <d07a9d41-5a8f-a1f3-59f7-d2a75d6df2e5@youngman.org.uk>
-Date:   Tue, 8 Feb 2022 22:12:47 +0000
+        with ESMTP id S240154AbiBIAfv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Feb 2022 19:35:51 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE11BC061576;
+        Tue,  8 Feb 2022 16:35:50 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id i10so425665ilm.4;
+        Tue, 08 Feb 2022 16:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+YWDH4eHWrUs+PczL2NaxuiVLZlAbGyakS668c6eLak=;
+        b=bwoDTM16u7oDn1CPlqKqLcy5pChqFvKVLokKfP0cEseywUB2c1KLfZRCgVol6fPK09
+         6OfXhgTMBQ38lbx9Ug+G4dZh1zczJzjt/OmBFqRffiYLzoWq2TiWE+C8mqCCNbQvmCE0
+         g/AiVPQpb4HkZP/XdzSkLn2kCFbP1CQ5tKw8veVr8bPClYdoQbGThhT+NJ1biTKxJoyg
+         meDgbGb8BV8DfwNGYpljRcxeZI3Oox5rHV9mmas1UyV9WGWyTiZeuyZLCvGmUxzQBt7q
+         jbejjCT16EwsCmbdiBRMFpY2E+KR86s4aeC/InxuOFOAff9tXJxhdZG9TkJtd1qe6Wbb
+         h0Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+YWDH4eHWrUs+PczL2NaxuiVLZlAbGyakS668c6eLak=;
+        b=7JbMhnpsv4tcI5SuhysNfJHIpo/l4djU5PElb2W5ljXm+NKHr9N26DWyfEcNayRlFx
+         Vx3/T22h1xqrxndxwppHQbpNi5yiVwagbJYJGJxf1vD3QWITwR+NGWu+L3C0OTJhZw10
+         CtqJKukcfx1U0491TWvL0uelfk964A31tn2dQzRmUYSFEMVFZw7VqZS54u5/Y9EcQ3C2
+         6V9fQTe/qbXYMMZ+Wqnwan9wM2USAEWUevkwKPTyo3n3FBBfwyuQAEOcWM3rB9vNiE/3
+         6ns751G4FkRoydVcTW9xTt4IcN/t2K3R70AU8QkVVddDKn4zTTDW+7OMKb6uPKx3E4An
+         Vp5w==
+X-Gm-Message-State: AOAM530YjUvL6XZptYEgqh0GSRfwUUeGR947pLHKJDOXXKRRRxE+0euq
+        gEc4934paofkOF2WmuNf5pW8qlBnooppZjNu4aRjRNNC
+X-Google-Smtp-Source: ABdhPJyRGl2DdC3jBFNtbIKvppHoU/K3MAgFnADqdOmVIzsyNrwr9872zhb2xL9e6PD0y/aUtmXwPl91hRf+Ki6Qq3E=
+X-Received: by 2002:a05:6e02:1bcd:: with SMTP id x13mr3454687ilv.98.1644366949988;
+ Tue, 08 Feb 2022 16:35:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 1/2] lib/raid6/test/Makefile: Use `$(pound)` instead of
- `\#` for Make 4.3
-Content-Language: en-GB
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20220208120648.49169-1-quentin@isovalent.com> <20220208120648.49169-3-quentin@isovalent.com>
+In-Reply-To: <20220208120648.49169-3-quentin@isovalent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 8 Feb 2022 16:35:38 -0800
+Message-ID: <CAEf4BzaWJtOkinVVet1hzHioCo4sZ++o+N2cXhNbV7r7iP=Krg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/3] libbpf: Add "libbpversion" make target to
+ print version
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, Song Liu <song@kernel.org>,
-        linux-raid@vger.kernel.org,
-        Matt Brown <matthew.brown.dev@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20220208152148.48534-1-pmenzel@molgen.mpg.de>
-From:   Wols Lists <antlists@youngman.org.uk>
-In-Reply-To: <20220208152148.48534-1-pmenzel@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 08/02/2022 15:21, Paul Menzel wrote:
-> So, do the same as commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd
-> files for future Make") and commit 929bef467771 ("bpf: Use $(pound) instead
-> of \# in Makefiles") and define and use a `$(pound)` variable.
+On Tue, Feb 8, 2022 at 4:06 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> Add a target to libbpf's Makefile to print its version number, in a
+> similar way to what running "make kernelversion" at the root of the
+> repository does.
+>
+> This is to avoid re-implementing the parsing of the libbpf.map file in
+> case some other tools want to extract the version of the libbpf sources
+> they are using.
+>
+> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> ---
+>  tools/lib/bpf/Makefile | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index b8b37fe76006..91136623edf9 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -108,6 +108,9 @@ MAKEOVERRIDES=
+>
+>  all:
+>
+> +libbpfversion:
 
-As commented elsewhere, for the sake of us ENGLISH speakers, *PLEASE* 
-make that $(hash). A pound sign is £.
+I don't think we need it (see next patch), but if we end up keeping
+it, please call it just "version". Worst case, "libbpf-version" seems
+better still.
 
-Cheers,
-Wol
+> +       @echo $(LIBBPF_VERSION)
+> +
+>  export srctree OUTPUT CC LD CFLAGS V
+>  include $(srctree)/tools/build/Makefile.include
+>
+> --
+> 2.32.0
+>
