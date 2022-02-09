@@ -2,115 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BA2CC4321E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AF35C4332F
 	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 05:49:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235648AbiBIFqN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 00:46:13 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36886 "EHLO
+        id S235411AbiBIFqJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 00:46:09 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:58774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232711AbiBIFnT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 00:43:19 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F78C033254
-        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:43:18 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id qe15so1201849pjb.3
-        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:43:18 -0800 (PST)
+        with ESMTP id S236564AbiBIFjv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 00:39:51 -0500
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F10C0045A1
+        for <bpf@vger.kernel.org>; Tue,  8 Feb 2022 21:39:48 -0800 (PST)
+Received: by mail-il1-x12b.google.com with SMTP id m8so844456ilg.7
+        for <bpf@vger.kernel.org>; Tue, 08 Feb 2022 21:39:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N9nLDCQ80z4+JhzlN4J0+C0ugWJ8hqgMXykPNhAZKjc=;
-        b=p7ZX4a4RmbRPa3YBJk4VH6+h+MdIjnAtw13FrAwsz6YxKn8IGjbtJ6t6JMPh0csvDP
-         rW/0r7PMijIjiLEEGgp64qL5F9IZfnNbX0BpE6aNCsnPLhagBeMZVwklk2Q+q2dMJFHG
-         FuiJL0OknYWQ1GHsynhyOcCrXIsz8VRsTLVk6TZHtkw80+LfExL+UE5W40FBwf82VsdW
-         L3RUGm3EygeO+EvUVB+JuwMQ7+lKucDyQ62E3X+7PCnms5LIYuu0OMZMT7R3A8LdenGJ
-         C/nf1vXiw+zxUZt6jfWAjLMWrNJyp2FiOR52B1RqBDDZm0l4SkPWmUEWuBUJq1mtKshG
-         YA7A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kqQXyrjAsKa/Xf75OvQvRpTW5bHmnbZZCd0DV2cM2GY=;
+        b=QIkd2IZTdL/W+Ykr+tx3xA846UD75tn80tBL/KVAtBaynjOz/YLLa4+PZO1WAQ4d1I
+         g7WPhF9z0Kikn4osTKwjuc9Rh/0w/GXkGG6enLJV3QY63bS4yr4ebb2ZOsscyj24cqK9
+         Xrp5Jccp7jozj70EYtVoZL0lIZ9abnU4Uu9La8xFocMMiWCb1cOwe+PHfXfv+dmwhUn/
+         jvXBOSaqIOZ07OedfFZDZs6KMAgEXEQLIpe0+lk5wqD2mwQ4dmXymPj+4PIdroqDBgrK
+         aEreAEYq/g0cPPX8VHdxLQy8eycZROGzvAgAaMDmeo0Rpkgt0x9PtOGb4o2U/awtS8Qu
+         Td4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N9nLDCQ80z4+JhzlN4J0+C0ugWJ8hqgMXykPNhAZKjc=;
-        b=0HJTCzBTDAGw31Y/nMgeozK6CYckcfEz+9H6WDeOBdTDwk5Ll5P/4nH45Po1BlINXN
-         9/5m20VXO71cSwMQ+tcvhzIaXOoEY8SiKsfZmJPWMAIC49+8owbDd43P7AuNobDdHGYP
-         S5lHlSwfqsCUWqzpxaaG9Sj+0ZmY1VnjQ7V8mtu6i58dnshJnD9ZdXt+eFJt0IR+lxUh
-         wR2iUupr2MVEKVUXY3rK+KtjIwAedpzBz09xNsr7pYMKpqAPvS1Y3dx53e9XdwjwTHzw
-         1K1taUPqnU+xKhRUcM8tBa+df5M1Tig3OabC2RqZMHhJLdvEN/m9tI8B3M+Z8j30hLRw
-         +OBw==
-X-Gm-Message-State: AOAM533zcQT1yIPOlHoZ07yjY5/zeSyfd9a8dZaBVIeEACIJkvqf154B
-        wAHIukjPiItNgkMf1AT1vCU20xuvvfc=
-X-Google-Smtp-Source: ABdhPJy6rLWE3imTJAXE6vkRprWiUKN5SflVdBeF9uZOrONp7Ko0Qm44yDpeiRV1ekMtMFoHWmT8Fg==
-X-Received: by 2002:a17:90a:7e15:: with SMTP id i21mr1672344pjl.74.1644385397394;
-        Tue, 08 Feb 2022 21:43:17 -0800 (PST)
-Received: from ast-mbp.thefacebook.com ([2620:10d:c090:400::5:cbf])
-        by smtp.gmail.com with ESMTPSA id u12sm18759538pfk.220.2022.02.08.21.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 21:43:17 -0800 (PST)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH v3 bpf-next 0/5] bpf: Light skeleton for the kernel.
-Date:   Tue,  8 Feb 2022 21:43:10 -0800
-Message-Id: <20220209054315.73833-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kqQXyrjAsKa/Xf75OvQvRpTW5bHmnbZZCd0DV2cM2GY=;
+        b=5VuU78f+hmYfaqCw98VqmkOQ/DeSdo4l2/L1cxNPT7CHQof7uelvwfgQftbBw2WbEK
+         siDwPCNDqkFYL6eyGRTkQXQABIiVzDCt6FYtae/ufP+0D7HB1pv9ect9c5jgc6hKlus2
+         tliAYHtecTrwD2rtrZCyy+eicGh9OHLuzKusVsUnX2JDEt6wtns/dkGAT95mpdXwi9xG
+         6EgentUiez7swK2GjnjdxYq4lPchRdU1N9FduEP91C8zoS9XKjZ6Eb8i5L5JN/K9SJwX
+         HjFMmTGVxfAwiaHyAdxIz1/pd5UubYosMbIJBSomWNA9pr06yO+zfNya6ZT4oEayIzEI
+         6oEQ==
+X-Gm-Message-State: AOAM532Hyz7agmSIGVZiKihA8W6sam/ufdpFLMRDOMOnVe8EGfHdmvuJ
+        suevHUppRVnE0rqupMnRF4ZH1qMm90tDarqcmX0=
+X-Google-Smtp-Source: ABdhPJynq9sLryBwvT8+r2fKtKlBAOa9ReVhMrJxGjhz2PRrIKNdGH47nynxfBieToxcybJ7geuHkztdPvhgj1d/3p0=
+X-Received: by 2002:a05:6e02:1bcd:: with SMTP id x13mr331440ilv.98.1644385181714;
+ Tue, 08 Feb 2022 21:39:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220209021745.2215452-1-iii@linux.ibm.com> <20220209021745.2215452-9-iii@linux.ibm.com>
+In-Reply-To: <20220209021745.2215452-9-iii@linux.ibm.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 8 Feb 2022 21:39:30 -0800
+Message-ID: <CAEf4BzZHg2Ju1jkUYeCTgWpubFLOBJDG-QzD91QRxfC8Op3cww@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 08/10] libbpf: Allow overriding PT_REGS_PARM1{_CORE}_SYSCALL
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue, Feb 8, 2022 at 6:18 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
+>
+> arm64 and s390 need a special way to access the first syscall argument.
+>
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+>  tools/lib/bpf/bpf_tracing.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+> index 41a015ee6bfb..f364f1f4710e 100644
+> --- a/tools/lib/bpf/bpf_tracing.h
+> +++ b/tools/lib/bpf/bpf_tracing.h
+> @@ -269,7 +269,9 @@ struct pt_regs;
+>
+>  #endif
+>
+> +#ifndef PT_REGS_PARM1_SYSCALL
+>  #define PT_REGS_PARM1_SYSCALL(x) PT_REGS_PARM1(x)
+> +#endif
+>  #define PT_REGS_PARM2_SYSCALL(x) PT_REGS_PARM2(x)
+>  #define PT_REGS_PARM3_SYSCALL(x) PT_REGS_PARM3(x)
+>  #ifdef __PT_PARM4_REG_SYSCALL
+> @@ -279,7 +281,9 @@ struct pt_regs;
+>  #endif
+>  #define PT_REGS_PARM5_SYSCALL(x) PT_REGS_PARM5(x)
+>
+> +#ifndef PT_REGS_PARM1_CORE_SYSCALL
+>  #define PT_REGS_PARM1_CORE_SYSCALL(x) PT_REGS_PARM1_CORE(x)
+> +#endif
+>  #define PT_REGS_PARM2_CORE_SYSCALL(x) PT_REGS_PARM2_CORE(x)
+>  #define PT_REGS_PARM3_CORE_SYSCALL(x) PT_REGS_PARM3_CORE(x)
+>  #ifdef __PT_PARM4_REG_SYSCALL
 
-The libbpf performs a set of complex operations to load BPF programs.
-With "loader program" and "CO-RE in the kernel" the loading job of
-libbpf was diminished. The light skeleton became lean enough to perform
-program loading and map creation tasks without libbpf.
-It's now possible to tweak it further to make light skeleton usable
-out of user space and out of kernel module.
-This allows bpf_preload.ko to drop user-mode-driver usage,
-drop host compiler dependency, allow cross compilation and simplify the code.
-It's a building block toward safe and portable kernel modules.
+I've changed PARM4 handling to be the same as for PARM1 for
+consistency (and flexibility, if we ever need as much)
 
-v2->v3:
-- dropped vm_mmap() and switched to bpf_loader_ctx->flags & KERNEL approach.
-  It allows bpf_preload.ko to be built-in.
-  The kernel is able to load bpf progs before init process starts.
-- added comments (Yonghong's review)
-- added error checks in lskel (Andrii's review)
-- added Acks in all but 2nd patch.
 
-v1->v2:
-- removed redundant anon struct and added comments (Andrii's reivew)
-- added Yonghong's ack
-- fixed build warning when JIT is off
-
-Alexei Starovoitov (5):
-  bpf: Extend sys_bpf commands for bpf_syscall programs.
-  libbpf: Prepare light skeleton for the kernel.
-  bpftool: Generalize light skeleton generation.
-  bpf: Update iterators.lskel.h.
-  bpf: Convert bpf_preload.ko to use light skeleton.
-
- kernel/bpf/inode.c                            |  39 +---
- kernel/bpf/preload/Kconfig                    |   7 +-
- kernel/bpf/preload/Makefile                   |  14 +-
- kernel/bpf/preload/bpf_preload.h              |   8 +-
- kernel/bpf/preload/bpf_preload_kern.c         | 119 +++++------
- kernel/bpf/preload/bpf_preload_umd_blob.S     |   7 -
- .../preload/iterators/bpf_preload_common.h    |  13 --
- kernel/bpf/preload/iterators/iterators.c      | 108 ----------
- .../bpf/preload/iterators/iterators.lskel.h   | 144 ++++++-------
- kernel/bpf/syscall.c                          |  40 +++-
- tools/bpf/bpftool/gen.c                       |  55 +++--
- tools/lib/bpf/gen_loader.c                    |  15 +-
- tools/lib/bpf/skel_internal.h                 | 195 ++++++++++++++++--
- 13 files changed, 402 insertions(+), 362 deletions(-)
- delete mode 100644 kernel/bpf/preload/bpf_preload_umd_blob.S
- delete mode 100644 kernel/bpf/preload/iterators/bpf_preload_common.h
- delete mode 100644 kernel/bpf/preload/iterators/iterators.c
-
--- 
-2.30.2
-
+> --
+> 2.34.1
+>
