@@ -2,259 +2,204 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40AC7C433F5
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 19:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A173CC433F5
+	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 19:14:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbiBITHI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 14:07:08 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:38256 "EHLO
+        id S232138AbiBITOt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 14:14:49 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiBITHI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 14:07:08 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93250C050CE5
-        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 11:06:59 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219HJ8gG020310;
-        Wed, 9 Feb 2022 11:06:14 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=3ScKyrDix52+BaR8PmrxoV4ZLt7sT5QHuNlouhtiLzA=;
- b=bMbAKwjF6UPyEVIKNO5AWQxGsjLuBQp0gqjQ22nFcQJEKIx2zHC1SvHOwajqydnFiyib
- 3LQbftm7w2CzHyaAbrrD6b+24ZNbReaSYaW8nY81W7P0GwU7KYT2R/t8Pfzt+tSs7kPq
- MlsuOvE5BdQrwOjdLMrvbh6GpWUGb3aJtcc= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e4fyk1uv8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 09 Feb 2022 11:06:14 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 9 Feb 2022 11:06:13 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ejpca2gcRRQ64B8DjTrm75zikHbM4Tr5ZeEz26QeivhElArCHyMNmtq386bhOk9jFM2jgZrAQgOwR7394lvIvAkDYKs0993Fjkp5DbF3QFeBS90UgE+9nC9tbNXZtgQI7N59vhNUq2VxSqSiF7fY2zresYV8CSzj44ZAuuwW1VTJk2YcRDn/VaKgLYQ2I+Xj5Ea374kS7Dw0L4xVdzCpYVrRYh56ZRF/veFjlEcimx1mcNVNMmehgA7gGY8ESYYPO0oIqjITTDWtc3nS/f6JHtCDfSCswfx2cwuDJHIoj5UoCHDcvya41gNPcvjWb5TZiB3QX2euqJca4C5oOO/32Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3ScKyrDix52+BaR8PmrxoV4ZLt7sT5QHuNlouhtiLzA=;
- b=U4Fo2sXYVF8Z+7lpXpFyMPRNgNUix4j8BvGJjS3IOtxT36Jk/MeuFJfUkIZbyDQjep7JdTKB28waiKF3GpcBFN9yBdYupJA7NwizTWiddsSCssup7SKI366u6BxeLuQ4Gpp/IlhycYvRMGQPiCBwQ3EzpqU1Gk5za7mruyQku8aSjsTsILQUIx/8w4Tt+WAefOeHCPYpUcrzYD4+Jncjv5AADh0PV4yUNMzERDo3HgBKY51Rk5YMfGIxCK0vwA7wDkej/iAXn1rb38+qWfiv7sLi64yq1SqN/GeytUiL/eydIVY4vkovGHBQGARjG/ldED5YLj6ztGAsJvQAeTzjfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MN2PR15MB3565.namprd15.prod.outlook.com (2603:10b6:208:184::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Wed, 9 Feb
- 2022 19:06:12 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f54e:cd09:acc2:1092]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f54e:cd09:acc2:1092%4]) with mapi id 15.20.4975.011; Wed, 9 Feb 2022
- 19:06:12 +0000
-Message-ID: <57359c7b-7c6b-cfc9-22e8-5288a6ce0517@fb.com>
-Date:   Wed, 9 Feb 2022 11:06:08 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH bpf v2 1/2] bpf: Fix crash due to incorrect copy_map_value
-Content-Language: en-US
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S232118AbiBITOq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 14:14:46 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D07C00F639;
+        Wed,  9 Feb 2022 11:14:40 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id r131so2099212wma.1;
+        Wed, 09 Feb 2022 11:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=53AqFhwrg5sf39zbHRlZ7vehLvu2fcixViHXJDSalrM=;
+        b=jsWd78AlHH12GCKj2sM1lGyk7uPOeN2Hbv9zgbd6Jh90rE/VED+SCZQ7MvUbRIpQGQ
+         toDPAuiewlaGeRaYS8OpYAyIo1BRtg9ObuFi66RmkKYrzvRv3f5QIyZwjYyPuwXxwpOO
+         wLXL+aKLyYGe6lUnUuzrFLCypTXYJlj0JcfbJAaiM0DDX+gySER0xQduBFYIxFFt19pQ
+         cLtKzBzncDDqs9mQM+qiR/kcl5dWTIxgfOXz2Be2VG6ssBsjvkqgsjGlwBXcoLt5Pie0
+         /c9bNrxQltcrKUb24wOJFNrN/p6/GrgN6uBaqTcJAynAOoi2goC8YCjpHmekvKJj0rbE
+         fsMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=53AqFhwrg5sf39zbHRlZ7vehLvu2fcixViHXJDSalrM=;
+        b=cqxw5GPMUzs6sCcP49x0HD1VhkIdJr4qPNYRpbPZTMwoKHLcmsqIPGMGfnBe8LNBjD
+         zeht2ctojXPSmLxb0f5dB47I/T+N6DUVIvj3y7Gzp/xQAXKOruZwMD/HRPzXfjL5ZzNz
+         zFzEWtI/P8N/fQ+htotRx3tBCCYBkF+CzRHy3kmNZABRk14CTAl8+9q7vdc7LdcabzCd
+         7R6uEUl2Z/+A4SBREwVzk75zKCl8/KgGhYyQW+wU+46Z79//8/5oD6QvOB01pg2AFP7I
+         oCAjDJ4AbaUq7sgk8/Ta4mp3dXPTqE3JyJ8pd7oMIl1SN/kWuXHzEB7+MCTMowITLVID
+         pNRQ==
+X-Gm-Message-State: AOAM530Wha2/VNScR42hkXWxMQlbETLFBBjE/mIh9cU3ay0++1HatCZ2
+        vvKL75JbG8+Q2vkhm43KK2Y=
+X-Google-Smtp-Source: ABdhPJwhmM58FyRk4hJCT5mMbz2jGwH5dhixXieg1tw4oT6/MTcNt7zs5Z0qZofSAHx3/kkf3YsMcw==
+X-Received: by 2002:a05:600c:2944:: with SMTP id n4mr3393140wmd.190.1644434071348;
+        Wed, 09 Feb 2022 11:14:31 -0800 (PST)
+Received: from krava ([83.240.63.12])
+        by smtp.gmail.com with ESMTPSA id l10sm19669970wry.79.2022.02.09.11.14.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Feb 2022 11:14:30 -0800 (PST)
+Date:   Wed, 9 Feb 2022 20:14:28 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20220209070324.1093182-1-memxor@gmail.com>
- <20220209070324.1093182-2-memxor@gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220209070324.1093182-2-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CO2PR07CA0057.namprd07.prod.outlook.com (2603:10b6:100::25)
- To SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 2/8] bpf: Add bpf_get_func_ip kprobe helper for fprobe
+ link
+Message-ID: <YgQSlAIdjyC/FOgy@krava>
+References: <20220202135333.190761-1-jolsa@kernel.org>
+ <20220202135333.190761-3-jolsa@kernel.org>
+ <CAEf4Bzbrj01RJq7ArAo-kX-+8rPx9j5OH1OvGHxVJxiq8rn3FA@mail.gmail.com>
+ <YgPXVXJnPKQ7lOi9@krava>
+ <CAEf4BzYxtoE8Gu62oNSdVxvsv2K_5CPSdGS3Qd0Jgaegvw7sfw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 94e5c410-6165-45ad-dd6d-08d9ebff3cc8
-X-MS-TrafficTypeDiagnostic: MN2PR15MB3565:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR15MB3565A0EE1DB524E4FCE81AEAD32E9@MN2PR15MB3565.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LAusis2Y3tjZpv+Rp5A0m/pwdPRIF6vVZ5RV/Vvrdl4ZbRB5FjZyzpgk4pCXxqgXokL8JvbJh+nTTkjdJX+WLdBK4cLVnKyd2xJ30BHvv4aTblDylfyJ+ddXrIZbIlFG3zsGXs6dJgXd5ZHGDbUrOzssTDEW7Kah8S+RwiUjRAvmytmTXwRM7ll76y570mv2uvKljBX9yuuiplHmNul0QvizepgaxaqMqjh+n8jU4icbsO5bGin35ux8WXhldOgBCYxUE1tRKONXoz8WBqPX+QBV1RemXvTl7AwUxnpo4YAbqKvWVexTMEs1cdD+GsNlyVvfaHGHDjNHoboLnWZ80FYwtaIQNClys6oB06i5FbTDhaC6wcz3eve4cMB/vEwVM0cHblJ9Kgcw2dinVtEvYYda5hAtfMX8buNF+xgLdnu4+kr4ApkuSpBC/Q3sXyOZYnJwgLKJdPEa21h7fICATEqTXRUsLwpHisnGbjiRsgQY4pYOmc54DEqEbFwlgtzM3ycNgmx3bej3M1nhqLk+mMTCZxb+Mqelk0/wAtUCmrIICjIZAlJsE83tgHc7ylNnhptUwHM4JziFiYmyahBZlvQ9aV0bMmdLi7mmDuQBIQm0YXgMxsDJyzHy+vx6e4VLs9pcOVYY0wx8xDZuXqADxrjPGj6stfl6th/miiYj9/8KH6JYVzOgHjG3w5by4Ti8bB1DjEjWXUKdW2ywiHgkIXSei9GaMPBMH7LPP9nazG+xR1SnI606Lddw+umFRv6N
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(66476007)(8936002)(66556008)(36756003)(66946007)(316002)(8676002)(2616005)(5660300002)(110136005)(186003)(38100700002)(31686004)(6666004)(86362001)(6512007)(2906002)(31696002)(53546011)(508600001)(52116002)(6506007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekFFbFJVQ1g0a3RKUmpJbVBCUysyYU5uNllyUE1odytpSUIyRjNUUmI2YzJ5?=
- =?utf-8?B?dGhwdTl6UXFTNkl4dGYxTCtiS0pLeTZQYW41SWRFaklKbGNuLytrUnczQWJy?=
- =?utf-8?B?Q2pOL0FEWURidjlMK2VGY0QrNndQa2ZEU2E4UzIreEkwZm1JN0JlcUE5b25O?=
- =?utf-8?B?TEkyWUtOSHlyRmlxdWJla2NiVjBYLzlnOTgvTEVWc21jNU01Y3lWdE9NRnRl?=
- =?utf-8?B?cks2M3pEZlZ3WDFmTFFIeHdlaHdYVE4zeGZnd3AzaE5DTFJ5VjQ0YjF3UnVk?=
- =?utf-8?B?bmgzYW8yUzlzV2d5UTdib0Iya0Vzc2plS3NjSWtEMGlNUW9jakRIaDN2QzZE?=
- =?utf-8?B?cldMY3Bvb2J6aGFjQ3AyQ3FXUGFiSFg1WmxKV1crSEpPcVh6Q0FxblZyZEli?=
- =?utf-8?B?emdCM0dMeFdQejhvbHdvWElMOHc4bERNY0luTG1xVUxZRTNtbGVTd2RaTU5r?=
- =?utf-8?B?UGFJemdjenhTVjBkRWNhMWZ4OHY5TzhPVTViUWRwU2d1cXgwWmpFKzQ4cUF1?=
- =?utf-8?B?cjdzSlJIU1VlN1Z4MEtwcXdsK0VRNWVLbHlWTjVCbytOVHpkN3RtTFQwRUc1?=
- =?utf-8?B?TG1nN21sYzBYUnM2ZlNUaFhHWEt4cWNqWGJRZU84L2U3WSs1TFlidXNCWHdy?=
- =?utf-8?B?Z3NrbjhRSDJBUWpPcjBWaDRhUlJMWHFLbDgzTkJqNE4zRjdqcTFlMXVQTDZ6?=
- =?utf-8?B?VjdPdWFmSHE2UzJibGNhQ2VIU1pDcndCVmVMbnFyMjd6NURnWW5GK3M3dm9R?=
- =?utf-8?B?dmVhYWZOaWw2U3h4ZFF5MkVMeDF0OU1JSDl0YlhINkdRNlAraEEwcGxEYlVJ?=
- =?utf-8?B?WHptMUNqdkJDek9pSDdLT0k2MERoWC8yc2ZqSGt1U3FZdGVJcWJXNElTRnMx?=
- =?utf-8?B?UUM5MXNNQ0U0US9OMExIWG9NV3owYXRPODBPdlhSM1EybVYvb2pjRGZ1dmVx?=
- =?utf-8?B?d1B6MlM2ckxRc041ZTFHZ055emV3aTIvMDhyNnNvUVhCdUllcFk2ZC9VUmxo?=
- =?utf-8?B?eGMvV0hVa011NkFXdDgwYjBzb2ZramJhVk1Cc1JXTVlOOVp5N0pHd1NxU1JV?=
- =?utf-8?B?YURzem5YWnRrTWlpYkljRXFHYkZqdmxJbUt3Yk9hdzdQOUVVLy9TdllzN0xG?=
- =?utf-8?B?MjZkS3Z1ZWIzeFNKWjZUbHp6eVRUU21vZjExeDJZZ1FxcTVicEtYZmkxUTBa?=
- =?utf-8?B?WGZSWFV2N0ovS2NJemg2aUk4dHR3ZTdTN2RIMGIyWjMvT3NYZUZ6NVR1b3J5?=
- =?utf-8?B?NkNwZXMyeFp6OUl0VzJPc21Lc1hZNWlVRndBdGRDdzJ1REN5Nis0NDBWaDBE?=
- =?utf-8?B?UC8wN09LdmdUbGE5OHJMczQ2b1p4RGh0MTc2K3B0blZQb2pMVVplRTgxZ3hM?=
- =?utf-8?B?NTZiUVZDaEhLc3hUMHJ0aFdsZnJWZWU5S3pHY0ZaSFpYZTRpMnZ1MmREaXVm?=
- =?utf-8?B?bzZ2UlBEQ1d2NzlnK00rS2g1NTFHa2czUDU5Y2U0L3REMUNLcjF6eTEwNmlp?=
- =?utf-8?B?bGVGa1FwQ0FVQVhtSDJhVlI0dXRteU5UYVNiT1BkTllmaWY1ajJLUmhzbVBB?=
- =?utf-8?B?ZWIwVUEvT3ZHamVyOEdocld1RmtGNzhLWld3OUQrQnhIdlpHMm1mUHk4TllG?=
- =?utf-8?B?T0pJQnpqQTQ3MVVpMHNKaEE5NFJtOHhHbFk0a0VuUUZoVmVmcDdROVRWTXZj?=
- =?utf-8?B?UTFWZ2FMM3p3OUdJWDNwYmJBWGRnYytjcExMeDhoM1BCdloyY2hXRVhtbnpr?=
- =?utf-8?B?QmFpT1RaL0pvMVI0cmt0b0lReEtKRWc0YTd2STdKMnZ3cmxMVGdOL0VxdlE1?=
- =?utf-8?B?MEJqMHkyelFrOHZQT0I4dStiWmtxOU5VdC9GbWxaWjI1eDkzOExQd08zckMv?=
- =?utf-8?B?SHZiTTFIdjBHek13NzUrOWIyK25CUndvYWlocDdBYjVZd05oNisyK3Qvai9x?=
- =?utf-8?B?dlUzYWNjL29BY21pTFpSMmtnWmpCbmJqMnlCTWZBaVM2endmZWNqS1BUbHVM?=
- =?utf-8?B?OFRaQ0FwVWQzalZiL05oYUg3c0NlWFNjdmQxZTJTSnd6R0ZYaThvQmgwRGdp?=
- =?utf-8?B?MHZFYW5FLy90Qm5oQnB2TnByMHlkVmtlTG96RWdmaE10SmFBdUdraVJWZGJY?=
- =?utf-8?B?MXIwbUcrN0tzMUpzbUIrSTZRQndkVHBEbHhHeEtIaEZvcEFiNHV1a3A4dXp5?=
- =?utf-8?B?cFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 94e5c410-6165-45ad-dd6d-08d9ebff3cc8
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2022 19:06:12.0651
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oe/S94+LsjPVTd6DnNZ5YCRzINPM6jlQJM+s1ESPue9eLBYpCKOidpfVfKE0CBw0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB3565
-X-OriginatorOrg: fb.com
-X-Proofpoint-GUID: KA6Zu5nvxzn0hygFYQgGhPeoB1DkH5xY
-X-Proofpoint-ORIG-GUID: KA6Zu5nvxzn0hygFYQgGhPeoB1DkH5xY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-09_10,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 adultscore=0 mlxscore=0 mlxlogscore=864 bulkscore=0
- phishscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202090101
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYxtoE8Gu62oNSdVxvsv2K_5CPSdGS3Qd0Jgaegvw7sfw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 2/8/22 11:03 PM, Kumar Kartikeya Dwivedi wrote:
-> When both bpf_spin_lock and bpf_timer are present in a BPF map value,
-> copy_map_value needs to skirt both objects when copying a value into and
-> out of the map. However, the current code does not set both s_off and
-> t_off in copy_map_value, which leads to a crash when e.g. bpf_spin_lock
-> is placed in map value with bpf_timer, as bpf_map_update_elem call will
-> be able to overwrite the other timer object.
+On Wed, Feb 09, 2022 at 08:05:05AM -0800, Andrii Nakryiko wrote:
+> On Wed, Feb 9, 2022 at 7:01 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Mon, Feb 07, 2022 at 10:59:18AM -0800, Andrii Nakryiko wrote:
+> > > On Wed, Feb 2, 2022 at 5:53 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > > >
+> > > > Adding support to call get_func_ip_fprobe helper from kprobe
+> > > > programs attached by fprobe link.
+> > > >
+> > > > Also adding support to inline it, because it's single load
+> > > > instruction.
+> > > >
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >  kernel/bpf/verifier.c    | 19 ++++++++++++++++++-
+> > > >  kernel/trace/bpf_trace.c | 16 +++++++++++++++-
+> > > >  2 files changed, 33 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 1ae41d0cf96c..a745ded00635 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -13625,7 +13625,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+> > > >                         continue;
+> > > >                 }
+> > > >
+> > > > -               /* Implement bpf_get_func_ip inline. */
+> > > > +               /* Implement tracing bpf_get_func_ip inline. */
+> > > >                 if (prog_type == BPF_PROG_TYPE_TRACING &&
+> > > >                     insn->imm == BPF_FUNC_get_func_ip) {
+> > > >                         /* Load IP address from ctx - 16 */
+> > > > @@ -13640,6 +13640,23 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+> > > >                         continue;
+> > > >                 }
+> > > >
+> > > > +               /* Implement kprobe/fprobe bpf_get_func_ip inline. */
+> > > > +               if (prog_type == BPF_PROG_TYPE_KPROBE &&
+> > > > +                   eatype == BPF_TRACE_FPROBE &&
+> > > > +                   insn->imm == BPF_FUNC_get_func_ip) {
+> > > > +                       /* Load IP address from ctx (struct pt_regs) ip */
+> > > > +                       insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1,
+> > > > +                                                 offsetof(struct pt_regs, ip));
+> > >
+> > > Isn't this architecture-specific? I'm starting to dislike this
+> >
+> > ugh, it is.. I'm not sure we want #ifdef CONFIG_X86 in here,
+> > or some arch_* specific function?
 > 
-> When the issue is not fixed, an overwriting can produce the following
-> splat:
 > 
-> [root@(none) bpf]# ./test_progs -t timer_crash
-> [   15.930339] bpf_testmod: loading out-of-tree module taints kernel.
-> [   16.037849] ==================================================================
-> [   16.038458] BUG: KASAN: user-memory-access in __pv_queued_spin_lock_slowpath+0x32b/0x520
-> [   16.038944] Write of size 8 at addr 0000000000043ec0 by task test_progs/325
-> [   16.039399]
-> [   16.039514] CPU: 0 PID: 325 Comm: test_progs Tainted: G           OE     5.16.0+ #278
-> [   16.039983] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ArchLinux 1.15.0-1 04/01/2014
-> [   16.040485] Call Trace:
-> [   16.040645]  <TASK>
-> [   16.040805]  dump_stack_lvl+0x59/0x73
-> [   16.041069]  ? __pv_queued_spin_lock_slowpath+0x32b/0x520
-> [   16.041427]  kasan_report.cold+0x116/0x11b
-> [   16.041673]  ? __pv_queued_spin_lock_slowpath+0x32b/0x520
-> [   16.042040]  __pv_queued_spin_lock_slowpath+0x32b/0x520
-> [   16.042328]  ? memcpy+0x39/0x60
-> [   16.042552]  ? pv_hash+0xd0/0xd0
-> [   16.042785]  ? lockdep_hardirqs_off+0x95/0xd0
-> [   16.043079]  __bpf_spin_lock_irqsave+0xdf/0xf0
-> [   16.043366]  ? bpf_get_current_comm+0x50/0x50
-> [   16.043608]  ? jhash+0x11a/0x270
-> [   16.043848]  bpf_timer_cancel+0x34/0xe0
-> [   16.044119]  bpf_prog_c4ea1c0f7449940d_sys_enter+0x7c/0x81
-> [   16.044500]  bpf_trampoline_6442477838_0+0x36/0x1000
-> [   16.044836]  __x64_sys_nanosleep+0x5/0x140
-> [   16.045119]  do_syscall_64+0x59/0x80
-> [   16.045377]  ? lock_is_held_type+0xe4/0x140
-> [   16.045670]  ? irqentry_exit_to_user_mode+0xa/0x40
-> [   16.046001]  ? mark_held_locks+0x24/0x90
-> [   16.046287]  ? asm_exc_page_fault+0x1e/0x30
-> [   16.046569]  ? asm_exc_page_fault+0x8/0x30
-> [   16.046851]  ? lockdep_hardirqs_on+0x7e/0x100
-> [   16.047137]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [   16.047405] RIP: 0033:0x7f9e4831718d
-> [   16.047602] Code: b4 0c 00 0f 05 eb a9 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b3 6c 0c 00 f7 d8 64 89 01 48
-> [   16.048764] RSP: 002b:00007fff488086b8 EFLAGS: 00000206 ORIG_RAX: 0000000000000023
-> [   16.049275] RAX: ffffffffffffffda RBX: 00007f9e48683740 RCX: 00007f9e4831718d
-> [   16.049747] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fff488086d0
-> [   16.050225] RBP: 00007fff488086f0 R08: 00007fff488085d7 R09: 00007f9e4cb594a0
-> [   16.050648] R10: 0000000000000000 R11: 0000000000000206 R12: 00007f9e484cde30
-> [   16.051124] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [   16.051608]  </TASK>
-> [   16.051762] ==================================================================
+> So not inlining it isn't even considered? this function will be called
+> once or at most a few times per BPF program invocation. Anyone calling
+> it in a tight loop is going to use it very-very suboptimally (and even
+> then useful program logic will dominate). There is no point in
+> inlining it.
+
+I agree that given its usage pattern there won't be too much gain,
+on the other hand it's simple verifier code changing call/load/ret
+into simple load, so I thought why not.. also there are just few
+helpers we can inline so easily
+
+but yea.. I can't think of any sane usage of this helper that inlining
+would matter for.. which doesn't mean there isn't one ;-)
+
+jirka
+
 > 
-> Fixes: 68134668c17f ("bpf: Add map side support for bpf timers.")
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->   include/linux/bpf.h | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index fa517ae604ad..31a83449808b 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -224,7 +224,8 @@ static inline void copy_map_value(struct bpf_map *map, void *dst, void *src)
->   	if (unlikely(map_value_has_spin_lock(map))) {
->   		s_off = map->spin_lock_off;
->   		s_sz = sizeof(struct bpf_spin_lock);
-> -	} else if (unlikely(map_value_has_timer(map))) {
-> +	}
-> +	if (unlikely(map_value_has_timer(map))) {
->   		t_off = map->timer_off;
->   		t_sz = sizeof(struct bpf_timer);
->   	}
-
-Thanks for the patch. I think we have a bigger problem here with the 
-patch. It actually exposed a few kernel bugs. If you run current 
-selftests, esp. ./test_progs -j which is what I tried, you will observe
-various testing failures. The reason is due to we preserved the timer or
-spin lock information incorrectly for a map value.
-
-For example, the selftest #179 (timer) will fail with this patch and
-the following change can fix it.
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index d29af9988f37..3336d76cc5a6 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -961,10 +961,11 @@ static struct htab_elem *alloc_htab_elem(struct 
-bpf_htab *htab, void *key,
-                         l_new = ERR_PTR(-ENOMEM);
-                         goto dec_count;
-                 }
--               check_and_init_map_value(&htab->map,
--                                        l_new->key + round_up(key_size, 
-8));
-         }
-
-+       check_and_init_map_value(&htab->map,
-+                                l_new->key + round_up(key_size, 8));
-+
-         memcpy(l_new->key, key, key_size);
-         if (percpu) {
-                 size = round_up(size, 8);
-
-Basically, the above clears new map value timer/spin_lock fields for 
-*all* new items.
-
-There are still some selftest failures due to this patch.
-Could you run selftest, with necessary additional fixes, to ensure
-all selftests passed?
+> >
+> > jirka
+> >
+> > > inlining whole more and more. It's just a complication in verifier
+> > > without clear real-world benefits. We are clearly prematurely
+> > > optimizing here. In practice you'll just call bpf_get_func_ip() once
+> > > and that's it. Function call overhead will be negligible compare to
+> > > other *userful* work you'll be doing in your BPF program.
+> > >
+> > >
+> > > > +
+> > > > +                       new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, 1);
+> > > > +                       if (!new_prog)
+> > > > +                               return -ENOMEM;
+> > > > +
+> > > > +                       env->prog = prog = new_prog;
+> > > > +                       insn      = new_prog->insnsi + i + delta;
+> > > > +                       continue;
+> > > > +               }
+> > > > +
+> > > >  patch_call_imm:
+> > > >                 fn = env->ops->get_func_proto(insn->imm, env->prog);
+> > > >                 /* all functions that have prototype and verifier allowed
+> > > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > > index a2024ba32a20..28e59e31e3db 100644
+> > > > --- a/kernel/trace/bpf_trace.c
+> > > > +++ b/kernel/trace/bpf_trace.c
+> > > > @@ -1036,6 +1036,19 @@ static const struct bpf_func_proto bpf_get_func_ip_proto_kprobe = {
+> > > >         .arg1_type      = ARG_PTR_TO_CTX,
+> > > >  };
+> > > >
+> > > > +BPF_CALL_1(bpf_get_func_ip_fprobe, struct pt_regs *, regs)
+> > > > +{
+> > > > +       /* This helper call is inlined by verifier. */
+> > > > +       return regs->ip;
+> > > > +}
+> > > > +
+> > > > +static const struct bpf_func_proto bpf_get_func_ip_proto_fprobe = {
+> > > > +       .func           = bpf_get_func_ip_fprobe,
+> > > > +       .gpl_only       = false,
+> > > > +       .ret_type       = RET_INTEGER,
+> > > > +       .arg1_type      = ARG_PTR_TO_CTX,
+> > > > +};
+> > > > +
+> > > >  BPF_CALL_1(bpf_get_attach_cookie_trace, void *, ctx)
+> > > >  {
+> > > >         struct bpf_trace_run_ctx *run_ctx;
+> > > > @@ -1279,7 +1292,8 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > > >                 return &bpf_override_return_proto;
+> > > >  #endif
+> > > >         case BPF_FUNC_get_func_ip:
+> > > > -               return &bpf_get_func_ip_proto_kprobe;
+> > > > +               return prog->expected_attach_type == BPF_TRACE_FPROBE ?
+> > > > +                       &bpf_get_func_ip_proto_fprobe : &bpf_get_func_ip_proto_kprobe;
+> > > >         case BPF_FUNC_get_attach_cookie:
+> > > >                 return &bpf_get_attach_cookie_proto_trace;
+> > > >         default:
+> > > > --
+> > > > 2.34.1
+> > > >
