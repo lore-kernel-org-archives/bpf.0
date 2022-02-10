@@ -2,78 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD647C433EF
-	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 06:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7DC8C433F5
+	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 06:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232479AbiBJGIG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Feb 2022 01:08:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53230 "EHLO
+        id S235366AbiBJGlZ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Feb 2022 01:41:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiBJGIF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Feb 2022 01:08:05 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCAC1A5
-        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 22:08:07 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso3259444ilu.19
-        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 22:08:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=hxxPMFG7Sy5R8OTw+DHD+CiI9MhDe02HH/eavpKJlVI=;
-        b=a4KZxX35uM+iRT2VjhW/sTIRIysDEwYQQc90PbyZHWevTLmr4G6+ZJMLAmhpotTRdd
-         L/vYuICg+m/jlvDy//ngzhRmJqzaLZTPg+RGxs5BGQEduZut5LcUPb1DHZhqBZ2Z8jsj
-         CuI5frZCMyJSVUIEo9Is6OJ59R5HjBEpKawsKe04ISI2qKLh7yUJlcLpRXlsuzRvFLD6
-         IjiTRePqxZBvW2r6lOFUwHrbhkSumuqs15Bx5qgyhJgI7HGKNUmcO491DaAeZ68eTBhM
-         0tPPSTAXABiUeVOxhkMNHbGy31poA1QDGxPQnbBJ2b5HHuyX7x+n7ljnrFS8ZKeR24jK
-         +SlQ==
-X-Gm-Message-State: AOAM533ju35fy/TOOtBDxiDURgxaeQ8hMLYedPWvJRvNmwa0pU/EiXYw
-        FsDGCmjsJgovXdi8D6bs7maPPfGEHYGwArIIeGiTB+l+uG6R
-X-Google-Smtp-Source: ABdhPJxoAleQUKXdKQfyFJ/lU/DvKG+eN88p4ZFdGI/Tl2jq2ibPHrnZmPgShLp0DuHR0xD1pBw8UCAuxjN2bbrZc03Lii2YDBgU
+        with ESMTP id S234591AbiBJGlZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Feb 2022 01:41:25 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BAA10A8
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 22:41:27 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219NYHkt007182
+        for <bpf@vger.kernel.org>; Wed, 9 Feb 2022 22:41:27 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e4fxaw948-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 22:41:26 -0800
+Received: from twshared22811.39.frc1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 22:41:25 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 42D8229D423BF; Wed,  9 Feb 2022 22:41:19 -0800 (PST)
+From:   Song Liu <song@kernel.org>
+To:     <linux-mm@kvack.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <akpm@linux-foundation.org>,
+        <eric.dumazet@gmail.com>, Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next 1/2] vmalloc: expose vmap_allow_huge via get_vmap_allow_huge()
+Date:   Wed, 9 Feb 2022 22:41:07 -0800
+Message-ID: <20220210064108.1095847-2-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220210064108.1095847-1-song@kernel.org>
+References: <20220210064108.1095847-1-song@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2cd2:: with SMTP id j18mr3118329iow.92.1644473287137;
- Wed, 09 Feb 2022 22:08:07 -0800 (PST)
-Date:   Wed, 09 Feb 2022 22:08:07 -0800
-In-Reply-To: <000000000000a3571605d27817b5@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001f60ef05d7a3c6ad@google.com>
-Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
-From:   syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
-        bjorn.topel@gmail.com, bjorn.topel@intel.com, bjorn@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        fgheet255t@gmail.com, hawk@kernel.org, john.fastabend@gmail.com,
-        jonathan.lemon@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        magnus.karlsson@intel.com, mudongliangabcd@gmail.com,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org,
-        w@1wt.eu, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 8qvVp8k-vbbcRr47LnIl39pxz1Mc86uD
+X-Proofpoint-GUID: 8qvVp8k-vbbcRr47LnIl39pxz1Mc86uD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-10_02,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 spamscore=0 mlxscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202100034
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot has bisected this issue to:
+Users can use get_vmap_allow_huge() to predict the behavior of vmalloc (or
+its variations). Specifically, if get_vmap_allow_huge() == false, vmalloc
+will never return huge pages.
 
-commit 7661809d493b426e979f39ab512e3adf41fbcc69
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed Jul 14 16:45:49 2021 +0000
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ include/linux/vmalloc.h | 1 +
+ mm/vmalloc.c            | 5 +++++
+ 2 files changed, 6 insertions(+)
 
-    mm: don't allow oversized kvmalloc() calls
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 880227b9f044..22acfcd2d0d1 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -256,6 +256,7 @@ extern long vread(char *buf, char *addr, unsigned long count);
+ extern struct list_head vmap_area_list;
+ extern __init void vm_area_add_early(struct vm_struct *vm);
+ extern __init void vm_area_register_early(struct vm_struct *vm, size_t align);
++extern bool get_vmap_allow_huge(void);
+ 
+ #ifdef CONFIG_SMP
+ # ifdef CONFIG_MMU
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 4165304d3547..895ac81b6bb4 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -72,6 +72,11 @@ early_param("nohugevmalloc", set_nohugevmalloc);
+ static const bool vmap_allow_huge = false;
+ #endif	/* CONFIG_HAVE_ARCH_HUGE_VMALLOC */
+ 
++bool get_vmap_allow_huge(void)
++{
++	return vmap_allow_huge;
++}
++
+ bool is_vmalloc_addr(const void *x)
+ {
+ 	unsigned long addr = (unsigned long)x;
+-- 
+2.30.2
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13bc74c2700000
-start commit:   f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=107c74c2700000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17bc74c2700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
-dashboard link: https://syzkaller.appspot.com/bug?extid=11421fbbff99b989670e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e514a4700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15fcdf8a700000
-
-Reported-by: syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com
-Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
