@@ -2,131 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50D1BC433EF
-	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 18:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB3DC433EF
+	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 18:13:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245569AbiBJSLf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Feb 2022 13:11:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37080 "EHLO
+        id S245591AbiBJSNf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Feb 2022 13:13:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245555AbiBJSLf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:11:35 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7A41167
-        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:11:36 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id y22so5373517eju.9
-        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tlc50y2zvWkDNDR0F+Hwlo/MK2qUQWeFkSFZIhsrGgA=;
-        b=iJ8wAdxK3aVPvQadvP2kQORWpqM1MwHhKRoQhinm5nXPKgnbRB25C9NdtTZR9ceJIE
-         SBtJXEjBFGQckKrACPJtdyxbGmTclNdJbEJSeV7V7WDPuPoqREzUn2VBLtsxA4qSs5wS
-         cyllBj95re5mmkwQjGIgS42OyNeC+S8X3neeo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tlc50y2zvWkDNDR0F+Hwlo/MK2qUQWeFkSFZIhsrGgA=;
-        b=F4hYWL5OhIhq41giUYEElf93WvojDoksFeMTPsNmsETGeQpKvG2UxDUu8fDfOTlSyR
-         4LKagnLtfyd3pVbStS9pdvtDhq5mylNiehi8uY0Ltn9tdhHbw561o2lJ3EtmfqEug9/u
-         Hu6uAYd7h9WPRq/zyPAdBAkVCBQWrUif6HJ9ko7GHVk7yCaXoNboE4McKGR+Id+DXyCY
-         V/kq4H8fqGiSPyVcAkjbyeHFoiadMSFX8SDizJUgVyg6ULn4S/cLKmOcF2nJF2YpHHaZ
-         ZcJK3mCnLY6lADrW9Wm/9/O+ol4uE+jwufOzN6fYTqbM/1jYCgWrOsUi8J/HIudIcRh4
-         h6Cg==
-X-Gm-Message-State: AOAM530F/a9muzb93MqJBjLe9vWP6DZAecclyBmIg7hof06HjIXtMcVG
-        8Ly7Y0odXHFOggVp99NlK9NSqnOmW/WKbJqkgnY=
-X-Google-Smtp-Source: ABdhPJzFvS/WreVglni1G1lq8OSyAhA58LCN2mPrM0lgjsQuyCsLIxgHanE3NH3q6rl0sxuAfFEy8A==
-X-Received: by 2002:a17:906:4fca:: with SMTP id i10mr7134994ejw.542.1644516694273;
-        Thu, 10 Feb 2022 10:11:34 -0800 (PST)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id 5sm10247389edx.32.2022.02.10.10.11.33
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Feb 2022 10:11:34 -0800 (PST)
-Received: by mail-wm1-f53.google.com with SMTP id y6-20020a7bc186000000b0037bdc5a531eso1604926wmi.0
-        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:11:33 -0800 (PST)
-X-Received: by 2002:a1c:f702:: with SMTP id v2mr3105904wmh.155.1644516283317;
- Thu, 10 Feb 2022 10:04:43 -0800 (PST)
-MIME-Version: 1.0
-References: <000000000000a3571605d27817b5@google.com> <0000000000001f60ef05d7a3c6ad@google.com>
- <20220210081125.GA4616@1wt.eu> <359ee592-747f-8610-4180-5e1d2aba1b77@iogearbox.net>
- <CAJ+HfNjeapa=2Ue19L3EWF8z5vxFB0k2QO_LuBu4Meqs0=AE4Q@mail.gmail.com>
- <20220210174507.GK1951@kadam> <20220210175603.GL1951@kadam>
-In-Reply-To: <20220210175603.GL1951@kadam>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 10 Feb 2022 10:04:27 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiRq+_jd_O1gz3J6-ANtXMY7iLpi8XFUcmtB3rBixvUXQ@mail.gmail.com>
-Message-ID: <CAHk-=wiRq+_jd_O1gz3J6-ANtXMY7iLpi8XFUcmtB3rBixvUXQ@mail.gmail.com>
-Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Willy Tarreau <w@1wt.eu>,
-        syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        with ESMTP id S239730AbiBJSNe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Feb 2022 13:13:34 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357B1167;
+        Thu, 10 Feb 2022 10:13:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A58B1CE2625;
+        Thu, 10 Feb 2022 18:13:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D31FC340EB;
+        Thu, 10 Feb 2022 18:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644516811;
+        bh=g7jIMKjk4AjtcIO0QzOSIrmNcehM6ru1WwL4Z6HKvOo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YooH2w9Njl6oOOavP1PlxNX22+HMHk21uA9nPlCZJzG+Gq1PhNx4C8B1mFnbHSLuF
+         S2ZZsl9g3gC0c8xUJLPjYggjK46wMPOf5z07H2Ol1L2LBPcp1M1sP0P5D0mpMeBGJE
+         kBEnbmODhitoAnZrz49xAnDRWG9sWMG1Qq4SjxkjKlCTyb8l+ENc26vYsub2d+Ozyq
+         +tAIEUBYs2aTH2BWx2DKwOVGTQT/7Dl2UCtr+Nt5mYjFpCpWL5zafajBG/d69AhXGb
+         axabZEwfPtvSR5e28ZFEdDACbKlA2s/8e8w89dLH1fvOz6lEraSsvDuGcR/cBuPqQp
+         UCGdcaBbfMk+g==
+Date:   Thu, 10 Feb 2022 10:13:30 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
-        fgheet255t@gmail.com, Jesper Dangaard Brouer <hawk@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        mudongliangabcd@gmail.com, Netdev <netdev@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNl?= =?UTF-8?B?bg==?= 
+        <toke@toke.dk>
+Subject: Re: [PATCH net-next v2 2/3] net: dev: Makes sure netif_rx() can be
+ invoked in any context.
+Message-ID: <20220210101330.47165ae0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <YgUDiE4FTsdwdVSH@linutronix.de>
+References: <20220204201259.1095226-1-bigeasy@linutronix.de>
+        <20220204201259.1095226-3-bigeasy@linutronix.de>
+        <20220204201715.44f48f4f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <Yf7ftf+6j52opu5w@linutronix.de>
+        <20220207084717.5b7126e7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <YgUDiE4FTsdwdVSH@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 9:57 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> Wait that would make the allocation succeed...  We don't want that.
-> That was a dumb idea.  Forget I said that.
+On Thu, 10 Feb 2022 13:22:32 +0100 Sebastian Andrzej Siewior wrote:
+> On 2022-02-07 08:47:17 [-0800], Jakub Kicinski wrote:
+> > On Sat, 5 Feb 2022 21:36:05 +0100 Sebastian Andrzej Siewior wrote:  
+> > > Don't we end up in the same situation as netif_rx() vs netix_rx_ni()?  
+> > 
+> > Sort of. TBH my understanding of the motivation is a bit vague.
+> > IIUC you want to reduce the API duplication so drivers know what to
+> > do[1]. I believe the quote from Eric you put in the commit message
+> > pertains to HW devices, where using netif_rx() is quite anachronistic. 
+> > But software devices like loopback, veth or tunnels may want to go via
+> > backlog for good reasons. Would it make it better if we called
+> > netif_rx() netif_rx_backlog() instead? Or am I missing the point?  
+> 
+> So we do netif_rx_backlog() with the bh disable+enable and
+> __netif_rx_backlog() without it and export both tree wide?
 
-Well, sometimes that _can_ be the right model.
+At a risk of confusing people about the API we could also name the
+"non-super-optimized" version netif_rx(), like you had in your patch.
+Grepping thru the drivers there's ~250 uses so maybe we don't wanna
+touch all that code. No strong preference, I just didn't expect to 
+see __netif_rx_backlog(), but either way works.
 
-That said, pretty much every time this has come up, the kernel warning
-has shown that yes, the code was broken and there really wasn't a
-reason for doing allocations that big.
+> It would make it more obvious indeed. Could we add
+> 	WARN_ON_ONCE(!(hardirq_count() | softirq_count()))
+> to the shortcut to catch the "you did it wrong folks"? This costs me
+> about 2ns.
 
-Of course, some people would be perfectly fine with the allocation
-failing, they just don't want the warning. I didn't want __GFP_NOWARN
-to shut it up originally because I wanted people to see all those
-cases, but these days I think we can just say "yeah, people can shut
-it up explicitly by saying 'go ahead and fail this allocation, don't
-warn about it'".
+Modulo lockdep_..(), so we don't have to run this check on prod kernels?
 
-So enough time has passed that by now I'd certainly be ok with something like
+> TL;DR
+> 
+> The netix_rx_ni() is problematic on RT and I tried to do something about
+> it. I remembered from the in_atomic() cleanup that a few drivers got it
+> wrong (one way or another). We added also netif_rx_any_context() which
+> is used by some of the drivers (which is yet another entry point) while
+> the few other got fixed.
+> Then I stumbled over the thread where the entry (netif_rx() vs
+> netif_rx_ni()) was wrong and Dave suggested to have one entry point for
+> them all. This sounded like a good idea since it would eliminate the
+> several API entry points where things can go wrong and my RT trouble
+> would vanish in one go.
+> The part with deprecated looked promising but I didn't take into account
+> that the overhead for legitimate users (like the backlog or the software
+> tunnels you mention) is not acceptable.
 
-  --- a/mm/util.c
-  +++ b/mm/util.c
-  @@ -587,8 +587,10 @@ void *kvmalloc_node(size_t size,
-                  return ret;
-
-          /* Don't even allow crazy sizes */
-  -       if (WARN_ON_ONCE(size > INT_MAX))
-  +       if (unlikely(size > INT_MAX)) {
-  +               WARN_ON_ONCE(!(flags & __GFP_NOWARN));
-                  return NULL;
-  +       }
-
-          return __vmalloc_node(size, 1, flags, node,
-                           __builtin_return_address(0));
-
-(which is obviously COMPLETELY UNTESTED as well as being
-whitespace-damaged, but you get the idea).
-
-If somebody tests that patch and verifies it works, and writes a
-little commit blurb for it, I'll apply it.
-
-            Linus
+I see. So IIUC primary motivation is replacing preempt disable with bh
+disable but the cleanup seemed like a good idea.
