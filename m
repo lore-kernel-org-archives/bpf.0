@@ -2,83 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48C97C433EF
-	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 18:06:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50D1BC433EF
+	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 18:11:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245525AbiBJSGl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Feb 2022 13:06:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34226 "EHLO
+        id S245569AbiBJSLf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Feb 2022 13:11:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244796AbiBJSGk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Feb 2022 13:06:40 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AE225D1
-        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:06:41 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id b37so3419540uad.12
-        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:06:41 -0800 (PST)
+        with ESMTP id S245555AbiBJSLf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Feb 2022 13:11:35 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7A41167
+        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:11:36 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id y22so5373517eju.9
+        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:11:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=QLAfKqmhSBus4Fd9PwOHU5Gpom66QCfywDWDrHdXm0I=;
-        b=E1HaE37yDHuRfjmHQaBH0z3g8JL0XisVYmChbS9IzmugVv3n3pW65RdfySSHe+ytZi
-         9IFmm0+FzPdULbDNITcsTXApIIjIr0M6PDTufNwROmfpqQ45r5EQFTrFu7fiLBuTK4ze
-         sQ4OGDvMZxIow/kSnMZkThIeRK/Mqpnk6F5LsNGdXjckZm9ie7W3BOcTjEfEbA8uYDpE
-         O5X4zh2F6aaaK7bBFQs4PhiOvWA/1EVuYqaej3yZjeK7iVWmKSOlGwffcfu+I6Nj1RCL
-         7sXecrQAQLL7zTBfzAJX7j0oqvB90KO5Zb8oBQgBLpuU0vMTeAu15pdEAUVe1vKavek+
-         sSsQ==
+        bh=Tlc50y2zvWkDNDR0F+Hwlo/MK2qUQWeFkSFZIhsrGgA=;
+        b=iJ8wAdxK3aVPvQadvP2kQORWpqM1MwHhKRoQhinm5nXPKgnbRB25C9NdtTZR9ceJIE
+         SBtJXEjBFGQckKrACPJtdyxbGmTclNdJbEJSeV7V7WDPuPoqREzUn2VBLtsxA4qSs5wS
+         cyllBj95re5mmkwQjGIgS42OyNeC+S8X3neeo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=QLAfKqmhSBus4Fd9PwOHU5Gpom66QCfywDWDrHdXm0I=;
-        b=EinWKDm1DfnIiK0wNEx5uqkaB75E59v1thOsFIr2oH0RApyXHC1BGVijcw6Y4Ck+qg
-         81SfVyYiXM8utjSuKhwXX5+ebdVZnDJ/lf8TzjiR7xnweGcgXCIMfV4qlaNWgy3TjjXZ
-         7VK18pKYedRuNmq+Hn3xCjvCOX2FfiTKxkIDOrra5QB9qzpaScY2MwUxBLWu+BOtILrY
-         rrgwayZ6aFd59YIXyWKMg6kJFJIUuYkmuQBKVwEUzJlb61PUX6N+bsmYg2sMaBwMj9nj
-         iMpfHC0O8F6AEpegkLUS9voObcV+i1dIWQUTGL3cwyfyqV+pbDZ5/5hz4d7Vit1iX5n3
-         k6eA==
-X-Gm-Message-State: AOAM531kfWIs87prDzfYs3dbVIiaGPq9HtwjTOOVsHv9AKu9XGMAc/VT
-        y1iTtMEaPCZz+KF/Q0v7E4x40Dhb4y0xkrl/lXaF+g==
-X-Google-Smtp-Source: ABdhPJyL0ZNYGrR3MjeCiFh0aRSXwUGHcPfhFv1tsW1Cy0Yjm2/GJR4EmgQGi8kwNeTXmb1sUpyY0g/NxVDJGvCs1wY=
-X-Received: by 2002:a9f:35d0:: with SMTP id u16mr2723403uad.87.1644516400582;
- Thu, 10 Feb 2022 10:06:40 -0800 (PST)
+        bh=Tlc50y2zvWkDNDR0F+Hwlo/MK2qUQWeFkSFZIhsrGgA=;
+        b=F4hYWL5OhIhq41giUYEElf93WvojDoksFeMTPsNmsETGeQpKvG2UxDUu8fDfOTlSyR
+         4LKagnLtfyd3pVbStS9pdvtDhq5mylNiehi8uY0Ltn9tdhHbw561o2lJ3EtmfqEug9/u
+         Hu6uAYd7h9WPRq/zyPAdBAkVCBQWrUif6HJ9ko7GHVk7yCaXoNboE4McKGR+Id+DXyCY
+         V/kq4H8fqGiSPyVcAkjbyeHFoiadMSFX8SDizJUgVyg6ULn4S/cLKmOcF2nJF2YpHHaZ
+         ZcJK3mCnLY6lADrW9Wm/9/O+ol4uE+jwufOzN6fYTqbM/1jYCgWrOsUi8J/HIudIcRh4
+         h6Cg==
+X-Gm-Message-State: AOAM530F/a9muzb93MqJBjLe9vWP6DZAecclyBmIg7hof06HjIXtMcVG
+        8Ly7Y0odXHFOggVp99NlK9NSqnOmW/WKbJqkgnY=
+X-Google-Smtp-Source: ABdhPJzFvS/WreVglni1G1lq8OSyAhA58LCN2mPrM0lgjsQuyCsLIxgHanE3NH3q6rl0sxuAfFEy8A==
+X-Received: by 2002:a17:906:4fca:: with SMTP id i10mr7134994ejw.542.1644516694273;
+        Thu, 10 Feb 2022 10:11:34 -0800 (PST)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id 5sm10247389edx.32.2022.02.10.10.11.33
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 10:11:34 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id y6-20020a7bc186000000b0037bdc5a531eso1604926wmi.0
+        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 10:11:33 -0800 (PST)
+X-Received: by 2002:a1c:f702:: with SMTP id v2mr3105904wmh.155.1644516283317;
+ Thu, 10 Feb 2022 10:04:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20220208025511.1019-1-lina.wang@mediatek.com> <0300acca47b10384e6181516f32caddda043f3e4.camel@redhat.com>
- <CANP3RGe8ko=18F2cr0_hVMKw99nhTyOCf4Rd_=SMiwBtQ7AmrQ@mail.gmail.com>
- <a62abfeb0c06bf8be7f4fa271e2bcdef9d86c550.camel@redhat.com>
- <5ca86c46109794a627e6e2a62b140963217984a0.camel@mediatek.com> <d5dd3f10c144f7150ec508fa8e6d7a78ceabfc10.camel@redhat.com>
-In-Reply-To: <d5dd3f10c144f7150ec508fa8e6d7a78ceabfc10.camel@redhat.com>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Thu, 10 Feb 2022 10:06:28 -0800
-Message-ID: <CANP3RGeCRz5Ea6tbX4qGnYNzP_sq0K3mGKdpzP0OrcL=C6ejgQ@mail.gmail.com>
-Subject: Re: [PATCH] net: fix wrong network header length
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     "lina.wang" <lina.wang@mediatek.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <000000000000a3571605d27817b5@google.com> <0000000000001f60ef05d7a3c6ad@google.com>
+ <20220210081125.GA4616@1wt.eu> <359ee592-747f-8610-4180-5e1d2aba1b77@iogearbox.net>
+ <CAJ+HfNjeapa=2Ue19L3EWF8z5vxFB0k2QO_LuBu4Meqs0=AE4Q@mail.gmail.com>
+ <20220210174507.GK1951@kadam> <20220210175603.GL1951@kadam>
+In-Reply-To: <20220210175603.GL1951@kadam>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 10 Feb 2022 10:04:27 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiRq+_jd_O1gz3J6-ANtXMY7iLpi8XFUcmtB3rBixvUXQ@mail.gmail.com>
+Message-ID: <CAHk-=wiRq+_jd_O1gz3J6-ANtXMY7iLpi8XFUcmtB3rBixvUXQ@mail.gmail.com>
+Subject: Re: [syzbot] WARNING: kmalloc bug in xdp_umem_create (2)
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Willy Tarreau <w@1wt.eu>,
+        syzbot <syzbot+11421fbbff99b989670e@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Kernel hackers <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        bpf <bpf@vger.kernel.org>, David Miller <davem@davemloft.net>,
+        fgheet255t@gmail.com, Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
         KP Singh <kpsingh@kernel.org>,
-        Willem Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>, zhuoliang@mediatek.com,
-        chao.song@mediatek.com
+        Jakub Kicinski <kuba@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        mudongliangabcd@gmail.com, Netdev <netdev@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> I'm wondering why don't you simply enable UDP_GRO on the relevant
-> socket?
+On Thu, Feb 10, 2022 at 9:57 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> Wait that would make the allocation succeed...  We don't want that.
+> That was a dumb idea.  Forget I said that.
 
-Oh this is simple.
-We don't control the socket.  Apps do.  ie. the entirety of the rest
-of the internet.
+Well, sometimes that _can_ be the right model.
+
+That said, pretty much every time this has come up, the kernel warning
+has shown that yes, the code was broken and there really wasn't a
+reason for doing allocations that big.
+
+Of course, some people would be perfectly fine with the allocation
+failing, they just don't want the warning. I didn't want __GFP_NOWARN
+to shut it up originally because I wanted people to see all those
+cases, but these days I think we can just say "yeah, people can shut
+it up explicitly by saying 'go ahead and fail this allocation, don't
+warn about it'".
+
+So enough time has passed that by now I'd certainly be ok with something like
+
+  --- a/mm/util.c
+  +++ b/mm/util.c
+  @@ -587,8 +587,10 @@ void *kvmalloc_node(size_t size,
+                  return ret;
+
+          /* Don't even allow crazy sizes */
+  -       if (WARN_ON_ONCE(size > INT_MAX))
+  +       if (unlikely(size > INT_MAX)) {
+  +               WARN_ON_ONCE(!(flags & __GFP_NOWARN));
+                  return NULL;
+  +       }
+
+          return __vmalloc_node(size, 1, flags, node,
+                           __builtin_return_address(0));
+
+(which is obviously COMPLETELY UNTESTED as well as being
+whitespace-damaged, but you get the idea).
+
+If somebody tests that patch and verifies it works, and writes a
+little commit blurb for it, I'll apply it.
+
+            Linus
