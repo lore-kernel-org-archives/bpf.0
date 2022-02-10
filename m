@@ -2,552 +2,254 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90311C433F5
-	for <bpf@archiver.kernel.org>; Wed,  9 Feb 2022 23:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61FCDC433EF
+	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 01:22:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiBIXUa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Feb 2022 18:20:30 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42452 "EHLO
+        id S231512AbiBJBWr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Feb 2022 20:22:47 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiBIXUX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Feb 2022 18:20:23 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C0CE06A63B
-        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 15:20:18 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id d15-20020a17090a564f00b001b937f4ae2fso1440925pji.4
-        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 15:20:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZDz5jomKuezfVBxNU4lbggtwu1PEv0I/3DRU5KQ0YZA=;
-        b=YqJK/rtRuel1EhK4vVCfq+aY5CRa9eT7PBLkDjifDOCdpU55oIbM/OSKRnkxFCuY3o
-         mZKv6wBZ7U1sa+KX1U7FqQ/ZYmKpgY9AmnPYhsCsLKNqCx+ngvGR3ErD9nhSpM4hAYQj
-         YiUwAT1RiBA+0sKS5mdt9JnrjdD0XSLt5vihR8DAelwH9/pBXeGKWIDhU2hhjEAH4DSj
-         rExdsLijuVUUEAIR2rHt2dHBSrOen9MJlpzEdP08q2KiEPhSeitBWDO42Ty+7g7II3c+
-         TQ5a4neAk/IU3lNGAiajPk7F4MSvtNCI2nmPOEZwPn+nW0U0tG3M2YTAhvC+VA89bqIU
-         YLog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZDz5jomKuezfVBxNU4lbggtwu1PEv0I/3DRU5KQ0YZA=;
-        b=qWPjAmDWDbytrYDFYIg/UoUJZSNlKdP6ljP1Cpo3UWItTToVUK/V9r+mVU13K+l2/W
-         RR4wkuOAw5vSYSLj9IYqMitobaHZdnXImwyL5NLl0qBdV77bwci96gw1SnPhaRaj1966
-         r5TKXuAvqEux107zswLuYsSJh0ILscK8fmxPnhn97cUmMny3F0BsGqC2aa1gopQS8Bc4
-         CoNlwX2bZLTLN8NiFaIU2AWG31jFlnODQUCxqy+hXwyVjbLq3saG9NLTgmSPrSoJZXzr
-         DNp1PG6uY3wfkiWmVzl2YghZkTMznkvjpZYS8v7SlFy2SLLOaXqqm100JSNUmhIz5Va8
-         8vvQ==
-X-Gm-Message-State: AOAM533d1kq0WKem1xSC0Y5q67xVYa0tNb0Y7hfnPqBrXFDIwZcEHSwW
-        mWSPmB1yEgTImyvkKdTzWb0=
-X-Google-Smtp-Source: ABdhPJxtPlcvEYyMHapplHV4O9J3s1oKty7kpoaLzQgxO3AqatiT9h+V3W+jXJscY1wbtV3H2pNFFw==
-X-Received: by 2002:a17:902:ef47:: with SMTP id e7mr4655766plx.73.1644448818257;
-        Wed, 09 Feb 2022 15:20:18 -0800 (PST)
-Received: from ast-mbp.thefacebook.com ([2620:10d:c090:500::2:9eba])
-        by smtp.gmail.com with ESMTPSA id ng16sm7940122pjb.12.2022.02.09.15.20.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Feb 2022 15:20:17 -0800 (PST)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, andrii@kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: [PATCH v4 bpf-next 5/5] bpf: Convert bpf_preload.ko to use light skeleton.
-Date:   Wed,  9 Feb 2022 15:20:01 -0800
-Message-Id: <20220209232001.27490-6-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220209232001.27490-1-alexei.starovoitov@gmail.com>
-References: <20220209232001.27490-1-alexei.starovoitov@gmail.com>
+        with ESMTP id S231540AbiBJBWl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Feb 2022 20:22:41 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F58E1EC47
+        for <bpf@vger.kernel.org>; Wed,  9 Feb 2022 17:22:43 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219NYHi3029395
+        for <bpf@vger.kernel.org>; Wed, 9 Feb 2022 16:36:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : subject :
+ date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=R4upJ/IquiANQLCltuWGGy6R+6bn4TGeOOM0s2ESvlI=;
+ b=S3bEXS0YIC0gtKu8HGdQvnaMH2BcbotPSZSEnvTBNTKWiTBVxhOfSNb+pRE89OtGonfZ
+ EnyprmrHv45cIN3J+SyTMXscRVb5w2zxkrHSjxzfjOjJub9sih3hhcrvEQdNQiTS5eJG
+ 0Oq/A45YslDhHliA/IJTZVCsEKRkKKe4dcQ= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e4e8nvnfh-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Feb 2022 16:36:56 -0800
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 16:36:56 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kvbck3W3OrA1JbEzws4ujK9LBmRfsv+/FkQoyKclDGIN5lOdgnV405grqHBmXwc1XjcBvInv37hg24VlRJBLc5u9N91Ju5K4TWxUPaWQhUbXQdKmFA3BxCtqbsYqd6ijoSuk3yxZezvdcL2WYRFzul3F5cOKD2By4vzV5EjejMsoTCCZuICSaVlC+Yj1vp0bkpCf44i7CmEKUqIhjgLtf22r1id1ZjlyT1XI4OrMYALlUqSRPhrvOv+D/281QR8OO86Hn3/Ou6OgdgLeD6Ce2T0q6pgSxLJxwsH7ncxn2fXhkwEZuNHuJur3g5q/b7dLJ6c4xsxYOcXI1FJll5RZEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7khCYI7ljTUwy2g6JN04oaknrH1FRqkmEHyG8PhDaks=;
+ b=eULv4WZ3AxmwLv8nGEJus2jj4dVc30BwQiaF8STmhoVQPt2L8hAajRVgGCbMloQGrv0al/m7h1RYho5heSWYnpyg9gojI82elcgWco1dGFthjyJOniArBwps1o4n7W7s5+/qNJ0KIwB/Kqduq7xw8R3iDJuldmEsgNGtNaf/91WQrG2abYNR4oJRZqkU4P8Q+mfcyCjLph/fzB0Zu/LCsjjfDV9UvCGC7x61XZM+0IumdFGVBBav2pZgZWFKKnSxniNveRlWcDKOSceVQCMhEt+khvkzGyCAnnGWY2ZvynwDi6oRrQ9LagRHKJixO4CObByWG9+Jd7wynFL3wBoiYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from SJ0PR15MB5154.namprd15.prod.outlook.com (2603:10b6:a03:423::6)
+ by CY4PR15MB1590.namprd15.prod.outlook.com (2603:10b6:903:f5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4975.11; Thu, 10 Feb
+ 2022 00:36:54 +0000
+Received: from SJ0PR15MB5154.namprd15.prod.outlook.com
+ ([fe80::f1fc:6c73:10d4:1098]) by SJ0PR15MB5154.namprd15.prod.outlook.com
+ ([fe80::f1fc:6c73:10d4:1098%6]) with mapi id 15.20.4951.019; Thu, 10 Feb 2022
+ 00:36:54 +0000
+From:   Delyan Kratunov <delyank@fb.com>
+To:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: [PATCH bpf-next v1 2/3] bpftool: skeleton uses explicitly sized ints
+Thread-Topic: [PATCH bpf-next v1 2/3] bpftool: skeleton uses explicitly sized
+ ints
+Thread-Index: AQHYHhZN/e7JuZr7akC7vD+AXIiWjA==
+Date:   Thu, 10 Feb 2022 00:36:54 +0000
+Message-ID: <b904faaff6e8a04809e722d33e062ad47e97c84e.1644453291.git.delyank@fb.com>
+References: <cover.1644453291.git.delyank@fb.com>
+In-Reply-To: <cover.1644453291.git.delyank@fb.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 65ccafdc-641e-4f2a-9f16-08d9ec2d6fd6
+x-ms-traffictypediagnostic: CY4PR15MB1590:EE_
+x-microsoft-antispam-prvs: <CY4PR15MB1590EF626466CC47BC8779C4C12F9@CY4PR15MB1590.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:101;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Bz2Kao0FB4pO6u5aNaF+PDuHRoyCIO5ohkwjd8fXopDm2wNntrqMhLZn2IbAFXmLKsklxtHaVuc0qdpB7Ys2/549ZaxBRc2FRG/Um6l/EyG/cGVqCg+eum/eJO60z4ssSHU8MwQFWrYvn+YQnj9kp43wBUoLUleB92nVV7n32Hn2SQIef7ewV4tRHf+RtiHJFIpgxSQ5Ib/jz1HQuAE1Y0RyoRoGY9hOUOxtU/ud+8T743YNWsJo8N1P4XIhWRA9l8olsDM4fTrPRVJ1rySBBD3MFyL5ODbiMwqCC/DNUv07dZnfGHmkKYKSRqV13+AfNf/rOhZeYV+3stMfAtmj30jLr+NqMp6FVQASYyTj+cfIGqSIQ3w2Cu8Fcv6FphXayIL5mbVMGVAfNc+BjcPYWvJyvyvBYS/BMcpjulkuZjQAth1iXgzsQlKIkmSIWm36mf4ZuAvbL2/LJiPjVUkL1djddJDaKJ2ItptZv/yk+TQtTwRWLScYJXL4AmXTmuiru7YUHKUOr3BbJQg9gu2lfZN7pzJROcJLkWftx2xIVy/H6RYpdMCYyTHLszzmbRApHntrtCwSti/jerBIH+I/HVbLxM7YH2V0a6Tt0bhPQ/WKT2w0ffe5DMoMi/yq72LnMMvLhgvxXxvlp3BcSSutZRejyN6FNuE7K0IA8tmSq/ZWMn2AJjTEFlomb62yccpdVLJ4XVtvQSkGU0zqiz1wOqY5viekuvvPzRBSl9rupxEv1oLx/O7TfZdxInyrD2mExtENDDV4ZGzpWxYaMN6LrLjo23ZADHJQw7U+/OFTvrY/eY/FWdki6D4UipGMLxdoPKXGbn6GzcLi2KQkbIcXQA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB5154.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38070700005)(316002)(8936002)(5660300002)(110136005)(2906002)(6512007)(6506007)(122000001)(508600001)(26005)(2616005)(186003)(966005)(6486002)(86362001)(76116006)(64756008)(66556008)(66476007)(66446008)(66946007)(71200400001)(8676002)(36756003)(38100700002)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?eWCnabsD9Odk5SDd/HutxxIWxYTKMWcurTjMBIxGn8DE8Z5556ODDemp78?=
+ =?iso-8859-1?Q?e08rg/r+QwcxMCFOXPyzHaYnsuML2Yf9n1S/xARy5UoOfncJfmGZN742Am?=
+ =?iso-8859-1?Q?+I2cYXufdFVDuOr2lg3muXd8EeW7aL/+cAt0jsJxe91BRT32yinjYyoTde?=
+ =?iso-8859-1?Q?jqqpVpRpaBrroOo96OjRVedrsL/cKoeFo73+e6WJCCfM2IbxL1+w/hhrx8?=
+ =?iso-8859-1?Q?TkOTX+Hgh7XR+80OmKRhaf2Kk5Gq8EuR88VpFzMC7A3DkFad/QT53SLfWH?=
+ =?iso-8859-1?Q?dfZxeX4uNEK2jcZ+Ce8cFe7Y0zG30g/UohcFPoQXVJMVjXoaI9qvyjUf6K?=
+ =?iso-8859-1?Q?uTFOAmmPPF5Ngi7u8GlLRziNj74HiA5vaDW4XsADGORI1Pk24h/IKpVLDf?=
+ =?iso-8859-1?Q?eOq3lRL3Kpjk/h6GsgsLQ0TyIK7TvLHAEF1WGicg3zUU+Y5s/CAvwq8NKf?=
+ =?iso-8859-1?Q?ep4LyIZhh+byHWnBE0+vVRfe4KhbwPCSaGsHWupSNt0WX1+gWBnnqE8n2A?=
+ =?iso-8859-1?Q?GMQ9nhalzDE8UyA5tgskarzwsCkZW4YyUW0lo9LmnJaBVOJooge25qFP2P?=
+ =?iso-8859-1?Q?+gtyQFJWqaUNGsoSqaRVFe+9aJvsAbpNVuIC5pi8aLxcTUNPJj/3u96wb5?=
+ =?iso-8859-1?Q?/p/gjbtfV61ShUIvIqoNN2B1w2gyuM7+3aAWhXS0D6W7/eRaRDxJSM121e?=
+ =?iso-8859-1?Q?AFUHWvJ5yzIyzkbRzyD5jVLBr1acSAWSOuIUm+9EM3moOCcFONbYaPRtl7?=
+ =?iso-8859-1?Q?xrNNz3oOPN6Fi7G79NZgX7eC+2l4fEnXV+v1GShKfQDTUxRGWlzoA2+8HC?=
+ =?iso-8859-1?Q?yan9J9RppcTgHTExMqIsU+AUhlNai3jMzD1WIwT+o40FfA0Dn4iQ5xmHQJ?=
+ =?iso-8859-1?Q?PyEiltDFZy8k3qy5iK89XMHiMi6RFoTMJqEBuzgTjbCm+MbEHwTYsyuuCN?=
+ =?iso-8859-1?Q?EvzO11PNEjMpUDH9OjE3H3Cwnt8+B8nBvwmzZA5ePvqvOk4jlETaupt68Z?=
+ =?iso-8859-1?Q?n5shpuJJNvUx5N6ntjhQHSJ7QvA2HF7NCbIN3Ux63WyfNLGOTWbpHy1B3h?=
+ =?iso-8859-1?Q?tlFRZSO2jt2xFkNAyPyzAMpGpGDegBuZmmQoKXFAciHlm8yiJECx6IVCM5?=
+ =?iso-8859-1?Q?AJIYcTHbunXnPvvM2RPy5JQ1y5u821i7BOltikvWvdrlrI2tB6YSkZWsyr?=
+ =?iso-8859-1?Q?yZlqVcIHAQuFIU8OaRl6wmHFY4hIAKzDaZT3cDwC7KxYLwHnBC0529q8zz?=
+ =?iso-8859-1?Q?6V++tkhujJtb2S/cDtZcv+6wucjWBpq+7Ql4+RlmJpcg4s84bmCKU1lWlD?=
+ =?iso-8859-1?Q?S26Mlu4nNEYBDoHlbWf67zIOCh+kZXxpN7G/To1j2RzcA2dU6hYI5BvXlo?=
+ =?iso-8859-1?Q?RILkrJTmfpVu/nlaoxas9hv9f+CYFeAw6J6pBsigKlGqMshnnCnpVQjXpC?=
+ =?iso-8859-1?Q?T4dXYheGTOSLVzrYT1pAuGnzLURVkmUptjkAi5D+bHJ4TmkTl9nxxUHVuX?=
+ =?iso-8859-1?Q?55FSl87RkFdfUZktK+xbu/l8wRkkIwWl+mpMK6vntaGbcisqw/q/J5t/Lu?=
+ =?iso-8859-1?Q?RFLgIpUrXYorSHji3cJpZ4C1MScqgHRYDXkiAukLwuEu35sHYH6fqD8gVr?=
+ =?iso-8859-1?Q?ksDD4rgkxZiSs=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB5154.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65ccafdc-641e-4f2a-9f16-08d9ec2d6fd6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Feb 2022 00:36:54.2562
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rz4yeClBEvfPm8uVYSU1meZWG/r4ldwHXiP7JIKrAyiyxE9Hiip29v4TgqRF5MYv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR15MB1590
+X-OriginatorOrg: fb.com
+X-Proofpoint-GUID: 4Wm11nyt7NoezmuKiSwv7qdx7puD6h7L
+X-Proofpoint-ORIG-GUID: 4Wm11nyt7NoezmuKiSwv7qdx7puD6h7L
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-09_12,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
+ mlxlogscore=999 lowpriorityscore=0 malwarescore=0 phishscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202100001
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <ast@kernel.org>
+As reported in [0] and [1], kernel and userspace can sometimes disagree
+on the definition of a typedef (in particular, the size).
+This leads to trouble when userspace maps the memory of a bpf program
+and reads/writes to it assuming a different memory layout.
 
-The main change is a move of the single line
-  #include "iterators.lskel.h"
-from iterators/iterators.c to bpf_preload_kern.c.
-Which means that generated light skeleton can be used from user space or
-user mode driver like iterators.c or from the kernel module or the kernel itself.
-The direct use of light skeleton from the kernel module simplifies the code,
-since UMD is no longer necessary. The libbpf.a required user space and UMD. The
-CO-RE in the kernel and generated "loader bpf program" used by the light
-skeleton are capable to perform complex loading operations traditionally
-provided by libbpf. In addition UMD approach was launching UMD process
-every time bpffs has to be mounted. With light skeleton in the kernel
-the bpf_preload kernel module loads bpf iterators once and pins them
-multiple times into different bpffs mounts.
+This commit now uses the libbpf sized ints logic when emitting the
+skeleton. This resolves int types to int32_t-like equivalents and
+ensures that typedefs are not just emitted verbatim.
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+The drive-by selftest changes fix format specifier issues
+due to the definitions of [us]64 and (u)int64_t differing in how
+many longs they use (long long int vs long int on x86_64).
+
+  [0]: https://github.com/iovisor/bcc/pull/3777
+  [1]: Closes: https://github.com/libbpf/libbpf/issues/433
+
+Signed-off-by: Delyan Kratunov <delyank@fb.com>
 ---
- kernel/bpf/inode.c                            |  39 ++----
- kernel/bpf/preload/Kconfig                    |   7 +-
- kernel/bpf/preload/Makefile                   |  14 +--
- kernel/bpf/preload/bpf_preload.h              |   8 +-
- kernel/bpf/preload/bpf_preload_kern.c         | 119 ++++++++----------
- kernel/bpf/preload/bpf_preload_umd_blob.S     |   7 --
- .../preload/iterators/bpf_preload_common.h    |  13 --
- kernel/bpf/preload/iterators/iterators.c      | 108 ----------------
- kernel/bpf/syscall.c                          |   2 +
- 9 files changed, 70 insertions(+), 247 deletions(-)
- delete mode 100644 kernel/bpf/preload/bpf_preload_umd_blob.S
- delete mode 100644 kernel/bpf/preload/iterators/bpf_preload_common.h
- delete mode 100644 kernel/bpf/preload/iterators/iterators.c
+ tools/bpf/bpftool/gen.c                          |  3 +++
+ .../testing/selftests/bpf/prog_tests/skeleton.c  | 16 ++++++++--------
+ 2 files changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 5a8d9f7467bf..4f841e16779e 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -710,11 +710,10 @@ static DEFINE_MUTEX(bpf_preload_lock);
- static int populate_bpffs(struct dentry *parent)
- {
- 	struct bpf_preload_info objs[BPF_PRELOAD_LINKS] = {};
--	struct bpf_link *links[BPF_PRELOAD_LINKS] = {};
- 	int err = 0, i;
- 
- 	/* grab the mutex to make sure the kernel interactions with bpf_preload
--	 * UMD are serialized
-+	 * are serialized
- 	 */
- 	mutex_lock(&bpf_preload_lock);
- 
-@@ -722,40 +721,22 @@ static int populate_bpffs(struct dentry *parent)
- 	if (!bpf_preload_mod_get())
- 		goto out;
- 
--	if (!bpf_preload_ops->info.tgid) {
--		/* preload() will start UMD that will load BPF iterator programs */
--		err = bpf_preload_ops->preload(objs);
--		if (err)
-+	err = bpf_preload_ops->preload(objs);
-+	if (err)
-+		goto out_put;
-+	for (i = 0; i < BPF_PRELOAD_LINKS; i++) {
-+		bpf_link_inc(objs[i].link);
-+		err = bpf_iter_link_pin_kernel(parent,
-+					       objs[i].link_name, objs[i].link);
-+		if (err) {
-+			bpf_link_put(objs[i].link);
- 			goto out_put;
--		for (i = 0; i < BPF_PRELOAD_LINKS; i++) {
--			links[i] = bpf_link_by_id(objs[i].link_id);
--			if (IS_ERR(links[i])) {
--				err = PTR_ERR(links[i]);
--				goto out_put;
--			}
- 		}
--		for (i = 0; i < BPF_PRELOAD_LINKS; i++) {
--			err = bpf_iter_link_pin_kernel(parent,
--						       objs[i].link_name, links[i]);
--			if (err)
--				goto out_put;
--			/* do not unlink successfully pinned links even
--			 * if later link fails to pin
--			 */
--			links[i] = NULL;
--		}
--		/* finish() will tell UMD process to exit */
--		err = bpf_preload_ops->finish();
--		if (err)
--			goto out_put;
- 	}
- out_put:
- 	bpf_preload_mod_put();
- out:
- 	mutex_unlock(&bpf_preload_lock);
--	for (i = 0; i < BPF_PRELOAD_LINKS && err; i++)
--		if (!IS_ERR_OR_NULL(links[i]))
--			bpf_link_put(links[i]);
- 	return err;
- }
- 
-diff --git a/kernel/bpf/preload/Kconfig b/kernel/bpf/preload/Kconfig
-index 26bced262473..c9d45c9d6918 100644
---- a/kernel/bpf/preload/Kconfig
-+++ b/kernel/bpf/preload/Kconfig
-@@ -18,10 +18,9 @@ menuconfig BPF_PRELOAD
- 
- if BPF_PRELOAD
- config BPF_PRELOAD_UMD
--	tristate "bpf_preload kernel module with user mode driver"
--	depends on CC_CAN_LINK
--	depends on m || CC_CAN_LINK_STATIC
-+	tristate "bpf_preload kernel module"
- 	default m
- 	help
--	  This builds bpf_preload kernel module with embedded user mode driver.
-+	  This builds bpf_preload kernel module with embedded BPF programs for
-+	  introspection in bpffs.
- endif
-diff --git a/kernel/bpf/preload/Makefile b/kernel/bpf/preload/Makefile
-index baf47d9c7557..167534e3b0b4 100644
---- a/kernel/bpf/preload/Makefile
-+++ b/kernel/bpf/preload/Makefile
-@@ -3,16 +3,6 @@
- LIBBPF_SRCS = $(srctree)/tools/lib/bpf/
- LIBBPF_INCLUDE = $(LIBBPF_SRCS)/..
- 
--userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi \
--	-I $(LIBBPF_INCLUDE) -Wno-unused-result
--
--userprogs := bpf_preload_umd
--
--bpf_preload_umd-objs := iterators/iterators.o
--
--$(obj)/bpf_preload_umd:
--
--$(obj)/bpf_preload_umd_blob.o: $(obj)/bpf_preload_umd
--
- obj-$(CONFIG_BPF_PRELOAD_UMD) += bpf_preload.o
--bpf_preload-objs += bpf_preload_kern.o bpf_preload_umd_blob.o
-+CFLAGS_bpf_preload_kern.o += -I $(LIBBPF_INCLUDE)
-+bpf_preload-objs += bpf_preload_kern.o
-diff --git a/kernel/bpf/preload/bpf_preload.h b/kernel/bpf/preload/bpf_preload.h
-index 2f9932276f2e..f065c91213a0 100644
---- a/kernel/bpf/preload/bpf_preload.h
-+++ b/kernel/bpf/preload/bpf_preload.h
-@@ -2,13 +2,13 @@
- #ifndef _BPF_PRELOAD_H
- #define _BPF_PRELOAD_H
- 
--#include <linux/usermode_driver.h>
--#include "iterators/bpf_preload_common.h"
-+struct bpf_preload_info {
-+	char link_name[16];
-+	struct bpf_link *link;
-+};
- 
- struct bpf_preload_ops {
--        struct umd_info info;
- 	int (*preload)(struct bpf_preload_info *);
--	int (*finish)(void);
- 	struct module *owner;
- };
- extern struct bpf_preload_ops *bpf_preload_ops;
-diff --git a/kernel/bpf/preload/bpf_preload_kern.c b/kernel/bpf/preload/bpf_preload_kern.c
-index 53736e52c1df..30207c048d36 100644
---- a/kernel/bpf/preload/bpf_preload_kern.c
-+++ b/kernel/bpf/preload/bpf_preload_kern.c
-@@ -2,101 +2,80 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- #include <linux/init.h>
- #include <linux/module.h>
--#include <linux/pid.h>
--#include <linux/fs.h>
--#include <linux/sched/signal.h>
- #include "bpf_preload.h"
-+#include "iterators/iterators.lskel.h"
- 
--extern char bpf_preload_umd_start;
--extern char bpf_preload_umd_end;
-+static struct bpf_link *maps_link, *progs_link;
-+static struct iterators_bpf *skel;
- 
--static int preload(struct bpf_preload_info *obj);
--static int finish(void);
-+static void free_links_and_skel(void)
-+{
-+	if (!IS_ERR_OR_NULL(maps_link))
-+		bpf_link_put(maps_link);
-+	if (!IS_ERR_OR_NULL(progs_link))
-+		bpf_link_put(progs_link);
-+	iterators_bpf__destroy(skel);
-+}
-+
-+static int preload(struct bpf_preload_info *obj)
-+{
-+	strlcpy(obj[0].link_name, "maps.debug", sizeof(obj[0].link_name));
-+	obj[0].link = maps_link;
-+	strlcpy(obj[1].link_name, "progs.debug", sizeof(obj[1].link_name));
-+	obj[1].link = progs_link;
-+	return 0;
-+}
- 
--static struct bpf_preload_ops umd_ops = {
--	.info.driver_name = "bpf_preload",
-+static struct bpf_preload_ops ops = {
- 	.preload = preload,
--	.finish = finish,
- 	.owner = THIS_MODULE,
- };
- 
--static int preload(struct bpf_preload_info *obj)
-+static int load_skel(void)
- {
--	int magic = BPF_PRELOAD_START;
--	loff_t pos = 0;
--	int i, err;
--	ssize_t n;
-+	int err;
- 
--	err = fork_usermode_driver(&umd_ops.info);
-+	skel = iterators_bpf__open();
-+	if (!skel)
-+		return -ENOMEM;
-+	err = iterators_bpf__load(skel);
- 	if (err)
--		return err;
--
--	/* send the start magic to let UMD proceed with loading BPF progs */
--	n = kernel_write(umd_ops.info.pipe_to_umh,
--			 &magic, sizeof(magic), &pos);
--	if (n != sizeof(magic))
--		return -EPIPE;
--
--	/* receive bpf_link IDs and names from UMD */
--	pos = 0;
--	for (i = 0; i < BPF_PRELOAD_LINKS; i++) {
--		n = kernel_read(umd_ops.info.pipe_from_umh,
--				&obj[i], sizeof(*obj), &pos);
--		if (n != sizeof(*obj))
--			return -EPIPE;
-+		goto out;
-+	err = iterators_bpf__attach(skel);
-+	if (err)
-+		goto out;
-+	maps_link = bpf_link_get_from_fd(skel->links.dump_bpf_map_fd);
-+	if (IS_ERR(maps_link)) {
-+		err = PTR_ERR(maps_link);
-+		goto out;
- 	}
--	return 0;
--}
--
--static int finish(void)
--{
--	int magic = BPF_PRELOAD_END;
--	struct pid *tgid;
--	loff_t pos = 0;
--	ssize_t n;
--
--	/* send the last magic to UMD. It will do a normal exit. */
--	n = kernel_write(umd_ops.info.pipe_to_umh,
--			 &magic, sizeof(magic), &pos);
--	if (n != sizeof(magic))
--		return -EPIPE;
--
--	tgid = umd_ops.info.tgid;
--	if (tgid) {
--		wait_event(tgid->wait_pidfd, thread_group_exited(tgid));
--		umd_cleanup_helper(&umd_ops.info);
-+	progs_link = bpf_link_get_from_fd(skel->links.dump_bpf_prog_fd);
-+	if (IS_ERR(progs_link)) {
-+		err = PTR_ERR(progs_link);
-+		goto out;
- 	}
- 	return 0;
-+out:
-+	free_links_and_skel();
-+	return err;
- }
- 
--static int __init load_umd(void)
-+static int __init load(void)
- {
- 	int err;
- 
--	err = umd_load_blob(&umd_ops.info, &bpf_preload_umd_start,
--			    &bpf_preload_umd_end - &bpf_preload_umd_start);
-+	err = load_skel();
- 	if (err)
- 		return err;
--	bpf_preload_ops = &umd_ops;
-+	bpf_preload_ops = &ops;
- 	return err;
- }
- 
--static void __exit fini_umd(void)
-+static void __exit fini(void)
- {
--	struct pid *tgid;
--
- 	bpf_preload_ops = NULL;
--
--	/* kill UMD in case it's still there due to earlier error */
--	tgid = umd_ops.info.tgid;
--	if (tgid) {
--		kill_pid(tgid, SIGKILL, 1);
--
--		wait_event(tgid->wait_pidfd, thread_group_exited(tgid));
--		umd_cleanup_helper(&umd_ops.info);
--	}
--	umd_unload_blob(&umd_ops.info);
-+	free_links_and_skel();
- }
--late_initcall(load_umd);
--module_exit(fini_umd);
-+late_initcall(load);
-+module_exit(fini);
- MODULE_LICENSE("GPL");
-diff --git a/kernel/bpf/preload/bpf_preload_umd_blob.S b/kernel/bpf/preload/bpf_preload_umd_blob.S
-deleted file mode 100644
-index f1f40223b5c3..000000000000
---- a/kernel/bpf/preload/bpf_preload_umd_blob.S
-+++ /dev/null
-@@ -1,7 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--	.section .init.rodata, "a"
--	.global bpf_preload_umd_start
--bpf_preload_umd_start:
--	.incbin "kernel/bpf/preload/bpf_preload_umd"
--	.global bpf_preload_umd_end
--bpf_preload_umd_end:
-diff --git a/kernel/bpf/preload/iterators/bpf_preload_common.h b/kernel/bpf/preload/iterators/bpf_preload_common.h
-deleted file mode 100644
-index 8464d1a48c05..000000000000
---- a/kernel/bpf/preload/iterators/bpf_preload_common.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _BPF_PRELOAD_COMMON_H
--#define _BPF_PRELOAD_COMMON_H
--
--#define BPF_PRELOAD_START 0x5555
--#define BPF_PRELOAD_END 0xAAAA
--
--struct bpf_preload_info {
--	char link_name[16];
--	int link_id;
--};
--
--#endif
-diff --git a/kernel/bpf/preload/iterators/iterators.c b/kernel/bpf/preload/iterators/iterators.c
-deleted file mode 100644
-index 4dafe0f4f2b2..000000000000
---- a/kernel/bpf/preload/iterators/iterators.c
-+++ /dev/null
-@@ -1,108 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright (c) 2020 Facebook */
--#include <errno.h>
--#include <stdio.h>
--#include <stdlib.h>
--#include <string.h>
--#include <unistd.h>
--#include <fcntl.h>
--#include <sys/resource.h>
--#include <bpf/libbpf.h>
--#include <bpf/bpf.h>
--#include <sys/mount.h>
--#include "iterators.lskel.h"
--#include "bpf_preload_common.h"
--
--int to_kernel = -1;
--int from_kernel = 0;
--
--static int __bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len)
--{
--	union bpf_attr attr;
--	int err;
--
--	memset(&attr, 0, sizeof(attr));
--	attr.info.bpf_fd = bpf_fd;
--	attr.info.info_len = *info_len;
--	attr.info.info = (long) info;
--
--	err = skel_sys_bpf(BPF_OBJ_GET_INFO_BY_FD, &attr, sizeof(attr));
--	if (!err)
--		*info_len = attr.info.info_len;
--	return err;
--}
--
--static int send_link_to_kernel(int link_fd, const char *link_name)
--{
--	struct bpf_preload_info obj = {};
--	struct bpf_link_info info = {};
--	__u32 info_len = sizeof(info);
--	int err;
--
--	err = __bpf_obj_get_info_by_fd(link_fd, &info, &info_len);
--	if (err)
--		return err;
--	obj.link_id = info.id;
--	if (strlen(link_name) >= sizeof(obj.link_name))
--		return -E2BIG;
--	strcpy(obj.link_name, link_name);
--	if (write(to_kernel, &obj, sizeof(obj)) != sizeof(obj))
--		return -EPIPE;
--	return 0;
--}
--
--int main(int argc, char **argv)
--{
--	struct iterators_bpf *skel;
--	int err, magic;
--	int debug_fd;
--
--	debug_fd = open("/dev/console", O_WRONLY | O_NOCTTY | O_CLOEXEC);
--	if (debug_fd < 0)
--		return 1;
--	to_kernel = dup(1);
--	close(1);
--	dup(debug_fd);
--	/* now stdin and stderr point to /dev/console */
--
--	read(from_kernel, &magic, sizeof(magic));
--	if (magic != BPF_PRELOAD_START) {
--		printf("bad start magic %d\n", magic);
--		return 1;
--	}
--	/* libbpf opens BPF object and loads it into the kernel */
--	skel = iterators_bpf__open_and_load();
--	if (!skel) {
--		/* iterators.skel.h is little endian.
--		 * libbpf doesn't support automatic little->big conversion
--		 * of BPF bytecode yet.
--		 * The program load will fail in such case.
--		 */
--		printf("Failed load could be due to wrong endianness\n");
--		return 1;
--	}
--	err = iterators_bpf__attach(skel);
--	if (err)
--		goto cleanup;
--
--	/* send two bpf_link IDs with names to the kernel */
--	err = send_link_to_kernel(skel->links.dump_bpf_map_fd, "maps.debug");
--	if (err)
--		goto cleanup;
--	err = send_link_to_kernel(skel->links.dump_bpf_prog_fd, "progs.debug");
--	if (err)
--		goto cleanup;
--
--	/* The kernel will proceed with pinnging the links in bpffs.
--	 * UMD will wait on read from pipe.
--	 */
--	read(from_kernel, &magic, sizeof(magic));
--	if (magic != BPF_PRELOAD_END) {
--		printf("bad final magic %d\n", magic);
--		err = -EINVAL;
--	}
--cleanup:
--	iterators_bpf__destroy(skel);
--
--	return err != 0;
--}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 49f88b30662a..35646db3d950 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2490,6 +2490,7 @@ void bpf_link_put(struct bpf_link *link)
- 		bpf_link_free(link);
- 	}
- }
-+EXPORT_SYMBOL(bpf_link_put);
- 
- static int bpf_link_release(struct inode *inode, struct file *filp)
- {
-@@ -2632,6 +2633,7 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd)
- 
- 	return link;
- }
-+EXPORT_SYMBOL(bpf_link_get_from_fd);
- 
- struct bpf_tracing_link {
- 	struct bpf_link link;
--- 
-2.30.2
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index eacfc6a2060d..18c3f755ad88 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -146,6 +146,7 @@ static int codegen_datasec_def(struct bpf_object *obj,
+ 			.field_name =3D var_ident,
+ 			.indent_level =3D 2,
+ 			.strip_mods =3D strip_mods,
++			.sizedints =3D true,
+ 		);
+ 		int need_off =3D sec_var->offset, align_off, align;
+ 		__u32 var_type_id =3D var->type;
+@@ -751,6 +752,7 @@ static int do_skeleton(int argc, char **argv)
+ 		#ifndef %2$s						    \n\
+ 		#define %2$s						    \n\
+ 									    \n\
++		#include <inttypes.h>					    \n\
+ 		#include <stdlib.h>					    \n\
+ 		#include <bpf/bpf.h>					    \n\
+ 		#include <bpf/skel_internal.h>				    \n\
+@@ -770,6 +772,7 @@ static int do_skeleton(int argc, char **argv)
+ 		#define %2$s						    \n\
+ 									    \n\
+ 		#include <errno.h>					    \n\
++		#include <inttypes.h>					    \n\
+ 		#include <stdlib.h>					    \n\
+ 		#include <bpf/libbpf.h>					    \n\
+ 									    \n\
+diff --git a/tools/testing/selftests/bpf/prog_tests/skeleton.c b/tools/test=
+ing/selftests/bpf/prog_tests/skeleton.c
+index 180afd632f4c..9894e1b39211 100644
+--- a/tools/testing/selftests/bpf/prog_tests/skeleton.c
++++ b/tools/testing/selftests/bpf/prog_tests/skeleton.c
+@@ -43,13 +43,13 @@ void test_skeleton(void)
+ 	/* validate values are pre-initialized correctly */
+ 	CHECK(data->in1 !=3D -1, "in1", "got %d !=3D exp %d\n", data->in1, -1);
+ 	CHECK(data->out1 !=3D -1, "out1", "got %d !=3D exp %d\n", data->out1, -1);
+-	CHECK(data->in2 !=3D -1, "in2", "got %lld !=3D exp %lld\n", data->in2, -1=
+LL);
+-	CHECK(data->out2 !=3D -1, "out2", "got %lld !=3D exp %lld\n", data->out2,=
+ -1LL);
++	CHECK(data->in2 !=3D -1, "in2", "got %"PRId64" !=3D exp %lld\n", data->in=
+2, -1LL);
++	CHECK(data->out2 !=3D -1, "out2", "got %"PRId64" !=3D exp %lld\n", data->=
+out2, -1LL);
 
+ 	CHECK(bss->in3 !=3D 0, "in3", "got %d !=3D exp %d\n", bss->in3, 0);
+ 	CHECK(bss->out3 !=3D 0, "out3", "got %d !=3D exp %d\n", bss->out3, 0);
+-	CHECK(bss->in4 !=3D 0, "in4", "got %lld !=3D exp %lld\n", bss->in4, 0LL);
+-	CHECK(bss->out4 !=3D 0, "out4", "got %lld !=3D exp %lld\n", bss->out4, 0L=
+L);
++	CHECK(bss->in4 !=3D 0, "in4", "got %"PRId64" !=3D exp %lld\n", bss->in4, =
+0LL);
++	CHECK(bss->out4 !=3D 0, "out4", "got %"PRId64" !=3D exp %lld\n", bss->out=
+4, 0LL);
+
+ 	CHECK(rodata->in.in6 !=3D 0, "in6", "got %d !=3D exp %d\n", rodata->in.in=
+6, 0);
+ 	CHECK(bss->out6 !=3D 0, "out6", "got %d !=3D exp %d\n", bss->out6, 0);
+@@ -77,9 +77,9 @@ void test_skeleton(void)
+
+ 	/* validate pre-setup values are still there */
+ 	CHECK(data->in1 !=3D 10, "in1", "got %d !=3D exp %d\n", data->in1, 10);
+-	CHECK(data->in2 !=3D 11, "in2", "got %lld !=3D exp %lld\n", data->in2, 11=
+LL);
++	CHECK(data->in2 !=3D 11, "in2", "got %"PRId64" !=3D exp %lld\n", data->in=
+2, 11LL);
+ 	CHECK(bss->in3 !=3D 12, "in3", "got %d !=3D exp %d\n", bss->in3, 12);
+-	CHECK(bss->in4 !=3D 13, "in4", "got %lld !=3D exp %lld\n", bss->in4, 13LL=
+);
++	CHECK(bss->in4 !=3D 13, "in4", "got %"PRId64" !=3D exp %lld\n", bss->in4,=
+ 13LL);
+ 	CHECK(rodata->in.in6 !=3D 14, "in6", "got %d !=3D exp %d\n", rodata->in.i=
+n6, 14);
+
+ 	ASSERT_EQ(rodata_dyn->in_dynarr_sz, 4, "in_dynarr_sz");
+@@ -105,9 +105,9 @@ void test_skeleton(void)
+ 	usleep(1);
+
+ 	CHECK(data->out1 !=3D 1, "res1", "got %d !=3D exp %d\n", data->out1, 1);
+-	CHECK(data->out2 !=3D 2, "res2", "got %lld !=3D exp %d\n", data->out2, 2);
++	CHECK(data->out2 !=3D 2, "res2", "got %"PRId64" !=3D exp %d\n", data->out=
+2, 2);
+ 	CHECK(bss->out3 !=3D 3, "res3", "got %d !=3D exp %d\n", (int)bss->out3, 3=
+);
+-	CHECK(bss->out4 !=3D 4, "res4", "got %lld !=3D exp %d\n", bss->out4, 4);
++	CHECK(bss->out4 !=3D 4, "res4", "got %"PRId64" !=3D exp %d\n", bss->out4,=
+ 4);
+ 	CHECK(bss->out5.a !=3D 5, "res5", "got %d !=3D exp %d\n", bss->out5.a, 5);
+ 	CHECK(bss->out5.b !=3D 6, "res6", "got %lld !=3D exp %d\n", bss->out5.b, =
+6);
+ 	CHECK(bss->out6 !=3D 14, "res7", "got %d !=3D exp %d\n", bss->out6, 14);
+--
+2.34.1=
