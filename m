@@ -2,290 +2,187 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94D3AC433F5
-	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 08:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E5E7C433F5
+	for <bpf@archiver.kernel.org>; Thu, 10 Feb 2022 08:25:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbiBJILT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Feb 2022 03:11:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50200 "EHLO
+        id S237311AbiBJIZ4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Feb 2022 03:25:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237116AbiBJILT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Feb 2022 03:11:19 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79478109D
-        for <bpf@vger.kernel.org>; Thu, 10 Feb 2022 00:11:20 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219NYEst007042;
-        Thu, 10 Feb 2022 00:11:06 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=fuVzZrlVbWXE1MJjHMUKBweoY98rGu8Nnm2zLyzhJ8I=;
- b=rC2V5QMZ3X7M4WD8svpO8pBkhmnJp3ZyYpADo+WpzGvYCP4kvBz+dVOMQS+Uhxr5FKdO
- 9BX3gpCY0ORSBTjUsDK0OWgY6f8dEynoSLel+Z9u0VvPOwwC9VmmnJTwjyv1Gr2TR3r6
- q0Wb5E0vk26fQNjw5SZsSfCUGcNmmNnLTBw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e4fxawm6n-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 10 Feb 2022 00:11:06 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 10 Feb 2022 00:11:02 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SG3+arUJief1RBQe1ptyxNFrj5TYsT1p2dVa+QhvXgh7zqa4MnC3p4lnLWPbPukpnjuiA8EHxRiBqF53Wye2f+ymbnAHXfdgG8JMaJDLaxHuSeD33VlWl3aINLIlrVjCAUporI32reJIEqR4vWZ3uI0nEHd8PhWOAIiuqvpYQeVwGfX0wEAASuoFT+JL/D/0F+VIr2CB4PO5IAcBPDxRKnbzMqphu3w3xi2gbSJy080OetqH7H/q0Ln7fGnigpQMJ1+jJPZ0o7wk4PbSLHwQE+6mXwuYeIhDpk88uwYtqCAoo1HZe3Js73sjJEERuBrdwjJkQn16m0RcgNf2lhpBDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fuVzZrlVbWXE1MJjHMUKBweoY98rGu8Nnm2zLyzhJ8I=;
- b=d/KysYCB2f3kVZJlEwizbbbRpt+XLvnfBOg47ncF6jYnLYREr9TvPwgVKFbJms+Hrdg1PLzKV7kvIut81eS4PnykHJjMPHOl71HXmLjd8sn5s5lQ5vRD9qP1IchosqdUh+R5ztAVNbhxuUDAjG/P8XHVakq64oP3muiZPMvC6qYGDSQYtF2/TMcGFXXbZaXg1fOps9ReJtDAY7Ee/nSMdX/AlLncsydtpeFOIvJfMUspu5AAmv4PcumELz8bZK9fNTuRb/yFkfn+TiO17V2ETAkGTqG108K3cxr4pDa5OzO9bVOMo8KGQAWsdgEW2NEilxWe3Fh9RjTXcxAWY2mQcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BN7PR15MB2194.namprd15.prod.outlook.com (2603:10b6:406:81::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4951.19; Thu, 10 Feb
- 2022 08:11:00 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f54e:cd09:acc2:1092]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::f54e:cd09:acc2:1092%4]) with mapi id 15.20.4975.011; Thu, 10 Feb 2022
- 08:11:00 +0000
-Message-ID: <e8fc8bd2-a775-6c39-74eb-b33ec6e9ca94@fb.com>
-Date:   Thu, 10 Feb 2022 00:10:56 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.5.1
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add test for bpf_timer
- overwriting crash
-Content-Language: en-US
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20220209070324.1093182-1-memxor@gmail.com>
- <20220209070324.1093182-3-memxor@gmail.com>
- <20220209200325.ipydl7jsrwiugujn@apollo.legion>
-From:   Yonghong Song <yhs@fb.com>
-In-Reply-To: <20220209200325.ipydl7jsrwiugujn@apollo.legion>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR03CA0166.namprd03.prod.outlook.com
- (2603:10b6:303:8d::21) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        with ESMTP id S237267AbiBJIZz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Feb 2022 03:25:55 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D87D109E;
+        Thu, 10 Feb 2022 00:25:56 -0800 (PST)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nI4lz-000D7n-KY; Thu, 10 Feb 2022 09:25:51 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nI4lz-00050p-Be; Thu, 10 Feb 2022 09:25:51 +0100
+Subject: Re: [PATCH bpf-next 2/2] bpf: flexible size for bpf_prog_pack
+To:     Song Liu <song@kernel.org>, linux-mm@kvack.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, kernel-team@fb.com,
+        akpm@linux-foundation.org, eric.dumazet@gmail.com, mhocko@suse.com
+References: <20220210064108.1095847-1-song@kernel.org>
+ <20220210064108.1095847-3-song@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <34d0ed40-30cf-a1a2-f4eb-fa3d0a55bce8@iogearbox.net>
+Date:   Thu, 10 Feb 2022 09:25:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fb73c88c-588d-4984-11b1-08d9ec6cdf6d
-X-MS-TrafficTypeDiagnostic: BN7PR15MB2194:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR15MB2194144AC4869A5C532032CED32F9@BN7PR15MB2194.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uZUWGi5+pWxHpkokhsHKnGQ5IOLZtM5nk9KnyTAXW4wcDeEmiR6sJ0zhSJv8m7K8uO0beYSVtaL0OKwGsrAt5MmYW6fMcmJ+7baZEJaT/CrM7tVGeAk1vcUpBEed3ki2e4iT2l3nOKFcZcujAFJ5D4mbuWsBzkTfgUH1gk75wHE0jAPVv8Kj8yOpTq9S46KrheVdXxNbGjBsI7wScN3JnjFuTQ0PrcIEc7HnqYTBTYE7JaGiGEYDhbpYzlnxqkUv4/36NhwmYFG/RryHXKqmODhP1kfpW07KwzbjgE6cY1IBC1DgWEcMNEI7lq+rDmofIulh/RCDhJSSaZL4kbPb0/9CM4wbH5LNrkSrgSOe7P7Gn++pTFULYB5cArGqRF5xLVZtOw0Ka9AvBWiO+pJHuG6O9wNzhkUGhBxo+/c0swJlZIZGkYll/k+rAZ3l/njl7x/jS/uAevN23cjLZOKlffZqEcyV8uvdTQLS1Rn/n9l60NsduqOm9wMbiZo3xeUj93c4ar27GTSXPd5iFAugRLDUBYpwo0STfYx/XKvLcFtIkpGGUrs/r1lGscAmRe74le0jcaD0+qfxg7mdLm1+qcuvVbfyOA1lTh8pN8QuhotMc95PqcIeJ1GjVIgXH12bHn8XAapP3QWEK9U0XNTAT1bIN7UIs61au0vWuURjuYfdoVTc1Su1aI6U2nJiPUmGsPTA7KOno7MWLWv/Yb1xUN+kucOzjJ2PkiKn0ESZ12P4J/8GIkvz/CcOjMPR/dhW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52116002)(53546011)(36756003)(38100700002)(6666004)(6506007)(6512007)(2616005)(186003)(83380400001)(5660300002)(6486002)(31686004)(31696002)(66556008)(86362001)(110136005)(66476007)(66946007)(8676002)(8936002)(316002)(508600001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M0xlNGFIK3MwMUI0M1MyNXBTTWEzVXlBNFpsRmZNOFJBQmVSalN5UDB1ZDN4?=
- =?utf-8?B?K25WT1NuMW9oS3pQVTNXTVMvd3ZheEl1MWhoZ2FoQSs3eUpaZWRlZjMwaTNu?=
- =?utf-8?B?Y1ZZeXQzczluQ0lRdnN6ZVE3Yy9kVDQxWjd1TmtEWUZ1M3E3NUNVY24xaU1z?=
- =?utf-8?B?R1JoTE4wVHRxRnRrV1g2MmJSaTNlc3kvS3d1b0t3eFNONDMvSzZ6S1JxN1Bx?=
- =?utf-8?B?VkRkeU43VzhSNU5CMlhocUluMVVxcnZHT2dNM0UvUE5LbFo3dGgvQ3lwM1hR?=
- =?utf-8?B?Rlk2VWV1OXFMWnV5SVluMDNGZzViVGVySHNkVzN5djNBbE9lb3dwQzZOT2xS?=
- =?utf-8?B?THVIQjhyUkNVMnRWcGhNOTUzV00vN2xJNjdQeWtFV2VmMmpyb2xoK2llWmRp?=
- =?utf-8?B?WUFYU1NMMGNOVEtNanZtMDl3VDRWaHRTTjBoQkt6ZDRMVmM3SlBoa0dheWlj?=
- =?utf-8?B?cERWYkRaQlFFa0R0Ky9RTUJrU1YzMy9DMHlkNk56UXpKaU9aWU05dzZKSEYv?=
- =?utf-8?B?aE44ZzhIUWlyQVlxcFQ3Qk9scVBKNk1Nc1FZWmxwTW1WOGZsL0xsN2JpQWlz?=
- =?utf-8?B?MkUxeFlkZ3UvWjJMcXE0T2hNOTZGN2Y4bmc1N05sSEJmd0xoS3FBTjQxODBS?=
- =?utf-8?B?ZHdyUFpHZXRLa1V5UWRJaDRNd2x5UWVTRFAxRkIzL3V2USt6KzkrNnhsWWJi?=
- =?utf-8?B?eEhvb2liK2dzaDA1WlFLcWZXNEdwUFRwcFpFSGdUUU5nWXBWZHNGbmxZeE8r?=
- =?utf-8?B?Zkp1aENTWFIxWG1CVk5ZUzc1Qk1Xcy9VZldyK1Z3ekE3RDZyWmFxUlk4L3dB?=
- =?utf-8?B?cWVaY3V2THB5ZWpVS3ZCc2xHekZtTnVvVnVEVlVGMW1YT3p3RmZIM1liMzlt?=
- =?utf-8?B?b1luLzA3UVE4QndkR1VVZ1kyOXJVZWZLVnJvRnRKVTljYTVDVU9yeWJETXRt?=
- =?utf-8?B?VWt1bmRnSVhyR3czam9rZXRUajhQSWdiQlkxcGFqUTJzeWxkNjh0Um1HK3I0?=
- =?utf-8?B?ZHZUL0x5OHdiTE1saTQ4amFSZmI2OGpZbUwzdndSdndQOTYyWnVpbFF0M0JW?=
- =?utf-8?B?Qm5LYy9IMGt1QVd1aVhrbmhIUVlVSlpKa2dmZk9NVVlqWFRoRm9xeTJvVkow?=
- =?utf-8?B?Y0NNbXg0QVdMampGQzN0RXVhMytRdFRBVkw0Y1Y0QmlDSUVYM1lIQTV3SjB6?=
- =?utf-8?B?U2k0N1lXVE5sY3FzK1lZRFdTTHN2TzdhK0hwenVEeWJJMzFaVFlTdXRvdzVr?=
- =?utf-8?B?T1JyNXNodm9wblZEaW1IS1diL1VJTlJyc1BVaHUveDd4Q2pjdHR0MytndGFq?=
- =?utf-8?B?citPcERJd3lzNmRURnl6TVF6RUdYWEkyemZuWW5MN2ZjYy9jbnVxa1RRaGpY?=
- =?utf-8?B?bFlKZjZMMENncmFHclRpMjQzR0JHYk9zMk5Na1VrRGlEZUJtK24rS0QrZTRT?=
- =?utf-8?B?by9IUlJNdU11aXdqKzJMNTNFZlJidlNZZFBNb1VJc3JtT1pNM09mZjNGbW1U?=
- =?utf-8?B?OTdmcmRQdWo0ZHQrdmRhUk9MY0c4ZzB2V1hOU0t3dnlReDZjMEZZVElxaFBx?=
- =?utf-8?B?VkFVRlNhU0cyUUUxYVhJY01JS3oyck5pSTJqQjYycEFlMXp1REtNRFYxVnhK?=
- =?utf-8?B?dldyTVdLS0VMUVR6MHdWc0lrNUg5MW42UnFTTFNhOVhnc0NjUTFnNmJzV3pN?=
- =?utf-8?B?eWx1L1VPNGJib0dCdUp5TmZjU0YvSUl5SlVYVllJTUUxQjE5UE0wa2dsYzdj?=
- =?utf-8?B?VDZQcDBiOUVzSW5kM3E1ek51akVad3NVbFgwdDltcXdPb1VwcURHWWp5MW1o?=
- =?utf-8?B?STNrLzFRamR5aHlxL0dHWHFlemZhMW0yZVczcVNGa3E1aEpSVDcyd2pYSTVU?=
- =?utf-8?B?R1BVeFNiMkdJOVhqSkhtc3BXV2NBRFVFTERTUjM2U2IyV2ZkazRhUlNueG5Y?=
- =?utf-8?B?ZGZrQWxMS1FxNW9vdUs0NERSRzNiZUNlbXJzYXVpeThrVU0vTGJiMjRwSjlC?=
- =?utf-8?B?REUvdnVzZkpPYUhoTkxuOXNNMytTYXptSGtGZ1hQY0xnOXNFZGRaS0d2ZTVO?=
- =?utf-8?B?MTQxU0pXSXhXUCtCYXdSUktwL0d2N2pTMXo3VlVSMzVYUktzYVBvK21Ta2l6?=
- =?utf-8?B?N083WHRkSDluSENmMWFzUncrTnpzTFdUL0NWUUlGVmNZdW55dHJOZTFOb09o?=
- =?utf-8?B?Y2c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb73c88c-588d-4984-11b1-08d9ec6cdf6d
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2022 08:11:00.0132
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vTJa+H43vaiE7CukNs0Sbb9du0yipTPqGHLbeorya23zjl7NYa2Sg2+zXK8T2BnP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR15MB2194
-X-OriginatorOrg: fb.com
-X-Proofpoint-ORIG-GUID: FtxOFkg3jQ2XGnExKTqcvaqbn-65-7Ok
-X-Proofpoint-GUID: FtxOFkg3jQ2XGnExKTqcvaqbn-65-7Ok
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-10_02,2022-02-09_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 spamscore=0 mlxscore=0
- priorityscore=1501 suspectscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 clxscore=1015 impostorscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202100043
-X-FB-Internal: deliver
+In-Reply-To: <20220210064108.1095847-3-song@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26448/Wed Feb  9 10:31:19 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-On 2/9/22 12:03 PM, Kumar Kartikeya Dwivedi wrote:
-> On Wed, Feb 09, 2022 at 12:33:24PM IST, Kumar Kartikeya Dwivedi wrote:
->> Add a test that validates that timer value is not overwritten when doing
->> a copy_map_value call in the kernel. Without the prior fix, this test
->> triggers a crash.
->>
->> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> ---
->>   .../selftests/bpf/prog_tests/timer_crash.c    | 32 +++++++++++
->>   .../testing/selftests/bpf/progs/timer_crash.c | 54 +++++++++++++++++++
->>   2 files changed, 86 insertions(+)
->>   create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_crash.c
->>   create mode 100644 tools/testing/selftests/bpf/progs/timer_crash.c
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/timer_crash.c b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
->> new file mode 100644
->> index 000000000000..f74b82305da8
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/timer_crash.c
->> @@ -0,0 +1,32 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <test_progs.h>
->> +#include "timer_crash.skel.h"
->> +
->> +enum {
->> +	MODE_ARRAY,
->> +	MODE_HASH,
->> +};
->> +
->> +static void test_timer_crash_mode(int mode)
->> +{
->> +	struct timer_crash *skel;
->> +
->> +	skel = timer_crash__open_and_load();
->> +	if (!ASSERT_OK_PTR(skel, "timer_crash__open_and_load"))
->> +		return;
->> +	skel->bss->pid = getpid();
->> +	skel->bss->crash_map = mode;
->> +	if (!ASSERT_OK(timer_crash__attach(skel), "timer_crash__attach"))
->> +		goto end;
->> +	usleep(1);
->> +end:
->> +	timer_crash__destroy(skel);
->> +}
->> +
->> +void test_timer_crash(void)
->> +{
->> +	if (test__start_subtest("array"))
->> +		test_timer_crash_mode(MODE_ARRAY);
->> +	if (test__start_subtest("hash"))
->> +		test_timer_crash_mode(MODE_HASH);
->> +}
->> diff --git a/tools/testing/selftests/bpf/progs/timer_crash.c b/tools/testing/selftests/bpf/progs/timer_crash.c
->> new file mode 100644
->> index 000000000000..f8f7944e70da
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/timer_crash.c
->> @@ -0,0 +1,54 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <vmlinux.h>
->> +#include <bpf/bpf_tracing.h>
->> +#include <bpf/bpf_helpers.h>
->> +
->> +struct map_elem {
->> +	struct bpf_timer timer;
->> +	struct bpf_spin_lock lock;
->> +};
->> +
->> +struct {
->> +	__uint(type, BPF_MAP_TYPE_ARRAY);
->> +	__uint(max_entries, 1);
->> +	__type(key, int);
->> +	__type(value, struct map_elem);
->> +} amap SEC(".maps");
->> +
->> +struct {
->> +	__uint(type, BPF_MAP_TYPE_HASH);
->> +	__uint(max_entries, 1);
->> +	__type(key, int);
->> +	__type(value, struct map_elem);
->> +} hmap SEC(".maps");
->> +
->> +int pid = 0;
->> +int crash_map = 0; /* 0 for amap, 1 for hmap */
->> +
->> +SEC("fentry/do_nanosleep")
->> +int sys_enter(void *ctx)
->> +{
->> +	struct map_elem *e, value = {};
->> +	void *map = crash_map ? (void *)&hmap : (void *)&amap;
->> +
->> +	if (bpf_get_current_task_btf()->tgid != pid)
->> +		return 0;
->> +
->> +	*(void **)&value = (void *)0xdeadcaf3;
->> +
->> +	bpf_map_update_elem(map, &(int){0}, &value, 0);
->> +	/* For array map, doing bpf_map_update_elem will do a
->> +	 * check_and_free_timer_in_array, which will trigger the crash if timer
->> +	 * pointer was overwritten, for hmap we need to use bpf_timer_cancel.
->> +	 */
+On 2/10/22 7:41 AM, Song Liu wrote:
+> bpf_prog_pack uses huge pages to reduce pressue on instruction TLB.
+> To guarantee allocating huge pages for bpf_prog_pack, it is necessary to
+> allocate memory of size PMD_SIZE * num_online_nodes().
 > 
-> Also, in this case, there seems to be a difference of behavior. When we do
-> bpf_map_update_elem for array map, it seems to invoke
-> check_and_free_timer_in_array and free any timers that were part of the value.
-> In case of hash/lru_hash, that doesn't seem to happen, hence why the test has
-> two 'modes', to then trigger a dereference of the overwritten pointer using
-> bpf_timer_cancel.
+> On the other hand, if the system doesn't support huge pages, it is more
+> efficient to allocate PAGE_SIZE bpf_prog_pack.
 > 
-> So in case of array map it crashes right when doing bpf_map_update_elem, and in
-> case of hash it crashes inside bpf_timer_cancel.
+> Address different scenarios with more flexible bpf_prog_pack_size().
 > 
-> This seems inconsistent to me, is there a specific reason behind doing it for
-> array map differently than hash map? If not, is it now too late to change this?
+> Signed-off-by: Song Liu <song@kernel.org>
+> ---
+>   kernel/bpf/core.c | 47 +++++++++++++++++++++++++++--------------------
+>   1 file changed, 27 insertions(+), 20 deletions(-)
+> 
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 42d96549a804..d961a1f07a13 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -814,46 +814,53 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+>    * allocator. The prog_pack allocator uses HPAGE_PMD_SIZE page (2MB on x86)
+>    * to host BPF programs.
+>    */
+> -#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> -#define BPF_PROG_PACK_SIZE	HPAGE_PMD_SIZE
+> -#else
+> -#define BPF_PROG_PACK_SIZE	PAGE_SIZE
+> -#endif
+>   #define BPF_PROG_CHUNK_SHIFT	6
+>   #define BPF_PROG_CHUNK_SIZE	(1 << BPF_PROG_CHUNK_SHIFT)
+>   #define BPF_PROG_CHUNK_MASK	(~(BPF_PROG_CHUNK_SIZE - 1))
+> -#define BPF_PROG_CHUNK_COUNT	(BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE)
+>   
+>   struct bpf_prog_pack {
+>   	struct list_head list;
+>   	void *ptr;
+> -	unsigned long bitmap[BITS_TO_LONGS(BPF_PROG_CHUNK_COUNT)];
+> +	unsigned long bitmap[];
+>   };
+>   
+> -#define BPF_PROG_MAX_PACK_PROG_SIZE	BPF_PROG_PACK_SIZE
+>   #define BPF_PROG_SIZE_TO_NBITS(size)	(round_up(size, BPF_PROG_CHUNK_SIZE) / BPF_PROG_CHUNK_SIZE)
+>   
+>   static DEFINE_MUTEX(pack_mutex);
+>   static LIST_HEAD(pack_list);
+>   
+> +static inline int bpf_prog_pack_size(void)
+> +{
+> +	/* If vmap_allow_huge == true, use pack size of the smallest
+> +	 * possible vmalloc huge page: PMD_SIZE * num_online_nodes().
+> +	 * Otherwise, use pack size of PAGE_SIZE.
+> +	 */
+> +	return get_vmap_allow_huge() ? PMD_SIZE * num_online_nodes() : PAGE_SIZE;
+> +}
 
-There is no map deletion operation for array map, so the timer is 
-canceled and freed when a new update comes in which signals the previous
-value is gone.
+Imho, this is making too many assumptions about implementation details. Can't we
+just add a new module_alloc*() API instead which internally guarantees allocating
+huge pages when enabled/supported (e.g. with a __weak function as fallback)?
 
-for hashmap, depending on whether a new element will be allocated or 
-not. If it is, the old element (if exists) will have its timer freed.
+> +static inline int bpf_prog_chunk_count(void)
+> +{
+> +	return bpf_prog_pack_size() / BPF_PROG_CHUNK_SIZE;
+> +}
+> +
+>   static struct bpf_prog_pack *alloc_new_pack(void)
+>   {
+>   	struct bpf_prog_pack *pack;
+>   
+> -	pack = kzalloc(sizeof(*pack), GFP_KERNEL);
+> +	pack = kzalloc(sizeof(*pack) + BITS_TO_BYTES(bpf_prog_chunk_count()), GFP_KERNEL);
+>   	if (!pack)
+>   		return NULL;
+> -	pack->ptr = module_alloc(BPF_PROG_PACK_SIZE);
+> +	pack->ptr = module_alloc(bpf_prog_pack_size());
+>   	if (!pack->ptr) {
+>   		kfree(pack);
+>   		return NULL;
+>   	}
+> -	bitmap_zero(pack->bitmap, BPF_PROG_PACK_SIZE / BPF_PROG_CHUNK_SIZE);
+> +	bitmap_zero(pack->bitmap, bpf_prog_pack_size() / BPF_PROG_CHUNK_SIZE);
+>   	list_add_tail(&pack->list, &pack_list);
+>   
+>   	set_vm_flush_reset_perms(pack->ptr);
+> -	set_memory_ro((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
+> -	set_memory_x((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
+> +	set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size() / PAGE_SIZE);
+> +	set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size() / PAGE_SIZE);
+>   	return pack;
+>   }
+>   
+> @@ -864,7 +871,7 @@ static void *bpf_prog_pack_alloc(u32 size)
+>   	unsigned long pos;
+>   	void *ptr = NULL;
+>   
+> -	if (size > BPF_PROG_MAX_PACK_PROG_SIZE) {
+> +	if (size > bpf_prog_pack_size()) {
+>   		size = round_up(size, PAGE_SIZE);
+>   		ptr = module_alloc(size);
+>   		if (ptr) {
+> @@ -876,9 +883,9 @@ static void *bpf_prog_pack_alloc(u32 size)
+>   	}
+>   	mutex_lock(&pack_mutex);
+>   	list_for_each_entry(pack, &pack_list, list) {
+> -		pos = bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
+> +		pos = bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
+>   						 nbits, 0);
+> -		if (pos < BPF_PROG_CHUNK_COUNT)
+> +		if (pos < bpf_prog_chunk_count())
+>   			goto found_free_area;
+>   	}
+>   
+> @@ -904,12 +911,12 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+>   	unsigned long pos;
+>   	void *pack_ptr;
+>   
+> -	if (hdr->size > BPF_PROG_MAX_PACK_PROG_SIZE) {
+> +	if (hdr->size > bpf_prog_pack_size()) {
+>   		module_memfree(hdr);
+>   		return;
+>   	}
+>   
+> -	pack_ptr = (void *)((unsigned long)hdr & ~(BPF_PROG_PACK_SIZE - 1));
+> +	pack_ptr = (void *)((unsigned long)hdr & ~(bpf_prog_pack_size() - 1));
+>   	mutex_lock(&pack_mutex);
+>   
+>   	list_for_each_entry(tmp, &pack_list, list) {
+> @@ -926,8 +933,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+>   	pos = ((unsigned long)hdr - (unsigned long)pack_ptr) >> BPF_PROG_CHUNK_SHIFT;
+>   
+>   	bitmap_clear(pack->bitmap, pos, nbits);
+> -	if (bitmap_find_next_zero_area(pack->bitmap, BPF_PROG_CHUNK_COUNT, 0,
+> -				       BPF_PROG_CHUNK_COUNT, 0) == 0) {
+> +	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
+> +				       bpf_prog_chunk_count(), 0) == 0) {
+>   		list_del(&pack->list);
+>   		module_memfree(pack->ptr);
+>   		kfree(pack);
+> 
 
-> 
->> +	if (crash_map == 1) {
->> +		e = bpf_map_lookup_elem(map, &(int){0});
->> +		if (!e)
->> +			return 0;
->> +		bpf_timer_cancel(&e->timer);
->> +	}
->> +	return 0;
->> +}
->> +
->> +char _license[] SEC("license") = "GPL";
->> --
->> 2.35.1
->>
-> 
-> --
-> Kartikeya
