@@ -2,61 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4642C433F5
-	for <bpf@archiver.kernel.org>; Fri, 11 Feb 2022 09:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F18DC433F5
+	for <bpf@archiver.kernel.org>; Fri, 11 Feb 2022 09:24:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235933AbiBKJHo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Feb 2022 04:07:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51724 "EHLO
+        id S1348593AbiBKJYv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Feb 2022 04:24:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234132AbiBKJHn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Feb 2022 04:07:43 -0500
-X-Greylist: delayed 585 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Feb 2022 01:07:42 PST
-Received: from mail.onlinesuccesses.pl (mail.onlinesuccesses.pl [198.244.150.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4902C2
-        for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 01:07:42 -0800 (PST)
-Received: by mail.onlinesuccesses.pl (Postfix, from userid 1002)
-        id 5E3D8AA0A2; Fri, 11 Feb 2022 08:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=onlinesuccesses.pl;
-        s=mail; t=1644569811;
-        bh=nE8HqilgMh4dy7+Z8ksfg7Bc9rmPeQtYFq3/3YR2ODU=;
-        h=Date:From:To:Subject:From;
-        b=nfhsziZNRFDKVl5eYHQ/TF8uTYD4rQK58kcuawyswUqOzE9waLRsm1ZJODIDTq7FU
-         YwYuyMQPUdzVIpTjr79OYpLfZr9BBs6mgi/DsMvXpbzdMl4kFECWxyKkzNP3OiFI8f
-         aPocI1iRYEg8oMXvfQ9FMJGId7IJAUuJncFJzGh33Q2FDbvoNAPMMk5EUxUZSDcjPd
-         WxF0d1hk7FZgLtz9qBwAO7Wcrx9moNDDLkM7c6LlsbK1nML575LacCAW2ivsXJ3W+Q
-         8fc6A+Ol4ZKbT+6Up9qUu0p7EOOiCOrmsAlK6g3E0OhCCOJHd4etL2x2W2zwwWswY1
-         OubvqJZkxC9Eg==
-Received: by mail.onlinesuccesses.pl for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 08:56:19 GMT
-Message-ID: <20220211074500-0.1.2i.dr5j.0.pyll05o5gt@onlinesuccesses.pl>
-Date:   Fri, 11 Feb 2022 08:56:19 GMT
-From:   "Wiktor Zielonko" <wiktor.zielonko@onlinesuccesses.pl>
-To:     <bpf@vger.kernel.org>
-Subject: Ruch z pierwszej pozycji w Google
-X-Mailer: mail.onlinesuccesses.pl
+        with ESMTP id S1348595AbiBKJYk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Feb 2022 04:24:40 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03381109B;
+        Fri, 11 Feb 2022 01:24:37 -0800 (PST)
+Received: from localhost.localdomain ([81.221.85.15]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M7ZR3-1oCV3C3YYh-00xJjX;
+ Fri, 11 Feb 2022 10:24:06 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Song Liu <songliubraving@fb.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Adam Ford <aford173@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Olof Johansson <olof@lixom.net>,
+        Shawn Guo <shawnguo@kernel.org>, Will Deacon <will@kernel.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v6 06/12] arm64: defconfig: enable bpf/cgroup firewalling
+Date:   Fri, 11 Feb 2022 10:23:16 +0100
+Message-Id: <20220211092322.287487-7-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20220211092322.287487-1-marcel@ziswiler.com>
+References: <20220211092322.287487-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:rf0hT0aeHyLIdu2loRx1Zy/Fdh/cjuPMmxMTcXBYZ2EmTPwGFfz
+ tyrlZLoxD7OYvX/ct1Z3LsVE0ZXI4eUav9jH7hq55G8ouOcefAA1FtpzYPlUBcrc6YsA0M+
+ P6BPQH5zz8UTVpXp6mvkuBI5temNeqzofaby8EXsoHM/lGWz5cN8C2C7pGfR9cBTeBdgJ/v
+ fc0nPXmlG9NosgKCSgp6w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zrql6Y5KADM=:aTsM38AVLTMnEHGDXL5Kt7
+ ms9ORCvceNmgrjSAO41QoE3DQO6UnVu+tVC5HCDFQzominrpjUN+BLKhSCTAle78ikUpGIIsj
+ n95Tlm82pWsefN0QkMluYZKteSjAnPuixPFlHas1kPqGOTehncV3CYPxBLw+YOH0RvdBciQbT
+ ikVSNLlpdi0STQ6bMIpWeUtuGZC2G7RmWumovOOIhxYGcgFFkuo7goKqQCfZGhOnVunjk8qFS
+ WL6/2otNIz44uL43Som8sEWAcdED7Kj+SlR404rqAjQwi9MEWX2X6qZW1azerM4NUe9clT7xn
+ jRSs3c7P3Bb7X5Y3Mc6GKXJgK8xMNN8qxwwhxIOtKo1bUG0ezrbAv6Om5IBTDjhtisz6rCDUH
+ oTHatkSgMOAnCqndtXVcUN4T4g+7i3lwo/Q6K+ggNbi5qOvuVJtO+lz59fMqQKpbluvTD/chg
+ wkQ9+X0S5HAA9+uqOspO3rQEIun9SwB/qLhKRbk0biymF+3q7DiNIk6w+VROQEO2QpwfnPTfE
+ 0YdtemLYEdxY4vMxDkec3/NdIA8VPdTo86mzrmH5WI28/9CW4rLGfWt8yF9GcG/cDhv0kpcPK
+ t6JWVVQjejM3AprUD2EKhO9TPtmplqzOJME7+ll3cPg1D4fFoZCWJrebRbdfLqDUfTkaZHE6K
+ +lnwuQ5iFZdi0q6kWQ7JiI6Ug6iONb6rgl7k9mmjG4jOSmxYfyhXwYCzh8HX2VkRYIdPeJHx+
+ F4PoYmR+CJokuKFk
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
-j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
-e Google.=20
+This avoids the following systemd warning:
 
-Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
-=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
-w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
-owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
-dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+[    2.618538] systemd[1]: system-getty.slice: unit configures an IP
+ firewall, but the local system does not support BPF/cgroup firewalling.
+[    2.630916] systemd[1]: (This warning is only shown for the first
+ unit using IP firewalling.)
 
-Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
-edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
-edstawi=C4=87 ofert=C4=99?=20
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
+---
 
-Pozdrawiam serdecznie,
-Wiktor Zielonko
+(no changes since v3)
+
+Changes in v3:
+- Add Krzysztof's reviewed-by tag.
+
+Changes in v2:
+- Add Song's acked-by tag.
+
+ arch/arm64/configs/defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 530ad076b5cb..444fec9ec73a 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -3,6 +3,7 @@ CONFIG_POSIX_MQUEUE=y
+ CONFIG_AUDIT=y
+ CONFIG_NO_HZ_IDLE=y
+ CONFIG_HIGH_RES_TIMERS=y
++CONFIG_BPF_SYSCALL=y
+ CONFIG_BPF_JIT=y
+ CONFIG_PREEMPT=y
+ CONFIG_IRQ_TIME_ACCOUNTING=y
+@@ -22,6 +23,7 @@ CONFIG_CPUSETS=y
+ CONFIG_CGROUP_DEVICE=y
+ CONFIG_CGROUP_CPUACCT=y
+ CONFIG_CGROUP_PERF=y
++CONFIG_CGROUP_BPF=y
+ CONFIG_USER_NS=y
+ CONFIG_SCHED_AUTOGROUP=y
+ CONFIG_BLK_DEV_INITRD=y
+-- 
+2.33.1
+
