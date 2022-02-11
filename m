@@ -2,107 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6827FC433F5
-	for <bpf@archiver.kernel.org>; Fri, 11 Feb 2022 12:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53CADC4332F
+	for <bpf@archiver.kernel.org>; Fri, 11 Feb 2022 12:11:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349865AbiBKMLz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Feb 2022 07:11:55 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54328 "EHLO
+        id S1349869AbiBKML4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Feb 2022 07:11:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239498AbiBKMLz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1349867AbiBKMLz (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 11 Feb 2022 07:11:55 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F91FE77;
-        Fri, 11 Feb 2022 04:11:54 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id u16so10216280pfg.3;
-        Fri, 11 Feb 2022 04:11:54 -0800 (PST)
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E48D5A;
+        Fri, 11 Feb 2022 04:11:55 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id om7so7899357pjb.5;
+        Fri, 11 Feb 2022 04:11:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0lNjZ+DwApF0imKf15w8mcxvZtcgQC1cz+0EsKbpnjY=;
-        b=EBqlAyRGb0+mQvO2+QiRr1S4ZsXqBXlBGJsqn0hVX/1Xx67vLmqgDEHBeRmHlRCfxJ
-         FN/nbDMmjTX8pOLLvjqtC211WK+LRqPNZRBiLMrBFe1WsxTSYhl7SKKsUVOlqsP12osV
-         NkbivlUSMUeaoW8sxTIwJaGMH4n4gov8hEO+9tBTESOpWMFot52+30VdDYV8p3P2FgbX
-         H4KJ9/yVKGgTieamp+NFl0jpDgFpDWQtZbNzZUy0IVwnh/i5up9mYiUGA4bO5C+qG5n7
-         LDE1mKEh0sK9m6r5Bl+D8e1NlY9dr+j4KMZ7VtS7QRxgeQ0ar37+whMVa/hfCuCxW2xg
-         xX7A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yy9scMf4Ui56NpjyKDEB4Jg/xmcpa20rCXr5oBLCc18=;
+        b=p9zT758bIKEwIEdy2skqBXu4Sbf2IDLjoOEa0OK6bSumy757PNzGCiqqNfX44YGrWh
+         VxmfdzFW9BgZJ00s997g+GxTQ8ouNMgXwltB4l0H27r3i62yok1YS46mTQXbmz6LXUFb
+         AUygNN9T4msE8rc0XnVhvT449D71/vr7ruroQzqM5sQZdxGQ3LlsBUI3/AOo8y0PyyRL
+         mVey6HHPHOYF1b9GCtqG4awPkDgkSI2WKv3XiDTSmimzXUFxk7BliMoE0MNcO4dafuBz
+         a/g0NHig8woGlyFA0ZjthQy3DAG0/vSeSW77jtA5JDV9sKqFzDGCAJp89kNB04pcB9LH
+         U2zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=0lNjZ+DwApF0imKf15w8mcxvZtcgQC1cz+0EsKbpnjY=;
-        b=rGfVkVLXmdX8vCKRl+pZn/DualMQdksmSK/Qxt92Kr1InYibMOuj2Vw1HS+2sa3lxW
-         zRQST4nDspONSeSIj+iPXRlCIQOJxRQBAohO2zXT/vNTkxVARhiW/5Z6+cdrYl+I1pvO
-         VdVhqClSUmUFzxt4iZZLGJgJROuxQimcazyfOAb9sAsYJJ1P+0lKa1P70Kcdn47nZ/7b
-         edIPzOw8s7Qb2Jq+dsTVWqvtUVuPTjYurbQya492rG9/dewEiDTv0yzEf3BHOS6Abner
-         IKz/RFa+Ncf4ovFgbQIJy4O/VRX92o0o/BLveHiGYw2jhkH1o4lnhwjV0633M8XqImIo
-         uvoQ==
-X-Gm-Message-State: AOAM533XULSvGMrDtZgJjl+Fsdzmi2zUxbZmpOLZMlLcVNIR2jQgjkFC
-        k+xOiOdy60ay2bRKByaB8rM=
-X-Google-Smtp-Source: ABdhPJw4k4Ho1sGhoGzEsoatlvdHChxKIAQtxkk3etUsws4ARzNnAcCKsiEZCJkMIJ12EsFtrlyPLg==
-X-Received: by 2002:a63:5545:: with SMTP id f5mr1066631pgm.157.1644581512886;
-        Fri, 11 Feb 2022 04:11:52 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yy9scMf4Ui56NpjyKDEB4Jg/xmcpa20rCXr5oBLCc18=;
+        b=uZ9cpY+oi6PMAucrBpmvosxfo+4U0sH/dX4r7UX42X/saF/qwc+e1SSBfIl6mnPmvi
+         NGpdwflb81qkOz68QMIZd0q/3uhuBFKjP8TgLk5iy4tFUw5yYIScFZCiL6JcMCc2/CMd
+         TgQaGXKmAJ/x/J2daJqVFP1kLKLrz/xBURtj+yXSa4EMl9HiCjG+p8NYOjofwAiul+bc
+         AVFIoEJsLvJrypFWVxvTJhEwv7j3F+0dXAJOvSdQghfEo4/XGAGe3pUYgVqyN0bSocUU
+         nh+j7OG8YFsOoJQ+wY1zK36GmHVTLEUyAJqbUtnMJVUgmx9gisohquRVtuXroM0dDWXy
+         +/CA==
+X-Gm-Message-State: AOAM532YbHf3nTsRcNNf2fCYvXY+SN40w6Vo6JIv4nFb6rsIugi5EvAK
+        ncBfeLBIx8TStsHpauTrpqA=
+X-Google-Smtp-Source: ABdhPJyHRhSfDAvWkRzq26SisKk9JGuYvCRkCaM4Tc8EmEs5lzEFoiclkN6xyFNLTiTHn2IqIW3iJA==
+X-Received: by 2002:a17:902:a418:: with SMTP id p24mr1322542plq.171.1644581514840;
+        Fri, 11 Feb 2022 04:11:54 -0800 (PST)
 Received: from vultr.guest ([149.248.7.47])
-        by smtp.gmail.com with ESMTPSA id il18sm5558913pjb.27.2022.02.11.04.11.51
+        by smtp.gmail.com with ESMTPSA id il18sm5558913pjb.27.2022.02.11.04.11.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 04:11:52 -0800 (PST)
+        Fri, 11 Feb 2022 04:11:54 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH 0/4] bpf: Add more information into bpffs
-Date:   Fri, 11 Feb 2022 12:11:41 +0000
-Message-Id: <20220211121145.35237-1-laoar.shao@gmail.com>
+Subject: [PATCH 2/4] bpf: Add pin_name into struct bpf_map
+Date:   Fri, 11 Feb 2022 12:11:43 +0000
+Message-Id: <20220211121145.35237-3-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220211121145.35237-1-laoar.shao@gmail.com>
+References: <20220211121145.35237-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have a bpf manager (bpfman) running on the host to maintain the
-lifecycle of all the bpf progs and maps on this host.
+A new member pin_name is added into struct bpf_map, which will set when
+the map is pinned and cleared when the pinned file is removed.
 
-The purpose of the bpfman includes,
-- pin and unpin bpf progs and maps
-- attach and detach bpf progs
-- update running bpf progs and the related bpf maps
-- update some running bpf progs only without updating the related bpf
-  maps
-- check the possible conflict of bpf progs
-- etc
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ include/linux/bpf.h | 1 +
+ kernel/bpf/inode.c  | 9 +++++++++
+ 2 files changed, 10 insertions(+)
 
-In order to safely do these works, we used many tools to get the
-required information, like bpftool and some other customized tools. Some
-of these works seem a little heavy. After the preloaded progs.debug and
-maps.debug are introduced, we decided to improve these two files to get
-the full view of progs and maps that required by bpfman.
-
-This patchset includes below features,
-- the pinned file of progs and maps are introduced into these two files
-- the relateship of progs and maps is introduced into progs.debug
-
-With these features we may also improve how bpftool get the pinned
-file[1] in the next step.
-
-[1]. https://github.com/torvalds/linux/blob/master/tools/bpf/bpftool/prog.c#L648
-
-Yafang Shao (4):
-  bpf: Add pin_name into struct bpf_prog_aux
-  bpf: Add pin_name into struct bpf_map
-  bpf: show pinned file name in {progs, maps}.debug
-  bpf: Show the used maps of each prog in progs.debug
-
- include/linux/bpf.h                           |   3 +
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/inode.c                            |  29 +-
- kernel/bpf/preload/iterators/iterators.bpf.c  |  33 +-
- kernel/bpf/preload/iterators/iterators.skel.h | 676 +++++++++++++++-----------
- 5 files changed, 460 insertions(+), 282 deletions(-)
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9cf8055..220de69 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -182,6 +182,7 @@ struct bpf_map {
+ 	struct mem_cgroup *memcg;
+ #endif
+ 	char name[BPF_OBJ_NAME_LEN];
++	char pin_name[BPF_PIN_NAME_LEN];
+ 	bool bypass_spec_v1;
+ 	bool frozen; /* write-once; write-protected by freeze_mutex */
+ 	/* 14 bytes hole */
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index f1a8811..586adef 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -440,6 +440,7 @@ static int bpf_obj_do_pin(const char __user *pathname, void *raw,
+ 	struct bpf_prog_aux *aux;
+ 	struct bpf_prog *prog;
+ 	struct dentry *dentry;
++	struct bpf_map *map;
+ 	struct inode *dir;
+ 	struct path path;
+ 	umode_t mode;
+@@ -470,6 +471,9 @@ static int bpf_obj_do_pin(const char __user *pathname, void *raw,
+ 		ret = vfs_mkobj(dentry, mode, bpf_mkprog, raw);
+ 		break;
+ 	case BPF_TYPE_MAP:
++		map = raw;
++		(void) strncpy_from_user(map->pin_name, pathname, BPF_PIN_NAME_LEN);
++		map->pin_name[BPF_PIN_NAME_LEN - 1] = '\0';
+ 		ret = vfs_mkobj(dentry, mode, bpf_mkmap, raw);
+ 		break;
+ 	case BPF_TYPE_LINK:
+@@ -619,6 +623,7 @@ static void bpf_free_inode(struct inode *inode)
+ {
+ 	struct bpf_prog_aux *aux;
+ 	struct bpf_prog *prog;
++	struct bpf_map *map;
+ 	enum bpf_type type;
+ 
+ 	if (S_ISLNK(inode->i_mode))
+@@ -630,6 +635,10 @@ static void bpf_free_inode(struct inode *inode)
+ 			aux = prog->aux;
+ 			aux->pin_name[0] = '\0';
+ 			break;
++		case BPF_TYPE_MAP:
++			map = inode->i_private;
++			map->pin_name[0] = '\0';
++			break;
+ 		default:
+ 			break;
+ 		}
 -- 
 1.8.3.1
 
