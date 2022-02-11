@@ -2,144 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16DB2C433F5
-	for <bpf@archiver.kernel.org>; Fri, 11 Feb 2022 22:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F027C433F5
+	for <bpf@archiver.kernel.org>; Fri, 11 Feb 2022 23:13:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353423AbiBKWu0 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 11 Feb 2022 17:50:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41328 "EHLO
+        id S1353988AbiBKXNV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Feb 2022 18:13:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353938AbiBKWuX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Feb 2022 17:50:23 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9ACFD6B
-        for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 14:50:20 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21BLJLVA021096
-        for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 14:50:20 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e59rq0gby-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 14:50:20 -0800
-Received: from twshared13833.42.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 11 Feb 2022 14:50:19 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 8D27B10BC529E; Fri, 11 Feb 2022 14:50:13 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/2] bpftool: add C++-specific open/load/etc skeleton wrappers
-Date:   Fri, 11 Feb 2022 14:50:06 -0800
-Message-ID: <20220211225007.2693813-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220211225007.2693813-1-andrii@kernel.org>
-References: <20220211225007.2693813-1-andrii@kernel.org>
+        with ESMTP id S1353928AbiBKXNU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Feb 2022 18:13:20 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4212AD68
+        for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 15:13:19 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id c3so5842377pls.5
+        for <bpf@vger.kernel.org>; Fri, 11 Feb 2022 15:13:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=slkN30ujMxi6RyrUAYgGLLOBAD2boltJ7SmUXMuxzQI=;
+        b=dDiShCM02nbX9zISLymObsQsAimHsX02WnfWZlZUBhl4FAQUGdP4GIDOdCkO5HIrvO
+         vskLpLDzCngorZyRg3quy9Qfj3xlFlZvR41DaN5nYK/FRHD0FyqJ8Ef79Xk6hBLVLbCr
+         zRl2b/bFTyczJV3DvK4E/x3EGZUpavR7MdFc+lov2xCFNz+lMFXfIEX30N5h2YJ4rlEc
+         dCMbvZMA7Mk0lNdzo/JQDXh/ZsCUQcIcCDGRn6gMpvhShtzXjzNZhckNVRtBNmwi0sgd
+         UsnUvQXESOdhY/KGcBaZ+EESSSyL2eqQpkw6n/Z7FsOpYimtXr3ubWYw8tKJrJAOb6L8
+         PU8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=slkN30ujMxi6RyrUAYgGLLOBAD2boltJ7SmUXMuxzQI=;
+        b=leSv7sRJrDZFNvu5nCD7V/YhtbACKmZqvCZ7ixtnX6OiJDSqD4W/2IHTqjTBghCd/S
+         Rn1Sm82B/FUmoft+FjTTifrC24LwJD2EUyDHSYGXceKib/7LtF8t4ZUbicz6dNpZZNuy
+         RldorBXEj2MCsToqbAMxJdhuEAAlL4Y1qBkfsU3gA5/FUTpU8tfirxLug9A76ohJesTB
+         2NwKuezuMYIhDMEV3ZkVHM0vuZeek0CD0cRh5u3rrfThuXr7FtzUXU6lhMYaoRK2/bhl
+         gGVF4p/LHwB2tNzExYeHJ1yHpZBzhUAWFon93aiKzmjevigzAtt05gp5HaflI4asQhAV
+         kXyA==
+X-Gm-Message-State: AOAM533AfvQ5SW2TsIOuBjqmYEphx4L1NJvZmRilSpawdSDrbMnBsXBD
+        f22qufIKSbuWoXvk/wn1X0jdkLgvG9s=
+X-Google-Smtp-Source: ABdhPJwMy0GTUQGB0w2p/kUYX+scSGQZiss2Bt4MmMOAr3dCTPO8Kgat3uXAe3dSxBjGLOnhV9HBYw==
+X-Received: by 2002:a17:902:db0c:: with SMTP id m12mr532581plx.72.1644621198660;
+        Fri, 11 Feb 2022 15:13:18 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:eb33])
+        by smtp.gmail.com with ESMTPSA id i19sm9226350pgn.55.2022.02.11.15.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Feb 2022 15:13:17 -0800 (PST)
+Date:   Fri, 11 Feb 2022 15:13:16 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: [PATCH v3 bpf-next 3/3] selftests/bpf: add custom SEC() handling
+ selftest
+Message-ID: <20220211231316.iqhn3jqnxangv5jc@ast-mbp.dhcp.thefacebook.com>
+References: <20220211211450.2224877-1-andrii@kernel.org>
+ <20220211211450.2224877-4-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: aMKbcPF5f4aHSDn6uoWGuo4gASe97mQV
-X-Proofpoint-GUID: aMKbcPF5f4aHSDn6uoWGuo4gASe97mQV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-11_05,2022-02-11_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- spamscore=0 mlxlogscore=984 clxscore=1015 priorityscore=1501
- suspectscore=0 mlxscore=0 impostorscore=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2202110115
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220211211450.2224877-4-andrii@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add C++-specific static methods for code-generated BPF skeleton for each
-skeleton operation: open, open_opts, open_and_load, load, attach,
-detach, destroy, and elf_bytes. This is to facilitate easier C++
-templating on top of pure C BPF skeleton.
+On Fri, Feb 11, 2022 at 01:14:50PM -0800, Andrii Nakryiko wrote:
+> Add a selftest validating various aspects of libbpf's handling of custom
+> SEC() handlers. It also demonstrates how libraries can ensure very early
+> callbacks registration and unregistration using
+> __attribute__((constructor))/__attribute__((destructor)) functions.
+> 
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  .../bpf/prog_tests/custom_sec_handlers.c      | 176 ++++++++++++++++++
+>  .../bpf/progs/test_custom_sec_handlers.c      |  63 +++++++
+>  2 files changed, 239 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_custom_sec_handlers.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c b/tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
+> new file mode 100644
+> index 000000000000..28264528280d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
+> @@ -0,0 +1,176 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2022 Facebook */
+> +
+> +#include <test_progs.h>
+> +#include "test_custom_sec_handlers.skel.h"
+> +
+> +#define COOKIE_ABC1 1
+> +#define COOKIE_ABC2 2
+> +#define COOKIE_CUSTOM 3
+> +#define COOKIE_FALLBACK 4
+> +#define COOKIE_KPROBE 5
+> +
+> +static int custom_init_prog(struct bpf_program *prog, long cookie)
+> +{
+> +	if (cookie == COOKIE_ABC1)
+> +		bpf_program__set_autoload(prog, false);
+> +
+> +	return 0;
+> +}
 
-In C, open/load/destroy/etc "methods" are of the form
-<skeleton_name>__<method>() to avoid name collision with similar
-"methods" of other skeletons withint the same application. This works
-well, but is very inconvenient for C++ applications that would like to
-write generic (templated) wrappers around BPF skeleton to fit in with
-C++ code base and take advantage of destructors and other convenient C++
-constructs.
-
-This patch makes it easier to build such generic templated wrappers by
-additionally defining C++ static methods for skeleton's struct with
-fixed names. This allows to refer to, say, open method as `T::open()`
-instead of having to somehow generate `T__open()` function call.
-
-Next patch adds an example template to test_cpp selftest to demonstrate
-how it's possible to have all the operations wrapped in a generic
-Skeleton<my_skeleton> type without explicitly passing function references.
-
-An example of generated declaration section without %1$s placeholders:
-
-  #ifdef __cplusplus
-      static test_attach_probe *open();
-      static test_attach_probe *open(const struct bpf_object_open_opts *opts);
-      static test_attach_probe *open_and_load();
-      static int load(struct test_attach_probe *skel);
-      static int attach(struct test_attach_probe *skel);
-      static void detach(struct test_attach_probe *skel);
-      static void destroy(struct test_attach_probe *skel);
-      static const void *elf_bytes(size_t *sz);
-  #endif /* __cplusplus */
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/bpf/bpftool/gen.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
-
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 6f2e20be0c62..d812414fc587 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -831,6 +831,17 @@ static int do_skeleton(int argc, char **argv)
- 
- 	codegen("\
- 		\n\
-+									    \n\
-+		#ifdef __cplusplus					    \n\
-+			static %1$s *open();				    \n\
-+			static %1$s *open(const struct bpf_object_open_opts *opts);\n\
-+			static %1$s *open_and_load();			    \n\
-+			static int load(struct %1$s *skel);		    \n\
-+			static int attach(struct %1$s *skel);		    \n\
-+			static void detach(struct %1$s *skel);		    \n\
-+			static void destroy(struct %1$s *skel);		    \n\
-+			static const void *elf_bytes(size_t *sz);	    \n\
-+		#endif /* __cplusplus */				    \n\
- 		};							    \n\
- 									    \n\
- 		static void						    \n\
-@@ -1025,9 +1036,20 @@ static int do_skeleton(int argc, char **argv)
- 		\";							    \n\
- 		}							    \n\
- 									    \n\
--		#endif /* %s */						    \n\
-+		#ifdef __cplusplus					    \n\
-+		struct %1$s *%1$s::open() { return %1$s__open(); }	    \n\
-+		struct %1$s *%1$s::open(const struct bpf_object_open_opts *opts) { return %1$s__open_opts(opts); }\n\
-+		struct %1$s *%1$s::open_and_load() { return %1$s__open_and_load(); }	\n\
-+		int %1$s::load(struct %1$s *skel) { return %1$s__load(skel); }		\n\
-+		int %1$s::attach(struct %1$s *skel) { return %1$s__attach(skel); }	\n\
-+		void %1$s::detach(struct %1$s *skel) { %1$s__detach(skel); }		\n\
-+		void %1$s::destroy(struct %1$s *skel) { %1$s__destroy(skel); }		\n\
-+		const void *%1$s::elf_bytes(size_t *sz) { return %1$s__elf_bytes(sz); } \n\
-+		#endif /* __cplusplus */				    \n\
-+									    \n\
-+		#endif /* %2$s */					    \n\
- 		",
--		header_guard);
-+		obj_name, header_guard);
- 	err = 0;
- out:
- 	bpf_object__close(obj);
--- 
-2.30.2
-
+What is the value of init_fn callback?
+afaict it was and still unused in libbpf.
+The above example doesn't make a compelling case, since set_autoload
+can be done out of preload callback.
+Maybe drop init_fn for now and extend libbpf_prog_handler_opts
+when there is actual need for it?
