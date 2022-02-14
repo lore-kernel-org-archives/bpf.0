@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B92C4321E
-	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 08:14:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19A18C433F5
+	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 08:14:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbiBNIOu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Feb 2022 03:14:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42008 "EHLO
+        id S241693AbiBNIOz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Feb 2022 03:14:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241652AbiBNIOn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:14:43 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6EE5F8F9;
-        Mon, 14 Feb 2022 00:14:35 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4O5xA4_1644826471;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V4O5xA4_1644826471)
+        with ESMTP id S241640AbiBNIOu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Feb 2022 03:14:50 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47E75FF0E;
+        Mon, 14 Feb 2022 00:14:40 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R791e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4O5x8V_1644826461;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V4O5x8V_1644826461)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 14 Feb 2022 16:14:32 +0800
+          Mon, 14 Feb 2022 16:14:22 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -28,9 +28,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v5 14/22] virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
-Date:   Mon, 14 Feb 2022 16:14:08 +0800
-Message-Id: <20220214081416.117695-15-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v5 05/22] virtio_ring: queue_reset: split: support enable reset queue
+Date:   Mon, 14 Feb 2022 16:13:59 +0800
+Message-Id: <20220214081416.117695-6-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220214081416.117695-1-xuanzhuo@linux.alibaba.com>
 References: <20220214081416.117695-1-xuanzhuo@linux.alibaba.com>
@@ -41,134 +41,147 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch implements virtio pci support for QUEUE RESET.
+The purpose of this patch is to make vring split support re-enable reset
+vq.
 
-Performing reset on a queue is divided into these steps:
+Based on whether the incoming vq passed by vring_setup_virtqueue() is
+NULL or not, distinguish whether it is a normal create virtqueue or
+re-enable a reset queue.
 
-1. reset_vq: reset one vq
-2. recycle the buffer from vq by virtqueue_detach_unused_buf()
-3. release the ring of the vq by vring_release_virtqueue()
-4. enable_reset_vq: re-enable the reset queue
-
-This patch implements reset_vq, enable_reset_vq in the pci scenario.
+When re-enable a reset queue, reuse the original callback, name,
+indirect.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/virtio/virtio_pci_common.c |  8 ++--
- drivers/virtio/virtio_pci_modern.c | 60 ++++++++++++++++++++++++++++++
- 2 files changed, 65 insertions(+), 3 deletions(-)
+ drivers/virtio/virtio_ring.c | 52 +++++++++++++++++++++++++-----------
+ 1 file changed, 37 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
-index 5a4f750a0b97..9ea319b1d404 100644
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -255,9 +255,11 @@ static void vp_del_vq(struct virtqueue *vq)
- 	struct virtio_pci_vq_info *info = vp_dev->vqs[vq->index];
- 	unsigned long flags;
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 9cfbe45ab286..4639e1643c78 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -198,6 +198,16 @@ struct vring_virtqueue {
+ #endif
+ };
  
--	spin_lock_irqsave(&vp_dev->lock, flags);
--	list_del(&info->node);
--	spin_unlock_irqrestore(&vp_dev->lock, flags);
-+	if (!vq->reset) {
-+		spin_lock_irqsave(&vp_dev->lock, flags);
-+		list_del(&info->node);
-+		spin_unlock_irqrestore(&vp_dev->lock, flags);
-+	}
++static int __vring_init_virtqueue(struct virtqueue *_vq,
++				  unsigned int index,
++				  struct vring vring,
++				  struct virtio_device *vdev,
++				  bool weak_barriers,
++				  bool context,
++				  bool (*notify)(struct virtqueue *),
++				  void (*callback)(struct virtqueue *),
++				  const char *name,
++				  bool reset);
  
- 	vp_dev->del_vq(info);
- 	kfree(info);
-diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
-index bed3e9b84272..7d28f4c36fc2 100644
---- a/drivers/virtio/virtio_pci_modern.c
-+++ b/drivers/virtio/virtio_pci_modern.c
-@@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_device *vdev, u64 features)
- 	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
- 			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
- 		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
-+
-+	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
-+		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
- }
- 
- /* virtio config->finalize_features() implementation */
-@@ -176,6 +179,59 @@ static void vp_reset(struct virtio_device *vdev)
- 	vp_disable_cbs(vdev);
- }
- 
-+static int vp_modern_reset_vq(struct virtqueue *vq)
-+{
-+	struct virtio_pci_device *vp_dev = to_vp_device(vq->vdev);
-+	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
-+	struct virtio_pci_vq_info *info;
-+	unsigned long flags;
-+
-+	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
-+		return -ENOENT;
-+
-+	vp_modern_set_queue_reset(mdev, vq->index);
-+
-+	info = vp_dev->vqs[vq->index];
-+
-+	/* delete vq from irq handler */
-+	spin_lock_irqsave(&vp_dev->lock, flags);
-+	list_del(&info->node);
-+	spin_unlock_irqrestore(&vp_dev->lock, flags);
-+
-+	INIT_LIST_HEAD(&info->node);
-+
-+	vq->reset = VIRTQUEUE_RESET_STAGE_DEVICE;
-+
-+	return 0;
-+}
-+
-+static int vp_modern_enable_reset_vq(struct virtqueue *vq)
-+{
-+	struct virtio_pci_device *vp_dev = to_vp_device(vq->vdev);
-+	struct virtio_pci_modern_device *mdev = &vp_dev->mdev;
-+	struct virtio_pci_vq_info *info;
-+	struct virtqueue *_vq;
-+
-+	if (vq->reset != VIRTQUEUE_RESET_STAGE_RELEASE)
-+		return -EBUSY;
-+
-+	/* check queue reset status */
-+	if (vp_modern_get_queue_reset(mdev, vq->index) != 1)
-+		return -EBUSY;
-+
-+	info = vp_dev->vqs[vq->index];
-+	_vq = vp_setup_vq(vq->vdev, vq->index, NULL, NULL, NULL,
-+			 info->msix_vector);
-+	if (IS_ERR(_vq)) {
-+		vq->reset = VIRTQUEUE_RESET_STAGE_RELEASE;
-+		return PTR_ERR(_vq);
-+	}
-+
-+	vp_modern_set_queue_enable(&vp_dev->mdev, vq->index, true);
-+
-+	return 0;
-+}
-+
- static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
+ /*
+  * Helpers.
+@@ -925,9 +935,9 @@ static struct virtqueue *vring_create_virtqueue_split(
+ 	bool context,
+ 	bool (*notify)(struct virtqueue *),
+ 	void (*callback)(struct virtqueue *),
+-	const char *name)
++	const char *name,
++	struct virtqueue *vq)
  {
- 	return vp_modern_config_vector(&vp_dev->mdev, vector);
-@@ -397,6 +453,8 @@ static const struct virtio_config_ops virtio_pci_config_nodev_ops = {
- 	.set_vq_affinity = vp_set_vq_affinity,
- 	.get_vq_affinity = vp_get_vq_affinity,
- 	.get_shm_region  = vp_get_shm_region,
-+	.reset_vq	 = vp_modern_reset_vq,
-+	.enable_reset_vq = vp_modern_enable_reset_vq,
- };
+-	struct virtqueue *vq;
+ 	void *queue = NULL;
+ 	dma_addr_t dma_addr;
+ 	size_t queue_size_in_bytes;
+@@ -964,12 +974,17 @@ static struct virtqueue *vring_create_virtqueue_split(
+ 	queue_size_in_bytes = vring_size(num, vring_align);
+ 	vring_init(&vring, num, queue, vring_align);
  
- static const struct virtio_config_ops virtio_pci_config_ops = {
-@@ -415,6 +473,8 @@ static const struct virtio_config_ops virtio_pci_config_ops = {
- 	.set_vq_affinity = vp_set_vq_affinity,
- 	.get_vq_affinity = vp_get_vq_affinity,
- 	.get_shm_region  = vp_get_shm_region,
-+	.reset_vq	 = vp_modern_reset_vq,
-+	.enable_reset_vq = vp_modern_enable_reset_vq,
- };
+-	vq = __vring_new_virtqueue(index, vring, vdev, weak_barriers, context,
+-				   notify, callback, name);
+ 	if (!vq) {
+-		vring_free_queue(vdev, queue_size_in_bytes, queue,
+-				 dma_addr);
+-		return NULL;
++		vq = __vring_new_virtqueue(index, vring, vdev, weak_barriers,
++					   context, notify, callback, name);
++		if (!vq)
++			goto err;
++
++	} else {
++		if (__vring_init_virtqueue(vq, index, vring, vdev,
++					   weak_barriers, context, notify,
++					   callback, name, true))
++			goto err;
+ 	}
  
- /* the PCI probing function */
+ 	to_vvq(vq)->split.queue_dma_addr = dma_addr;
+@@ -977,6 +992,9 @@ static struct virtqueue *vring_create_virtqueue_split(
+ 	to_vvq(vq)->we_own_ring = true;
+ 
+ 	return vq;
++err:
++	vring_free_queue(vdev, queue_size_in_bytes, queue, dma_addr);
++	return NULL;
+ }
+ 
+ 
+@@ -2177,14 +2195,20 @@ static int __vring_init_virtqueue(struct virtqueue *_vq,
+ 				  bool context,
+ 				  bool (*notify)(struct virtqueue *),
+ 				  void (*callback)(struct virtqueue *),
+-				  const char *name)
++				  const char *name,
++				  bool reset)
+ {
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+ 
++	if (!reset) {
++		vq->vq.callback = callback;
++		vq->vq.name = name;
++		vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
++			!context;
++	}
++
+ 	vq->packed_ring = false;
+-	vq->vq.callback = callback;
+ 	vq->vq.vdev = vdev;
+-	vq->vq.name = name;
+ 	vq->vq.num_free = vring.num;
+ 	vq->vq.index = index;
+ 	vq->we_own_ring = false;
+@@ -2200,8 +2224,6 @@ static int __vring_init_virtqueue(struct virtqueue *_vq,
+ 	vq->last_add_time_valid = false;
+ #endif
+ 
+-	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
+-		!context;
+ 	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
+ 
+ 	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
+@@ -2215,7 +2237,7 @@ static int __vring_init_virtqueue(struct virtqueue *_vq,
+ 	vq->split.avail_idx_shadow = 0;
+ 
+ 	/* No callback?  Tell other side not to bother us. */
+-	if (!callback) {
++	if (!vq->vq.callback) {
+ 		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;
+ 		if (!vq->event)
+ 			vq->split.vring.avail->flags = cpu_to_virtio16(vdev,
+@@ -2267,7 +2289,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+ 		return NULL;
+ 
+ 	err = __vring_init_virtqueue(&vq->vq, index, vring, vdev, weak_barriers,
+-				     context, notify, callback, name);
++				     context, notify, callback, name, false);
+ 
+ 	if (err) {
+ 		kfree(vq);
+@@ -2299,7 +2321,7 @@ struct virtqueue *vring_setup_virtqueue(
+ 
+ 	return vring_create_virtqueue_split(index, num, vring_align,
+ 			vdev, weak_barriers, may_reduce_num,
+-			context, notify, callback, name);
++			context, notify, callback, name, vq);
+ }
+ EXPORT_SYMBOL_GPL(vring_setup_virtqueue);
+ 
 -- 
 2.31.0
 
