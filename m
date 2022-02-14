@@ -2,117 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B436CC433EF
-	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 11:16:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F034C433FE
+	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 11:18:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349896AbiBNLRD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Feb 2022 06:17:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45148 "EHLO
+        id S1350500AbiBNLSY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Feb 2022 06:18:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350632AbiBNLQ4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Feb 2022 06:16:56 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C326C90D
-        for <bpf@vger.kernel.org>; Mon, 14 Feb 2022 02:47:39 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21E9EAmc006904;
-        Mon, 14 Feb 2022 10:47:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=Ib57o6XEDx2zL4tfXsEqyFcGD5EI0qTqjW2ch/AjXtc=;
- b=NbUO0ttLLQa+Y8fG3i4KaTn/tGeltTrnu5eRSukZjWgU09hR2JWd3caDvB4ZG/oWbkpF
- YEfXO4C9t902ylaz4sqOuHCc4aonMjPtLCmLaXXJ+DEYMXsCAe/ysbWKV5atpjZUI4Ss
- AKbgRbUfL/p+bbrjkYokgydyfsOEtqKFNeA8fAoP4NXOtXrk4HAMHzXOf+g2gD9v93SC
- +3ViOPH8nJpDT2sUZzdS49rMzbxzAyfGDG0+LHJImVjLI9QMRHq8azYElAgt6Ddb8Osx
- JmzTSwZxnvDoxcMDXPlsze+yVPkhh6Dut665SzuWxkwYSkvqj+yq6CNEqMADgc8Ahmg7 kQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7ath437p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 10:47:08 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 21EAcgw8032248;
-        Mon, 14 Feb 2022 10:47:07 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3e7ath436f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 10:47:07 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21EAXVN5012196;
-        Mon, 14 Feb 2022 10:47:04 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03ams.nl.ibm.com with ESMTP id 3e64h9m1ye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Feb 2022 10:47:04 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21EAl2Xf42336576
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Feb 2022 10:47:02 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 67912A4060;
-        Mon, 14 Feb 2022 10:47:02 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EF9BDA405B;
-        Mon, 14 Feb 2022 10:47:01 +0000 (GMT)
-Received: from localhost (unknown [9.43.124.167])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Feb 2022 10:47:01 +0000 (GMT)
-Date:   Mon, 14 Feb 2022 16:17:00 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [RFC PATCH 0/3] powerpc64/bpf: Add support for BPF Trampolines
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        with ESMTP id S1350684AbiBNLST (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Feb 2022 06:18:19 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCF366214;
+        Mon, 14 Feb 2022 02:51:30 -0800 (PST)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Jy1BP4Jkzz1FD9x;
+        Mon, 14 Feb 2022 18:47:09 +0800 (CST)
+Received: from huawei.com (10.175.112.60) by dggpeml500025.china.huawei.com
+ (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Mon, 14 Feb
+ 2022 18:51:28 +0800
+From:   Hou Tao <houtao1@huawei.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+CC:     Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Jordan Niethe <jniethe5@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-References: <cover.1644216043.git.naveen.n.rao@linux.vnet.ibm.com>
-        <918b842d-f674-bbdb-c772-b43a00f1b155@csgroup.eu>
-In-Reply-To: <918b842d-f674-bbdb-c772-b43a00f1b155@csgroup.eu>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <houtao1@huawei.com>
+Subject: [RFC PATCH bpf-next v2 0/3] bpf: support string key in htab
+Date:   Mon, 14 Feb 2022 19:13:34 +0800
+Message-ID: <20220214111337.3539-1-houtao1@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1644835471.mm5694ds8t.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SVBsdeW2rPuPsaiU_U_Pv4tGdWrT5rZU
-X-Proofpoint-GUID: L62ehD2I5ZMrJx9P1LNnET6rBYPxqt2i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-14_02,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 clxscore=1015 priorityscore=1501 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202140064
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.112.60]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Christophe Leroy wrote:
->=20
->=20
-> Le 07/02/2022 =C3=A0 08:07, Naveen N. Rao a =C3=A9crit=C2=A0:
->> This is an early RFC series that adds support for BPF Trampolines on
->> powerpc64. Some of the selftests are passing for me, but this needs more
->> testing and I've likely missed a few things as well. A review of the
->> patches and feedback about the overall approach will be great.
->>=20
->> This series depends on some of the other BPF JIT fixes and enhancements
->> posted previously, as well as on ftrace direct enablement on powerpc
->> which has also been posted in the past.
->=20
-> Is there any reason to limit this to powerpc64 ?
+Hi,
 
-I have limited this to elf v2, and we won't be able to get this working=20
-on elf v1, since we don't have DYNAMIC_FTRACE_WITH_REGS supported there.=20
-We should be able to get this working on ppc32 though.
+In order to use string as hash-table key, key_size must be the storage
+size of longest string. If there are large differencies in string
+length, the hash distribution will be sub-optimal due to the unused
+zero bytes in shorter strings and the lookup will be inefficient due to
+unnecessary memcmp().
 
+Also it is possible the unused part of string key returned from bpf helper
+(e.g. bpf_d_path) is not mem-zeroed and if using it directly as lookup key,
+the lookup will fail with -ENOENT (as reported in [1]).
 
-- Naveen
+The patchset tries to address the inefficiency by adding support for
+string key. There is extensibility problem in v1 because the string key
+and its optimization is only available for string-only key. To make it
+extensible, v2 introduces bpf_str_key_stor and bpf_str_key_desc and enforce
+the layout of hash key struct through BTF as follows:
+
+	>the start of hash key
+	...
+	[struct bpf_str_key_desc m;]
+	...
+	[struct bpf_str_key_desc n;]
+	...
+	struct bpf_str_key_stor z;
+	unsigned char raw[N];
+	>the end of hash key
+
+So if there is string-only key, the struct of hash key will be:
+
+	struct key {
+		struct bpf_str_key_stor comm;
+		unsigend char raw[128];
+	};
+
+And if there are other fields in hash key, the struct will be:
+
+	struct key {
+		int pid;
+		struct bpf_str_key_stor comm;
+		unsigned char raw[128];
+	};
+
+If there are multiple string in hash, the struct will become as:
+
+	struct key {
+		int pid;
+		struct bpf_str_key_desc path;
+		struct bpf_str_key_desc comm;
+		unsigned char raw[128 + 128];
+	};
+
+See patch #1 and #3 for more details on how these key are manipulated and
+used. Patch #2 adds a simple test to demonstrate how string key solves the
+reported problem ([1]) due to unused part in hash key.
+
+There are about 180% and 170% improvment in benchmark under x86-64 and
+arm64 when key_size is 252. About 280% and %270 when key size is greater
+than 512.
+
+Also testing the performance improvment by using all files under linux
+kernel sources as the string key input. There are about 74k files and the
+maximum string length is 101. When key_size is 108, there are about 71%
+and 39% win under x86-64 and arm64 in lookup performance, and when key_size
+is 252, the win increases to 150% and 94% respectively.
+
+The patchset is still in early stage of development, so any comments and
+suggestions are always welcome.
+
+Regards,
+Tao
+
+Change Log
+v2:
+  * make string key being extensible for no-string-only hash key
+
+v1: https://lore.kernel.org/bpf/20211219052245.791605-1-houtao1@huawei.com/
+
+[1]: https://lore.kernel.org/bpf/20211120051839.28212-2-yunbo.xufeng@linux.alibaba.com
+
+Hou Tao (3):
+  bpf: add support for string in hash table key
+  selftests/bpf: add a simple test for htab str key
+  selftests/bpf: add benchmark for string-key hash table
+
+ include/linux/btf.h                           |   3 +
+ include/uapi/linux/bpf.h                      |  19 +
+ kernel/bpf/btf.c                              |  39 ++
+ kernel/bpf/hashtab.c                          | 162 ++++++-
+ tools/include/uapi/linux/bpf.h                |  19 +
+ tools/testing/selftests/bpf/Makefile          |   4 +-
+ tools/testing/selftests/bpf/bench.c           |  14 +
+ .../selftests/bpf/benchs/bench_str_htab.c     | 449 ++++++++++++++++++
+ .../testing/selftests/bpf/benchs/run_htab.sh  |  11 +
+ .../selftests/bpf/prog_tests/str_key.c        |  71 +++
+ .../selftests/bpf/progs/str_htab_bench.c      | 224 +++++++++
+ tools/testing/selftests/bpf/progs/str_key.c   |  75 +++
+ 12 files changed, 1064 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_str_htab.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_htab.sh
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/str_key.c
+ create mode 100644 tools/testing/selftests/bpf/progs/str_htab_bench.c
+ create mode 100644 tools/testing/selftests/bpf/progs/str_key.c
+
+-- 
+2.25.4
 
