@@ -2,215 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD1A5C433F5
-	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 06:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F87AC433EF
+	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 08:14:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233183AbiBNGC6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Feb 2022 01:02:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47096 "EHLO
+        id S241604AbiBNIO2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Feb 2022 03:14:28 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbiBNGC5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Feb 2022 01:02:57 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9222D50463;
-        Sun, 13 Feb 2022 22:02:50 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id w7so18688891ioj.5;
-        Sun, 13 Feb 2022 22:02:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=papruFJfe9IvaMWn+6Mq6BLzhVMmTFRdEs0zpXgov0Q=;
-        b=QLQHLEK37s6RgOEHcA+CGoOmomqnwmMcETyCuToH+ulaaIMOWaCJvWkpIrXdUjc8uu
-         HJ6P4uu7juyJ8Ni+nP9UCSHxJXJKIdjHdSFtSiQC92SLTEL7syxPqHs/vhAhjEuPC9ln
-         ulXZcYAbQndWYeVqCS/x4k0pziUwEXwfenyWFzq0iQW7WrZLuktSabBzjykB84GxK8nq
-         GMnjMJpgRysBNeKF0QcjezOA8M347HFguaO+JPY5npWC+bz/QfkziIRlCC2NCYgCr++F
-         gh1bkMAMf16u3/pxkDgjNexnfv9zQ2PVn0/f0B6ZoZqWQBR2cjQXVRmmq23VhoCDCVkR
-         YtXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=papruFJfe9IvaMWn+6Mq6BLzhVMmTFRdEs0zpXgov0Q=;
-        b=DtBQ9x+TjiugxOLYmfTUjnjfUjZhcQ/GXBO2irw3bbMRiqCcywEj1CU0em7e9Ec587
-         csTFu+7HlEhvjOlNWhL/1ou7Y7JS4egpTK55rwFhBzMqJeMwd4G1RybVqykERLFyt9EL
-         3dEGhhm7ydCWbuCaEcMlxI9iHUf210peV+uF7E5IWPA7rY6fr8xPIM0ZCpBKiMFqfl08
-         5plh0Ys5hACSZ1WqCFZb7o4hNHOM96tWQJcxAdsNmcOp/+4ignWD4mHnqlu9g6wLZ0d6
-         kRPSDp4HDIGEIOrI5AqRj2S08dVNqJaUHob8jzQcySpU6FDSb3IR4c6fEqBMhTifjrHc
-         3tNw==
-X-Gm-Message-State: AOAM530jzBlpxIoXGx9uYRbSOgjAGedPtG7VetZ0XEqg7dL7sgjr3VY+
-        4SR2OrZBnvhx3liZQtGup+QmKtYLSQDjgNS+80IFqH6i
-X-Google-Smtp-Source: ABdhPJxMSAs1t5ystT5yQ4zs+gG+HX/YbQal4u31dhX9oTnbjo/8Fw41QoiXgwcJElHO/hd7zCmTyHE+kROzP7tsl/g=
-X-Received: by 2002:a05:6638:d88:: with SMTP id l8mr7605398jaj.234.1644818569903;
- Sun, 13 Feb 2022 22:02:49 -0800 (PST)
+        with ESMTP id S238522AbiBNIO1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Feb 2022 03:14:27 -0500
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1E95F8EE;
+        Mon, 14 Feb 2022 00:14:20 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R251e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4O5x7N_1644826457;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V4O5x7N_1644826457)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 14 Feb 2022 16:14:18 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+Subject: [PATCH v5 01/22] virtio_pci: struct virtio_pci_common_cfg add queue_notify_data
+Date:   Mon, 14 Feb 2022 16:13:55 +0800
+Message-Id: <20220214081416.117695-2-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220214081416.117695-1-xuanzhuo@linux.alibaba.com>
+References: <20220214081416.117695-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20220123221932.537060-1-jolsa@kernel.org> <YgVk8t6COJhDJyzj@kernel.org>
- <YgWEEHFV4U0jhrX8@krava>
-In-Reply-To: <YgWEEHFV4U0jhrX8@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sun, 13 Feb 2022 22:02:38 -0800
-Message-ID: <CAEf4BzYbtUZ_1nu0vjKYBGDWM_-EJB_C7xA_WheBjS6hPzNn0Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] perf/bpf: Remove prologue generation
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Ian Rogers <irogers@google.com>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Git-Hash: 24fd8391539b
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Feb 10, 2022 at 1:31 PM Jiri Olsa <olsajiri@gmail.com> wrote:
->
-> On Thu, Feb 10, 2022 at 04:18:10PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Em Sun, Jan 23, 2022 at 11:19:30PM +0100, Jiri Olsa escreveu:
-> > > Removing code for ebpf program prologue generation.
-> > >
-> > > The prologue code was used to get data for extra arguments specified
-> > > in program section name, like:
-> > >
-> > >   SEC("lock_page=__lock_page page->flags")
-> > >   int lock_page(struct pt_regs *ctx, int err, unsigned long flags)
-> > >   {
-> > >          return 1;
-> > >   }
-> > >
-> > > This code is using deprecated libbpf API and blocks its removal.
-> > >
-> > > This feature was not documented and broken for some time without
-> > > anyone complaining, also original authors are not responding,
-> > > so I'm removing it.
-> >
-> > So, the example below breaks, how hard would be to move the deprecated
-> > APIs to perf like was done in some other cases?
-> >
-> > - Arnaldo
-> >
-> > Before:
-> >
-> > [root@quaco perf]# cat tools/perf/examples/bpf/5sec.c
-> > // SPDX-License-Identifier: GPL-2.0
-> > /*
-> >     Description:
-> >
-> >     . Disable strace like syscall tracing (--no-syscalls), or try tracing
-> >       just some (-e *sleep).
-> >
-> >     . Attach a filter function to a kernel function, returning when it should
-> >       be considered, i.e. appear on the output.
-> >
-> >     . Run it system wide, so that any sleep of >= 5 seconds and < than 6
-> >       seconds gets caught.
-> >
-> >     . Ask for callgraphs using DWARF info, so that userspace can be unwound
-> >
-> >     . While this is running, run something like "sleep 5s".
-> >
-> >     . If we decide to add tv_nsec as well, then it becomes:
-> >
-> >       int probe(hrtimer_nanosleep, rqtp->tv_sec rqtp->tv_nsec)(void *ctx, int err, long sec, long nsec)
-> >
-> >       I.e. add where it comes from (rqtp->tv_nsec) and where it will be
-> >       accessible in the function body (nsec)
-> >
-> >     # perf trace --no-syscalls -e tools/perf/examples/bpf/5sec.c/call-graph=dwarf/
-> >          0.000 perf_bpf_probe:func:(ffffffff9811b5f0) tv_sec=5
-> >                                            hrtimer_nanosleep ([kernel.kallsyms])
-> >                                            __x64_sys_nanosleep ([kernel.kallsyms])
-> >                                            do_syscall_64 ([kernel.kallsyms])
-> >                                            entry_SYSCALL_64 ([kernel.kallsyms])
-> >                                            __GI___nanosleep (/usr/lib64/libc-2.26.so)
-> >                                            rpl_nanosleep (/usr/bin/sleep)
-> >                                            xnanosleep (/usr/bin/sleep)
-> >                                            main (/usr/bin/sleep)
-> >                                            __libc_start_main (/usr/lib64/libc-2.26.so)
-> >                                            _start (/usr/bin/sleep)
-> >     ^C#
-> >
-> >    Copyright (C) 2018 Red Hat, Inc., Arnaldo Carvalho de Melo <acme@redhat.com>
-> > */
-> >
-> > #include <bpf.h>
-> >
-> > #define NSEC_PER_SEC  1000000000L
-> >
-> > int probe(hrtimer_nanosleep, rqtp)(void *ctx, int err, long long sec)
-> > {
-> >       return sec / NSEC_PER_SEC == 5ULL;
-> > }
->
-> that sucks ;-) I'll check if we can re-implement as we discussed earlier,
-> however below is workaround how to do it without the prologue support
->
+Add queue_notify_data in struct virtio_pci_common_cfg, which comes from
+here https://github.com/oasis-tcs/virtio-spec/issues/89
 
-I'm a bit confused. I thought that we discussed dropping custom SEC()
-definitions from perf as no one knew if anyone is even using this
-feature and when Jiri tried it didn't even work ([0]). Is this broken
-sample some other important use case that we are sure is used by
-people and thus must be preserved?
+For not breaks uABI, add a new struct virtio_pci_common_cfg_notify.
 
-Or dropping this custom SEC() business and prologue generation still
-on the table?
+Since I want to add queue_reset after queue_notify_data, I submitted
+this patch first.
 
-> jirka
->
->
-> ---
-> diff --git a/tools/perf/examples/bpf/5sec.c b/tools/perf/examples/bpf/5sec.c
-> index e6b6181c6dc6..734d39debdb8 100644
-> --- a/tools/perf/examples/bpf/5sec.c
-> +++ b/tools/perf/examples/bpf/5sec.c
-> @@ -43,9 +43,17 @@
->
->  #define NSEC_PER_SEC   1000000000L
->
-> -int probe(hrtimer_nanosleep, rqtp)(void *ctx, int err, long long sec)
-> +struct pt_regs {
-> +        long di;
-> +};
-> +
-> +SEC("function=hrtimer_nanosleep")
-> +int krava(struct pt_regs *ctx)
->  {
-> -       return sec / NSEC_PER_SEC == 5ULL;
-> +       unsigned long arg;
-> +
-> +       probe_read_kernel(&arg, sizeof(arg), __builtin_preserve_access_index(&ctx->di));
-> +       return arg / NSEC_PER_SEC == 5ULL;
->  }
->
->  license(GPL);
-> diff --git a/tools/perf/include/bpf/bpf.h b/tools/perf/include/bpf/bpf.h
-> index b422aeef5339..b7d6d2fc8342 100644
-> --- a/tools/perf/include/bpf/bpf.h
-> +++ b/tools/perf/include/bpf/bpf.h
-> @@ -64,6 +64,7 @@ int _version SEC("version") = LINUX_VERSION_CODE;
->
->  static int (*probe_read)(void *dst, int size, const void *unsafe_addr) = (void *)BPF_FUNC_probe_read;
->  static int (*probe_read_str)(void *dst, int size, const void *unsafe_addr) = (void *)BPF_FUNC_probe_read_str;
-> +static long (*probe_read_kernel)(void *dst, __u32 size, const void *unsafe_ptr) = (void *) BPF_FUNC_probe_read_kernel;
->
->  static int (*perf_event_output)(void *, struct bpf_map *, int, void *, unsigned long) = (void *)BPF_FUNC_perf_event_output;
->
-> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-> index 96c8ef60f4f8..9274a3373847 100644
-> --- a/tools/perf/util/llvm-utils.c
-> +++ b/tools/perf/util/llvm-utils.c
-> @@ -25,7 +25,7 @@
->                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
->                 "-Wno-unused-value -Wno-pointer-sign "          \
->                 "-working-directory $WORKING_DIR "              \
-> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-> +               "-g -c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
->
->  struct llvm_param llvm_param = {
->         .clang_path = "clang",
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ include/uapi/linux/virtio_pci.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/uapi/linux/virtio_pci.h b/include/uapi/linux/virtio_pci.h
+index 3a86f36d7e3d..22bec9bd0dfc 100644
+--- a/include/uapi/linux/virtio_pci.h
++++ b/include/uapi/linux/virtio_pci.h
+@@ -166,6 +166,13 @@ struct virtio_pci_common_cfg {
+ 	__le32 queue_used_hi;		/* read-write */
+ };
+ 
++struct virtio_pci_common_cfg_notify {
++	struct virtio_pci_common_cfg cfg;
++
++	__le16 queue_notify_data;	/* read-write */
++	__le16 padding;
++};
++
+ /* Fields in VIRTIO_PCI_CAP_PCI_CFG: */
+ struct virtio_pci_cfg_cap {
+ 	struct virtio_pci_cap cap;
+-- 
+2.31.0
+
