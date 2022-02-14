@@ -2,313 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E429C433EF
-	for <bpf@archiver.kernel.org>; Sun, 13 Feb 2022 15:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CA45C433EF
+	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 02:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233141AbiBMPk5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 13 Feb 2022 10:40:57 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45492 "EHLO
+        id S239512AbiBNCuZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 13 Feb 2022 21:50:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiBMPk4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 13 Feb 2022 10:40:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 718B45F8D1
-        for <bpf@vger.kernel.org>; Sun, 13 Feb 2022 07:40:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644766849;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YbJQamN+sKTyPLg9NaZqK73U4/0pTwLbVitSiQ2XTUQ=;
-        b=fQb4lUhB3CJSc6lMP42ml+SNWTD7lQfHO+JZorTWFFSDki+TIlwJV8NDPxgLqJBhny9UkE
-        lHWcwFjiTFyvo7Rd2+ZnhZLyh1CSSmncs39I8jDRQ6kpB9S/kox+XR12LUcKWCSyc5InaJ
-        2Z3a2OGqgIk1aWntJDlzOrk6grPHrtw=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-rpbaUpwSPzSCCXDGAnDohA-1; Sun, 13 Feb 2022 10:40:47 -0500
-X-MC-Unique: rpbaUpwSPzSCCXDGAnDohA-1
-Received: by mail-ed1-f69.google.com with SMTP id z21-20020a05640235d500b0041092b29ad6so2441663edc.19
-        for <bpf@vger.kernel.org>; Sun, 13 Feb 2022 07:40:47 -0800 (PST)
+        with ESMTP id S239483AbiBNCuY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 13 Feb 2022 21:50:24 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DC950056
+        for <bpf@vger.kernel.org>; Sun, 13 Feb 2022 18:50:18 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id n20-20020a6bed14000000b0060faa0aefd3so9643012iog.20
+        for <bpf@vger.kernel.org>; Sun, 13 Feb 2022 18:50:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=YbJQamN+sKTyPLg9NaZqK73U4/0pTwLbVitSiQ2XTUQ=;
-        b=QRdeMKor0/qmEP65PM+Kixbl1YGgLT4QrbHhsBCoEP5OazMCrIP0S9tkCPzrl98kdL
-         k63C3zAZuq7hCvx+iTGoqY/0MWzWjpdxsQwKFKNVJuw+yPb3NT+vGwa6BgrTEXtEWR+N
-         +JUwraO9cqGoeQebne5iz3GG3Eewk87KwKH8KO+YIhrf3V9b0olX0y4oa3XvYOxAn4V5
-         KoHWHkDEDdlltN0E99fb/EY25TNVyJGPmz5lO00yVXWEBlrk46mI4sEn9AtwJ7B/6DoH
-         3/yo4hP+gxiBN1gX1Os9SiZg2dup61HwtfLfHD5W2HQo+pTp7Hgosi20FTs34kZv1Z5n
-         xiVQ==
-X-Gm-Message-State: AOAM5329WZ8UH869VwypkFenNOxsaAJuqLO57cPJQYCGUYCsyBs0HnIv
-        3cwGVoudDs+CcWa5/pmOdyqyJskeJodfYJMds3C8IuTXV16KLYTqXvJ0g1OjfuZjS49dAeU25k0
-        Yimy9pzK9DvxS
-X-Received: by 2002:a17:907:7da4:: with SMTP id oz36mr2649737ejc.59.1644766846499;
-        Sun, 13 Feb 2022 07:40:46 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwS5JxYITvy8PL5O+WqNK+RIJFpmYH6pkBtbVT2ImKcZolo5sUDL9u5Au9blkyr/mvITCERRQ==
-X-Received: by 2002:a17:907:7da4:: with SMTP id oz36mr2649715ejc.59.1644766845992;
-        Sun, 13 Feb 2022 07:40:45 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ed9sm8898476edb.59.2022.02.13.07.40.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Feb 2022 07:40:45 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 69FBF1031BE; Sun, 13 Feb 2022 16:40:44 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal =?utf-8?Q?Such?= =?utf-8?Q?=C3=A1nek?= 
-        <msuchanek@suse.de>, Yonghong Song <yhs@fb.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-Subject: Re: BTF compatibility issue across builds
-In-Reply-To: <Ygdjt0Qbki0tHG4k@syu-laptop.lan>
-References: <YfK18x/XrYL4Vw8o@syu-laptop>
- <8d17226b-730f-5426-b1cc-99fe43483ed1@fb.com>
- <20220210100153.GA90679@kunlun.suse.cz>
- <CAEf4BzZ6CrNGWt3DENvCBXpUKrvNiZwoK87rR75izP=CDf8YoQ@mail.gmail.com>
- <87a6ex8gm8.fsf@toke.dk>
- <CAEf4BzYJCHB-oYqFqJTfHU4D795ewgkndQtR1Po5H521fH0oMg@mail.gmail.com>
- <87v8xl6jlw.fsf@toke.dk> <Ygdjt0Qbki0tHG4k@syu-laptop.lan>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Sun, 13 Feb 2022 16:40:44 +0100
-Message-ID: <87ee467p1f.fsf@toke.dk>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=+jq+QysxQkWFCMcSOLTxGlsKrZFeW5BnbyJngHYSa6c=;
+        b=hL2PDzGxM3dd+WFGEbaZowlVYF9ChamRw941zSO4qd11HX/zxJigmfjOkmnzEZOdHG
+         7V7wUnyYN4udoc3rL+LRlp0IqCfXgW9KbUMKADKG76kPQEk4IMT8wLs4wNHA0oQaY/CE
+         CncQhf+Q1A0Mt+vmBxNmMJZ6PLdXDXZizhmBhaAlPSue8CjH6MlBZ/M1C5MlVnA3Bm0F
+         gmHLTqS9w/MnTJvL2VEw4rqqCJi0aNrhPYPSIh2JiqKsHF9JFRN1P4cIC5N+lsRQ0w0o
+         jq9mTO7zMyZSP592h2GMU37nvpoxLl3Gnm9MSLQdo8Q/U5m2/iraFJ5FD1PfXCIYbUF1
+         pDxQ==
+X-Gm-Message-State: AOAM530hFfmkvJkTA+U2zzwcNlHyzLsg6DpKLCWYNuQjo5UsOrrVxWOk
+        Of3U3gffsy58h+UpdocE9u2vFsvtjhahbaBGXHZT4FMAYygW
+X-Google-Smtp-Source: ABdhPJzvtqd5odrpnUu7RRRQa+faT7ZRBKYCSLDaK9pFc/byhODAwwGkMKQXgDPoDS3o1oc3URVohypTQVpgtbK81olEaPSLlhw4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a05:6638:2493:: with SMTP id x19mr7130809jat.219.1644807017384;
+ Sun, 13 Feb 2022 18:50:17 -0800 (PST)
+Date:   Sun, 13 Feb 2022 18:50:17 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fed00c05d7f179e0@google.com>
+Subject: [syzbot] WARNING: kmalloc bug in xdp_umem_pin_pages
+From:   syzbot <syzbot+1dd093e0edb4647f5b69@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bjorn@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        jonathan.lemon@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        magnus.karlsson@intel.com, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Shung-Hsi Yu <shung-hsi.yu@suse.com> writes:
+Hello,
 
-> On Sat, Feb 12, 2022 at 12:58:51AM +0100, Toke H=C3=B8iland-J=C3=B8rgense=
-n wrote:
->> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>=20
->> > On Fri, Feb 11, 2022 at 9:20 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke=
-@redhat.com> wrote:
->> >>
->> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->> >>
->> >> > On Thu, Feb 10, 2022 at 2:01 AM Michal Such=C3=A1nek <msuchanek@sus=
-e.de> wrote:
->> >> >>
->> >> >> Hello,
->> >> >>
->> >> >> On Mon, Jan 31, 2022 at 09:36:44AM -0800, Yonghong Song wrote:
->> >> >> >
->> >> >> >
->> >> >> > On 1/27/22 7:10 AM, Shung-Hsi Yu wrote:
->> >> >> > > Hi,
->> >> >> > >
->> >> >> > > We recently run into module load failure related to split BTF =
-on openSUSE
->> >> >> > > Tumbleweed[1], which I believe is something that may also happ=
-en on other
->> >> >> > > rolling distros.
->> >> >> > >
->> >> >> > > The error looks like the follow (though failure is not limited=
- to ipheth)
->> >> >> > >
->> >> >> > >      BPF:[103111] STRUCT BPF:size=3D152 vlen=3D2 BPF: BPF:Inva=
-lid name BPF:
->> >> >> > >
->> >> >> > >      failed to validate module [ipheth] BTF: -22
->> >> >> > >
->> >> >> > > The error comes down to trying to load BTF of *kernel modules =
-from a
->> >> >> > > different build* than the runtime kernel (but the source is th=
-e same), where
->> >> >> > > the base BTF of the two build is different.
->> >> >> > >
->> >> >> > > While it may be too far stretched to call this a bug, solving =
-this might
->> >> >> > > make BTF adoption easier. I'd natively think that we could fur=
-ther split
->> >> >> > > base BTF into two part to avoid this issue, where .BTF only co=
-ntain exported
->> >> >> > > types, and the other (still residing in vmlinux) holds the une=
-xported types.
->> >> >> >
->> >> >> > What is the exported types? The types used by export symbols?
->> >> >> > This for sure will increase btf handling complexity.
->> >> >>
->> >> >> And it will not actually help.
->> >> >>
->> >> >> We have modversion ABI which checks the checksum of the symbols th=
-at the
->> >> >> module imports and fails the load if the checksum for these symbol=
-s does
->> >> >> not match. It's not concerned with symbols not exported, it's not
->> >> >> concerned with symbols not used by the module. This is something t=
-hat is
->> >> >> sustainable across kernel rebuilds with minor fixes/features and w=
-hat
->> >> >> distributions watch for.
->> >> >>
->> >> >> Now with BTF the situation is vastly different. There are at least=
- three
->> >> >> bugs:
->> >> >>
->> >> >>  - The BTF check is global for all symbols, not for the symbols the
->> >> >>    module uses. This is not sustainable. Given the BTF is supposed=
- to
->> >> >>    allow linking BPF programs that were built in completely differ=
-ent
->> >> >>    environment with the kernel it is completely within the scope o=
-f BTF
->> >> >>    to solve this problem, it's just neglected.
->> >> >
->> >> > You refer to BTF use in CO-RE with the latter. It's just one
->> >> > application of BTF and it doesn't follow that you can do the same w=
-ith
->> >> > module BTF. It's not a neglect, it's a very big technical difficult=
-y.
->> >> >
->> >> > Each module's BTFs are designed as logical extensions of vmlinux BT=
-F.
->> >> > And each module BTF is independent and isolated from other modules
->> >> > extension of the same vmlinux BTF. The way that BTF format is
->> >> > designed, any tiny difference in vmlinux BTF effectively invalidates
->> >> > all modules' BTFs and they have to be rebuilt.
->> >> >
->> >> > Imagine that only one BTF type is added to vmlinux BTF. Last BTF ty=
-pe
->> >> > ID in vmlinux BTF is shifted from, say, 1000 to 1001. While previou=
-sly
->> >> > every module's BTF type ID started with 1001, now they all have to
->> >> > start with 1002 and be shifted by 1.
->> >> >
->> >> > Now let's say that the order of two BTF types in vmlinux BTF is
->> >> > changed, say type 10 becomes type 20 and type 20 becomes type 10 (j=
-ust
->> >> > because of slight difference in DWARF, for instance). Any type
->> >> > reference to 10 or 20 in any module BTF has to be renumbered now.
->> >> >
->> >> > Another one, let's say we add a new string to vmlinux BTF string
->> >> > section somewhere at the beginning, say "abc" at offset 100. Any
->> >> > string offset after 100 now has to be shifted *both* in vmlinux BTF
->> >> > and all module BTFs. And also any string reference in module BTFs h=
-ave
->> >> > to be adjusted as well because now each module's BTF's logical stri=
-ng
->> >> > offset is starting at 4 logical bytes higher (due to "abc\0" being
->> >> > added and shifting everything right).
->> >> >
->> >> > As you can see, any tiny change in vmlinux BTF, no matter where,
->> >> > beginning, middle, or end, causes massive changes in type IDs and
->> >> > offsets everywhere. It's impractical to do any local adjustments, i=
-t's
->> >> > much simpler and more reliable to completely regenerate BTF
->> >> > completely.
->> >>
->> >> This seems incredibly brittle, though? IIUC this means that if you wa=
-nt
->> >> BTF in your modules you *must* have not only the kernel headers of the
->> >> kernel it's going to run on, but the full BTF information for the exa=
-ct
->> >
->> > From BTF perspective, only vmlinux BTF. Having exact kernel headers
->> > would minimize type information duplication.
->>=20
->> Right, I meant you'd need the kernel headers to compile the module, and
->> the vmlinux BTF to build the module BTF info.
->>=20
->> >> kernel image you're going to load that module on? How is that supposed
->> >> to work for any kind of environment where everything is not built
->> >> together? Third-party modules for distribution kernels is the obvious
->> >> example that comes to mind here, but as this thread shows, they don't
->> >> necessarily even have to be third party...
->> >>
->> >> How would you go about "completely regenerating BTF" in practice for a
->> >> third-party module, say?
->> >
->> > Great questions. I was kind of hoping you'll have some suggestions as
->> > well, though. Not just complaints.
->>=20
->> Well, I kinda took your "not really a bug either" comment to mean you
->> weren't really open to changing the current behaviour. But if that was a
->> misunderstanding on my part, I do have one thought:
->>=20
->> The "partial BTF" thing in the modules is done to save space, right?
->> I.e., in principle there would be nothing preventing a module from
->> including a full (self-contained) set of BTF in its .ko when it is
->> compiled? Because if so, we could allow that as an optional mode that
->> can be enabled if you don't mind taking the size hit (any idea how large
->> that usually is, BTW?).
->
-> This seems quite nice IMO as no change need to be made on the generation
-> side of existing BTF tooling. I test it out on openSUSE Tumbleweed 5.16.5
-> kernel modules, and for the sake of completeness, includes both the case
-> where BTF is stripped and using a pre-trained zstd dictionary as well.
->
-> Uncompressed, no BTF                             362MiB -27%
-> Uncompressed, parital BTF                        499MiB +0%
-> Uncompressed, self-contained BTF                1026MiB +105%
->
-> Zstd compressed, no BTF                           95MiB -35%
-> Zstd compressed, partial BTF                     147MiB +0%
-> Zstd compressed, self-contained BTF              361MiB +145%
-> Zstd compressed (trained), self-contained BTF    299MiB +103%
->
-> So we'd expect quite a bit of hit as the size of kernel module would doub=
-le.
->
-> For servers and workstation environment an additional ~200MiB of disk spa=
-ce
-> seems like tolerable trade-off if it can get third-party kernel module to
-> work. But I cannot speak for other kind of use cases.
+syzbot found the following issue on:
 
-Well, there are also in-between tradeoffs (i.e., you can build a subset
-of the modules with self-contained BTF and a subset with partial BTF
-depending on what fits your build environment).
+HEAD commit:    f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13c2aa3c700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=88e0a6a3dbf057cf
+dashboard link: https://syzkaller.appspot.com/bug?extid=1dd093e0edb4647f5b69
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
 
-We could also come up with more optimisations later if needed; one thing
-that comes to mind is adding the option to build a set of modules
-together and have them deduplicate BTF between them, but still be
-self-contained as a group. E.g., all netfilter modules could share a
-common BTF set if you can be sure they will always be rebuilt together.
-Once we have the deduplication logic in 'modprobe' this could be made
-infinitely complex (recursive groups of deduplicated chunks of BTF!),
-but that's probably overdoing it ;)
+Unfortunately, I don't have any reproducer for this issue yet.
 
->> And then we could teach 'modprobe' to do a fresh deduplication of this
->> full BTF set against the vmlinux BTF before loading such a module into t=
-he
->> kernel.
->>=20
->> Or am I missing some reason why that wouldn't work?
->
-> One minor problem would be this is essentially introducing a new kernel
-> module BTF format that uses exactly the same header.
->
-> Ever since the introduction of split BTF, we're reusing btf_header but
-> acting as if there's an extra hidden flag indicating whether the BTF is
-> self-contained or partial. So far we could implicitly guess the value of =
-the
-> flag since BTF in vmlinux is always self-contained and BTF in kernel modu=
-le
-> is always partial; but if self-contained BTF on kernel module is introduc=
-ed
-> this will no longer be the case.
->
-> Not sure if it'd be a issue in practice though, as we could go through the
-> type info and see whether there's any type ID that is too large and cannot
-> be found.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1dd093e0edb4647f5b69@syzkaller.appspotmail.com
 
-Yeah, one option could be to just discover it when parsing the BTF: if
-it's not self-contained, assume it's referring to the vmlinux BTF and
-act accordingly. As long as there is no risk of "false positives" where
-the loader detects the wrong thing, but I don't think this detection
-would add any failure cases that are not present already today?
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5535 at mm/util.c:590 kvmalloc_node+0xd9/0xe0 mm/util.c:590
+Modules linked in:
+CPU: 1 PID: 5535 Comm: syz-executor.2 Not tainted 5.17.0-rc3-syzkaller-00043-gf4bc5bbb5fef #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:kvmalloc_node+0xd9/0xe0 mm/util.c:590
+Code: 00 00 48 89 df 44 89 fa 44 89 f1 5b 41 5e 41 5f 5d e9 5b fd 0b 00 e8 46 46 cc ff 48 89 e8 5b 41 5e 41 5f 5d c3 e8 37 46 cc ff <0f> 0b 31 ed eb eb 90 41 56 53 49 89 f6 48 89 fb e8 22 46 cc ff 48
+RSP: 0018:ffffc90009e67bb0 EFLAGS: 00010287
+RAX: ffffffff81b96759 RBX: 00000007ff810000 RCX: 0000000000040000
+RDX: ffffc90005534000 RSI: 0000000000001ca2 RDI: 0000000000001ca3
+RBP: 0000000000000000 R08: ffffffff81b96719 R09: 00000000ffffffff
+R10: fffff520013ccf49 R11: 0000000000000000 R12: ffff888023eb9d00
+R13: dffffc0000000000 R14: 00000000ffffffff R15: 0000000000002dc0
+FS:  00007fc31c85f700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fdaa9958058 CR3: 0000000075e10000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kvmalloc include/linux/slab.h:732 [inline]
+ kvmalloc_array include/linux/slab.h:750 [inline]
+ kvcalloc include/linux/slab.h:755 [inline]
+ xdp_umem_pin_pages+0x57/0x330 net/xdp/xdp_umem.c:102
+ xdp_umem_reg net/xdp/xdp_umem.c:219 [inline]
+ xdp_umem_create+0x790/0xb40 net/xdp/xdp_umem.c:252
+ xsk_setsockopt+0x86f/0xac0 net/xdp/xsk.c:1051
+ __sys_setsockopt+0x552/0x980 net/socket.c:2180
+ __do_sys_setsockopt net/socket.c:2191 [inline]
+ __se_sys_setsockopt net/socket.c:2188 [inline]
+ __x64_sys_setsockopt+0xb1/0xc0 net/socket.c:2188
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fc31deea059
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc31c85f168 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
+RAX: ffffffffffffffda RBX: 00007fc31dffcf60 RCX: 00007fc31deea059
+RDX: 0000000000000004 RSI: 000000000000011b RDI: 0000000000000003
+RBP: 00007fc31df4408d R08: 0000000000000020 R09: 0000000000000000
+R10: 0000000020000080 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff15fae91f R14: 00007fc31c85f300 R15: 0000000000022000
+ </TASK>
 
-Another option would be to but self-contained BTF in a different
-section. Or we could amend the header as you say, but with what?
 
--Toke
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
