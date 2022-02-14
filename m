@@ -2,22 +2,22 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 746DDC433EF
-	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 08:15:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1A56C35274
+	for <bpf@archiver.kernel.org>; Mon, 14 Feb 2022 08:15:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbiBNIPH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Feb 2022 03:15:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42112 "EHLO
+        id S241685AbiBNIPK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Feb 2022 03:15:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241691AbiBNIPF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Feb 2022 03:15:05 -0500
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C15F8FF;
-        Mon, 14 Feb 2022 00:14:57 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4O5xBg_1644826480;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V4O5xBg_1644826480)
+        with ESMTP id S241689AbiBNIPE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Feb 2022 03:15:04 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E843D5FF15;
+        Mon, 14 Feb 2022 00:14:55 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0V4OcHGK_1644826476;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V4OcHGK_1644826476)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 14 Feb 2022 16:14:41 +0800
+          Mon, 14 Feb 2022 16:14:36 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -28,9 +28,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH v5 22/22] virtio_net: support set_ringparam
-Date:   Mon, 14 Feb 2022 16:14:16 +0800
-Message-Id: <20220214081416.117695-23-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v5 18/22] virtio: add helper virtqueue_get_vring_max_size()
+Date:   Mon, 14 Feb 2022 16:14:12 +0800
+Message-Id: <20220214081416.117695-19-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220214081416.117695-1-xuanzhuo@linux.alibaba.com>
 References: <20220214081416.117695-1-xuanzhuo@linux.alibaba.com>
@@ -41,83 +41,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support set_ringparam based on virtio queue reset.
+Record the maximum queue num supported by the device.
 
-The rx,tx_pending required to be passed must be power of 2.
+virtio-net can display the maximum (supported by hardware) ring size in
+ethtool -g eth0.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 50 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ drivers/virtio/virtio_mmio.c       |  2 ++
+ drivers/virtio/virtio_pci_legacy.c |  2 ++
+ drivers/virtio/virtio_pci_modern.c |  2 ++
+ drivers/virtio/virtio_ring.c       | 13 +++++++++++++
+ include/linux/virtio.h             |  2 ++
+ 5 files changed, 21 insertions(+)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index f9bb760c6dbd..bf460ea87354 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2308,6 +2308,55 @@ static void virtnet_get_ringparam(struct net_device *dev,
- 	ring->tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 56128b9c46eb..a41abc8051b9 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -390,6 +390,8 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned index,
+ 		goto error_new_virtqueue;
+ 	}
+ 
++	vq->num_max = num;
++
+ 	/* Activate the queue */
+ 	writel(virtqueue_get_vring_size(vq), vm_dev->base + VIRTIO_MMIO_QUEUE_NUM);
+ 	if (vm_dev->version == 1) {
+diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
+index 96ec2b04e97d..340149f6196d 100644
+--- a/drivers/virtio/virtio_pci_legacy.c
++++ b/drivers/virtio/virtio_pci_legacy.c
+@@ -135,6 +135,8 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	vq->num_max = num;
++
+ 	q_pfn = virtqueue_get_desc_addr(vq) >> VIRTIO_PCI_QUEUE_ADDR_SHIFT;
+ 	if (q_pfn >> 32) {
+ 		dev_err(&vp_dev->pci_dev->dev,
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+index 7d28f4c36fc2..5811691a90ec 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -274,6 +274,8 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	vq->num_max = num;
++
+ 	/* activate the queue */
+ 	vp_modern_set_queue_size(mdev, index, virtqueue_get_vring_size(vq));
+ 	vp_modern_queue_address(mdev, index, virtqueue_get_desc_addr(vq),
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 6a892c8ea16e..1a123b5e5371 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -2447,6 +2447,19 @@ void vring_transport_features(struct virtio_device *vdev)
  }
+ EXPORT_SYMBOL_GPL(vring_transport_features);
  
-+static int virtnet_set_ringparam(struct net_device *dev,
-+				 struct ethtool_ringparam *ring,
-+				 struct kernel_ethtool_ringparam *kernel_ring,
-+				 struct netlink_ext_ack *extack)
++/**
++ * virtqueue_get_vring_max_size - return the max size of the virtqueue's vring
++ * @_vq: the struct virtqueue containing the vring of interest.
++ *
++ * Returns the max size of the vring.  This is mainly used for boasting to
++ * userspace.  Unlike other operations, this need not be serialized.
++ */
++unsigned int virtqueue_get_vring_max_size(struct virtqueue *_vq)
 +{
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	u32 rx_pending, tx_pending;
-+	int i, err;
-+
-+	if (ring->rx_mini_pending || ring->rx_jumbo_pending)
-+		return -EINVAL;
-+
-+	rx_pending = virtqueue_get_vring_size(vi->rq[0].vq);
-+	tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
-+
-+	if (ring->rx_pending == rx_pending &&
-+	    ring->tx_pending == tx_pending)
-+		return 0;
-+
-+	if (ring->rx_pending > virtqueue_get_vring_max_size(vi->rq[0].vq))
-+		return -EINVAL;
-+
-+	if (ring->tx_pending > virtqueue_get_vring_max_size(vi->sq[0].vq))
-+		return -EINVAL;
-+
-+	if (!is_power_of_2(ring->rx_pending))
-+		return -EINVAL;
-+
-+	if (!is_power_of_2(ring->tx_pending))
-+		return -EINVAL;
-+
-+	for (i = 0; i < vi->max_queue_pairs; i++) {
-+		if (ring->tx_pending != tx_pending) {
-+			virtio_set_max_ring_num(vi->vdev, ring->tx_pending);
-+			err = virtnet_tx_vq_reset(vi, i);
-+			if (err)
-+				return err;
-+		}
-+
-+		if (ring->rx_pending != rx_pending) {
-+			virtio_set_max_ring_num(vi->vdev, ring->rx_pending);
-+			err = virtnet_rx_vq_reset(vi, i);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	return 0;
++	return _vq->num_max;
 +}
++EXPORT_SYMBOL_GPL(virtqueue_get_vring_max_size);
++
+ /**
+  * virtqueue_get_vring_size - return the size of the virtqueue's vring
+  * @_vq: the struct virtqueue containing the vring of interest.
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index cdb2a551257c..1153b093c53d 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -37,6 +37,7 @@ struct virtqueue {
+ 	struct virtio_device *vdev;
+ 	unsigned int index;
+ 	unsigned int num_free;
++	unsigned int num_max;
+ 	void *priv;
+ 	enum virtqueue_reset_stage reset;
+ };
+@@ -87,6 +88,7 @@ bool virtqueue_enable_cb_delayed(struct virtqueue *vq);
  
- static void virtnet_get_drvinfo(struct net_device *dev,
- 				struct ethtool_drvinfo *info)
-@@ -2541,6 +2590,7 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
- 	.get_drvinfo = virtnet_get_drvinfo,
- 	.get_link = ethtool_op_get_link,
- 	.get_ringparam = virtnet_get_ringparam,
-+	.set_ringparam = virtnet_set_ringparam,
- 	.get_strings = virtnet_get_strings,
- 	.get_sset_count = virtnet_get_sset_count,
- 	.get_ethtool_stats = virtnet_get_ethtool_stats,
+ void *virtqueue_detach_unused_buf(struct virtqueue *vq);
+ 
++unsigned int virtqueue_get_vring_max_size(struct virtqueue *vq);
+ unsigned int virtqueue_get_vring_size(struct virtqueue *vq);
+ 
+ bool virtqueue_is_broken(struct virtqueue *vq);
 -- 
 2.31.0
 
