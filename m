@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F384EC433F5
-	for <bpf@archiver.kernel.org>; Tue, 15 Feb 2022 22:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B951C4167B
+	for <bpf@archiver.kernel.org>; Tue, 15 Feb 2022 22:59:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244737AbiBOW7s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Feb 2022 17:59:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35860 "EHLO
+        id S242248AbiBOW7u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Feb 2022 17:59:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244721AbiBOW7j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Feb 2022 17:59:39 -0500
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9AD5F4D
-        for <bpf@vger.kernel.org>; Tue, 15 Feb 2022 14:59:28 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id 200so223723qki.2
-        for <bpf@vger.kernel.org>; Tue, 15 Feb 2022 14:59:28 -0800 (PST)
+        with ESMTP id S244730AbiBOW7s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Feb 2022 17:59:48 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E74AF747B
+        for <bpf@vger.kernel.org>; Tue, 15 Feb 2022 14:59:34 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id q20so372984qtw.8
+        for <bpf@vger.kernel.org>; Tue, 15 Feb 2022 14:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dUoNVzQd4tS2PRRRezKZ0/UPTa4dRXCSBMWAvOz+mKc=;
-        b=CCYdJjTFdVJ6EMjggu+D7OXeR0bMTTF6sn/Nz+JhdtOFV4qsw07LF3lb9PpUtvXdtG
-         Sh0joJgowkAlbeaoMC5v/dgPD39yoeJZI0OsYfgGCoQfshE4Bxz6wy91JQjMePbdSI5f
-         OZfXh6CLqqQhDNEYLL/+YO2oozBwGhlsBaWeg=
+        bh=zT3uK29FMhfhh8DewxMCadQW6mKbGtNQ3FzMrNuYVHw=;
+        b=D/lIXVd+MDiOWDoEabTMuoFkPvPCPWMHigtsYkCs+cfFzJM64fJvhKHeAYU9dVjZam
+         YFf9kh+seOhpkIhSTazrAWa9lDgLZvIbAeIUfyrNPB6Yn5YTXdYW7ef7Hui/LzKlz/ab
+         5XfDMbFp4Rv1Lc3c+PTfQ7uWJCmvjIcGt4a8I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dUoNVzQd4tS2PRRRezKZ0/UPTa4dRXCSBMWAvOz+mKc=;
-        b=HehVRkFnHmAKsKW64+kjgR9lp1p+oL5AFumCvYg5LVWAacKmXC8GevbaIzYrQknMia
-         DYx3IKJQJFx5Ipw/g7AEuP81mKaXRk1baOLRR7CBPwj4sKXLd6DAAIgM+KrHzxgaCAWb
-         +Wt99CTOsr9b/+On+moVY3xu0Wzl3gKrbU52Z/qNB5LTcnPJYUKUYPOU+BnMpvTJac7S
-         y8kEI3BS1I833AsoTrlwMAGSaV9PNZOSUqWUYcRd2hxwrXNpCwGRKcwRzUkwV5JCDq28
-         cbl8yyMjolD5Dc5oihhQBIYK3qg4HwDWVBAucn9phEnlo731kQLZAH73Tbfj/wTprbmS
-         4jnA==
-X-Gm-Message-State: AOAM533UPudQ2wg9Gx09JilkToOejxrWC2vmzGe+1soHA+1ZnA1pWom5
-        nHELLpivH2nWyM0VpM939v06PQ==
-X-Google-Smtp-Source: ABdhPJwpuLKOrkxFmW4pN0qTDfOhCyD2IGz+j8ccsw+ZqTs4sgLlQBH0n193tPNstP1qnzSIEXcYYw==
-X-Received: by 2002:a05:620a:152a:b0:46d:5918:e7cd with SMTP id n10-20020a05620a152a00b0046d5918e7cdmr66549qkk.494.1644965966870;
-        Tue, 15 Feb 2022 14:59:26 -0800 (PST)
+        bh=zT3uK29FMhfhh8DewxMCadQW6mKbGtNQ3FzMrNuYVHw=;
+        b=pw43uMhsq13Px4JkJuaS/DGk0GAyofkkajP17fjzzcSG+Olf9FDW4eMR297WcwpP3K
+         ogQqChdPlawhnJIYoFAY12mQkeHBsRHXs8LJ2ahvC227SVosYIFoksY1UBwz428BE0Fn
+         BRuevypyTxlY9VKsWBd81B5fyU4PV+PpqOZyBd5d5kqa0XRFgTR7eq6QGRD8fqzyK5zZ
+         O+1EOs/yqQdagvr2jvFDd3xNsufoFX+nZKtwIobs94RqtMJvETZbXxz/m7AfizrZdwzY
+         2DUOMsYNkvkvtDapFcR4/H0XHkccA03naDxo+IQzjmzwDS2Ee5vwZGrxQ7/a5ysDxiBZ
+         BHfw==
+X-Gm-Message-State: AOAM530vx3jNi8oVTrK7cdjnLaP0HgsWqTtw/rAm9wwV3j7tT3tjpxze
+        IIH3e1T+z499C8y0SUbrZQ/ECg==
+X-Google-Smtp-Source: ABdhPJx7sfTWQxfkUplLloleC+98bFLx389D3qdkBCBg6gyujx77OJsCFvEcE90gSTFh9NgFbW31gg==
+X-Received: by 2002:a05:622a:1454:b0:2db:65c9:3a89 with SMTP id v20-20020a05622a145400b002db65c93a89mr184382qtx.129.1644965972491;
+        Tue, 15 Feb 2022 14:59:32 -0800 (PST)
 Received: from localhost.localdomain ([181.136.110.101])
-        by smtp.gmail.com with ESMTPSA id w19sm15520021qkp.6.2022.02.15.14.59.25
+        by smtp.gmail.com with ESMTPSA id w19sm15520021qkp.6.2022.02.15.14.59.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 14:59:26 -0800 (PST)
+        Tue, 15 Feb 2022 14:59:32 -0800 (PST)
 From:   =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Rafael David Tinoco <rafaeldtinoco@gmail.com>,
         Lorenzo Fontana <lorenzo.fontana@elastic.co>,
         Leonardo Di Donato <leonardo.didonato@elastic.co>
-Subject: [PATCH bpf-next v7 3/7] bpftool: Add gen min_core_btf command
-Date:   Tue, 15 Feb 2022 17:58:52 -0500
-Message-Id: <20220215225856.671072-4-mauricio@kinvolk.io>
+Subject: [PATCH bpf-next v7 5/7] bpftool: Implement btfgen_get_btf()
+Date:   Tue, 15 Feb 2022 17:58:54 -0500
+Message-Id: <20220215225856.671072-6-mauricio@kinvolk.io>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220215225856.671072-1-mauricio@kinvolk.io>
 References: <20220215225856.671072-1-mauricio@kinvolk.io>
@@ -66,105 +66,139 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This command is implemented under the "gen" command in bpftool and the
-syntax is the following:
+The last part of the BTFGen algorithm is to create a new BTF object with
+all the types that were recorded in the previous steps.
 
-$ bpftool gen min_core_btf INPUT OUTPUT OBJECT [OBJECT...]
-
-INPUT is the file that contains all the BTF types for a kernel and
-OUTPUT is the path of the minimize BTF file that will be created with
-only the types needed by the objects.
+This function performs two different steps:
+1. Add the types to the new BTF object by using btf__add_type(). Some
+special logic around struct and unions is implemented to only add the
+members that are really used in the field-based relocations. The type
+ID on the new and old BTF objects is stored on a map.
+2. Fix all the type IDs on the new BTF object by using the IDs saved in
+the previous step.
 
 Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
 Signed-off-by: Rafael David Tinoco <rafael.tinoco@aquasec.com>
 Signed-off-by: Lorenzo Fontana <lorenzo.fontana@elastic.co>
 Signed-off-by: Leonardo Di Donato <leonardo.didonato@elastic.co>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/bpftool/bash-completion/bpftool |  6 +++-
- tools/bpf/bpftool/gen.c                   | 42 +++++++++++++++++++++--
- 2 files changed, 44 insertions(+), 4 deletions(-)
+ tools/bpf/bpftool/gen.c | 100 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 99 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 493753a4962e..958e1fd71b5c 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -1003,9 +1003,13 @@ _bpftool()
-                             ;;
-                     esac
-                     ;;
-+                min_core_btf)
-+                    _filedir
-+                    return 0
-+                    ;;
-                 *)
-                     [[ $prev == $object ]] && \
--                        COMPREPLY=( $( compgen -W 'object skeleton help' -- "$cur" ) )
-+                        COMPREPLY=( $( compgen -W 'object skeleton help min_core_btf' -- "$cur" ) )
-                     ;;
-             esac
-             ;;
 diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 022f30490567..8e066c747691 100644
+index 806001020841..25a336846d9f 100644
 --- a/tools/bpf/bpftool/gen.c
 +++ b/tools/bpf/bpftool/gen.c
-@@ -1108,6 +1108,7 @@ static int do_help(int argc, char **argv)
- 	fprintf(stderr,
- 		"Usage: %1$s %2$s object OUTPUT_FILE INPUT_FILE [INPUT_FILE...]\n"
- 		"       %1$s %2$s skeleton FILE [name OBJECT_NAME]\n"
-+		"       %1$s %2$s min_core_btf INPUT OUTPUT OBJECT [OBJECT...]\n"
- 		"       %1$s %2$s help\n"
- 		"\n"
- 		"       " HELP_SPEC_OPTIONS " |\n"
-@@ -1118,10 +1119,45 @@ static int do_help(int argc, char **argv)
- 	return 0;
+@@ -1505,10 +1505,108 @@ static int btfgen_record_obj(struct btfgen_info *info, const char *obj_path)
+ 	return err;
  }
  
-+/* Create minimized BTF file for a set of BPF objects */
-+static int minimize_btf(const char *src_btf, const char *dst_btf, const char *objspaths[])
++static int btfgen_remap_id(__u32 *type_id, void *ctx)
 +{
-+	return -EOPNOTSUPP;
++	unsigned int *ids = ctx;
++
++	*type_id = ids[*type_id];
++
++	return 0;
 +}
 +
-+static int do_min_core_btf(int argc, char **argv)
-+{
-+	const char *input, *output, **objs;
-+	int i, err;
+ /* Generate BTF from relocation information previously recorded */
+ static struct btf *btfgen_get_btf(struct btfgen_info *info)
+ {
+-	return ERR_PTR(-EOPNOTSUPP);
++	struct btf *btf_new = NULL;
++	unsigned int *ids = NULL;
++	unsigned int i, n = btf__type_cnt(info->marked_btf);
++	int err = 0;
 +
-+	if (!REQ_ARGS(3)) {
-+		usage();
-+		return -1;
++	btf_new = btf__new_empty();
++	if (!btf_new) {
++		err = -errno;
++		goto err_out;
 +	}
 +
-+	input = GET_ARG();
-+	output = GET_ARG();
-+
-+	objs = (const char **) calloc(argc + 1, sizeof(*objs));
-+	if (!objs) {
-+		p_err("failed to allocate array for object names");
-+		return -ENOMEM;
++	ids = calloc(n, sizeof(*ids));
++	if (!ids) {
++		err = -errno;
++		goto err_out;
 +	}
 +
-+	i = 0;
-+	while (argc)
-+		objs[i++] = GET_ARG();
++	/* first pass: add all marked types to btf_new and add their new ids to the ids map */
++	for (i = 1; i < n; i++) {
++		const struct btf_type *cloned_type, *type;
++		const char *name;
++		int new_id;
 +
-+	err = minimize_btf(input, output, objs);
-+	free(objs);
-+	return err;
-+}
++		cloned_type = btf__type_by_id(info->marked_btf, i);
 +
- static const struct cmd cmds[] = {
--	{ "object",	do_object },
--	{ "skeleton",	do_skeleton },
--	{ "help",	do_help },
-+	{ "object",		do_object },
-+	{ "skeleton",		do_skeleton },
-+	{ "min_core_btf",	do_min_core_btf},
-+	{ "help",		do_help },
- 	{ 0 }
- };
++		if (cloned_type->name_off != MARKED)
++			continue;
++
++		type = btf__type_by_id(info->src_btf, i);
++
++		/* add members for struct and union */
++		if (btf_is_composite(type)) {
++			struct btf_member *cloned_m, *m;
++			unsigned short vlen;
++			int idx_src;
++
++			name = btf__str_by_offset(info->src_btf, type->name_off);
++
++			if (btf_is_struct(type))
++				err = btf__add_struct(btf_new, name, type->size);
++			else
++				err = btf__add_union(btf_new, name, type->size);
++
++			if (err < 0)
++				goto err_out;
++			new_id = err;
++
++			cloned_m = btf_members(cloned_type);
++			m = btf_members(type);
++			vlen = btf_vlen(cloned_type);
++			for (idx_src = 0; idx_src < vlen; idx_src++, cloned_m++, m++) {
++				/* add only members that are marked as used */
++				if (cloned_m->name_off != MARKED)
++					continue;
++
++				name = btf__str_by_offset(info->src_btf, m->name_off);
++				err = btf__add_field(btf_new, name, m->type,
++						     BTF_MEMBER_BIT_OFFSET(m->offset),
++						     BTF_MEMBER_BITFIELD_SIZE(m->offset));
++				if (err < 0)
++					goto err_out;
++			}
++		} else {
++			err = btf__add_type(btf_new, info->src_btf, type);
++			if (err < 0)
++				goto err_out;
++			new_id = err;
++		}
++
++		/* add ID mapping */
++		ids[i] = new_id;
++	}
++
++	/* second pass: fix up type ids */
++	for (i = 1; i < btf__type_cnt(btf_new); i++) {
++		struct btf_type *btf_type = (struct btf_type *) btf__type_by_id(btf_new, i);
++
++		err = btf_type_visit_type_ids(btf_type, btfgen_remap_id, ids);
++		if (err)
++			goto err_out;
++	}
++
++	free(ids);
++	return btf_new;
++
++err_out:
++	btf__free(btf_new);
++	free(ids);
++	errno = -err;
++	return NULL;
+ }
  
+ /* Create minimized BTF file for a set of BPF objects.
 -- 
 2.25.1
 
