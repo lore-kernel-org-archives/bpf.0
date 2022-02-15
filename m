@@ -2,114 +2,183 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DA1EC433EF
-	for <bpf@archiver.kernel.org>; Tue, 15 Feb 2022 13:47:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 562B4C433EF
+	for <bpf@archiver.kernel.org>; Tue, 15 Feb 2022 15:25:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238405AbiBONrv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Feb 2022 08:47:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43572 "EHLO
+        id S237145AbiBOPZy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Feb 2022 10:25:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238410AbiBONru (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Feb 2022 08:47:50 -0500
-X-Greylist: delayed 1751 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Feb 2022 05:47:39 PST
-Received: from mx0b-00206401.pphosted.com (mx0b-00206401.pphosted.com [IPv6:2620:100:9005:15::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08DDDF1E;
-        Tue, 15 Feb 2022 05:47:39 -0800 (PST)
-Received: from pps.filterd (m0093025.ppops.net [127.0.0.1])
-        by mx0b-00206401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21F6ASAY007341;
-        Tue, 15 Feb 2022 05:18:03 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=default;
- bh=W6yoCectmQ4/K1pbGPJHpv21JoEXJ3arKNE0Hupp2Xw=;
- b=sanZ+RdOXmw3cKi6YBpL5ctXoOo/8Kjnj9ShgxjmBzf8oQukPgYt84QrYa2vGfPrvfQB
- I/GMVqsY3gZmpbU3NvniOy3ZezsNvMJ4tm6g3py0ObX7Lo6Rw2Rkjm7uV0+tndNn3URc
- 0B2/bZ8nib7uLcFlGlyLZIQkbkEsOkv9HIlR2qle1Mruq48bqu9XPXBquwHyTUm0PV9Q
- lJIdr3PdgHHx0QTGNcCgoS7nCEhIhY4hJu6f5SDbZyNkFwXaDDyAR2YidtP9cPbemvoc
- iCnK5qGH9zmvw1o0iIgDYy2ZJuj3WxIB9I3fOqFdLyXmUBXi49vE1cvUnSplTKebIYe/ OQ== 
-Received: from 04wpexch03.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60])
-        by mx0b-00206401.pphosted.com (PPS) with ESMTPS id 3e86p38gnt-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Feb 2022 05:18:03 -0800
-Received: from 04wpexch04.crowdstrike.sys (10.100.11.94) by
- 04wpexch03.crowdstrike.sys (10.100.11.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.20; Tue, 15 Feb 2022 13:18:01 +0000
-Received: from 04wpexch04.crowdstrike.sys ([fe80::f066:b5c1:cf22:763a]) by
- 04wpexch04.crowdstrike.sys ([fe80::f066:b5c1:cf22:763a%5]) with mapi id
- 15.02.0922.020; Tue, 15 Feb 2022 13:18:01 +0000
-From:   Marco Vedovati <marco.vedovati@crowdstrike.com>
-To:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "toke@redhat.com" <toke@redhat.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>,
-        Martin Kelly <martin.kelly@crowdstrike.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>
-Subject: Clarifications on linux/types.h used with libbpf
-Thread-Topic: Clarifications on linux/types.h used with libbpf
-Thread-Index: AQHYImtWLXmUZLJvoESUDAAgE80rXqyUlyIa
-Date:   Tue, 15 Feb 2022 13:18:01 +0000
-Message-ID: <7cc5e02742da482b9daf06ffe3218262@crowdstrike.com>
-References: <7b2e447f6ae34022a56158fcbf8dc890@crowdstrike.com>
-In-Reply-To: <7b2e447f6ae34022a56158fcbf8dc890@crowdstrike.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.100.11.84]
-x-disclaimer: USA
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S234691AbiBOPZy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Feb 2022 10:25:54 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4F78A333
+        for <bpf@vger.kernel.org>; Tue, 15 Feb 2022 07:25:44 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id j12so34884549ybh.8
+        for <bpf@vger.kernel.org>; Tue, 15 Feb 2022 07:25:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=857+qV47ddm8WE8KTWXLHPQ7djLUydmVO+RXbwgQrfk=;
+        b=D/mNPmTVJktt/9sUx/SBEKcVTfsa+TjCn2lpj52UUTHad0PYCP5Y5GRCI5TsYp/Qb4
+         +3GRI9/4MzexhaYzhS1sAqdgGVT0f+0MRLF/NNyIfoc/F4Gny6uGGwGZX5yY/oC69zyU
+         q7sKT2+fhC81GUp9Tt55QBzS+BOkBsnQqsHYKpOfiPoQZ+Obe1Xgjr8O8vtBz+eAaMa4
+         y3o7yKo5gCKZxcglyuEHZlXGeK4UGpDYUtiyhWlGWOVamG4O4oaeCRkDm2Zcpr2kGGK7
+         l1pP12h2lndBiXfbkyBb2/wULR3aPBHDIuFoWjZGf3a7HZM2PbN3evJ5bxgQTp+mMTYf
+         QD7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=857+qV47ddm8WE8KTWXLHPQ7djLUydmVO+RXbwgQrfk=;
+        b=dMzQ/mEWzZt0iXg7rfTEedIi0kjMFUVmrT9gO9YZX2h/9p8izN0MoKUG3mxa4ElE9f
+         /8g1EcM7SIggHoADuLZKPFwLfN2X3BLYt5znQBIBTxISIIM2yMZc16L/FBmxrtYsDiCE
+         KzcI1Ln/5ngpOOEOEqSS0Qxd7Pr6IWV+0WizWLrpOWPTz9U5M/d6dZ9ruLP/aQU527bd
+         ZJxdpKO849L11LGIV/TDxeGKTrFB0D2f/XM2dTbKHHYrvGLFNxwaQVU8g3WiHRKfBaCs
+         FC5NK4KSkkeCLZWQJNwfGduUXSC+e8VDBb9Rk3DcfBBa+zAqoG9WLKeft6ovVsVv0gIy
+         +ueA==
+X-Gm-Message-State: AOAM530kE4rqVRerRnsK6Wywswg6x5n6/z/HkXhjGG5xufkVa4qzYUd9
+        soG/Z8Rp9BntZ9UwFcrOpycpjQcxPoK5qibWMngTHw==
+X-Google-Smtp-Source: ABdhPJxk7mrbL3RMym2ruQfovDQ1leVFG4JQH55yguTM8qjJSu1NPA/AjTgXDZUUTMFqhfKeqlX581mdgioFNv/nHJw=
+X-Received: by 2002:a81:ff05:: with SMTP id k5mr4176036ywn.474.1644938742804;
+ Tue, 15 Feb 2022 07:25:42 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-15_04,2022-02-14_04,2021-12-02_01
+References: <20220215103639.11739-1-kerneljasonxing@gmail.com>
+In-Reply-To: <20220215103639.11739-1-kerneljasonxing@gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 15 Feb 2022 07:25:31 -0800
+Message-ID: <CANn89iL8vOUOH9bZaiA-cKcms+PotuKCxv7LpVx3RF0dDDSnmg@mail.gmail.com>
+Subject: Re: [PATCH] net: do not set SOCK_RCVBUF_LOCK if sk_rcvbuf isn't reduced
+To:     Jason Xing <kerneljasonxing@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Wei Wang <weiwan@google.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>, Florian Westphal <fw@strlen.de>,
+        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Jason Xing <xingwanli@kuaishou.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-(resending as my first email was sent without ml subscription)
-Hi,
+On Tue, Feb 15, 2022 at 2:37 AM <kerneljasonxing@gmail.com> wrote:
+>
+> From: Jason Xing <xingwanli@kuaishou.com>
+>
+> Normally, user doesn't care the logic behind the kernel if they're
+> trying to set receive buffer via setsockopt. However, if the new value
+> of the receive buffer is not smaller than the initial value which is
+> sysctl_tcp_rmem[1] implemented in tcp_rcv_space_adjust(), the server's
+> wscale will shrink and then lead to the bad bandwidth. I think it is
+> not appropriate.
 
-I have few questions about the linux/types.h file used to build bpf
-applications. This file gets included by both userspace applications using
-libbpf and by bpf programs. E.g., in a userspace application:
-foo.c
-=A0 foo.skel.h
-=A0=A0=A0 bpf/libbpf.h
-=A0=A0=A0=A0=A0 linux/bpf.h
-=A0=A0=A0=A0=A0=A0=A0 linux/types.h
+Then do not use SO_RCVBUF ?
 
-Or in a bpf program:
-foo.bpf.c
-=A0 linux/bpf.h
-=A0=A0=A0 linux/types.h
+It is working as intended really.
 
-libbpf provides its own copy of this file in include/linux/types.h.
-As I could understand from the Git history, it was initially copied from
-linux include/linux/types.h, but it is now maintained separately.
+>
+> Here are some numbers:
+> $ sysctl -a | grep rmem
+> net.core.rmem_default = 212992
+> net.core.rmem_max = 40880000
+> net.ipv4.tcp_rmem = 4096        425984  40880000
+>
+> Case 1
+> on the server side
+>     # iperf -s -p 5201
+> on the client side
+>     # iperf -c [client ip] -p 5201
+> It turns out that the bandwidth is 9.34 Gbits/sec while the wscale of
+> server side is 10. It's good.
+>
+> Case 2
+> on the server side
+>     #iperf -s -p 5201 -w 425984
+> on the client side
+>     # iperf -c [client ip] -p 5201
+> It turns out that the bandwidth is reduced to 2.73 Gbits/sec while the
+> wcale is 2, even though the receive buffer is not changed at all at the
+> very beginning.
 
-Both linux bpftool and bpf selftests however are built using another
-types.h from tools/include/uapi/linux/types.h.
-Is there a reason why bpftool and selftests aren't built using the same
-types.h distributed by libbpf?
+Great, you discovered auto tuning is working as intended.
 
-I also see that the license of the three files differs:
-- (libbpf) include/linux/types.h is "LGPL-2.1 OR BSD-2-Clause"
-- (linux) include/linux/types.h is "GPL-2.0"
-- (linux) tools/include/uapi/linux/types.h is "GPL-2.0"
-Is there a reason why tools/include/uapi/linux/types.h isn't licensed as
-"GPL-2.0 WITH Linux-syscall-note"?
+>
+> Therefore, I added one condition where only user is trying to set a
+> smaller rx buffer. After this patch is applied, the bandwidth of case 2
+> is recovered to 9.34 Gbits/sec.
+>
+> Fixes: e88c64f0a425 ("tcp: allow effective reduction of TCP's rcv-buffer via setsockopt")
 
-Finally, would it make sense to also have libbpf use
-tools/include/uapi/linux/types.h instead of its own copy?
-The advantages would be:
-- consistency with linux use
-- the only architecture specific header included is "asm/bitsperlong.h",
-=A0 instead of all the ones currently included.
+This commit has nothing to do with your patch or feature.
 
-Thanks,
-Marco
+> Signed-off-by: Jason Xing <xingwanli@kuaishou.com>
+> ---
+>  net/core/filter.c | 7 ++++---
+>  net/core/sock.c   | 8 +++++---
+>  2 files changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 4603b7c..99f5d9c 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4795,9 +4795,10 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
+>                 case SO_RCVBUF:
+>                         val = min_t(u32, val, sysctl_rmem_max);
+>                         val = min_t(int, val, INT_MAX / 2);
+> -                       sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+> -                       WRITE_ONCE(sk->sk_rcvbuf,
+> -                                  max_t(int, val * 2, SOCK_MIN_RCVBUF));
+> +                       val = max_t(int, val * 2, SOCK_MIN_RCVBUF);
+> +                       if (val < sock_net(sk)->ipv4.sysctl_tcp_rmem[1])
+> +                               sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+> +                       WRITE_ONCE(sk->sk_rcvbuf, val);
+>                         break;
+>                 case SO_SNDBUF:
+>                         val = min_t(u32, val, sysctl_wmem_max);
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 4ff806d..e5e9cb0 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -923,8 +923,6 @@ static void __sock_set_rcvbuf(struct sock *sk, int val)
+>          * as a negative value.
+>          */
+>         val = min_t(int, val, INT_MAX / 2);
+> -       sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+> -
+>         /* We double it on the way in to account for "struct sk_buff" etc.
+>          * overhead.   Applications assume that the SO_RCVBUF setting they make
+>          * will allow that much actual data to be received on that socket.
+> @@ -935,7 +933,11 @@ static void __sock_set_rcvbuf(struct sock *sk, int val)
+>          * And after considering the possible alternatives, returning the value
+>          * we actually used in getsockopt is the most desirable behavior.
+>          */
+> -       WRITE_ONCE(sk->sk_rcvbuf, max_t(int, val * 2, SOCK_MIN_RCVBUF));
+> +       val = max_t(int, val * 2, SOCK_MIN_RCVBUF);
+> +       if (val < sock_net(sk)->ipv4.sysctl_tcp_rmem[1])
+> +               sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+> +
+> +       WRITE_ONCE(sk->sk_rcvbuf, val);
+>  }
+>
+>  void sock_set_rcvbuf(struct sock *sk, int val)
+
+You are breaking applications that want to set sk->sk_rcvbuf  to a fixed value,
+to control memory usage on millions of active sockets in a host.
+
+I think that you want new functionality, with new SO_ socket options,
+targeting net-next tree (No spurious FIxes: tag)
+
+For instance letting an application set  or unset  SOCK_RCVBUF_LOCK
+would be more useful, and would not break applications.
