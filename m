@@ -2,139 +2,158 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50458C433FE
-	for <bpf@archiver.kernel.org>; Tue, 15 Feb 2022 06:41:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8442AC433FE
+	for <bpf@archiver.kernel.org>; Tue, 15 Feb 2022 08:00:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbiBOGlp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Feb 2022 01:41:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51914 "EHLO
+        id S235049AbiBOIAw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 15 Feb 2022 03:00:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234583AbiBOGlo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Feb 2022 01:41:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A86B7C50;
-        Mon, 14 Feb 2022 22:41:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21B15B817A0;
-        Tue, 15 Feb 2022 06:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25BDC36AE2;
-        Tue, 15 Feb 2022 06:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644907291;
-        bh=jEmPVNZaBNwt/VLaRLc3lHKKicFk8z2UL+ikTy2DTQI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JwYoRmnaQEoFzUSq4tfhgUI8/LxYHECZ+i2D+1+J74DSWArNIsM9FCwb+T8mKbOsh
-         RSNWgcVWh9EJ/etpOjmpPZauvrj+QaCjvTCjCaZkiHR3F5qmHisDUiK9SSUo2qXBLY
-         Yj4h0xL71i5a8/1oIelqnABk0CJVn43MiVew+rcgqk4N5IaMxH2dM/ULoT5Lh5Itv4
-         JIhwCy0WX+RoPrhc9KPQifO/ou7WeN0X33qJ9b1zQLDPfwpM6+uWlkxNSmaALrhVEj
-         kRQ4nOXGLGi7HG7PwaihDIjIRot/wjJnjiBOuY3Mg393XYtdXVoGQ6/ACn1YCo3n4Z
-         n7RgzsEI+FRMQ==
-Received: by mail-yb1-f172.google.com with SMTP id p5so52903496ybd.13;
-        Mon, 14 Feb 2022 22:41:31 -0800 (PST)
-X-Gm-Message-State: AOAM532TOcXuCx8Y5vHNvLO3pvtqPpKj7/YYqVf93WR45A+26wnHIxiY
-        YoD3C0PlJKX4zwcdmTEtHe5h0abhwp7lcSz3NkE=
-X-Google-Smtp-Source: ABdhPJzswv2sMMGR1rXWoD7A42tM1dR/Z1aNC51Ziw3g8/36nUyzOBhKeFLX0p7x0D7ZhQw2xxq2Ng3glg3YGjqy2lM=
-X-Received: by 2002:a5b:a03:: with SMTP id k3mr2546249ybq.219.1644907290851;
- Mon, 14 Feb 2022 22:41:30 -0800 (PST)
+        with ESMTP id S235011AbiBOIAs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Feb 2022 03:00:48 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBF313E1B;
+        Tue, 15 Feb 2022 00:00:38 -0800 (PST)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JyYLg2SbYz67ts3;
+        Tue, 15 Feb 2022 15:56:11 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 15 Feb 2022 09:00:35 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.021;
+ Tue, 15 Feb 2022 09:00:35 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>
+CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] ima: Calculate digest in ima_inode_hash() if not
+ available
+Thread-Topic: [PATCH] ima: Calculate digest in ima_inode_hash() if not
+ available
+Thread-Index: AQHYHzTu9kKzqhEAHUiW0cSG9MzvPayRZbiAgAHZaqCAAFdHgIAArm+A
+Date:   Tue, 15 Feb 2022 08:00:34 +0000
+Message-ID: <311b5d0b3b824c548a4032a76a408944@huawei.com>
+References: <20220211104828.4061334-1-roberto.sassu@huawei.com>
+         <537635732d9cbcc42bcf7be5ed932d284b03d39f.camel@linux.ibm.com>
+         <cc6bcb7742dc432ba990ee38b5909496@huawei.com>
+ <36f85113f181f78eda3576823bd92be3f9cd1802.camel@linux.ibm.com>
+In-Reply-To: <36f85113f181f78eda3576823bd92be3f9cd1802.camel@linux.ibm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-References: <00000000000073b3e805d7fed17e@google.com> <462fa505-25a8-fd3f-cc36-5860c6539664@iogearbox.net>
-In-Reply-To: <462fa505-25a8-fd3f-cc36-5860c6539664@iogearbox.net>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 14 Feb 2022 22:41:19 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW6rPx3JqpPdQVdZN-YtZp1SbuW1j+SVNs48UVEYv68s1A@mail.gmail.com>
-Message-ID: <CAPhsuW6rPx3JqpPdQVdZN-YtZp1SbuW1j+SVNs48UVEYv68s1A@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: vmalloc-out-of-bounds Read in bpf_jit_free
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     syzbot <syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs@googlegroups.com, Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 3:52 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> Song, ptal.
->
-> On 2/14/22 7:45 PM, syzbot wrote:
-> > Hello,
+> From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> Sent: Monday, February 14, 2022 11:33 PM
+> On Mon, 2022-02-14 at 17:05 +0000, Roberto Sassu wrote:
+> > > From: Mimi Zohar [mailto:zohar@linux.ibm.com]
+> > > Sent: Sunday, February 13, 2022 2:06 PM
+> > > Hi Roberto,
+> > >
+> > > On Fri, 2022-02-11 at 11:48 +0100, Roberto Sassu wrote:
+> > > > __ima_inode_hash() checks if a digest has been already calculated by
+> > > > looking for the integrity_iint_cache structure associated to the passed
+> > > > inode.
+> > > >
+> > > > Users of ima_file_hash() and ima_inode_hash() (e.g. eBPF) might be
+> > > > interested in obtaining the information without having to setup an IMA
+> > > > policy so that the digest is always available at the time they call one of
+> > > > those functions.
+> > > >
+> > > > Open a new file descriptor in __ima_inode_hash(), so that this function
+> > > > could invoke ima_collect_measurement() to calculate the digest if it is not
+> > > > available. Still return -EOPNOTSUPP if the calculation failed.
+> > > >
+> > > > Instead of opening a new file descriptor, the one from ima_file_hash()
+> > > > could have been used. However, since ima_inode_hash() was created to
+> > > obtain
+> > > > the digest when the file descriptor is not available, it could benefit from
+> > > > this change too. Also, the opened file descriptor might be not suitable for
+> > > > use (file descriptor opened not for reading).
+> > > >
+> > > > This change does not cause memory usage increase, due to using a
+> temporary
+> > > > integrity_iint_cache structure for the digest calculation, and due to
+> > > > freeing the ima_digest_data structure inside integrity_iint_cache before
+> > > > exiting from __ima_inode_hash().
+> > > >
+> > > > Finally, update the test by removing ima_setup.sh (it is not necessary
+> > > > anymore to set an IMA policy) and by directly executing /bin/true.
+> > > >
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > >
+> > > Although this patch doesn't directly modify either ima_file_hash() or
+> > > ima_inode_hash(),  this change affects both functions.  ima_file_hash()
+> > > was introduced to be used with eBPF.  Based on Florent's post, changing
+> > > the ima_file_hash() behavor seems fine.  Since I have no idea whether
+> > > anyone is still using ima_inode_hash(), perhaps it would be safer to
+> > > limit this behavior change to just ima_file_hash().
 > >
-> > syzbot found the following issue on:
+> > Hi Mimi
 > >
-> > HEAD commit:    e5313968c41b Merge branch 'Split bpf_sk_lookup remote_port..
-> > git tree:       bpf-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=10baced8700000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=c40b67275bfe2a58
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=2f649ec6d2eea1495a8f
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > ok.
 > >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+2f649ec6d2eea1495a8f@syzkaller.appspotmail.com
-> >
-> > ==================================================================
-> > BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_binary_pack_free kernel/bpf/core.c:1120 [inline]
-> > BUG: KASAN: vmalloc-out-of-bounds in bpf_jit_free+0x2b5/0x2e0 kernel/bpf/core.c:1151
-> > Read of size 4 at addr ffffffffa0001a80 by task kworker/0:18/13642
-> >
-> > CPU: 0 PID: 13642 Comm: kworker/0:18 Not tainted 5.16.0-syzkaller-11655-ge5313968c41b #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Workqueue: events bpf_prog_free_deferred
-> > Call Trace:
-> >   <TASK>
-> >   __dump_stack lib/dump_stack.c:88 [inline]
-> >   dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
-> >   print_address_description.constprop.0.cold+0xf/0x336 mm/kasan/report.c:255
-> >   __kasan_report mm/kasan/report.c:442 [inline]
-> >   kasan_report.cold+0x83/0xdf mm/kasan/report.c:459
-> >   bpf_jit_binary_pack_free kernel/bpf/core.c:1120 [inline]
-> >   bpf_jit_free+0x2b5/0x2e0 kernel/bpf/core.c:1151
-> >   bpf_prog_free_deferred+0x5c1/0x790 kernel/bpf/core.c:2524
-> >   process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
-> >   worker_thread+0x657/0x1110 kernel/workqueue.c:2454
-> >   kthread+0x2e9/0x3a0 kernel/kthread.c:377
-> >   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
-> >   </TASK>
+> > I found that just checking that iint->ima_hash is not NULL is not enough
+> > (ima_inode_hash() might still return the old digest after a file write).
+> > Should I replace that check with !(iint->flags & IMA_COLLECTED)?
+> > Or should I do only for ima_file_hash() and recalculate the digest
+> > if necessary?
+> 
+> Updating the file hash after each write would really impact IMA
+> performance.  If you really want to detect any file change, no matter
+> how frequently it occurs, your best bet would be to track i_generation
+> and i_version.  Stefan is already adding "i_generation" for IMA
+> namespacing.
 
-I think this is the same issue as [1], that the 2MB page somehow got freed
-while still in use. I couldn't spot any bug with bpf_prog_pack allocate/free
-logic. I haven't got luck reproducing it either. Will continue tomorrow.
+I just wanted the ability to get a fresh digest after a file opened
+for writing is closed. Since in my use case I would not use an IMA
+policy, that would not be a problem.
 
+Thanks
 
-[1] https://lore.kernel.org/netdev/0000000000007646bd05d7f81943@google.com/t/
+Roberto
 
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua
+
+> > > Please update the ima_file_hash() doc.  While touching this area, I'd
+> > > appreciate your fixing the first doc line in both ima_file_hash() and
+> > > ima_inode_hash() cases, which wraps spanning two lines.
 > >
+> > Did you mean to make the description shorter or to have everything
+> > in one line? According to the kernel documentation (kernel-doc.rst),
+> > having the brief description in multiple lines should be fine.
+> 
+> Thanks for checking kernel-doc.   The "brief description"  not wrapping
+> across multiple lines did in fact change.
+> 
+> > > Please split the IMA from the eBPF changes.
 > >
-> > Memory state around the buggy address:
-> >   ffffffffa0001980: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> >   ffffffffa0001a00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> >> ffffffffa0001a80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> >                     ^
-> >   ffffffffa0001b00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> >   ffffffffa0001b80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-> > ==================================================================
-> >
-> >
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
->
+> > Ok.
+> 
+> --
+> thanks,
+> 
+> Mimi
+
