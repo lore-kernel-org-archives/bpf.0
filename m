@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6195EC4332F
-	for <bpf@archiver.kernel.org>; Wed, 16 Feb 2022 03:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C57C433F5
+	for <bpf@archiver.kernel.org>; Wed, 16 Feb 2022 03:56:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344017AbiBPD4D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Feb 2022 22:56:03 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50868 "EHLO
+        id S245450AbiBPD4P (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Feb 2022 22:56:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343713AbiBPDzu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Feb 2022 22:55:50 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1AEF65F5;
-        Tue, 15 Feb 2022 19:55:39 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id b8so1307745pjb.4;
-        Tue, 15 Feb 2022 19:55:39 -0800 (PST)
+        with ESMTP id S245738AbiBPD4F (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Feb 2022 22:56:05 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA42F47D2;
+        Tue, 15 Feb 2022 19:55:53 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id i10so1029350plr.2;
+        Tue, 15 Feb 2022 19:55:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EZoukMGiWXk1HvbuQEBDTM8Ki/Xg0Kqyx/8NN8gbO9E=;
-        b=EVm+tVf2ob8Bd6hyOZxaiciBkLNRKhy/EBpSFT+cBRzIH7Ri8w6Jh7P6eZ37/+I3O9
-         EkF1aAtMePZh9l5I3yPqlV5jT7Wa0wH0SiD8X2W68NQS+G/yGhx4PG37DDbpif2/9LGQ
-         4wwpC7mmMzAWkJsJvc+jKCaqF9YI21IUG8RyHi2RQ7MGIvOWsDeZJtHrEZy+yJiFHZ0I
-         mhY1ocLYU6tXr7jRCq0AHyagEISi42OpHnhcHuQyR8TynzbztdGrnfeKGsJeipgXQPJA
-         a5SlmUYU9KIPByXXjChd3Nc336TJpjYIV3IJVttfUg63I0xOyxzzcvabmQ/Z2rYZIO71
-         1f9Q==
+        bh=Igd5WmRzlfBkM7QudgasudwGUSnfgQe6ubQS3rivJ9o=;
+        b=EGAcxrqWnPxkhekrnbSeeyVpChoXg63+bQSizt6L6IiwZDcQYHmE91p2cNLXQFB9vR
+         PQKtJWDc4Q8+VaHLYV4KJ7und/jATXRDLN7gulOwBSHaWwsARkOZL3ZcmWWnyu+j5BfW
+         /VA93rDc+FXC5OghRhAFDb+tUlXI21hizYC50RsJVXWrhZ26dqlGY4Kc14//qSvaAays
+         po5YZfivOjYmOlqpM0/rX9f6D7p+Qqlrpcsw+9udIWJovwj8S/0sjH7qV4g3ZXW/Xy7Z
+         4KMYE5pVkIkBfcglVWMF7a2T2YXveLHLjFNws8EcWkG7vmyM97tiwkh2qoCzKk+f0EwH
+         /Vig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EZoukMGiWXk1HvbuQEBDTM8Ki/Xg0Kqyx/8NN8gbO9E=;
-        b=eQm0frnsuP3jJvZ8i8QFhR93XglmKcjBEl7BQlLz784psR8J5wuek9xyxVNFLbGCx1
-         jFawQdsk6E/zJLYKVB9Y0vxp+n+SuZXw0TYyu6DnZD+nKGAx8OCVVoORgP3HKcoiNAT3
-         2Nu4GeFKf84kpbNE2c6dKYbsOSZv8d5isWvV4fHTpmOOpuOMmsUWfYxNEbG8q0tMi7wI
-         EHjsYF7h6jhpAlNcL4MfQyGM2rPZVv+hVMW7r/M16+2QEgIQvwaanL4e88tMZ8aKZflC
-         YloYqpsmXWQikeSqmjiL7Q3EwsYVhtpCTPykTOnsRITedxVZhAxIUhm24pfEZbzGGsyu
-         5VKQ==
-X-Gm-Message-State: AOAM5301iJvmV9Vhhe4gdYrFt762TZyZoOYmxOCtQtNOBqvGhFpyM0sy
-        YNOFRXRYh15plXatkcHJt8s=
-X-Google-Smtp-Source: ABdhPJyU9BV6vwbfISPw6NBlVM3EGCGhdymUXNk1IdlFwiV0htoID4GvR7obIfHk4OFOMp5UuTcJ0A==
-X-Received: by 2002:a17:90a:3e4e:b0:1b9:bda3:10f5 with SMTP id t14-20020a17090a3e4e00b001b9bda310f5mr744386pjm.112.1644983739080;
-        Tue, 15 Feb 2022 19:55:39 -0800 (PST)
+        bh=Igd5WmRzlfBkM7QudgasudwGUSnfgQe6ubQS3rivJ9o=;
+        b=Su51g1WKt/xgV4TtR1yyub3OdYH/pyv/Htj3hsEE5ldEqGddoBC5/KwX0dBVccx+2V
+         IO/28ZhOFVyiXV2QwhmLWvay6t0EAdOjp+qv0aVGBUIcpr7cD+UI22XqYycWo/bi9ZOK
+         4dY+vkh0K2nR+wxli51NCkPVsESCgjB4UKcxPpI0pR/kQ4H7FrSsEPj9kBDFRBF4EEvN
+         E9MTQg4NUtAt4JtIs3XnTyQi7Ygh2s9ilv/ltMOokRdlWJuCD7rJxANbB9FeUPTxEZam
+         c9vEf5jrBkNTd3sVqcEfQ2c3XdSoqu0ul3UcG1+i/PBosRt4EcSf0XjwjgnaUjCFAxiP
+         bpLg==
+X-Gm-Message-State: AOAM533KVGYHI76t8HAwWyttInbC0CoblnvOXZKGbsME17KSDzCIyDfa
+        wFuBc6uiSZ8aQaVF3n0XuJzHhPNAX2c=
+X-Google-Smtp-Source: ABdhPJxcb2aSMf+fZCMQX+nVvm6YiWqC8rEz23edP+K15bZ24/vBrYsLE0OHDez1kJT06ducgUUzpQ==
+X-Received: by 2002:a17:90a:13c3:b0:1b8:d015:66d2 with SMTP id s3-20020a17090a13c300b001b8d01566d2mr8114321pjf.96.1644983753164;
+        Tue, 15 Feb 2022 19:55:53 -0800 (PST)
 Received: from localhost.localdomain ([203.205.141.110])
-        by smtp.gmail.com with ESMTPSA id nn16sm19099668pjb.2.2022.02.15.19.55.32
+        by smtp.gmail.com with ESMTPSA id nn16sm19099668pjb.2.2022.02.15.19.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 19:55:38 -0800 (PST)
+        Tue, 15 Feb 2022 19:55:52 -0800 (PST)
 From:   menglong8.dong@gmail.com
 X-Google-Original-From: imagedong@tencent.com
 To:     dsahern@kernel.org, kuba@kernel.org
@@ -61,9 +61,9 @@ Cc:     edumazet@google.com, davem@davemloft.net, rostedt@goodmis.org,
         vvs@virtuozzo.com, cong.wang@bytedance.com,
         luiz.von.dentz@intel.com, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org, flyingpeng@tencent.com
-Subject: [PATCH net-next 6/9] net: tcp: use kfree_skb_reason() for tcp_v{4,6}_do_rcv()
-Date:   Wed, 16 Feb 2022 11:54:23 +0800
-Message-Id: <20220216035426.2233808-7-imagedong@tencent.com>
+Subject: [PATCH net-next 8/9] net: tcp: use tcp_drop_reason() for tcp_data_queue()
+Date:   Wed, 16 Feb 2022 11:54:25 +0800
+Message-Id: <20220216035426.2233808-9-imagedong@tencent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220216035426.2233808-1-imagedong@tencent.com>
 References: <20220216035426.2233808-1-imagedong@tencent.com>
@@ -75,76 +75,133 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Menglong Dong <imagedong@tencent.com>
 
-Replace kfree_skb() used in tcp_v4_do_rcv() and tcp_v6_do_rcv() with
-kfree_skb_reason().
+Replace tcp_drop() used in tcp_data_queue() with tcp_drop_reason().
+Following drop reasons are introduced:
+
+SKB_DROP_REASON_TCP_ZEROWINDOW
+SKB_DROP_REASON_TCP_OLD_DATA
+SKB_DROP_REASON_TCP_OVERWINDOW
+
+SKB_DROP_REASON_TCP_OLD_DATA is used for the case that end_seq of skb
+less than the left edges of receive window. (Maybe there is a better
+name?)
 
 Signed-off-by: Menglong Dong <imagedong@tencent.com>
 ---
- net/ipv4/tcp_ipv4.c | 5 ++++-
- net/ipv6/tcp_ipv6.c | 4 +++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ include/linux/skbuff.h     | 13 +++++++++++++
+ include/trace/events/skb.h |  3 +++
+ net/ipv4/tcp_input.c       | 13 +++++++++++--
+ 3 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 15ef1bcff84f..036b855c1b14 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1708,6 +1708,7 @@ INDIRECT_CALLABLE_DECLARE(struct dst_entry *ipv4_dst_check(struct dst_entry *,
-  */
- int tcp_v4_do_rcv(struct sock *sk, struct sk_buff *skb)
- {
-+	enum skb_drop_reason reason;
- 	struct sock *rsk;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index dcf9d8bd0079..62a0d7d78f6f 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -358,6 +358,19 @@ enum skb_drop_reason {
+ 					 * LINUX_MIB_TCPBACKLOGDROP)
+ 					 */
+ 	SKB_DROP_REASON_TCP_FLAGS,	/* TCP flags invalid */
++	SKB_DROP_REASON_TCP_ZEROWINDOW,	/* TCP receive window size is zero,
++					 * see LINUX_MIB_TCPZEROWINDOWDROP
++					 */
++	SKB_DROP_REASON_TCP_OLD_DATA,	/* the TCP data reveived is already
++					 * received before (spurious retrans
++					 * may happened), see
++					 * LINUX_MIB_DELAYEDACKLOST
++					 */
++	SKB_DROP_REASON_TCP_OVERWINDOW,	/* the TCP data is out of window,
++					 * the seq of the first byte exceed
++					 * the right edges of receive
++					 * window
++					 */
+ 	SKB_DROP_REASON_MAX,
+ };
  
- 	if (sk->sk_state == TCP_ESTABLISHED) { /* Fast path */
-@@ -1730,6 +1731,7 @@ int tcp_v4_do_rcv(struct sock *sk, struct sk_buff *skb)
- 		return 0;
- 	}
+diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
+index d332e7313a61..cc1c8f7eaf72 100644
+--- a/include/trace/events/skb.h
++++ b/include/trace/events/skb.h
+@@ -33,6 +33,9 @@
+ 	EM(SKB_DROP_REASON_TCP_MD5FAILURE, TCP_MD5FAILURE)	\
+ 	EM(SKB_DROP_REASON_SOCKET_BACKLOG, SOCKET_BACKLOG)	\
+ 	EM(SKB_DROP_REASON_TCP_FLAGS, TCP_FLAGS)		\
++	EM(SKB_DROP_REASON_TCP_ZEROWINDOW, TCP_ZEROWINDOW)	\
++	EM(SKB_DROP_REASON_TCP_OLD_DATA, TCP_OLD_DATA)		\
++	EM(SKB_DROP_REASON_TCP_OVERWINDOW, TCP_OVERWINDOW)	\
+ 	EMe(SKB_DROP_REASON_MAX, MAX)
+ 
+ #undef EM
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 16ee1127e25d..0a4ca818d580 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -4988,6 +4988,7 @@ void tcp_data_ready(struct sock *sk)
+ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct tcp_sock *tp = tcp_sk(sk);
++	enum skb_drop_reason reason;
+ 	bool fragstolen;
+ 	int eaten;
+ 
+@@ -5006,6 +5007,7 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ 	skb_dst_drop(skb);
+ 	__skb_pull(skb, tcp_hdr(skb)->doff * 4);
  
 +	reason = SKB_DROP_REASON_NOT_SPECIFIED;
- 	if (tcp_checksum_complete(skb))
- 		goto csum_err;
+ 	tp->rx_opt.dsack = 0;
  
-@@ -1757,7 +1759,7 @@ int tcp_v4_do_rcv(struct sock *sk, struct sk_buff *skb)
- reset:
- 	tcp_v4_send_reset(rsk, skb);
- discard:
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, reason);
- 	/* Be careful here. If this function gets more complicated and
- 	 * gcc suffers from register pressure on the x86, sk (in %ebx)
- 	 * might be destroyed here. This current version compiles correctly,
-@@ -1766,6 +1768,7 @@ int tcp_v4_do_rcv(struct sock *sk, struct sk_buff *skb)
- 	return 0;
+ 	/*  Queue data for delivery to the user.
+@@ -5014,6 +5016,7 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ 	 */
+ 	if (TCP_SKB_CB(skb)->seq == tp->rcv_nxt) {
+ 		if (tcp_receive_window(tp) == 0) {
++			reason = SKB_DROP_REASON_TCP_ZEROWINDOW;
+ 			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPZEROWINDOWDROP);
+ 			goto out_of_window;
+ 		}
+@@ -5023,6 +5026,7 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ 		if (skb_queue_len(&sk->sk_receive_queue) == 0)
+ 			sk_forced_mem_schedule(sk, skb->truesize);
+ 		else if (tcp_try_rmem_schedule(sk, skb, skb->truesize)) {
++			reason = SKB_DROP_REASON_PROTO_MEM;
+ 			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPRCVQDROP);
+ 			sk->sk_data_ready(sk);
+ 			goto drop;
+@@ -5059,6 +5063,7 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ 	if (!after(TCP_SKB_CB(skb)->end_seq, tp->rcv_nxt)) {
+ 		tcp_rcv_spurious_retrans(sk, skb);
+ 		/* A retransmit, 2nd most common case.  Force an immediate ack. */
++		reason = SKB_DROP_REASON_TCP_OLD_DATA;
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_DELAYEDACKLOST);
+ 		tcp_dsack_set(sk, TCP_SKB_CB(skb)->seq, TCP_SKB_CB(skb)->end_seq);
  
- csum_err:
-+	reason = SKB_DROP_REASON_TCP_CSUM;
- 	trace_tcp_bad_csum(skb);
- 	TCP_INC_STATS(sock_net(sk), TCP_MIB_CSUMERRORS);
- 	TCP_INC_STATS(sock_net(sk), TCP_MIB_INERRS);
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index 15090fe5af90..4d4af9b15c83 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -1476,6 +1476,7 @@ int tcp_v6_do_rcv(struct sock *sk, struct sk_buff *skb)
- {
- 	struct ipv6_pinfo *np = tcp_inet6_sk(sk);
- 	struct sk_buff *opt_skb = NULL;
-+	enum skb_drop_reason reason;
- 	struct tcp_sock *tp;
+@@ -5066,13 +5071,16 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ 		tcp_enter_quickack_mode(sk, TCP_MAX_QUICKACKS);
+ 		inet_csk_schedule_ack(sk);
+ drop:
+-		tcp_drop(sk, skb);
++		tcp_drop_reason(sk, skb, reason);
+ 		return;
+ 	}
  
- 	/* Imagine: socket is IPv6. IPv4 packet arrives,
-@@ -1563,9 +1564,10 @@ int tcp_v6_do_rcv(struct sock *sk, struct sk_buff *skb)
- discard:
- 	if (opt_skb)
- 		__kfree_skb(opt_skb);
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, reason);
- 	return 0;
- csum_err:
-+	reason = SKB_DROP_REASON_TCP_CSUM;
- 	trace_tcp_bad_csum(skb);
- 	TCP_INC_STATS(sock_net(sk), TCP_MIB_CSUMERRORS);
- 	TCP_INC_STATS(sock_net(sk), TCP_MIB_INERRS);
+ 	/* Out of window. F.e. zero window probe. */
+-	if (!before(TCP_SKB_CB(skb)->seq, tp->rcv_nxt + tcp_receive_window(tp)))
++	if (!before(TCP_SKB_CB(skb)->seq,
++		    tp->rcv_nxt + tcp_receive_window(tp))) {
++		reason = SKB_DROP_REASON_TCP_OVERWINDOW;
+ 		goto out_of_window;
++	}
+ 
+ 	if (before(TCP_SKB_CB(skb)->seq, tp->rcv_nxt)) {
+ 		/* Partial packet, seq < rcv_next < end_seq */
+@@ -5082,6 +5090,7 @@ static void tcp_data_queue(struct sock *sk, struct sk_buff *skb)
+ 		 * remembering D-SACK for its head made in previous line.
+ 		 */
+ 		if (!tcp_receive_window(tp)) {
++			reason = SKB_DROP_REASON_TCP_ZEROWINDOW;
+ 			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPZEROWINDOWDROP);
+ 			goto out_of_window;
+ 		}
 -- 
 2.34.1
 
