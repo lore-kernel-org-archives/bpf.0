@@ -2,95 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 245AEC433F5
-	for <bpf@archiver.kernel.org>; Thu, 17 Feb 2022 07:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1827C433EF
+	for <bpf@archiver.kernel.org>; Thu, 17 Feb 2022 08:45:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbiBQHk3 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 17 Feb 2022 02:40:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49372 "EHLO
+        id S237633AbiBQIpt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Feb 2022 03:45:49 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236472AbiBQHk3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:40:29 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3702B2A39CF
-        for <bpf@vger.kernel.org>; Wed, 16 Feb 2022 23:40:15 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21H2IdYc014623
-        for <bpf@vger.kernel.org>; Wed, 16 Feb 2022 23:40:15 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e9dfb9885-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 16 Feb 2022 23:40:14 -0800
-Received: from twshared29821.14.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 16 Feb 2022 23:40:14 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BFFC61132323A; Wed, 16 Feb 2022 23:39:59 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: [PATCH bpf-next] libbpf: fix memleak in libbpf_netlink_recv()
-Date:   Wed, 16 Feb 2022 23:39:58 -0800
-Message-ID: <20220217073958.276959-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
+        with ESMTP id S238038AbiBQIpr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Feb 2022 03:45:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 113502221B4
+        for <bpf@vger.kernel.org>; Thu, 17 Feb 2022 00:45:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645087532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l/VQgLhh1DBOYffBqGYngony3TZbnaAH3gw4sPL+y8Y=;
+        b=THEdw38vzB0QWr4jHcxHN+OaOpdlOkXAwUgJbz0PFhdOFvTd7Peg6Z9BVjnBoC8DElB8V1
+        S/zG6gEwFUhy/PVPBynXGnn2tWYNL7XqZAAKk/0/sHS1u6t2l+KRbobbJb6z/Mb/7QIj83
+        Es249uGRRbdMgKDYdUXZpNiVbXBgZc4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-460-Mt4B4Tg6PBOgJfpjfbCemA-1; Thu, 17 Feb 2022 03:45:30 -0500
+X-MC-Unique: Mt4B4Tg6PBOgJfpjfbCemA-1
+Received: by mail-wm1-f69.google.com with SMTP id u14-20020a05600c210e00b0037bddd0562eso1378520wml.1
+        for <bpf@vger.kernel.org>; Thu, 17 Feb 2022 00:45:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=l/VQgLhh1DBOYffBqGYngony3TZbnaAH3gw4sPL+y8Y=;
+        b=irEVV7CtUayxCSnARaHwyi6p4+whr78SVfEdRDzsG+BKtTEKRccY4VSOY5IIBM+UkI
+         lp961smK+7HgoJJedt7hsGXUClkRl/oJNVI9gNSaKHSWB+gCVT8MXWXscwyyfxGJ9Ntb
+         fMjkE1sSEVG3lBdj94ctrPzex6xEGeR2p0fnW7BDQuYiq9c8KbhfHrkinYWjcXP+20PW
+         VugHbiGsNKotD6qfSKoKWSgYzo4+4dyHd9pj1CCqUWoxUIuGmE92yoru2nZMa+bbCs2J
+         DiLXfQF7VTxXIbeHMB5VXqUY8ppSNbI7ixblA593eArATwSBqNq28+CIJF4caGrhpDqy
+         Avig==
+X-Gm-Message-State: AOAM5310fWXfhF2u3xW3QLQ/5lgtI4P4vMyWkjxJejVrsCsmgkGHWRW0
+        pFzJN8KNwRSzEcplKGTZQBswLi55DOzDgXP/gfze3bnDKdI5U0ltF0V/MzJgCnrSldGOSJ6YYta
+        VzVS2QJCU7txP
+X-Received: by 2002:a05:600c:4e0a:b0:37b:c548:622a with SMTP id b10-20020a05600c4e0a00b0037bc548622amr5359162wmq.55.1645087529259;
+        Thu, 17 Feb 2022 00:45:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxg9hz9QXiPqil98HtD9zdj/RRqil2JJJiJ6kNUJxNsL96+bttpFtCe95wg8+235HI07HM++Q==
+X-Received: by 2002:a05:600c:4e0a:b0:37b:c548:622a with SMTP id b10-20020a05600c4e0a00b0037bc548622amr5359148wmq.55.1645087529037;
+        Thu, 17 Feb 2022 00:45:29 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-112-206.dyn.eolo.it. [146.241.112.206])
+        by smtp.gmail.com with ESMTPSA id z7sm492824wml.40.2022.02.17.00.45.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Feb 2022 00:45:28 -0800 (PST)
+Message-ID: <41a3e6e4f9331c6a0a62fe838fc6f9084a5c89bc.camel@redhat.com>
+Subject: Re: [PATCH v3] net: fix wrong network header length
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        bpf <bpf@vger.kernel.org>,
+        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Date:   Thu, 17 Feb 2022 09:45:27 +0100
+In-Reply-To: <20220217070139.30028-1-lina.wang@mediatek.com>
+References: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
+         <20220217070139.30028-1-lina.wang@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-X-Proofpoint-ORIG-GUID: OfQmuHkrNhIZ_GhGPIc2D95Rr23RhPwx
-X-Proofpoint-GUID: OfQmuHkrNhIZ_GhGPIc2D95Rr23RhPwx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-02-17_03,2022-02-16_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 lowpriorityscore=0
- mlxscore=0 malwarescore=0 clxscore=1015 suspectscore=0 phishscore=0
- spamscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=612
- adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202170034
-X-FB-Internal: deliver
+User-Agent: Evolution 3.42.3 (3.42.3-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure that libbpf_netlink_recv() frees dynamically allocated buffer in
-all code paths.
+Hello,
 
-Cc: Toke Høiland-Jørgensen <toke@redhat.com>
-Fixes: 9c3de619e13e ("libbpf: Use dynamically allocated buffer when receiving netlink messages")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/netlink.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+On Thu, 2022-02-17 at 15:01 +0800, Lina Wang wrote:
+> On Wed, 2022-02-16 at 19:05 -0800, Alexei Starovoitov wrote:
+> > On Tue, Feb 15, 2022 at 11:37 PM Lina Wang <lina.wang@mediatek.com>
+> > wrote:
+> > > 
+> > > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is
+> > > enable,
+> > > several skbs are gathered in skb_shinfo(skb)->frag_list. The first
+> > > skb's
+> > > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> > > network_header\transport_header\mac_header have been updated as
+> > > ipv4 acts,
+> > > but other skbs in frag_list didnot update anything, just ipv6
+> > > packets.
+> > 
+> > Please add a test that demonstrates the issue and verifies the fix.
+> 
+> I used iperf udp test to verify the patch, server peer enabled -d to debug
+> received packets.
+> 
+> 192.0.0.4 is clatd interface ip, corresponding ipv6 addr is 
+> 2000:1:1:1:afca:1b1f:1a9:b367, server peer ip is 1.1.1.1,
+> whose ipv6 is 2004:1:1:1::101:101.
+> 
+> Without the patch, when udp length 2840 packets received, iperf shows:
+> pcount 1 packet_count 0
+> pcount 27898727 packet_count 1
+> pcount 3 packet_count 27898727
+> 
+> pcount should be 2, but is 27898727(0x1a9b367) , which is 20 bytes put 
+> forward. 
+> 
+> 12:08:02.680299	Unicast to us 2004:1:1:1::101:101   2000:1:1:1:afca:1b1f:1a9:b367 UDP 51196 → 5201 Len=2840
+> 0000   20 00 00 01 00 01 00 01 af ca 1b 1f 01 a9 b3 67   ipv6 dst address
+> 0000   c7 fc 14 51 0b 20 c7 ab                           udp header
+> 0000   00 00 00 ab 00 0e f3 49 00 00 00 01 08 06 69 d2   00000001 is pcount
+> 12:08:02.682084	Unicast to us	1.1.1.1	                 192.0.0.4 	 	  UDP 51196 → 5201 Len=2840
+> 
+> After applied the patch, there is no OOO, pcount acted in order.
 
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index a598061f6fea..cbc8967d5402 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -176,7 +176,8 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
- 				libbpf_nla_dump_errormsg(nh);
- 				goto done;
- 			case NLMSG_DONE:
--				return 0;
-+				ret = 0;
-+				goto done;
- 			default:
- 				break;
- 			}
-@@ -188,9 +189,10 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
- 				case NL_NEXT:
- 					goto start;
- 				case NL_DONE:
--					return 0;
-+					ret = 0;
-+					goto done;
- 				default:
--					return ret;
-+					goto done;
- 				}
- 			}
- 		}
--- 
-2.30.2
+To clarify: Alexei is asking to add a test under:
+
+tools/testing/selftests/net/
+
+to cover this specific case. You can propbably extend the existing
+udpgro_fwd.sh.
+
+Please explicitly CC people who gave feedback to previous iterations,
+it makes easier to track the discussion.
+
+/P
 
