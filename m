@@ -2,413 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECEDBC433F5
-	for <bpf@archiver.kernel.org>; Thu, 17 Feb 2022 07:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1B15C433EF
+	for <bpf@archiver.kernel.org>; Thu, 17 Feb 2022 07:07:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbiBQHET (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Feb 2022 02:04:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51238 "EHLO
+        id S235894AbiBQHIB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Feb 2022 02:08:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235877AbiBQHEN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Feb 2022 02:04:13 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F118C2E7;
-        Wed, 16 Feb 2022 23:03:57 -0800 (PST)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Jzm484kp3zbkCf;
-        Thu, 17 Feb 2022 15:02:48 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
- (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Feb
- 2022 15:03:55 +0800
-From:   Hou Tao <houtao1@huawei.com>
-To:     Alexei Starovoitov <ast@kernel.org>, Will Deacon <will@kernel.org>
-CC:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
+        with ESMTP id S235949AbiBQHIA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Feb 2022 02:08:00 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5EF28ADA2;
+        Wed, 16 Feb 2022 23:07:41 -0800 (PST)
+X-UUID: a549484970ab4c659dbf3a1fca61e35b-20220217
+X-UUID: a549484970ab4c659dbf3a1fca61e35b-20220217
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <lina.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1352216927; Thu, 17 Feb 2022 15:07:34 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 17 Feb 2022 15:07:33 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 17 Feb 2022 15:07:32 +0800
+From:   Lina Wang <lina.wang@mediatek.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <houtao1@huawei.com>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH bpf-next v4 3/4] bpf, arm64: support more atomic operations
-Date:   Thu, 17 Feb 2022 15:22:31 +0800
-Message-ID: <20220217072232.1186625-4-houtao1@huawei.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220217072232.1186625-1-houtao1@huawei.com>
-References: <20220217072232.1186625-1-houtao1@huawei.com>
+        Andrii Nakryiko <andrii@kernel.org>
+CC:     Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        bpf <bpf@vger.kernel.org>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v3] net: fix wrong network header length
+Date:   Thu, 17 Feb 2022 15:01:39 +0800
+Message-ID: <20220217070139.30028-1-lina.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
+References: <CAADnVQK78PN8N6c6u_O2BAxdyXwH_HVYMV_x3oGgyfT50a6ymg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Atomics for eBPF patch series adds support for atomic[64]_fetch_add,
-atomic[64]_[fetch_]{and,or,xor} and atomic[64]_{xchg|cmpxchg}, but
-it only adds support for x86-64, so support these atomic operations
-for arm64 as well.
+On Wed, 2022-02-16 at 19:05 -0800, Alexei Starovoitov wrote:
+> On Tue, Feb 15, 2022 at 11:37 PM Lina Wang <lina.wang@mediatek.com>
+> wrote:
+> > 
+> > When clatd starts with ebpf offloaing, and NETIF_F_GRO_FRAGLIST is
+> > enable,
+> > several skbs are gathered in skb_shinfo(skb)->frag_list. The first
+> > skb's
+> > ipv6 header will be changed to ipv4 after bpf_skb_proto_6_to_4,
+> > network_header\transport_header\mac_header have been updated as
+> > ipv4 acts,
+> > but other skbs in frag_list didnot update anything, just ipv6
+> > packets.
+> 
+> Please add a test that demonstrates the issue and verifies the fix.
 
-Basically the implementation procedure is almost mechanical translation
-of code snippets in atomic_ll_sc.h & atomic_lse.h & cmpxchg.h located
-under arch/arm64/include/asm.
+I used iperf udp test to verify the patch, server peer enabled -d to debug
+received packets.
 
-When LSE atomic is unavailable, an extra temporary register is needed for
-(BPF_ADD | BPF_FETCH) to save the value of src register, instead of adding
-TMP_REG_4 just use BPF_REG_AX instead. Also make emit_lse_atomic() as an
-empty inline function when CONFIG_ARM64_LSE_ATOMICS is disabled.
+192.0.0.4 is clatd interface ip, corresponding ipv6 addr is 
+2000:1:1:1:afca:1b1f:1a9:b367, server peer ip is 1.1.1.1,
+whose ipv6 is 2004:1:1:1::101:101.
 
-For cpus_have_cap(ARM64_HAS_LSE_ATOMICS) case and no-LSE-ATOMICS case, the
-following three tests: "./test_verifier", "./test_progs -t atomic" and
-"insmod ./test_bpf.ko" are exercised and passed.
+Without the patch, when udp length 2840 packets received, iperf shows:
+pcount 1 packet_count 0
+pcount 27898727 packet_count 1
+pcount 3 packet_count 27898727
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- arch/arm64/net/bpf_jit.h      |  39 +++++-
- arch/arm64/net/bpf_jit_comp.c | 223 +++++++++++++++++++++++++++-------
- 2 files changed, 217 insertions(+), 45 deletions(-)
+pcount should be 2, but is 27898727(0x1a9b367) , which is 20 bytes put 
+forward. 
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index 9d9250c7cc72..dd59b5ad8fe4 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -88,17 +88,42 @@
- /* [Rn] = Rt; (atomic) Rs = [state] */
- #define A64_STXR(sf, Rt, Rn, Rs) \
- 	A64_LSX(sf, Rt, Rn, Rs, STORE_EX)
-+/* [Rn] = Rt (store release); (atomic) Rs = [state] */
-+#define A64_STLXR(sf, Rt, Rn, Rs) \
-+	aarch64_insn_gen_load_store_ex(Rt, Rn, Rs, A64_SIZE(sf), \
-+				       AARCH64_INSN_LDST_STORE_REL_EX)
- 
- /*
-  * LSE atomics
-  *
-- * STADD is simply encoded as an alias for LDADD with XZR as
-- * the destination register.
-+ * ST{ADD,CLR,SET,EOR} is simply encoded as an alias for
-+ * LDD{ADD,CLR,SET,EOR} with XZR as the destination register.
-  */
--#define A64_STADD(sf, Rn, Rs) \
-+#define A64_ST_OP(sf, Rn, Rs, op) \
- 	aarch64_insn_gen_atomic_ld_op(A64_ZR, Rn, Rs, \
--		A64_SIZE(sf), AARCH64_INSN_MEM_ATOMIC_ADD, \
-+		A64_SIZE(sf), AARCH64_INSN_MEM_ATOMIC_##op, \
- 		AARCH64_INSN_MEM_ORDER_NONE)
-+/* [Rn] <op>= Rs */
-+#define A64_STADD(sf, Rn, Rs) A64_ST_OP(sf, Rn, Rs, ADD)
-+#define A64_STCLR(sf, Rn, Rs) A64_ST_OP(sf, Rn, Rs, CLR)
-+#define A64_STEOR(sf, Rn, Rs) A64_ST_OP(sf, Rn, Rs, EOR)
-+#define A64_STSET(sf, Rn, Rs) A64_ST_OP(sf, Rn, Rs, SET)
-+
-+#define A64_LD_OP_AL(sf, Rt, Rn, Rs, op) \
-+	aarch64_insn_gen_atomic_ld_op(Rt, Rn, Rs, \
-+		A64_SIZE(sf), AARCH64_INSN_MEM_ATOMIC_##op, \
-+		AARCH64_INSN_MEM_ORDER_ACQREL)
-+/* Rt = [Rn] (load acquire); [Rn] <op>= Rs (store release) */
-+#define A64_LDADDAL(sf, Rt, Rn, Rs) A64_LD_OP_AL(sf, Rt, Rn, Rs, ADD)
-+#define A64_LDCLRAL(sf, Rt, Rn, Rs) A64_LD_OP_AL(sf, Rt, Rn, Rs, CLR)
-+#define A64_LDEORAL(sf, Rt, Rn, Rs) A64_LD_OP_AL(sf, Rt, Rn, Rs, EOR)
-+#define A64_LDSETAL(sf, Rt, Rn, Rs) A64_LD_OP_AL(sf, Rt, Rn, Rs, SET)
-+/* Rt = [Rn] (load acquire); [Rn] = Rs (store release) */
-+#define A64_SWPAL(sf, Rt, Rn, Rs) A64_LD_OP_AL(sf, Rt, Rn, Rs, SWP)
-+/* Rs = CAS(Rn, Rs, Rt) (load acquire & store release) */
-+#define A64_CASAL(sf, Rt, Rn, Rs) \
-+	aarch64_insn_gen_cas(Rt, Rn, Rs, A64_SIZE(sf), \
-+		AARCH64_INSN_MEM_ORDER_ACQREL)
- 
- /* Add/subtract (immediate) */
- #define A64_ADDSUB_IMM(sf, Rd, Rn, imm12, type) \
-@@ -203,6 +228,9 @@
- #define A64_ANDS(sf, Rd, Rn, Rm) A64_LOGIC_SREG(sf, Rd, Rn, Rm, AND_SETFLAGS)
- /* Rn & Rm; set condition flags */
- #define A64_TST(sf, Rn, Rm) A64_ANDS(sf, A64_ZR, Rn, Rm)
-+/* Rd = ~Rm (alias of ORN with A64_ZR as Rn) */
-+#define A64_MVN(sf, Rd, Rm)  \
-+	A64_LOGIC_SREG(sf, Rd, A64_ZR, Rm, ORN)
- 
- /* Logical (immediate) */
- #define A64_LOGIC_IMM(sf, Rd, Rn, imm, type) ({ \
-@@ -226,4 +254,7 @@
- #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
- #define A64_BTI_JC A64_HINT(AARCH64_INSN_HINT_BTIJC)
- 
-+/* DMB */
-+#define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
-+
- #endif /* _BPF_JIT_H */
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 74f9a9b6a053..2375ed3e4c8a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -27,6 +27,17 @@
- #define TCALL_CNT (MAX_BPF_JIT_REG + 2)
- #define TMP_REG_3 (MAX_BPF_JIT_REG + 3)
- 
-+#define check_imm(bits, imm) do {				\
-+	if ((((imm) > 0) && ((imm) >> (bits))) ||		\
-+	    (((imm) < 0) && (~(imm) >> (bits)))) {		\
-+		pr_info("[%2d] imm=%d(0x%x) out of range\n",	\
-+			i, imm, imm);				\
-+		return -EINVAL;					\
-+	}							\
-+} while (0)
-+#define check_imm19(imm) check_imm(19, imm)
-+#define check_imm26(imm) check_imm(26, imm)
-+
- /* Map BPF registers to A64 registers */
- static const int bpf2a64[] = {
- 	/* return value from in-kernel function, and exit value from eBPF */
-@@ -329,6 +340,170 @@ static int emit_bpf_tail_call(struct jit_ctx *ctx)
- #undef jmp_offset
- }
- 
-+#ifdef CONFIG_ARM64_LSE_ATOMICS
-+static int emit_lse_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
-+{
-+	const u8 code = insn->code;
-+	const u8 dst = bpf2a64[insn->dst_reg];
-+	const u8 src = bpf2a64[insn->src_reg];
-+	const u8 tmp = bpf2a64[TMP_REG_1];
-+	const u8 tmp2 = bpf2a64[TMP_REG_2];
-+	const bool isdw = BPF_SIZE(code) == BPF_DW;
-+	const s16 off = insn->off;
-+	u8 reg;
-+
-+	if (!off) {
-+		reg = dst;
-+	} else {
-+		emit_a64_mov_i(1, tmp, off, ctx);
-+		emit(A64_ADD(1, tmp, tmp, dst), ctx);
-+		reg = tmp;
-+	}
-+
-+	switch (insn->imm) {
-+	/* lock *(u32/u64 *)(dst_reg + off) <op>= src_reg */
-+	case BPF_ADD:
-+		emit(A64_STADD(isdw, reg, src), ctx);
-+		break;
-+	case BPF_AND:
-+		emit(A64_MVN(isdw, tmp2, src), ctx);
-+		emit(A64_STCLR(isdw, reg, tmp2), ctx);
-+		break;
-+	case BPF_OR:
-+		emit(A64_STSET(isdw, reg, src), ctx);
-+		break;
-+	case BPF_XOR:
-+		emit(A64_STEOR(isdw, reg, src), ctx);
-+		break;
-+	/* src_reg = atomic_fetch_<op>(dst_reg + off, src_reg) */
-+	case BPF_ADD | BPF_FETCH:
-+		emit(A64_LDADDAL(isdw, src, reg, src), ctx);
-+		break;
-+	case BPF_AND | BPF_FETCH:
-+		emit(A64_MVN(isdw, tmp2, src), ctx);
-+		emit(A64_LDCLRAL(isdw, src, reg, tmp2), ctx);
-+		break;
-+	case BPF_OR | BPF_FETCH:
-+		emit(A64_LDSETAL(isdw, src, reg, src), ctx);
-+		break;
-+	case BPF_XOR | BPF_FETCH:
-+		emit(A64_LDEORAL(isdw, src, reg, src), ctx);
-+		break;
-+	/* src_reg = atomic_xchg(dst_reg + off, src_reg); */
-+	case BPF_XCHG:
-+		emit(A64_SWPAL(isdw, src, reg, src), ctx);
-+		break;
-+	/* r0 = atomic_cmpxchg(dst_reg + off, r0, src_reg); */
-+	case BPF_CMPXCHG:
-+		emit(A64_CASAL(isdw, src, reg, bpf2a64[BPF_REG_0]), ctx);
-+		break;
-+	default:
-+		pr_err_once("unknown atomic op code %02x\n", insn->imm);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+#else
-+static inline int emit_lse_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
-+{
-+	return -EINVAL;
-+}
-+#endif
-+
-+static int emit_ll_sc_atomic(const struct bpf_insn *insn, struct jit_ctx *ctx)
-+{
-+	const u8 code = insn->code;
-+	const u8 dst = bpf2a64[insn->dst_reg];
-+	const u8 src = bpf2a64[insn->src_reg];
-+	const u8 tmp = bpf2a64[TMP_REG_1];
-+	const u8 tmp2 = bpf2a64[TMP_REG_2];
-+	const u8 tmp3 = bpf2a64[TMP_REG_3];
-+	const int i = insn - ctx->prog->insnsi;
-+	const s32 imm = insn->imm;
-+	const s16 off = insn->off;
-+	const bool isdw = BPF_SIZE(code) == BPF_DW;
-+	u8 reg;
-+	s32 jmp_offset;
-+
-+	if (!off) {
-+		reg = dst;
-+	} else {
-+		emit_a64_mov_i(1, tmp, off, ctx);
-+		emit(A64_ADD(1, tmp, tmp, dst), ctx);
-+		reg = tmp;
-+	}
-+
-+	if (imm == BPF_ADD || imm == BPF_AND ||
-+	    imm == BPF_OR || imm == BPF_XOR) {
-+		/* lock *(u32/u64 *)(dst_reg + off) <op>= src_reg */
-+		emit(A64_LDXR(isdw, tmp2, reg), ctx);
-+		if (imm == BPF_ADD)
-+			emit(A64_ADD(isdw, tmp2, tmp2, src), ctx);
-+		else if (imm == BPF_AND)
-+			emit(A64_AND(isdw, tmp2, tmp2, src), ctx);
-+		else if (imm == BPF_OR)
-+			emit(A64_ORR(isdw, tmp2, tmp2, src), ctx);
-+		else
-+			emit(A64_EOR(isdw, tmp2, tmp2, src), ctx);
-+		emit(A64_STXR(isdw, tmp2, reg, tmp3), ctx);
-+		jmp_offset = -3;
-+		check_imm19(jmp_offset);
-+		emit(A64_CBNZ(0, tmp3, jmp_offset), ctx);
-+	} else if (imm == (BPF_ADD | BPF_FETCH) ||
-+		   imm == (BPF_AND | BPF_FETCH) ||
-+		   imm == (BPF_OR | BPF_FETCH) ||
-+		   imm == (BPF_XOR | BPF_FETCH)) {
-+		/* src_reg = atomic_fetch_<op>(dst_reg + off, src_reg) */
-+		const u8 ax = bpf2a64[BPF_REG_AX];
-+
-+		emit(A64_MOV(isdw, ax, src), ctx);
-+		emit(A64_LDXR(isdw, src, reg), ctx);
-+		if (imm == (BPF_ADD | BPF_FETCH))
-+			emit(A64_ADD(isdw, tmp2, src, ax), ctx);
-+		else if (imm == (BPF_AND | BPF_FETCH))
-+			emit(A64_AND(isdw, tmp2, src, ax), ctx);
-+		else if (imm == (BPF_OR | BPF_FETCH))
-+			emit(A64_ORR(isdw, tmp2, src, ax), ctx);
-+		else
-+			emit(A64_EOR(isdw, tmp2, src, ax), ctx);
-+		emit(A64_STLXR(isdw, tmp2, reg, tmp3), ctx);
-+		jmp_offset = -3;
-+		check_imm19(jmp_offset);
-+		emit(A64_CBNZ(0, tmp3, jmp_offset), ctx);
-+		emit(A64_DMB_ISH, ctx);
-+	} else if (imm == BPF_XCHG) {
-+		/* src_reg = atomic_xchg(dst_reg + off, src_reg); */
-+		emit(A64_MOV(isdw, tmp2, src), ctx);
-+		emit(A64_LDXR(isdw, src, reg), ctx);
-+		emit(A64_STLXR(isdw, tmp2, reg, tmp3), ctx);
-+		jmp_offset = -2;
-+		check_imm19(jmp_offset);
-+		emit(A64_CBNZ(0, tmp3, jmp_offset), ctx);
-+		emit(A64_DMB_ISH, ctx);
-+	} else if (imm == BPF_CMPXCHG) {
-+		/* r0 = atomic_cmpxchg(dst_reg + off, r0, src_reg); */
-+		const u8 r0 = bpf2a64[BPF_REG_0];
-+
-+		emit(A64_MOV(isdw, tmp2, r0), ctx);
-+		emit(A64_LDXR(isdw, r0, reg), ctx);
-+		emit(A64_EOR(isdw, tmp3, r0, tmp2), ctx);
-+		jmp_offset = 4;
-+		check_imm19(jmp_offset);
-+		emit(A64_CBNZ(isdw, tmp3, jmp_offset), ctx);
-+		emit(A64_STLXR(isdw, src, reg, tmp3), ctx);
-+		jmp_offset = -4;
-+		check_imm19(jmp_offset);
-+		emit(A64_CBNZ(0, tmp3, jmp_offset), ctx);
-+		emit(A64_DMB_ISH, ctx);
-+	} else {
-+		pr_err_once("unknown atomic op code %02x\n", imm);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static void build_epilogue(struct jit_ctx *ctx)
- {
- 	const u8 r0 = bpf2a64[BPF_REG_0];
-@@ -434,29 +609,16 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	const u8 src = bpf2a64[insn->src_reg];
- 	const u8 tmp = bpf2a64[TMP_REG_1];
- 	const u8 tmp2 = bpf2a64[TMP_REG_2];
--	const u8 tmp3 = bpf2a64[TMP_REG_3];
- 	const s16 off = insn->off;
- 	const s32 imm = insn->imm;
- 	const int i = insn - ctx->prog->insnsi;
- 	const bool is64 = BPF_CLASS(code) == BPF_ALU64 ||
- 			  BPF_CLASS(code) == BPF_JMP;
--	const bool isdw = BPF_SIZE(code) == BPF_DW;
--	u8 jmp_cond, reg;
-+	u8 jmp_cond;
- 	s32 jmp_offset;
- 	u32 a64_insn;
- 	int ret;
- 
--#define check_imm(bits, imm) do {				\
--	if ((((imm) > 0) && ((imm) >> (bits))) ||		\
--	    (((imm) < 0) && (~(imm) >> (bits)))) {		\
--		pr_info("[%2d] imm=%d(0x%x) out of range\n",	\
--			i, imm, imm);				\
--		return -EINVAL;					\
--	}							\
--} while (0)
--#define check_imm19(imm) check_imm(19, imm)
--#define check_imm26(imm) check_imm(26, imm)
--
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
-@@ -891,33 +1053,12 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 
- 	case BPF_STX | BPF_ATOMIC | BPF_W:
- 	case BPF_STX | BPF_ATOMIC | BPF_DW:
--		if (insn->imm != BPF_ADD) {
--			pr_err_once("unknown atomic op code %02x\n", insn->imm);
--			return -EINVAL;
--		}
--
--		/* STX XADD: lock *(u32 *)(dst + off) += src
--		 * and
--		 * STX XADD: lock *(u64 *)(dst + off) += src
--		 */
--
--		if (!off) {
--			reg = dst;
--		} else {
--			emit_a64_mov_i(1, tmp, off, ctx);
--			emit(A64_ADD(1, tmp, tmp, dst), ctx);
--			reg = tmp;
--		}
--		if (cpus_have_cap(ARM64_HAS_LSE_ATOMICS)) {
--			emit(A64_STADD(isdw, reg, src), ctx);
--		} else {
--			emit(A64_LDXR(isdw, tmp2, reg), ctx);
--			emit(A64_ADD(isdw, tmp2, tmp2, src), ctx);
--			emit(A64_STXR(isdw, tmp2, reg, tmp3), ctx);
--			jmp_offset = -3;
--			check_imm19(jmp_offset);
--			emit(A64_CBNZ(0, tmp3, jmp_offset), ctx);
--		}
-+		if (cpus_have_cap(ARM64_HAS_LSE_ATOMICS))
-+			ret = emit_lse_atomic(insn, ctx);
-+		else
-+			ret = emit_ll_sc_atomic(insn, ctx);
-+		if (ret)
-+			return ret;
- 		break;
- 
- 	default:
--- 
-2.29.2
+12:08:02.680299	Unicast to us 2004:1:1:1::101:101   2000:1:1:1:afca:1b1f:1a9:b367 UDP 51196 → 5201 Len=2840
+0000   20 00 00 01 00 01 00 01 af ca 1b 1f 01 a9 b3 67   ipv6 dst address
+0000   c7 fc 14 51 0b 20 c7 ab                           udp header
+0000   00 00 00 ab 00 0e f3 49 00 00 00 01 08 06 69 d2   00000001 is pcount
+12:08:02.682084	Unicast to us	1.1.1.1	                 192.0.0.4 	 	  UDP 51196 → 5201 Len=2840
 
+After applied the patch, there is no OOO, pcount acted in order.
+
+Thanks!
