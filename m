@@ -2,77 +2,77 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D145C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D566BC43219
 	for <bpf@archiver.kernel.org>; Fri, 18 Feb 2022 17:50:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237890AbiBRRu7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S238323AbiBRRu7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 18 Feb 2022 12:50:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33526 "EHLO
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238847AbiBRRuy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Feb 2022 12:50:54 -0500
+        with ESMTP id S238854AbiBRRuz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Feb 2022 12:50:55 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1FFCD0051
-        for <bpf@vger.kernel.org>; Fri, 18 Feb 2022 09:50:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E7E55BD37
+        for <bpf@vger.kernel.org>; Fri, 18 Feb 2022 09:50:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645206636;
+        s=mimecast20190719; t=1645206637;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RpV1EzK6NqZpSqOlfHeXkxYDh18aJpJ+bK/njkfrFHk=;
-        b=eHZ03RQK7V4Jb8KMGlOxB0cqIQHRk8tbvta4iLWqzzHKC3E1QMnJfbNaFmHtld6HdE4g0e
-        WKYeb0sPH87S7madNSFdETQEFe/HF8dq2DCTOQ6nWPsee+J32zObx+V3Sy+/5KwOBmlwwf
-        cEPPXSETJsYlJRfN6W6Ns6ocpG1tixM=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=mQXbaR0nfjnrgioQog4cSG46d+jwPz5czwsYPjOndl8=;
+        b=LaT+n/TTx+Er6ndZ0KTylm8UV1N6kMG0+jGLO/vOws4uFM80Q53IFsI+DKTWJXgdx351Wr
+        /D08fIUYoJuafWNR59x2lLq4rusph71T7tYn/UZI3jwDX2QgpR/Fr5rpKbg7rAE9EaQvMV
+        52MWRBi2g6tzlhQOW180iWOSFwOUCwk=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-eXlIrSYgPC-_0cQeBvl5wg-1; Fri, 18 Feb 2022 12:50:35 -0500
-X-MC-Unique: eXlIrSYgPC-_0cQeBvl5wg-1
-Received: by mail-ej1-f71.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so3380904ejk.16
-        for <bpf@vger.kernel.org>; Fri, 18 Feb 2022 09:50:35 -0800 (PST)
+ us-mta-536-gAuKPmP6O_eqILP1jJmGoA-1; Fri, 18 Feb 2022 12:50:36 -0500
+X-MC-Unique: gAuKPmP6O_eqILP1jJmGoA-1
+Received: by mail-ed1-f70.google.com with SMTP id eq13-20020a056402298d00b00412cfa4bb0eso1121357edb.7
+        for <bpf@vger.kernel.org>; Fri, 18 Feb 2022 09:50:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RpV1EzK6NqZpSqOlfHeXkxYDh18aJpJ+bK/njkfrFHk=;
-        b=kbTB9tq+oUEyRcM34+mDYqWvpsUVdP5iJaU22VSzLiSsX38Wpjx75GkWXsUR9RUTnt
-         wFAFL66eISYrzKng3ZLBYZ55fGApGKC2FGZ7/6UI3Ne1w87SK6s5HMr1o8YsQWM5+Zvt
-         D/IlQDd0CWbHr0sgYbbzpnzl0z4UaTNxogs+Ja74JVpPjZ2Ul2ShNrAkUEqWaRjKc1KT
-         r1cRYqRiizwI6Z0VXdi1PRXUl/DI4o54NUSvArB9gb5STOZlXLI8qya2pqmEay4qnoBW
-         xrq2JRKbjysuH5dwuy0wzBoFDVh+PGpf5J7M4W1k9g9m/Rsbzt1dS33keNYEDfwE7vjR
-         84rw==
-X-Gm-Message-State: AOAM5320AzFhSTvIei/6ccybAfO5YIQQvBdz5DYOtZNBK+rkmAdZBXH+
-        wtXN8t9wLN7UPQGqlLZzHlS0ByZuUhk1y6jCQjwdKcnXypj/dumR8zf6LJAgcBFgyZ75h0FH7w1
-        khLFEOGHRl4jO
-X-Received: by 2002:a17:906:5950:b0:6b3:65b7:82d3 with SMTP id g16-20020a170906595000b006b365b782d3mr7215938ejr.636.1645206634024;
+        bh=mQXbaR0nfjnrgioQog4cSG46d+jwPz5czwsYPjOndl8=;
+        b=7oB+lmnw67f5EVlvkmdgtXjSr4+5NzVZONdnXgkkoagVWQ3jSnhIDQa1N3G/cBp1ys
+         LJT/8UfVkbcFiZ31Pjt5mMzFr36KgwypHCczA6hbG2m8kYanliCFJuN0OWf+E3YqYBkA
+         HNfjwPl3JQQciLkzvbu59ze2Zv2I/vhsk2C3g+wVJy8XgDAdYggSwQkycncM/LX+sgvW
+         xJeic/XrA9aR1Esq8+CUqvym6AtqNSp15yVKFbt2vGyPAHPxkOE2KJrGiAWJFktQqbbY
+         BUG3vH/tT0c35G5sUX/EpueI5/cmaGHLnZE7G/qDTK7DXCMhSF5wNM7TDKuX6Igk915Q
+         piYQ==
+X-Gm-Message-State: AOAM533kCKzv0HqYRVQHMiHT3ouFGODQ8pPi7ApUOZV0fqQUVcqSS09B
+        /6ZgiB+lSlqA6x0OZaTO9DwwR0BasVAMEGE5M9Dj6zHpBUzaTrnSposIwoNC7KZq2CrJUUEYiNz
+        Y5UD38uFCxchl
+X-Received: by 2002:a05:6402:438f:b0:412:a96b:a651 with SMTP id o15-20020a056402438f00b00412a96ba651mr8587372edc.40.1645206635101;
+        Fri, 18 Feb 2022 09:50:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxPH/UYaoB2yYlZsUbyqJCQDVwJQ2WBF3hw4xcvyDzaziBJUrJP6EVNMRrT59x4MFXJT7g7Kw==
+X-Received: by 2002:a05:6402:438f:b0:412:a96b:a651 with SMTP id o15-20020a056402438f00b00412a96ba651mr8587337edc.40.1645206634734;
         Fri, 18 Feb 2022 09:50:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy6RMdtjL4BLpokb/4tKxAFqUkA7AJv9sCqaPSgk80oPrQoeYK4UBKFOr3qebiRXk58M/SwgQ==
-X-Received: by 2002:a17:906:5950:b0:6b3:65b7:82d3 with SMTP id g16-20020a170906595000b006b365b782d3mr7215903ejr.636.1645206633628;
-        Fri, 18 Feb 2022 09:50:33 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id jz17sm2449998ejb.195.2022.02.18.09.50.31
+        by smtp.gmail.com with ESMTPSA id m7sm4958208edb.16.2022.02.18.09.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 09:50:32 -0800 (PST)
+        Fri, 18 Feb 2022 09:50:33 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5982F13023E; Fri, 18 Feb 2022 18:50:31 +0100 (CET)
+        id 6BBEC130244; Fri, 18 Feb 2022 18:50:32 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>
+        KP Singh <kpsingh@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v8 2/5] Documentation/bpf: Add documentation for BPF_PROG_RUN
-Date:   Fri, 18 Feb 2022 18:50:26 +0100
-Message-Id: <20220218175029.330224-3-toke@redhat.com>
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next v8 5/5] selftests/bpf: Add selftest for XDP_REDIRECT in BPF_PROG_RUN
+Date:   Fri, 18 Feb 2022 18:50:29 +0100
+Message-Id: <20220218175029.330224-6-toke@redhat.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220218175029.330224-1-toke@redhat.com>
 References: <20220218175029.330224-1-toke@redhat.com>
@@ -83,155 +83,291 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds documentation for the BPF_PROG_RUN command; a short overview of
-the command itself, and a more verbose description of the "live packet"
-mode for XDP introduced in the previous commit.
+This adds a selftest for the XDP_REDIRECT facility in BPF_PROG_RUN, that
+redirects packets into a veth and counts them using an XDP program on the
+other side of the veth pair and a TC program on the local side of the veth.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- Documentation/bpf/bpf_prog_run.rst | 120 +++++++++++++++++++++++++++++
- Documentation/bpf/index.rst        |   1 +
- 2 files changed, 121 insertions(+)
- create mode 100644 Documentation/bpf/bpf_prog_run.rst
+ .../bpf/prog_tests/xdp_do_redirect.c          | 176 ++++++++++++++++++
+ .../bpf/progs/test_xdp_do_redirect.c          |  85 +++++++++
+ 2 files changed, 261 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
 
-diff --git a/Documentation/bpf/bpf_prog_run.rst b/Documentation/bpf/bpf_prog_run.rst
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
 new file mode 100644
-index 000000000000..c561677081de
+index 000000000000..9024bb24c204
 --- /dev/null
-+++ b/Documentation/bpf/bpf_prog_run.rst
-@@ -0,0 +1,120 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+@@ -0,0 +1,176 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <network_helpers.h>
++#include <net/if.h>
++#include <linux/if_ether.h>
++#include <linux/if_packet.h>
++#include <linux/ipv6.h>
++#include <linux/in6.h>
++#include <linux/udp.h>
++#include <bpf/bpf_endian.h>
++#include "test_xdp_do_redirect.skel.h"
 +
-+===================================
-+Running BPF programs from userspace
-+===================================
++#define SYS(fmt, ...)						\
++	({							\
++		char cmd[1024];					\
++		snprintf(cmd, sizeof(cmd), fmt, ##__VA_ARGS__);	\
++		if (!ASSERT_OK(system(cmd), cmd))		\
++			goto out;				\
++	})
 +
-+This document describes the ``BPF_PROG_RUN`` facility for running BPF programs
-+from userspace.
++struct udp_packet {
++	struct ethhdr eth;
++	struct ipv6hdr iph;
++	struct udphdr udp;
++	__u8 payload[64 - sizeof(struct udphdr)
++		     - sizeof(struct ethhdr) - sizeof(struct ipv6hdr)];
++} __packed;
 +
-+.. contents::
-+    :local:
-+    :depth: 2
++static struct udp_packet pkt_udp = {
++	.eth.h_proto = __bpf_constant_htons(ETH_P_IPV6),
++	.eth.h_dest = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55},
++	.eth.h_source = {0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb},
++	.iph.version = 6,
++	.iph.nexthdr = IPPROTO_UDP,
++	.iph.payload_len = bpf_htons(sizeof(struct udp_packet)
++				     - offsetof(struct udp_packet, udp)),
++	.iph.hop_limit = 2,
++	.iph.saddr.s6_addr16 = {bpf_htons(0xfc00), 0, 0, 0, 0, 0, 0, bpf_htons(1)},
++	.iph.daddr.s6_addr16 = {bpf_htons(0xfc00), 0, 0, 0, 0, 0, 0, bpf_htons(2)},
++	.udp.source = bpf_htons(1),
++	.udp.dest = bpf_htons(1),
++	.udp.len = bpf_htons(sizeof(struct udp_packet)
++			     - offsetof(struct udp_packet, udp)),
++	.payload = {0x42}, /* receiver XDP program matches on this */
++};
 +
++static int attach_tc_prog(struct bpf_tc_hook *hook, int fd)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_opts, opts, .handle = 1, .priority = 1, .prog_fd = fd);
++	int ret;
 +
-+Overview
-+--------
++	ret = bpf_tc_hook_create(hook);
++	if (!ASSERT_OK(ret, "create tc hook"))
++		return ret;
 +
-+The ``BPF_PROG_RUN`` command can be used through the ``bpf()`` syscall to
-+execute a BPF program in the kernel and return the results to userspace. This
-+can be used to unit test BPF programs against user-supplied context objects, and
-+as way to explicitly execute programs in the kernel for their side effects. The
-+command was previously named ``BPF_PROG_TEST_RUN``, and both constants continue
-+to be defined in the UAPI header, aliased to the same value.
++	ret = bpf_tc_attach(hook, &opts);
++	if (!ASSERT_OK(ret, "bpf_tc_attach")) {
++		bpf_tc_hook_destroy(hook);
++		return ret;
++	}
 +
-+The ``BPF_PROG_RUN`` command can be used to execute BPF programs of the
-+following types:
++	return 0;
++}
 +
-+- ``BPF_PROG_TYPE_SOCKET_FILTER``
-+- ``BPF_PROG_TYPE_SCHED_CLS``
-+- ``BPF_PROG_TYPE_SCHED_ACT``
-+- ``BPF_PROG_TYPE_XDP``
-+- ``BPF_PROG_TYPE_SK_LOOKUP``
-+- ``BPF_PROG_TYPE_CGROUP_SKB``
-+- ``BPF_PROG_TYPE_LWT_IN``
-+- ``BPF_PROG_TYPE_LWT_OUT``
-+- ``BPF_PROG_TYPE_LWT_XMIT``
-+- ``BPF_PROG_TYPE_LWT_SEG6LOCAL``
-+- ``BPF_PROG_TYPE_FLOW_DISSECTOR``
-+- ``BPF_PROG_TYPE_STRUCT_OPS``
-+- ``BPF_PROG_TYPE_RAW_TRACEPOINT``
-+- ``BPF_PROG_TYPE_SYSCALL``
++#define NUM_PKTS 1000000
++void test_xdp_do_redirect(void)
++{
++	int err, xdp_prog_fd, tc_prog_fd, ifindex_src, ifindex_dst;
++	char data[sizeof(pkt_udp) + sizeof(__u32)];
++	struct test_xdp_do_redirect *skel = NULL;
++	struct nstoken *nstoken = NULL;
++	struct bpf_link *link;
 +
-+When using the ``BPF_PROG_RUN`` command, userspace supplies an input context
-+object and (for program types operating on network packets) a buffer containing
-+the packet data that the BPF program will operate on. The kernel will then
-+execute the program and return the results to userspace. Note that programs will
-+not have any side effects while being run in this mode; in particular, packets
-+will not actually be redirected or dropped, the program return code will just be
-+returned to userspace. A separate mode for live execution of XDP programs is
-+provided, documented separately below.
++	struct xdp_md ctx_in = { .data = sizeof(__u32),
++				 .data_end = sizeof(data) };
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .data_in = &data,
++			    .data_size_in = sizeof(data),
++			    .ctx_in = &ctx_in,
++			    .ctx_size_in = sizeof(ctx_in),
++			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
++			    .repeat = NUM_PKTS,
++			    .batch_size = 64,
++		);
++	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
++			    .attach_point = BPF_TC_INGRESS);
 +
-+Running XDP programs in "live frame mode"
-+-----------------------------------------
++	memcpy(&data[sizeof(__u32)], &pkt_udp, sizeof(pkt_udp));
++	*((__u32 *)data) = 0x42; /* metadata test value */
 +
-+The ``BPF_PROG_RUN`` command has a separate mode for running live XDP programs,
-+which can be used to execute XDP programs in a way where packets will actually
-+be processed by the kernel after the execution of the XDP program as if they
-+arrived on a physical interface. This mode is activated by setting the
-+``BPF_F_TEST_XDP_LIVE_FRAMES`` flag when supplying an XDP program to
-+``BPF_PROG_RUN``. Earlier versions of the kernel did not reject invalid flags
-+supplied to ``BPF_PROG_RUN`` for XDP programs. For this reason, another new
-+flag, ``BPF_F_TEST_XDP_RESERVED`` is defined, which will simply be rejected if
-+set. Userspace can use this for feature probing: if the reserved flag is
-+rejected, live frame mode is supported by the running kernel.
++	skel = test_xdp_do_redirect__open();
++	if (!ASSERT_OK_PTR(skel, "skel"))
++		return;
 +
-+The live packet mode is optimised for high performance execution of the supplied
-+XDP program many times (suitable for, e.g., running as a traffic generator),
-+which means the semantics are not quite as straight-forward as the regular test
-+run mode. Specifically:
++	/* The XDP program we run with bpf_prog_run() will cycle through all
++	 * three xmit (PASS/TX/REDIRECT) return codes starting from above, and
++	 * ending up with PASS, so we should end up with two packets on the dst
++	 * iface and NUM_PKTS-2 in the TC hook. We match the packets on the UDP
++	 * payload.
++	 */
++	SYS("ip netns add testns");
++	nstoken = open_netns("testns");
++	if (!ASSERT_OK_PTR(nstoken, "setns"))
++		goto out;
 +
-+- When executing an XDP program in live frame mode, the result of the execution
-+  will not be returned to userspace; instead, the kernel will perform the
-+  operation indicated by the program's return code (drop the packet, redirect
-+  it, etc). For this reason, setting the ``data_out`` or ``ctx_out`` attributes
-+  in the syscall parameters when running in this mode will be rejected. In
-+  addition, not all failures will be reported back to userspace directly;
-+  specifically, only fatal errors in setup or during execution (like memory
-+  allocation errors) will halt execution and return an error. If an error occurs
-+  in packet processing, like a failure to redirect to a given interface,
-+  execution will continue with the next repetition; these errors can be detected
-+  via the same trace points as for regular XDP programs.
++	SYS("ip link add veth_src type veth peer name veth_dst");
++	SYS("ip link set dev veth_src address 00:11:22:33:44:55");
++	SYS("ip link set dev veth_dst address 66:77:88:99:aa:bb");
++	SYS("ip link set dev veth_src up");
++	SYS("ip link set dev veth_dst up");
++	SYS("ip addr add dev veth_src fc00::1/64");
++	SYS("ip addr add dev veth_dst fc00::2/64");
++	SYS("ip neigh add fc00::2 dev veth_src lladdr 66:77:88:99:aa:bb");
 +
-+- Userspace can supply an ifindex as part of the context object, just like in
-+  the regular (non-live) mode. The XDP program will be executed as though the
-+  packet arrived on this interface; i.e., the ``ingress_ifindex`` of the context
-+  object will point to that interface. Furthermore, if the XDP program returns
-+  ``XDP_PASS``, the packet will be injected into the kernel networking stack as
-+  though it arrived on that ifindex, and if it returns ``XDP_TX``, the packet
-+  will be transmitted *out* of that same interface. Do note, though, that
-+  because the program execution is not happening in driver context, an
-+  ``XDP_TX`` is actually turned into the same action as an ``XDP_REDIRECT`` to
-+  that same interface (i.e., it will only work if the driver has support for the
-+  ``ndo_xdp_xmit`` driver op).
++	/* We enable forwarding in the test namespace because that will cause
++	 * the packets that go through the kernel stack (with XDP_PASS) to be
++	 * forwarded back out the same interface (because of the packet dst
++	 * combined with the interface addresses). When this happens, the
++	 * regular forwarding path will end up going through the same
++	 * veth_xdp_xmit() call as the XDP_REDIRECT code, which can cause a
++	 * deadlock if it happens on the same CPU. There's a local_bh_disable()
++	 * in the test_run code to prevent this, but an earlier version of the
++	 * code didn't have this, so we keep the test behaviour to make sure the
++	 * bug doesn't resurface.
++	 */
++	SYS("sysctl -qw net.ipv6.conf.all.forwarding=1");
 +
-+- When running the program with multiple repetitions, the execution will happen
-+  in batches, where the program is executed multiple times in a loop, the result
-+  is saved, and other actions (like redirecting the packet or passing it to the
-+  networking stack) will happen for the whole batch after the execution. This is
-+  similar to how execution happens in driver-mode XDP for each hardware NAPI
-+  cycle. The batch size defaults to 64 packets (which is same as the NAPI batch
-+  size), but the batch size can be specified by userspace through the
-+  ``batch_size`` parameter, up to a maximum of 256 packets.
++	ifindex_src = if_nametoindex("veth_src");
++	ifindex_dst = if_nametoindex("veth_dst");
++	if (!ASSERT_NEQ(ifindex_src, 0, "ifindex_src") ||
++	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
++		goto out;
 +
-+- When setting up the test run, the kernel will initialise a pool of memory
-+  pages of the same size as the batch size. Each memory page will be initialised
-+  with the initial packet data supplied by userspace at ``BPF_PROG_RUN``
-+  invocation. When possible, the pages will be recycled on future program
-+  invocations, to improve performance. Pages will generally be recycled a full
-+  batch at a time, except when a packet is dropped (by return code or because
-+  of, say, a redirection error), in which case that page will be recycled
-+  immediately. If a packet ends up being passed to the regular networking stack
-+  (because the XDP program returns ``XDP_PASS``, or because it ends up being
-+  redirected to an interface that injects it into the stack), the page will be
-+  released and a new one will be allocated when the pool is empty.
++	memcpy(skel->rodata->expect_dst, &pkt_udp.eth.h_dest, ETH_ALEN);
++	skel->rodata->ifindex_out = ifindex_src; /* redirect back to the same iface */
++	skel->rodata->ifindex_in = ifindex_src;
++	ctx_in.ingress_ifindex = ifindex_src;
++	tc_hook.ifindex = ifindex_src;
 +
-+  When recycling, the page content is not rewritten; only the packet boundary
-+  pointers (``data``, ``data_end`` and ``data_meta``) in the context object will
-+  be reset to the original values. This means that if a program rewrites the
-+  packet contents, it has to be prepared to see either the original content or
-+  the modified version on subsequent invocations.
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index ef5c996547ec..96056a7447c7 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -21,6 +21,7 @@ that goes into great technical depth about the BPF Architecture.
-    helpers
-    programs
-    maps
-+   bpf_prog_run
-    classic_vs_extended.rst
-    bpf_licensing
-    test_debug
++	if (!ASSERT_OK(test_xdp_do_redirect__load(skel), "load"))
++		goto out;
++
++	link = bpf_program__attach_xdp(skel->progs.xdp_count_pkts, ifindex_dst);
++	if (!ASSERT_OK_PTR(link, "prog_attach"))
++		goto out;
++	skel->links.xdp_count_pkts = link;
++
++	tc_prog_fd = bpf_program__fd(skel->progs.tc_count_pkts);
++	if (attach_tc_prog(&tc_hook, tc_prog_fd))
++		goto out;
++
++	xdp_prog_fd = bpf_program__fd(skel->progs.xdp_redirect);
++	err = bpf_prog_test_run_opts(xdp_prog_fd, &opts);
++	if (!ASSERT_OK(err, "prog_run"))
++		goto out_tc;
++
++	/* wait for the packets to be flushed */
++	kern_sync_rcu();
++
++	/* There will be one packet sent through XDP_REDIRECT and one through
++	 * XDP_TX; these will show up on the XDP counting program, while the
++	 * rest will be counted at the TC ingress hook (and the counting program
++	 * resets the packet payload so they don't get counted twice even though
++	 * they are re-xmited out the veth device
++	 */
++	ASSERT_EQ(skel->bss->pkts_seen_xdp, 2, "pkt_count_xdp");
++	ASSERT_EQ(skel->bss->pkts_seen_tc, NUM_PKTS - 2, "pkt_count_tc");
++
++out_tc:
++	bpf_tc_hook_destroy(&tc_hook);
++out:
++	if (nstoken)
++		close_netns(nstoken);
++	system("ip netns del testns");
++	test_xdp_do_redirect__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+new file mode 100644
+index 000000000000..af3cffccc794
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+@@ -0,0 +1,85 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++#define ETH_ALEN 6
++const volatile int ifindex_out;
++const volatile int ifindex_in;
++const volatile __u8 expect_dst[ETH_ALEN];
++volatile int pkts_seen_xdp = 0;
++volatile int pkts_seen_tc = 0;
++volatile int retcode = XDP_REDIRECT;
++
++SEC("xdp")
++int xdp_redirect(struct xdp_md *xdp)
++{
++	__u32 *metadata = (void *)(long)xdp->data_meta;
++	void *data = (void *)(long)xdp->data;
++	int ret = retcode;
++
++	if (xdp->ingress_ifindex != ifindex_in)
++		return XDP_ABORTED;
++
++	if (metadata + 1 > data)
++		return XDP_ABORTED;
++
++	if (*metadata != 0x42)
++		return XDP_ABORTED;
++
++	if (bpf_xdp_adjust_meta(xdp, 4))
++		return XDP_ABORTED;
++
++	if (retcode > XDP_PASS)
++		retcode--;
++
++	if (ret == XDP_REDIRECT)
++		return bpf_redirect(ifindex_out, 0);
++
++	return ret;
++}
++
++static bool check_pkt(void *data, void *data_end)
++{
++	struct ethhdr *eth = data;
++	struct ipv6hdr *iph = (void *)(eth + 1);
++	struct udphdr *udp = (void *)(iph + 1);
++	__u8 *payload = (void *)(udp + 1);
++
++	if (payload + 1 > data_end)
++		return false;
++
++	if (iph->nexthdr != IPPROTO_UDP || *payload != 0x42)
++		return false;
++
++	/* reset the payload so the same packet doesn't get counted twice when
++	 * it cycles back through the kernel path and out the dst veth
++	 */
++	*payload = 0;
++	return true;
++}
++
++SEC("xdp")
++int xdp_count_pkts(struct xdp_md *xdp)
++{
++	void *data = (void *)(long)xdp->data;
++	void *data_end = (void *)(long)xdp->data_end;
++
++	if (check_pkt(data, data_end))
++		pkts_seen_xdp++;
++
++	return XDP_PASS;
++}
++
++SEC("tc")
++int tc_count_pkts(struct __sk_buff *skb)
++{
++	void *data = (void *)(long)skb->data;
++	void *data_end = (void *)(long)skb->data_end;
++
++	if (check_pkt(data, data_end))
++		pkts_seen_tc++;
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.35.1
 
