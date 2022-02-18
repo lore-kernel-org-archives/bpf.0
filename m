@@ -2,766 +2,458 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31B8EC433EF
-	for <bpf@archiver.kernel.org>; Fri, 18 Feb 2022 09:56:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBCF5C433F5
+	for <bpf@archiver.kernel.org>; Fri, 18 Feb 2022 10:02:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbiBRJ44 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Feb 2022 04:56:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37950 "EHLO
+        id S233813AbiBRKDB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Feb 2022 05:03:01 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiBRJ4q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:56:46 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09848389F;
-        Fri, 18 Feb 2022 01:56:27 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id w37so1004764pga.7;
-        Fri, 18 Feb 2022 01:56:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=o5H0lLOP6Bhm9P6UjlQRH6QOTJj/wEDTVSpAt4R6UIA=;
-        b=ffc3KtOKN1zW/CnW2ayTsPFJSve9qItASYWzfHKaUAgXOE7jkQY3i8QT/gxFZEHWES
-         Ifc0hmPzuVZ8KmiwIziz4hjSS+/bMbhGmNhADUb8tBBB4jYKSQSHfD/lRpFsTN+rG4qY
-         LOC6blbulziAafnOQlYD4f45R0EG06UyAZu5vLriybz9w52s/LVVSkpddFYLy/tB4d3/
-         TXsHSZOqRQnmlN3hb92VdnoCMBJh0HpxKKZcyD1fzURp+hUrQmiMEj+7/pAF5FRmK8wY
-         lYR2SJxv+HWCCx+5r0q4Ij+D0RNQzMnvRdijbEBdl3LxsouwqJXpuZwNNdSF5SVSEux9
-         1ONQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=o5H0lLOP6Bhm9P6UjlQRH6QOTJj/wEDTVSpAt4R6UIA=;
-        b=vJwkRidDzdssRCisBn1AP+JD6jmW07OcIeb/lvBGPt56lAEPyD5T0FQcjIbtHWB+nK
-         fVdsq+7vObckCsGMP+VTd5z2nhIzEumo11GhxyTNrKOtZg/vAbTEZNjQ2Jj94/syRNeP
-         k7ywq2dBtMMCovGL0dhMSfL6uzLIXVw/x/RiRNDkzqNFDxGDDewMSsfoUCIzWnSh2bgt
-         clbmn9Z9bKDOeMNCBuI3zq7vZx4NsDckZtovcponDt8QFR9oCIM/XZ+whw4ECzIGP3pS
-         vuC8G/29QZ/gvtzpu93iF3lD0GsyhtB3tS7rVpcp9RtfqUAYMBGF8Ni/hmA7P/3CU82R
-         jiIA==
-X-Gm-Message-State: AOAM531KD3TotGjM5P0qNDU/XOkevtn6WAYI9oCHHxh44RzYGx8EF+m6
-        DeJnFYdjj6W31XpY792a1h3IYLgptBfSpQ==
-X-Google-Smtp-Source: ABdhPJyD8sLwK4w/Zc0AM+OmpMMu6iP+uXRu0QA1YRYKEbvjYefvXXNtCgXajqey+SzHS/H19yQuQg==
-X-Received: by 2002:a63:f10d:0:b0:370:14d9:c1ce with SMTP id f13-20020a63f10d000000b0037014d9c1cemr5817316pgi.50.1645178185903;
-        Fri, 18 Feb 2022 01:56:25 -0800 (PST)
-Received: from vultr.guest ([149.248.7.47])
-        by smtp.gmail.com with ESMTPSA id t22sm2750430pfg.92.2022.02.18.01.56.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 01:56:25 -0800 (PST)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH RFC 1/3] bpf: rename attach_func_name to attach_name
-Date:   Fri, 18 Feb 2022 09:56:10 +0000
-Message-Id: <20220218095612.52082-2-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220218095612.52082-1-laoar.shao@gmail.com>
-References: <20220218095612.52082-1-laoar.shao@gmail.com>
+        with ESMTP id S232739AbiBRKDA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Feb 2022 05:03:00 -0500
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A180C369C4
+        for <bpf@vger.kernel.org>; Fri, 18 Feb 2022 02:02:42 -0800 (PST)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220218100239euoutp014502842d6ee411566356df4c7387b496~U2S7Un7vw2407924079euoutp01g
+        for <bpf@vger.kernel.org>; Fri, 18 Feb 2022 10:02:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220218100239euoutp014502842d6ee411566356df4c7387b496~U2S7Un7vw2407924079euoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1645178559;
+        bh=oKDYveujkfhcs2ZLh37VcFiF0JyMo/sncXxADNqfYsk=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=WGl0LvhPXjAoydPagXUYzI4vodqxcXHijRWoGsWXRbJ07/TipIM1dsQ01f9VknBWI
+         GiwHSjoce2zM61CcXk5q2FhRuY3BAOMEfm89v1QEIUkqkpxJF3cLv1migmPmw8nc1S
+         ZIfQ1hRtV11mXNZwwUOhnd+8dc0KdOAPk2vWs4gI=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220218100238eucas1p1852026a4ff12eb3180732a492108c515~U2S7BL6Mz0172501725eucas1p14;
+        Fri, 18 Feb 2022 10:02:38 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 7A.2B.10009.FBE6F026; Fri, 18
+        Feb 2022 10:02:39 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220218100238eucas1p2c3022a0124bb1b33a20fb375d0e41b5d~U2S6hP4TG1574615746eucas1p2B;
+        Fri, 18 Feb 2022 10:02:38 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220218100238eusmtrp122e09e34915cfbb3c942cdc1605c2849~U2S6fiKj31944819448eusmtrp1b;
+        Fri, 18 Feb 2022 10:02:38 +0000 (GMT)
+X-AuditID: cbfec7f2-e95ff70000002719-d6-620f6ebfd99f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 07.9E.09404.EBE6F026; Fri, 18
+        Feb 2022 10:02:38 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220218100237eusmtip14cf544f71dd81e19c562908887003dfd~U2S5jWlji2870528705eusmtip1j;
+        Fri, 18 Feb 2022 10:02:37 +0000 (GMT)
+Message-ID: <2dc85036-c5a8-d79b-71b5-9288d0a53c37@samsung.com>
+Date:   Fri, 18 Feb 2022 11:02:35 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.6.0
+Subject: Re: [PATCH net-next] net: Correct wrong BH disable in
+ hard-interrupt.
+Content-Language: en-US
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rg?= =?UTF-8?Q?ensen?= 
+        <toke@toke.dk>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgense?= =?UTF-8?Q?n?= 
+        <toke@redhat.com>, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <Yg9oNlF+YCot6WcO@linutronix.de>
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrOKsWRmVeSWpSXmKPExsWy7djPc7r78/iTDG51ilp8+Xmb3eJY2xN2
+        i2kXJzFbfD5ynM1i8cJvzBZzzrewWDw99ojdYk/7dmaLph0rmCwubOtjtVi0rJXZ4tgCMYvN
+        m6YyW1w6/IjFYuv7FewO/B5bVt5k8tg56y67x4JNpR5dNy4xe2xa1cnm8e7cOXaP9/uusnls
+        OXSRzePzJrkAzigum5TUnMyy1CJ9uwSujGlzJzAXrKmoeDrTqoHxbnYXIyeHhICJRPPFaawg
+        tpDACkaJNwtNuxi5gOwvQPb8Y2wQzmdGidbXdxlhOp7MeccKkVjOKPH6/yt2COcjo8TWY7dY
+        QKp4Bewkpm/uB+tgEVCVmH7qJSNEXFDi5MwnQDUcHKICSRKLtrmDhIUFAiQOzZzEBmIzC4hL
+        3HoynwnEFhEwlWi8eIgFZD6zwHEWiUML7oDNZxMwlOh62wXWwCmgK7H1yQRGiGZ5ieats5lB
+        GiQE1nNKXGxaBXW2i8Sbe4eYIGxhiVfHt7BD2DISpyf3sEA0NDNKPDy3lh3C6WGUuNw0A6rb
+        WuLOuV9sIGczC2hKrN+lDxF2lPizupkZJCwhwCdx460gxBF8EpO2TYcK80p0tAlBVKtJzDq+
+        Dm7twQuXmCcwKs1CCpZZSP6fheSdWQh7FzCyrGIUTy0tzk1PLTbMSy3XK07MLS7NS9dLzs/d
+        xAhMe6f/Hf+0g3Huq496hxiZOBgPMUpwMCuJ8H44yJskxJuSWFmVWpQfX1Sak1p8iFGag0VJ
+        nDc5c0OikEB6YklqdmpqQWoRTJaJg1OqgWnO44WVGZILc1cZrlyRYsB8o56p7dHszj8Zj7aJ
+        e70If/rHdWnpKp0FAcxmuf5Ptjvb6dd8rst8Me3XtCk7NB1PvrjUlfnrGT/L+V67KwqNtydK
+        Gbsv5J7KdleIzXaTofhOO4stdlc3Wccsipiq5/XWc+13hi6J2N1bPr//dTr7/v3makd/PS1J
+        byVr5yTl1Ohk5+3J3AcPHdhTOkdOPmvHo2k3U+SrW633PfkpfMruOfPxezz/V1+dvzt9y9tO
+        K/lXR90Y56arHBDYcORmzMRlwar8DG/nltrtXLDr+H/Jyg9/HjtvC2N5e2dHw1JL/3lRxU+r
+        PBc4qMhszeJsU775MSK00fNT9MSNvuwHI9KVWIozEg21mIuKEwH+C9ZJ6gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJIsWRmVeSWpSXmKPExsVy+t/xu7r78viTDOZ/0bL48vM2u8Wxtifs
+        FtMuTmK2+HzkOJvF4oXfmC3mnG9hsXh67BG7xZ727cwWTTtWMFlc2NbHarFoWSuzxbEFYhab
+        N01ltrh0+BGLxdb3K9gd+D22rLzJ5LFz1l12jwWbSj26blxi9ti0qpPN4925c+we7/ddZfPY
+        cugim8fnTXIBnFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZll
+        qUX6dgl6GdPmTmAuWFNR8XSmVQPj3ewuRk4OCQETiSdz3rF2MXJxCAksZZRYe/05G0RCRuLk
+        tAZWCFtY4s+1LrC4kMB7Rol7B31BbF4BO4npm/sZQWwWAVWJ6adeMkLEBSVOznzCAmKLCiRJ
+        rJs+nxnEFhbwk/j2/AxYDbOAuMStJ/OZQGwRAVOJxouHWECOYBY4zSLx5d10ZohlvUwS846X
+        gthsAoYSXW8hjuAU0JXY+mQC1CAzia6tXVC2vETz1tnMExiFZiG5YxaSfbOQtMxC0rKAkWUV
+        o0hqaXFuem6xkV5xYm5xaV66XnJ+7iZGYJxvO/Zzyw7Gla8+6h1iZOJgPMQowcGsJML74SBv
+        khBvSmJlVWpRfnxRaU5q8SFGU2BgTGSWEk3OByaavJJ4QzMDU0MTM0sDU0szYyVxXs+CjkQh
+        gfTEktTs1NSC1CKYPiYOTqkGJp17L2qy9y9+HOK6sqFR7tH3015+1jxKKaWO1zq/3U3p/a+z
+        3Xah1tYPX/dcf7n874b+hZOv+s1nezzHKqmYQ5AtLI7nqoLAm8V6m//66Jhs4tOzdPnZ9vue
+        s0yiY0+QXpr9B8sZN1zZJEwNajVSRTXYzJVfV7POzjz5lOlZ42TVHzyaV5tdQmwPm+uZn9tS
+        u/v/h9UBJ4pWipQX6XjtmLf8k83dzdcr1Y856DFvdwheXXL5RdOUE77232YJvJifzc+5/bD2
+        ru8z3Qqifk72uu31Pd/z595jdyzss15Mu7fK9M/VQ6Ut94Nmtez/x2Gt9e6YoRKnpkPy9xBD
+        gZZU4znTXbsnL945K6tZ3iUhQImlOCPRUIu5qDgRAHCPYWV8AwAA
+X-CMS-MailID: 20220218100238eucas1p2c3022a0124bb1b33a20fb375d0e41b5d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220216175054eucas1p2d8aef6c75806dcdab18b37a4e317dd08
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220216175054eucas1p2d8aef6c75806dcdab18b37a4e317dd08
+References: <CGME20220216175054eucas1p2d8aef6c75806dcdab18b37a4e317dd08@eucas1p2.samsung.com>
+        <Yg05duINKBqvnxUc@linutronix.de>
+        <ce67e9c9-966e-3a08-e571-b7f1dacb3814@samsung.com>
+        <c2a64979-73d1-2c22-e048-c275c9f81558@samsung.com>
+        <Yg9oNlF+YCot6WcO@linutronix.de>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The member attach_func_name in struct bpf_prog_aux is renamed to
-attach_name, in order to show a non-function name.
+Hi,
 
-This is a preparation of the followup patches.
+On 18.02.2022 10:34, Sebastian Andrzej Siewior wrote:
+> On 2022-02-17 15:08:55 [+0100], Marek Szyprowski wrote:
+>>>> Marek, does this work for you?
+>>> Yes, this fixed the issue. Thanks!
+>>>
+>>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+>> I've just noticed that there is one more issue left to fix (the $subject
+>> patch is already applied) - this one comes from threaded irq (if I got
+>> the stack trace right):
+> netif_rx() did only set the matching softirq bit and not more. Based on
+> that I don't see why NOHZ shouldn't complain about a pending softirq
+> once the CPU goes idle. Therefore I think the change I made is good
+> since it uncovered that.
+>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 0 PID: 147 at kernel/softirq.c:363
+>> __local_bh_enable_ip+0xa8/0x1c0
+> …
+>> CPU: 0 PID: 147 Comm: irq/150-dwc3 Not tainted 5.17.0-rc4-next-20220217+
+>> #4557
+>> Hardware name: Samsung TM2E board (DT)
+>> pstate: 400000c5 (nZcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> pc : __local_bh_enable_ip+0xa8/0x1c0
+>> lr : netif_rx+0xa4/0x2c0
+>> ...
+>>
+>> Call trace:
+>>    __local_bh_enable_ip+0xa8/0x1c0
+>>    netif_rx+0xa4/0x2c0
+>>    rx_complete+0x214/0x250
+>>    usb_gadget_giveback_request+0x58/0x170
+>>    dwc3_gadget_giveback+0xe4/0x200
+>>    dwc3_gadget_endpoint_trbs_complete+0x100/0x388
+>>    dwc3_thread_interrupt+0x46c/0xe20
+> So dwc3_thread_interrupt() disables interrupts here. Felipe dropped it
+> and then added it back in
+>      e5f68b4a3e7b0 ("Revert "usb: dwc3: gadget: remove unnecessary _irqsave()"")
+>
+> I would suggest to revert it (the above commit) and fixing the lockdep
+> splat in the gadget driver and other. I don't see the g_ether warning
+> Felipe mentioned. It might come from f_ncm (since it uses a timer) or
+> something else in the network stack (that uses a timeout timer).
+> But not now.
+> As much as I hate it, I suggest:
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 183b90923f51b..a0c883f19a417 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -4160,9 +4160,11 @@ static irqreturn_t dwc3_thread_interrupt(int irq, void *_evt)
+>   	unsigned long flags;
+>   	irqreturn_t ret = IRQ_NONE;
+>   
+> +	local_bh_disable();
+>   	spin_lock_irqsave(&dwc->lock, flags);
+>   	ret = dwc3_process_event_buf(evt);
+>   	spin_unlock_irqrestore(&dwc->lock, flags);
+> +	local_bh_enable();
+>   
+>   	return ret;
+>   }
+>
+>
+> In the long run I would drop that irqsave (along with bh_disable() since
+> netif_rx() covers that) and make sure the there is no lockdep warning
+> popping up.
+>
+> Marek, could you please give it a try?
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- include/linux/bpf.h                           |   3 +-
- kernel/bpf/bpf_iter.c                         |   2 +-
- kernel/bpf/bpf_lsm.c                          |   2 +-
- kernel/bpf/btf.c                              |   2 +-
- kernel/bpf/preload/iterators/iterators.bpf.c  |   4 +-
- kernel/bpf/preload/iterators/iterators.skel.h | 488 +++++++++---------
- kernel/bpf/syscall.c                          |   2 +-
- kernel/bpf/verifier.c                         |   4 +-
- 8 files changed, 261 insertions(+), 246 deletions(-)
+Yes. The above change fixes the issue.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e7a163a3146b..f4da69f9f634 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -878,8 +878,7 @@ struct bpf_prog_aux {
- 	struct hlist_node tramp_hlist;
- 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
- 	const struct btf_type *attach_func_proto;
--	/* function name for valid attach_btf_id */
--	const char *attach_func_name;
-+	const char *attach_name;
- 	struct bpf_prog **func;
- 	void *jit_data; /* JIT specific data. arch dependent */
- 	struct bpf_jit_poke_descriptor *poke_tab;
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index b2ee45064e06..40bda43bbbcf 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -328,7 +328,7 @@ static void cache_btf_id(struct bpf_iter_target_info *tinfo,
- 
- bool bpf_iter_prog_supported(struct bpf_prog *prog)
- {
--	const char *attach_fname = prog->aux->attach_func_name;
-+	const char *attach_fname = prog->aux->attach_name;
- 	u32 prog_btf_id = prog->aux->attach_btf_id;
- 	const char *prefix = BPF_ITER_FUNC_PREFIX;
- 	struct bpf_iter_target_info *tinfo;
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 06062370c3b8..a7316c1327fb 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -46,7 +46,7 @@ int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
- 
- 	if (!btf_id_set_contains(&bpf_lsm_hooks, prog->aux->attach_btf_id)) {
- 		bpf_log(vlog, "attach_btf_id %u points to wrong type name %s\n",
--			prog->aux->attach_btf_id, prog->aux->attach_func_name);
-+			prog->aux->attach_btf_id, prog->aux->attach_name);
- 		return -EINVAL;
- 	}
- 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index dbc3ad07e21b..9896cffe32cb 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4834,7 +4834,7 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 	const struct btf_type *t = prog->aux->attach_func_proto;
- 	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
- 	struct btf *btf = bpf_prog_get_target_btf(prog);
--	const char *tname = prog->aux->attach_func_name;
-+	const char *tname = prog->aux->attach_name;
- 	struct bpf_verifier_log *log = info->log;
- 	const struct btf_param *args;
- 	u32 nr_args, arg;
-diff --git a/kernel/bpf/preload/iterators/iterators.bpf.c b/kernel/bpf/preload/iterators/iterators.bpf.c
-index 03af863314ea..a5aa53e8c038 100644
---- a/kernel/bpf/preload/iterators/iterators.bpf.c
-+++ b/kernel/bpf/preload/iterators/iterators.bpf.c
-@@ -40,7 +40,7 @@ struct btf {
- struct bpf_prog_aux {
- 	__u32 id;
- 	char name[16];
--	const char *attach_func_name;
-+	const char *attach_name;
- 	struct bpf_prog *dst_prog;
- 	struct bpf_func_info *func_info;
- 	struct btf *btf;
-@@ -107,7 +107,7 @@ int dump_bpf_prog(struct bpf_iter__bpf_prog *ctx)
- 
- 	BPF_SEQ_PRINTF(seq, "%4u %-16s %s %s\n", aux->id,
- 		       get_name(aux->btf, aux->func_info[0].type_id, aux->name),
--		       aux->attach_func_name, aux->dst_prog->aux->name);
-+		       aux->attach_name, aux->dst_prog->aux->name);
- 	return 0;
- }
- char LICENSE[] SEC("license") = "GPL";
-diff --git a/kernel/bpf/preload/iterators/iterators.skel.h b/kernel/bpf/preload/iterators/iterators.skel.h
-index cf9a6a94b3a4..dfc825051161 100644
---- a/kernel/bpf/preload/iterators/iterators.skel.h
-+++ b/kernel/bpf/preload/iterators/iterators.skel.h
-@@ -4,6 +4,7 @@
- #ifndef __ITERATORS_BPF_SKEL_H__
- #define __ITERATORS_BPF_SKEL_H__
- 
-+#include <errno.h>
- #include <stdlib.h>
- #include <bpf/libbpf.h>
- 
-@@ -22,10 +23,6 @@ struct iterators_bpf {
- 		struct bpf_link *dump_bpf_prog;
- 	} links;
- 	struct iterators_bpf__rodata {
--		char dump_bpf_map____fmt[35];
--		char dump_bpf_map____fmt_1[14];
--		char dump_bpf_prog____fmt[32];
--		char dump_bpf_prog____fmt_2[17];
- 	} *rodata;
- };
- 
-@@ -46,18 +43,26 @@ static inline struct iterators_bpf *
- iterators_bpf__open_opts(const struct bpf_object_open_opts *opts)
- {
- 	struct iterators_bpf *obj;
-+	int err;
- 
- 	obj = (struct iterators_bpf *)calloc(1, sizeof(*obj));
--	if (!obj)
-+	if (!obj) {
-+		errno = ENOMEM;
- 		return NULL;
--	if (iterators_bpf__create_skeleton(obj))
--		goto err;
--	if (bpf_object__open_skeleton(obj->skeleton, opts))
--		goto err;
-+	}
-+
-+	err = iterators_bpf__create_skeleton(obj);
-+	if (err)
-+		goto err_out;
-+
-+	err = bpf_object__open_skeleton(obj->skeleton, opts);
-+	if (err)
-+		goto err_out;
- 
- 	return obj;
--err:
-+err_out:
- 	iterators_bpf__destroy(obj);
-+	errno = -err;
- 	return NULL;
- }
- 
-@@ -77,12 +82,15 @@ static inline struct iterators_bpf *
- iterators_bpf__open_and_load(void)
- {
- 	struct iterators_bpf *obj;
-+	int err;
- 
- 	obj = iterators_bpf__open();
- 	if (!obj)
- 		return NULL;
--	if (iterators_bpf__load(obj)) {
-+	err = iterators_bpf__load(obj);
-+	if (err) {
- 		iterators_bpf__destroy(obj);
-+		errno = -err;
- 		return NULL;
- 	}
- 	return obj;
-@@ -100,6 +108,8 @@ iterators_bpf__detach(struct iterators_bpf *obj)
- 	return bpf_object__detach_skeleton(obj->skeleton);
- }
- 
-+static inline const void *iterators_bpf__elf_bytes(size_t *sz);
-+
- static inline int
- iterators_bpf__create_skeleton(struct iterators_bpf *obj)
- {
-@@ -107,7 +117,7 @@ iterators_bpf__create_skeleton(struct iterators_bpf *obj)
- 
- 	s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));
- 	if (!s)
--		return -1;
-+		goto err;
- 	obj->skeleton = s;
- 
- 	s->sz = sizeof(*s);
-@@ -140,10 +150,20 @@ iterators_bpf__create_skeleton(struct iterators_bpf *obj)
- 	s->progs[1].prog = &obj->progs.dump_bpf_prog;
- 	s->progs[1].link = &obj->links.dump_bpf_prog;
- 
--	s->data_sz = 7176;
--	s->data = (void *)"\
-+	s->data = (void *)iterators_bpf__elf_bytes(&s->data_sz);
-+
-+	return 0;
-+err:
-+	bpf_object__destroy_skeleton(s);
-+	return -ENOMEM;
-+}
-+
-+static inline const void *iterators_bpf__elf_bytes(size_t *sz)
-+{
-+	*sz = 7184;
-+	return (const void *)"\
- \x7f\x45\x4c\x46\x02\x01\x01\0\0\0\0\0\0\0\0\0\x01\0\xf7\0\x01\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\x48\x18\0\0\0\0\0\0\0\0\0\0\x40\0\0\0\0\0\x40\0\x0f\0\
-+\0\0\0\0\0\0\0\0\0\0\0\x50\x18\0\0\0\0\0\0\0\0\0\0\x40\0\0\0\0\0\x40\0\x0f\0\
- \x0e\0\x79\x12\0\0\0\0\0\0\x79\x26\0\0\0\0\0\0\x79\x17\x08\0\0\0\0\0\x15\x07\
- \x1a\0\0\0\0\0\x79\x21\x10\0\0\0\0\0\x55\x01\x08\0\0\0\0\0\xbf\xa4\0\0\0\0\0\0\
- \x07\x04\0\0\xe8\xff\xff\xff\xbf\x61\0\0\0\0\0\0\x18\x02\0\0\0\0\0\0\0\0\0\0\0\
-@@ -176,237 +196,233 @@ iterators_bpf__create_skeleton(struct iterators_bpf *obj)
- \x73\x25\x36\x64\x0a\0\x20\x20\x69\x64\x20\x6e\x61\x6d\x65\x20\x20\x20\x20\x20\
- \x20\x20\x20\x20\x20\x20\x20\x20\x61\x74\x74\x61\x63\x68\x65\x64\x0a\0\x25\x34\
- \x75\x20\x25\x2d\x31\x36\x73\x20\x25\x73\x20\x25\x73\x0a\0\x47\x50\x4c\0\x9f\
--\xeb\x01\0\x18\0\0\0\0\0\0\0\x1c\x04\0\0\x1c\x04\0\0\x09\x05\0\0\0\0\0\0\0\0\0\
-+\xeb\x01\0\x18\0\0\0\0\0\0\0\x1c\x04\0\0\x1c\x04\0\0\x0c\x05\0\0\0\0\0\0\0\0\0\
- \x02\x02\0\0\0\x01\0\0\0\x02\0\0\x04\x10\0\0\0\x13\0\0\0\x03\0\0\0\0\0\0\0\x18\
- \0\0\0\x04\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\x08\0\0\0\0\0\0\0\0\0\0\x02\x0d\0\
- \0\0\0\0\0\0\x01\0\0\x0d\x06\0\0\0\x1c\0\0\0\x01\0\0\0\x20\0\0\0\0\0\0\x01\x04\
--\0\0\0\x20\0\0\x01\x24\0\0\0\x01\0\0\x0c\x05\0\0\0\xaf\0\0\0\x03\0\0\x04\x18\0\
--\0\0\xbd\0\0\0\x09\0\0\0\0\0\0\0\xc1\0\0\0\x0b\0\0\0\x40\0\0\0\xcc\0\0\0\x0b\0\
--\0\0\x80\0\0\0\0\0\0\0\0\0\0\x02\x0a\0\0\0\xd4\0\0\0\0\0\0\x07\0\0\0\0\xdd\0\0\
--\0\0\0\0\x08\x0c\0\0\0\xe3\0\0\0\0\0\0\x01\x08\0\0\0\x40\0\0\0\xa4\x01\0\0\x03\
--\0\0\x04\x18\0\0\0\xac\x01\0\0\x0e\0\0\0\0\0\0\0\xaf\x01\0\0\x11\0\0\0\x20\0\0\
--\0\xb4\x01\0\0\x0e\0\0\0\xa0\0\0\0\xc0\x01\0\0\0\0\0\x08\x0f\0\0\0\xc6\x01\0\0\
--\0\0\0\x01\x04\0\0\0\x20\0\0\0\xd3\x01\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\x01\0\0\
--\0\0\0\0\0\x03\0\0\0\0\x10\0\0\0\x12\0\0\0\x10\0\0\0\xd8\x01\0\0\0\0\0\x01\x04\
--\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\x02\x14\0\0\0\x3c\x02\0\0\x02\0\0\x04\x10\0\0\0\
--\x13\0\0\0\x03\0\0\0\0\0\0\0\x4f\x02\0\0\x15\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\
--\x18\0\0\0\0\0\0\0\x01\0\0\x0d\x06\0\0\0\x1c\0\0\0\x13\0\0\0\x54\x02\0\0\x01\0\
--\0\x0c\x16\0\0\0\xa0\x02\0\0\x01\0\0\x04\x08\0\0\0\xa9\x02\0\0\x19\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\x02\x1a\0\0\0\xfa\x02\0\0\x06\0\0\x04\x38\0\0\0\xac\x01\0\0\
--\x0e\0\0\0\0\0\0\0\xaf\x01\0\0\x11\0\0\0\x20\0\0\0\x07\x03\0\0\x1b\0\0\0\xc0\0\
--\0\0\x18\x03\0\0\x15\0\0\0\0\x01\0\0\x21\x03\0\0\x1d\0\0\0\x40\x01\0\0\x2b\x03\
-+\0\0\0\x20\0\0\x01\x24\0\0\0\x01\0\0\x0c\x05\0\0\0\xb7\0\0\0\x03\0\0\x04\x18\0\
-+\0\0\xc5\0\0\0\x09\0\0\0\0\0\0\0\xc9\0\0\0\x0b\0\0\0\x40\0\0\0\xd4\0\0\0\x0b\0\
-+\0\0\x80\0\0\0\0\0\0\0\0\0\0\x02\x0a\0\0\0\xdc\0\0\0\0\0\0\x07\0\0\0\0\xe5\0\0\
-+\0\0\0\0\x08\x0c\0\0\0\xeb\0\0\0\0\0\0\x01\x08\0\0\0\x40\0\0\0\xac\x01\0\0\x03\
-+\0\0\x04\x18\0\0\0\xb4\x01\0\0\x0e\0\0\0\0\0\0\0\xb7\x01\0\0\x11\0\0\0\x20\0\0\
-+\0\xbc\x01\0\0\x0e\0\0\0\xa0\0\0\0\xc8\x01\0\0\0\0\0\x08\x0f\0\0\0\xce\x01\0\0\
-+\0\0\0\x01\x04\0\0\0\x20\0\0\0\xdb\x01\0\0\0\0\0\x01\x01\0\0\0\x08\0\0\x01\0\0\
-+\0\0\0\0\0\x03\0\0\0\0\x10\0\0\0\x12\0\0\0\x10\0\0\0\xe0\x01\0\0\0\0\0\x01\x04\
-+\0\0\0\x20\0\0\0\0\0\0\0\0\0\0\x02\x14\0\0\0\x44\x02\0\0\x02\0\0\x04\x10\0\0\0\
-+\x13\0\0\0\x03\0\0\0\0\0\0\0\x57\x02\0\0\x15\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\x02\
-+\x18\0\0\0\0\0\0\0\x01\0\0\x0d\x06\0\0\0\x1c\0\0\0\x13\0\0\0\x5c\x02\0\0\x01\0\
-+\0\x0c\x16\0\0\0\xa8\x02\0\0\x01\0\0\x04\x08\0\0\0\xb1\x02\0\0\x19\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\x02\x1a\0\0\0\x02\x03\0\0\x06\0\0\x04\x38\0\0\0\xb4\x01\0\0\
-+\x0e\0\0\0\0\0\0\0\xb7\x01\0\0\x11\0\0\0\x20\0\0\0\x0f\x03\0\0\x1b\0\0\0\xc0\0\
-+\0\0\x1b\x03\0\0\x15\0\0\0\0\x01\0\0\x24\x03\0\0\x1d\0\0\0\x40\x01\0\0\x2e\x03\
- \0\0\x1e\0\0\0\x80\x01\0\0\0\0\0\0\0\0\0\x02\x1c\0\0\0\0\0\0\0\0\0\0\x0a\x10\0\
--\0\0\0\0\0\0\0\0\0\x02\x1f\0\0\0\0\0\0\0\0\0\0\x02\x20\0\0\0\x75\x03\0\0\x02\0\
--\0\x04\x08\0\0\0\x83\x03\0\0\x0e\0\0\0\0\0\0\0\x8c\x03\0\0\x0e\0\0\0\x20\0\0\0\
--\x2b\x03\0\0\x03\0\0\x04\x18\0\0\0\x96\x03\0\0\x1b\0\0\0\0\0\0\0\x9e\x03\0\0\
--\x21\0\0\0\x40\0\0\0\xa4\x03\0\0\x23\0\0\0\x80\0\0\0\0\0\0\0\0\0\0\x02\x22\0\0\
--\0\0\0\0\0\0\0\0\x02\x24\0\0\0\xa8\x03\0\0\x01\0\0\x04\x04\0\0\0\xb3\x03\0\0\
--\x0e\0\0\0\0\0\0\0\x1c\x04\0\0\x01\0\0\x04\x04\0\0\0\x25\x04\0\0\x0e\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x1c\0\0\0\x12\0\0\0\x23\0\0\0\x9b\x04\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\x02\x1f\0\0\0\0\0\0\0\0\0\0\x02\x20\0\0\0\x78\x03\0\0\x02\0\
-+\0\x04\x08\0\0\0\x86\x03\0\0\x0e\0\0\0\0\0\0\0\x8f\x03\0\0\x0e\0\0\0\x20\0\0\0\
-+\x2e\x03\0\0\x03\0\0\x04\x18\0\0\0\x99\x03\0\0\x1b\0\0\0\0\0\0\0\xa1\x03\0\0\
-+\x21\0\0\0\x40\0\0\0\xa7\x03\0\0\x23\0\0\0\x80\0\0\0\0\0\0\0\0\0\0\x02\x22\0\0\
-+\0\0\0\0\0\0\0\0\x02\x24\0\0\0\xab\x03\0\0\x01\0\0\x04\x04\0\0\0\xb6\x03\0\0\
-+\x0e\0\0\0\0\0\0\0\x1f\x04\0\0\x01\0\0\x04\x04\0\0\0\x28\x04\0\0\x0e\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x1c\0\0\0\x12\0\0\0\x23\0\0\0\x9e\x04\0\0\0\0\0\
- \x0e\x25\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x1c\0\0\0\x12\0\0\0\x0e\0\0\0\
--\xaf\x04\0\0\0\0\0\x0e\x27\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x1c\0\0\0\
--\x12\0\0\0\x20\0\0\0\xc5\x04\0\0\0\0\0\x0e\x29\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\
--\0\0\0\0\x1c\0\0\0\x12\0\0\0\x11\0\0\0\xda\x04\0\0\0\0\0\x0e\x2b\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\x03\0\0\0\0\x10\0\0\0\x12\0\0\0\x04\0\0\0\xf1\x04\0\0\0\0\0\x0e\
--\x2d\0\0\0\x01\0\0\0\xf9\x04\0\0\x04\0\0\x0f\0\0\0\0\x26\0\0\0\0\0\0\0\x23\0\0\
-+\xb2\x04\0\0\0\0\0\x0e\x27\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\0\0\0\x1c\0\0\0\
-+\x12\0\0\0\x20\0\0\0\xc8\x04\0\0\0\0\0\x0e\x29\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\
-+\0\0\0\0\x1c\0\0\0\x12\0\0\0\x11\0\0\0\xdd\x04\0\0\0\0\0\x0e\x2b\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\x03\0\0\0\0\x10\0\0\0\x12\0\0\0\x04\0\0\0\xf4\x04\0\0\0\0\0\x0e\
-+\x2d\0\0\0\x01\0\0\0\xfc\x04\0\0\x04\0\0\x0f\0\0\0\0\x26\0\0\0\0\0\0\0\x23\0\0\
- \0\x28\0\0\0\x23\0\0\0\x0e\0\0\0\x2a\0\0\0\x31\0\0\0\x20\0\0\0\x2c\0\0\0\x51\0\
--\0\0\x11\0\0\0\x01\x05\0\0\x01\0\0\x0f\0\0\0\0\x2e\0\0\0\0\0\0\0\x04\0\0\0\0\
-+\0\0\x11\0\0\0\x04\x05\0\0\x01\0\0\x0f\0\0\0\0\x2e\0\0\0\0\0\0\0\x04\0\0\0\0\
- \x62\x70\x66\x5f\x69\x74\x65\x72\x5f\x5f\x62\x70\x66\x5f\x6d\x61\x70\0\x6d\x65\
- \x74\x61\0\x6d\x61\x70\0\x63\x74\x78\0\x69\x6e\x74\0\x64\x75\x6d\x70\x5f\x62\
- \x70\x66\x5f\x6d\x61\x70\0\x69\x74\x65\x72\x2f\x62\x70\x66\x5f\x6d\x61\x70\0\
--\x30\x3a\x30\0\x2f\x68\x6f\x6d\x65\x2f\x61\x6c\x72\x75\x61\x2f\x62\x75\x69\x6c\
--\x64\x2f\x6c\x69\x6e\x75\x78\x2f\x6b\x65\x72\x6e\x65\x6c\x2f\x62\x70\x66\x2f\
--\x70\x72\x65\x6c\x6f\x61\x64\x2f\x69\x74\x65\x72\x61\x74\x6f\x72\x73\x2f\x69\
--\x74\x65\x72\x61\x74\x6f\x72\x73\x2e\x62\x70\x66\x2e\x63\0\x09\x73\x74\x72\x75\
--\x63\x74\x20\x73\x65\x71\x5f\x66\x69\x6c\x65\x20\x2a\x73\x65\x71\x20\x3d\x20\
--\x63\x74\x78\x2d\x3e\x6d\x65\x74\x61\x2d\x3e\x73\x65\x71\x3b\0\x62\x70\x66\x5f\
--\x69\x74\x65\x72\x5f\x6d\x65\x74\x61\0\x73\x65\x71\0\x73\x65\x73\x73\x69\x6f\
--\x6e\x5f\x69\x64\0\x73\x65\x71\x5f\x6e\x75\x6d\0\x73\x65\x71\x5f\x66\x69\x6c\
--\x65\0\x5f\x5f\x75\x36\x34\0\x6c\x6f\x6e\x67\x20\x6c\x6f\x6e\x67\x20\x75\x6e\
--\x73\x69\x67\x6e\x65\x64\x20\x69\x6e\x74\0\x30\x3a\x31\0\x09\x73\x74\x72\x75\
--\x63\x74\x20\x62\x70\x66\x5f\x6d\x61\x70\x20\x2a\x6d\x61\x70\x20\x3d\x20\x63\
--\x74\x78\x2d\x3e\x6d\x61\x70\x3b\0\x09\x69\x66\x20\x28\x21\x6d\x61\x70\x29\0\
--\x30\x3a\x32\0\x09\x5f\x5f\x75\x36\x34\x20\x73\x65\x71\x5f\x6e\x75\x6d\x20\x3d\
--\x20\x63\x74\x78\x2d\x3e\x6d\x65\x74\x61\x2d\x3e\x73\x65\x71\x5f\x6e\x75\x6d\
--\x3b\0\x09\x69\x66\x20\x28\x73\x65\x71\x5f\x6e\x75\x6d\x20\x3d\x3d\x20\x30\x29\
--\0\x09\x09\x42\x50\x46\x5f\x53\x45\x51\x5f\x50\x52\x49\x4e\x54\x46\x28\x73\x65\
--\x71\x2c\x20\x22\x20\x20\x69\x64\x20\x6e\x61\x6d\x65\x20\x20\x20\x20\x20\x20\
--\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x78\x5f\x65\x6e\x74\x72\x69\x65\x73\x5c\
--\x6e\x22\x29\x3b\0\x62\x70\x66\x5f\x6d\x61\x70\0\x69\x64\0\x6e\x61\x6d\x65\0\
--\x6d\x61\x78\x5f\x65\x6e\x74\x72\x69\x65\x73\0\x5f\x5f\x75\x33\x32\0\x75\x6e\
--\x73\x69\x67\x6e\x65\x64\x20\x69\x6e\x74\0\x63\x68\x61\x72\0\x5f\x5f\x41\x52\
--\x52\x41\x59\x5f\x53\x49\x5a\x45\x5f\x54\x59\x50\x45\x5f\x5f\0\x09\x42\x50\x46\
--\x5f\x53\x45\x51\x5f\x50\x52\x49\x4e\x54\x46\x28\x73\x65\x71\x2c\x20\x22\x25\
--\x34\x75\x20\x25\x2d\x31\x36\x73\x25\x36\x64\x5c\x6e\x22\x2c\x20\x6d\x61\x70\
--\x2d\x3e\x69\x64\x2c\x20\x6d\x61\x70\x2d\x3e\x6e\x61\x6d\x65\x2c\x20\x6d\x61\
--\x70\x2d\x3e\x6d\x61\x78\x5f\x65\x6e\x74\x72\x69\x65\x73\x29\x3b\0\x7d\0\x62\
--\x70\x66\x5f\x69\x74\x65\x72\x5f\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x70\x72\
--\x6f\x67\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x69\x74\x65\
--\x72\x2f\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x09\x73\x74\x72\x75\x63\x74\x20\x62\
--\x70\x66\x5f\x70\x72\x6f\x67\x20\x2a\x70\x72\x6f\x67\x20\x3d\x20\x63\x74\x78\
--\x2d\x3e\x70\x72\x6f\x67\x3b\0\x09\x69\x66\x20\x28\x21\x70\x72\x6f\x67\x29\0\
--\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x61\x75\x78\0\x09\x61\x75\x78\x20\x3d\x20\
--\x70\x72\x6f\x67\x2d\x3e\x61\x75\x78\x3b\0\x09\x09\x42\x50\x46\x5f\x53\x45\x51\
--\x5f\x50\x52\x49\x4e\x54\x46\x28\x73\x65\x71\x2c\x20\x22\x20\x20\x69\x64\x20\
--\x6e\x61\x6d\x65\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x61\x74\
--\x74\x61\x63\x68\x65\x64\x5c\x6e\x22\x29\x3b\0\x62\x70\x66\x5f\x70\x72\x6f\x67\
--\x5f\x61\x75\x78\0\x61\x74\x74\x61\x63\x68\x5f\x66\x75\x6e\x63\x5f\x6e\x61\x6d\
--\x65\0\x64\x73\x74\x5f\x70\x72\x6f\x67\0\x66\x75\x6e\x63\x5f\x69\x6e\x66\x6f\0\
--\x62\x74\x66\0\x09\x42\x50\x46\x5f\x53\x45\x51\x5f\x50\x52\x49\x4e\x54\x46\x28\
--\x73\x65\x71\x2c\x20\x22\x25\x34\x75\x20\x25\x2d\x31\x36\x73\x20\x25\x73\x20\
--\x25\x73\x5c\x6e\x22\x2c\x20\x61\x75\x78\x2d\x3e\x69\x64\x2c\0\x30\x3a\x34\0\
--\x30\x3a\x35\0\x09\x69\x66\x20\x28\x21\x62\x74\x66\x29\0\x62\x70\x66\x5f\x66\
--\x75\x6e\x63\x5f\x69\x6e\x66\x6f\0\x69\x6e\x73\x6e\x5f\x6f\x66\x66\0\x74\x79\
--\x70\x65\x5f\x69\x64\0\x30\0\x73\x74\x72\x69\x6e\x67\x73\0\x74\x79\x70\x65\x73\
--\0\x68\x64\x72\0\x62\x74\x66\x5f\x68\x65\x61\x64\x65\x72\0\x73\x74\x72\x5f\x6c\
--\x65\x6e\0\x09\x74\x79\x70\x65\x73\x20\x3d\x20\x62\x74\x66\x2d\x3e\x74\x79\x70\
--\x65\x73\x3b\0\x09\x62\x70\x66\x5f\x70\x72\x6f\x62\x65\x5f\x72\x65\x61\x64\x5f\
--\x6b\x65\x72\x6e\x65\x6c\x28\x26\x74\x2c\x20\x73\x69\x7a\x65\x6f\x66\x28\x74\
--\x29\x2c\x20\x74\x79\x70\x65\x73\x20\x2b\x20\x62\x74\x66\x5f\x69\x64\x29\x3b\0\
--\x09\x73\x74\x72\x20\x3d\x20\x62\x74\x66\x2d\x3e\x73\x74\x72\x69\x6e\x67\x73\
--\x3b\0\x62\x74\x66\x5f\x74\x79\x70\x65\0\x6e\x61\x6d\x65\x5f\x6f\x66\x66\0\x09\
--\x6e\x61\x6d\x65\x5f\x6f\x66\x66\x20\x3d\x20\x42\x50\x46\x5f\x43\x4f\x52\x45\
--\x5f\x52\x45\x41\x44\x28\x74\x2c\x20\x6e\x61\x6d\x65\x5f\x6f\x66\x66\x29\x3b\0\
--\x30\x3a\x32\x3a\x30\0\x09\x69\x66\x20\x28\x6e\x61\x6d\x65\x5f\x6f\x66\x66\x20\
--\x3e\x3d\x20\x62\x74\x66\x2d\x3e\x68\x64\x72\x2e\x73\x74\x72\x5f\x6c\x65\x6e\
--\x29\0\x09\x72\x65\x74\x75\x72\x6e\x20\x73\x74\x72\x20\x2b\x20\x6e\x61\x6d\x65\
--\x5f\x6f\x66\x66\x3b\0\x30\x3a\x33\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\
--\x61\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\
--\x61\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\x2e\x31\0\x64\x75\x6d\x70\x5f\x62\x70\x66\
--\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\x75\x6d\x70\x5f\x62\x70\
--\x66\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\x2e\x32\0\x4c\x49\x43\x45\
--\x4e\x53\x45\0\x2e\x72\x6f\x64\x61\x74\x61\0\x6c\x69\x63\x65\x6e\x73\x65\0\x9f\
--\xeb\x01\0\x20\0\0\0\0\0\0\0\x24\0\0\0\x24\0\0\0\x44\x02\0\0\x68\x02\0\0\xa4\
--\x01\0\0\x08\0\0\0\x31\0\0\0\x01\0\0\0\0\0\0\0\x07\0\0\0\x62\x02\0\0\x01\0\0\0\
--\0\0\0\0\x17\0\0\0\x10\0\0\0\x31\0\0\0\x09\0\0\0\0\0\0\0\x42\0\0\0\x87\0\0\0\
--\x1e\x40\x01\0\x08\0\0\0\x42\0\0\0\x87\0\0\0\x24\x40\x01\0\x10\0\0\0\x42\0\0\0\
--\xfe\0\0\0\x1d\x48\x01\0\x18\0\0\0\x42\0\0\0\x1f\x01\0\0\x06\x50\x01\0\x20\0\0\
--\0\x42\0\0\0\x2e\x01\0\0\x1d\x44\x01\0\x28\0\0\0\x42\0\0\0\x53\x01\0\0\x06\x5c\
--\x01\0\x38\0\0\0\x42\0\0\0\x66\x01\0\0\x03\x60\x01\0\x70\0\0\0\x42\0\0\0\xec\
--\x01\0\0\x02\x68\x01\0\xf0\0\0\0\x42\0\0\0\x3a\x02\0\0\x01\x70\x01\0\x62\x02\0\
--\0\x1a\0\0\0\0\0\0\0\x42\0\0\0\x87\0\0\0\x1e\x84\x01\0\x08\0\0\0\x42\0\0\0\x87\
--\0\0\0\x24\x84\x01\0\x10\0\0\0\x42\0\0\0\x70\x02\0\0\x1f\x8c\x01\0\x18\0\0\0\
--\x42\0\0\0\x94\x02\0\0\x06\x98\x01\0\x20\0\0\0\x42\0\0\0\xad\x02\0\0\x0e\xa4\
--\x01\0\x28\0\0\0\x42\0\0\0\x2e\x01\0\0\x1d\x88\x01\0\x30\0\0\0\x42\0\0\0\x53\
--\x01\0\0\x06\xa8\x01\0\x40\0\0\0\x42\0\0\0\xbf\x02\0\0\x03\xac\x01\0\x80\0\0\0\
--\x42\0\0\0\x2f\x03\0\0\x02\xb4\x01\0\xb8\0\0\0\x42\0\0\0\x6a\x03\0\0\x06\x08\
--\x01\0\xd0\0\0\0\x42\0\0\0\0\0\0\0\0\0\0\0\xd8\0\0\0\x42\0\0\0\xbb\x03\0\0\x0f\
--\x14\x01\0\xe0\0\0\0\x42\0\0\0\xd0\x03\0\0\x2d\x18\x01\0\xf0\0\0\0\x42\0\0\0\
--\x07\x04\0\0\x0d\x10\x01\0\0\x01\0\0\x42\0\0\0\0\0\0\0\0\0\0\0\x08\x01\0\0\x42\
--\0\0\0\xd0\x03\0\0\x02\x18\x01\0\x20\x01\0\0\x42\0\0\0\x2e\x04\0\0\x0d\x1c\x01\
--\0\x38\x01\0\0\x42\0\0\0\0\0\0\0\0\0\0\0\x40\x01\0\0\x42\0\0\0\x2e\x04\0\0\x0d\
--\x1c\x01\0\x58\x01\0\0\x42\0\0\0\x2e\x04\0\0\x0d\x1c\x01\0\x60\x01\0\0\x42\0\0\
--\0\x5c\x04\0\0\x1b\x20\x01\0\x68\x01\0\0\x42\0\0\0\x5c\x04\0\0\x06\x20\x01\0\
--\x70\x01\0\0\x42\0\0\0\x7f\x04\0\0\x0d\x28\x01\0\x78\x01\0\0\x42\0\0\0\0\0\0\0\
--\0\0\0\0\x80\x01\0\0\x42\0\0\0\x2f\x03\0\0\x02\xb4\x01\0\xf8\x01\0\0\x42\0\0\0\
--\x3a\x02\0\0\x01\xc4\x01\0\x10\0\0\0\x31\0\0\0\x07\0\0\0\0\0\0\0\x02\0\0\0\x3e\
--\0\0\0\0\0\0\0\x08\0\0\0\x08\0\0\0\x3e\0\0\0\0\0\0\0\x10\0\0\0\x02\0\0\0\xfa\0\
--\0\0\0\0\0\0\x20\0\0\0\x08\0\0\0\x2a\x01\0\0\0\0\0\0\x70\0\0\0\x0d\0\0\0\x3e\0\
--\0\0\0\0\0\0\x80\0\0\0\x0d\0\0\0\xfa\0\0\0\0\0\0\0\xa0\0\0\0\x0d\0\0\0\x2a\x01\
--\0\0\0\0\0\0\x62\x02\0\0\x12\0\0\0\0\0\0\0\x14\0\0\0\x3e\0\0\0\0\0\0\0\x08\0\0\
--\0\x08\0\0\0\x3e\0\0\0\0\0\0\0\x10\0\0\0\x14\0\0\0\xfa\0\0\0\0\0\0\0\x20\0\0\0\
--\x18\0\0\0\x3e\0\0\0\0\0\0\0\x28\0\0\0\x08\0\0\0\x2a\x01\0\0\0\0\0\0\x80\0\0\0\
--\x1a\0\0\0\x3e\0\0\0\0\0\0\0\x90\0\0\0\x1a\0\0\0\xfa\0\0\0\0\0\0\0\xa8\0\0\0\
--\x1a\0\0\0\x62\x03\0\0\0\0\0\0\xb0\0\0\0\x1a\0\0\0\x66\x03\0\0\0\0\0\0\xc0\0\0\
--\0\x1f\0\0\0\x94\x03\0\0\0\0\0\0\xd8\0\0\0\x20\0\0\0\xfa\0\0\0\0\0\0\0\xf0\0\0\
--\0\x20\0\0\0\x3e\0\0\0\0\0\0\0\x18\x01\0\0\x24\0\0\0\x3e\0\0\0\0\0\0\0\x50\x01\
--\0\0\x1a\0\0\0\xfa\0\0\0\0\0\0\0\x60\x01\0\0\x20\0\0\0\x56\x04\0\0\0\0\0\0\x88\
--\x01\0\0\x1a\0\0\0\x2a\x01\0\0\0\0\0\0\x98\x01\0\0\x1a\0\0\0\x97\x04\0\0\0\0\0\
--\0\xa0\x01\0\0\x18\0\0\0\x3e\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\x91\0\0\0\x04\0\xf1\xff\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xe6\0\0\
--\0\0\0\x02\0\x70\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xd8\0\0\0\0\0\x02\0\xf0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\xdf\0\0\0\0\0\x03\0\x78\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\xd1\0\0\0\0\0\x03\0\x80\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xca\0\0\0\0\0\x03\0\
--\xf8\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x14\0\0\0\x01\0\x04\0\0\0\0\0\0\0\0\0\x23\
--\0\0\0\0\0\0\0\x04\x01\0\0\x01\0\x04\0\x23\0\0\0\0\0\0\0\x0e\0\0\0\0\0\0\0\x28\
--\0\0\0\x01\0\x04\0\x31\0\0\0\0\0\0\0\x20\0\0\0\0\0\0\0\xed\0\0\0\x01\0\x04\0\
--\x51\0\0\0\0\0\0\0\x11\0\0\0\0\0\0\0\0\0\0\0\x03\0\x02\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\x03\0\x03\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\
--\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xc2\0\0\0\x11\0\x05\0\0\0\0\0\0\0\0\0\
--\x04\0\0\0\0\0\0\0\x3d\0\0\0\x12\0\x02\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\x5b\
--\0\0\0\x12\0\x03\0\0\0\0\0\0\0\0\0\x08\x02\0\0\0\0\0\0\x48\0\0\0\0\0\0\0\x01\0\
--\0\0\x0d\0\0\0\xc8\0\0\0\0\0\0\0\x01\0\0\0\x0d\0\0\0\x50\0\0\0\0\0\0\0\x01\0\0\
--\0\x0d\0\0\0\xd0\x01\0\0\0\0\0\0\x01\0\0\0\x0d\0\0\0\xf0\x03\0\0\0\0\0\0\x0a\0\
--\0\0\x0d\0\0\0\xfc\x03\0\0\0\0\0\0\x0a\0\0\0\x0d\0\0\0\x08\x04\0\0\0\0\0\0\x0a\
--\0\0\0\x0d\0\0\0\x14\x04\0\0\0\0\0\0\x0a\0\0\0\x0d\0\0\0\x2c\x04\0\0\0\0\0\0\0\
--\0\0\0\x0e\0\0\0\x2c\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x3c\0\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x50\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x60\0\0\0\0\0\0\0\0\0\0\0\x0b\0\
--\0\0\x70\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x80\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\
--\x90\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xa0\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xb0\0\
--\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xc0\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xd0\0\0\0\0\
--\0\0\0\0\0\0\0\x0b\0\0\0\xe8\0\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xf8\0\0\0\0\0\0\0\
--\0\0\0\0\x0c\0\0\0\x08\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x18\x01\0\0\0\0\0\0\0\
--\0\0\0\x0c\0\0\0\x28\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x38\x01\0\0\0\0\0\0\0\0\
--\0\0\x0c\0\0\0\x48\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x58\x01\0\0\0\0\0\0\0\0\0\
--\0\x0c\0\0\0\x68\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x78\x01\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x88\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x98\x01\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\xa8\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xb8\x01\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\xc8\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xd8\x01\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\xe8\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xf8\x01\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x08\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x18\x02\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x28\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x38\x02\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x48\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x58\x02\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x68\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x78\x02\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x94\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xa4\x02\0\0\0\0\0\0\0\0\0\0\
--\x0b\0\0\0\xb4\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xc4\x02\0\0\0\0\0\0\0\0\0\0\
--\x0b\0\0\0\xd4\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xe4\x02\0\0\0\0\0\0\0\0\0\0\
--\x0b\0\0\0\xf4\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x0c\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x1c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x2c\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x3c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x4c\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x5c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x6c\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x7c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x8c\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x9c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xac\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\xbc\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xcc\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\xdc\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xec\x03\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\xfc\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x0c\x04\0\0\0\0\0\0\0\0\0\0\
--\x0c\0\0\0\x1c\x04\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x4d\x4e\x40\x41\x42\x43\x4c\0\
--\x2e\x74\x65\x78\x74\0\x2e\x72\x65\x6c\x2e\x42\x54\x46\x2e\x65\x78\x74\0\x64\
--\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\x61\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\
--\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\0\
--\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\x61\x70\0\x2e\x72\x65\x6c\x69\x74\x65\
--\x72\x2f\x62\x70\x66\x5f\x6d\x61\x70\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\
--\x72\x6f\x67\0\x2e\x72\x65\x6c\x69\x74\x65\x72\x2f\x62\x70\x66\x5f\x70\x72\x6f\
--\x67\0\x2e\x6c\x6c\x76\x6d\x5f\x61\x64\x64\x72\x73\x69\x67\0\x6c\x69\x63\x65\
--\x6e\x73\x65\0\x69\x74\x65\x72\x61\x74\x6f\x72\x73\x2e\x62\x70\x66\x2e\x63\0\
--\x2e\x73\x74\x72\x74\x61\x62\0\x2e\x73\x79\x6d\x74\x61\x62\0\x2e\x72\x6f\x64\
--\x61\x74\x61\0\x2e\x72\x65\x6c\x2e\x42\x54\x46\0\x4c\x49\x43\x45\x4e\x53\x45\0\
--\x4c\x42\x42\x31\x5f\x37\0\x4c\x42\x42\x31\x5f\x36\0\x4c\x42\x42\x30\x5f\x34\0\
--\x4c\x42\x42\x31\x5f\x33\0\x4c\x42\x42\x30\x5f\x33\0\x64\x75\x6d\x70\x5f\x62\
--\x70\x66\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\x2e\x32\0\x64\x75\x6d\
--\x70\x5f\x62\x70\x66\x5f\x6d\x61\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\x2e\x31\0\0\0\
-+\x30\x3a\x30\0\x2f\x64\x61\x74\x61\x30\x2f\x77\x61\x6b\x65\x6e\x2f\x76\x65\x72\
-+\x69\x66\x79\x2f\x6c\x69\x6e\x75\x78\x2d\x35\x2e\x39\x2e\x79\x2f\x6b\x65\x72\
-+\x6e\x65\x6c\x2f\x62\x70\x66\x2f\x70\x72\x65\x6c\x6f\x61\x64\x2f\x69\x74\x65\
-+\x72\x61\x74\x6f\x72\x73\x2f\x69\x74\x65\x72\x61\x74\x6f\x72\x73\x2e\x62\x70\
-+\x66\x2e\x63\0\x09\x73\x74\x72\x75\x63\x74\x20\x73\x65\x71\x5f\x66\x69\x6c\x65\
-+\x20\x2a\x73\x65\x71\x20\x3d\x20\x63\x74\x78\x2d\x3e\x6d\x65\x74\x61\x2d\x3e\
-+\x73\x65\x71\x3b\0\x62\x70\x66\x5f\x69\x74\x65\x72\x5f\x6d\x65\x74\x61\0\x73\
-+\x65\x71\0\x73\x65\x73\x73\x69\x6f\x6e\x5f\x69\x64\0\x73\x65\x71\x5f\x6e\x75\
-+\x6d\0\x73\x65\x71\x5f\x66\x69\x6c\x65\0\x5f\x5f\x75\x36\x34\0\x6c\x6f\x6e\x67\
-+\x20\x6c\x6f\x6e\x67\x20\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x69\x6e\x74\0\x30\
-+\x3a\x31\0\x09\x73\x74\x72\x75\x63\x74\x20\x62\x70\x66\x5f\x6d\x61\x70\x20\x2a\
-+\x6d\x61\x70\x20\x3d\x20\x63\x74\x78\x2d\x3e\x6d\x61\x70\x3b\0\x09\x69\x66\x20\
-+\x28\x21\x6d\x61\x70\x29\0\x30\x3a\x32\0\x09\x5f\x5f\x75\x36\x34\x20\x73\x65\
-+\x71\x5f\x6e\x75\x6d\x20\x3d\x20\x63\x74\x78\x2d\x3e\x6d\x65\x74\x61\x2d\x3e\
-+\x73\x65\x71\x5f\x6e\x75\x6d\x3b\0\x09\x69\x66\x20\x28\x73\x65\x71\x5f\x6e\x75\
-+\x6d\x20\x3d\x3d\x20\x30\x29\0\x09\x09\x42\x50\x46\x5f\x53\x45\x51\x5f\x50\x52\
-+\x49\x4e\x54\x46\x28\x73\x65\x71\x2c\x20\x22\x20\x20\x69\x64\x20\x6e\x61\x6d\
-+\x65\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x6d\x61\x78\x5f\x65\
-+\x6e\x74\x72\x69\x65\x73\x5c\x6e\x22\x29\x3b\0\x62\x70\x66\x5f\x6d\x61\x70\0\
-+\x69\x64\0\x6e\x61\x6d\x65\0\x6d\x61\x78\x5f\x65\x6e\x74\x72\x69\x65\x73\0\x5f\
-+\x5f\x75\x33\x32\0\x75\x6e\x73\x69\x67\x6e\x65\x64\x20\x69\x6e\x74\0\x63\x68\
-+\x61\x72\0\x5f\x5f\x41\x52\x52\x41\x59\x5f\x53\x49\x5a\x45\x5f\x54\x59\x50\x45\
-+\x5f\x5f\0\x09\x42\x50\x46\x5f\x53\x45\x51\x5f\x50\x52\x49\x4e\x54\x46\x28\x73\
-+\x65\x71\x2c\x20\x22\x25\x34\x75\x20\x25\x2d\x31\x36\x73\x25\x36\x64\x5c\x6e\
-+\x22\x2c\x20\x6d\x61\x70\x2d\x3e\x69\x64\x2c\x20\x6d\x61\x70\x2d\x3e\x6e\x61\
-+\x6d\x65\x2c\x20\x6d\x61\x70\x2d\x3e\x6d\x61\x78\x5f\x65\x6e\x74\x72\x69\x65\
-+\x73\x29\x3b\0\x7d\0\x62\x70\x66\x5f\x69\x74\x65\x72\x5f\x5f\x62\x70\x66\x5f\
-+\x70\x72\x6f\x67\0\x70\x72\x6f\x67\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\
-+\x72\x6f\x67\0\x69\x74\x65\x72\x2f\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x09\x73\
-+\x74\x72\x75\x63\x74\x20\x62\x70\x66\x5f\x70\x72\x6f\x67\x20\x2a\x70\x72\x6f\
-+\x67\x20\x3d\x20\x63\x74\x78\x2d\x3e\x70\x72\x6f\x67\x3b\0\x09\x69\x66\x20\x28\
-+\x21\x70\x72\x6f\x67\x29\0\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x61\x75\x78\0\x09\
-+\x61\x75\x78\x20\x3d\x20\x70\x72\x6f\x67\x2d\x3e\x61\x75\x78\x3b\0\x09\x09\x42\
-+\x50\x46\x5f\x53\x45\x51\x5f\x50\x52\x49\x4e\x54\x46\x28\x73\x65\x71\x2c\x20\
-+\x22\x20\x20\x69\x64\x20\x6e\x61\x6d\x65\x20\x20\x20\x20\x20\x20\x20\x20\x20\
-+\x20\x20\x20\x20\x61\x74\x74\x61\x63\x68\x65\x64\x5c\x6e\x22\x29\x3b\0\x62\x70\
-+\x66\x5f\x70\x72\x6f\x67\x5f\x61\x75\x78\0\x61\x74\x74\x61\x63\x68\x5f\x6e\x61\
-+\x6d\x65\0\x64\x73\x74\x5f\x70\x72\x6f\x67\0\x66\x75\x6e\x63\x5f\x69\x6e\x66\
-+\x6f\0\x62\x74\x66\0\x09\x42\x50\x46\x5f\x53\x45\x51\x5f\x50\x52\x49\x4e\x54\
-+\x46\x28\x73\x65\x71\x2c\x20\x22\x25\x34\x75\x20\x25\x2d\x31\x36\x73\x20\x25\
-+\x73\x20\x25\x73\x5c\x6e\x22\x2c\x20\x61\x75\x78\x2d\x3e\x69\x64\x2c\0\x30\x3a\
-+\x34\0\x30\x3a\x35\0\x09\x69\x66\x20\x28\x21\x62\x74\x66\x29\0\x62\x70\x66\x5f\
-+\x66\x75\x6e\x63\x5f\x69\x6e\x66\x6f\0\x69\x6e\x73\x6e\x5f\x6f\x66\x66\0\x74\
-+\x79\x70\x65\x5f\x69\x64\0\x30\0\x73\x74\x72\x69\x6e\x67\x73\0\x74\x79\x70\x65\
-+\x73\0\x68\x64\x72\0\x62\x74\x66\x5f\x68\x65\x61\x64\x65\x72\0\x73\x74\x72\x5f\
-+\x6c\x65\x6e\0\x09\x74\x79\x70\x65\x73\x20\x3d\x20\x62\x74\x66\x2d\x3e\x74\x79\
-+\x70\x65\x73\x3b\0\x09\x62\x70\x66\x5f\x70\x72\x6f\x62\x65\x5f\x72\x65\x61\x64\
-+\x5f\x6b\x65\x72\x6e\x65\x6c\x28\x26\x74\x2c\x20\x73\x69\x7a\x65\x6f\x66\x28\
-+\x74\x29\x2c\x20\x74\x79\x70\x65\x73\x20\x2b\x20\x62\x74\x66\x5f\x69\x64\x29\
-+\x3b\0\x09\x73\x74\x72\x20\x3d\x20\x62\x74\x66\x2d\x3e\x73\x74\x72\x69\x6e\x67\
-+\x73\x3b\0\x62\x74\x66\x5f\x74\x79\x70\x65\0\x6e\x61\x6d\x65\x5f\x6f\x66\x66\0\
-+\x09\x6e\x61\x6d\x65\x5f\x6f\x66\x66\x20\x3d\x20\x42\x50\x46\x5f\x43\x4f\x52\
-+\x45\x5f\x52\x45\x41\x44\x28\x74\x2c\x20\x6e\x61\x6d\x65\x5f\x6f\x66\x66\x29\
-+\x3b\0\x30\x3a\x32\x3a\x30\0\x09\x69\x66\x20\x28\x6e\x61\x6d\x65\x5f\x6f\x66\
-+\x66\x20\x3e\x3d\x20\x62\x74\x66\x2d\x3e\x68\x64\x72\x2e\x73\x74\x72\x5f\x6c\
-+\x65\x6e\x29\0\x09\x72\x65\x74\x75\x72\x6e\x20\x73\x74\x72\x20\x2b\x20\x6e\x61\
-+\x6d\x65\x5f\x6f\x66\x66\x3b\0\x30\x3a\x33\0\x64\x75\x6d\x70\x5f\x62\x70\x66\
-+\x5f\x6d\x61\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\x75\x6d\x70\x5f\x62\x70\x66\
-+\x5f\x6d\x61\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\x2e\x31\0\x64\x75\x6d\x70\x5f\x62\
-+\x70\x66\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\x75\x6d\x70\x5f\
-+\x62\x70\x66\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\x2e\x32\0\x4c\x49\
-+\x43\x45\x4e\x53\x45\0\x2e\x72\x6f\x64\x61\x74\x61\0\x6c\x69\x63\x65\x6e\x73\
-+\x65\0\x9f\xeb\x01\0\x20\0\0\0\0\0\0\0\x24\0\0\0\x24\0\0\0\x44\x02\0\0\x68\x02\
-+\0\0\xa4\x01\0\0\x08\0\0\0\x31\0\0\0\x01\0\0\0\0\0\0\0\x07\0\0\0\x6a\x02\0\0\
-+\x01\0\0\0\0\0\0\0\x17\0\0\0\x10\0\0\0\x31\0\0\0\x09\0\0\0\0\0\0\0\x42\0\0\0\
-+\x8f\0\0\0\x1e\x3c\x01\0\x08\0\0\0\x42\0\0\0\x8f\0\0\0\x24\x3c\x01\0\x10\0\0\0\
-+\x42\0\0\0\x06\x01\0\0\x1d\x44\x01\0\x18\0\0\0\x42\0\0\0\x27\x01\0\0\x06\x4c\
-+\x01\0\x20\0\0\0\x42\0\0\0\x36\x01\0\0\x1d\x40\x01\0\x28\0\0\0\x42\0\0\0\x5b\
-+\x01\0\0\x06\x58\x01\0\x38\0\0\0\x42\0\0\0\x6e\x01\0\0\x03\x5c\x01\0\x70\0\0\0\
-+\x42\0\0\0\xf4\x01\0\0\x02\x64\x01\0\xf0\0\0\0\x42\0\0\0\x42\x02\0\0\x01\x6c\
-+\x01\0\x6a\x02\0\0\x1a\0\0\0\0\0\0\0\x42\0\0\0\x8f\0\0\0\x1e\x80\x01\0\x08\0\0\
-+\0\x42\0\0\0\x8f\0\0\0\x24\x80\x01\0\x10\0\0\0\x42\0\0\0\x78\x02\0\0\x1f\x88\
-+\x01\0\x18\0\0\0\x42\0\0\0\x9c\x02\0\0\x06\x94\x01\0\x20\0\0\0\x42\0\0\0\xb5\
-+\x02\0\0\x0e\xa0\x01\0\x28\0\0\0\x42\0\0\0\x36\x01\0\0\x1d\x84\x01\0\x30\0\0\0\
-+\x42\0\0\0\x5b\x01\0\0\x06\xa4\x01\0\x40\0\0\0\x42\0\0\0\xc7\x02\0\0\x03\xa8\
-+\x01\0\x80\0\0\0\x42\0\0\0\x32\x03\0\0\x02\xb0\x01\0\xb8\0\0\0\x42\0\0\0\x6d\
-+\x03\0\0\x06\x04\x01\0\xd0\0\0\0\x42\0\0\0\0\0\0\0\0\0\0\0\xd8\0\0\0\x42\0\0\0\
-+\xbe\x03\0\0\x0f\x10\x01\0\xe0\0\0\0\x42\0\0\0\xd3\x03\0\0\x2d\x14\x01\0\xf0\0\
-+\0\0\x42\0\0\0\x0a\x04\0\0\x0d\x0c\x01\0\0\x01\0\0\x42\0\0\0\0\0\0\0\0\0\0\0\
-+\x08\x01\0\0\x42\0\0\0\xd3\x03\0\0\x02\x14\x01\0\x20\x01\0\0\x42\0\0\0\x31\x04\
-+\0\0\x0d\x18\x01\0\x38\x01\0\0\x42\0\0\0\0\0\0\0\0\0\0\0\x40\x01\0\0\x42\0\0\0\
-+\x31\x04\0\0\x0d\x18\x01\0\x58\x01\0\0\x42\0\0\0\x31\x04\0\0\x0d\x18\x01\0\x60\
-+\x01\0\0\x42\0\0\0\x5f\x04\0\0\x1b\x1c\x01\0\x68\x01\0\0\x42\0\0\0\x5f\x04\0\0\
-+\x06\x1c\x01\0\x70\x01\0\0\x42\0\0\0\x82\x04\0\0\x0d\x24\x01\0\x78\x01\0\0\x42\
-+\0\0\0\0\0\0\0\0\0\0\0\x80\x01\0\0\x42\0\0\0\x32\x03\0\0\x02\xb0\x01\0\xf8\x01\
-+\0\0\x42\0\0\0\x42\x02\0\0\x01\xc0\x01\0\x10\0\0\0\x31\0\0\0\x07\0\0\0\0\0\0\0\
-+\x02\0\0\0\x3e\0\0\0\0\0\0\0\x08\0\0\0\x08\0\0\0\x3e\0\0\0\0\0\0\0\x10\0\0\0\
-+\x02\0\0\0\x02\x01\0\0\0\0\0\0\x20\0\0\0\x08\0\0\0\x32\x01\0\0\0\0\0\0\x70\0\0\
-+\0\x0d\0\0\0\x3e\0\0\0\0\0\0\0\x80\0\0\0\x0d\0\0\0\x02\x01\0\0\0\0\0\0\xa0\0\0\
-+\0\x0d\0\0\0\x32\x01\0\0\0\0\0\0\x6a\x02\0\0\x12\0\0\0\0\0\0\0\x14\0\0\0\x3e\0\
-+\0\0\0\0\0\0\x08\0\0\0\x08\0\0\0\x3e\0\0\0\0\0\0\0\x10\0\0\0\x14\0\0\0\x02\x01\
-+\0\0\0\0\0\0\x20\0\0\0\x18\0\0\0\x3e\0\0\0\0\0\0\0\x28\0\0\0\x08\0\0\0\x32\x01\
-+\0\0\0\0\0\0\x80\0\0\0\x1a\0\0\0\x3e\0\0\0\0\0\0\0\x90\0\0\0\x1a\0\0\0\x02\x01\
-+\0\0\0\0\0\0\xa8\0\0\0\x1a\0\0\0\x65\x03\0\0\0\0\0\0\xb0\0\0\0\x1a\0\0\0\x69\
-+\x03\0\0\0\0\0\0\xc0\0\0\0\x1f\0\0\0\x97\x03\0\0\0\0\0\0\xd8\0\0\0\x20\0\0\0\
-+\x02\x01\0\0\0\0\0\0\xf0\0\0\0\x20\0\0\0\x3e\0\0\0\0\0\0\0\x18\x01\0\0\x24\0\0\
-+\0\x3e\0\0\0\0\0\0\0\x50\x01\0\0\x1a\0\0\0\x02\x01\0\0\0\0\0\0\x60\x01\0\0\x20\
-+\0\0\0\x59\x04\0\0\0\0\0\0\x88\x01\0\0\x1a\0\0\0\x32\x01\0\0\0\0\0\0\x98\x01\0\
-+\0\x1a\0\0\0\x9a\x04\0\0\0\0\0\0\xa0\x01\0\0\x18\0\0\0\x3e\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x91\0\0\0\x04\0\xf1\xff\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xe6\0\0\0\0\0\x02\0\x70\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\xd8\0\0\0\0\0\x02\0\xf0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xdf\0\0\0\0\0\
-+\x03\0\x78\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xd1\0\0\0\0\0\x03\0\x80\x01\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\xca\0\0\0\0\0\x03\0\xf8\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x14\
-+\0\0\0\x01\0\x04\0\0\0\0\0\0\0\0\0\x23\0\0\0\0\0\0\0\x04\x01\0\0\x01\0\x04\0\
-+\x23\0\0\0\0\0\0\0\x0e\0\0\0\0\0\0\0\x28\0\0\0\x01\0\x04\0\x31\0\0\0\0\0\0\0\
-+\x20\0\0\0\0\0\0\0\xed\0\0\0\x01\0\x04\0\x51\0\0\0\0\0\0\0\x11\0\0\0\0\0\0\0\0\
-+\0\0\0\x03\0\x02\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\x03\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x03\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\xc2\0\0\0\x11\0\x05\0\0\0\0\0\0\0\0\0\x04\0\0\0\0\0\0\0\x3d\0\0\0\x12\0\x02\0\
-+\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\x5b\0\0\0\x12\0\x03\0\0\0\0\0\0\0\0\0\x08\
-+\x02\0\0\0\0\0\0\x48\0\0\0\0\0\0\0\x01\0\0\0\x0d\0\0\0\xc8\0\0\0\0\0\0\0\x01\0\
-+\0\0\x0d\0\0\0\x50\0\0\0\0\0\0\0\x01\0\0\0\x0d\0\0\0\xd0\x01\0\0\0\0\0\0\x01\0\
-+\0\0\x0d\0\0\0\xf0\x03\0\0\0\0\0\0\x0a\0\0\0\x0d\0\0\0\xfc\x03\0\0\0\0\0\0\x0a\
-+\0\0\0\x0d\0\0\0\x08\x04\0\0\0\0\0\0\x0a\0\0\0\x0d\0\0\0\x14\x04\0\0\0\0\0\0\
-+\x0a\0\0\0\x0d\0\0\0\x2c\x04\0\0\0\0\0\0\0\0\0\0\x0e\0\0\0\x2c\0\0\0\0\0\0\0\0\
-+\0\0\0\x0b\0\0\0\x3c\0\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x50\0\0\0\0\0\0\0\0\0\0\0\
-+\x0b\0\0\0\x60\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x70\0\0\0\0\0\0\0\0\0\0\0\x0b\0\
-+\0\0\x80\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x90\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\
-+\xa0\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xb0\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xc0\0\
-+\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xd0\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xe8\0\0\0\0\
-+\0\0\0\0\0\0\0\x0c\0\0\0\xf8\0\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x08\x01\0\0\0\0\0\
-+\0\0\0\0\0\x0c\0\0\0\x18\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x28\x01\0\0\0\0\0\0\
-+\0\0\0\0\x0c\0\0\0\x38\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x48\x01\0\0\0\0\0\0\0\
-+\0\0\0\x0c\0\0\0\x58\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x68\x01\0\0\0\0\0\0\0\0\
-+\0\0\x0c\0\0\0\x78\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x88\x01\0\0\0\0\0\0\0\0\0\
-+\0\x0c\0\0\0\x98\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xa8\x01\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\xb8\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xc8\x01\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\xd8\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xe8\x01\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\xf8\x01\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x08\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x18\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x28\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x38\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x48\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x58\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x68\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x78\x02\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x94\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0b\0\0\0\xa4\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xb4\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0b\0\0\0\xc4\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xd4\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0b\0\0\0\xe4\x02\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\xf4\x02\0\0\0\0\0\0\0\0\0\0\
-+\x0b\0\0\0\x0c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x1c\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x2c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x3c\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x4c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x5c\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x6c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x7c\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x8c\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x9c\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\xac\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xbc\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\xcc\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xdc\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\xec\x03\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\xfc\x03\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x0c\x04\0\0\0\0\0\0\0\0\0\0\x0c\0\0\0\x1c\x04\0\0\0\0\0\0\0\0\0\0\
-+\x0c\0\0\0\x4c\x4d\x3f\x40\x41\x42\x4b\0\x2e\x74\x65\x78\x74\0\x2e\x72\x65\x6c\
-+\x2e\x42\x54\x46\x2e\x65\x78\x74\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\x61\
-+\x70\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\x72\
-+\x6f\x67\x2e\x5f\x5f\x5f\x66\x6d\x74\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\
-+\x61\x70\0\x2e\x72\x65\x6c\x69\x74\x65\x72\x2f\x62\x70\x66\x5f\x6d\x61\x70\0\
-+\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x2e\x72\x65\x6c\x69\x74\
-+\x65\x72\x2f\x62\x70\x66\x5f\x70\x72\x6f\x67\0\x2e\x6c\x6c\x76\x6d\x5f\x61\x64\
-+\x64\x72\x73\x69\x67\0\x6c\x69\x63\x65\x6e\x73\x65\0\x69\x74\x65\x72\x61\x74\
-+\x6f\x72\x73\x2e\x62\x70\x66\x2e\x63\0\x2e\x73\x74\x72\x74\x61\x62\0\x2e\x73\
-+\x79\x6d\x74\x61\x62\0\x2e\x72\x6f\x64\x61\x74\x61\0\x2e\x72\x65\x6c\x2e\x42\
-+\x54\x46\0\x4c\x49\x43\x45\x4e\x53\x45\0\x4c\x42\x42\x31\x5f\x37\0\x4c\x42\x42\
-+\x31\x5f\x36\0\x4c\x42\x42\x30\x5f\x34\0\x4c\x42\x42\x31\x5f\x33\0\x4c\x42\x42\
-+\x30\x5f\x33\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x70\x72\x6f\x67\x2e\x5f\x5f\
-+\x5f\x66\x6d\x74\x2e\x32\0\x64\x75\x6d\x70\x5f\x62\x70\x66\x5f\x6d\x61\x70\x2e\
-+\x5f\x5f\x5f\x66\x6d\x74\x2e\x31\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
- \0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x01\0\0\
--\0\x06\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x4e\0\0\0\x01\0\0\0\x06\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\x40\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x08\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\x6d\0\0\0\x01\0\0\0\x06\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\x40\x01\0\0\0\0\0\0\x08\x02\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\xb1\0\0\0\x01\0\0\0\x02\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x48\x03\0\
--\0\0\0\0\0\x62\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\x89\0\0\0\x01\0\0\0\x03\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xaa\x03\0\0\0\0\0\0\x04\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xbd\0\0\0\x01\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xae\x03\0\0\0\0\0\0\x3d\x09\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x0b\0\0\0\x01\0\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\0\0\0\0\xeb\x0c\0\0\0\0\0\0\x2c\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xa9\0\0\0\x02\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\0\0\0\0\x18\x11\0\0\0\0\0\0\x98\x01\0\0\0\0\0\0\x0e\0\0\0\x0e\0\0\0\x08\0\0\
--\0\0\0\0\0\x18\0\0\0\0\0\0\0\x4a\0\0\0\x09\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
--\0\xb0\x12\0\0\0\0\0\0\x20\0\0\0\0\0\0\0\x08\0\0\0\x02\0\0\0\x08\0\0\0\0\0\0\0\
--\x10\0\0\0\0\0\0\0\x69\0\0\0\x09\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xd0\x12\
--\0\0\0\0\0\0\x20\0\0\0\0\0\0\0\x08\0\0\0\x03\0\0\0\x08\0\0\0\0\0\0\0\x10\0\0\0\
--\0\0\0\0\xb9\0\0\0\x09\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xf0\x12\0\0\0\0\0\
--\0\x50\0\0\0\0\0\0\0\x08\0\0\0\x06\0\0\0\x08\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\
--\x07\0\0\0\x09\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\x13\0\0\0\0\0\0\xe0\
--\x03\0\0\0\0\0\0\x08\0\0\0\x07\0\0\0\x08\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x7b\0\
--\0\0\x03\x4c\xff\x6f\0\0\0\x80\0\0\0\0\0\0\0\0\0\0\0\0\x20\x17\0\0\0\0\0\0\x07\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xa1\0\0\0\x03\
--\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x27\x17\0\0\0\0\0\0\x1a\x01\0\0\0\0\0\0\
--\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
--
--	return 0;
--err:
--	bpf_object__destroy_skeleton(s);
--	return -1;
-+\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\x01\0\0\0\x06\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\x4e\0\0\0\x01\0\0\0\x06\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\0\0\0\0\0\0\0\0\
-+\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x6d\0\0\0\
-+\x01\0\0\0\x06\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x40\x01\0\0\0\0\0\0\x08\x02\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\x08\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xb1\0\0\0\x01\0\0\0\
-+\x02\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x48\x03\0\0\0\0\0\0\x62\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x89\0\0\0\x01\0\0\0\x03\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\xaa\x03\0\0\0\0\0\0\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xbd\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\xae\x03\0\0\0\0\0\0\x40\x09\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\x0b\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xee\x0c\0\
-+\0\0\0\0\0\x2c\x04\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\xa9\0\0\0\x02\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x20\x11\0\0\0\0\0\0\x98\
-+\x01\0\0\0\0\0\0\x0e\0\0\0\x0e\0\0\0\x08\0\0\0\0\0\0\0\x18\0\0\0\0\0\0\0\x4a\0\
-+\0\0\x09\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xb8\x12\0\0\0\0\0\0\x20\0\0\0\0\
-+\0\0\0\x08\0\0\0\x02\0\0\0\x08\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x69\0\0\0\x09\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xd8\x12\0\0\0\0\0\0\x20\0\0\0\0\0\0\0\x08\
-+\0\0\0\x03\0\0\0\x08\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\xb9\0\0\0\x09\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\xf8\x12\0\0\0\0\0\0\x50\0\0\0\0\0\0\0\x08\0\0\0\x06\
-+\0\0\0\x08\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x07\0\0\0\x09\0\0\0\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0\0\x48\x13\0\0\0\0\0\0\xe0\x03\0\0\0\0\0\0\x08\0\0\0\x07\0\0\0\
-+\x08\0\0\0\0\0\0\0\x10\0\0\0\0\0\0\0\x7b\0\0\0\x03\x4c\xff\x6f\0\0\0\x80\0\0\0\
-+\0\0\0\0\0\0\0\0\0\x28\x17\0\0\0\0\0\0\x07\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\
-+\0\0\0\0\0\0\0\0\0\0\0\0\0\0\xa1\0\0\0\x03\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\
-+\0\x2f\x17\0\0\0\0\0\0\x1a\x01\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0\0\
-+\0\0\0\0\0\0\0";
- }
- 
- #endif /* __ITERATORS_BPF_SKEL_H__ */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1033ee8c0caf..24d863d9d9b5 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3047,7 +3047,7 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
- 		}
- 		if (prog->type == BPF_PROG_TYPE_TRACING &&
- 		    prog->expected_attach_type == BPF_TRACE_RAW_TP) {
--			tp_name = prog->aux->attach_func_name;
-+			tp_name = prog->aux->attach_name;
- 			break;
- 		}
- 		err = bpf_tracing_prog_attach(prog, 0, 0);
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 50efda51515b..129e9f8e28f8 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13524,7 +13524,7 @@ static int check_struct_ops_btf_id(struct bpf_verifier_env *env)
- 	}
- 
- 	prog->aux->attach_func_proto = func_proto;
--	prog->aux->attach_func_name = mname;
-+	prog->aux->attach_name = mname;
- 	env->ops = st_ops->verifier_ops;
- 
- 	return 0;
-@@ -13849,7 +13849,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 
- 	/* store info about the attachment target that will be used later */
- 	prog->aux->attach_func_proto = tgt_info.tgt_type;
--	prog->aux->attach_func_name = tgt_info.tgt_name;
-+	prog->aux->attach_name = tgt_info.tgt_name;
- 
- 	if (tgt_prog) {
- 		prog->aux->saved_dst_prog_type = tgt_prog->type;
+
+I've also tried to revert the mentioned commit e5f68b4a3e7b, but this 
+gives me the following lockdep warning:
+
+IPv6: ADDRCONF(NETDEV_CHANGE): usb0: link becomes ready
+
+========================================================
+WARNING: possible irq lock inversion dependency detected
+5.17.0-rc4-next-20220217+ #4563 Not tainted
+--------------------------------------------------------
+swapper/0/0 just changed the state of lock:
+ffff000025548098 (_xmit_ETHER#2){+.-.}-{2:2}, at: 
+sch_direct_xmit+0x2f0/0x360
+but this lock took another, SOFTIRQ-unsafe lock in the past:
+  (&dev->lock#2){+.+.}-{2:2}
+
+
+and interrupts could create inverse lock ordering between them.
+
+
+other info that might help us debug this:
+  Possible interrupt unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&dev->lock#2);
+                                local_irq_disable();
+                                lock(_xmit_ETHER#2);
+                                lock(&dev->lock#2);
+   <Interrupt>
+     lock(_xmit_ETHER#2);
+
+  *** DEADLOCK ***
+
+5 locks held by swapper/0/0:
+  #0: ffff80000a5f39e0 ((&ndev->rs_timer)){+.-.}-{0:0}, at: 
+call_timer_fn+0x0/0x3b0
+  #1: ffff80000a695e00 (rcu_read_lock){....}-{1:2}, at: 
+ndisc_send_skb+0x138/0x730 [ipv6]
+  #2: ffff80000a696290 (rcu_read_lock_bh){....}-{1:2}, at: 
+ip6_finish_output2+0x94/0xbe8 [ipv6]
+  #3: ffff80000a696290 (rcu_read_lock_bh){....}-{1:2}, at: 
+__dev_queue_xmit+0x64/0xec8
+  #4: ffff0000246cd258 (dev->qdisc_tx_busylock ?: 
+&qdisc_tx_busylock){+...}-{2:2}, at: __dev_queue_xmit+0x9a4/0xec8
+
+the shortest dependencies between 2nd lock and 1st lock:
+  -> (&dev->lock#2){+.+.}-{2:2} {
+     HARDIRQ-ON-W at:
+                       lock_acquire+0x120/0x3c8
+                       _raw_spin_lock+0x58/0x78
+                       gether_connect+0x118/0x1c0
+                       ecm_set_alt+0xf4/0x170
+                       composite_setup+0x8d0/0x1820
+                       dwc3_ep0_delegate_req+0x40/0x68
+                       dwc3_ep0_interrupt+0x5a4/0xf88
+                       dwc3_thread_interrupt+0xb7c/0xe18
+                       irq_thread_fn+0x28/0x98
+                       irq_thread+0x184/0x238
+                       kthread+0x100/0x120
+                       ret_from_fork+0x10/0x20
+     SOFTIRQ-ON-W at:
+                       lock_acquire+0x120/0x3c8
+                       _raw_spin_lock+0x58/0x78
+                       gether_connect+0x118/0x1c0
+                       ecm_set_alt+0xf4/0x170
+                       composite_setup+0x8d0/0x1820
+                       dwc3_ep0_delegate_req+0x40/0x68
+                       dwc3_ep0_interrupt+0x5a4/0xf88
+                       dwc3_thread_interrupt+0xb7c/0xe18
+                       irq_thread_fn+0x28/0x98
+                       irq_thread+0x184/0x238
+                       kthread+0x100/0x120
+                       ret_from_fork+0x10/0x20
+     INITIAL USE at:
+                      lock_acquire+0x120/0x3c8
+                      _raw_spin_lock_irq+0x74/0xa0
+                      eth_open+0x28/0x78
+                      __dev_open+0x100/0x190
+                      __dev_change_flags+0x16c/0x1b8
+                      dev_change_flags+0x20/0x60
+                      do_setlink+0x314/0xd28
+                      __rtnl_newlink+0x418/0x798
+                      rtnl_newlink+0x4c/0x78
+                      rtnetlink_rcv_msg+0x2bc/0x4e0
+                      netlink_rcv_skb+0xe8/0x130
+                      rtnetlink_rcv+0x14/0x20
+                      netlink_unicast+0x1d4/0x280
+                      netlink_sendmsg+0x2cc/0x408
+                      ____sys_sendmsg+0x258/0x290
+                      ___sys_sendmsg+0x80/0xc0
+                      __sys_sendmsg+0x60/0xb8
+                      __arm64_sys_sendmsg+0x1c/0x28
+                      invoke_syscall+0x40/0xf8
+                      el0_svc_common.constprop.3+0x8c/0x120
+                      do_el0_svc+0x20/0x98
+                      el0_svc+0x48/0x100
+                      el0t_64_sync_handler+0x8c/0xb0
+                      el0t_64_sync+0x15c/0x160
+   }
+   ... key      at: [<ffff80000b5004b8>] __key.60862+0x0/0x10
+   ... acquired at:
+    _raw_spin_lock_irqsave+0x78/0x148
+    eth_start_xmit+0x30/0x3a0
+    dev_hard_start_xmit+0x108/0x3d8
+    sch_direct_xmit+0xf4/0x360
+    __dev_queue_xmit+0xa10/0xec8
+    dev_queue_xmit+0x10/0x18
+    neigh_resolve_output+0x18c/0x290
+    ip6_finish_output2+0x20c/0xbe8 [ipv6]
+    __ip6_finish_output+0x104/0x2b8 [ipv6]
+    ip6_finish_output+0x30/0x108 [ipv6]
+    ip6_output+0x80/0x360 [ipv6]
+    mld_sendpack+0x570/0x5a0 [ipv6]
+    mld_ifc_work+0x2a4/0x4a0 [ipv6]
+    process_one_work+0x29c/0x6b0
+    worker_thread+0x48/0x420
+    kthread+0x100/0x120
+    ret_from_fork+0x10/0x20
+
+-> (_xmit_ETHER#2){+.-.}-{2:2} {
+    HARDIRQ-ON-W at:
+                     lock_acquire+0x120/0x3c8
+                     _raw_spin_lock+0x58/0x78
+                     sch_direct_xmit+0x2f0/0x360
+                     __dev_queue_xmit+0xa10/0xec8
+                     dev_queue_xmit+0x10/0x18
+                     neigh_resolve_output+0x18c/0x290
+                     ip6_finish_output2+0x20c/0xbe8 [ipv6]
+                     __ip6_finish_output+0x104/0x2b8 [ipv6]
+                     ip6_finish_output+0x30/0x108 [ipv6]
+                     ip6_output+0x80/0x360 [ipv6]
+                     mld_sendpack+0x570/0x5a0 [ipv6]
+                     mld_ifc_work+0x2a4/0x4a0 [ipv6]
+                     process_one_work+0x29c/0x6b0
+                     worker_thread+0x48/0x420
+                     kthread+0x100/0x120
+                     ret_from_fork+0x10/0x20
+    IN-SOFTIRQ-W at:
+                     lock_acquire+0x120/0x3c8
+                     _raw_spin_lock+0x58/0x78
+                     sch_direct_xmit+0x2f0/0x360
+                     __dev_queue_xmit+0xa10/0xec8
+                     dev_queue_xmit+0x10/0x18
+                     ip6_finish_output2+0x8bc/0xbe8 [ipv6]
+                     __ip6_finish_output+0x104/0x2b8 [ipv6]
+                     ip6_finish_output+0x30/0x108 [ipv6]
+                     ip6_output+0x80/0x360 [ipv6]
+                     ndisc_send_skb+0x464/0x730 [ipv6]
+                     ndisc_send_rs+0x58/0x138 [ipv6]
+                     addrconf_rs_timer+0x140/0x218 [ipv6]
+                     call_timer_fn+0xb4/0x3b0
+                     run_timer_softirq+0x290/0x678
+                     _stext+0x11c/0x5cc
+                     irq_exit_rcu+0x168/0x1a8
+                     el1_interrupt+0x40/0x128
+                     el1h_64_irq_handler+0x14/0x20
+                     el1h_64_irq+0x64/0x68
+                     arch_cpu_idle+0x14/0x20
+                     default_idle_call+0x78/0x350
+                     do_idle+0x1f0/0x280
+                     cpu_startup_entry+0x24/0x80
+                     rest_init+0x180/0x290
+                     arch_call_rest_init+0xc/0x14
+                     start_kernel+0x694/0x6cc
+                     __primary_switched+0xc0/0xc8
+    INITIAL USE at:
+                    lock_acquire+0x120/0x3c8
+                    _raw_spin_lock+0x58/0x78
+                    sch_direct_xmit+0x2f0/0x360
+                    __dev_queue_xmit+0xa10/0xec8
+                    dev_queue_xmit+0x10/0x18
+                    neigh_resolve_output+0x18c/0x290
+                    ip6_finish_output2+0x20c/0xbe8 [ipv6]
+                    __ip6_finish_output+0x104/0x2b8 [ipv6]
+                    ip6_finish_output+0x30/0x108 [ipv6]
+                    ip6_output+0x80/0x360 [ipv6]
+                    mld_sendpack+0x570/0x5a0 [ipv6]
+                    mld_ifc_work+0x2a4/0x4a0 [ipv6]
+                    process_one_work+0x29c/0x6b0
+                    worker_thread+0x48/0x420
+                    kthread+0x100/0x120
+                    ret_from_fork+0x10/0x20
+  }
+  ... key      at: [<ffff80000b507ca8>] netdev_xmit_lock_key+0x10/0x390
+  ... acquired at:
+    __lock_acquire+0x564/0x16f8
+    lock_acquire+0x120/0x3c8
+    _raw_spin_lock+0x58/0x78
+    sch_direct_xmit+0x2f0/0x360
+    __dev_queue_xmit+0xa10/0xec8
+    dev_queue_xmit+0x10/0x18
+    ip6_finish_output2+0x8bc/0xbe8 [ipv6]
+    __ip6_finish_output+0x104/0x2b8 [ipv6]
+    ip6_finish_output+0x30/0x108 [ipv6]
+    ip6_output+0x80/0x360 [ipv6]
+    ndisc_send_skb+0x464/0x730 [ipv6]
+    ndisc_send_rs+0x58/0x138 [ipv6]
+    addrconf_rs_timer+0x140/0x218 [ipv6]
+    call_timer_fn+0xb4/0x3b0
+    run_timer_softirq+0x290/0x678
+    _stext+0x11c/0x5cc
+    irq_exit_rcu+0x168/0x1a8
+    el1_interrupt+0x40/0x128
+    el1h_64_irq_handler+0x14/0x20
+    el1h_64_irq+0x64/0x68
+    arch_cpu_idle+0x14/0x20
+    default_idle_call+0x78/0x350
+    do_idle+0x1f0/0x280
+    cpu_startup_entry+0x24/0x80
+    rest_init+0x180/0x290
+    arch_call_rest_init+0xc/0x14
+    start_kernel+0x694/0x6cc
+    __primary_switched+0xc0/0xc8
+
+
+stack backtrace:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.17.0-rc4-next-20220217+ #4563
+Hardware name: Samsung TM2E board (DT)
+Call trace:
+  dump_backtrace.part.6+0xd8/0xe8
+  show_stack+0x14/0x60
+  dump_stack_lvl+0x88/0xb0
+  dump_stack+0x14/0x2c
+  print_irq_inversion_bug+0x194/0x1f8
+  mark_lock.part.52+0x29c/0x440
+  __lock_acquire+0x564/0x16f8
+  lock_acquire+0x120/0x3c8
+  _raw_spin_lock+0x58/0x78
+  sch_direct_xmit+0x2f0/0x360
+  __dev_queue_xmit+0xa10/0xec8
+  dev_queue_xmit+0x10/0x18
+  ip6_finish_output2+0x8bc/0xbe8 [ipv6]
+  __ip6_finish_output+0x104/0x2b8 [ipv6]
+  ip6_finish_output+0x30/0x108 [ipv6]
+  ip6_output+0x80/0x360 [ipv6]
+  ndisc_send_skb+0x464/0x730 [ipv6]
+  ndisc_send_rs+0x58/0x138 [ipv6]
+  addrconf_rs_timer+0x140/0x218 [ipv6]
+  call_timer_fn+0xb4/0x3b0
+  run_timer_softirq+0x290/0x678
+  _stext+0x11c/0x5cc
+  irq_exit_rcu+0x168/0x1a8
+  el1_interrupt+0x40/0x128
+  el1h_64_irq_handler+0x14/0x20
+  el1h_64_irq+0x64/0x68
+  arch_cpu_idle+0x14/0x20
+  default_idle_call+0x78/0x350
+  do_idle+0x1f0/0x280
+  cpu_startup_entry+0x24/0x80
+  rest_init+0x180/0x290
+  arch_call_rest_init+0xc/0x14
+  start_kernel+0x694/0x6cc
+  __primary_switched+0xc0/0xc8
+
+
+Best regards
 -- 
-2.17.1
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
