@@ -2,95 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48E29C433EF
-	for <bpf@archiver.kernel.org>; Fri, 18 Feb 2022 09:56:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50630C433F5
+	for <bpf@archiver.kernel.org>; Fri, 18 Feb 2022 09:56:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233017AbiBRJ4o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Feb 2022 04:56:44 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37768 "EHLO
+        id S233485AbiBRJ4p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Feb 2022 04:56:45 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbiBRJ4n (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Feb 2022 04:56:43 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406956366;
-        Fri, 18 Feb 2022 01:56:25 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id y5so1938388pfe.4;
-        Fri, 18 Feb 2022 01:56:25 -0800 (PST)
+        with ESMTP id S232816AbiBRJ4o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Feb 2022 04:56:44 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744496366;
+        Fri, 18 Feb 2022 01:56:28 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id om7so8088844pjb.5;
+        Fri, 18 Feb 2022 01:56:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ASeypXRihACV7GAUh7uwe5dr074v2W03J+WqWirP0qg=;
-        b=TtP3a8fvx71ymXORVwJz5VvdiIKXHlGEQaF1fswtgYez7GykxxafxT3tThvW7rQBp+
-         RVN8oyZkTf9vfw9yU66OSr/z9IDubO5v8CNmpjTR/xQnb2WFc4RZ5BINkPobC4KKEJbL
-         Cf6WP98bXTcyftgUJi+vlq2oq7tRQiEtgpTlQwSCpOqOX9pC5u/txW2pI/JSjlSIKk2c
-         KUxnc+tUTVdrqlIDZ8QqQDn/c9nj5qQezMUNRaI8U4fTcRUvOJ8TTjOMZX+GyGV2U5xw
-         B2Dit8xdCj0GCtm5FIyiwVHKcZGuFQ5xs4GXJfyaFov2Mpz9LWYZ5C8qH/T7usppNHin
-         wK/g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=W/khSlDMF8Z5nH/DIhbMkSDcNIElSCZv9aSrQuDBt2A=;
+        b=HZnNKMMLbNCdDgqAoAeFC/a0LMfKTWEqPHm035xs8Wu9ydkR3DYgM10Taqtxcif5WI
+         B/HZRgzvUHZWrUav1NOhbbhEoaejkhV8OHkyucnJLk7/j6bgkaLpDUbn8cQdBagGRBG9
+         8jbmAXWnJSf1bH2ayU3orWi0mLFUaDQXZaOnY2njg5rUF/A1z/TUMa94DeynGs3VfbkO
+         DTnBzs1Rq/HGihQOPOetMWv5/hR3iP34WAhkrCOaO+GLtuKPrzCdOWwdf8m3kDgK1paZ
+         HbZ/q9NfAluCB8+EuuPKYMpq4MTRrcg5rj7aIPAOdskP//O29BqVDJDagygbkeE/LaxB
+         +vLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ASeypXRihACV7GAUh7uwe5dr074v2W03J+WqWirP0qg=;
-        b=L2xv6K+rfW5dtljJVMeKilFVKvCUiD933+wvqZec/GX4FOcOiVdnEDoFL6Ez9i4+cc
-         L56sP4961uCVAURx0duY6BzSMWb6bq3oiZziLzG9riFEv+OsHu8pn/XsjiiZR0Df8xo3
-         p9liCZsIjVAYtomesGvBdKpze5iHesEk/E/l+Ozux/+OYd6UiPBM+z5a/Zy7ky0nfsA7
-         8mKHZczSeGMTIVezwqpf01xBtqNvO2/OAFSVGMA+YatnMlPcTchT3RP/P/RpVuPStw1T
-         c875HzNhd+YBuzMBUtLCZNpYp75BEnYchZgnr4/S+15m+sWuhxDYCde3xIaQIsOpjoPt
-         JTkQ==
-X-Gm-Message-State: AOAM533mtpoX5/GBZNqrWRaGXtigTJpgc2czwl3VfL45PoCsWYrwfcVb
-        +DICy4OqRTt380Yn4JYqOrQ=
-X-Google-Smtp-Source: ABdhPJyGYravoPWA+7V/e14rAqNKZ++soM1WSQ15O73L+fXP8rw+tjDEDqtcxEoZ1394l+dE+depvQ==
-X-Received: by 2002:a63:6985:0:b0:341:b238:7cb1 with SMTP id e127-20020a636985000000b00341b2387cb1mr5696159pgc.621.1645178184747;
-        Fri, 18 Feb 2022 01:56:24 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=W/khSlDMF8Z5nH/DIhbMkSDcNIElSCZv9aSrQuDBt2A=;
+        b=WvetYxscVbakZ1l91lJpNyGRPHrJy5DLCxdTDDqQX+j92p+KCKOhdAAmLpTpv5jRsB
+         pOVfgkiFcLB/6zKCXtIl8GFu5FsNF+8xwN9jIbskvx9iR/Vx7yxMXMcBgnFOxKcMQFcX
+         JMi46iCgPMu0LcAWmMr55E40VefZ6B1O28+/nxi0Fia5rFNv+XyEY5mQUXlVQl48IObz
+         2Wit/WUpfOfBII1N9FG1GOZLT8E982pf33DTfPnOlBxqaL2hxDtuC2mGfr08QHRIXDS7
+         Kq+C43Xdaim2nYjFTxw476S+t6QA/m+C3QSHFyRqHF7AZvFk1Lfq7K/fFHm3JIF4sGHR
+         XWKg==
+X-Gm-Message-State: AOAM531QcQVCOTqtdfj6IAkrK73RMVA/6xYlQtE72OZ7oQi/EWE14QI1
+        oZj2TzdyqoEZ7rywdT8ntkc=
+X-Google-Smtp-Source: ABdhPJx35PopsR04KZtG+0aBxiWPHIEc7aqYu5utofVRYYKTbArMnAPOhmhMNL4dLpqZ0BUYFmqHUw==
+X-Received: by 2002:a17:902:7c0e:b0:14d:9791:39f8 with SMTP id x14-20020a1709027c0e00b0014d979139f8mr6786807pll.23.1645178188040;
+        Fri, 18 Feb 2022 01:56:28 -0800 (PST)
 Received: from vultr.guest ([149.248.7.47])
-        by smtp.gmail.com with ESMTPSA id t22sm2750430pfg.92.2022.02.18.01.56.23
+        by smtp.gmail.com with ESMTPSA id t22sm2750430pfg.92.2022.02.18.01.56.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 01:56:24 -0800 (PST)
+        Fri, 18 Feb 2022 01:56:27 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH RFC 0/3] bpf: show attached name for progs without btf name
-Date:   Fri, 18 Feb 2022 09:56:09 +0000
-Message-Id: <20220218095612.52082-1-laoar.shao@gmail.com>
+Subject: [PATCH RFC 3/3] bpf: set attached sockmap id in attach_name
+Date:   Fri, 18 Feb 2022 09:56:12 +0000
+Message-Id: <20220218095612.52082-4-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220218095612.52082-1-laoar.shao@gmail.com>
+References: <20220218095612.52082-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With progs.debug we can get the attached name of the bpf prog which is
-attached to a kernel function. But we can't get bpf progs which are
-attached to others, like a cgroup, sockmap and etc. This patchset means
-to extend the attached name to other types.
+Set the attached name when a bpf prog is attached to a sockmap, and
+unset it when the bpf prog is detached.
 
-The member attach_func_name in struct bpf_prog_aux is renamed to
-attach_name in patch #1, to avoid possible confusion. Then in patch #2
-and #3 I extend the attached name to bpf progs which are attached to a
-cgroup or a sockmap. If this solution is acceptable, I will extend it to
-other attach types in the next step.
+Below is the result after this change,
+$ cat progs.debug
+  id name             attached
+   5 dump_bpf_map     bpf_iter_bpf_map
+   7 dump_bpf_prog    bpf_iter_bpf_prog
+  17 bpf_sockmap      cgroup:/
+  19 bpf_redir_proxy  sockmap:9
 
-Yafang Shao (3):
-  bpf: rename attach_func_name to attach_name
-  bpf: set attached cgroup name in attach_name
-  bpf: set attached sockmap id in attach_name
+$ cat maps.debug
+  id name             max_entries
+   3 iterator.rodata      1
+   9 ltcp_map         65535
 
- include/linux/bpf.h                           |   3 +-
- kernel/bpf/bpf_iter.c                         |   2 +-
- kernel/bpf/bpf_lsm.c                          |   2 +-
- kernel/bpf/btf.c                              |   2 +-
- kernel/bpf/cgroup.c                           |   8 +
- kernel/bpf/preload/iterators/iterators.bpf.c  |   4 +-
- kernel/bpf/preload/iterators/iterators.skel.h | 488 +++++++++---------
- kernel/bpf/syscall.c                          |   2 +-
- kernel/bpf/verifier.c                         |   4 +-
- net/core/sock_map.c                           |   8 +-
- 10 files changed, 276 insertions(+), 247 deletions(-)
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ net/core/sock_map.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index f39ef79ced67..ce8d0bbba6cc 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -1411,6 +1411,7 @@ static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+ {
+ 	struct sk_psock_progs *progs = sock_map_progs(map);
+ 	struct bpf_prog **pprog;
++	char sockmap_info[16];
+ 
+ 	if (!progs)
+ 		return -EOPNOTSUPP;
+@@ -1438,8 +1439,13 @@ static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *prog,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-	if (old)
++	if (old) {
++		kfree(prog->aux->attach_name);
+ 		return psock_replace_prog(pprog, prog, old);
++	}
++
++	snprintf(sockmap_info, 16, "sockmap:%d", map->id);
++	prog->aux->attach_name = kstrdup(sockmap_info, GFP_KERNEL);
+ 
+ 	psock_set_prog(pprog, prog);
+ 	return 0;
 -- 
 2.17.1
 
