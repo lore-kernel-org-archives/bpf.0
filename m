@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8BAAC4332F
-	for <bpf@archiver.kernel.org>; Sun, 20 Feb 2022 13:48:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7562C4321E
+	for <bpf@archiver.kernel.org>; Sun, 20 Feb 2022 13:48:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243892AbiBTNtP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 20 Feb 2022 08:49:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49894 "EHLO
+        id S243898AbiBTNtQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 20 Feb 2022 08:49:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:50520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243893AbiBTNtF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 20 Feb 2022 08:49:05 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BEA2D1EA;
-        Sun, 20 Feb 2022 05:48:44 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id v8-20020a17090a634800b001bb78857ccdso14208793pjs.1;
-        Sun, 20 Feb 2022 05:48:44 -0800 (PST)
+        with ESMTP id S243916AbiBTNtP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 20 Feb 2022 08:49:15 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D511653732;
+        Sun, 20 Feb 2022 05:48:53 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id s16so12001635pgs.13;
+        Sun, 20 Feb 2022 05:48:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tRgersc7+YiHsFoqjkDw4Ohre3w5vPK2wp9oy5KJBzI=;
-        b=gmMjHzzthS+Pc8+pZwqt44EjB3kst7Y1OcDKz4vCjRs/4jNcP0oHae8quxqX+cEQOx
-         Fw1T9wpe9qXc6KuK8FmuKfFy5nbzy0p1uQ4MMspodbiz6o9hmEBtGDaDAx7BiOHEWsz0
-         HgAF14kep+RfALD8EewfXDs5InzNL7j1ewIaVm3isMo3tJkNx+CarcakDIeOouyq5/94
-         bHYZh8ADNFJ2F/JP0gK5ZZVyAUachPhf4c+9W5J8jIRdfhusoHh8ikH0I/p2eRp1imkP
-         tMW9OYTR/8tY6D+YFTb3h3Vr94lCbiboBDquHRtf5DPTjugsaZ2CnYkiOMFDsBMo4kII
-         XFjw==
+        bh=v7r7FHu3QAUhr3+7QG+/dRRC3q80hrKg8AEc1n+/igo=;
+        b=kHV+QJWieq0jGqRzueAF4rk9YMSlkJUsWMJ3wTg9+D5mbEVNh9ZjZKV2OOgbZJrdSS
+         0ZMivsWI1P3+twe5PtEM56UQJE6a8tpF50RdHFXMvCYuL5bmLxmxYrkba9Z8s5ZJ9J0b
+         jO0wrxgeYgiJzktjgdjzjWdXHlPpUMlOsK3vktXyFyuHitM1wq3rvJ2L1OgFOoOFJV21
+         /3WdnPWA4WS4WhyZksbJHHjmBSLZSNEw407pTHU++Z1dc8s5uC4510c4MZw0/LPTmCql
+         C2MyQgHK3S+W7Gefgabgfvqn+6wTmV1/uiMmn1kCAet8cub2h8qEhXhuTuryw7dggfXt
+         LWZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tRgersc7+YiHsFoqjkDw4Ohre3w5vPK2wp9oy5KJBzI=;
-        b=HeQNSwoN96QobCzp+/hfx3G8PKg9zIyi78HLRwtDXjXw8Adp4nXyQPlM2gV8a/hJMF
-         DwiCGbfLcKO5S4QorquqocUHFMnnMs5nFY+qFuA33vzd5aKWq7cwyRv4EBrzV6E/dSkq
-         C4tlTY0a3ebBaCD2eNl5vSTnzYkp89XusQ7mGPkPNmqBQVqz91YRiKqhzjefUQ+arPyo
-         Hw/hHZxKN3G5MCI1UjKqS/5XnKwgUjXuNY5zcM6eEMkCOG+Zv+ewX1Ix2aLRt0IrJ3Kf
-         jC9ibPgavP+GOljIctG0WDBeUC9kLur/scB9g2P87L3axlVwqnKIN0RdEavSqReX43RN
-         DZ0g==
-X-Gm-Message-State: AOAM5335nwMfa49zv2a1B4oTMdU9ikS3b9jasydCFFSTMhz+4l8hF0/R
-        4cnbFCKiMXHWjfp6c5unvJQJ3YC4iJo=
-X-Google-Smtp-Source: ABdhPJyOETrW6jI5qRGlR7NC506DjIBk1zKstL63YLIIcRI89gS37xcbOIJ4hYWpCBzWjCoGkNp0hw==
-X-Received: by 2002:a17:902:8497:b0:14f:919:9fdd with SMTP id c23-20020a170902849700b0014f09199fddmr15431878plo.52.1645364924085;
-        Sun, 20 Feb 2022 05:48:44 -0800 (PST)
+        bh=v7r7FHu3QAUhr3+7QG+/dRRC3q80hrKg8AEc1n+/igo=;
+        b=ThBUZ51Ar44Py30x7qmynSpBSTILQ5VjW+Jia20sdZogjELv73f+5ul5cnRuuIHoZC
+         +B+5nV9llOQqzluSi6X1XRnG/otviqtUCat51d/viQAZtteqGCALXsj+rRXizFUZ1xn4
+         LImzlLTmTI/cGYa6f+c0f8Yg405dQIeS2jywdSEykegWxeMQHT7Bbn44A/ce3gKQiCHF
+         +5e22J6YF25cNMUbsxKOXOzss6Kv5Krp1q3l6NC2w0UlHz3vOKtIMZgwY8nwaY0Cnz32
+         SCf1IDjfq/oCrDLcw8Nx+C2m21bthPIlRFv4+0AIvLct7U5Duo0p5mc0lSBkmSMqv2zm
+         7fCA==
+X-Gm-Message-State: AOAM5313IfAF0QVsJJyH8MYZEc08UuBMuDCZrQvRHKeM7YnSHxb7xHl4
+        KsEMjt1zidzEfH8+3F+MfvGsUuZWdm8=
+X-Google-Smtp-Source: ABdhPJzK6kwqZpGGf6MnW/pEFOYgmd5WWEWPXLCg7HUqFdLFyn7nGenJJvSrroh8qdfi6ANthhc8vg==
+X-Received: by 2002:a05:6a00:124b:b0:4f0:eaa7:4677 with SMTP id u11-20020a056a00124b00b004f0eaa74677mr11208398pfi.85.1645364933191;
+        Sun, 20 Feb 2022 05:48:53 -0800 (PST)
 Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id q9sm9921393pfk.31.2022.02.20.05.48.43
+        by smtp.gmail.com with ESMTPSA id v13sm10118464pfu.196.2022.02.20.05.48.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 05:48:43 -0800 (PST)
+        Sun, 20 Feb 2022 05:48:52 -0800 (PST)
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -55,233 +55,285 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         netfilter-devel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v1 09/15] bpf: Populate pairs of btf_id and destructor kfunc in btf
-Date:   Sun, 20 Feb 2022 19:18:07 +0530
-Message-Id: <20220220134813.3411982-10-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 12/15] net/netfilter: Add bpf_ct_kptr_get helper
+Date:   Sun, 20 Feb 2022 19:18:10 +0530
+Message-Id: <20220220134813.3411982-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220220134813.3411982-1-memxor@gmail.com>
 References: <20220220134813.3411982-1-memxor@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6298; h=from:subject; bh=bEtsOEx3UKJJcW3J592imsq8QQaOzR84HSnwrs6Zyzo=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiEkZY0debdctwSyfadfikEkSTZaceVwjMv9F6SfUe R4rLvMKJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYhJGWAAKCRBM4MiGSL8RymWLD/ 4kKQgF/G8Wx42sO4kS/V3jpxqvYE5QJIbwOrmxPXwqD5WuFUn1/Eq1cmaBdfwZ3bhxhTMxzuD923a9 ZLWRotwtCxo5BpyvVH0la4PckOrGvKqPISQbLNGzjt2ZQ7dHpi7QOcX4yrUggm+YN6G6NUBwi0Fj6W 5Eq9Fg6QdfVHep/V8Y6HdR7QfZ7ARw0isopS/3yGqvMrQjxciTinJveVqlXoe1dDAxcOG4kJ/B/qcG AI5KEt5hseY0ESGJU72iX2sEQouljLIOIowIyQkrGBBTq+qmXOHAlGc3L3eYFOmJ403zwE5nyMXQR4 OEvNqNqf9dCu/Hczet7DWBs6roQxPJ4UxUlJ1gsisUc2HHLc2PeIJOIQql7fLOUlEFBbFVGVx+wupt NIYzPruSd3DVj0SmSg8Jy0nVQte4Bt+aj68xlisWrGoRE1z2dzWI/kzqqjGD2m+kCAyx42wConwiV7 /c6rUZSOAZ4gxteVnkvoBuEmzOZlxcRdk/3UB7dqWtsWOg4eu1V3QrPJlnkxLfw2f9w76mIKFdTOIi s0mhmSJwKJe5uLq6eoDCnJePvktVbynmfJa+AyJlZEOJW/bIOmF9YQFedNJJHnM4wuAr7UOPbdX18m wdzwv2r6r1s29Bw5lrxdQxrqdRTqhkWWyicnNlzBAA6eDShpZXPbqcORQwbA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9318; h=from:subject; bh=fN4g0NsdFmVTHRi7ezE3E/ZN+uig0L4IYC7S4pnjH60=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiEkZYTo+bmM8pp/rh3EIrMhbhLK9xV6cJ7gRXpSif /qkFJgeJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYhJGWAAKCRBM4MiGSL8Ryja/D/ 9QSz/4px2Q7U+6712nl2OxXmGQk+k6QbEWUab0LPdANl+E6B9qn/rybtXi7o013DzRB+X2wAye9dkc QGiIwqvlbdQSumKkzI4kk1t6lW2IIzLdCkA8wXOC3vw2xzQaaMDnVQJvM41WCyagf5JN4X/DciOjx8 pbjfaVJRR6hhndngIMVkI1bEJFbscK0Urd+KBPqUO1rXxMo/nvfv2/OOdD7G/azw/GDRGzAh0jVCxW tiZdjCUs9lWy1018/xSVNWZLOIBD3H1sym5sEXkjqAA8XIlGGeU+oPD4X0mVrsrJWupOwODKPEwkwY FvkKKE9PPI7mqj7/Lu3vh8SbxOpV/CegFg0W9VrNR7o/IIdG4ts/8Wy+o4hjZzFHFABTXW6ZWY965g k/IAJP9CvJHKpclaJjDv9OSEZfjpkApQdpwYcUeCi9AgmdaT1+rOfFYqHWrjio6v7V7dyM3TlqMWxT uolP00ZVzdZGf6MQKcJfXORxMa5JzQTl4SWxPUWJBl37YdPQ5/3MP/BvMOeQe39os/pTsM5WVfZi9Q Mcudx0rqjkEa6c/na54Bqh8/WeXvD/ytDpcvJSsZCHWBkZGv/VRzkJsAW3CqdT1qOg+4l70Gbd6ooH BclvVppaI4Tsu/P8G+Ht7A0gpDlQDJQN3TamXrc4jhdI+W2QeYVtq2wTcmKA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To support storing referenced PTR_TO_BTF_ID in maps, we require
-associating a specific BTF ID with a 'destructor' kfunc. This is because
-we need to release a live referenced pointer at a certain offset in map
-value from the map destruction path, otherwise we end up leaking
-resources.
-
-Hence, introduce support for passing an array of btf_id, kfunc_btf_id
-pairs that denote a BTF ID and its associated release function. Then,
-add an accessor 'btf_find_dtor_kfunc' which can be used to look up the
-destructor kfunc of a certain BTF ID. If found, we can use it to free
-the object from the map free path.
-
-The registration of these pairs also serve as a whitelist of structures
-which are allowed as referenced PTR_TO_BTF_ID in a BPF map, because
-without finding the destructor kfunc, we will bail and return an error.
+Require some more feedback on whether this is OK, before refactoring
+netfilter functions to share code to increment reference and match the
+tuple. Also probably need to work on allowing taking reference to struct
+net * to save another lookup inside this function.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/btf.h |  17 +++++++
- kernel/bpf/btf.c    | 109 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 126 insertions(+)
+ include/net/netfilter/nf_conntrack_core.h |  17 +++
+ net/netfilter/nf_conntrack_bpf.c          | 132 +++++++++++++++++-----
+ net/netfilter/nf_conntrack_core.c         |  17 ---
+ 3 files changed, 119 insertions(+), 47 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 6592183aeb23..a304a1ea39d9 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -41,6 +41,11 @@ struct btf_kfunc_id_set {
- 	};
+diff --git a/include/net/netfilter/nf_conntrack_core.h b/include/net/netfilter/nf_conntrack_core.h
+index 13807ea94cd2..09389769dce3 100644
+--- a/include/net/netfilter/nf_conntrack_core.h
++++ b/include/net/netfilter/nf_conntrack_core.h
+@@ -51,6 +51,23 @@ nf_conntrack_find_get(struct net *net,
+ 
+ int __nf_conntrack_confirm(struct sk_buff *skb);
+ 
++static inline bool
++nf_ct_key_equal(struct nf_conntrack_tuple_hash *h,
++		const struct nf_conntrack_tuple *tuple,
++		const struct nf_conntrack_zone *zone,
++		const struct net *net)
++{
++	struct nf_conn *ct = nf_ct_tuplehash_to_ctrack(h);
++
++	/* A conntrack can be recreated with the equal tuple,
++	 * so we need to check that the conntrack is confirmed
++	 */
++	return nf_ct_tuple_equal(tuple, &h->tuple) &&
++	       nf_ct_zone_equal(ct, zone, NF_CT_DIRECTION(h)) &&
++	       nf_ct_is_confirmed(ct) &&
++	       net_eq(net, nf_ct_net(ct));
++}
++
+ /* Confirm a connection: returns NF_DROP if packet must be dropped. */
+ static inline int nf_conntrack_confirm(struct sk_buff *skb)
+ {
+diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+index 8ad3f52579f3..26211a5ec0c4 100644
+--- a/net/netfilter/nf_conntrack_bpf.c
++++ b/net/netfilter/nf_conntrack_bpf.c
+@@ -52,6 +52,30 @@ enum {
+ 	NF_BPF_CT_OPTS_SZ = 12,
  };
  
-+struct btf_id_dtor_kfunc {
-+	u32 btf_id;
-+	u32 kfunc_btf_id;
-+};
-+
- extern const struct file_operations btf_fops;
- 
- void btf_get(struct btf *btf);
-@@ -347,6 +352,9 @@ bool btf_kfunc_id_set_contains(const struct btf *btf,
- 			       enum btf_kfunc_type type, u32 kfunc_btf_id);
- int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
- 			      const struct btf_kfunc_id_set *s);
-+s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id);
-+int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
-+				struct module *owner);
- #else
- static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
- 						    u32 type_id)
-@@ -370,6 +378,15 @@ static inline int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
- {
- 	return 0;
- }
-+static inline s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id)
++static int bpf_fill_nf_tuple(struct nf_conntrack_tuple *tuple,
++			     struct bpf_sock_tuple *bpf_tuple, u32 tuple_len)
 +{
-+	return -ENOENT;
-+}
-+static inline int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors,
-+					      u32 add_cnt, struct module *owner)
-+{
++	switch (tuple_len) {
++	case sizeof(bpf_tuple->ipv4):
++		tuple->src.l3num = AF_INET;
++		tuple->src.u3.ip = bpf_tuple->ipv4.saddr;
++		tuple->src.u.tcp.port = bpf_tuple->ipv4.sport;
++		tuple->dst.u3.ip = bpf_tuple->ipv4.daddr;
++		tuple->dst.u.tcp.port = bpf_tuple->ipv4.dport;
++		break;
++	case sizeof(bpf_tuple->ipv6):
++		tuple->src.l3num = AF_INET6;
++		memcpy(tuple->src.u3.ip6, bpf_tuple->ipv6.saddr, sizeof(bpf_tuple->ipv6.saddr));
++		tuple->src.u.tcp.port = bpf_tuple->ipv6.sport;
++		memcpy(tuple->dst.u3.ip6, bpf_tuple->ipv6.daddr, sizeof(bpf_tuple->ipv6.daddr));
++		tuple->dst.u.tcp.port = bpf_tuple->ipv6.dport;
++		break;
++	default:
++		return -EAFNOSUPPORT;
++	}
 +	return 0;
 +}
- #endif
- 
- #endif
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index bafceae90c32..8a6ec1847f17 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -207,12 +207,18 @@ enum btf_kfunc_hook {
- 
- enum {
- 	BTF_KFUNC_SET_MAX_CNT = 32,
-+	BTF_DTOR_KFUNC_MAX_CNT = 256,
- };
- 
- struct btf_kfunc_set_tab {
- 	struct btf_id_set *sets[BTF_KFUNC_HOOK_MAX][BTF_KFUNC_TYPE_MAX];
- };
- 
-+struct btf_id_dtor_kfunc_tab {
-+	u32 cnt;
-+	struct btf_id_dtor_kfunc dtors[];
-+};
 +
- struct btf {
- 	void *data;
- 	struct btf_type **types;
-@@ -228,6 +234,7 @@ struct btf {
- 	u32 id;
- 	struct rcu_head rcu;
- 	struct btf_kfunc_set_tab *kfunc_set_tab;
-+	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
- 
- 	/* split BTF support */
- 	struct btf *base_btf;
-@@ -1572,8 +1579,19 @@ static void btf_free_kfunc_set_tab(struct btf *btf)
- 	btf->kfunc_set_tab = NULL;
- }
- 
-+static void btf_free_dtor_kfunc_tab(struct btf *btf)
-+{
-+	struct btf_id_dtor_kfunc_tab *tab = btf->dtor_kfunc_tab;
-+
-+	if (!tab)
-+		return;
-+	kfree(tab);
-+	btf->dtor_kfunc_tab = NULL;
-+}
-+
- static void btf_free(struct btf *btf)
+ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
+ 					  struct bpf_sock_tuple *bpf_tuple,
+ 					  u32 tuple_len, u8 protonum,
+@@ -59,6 +83,7 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
  {
-+	btf_free_dtor_kfunc_tab(btf);
- 	btf_free_kfunc_set_tab(btf);
- 	kvfree(btf->types);
- 	kvfree(btf->resolved_sizes);
-@@ -7037,6 +7055,97 @@ int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
- }
- EXPORT_SYMBOL_GPL(register_btf_kfunc_id_set);
+ 	struct nf_conntrack_tuple_hash *hash;
+ 	struct nf_conntrack_tuple tuple;
++	int ret;
  
-+s32 btf_find_dtor_kfunc(struct btf *btf, u32 btf_id)
+ 	if (unlikely(protonum != IPPROTO_TCP && protonum != IPPROTO_UDP))
+ 		return ERR_PTR(-EPROTO);
+@@ -66,25 +91,9 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	memset(&tuple, 0, sizeof(tuple));
+-	switch (tuple_len) {
+-	case sizeof(bpf_tuple->ipv4):
+-		tuple.src.l3num = AF_INET;
+-		tuple.src.u3.ip = bpf_tuple->ipv4.saddr;
+-		tuple.src.u.tcp.port = bpf_tuple->ipv4.sport;
+-		tuple.dst.u3.ip = bpf_tuple->ipv4.daddr;
+-		tuple.dst.u.tcp.port = bpf_tuple->ipv4.dport;
+-		break;
+-	case sizeof(bpf_tuple->ipv6):
+-		tuple.src.l3num = AF_INET6;
+-		memcpy(tuple.src.u3.ip6, bpf_tuple->ipv6.saddr, sizeof(bpf_tuple->ipv6.saddr));
+-		tuple.src.u.tcp.port = bpf_tuple->ipv6.sport;
+-		memcpy(tuple.dst.u3.ip6, bpf_tuple->ipv6.daddr, sizeof(bpf_tuple->ipv6.daddr));
+-		tuple.dst.u.tcp.port = bpf_tuple->ipv6.dport;
+-		break;
+-	default:
+-		return ERR_PTR(-EAFNOSUPPORT);
+-	}
+-
++	ret = bpf_fill_nf_tuple(&tuple, bpf_tuple, tuple_len);
++	if (ret < 0)
++		return ERR_PTR(ret);
+ 	tuple.dst.protonum = protonum;
+ 
+ 	if (netns_id >= 0) {
+@@ -208,50 +217,113 @@ void bpf_ct_release(struct nf_conn *nfct)
+ 	nf_ct_put(nfct);
+ }
+ 
++/* TODO: Just a PoC, need to reuse code in __nf_conntrack_find_get for this */
++struct nf_conn *bpf_ct_kptr_get(struct nf_conn **ptr, struct bpf_sock_tuple *bpf_tuple,
++				u32 tuple__sz, u8 protonum, u8 direction)
 +{
-+	struct btf_id_dtor_kfunc_tab *tab = btf->dtor_kfunc_tab;
-+	struct btf_id_dtor_kfunc *dtor;
-+
-+	if (!tab)
-+		return -ENOENT;
-+	/* Even though the size of tab->dtors[0] is > sizeof(u32), we only need
-+	 * to compare the first u32 with btf_id, so we can reuse btf_id_cmp_func.
-+	 */
-+	BUILD_BUG_ON(offsetof(struct btf_id_dtor_kfunc, btf_id) != 0);
-+	dtor = bsearch(&btf_id, tab->dtors, tab->cnt, sizeof(tab->dtors[0]), btf_id_cmp_func);
-+	if (!dtor)
-+		return -ENOENT;
-+	return dtor->kfunc_btf_id;
-+}
-+
-+/* This function must be invoked only from initcalls/module init functions */
-+int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_cnt,
-+				struct module *owner)
-+{
-+	struct btf_id_dtor_kfunc_tab *tab;
-+	struct btf *btf;
-+	u32 tab_cnt;
++	struct nf_conntrack_tuple tuple;
++	struct nf_conn *nfct;
++	struct net *net;
++	u64 *nfct_p;
 +	int ret;
 +
-+	btf = btf_get_module_btf(owner);
-+	if (!btf) {
-+		if (!owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
-+			pr_err("missing vmlinux BTF, cannot register dtor kfuncs\n");
-+			return -ENOENT;
-+		}
-+		if (owner && IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES)) {
-+			pr_err("missing module BTF, cannot register dtor kfuncs\n");
-+			return -ENOENT;
-+		}
-+		return 0;
-+	}
-+	if (IS_ERR(btf))
-+		return PTR_ERR(btf);
++	WARN_ON_ONCE(!rcu_read_lock_held());
 +
-+	if (add_cnt >= BTF_DTOR_KFUNC_MAX_CNT) {
-+		pr_err("cannot register more than %d kfunc destructors\n", BTF_DTOR_KFUNC_MAX_CNT);
-+		ret = -E2BIG;
++	if ((protonum != IPPROTO_TCP && protonum != IPPROTO_UDP) ||
++	    (direction != IP_CT_DIR_ORIGINAL && direction != IP_CT_DIR_REPLY))
++		return NULL;
++
++	/* ptr is actually pointer to u64 having address, hence recast u64 load
++	 * to native pointer width.
++	 */
++	nfct_p = (u64 *)ptr;
++	nfct = (struct nf_conn *)READ_ONCE(*nfct_p);
++	if (!nfct || unlikely(!refcount_inc_not_zero(&nfct->ct_general.use)))
++		return NULL;
++
++	memset(&tuple, 0, sizeof(tuple));
++	ret = bpf_fill_nf_tuple(&tuple, bpf_tuple, tuple__sz);
++	if (ret < 0)
 +		goto end;
-+	}
++	tuple.dst.protonum = protonum;
 +
-+	tab = btf->dtor_kfunc_tab;
-+	/* Only one call allowed for modules */
-+	if (WARN_ON_ONCE(tab && btf_is_module(btf))) {
-+		ret = -EINVAL;
++	/* XXX: Need to allow passing in struct net *, or take netns_id, this is non-sense */
++	net = nf_ct_net(nfct);
++	if (!nf_ct_key_equal(&nfct->tuplehash[direction], &tuple,
++			     &nf_ct_zone_dflt, nf_ct_net(nfct)))
 +		goto end;
-+	}
-+
-+	tab_cnt = tab ? tab->cnt : 0;
-+	if (tab_cnt > U32_MAX - add_cnt) {
-+		ret = -EOVERFLOW;
-+		goto end;
-+	}
-+	if (tab_cnt + add_cnt >= BTF_DTOR_KFUNC_MAX_CNT) {
-+		pr_err("cannot register more than %d kfunc destructors\n", BTF_DTOR_KFUNC_MAX_CNT);
-+		ret = -E2BIG;
-+		goto end;
-+	}
-+
-+	tab = krealloc(btf->dtor_kfunc_tab,
-+		       offsetof(struct btf_id_dtor_kfunc_tab, dtors[tab_cnt + add_cnt]),
-+		       GFP_KERNEL | __GFP_NOWARN);
-+	if (!tab) {
-+		ret = -ENOMEM;
-+		goto end;
-+	}
-+
-+	if (!btf->dtor_kfunc_tab)
-+		tab->cnt = 0;
-+	btf->dtor_kfunc_tab = tab;
-+
-+	memcpy(tab->dtors + tab->cnt, dtors, add_cnt * sizeof(tab->dtors[0]));
-+	tab->cnt += add_cnt;
-+
-+	sort(tab->dtors, tab->cnt, sizeof(tab->dtors[0]), btf_id_cmp_func, NULL);
-+
-+	return 0;
++	return nfct;
 +end:
-+	btf_free_dtor_kfunc_tab(btf);
-+	if (btf_is_module(btf))
-+		btf_put(btf);
-+	return ret;
++	nf_ct_put(nfct);
++	return NULL;
 +}
-+EXPORT_SYMBOL_GPL(register_btf_id_dtor_kfuncs);
 +
- #define MAX_TYPES_ARE_COMPAT_DEPTH 2
+ __diag_pop()
  
- static
+ BTF_SET_START(nf_ct_xdp_check_kfunc_ids)
+ BTF_ID(func, bpf_xdp_ct_lookup)
++BTF_ID(func, bpf_ct_kptr_get)
+ BTF_ID(func, bpf_ct_release)
+ BTF_SET_END(nf_ct_xdp_check_kfunc_ids)
+ 
+ BTF_SET_START(nf_ct_tc_check_kfunc_ids)
+ BTF_ID(func, bpf_skb_ct_lookup)
++BTF_ID(func, bpf_ct_kptr_get)
+ BTF_ID(func, bpf_ct_release)
+ BTF_SET_END(nf_ct_tc_check_kfunc_ids)
+ 
+ BTF_SET_START(nf_ct_acquire_kfunc_ids)
+ BTF_ID(func, bpf_xdp_ct_lookup)
+ BTF_ID(func, bpf_skb_ct_lookup)
++BTF_ID(func, bpf_ct_kptr_get)
+ BTF_SET_END(nf_ct_acquire_kfunc_ids)
+ 
+ BTF_SET_START(nf_ct_release_kfunc_ids)
+ BTF_ID(func, bpf_ct_release)
+ BTF_SET_END(nf_ct_release_kfunc_ids)
+ 
++BTF_SET_START(nf_ct_kptr_acquire_kfunc_ids)
++BTF_ID(func, bpf_ct_kptr_get)
++BTF_SET_END(nf_ct_kptr_acquire_kfunc_ids)
++
+ /* Both sets are identical */
+ #define nf_ct_ret_null_kfunc_ids nf_ct_acquire_kfunc_ids
+ 
+ static const struct btf_kfunc_id_set nf_conntrack_xdp_kfunc_set = {
+-	.owner        = THIS_MODULE,
+-	.check_set    = &nf_ct_xdp_check_kfunc_ids,
+-	.acquire_set  = &nf_ct_acquire_kfunc_ids,
+-	.release_set  = &nf_ct_release_kfunc_ids,
+-	.ret_null_set = &nf_ct_ret_null_kfunc_ids,
++	.owner            = THIS_MODULE,
++	.check_set        = &nf_ct_xdp_check_kfunc_ids,
++	.acquire_set      = &nf_ct_acquire_kfunc_ids,
++	.release_set      = &nf_ct_release_kfunc_ids,
++	.ret_null_set     = &nf_ct_ret_null_kfunc_ids,
++	.kptr_acquire_set = &nf_ct_kptr_acquire_kfunc_ids,
+ };
+ 
+ static const struct btf_kfunc_id_set nf_conntrack_tc_kfunc_set = {
+-	.owner        = THIS_MODULE,
+-	.check_set    = &nf_ct_tc_check_kfunc_ids,
+-	.acquire_set  = &nf_ct_acquire_kfunc_ids,
+-	.release_set  = &nf_ct_release_kfunc_ids,
+-	.ret_null_set = &nf_ct_ret_null_kfunc_ids,
++	.owner            = THIS_MODULE,
++	.check_set        = &nf_ct_tc_check_kfunc_ids,
++	.acquire_set      = &nf_ct_acquire_kfunc_ids,
++	.release_set      = &nf_ct_release_kfunc_ids,
++	.ret_null_set     = &nf_ct_ret_null_kfunc_ids,
++	.kptr_acquire_set = &nf_ct_kptr_acquire_kfunc_ids,
+ };
+ 
++BTF_ID_LIST(nf_conntrack_dtor_kfunc_ids)
++BTF_ID(struct, nf_conn)
++BTF_ID(func, bpf_ct_release)
++
+ int register_nf_conntrack_bpf(void)
+ {
++	const struct btf_id_dtor_kfunc nf_conntrack_dtor_kfunc[] = {
++		{
++			.btf_id       = nf_conntrack_dtor_kfunc_ids[0],
++			.kfunc_btf_id = nf_conntrack_dtor_kfunc_ids[1],
++		}
++	};
+ 	int ret;
+ 
+-	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &nf_conntrack_xdp_kfunc_set);
++	ret = register_btf_id_dtor_kfuncs(nf_conntrack_dtor_kfunc,
++					  ARRAY_SIZE(nf_conntrack_dtor_kfunc),
++					  THIS_MODULE);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &nf_conntrack_xdp_kfunc_set);
+ 	return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &nf_conntrack_tc_kfunc_set);
+ }
+diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
+index 9b7f9c966f73..0aae98f60769 100644
+--- a/net/netfilter/nf_conntrack_core.c
++++ b/net/netfilter/nf_conntrack_core.c
+@@ -710,23 +710,6 @@ bool nf_ct_delete(struct nf_conn *ct, u32 portid, int report)
+ }
+ EXPORT_SYMBOL_GPL(nf_ct_delete);
+ 
+-static inline bool
+-nf_ct_key_equal(struct nf_conntrack_tuple_hash *h,
+-		const struct nf_conntrack_tuple *tuple,
+-		const struct nf_conntrack_zone *zone,
+-		const struct net *net)
+-{
+-	struct nf_conn *ct = nf_ct_tuplehash_to_ctrack(h);
+-
+-	/* A conntrack can be recreated with the equal tuple,
+-	 * so we need to check that the conntrack is confirmed
+-	 */
+-	return nf_ct_tuple_equal(tuple, &h->tuple) &&
+-	       nf_ct_zone_equal(ct, zone, NF_CT_DIRECTION(h)) &&
+-	       nf_ct_is_confirmed(ct) &&
+-	       net_eq(net, nf_ct_net(ct));
+-}
+-
+ static inline bool
+ nf_ct_match(const struct nf_conn *ct1, const struct nf_conn *ct2)
+ {
 -- 
 2.35.1
 
