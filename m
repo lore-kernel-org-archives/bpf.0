@@ -2,168 +2,282 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A5DC433EF
-	for <bpf@archiver.kernel.org>; Mon, 21 Feb 2022 14:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 470EBC433EF
+	for <bpf@archiver.kernel.org>; Mon, 21 Feb 2022 15:21:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbiBUO1S (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Feb 2022 09:27:18 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36544 "EHLO
+        id S245550AbiBUPWL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Feb 2022 10:22:11 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377779AbiBUO1Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Feb 2022 09:27:16 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4C22196;
-        Mon, 21 Feb 2022 06:26:52 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id t9so7603393ilf.13;
-        Mon, 21 Feb 2022 06:26:52 -0800 (PST)
+        with ESMTP id S235506AbiBUPWK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Feb 2022 10:22:10 -0500
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C0BBCA3;
+        Mon, 21 Feb 2022 07:21:45 -0800 (PST)
+Received: by mail-pl1-x643.google.com with SMTP id q11so3342018pln.11;
+        Mon, 21 Feb 2022 07:21:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uljOiLd66xpetJx0r72sLRAF02XT1S7b6VYjvM9jydk=;
-        b=THbWzgligE4bkojM2wrZxkWKHPbzPta+67EMdonT+JLjppx6A2XrfmgtJO03+1P1qd
-         wzO7rINmQCjE/uKBSkwtKJUZ1vBooBu4rupN2hXB0oB5WklD1V0YE2U5UWtS3V0BlvGS
-         1RE2TQskoqPZl173bEvWKs3NZNhUX1GaefDw46onHWDjFdvSiredN55sukbs4o1NWKb0
-         T/P6cQXoMB4kD2gZmRl5ELQMwP5OJZ1oOh4TO8sm+Lytiuu9XHfFbjXhwgJw2bsQ1IGr
-         7G+pDlejtFgFE7n6bg7H/y4/lXtDz0Wxt6YRcC8RZZN7FO8GyZBj4IDtBxo37vlVzQr3
-         nHmw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=A4NrD48q9KOhijNPOkUx9pEnWJGMxbtOCpt4Iac/M28=;
+        b=ofk2BYarXykhbwKOTsmfv0XwxfXxodnXWDd1AA0gVIcUEjLBzSOlKGlfI1BD8mAOah
+         uI8hVZFFnQ2xhmjFDQTB+J9Tq2k7YaNxB6VTpTCgLFkagOZz4suLyuvBcfigepQJAT24
+         Q6eYx2g4QQ5IfkUN+x3PKmyFrN6bdtyaudTLG4WHgX9DEExjAlf9Q2rSR2NTnQ2NnnJK
+         HyjLSR4L8vUqAXFh3cMmEWh6APpfrtgGGGRDkZSyJJ+ndUo6bZIxq5Z0QexYyhtwFu+E
+         P4vXJE0qD1v4UaWH9Fefjh8ODbpGFCjp3ElqkEW2D1QmTueEHoC36NLQAXCgdibcjPei
+         MMZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uljOiLd66xpetJx0r72sLRAF02XT1S7b6VYjvM9jydk=;
-        b=5LIHe25zs+aAVmiUxE5VuhjTK+CZgqv3AqEMuFxobk3nw4TI07a4L+2AgYtFvbOWu2
-         Sl9GtEai4+P7ocTrnNtgBmKh6dYkp51KH1yPzcpcWMpiqKWxR21DfHgmr9FUSZb5iud/
-         en0YTx5I4rMB8wAnEHayRoe0cw5HdM156Irgnyvm1uThOy0z5473D0n3xhGyomUr/A6e
-         SgLssWzE3dgXL3rvsNnfk+dUxfCgbUhlP0ORbUwDYPG+Rfb3A5v7IFF6QM8aIFBS4srl
-         cWlsZXGkkgrti6pmDQmBwmL/d2OgWyLqskwiRfyUaWGY+DJOksKBICg3k16SuWLNtemz
-         98KQ==
-X-Gm-Message-State: AOAM5304K+Bdt1QoF2egn4STh/6bVMmvWCQWAmD9zJpH1uSSxI+A0Hwr
-        tRG9vmeA51CprnoFMQGD14ezZFZSKhfWME+sI3g=
-X-Google-Smtp-Source: ABdhPJzA8Evh3FBFg+wQlCRb16Dc5G39AshYQYUTuZAbWI9pawT+AJ70tPxLix7z78KbBoqZLNNNh2EsIZ6Ptq6ZUEk=
-X-Received: by 2002:a05:6e02:1a2f:b0:2c2:3afa:95fa with SMTP id
- g15-20020a056e021a2f00b002c23afa95famr4915088ile.257.1645453612219; Mon, 21
- Feb 2022 06:26:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20220218095612.52082-1-laoar.shao@gmail.com> <20220218095612.52082-3-laoar.shao@gmail.com>
- <CAADnVQJhGmvY1NDsy9WE6tnqYM6JCmi4iZtB7xHuWh4yC-awPw@mail.gmail.com>
- <CALOAHbCytBP4osCXSZ_7+A69NuVf6SYDWGFC62O_MkHn9Fn10Q@mail.gmail.com> <CAADnVQ+FuK2wihDy5GumBN3LVBky0r04CmS4h1JsVoS7QoH6LA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+FuK2wihDy5GumBN3LVBky0r04CmS4h1JsVoS7QoH6LA@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Mon, 21 Feb 2022 22:26:16 +0800
-Message-ID: <CALOAHbAvG1gEAFhqs61x4aStaxph-O3f8k0XbCuUJK4rxcMRFw@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/3] bpf: set attached cgroup name in attach_name
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=A4NrD48q9KOhijNPOkUx9pEnWJGMxbtOCpt4Iac/M28=;
+        b=tTeIfzOUk9R94kZzMBvjVBGFWBJrsDMnA+pmuYNJHkL7qAfuhAGvJBrjEXL+OKYsqP
+         S87vbTRSjxjGWpKvNcB8hUSR6Bb3qou3A+FAB9h4RTcQJrD4zLVfkGlfB1E1eJNbkkj3
+         kw4r0UFHeJNe+VNoCzaHBhyREYfYCj9kvBaWnww5GSgZSQ3wqRf7cxGhQZ/l8NmVVIvR
+         JMUAxZdFuAJK2hD9Jjnnj/FpybqqUDLc0vl7UD9YXMsk9QWPtiiPPcT9eJxrV5Hmp8Ho
+         uEp22E6pD5JnMPvZoVuP+K9CEF6Z4y4MASPzoZw60fKNDGsdHF7NlTGbjS4d+YBDPfOI
+         EvDA==
+X-Gm-Message-State: AOAM531nOYKDp1DNl6wasVOA01PaUh6vq2kObiQb1aRheV3Y4G5xHrpr
+        F4j+QC/8bbF2+q2pPZZEyjxQa5FQefQ=
+X-Google-Smtp-Source: ABdhPJxZlBSW8Tjroa/saKwIeIkybooY/9gR/FHRynVA2Y8lqwFAc7nl0OD25SYshf7kM6IRg9wkqg==
+X-Received: by 2002:a17:902:dace:b0:14e:e471:a9c3 with SMTP id q14-20020a170902dace00b0014ee471a9c3mr19437458plx.49.1645456905174;
+        Mon, 21 Feb 2022 07:21:45 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id d16sm13353965pfj.1.2022.02.21.07.21.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Feb 2022 07:21:44 -0800 (PST)
+Date:   Mon, 21 Feb 2022 20:51:42 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        Tariq Toukan <tariqt@nvidia.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        Florent Revest <revest@chromium.org>,
+        linux-kselftest@vger.kernel.org, Florian Westphal <fw@strlen.de>
+Subject: Re: [PATCH bpf-next v2 2/3] bpf: Add helpers to issue and check SYN
+ cookies in XDP
+Message-ID: <20220221152142.cm6fiag27g74bk6h@apollo.legion>
+References: <20220124151340.376807-1-maximmi@nvidia.com>
+ <20220124151340.376807-3-maximmi@nvidia.com>
+ <61efacc6980f4_274ca2083e@john.notmuch>
+ <8f5fecac-ce6e-adc8-305b-a2ee76328bce@nvidia.com>
+ <61f850bdf1b23_8597208f8@john.notmuch>
+ <61f852711e15a_92e0208ac@john.notmuch>
+ <9cef58de-1f84-5988-92f8-fcdd3c61f689@nvidia.com>
+ <61fc9483dfbe7_1d27c208e7@john.notmuch>
+ <87a6f6bu6n.fsf@toke.dk>
+ <6b6ce8a2-e409-0297-cb29-fe9493c9d637@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6b6ce8a2-e409-0297-cb29-fe9493c9d637@nvidia.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 21, 2022 at 4:59 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sun, Feb 20, 2022 at 6:17 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+On Mon, Feb 21, 2022 at 07:56:28PM IST, Maxim Mikityanskiy wrote:
+> On 2022-02-04 16:08, Toke Høiland-Jørgensen wrote:
+> > John Fastabend <john.fastabend@gmail.com> writes:
 > >
-> > On Sun, Feb 20, 2022 at 2:27 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Fri, Feb 18, 2022 at 1:56 AM Yafang Shao <laoar.shao@gmail.com> wrote:
+> > > Maxim Mikityanskiy wrote:
+> > > > On 2022-01-31 23:19, John Fastabend wrote:
+> > > > > John Fastabend wrote:
+> > > > > > Maxim Mikityanskiy wrote:
+> > > > > > > On 2022-01-25 09:54, John Fastabend wrote:
+> > > > > > > > Maxim Mikityanskiy wrote:
+> > > > > > > > > The new helpers bpf_tcp_raw_{gen,check}_syncookie allow an XDP program
+> > > > > > > > > to generate SYN cookies in response to TCP SYN packets and to check
+> > > > > > > > > those cookies upon receiving the first ACK packet (the final packet of
+> > > > > > > > > the TCP handshake).
+> > > > > > > > >
+> > > > > > > > > Unlike bpf_tcp_{gen,check}_syncookie these new helpers don't need a
+> > > > > > > > > listening socket on the local machine, which allows to use them together
+> > > > > > > > > with synproxy to accelerate SYN cookie generation.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+> > > > > > > > > Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> > > > > > > > > ---
+> > > > > > > >
+> > > > > > > > [...]
+> > > > > > > >
+> > > > > > > > > +
+> > > > > > > > > +BPF_CALL_4(bpf_tcp_raw_check_syncookie, void *, iph, u32, iph_len,
+> > > > > > > > > +	   struct tcphdr *, th, u32, th_len)
+> > > > > > > > > +{
+> > > > > > > > > +#ifdef CONFIG_SYN_COOKIES
+> > > > > > > > > +	u32 cookie;
+> > > > > > > > > +	int ret;
+> > > > > > > > > +
+> > > > > > > > > +	if (unlikely(th_len < sizeof(*th)))
+> > > > > > > > > +		return -EINVAL;
+> > > > > > > > > +
+> > > > > > > > > +	if (!th->ack || th->rst || th->syn)
+> > > > > > > > > +		return -EINVAL;
+> > > > > > > > > +
+> > > > > > > > > +	if (unlikely(iph_len < sizeof(struct iphdr)))
+> > > > > > > > > +		return -EINVAL;
+> > > > > > > > > +
+> > > > > > > > > +	cookie = ntohl(th->ack_seq) - 1;
+> > > > > > > > > +
+> > > > > > > > > +	/* Both struct iphdr and struct ipv6hdr have the version field at the
+> > > > > > > > > +	 * same offset so we can cast to the shorter header (struct iphdr).
+> > > > > > > > > +	 */
+> > > > > > > > > +	switch (((struct iphdr *)iph)->version) {
+> > > > > > > > > +	case 4:
+> > > > > > > >
+> > > > > > > > Did you consider just exposing __cookie_v4_check() and __cookie_v6_check()?
+> > > > > > >
+> > > > > > > No, I didn't, I just implemented it consistently with
+> > > > > > > bpf_tcp_check_syncookie, but let's consider it.
+> > > > > > >
+> > > > > > > I can't just pass a pointer from BPF without passing the size, so I
+> > > > > > > would need some wrappers around __cookie_v{4,6}_check anyway. The checks
+> > > > > > > for th_len and iph_len would have to stay in the helpers. The check for
+> > > > > > > TCP flags (ACK, !RST, !SYN) could be either in the helper or in BPF. The
+> > > > > > > switch would obviously be gone.
+> > > > > >
+> > > > > > I'm not sure you would need the len checks in helper, they provide
+> > > > > > some guarantees I guess, but the void * is just memory I don't see
+> > > > > > any checks on its size. It could be the last byte of a value for
+> > > > > > example?
 > > > >
-> > > > Set the cgroup path when a bpf prog is attached to a cgroup, and unset
-> > > > it when the bpf prog is detached.
+> > > > The verifier makes sure that the packet pointer and the size come
+> > > > together in function parameters (see check_arg_pair_ok). It also makes
+> > > > sure that the memory region defined by these two parameters is valid,
+> > > > i.e. in our case it belongs to packet data.
 > > > >
-> > > > Below is the result after this change,
-> > > > $ cat progs.debug
-> > > >   id name             attached
-> > > >    5 dump_bpf_map     bpf_iter_bpf_map
-> > > >    7 dump_bpf_prog    bpf_iter_bpf_prog
-> > > >   17 bpf_sockmap      cgroup:/
-> > > >   19 bpf_redir_proxy
+> > > > Now that the helper got a valid memory region, its length is still
+> > > > arbitrary. The helper has to check it's big enough to contain a TCP
+> > > > header, before trying to access its fields. Hence the checks in the helper.
 > > > >
-> > > > Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> > > > ---
-> > > >  kernel/bpf/cgroup.c | 8 ++++++++
-> > > >  1 file changed, 8 insertions(+)
+> > > > > I suspect we need to add verifier checks here anyways to ensure we don't
+> > > > > walk off the end of a value unless something else is ensuring the iph
+> > > > > is inside a valid memory block.
 > > > >
-> > > > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > > > index 43eb3501721b..ebd87e54f2d0 100644
-> > > > --- a/kernel/bpf/cgroup.c
-> > > > +++ b/kernel/bpf/cgroup.c
-> > > > @@ -440,6 +440,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
-> > > >         struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-> > > >         struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYPE] = {};
-> > > >         enum cgroup_bpf_attach_type atype;
-> > > > +       char cgrp_path[64] = "cgroup:";
-> > > >         struct bpf_prog_list *pl;
-> > > >         struct list_head *progs;
-> > > >         int err;
-> > > > @@ -508,6 +509,11 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
-> > > >         else
-> > > >                 static_branch_inc(&cgroup_bpf_enabled_key[atype]);
-> > > >         bpf_cgroup_storages_link(new_storage, cgrp, type);
-> > > > +
-> > > > +       cgroup_name(cgrp, cgrp_path + strlen("cgroup:"), 64);
-> > > > +       cgrp_path[63] = '\0';
-> > > > +       prog->aux->attach_name = kstrdup(cgrp_path, GFP_KERNEL);
-> > > > +
+> > > > The verifier ensures that the [iph; iph+iph_len) is valid memory, but
+> > > > the helper still has to check that struct iphdr fits into this region.
+> > > > Otherwise iph_len could be too small, and the helper would access memory
+> > > > outside of the valid region.
 > > >
-> > > This is pure debug code. We cannot have it in the kernel.
-> > > Not even under #ifdef.
-> > >
-> > > Please do such debug code on a side as your own bpf program.
-> > > For example by kprobe-ing in this function and keeping the path
-> > > in a bpf map or send it to user space via ringbuf.
-> > > Or enable cgroup tracepoint and monitor cgroup_mkdir with full path.
-> > > Record it in user space or in bpf map, etc.
-> > >
+> > > Thanks for the details this all makes sense. See response to
+> > > other mail about adding new types. Replied to the wrong email
+> > > but I think the context is not lost.
 > >
-> > It is another possible solution to  hook the related kernel functions
-> > or tracepoints, but it may be a little complicated to track all the
-> > bpf attach types, for example we also want to track
-> > BPF_PROG_TYPE_SK_MSG[1], BPF_PROG_TYPE_FLOW_DISSECTOR and etc.
-> > While the attach_name provides us a generic way to get how the bpf
-> > progs are attached, which can't be got by bpftool.
+> > Keeping my reply here in an attempt to de-fork :)
+> >
+> > > > > > >
+> > > > > > > The bottom line is that it would be the same code, but without the
+> > > > > > > switch, and repeated twice. What benefit do you see in this approach?
+> > > > > >
+> > > > > > The only benefit would be to shave some instructions off the program.
+> > > > > > XDP is about performance so I figure we shouldn't be adding arbitrary
+> > > > > > stuff here. OTOH you're already jumping into a helper so it might
+> > > > > > not matter at all.
+> > > > > >
+> > > > > > >    From my side, I only see the ability to drop one branch at the expense
+> > > > > > > of duplicating the code above the switch (th_len and iph_len checks).
+> > > > > >
+> > > > > > Just not sure you need the checks either, can you just assume the user
+> > > > > > gives good data?
+> > > >
+> > > > No, since the BPF program would be able to trick the kernel into reading
+> > > > from an invalid location (see the explanation above).
+> > > >
+> > > > > > >
+> > > > > > > > My code at least has already run the code above before it would ever call
+> > > > > > > > this helper so all the other bits are duplicate.
+> > > > > > >
+> > > > > > > Sorry, I didn't quite understand this part. What "your code" are you
+> > > > > > > referring to?
+> > > > > >
+> > > > > > Just that the XDP code I maintain has a if ipv4 {...} else ipv6{...}
+> > > > > > structure
+> > > >
+> > > > Same for my code (see the last patch in the series).
+> > > >
+> > > > Splitting into two helpers would allow to drop the extra switch in the
+> > > > helper, however:
+> > > >
+> > > > 1. The code will be duplicated for the checks.
+> > >
+> > > See response wrt PTR_TO_IP, PTR_TO_TCP types.
+> >
+> > So about that (quoting some context from your other email):
+> >
+> > > We could have some new mem types, PTR_TO_IPV4, PTR_TO_IPv6, and PTR_TO_TCP.
+> > > Then we simplify the helper signatures to just,
+> > >
+> > >    bpf_tcp_raw_check_syncookie_v4(iph, tcph);
+> > >    bpf_tcp_raw_check_syncookie_v6(iph, tcph);
+> > >
+> > > And the verifier "knows" what a v4/v6 header is and does the mem
+> > > check at verification time instead of run time.
+> >
+> > I think this could probably be achieved with PTR_TO_BTF arguments to the
+> > helper (if we define appropriate struct types that the program can use
+> > for each header type)?
 >
-> bpftool can certainly print such details.
-> See how it's using task_file iterator.
-> It can be extended to look into cgroups and sockmap,
-> and for each program print "sockmap:%d", map->id if so desired.
+> I get the following error when I try to pass the headers from packet data to
+> a helper that accepts ARG_PTR_TO_BTF_ID:
+>
+> ; value = bpf_tcp_raw_gen_syncookie_ipv4(hdr->ipv4, hdr->tcp,
+> 297: (79) r1 = *(u64 *)(r10 -80)      ; R1_w=pkt(id=0,off=14,r=74,imm=0)
+> R10=fp0
+> 298: (79) r2 = *(u64 *)(r10 -72)      ;
+> R2_w=pkt(id=5,off=14,r=74,umax_value=60,var_off=(0x0; 0x3c)) R10=fp0
+> 299: (bc) w3 = w9                     ;
+> R3_w=invP(id=0,umin_value=20,umax_value=60,var_off=(0x0; 0x3c))
+> R9=invP(id=0,umin_value=20,umax_value=60,var_off=(0x0; 0x3c))
+> 300: (85) call bpf_tcp_raw_gen_syncookie_ipv4#192
+> R1 type=pkt expected=ptr_
+> processed 317 insns (limit 1000000) max_states_per_insn 0 total_states 23
+> peak_states 23 mark_read 12
+> -- END PROG LOAD LOG --
+>
+> It looks like the verifier doesn't currently support such type conversion.
+> Could you give any clue what is needed to add this support? Is it enough to
+> extend compatible_reg_types, or should more checks be added anywhere?
+>
 
-I have read through the task_file code, but I haven't found a direct
-way to get the attached cgroups or maps of a specified prog.
-It is easy to look into a cgroup or sockmap, but the key point here is
-which is the proper cgroup or sockmap.
-There are some possible ways to get the attached cgroup or sockmap.
+I think what he meant was getting the size hint from the function prototype. In
+case of kfunc we do it by resolving type size from BTF, for the PTR_TO_MEM case
+when a size argument is missing. For helper, you can add a field to indicate the
+constant size hint in the bpf_func_proto, and then in check_func_arg directly do
+the equivalent check_helper_mem_access for arg_type_is_mem_ptr block if such a
+hint is set, instead of delaying it till check_mem_size_reg call when the next
+arg_type_is_mem_size block is executed.
 
-- add new member into struct bpf_prog_aux
-   For example,
-    struct bpf_prog_aux{
-        union {
-            struct cgroup *attached_cgrp;
-            struct bpf_map *attached_map;
-        };
-    };
-    Then we can easily get the related map or cgroup by extending
-task_file iterator.
+Then you can have two helpers with same argument types but different size hint
+values for the header argument, so you wouldn't need an extra mem size parameter.
 
-- build a table for attached maps, cgroups and etc
-   Like we did for pinned files.
-   Then we can compare the prog with the members stored in this table
-one by one, but that seems a little heavy.
+You may also want to disallow setting both the size hint and next argument as
+ARG_CONST_SIZE.
 
-There may be some other ways.
-I'm not sure if I clearly understand what you mean.
-Hopefully you could help clarify it.
+> Alternatively, I can revert to ARG_PTR_TO_MEM and do size checks in runtime
+> in the helper.
+>
+> [...]
 
--- 
-Thanks
-Yafang
+--
+Kartikeya
