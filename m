@@ -2,135 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B078DC433EF
-	for <bpf@archiver.kernel.org>; Mon, 21 Feb 2022 10:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46DD1C433EF
+	for <bpf@archiver.kernel.org>; Mon, 21 Feb 2022 12:26:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355175AbiBUKvu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Feb 2022 05:51:50 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:49388 "EHLO
+        id S1357840AbiBUM0u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Feb 2022 07:26:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355830AbiBUKvT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Feb 2022 05:51:19 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB5A7085D;
-        Mon, 21 Feb 2022 02:13:21 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K2J0s0rFVz1FDLy;
-        Mon, 21 Feb 2022 18:08:45 +0800 (CST)
-Received: from localhost.localdomain (10.175.104.82) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 18:13:12 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <john.fastabend@gmail.com>, <daniel@iogearbox.net>,
-        <jakub@cloudflare.com>, <lmb@cloudflare.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <ast@kernel.org>, <andrii@kernel.org>, <kafai@fb.com>,
-        <songliubraving@fb.com>, <yhs@fb.com>, <kpsingh@kernel.org>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        Wang Yufen <wangyufen@huawei.com>
-Subject: [PATCH net-next 3/4] bpf, sockmap: Fix more uncharged while msg has more_data
-Date:   Mon, 21 Feb 2022 18:31:04 +0800
-Message-ID: <20220221103105.4028557-4-wangyufen@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220221103105.4028557-1-wangyufen@huawei.com>
-References: <20220221103105.4028557-1-wangyufen@huawei.com>
+        with ESMTP id S1357897AbiBUM0s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Feb 2022 07:26:48 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817C413E22
+        for <bpf@vger.kernel.org>; Mon, 21 Feb 2022 04:26:24 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id e5so18273678lfr.9
+        for <bpf@vger.kernel.org>; Mon, 21 Feb 2022 04:26:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kinvolk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9Y2xp4GHZOreqBdq9NTl4mbms3BzgIagOj5DDd+YVyw=;
+        b=jquks9KpBNaSJKvLDOpeUQ1oRx5U9PU5GSFXdkrYCXlHqm1tFqkfVz4WcghzJZgG4g
+         TGTN/Y6L7StN9oOik/6jzGjp3B+AH8XYIFAVcW1cce4y7TDwZHET496ptGnlDDcV+NoK
+         R8Vxs4eUjL/SdzSDgnxb1Im57ucEZb3wPvRdo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Y2xp4GHZOreqBdq9NTl4mbms3BzgIagOj5DDd+YVyw=;
+        b=wqapvkQN9U/B8pjWhq6NwLsKdgTsZ/R/1WNEIi+0nfETyfW9rpqcKYvY96uyDOVS06
+         3wsMEjtAGklgHP1snbOFulGGbLgK8wcuS0aUJJ4asl2noRHFi6JcEBnUnqS3fmouTo2X
+         kB/7Wo/KJ0JGZDq4smAtCzNe8MM2BiFQsrbmYiVBtZ32K06HYw7F0JJTlqfnvW5u+thH
+         X29l+fmEGP4uJMJE5IHWmB+sYyyEzhQ4QziGoFkzWEUn+PVTkOYbuwKjOhHqtgmoi9O1
+         syPSAaH5OkhrF+mXgpsbbihSt46mgQxt/VktvdHzFLlc5+PMRilk6I+FNpZ4aW0VKJmt
+         6pIQ==
+X-Gm-Message-State: AOAM532xYkZkOBj1c47nqIZ8ZvpHgynCWYqCn66bqv7xT54yFmds56vD
+        EEPYiZSvkjmdE28z5zlyq4OG0giw+aZU9CAHtk2BGg==
+X-Google-Smtp-Source: ABdhPJz98Au3SEhVNxRUT1hugWSSaQO9u9n+nc1yP0lSlhw9BA6ca13qMzr4QVaItu7T/OBgSJpYyWyT8/4iXhcyt+w=
+X-Received: by 2002:a05:6512:2611:b0:443:1369:b599 with SMTP id
+ bt17-20020a056512261100b004431369b599mr13482448lfb.569.1645446382829; Mon, 21
+ Feb 2022 04:26:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+References: <20220220042720.3336684-1-andrii@kernel.org>
+In-Reply-To: <20220220042720.3336684-1-andrii@kernel.org>
+From:   =?UTF-8?Q?Mauricio_V=C3=A1squez_Bernal?= <mauricio@kinvolk.io>
+Date:   Mon, 21 Feb 2022 07:26:11 -0500
+Message-ID: <CAHap4zsLZ80gceMUtEZnHyx8JLfxBXzGm0_cdMM0EVx5zyC-+Q@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next] selftests/bpf: fix btfgen tests
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In tcp_bpf_send_verdict(), if msg has more data after
-tcp_bpf_sendmsg_redir():
+On Sat, Feb 19, 2022 at 11:27 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>
+> There turned out to be a few problems with btfgen selftests.
+>
+> First, core_btfgen tests are failing in BPF CI due to the use of
+> full-featured bpftool, which has extra dependencies on libbfd, libcap,
+> etc, which are present in BPF CI's build environment, but those shared
+> libraries are missing in QEMU image in which test_progs is running.
+>
+> To fix this problem, use minimal bootstrap version of bpftool instead.
+> It only depend on libelf and libz, same as libbpf, so doesn't add any
+> new requirements (and bootstrap bpftool still implementes entire
+> `bpftool gen` functionality, which is quite convenient).
+>
+> Second problem is even more interesting. Both core_btfgen and core_reloc
+> reuse the same set of struct core_reloc_test_case array of test case
+> definitions. That in itself is not a problem, but btfgen test replaces
+> test_case->btf_src_file property with the path to temporary file into
+> which minimized BTF is output by bpftool. This interferes with original
+> core_reloc tests, depending on order of tests execution
 
-tcp_bpf_send_verdict()
- tosend = msg->sg.size  //msg->sg.size = 22220
- case __SK_REDIRECT:
-  sk_msg_return()  //uncharged msg->sg.size(22220) sk->sk_forward_alloc
-  tcp_bpf_sendmsg_redir() //after tcp_bpf_sendmsg_redir, msg->sg.size=11000
- goto more_data;
- tosend = msg->sg.size  //msg->sg.size = 11000
- case __SK_REDIRECT:
-  sk_msg_return()  //uncharged msg->sg.size(11000) to sk->sk_forward_alloc
-
-The msg->sg.size(11000) has been uncharged twice, to fix we can charge the
-remaining msg->sg.size before goto more data.
-
-This issue can cause the following info:
-WARNING: CPU: 0 PID: 9860 at net/core/stream.c:208 sk_stream_kill_queues+0xd4/0x1a0
-Call Trace:
- <TASK>
- inet_csk_destroy_sock+0x55/0x110
- __tcp_close+0x279/0x470
- tcp_close+0x1f/0x60
- inet_release+0x3f/0x80
- __sock_release+0x3d/0xb0
- sock_close+0x11/0x20
- __fput+0x92/0x250
- task_work_run+0x6a/0xa0
- do_exit+0x33b/0xb60
- do_group_exit+0x2f/0xa0
- get_signal+0xb6/0x950
- arch_do_signal_or_restart+0xac/0x2a0
- ? vfs_write+0x237/0x290
- exit_to_user_mode_prepare+0xa9/0x200
- syscall_exit_to_user_mode+0x12/0x30
- do_syscall_64+0x46/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
- </TASK>
-
-WARNING: CPU: 0 PID: 2136 at net/ipv4/af_inet.c:155 inet_sock_destruct+0x13c/0x260
-Call Trace:
- <TASK>
- __sk_destruct+0x24/0x1f0
- sk_psock_destroy+0x19b/0x1c0
- process_one_work+0x1b3/0x3c0
- worker_thread+0x30/0x350
- ? process_one_work+0x3c0/0x3c0
- kthread+0xe6/0x110
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x22/0x30
- </TASK>
-
-Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- net/ipv4/tcp_bpf.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index ac9f491cc139..1f0364e06619 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -335,7 +335,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 			cork = true;
- 			psock->cork = NULL;
- 		}
--		sk_msg_return(sk, msg, tosend);
-+		sk_msg_return(sk, msg, msg->sg.size);
- 		release_sock(sk);
- 
- 		ret = tcp_bpf_sendmsg_redir(sk_redir, msg, tosend, flags);
-@@ -375,8 +375,11 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 		}
- 		if (msg &&
- 		    msg->sg.data[msg->sg.start].page_link &&
--		    msg->sg.data[msg->sg.start].length)
-+		    msg->sg.data[msg->sg.start].length) {
-+			if (eval == __SK_REDIRECT)
-+				sk_mem_charge(sk, msg->sg.size);
- 			goto more_data;
-+		}
- 	}
- 	return ret;
- }
--- 
-2.25.1
-
+ah, good catch! Thanks for the fix!
