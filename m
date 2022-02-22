@@ -2,248 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88955C433F5
-	for <bpf@archiver.kernel.org>; Tue, 22 Feb 2022 05:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F18DC433EF
+	for <bpf@archiver.kernel.org>; Tue, 22 Feb 2022 06:05:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiBVFlz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Feb 2022 00:41:55 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:36992 "EHLO
+        id S230133AbiBVGFx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Feb 2022 01:05:53 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:34422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiBVFlx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Feb 2022 00:41:53 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAACA278D;
-        Mon, 21 Feb 2022 21:41:20 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21M2G5UE019030;
-        Tue, 22 Feb 2022 04:45:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=alrK+LS8O1XJPoQ/z3Bbsiij9D1JoU4QLOEu1MZaVRk=;
- b=EOT+4c+br3rQVnud9j5Do5Zxus3sf+7msF7ypGoPZiTod85AItaZfB6FTJCfZ7QFWoFW
- FmD1avap/QEoN7gvv2eLPbexoX+WXCg7twa5A4usqLfPMU4u7xrYRY5zBtpkZRjSM84M
- Fe5sn4WhtZS8Kt5Uw6qR02pkkJnFZQCOHvpFEFJlNywu1DKCTkf4ZdbgUyu65NVrmtJG
- jIvV1y5dzMPcrvuDAWSy0mUMzNdTlkPFfE8ONkxQ4jHYQ7k3+14NyL2LDc0cX5Re4Gjg
- XvISsS71eiEDd1nk7R8lwYsRxfdQ2nQIqPx+NWTt9YrsRJo7ynHISiRF2cA/iY5c/8k5 ng== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3eas3v615p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Feb 2022 04:45:57 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21M4eo2e035975;
-        Tue, 22 Feb 2022 04:45:56 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2173.outbound.protection.outlook.com [104.47.73.173])
-        by aserp3030.oracle.com with ESMTP id 3eapkfbwqs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 22 Feb 2022 04:45:56 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mn8fNVt5mfxykRHHuetUsH/HeKOpbRuOly09ZWUfwVEWXVoi2gI9DU6ebcVtoVDYvN5Rj69ZQhGcWLX3FZ56fxjhFxImb29p/xXTLWck1L/lV6b2SbNCTGF73RZSVbpsOZqZwRRZLd5Jf1TFaAZubo2z1H6sU2SkDmXGdl6gH/V0GIzo0k/aTy4fPdn2CHR+ACABMw2NxwM1x9jyP9qGcrmjC7ouLLAUBWeX9D+vo6rNi/+lbZXgsF8L3B5H21NUtVa7epBRUCQKjRsaMF0zS6FiLjFryJ6Cb0ugDBMI/wWz+SlPlOn1nwiPquSZE7J3b3j6ZihJs/5N87vCG5BzHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=alrK+LS8O1XJPoQ/z3Bbsiij9D1JoU4QLOEu1MZaVRk=;
- b=jasqt74mf5PQrsGgsVVtzcUyrlQHtITJNko1+1athdgVVSwn5vYQY7CHjKKZzD5N6QcNX2S3yHwcJf7Py9FrjaDb8az8LDiFQDsmJP0R4z2wNO1oTlySqi8Fpk72rcnIkUYX2SG/xQ3BuRGk0WQi1IrcRKeaoTeOv5/x35qCLdgjfJdq1yeMoAj9JWoEStzd2gSIivFbcSkUeZ/ibH14DdQcZ7/F0IYc1HwVTxRqqij9icNprhC01tsJ0+TNGVDKos+xqDXvkmWohrWCxy03xSv+wg0O0y0KRrbNpOLd+4XgYJZePDJ4Nq15Sql06VCI7XuCn5SsyczQpiwsrqRkMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=alrK+LS8O1XJPoQ/z3Bbsiij9D1JoU4QLOEu1MZaVRk=;
- b=PaDBrUnhfWbfetHcSOnJ//vKcw63fJxZgdf4ISFgNTN8K13rdQIa8HAi4FNRlc0WOgjuPNwgrKFE8opqwqEUS9tct2+DcR+Xm5o0+P614/NTPZcwJZ5usl80Tvy4WXR6J8z4+rheENbMcP+rlkjjkk8D0f9/4BjfcKGFregoI6U=
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
- by CH2PR10MB4197.namprd10.prod.outlook.com (2603:10b6:610:7d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4995.16; Tue, 22 Feb
- 2022 04:45:53 +0000
-Received: from BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
- ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.4995.027; Tue, 22 Feb 2022
- 04:45:53 +0000
-Subject: Re: [PATCH net-next v3 4/4] net: tun: track dropped skb via
- kfree_skb_reason()
-To:     David Ahern <dsahern@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
-References: <20220221053440.7320-1-dongli.zhang@oracle.com>
- <20220221053440.7320-5-dongli.zhang@oracle.com>
- <877dfc5d-c3a1-463f-3abc-15e5827cfdb6@gmail.com>
-From:   Dongli Zhang <dongli.zhang@oracle.com>
-Message-ID: <6eab223b-028d-c822-01ad-47e5869e0fe8@oracle.com>
-Date:   Mon, 21 Feb 2022 20:45:43 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-In-Reply-To: <877dfc5d-c3a1-463f-3abc-15e5827cfdb6@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0003.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::8) To BYAPR10MB2663.namprd10.prod.outlook.com
- (2603:10b6:a02:a9::20)
+        with ESMTP id S230078AbiBVGFw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Feb 2022 01:05:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6D09D0E5;
+        Mon, 21 Feb 2022 22:05:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E540660F49;
+        Tue, 22 Feb 2022 06:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479F6C36AE3;
+        Tue, 22 Feb 2022 06:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645509926;
+        bh=sTgSEKKoICol33yrPaBoC5i5Zy7dMIxDHtgX1m8Wif0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jvYiGVqzS6uC1sMS0YYUMW6roBhxyPQvTtRoYJ0CfpSX2zjuHbSyAQ2B0eIo7X/f/
+         EVBdm/n8jGfiJhbxwqLnvC03t0JCe4KM8WLrLyGS/bPhwADxipv7EB/xhUhjrUQrvG
+         jO8dvEUyBu/UodszQHrpSzGUERMSQfsmWfPxi30tSSwcQZXAARHA+gSMOJp267OWUH
+         FssrCn8iodiohTSACoC1WzjrlrYYH06X4x318t6xQnAldW79CGM10tTd+bs8YyjqsR
+         vYQVRZnVNnui4ojM7AYGRoPiX8MR/QEcTZmbMEd2rfzVQjesMH2IlXv4RNogekiLQI
+         faFKZcMxgh5aA==
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2d310db3812so161780817b3.3;
+        Mon, 21 Feb 2022 22:05:26 -0800 (PST)
+X-Gm-Message-State: AOAM5333sBR/IMjP/1CjBkyI9ZGNcX7R0TxRoqMBkfZGxz7rffLRwzRQ
+        i8Oq60bwSpWg+BwcQHM7cj7nV0sQzaSt3/hW1iI=
+X-Google-Smtp-Source: ABdhPJzEZ/bEc8cwZMK0aBgwowso24AHWiaqSakzFUZIobZmtbYInj/25T2cMOnwraye3UOTl0ZiQabsjfRQcJc3oNA=
+X-Received: by 2002:a81:9895:0:b0:2d7:7e75:9ba8 with SMTP id
+ p143-20020a819895000000b002d77e759ba8mr4335827ywg.130.1645509925349; Mon, 21
+ Feb 2022 22:05:25 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a34877ab-f744-451f-fb4b-08d9f5be352e
-X-MS-TrafficTypeDiagnostic: CH2PR10MB4197:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR10MB4197064C23FD50C5907AD2BBF03B9@CH2PR10MB4197.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ERmDWzhSUkfKV0cnAKGNEiOxOTJ011xgtvyehsvg/yrmZK0btp4C5o2HU3hQYoPZZJE7H3vhYIHxSR5qfrj1dHPSIRogTKc73tGB+GKMLhQfhZsEt+8Asky2ibCCWUrzUn81OrIwx/vP0KKB8LXSApA1urNFboJebGnwj06fq5a8L1w3xOwY/cUjpIZ6BE7bv40aGEwz7YL+SfZBSvi8KVZnb06A22UOVMrM+tZ200a6pWEeR5gC3Re+zg/yfudJZTc+kwBYRw4nypOQIMScH76+R5qv/tfZCG0UiUpyZE8WRQMH6fEjCbHTtB1B7b6eG8gI/F/XQj9mpsPdM725Sd/4LYlx8AKaueiYBmMEU7x9Prwa0nvA5xpLp+HWBjc4Sy0oL9bMjTd9ZOJUvFeNfnH6wZyjBf/6qM/ZYHwE6Tb8lvMEycQ2b8+U/NNzeiL7AkTlMtMk+6SXdu0TZmuTWm7JZlbzCUemugst/a858ndB/kTQQE+msJvBamH/7iKog1iILx8QCh9V0OLht0oo+sNF6HDmKZVuAI5WagVuAgEX3Q+OdpslnPqqNAuYKiL4GIE7yHL9Mulvn9nXIePT4uHSokH27SCImWNqja+FMYH63P9nNO83+ozIqvuXpJ6Zkch8M/uYmiBozamFB9N7S0iSeBkJC+cXbRPbFJzHz/Hk9N+uOGS8PXcKWesc0DUl6GoW6MctRA4laGbZKnVux9FPBO3KSKgGgMBBk0L6XkA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(31696002)(86362001)(2906002)(508600001)(6512007)(66556008)(8936002)(66946007)(6486002)(6506007)(38100700002)(53546011)(6666004)(186003)(4326008)(2616005)(83380400001)(8676002)(44832011)(5660300002)(66476007)(31686004)(36756003)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MTNWV25PQy9EVVZMK0NPK2VHQnFLbFhsdE1iay9xTldQRTlIOVpKdlJrZWNs?=
- =?utf-8?B?R25ObGpjNTlIdEpzblRsY0RwblZmbHdIUXduVVBYR0JwajZJbXhXTkZMS3Fx?=
- =?utf-8?B?UkdBeWpKajdwYUdIZUpnRjQybFNpRE44V0xaNUwvcXgvK0R6Sm9nNWtZNXA2?=
- =?utf-8?B?NTc3ZGFqRGZIN3NxTS9jQndLSE1BeUhFWGJIZlR5NXFXSms5UlhsMDRWaGR5?=
- =?utf-8?B?allobFV4b2hkNVEzVjg2enVuU1BORUVZdDkza2RWUiswYWFRcUZ6eEpQb0JD?=
- =?utf-8?B?NWlkQkRiSkcvQ0lLTCtkSXdLWnJCZkc2UjFPQ0d5eUphZ2FGd0FIL3lPVlcv?=
- =?utf-8?B?YmNRNFZhUlRJaVdHcUZ3N0dNaUZhaEJ1d25tTjNxVERXVUNkRlVIMWhzSERk?=
- =?utf-8?B?K3VnYjZoT2FOeDJSZU0zYjE5V1J2b1dyS0dNN1gyT1hSaDQyc1ZJeDk0bFhB?=
- =?utf-8?B?Rm1uSTBsc2VQbmJjSlFiNEpJMjluaUYrRXhlQU4rdFNweFNLc2UrVmNGUkx2?=
- =?utf-8?B?V1UxY0RYSVRwamwxdTlxQUFPMDBKZ3VkNElFUTMrdWN5bDJidXhYSGxZMjQz?=
- =?utf-8?B?V2poNmg1L0Q4NnBFYnN6ek9XeUd1bnRlbkNiWEV2SFdUQ3dHdktJcVRaZEtm?=
- =?utf-8?B?UDh0bDZSb1d0dU0xby9PZ0s0UEVseGdYNzB6V0FLVkpUL0ZjMi9naEp0UDV5?=
- =?utf-8?B?V2hJZmxGU0c5eXkvSGk2N0dNc2VYWjZUNjhVNC9hd0gzMlNUbXlNWFVJTnFQ?=
- =?utf-8?B?TG0rUW1oQ2N5b3haR3IyWVduYnVqdVhRdzdiRFhZQTQvZDhuL0FMWlY5NDVK?=
- =?utf-8?B?NERXUEpDdVYzN2IzcVBsVUR6K096bVd5RzBzTGIyZ1JMUjdKUFlUWXpiVUFP?=
- =?utf-8?B?MEM3NGFDU1J3NW5mTzMrMG4yMjFiRDJjbWNRV0RhR3Z1K3V0bHpmcVp2YUJQ?=
- =?utf-8?B?ODJ5eVZ6K1RmSm92UmptQy9hbEJGQkpqZDEvazZ2b0thWmV4SnJJOVU5OXZK?=
- =?utf-8?B?RzRYQXhiTVhIa2JsYktmUTc5Y2NtTzR0dE1QYWRuRG9UM1FZR1JEdVh3V2tR?=
- =?utf-8?B?Q3lOcWVlamtxa1Z3MTVtQlI3SzloLzNsdjZTS2pJazViVFk3WHBKMFN6em5v?=
- =?utf-8?B?YjhJSWtwL05Fc1VFcU1zcnlra1FMUlpHcEgrSGJ6VVB0R3ptOU5xeEQyUk9H?=
- =?utf-8?B?NU5uZ0JKRERQeVRUaVJqb2FNSGx2VHBCMEJFclExTFB0aVVzaDhJbEFGSDdR?=
- =?utf-8?B?UkltZ2xuN1I1T2hmQ0hXTnpHRDFQMmRYVHdlZngrbERCRjBIRTFGS3FMZTJY?=
- =?utf-8?B?OGZ3MmY5NktYcjhuOXFEaHFmUVZMZUQ0a0xyMGdTMmpZbHZwZ1E4NFZwelJP?=
- =?utf-8?B?VGFOU2paT2FTbG1PZWlNQlQ1dnVOcWxRN216SW1HY1N6bFBRQlpJUWg1WVJ4?=
- =?utf-8?B?TjBwQitHeDQzYWRwUVZoTVJCUnBXN2VZOC9USlpXVnVIVm5GbEZHOTI5d3F1?=
- =?utf-8?B?S1N0V0ZNRmlrWG13eFhvSTZGQU9jeEVNUnBJYmVpMFpKZlhQdStGU256NzUy?=
- =?utf-8?B?Yk1zZDVHUmxNZkE4TVFkRi9tU2VEN3BDcWNQcmZiYUlXSlZYQWFzNmtiS0Ey?=
- =?utf-8?B?YUN5Q2tKQ0ttNDl5dzl4a3VIU0VKbHVtWndPYmRaOW5VNk9BSUJTNWFRU0hG?=
- =?utf-8?B?N0laOGM4VHdkSVJ4UTBMTERQdWtFYjQ2TjVqTDV5UXJXSnhUV2pSZDVCUmlp?=
- =?utf-8?B?NGlSRnhWTm1JWFdrRFNxYmdzNXhxNzVjbmdIQXZnckxqRmZXSG5CYk12MVBN?=
- =?utf-8?B?VkRRSlZyRDQ5azZ0WWpINnVsTFk5YnVNR2VFZW1qbEVrSm4yVFZxUmpIUkdQ?=
- =?utf-8?B?MjVwcGlCMS9ZclRIVlNLYjhtdlpXdmpSZ0tWMlFHZG5GWlRrVk5DVzV6QmxW?=
- =?utf-8?B?b1JaOE5mMWdYTEE3OTNYOVR4Z2lJd0o1cmVmTG56bTN6Y3BXUVBrWmg4UzVD?=
- =?utf-8?B?N3RNa2lSeVdjV3VpTk5sSjNXUUNGejMzbWxyWjdHZFVEeGJCazIyazRlb2VQ?=
- =?utf-8?B?Tkxuc2lSa0Zudk1Hc25ZWDJwallBamZkb1MvcDlPY2NPRFFCK0NSbnNxbDZw?=
- =?utf-8?B?RTkvcVp4OFJ4Qzl2YWJNeGJQdllXWVZUOWVNTUdaaEdEQ1Z5Y05WUVRRdDBN?=
- =?utf-8?Q?58rdqVI50i33gy8b+GQRyLv0QOW2kCYAJg1XqXIXwcz9?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a34877ab-f744-451f-fb4b-08d9f5be352e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2022 04:45:53.5592
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 75DARnHQhhGODX1o/Aj130zdFXIPOINJuZ+MGjyRMhNUAY0De03Pta+T9I9rXFPDIm1/7+RTjgXF4FMLcuPckQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4197
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10265 signatures=677614
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 mlxscore=0
- spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202220027
-X-Proofpoint-GUID: 1DuVxg98C_MLC_K3WqCL4w3LkL7ylSA5
-X-Proofpoint-ORIG-GUID: 1DuVxg98C_MLC_K3WqCL4w3LkL7ylSA5
+References: <20220220134813.3411982-1-memxor@gmail.com>
+In-Reply-To: <20220220134813.3411982-1-memxor@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 21 Feb 2022 22:05:14 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW53epuRQ3X5bYeoxRUL9sdEm7MUQ8bUoQCsf=C7k3hQ8A@mail.gmail.com>
+Message-ID: <CAPhsuW53epuRQ3X5bYeoxRUL9sdEm7MUQ8bUoQCsf=C7k3hQ8A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 00/15] Introduce typed pointer support in BPF maps
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netfilter-devel@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+On Sun, Feb 20, 2022 at 5:48 AM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> Introduction
+> ------------
+>
+> This set enables storing pointers of a certain type in BPF map, and extends the
+> verifier to enforce type safety and lifetime correctness properties.
+>
+> The infrastructure being added is generic enough for allowing storing any kind
+> of pointers whose type is available using BTF (user or kernel) in the future
+> (e.g. strongly typed memory allocation in BPF program), which are internally
+> tracked in the verifier as PTR_TO_BTF_ID, but for now the series limits them to
+> four kinds of pointers obtained from the kernel.
+>
+> Obviously, use of this feature depends on map BTF.
+>
+> 1. Unreferenced kernel pointer
+>
+> In this case, there are very few restrictions. The pointer type being stored
+> must match the type declared in the map value. However, such a pointer when
+> loaded from the map can only be dereferenced, but not passed to any in-kernel
+> helpers or kernel functions available to the program. This is because while the
+> verifier's exception handling mechanism coverts BPF_LDX to PROBE_MEM loads,
+> which are then handled specially by the JIT implementation, the same liberty is
+> not available to accesses inside the kernel. The pointer by the time it is
+> passed into a helper has no lifetime related guarantees about the object it is
+> pointing to, and may well be referencing invalid memory.
+>
+> 2. Referenced kernel pointer
+>
+> This case imposes a lot of restrictions on the programmer, to ensure safety. To
+> transfer the ownership of a reference in the BPF program to the map, the user
+> must use the BPF_XCHG instruction, which returns the old pointer contained in
+> the map, as an acquired reference, and releases verifier state for the
+> referenced pointer being exchanged, as it moves into the map.
+>
+> This a normal PTR_TO_BTF_ID that can be used with in-kernel helpers and kernel
+> functions callable by the program.
+>
+> However, if BPF_LDX is used to load a referenced pointer from the map, it is
+> still not permitted to pass it to in-kernel helpers or kernel functions. To
+> obtain a reference usable with helpers, the user must invoke a kfunc helper
+> which returns a usable reference (which also must be eventually released before
+> BPF_EXIT, or moved into a map).
+>
+> Since the load of the pointer (preserving data dependency ordering) must happen
+> inside the RCU read section, the kfunc helper will take a pointer to the map
+> value, which must point to the actual pointer of the object whose reference is
+> to be raised. The type will be verified from the BTF information of the kfunc,
+> as the prototype must be:
+>
+>         T *func(T **, ... /* other arguments */);
+>
+> Then, the verifier checks whether pointer at offset of the map value points to
+> the type T, and permits the call.
+>
+> This convention is followed so that such helpers may also be called from
+> sleepable BPF programs, where RCU read lock is not necessarily held in the BPF
+> program context, hence necessiating the need to pass in a pointer to the actual
+> pointer to perform the load inside the RCU read section.
+>
+> 3. per-CPU kernel pointer
+>
+> These have very little restrictions. The user can store a PTR_TO_PERCPU_BTF_ID
+> into the map, and when loading from the map, they must NULL check it before use,
+> because while a non-zero value stored into the map should always be valid, it can
+> still be reset to zero on updates. After checking it to be non-NULL, it can be
+> passed to bpf_per_cpu_ptr and bpf_this_cpu_ptr helpers to obtain a PTR_TO_BTF_ID
+> to underlying per-CPU object.
+>
+> It is also permitted to write 0 and reset the value.
+>
+> 4. Userspace pointer
+>
+> The verifier recently gained support for annotating BTF with __user type tag.
+> This indicates pointers pointing to memory which must be read using the
+> bpf_probe_read_user helper to ensure correct results. The set also permits
+> storing them into the BPF map, and ensures user pointer cannot be stored
+> into other kinds of pointers mentioned above.
+>
+> When loaded from the map, the only thing that can be done is to pass this
+> pointer to bpf_probe_read_user. No dereference is allowed.
+>
 
-On 2/21/22 7:28 PM, David Ahern wrote:
-> On 2/20/22 10:34 PM, Dongli Zhang wrote:
->> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
->> index aa27268..bf7d8cd 100644
->> --- a/drivers/net/tun.c
->> +++ b/drivers/net/tun.c
->> @@ -1062,13 +1062,16 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->>  	struct netdev_queue *queue;
->>  	struct tun_file *tfile;
->>  	int len = skb->len;
->> +	enum skb_drop_reason drop_reason;
-> 
-> this function is already honoring reverse xmas tree style, so this needs
-> to be moved up.
+I guess I missed some context here. Could you please provide some reference
+to the use cases of these features?
 
-I will move this up to before "int txq = skb->queue_mapping;".
+For Unreferenced kernel pointer and userspace pointer, it seems that there is
+no guarantee the pointer will still be valid during access (we only know it is
+valid when it is stored in the map). Is this correct?
 
-> 
->>  
->>  	rcu_read_lock();
->>  	tfile = rcu_dereference(tun->tfiles[txq]);
->>  
->>  	/* Drop packet if interface is not attached */
->> -	if (!tfile)
->> +	if (!tfile) {
->> +		drop_reason = SKB_DROP_REASON_DEV_READY;
->>  		goto drop;
->> +	}
->>  
->>  	if (!rcu_dereference(tun->steering_prog))
->>  		tun_automq_xmit(tun, skb);
->> @@ -1078,22 +1081,32 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
->>  	/* Drop if the filter does not like it.
->>  	 * This is a noop if the filter is disabled.
->>  	 * Filter can be enabled only for the TAP devices. */
->> -	if (!check_filter(&tun->txflt, skb))
->> +	if (!check_filter(&tun->txflt, skb)) {
->> +		drop_reason = SKB_DROP_REASON_DEV_FILTER;
->>  		goto drop;
->> +	}
->>  
->>  	if (tfile->socket.sk->sk_filter &&
->> -	    sk_filter(tfile->socket.sk, skb))
->> +	    sk_filter(tfile->socket.sk, skb)) {
->> +		drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
->>  		goto drop;
->> +	}
->>  
->>  	len = run_ebpf_filter(tun, skb, len);
->> -	if (len == 0)
->> +	if (len == 0) {
->> +		drop_reason = SKB_DROP_REASON_BPF_FILTER;
-> 
-> how does this bpf filter differ from SKB_DROP_REASON_SOCKET_FILTER? I
-> think the reason code needs to be a little clearer on the distinction.
-> 
+Thanks,
+Song
 
-
-While there is a diff between BPF_FILTER (here) and SOCKET_FILTER ...
-
-... indeed the issue is: there is NO diff between BPF_FILTER (here) and
-DEV_FILTER (introduced by the patch).
-
-
-The run_ebpf_filter() is to run the bpf filter attached to the TUN device (not
-socket). This is similar to DEV_FILTER, which is to run a device specific filter.
-
-Initially, I would use DEV_FILTER at both locations. This makes trouble to me as
-there would be two places with same reason=DEV_FILTER. I will not be able to
-tell where the skb is dropped.
-
-
-I was thinking about to introduce a SKB_DROP_REASON_DEV_BPF. While I have
-limited experience in device specific bpf, the TUN is the only device I know
-that has a device specific ebpf filter (by commit aff3d70a07ff ("tun: allow to
-attach ebpf socket filter")). The SKB_DROP_REASON_DEV_BPF is not generic enough
-to be re-used by other drivers.
-
-
-Would you mind sharing your suggestion if I would re-use (1)
-SKB_DROP_REASON_DEV_FILTER or (2) introduce a new SKB_DROP_REASON_DEV_BPF, which
-is for sk_buff dropped by ebpf attached to device (not socket).
-
-
-To answer your question, the SOCKET_FILTER is for filter attached to socket, the
-BPF_FILTER was supposed for ebpf filter attached to device (tun->filter_prog).
-
-
-Thank you very much!
-
-Dongli Zhang
+[...]
