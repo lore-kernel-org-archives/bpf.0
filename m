@@ -2,61 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22351C433F5
-	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 09:15:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AD9C433EF
+	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 10:04:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbiBXJPb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Feb 2022 04:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S232026AbiBXKEm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Feb 2022 05:04:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbiBXJPa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Feb 2022 04:15:30 -0500
-X-Greylist: delayed 442 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Feb 2022 01:15:00 PST
-Received: from mail.alecwise.pl (mail.alecwise.pl [89.40.125.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E0C2465CA
-        for <bpf@vger.kernel.org>; Thu, 24 Feb 2022 01:15:00 -0800 (PST)
-Received: by mail.alecwise.pl (Postfix, from userid 1001)
-        id 7C5DCA3F9C; Thu, 24 Feb 2022 09:06:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=alecwise.pl; s=mail;
-        t=1645693656; bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
-        h=Date:From:To:Subject:From;
-        b=JW5R92H6AuDpYOb4QX7I//2LzvZIAU31U9pKo72oYwr4ZCMc5xLRd43wNeY/wnkGm
-         2i//RsO45W31a3cQHRB1e6SyWOX+Uy8dQRWX6bEe8Z9PUBOL5zBx6WFUXhUAQ840PD
-         +HDE5VlBcncn7nogw8FPa//jiO1l1nxONgbbNBATp5mchYZVLOoVh/Y6xiiajnvrmT
-         ehOaFkk2vFupIp9oVgmoyujUDSx335L8dhnrzExBerJBW5obThCgkTGGyudDa8rv5Q
-         +TJ37EQeUyQf/H6LHB+MGLa8WaoREkY4k0AUwW+Dj1hZYsMOPJa0nPBMz+gbGX7Aoz
-         Zso7GSHE8j3hw==
-Received: by mail.alecwise.pl for <bpf@vger.kernel.org>; Thu, 24 Feb 2022 09:05:55 GMT
-Message-ID: <20220224074501-0.1.t.2mfc.0.dzql3nlw1p@alecwise.pl>
-Date:   Thu, 24 Feb 2022 09:05:55 GMT
-From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
-        <arkadiusz.sokolowski@alecwise.pl>
+        with ESMTP id S231623AbiBXKEl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Feb 2022 05:04:41 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2775285AB9
+        for <bpf@vger.kernel.org>; Thu, 24 Feb 2022 02:04:11 -0800 (PST)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K47fx6LYdz1FDbT;
+        Thu, 24 Feb 2022 17:59:37 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 24 Feb
+ 2022 18:04:09 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
 To:     <bpf@vger.kernel.org>
-Subject: Koszty instalacji fotowoltaicznej
-X-Mailer: mail.alecwise.pl
+CC:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH bpf-next v2 0/2] libbpf: Fix btf dump error caused by
+Date:   Thu, 24 Feb 2022 05:14:42 -0500
+Message-ID: <20220224101444.1169015-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dzie=C5=84 dobry,
+This series fixes a btf dump error caused by forward declaration.
+Currently if a declaration appears in the BTF before the definition,
+the definition is dumped as a conflicting name, eg:
 
-stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
- obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
+    $ bpftool btf dump file vmlinux format raw | grep "'unix_sock'"
+    [81287] FWD 'unix_sock' fwd_kind=struct
+    [89336] STRUCT 'unix_sock' size=1024 vlen=14
 
-Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
-acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
-ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
+    $ bpftool btf dump file vmlinux format c | grep "struct unix_sock"
+    struct unix_sock;
+    struct unix_sock___2 {	<--- conflict, the "___2" is unexpected
+		    struct unix_sock___2 *unix_sk;
 
-Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
-=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
-=2E
+This causes a "definition not found" compilation error if the dump output
+is used as a header file.
 
-Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
-temacie?
+Xu Kuohai (2):
+  libbpf: Skip declaration when counting duplicated type names
+  selftests/bpf: Update btf_dump for conflicting names caused by
+    declaration
 
+ tools/lib/bpf/btf_dump.c                      |  5 ++
+ .../selftests/bpf/prog_tests/btf_dump.c       | 54 ++++++++++++++-----
+ 2 files changed, 46 insertions(+), 13 deletions(-)
 
-Pozdrawiam
-Arkadiusz Soko=C5=82owski
+-- 
+2.30.2
+
