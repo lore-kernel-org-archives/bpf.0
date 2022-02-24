@@ -2,110 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD90FC433FE
-	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 01:40:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B793C433F5
+	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 01:41:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiBXBkv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Feb 2022 20:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S229633AbiBXBmX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Feb 2022 20:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiBXBks (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Feb 2022 20:40:48 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656D1110A
-        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 17:40:20 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id v5so659646qkj.4
-        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 17:40:20 -0800 (PST)
+        with ESMTP id S229685AbiBXBmW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Feb 2022 20:42:22 -0500
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF0D369EB
+        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 17:41:53 -0800 (PST)
+Received: by mail-il1-x129.google.com with SMTP id 9so592010ily.11
+        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 17:41:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=c0+yvP+F0EsSuoYlT67FNUqaSTeigpT+q0Adpduwy5E=;
-        b=PKlhuVKsNrEUVyGzqvCwpR8pOqGCDrmzI7od+f6QUwpI4cmRgdMiZkhC5ZyCbdVKht
-         YDd6YnwP1YyLrazZS6FiQPbDdXWPhDuMTIgbXeHtIZTdWhdy6R2FcZh8vyYb7PN4QLGa
-         Bf4Hs/73etduJ2HA/jcIzkMAmCVnSPpnrt41CtswnJO4g5BnMddF2fk2FnfNjBrYQxEg
-         Pt1wVmjrz/iyWUmePS2L/K8+pz3Y5VUOf5kHlBTC2AGYOktfHzjue9EzRDvDo0BpYkGF
-         Oa7GDG/lKeJffigWDZnuuvB9hut5Vlqah1bHh3Ut5kTCxtK3+iQi3CixsxR1VBGwIsbK
-         yXog==
+        bh=7uCJSsDQCRQ6U7yZAFsNaZ5VC0HlZq9YRypzah8QdjY=;
+        b=qQBCEwz3pKQmlHZ1k7xKw+iZiRu4Iuprwa7+9jsWR9OEsf+Te0GDk/TeXHF0hqPCCl
+         g2GArs29ajCDrsZMFh/oPJc3MA5+cUOvXpp7Ss1v1R3z2U3LZKjbVb7BA72j83mJhapl
+         DSWanq9s0B2lBFA+4b/4gsPD99V1YMgU7eY4io6UvHLu3NmrjhYF+yDNEz4pPNRt1ClM
+         nhuQO+9ujCh+XRXiTe9yaq/j9N+xl9comKAblXBPGGeGugsk1A9rdtX/tNUr2gkrapJs
+         +sDp5xGq6fDT/NfKYzjVZnouqc4l/k/zfTgraQPNq6UyZE59N0MutYXz1bNDoBjdkb92
+         IPBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c0+yvP+F0EsSuoYlT67FNUqaSTeigpT+q0Adpduwy5E=;
-        b=a94/+WnCnIjZBHs0rE9FChUvW+DLZi39ItBgGudUsHYcATBvVfUyPnTiOpX3+4E7Vk
-         mwWiwCAMK99qbYyJQvPyaGTp6dwWDHYbV1T3XBnuEZ20XMAfftSJWx9++iQIF7eeL21u
-         nbZdBBna9r1bs+1l5xnDZY0g4aOmcPNTt8jIrbxU+5XB64urkLAzAR/BKSax+FIeFt5y
-         OIRWpid8qhHUDlPt7Fb3IQLOILdk0YCyU8lNfaXFWPfhWDgAjix6Q9H+9sFWoHmIEv2A
-         q0hVLzhrugt0bjqAP3h3rlweM/rmLHKoPPD0xESqdzE5Ve/vVYLAR5qjKMlJ+HfORyax
-         NqJw==
-X-Gm-Message-State: AOAM530E1BvVl3uCnzRr8fJ1rk2UuoRScZvScz6CcuwB+D6H5OQF/lp8
-        AZe+1hiF070IrvR/RUWdZoy/+YPTcffRFHBDOduZhhEyYuIWfg==
-X-Google-Smtp-Source: ABdhPJwnnHMIdkfAYafPTW474UNEZq4sloTVO0KQ5JUKtN+zfBR0/VtawBwUv/EAyao0Tl6ABMKKCTTR57iai/snwLE=
-X-Received: by 2002:a05:622a:178b:b0:2dd:cbdf:ae23 with SMTP id
- s11-20020a05622a178b00b002ddcbdfae23mr403443qtk.566.1645665123836; Wed, 23
- Feb 2022 17:12:03 -0800 (PST)
+        bh=7uCJSsDQCRQ6U7yZAFsNaZ5VC0HlZq9YRypzah8QdjY=;
+        b=8LqyV3nGXbMDP3rpnaqV5XbO8okDoAqUo/l5/RmOe46P9rTRCp8LE4sNRo+vJd9qjx
+         uV/4aqpgFfPYyRplDJ44sJjWReJ/Sy6nNZR3UiDie0ADFBKAao+bPjuPgs5kMBbVFrea
+         ctsh+p87ipego4DoYv5uoj9d9WSCwB/pZVJIqTIl4zOG7ilFFBYQqlsxIOvI0X4TK39P
+         pImZ4Of7ekW5s4XGmS/6pZx9K0ZxBVKtVDDVozqtkaV5MZPj2s9rcTRv+aq8l4fzXEmG
+         w2TqIYqmIO5PDcjK/6Tl1BF+QXKvU8hyUsKQ1fLwRP1+gmZrlRv7KSFt+cIQaxWXopXx
+         mehQ==
+X-Gm-Message-State: AOAM533zBkmMUDLrD8l0TDXSl9hqBKptjEaXNGCrMfoS9j47kl2CtByR
+        TmGAEZvR7mlqI2uZMuMLdq0qfEo0rjjfLUCpv3mihrVbUbGpVg==
+X-Google-Smtp-Source: ABdhPJzEIgh/WyFNhs/28IHnX0wjE3IihYBDPhQFxG1pvHJWnHo0PYfO4Gc39TiyGHZs4qMSnf4M6lyWQlUXpiVP5mw=
+X-Received: by 2002:a92:d208:0:b0:2c1:1a3c:7b01 with SMTP id
+ y8-20020a92d208000000b002c11a3c7b01mr247449ily.71.1645664972248; Wed, 23 Feb
+ 2022 17:09:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224000531.1265030-1-haoluo@google.com> <CAEf4Bzb44WR2LiYchxB5JZ=Jdie6FEEi90mh=SCv07v4h4W11w@mail.gmail.com>
- <CA+khW7h4bL3qUst4nDy6LDmx73xVA_ch=PLc=o=v2iJNbGn21A@mail.gmail.com> <CAEf4BzaYxgnotk+J+czhAjXbfzEoOrnyiVMmmkjDDVHzYUs48A@mail.gmail.com>
-In-Reply-To: <CAEf4BzaYxgnotk+J+czhAjXbfzEoOrnyiVMmmkjDDVHzYUs48A@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 23 Feb 2022 17:11:52 -0800
-Message-ID: <CA+khW7ir8DTkVUae64wW9ju8fj9=gW5NHgAJ65ixvYsbubVr-A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+References: <20220224003729.2949667-1-mykolal@fb.com>
+In-Reply-To: <20220224003729.2949667-1-mykolal@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 23 Feb 2022 17:09:21 -0800
+Message-ID: <CAEf4BzaxyzTBJOp0uDmwG5LuTL-RJ08-DCuzLEa3Xw9bF5hk-w@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next] Small BPF verifier log improvements
+To:     Mykola Lysenko <mykolal@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Greg Thelen <gthelen@google.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 5:10 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Wed, Feb 23, 2022 at 4:40 PM Mykola Lysenko <mykolal@fb.com> wrote:
 >
-> On Wed, Feb 23, 2022 at 4:33 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Wed, Feb 23, 2022 at 4:11 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Feb 23, 2022 at 4:05 PM Hao Luo <haoluo@google.com> wrote:
-> > > >
-> > > > For binaries that are statically linked, consecutive stack frames are
-> > > > likely to be in the same VMA and therefore have the same build id.
-> > > > As an optimization for this case, we can cache the previous frame's
-> > > > VMA, if the new frame has the same VMA as the previous one, reuse the
-> > > > previous one's build id. We are holding the MM locks as reader across
-> > > > the entire loop, so we don't need to worry about VMA going away.
-> > > >
-> > > > Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
-> > > > test_progs.
-> > > >
-> > > > Suggested-by: Greg Thelen <gthelen@google.com>
-> > > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > > ---
-> > >
-> > > LGTM. Can you share performance numbers before and after?
-> > >
-> > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > >
-> >
-> > Thanks Andrii.
-> >
-> > On a real-world workload, we observed that 66% of cpu cycles in
-> > __bpf_get_stackid() were spent on build_id_parse() and find_vma().
-> > This was before.
-> >
-> > We haven't evaluated the performance with this patch yet. This
-> > optimization seems straightforward, so we plan to upstream it first
-> > and then retest.
+> In particular:
+> 1) remove output of inv for scalars in print_verifier_state
+> 2) replace inv with scalar in verifier error messages
+> 3) remove _value suffixes for umin/umax/s32_min/etc (except map_value)
+> 4) remove output of id=0
+> 5) remove output of ref_obj_id=0
 >
-> Ok, once it lands upstream, I'd really appreciate if you can retest
-> and update us with numbers. Thanks!
+> Signed-off-by: Mykola Lysenko <mykolal@fb.com>
+> ---
 
-Sure, will do that.
+You could have preserved my ack, but LGTM again (assuming CI run is green):
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>  kernel/bpf/verifier.c                         |  63 ++---
+>  .../testing/selftests/bpf/prog_tests/align.c  | 218 +++++++++---------
+>  .../selftests/bpf/prog_tests/log_buf.c        |   4 +-
+>  .../selftests/bpf/verifier/atomic_invalid.c   |   6 +-
+>  tools/testing/selftests/bpf/verifier/bounds.c |   4 +-
+>  tools/testing/selftests/bpf/verifier/calls.c  |   6 +-
+>  tools/testing/selftests/bpf/verifier/ctx.c    |   4 +-
+>  .../bpf/verifier/direct_packet_access.c       |   2 +-
+>  .../bpf/verifier/helper_access_var_len.c      |   6 +-
+>  tools/testing/selftests/bpf/verifier/jmp32.c  |  16 +-
+>  .../testing/selftests/bpf/verifier/precise.c  |   4 +-
+>  .../selftests/bpf/verifier/raw_stack.c        |   4 +-
+>  .../selftests/bpf/verifier/ref_tracking.c     |   6 +-
+>  .../selftests/bpf/verifier/search_pruning.c   |   2 +-
+>  tools/testing/selftests/bpf/verifier/sock.c   |   2 +-
+>  .../selftests/bpf/verifier/spill_fill.c       |  38 +--
+>  tools/testing/selftests/bpf/verifier/unpriv.c |   4 +-
+>  .../bpf/verifier/value_illegal_alu.c          |   4 +-
+>  .../selftests/bpf/verifier/value_ptr_arith.c  |   4 +-
+>  .../testing/selftests/bpf/verifier/var_off.c  |   2 +-
+>  20 files changed, 202 insertions(+), 197 deletions(-)
+>
+
+[...]
