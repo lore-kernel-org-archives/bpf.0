@@ -2,92 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02B49C433F5
-	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 00:23:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39708C433F5
+	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 00:33:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245236AbiBXAYD convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 23 Feb 2022 19:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55638 "EHLO
+        id S229834AbiBXAeU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Feb 2022 19:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245238AbiBXAYC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Feb 2022 19:24:02 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8D760CE5
-        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 16:23:34 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21NJp3BD002368
-        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 16:23:34 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3edmmhmrq6-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 16:23:34 -0800
-Received: from twshared5730.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Feb 2022 16:23:21 -0800
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id A7F2C12316A4D; Wed, 23 Feb 2022 16:23:18 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 bpf-next 0/3] libbpf: support custom SEC() handlers
-Date:   Wed, 23 Feb 2022 16:23:14 -0800
-Message-ID: <20220224002317.1089150-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229617AbiBXAeT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Feb 2022 19:34:19 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA0193190
+        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 16:33:49 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id 185so572733qkh.1
+        for <bpf@vger.kernel.org>; Wed, 23 Feb 2022 16:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AXLSRzCjsZCFoAyswTHwstLfgcPocf6IJntD36q7k5Q=;
+        b=eXo4RTiBDfKvcK3zjsVQUbB5xRiFtVQPIcgfPkctoWbFm5mnw9b/rvv7i7W/blEnBC
+         yIc5bKXcG1pxnlC0SRfWI5IDbeG0z3AZX3nQHmQHc113lD6Ol5OZ2tS74G+kNbIpat1S
+         l2koJ9Bkk6iHOLOt0wQmQQ2nbaKX3GYVJzBJISlswiX/aKcziR17YdIj0OELDv5KI37/
+         dvnuxypDL6azczfOlAZUUWle1zoc4hheSw3nVaAqiT9YpEGYVaSrD6iUaorNjL/zZVSV
+         Ci3XLLXkSLWxebo0p8uOW6BT3b9e7L/3SBI7yIwiQbVWMq95CTdtytdFiiwQrPyOiCF+
+         4Hcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AXLSRzCjsZCFoAyswTHwstLfgcPocf6IJntD36q7k5Q=;
+        b=mRx2ZKBuc9QhIk80pY2COGdBOToIMbsG327b/f0Cl7UHN3bHf+IPAcB19DPB+TXVsf
+         FZ4eG3IznkRVNvgU8tSVAxcV30x4G4GftrvhC1z8ZNX0UAG+mLrDSYKYw8jv56u/1/Ex
+         b3xeG9lLS3Tb4x1Nxq8oh2Z6ZUJjwFjesWxRSIvYacxdyxAFL+DJF1fqM2o137EoJmbL
+         +hcgEQ5wL0udfSDGAakQQdSmO3rTQuqWBs9x8UCicHxrczhbiHj+FLU02L/n82GZNY4J
+         eD0m/eoKUANWlTEx2PWXSG5Msr3rCvYvs8IIhl8dqjts8PLWYTQQBo3d8IbYVWRoH8py
+         QnQg==
+X-Gm-Message-State: AOAM532cLT6Tvny6OQyo0TIz0DH7sPCkBaYaFcjJK+tyqzbdWJFqguJ8
+        jpjEkHSKJVrgnGbD4+bXRLOsBKAdL3sssIs22UbNFgmeEoXPqgPa
+X-Google-Smtp-Source: ABdhPJyH1H6InszUaBtbaqZ275mDiIyZuB59Sdfd5+Ui+46/fsxVuxWpwD4DpXN8ISi2NArkYmB9ZgKngl+DZhH3h3U=
+X-Received: by 2002:a37:b287:0:b0:607:afb3:2c1d with SMTP id
+ b129-20020a37b287000000b00607afb32c1dmr212265qkf.221.1645662828189; Wed, 23
+ Feb 2022 16:33:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: HhDWBDGxQJ39VN36k1oHF9kBqzg5amXx
-X-Proofpoint-GUID: HhDWBDGxQJ39VN36k1oHF9kBqzg5amXx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-02-23_09,2022-02-23_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- malwarescore=0 phishscore=0 bulkscore=0 adultscore=0 spamscore=0
- suspectscore=0 impostorscore=0 lowpriorityscore=0 priorityscore=1501
- mlxscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202240000
-X-FB-Internal: deliver
+References: <20220224000531.1265030-1-haoluo@google.com> <CAEf4Bzb44WR2LiYchxB5JZ=Jdie6FEEi90mh=SCv07v4h4W11w@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb44WR2LiYchxB5JZ=Jdie6FEEi90mh=SCv07v4h4W11w@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 23 Feb 2022 16:33:37 -0800
+Message-ID: <CA+khW7h4bL3qUst4nDy6LDmx73xVA_ch=PLc=o=v2iJNbGn21A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Cache the last valid build_id.
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Blake Jones <blakejones@google.com>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability for user applications and libraries to register custom BPF program
-SEC() handlers. See patch #2 for examples where this is useful.
+On Wed, Feb 23, 2022 at 4:11 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Feb 23, 2022 at 4:05 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > For binaries that are statically linked, consecutive stack frames are
+> > likely to be in the same VMA and therefore have the same build id.
+> > As an optimization for this case, we can cache the previous frame's
+> > VMA, if the new frame has the same VMA as the previous one, reuse the
+> > previous one's build id. We are holding the MM locks as reader across
+> > the entire loop, so we don't need to worry about VMA going away.
+> >
+> > Tested through "stacktrace_build_id" and "stacktrace_build_id_nmi" in
+> > test_progs.
+> >
+> > Suggested-by: Greg Thelen <gthelen@google.com>
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+>
+> LGTM. Can you share performance numbers before and after?
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
 
-Patch #1 does some preliminary refactoring to allow exponsing program
-init, preload, and attach callbacks as public API. It also establishes
-a protocol to allow optional auto-attach behavior. This will also help the
-case of sometimes auto-attachable uprobes.
+Thanks Andrii.
 
-v3->v4:
-  - init_fn -> prog_setup_fn, preload_fn -> prog_prepare_load_fn (Alexei);
-v2->v3:
-  - moved callbacks and cookie into OPTS struct (Alan);
-  - added more test scenarios (Alan);
-  - address most of Alan's feedback, but kept API name;
-v1->v2:
-  - resubmitting due to git send-email screw up.
+On a real-world workload, we observed that 66% of cpu cycles in
+__bpf_get_stackid() were spent on build_id_parse() and find_vma().
+This was before.
 
-Cc: Alan Maguire <alan.maguire@oracle.com>
-
-Andrii Nakryiko (3):
-  libbpf: allow BPF program auto-attach handlers to bail out
-  libbpf: support custom SEC() handlers
-  selftests/bpf: add custom SEC() handling selftest
-
- tools/lib/bpf/libbpf.c                        | 332 ++++++++++++------
- tools/lib/bpf/libbpf.h                        |  87 +++++
- tools/lib/bpf/libbpf.map                      |   6 +
- tools/lib/bpf/libbpf_version.h                |   2 +-
- .../bpf/prog_tests/custom_sec_handlers.c      | 176 ++++++++++
- .../bpf/progs/test_custom_sec_handlers.c      |  63 ++++
- 6 files changed, 564 insertions(+), 102 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_custom_sec_handlers.c
-
--- 
-2.30.2
-
+We haven't evaluated the performance with this patch yet. This
+optimization seems straightforward, so we plan to upstream it first
+and then retest.
