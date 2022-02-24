@@ -2,102 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95919C433F5
-	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 10:09:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BC2CC433F5
+	for <bpf@archiver.kernel.org>; Thu, 24 Feb 2022 10:21:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbiBXKJw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Feb 2022 05:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S231623AbiBXKWP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Feb 2022 05:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbiBXKJk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Feb 2022 05:09:40 -0500
-Received: from mail.tintel.eu (mail.tintel.eu [51.83.127.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223D128AD96;
-        Thu, 24 Feb 2022 02:09:05 -0800 (PST)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id 50C8C434FC4A;
-        Thu, 24 Feb 2022 11:09:02 +0100 (CET)
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id SFVhmd4-Hbc4; Thu, 24 Feb 2022 11:09:01 +0100 (CET)
-Received: from localhost (localhost [IPv6:::1])
-        by mail.tintel.eu (Postfix) with ESMTP id BBDAB434FC4B;
-        Thu, 24 Feb 2022 11:09:01 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.tintel.eu BBDAB434FC4B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux-ipv6.be;
-        s=502B7754-045F-11E5-BBC5-64595FD46BE8; t=1645697341;
-        bh=NsEziSD8zXGAxjibXFGFRrDDNKL9BST7ZKyzNe6aCCc=;
-        h=Message-ID:Date:MIME-Version:To:From;
-        b=cjdelavZb9bpnlZ24Xu1lGiiftDZaQ9y9quF0qr572LG3GfZefKKt9dUqmP7bjiLj
-         R1a8lWip6pBHta8VooDEz3xgPmIt8MdklEls7mtZKSqClTrUKqLM5TJBk0v+8Siyyx
-         keJo3orc3JNB7CeA95rH4x8IBQDcFtW6jFtaYZlc=
-X-Virus-Scanned: amavisd-new at mail.tintel.eu
-Received: from mail.tintel.eu ([IPv6:::1])
-        by localhost (mail.tintel.eu [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id 0BgzWEgqgmxJ; Thu, 24 Feb 2022 11:09:01 +0100 (CET)
-Received: from [IPV6:2001:67c:21bc:20::10] (unknown [IPv6:2001:67c:21bc:20::10])
-        (Authenticated sender: stijn@tintel.eu)
-        by mail.tintel.eu (Postfix) with ESMTPSA id E115A434FC4A;
-        Thu, 24 Feb 2022 11:09:00 +0100 (CET)
-Message-ID: <ac624e07-5310-438a-dce3-d2edb01e8031@linux-ipv6.be>
-Date:   Thu, 24 Feb 2022 12:08:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] libbpf: fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
-Content-Language: en-GB
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Song Liu <song@kernel.org>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        with ESMTP id S230344AbiBXKWN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Feb 2022 05:22:13 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC1011147
+        for <bpf@vger.kernel.org>; Thu, 24 Feb 2022 02:21:42 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a23so3285015eju.3
+        for <bpf@vger.kernel.org>; Thu, 24 Feb 2022 02:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Htc3oqWxZZMcWDbUXLeAQItx5CvgH1P5LweVKfWWbXU=;
+        b=YKgYD1I6XrVZ0S6uDdTcELyy7K2p9re21N1W4SD5OwQmZL6TUJRWhHHVVU7MmtBdo+
+         c+YcxC0tg9sLKNs0ZRamriW9Q8iKrVC+Dga8qoE/f8+XUP+96bDxFzXZV1pmdxXW86WN
+         o69nXC4icshS8z7Nat2x8HSu3Lv/9ZOFZ6umFnyVmTwbEwcSxc2SMmkwXunSJMt1AI1g
+         z+nKO54D0NayWsiZlFwHk+ah2KSAxnMFZSUHMgbjTB3tq34NAYNd9SaQV0nLfMRrOwLS
+         iN2e7BURm3SbqZ+12DlUHVyoRoD0p1o6sYKFnQJZk7H8rU8qDc3Hf9wWmAVH4Yl3sTGH
+         Nhow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Htc3oqWxZZMcWDbUXLeAQItx5CvgH1P5LweVKfWWbXU=;
+        b=JSG3DrdmKEiRhr0KlX+ezlnnI7VWFKnAsnbx4y/PZ0SpOEfTzqGrBae8jSFWjA07/7
+         D6SVY4vCNcXlX31gm6IxQT1nj0FX4dccP8pnhnVyk1rNKjc+QhI/zGqzUNOm2szSL2pz
+         g3FrRguD4JMAkNDRmI0/BVLCpODNMOVPXvrfmsE+hRfKCyPt60qxEXk/V/qoImFku4fn
+         l7O5nv/1Rum3028Lo8ko28O8JIYsdpfbvKRyMTpGWjRb5CAY+IwRfhge94vLRt+xnc5d
+         FoUCySP0Ifm9mQVJlWv5/R1IltfJMzqHmiShd3+q614lh8IAwj+IPVIsRr7cl7fbmqki
+         aUDA==
+X-Gm-Message-State: AOAM531UAIpXu1omkYW3dnzLNMbDBR+gIZYFDYdsHHnJK5/IHei8ReSS
+        ejYPNPcGdoWDyIMEjiHTPXch/6OdsE5jyg==
+X-Google-Smtp-Source: ABdhPJwKwy9gbDflJtc0X3PRdaHY4Vg40d7PrjYzsLby7GuGttjiyc1cDQvE9DaqOeo+GCM9FQ3urg==
+X-Received: by 2002:a17:906:1316:b0:6cf:d101:9638 with SMTP id w22-20020a170906131600b006cfd1019638mr1653017ejb.284.1645698100730;
+        Thu, 24 Feb 2022 02:21:40 -0800 (PST)
+Received: from ddolgov.remote.csb (dslb-178-012-046-224.178.012.pools.vodafone-ip.de. [178.12.46.224])
+        by smtp.gmail.com with ESMTPSA id c29sm1151518ejj.117.2022.02.24.02.21.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 02:21:40 -0800 (PST)
+Date:   Thu, 24 Feb 2022 11:21:39 +0100
+From:   Dmitry Dolgov <9erthalion6@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>
-References: <20220222204236.2192513-1-stijn@linux-ipv6.be>
- <CAPhsuW6WgjL_atKCivbk5iMNBFHuSGcjAC0tdZYag2fOesUBKA@mail.gmail.com>
- <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
-From:   Stijn Tintel <stijn@linux-ipv6.be>
-In-Reply-To: <CAEf4BzYuk2Rur-pae7gbuXSb=ayJ0fUREStdWyorWgd_q1D9zQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Andrii Nakryiko <andrii@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [RFC PATCH v3] bpftool: Add bpf_cookie to link output
+Message-ID: <20220224102139.rvf44rd6wbzlf4gc@ddolgov.remote.csb>
+References: <20220218075103.10002-1-9erthalion6@gmail.com>
+ <CAEf4BzaD4FJw9_45v0-N5MbSKMCDcENQPzUDwo1FWoX-5ixzsg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzaD4FJw9_45v0-N5MbSKMCDcENQPzUDwo1FWoX-5ixzsg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 24/02/2022 01:15, Andrii Nakryiko wrote:
-> On Tue, Feb 22, 2022 at 6:37 PM Song Liu <song@kernel.org> wrote:
->> On Tue, Feb 22, 2022 at 12:51 PM Stijn Tintel <stijn@linux-ipv6.be> wrote:
->>> When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
->>> max_entries parameter set, this parameter will be set to the number of
->>> possible CPUs. Due to this, the map_is_reuse_compat function will return
->>> false, causing the following error when trying to reuse the map:
->>>
->>> libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter mismatch
->>>
->>> Fix this by checking against the number of possible CPUs if the
->>> max_entries parameter is not set in the map definition.
->>>
->>> Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF objects")
->>> Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
->> Acked-by: Song Liu <songliubraving@fb.com>
->>
->> I think the following fix would be more future proof, but the patch
->> as-is is better for
->> stable backport? How about we add a follow up patch on top of current
->> patch to fix
->> def->max_entries once for all?
-> Keeping special logic for PERF_EVENT_ARRAY in one place is
-> preferrable. With this, the changes in map_is_reuse_compat() shouldn't
-> be necessary at all. Stijn, can you please send v2 with Song's
-> proposed changes?
+> On Wed, Feb 23, 2022 at 01:46:56PM -0800, Andrii Nakryiko wrote:
+> On Thu, Feb 17, 2022 at 11:51 PM Dmitrii Dolgov <9erthalion6@gmail.com> wrote:
+> >
+> > +static __always_inline __u64 get_bpf_cookie(struct bpf_link *link)
+> > +{
+> > +       struct bpf_perf_link *perf_link;
+> > +       struct perf_event *event;
+> > +
+> > +       perf_link = container_of(link, struct bpf_perf_link, link);
+> > +       event = BPF_CORE_READ(perf_link, perf_file, private_data);
+> > +       return BPF_CORE_READ(event, bpf_cookie);
 >
-Will do!
+> not every bpf_link is bpf_perf_link, you can't do it for every
+> instance of bpf_link.
 
-Thanks,
-Stijn
-
+Right, thanks. I was somehow testing it only with perf links, will fix.
