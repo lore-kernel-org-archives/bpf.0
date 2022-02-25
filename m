@@ -2,187 +2,349 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E35ADC433F5
-	for <bpf@archiver.kernel.org>; Fri, 25 Feb 2022 09:02:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB356C433F5
+	for <bpf@archiver.kernel.org>; Fri, 25 Feb 2022 10:25:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238701AbiBYJD1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Feb 2022 04:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
+        id S239345AbiBYK0O (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Feb 2022 05:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiBYJD0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Feb 2022 04:03:26 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B021B8CDB5;
-        Fri, 25 Feb 2022 01:02:54 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id bx9-20020a17090af48900b001bc64ee7d3cso4244962pjb.4;
-        Fri, 25 Feb 2022 01:02:54 -0800 (PST)
+        with ESMTP id S231214AbiBYK0N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Feb 2022 05:26:13 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7701DDFD7
+        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 02:25:41 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id bn33so6744302ljb.6
+        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 02:25:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ducc7JXZKPilbiGQb9maeoCw4VcQthlM/33tFBDDEXY=;
-        b=LXxI6oEAqREMBDL8LgEQdui6E2TZcGhmYxgWhOkc6Tozq2/M+EEAiDVhrbhLwLrRbo
-         kuzQdUX+yM8MDIdMaesD0zLI0Y5PdQopdzQOyJAESekaamPrTOgwlJsh8foVRiOqRpWk
-         7eDKJg4b97CSTKGZkZ2u6fC8+2GZrMsIdUJlb8bjiOspJAMfhVaZJDLz/IXKDrL0lEwA
-         12+udt6Isx4rIyzg8BBY6kUaHDZ3WVNqjrzsfKK05FTGOx/VaQSHbsb+zng+7HIsoN1J
-         fZTD7E1fiwoKOtvUJ5a2WJHNI4lbqJ31n5OGDQX4S/uBAMk2g4wxAhwbFOffoQSAV7ym
-         2dqA==
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=5dv4/lYYYynkGTfjwQ1LaTUlJAy6uWzUoPFSJxjFa2U=;
+        b=FCqBPCtMhuxOuNTpGBvaxsuoprHho98IuETQXW+dRbHykkZgCkE1kqTpaqn1W2SaZ1
+         LjYndQS8RkjE55T+gXW7sRr7EKNWpQq3Ok2ZldqoWirSvOwjeLScrl2aMb88qhZwYH3f
+         Fhp1/x4xoQiLkQokIkrDVyMhOtw2hxckarYNk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ducc7JXZKPilbiGQb9maeoCw4VcQthlM/33tFBDDEXY=;
-        b=ppCx2hpqXobdvFbRZlAESdfwYklfjNEYlDwHwyNwX0L5hYMT0Ktx8mgvf9YtYH2bvu
-         nC7s953UiRmlFzAh5afHnENZOe7bWae/xDt6BHKyCVMq903SAUOxORmQpMf3xXdyq1rs
-         1aDFEcOjdE3314EHn6GXHJh0xGf05ygrdoN9DehDl/z5xxMZUerfuEggRHrFanfdfCf4
-         T6fU0MNMG8xAMwJPzvgxcAyS9yVeEU9fXhcmJOWIxkwolvrCNvVLJOB0ElgRG6UuYvWj
-         wnRJQdqsaYSLckkUTuo8BbUUDey+SDqqxO+iLYiYEmoit82Gp7F//shRmCXyY6c2Ii6v
-         Ko+Q==
-X-Gm-Message-State: AOAM533+xL1ay6jsWkteNUPkcY6ohR+j15Z8gVyv8gYnDGGfsBHoTPVT
-        FXvZQJ8gwpwYBVxQqBQt+VcryDOsc12idXqi
-X-Google-Smtp-Source: ABdhPJylz7bTsGKWA+YqwJVquOZ29LPKyAFu7GqCfzGA8fDlTPSCwefNlBPiXAIqtgZZmbbPXw3W9w==
-X-Received: by 2002:a17:90a:8a14:b0:1bc:1d5e:d852 with SMTP id w20-20020a17090a8a1400b001bc1d5ed852mr2234799pjn.76.1645779774010;
-        Fri, 25 Feb 2022 01:02:54 -0800 (PST)
-Received: from localhost.localdomain ([157.255.44.217])
-        by smtp.gmail.com with ESMTPSA id p1-20020a056a000b4100b004e13df16962sm2406744pfo.217.2022.02.25.01.02.51
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=5dv4/lYYYynkGTfjwQ1LaTUlJAy6uWzUoPFSJxjFa2U=;
+        b=lDMXl30C+oVzk6lngfn1VOLoOvmFgaFxbEqOb6AaCsguDJcsuilSPY3cQAEpHtrLuP
+         zFFAWjHSoyQBs4pJZsFcas1fhRis9KHoh22HRNM2Wxlvya8RzRxSK4Grwg4ipzMTdRBy
+         y7k1IqPmbvbI0q7xZp3zByTG0R67DREdqxIiVlBi0n6amZxl+rhzDGN1CWaS+ilmsnkQ
+         HVUeuQ3M5kRBx6Vn3BOIQW8U+aC+8b0rx75sSepk+fkw6+DqwhJdtwypV58M+XoIVXIN
+         6tW01B2k2DIri2GZetnvtRNvKbjmD/uhjj2mrOv1uGiGjJk1Ou9+KdC7/YqVdlF9Xuek
+         Cqhw==
+X-Gm-Message-State: AOAM530CFj9S6fAekLttpXnAzGjWfsaEvmD2YdugG2xMDc2Cn0vsq6c/
+        gEe2WFocMS96A9xHGBMTPAljow==
+X-Google-Smtp-Source: ABdhPJzUsTYYkcAtzS0CUR3FEoeE9C5Uinl2yjOS/Gk9cy68B+THUq/rOlhaViESYPLZ7MYlEfu5Rg==
+X-Received: by 2002:a05:651c:2113:b0:246:7097:afff with SMTP id a19-20020a05651c211300b002467097afffmr2497580ljq.417.1645784739221;
+        Fri, 25 Feb 2022 02:25:39 -0800 (PST)
+Received: from cloudflare.com ([2a01:110f:4809:d800::f9c])
+        by smtp.gmail.com with ESMTPSA id r6-20020a19ac46000000b00442f6964cc1sm162064lfc.230.2022.02.25.02.25.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Feb 2022 01:02:53 -0800 (PST)
-From:   Harold Huang <baymaxhuang@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     jasowang@redhat.com, pabeni@redhat.com,
-        Harold Huang <baymaxhuang@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Fri, 25 Feb 2022 02:25:38 -0800 (PST)
+References: <20220221180358.169101-1-jakub@cloudflare.com>
+ <8ff3f2ff692acaffe9494007a3431c269372f822.camel@linux.ibm.com>
+ <88a4927eaf3ca385ce9a7406ef23062a39eb1734.camel@linux.ibm.com>
+ <0eeac90306f03b4fdb2b028ffb509e4d20121aec.camel@linux.ibm.com>
+ <87fsoakjj6.fsf@cloudflare.com>
+ <6e28c1c3ef0eda6f041593216ac32b210e55e4b7.camel@linux.ibm.com>
+ <87bkyykapm.fsf@cloudflare.com>
+ <8a88c49e2d4f5715776c33a6cc83cc1985f4e106.camel@linux.ibm.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kernel@vger.kernel.org (open list),
-        bpf@vger.kernel.org (open list:XDP (eXpress Data Path))
-Subject: [PATCH net-next v2] tun: support NAPI for packets received from batched XDP buffs
-Date:   Fri, 25 Feb 2022 17:02:23 +0800
-Message-Id: <20220225090223.636877-1-baymaxhuang@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220224103852.311369-1-baymaxhuang@gmail.com>
-References: <20220224103852.311369-1-baymaxhuang@gmail.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        kernel-team@cloudflare.com,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix implementation-defined
+ behavior in sk_lookup test
+Date:   Fri, 25 Feb 2022 11:01:37 +0100
+In-reply-to: <8a88c49e2d4f5715776c33a6cc83cc1985f4e106.camel@linux.ibm.com>
+Message-ID: <877d9jjl99.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In tun, NAPI is supported and we can also use NAPI in the path of
-batched XDP buffs to accelerate packet processing. What is more, after
-we use NAPI, GRO is also supported. The iperf shows that the throughput of
-single stream could be improved from 4.5Gbps to 9.2Gbps. Additionally, 9.2
-Gbps nearly reachs the line speed of the phy nic and there is still about
-15% idle cpu core remaining on the vhost thread.
+On Tue, Feb 22, 2022 at 10:51 PM +01, Ilya Leoshkevich wrote:
+> On Tue, 2022-02-22 at 19:24 +0100, Jakub Sitnicki wrote:
+>> On Tue, Feb 22, 2022 at 06:42 PM +01, Ilya Leoshkevich wrote:
+>> > On Tue, 2022-02-22 at 15:53 +0100, Jakub Sitnicki wrote:
+>> > > On Tue, Feb 22, 2022 at 03:22 AM +01, Ilya Leoshkevich wrote:
+>> > > > On Tue, 2022-02-22 at 01:43 +0100, Ilya Leoshkevich wrote:
+>> > > > > On Mon, 2022-02-21 at 22:39 +0100, Ilya Leoshkevich wrote:
+>> > > > > > On Mon, 2022-02-21 at 19:03 +0100, Jakub Sitnicki wrote:
+>> > > > > > > Shifting 16-bit type by 16 bits is implementation-defined
+>> > > > > > > for
+>> > > > > > > BPF
+>> > > > > > > programs.
+>> > > > > > > Don't rely on it in case it is causing the test failures
+>> > > > > > > we
+>> > > > > > > are
+>> > > > > > > seeing on
+>> > > > > > > s390x z15 target.
+>> > > > > > >=20
+>> > > > > > > Fixes: 2ed0dc5937d3 ("selftests/bpf: Cover 4-byte load
+>> > > > > > > from
+>> > > > > > > remote_port in bpf_sk_lookup")
+>> > > > > > > Reported-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+>> > > > > > > Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+>> > > > > > > ---
+>> > > > > > >=20
+>> > > > > > > I don't have a dev env for s390x/z15 set up yet, so can't
+>> > > > > > > definitely
+>> > > > > > > confirm the fix.
+>> > > > > > > That said, it seems worth fixing either way.
+>> > > > > > >=20
+>> > > > > > > =C2=A0tools/testing/selftests/bpf/progs/test_sk_lookup.c | 3
+>> > > > > > > ++-
+>> > > > > > > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
+>> > > > > > >=20
+>> > > > > > > diff --git
+>> > > > > > > a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+>> > > > > > > b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+>> > > > > > > index bf5b7caefdd0..7d47276a8964 100644
+>> > > > > > > --- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+>> > > > > > > +++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+>> > > > > > > @@ -65,6 +65,7 @@ static const __u32 KEY_SERVER_A =3D
+>> > > > > > > SERVER_A;
+>> > > > > > > =C2=A0static const __u32 KEY_SERVER_B =3D SERVER_B;
+>> > > > > > > =C2=A0
+>> > > > > > > =C2=A0static const __u16 SRC_PORT =3D bpf_htons(8008);
+>> > > > > > > +static const __u32 SRC_PORT_U32 =3D bpf_htonl(8008U <<
+>> > > > > > > 16);
+>> > > > > > > =C2=A0static const __u32 SRC_IP4 =3D IP4(127, 0, 0, 2);
+>> > > > > > > =C2=A0static const __u32 SRC_IP6[] =3D IP6(0xfd000000, 0x0, =
+0x0,
+>> > > > > > > 0x00000002);
+>> > > > > > > =C2=A0
+>> > > > > > > @@ -421,7 +422,7 @@ int ctx_narrow_access(struct
+>> > > > > > > bpf_sk_lookup
+>> > > > > > > *ctx)
+>> > > > > > > =C2=A0
+>> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Load from=
+ remote_port field with zero padding
+>> > > > > > > (backward
+>> > > > > > > compatibility) */
+>> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0val_u32 =3D =
+*(__u32 *)&ctx->remote_port;
+>> > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (val_u32 !=3D =
+bpf_htonl(bpf_ntohs(SRC_PORT) <<
+>> > > > > > > 16))
+>> > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (val_u32 !=3D =
+SRC_PORT_U32)
+>> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return SK_DROP;
+>> > > > > > > =C2=A0
+>> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Narrow lo=
+ads from local_port field. Expect
+>> > > > > > > DST_PORT.
+>> > > > > > > */
+>> > > > > >=20
+>> > > > > > Unfortunately this doesn't help with the s390 problem.
+>> > > > > > I'll try to debug this.
+>> > > > >=20
+>> > > > > I have to admit I have a hard time wrapping my head around
+>> > > > > the
+>> > > > > requirements here.
+>> > > > >=20
+>> > > > > Based on the pre-9a69e2b385f4 code, do I understand correctly
+>> > > > > that
+>> > > > > for the following input
+>> > > > >=20
+>> > > > > Port:=C2=A0=C2=A0=C2=A0=C2=A0 0x1f48
+>> > > > > SRC_PORT: 0x481f
+>> > > > >=20
+>> > > > > we expect the following results for different kinds of loads:
+>> > > > >=20
+>> > > > > Size=C2=A0=C2=A0 Offset=C2=A0 LE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BE
+>> > > > > BPF_B=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x1f=C2=A0=C2=
+=A0=C2=A0 0
+>> > > > > BPF_B=C2=A0 1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x48=C2=A0=C2=
+=A0=C2=A0 0
+>> > > > > BPF_B=C2=A0 2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 0x48
+>> > > > > BPF_B=C2=A0 3=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 0x1f
+>> > > > > BPF_H=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x481f=C2=A0 0
+>> > > > > BPF_H=C2=A0 1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 0x481f
+>> > > > > BPF_W=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x481f=C2=A0 0=
+x481f
+>> > > > >=20
+>> > > > > and this is guaranteed by the struct bpf_sk_lookup ABI?
+>> > > > > Because
+>> > > > > then
+>> > > > > it
+>> > > > > looks as if 9a69e2b385f4 breaks it on big-endian as follows:
+>> > > > >=20
+>> > > > > Size=C2=A0=C2=A0 Offset=C2=A0 BE-9a69e2b385f4
+>> > > > > BPF_B=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x48
+>> > > > > BPF_B=C2=A0 1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x1f
+>> > > > > BPF_B=C2=A0 2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+>> > > > > BPF_B=C2=A0 3=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+>> > > > > BPF_H=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x481f
+>> > > > > BPF_H=C2=A0 1=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+>> > > > > BPF_W=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x481f0000
+>> > > >=20
+>> > > > Sorry, I worded this incorrectly: 9a69e2b385f4 did not change
+>> > > > the
+>> > > > kernel behavior, the ABI is not broken and the old compiled
+>> > > > code
+>> > > > should
+>> > > > continue to work.
+>> > > > What the second table really shows are what the results should
+>> > > > be
+>> > > > according to the 9a69e2b385f4 struct bpf_sk_lookup definition,
+>> > > > which I
+>> > > > still think is broken on big-endian and needs to be adjusted to
+>> > > > match
+>> > > > the ABI.
+>> > > >=20
+>> > > > I noticed one other strange thing in the meantime: loads from
+>> > > > *(__u32 *)&ctx->remote_port, *(__u16 *)&ctx->remote_port and
+>> > > > *((__u16 *)&ctx->remote_port + 1) all produce 8008 on s390,
+>> > > > which
+>> > > > is
+>> > > > clearly inconsistent. It looks as if convert_ctx_accesses()
+>> > > > needs
+>> > > > to be
+>> > > > adjusted to handle combinations like ctx_field_size =3D=3D 4 &&
+>> > > > size =3D=3D
+>> > > > 2
+>> > > > && target_size =3D=3D 2. I will continue with this tomorrow.
+>> > > >=20
+>> > > > > Or is the old behavior a bug and this new one is desirable?
+>> > > > > 9a69e2b385f4 has no Fixes: tag, so I assume that's the former
+>> > > > > :-(
+>> > > > >=20
+>> > > > > In which case, would it make sense to fix it by swapping
+>> > > > > remote_port
+>> > > > > and :16 in bpf_sk_lookup on big-endian?
+>> > >=20
+>> > > Thanks for looking into it.
+>> > >=20
+>> > > When it comes to requirements, my intention was to keep the same
+>> > > behavior as before the split up of the remote_port field in
+>> > > 9a69e2b385f4
+>> > > ("bpf: Make remote_port field in struct bpf_sk_lookup 16-bit
+>> > > wide").
+>> > >=20
+>> > > 9a69e2b385f4 was supposed to be a formality, after a similar
+>> > > change
+>> > > in
+>> > > 4421a582718a ("bpf: Make dst_port field in struct bpf_sock 16-bit
+>> > > wide"), which went in earlier.
+>> > >=20
+>> > > In 4421a582718a I've provided a bit more context. I understand
+>> > > that
+>> > > the
+>> > > remote_port value, even before the type changed from u32 to u16,
+>> > > appeared to the BPF program as if laid out in memory like so:
+>> > >=20
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 offsetof(struct bpf_sk_lookup, remote=
+_port) +0=C2=A0 <port MSB>
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 +1=C2=A0 <port LSB>
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 +2=C2=A0 0x00
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 +3=C2=A0 0x00
+>> > >=20
+>> > > Translating it to your handy table format, I expect should result
+>> > > in
+>> > > loads as so if port is 8008 =3D 0x1f48:
+>> > >=20
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Size=C2=A0=C2=A0 Offset=C2=A0 LE=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 BE
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_B=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x1f=C2=A0=C2=A0=C2=A0 0x1f
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_B=C2=A0 1=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x48=C2=A0=C2=A0=C2=A0 0x48
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_B=C2=A0 2=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_B=C2=A0 3=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_H=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x481f=C2=A0 0x1f48
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_H=C2=A0 1=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0
+>> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BPF_W=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x481f=C2=A0 0x1f480000
+>> >=20
+>> > Hmm, I think for big-endian the layout is different.
+>> > If we look at test_sk_lookup.c from 9a69e2b385f4^:
+>> >=20
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Narrow loads from remote=
+_port field. Expect SRC_PORT. */
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (LSB(ctx->remote_port, 0=
+) !=3D ((SRC_PORT >> 0) & 0xff) ||
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LSB=
+(ctx->remote_port, 1) !=3D ((SRC_PORT >> 8) & 0xff) ||
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LSB=
+(ctx->remote_port, 2) !=3D 0 || LSB(ctx->remote_port,
+>> > 3)
+>> > !=3D 0)
+>> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 return SK_DROP;
+>> >=20
+>> > LSB() on little-endian is just byte indexing, so it's indeed=C2=A0
+>> > 1f,48,00,00. However, on big-endian it's indexing from the end, so
+>> > it's 00,00,48,1f.
+>>=20
+>> I understood that LSB() is indexing from the end on BE because
+>> SRC_PORT
+>> constant value differs on LE (=3D 0x481f) and BE (=3D 0x1f48) platforms,
+>> so
+>>=20
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 LE=C2=A0 BE
+>> =C2=A0 SRC_PORT >> 0=C2=A0 1f=C2=A0 48
+>> =C2=A0 SRC_PORT >> 8=C2=A0 48=C2=A0 1f
+>>=20
+>> So on LE we first compare remote_port MSB, then LSB.
+>> While on BE we start with remote_port LSB, then MSB.
+>>=20
+>> But, now that you have pointed it out, I notice that
+>> sizeof(remote_port)
+>> has changed and from 4 to 2, and I can't see how LSB(=E2=80=A6, 3) and L=
+SB(=E2=80=A6,
+>> 4)
+>> loads can keep working on big-endian.
+>
+> Oh, right - it should be 00,00,1f,48 on big-endian.
+> Out-of-bounds LSB is indeed an issue. I've posted my current
+> thoughts as an RFC series [1], this one is addressed in patch 3.
+>
+> [1]
+> https://lore.kernel.org/bpf/20220222182559.2865596-1-iii@linux.ibm.com/
 
-Test topology:
+Sorry for the radio silience.
 
-[iperf server]<--->tap<--->dpdk testpmd<--->phy nic<--->[iperf client]
+I have patched my way through cross-compiling bpf selftests to s390, and
+can reproduce the sk_lookup test failure on big-endian.
 
-Iperf stream:
+bpftool gen object/skeleton refusing to process BE BPF objects on an LE
+host got me stuck for a moment, but user mode qemu saved the day.
 
-Before:
-...
-[  5]   5.00-6.00   sec   558 MBytes  4.68 Gbits/sec    0   1.50 MBytes
-[  5]   6.00-7.00   sec   556 MBytes  4.67 Gbits/sec    1   1.35 MBytes
-[  5]   7.00-8.00   sec   556 MBytes  4.67 Gbits/sec    2   1.18 MBytes
-[  5]   8.00-9.00   sec   559 MBytes  4.69 Gbits/sec    0   1.48 MBytes
-[  5]   9.00-10.00  sec   556 MBytes  4.67 Gbits/sec    1   1.33 MBytes
-- - - - - - - - - - - - - - - - - - - - - - - - -
-[ ID] Interval           Transfer     Bitrate         Retr
-[  5]   0.00-10.00  sec  5.39 GBytes  4.63 Gbits/sec   72          sender
-[  5]   0.00-10.04  sec  5.39 GBytes  4.61 Gbits/sec               receiver
+FWIW, sock_fields test are also broken on BE, but failing silently, as I
+observed by instrumenting the read_sk_dst_port BPF prog with bpf_printk.
 
-After:
-...
-[  5]   5.00-6.00   sec  1.07 GBytes  9.19 Gbits/sec    0   1.55 MBytes
-[  5]   6.00-7.00   sec  1.08 GBytes  9.30 Gbits/sec    0   1.63 MBytes
-[  5]   7.00-8.00   sec  1.08 GBytes  9.25 Gbits/sec    0   1.72 MBytes
-[  5]   8.00-9.00   sec  1.08 GBytes  9.25 Gbits/sec   77   1.31 MBytes
-[  5]   9.00-10.00  sec  1.08 GBytes  9.24 Gbits/sec    0   1.48 MBytes
-- - - - - - - - - - - - - - - - - - - - - - - - -
-[ ID] Interval           Transfer     Bitrate         Retr
-[  5]   0.00-10.00  sec  10.8 GBytes  9.28 Gbits/sec  166          sender
-[  5]   0.00-10.04  sec  10.8 GBytes  9.24 Gbits/sec               receiver
-....
-
-Reported-at: https://lore.kernel.org/all/CACGkMEvTLG0Ayg+TtbN4q4pPW-ycgCCs3sC3-TF8cuRTf7Pp1A@mail.gmail.com
-Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
----
-v1 -> v2
- - fix commit messages
- - add queued flag to avoid void unnecessary napi suggested by Jason
-
- drivers/net/tun.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index fed85447701a..c7d8b7c821d8 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -2379,7 +2379,7 @@ static void tun_put_page(struct tun_page *tpage)
- }
- 
- static int tun_xdp_one(struct tun_struct *tun,
--		       struct tun_file *tfile,
-+		       struct tun_file *tfile, int *queued,
- 		       struct xdp_buff *xdp, int *flush,
- 		       struct tun_page *tpage)
- {
-@@ -2388,6 +2388,7 @@ static int tun_xdp_one(struct tun_struct *tun,
- 	struct virtio_net_hdr *gso = &hdr->gso;
- 	struct bpf_prog *xdp_prog;
- 	struct sk_buff *skb = NULL;
-+	struct sk_buff_head *queue;
- 	u32 rxhash = 0, act;
- 	int buflen = hdr->buflen;
- 	int err = 0;
-@@ -2464,7 +2465,15 @@ static int tun_xdp_one(struct tun_struct *tun,
- 	    !tfile->detached)
- 		rxhash = __skb_get_hash_symmetric(skb);
- 
--	netif_receive_skb(skb);
-+	if (tfile->napi_enabled) {
-+		queue = &tfile->sk.sk_write_queue;
-+		spin_lock(&queue->lock);
-+		__skb_queue_tail(queue, skb);
-+		spin_unlock(&queue->lock);
-+		(*queued)++;
-+	} else {
-+		netif_receive_skb(skb);
-+	}
- 
- 	/* No need to disable preemption here since this function is
- 	 * always called with bh disabled
-@@ -2492,7 +2501,7 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	if (ctl && (ctl->type == TUN_MSG_PTR)) {
- 		struct tun_page tpage;
- 		int n = ctl->num;
--		int flush = 0;
-+		int flush = 0, queued = 0;
- 
- 		memset(&tpage, 0, sizeof(tpage));
- 
-@@ -2501,12 +2510,15 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 
- 		for (i = 0; i < n; i++) {
- 			xdp = &((struct xdp_buff *)ctl->ptr)[i];
--			tun_xdp_one(tun, tfile, xdp, &flush, &tpage);
-+			tun_xdp_one(tun, tfile, &queued, xdp, &flush, &tpage);
- 		}
- 
- 		if (flush)
- 			xdp_do_flush();
- 
-+		if (tfile->napi_enabled && queued > 0)
-+			napi_schedule(&tfile->napi);
-+
- 		rcu_read_unlock();
- 		local_bh_enable();
- 
--- 
-2.27.0
+I will be able check out the RFC series over this weekend.
 
