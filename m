@@ -2,56 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E08B6C433FE
-	for <bpf@archiver.kernel.org>; Fri, 25 Feb 2022 23:43:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE779C433FE
+	for <bpf@archiver.kernel.org>; Fri, 25 Feb 2022 23:43:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbiBYXoV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Feb 2022 18:44:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42406 "EHLO
+        id S239587AbiBYXo3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Feb 2022 18:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239447AbiBYXoU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Feb 2022 18:44:20 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CF617C426
-        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:46 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id k10-20020a056902070a00b0062469b00335so4888372ybt.14
-        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:46 -0800 (PST)
+        with ESMTP id S239510AbiBYXo2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Feb 2022 18:44:28 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05FC189A95
+        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:51 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d07ae11467so46378807b3.12
+        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=1qljGvi/baSUFDY4mqKz3QQQFwbltSyykW/yjXYd2yM=;
-        b=mE7MUbyagfjgIsftf4aBMAUfxEHMroR905idQD8siRRfqQwgOnpPHWSclHIFB9jW+r
-         a+nayfIt30kJIiVu6bCSgXXcyRI5Xd9jG0sREse3WUJ0C/ONMYIt3EeQHsTsA5MQrmVJ
-         /hCXLXZBtDnlLwleHB47K4FvJ8jsO/cPPvlUDvNX8bjVgpgFxvC+T/ezP2SDUjwkH46n
-         RIcvqawbZ1Zz86BR6A0N5zzclJzoyJLnllwd+ITPJBGk4vHIy4h4bX8vVFqa2YTPNKPv
-         SFfGbGLpqnKm7G+mg0UJYsGpfNUQTgqSb69KHzW8qVGm21ZClX8CwB3gnUEtFtm0oaan
-         SFtQ==
+        bh=CQ83ADA826CcNYM4PsEmnTeYIiXeHVnMOlfVD0fM6L8=;
+        b=oSWxFXNgsoQGu7aE46foiUXppB7TXXZzWVMgqHDgDZ7rKr3uOpTNXNAp6WU4aMzbTM
+         31r1/g51RRVW7n+rDBe8ChRuToecXHCIjVmuAMDoFh7tzDepFlrYDXHAVIfoH+UzjssI
+         FxN0YEzmQ5hcJl+8r+Dq8Q4JSBnPFhOsbxPeI9VPwpCuxXYW0aeE6bhz0o9Cgimyt5am
+         32FluCPLSqEGXiO1PqKHp8jhntngq1gSXfv1ScMWOG9wlcaYkJ9TKysC/cW4+HH5QWqq
+         kncug2mNPqW/21Ma3WpTcZELZ2YuScl1Kh1dgH/9/bI3Ydnk6yR1LLkeBIgM+9LzNAho
+         b9yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=1qljGvi/baSUFDY4mqKz3QQQFwbltSyykW/yjXYd2yM=;
-        b=VEob5LqZj+xC4coNbxTDrcnm5GB07gXJ6ymV4zqr1tm/t79sphFJhbi7UZ3mmD0olS
-         MMNLu84ZKpwT/J0EgJUOWldhg4+WiZPyyGrFODJhoPVpmtZ/gyQK3+ooviq1BuEVF+DO
-         3Psp3oZ6J6m0v9qw2+fzOtvwc5UDROZC6nwPH2WaEobwJQcGUk89Yvxf9Gq+DjZwju2e
-         L5neU9QYDFjDD4GpWAUTcwCHguR1b5ZVnImn8rgU7fIUfN/W8sKqSlQy0sXhO/oY+qFy
-         ZQQxqx6wrANpzTzwcx/OM1xGIeZoJhHxrufFe2/ece6OvlKV98Oi9N2pVuGu8IpyUrX+
-         eXHQ==
-X-Gm-Message-State: AOAM530hYMFs9tjnclbN08XF2TkRsUL9YfTFD+Fbu/5FXjkeLFA5TLEf
-        abAUzP7hjkfCc3RTkoYE6x+GbQKTf+s=
-X-Google-Smtp-Source: ABdhPJxEUyC7gY+QotGZ9BkZFQFS4jfSmgc0ZR7kFVOJiEUIskrlPPI1dFQi2UIKQgsaT8xhZrfCOW46s28=
+        bh=CQ83ADA826CcNYM4PsEmnTeYIiXeHVnMOlfVD0fM6L8=;
+        b=yhfiyfyw+lmVFdwziJw0dMtE0fRZ9hBr+YiC2SkLo/nI3orFVk2JYFrM8VlDmjao/S
+         xEXMHYk5Z2xRjnrKiZLwEKz9pdbzikPyHx0fb9PWaOwbcWvJK2C5LzwnPk7gz3jPyXuf
+         IeqNvW95S78/7//jI61ziu2MWhqa1x+cG8Nf2joHWzeRRz5Zz9y7rs9eU75ZE4z8K2b8
+         P8Na7mVJZ+riKh6po+b1PuU3RMJ1iM/hrg8hg2mBhLrzh8EQoa+NYWgIKuvmtVAz9muA
+         nE8ybNhQ4UBxYIxb7yNfwnC64S9U05Mt3CNABfvNctgybW/NOhXt3LG4ifw+MJ6sSMBx
+         nyLg==
+X-Gm-Message-State: AOAM532ZKYx9kKqssrlTIxUtteG2wY/vfQQkq6d/BrYNAznaK78xKt0P
+        b+1UeiVXRU9N0A1LjWKMtgnEFulsxUs=
+X-Google-Smtp-Source: ABdhPJwMhAIVAKEuRaaDmgn4bLiE++XUv4sp87DRSHk0UYkM2EhEzAHSjiM6bmZERZ0vbVtNhzllW6aTM/M=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:378d:645d:49ad:4f8b])
- (user=haoluo job=sendgmr) by 2002:a25:b004:0:b0:621:f386:f10a with SMTP id
- q4-20020a25b004000000b00621f386f10amr9229547ybf.314.1645832626177; Fri, 25
- Feb 2022 15:43:46 -0800 (PST)
-Date:   Fri, 25 Feb 2022 15:43:31 -0800
+ (user=haoluo job=sendgmr) by 2002:a0d:d697:0:b0:2d4:2ff7:5c5c with SMTP id
+ y145-20020a0dd697000000b002d42ff75c5cmr9978773ywd.495.1645832630812; Fri, 25
+ Feb 2022 15:43:50 -0800 (PST)
+Date:   Fri, 25 Feb 2022 15:43:33 -0800
 In-Reply-To: <20220225234339.2386398-1-haoluo@google.com>
-Message-Id: <20220225234339.2386398-2-haoluo@google.com>
+Message-Id: <20220225234339.2386398-4-haoluo@google.com>
 Mime-Version: 1.0
 References: <20220225234339.2386398-1-haoluo@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH bpf-next v1 1/9] bpf: Add mkdir, rmdir, unlink syscalls for prog_bpf_syscall
+Subject: [PATCH bpf-next v1 3/9] selftests/bpf: tests mkdir, rmdir, unlink and
+ pin in syscall
 From:   Hao Luo <haoluo@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -68,367 +69,181 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch allows bpf_syscall prog to perform some basic filesystem
-operations: create, remove directories and unlink files. Three bpf
-helpers are added for this purpose. When combined with the following
-patches that allow pinning and getting bpf objects from bpf prog,
-this feature can be used to create directory hierarchy in bpffs that
-help manage bpf objects purely using bpf progs.
-
-The added helpers subject to the same permission checks as their syscall
-version. For example, one can not write to a read-only file system;
-The identity of the current process is checked to see whether it has
-sufficient permission to perform the operations.
-
-Only directories and files in bpffs can be created or removed by these
-helpers. But it won't be too hard to allow these helpers to operate
-on files in other filesystems, if we want.
+Add a subtest in syscall to test bpf_mkdir(), bpf_rmdir(),
+bpf_unlink() and object pinning in syscall prog.
 
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- include/linux/bpf.h            |   1 +
- include/uapi/linux/bpf.h       |  26 +++++
- kernel/bpf/inode.c             |   9 +-
- kernel/bpf/syscall.c           | 177 +++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  26 +++++
- 5 files changed, 236 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/syscall.c        | 67 +++++++++++++++++-
+ .../testing/selftests/bpf/progs/syscall_fs.c  | 69 +++++++++++++++++++
+ 2 files changed, 135 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/syscall_fs.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index f19abc59b6cd..fce5e26179f5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1584,6 +1584,7 @@ int bpf_link_new_fd(struct bpf_link *link);
- struct file *bpf_link_new_file(struct bpf_link *link, int *reserved_fd);
- struct bpf_link *bpf_link_get_from_fd(u32 ufd);
+diff --git a/tools/testing/selftests/bpf/prog_tests/syscall.c b/tools/testing/selftests/bpf/prog_tests/syscall.c
+index f4d40001155a..782b5fe73096 100644
+--- a/tools/testing/selftests/bpf/prog_tests/syscall.c
++++ b/tools/testing/selftests/bpf/prog_tests/syscall.c
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2021 Facebook */
++#include <sys/stat.h>
+ #include <test_progs.h>
+ #include "syscall.skel.h"
++#include "syscall_fs.skel.h"
  
-+bool bpf_path_is_bpf_dir(const struct path *path);
- int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
- int bpf_obj_get_user(const char __user *pathname, int flags);
- 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index afe3d0d7f5f2..a5dbc794403d 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5086,6 +5086,29 @@ union bpf_attr {
-  *	Return
-  *		0 on success, or a negative error in case of failure. On error
-  *		*dst* buffer is zeroed out.
-+ *
-+ * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
-+ *	Description
-+ *		Attempts to create a directory name *pathname*. The argument
-+ *		*pathname_sz* specifies the length of the string *pathname*.
-+ *		The argument *mode* specifies the mode for the new directory. It
-+ *		is modified by the process's umask. It has the same semantic as
-+ *		the syscall mkdir(2).
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-+ *
-+ * long bpf_rmdir(const char *pathname, int pathname_sz)
-+ *	Description
-+ *		Deletes a directory, which must be empty.
-+ *	Return
-+ *		0 on sucess, or a negative error in case of failure.
-+ *
-+ * long bpf_unlink(const char *pathname, int pathname_sz)
-+ *	Description
-+ *		Deletes a name and possibly the file it refers to. It has the
-+ *		same semantic as the syscall unlink(2).
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5280,6 +5303,9 @@ union bpf_attr {
- 	FN(xdp_load_bytes),		\
- 	FN(xdp_store_bytes),		\
- 	FN(copy_from_user_task),	\
-+	FN(mkdir),			\
-+	FN(rmdir),			\
-+	FN(unlink),			\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 4f841e16779e..3aca00e9e950 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -414,6 +414,11 @@ static const struct inode_operations bpf_dir_iops = {
- 	.unlink		= simple_unlink,
+ struct args {
+ 	__u64 log_buf;
+@@ -12,7 +14,7 @@ struct args {
+ 	int btf_fd;
  };
  
-+bool bpf_path_is_bpf_dir(const struct path *path)
-+{
-+	return d_inode(path->dentry)->i_op == &bpf_dir_iops;
-+}
-+
- /* pin iterator link into bpffs */
- static int bpf_iter_link_pin_kernel(struct dentry *parent,
- 				    const char *name, struct bpf_link *link)
-@@ -439,7 +444,6 @@ static int bpf_obj_do_pin(const char __user *pathname, void *raw,
- 			  enum bpf_type type)
+-void test_syscall(void)
++static void test_syscall_basic(void)
  {
- 	struct dentry *dentry;
--	struct inode *dir;
- 	struct path path;
- 	umode_t mode;
- 	int ret;
-@@ -454,8 +458,7 @@ static int bpf_obj_do_pin(const char __user *pathname, void *raw,
- 	if (ret)
- 		goto out;
- 
--	dir = d_inode(path.dentry);
--	if (dir->i_op != &bpf_dir_iops) {
-+	if (!bpf_path_is_bpf_dir(&path)) {
- 		ret = -EPERM;
- 		goto out;
- 	}
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index db402ebc5570..07683b791733 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -12,6 +12,7 @@
- #include <linux/sched/signal.h>
- #include <linux/vmalloc.h>
- #include <linux/mmzone.h>
-+#include <linux/namei.h>
- #include <linux/anon_inodes.h>
- #include <linux/fdtable.h>
- #include <linux/file.h>
-@@ -4867,6 +4868,176 @@ const struct bpf_func_proto bpf_kallsyms_lookup_name_proto = {
- 	.arg4_type	= ARG_PTR_TO_LONG,
- };
- 
-+BPF_CALL_3(bpf_mkdir, const char *, pathname, int, pathname_sz, u32, raw_mode)
+ 	static char verifier_log[8192];
+ 	struct args ctx = {
+@@ -53,3 +55,66 @@ void test_syscall(void)
+ 	if (ctx.btf_fd > 0)
+ 		close(ctx.btf_fd);
+ }
++
++static void test_syscall_fs(void)
 +{
-+	struct user_namespace *mnt_userns;
-+	struct dentry *dentry;
-+	struct path path;
-+	umode_t mode;
-+	int err;
++	char tmpl[] = "/sys/fs/bpf/syscall_XXXXXX";
++	struct stat statbuf = {};
++	static char verifier_log[8192];
++	struct args ctx = {
++		.log_buf = (uintptr_t) verifier_log,
++		.log_size = sizeof(verifier_log),
++		.prog_fd = 0,
++	};
++	LIBBPF_OPTS(bpf_test_run_opts, tattr,
++		.ctx_in = &ctx,
++		.ctx_size_in = sizeof(ctx),
++	);
++	struct syscall_fs *skel = NULL;
++	int err, mkdir_fd, rmdir_fd;
++	char *root, *dir, *path;
 +
-+	if (pathname_sz <= 1 || pathname[pathname_sz - 1])
-+		return -EINVAL;
++	/* prepares test directories */
++	system("mount -t bpf bpffs /sys/fs/bpf");
++	root = mkdtemp(tmpl);
++	chmod(root, 0755);
 +
-+	dentry = kern_path_create(AT_FDCWD, pathname, &path, LOOKUP_DIRECTORY);
-+	if (IS_ERR(dentry))
-+		return PTR_ERR(dentry);
++	/* loads prog */
++	skel = syscall_fs__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto cleanup;
 +
-+	if (!bpf_path_is_bpf_dir(&path)) {
-+		err = -EPERM;
-+		goto err_exit;
-+	}
++	dir = skel->bss->dirname;
++	snprintf(dir, sizeof(skel->bss->dirname), "%s/test", root);
++	path = skel->bss->pathname;
++	snprintf(path, sizeof(skel->bss->pathname), "%s/prog", dir);
 +
-+	mode = raw_mode;
-+	if (!IS_POSIXACL(path.dentry->d_inode))
-+		mode &= ~current_umask();
-+	err = security_path_mkdir(&path, dentry, mode);
-+	if (err)
-+		goto err_exit;
++	/* tests mkdir */
++	mkdir_fd = bpf_program__fd(skel->progs.mkdir_prog);
++	err = bpf_prog_test_run_opts(mkdir_fd, &tattr);
++	ASSERT_EQ(err, 0, "mkdir_err");
++	ASSERT_EQ(tattr.retval, 0, "mkdir_retval");
++	ASSERT_OK(stat(dir, &statbuf), "mkdir_success");
++	ASSERT_OK(stat(path, &statbuf), "pin_success");
 +
-+	mnt_userns = mnt_user_ns(path.mnt);
-+	err = vfs_mkdir(mnt_userns, d_inode(path.dentry), dentry, mode);
++	/* tests rmdir */
++	rmdir_fd = bpf_program__fd(skel->progs.rmdir_prog);
++	err = bpf_prog_test_run_opts(rmdir_fd, &tattr);
++	ASSERT_EQ(err, 0, "rmdir_err");
++	ASSERT_EQ(tattr.retval, 0, "rmdir_retval");
++	ASSERT_ERR(stat(path, &statbuf), "unlink_success");
++	ASSERT_ERR(stat(dir, &statbuf), "rmdir_success");
 +
-+err_exit:
-+	done_path_create(&path, dentry);
-+	return err;
++cleanup:
++	syscall_fs__destroy(skel);
++	if (ctx.prog_fd > 0)
++		close(ctx.prog_fd);
++	rmdir(root);
 +}
 +
-+const struct bpf_func_proto bpf_mkdir_proto = {
-+	.func		= bpf_mkdir,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
-+	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg3_type	= ARG_ANYTHING,
++void test_syscall(void) {
++	if (test__start_subtest("basic"))
++		test_syscall_basic();
++	if (test__start_subtest("filesystem"))
++		test_syscall_fs();
++}
+diff --git a/tools/testing/selftests/bpf/progs/syscall_fs.c b/tools/testing/selftests/bpf/progs/syscall_fs.c
+new file mode 100644
+index 000000000000..9418d1364c09
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/syscall_fs.c
+@@ -0,0 +1,69 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Google */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <../../../tools/include/linux/filter.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct args {
++	__u64 log_buf;
++	__u32 log_size;
++	int max_entries;
++	int map_fd;
++	int prog_fd;
++	int btf_fd;
 +};
 +
-+BPF_CALL_2(bpf_rmdir, const char *, pathname, int, pathname_sz)
++char dirname[64];
++char pathname[64];
++
++SEC("syscall")
++int mkdir_prog(struct args *ctx)
 +{
-+	struct user_namespace *mnt_userns;
-+	struct path parent;
-+	struct dentry *dentry;
-+	int err;
++	static char license[] = "GPL";
++	static struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	static union bpf_attr load_attr = {
++		.prog_type = BPF_PROG_TYPE_XDP,
++		.insn_cnt = sizeof(insns) / sizeof(insns[0]),
++	};
++	static union bpf_attr pin_attr = {
++		.file_flags = 0,
++	};
++	int ret;
 +
-+	if (pathname_sz <= 1 || pathname[pathname_sz - 1])
-+		return -EINVAL;
++	ret = bpf_mkdir(dirname, sizeof(dirname), 0644);
++	if (ret)
++		return ret;
 +
-+	err = kern_path(pathname, 0, &parent);
-+	if (err)
-+		return err;
++	load_attr.license = (long) license;
++	load_attr.insns = (long) insns;
++	load_attr.log_buf = ctx->log_buf;
++	load_attr.log_size = ctx->log_size;
++	load_attr.log_level = 1;
++	ret = bpf_sys_bpf(BPF_PROG_LOAD, &load_attr, sizeof(load_attr));
++	if (ret < 0)
++		return ret;
++	else if (ret == 0)
++		return -1;
++	ctx->prog_fd = ret;
 +
-+	if (!bpf_path_is_bpf_dir(&parent)) {
-+		err = -EPERM;
-+		goto exit1;
-+	}
-+
-+	err = mnt_want_write(parent.mnt);
-+	if (err)
-+		goto exit1;
-+
-+	dentry = kern_path_locked(pathname, &parent);
-+	if (IS_ERR(dentry)) {
-+		err = PTR_ERR(dentry);
-+		goto exit2;
-+	}
-+
-+	if (d_really_is_negative(dentry)) {
-+		err = -ENOENT;
-+		goto exit3;
-+	}
-+
-+	err = security_path_rmdir(&parent, dentry);
-+	if (err)
-+		goto exit3;
-+
-+	mnt_userns = mnt_user_ns(parent.mnt);
-+	err = vfs_rmdir(mnt_userns, d_inode(parent.dentry), dentry);
-+exit3:
-+	dput(dentry);
-+	inode_unlock(d_inode(parent.dentry));
-+exit2:
-+	mnt_drop_write(parent.mnt);
-+exit1:
-+	path_put(&parent);
-+	return err;
++	pin_attr.pathname = (__u64)pathname;
++	pin_attr.bpf_fd = ret;
++	return bpf_sys_bpf(BPF_OBJ_PIN, &pin_attr, sizeof(pin_attr));
 +}
 +
-+const struct bpf_func_proto bpf_rmdir_proto = {
-+	.func		= bpf_rmdir,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
-+	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+};
-+
-+BPF_CALL_2(bpf_unlink, const char *, pathname, int, pathname_sz)
++SEC("syscall")
++int rmdir_prog(struct args *ctx)
 +{
-+	struct user_namespace *mnt_userns;
-+	struct path parent;
-+	struct dentry *dentry;
-+	struct inode *inode = NULL;
-+	int err;
++	int ret;
 +
-+	if (pathname_sz <= 1 || pathname[pathname_sz - 1])
-+		return -EINVAL;
++	ret = bpf_unlink(pathname, sizeof(pathname));
++	if (ret)
++		return ret;
 +
-+	err = kern_path(pathname, 0, &parent);
-+	if (err)
-+		return err;
-+
-+	err = mnt_want_write(parent.mnt);
-+	if (err)
-+		goto exit1;
-+
-+	dentry = kern_path_locked(pathname, &parent);
-+	if (IS_ERR(dentry)) {
-+		err = PTR_ERR(dentry);
-+		goto exit2;
-+	}
-+
-+	if (!bpf_path_is_bpf_dir(&parent)) {
-+		err = -EPERM;
-+		goto exit3;
-+	}
-+
-+	if (d_is_negative(dentry)) {
-+		err = -ENOENT;
-+		goto exit3;
-+	}
-+
-+	if (d_is_dir(dentry)) {
-+		err = -EISDIR;
-+		goto exit3;
-+	}
-+
-+	inode = dentry->d_inode;
-+	ihold(inode);
-+	err = security_path_unlink(&parent, dentry);
-+	if (err)
-+		goto exit3;
-+
-+	mnt_userns = mnt_user_ns(parent.mnt);
-+	err = vfs_unlink(mnt_userns, d_inode(parent.dentry), dentry, NULL);
-+exit3:
-+	dput(dentry);
-+	inode_unlock(d_inode(parent.dentry));
-+	if (inode)
-+		iput(inode);
-+exit2:
-+	mnt_drop_write(parent.mnt);
-+exit1:
-+	path_put(&parent);
-+	return err;
++	return bpf_rmdir(dirname, sizeof(dirname));
 +}
-+
-+const struct bpf_func_proto bpf_unlink_proto = {
-+	.func		= bpf_unlink,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
-+	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+};
-+
- static const struct bpf_func_proto *
- syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -4879,6 +5050,12 @@ syscall_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sys_close_proto;
- 	case BPF_FUNC_kallsyms_lookup_name:
- 		return &bpf_kallsyms_lookup_name_proto;
-+	case BPF_FUNC_mkdir:
-+		return &bpf_mkdir_proto;
-+	case BPF_FUNC_rmdir:
-+		return &bpf_rmdir_proto;
-+	case BPF_FUNC_unlink:
-+		return &bpf_unlink_proto;
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index afe3d0d7f5f2..a5dbc794403d 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5086,6 +5086,29 @@ union bpf_attr {
-  *	Return
-  *		0 on success, or a negative error in case of failure. On error
-  *		*dst* buffer is zeroed out.
-+ *
-+ * long bpf_mkdir(const char *pathname, int pathname_sz, u32 mode)
-+ *	Description
-+ *		Attempts to create a directory name *pathname*. The argument
-+ *		*pathname_sz* specifies the length of the string *pathname*.
-+ *		The argument *mode* specifies the mode for the new directory. It
-+ *		is modified by the process's umask. It has the same semantic as
-+ *		the syscall mkdir(2).
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-+ *
-+ * long bpf_rmdir(const char *pathname, int pathname_sz)
-+ *	Description
-+ *		Deletes a directory, which must be empty.
-+ *	Return
-+ *		0 on sucess, or a negative error in case of failure.
-+ *
-+ * long bpf_unlink(const char *pathname, int pathname_sz)
-+ *	Description
-+ *		Deletes a name and possibly the file it refers to. It has the
-+ *		same semantic as the syscall unlink(2).
-+ *	Return
-+ *		0 on success, or a negative error in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5280,6 +5303,9 @@ union bpf_attr {
- 	FN(xdp_load_bytes),		\
- 	FN(xdp_store_bytes),		\
- 	FN(copy_from_user_task),	\
-+	FN(mkdir),			\
-+	FN(rmdir),			\
-+	FN(unlink),			\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.35.1.574.g5d30c73bfb-goog
 
