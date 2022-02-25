@@ -2,57 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 527EDC433EF
-	for <bpf@archiver.kernel.org>; Fri, 25 Feb 2022 23:44:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48073C433FE
+	for <bpf@archiver.kernel.org>; Fri, 25 Feb 2022 23:44:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239523AbiBYXo3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Feb 2022 18:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S239473AbiBYXoc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Feb 2022 18:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239481AbiBYXoW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Feb 2022 18:44:22 -0500
+        with ESMTP id S239517AbiBYXo3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Feb 2022 18:44:29 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AED3187BAF
-        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:49 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id k7-20020a255607000000b00621afc793b8so4978011ybb.1
-        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579241A2717
+        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:56 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id j17-20020a25ec11000000b0061dabf74012so4922343ybh.15
+        for <bpf@vger.kernel.org>; Fri, 25 Feb 2022 15:43:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=uFPxHpKM1wpN11u3R15gkkPUUa85utV+YA3orSMAaMQ=;
-        b=jGGYR7+JlJhz+u/oapTmhLOpMRP4r7XNM0dqrGXqjl9Og9VMXbKrCKYt/9JKLsr8q1
-         a6yOKUHWJUf2Lmor+BTC5wQfPvoz09O0YY/IPHq0mncxa3brxguarta8UGQvem8MYqbl
-         mqrC+JaFJRxXCA+L5oZcbpqKmC2CH0DG1Zis1U728AlI3TxC2Y8kVbs2+IECcgkAkUOn
-         shIYrlgazgjuocB9EhfMgYSxHylqm8eQ9Q+u8e4dnek+skbidW+ACdvZ0jRkMVID6kam
-         j30pSbzqLM2vckx/tAHDNk7I7fI/6JXEJy3mnJYc6kde4FHYp5GxJ5Fla4X0D00Or+vE
-         Xm1Q==
+        bh=zSQ3ZyUQ2OEfiGKk7osb66v16UBXeasV5LfSlDNJLTs=;
+        b=RAWcMz9SCO9AYZ5Pdggqlu3RxuyFkY6L5ZYVTbuszydG5Wij7F33XdUpXekqDNvgDb
+         BbWbrze1Z2q5JkRVH/Mrso+MKEvpttminKC8Jc8Xr9EZ4/5mI1+WvY6YbaYulqScKQ9j
+         1YLBQR1mMvdAHHfUlaqPu3ftcgq2VlgRWG5Q/GgUJKgBwYQa4yvPUYeZOCtdTy2Z88cI
+         1OgIKH+ZbEIKHOz5hZX4svpyPB4h86ryzdTGE/bvN1dTBn28bElnZWfe4IDGdFs5di39
+         4PGMTjYksntvmqRVXi+U2b/LGkRjGmblq9KBt6ylJxGB+j711I9tATWezK3+pr2Z+60A
+         c6Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=uFPxHpKM1wpN11u3R15gkkPUUa85utV+YA3orSMAaMQ=;
-        b=Sw6Z+vvDX7ocxMRQ3d05ZKo61efhZAvk3cM2aq5PS28vYUZzXxklCO+aaHEGQHu30h
-         PVJ7N25EPN8wglvSqz2I2tKXU3A2N5pSg9OkE7U0NIzJ/v/3NP0X9ohiFPEmcyG2rrji
-         rrIKjydtpyZd4XHJzgBcXxXFhAZgOCXEPkWVrhHnRC/AktojsqccwjOOpUfYSgUY5DkV
-         o7JN87ix2GUvpSEpsXbWWjtOCqPVgQB+u3PLCMKP4J0ncNmvuM9DoHkKmWTDvMDCxk/6
-         XEUkmx2OPQl59IIkweao45EfM6MhDZt9XI506ZlX+l1s1QV+SlFNoziY9Gx0AQGNJbkH
-         dGRg==
-X-Gm-Message-State: AOAM532jnjmlWaM6ryvkTeZsEy9rWnDtWrlmi6qhPOSQ1LszhSMVMRtD
-        KHgQFgQ4xGcJkL130rTnPGdb9SHSk8Y=
-X-Google-Smtp-Source: ABdhPJy+r5NcA4n55DFecrVbqxpsO0btN/dh4PxHGww5fNUy03ZbrhBM+V2jd7zdFN7r8nz2R/bkcIa8r84=
+        bh=zSQ3ZyUQ2OEfiGKk7osb66v16UBXeasV5LfSlDNJLTs=;
+        b=2bPU4LjU8yz/frkgCyJtyqO/TWjXTjMztgEk4NjVk39LwzRyit42sCA2ev8f3xwUGB
+         cegaFMyq1TqlL4T3D1mvBd7X5YDhCOzzp59nec35DhiY/+5Wg43IZPWDWkstM04w2QIH
+         I4dOZ2P6bogZ1vuJNhmAYpjwnWnFQcr3z4l3SQhjXUQFQnq4MtVLTfX4P864hRuFfj94
+         iirVrCpx2hX199hEurD6dERlTUoAUzkMHSjU3SIlU5bXvFqi6D2G9wKGUZpSzDOIJqxu
+         +W9/WmPpBZA+xdGe/8c//FMYvIOO8yZdehmrrR2WXB0WrM3QgJ0gJT7ZctP2Xhq+XSZz
+         wWzg==
+X-Gm-Message-State: AOAM5319n/x3+gxBqDdRD5YXGlLke3YSM1t6/8amxUEJgmzroNB6XItg
+        7piuyPog0DsSoq8ZHvSo35zfAjN5V7A=
+X-Google-Smtp-Source: ABdhPJxqiIRkNLzksIZdrDz6SCwnzk2SPJ/9GP6wVJL0Xqy6aFUvgU6B8ncEMVzBhuX/1S7CgZJDqPIDleo=
 X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:378d:645d:49ad:4f8b])
- (user=haoluo job=sendgmr) by 2002:a25:9a44:0:b0:622:4e:958c with SMTP id
- r4-20020a259a44000000b00622004e958cmr9880165ybo.566.1645832628657; Fri, 25
- Feb 2022 15:43:48 -0800 (PST)
-Date:   Fri, 25 Feb 2022 15:43:32 -0800
+ (user=haoluo job=sendgmr) by 2002:a25:c5d0:0:b0:624:41d4:e37c with SMTP id
+ v199-20020a25c5d0000000b0062441d4e37cmr9499906ybe.318.1645832635508; Fri, 25
+ Feb 2022 15:43:55 -0800 (PST)
+Date:   Fri, 25 Feb 2022 15:43:35 -0800
 In-Reply-To: <20220225234339.2386398-1-haoluo@google.com>
-Message-Id: <20220225234339.2386398-3-haoluo@google.com>
+Message-Id: <20220225234339.2386398-6-haoluo@google.com>
 Mime-Version: 1.0
 References: <20220225234339.2386398-1-haoluo@google.com>
 X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
-Subject: [PATCH bpf-next v1 2/9] bpf: Add BPF_OBJ_PIN and BPF_OBJ_GET in the
- bpf_sys_bpf helper
+Subject: [PATCH bpf-next v1 5/9] cgroup: Sleepable cgroup tracepoints.
 From:   Hao Luo <haoluo@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -69,163 +68,108 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now bpf syscall prog is able to pin bpf objects into bpffs and get
-a pinned object from file system. Combining the previous patch that
-introduced the helpers for creating and deleting directories in bpffs,
-syscall prog can now persist bpf objects and organize them in a
-directory hierarchy.
+Add two new sleepable tracepoints in cgroup: cgroup_mkdir_s and
+cgroup_rmdir_s. The suffix _s means they are in a sleepable context.
+These two tracepoints don't need full cgroup paths, they don't have
+to live in atomic context. These two tracepoints are also called without
+holding cgroup_mutex.
 
+They can be used for bpf to monitor cgroup creation and deletion. Bpf
+sleepable programs can attach to these two tracepoints and create
+corresponding directories in bpffs. The created directories don't need
+the cgroup paths, cgroup id is sufficient to identify the cgroup. Once
+the bpffs directories have been created, the bpf prog can further pin
+bpf objects inside the directories and allow users to read the pinned
+objects.
+
+This serves a way to extend the fixed cgroup interface.
+
+Cc: Tejun Heo <tj@kernel.org>
 Signed-off-by: Hao Luo <haoluo@google.com>
 ---
- include/linux/bpf.h  |  4 ++--
- kernel/bpf/inode.c   | 24 ++++++++++++++++++------
- kernel/bpf/syscall.c | 21 ++++++++++++++-------
- 3 files changed, 34 insertions(+), 15 deletions(-)
+ include/trace/events/cgroup.h | 45 +++++++++++++++++++++++++++++++++++
+ kernel/cgroup/cgroup.c        |  5 ++++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index fce5e26179f5..c36eeced3838 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1585,8 +1585,8 @@ struct file *bpf_link_new_file(struct bpf_link *link, int *reserved_fd);
- struct bpf_link *bpf_link_get_from_fd(u32 ufd);
+diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
+index dd7d7c9efecd..4483a7d6c43a 100644
+--- a/include/trace/events/cgroup.h
++++ b/include/trace/events/cgroup.h
+@@ -204,6 +204,51 @@ DEFINE_EVENT(cgroup_event, cgroup_notify_frozen,
+ 	TP_ARGS(cgrp, path, val)
+ );
  
- bool bpf_path_is_bpf_dir(const struct path *path);
--int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
--int bpf_obj_get_user(const char __user *pathname, int flags);
-+int bpf_obj_pin_path(u32 ufd, bpfptr_t pathname);
-+int bpf_obj_get_path(bpfptr_t pathname, int flags);
++/*
++ * The following tracepoints are supposed to be called in a sleepable context.
++ */
++DECLARE_EVENT_CLASS(cgroup_sleepable_tp,
++
++	TP_PROTO(struct cgroup *cgrp),
++
++	TP_ARGS(cgrp),
++
++	TP_STRUCT__entry(
++		__field(	int,		root			)
++		__field(	int,		level			)
++		__field(	u64,		id			)
++	),
++
++	TP_fast_assign(
++		__entry->root = cgrp->root->hierarchy_id;
++		__entry->id = cgroup_id(cgrp);
++		__entry->level = cgrp->level;
++	),
++
++	TP_printk("root=%d id=%llu level=%d",
++		  __entry->root, __entry->id, __entry->level)
++);
++
++#ifdef DEFINE_EVENT_SLEEPABLE
++#undef DEFINE_EVENT
++#define DEFINE_EVENT(template, call, proto, args)		\
++	DEFINE_EVENT_SLEEPABLE(template, call, PARAMS(proto), PARAMS(args))
++#endif
++
++DEFINE_EVENT(cgroup_sleepable_tp, cgroup_mkdir_s,
++
++	TP_PROTO(struct cgroup *cgrp),
++
++	TP_ARGS(cgrp)
++);
++
++DEFINE_EVENT(cgroup_sleepable_tp, cgroup_rmdir_s,
++
++	TP_PROTO(struct cgroup *cgrp),
++
++	TP_ARGS(cgrp)
++);
++
+ #endif /* _TRACE_CGROUP_H */
  
- #define BPF_ITER_FUNC_PREFIX "bpf_iter_"
- #define DEFINE_BPF_ITER_FUNC(target, args...)			\
-diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-index 3aca00e9e950..6c2db54a2ff9 100644
---- a/kernel/bpf/inode.c
-+++ b/kernel/bpf/inode.c
-@@ -440,7 +440,7 @@ static int bpf_iter_link_pin_kernel(struct dentry *parent,
+ /* This part must be outside protection */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 9d05c3ca2d5e..f14ab00d9ef5 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -5535,6 +5535,8 @@ int cgroup_mkdir(struct kernfs_node *parent_kn, const char *name, umode_t mode)
+ 	cgroup_destroy_locked(cgrp);
+ out_unlock:
+ 	cgroup_kn_unlock(parent_kn);
++	if (!ret)
++		trace_cgroup_mkdir_s(cgrp);
  	return ret;
  }
  
--static int bpf_obj_do_pin(const char __user *pathname, void *raw,
-+static int bpf_obj_do_pin(bpfptr_t pathname, void *raw,
- 			  enum bpf_type type)
- {
- 	struct dentry *dentry;
-@@ -448,7 +448,13 @@ static int bpf_obj_do_pin(const char __user *pathname, void *raw,
- 	umode_t mode;
- 	int ret;
+@@ -5725,6 +5727,9 @@ int cgroup_rmdir(struct kernfs_node *kn)
+ 		TRACE_CGROUP_PATH(rmdir, cgrp);
  
--	dentry = user_path_create(AT_FDCWD, pathname, &path, 0);
-+	if (bpfptr_is_null(pathname))
-+		return -EINVAL;
+ 	cgroup_kn_unlock(kn);
 +
-+	if (bpfptr_is_kernel(pathname))
-+		dentry = kern_path_create(AT_FDCWD, pathname.kernel, &path, 0);
-+	else
-+		dentry = user_path_create(AT_FDCWD, pathname.user, &path, 0);
- 	if (IS_ERR(dentry))
- 		return PTR_ERR(dentry);
- 
-@@ -481,7 +487,7 @@ static int bpf_obj_do_pin(const char __user *pathname, void *raw,
++	if (!ret)
++		trace_cgroup_rmdir_s(cgrp);
  	return ret;
  }
  
--int bpf_obj_pin_user(u32 ufd, const char __user *pathname)
-+int bpf_obj_pin_path(u32 ufd, bpfptr_t pathname)
- {
- 	enum bpf_type type;
- 	void *raw;
-@@ -498,7 +504,7 @@ int bpf_obj_pin_user(u32 ufd, const char __user *pathname)
- 	return ret;
- }
- 
--static void *bpf_obj_do_get(const char __user *pathname,
-+static void *bpf_obj_do_get(bpfptr_t pathname,
- 			    enum bpf_type *type, int flags)
- {
- 	struct inode *inode;
-@@ -506,7 +512,13 @@ static void *bpf_obj_do_get(const char __user *pathname,
- 	void *raw;
- 	int ret;
- 
--	ret = user_path_at(AT_FDCWD, pathname, LOOKUP_FOLLOW, &path);
-+	if (bpfptr_is_null(pathname))
-+		return ERR_PTR(-EINVAL);
-+
-+	if (bpfptr_is_kernel(pathname))
-+		ret = kern_path(pathname.kernel, LOOKUP_FOLLOW, &path);
-+	else
-+		ret = user_path_at(AT_FDCWD, pathname.user, LOOKUP_FOLLOW, &path);
- 	if (ret)
- 		return ERR_PTR(ret);
- 
-@@ -530,7 +542,7 @@ static void *bpf_obj_do_get(const char __user *pathname,
- 	return ERR_PTR(ret);
- }
- 
--int bpf_obj_get_user(const char __user *pathname, int flags)
-+int bpf_obj_get_path(bpfptr_t pathname, int flags)
- {
- 	enum bpf_type type = BPF_TYPE_UNSPEC;
- 	int f_flags;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 07683b791733..9e6d8d0c8af5 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2402,22 +2402,27 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 
- #define BPF_OBJ_LAST_FIELD file_flags
- 
--static int bpf_obj_pin(const union bpf_attr *attr)
-+static int bpf_obj_pin(const union bpf_attr *attr, bpfptr_t uattr)
- {
-+	bpfptr_t pathname;
-+
- 	if (CHECK_ATTR(BPF_OBJ) || attr->file_flags != 0)
- 		return -EINVAL;
- 
--	return bpf_obj_pin_user(attr->bpf_fd, u64_to_user_ptr(attr->pathname));
-+	pathname = make_bpfptr(attr->pathname, bpfptr_is_kernel(uattr));
-+	return bpf_obj_pin_path(attr->bpf_fd, pathname);
- }
- 
--static int bpf_obj_get(const union bpf_attr *attr)
-+static int bpf_obj_get(const union bpf_attr *attr, bpfptr_t uattr)
- {
-+	bpfptr_t pathname;
-+
- 	if (CHECK_ATTR(BPF_OBJ) || attr->bpf_fd != 0 ||
- 	    attr->file_flags & ~BPF_OBJ_FLAG_MASK)
- 		return -EINVAL;
- 
--	return bpf_obj_get_user(u64_to_user_ptr(attr->pathname),
--				attr->file_flags);
-+	pathname = make_bpfptr(attr->pathname, bpfptr_is_kernel(uattr));
-+	return bpf_obj_get_path(pathname, attr->file_flags);
- }
- 
- void bpf_link_init(struct bpf_link *link, enum bpf_link_type type,
-@@ -4648,10 +4653,10 @@ static int __sys_bpf(int cmd, bpfptr_t uattr, unsigned int size)
- 		err = bpf_prog_load(&attr, uattr);
- 		break;
- 	case BPF_OBJ_PIN:
--		err = bpf_obj_pin(&attr);
-+		err = bpf_obj_pin(&attr, uattr);
- 		break;
- 	case BPF_OBJ_GET:
--		err = bpf_obj_get(&attr);
-+		err = bpf_obj_get(&attr, uattr);
- 		break;
- 	case BPF_PROG_ATTACH:
- 		err = bpf_prog_attach(&attr);
-@@ -4776,6 +4781,8 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
- 	case BPF_BTF_LOAD:
- 	case BPF_LINK_CREATE:
- 	case BPF_RAW_TRACEPOINT_OPEN:
-+	case BPF_OBJ_PIN:
-+	case BPF_OBJ_GET:
- 		break;
- #ifdef CONFIG_BPF_JIT /* __bpf_prog_enter_sleepable used by trampoline and JIT */
- 	case BPF_PROG_TEST_RUN:
 -- 
 2.35.1.574.g5d30c73bfb-goog
 
