@@ -2,237 +2,213 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A590BC433EF
-	for <bpf@archiver.kernel.org>; Sat, 26 Feb 2022 08:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5BFEC433F5
+	for <bpf@archiver.kernel.org>; Sat, 26 Feb 2022 08:53:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbiBZIvq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Feb 2022 03:51:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S229827AbiBZIyG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 26 Feb 2022 03:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiBZIvk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 26 Feb 2022 03:51:40 -0500
+        with ESMTP id S229633AbiBZIyG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 26 Feb 2022 03:54:06 -0500
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA258888FB;
-        Sat, 26 Feb 2022 00:51:06 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21Q4nCuo008247;
-        Sat, 26 Feb 2022 08:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=corp-2021-07-09; bh=KDez+LS+FXYOys1cXqkw1KUN43jbTJnNSUFvuamaZ34=;
- b=JisdGANzCz580XAg4Q0fv502j6Oepxo+i7DmsxQew6NnOwUM9OBa4H68BAGZNGgxwShQ
- i2lerdPq+2P4lWL3qifwYkICF1tfW2fyGPygjFSdixpwhcbIwZnedeNHj2eZsOHA+OxC
- 0mg7UkoQSo3QpJeeD86EH7iPTZJKlOCcZcPcsTCvv9aHXAYlq62U5//41B+/cTKoUFbj
- IMn5a5elTi2kebcWTIccoTX/jSP5AEKTjjiyGI/qVD8UyL2Uu2JbSsOX4UJXT7fD3kf9
- 0stfxBeO0V9KENdBmq+jEXe+v0y6HJTgtlGmgbyF56KH6n/XFITnfJxktbGREsABqR0h aw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3efb02gdty-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DAF1D86DC;
+        Sat, 26 Feb 2022 00:53:32 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21Q4nCGX029567;
+        Sat, 26 Feb 2022 08:52:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
+ cc : references : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=DbQF20PtOuB54svgP9ge0FcQmG5QotEDhxb7kD4er0Q=;
+ b=biV6sZ4MdnOjMfy05VKg7mBoLtcMsUdJgRLZ3/ryv45phSO9hYBh2nwiLnsd+QyTKcNr
+ 6ydL24alzUNxKkv+5wRu913Na+YJwzLdyJ284FxVRZGBaSSqkamNLlWiYu7m/ORs71Kk
+ 9xuG0MdXwjylRn+8HW3AKQ+7Uxv47T8dB+H8NurTc7HF6+nEdwxXXShqBjDSHImsImuC
+ 0wSSs2HF1DEUngKYlwq8nHr3dIvWjkwErPlpCEkzRMoJJI7X9+oHwHmCtu1OzTCmba+q
+ yflhkSyS2Nkmhe53luSXuKjWwYDwCr7X78lhqnbEPv4SJqY/5Y+PQpGlLmvevCSkpwBz Cg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3efbtt8c4u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 26 Feb 2022 08:49:59 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21Q8kO7q005020;
-        Sat, 26 Feb 2022 08:49:58 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2170.outbound.protection.outlook.com [104.47.55.170])
-        by userp3030.oracle.com with ESMTP id 3ef9askqdw-2
+        Sat, 26 Feb 2022 08:52:32 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 21Q8j7TU146244;
+        Sat, 26 Feb 2022 08:52:31 GMT
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2041.outbound.protection.outlook.com [104.47.56.41])
+        by userp3020.oracle.com with ESMTP id 3efdngkk3f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 26 Feb 2022 08:49:58 +0000
+        Sat, 26 Feb 2022 08:52:30 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U0pQZrxRdCF/76wcsOBnA2VYMF8PhQ/E2n//F0X5zhPjQ7t6IAOtKQclcoj3tNvsaJlMwnbXHsDvPV5hQctuWVJwBEciQSHiljWisyZz4W/D3ZnkVM8dTEZy2FtNe5JnKsMhOZ6Ux7lpaWKkSeccyuXkZvEvHZobPuM7MHKvBm5HOjyyF1YDOi7EZxFzgQhYzG21o9APraQc/Tz0+wvcUA7+otYZJz00YtAr6v3nqsMxYkUaQ1lXbe4chBANG34bR46oSphlGL+ZYTxIRslUafvXrKsQM6POHV+JxOQKL5yOYfodQfSfyYNlslOjH0IsL4FiKVIXu11/Adj0ldTlSw==
+ b=htYiDNUsHRAQ6mbWQtr7U6udrpqAGz7VConav/8G0rJiZX6gf7AzNBY2Mqe9MvpN4pSakhxeaDBum97DJiMcVDXltE5+YfwRWJENYkg4xEKm0CvnSrAdO9psGq9GAu8nxikn3Hn/qsljbmv0fvBBQlBA+Jw018eIKVGq8QXuZMt7MzSnPwUo/SNmFRxCtQ870nmAfAoo4hq34TAiQFJ48CEne9v3gwvwj2Onfmhy/ppinZorFOCdsdGs9q6OOFNRe+W7AtnVngfK9BRTvePRZOLbwT5FEr7Xcdk6pYbuNNx2yEtQBTLiul8stro76m+zLiT0wH0MKJowtTyzQYu47w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KDez+LS+FXYOys1cXqkw1KUN43jbTJnNSUFvuamaZ34=;
- b=etiZyTkQEk4nMuZ4GmNz51/HD/YsFc+vfzlfZ8bXKrORHZg42hu/c4yvwIRXlx4J+7fBxB09xq9barLALinybeXo6bg1FxlfbKtAvowLV+SvKYAmdgkrEjNE2mPcDm/pjttfymxFnLVaMzbt4QaFfQ8q9c7h0RvbvXK9D84jQl/tktq54cWJtUrI2maBh9foYzapZRda51mUx4EdtulIin0TC5/TgF/0OzMq1rba9D+w1tPFObOUe7GNJvI0/8pQLV12gBlTaYiAPV1Q8jAi8bHu5KTBTfqbBhvcQbs8/79OCd4Sfh10WIHP2hNDBY28Q3y3e1kuN1xOMqaHB2co4g==
+ bh=DbQF20PtOuB54svgP9ge0FcQmG5QotEDhxb7kD4er0Q=;
+ b=KzsyyWuh5z0JONEvUEQkZvhtsmSgFPBs3lAzoQk/f2dMyeDfVKdcZDQv7+dd6o3TsqxJTVQ6in4NmIorvjmfLKosUThqVfAmbFIwTDdQb4uzEQaY6NgjoV9eGgYPUYEEZO4q3j4C6Pi+XGtt2uMzzNXw7yp1Qs5bM8RmCI3gNcJwFyZmffHp8whERivUmXHyhmLKiRJTB7nPW9iKfxTXSdfqqpdHq8sCI001S/eRrOe2fQv1wI+b0iBzHJ0TRmhjLsbvztAlKll6y3pqt79RCHRASJ54SWLVmpD8G+78uu+PlHkFJ80WwKdVbzRsH6JTnPKvuVsv6WmTJZpCvy+r4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KDez+LS+FXYOys1cXqkw1KUN43jbTJnNSUFvuamaZ34=;
- b=egWW+HVSBncn+99LiYoLekwijqpa5Pj9knqTsSni4vowfGLAR13gOZGKVIx+TVR0XT2WvIM77wEa6nzsXrpscM6Nb6m1psCQnPuSuC7NPK5DV96A0Tc7giSVWzg1hqmQ7dla7j5Vuob1IiS+mN4zOaiJzBTWBExSQFZy1tQ1OSs=
+ bh=DbQF20PtOuB54svgP9ge0FcQmG5QotEDhxb7kD4er0Q=;
+ b=IeQBU8goPWglBrJcadWgrCblC5faqWW3eC6KpuMcyp2KvtAY0pE9yf5gX1JdJmA0nOpcRJQEX24qZzxPoLbwXOmzUDkSkOo9O06/er3kYQx7YwuDtWCuDYlClGJZaLho7Gltft+3DbuS5gIYSx8pQHFO0cVMitfKbYtMgGGM65o=
 Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
  by CY4PR10MB1768.namprd10.prod.outlook.com (2603:10b6:910:c::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Sat, 26 Feb
- 2022 08:49:54 +0000
+ 2022 08:52:28 +0000
 Received: from BYAPR10MB2663.namprd10.prod.outlook.com
  ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
  ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5017.025; Sat, 26 Feb 2022
- 08:49:54 +0000
+ 08:52:28 +0000
+Subject: Re: [PATCH net-next v3 2/4] net: tap: track dropped skb via
+ kfree_skb_reason()
 From:   Dongli Zhang <dongli.zhang@oracle.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+To:     David Ahern <dsahern@gmail.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
         rostedt@goodmis.org, mingo@redhat.com, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
-        joao.m.martins@oracle.com, joe.jin@oracle.com, dsahern@gmail.com,
-        edumazet@google.com
-Subject: [PATCH net-next v4 0/4] tun/tap: use kfree_skb_reason() to trace dropped skb
-Date:   Sat, 26 Feb 2022 00:49:25 -0800
-Message-Id: <20220226084929.6417-1-dongli.zhang@oracle.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0196.namprd05.prod.outlook.com
- (2603:10b6:a03:330::21) To BYAPR10MB2663.namprd10.prod.outlook.com
+        joao.m.martins@oracle.com, joe.jin@oracle.com, edumazet@google.com
+References: <20220221053440.7320-1-dongli.zhang@oracle.com>
+ <20220221053440.7320-3-dongli.zhang@oracle.com>
+ <cac945fa-ec67-4bbf-8893-323adf0836d8@gmail.com>
+ <235632dd-ca7c-0a08-3313-1c9603807d93@oracle.com>
+Message-ID: <8f93148e-2c9d-3c31-38b1-6d1ae2f0d434@oracle.com>
+Date:   Sat, 26 Feb 2022 00:52:34 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+In-Reply-To: <235632dd-ca7c-0a08-3313-1c9603807d93@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0147.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c6::32) To BYAPR10MB2663.namprd10.prod.outlook.com
  (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 92bab966-b215-4886-209d-08d9f904f539
+X-MS-Office365-Filtering-Correlation-Id: e0081e3f-129b-491f-ab58-08d9f9055150
 X-MS-TrafficTypeDiagnostic: CY4PR10MB1768:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR10MB17685C7B67AE00EB3970F53BF03F9@CY4PR10MB1768.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1768B1D82F3F7DC5E81213FBF03F9@CY4PR10MB1768.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R81V1CwcfUQNFIfigP2R1cvoO4lSQWlBOlPPrbU1bfmgUU5LrLfzYMtXBKcQkFZTVMoE5QfGCrQ4RZ738UleqoRLbwBl7Jw8s6xaHDBd5gpCRaVwhcUBH63nlqb4anN0My5LOSy+S9D50c4E8yHQxhd7+nGmRk10QQRQY1PI3A5+TUNA8WnLuOUl6EknfcxQDHhpNtioP6Kc+CO3lTosvR3uPqzyQgoZQWzQ5VbUBobL28+1qbOSKJlzV+5zZJnUeOvJhOGvuTFZNaT7sXsnqzDsCuMZBaXtkVN6pq9IpiesLebvxBEiJ6mtP5nU4ludZ4MLa/SYv8oruzS+RLMgwcdfcFR03TprxksS2zzi0Q1ubONa0k0pPTyA4mK1wTp8+iYGzBUj1KNE17Pa7hzgQGnEDsAhMZCbNaBcLKAlzQTyk335nTwrc3tz0AmrjHzlB9wC0ccjtMgmAuGOKo9ERE3VwX90V6Yt5/Vsg1j/hc9sc9zqMF4w68KmJjlVk7Wwu/HnpbejQZg9smyKSv6fCoh7m9rhCKhrvcQU8HtFTtxc+5et9FXwkzWdI3C46Ap75PNBHnVg6E+y6xtOMe8SjK2N9eEW2YhZNBf2ueyVwRB1GvyUH+1u0ubNwbxubTOZBhn3Un0pkNMzJcM36hg/wl8t5JkXkHtK3oG9HnPJOeNXEkOn7XrzWbt23p108NTVscCwsyPX1UjKVueeycFw2A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(52116002)(316002)(6512007)(6666004)(6506007)(186003)(5660300002)(86362001)(8936002)(44832011)(26005)(7416002)(1076003)(2616005)(2906002)(8676002)(66476007)(66556008)(83380400001)(66946007)(38350700002)(38100700002)(4326008)(6486002)(508600001)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: A1EX2k681MUyoQgmizocAhIcoJPMiBs/daCTJtqIxBWy6ulT6JEI578BO37EhPSPx43Fjo7eLpEb0G40ioDrBcA9ELzzN5TS5ukVSJyJ9bAKWY0HJbH209Gm7CtZzLiGHQlrhjNZQWixwS2IS0PNZaXLJmOvFF2J1tEG7MmXxTRl7JEhxDc+Y5C74USz2vwGeoP1SkwTxbOUg30EmVGXYuf3uYXo1OUCJ1SSXIR2j9JcLAbe1d7ff5tgeRx2YEMl9Ru0XktpgIf8CUEC80IElVaC2gdvT/C6e8UbjvTUf1ah7jqOFxwbQIIEwCyQllGGSnW+sCoxjC8uUo3TMKawEHPHg5B7tNiTh7sO7QOEWTFSMyLLhYrGKhIo+NzUKwnxT8X0rr6rQgxuuHERlNm2SIf69bqmHSSpUoeom37VnxajSR1bEnJXg9xRMAAYs3D+HAyHSpxBnTmv40g94Z4+em+l1Iqep+0ev+5LxiXWFPYKHEDBjJzFOE7A/6wLHct/ge4H+ZZkJCk8s4lg/OlXhtcxF+50PXN+gM8qlfc69WFLcpUlWyJztABtbpDGWHjMlMbNPMVbavZQ9s01PstbkUYZe3ilZDYm54TCeaYemo9E1UBtP9Ds3neGJGQG4i0kCuOiQJcOZk3MPWDBhASX3cyJ1F/vDcnAzealNb76kbF5vV284W1qErvt83+C4qcf2R/90RmOkAcB2zXowZUqgryPyLBYdLvWrUbbVwUQDWTjJ6FHKrcoMXMsFjFovnNL
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(316002)(6512007)(53546011)(6666004)(6506007)(186003)(5660300002)(86362001)(8936002)(44832011)(31696002)(7416002)(2616005)(2906002)(8676002)(66476007)(66556008)(83380400001)(66946007)(38100700002)(4326008)(6486002)(508600001)(31686004)(36756003)(87944003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hvd9hEdoxI9Oz22ZkfZjwm1BLPzj3/3VMuU9Y1ByJnVlfItQfIW9QhX66MFT?=
- =?us-ascii?Q?4nKRSpU8uxYciUOlSDnL0fMiKovN13DIl06QqfImcJACzJ06jZwKE188vzv7?=
- =?us-ascii?Q?Jm2QvXjDOwFg8Ifm2HgG0XDK5buOD4j1RvpUrbak1FiOQduNT//qcuuBQiY8?=
- =?us-ascii?Q?Y+DtWGZJED24FpvtaARs6CkABAKhoEsvy6ESzTxLpEjxi+0Y3aep/bpg3grN?=
- =?us-ascii?Q?wzTJ9pTf73ZOPi3YuU3D0K2DKjAQdRVdXDEYh3cMVH19MBo5o2T8Ys/W00Yp?=
- =?us-ascii?Q?Z/C60CstKzBK6p8fJM4yaFrvrbEhLavetLT5t2bErf0hedggWcAz8c6WatOr?=
- =?us-ascii?Q?RxlCSEPJLPGLhQnSy0taHzuZ5hK0Wy42GkGAp+fbB/N9IfBjDvKyzUkivhzF?=
- =?us-ascii?Q?O+kCYI6pIxAcYHM9Jbzjd6rZLTIeaRNtq1BkJ/CZLNiNrEr6A2qjqUBsE0JW?=
- =?us-ascii?Q?cGqL0gv1a3qvEnr1234atAp8C7p8gEY2J+Pz7gEIsPJiwNZ51BnFlKhengX5?=
- =?us-ascii?Q?TSuqdB9y2SowFDB3e6fHbpGjFQxR9OMBHq304Zvzlcs9bh3iXoviBBQJXuEc?=
- =?us-ascii?Q?iagYHymAGUckEu+/sMhJvNrdsLkduwMgTdYidAF7pLOMukI3MEuFi2AIFwLf?=
- =?us-ascii?Q?7uTCbWzQZ3y/QI4tb5X6yYM8pQak6NDrMehQshwIaaQ0Q6/CjkmeznOpDGKu?=
- =?us-ascii?Q?7d8Qz+NIXBQvufa/DAQ1EqFd4TTXjdB/Sn2VKuZOngwB7PQzT92AZNSttOWs?=
- =?us-ascii?Q?RxQ0X2DJa9lL1Z664Vffll8XccipwocezZnma+qxLxkOGHq/uMSZo3ATipRq?=
- =?us-ascii?Q?wkbFDPopHquxpTSw7VeE2Pl9VINwx8kIWtt3X21jOnhCHCXTG8OS4eZvx1aY?=
- =?us-ascii?Q?6Odv1hzotxJ/46YRDIZ8RcLij+D0PGGCvMZ6lfS7apxMxiH10vWsBOt4/21C?=
- =?us-ascii?Q?FCo04dwxQpV6vOfyBwbD2G9hA9nN2QKRj+vzcccv3gPEgvYO6kZ014lJDHJ2?=
- =?us-ascii?Q?jvrGJfCLMt5gkjcNA+ImrS6VbQEbonjSPHIPgQS/yX5nodWT6iG4JZ1Q9XXC?=
- =?us-ascii?Q?e+fPqB/eEdlVP5QdPQzVRl/zBuvodzBP00JF/JF26L3+/aXSmpZI5BIUAs63?=
- =?us-ascii?Q?adXenX3hYqbUpGQjMW+1SGpoUcqxIbB56OIOTESZLB/jluuuS0Hm9bgenwUR?=
- =?us-ascii?Q?d1nzJfloef8Rl39Y44FYRcnFuzwbNEURym1mvYWBx8avFgXa24DnOx400ees?=
- =?us-ascii?Q?3ei3iPQ7Cjhnod/8jkwtmN/iBE5HiDRGGyWznqOKMLqGzMmV6eA5+7ubiByw?=
- =?us-ascii?Q?XR+AxoPStN3EiZIIv7yaW8adVXTtkeH9d6LPtCfyEAuwayQuxOt3nl95+TvE?=
- =?us-ascii?Q?wfrxeT/uHsd2b5Mr6UDWDxeCcd4h1IaWO07teZI0s5DwkhYCbXjyDKZYN6Yd?=
- =?us-ascii?Q?Z9MCR4xincR79bFuCaQOQe0NpG7YXkeVl0DD9Jo2hKeWEK0nMF1BQWg3Sl1k?=
- =?us-ascii?Q?yjoWAdwzEBNjM8u3O9i6XPEtt2dN9WZ0qrOY7xUDlaEaz1c8a6sDhC2fH7wY?=
- =?us-ascii?Q?75eb6QYGpnF+aDhhnXrPBnXOh3ezyRzNXh1sAAZwA/r9Jwe4nJ01LnTynWvg?=
- =?us-ascii?Q?hDALlmXfgqFVXUynUFfMcMM=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K0U4YmlkTy9oSFVaZ0dyUXEvRVJxU3RGY1lsMFN4WUhiSGFXQThhUnRRK0RJ?=
+ =?utf-8?B?NWdTbzNiWU9DaTBFd2tEMEJNRFIyNnh3MEIyMU56cDlwMmNPTno0emxFemMy?=
+ =?utf-8?B?dmF2eng3S1BmUDRmK01lTFMydk0wUXVPQXU4SDhrdDdxOXdMTnhCdyszMy9Q?=
+ =?utf-8?B?cU43Qi9BeUpxS0RsUGlld3NMdkl2ZmE4OEdEbFU2UHJsdHE5azB2cTlzOEwx?=
+ =?utf-8?B?YWJsV2xLSTJuSG1taXN3ZmNUekVyUXN0L1plbGdYT25HL2lHZFY4L3FLbDAv?=
+ =?utf-8?B?RFVkWHpZaW1tVWtYQ2pwNjRKWEYrRHpMQ0lWTldaR2VCWC9ZNTEvWHZKWkxz?=
+ =?utf-8?B?TWp4NU56a3FXMG4zbExFQ2pZaTlHWUFqT1hUZ1M5VGhkYWx0dE5pZ041QWRv?=
+ =?utf-8?B?T1ZUc05Mc1ZncC9vTG1WSUhhRXRHTWxpOTlmNVdSeWpSeStBZDZ1NHhLNEtS?=
+ =?utf-8?B?THV6YmFrYXlERkx0Z2hMOEpEL2tNNEhIUG1jTkNxMVdCTGVzOU1jQjByM2dy?=
+ =?utf-8?B?RGZLVnN6eGNaUDdwVGhaWTVtVU95UE5HQmdEb2d6dzI0cCtkeGxKMzUrazNV?=
+ =?utf-8?B?RWR3cENQOFZSOGQ0ajgwR1lZTldBR2h6THFJc2pQaEEya1dYNmVOMUhYYXJ5?=
+ =?utf-8?B?OHZmaU0zQWRwSFhVd2dKT0hGdXRPWkVTcGFsREwxZmxaVjYvTXBZNW5LTHZ5?=
+ =?utf-8?B?Mnc5U0xlYWJwU1dtYStpMjZ0alNOTEdmYUgrbVE5NXNKd1o5RXRyUE1idCs3?=
+ =?utf-8?B?NzFyVVBFMVpwNXJpcGk4c2VRdEg4M3BKUVI1ZTJKUFNYTW5tajB6OVB6bVpt?=
+ =?utf-8?B?ZDlvSHZ3MVVKcWpOcXNBMTh5MFdlRHkyaks4Z0RNaFQxZDRPbWRtUVdRVUJ3?=
+ =?utf-8?B?THFBQSs5dWJISDZjZ3dFMm5zSGpudnJ5bmhacUNFbmlMMU1FOHF3VGhOWFZC?=
+ =?utf-8?B?NjViOS8wSERPMkRzSE9qRUs1bDJPTzZtcG4yZzAwUHlmRzR4OEZ1UTc0ajdQ?=
+ =?utf-8?B?UkczU2swZFlTaG5sa1RjTTVjV0orQS90VXJIcFlSWGhBbVBZMWxWSDcxdzlI?=
+ =?utf-8?B?TjRKRnNtQ1hzNlVkRE9PeWxyUFJQMVlzN1RwOGNkQVdDU0JxR0xqaXNXaEdT?=
+ =?utf-8?B?Zko2TUFmR2d6VXh5aU9tMHRyMDlDWENod0NsREIwckdyK1o3c2tNTGdzbSsr?=
+ =?utf-8?B?TXEyY3JubExUMTB6aHdWMFp2TFd5Rm94bVd3ZWp5WGxaQnV6Z3U1V3oyTlky?=
+ =?utf-8?B?UWlRYnVORXJMc2pITmtiZ09FaUdFekJUbWF5bjRCempudENMWTl3SDR3V1g5?=
+ =?utf-8?B?eTJUbjhBMXBUeUlIdXEyamtkSEdnMDVHTk56MDNwZUJPRkk4ZXhRSnh6V3E3?=
+ =?utf-8?B?SU5RYVBWb1BkZzZOdVBNbzRnTVNITnh5UEpnZjVsQVhIS3FoU1dQZHZDSFB2?=
+ =?utf-8?B?Q0RINkZuNkorWnRjbUVMQTB1N1gvdURNRTFSTWhuY1I1aGFjUXR6a2hNQ3dR?=
+ =?utf-8?B?S1F1WXZsY1paSHRuamxYT29NTUhLakhUNjYybkFDQi9yZTFCRDBLY0djNDZy?=
+ =?utf-8?B?RW80eEpzYVkzbUhYRElIUFAzdkRHVjhZRmFnVXRoNkk3MTJYU0NleVZ4RkQw?=
+ =?utf-8?B?elhJMHZhSmlKNE51ZGpwSjdaSGFxTGU5UHE4S3FVc3dRTTdaZzRIbTduQWd1?=
+ =?utf-8?B?UnF3aVpsNVB6Qzd2N1ArVUhDK0hlamRUdVd3RlZVSTBQK2hBRW9jSHArYlVW?=
+ =?utf-8?B?WDlqNjlNeEdWSHd1STVmSHZDeGhZZWN5QXFOZ0hydXUwZTJOaVlrQUR4NWt4?=
+ =?utf-8?B?ek9IbE93dWFMODFnU2hneDAxbzVkTWNEeDFxNHl2MlpMdDNzdEgxYko1T3JK?=
+ =?utf-8?B?VktqMGJwaC9SUXNPT2VpdSsxWkEzTjFnQ0x0cng3SFVVci9qNkRJdHJlSUZK?=
+ =?utf-8?B?ZXY4U0N6Tm9wSE5KbHlSdno1MlVrMWsya3VNaStBOTUyeFdid0IxUVpwQk1D?=
+ =?utf-8?B?dy9sc0tiQUw5ODdaNWdMK1pQYlN6aUNEWnVaaEFpeWF6aFZ4bGZRdXlVYUJu?=
+ =?utf-8?B?RXROaU53a3hmd2pCc043cWFTV3Ric0Z3eUpsajJSeENlc2pCdjZZMm1wZVJ4?=
+ =?utf-8?B?L1VYUllYWmJvWHNQbExwSzFtVXpqM3hQSzlYRkZqR3pkVmVhei9UNnNGckl4?=
+ =?utf-8?Q?RnKkZQWcGTdyFtRhjub+iCG64UH87OV1uPKRXnR3Ajkh?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92bab966-b215-4886-209d-08d9f904f539
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0081e3f-129b-491f-ab58-08d9f9055150
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2022 08:49:54.1482
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2022 08:52:28.6060
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tePG+n4GY7u/iFqJt1PlTZNqkrzY5k3wkpbRt6uS4WAoq8BXgpYhMPVNX3x8/quOxRbkAvbFxAfn8wdK2CgzBw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: X9a4i5AFNXIPa1WChbB1pFzPytJGk3cKkoedYI9l1aBw/YDppEelYxxAdrGusg6+tCFVWGzc9wzDkcW/gTUiDA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1768
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10269 signatures=684655
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=949
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2201110000
- definitions=main-2202260060
-X-Proofpoint-GUID: nsy016fOyxj1xGCbQSyfRt-pz8ylFOQ5
-X-Proofpoint-ORIG-GUID: nsy016fOyxj1xGCbQSyfRt-pz8ylFOQ5
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ adultscore=0 phishscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202260060
+X-Proofpoint-GUID: TaYKiZipStF2uePPHvesQsdQWx3h01v6
+X-Proofpoint-ORIG-GUID: TaYKiZipStF2uePPHvesQsdQWx3h01v6
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The commit c504e5c2f964 ("net: skb: introduce kfree_skb_reason()") has
-introduced the kfree_skb_reason() to help track the reason.
-
-The tun and tap are commonly used as virtio-net/vhost-net backend. This is to
-use kfree_skb_reason() to trace the dropped skb for those two drivers. 
-
-Changed since v1:
-- I have renamed many of the reasons since v1. I make them as generic as
-  possible so that they can be re-used by core networking and drivers.
-
-Changed since v2:
-- declare drop_reason as type "enum skb_drop_reason"
-- handle the drop in skb_list_walk_safe() case for tap driver, and
-  kfree_skb_list_reason() is introduced
-
-Changed since v3 (only for PATCH 4/4):
-- rename to TAP_FILTER and TAP_TXFILTER
-- honor reverse xmas tree style declaration for 'drop_reason' in
-  tun_net_xmit()
 
 
-The following reasons are introduced.
+On 2/21/22 8:31 PM, Dongli Zhang wrote:
+> Hi David,
+> 
+> On 2/21/22 7:24 PM, David Ahern wrote:
+>> On 2/20/22 10:34 PM, Dongli Zhang wrote:
+>>> The TAP can be used as vhost-net backend. E.g., the tap_handle_frame() is
+>>> the interface to forward the skb from TAP to vhost-net/virtio-net.
+>>>
+>>> However, there are many "goto drop" in the TAP driver. Therefore, the
+>>> kfree_skb_reason() is involved at each "goto drop" to help userspace
+>>> ftrace/ebpf to track the reason for the loss of packets.
+>>>
+>>> The below reasons are introduced:
+>>>
+>>> - SKB_DROP_REASON_SKB_CSUM
+>>> - SKB_DROP_REASON_SKB_COPY_DATA
+>>> - SKB_DROP_REASON_SKB_GSO_SEG
+>>> - SKB_DROP_REASON_DEV_HDR
+>>> - SKB_DROP_REASON_FULL_RING
+>>>
+>>> Cc: Joao Martins <joao.m.martins@oracle.com>
+>>> Cc: Joe Jin <joe.jin@oracle.com>
+>>> Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+>>> ---
+>>> Changed since v1:
+>>>   - revise the reason name
+>>> Changed since v2:
+>>>   - declare drop_reason as type "enum skb_drop_reason"
+>>>   - handle the drop in skb_list_walk_safe() case
+>>>
+>>>  drivers/net/tap.c          | 35 +++++++++++++++++++++++++----------
+>>>  include/linux/skbuff.h     |  9 +++++++++
+>>>  include/trace/events/skb.h |  5 +++++
+>>>  3 files changed, 39 insertions(+), 10 deletions(-)
+>>>
+>>
+>> couple of places where the new reason should be in reverse xmas order;
+>> logic wise:
+>>
+>> Reviewed-by: David Ahern <dsahern@kernel.org>
+>>
+> 
+> I will re-order the reasons in the same patch and re-send with your Reviewed-by
+> in the next version.
+> 
 
-- SKB_DROP_REASON_SKB_CSUM
+I have sent out v4 and I finally decide to not re-order reasons for this patch
+as this may makes trouble for backport.
 
-This is used whenever there is checksum error with sk_buff.
-
-- SKB_DROP_REASON_SKB_COPY_DATA
-
-The kernel may (zero) copy the data to or from sk_buff, e.g.,
-zerocopy_sg_from_iter(), skb_copy_datagram_from_iter() and
-skb_orphan_frags_rx(). This reason is for the copy related error.
-
-- SKB_DROP_REASON_SKB_GSO_SEG
-
-Any error reported when GSO processing the sk_buff. It is frequent to process
-sk_buff gso data and we introduce a new reason to handle that.
-	
-- SKB_DROP_REASON_SKB_PULL
-- SKB_DROP_REASON_SKB_TRIM
-
-It is frequent to pull to sk_buff data or trim the sk_buff data.
-
-- SKB_DROP_REASON_DEV_HDR
-
-Any driver may report error if there is any error in the metadata on the DMA
-ring buffer.
-
-- SKB_DROP_REASON_DEV_READY
-
-The device is not ready/online or initialized to receive data.
-
-- SKB_DROP_REASON_FULL_RING
-
-Suggested by Eric Dumazet.
-
-- SKB_DROP_REASON_TAP_FILTER
-
-Suggested by Menglong Dong. For sk_buff dropped by (ebpf) filter directly
-attached to tun/tap, e.g., via TUNSETFILTEREBPF.
-
-- SKB_DROP_REASON_TAP_TXFILTER
-
-Suggested by Menglong Dong. For sk_buff dropped by tx filter implemented at
-tun/tap, e.g., check_filter()
-
-
-This is the output for TUN device.
-
-# cat /sys/kernel/debug/tracing/trace_pipe
-          <idle>-0       [014] b.s3.   893.074829: kfree_skb: skbaddr=0000000013eea285 protocol=4 location=00000000036fe12c reason: FULL_RING
-      vhost-4456-4469    [024] b..1.   893.230235: kfree_skb: skbaddr=0000000011eab049 protocol=2054 location=00000000036fe12c reason: FULL_RING
-          arping-6811    [002] b..1.   893.235606: kfree_skb: skbaddr=000000000121f124 protocol=2054 location=00000000036fe12c reason: FULL_RING
-          arping-6811    [002] b..1.   894.235682: kfree_skb: skbaddr=000000000121f124 protocol=2054 location=00000000036fe12c reason: FULL_RING
-      vhost-4456-4469    [024] b..1.   894.291240: kfree_skb: skbaddr=00000000d093f0cd protocol=2054 location=00000000036fe12c reason: FULL_RING
-
-
-This is the output for TAP device.
-
-# cat /sys/kernel/debug/tracing/trace_pipe
-          <idle>-0       [004] ..s1.  1584.564287: kfree_skb: skbaddr=00000000e0987862 protocol=0 location=00000000177d2c83 reason: NOT_SPECIFIED
-          arping-9338    [018] ..s1.  1584.642082: kfree_skb: skbaddr=00000000856cd27d protocol=2054 location=00000000615812ac reason: FULL_RING
-          arping-9338    [018] ..s1.  1585.642190: kfree_skb: skbaddr=00000000856cd27d protocol=2054 location=00000000615812ac reason: FULL_RING
-          arping-9338    [018] ..s1.  1586.642271: kfree_skb: skbaddr=00000000856cd27d protocol=2054 location=00000000615812ac reason: FULL_RING
-          arping-9338    [018] ..s1.  1587.642368: kfree_skb: skbaddr=00000000856cd27d protocol=2054 location=00000000615812ac reason: FULL_RING
-
-
- drivers/net/tap.c          | 35 +++++++++++++++++++++++++----------
- drivers/net/tun.c          | 38 ++++++++++++++++++++++++++++++--------
- include/linux/skbuff.h     | 21 +++++++++++++++++++++
- include/trace/events/skb.h | 10 ++++++++++
- net/core/skbuff.c          | 11 +++++++++--
- 5 files changed, 95 insertions(+), 20 deletions(-)
-
+I will not follow the reverse xmas order here, as all existing variables are not
+declared in reverse xmas order.
 
 Thank you very much!
 
 Dongli Zhang
-
-
