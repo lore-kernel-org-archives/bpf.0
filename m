@@ -2,73 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02375C433EF
-	for <bpf@archiver.kernel.org>; Mon, 28 Feb 2022 13:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 987C2C433F5
+	for <bpf@archiver.kernel.org>; Mon, 28 Feb 2022 13:28:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiB1N00 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Feb 2022 08:26:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S235376AbiB1N2k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Feb 2022 08:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235498AbiB1N0Y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Feb 2022 08:26:24 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED757A99E;
-        Mon, 28 Feb 2022 05:25:46 -0800 (PST)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nOg21-000A8i-H2; Mon, 28 Feb 2022 14:25:41 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nOg21-000XD9-63; Mon, 28 Feb 2022 14:25:41 +0100
-Subject: Re: [PATCH bpf-next] bpf: add config to allow loading modules with
- BTF mismatches
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-        Connor O'Brien <connoro@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>
-References: <20220223012814.1898677-1-connoro@google.com>
- <YhW5UIQ5kf8Fr3kI@syu-laptop.lan>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <6a979467-7bfb-68eb-57d6-f5294846bac4@iogearbox.net>
-Date:   Mon, 28 Feb 2022 14:25:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S236032AbiB1N2j (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Feb 2022 08:28:39 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C286B30F6F;
+        Mon, 28 Feb 2022 05:28:00 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id q11so10707506pln.11;
+        Mon, 28 Feb 2022 05:28:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=y1lfQkaMWFdWKl8tBqnI/TXOCG2pTT27XRwhXLuxq6k=;
+        b=AOGl3kXEr5wLLSx++P32sRbRmd3mcW6LtIDUENN/eveEgyrfi/v5AelyysX4lbBn5N
+         WPhdFkslH5lJwIm16GPhYrhymCV8ajEeo877j8SKQ5DcBwAdKpbYxpHSEY65/jcMRuCp
+         ATK18qik38Iggpo6jeWvvzcx9+lXn4QYumRL5i0UogAlQp2D7ug9ADScxFvF3fObdubG
+         7ZmlHVakD/Gi/PiBMuP6cnnV9PmSf71VwM2FGLVidjnCwhKXMq5v4XF5N1Vvv4G5BLVF
+         XBBZIJKasLp4askqQVDn+VAy17phnSJqY92JYiG8ZthysCfkWRbcyL1hOFxJNCUDWKHw
+         gH6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=y1lfQkaMWFdWKl8tBqnI/TXOCG2pTT27XRwhXLuxq6k=;
+        b=AYoaeaoDmZA0Pb9o5Nbuaf7fKRrhIyJjdnPm5niMmKm0VJ4SjBSHlwRuTkoFk3OVDu
+         mh8Yp4X76+LGN+dxxRrPJ++ajyI5OtPR6ZFk7alu8W8SZb1DZfI2Ylhl2zF3tOwoM4CI
+         y1rzNOiQlmhz1x7s3lDPQiaNoBNyVOVk8wRB8KEluo+Ofae/sMx5PjMImPofgizRAkdQ
+         l3SNce6N7Ww0sF2lnrjwoxUuWwK0J6D1LcebBoVn36fl1rJrm5simcCntKdMq2xZrW9/
+         3gwe7GozpSC0VO/4RjAndkUDriEfX1RUI2etoNhP6YRJu5rNZfhnhWdQhzch+Gt6LvWO
+         oD6Q==
+X-Gm-Message-State: AOAM5314rXdG3EpfhkS1wf6bowHQl/c4AQOUsJLq/flb4SY/HDcB//L9
+        0aBaATvf3E65CZB6Sf4dhAbQG56Fu5Or2DCMtXOXSoG5b4o=
+X-Google-Smtp-Source: ABdhPJzu7wWsHJhfI60JHYyIhEtqGy54QKziY7rmxV8/+HA9syr0Sbr+ChrV/y5HvtKZAMtK0MAyfv8/FxMWwGDmwVc=
+X-Received: by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP id
+ d7-20020a17090ab30700b001bd37f3f0fcmr7439953pjr.132.1646054880182; Mon, 28
+ Feb 2022 05:28:00 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YhW5UIQ5kf8Fr3kI@syu-laptop.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26467/Mon Feb 28 10:24:05 2022)
+References: <20220228094552.10134-1-magnus.karlsson@gmail.com> <CAJ+HfNiMQOgnKfa2EtnazK8MuQx5zUtF8GzQjdo-kUAoDv+Z1A@mail.gmail.com>
+In-Reply-To: <CAJ+HfNiMQOgnKfa2EtnazK8MuQx5zUtF8GzQjdo-kUAoDv+Z1A@mail.gmail.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Mon, 28 Feb 2022 14:27:49 +0100
+Message-ID: <CAJ8uoz0NRRoviHd4tthsyMyAqw2FRUeWn17VP4k-7=9uJ3Kitw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] xsk: fix race at socket teardown
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Netdev <netdev@vger.kernel.org>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Elza Mathew <elza.mathew@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2/23/22 5:34 AM, Shung-Hsi Yu wrote:
-> On Wed, Feb 23, 2022 at 01:28:14AM +0000, Connor O'Brien wrote:
->> BTF mismatch can occur for a separately-built module even when the ABI
->> is otherwise compatible and nothing else would prevent successfully
->> loading. Add a new config to control how mismatches are handled. By
->> default, preserve the current behavior of refusing to load the
->> module. If MODULE_ALLOW_BTF_MISMATCH is enabled, load the module but
->> ignore its BTF information.
->>
->> Suggested-by: Yonghong Song <yhs@fb.com>
->> Suggested-by: Michal Suchánek <msuchanek@suse.de>
->> Signed-off-by: Connor O'Brien <connoro@google.com>
-> 
-> Maybe reference the discussion thread as well?
-> 
-> Link: https://lore.kernel.org/bpf/CAADnVQJ+OVPnBz8z3vNu8gKXX42jCUqfuvhWAyCQDu8N_yqqwQ@mail.gmail.com/
+On Mon, Feb 28, 2022 at 2:21 PM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.co=
+m> wrote:
+>
+> On Mon, 28 Feb 2022 at 10:46, Magnus Karlsson <magnus.karlsson@gmail.com>=
+ wrote:
+> >
+> > From: Magnus Karlsson <magnus.karlsson@intel.com>
+> >
+> > Fix a race in the xsk socket teardown code that can lead to a null
+> > pointer dereference splat. The current xsk unbind code in
+> > xsk_unbind_dev() starts by setting xs->state to XSK_UNBOUND, sets
+> > xs->dev to NULL and then waits for any NAPI processing to terminate
+> > using synchronize_net(). After that, the release code starts to tear
+> > down the socket state and free allocated memory.
+> >
+> [...]
+> >
+> > v1 -> v2:
+> > * Naming xsk_zc_xmit() -> xsk_wakeup() [Maciej]
+> >
+>
+> Magnus,
+>
+> You forgot to include my ACK! So, again:
+>
+> Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 
-LGTM, and added above into the commit log while applying. Thanks everyone!
+Sorry for that Bj=C3=B6rn.
+
+/Magnus
+
+>
+> Cheers,
+> Bj=C3=B6rn
