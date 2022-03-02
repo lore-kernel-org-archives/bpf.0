@@ -2,63 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DD99C433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 23:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38DD7C433EF
+	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 23:49:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiCBXtl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Mar 2022 18:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S229509AbiCBXuM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Mar 2022 18:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiCBXth (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:49:37 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F9012E140
-        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 15:48:45 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id w37so2989879pga.7
-        for <bpf@vger.kernel.org>; Wed, 02 Mar 2022 15:48:45 -0800 (PST)
+        with ESMTP id S229546AbiCBXuL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Mar 2022 18:50:11 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5447C241B71
+        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 15:49:25 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id u16so3283264pfg.12
+        for <bpf@vger.kernel.org>; Wed, 02 Mar 2022 15:49:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oYlfaNa0Seitg9T4VDI81l0LbRv14ezy5c9yD4odAYU=;
-        b=iYs1Th1vs5t85JhmNZu8Xlixb26h5jitdS+k9YyBzIhOESYpPSEE4nYQU1fZym5Zs7
-         9O5YDGFs22bpXsp5m1UgY1aKGXayAZ5ZrXsWR+h5eqQ2QHzqVe0QdqUj2gukN6sL3qEW
-         JRlUF31ggJRaACkrXwswybwhLvAeqQQ4h40LcpfRKzW5zQtxNhoqU4lsb05pe4vzAcRa
-         LuXI27v1dL6ncYoxruvKaJkcwamK+iZL6pjDZT8H2hzhqKUU1tZYkPuaLTar8ZI/djnu
-         +SNRyx9TYmXnYaPrKE4EKzY/BPwbV39OzONsMVKOQyuaVBAXECcFOGEbCwxFUNL28fPZ
-         AahQ==
+        bh=Ko8Es7ZJtjVO3NP/5pMNlDyCEfQwQh9f4P4oN5F0HKc=;
+        b=SIwBw7VfRJCPINYHm+4ZQG49baQ2QQzZw/6oLDNyfJbsP9VSKSJOgcutBtl16/ONib
+         v9rVLRHi1UvEC36pENc5cBM3B7nY9MX4zH6RFSX3jC9SmRri966+OUPOmKZHarWV3Uw0
+         5M649Cn8MRv7IH2ezL4bOPwsoTljQ9kPDox+ra0Q7Fc26uWpFdqC6AzT2ff5Q94OzdD4
+         2WtpNX+5It8m70KrT/+9QeISFJMJhn5mNKT8SF7dZ59a1SOAQZFfbGuoTfiKkc8opyl8
+         2kztRDiMntQneVxCc7xuOBUohDiYmapFs85wlPgaCOFFz4Mn9mJ2I6Ti43JEgZjke2CW
+         ft2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oYlfaNa0Seitg9T4VDI81l0LbRv14ezy5c9yD4odAYU=;
-        b=2Rt0DDbM4RP5/Di8RKMKFY++Ril/EyugGXV+WzbjB4xJjqlOc/IcFZJcsDoPE1sYzJ
-         hrs7v+oH3V/526MiI3pPu2J6QrjyCInZiWCcDiwoQQ/q4LO1yTsogGxciF06ahB/WRg+
-         SLaAyXYwxvc5tpPD+z2V/uuncSpNTH5+xS19rvuaon+hvken5F5Qh01DveIPa5xn34HC
-         lwhmu55lbQ+1oSa3pgbf6e21e2aDRvEtb6ybTH9Jsj1znWKEGli9i3gcKfZWXNX6qlbw
-         ZgQDR5FqRSRzGgzqaNX145ND35ezCZtDMHua83O417FtZam8Gw4XJmGOtNZ6TkXHVhsJ
-         VwOw==
-X-Gm-Message-State: AOAM531mN702ehxW2iM9mRMtxChI+LuZTSgKOR+fsaNBoIapaoSUtzVW
-        /Yq0gMRlJ3FZtKj0F1uqqEJsqEIROAnlPmbTYzHIxdr9WCg=
-X-Google-Smtp-Source: ABdhPJwJMFA/ILZz+wlcWISCP6dD2XIX/oXtqjm7HZPjBbpiJsZHTu60KPQBuRgURVN/6m0rpC6AAiC1iRKNsKbwZl8=
-X-Received: by 2002:a05:6a00:809:b0:4f1:14bb:40b1 with SMTP id
- m9-20020a056a00080900b004f114bb40b1mr35668681pfk.69.1646264386132; Wed, 02
- Mar 2022 15:39:46 -0800 (PST)
+        bh=Ko8Es7ZJtjVO3NP/5pMNlDyCEfQwQh9f4P4oN5F0HKc=;
+        b=Jozd51cYlrViH9BwO3BK2pMaOja4HduYWAaDfw7Eu1jiZuetzXlTPpQ2m5eYCyA1pm
+         +nINYbm89y1MJaa2wgZYBM3u55LezSVtW9g1p8UBTDdjbICgOH/sM7R/AokUecTP0/FH
+         R0b63hgHk2/7dqR9nHR8pEr5GWuq426mI+EXn4op6eYKDOi2k+aCoYJCjDeA8zjJebwN
+         Us+uSIXNbTEcJsS7afRb/smegss14sRHcDKhM9tfVsRcQF2dtfU+2deqWK2T0gxeu81k
+         jfpd1F2lFnM5+b7Cf/U/lANFQ9b4GvYWNDUl8k0/ROSRCUJV+REvh4msABokO9W5/NyS
+         Y1gQ==
+X-Gm-Message-State: AOAM531rC99WWl+w+mjU1HFcdCQNevM0x1QqZtNm4Mnh42FVOk/JHpEx
+        oZyFYFmgn2NgJLtJ/TqTGOIJ+S9iIvq7FLuz4qe3b63RhqU=
+X-Google-Smtp-Source: ABdhPJxkdMgxHAjuiogfMST1u3t0aIc/vYODaa/J5QdPoKTjpSqgeZq2FVS4GEx8TicBrzyXEefoxDhkr/5SN1LAYsk=
+X-Received: by 2002:a05:6a00:1146:b0:4c9:ede0:725a with SMTP id
+ b6-20020a056a00114600b004c9ede0725amr35832067pfm.35.1646263246087; Wed, 02
+ Mar 2022 15:20:46 -0800 (PST)
 MIME-Version: 1.0
-References: <20220301065745.1634848-1-memxor@gmail.com> <20220301065745.1634848-5-memxor@gmail.com>
- <20220302032024.knhf2wyfiscjy73p@kafai-mbp> <20220302094218.5gov4mdmyiqfrt6p@apollo.legion>
- <20220302215640.2thsbd4blxbfd7tk@kafai-mbp> <20220302223020.3vmwknct24pplzzr@apollo.legion>
- <20220302224418.5ph7nkzx2qmcy36n@ast-mbp.dhcp.thefacebook.com>
- <20220302230047.7xjekpuivrbno5cp@apollo.legion> <CAADnVQLPpCLLTQZdeXWfx_Ey-4mrs_=yuL48dVpi839hq9No+A@mail.gmail.com>
- <20220302232952.2p7nn5bzqaflftev@apollo.legion>
-In-Reply-To: <20220302232952.2p7nn5bzqaflftev@apollo.legion>
+References: <20220301065745.1634848-7-memxor@gmail.com> <202203011937.wMLpkfU3-lkp@intel.com>
+ <20220301115722.jjklznmjsbnkdsf2@apollo.legion> <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
+ <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+In-Reply-To: <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 2 Mar 2022 15:39:35 -0800
-Message-ID: <CAADnVQ+VpaBy4bcKBwmhyGT70LU+EhvE_o3KOba4NzE7QA=K-A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 4/6] bpf: Harden register offset checks for
- release kfunc
+Date:   Wed, 2 Mar 2022 15:20:34 -0800
+Message-ID: <CAADnVQJucT4+Q7Yu=vcR0b+a1bkZv024UEm9Z=24gt_NrV1KVA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
+ register offset checks
 To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
+Cc:     kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
@@ -67,43 +65,34 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 3:29 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Wed, Mar 2, 2022 at 3:14 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
 >
-> On Thu, Mar 03, 2022 at 04:47:59AM IST, Alexei Starovoitov wrote:
-> > On Wed, Mar 2, 2022 at 3:00 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> > > >
-> > > > fwiw I like patches 1-3.
-> > > > I think extra check here for release func is justified on its own.
-> > > > Converting it into:
-> > > >   fixed_off_ok = false;
-> > > >   if (type == PTR_TO_BTF_ID && (!is_release_func || !reg->ref_obj_id))
-> > > >           fixed_off_ok = true;
-> > > > obfuscates the check to me.
+> On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
+> > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
 > > >
-> > > I was talking of putting this inside check_func_arg_reg_off. I think we should
-> > > do the same check for BPF helpers as well (rn only one supports releasing
-> > > PTR_TO_BTF_ID, soon we may have others). Just passing a bool to
-> > > check_func_arg_reg_off to indicate we are checking for release func (helper or
-> > > kfunc have same rules here) would allow putting this check inside it.
+> > > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
+> > > > Hi Kumar,
+> > > >
+> > > > Thank you for the patch! Perhaps something to improve:
+> > > >
+> > > > [auto build test WARNING on bpf-next/master]
+> > > >
+> > > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
+> > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> > > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
+> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> > >
+> > > The same warning is emitted on clang for all existing definitions, so I can
+> > > respin with a fix for the warning like we do for GCC, otherwise it can also
+> > > be a follow up patch.
 > >
-> > Hmm. check_func_arg() is called before we call
-> > is_release_function(func_id).
-> > Are you proposing to call it before and pass
-> > another boolean into check_func_arg() or store the flag in meta?
+> > Separate patch is fine.
+> > How do you plan on fixing it?
+> > What is __diag_ignore equivalent for clang?
 >
-> We save meta.func_id before calling check_func_arg. Inside it we can do:
-> err = check_func_arg_reg_off(env, reg, regno, arg_type, is_release_function(meta->func_id));
->
-> I actually tried open coding it for BPF helpers, and it was more complicated. If
-> we delay this check until is_release_function call after check_func_arg, we need
-> to remember if reg for whom meta->ref_obj_id had off > 0 and type PTR_TO_BTF_ID.
-> If we put it inside check_reg_type or check_func_arg, you need to call
-> is_release_function anyway there.
->
-> Compared to these two options, doing it in check_func_arg_reg_off looks better
-> to me, but ymmv.
+> Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
+> local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
 
-I see. Yeah. You're right.
-check_func_arg_reg_off(env, reg, regno, arg_type,
-  is_release_function(meta->func_id))
-is indeed cleaner.
+Make a generic llvm/gcc #define for
+__diag_ignore(GCC, 8, "-Wmissing-prototypes" ?
+We need it in two places so far.
