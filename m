@@ -2,51 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3078FC433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 02:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 978C1C433F5
+	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 02:05:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235789AbiCBCD7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Mar 2022 21:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S238990AbiCBCF5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Mar 2022 21:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiCBCD6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Mar 2022 21:03:58 -0500
+        with ESMTP id S232069AbiCBCF4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Mar 2022 21:05:56 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED03B289A9;
-        Tue,  1 Mar 2022 18:03:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1753D5F241;
+        Tue,  1 Mar 2022 18:05:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8872361668;
-        Wed,  2 Mar 2022 02:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8784AC340EE;
-        Wed,  2 Mar 2022 02:03:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7635615D3;
+        Wed,  2 Mar 2022 02:05:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8382AC340EE;
+        Wed,  2 Mar 2022 02:05:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646186595;
-        bh=s7k6aRxfxCIh/rpY0Mm41+2wCLMLFpGjdtj8D5mnN6Y=;
+        s=k20201202; t=1646186714;
+        bh=5i8Y5+dBeeL89jeI9/AO5sLou/tQrxrcO+QtYbCCKUc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Um2yvFya4FM/XJHG9lFQ4B8GKPdtereJZ6FQNHUiRly1W0L+QReG8uzDi06KuvUuS
-         RAHrKN0CPoO3n6GzWW1YIBzakiIFmYdDG/4UsbeZKO0dcYKV4M9fIGYasnfhbKrwP1
-         qv8+FJdlm7DI7xT3c5m6dWwIGncEs3U2GmwDur8PEx57a53Ok0aVvWd55Z8E7Nkcjf
-         R9xZk8wBqnnvSZiN+NIK1Kofm7hS5h7nuaGOnHSHWyAikx0WlMwi02UkQR/F61k6QL
-         GfxNFwoWbtO7UqhQPsrMYcjW1Syte2/02bwwAdlTtmUVeyM9EWpLtTzrnjJmgeEQHY
-         fj7URS9LCJm3g==
-Date:   Tue, 1 Mar 2022 18:03:14 -0800
+        b=f5R3K7LQpxliNR5Lci0onOHclKiqth1ZuwJE+DSpmjDqYk+O6stDhcRJ5MX65Zioe
+         NPTzlzD1OekD3KsA86i3EqwvToKi1cDnAUI4gVpVAd13m9DeT8al538iFv80R9/5bU
+         92oYPHZjTkfdOSoB6oyMevjeC3si3MaMeC7uCuqAzgg4OrpSlytHbenOyU4xV1S4vE
+         bGy5KhHr0o9kkzbkSpNxG+TVpVElHfkkgucfpNfLYLDNTxdkLmNTpGHj/6i/UX2NeO
+         fDGriUvcdbAh8sQwaF1U59Cu30oVk761nMWSG8RNn7GK/yK1TCXs+kFvJxUcAD9CDn
+         tla4rME8QEXYg==
+Date:   Tue, 1 Mar 2022 18:05:12 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+To:     Harold Huang <baymaxhuang@gmail.com>
+Cc:     netdev@vger.kernel.org, jasowang@redhat.com, edumazet@google.com,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, <kernel-team@fb.com>,
-        Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH v5 net-next 06/13] net: ip: Handle delivery_time in ip
- defrag
-Message-ID: <20220301180314.45c0bb84@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20220301053709.933219-1-kafai@fb.com>
-References: <20220301053631.930498-1-kafai@fb.com>
-        <20220301053709.933219-1-kafai@fb.com>
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kernel@vger.kernel.org (open list),
+        kvm@vger.kernel.org (open list:VIRTIO HOST (VHOST)),
+        virtualization@lists.linux-foundation.org (open list:VIRTIO HOST 
+        (VHOST)), bpf@vger.kernel.org (open list:XDP (eXpress Data Path))
+Subject: Re: [PATCH net-next] tuntap: add sanity checks about msg_controllen
+ in sendmsg
+Message-ID: <20220301180512.06f7f6dc@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20220301064314.2028737-1-baymaxhuang@gmail.com>
+References: <20220301064314.2028737-1-baymaxhuang@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -54,19 +58,16 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 28 Feb 2022 21:37:09 -0800 Martin KaFai Lau wrote:
-> diff --git a/include/net/inet_frag.h b/include/net/inet_frag.h
-> index 63540be0fc34..8ad0c1d6d024 100644
-> --- a/include/net/inet_frag.h
-> +++ b/include/net/inet_frag.h
-> @@ -90,6 +90,7 @@ struct inet_frag_queue {
->  	ktime_t			stamp;
->  	int			len;
->  	int			meat;
-> +	__u8			mono_delivery_time;
->  	__u8			flags;
->  	u16			max_size;
->  	struct fqdir		*fqdir;
+On Tue,  1 Mar 2022 14:43:14 +0800 Harold Huang wrote:
+> In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
+> tun_sendmsg. Although we donot use msg_controllen in this path, we should
+> check msg_controllen to make sure the caller pass a valid msg_ctl.
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
+> 
+> Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
+> Suggested-by: Jason Wang <jasowang@redhat.com>
+> Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
 
-kdoc missing for this one, also we can ignore the __u8 in flags and
-stick to non-uAPI types this time
+Would you mind resending the same patch? It looks like it depended on
+your other change so the build bot was unable to apply and test it.
