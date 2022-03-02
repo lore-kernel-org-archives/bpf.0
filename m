@@ -2,227 +2,255 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4637EC433EF
-	for <bpf@archiver.kernel.org>; Thu,  3 Mar 2022 00:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B9D8C433F5
+	for <bpf@archiver.kernel.org>; Thu,  3 Mar 2022 00:07:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbiCCAHE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Mar 2022 19:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
+        id S230078AbiCCAIj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Mar 2022 19:08:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiCCAHD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:07:03 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7622C53B45
-        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 16:06:17 -0800 (PST)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 222JMm8I005094
-        for <bpf@vger.kernel.org>; Wed, 2 Mar 2022 16:06:17 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=qwPEKb4CJZa4YckOlAfQPKrkcEa2UfGeJw609IKQaBY=;
- b=mYsz4tKJqxoq+OMkkEtKzVWl2qZKwVcG/ZPNKM1ap6+ZWS8N8yuSB1dYWT6gL2HlNpgv
- nfn6YIGIwIY9wxwQIP49K4TizY4xTEYvUY8cPNPd7X/iVS0GPvHyrTAYcuYLvWP/jsBM
- FbGZ4G1wYMBTCf5zgzLzVpChF8wXCAh7uqs= 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ejdmmtd8g-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Mar 2022 16:06:17 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VwX9LnPSSfxXkk5pIwDrQF2TmAM/S4s66HEvpMqdXw1IE5XPDf/yHZx8NKGhkNu3RlRmQJpB+V02ZQF7jfZTGhOdpcqbD2SCWa9Z4gq2onua4zw/aNI9uimphWyLgMLS8lvLkHxcH4/HLtlpnPT/Bot/0UAM+GwfGN3CEjNyGW/490nugrmcRspskHaUiRnD3lmgYOSbt6JtJokjiE7bUbMgDS/Kc9+tE2ild17ykCIunEnaQSWYkoBExy11Kf052h9UA2E9Uo//Iz9jigHf2RFSHNS+o/8gti2jl3nrDmKjNs2ncs4+oiqvKq+t/TZNTnbfiOjXdFtPGYJM4IPYwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qwPEKb4CJZa4YckOlAfQPKrkcEa2UfGeJw609IKQaBY=;
- b=e4C6/DpNgFuutDNsRZBZNACKij6jjw6f+qe3Pp5AHKqIFn5jPCpIb4bnZK/AA9oEreqd6muMnp6uoTRPlZ+Vjqj3boZtWQVzgPH8eytfHFSZi88x/2Uje4uqtet+rD51EpJ0+fNW8f1MlxuB5vznnGqRF9mOLaEtn/QAa11bdoQV0jOQL0RCAvFAhbr/EjDtOpKDiL6G3w8//8HobN+rNyMZ1MdoUxF4iU6qRVOm5Gn7JEUlVe9EwsGbX9SSK/SK1cgnf+WZ0JJkqY4RyonamqvnXHJSlzfqzGXcIps/nla1jmuBLoFLGJXlJHoM1KfrlewhwftSsSGK0r2LM7XoIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SJ0PR15MB5154.namprd15.prod.outlook.com (2603:10b6:a03:423::6)
- by MN2PR15MB4302.namprd15.prod.outlook.com (2603:10b6:208:181::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.26; Thu, 3 Mar
- 2022 00:06:14 +0000
-Received: from SJ0PR15MB5154.namprd15.prod.outlook.com
- ([fe80::90c1:20f8:4fc6:d7a3]) by SJ0PR15MB5154.namprd15.prod.outlook.com
- ([fe80::90c1:20f8:4fc6:d7a3%5]) with mapi id 15.20.5017.027; Thu, 3 Mar 2022
- 00:06:14 +0000
-From:   Delyan Kratunov <delyank@fb.com>
-To:     "alexei.starovoitov@gmail.com" <alexei.starovoitov@gmail.com>
-CC:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: test subskeleton
- functionality
-Thread-Topic: [PATCH bpf-next 4/4] selftests/bpf: test subskeleton
- functionality
-Thread-Index: AQHYLeAKMKJESw6+B0GttMPBMXX3YKysrmQAgAAZc4A=
-Date:   Thu, 3 Mar 2022 00:06:14 +0000
-Message-ID: <decc0e45afff1ed4bdb65e929aab24d7f66ed921.camel@fb.com>
-References: <cover.1646188795.git.delyank@fb.com>
-         <89a850b9c06835b839da76386ee0e4bbeaf5a37b.1646188795.git.delyank@fb.com>
-         <20220302223008.7deshk5qfw3pytxm@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220302223008.7deshk5qfw3pytxm@ast-mbp.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a209f32d-16a4-4fe1-b956-08d9fca9a1d6
-x-ms-traffictypediagnostic: MN2PR15MB4302:EE_
-x-microsoft-antispam-prvs: <MN2PR15MB4302AD0F7FC225F1E829DC50C1049@MN2PR15MB4302.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BF1Vo6X3jX+FuQjlQUzkgzYFLDOchoJFCmjjUDc5q52uWNm1Y1mcY8qm05zHtFmcEziv625C8rDfenrNgHgFPSwnuVP7aPAzyJBxxIWd8PZoyqDRRUG3yMTt6RccYxC/GjQPf1ymiU6C5Bbxs6wCzyHC1csGm4SpQuFEalbpW1Y9joSq7sWW/4TWUROfdisu5Qk4JKM7lDAxPJIdc6B3jU1WYLkGeJpfoD8cq+WvqK+gyfXLHxbXyl/2c/KLOmH/rOsisTmrWtHNFxy9iefHsrv7/A/MCeMFkdMBC3PzbGjDexvYc8F7MVwk4oxeF1cMxmlzDa9a/qy0lOHayLjbKwvBx23Tj5CnANs1XFJO3/EDayBDOXGCduqucRX3dsvfZ4oL9Etxpwty5v8vY5CVCg0roJY33rqoOE98ukQqOuE9tIRUsA/oUrOqoyKUW3rjuOYBz8nD3lH+8dy419GhWruSbSmheiY7OuAqJYrQVRg0moRrWMyjcx2Zgl9kd8X1mFuB1CeKf/W1b8QnziTjDCIi9imsGwujaSDKsgayTrHODY/1f7loESRHTJt04mFPPVndYghNYNX4F8lvDLZCl7g6IUsrOZZ0Qwn4beMwdg++8U2WPQ3p6bUuOkXCDpQAk/nOlhMci9wyFcLqRH6/mhs9VomuLL42dMbnfGTXA77EN2HeQNrBOox7co8Zp/rULeSZdGcyxTHCbQbulv9ZMA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR15MB5154.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(36756003)(186003)(2616005)(122000001)(38100700002)(86362001)(38070700005)(6512007)(316002)(5660300002)(8936002)(6506007)(508600001)(6916009)(6486002)(66446008)(71200400001)(54906003)(91956017)(76116006)(4326008)(8676002)(66476007)(66556008)(66946007)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dXdEcXMySWZ0Nk4vYlI4dTl0YkVMVjVINGIyNHNUbkQwd0ZzYkdDOTlhK0Ew?=
- =?utf-8?B?ZUtObGZxWmhoS2hqZ0JUZFluNEVWM2RRRlFIRitPdnUzV2Z1QTR5SVBQMEZY?=
- =?utf-8?B?ZXVKL3NBc0dwYjlxWFkyTzFjSEUwVWtBczJndXQxQmg5NVRKVVVmUVNEalBY?=
- =?utf-8?B?MHQrWTJURFg2R3RtWk5jRUlVcmtjd3EwRU5oL1pEekw2cXM3YTNVVnh1VE9h?=
- =?utf-8?B?N2FkeDZqZk9sWFlnMUFVZytoVTdUdjN3VFZLUmIwNmFTT3Z5SjlWLzZCVzIw?=
- =?utf-8?B?V3laMytLMWs5VXIrNzNheUdmUmgvNVNuU1JtTGhoeGFURUVSR3BUMEpuS2lR?=
- =?utf-8?B?bkFHbVI5bnIxeXdPcW9yZ0RCNDB5QnExQTlVUEZaRkJSZ3hTWFdmdTRsb3Jo?=
- =?utf-8?B?Zy85ajVlRUk1dmIrSDdIdS8yTjdSVU9YbXRKaGlkemFkS081YTh5QWdmdHdl?=
- =?utf-8?B?T2ZQUmppcHZEeUlCWkRlOWwwT3gvZ0Q5alR3ak5sekdQWHI3UEtuRlFBTW9B?=
- =?utf-8?B?YmhIWStyWFBrL2phUWFLMDIySFpSaE9CalFuVVpBS0VwRU5WcWxEOEJ0M25V?=
- =?utf-8?B?KzZKcEg5dFhYSk5TdGEyaFMvRWwrcmVtL0ZxeEFKS0FodnE1SkRtTDM1alo2?=
- =?utf-8?B?b1M5bjNRZ1g3UHZraFh2SjdRZFhPOHZ5ZlZhbXFsUVFQWkRzVDdSdjZtTkNl?=
- =?utf-8?B?VmM5cEwvSytxQzFqeEJEZnRLcEg3QzFmWUFxYXUxb0N3cWkrQ2RJRktJbDll?=
- =?utf-8?B?MGlDZVVxZ1Y0c0tQbmJmWm0rYzgvdWpNNVYvN2YzRUNFOUw3clpueStUY0tM?=
- =?utf-8?B?cTQ1TGtmdGZLRlpyeFZSd1ZPZ3lsSVQ4M2NWTW9RZ1RCeGlMTXNCamxNelNu?=
- =?utf-8?B?SVZzWnN5YW1icXQ4aWxyUG9XVGkvVkhsT21kYThkMWtCQVZUZ1JIYno0S3lL?=
- =?utf-8?B?dS93WG81MUU5VFVJcWI2R1RMME0vU1BxSytubmpLMXdURlBxTVVJcTNCYWRL?=
- =?utf-8?B?dGwzbUdSelZpS1lIUHZzUmFpN091anhEZlIwS2FzS1ZOL2R1TzZQVytFMmIv?=
- =?utf-8?B?T2NRNDJaQUdqdUZXekdHaloxWHY1UlNvUGZXMWFVSDhDTDBKVHIydjkyR3lJ?=
- =?utf-8?B?N1pWL1VsbHRjMmxnKy9IWHJabjVmWFFmNTNmQlpXcnVRWEIxRnNlUmxXN2Fm?=
- =?utf-8?B?b2lqSGEvMFFPL2FWeFdOU2VpMEZPVkZSWkhWSGZRaTF5UjlLMmhqZ0gwbFA1?=
- =?utf-8?B?dkFURkNKRTdBMkFEYkxlVFVqdWNZWUZ1MzkxQkh4UkFVRDZVdVZSSDU2aC81?=
- =?utf-8?B?OGVaMnp3K2lpQ2JDZkRJRGUvak1vLy90L1dpS3poUkVsOVBqWkxxeVdTSW9r?=
- =?utf-8?B?dmhsSDJ4MENkZUdWUm9pVEJxcEdCUllScE0zL05pbmtHTWJRZGx6LzVlNUhI?=
- =?utf-8?B?Tmp2cytSYXlxblcwbnJPL0MyRnRoZ0dKczRUOGp4dWhvUzFBMXcvSHljOUNx?=
- =?utf-8?B?ZEd5THdiRzA0Q3JReUhwNytyVENvYi9XYlVmVzFLT2RPVzdXRER2Z1JUR0dU?=
- =?utf-8?B?UWZGNnlnZUJNZ3ExcXNUUTk0SDlGTXk1ZHlZUXR5ZW9IRXdIUFpMcG04YnBo?=
- =?utf-8?B?T3dXUmh6OWJTNGZMNURaMS9ES2lKN2liSFQzMHdKcFhvR01Ba2J2ZFloY2p3?=
- =?utf-8?B?bVFjM1p3SHd0UWJTVmRtUXRnc3BlZ2EwU1BVTUYrNzFmeDhnUUEvd043eVZT?=
- =?utf-8?B?NWNYZnYyTGNmUko0czBvK1NkakpsaXBhNU1YUjNaSi9HWDFDV2lJTGRJc1ZV?=
- =?utf-8?B?blF2cElQdzNuTlBIYS9vLzhJRkhrTFNCQThMeG9Ga2pXT2MwUXFoakhXMnRt?=
- =?utf-8?B?UlpnL0hsekNlOXR0MHdTRFhENFpVTUNtQXlsQWhuUjJZNjJPd2VQOGt3QjNx?=
- =?utf-8?B?Z1RWRC95eGU4eGFzNitPUzVNMU1BVHdPUzlqa1pDNHNUM1Z1bnRZSUlQQlRn?=
- =?utf-8?B?cTRJUmtqUTZoZFU1QlVKWmF6NTJBakgvcFZ4MDJTU2VqNDlnSFg2ZExjc1lO?=
- =?utf-8?B?QnpteTBQN2FiejlIaC9VN3BWOExzRndEMVhYT3ZXZHJSM1NYVDZwQ2NSSWVC?=
- =?utf-8?B?a2JOZWNIaWNMNThXblpvYjIyQURUYXoyQ2N2UzBuc3NkYmZMWmNZWDlnMUlR?=
- =?utf-8?B?Snc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <00D630B1FC4FB342B456679FF25425C1@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S230073AbiCCAIh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Mar 2022 19:08:37 -0500
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBECD74858
+        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 16:07:50 -0800 (PST)
+Received: by mail-il1-x142.google.com with SMTP id k7so2744745ilo.8
+        for <bpf@vger.kernel.org>; Wed, 02 Mar 2022 16:07:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Iujg601tHIeH6JI2SX+HmwstH2QXhq9enqND6zcsXJ8=;
+        b=kL8sMFNYf7WHe8mDxrIj0BIcxWywgK05GkGIlcAYqvq7MY06SIh8XFaclGn/B43sB5
+         ZbTKoHl+wVQfRbvCUv8b9PEr5J3c4lqQEPwUZYzkmbOGg9EPx7B+PgGAYtyujMX9k2oU
+         VE8UVsXJvk0IqCEAt5vqlCBc4ZGiWMBAlU1R70hp1F9FhJvRc9aToMGal3gcXNDQyOjq
+         D1yaSCdSR3iu+hfcQWwqdB0/UjYkO4ZIzkjsXMy1unQn2D8uq68JFfRNdvGJWlofiTQ5
+         nxHzPBLSw0cW+71s8jY9AvwxonCZG17Of6Agx3rr0SHh2aYa2iMwVyRh7p+M8JafrGpl
+         zITw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Iujg601tHIeH6JI2SX+HmwstH2QXhq9enqND6zcsXJ8=;
+        b=F1hqPRZrRkuTK6lfu11PEIh6AoBvfw55OBPsppzNOO5FfrEMgwUNzF/ZmSQ2julKi6
+         C+2LyEmnVfBTJqOa+K72sTxwLM6d2ZXhAaUIxYuOA/ZxKxcxQ2rtfNU3QrC7q8vTqkO1
+         BcWpTddsXShqkxr4A3BAj0tyBSNpLwKijjsiL4wiph/Jm4kVinV21msiWuLF607Hj8wC
+         jkmtI3GIR2ryQzw1vbwMjBG63E3TJ35WoWSiI3K+JZIesBrvsJYSzQoQ4TDGzS4mhvqc
+         GTryCXNsrqxeOOsJxi+c8OJmrwdGhCydj5vvWRz1MAEflUdK07yefpmOpu+siqtKMngC
+         725w==
+X-Gm-Message-State: AOAM531KZQODbCT8aGCjnYWRSt6KE7CStFbQQCb/UV1NX/09FsU5KKKj
+        l7ejOWB51dhunjYW710uxtSMuEtVwFw=
+X-Google-Smtp-Source: ABdhPJwKDlhrIZ9cEN2U07zavwxIkZdfuZymbOTyRaI6Z79AY/U++edIjg0YVFtD3ODP7LSlVLa4gA==
+X-Received: by 2002:a63:c1d:0:b0:365:7d16:f648 with SMTP id b29-20020a630c1d000000b003657d16f648mr28091590pgl.517.1646262050404;
+        Wed, 02 Mar 2022 15:00:50 -0800 (PST)
+Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
+        by smtp.gmail.com with ESMTPSA id t1-20020a634441000000b00372cb183243sm189626pgk.1.2022.03.02.15.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 15:00:50 -0800 (PST)
+Date:   Thu, 3 Mar 2022 04:30:47 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH bpf-next v1 4/6] bpf: Harden register offset checks for
+ release kfunc
+Message-ID: <20220302230047.7xjekpuivrbno5cp@apollo.legion>
+References: <20220301065745.1634848-1-memxor@gmail.com>
+ <20220301065745.1634848-5-memxor@gmail.com>
+ <20220302032024.knhf2wyfiscjy73p@kafai-mbp>
+ <20220302094218.5gov4mdmyiqfrt6p@apollo.legion>
+ <20220302215640.2thsbd4blxbfd7tk@kafai-mbp>
+ <20220302223020.3vmwknct24pplzzr@apollo.legion>
+ <20220302224418.5ph7nkzx2qmcy36n@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR15MB5154.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a209f32d-16a4-4fe1-b956-08d9fca9a1d6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2022 00:06:14.3731
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JpIL1q0FKTPehxWu18fINITaKbWLBX3UdAmiYjwVS/5jUcbFK+6C9zlSwkOe/vEp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB4302
-X-Proofpoint-GUID: xnMm1HGf5A-_vXekjXuHBJ_s_zYbMePi
-X-Proofpoint-ORIG-GUID: xnMm1HGf5A-_vXekjXuHBJ_s_zYbMePi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-02_12,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
- adultscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0 spamscore=0
- bulkscore=0 phishscore=0 mlxlogscore=560 impostorscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2203020102
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302224418.5ph7nkzx2qmcy36n@ast-mbp.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gV2VkLCAyMDIyLTAzLTAyIGF0IDE0OjMwIC0wODAwLCBBbGV4ZWkgU3Rhcm92b2l0b3Ygd3Jv
-dGU6DQo+IE9uIFdlZCwgTWFyIDAyLCAyMDIyIGF0IDAyOjQ4OjQ4QU0gKzAwMDAsIERlbHlhbiBL
-cmF0dW5vdiB3cm90ZToNCj4gPiAtLS0gL2Rldi9udWxsDQo+ID4gKysrIGIvdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvc3Vic2tlbGV0b24uYw0KPiA+IEBAIC0wLDAgKzEs
-MzggQEANCj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gPiArLyog
-Q29weXJpZ2h0IChjKSAyMDE5IEZhY2Vib29rICovDQo+ID4gKw0KPiA+ICsjaW5jbHVkZSA8dGVz
-dF9wcm9ncy5oPg0KPiA+ICsjaW5jbHVkZSAidGVzdF9zdWJza2VsZXRvbi5za2VsLmgiDQo+ID4g
-Kw0KPiA+ICtleHRlcm4gdm9pZCBzdWJza2VsZXRvbl9saWJfc2V0dXAoc3RydWN0IGJwZl9vYmpl
-Y3QgKm9iaik7DQo+ID4gK2V4dGVybiBpbnQgc3Vic2tlbGV0b25fbGliX3N1YnJlc3VsdChzdHJ1
-Y3QgYnBmX29iamVjdCAqb2JqKTsNCj4gPiArDQo+ID4gK3ZvaWQgdGVzdF9zdWJza2VsZXRvbih2
-b2lkKQ0KPiA+ICt7DQo+ID4gKwlpbnQgZHVyYXRpb24gPSAwLCBlcnIsIHJlc3VsdDsNCj4gPiAr
-CXN0cnVjdCB0ZXN0X3N1YnNrZWxldG9uICpza2VsOw0KPiA+ICsNCj4gPiArCXNrZWwgPSB0ZXN0
-X3N1YnNrZWxldG9uX19vcGVuKCk7DQo+ID4gKwlpZiAoQ0hFQ0soIXNrZWwsICJza2VsX29wZW4i
-LCAiZmFpbGVkIHRvIG9wZW4gc2tlbGV0b25cbiIpKQ0KPiA+ICsJCXJldHVybjsNCj4gPiArDQo+
-ID4gKwlza2VsLT5yb2RhdGEtPnJvdmFyMSA9IDEwOw0KPiANCj4gVGhlIHJvZGF0YSB2YXJzIGlu
-IHN1YnNrZWxldG9uIHdpbGwgbmVlZCBleHRyYSAnKicsIHJpZ2h0Pw0KDQpQb3NzaWJseSwgZGVw
-ZW5kaW5nIG9uIHRoZSBleGFjdCBzdHJ1Y3R1cmUgKHNlZSB0aGUgdmFyMyBhc3NpZ25tZW50cyBp
-biB0aGUNCnN1YnNrZWwpLsKgDQpPdmVyYWxsLCB0aGUgbmFtaW5nIGhlcmUgaXMgY29uZnVzaW5n
-LiBUaGlzIGlzIHRoZSBzdWJza2VsZXRvbi5jIHRlc3QsIHRoZSANCnN1YnNrZWxldG9uLm8gZmlu
-YWwgYnBmIG9iamVjdCwgYnV0IHRoaXMgaXMgdGhlICpmdWxsKiBza2VsZXRvbiBmb3IgdGhhdCBv
-YmplY3QuDQoNCk5hbWluZyBzdWdnZXN0aW9ucyB3ZWxjb21lIQ0KDQo+IFRoZSBhYm92ZSBpcyBj
-b25mdXNpbmcgdG8gcmVhZCBjb21wYXJpbmcgdG8gYmVsb3c6DQo+IA0KPiA+ICt2b2lkIHN1YnNr
-ZWxldG9uX2xpYl9zZXR1cChzdHJ1Y3QgYnBmX29iamVjdCAqb2JqKQ0KPiA+ICt7DQo+ID4gKwlz
-dHJ1Y3QgdGVzdF9zdWJza2VsZXRvbl9saWIgKmxpYiA9IHRlc3Rfc3Vic2tlbGV0b25fbGliX19v
-cGVuKG9iaik7DQo+ID4gKw0KPiA+ICsJQVNTRVJUX09LX1BUUihsaWIsICJvcGVuIHN1YnNrZWxl
-dG9uIik7DQo+ID4gKw0KPiA+ICsJKmxpYi0+ZGF0YS52YXIxID0gMTsNCj4gPiArCSpsaWItPmJz
-cy52YXIyID0gMjsNCj4gPiArCWxpYi0+YnNzLnZhcjMtPnZhcjNfMSA9IDM7DQo+ID4gKwlsaWIt
-PmJzcy52YXIzLT52YXIzXzIgPSA0Ow0KPiA+ICt9DQo+IA0KPiBDb3VsZCB5b3UgYWRkIHJvZGF0
-YSB0byBzdWJza2VsIGFzIHdlbGw/DQo+IEp1c3QgdG8gbWFrZSBpdCBvYnZpb3VzIHRoYXQgcm9k
-YXRhIGlzIG5vdCBzcGVjaWFsLg0KDQpTdXJlLCBubyBvYmplY3Rpb25zIGZyb20gbWUuDQoNCj4g
-QW4gZXhhbXBsZSBvZiBnZW5lcmF0ZWQgc2tlbCBpbiBjb21taXQgbG9nIHdvdWxkIGJlIGdyZWF0
-Lg0KDQpXaWxsIGFkZCBpbiByZXJvbGwuIFRoaXMgaXMgaXQgaW4gaXRzIGVudGlyZXR5Og0KDQov
-KiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKExHUEwtMi4xIE9SIEJTRC0yLUNsYXVzZSkgKi8N
-Cg0KLyogVEhJUyBGSUxFIElTIEFVVE9HRU5FUkFURUQhICovDQojaWZuZGVmIF9fVEVTVF9TVUJT
-S0VMRVRPTl9MSUJfU0tFTF9IX18NCiNkZWZpbmUgX19URVNUX1NVQlNLRUxFVE9OX0xJQl9TS0VM
-X0hfXw0KDQojaW5jbHVkZSA8ZXJybm8uaD4NCiNpbmNsdWRlIDxzdGRsaWIuaD4NCiNpbmNsdWRl
-IDxicGYvbGliYnBmLmg+DQoNCnN0cnVjdCB0ZXN0X3N1YnNrZWxldG9uX2xpYiB7DQoJc3RydWN0
-IGJwZl9vYmplY3QgKm9iajsNCglzdHJ1Y3QgYnBmX29iamVjdF9zdWJza2VsZXRvbiAqc3Vic2tl
-bDsNCglzdHJ1Y3QgdGVzdF9zdWJza2VsZXRvbl9saWJfX2RhdGEgew0KCQlpbnQgKnZhcjE7DQoJ
-fSBkYXRhOw0KCXN0cnVjdCB0ZXN0X3N1YnNrZWxldG9uX2xpYl9fYnNzIHsNCgkJaW50ICp2YXIy
-Ow0KCQlzdHJ1Y3Qgew0KCQkJaW50IHZhcjNfMTsNCgkJCV9fczY0IHZhcjNfMjsNCgkJfSAqdmFy
-MzsNCgkJaW50ICpsaWJvdXQxOw0KCX0gYnNzOw0KDQojaWZkZWYgX19jcGx1c3BsdXMNCglzdGF0
-aWMgaW5saW5lIHN0cnVjdCB0ZXN0X3N1YnNrZWxldG9uX2xpYiAqb3Blbihjb25zdCBzdHJ1Y3QN
-CmJwZl9vYmplY3Rfb3Blbl9vcHRzICpvcHRzID0gbnVsbHB0cik7DQoJc3RhdGljIGlubGluZSB2
-b2lkIHRlc3Rfc3Vic2tlbGV0b25fbGliOjpkZXN0cm95KHN0cnVjdA0KdGVzdF9zdWJza2VsZXRv
-bl9saWIgKnNrZWwpOw0KI2VuZGlmIC8qIF9fY3BsdXNwbHVzICovDQp9Ow0KDQpzdGF0aWMgaW5s
-aW5lIHZvaWQNCnRlc3Rfc3Vic2tlbGV0b25fbGliX19kZXN0cm95KHN0cnVjdCB0ZXN0X3N1YnNr
-ZWxldG9uX2xpYiAqc2tlbCkNCnsNCglpZiAoIXNrZWwpDQoJCXJldHVybjsNCglpZiAoc2tlbC0+
-c3Vic2tlbCkNCgkJYnBmX29iamVjdF9fZGVzdHJveV9zdWJza2VsZXRvbihza2VsLT5zdWJza2Vs
-KTsNCglmcmVlKHNrZWwpOw0KfQ0KDQpzdGF0aWMgaW5saW5lIHN0cnVjdCB0ZXN0X3N1YnNrZWxl
-dG9uX2xpYiAqDQp0ZXN0X3N1YnNrZWxldG9uX2xpYl9fb3Blbihjb25zdCBzdHJ1Y3QgYnBmX29i
-amVjdCAqc3JjKQ0Kew0KCXN0cnVjdCB0ZXN0X3N1YnNrZWxldG9uX2xpYiAqb2JqOw0KCXN0cnVj
-dCBicGZfb2JqZWN0X3N1YnNrZWxldG9uICpzdWJza2VsOw0KCXN0cnVjdCBicGZfc3ltX3NrZWxl
-dG9uICpzeW1zOw0KCWludCBlcnI7DQoNCglvYmogPSAoc3RydWN0IHRlc3Rfc3Vic2tlbGV0b25f
-bGliICopY2FsbG9jKDEsIHNpemVvZigqb2JqKSk7DQoJaWYgKCFvYmopIHsNCgkJZXJybm8gPSBF
-Tk9NRU07DQoJCXJldHVybiBOVUxMOw0KCX0NCglzdWJza2VsID0gKHN0cnVjdCBicGZfb2JqZWN0
-X3N1YnNrZWxldG9uICopY2FsbG9jKDEsIHNpemVvZigqc3Vic2tlbCkpOw0KCWlmICghc3Vic2tl
-bCkgew0KCQllcnJubyA9IEVOT01FTTsNCgkJcmV0dXJuIE5VTEw7DQoJfQ0KCXN1YnNrZWwtPnN6
-ID0gc2l6ZW9mKCpzdWJza2VsKTsNCglzdWJza2VsLT5vYmogPSBzcmM7DQoJc3Vic2tlbC0+c3lt
-X3NrZWxfc3ogPSBzaXplb2Yoc3RydWN0IGJwZl9zeW1fc2tlbGV0b24pOw0KCXN1YnNrZWwtPnN5
-bV9jbnQgPSA0Ow0KCW9iai0+c3Vic2tlbCA9IHN1YnNrZWw7DQoNCglzeW1zID0gKHN0cnVjdCBi
-cGZfc3ltX3NrZWxldG9uICopY2FsbG9jKDQsIHNpemVvZigqc3ltcykpOw0KCWlmICghc3ltcykg
-ew0KCQlmcmVlKHN1YnNrZWwpOw0KCQllcnJubyA9IEVOT01FTTsNCgkJcmV0dXJuIE5VTEw7DQoJ
-fQ0KCXN1YnNrZWwtPnN5bXMgPSBzeW1zOw0KDQoJc3ltc1swXS5uYW1lID0gInZhcjEiOw0KCXN5
-bXNbMF0uc2VjdGlvbiA9ICIuZGF0YSI7DQoJc3ltc1swXS5hZGRyID0gKHZvaWQqKikgJm9iai0+
-ZGF0YS52YXIxOw0KCXN5bXNbMV0ubmFtZSA9ICJ2YXIyIjsNCglzeW1zWzFdLnNlY3Rpb24gPSAi
-LmJzcyI7DQoJc3ltc1sxXS5hZGRyID0gKHZvaWQqKikgJm9iai0+YnNzLnZhcjI7DQoJc3ltc1sy
-XS5uYW1lID0gInZhcjMiOw0KCXN5bXNbMl0uc2VjdGlvbiA9ICIuYnNzIjsNCglzeW1zWzJdLmFk
-ZHIgPSAodm9pZCoqKSAmb2JqLT5ic3MudmFyMzsNCglzeW1zWzNdLm5hbWUgPSAibGlib3V0MSI7
-DQoJc3ltc1szXS5zZWN0aW9uID0gIi5ic3MiOw0KCXN5bXNbM10uYWRkciA9ICh2b2lkKiopICZv
-YmotPmJzcy5saWJvdXQxOw0KDQoJZXJyID0gYnBmX29iamVjdF9fb3Blbl9zdWJza2VsZXRvbihz
-dWJza2VsKTsNCglpZiAoZXJyKSB7DQoJCXRlc3Rfc3Vic2tlbGV0b25fbGliX19kZXN0cm95KG9i
-aik7DQoJCWVycm5vID0gZXJyOw0KCQlyZXR1cm4gTlVMTDsNCgl9DQoNCglyZXR1cm4gb2JqOw0K
-fQ0KDQojaWZkZWYgX19jcGx1c3BsdXMNCnN0cnVjdCB0ZXN0X3N1YnNrZWxldG9uX2xpYiAqdGVz
-dF9zdWJza2VsZXRvbl9saWI6Om9wZW4oY29uc3Qgc3RydWN0IGJwZl9vYmplY3QNCipzcmMpIHsg
-cmV0dXJuIHRlc3Rfc3Vic2tlbGV0b25fbGliX19vcGVuKHNyYyk7IH0NCnZvaWQgdGVzdF9zdWJz
-a2VsZXRvbl9saWI6OmRlc3Ryb3koc3RydWN0IHRlc3Rfc3Vic2tlbGV0b25fbGliICpza2VsKSB7
-DQp0ZXN0X3N1YnNrZWxldG9uX2xpYl9fZGVzdHJveShza2VsKTsgfQ0KI2VuZGlmIC8qIF9fY3Bs
-dXNwbHVzICovDQoNCiNlbmRpZiAvKiBfX1RFU1RfU1VCU0tFTEVUT05fTElCX1NLRUxfSF9fICov
-DQoNCg0K
+On Thu, Mar 03, 2022 at 04:14:18AM IST, Alexei Starovoitov wrote:
+> On Thu, Mar 03, 2022 at 04:00:20AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, Mar 03, 2022 at 03:26:40AM IST, Martin KaFai Lau wrote:
+> > > On Wed, Mar 02, 2022 at 03:12:18PM +0530, Kumar Kartikeya Dwivedi wrote:
+> > > > On Wed, Mar 02, 2022 at 08:50:24AM IST, Martin KaFai Lau wrote:
+> > > > > On Tue, Mar 01, 2022 at 12:27:43PM +0530, Kumar Kartikeya Dwivedi wrote:
+> > > > > > Let's ensure that the PTR_TO_BTF_ID reg being passed in to release kfunc
+> > > > > > always has its offset set to 0. While not a real problem now, there's a
+> > > > > > very real possibility this will become a problem when more and more
+> > > > > > kfuncs are exposed.
+> > > > > >
+> > > > > > Previous commits already protected against non-zero var_off. The case we
+> > > > > > are concerned about now is when we have a type that can be returned by
+> > > > > > acquire kfunc:
+> > > > > >
+> > > > > > struct foo {
+> > > > > > 	int a;
+> > > > > > 	int b;
+> > > > > > 	struct bar b;
+> > > > > > };
+> > > > > >
+> > > > > > ... and struct bar is also a type that can be returned by another
+> > > > > > acquire kfunc.
+> > > > > >
+> > > > > > Then, doing the following sequence:
+> > > > > >
+> > > > > > 	struct foo *f = bpf_get_foo(); // acquire kfunc
+> > > > > > 	if (!f)
+> > > > > > 		return 0;
+> > > > > > 	bpf_put_bar(&f->b); // release kfunc
+> > > > > >
+> > > > > > ... would work with the current code, since the btf_struct_ids_match
+> > > > > > takes reg->off into account for matching pointer type with release kfunc
+> > > > > > argument type, but would obviously be incorrect, and most likely lead to
+> > > > > > a kernel crash. A test has been included later to prevent regressions in
+> > > > > > this area.
+> > > > > >
+> > > > > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > > > > ---
+> > > > > >  kernel/bpf/btf.c | 15 +++++++++++++--
+> > > > > >  1 file changed, 13 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > > > > > index 7f6a0ae5028b..ba6845225b65 100644
+> > > > > > --- a/kernel/bpf/btf.c
+> > > > > > +++ b/kernel/bpf/btf.c
+> > > > > > @@ -5753,6 +5753,9 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> > > > > >  		return -EINVAL;
+> > > > > >  	}
+> > > > > >
+> > > > > > +	if (is_kfunc)
+> > > > > > +		rel = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
+> > > > > > +						BTF_KFUNC_TYPE_RELEASE, func_id);
+> > > > > >  	/* check that BTF function arguments match actual types that the
+> > > > > >  	 * verifier sees.
+> > > > > >  	 */
+> > > > > > @@ -5816,6 +5819,16 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+> > > > > >  							regno, reg->ref_obj_id, ref_obj_id);
+> > > > > >  						return -EFAULT;
+> > > > > >  					}
+> > > > > > +					/* Ensure that offset of referenced PTR_TO_BTF_ID is
+> > > > > > +					 * always zero, when passed to release function.
+> > > > > > +					 * var_off has already been checked to be 0 by
+> > > > > > +					 * check_func_arg_reg_off.
+> > > > > > +					 */
+> > > > > > +					if (rel && reg->off) {
+> > > > > Here is another reg->off check for PTR_TO_BTF_ID on top of the
+> > > > > one 'check_func_arg_reg_off' added to the same function in patch 2.
+> > > > > A nit, I also found passing ARG_DONTCARE in patch 2 a bit convoluted
+> > > > > considering the btf func does not need ARG_* to begin with.
+> > > > >
+> > > >
+> > > > Right, arg_type doesn't really matter here (unless we start indicating in BTF we
+> > > > want to take ringbuf allocation directly without size parameter or getting size
+> > > > from BTF type).
+> > > >
+> > > > > How about directly use the __check_ptr_off_reg() here instead of
+> > > > > check_func_arg_reg_off()?  Then patch 1 is not needed.
+> > > > >
+> > > > > Would something like this do the same thing (uncompiled code) ?
+> > > > >
+> > > >
+> > > > I should have included a link to the previous discussion, sorry about that:
+> > > > https://lore.kernel.org/bpf/20220223031600.pvbhu3dbwxke4eia@apollo.legion
+> > > Ah. Thanks for the link.  I didn't go back to the list since the set is
+> > > tagged v1 ;)
+> > >
+> >
+> > Right, I split the first patch out and then added this patch, so it felt more
+> > appropriate to tag it as v1. But I will include this link in the cover letter
+> > going forward.
+> >
+> > > > Yes, this should also do the same thing, but the idea was to avoid keeping the
+> > > > same checks in multiple places. For now, there is only the special case of
+> > > > ARG_TYPE_PTR_TO_ALLOC_MEM and PTR_TO_BTF_ID that require some special handling,
+> > > > the former of which is currently not relevant for kfunc, but adding some future
+> > > > type and ensuring kfunc, and helper do the offset checks correctly just means
+> > > > updating check_func_arg_reg_off.
+> > > >
+> > > > reg->off in case of PTR_TO_BTF_ID reg for release kfunc is a bit of a special
+> > > > case. We should also do the same thing for BPF helpers, now that I look at it,
+> > > > but there's only one which takes a PTR_TO_BTF_ID right now (bpf_sk_release), and
+> > > > it isn't problematic currently, but now that referenced PTR_TO_BTF_ID is used it
+> > > > is quite possible to support it in more BPF helpers later and forget to prevent
+> > > > such case.
+> > > >
+> > > > So, it would be possible to move this check inside check_func_arg_reg_off, based
+> > > > on a new bool is_release_func parameter, and relying on the assumption that only
+> > > > one referenced register can be passed to helper or kfunc at a time (already
+> > > > enforced for both BPF helpers and kfuncs).
+> > > >
+> > > > Basically, instead of doing type == PTR_TO_BTF_ID for fixed_off_ok inside it, we
+> > > > will do:
+> > > >
+> > > > 	fixed_off_ok = false;
+> > > > 	if (type == PTR_TO_BTF_ID && (!is_release_func || !reg->ref_obj_id))
+> > > > 		fixed_off_ok = true;
+> > > For the preemptive fix on release func and non zero reg->off,
+> > > should it be a release-without-acquire error instead of a ptr-type/reg->off error?
+> > > The fix should be either clearing the reg->ref_obj_id earlier or at least treat
+> > > ref_obj_id as zero here and then fallthrough the existing release-without-acquire
+> > > error.  It is more to do with the ref_obj_id becomes invalid after reg->off
+> > > becoming non-zero instead of reg->off is not allowed for a specific ptr
+> > > type.  It is better to separate this preemptive fix to another set.
+> > >
+> >
+> > So IIUC what you're saying is that once someone performs increment, we reset the
+> > ref_obj_id to 0, then the reference state is still present so
+> > check_reference_leak would complain, but releasing such modified register won't
+> > work since ref_obj_id is 0 (so no ref state for that ref_obj_id).
+> >
+> > But I think clang (or even user writing BPF ASM) would be well within its rights
+> > to temporarily add an offset to the register, pass member pointer to some other
+> > helper, or read some data, and then decrement it again to shift the pointer
+> > backwards setting reg->off to 0. Then they should be able to again pass such
+> > register to release helper or kfunc. I think it would be unlikely (you can save
+> > original pointer to caller saved reg, or spill to stack, or use offset in LDX,
+> > etc.) but certainly not impossible.
+>
+> I don't think llvm will ever do such thing. Passing into a helper means
+> that the register is scratched. It won't be reused after the call.
+> Saving modified into a stack to restore later just to do a math on it
+> goes against "optimization" goal of the compiler.
+>
+> > I think the key point is that we want to make user pass the register as it was
+> > when it was acquired, they can do any changes to off between acquire and
+> > release, just that it should be set back to 0 when release function is called.
+>
+> Correct and this patch is covering that.
+> I'm not sure what is the contention point here.
+> Sorry I'm behind the mailing list.
+>
+> > > >
+> > > > Again, given we can only pass one referenced reg, if we see release func and a
+> > > > reg with ref_obj_id, it is the one being released.
+> > > >
+> > > > In the end, it's more of a preference thing, if you feel strongly about it I can
+> > > > go with the __check_ptr_off_reg call too.
+> > > Yeah, it is a preference thing and not feeling strongly.
+> > > Without the need for the release-func/reg->off preemptive fix, adding
+> > > one __check_ptr_off_reg() seems to be a cleaner fix to me but
+> > > I won't insist.
+>
+> fwiw I like patches 1-3.
+> I think extra check here for release func is justified on its own.
+> Converting it into:
+>   fixed_off_ok = false;
+>   if (type == PTR_TO_BTF_ID && (!is_release_func || !reg->ref_obj_id))
+>           fixed_off_ok = true;
+> obfuscates the check to me.
+
+I was talking of putting this inside check_func_arg_reg_off. I think we should
+do the same check for BPF helpers as well (rn only one supports releasing
+PTR_TO_BTF_ID, soon we may have others). Just passing a bool to
+check_func_arg_reg_off to indicate we are checking for release func (helper or
+kfunc have same rules here) would allow putting this check inside it.
+
+> if (rel && reg->off) check
+> is pretty obvious.
+
+--
+Kartikeya
