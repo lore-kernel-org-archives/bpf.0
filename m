@@ -2,249 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDA01C433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 02:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5549C433EF
+	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 02:10:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239017AbiCBCGS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Mar 2022 21:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S232269AbiCBCKs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Mar 2022 21:10:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiCBCGR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Mar 2022 21:06:17 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B19A41A3;
-        Tue,  1 Mar 2022 18:05:34 -0800 (PST)
-Received: from dggeme762-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4K7clG14X2z1GC1j;
-        Wed,  2 Mar 2022 10:00:26 +0800 (CST)
-Received: from linux-suse12sp5.huawei.com (10.67.133.175) by
- dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.21; Wed, 2 Mar 2022 10:05:05 +0800
-From:   Yan Zhu <zhuyan34@huawei.com>
-To:     <mcgrof@kernel.org>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <kafai@fb.com>,
-        <keescook@chromium.org>, <kpsingh@kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liucheng32@huawei.com>, <netdev@vger.kernel.org>,
-        <nixiaoming@huawei.com>, <songliubraving@fb.com>,
-        <xiechengliang1@huawei.com>, <yhs@fb.com>, <yzaikin@google.com>,
-        <zengweilin@huawei.com>, <zhuyan34@huawei.com>
-Subject: [PATCH v3 sysctl-next] bpf: move bpf sysctls from kernel/sysctl.c to bpf module
-Date:   Wed, 2 Mar 2022 10:04:12 +0800
-Message-ID: <20220302020412.128772-1-zhuyan34@huawei.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <Yh1dtBTeRtjD0eGp@bombadil.infradead.org>
-References: <Yh1dtBTeRtjD0eGp@bombadil.infradead.org>
+        with ESMTP id S231734AbiCBCKs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Mar 2022 21:10:48 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDD55B3DA;
+        Tue,  1 Mar 2022 18:10:06 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K7ctH0VB3zVfpD;
+        Wed,  2 Mar 2022 10:06:31 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 2 Mar 2022 10:10:03 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <john.fastabend@gmail.com>, <daniel@iogearbox.net>,
+        <jakub@cloudflare.com>, <lmb@cloudflare.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
+        <ast@kernel.org>, <andrii@kernel.org>, <kafai@fb.com>,
+        <songliubraving@fb.com>, <yhs@fb.com>, <kpsingh@kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH bpf-next v2 1/4] bpf, sockmap: Fix memleak in sk_psock_queue_msg
+Date:   Wed, 2 Mar 2022 10:27:52 +0800
+Message-ID: <20220302022755.3876705-2-wangyufen@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220302022755.3876705-1-wangyufen@huawei.com>
+References: <20220302022755.3876705-1-wangyufen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.133.175]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggeme762-chm.china.huawei.com (10.3.19.108)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We're moving sysctls out of kernel/sysctl.c as its a mess. We
-already moved all filesystem sysctls out. And with time the goal is
-to move all sysctls out to their own susbsystem/actual user.
+If tcp_bpf_sendmsg is running during a tear down operation we may enqueue
+data on the ingress msg queue while tear down is trying to free it.
 
-kernel/sysctl.c has grown to an insane mess and its easy to run
-into conflicts with it. The effort to move them out is part of this.
+ sk1 (redirect sk2)                         sk2
+ -------------------                      ---------------
+tcp_bpf_sendmsg()
+ tcp_bpf_send_verdict()
+  tcp_bpf_sendmsg_redir()
+   bpf_tcp_ingress()
+                                          sock_map_close()
+                                           lock_sock()
+    lock_sock() ... blocking
+                                           sk_psock_stop
+                                            sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+                                           release_sock(sk);
+    lock_sock()
+    sk_mem_charge()
+    get_page()
+    sk_psock_queue_msg()
+     sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED);
+      drop_sk_msg()
+    release_sock()
 
-Signed-off-by: Yan Zhu <zhuyan34@huawei.com>
+While drop_sk_msg(), the msg has charged memory form sk by sk_mem_charge
+and has sg pages need to put. To fix we use sk_msg_free() and then kfee()
+msg.
 
+This issue can cause the following info:
+WARNING: CPU: 0 PID: 9202 at net/core/stream.c:205 sk_stream_kill_queues+0xc8/0xe0
+Call Trace:
+ <IRQ>
+ inet_csk_destroy_sock+0x55/0x110
+ tcp_rcv_state_process+0xe5f/0xe90
+ ? sk_filter_trim_cap+0x10d/0x230
+ ? tcp_v4_do_rcv+0x161/0x250
+ tcp_v4_do_rcv+0x161/0x250
+ tcp_v4_rcv+0xc3a/0xce0
+ ip_protocol_deliver_rcu+0x3d/0x230
+ ip_local_deliver_finish+0x54/0x60
+ ip_local_deliver+0xfd/0x110
+ ? ip_protocol_deliver_rcu+0x230/0x230
+ ip_rcv+0xd6/0x100
+ ? ip_local_deliver+0x110/0x110
+ __netif_receive_skb_one_core+0x85/0xa0
+ process_backlog+0xa4/0x160
+ __napi_poll+0x29/0x1b0
+ net_rx_action+0x287/0x300
+ __do_softirq+0xff/0x2fc
+ do_softirq+0x79/0x90
+ </IRQ>
+
+WARNING: CPU: 0 PID: 531 at net/ipv4/af_inet.c:154 inet_sock_destruct+0x175/0x1b0
+Call Trace:
+ <TASK>
+ __sk_destruct+0x24/0x1f0
+ sk_psock_destroy+0x19b/0x1c0
+ process_one_work+0x1b3/0x3c0
+ ? process_one_work+0x3c0/0x3c0
+ worker_thread+0x30/0x350
+ ? process_one_work+0x3c0/0x3c0
+ kthread+0xe6/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+ </TASK>
+
+Fixes: 9635720b7c88 ("bpf, sockmap: Fix memleak on ingress msg enqueue")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
-v1->v2:
-  1.Added patch branch identifier sysctl-next.
-  2.Re-describe the reason for the patch submission.
+ include/linux/skmsg.h | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-v2->v3:
-  Re-describe the reason for the patch submission.
----
- kernel/bpf/syscall.c | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- kernel/sysctl.c      | 71 ----------------------------------------------
- 2 files changed, 80 insertions(+), 71 deletions(-)
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 35646db3d950..50f85b47d478 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4888,3 +4888,83 @@ const struct bpf_verifier_ops bpf_syscall_verifier_ops = {
- const struct bpf_prog_ops bpf_syscall_prog_ops = {
- 	.test_run = bpf_prog_test_run_syscall,
- };
-+
-+#ifdef CONFIG_SYSCTL
-+static int bpf_stats_handler(struct ctl_table *table, int write,
-+			     void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	struct static_key *key = (struct static_key *)table->data;
-+	static int saved_val;
-+	int val, ret;
-+	struct ctl_table tmp = {
-+		.data   = &val,
-+		.maxlen = sizeof(val),
-+		.mode   = table->mode,
-+		.extra1 = SYSCTL_ZERO,
-+		.extra2 = SYSCTL_ONE,
-+	};
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	mutex_lock(&bpf_stats_enabled_mutex);
-+	val = saved_val;
-+	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	if (write && !ret && val != saved_val) {
-+		if (val)
-+			static_key_slow_inc(key);
-+		else
-+			static_key_slow_dec(key);
-+		saved_val = val;
-+	}
-+	mutex_unlock(&bpf_stats_enabled_mutex);
-+	return ret;
-+}
-+
-+static int bpf_unpriv_handler(struct ctl_table *table, int write,
-+			      void *buffer, size_t *lenp, loff_t *ppos)
-+{
-+	int ret, unpriv_enable = *(int *)table->data;
-+	bool locked_state = unpriv_enable == 1;
-+	struct ctl_table tmp = *table;
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	tmp.data = &unpriv_enable;
-+	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
-+	if (write && !ret) {
-+		if (locked_state && unpriv_enable != 1)
-+			return -EPERM;
-+		*(int *)table->data = unpriv_enable;
-+	}
-+	return ret;
-+}
-+
-+static struct ctl_table bpf_syscall_table[] = {
-+	{
-+		.procname	= "unprivileged_bpf_disabled",
-+		.data		= &sysctl_unprivileged_bpf_disabled,
-+		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
-+		.mode		= 0644,
-+		.proc_handler	= bpf_unpriv_handler,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_TWO,
-+	},
-+	{
-+		.procname	= "bpf_stats_enabled",
-+		.data		= &bpf_stats_enabled_key.key,
-+		.maxlen		= sizeof(bpf_stats_enabled_key),
-+		.mode		= 0644,
-+		.proc_handler	= bpf_stats_handler,
-+	},
-+	{ }
-+};
-+
-+static int __init bpf_syscall_sysctl_init(void)
-+{
-+	register_sysctl_init("kernel", bpf_syscall_table);
-+	return 0;
-+}
-+late_initcall(bpf_syscall_sysctl_init);
-+#endif /* CONFIG_SYSCTL */
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index ae5e59396b5d..c64db3755d9c 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -146,59 +146,6 @@ static const int max_extfrag_threshold = 1000;
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index fdb5375f0562..c5a2d6f50f25 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -304,21 +304,16 @@ static inline void sock_drop(struct sock *sk, struct sk_buff *skb)
+ 	kfree_skb(skb);
+ }
  
- #endif /* CONFIG_SYSCTL */
- 
--#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_SYSCTL)
--static int bpf_stats_handler(struct ctl_table *table, int write,
--			     void *buffer, size_t *lenp, loff_t *ppos)
+-static inline void drop_sk_msg(struct sk_psock *psock, struct sk_msg *msg)
 -{
--	struct static_key *key = (struct static_key *)table->data;
--	static int saved_val;
--	int val, ret;
--	struct ctl_table tmp = {
--		.data   = &val,
--		.maxlen = sizeof(val),
--		.mode   = table->mode,
--		.extra1 = SYSCTL_ZERO,
--		.extra2 = SYSCTL_ONE,
--	};
--
--	if (write && !capable(CAP_SYS_ADMIN))
--		return -EPERM;
--
--	mutex_lock(&bpf_stats_enabled_mutex);
--	val = saved_val;
--	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
--	if (write && !ret && val != saved_val) {
--		if (val)
--			static_key_slow_inc(key);
--		else
--			static_key_slow_dec(key);
--		saved_val = val;
--	}
--	mutex_unlock(&bpf_stats_enabled_mutex);
--	return ret;
+-	if (msg->skb)
+-		sock_drop(psock->sk, msg->skb);
+-	kfree(msg);
 -}
 -
--static int bpf_unpriv_handler(struct ctl_table *table, int write,
--			      void *buffer, size_t *lenp, loff_t *ppos)
--{
--	int ret, unpriv_enable = *(int *)table->data;
--	bool locked_state = unpriv_enable == 1;
--	struct ctl_table tmp = *table;
--
--	if (write && !capable(CAP_SYS_ADMIN))
--		return -EPERM;
--
--	tmp.data = &unpriv_enable;
--	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
--	if (write && !ret) {
--		if (locked_state && unpriv_enable != 1)
--			return -EPERM;
--		*(int *)table->data = unpriv_enable;
--	}
--	return ret;
--}
--#endif /* CONFIG_BPF_SYSCALL && CONFIG_SYSCTL */
--
- /*
-  * /proc/sys support
-  */
-@@ -2188,24 +2135,6 @@ static struct ctl_table kern_table[] = {
- 		.extra2		= SYSCTL_ONE,
- 	},
- #endif
--#ifdef CONFIG_BPF_SYSCALL
--	{
--		.procname	= "unprivileged_bpf_disabled",
--		.data		= &sysctl_unprivileged_bpf_disabled,
--		.maxlen		= sizeof(sysctl_unprivileged_bpf_disabled),
--		.mode		= 0644,
--		.proc_handler	= bpf_unpriv_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_TWO,
--	},
--	{
--		.procname	= "bpf_stats_enabled",
--		.data		= &bpf_stats_enabled_key.key,
--		.maxlen		= sizeof(bpf_stats_enabled_key),
--		.mode		= 0644,
--		.proc_handler	= bpf_stats_handler,
--	},
--#endif
- #if defined(CONFIG_TREE_RCU)
- 	{
- 		.procname	= "panic_on_rcu_stall",
+ static inline void sk_psock_queue_msg(struct sk_psock *psock,
+ 				      struct sk_msg *msg)
+ {
+ 	spin_lock_bh(&psock->ingress_lock);
+ 	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
+ 		list_add_tail(&msg->list, &psock->ingress_msg);
+-	else
+-		drop_sk_msg(psock, msg);
++	else {
++		sk_msg_free(psock->sk, msg);
++		kfree(msg);
++	}
+ 	spin_unlock_bh(&psock->ingress_lock);
+ }
+ 
 -- 
-2.12.3
+2.25.1
 
