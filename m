@@ -2,130 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E424AC433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Mar 2022 00:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 853A3C433F5
+	for <bpf@archiver.kernel.org>; Thu,  3 Mar 2022 00:01:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiCCABQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Mar 2022 19:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
+        id S229930AbiCCAC3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Mar 2022 19:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiCCABI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Mar 2022 19:01:08 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019444FC6E;
-        Wed,  2 Mar 2022 16:00:07 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id 185so2739074qkh.1;
-        Wed, 02 Mar 2022 16:00:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s2VoxRcgzayXC4zVf8d2bV7EKQmBNoz4BFBzN6+8sx8=;
-        b=irtUW00dYBE7kRhx89tLLgo+OiHCquwUTazjhPRpgra/Ng8ZdA8XxCmleB4NvxllKh
-         4pKE6dlj50+3l1NtV4o9/4ebYa6MzILugoiY6A7PIbHurAxsmGNDq+Azak/YPX7TvXqp
-         vWKgPbmVn8eSbnf0s0rlwVptu1i33O5KFWx6cgKlB1Iv/ADRAyqTCutf86BCCCum8X2/
-         Bf0AFz6Uc9OqJ9+suUpqFsrW1IvnGHcoqc6V2ESgWgVivWiJrGD9dv/iy4uRrGM+OgIG
-         JzhbU+mrHknnWfDH4bhT9zMXZNaDWIeBUzcbCDaaOTAZ4EeZTnnWYTbM3mDIlJ1KSgyy
-         PikQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s2VoxRcgzayXC4zVf8d2bV7EKQmBNoz4BFBzN6+8sx8=;
-        b=wCLGp7OUJp/fLsZela7DxIvXWMqB8fMTaKGEFbVYBpJVhW5arTt6ymEBh+LPLVEJoB
-         SBitD97j/9axjRTC5GzF8BYKe0LIwXvp+8KyFUx02QRApxCPyYgOy5yCJBzjSBDR6SEf
-         tzAUuLR/0Dxip33xVNuSNyqvSr4CLSpBewlV4bMI2y8CR3ALVHsIRgnBJrZhjrzDHY4L
-         4QQTfvAlGrKVe5C47SWMfAJBYoQzSMu+s4vXQRXGiG+futo0FRgWFpP5zX+uv9/EYBZv
-         PV9OvMQmw8H+4EplRUvT2mGrKM7g+0Nq+2sILaHvIgXScDwjnhp8el0sXeOJ+NszTQfJ
-         euow==
-X-Gm-Message-State: AOAM530/h/YHG3cvh0tVvANRZMBksuBNc9m19b9MQE+GzLwZzjR/NQWO
-        kfBELprPAxqy7sRyqyySHYOjoL5psvJ9dX7l2+qacind//ASHw==
-X-Google-Smtp-Source: ABdhPJxo/W0o2SxPKcSkXdGg8CN8B7z5+TwZFM+qdHIf07npd47aBOy5NLnFlh9FXRccJ7EOY1O/tmylybId+gaV5XE=
-X-Received: by 2002:a02:aa85:0:b0:314:c152:4c89 with SMTP id
- u5-20020a02aa85000000b00314c1524c89mr26976369jai.93.1646263965076; Wed, 02
- Mar 2022 15:32:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20220301165737.672007-1-ytcoode@gmail.com>
-In-Reply-To: <20220301165737.672007-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 2 Mar 2022 15:32:34 -0800
-Message-ID: <CAEf4BzYYaRyTh=W+ceb6V=Dj+SzoKNV_O24by4j8Fn4oG3gq2A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: Add a check to ensure that page_cnt is non-zero
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S229932AbiCCAC3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Mar 2022 19:02:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52563240B2
+        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 16:01:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A394617BD
+        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 23:26:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFCBC340E9;
+        Wed,  2 Mar 2022 23:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646263605;
+        bh=TLcvoWQtdtysbTxCfNelk4ZWdU1R8dneA5RI6VnKf3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IxTQQ+8m0ZTa2bMU3evAo+eXjcpRe8ZvOjUXx1pWyjCCCnuOH5j4O9lpcdSQlzpGc
+         PXgL4QGaJ9i3aDdy4zxNI0SFMtFwKl6He9iGhr7YnPGN6pCaKYmhXM8OyHtz4ma6uX
+         y7hVospFUZuBQ1CZ3pP5/uOw/HC2SE4w+lzjIJ4Y3fjRSHtppU4vyHx31hHpDWkx7f
+         uTabSE3McPiaDKnHvnBFnwGlKgBcP92IcwXl6uwa3M01qO5DVwCFdC8nFgy8WF/dvc
+         Te1uP3s8vecr5eOtC+N+A01oKhjgJ/EeS1BuGdvSiV5Omc/KzSDT39McOeof4IP6HL
+         A1pYBpA4elqKw==
+Date:   Wed, 2 Mar 2022 16:26:37 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
+ register offset checks
+Message-ID: <Yh/9LS7zc3nhTjsR@thelio-3990X>
+References: <20220301065745.1634848-7-memxor@gmail.com>
+ <202203011937.wMLpkfU3-lkp@intel.com>
+ <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
+ <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
+ <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 8:57 AM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> The page_cnt parameter is used to specify the number of memory pages
-> allocated for each per-CPU buffer, it must be non-zero and a power of 2.
->
-> Currently, the __perf_buffer__new() function attempts to validate that
-> the page_cnt is a power of 2 but forgets checking for the case where
-> page_cnt is zero, we can fix it by replacing 'page_cnt & (page_cnt - 1)'
-> with '!is_power_of_2(page_cnt)'.
->
-> Thus we also don't need to add a check in perf_buffer__new_v0_6_0() to
-> make sure that page_cnt is non-zero and the check for zero in
-> perf_buffer__new_raw_v0_6_0() can also be removed.
->
-> The code is cleaner and more readable.
->
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  tools/lib/bpf/libbpf.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index be6480e260c4..4dd1d82cd5b9 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -33,6 +33,7 @@
->  #include <linux/filter.h>
->  #include <linux/list.h>
->  #include <linux/limits.h>
-> +#include <linux/log2.h>
+On Thu, Mar 03, 2022 at 04:44:01AM +0530, Kumar Kartikeya Dwivedi wrote:
+> On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
+> > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> > >
+> > > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
+> > > > Hi Kumar,
+> > > >
+> > > > Thank you for the patch! Perhaps something to improve:
+> > > >
+> > > > [auto build test WARNING on bpf-next/master]
+> > > >
+> > > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
+> > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> > > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
+> > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> > >
+> > > The same warning is emitted on clang for all existing definitions, so I can
+> > > respin with a fix for the warning like we do for GCC, otherwise it can also
+> > > be a follow up patch.
+> >
+> > Separate patch is fine.
+> > How do you plan on fixing it?
+> > What is __diag_ignore equivalent for clang?
+> 
+> Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
+> local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
 
-we don't have this header implemented in Github repo, so this will be
-unnecessary painful
+I have a diff that mirrors the GCC infrastructure, which should work for
+this, feel free to copy it:
 
+https://lore.kernel.org/r/20210310225240.4epj2mdmzt4vurr3@archlinux-ax161/
 
->  #include <linux/perf_event.h>
->  #include <linux/ring_buffer.h>
->  #include <linux/version.h>
-> @@ -10951,7 +10952,7 @@ struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
->  {
->         struct perf_buffer_params p = {};
->
-> -       if (page_cnt == 0 || !attr)
-> +       if (!attr)
->                 return libbpf_err_ptr(-EINVAL);
->
->         if (!OPTS_VALID(opts, perf_buffer_raw_opts))
-> @@ -10992,7 +10993,7 @@ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
->         __u32 map_info_len;
->         int err, i, j, n;
->
-> -       if (page_cnt & (page_cnt - 1)) {
-> +       if (!is_power_of_2(page_cnt)) {
+If you want to shut up the warning for all supported versions of clang,
+switch 130000 for 110000 and __diag_clang_11() for __diag_clang_13().
 
-so let's instead just use `page_cnt == 0 || (page_cnt & (page_cnt -
-1))` here explicitly
-
->                 pr_warn("page count should be power of two, but is %zu\n",
->                         page_cnt);
->                 return ERR_PTR(-EINVAL);
-> --
-> 2.35.1
->
+Cheers,
+Nathan
