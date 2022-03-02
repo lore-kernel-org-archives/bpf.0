@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17C6AC433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 02:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5BA8C4332F
+	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 02:10:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbiCBCKt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Mar 2022 21:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S237354AbiCBCKu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Mar 2022 21:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiCBCKs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Mar 2022 21:10:48 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F753E5D8;
-        Tue,  1 Mar 2022 18:10:06 -0800 (PST)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4K7ctG1fmxzVfpF;
-        Wed,  2 Mar 2022 10:06:30 +0800 (CST)
+        with ESMTP id S235736AbiCBCKt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Mar 2022 21:10:49 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598E492840;
+        Tue,  1 Mar 2022 18:10:07 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4K7cww3DrTzdfcn;
+        Wed,  2 Mar 2022 10:08:48 +0800 (CST)
 Received: from localhost.localdomain (10.175.104.82) by
  canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 2 Mar 2022 10:10:03 +0800
+ 15.1.2308.21; Wed, 2 Mar 2022 10:10:04 +0800
 From:   Wang Yufen <wangyufen@huawei.com>
 To:     <john.fastabend@gmail.com>, <daniel@iogearbox.net>,
         <jakub@cloudflare.com>, <lmb@cloudflare.com>
@@ -30,10 +30,12 @@ CC:     <davem@davemloft.net>, <edumazet@google.com>,
         <songliubraving@fb.com>, <yhs@fb.com>, <kpsingh@kernel.org>,
         <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         Wang Yufen <wangyufen@huawei.com>
-Subject: [PATCH bpf-next v2 0/4] bpf, sockmap: Fix memleaks and issues of mem charge/uncharge
-Date:   Wed, 2 Mar 2022 10:27:51 +0800
-Message-ID: <20220302022755.3876705-1-wangyufen@huawei.com>
+Subject: [PATCH bpf-next v2 2/4] bpf, sockmap: Fix memleak in tcp_bpf_sendmsg while sk msg is full
+Date:   Wed, 2 Mar 2022 10:27:53 +0800
+Message-ID: <20220302022755.3876705-3-wangyufen@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220302022755.3876705-1-wangyufen@huawei.com>
+References: <20220302022755.3876705-1-wangyufen@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -45,62 +47,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset fixes memleaks and incorrect charge/uncharge memory, these
-issues cause the following info:
+If tcp_bpf_sendmsg() is running while sk msg is full. When sk_msg_alloc()
+returns -ENOMEM error, tcp_bpf_sendmsg() goes to wait_for_memory. If partial
+memory has been alloced by sk_msg_alloc(), that is, msg_tx->sg.size is
+greater than osize after sk_msg_alloc(), memleak occurs. To fix we use
+sk_msg_trim() to release the allocated memory, then goto wait for memory.
 
-WARNING: CPU: 0 PID: 9202 at net/core/stream.c:205 sk_stream_kill_queues+0xc8/0xe0
+This issue can cause the following info:
+WARNING: CPU: 3 PID: 7950 at net/core/stream.c:208 sk_stream_kill_queues+0xd4/0x1a0
 Call Trace:
- <IRQ>
+ <TASK>
  inet_csk_destroy_sock+0x55/0x110
- tcp_rcv_state_process+0xe5f/0xe90
- ? sk_filter_trim_cap+0x10d/0x230
- ? tcp_v4_do_rcv+0x161/0x250
- tcp_v4_do_rcv+0x161/0x250
- tcp_v4_rcv+0xc3a/0xce0
- ip_protocol_deliver_rcu+0x3d/0x230
- ip_local_deliver_finish+0x54/0x60
- ip_local_deliver+0xfd/0x110
- ? ip_protocol_deliver_rcu+0x230/0x230
- ip_rcv+0xd6/0x100
- ? ip_local_deliver+0x110/0x110
- __netif_receive_skb_one_core+0x85/0xa0
- process_backlog+0xa4/0x160
- __napi_poll+0x29/0x1b0
- net_rx_action+0x287/0x300
- __do_softirq+0xff/0x2fc
- do_softirq+0x79/0x90
- </IRQ>
+ __tcp_close+0x279/0x470
+ tcp_close+0x1f/0x60
+ inet_release+0x3f/0x80
+ __sock_release+0x3d/0xb0
+ sock_close+0x11/0x20
+ __fput+0x92/0x250
+ task_work_run+0x6a/0xa0
+ do_exit+0x33b/0xb60
+ do_group_exit+0x2f/0xa0
+ get_signal+0xb6/0x950
+ arch_do_signal_or_restart+0xac/0x2a0
+ exit_to_user_mode_prepare+0xa9/0x200
+ syscall_exit_to_user_mode+0x12/0x30
+ do_syscall_64+0x46/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+ </TASK>
 
-WARNING: CPU: 0 PID: 531 at net/ipv4/af_inet.c:154 inet_sock_destruct+0x175/0x1b0
+WARNING: CPU: 3 PID: 2094 at net/ipv4/af_inet.c:155 inet_sock_destruct+0x13c/0x260
 Call Trace:
  <TASK>
  __sk_destruct+0x24/0x1f0
  sk_psock_destroy+0x19b/0x1c0
  process_one_work+0x1b3/0x3c0
- ? process_one_work+0x3c0/0x3c0
- worker_thread+0x30/0x350
- ? process_one_work+0x3c0/0x3c0
  kthread+0xe6/0x110
- ? kthread_complete_and_exit+0x20/0x20
  ret_from_fork+0x22/0x30
  </TASK>
 
-Changes since v1:
--Update the commit message of patch #2, the error path is from ENOMEM not
-the ENOSPC.
--Simply returning an error code when psock is null, as John Fastabend
-suggested.
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+ net/ipv4/tcp_bpf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Wang Yufen (4):
-  bpf, sockmap: Fix memleak in sk_psock_queue_msg
-  bpf, sockmap: Fix memleak in tcp_bpf_sendmsg while sk msg is full
-  bpf, sockmap: Fix more uncharged while msg has more_data
-  bpf, sockmap: Fix double uncharge the mem of sk_msg
-
- include/linux/skmsg.h | 13 ++++---------
- net/ipv4/tcp_bpf.c    | 18 +++++++++++-------
- 2 files changed, 15 insertions(+), 16 deletions(-)
-
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 9b9b02052fd3..ac9f491cc139 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -421,8 +421,10 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 		osize = msg_tx->sg.size;
+ 		err = sk_msg_alloc(sk, msg_tx, msg_tx->sg.size + copy, msg_tx->sg.end - 1);
+ 		if (err) {
+-			if (err != -ENOSPC)
++			if (err != -ENOSPC) {
++				sk_msg_trim(sk, msg_tx, osize);
+ 				goto wait_for_memory;
++			}
+ 			enospc = true;
+ 			copy = msg_tx->sg.size - osize;
+ 		}
 -- 
 2.25.1
 
