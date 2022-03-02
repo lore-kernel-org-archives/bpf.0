@@ -2,91 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B684C433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 00:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 390FEC433EF
+	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 01:40:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiCBAot convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Mar 2022 19:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S238946AbiCBBk4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Mar 2022 20:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236504AbiCBAor (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Mar 2022 19:44:47 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81D85EBDD
-        for <bpf@vger.kernel.org>; Tue,  1 Mar 2022 16:44:03 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 221GjV8c027608
-        for <bpf@vger.kernel.org>; Tue, 1 Mar 2022 16:44:03 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3eh3vj29n6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Mar 2022 16:44:03 -0800
-Received: from twshared7634.08.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 1 Mar 2022 16:44:02 -0800
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id A8E6E2B47846C; Tue,  1 Mar 2022 16:43:54 -0800 (PST)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, Song Liu <song@kernel.org>,
-        kernel test robot <oliver.sang@intel.com>
-Subject: [PATCH bpf-next 1/2] x86: disable HAVE_ARCH_HUGE_VMALLOC on 32-bit x86
-Date:   Tue, 1 Mar 2022 16:43:38 -0800
-Message-ID: <20220302004339.3932356-2-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220302004339.3932356-1-song@kernel.org>
-References: <20220302004339.3932356-1-song@kernel.org>
+        with ESMTP id S238931AbiCBBkz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Mar 2022 20:40:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED50EA2508;
+        Tue,  1 Mar 2022 17:40:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0A825CE2082;
+        Wed,  2 Mar 2022 01:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 134CEC340F0;
+        Wed,  2 Mar 2022 01:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646185210;
+        bh=yiu2oVO8iMfUx8EITjMvjJ0JsQ6koCRlfPLhskhPshw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mCDoiTtw0T88xtrDgZ8GvcOrpJpL/HbGqFUfXy+tPngi0wtZZm+Vqf0LIHZoyqAfY
+         9JEdSVry3XnnuwwtThP4Uauz+NC4gy+p8wVhAjnpyrTLzbsSKfTfHXOKLbb5yWsiAW
+         BCgz4xHr088dHv1eeltEILX8/XtrKqu4GuQ8VRgLqmvg04WIkp/8Pybofzv1sRLA9g
+         0qAzWkjQnXUDvf5CY25Ektbfyv5K0TQloxTo0De9QnXTYn0/iUS3ksf7SYfbeZrbHs
+         /kFsXk5CRzirj9uyuVBR+pScsPJ2O3IFfcTfnNNMPici54dhmtlxqZGm/a2v8jy28X
+         6ya7T3dGJ4VsQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA678EAC096;
+        Wed,  2 Mar 2022 01:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 5yQon-f8uqmnQHO4XstR7sdYxq6jcHUh
-X-Proofpoint-GUID: 5yQon-f8uqmnQHO4XstR7sdYxq6jcHUh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-01_07,2022-02-26_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 adultscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=701 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2201110000 definitions=main-2203020001
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3] tun: support NAPI for packets received from
+ batched XDP buffs
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164618520995.21891.13359440725672676433.git-patchwork-notify@kernel.org>
+Date:   Wed, 02 Mar 2022 01:40:09 +0000
+References: <20220228033805.1579435-1-baymaxhuang@gmail.com>
+In-Reply-To: <20220228033805.1579435-1-baymaxhuang@gmail.com>
+To:     Harold Huang <baymaxhuang@gmail.com>
+Cc:     netdev@vger.kernel.org, jasowang@redhat.com, pabeni@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-kernel test robot reported kernel BUG like:
+Hello:
 
-[ 44.587744][ T1] kernel BUG at arch/x86/mm/physaddr.c:76!
-[ 44.590151][ T1] __vmalloc_area_node (mm/vmalloc.c:622 mm/vmalloc.c:2995)
-[ 44.590151][ T1] __vmalloc_node_range (mm/vmalloc.c:3108)
-[ 44.590151][ T1] __vmalloc_node (mm/vmalloc.c:3157)
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-which is triggered with HAVE_ARCH_HUGE_VMALLOC on 32-bit x86. Since BPF
-only uses HAVE_ARCH_HUGE_VMALLOC for x86_64, turn it off for 32-bit x86.
+On Mon, 28 Feb 2022 11:38:05 +0800 you wrote:
+> In tun, NAPI is supported and we can also use NAPI in the path of
+> batched XDP buffs to accelerate packet processing. What is more, after
+> we use NAPI, GRO is also supported. The iperf shows that the throughput of
+> single stream could be improved from 4.5Gbps to 9.2Gbps. Additionally, 9.2
+> Gbps nearly reachs the line speed of the phy nic and there is still about
+> 15% idle cpu core remaining on the vhost thread.
+> 
+> [...]
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Fixes: fac54e2bfb5b ("x86/Kconfig: Select HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP")
-Signed-off-by: Song Liu <song@kernel.org>
----
- arch/x86/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here is the summary with links:
+  - [net-next,v3] tun: support NAPI for packets received from batched XDP buffs
+    https://git.kernel.org/netdev/net-next/c/fb3f903769e8
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 995f2dc28631..9b356da6f46b 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -158,7 +158,7 @@ config X86
- 	select HAVE_ALIGNED_STRUCT_PAGE		if SLUB
- 	select HAVE_ARCH_AUDITSYSCALL
- 	select HAVE_ARCH_HUGE_VMAP		if X86_64 || X86_PAE
--	select HAVE_ARCH_HUGE_VMALLOC		if HAVE_ARCH_HUGE_VMAP
-+	select HAVE_ARCH_HUGE_VMALLOC		if X86_64
- 	select HAVE_ARCH_JUMP_LABEL
- 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
- 	select HAVE_ARCH_KASAN			if X86_64
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
