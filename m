@@ -2,99 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10BC5C433F5
-	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 23:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0221CC433EF
+	for <bpf@archiver.kernel.org>; Wed,  2 Mar 2022 23:47:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiCBXqB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Mar 2022 18:46:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S229562AbiCBXr7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Mar 2022 18:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiCBXp6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Mar 2022 18:45:58 -0500
-Received: from mail-vk1-f193.google.com (mail-vk1-f193.google.com [209.85.221.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A70F42A3B
-        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 15:43:41 -0800 (PST)
-Received: by mail-vk1-f193.google.com with SMTP id j201so1776687vke.11
-        for <bpf@vger.kernel.org>; Wed, 02 Mar 2022 15:43:41 -0800 (PST)
+        with ESMTP id S229567AbiCBXr6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Mar 2022 18:47:58 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06BB23F3C0
+        for <bpf@vger.kernel.org>; Wed,  2 Mar 2022 15:47:04 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id q5so3289006oij.6
+        for <bpf@vger.kernel.org>; Wed, 02 Mar 2022 15:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=6MZZKg76Uu6fTeP2WHxUNaLYjEwH0+kMrpeM8QvcEII=;
-        b=U4dIHcJcXSEFAeFXkdMSfZz/MtfWZqMJXt9E25MWjxZMEeP1k6D06SGlMKkd9CtCPs
-         Ork45JxwruKDiYOjZx9EEq/jLWS9GxZE12P8QrMJpYidS/1SUj4XG0QYnOmJ08klyn04
-         tJPflyEjVYIfQ3GFloTEt0vZ7XXT3twXQS+lJPCetvjCr6Lc6SGtx0cNLTsDX+1+gLz6
-         A0PRZFAS+ICMrw4fF/Jq1ntJfnByBBvufk+Qf5mf1YQO5TtBbJlIFxr64f1VSJgxbBOT
-         zJQglD2O2ut9yFY3QSt99TofTcAH/TSHpdQOK+f1eFoL6Th/n+qDqcDVJd6nfyhOHJO4
-         bEiQ==
+        bh=H/ld2l1QfhZw5fycHIZhicQmUAincS/ed7DfQS4GrJo=;
+        b=ViefEvfMbLhz6Ctu96GokkwMfCpWEne+ktDvFtkT3qkLrh7gfDs9PfaXYkJDEYrtui
+         49WDWIvwvvM6gXpGSZsTB/qPnuPrCIRuQy/XCvrR9PmShSwCO13rPkuZAXJUbvumZUnB
+         AMYP1KPCsbk/ve2rSrCawBXNkTTeUJUizFoGHdL2cdPqwBW37AwuNDjENUvqaQu+AhUl
+         LlPEarJcQ0aawr+1TgicF+xm1Dl3GILQ5WUlRoilbnNUUG2EQIntvKG/NSHEEW8KEOwU
+         MFHmF8y8gkT0DwbMtzKUHTohkZSJ6sIZOd2feeMygKXKIxhVJlI5kFwUybtmuaDB2UEt
+         9eJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6MZZKg76Uu6fTeP2WHxUNaLYjEwH0+kMrpeM8QvcEII=;
-        b=1cW50D+TZyxSTbx/Cc/mh47VlgTLX8bm8AN9fF4/6i3TrC7WO61eNXfgtM/ESdiDh+
-         /ed4ODMGL+awI6pmdInuh56ftcPPViW/706wZuFRSwnmEO2HnRWK5vvF6/f0Mwl5aECe
-         ljhdidB/Vthj4D3N0p4DC348bV+ouwntU89JI3eGlefq0M/+Z8v+p0ABSnFwNM5j+Zay
-         5Xpv6kOXMuNd5l1n9FCf0T0M+QXn8ooEByVq9i6nioOPeFZ93a8a8zFPdq6zMxqjm9N4
-         nD7bC1Tk48QRdp8K4jwm0yfBOGDqs+8DL6V7OCvuw+ZOyMRW04jxYCrAzwPZpsncqgX/
-         E2PA==
-X-Gm-Message-State: AOAM530h5OsSOul/RFok03BD2YsMWYRBxqCVl1X3+6OKoqt7u3TG4sQi
-        y/RuIVqy3QBalRiH1fDohNA2ryKvCps=
-X-Google-Smtp-Source: ABdhPJwsMinvFGIELcISd8wwBPadUVTyfGzpYvf/+AaFc3t1W920rGxSNlDx2+/+eEZEVK+j+VdEPQ==
-X-Received: by 2002:a17:902:7b8d:b0:14f:1aca:d95e with SMTP id w13-20020a1709027b8d00b0014f1acad95emr32781546pll.122.1646262843965;
-        Wed, 02 Mar 2022 15:14:03 -0800 (PST)
+        bh=H/ld2l1QfhZw5fycHIZhicQmUAincS/ed7DfQS4GrJo=;
+        b=1yHdZCn7aIQ+c7lLCKsG7LTKRt5OvTF4a0pjl5OltDicsaMJyhTjYiVVsGEPggG6dd
+         IYutYbVOtV6n1saqdvoCZ+0kfqxXFafqzKwA+9EJwi5+eBNRZ+hoRgKlZSISC0xi5wAj
+         Jr1i/aPtXw7mhsynV1nkmKf1SV7/Fr0HU8yUCjzrw9tbYC7aK0aFptEQwyoPj9sglrQp
+         0QPHSZmZXUMcW2aqD6QxhY9D6RkpV3Oa1WOoAoNpzGBRJfQ50yl4m5NLUKA0dnSs31Ha
+         tsfjC0LABzhAxlqef0wLJbOsmSSuFbxRL5pZevWHosvJB6F2+PHF1suvvY5UX3x5GfDD
+         s+kA==
+X-Gm-Message-State: AOAM531EWg9g2ZQ0uDTvKtDf49s11TAh2dWftdHTVAz3X4i2PlGmrIFa
+        D+zj6rp//T1S/GSyacQ1i/tpf5hJinA=
+X-Google-Smtp-Source: ABdhPJzB/6ywPQ1g5j9dJIjdvx9LpP29jILx7t9+/tzYvRREY7LhT7NAaRPZxLwQNGC4YnwLN9MDHA==
+X-Received: by 2002:a17:90a:6404:b0:1b9:28a8:935f with SMTP id g4-20020a17090a640400b001b928a8935fmr2231073pjj.197.1646264280108;
+        Wed, 02 Mar 2022 15:38:00 -0800 (PST)
 Received: from localhost ([2405:201:6014:d0c0:6243:316e:a9e1:adda])
-        by smtp.gmail.com with ESMTPSA id bh3-20020a056a02020300b00378b62df320sm182683pgb.73.2022.03.02.15.14.03
+        by smtp.gmail.com with ESMTPSA id nk5-20020a17090b194500b001bf01e6e558sm152612pjb.29.2022.03.02.15.37.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 15:14:03 -0800 (PST)
-Date:   Thu, 3 Mar 2022 04:44:01 +0530
+        Wed, 02 Mar 2022 15:37:59 -0800 (PST)
+Date:   Thu, 3 Mar 2022 05:07:57 +0530
 From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        kernel test robot <lkp@intel.com>, bpf <bpf@vger.kernel.org>,
         llvm@lists.linux.dev, kbuild-all@lists.01.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
 Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Add tests for kfunc
  register offset checks
-Message-ID: <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+Message-ID: <20220302233757.plavf56gm2uhhneu@apollo.legion>
 References: <20220301065745.1634848-7-memxor@gmail.com>
  <202203011937.wMLpkfU3-lkp@intel.com>
  <20220301115722.jjklznmjsbnkdsf2@apollo.legion>
  <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
+ <20220302231401.bvtffkq3oz7g4mxj@apollo.legion>
+ <Yh/9LS7zc3nhTjsR@thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQL-sSMacA8S-gvKTAz-CAdTaDgX=4ZZrwFL=zZKYC0-Aw@mail.gmail.com>
+In-Reply-To: <Yh/9LS7zc3nhTjsR@thelio-3990X>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
-> On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+On Thu, Mar 03, 2022 at 04:56:37AM IST, Nathan Chancellor wrote:
+> On Thu, Mar 03, 2022 at 04:44:01AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, Mar 03, 2022 at 04:17:25AM IST, Alexei Starovoitov wrote:
+> > > On Tue, Mar 1, 2022 at 3:57 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> > > >
+> > > > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
+> > > > > Hi Kumar,
+> > > > >
+> > > > > Thank you for the patch! Perhaps something to improve:
+> > > > >
+> > > > > [auto build test WARNING on bpf-next/master]
+> > > > >
+> > > > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
+> > > > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> > > > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
+> > > > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
+> > > >
+> > > > The same warning is emitted on clang for all existing definitions, so I can
+> > > > respin with a fix for the warning like we do for GCC, otherwise it can also
+> > > > be a follow up patch.
+> > >
+> > > Separate patch is fine.
+> > > How do you plan on fixing it?
+> > > What is __diag_ignore equivalent for clang?
 > >
-> > On Tue, Mar 01, 2022 at 05:10:31PM IST, kernel test robot wrote:
-> > > Hi Kumar,
-> > >
-> > > Thank you for the patch! Perhaps something to improve:
-> > >
-> > > [auto build test WARNING on bpf-next/master]
-> > >
-> > > url:    https://github.com/0day-ci/linux/commits/Kumar-Kartikeya-Dwivedi/Fixes-for-bad-PTR_TO_BTF_ID-offset/20220301-150010
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> > > config: s390-randconfig-r021-20220301 (https://download.01.org/0day-ci/archive/20220301/202203011937.wMLpkfU3-lkp@intel.com/config)
-> > > compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> >
-> > The same warning is emitted on clang for all existing definitions, so I can
-> > respin with a fix for the warning like we do for GCC, otherwise it can also
-> > be a follow up patch.
+> > Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
+> > local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
 >
-> Separate patch is fine.
-> How do you plan on fixing it?
-> What is __diag_ignore equivalent for clang?
+> I have a diff that mirrors the GCC infrastructure, which should work for
+> this, feel free to copy it:
+>
+> https://lore.kernel.org/r/20210310225240.4epj2mdmzt4vurr3@archlinux-ax161/
+>
+> If you want to shut up the warning for all supported versions of clang,
+> switch 130000 for 110000 and __diag_clang_11() for __diag_clang_13().
+>
 
-Hmm, looks like I'll have to add those in include/linux/compiler-clang.h. Quick
-local testing suggests it will work with _Pragma("clang diagnostic ignored ...").
+That's great, Nathan! I'll add your Signed-off-by to it.
+
+> Cheers,
+> Nathan
 
 --
 Kartikeya
