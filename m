@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4468EC433EF
-	for <bpf@archiver.kernel.org>; Thu,  3 Mar 2022 17:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03132C433F5
+	for <bpf@archiver.kernel.org>; Thu,  3 Mar 2022 17:35:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiCCRfE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Mar 2022 12:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S231287AbiCCRgK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Mar 2022 12:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbiCCRfD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Mar 2022 12:35:03 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166051CB35
-        for <bpf@vger.kernel.org>; Thu,  3 Mar 2022 09:34:17 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id g39so9744959lfv.10
-        for <bpf@vger.kernel.org>; Thu, 03 Mar 2022 09:34:16 -0800 (PST)
+        with ESMTP id S229914AbiCCRgJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Mar 2022 12:36:09 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D835031922
+        for <bpf@vger.kernel.org>; Thu,  3 Mar 2022 09:35:22 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id i11so9801257lfu.3
+        for <bpf@vger.kernel.org>; Thu, 03 Mar 2022 09:35:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=references:user-agent:from:to:cc:subject:date:in-reply-to
          :message-id:mime-version;
-        bh=8tLtmJ2RQFruIKSmv2RAzaXnytpg1mHx5r3lRuwz4SQ=;
-        b=zD2wIIJPiate0cNq+14kRUpBPEQKPz4nJmw/qZb1Cc1udB5KKscwtAiuBsXabpKKiC
-         p5mhU/Cdh8VmuQGrydAyRmOgCge2+ikTpzCB+X2G0gban1MXSi3egxolNqRl8pvlY3eB
-         vw16tZNL/60GYX4GOtIx3A9L8/maCflZM/lvo=
+        bh=gJO9t+nw81mCakkJU4rcitth7kTwFygbrgST2tWJ3Vo=;
+        b=qyoVlFBomloAoUn1xlqx5IqE4FsUTuCVy8zHzcuJ6wcDz2/Xvarcsb0GQF5O5/xLF5
+         LZArGmIjj93gpo5DX6O45bTPYBcCKTFF+h220RDpA7/hkvvRNC32IKf1csyrUlo4wQ0X
+         HhwF+6j4xdD4Z2FiJRipv6i5ijnAbRFBsmQsA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
          :in-reply-to:message-id:mime-version;
-        bh=8tLtmJ2RQFruIKSmv2RAzaXnytpg1mHx5r3lRuwz4SQ=;
-        b=Qgwdxu3hQP9aU/4B7VEeZMYGvmGvfByae850uDYKKL2XGdli+0BJs8/mR5UiMuqFWQ
-         MiB7fdtNA3rMNWrNno+EY0Loa/rVvlbpMeGdYO9/cKJjiOiIKTJk/CEPKq0nDU51dCbU
-         xzytRl3vIf5Jc8IfTkGO17udbR04JQnqs7m3wqHbGCxnKXXeMfUuwvGL01vlwQHLfgfi
-         nFcfTO7gao02jtSJCPKxgOy4YVRdbpI7NRZG6gBR+aV33yBUMQwCDuXRgvjNT0xFn81I
-         Pbmm3jX1rBcx3aAZaFmoXhV6kiyFaX0iSRwfrQRek48gXX4qsqbuWJrjo6900/3gtndk
-         IrbA==
-X-Gm-Message-State: AOAM5307UQqCskgeJvuFGZqubfL/7JBQKZb85PIfkUJcQLtIaU4somAz
-        piIX9OYtncIhWcCfIg1rHZKwVQ==
-X-Google-Smtp-Source: ABdhPJwPOTr+bP13XZ5/Qj03An+Q/A1lifT9TJVElUkL83XHBcTHdMFYiJcHPLV/iVXA+KDxM9HCxw==
-X-Received: by 2002:ac2:418c:0:b0:43e:8f98:98f0 with SMTP id z12-20020ac2418c000000b0043e8f9898f0mr22944499lfh.604.1646328853292;
-        Thu, 03 Mar 2022 09:34:13 -0800 (PST)
+        bh=gJO9t+nw81mCakkJU4rcitth7kTwFygbrgST2tWJ3Vo=;
+        b=WnK/4tF/gvbCteZRv85Gc8HaFY5iKsQwHMktv/HNJzAp67yL/hUSccSHvz5sHgfQwv
+         IM9N/jGVOrJPXxOJQlZ9a1AYHJ/BhM/83J4OTr3KZIzXD66XL+nk5z7YmBUjOLLRYeJG
+         PFjATpF2pEtgYdbK37s9rVdHgs5o6woZG8WEg4th6xZ6tPwqSCXOEUrpS/S4Miea+sjj
+         LcqszOYm+Odcbx3qM68gC5oU6SGbTcXjuKnJ7SrQcxExLIVTQLypeJPA0fuw1av5QdnG
+         NK9cyKUso6PlGJGb3chJA0x93eisusM/dUFfv81x5hIUF+k1395DIzydOBrLjA/2gize
+         X8mA==
+X-Gm-Message-State: AOAM531IQGcj+SQczplAyqo9Zq+Zug84AXcR2u+HBeVSjemrTy49hrJw
+        vVxPKy8qa8UX9Aihml6P52pcdQ==
+X-Google-Smtp-Source: ABdhPJzZI8wTAhP+syWE9VPh8Qg10UjeSdqOap0TYm4UFweiyRiNQpiwd1zO6gZNGkzqAu4agWfSxw==
+X-Received: by 2002:ac2:4d29:0:b0:445:b80c:1130 with SMTP id h9-20020ac24d29000000b00445b80c1130mr6625873lfk.21.1646328919443;
+        Thu, 03 Mar 2022 09:35:19 -0800 (PST)
 Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0f9c.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::f9c])
-        by smtp.gmail.com with ESMTPSA id k6-20020a0565123d8600b00443967200c0sm537598lfv.143.2022.03.03.09.34.12
+        by smtp.gmail.com with ESMTPSA id c12-20020a056512074c00b004458cd423f7sm542354lfs.68.2022.03.03.09.35.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 09:34:12 -0800 (PST)
+        Thu, 03 Mar 2022 09:35:19 -0800 (PST)
 References: <20220227202757.519015-1-jakub@cloudflare.com>
- <20220227202757.519015-4-jakub@cloudflare.com>
- <20220301062207.d3aqge5qg623asr6@kafai-mbp.dhcp.thefacebook.com>
+ <20220227202757.519015-3-jakub@cloudflare.com>
+ <20220301062536.zs6z6q56exu3hgvv@kafai-mbp.dhcp.thefacebook.com>
 User-agent: mu4e 1.6.10; emacs 27.2
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     Martin KaFai Lau <kafai@fb.com>
@@ -55,70 +55,50 @@ Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         kernel-team@cloudflare.com, Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Fix test for 4-byte load
- from dst_port on big-endian
-Date:   Thu, 03 Mar 2022 18:12:02 +0100
-In-reply-to: <20220301062207.d3aqge5qg623asr6@kafai-mbp.dhcp.thefacebook.com>
-Message-ID: <874k4fhre3.fsf@cloudflare.com>
+Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Check dst_port only on
+ the client socket
+Date:   Thu, 03 Mar 2022 18:34:38 +0100
+In-reply-to: <20220301062536.zs6z6q56exu3hgvv@kafai-mbp.dhcp.thefacebook.com>
+Message-ID: <87zgm7gcrt.fsf@cloudflare.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 10:22 PM -08, Martin KaFai Lau wrote:
-> On Sun, Feb 27, 2022 at 09:27:57PM +0100, Jakub Sitnicki wrote:
-
-[...]
-
+On Mon, Feb 28, 2022 at 10:25 PM -08, Martin KaFai Lau wrote:
+> On Sun, Feb 27, 2022 at 09:27:56PM +0100, Jakub Sitnicki wrote:
+>> cgroup_skb/egress programs which sock_fields test installs process packets
+>> flying in both directions, from the client to the server, and in reverse
+>> direction.
+>> 
+>> Recently added dst_port check relies on the fact that destination
+>> port (remote peer port) of the socket which sends the packet is known ahead
+>> of time. This holds true only for the client socket, which connects to the
+>> known server port.
+>> 
+>> Filter out any traffic that is not bound to be egressing from the client
+>> socket in the test program for reading the dst_port.
+>> 
+>> Fixes: 8f50f16ff39d ("selftests/bpf: Extend verifier and bpf_sock tests for dst_port loads")
+>> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+>> ---
+>>  .../testing/selftests/bpf/progs/test_sock_fields.c  | 13 +++++++++++--
+>>  1 file changed, 11 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/tools/testing/selftests/bpf/progs/test_sock_fields.c b/tools/testing/selftests/bpf/progs/test_sock_fields.c
+>> index 3e2e3ee51cc9..186fed1deaab 100644
 >> --- a/tools/testing/selftests/bpf/progs/test_sock_fields.c
 >> +++ b/tools/testing/selftests/bpf/progs/test_sock_fields.c
->> @@ -256,10 +256,23 @@ int ingress_read_sock_fields(struct __sk_buff *skb)
->>  	return CG_OK;
->>  }
+>> @@ -42,6 +42,11 @@ struct {
+>>  	__type(value, struct bpf_spinlock_cnt);
+>>  } sk_pkt_out_cnt10 SEC(".maps");
 >>  
->> +/*
->> + * NOTE: 4-byte load from bpf_sock at dst_port offset is quirky. The
->> + * result is left shifted on little-endian architectures because the
->> + * access is converted to a 2-byte load. The quirky behavior is kept
->> + * for backward compatibility.
->> + */
->>  static __noinline bool sk_dst_port__load_word(struct bpf_sock *sk)
->>  {
->> +#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->> +	const __u8 SHIFT = 16;
->> +#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
->> +	const __u8 SHIFT = 0;
->> +#else
->> +#error "Unrecognized __BYTE_ORDER__"
->> +#endif
->>  	__u32 *word = (__u32 *)&sk->dst_port;
->> -	return word[0] == bpf_htonl(0xcafe0000);
->> +	return word[0] == bpf_htonl(0xcafe << SHIFT);
-> I believe it should be fine.  It is the behavior even before
-> commit 4421a582718a ("bpf: Make dst_port field in struct bpf_sock 16-bit wide") ?
+>> +enum {
+>> +	TCP_SYN_SENT = 2,
+>> +	TCP_LISTEN = 10,
+> Thanks for the clean up.
+>
+> A nit. directly use BPF_TCP_SYN_SENT and BPF_TCP_LISTEN.
 
-Yes, exactly. AFAICT there was no change in behavior in commit
-4421a582718a, that is:
-
-  1. 4-byte load behaves like it did, in its quirky way,
-  2. 2-byte load at offset dst_port works the same
-  3. 2-byte load at offset dst_port+2 continues to be rejected.
-
-> btw, is it the same as testing "return word[0] == bpf_hton's'(0xcafe);"
-
-Right. Clever observation. I got the impression from the original
-problem report [1] that the users were failing when trying to do:
-
-  bpf_htonl(sk->dst_port) == 0xcafe
-
-Hence I the bpf_htonl() use here.
-
-But perhaps it's better to promote this cleaner pattern in tests.
-
-I will respin it once we hash out the details of what the access should
-look like on big-endian with Ilya.
-
-[1] https://lore.kernel.org/bpf/20220113070245.791577-1-imagedong@tencent.com/
-
-[...]
+Thanks. Completely forgot about those.
