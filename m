@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1235C433EF
-	for <bpf@archiver.kernel.org>; Fri,  4 Mar 2022 17:32:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E983C433F5
+	for <bpf@archiver.kernel.org>; Fri,  4 Mar 2022 17:33:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241176AbiCDRdK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Mar 2022 12:33:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
+        id S238235AbiCDRdt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Mar 2022 12:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241255AbiCDRcz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Mar 2022 12:32:55 -0500
+        with ESMTP id S239409AbiCDRdr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Mar 2022 12:33:47 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BC8D1CD9F4
-        for <bpf@vger.kernel.org>; Fri,  4 Mar 2022 09:32:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B227013FBC
+        for <bpf@vger.kernel.org>; Fri,  4 Mar 2022 09:32:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646415127;
+        s=mimecast20190719; t=1646415161;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AHXclG4UU3SsFO1lmPzG4KrgiciUiPhbXYLOOW1McYw=;
-        b=LrghOQXNUOR0r0kuatoGrfArTEqrYDbRFzbT30v73POJbiNl7MumXnywvf8JMPLuxtTjVQ
-        APKp52hkHExi+L9CTgivORTFZxOt/4n1gOdw2+VNgzVhg3XA6aiE7f5nRDNWikj0KyhhHi
-        FLuiC3oQ6vcYGI9corXHnWfetncRevs=
+        bh=jxX8RNUdMtQkr8agXKyQdLygFyl1w1wHLWAQzrI5Jww=;
+        b=EBbGMnAbYdDaqhREQNZFD/dwJVWKGoEqux53IwUGg94ln9ZkWzABDKyoNPgBlMb0Q4Dh5B
+        wiGDlGpBgMEz/7m7J+9cG32JO3gbqQCkkhkWB4KFwOe2wA3aDyzqMaGybBxshiWkFklt6r
+        Aa3+iQKX2R/ONY6kKWJMR1PoeQJutlE=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-438-dEgrSUCrOImgtxojmRx8Bg-1; Fri, 04 Mar 2022 12:32:04 -0500
-X-MC-Unique: dEgrSUCrOImgtxojmRx8Bg-1
+ us-mta-604-rlFpjqNtNyGRyAZNWq3Ftw-1; Fri, 04 Mar 2022 12:32:38 -0500
+X-MC-Unique: rlFpjqNtNyGRyAZNWq3Ftw-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C19BA1091DA1;
-        Fri,  4 Mar 2022 17:32:01 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0971824FA8;
+        Fri,  4 Mar 2022 17:32:35 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5B2886595;
-        Fri,  4 Mar 2022 17:31:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AA1FE86595;
+        Fri,  4 Mar 2022 17:32:10 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v2 09/28] libbpf: add new attach type BPF_HID_RDESC_FIXUP
-Date:   Fri,  4 Mar 2022 18:28:33 +0100
-Message-Id: <20220304172852.274126-10-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v2 12/28] bpf/hid: add hid_{get|set}_data helpers
+Date:   Fri,  4 Mar 2022 18:28:36 +0100
+Message-Id: <20220304172852.274126-13-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
 References: <20220304172852.274126-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -66,30 +66,213 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adds the SEC definiton for report descriptor fixups.
+When we process an incoming HID report, it is common to have to account
+for fields that are not aligned in the report. HID is using 2 helpers
+hid_field_extract() and implement() to pick up any data at any offset
+within the report.
+
+Export those 2 helpers in BPF programs so users can also rely on them.
+The second net worth advantage of those helpers is that now we can
+fetch data anywhere in the report without knowing at compile time the
+location of it. The boundary checks are done in hid-bpf.c, to prevent
+a memory leak.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
 changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
+- split the patch with libbpf and HID left outside.
 ---
- tools/lib/bpf/libbpf.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/bpf-hid.h        |  4 +++
+ include/uapi/linux/bpf.h       | 32 ++++++++++++++++++++
+ kernel/bpf/hid.c               | 53 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 32 ++++++++++++++++++++
+ 4 files changed, 121 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 356bbd3ad2c7..192ef3901251 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8681,6 +8681,7 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
- 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
- 	SEC_DEF("hid/device_event",	HID, BPF_HID_DEVICE_EVENT, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
-+	SEC_DEF("hid/rdesc_fixup",	HID, BPF_HID_RDESC_FIXUP, SEC_ATTACHABLE_OPT | SEC_SLOPPY_PFX),
+diff --git a/include/linux/bpf-hid.h b/include/linux/bpf-hid.h
+index 0c5000b28b20..69bb28523ceb 100644
+--- a/include/linux/bpf-hid.h
++++ b/include/linux/bpf-hid.h
+@@ -93,6 +93,10 @@ struct bpf_hid_hooks {
+ 	int (*link_attach)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+ 	void (*link_attached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
+ 	void (*array_detached)(struct hid_device *hdev, enum bpf_hid_attach_type type);
++	int (*hid_get_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
++			    u64 offset, u32 n, u8 *data, u64 data_size);
++	int (*hid_set_data)(struct hid_device *hdev, u8 *buf, size_t buf_size,
++			    u64 offset, u32 n, u8 *data, u64 data_size);
  };
  
- #define MAX_TYPE_NAME_SIZE 32
+ #ifdef CONFIG_BPF
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a7a8d9cfcf24..4845a20e6f96 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5090,6 +5090,36 @@ union bpf_attr {
+  *	Return
+  *		0 on success, or a negative error in case of failure. On error
+  *		*dst* buffer is zeroed out.
++ *
++ * int bpf_hid_get_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
++ *	Description
++ *		Get the data of size n (in bits) at the given offset (bits) in the
++ *		ctx->event.data field and store it into data.
++ *
++ *		if n is less or equal than 32, we can address with bit precision,
++ *		the value in the buffer. However, data must be a pointer to a u32
++ *		and size must be 4.
++ *
++ *		if n is greater than 32, offset and n must be a multiple of 8
++ *		and the result is working with a memcpy internally.
++ *	Return
++ *		The length of data copied into data. On error, a negative value
++ *		is returned.
++ *
++ * int bpf_hid_set_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
++ *	Description
++ *		Set the data of size n (in bits) at the given offset (bits) in the
++ *		ctx->event.data field.
++ *
++ *		if n is less or equal than 32, we can address with bit precision,
++ *		the value in the buffer. However, data must be a pointer to a u32
++ *		and size must be 4.
++ *
++ *		if n is greater than 32, offset and n must be a multiple of 8
++ *		and the result is working with a memcpy internally.
++ *	Return
++ *		The length of data copied into ctx->event.data. On error, a negative
++ *		value is returned.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5284,6 +5314,8 @@ union bpf_attr {
+ 	FN(xdp_load_bytes),		\
+ 	FN(xdp_store_bytes),		\
+ 	FN(copy_from_user_task),	\
++	FN(hid_get_data),		\
++	FN(hid_set_data),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/bpf/hid.c b/kernel/bpf/hid.c
+index 37500313e270..640e55ba66ec 100644
+--- a/kernel/bpf/hid.c
++++ b/kernel/bpf/hid.c
+@@ -37,10 +37,63 @@ void bpf_hid_set_hooks(struct bpf_hid_hooks *hooks)
+ }
+ EXPORT_SYMBOL_GPL(bpf_hid_set_hooks);
+ 
++BPF_CALL_5(bpf_hid_get_data, void*, ctx, u64, offset, u32, n, void*, data, u64, size)
++{
++	struct hid_bpf_ctx *bpf_ctx = ctx;
++
++	if (!hid_hooks.hid_get_data)
++		return -EOPNOTSUPP;
++
++	return hid_hooks.hid_get_data(bpf_ctx->hdev,
++				      bpf_ctx->data, bpf_ctx->allocated_size,
++				      offset, n,
++				      data, size);
++}
++
++static const struct bpf_func_proto bpf_hid_get_data_proto = {
++	.func      = bpf_hid_get_data,
++	.gpl_only  = true,
++	.ret_type  = RET_INTEGER,
++	.arg1_type = ARG_PTR_TO_CTX,
++	.arg2_type = ARG_ANYTHING,
++	.arg3_type = ARG_ANYTHING,
++	.arg4_type = ARG_PTR_TO_MEM,
++	.arg5_type = ARG_CONST_SIZE_OR_ZERO,
++};
++
++BPF_CALL_5(bpf_hid_set_data, void*, ctx, u64, offset, u32, n, void*, data, u64, size)
++{
++	struct hid_bpf_ctx *bpf_ctx = ctx;
++
++	if (!hid_hooks.hid_set_data)
++		return -EOPNOTSUPP;
++
++	hid_hooks.hid_set_data(bpf_ctx->hdev,
++			       bpf_ctx->data, bpf_ctx->allocated_size,
++			       offset, n,
++			       data, size);
++	return 0;
++}
++
++static const struct bpf_func_proto bpf_hid_set_data_proto = {
++	.func      = bpf_hid_set_data,
++	.gpl_only  = true,
++	.ret_type  = RET_INTEGER,
++	.arg1_type = ARG_PTR_TO_CTX,
++	.arg2_type = ARG_ANYTHING,
++	.arg3_type = ARG_ANYTHING,
++	.arg4_type = ARG_PTR_TO_MEM,
++	.arg5_type = ARG_CONST_SIZE_OR_ZERO,
++};
++
+ static const struct bpf_func_proto *
+ hid_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+ 	switch (func_id) {
++	case BPF_FUNC_hid_get_data:
++		return &bpf_hid_get_data_proto;
++	case BPF_FUNC_hid_set_data:
++		return &bpf_hid_set_data_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index a7a8d9cfcf24..4845a20e6f96 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5090,6 +5090,36 @@ union bpf_attr {
+  *	Return
+  *		0 on success, or a negative error in case of failure. On error
+  *		*dst* buffer is zeroed out.
++ *
++ * int bpf_hid_get_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
++ *	Description
++ *		Get the data of size n (in bits) at the given offset (bits) in the
++ *		ctx->event.data field and store it into data.
++ *
++ *		if n is less or equal than 32, we can address with bit precision,
++ *		the value in the buffer. However, data must be a pointer to a u32
++ *		and size must be 4.
++ *
++ *		if n is greater than 32, offset and n must be a multiple of 8
++ *		and the result is working with a memcpy internally.
++ *	Return
++ *		The length of data copied into data. On error, a negative value
++ *		is returned.
++ *
++ * int bpf_hid_set_data(void *ctx, u64 offset, u32 n, u8 *data, u64 size)
++ *	Description
++ *		Set the data of size n (in bits) at the given offset (bits) in the
++ *		ctx->event.data field.
++ *
++ *		if n is less or equal than 32, we can address with bit precision,
++ *		the value in the buffer. However, data must be a pointer to a u32
++ *		and size must be 4.
++ *
++ *		if n is greater than 32, offset and n must be a multiple of 8
++ *		and the result is working with a memcpy internally.
++ *	Return
++ *		The length of data copied into ctx->event.data. On error, a negative
++ *		value is returned.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5284,6 +5314,8 @@ union bpf_attr {
+ 	FN(xdp_load_bytes),		\
+ 	FN(xdp_store_bytes),		\
+ 	FN(copy_from_user_task),	\
++	FN(hid_get_data),		\
++	FN(hid_set_data),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.35.1
 
