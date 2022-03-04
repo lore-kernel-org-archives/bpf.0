@@ -2,65 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9BA2C433EF
-	for <bpf@archiver.kernel.org>; Fri,  4 Mar 2022 14:56:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3127C433FE
+	for <bpf@archiver.kernel.org>; Fri,  4 Mar 2022 14:56:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbiCDO5M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Mar 2022 09:57:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
+        id S239981AbiCDO5N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Mar 2022 09:57:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiCDO5M (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Mar 2022 09:57:12 -0500
+        with ESMTP id S239360AbiCDO5N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Mar 2022 09:57:13 -0500
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F131BD9AC;
-        Fri,  4 Mar 2022 06:56:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50E1BD9AC;
+        Fri,  4 Mar 2022 06:56:25 -0800 (PST)
 Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224EFZTw011983;
-        Fri, 4 Mar 2022 14:55:20 GMT
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 224EFZuS011976;
+        Fri, 4 Mar 2022 14:55:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=JlAgFzVLhY5R7MWHn2Jcitz03VhS5pnPfmzBOrCrbLE=;
- b=rsVge4DVr6NtWEXpHzpq34K9Htmnt24leEsQzUAT8nh2LFlh5lapD1vAZxIQhpDhXD64
- XZysFOmTvS9HU0rUMhFDM6+cHF9qcBV+2QskrU71Z3dXpkaVJGLNfr1e7iXsJujIroZG
- qjNZjkQUQJ01deCAoz7v0a4Img7+mA7GBuwN4Ak/sMSRDg+KkE+DV6KEInkj5mTYAiDH
- izsLQpFHAY+qqp4KdfeN8VS2ZECyZoboyqz2KjnJB1f6i+br5TicBQ74wMoceWyZwnfS
- mjGRYneIhPeSLNxA+/hnXmXZU3il/Cn5wVOJCLxBE8a7lpoCVa3tB/urtyYKmrhFXYZe /w== 
+ bh=hUDIcnNiRpkx4ACdSK5QyG+INBUXgiHjMtuU7PlKHuU=;
+ b=nissb5D7vXCkM7b3UMa4Fz1zik+RCMIVm7xgOenj9WsXmV93siFwhWGz/SATMfQkwI9H
+ 2RFq5jw+Uq/3hFYhp0WQDRoKDoKQVJ9UAEwd8kdA138ZIC5mLtofJ5xR4TU/2Yh3cooA
+ Aye7NnxXHavwBgvlxJkXFtc7jtRDlPZnLYfq895RSqDvDtw5WRnoqz+RmP8v//T/+pia
+ OD7ABQ9+Drs2OPOMaYWsdWvkfm+imYZi2wl4V4zZljuJbI0p40QxzFpz7AXc/mm7oyOD
+ QchFwX0tzOsyq8AgS6DbvAEoiZifmF5PUzWJRDAJIoeIUFeqgE0t+ZH1Hn/aKsT7/w5B Aw== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ek4hvhxwy-1
+        by mx0b-00069f02.pphosted.com with ESMTP id 3ek4hvhxxa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 14:55:20 +0000
+        Fri, 04 Mar 2022 14:55:23 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 224EZUGD130215;
-        Fri, 4 Mar 2022 14:55:19 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2177.outbound.protection.outlook.com [104.47.57.177])
-        by userp3020.oracle.com with ESMTP id 3ek4jh0831-2
+        by userp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 224EZTP6129989;
+        Fri, 4 Mar 2022 14:55:22 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2044.outbound.protection.outlook.com [104.47.57.44])
+        by userp3020.oracle.com with ESMTP id 3ek4jh0869-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Mar 2022 14:55:18 +0000
+        Fri, 04 Mar 2022 14:55:22 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XZPrQ0gyOU+2dBTfyEEK4jqNlus9uZwrNfUj6AlznAWmgjtOqeoRZS3p/QCZ+E2DJk7Rf+3WxqrKd6VNClkZXqRCIilfVgxThEs88YTDW6KSmVoMQWy3+M1OiPHYfWnOuuxcfcR8e0RtYSyUz7PU9IOQKmcYHhso9cYIgINGahgVuwMt5Nx34m02QAjJTETgV3fZOhkTavur74mcA0Yy4/drkQFLr37NRg7U7KeVWqPDNLoDrZ1+1vTjllw2jtnLyScTWpha2juHKV2foE63YYXrZMFr2DwbyZz1ROAeHxO9rOQJNWJUjdaKZcvpy1NXKVbBu9wq8IivR4lm44Ld6g==
+ b=LvPwjchPoq0rbq11DNrGAKxKlUb/4HpXg54sv2BCDbWhTm11PfSq7ioFAAVeVN0RPYEjwjZCPSuN48XTfyx+40Hs5Kwt/ADrph5tCfPL86dRUEwJ0Xf2E96eAHRMO8btF4wOaVaP/0mGWPlmEa1ncT/yDaTgoVvqZC/AyjE1g2Jf1nTzOcTsMm7iTtgCv5kEw1AyjvRT0+q+PEr4awmU9eJb0x81KO6X+smhRVPCaumQfGCOm20lrCUBEKiXEH18GHZ7Rgu/qaseTMuxU7PzhX72FQFPIZqPEdFKT4OjXIc++HTdPp8XxkWJVWaSq243VDJWBB+m5wT2Rw2WjWYpTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JlAgFzVLhY5R7MWHn2Jcitz03VhS5pnPfmzBOrCrbLE=;
- b=S3eOiYzLISfJjm9P/4JAeCNGu56GGK7HnSBkTkDV8gEFmW07tocLqdNyOzmMzobY05FVPvrjjinzJ3e7ZKvwG/krVvgn/d7Xys1ywwlHQlAOVlntH8p8pBPK7dGEHAfP/DLqK/N7aMaG6M/XBZgFn3Vk8/rkg5ZDVwIF+jV6CSKPavgzXQdHqp5+X4CkjGyz9EVGd/DHQACAhnOeuSdJmuk77haOtWbI2wf1QChNjjG6J2zVOV1v/qRy8+P6IgddvbCFg+rYoJjJtHrDd7ODUkq9RfM3TeMyn8w+KKtN5LJgHcgsDf4zcvyvrKbQcZI/gXfRTpydYxInLcGptVPTgg==
+ bh=hUDIcnNiRpkx4ACdSK5QyG+INBUXgiHjMtuU7PlKHuU=;
+ b=euBeqJAUz6Blp2zd6W1JlbXV7mJ64OSI+AMOuAVCYfyF87IQRa/F6oWDUbDI7XDNaA1zv9XZPjz/TTJOxHyAcOi9TvzFFYqwACEW4Agf8a+qxGqiCJsOdzDhydGQZjiP0SGN5krONc2eGgEBuFG2Exk5X19x1Go1/KYkOtHtc2rY7oo/aYtzXsm+rd6YqBwHnTUdAGbQXdZ1PJ+beD/qfmma+QMzSxRDSYKCSMP38ZRsRxvc95MqN8iRpo4vIeic1giYdr6LelL3crLDr762ATSqvPudl59plz995Lkx8TMlTiBqVDw5yIxQcMC25NJ1MvMQMJQauKHr2oMuBPcVUQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JlAgFzVLhY5R7MWHn2Jcitz03VhS5pnPfmzBOrCrbLE=;
- b=luwqyjUzHhFMmwZInrdK0/HXW/C41fKBJ8uwX/VHKYh7YzZRUrE+JPXLmPna7H5MB8sSJ0kVgKFisKpVRotUJrDHVYBzU9wvKj/DbtekgrTdG+m+bkO99pujanmB4sAtRHqTzmm3JR9D7V6uSwgUNi/jGaWTTgefOnctTyJ//UQ=
+ bh=hUDIcnNiRpkx4ACdSK5QyG+INBUXgiHjMtuU7PlKHuU=;
+ b=c3u/lCyrZKikmbKcUNqFQut7qyqP7kqtXIYGsxpoAknm3Oe7M8yWwLVeEgd1AyVjqyNYazMAP7lHbFpVWC0DnCUHutfQI7pTdfKECdEqI/FoE3gLMm+/JZ8QIaUWj3LCeYELcPjiLh6wGunO0jQN6Pn1mP50mw4i4WBtrNzJkwQ=
 Received: from BYAPR10MB2663.namprd10.prod.outlook.com (2603:10b6:a02:a9::20)
  by DM6PR10MB3977.namprd10.prod.outlook.com (2603:10b6:5:1d0::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.25; Fri, 4 Mar
- 2022 14:55:16 +0000
+ 2022 14:55:18 +0000
 Received: from BYAPR10MB2663.namprd10.prod.outlook.com
  ([fe80::a0d5:610d:bcf:9b47]) by BYAPR10MB2663.namprd10.prod.outlook.com
  ([fe80::a0d5:610d:bcf:9b47%4]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
- 14:55:16 +0000
+ 14:55:18 +0000
 From:   Dongli Zhang <dongli.zhang@oracle.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
@@ -68,9 +68,9 @@ Cc:     linux-kernel@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, imagedong@tencent.com,
         joao.m.martins@oracle.com, joe.jin@oracle.com, dsahern@gmail.com,
         edumazet@google.com
-Subject: [PATCH net-next v6 1/3] net: tap: track dropped skb via kfree_skb_reason()
-Date:   Fri,  4 Mar 2022 06:55:05 -0800
-Message-Id: <20220304145507.1883-2-dongli.zhang@oracle.com>
+Subject: [PATCH net-next v6 3/3] net: tun: track dropped skb via kfree_skb_reason()
+Date:   Fri,  4 Mar 2022 06:55:07 -0800
+Message-Id: <20220304145507.1883-4-dongli.zhang@oracle.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220304145507.1883-1-dongli.zhang@oracle.com>
 References: <20220304145507.1883-1-dongli.zhang@oracle.com>
@@ -80,79 +80,79 @@ X-ClientProxiedBy: BYAPR05CA0034.namprd05.prod.outlook.com
  (2603:10b6:a02:a9::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3728bfd1-2b27-4e23-3322-08d9fdeefe77
+X-MS-Office365-Filtering-Correlation-Id: 7078ffa6-a4c9-4087-dd53-08d9fdeefee4
 X-MS-TrafficTypeDiagnostic: DM6PR10MB3977:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB3977BF43E9C856E2E9EDEF03F0059@DM6PR10MB3977.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <DM6PR10MB39776900D8F9645D1CE65DD0F0059@DM6PR10MB3977.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AnHMizgQGOlDon82PrgeMjztmf8l/xbODzyES4UMwMyUod9Nwc2xZ3vWvXkm2BWoOQKLMHTWX8GxfV3ogKAnGmQc2bX2K3KnhJecCNzcEMc1dVLlSPTvIfE6iGkgM99g/3xLPY49m85wtm24PG48mhFNwV6iRFRF3beQK8a14c3y64kCuVWlqUT5UbpJn8XTqTmrL+wx9qgwBEb6aHRY9EDefEoAdVJCEJOnMZLLcJwfyCb/yJadr7DFdCfcyGqUtDnVopTh4hjGJgjdsME0r/S2UgG0WD6KNry17ZsmIhC15iTywfOPifYtU+Uyo6+twYgPsX/g9Z0a9VQsI+Vim/toS8UuAaTLUDZMVNAoGkyK7LS156e3g+rZKkkkimDMfMBNnhf1sxS307zLkhqMShHTA16dvF/DhfbI7LlvUCZ2KSyA+UCeUtevHxROaYCUmAxMPhRjQhcglGefWaSxImSuAe5O2Qk7RhkWKks9gjUoRKadIFFscwsMPGV9R8E774ROCMlPBREGn7MvIuPErkGB/VMSByUW5lhw94zu9N6amsCoWRSYVDsbn9nPfXJVDv251KUA+SBADlrlXnTis7GvILCL8UmtYcNUsO9JUlETMtdjJhOec0lYKioJymngxs3EcmouQROPRAd21d1k3tSaez2asZFaSa7bTYYf1gaLEqhTSg9F/2MSTU1J1g3+R/22lbfmWmjg7TFPV/U7gw==
+X-Microsoft-Antispam-Message-Info: 8wBtCXJ3uFHtmAGOhcLBRD91d/7dERGNKfpmQQnT+zl5hs1l05Vh1JuHzC3eQ7SQ4CIGb+5Mkw8wgke9z01o9iOs2+4YUv87qb3q+ZrW9yOVUie9POf+gqYaIjBmc2NkKaHfOTMRaAYCgeVzTXzF9ZhAhkwRTJWrpFc256m0JHnBGASDSxI5vRadpcbI+FFaYig0j2MRLqtK7brj+H4OoKL/DooBV3zx2wCQFIaduwM+3SDBI9m0ZZ8ISAIfbAogt+JQt9ezDig1cuV6YpwhfQRb9jQ2F21UG6j/6jHxGll98bPtEZkQKllv4KfnLwR/tSNd1EzcBCfiPkfvtDAqnOctJwVqaR/TGKE+q3IqUK2TbqQt4d2ionG2ZEA6xKdtwu8x1U9kuQOxpGkbN2Nz6UCb1LNmFjymGSfYv4uUmnMFDuCqisywFNsQCYi+s/yiGXZPnUKlar498egnqVZw3QJg+nszZ5owZY7EwgRwYP0XJ1iw4S8ZvihPpskOls0MkQ6kBcpmLCLXjT0kl1Gl7LCiEXr22JimjAsSSCiSLeGEZbZ/gcnYFPYPUCC8fyepFkNkWpRCVJAOXSGEesM3s26+zO02dH6B2S7jmGN1KJifKXg8XkP82PsRNOHRNctntW3D/HSDK5Vvituaf4ChERPqT5XT7CKuVKAk6OdYqpoIqMqwdrU0P4JkWa5S36OcsBvgUSZK4e4/nhzQtYp3dA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2663.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(6486002)(316002)(86362001)(38100700002)(52116002)(1076003)(2616005)(6666004)(38350700002)(6512007)(6506007)(83380400001)(66556008)(66476007)(44832011)(66946007)(7416002)(4326008)(2906002)(36756003)(8936002)(5660300002)(8676002)(26005)(186003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y9U7qjhWo8UBhT015gLYUAdkV1BC+i3gkgcO1GkujTPD0m+3zdL8Bm/dXHle?=
- =?us-ascii?Q?R642CnDcI3/F+EpV7Ek5jAe6TuG0QH7FKAtm0GjAm4LaJlk7lld5R9jXmVcA?=
- =?us-ascii?Q?Exta9iO2c5ULncgyWr5b29GSE6SNt3uvTjv4b7Kfrx705qiUFrJjkxL4SH8e?=
- =?us-ascii?Q?Eo5g0am5XYPnzVJlHXIrSGsHFuYgGyjEJq/cajL5xVehwvX6uuBiUXvZgGy1?=
- =?us-ascii?Q?rNzpaMMljNcaU636UESX3fEbcrYyigQhNPDP112muouC7gBSA4NT7zDbRBEK?=
- =?us-ascii?Q?KP8aRXZH2rvZ0b6UYtYnCHmq5IT1yc6+ehgsY9c2rRrwStf/Ab3vAd7YVfak?=
- =?us-ascii?Q?r3ThZYbEB40rpj3FKbelfhXHT4F+GvcyvITOuek9DOx531PWOHSsQOYl5yQw?=
- =?us-ascii?Q?lK50byDLXfqG5dqd9h/ZTyN4ew16LkqpcDQKIqf88dDDNaHWeB/Kl/XdpGq8?=
- =?us-ascii?Q?PfKLMjnCO7jy0JRxW6KZzEeVCdqX9Yx0sa8AjRUgK4gQKxyQuwU5WLg4OMCA?=
- =?us-ascii?Q?oy1YkO90Bw8WqoDStMDObvwZDl+EUk6vcj6Wowx6j5q+M6IJAs7baYo5dcnr?=
- =?us-ascii?Q?C7Cd/XcNA39tXne54JFlsbUK+Y48pOwH6yQ99JJFGD9brT2uDR9QFDYlizj3?=
- =?us-ascii?Q?p1YGmqf3N6GfbOotHh3tgJgR+xBEWUxOYo4+qb1S6hwkoPlNqqLLU+18Tppg?=
- =?us-ascii?Q?BjIW99+3fiKxeJvCaa+Jn6A2uJKPXcFWhie8vUC/IitS3oRu6eLkm7WqWdQU?=
- =?us-ascii?Q?o0+tB4uT6DM4Te271jo+gLtv03YrUXEnHKLGAr3zQcqnSi9Qh1uHr0IZaZLc?=
- =?us-ascii?Q?1k1h9+Q6eS39BxhAyoH3KEKK9kD3pkJ6dse5yif2vrvSz+dKrp7l7iykXxxN?=
- =?us-ascii?Q?cP2I0xCl1NExiMZILi7i7RPa2GKT6N9p3QK+/m8QDktDHvMoDyrfaXWfeElr?=
- =?us-ascii?Q?GDu4TPZBcePQ6tfuU4+26i/9ihTmrz2FkCxHpjiM2cOk+txKfFpAUCS3NiS2?=
- =?us-ascii?Q?2gyMccgYetPLNF6jQSdOEqehtDX0KSn8XMiZiCsRCgq+fxdzdSTa48hFdiWS?=
- =?us-ascii?Q?Y82m3U66em6/hs2LJpj2Dv5autzMezHL7jQTRtcUzxEFU7fb43y45r0PUz8j?=
- =?us-ascii?Q?WLwIa9PoFn5MNgXtv+jdCsGykNmbqxZtBF4l26CjnwgSTeow/yXr79yN84OS?=
- =?us-ascii?Q?djGSujdmq0YSSYfYjBNYDIU7ilDtYIXD3U0/dfZcxm4hrVqujZiSHdFwGKQW?=
- =?us-ascii?Q?y9Y9Ljso71uPPXidVGxboWHYS0NOBcchcarGROUGudM86e+aNZtBFqBfoz73?=
- =?us-ascii?Q?WGOpgVykFI+cYmCw26gPCB11E+idpgoHm4RQfEDjpFdZrYSxK89+gMB1/Z+w?=
- =?us-ascii?Q?Rnb4m434gDGQ5uc/8XIqiGDMkl0az5ocyX2gcXC25As2akIQsRsQFmjaOfVF?=
- =?us-ascii?Q?Ty/IvxENiSxHudHlyfQnZ3ySoG9GZlrK5VX9UerqQz80jxYZwOeA125BMk4C?=
- =?us-ascii?Q?5DAcK2aFpnQqea8RO/wAGfAg88k83CzGfy3sAheSHJDktm15p4Ll0as3bLkW?=
- =?us-ascii?Q?f/wgpkDxhys28g9F+a+s4TWXeNbKAdozAlUbQ5+/KE50vOoQbc9x+A9jtyy5?=
- =?us-ascii?Q?qpxI7LoEGsE3RYFyNv6x4xg=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XsZJFWYJP5Ilr0zPO6alzpVjzK5knGJVuCcOBaBQpFuRCPZtc4LJhx9p3vBn?=
+ =?us-ascii?Q?vP8leycAarMt2nWEOBL2+hfo9Kc+82r1yA6QWsbk4vk/IC/RO83RYhN6SJUu?=
+ =?us-ascii?Q?2rk+IfIzQJlt0AVm5Ysv5yIjxVi75l1qCOPoge8mO9O22GQZMQRBHUc8rN7n?=
+ =?us-ascii?Q?5ShKNQjOk4bUZL3moMCKYDgYcKfmYj1fvMWg+y6q8d/8oyaKJNVr3bzw615/?=
+ =?us-ascii?Q?RpBsoNRgP9RWoWHstjNuhCVgFM/w4/QqKz2GyH8KswFnR2cEfSC/JVrHdyl4?=
+ =?us-ascii?Q?AsMBcvPHd/wZz3Qrv9jI1QhWPjSCs5AmyA07cuikxGcTl35St7iFZkxEOBEs?=
+ =?us-ascii?Q?Y34PPvdTgPF9wZnlraA3To0GaFgBJgzreeZ1Q3VSOlbqfE4S+JGgnjVdaTJ1?=
+ =?us-ascii?Q?nCp2E9zI9E50Yl1TZEs0zOrGoM8oT1U5l6GFnYvXPx0eS9ix+BlWEdbvcW6p?=
+ =?us-ascii?Q?F+Jef/dwEieDZcsniV78dT5DPDZGAI8Tg6Jw0RLPt3obEoREz81WhHv0x1TE?=
+ =?us-ascii?Q?PC+rY5A8Mpu/XatE9RNvdwG2165xo3N+5lSyGghV6ocHIRdh9iLNu59GphYS?=
+ =?us-ascii?Q?XKyxZVAsmOKDymny8CbKp+xHhIWxr4l5LaGHUK0B70jUbACKQvxQ1rKIeHtR?=
+ =?us-ascii?Q?mF/X/iF5/nM3nF6ZJvkri9Gm2bMFuxSXhSU3qesrwawvnpvzDVWLvgeizIP3?=
+ =?us-ascii?Q?IytNv//L9rB5QIPawbb103peLVwKmwJITUrVdIGfYQbvx71UF5tyJUMESJ1a?=
+ =?us-ascii?Q?zCoLMle5TNOKsYo4nzrAiNA6KCLWrkeYFB2eGzfvzx2fCbKVtH5IUryb0D8E?=
+ =?us-ascii?Q?O+2Hsnq1IWi0coC2I/fmYKlFh1cV60c2P7RASGCK1O546YrYEx3mtyItUiTc?=
+ =?us-ascii?Q?qF6zOuEJRgM/PiOisZqBZsFYiRZ2IYuq0wrvQsXykFKCrrJuCBRSyVHp3rvZ?=
+ =?us-ascii?Q?PV8pdpV8yzXOYRQAjD5I/42nrgV1TxxIJmY83aeb0kSXS2kWv1s2yNPIfLRm?=
+ =?us-ascii?Q?dinVGFhQx/PRck9O353wYeTXiLUCtzp2VkBI87AzLyKO3+0fYbRPT46g2SQ5?=
+ =?us-ascii?Q?WLtchFXPg4rfe+GdU5+jRq1XOMNAnXNd4iAIA8LwURZ818GH+TARB97h3jmU?=
+ =?us-ascii?Q?tmGA7tO72kFI2JWKsDvrMdvK/HgPfHBOPRVw9CToDDRrHWlxwUepZ1FZbyGi?=
+ =?us-ascii?Q?Zq6JBhX83grMTASKKtyz796fuyxccEnbe5BZChjOFy3D/Ud9+4Y3nyeAppjp?=
+ =?us-ascii?Q?vBIeS7yDoVEWNGiidN7jiDEq65neLYkqr2MfSAkJKxXXMl63E1xwd3nh+zlN?=
+ =?us-ascii?Q?Hnt8WOB/8t7jKNkH9GCUjt1sVgm4m26hq+mBFU18MTiRG/8XOCu5wjFXwmR1?=
+ =?us-ascii?Q?wQVuV6Rfc0LVnZuibhrbHS7Zq5Fvtv9sfGJZKavcUViXhbz1zda2JsvzXHEO?=
+ =?us-ascii?Q?SW7bVlg8FzCL+H8fC/U9zzG/lCKtAWszBkY1KQSA8MnEWx4j3Fne3ecZOmlF?=
+ =?us-ascii?Q?S6x6jzyKaZSB0BhhFwBrV1OAiZQRISEUUNDUm01MT/g6TGH8AClzyrMBroku?=
+ =?us-ascii?Q?XAfUL7y/heyWHNf4Db7/zSahditsyqRyj577nwJTZ144yxyDZk+EQD0ot02t?=
+ =?us-ascii?Q?uer5bnltpSjwB0kJYDwFelY=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3728bfd1-2b27-4e23-3322-08d9fdeefe77
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7078ffa6-a4c9-4087-dd53-08d9fdeefee4
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2663.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 14:55:16.3998
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 14:55:17.1653
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ChOt+8keF/vvHqnDs4jwxj2DB5zjCoanqXRZZNEk7BdCph1RIteBWvH14aoqYXbXjh215RNVPS5fp20ro7IN9Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: xY9Zzbt8TzZKY309Onb1n9CucJq2gCLTbavV+Ewfe7brg2/+HAazETX5tLrQsd2+DnypaeeWpfv0z0NVrlyMVg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3977
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10276 signatures=690470
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
  adultscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
  mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2203040080
-X-Proofpoint-ORIG-GUID: m5bR0lRzcxcdddWsK8khUNQrH4L5tuxl
-X-Proofpoint-GUID: m5bR0lRzcxcdddWsK8khUNQrH4L5tuxl
+X-Proofpoint-ORIG-GUID: C08cUcD-gz7Btndm792AiSkD97cmXIWo
+X-Proofpoint-GUID: C08cUcD-gz7Btndm792AiSkD97cmXIWo
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The TAP can be used as vhost-net backend. E.g., the tap_handle_frame() is
-the interface to forward the skb from TAP to vhost-net/virtio-net.
+The TUN can be used as vhost-net backend. E.g, the tun_net_xmit() is the
+interface to forward the skb from TUN to vhost-net/virtio-net.
 
-However, there are many "goto drop" in the TAP driver. Therefore, the
+However, there are many "goto drop" in the TUN driver. Therefore, the
 kfree_skb_reason() is involved at each "goto drop" to help userspace
 ftrace/ebpf to track the reason for the loss of packets.
 
 The below reasons are introduced:
 
-- SKB_DROP_REASON_SKB_CSUM
-- SKB_DROP_REASON_SKB_GSO_SEG
-- SKB_DROP_REASON_SKB_UCOPY_FAULT
-- SKB_DROP_REASON_DEV_HDR
-- SKB_DROP_REASON_FULL_RING
+- SKB_DROP_REASON_DEV_READY
+- SKB_DROP_REASON_NOMEM
+- SKB_DROP_REASON_HDR_TRUNC
+- SKB_DROP_REASON_TAP_FILTER
+- SKB_DROP_REASON_TAP_TXFILTER
 
 Cc: Joao Martins <joao.m.martins@oracle.com>
 Cc: Joe Jin <joe.jin@oracle.com>
@@ -162,166 +162,183 @@ Changed since v1:
   - revise the reason name
 Changed since v2:
   - declare drop_reason as type "enum skb_drop_reason"
-  - handle the drop in skb_list_walk_safe() case
+Changed since v3:
+  - rename to TAP_FILTER and TAP_TXFILTER
+  - honor reverse xmas tree style declaration for 'drop_reason' in
+    tun_net_xmit()
 Changed since v4:
-  - add 'computation' to SKB_CSUM comment
-  - change COPY_DATA to UCOPY_FAULT
-  - add 'metadata' to DEV_HDR comment
-Changed since v5:
-  - rebase to net-next
+  - expand comment on DEV_READY
+  - change SKB_TRIM to NOMEM
+  - chnage SKB_PULL to HDR_TRUNC
 
- drivers/net/tap.c          | 35 +++++++++++++++++++++++++----------
- include/linux/skbuff.h     | 13 +++++++++++++
+ drivers/net/tun.c          | 37 ++++++++++++++++++++++++++++---------
+ include/linux/skbuff.h     | 18 ++++++++++++++++++
  include/trace/events/skb.h |  5 +++++
- 3 files changed, 43 insertions(+), 10 deletions(-)
+ 3 files changed, 51 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index ba2ef5437e16..c3d42062559d 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -322,6 +322,7 @@ rx_handler_result_t tap_handle_frame(struct sk_buff **pskb)
- 	struct tap_dev *tap;
- 	struct tap_queue *q;
- 	netdev_features_t features = TAP_FEATURES;
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 6e06c846fe82..bab92e489fba 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1058,6 +1058,7 @@ static unsigned int run_ebpf_filter(struct tun_struct *tun,
+ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct tun_struct *tun = netdev_priv(dev);
 +	enum skb_drop_reason drop_reason;
+ 	int txq = skb->queue_mapping;
+ 	struct netdev_queue *queue;
+ 	struct tun_file *tfile;
+@@ -1067,8 +1068,10 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	tfile = rcu_dereference(tun->tfiles[txq]);
  
- 	tap = tap_dev_get_rcu(dev);
- 	if (!tap)
-@@ -343,12 +344,16 @@ rx_handler_result_t tap_handle_frame(struct sk_buff **pskb)
- 		struct sk_buff *segs = __skb_gso_segment(skb, features, false);
- 		struct sk_buff *next;
- 
--		if (IS_ERR(segs))
-+		if (IS_ERR(segs)) {
-+			drop_reason = SKB_DROP_REASON_SKB_GSO_SEG;
- 			goto drop;
-+		}
- 
- 		if (!segs) {
--			if (ptr_ring_produce(&q->ring, skb))
-+			if (ptr_ring_produce(&q->ring, skb)) {
-+				drop_reason = SKB_DROP_REASON_FULL_RING;
- 				goto drop;
-+			}
- 			goto wake_up;
- 		}
- 
-@@ -356,8 +361,9 @@ rx_handler_result_t tap_handle_frame(struct sk_buff **pskb)
- 		skb_list_walk_safe(segs, skb, next) {
- 			skb_mark_not_on_list(skb);
- 			if (ptr_ring_produce(&q->ring, skb)) {
--				kfree_skb(skb);
--				kfree_skb_list(next);
-+				drop_reason = SKB_DROP_REASON_FULL_RING;
-+				kfree_skb_reason(skb, drop_reason);
-+				kfree_skb_list_reason(next, drop_reason);
- 				break;
- 			}
- 		}
-@@ -369,10 +375,14 @@ rx_handler_result_t tap_handle_frame(struct sk_buff **pskb)
- 		 */
- 		if (skb->ip_summed == CHECKSUM_PARTIAL &&
- 		    !(features & NETIF_F_CSUM_MASK) &&
--		    skb_checksum_help(skb))
-+		    skb_checksum_help(skb)) {
-+			drop_reason = SKB_DROP_REASON_SKB_CSUM;
- 			goto drop;
--		if (ptr_ring_produce(&q->ring, skb))
-+		}
-+		if (ptr_ring_produce(&q->ring, skb)) {
-+			drop_reason = SKB_DROP_REASON_FULL_RING;
- 			goto drop;
-+		}
- 	}
- 
- wake_up:
-@@ -383,7 +393,7 @@ rx_handler_result_t tap_handle_frame(struct sk_buff **pskb)
- 	/* Count errors/drops only here, thus don't care about args. */
- 	if (tap->count_rx_dropped)
- 		tap->count_rx_dropped(tap);
--	kfree_skb(skb);
-+	kfree_skb_reason(skb, drop_reason);
- 	return RX_HANDLER_CONSUMED;
- }
- EXPORT_SYMBOL_GPL(tap_handle_frame);
-@@ -632,6 +642,7 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 	int depth;
- 	bool zerocopy = false;
- 	size_t linear;
-+	enum skb_drop_reason drop_reason;
- 
- 	if (q->flags & IFF_VNET_HDR) {
- 		vnet_hdr_len = READ_ONCE(q->vnet_hdr_sz);
-@@ -696,8 +707,10 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 	else
- 		err = skb_copy_datagram_from_iter(skb, 0, from, len);
- 
--	if (err)
-+	if (err) {
-+		drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
- 		goto err_kfree;
+ 	/* Drop packet if interface is not attached */
+-	if (!tfile)
++	if (!tfile) {
++		drop_reason = SKB_DROP_REASON_DEV_READY;
+ 		goto drop;
 +	}
  
- 	skb_set_network_header(skb, ETH_HLEN);
- 	skb_reset_mac_header(skb);
-@@ -706,8 +719,10 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 	if (vnet_hdr_len) {
- 		err = virtio_net_hdr_to_skb(skb, &vnet_hdr,
- 					    tap_is_little_endian(q));
--		if (err)
-+		if (err) {
-+			drop_reason = SKB_DROP_REASON_DEV_HDR;
- 			goto err_kfree;
-+		}
- 	}
+ 	if (!rcu_dereference(tun->steering_prog))
+ 		tun_automq_xmit(tun, skb);
+@@ -1078,22 +1081,32 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	/* Drop if the filter does not like it.
+ 	 * This is a noop if the filter is disabled.
+ 	 * Filter can be enabled only for the TAP devices. */
+-	if (!check_filter(&tun->txflt, skb))
++	if (!check_filter(&tun->txflt, skb)) {
++		drop_reason = SKB_DROP_REASON_TAP_TXFILTER;
+ 		goto drop;
++	}
  
- 	skb_probe_transport_header(skb);
-@@ -738,7 +753,7 @@ static ssize_t tap_get_user(struct tap_queue *q, void *msg_control,
- 	return total_len;
+ 	if (tfile->socket.sk->sk_filter &&
+-	    sk_filter(tfile->socket.sk, skb))
++	    sk_filter(tfile->socket.sk, skb)) {
++		drop_reason = SKB_DROP_REASON_SOCKET_FILTER;
+ 		goto drop;
++	}
  
- err_kfree:
+ 	len = run_ebpf_filter(tun, skb, len);
+-	if (len == 0)
++	if (len == 0) {
++		drop_reason = SKB_DROP_REASON_TAP_FILTER;
+ 		goto drop;
++	}
+ 
+-	if (pskb_trim(skb, len))
++	if (pskb_trim(skb, len)) {
++		drop_reason = SKB_DROP_REASON_NOMEM;
+ 		goto drop;
++	}
+ 
+-	if (unlikely(skb_orphan_frags_rx(skb, GFP_ATOMIC)))
++	if (unlikely(skb_orphan_frags_rx(skb, GFP_ATOMIC))) {
++		drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
+ 		goto drop;
++	}
+ 
+ 	skb_tx_timestamp(skb);
+ 
+@@ -1104,8 +1117,10 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+ 
+ 	nf_reset_ct(skb);
+ 
+-	if (ptr_ring_produce(&tfile->tx_ring, skb))
++	if (ptr_ring_produce(&tfile->tx_ring, skb)) {
++		drop_reason = SKB_DROP_REASON_FULL_RING;
+ 		goto drop;
++	}
+ 
+ 	/* NETIF_F_LLTX requires to do our own update of trans_start */
+ 	queue = netdev_get_tx_queue(dev, txq);
+@@ -1122,7 +1137,7 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
+ drop:
+ 	atomic_long_inc(&dev->tx_dropped);
+ 	skb_tx_error(skb);
 -	kfree_skb(skb);
 +	kfree_skb_reason(skb, drop_reason);
+ 	rcu_read_unlock();
+ 	return NET_XMIT_DROP;
+ }
+@@ -1720,6 +1735,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 	u32 rxhash = 0;
+ 	int skb_xdp = 1;
+ 	bool frags = tun_napi_frags_enabled(tfile);
++	enum skb_drop_reason drop_reason;
  
- err:
- 	rcu_read_lock();
+ 	if (!(tun->flags & IFF_NO_PI)) {
+ 		if (len < sizeof(pi))
+@@ -1823,9 +1839,10 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 
+ 		if (err) {
+ 			err = -EFAULT;
++			drop_reason = SKB_DROP_REASON_SKB_UCOPY_FAULT;
+ drop:
+ 			atomic_long_inc(&tun->dev->rx_dropped);
+-			kfree_skb(skb);
++			kfree_skb_reason(skb, drop_reason);
+ 			if (frags) {
+ 				tfile->napi.skb = NULL;
+ 				mutex_unlock(&tfile->napi_mutex);
+@@ -1872,6 +1889,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 	case IFF_TAP:
+ 		if (frags && !pskb_may_pull(skb, ETH_HLEN)) {
+ 			err = -ENOMEM;
++			drop_reason = SKB_DROP_REASON_HDR_TRUNC;
+ 			goto drop;
+ 		}
+ 		skb->protocol = eth_type_trans(skb, tun->dev);
+@@ -1925,6 +1943,7 @@ static ssize_t tun_get_user(struct tun_struct *tun, struct tun_file *tfile,
+ 	if (unlikely(!(tun->dev->flags & IFF_UP))) {
+ 		err = -EIO;
+ 		rcu_read_unlock();
++		drop_reason = SKB_DROP_REASON_DEV_READY;
+ 		goto drop;
+ 	}
+ 
 diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 2be263184d1e..67cfff4065b6 100644
+index 67cfff4065b6..34f572271c0c 100644
 --- a/include/linux/skbuff.h
 +++ b/include/linux/skbuff.h
-@@ -412,6 +412,19 @@ enum skb_drop_reason {
- 					 * this means that L3 protocol is
- 					 * not supported
+@@ -424,7 +424,25 @@ enum skb_drop_reason {
+ 	SKB_DROP_REASON_DEV_HDR,	/* device driver specific
+ 					 * header/metadata is invalid
  					 */
-+	SKB_DROP_REASON_SKB_CSUM,	/* sk_buff checksum computation
-+					 * error
++	/* the device is not ready to xmit/recv due to any of its data
++	 * structure that is not up/ready/initialized, e.g., the IFF_UP is
++	 * not set, or driver specific tun->tfiles[txq] is not initialized
++	 */
++	SKB_DROP_REASON_DEV_READY,
+ 	SKB_DROP_REASON_FULL_RING,	/* ring buffer is full */
++	SKB_DROP_REASON_NOMEM,		/* error due to OOM */
++	SKB_DROP_REASON_HDR_TRUNC,      /* failed to trunc/extract the header
++					 * from networking data, e.g., failed
++					 * to pull the protocol header from
++					 * frags via pskb_may_pull()
 +					 */
-+	SKB_DROP_REASON_SKB_GSO_SEG,	/* gso segmentation error */
-+	SKB_DROP_REASON_SKB_UCOPY_FAULT,	/* failed to copy data from
-+						 * user space, e.g., via
-+						 * zerocopy_sg_from_iter()
-+						 * or skb_orphan_frags_rx()
-+						 */
-+	SKB_DROP_REASON_DEV_HDR,	/* device driver specific
-+					 * header/metadata is invalid
++	SKB_DROP_REASON_TAP_FILTER,     /* dropped by (ebpf) filter directly
++					 * attached to tun/tap, e.g., via
++					 * TUNSETFILTEREBPF
 +					 */
-+	SKB_DROP_REASON_FULL_RING,	/* ring buffer is full */
++	SKB_DROP_REASON_TAP_TXFILTER,	/* dropped by tx filter implemented
++					 * at tun/tap, e.g., check_filter()
++					 */
  	SKB_DROP_REASON_MAX,
  };
  
 diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index c0769d943f8e..240e7e7591fc 100644
+index 240e7e7591fc..e1670e1e4934 100644
 --- a/include/trace/events/skb.h
 +++ b/include/trace/events/skb.h
-@@ -51,6 +51,11 @@
- 	EM(SKB_DROP_REASON_XDP, XDP)				\
- 	EM(SKB_DROP_REASON_TC_INGRESS, TC_INGRESS)		\
- 	EM(SKB_DROP_REASON_PTYPE_ABSENT, PTYPE_ABSENT)		\
-+	EM(SKB_DROP_REASON_SKB_CSUM, SKB_CSUM)			\
-+	EM(SKB_DROP_REASON_SKB_GSO_SEG, SKB_GSO_SEG)		\
-+	EM(SKB_DROP_REASON_SKB_UCOPY_FAULT, SKB_UCOPY_FAULT)	\
-+	EM(SKB_DROP_REASON_DEV_HDR, DEV_HDR)			\
-+	EM(SKB_DROP_REASON_FULL_RING, FULL_RING)		\
+@@ -55,7 +55,12 @@
+ 	EM(SKB_DROP_REASON_SKB_GSO_SEG, SKB_GSO_SEG)		\
+ 	EM(SKB_DROP_REASON_SKB_UCOPY_FAULT, SKB_UCOPY_FAULT)	\
+ 	EM(SKB_DROP_REASON_DEV_HDR, DEV_HDR)			\
++	EM(SKB_DROP_REASON_DEV_READY, DEV_READY)		\
+ 	EM(SKB_DROP_REASON_FULL_RING, FULL_RING)		\
++	EM(SKB_DROP_REASON_NOMEM, NOMEM)			\
++	EM(SKB_DROP_REASON_HDR_TRUNC, HDR_TRUNC)		\
++	EM(SKB_DROP_REASON_TAP_FILTER, TAP_FILTER)		\
++	EM(SKB_DROP_REASON_TAP_TXFILTER, TAP_TXFILTER)		\
  	EMe(SKB_DROP_REASON_MAX, MAX)
  
  #undef EM
