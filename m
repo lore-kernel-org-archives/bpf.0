@@ -2,471 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85460C433EF
-	for <bpf@archiver.kernel.org>; Fri,  4 Mar 2022 19:17:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB56C433EF
+	for <bpf@archiver.kernel.org>; Fri,  4 Mar 2022 19:54:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiCDTSK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Mar 2022 14:18:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S229453AbiCDTys (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Mar 2022 14:54:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiCDTSJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Mar 2022 14:18:09 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F780230E6E
-        for <bpf@vger.kernel.org>; Fri,  4 Mar 2022 11:17:12 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d726bd83a2so78853537b3.20
-        for <bpf@vger.kernel.org>; Fri, 04 Mar 2022 11:17:12 -0800 (PST)
+        with ESMTP id S229436AbiCDTyr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Mar 2022 14:54:47 -0500
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EE81C9B5C
+        for <bpf@vger.kernel.org>; Fri,  4 Mar 2022 11:50:03 -0800 (PST)
+Received: by mail-il1-f180.google.com with SMTP id 13so1350316ilq.5
+        for <bpf@vger.kernel.org>; Fri, 04 Mar 2022 11:50:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=7Fdyq2zl3Pn/KJWhFsp8uIQPyOE72aunF6Y/Yf0GGQI=;
-        b=s6aV8QLut1V+onK6489O8IDLDeMnKDrp75Va/PwX/npSBsBixhEyLAxXvzXVc1xMxA
-         skrK+8Nqg3q7pycesMMQ9GgWeOtWQ/AH5mznt7KZzkTGb+qAKWeWpbD3xIRgHMABdToX
-         BUABCCiPHA1f3RGyJTiFqSQoO7RHq4hkvYn2zT7WW6tXTNpeQF95ySUFNQayYtBJFQbZ
-         kRtTC+UKStRYIm7iAol4JEsNiZ71jycfjIlboGzapdieXZsfC+wnod/ygU9/0Q5iVxMh
-         vzrb00OfroXKdttxiD1J1C0xEKi2T2/fAx9tAe75sDCWdWRMeG3Kw83K8+YP1gxxesyx
-         aoFg==
+        bh=nZBTNphfaHhZVTqi3GXUcMB6Eq7viceo1VRkv3S8cUU=;
+        b=iW/DIJCyQv3qLJJkiOFoKIE6kAfYzY9dUJC+SMGpCaGgvYx83Hn1tpOWmkvo2AZGue
+         yY/NPxkhrrtyAC/118in2LFjvvd0khkGCPHSxubBqWimW0TkpCQXcg++2sWimrHEkBqT
+         iPKUMAmyZe7a9LNhCbw+8cTclOG2hfADerrbfoGg83ZBBX94BOG4AMdCvb9QNjlpuXwW
+         TUnpz6cQh5QX33CCYHUlgNjuVi5mB7ptxRalhJpVNt8NvUhPd4zzOQBoYAKMcQtEvQLy
+         axAASkbwl9VwEMnhduRvzUfIxQzDBOgLk/SVrN7xEIbMxJxACTRJGrU22y6kxl1CpdgU
+         HIVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=7Fdyq2zl3Pn/KJWhFsp8uIQPyOE72aunF6Y/Yf0GGQI=;
-        b=HqRCik07cxzIQE6e+AlSjUPb4HJHhVytsNValmrnOhO65jdQoslQdSR0ltvWlBMsK2
-         MwFDhLd60lZ5sq0lJL7b6Anf+/WpoYVSAweYZQv/rJCw1OtbJL6gPrBcpCRhyX09cXFA
-         0eGcRbg9MzsfEFMoPxZjlz6suuWdK+AB8LR6f8+K3TN4n8ek5jkJm+51eFa/QFfG7wYz
-         REpxp4D/ARGxfUuwD1DfeLiYxL51Bp7N6babzF2dW/jq61odc9P5v8nzqa9r2vjLqJlA
-         pEjNBIc2UyMnuQto1O7wC+e9CLX4vnRvEW+cCZoXtIWbY4zI9FyCqDKg4uXxAena/Br+
-         4G3A==
-X-Gm-Message-State: AOAM532SRB2ElFjaLfiB5qUEuOt4AwmUPLvQYwjBzdn0eyT3wHvmGpAl
-        C36Y8gD7Q1GwomAMOkmuPr/m0jbJIqE=
-X-Google-Smtp-Source: ABdhPJyiCfBKoQ9i/MFZRr93lw0d4r7iOLd5mSKkWydJ7oR1xp5xZ79128CVeq29B8xM9Gr7k1VOlHzxTPQ=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:d204:6f81:5498:9251])
- (user=haoluo job=sendgmr) by 2002:a25:7804:0:b0:628:ec4c:989b with SMTP id
- t4-20020a257804000000b00628ec4c989bmr3202280ybc.428.1646421430967; Fri, 04
- Mar 2022 11:17:10 -0800 (PST)
-Date:   Fri,  4 Mar 2022 11:16:57 -0800
-In-Reply-To: <20220304191657.981240-1-haoluo@google.com>
-Message-Id: <20220304191657.981240-5-haoluo@google.com>
-Mime-Version: 1.0
-References: <20220304191657.981240-1-haoluo@google.com>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-Subject: [PATCH bpf-next v1 4/4] selftests/bpf: Add a test for btf_type_tag "percpu"
-From:   Hao Luo <haoluo@google.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, yhs@fb.com
-Cc:     acme@kernel.org, KP Singh <kpsingh@kernel.org>,
-        bpf@vger.kernel.org, Hao Luo <haoluo@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nZBTNphfaHhZVTqi3GXUcMB6Eq7viceo1VRkv3S8cUU=;
+        b=Kb2FaCfj5TzLblIVkgSv2fipTS0So3sebdkQC6689/kozGPqajLrePuh6upd2CHNKJ
+         9iz/6IKitp8TWL9Wmu/Th7ucvzR1QM6lC9EiB9JYZ4A5rzwXuarxHbpAV1yXCPGAlM6c
+         q+IZLY6surmVZZsXD8yMlXRXPt2UQAyLltqmVzAERkY3zERqJP47vOxIzr4XWhOQNe2E
+         TeETkH2uqJ/yEK92WlOVwL0HA0aBqatXcvqN7KuqtqIXzFl4jTVGeWK0d+nletfXngbj
+         hrzyISrxsi6CXJEmqWh+D2Tm4igO+mcc+jXJcALxpNdDHmI666Uz8N5YaMm6cGWmXn8x
+         NgOw==
+X-Gm-Message-State: AOAM533MxbxjCpFDJ+1vbOyjeQuJrZjtOgeNetwK1dzoKblEHWVxpnt2
+        0igXO1x4Yv2Bn2EWO5uUDM7BLaDDEpTNHUtEp13ryPLh40vaGQ==
+X-Google-Smtp-Source: ABdhPJwYSnjUCUxc5D0JN5bpRurU8X3U2nMy3O9GLJ4XTfY2rnj1CihLmXlGBAnws/9sJAlLOafA1qf3Rjrf38elvMI=
+X-Received: by 2002:a5e:c648:0:b0:640:bc31:cbec with SMTP id
+ s8-20020a5ec648000000b00640bc31cbecmr143573ioo.79.1646422818357; Fri, 04 Mar
+ 2022 11:40:18 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1646188795.git.delyank@fb.com> <13cba9e1c39e999e7bfb14f1f986b76d13e150b3.1646188795.git.delyank@fb.com>
+ <CAEf4Bza55GsV1oZa=d9UuscNerMsvFPtXSTQ9qr8mrxPQVu7QA@mail.gmail.com>
+ <CAEf4BzbHM_5Ytw=bMbw8Lif+EMyyCmvTRt36DnkGB00+ovX26w@mail.gmail.com> <af229a64d7f64996c75e6406b146ff00df3e9f5a.camel@fb.com>
+In-Reply-To: <af229a64d7f64996c75e6406b146ff00df3e9f5a.camel@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 4 Mar 2022 11:40:07 -0800
+Message-ID: <CAEf4BzaTLjf+Z51Gx=3MQKUJh2WAEq6o+Ps3KSV4tANK_GECzg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/4] libbpf: add subskeleton scaffolding
+To:     Delyan Kratunov <delyank@fb.com>
+Cc:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add test for percpu btf_type_tag. Similar to the "user" tag, we test
-the following cases:
+On Thu, Mar 3, 2022 at 11:09 AM Delyan Kratunov <delyank@fb.com> wrote:
+>
+> On Wed, 2022-03-02 at 20:34 -0800, Andrii Nakryiko wrote:
+> > >
+> >
+> > forgot to mention, this patch logically probably should go before
+> > bpftool changes: 1) define types and APIs in libbpf, and only then 2)
+> > "use" those in bpftool
+>
+> Sure.
+>
+> > > >
+> > > > +struct bpf_sym_skeleton {
+> > >
+> > > I tried to get used to this "sym" terminology for a bit, but it still
+> > > feels off. From user's perspective all this are variables. Any
+> > > objections to use "var" terminology?
+>
+> "var" has a specific meaning in btf and I didn't want to make bpf_var_skeleton
+> look related to btf_var for example. Given the extern usage that libs require, I
+> figured "sym" would make sense to the user.
+>
 
- 1. __percpu struct field.
- 2. __percpu as function parameter.
- 3. per_cpu_ptr() accepts dynamically allocated __percpu memory.
+Even for extern cases, we only generate stuff that really is a
+variable. That is, it has allocated memory and there is specific
+value. Only .kconfig is like that. .ksyms, for example, doesn't get
+any exposure in skeleton as it can't be used from user-space code.
 
-Because the test for "user" and the test for "percpu" are very similar,
-a little bit of refactoring has been done in btf_tag.c. Basically, both
-tests share the same function for loading vmlinux and module btf.
+For me, symbol is just way too generic (could be basically anything,
+including ELF section symbol, function, etc, etc). But our use case is
+always variables available to both user-space and BPF code. I don't
+think btf_var vs btf_var_skeleton confusion is significant (and even
+then, each extern in .kconfig has corresponding BTF_KIND_VAR, so it
+all is in sync).
 
-Example output from log:
+> If you don't think the confusion with btf_var is significant, I can rename it -
+> this is all used by generated code anyway.
+>
+> > >
+> > > > +       const char *name;
+> > > > +       const char *section;
+> > >
+> > > what if we store a pointer to struct bpf_map * instead, that way we
+> > > won't need to search, we'll just have a pointer ready
+>
+> We'd have to search *somewhere*. I'd rather have the search inside libbpf than
+> inside the generated code. Besides, finding the right bpf_map from within the
+> subskeleton is pretty annoying - you'll have to do suffix searches on the
+> bpf_map names in the passed-in bpf_object and codegening all that is unnecessary
+> when libbpf can look at real_name.
 
- > ./test_progs -v -t btf_tag
+I think you misunderstood what I proposed. There is no explicit
+searching. Here is a simple example of sub-skeleton struct and how
+code-generated code will fill it out
 
- libbpf: prog 'test_percpu1': BPF program load failed: Permission denied
- libbpf: prog 'test_percpu1': -- BEGIN PROG LOAD LOG --
- ...
- ; g = arg->a;
- 1: (61) r1 = *(u32 *)(r1 +0)
- R1 is ptr_bpf_testmod_btf_type_tag_1 access percpu memory: off=0
- ...
- test_btf_type_tag_mod_percpu:PASS:btf_type_tag_percpu 0 nsec
- #26/6 btf_tag/btf_type_tag_percpu_mod1:OK
 
- libbpf: prog 'test_percpu2': BPF program load failed: Permission denied
- libbpf: prog 'test_percpu2': -- BEGIN PROG LOAD LOG --
- ...
- ; g = arg->p->a;
- 2: (61) r1 = *(u32 *)(r1 +0)
- R1 is ptr_bpf_testmod_btf_type_tag_1 access percpu memory: off=0
- ...
- test_btf_type_tag_mod_percpu:PASS:btf_type_tag_percpu 0 nsec
- #26/7 btf_tag/btf_type_tag_percpu_mod2:OK
+struct my_subskel {
+    struct {
+        struct bpf_map *my_map;
+    } maps;
+    struct my_subskel__data {
+        int *my_var;
+    } data;
+};
 
- libbpf: prog 'test_percpu_load': BPF program load failed: Permission denied
- libbpf: prog 'test_percpu_load': -- BEGIN PROG LOAD LOG --
- ...
- ; g = (__u64)cgrp->rstat_cpu->updated_children;
- 2: (79) r1 = *(u64 *)(r1 +48)
- R1 is ptr_cgroup_rstat_cpu access percpu memory: off=48
- ...
- test_btf_type_tag_vmlinux_percpu:PASS:btf_type_tag_percpu_load 0 nsec
- #26/8 btf_tag/btf_type_tag_percpu_vmlinux_load:OK
 
- load_btfs:PASS:could not load vmlinux BTF 0 nsec
- test_btf_type_tag_vmlinux_percpu:PASS:btf_type_tag_percpu 0 nsec
- test_btf_type_tag_vmlinux_percpu:PASS:btf_type_tag_percpu_helper 0 nsec
- #26/9 btf_tag/btf_type_tag_percpu_vmlinux_helper:OK
+/* in codegen'ed code */
 
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  17 ++
- .../selftests/bpf/prog_tests/btf_tag.c        | 164 ++++++++++++++----
- .../selftests/bpf/progs/btf_type_tag_percpu.c |  66 +++++++
- 3 files changed, 218 insertions(+), 29 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c
+struct my_subskel *s;
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 27d63be47b95..17c211f3b924 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -33,6 +33,10 @@ struct bpf_testmod_btf_type_tag_2 {
- 	struct bpf_testmod_btf_type_tag_1 __user *p;
- };
- 
-+struct bpf_testmod_btf_type_tag_3 {
-+	struct bpf_testmod_btf_type_tag_1 __percpu *p;
-+};
-+
- noinline int
- bpf_testmod_test_btf_type_tag_user_1(struct bpf_testmod_btf_type_tag_1 __user *arg) {
- 	BTF_TYPE_EMIT(func_proto_typedef);
-@@ -46,6 +50,19 @@ bpf_testmod_test_btf_type_tag_user_2(struct bpf_testmod_btf_type_tag_2 *arg) {
- 	return arg->p->a;
- }
- 
-+noinline int
-+bpf_testmod_test_btf_type_tag_percpu_1(struct bpf_testmod_btf_type_tag_1 __percpu *arg) {
-+	BTF_TYPE_EMIT(func_proto_typedef);
-+	BTF_TYPE_EMIT(func_proto_typedef_nested1);
-+	BTF_TYPE_EMIT(func_proto_typedef_nested2);
-+	return arg->a;
-+}
-+
-+noinline int
-+bpf_testmod_test_btf_type_tag_percpu_2(struct bpf_testmod_btf_type_tag_3 *arg) {
-+	return arg->p->a;
-+}
-+
- noinline int bpf_testmod_loop_test(int n)
- {
- 	int i, sum = 0;
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_tag.c b/tools/testing/selftests/bpf/prog_tests/btf_tag.c
-index f7560b54a6bb..071430cd54de 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_tag.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_tag.c
-@@ -10,6 +10,7 @@ struct btf_type_tag_test {
- };
- #include "btf_type_tag.skel.h"
- #include "btf_type_tag_user.skel.h"
-+#include "btf_type_tag_percpu.skel.h"
- 
- static void test_btf_decl_tag(void)
- {
-@@ -43,38 +44,81 @@ static void test_btf_type_tag(void)
- 	btf_type_tag__destroy(skel);
- }
- 
--static void test_btf_type_tag_mod_user(bool load_test_user1)
-+/* loads vmlinux_btf as well as module_btf. If the caller passes NULL as
-+ * module_btf, it will not load module btf.
-+ *
-+ * Returns 0 on success.
-+ * Return -1 On error. In case of error, the loaded btf will be freed and the
-+ * input parameters will be set to pointing to NULL.
-+ */
-+static int load_btfs(struct btf **vmlinux_btf, struct btf **module_btf,
-+		     bool needs_vmlinux_tag)
- {
- 	const char *module_name = "bpf_testmod";
--	struct btf *vmlinux_btf, *module_btf;
--	struct btf_type_tag_user *skel;
- 	__s32 type_id;
--	int err;
- 
- 	if (!env.has_testmod) {
- 		test__skip();
--		return;
-+		return -1;
- 	}
- 
--	/* skip the test if the module does not have __user tags */
--	vmlinux_btf = btf__load_vmlinux_btf();
--	if (!ASSERT_OK_PTR(vmlinux_btf, "could not load vmlinux BTF"))
--		return;
-+	*vmlinux_btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(*vmlinux_btf, "could not load vmlinux BTF"))
-+		return -1;
-+
-+	if (!needs_vmlinux_tag)
-+		goto load_module_btf;
- 
--	module_btf = btf__load_module_btf(module_name, vmlinux_btf);
--	if (!ASSERT_OK_PTR(module_btf, "could not load module BTF"))
-+	/* skip the test if the vmlinux does not have __user tags */
-+	type_id = btf__find_by_name_kind(*vmlinux_btf, "user", BTF_KIND_TYPE_TAG);
-+	if (type_id <= 0) {
-+		printf("%s:SKIP: btf_type_tag attribute not in vmlinux btf", __func__);
-+		test__skip();
- 		goto free_vmlinux_btf;
-+	}
- 
--	type_id = btf__find_by_name_kind(module_btf, "user", BTF_KIND_TYPE_TAG);
-+load_module_btf:
-+	/* skip loading module_btf, if not requested by caller */
-+	if (!module_btf)
-+		return 0;
-+
-+	*module_btf = btf__load_module_btf(module_name, *vmlinux_btf);
-+	if (!ASSERT_OK_PTR(*module_btf, "could not load module BTF"))
-+		goto free_vmlinux_btf;
-+
-+	/* skip the test if the module does not have __user tags */
-+	type_id = btf__find_by_name_kind(*module_btf, "user", BTF_KIND_TYPE_TAG);
- 	if (type_id <= 0) {
- 		printf("%s:SKIP: btf_type_tag attribute not in %s", __func__, module_name);
- 		test__skip();
- 		goto free_module_btf;
- 	}
- 
-+	return 0;
-+
-+free_module_btf:
-+	btf__free(*module_btf);
-+free_vmlinux_btf:
-+	btf__free(*vmlinux_btf);
-+
-+	*vmlinux_btf = NULL;
-+	if (module_btf)
-+		*module_btf = NULL;
-+	return -1;
-+}
-+
-+static void test_btf_type_tag_mod_user(bool load_test_user1)
-+{
-+	struct btf *vmlinux_btf = NULL, *module_btf = NULL;
-+	struct btf_type_tag_user *skel;
-+	int err;
-+
-+	if (load_btfs(&vmlinux_btf, &module_btf, /*needs_vmlinux_tag=*/false))
-+		return;
-+
- 	skel = btf_type_tag_user__open();
- 	if (!ASSERT_OK_PTR(skel, "btf_type_tag_user"))
--		goto free_module_btf;
-+		goto cleanup;
- 
- 	bpf_program__set_autoload(skel->progs.test_sys_getsockname, false);
- 	if (load_test_user1)
-@@ -87,34 +131,23 @@ static void test_btf_type_tag_mod_user(bool load_test_user1)
- 
- 	btf_type_tag_user__destroy(skel);
- 
--free_module_btf:
-+cleanup:
- 	btf__free(module_btf);
--free_vmlinux_btf:
- 	btf__free(vmlinux_btf);
- }
- 
- static void test_btf_type_tag_vmlinux_user(void)
- {
- 	struct btf_type_tag_user *skel;
--	struct btf *vmlinux_btf;
--	__s32 type_id;
-+	struct btf *vmlinux_btf = NULL;
- 	int err;
- 
--	/* skip the test if the vmlinux does not have __user tags */
--	vmlinux_btf = btf__load_vmlinux_btf();
--	if (!ASSERT_OK_PTR(vmlinux_btf, "could not load vmlinux BTF"))
-+	if (load_btfs(&vmlinux_btf, NULL, /*needs_vmlinux_tag=*/true))
- 		return;
- 
--	type_id = btf__find_by_name_kind(vmlinux_btf, "user", BTF_KIND_TYPE_TAG);
--	if (type_id <= 0) {
--		printf("%s:SKIP: btf_type_tag attribute not in vmlinux btf", __func__);
--		test__skip();
--		goto free_vmlinux_btf;
--	}
--
- 	skel = btf_type_tag_user__open();
- 	if (!ASSERT_OK_PTR(skel, "btf_type_tag_user"))
--		goto free_vmlinux_btf;
-+		goto cleanup;
- 
- 	bpf_program__set_autoload(skel->progs.test_user2, false);
- 	bpf_program__set_autoload(skel->progs.test_user1, false);
-@@ -124,7 +157,70 @@ static void test_btf_type_tag_vmlinux_user(void)
- 
- 	btf_type_tag_user__destroy(skel);
- 
--free_vmlinux_btf:
-+cleanup:
-+	btf__free(vmlinux_btf);
-+}
-+
-+static void test_btf_type_tag_mod_percpu(bool load_test_percpu1)
-+{
-+	struct btf *vmlinux_btf, *module_btf;
-+	struct btf_type_tag_percpu *skel;
-+	int err;
-+
-+	if (load_btfs(&vmlinux_btf, &module_btf, /*needs_vmlinux_tag=*/false))
-+		return;
-+
-+	skel = btf_type_tag_percpu__open();
-+	if (!ASSERT_OK_PTR(skel, "btf_type_tag_percpu"))
-+		goto cleanup;
-+
-+	bpf_program__set_autoload(skel->progs.test_percpu_load, false);
-+	bpf_program__set_autoload(skel->progs.test_percpu_helper, false);
-+	if (load_test_percpu1)
-+		bpf_program__set_autoload(skel->progs.test_percpu2, false);
-+	else
-+		bpf_program__set_autoload(skel->progs.test_percpu1, false);
-+
-+	err = btf_type_tag_percpu__load(skel);
-+	ASSERT_ERR(err, "btf_type_tag_percpu");
-+
-+	btf_type_tag_percpu__destroy(skel);
-+
-+cleanup:
-+	btf__free(module_btf);
-+	btf__free(vmlinux_btf);
-+}
-+
-+static void test_btf_type_tag_vmlinux_percpu(bool load_test)
-+{
-+	struct btf_type_tag_percpu *skel;
-+	struct btf *vmlinux_btf = NULL;
-+	int err;
-+
-+	if (load_btfs(&vmlinux_btf, NULL, /*needs_vmlinux_tag=*/true))
-+		return;
-+
-+	skel = btf_type_tag_percpu__open();
-+	if (!ASSERT_OK_PTR(skel, "btf_type_tag_percpu"))
-+		goto cleanup;
-+
-+	bpf_program__set_autoload(skel->progs.test_percpu2, false);
-+	bpf_program__set_autoload(skel->progs.test_percpu1, false);
-+	if (load_test) {
-+		bpf_program__set_autoload(skel->progs.test_percpu_helper, false);
-+
-+		err = btf_type_tag_percpu__load(skel);
-+		ASSERT_ERR(err, "btf_type_tag_percpu_load");
-+	} else {
-+		bpf_program__set_autoload(skel->progs.test_percpu_load, false);
-+
-+		err = btf_type_tag_percpu__load(skel);
-+		ASSERT_OK(err, "btf_type_tag_percpu_helper");
-+	}
-+
-+	btf_type_tag_percpu__destroy(skel);
-+
-+cleanup:
- 	btf__free(vmlinux_btf);
- }
- 
-@@ -134,10 +230,20 @@ void test_btf_tag(void)
- 		test_btf_decl_tag();
- 	if (test__start_subtest("btf_type_tag"))
- 		test_btf_type_tag();
-+
- 	if (test__start_subtest("btf_type_tag_user_mod1"))
- 		test_btf_type_tag_mod_user(true);
- 	if (test__start_subtest("btf_type_tag_user_mod2"))
- 		test_btf_type_tag_mod_user(false);
- 	if (test__start_subtest("btf_type_tag_sys_user_vmlinux"))
- 		test_btf_type_tag_vmlinux_user();
-+
-+	if (test__start_subtest("btf_type_tag_percpu_mod1"))
-+		test_btf_type_tag_mod_percpu(true);
-+	if (test__start_subtest("btf_type_tag_percpu_mod2"))
-+		test_btf_type_tag_mod_percpu(false);
-+	if (test__start_subtest("btf_type_tag_percpu_vmlinux_load"))
-+		test_btf_type_tag_vmlinux_percpu(true);
-+	if (test__start_subtest("btf_type_tag_percpu_vmlinux_helper"))
-+		test_btf_type_tag_vmlinux_percpu(false);
- }
-diff --git a/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c b/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c
-new file mode 100644
-index 000000000000..8feddb8289cf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf_type_tag_percpu.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Google */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct bpf_testmod_btf_type_tag_1 {
-+	int a;
-+};
-+
-+struct bpf_testmod_btf_type_tag_2 {
-+	struct bpf_testmod_btf_type_tag_1 *p;
-+};
-+
-+__u64 g;
-+
-+SEC("fentry/bpf_testmod_test_btf_type_tag_percpu_1")
-+int BPF_PROG(test_percpu1, struct bpf_testmod_btf_type_tag_1 *arg)
-+{
-+	g = arg->a;
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_testmod_test_btf_type_tag_percpu_2")
-+int BPF_PROG(test_percpu2, struct bpf_testmod_btf_type_tag_2 *arg)
-+{
-+	g = arg->p->a;
-+	return 0;
-+}
-+
-+/* trace_cgroup_mkdir(struct cgroup *cgrp, const char *path)
-+ *
-+ * struct cgroup_rstat_cpu {
-+ *   ...
-+ *   struct cgroup *updated_children;
-+ *   ...
-+ * };
-+ *
-+ * struct cgroup {
-+ *   ...
-+ *   struct cgroup_rstat_cpu __percpu *rstat_cpu;
-+ *   ...
-+ * };
-+ */
-+SEC("tp_btf/cgroup_mkdir")
-+int BPF_PROG(test_percpu_load, struct cgroup *cgrp, const char *path)
-+{
-+	g = (__u64)cgrp->rstat_cpu->updated_children;
-+	return 0;
-+}
-+
-+SEC("tp_btf/cgroup_mkdir")
-+int BPF_PROG(test_percpu_helper, struct cgroup *cgrp, const char *path)
-+{
-+	struct cgroup_rstat_cpu *rstat;
-+	__u32 cpu;
-+
-+	cpu = bpf_get_smp_processor_id();
-+	rstat = (struct cgroup_rstat_cpu *)bpf_per_cpu_ptr(cgrp->rstat_cpu, cpu);
-+	if (rstat) {
-+		/* READ_ONCE */
-+		*(volatile int *)rstat;
-+	}
-+
-+	return 0;
-+}
--- 
-2.35.1.616.g0bdcbb4464-goog
+subskel->syms[0].name = "my_var";
+subskel->syms[0].map = &s->maps.data_syn;
 
+
+It's similar in principle to how we define maps (that are found and
+filled out by libbpf):
+
+        s->maps[4].name = ".data.dyn";
+        s->maps[4].map = &obj->maps.data_dyn;
+        s->maps[4].mmaped = (void **)&obj->data_dyn;
+
+
+Except in this case we use &s->maps.data_syn for reading, not for
+writing into it.
+
+Hope this is clearer now.
+
+
+>
+> >
+>
+> Thanks,
+> Delyan
