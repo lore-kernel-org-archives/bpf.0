@@ -2,136 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80ACEC433EF
-	for <bpf@archiver.kernel.org>; Sat,  5 Mar 2022 12:45:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B7C4C433EF
+	for <bpf@archiver.kernel.org>; Sat,  5 Mar 2022 16:10:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiCEMps (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 5 Mar 2022 07:45:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        id S230194AbiCEQLn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 5 Mar 2022 11:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiCEMps (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 5 Mar 2022 07:45:48 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B431CC7FD
-        for <bpf@vger.kernel.org>; Sat,  5 Mar 2022 04:44:55 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id p15so22766150ejc.7
-        for <bpf@vger.kernel.org>; Sat, 05 Mar 2022 04:44:55 -0800 (PST)
+        with ESMTP id S230105AbiCEQLm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 5 Mar 2022 11:11:42 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE42882D33;
+        Sat,  5 Mar 2022 08:10:51 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 27so9989235pgk.10;
+        Sat, 05 Mar 2022 08:10:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BT/LruK1iU2aEC5IUz8FPhJu685NPizXKAEkqmR3dME=;
-        b=NCg8APlFjOE9h2Y+o0xCxjR53+eJdRZt2fXOBbgWJSvktNhRw3C0497CUkWnxANB58
-         KdFCGAHfMJ5yt/2zCG8WuUoe7Qe9cuvh9vHK/MWUDStWeBo9DHInYqhfxIXZjiFjusyP
-         MZyUM99kZ6KlWhIe8IWyD52SDtMIYajjj3V67bLn1Cx4ZZp/jq6ixlhAsielV4TDA9iS
-         CdCLCs+qMoCqCMMWy9uDJaCHhY10MbeVIuf5a9ftZSkFMkN3r88H02UFIg3HHtFEcwX2
-         02T2CkiKX6/wnL8quj1fWokjkONEJWBW4qrD0nhum/e5olQGP720XMMFLA3sz1LLMSdc
-         CQCQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wtx7c+X3yjESu1Dpjr/CsyO3k3jbgKrBuP5zPYT0FSk=;
+        b=f6uGNOfIbH+TrImkxSbJDauNwa/CF+cQEvDDrhDCzcK1UtqlwlMeid4oWjjChXUfnE
+         LCK+PM3T/qkMAPWLd90YEfegnyrEqXs2e18LWtJ2wyVy4LvP5Dr6P+TZg9lrFwUhb11e
+         /S+siIpFU+ga9TpwCi8iSfLX5drHS9UMHB1JT/C5FEhk6X47cvEp8E187thPgH96K5q8
+         KQrYB1TGKKGluMvwKmFDDG/99yUgmMbFi6v7kCWllcVB5oknRWlvMOEqwO0s+SXsFDeH
+         vCj1H8LENDQ+pzxe6jifoW2r4MIV61yhgM0s7nB/AkWpaJeYk/hcekEitHjBo5XtEKEq
+         ifqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BT/LruK1iU2aEC5IUz8FPhJu685NPizXKAEkqmR3dME=;
-        b=ZZDQ2Wz4g6LcY5bwRpbbg3TCWt29XeoXmY9WVZp/DI6fGjCbfShxfBFa8vXamQAdtQ
-         q9uRMww3cl8Lh47mh6yyDZH7+cYgv0zS+CdkkWeSSxISJmqHG570BBE2VPvxlBSdmMcU
-         sTvW5Zq3CFKGiS3Qcws1OwYYTfF0V56u+IQ/cUKqxPSmRiNaya4C1ugSeQXwr1wIq2Cp
-         3iLeVg0pM8/8IDKuO3WX0Kxo+0z939gaZKA2coRGQBzbZ9A+ZGhyM6Lf+BK63xW6IZHW
-         QxnBNorjGiZT7r7yCboyn2fUTNuRv9EMBVo+sLXO4ONytj27nZhQfD7cV4K/6gtN5TU2
-         aH1g==
-X-Gm-Message-State: AOAM531n/5wmqbR9eP312aGvOTsu4lLpQ6y0FDPyY8dUBp1rX0pwuV4H
-        lovdLXtV8Ay/cVnuyX1ABuY53c3EpLk=
-X-Google-Smtp-Source: ABdhPJzVzsYirWXwuBS697QmDrsV2kQ/Y5KjYJ28++zhVK0pkrjsnyMLSVzKPixsXkaqZJrP8zf4rA==
-X-Received: by 2002:a17:907:7ea3:b0:6d9:4406:6029 with SMTP id qb35-20020a1709077ea300b006d944066029mr2837442ejc.262.1646484294423;
-        Sat, 05 Mar 2022 04:44:54 -0800 (PST)
-Received: from erthalion.local (dslb-178-005-230-047.178.005.pools.vodafone-ip.de. [178.5.230.47])
-        by smtp.gmail.com with ESMTPSA id sb31-20020a1709076d9f00b006ceb969822esm2816355ejc.76.2022.03.05.04.44.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Wtx7c+X3yjESu1Dpjr/CsyO3k3jbgKrBuP5zPYT0FSk=;
+        b=ev+N1/QZFPfjsPeZqMZXuKnk+AyL1Wx9UeF5FATM683YPLeLyrqQiylzEwVNt5EF6I
+         dHl8fW6uNNbDausNDiL42UUgSjQTReBjYUMHGwyx6sNuQTCsWesUXJNWcg2SAfSjRFOG
+         9L7EfGMEHJi5BWGz5Yl899QX2mWXEHVRzSVQoERQolicmEMzUPAvS83kXReYV+LxDiXg
+         rGmfh5Mni88IRx3x3BN4ecNPOMxTnevKh6rBv6G/4hJWi1XSApM179BgtNwok9IAl0Hh
+         /ZMgrTn0EYMFvhPHo3CSgdGrZGDdNYOTXv/BCUDZbRgVJz2S6GgkUJlY/OLGNmLtypMj
+         9oDw==
+X-Gm-Message-State: AOAM530N7KYHxc4gtUJsGeh3MdmRa/LeqTVGgd5nYjMbl3QqAt/bYZ7D
+        nW4r09KIRtGVymXaTReXjRQM9KW2ud3oiRjL
+X-Google-Smtp-Source: ABdhPJxrEAGDhuCwqZ+Chfx7wXPBFe8HnPTj3i4MDB8GsFpwKTihqD7Lt/y8bKHDxTy7JUBNNO/wQw==
+X-Received: by 2002:a63:4c50:0:b0:373:2a90:dc04 with SMTP id m16-20020a634c50000000b003732a90dc04mr3210931pgl.350.1646496651181;
+        Sat, 05 Mar 2022 08:10:51 -0800 (PST)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id 124-20020a620582000000b004dee0e77128sm9460805pff.166.2022.03.05.08.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Mar 2022 04:44:53 -0800 (PST)
-Date:   Sat, 5 Mar 2022 13:44:26 +0100
-From:   Dmitry Dolgov <9erthalion6@gmail.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, quentin@isovalent.com
-Subject: Re: [PATCH bpf-next v5] bpftool: Add bpf_cookie to link output
-Message-ID: <20220305124426.qodif327pima6rqj@erthalion.local>
-References: <20220304143610.10796-1-9erthalion6@gmail.com>
- <acf30143-dc2c-9651-44b6-af45a1c426ce@fb.com>
+        Sat, 05 Mar 2022 08:10:50 -0800 (PST)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Quentin Monnet <quentin@isovalent.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] bpf: Remove redundant slash
+Date:   Sun,  6 Mar 2022 00:10:13 +0800
+Message-Id: <20220305161013.361646-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <acf30143-dc2c-9651-44b6-af45a1c426ce@fb.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 08:21:34AM -0800, Yonghong Song wrote:
->
-> > diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
-> > index 7c384d10e95f..6c6e7c90cc3d 100644
-> > --- a/tools/bpf/bpftool/pids.c
-> > +++ b/tools/bpf/bpftool/pids.c
-> > @@ -78,6 +78,8 @@ static void add_ref(struct hashmap *map, struct pid_iter_entry *e)
-> >   	ref->pid = e->pid;
-> >   	memcpy(ref->comm, e->comm, sizeof(ref->comm));
-> >   	refs->ref_cnt = 1;
-> > +	refs->bpf_cookie_set = e->bpf_cookie_set;
-> > +	refs->bpf_cookie = e->bpf_cookie;
-> >   	err = hashmap__append(map, u32_as_hash_field(e->id), refs);
-> >   	if (err)
-> > @@ -205,6 +207,9 @@ void emit_obj_refs_json(struct hashmap *map, __u32 id,
-> >   		if (refs->ref_cnt == 0)
-> >   			break;
-> > +		if (refs->bpf_cookie_set)
-> > +			jsonw_lluint_field(json_writer, "bpf_cookie", refs->bpf_cookie);
->
-> The original motivation for 'bpf_cookie' is for kprobe to get function
-> addresses. In that case, printing with llx (0x...) is better than llu
-> since people can easily search it with /proc/kallsyms to get what the
-> function it attached to. But on the other hand, other use cases might
-> be simply just wanting an int.
->
-> I don't have a strong opinion here. Just to speak out loud so other
-> people can comment on this too.
+The trailing slash of LIBBPF_SRCS is redundant, remove it.
 
-Interesting, I didn't know that. The current implementation of
-'bpf_cookie' seems to be quite opaque, with no assumptions about what
-does it contain, probably it makes sense to keep it like that. But I
-don't have a strong opinion here either, would love to hear what others
-think.
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ kernel/bpf/preload/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > diff --git a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> > index f70702fcb224..91366ce33717 100644
-> > --- a/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> > +++ b/tools/bpf/bpftool/skeleton/pid_iter.bpf.c
-> > @@ -38,6 +38,18 @@ static __always_inline __u32 get_obj_id(void *ent, enum bpf_obj_type type)
-> >   	}
-> >   }
-> > +/* could be used only with BPF_LINK_TYPE_PERF_EVENT links */
-> > +static __always_inline __u64 get_bpf_cookie(struct bpf_link *link)
-> > +{
-> > +	struct bpf_perf_link *perf_link;
-> > +	struct perf_event *event;
-> > +
-> > +	perf_link = container_of(link, struct bpf_perf_link, link);
-> > +	event = BPF_CORE_READ(perf_link, perf_file, private_data);
-> > +	return BPF_CORE_READ(event, bpf_cookie);
-> > +}
-> > +
-> > +
-> >   SEC("iter/task_file")
-> >   int iter(struct bpf_iter__task_file *ctx)
-> >   {
-> > @@ -69,8 +81,21 @@ int iter(struct bpf_iter__task_file *ctx)
-> >   	if (file->f_op != fops)
-> >   		return 0;
-> > +	__builtin_memset(&e, 0, sizeof(e));
-> >   	e.pid = task->tgid;
-> >   	e.id = get_obj_id(file->private_data, obj_type);
-> > +	e.bpf_cookie = 0;
-> > +	e.bpf_cookie_set = false;
->
-> We already have __builtin_memset(&e, 0, sizeof(e)) in the above, so
-> the above e.bpf_cookie and e.bpf_cookie_set assignment is not
-> necessary.
+diff --git a/kernel/bpf/preload/Makefile b/kernel/bpf/preload/Makefile
+index 167534e3b0b4..7b62b3e2bf6d 100644
+--- a/kernel/bpf/preload/Makefile
++++ b/kernel/bpf/preload/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-LIBBPF_SRCS = $(srctree)/tools/lib/bpf/
++LIBBPF_SRCS = $(srctree)/tools/lib/bpf
+ LIBBPF_INCLUDE = $(LIBBPF_SRCS)/..
+ 
+ obj-$(CONFIG_BPF_PRELOAD_UMD) += bpf_preload.o
+-- 
+2.35.1
 
-Good point, will remote this.
