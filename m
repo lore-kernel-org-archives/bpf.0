@@ -2,94 +2,326 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACE26C433F5
-	for <bpf@archiver.kernel.org>; Sat,  5 Mar 2022 01:01:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA64AC433FE
+	for <bpf@archiver.kernel.org>; Sat,  5 Mar 2022 01:01:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiCEBC1 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 4 Mar 2022 20:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S229589AbiCEBCb convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 4 Mar 2022 20:02:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiCEBC1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Mar 2022 20:02:27 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16541AD963
-        for <bpf@vger.kernel.org>; Fri,  4 Mar 2022 17:01:38 -0800 (PST)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 224HQk3C007091
-        for <bpf@vger.kernel.org>; Fri, 4 Mar 2022 17:01:38 -0800
+        with ESMTP id S229479AbiCEBC2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Mar 2022 20:02:28 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4E01AE66B
+        for <bpf@vger.kernel.org>; Fri,  4 Mar 2022 17:01:39 -0800 (PST)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 224HQQib015606
+        for <bpf@vger.kernel.org>; Fri, 4 Mar 2022 17:01:39 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ek4hrscjf-5
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ek4jkscqf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Fri, 04 Mar 2022 17:01:38 -0800
-Received: from twshared27297.14.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+Received: from twshared2439.42.prn1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 4 Mar 2022 17:01:35 -0800
+ 15.1.2308.21; Fri, 4 Mar 2022 17:01:38 -0800
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 24ED7132C992B; Fri,  4 Mar 2022 17:01:30 -0800 (PST)
+        id 4A7DA132C9938; Fri,  4 Mar 2022 17:01:36 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v5 bpf-next 0/3] libbpf: support custom SEC() handlers
-Date:   Fri, 4 Mar 2022 17:01:26 -0800
-Message-ID: <20220305010129.1549719-1-andrii@kernel.org>
+Subject: [PATCH v5 bpf-next 3/3] selftests/bpf: add custom SEC() handling selftest
+Date:   Fri, 4 Mar 2022 17:01:29 -0800
+Message-ID: <20220305010129.1549719-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220305010129.1549719-1-andrii@kernel.org>
+References: <20220305010129.1549719-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: EINGEuE73GL0y0qQR0zY8c24vd-roZIz
-X-Proofpoint-ORIG-GUID: EINGEuE73GL0y0qQR0zY8c24vd-roZIz
+X-Proofpoint-GUID: RStdWeTTfZ08UmYYfOa3LUj1H3w9CNrU
+X-Proofpoint-ORIG-GUID: RStdWeTTfZ08UmYYfOa3LUj1H3w9CNrU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-04_09,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 lowpriorityscore=0
- adultscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
- impostorscore=0 mlxscore=0 spamscore=0 phishscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ mlxlogscore=999 clxscore=1015 priorityscore=1501 adultscore=0 phishscore=0
+ suspectscore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2203050002
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability for user applications and libraries to register custom BPF program
-SEC() handlers. See patch #2 for examples where this is useful.
+Add a selftest validating various aspects of libbpf's handling of custom
+SEC() handlers. It also demonstrates how libraries can ensure very early
+callbacks registration and unregistration using
+__attribute__((constructor))/__attribute__((destructor)) functions.
 
-Patch #1 does some preliminary refactoring to allow exponsing program
-init, preload, and attach callbacks as public API. It also establishes
-a protocol to allow optional auto-attach behavior. This will also help the
-case of sometimes auto-attachable uprobes.
-
-v4->v5:
-  - API documentation improvements (Daniel);
-v3->v4:
-  - init_fn -> prog_setup_fn, preload_fn -> prog_prepare_load_fn (Alexei);
-v2->v3:
-  - moved callbacks and cookie into OPTS struct (Alan);
-  - added more test scenarios (Alan);
-  - address most of Alan's feedback, but kept API name;
-v1->v2:
-  - resubmitting due to git send-email screw up.
-
-Cc: Alan Maguire <alan.maguire@oracle.com>
-
-Andrii Nakryiko (3):
-  libbpf: allow BPF program auto-attach handlers to bail out
-  libbpf: support custom SEC() handlers
-  selftests/bpf: add custom SEC() handling selftest
-
- tools/lib/bpf/libbpf.c                        | 332 ++++++++++++------
- tools/lib/bpf/libbpf.h                        | 109 ++++++
- tools/lib/bpf/libbpf.map                      |   6 +
- tools/lib/bpf/libbpf_version.h                |   2 +-
- .../bpf/prog_tests/custom_sec_handlers.c      | 176 ++++++++++
- .../bpf/progs/test_custom_sec_handlers.c      |  63 ++++
- 6 files changed, 586 insertions(+), 102 deletions(-)
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../bpf/prog_tests/custom_sec_handlers.c      | 176 ++++++++++++++++++
+ .../bpf/progs/test_custom_sec_handlers.c      |  63 +++++++
+ 2 files changed, 239 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_custom_sec_handlers.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c b/tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
+new file mode 100644
+index 000000000000..b2dfc5954aea
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/custom_sec_handlers.c
+@@ -0,0 +1,176 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Facebook */
++
++#include <test_progs.h>
++#include "test_custom_sec_handlers.skel.h"
++
++#define COOKIE_ABC1 1
++#define COOKIE_ABC2 2
++#define COOKIE_CUSTOM 3
++#define COOKIE_FALLBACK 4
++#define COOKIE_KPROBE 5
++
++static int custom_setup_prog(struct bpf_program *prog, long cookie)
++{
++	if (cookie == COOKIE_ABC1)
++		bpf_program__set_autoload(prog, false);
++
++	return 0;
++}
++
++static int custom_prepare_load_prog(struct bpf_program *prog,
++				    struct bpf_prog_load_opts *opts, long cookie)
++{
++	if (cookie == COOKIE_FALLBACK)
++		opts->prog_flags |= BPF_F_SLEEPABLE;
++	else if (cookie == COOKIE_ABC1)
++		ASSERT_FALSE(true, "unexpected preload for abc");
++
++	return 0;
++}
++
++static int custom_attach_prog(const struct bpf_program *prog, long cookie,
++			      struct bpf_link **link)
++{
++	switch (cookie) {
++	case COOKIE_ABC2:
++		*link = bpf_program__attach_raw_tracepoint(prog, "sys_enter");
++		return libbpf_get_error(*link);
++	case COOKIE_CUSTOM:
++		*link = bpf_program__attach_tracepoint(prog, "syscalls", "sys_enter_nanosleep");
++		return libbpf_get_error(*link);
++	case COOKIE_KPROBE:
++	case COOKIE_FALLBACK:
++		/* no auto-attach for SEC("xyz") and SEC("kprobe") */
++		*link = NULL;
++		return 0;
++	default:
++		ASSERT_FALSE(true, "unexpected cookie");
++		return -EINVAL;
++	}
++}
++
++static int abc1_id;
++static int abc2_id;
++static int custom_id;
++static int fallback_id;
++static int kprobe_id;
++
++__attribute__((constructor))
++static void register_sec_handlers(void)
++{
++	LIBBPF_OPTS(libbpf_prog_handler_opts, abc1_opts,
++		.cookie = COOKIE_ABC1,
++		.prog_setup_fn = custom_setup_prog,
++		.prog_prepare_load_fn = custom_prepare_load_prog,
++		.prog_attach_fn = NULL,
++	);
++	LIBBPF_OPTS(libbpf_prog_handler_opts, abc2_opts,
++		.cookie = COOKIE_ABC2,
++		.prog_setup_fn = custom_setup_prog,
++		.prog_prepare_load_fn = custom_prepare_load_prog,
++		.prog_attach_fn = custom_attach_prog,
++	);
++	LIBBPF_OPTS(libbpf_prog_handler_opts, custom_opts,
++		.cookie = COOKIE_CUSTOM,
++		.prog_setup_fn = NULL,
++		.prog_prepare_load_fn = NULL,
++		.prog_attach_fn = custom_attach_prog,
++	);
++
++	abc1_id = libbpf_register_prog_handler("abc", BPF_PROG_TYPE_RAW_TRACEPOINT, 0, &abc1_opts);
++	abc2_id = libbpf_register_prog_handler("abc/", BPF_PROG_TYPE_RAW_TRACEPOINT, 0, &abc2_opts);
++	custom_id = libbpf_register_prog_handler("custom+", BPF_PROG_TYPE_TRACEPOINT, 0, &custom_opts);
++}
++
++__attribute__((destructor))
++static void unregister_sec_handlers(void)
++{
++	libbpf_unregister_prog_handler(abc1_id);
++	libbpf_unregister_prog_handler(abc2_id);
++	libbpf_unregister_prog_handler(custom_id);
++}
++
++void test_custom_sec_handlers(void)
++{
++	LIBBPF_OPTS(libbpf_prog_handler_opts, opts,
++		.prog_setup_fn = custom_setup_prog,
++		.prog_prepare_load_fn = custom_prepare_load_prog,
++		.prog_attach_fn = custom_attach_prog,
++	);
++	struct test_custom_sec_handlers* skel;
++	int err;
++
++	ASSERT_GT(abc1_id, 0, "abc1_id");
++	ASSERT_GT(abc2_id, 0, "abc2_id");
++	ASSERT_GT(custom_id, 0, "custom_id");
++
++	/* override libbpf's handle of SEC("kprobe/...") but also allow pure
++	 * SEC("kprobe") due to "kprobe+" specifier. Register it as
++	 * TRACEPOINT, just for fun.
++	 */
++	opts.cookie = COOKIE_KPROBE;
++	kprobe_id = libbpf_register_prog_handler("kprobe+", BPF_PROG_TYPE_TRACEPOINT, 0, &opts);
++	/* fallback treats everything as BPF_PROG_TYPE_SYSCALL program to test
++	 * setting custom BPF_F_SLEEPABLE bit in preload handler
++	 */
++	opts.cookie = COOKIE_FALLBACK;
++	fallback_id = libbpf_register_prog_handler(NULL, BPF_PROG_TYPE_SYSCALL, 0, &opts);
++
++	if (!ASSERT_GT(fallback_id, 0, "fallback_id") /* || !ASSERT_GT(kprobe_id, 0, "kprobe_id")*/) {
++		if (fallback_id > 0)
++			libbpf_unregister_prog_handler(fallback_id);
++		if (kprobe_id > 0)
++			libbpf_unregister_prog_handler(kprobe_id);
++		return;
++	}
++
++	/* open skeleton and validate assumptions */
++	skel = test_custom_sec_handlers__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		goto cleanup;
++
++	ASSERT_EQ(bpf_program__type(skel->progs.abc1), BPF_PROG_TYPE_RAW_TRACEPOINT, "abc1_type");
++	ASSERT_FALSE(bpf_program__autoload(skel->progs.abc1), "abc1_autoload");
++
++	ASSERT_EQ(bpf_program__type(skel->progs.abc2), BPF_PROG_TYPE_RAW_TRACEPOINT, "abc2_type");
++	ASSERT_EQ(bpf_program__type(skel->progs.custom1), BPF_PROG_TYPE_TRACEPOINT, "custom1_type");
++	ASSERT_EQ(bpf_program__type(skel->progs.custom2), BPF_PROG_TYPE_TRACEPOINT, "custom2_type");
++	ASSERT_EQ(bpf_program__type(skel->progs.kprobe1), BPF_PROG_TYPE_TRACEPOINT, "kprobe1_type");
++	ASSERT_EQ(bpf_program__type(skel->progs.xyz), BPF_PROG_TYPE_SYSCALL, "xyz_type");
++
++	skel->rodata->my_pid = getpid();
++
++	/* now attempt to load everything */
++	err = test_custom_sec_handlers__load(skel);
++	if (!ASSERT_OK(err, "skel_load"))
++		goto cleanup;
++
++	/* now try to auto-attach everything */
++	err = test_custom_sec_handlers__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	skel->links.xyz = bpf_program__attach(skel->progs.kprobe1);
++	ASSERT_EQ(errno, EOPNOTSUPP, "xyz_attach_err");
++	ASSERT_ERR_PTR(skel->links.xyz, "xyz_attach");
++
++	/* trigger programs */
++	usleep(1);
++
++	/* SEC("abc") is set to not auto-loaded */
++	ASSERT_FALSE(skel->bss->abc1_called, "abc1_called");
++	ASSERT_TRUE(skel->bss->abc2_called, "abc2_called");
++	ASSERT_TRUE(skel->bss->custom1_called, "custom1_called");
++	ASSERT_TRUE(skel->bss->custom2_called, "custom2_called");
++	/* SEC("kprobe") shouldn't be auto-attached */
++	ASSERT_FALSE(skel->bss->kprobe1_called, "kprobe1_called");
++	/* SEC("xyz") shouldn't be auto-attached */
++	ASSERT_FALSE(skel->bss->xyz_called, "xyz_called");
++
++cleanup:
++	test_custom_sec_handlers__destroy(skel);
++
++	ASSERT_OK(libbpf_unregister_prog_handler(fallback_id), "unregister_fallback");
++	ASSERT_OK(libbpf_unregister_prog_handler(kprobe_id), "unregister_kprobe");
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_custom_sec_handlers.c b/tools/testing/selftests/bpf/progs/test_custom_sec_handlers.c
+new file mode 100644
+index 000000000000..4061f701ca50
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_custom_sec_handlers.c
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++const volatile int my_pid;
++
++bool abc1_called;
++bool abc2_called;
++bool custom1_called;
++bool custom2_called;
++bool kprobe1_called;
++bool xyz_called;
++
++SEC("abc")
++int abc1(void *ctx)
++{
++	abc1_called = true;
++	return 0;
++}
++
++SEC("abc/whatever")
++int abc2(void *ctx)
++{
++	abc2_called = true;
++	return 0;
++}
++
++SEC("custom")
++int custom1(void *ctx)
++{
++	custom1_called = true;
++	return 0;
++}
++
++SEC("custom/something")
++int custom2(void *ctx)
++{
++	custom2_called = true;
++	return 0;
++}
++
++SEC("kprobe")
++int kprobe1(void *ctx)
++{
++	kprobe1_called = true;
++	return 0;
++}
++
++SEC("xyz/blah")
++int xyz(void *ctx)
++{
++	int whatever;
++
++	/* use sleepable helper, custom handler should set sleepable flag */
++	bpf_copy_from_user(&whatever, sizeof(whatever), NULL);
++	xyz_called = true;
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.30.2
 
