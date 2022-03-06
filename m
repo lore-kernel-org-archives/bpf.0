@@ -2,121 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDD2C433FE
-	for <bpf@archiver.kernel.org>; Sun,  6 Mar 2022 19:32:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66409C433EF
+	for <bpf@archiver.kernel.org>; Sun,  6 Mar 2022 22:34:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiCFTdQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 6 Mar 2022 14:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S234367AbiCFWfI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 6 Mar 2022 17:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiCFTdQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 6 Mar 2022 14:33:16 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA6D63BF9;
-        Sun,  6 Mar 2022 11:32:23 -0800 (PST)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 226EU9We012481;
-        Sun, 6 Mar 2022 19:31:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=P7Sx8LIVCicwGCYwd3xV2H3Pz4bqw+ZRm8PRE3xM/Mg=;
- b=ftsKdDrPlaGfYECHuxP1qWntRXyRuGDp3TXU4/cvU0t6wiT8y3yDBE3W82aQ2iZewa9S
- GFnaBTteAjCjCXPwWP+ySqDwgQogSVxc9IyylPNGWCP+xTEJ7VeLAUgg4CbciRLdVMx2
- sq9Ajl/kZKbxFfn+zfVPEj69KULvWMDzV6zz3ffHlzvZqPP8ZPr/8+3mGo69kntG6MGJ
- C4igPyHZo5vpaVYwGp8EtqxTMRVgdAnMhLnzbhc+m+qFx2ijCISS4fDHKD9ij6dtf/Ma
- 1MJmmZnXovpZI9ZtK43j1wmy+cJo+czMMyyD6O6i2e1sQIkYaH806C2pv2BxAlT21c2P sA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3emrtjy525-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Mar 2022 19:31:55 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 226JUISO028583;
-        Sun, 6 Mar 2022 19:31:52 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3emk62h9yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 06 Mar 2022 19:31:52 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 226JVopx50266594
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 6 Mar 2022 19:31:50 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 552B4AE051;
-        Sun,  6 Mar 2022 19:31:50 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66C9AAE045;
-        Sun,  6 Mar 2022 19:31:48 +0000 (GMT)
-Received: from sig-9-65-93-47.ibm.com (unknown [9.65.93.47])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sun,  6 Mar 2022 19:31:48 +0000 (GMT)
-Message-ID: <1616eae810986a6570f472b3fa7eb099b3134b4a.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/9] ima: Always return a file measurement in
- ima_file_hash()
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, revest@chromium.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 06 Mar 2022 14:31:47 -0500
-In-Reply-To: <20220302111404.193900-3-roberto.sassu@huawei.com>
-References: <20220302111404.193900-1-roberto.sassu@huawei.com>
-         <20220302111404.193900-3-roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: sVyzJGT0ikza_FYNnIDRzwD_2klAk8SE
-X-Proofpoint-ORIG-GUID: sVyzJGT0ikza_FYNnIDRzwD_2klAk8SE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-06_08,2022-03-04_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- priorityscore=1501 bulkscore=0 mlxscore=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2203060134
+        with ESMTP id S229844AbiCFWfH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 6 Mar 2022 17:35:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C794457B8
+        for <bpf@vger.kernel.org>; Sun,  6 Mar 2022 14:34:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646606051;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZNde7WrV2e/jpBdIIKy9XtPA41qQOji4MxpvjqoSM84=;
+        b=BFFDJL60zHUkoshwhw8Wh8sG+9M2rFHStwrx3daOut7R12In5H/l/bWoFrGlIYU46fJM96
+        rNkvzHbWvoM1EfO6EMjjidshTExwam8dtxbjLYx0a3VF4h6y4nFFw0jkafGsi/6pMtBxZv
+        dp0sPRm53fn0ucMnSKr0q0T9vsltKGE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-316-5sv6BqJGNT6DjJr9yw5gsg-1; Sun, 06 Mar 2022 17:34:10 -0500
+X-MC-Unique: 5sv6BqJGNT6DjJr9yw5gsg-1
+Received: by mail-ed1-f71.google.com with SMTP id co2-20020a0564020c0200b00415f9fa6ca8so3960345edb.6
+        for <bpf@vger.kernel.org>; Sun, 06 Mar 2022 14:34:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZNde7WrV2e/jpBdIIKy9XtPA41qQOji4MxpvjqoSM84=;
+        b=BhakcU8ssf+QeJAT138mg2e9JcCLaJJlUuS6XeOSNzxRNMDt3nIDTYUKVrbEd5m1md
+         sJFHZo5jgwmbJWBSRHVL1AdqFHvVUygGTFV6JOU0vLYl07FrD7rCFKwP+uXLN+aWSLMM
+         3dbd+HSrbguDYtOdQBZ+BMF1FkmlvwI+WJTNawKS/6vk4h6FLzxwGSLhAejD3od/AQci
+         rhLnuMu9n5LE5BU4bERIpjHHU2090Qmc2AaMVsS7lq2gPmkYG6sJRd6lPzHnBVVMhLST
+         MZA1roF7vhY6xGdNZUwdEJcqKhj8rjKrbpAFD/ilNbyhIdBKpX6ntQRlf5HIlNGlECg8
+         kuTw==
+X-Gm-Message-State: AOAM531jbBsqxtXSGWILcLQYRWAPBFHgexBpe0kdBUM+T9vNDnmpH9fx
+        AjrhUqPf3gTKDMthfsu3wfAq7MscNGDJrX1kQm29oGfL6RSzoFdLGgudbesllNwJLA2iiMMPVUJ
+        6pBIzLIow60GM
+X-Received: by 2002:a05:6402:358c:b0:412:e44e:f62c with SMTP id y12-20020a056402358c00b00412e44ef62cmr8465628edc.206.1646606049325;
+        Sun, 06 Mar 2022 14:34:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxGbExezdxM2ZvbFqBDeTjMO0cOLJqAoibCU1AmfVBV15DRDDGJrrB0r33g08ajuoofBwxISQ==
+X-Received: by 2002:a05:6402:358c:b0:412:e44e:f62c with SMTP id y12-20020a056402358c00b00412e44ef62cmr8465602edc.206.1646606048962;
+        Sun, 06 Mar 2022 14:34:08 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id i4-20020a1709061e4400b006db370920bbsm24669ejj.90.2022.03.06.14.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 14:34:08 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id DB401131DF1; Sun,  6 Mar 2022 23:34:07 +0100 (CET)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v9 3/5] libbpf: Support batch_size option to bpf_prog_test_run
+Date:   Sun,  6 Mar 2022 23:34:02 +0100
+Message-Id: <20220306223404.60170-4-toke@redhat.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220306223404.60170-1-toke@redhat.com>
+References: <20220306223404.60170-1-toke@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 2022-03-02 at 12:13 +0100, Roberto Sassu wrote:
-> __ima_inode_hash() checks if a digest has been already calculated by
-> looking for the integrity_iint_cache structure associated to the passed
-> inode.
-> 
-> Users of ima_file_hash() (e.g. eBPF) might be interested in obtaining the
-> information without having to setup an IMA policy so that the digest is
-> always available at the time they call this function.
-> 
-> In addition, they likely expect the digest to be fresh, e.g. recalculated
-> by IMA after a file write. Although getting the digest from the
-> bprm_committed_creds hook (as in the eBPF test) ensures that the digest is
-> fresh, as the IMA hook is executed before that hook, this is not always the
-> case (e.g. for the mmap_file hook).
-> 
-> Call ima_collect_measurement() in __ima_inode_hash(), if the file
-> descriptor is available (passed by ima_file_hash()) and the digest is not
-> available/not fresh, and store the file measurement in a temporary
-> integrity_iint_cache structure.
-> 
-> This change does not cause memory usage increase, due to using the
-> temporary integrity_iint_cache structure, and due to freeing the
-> ima_digest_data structure inside integrity_iint_cache before exiting from
-> __ima_inode_hash().
-> 
-> For compatibility reasons, the behavior of ima_inode_hash() remains
-> unchanged.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Add support for setting the new batch_size parameter to BPF_PROG_TEST_RUN
+to libbpf; just add it as an option and pass it through to the kernel.
 
-The patch itself is fine, but with great hesitancy due to the existing
-eBPF integrity gaps and how these functions are planned to be used,
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ tools/lib/bpf/bpf.c | 1 +
+ tools/lib/bpf/bpf.h | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 418b259166f8..e2ec93c2c7c4 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -994,6 +994,7 @@ int bpf_prog_test_run_opts(int prog_fd, struct bpf_test_run_opts *opts)
+ 
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.test.prog_fd = prog_fd;
++	attr.test.batch_size = OPTS_GET(opts, batch_size, 0);
+ 	attr.test.cpu = OPTS_GET(opts, cpu, 0);
+ 	attr.test.flags = OPTS_GET(opts, flags, 0);
+ 	attr.test.repeat = OPTS_GET(opts, repeat, 0);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 16b21757b8bf..5253cb4a4c0a 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -512,8 +512,9 @@ struct bpf_test_run_opts {
+ 	__u32 duration;      /* out: average per repetition in ns */
+ 	__u32 flags;
+ 	__u32 cpu;
++	__u32 batch_size;
+ };
+-#define bpf_test_run_opts__last_field cpu
++#define bpf_test_run_opts__last_field batch_size
+ 
+ LIBBPF_API int bpf_prog_test_run_opts(int prog_fd,
+ 				      struct bpf_test_run_opts *opts);
+-- 
+2.35.1
 
