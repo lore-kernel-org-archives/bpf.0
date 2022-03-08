@@ -2,75 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3206BC433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 06:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 277DDC433FE
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 06:30:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242300AbiCHGbI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 01:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S243806AbiCHGbJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 01:31:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242155AbiCHGbI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 01:31:08 -0500
+        with ESMTP id S232068AbiCHGbH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 01:31:07 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7973CA5B;
-        Mon,  7 Mar 2022 22:30:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195C3C73C;
+        Mon,  7 Mar 2022 22:30:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F290E615EA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DE5E6159E;
         Tue,  8 Mar 2022 06:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 55C4AC340FC;
-        Tue,  8 Mar 2022 06:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 78978C340EC;
+        Tue,  8 Mar 2022 06:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646721011;
-        bh=WFHmEO+qM4oBqzX1Gg1yyznrCWEXa3Rr+pEOVmv32F8=;
+        s=k20201202; t=1646721010;
+        bh=oQ18lgNoYFU+P1cuSECSbe2PiBEyVyLpvsuYeCOz6PM=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=g2Bu33U54eQsWxNVWqdPATbAlunswIhnKOcKxJ4MXLrOYEqkUmO30D4Hb8ook7+CF
-         6Vym8UvnKwQ1qjSOxt17TVwLXUa3WD/1zaOgb/4U68mKB4kMhTOORC1hGKuVNYy5F4
-         x5kfyNNRmHueA477h8ALKl4KvAUlJ5QakmbPwQvOq37YWX2UAd320ThvdvTP9M1R+e
-         4ty4GPBOSnZXgbsR8TXJWaYhtYLktriXu7yR+v9Os/G7PHybcOEd2279w7RAEOFBcy
-         CxyqmWLWJrLQUAU1MS3XlirDbeKiVfvhcplKi8kwIWLKHo8x6fJxIHuVOxrNTmWlNn
-         HElMIeB4SipIw==
+        b=ZkPIrJblLZTek7xgTxZOiEoj8198nEYDj/5BIR1L679c1wn2CCwd3UQJbUeOIAYEp
+         Zigt0BMDXO9o8eAlqCHGs4ETqTHbDSEziUSAJp8ZLajSkE76FStys7AIJyOpDxHapF
+         ozXYweBZTwwjkAjNXuHow8aUfoMy5dWlE86jcIwBaqRYVMFArGHu8U/lU4vVAiVZ9F
+         /uLCbqE37hRNpdNVlleJmIV0pLQog6nMtix1ScGrnpxqqMVJJxdW1NdNZfRzbuBetL
+         p6lIpO3Xb4e+9xtuUIUGFAb5vDXyDXYRCuqRUzrxwHafCPrQACi0YA1vZfdDNtzir9
+         F/EduwZrwCfdg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4012EF0383A;
-        Tue,  8 Mar 2022 06:30:11 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5B6F4F0383B;
+        Tue,  8 Mar 2022 06:30:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] ice: xsk: fix GCC version checking against pragma
- unroll presence
+Subject: Re: [PATCH bpf-next] bpf: Remove redundant slash
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164672101125.16776.2136234286176245062.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Mar 2022 06:30:11 +0000
-References: <20220307231353.56638-1-maciej.fijalkowski@intel.com>
-In-Reply-To: <20220307231353.56638-1-maciej.fijalkowski@intel.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, davem@davemloft.net,
-        magnus.karlsson@intel.com, alexandr.lobakin@intel.com,
-        sfr@canb.auug.org.au
+Message-Id: <164672101036.16776.9038565963181298704.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Mar 2022 06:30:10 +0000
+References: <20220305161013.361646-1-ytcoode@gmail.com>
+In-Reply-To: <20220305161013.361646-1-ytcoode@gmail.com>
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        quentin@isovalent.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-On Tue,  8 Mar 2022 00:13:53 +0100 you wrote:
-> Pragma unroll was introduced around GCC 8, whereas current xsk code in
-> ice that prepares loop_unrolled_for macro that is based on mentioned
-> pragma, compares GCC version against 4, which is wrong and Stephen
-> found this out by compiling kernel with GCC 5.4 [0].
+On Sun,  6 Mar 2022 00:10:13 +0800 you wrote:
+> The trailing slash of LIBBPF_SRCS is redundant, remove it.
 > 
-> Fix this mistake and check if GCC version is >= 8.
-> 
-> [...]
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> ---
+>  kernel/bpf/preload/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Here is the summary with links:
-  - [net-next] ice: xsk: fix GCC version checking against pragma unroll presence
-    https://git.kernel.org/netdev/net-next/c/13d04d79701b
+  - [bpf-next] bpf: Remove redundant slash
+    https://git.kernel.org/bpf/bpf-next/c/4989135a8533
 
 You are awesome, thank you!
 -- 
