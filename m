@@ -2,148 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 890D3C433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 12:38:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71E18C433F5
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 12:54:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiCHMju (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 07:39:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S233477AbiCHMzW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 07:55:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346959AbiCHMhk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:37:40 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6EF483B2;
-        Tue,  8 Mar 2022 04:36:15 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0V6eQtdd_1646742968;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6eQtdd_1646742968)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 08 Mar 2022 20:36:09 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v7 23/26] virtio_net: split free_unused_bufs()
-Date:   Tue,  8 Mar 2022 20:35:15 +0800
-Message-Id: <20220308123518.33800-24-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
-References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
+        with ESMTP id S231258AbiCHMzV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 07:55:21 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E134E473B7;
+        Tue,  8 Mar 2022 04:54:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646744064; x=1678280064;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0T14saHEBTpCKfGqSe8NbuOhFvGpALcbihrkiXvDH9c=;
+  b=iz3QlAKxiHsYCquHvqZHAaRs9TrkLJ0cm5TaZZ03CJiojYrLZMm75qYO
+   5CT0+DulNjzxl6M8NugnF7u6knhLTOBhxj2AGMg2OqWGHPmt4ESv1Bhnu
+   ecSHDgZm5Sd1KmsDTqQChTr+6Ee56EA2MwbUVXYPlTWvxse9Mae3zy/Fc
+   ddQXvE8Uw2R+X2hpCaeJ4OvrdrKDrBuKtWySovJlqwAs8Ai+t0xxMmlXQ
+   Yhgm3obJecNlAut6akgZDqsqTjftajyIMTFHTnblPRGJFXHsY7UUpVJ9x
+   +9BMD/FDC4daDTd2ZitC9x0GFnBjaE33NqAFJmi77X49UZDw2DBsfaOHE
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10279"; a="341106621"
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="341106621"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 04:54:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,164,1643702400"; 
+   d="scan'208";a="687910697"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Mar 2022 04:54:22 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 228CsL1V001091;
+        Tue, 8 Mar 2022 12:54:21 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, anthony.l.nguyen@intel.com, kuba@kernel.org,
+        davem@davemloft.net, magnus.karlsson@intel.com,
+        dan.carpenter@oracle.com
+Subject: Re: [PATCH intel-net] ice: fix NULL pointer dereference in ice_update_vsi_tx_ring_stats()
+Date:   Tue,  8 Mar 2022 13:51:59 +0100
+Message-Id: <20220308125159.1843373-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220307174739.55899-1-maciej.fijalkowski@intel.com>
+References: <20220307174739.55899-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-X-Git-Hash: f06b131dbfed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch separates two functions for freeing sq buf and rq buf from
-free_unused_bufs().
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Mon, 7 Mar 2022 18:47:39 +0100
 
-When supporting the enable/disable tx/rq queue in the future, it is
-necessary to support separate recovery of a sq buf or a rq buf.
+> It is possible to do NULL pointer dereference in routine that updates
+> Tx ring stats. Currently only stats and bytes are updated when ring
+> pointer is valid, but later on ring is accessed to propagate gathered Tx
+> stats onto VSI stats.
+> 
+> Change the existing logic to move to next ring when ring is NULL.
+> 
+> Fixes: e72bba21355d ("ice: split ice_ring onto Tx/Rx separate structs")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  drivers/net/ethernet/intel/ice/ice_main.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+> index 289e5c99e313..d3f8b6468b92 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_main.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
+> @@ -6145,8 +6145,9 @@ ice_update_vsi_tx_ring_stats(struct ice_vsi *vsi,
+>  		u64 pkts = 0, bytes = 0;
+>  
+>  		ring = READ_ONCE(rings[i]);
+> -		if (ring)
+> -			ice_fetch_u64_stats_per_ring(&ring->syncp, ring->stats, &pkts, &bytes);
+> +		if (!ring)
+> +			continue;
+> +		ice_fetch_u64_stats_per_ring(&ring->syncp, ring->stats, &pkts, &bytes);
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/net/virtio_net.c | 53 +++++++++++++++++++++++-----------------
- 1 file changed, 31 insertions(+), 22 deletions(-)
+Nice catch, thanks!
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 59b1ea82f5f0..409a8e180918 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2804,36 +2804,45 @@ static void free_receive_page_frags(struct virtnet_info *vi)
- 			put_page(vi->rq[i].alloc_frag.page);
- }
- 
--static void free_unused_bufs(struct virtnet_info *vi)
-+static void virtnet_sq_free_unused_bufs(struct virtnet_info *vi,
-+					struct send_queue *sq)
- {
- 	void *buf;
--	int i;
- 
--	for (i = 0; i < vi->max_queue_pairs; i++) {
--		struct virtqueue *vq = vi->sq[i].vq;
--		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
--			if (!is_xdp_frame(buf))
--				dev_kfree_skb(buf);
--			else
--				xdp_return_frame(ptr_to_xdp(buf));
--		}
-+	while ((buf = virtqueue_detach_unused_buf(sq->vq)) != NULL) {
-+		if (!is_xdp_frame(buf))
-+			dev_kfree_skb(buf);
-+		else
-+			xdp_return_frame(ptr_to_xdp(buf));
- 	}
-+}
- 
--	for (i = 0; i < vi->max_queue_pairs; i++) {
--		struct virtqueue *vq = vi->rq[i].vq;
--
--		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
--			if (vi->mergeable_rx_bufs) {
--				put_page(virt_to_head_page(buf));
--			} else if (vi->big_packets) {
--				give_pages(&vi->rq[i], buf);
--			} else {
--				put_page(virt_to_head_page(buf));
--			}
--		}
-+static void virtnet_rq_free_unused_bufs(struct virtnet_info *vi,
-+					struct receive_queue *rq)
-+{
-+	void *buf;
-+
-+	while ((buf = virtqueue_detach_unused_buf(rq->vq)) != NULL) {
-+		if (vi->mergeable_rx_bufs)
-+			put_page(virt_to_head_page(buf));
-+		else if (vi->big_packets)
-+			give_pages(rq, buf);
-+		else
-+			put_page(virt_to_head_page(buf));
- 	}
- }
- 
-+static void free_unused_bufs(struct virtnet_info *vi)
-+{
-+	int i;
-+
-+	for (i = 0; i < vi->max_queue_pairs; i++)
-+		virtnet_sq_free_unused_bufs(vi, vi->sq + i);
-+
-+	for (i = 0; i < vi->max_queue_pairs; i++)
-+		virtnet_rq_free_unused_bufs(vi, vi->rq + i);
-+}
-+
- static void virtnet_del_vqs(struct virtnet_info *vi)
- {
- 	struct virtio_device *vdev = vi->vdev;
--- 
-2.31.0
+Acked-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
+>  		vsi_stats->tx_packets += pkts;
+>  		vsi_stats->tx_bytes += bytes;
+>  		vsi->tx_restart += ring->tx_stats.restart_q;
+
+                                   ^^^^
+                                   lol
+
+> -- 
+> 2.33.1
+
+Al
