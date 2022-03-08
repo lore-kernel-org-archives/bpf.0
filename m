@@ -2,91 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF891C433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 12:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EE88C4332F
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 12:35:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346772AbiCHMTB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 07:19:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S1346795AbiCHMgZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 07:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346781AbiCHMS7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 07:18:59 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D9B369F0
-        for <bpf@vger.kernel.org>; Tue,  8 Mar 2022 04:18:02 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCZ940kMhz4xy3;
-        Tue,  8 Mar 2022 23:18:00 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linuxppc-dev@lists.ozlabs.org,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        with ESMTP id S245548AbiCHMgY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 07:36:24 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29293A723;
+        Tue,  8 Mar 2022 04:35:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0V6eQtX-_1646742920;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6eQtX-_1646742920)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 08 Mar 2022 20:35:21 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf@vger.kernel.org
-In-Reply-To: <cover.1644834730.git.naveen.n.rao@linux.vnet.ibm.com>
-References: <cover.1644834730.git.naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH powerpc/next 00/17] powerpc/bpf: Some updates and cleanups
-Message-Id: <164674128395.3322453.15857183834950930927.b4-ty@ellerman.id.au>
-Date:   Tue, 08 Mar 2022 23:08:03 +1100
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v7 01/26] virtio_pci: struct virtio_pci_common_cfg add queue_notify_data
+Date:   Tue,  8 Mar 2022 20:34:53 +0800
+Message-Id: <20220308123518.33800-2-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
+References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-Git-Hash: f06b131dbfed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 14 Feb 2022 16:11:34 +0530, Naveen N. Rao wrote:
-> This is a follow-up series with the pending patches from:
-> https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=279602&state=*
-> 
-> Patches 1-5 and 8 are unchanged. Patch 6 is new and patch 7 has changes
-> based on discussion from the last series. Patch 9 has a small change to
-> not skip the toc load for elf v2.
-> 
-> [...]
+Add queue_notify_data in struct virtio_pci_common_cfg, which comes from
+here https://github.com/oasis-tcs/virtio-spec/issues/89
 
-Applied to powerpc/next.
+For not breaks uABI, add a new struct virtio_pci_common_cfg_notify.
 
-[01/17] powerpc/bpf: Skip branch range validation during first pass
-        https://git.kernel.org/powerpc/c/acd7408d2748533d767387cb4308692fba543658
-[02/17] powerpc/bpf: Emit a single branch instruction for known short branch ranges
-        https://git.kernel.org/powerpc/c/bafb5898de5d2f15133774cb049fe55720b9c92f
-[03/17] powerpc/bpf: Handle large branch ranges with BPF_EXIT
-        https://git.kernel.org/powerpc/c/0ffdbce6f4a89bb7c0002904d6438ec83cf05ce7
-[04/17] powerpc64/bpf: Do not save/restore LR on each call to bpf_stf_barrier()
-        https://git.kernel.org/powerpc/c/c2067f7f88830cdd020c775ffefe84a8177337af
-[05/17] powerpc64/bpf: Use r12 for constant blinding
-        https://git.kernel.org/powerpc/c/1d4866d5652f7a19dcbed0c4e366c3402c7775b7
-[06/17] powerpc64: Set PPC64_ELF_ABI_v[1|2] macros to 1
-        https://git.kernel.org/powerpc/c/4eeac2b0aaadc3d1943d348d8565f7cfb93272b9
-[07/17] powerpc64/bpf elfv2: Setup kernel TOC in r2 on entry
-        https://git.kernel.org/powerpc/c/b10cb163c4b31b03ac5014abbfd0b868913fd8e3
-[08/17] powerpc64/bpf elfv1: Do not load TOC before calling functions
-        https://git.kernel.org/powerpc/c/43d636f8b4fd2ee668e75e835fae2fcf4bc0f699
-[09/17] powerpc64/bpf: Optimize instruction sequence used for function calls
-        https://git.kernel.org/powerpc/c/feb6307289d85262c5aed04d6f192d38abba7c45
-[10/17] powerpc/bpf: Rename PPC_BL_ABS() to PPC_BL()
-        https://git.kernel.org/powerpc/c/74bbe3f08463c48a27088be4823a5803b7f7d9a1
-[11/17] powerpc64/bpf: Convert some of the uses of PPC_BPF_[LL|STL] to PPC_BPF_[LD|STD]
-        https://git.kernel.org/powerpc/c/391c271f4deb7356482d12f962a6fc018b6a3fb0
-[12/17] powerpc64/bpf: Get rid of PPC_BPF_[LL|STL|STLU] macros
-        https://git.kernel.org/powerpc/c/794abc08d75e9f2833f493090af14b748e182c5f
-[13/17] powerpc/bpf: Cleanup bpf_jit.h
-        https://git.kernel.org/powerpc/c/7b187dcdb5d348aa916dcda769313512c08e85a5
-[14/17] powerpc/bpf: Move bpf_jit64.h into bpf_jit_comp64.c
-        https://git.kernel.org/powerpc/c/576a6c3a00c1a2a3645e039b126b52f6c7755e54
-[15/17] powerpc/bpf: Use _Rn macros for GPRs
-        https://git.kernel.org/powerpc/c/036d559c0bdea75bf4840ba6780790d08572480c
-[16/17] powerpc64/bpf: Store temp registers' bpf to ppc mapping
-        https://git.kernel.org/powerpc/c/3a3fc9bf103974d9a886fa37087d5d491c806e00
-[17/17] powerpc/bpf: Simplify bpf_to_ppc() and adopt it for powerpc64
-        https://git.kernel.org/powerpc/c/49c3af43e65fbcc13860e0cf5fb2507b13e9724c
+Since I want to add queue_reset after queue_notify_data, I submitted
+this patch first.
 
-cheers
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ include/uapi/linux/virtio_pci.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/uapi/linux/virtio_pci.h b/include/uapi/linux/virtio_pci.h
+index 3a86f36d7e3d..22bec9bd0dfc 100644
+--- a/include/uapi/linux/virtio_pci.h
++++ b/include/uapi/linux/virtio_pci.h
+@@ -166,6 +166,13 @@ struct virtio_pci_common_cfg {
+ 	__le32 queue_used_hi;		/* read-write */
+ };
+ 
++struct virtio_pci_common_cfg_notify {
++	struct virtio_pci_common_cfg cfg;
++
++	__le16 queue_notify_data;	/* read-write */
++	__le16 padding;
++};
++
+ /* Fields in VIRTIO_PCI_CAP_PCI_CFG: */
+ struct virtio_pci_cfg_cap {
+ 	struct virtio_pci_cap cap;
+-- 
+2.31.0
+
