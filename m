@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0208C4332F
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 13:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A9FC43217
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 13:11:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiCHNMh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 08:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
+        id S244983AbiCHNMj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 08:12:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347064AbiCHNMa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:12:30 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FCA48E4C;
-        Tue,  8 Mar 2022 05:11:23 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id m2so11046567pll.0;
-        Tue, 08 Mar 2022 05:11:23 -0800 (PST)
+        with ESMTP id S1347040AbiCHNM1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 08:12:27 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADF148884;
+        Tue,  8 Mar 2022 05:11:26 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id c11so4023354pgu.11;
+        Tue, 08 Mar 2022 05:11:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3u3VsA3Fi5wDkVLbct/DeOE8XIO9r5bCMklz39tC+30=;
-        b=d3xMfPnSj9DUQxDjtQLyi+itK0WX3JodAeZCw3xPBtkpGMEM+aD8bzj6wZwCzhWcHZ
-         kt5w7qKQK3TtStKQ3oT5qOYPzVp+cM1eosOYmB4siu0vBKluYV91Do7HgnXDEzhnVvWj
-         /WVDgwGVTkUWcEoOPTIW8t2SQAfmnpXJiVWedbMFSLl9wZeb1olWm/3CDgl9nqVXGaK7
-         1l6LV05YKWWBgXJBMIoPk8gJTEYnCZFusR5ixA0BtXVZJAfPp6gJtnzkg3aQPwjfKaqG
-         3o+ON2B1FO4YimaKwPZj1bBFt+nJn4+/9+rHZp7yv1OvuJ13QO4UOZGSb9B2++pmQ4vx
-         9ALg==
+        bh=lr/CFIp00pEF/BEp0dXxqdNW/AI45azIAndxyHO9fEc=;
+        b=JB0q4IHcXTozLToE7J/d1F6oTslE6YdOVpdWGhqprivSKxigjke87oe7Q/SAuyYUeH
+         WGJhQaBuZ3HVQClkwYFjPKSRzgp4emV2L1P9SSaiybKpW76EN96/bTPE61IvacYCCbPu
+         2tnyx9h8AlAdJPTWgHaw0h6UrUPrZ543f9QNEfkMR0fTECuDmx4tQ3zxfQqOJsCk8sVk
+         DYKKS+Xgd/h2MU2mxDUrjhR88QnzZGpZMmDwkqIWWmQrDT1ib7gRT6txscX8hGM0D7a6
+         uqP4aOAJ9FLNxpLxK1WiRTAVv86fU6Cfs15ePd+M+iOUp7u+I0QzoTVPdqbLiMfI4jIW
+         wpSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3u3VsA3Fi5wDkVLbct/DeOE8XIO9r5bCMklz39tC+30=;
-        b=LA3uWsLE1HvBLU200/beBDdNvg1cYENKHzlSJ3uLVt9JOI59YrQzRkLHdNRPJ/+RII
-         FFHifp477D8PijtZ7+rHiwYA03JiRF9bgOnL0KxTMSMm1/UyO5rnxwE3c9M6Yr9Qs6Lo
-         P3GHWscWM7QaX/bbYTSwrl9IBFkbSf3OSAEucXqlZLdZ45S0rYLN4fTYRPlHvd10sveL
-         ebYgtcAKIIHbup7iDA4bzOryRXQgqcNFR1l4vGCEN8JOo2OuqrGeDD4kAgFoXrS0D+Er
-         wrsK+6R2Bo9tNyW5NzNTubdrQVgC4Aph8SSuAkpbNChKWoQCGJ8rgejxqtQyM0Is+4Ny
-         5uag==
-X-Gm-Message-State: AOAM531iKbNTYPgm8Zdu4pKldvBXhVUrw4hjqbT18yEL2WAF4N/YcNxI
-        zOdm8Tk5/tp7EP2ClNjrsRo=
-X-Google-Smtp-Source: ABdhPJzwC/En9lunCH8+wURsQQ1/FmGWLsc3MnOR1uRl1atGtzR7v2u8iVEpo0GJyAqsYIshW6NEaQ==
-X-Received: by 2002:a17:902:f68f:b0:151:fbf5:db45 with SMTP id l15-20020a170902f68f00b00151fbf5db45mr4536477plg.60.1646745082822;
-        Tue, 08 Mar 2022 05:11:22 -0800 (PST)
+        bh=lr/CFIp00pEF/BEp0dXxqdNW/AI45azIAndxyHO9fEc=;
+        b=DEKs1ZUQhBacW2MSbjDCwWwcwbyLZ5gH21aaIHH9LKqa+cXaHnCtK4Oi2MiYbGcSe4
+         1PANkP6q7k2F47ixA7tl53z+xVt3NAtQkj208q0r/ufh1sDi8ri7uQEDF8dkC73sHN6o
+         N/stkV4lgxqNND9fQFhnqZ/FORIsFo2iAeJZoh9UrXZYJDCFnBJ0Ru3FL79m6J07eVbZ
+         ZHgfwbZcgdjacpsBFvkDtmhY9bYs8xgItBJQltPwVIWxbmluibGtZOEDafcSK2LvrpU/
+         Bxs14dfZpfsyPFevVoxdDP3oagF+Sg7DYdI8a7yGdOEsWXoeVduBU1H1vfWBq5vxdfjH
+         SFtg==
+X-Gm-Message-State: AOAM5323NzjLIKGrKJ6ak/c1HBvw85zRKNn4HICA2L6dqD7CXuxgXyih
+        IdFr4F8BjLfz7qifptcexKsMvwF96pJNXzVUZxg=
+X-Google-Smtp-Source: ABdhPJyOlCtmyFx3M63Qe/Lo+ROqOvjtLMDDMPcSoi5Quoxet+iI8DibJx/wB3rOKVChv0jQxhwF4w==
+X-Received: by 2002:a05:6a00:198f:b0:4f6:c0e4:207d with SMTP id d15-20020a056a00198f00b004f6c0e4207dmr17968238pfl.82.1646745086059;
+        Tue, 08 Mar 2022 05:11:26 -0800 (PST)
 Received: from vultr.guest ([149.248.19.67])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056a00179400b004f709998d13sm7378598pfg.10.2022.03.08.05.11.21
+        by smtp.gmail.com with ESMTPSA id s20-20020a056a00179400b004f709998d13sm7378598pfg.10.2022.03.08.05.11.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 05:11:22 -0800 (PST)
+        Tue, 08 Mar 2022 05:11:25 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -57,9 +57,9 @@ To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         guro@fb.com
 Cc:     linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH RFC 6/9] bpf: add a helper to find map by id
-Date:   Tue,  8 Mar 2022 13:10:53 +0000
-Message-Id: <20220308131056.6732-7-laoar.shao@gmail.com>
+Subject: [PATCH RFC 8/9] bpf: make bpf_map_{save, release}_memcg public
+Date:   Tue,  8 Mar 2022 13:10:55 +0000
+Message-Id: <20220308131056.6732-9-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220308131056.6732-1-laoar.shao@gmail.com>
 References: <20220308131056.6732-1-laoar.shao@gmail.com>
@@ -69,55 +69,90 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A new helper bpf_map_idr_find() is introduced for later use.
+These two helpers will be used in map specific files later.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/bpf/syscall.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ include/linux/bpf.h  | 21 +++++++++++++++++++++
+ kernel/bpf/syscall.c | 19 -------------------
+ 2 files changed, 21 insertions(+), 19 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 3b50fcb..68fea3b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3474,6 +3474,21 @@ static int bpf_prog_get_fd_by_id(const union bpf_attr *attr)
- 	return fd;
- }
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fca274e..2f3f092 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -23,6 +23,7 @@
+ #include <linux/slab.h>
+ #include <linux/percpu-refcount.h>
+ #include <linux/bpfptr.h>
++#include <linux/memcontrol.h>
  
-+static struct bpf_map *bpf_map_idr_find(unsigned long id)
+ struct bpf_verifier_env;
+ struct bpf_verifier_log;
+@@ -209,6 +210,26 @@ struct bpf_map {
+ 	} owner;
+ };
+ 
++#ifdef CONFIG_MEMCG_KMEM
++static inline void bpf_map_save_memcg(struct bpf_map *map)
 +{
-+	void *map;
-+
-+	spin_lock_bh(&map_idr_lock);
-+	map = idr_find(&map_idr, id);
-+	if (map)
-+		map = __bpf_map_inc_not_zero(map, true);
-+	else
-+		map = ERR_PTR(-ENOENT);
-+	spin_unlock_bh(&map_idr_lock);
-+
-+	return map;
++	map->memcg = get_mem_cgroup_from_mm(current->mm);
 +}
 +
- #define BPF_MAP_GET_FD_BY_ID_LAST_FIELD open_flags
++static inline void bpf_map_release_memcg(struct bpf_map *map)
++{
++	mem_cgroup_put(map->memcg);
++}
++#else
++static inline void bpf_map_save_memcg(struct bpf_map *map)
++{
++}
++
++static inline void bpf_map_release_memcg(struct bpf_map *map)
++{
++}
++#endif
++
+ static inline bool map_value_has_spin_lock(const struct bpf_map *map)
+ {
+ 	return map->spin_lock_off >= 0;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 85456f1..7b4cbe7 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -414,16 +414,6 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
+ }
  
- static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
-@@ -3494,14 +3509,7 @@ static int bpf_map_get_fd_by_id(const union bpf_attr *attr)
- 	if (f_flags < 0)
- 		return f_flags;
- 
--	spin_lock_bh(&map_idr_lock);
--	map = idr_find(&map_idr, id);
--	if (map)
--		map = __bpf_map_inc_not_zero(map, true);
--	else
--		map = ERR_PTR(-ENOENT);
--	spin_unlock_bh(&map_idr_lock);
+ #ifdef CONFIG_MEMCG_KMEM
+-static void bpf_map_save_memcg(struct bpf_map *map)
+-{
+-	map->memcg = get_mem_cgroup_from_mm(current->mm);
+-}
 -
-+	map = bpf_map_idr_find(id);
- 	if (IS_ERR(map))
- 		return PTR_ERR(map);
+-static void bpf_map_release_memcg(struct bpf_map *map)
+-{
+-	mem_cgroup_put(map->memcg);
+-}
+-
+ void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
+ 			   int node)
+ {
+@@ -461,15 +451,6 @@ void __percpu *bpf_map_alloc_percpu(const struct bpf_map *map, size_t size,
  
+ 	return ptr;
+ }
+-
+-#else
+-static void bpf_map_save_memcg(struct bpf_map *map)
+-{
+-}
+-
+-static void bpf_map_release_memcg(struct bpf_map *map)
+-{
+-}
+ #endif
+ 
+ /* called from workqueue */
 -- 
 1.8.3.1
 
