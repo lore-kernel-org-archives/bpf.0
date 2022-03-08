@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C975C4332F
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 13:11:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93889C433F5
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 13:11:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiCHNMZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 08:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S1346781AbiCHNMg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 08:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234899AbiCHNMV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 08:12:21 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C7948E41;
-        Tue,  8 Mar 2022 05:11:18 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id a5so5710929pfv.2;
-        Tue, 08 Mar 2022 05:11:18 -0800 (PST)
+        with ESMTP id S234606AbiCHNMY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 08:12:24 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB6488B6;
+        Tue,  8 Mar 2022 05:11:21 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id m2so11046481pll.0;
+        Tue, 08 Mar 2022 05:11:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BdKzZoxcCHUk05nIKgEhaGedb/vHkDzRSP6HrqUzWkw=;
-        b=mVG368BLiMOTpvYHAUUF4Hl0SvELdZmvTum03FPpeGhXzLHWktVasfzvvXjRTjOz8v
-         OeRQAhrdpy137X55NmR+Q/Kuzq9xiVfXNfSvJp32pazR2MPbIlJ8Vzb0Bd7V7G/na2UQ
-         /kfik/XTfzvUUpTBTd1qB8DMG2kpuKdtEfRyYh14NVfqPCAXvfHKDJ+64jnLsvC2UHCd
-         Q3sUYvjb4wA56QqTFnZWhIKlsDgOcCCK5NzY5cMPJAHGwN6RbCmGB1z9nZM4JR4/0Zny
-         plLD1LQTq3acxLCjuPV6GmozEA9rAtVuiBPQKKhaxmdk4ZZHaK0851qNleWCQ6+8DyHd
-         neGA==
+        bh=6X23AJzOcszEUYA+Oc8WYhr7w/7aeKWJdCFlxFdfbxc=;
+        b=QzDOs9yQq9R1CZFP5kH/i37OmN2DriXgh+Uc29/28MK52/n2BNL5T+LpOEtCkDH1wT
+         SArng9TL/tXBv+Z80bt9GxJnPhLPtlJphCtIvRp0gdbabeClqLN5OJJWkW3w2ZTfWwQa
+         Rnjfw7mAFLLj9wTWH+Eh6SOwOz0vOv1IZ2Ez9Hdj3Lib06/AoNebKC9gEtTDUdNrv4NQ
+         9DcZx2G8SWEzn6bao5aEaUSzUNDhlZZ1d3NO0Rldf6bomrFxx1CFs1Xa9YnCHp8zH9iB
+         t5155kTpOmXdPuCwsVILsy5c1hsx6nSVXhy04JPx1GbVRQYFwe+KylhvR1CA514F2xZd
+         3C/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BdKzZoxcCHUk05nIKgEhaGedb/vHkDzRSP6HrqUzWkw=;
-        b=T+tv+erLOYUodKRwrQo799/Hy2Bm0asGnoCfttiq/1f/epUXuMud0exijiAeqiEUJU
-         JwRSdzdN2PuMjDoXew68KQ5nWgBxhO8DMqcNu0vlOoB80whLHuNIRRZRJOgyITxJbBoX
-         9bezDaoXJIsED/lqaIPKwuDSIQLHdyYtudBbFZ6R/lJbqdYV5QRShuKtaoqebuNa6fXU
-         loNRWiRvSfbnYtwsBWIKpEu0tQD9LM/Bn08uwA5TH8qQcE6e0ukocZenul7SwrQcwkJd
-         sMVeHzx3QHmhVLfZgYebpmLryrHlpAGV31aXlcGXjeV2Mi/GtbXHnihvEiTGb2QPGaRc
-         EClw==
-X-Gm-Message-State: AOAM532JsQ8lhZQy/V3p/kDDMT+msbEyHYK1XRVrhSeHVQqgKhp+8lgU
-        F/TwurWx3op8jXm683GOmq1I6gtz/VSjhHsGw6o=
-X-Google-Smtp-Source: ABdhPJxi1T75LgLTxomuRmkgtIa5sVE1omWzFmGT1bjc4dtbt/cmnHAw3/PxWVByPMfUm079lFsD0Q==
-X-Received: by 2002:a63:61d3:0:b0:37f:f9c5:bbb8 with SMTP id v202-20020a6361d3000000b0037ff9c5bbb8mr13005281pgb.332.1646745077687;
-        Tue, 08 Mar 2022 05:11:17 -0800 (PST)
+        bh=6X23AJzOcszEUYA+Oc8WYhr7w/7aeKWJdCFlxFdfbxc=;
+        b=G7uo/XXQehS2HJszpfZTnuqtAcr8oCVBolH9/xMu3y05Lb0tnx1km5sNug3rSo2c5e
+         Cuh2U+3Zm5/FoO63TXJVV7QYkzHIMAwe6s8Gs91UdnpkGGrWJJQSn9KcBhI0FEfw6g4G
+         OgFWJWlSm8YK5ZBU6yE0JCsxBjTpvd1nGceWK8YCpvu8Lyuo3E/Ez1LMrQxSnZHswSJq
+         s8+3SZXKZSUXAIAMQPzmV7P6rLV+iSOCq60RNRZh3nnm82TrxWgOfq8IYvlWie+Vz8qr
+         n80qEXyLk6i64dQuXcOdHlqK6O04TlMrs1gkBLSFzqTgYaxQcSPlGk5ssGz1IHiXNLCZ
+         XHaw==
+X-Gm-Message-State: AOAM530SSWe8Jun2y/rDFnh6IWe5wl2t2seGzqPp1TOMYbqjnDcL51Nj
+        sub75A0zUunVWmfqqZiVRms=
+X-Google-Smtp-Source: ABdhPJxKOq3e10aQ1RmNw8ArFeArmumS9bRFdOU8RkbwmtWaG0AV0PF5C3HqteolvWr6aJIng6XTbQ==
+X-Received: by 2002:a17:90a:4fa2:b0:1bd:383a:2b6b with SMTP id q31-20020a17090a4fa200b001bd383a2b6bmr4727275pjh.108.1646745080990;
+        Tue, 08 Mar 2022 05:11:20 -0800 (PST)
 Received: from vultr.guest ([149.248.19.67])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056a00179400b004f709998d13sm7378598pfg.10.2022.03.08.05.11.16
+        by smtp.gmail.com with ESMTPSA id s20-20020a056a00179400b004f709998d13sm7378598pfg.10.2022.03.08.05.11.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 05:11:17 -0800 (PST)
+        Tue, 08 Mar 2022 05:11:20 -0800 (PST)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -57,9 +57,9 @@ To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         guro@fb.com
 Cc:     linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH RFC 3/9] mm: add methord to charge kmalloc-ed address
-Date:   Tue,  8 Mar 2022 13:10:50 +0000
-Message-Id: <20220308131056.6732-4-laoar.shao@gmail.com>
+Subject: [PATCH RFC 5/9] mm: add methord to charge percpu address
+Date:   Tue,  8 Mar 2022 13:10:52 +0000
+Message-Id: <20220308131056.6732-6-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220308131056.6732-1-laoar.shao@gmail.com>
 References: <20220308131056.6732-1-laoar.shao@gmail.com>
@@ -69,108 +69,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch implements a methord to charge or uncharge related pages
-or objects from a given kmalloc-ed address. It is similar to kfree,
-except that it doesn't touch the pages or objects while does account
-only.
+This patch adds a methord to charge or uncharge a percpu address.
+It is similar to free_percpu except that it doesn't touch the related
+pages while does account only.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- include/linux/slab.h |  1 +
- mm/slab.c            |  6 ++++++
- mm/slob.c            |  6 ++++++
- mm/slub.c            | 32 ++++++++++++++++++++++++++++++++
- 4 files changed, 45 insertions(+)
+ include/linux/percpu.h |  1 +
+ mm/percpu.c            | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 5b6193f..ae82e23 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -182,6 +182,7 @@ struct kmem_cache *kmem_cache_create_usercopy(const char *name,
- void * __must_check krealloc(const void *objp, size_t new_size, gfp_t flags) __alloc_size(2);
- void kfree(const void *objp);
- void kfree_sensitive(const void *objp);
-+void kcharge(const void *objp, bool charge);
- size_t __ksize(const void *objp);
- size_t ksize(const void *objp);
- #ifdef CONFIG_PRINTK
-diff --git a/mm/slab.c b/mm/slab.c
-index ddf5737..fbff613 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -3796,6 +3796,12 @@ void kfree(const void *objp)
- }
- EXPORT_SYMBOL(kfree);
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index f1ec5ad..1a65221 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -128,6 +128,7 @@ extern int __init pcpu_page_first_chunk(size_t reserved_size,
+ extern void __percpu *__alloc_percpu_gfp(size_t size, size_t align, gfp_t gfp) __alloc_size(1);
+ extern void __percpu *__alloc_percpu(size_t size, size_t align) __alloc_size(1);
+ extern void free_percpu(void __percpu *__pdata);
++void charge_percpu(void __percpu *__pdata, bool charge);
+ extern phys_addr_t per_cpu_ptr_to_phys(void *addr);
  
-+void kcharge(const void *objp, bool charge)
-+{
-+	/* Not implemented yet */
-+}
-+EXPORT_SYMBOL(kfree);
-+
- /*
-  * This initializes kmem_cache_node or resizes various caches for all nodes.
-  */
-diff --git a/mm/slob.c b/mm/slob.c
-index 60c5842..d3a789f 100644
---- a/mm/slob.c
-+++ b/mm/slob.c
-@@ -569,6 +569,12 @@ void kfree(const void *block)
+ #define alloc_percpu_gfp(type, gfp)					\
+diff --git a/mm/percpu.c b/mm/percpu.c
+index ea28db2..22fc0ff 100644
+--- a/mm/percpu.c
++++ b/mm/percpu.c
+@@ -2309,6 +2309,56 @@ void free_percpu(void __percpu *ptr)
  }
- EXPORT_SYMBOL(kfree);
+ EXPORT_SYMBOL_GPL(free_percpu);
  
-+void kcharge(const void *block, bool charge)
++void charge_percpu(void __percpu *ptr, bool charge)
 +{
-+	/* not implemented yet. */
-+}
-+EXPORT_SYMBOL(kcharge);
-+
- /* can't use ksize for kmem_cache_alloc memory, only kmalloc */
- size_t __ksize(const void *block)
- {
-diff --git a/mm/slub.c b/mm/slub.c
-index 2614740..e933d45 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -4563,6 +4563,38 @@ void kfree(const void *x)
- }
- EXPORT_SYMBOL(kfree);
- 
-+void kcharge(const void *x, bool charge)
-+{
-+	void *object = (void *)x;
-+	struct folio *folio;
-+	struct slab *slab;
++	int bit_off, off, bits, size, end;
++	struct obj_cgroup *objcg;
++	struct pcpu_chunk *chunk;
++	unsigned long flags;
++	void *addr;
 +
 +	WARN_ON(!in_task());
 +
-+	if (unlikely(ZERO_OR_NULL_PTR(x)))
++	if (!ptr)
 +		return;
 +
-+	folio = virt_to_folio(x);
-+	if (unlikely(!folio_test_slab(folio))) {
-+		unsigned int order = folio_order(folio);
-+		int sign = charge ? 1 : -1;
-+
-+		mod_lruvec_page_state(folio_page(folio, 0), NR_SLAB_UNRECLAIMABLE_B,
-+			sign * (PAGE_SIZE << order));
-+
++	addr = __pcpu_ptr_to_addr(ptr);
++	spin_lock_irqsave(&pcpu_lock, flags);
++	chunk = pcpu_chunk_addr_search(addr);
++	off = addr - chunk->base_addr;
++	objcg = chunk->obj_cgroups[off >> PCPU_MIN_ALLOC_SHIFT];
++	if (!objcg) {
++		spin_unlock_irqrestore(&pcpu_lock, flags);
 +		return;
 +	}
 +
-+	slab = folio_slab(folio);
-+	if (charge)
-+		memcg_slab_post_alloc_hook(slab->slab_cache,
-+			get_obj_cgroup_from_current(), GFP_KERNEL, 1, &object);
-+	else
-+		memcg_slab_free_hook(slab->slab_cache, &object, 1);
++	bit_off = off / PCPU_MIN_ALLOC_SIZE;
++	/* find end index */
++	end = find_next_bit(chunk->bound_map, pcpu_chunk_map_bits(chunk),
++			bit_off + 1);
++	bits = end - bit_off;
++	size = bits * PCPU_MIN_ALLOC_SIZE;
 +
++	if (charge) {
++		obj_cgroup_get(objcg);
++		obj_cgroup_charge(objcg, GFP_KERNEL, size * num_possible_cpus());
++		rcu_read_lock();
++		mod_memcg_state(obj_cgroup_memcg(objcg), MEMCG_PERCPU_B,
++			(size * num_possible_cpus()));
++		rcu_read_unlock();
++	} else {
++		obj_cgroup_uncharge(objcg, size * num_possible_cpus());
++		rcu_read_lock();
++		mod_memcg_state(obj_cgroup_memcg(objcg), MEMCG_PERCPU_B,
++			-(size * num_possible_cpus()));
++		rcu_read_unlock();
++		obj_cgroup_put(objcg);
++	}
++
++	spin_unlock_irqrestore(&pcpu_lock, flags);
 +}
-+EXPORT_SYMBOL(kcharge);
++EXPORT_SYMBOL(charge_percpu);
 +
- #define SHRINK_PROMOTE_MAX 32
- 
- /*
+ bool __is_kernel_percpu_address(unsigned long addr, unsigned long *can_addr)
+ {
+ #ifdef CONFIG_SMP
 -- 
 1.8.3.1
 
