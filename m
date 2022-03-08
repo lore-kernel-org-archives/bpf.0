@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF91FC433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 14:58:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FA7DC433F5
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 14:58:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347698AbiCHO7P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 09:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S1347711AbiCHO7V (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 09:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347695AbiCHO7N (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 09:59:13 -0500
+        with ESMTP id S1347714AbiCHO7P (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 09:59:15 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 937791FA51
-        for <bpf@vger.kernel.org>; Tue,  8 Mar 2022 06:58:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EDAA20F52
+        for <bpf@vger.kernel.org>; Tue,  8 Mar 2022 06:58:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646751491;
+        s=mimecast20190719; t=1646751494;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iFqilxT+lSZOOOZ98XwesoXOJ/SGZfcJgQSLbKjZtCg=;
-        b=R1NE5ZEIPyFBFggJHkSKFdYCGuxR8ttQVTmRIWSR5OSNxirGiTjvO+2+pRYpcF8NPNXvNx
-        +igGn5QDmVR+LwQayCnJ9qhbTr8HF9U3Q0NFDaZ2Op7hywaVxDHn0D//osig6rkKBX99Hw
-        g3njikpVj4/pwx5aZ3h9h2RzVxY1SM0=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Y3p/D+LKC0CPwTQtFCwaC048P3XZEYMeJHbFVjQHPik=;
+        b=bEdptXGs22qYVE+MULDLg1AaZ2JBLjZ0uQ7iUQ4IRR8Lc7xtkbCBJ3K1bAbQWKhdiFZES2
+        bzfdl0bLbfUmEkN2lJekqlKU4AYxM+5txYxqz5qzMrg2/1qal1jq5F+eBG4CP8NhpHIMNQ
+        mIuxZedrrXl8blfJpmYGjUuCzw9jyas=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-uTUFndCsNRG6ISngB0y1JQ-1; Tue, 08 Mar 2022 09:58:10 -0500
-X-MC-Unique: uTUFndCsNRG6ISngB0y1JQ-1
-Received: by mail-ej1-f71.google.com with SMTP id m12-20020a1709062acc00b006cfc98179e2so8838511eje.6
-        for <bpf@vger.kernel.org>; Tue, 08 Mar 2022 06:58:10 -0800 (PST)
+ us-mta-250-k0Q_W8JDPtGrTnsQP9WMOQ-1; Tue, 08 Mar 2022 09:58:13 -0500
+X-MC-Unique: k0Q_W8JDPtGrTnsQP9WMOQ-1
+Received: by mail-ej1-f70.google.com with SMTP id q22-20020a1709064cd600b006db14922f93so2901543ejt.7
+        for <bpf@vger.kernel.org>; Tue, 08 Mar 2022 06:58:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iFqilxT+lSZOOOZ98XwesoXOJ/SGZfcJgQSLbKjZtCg=;
-        b=LJAHeeBYLhBioNQcFC7CX7hmGmrqzcdETgeuKq39KejtrYu9IouGi4+wkolvGH8tdW
-         PDaKDzzNJA2RiTvNYF9Xda3Lsbl03XOhxPg0qcrHSw3vF+EmQPEMRKn7Od9wYpEYb88P
-         xjLrTkAX4gYzG/QowmdXsOEkpqYANtLczhC3CZebiaUjCyUD99H2lKmy0cbU1HauV9EB
-         24Y9mlT/EsHBkyBPQ89f6Igv+PEEAWcnbjKXN8es4Hzi8K/j3M8nyebFkcrUeoeEKnDp
-         pwd9robpS6Nj2y8U73EEnvV3UClQoP6M2YcbMO0CpgLVmJ3I5ZLhjU5lXO75mzYvx4QH
-         cirg==
-X-Gm-Message-State: AOAM531WZnL8dtYy8vlFg0Gg0lPo81ps3OYyKqtLcwKGu+IzgzrvxG96
-        jHQ3Bf/Rf6GxcJPEPr3Yklm9pwYJIkX1y5SbhXWM8sbaCPA3wNMoZcyHsMoK2WNIEZpiJi9WlwJ
-        +ELQlHcFOQ7Nv
-X-Received: by 2002:a17:907:961b:b0:6d9:acb0:5403 with SMTP id gb27-20020a170907961b00b006d9acb05403mr13442052ejc.568.1646751488354;
-        Tue, 08 Mar 2022 06:58:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwyT4bqTkb/KvZ/GIdppGkevRs1F3WAJIZxAs4m3ze4tcXMPUM+DQnZsFpkV+3EoTVc1IkbCw==
-X-Received: by 2002:a17:907:961b:b0:6d9:acb0:5403 with SMTP id gb27-20020a170907961b00b006d9acb05403mr13441891ejc.568.1646751485821;
-        Tue, 08 Mar 2022 06:58:05 -0800 (PST)
+        bh=Y3p/D+LKC0CPwTQtFCwaC048P3XZEYMeJHbFVjQHPik=;
+        b=Y7srlTVxVcY2SQzDky5uyoUm7DvZ2unpWo+2B+MwE0ObtLGn9O56hKdRq0QjPE14W/
+         WShmsBVSjSKs0+woRdRqOQ8Bkw281is7ZZ+86x8JkLaIslAq0hWsExKtSlJeHjFKUIrS
+         VvFr4eVeqi1zMyroINfQX7tNJctVFtT85iiDUDuXS5WiLO1jKc0bIClYwQiLFTL05Q1a
+         uSwaDnE2If7vgsUkHNnTd9ZgUfqlTTH/9hungRD5Fwni9BLW5EfwjglA2EZr30yG9T83
+         dnxmqPzz07IZyclc/pqu1b61KKaVwb+UDNm/Ps898EN9L0GCDFXcB280BUYbf2bI2ixa
+         cDUg==
+X-Gm-Message-State: AOAM532nWdgQQ8CS3hwie3vlAbWXwgsKxUBv7fNRPn2B2a3RwWKtm8oB
+        Fd3BO4IQElS8W4lb3pVl5cgYWnY1MOl8EWYAnAbovAr1J/lxNDrGJxZWrW45k9uxvLSRhJ8DRQc
+        CsPPODEYnsZhl
+X-Received: by 2002:a05:6402:2548:b0:416:4155:e12 with SMTP id l8-20020a056402254800b0041641550e12mr11276608edb.175.1646751489444;
+        Tue, 08 Mar 2022 06:58:09 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxYFLAl8d95Ga+0g/easO+CIUBnQ+jRcIsWAh5LlijQ4M+kGaSdtwCxmmEd0GZo4+vPNaH3ag==
+X-Received: by 2002:a05:6402:2548:b0:416:4155:e12 with SMTP id l8-20020a056402254800b0041641550e12mr11276412edb.175.1646751486830;
+        Tue, 08 Mar 2022 06:58:06 -0800 (PST)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id y6-20020a056402358600b004166413d27bsm1738953edc.97.2022.03.08.06.58.04
+        by smtp.gmail.com with ESMTPSA id p24-20020a1709061b5800b006da6435cedcsm5939105ejg.132.2022.03.08.06.58.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 06:58:04 -0800 (PST)
+        Tue, 08 Mar 2022 06:58:05 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8AA101928D4; Tue,  8 Mar 2022 15:58:03 +0100 (CET)
+        id 39D0D1928D8; Tue,  8 Mar 2022 15:58:04 +0100 (CET)
 From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -68,11 +68,11 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>
 Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v10 2/5] Documentation/bpf: Add documentation for BPF_PROG_RUN
-Date:   Tue,  8 Mar 2022 15:57:58 +0100
-Message-Id: <20220308145801.46256-3-toke@redhat.com>
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH bpf-next v10 4/5] selftests/bpf: Move open_netns() and close_netns() into network_helpers.c
+Date:   Tue,  8 Mar 2022 15:58:00 +0100
+Message-Id: <20220308145801.46256-5-toke@redhat.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220308145801.46256-1-toke@redhat.com>
 References: <20220308145801.46256-1-toke@redhat.com>
@@ -83,152 +83,264 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds documentation for the BPF_PROG_RUN command; a short overview of
-the command itself, and a more verbose description of the "live packet"
-mode for XDP introduced in the previous commit.
+These will also be used by the xdp_do_redirect test being added in the next
+commit.
 
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- Documentation/bpf/bpf_prog_run.rst | 117 +++++++++++++++++++++++++++++
- Documentation/bpf/index.rst        |   1 +
- 2 files changed, 118 insertions(+)
- create mode 100644 Documentation/bpf/bpf_prog_run.rst
+ tools/testing/selftests/bpf/network_helpers.c | 86 ++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  9 ++
+ .../selftests/bpf/prog_tests/tc_redirect.c    | 89 -------------------
+ 3 files changed, 95 insertions(+), 89 deletions(-)
 
-diff --git a/Documentation/bpf/bpf_prog_run.rst b/Documentation/bpf/bpf_prog_run.rst
-new file mode 100644
-index 000000000000..4868c909df5c
---- /dev/null
-+++ b/Documentation/bpf/bpf_prog_run.rst
-@@ -0,0 +1,117 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 6db1af8fdee7..2bb1f9b3841d 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -1,18 +1,25 @@
+ // SPDX-License-Identifier: GPL-2.0-only
++#define _GNU_SOURCE
 +
-+===================================
-+Running BPF programs from userspace
-+===================================
+ #include <errno.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <sched.h>
+ 
+ #include <arpa/inet.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
+ 
+ #include <linux/err.h>
+ #include <linux/in.h>
+ #include <linux/in6.h>
++#include <linux/limits.h>
+ 
+ #include "bpf_util.h"
+ #include "network_helpers.h"
++#include "test_progs.h"
+ 
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+@@ -356,3 +363,82 @@ char *ping_command(int family)
+ 	}
+ 	return "ping";
+ }
 +
-+This document describes the ``BPF_PROG_RUN`` facility for running BPF programs
-+from userspace.
++struct nstoken {
++	int orig_netns_fd;
++};
 +
-+.. contents::
-+    :local:
-+    :depth: 2
++static int setns_by_fd(int nsfd)
++{
++	int err;
 +
++	err = setns(nsfd, CLONE_NEWNET);
++	close(nsfd);
 +
-+Overview
-+--------
++	if (!ASSERT_OK(err, "setns"))
++		return err;
 +
-+The ``BPF_PROG_RUN`` command can be used through the ``bpf()`` syscall to
-+execute a BPF program in the kernel and return the results to userspace. This
-+can be used to unit test BPF programs against user-supplied context objects, and
-+as way to explicitly execute programs in the kernel for their side effects. The
-+command was previously named ``BPF_PROG_TEST_RUN``, and both constants continue
-+to be defined in the UAPI header, aliased to the same value.
++	/* Switch /sys to the new namespace so that e.g. /sys/class/net
++	 * reflects the devices in the new namespace.
++	 */
++	err = unshare(CLONE_NEWNS);
++	if (!ASSERT_OK(err, "unshare"))
++		return err;
 +
-+The ``BPF_PROG_RUN`` command can be used to execute BPF programs of the
-+following types:
++	/* Make our /sys mount private, so the following umount won't
++	 * trigger the global umount in case it's shared.
++	 */
++	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
++	if (!ASSERT_OK(err, "remount private /sys"))
++		return err;
 +
-+- ``BPF_PROG_TYPE_SOCKET_FILTER``
-+- ``BPF_PROG_TYPE_SCHED_CLS``
-+- ``BPF_PROG_TYPE_SCHED_ACT``
-+- ``BPF_PROG_TYPE_XDP``
-+- ``BPF_PROG_TYPE_SK_LOOKUP``
-+- ``BPF_PROG_TYPE_CGROUP_SKB``
-+- ``BPF_PROG_TYPE_LWT_IN``
-+- ``BPF_PROG_TYPE_LWT_OUT``
-+- ``BPF_PROG_TYPE_LWT_XMIT``
-+- ``BPF_PROG_TYPE_LWT_SEG6LOCAL``
-+- ``BPF_PROG_TYPE_FLOW_DISSECTOR``
-+- ``BPF_PROG_TYPE_STRUCT_OPS``
-+- ``BPF_PROG_TYPE_RAW_TRACEPOINT``
-+- ``BPF_PROG_TYPE_SYSCALL``
++	err = umount2("/sys", MNT_DETACH);
++	if (!ASSERT_OK(err, "umount2 /sys"))
++		return err;
 +
-+When using the ``BPF_PROG_RUN`` command, userspace supplies an input context
-+object and (for program types operating on network packets) a buffer containing
-+the packet data that the BPF program will operate on. The kernel will then
-+execute the program and return the results to userspace. Note that programs will
-+not have any side effects while being run in this mode; in particular, packets
-+will not actually be redirected or dropped, the program return code will just be
-+returned to userspace. A separate mode for live execution of XDP programs is
-+provided, documented separately below.
++	err = mount("sysfs", "/sys", "sysfs", 0, NULL);
++	if (!ASSERT_OK(err, "mount /sys"))
++		return err;
 +
-+Running XDP programs in "live frame mode"
-+-----------------------------------------
++	err = mount("bpffs", "/sys/fs/bpf", "bpf", 0, NULL);
++	if (!ASSERT_OK(err, "mount /sys/fs/bpf"))
++		return err;
 +
-+The ``BPF_PROG_RUN`` command has a separate mode for running live XDP programs,
-+which can be used to execute XDP programs in a way where packets will actually
-+be processed by the kernel after the execution of the XDP program as if they
-+arrived on a physical interface. This mode is activated by setting the
-+``BPF_F_TEST_XDP_LIVE_FRAMES`` flag when supplying an XDP program to
-+``BPF_PROG_RUN``.
++	return 0;
++}
 +
-+The live packet mode is optimised for high performance execution of the supplied
-+XDP program many times (suitable for, e.g., running as a traffic generator),
-+which means the semantics are not quite as straight-forward as the regular test
-+run mode. Specifically:
++struct nstoken *open_netns(const char *name)
++{
++	int nsfd;
++	char nspath[PATH_MAX];
++	int err;
++	struct nstoken *token;
 +
-+- When executing an XDP program in live frame mode, the result of the execution
-+  will not be returned to userspace; instead, the kernel will perform the
-+  operation indicated by the program's return code (drop the packet, redirect
-+  it, etc). For this reason, setting the ``data_out`` or ``ctx_out`` attributes
-+  in the syscall parameters when running in this mode will be rejected. In
-+  addition, not all failures will be reported back to userspace directly;
-+  specifically, only fatal errors in setup or during execution (like memory
-+  allocation errors) will halt execution and return an error. If an error occurs
-+  in packet processing, like a failure to redirect to a given interface,
-+  execution will continue with the next repetition; these errors can be detected
-+  via the same trace points as for regular XDP programs.
++	token = malloc(sizeof(struct nstoken));
++	if (!ASSERT_OK_PTR(token, "malloc token"))
++		return NULL;
 +
-+- Userspace can supply an ifindex as part of the context object, just like in
-+  the regular (non-live) mode. The XDP program will be executed as though the
-+  packet arrived on this interface; i.e., the ``ingress_ifindex`` of the context
-+  object will point to that interface. Furthermore, if the XDP program returns
-+  ``XDP_PASS``, the packet will be injected into the kernel networking stack as
-+  though it arrived on that ifindex, and if it returns ``XDP_TX``, the packet
-+  will be transmitted *out* of that same interface. Do note, though, that
-+  because the program execution is not happening in driver context, an
-+  ``XDP_TX`` is actually turned into the same action as an ``XDP_REDIRECT`` to
-+  that same interface (i.e., it will only work if the driver has support for the
-+  ``ndo_xdp_xmit`` driver op).
++	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
++	if (!ASSERT_GE(token->orig_netns_fd, 0, "open /proc/self/ns/net"))
++		goto fail;
 +
-+- When running the program with multiple repetitions, the execution will happen
-+  in batches. The batch size defaults to 64 packets (which is same as the
-+  maximum NAPI receive batch size), but can be specified by userspace through
-+  the ``batch_size`` parameter, up to a maximum of 256 packets. For each batch,
-+  the kernel executes the XDP program repeatedly, each invocation getting a
-+  separate copy of the packet data. For each repetition, if the program drops
-+  the packet, the data page is immediately recycled (see below). Otherwise, the
-+  packet is buffered until the end of the batch, at which point all packets
-+  buffered this way during the batch are transmitted at once.
++	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name);
++	nsfd = open(nspath, O_RDONLY | O_CLOEXEC);
++	if (!ASSERT_GE(nsfd, 0, "open netns fd"))
++		goto fail;
 +
-+- When setting up the test run, the kernel will initialise a pool of memory
-+  pages of the same size as the batch size. Each memory page will be initialised
-+  with the initial packet data supplied by userspace at ``BPF_PROG_RUN``
-+  invocation. When possible, the pages will be recycled on future program
-+  invocations, to improve performance. Pages will generally be recycled a full
-+  batch at a time, except when a packet is dropped (by return code or because
-+  of, say, a redirection error), in which case that page will be recycled
-+  immediately. If a packet ends up being passed to the regular networking stack
-+  (because the XDP program returns ``XDP_PASS``, or because it ends up being
-+  redirected to an interface that injects it into the stack), the page will be
-+  released and a new one will be allocated when the pool is empty.
++	err = setns_by_fd(nsfd);
++	if (!ASSERT_OK(err, "setns_by_fd"))
++		goto fail;
 +
-+  When recycling, the page content is not rewritten; only the packet boundary
-+  pointers (``data``, ``data_end`` and ``data_meta``) in the context object will
-+  be reset to the original values. This means that if a program rewrites the
-+  packet contents, it has to be prepared to see either the original content or
-+  the modified version on subsequent invocations.
-diff --git a/Documentation/bpf/index.rst b/Documentation/bpf/index.rst
-index ef5c996547ec..96056a7447c7 100644
---- a/Documentation/bpf/index.rst
-+++ b/Documentation/bpf/index.rst
-@@ -21,6 +21,7 @@ that goes into great technical depth about the BPF Architecture.
-    helpers
-    programs
-    maps
-+   bpf_prog_run
-    classic_vs_extended.rst
-    bpf_licensing
-    test_debug
++	return token;
++fail:
++	free(token);
++	return NULL;
++}
++
++void close_netns(struct nstoken *token)
++{
++	ASSERT_OK(setns_by_fd(token->orig_netns_fd), "setns_by_fd");
++	free(token);
++}
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index d198181a5648..a4b3b2f9877b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -55,4 +55,13 @@ int make_sockaddr(int family, const char *addr_str, __u16 port,
+ 		  struct sockaddr_storage *addr, socklen_t *len);
+ char *ping_command(int family);
+ 
++struct nstoken;
++/**
++ * open_netns() - Switch to specified network namespace by name.
++ *
++ * Returns token with which to restore the original namespace
++ * using close_netns().
++ */
++struct nstoken *open_netns(const char *name);
++void close_netns(struct nstoken *token);
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+index 2b255e28ed26..7ad66a247c02 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
+@@ -10,8 +10,6 @@
+  * to drop unexpected traffic.
+  */
+ 
+-#define _GNU_SOURCE
+-
+ #include <arpa/inet.h>
+ #include <linux/if.h>
+ #include <linux/if_tun.h>
+@@ -19,10 +17,8 @@
+ #include <linux/sysctl.h>
+ #include <linux/time_types.h>
+ #include <linux/net_tstamp.h>
+-#include <sched.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+-#include <sys/mount.h>
+ #include <sys/stat.h>
+ #include <unistd.h>
+ 
+@@ -92,91 +88,6 @@ static int write_file(const char *path, const char *newval)
+ 	return 0;
+ }
+ 
+-struct nstoken {
+-	int orig_netns_fd;
+-};
+-
+-static int setns_by_fd(int nsfd)
+-{
+-	int err;
+-
+-	err = setns(nsfd, CLONE_NEWNET);
+-	close(nsfd);
+-
+-	if (!ASSERT_OK(err, "setns"))
+-		return err;
+-
+-	/* Switch /sys to the new namespace so that e.g. /sys/class/net
+-	 * reflects the devices in the new namespace.
+-	 */
+-	err = unshare(CLONE_NEWNS);
+-	if (!ASSERT_OK(err, "unshare"))
+-		return err;
+-
+-	/* Make our /sys mount private, so the following umount won't
+-	 * trigger the global umount in case it's shared.
+-	 */
+-	err = mount("none", "/sys", NULL, MS_PRIVATE, NULL);
+-	if (!ASSERT_OK(err, "remount private /sys"))
+-		return err;
+-
+-	err = umount2("/sys", MNT_DETACH);
+-	if (!ASSERT_OK(err, "umount2 /sys"))
+-		return err;
+-
+-	err = mount("sysfs", "/sys", "sysfs", 0, NULL);
+-	if (!ASSERT_OK(err, "mount /sys"))
+-		return err;
+-
+-	err = mount("bpffs", "/sys/fs/bpf", "bpf", 0, NULL);
+-	if (!ASSERT_OK(err, "mount /sys/fs/bpf"))
+-		return err;
+-
+-	return 0;
+-}
+-
+-/**
+- * open_netns() - Switch to specified network namespace by name.
+- *
+- * Returns token with which to restore the original namespace
+- * using close_netns().
+- */
+-static struct nstoken *open_netns(const char *name)
+-{
+-	int nsfd;
+-	char nspath[PATH_MAX];
+-	int err;
+-	struct nstoken *token;
+-
+-	token = calloc(1, sizeof(struct nstoken));
+-	if (!ASSERT_OK_PTR(token, "malloc token"))
+-		return NULL;
+-
+-	token->orig_netns_fd = open("/proc/self/ns/net", O_RDONLY);
+-	if (!ASSERT_GE(token->orig_netns_fd, 0, "open /proc/self/ns/net"))
+-		goto fail;
+-
+-	snprintf(nspath, sizeof(nspath), "%s/%s", "/var/run/netns", name);
+-	nsfd = open(nspath, O_RDONLY | O_CLOEXEC);
+-	if (!ASSERT_GE(nsfd, 0, "open netns fd"))
+-		goto fail;
+-
+-	err = setns_by_fd(nsfd);
+-	if (!ASSERT_OK(err, "setns_by_fd"))
+-		goto fail;
+-
+-	return token;
+-fail:
+-	free(token);
+-	return NULL;
+-}
+-
+-static void close_netns(struct nstoken *token)
+-{
+-	ASSERT_OK(setns_by_fd(token->orig_netns_fd), "setns_by_fd");
+-	free(token);
+-}
+-
+ static int netns_setup_namespaces(const char *verb)
+ {
+ 	const char * const *ns = namespaces;
 -- 
 2.35.1
 
