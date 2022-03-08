@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E6AC433F5
-	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 11:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5009C433EF
+	for <bpf@archiver.kernel.org>; Tue,  8 Mar 2022 11:10:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346286AbiCHLKu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Mar 2022 06:10:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
+        id S1346295AbiCHLLK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Mar 2022 06:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234013AbiCHLKq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Mar 2022 06:10:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792BE424BD;
-        Tue,  8 Mar 2022 03:09:50 -0800 (PST)
+        with ESMTP id S1346342AbiCHLLH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Mar 2022 06:11:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D0041FA3;
+        Tue,  8 Mar 2022 03:10:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C285B817CC;
-        Tue,  8 Mar 2022 11:09:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8151CC340EB;
-        Tue,  8 Mar 2022 11:09:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CDDB615F5;
+        Tue,  8 Mar 2022 11:10:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18475C340EB;
+        Tue,  8 Mar 2022 11:10:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646737787;
-        bh=u3LXU9B0NsFiJGyUROaEhGHNAJ3nalwJrXEmn9uAx90=;
+        s=k20201202; t=1646737809;
+        bh=4np2dBOfdrhAvWSD0KrpvtH6KlUzllFx8wV9gxXS/ko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VXbc5n+pOTrB24RFFI7VL7p6tzU0pPNI2P9X7Wm09DBLuRFFzBQuV1jYaga9Zj+cC
-         4XfMcctO941+494jzCbEnBJ44aKAMWV6UaSbPwP55w2Q5LhCeQo/n9XiDi4e+MUYMp
-         BBB1/3hBDC793SPfcjAMpDzyZ+UgXmy5rAf1PFqDA/cbm4TbdwP7jSHlS2Zgb328U5
-         hiMqa0sYmIYbuV3paicN8J3khJxz/m4gGNI/8/sjUseseSuraNJHmiaNk7fvYeRij3
-         RAT73XGzw3k+lgtKGon6vy5ruzRnn1M+D1sgledfYJLwy90fUZb6lO8OLE4IQwKttv
-         LU16LMxxLd+JA==
+        b=mTeTLm69xM0xa4qMxTaw/sYNPPnnMtKZJlMMKsvx9VNarTGA2MKTeA3fk81s/WTf4
+         YriMb4UFcXU3ONJ+5LWXg0oGWPg63zKueDV6PYiGz5aviQqme5BmFuK9SPY6pPfXb+
+         pUDwtxtkhoknI/rkBZa0+axx9B/TY9LDP4H1U5epHXplpco9Xa2mZuRPyfeoboonsK
+         3vdz+Tb/X0MmZCdaeVPwOWCMYfCqzq6bG7wdFq57zMmOdkm4SEEe0LgdeGxT8K7qr/
+         taiYfbDiPNLb0K2uwom62wBbdV4lZjWaxup2++kFtUPZLlD0ATkjgfETt+jARZmNz2
+         isiP9QnRx495g==
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -45,9 +45,9 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
         Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
         "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH v10 06/12] powerpc: Add rethook support
-Date:   Tue,  8 Mar 2022 20:09:42 +0900
-Message-Id: <164673778191.1984170.16191629286250415895.stgit@devnote2>
+Subject: [PATCH v10 08/12] fprobe: Add exit_handler support
+Date:   Tue,  8 Mar 2022 20:10:05 +0900
+Message-Id: <164673780458.1984170.17549412262886313681.stgit@devnote2>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <164673771096.1984170.8155877393151850116.stgit@devnote2>
 References: <164673771096.1984170.8155877393151850116.stgit@devnote2>
@@ -59,120 +59,273 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add rethook powerpc64 implementation. Most of the code has been copied from
-kretprobes on powerpc64.
+Add exit_handler to fprobe. fprobe + rethook allows us to hook the kernel
+function return. The rethook will be enabled only if the
+fprobe::exit_handler is set.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
  Changes in v10:
-  - Add a dummy @mcount to arch_rethook_prepare().
+  - Call rethook_hook() with mcount context flag.
+ Changes in v7:
+  - Fix unregister_fprobe() to ensure the rethook handlers are
+    finished when it returns.
+  - Update Kconfig help.
+ Changes in v6:
+  - Update according to the fprobe update.
+ Changes in v5:
+  - Add dependency for HAVE_RETHOOK.
+ Changes in v4:
+  - Check fprobe is disabled in the exit handler.
+ Changes in v3:
+  - Make sure to clear rethook->data before free.
+  - Handler checks the data is not NULL.
+  - Free rethook only if the rethook is using.
 ---
- arch/powerpc/Kconfig          |    1 +
- arch/powerpc/kernel/Makefile  |    1 +
- arch/powerpc/kernel/rethook.c |   72 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 74 insertions(+)
- create mode 100644 arch/powerpc/kernel/rethook.c
+ include/linux/fprobe.h |    6 ++
+ kernel/trace/Kconfig   |    9 ++--
+ kernel/trace/fprobe.c  |  116 ++++++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 122 insertions(+), 9 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index b779603978e1..5feaa241fb56 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -229,6 +229,7 @@ config PPC
- 	select HAVE_PERF_EVENTS_NMI		if PPC64
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
-+	select HAVE_RETHOOK			if KPROBES
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RELIABLE_STACKTRACE
- 	select HAVE_RSEQ
-diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-index 4d7829399570..feb24ea83ca6 100644
---- a/arch/powerpc/kernel/Makefile
-+++ b/arch/powerpc/kernel/Makefile
-@@ -115,6 +115,7 @@ obj-$(CONFIG_SMP)		+= smp.o
- obj-$(CONFIG_KPROBES)		+= kprobes.o
- obj-$(CONFIG_OPTPROBES)		+= optprobes.o optprobes_head.o
- obj-$(CONFIG_KPROBES_ON_FTRACE)	+= kprobes-ftrace.o
-+obj-$(CONFIG_RETHOOK)		+= rethook.o
- obj-$(CONFIG_UPROBES)		+= uprobes.o
- obj-$(CONFIG_PPC_UDBG_16550)	+= legacy_serial.o udbg_16550.o
- obj-$(CONFIG_SWIOTLB)		+= dma-swiotlb.o
-diff --git a/arch/powerpc/kernel/rethook.c b/arch/powerpc/kernel/rethook.c
-new file mode 100644
-index 000000000000..a8a128748efa
---- /dev/null
-+++ b/arch/powerpc/kernel/rethook.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * PowerPC implementation of rethook. This depends on kprobes.
-+ */
-+
-+#include <linux/kprobes.h>
+diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
+index 2ba099aff041..8eefec2b485e 100644
+--- a/include/linux/fprobe.h
++++ b/include/linux/fprobe.h
+@@ -5,13 +5,16 @@
+ 
+ #include <linux/compiler.h>
+ #include <linux/ftrace.h>
 +#include <linux/rethook.h>
+ 
+ /**
+  * struct fprobe - ftrace based probe.
+  * @ops: The ftrace_ops.
+  * @nmissed: The counter for missing events.
+  * @flags: The status flag.
++ * @rethook: The rethook data structure. (internal data)
+  * @entry_handler: The callback function for function entry.
++ * @exit_handler: The callback function for function exit.
+  */
+ struct fprobe {
+ #ifdef CONFIG_FUNCTION_TRACER
+@@ -25,7 +28,10 @@ struct fprobe {
+ #endif
+ 	unsigned long		nmissed;
+ 	unsigned int		flags;
++	struct rethook		*rethook;
 +
-+/*
-+ * Function return trampoline:
-+ * 	- init_kprobes() establishes a probepoint here
-+ * 	- When the probed function returns, this probe
-+ * 		causes the handlers to fire
-+ */
-+asm(".global arch_rethook_trampoline\n"
-+	".type arch_rethook_trampoline, @function\n"
-+	"arch_rethook_trampoline:\n"
-+	"nop\n"
-+	"blr\n"
-+	".size arch_rethook_trampoline, .-arch_rethook_trampoline\n");
+ 	void (*entry_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
++	void (*exit_handler)(struct fprobe *fp, unsigned long entry_ip, struct pt_regs *regs);
+ };
+ 
+ #define FPROBE_FL_DISABLED	1
+diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+index e75504e42ab8..99dd4ca63d68 100644
+--- a/kernel/trace/Kconfig
++++ b/kernel/trace/Kconfig
+@@ -251,11 +251,14 @@ config FPROBE
+ 	bool "Kernel Function Probe (fprobe)"
+ 	depends on FUNCTION_TRACER
+ 	depends on DYNAMIC_FTRACE_WITH_REGS
++	depends on HAVE_RETHOOK
++	select RETHOOK
+ 	default n
+ 	help
+-	  This option enables kernel function probe (fprobe) based on ftrace,
+-	  which is similar to kprobes, but probes only for kernel function
+-	  entries and it can probe multiple functions by one fprobe.
++	  This option enables kernel function probe (fprobe) based on ftrace.
++	  The fprobe is similar to kprobes, but probes only for kernel function
++	  entries and exits. This also can probe multiple functions by one
++	  fprobe.
+ 
+ 	  If unsure, say N.
+ 
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 7e8ceee339a0..38073632bfe4 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -8,12 +8,22 @@
+ #include <linux/fprobe.h>
+ #include <linux/kallsyms.h>
+ #include <linux/kprobes.h>
++#include <linux/rethook.h>
+ #include <linux/slab.h>
+ #include <linux/sort.h>
+ 
++#include "trace.h"
 +
-+/*
-+ * Called when the probe at kretprobe trampoline is hit
-+ */
-+static int trampoline_rethook_handler(struct kprobe *p, struct pt_regs *regs)
-+{
-+	unsigned long orig_ret_address;
-+
-+	orig_ret_address = rethook_trampoline_handler(regs, 0);
-+	/*
-+	 * We get here through one of two paths:
-+	 * 1. by taking a trap -> kprobe_handler() -> here
-+	 * 2. by optprobe branch -> optimized_callback() -> opt_pre_handler() -> here
-+	 *
-+	 * When going back through (1), we need regs->nip to be setup properly
-+	 * as it is used to determine the return address from the trap.
-+	 * For (2), since nip is not honoured with optprobes, we instead setup
-+	 * the link register properly so that the subsequent 'blr' in
-+	 * __kretprobe_trampoline jumps back to the right instruction.
-+	 *
-+	 * For nip, we should set the address to the previous instruction since
-+	 * we end up emulating it in kprobe_handler(), which increments the nip
-+	 * again.
-+	 */
-+	regs_set_return_ip(regs, orig_ret_address - 4);
-+	regs->link = orig_ret_address;
-+
-+	return 0;
-+}
-+NOKPROBE_SYMBOL(trampoline_rethook_handler);
-+
-+void arch_rethook_prepare(struct rethook_node *rh, struct pt_regs *regs, bool mcount)
-+{
-+	rh->ret_addr = regs->link;
-+	rh->frame = 0;
-+
-+	/* Replace the return addr with trampoline addr */
-+	regs->link = (unsigned long)arch_rethook_trampoline;
-+}
-+NOKPROBE_SYMBOL(arch_prepare_kretprobe);
-+
-+static struct kprobe trampoline_p = {
-+	.addr = (kprobe_opcode_t *) &arch_rethook_trampoline,
-+	.pre_handler = trampoline_rethook_handler
++struct fprobe_rethook_node {
++	struct rethook_node node;
++	unsigned long entry_ip;
 +};
 +
-+static int init_arch_rethook(void)
+ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+ 			   struct ftrace_ops *ops, struct ftrace_regs *fregs)
+ {
++	struct fprobe_rethook_node *fpr;
++	struct rethook_node *rh;
+ 	struct fprobe *fp;
+ 	int bit;
+ 
+@@ -30,10 +40,37 @@ static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+ 	if (fp->entry_handler)
+ 		fp->entry_handler(fp, ip, ftrace_get_regs(fregs));
+ 
++	if (fp->exit_handler) {
++		rh = rethook_try_get(fp->rethook);
++		if (!rh) {
++			fp->nmissed++;
++			goto out;
++		}
++		fpr = container_of(rh, struct fprobe_rethook_node, node);
++		fpr->entry_ip = ip;
++		rethook_hook(rh, ftrace_get_regs(fregs), true);
++	}
++
++out:
+ 	ftrace_test_recursion_unlock(bit);
+ }
+ NOKPROBE_SYMBOL(fprobe_handler);
+ 
++static void fprobe_exit_handler(struct rethook_node *rh, void *data,
++				struct pt_regs *regs)
 +{
-+	return register_kprobe(&trampoline_p);
++	struct fprobe *fp = (struct fprobe *)data;
++	struct fprobe_rethook_node *fpr;
++
++	if (!fp || fprobe_disabled(fp))
++		return;
++
++	fpr = container_of(rh, struct fprobe_rethook_node, node);
++
++	fp->exit_handler(fp, fpr->entry_ip, regs);
++}
++NOKPROBE_SYMBOL(fprobe_exit_handler);
++
+ /* Convert ftrace location address from symbols */
+ static unsigned long *get_ftrace_locations(const char **syms, int num)
+ {
+@@ -77,6 +114,48 @@ static void fprobe_init(struct fprobe *fp)
+ 	fp->ops.flags |= FTRACE_OPS_FL_SAVE_REGS;
+ }
+ 
++static int fprobe_init_rethook(struct fprobe *fp, int num)
++{
++	int i, size;
++
++	if (num < 0)
++		return -EINVAL;
++
++	if (!fp->exit_handler) {
++		fp->rethook = NULL;
++		return 0;
++	}
++
++	/* Initialize rethook if needed */
++	size = num * num_possible_cpus() * 2;
++	if (size < 0)
++		return -E2BIG;
++
++	fp->rethook = rethook_alloc((void *)fp, fprobe_exit_handler);
++	for (i = 0; i < size; i++) {
++		struct rethook_node *node;
++
++		node = kzalloc(sizeof(struct fprobe_rethook_node), GFP_KERNEL);
++		if (!node) {
++			rethook_free(fp->rethook);
++			fp->rethook = NULL;
++			return -ENOMEM;
++		}
++		rethook_add_node(fp->rethook, node);
++	}
++	return 0;
 +}
 +
-+core_initcall(init_arch_rethook);
++static void fprobe_fail_cleanup(struct fprobe *fp)
++{
++	if (fp->rethook) {
++		/* Don't need to cleanup rethook->handler because this is not used. */
++		rethook_free(fp->rethook);
++		fp->rethook = NULL;
++	}
++	ftrace_free_filter(&fp->ops);
++}
++
+ /**
+  * register_fprobe() - Register fprobe to ftrace by pattern.
+  * @fp: A fprobe data structure to be registered.
+@@ -90,6 +169,7 @@ static void fprobe_init(struct fprobe *fp)
+  */
+ int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter)
+ {
++	struct ftrace_hash *hash;
+ 	unsigned char *str;
+ 	int ret, len;
+ 
+@@ -114,10 +194,21 @@ int register_fprobe(struct fprobe *fp, const char *filter, const char *notfilter
+ 			goto out;
+ 	}
+ 
+-	ret = register_ftrace_function(&fp->ops);
++	/* TODO:
++	 * correctly calculate the total number of filtered symbols
++	 * from both filter and notfilter.
++	 */
++	hash = fp->ops.local_hash.filter_hash;
++	if (WARN_ON_ONCE(!hash))
++		goto out;
++
++	ret = fprobe_init_rethook(fp, (int)hash->count);
++	if (!ret)
++		ret = register_ftrace_function(&fp->ops);
++
+ out:
+ 	if (ret)
+-		ftrace_free_filter(&fp->ops);
++		fprobe_fail_cleanup(fp);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(register_fprobe);
+@@ -145,12 +236,15 @@ int register_fprobe_ips(struct fprobe *fp, unsigned long *addrs, int num)
+ 	fprobe_init(fp);
+ 
+ 	ret = ftrace_set_filter_ips(&fp->ops, addrs, num, 0, 0);
++	if (ret)
++		return ret;
++
++	ret = fprobe_init_rethook(fp, num);
+ 	if (!ret)
+ 		ret = register_ftrace_function(&fp->ops);
+ 
+ 	if (ret)
+-		ftrace_free_filter(&fp->ops);
+-
++		fprobe_fail_cleanup(fp);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(register_fprobe_ips);
+@@ -201,10 +295,20 @@ int unregister_fprobe(struct fprobe *fp)
+ 	if (!fp || fp->ops.func != fprobe_handler)
+ 		return -EINVAL;
+ 
++	/*
++	 * rethook_free() starts disabling the rethook, but the rethook handlers
++	 * may be running on other processors at this point. To make sure that all
++	 * current running handlers are finished, call unregister_ftrace_function()
++	 * after this.
++	 */
++	if (fp->rethook)
++		rethook_free(fp->rethook);
++
+ 	ret = unregister_ftrace_function(&fp->ops);
++	if (ret < 0)
++		return ret;
+ 
+-	if (!ret)
+-		ftrace_free_filter(&fp->ops);
++	ftrace_free_filter(&fp->ops);
+ 
+ 	return ret;
+ }
 
