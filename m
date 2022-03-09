@@ -2,143 +2,188 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2239BC433EF
-	for <bpf@archiver.kernel.org>; Wed,  9 Mar 2022 09:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3F6C433F5
+	for <bpf@archiver.kernel.org>; Wed,  9 Mar 2022 09:04:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiCIJFc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Mar 2022 04:05:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S231234AbiCIJF4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Mar 2022 04:05:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbiCIJFb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Mar 2022 04:05:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F23A1480EA
-        for <bpf@vger.kernel.org>; Wed,  9 Mar 2022 01:04:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646816671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8eOwlkZcGQDXJozobV2VKRCePhnXpJDnIKdIuSxdQwY=;
-        b=DIkKYiIYR8PSqDyTC/LifulEZk6PAGXeQJdztYPzxIX7SZ0Oa0if+HLZEa45iyfsA1Wfjd
-        eljR6AUPAqdR6i46iP+Z2WhoOsu81Dwool1d6K3ryAFYcJw1SIe5A7f+65I8zLW14NxZNi
-        ZkAehu5TS0LylhE4tUniAEEtiQ5ycdw=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-573--3t11fKLOiCKVv-oGGCEMg-1; Wed, 09 Mar 2022 04:04:29 -0500
-X-MC-Unique: -3t11fKLOiCKVv-oGGCEMg-1
-Received: by mail-pj1-f71.google.com with SMTP id e14-20020a17090a684e00b001bf09ac2385so1216795pjm.1
-        for <bpf@vger.kernel.org>; Wed, 09 Mar 2022 01:04:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8eOwlkZcGQDXJozobV2VKRCePhnXpJDnIKdIuSxdQwY=;
-        b=XjKDV3AkEXD35LJhlHYEVKSmZrCpZ2Spsh96awCv6Gs72zc3/jkDdGkF4fOnCGB2Wx
-         v8FtVAG73UBjuRSBL/0KdjlarkvgvLYbZZJ0NCvWXA1ZqoFMEiRiPPxxc1Viu2D1Klir
-         zoBFBv1YBO7kdDcMfM7wHotj1WUP/sxOZNzkO0we4lSOkWR4A9c++G7imOjexyUK1Ovr
-         N9M8mg+2V6JpHQxjIWX/kz7X1Uh/TSIHehibYZB168uVqKgikEvWx1uTpElr7+PFM5pi
-         w5tN+Mov4buo4p8x6S2/rgWtb17edryfMR2XqcZ0c504Nb9uo5OpqVGuc/KFdMgN/MrT
-         SY6Q==
-X-Gm-Message-State: AOAM5310erJ3PhW/ERxfOg+RIeHKrI7PepGa/DmIWjeDGaDJiNjUKYo3
-        faa3/2HTVt0co0g91ujl/BL9vOd4/1Lh5+94y46pByVJaVCiOkIQyzUob9fUnUK412rY/b6EBsk
-        KPVLUp92NKlS2
-X-Received: by 2002:a62:1881:0:b0:4e0:1b4c:36f8 with SMTP id 123-20020a621881000000b004e01b4c36f8mr22643983pfy.26.1646816668195;
-        Wed, 09 Mar 2022 01:04:28 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzUnje7NyiCBB5gGNjdXAqLUtIZXfE6NBoxWfMgYiTY4JFlOMy5UMt3jQvXKvTlc37/MUAVcA==
-X-Received: by 2002:a62:1881:0:b0:4e0:1b4c:36f8 with SMTP id 123-20020a621881000000b004e01b4c36f8mr22643942pfy.26.1646816667945;
-        Wed, 09 Mar 2022 01:04:27 -0800 (PST)
-Received: from [10.72.12.183] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id d25-20020a639919000000b00364f999aed5sm1614910pge.20.2022.03.09.01.04.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Mar 2022 01:04:27 -0800 (PST)
-Message-ID: <f1fb522d-74ce-a642-7768-deaad76aeddc@redhat.com>
-Date:   Wed, 9 Mar 2022 17:04:12 +0800
+        with ESMTP id S230445AbiCIJF4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Mar 2022 04:05:56 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B511409F5
+        for <bpf@vger.kernel.org>; Wed,  9 Mar 2022 01:04:58 -0800 (PST)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2296sD2k006534
+        for <bpf@vger.kernel.org>; Wed, 9 Mar 2022 01:04:57 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=CJIvRMVKeVThsJZ4VJGvt5A6Gdxs44d8x2IPElkl0I4=;
+ b=IqDDEN1fzWDM6yorlCTaSFj0ke7CS1tho4/mgFAuJH1WxnzpD17cNDXJQrWsLdZS/9YV
+ wCmXMf8gGXgX/vTHh2huvvYjBA6CgZ21OR7laU8FJ6QeSEOCu02MO5/sY0Yp9PtXaqah
+ LP2GeDMyZXk+chW3wtCbbDTKAm0Nkt4Sd5Y= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3epak3dha4-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Mar 2022 01:04:57 -0800
+Received: from twshared13345.18.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Mar 2022 01:04:56 -0800
+Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
+        id 60ED51ADC5DB; Wed,  9 Mar 2022 01:04:50 -0800 (PST)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH bpf-next 1/5] bpf: net: Remove TC_AT_INGRESS_OFFSET and SKB_MONO_DELIVERY_TIME_OFFSET macro
+Date:   Wed, 9 Mar 2022 01:04:50 -0800
+Message-ID: <20220309090450.3710955-1-kafai@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220309090444.3710464-1-kafai@fb.com>
+References: <20220309090444.3710464-1-kafai@fb.com>
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: d5M4DKIWG981WhE9rZDYDsYd3XHvTfTb
+X-Proofpoint-GUID: d5M4DKIWG981WhE9rZDYDsYd3XHvTfTb
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.6.1
-Subject: Re: [PATCH v7 21/26] virtio: add helper virtio_find_vqs_ctx_size()
-Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org
-References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
- <20220308123518.33800-22-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220308123518.33800-22-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-09_04,2022-03-04_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+This patch removes the TC_AT_INGRESS_OFFSET and
+SKB_MONO_DELIVERY_TIME_OFFSET macros.  Instead, PKT_VLAN_PRESENT_OFFSET
+is used because all of them are at the same offset.  Comment is added to
+make it clear that changing the position of tc_at_ingress or
+mono_delivery_time will require to adjust the defined macros.
 
-在 2022/3/8 下午8:35, Xuan Zhuo 写道:
-> Introduce helper virtio_find_vqs_ctx_size() to call find_vqs and specify
-> the maximum size of each vq ring.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->   include/linux/virtio_config.h | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
->
-> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-> index 5157524d8036..921d8610db0c 100644
-> --- a/include/linux/virtio_config.h
-> +++ b/include/linux/virtio_config.h
-> @@ -233,6 +233,18 @@ int virtio_find_vqs_ctx(struct virtio_device *vdev, unsigned nvqs,
->   				      desc, NULL);
->   }
->   
-> +static inline
-> +int virtio_find_vqs_ctx_size(struct virtio_device *vdev, u32 nvqs,
-> +				 struct virtqueue *vqs[],
-> +				 vq_callback_t *callbacks[],
-> +				 const char * const names[],
-> +				 const bool *ctx, struct irq_affinity *desc,
-> +				 u32 sizes[])
-> +{
-> +	return vdev->config->find_vqs(vdev, nvqs, vqs, callbacks, names, ctx,
-> +				      desc, sizes);
-> +}
+The earlier discussion can be found here:
+https://lore.kernel.org/bpf/419d994e-ff61-7c11-0ec7-11fefcb0186e@iogearbox.=
+net/
 
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/linux/skbuff.h | 10 +++++-----
+ net/core/filter.c      | 14 +++++++-------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
-Do we need to convert all the open coded direct call to find_vqs() other 
-than net?
-
-Thanks
-
-
-> +
->   /**
->    * virtio_reset_vq - reset a queue individually
->    * @vq: the virtqueue
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 2be263184d1e..7b0cb10e70cb 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -960,10 +960,10 @@ struct sk_buff {
+ 	__u8			csum_complete_sw:1;
+ 	__u8			csum_level:2;
+ 	__u8			dst_pending_confirm:1;
+-	__u8			mono_delivery_time:1;
++	__u8			mono_delivery_time:1;	/* See SKB_MONO_DELIVERY_TIME_MASK */
+ #ifdef CONFIG_NET_CLS_ACT
+ 	__u8			tc_skip_classify:1;
+-	__u8			tc_at_ingress:1;
++	__u8			tc_at_ingress:1;	/* See TC_AT_INGRESS_MASK */
+ #endif
+ #ifdef CONFIG_IPV6_NDISC_NODETYPE
+ 	__u8			ndisc_nodetype:2;
+@@ -1062,7 +1062,9 @@ struct sk_buff {
+ #endif
+ #define PKT_TYPE_OFFSET		offsetof(struct sk_buff, __pkt_type_offset)
+=20
+-/* if you move pkt_vlan_present around you also must adapt these constants=
+ */
++/* if you move pkt_vlan_present, tc_at_ingress, or mono_delivery_time
++ * around, you also must adapt these constants.
++ */
+ #ifdef __BIG_ENDIAN_BITFIELD
+ #define PKT_VLAN_PRESENT_BIT	7
+ #define TC_AT_INGRESS_MASK		(1 << 0)
+@@ -1073,8 +1075,6 @@ struct sk_buff {
+ #define SKB_MONO_DELIVERY_TIME_MASK	(1 << 5)
+ #endif
+ #define PKT_VLAN_PRESENT_OFFSET	offsetof(struct sk_buff, __pkt_vlan_presen=
+t_offset)
+-#define TC_AT_INGRESS_OFFSET offsetof(struct sk_buff, __pkt_vlan_present_o=
+ffset)
+-#define SKB_MONO_DELIVERY_TIME_OFFSET offsetof(struct sk_buff, __pkt_vlan_=
+present_offset)
+=20
+ #ifdef __KERNEL__
+ /*
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 88767f7da150..738a294a3c82 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8896,7 +8896,7 @@ static struct bpf_insn *bpf_convert_dtime_type_read(c=
+onst struct bpf_insn *si,
+ 	__u8 tmp_reg =3D BPF_REG_AX;
+=20
+ 	*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg,
+-			      SKB_MONO_DELIVERY_TIME_OFFSET);
++			      PKT_VLAN_PRESENT_OFFSET);
+ 	*insn++ =3D BPF_ALU32_IMM(BPF_AND, tmp_reg,
+ 				SKB_MONO_DELIVERY_TIME_MASK);
+ 	*insn++ =3D BPF_JMP32_IMM(BPF_JEQ, tmp_reg, 0, 2);
+@@ -8912,7 +8912,7 @@ static struct bpf_insn *bpf_convert_dtime_type_read(c=
+onst struct bpf_insn *si,
+ 	*insn++ =3D BPF_JMP_A(IS_ENABLED(CONFIG_NET_CLS_ACT) ? 6 : 1);
+=20
+ #ifdef CONFIG_NET_CLS_ACT
+-	*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, TC_AT_INGRESS_OFFSET);
++	*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET);
+ 	*insn++ =3D BPF_ALU32_IMM(BPF_AND, tmp_reg, TC_AT_INGRESS_MASK);
+ 	*insn++ =3D BPF_JMP32_IMM(BPF_JEQ, tmp_reg, 0, 2);
+ 	/* At ingress, value_reg =3D 0 */
+@@ -8959,14 +8959,14 @@ static struct bpf_insn *bpf_convert_tstamp_read(con=
+st struct bpf_prog *prog,
+ 	if (!prog->delivery_time_access) {
+ 		__u8 tmp_reg =3D BPF_REG_AX;
+=20
+-		*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, TC_AT_INGRESS_OFFSET);
++		*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET=
+);
+ 		*insn++ =3D BPF_ALU32_IMM(BPF_AND, tmp_reg, TC_AT_INGRESS_MASK);
+ 		*insn++ =3D BPF_JMP32_IMM(BPF_JEQ, tmp_reg, 0, 5);
+ 		/* @ingress, read __sk_buff->tstamp as the (rcv) timestamp,
+ 		 * so check the skb->mono_delivery_time.
+ 		 */
+ 		*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg,
+-				      SKB_MONO_DELIVERY_TIME_OFFSET);
++				      PKT_VLAN_PRESENT_OFFSET);
+ 		*insn++ =3D BPF_ALU32_IMM(BPF_AND, tmp_reg,
+ 					SKB_MONO_DELIVERY_TIME_MASK);
+ 		*insn++ =3D BPF_JMP32_IMM(BPF_JEQ, tmp_reg, 0, 2);
+@@ -8992,18 +8992,18 @@ static struct bpf_insn *bpf_convert_tstamp_write(co=
+nst struct bpf_prog *prog,
+ 	if (!prog->delivery_time_access) {
+ 		__u8 tmp_reg =3D BPF_REG_AX;
+=20
+-		*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, TC_AT_INGRESS_OFFSET);
++		*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, PKT_VLAN_PRESENT_OFFSET=
+);
+ 		*insn++ =3D BPF_ALU32_IMM(BPF_AND, tmp_reg, TC_AT_INGRESS_MASK);
+ 		*insn++ =3D BPF_JMP32_IMM(BPF_JEQ, tmp_reg, 0, 3);
+ 		/* Writing __sk_buff->tstamp at ingress as the (rcv) timestamp.
+ 		 * Clear the skb->mono_delivery_time.
+ 		 */
+ 		*insn++ =3D BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg,
+-				      SKB_MONO_DELIVERY_TIME_OFFSET);
++				      PKT_VLAN_PRESENT_OFFSET);
+ 		*insn++ =3D BPF_ALU32_IMM(BPF_AND, tmp_reg,
+ 					~SKB_MONO_DELIVERY_TIME_MASK);
+ 		*insn++ =3D BPF_STX_MEM(BPF_B, skb_reg, tmp_reg,
+-				      SKB_MONO_DELIVERY_TIME_OFFSET);
++				      PKT_VLAN_PRESENT_OFFSET);
+ 	}
+ #endif
+=20
+--=20
+2.30.2
 
