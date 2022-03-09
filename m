@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E119EC433EF
-	for <bpf@archiver.kernel.org>; Wed,  9 Mar 2022 12:14:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9613C433F5
+	for <bpf@archiver.kernel.org>; Wed,  9 Mar 2022 12:14:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbiCIMPy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Mar 2022 07:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S232725AbiCIMPz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Mar 2022 07:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiCIMPw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Mar 2022 07:15:52 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F6108578;
-        Wed,  9 Mar 2022 04:14:53 -0800 (PST)
+        with ESMTP id S232721AbiCIMPx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Mar 2022 07:15:53 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2046310E06C;
+        Wed,  9 Mar 2022 04:14:54 -0800 (PST)
 Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KD9xP51dJzbcG8;
-        Wed,  9 Mar 2022 20:10:01 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KDB0m66rszBrk7;
+        Wed,  9 Mar 2022 20:12:56 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by dggpeml500025.china.huawei.com
  (7.185.36.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 9 Mar
- 2022 20:14:50 +0800
+ 2022 20:14:51 +0800
 From:   Hou Tao <houtao1@huawei.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 CC:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
@@ -32,9 +32,9 @@ CC:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
         Jakub Kicinski <kuba@kernel.org>,
         KP Singh <kpsingh@kernel.org>, <netdev@vger.kernel.org>,
         <bpf@vger.kernel.org>, <houtao1@huawei.com>
-Subject: [PATCH bpf-next 2/4] bpf: Introduce bpf_int_jit_abort()
-Date:   Wed, 9 Mar 2022 20:33:19 +0800
-Message-ID: <20220309123321.2400262-3-houtao1@huawei.com>
+Subject: [PATCH bpf-next 4/4] selftests/bpf: Test subprog jit when toggle bpf_jit_harden repeatedly
+Date:   Wed, 9 Mar 2022 20:33:21 +0800
+Message-ID: <20220309123321.2400262-5-houtao1@huawei.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220309123321.2400262-1-houtao1@huawei.com>
 References: <20220309123321.2400262-1-houtao1@huawei.com>
@@ -49,105 +49,124 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It will be used to do cleanup for subprog which has been jited in first
-pass but extra pass has not been done. The scenario is possible when
-extra pass for subprog in the middle fails. The failure may lead to
-oops due to inconsistent status for pack allocator (e.g. ro_hdr->size
-and use_bpf_prog_pack) and memory leak in aux->jit_data.
-
-For x86-64, bpf_int_jit_abort() will free allocated memories saved in
-aux->jit_data and fall back to interpreter mode to bypass the calling
-of bpf_jit_binary_pack_free() in bpf_jit_free().
+When bpf_jit_harden is toggled between 0 and 2, subprog jit may fail
+due to inconsistent twice read values of bpf_jit_harden during jit. So
+add a test to ensure the problem is fixed.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 24 ++++++++++++++++++++++++
- include/linux/filter.h      |  1 +
- kernel/bpf/core.c           |  9 +++++++++
- kernel/bpf/verifier.c       |  3 +++
- 4 files changed, 37 insertions(+)
+ .../selftests/bpf/prog_tests/subprogs.c       | 77 ++++++++++++++++---
+ 1 file changed, 68 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index ec3f00be2ac5..49bc0ddd55ae 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2244,6 +2244,30 @@ struct x64_jit_data {
- 	struct jit_context ctx;
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs.c b/tools/testing/selftests/bpf/prog_tests/subprogs.c
+index 3f3d2ac4dd57..903f35a9e62e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/subprogs.c
++++ b/tools/testing/selftests/bpf/prog_tests/subprogs.c
+@@ -1,32 +1,83 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+ #include <test_progs.h>
+-#include <time.h>
+ #include "test_subprogs.skel.h"
+ #include "test_subprogs_unused.skel.h"
  
-+void bpf_int_jit_abort(struct bpf_prog *prog)
+-static int duration;
++struct toggler_ctx {
++	int fd;
++	bool stop;
++};
+ 
+-void test_subprogs(void)
++static void *toggle_jit_harden(void *arg)
 +{
-+	struct x64_jit_data *jit_data = prog->aux->jit_data;
-+	struct bpf_binary_header *header, *rw_header;
++	struct toggler_ctx *ctx = arg;
++	char two = '2';
++	char zero = '0';
 +
-+	if (!jit_data)
++	while (!ctx->stop) {
++		lseek(ctx->fd, SEEK_SET, 0);
++		write(ctx->fd, &two, sizeof(two));
++		lseek(ctx->fd, SEEK_SET, 0);
++		write(ctx->fd, &zero, sizeof(zero));
++	}
++
++	return NULL;
++}
++
++static void test_subprogs_with_jit_harden_toggling(void)
++{
++	struct toggler_ctx ctx;
++	pthread_t toggler;
++	int err;
++	unsigned int i, loop = 10;
++
++	ctx.fd = open("/proc/sys/net/core/bpf_jit_harden", O_RDWR);
++	if (!ASSERT_GE(ctx.fd, 0, "open bpf_jit_harden"))
 +		return;
 +
-+	prog->bpf_func = NULL;
-+	prog->jited = 0;
-+	prog->jited_len = 0;
++	ctx.stop = false;
++	err = pthread_create(&toggler, NULL, toggle_jit_harden, &ctx);
++	if (!ASSERT_OK(err, "new toggler"))
++		goto out;
 +
-+	header = jit_data->header;
-+	rw_header = jit_data->rw_header;
-+	bpf_arch_text_copy(&header->size, &rw_header->size,
-+			   sizeof(rw_header->size));
-+	bpf_jit_binary_pack_free(header, rw_header);
++	/* Make toggler thread to run */
++	usleep(1);
 +
-+	kvfree(jit_data->addrs);
-+	kfree(jit_data);
++	for (i = 0; i < loop; i++) {
++		struct test_subprogs *skel = test_subprogs__open_and_load();
 +
-+	prog->aux->jit_data = NULL;
++		if (!ASSERT_OK_PTR(skel, "skel open"))
++			break;
++		test_subprogs__destroy(skel);
++	}
++
++	ctx.stop = true;
++	pthread_join(toggler, NULL);
++out:
++	close(ctx.fd);
 +}
 +
- #define MAX_PASSES 20
- #define PADDING_PASSES (MAX_PASSES - 5)
++static void test_subprogs_alone(void)
+ {
+ 	struct test_subprogs *skel;
+ 	struct test_subprogs_unused *skel2;
+ 	int err;
  
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 9bf26307247f..f3a913229edd 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -945,6 +945,7 @@ u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 	 (void *)__bpf_call_base)
+ 	skel = test_subprogs__open_and_load();
+-	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
+ 		return;
  
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
-+void bpf_int_jit_abort(struct bpf_prog *prog);
- void bpf_jit_compile(struct bpf_prog *prog);
- bool bpf_jit_needs_zext(void);
- bool bpf_jit_supports_kfunc_call(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ab630f773ec1..a1841e11524c 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2636,6 +2636,15 @@ struct bpf_prog * __weak bpf_int_jit_compile(struct bpf_prog *prog)
- 	return prog;
+ 	err = test_subprogs__attach(skel);
+-	if (CHECK(err, "skel_attach", "failed to attach skeleton: %d\n", err))
++	if (!ASSERT_OK(err, "skel attach"))
+ 		goto cleanup;
+ 
+ 	usleep(1);
+ 
+-	CHECK(skel->bss->res1 != 12, "res1", "got %d, exp %d\n", skel->bss->res1, 12);
+-	CHECK(skel->bss->res2 != 17, "res2", "got %d, exp %d\n", skel->bss->res2, 17);
+-	CHECK(skel->bss->res3 != 19, "res3", "got %d, exp %d\n", skel->bss->res3, 19);
+-	CHECK(skel->bss->res4 != 36, "res4", "got %d, exp %d\n", skel->bss->res4, 36);
++	ASSERT_EQ(skel->bss->res1, 12, "res1");
++	ASSERT_EQ(skel->bss->res2, 17, "res2");
++	ASSERT_EQ(skel->bss->res3, 19, "res3");
++	ASSERT_EQ(skel->bss->res4, 36, "res4");
+ 
+ 	skel2 = test_subprogs_unused__open_and_load();
+ 	ASSERT_OK_PTR(skel2, "unused_progs_skel");
+@@ -35,3 +86,11 @@ void test_subprogs(void)
+ cleanup:
+ 	test_subprogs__destroy(skel);
  }
- 
-+/*
-+ * If arch JIT uses aux->jit_data to save temporary allocated status and
-+ * supports subprog, it needs to override the function to free allocated
-+ * memories and fall back to interpreter mode for passed prog.
-+ */
-+void __weak bpf_int_jit_abort(struct bpf_prog *prog)
-+{
-+}
 +
- /* Stub for JITs that support eBPF. All cBPF code gets transformed into
-  * eBPF by the kernel and is later compiled by bpf_int_jit_compile().
-  */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e34264200e09..885e515cf83f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -13086,6 +13086,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		if (tmp != func[i] || func[i]->bpf_func != old_bpf_func) {
- 			verbose(env, "JIT doesn't support bpf-to-bpf calls\n");
- 			err = -ENOTSUPP;
-+			/* Abort extra pass for the remaining subprogs */
-+			while (++i < env->subprog_cnt)
-+				bpf_int_jit_abort(func[i]);
- 			goto out_free;
- 		}
- 		cond_resched();
++void test_subprogs(void)
++{
++	if (test__start_subtest("subprogs_alone"))
++		test_subprogs_alone();
++	if (test__start_subtest("subprogs_and_jit_harden"))
++		test_subprogs_with_jit_harden_toggling();
++}
 -- 
 2.29.2
 
