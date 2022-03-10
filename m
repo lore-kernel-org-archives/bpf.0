@@ -2,109 +2,246 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A144BC433FE
-	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 23:06:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB183C433EF
+	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 23:06:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344525AbiCJXHA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Mar 2022 18:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
+        id S1344524AbiCJXHC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Mar 2022 18:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344521AbiCJXG7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Mar 2022 18:06:59 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A435D1965E4
-        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 15:05:57 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-95-j_DIc5ZRPHOyWYg3TK3RZg-1; Thu, 10 Mar 2022 23:05:54 +0000
-X-MC-Unique: j_DIc5ZRPHOyWYg3TK3RZg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 10 Mar 2022 23:05:53 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 10 Mar 2022 23:05:53 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        "David Ahern" <dsahern@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        "syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com" 
-        <syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com>,
-        Willem de Bruijn <willemb@google.com>
-Subject: RE: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
-Thread-Topic: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
-Thread-Index: AQHYNNA9n/GFN1e7cUOoZGj2dooiCKy5O9cQ
-Date:   Thu, 10 Mar 2022 23:05:53 +0000
-Message-ID: <6871999c8e8640beae53f230681b3ce2@AcuMS.aculab.com>
-References: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
- <20220310221328.877987-1-tadeusz.struk@linaro.org>
- <20220310143011.00c21f53@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
-In-Reply-To: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S1344531AbiCJXHB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Mar 2022 18:07:01 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD0FCEA24
+        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 15:05:59 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id z11so12014607lfh.13
+        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 15:05:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=G9J8FmHq2/CqMV+jtudqhKexWT092dl7bgPQcNEIVpI=;
+        b=kqOPu49snnEYaDB6NIOJaYGr0ImOIF4OUUO7zYQwrxVSgFaeDAmw1yMD7v0QF3Ryyi
+         zjwIbDFydMGbXUIzL5/slUW8ZOfQaKpiWTF6oWeV8JBStCWYdxu+wwf+iL7vtBgE8lB9
+         aVnezfHcQLE7M9RNndqono6tZzQ7Oe8fkYXCU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=G9J8FmHq2/CqMV+jtudqhKexWT092dl7bgPQcNEIVpI=;
+        b=WPHsHyc4IgziLuVIqTp2thDbr49wM0XPN/7KnTQ+x00ipl6lBb7DGt9Fej7yjWmyMr
+         EtAIi5BSm0t7HZ8OZGdRBVQztyubTOR8oWVFddbsYU0PFV0Sts8H5McfVBAQE79EkKzf
+         c6u1HvZFfrxoIpZVJedEF02ifeJKt98KVpj27RqBC5LeG8ZoFrdoIev+OrfY62hunVCR
+         uFumaEB0DZfGeLqJc2obZsVKcvBpphCty5i4ApdXSGP1QPeYS4kYZomTc44zOmIZ01EK
+         7eFV2ZO67OXNIJOk/m0HpfbyNek7+xgNgwB8e1sJQyGyt7IbVU47WUMQTiBrDnM2PNPL
+         nNlA==
+X-Gm-Message-State: AOAM53352nPJN3agyhCqQNMHbEaiZI7X8J+9F7AVsofb1RmYlSLRFv4M
+        V+cucay8sgY9yqmwHQDzOTo2kg==
+X-Google-Smtp-Source: ABdhPJwBeP1H+YsXCFBZFVSgVJtWDt+BjoUIPA40jh2nJVAjIw1o95VxemmxfNXWhAkJxgNIziKyVA==
+X-Received: by 2002:a05:6512:3f95:b0:448:40cd:dcab with SMTP id x21-20020a0565123f9500b0044840cddcabmr4251208lfa.517.1646953557908;
+        Thu, 10 Mar 2022 15:05:57 -0800 (PST)
+Received: from cloudflare.com ([2a01:110f:4809:d800::f9c])
+        by smtp.gmail.com with ESMTPSA id f15-20020a2e6a0f000000b0023e429778fasm1346783ljc.56.2022.03.10.15.05.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 15:05:57 -0800 (PST)
+References: <20220222182559.2865596-1-iii@linux.ibm.com>
+ <20220222182559.2865596-2-iii@linux.ibm.com>
+ <87bkygzbg5.fsf@cloudflare.com>
+ <8d8b464f6c2820989d67f00d24b6003b8b758274.camel@linux.ibm.com>
+ <871qzbz5sa.fsf@cloudflare.com>
+ <a924d763fe50ec80594ca3fac6b311cf9ec20fca.camel@linux.ibm.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH RFC bpf-next 1/3] bpf: Fix certain narrow loads with
+ offsets
+Date:   Thu, 10 Mar 2022 23:57:43 +0100
+In-reply-to: <a924d763fe50ec80594ca3fac6b311cf9ec20fca.camel@linux.ibm.com>
+Message-ID: <87wnh1xvaj.fsf@cloudflare.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-RnJvbTogV2lsbGVtIGRlIEJydWlqbg0KPiBTZW50OiAxMCBNYXJjaCAyMDIyIDIyOjQzDQo+IA0K
-PiBPbiBUaHUsIE1hciAxMCwgMjAyMiBhdCA1OjMwIFBNIEpha3ViIEtpY2luc2tpIDxrdWJhQGtl
-cm5lbC5vcmc+IHdyb3RlOg0KPiA+DQo+ID4gT24gVGh1LCAxMCBNYXIgMjAyMiAxNDoxMzoyOCAt
-MDgwMCBUYWRldXN6IFN0cnVrIHdyb3RlOg0KPiA+ID4gZGlmZiAtLWdpdCBhL25ldC9pcHY2L2lw
-Nl9vdXRwdXQuYyBiL25ldC9pcHY2L2lwNl9vdXRwdXQuYw0KPiA+ID4gaW5kZXggNDc4OGY2YjM3
-MDUzLi42ZDQ1MTEyMzIyYTAgMTAwNjQ0DQo+ID4gPiAtLS0gYS9uZXQvaXB2Ni9pcDZfb3V0cHV0
-LmMNCj4gPiA+ICsrKyBiL25ldC9pcHY2L2lwNl9vdXRwdXQuYw0KPiA+ID4gQEAgLTE2NDksNiAr
-MTY0OSwxNiBAQCBzdGF0aWMgaW50IF9faXA2X2FwcGVuZF9kYXRhKHN0cnVjdCBzb2NrICpzaywN
-Cj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICBza2ItPnByb3RvY29sID0gaHRvbnMoRVRIX1Bf
-SVBWNik7DQo+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgc2tiLT5pcF9zdW1tZWQgPSBjc3Vt
-bW9kZTsNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICBza2ItPmNzdW0gPSAwOw0KPiA+ID4g
-Kw0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgIC8qDQo+ID4gPiArICAgICAgICAgICAgICAg
-ICAgICAgICogICAgICBDaGVjayBpZiB0aGVyZSBpcyBzdGlsbCByb29tIGZvciBwYXlsb2FkDQo+
-ID4gPiArICAgICAgICAgICAgICAgICAgICAgICovDQo+ID4NCj4gPiBUQkggSSB0aGluayB0aGUg
-Y2hlY2sgaXMgc2VsZi1leHBsYW5hdG9yeS4gTm90IHdvcnRoIGEgYmFubmVyIGNvbW1lbnQsDQo+
-ID4gZm9yIHN1cmUuDQo+ID4NCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICBpZiAoZnJhZ2hl
-YWRlcmxlbiA+PSBtdHUpIHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVy
-ciA9IC1FTVNHU0laRTsNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGtmcmVl
-X3NrYihza2IpOw0KPiA+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZ290byBlcnJv
-cjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICB9DQo+ID4NCj4gPiBOb3Qgc3VyZSBpZiBX
-aWxsZW0gcHJlZmVycyB0aGlzIHBsYWNlbWVudCwgYnV0IHNlZW1zIGxpa2Ugd2UgY2FuIGxpZnQN
-Cj4gPiB0aGlzIGNoZWNrIG91dCBvZiB0aGUgbG9vcCwgYXMgc29vbiBhcyBmcmFnaGVhZGVybGVu
-IGFuZCBtdHUgYXJlIGtub3duLg0KPiA+DQo+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgLyog
-cmVzZXJ2ZSBmb3IgZnJhZ21lbnRhdGlvbiBhbmQgaXBzZWMgaGVhZGVyICovDQo+ID4gPiAgICAg
-ICAgICAgICAgICAgICAgICAgc2tiX3Jlc2VydmUoc2tiLCBoaF9sZW4gKyBzaXplb2Yoc3RydWN0
-IGZyYWdfaGRyKSArDQo+ID4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZHN0
-X2V4dGhkcmxlbik7DQo+IA0KPiBKdXN0IHVwZGF0aW5nIHRoaXMgYm91bmRhcnkgY2hlY2sgd2ls
-bCBkbz8NCj4gDQo+ICAgICAgICAgaWYgKG10dSA8IGZyYWdoZWFkZXJsZW4gfHwNCj4gICAgICAg
-ICAgICAgKChtdHUgLSBmcmFnaGVhZGVybGVuKSAmIH43KSArIGZyYWdoZWFkZXJsZW4gPA0KPiBz
-aXplb2Yoc3RydWN0IGZyYWdfaGRyKSkNCj4gICAgICAgICAgICAgICAgIGdvdG8gZW1zZ3NpemU7
-DQoNCkJvdGggdGhvc2UgPCBzaG91bGQgYmUgPD0NCg0KQnV0IEkgdGhpbmsgSSdkIGNoZWNrOg0K
-CWlmIChmcmFnaGVhZGVybGVuID49IDEyODAgLSBzaXplb2YgKHN0cnVjdCBmcmFnX2hkcikpDQoJ
-CWdvdG8gZW1zZ3NpemU7DQpmaXJzdCAob3Igb25seSEpDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
-cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
-eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
+On Wed, Mar 09, 2022 at 01:34 PM +01, Ilya Leoshkevich wrote:
+> On Wed, 2022-03-09 at 09:36 +0100, Jakub Sitnicki wrote:
+
+[...]
+
+>>=20
+>> Consider this - today the below is true on both LE and BE, right?
+>>=20
+>> =C2=A0 *(u32 *)&ctx->remote_port =3D=3D *(u16 *)&ctx->remote_port
+>>=20
+>> because the loads get converted to:
+>>=20
+>> =C2=A0 *(u16 *)&ctx_kern->sport =3D=3D *(u16 *)&ctx_kern->sport
+>>=20
+>> IOW, today, because of the bug that you are fixing here, the data
+>> layout
+>> changes from the PoV of the BPF program depending on the load size.
+>>=20
+>> With 2-byte loads, without this patch, the data layout appears as:
+>>=20
+>> =C2=A0 struct bpf_sk_lookup {
+>> =C2=A0=C2=A0=C2=A0 ...
+>> =C2=A0=C2=A0=C2=A0 __be16 remote_port;
+>> =C2=A0=C2=A0=C2=A0 __be16 remote_port;
+>> =C2=A0=C2=A0=C2=A0 ...
+>> =C2=A0 }
+>
+> I see, one can indeed argue that this is also a part of the ABI now.
+> So we're stuck between a rock and a hard place.
+>
+>> While for 4-byte loads, it appears as in your 2nd patch:
+>>=20
+>> =C2=A0 struct bpf_sk_lookup {
+>> =C2=A0=C2=A0=C2=A0 ...
+>> =C2=A0=C2=A0=C2=A0 #if little-endian
+>> =C2=A0=C2=A0=C2=A0 __be16 remote_port;
+>> =C2=A0=C2=A0=C2=A0 __u16=C2=A0 :16; /* zero padding */
+>> =C2=A0=C2=A0=C2=A0 #elif big-endian
+>> =C2=A0=C2=A0=C2=A0 __u16=C2=A0 :16; /* zero padding */
+>> =C2=A0=C2=A0=C2=A0 __be16 remote_port;
+>> =C2=A0=C2=A0=C2=A0 #endif
+>> =C2=A0=C2=A0=C2=A0 ...
+>> =C2=A0 }
+>>=20
+>> Because of that I don't see how we could keep complete ABI
+>> compatiblity,
+>> and have just one definition of struct bpf_sk_lookup that reflects
+>> it. These are conflicting requirements.
+>>=20
+>> I'd bite the bullet for 4-byte loads, for the sake of having an
+>> endian-agnostic struct bpf_sk_lookup and struct bpf_sock definition
+>> in
+>> the uAPI header.
+>>=20
+>> The sacrifice here is that the access converter will have to keep
+>> rewriting 4-byte access to bpf_sk_lookup.remote_port and
+>> bpf_sock.dst_port in this unexpected, quirky manner.
+>>=20
+>> The expectation is that with time users will recompile their BPF
+>> progs
+>> against the updated bpf.h, and switch to 2-byte loads. That will make
+>> the quirk in the access converter dead code in time.
+>>=20
+>> I don't have any better ideas. Sorry.
+>>=20
+>> [...]
+>
+> I agree, let's go ahead with this solution.
+>
+> The only remaining problem that I see is: the bug is in the common
+> code, and it will affect the fields that we add in the future.
+>
+> Can we either document this state of things in a comment, or fix the
+> bug and emulate the old behavior for certain fields?
+
+I think we can fix the bug in the common code, and compensate for the
+quirky 4-byte access to bpf_sk_lookup.remote_port and bpf_sock.dst_port
+in the is_valid_access and convert_ctx_access.
+
+With the patch as below, access to remote_port gets rewritten to:
+
+* size=3D1, offset=3D0, r2 =3D *(u8 *)(r1 +36)
+   0: (69) r2 =3D *(u16 *)(r1 +4)
+   1: (54) w2 &=3D 255
+   2: (b7) r0 =3D 0
+   3: (95) exit
+
+* size=3D1, offset=3D1, r2 =3D *(u8 *)(r1 +37)
+   0: (69) r2 =3D *(u16 *)(r1 +4)
+   1: (74) w2 >>=3D 8
+   2: (54) w2 &=3D 255
+   3: (b7) r0 =3D 0
+   4: (95) exit
+
+* size=3D1, offset=3D2, r2 =3D *(u8 *)(r1 +38)
+   0: (b4) w2 =3D 0
+   1: (54) w2 &=3D 255
+   2: (b7) r0 =3D 0
+   3: (95) exit
+
+* size=3D1, offset=3D3, r2 =3D *(u8 *)(r1 +39)
+   0: (b4) w2 =3D 0
+   1: (74) w2 >>=3D 8
+   2: (54) w2 &=3D 255
+   3: (b7) r0 =3D 0
+   4: (95) exit
+
+* size=3D2, offset=3D0, r2 =3D *(u16 *)(r1 +36)
+   0: (69) r2 =3D *(u16 *)(r1 +4)
+   1: (b7) r0 =3D 0
+   2: (95) exit
+
+* size=3D2, offset=3D2, r2 =3D *(u16 *)(r1 +38)
+   0: (b4) w2 =3D 0
+   1: (b7) r0 =3D 0
+   2: (95) exit
+
+* size=3D4, offset=3D0, r2 =3D *(u32 *)(r1 +36)
+   0: (69) r2 =3D *(u16 *)(r1 +4)
+   1: (b7) r0 =3D 0
+   2: (95) exit
+
+How does that look to you?
+
+Still need to give it a test on s390x.
+
+--8<--
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 65869fd510e8..2625a1d2dabc 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -10856,13 +10856,24 @@ static bool sk_lookup_is_valid_access(int off, in=
+t size,
+ 	case bpf_ctx_range(struct bpf_sk_lookup, local_ip4):
+ 	case bpf_ctx_range_till(struct bpf_sk_lookup, remote_ip6[0], remote_ip6[3=
+]):
+ 	case bpf_ctx_range_till(struct bpf_sk_lookup, local_ip6[0], local_ip6[3]):
+-	case offsetof(struct bpf_sk_lookup, remote_port) ...
+-	     offsetof(struct bpf_sk_lookup, local_ip4) - 1:
+ 	case bpf_ctx_range(struct bpf_sk_lookup, local_port):
+ 	case bpf_ctx_range(struct bpf_sk_lookup, ingress_ifindex):
+ 		bpf_ctx_record_field_size(info, sizeof(__u32));
+ 		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u32));
+=20
++	case bpf_ctx_range(struct bpf_sk_lookup, remote_port):
++		/* Allow 4-byte access to 2-byte field for backward compatibility */
++		if (size =3D=3D sizeof(__u32))
++			return off =3D=3D offsetof(struct bpf_sk_lookup, remote_port);
++		bpf_ctx_record_field_size(info, sizeof(__be16));
++		return bpf_ctx_narrow_access_ok(off, size, sizeof(__be16));
++
++	case offsetofend(struct bpf_sk_lookup, remote_port) ...
++	     offsetof(struct bpf_sk_lookup, local_ip4) - 1:
++		/* Allow access to zero padding for backward compatiblity */
++		bpf_ctx_record_field_size(info, sizeof(__u16));
++		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u16));
++
+ 	default:
+ 		return false;
+ 	}
+@@ -10944,6 +10955,11 @@ static u32 sk_lookup_convert_ctx_access(enum bpf_a=
+ccess_type type,
+ 						     sport, 2, target_size));
+ 		break;
+=20
++	case offsetofend(struct bpf_sk_lookup, remote_port):
++		*target_size =3D 2;
++		*insn++ =3D BPF_MOV32_IMM(si->dst_reg, 0);
++		break;
++
+ 	case offsetof(struct bpf_sk_lookup, local_port):
+ 		*insn++ =3D BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg,
+ 				      bpf_target_off(struct bpf_sk_lookup_kern,
