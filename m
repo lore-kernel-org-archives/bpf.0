@@ -2,289 +2,141 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F07C43217
-	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 08:29:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BA5BC433F5
+	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 09:05:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240335AbiCJIaI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Mar 2022 03:30:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S240603AbiCJJGg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Mar 2022 04:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbiCJIaI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:30:08 -0500
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8811135701;
-        Thu, 10 Mar 2022 00:29:05 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0V6neRLx_1646900938;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6neRLx_1646900938)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Mar 2022 16:28:59 +0800
-Message-ID: <1646900411.6481435-2-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v7 17/26] virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
-Date:   Thu, 10 Mar 2022 16:20:11 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
- <20220308123518.33800-18-xuanzhuo@linux.alibaba.com>
- <8b9d337d-71c2-07b4-8e65-6f83cf09bf7a@redhat.com>
-In-Reply-To: <8b9d337d-71c2-07b4-8e65-6f83cf09bf7a@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S233760AbiCJJGf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Mar 2022 04:06:35 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F069137768;
+        Thu, 10 Mar 2022 01:05:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=asZaKof/Ycf9Yl/IenjXZLrN7xJYPH+zuWKph/YnaGE=; b=mPNMJ1Y4nU566VAWE+/NYgv08b
+        fnoUNB++Yh/YKvbCQYGfC8U772Xr6Xf6cRnvIb/1RPGfBQ+7ctL/m6ntNGPUbgCz+7y8MEzVM8vTX
+        AadX+R+AmeKWwfoeS+z2TK2R7SJ7VcVvWpIuf42dJ69D2Ws1aeq3t4asGj4pZv0Aj3/YjpMFFSPD3
+        i/rW8D4rdjYC9pHvANvFG0HJJTAzLZR6cb8sOdvF+OJPZh/OoMwUu8tYjcPF5WT6Ys/vHywQDhZKc
+        5tFCASSZpCD/LLA1tyKH5+S7oUWSmBwbGmLjiu5EPiCx2HFyXRO/vnxoFuEAe7SHVJioEAx4hxOgs
+        bFD5LLxw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSEjK-000Mm2-EX; Thu, 10 Mar 2022 09:05:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1367430041D;
+        Thu, 10 Mar 2022 10:05:05 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E86EC264E62B6; Thu, 10 Mar 2022 10:05:04 +0100 (CET)
+Date:   Thu, 10 Mar 2022 10:05:04 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, x86@kernel.org,
+        joao@overdrivepizza.com, hjl.tools@gmail.com, jpoimboe@redhat.com,
+        andrew.cooper3@citrix.com, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, samitolvanen@google.com,
+        mark.rutland@arm.com, alyssa.milburn@intel.com, mbenes@suse.cz,
+        rostedt@goodmis.org, mhiramat@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+Message-ID: <Yim/QJhNBCDfuxsc@hirez.programming.kicks-ass.net>
+References: <20220308153011.021123062@infradead.org>
+ <20220308200052.rpr4vkxppnxguirg@ast-mbp.dhcp.thefacebook.com>
+ <YifSIDAJ/ZBKJWrn@hirez.programming.kicks-ass.net>
+ <YifZhUVoHLT/76fE@hirez.programming.kicks-ass.net>
+ <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdk0ROSOSDKHcyH0kP+5MFH5QnasD6kbAu8gG8CCXO7OmQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 9 Mar 2022 16:54:10 +0800, Jason Wang <jasowang@redhat.com> wrote:
->
-> =E5=9C=A8 2022/3/8 =E4=B8=8B=E5=8D=888:35, Xuan Zhuo =E5=86=99=E9=81=93:
-> > This patch implements virtio pci support for QUEUE RESET.
-> >
-> > Performing reset on a queue is divided into these steps:
-> >
-> >   1. virtio_reset_vq()              - notify the device to reset the qu=
-eue
-> >   2. virtqueue_detach_unused_buf()  - recycle the buffer submitted
-> >   3. virtqueue_reset_vring()        - reset the vring (may re-alloc)
-> >   4. virtio_enable_resetq()         - mmap vring to device, and enable =
-the queue
-> >
-> > This patch implements virtio_reset_vq(), virtio_enable_resetq() in the
-> > pci scenario.
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > ---
-> >   drivers/virtio/virtio_pci_common.c |  8 +--
-> >   drivers/virtio/virtio_pci_modern.c | 83 ++++++++++++++++++++++++++++++
-> >   2 files changed, 88 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio=
-_pci_common.c
-> > index fdbde1db5ec5..863d3a8a0956 100644
-> > --- a/drivers/virtio/virtio_pci_common.c
-> > +++ b/drivers/virtio/virtio_pci_common.c
-> > @@ -248,9 +248,11 @@ static void vp_del_vq(struct virtqueue *vq)
-> >   	struct virtio_pci_vq_info *info =3D vp_dev->vqs[vq->index];
-> >   	unsigned long flags;
-> >
-> > -	spin_lock_irqsave(&vp_dev->lock, flags);
-> > -	list_del(&info->node);
-> > -	spin_unlock_irqrestore(&vp_dev->lock, flags);
-> > +	if (!vq->reset) {
-> > +		spin_lock_irqsave(&vp_dev->lock, flags);
-> > +		list_del(&info->node);
-> > +		spin_unlock_irqrestore(&vp_dev->lock, flags);
-> > +	}
-> >
-> >   	vp_dev->del_vq(info);
-> >   	kfree(info);
-> > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio=
-_pci_modern.c
-> > index 49a4493732cf..3c67d3607802 100644
-> > --- a/drivers/virtio/virtio_pci_modern.c
-> > +++ b/drivers/virtio/virtio_pci_modern.c
-> > @@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_devic=
-e *vdev, u64 features)
-> >   	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
-> >   			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
-> >   		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
-> > +
-> > +	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
-> > +		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
-> >   }
-> >
-> >   /* virtio config->finalize_features() implementation */
-> > @@ -199,6 +202,82 @@ static int vp_active_vq(struct virtqueue *vq, u16 =
-msix_vec)
-> >   	return 0;
-> >   }
-> >
-> > +static int vp_modern_reset_vq(struct virtqueue *vq)
-> > +{
-> > +	struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
-> > +	struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
-> > +	struct virtio_pci_vq_info *info;
-> > +	unsigned long flags;
-> > +	unsigned int irq;
-> > +
-> > +	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
-> > +		return -ENOENT;
-> > +
-> > +	vp_modern_set_queue_reset(mdev, vq->index);
-> > +
-> > +	info =3D vp_dev->vqs[vq->index];
-> > +
-> > +	/* delete vq from irq handler */
-> > +	spin_lock_irqsave(&vp_dev->lock, flags);
-> > +	list_del(&info->node);
-> > +	spin_unlock_irqrestore(&vp_dev->lock, flags);
-> > +
-> > +	INIT_LIST_HEAD(&info->node);
-> > +
-> > +	vq->reset =3D VIRTIO_VQ_RESET_STEP_DEVICE;
-> > +
-> > +	/* sync irq callback. */
-> > +	if (vp_dev->intx_enabled) {
-> > +		irq =3D vp_dev->pci_dev->irq;
-> > +
-> > +	} else {
-> > +		if (info->msix_vector =3D=3D VIRTIO_MSI_NO_VECTOR)
-> > +			return 0;
-> > +
-> > +		irq =3D pci_irq_vector(vp_dev->pci_dev, info->msix_vector);
-> > +	}
-> > +
-> > +	synchronize_irq(irq);
->
->
-> Synchronize_irq() is not sufficient here since it breaks the effort of
-> the interrupt hardening which is done by commits:
->
-> 080cd7c3ac87 virtio-pci: harden INTX interrupts
-> 9e35276a5344 virtio_pci: harden MSI-X interrupts
->
-> Unfortunately=C2=A0 080cd7c3ac87 introduces an issue that disable_irq() w=
-ere
-> used for the affinity managed irq but we're discussing a fix.
->
+On Wed, Mar 09, 2022 at 04:30:28PM -0800, Nick Desaulniers wrote:
+
+> I observed the following error when building with
+> CONFIG_LTO_CLANG_FULL=y enabled:
+> 
+> ld.lld: error: ld-temp.o <inline asm>:7:2: symbol 'ibt_selftest_ip' is
+> already defined
+>         ibt_selftest_ip:
+>         ^
+> 
+> Seems to come from
+> commit a802350ba65a ("x86/ibt: Add IBT feature, MSR and #CP handling")
+> 
+> Commenting out the label in the inline asm, I then observed:
+> vmlinux.o: warning: objtool: identify_cpu()+0x6d0: sibling call from
+> callable instruction with modified stack frame
+> vmlinux.o: warning: objtool: identify_cpu()+0x6e0: stack state
+> mismatch: cfa1=4+64 cfa2=4+8
+> These seemed to disappear when I kept CONFIG_LTO_CLANG_FULL=y but then
+> disabled CONFIG_X86_KERNEL_IBT. (perhaps due to the way I hacked out
+> the ibt_selftest_ip label).
+
+Urgh.. I'm thikning this is a clang bug :/
+
+The code in question is:
 
 
-ok, I think disable_irq() is still used here.
+void ibt_selftest_ip(void); /* code label defined in asm below */
 
-I want to determine the solution for this detail first. So I posted the cod=
-e, I
-hope Jason can help confirm this point first.
+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+{
+	/* ... */
 
-There are three situations in which vq corresponds to an interrupt
+	if (unlikely(regs->ip == (unsigned long)ibt_selftest_ip)) {
+		regs->ax = 0;
+		return;
+	}
 
-1. intx
-2. msix: per vq vectors
-2. msix: share irq
+	/* ... */
+}
 
-Essentially can be divided into two categories: per vq vectors and share ir=
-q.
+bool ibt_selftest(void)
+{
+	unsigned long ret;
 
-For share irq is based on virtqueues to find vq, so I think it is safe as l=
-ong
-as list_del() is executed under the protection of the lock.
+	asm ("	lea ibt_selftest_ip(%%rip), %%rax\n\t"
+	     ANNOTATE_RETPOLINE_SAFE
+	     "	jmp *%%rax\n\t"
+	     "ibt_selftest_ip:\n\t"
+	     UNWIND_HINT_FUNC
+	     ANNOTATE_NOENDBR
+	     "	nop\n\t"
 
-In the case of per vq vectors, disable_irq() is used.
+	     : "=a" (ret) : : "memory");
 
-Thanks.
+	return !ret;
+}
 
-+static int vp_modern_reset_vq(struct virtqueue *vq)
-+{
-+       struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
-+       struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
-+       struct virtio_pci_vq_info *info;
-+       unsigned long flags;
-+       unsigned int irq;
-+
-+       if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
-+               return -ENOENT;
-+
-+       vp_modern_set_queue_reset(mdev, vq->index);
-+
-+       info =3D vp_dev->vqs[vq->index];
-+
-+       /* delete vq from irq handler */
-+       spin_lock_irqsave(&vp_dev->lock, flags);
-+       list_del(&info->node);
-+       vp_modern_set_queue_reset(mdev, vq->index);
-+
-+       info =3D vp_dev->vqs[vq->index];
-+
-+       /* delete vq from irq handler */
-+       spin_lock_irqsave(&vp_dev->lock, flags);
-+       list_del(&info->node);
-+       spin_unlock_irqrestore(&vp_dev->lock, flags);
-+
-+       INIT_LIST_HEAD(&info->node);
-+
-+       /* For the case where vq has an exclusive irq, to prevent the irq f=
-rom
-+        * being received again and the pending irq, call disable_irq().
-+        *
-+        * In the scenario based on shared interrupts, vq will be searched =
-from
-+        * the queue virtqueues. Since the previous list_del() has been del=
-eted
-+        * from the queue, it is impossible for vq to be called in this cas=
-e.
-+        * There is no need to close the corresponding interrupt.
-+        */
-+       if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
-+               disable_irq(pci_irq_vector(vp_dev->pci_dev, info->msix_vect=
-or));
-+
-+       vq->reset =3D true;
-+
-+       return 0;
-+}
-+
-+static int vp_modern_enable_reset_vq(struct virtqueue *vq)
-+{
-+       struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
-+       struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
-+       struct virtio_pci_vq_info *info;
-+       unsigned long flags, index;
-+       int err;
-+
-+       if (!vq->reset)
-+               return -EBUSY;
-+
-+       index =3D vq->index;
-+       info =3D vp_dev->vqs[index];
-+
-+       /* check queue reset status */
-+       if (vp_modern_get_queue_reset(mdev, index) !=3D 1)
-+               return -EBUSY;
-+
-+       err =3D vp_active_vq(vq, info->msix_vector);
-+       if (err)
-+               return err;
-+
-+       if (vq->callback) {
-+               spin_lock_irqsave(&vp_dev->lock, flags);
-+               list_add(&info->node, &vp_dev->virtqueues);
-+               spin_unlock_irqrestore(&vp_dev->lock, flags);
-+       } else {
-+               INIT_LIST_HEAD(&info->node);
-+       }
-+
-+       vp_modern_set_queue_enable(&vp_dev->mdev, index, true);
-+       vq->reset =3D false;
-+
-+       if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
-+               enable_irq(pci_irq_vector(vp_dev->pci_dev, info->msix_vecto=
-r));
-+
-+       return 0;
-+}
+There is only a single definition of that symbol, the one in the asm.
+The other is a declaration, which is used in the exception handler to
+compare against regs->ip.
 
+So what this code does is trigger an explicit #CP and special case that
+in the handler. For that the handler needs to know the special IP that
+will trigger the failure, this is cummunicated with that symbol.
 
+> Otherwise defconfig and CONFIG_LTO_CLANG_THIN=y both built and booted
+> in a vm WITHOUT IBT support.
+> 
+> Any idea what's the status of IBT emulation in QEMU, and if it exists,
+> what's the necessary `-cpu` flag to enable it?
+
+I have a very ugly kvm patch that goes with a very ugly qemu patch to
+make it work. I would very much not recommend those getting merged.
+
+Someone with some actual kvm/qemu foo should do one. The complicating
+factor is that IA32_S_CET also contains SHSTK enable bits, so a straight
+passthrough like I use relies on the guest never setting those bits or
+keeping the pieces. It either needs to filter the MSR or implement the
+full CET mess.
