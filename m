@@ -2,261 +2,252 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0867AC4332F
-	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 08:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EDB5C433F5
+	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 08:22:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236539AbiCJITx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Mar 2022 03:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        id S237429AbiCJIXK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Mar 2022 03:23:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiCJITx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:19:53 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE41C443C2;
-        Thu, 10 Mar 2022 00:18:50 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0V6nhRC-_1646900323;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6nhRC-_1646900323)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 10 Mar 2022 16:18:45 +0800
-Message-ID: <1646900056.7775025-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v7 09/26] virtio_ring: split: implement virtqueue_reset_vring_split()
-Date:   Thu, 10 Mar 2022 16:14:16 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jeff Dike <jdike@addtoit.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S234545AbiCJIXJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Mar 2022 03:23:09 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D9899698;
+        Thu, 10 Mar 2022 00:22:08 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id 15-20020a17090a098f00b001bef0376d5cso4548828pjo.5;
+        Thu, 10 Mar 2022 00:22:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vxbnybQKpkfay2iHQzcgyktbxlcEBTXr8udywXFflIs=;
+        b=W/3z9Oqdh8/2k2g6SQJMQUoexKyl+RSMUAXa9Zuuya31CAiVULnsn3yGTxZIGoG8ts
+         diUceabMVH9Da0WTMZ7ywZ1qwtG0u43WzVE8RYXfruZQSPZdmsuYbaO0AOA7mqeDRdqg
+         fCbMH1sQ6Ks5lPlROKJ19NzNXpV6MiRW7L0lzScEb32ooKrO/C9hm9eCHeiSXhCWWXZT
+         13U9NQ//BfS9aKJS6Y9I4Lw+szbi+ikvTgqUECIW4svuQWjhQaOAJEbu+diwWS+2nWYS
+         y0w0oEt+WKWrRw0Orl/CmvTMQ2P9/WRdWGYNGv5Pq0R/wqrvHyxdG9m2aL+1X9il91on
+         oTsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=vxbnybQKpkfay2iHQzcgyktbxlcEBTXr8udywXFflIs=;
+        b=f4xv5G1I2n20kU5kdJx7eflbhvygIX08Jn1UAnS0VMNE6D8xr6FZQYb2VhCP8PcjsV
+         V8om95Na9Qy9qDJvTCvIFuwdCuM9i4SrzqTEmT4RliIQpSZmMoHKJVlcq31HOUY3oBRZ
+         xln4vRqdULvipWoAhD/h5K89eIZ988DLS6yymnsl73dXUQRt2XG5Dd1e8J7lUdcLaKRg
+         LmwR/FLyznYswOWwk+nQFzitD5ZMW5M/17V0Y0pzE+tjOdLl+2ZzLuQL42ZGj9DaNWyU
+         U1NhyKjD13Jm9J7xvUrX31WNQtV0OW56fL/lZeROF2F/id0T1W7vS5dBIr7rhhQF5ndt
+         bogw==
+X-Gm-Message-State: AOAM5314o+9j2lq3zSON7pu/+/nstz00Cm43wRD4gBJtsndoOIqiNQ6L
+        9pMzPZDhxazWGCDizXrB8Sw=
+X-Google-Smtp-Source: ABdhPJzWohQvo5vEKV4hAl68MPDykkWW2muYj8ILf8prnZuxRyRz2xPPkTGxLKnCQNcCkJHxfEZGFw==
+X-Received: by 2002:a17:90b:384:b0:1bf:cd0f:81b4 with SMTP id ga4-20020a17090b038400b001bfcd0f81b4mr2873148pjb.199.1646900527902;
+        Thu, 10 Mar 2022 00:22:07 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:e7f1:5749:9be:64e1])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056a000c8c00b004e1a76f0a8asm5903008pfv.51.2022.03.10.00.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 00:22:07 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org
-References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
- <20220308123518.33800-10-xuanzhuo@linux.alibaba.com>
- <20220310015418-mutt-send-email-mst@kernel.org>
- <1646896623.3794115-2-xuanzhuo@linux.alibaba.com>
- <20220310025930-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20220310025930-mutt-send-email-mst@kernel.org>
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eugene Loh <eugene.loh@oracle.com>, Hao Luo <haoluo@google.com>
+Subject: [PATCH 1/2] bpf: Adjust BPF stack helper functions to accommodate skip > 0
+Date:   Thu, 10 Mar 2022 00:22:01 -0800
+Message-Id: <20220310082202.1229345-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 10 Mar 2022 03:07:22 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> On Thu, Mar 10, 2022 at 03:17:03PM +0800, Xuan Zhuo wrote:
-> > On Thu, 10 Mar 2022 02:00:39 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
-> > > On Tue, Mar 08, 2022 at 08:35:01PM +0800, Xuan Zhuo wrote:
-> > > > virtio ring supports reset.
-> > > >
-> > > > Queue reset is divided into several stages.
-> > > >
-> > > > 1. notify device queue reset
-> > > > 2. vring release
-> > > > 3. attach new vring
-> > > > 4. notify device queue re-enable
-> > > >
-> > > > After the first step is completed, the vring reset operation can be
-> > > > performed. If the newly set vring num does not change, then just reset
-> > > > the vq related value.
-> > > >
-> > > > Otherwise, the vring will be released and the vring will be reallocated.
-> > > > And the vring will be attached to the vq. If this process fails, the
-> > > > function will exit, and the state of the vq will be the vring release
-> > > > state. You can call this function again to reallocate the vring.
-> > > >
-> > > > In addition, vring_align, may_reduce_num are necessary for reallocating
-> > > > vring, so they are retained when creating vq.
-> > > >
-> > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > > > ---
-> > > >  drivers/virtio/virtio_ring.c | 69 ++++++++++++++++++++++++++++++++++++
-> > > >  1 file changed, 69 insertions(+)
-> > > >
-> > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > > > index e0422c04c903..148fb1fd3d5a 100644
-> > > > --- a/drivers/virtio/virtio_ring.c
-> > > > +++ b/drivers/virtio/virtio_ring.c
-> > > > @@ -158,6 +158,12 @@ struct vring_virtqueue {
-> > > >  			/* DMA address and size information */
-> > > >  			dma_addr_t queue_dma_addr;
-> > > >  			size_t queue_size_in_bytes;
-> > > > +
-> > > > +			/* The parameters for creating vrings are reserved for
-> > > > +			 * creating new vrings when enabling reset queue.
-> > > > +			 */
-> > > > +			u32 vring_align;
-> > > > +			bool may_reduce_num;
-> > > >  		} split;
-> > > >
-> > > >  		/* Available for packed ring */
-> > > > @@ -217,6 +223,12 @@ struct vring_virtqueue {
-> > > >  #endif
-> > > >  };
-> > > >
-> > > > +static void vring_free(struct virtqueue *vq);
-> > > > +static void __vring_virtqueue_init_split(struct vring_virtqueue *vq,
-> > > > +					 struct virtio_device *vdev);
-> > > > +static int __vring_virtqueue_attach_split(struct vring_virtqueue *vq,
-> > > > +					  struct virtio_device *vdev,
-> > > > +					  struct vring vring);
-> > > >
-> > > >  /*
-> > > >   * Helpers.
-> > > > @@ -1012,6 +1024,8 @@ static struct virtqueue *vring_create_virtqueue_split(
-> > > >  		return NULL;
-> > > >  	}
-> > > >
-> > > > +	to_vvq(vq)->split.vring_align = vring_align;
-> > > > +	to_vvq(vq)->split.may_reduce_num = may_reduce_num;
-> > > >  	to_vvq(vq)->split.queue_dma_addr = vring.dma_addr;
-> > > >  	to_vvq(vq)->split.queue_size_in_bytes = vring.queue_size_in_bytes;
-> > > >  	to_vvq(vq)->we_own_ring = true;
-> > > > @@ -1019,6 +1033,59 @@ static struct virtqueue *vring_create_virtqueue_split(
-> > > >  	return vq;
-> > > >  }
-> > > >
-> > > > +static int virtqueue_reset_vring_split(struct virtqueue *_vq, u32 num)
-> > > > +{
-> > > > +	struct vring_virtqueue *vq = to_vvq(_vq);
-> > > > +	struct virtio_device *vdev = _vq->vdev;
-> > > > +	struct vring_split vring;
-> > > > +	int err;
-> > > > +
-> > > > +	if (num > _vq->num_max)
-> > > > +		return -E2BIG;
-> > > > +
-> > > > +	switch (vq->vq.reset) {
-> > > > +	case VIRTIO_VQ_RESET_STEP_NONE:
-> > > > +		return -ENOENT;
-> > > > +
-> > > > +	case VIRTIO_VQ_RESET_STEP_VRING_ATTACH:
-> > > > +	case VIRTIO_VQ_RESET_STEP_DEVICE:
-> > > > +		if (vq->split.vring.num == num || !num)
-> > > > +			break;
-> > > > +
-> > > > +		vring_free(_vq);
-> > > > +
-> > > > +		fallthrough;
-> > > > +
-> > > > +	case VIRTIO_VQ_RESET_STEP_VRING_RELEASE:
-> > > > +		if (!num)
-> > > > +			num = vq->split.vring.num;
-> > > > +
-> > > > +		err = vring_create_vring_split(&vring, vdev,
-> > > > +					       vq->split.vring_align,
-> > > > +					       vq->weak_barriers,
-> > > > +					       vq->split.may_reduce_num, num);
-> > > > +		if (err)
-> > > > +			return -ENOMEM;
-> > > > +
-> > > > +		err = __vring_virtqueue_attach_split(vq, vdev, vring.vring);
-> > > > +		if (err) {
-> > > > +			vring_free_queue(vdev, vring.queue_size_in_bytes,
-> > > > +					 vring.queue,
-> > > > +					 vring.dma_addr);
-> > > > +			return -ENOMEM;
-> > > > +		}
-> > > > +
-> > > > +		vq->split.queue_dma_addr = vring.dma_addr;
-> > > > +		vq->split.queue_size_in_bytes = vring.queue_size_in_bytes;
-> > > > +	}
-> > > > +
-> > > > +	__vring_virtqueue_init_split(vq, vdev);
-> > > > +	vq->we_own_ring = true;
-> > > > +	vq->vq.reset = VIRTIO_VQ_RESET_STEP_VRING_ATTACH;
-> > > > +
-> > > > +	return 0;
-> > > > +}
-> > > > +
-> > >
-> > > I kind of dislike this state machine.
-> > >
-> > > Hacks like special-casing num = 0 to mean "reset" are especially
-> > > confusing.
-> >
-> > I'm removing it. I'll say in the function description that this function is
-> > currently only called when vq has been reset. I'm no longer checking it based on
-> > state.
-> >
-> > >
-> > > And as Jason points out, when we want a resize then yes this currently
-> > > implies reset but that is an implementation detail.
-> > >
-> > > There should be a way to just make these cases separate functions
-> > > and then use them to compose consistent external APIs.
-> >
-> > Yes, virtqueue_resize_split() is fine for ethtool -G.
-> >
-> > But in the case of AF_XDP, just execute reset to free the buffer. The name
-> > virtqueue_reset_vring_split() I think can cover both cases. Or we use two apis
-> > to handle both scenarios?
-> >
-> > Or can anyone think of a better name. ^_^
-> >
-> > Thanks.
->
->
-> I'd say resize should be called resize and reset should be called reset.
+Let's say that the caller has storage for num_elem stack frames.  Then,
+the BPF stack helper functions walk the stack for only num_elem frames.
+This means that if skip > 0, one keeps only 'num_elem - skip' frames.
 
+This is because it sets init_nr in the perf_callchain_entry to the end
+of the buffer to save num_elem entries only.  I believe it was because
+the perf callchain code unwound the stack frames until it reached the
+global max size (sysctl_perf_event_max_stack).
 
-OK, I'll change it to resize here.
+However it now has perf_callchain_entry_ctx.max_stack to limit the
+iteration locally.  This simplifies the code to handle init_nr in the
+BPF callstack entries and removes the confusion with the perf_event's
+__PERF_SAMPLE_CALLCHAIN_EARLY which sets init_nr to 0.
 
-But I want to know that when I implement virtio-net to support AF_XDP, its
-requirement is to release all submitted buffers. Then should I add a new api
-such as virtqueue_reset_vring()?
+Also change the comment on bpf_get_stack() in the header file to be
+more explicit what the return value means.
 
->
-> The big issue is a sane API for resize. Ideally it would resubmit
-> buffers which did not get used. Question is what to do
-> about buffers which don't fit (if ring has been downsized)?
-> Maybe a callback that will handle them?
-> And then what? Queue them up and readd later? Drop?
-> If we drop we should drop from the head not the tail ...
+Based-on-patch-by: Eugene Loh <eugene.loh@oracle.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ include/uapi/linux/bpf.h |  4 +--
+ kernel/bpf/stackmap.c    | 56 +++++++++++++++++-----------------------
+ 2 files changed, 26 insertions(+), 34 deletions(-)
 
-It's a good idea, let's implement it later.
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b0383d371b9a..77f4a022c60c 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2975,8 +2975,8 @@ union bpf_attr {
+  *
+  * 			# sysctl kernel.perf_event_max_stack=<new value>
+  * 	Return
+- * 		A non-negative value equal to or less than *size* on success,
+- * 		or a negative error in case of failure.
++ * 		The non-negative copied *buf* length equal to or less than
++ * 		*size* on success, or a negative error in case of failure.
+  *
+  * long bpf_skb_load_bytes_relative(const void *skb, u32 offset, void *to, u32 len, u32 start_header)
+  * 	Description
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 22c8ae94e4c1..2823dcefae10 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -166,7 +166,7 @@ static void stack_map_get_build_id_offset(struct bpf_stack_build_id *id_offs,
+ }
+ 
+ static struct perf_callchain_entry *
+-get_callchain_entry_for_task(struct task_struct *task, u32 init_nr)
++get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
+ {
+ #ifdef CONFIG_STACKTRACE
+ 	struct perf_callchain_entry *entry;
+@@ -177,9 +177,8 @@ get_callchain_entry_for_task(struct task_struct *task, u32 init_nr)
+ 	if (!entry)
+ 		return NULL;
+ 
+-	entry->nr = init_nr +
+-		stack_trace_save_tsk(task, (unsigned long *)(entry->ip + init_nr),
+-				     sysctl_perf_event_max_stack - init_nr, 0);
++	entry->nr = stack_trace_save_tsk(task, (unsigned long *)entry->ip,
++					 max_depth, 0);
+ 
+ 	/* stack_trace_save_tsk() works on unsigned long array, while
+ 	 * perf_callchain_entry uses u64 array. For 32-bit systems, it is
+@@ -191,7 +190,7 @@ get_callchain_entry_for_task(struct task_struct *task, u32 init_nr)
+ 		int i;
+ 
+ 		/* copy data from the end to avoid using extra buffer */
+-		for (i = entry->nr - 1; i >= (int)init_nr; i--)
++		for (i = entry->nr - 1; i >= 0; i--)
+ 			to[i] = (u64)(from[i]);
+ 	}
+ 
+@@ -208,27 +207,19 @@ static long __bpf_get_stackid(struct bpf_map *map,
+ {
+ 	struct bpf_stack_map *smap = container_of(map, struct bpf_stack_map, map);
+ 	struct stack_map_bucket *bucket, *new_bucket, *old_bucket;
+-	u32 max_depth = map->value_size / stack_map_data_size(map);
+-	/* stack_map_alloc() checks that max_depth <= sysctl_perf_event_max_stack */
+-	u32 init_nr = sysctl_perf_event_max_stack - max_depth;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	u32 hash, id, trace_nr, trace_len;
+ 	bool user = flags & BPF_F_USER_STACK;
+ 	u64 *ips;
+ 	bool hash_matches;
+ 
+-	/* get_perf_callchain() guarantees that trace->nr >= init_nr
+-	 * and trace-nr <= sysctl_perf_event_max_stack, so trace_nr <= max_depth
+-	 */
+-	trace_nr = trace->nr - init_nr;
+-
+-	if (trace_nr <= skip)
++	if (trace->nr <= skip)
+ 		/* skipping more than usable stack trace */
+ 		return -EFAULT;
+ 
+-	trace_nr -= skip;
++	trace_nr = trace->nr - skip;
+ 	trace_len = trace_nr * sizeof(u64);
+-	ips = trace->ip + skip + init_nr;
++	ips = trace->ip + skip;
+ 	hash = jhash2((u32 *)ips, trace_len / sizeof(u32), 0);
+ 	id = hash & (smap->n_buckets - 1);
+ 	bucket = READ_ONCE(smap->buckets[id]);
+@@ -285,8 +276,7 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 	   u64, flags)
+ {
+ 	u32 max_depth = map->value_size / stack_map_data_size(map);
+-	/* stack_map_alloc() checks that max_depth <= sysctl_perf_event_max_stack */
+-	u32 init_nr = sysctl_perf_event_max_stack - max_depth;
++	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	bool user = flags & BPF_F_USER_STACK;
+ 	struct perf_callchain_entry *trace;
+ 	bool kernel = !user;
+@@ -295,8 +285,12 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
+ 			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+ 		return -EINVAL;
+ 
+-	trace = get_perf_callchain(regs, init_nr, kernel, user,
+-				   sysctl_perf_event_max_stack, false, false);
++	max_depth += skip;
++	if (max_depth > sysctl_perf_event_max_stack)
++		max_depth = sysctl_perf_event_max_stack;
++
++	trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
++				   false, false);
+ 
+ 	if (unlikely(!trace))
+ 		/* couldn't fetch the stack trace */
+@@ -387,7 +381,7 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 			    struct perf_callchain_entry *trace_in,
+ 			    void *buf, u32 size, u64 flags)
+ {
+-	u32 init_nr, trace_nr, copy_len, elem_size, num_elem;
++	u32 trace_nr, copy_len, elem_size, num_elem, max_depth;
+ 	bool user_build_id = flags & BPF_F_USER_BUILD_ID;
+ 	u32 skip = flags & BPF_F_SKIP_FIELD_MASK;
+ 	bool user = flags & BPF_F_USER_STACK;
+@@ -412,30 +406,28 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+ 		goto err_fault;
+ 
+ 	num_elem = size / elem_size;
+-	if (sysctl_perf_event_max_stack < num_elem)
+-		init_nr = 0;
+-	else
+-		init_nr = sysctl_perf_event_max_stack - num_elem;
++	max_depth = num_elem + skip;
++	if (sysctl_perf_event_max_stack < max_depth)
++		max_depth = sysctl_perf_event_max_stack;
+ 
+ 	if (trace_in)
+ 		trace = trace_in;
+ 	else if (kernel && task)
+-		trace = get_callchain_entry_for_task(task, init_nr);
++		trace = get_callchain_entry_for_task(task, max_depth);
+ 	else
+-		trace = get_perf_callchain(regs, init_nr, kernel, user,
+-					   sysctl_perf_event_max_stack,
++		trace = get_perf_callchain(regs, 0, kernel, user, max_depth,
+ 					   false, false);
+ 	if (unlikely(!trace))
+ 		goto err_fault;
+ 
+-	trace_nr = trace->nr - init_nr;
+-	if (trace_nr < skip)
++	if (trace->nr < skip)
+ 		goto err_fault;
+ 
+-	trace_nr -= skip;
++	trace_nr = trace->nr - skip;
+ 	trace_nr = (trace_nr <= num_elem) ? trace_nr : num_elem;
+ 	copy_len = trace_nr * elem_size;
+-	ips = trace->ip + skip + init_nr;
++
++	ips = trace->ip + skip;
+ 	if (user && user_build_id)
+ 		stack_map_get_build_id_offset(buf, ips, trace_nr, user);
+ 	else
+-- 
+2.35.1.723.g4982287a31-goog
 
-Thanks.
-
->
->
-> > >
-> > > If we additionally want to track state for debugging then bool flags
-> > > seem more appropriate for this, though from experience that is
-> > > not always worth the extra code.
-> > >
-> > >
-> > >
-> > > >  /*
-> > > >   * Packed ring specific functions - *_packed().
-> > > > @@ -2317,6 +2384,8 @@ static int __vring_virtqueue_attach_split(struct vring_virtqueue *vq,
-> > > >  static void __vring_virtqueue_init_split(struct vring_virtqueue *vq,
-> > > >  					 struct virtio_device *vdev)
-> > > >  {
-> > > > +	vq->vq.reset = VIRTIO_VQ_RESET_STEP_NONE;
-> > > > +
-> > > >  	vq->packed_ring = false;
-> > > >  	vq->we_own_ring = false;
-> > > >  	vq->broken = false;
-> > > > --
-> > > > 2.31.0
-> > >
->
