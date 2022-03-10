@@ -2,138 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0F8EC433F5
-	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 22:56:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40E49C433EF
+	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 23:04:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344502AbiCJW5l (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Mar 2022 17:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S1344131AbiCJXFT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Mar 2022 18:05:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiCJW5j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Mar 2022 17:57:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45D871986FF
-        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 14:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646952997;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=X+C4z+W6JKvW1PkIKtt/f0rXq2MGC/kPw7Xm7/uk89s=;
-        b=FjZelZNX4hNp2TNws2K2Hojj4QyhC76VuUJEYSjNLMLFnEdJyHslxeUCfGwO7dzH89Vnya
-        Q2OtKXlnqbmsMFlTVkZtl/hhepHNFibb+tdFfh/bIPg2eSwX8f1O5KDyzry5qornzSofc6
-        q+pQBqXt1zCk7xC2tqeNPjg0zE5eGCE=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-eUabmi_OMWW7N8FhYRWzZQ-1; Thu, 10 Mar 2022 17:56:36 -0500
-X-MC-Unique: eUabmi_OMWW7N8FhYRWzZQ-1
-Received: by mail-ej1-f70.google.com with SMTP id hq34-20020a1709073f2200b006d677c94909so3913927ejc.8
-        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 14:56:36 -0800 (PST)
+        with ESMTP id S242335AbiCJXFS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Mar 2022 18:05:18 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0CFD2276
+        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 15:04:16 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id n2so6212930plf.4
+        for <bpf@vger.kernel.org>; Thu, 10 Mar 2022 15:04:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1coxOHy+MiOVkaWgzSw++tkxGlirBpUlCMovtClURhw=;
+        b=CjWfotxA33yOsiAJ7O8Fm3Q6c+I6BF7K7x2OwbbcHiGwT0SPnVY4OXhan3k5QaGlbt
+         WU3LZJ+4LVyE4wxo5yZEYRRY6oVg/CwycFcrLAJA/7Sv9vc+4OPp3aEicV+dmxkIPNu7
+         B9mDme2VHkIEA86cgc3LRs1aJvhXqL+HivHuz8+8IKsulr7JWTB+EfFZ/70pTeYm0l5s
+         jbOQgfW0slhcjisOZ3zLqjDUjedFHxTul8fich1wTn1OV6bH8Bfv3gEdGQUbT/Jx7vRU
+         F+KzSYjRifjUoT98RTyxdS3W93t8RAjJ9ejZEz5cAaZ8uPIByzG/qpEFK88zunFNx8JJ
+         rnvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=X+C4z+W6JKvW1PkIKtt/f0rXq2MGC/kPw7Xm7/uk89s=;
-        b=WUoBhb6puiLpAMzmrcavtk+QeXzF4WRho5UFB46H3lXXygY3i6Bbn90njclHUem0BO
-         F2rTRE+MKlJ0hRd09kVhpL+IBCPuc8Wcrq4vJikYWXY8goTsHko8loQlBCB0faKNEbS/
-         MPuR0bhiOwWYyNgzB38UxGbkv64dqI6S3Xvoe026g6j9qDOboJlSDDLqJ5M7yaMYUBgw
-         u4yu5+TIPHcakZPSdhR0ExteBstvbFRW3nY90hWRpMeYzkJ4kzeSdZiDc8QofDcDwOnT
-         +9GA0h3oW4eEJ7Uyce5558ZRy5jEsbSP3+JcYMqVv52kKV2VLurEIkOqcdnXVnaMS7sr
-         H8TA==
-X-Gm-Message-State: AOAM532NTplaumvlCxX3EYfoljnPv20dDGV8QkZCvPXUcAUDyV9nmF2O
-        ywu/db5pOmZLaOzLRSptTOHG8TpFpe7NaCkXk8U/2iIKpEyXbfyqeQBqqC2lFtxy+XJ78Xk3r7b
-        WkqY1PKNqQ1G6
-X-Received: by 2002:a17:907:da4:b0:6da:7952:ccd2 with SMTP id go36-20020a1709070da400b006da7952ccd2mr6015469ejc.763.1646952993996;
-        Thu, 10 Mar 2022 14:56:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxsZOomQyju/SgppJIjOpLtra7yrnPadi1K+LnceE/3q023DlNqyHtR4F2O64IOpBOAZBUmdA==
-X-Received: by 2002:a17:907:da4:b0:6da:7952:ccd2 with SMTP id go36-20020a1709070da400b006da7952ccd2mr6015421ejc.763.1646952992959;
-        Thu, 10 Mar 2022 14:56:32 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906521000b006d58773e992sm2259017ejm.188.2022.03.10.14.56.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 14:56:32 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id C34181A89A3; Thu, 10 Mar 2022 23:56:31 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1coxOHy+MiOVkaWgzSw++tkxGlirBpUlCMovtClURhw=;
+        b=sxpiSi+b2+j/Ncl4Q7k1XCliJbG2CRI6mVZYmD1hOKcCV8bL/KxPlfHKrOzEercQxh
+         vKL/i28TGJHGVs804VikTtodkRdyx58EgnaSz1NCO8xXLUfiGe7KvYJk7MMrZTaWPxZz
+         10I+0eNbjZbmEIikx8YfYuh9yp3USqhgkRI1jPO/oOSKKDu2HJn1cOWqp19pHberpzzG
+         VgHBLTJQCmugIHI8FjYesXJ2N+iu+Mbvl5X9c1q/y7bl+YN4vlnU5hmZ5gVK7bS76bBq
+         lpIth1GwnTjzT4qMYZ7VnOpDjWHfT7EZyRmkZCYVr5Ozzg7LyyaaAeKugSE/lQXI6c6p
+         varA==
+X-Gm-Message-State: AOAM530r/4fudElbHKsqxIsFueMZ8HQdoQgpkmL0HXmY8O7YJTAMKl5v
+        ajFwyyM+pDp0dLV5uhlUHO3tVQ==
+X-Google-Smtp-Source: ABdhPJw8HTIbG6Vtna5RHQ3w0pUmdSBxZ9o7VNzoRIFubitq+l+4KYvfWrG6iZrcHpsFwfLo5jj15A==
+X-Received: by 2002:a17:903:124a:b0:151:99fe:1a10 with SMTP id u10-20020a170903124a00b0015199fe1a10mr7338107plh.87.1646953455727;
+        Thu, 10 Mar 2022 15:04:15 -0800 (PST)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id rj14-20020a17090b3e8e00b001bf50a8b468sm11740225pjb.51.2022.03.10.15.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Mar 2022 15:04:15 -0800 (PST)
+Message-ID: <77a44185-c9cd-21f5-125f-b8eec7a66537@linaro.org>
+Date:   Thu, 10 Mar 2022 15:04:14 -0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2] net: ipv6: fix skb_over_panic in __ip6_append_data
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add a test for maximum packet size in xdp_do_redirect
-Date:   Thu, 10 Mar 2022 23:56:21 +0100
-Message-Id: <20220310225621.53374-2-toke@redhat.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220310225621.53374-1-toke@redhat.com>
-References: <20220310225621.53374-1-toke@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        syzbot+e223cf47ec8ae183f2a0@syzkaller.appspotmail.com,
+        Willem de Bruijn <willemb@google.com>
+References: <CA+FuTScPUVpyK6WYXrePTg_533VF2wfPww4MOJYa17v0xbLeGQ@mail.gmail.com>
+ <20220310221328.877987-1-tadeusz.struk@linaro.org>
+ <20220310143011.00c21f53@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <CAF=yD-LrVjvY8wAqZtUTFS8V9ng2AD3jB1DOZvkagPOp3Sbq-g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds an extra test to the xdp_do_redirect selftest for XDP live packet
-mode, which verifies that the maximum permissible packet size is accepted
-without any errors, and that a too big packet is correctly rejected.
+On 3/10/22 14:43, Willem de Bruijn wrote:
+> On Thu, Mar 10, 2022 at 5:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>>
+>> On Thu, 10 Mar 2022 14:13:28 -0800 Tadeusz Struk wrote:
+>>> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+>>> index 4788f6b37053..6d45112322a0 100644
+>>> --- a/net/ipv6/ip6_output.c
+>>> +++ b/net/ipv6/ip6_output.c
+>>> @@ -1649,6 +1649,16 @@ static int __ip6_append_data(struct sock *sk,
+>>>                        skb->protocol = htons(ETH_P_IPV6);
+>>>                        skb->ip_summed = csummode;
+>>>                        skb->csum = 0;
+>>> +
+>>> +                     /*
+>>> +                      *      Check if there is still room for payload
+>>> +                      */
+>>
+>> TBH I think the check is self-explanatory. Not worth a banner comment,
+>> for sure.
+>>
+>>> +                     if (fragheaderlen >= mtu) {
+>>> +                             err = -EMSGSIZE;
+>>> +                             kfree_skb(skb);
+>>> +                             goto error;
+>>> +                     }
+>>
+>> Not sure if Willem prefers this placement, but seems like we can lift
+>> this check out of the loop, as soon as fragheaderlen and mtu are known.
+>>
+>>>                        /* reserve for fragmentation and ipsec header */
+>>>                        skb_reserve(skb, hh_len + sizeof(struct frag_hdr) +
+>>>                                    dst_exthdrlen);
+> 
+> Just updating this boundary check will do?
+> 
+>          if (mtu < fragheaderlen ||
+>              ((mtu - fragheaderlen) & ~7) + fragheaderlen <
+> sizeof(struct frag_hdr))
+>                  goto emsgsize;
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- .../bpf/prog_tests/xdp_do_redirect.c          | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Yes, it will. v3 on its way.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index 9926b07e38c8..a50971c6cf4a 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -62,6 +62,28 @@ static int attach_tc_prog(struct bpf_tc_hook *hook, int fd)
- 	return 0;
- }
- 
-+/* The maximum permissible size is: PAGE_SIZE - sizeof(struct xdp_page_head) -
-+ * sizeof(struct skb_shared_info) - XDP_PACKET_HEADROOM = 3368 bytes
-+ */
-+#define MAX_PKT_SIZE 3368
-+static void test_max_pkt_size(int fd)
-+{
-+	char data[MAX_PKT_SIZE + 1] = {};
-+	int err;
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &data,
-+			    .data_size_in = MAX_PKT_SIZE,
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+		);
-+	err = bpf_prog_test_run_opts(fd, &opts);
-+	ASSERT_OK(err, "prog_run_max_size");
-+
-+	opts.data_size_in += 1;
-+	err = bpf_prog_test_run_opts(fd, &opts);
-+	ASSERT_EQ(err, -EINVAL, "prog_run_too_big");
-+}
-+
- #define NUM_PKTS 10000
- void test_xdp_do_redirect(void)
- {
-@@ -167,6 +189,8 @@ void test_xdp_do_redirect(void)
- 	ASSERT_EQ(skel->bss->pkts_seen_zero, 2, "pkt_count_zero");
- 	ASSERT_EQ(skel->bss->pkts_seen_tc, NUM_PKTS - 2, "pkt_count_tc");
- 
-+	test_max_pkt_size(bpf_program__fd(skel->progs.xdp_count_pkts));
-+
- out_tc:
- 	bpf_tc_hook_destroy(&tc_hook);
- out:
 -- 
-2.35.1
-
+Thanks,
+Tadeusz
