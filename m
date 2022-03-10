@@ -2,254 +2,289 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C401C433EF
-	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 08:22:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F07C43217
+	for <bpf@archiver.kernel.org>; Thu, 10 Mar 2022 08:29:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239908AbiCJIXM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Mar 2022 03:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
+        id S240335AbiCJIaI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Mar 2022 03:30:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234558AbiCJIXK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Mar 2022 03:23:10 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C15D1301B6;
-        Thu, 10 Mar 2022 00:22:10 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id mm23-20020a17090b359700b001bfceefd8c6so1339992pjb.3;
-        Thu, 10 Mar 2022 00:22:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=z/Mr8oh0sWKEm17KedkzMdcKpYvzoba3uTd2uHZZr9s=;
-        b=X5ihtfVuum0YUKHMU2jEqc/tEzjv6a/y4+REtlgaXQECTGRJCtu/aJJcsq4m7/KfJK
-         UMf4hBdUYJGwVdbYQU94a57SU+/YGmMW5CpdGa+K+enoInnOnlkuQh3oKmJpphJLPZIl
-         g6wHG7Gb7E38d32RU4uxaz0ZXrnkuXDBBwUqkvhJdDUvd92wYPEmD1j8chbQ4sBo78xS
-         +uy4b2cX5ouWwTKYhmfgqn6lWt88VxBQcyZ5pzEofdgRvdjJx0R5iv4xvk6HweHwxP8R
-         L/mhBMQcw/f/ODTz0BevBtf7MG6muzgCjI3QRjpWzHLkYgayzOmhnQDnxJRKbAmQYIn7
-         wF2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=z/Mr8oh0sWKEm17KedkzMdcKpYvzoba3uTd2uHZZr9s=;
-        b=Jr5vYbi+27vFnlf0Hpg+G1x5Y3PgAUo5gsbVD7pSdjGH12XqjjioGH1YnWJgcyMtZG
-         f7WkA1qnv80bxblPv9R7E7Khe+q+ZLpnhRBBlJfwk72exXS91rbLUDnsvHIznrmQWELF
-         QFQRw9kL9jhhndkrXV/tt5gPon71dfv/xQb/0n1N8Wxz2kIX23H49jbg5Oow/bLSnAcM
-         DYp33yAbnxC3sqFkRfFsGMl3DEPJGQB8uBiTMGXhZaVF6JbCVj3EZLQcO9iwmc9WWHbq
-         3E2vQ8Y6t5y4NyhSrxwFqMqtfTRcbhsU/GMbymhwLjQbMxjN39z7fGEsVZOM98OHl7jT
-         NQwg==
-X-Gm-Message-State: AOAM532MnYzqx2AjoVEqfgbDvpEBX8sx1kmmqiyV/ZtWTiCjLWoci8r0
-        Vo0x2YDwxZwThhAvfh5dNBzasvU1QRs=
-X-Google-Smtp-Source: ABdhPJxaKvATvJcKM/p3sRrZdAYUBZaW3EkkpE4vAwzzsPiNpXHpRAotjVf4CnOg/RpQyF5KKuyVMg==
-X-Received: by 2002:a17:90b:2092:b0:1be:e373:2ed9 with SMTP id hb18-20020a17090b209200b001bee3732ed9mr3773083pjb.128.1646900529744;
-        Thu, 10 Mar 2022 00:22:09 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:e7f1:5749:9be:64e1])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056a000c8c00b004e1a76f0a8asm5903008pfv.51.2022.03.10.00.22.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 00:22:09 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S232250AbiCJIaI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Mar 2022 03:30:08 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8811135701;
+        Thu, 10 Mar 2022 00:29:05 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0V6neRLx_1646900938;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6neRLx_1646900938)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 10 Mar 2022 16:28:59 +0800
+Message-ID: <1646900411.6481435-2-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH v7 17/26] virtio_pci: queue_reset: support VIRTIO_F_RING_RESET
+Date:   Thu, 10 Mar 2022 16:20:11 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eugene Loh <eugene.loh@oracle.com>, Hao Luo <haoluo@google.com>
-Subject: [PATCH 2/2] bpf/selftests: Test skipping stacktrace
-Date:   Thu, 10 Mar 2022 00:22:02 -0800
-Message-Id: <20220310082202.1229345-2-namhyung@kernel.org>
-X-Mailer: git-send-email 2.35.1.723.g4982287a31-goog
-In-Reply-To: <20220310082202.1229345-1-namhyung@kernel.org>
-References: <20220310082202.1229345-1-namhyung@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Johannes Berg <johannes.berg@intel.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
+ <20220308123518.33800-18-xuanzhuo@linux.alibaba.com>
+ <8b9d337d-71c2-07b4-8e65-6f83cf09bf7a@redhat.com>
+In-Reply-To: <8b9d337d-71c2-07b4-8e65-6f83cf09bf7a@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test case for stacktrace with skip > 0 using a small sized
-buffer.  It didn't support skipping entries greater than or equal to
-the size of buffer and filled the skipped part with 0.
+On Wed, 9 Mar 2022 16:54:10 +0800, Jason Wang <jasowang@redhat.com> wrote:
+>
+> =E5=9C=A8 2022/3/8 =E4=B8=8B=E5=8D=888:35, Xuan Zhuo =E5=86=99=E9=81=93:
+> > This patch implements virtio pci support for QUEUE RESET.
+> >
+> > Performing reset on a queue is divided into these steps:
+> >
+> >   1. virtio_reset_vq()              - notify the device to reset the qu=
+eue
+> >   2. virtqueue_detach_unused_buf()  - recycle the buffer submitted
+> >   3. virtqueue_reset_vring()        - reset the vring (may re-alloc)
+> >   4. virtio_enable_resetq()         - mmap vring to device, and enable =
+the queue
+> >
+> > This patch implements virtio_reset_vq(), virtio_enable_resetq() in the
+> > pci scenario.
+> >
+> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> > ---
+> >   drivers/virtio/virtio_pci_common.c |  8 +--
+> >   drivers/virtio/virtio_pci_modern.c | 83 ++++++++++++++++++++++++++++++
+> >   2 files changed, 88 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio=
+_pci_common.c
+> > index fdbde1db5ec5..863d3a8a0956 100644
+> > --- a/drivers/virtio/virtio_pci_common.c
+> > +++ b/drivers/virtio/virtio_pci_common.c
+> > @@ -248,9 +248,11 @@ static void vp_del_vq(struct virtqueue *vq)
+> >   	struct virtio_pci_vq_info *info =3D vp_dev->vqs[vq->index];
+> >   	unsigned long flags;
+> >
+> > -	spin_lock_irqsave(&vp_dev->lock, flags);
+> > -	list_del(&info->node);
+> > -	spin_unlock_irqrestore(&vp_dev->lock, flags);
+> > +	if (!vq->reset) {
+> > +		spin_lock_irqsave(&vp_dev->lock, flags);
+> > +		list_del(&info->node);
+> > +		spin_unlock_irqrestore(&vp_dev->lock, flags);
+> > +	}
+> >
+> >   	vp_dev->del_vq(info);
+> >   	kfree(info);
+> > diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio=
+_pci_modern.c
+> > index 49a4493732cf..3c67d3607802 100644
+> > --- a/drivers/virtio/virtio_pci_modern.c
+> > +++ b/drivers/virtio/virtio_pci_modern.c
+> > @@ -34,6 +34,9 @@ static void vp_transport_features(struct virtio_devic=
+e *vdev, u64 features)
+> >   	if ((features & BIT_ULL(VIRTIO_F_SR_IOV)) &&
+> >   			pci_find_ext_capability(pci_dev, PCI_EXT_CAP_ID_SRIOV))
+> >   		__virtio_set_bit(vdev, VIRTIO_F_SR_IOV);
+> > +
+> > +	if (features & BIT_ULL(VIRTIO_F_RING_RESET))
+> > +		__virtio_set_bit(vdev, VIRTIO_F_RING_RESET);
+> >   }
+> >
+> >   /* virtio config->finalize_features() implementation */
+> > @@ -199,6 +202,82 @@ static int vp_active_vq(struct virtqueue *vq, u16 =
+msix_vec)
+> >   	return 0;
+> >   }
+> >
+> > +static int vp_modern_reset_vq(struct virtqueue *vq)
+> > +{
+> > +	struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
+> > +	struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
+> > +	struct virtio_pci_vq_info *info;
+> > +	unsigned long flags;
+> > +	unsigned int irq;
+> > +
+> > +	if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
+> > +		return -ENOENT;
+> > +
+> > +	vp_modern_set_queue_reset(mdev, vq->index);
+> > +
+> > +	info =3D vp_dev->vqs[vq->index];
+> > +
+> > +	/* delete vq from irq handler */
+> > +	spin_lock_irqsave(&vp_dev->lock, flags);
+> > +	list_del(&info->node);
+> > +	spin_unlock_irqrestore(&vp_dev->lock, flags);
+> > +
+> > +	INIT_LIST_HEAD(&info->node);
+> > +
+> > +	vq->reset =3D VIRTIO_VQ_RESET_STEP_DEVICE;
+> > +
+> > +	/* sync irq callback. */
+> > +	if (vp_dev->intx_enabled) {
+> > +		irq =3D vp_dev->pci_dev->irq;
+> > +
+> > +	} else {
+> > +		if (info->msix_vector =3D=3D VIRTIO_MSI_NO_VECTOR)
+> > +			return 0;
+> > +
+> > +		irq =3D pci_irq_vector(vp_dev->pci_dev, info->msix_vector);
+> > +	}
+> > +
+> > +	synchronize_irq(irq);
+>
+>
+> Synchronize_irq() is not sufficient here since it breaks the effort of
+> the interrupt hardening which is done by commits:
+>
+> 080cd7c3ac87 virtio-pci: harden INTX interrupts
+> 9e35276a5344 virtio_pci: harden MSI-X interrupts
+>
+> Unfortunately=C2=A0 080cd7c3ac87 introduces an issue that disable_irq() w=
+ere
+> used for the affinity managed irq but we're discussing a fix.
+>
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- .../bpf/prog_tests/stacktrace_map_skip.c      | 72 ++++++++++++++++
- .../selftests/bpf/progs/stacktrace_map_skip.c | 82 +++++++++++++++++++
- 2 files changed, 154 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
- create mode 100644 tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
-new file mode 100644
-index 000000000000..bcb244aa3c78
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/stacktrace_map_skip.c
-@@ -0,0 +1,72 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "stacktrace_map_skip.skel.h"
-+
-+#define TEST_STACK_DEPTH  2
-+
-+void test_stacktrace_map_skip(void)
+ok, I think disable_irq() is still used here.
+
+I want to determine the solution for this detail first. So I posted the cod=
+e, I
+hope Jason can help confirm this point first.
+
+There are three situations in which vq corresponds to an interrupt
+
+1. intx
+2. msix: per vq vectors
+2. msix: share irq
+
+Essentially can be divided into two categories: per vq vectors and share ir=
+q.
+
+For share irq is based on virtqueues to find vq, so I think it is safe as l=
+ong
+as list_del() is executed under the protection of the lock.
+
+In the case of per vq vectors, disable_irq() is used.
+
+Thanks.
+
++static int vp_modern_reset_vq(struct virtqueue *vq)
 +{
-+	struct stacktrace_map_skip *skel;
-+	int control_map_fd, stackid_hmap_fd, stackmap_fd, stack_amap_fd;
-+	int err, stack_trace_len;
-+	__u32 key, val, duration = 0;
++       struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
++       struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
++       struct virtio_pci_vq_info *info;
++       unsigned long flags;
++       unsigned int irq;
 +
-+	skel = stacktrace_map_skip__open_and_load();
-+	if (CHECK(!skel, "skel_open_and_load", "skeleton open failed\n"))
-+		return;
++       if (!virtio_has_feature(vq->vdev, VIRTIO_F_RING_RESET))
++               return -ENOENT;
 +
-+	/* find map fds */
-+	control_map_fd = bpf_map__fd(skel->maps.control_map);
-+	if (CHECK_FAIL(control_map_fd < 0))
-+		goto out;
++       vp_modern_set_queue_reset(mdev, vq->index);
 +
-+	stackid_hmap_fd = bpf_map__fd(skel->maps.stackid_hmap);
-+	if (CHECK_FAIL(stackid_hmap_fd < 0))
-+		goto out;
++       info =3D vp_dev->vqs[vq->index];
 +
-+	stackmap_fd = bpf_map__fd(skel->maps.stackmap);
-+	if (CHECK_FAIL(stackmap_fd < 0))
-+		goto out;
++       /* delete vq from irq handler */
++       spin_lock_irqsave(&vp_dev->lock, flags);
++       list_del(&info->node);
++       vp_modern_set_queue_reset(mdev, vq->index);
 +
-+	stack_amap_fd = bpf_map__fd(skel->maps.stack_amap);
-+	if (CHECK_FAIL(stack_amap_fd < 0))
-+		goto out;
++       info =3D vp_dev->vqs[vq->index];
 +
-+	err = stacktrace_map_skip__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed\n"))
-+		goto out;
++       /* delete vq from irq handler */
++       spin_lock_irqsave(&vp_dev->lock, flags);
++       list_del(&info->node);
++       spin_unlock_irqrestore(&vp_dev->lock, flags);
 +
-+	/* give some time for bpf program run */
-+	sleep(1);
++       INIT_LIST_HEAD(&info->node);
 +
-+	/* disable stack trace collection */
-+	key = 0;
-+	val = 1;
-+	bpf_map_update_elem(control_map_fd, &key, &val, 0);
++       /* For the case where vq has an exclusive irq, to prevent the irq f=
+rom
++        * being received again and the pending irq, call disable_irq().
++        *
++        * In the scenario based on shared interrupts, vq will be searched =
+from
++        * the queue virtqueues. Since the previous list_del() has been del=
+eted
++        * from the queue, it is impossible for vq to be called in this cas=
+e.
++        * There is no need to close the corresponding interrupt.
++        */
++       if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
++               disable_irq(pci_irq_vector(vp_dev->pci_dev, info->msix_vect=
+or));
 +
-+	/* for every element in stackid_hmap, we can find a corresponding one
-+	 * in stackmap, and vise versa.
-+	 */
-+	err = compare_map_keys(stackid_hmap_fd, stackmap_fd);
-+	if (CHECK(err, "compare_map_keys stackid_hmap vs. stackmap",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
++       vq->reset =3D true;
 +
-+	err = compare_map_keys(stackmap_fd, stackid_hmap_fd);
-+	if (CHECK(err, "compare_map_keys stackmap vs. stackid_hmap",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	stack_trace_len = TEST_STACK_DEPTH * sizeof(__u64);
-+	err = compare_stack_ips(stackmap_fd, stack_amap_fd, stack_trace_len);
-+	if (CHECK(err, "compare_stack_ips stackmap vs. stack_amap",
-+		  "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	if (CHECK(skel->bss->failed, "check skip",
-+		  "failed to skip some depth: %d", skel->bss->failed))
-+		goto out;
-+
-+out:
-+	stacktrace_map_skip__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c b/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
-new file mode 100644
-index 000000000000..323248b17ae4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/stacktrace_map_skip.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define TEST_STACK_DEPTH         2
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} control_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, __u32);
-+} stackid_hmap SEC(".maps");
-+
-+typedef __u64 stack_trace_t[TEST_STACK_DEPTH];
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, stack_trace_t);
-+} stackmap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 16384);
-+	__type(key, __u32);
-+	__type(value, stack_trace_t);
-+} stack_amap SEC(".maps");
-+
-+/* taken from /sys/kernel/debug/tracing/events/sched/sched_switch/format */
-+struct sched_switch_args {
-+	unsigned long long pad;
-+	char prev_comm[TASK_COMM_LEN];
-+	int prev_pid;
-+	int prev_prio;
-+	long long prev_state;
-+	char next_comm[TASK_COMM_LEN];
-+	int next_pid;
-+	int next_prio;
-+};
-+
-+int failed = 0;
-+
-+SEC("tracepoint/sched/sched_switch")
-+int oncpu(struct sched_switch_args *ctx)
-+{
-+	__u32 max_len = TEST_STACK_DEPTH * sizeof(__u64);
-+	__u32 key = 0, val = 0, *value_p;
-+	__u64 *stack_p;
-+
-+	value_p = bpf_map_lookup_elem(&control_map, &key);
-+	if (value_p && *value_p)
-+		return 0; /* skip if non-zero *value_p */
-+
-+	/* it should allow skipping whole buffer size entries */
-+	key = bpf_get_stackid(ctx, &stackmap, TEST_STACK_DEPTH);
-+	if ((int)key >= 0) {
-+		/* The size of stackmap and stack_amap should be the same */
-+		bpf_map_update_elem(&stackid_hmap, &key, &val, 0);
-+		stack_p = bpf_map_lookup_elem(&stack_amap, &key);
-+		if (stack_p) {
-+			bpf_get_stack(ctx, stack_p, max_len, TEST_STACK_DEPTH);
-+			/* it wrongly skipped all the entries and filled zero */
-+			if (stack_p[0] == 0)
-+				failed = 1;
-+		}
-+	} else if ((int)key == -14/*EFAULT*/) {
-+		/* old kernel doesn't support skipping that many entries */
-+		failed = 2;
-+	}
-+
-+	return 0;
++       return 0;
 +}
 +
-+char _license[] SEC("license") = "GPL";
--- 
-2.35.1.723.g4982287a31-goog
++static int vp_modern_enable_reset_vq(struct virtqueue *vq)
++{
++       struct virtio_pci_device *vp_dev =3D to_vp_device(vq->vdev);
++       struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
++       struct virtio_pci_vq_info *info;
++       unsigned long flags, index;
++       int err;
++
++       if (!vq->reset)
++               return -EBUSY;
++
++       index =3D vq->index;
++       info =3D vp_dev->vqs[index];
++
++       /* check queue reset status */
++       if (vp_modern_get_queue_reset(mdev, index) !=3D 1)
++               return -EBUSY;
++
++       err =3D vp_active_vq(vq, info->msix_vector);
++       if (err)
++               return err;
++
++       if (vq->callback) {
++               spin_lock_irqsave(&vp_dev->lock, flags);
++               list_add(&info->node, &vp_dev->virtqueues);
++               spin_unlock_irqrestore(&vp_dev->lock, flags);
++       } else {
++               INIT_LIST_HEAD(&info->node);
++       }
++
++       vp_modern_set_queue_enable(&vp_dev->mdev, index, true);
++       vq->reset =3D false;
++
++       if (vp_dev->per_vq_vectors && msix_vec !=3D VIRTIO_MSI_NO_VECTOR)
++               enable_irq(pci_irq_vector(vp_dev->pci_dev, info->msix_vecto=
+r));
++
++       return 0;
++}
+
 
