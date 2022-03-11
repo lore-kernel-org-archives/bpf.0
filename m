@@ -2,83 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ADA2C433FE
-	for <bpf@archiver.kernel.org>; Fri, 11 Mar 2022 22:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 959ADC433F5
+	for <bpf@archiver.kernel.org>; Fri, 11 Mar 2022 22:54:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiCKWxo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Mar 2022 17:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40302 "EHLO
+        id S229960AbiCKWzY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Mar 2022 17:55:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiCKWx1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Mar 2022 17:53:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C7C2A2D29;
-        Fri, 11 Mar 2022 14:27:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98AB260EDF;
-        Fri, 11 Mar 2022 21:10:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 027D9C340EC;
-        Fri, 11 Mar 2022 21:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647033010;
-        bh=61Xxy7fRTLYTj8A4CEx5xGaKDEr6+LlKepnbpX8kW6U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=XpuvEQPzr1Kpt4+5y5kRPQIrB53DysoCiJ3AcwECWPWSJ1k10xSltMRQbBjvJfmeu
-         aKuHhuQBEzfWzDz3cOl2TRAuj5aMrf7A7P9Zg1eZIU1wK5Glfd0pq49nOj8o7TKp3w
-         QwYaBvGLt1d+YbEPnholsFk/oaviazdFWndlFAhMkjyL3swaYsnX7H2s8Ov4MC+7RE
-         ZlLUxS3injPFQwOF9zWx0vtkhJKerCVefa+K5xTgieFMRvsGXbeB3TN+dYwFz25t0E
-         EoNoW8jrgcALafo0fKpGq/ErKBCn7G+NVj84A6edWHfrdcl6cNJrA1HtgEjh03kcI9
-         g1NzaKEgig3Ww==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAEA6E8DD5B;
-        Fri, 11 Mar 2022 21:10:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229993AbiCKWzI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Mar 2022 17:55:08 -0500
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5672A25D20A
+        for <bpf@vger.kernel.org>; Fri, 11 Mar 2022 14:42:35 -0800 (PST)
+Received: by mail-il1-x12f.google.com with SMTP id j29so7006055ila.4
+        for <bpf@vger.kernel.org>; Fri, 11 Mar 2022 14:42:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l+hL8rV7q3DyjbzisQadibVPVfCUIViElitkx0FtpFg=;
+        b=KZrgMj6brxB45N/zqeGjt2Cwne2ePFzmWfYqb0lCtPkjFcF3azUNcThQpHzwp1oI1W
+         +a4FfsVJVBBUTUI1385F1bN7qonmAmA5K7V1BKW/K9ejTdWDETSNtqnOLA4FHIXB4MXJ
+         PAiGiqe7dZR6feckmcW0FvA6unKWfFvirGl6hor1oqyTwJ3+ktwHnzTaYzVJHXoCQAZp
+         jhZldOQugT9p5PJ9vR+jxaRfmgj7lbd5TAMfKhBMlmuiH0UFTr6fCEhlb1RJi01e1ZWf
+         JjRkNasHC2JlAPex+DkM5zwO2U4hYfAXpSRYfK3W0ZWlmWI8L6qbZizOJ+ubW5NIJb9i
+         kvFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l+hL8rV7q3DyjbzisQadibVPVfCUIViElitkx0FtpFg=;
+        b=BrNEHOGWohoQ4TSGia1+BtyBZrhlPXJNPSrUEykZa53BCJbYrAjOuSLkvVBhV+Ff/v
+         Wi/+PSYKmX88loXFL0ig+ipQDMwwXZ2AHOH7pHsSXKNHKDZuN2Z6cdRXR+N/gldLCqsq
+         TExQG5xFojVWiNiJqMDWNJhi7RSm3Oc4VVQcSNLoqNOOWw2xmJI565rPap0sK3QiRmRf
+         9LNnbCkR5oOhHqJbMeJfkJFhnHcJetOOefzinwORSuWevybdVNh/8Uby2D4fj4u5x4o3
+         Wbcz2scm+Jwq2JGsfcDtg5A62uh57mtAlHYXFrCjuCKmmrp1FjrJT+4Z2HAZRzydDH5e
+         pfIQ==
+X-Gm-Message-State: AOAM533FIe2BerT31bQzoSzQ82Tti/6a39bNorATJCOXyhYMuOjXIy3I
+        /qFQV9pcQr0baO/BH98le0LSGs0IQXn71Tzd1Ek=
+X-Google-Smtp-Source: ABdhPJz0WWJHcbPkkiVfo51+6M1W0UPg14QhDWoLi9c7RAezNK5jkhViiQKY8rED3cwQM1aD7aaI02Y75kIEKBrEF+0=
+X-Received: by 2002:a92:c5aa:0:b0:2c5:f753:9069 with SMTP id
+ r10-20020a92c5aa000000b002c5f7539069mr9320827ilt.71.1647038554708; Fri, 11
+ Mar 2022 14:42:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 1/2] bpf,
- test_run: Fix packet size check for live packet mode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164703300989.26095.18212474165043880639.git-patchwork-notify@kernel.org>
-Date:   Fri, 11 Mar 2022 21:10:09 +0000
-References: <20220310225621.53374-1-toke@redhat.com>
-In-Reply-To: <20220310225621.53374-1-toke@redhat.com>
-To:     =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2VuIDx0b2tlQHJlZGhhdC5jb20+?=@ci.codeaurora.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org,
-        syzbot+0e91362d99386dc5de99@syzkaller.appspotmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <cover.1646957399.git.delyank@fb.com> <6d868b6effca2549681a9e42ccbdd71aac6287e8.1646957399.git.delyank@fb.com>
+In-Reply-To: <6d868b6effca2549681a9e42ccbdd71aac6287e8.1646957399.git.delyank@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 11 Mar 2022 14:42:23 -0800
+Message-ID: <CAEf4BzbALV8o+dMjdW3fztBVa7Xq1sfgt6u8D79rQ4SWEJt7Vw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/5] libbpf: init btf_{key,value}_type_id on
+ internal map open
+To:     Delyan Kratunov <delyank@fb.com>
+Cc:     "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Thu, Mar 10, 2022 at 4:12 PM Delyan Kratunov <delyank@fb.com> wrote:
+>
+> For internal maps, look up the key and value btf types on
+> open() and not load(), so that `bpf_map_btf_value_type_id`
+> is usable in `bpftool gen`.
+>
+> Signed-off-by: Delyan Kratunov <delyank@fb.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index b6f11ce0d6bc..3fb9c926fe6e 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -1517,6 +1517,9 @@ static char *internal_map_name(struct bpf_object *obj, const char *real_name)
+>         return strdup(map_name);
+>  }
+>
+> +static int
+> +bpf_map_find_btf_info(struct bpf_object *obj, struct bpf_map *map);
+> +
+>  static int
+>  bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+>                               const char *real_name, int sec_idx, void *data, size_t data_sz)
+> @@ -1564,6 +1567,11 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+>                 return err;
+>         }
+>
+> +       err = bpf_map_find_btf_info(obj, map);
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+is there any reason to still do bpf_map_find_btf_info() in
+bpf_object__create_map()? It's also non-uniform, legacy user maps
+won't have btf_key_type_id/btf_value_type_id set until load, while
+internal maps (and BTF-defined maps) will. Let's make it uniform and
+call bpf_map_find_btf_info() from bpf_object__init_user_maps() early
+on as well (and not do that at all in bpf_object__create_map())
 
-On Thu, 10 Mar 2022 23:56:20 +0100 you wrote:
-> The live packet mode uses some extra space at the start of each page to
-> cache data structures so they don't have to be rebuilt at every repetition.
-> This space wasn't correctly accounted for in the size checking of the
-> arguments supplied to userspace. In addition, the definition of the frame
-> size should include the size of the skb_shared_info (as there is other
-> logic that subtracts the size of this).
-> 
-> [...]
+> +       /* intentionally ignoring err, failures are fine because of
+> +        * maps like .rodata.str1.1
+> +        */
 
-Here is the summary with links:
-  - [bpf-next,1/2] bpf, test_run: Fix packet size check for live packet mode
-    https://git.kernel.org/bpf/bpf-next/c/b6f1f780b393
-  - [bpf-next,2/2] selftests/bpf: Add a test for maximum packet size in xdp_do_redirect
-    https://git.kernel.org/bpf/bpf-next/c/c09df4bd3a91
+if the intention is to explicitly ignore error, then the most explicit
+way to express this is:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(void)func_that_can_return_error(...);
 
-
+> +
+>         if (data)
+>                 memcpy(map->mmaped, data, data_sz);
+>
+> --
+> 2.34.1
