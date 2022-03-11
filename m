@@ -2,74 +2,74 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93051C4332F
-	for <bpf@archiver.kernel.org>; Fri, 11 Mar 2022 12:11:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D678C433F5
+	for <bpf@archiver.kernel.org>; Fri, 11 Mar 2022 12:11:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345956AbiCKMMn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Mar 2022 07:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S242350AbiCKMMm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Mar 2022 07:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347911AbiCKMMk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1347050AbiCKMMk (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 11 Mar 2022 07:12:40 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0619817AEE1;
-        Fri, 11 Mar 2022 04:11:34 -0800 (PST)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BBeGs9024109;
-        Fri, 11 Mar 2022 12:11:15 GMT
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38F5141FE5;
+        Fri, 11 Mar 2022 04:11:33 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 22BBZcrE004098;
+        Fri, 11 Mar 2022 12:11:12 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : content-type :
  mime-version; s=corp-2021-07-09;
- bh=o+crwmIaRiur1B8tccY50Nwg6siAf4qC4X9Mad9uEjw=;
- b=oWqF0E7d7OwQswuv8wszRQtcTjWuSRs8P1MkcSxL/A0efyBRF2WPZhKLC6CABSHdfm5b
- mov4MQXoN2wmzkqLsn4hwH1wvVi0zL9N2Jii7hvRws315VnePslf6IEeBlNCRs6br2HW
- +I+JWNwRVIVr3kdlh/uZrQmsDTu5leSUI0yWy5UXREqEavTtMK+YajCcciwZYxcKjcV8
- ApQ74oqAVW5OWbMvn8vGvLW4CZxKM7z/xX7Tcv0VRN0dhhU9DRLb7mxMS5QzJeeYZmKh
- 4/ZekW5fYFrawxOfugw0JU6S1H0FBlPdkZFwGCwS/SWzM7t0AakcIjgSTa2Id0jOMvBL jw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ekx9creuu-1
+ bh=5jF2kYrj8DqV5W8M0raDLkw8hX7kFHu9OdM920FxLC8=;
+ b=C/FSc0CT5gCJfxQXtLDjMq31T6ieyux0qEcgrz3+H7l3Jhb17PzxN1qmAN2KtRUNNTYT
+ J7P2UFdNMMXaa4fkNSaIKZR8NecMp5W/phjmYv89Gy2Pnp/fhD9eSZlNz35dfAk9BElQ
+ TQMXdsy1adzsItO02NDNiuV6/0oXFeuXD/h6w8oQL7Jkus9s1nVVwGSRBixOjMkaTAnE
+ o7SHAC5+6QE4nihCu/zU4Mqhhi7Ms1xGT6gVNPh2vgnaC/7VDG5VQ1tB8AcBtpBE8qLs
+ wrrmla07o+YfOETYlCjGOdykbFxU91ah9Lt/Y3CzgUX6zRxclZHAIA1c0iJFryl0RX4D hQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3em0du8w9h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 12:11:15 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BC0UM6117764;
-        Fri, 11 Mar 2022 12:11:14 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2101.outbound.protection.outlook.com [104.47.58.101])
-        by userp3030.oracle.com with ESMTP id 3ekvyxjce0-1
+        Fri, 11 Mar 2022 12:11:11 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 22BC1obs034517;
+        Fri, 11 Mar 2022 12:11:10 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2105.outbound.protection.outlook.com [104.47.55.105])
+        by aserp3030.oracle.com with ESMTP id 3ekwwe2s0h-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Mar 2022 12:11:14 +0000
+        Fri, 11 Mar 2022 12:11:10 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LMRdp6dU8HiSsA+15FGJZdE8TJjPH/MEhqU1DyE7LZwZ/BgN9OqdoNoVYvIiIP0nKF5YFFJ5ZgBT5ojV7j34X99KW8eo8+LM5a5XgnVdKKSqkhxT8PNkksTkuovDxhs/GSitAPnq0sWdBNrHbsewwFBiFoXBzHNcqwuh/MvGCIEiBjdtb5FSak5kIUDAgz9YeS1yCSU/X+YWCgrG3NR7JB+sy1Jbd965sJNNk3HIJyDcW7bL6fo136wLDO2QHH0zeh6I8/YxVhwx8fByHTDM8eX9OHbWR6nFdc9EGa8LWYgpBTwj+L+c9Fzwe3k+RMz1ms1UHLw182PJHSP2+gBSBg==
+ b=CG+LeG2GAKPFH9rJKj0iP93/kUXqzjRcV3WWmUirKRAZpNB4tvQLgDwSTSCz4fCFgVMokQ9T9ZsHPC2iX/JpN25OOdXTOgEqyOOqRkpt9eC4rsjcEyrzF8RjfPkHc17hkg/y+53NvKyaNPpeRuLuZt6dzgaIqXckWhUbEwJu3bOH983tGdBHxZQ3TG0mkVwcN5t0whdEmB5IH55j93L1/zcUf3V2a3b52jQyLqMCx5fPBq3hiANns1Y7Guys6jHILjUijdcP+OylxLZf0dlv/uDLqpq1d1gqvQo2280q29pg/X9mnpyzjax01W5HJXl3ymZPhL/NZDC1XVLCih6moQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o+crwmIaRiur1B8tccY50Nwg6siAf4qC4X9Mad9uEjw=;
- b=f3lO6u0lj9+thC/dOgGqQekufJUFSBNEH9lD0Ej1m0GEE5lb3HptHiQufh/4JgNQcd9ag8Z/R+xdoodAfqfjJUyR27Ja61ku4s67rMpHLexzktd83zLMNSa2StBIO5ZaEup52lbk0JF/t5Jnp7ONnv0/oINI+vJ7ntwtFVnfy4mPDcjxE30SXsYlHW4qcOCKfLOwicO0Qt76Xw9MBFkw09KNX07+J/P2eXWeBgum9pNg5bbzV5u3PB82B0rzYMeO7778LnsB2rf/94a59pLgJaoSjPOoo8yz9iMRHbe/v6SjM/1tVIyXS+rymPaEFqQGq3B/O7RcXuIje0ElOtF0xg==
+ bh=5jF2kYrj8DqV5W8M0raDLkw8hX7kFHu9OdM920FxLC8=;
+ b=nvzztSMizKCsBkkein7Gy0Cx3aipLXdf2F/rOcNjqXBqq3yrdUWqPkTTvLNB8J79eyq6g9sOmMD+Uze//8Xa37yOrzEG33LzCNoX7o0F7CzqbnDNil4AJY5ajV1TKnfu4Qdi+dn2aVg9p7SCj92yuth7TDywAlHLy48bNkAFljdcntpWJE1xdv137KvfpnhUM+52o6l5XuUDVQ34EH3LKKCVys4TOBDCfqAV9M4SKvOZMx5pKaKnHrBiWmfNumysKNYwYud5j0OTNN6McJUk4EOkQR4Q+8p6zWPRDv4eFRZnCkDIEoDCl/J2IhXwVkVrdoup+kH576kk6RY1J32jOQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o+crwmIaRiur1B8tccY50Nwg6siAf4qC4X9Mad9uEjw=;
- b=toHr3i3juz6jPildNiAQf4u33IbeXSJcenyjXWYXgqOyxv22nBOSP/yA4/IiYrkySZZ/eO+CWvlTraxQtfcPduKu3BlQ+TwbLxWhqhzxKaWLNNB2rmtZxiXKH569LOGI0O0Mn0gxnZ4NQA2Cpp8eQfANDIDuZSCJjZ79qKFyVmw=
+ bh=5jF2kYrj8DqV5W8M0raDLkw8hX7kFHu9OdM920FxLC8=;
+ b=d0ztgn3TKWkEJnjUZzN5+k++jf+/IN0+SzPMgdr2rFNcoB7n+Jnd+TJeltf0dD+7NXYoZU56bhg8mwCJX9XSDg1CsIQQI6hLpBaploWKjFuZHs051pvV4sdLKJ7oO37zoPwX3joZNXY/+sKqqoM1sHOwMQSl9kk2DglhpS6ipeY=
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
  by SJ0PR10MB4784.namprd10.prod.outlook.com (2603:10b6:a03:2d4::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Fri, 11 Mar
- 2022 12:11:11 +0000
+ 2022 12:11:08 +0000
 Received: from BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::517b:68:908d:b931]) by BLAPR10MB5267.namprd10.prod.outlook.com
  ([fe80::517b:68:908d:b931%3]) with mapi id 15.20.5061.024; Fri, 11 Mar 2022
- 12:11:11 +0000
+ 12:11:07 +0000
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, toke@redhat.com,
         sunyucong@gmail.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 bpf-next 4/5] selftests/bpf: add tests for u[ret]probe attach by name
-Date:   Fri, 11 Mar 2022 12:10:57 +0000
-Message-Id: <1647000658-16149-5-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v4 bpf-next 2/5] libbpf: support function name-based attach uprobes
+Date:   Fri, 11 Mar 2022 12:10:55 +0000
+Message-Id: <1647000658-16149-3-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1647000658-16149-1-git-send-email-alan.maguire@oracle.com>
 References: <1647000658-16149-1-git-send-email-alan.maguire@oracle.com>
@@ -79,267 +79,465 @@ X-ClientProxiedBy: LO4P123CA0335.GBRP123.PROD.OUTLOOK.COM
  (2603:10b6:208:30e::22)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b3d2775f-67dc-4a2e-a2ba-08da03583b4f
+X-MS-Office365-Filtering-Correlation-Id: 78e706df-09c0-4aaf-3c51-08da03583921
 X-MS-TrafficTypeDiagnostic: SJ0PR10MB4784:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB4784A61209D20AC49C917AD1EF0C9@SJ0PR10MB4784.namprd10.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <SJ0PR10MB478401674BB324039619B9FFEF0C9@SJ0PR10MB4784.namprd10.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LLLeAJNAQnum0e+X5EWHmJc2alR+w/W0hpmHbCIfRZTGwWklLc8CtVww0H1R3ClcNA/spuvK9ROYjtV2lw8iq0AsUgN4AkSEnYeDMWb6c5SAbUIvZgZIeiMT2bd+/97rtCQTBdjIEa3TKOs/6yAJQn2hFvk7A/YfV5x6izKfP+9A0MHCmNCVKLThmXq4YXpBvpWdjsijMPjeXtfXfuDLSSuOML7r6A9q+rA6znS1BK4TGlIcTJBHVd6Eg5PwfnJF6f+bUmVP4fjrrXnKaOsCMcf/GFF90dY3ms7XnYbpYZS836b0jUyCxETgrSFQyMeqVl+jhiTssj4bZYD7FSFVwryO0ihm5pGj+GhccKB3hMqS6lP2XiTodsn4cAfyqiKmzDf8ZzZ9J/jjxSCupdblQcJK+FHTp1eHAitK1XzZ0cxk70m2P072Z434E6gvaT2m2h2Rn/gmRjitxLkawg+ak6o+8AHiVeblRoWGx3IietORHR4MpYH6WIJJskL/suMlBqfrdkX8Obztw3WBC/dnkLeQkU5+JiR6fqW+yk7ps39hjwfQBOX7yRRvdLfI4f/5sbvFcjLmmwugfIaRXwRKReH+GmuYfyGTTzh+lrl7MC+QbZsLeV/WZSRR16lkhwXKmxP2UUFG1LNAqV2JqVXQSaYWmL6eEEyoqVwH5l5jwT23X5yNh/sg/9lMdEW9o4aCJcdFvKya5/63dR746efhNw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38350700002)(2616005)(66946007)(36756003)(7416002)(83380400001)(316002)(38100700002)(6666004)(86362001)(508600001)(5660300002)(44832011)(6506007)(8936002)(52116002)(26005)(6512007)(186003)(2906002)(107886003)(66476007)(8676002)(4326008)(6486002)(66556008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: eshRCV3l1+YVnh0n64/GSwnGazUDI4Xf0E6AHPo8/1FRp6+NtCtD5vLWBRGenC4+wH8vA6rJoh3vu2PUfMYLB++3vfxlHJXq0XaTfXv98ILfAzJufrV1ybvxfRnVr1oAJUNeD7HQ5x/XdcPX3KWSg+dfq2c3dSU6KN4KvUqjM7Yi4FEpq/jai4jfZn77RUJZhF5qbtgJtFC3bf3CmrlJ6BDZSZ6EzUc+nywWJdNDsctyoMqnXgJMQZ3s5IW0LYbjo3NrUfksbCtKOvtsmL6Z1MBF2TEhf/h/R72pgQDpgFHZ5+pEHxrMUPc0OeW/xadcrlKTzSK8faVnixw+zx+o0TVr18PDFFauc7IKwX46XiZ6FPukzwXzHACDBdfMQqk44v1z6iC91SY4kQuSmaP0UVp2WEqwxRiwFXkggRsv2N4BMLT61bE4RE+aZFAoLLpqXu8urAE4RMHgKGAte21tBGML+hZ06XFp5i/mifq/VhB1YLrFXQ06v9pySqh2i8G7Cue4xGf4lBKLuk6bQLgbfoNH7n7ib+NoGJOPOoK7eYB2MoF9cGmpdbvBVZugyZeAcg8Nkl215Lptelhch1upi+bi7tJSYvfRxu4oFJI03iunztZkCBBmwOlSX5Ye4bON04iRLtpn5RurF0zCFCE1gm4dC+Zc2ZyVl6oC1azEoQoKv1GA6uovKabOE+YXSNfq04LowBQNWmzICBI5IMCqo6AhYCsM0nLTSSI83fsk6OHLqvRAJmSxcYAaQYH19NMfpoC2VAk9YXlg+WogHcSJjH1sZnPC4S+yf3J0dCY78VY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38350700002)(2616005)(66946007)(36756003)(7416002)(966005)(83380400001)(316002)(38100700002)(30864003)(6666004)(86362001)(508600001)(5660300002)(44832011)(6506007)(8936002)(52116002)(26005)(6512007)(186003)(2906002)(107886003)(66476007)(8676002)(4326008)(6486002)(66556008);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ruBgXkj/km9jRYiIv+lR0mLWcFS+H1QJZ2Lej4/o5tVJxwRbP6dRtp/IG9Zh?=
- =?us-ascii?Q?6TT0B58uGcivDEMogH6LxdLCiJa6yMMcDrYfHLkHtd5ePH6S02R7JjDJ13Jp?=
- =?us-ascii?Q?o7Hx6RtbMJZxkz0bUDHg/ecQH/vfkITA0IIgV7d4M06ONJNmtceeBsXwBmTK?=
- =?us-ascii?Q?AGk6Kfm4dhP1gASTbSYf7XiLNoLqQ3v+rqOyTBzABqYzlZXLbaIqs3yIEzot?=
- =?us-ascii?Q?c2pkeSe1ILeJ3ZJJirt4E+cYnHobdsQkszR1kUB+bgY/C3w7DL/LQ9i9duum?=
- =?us-ascii?Q?9TFEHNHVwRq3Kgb1sac6aCE22ivCwV6pyK8arGY3wGxebdK+lXCFjdlfOmkO?=
- =?us-ascii?Q?1xguqvFETbCwe1tWR8NMZqQkfYhuc1Ma14kl2I5xzOhuk5JagRyIbIu+SLLj?=
- =?us-ascii?Q?+b6v0im2ZX4yUgxtt99DPCO1CM53yWSYg+lqIuE2N8vohf4cuM2zTYmnbGhQ?=
- =?us-ascii?Q?SePDVlkp63IweDwSh2wx2r+QiAtnXKiQp49HJcL7LH0mdeESxxnoOdMOd9AH?=
- =?us-ascii?Q?ZatmwK8oSI4m2jCFulVXnlH8E6zWqDgdpom+J9/r8dXIyTLXznz4BruYL7+d?=
- =?us-ascii?Q?0RYkN61LwpGhdfE+NBNj6V1ynBOsgk95l0TW2RJdlb3sBM0gCkYuKvsSv+LY?=
- =?us-ascii?Q?ppwl38K5ePfVrX7h10mkFGvw6NxJChpWTlTawC+ijR9DSAEgrGG7H425QqU4?=
- =?us-ascii?Q?n4aR7Yh6aVTEjywYCTv7Cfl9CY85J7W+svVmebKd596xhNfsRf84axYvbjYz?=
- =?us-ascii?Q?70rPJbQponrguNqbRWLb8A2dCL/EUrTWP1eXbzVDoCuVmV7fkAFckMOewQd/?=
- =?us-ascii?Q?MNYJSixnRN4Hfi3Z1KZ0exbtTT8AcTOD8SatP3AkfVWLimak3BfFkXLqTOnw?=
- =?us-ascii?Q?fYu4epy3AVDUFkCLuOATZF2BTV1Pf0qe9v4HBfybzjRDL+UHXhmvpuDXGw2M?=
- =?us-ascii?Q?G4yW+lrChcz7CduK6rnFis9xY2ApD55D1yNC2jB0rd3quqRZXnwNo6VLF/7P?=
- =?us-ascii?Q?OIOZ6VhT2sGFAgkARgqy8fdULUIFDUBltX8phziHW0L2jVhnGVxx7PC/RizH?=
- =?us-ascii?Q?8LbKfEPONPrQa9DhsMxMa10gYsUhpJHoZtRJYPGpUWcesa5PyFrw81bokrkr?=
- =?us-ascii?Q?29+emO9YMr20uDYBsOLpg2Kg+JOV5LlAG+DTC8HtHr1f7bk/Y71DshM8WeZd?=
- =?us-ascii?Q?SR9dWGL55dNYULHQUki6JmIvvecSTbciEeS+4XMQpzelXKI1Gu9MDJafOINz?=
- =?us-ascii?Q?hzlXRBC5yGRV7v8GInDE/YxBoFhAaAzREfGPCuvWYaWzmdmIf9ECfutKHAhN?=
- =?us-ascii?Q?ONsuzTZTyMrh/S0KPW5uXLOwBj5N5kuIji3b32m5SbcpAb8uDJ73cUVgLzJE?=
- =?us-ascii?Q?a5JChEKds/ySFXNCjrSQCh9VD/vuXiRpPvMGROm+BNlLdbtYhk7U6KJGkCHq?=
- =?us-ascii?Q?HOyaO65C9+F/UpL7GQq8I/614OFCtgLGDNZ/o2HthmHATAmQ0pI/vldiYE/p?=
- =?us-ascii?Q?tnYziRncr2TAEozN3NX/oJW0UxBIKw91j7Q/tLRYoQXpA5AglIwB1Yjs/SX8?=
- =?us-ascii?Q?mABoURhPPKGcb8pX5bEY9EPF0vWX81I1QXl20SkSmBnpMtyXFvC2ziyBHodB?=
- =?us-ascii?Q?5DX734lva0Jy8o0lK4cZPXM=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SGa/ad40t4IYk3OpfIhHP7D5xP62RuZsQ7m8dh5s1J6b92qsurNGmeDBSRDj?=
+ =?us-ascii?Q?MUwlLsDuyDYGReEnKLL8u5y0vA0ja0dY+twD65lEjSIhJXAYSzylPl39Jo4e?=
+ =?us-ascii?Q?2pLx6cpg92JZHQc3gkF/C7+p0a2dmpu5f70kJqNM5pPpTYNwWHrOcm2A0n8R?=
+ =?us-ascii?Q?l7bcn/9t0jBvgzFnya6kkpD7Wr22zY5h0i73tF75E7h7nfM5F5ggeIT2lLaT?=
+ =?us-ascii?Q?/7V/4B7JIY/MlGJZcwB3H1oAWAEAlsKrqo08Fthrhx+ThQg7OXAD6vzeohL7?=
+ =?us-ascii?Q?953wsbSHBMk9rK64nHYi4f0P5aeT+OH+vwx0u7hgcI84upd0Th6OReAEyY/7?=
+ =?us-ascii?Q?53V7dvrLMqsRk9jhyzhY8FlWZdCfcoakZQwC32IeiV+Xj2Oe9yw2iT86vL+y?=
+ =?us-ascii?Q?2JR0UinQtTmedzJaYoiwbxrNPlcU9Jm5vqJGikKy95OpRUU9fFl5XWGgLV7f?=
+ =?us-ascii?Q?I07nc3nLdPM8z/U91F2ohI0/dn56P2v3ZNPxcJiJwwUdNM9+LXiWluTa6w4J?=
+ =?us-ascii?Q?FU5S3Xv/ibEQtch5CPEFz/QTZ7HfC38hkhXIbYtPLZbiWuBSHOub5m36vgjI?=
+ =?us-ascii?Q?8RASmmEvpZPLN9/1CtLep3cTQWT3biJ+OY9GRD9gHjxhnYYQ/EoDOt3nxGEd?=
+ =?us-ascii?Q?rwXuxXHBosMa0eisi8JccjgSDIyJeZDPNSkLUSS/1Wwwa946neBLaRp9G4ju?=
+ =?us-ascii?Q?jgU4XHTs7F0RwrJsZEYNw53JJ5tCGcvHIEl0ViHRT8a7ElGTPRs+dJp89mew?=
+ =?us-ascii?Q?aZsw1ykiK4mHbByCrVauh07WngMDXh4oCkVmttONy37+ermc2nP0DysgUajC?=
+ =?us-ascii?Q?ZJxl6LiWNLWzrvyS2NfsrlzRc6a+9/VXwpF/jwx9/yqQDGvFUsfJB8xgQ25C?=
+ =?us-ascii?Q?p9NflTorR2LPh8Uf84k4j05HqNhSlHb7vKFynh9aEEo87vyVNV/H+Gkxuo9Q?=
+ =?us-ascii?Q?1nJlE/N8rJGczR3tmjwy5dIp5d/W4iUFsPTs9TKf//wj2RPt3akdBWbxfx4Z?=
+ =?us-ascii?Q?XnA6FRgAWOWcNCbD88ygRLgM7w4kray8/yI8jWIXLBF2P4OSAH/ZW0I+EYPQ?=
+ =?us-ascii?Q?Qqd1TgaVERLpjpGRy1/oTFyllCc199Uy7HCET/zQo3s4Frsxiec69o8kkuOh?=
+ =?us-ascii?Q?oXczWNUiZjHS1OL0S+QFFAXSVK14U1o67y7+I1ymTmkw4XFAKvkYiueHBR+E?=
+ =?us-ascii?Q?lJ8hhjMBslmByRe6AhAT7VRv9X6t/OWWICjyN8Yk7+NhjXOKl7BHzoNq8q9w?=
+ =?us-ascii?Q?XsmMVMoRFOTpGe5OCJKnEQP2nE5Qo8yyDn0guctDKKmWs72/g4Hm1w6MhZyp?=
+ =?us-ascii?Q?pIXW2oQJaErit6hCNDhF1gyNH0mcp/JAkOasI8Y+msUTKKSbE0yfTpCj8jUY?=
+ =?us-ascii?Q?5F64mvuqLMbFUTvfGB3dcfF9CFgDj+HSskak87REl7uFsTz6nr4Vb5Nc4V/i?=
+ =?us-ascii?Q?GgaI54n0WiXWr+WHCKhmhhdE/kqJ5wEXlNTX3jqteh+Ug+z6/tznR95ogCAa?=
+ =?us-ascii?Q?OtoWUushx0aLsBHo7+oT/M7da0+1Ge+BnfCiwXf6YoyvenecZGw8c7LLQfK9?=
+ =?us-ascii?Q?yUouDgC29pNdAZUJKiFGzqrXXsR631L4epQ+ePnNTskL1fZzqIiq2PjKuw0w?=
+ =?us-ascii?Q?ddRf2Yz8cd3Y4D2R1+GjzmM=3D?=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3d2775f-67dc-4a2e-a2ba-08da03583b4f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 78e706df-09c0-4aaf-3c51-08da03583921
 X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 12:11:11.5926
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 12:11:07.8705
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: haIAZiyAS8JRkcjEvGpPEcwqwZfNy4DeC34PqRjlrLLBTF2mCLnX87JRFHZNmQBhEZDH9Kny1uNqogvifHBk5A==
+X-MS-Exchange-CrossTenant-UserPrincipalName: pMTrC8t0K17wNk04HnLYSYi787CLdbSO6bI2dIv04zMXGwj4FpOk8f6jAYv6YtdAP7DDJDUBx5Gw9xtxbQyKmA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4784
 X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10282 signatures=692556
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ phishscore=0 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2203110059
-X-Proofpoint-ORIG-GUID: rpKjM3Ogzj13YCX5ZWTbVbCJIRuBHPNW
-X-Proofpoint-GUID: rpKjM3Ogzj13YCX5ZWTbVbCJIRuBHPNW
+X-Proofpoint-ORIG-GUID: b0pYeu4J0mzmNYf-uCuYXBFPPtstNWre
+X-Proofpoint-GUID: b0pYeu4J0mzmNYf-uCuYXBFPPtstNWre
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-add tests that verify attaching by name for
+kprobe attach is name-based, using lookups of kallsyms to translate
+a function name to an address.  Currently uprobe attach is done
+via an offset value as described in [1].  Extend uprobe opts
+for attach to include a function name which can then be converted
+into a uprobe-friendly offset.  The calcualation is done in
+several steps:
 
-1. local functions in a program
-2. library functions in a shared object; and
-3. library functions in a program
+1. First, determine the symbol address using libelf; this gives us
+   the offset as reported by objdump
+2. If the function is a shared library function - and the binary
+   provided is a shared library - no further work is required;
+   the address found is the required address
+3. If the function is a shared library function in a program
+   (as opposed to a shared library), the Procedure Linking Table
+   (PLT) table address is found (it is indexed via the dynamic
+   symbol table index).  This allows us to instrument a call
+   to a shared library function locally in the calling binary,
+   reducing overhead versus having a breakpoint in global lib.
+4. Finally, if the function is local, subtract the base address
+   associated with the object, retrieved from ELF program headers.
 
-...succeed for uprobe and uretprobes using new "func_name"
-option for bpf_program__attach_uprobe_opts().  Also verify
-auto-attach works where uprobe, path to binary and function
-name are specified, but fails with -EOPNOTSUPP when the format
-does not match (the latter is to support backwards-compatibility).
+The resultant value is then added to the func_offset value passed
+in to specify the uprobe attach address.  So specifying a func_offset
+of 0 along with a function name "printf" will attach to printf entry.
+
+The modes of operation supported are then
+
+1. to attach to a local function in a binary; function "foo1" in
+   "/usr/bin/foo"
+2. to attach to a shared library function in a binary;
+   function "malloc" in "/usr/bin/foo"
+3. to attach to a shared library function in a shared library -
+   function "malloc" in libc.
+
+[1] https://www.kernel.org/doc/html/latest/trace/uprobetracer.html
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- .../selftests/bpf/prog_tests/attach_probe.c        | 89 ++++++++++++++++++----
- .../selftests/bpf/progs/test_attach_probe.c        | 37 +++++++++
- 2 files changed, 113 insertions(+), 13 deletions(-)
+ tools/lib/bpf/libbpf.c | 310 +++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h |  10 +-
+ 2 files changed, 319 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index d48f6e5..b770e0e 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -11,15 +11,22 @@ static void trigger_func(void)
- 	asm volatile ("");
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b577577..2b50b01 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10320,6 +10320,302 @@ static int perf_event_uprobe_open_legacy(const char *probe_name, bool retprobe,
+ 	return pfd;
  }
  
-+/* attach point for byname uprobe */
-+static void trigger_func2(void)
++/* uprobes deal in relative offsets; subtract the base address associated with
++ * the mapped binary.  See Documentation/trace/uprobetracer.rst for more
++ * details.
++ */
++static long elf_find_relative_offset(Elf *elf, long addr)
 +{
-+	asm volatile ("");
++	size_t n;
++	int i;
++
++	if (elf_getphdrnum(elf, &n)) {
++		pr_warn("elf: failed to find program headers: %s\n",
++			elf_errmsg(-1));
++		return -ENOENT;
++	}
++
++	for (i = 0; i < n; i++) {
++		int seg_start, seg_end, seg_offset;
++		GElf_Phdr phdr;
++
++		if (!gelf_getphdr(elf, i, &phdr)) {
++			pr_warn("elf: failed to get program header %d: %s\n",
++				i, elf_errmsg(-1));
++			return -ENOENT;
++		}
++		if (phdr.p_type != PT_LOAD || !(phdr.p_flags & PF_X))
++			continue;
++
++		seg_start = phdr.p_vaddr;
++		seg_end = seg_start + phdr.p_memsz;
++		seg_offset = phdr.p_offset;
++		if (addr >= seg_start && addr < seg_end)
++			return addr - seg_start + seg_offset;
++	}
++	pr_warn("elf: failed to find prog header containing 0x%lx\n", addr);
++	return -ENOENT;
 +}
 +
- void test_attach_probe(void)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, uprobe_opts);
--	int duration = 0;
- 	struct bpf_link *kprobe_link, *kretprobe_link;
- 	struct bpf_link *uprobe_link, *uretprobe_link;
- 	struct test_attach_probe* skel;
- 	ssize_t uprobe_offset, ref_ctr_offset;
-+	struct bpf_link *uprobe_err_link;
- 	bool legacy;
-+	char *mem;
- 
- 	/* Check if new-style kprobe/uprobe API is supported.
- 	 * Kernels that support new FD-based kprobe and uprobe BPF attachment
-@@ -43,9 +50,9 @@ void test_attach_probe(void)
- 		return;
- 
- 	skel = test_attach_probe__open_and_load();
--	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
- 		return;
--	if (CHECK(!skel->bss, "check_bss", ".bss wasn't mmap()-ed\n"))
-+	if (!ASSERT_OK_PTR(skel->bss, "check_bss"))
- 		goto cleanup;
- 
- 	kprobe_link = bpf_program__attach_kprobe(skel->progs.handle_kprobe,
-@@ -90,24 +97,80 @@ void test_attach_probe(void)
- 		goto cleanup;
- 	skel->links.handle_uretprobe = uretprobe_link;
- 
--	/* trigger & validate kprobe && kretprobe */
--	usleep(1);
-+	/* verify auto-attach fails for old-style uprobe definition */
-+	uprobe_err_link = bpf_program__attach(skel->progs.handle_uprobe_byname);
-+	if (!ASSERT_EQ(libbpf_get_error(uprobe_err_link), -EOPNOTSUPP,
-+		       "auto-attach should fail for old-style name"))
-+		goto cleanup;
- 
--	if (CHECK(skel->bss->kprobe_res != 1, "check_kprobe_res",
--		  "wrong kprobe res: %d\n", skel->bss->kprobe_res))
-+	uprobe_opts.func_name = "trigger_func2";
-+	uprobe_opts.retprobe = false;
-+	uprobe_opts.ref_ctr_offset = 0;
-+	skel->links.handle_uprobe_byname =
-+			bpf_program__attach_uprobe_opts(skel->progs.handle_uprobe_byname,
-+							0 /* this pid */,
-+							"/proc/self/exe",
-+							0, &uprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_uprobe_byname, "attach_uprobe_byname"))
- 		goto cleanup;
--	if (CHECK(skel->bss->kretprobe_res != 2, "check_kretprobe_res",
--		  "wrong kretprobe res: %d\n", skel->bss->kretprobe_res))
++/* Return next ELF section of sh_type after scn, or first of that type
++ * if scn is NULL, and if name is non-NULL, both name and type must match.
++ */
++static Elf_Scn *elf_find_next_scn_by_type_name(Elf *elf, int sh_type, const char *name,
++					       Elf_Scn *scn)
++{
++	size_t shstrndx;
 +
-+	/* verify auto-attach works */
-+	skel->links.handle_uretprobe_byname =
-+			bpf_program__attach(skel->progs.handle_uretprobe_byname);
-+	if (!ASSERT_OK_PTR(skel->links.handle_uretprobe_byname, "attach_uretprobe_byname"))
- 		goto cleanup;
- 
-+	/* test attach by name for a library function, using the library
-+	 * as the binary argument. libc.so.6 will be resolved via dlopen()/dlinfo().
++	if (name && elf_getshdrstrndx(elf, &shstrndx)) {
++		pr_debug("elf: failed to get section names section index: %s\n",
++			 elf_errmsg(-1));
++		return NULL;
++	}
++
++	while ((scn = elf_nextscn(elf, scn)) != NULL) {
++		const char *sname;
++		GElf_Shdr sh;
++
++		if (!gelf_getshdr(scn, &sh))
++			continue;
++		if (sh.sh_type != sh_type)
++			continue;
++
++		if (!name)
++			return scn;
++
++		sname = elf_strptr(elf, shstrndx, sh.sh_name);
++		if (sname && strcmp(sname, name) == 0)
++			return scn;
++	}
++	return NULL;
++}
++
++/* For Position-Independent Code-based libraries, a table of trampolines (Procedure Linking Table)
++ * is used to support resolution of symbol names at linking time.  The goal here is to find the
++ * offset associated with the jump to the actual library function, since consumers of the
++ * library function within the binary will jump to the plt table entry (malloc@plt) first.
++ * If we can instrument that .plt entry locally in the specific binary (rather than instrumenting
++ * glibc say), overheads are greatly reduced.
++ *
++ * However, we need to find the index into the .plt table.  There are two parts to this.
++ *
++ * First, we have to find the index that the .plt entry (malloc@plt) lives at.  To do that,
++ * we use the .rela.plt table, which consists of entries in the same order as the .plt,
++ * but crucially each entry contains the symbol index from the symbol table.  This allows
++ * us to match the index of the .plt entry to the desired library function.
++ *
++ * Second, we need to find the address associated with that indexed .plt entry.
++ * The .plt section provides section information about the overall section size and the
++ * size of each .plt entry.  However prior to the entries themselves, there is code
++ * that carries out the dynamic linking, and this code may not be the same size as the
++ * .plt entry size (it happens to be on x86_64, but not on aarch64).  So we have to
++ * determine that initial code size so we can index into the .plt entries that follow it.
++ * To do this, we simply subtract the .plt table size (nr_plt_entries * entry_size)
++ * from the overall section size, and then use that offset as the base into the array
++ * of .plt entries.
++ */
++static ssize_t elf_find_plt_offset(Elf *elf, size_t sym_idx)
++{
++	long plt_entry_sz, plt_sz, plt_base;
++	Elf_Scn *rela_plt_scn, *plt_scn;
++	size_t plt_idx, nr_plt_entries;
++	Elf_Data *rela_data;
++	GElf_Shdr sh;
++
++	/* First get .plt index and table size via .rela.plt */
++	rela_plt_scn = elf_find_next_scn_by_type_name(elf, SHT_RELA, ".rela.plt", NULL);
++	if (!rela_plt_scn) {
++		pr_debug("elf: failed to find .rela.plt section\n");
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++	if (!gelf_getshdr(rela_plt_scn, &sh)) {
++		pr_debug("elf: failed to get shdr for .rela.plt section\n");
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++	rela_data = elf_getdata(rela_plt_scn, 0);
++	if (!rela_data) {
++		pr_debug("elf: failed to get data for .rela.plt section\n");
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++	nr_plt_entries = sh.sh_size / sh.sh_entsize;
++	for (plt_idx = 0; plt_idx < nr_plt_entries; plt_idx++) {
++		GElf_Rela rela;
++
++		if (!gelf_getrela(rela_data, plt_idx, &rela))
++			continue;
++		if (GELF_R_SYM(rela.r_info) == sym_idx)
++			break;
++	}
++	if (plt_idx == nr_plt_entries) {
++		pr_debug("elf: could not find sym index %ld in .rela.plt section\n",
++			 sym_idx);
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++
++	/* Now determine base of .plt table and calculate where entry for function is */
++	plt_scn = elf_find_next_scn_by_type_name(elf, SHT_PROGBITS, ".plt", NULL);
++	if (!plt_scn || !gelf_getshdr(plt_scn, &sh)) {
++		pr_debug("elf: failed to find .plt section\n");
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++	plt_base = sh.sh_addr;
++	plt_entry_sz = sh.sh_entsize;
++	plt_sz = sh.sh_size;
++	if (nr_plt_entries * plt_entry_sz >= plt_sz) {
++		pr_debug("elf: failed to calculate base .plt entry size with %ld plt entries\n",
++			 nr_plt_entries);
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++	plt_base += plt_sz - (nr_plt_entries * plt_entry_sz);
++
++	return plt_base + (plt_idx * plt_entry_sz);
++}
++
++/* Find offset of function name in object specified by path.  "name" matches
++ * symbol name or name@@LIB for library functions.
++ */
++static long elf_find_func_offset(const char *binary_path, const char *name)
++{
++	int fd, i, sh_types[2] = { SHT_DYNSYM, SHT_SYMTAB };
++	bool is_shared_lib, is_name_qualified;
++	size_t name_len, sym_idx = 0;
++	char errmsg[STRERR_BUFSIZE];
++	long ret = -ENOENT;
++	GElf_Ehdr ehdr;
++	Elf *elf;
++
++	fd = open(binary_path, O_RDONLY | O_CLOEXEC);
++	if (fd < 0) {
++		ret = -errno;
++		pr_warn("failed to open %s: %s\n", binary_path,
++			libbpf_strerror_r(ret, errmsg, sizeof(errmsg)));
++		return ret;
++	}
++	elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
++	if (!elf) {
++		pr_warn("elf: could not read elf from %s: %s\n", binary_path, elf_errmsg(-1));
++		close(fd);
++		return -LIBBPF_ERRNO__FORMAT;
++	}
++	if (!gelf_getehdr(elf, &ehdr)) {
++		pr_warn("elf: failed to get ehdr from %s: %s\n", binary_path, elf_errmsg(-1));
++		ret = -LIBBPF_ERRNO__FORMAT;
++		goto out;
++	}
++	/* for shared lib case, we do not need to calculate relative offset */
++	is_shared_lib = ehdr.e_type == ET_DYN;
++
++	name_len = strlen(name);
++	/* Does name specify "@@LIB"? */
++	is_name_qualified = strstr(name, "@@") != NULL;
++
++	/* Search SHT_DYNSYM, SHT_SYMTAB for symbol.  This search order is used because if
++	 * the symbol is found in SHY_DYNSYM, the index in that table tells us which index
++	 * to use in the Procedure Linking Table to instrument calls to the shared library
++	 * function, but locally in the binary rather than in the shared library itself.
++	 * If a binary is stripped, it may also only have SHT_DYNSYM, and a fully-statically
++	 * linked binary may not have SHT_DYMSYM, so absence of a section should not be
++	 * reported as a warning/error.
 +	 */
-+	uprobe_opts.func_name = "malloc";
-+	uprobe_opts.retprobe = false;
-+	skel->links.handle_uprobe_byname2 =
-+			bpf_program__attach_uprobe_opts(skel->progs.handle_uprobe_byname2,
-+							0 /* this pid */,
-+							"libc.so.6",
-+							0, &uprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_uprobe_byname2, "attach_uprobe_byname2"))
-+		goto cleanup;
++	for (i = 0; i < ARRAY_SIZE(sh_types); i++) {
++		size_t nr_syms, strtabidx, idx;
++		Elf_Data *symbols = NULL;
++		Elf_Scn *scn = NULL;
++		int last_bind = -1;
++		const char *sname;
++		GElf_Shdr sh;
 +
-+	uprobe_opts.func_name = "free";
-+	uprobe_opts.retprobe = true;
-+	skel->links.handle_uretprobe_byname2 =
-+			bpf_program__attach_uprobe_opts(skel->progs.handle_uretprobe_byname2,
-+							-1 /* any pid */,
-+							"/proc/self/exe",
-+							0, &uprobe_opts);
-+	if (!ASSERT_OK_PTR(skel->links.handle_uretprobe_byname2, "attach_uretprobe_byname2"))
-+		goto cleanup;
++		scn = elf_find_next_scn_by_type_name(elf, sh_types[i], NULL, NULL);
++		if (!scn) {
++			pr_debug("elf: failed to find symbol table ELF sections in '%s'\n",
++				 binary_path);
++			continue;
++		}
++		if (!gelf_getshdr(scn, &sh))
++			continue;
++		strtabidx = sh.sh_link;
++		symbols = elf_getdata(scn, 0);
++		if (!symbols) {
++			pr_warn("elf: failed to get symbols for symtab section in '%s': %s\n",
++				binary_path, elf_errmsg(-1));
++			ret = -LIBBPF_ERRNO__FORMAT;
++			goto out;
++		}
++		nr_syms = symbols->d_size / sh.sh_entsize;
 +
-+	/* trigger & validate kprobe && kretprobe */
-+	usleep(1);
++		for (idx = 0; idx < nr_syms; idx++) {
++			int curr_bind;
++			GElf_Sym sym;
 +
-+	/* trigger & validate shared library u[ret]probes attached by name */
-+	mem = malloc(1);
-+	free(mem);
++			if (!gelf_getsym(symbols, idx, &sym))
++				continue;
 +
- 	/* trigger & validate uprobe & uretprobe */
- 	trigger_func();
- 
--	if (CHECK(skel->bss->uprobe_res != 3, "check_uprobe_res",
--		  "wrong uprobe res: %d\n", skel->bss->uprobe_res))
-+	/* trigger & validate uprobe attached by name */
-+	trigger_func2();
++			if (GELF_ST_TYPE(sym.st_info) != STT_FUNC)
++				continue;
 +
-+	if (!ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_res"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_res"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(skel->bss->uprobe_res, 3, "check_uprobe_res"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(skel->bss->uretprobe_res, 4, "check_uretprobe_res"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(skel->bss->uprobe_byname_res, 5, "check_uprobe_byname_res"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(skel->bss->uretprobe_byname_res, 6, "check_uretprobe_byname_res"))
-+		goto cleanup;
-+	if (!ASSERT_EQ(skel->bss->uprobe_byname2_res, 7, "check_uprobe_byname2_res"))
- 		goto cleanup;
--	if (CHECK(skel->bss->uretprobe_res != 4, "check_uretprobe_res",
--		  "wrong uretprobe res: %d\n", skel->bss->uretprobe_res))
-+	if (!ASSERT_EQ(skel->bss->uretprobe_byname2_res, 8, "check_uretprobe_byname2_res"))
- 		goto cleanup;
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-index 8056a4c..9942461c 100644
---- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-@@ -10,6 +10,10 @@
- int kretprobe_res = 0;
- int uprobe_res = 0;
- int uretprobe_res = 0;
-+int uprobe_byname_res = 0;
-+int uretprobe_byname_res = 0;
-+int uprobe_byname2_res = 0;
-+int uretprobe_byname2_res = 0;
- 
- SEC("kprobe/sys_nanosleep")
- int handle_kprobe(struct pt_regs *ctx)
-@@ -39,4 +43,37 @@ int handle_uretprobe(struct pt_regs *ctx)
- 	return 0;
- }
- 
-+SEC("uprobe/trigger_func_byname")
-+int handle_uprobe_byname(struct pt_regs *ctx)
-+{
-+	uprobe_byname_res = 5;
-+	return 0;
++			sname = elf_strptr(elf, strtabidx, sym.st_name);
++			if (!sname)
++				continue;
++
++			curr_bind = GELF_ST_BIND(sym.st_info);
++
++			/* User can specify func, func@@LIB or func@@LIB_VERSION. */
++			if (strncmp(sname, name, name_len) != 0)
++				continue;
++			/* ...but we don't want a search for "foo" to match 'foo2" also, so any
++			 * additional characters in sname should be of the form "@@LIB".
++			 */
++			if (!is_name_qualified && strlen(sname) > name_len &&
++			    sname[name_len] != '@')
++				continue;
++
++			if (ret >= 0) {
++				/* handle multiple matches */
++				if (last_bind != STB_WEAK && curr_bind != STB_WEAK) {
++					/* Only accept one non-weak bind. */
++					pr_warn("elf: ambiguous match for '%s': %s\n",
++						sname, name);
++					ret = -LIBBPF_ERRNO__FORMAT;
++					goto out;
++				} else if (curr_bind == STB_WEAK) {
++					/* already have a non-weak bind, and
++					 * this is a weak bind, so ignore.
++					 */
++					continue;
++				}
++			}
++			ret = sym.st_value;
++			last_bind = curr_bind;
++			sym_idx = idx;
++		}
++		/* The index of the entry in SHT_DYNSYM helps find .plt entry */
++		if (ret == 0 && sh_types[i] == SHT_DYNSYM)
++			ret = elf_find_plt_offset(elf, sym_idx);
++		/* For binaries that are not shared libraries, we need relative offset */
++		if (ret > 0 && !is_shared_lib)
++			ret = elf_find_relative_offset(elf, ret);
++		if (ret > 0)
++			break;
++	}
++
++	if (ret > 0) {
++		pr_debug("elf: symbol address match for '%s': 0x%lx\n", name, ret);
++	} else {
++		if (ret == 0) {
++			pr_warn("elf: '%s' is 0 in symtab for '%s': %s\n", name, binary_path,
++				is_shared_lib ? "should not be 0 in a shared library" :
++						"try using shared library path instead");
++			ret = -ENOENT;
++		} else {
++			pr_warn("elf: failed to find symbol '%s' in '%s'\n", name, binary_path);
++		}
++	}
++out:
++	elf_end(elf);
++	close(fd);
++	return ret;
 +}
 +
-+/* use auto-attach format for section definition. */
-+SEC("uretprobe//proc/self/exe:trigger_func2")
-+int handle_uretprobe_byname(struct pt_regs *ctx)
-+{
-+	uretprobe_byname_res = 6;
-+	return 0;
-+}
+ /* Get full path to program/shared library. */
+ static int resolve_full_path(const char *file, char *result, size_t result_sz)
+ {
+@@ -10371,6 +10667,7 @@ static int resolve_full_path(const char *file, char *result, size_t result_sz)
+ 	size_t ref_ctr_off;
+ 	int pfd, err;
+ 	bool retprobe, legacy;
++	const char *func_name;
+ 
+ 	if (!OPTS_VALID(opts, bpf_uprobe_opts))
+ 		return libbpf_err_ptr(-EINVAL);
+@@ -10387,6 +10684,19 @@ static int resolve_full_path(const char *file, char *result, size_t result_sz)
+ 		}
+ 		binary_path = full_binary_path;
+ 	}
++	func_name = OPTS_GET(opts, func_name, NULL);
++	if (func_name) {
++		long sym_off;
 +
-+SEC("uprobe/trigger_func_byname2")
-+int handle_uprobe_byname2(struct pt_regs *ctx)
-+{
-+	unsigned int size = PT_REGS_PARM1(ctx);
-+
-+	/* verify malloc size */
-+	if (size == 1)
-+		uprobe_byname2_res = 7;
-+	return 0;
-+}
-+
-+SEC("uretprobe/trigger_func_byname2")
-+int handle_uretprobe_byname2(struct pt_regs *ctx)
-+{
-+	uretprobe_byname2_res = 8;
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
++		if (!binary_path) {
++			pr_warn("name-based attach requires binary_path\n");
++			return libbpf_err_ptr(-EINVAL);
++		}
++		sym_off = elf_find_func_offset(binary_path, func_name);
++		if (sym_off < 0)
++			return libbpf_err_ptr(sym_off);
++		func_offset += (size_t)sym_off;
++	}
+ 
+ 	legacy = determine_uprobe_perf_type() < 0;
+ 	if (!legacy) {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index c1b0c2e..85c93e2 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -436,9 +436,17 @@ struct bpf_uprobe_opts {
+ 	__u64 bpf_cookie;
+ 	/* uprobe is return probe, invoked at function return time */
+ 	bool retprobe;
++	/* name of function name or function@@LIBRARY.  Partial matches
++	 * work for library functions, such as printf, printf@@GLIBC.
++	 * To specify function entry, func_offset argument should be 0 and
++	 * func_name should specify function to trace.  To trace an offset
++	 * within the function, specify func_name and use func_offset
++	 * argument to specify argument _within_ the function.
++	 */
++	const char *func_name;
+ 	size_t :0;
+ };
+-#define bpf_uprobe_opts__last_field retprobe
++#define bpf_uprobe_opts__last_field func_name
+ 
+ /**
+  * @brief **bpf_program__attach_uprobe()** attaches a BPF program
 -- 
 1.8.3.1
 
