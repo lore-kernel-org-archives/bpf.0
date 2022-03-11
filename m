@@ -2,109 +2,162 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72CD4C433FE
-	for <bpf@archiver.kernel.org>; Fri, 11 Mar 2022 23:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7107C433F5
+	for <bpf@archiver.kernel.org>; Fri, 11 Mar 2022 23:54:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229464AbiCKXz2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Mar 2022 18:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S229839AbiCKXzi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Mar 2022 18:55:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiCKXz1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Mar 2022 18:55:27 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD40E6DBC;
-        Fri, 11 Mar 2022 14:23:24 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id k5-20020a17090a3cc500b001befa0d3102so9322725pjd.1;
-        Fri, 11 Mar 2022 14:23:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NRfHmLV6jC//S0JUnsW7EkyoAJl8Vb/or5+A/gBKAzM=;
-        b=KwPsT2XsrHShv56NDjUu3yvGQa1JlqCIdWproXqbg0elY5sxpXeo0jGIjpog1jChpi
-         l3dl2QAURioV1sWFgBC6rU++phG9LloQXtBVTzFVf9zjriVpimSq1gB881YT5sdLGfCm
-         f7MOSPCElXan/sdrSTwGt4sjsY7A1JBpgzh2Flwbq5F3z1mBemRaxQcxwKye6b8vOiDm
-         OTYLAvOcQTstwGN+sfa4LteZ6Tt4VPiJQdOYRdYfTwvbqxgiv7ZaD8cKJd+yD9V/BrFk
-         EEvv3Yxg92wD1nDc+lrdjhYVextf5yiEEd8VD6rbYEpvf3mCVrrOlr9zk2ldJeVW9BIl
-         kIjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NRfHmLV6jC//S0JUnsW7EkyoAJl8Vb/or5+A/gBKAzM=;
-        b=DW76xWJ0v2gdlCWZsCsOdD3LHfjp2VFmjucyvToYxBG5cPAGANISPku+fkOQDIzPuH
-         C+6qKtvSJLO+NLBNIIAjbGRrwM62gIZ4bi8FnOd6ZssUr0q4d3y11WZtArWIeblRJVOj
-         LAlzaam0RJ/YFfztOAPGHKw+qCBIHTqn8DMArIzOc33NdrmTH/rww7kMoNLi9IuRMTiQ
-         uCJtt2t0Jmdjc9dlsszsKEka/8ZboHTUcmvOSpNmHiDJ2c/rnP+gT6YcyN2yVgf1Ke90
-         i97+J79M20PP2UIJMqeORG/I1wBXh42x7F6IRmRSDtYf7+6IbDVMkHdtCPpCPnVQPRlI
-         hX0g==
-X-Gm-Message-State: AOAM531GXcfAy3vSVuC1FvD7iprLxvaPGA4JNx97Ywpl6LQAe+eue8Bh
-        +9o1Vm22AFSgTrYcchnSKxVU+MK/cvRPEGcLWQU=
-X-Google-Smtp-Source: ABdhPJx1WAK57P7gss50W9Beemu0j3TP092wJbDltjPnhLzW3G3PvAU64j0v2RUJlFUyoFI9PzM7BBFicNEKCvBtXJY=
-X-Received: by 2002:a17:902:e80d:b0:151:e043:a2c3 with SMTP id
- u13-20020a170902e80d00b00151e043a2c3mr12518835plg.64.1647037404220; Fri, 11
- Mar 2022 14:23:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220311032828.702392-1-imagedong@tencent.com>
- <20220310195429.4ba93edf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <CADxym3YybdOPMwHr3TOf0vxAN5W8mMdeQmQiQq_nr-1SSF5jMA@mail.gmail.com>
-In-Reply-To: <CADxym3YybdOPMwHr3TOf0vxAN5W8mMdeQmQiQq_nr-1SSF5jMA@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 11 Mar 2022 14:23:13 -0800
-Message-ID: <CAADnVQ+XOqPXVaVVQ0HDtBob6Kv48AqEQrn8mS4rPyiNUGQXBw@mail.gmail.com>
-Subject: Re: [PATCH] net: skb: move enum skb_drop_reason to uapi
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, David Ahern <dsahern@kernel.org>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        with ESMTP id S229828AbiCKXzf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Mar 2022 18:55:35 -0500
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAD621EBA5;
+        Fri, 11 Mar 2022 15:54:28 -0800 (PST)
+Received: from [78.46.152.42] (helo=sslproxy04.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nSp5J-000370-7x; Sat, 12 Mar 2022 00:54:13 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nSp5I-000C0R-UB; Sat, 12 Mar 2022 00:54:12 +0100
+Subject: Re: [PATCH bpf-next 2/4] bpf: Introduce bpf_int_jit_abort()
+To:     Hou Tao <houtao1@huawei.com>, Alexei Starovoitov <ast@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Menglong Dong <imagedong@tencent.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Talal Ahmad <talalahmad@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Mengen Sun <mengensun@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20220309123321.2400262-1-houtao1@huawei.com>
+ <20220309123321.2400262-3-houtao1@huawei.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f4bbf729-b960-de37-8a17-de41bc5559e6@iogearbox.net>
+Date:   Sat, 12 Mar 2022 00:54:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20220309123321.2400262-3-houtao1@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.5/26478/Fri Mar 11 10:27:25 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 8:58 PM Menglong Dong <menglong8.dong@gmail.com> wrote:
->
-> On Fri, Mar 11, 2022 at 11:54 AM Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Fri, 11 Mar 2022 11:28:28 +0800 menglong8.dong@gmail.com wrote:
-> > > From: Menglong Dong <imagedong@tencent.com>
-> > >
-> > > Move the definition of 'enum skb_drop_reason' in 'skbuff.h' to the uapi
-> > > header 'net_dropmon.h', therefore some users, such as eBPF program, can
-> > > make use of it.
-> >
-> > BPF does not need an enum definition to be part of the uAPI to make use
-> > of it. BTF should encode the values, and CO-RE can protect from them
-> > changing, AFAIU. I think we need a better example user / justification.
->
-> There is something wrong with my description, it's not the eBPF, but the user
-> program that loads eBPF.
->
-> In my case, I'll pass the packet info (protocol, ip, port, etc) and drop reason
-> to user space by eBPF that is attached on the kfree_skb() tracepoint.
->
-> In the user space, I'll custom the description for drop reasons and convert them
-> from int to string. Therefore, I need to use 'enum skb_drop_reason' in my
-> user space code.
+On 3/9/22 1:33 PM, Hou Tao wrote:
+> It will be used to do cleanup for subprog which has been jited in first
+> pass but extra pass has not been done. The scenario is possible when
+> extra pass for subprog in the middle fails. The failure may lead to
+> oops due to inconsistent status for pack allocator (e.g. ro_hdr->size
+> and use_bpf_prog_pack) and memory leak in aux->jit_data.
+> 
+> For x86-64, bpf_int_jit_abort() will free allocated memories saved in
+> aux->jit_data and fall back to interpreter mode to bypass the calling
+> of bpf_jit_binary_pack_free() in bpf_jit_free().
+> 
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> ---
+>   arch/x86/net/bpf_jit_comp.c | 24 ++++++++++++++++++++++++
+>   include/linux/filter.h      |  1 +
+>   kernel/bpf/core.c           |  9 +++++++++
+>   kernel/bpf/verifier.c       |  3 +++
+>   4 files changed, 37 insertions(+)
+> 
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index ec3f00be2ac5..49bc0ddd55ae 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -2244,6 +2244,30 @@ struct x64_jit_data {
+>   	struct jit_context ctx;
+>   };
+>   
+> +void bpf_int_jit_abort(struct bpf_prog *prog)
+> +{
+> +	struct x64_jit_data *jit_data = prog->aux->jit_data;
+> +	struct bpf_binary_header *header, *rw_header;
+> +
+> +	if (!jit_data)
+> +		return;
+> +
+> +	prog->bpf_func = NULL;
+> +	prog->jited = 0;
+> +	prog->jited_len = 0;
+> +
+> +	header = jit_data->header;
+> +	rw_header = jit_data->rw_header;
+> +	bpf_arch_text_copy(&header->size, &rw_header->size,
+> +			   sizeof(rw_header->size));
+> +	bpf_jit_binary_pack_free(header, rw_header);
+> +
+> +	kvfree(jit_data->addrs);
+> +	kfree(jit_data);
+> +
+> +	prog->aux->jit_data = NULL;
+> +}
+> +
+>   #define MAX_PASSES 20
+>   #define PADDING_PASSES (MAX_PASSES - 5)
+>   
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 9bf26307247f..f3a913229edd 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -945,6 +945,7 @@ u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+>   	 (void *)__bpf_call_base)
+>   
+>   struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
+> +void bpf_int_jit_abort(struct bpf_prog *prog);
+>   void bpf_jit_compile(struct bpf_prog *prog);
+>   bool bpf_jit_needs_zext(void);
+>   bool bpf_jit_supports_kfunc_call(void);
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index ab630f773ec1..a1841e11524c 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2636,6 +2636,15 @@ struct bpf_prog * __weak bpf_int_jit_compile(struct bpf_prog *prog)
+>   	return prog;
+>   }
+>   
+> +/*
+> + * If arch JIT uses aux->jit_data to save temporary allocated status and
+> + * supports subprog, it needs to override the function to free allocated
+> + * memories and fall back to interpreter mode for passed prog.
+> + */
+> +void __weak bpf_int_jit_abort(struct bpf_prog *prog)
+> +{
+> +}
+> +
+>   /* Stub for JITs that support eBPF. All cBPF code gets transformed into
+>    * eBPF by the kernel and is later compiled by bpf_int_jit_compile().
+>    */
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e34264200e09..885e515cf83f 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -13086,6 +13086,9 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>   		if (tmp != func[i] || func[i]->bpf_func != old_bpf_func) {
+>   			verbose(env, "JIT doesn't support bpf-to-bpf calls\n");
+>   			err = -ENOTSUPP;
+> +			/* Abort extra pass for the remaining subprogs */
+> +			while (++i < env->subprog_cnt)
+> +				bpf_int_jit_abort(func[i]);
 
-As Jakub said there is no reason to expose this in uapi.
+Don't quite follow this one. For example, if we'd fail in the second pass, the
+goto out_addrs from jit would free and clear the prog->aux->jit_data. If we'd succeed
+but different prog is returned, prog->aux->jit_data is released and later the goto
+out_free in here would clear the jited prog via bpf_jit_free(). Which code path leaves
+prog->aux->jit_data as non-NULL such that extra bpf_int_jit_abort() is needed?
 
-> For now, I copied the definition of 'enum skb_drop_reason' to my code,
-> and I think it's better to make them uapi, considering someone else may
-> use it this way too.
+>   			goto out_free;
+>   		}
+>   		cond_resched();
+> 
 
-No. Please use CO-RE and vmlinux.h instead.
