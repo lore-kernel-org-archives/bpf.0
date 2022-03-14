@@ -2,40 +2,40 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61FF0C433EF
-	for <bpf@archiver.kernel.org>; Mon, 14 Mar 2022 14:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A69BDC433F5
+	for <bpf@archiver.kernel.org>; Mon, 14 Mar 2022 15:33:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241554AbiCNPAv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Mar 2022 11:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S238293AbiCNPez (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Mar 2022 11:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiCNPAu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Mar 2022 11:00:50 -0400
+        with ESMTP id S230187AbiCNPey (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Mar 2022 11:34:54 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB92F419B5;
-        Mon, 14 Mar 2022 07:59:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546166572;
+        Mon, 14 Mar 2022 08:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vXKkXDbED7M3BWB+wPrKSrCS9R2wouzreerqWBT0T0k=; b=ZeJJ0Dq/0uSZYlG1mlawxZ5pdN
-        4YKofYC9jXWAD8OKnZ6MD5O2Q7RU4xao84q0SPnyE8chhrkf3jHJBh0NgYq84Sw1Z1HxemXMUgwWe
-        GcU5fqQRiAK2Y8huReqxwheNlyAiLCuOpnyp8nKnxI02QA0mzzVg4OpsyvXd0pPXln6D8lhBgXxVl
-        NxgSTCh2/ARaku4b1OM/sQceNmtht2cbwVwXwO34+b6Wjy1f62apVDcQDYSsh0rsmO3x0useBGZes
-        lY8QAFuzzeqpOBPVlsXTY4uQJw6qDg3NWiqMljRX9HJpQA+Y1iPIQhT0VbcjcxwCjjkx7gTOrtqJm
-        JVafiIsQ==;
+        bh=Xs4X/y59tj7HCyhkvEPkeSgLjnXIhqNwdO4FVnEL+Lk=; b=RlpyCy17AC9KU1bMeyX9gDjqxL
+        hhCYrshZ+ckxB66p0f2s35xypYHgvQDc2EhLIK7PdoZPSo2wQp0/uqOQbAADx6So/uuxagyHHv5P6
+        XdYiargvDKJqFlXE8nk3voaoMbmn+MzDqvbdwT4+Erf64fMsfg1FQiDWako7LIN6Cl5xkMx6MEG/B
+        ND17scnQT5kPv+cGQV8cUG/gQgJMtgSZyAm2Lb4v2QwdJfZeOYRMNuh6AEj/Ub5p6jhhIaBJN5liD
+        FSUETzkzk0feqLsiTGeB47ZK26DoSp30lXMAECxM8B/LXEymhokHpV/R6syZjxTYQhqnquNeFEloW
+        SRHIhZLQ==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nTmA9-000sJS-Fu; Mon, 14 Mar 2022 14:59:09 +0000
+        id 1nTmh9-000svL-FV; Mon, 14 Mar 2022 15:33:15 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 18AEC3003BC;
-        Mon, 14 Mar 2022 15:59:06 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9109C3003BC;
+        Mon, 14 Mar 2022 16:33:13 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EABB930413243; Mon, 14 Mar 2022 15:59:05 +0100 (CET)
-Date:   Mon, 14 Mar 2022 15:59:05 +0100
+        id 50B833041324E; Mon, 14 Mar 2022 16:33:13 +0100 (CET)
+Date:   Mon, 14 Mar 2022 16:33:13 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -51,10 +51,9 @@ Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        masahiroy@kernel.org
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
 Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-Message-ID: <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
+Message-ID: <Yi9gOW9f1GGwwUD6@hirez.programming.kicks-ass.net>
 References: <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
  <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
  <YinGZObp37b27LjK@hirez.programming.kicks-ass.net>
@@ -74,142 +73,69 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 On Sun, Mar 13, 2022 at 09:52:14AM +0100, Peter Zijlstra wrote:
-> On Sat, Mar 12, 2022 at 05:33:39PM -0800, Alexei Starovoitov wrote:
-> > During the build with gcc 8.5 I see:
-> > 
-> > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
-> > .ibt_endbr_seal, skipping
-> > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
-> > .orc_unwind section, skipping
-> >   LD [M]  crypto/async_tx/async_xor.ko
-> >   LD [M]  crypto/authenc.ko
-> > make[3]: *** [../scripts/Makefile.modfinal:61:
-> > arch/x86/crypto/crc32c-intel.ko] Error 255
-> > make[3]: *** Waiting for unfinished jobs....
-> > 
-> > but make clean cures it.
-> > I suspect it's some missing makefile dependency.
+
+> > and:
+> > vmlinux.o: warning: objtool: ksys_unshare()+0x626: unreachable instruction
+> > which stays even after make clean.
 > 
-> Yes, I recently ran into it; I've been trying to kick Makefile into
-> submission but have not had success yet. Will try again on Monday.
-> 
-> Problem appears to be that it will re-link .ko even though .o hasn't
-> changed, resulting in duplicate objtool runs. I've been trying to have
-> makefile generate .o.objtool empty file to serve as dependency marker to
-> avoid doing second objtool run, but like said, no luck yet.
+> Humm, I shall have to dig out gcc-8.5 then.
 
-Masahiro-san, I'm trying the below, but afaict it's not working because
-the rule for the .o file itself:
+Ha!, I could reproduce using the bpf-selftest .config for x86_64. Fixing
+that (the __noreturn on __invalid_creds) immediately yields another one
+on that .config in asm_exc_double_fault. And a missing ENDBR if you
+don't build 32bit compat.
 
-$(multi-obj-m): FORCE
-	$(call if_changed,link_multi-m)
-
-will in fact update the timestamp of the .o file, even if if_changed
-nops out the cmd. Concequently all rules that try to use if_changed with
-this .o file as a dependency will find it newer and run anyway.
+I'll go clean up ...
 
 
-remake -x output of a fs/f2fs/ module (re)build:
-
-     Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.o' does not exist.
-    Must remake target 'fs/f2fs/f2fs.o'.
-../scripts/Makefile.build:454: target 'fs/f2fs/f2fs.o' does not exist
-##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-:
-##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    Successfully remade target file 'fs/f2fs/f2fs.o'.
-   Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.mod'.
-   Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.mod' does not exist.
-  Must remake target 'fs/f2fs/f2fs.mod'.
-../scripts/Makefile.build:281: update target 'fs/f2fs/f2fs.mod' due to: fs/f2fs/f2fs.o
-##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-set -e;   { echo  fs/f2fs/dir.o fs/f2fs/file.o fs/f2fs/inode.o fs/f2fs/namei.o fs/f2fs/hash.o fs/f2fs/super.o fs/f2fs/inline.o fs/f2fs/checkpoint.o fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node.o fs/f2fs/segment.o fs/f2fs/recovery.o fs/f2fs/shrinker.o fs/f2fs/extent_cache.o fs/f2fs/sysfs.o fs/f2fs/debug.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2fs/iostat.o;  echo; } > fs/f2fs/f2fs.mod; printf '%s\n' 'cmd_fs/f2fs/f2fs.mod := { echo  fs/f2fs/dir.o fs/f2fs/file.o fs/f2fs/inode.o fs/f2fs/namei.o fs/f2fs/hash.o fs/f2fs/super.o fs/f2fs/inline.o fs/f2fs/checkpoint.o fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node.o fs/f2fs/segment.o fs/f2fs/recovery.o fs/f2fs/shrinker.o fs/f2fs/extent_cache.o fs/f2fs/sysfs.o fs/f2fs/debug.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2fs/iostat.o;  echo; } > fs/f2fs/f2fs.mod' > fs/f2fs/.f2fs.mod.cmd
-##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-  Successfully remade target file 'fs/f2fs/f2fs.mod'.
-   Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.objtool'.
-   Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.objtool' does not exist.
-  Must remake target 'fs/f2fs/f2fs.objtool'.
-../scripts/Makefile.build:287: update target 'fs/f2fs/f2fs.objtool' due to: fs/f2fs/f2fs.o
-##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-set -e;   { echo fs/f2fs/f2fs.o  ; ./tools/objtool/objtool orc generate  --module  --lto --ibt  --no-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/f2fs.objtool; printf '%s\n' 'cmd_fs/f2fs/f2fs.objtool := { echo fs/f2fs/f2fs.o  ; ./tools/objtool/objtool orc generate  --module  --lto --ibt  --no-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/f2fs.objtool' > fs/f2fs/.f2fs.objtool.cmd
-##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-fs/f2fs/f2fs.o: warning: objtool: file already has .static_call_sites section, skipping
-fs/f2fs/f2fs.o: warning: objtool: file already has .ibt_endbr_seal, skipping
-fs/f2fs/f2fs.o: warning: objtool: file already has .orc_unwind section, skipping
-../scripts/Makefile.build:286: *** [fs/f2fs/f2fs.objtool] error 255
-
-
-Where we can see that we don't re-generate f2fs.o (empty command), but
-then we do re-generate f2fs.mod because f2fs.o is newer and the same
-happens for the new f2fs.objtool.
-
-Help?
-
----
-Index: linux-2.6/scripts/Makefile.build
-===================================================================
---- linux-2.6.orig/scripts/Makefile.build
-+++ linux-2.6/scripts/Makefile.build
-@@ -92,6 +92,10 @@ ifdef CONFIG_LTO_CLANG
- targets-for-modules += $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)))
- endif
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -551,6 +551,14 @@ SYM_CODE_START(\asmsym)
+ 	movq	$-1, ORIG_RAX(%rsp)	/* no syscall to restart */
+ 	call	\cfunc
  
-+ifdef CONFIG_X86_KERNEL_IBT
-+targets-for-modules += $(patsubst %.o, %.objtool, $(filter %.o, $(obj-m)))
-+endif
++	/*
++	 * For some configurations exc_double_fault() is a noreturn
++	 */
++1:
++	.pushsection .discard.reachable
++	.long	1b - .
++	.popsection
 +
- ifdef need-modorder
- targets-for-modules += $(obj)/modules.order
- endif
-@@ -276,6 +280,12 @@ cmd_mod = { \
- $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
- 	$(call if_changed,mod)
+ 	jmp	paranoid_exit
  
-+cmd_objtool_mod =							\
-+	{ echo $< $(cmd_objtool) ; } > $@
-+
-+$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
-+	$(call if_changed,objtool_mod)
-+
- quiet_cmd_cc_lst_c = MKLST   $@
-       cmd_cc_lst_c = $(CC) $(c_flags) -g -c -o $*.o $< && \
- 		     $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
-Index: linux-2.6/scripts/Makefile.lib
-===================================================================
---- linux-2.6.orig/scripts/Makefile.lib
-+++ linux-2.6/scripts/Makefile.lib
-@@ -552,9 +552,8 @@ objtool_args =								\
- 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
- 	$(if $(CONFIG_SLS), --sls)
+ _ASM_NOKPROBE(\asmsym)
+@@ -1440,6 +1448,7 @@ SYM_CODE_END(asm_exc_nmi)
+  */
+ SYM_CODE_START(ignore_sysret)
+ 	UNWIND_HINT_EMPTY
++	ENDBR
+ 	mov	$-ENOSYS, %eax
+ 	sysretl
+ SYM_CODE_END(ignore_sysret)
+diff --git a/include/linux/cred.h b/include/linux/cred.h
+index fcbc6885cc09..9ed9232af934 100644
+--- a/include/linux/cred.h
++++ b/include/linux/cred.h
+@@ -176,7 +176,7 @@ extern int set_cred_ucounts(struct cred *);
+  * check for validity of credentials
+  */
+ #ifdef CONFIG_DEBUG_CREDENTIALS
+-extern void __invalid_creds(const struct cred *, const char *, unsigned);
++extern void __noreturn __invalid_creds(const struct cred *, const char *, unsigned);
+ extern void __validate_process_creds(struct task_struct *,
+ 				     const char *, unsigned);
  
--cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
--cmd_objtool_mod = $(if $(objtool-enabled), $(objtool) $(objtool_args) $(@:.ko=.o) ; )
--cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
-+cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(@:.objtool=.o))
-+cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$(@:.objtool=.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
- 
- endif # CONFIG_STACK_VALIDATION
- 
-@@ -575,8 +574,8 @@ $(obj)/%.o: objtool-enabled :=
- 
- # instead run objtool on the module as a whole, right before
- # the final link pass with the linker script.
--%.ko: objtool-enabled = y
--%.ko: part-of-module := y
-+$(obj)/%.objtool: objtool-enabled = y
-+$(obj)/%.objtool: part-of-module := y
- 
- else
- 
-Index: linux-2.6/scripts/Makefile.modfinal
-===================================================================
---- linux-2.6.orig/scripts/Makefile.modfinal
-+++ linux-2.6/scripts/Makefile.modfinal
-@@ -32,7 +32,6 @@ ARCH_POSTLINK := $(wildcard $(srctree)/a
- 
- quiet_cmd_ld_ko_o = LD [M]  $@
-       cmd_ld_ko_o +=							\
--	$(cmd_objtool_mod)						\
- 	$(LD) -r $(KBUILD_LDFLAGS)					\
- 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
- 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\
+diff --git a/kernel/cred.c b/kernel/cred.c
+index 933155c96922..e10c15f51c1f 100644
+--- a/kernel/cred.c
++++ b/kernel/cred.c
+@@ -870,7 +870,7 @@ static void dump_invalid_creds(const struct cred *cred, const char *label,
+ /*
+  * report use of invalid credentials
+  */
+-void __invalid_creds(const struct cred *cred, const char *file, unsigned line)
++void __noreturn __invalid_creds(const struct cred *cred, const char *file, unsigned line)
+ {
+ 	printk(KERN_ERR "CRED: Invalid credentials\n");
+ 	printk(KERN_ERR "CRED: At %s:%u\n", file, line);
