@@ -2,135 +2,233 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96216C433F5
-	for <bpf@archiver.kernel.org>; Tue, 15 Mar 2022 16:25:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EC61C433F5
+	for <bpf@archiver.kernel.org>; Tue, 15 Mar 2022 16:29:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbiCOQ0o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Mar 2022 12:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S1350029AbiCOQaT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Mar 2022 12:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235452AbiCOQ0m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:26:42 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F7656C07;
-        Tue, 15 Mar 2022 09:25:30 -0700 (PDT)
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nU9z1-0004dT-EN; Tue, 15 Mar 2022 17:25:15 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nU9z1-0002YV-31; Tue, 15 Mar 2022 17:25:15 +0100
-Subject: Re: [PATCH bpf-next] bpf, sockmap: Manual deletion of sockmap
- elements in user mode is not allowed
-To:     Jakub Sitnicki <jakub@cloudflare.com>,
-        wangyufen <wangyufen@huawei.com>
-Cc:     ast@kernel.org, john.fastabend@gmail.com, lmb@cloudflare.com,
-        davem@davemloft.net, kafai@fb.com, dsahern@kernel.org,
-        kuba@kernel.org, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20220314124432.3050394-1-wangyufen@huawei.com>
- <87sfrky2bt.fsf@cloudflare.com>
- <ff9d0ecf-315b-00a3-8140-424714b204ff@huawei.com>
- <87fsnjxvho.fsf@cloudflare.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <79281351-b412-2c54-265b-c0ddf537fae1@iogearbox.net>
-Date:   Tue, 15 Mar 2022 17:25:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S1350010AbiCOQaS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Mar 2022 12:30:18 -0400
+X-Greylist: delayed 105 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 09:29:06 PDT
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D3E56C38;
+        Tue, 15 Mar 2022 09:29:06 -0700 (PDT)
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 22FGSqlW026839;
+        Wed, 16 Mar 2022 01:28:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 22FGSqlW026839
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1647361732;
+        bh=kto8rSbm3Q3xiCM3iwqUkTy1Lz+u7MD+xAW0APggEBU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B36aTK1eOn+/DzeSKGQletXIVYZrcXnog3sAaflmoIeR8H/7rpVhq+y+D6//2VaeO
+         vVDy0Sa8nS1yzua+ySP4gGoK9GZNq7HgLBaN53Q90UhxYqn0A4IP+U75WLtf/R6AYf
+         GO6JRuP+WZlvpvKRBE6+iX/aEVe/LCa+BhMC5Rb/H4GkfYaO64IlQKzEsMzEGSYwV4
+         0zTJkF/9RrsFTgLsvzRicpoRoLgT2BnnoHErkpYziHeRdDynhDEsJ8SL1dF4ZDxhUZ
+         YAwJEZJhRQttDsojavllWVGf8W9or0rsUWfb3v0BRYJsrs0sYONIfF5dJmM8533BJZ
+         pl+AeSF69MbgQ==
+X-Nifty-SrcIP: [209.85.216.44]
+Received: by mail-pj1-f44.google.com with SMTP id m11-20020a17090a7f8b00b001beef6143a8so2914770pjl.4;
+        Tue, 15 Mar 2022 09:28:52 -0700 (PDT)
+X-Gm-Message-State: AOAM531Gy75IXSaPIJcsaU9KNUukIzfI7XD4enmH5/cQHrblVPfMRf9n
+        bOExu+0NC4zBX3qQ4EPvpg2YgBJORLLM1Rag3xY=
+X-Google-Smtp-Source: ABdhPJyQQCiK2kYc6VKY4osuuaLXqfBSrRdu+1+tQj6ir64AFa+GJSuGhwO7V/BFO7Ul0tkdLmMYa9LM+xz47pi9Cqw=
+X-Received: by 2002:a17:90a:ab17:b0:1b9:b61a:aadb with SMTP id
+ m23-20020a17090aab1700b001b9b61aaadbmr5506333pjq.77.1647361731601; Tue, 15
+ Mar 2022 09:28:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87fsnjxvho.fsf@cloudflare.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26482/Tue Mar 15 09:26:17 2022)
+References: <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
+ <YinGZObp37b27LjK@hirez.programming.kicks-ass.net> <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
+ <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net> <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
+ <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
+ <20220312154407.GF28057@worktop.programming.kicks-ass.net>
+ <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
+ <20220313085214.GK28057@worktop.programming.kicks-ass.net>
+ <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net> <20220315081522.GA8939@worktop.programming.kicks-ass.net>
+In-Reply-To: <20220315081522.GA8939@worktop.programming.kicks-ass.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 16 Mar 2022 01:28:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAReAKXT97NHEnC-1UXozdcPdYNHR55knNRDatJr_GqrrA@mail.gmail.com>
+Message-ID: <CAK7LNAReAKXT97NHEnC-1UXozdcPdYNHR55knNRDatJr_GqrrA@mail.gmail.com>
+Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
+        Miroslav Benes <mbenes@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 3/15/22 1:12 PM, Jakub Sitnicki wrote:
-> On Tue, Mar 15, 2022 at 03:24 PM +08, wangyufen wrote:
->> 在 2022/3/14 23:30, Jakub Sitnicki 写道:
->>> On Mon, Mar 14, 2022 at 08:44 PM +08, Wang Yufen wrote:
->>>> A tcp socket in a sockmap. If user invokes bpf_map_delete_elem to delete
->>>> the sockmap element, the tcp socket will switch to use the TCP protocol
->>>> stack to send and receive packets. The switching process may cause some
->>>> issues, such as if some msgs exist in the ingress queue and are cleared
->>>> by sk_psock_drop(), the packets are lost, and the tcp data is abnormal.
->>>>
->>>> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
->>>> ---
->>> Can you please tell us a bit more about the life-cycle of the socket in
->>> your workload? Questions that come to mind:
->>>
->>> 1) What triggers the removal of the socket from sockmap in your case?
->> We use sk_msg to redirect with sock hash, like this:
->>
->>   skA   redirect    skB
->>   Tx <-----------> skB,Rx
->>
->> And construct a scenario where the packet sending speed is high, the
->> packet receiving speed is slow, so the packets are stacked in the ingress
->> queue on the receiving side. In this case, if run bpf_map_delete_elem() to
->> delete the sockmap entry, will trigger the following procedure:
->>
->> sock_hash_delete_elem()
->>    sock_map_unref()
->>      sk_psock_put()
->>        sk_psock_drop()
->>          sk_psock_stop()
->>            __sk_psock_zap_ingress()
->>              __sk_psock_purge_ingress_msg()
->>
->>> 2) Would it still be a problem if removal from sockmap did not cause any
->>> packets to get dropped?
->> Yes, it still be a problem. If removal from sockmap  did not cause any
->> packets to get dropped, packet receiving process switches to use TCP
->> protocol stack. The packets in the psock ingress queue cannot be received
->>
->> by the user.
-> 
-> Thanks for the context. So, if I understand correctly, you want to avoid
-> breaking the network pipe by updating the sockmap from user-space.
-> 
-> This sounds awfully similar to BPF_MAP_FREEZE. Have you considered that?
+On Tue, Mar 15, 2022 at 5:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Mar 14, 2022 at 03:59:05PM +0100, Peter Zijlstra wrote:
+> > On Sun, Mar 13, 2022 at 09:52:14AM +0100, Peter Zijlstra wrote:
+> > > On Sat, Mar 12, 2022 at 05:33:39PM -0800, Alexei Starovoitov wrote:
+> > > > During the build with gcc 8.5 I see:
+> > > >
+> > > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > > > .ibt_endbr_seal, skipping
+> > > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
+> > > > .orc_unwind section, skipping
+> > > >   LD [M]  crypto/async_tx/async_xor.ko
+> > > >   LD [M]  crypto/authenc.ko
+> > > > make[3]: *** [../scripts/Makefile.modfinal:61:
+> > > > arch/x86/crypto/crc32c-intel.ko] Error 255
+> > > > make[3]: *** Waiting for unfinished jobs....
+> > > >
+> > > > but make clean cures it.
+> > > > I suspect it's some missing makefile dependency.
+> > >
+> > > Yes, I recently ran into it; I've been trying to kick Makefile into
+> > > submission but have not had success yet. Will try again on Monday.
+> > >
+> > > Problem appears to be that it will re-link .ko even though .o hasn't
+> > > changed, resulting in duplicate objtool runs. I've been trying to have
+> > > makefile generate .o.objtool empty file to serve as dependency marker to
+> > > avoid doing second objtool run, but like said, no luck yet.
+> >
+> > Masahiro-san, I'm trying the below, but afaict it's not working because
+> > the rule for the .o file itself:
+> >
+> Ha, sleep, it is marvelous!
+>
+> The below appears to be working as desired.
+>
+> ---
+> Index: linux-2.6/scripts/Makefile.build
+> ===================================================================
+> --- linux-2.6.orig/scripts/Makefile.build
+> +++ linux-2.6/scripts/Makefile.build
+> @@ -86,12 +86,18 @@ ifdef need-builtin
+>  targets-for-builtin += $(obj)/built-in.a
+>  endif
+>
+> -targets-for-modules := $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
+> +targets-for-modules :=
 
-+1
 
-Aside from that, the patch as-is also fails BPF CI in a lot of places, please
-make sure to check selftests:
+Why do you need to change this line?
 
-https://github.com/kernel-patches/bpf/runs/5537367301?check_suite_focus=true
 
-   [...]
-   #145/73 sockmap_listen/sockmap IPv6 test_udp_redir:OK
-   #145/74 sockmap_listen/sockmap IPv6 test_udp_unix_redir:OK
-   #145/75 sockmap_listen/sockmap Unix test_unix_redir:OK
-   #145/76 sockmap_listen/sockmap Unix test_unix_redir:OK
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   #145/77 sockmap_listen/sockhash IPv4 TCP test_insert_invalid:FAIL
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   #145/78 sockmap_listen/sockhash IPv4 TCP test_insert_opened:FAIL
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   #145/79 sockmap_listen/sockhash IPv4 TCP test_insert_bound:FAIL
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   ./test_progs:test_ops_cleanup:1424: map_delete: expected EINVAL/ENOENT: Operation not supported
-   test_ops_cleanup:FAIL:1424
-   [...]
 
-Thanks,
-Daniel
+>
+>  ifdef CONFIG_LTO_CLANG
+>  targets-for-modules += $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)))
+>  endif
+>
+> +ifdef CONFIG_X86_KERNEL_IBT
+> +targets-for-modules += $(patsubst %.o, %.objtool, $(filter %.o, $(obj-m)))
+> +endif
+> +
+> +targets-for-modules += $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
+> +
+>  ifdef need-modorder
+>  targets-for-modules += $(obj)/modules.order
+>  endif
+> @@ -276,6 +282,19 @@ cmd_mod = { \
+>  $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
+>         $(call if_changed,mod)
+>
+> +#
+> +# Since objtool will re-write the file it will change the timestamps, therefore
+> +# it is critical that the %.objtool file gets a timestamp *after* objtool runs.
+
+
+Thanks for explaining how stupidly this works.
+NACK.
+
+
+I guess re-using the current clang-lto rule is much cleaner.
+(but please rename  %.lto.o  to  %.prelink.o)
+
+
+Roughly like this:
+
+
+if CONFIG_LTO_CLANG || CONFIG_X86_KERNEL_IBT
+
+$(obj)/%.prelink:  $(obj)/%.o FORCE
+        [  $(LD) if CONFIG_LTO_CLANG ]   +  $(cmd_objtool)
+
+endif
+
+
+
+
+
+
+
+> +#
+> +# Additionally, care must be had with ordering this rule against the other rules
+> +# that take %.o as a dependency.
+> +#
+> +cmd_objtool_mod =                                                      \
+> +       true $(cmd_objtool) ; touch $@
+> +
+> +$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
+> +       $(call if_changed,objtool_mod)
+> +
+>  quiet_cmd_cc_lst_c = MKLST   $@
+>        cmd_cc_lst_c = $(CC) $(c_flags) -g -c -o $*.o $< && \
+>                      $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
+> Index: linux-2.6/scripts/Makefile.lib
+> ===================================================================
+> --- linux-2.6.orig/scripts/Makefile.lib
+> +++ linux-2.6/scripts/Makefile.lib
+> @@ -552,9 +552,8 @@ objtool_args =                                                              \
+>         $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
+>         $(if $(CONFIG_SLS), --sls)
+>
+> -cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@)
+> -cmd_objtool_mod = $(if $(objtool-enabled), $(objtool) $(objtool_args) $(@:.ko=.o) ; )
+> -cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$@: $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+> +cmd_objtool = $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(@:.objtool=.o))
+> +cmd_gen_objtooldep = $(if $(objtool-enabled), { echo ; echo '$(@:.objtool=.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
+>
+>  endif # CONFIG_STACK_VALIDATION
+>
+> @@ -575,8 +574,8 @@ $(obj)/%.o: objtool-enabled :=
+>
+>  # instead run objtool on the module as a whole, right before
+>  # the final link pass with the linker script.
+> -%.ko: objtool-enabled = y
+> -%.ko: part-of-module := y
+> +$(obj)/%.objtool: objtool-enabled = y
+> +$(obj)/%.objtool: part-of-module := y
+>
+>  else
+>
+> Index: linux-2.6/scripts/Makefile.modfinal
+> ===================================================================
+> --- linux-2.6.orig/scripts/Makefile.modfinal
+> +++ linux-2.6/scripts/Makefile.modfinal
+> @@ -32,7 +32,6 @@ ARCH_POSTLINK := $(wildcard $(srctree)/a
+>
+>  quiet_cmd_ld_ko_o = LD [M]  $@
+>        cmd_ld_ko_o +=                                                   \
+> -       $(cmd_objtool_mod)                                              \
+>         $(LD) -r $(KBUILD_LDFLAGS)                                      \
+>                 $(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)              \
+>                 -T scripts/module.lds -o $@ $(filter %.o, $^);          \
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
