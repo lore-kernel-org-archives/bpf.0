@@ -2,290 +2,503 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E380BC433F5
-	for <bpf@archiver.kernel.org>; Tue, 15 Mar 2022 16:39:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96BE5C433F5
+	for <bpf@archiver.kernel.org>; Tue, 15 Mar 2022 16:49:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239245AbiCOQkl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Mar 2022 12:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38376 "EHLO
+        id S1350179AbiCOQuo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Mar 2022 12:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiCOQkk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Mar 2022 12:40:40 -0400
-X-Greylist: delayed 236 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Mar 2022 09:39:28 PDT
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCC857155
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 09:39:27 -0700 (PDT)
-Received: from conssluserg-03.nifty.com ([10.126.8.82])by condef-09.nifty.com with ESMTP id 22FGRNOn020190
-        for <bpf@vger.kernel.org>; Wed, 16 Mar 2022 01:27:23 +0900
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 22FGR9dr025638;
-        Wed, 16 Mar 2022 01:27:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 22FGR9dr025638
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1647361630;
-        bh=BOExbP66O/Uw83XDrn7rpBs8+RR88II8AzpWN9E7Ij8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rA9hroOKKerr19Bw4b7PXizh9fqj0afiUYGVwhUHwpvJ2bkD1AYoPUizxA26Hehgc
-         4dTPwZUXzvwb30kBQtUoKeA7DxBP1/7E95zjiSoSfF8Heaoodu5RJuxEh8OH5gIklh
-         QRgjv5lW9jT1sgrMdYdVhK5UW9KnC2Gl5EwUTRuD5fVtttbD308l1nye5TUqa27Ft9
-         6KJncFlXCu5RFVCiYPPj/T98I+0w9ENcCTdhuWpXxthBuTLlk7Dd7WX9nDIt/UyppB
-         6uWPQTY0d/FAKufm7eHTX4rxsEUSXmAlt5ePMfKIY75EL6sSXIeSpzfoYt3CwubmnL
-         OWoCzGmIKkBcg==
-X-Nifty-SrcIP: [209.85.214.173]
-Received: by mail-pl1-f173.google.com with SMTP id n15so16682437plh.2;
-        Tue, 15 Mar 2022 09:27:09 -0700 (PDT)
-X-Gm-Message-State: AOAM533EcG/ATJT6Mzg0mkGYmxbZEFYnxGtltclLqR5an4GjbFAaxZzm
-        24N7XFk9LNrofoFnm0VtnnSPB0kVtfRbFRj6M4A=
-X-Google-Smtp-Source: ABdhPJxBZNGNRIITAORFdnjsxJn8chKL2ZYd6FUuJo3h2ECaHhs7DII5mfIECrcrNqbnXKgYHaifSPRjWImr0MzXGYY=
-X-Received: by 2002:a17:902:eb84:b0:151:f80e:e98b with SMTP id
- q4-20020a170902eb8400b00151f80ee98bmr29180354plg.99.1647361628703; Tue, 15
- Mar 2022 09:27:08 -0700 (PDT)
+        with ESMTP id S234843AbiCOQum (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Mar 2022 12:50:42 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39AAF50E33
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 09:49:30 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id b8so18365381pjb.4
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 09:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=lEmcnk2bRnzVYKLy4ND8LlQLqDZKeOM5FuW36l0r0v8=;
+        b=ivrRVVrOt/vag8K3heEvpg536T4yP2YH93SixmUdWM5eH+A5CAiqWqHs7G0DdACHhr
+         Vsg6JT5BqBIVh8xwC2y3MvuHcPDxs70P8c1xoXl6tq0wfP44tiJS9zRWt47Extem+W+j
+         ecVDu4v991LglrNBgtlMaR95QSMItTLh55sI7YUqwdqrc5YN26CWl1cy29RHES7Ldpfz
+         9MLO68BbeMJfAaA7dvY06cUgijRw6uTfXTXYOHZUFJ/rxGFIEt9mAZsmbzs7oEsJwiS/
+         2kEPkgiNbDEeRRvwhYYns9le6+DuXQFLxVII/4KShnn1k17e7tAGCJ33QbiPKCus7Rfy
+         aVHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lEmcnk2bRnzVYKLy4ND8LlQLqDZKeOM5FuW36l0r0v8=;
+        b=AlWaxvrA+36o/hqpSwz8nIVa9IullfIMMrs4Pc8vpgDCLoMORl9bZ3Z+srtC4qay7Q
+         teOiTrHB8s9Zkw12FU6vvhalXvI7GKog933t2TeVPzRxjpi9MZ5tsfTaBd8qI1spXr9k
+         lJ7SHqAaPKOdWETaRDCIgilPWScYZF8O+ENlhE/JoOUxa2aH7bLJT3llX5oguab92vYQ
+         VmZ5Y5Zs78RjOjTQFuIjuuHymSBVcxhluWhcMALNzfOmrLW05fZjNcuH3PQO6pBuf+S6
+         FgzRdlKYNjSmw0TEASRXHHfEsa8d4H//gf4u3r/0YhYfMVt1d7zOC/n4Eubhf5E1P4kr
+         1wnQ==
+X-Gm-Message-State: AOAM5322pksERbLS806HKM2iEGxpzGBF6hr3ln/nvVTSqXxJ9HKh6gyk
+        uzXtWZvPJkHq7Vb8q1j1tYU=
+X-Google-Smtp-Source: ABdhPJyc24b6H+B+OvQncffre/dIDUXFMYz3+OYq7NDWhlEDyCNAwXUD3B7HL7wl9kAd2vIZCvCcLw==
+X-Received: by 2002:a17:902:e949:b0:14b:1f32:e926 with SMTP id b9-20020a170902e94900b0014b1f32e926mr29285857pll.170.1647362969439;
+        Tue, 15 Mar 2022 09:49:29 -0700 (PDT)
+Received: from localhost ([14.139.187.71])
+        by smtp.gmail.com with ESMTPSA id z16-20020a056a00241000b004f3a647ae89sm24717483pfh.174.2022.03.15.09.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 09:49:29 -0700 (PDT)
+Date:   Tue, 15 Mar 2022 22:19:16 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Joanne Koong <joannekoong@fb.com>, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, tj@kernel.org, davemarchevsky@fb.com,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: Re: [PATCH bpf-next v1] bpf: Enable non-atomic allocations in local
+ storage
+Message-ID: <20220315164916.jlqjxcgetxuhur7i@apollo>
+References: <20220312011643.2136370-1-joannekoong@fb.com>
+ <CACYkzJ6TWGOWk5UTh6juuEO2xYheu7MEh-m=R8h20sCG5sV71g@mail.gmail.com>
 MIME-Version: 1.0
-References: <Yif8nO2xg6QnVQfD@hirez.programming.kicks-ass.net>
- <20220309190917.w3tq72alughslanq@ast-mbp.dhcp.thefacebook.com>
- <YinGZObp37b27LjK@hirez.programming.kicks-ass.net> <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
- <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net> <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
- <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
- <20220312154407.GF28057@worktop.programming.kicks-ass.net>
- <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
- <20220313085214.GK28057@worktop.programming.kicks-ass.net> <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 16 Mar 2022 01:26:25 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASOjsSRixifxxUBKiFdR_Q_pSoBu98zYU_u_z1rtUD=zA@mail.gmail.com>
-Message-ID: <CAK7LNASOjsSRixifxxUBKiFdR_Q_pSoBu98zYU_u_z1rtUD=zA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/45] x86: Kernel IBT
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        X86 ML <x86@kernel.org>, joao@overdrivepizza.com,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>, alyssa.milburn@intel.com,
-        Miroslav Benes <mbenes@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACYkzJ6TWGOWk5UTh6juuEO2xYheu7MEh-m=R8h20sCG5sV71g@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 11:59 PM Peter Zijlstra <peterz@infradead.org> wrot=
-e:
->
-> On Sun, Mar 13, 2022 at 09:52:14AM +0100, Peter Zijlstra wrote:
-> > On Sat, Mar 12, 2022 at 05:33:39PM -0800, Alexei Starovoitov wrote:
-> > > During the build with gcc 8.5 I see:
-> > >
-> > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
-> > > .ibt_endbr_seal, skipping
-> > > arch/x86/crypto/crc32c-intel.o: warning: objtool: file already has
-> > > .orc_unwind section, skipping
-> > >   LD [M]  crypto/async_tx/async_xor.ko
-> > >   LD [M]  crypto/authenc.ko
-> > > make[3]: *** [../scripts/Makefile.modfinal:61:
-> > > arch/x86/crypto/crc32c-intel.ko] Error 255
-> > > make[3]: *** Waiting for unfinished jobs....
-> > >
-> > > but make clean cures it.
-> > > I suspect it's some missing makefile dependency.
+On Tue, Mar 15, 2022 at 07:56:46AM IST, KP Singh wrote:
+> On Sat, Mar 12, 2022 at 2:17 AM Joanne Koong <joannekoong@fb.com> wrote:
 > >
-> > Yes, I recently ran into it; I've been trying to kick Makefile into
-> > submission but have not had success yet. Will try again on Monday.
+> > From: Joanne Koong <joannelkoong@gmail.com>
 > >
-> > Problem appears to be that it will re-link .ko even though .o hasn't
-> > changed, resulting in duplicate objtool runs. I've been trying to have
-> > makefile generate .o.objtool empty file to serve as dependency marker t=
-o
-> > avoid doing second objtool run, but like said, no luck yet.
+> > Currently, local storage memory can only be allocated atomically
+> > (GFP_ATOMIC). This restriction is too strict for sleepable bpf
+> > programs.
+> >
+> > In this patch, the verifier detects whether the program is sleepable,
+> > and passes the corresponding GFP_KERNEL or GFP_ATOMIC flag as a
+> > 5th argument to bpf_task/sk/inode_storage_get. This flag will propagate
+> > down to the local storage functions that allocate memory.
+> >
+> > A few things to note:
+> > * bpf_task/sk/inode_storage_update_elem functions are invoked by
+> > userspace applications through syscalls. Preemption is disabled before
+> > bpf_task/sk/inode_storage_update_elem is called, which means they will
+> > always have to allocate memory atomically.
+> >
+> > * In bpf_local_storage_update, we have to do the memory charging and
+> > allocation outside the spinlock. There are some cases where it is
+> > permissible for the memory charging and/or allocation to fail, so in
+> > these failure cases, we continue on to determine at a later time whether
+> > the failure is relevant.
+> >
+> > Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+> > ---
+> >  include/linux/bpf_local_storage.h |  7 +--
+> >  kernel/bpf/bpf_inode_storage.c    |  9 ++--
+> >  kernel/bpf/bpf_local_storage.c    | 77 +++++++++++++++++++++----------
+> >  kernel/bpf/bpf_task_storage.c     | 10 ++--
+> >  kernel/bpf/verifier.c             | 20 ++++++++
+> >  net/core/bpf_sk_storage.c         | 21 +++++----
+> >  6 files changed, 99 insertions(+), 45 deletions(-)
+> >
+> > diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
+> > index 37b3906af8b1..d6905e85399d 100644
+> > --- a/include/linux/bpf_local_storage.h
+> > +++ b/include/linux/bpf_local_storage.h
+> > @@ -154,16 +154,17 @@ void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem);
+> >
+> >  struct bpf_local_storage_elem *
+> >  bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void *value,
+> > -               bool charge_mem);
+> > +               gfp_t mem_flags);
+> >
+> >  int
+> >  bpf_local_storage_alloc(void *owner,
+> >                         struct bpf_local_storage_map *smap,
+> > -                       struct bpf_local_storage_elem *first_selem);
+> > +                       struct bpf_local_storage_elem *first_selem,
+> > +                       gfp_t mem_flags);
+> >
+> >  struct bpf_local_storage_data *
+> >  bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> > -                        void *value, u64 map_flags);
+> > +                        void *value, u64 map_flags, gfp_t mem_flags);
+> >
+> >  void bpf_local_storage_free_rcu(struct rcu_head *rcu);
+> >
+> > diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storage.c
+> > index e29d9e3d853e..41b0bec1e7e9 100644
+> > --- a/kernel/bpf/bpf_inode_storage.c
+> > +++ b/kernel/bpf/bpf_inode_storage.c
+> > @@ -136,7 +136,7 @@ static int bpf_fd_inode_storage_update_elem(struct bpf_map *map, void *key,
+> >
+> >         sdata = bpf_local_storage_update(f->f_inode,
+> >                                          (struct bpf_local_storage_map *)map,
+> > -                                        value, map_flags);
+> > +                                        value, map_flags, GFP_ATOMIC);
+> >         fput(f);
+> >         return PTR_ERR_OR_ZERO(sdata);
+> >  }
+> > @@ -169,8 +169,9 @@ static int bpf_fd_inode_storage_delete_elem(struct bpf_map *map, void *key)
+> >         return err;
+> >  }
+> >
+> > -BPF_CALL_4(bpf_inode_storage_get, struct bpf_map *, map, struct inode *, inode,
+> > -          void *, value, u64, flags)
+> > +/* *mem_flags* is set by the bpf verifier */
+> > +BPF_CALL_5(bpf_inode_storage_get, struct bpf_map *, map, struct inode *, inode,
+> > +          void *, value, u64, flags, gfp_t, mem_flags)
+> >  {
+> >         struct bpf_local_storage_data *sdata;
+> >
+> > @@ -196,7 +197,7 @@ BPF_CALL_4(bpf_inode_storage_get, struct bpf_map *, map, struct inode *, inode,
+> >         if (flags & BPF_LOCAL_STORAGE_GET_F_CREATE) {
+> >                 sdata = bpf_local_storage_update(
+> >                         inode, (struct bpf_local_storage_map *)map, value,
+> > -                       BPF_NOEXIST);
+> > +                       BPF_NOEXIST, mem_flags);
+> >                 return IS_ERR(sdata) ? (unsigned long)NULL :
+> >                                              (unsigned long)sdata->data;
+> >         }
+> > diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+> > index 092a1ac772d7..ca402f9cf1a5 100644
+> > --- a/kernel/bpf/bpf_local_storage.c
+> > +++ b/kernel/bpf/bpf_local_storage.c
+> > @@ -63,23 +63,22 @@ static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
+> >
+> >  struct bpf_local_storage_elem *
+> >  bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+> > -               void *value, bool charge_mem)
+> > +               void *value, gfp_t mem_flags)
+> >  {
+> >         struct bpf_local_storage_elem *selem;
+> >
+> > -       if (charge_mem && mem_charge(smap, owner, smap->elem_size))
+> > +       if (mem_charge(smap, owner, smap->elem_size))
+> >                 return NULL;
+> >
+> >         selem = bpf_map_kzalloc(&smap->map, smap->elem_size,
+> > -                               GFP_ATOMIC | __GFP_NOWARN);
+> > +                               mem_flags | __GFP_NOWARN);
+> >         if (selem) {
+> >                 if (value)
+> >                         memcpy(SDATA(selem)->data, value, smap->map.value_size);
+> >                 return selem;
+> >         }
+> >
+> > -       if (charge_mem)
+> > -               mem_uncharge(smap, owner, smap->elem_size);
+> > +       mem_uncharge(smap, owner, smap->elem_size);
+> >
+> >         return NULL;
+> >  }
+> > @@ -282,7 +281,8 @@ static int check_flags(const struct bpf_local_storage_data *old_sdata,
+> >
+> >  int bpf_local_storage_alloc(void *owner,
+> >                             struct bpf_local_storage_map *smap,
+> > -                           struct bpf_local_storage_elem *first_selem)
+> > +                           struct bpf_local_storage_elem *first_selem,
+> > +                           gfp_t mem_flags)
+> >  {
+> >         struct bpf_local_storage *prev_storage, *storage;
+> >         struct bpf_local_storage **owner_storage_ptr;
+> > @@ -293,7 +293,7 @@ int bpf_local_storage_alloc(void *owner,
+> >                 return err;
+> >
+> >         storage = bpf_map_kzalloc(&smap->map, sizeof(*storage),
+> > -                                 GFP_ATOMIC | __GFP_NOWARN);
+> > +                                 mem_flags | __GFP_NOWARN);
+> >         if (!storage) {
+> >                 err = -ENOMEM;
+> >                 goto uncharge;
+> > @@ -350,13 +350,13 @@ int bpf_local_storage_alloc(void *owner,
+> >   */
+> >  struct bpf_local_storage_data *
+> >  bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> > -                        void *value, u64 map_flags)
+> > +                        void *value, u64 map_flags, gfp_t mem_flags)
+> >  {
+> >         struct bpf_local_storage_data *old_sdata = NULL;
+> >         struct bpf_local_storage_elem *selem;
+> >         struct bpf_local_storage *local_storage;
+> >         unsigned long flags;
+> > -       int err;
+> > +       int err, charge_err;
+> >
+> >         /* BPF_EXIST and BPF_NOEXIST cannot be both set */
+> >         if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
+> > @@ -373,11 +373,11 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >                 if (err)
+> >                         return ERR_PTR(err);
+> >
+> > -               selem = bpf_selem_alloc(smap, owner, value, true);
+> > +               selem = bpf_selem_alloc(smap, owner, value, mem_flags);
+> >                 if (!selem)
+> >                         return ERR_PTR(-ENOMEM);
+> >
+> > -               err = bpf_local_storage_alloc(owner, smap, selem);
+> > +               err = bpf_local_storage_alloc(owner, smap, selem, mem_flags);
+> >                 if (err) {
+> >                         kfree(selem);
+> >                         mem_uncharge(smap, owner, smap->elem_size);
+> > @@ -404,6 +404,19 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >                 }
+> >         }
+> >
+> > +       /* Since mem_flags can be non-atomic, we need to do the memory
+> > +        * allocation outside the spinlock.
+> > +        *
+> > +        * There are a few cases where it is permissible for the memory charge
+> > +        * and allocation to fail (eg if BPF_F_LOCK is set and a local storage
+> > +        * value already exists, we can swap values without needing an
+> > +        * allocation), so in the case of a failure here, continue on and see
+> > +        * if the failure is relevant.
+> > +        */
+> > +       charge_err = mem_charge(smap, owner, smap->elem_size);
+> > +       selem = bpf_map_kzalloc(&smap->map, smap->elem_size,
+> > +                               mem_flags | __GFP_NOWARN);
+> > +
+> >         raw_spin_lock_irqsave(&local_storage->lock, flags);
+> >
+> >         /* Recheck local_storage->list under local_storage->lock */
+> > @@ -425,25 +438,37 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >         if (old_sdata && (map_flags & BPF_F_LOCK)) {
+> >                 copy_map_value_locked(&smap->map, old_sdata->data, value,
+> >                                       false);
+> > -               selem = SELEM(old_sdata);
+> > -               goto unlock;
+> > +
+> > +               raw_spin_unlock_irqrestore(&local_storage->lock, flags);
+> > +
+> > +               if (!charge_err)
+> > +                       mem_uncharge(smap, owner, smap->elem_size);
+> > +               kfree(selem);
+> > +
+> > +               return old_sdata;
+> > +       }
+> > +
+> > +       if (!old_sdata && charge_err) {
+> > +               /* If there is no existing local storage value, then this means
+> > +                * we needed the charge to succeed. We must make sure this did not
+> > +                * return an error.
+> > +                *
+> > +                * Please note that if an existing local storage value exists, then
+> > +                * it doesn't matter if the charge failed because we can just
+> > +                * "reuse" the charge from the existing local storage element.
+> > +                */
 >
-> Masahiro-san, I'm trying the below, but afaict it's not working because
-> the rule for the .o file itself:
+> But we did allocate a new element which was unaccounted for, even if
+> it was temporarily.
+> [for the short period of time till we freed the old element]
 >
-> $(multi-obj-m): FORCE
->         $(call if_changed,link_multi-m)
+> Martin, is this something we are okay with?
 >
-> will in fact update the timestamp of the .o file, even if if_changed
-> nops out the cmd. Concequently all rules that try to use if_changed with
-> this .o file as a dependency will find it newer and run anyway.
+> > +               err = charge_err;
+> > +               goto unlock_err;
+> >         }
+> >
+> > -       /* local_storage->lock is held.  Hence, we are sure
+> > -        * we can unlink and uncharge the old_sdata successfully
+> > -        * later.  Hence, instead of charging the new selem now
+> > -        * and then uncharge the old selem later (which may cause
+> > -        * a potential but unnecessary charge failure),  avoid taking
+> > -        * a charge at all here (the "!old_sdata" check) and the
+> > -        * old_sdata will not be uncharged later during
+> > -        * bpf_selem_unlink_storage_nolock().
+> > -        */
+> > -       selem = bpf_selem_alloc(smap, owner, value, !old_sdata);
+> >         if (!selem) {
+> >                 err = -ENOMEM;
+> >                 goto unlock_err;
+> >         }
+> >
+> > +       if (value)
+> > +               memcpy(SDATA(selem)->data, value, smap->map.value_size);
+> > +
+> >         /* First, link the new selem to the map */
+> >         bpf_selem_link_map(smap, selem);
+> >
+> > @@ -454,15 +479,17 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >         if (old_sdata) {
+> >                 bpf_selem_unlink_map(SELEM(old_sdata));
+> >                 bpf_selem_unlink_storage_nolock(local_storage, SELEM(old_sdata),
+> > -                                               false);
+> > +                                               !charge_err);
+> >         }
+> >
+> > -unlock:
+> >         raw_spin_unlock_irqrestore(&local_storage->lock, flags);
+> >         return SDATA(selem);
+> >
+> >  unlock_err:
+> >         raw_spin_unlock_irqrestore(&local_storage->lock, flags);
+> > +       if (!charge_err)
+> > +               mem_uncharge(smap, owner, smap->elem_size);
+> > +       kfree(selem);
+> >         return ERR_PTR(err);
+> >  }
+> >
+> > diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
+> > index 5da7bed0f5f6..bb9e22bad42b 100644
+> > --- a/kernel/bpf/bpf_task_storage.c
+> > +++ b/kernel/bpf/bpf_task_storage.c
+> > @@ -174,7 +174,8 @@ static int bpf_pid_task_storage_update_elem(struct bpf_map *map, void *key,
+> >
+> >         bpf_task_storage_lock();
+> >         sdata = bpf_local_storage_update(
+> > -               task, (struct bpf_local_storage_map *)map, value, map_flags);
+> > +               task, (struct bpf_local_storage_map *)map, value, map_flags,
+> > +               GFP_ATOMIC);
+> >         bpf_task_storage_unlock();
+> >
+> >         err = PTR_ERR_OR_ZERO(sdata);
+> > @@ -226,8 +227,9 @@ static int bpf_pid_task_storage_delete_elem(struct bpf_map *map, void *key)
+> >         return err;
+> >  }
+> >
+> > -BPF_CALL_4(bpf_task_storage_get, struct bpf_map *, map, struct task_struct *,
+> > -          task, void *, value, u64, flags)
+> > +/* *mem_flags* is set by the bpf verifier */
 >
+> Is there a precedence of this happening for any other helpers?
 >
-> remake -x output of a fs/f2fs/ module (re)build:
->
->      Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.o' does not exist.
->     Must remake target 'fs/f2fs/f2fs.o'.
-> ../scripts/Makefile.build:454: target 'fs/f2fs/f2fs.o' does not exist
-> ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-> :
-> ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
->     Successfully remade target file 'fs/f2fs/f2fs.o'.
->    Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.mod'.
->    Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.mod' does not exist.
->   Must remake target 'fs/f2fs/f2fs.mod'.
-> ../scripts/Makefile.build:281: update target 'fs/f2fs/f2fs.mod' due to: f=
-s/f2fs/f2fs.o
-> ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-> set -e;   { echo  fs/f2fs/dir.o fs/f2fs/file.o fs/f2fs/inode.o fs/f2fs/na=
-mei.o fs/f2fs/hash.o fs/f2fs/super.o fs/f2fs/inline.o fs/f2fs/checkpoint.o =
-fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node.o fs/f2fs/segment.o fs/f2fs/recove=
-ry.o fs/f2fs/shrinker.o fs/f2fs/extent_cache.o fs/f2fs/sysfs.o fs/f2fs/debu=
-g.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2fs/iostat.o;  echo; } > fs/f2fs/f2fs=
-.mod; printf '%s\n' 'cmd_fs/f2fs/f2fs.mod :=3D { echo  fs/f2fs/dir.o fs/f2f=
-s/file.o fs/f2fs/inode.o fs/f2fs/namei.o fs/f2fs/hash.o fs/f2fs/super.o fs/=
-f2fs/inline.o fs/f2fs/checkpoint.o fs/f2fs/gc.o fs/f2fs/data.o fs/f2fs/node=
-.o fs/f2fs/segment.o fs/f2fs/recovery.o fs/f2fs/shrinker.o fs/f2fs/extent_c=
-ache.o fs/f2fs/sysfs.o fs/f2fs/debug.o fs/f2fs/xattr.o fs/f2fs/acl.o fs/f2f=
-s/iostat.o;  echo; } > fs/f2fs/f2fs.mod' > fs/f2fs/.f2fs.mod.cmd
-> ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
->   Successfully remade target file 'fs/f2fs/f2fs.mod'.
->    Prerequisite 'fs/f2fs/f2fs.o' is newer than target 'fs/f2fs/f2fs.objto=
-ol'.
->    Prerequisite 'FORCE' of target 'fs/f2fs/f2fs.objtool' does not exist.
->   Must remake target 'fs/f2fs/f2fs.objtool'.
-> ../scripts/Makefile.build:287: update target 'fs/f2fs/f2fs.objtool' due t=
-o: fs/f2fs/f2fs.o
-> ##>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-> set -e;   { echo fs/f2fs/f2fs.o  ; ./tools/objtool/objtool orc generate  =
---module  --lto --ibt  --no-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/=
-f2fs.objtool; printf '%s\n' 'cmd_fs/f2fs/f2fs.objtool :=3D { echo fs/f2fs/f=
-2fs.o  ; ./tools/objtool/objtool orc generate  --module  --lto --ibt  --no-=
-fp    --uaccess   fs/f2fs/f2fs.o ; } > fs/f2fs/f2fs.objtool' > fs/f2fs/.f2f=
-s.objtool.cmd
-> ##<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-> fs/f2fs/f2fs.o: warning: objtool: file already has .static_call_sites sec=
-tion, skipping
-> fs/f2fs/f2fs.o: warning: objtool: file already has .ibt_endbr_seal, skipp=
-ing
-> fs/f2fs/f2fs.o: warning: objtool: file already has .orc_unwind section, s=
-kipping
-> ../scripts/Makefile.build:286: *** [fs/f2fs/f2fs.objtool] error 255
->
->
-> Where we can see that we don't re-generate f2fs.o (empty command), but
-> then we do re-generate f2fs.mod because f2fs.o is newer and the same
-> happens for the new f2fs.objtool.
->
-> Help?
 
+Yes, e.g. bpf_timer_set_callback receives hidden prog->aux.
 
-Help?
-
-I had never noticed this thread before because
-you did not CC me or kbuild ML.
-
-
-Looking at the build system changes:
-https://lore.kernel.org/all/20220308154319.528181453@infradead.org/
-https://lore.kernel.org/all/20220308154319.822545231@infradead.org/
-
-Both patches are wrong.
-So is the fix-up you appended lator in this thread.
-
-Apparently, you were screwing up Kbuild in a brown paper bag.
-So scared.
-
-
-
-
-
-
-
+> You may want to add here that "any value, even if set by uapi, will be ignored"
 >
-> ---
-> Index: linux-2.6/scripts/Makefile.build
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-2.6.orig/scripts/Makefile.build
-> +++ linux-2.6/scripts/Makefile.build
-> @@ -92,6 +92,10 @@ ifdef CONFIG_LTO_CLANG
->  targets-for-modules +=3D $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)=
-))
->  endif
+> Can we go even beyond this and ensure that the verifier understands
+> that this is an
+> "internal only arg" something in check_helper_call?
 >
-> +ifdef CONFIG_X86_KERNEL_IBT
-> +targets-for-modules +=3D $(patsubst %.o, %.objtool, $(filter %.o, $(obj-=
-m)))
-> +endif
-> +
->  ifdef need-modorder
->  targets-for-modules +=3D $(obj)/modules.order
->  endif
-> @@ -276,6 +280,12 @@ cmd_mod =3D { \
->  $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o FORCE
->         $(call if_changed,mod)
->
-> +cmd_objtool_mod =3D                                                     =
- \
-> +       { echo $< $(cmd_objtool) ; } > $@
-> +
-> +$(obj)/%.objtool: $(obj)/%$(mod-prelink-ext).o FORCE
-> +       $(call if_changed,objtool_mod)
-> +
->  quiet_cmd_cc_lst_c =3D MKLST   $@
->        cmd_cc_lst_c =3D $(CC) $(c_flags) -g -c -o $*.o $< && \
->                      $(CONFIG_SHELL) $(srctree)/scripts/makelst $*.o \
-> Index: linux-2.6/scripts/Makefile.lib
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-2.6.orig/scripts/Makefile.lib
-> +++ linux-2.6/scripts/Makefile.lib
-> @@ -552,9 +552,8 @@ objtool_args =3D                                     =
-                         \
->         $(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)             \
->         $(if $(CONFIG_SLS), --sls)
->
-> -cmd_objtool =3D $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $@=
-)
-> -cmd_objtool_mod =3D $(if $(objtool-enabled), $(objtool) $(objtool_args) =
-$(@:.ko=3D.o) ; )
-> -cmd_gen_objtooldep =3D $(if $(objtool-enabled), { echo ; echo '$@: $$(wi=
-ldcard $(objtool))' ; } >> $(dot-target).cmd)
-> +cmd_objtool =3D $(if $(objtool-enabled), ; $(objtool) $(objtool_args) $(=
-@:.objtool=3D.o))
-> +cmd_gen_objtooldep =3D $(if $(objtool-enabled), { echo ; echo '$(@:.objt=
-ool=3D.o): $$(wildcard $(objtool))' ; } >> $(dot-target).cmd)
->
->  endif # CONFIG_STACK_VALIDATION
->
-> @@ -575,8 +574,8 @@ $(obj)/%.o: objtool-enabled :=3D
->
->  # instead run objtool on the module as a whole, right before
->  # the final link pass with the linker script.
-> -%.ko: objtool-enabled =3D y
-> -%.ko: part-of-module :=3D y
-> +$(obj)/%.objtool: objtool-enabled =3D y
-> +$(obj)/%.objtool: part-of-module :=3D y
->
->  else
->
-> Index: linux-2.6/scripts/Makefile.modfinal
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-2.6.orig/scripts/Makefile.modfinal
-> +++ linux-2.6/scripts/Makefile.modfinal
-> @@ -32,7 +32,6 @@ ARCH_POSTLINK :=3D $(wildcard $(srctree)/a
->
->  quiet_cmd_ld_ko_o =3D LD [M]  $@
->        cmd_ld_ko_o +=3D                                                  =
- \
-> -       $(cmd_objtool_mod)                                              \
->         $(LD) -r $(KBUILD_LDFLAGS)                                      \
->                 $(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)              \
->                 -T scripts/module.lds -o $@ $(filter %.o, $^);          \
 
+Since bpf_func_proto was not changed, arg5_type is still ARG_DONTCARE, so
+verifier should already ignore register type for R5, and anyway user cannot
+assume it remains same across call (since it is caller-saved), so I think this
+is fine.
 
+> > +BPF_CALL_5(bpf_task_storage_get, struct bpf_map *, map, struct task_struct *,
+> > +          task, void *, value, u64, flags, gfp_t, mem_flags)
+> >  {
+> >         struct bpf_local_storage_data *sdata;
+> >
+> > @@ -250,7 +252,7 @@ BPF_CALL_4(bpf_task_storage_get, struct bpf_map *, map, struct task_struct *,
+> >             (flags & BPF_LOCAL_STORAGE_GET_F_CREATE))
+> >                 sdata = bpf_local_storage_update(
+> >                         task, (struct bpf_local_storage_map *)map, value,
+> > -                       BPF_NOEXIST);
+> > +                       BPF_NOEXIST, mem_flags);
+> >
+> >  unlock:
+> >         bpf_task_storage_unlock();
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 0db6cd8dcb35..392fdaabedbd 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -13491,6 +13491,26 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+> >                         goto patch_call_imm;
+> >                 }
+> >
+> > +               if (insn->imm == BPF_FUNC_task_storage_get ||
+> > +                   insn->imm == BPF_FUNC_sk_storage_get ||
+> > +                   insn->imm == BPF_FUNC_inode_storage_get) {
+> > +                       if (env->prog->aux->sleepable)
+> > +                               insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, GFP_KERNEL);
+> > +                       else
+> > +                               insn_buf[0] = BPF_MOV64_IMM(BPF_REG_5, GFP_ATOMIC);
+> > +                       insn_buf[1] = *insn;
+> > +                       cnt = 2;
+> > +
+> > +                       new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
+> > +                       if (!new_prog)
+> > +                               return -ENOMEM;
+> > +
+> > +                       delta += cnt - 1;
+> > +                       env->prog = prog = new_prog;
+> > +                       insn = new_prog->insnsi + i + delta;
+> > +                       goto patch_call_imm;
+> > +               }
+> > +
+> >                 /* BPF_EMIT_CALL() assumptions in some of the map_gen_lookup
+> >                  * and other inlining handlers are currently limited to 64 bit
+> >                  * only.
+> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> > index d9c37fd10809..8790a3791d39 100644
+> > --- a/net/core/bpf_sk_storage.c
+> > +++ b/net/core/bpf_sk_storage.c
+> > @@ -141,7 +141,7 @@ static int bpf_fd_sk_storage_update_elem(struct bpf_map *map, void *key,
+> >         if (sock) {
+> >                 sdata = bpf_local_storage_update(
+> >                         sock->sk, (struct bpf_local_storage_map *)map, value,
+> > -                       map_flags);
+> > +                       map_flags, GFP_ATOMIC);
+> >                 sockfd_put(sock);
+> >                 return PTR_ERR_OR_ZERO(sdata);
+> >         }
+> > @@ -172,7 +172,7 @@ bpf_sk_storage_clone_elem(struct sock *newsk,
+> >  {
+> >         struct bpf_local_storage_elem *copy_selem;
+> >
+> > -       copy_selem = bpf_selem_alloc(smap, newsk, NULL, true);
+> > +       copy_selem = bpf_selem_alloc(smap, newsk, NULL, GFP_ATOMIC);
+> >         if (!copy_selem)
+> >                 return NULL;
+> >
+> > @@ -230,7 +230,7 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
+> >                         bpf_selem_link_map(smap, copy_selem);
+> >                         bpf_selem_link_storage_nolock(new_sk_storage, copy_selem);
+> >                 } else {
+> > -                       ret = bpf_local_storage_alloc(newsk, smap, copy_selem);
+> > +                       ret = bpf_local_storage_alloc(newsk, smap, copy_selem, GFP_ATOMIC);
+> >                         if (ret) {
+> >                                 kfree(copy_selem);
+> >                                 atomic_sub(smap->elem_size,
+> > @@ -255,8 +255,9 @@ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk)
+> >         return ret;
+> >  }
+> >
+> > -BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map, struct sock *, sk,
+> > -          void *, value, u64, flags)
+> > +/* *mem_flags* is set by the bpf verifier */
+> > +BPF_CALL_5(bpf_sk_storage_get, struct bpf_map *, map, struct sock *, sk,
+> > +          void *, value, u64, flags, gfp_t, mem_flags)
+> >  {
+> >         struct bpf_local_storage_data *sdata;
+> >
+> > @@ -277,7 +278,7 @@ BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map, struct sock *, sk,
+> >             refcount_inc_not_zero(&sk->sk_refcnt)) {
+> >                 sdata = bpf_local_storage_update(
+> >                         sk, (struct bpf_local_storage_map *)map, value,
+> > -                       BPF_NOEXIST);
+> > +                       BPF_NOEXIST, mem_flags);
+> >                 /* sk must be a fullsock (guaranteed by verifier),
+> >                  * so sock_gen_put() is unnecessary.
+> >                  */
+> > @@ -417,14 +418,16 @@ static bool bpf_sk_storage_tracing_allowed(const struct bpf_prog *prog)
+> >         return false;
+> >  }
+> >
+> > -BPF_CALL_4(bpf_sk_storage_get_tracing, struct bpf_map *, map, struct sock *, sk,
+> > -          void *, value, u64, flags)
+> > +/* *mem_flags* is set by the bpf verifier */
+> > +BPF_CALL_5(bpf_sk_storage_get_tracing, struct bpf_map *, map, struct sock *, sk,
+> > +          void *, value, u64, flags, gfp_t, mem_flags)
+> >  {
+> >         WARN_ON_ONCE(!bpf_rcu_lock_held());
+> >         if (in_hardirq() || in_nmi())
+> >                 return (unsigned long)NULL;
+> >
+> > -       return (unsigned long)____bpf_sk_storage_get(map, sk, value, flags);
+> > +       return (unsigned long)____bpf_sk_storage_get(map, sk, value, flags,
+> > +                                                    mem_flags);
+> >  }
+> >
+> >  BPF_CALL_2(bpf_sk_storage_delete_tracing, struct bpf_map *, map,
+> > --
+> > 2.30.2
+> >
 
---=20
-Best Regards
-Masahiro Yamada
+--
+Kartikeya
