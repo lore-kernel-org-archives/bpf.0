@@ -2,45 +2,45 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40879C433EF
-	for <bpf@archiver.kernel.org>; Wed, 16 Mar 2022 00:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 678A3C433F5
+	for <bpf@archiver.kernel.org>; Wed, 16 Mar 2022 00:44:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352842AbiCPAqC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Mar 2022 20:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S1352843AbiCPAqD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Mar 2022 20:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiCPAqC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Mar 2022 20:46:02 -0400
+        with ESMTP id S231308AbiCPAqD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Mar 2022 20:46:03 -0400
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960664A917
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 17:44:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042D25DE55
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 17:44:49 -0700 (PDT)
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 22FNkbw4004130
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 17:44:47 -0700
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 22FNkbw8004130
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 17:44:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=IX13ARVTyTDONegkfBTMKcczyu7xf0t/fXL2o3xqA2M=;
- b=fsjLd7ErDH4r9aG50xKSsHDI+/CsAEt7cAblXKt/e6LkQ98wBnmCgGyTC4mtAdlQMlr8
- LESOnKhdTe0/LQbPSNAPib4v6+TE9RUkF9BQoLLXIfajqkPRgwq6GSl4c63So+FLp8Ye
- LJdbi0lP92p7JcFDvzu4MLzzk2X51RKsGUA= 
+ bh=5Mn/lyNAphq1lkKe0VRVi/Z2OossJay8MjSWl7Ej810=;
+ b=KdXCWG5djq1uPwXDz6TNLmhjh+mC7pjaWthB7N66vNgmzGccZTfxn4iQWvJ6fYkwqPrm
+ bWca3dbFaPux5DXnajVSLPZcg6LcX/UjmJeStRzflvAIVTkhbF6KENN+jgKzpT1Ylccu
+ GmhQ/cVD3xAWwFSz75mvD36oVqv6m+addpU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3et99mm0q4-5
+        by m0089730.ppops.net (PPS) with ESMTPS id 3et99mm0q4-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 17:44:47 -0700
-Received: from twshared29473.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 17:44:49 -0700
+Received: from twshared22811.39.frc1.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 17:44:42 -0700
+ 15.1.2308.21; Tue, 15 Mar 2022 17:44:46 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 074B91269EDA; Tue, 15 Mar 2022 17:44:36 -0700 (PDT)
+        id 5AB651269EEA; Tue, 15 Mar 2022 17:44:41 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andrii@kernel.org>
 CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v2 2/4] bpf, x86: Create bpf_trace_run_ctx on the caller thread's stack
-Date:   Tue, 15 Mar 2022 17:42:29 -0700
-Message-ID: <20220316004231.1103318-3-kuifeng@fb.com>
+Subject: [PATCH bpf-next v2 4/4] selftest/bpf: The test cses of BPF cookie for fentry/fexit/fmod_ret.
+Date:   Tue, 15 Mar 2022 17:42:31 -0700
+Message-ID: <20220316004231.1103318-5-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220316004231.1103318-1-kuifeng@fb.com>
 References: <20220316004231.1103318-1-kuifeng@fb.com>
@@ -48,8 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: JnFkmNIBnQXs8Djpm-pgZ5nuuJ2XjHL4
-X-Proofpoint-ORIG-GUID: JnFkmNIBnQXs8Djpm-pgZ5nuuJ2XjHL4
+X-Proofpoint-GUID: U1aGH6k3G6SnpaksNb07I_k39Lj-ZtYR
+X-Proofpoint-ORIG-GUID: U1aGH6k3G6SnpaksNb07I_k39Lj-ZtYR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-15_11,2022-03-15_01,2022-02-23_01
@@ -57,211 +57,135 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF trampolines will create a bpf_trace_run_ctx on their stacks, and
-set/reset the current bpf_run_ctx whenever calling/returning from a
-bpf_prog.
+Make sure BPF cookies are correct for fentry/fexit/fmod_ret.
 
 Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 32 ++++++++++++++++++++++++++++++++
- include/linux/bpf.h         | 12 ++++++++----
- kernel/bpf/syscall.c        |  4 ++--
- kernel/bpf/trampoline.c     | 21 +++++++++++++++++----
- 4 files changed, 59 insertions(+), 10 deletions(-)
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 61 +++++++++++++++++++
+ .../selftests/bpf/progs/test_bpf_cookie.c     | 24 ++++++++
+ 2 files changed, 85 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 1228e6e6a420..29775a475513 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1748,10 +1748,33 @@ static int invoke_bpf_prog(const struct btf_func_=
-model *m, u8 **pprog,
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/=
+testing/selftests/bpf/prog_tests/bpf_cookie.c
+index 0612e79a9281..6d06c5046e9c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+@@ -237,6 +237,65 @@ static void pe_subtest(struct test_bpf_cookie *skel)
+ 	bpf_link__destroy(link);
+ }
+=20
++static void tracing_subtest(struct test_bpf_cookie *skel)
++{
++	__u64 cookie;
++	int prog_fd;
++	int fentry_fd =3D -1, fexit_fd =3D -1, fmod_ret_fd =3D -1;
++	struct bpf_test_run_opts opts;
++
++	skel->bss->fentry_res =3D 0;
++	skel->bss->fexit_res =3D 0;
++
++	cookie =3D 0x100000;
++	prog_fd =3D bpf_program__fd(skel->progs.fentry_test1);
++	if (!ASSERT_GE(prog_fd, 0, "fentry.prog_fd"))
++		return;
++	fentry_fd =3D bpf_raw_tracepoint_cookie_open(NULL, prog_fd, cookie);
++	if (!ASSERT_GE(fentry_fd, 0, "fentry.open"))
++		return;
++
++	cookie =3D 0x200000;
++	prog_fd =3D bpf_program__fd(skel->progs.fexit_test1);
++	if (!ASSERT_GE(prog_fd, 0, "fexit.prog_fd"))
++		goto cleanup;
++	fexit_fd =3D bpf_raw_tracepoint_cookie_open(NULL, prog_fd, cookie);
++	if (!ASSERT_GE(fexit_fd, 0, "fexit.open"))
++		goto cleanup;
++
++	cookie =3D 0x300000;
++	prog_fd =3D bpf_program__fd(skel->progs.fmod_ret_test);
++	if (!ASSERT_GE(prog_fd, 0, "fmod_ret.prog_fd"))
++		goto cleanup;
++	fmod_ret_fd =3D bpf_raw_tracepoint_cookie_open(NULL, prog_fd, cookie);
++	if (!ASSERT_GE(fmod_ret_fd, 0, "fmod_ret.opoen"))
++		goto cleanup;
++
++	bzero(&opts, sizeof(opts));
++	opts.sz =3D sizeof(opts);
++	opts.repeat =3D 1;
++	prog_fd =3D bpf_program__fd(skel->progs.fentry_test1);
++	bpf_prog_test_run_opts(prog_fd, &opts);
++
++	bzero(&opts, sizeof(opts));
++	opts.sz =3D sizeof(opts);
++	opts.repeat =3D 1;
++	prog_fd =3D bpf_program__fd(skel->progs.fmod_ret_test);
++	bpf_prog_test_run_opts(prog_fd, &opts);
++
++	ASSERT_EQ(skel->bss->fentry_res, 0x100000, "fentry_res");
++	ASSERT_EQ(skel->bss->fexit_res, 0x200000, "fexit_res");
++	ASSERT_EQ(skel->bss->fmod_ret_res, 0x300000, "fmod_ret_res");
++
++cleanup:
++	if (fentry_fd >=3D 0)
++		close(fentry_fd);
++	if (fexit_fd >=3D 0)
++		close(fexit_fd);
++	if (fmod_ret_fd >=3D 0)
++		close(fmod_ret_fd);
++}
++
+ void test_bpf_cookie(void)
  {
- 	u8 *prog =3D *pprog;
- 	u8 *jmp_insn;
-+	int ctx_cookie_off =3D offsetof(struct bpf_trace_run_ctx, bpf_cookie);
- 	struct bpf_prog *p =3D l->prog;
+ 	struct test_bpf_cookie *skel;
+@@ -255,6 +314,8 @@ void test_bpf_cookie(void)
+ 		tp_subtest(skel);
+ 	if (test__start_subtest("perf_event"))
+ 		pe_subtest(skel);
++	if (test__start_subtest("tracing"))
++		tracing_subtest(skel);
 =20
-+	EMIT1(0x52);		 /* push rdx */
-+
-+	/* mov rdi, 0 */
-+	emit_mov_imm64(&prog, BPF_REG_1, 0, 0);
-+
-+	/* Prepare struct bpf_trace_run_ctx.
-+	 * sub rsp, sizeof(struct bpf_trace_run_ctx)
-+	 * mov rax, rsp
-+	 * mov QWORD PTR [rax + ctx_cookie_off], rdi
-+	 */
-+	EMIT4(0x48, 0x83, 0xEC, sizeof(struct bpf_trace_run_ctx));
-+	EMIT3(0x48, 0x89, 0xE0);
-+	EMIT4(0x48, 0x89, 0x78, ctx_cookie_off);
-+
-+	/* mov rdi, rsp */
-+	EMIT3(0x48, 0x89, 0xE7);
-+	/* mov QWORD PTR [rdi + sizeof(struct bpf_trace_run_ctx)], rax */
-+	emit_stx(&prog, BPF_DW, BPF_REG_1, BPF_REG_0, sizeof(struct bpf_trace_r=
-un_ctx));
-+
- 	/* arg1: mov rdi, progs[i] */
- 	emit_mov_imm64(&prog, BPF_REG_1, (long) p >> 32, (u32) (long) p);
-+	/* arg2: mov rsi, rsp (struct bpf_run_ctx *) */
-+	EMIT3(0x48, 0x89, 0xE6);
-+
- 	if (emit_call(&prog,
- 		      p->aux->sleepable ? __bpf_prog_enter_sleepable :
- 		      __bpf_prog_enter, prog))
-@@ -1797,11 +1820,20 @@ static int invoke_bpf_prog(const struct btf_func_=
-model *m, u8 **pprog,
- 	emit_mov_imm64(&prog, BPF_REG_1, (long) p >> 32, (u32) (long) p);
- 	/* arg2: mov rsi, rbx <- start time in nsec */
- 	emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
-+	/* arg3: mov rdx, rsp (struct bpf_run_ctx *) */
-+	EMIT3(0x48, 0x89, 0xE2);
- 	if (emit_call(&prog,
- 		      p->aux->sleepable ? __bpf_prog_exit_sleepable :
- 		      __bpf_prog_exit, prog))
- 			return -EINVAL;
+ 	test_bpf_cookie__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/=
+testing/selftests/bpf/progs/test_bpf_cookie.c
+index 2d3a7710e2ce..a9f83f46e7b7 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+@@ -14,6 +14,9 @@ int uprobe_res;
+ int uretprobe_res;
+ int tp_res;
+ int pe_res;
++int fentry_res;
++int fexit_res;
++int fmod_ret_res;
 =20
-+	/* pop struct bpf_trace_run_ctx
-+	 * add rsp, sizeof(struct bpf_trace_run_ctx)
-+	 */
-+	EMIT4(0x48, 0x83, 0xC4, sizeof(struct bpf_trace_run_ctx));
-+
-+	EMIT1(0x5A); /* pop rdx */
-+
- 	*pprog =3D prog;
+ static void update(void *ctx, int *res)
+ {
+@@ -82,4 +85,25 @@ int handle_pe(struct pt_regs *ctx)
  	return 0;
  }
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 3dcae8550c21..d20a23953696 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -681,6 +681,8 @@ struct bpf_tramp_links {
- 	int nr_links;
- };
 =20
-+struct bpf_trace_run_ctx;
++SEC("fentry/bpf_fentry_test1")
++int BPF_PROG(fentry_test1, int a)
++{
++	update(ctx, &fentry_res);
++	return 0;
++}
 +
- /* Different use cases for BPF trampoline:
-  * 1. replace nop at the function entry (kprobe equivalent)
-  *    flags =3D BPF_TRAMP_F_RESTORE_REGS
-@@ -707,10 +709,11 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
-age *tr, void *image, void *i
- 				struct bpf_tramp_links *tlinks,
- 				void *orig_call);
- /* these two functions are called from generated trampoline */
--u64 notrace __bpf_prog_enter(struct bpf_prog *prog);
--void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start);
--u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog);
--void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start)=
-;
-+u64 notrace __bpf_prog_enter(struct bpf_prog *prog, struct bpf_trace_run=
-_ctx *run_ctx);
-+void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start, struct bp=
-f_trace_run_ctx *run_ctx);
-+u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog, struct bpf=
-_trace_run_ctx *run_ctx);
-+void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start,
-+				       struct bpf_trace_run_ctx *run_ctx);
- void notrace __bpf_tramp_enter(struct bpf_tramp_image *tr);
- void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
-=20
-@@ -1291,6 +1294,7 @@ struct bpf_cg_run_ctx {
- struct bpf_trace_run_ctx {
- 	struct bpf_run_ctx run_ctx;
- 	u64 bpf_cookie;
-+	struct bpf_run_ctx *saved_run_ctx;
- };
-=20
- static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *ne=
-w_ctx)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index fecfc803785d..a289ef55ea17 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4793,13 +4793,13 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr =
-*, attr, u32, attr_size)
- 			return -EINVAL;
- 		}
-=20
--		if (!__bpf_prog_enter_sleepable(prog)) {
-+		if (!__bpf_prog_enter_sleepable(prog, NULL)) {
- 			/* recursion detected */
- 			bpf_prog_put(prog);
- 			return -EBUSY;
- 		}
- 		attr->test.retval =3D bpf_prog_run(prog, (void *) (long) attr->test.ct=
-x_in);
--		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats *=
-/);
-+		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats *=
-/, NULL);
- 		bpf_prog_put(prog);
- 		return 0;
- #endif
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 54c695d49ec9..0b050aa2f159 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -580,9 +580,12 @@ static void notrace inc_misses_counter(struct bpf_pr=
-og *prog)
-  * [2..MAX_U64] - execute bpf prog and record execution time.
-  *     This is start time.
-  */
--u64 notrace __bpf_prog_enter(struct bpf_prog *prog)
-+u64 notrace __bpf_prog_enter(struct bpf_prog *prog, struct bpf_trace_run=
-_ctx *run_ctx)
- 	__acquires(RCU)
- {
-+	if (run_ctx)
-+		run_ctx->saved_run_ctx =3D bpf_set_run_ctx(&run_ctx->run_ctx);
++SEC("fexit/bpf_fentry_test1")
++int BPF_PROG(fexit_test1, int a, int ret)
++{
++	update(ctx, &fexit_res);
++	return 0;
++}
 +
- 	rcu_read_lock();
- 	migrate_disable();
- 	if (unlikely(__this_cpu_inc_return(*(prog->active)) !=3D 1)) {
-@@ -614,17 +617,23 @@ static void notrace update_prog_stats(struct bpf_pr=
-og *prog,
- 	}
- }
-=20
--void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
-+void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start, struct bp=
-f_trace_run_ctx *run_ctx)
- 	__releases(RCU)
- {
-+	if (run_ctx)
-+		bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++SEC("fmod_ret/bpf_modify_return_test")
++int BPF_PROG(fmod_ret_test, int _a, int *_b, int _ret)
++{
++	update(ctx, &fmod_ret_res);
++	return 1234;
++}
 +
- 	update_prog_stats(prog, start);
- 	__this_cpu_dec(*(prog->active));
- 	migrate_enable();
- 	rcu_read_unlock();
- }
-=20
--u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog)
-+u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog, struct bpf=
-_trace_run_ctx *run_ctx)
- {
-+	if (run_ctx)
-+		run_ctx->saved_run_ctx =3D bpf_set_run_ctx(&run_ctx->run_ctx);
-+
- 	rcu_read_lock_trace();
- 	migrate_disable();
- 	might_fault();
-@@ -635,8 +644,12 @@ u64 notrace __bpf_prog_enter_sleepable(struct bpf_pr=
-og *prog)
- 	return bpf_prog_start_time();
- }
-=20
--void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start)
-+void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start,
-+				       struct bpf_trace_run_ctx *run_ctx)
- {
-+	if (run_ctx)
-+		bpf_reset_run_ctx(run_ctx->saved_run_ctx);
-+
- 	update_prog_stats(prog, start);
- 	__this_cpu_dec(*(prog->active));
- 	migrate_enable();
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.30.2
 
