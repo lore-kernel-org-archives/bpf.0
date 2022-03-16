@@ -2,233 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E635CC433EF
-	for <bpf@archiver.kernel.org>; Wed, 16 Mar 2022 01:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BD17C433F5
+	for <bpf@archiver.kernel.org>; Wed, 16 Mar 2022 02:12:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353012AbiCPBuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Mar 2022 21:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S1345873AbiCPCNx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Mar 2022 22:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353015AbiCPBuS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Mar 2022 21:50:18 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACE35E14E
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 18:49:05 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22G1YC99005106
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 18:49:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=prlauYYkFo6CrRd12j0xqSY9DwY6J6otxG++BxiHu04=;
- b=aavwEmnmKW+wytAxvJ0UZH0RdsCHcxpyUp7Xj+C3CJigGGa4sbHR19bAczxmFY7Zh7Lf
- EHRPExj6SnCH7Z8gNLRmmXLLStAwZBU2cgHDqsL6Hp9DjG/KcIj0ekRH8I8qRqbSkeXO
- uAWNbOtaFu5k7fY0Ux04UOYB5x27USIcmzE= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3eu6bc02gm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 18:49:04 -0700
-Received: from twshared29473.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 15 Mar 2022 18:49:03 -0700
-Received: by devbig933.frc1.facebook.com (Postfix, from userid 6611)
-        id 560142103FD8; Tue, 15 Mar 2022 18:48:54 -0700 (PDT)
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/3] bpf: selftests: Remove libcap usage from test_verifier
-Date:   Tue, 15 Mar 2022 18:48:54 -0700
-Message-ID: <20220316014854.2257030-1-kafai@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220316014841.2255248-1-kafai@fb.com>
-References: <20220316014841.2255248-1-kafai@fb.com>
+        with ESMTP id S1353108AbiCPCNo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Mar 2022 22:13:44 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A5A5FF2D
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 19:11:26 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 25so1292555ljv.10
+        for <bpf@vger.kernel.org>; Tue, 15 Mar 2022 19:11:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O8cid+pgrGye/tvfCn78P68h1Y87zZvZHfws/yKeLlw=;
+        b=BJSwJ2MjBK1RKY/VphW5HX7UU8GykoqADgnpOahbydUJx+ePMyhwd/zZPy9TbmVaYF
+         RWXlHCz085dL+8sJREh5Ocnt0oUz5LlffRYHw1wUlBB94gaTGC6JLgNkE/4vWz/262au
+         eHhPsHNTOu9VQV3Cz0j5w+UpKYS9lMwfXz0pD9bnaOgjZ6+l55C7Q7/FHkroSzENnFx7
+         lyf60VdDORJVWp2IG7XXZSfgH4j8nkwdVEuqQM4XRmN0GQHEXePZj4KxORIWAb0dXHzo
+         vvGQlm/7OirO7sc9ZrDVCW+GxJTlnDoBMOm+CSFRSnaGS9LCPNALRkdfJ6E8+O5tzUfs
+         UtAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O8cid+pgrGye/tvfCn78P68h1Y87zZvZHfws/yKeLlw=;
+        b=mKnDmmXsu3mcHX57nmm82FdIRVqzjA37B+8OZe3S8KVyWuCbAiWOv9uGeIe7VEEhnB
+         mSSNvPTcNF70h55xoBFAunZgyJ0Yr2m0+xj5ByZCVYIWej1vDp5NqBa01pt36Xzgdx5e
+         NL+bnWeqluH0JU0aWRkmqdT33vVP3s5cUZ2gBxxGRCZpdHvXPQSpM/CzBN4XtYJzXtNr
+         dFBgCGkXeNSdeCUBxv6W1Pp5CYikBsmzcogSeRjJBZdOvrpa3KubpRtkEAxpuBYWJhJM
+         n2FR35ajlDak8U4wWcJDOby8HMcIB3v8WYkBxAUXhAEPoue/u+nOs3wEK1177JEuVE3X
+         RJCQ==
+X-Gm-Message-State: AOAM533kv+1K2tHHf8TuW7YrAMZIQsY6YZ9IgFgjizKl6BZV9z1i8mLK
+        lLWZ98rsFK2B8HN4lEAVe9GbWWptkZYyvP58YmY=
+X-Google-Smtp-Source: ABdhPJzWu2/aTmxvfJQI2whWf+3rVhNz624FCBio96tK7qxOKNdAQ1RKgIp6FWZqDd0Wec/L3eSY1bf3TVpbaVHoJhs=
+X-Received: by 2002:a2e:a7c5:0:b0:249:3e51:e33f with SMTP id
+ x5-20020a2ea7c5000000b002493e51e33fmr6532037ljp.369.1647396684247; Tue, 15
+ Mar 2022 19:11:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: UTD8bySCOxAP3ibBCUba3vUP2h47bRZR
-X-Proofpoint-ORIG-GUID: UTD8bySCOxAP3ibBCUba3vUP2h47bRZR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-03-15_11,2022-03-15_01,2022-02-23_01
+References: <20220312011643.2136370-1-joannekoong@fb.com> <CACYkzJ6TWGOWk5UTh6juuEO2xYheu7MEh-m=R8h20sCG5sV71g@mail.gmail.com>
+ <20220315190455.7v6wjovhrhnezvxi@kafai-mbp.dhcp.thefacebook.com>
+ <CACYkzJ5P8frjjvQR5Q=nhsXiTyEsuJU4wY3w-Mbk2pbAVM8vJQ@mail.gmail.com>
+ <CAADnVQL1Fa3uDSqaJu=0F1FjF7P_=VnXEj_8xKPDVmtCvPo06A@mail.gmail.com>
+ <CACYkzJ5AWNDkmFqCCMXKN3ZCpuZmEqsFuqi4yVeU8euoJ7puzw@mail.gmail.com>
+ <CAJnrk1bTSuoDf4FJr3nSiYWc_eAtXfZzyQ4GYLhAfyoAWVhpxw@mail.gmail.com> <20220315210142.slkwr4dxal4lxunk@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220315210142.slkwr4dxal4lxunk@kafai-mbp.dhcp.thefacebook.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Tue, 15 Mar 2022 19:11:13 -0700
+Message-ID: <CAJnrk1bz=urB66s-6p1vHwoHNiLZjfc7OzCipJcXwS=THdn1-w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] bpf: Enable non-atomic allocations in local storage
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     KP Singh <kpsingh@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Joanne Koong <joannekoong@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch removes the libcap usage from test_verifier.
-The cap_*_effective() helpers added in the earlier patch are
-used instead.
+On Tue, Mar 15, 2022 at 2:01 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Tue, Mar 15, 2022 at 01:33:05PM -0700, Joanne Koong wrote:
+> > > > > > > > @@ -425,25 +438,37 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> > > > > > > >         if (old_sdata && (map_flags & BPF_F_LOCK)) {
+> > > > > > > >                 copy_map_value_locked(&smap->map, old_sdata->data, value,
+> > > > > > > >                                       false);
+> > > > > > > > -               selem = SELEM(old_sdata);
+> > > > > > > > -               goto unlock;
+> > > > > > > > +
+> > > > > > > > +               raw_spin_unlock_irqrestore(&local_storage->lock, flags);
+> > > > > > > > +
+> > > > > > > > +               if (!charge_err)
+> > > > > > > > +                       mem_uncharge(smap, owner, smap->elem_size);
+> > > > > > > > +               kfree(selem);
+> > > > > > > > +
+> > > > > > > > +               return old_sdata;
+> > > > > > > > +       }
+> > > > > > > > +
+> > > > > > > > +       if (!old_sdata && charge_err) {
+> > > > > > > > +               /* If there is no existing local storage value, then this means
+> > > > > > > > +                * we needed the charge to succeed. We must make sure this did not
+> > > > > > > > +                * return an error.
+> > > > > > > > +                *
+> > > > > > > > +                * Please note that if an existing local storage value exists, then
+> > > > > > > > +                * it doesn't matter if the charge failed because we can just
+> > > > > > > > +                * "reuse" the charge from the existing local storage element.
+> > > > > > > > +                */
+> > > > > > >
+> > > > > > > But we did allocate a new element which was unaccounted for, even if
+> > > > > > > it was temporarily.
+> > > > > > > [for the short period of time till we freed the old element]
+> > > > > > >
+> > > > > > > Martin, is this something we are okay with?
+> > > > > > It is the behavior today already.  Take a look at the bpf_selem_alloc(...., !sold_data)
+> > > > > > and the later "if (old_sdata) { /* ... */ bpf_selem_unlink_storage_nolock(..., false); }"
+> > > > > > Most things happen in a raw_spin_lock, so this should be very brief moment.
+> > > > > > Not perfect but should be fine.
+> > > > > >
+> > > > > > If it always error out on charge failure, it will risk the case that the
+> > > > > > userspace's syscall will unnecessary be failed on mem charging while it only
+> > > > > > tries to replace the old_sdata.
+> > > > > >
+> > > > > > If the concern is the increased chance of brief moment of unaccounted memory
+> > > > > > from the helper side now because GFP_KERNEL is from the helper only,
+> > > > > > another option that came up to my mind is to decide to do the alloc before or
+> > > > > > after raw_spin_lock_irqsave() based on mem_flags.  The GFP_KERNEL here is only
+> > > > > > calling from the bpf helper side and it is always done with BPF_NOEXIST
+> > > > > > because the bpf helper has already done a lookup, so it should
+> > > > > > always charge success first and then alloc.
+> > > > > >
+> > > > > > Something like this that drafted on top of this patch.  Untested code:
+> > > > >
+> > > > > I think this looks okay. One minor comment below:
+> > > > >
+> > > > > >
+> > > > > > diff --git c/kernel/bpf/bpf_local_storage.c w/kernel/bpf/bpf_local_storage.c
+> > > > > > index 092a1ac772d7..b48beb57fe6e 100644
+> > > > > > --- c/kernel/bpf/bpf_local_storage.c
+> > > > > > +++ w/kernel/bpf/bpf_local_storage.c
+> > > > > > @@ -63,7 +63,7 @@ static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
+> > > > > >
+> > > > > >  struct bpf_local_storage_elem *
+> > > > > >  bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+> > > > > > -               void *value, bool charge_mem)
+> > > > > > +               void *value, bool charge_mem, gfp_t mem_flags)
+> > > > > >  {
+> > > > > >         struct bpf_local_storage_elem *selem;
+> > > > > >
+> > > > > > @@ -71,7 +71,7 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+> > > > > >                 return NULL;
+> > > > > >
+> > > > > >         selem = bpf_map_kzalloc(&smap->map, smap->elem_size,
+> > > > > > -                               GFP_ATOMIC | __GFP_NOWARN);
+> > > > > > +                               mem_flags | __GFP_NOWARN);
+> > > > > >         if (selem) {
+> > > > > >                 if (value)
+> > > > > >                         memcpy(SDATA(selem)->data, value, smap->map.value_size);
+> > > > > >
+> > > > > > @@ -404,6 +408,12 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> > > > > >                 }
+> > > > > >         }
+> > > > > >
+> > > > > > +       if (mem_flags == GFP_KERNEL) {
+> > > > >
+> > > > > It seems like what this check really is (and similarly for the other
+> > > > > mem_flags based check you have below.
+> > > > >
+> > > > > "am I called from a sleepable helper"
+> > > > >
+> > > > > and I wonder if, instead of the verifier setting mem_flags, could set
+> > > > > a boolean "sleepable_helper_call"
+> > > > > which might be more useful and readable and is more relevant to the
+> > > > > check that the verifier is
+> > > > > performing "if (env->prog->aux->sleepable)"
+> > > >
+> > > > I think you're proposing to pass a boolean flag
+> > > > into the helper instead of gfp_t?
+> > > > I think gfp_t is cleaner.
+> > > > For example we might allow local storage access under bpf_spin_lock
+> > > > or other critical sections.
+> > > > Passing boolean flag of the prog state is not equivalent
+> > > > to the availability of gfp at the callsite inside bpf prog code.
+> > >
+> > > Ah yes, then using gfp_t makes sense as we may have other use cases.
+> > >
+> > > I think we can follow up with the changes Martin suggested separately as
+> > > the current behaviour is essentially the same.
+> > >
+> > > In any case, you can add my:
+> > >
+> > > Acked-by: KP Singh <kpsingh@kernel.org>
+> >
+> > Thanks for the discussion, KP, Kumar, Martin, and Alexei!
+> >
+> > For v2, I will make the following changes:
+> > 1) Allocate the memory before/after the raw_spin_lock_irqsave,
+> > depending on mem_flags
+> > 2) Change the comment "*mem_flags* is set by the bpf verifier" to
+> > "*mem_flags* is set by the bpf verifier. Any value set through uapi
+> > will be ignored"
+> It will also be useful to double check if the existing sleepable
+> lsm selftests can cover this change.
 
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- tools/testing/selftests/bpf/Makefile        |  3 +-
- tools/testing/selftests/bpf/test_verifier.c | 89 ++++++---------------
- 2 files changed, 28 insertions(+), 64 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index fe12b4f5fe20..1c6e55740019 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -195,6 +195,7 @@ $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(BPFOB=
-J)
- CGROUP_HELPERS	:=3D $(OUTPUT)/cgroup_helpers.o
- TESTING_HELPERS	:=3D $(OUTPUT)/testing_helpers.o
- TRACE_HELPERS	:=3D $(OUTPUT)/trace_helpers.o
-+CAP_HELPERS	:=3D $(OUTPUT)/cap_helpers.o
-=20
- $(OUTPUT)/test_dev_cgroup: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
-@@ -211,7 +212,7 @@ $(OUTPUT)/test_lirc_mode2_user: $(TESTING_HELPERS)
- $(OUTPUT)/xdping: $(TESTING_HELPERS)
- $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
- $(OUTPUT)/test_maps: $(TESTING_HELPERS)
--$(OUTPUT)/test_verifier: $(TESTING_HELPERS)
-+$(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS)
-=20
- BPFTOOL ?=3D $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefi=
-le)    \
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/=
-selftests/bpf/test_verifier.c
-index 92e3465fbae8..091848662b7a 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -22,8 +22,7 @@
- #include <limits.h>
- #include <assert.h>
-=20
--#include <sys/capability.h>
--
-+#include <linux/capability.h>
- #include <linux/unistd.h>
- #include <linux/filter.h>
- #include <linux/bpf_perf_event.h>
-@@ -42,6 +41,7 @@
- #  define CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS 1
- # endif
- #endif
-+#include "cap_helpers.h"
- #include "bpf_rand.h"
- #include "bpf_util.h"
- #include "test_btf.h"
-@@ -62,6 +62,10 @@
- #define F_NEEDS_EFFICIENT_UNALIGNED_ACCESS	(1 << 0)
- #define F_LOAD_WITH_STRICT_ALIGNMENT		(1 << 1)
-=20
-+/* need CAP_BPF, CAP_NET_ADMIN, CAP_PERFMON to load progs */
-+#define ADMIN_CAPS (1ULL << CAP_NET_ADMIN |	\
-+		    1ULL << CAP_PERFMON |	\
-+		    1ULL << CAP_BPF)
- #define UNPRIV_SYSCTL "kernel/unprivileged_bpf_disabled"
- static bool unpriv_disabled =3D false;
- static int skips;
-@@ -973,47 +977,19 @@ struct libcap {
-=20
- static int set_admin(bool admin)
- {
--	cap_t caps;
--	/* need CAP_BPF, CAP_NET_ADMIN, CAP_PERFMON to load progs */
--	const cap_value_t cap_net_admin =3D CAP_NET_ADMIN;
--	const cap_value_t cap_sys_admin =3D CAP_SYS_ADMIN;
--	struct libcap *cap;
--	int ret =3D -1;
--
--	caps =3D cap_get_proc();
--	if (!caps) {
--		perror("cap_get_proc");
--		return -1;
--	}
--	cap =3D (struct libcap *)caps;
--	if (cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_sys_admin, CAP_CLEAR)) {
--		perror("cap_set_flag clear admin");
--		goto out;
--	}
--	if (cap_set_flag(caps, CAP_EFFECTIVE, 1, &cap_net_admin,
--				admin ? CAP_SET : CAP_CLEAR)) {
--		perror("cap_set_flag set_or_clear net");
--		goto out;
--	}
--	/* libcap is likely old and simply ignores CAP_BPF and CAP_PERFMON,
--	 * so update effective bits manually
--	 */
-+	int err;
-+
- 	if (admin) {
--		cap->data[1].effective |=3D 1 << (38 /* CAP_PERFMON */ - 32);
--		cap->data[1].effective |=3D 1 << (39 /* CAP_BPF */ - 32);
-+		err =3D cap_enable_effective(ADMIN_CAPS, NULL);
-+		if (err)
-+			perror("cap_enable_effective(ADMIN_CAPS)");
- 	} else {
--		cap->data[1].effective &=3D ~(1 << (38 - 32));
--		cap->data[1].effective &=3D ~(1 << (39 - 32));
--	}
--	if (cap_set_proc(caps)) {
--		perror("cap_set_proc");
--		goto out;
-+		err =3D cap_disable_effective(ADMIN_CAPS, NULL);
-+		if (err)
-+			perror("cap_disable_effective(ADMIN_CAPS)");
- 	}
--	ret =3D 0;
--out:
--	if (cap_free(caps))
--		perror("cap_free");
--	return ret;
-+
-+	return err;
- }
-=20
- static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_=
-val,
-@@ -1291,31 +1267,18 @@ static void do_test_single(struct bpf_test *test,=
- bool unpriv,
-=20
- static bool is_admin(void)
- {
--	cap_flag_value_t net_priv =3D CAP_CLEAR;
--	bool perfmon_priv =3D false;
--	bool bpf_priv =3D false;
--	struct libcap *cap;
--	cap_t caps;
--
--#ifdef CAP_IS_SUPPORTED
--	if (!CAP_IS_SUPPORTED(CAP_SETFCAP)) {
--		perror("cap_get_flag");
--		return false;
--	}
--#endif
--	caps =3D cap_get_proc();
--	if (!caps) {
--		perror("cap_get_proc");
-+	__u64 caps;
-+
-+	/* The test checks for finer cap as CAP_NET_ADMIN,
-+	 * CAP_PERFMON, and CAP_BPF instead of CAP_SYS_ADMIN.
-+	 * Thus, disable CAP_SYS_ADMIN at the beginning.
-+	 */
-+	if (cap_disable_effective(1ULL << CAP_SYS_ADMIN, &caps)) {
-+		perror("cap_disable_effective(CAP_SYS_ADMIN)");
- 		return false;
- 	}
--	cap =3D (struct libcap *)caps;
--	bpf_priv =3D cap->data[1].effective & (1 << (39/* CAP_BPF */ - 32));
--	perfmon_priv =3D cap->data[1].effective & (1 << (38/* CAP_PERFMON */ - =
-32));
--	if (cap_get_flag(caps, CAP_NET_ADMIN, CAP_EFFECTIVE, &net_priv))
--		perror("cap_get_flag NET");
--	if (cap_free(caps))
--		perror("cap_free");
--	return bpf_priv && perfmon_priv && net_priv =3D=3D CAP_SET;
-+
-+	return (caps & ADMIN_CAPS) =3D=3D ADMIN_CAPS;
- }
-=20
- static void get_unpriv_disabled()
---=20
-2.30.2
-
+Sounds great!! For v2, I will do the following:
+1) Allocate the memory before/after the raw_spin_lock_irqsave,
+depending on the flags
+2) Rename mem_flags to gfp_flags
+3) Reword the comment "*mem_flags* is set by the bpf verifier" to
+"*gfp_flags* is a hidden argument provided by the verifier"
+4) See if any of the sleepable lsm selftests can provide coverage on
+the spinlock codepath in bpf_local_storage_update
