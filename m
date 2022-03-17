@@ -2,99 +2,180 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FA53C433EF
-	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 05:38:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAA31C433EF
+	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 05:56:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbiCQFkC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Mar 2022 01:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S229491AbiCQF5y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Mar 2022 01:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiCQFkC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Mar 2022 01:40:02 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E640A277972
-        for <bpf@vger.kernel.org>; Wed, 16 Mar 2022 22:09:33 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id v15so3584679qkg.8
-        for <bpf@vger.kernel.org>; Wed, 16 Mar 2022 22:09:33 -0700 (PDT)
+        with ESMTP id S229485AbiCQF5x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Mar 2022 01:57:53 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7C22CB1BC
+        for <bpf@vger.kernel.org>; Wed, 16 Mar 2022 22:27:10 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id g17so7229646lfh.2
+        for <bpf@vger.kernel.org>; Wed, 16 Mar 2022 22:27:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=XljFdoUfWopAfbGRep/wzfODzZ++uTnnGQSwefGABRY=;
-        b=kD9apftEEKvPe+i9VML3fekJl9p6R59ielKjRp/fuRfGHZmcnTaN+8pmdYztLbV9Sa
-         KLjo7jCqJ9Jdpi6y3crN3gn9DSNRzaTnuKP63Xs984Y35OhAKiPuc1aQ0YP1Nop5aNyT
-         iRylZyQKH2nYvosMTpvJyVCCijMWXfhCqlr7cKv19LzpFSIpT8kgwx9FSy7UD34krMul
-         OGaBJ+qV2strYLgLYUDaDsqMIyTFh2G5P1h1nX4O/2OKRgesDtXIwb7jvMoGlXfyLarV
-         THPVOrzwZPucg85BxxaqnwZZFmmgS3HuKFyyxZ/0ZoZumYofeskNF8DeriiZUChk1bJk
-         fxWA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AWCvtSY49jrATJVKLtY7XWKvLRYtcrtJulzN8PQtMog=;
+        b=Vs6ynCpyhbU779uH+L2k5LCsEycwm1QDMxRRvXsL481aAttWJAfZ4mPjSOS38h47st
+         Sivp5oexEJakruiv6ieqadzvt8M3kcWEyOTL8wRepPYqVXBCRVQ1Bhw4W0y9XvYJ+F6f
+         jeRUgkMNQe3VFkYTQix7fZb+EWPWuL7F8zHyrWjQjCQAxPXQTTyhkBY7iC/Yavx1t41c
+         WrlIY76bczmTZFdi01F2UuPQEEgQBrPCopmOZNxJw0y3j7OY0rtrOkBCNbWl/gjVLCj+
+         M26EoBJ1RedFMj74aF2ErMujAAPbbeN8EoHVxB3EPCbrRKcGYtF5eVUHSOe1CLnknFhq
+         hr0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=XljFdoUfWopAfbGRep/wzfODzZ++uTnnGQSwefGABRY=;
-        b=YdhKR68JWJ6J+RNCXdHQdotV2RakClOdMkBuzpTcIazhqEcy8xXvo5pL5x4x9SW6e3
-         ZmfZ6TMHs1pkTQEnEjHJgOWeizN8aUNVtfQBLscv5FoA6CyXsi4Z0dzAmV+MkXPZDREa
-         okJZm4ACsuCtZ7vLF/dq8GpP7B+S0xwwVzdP+EYraugO1SiKTCPai94W9GSTEBXN/xdC
-         a77N39Ntz84H8zBY0AYbmBgdPhSBVg8CKV2cvC9CPaEAUU25UfMZbans/SuyB2GihDgp
-         W8InB0fNT35iWznNpBV9x+ABu8MRJjqs42UC1Y5XUAYk6Jjo8WcZjvZp1oVif0O/8PO0
-         aNuA==
-X-Gm-Message-State: AOAM532QJxQbx41KI3k+RT4XhD0ax54N35ZISh5Um34PjteSGZb+7toL
-        ZYhZgTgknTJQv2LkzP6Vfp9qdAsUSLiANQ==
-X-Google-Smtp-Source: ABdhPJwnIbyZMHNdtk/8OH7P4lVUvZeb2zaaIZmYXlGiPlRiL2b0C6eNhZMzPMuLS5A8u2kfvsPaqA==
-X-Received: by 2002:a05:6638:4089:b0:319:b60c:3c3d with SMTP id m9-20020a056638408900b00319b60c3c3dmr1173163jam.120.1647489441061;
-        Wed, 16 Mar 2022 20:57:21 -0700 (PDT)
-Received: from localhost ([99.197.200.79])
-        by smtp.gmail.com with ESMTPSA id 201-20020a6b14d2000000b00640df82a01csm1995884iou.3.2022.03.16.20.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 20:57:20 -0700 (PDT)
-Date:   Wed, 16 Mar 2022 20:57:14 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     fankaixi.li@bytedance.com, shuah@kernel.org, bpf@vger.kernel.org
-Cc:     "kaixi.fan" <fankaixi.li@bytedance.com>
-Message-ID: <6232b19a306b2_3ed720828@john.notmuch>
-In-Reply-To: <20220313164116.5889-1-fankaixi.li@bytedance.com>
-References: <20220313164116.5889-1-fankaixi.li@bytedance.com>
-Subject: RE: [PATCH] selftests/bpf: fix tunnel remote ip comments
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AWCvtSY49jrATJVKLtY7XWKvLRYtcrtJulzN8PQtMog=;
+        b=uGC/FH56vz2z3wgP9tnLgJiFZO40ytdSmY3L36Nbujh3pGmRjwZ+3XHsJEUdgqROGX
+         L38ITmQqOVWzMrz8y6IRACLAjIDyMUSDDGiYdy2acfr8EfDnOnMNe9yHI9dIHUIwrNL3
+         WvDEnd1T216DdA9gYS0exn05g2MP1myFxHgJ40yS4j33MBJbbLWPDD5nXHJ/2H0Q/krq
+         5o4ZAh+Rkfbjrw2ysq0Wci+N9wq0X3QBB5qWh1wHjyX3gM8u1t8nNGQ5v1goSGIaNmtJ
+         qrTYIOGOdr9Aq2ArapPVq0/hy8eZ4KJsmaShq8IFQW5s2rbpqV7TTOrWRWM7rkWMIgG6
+         VCjQ==
+X-Gm-Message-State: AOAM532I3yoM6RJ64bJEn8htUR3BI7xIAzhPIXOCp3zUvQlvefudi0lf
+        /hh57ISXub2V8450ziHDXFXdrxBZ4WjAqQ7mUE4=
+X-Google-Smtp-Source: ABdhPJwbW/HXxTKvr4CIhe8IDyQhaqCQBLvRorpb6YN2fxNDmKxNm+wyZduPNxb7+/ImzbliSoCenjCKMrnrK6wdfXY=
+X-Received: by 2002:a05:6512:2292:b0:448:b7b7:a5d with SMTP id
+ f18-20020a056512229200b00448b7b70a5dmr1821156lfu.288.1647494828413; Wed, 16
+ Mar 2022 22:27:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220316195400.2998326-1-joannekoong@fb.com> <20220317022329.7wpltaqviw45qabl@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220317022329.7wpltaqviw45qabl@kafai-mbp.dhcp.thefacebook.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Wed, 16 Mar 2022 22:26:57 -0700
+Message-ID: <CAJnrk1Z=hX_zayU084mJjd_UDqw4dBkTgoRy+9xGeGoSYfL1TQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Enable non-atomic allocations in local storage
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Joanne Koong <joannekoong@fb.com>, bpf <bpf@vger.kernel.org>,
+        KP Singh <kpsingh@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-fankaixi.li@ wrote:
-> From: "kaixi.fan" <fankaixi.li@bytedance.com>
-> 
-> In namespace at_ns0, the ip address of tnl dev is 10.1.1.100 which
-> is the overlay ip, and the ip address of veth0 is 172.16.1.100
-> which is the vtep ip.
-> When doing 'ping 10.1.1.100' from root namespace, the
-> remote_ip should be 172.16.1.100.
-> 
-> Fixs: 933a741e ("selftests/bpf: bpf tunnel test.")
-> Signed-off-by: kaixi.fan <fankaixi.li@bytedance.com>
-> ---
->  tools/testing/selftests/bpf/test_tunnel.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-> index ca1372924023..2817d9948d59 100755
-> --- a/tools/testing/selftests/bpf/test_tunnel.sh
-> +++ b/tools/testing/selftests/bpf/test_tunnel.sh
-> @@ -39,7 +39,7 @@
->  # from root namespace, the following operations happen:
->  # 1) Route lookup shows 10.1.1.100/24 belongs to tnl dev, fwd to tnl dev.
->  # 2) Tnl device's egress BPF program is triggered and set the tunnel metadata,
-> -#    with remote_ip=172.16.1.200 and others.
-> +#    with remote_ip=172.16.1.100 and others.
->  # 3) Outer tunnel header is prepended and route the packet to veth1's egress
->  # 4) veth0's ingress queue receive the tunneled packet at namespace at_ns0
->  # 5) Tunnel protocol handler, ex: vxlan_rcv, decap the packet
-> -- 
-> 2.24.3 (Apple Git-128)
-> 
+On Wed, Mar 16, 2022 at 7:23 PM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Wed, Mar 16, 2022 at 12:54:00PM -0700, Joanne Koong wrote:
+> > From: Joanne Koong <joannelkoong@gmail.com>
+> >
+> > Currently, local storage memory can only be allocated atomically
+> > (GFP_ATOMIC). This restriction is too strict for sleepable bpf
+> > programs.
+> >
+> > In this patch, the verifier detects whether the program is sleepable,
+> > and passes the corresponding GFP_KERNEL or GFP_ATOMIC flag as a
+> > 5th argument to bpf_task/sk/inode_storage_get. This flag will propagate
+> > down to the local storage functions that allocate memory.
+> >
+> > Please note that bpf_task/sk/inode_storage_update_elem functions are
+> > invoked by userspace applications through syscalls. Preemption is
+> > disabled before bpf_task/sk/inode_storage_update_elem is called, which
+> > means they will always have to allocate memory atomically.
+> >
+> > The existing local storage selftests cover both the GFP_ATOMIC and the
+> > GFP_KERNEL cases in bpf_local_storage_update.
+> >
+> > v2 <- v1:
+> > * Allocate the memory before/after the raw_spin_lock_irqsave, depending
+> > on the gfp flags
+> > * Rename mem_flags to gfp_flags
+> > * Reword the comment "*mem_flags* is set by the bpf verifier" to
+> > "*gfp_flags* is a hidden argument provided by the verifier"
+> > * Add a sentence to the commit message about existing local storage
+> > selftests covering both the GFP_ATOMIC and GFP_KERNEL paths in
+> > bpf_local_storage_update.
+>
+> [ ... ]
+>
+> >  struct bpf_local_storage_data *
+> >  bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> > -                      void *value, u64 map_flags)
+> > +                      void *value, u64 map_flags, gfp_t gfp_flags)
+> >  {
+> >       struct bpf_local_storage_data *old_sdata = NULL;
+> > -     struct bpf_local_storage_elem *selem;
+> > +     struct bpf_local_storage_elem *selem = NULL;
+> >       struct bpf_local_storage *local_storage;
+> >       unsigned long flags;
+> >       int err;
+> > @@ -365,6 +366,9 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >                    !map_value_has_spin_lock(&smap->map)))
+> >               return ERR_PTR(-EINVAL);
+> >
+> > +     if (gfp_flags == GFP_KERNEL && (map_flags & ~BPF_F_LOCK) != BPF_NOEXIST)
+> > +             return ERR_PTR(-EINVAL);
+> > +
+> >       local_storage = rcu_dereference_check(*owner_storage(smap, owner),
+> >                                             bpf_rcu_lock_held());
+> >       if (!local_storage || hlist_empty(&local_storage->list)) {
+> > @@ -373,11 +377,11 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >               if (err)
+> >                       return ERR_PTR(err);
+> >
+> > -             selem = bpf_selem_alloc(smap, owner, value, true);
+> > +             selem = bpf_selem_alloc(smap, owner, value, true, gfp_flags);
+> >               if (!selem)
+> >                       return ERR_PTR(-ENOMEM);
+> >
+> > -             err = bpf_local_storage_alloc(owner, smap, selem);
+> > +             err = bpf_local_storage_alloc(owner, smap, selem, gfp_flags);
+> >               if (err) {
+> >                       kfree(selem);
+> >                       mem_uncharge(smap, owner, smap->elem_size);
+> > @@ -404,6 +408,12 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+> >               }
+> >       }
+> >
+> > +     if (gfp_flags == GFP_KERNEL) {
+> > +             selem = bpf_selem_alloc(smap, owner, value, true, gfp_flags);
+> I think this new path is not executed by the existing
+> "progs/local_storage.c" test which has sleepable lsm prog.  At least a second
+> BPF_MAP_TYPE_TASK_STORAGE map (or SK_STORAGE) is needed?
+> or there is other selftest covering this new path that I missed?
+Thanks for your feedback. I think I'm misunderstanding how the
+progs/local_storage.c test and/or local storage works then. Would you
+mind explaining why a second map is needed?
 
-checks out.
+This is my (faulty) understanding of what is happening:
+1) In "local_storage.c" in "SEC("lsm.s/inode_rename")" there is a call
+to bpf_inode_storage_get with the BPF_LOCAL_STORAGE_GET_F_CREATE flag
+set, which will call into bpf_local_storage_update (which will create
+the local storage + the selem, and put it in the RCU for that
+inode_storage_map)
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
+2) Then, further down in the "local_storage.c" file in
+"SEC("lsm.s/bprm_committed_creds")", there is another call to
+bpf_inode_storage_get on the same inode_storage_map but on a different
+inode, also with the BPF_LOCAL_STORAGE_GET_F_CREATE flag set. This
+will also call into bpf_local_storage_update.
+
+3) In bpf_local_storage_update from the call in #2, it sees that there
+is a local storage associated with this map in the RCU, it tries to
+look for the inode but doesn't find it, so it needs to allocate with
+GFP_KERNEL a new selem and then update with the new selem.
+
+I just tried out some debug statements locally to test, and it looks
+like my analysis of #3 is wrong. I will debug this some more tomorrow
+>
+> Others lgtm.
+>
+> Acked-by: Martin KaFai Lau <kafai@fb.com>
+>
+> > +             if (!selem)
+> > +                     return ERR_PTR(-ENOMEM);
+> > +     }
+> > +
+> >       raw_spin_lock_irqsave(&local_storage->lock, flags);
+> >
+> >       /* Recheck local_storage->list under local_storage->lock */
