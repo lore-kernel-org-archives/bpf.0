@@ -2,171 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D045C433FE
-	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 13:45:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 473B6C433EF
+	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 13:51:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiCQNqr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Mar 2022 09:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S230304AbiCQNwp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Mar 2022 09:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234682AbiCQNqq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:46:46 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8440F1D4C38;
-        Thu, 17 Mar 2022 06:45:30 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id D24213EF6F2;
-        Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id eI05lsRnsTj3; Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 1DCC93EF8F8;
-        Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1DCC93EF8F8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1647524729;
-        bh=9OxVWJ4vPMgt6fGn0jQ5iVj+WY+3QXU8NA1cjBO9lIk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=cUSboxJjB0cAoob2yW7rCVLFTGf6Q6Ns4oFwG6a7Vli6cltVPQcrvXn/gZ7SRZVUT
-         yXGVeOnH8WxE92Maa6yP4K1gdUVHXft9lN+gz8yVStyBG+9kd6rFRkl8mkm4fvWpiC
-         mRl2KZP20DlqwB5pjKDkbIhMqJao4p2Rox0gAJGuO8ng0l2dtgp+F+1EIuDNa6dh1e
-         RsYJYD8cIla4hRa6+uJnRK8n+PGlSMDyE+SKjcN+zcdJ/n81PhnZxoV5pl85pfcubd
-         blo+USifsbOZDoEYobQ+Row+Tmk4rwxvFXt3iHMwcPVe756+vP7W7Ro7nxBe8p8YF3
-         phnRr7zdaeaOw==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id J4lQgT7QznH7; Thu, 17 Mar 2022 09:45:29 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id E5A5D3EFD1E;
-        Thu, 17 Mar 2022 09:45:28 -0400 (EDT)
-Date:   Thu, 17 Mar 2022 09:45:28 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        paulmck <paulmck@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Message-ID: <365529974.156362.1647524728813.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220316224548.500123-3-namhyung@kernel.org>
-References: <20220316224548.500123-1-namhyung@kernel.org> <20220316224548.500123-3-namhyung@kernel.org>
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
+        with ESMTP id S233676AbiCQNwp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Mar 2022 09:52:45 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF05A1CABEF
+        for <bpf@vger.kernel.org>; Thu, 17 Mar 2022 06:51:27 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KK7n06yCNzfYw4;
+        Thu, 17 Mar 2022 21:49:56 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
+ 2022 21:51:24 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Julien Thierry <jthierry@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Hou Tao <houtao1@huawei.com>, Fuad Tabba <tabba@google.com>,
+        James Morse <james.morse@arm.com>
+Subject: [PATCH bpf-next v4 0/4] bpf, arm64: Optimize BPF store/load using
+Date:   Thu, 17 Mar 2022 10:02:39 -0400
+Message-ID: <20220317140243.212509-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4203 (ZimbraWebClient - FF98 (Linux)/8.8.15_GA_4232)
-Thread-Topic: locking: Apply contention tracepoints in the slow path
-Thread-Index: gDkcZNYUEH8fJg1vQNRPXNZ0Cqt22w==
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
------ On Mar 16, 2022, at 6:45 PM, Namhyung Kim namhyung@kernel.org wrote:
+The current BPF store/load instruction is translated by the JIT into two
+instructions. The first instruction moves the immediate offset into a
+temporary register. The second instruction uses this temporary register
+to do the real store/load.
 
-> Adding the lock contention tracepoints in various lock function slow
-> paths.  Note that each arch can define spinlock differently, I only
-> added it only to the generic qspinlock for now.
-> 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
-> kernel/locking/mutex.c        |  3 +++
-> kernel/locking/percpu-rwsem.c |  3 +++
-> kernel/locking/qrwlock.c      |  9 +++++++++
-> kernel/locking/qspinlock.c    |  5 +++++
-> kernel/locking/rtmutex.c      | 11 +++++++++++
-> kernel/locking/rwbase_rt.c    |  3 +++
-> kernel/locking/rwsem.c        |  9 +++++++++
-> kernel/locking/semaphore.c    | 14 +++++++++++++-
-> 8 files changed, 56 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-> index ee2fd7614a93..c88deda77cf2 100644
-> --- a/kernel/locking/mutex.c
-> +++ b/kernel/locking/mutex.c
-> @@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
-> unsigned int subclas
-> 	}
-> 
-> 	set_current_state(state);
-> +	trace_contention_begin(lock, 0);
+In fact, arm64 supports addressing with immediate offsets. So This series
+introduces optimization that uses arm64 str/ldr instruction with immediate
+offset when the offset fits.
 
-This should be LCB_F_SPIN rather than the hardcoded 0.
+Example of generated instuction for r2 = *(u64 *)(r1 + 0):
 
-> 	for (;;) {
-> 		bool first;
-> 
-> @@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
-> unsigned int subclas
-> skip_wait:
-> 	/* got the lock - cleanup and rejoice! */
-> 	lock_acquired(&lock->dep_map, ip);
-> +	trace_contention_end(lock, 0);
-> 
-> 	if (ww_ctx)
-> 		ww_mutex_lock_acquired(ww, ww_ctx);
-> @@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
-> unsigned int subclas
-> err:
-> 	__set_current_state(TASK_RUNNING);
-> 	__mutex_remove_waiter(lock, &waiter);
-> +	trace_contention_end(lock, ret);
-> err_early_kill:
-> 	raw_spin_unlock(&lock->wait_lock);
-> 	debug_mutex_free_waiter(&waiter);
-> diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-> index c9fdae94e098..833043613af6 100644
-> --- a/kernel/locking/percpu-rwsem.c
-> +++ b/kernel/locking/percpu-rwsem.c
-> @@ -9,6 +9,7 @@
-> #include <linux/sched/task.h>
-> #include <linux/sched/debug.h>
-> #include <linux/errno.h>
-> +#include <trace/events/lock.h>
-> 
-> int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
-> 			const char *name, struct lock_class_key *key)
-> @@ -154,6 +155,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore
-> *sem, bool reader)
-> 	}
-> 	spin_unlock_irq(&sem->waiters.lock);
-> 
-> +	trace_contention_begin(sem, LCB_F_PERCPU | (reader ? LCB_F_READ :
-> LCB_F_WRITE));
-> 	while (wait) {
-> 		set_current_state(TASK_UNINTERRUPTIBLE);
-> 		if (!smp_load_acquire(&wq_entry.private))
-> @@ -161,6 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore
-> *sem, bool reader)
-> 		schedule();
-> 	}
-> 	__set_current_state(TASK_RUNNING);
-> +	trace_contention_end(sem, 0);
+Without optimization:
+mov x10, 0
+ldr x1, [x0, x10]
 
-So for the reader-write locks, and percpu rwlocks, the "trace contention end" will always
-have ret=0. Likewise for qspinlock, qrwlock, and rtlock. It seems to be a waste of trace
-buffer space to always have space for a return value that is always 0.
+With optimization:
+ldr x1, [x0, 0]
 
-Sorry if I missed prior dicussions of that topic, but why introduce this single
-"trace contention begin/end" muxer tracepoint with flags rather than per-locking-type
-tracepoint ? The per-locking-type tracepoint could be tuned to only have the fields
-that are needed for each locking type.
+For the following bpftrace command:
 
-Thanks,
+  bpftrace -e 'kprobe:do_sys_open { printf("opening: %s\n", str(arg1)); }'
 
-Mathieu
+Without this series, jited code(fragment):
+
+   0:   bti     c
+   4:   stp     x29, x30, [sp, #-16]!
+   8:   mov     x29, sp
+   c:   stp     x19, x20, [sp, #-16]!
+  10:   stp     x21, x22, [sp, #-16]!
+  14:   stp     x25, x26, [sp, #-16]!
+  18:   mov     x25, sp
+  1c:   mov     x26, #0x0                       // #0
+  20:   bti     j
+  24:   sub     sp, sp, #0x90
+  28:   add     x19, x0, #0x0
+  2c:   mov     x0, #0x0                        // #0
+  30:   mov     x10, #0xffffffffffffff78        // #-136
+  34:   str     x0, [x25, x10]
+  38:   mov     x10, #0xffffffffffffff80        // #-128
+  3c:   str     x0, [x25, x10]
+  40:   mov     x10, #0xffffffffffffff88        // #-120
+  44:   str     x0, [x25, x10]
+  48:   mov     x10, #0xffffffffffffff90        // #-112
+  4c:   str     x0, [x25, x10]
+  50:   mov     x10, #0xffffffffffffff98        // #-104
+  54:   str     x0, [x25, x10]
+  58:   mov     x10, #0xffffffffffffffa0        // #-96
+  5c:   str     x0, [x25, x10]
+  60:   mov     x10, #0xffffffffffffffa8        // #-88
+  64:   str     x0, [x25, x10]
+  68:   mov     x10, #0xffffffffffffffb0        // #-80
+  6c:   str     x0, [x25, x10]
+  70:   mov     x10, #0xffffffffffffffb8        // #-72
+  74:   str     x0, [x25, x10]
+  78:   mov     x10, #0xffffffffffffffc0        // #-64
+  7c:   str     x0, [x25, x10]
+  80:   mov     x10, #0xffffffffffffffc8        // #-56
+  84:   str     x0, [x25, x10]
+  88:   mov     x10, #0xffffffffffffffd0        // #-48
+  8c:   str     x0, [x25, x10]
+  90:   mov     x10, #0xffffffffffffffd8        // #-40
+  94:   str     x0, [x25, x10]
+  98:   mov     x10, #0xffffffffffffffe0        // #-32
+  9c:   str     x0, [x25, x10]
+  a0:   mov     x10, #0xffffffffffffffe8        // #-24
+  a4:   str     x0, [x25, x10]
+  a8:   mov     x10, #0xfffffffffffffff0        // #-16
+  ac:   str     x0, [x25, x10]
+  b0:   mov     x10, #0xfffffffffffffff8        // #-8
+  b4:   str     x0, [x25, x10]
+  b8:   mov     x10, #0x8                       // #8
+  bc:   ldr     x2, [x19, x10]
+  [...]
+
+With this series, jited code(fragment):
+
+   0:   bti     c
+   4:   stp     x29, x30, [sp, #-16]!
+   8:   mov     x29, sp
+   c:   stp     x19, x20, [sp, #-16]!
+  10:   stp     x21, x22, [sp, #-16]!
+  14:   stp     x25, x26, [sp, #-16]!
+  18:   stp     x27, x28, [sp, #-16]!
+  1c:   mov     x25, sp
+  20:   sub     x27, x25, #0x88
+  24:   mov     x26, #0x0                       // #0
+  28:   bti     j
+  2c:   sub     sp, sp, #0x90
+  30:   add     x19, x0, #0x0
+  34:   mov     x0, #0x0                        // #0
+  38:   str     x0, [x27]
+  3c:   str     x0, [x27, #8]
+  40:   str     x0, [x27, #16]
+  44:   str     x0, [x27, #24]
+  48:   str     x0, [x27, #32]
+  4c:   str     x0, [x27, #40]
+  50:   str     x0, [x27, #48]
+  54:   str     x0, [x27, #56]
+  58:   str     x0, [x27, #64]
+  5c:   str     x0, [x27, #72]
+  60:   str     x0, [x27, #80]
+  64:   str     x0, [x27, #88]
+  68:   str     x0, [x27, #96]
+  6c:   str     x0, [x27, #104]
+  70:   str     x0, [x27, #112]
+  74:   str     x0, [x27, #120]
+  78:   str     x0, [x27, #128]
+  7c:   ldr     x2, [x19, #8]
+  [...]
+
+Tested with test_bpf on both big-endian and little-endian arm64 qemu:
+
+ test_bpf: Summary: 1026 PASSED, 0 FAILED, [1014/1014 JIT'ed]
+ test_bpf: test_tail_calls: Summary: 8 PASSED, 0 FAILED, [8/8 JIT'ed]
+ test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+
+Also tested with bpftrace, no failures encountered. 
+
+v3->v4:
+1. Fix compile error reported by kernel test robot
+2. Bug fix, and move test case to last patch
+
+v2 -> v3:
+1. Split the v2 patch into 2 patches, one for arm64 instruction encoder,
+   the other for BPF JIT
+2. Add tests for BPF_LDX/BPF_STX with different offsets
+3. Adjust the offset of str/ldr(immediate) to positive number
+
+v1 -> v2:
+1. Remove macro definition that causes checkpatch to fail
+2. Append result to commit message
+
+Xu Kuohai (4):
+  arm64: insn: add ldr/str with immediate offset
+  bpf, arm64: Optimize BPF store/load using str/ldr with immediate
+    offset
+  bpf, arm64: adjust the offset of str/ldr(immediate) to positive number
+  bpf/tests: Add tests for BPF_LDX/BPF_STX with different offsets
+
+ arch/arm64/include/asm/insn.h |   9 ++
+ arch/arm64/lib/insn.c         |  67 ++++++--
+ arch/arm64/net/bpf_jit.h      |  14 ++
+ arch/arm64/net/bpf_jit_comp.c | 233 +++++++++++++++++++++++++--
+ lib/test_bpf.c                | 285 +++++++++++++++++++++++++++++++++-
+ 5 files changed, 573 insertions(+), 35 deletions(-)
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+2.30.2
+
