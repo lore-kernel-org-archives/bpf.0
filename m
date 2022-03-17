@@ -2,192 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F63DC433F5
-	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 02:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16DBEC433FE
+	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 05:16:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358458AbiCQCdB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Mar 2022 22:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S229616AbiCQFRj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Mar 2022 01:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358422AbiCQCc6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Mar 2022 22:32:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8A41D318;
-        Wed, 16 Mar 2022 19:31:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B8A7611CB;
-        Thu, 17 Mar 2022 02:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD6B9C340E9;
-        Thu, 17 Mar 2022 02:31:39 +0000 (UTC)
-Date:   Wed, 16 Mar 2022 22:31:38 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 1/2] locking: Add lock contention tracepoints
-Message-ID: <20220316223138.30ceb025@gandalf.local.home>
-In-Reply-To: <20220316224548.500123-2-namhyung@kernel.org>
-References: <20220316224548.500123-1-namhyung@kernel.org>
-        <20220316224548.500123-2-namhyung@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        with ESMTP id S229560AbiCQFRg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Mar 2022 01:17:36 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9731965F2;
+        Wed, 16 Mar 2022 22:02:23 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id c23so4749921ioi.4;
+        Wed, 16 Mar 2022 22:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=mRFTBxOIFW33ZtPG6y2XY2NAl8iMh7CqfapUitnicL4=;
+        b=FnHjHgPOZl/wY/z34OHqyxGcYGBMPiVHGkrHl22pUcMEQC3anB/iYobf+B/3rmQ3Xl
+         IHrRP1NWpd8YqY3TlZAxe1BObTKe24wiKD5yNSROF2LeYxfX0bd/FxQ3sl4L1af2of/8
+         96OkeYfoerBZN5tAHaZvQYENZRuG0ROW8HxkbhU8CDl1W/H/pCZ7yEEhxqLEZ8lPlDlr
+         kZMhM2Xao/z0wNRwO3gzHquI0+hODTTKuc6n3wcNyvehhcFmQOtANT2ML6RbQvy2PBjw
+         iAb49tOsndwXdlQZ/8Sv5CvDlcBCvLyrKNL9b9nJjZAsxQMc4GY+UcpTa1fFkAm7vyfv
+         9vyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=mRFTBxOIFW33ZtPG6y2XY2NAl8iMh7CqfapUitnicL4=;
+        b=ufbS3OYwMP5/u5jhdhEztF+aO+FqGJSms637tg2Fi6Z0Sbz9u+CoEQ/3CVgLYGd6Fm
+         Cyw3QRQtvnw3KZcfE/lqq1PyWPyKDsTLmk5pj45O9cPKs1A8YG1ALejc4qHxeiImV/hd
+         jXpcCnKj89pQl51NbvI+7EatFedbEk5HL4g33tNzItIz40ZxD7+OkyMV77PRWc2fpmUV
+         nTjot9F3TWki6Ng30hyaHUuXhFuaNNgWCxCeJtDsdgGNkDOBEOfRYdqvmh5SfpQLNV2p
+         1pv8o7KWk6YqsppuEp5wlMKsLq+ZVzip6gevl57lPYb1do2kJUxzVbPafN1iXkpKfCxo
+         IxSA==
+X-Gm-Message-State: AOAM531wTpbPiFfNJG0orEx824rxs9+D/LyKvwPloGCZTDtevMV6cm9A
+        D18PfyJf2e3c78ZXa42pt+w=
+X-Google-Smtp-Source: ABdhPJyF6iXPkgdTMW9NQ/ygaG/HrsR+B393GuoHUwAi+WOCzttxjVmJFKs+7dlPQC9jZBIQ0A59oA==
+X-Received: by 2002:a05:6638:16d6:b0:31a:2592:a5cf with SMTP id g22-20020a05663816d600b0031a2592a5cfmr1261074jat.232.1647493266740;
+        Wed, 16 Mar 2022 22:01:06 -0700 (PDT)
+Received: from localhost ([99.197.200.79])
+        by smtp.gmail.com with ESMTPSA id f1-20020a056e020b4100b002c68e176293sm2334226ilu.87.2022.03.16.22.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Mar 2022 22:01:06 -0700 (PDT)
+Date:   Wed, 16 Mar 2022 22:00:57 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     kkourt@kkourt.io, Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kornilios Kourtis <kornilios@isovalent.com>
+Message-ID: <6232c089bbaf2_487f208db@john.notmuch>
+In-Reply-To: <20220316132354.3226908-1-kkourt@kkourt.io>
+References: <YjHjLkYBk/XfXSK0@tinh>
+ <20220316132354.3226908-1-kkourt@kkourt.io>
+Subject: RE: [PATCH 2/2] dwarves: cus__load_files: set errno if load fails
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 16 Mar 2022 15:45:47 -0700
-Namhyung Kim <namhyung@kernel.org> wrote:
-
-> This adds two new lock contention tracepoints like below:
+kkourt@ wrote:
+> From: Kornilios Kourtis <kornilios@isovalent.com>
 > 
->  * lock:contention_begin
->  * lock:contention_end
+> This patch improves the error seen by the user by setting errno in
+> cus__load_files(). Otherwise, we get a "No such file or directory" error
+> which might be confusing.
 > 
-> The lock:contention_begin takes a flags argument to classify locks.  I
-> found it useful to identify what kind of locks it's tracing like if
-> it's spinning or sleeping, reader-writer lock, real-time, and per-cpu.
+> Before the patch, using a bogus file:
+> $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> pahole: ./vmlinux-5.3.18-24.102-default.debug: No such file or directory
+> $ ls ./vmlinux-5.3.18-24.102-default.debug
+> /home/kkourt/src/hubble-fgs/vmlinux-5.3.18-24.102-default.debug
 > 
-> Move tracepoint definitions into mutex.c so that we can use them
-> without lockdep.
+> After the patch:
+> $ ./pahole -J ./vmlinux-5.3.18-24.102-default.debug
+> pahole: ./vmlinux-5.3.18-24.102-default.debug: Unknown error -22
 > 
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> Which is not very helpful, but less confusing.
+> 
+> Signed-off-by: Kornilios Kourtis <kornilios@isovalent.com>
 > ---
->  include/trace/events/lock.h | 54 ++++++++++++++++++++++++++++++++++---
->  kernel/locking/lockdep.c    |  1 -
->  kernel/locking/mutex.c      |  3 +++
->  3 files changed, 54 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
-> index d7512129a324..2a3df36d4fdb 100644
-> --- a/include/trace/events/lock.h
-> +++ b/include/trace/events/lock.h
-> @@ -5,11 +5,21 @@
->  #if !defined(_TRACE_LOCK_H) || defined(TRACE_HEADER_MULTI_READ)
->  #define _TRACE_LOCK_H
->  
-> -#include <linux/lockdep.h>
-> +#include <linux/sched.h>
->  #include <linux/tracepoint.h>
->  
-> +/* flags for lock:contention_begin */
-> +#define LCB_F_SPIN	(1U << 0)
-> +#define LCB_F_READ	(1U << 1)
-> +#define LCB_F_WRITE	(1U << 2)
-> +#define LCB_F_RT	(1U << 3)
-> +#define LCB_F_PERCPU	(1U << 4)
-> +
-> +
->  #ifdef CONFIG_LOCKDEP
->  
-> +#include <linux/lockdep.h>
-> +
->  TRACE_EVENT(lock_acquire,
->  
->  	TP_PROTO(struct lockdep_map *lock, unsigned int subclass,
-> @@ -78,8 +88,46 @@ DEFINE_EVENT(lock, lock_acquired,
->  	TP_ARGS(lock, ip)
->  );
->  
-> -#endif
-> -#endif
-> +#endif /* CONFIG_LOCK_STAT */
-> +#endif /* CONFIG_LOCKDEP */
-> +
-> +TRACE_EVENT(contention_begin,
-> +
-> +	TP_PROTO(void *lock, unsigned int flags),
-> +
-> +	TP_ARGS(lock, flags),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(void *, lock_addr)
-> +		__field(unsigned int, flags)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->lock_addr = lock;
-> +		__entry->flags = flags;
-> +	),
-> +
-> +	TP_printk("%p (flags=%x)", __entry->lock_addr, __entry->flags)
 
-Perhaps make this into:
+With the err to -err fix Arnaldo proposed.
 
-	TP_printk("%p (flags=%s)", __entry->lock_addr,
-		__print_flags(__entry->flags, "|",
-			{LCB_F_SPIN,   "spin" },
-			{LCB_F_READ,   "read" },
-			{LCB_F_WRITE,  "write" },
-			{LCB_F_RT,     "rt" },
-			{LCB_F_PERCPU, "percpu" }
-			))
-
-That way, the use doesn't need to figure out what the numbers mean.
-
--- Steve
-
-			
-> +);
-> +
-> +TRACE_EVENT(contention_end,
-> +
-> +	TP_PROTO(void *lock, int ret),
-> +
-> +	TP_ARGS(lock, ret),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(void *, lock_addr)
-> +		__field(int, ret)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->lock_addr = lock;
-> +		__entry->ret = ret;
-> +	),
-> +
-> +	TP_printk("%p (ret=%d)", __entry->lock_addr, __entry->ret)
-> +);
->  
->  #endif /* _TRACE_LOCK_H */
->  
-> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index 50036c10b518..08f8fb6a2d1e 100644
-> --- a/kernel/locking/lockdep.c
-> +++ b/kernel/locking/lockdep.c
-> @@ -60,7 +60,6 @@
->  
->  #include "lockdep_internals.h"
->  
-> -#define CREATE_TRACE_POINTS
->  #include <trace/events/lock.h>
->  
->  #ifdef CONFIG_PROVE_LOCKING
-> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-> index 5e3585950ec8..ee2fd7614a93 100644
-> --- a/kernel/locking/mutex.c
-> +++ b/kernel/locking/mutex.c
-> @@ -30,6 +30,9 @@
->  #include <linux/debug_locks.h>
->  #include <linux/osq_lock.h>
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/lock.h>
-> +
->  #ifndef CONFIG_PREEMPT_RT
->  #include "mutex.h"
->  
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
