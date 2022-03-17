@@ -2,69 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 787D6C433F5
-	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 13:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 830ADC433F5
+	for <bpf@archiver.kernel.org>; Thu, 17 Mar 2022 14:08:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiCQN5m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Mar 2022 09:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S234612AbiCQOJ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Mar 2022 10:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiCQN5l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Mar 2022 09:57:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED2E11CF77;
-        Thu, 17 Mar 2022 06:56:25 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KK7tl0p89zfYwD;
-        Thu, 17 Mar 2022 21:54:55 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Thu, 17 Mar
- 2022 21:56:23 +0800
-From:   Liu Jian <liujian56@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <sdf@google.com>,
-        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <liujian56@huawei.com>
-Subject: [PATCH bpf-next] net: Enlarge offset check value from 0xffff to 0x7fffffff in bpf_skb_load_bytes
-Date:   Thu, 17 Mar 2022 21:59:40 +0800
-Message-ID: <20220317135940.358774-1-liujian56@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S233793AbiCQOJ1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Mar 2022 10:09:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1F8103D9D;
+        Thu, 17 Mar 2022 07:08:09 -0700 (PDT)
+Received: from canpemm100009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KK87d00YczCqkF;
+        Thu, 17 Mar 2022 22:06:04 +0800 (CST)
+Received: from canpemm500010.china.huawei.com (7.192.105.118) by
+ canpemm100009.china.huawei.com (7.192.105.213) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 17 Mar 2022 22:08:04 +0800
+Received: from canpemm500010.china.huawei.com ([7.192.105.118]) by
+ canpemm500010.china.huawei.com ([7.192.105.118]) with mapi id 15.01.2308.021;
+ Thu, 17 Mar 2022 22:08:04 +0800
+From:   "liujian (CE)" <liujian56@huawei.com>
+To:     Stanislav Fomichev <sdf@google.com>
+CC:     John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "yhs@fb.com" <yhs@fb.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [PATCH bpf-next] net: Use skb->len to check the validity of the
+ parameters in bpf_skb_load_bytes
+Thread-Topic: [PATCH bpf-next] net: Use skb->len to check the validity of the
+ parameters in bpf_skb_load_bytes
+Thread-Index: AQHYOGk2O/XwDW4Ml0q7jRHCigZ/yqzAVx0AgADbdhD//6smgIABGg3Q//+g3wCAAgQ9QA==
+Date:   Thu, 17 Mar 2022 14:08:04 +0000
+Message-ID: <ed30a1fb4f8245568bb8f5c02cc19860@huawei.com>
+References: <20220315123916.110409-1-liujian56@huawei.com>
+ <20220315195822.sonic5avyizrufsv@kafai-mbp.dhcp.thefacebook.com>
+ <4f937ace70a3458580c6242fa68ea549@huawei.com>
+ <623160c966680_94df20819@john.notmuch>
+ <5cee2fb729624f168415d303cff4ee8f@huawei.com>
+ <CAKH8qBuBoyJqSEBX+2iG4b7C7tXPZUtVX6qZysrwddT3LE9ieg@mail.gmail.com>
+In-Reply-To: <CAKH8qBuBoyJqSEBX+2iG4b7C7tXPZUtVX6qZysrwddT3LE9ieg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.176.93]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The data length of skb frags + frag_list may be greater than 0xffff,
-and skb_header_pointer can not handle negative offset and negative len.
-So here 0x7ffffff is used to check the validity of offset and len.
-
-Fixes: 05c74e5e53f6 ("bpf: add bpf_skb_load_bytes helper")
-Signed-off-by: Liu Jian <liujian56@huawei.com>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 9eb785842258..236578e1b618 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1722,7 +1722,7 @@ BPF_CALL_4(bpf_skb_load_bytes, const struct sk_buff *, skb, u32, offset,
- {
- 	void *ptr;
- 
--	if (unlikely(offset > 0xffff))
-+	if (unlikely(offset > 0x7ffffffff || len > 0x7fffffff))
- 		goto err_clear;
- 
- 	ptr = skb_header_pointer(skb, offset, len, to);
--- 
-2.17.1
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU3RhbmlzbGF2IEZvbWlj
+aGV2IFttYWlsdG86c2RmQGdvb2dsZS5jb21dDQo+IFNlbnQ6IFdlZG5lc2RheSwgTWFyY2ggMTYs
+IDIwMjIgMTE6MDkgUE0NCj4gVG86IGxpdWppYW4gKENFKSA8bGl1amlhbjU2QGh1YXdlaS5jb20+
+DQo+IENjOiBKb2huIEZhc3RhYmVuZCA8am9obi5mYXN0YWJlbmRAZ21haWwuY29tPjsgTWFydGlu
+IEthRmFpIExhdQ0KPiA8a2FmYWlAZmIuY29tPjsgYXN0QGtlcm5lbC5vcmc7IGRhbmllbEBpb2dl
+YXJib3gubmV0OyBhbmRyaWlAa2VybmVsLm9yZzsNCj4gc29uZ2xpdWJyYXZpbmdAZmIuY29tOyB5
+aHNAZmIuY29tOyBrcHNpbmdoQGtlcm5lbC5vcmc7DQo+IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1
+YmFAa2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gYnBmQHZnZXIua2VybmVs
+Lm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIGJwZi1uZXh0XSBuZXQ6IFVzZSBza2ItPmxlbiB0
+byBjaGVjayB0aGUgdmFsaWRpdHkgb2YgdGhlDQo+IHBhcmFtZXRlcnMgaW4gYnBmX3NrYl9sb2Fk
+X2J5dGVzDQo+IA0KPiBPbiBXZWQsIE1hciAxNiwgMjAyMiBhdCA2OjA4IEFNIGxpdWppYW4gKENF
+KSA8bGl1amlhbjU2QGh1YXdlaS5jb20+IHdyb3RlOg0KPiA+DQo+ID4NCj4gPg0KPiA+ID4gLS0t
+LS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPiA+IEZyb206IEpvaG4gRmFzdGFiZW5kIFttYWls
+dG86am9obi5mYXN0YWJlbmRAZ21haWwuY29tXQ0KPiA+ID4gU2VudDogV2VkbmVzZGF5LCBNYXJj
+aCAxNiwgMjAyMiAxMjowMCBQTQ0KPiA+ID4gVG86IGxpdWppYW4gKENFKSA8bGl1amlhbjU2QGh1
+YXdlaS5jb20+OyBNYXJ0aW4gS2FGYWkgTGF1DQo+ID4gPiA8a2FmYWlAZmIuY29tPg0KPiA+ID4g
+Q2M6IGFzdEBrZXJuZWwub3JnOyBkYW5pZWxAaW9nZWFyYm94Lm5ldDsgYW5kcmlpQGtlcm5lbC5v
+cmc7DQo+ID4gPiBzb25nbGl1YnJhdmluZ0BmYi5jb207IHloc0BmYi5jb207IGpvaG4uZmFzdGFi
+ZW5kQGdtYWlsLmNvbTsNCj4gPiA+IGtwc2luZ2hAa2VybmVsLm9yZzsgZGF2ZW1AZGF2ZW1sb2Z0
+Lm5ldDsga3ViYUBrZXJuZWwub3JnOw0KPiA+ID4gc2RmQGdvb2dsZS5jb207IG5ldGRldkB2Z2Vy
+Lmtlcm5lbC5vcmc7IGJwZkB2Z2VyLmtlcm5lbC5vcmcNCj4gPiA+IFN1YmplY3Q6IFJFOiBbUEFU
+Q0ggYnBmLW5leHRdIG5ldDogVXNlIHNrYi0+bGVuIHRvIGNoZWNrIHRoZQ0KPiA+ID4gdmFsaWRp
+dHkgb2YgdGhlIHBhcmFtZXRlcnMgaW4gYnBmX3NrYl9sb2FkX2J5dGVzDQo+ID4gPg0KPiA+ID4g
+bGl1amlhbiAoQ0UpIHdyb3RlOg0KPiA+ID4gPg0KPiA+ID4gPg0KPiA+ID4gPiA+IC0tLS0tT3Jp
+Z2luYWwgTWVzc2FnZS0tLS0tDQo+ID4gPiA+ID4gRnJvbTogTWFydGluIEthRmFpIExhdSBbbWFp
+bHRvOmthZmFpQGZiLmNvbV0NCj4gPiA+ID4gPiBTZW50OiBXZWRuZXNkYXksIE1hcmNoIDE2LCAy
+MDIyIDM6NTggQU0NCj4gPiA+ID4gPiBUbzogbGl1amlhbiAoQ0UpIDxsaXVqaWFuNTZAaHVhd2Vp
+LmNvbT4NCj4gPiA+ID4gPiBDYzogYXN0QGtlcm5lbC5vcmc7IGRhbmllbEBpb2dlYXJib3gubmV0
+OyBhbmRyaWlAa2VybmVsLm9yZzsNCj4gPiA+ID4gPiBzb25nbGl1YnJhdmluZ0BmYi5jb207IHlo
+c0BmYi5jb207IGpvaG4uZmFzdGFiZW5kQGdtYWlsLmNvbTsNCj4gPiA+ID4gPiBrcHNpbmdoQGtl
+cm5lbC5vcmc7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1YmFAa2VybmVsLm9yZzsNCj4gPiA+ID4g
+PiBzZGZAZ29vZ2xlLmNvbTsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgYnBmQHZnZXIua2VybmVs
+Lm9yZw0KPiA+ID4gPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggYnBmLW5leHRdIG5ldDogVXNlIHNr
+Yi0+bGVuIHRvIGNoZWNrIHRoZQ0KPiA+ID4gPiA+IHZhbGlkaXR5IG9mIHRoZSBwYXJhbWV0ZXJz
+IGluIGJwZl9za2JfbG9hZF9ieXRlcw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gT24gVHVlLCBNYXIg
+MTUsIDIwMjIgYXQgMDg6Mzk6MTZQTSArMDgwMCwgTGl1IEppYW4gd3JvdGU6DQo+ID4gPiA+ID4g
+PiBUaGUgZGF0YSBsZW5ndGggb2Ygc2tiIGZyYWdzICsgZnJhZ19saXN0IG1heSBiZSBncmVhdGVy
+IHRoYW4NCj4gPiA+ID4gPiA+IDB4ZmZmZiwgc28gaGVyZSB1c2Ugc2tiLT5sZW4gdG8gY2hlY2sg
+dGhlIHZhbGlkaXR5IG9mIHRoZSBwYXJhbWV0ZXJzLg0KPiA+ID4gPiA+IFdoYXQgaXMgdGhlIHVz
+ZSBjYXNlIHRoYXQgbmVlZHMgdG8gbG9vayBiZXlvbmQgMHhmZmZmID8NCj4gPiA+DQo+ID4gPiA+
+IEkgdXNlIHNvY2ttYXAgd2l0aCBzdHJwYXJzZXIsIHRoZSBzdG0tPnN0cnAub2Zmc2V0ICh0aGUg
+YmVnaW4gb2YNCj4gPiA+ID4gb25lIGFwcGxpY2F0aW9uIGxheWVyIHByb3RvY29sIG1lc3NhZ2Up
+IG1heWJlIGJleW9uZCAweGZmZmYsIGJ1dCBpDQo+ID4gPiA+IG5lZWQgbG9hZCB0aGUgbWVzc2Fn
+ZSBoZWFkIHRvIGRvIHNvbWV0aGluZy4NCj4gPiA+DQo+ID4gPiBUaGlzIHdvdWxkIGV4cGxhaW4g
+c2tiX2xvYWRfYnl0ZXMgYnV0IG5vdCB0aGUgb3RoZXIgdHdvIHJpZ2h0PyBBbHNvDQo+ID4gPiBp
+ZiB3ZQ0KPiA+IFllcywgSSBqdXN0IHNlZSB0aGF0IHRoZXNlIHR3byBmdW5jdGlvbnMgaGF2ZSB0
+aGUgc2FtZSBqdWRnbWVudC4NCj4gPiA+IGFyZSBkb2luZyB0aGlzIHdoeSBub3QganVzdCByZW1v
+dmUgdGhvc2UgdHdvIGNoZWNrcyBpbg0KPiA+ID4gZmxvd19kaXNzZWN0b3JfbG9hZCgpIEkgdGhp
+bmsgc2tiX2hlYWRlcl9wb2ludGVyKCkgZG9lcyBkdXBsaWNhdGUNCj4gY2hlY2tzLg0KPiA+ID4g
+UGxlYXNlIGNoZWNrLg0KPiA+IFllcywgc2tiX2hlYWRlcl9wb2ludGVyKCkgaGF2ZSBjaGVja2Vk
+IGFzIGJlbG93LCBhbmQgSSB3aWxsIHNlbmQgdjIgdG8NCj4gcmVtb3ZlIDB4ZmZmZiBjaGVjay4N
+Cj4gPiAtLS0tc2tiX2hlYWRlcl9wb2ludGVyDQo+ID4gLS0tLS0tLS0gX19za2JfaGVhZGVyX3Bv
+aW50ZXINCj4gPiAtLS0tLS0tLS0tLS1za2JfY29weV9iaXRzDQo+ID4gLS0tLS0tLS0tLS0tLS0t
+LSBpZiAob2Zmc2V0ID4gKGludClza2ItPmxlbiAtIGxlbikNCj4gPiAtLS0tLS0tLS0tLS0tLS0t
+LS0tLWdvdG8gZmF1bHQ7DQo+ID4NCj4gPiBUaGFuayB5b3V+DQo+IA0KPiBEbyB3ZSBuZWVkIHRv
+IGhhdmUgYXQgbGVhc3QgIm9mZnNldCA8PSAweDdmZmZmZmZmIiBjaGVjaz8gSU9XLCBkbyB3ZSBu
+ZWVkDQo+IHRvIGVuZm9yY2UgdGhlIHVuc2lnbmVkbmVzcyBvZiB0aGUgb2Zmc2V0PyBPciBkb2Vz
+IHNrYl9oZWFkZXJfcG9pbnRlciBldA0KPiBhbGwgcHJvcGVybHkgd29yayB3aXRoIHRoZSBuZWdh
+dGl2ZSBvZmZzZXRzPw0KWWVzLCBza2JfaGVhZGVyX3BvaW50ZXIgY2FuIG5vdCBoYW5kbGUgdGhl
+IG5lZ2F0aXZlIG9mZnNldC4NCkkgc2VudCBhIG5ldyBwYXRjaC4gUGxlYXNlIGhlbHAgcmV2aWV3
+IGl0IGFnYWluLiBUaGFuayB5b3UuDQpodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2pl
+Y3QvbmV0ZGV2YnBmL3BhdGNoLzIwMjIwMzE3MTM1OTQwLjM1ODc3NC0xLWxpdWppYW41NkBodWF3
+ZWkuY29tLw0K
