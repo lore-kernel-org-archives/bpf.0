@@ -2,120 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13A95C433EF
-	for <bpf@archiver.kernel.org>; Fri, 18 Mar 2022 10:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED95C433EF
+	for <bpf@archiver.kernel.org>; Fri, 18 Mar 2022 10:24:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234929AbiCRKTq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Mar 2022 06:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S233444AbiCRK0A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Mar 2022 06:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbiCRKTp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Mar 2022 06:19:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796001FB518;
-        Fri, 18 Mar 2022 03:18:22 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KKg0f6BlmzfYnH;
-        Fri, 18 Mar 2022 18:16:50 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 18 Mar
- 2022 18:18:19 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next] bpf, arm64: sign return address for jited code
-Date:   Fri, 18 Mar 2022 06:29:36 -0400
-Message-ID: <20220318102936.838459-1-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232767AbiCRKZ7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Mar 2022 06:25:59 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2ED521A8AE;
+        Fri, 18 Mar 2022 03:24:39 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KKg7w1JLnzfYqx;
+        Fri, 18 Mar 2022 18:23:08 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 18 Mar 2022 18:24:37 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <ast@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <daniel@iogearbox.net>, <jakub@cloudflare.com>,
+        <lmb@cloudflare.com>, <davem@davemloft.net>, <kafai@fb.com>,
+        <dsahern@kernel.org>, <kuba@kernel.org>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <kpsingh@kernel.org>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Wang Yufen <wangyufen@huawei.com>
+Subject: [PATCH bpf-next] bpf, sockmap: Add sk_rmem_alloc check for tcp_bpf_ingress()
+Date:   Fri, 18 Mar 2022 18:42:22 +0800
+Message-ID: <20220318104222.1410625-1-wangyufen@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500010.china.huawei.com (7.192.105.118)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sign return address for jited code when the kernel is built with pointer
-authentication enabled.
+We use sk_msg to redirect with sock hash, like this:
 
-1. Sign lr with paciasp instruction before lr is pushed to stack. Since
-   paciasp acts like landing pads for function entry, no need to insert
-   bti instruction before paciasp.
+  skA   redirect    skB
+  Tx <----------->  Rx
 
-2. Authenticate lr with autiasp instruction after lr is poped from stack.
+And construct a scenario where the packet sending speed is high, the
+packet receiving speed is slow, so the packets are stacked in the ingress
+queue on the receiving side. After a period of time, the memory is
+exhausted and the system ooms.
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+To fix, we add sk_rmem_alloc while sk_msg queued in the ingress queue
+and subtract sk_rmem_alloc while sk_msg dequeued from the ingress queue
+and check sk_rmem_alloc at the beginning of bpf_tcp_ingress().
+
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 ---
- arch/arm64/net/bpf_jit.h      |  3 +++
- arch/arm64/net/bpf_jit_comp.c | 11 +++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ include/linux/skmsg.h | 9 ++++++---
+ net/core/skmsg.c      | 2 ++
+ net/ipv4/tcp_bpf.c    | 6 ++++++
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index dd59b5ad8fe4..679c80aa1f2e 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -249,6 +249,9 @@
- /* HINTs */
- #define A64_HINT(x) aarch64_insn_gen_hint(x)
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index c5a2d6f50f25..d2cfd5fa2274 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -308,9 +308,10 @@ static inline void sk_psock_queue_msg(struct sk_psock *psock,
+ 				      struct sk_msg *msg)
+ {
+ 	spin_lock_bh(&psock->ingress_lock);
+-	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
++	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
+ 		list_add_tail(&msg->list, &psock->ingress_msg);
+-	else {
++		atomic_add(msg->sg.size, &psock->sk->sk_rmem_alloc);
++	} else {
+ 		sk_msg_free(psock->sk, msg);
+ 		kfree(msg);
+ 	}
+@@ -323,8 +324,10 @@ static inline struct sk_msg *sk_psock_dequeue_msg(struct sk_psock *psock)
  
-+#define A64_PACIASP A64_HINT(AARCH64_INSN_HINT_PACIASP)
-+#define A64_AUTIASP A64_HINT(AARCH64_INSN_HINT_AUTIASP)
-+
- /* BTI */
- #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
- #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index e850c69e128c..5dcf45e5944e 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -192,7 +192,7 @@ static bool is_addsub_imm(u32 imm)
+ 	spin_lock_bh(&psock->ingress_lock);
+ 	msg = list_first_entry_or_null(&psock->ingress_msg, struct sk_msg, list);
+-	if (msg)
++	if (msg) {
+ 		list_del(&msg->list);
++		atomic_sub(msg->sg.size, &psock->sk->sk_rmem_alloc);
++	}
+ 	spin_unlock_bh(&psock->ingress_lock);
+ 	return msg;
  }
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index cc381165ea08..b19a3c49564f 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -445,6 +445,7 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 				if (!msg_rx->skb)
+ 					sk_mem_uncharge(sk, copy);
+ 				msg_rx->sg.size -= copy;
++				atomic_sub(copy, &sk->sk_rmem_alloc);
  
- /* Tail call offset to jump into */
--#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
-+#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
- #define PROLOGUE_OFFSET 8
- #else
- #define PROLOGUE_OFFSET 7
-@@ -233,8 +233,11 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	 *
- 	 */
+ 				if (!sge->length) {
+ 					sk_msg_iter_var_next(i);
+@@ -754,6 +755,7 @@ static void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
  
-+	/* Sign lr */
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
-+		emit(A64_PACIASP, ctx);
- 	/* BTI landing pad */
--	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
-+	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
- 		emit(A64_BTI_C, ctx);
+ 	list_for_each_entry_safe(msg, tmp, &psock->ingress_msg, list) {
+ 		list_del(&msg->list);
++		atomic_sub(msg->sg.size, &psock->sk->sk_rmem_alloc);
+ 		sk_msg_free(psock->sk, msg);
+ 		kfree(msg);
+ 	}
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 1cdcb4df0eb7..dd099875414c 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -24,6 +24,12 @@ static int bpf_tcp_ingress(struct sock *sk, struct sk_psock *psock,
+ 		return -ENOMEM;
  
- 	/* Save FP and LR registers to stay align with ARM64 AAPCS */
-@@ -529,6 +532,10 @@ static void build_epilogue(struct jit_ctx *ctx)
- 	/* Set return value */
- 	emit(A64_MOV(1, A64_R(0), r0), ctx);
- 
-+	/* Authenticate lr */
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
-+		emit(A64_AUTIASP, ctx);
+ 	lock_sock(sk);
++	if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf) {
++		release_sock(sk);
++		kfree(tmp);
++		return -EAGAIN;
++	}
 +
- 	emit(A64_RET(A64_LR), ctx);
- }
- 
+ 	tmp->sg.start = msg->sg.start;
+ 	i = msg->sg.start;
+ 	do {
 -- 
-2.30.2
+2.25.1
 
