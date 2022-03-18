@@ -2,85 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CC0EC433EF
-	for <bpf@archiver.kernel.org>; Fri, 18 Mar 2022 06:20:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 531CFC433F5
+	for <bpf@archiver.kernel.org>; Fri, 18 Mar 2022 09:08:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiCRGVb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Mar 2022 02:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S232488AbiCRJJs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Mar 2022 05:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiCRGVa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Mar 2022 02:21:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06AC17A2D6
-        for <bpf@vger.kernel.org>; Thu, 17 Mar 2022 23:20:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 198B6618F9
-        for <bpf@vger.kernel.org>; Fri, 18 Mar 2022 06:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 737A9C340EF;
-        Fri, 18 Mar 2022 06:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647584411;
-        bh=F1zCsghJueQMsFW5GEBOBU6YU5BLEIPD8aMfsq6ECwY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qJGenAUQ3rlAh3svAjviDUaIaGedEnB2UwO54Ca6gViy4z6uI6d4uj7xgKceH3sfF
-         fIbospnsPIRdnF6bjQEIpTvHLGg6o3Y0RLm3w/fGya8S6KK1pPuzLPXtNhZf6ovGQD
-         h/sLGj6J/nbbA0/HdlNwrA0pDh4AXbATLyHB5QF5trEBRIUcLz/ilLAEfTeaHoL4pF
-         EXaEYRdEVKtj0fFbphjBJTxnU4oBBuu+ejA2+Aq7gVtHKqmYqengMijs80aaJ/W4H/
-         J1CS/TG3TiZuX7mRag9smJEx7HtB4TfvRVIjFQP0vgWThmC/4jDcRhdaYZ6NqfjcQA
-         PAv8kWcOFdE+A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58800E6D44B;
-        Fri, 18 Mar 2022 06:20:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229497AbiCRJJr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Mar 2022 05:09:47 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79966F05;
+        Fri, 18 Mar 2022 02:08:27 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id l1-20020a05600c4f0100b00389645443d2so4483541wmq.2;
+        Fri, 18 Mar 2022 02:08:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=H57joah6JRzSVyTYQU9KgsPj7jpKF/h05WJs7NLLPns=;
+        b=U03bJzQT0bJEJexS9V+NX2I4JCuYr9aZlksheW/sF/hJzk4knck8d4PTQg/42l5M+j
+         8BI94ADqtc8LYVbhYyQf4WfPjF8JeKZbV9CLpHOuumRXb47Imnpg+UlGjFqYhIZTrazR
+         IQYWLCJSe66umM+bPfz0Xc1Ykzkxs2SmWHVqsXxa1dELbg8qaGU8FCnEc3SFJsBAhgMw
+         K4znPLSc9pu2I33NibQYseyJyttB7ARdDJkL8tXMBNJV/EytZxCSX65ym3JCf9NGfY3y
+         6vJKvTsPLrOwFmEld8bJnusWw/inq0z8v+PFQEneVo58AGh5oHPCXgJg8XcG1zOYeRDN
+         8sxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=H57joah6JRzSVyTYQU9KgsPj7jpKF/h05WJs7NLLPns=;
+        b=GINRlbppYgmK6EITmFkOAtPjaKR+37xQjTApNladPYzqOLTpyIk9CPmgM/XHbPdFOm
+         Oh6p0AaWLTz10Fsa7hfI7pNeYaUhnn3PDbk2+cx8T/2JIEB4GWIR6gZOEVFIjeeUS5fP
+         iE1u6bSO704ogotRWclG/i5fDmOsGfr45VNakaE4N40Vw8zWRonBWENvKBLiTM4L5xVW
+         Fsv/iMMvO2c9i/KqDhfXO2l5m7TzBuZ8Mz6XmTH/Bagak4ZaBsfGsBOxxRjtQFoN3rgc
+         VlEIXl32W43xIl2Jxhx3BRxNDLDsNejoMIhPLmg3cSQqH0Cwwg2Y4vmWK0MOuBKJSddM
+         cKBQ==
+X-Gm-Message-State: AOAM532cFi6JindYKWD2MxK8gFxg6MOZBRryGaAN1/S6MRmGJpcIgvcT
+        ewZZii4dWWuKGJlCQqFnTHY=
+X-Google-Smtp-Source: ABdhPJyZpRyr27HrecJoZkWPMBKFOa8W8tfobGxLHZGSFQNbA8X4Lb6U+1YvSx4S1Ed2kH+HTiNoYQ==
+X-Received: by 2002:a05:600c:1e1f:b0:38b:d7ea:99b9 with SMTP id ay31-20020a05600c1e1f00b0038bd7ea99b9mr7345798wmb.8.1647594505926;
+        Fri, 18 Mar 2022 02:08:25 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id f8-20020adfb608000000b0020229d72a4esm5686171wre.38.2022.03.18.02.08.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Mar 2022 02:08:25 -0700 (PDT)
+Date:   Fri, 18 Mar 2022 10:08:22 +0100
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCHv3 bpf-next 09/13] libbpf: Add
+ bpf_program__attach_kprobe_multi_opts function
+Message-ID: <YjRMBmmKN47G8iQ0@krava>
+References: <20220316122419.933957-1-jolsa@kernel.org>
+ <20220316122419.933957-10-jolsa@kernel.org>
+ <CAADnVQ+tNLEtbPY+=sZSoBicdSTx1YLgZJwnNuhnBkUcr5xozQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/5] Subskeleton support for BPF libraries
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164758441135.25738.7426516446576821597.git-patchwork-notify@kernel.org>
-Date:   Fri, 18 Mar 2022 06:20:11 +0000
-References: <cover.1647473511.git.delyank@fb.com>
-In-Reply-To: <cover.1647473511.git.delyank@fb.com>
-To:     Delyan Kratunov <delyank@fb.com>
-Cc:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
-        bpf@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+tNLEtbPY+=sZSoBicdSTx1YLgZJwnNuhnBkUcr5xozQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Wed, 16 Mar 2022 23:37:26 +0000 you wrote:
-> In the quest for ever more modularity, a new need has arisen - the ability to
-> access data associated with a BPF library from a corresponding userspace library.
-> The catch is that we don't want the userspace library to know about the structure of the
-> final BPF object that the BPF library is linked into.
+On Thu, Mar 17, 2022 at 08:53:15PM -0700, Alexei Starovoitov wrote:
+> On Wed, Mar 16, 2022 at 5:26 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > +
+> > +struct bpf_link *
+> > +bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
+> > +                                     const char *pattern,
+> > +                                     const struct bpf_kprobe_multi_opts *opts)
+> > +{
+> > +       LIBBPF_OPTS(bpf_link_create_opts, lopts);
+> > +       struct kprobe_multi_resolve res = {
+> > +               .pattern = pattern,
+> > +       };
+> > +       struct bpf_link *link = NULL;
+> > +       char errmsg[STRERR_BUFSIZE];
+> > +       const unsigned long *addrs;
+> > +       int err, link_fd, prog_fd;
+> > +       const __u64 *cookies;
+> > +       const char **syms;
+> > +       bool retprobe;
+> > +       size_t cnt;
+> > +
+> > +       if (!OPTS_VALID(opts, bpf_kprobe_multi_opts))
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +
+> > +       syms    = OPTS_GET(opts, syms, false);
+> > +       addrs   = OPTS_GET(opts, addrs, false);
+> > +       cnt     = OPTS_GET(opts, cnt, false);
+> > +       cookies = OPTS_GET(opts, cookies, false);
+> > +
+> > +       if (!pattern && !addrs && !syms)
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +       if (pattern && (addrs || syms || cookies || cnt))
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +       if (!pattern && !cnt)
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +       if (addrs && syms)
+> > +               return libbpf_err_ptr(-EINVAL);
+> > +
+> > +       if (pattern) {
+> > +               err = libbpf_kallsyms_parse(resolve_kprobe_multi_cb, &res);
+> > +               if (err)
+> > +                       goto error;
+> > +               if (!res.cnt) {
+> > +                       err = -ENOENT;
+> > +                       goto error;
+> > +               }
+> > +               addrs = res.addrs;
+> > +               cnt = res.cnt;
+> > +       }
 > 
-> In pursuit of this modularity, this patch series introduces *subskeletons.*
-> Subskeletons are similar in use and design to skeletons with a couple of differences:
+> Thanks Jiri.
+> Great stuff and a major milestone!
+> I've applied Masami's and your patches to bpf-next.
+
+great, thanks
+
 > 
-> [...]
+> But the above needs more work.
+> Currently test_progs -t kprobe_multi
+> takes 4 seconds on lockdep+debug kernel.
+> Mainly because of the above loop.
+> 
+>     18.05%  test_progs       [kernel.kallsyms]   [k]
+> kallsyms_expand_symbol.constprop.4
+>     12.53%  test_progs       libc-2.28.so        [.] _IO_vfscanf
+>      6.31%  test_progs       [kernel.kallsyms]   [k] number
+>      4.66%  test_progs       [kernel.kallsyms]   [k] format_decode
+>      4.65%  test_progs       [kernel.kallsyms]   [k] string_nocheck
+> 
+> Single test_skel_api() subtest takes almost a second.
 
-Here is the summary with links:
-  - [bpf-next,v4,1/5] libbpf: .text routines are subprograms in strict mode
-    https://git.kernel.org/bpf/bpf-next/c/bc380eb9d048
-  - [bpf-next,v4,4/5] bpftool: add support for subskeletons
-    https://git.kernel.org/bpf/bpf-next/c/00389c58ffe9
-  - [bpf-next,v4,2/5] libbpf: init btf_{key,value}_type_id on internal map open
-    https://git.kernel.org/bpf/bpf-next/c/262cfb74ffda
-  - [bpf-next,v4,5/5] selftests/bpf: test subskeleton functionality
-    https://git.kernel.org/bpf/bpf-next/c/3cccbaa03321
-  - [bpf-next,v4,3/5] libbpf: add subskeleton scaffolding
-    https://git.kernel.org/bpf/bpf-next/c/430025e5dca5
+hm, I'll check on lockdep+debug kernel.. I think this test
+should be going through kallsyms just once, will check
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+anyway libbpf_kallsyms_parse could use ksym_get_addr, which is
+now cached
 
+> 
+> A cache inside libbpf probably won't help.
+> Maybe introduce a bpf iterator for kallsyms?
+> 
+> On the kernel side kprobe_multi_resolve_syms() looks similarly inefficient.
+> I'm not sure whether it would be a bottle neck though.
+> 
+> Orthogonal to this issue please add a new stress test
+> to selftest/bpf that attaches to a lot of functions.
 
+ok, will add that
+
+thanks,
+jirka
