@@ -2,142 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF1D1C433F5
-	for <bpf@archiver.kernel.org>; Fri, 18 Mar 2022 02:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DEC0C433FE
+	for <bpf@archiver.kernel.org>; Fri, 18 Mar 2022 03:50:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbiCRCI7 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 17 Mar 2022 22:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S232260AbiCRDvg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Mar 2022 23:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231696AbiCRCI7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Mar 2022 22:08:59 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68E201770A1
-        for <bpf@vger.kernel.org>; Thu, 17 Mar 2022 19:07:41 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-138-muips4pANZGvgD4JdOOjog-1; Fri, 18 Mar 2022 02:07:38 +0000
-X-MC-Unique: muips4pANZGvgD4JdOOjog-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 18 Mar 2022 02:07:37 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 18 Mar 2022 02:07:37 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Peter Zijlstra' <peterz@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        X86 ML <x86@kernel.org>,
-        "joao@overdrivepizza.com" <joao@overdrivepizza.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "alyssa.milburn@intel.com" <alyssa.milburn@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: RE: [PATCH v4 00/45] x86: Kernel IBT
-Thread-Topic: [PATCH v4 00/45] x86: Kernel IBT
-Thread-Index: AQHYOjfxkjA80HyQbUOAw96zl/91g6zEYw+g
-Date:   Fri, 18 Mar 2022 02:07:37 +0000
-Message-ID: <260c9402b6d647a39b4a5cf51024963d@AcuMS.aculab.com>
-References: <YioBZmicMj7aAlLf@hirez.programming.kicks-ass.net>
- <YionV0+v/cUBiOh0@hirez.programming.kicks-ass.net>
- <YisnG9lW6kp8lBp3@hirez.programming.kicks-ass.net>
- <CAADnVQJfffD9tH_cWThktCCwXeoRV1XLZq69rKK5vKy_y6BN8A@mail.gmail.com>
- <20220312154407.GF28057@worktop.programming.kicks-ass.net>
- <CAADnVQL7xrafAviUJg47LfvFSJpgZLwyP18Bm3S_KQwRyOpheQ@mail.gmail.com>
- <20220313085214.GK28057@worktop.programming.kicks-ass.net>
- <Yi9YOdn5Nbq9BBwd@hirez.programming.kicks-ass.net>
- <20220315081522.GA8939@worktop.programming.kicks-ass.net>
- <CAK7LNAReAKXT97NHEnC-1UXozdcPdYNHR55knNRDatJr_GqrrA@mail.gmail.com>
- <YjOPrwZSEYR96/5D@hirez.programming.kicks-ass.net>
-In-Reply-To: <YjOPrwZSEYR96/5D@hirez.programming.kicks-ass.net>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S232046AbiCRDvf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Mar 2022 23:51:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8F12A1E86;
+        Thu, 17 Mar 2022 20:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F0E1617D0;
+        Fri, 18 Mar 2022 03:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DD85BC340EF;
+        Fri, 18 Mar 2022 03:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647575417;
+        bh=Uww6/9D2y4nrBnsntLSUJMYy+n/up9CmgOV1aFDe+/Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=dOv/Uujl9pEJcAqB+LODtHpJLJ80rxhJeDXwyrL9JTkTVz14Umc0lowWy421cDpAo
+         Hj/dH7hksmsbKo6HaZ10YjT2YXDANizwe57mdiWiZU1jjI/A9CBt4/Vz4cQqQg4Ee3
+         JbxqLcEZFQIw4zO9AtV/S+jAGhUTKMIXJFGdxcsEYrsXxqwsqQp10Cs2ouGoZ8+xdr
+         gZvtbVSYpVMJb+Woczqqmd/DZSiIdCjcoVYTFNN8E/6VO2BM8RwXbCPXR1xe5qh72U
+         +In97hQSh8/xWOGxQmTL1JXfqUwrn0M9kayGy8U6b3NvTDrk8eCh+K+HFX6635V+xp
+         x6kH4Ilo+Ajog==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BA1F9F03841;
+        Fri, 18 Mar 2022 03:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v12 bpf-next 00/12] fprobe: Introduce fprobe function
+ entry/exit probe
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164757541675.26179.17727138330733641017.git-patchwork-notify@kernel.org>
+Date:   Fri, 18 Mar 2022 03:50:16 +0000
+References: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+In-Reply-To: <164735281449.1084943.12438881786173547153.stgit@devnote2>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     jolsa@kernel.org, ast@kernel.org, andrii.nakryiko@gmail.com,
+        daniel@iogearbox.net, andrii@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, rostedt@goodmis.org,
+        naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Peter Zijlstra
-> Sent: 17 March 2022 19:45
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Tue, 15 Mar 2022 23:00:14 +0900 you wrote:
+> Hi,
 > 
-> On Wed, Mar 16, 2022 at 01:28:08AM +0900, Masahiro Yamada wrote:
-> > On Tue, Mar 15, 2022 at 5:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> Here is the 12th version of fprobe. This version fixes a possible gcc-11 issue which
+> was reported as kretprobes on arm issue, and also I updated the fprobe document.
 > 
-> > > Index: linux-2.6/scripts/Makefile.build
-> > > ===================================================================
-> > > --- linux-2.6.orig/scripts/Makefile.build
-> > > +++ linux-2.6/scripts/Makefile.build
-> > > @@ -86,12 +86,18 @@ ifdef need-builtin
-> > >  targets-for-builtin += $(obj)/built-in.a
-> > >  endif
-> > >
-> > > -targets-for-modules := $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
-> > > +targets-for-modules :=
-> >
-> >
-> > Why do you need to change this line?
-> >
-> >
-> >
-> > >
-> > >  ifdef CONFIG_LTO_CLANG
-> > >  targets-for-modules += $(patsubst %.o, %.lto.o, $(filter %.o, $(obj-m)))
-> > >  endif
-> > >
-> > > +ifdef CONFIG_X86_KERNEL_IBT
-> > > +targets-for-modules += $(patsubst %.o, %.objtool, $(filter %.o, $(obj-m)))
-> > > +endif
-> > > +
-> > > +targets-for-modules += $(patsubst %.o, %.mod, $(filter %.o, $(obj-m)))
-> > > +
-> > >  ifdef need-modorder
-> > >  targets-for-modules += $(obj)/modules.order
-> > >  endif
+> The previous version (v11) is here[1];
 > 
-> The thinking was that by having the .objtool rule before the .mod rule,
-> objtool runs first. If mod runs before objtool, objtool will change the
-> timestamp and then mod will get remade, even if nothing's changed.
+> [...]
 
-I don't think it should make any difference.
-A quick peruse didn't show where targets-for-modules actually
-ends up being used (after being added to targets).
-But in a makefile, if you have:
+Here is the summary with links:
+  - [v12,bpf-next,01/12] ftrace: Add ftrace_set_filter_ips function
+    https://git.kernel.org/bpf/bpf-next/c/4f554e955614
+  - [v12,bpf-next,02/12] fprobe: Add ftrace based probe APIs
+    https://git.kernel.org/bpf/bpf-next/c/cad9931f64dc
+  - [v12,bpf-next,03/12] rethook: Add a generic return hook
+    https://git.kernel.org/bpf/bpf-next/c/54ecbe6f1ed5
+  - [v12,bpf-next,04/12] rethook: x86: Add rethook x86 implementation
+    https://git.kernel.org/bpf/bpf-next/c/75caf33eda24
+  - [v12,bpf-next,05/12] arm64: rethook: Add arm64 rethook implementation
+    https://git.kernel.org/bpf/bpf-next/c/83acdce68949
+  - [v12,bpf-next,06/12] powerpc: Add rethook support
+    https://git.kernel.org/bpf/bpf-next/c/02752bd99dc2
+  - [v12,bpf-next,07/12] ARM: rethook: Add rethook arm implementation
+    https://git.kernel.org/bpf/bpf-next/c/515a49173b80
+  - [v12,bpf-next,08/12] fprobe: Add exit_handler support
+    https://git.kernel.org/bpf/bpf-next/c/5b0ab78998e3
+  - [v12,bpf-next,09/12] fprobe: Add sample program for fprobe
+    https://git.kernel.org/bpf/bpf-next/c/6ee64cc3020b
+  - [v12,bpf-next,10/12] fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+    https://git.kernel.org/bpf/bpf-next/c/ab51e15d535e
+  - [v12,bpf-next,11/12] docs: fprobe: Add fprobe description to ftrace-use.rst
+    https://git.kernel.org/bpf/bpf-next/c/aba09b44a985
+  - [v12,bpf-next,12/12] fprobe: Add a selftest for fprobe
+    https://git.kernel.org/bpf/bpf-next/c/f4616fabab39
 
-x: a b
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-nothing requires make to generate 'a' before or after 'b'.
-gmake might have something similar to nmake's .ORDER directive
-but I don't remember seeing it defined anywhere.
-You can add 'b: a' to force the order (which is how .ORDER
-ends up being implemented).
-But I didn't spot anything of that nature.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
