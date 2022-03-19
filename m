@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 620DEC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71586C4332F
 	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243704AbiCSRcX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 13:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243683AbiCSRcV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S243552AbiCSRcV (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 19 Mar 2022 13:32:21 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC52845ADC;
-        Sat, 19 Mar 2022 10:30:53 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id b8so9842126pjb.4;
-        Sat, 19 Mar 2022 10:30:53 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243429AbiCSRcL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 13:32:11 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E104552B;
+        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so7230301pjm.0;
+        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qHQu4l0DNA359MKDX3wgS7bak31X8wuVL1Qxy9vcN30=;
-        b=aVlQw/X30t3guhPlzexjfi4ZuV1qG2ftDBMaM2cxYxqwAi3vbYD6Qvz749eSnnmN3I
-         dcjSrNHmbXjAqWtWH9tlty2IMJT5ilANT557Z9fyWcqL3VhW8p+AWj02tlbZx2cPrTVs
-         b1ipu9ey3X/BQRhLYasrQJrjczm7Qpmz3cCvBHfN8DtM/l5g0NO1OCC7+VT+o5NJ9HcD
-         FW2ZjEo7o8iZXK9cbz6wNQ+H4kITaPS7gbBuVDOIm5JLoDEbKsZMAthE037au1hACQBN
-         kATbhDZARdTdhdL0FTjfcGN0oNMFTSTSZqrbMuUJc6K4XFgMwQEKQ8PAzDUSE+aqN1U1
-         XiRQ==
+        bh=tlUVvnpalHf+NQDEGRuVRqs1mWkMR7ChiLJEV3o+2Gs=;
+        b=b+0WOzv5QB5+n/S20HOa2mzV0FPpHcvm5Mx9dRPMPi7QXc74QJdQSxv7OA8ZqCgIiK
+         iBpzwwFyifkOo5bTzlngp0xZ3JGhEx9QkudeAMe0+40BuN5YHkTzX2v3ZX9a0EfZl2aW
+         8Tqci4BTDrs36dy2i6vFKfuL8bfCcDESXEQA6ypm5CkAgDotEzGaU0ENq0rrVBTIypOU
+         R0FagYGZDwo0mw7n/YF6JJ7hUhpLf406llT0/cbYv2YXgZA4uwFG2lLa60lFtirQn7Ja
+         hLmQascreXw/6d3tZzPiP5rSkjByzIFCDTYKYiC3NWfGxzlTOzmOTGistXW2i1CCmARZ
+         vh9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qHQu4l0DNA359MKDX3wgS7bak31X8wuVL1Qxy9vcN30=;
-        b=1kKUSuEIBEri2WuLOsrtKm710NPF3xUsbNafiTV+CVzZPsLsQ8x+2uH3cttHl32XPk
-         4CrsIYelW1Qv1VI1Tt1By59hAnxoTcDGaDlZEkFkbAffkZWPWOEc59ZSkM3c4rrG8V04
-         yj9oSDSSvY8Y9o7JUqI+e6iCS3esG1gIGnijtRySEDJ3s4qLYs7u3Y67cc3/83nTwQAY
-         7UmT+//Q+W3DGhCFpWyXOPnUrCMOWzjg+Ucs4k2TdEMUvbegKQH/oUaYU3SCcAhJ/NRS
-         38QXWlRxNME9kJFm637ONboXRjANDcdjYnGbz1ohEKBWtaGIbN0VU+M9iWDH5xkoIF7j
-         6X2Q==
-X-Gm-Message-State: AOAM532CQb/VFS5CefiXp/3uO8Xozw16/QOditIROZz79oGiXuJVQtYA
-        tEoIBWdEfglqWmtehVnMfw95sZkR4r1somi7sgU=
-X-Google-Smtp-Source: ABdhPJxbI/bKQUsvIS+pdtOIBg2Ba5EngaSH06pOcvVbNR2cQU79iWIhoSG40JbwcKqwIDkohnV3Ig==
-X-Received: by 2002:a17:903:230c:b0:151:93d0:5608 with SMTP id d12-20020a170903230c00b0015193d05608mr5013516plh.167.1647711053379;
-        Sat, 19 Mar 2022 10:30:53 -0700 (PDT)
+        bh=tlUVvnpalHf+NQDEGRuVRqs1mWkMR7ChiLJEV3o+2Gs=;
+        b=rd5vu5cuR5CdYHbb3wSTNOhmwP+lZH1KHFtQNxcxgNH79SRyzp+5TgaZ14ekkcEWqs
+         A+VVUQ4W72AZeC85AIh5KSkPUlMkNPrFmDQsSup6NH0cHN6mVeeaGQzUXQTm11WTE1Sg
+         5CUsqg4M58S2kwkmDblnaMbnybAieqN0n231sPSZCqhPFCSTW2W1RPVJxp2f4sZfeSp7
+         hVt3mJSsfCDdgbuX2xgwXHrIWnRxyt0IENuOZX0oq0VcjugD7iD1FnBsD9IBQSo/gS4L
+         24BYxK/5MTIE5Ahwc2R0sq+1trkWCw6+rN54x8JPcea2rsWCVuZNK1qF8Bx7xNG9Hqf3
+         QfxQ==
+X-Gm-Message-State: AOAM530Hb0rNG1U2wISbhQUqNm6p941PguE0oRQ12wi5yykCS2Amg3Lo
+        RCocWVX3Dylprh5KAB212ZY=
+X-Google-Smtp-Source: ABdhPJwJRkOwuhK3vq0vx0S4/e1H1jq1fI2TUfzFUYVOzgYTg/Db5VgKFU+zPydyVvPXiNi64ge4+Q==
+X-Received: by 2002:a17:902:be18:b0:153:2444:9c1a with SMTP id r24-20020a170902be1800b0015324449c1amr5212078pls.152.1647711047452;
+        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:4ab8:5400:3ff:fee9:a154])
-        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.52
+        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 10:30:52 -0700 (PDT)
+        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     roman.gushchin@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH 10/14] bpf: Only sys admin can set no charge flag for bpf prog
-Date:   Sat, 19 Mar 2022 17:30:32 +0000
-Message-Id: <20220319173036.23352-11-laoar.shao@gmail.com>
+Subject: [PATCH 06/14] bpf: Allow no charge for allocation not at map creation time
+Date:   Sat, 19 Mar 2022 17:30:28 +0000
+Message-Id: <20220319173036.23352-7-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
 References: <20220319173036.23352-1-laoar.shao@gmail.com>
@@ -65,29 +65,53 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a bpf prog is loaded by a proccess running in a container (with memcg),
-only sys admin has privilege not to charge bpf prog memory into this
-container while account it to root memcg only.
+Below three functions are used for memory allocation which is not at
+map creation time,
+  - bpf_map_kmalloc_node()
+  - bpf_map_kzalloc()
+  - bpf_map_alloc_percpu()
+
+For this kind of path, we can get the no charge flag from bpf_map
+struct we set before.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/bpf/syscall.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/bpf/syscall.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 346f3df9fa1d..ecc5de216f50 100644
+index add3b4045b4d..e84aeefa05f4 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -2234,6 +2234,9 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 				 BPF_F_PROG_NO_CHARGE))
- 		return -EINVAL;
+@@ -434,7 +434,8 @@ void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
+ 	void *ptr;
  
-+	if (attr->prog_flags & BPF_F_PROG_NO_CHARGE && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
- 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
- 	    (attr->prog_flags & BPF_F_ANY_ALIGNMENT) &&
- 	    !bpf_capable())
+ 	old_memcg = set_active_memcg(map->memcg);
+-	ptr = kmalloc_node(size, flags | __GFP_ACCOUNT, node);
++	ptr = kmalloc_node(size, bpf_flags_no_charge(flags, map->no_charge),
++			node);
+ 	set_active_memcg(old_memcg);
+ 
+ 	return ptr;
+@@ -446,7 +447,7 @@ void *bpf_map_kzalloc(const struct bpf_map *map, size_t size, gfp_t flags)
+ 	void *ptr;
+ 
+ 	old_memcg = set_active_memcg(map->memcg);
+-	ptr = kzalloc(size, flags | __GFP_ACCOUNT);
++	ptr = kzalloc(size, bpf_flags_no_charge(flags, map->no_charge));
+ 	set_active_memcg(old_memcg);
+ 
+ 	return ptr;
+@@ -459,7 +460,8 @@ void __percpu *bpf_map_alloc_percpu(const struct bpf_map *map, size_t size,
+ 	void __percpu *ptr;
+ 
+ 	old_memcg = set_active_memcg(map->memcg);
+-	ptr = __alloc_percpu_gfp(size, align, flags | __GFP_ACCOUNT);
++	ptr = __alloc_percpu_gfp(size, align,
++			bpf_flags_no_charge(flags, map->no_charge));
+ 	set_active_memcg(old_memcg);
+ 
+ 	return ptr;
 -- 
 2.17.1
 
