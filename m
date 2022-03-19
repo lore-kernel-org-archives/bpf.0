@@ -2,48 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D329C4332F
-	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 18:34:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45C69C433F5
+	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 18:34:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243925AbiCSSfV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 14:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
+        id S243943AbiCSSf3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Mar 2022 14:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243919AbiCSSfV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Mar 2022 14:35:21 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA32986E5
-        for <bpf@vger.kernel.org>; Sat, 19 Mar 2022 11:34:00 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id o6so15147638ljp.3
-        for <bpf@vger.kernel.org>; Sat, 19 Mar 2022 11:33:59 -0700 (PDT)
+        with ESMTP id S243927AbiCSSfX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 14:35:23 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B952986F2
+        for <bpf@vger.kernel.org>; Sat, 19 Mar 2022 11:34:02 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id g24so13917978lja.7
+        for <bpf@vger.kernel.org>; Sat, 19 Mar 2022 11:34:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mtXczsu2C3JoPkHJLZN7LlmBti2ryIONYAmzdT/tcu0=;
-        b=o+ubH51Aik2rVUR4EZJvtiL4v0D9wqLfUTqk/qtyuuqxeuURWuzqqKsM1dnGF1WiI2
-         UucAEuxPIF4SpMVrL746HLilekL+7K5qyx1vm/UyEnMt3HRzSYPLMnBgEF5DKjyxMZiH
-         127LQ5ZryPvsaiBSUQfyJK2JrDJI9HIUvYfcM=
+        bh=HJf9hjmlU8ooiir4NWlBaONurfCvBP7drmCxAIcE+pM=;
+        b=VLqU3oFb2kAvIf18xDmAfaYRL66Xl/BNJCKWKUmIpbbLFfs7X0XbDfqXKYZGgdBGq1
+         YNyagsngccVrEPRWm0w2l6TUhF4Wpqn5osbedBU99T6eSOPQHsZkhRxbdqsMwaxF1c3n
+         Il4K7gAKMKSLhEiRr8fQnYguRGmIgU9QVKGVc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mtXczsu2C3JoPkHJLZN7LlmBti2ryIONYAmzdT/tcu0=;
-        b=3hHqvEDU/UJd0VvyijtAeg/uuvV00cQDdcjcgo3+q6ntpeLFZsEkAB9d5/Dpypldf8
-         C82Xt7B3gN2ehqK5gL8VCC/bSh/3uJf/jLhSpZ0nGz5afoznAQajsMtknQp92yYWoccW
-         8JjMgsm9i8pqzcZVC5+cNUv3/mGojeJVeA8fxpqk3GgjJyF91NFdhKj5gox8lC2PLEDq
-         eMsCwGWsoYsl+rRsrCdDv9KlcLO5zMdNxAN6BDsxGHYvryWJit8jvJxX9UlzMxQQco69
-         77eqglv3heZuwgLDIeMpg3HtXQ6GchqmralatEL/MUVcEObMdMCsA+KyaWlzAqYmPgK2
-         fvLw==
-X-Gm-Message-State: AOAM533+7qSRzgcGGg0VEVC48faCjb2BWtVhthKn3A8Zz9/aTarr650t
-        As0bPwgwtQOa4l/UueXfW8Qce+TUoVoTZA==
-X-Google-Smtp-Source: ABdhPJyPIZKJLSrkwjM+FnzlSWFECMSGT98UgehV41rJMi/pH211+ek/qSFrnGx3EHajc3KS4M72wQ==
-X-Received: by 2002:a2e:a236:0:b0:249:2a4b:16f5 with SMTP id i22-20020a2ea236000000b002492a4b16f5mr9757845ljm.384.1647714838158;
-        Sat, 19 Mar 2022 11:33:58 -0700 (PDT)
+        bh=HJf9hjmlU8ooiir4NWlBaONurfCvBP7drmCxAIcE+pM=;
+        b=NUEkVDHaJ8VqPeggpGDRnz+NRBmWfK10Q2u6lAUL1EzM8MQgMtw0R6VBMDfi15ihGA
+         uszocPC+JvrB+jQg3Ao1KwtO+zLJI03KgoBFV/OQ9wHBBTijy7h0FDek/jGPJGF+5Dzc
+         QmiJj5y8oUwayoZcNgLTpuhUJ/CUyOxlhzZJPCssHHpKXtmZgHolUZMmwz1dn2owWFCW
+         6GCDIHgl7jYJHWn5pIPaF4+tm30MetFsQzRR73SsxZgccT8CqKEFzJVcKKe8+VIWVd3b
+         c7sVNuJWzRH/McrY2kVjN+ysuypntgEHDFBfGx/qTltFTKp81tTaJNUgMBD+JULe3vJ9
+         pYzA==
+X-Gm-Message-State: AOAM531iqBYZ6L+jCmXFVMRW4Kgp3r3y5QRuNJz5Tja6jIYIrdBYg3iG
+        MiB5R12O04e4nrl9uTLvsV7yoRpIZHbc2w==
+X-Google-Smtp-Source: ABdhPJwdknscv6JyO7SeEx1hBY9N4iMvMM/MkGLNDngTm3RU8c3ZnAJludotXKO926Rc3568NUTX3A==
+X-Received: by 2002:a2e:9e4b:0:b0:247:e9f3:2eda with SMTP id g11-20020a2e9e4b000000b00247e9f32edamr10021412ljk.378.1647714840178;
+        Sat, 19 Mar 2022 11:34:00 -0700 (PDT)
 Received: from cloudflare.com ([2a01:110f:4809:d800::f9c])
-        by smtp.gmail.com with ESMTPSA id f9-20020a2e3809000000b002491885098dsm1585676lja.74.2022.03.19.11.33.57
+        by smtp.gmail.com with ESMTPSA id k7-20020ac257c7000000b0044854f11248sm1347688lfo.55.2022.03.19.11.33.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 11:33:57 -0700 (PDT)
+        Sat, 19 Mar 2022 11:33:59 -0700 (PDT)
 From:   Jakub Sitnicki <jakub@cloudflare.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -53,9 +53,9 @@ Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH bpf-next v2 1/3] bpf: Treat bpf_sk_lookup remote_port as a 2-byte field
-Date:   Sat, 19 Mar 2022 19:33:54 +0100
-Message-Id: <20220319183356.233666-2-jakub@cloudflare.com>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Fix test for 4-byte load from remote_port on big-endian
+Date:   Sat, 19 Mar 2022 19:33:56 +0100
+Message-Id: <20220319183356.233666-4-jakub@cloudflare.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220319183356.233666-1-jakub@cloudflare.com>
 References: <20220319183356.233666-1-jakub@cloudflare.com>
@@ -65,84 +65,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In commit 9a69e2b385f4 ("bpf: Make remote_port field in struct
-bpf_sk_lookup 16-bit wide") the remote_port field has been split up and
-re-declared from u32 to be16.
+The context access converter rewrites the 4-byte load from
+bpf_sk_lookup->remote_port to a 2-byte load from bpf_sk_lookup_kern
+structure.
 
-However, the accompanying changes to the context access converter have not
-been well thought through when it comes big-endian platforms.
+It means that we cannot treat the destination register contents as a 32-bit
+value, or the code will not be portable across big- and little-endian
+architectures.
 
-Today 2-byte wide loads from offsetof(struct bpf_sk_lookup, remote_port)
-are handled as narrow loads from a 4-byte wide field.
+This is exactly the same case as with 4-byte loads from bpf_sock->dst_port
+so follow the approach outlined in [1] and treat the register contents as a
+16-bit value in the test.
 
-This by itself is not enough to create a problem, but when we combine
+[1]: https://lore.kernel.org/bpf/20220317113920.1068535-5-jakub@cloudflare.com/
 
- 1. 32-bit wide access to ->remote_port backed by a 16-wide wide load, with
- 2. inherent difference between litte- and big-endian in how narrow loads
-    need have to be handled (see bpf_ctx_narrow_access_offset),
-
-we get inconsistent results for a 2-byte loads from &ctx->remote_port on LE
-and BE architectures. This in turn makes BPF C code for the common case of
-2-byte load from ctx->remote_port not portable.
-
-To rectify it, inform the context access converter that remote_port is
-2-byte wide field, and only 1-byte loads need to be treated as narrow
-loads.
-
-At the same time, we special-case the 4-byte load from &ctx->remote_port to
-continue handling it the same way as do today, in order to keep the
-existing BPF programs working.
-
-Fixes: 9a69e2b385f4 ("bpf: Make remote_port field in struct bpf_sk_lookup 16-bit wide")
+Fixes: 2ed0dc5937d3 ("selftests/bpf: Cover 4-byte load from remote_port in bpf_sk_lookup")
 Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/core/filter.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/test_sk_lookup.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 03655f2074ae..a7044e98765e 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10989,13 +10989,24 @@ static bool sk_lookup_is_valid_access(int off, int size,
- 	case bpf_ctx_range(struct bpf_sk_lookup, local_ip4):
- 	case bpf_ctx_range_till(struct bpf_sk_lookup, remote_ip6[0], remote_ip6[3]):
- 	case bpf_ctx_range_till(struct bpf_sk_lookup, local_ip6[0], local_ip6[3]):
--	case offsetof(struct bpf_sk_lookup, remote_port) ...
--	     offsetof(struct bpf_sk_lookup, local_ip4) - 1:
- 	case bpf_ctx_range(struct bpf_sk_lookup, local_port):
- 	case bpf_ctx_range(struct bpf_sk_lookup, ingress_ifindex):
- 		bpf_ctx_record_field_size(info, sizeof(__u32));
- 		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u32));
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+index 38b7a1fe67b6..6058dcb11b36 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+@@ -418,9 +418,15 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ 	if (LSW(ctx->remote_port, 0) != SRC_PORT)
+ 		return SK_DROP;
  
-+	case bpf_ctx_range(struct bpf_sk_lookup, remote_port):
-+		/* Allow 4-byte access to 2-byte field for backward compatibility */
-+		if (size == sizeof(__u32))
-+			return true;
-+		bpf_ctx_record_field_size(info, sizeof(__be16));
-+		return bpf_ctx_narrow_access_ok(off, size, sizeof(__be16));
-+
-+	case offsetofend(struct bpf_sk_lookup, remote_port) ...
-+	     offsetof(struct bpf_sk_lookup, local_ip4) - 1:
-+		/* Allow access to zero padding for backward compatibility */
-+		bpf_ctx_record_field_size(info, sizeof(__u16));
-+		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u16));
-+
- 	default:
- 		return false;
- 	}
-@@ -11077,6 +11088,11 @@ static u32 sk_lookup_convert_ctx_access(enum bpf_access_type type,
- 						     sport, 2, target_size));
- 		break;
+-	/* Load from remote_port field with zero padding (backward compatibility) */
++	/*
++	 * NOTE: 4-byte load from bpf_sk_lookup at remote_port offset
++	 * is quirky. It gets rewritten by the access converter to a
++	 * 2-byte load for backward compatibility. Treating the load
++	 * result as a be16 value makes the code portable across
++	 * little- and big-endian platforms.
++	 */
+ 	val_u32 = *(__u32 *)&ctx->remote_port;
+-	if (val_u32 != bpf_htonl(bpf_ntohs(SRC_PORT) << 16))
++	if (val_u32 != SRC_PORT)
+ 		return SK_DROP;
  
-+	case offsetofend(struct bpf_sk_lookup, remote_port):
-+		*target_size = 2;
-+		*insn++ = BPF_MOV32_IMM(si->dst_reg, 0);
-+		break;
-+
- 	case offsetof(struct bpf_sk_lookup, local_port):
- 		*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg,
- 				      bpf_target_off(struct bpf_sk_lookup_kern,
+ 	/* Narrow loads from local_port field. Expect DST_PORT. */
 -- 
 2.35.1
 
