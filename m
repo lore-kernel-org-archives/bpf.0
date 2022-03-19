@@ -2,344 +2,231 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F1BCC433EF
-	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 13:06:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16584C433F5
+	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 13:41:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237868AbiCSNH1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 09:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S235136AbiCSNmX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Mar 2022 09:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242331AbiCSNH0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Mar 2022 09:07:26 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADBDD25DAB0
-        for <bpf@vger.kernel.org>; Sat, 19 Mar 2022 06:06:05 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q1-20020a17090a4f8100b001c6575ae105so7265276pjh.0
-        for <bpf@vger.kernel.org>; Sat, 19 Mar 2022 06:06:05 -0700 (PDT)
+        with ESMTP id S234728AbiCSNmW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 09:42:22 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A532B4A7E;
+        Sat, 19 Mar 2022 06:41:01 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id r23so13267289edb.0;
+        Sat, 19 Mar 2022 06:41:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=muKmcBmqTBILlMxPHUMzF1gSqPvhx98DfMtjuCdy0fk=;
-        b=BLJjmyoHxZhLDXcw1Pjnl6iKumxde35dfz0G7gRWVOaLnylaB+cUVLKcxeRHFXmbNb
-         s0bgyu7WF7bW08rvhUMzezzxxdKXnYWKv9UkMXzSZ/8zw8X1lgRfcOkHxakfcEGUCgPH
-         +OzY/luxFZs79X/1Ay3u7HPm4deEa1pZ4j+7n2f+1Hf6RVKq13i57b0db9qVwTea0sgW
-         jyg9t8lCOWTbpg6/Iya+OQk9QPFJAAnikFuTfj1pQaq6ZPd6CtOqMqrhdJyjeMWrIOk3
-         JuzQFcpsOnYmE8OYXQ98ZsSoS0xjDoLoSGTfID3dhMa3R4fyN1Q5TLvWPqCHMY8cxl4p
-         0bnA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E6YbzIjkOdXeD1dLlMPzr5/Z/QQCz1/q8dIJfg7C4JU=;
+        b=Atx78Yh+fx8APppD5Dy3Dgv5zsYGART4jqoXDMTp1LZHpXyPQx2+SBFKyfLDTfXgZq
+         CMy6YusbPe4voWDsseFcLOSN/VaQiQ8Nd4yoHTdYuYfH32s6cLezb0JonzO9eDDOe00O
+         qSnuEhmVx5Uok0S6QyjQUX2rYn0aaGhWIls9l8hgQjYkn5hLvkMPCpxChzNCU7tMByU/
+         xeR/GUZEX93eQxx45fgWXQEPHam56ZHn11AclzCrFFwCcIEbe0sK/V+klWyP5nNVCmi8
+         CUT5nD/+41Q945edxgl9/n16kyEkaVIWLCA3F9v1N7X7wne7OAFRO0ZCA+PdIu2oRJVJ
+         tVLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=muKmcBmqTBILlMxPHUMzF1gSqPvhx98DfMtjuCdy0fk=;
-        b=pi8sM/mbIxJn35i3z6m086dBm3zStajohuM1PVtFgbr/VAouz2kxpU9MS41LnYNwSX
-         UgmmlBZKw78BJhovpP43SNY3pPT8feQxCB3rU8cOW09gFcPeqED4S1BsvUqx5ZBzW25S
-         LZsX8RgyCvQhV83P5UGkQ/oyX/sqiq8Jrd4hSiJa/+yMI17EoHtabdbCp1eZ/gwQPmK3
-         oe3TumBVv0oQvlmk3MWFXt4Lo98x04S4PhbOEbmanIouyWlZ5sjIKc2LqT4m0Jlx3NgW
-         Bbgup3LKfOXtZcKjWKF/3ro1Ziv1HULrLe7LyeOus/x5g5s7c1o6VGc6WNf+5Oy6cPDc
-         VpvQ==
-X-Gm-Message-State: AOAM531hVkEXbY8J8ZflCQ1tqEIqKOmRKj17jQhsabgT+Eozg7F2melf
-        PE0UyAuy1xEGQJHpJdbPMZKxVg==
-X-Google-Smtp-Source: ABdhPJxw8Hr3E001S/jaTszlo/U+nx6aEx7nkWJ5Wbe7F97wTAHLPKa4bslu1mq1DQsqDD3cqtDTXw==
-X-Received: by 2002:a17:902:cf05:b0:14d:5249:3b1f with SMTP id i5-20020a170902cf0500b0014d52493b1fmr4102915plg.135.1647695165120;
-        Sat, 19 Mar 2022 06:06:05 -0700 (PDT)
-Received: from localhost.localdomain ([2409:8a20:483a:72c0:bdf5:8ebe:6be8:a257])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056a000acb00b004f35ee129bbsm14007797pfl.140.2022.03.19.06.06.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 06:06:04 -0700 (PDT)
-From:   fankaixi.li@bytedance.com
-To:     john.fastabend@gmail.com, kafai@fb.com, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net,
-        "kaixi.fan" <fankaixi.li@bytedance.com>
-Subject: [PATCH bpf-next 3/3] selftests/bpf: add ipv6 vxlan tunnel source testcase
-Date:   Sat, 19 Mar 2022 21:05:38 +0800
-Message-Id: <20220319130538.55741-4-fankaixi.li@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20220319130538.55741-1-fankaixi.li@bytedance.com>
-References: <20220319130538.55741-1-fankaixi.li@bytedance.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E6YbzIjkOdXeD1dLlMPzr5/Z/QQCz1/q8dIJfg7C4JU=;
+        b=nqmJCZMtKHdneVKWMNh1/V/FtbaPxOKs+dd8NxTiuuu734t3QNzIWfVyt+/tlWEGWB
+         B5YA7s1iQr88CavFtOOWWboZKmHhEmpTXygdcmcjA8piqrM7/aPS2HtyjjzM62EYhxSb
+         o4hj+SZWXEAi6KqoR1XW+TsdrPUkYDB4R+n1UQ+Tu3E7Wnlr0kJgoA7AAjSZZ/l8beJC
+         UOB23Anb8tggOrqIz23qW/SpqTiPFupk7kAk0TcnImIKerY8ksp94xJlzPFb9vxNMl+d
+         FHngOeGxKTSzQJrmBd7jTPPaQWbM0fVE+hCpRdujCsypOw/e8aJAzytk2G1sjEEof71W
+         bfNg==
+X-Gm-Message-State: AOAM533MAKCJIi9HlomhYxD6y8OCdXwhHBwzN1Jt+6BSRpRgmzs+g4JK
+        sicN4j6kg6t50jkkDpoHKieYpT5ajEUHo2pRNrY=
+X-Google-Smtp-Source: ABdhPJwGSijWEWwID4d1uhRmDL4PIef6uA+5F0E2SFi0ufpfoVMilUni1w+bjRytvK3w4iS5ZCX3HcxClHggN3owBCQ=
+X-Received: by 2002:aa7:d74d:0:b0:418:e883:b4e1 with SMTP id
+ a13-20020aa7d74d000000b00418e883b4e1mr14371287eds.56.1647697259399; Sat, 19
+ Mar 2022 06:40:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220314141508.39952-1-xiangxia.m.yue@gmail.com>
+ <20220314141508.39952-2-xiangxia.m.yue@gmail.com> <015e903a-f4b4-a905-1cd2-11d10aefec8a@iogearbox.net>
+ <CAMDZJNUO9k8xmrJwrXnj+LVG=bEv5Zwe=YkjOqSBrDS348OQfA@mail.gmail.com>
+ <7d4b0c51460dec351bbbaf9be85c4a25cb6cec4f.camel@redhat.com> <f61e4a34-e7e5-198b-dde6-816654775b21@iogearbox.net>
+In-Reply-To: <f61e4a34-e7e5-198b-dde6-816654775b21@iogearbox.net>
+From:   Tonghao Zhang <xiangxia.m.yue@gmail.com>
+Date:   Sat, 19 Mar 2022 21:40:23 +0800
+Message-ID: <CAMDZJNWaREaM7=CZY=HCvxY0T1uHDsDH3QBwdbstSrNPXrbcdA@mail.gmail.com>
+Subject: Re: [net-next v10 1/2] net: sched: use queue_mapping to pick tx queue
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Talal Ahmad <talalahmad@google.com>,
+        Kevin Hao <haokexin@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: "kaixi.fan" <fankaixi.li@bytedance.com>
+On Fri, Mar 18, 2022 at 9:36 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 3/17/22 9:20 AM, Paolo Abeni wrote:
+> > On Tue, 2022-03-15 at 20:48 +0800, Tonghao Zhang wrote:
+> >> On Tue, Mar 15, 2022 at 5:59 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >>> On 3/14/22 3:15 PM, xiangxia.m.yue@gmail.com wrote:
+> >>> [...]
+> >>>>    include/linux/netdevice.h |  3 +++
+> >>>>    include/linux/rtnetlink.h |  1 +
+> >>>>    net/core/dev.c            | 31 +++++++++++++++++++++++++++++--
+> >>>>    net/sched/act_skbedit.c   |  6 +++++-
+> >>>>    4 files changed, 38 insertions(+), 3 deletions(-)
+> >>>>
+> >>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> >>>> index 0d994710b335..f33fb2d6712a 100644
+> >>>> --- a/include/linux/netdevice.h
+> >>>> +++ b/include/linux/netdevice.h
+> >>>> @@ -3065,6 +3065,9 @@ struct softnet_data {
+> >>>>        struct {
+> >>>>                u16 recursion;
+> >>>>                u8  more;
+> >>>> +#ifdef CONFIG_NET_EGRESS
+> >>>> +             u8  skip_txqueue;
+> >>>> +#endif
+> >>>>        } xmit;
+> >>>>    #ifdef CONFIG_RPS
+> >>>>        /* input_queue_head should be written by cpu owning this struct,
+> >>>> diff --git a/include/linux/rtnetlink.h b/include/linux/rtnetlink.h
+> >>>> index 7f970b16da3a..ae2c6a3cec5d 100644
+> >>>> --- a/include/linux/rtnetlink.h
+> >>>> +++ b/include/linux/rtnetlink.h
+> >>>> @@ -100,6 +100,7 @@ void net_dec_ingress_queue(void);
+> >>>>    #ifdef CONFIG_NET_EGRESS
+> >>>>    void net_inc_egress_queue(void);
+> >>>>    void net_dec_egress_queue(void);
+> >>>> +void netdev_xmit_skip_txqueue(bool skip);
+> >>>>    #endif
+> >>>>
+> >>>>    void rtnetlink_init(void);
+> >>>> diff --git a/net/core/dev.c b/net/core/dev.c
+> >>>> index 75bab5b0dbae..8e83b7099977 100644
+> >>>> --- a/net/core/dev.c
+> >>>> +++ b/net/core/dev.c
+> >>>> @@ -3908,6 +3908,25 @@ sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
+> >>>>
+> >>>>        return skb;
+> >>>>    }
+> >>>> +
+> >>>> +static struct netdev_queue *
+> >>>> +netdev_tx_queue_mapping(struct net_device *dev, struct sk_buff *skb)
+> >>>> +{
+> >>>> +     int qm = skb_get_queue_mapping(skb);
+> >>>> +
+> >>>> +     return netdev_get_tx_queue(dev, netdev_cap_txqueue(dev, qm));
+> >>>> +}
+> >>>> +
+> >>>> +static bool netdev_xmit_txqueue_skipped(void)
+> >>>> +{
+> >>>> +     return __this_cpu_read(softnet_data.xmit.skip_txqueue);
+> >>>> +}
+> >>>> +
+> >>>> +void netdev_xmit_skip_txqueue(bool skip)
+> >>>> +{
+> >>>> +     __this_cpu_write(softnet_data.xmit.skip_txqueue, skip);
+> >>>> +}
+> >>>> +EXPORT_SYMBOL_GPL(netdev_xmit_skip_txqueue);
+> >>>>    #endif /* CONFIG_NET_EGRESS */
+> >>>>
+> >>>>    #ifdef CONFIG_XPS
+> >>>> @@ -4078,7 +4097,7 @@ struct netdev_queue *netdev_core_pick_tx(struct net_device *dev,
+> >>>>    static int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+> >>>>    {
+> >>>>        struct net_device *dev = skb->dev;
+> >>>> -     struct netdev_queue *txq;
+> >>>> +     struct netdev_queue *txq = NULL;
+> >>>>        struct Qdisc *q;
+> >>>>        int rc = -ENOMEM;
+> >>>>        bool again = false;
+> >>>> @@ -4106,11 +4125,17 @@ static int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+> >>>>                        if (!skb)
+> >>>>                                goto out;
+> >>>>                }
+> >>>> +
+> >>>> +             netdev_xmit_skip_txqueue(false);
+> >>>> +
+> >>>>                nf_skip_egress(skb, true);
+> >>>>                skb = sch_handle_egress(skb, &rc, dev);
+> >>>>                if (!skb)
+> >>>>                        goto out;
+> >>>>                nf_skip_egress(skb, false);
+> >>>> +
+> >>>> +             if (netdev_xmit_txqueue_skipped())
+> >>>> +                     txq = netdev_tx_queue_mapping(dev, skb);
+> >>>>        }
+> >>>>    #endif
+> >>>>        /* If device/qdisc don't need skb->dst, release it right now while
+> >>>> @@ -4121,7 +4146,9 @@ static int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
+> >>>>        else
+> >>>>                skb_dst_force(skb);
+> >>>>
+> >>>> -     txq = netdev_core_pick_tx(dev, skb, sb_dev);
+> >>>> +     if (likely(!txq))
+> >>>
+> >>> nit: Drop likely(). If the feature is used from sch_handle_egress(), then this would always be the case.
+> >> Hi Daniel
+> >> I think in most case, we don't use skbedit queue_mapping in the
+> >> sch_handle_egress() , so I add likely in fast path.
+>
+> Yeah, but then let branch predictor do its work ? We can still change and drop the
+> likely() once we add support for BPF though..
+Hi
+if you are ok that introducing the bpf helper shown below, I will drop
+likely() in next patch.
+>
+> >>>> +             txq = netdev_core_pick_tx(dev, skb, sb_dev);
+> >>>> +
+> >>>>        q = rcu_dereference_bh(txq->qdisc);
+> >>>
+> >>> How will the `netdev_xmit_skip_txqueue(true)` be usable from BPF side (see bpf_convert_ctx_access() ->
+> >>> queue_mapping)?
+> >> Good questions, In other patch, I introduce the
+> >> bpf_netdev_skip_txqueue, so we can use netdev_xmit_skip_txqueue in bpf
+> >> side
+>
+> Yeah, that bpf_netdev_skip_txqueue() won't fly. It's basically a helper doing quirk for
+> an implementation detail (aka calling netdev_xmit_skip_txqueue()). Was hoping you have
+> something better we could use along with the context rewrite of __sk_buff's queue_mapping,
+Hi Daniel
+I review the bpf codes, we introduce a lot helper to change the skb field:
+skb_change_proto
+skb_change_type
+skb_change_tail
+skb_pull_data
+skb_change_head
+skb_ecn_set_ce
+skb_cgroup_classid
+skb_vlan_push
+skb_set_tunnel_key
 
-Add two ipv6 address on underlay nic interface, and use bpf code to
-configure the secondary ipv6 address as the vxlan tunnel source ip.
-Then check ping6 result and log contains the correct tunnel source
-ip.
+did you mean that, we introduce bpf_skb_set_queue_mapping  is better
+than bpf_netdev_skip_txqueue.
+for example:
+BPF_CALL_2(bpf_skb_set_queue_mapping, struct sk_buff *, skb, u32, txq)
+{
+        skb->queue_mapping = txq;
+        netdev_xmit_skip_txqueue(true);
+        return 0;
+};
 
-Signed-off-by: kaixi.fan <fankaixi.li@bytedance.com>
----
- .../selftests/bpf/progs/test_tunnel_kern.c    | 46 ++++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh    | 71 +++++++++++++++----
- 2 files changed, 105 insertions(+), 12 deletions(-)
+> but worst case we need to rework a bit for BPF. :/
+> Thanks,
+> Daniel
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 4a39556ef609..67cb7ca3e083 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -736,4 +736,50 @@ int _vxlan_get_tunnel_src(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
- 
-+SEC("ip6vxlan_set_tunnel_src")
-+int _ip6vxlan_set_tunnel_src(struct __sk_buff *skb)
-+{
-+	struct bpf_tunnel_key key;
-+	int ret;
-+
-+	__builtin_memset(&key, 0x0, sizeof(key));
-+	key.local_ipv6[3] = bpf_htonl(0xbb); /* ::bb */
-+	key.remote_ipv6[3] = bpf_htonl(0x11); /* ::11 */
-+	key.tunnel_id = 22;
-+	key.tunnel_tos = 0;
-+	key.tunnel_ttl = 64;
-+
-+	ret = bpf_skb_set_tunnel_key(skb, &key, sizeof(key),
-+				     BPF_F_TUNINFO_IPV6);
-+	if (ret < 0) {
-+		ERROR(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	return TC_ACT_OK;
-+}
-+
-+SEC("ip6vxlan_get_tunnel_src")
-+int _ip6vxlan_get_tunnel_src(struct __sk_buff *skb)
-+{
-+	char fmt[] = "key %d remote ip6 ::%x source ip6 ::%x\n";
-+	char fmt2[] = "label %x\n";
-+	struct bpf_tunnel_key key;
-+	int ret;
-+
-+	ret = bpf_skb_get_tunnel_key(skb, &key, sizeof(key),
-+				     BPF_F_TUNINFO_IPV6);
-+	if (ret < 0) {
-+		ERROR(ret);
-+		return TC_ACT_SHOT;
-+	}
-+
-+	bpf_trace_printk(fmt, sizeof(fmt),
-+			 key.tunnel_id, key.remote_ipv6[3], key.local_ipv6[3]);
-+	bpf_trace_printk(fmt2, sizeof(fmt2),
-+			 key.tunnel_label);
-+
-+	return TC_ACT_OK;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 62ef5c998b6a..a0f9a5c5e0a5 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -67,6 +67,11 @@ add_second_ip()
-   ip addr add dev veth1 172.16.1.20/24
- }
- 
-+add_second_ip6()
-+{
-+  ip addr add dev veth1 ::bb/96
-+}
-+
- add_gre_tunnel()
- {
- 	# at_ns0 namespace
-@@ -94,7 +99,7 @@ add_ip6gretap_tunnel()
- 	# at_ns0 namespace
- 	ip netns exec at_ns0 \
- 		ip link add dev $DEV_NS type $TYPE seq flowlabel 0xbcdef key 2 \
--		local ::11 remote ::22
-+		local ::11 remote $REMOTE_IP6
- 
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS fc80::100/96
-@@ -143,7 +148,7 @@ add_ip6erspan_tunnel()
- 	if [ "$1" == "v1" ]; then
- 		ip netns exec at_ns0 \
- 		ip link add dev $DEV_NS type $TYPE seq key 2 \
--		local ::11 remote ::22 \
-+		local ::11 remote $REMOTE_IP6 \
- 		erspan_ver 1 erspan 123
- 	else
- 		ip netns exec at_ns0 \
-@@ -196,7 +201,7 @@ add_ip6vxlan_tunnel()
- 	# at_ns0 namespace
- 	ip netns exec at_ns0 \
- 		ip link add dev $DEV_NS type $TYPE id 22 dstport 4789 \
--		local ::11 remote ::22
-+		local ::11 remote $REMOTE_IP6
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
- 	ip netns exec at_ns0 ip link set dev $DEV_NS up
- 
-@@ -231,7 +236,7 @@ add_ip6geneve_tunnel()
- 	# at_ns0 namespace
- 	ip netns exec at_ns0 \
- 		ip link add dev $DEV_NS type $TYPE id 22 \
--		remote ::22     # geneve has no local option
-+		remote $REMOTE_IP6    # geneve has no local option
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
- 	ip netns exec at_ns0 ip link set dev $DEV_NS up
- 
-@@ -266,7 +271,7 @@ add_ip6tnl_tunnel()
- 	# at_ns0 namespace
- 	ip netns exec at_ns0 \
- 		ip link add dev $DEV_NS type $TYPE \
--		local ::11 remote ::22
-+		local ::11 remote $REMOTE_IP6
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 10.1.1.100/24
- 	ip netns exec at_ns0 ip addr add dev $DEV_NS 1::11/96
- 	ip netns exec at_ns0 ip link set dev $DEV_NS up
-@@ -307,12 +312,13 @@ test_ip6gre()
- 	TYPE=ip6gre
- 	DEV_NS=ip6gre00
- 	DEV=ip6gre11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
- 	# reuse the ip6gretap function
--	add_ip6gretap_tunnel
-+	add_ip6gretap_tunnel $REMOTE_IP6
- 	attach_bpf $DEV ip6gretap_set_tunnel ip6gretap_get_tunnel
- 	# underlay
- 	ping6 $PING_ARG ::11
-@@ -337,11 +343,12 @@ test_ip6gretap()
- 	TYPE=ip6gretap
- 	DEV_NS=ip6gretap00
- 	DEV=ip6gretap11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
--	add_ip6gretap_tunnel
-+	add_ip6gretap_tunnel $REMOTE_IP6
- 	attach_bpf $DEV ip6gretap_set_tunnel ip6gretap_get_tunnel
- 	# underlay
- 	ping6 $PING_ARG ::11
-@@ -390,11 +397,12 @@ test_ip6erspan()
- 	TYPE=ip6erspan
- 	DEV_NS=ip6erspan00
- 	DEV=ip6erspan11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
--	add_ip6erspan_tunnel $1
-+	add_ip6erspan_tunnel $1 $REMOTE_IP6
- 	attach_bpf $DEV ip4ip6erspan_set_tunnel ip4ip6erspan_get_tunnel
- 	ping6 $PING_ARG ::11
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-@@ -438,11 +446,12 @@ test_ip6vxlan()
- 	TYPE=vxlan
- 	DEV_NS=ip6vxlan00
- 	DEV=ip6vxlan11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
--	add_ip6vxlan_tunnel
-+	add_ip6vxlan_tunnel $REMOTE_IP6
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ip6vxlan_set_tunnel ip6vxlan_get_tunnel
- 	# underlay
-@@ -490,11 +499,12 @@ test_ip6geneve()
- 	TYPE=geneve
- 	DEV_NS=ip6geneve00
- 	DEV=ip6geneve11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
--	add_ip6geneve_tunnel
-+	add_ip6geneve_tunnel $REMOTE_IP6
- 	attach_bpf $DEV ip6geneve_set_tunnel ip6geneve_get_tunnel
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
-@@ -539,11 +549,12 @@ test_ipip6()
- 	TYPE=ip6tnl
- 	DEV_NS=ipip6tnl00
- 	DEV=ipip6tnl11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
--	add_ip6tnl_tunnel
-+	add_ip6tnl_tunnel $REMOTE_IP6
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ipip6_set_tunnel ipip6_get_tunnel
- 	# underlay
-@@ -567,11 +578,12 @@ test_ip6ip6()
- 	TYPE=ip6tnl
- 	DEV_NS=ip6ip6tnl00
- 	DEV=ip6ip6tnl11
-+	REMOTE_IP6=::22
- 	ret=0
- 
- 	check $TYPE
- 	config_device
--	add_ip6tnl_tunnel
-+	add_ip6tnl_tunnel $REMOTE_IP6
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ip6ip6_set_tunnel ip6ip6_get_tunnel
- 	# underlay
-@@ -693,6 +705,36 @@ test_vxlan_tunsrc()
-         echo -e ${GREEN}"PASS: $TYPE"${NC}
- }
- 
-+test_ip6vxlan_tunsrc()
-+{
-+	TYPE=vxlan
-+	DEV_NS=ip6vxlan00
-+	DEV=ip6vxlan11
-+	REMOTE_IP6=::bb
-+	ret=0
-+
-+	check $TYPE
-+	config_device
-+	add_second_ip6
-+	add_ip6vxlan_tunnel $REMOTE_IP6
-+	ip link set dev veth1 mtu 1500
-+	attach_bpf $DEV ip6vxlan_set_tunnel_src ip6vxlan_get_tunnel_src
-+	# underlay
-+	ping6 $PING_ARG ::11
-+	# ip4 over ip6
-+	ping $PING_ARG 10.1.1.100
-+	check_err $?
-+	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
-+	check_err $?
-+	cleanup
-+
-+	if [ $ret -ne 0 ]; then
-+                echo -e ${RED}"FAIL: ip6$TYPE"${NC}
-+                return 1
-+        fi
-+        echo -e ${GREEN}"PASS: ip6$TYPE"${NC}
-+}
-+
- attach_bpf()
- {
- 	DEV=$1
-@@ -818,6 +860,11 @@ bpf_tunnel_test()
- 	test_vxlan_tunsrc
- 	errors=$(( $errors + $? ))
- 
-+
-+	echo "Testing IP6VXLAN tunnel source..."
-+	test_ip6vxlan_tunsrc
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
+
+
 -- 
-2.24.3 (Apple Git-128)
-
+Best regards, Tonghao
