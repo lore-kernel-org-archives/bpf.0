@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71586C4332F
-	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77977C4167B
+	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243552AbiCSRcV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 13:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S243677AbiCSRcY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Mar 2022 13:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243429AbiCSRcL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Mar 2022 13:32:11 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E104552B;
-        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id l4-20020a17090a49c400b001c6840df4a3so7230301pjm.0;
-        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
+        with ESMTP id S243386AbiCSRcU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 13:32:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D594578A;
+        Sat, 19 Mar 2022 10:30:50 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mm17-20020a17090b359100b001c6da62a559so1303235pjb.3;
+        Sat, 19 Mar 2022 10:30:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tlUVvnpalHf+NQDEGRuVRqs1mWkMR7ChiLJEV3o+2Gs=;
-        b=b+0WOzv5QB5+n/S20HOa2mzV0FPpHcvm5Mx9dRPMPi7QXc74QJdQSxv7OA8ZqCgIiK
-         iBpzwwFyifkOo5bTzlngp0xZ3JGhEx9QkudeAMe0+40BuN5YHkTzX2v3ZX9a0EfZl2aW
-         8Tqci4BTDrs36dy2i6vFKfuL8bfCcDESXEQA6ypm5CkAgDotEzGaU0ENq0rrVBTIypOU
-         R0FagYGZDwo0mw7n/YF6JJ7hUhpLf406llT0/cbYv2YXgZA4uwFG2lLa60lFtirQn7Ja
-         hLmQascreXw/6d3tZzPiP5rSkjByzIFCDTYKYiC3NWfGxzlTOzmOTGistXW2i1CCmARZ
-         vh9w==
+        bh=cDbZmnyIct7dh5oDHwzWtZU+1KNpHzcJsMgS0/FqC04=;
+        b=qSUGKlq9jr+L42BLcgqJwPR3lzz7NGXgeJc3Ei2E1+bUYjo0YyU+vCBYGWCPEhjQZC
+         VvMCBJMqT/taNLtjl93gvIrB1/F7XpPn2Zb1inz+Lm+jQXUHszDGKJHFo4CfzE/i+22I
+         cEXJVHx9YcusE6ibDBjce99Df8IAw19ABmTNMKjX0u3iNaDmjW2WdWmVAxYx9nY42pZZ
+         jHVT3wqvwOn/+fdvWV1z+drzYTj/5QmjJbwIBVjymZA8B/iz7Z2TW8NpHoP8ZKsmq7D1
+         s80vFs2WJQB8qg/6iNqif2OKYOm1tBmGisy7CEaXUnqQFK8DDSiBo/UKnLRzvVdV9uzz
+         EPJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tlUVvnpalHf+NQDEGRuVRqs1mWkMR7ChiLJEV3o+2Gs=;
-        b=rd5vu5cuR5CdYHbb3wSTNOhmwP+lZH1KHFtQNxcxgNH79SRyzp+5TgaZ14ekkcEWqs
-         A+VVUQ4W72AZeC85AIh5KSkPUlMkNPrFmDQsSup6NH0cHN6mVeeaGQzUXQTm11WTE1Sg
-         5CUsqg4M58S2kwkmDblnaMbnybAieqN0n231sPSZCqhPFCSTW2W1RPVJxp2f4sZfeSp7
-         hVt3mJSsfCDdgbuX2xgwXHrIWnRxyt0IENuOZX0oq0VcjugD7iD1FnBsD9IBQSo/gS4L
-         24BYxK/5MTIE5Ahwc2R0sq+1trkWCw6+rN54x8JPcea2rsWCVuZNK1qF8Bx7xNG9Hqf3
-         QfxQ==
-X-Gm-Message-State: AOAM530Hb0rNG1U2wISbhQUqNm6p941PguE0oRQ12wi5yykCS2Amg3Lo
-        RCocWVX3Dylprh5KAB212ZY=
-X-Google-Smtp-Source: ABdhPJwJRkOwuhK3vq0vx0S4/e1H1jq1fI2TUfzFUYVOzgYTg/Db5VgKFU+zPydyVvPXiNi64ge4+Q==
-X-Received: by 2002:a17:902:be18:b0:153:2444:9c1a with SMTP id r24-20020a170902be1800b0015324449c1amr5212078pls.152.1647711047452;
-        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
+        bh=cDbZmnyIct7dh5oDHwzWtZU+1KNpHzcJsMgS0/FqC04=;
+        b=hxGOmfQpwgkSJ83rsr10ijvu+BqRc/cuLjRzFyPCr96iER4Hux4nWbUF4DY65rNMxZ
+         IM5W9fypPVV7a0uQTTny8ZpxPDfuTi9N8hYwVo5MEby+b0cObuUfsFVvaU1aAUClxrFS
+         xhwMqx4wWQAGW2iLSOcO7wiCx8Zg0ZdhG4aMo5aNtUJwGokEQUGOfLepHWQneTdK8Kc1
+         QcnMcyA7gY3RwXbHjLLum+rFzYkPeS6Hn31pCeTRu7DYgn7Pt0ca1YHKcaVir1iifayt
+         6FOkW4r7J+s7JvwGPQj1fcsyy6wZ+vyKompXUWhvMrGk8mstHHsCM9+ypVOdOlbdxHOi
+         e5LQ==
+X-Gm-Message-State: AOAM532i/yRK2W61/81o3i2NiVaeqgqZ3aIHyG507ZS/32U6WHGt1pyA
+        gmOXopbkNXgqUHWjzLERQwU=
+X-Google-Smtp-Source: ABdhPJzfqmK2Zh6x7voOpbJTgq3UTIo40u8y9v1MPFqLp/68HUc5AdKYX5mafm02kCF7iYc3MKftCg==
+X-Received: by 2002:a17:90b:3b43:b0:1c6:f878:ea52 with SMTP id ot3-20020a17090b3b4300b001c6f878ea52mr459431pjb.68.1647711049850;
+        Sat, 19 Mar 2022 10:30:49 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:4ab8:5400:3ff:fee9:a154])
-        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.46
+        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 10:30:47 -0700 (PDT)
+        Sat, 19 Mar 2022 10:30:49 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     roman.gushchin@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH 06/14] bpf: Allow no charge for allocation not at map creation time
-Date:   Sat, 19 Mar 2022 17:30:28 +0000
-Message-Id: <20220319173036.23352-7-laoar.shao@gmail.com>
+Subject: [PATCH 08/14] bpf: Aggregate flags for BPF_PROG_LOAD command
+Date:   Sat, 19 Mar 2022 17:30:30 +0000
+Message-Id: <20220319173036.23352-9-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
 References: <20220319173036.23352-1-laoar.shao@gmail.com>
@@ -65,53 +65,130 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Below three functions are used for memory allocation which is not at
-map creation time,
-  - bpf_map_kmalloc_node()
-  - bpf_map_kzalloc()
-  - bpf_map_alloc_percpu()
-
-For this kind of path, we can get the no charge flag from bpf_map
-struct we set before.
+It will be easy to read if we aggregate the flags for BPF_PROG_LOAD into
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/bpf/syscall.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ include/uapi/linux/bpf.h       | 15 +++++++++------
+ tools/include/uapi/linux/bpf.h | 15 +++++++++------
+ 2 files changed, 18 insertions(+), 12 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index add3b4045b4d..e84aeefa05f4 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -434,7 +434,8 @@ void *bpf_map_kmalloc_node(const struct bpf_map *map, size_t size, gfp_t flags,
- 	void *ptr;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e2dba6cdd88d..93ee04fb8c62 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1065,12 +1065,14 @@ enum bpf_link_type {
+ #define BPF_F_ALLOW_MULTI	(1U << 1)
+ #define BPF_F_REPLACE		(1U << 2)
  
- 	old_memcg = set_active_memcg(map->memcg);
--	ptr = kmalloc_node(size, flags | __GFP_ACCOUNT, node);
-+	ptr = kmalloc_node(size, bpf_flags_no_charge(flags, map->no_charge),
-+			node);
- 	set_active_memcg(old_memcg);
++/* flags for BPF_PROG_LOAD command */
++enum {
+ /* If BPF_F_STRICT_ALIGNMENT is used in BPF_PROG_LOAD command, the
+  * verifier will perform strict alignment checking as if the kernel
+  * has been built with CONFIG_EFFICIENT_UNALIGNED_ACCESS not set,
+  * and NET_IP_ALIGN defined to 2.
+  */
+-#define BPF_F_STRICT_ALIGNMENT	(1U << 0)
++	BPF_F_STRICT_ALIGNMENT	= (1U << 0),
  
- 	return ptr;
-@@ -446,7 +447,7 @@ void *bpf_map_kzalloc(const struct bpf_map *map, size_t size, gfp_t flags)
- 	void *ptr;
+ /* If BPF_F_ANY_ALIGNMENT is used in BPF_PROF_LOAD command, the
+  * verifier will allow any alignment whatsoever.  On platforms
+@@ -1084,7 +1086,7 @@ enum bpf_link_type {
+  * of an unaligned access the alignment check would trigger before
+  * the one we are interested in.
+  */
+-#define BPF_F_ANY_ALIGNMENT	(1U << 1)
++	BPF_F_ANY_ALIGNMENT		= (1U << 1),
  
- 	old_memcg = set_active_memcg(map->memcg);
--	ptr = kzalloc(size, flags | __GFP_ACCOUNT);
-+	ptr = kzalloc(size, bpf_flags_no_charge(flags, map->no_charge));
- 	set_active_memcg(old_memcg);
+ /* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
+  * Verifier does sub-register def/use analysis and identifies instructions whose
+@@ -1102,10 +1104,10 @@ enum bpf_link_type {
+  * Then, if verifier is not doing correct analysis, such randomization will
+  * regress tests to expose bugs.
+  */
+-#define BPF_F_TEST_RND_HI32	(1U << 2)
++	BPF_F_TEST_RND_HI32		= (1U << 2),
  
- 	return ptr;
-@@ -459,7 +460,8 @@ void __percpu *bpf_map_alloc_percpu(const struct bpf_map *map, size_t size,
- 	void __percpu *ptr;
+ /* The verifier internal test flag. Behavior is undefined */
+-#define BPF_F_TEST_STATE_FREQ	(1U << 3)
++	BPF_F_TEST_STATE_FREQ	= (1U << 3),
  
- 	old_memcg = set_active_memcg(map->memcg);
--	ptr = __alloc_percpu_gfp(size, align, flags | __GFP_ACCOUNT);
-+	ptr = __alloc_percpu_gfp(size, align,
-+			bpf_flags_no_charge(flags, map->no_charge));
- 	set_active_memcg(old_memcg);
+ /* If BPF_F_SLEEPABLE is used in BPF_PROG_LOAD command, the verifier will
+  * restrict map and helper usage for such programs. Sleepable BPF programs can
+@@ -1113,12 +1115,13 @@ enum bpf_link_type {
+  * Such programs are allowed to use helpers that may sleep like
+  * bpf_copy_from_user().
+  */
+-#define BPF_F_SLEEPABLE		(1U << 4)
++	BPF_F_SLEEPABLE			= (1U << 4),
  
- 	return ptr;
+ /* If BPF_F_XDP_HAS_FRAGS is used in BPF_PROG_LOAD command, the loaded program
+  * fully support xdp frags.
+  */
+-#define BPF_F_XDP_HAS_FRAGS	(1U << 5)
++	BPF_F_XDP_HAS_FRAGS		= (1U << 5),
++};
+ 
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index e2dba6cdd88d..71a4d8fdc880 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1065,12 +1065,14 @@ enum bpf_link_type {
+ #define BPF_F_ALLOW_MULTI	(1U << 1)
+ #define BPF_F_REPLACE		(1U << 2)
+ 
++/* flags for BPF_PROG_LOAD */
++enum {
+ /* If BPF_F_STRICT_ALIGNMENT is used in BPF_PROG_LOAD command, the
+  * verifier will perform strict alignment checking as if the kernel
+  * has been built with CONFIG_EFFICIENT_UNALIGNED_ACCESS not set,
+  * and NET_IP_ALIGN defined to 2.
+  */
+-#define BPF_F_STRICT_ALIGNMENT	(1U << 0)
++	BPF_F_STRICT_ALIGNMENT	= (1U << 0),
+ 
+ /* If BPF_F_ANY_ALIGNMENT is used in BPF_PROF_LOAD command, the
+  * verifier will allow any alignment whatsoever.  On platforms
+@@ -1084,7 +1086,7 @@ enum bpf_link_type {
+  * of an unaligned access the alignment check would trigger before
+  * the one we are interested in.
+  */
+-#define BPF_F_ANY_ALIGNMENT	(1U << 1)
++	BPF_F_ANY_ALIGNMENT		= (1U << 1),
+ 
+ /* BPF_F_TEST_RND_HI32 is used in BPF_PROG_LOAD command for testing purpose.
+  * Verifier does sub-register def/use analysis and identifies instructions whose
+@@ -1102,10 +1104,10 @@ enum bpf_link_type {
+  * Then, if verifier is not doing correct analysis, such randomization will
+  * regress tests to expose bugs.
+  */
+-#define BPF_F_TEST_RND_HI32	(1U << 2)
++	BPF_F_TEST_RND_HI32		= (1U << 2),
+ 
+ /* The verifier internal test flag. Behavior is undefined */
+-#define BPF_F_TEST_STATE_FREQ	(1U << 3)
++	BPF_F_TEST_STATE_FREQ	= (1U << 3),
+ 
+ /* If BPF_F_SLEEPABLE is used in BPF_PROG_LOAD command, the verifier will
+  * restrict map and helper usage for such programs. Sleepable BPF programs can
+@@ -1113,12 +1115,13 @@ enum bpf_link_type {
+  * Such programs are allowed to use helpers that may sleep like
+  * bpf_copy_from_user().
+  */
+-#define BPF_F_SLEEPABLE		(1U << 4)
++	BPF_F_SLEEPABLE			= (1U << 4),
+ 
+ /* If BPF_F_XDP_HAS_FRAGS is used in BPF_PROG_LOAD command, the loaded program
+  * fully support xdp frags.
+  */
+-#define BPF_F_XDP_HAS_FRAGS	(1U << 5)
++	BPF_F_XDP_HAS_FRAGS		= (1U << 5),
++};
+ 
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+  * BPF_TRACE_KPROBE_MULTI attach type to create return probe.
 -- 
 2.17.1
 
