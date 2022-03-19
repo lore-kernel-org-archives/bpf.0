@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BDB3C43219
-	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19B57C4321E
+	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243698AbiCSRcm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 13:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
+        id S243684AbiCSRco (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Mar 2022 13:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243686AbiCSRcV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Mar 2022 13:32:21 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEFB46141;
-        Sat, 19 Mar 2022 10:30:56 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id t22so9504713plo.0;
-        Sat, 19 Mar 2022 10:30:56 -0700 (PDT)
+        with ESMTP id S243702AbiCSRcW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 13:32:22 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AC646B04;
+        Sat, 19 Mar 2022 10:30:58 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mz9-20020a17090b378900b001c657559290so10657015pjb.2;
+        Sat, 19 Mar 2022 10:30:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UnzpRSS/vLYZGmFXrB6nYaZPHuwQlW9x/vmkhMBVTEQ=;
-        b=RsczAP8C3Ig4HKDvm6X86NOreFdEhMYHBpRBoeKF/94wlV9+u9Egr4V/TBqS1FX8Ue
-         lFFPQpIMJS4G5lpfiEw4KvUr8o5fqRs/XJsZMcZPpxldyQLPMhxPur699k75MNBgyaQ5
-         4dS5qDSS0tsiNXWZjsakb9ETsLt+JEePQaPATpMIr3Z/+Z86EFP3EGI9zrujz75CkY4V
-         ahN24nCYzn1MoHhVLuq5xcKyvqaej5JUbg49KNmekfTtZuNF73XEQW4iYhSAIFbHtXCu
-         LVoMb7GX+KBO8hWssyjZ8SSU8gCSwnDRoVlaBZRSYuVFbQtS176El/2RnVtm0bGcXaqC
-         U0VQ==
+        bh=gNHwzX1XXzyuZEkRQLK5ljL7FKM2KTEIhvt/+nJ9w5k=;
+        b=cWsSBz1wcJLbkEhvadWb1z178lDBINSMILOr0KYVKwhDbun9djaH9TCmc3V/X47pym
+         DuDLtLZW9Mw1cTrnsjsKmlH7ZvuFPFkJ4rsarGoModU082cK1VA+dDJ+GNIc5CwoKx34
+         wvQQTZSYyrSVI7T6FfY1aefOUuwaZmC5wiCWxKZqWxV9RepJVsKZh34D2LgSsyFjKZuK
+         BUthR6o8mnnz61PINJHyIrwp2uDJw5Xecw1vVn5dz30SLOTpiWnp0p0ojMl2ldLivLyo
+         awA5jMvuzOhSmBdGifSsHR9p9ndyhKd83qk3MlNvtLjcTPqaODL9fz9n1vXPSd4moFCf
+         +X/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UnzpRSS/vLYZGmFXrB6nYaZPHuwQlW9x/vmkhMBVTEQ=;
-        b=xLhZ7OQ4E6dLm+gjHuIVZ2MS49DrlOAVmjIgXa1A96EXuTQMTvebZH4s0481xqTIZu
-         Or9v6PerpPiTa4ZBYDutUrTG+zoflmqi9+KpILbleBtqfy52Q8cZrvAZHsfZvUn7x9ef
-         MvIjltl/m2RaNV/Kcy33DtLgxe2UPR0D5FIW0Nol8OB5LmroNVITfNNaVu4jZQw/UnOe
-         DJe4ng0XU3pSns8S3Bmy8EV3eFYKSaAm6YY0+xNvYuUSH7kqDazdTLP21gJ4EyOFYHTZ
-         KSjUm+AJw2kCDqVldmT2MAL+djaViqmhuCeTVL/6meo94dHmTaWpWhqTGosOsdzb8HX/
-         mhKA==
-X-Gm-Message-State: AOAM532H6H9vW6Ab0EturzBedYh3O25Z0cr2tQpSE8ejF5BqcOciPdFI
-        9+DBsIQiUBEc+xuMkoYpFVQ=
-X-Google-Smtp-Source: ABdhPJzDsThUZW6p6KlCe6SKrOblLrhRM+o0ogBcfGoBqkKzlliLEkvGKbHYLlwwOKXRc+RIyMwfZw==
-X-Received: by 2002:a17:903:246:b0:153:87f0:a93e with SMTP id j6-20020a170903024600b0015387f0a93emr5130014plh.171.1647711055893;
-        Sat, 19 Mar 2022 10:30:55 -0700 (PDT)
+        bh=gNHwzX1XXzyuZEkRQLK5ljL7FKM2KTEIhvt/+nJ9w5k=;
+        b=XfqoWp/LEYVCUwVdRZ2WhIQ+Oe72Bao3Y5nw/uWn9wt5DQg37rXBw4HCYoiwAXQbeJ
+         BdjOFxOaVUMdu+HvTOVe+YYbrKHX1umguWqnKcbzgJIiSeR7eGWkfE02SH3qdv97fbso
+         yhcWy9uBR5/A3srgOvB2HvaKAFhW5Qi8KhvaQHZwhlUPCaRCzvKrxIxLdFQTVh5ulBsu
+         x3FGU9WUOpuUy/HtDg/0wbAPLKuLSEgyyJawO8HM2oBWCpaaEJ8DSqibsxgFfdinHQAO
+         /kdno53tPsg0EomsNp+0HDearF+h/eFraJH3BCfLHtS62FN2bH65P9V55df+o7qXTx17
+         cE3Q==
+X-Gm-Message-State: AOAM532GiV0mk9FaiBL1V2+9fnUIB8tBHshL6wI/ohMViHWoL5P5Q6VF
+        RUHtTYgPhR5Y0KFSIj1jfS8=
+X-Google-Smtp-Source: ABdhPJx0WWiyXY4tSlfUjYz1EUtkAZiBSBQOTjQ9TIbe9waIxqXbbGnwv+SSon9nwqQjPI9mhc08Og==
+X-Received: by 2002:a17:90a:7305:b0:1bd:6972:faf5 with SMTP id m5-20020a17090a730500b001bd6972faf5mr17517556pjk.131.1647711058332;
+        Sat, 19 Mar 2022 10:30:58 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:4ab8:5400:3ff:fee9:a154])
-        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.54
+        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 10:30:55 -0700 (PDT)
+        Sat, 19 Mar 2022 10:30:57 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     roman.gushchin@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH 12/14] bpf: Allow no charge for bpf prog
-Date:   Sat, 19 Mar 2022 17:30:34 +0000
-Message-Id: <20220319173036.23352-13-laoar.shao@gmail.com>
+Subject: [PATCH 14/14] bpf: selftests: Add test case for BPF_F_PROG_NO_CHARGE
+Date:   Sat, 19 Mar 2022 17:30:36 +0000
+Message-Id: <20220319173036.23352-15-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
 References: <20220319173036.23352-1-laoar.shao@gmail.com>
@@ -65,83 +65,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow not to charge memory used by bpf progs. This includes the memory
-used by bpf progs itself, auxxiliary data, statistics and bpf line info.
+Test case to check if BPF_F_PROG_NO_CHARGE valid.
+The result as follows,
+ $ ./test_progs
+ ...
+ #103 no_charge:OK
+ ...
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/bpf/core.c    | 12 ++++++++++--
- kernel/bpf/syscall.c |  6 ++++--
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/no_charge.c      | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/no_charge.c
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 0f68b8203c18..7aa750e8bd7d 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -144,12 +144,17 @@ EXPORT_SYMBOL_GPL(bpf_prog_alloc);
- 
- int bpf_prog_alloc_jited_linfo(struct bpf_prog *prog)
- {
-+	gfp_t gfp_flags = GFP_KERNEL | __GFP_NOWARN;
+diff --git a/tools/testing/selftests/bpf/prog_tests/no_charge.c b/tools/testing/selftests/bpf/prog_tests/no_charge.c
+new file mode 100644
+index 000000000000..85fbd2ccbc71
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/no_charge.c
+@@ -0,0 +1,49 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <unistd.h>
++#include <errno.h>
++#include <string.h>
++#include <linux/bpf.h>
++#include <sys/syscall.h>
 +
- 	if (!prog->aux->nr_linfo || !prog->jit_requested)
- 		return 0;
- 
-+	if (!prog->aux->no_charge)
-+		gfp_flags |= __GFP_ACCOUNT;
++#include "test_progs.h"
 +
- 	prog->aux->jited_linfo = kvcalloc(prog->aux->nr_linfo,
- 					  sizeof(*prog->aux->jited_linfo),
--					  GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
-+					  gfp_flags);
- 	if (!prog->aux->jited_linfo)
- 		return -ENOMEM;
- 
-@@ -224,7 +229,7 @@ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
- struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
- 				  gfp_t gfp_extra_flags)
- {
--	gfp_t gfp_flags = GFP_KERNEL_ACCOUNT | __GFP_ZERO | gfp_extra_flags;
-+	gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
- 	struct bpf_prog *fp;
- 	u32 pages;
- 
-@@ -233,6 +238,9 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
- 	if (pages <= fp_old->pages)
- 		return fp_old;
- 
-+	if (!fp_old->aux->no_charge)
-+		gfp_flags |= __GFP_ACCOUNT;
++#define BPF_ALU64_IMM(OP, DST, IMM)					\
++	((struct bpf_insn) {							\
++		.code  = BPF_ALU64 | BPF_OP(OP) | BPF_K,	\
++		.dst_reg = DST,								\
++		.src_reg = 0,								\
++		.off   = 0,									\
++		.imm   = IMM })
 +
- 	fp = __vmalloc(size, gfp_flags);
- 	if (fp) {
- 		memcpy(fp, fp_old, fp_old->pages * PAGE_SIZE);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index fdfbb4d0d5e0..e386b549fafc 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2218,9 +2218,10 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	enum bpf_prog_type type = attr->prog_type;
- 	struct bpf_prog *prog, *dst_prog = NULL;
- 	struct btf *attach_btf = NULL;
--	int err;
-+	gfp_t gfp_flags = GFP_USER;
- 	char license[128];
- 	bool is_gpl;
-+	int err;
- 
- 	if (CHECK_ATTR(BPF_PROG_LOAD))
- 		return -EINVAL;
-@@ -2305,7 +2306,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
- 	}
- 
- 	/* plain bpf_prog allocation */
--	prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt), GFP_USER | __GFP_ACCOUNT);
-+	prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt),
-+				prog_flags_no_charge(gfp_flags, attr));
- 	if (!prog) {
- 		if (dst_prog)
- 			bpf_prog_put(dst_prog);
++#define BPF_EXIT_INSN()					\
++	((struct bpf_insn) {				\
++		.code  = BPF_JMP | BPF_EXIT,	\
++		.dst_reg = 0,					\
++		.src_reg = 0,					\
++		.off   = 0,						\
++		.imm   = 0 })
++
++void test_no_charge(void)
++{
++	struct bpf_insn prog[] = {
++		BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	union bpf_attr attr;
++	int duration = 0;
++	int fd;
++
++	bzero(&attr, sizeof(attr));
++	attr.prog_type = BPF_PROG_TYPE_SCHED_CLS;
++	attr.insn_cnt = 2;
++	attr.insns = (__u64)prog;
++	attr.license = (__u64)("GPL");
++	attr.prog_flags |= BPF_F_PROG_NO_CHARGE;
++
++	fd = syscall(__NR_bpf, BPF_PROG_LOAD, &attr, sizeof(attr));
++	CHECK(fd < 0 && fd != -EPERM, "no_charge", "error: %s\n",
++			strerror(errno));
++
++	if (fd > 0)
++		close(fd);
++}
 -- 
 2.17.1
 
