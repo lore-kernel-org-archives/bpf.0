@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C316C4321E
-	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:30:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 620DEC433FE
+	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243675AbiCSRcO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 13:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S243704AbiCSRcX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Mar 2022 13:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243386AbiCSRcH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Mar 2022 13:32:07 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9CB4550E;
-        Sat, 19 Mar 2022 10:30:46 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id gb19so9875707pjb.1;
-        Sat, 19 Mar 2022 10:30:46 -0700 (PDT)
+        with ESMTP id S243683AbiCSRcV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 13:32:21 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC52845ADC;
+        Sat, 19 Mar 2022 10:30:53 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id b8so9842126pjb.4;
+        Sat, 19 Mar 2022 10:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3WuzE/uAtr18lGVaEOIViWaXXDGLmE8cOvzc322Vqig=;
-        b=U3gnt1odSsXS96u0KSUsMa4JdEK+c88qDiumrnoW9VlEI1drFOGmZFEJk8GSvB/T6x
-         qa99pBmwoBsTYcODdLG0t69lxdoFOF5JsrU5lR4OYVfWG/dqOWi8GzPw93QkywOcu0BK
-         Zr+I2xakib/C99HXmI0AH8SjCqKug9WUTf1MLAcMiG7bfjZp1jfLgUwez3Zf4kgdGKq1
-         b+h+fwMAdWHAIMzPxwpm2/hWyM7NvwOz/+kMxwpRQ7A7ojh4BAailix4UWwAMZGFPBPe
-         z7jjQmG/12K/lofHz2tTdldjKW2Q0G+Lb6wfZSDVEBtNCKzj7QYL0oofFaQkPOBVFJmh
-         czpA==
+        bh=qHQu4l0DNA359MKDX3wgS7bak31X8wuVL1Qxy9vcN30=;
+        b=aVlQw/X30t3guhPlzexjfi4ZuV1qG2ftDBMaM2cxYxqwAi3vbYD6Qvz749eSnnmN3I
+         dcjSrNHmbXjAqWtWH9tlty2IMJT5ilANT557Z9fyWcqL3VhW8p+AWj02tlbZx2cPrTVs
+         b1ipu9ey3X/BQRhLYasrQJrjczm7Qpmz3cCvBHfN8DtM/l5g0NO1OCC7+VT+o5NJ9HcD
+         FW2ZjEo7o8iZXK9cbz6wNQ+H4kITaPS7gbBuVDOIm5JLoDEbKsZMAthE037au1hACQBN
+         kATbhDZARdTdhdL0FTjfcGN0oNMFTSTSZqrbMuUJc6K4XFgMwQEKQ8PAzDUSE+aqN1U1
+         XiRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3WuzE/uAtr18lGVaEOIViWaXXDGLmE8cOvzc322Vqig=;
-        b=6u7PDM9UyOjlPRW90+IVnixC4C46GcPg2IcRPFnI8eZOw7I6VaqGGUYGohyE/IePCy
-         xiVok9jvPXduqe37c0W60XmDQt1YXI8wa/lX7g+d4H0afA7IUXbkIL6qlIIl0rDz1bLi
-         tuUNM1DdD4Gms2Sn5TPkww6tM5TIJY/+UfmmwjRY6UqtF5d2+1p2lzF3x9CcLvFHkUGg
-         2V6+WlRYQDu5xqY5Gq1vrnlLkfCYibUXF1k2RpOt08Y1PsAOS7Jr0mCWxPqZAqjmeRay
-         2bq8yClBSP+leYfhORa+IogImJQa8ZFUb+9IsRYf9nYIoFwpXB7x/ldHbuTE+ln2pKMY
-         fMLA==
-X-Gm-Message-State: AOAM532p7l3xohrres5+zHpPyRlKv3tTT+Ir+Cb6nOHLkYhUD7zCqURa
-        30JBrWTH/6EHJbXaFY5velc=
-X-Google-Smtp-Source: ABdhPJw9FIF9vgwyN8OREh52A/jGghm9PrNkyABokhdKcaIawAJarKGKDk7JTox59oPleyl7Um+K3w==
-X-Received: by 2002:a17:90a:d584:b0:1b8:7864:1735 with SMTP id v4-20020a17090ad58400b001b878641735mr17400048pju.126.1647711046284;
-        Sat, 19 Mar 2022 10:30:46 -0700 (PDT)
+        bh=qHQu4l0DNA359MKDX3wgS7bak31X8wuVL1Qxy9vcN30=;
+        b=1kKUSuEIBEri2WuLOsrtKm710NPF3xUsbNafiTV+CVzZPsLsQ8x+2uH3cttHl32XPk
+         4CrsIYelW1Qv1VI1Tt1By59hAnxoTcDGaDlZEkFkbAffkZWPWOEc59ZSkM3c4rrG8V04
+         yj9oSDSSvY8Y9o7JUqI+e6iCS3esG1gIGnijtRySEDJ3s4qLYs7u3Y67cc3/83nTwQAY
+         7UmT+//Q+W3DGhCFpWyXOPnUrCMOWzjg+Ucs4k2TdEMUvbegKQH/oUaYU3SCcAhJ/NRS
+         38QXWlRxNME9kJFm637ONboXRjANDcdjYnGbz1ohEKBWtaGIbN0VU+M9iWDH5xkoIF7j
+         6X2Q==
+X-Gm-Message-State: AOAM532CQb/VFS5CefiXp/3uO8Xozw16/QOditIROZz79oGiXuJVQtYA
+        tEoIBWdEfglqWmtehVnMfw95sZkR4r1somi7sgU=
+X-Google-Smtp-Source: ABdhPJxbI/bKQUsvIS+pdtOIBg2Ba5EngaSH06pOcvVbNR2cQU79iWIhoSG40JbwcKqwIDkohnV3Ig==
+X-Received: by 2002:a17:903:230c:b0:151:93d0:5608 with SMTP id d12-20020a170903230c00b0015193d05608mr5013516plh.167.1647711053379;
+        Sat, 19 Mar 2022 10:30:53 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:4ab8:5400:3ff:fee9:a154])
-        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.45
+        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 10:30:45 -0700 (PDT)
+        Sat, 19 Mar 2022 10:30:52 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     roman.gushchin@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH 05/14] bpf: Allow no charge in bpf_map_area_alloc
-Date:   Sat, 19 Mar 2022 17:30:27 +0000
-Message-Id: <20220319173036.23352-6-laoar.shao@gmail.com>
+Subject: [PATCH 10/14] bpf: Only sys admin can set no charge flag for bpf prog
+Date:   Sat, 19 Mar 2022 17:30:32 +0000
+Message-Id: <20220319173036.23352-11-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
 References: <20220319173036.23352-1-laoar.shao@gmail.com>
@@ -65,27 +65,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the helper we introduced before to decide whether set the
-__GFP_ACCOUNT or not.
+When a bpf prog is loaded by a proccess running in a container (with memcg),
+only sys admin has privilege not to charge bpf prog memory into this
+container while account it to root memcg only.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/bpf/syscall.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/syscall.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index f70a7067ef4a..add3b4045b4d 100644
+index 346f3df9fa1d..ecc5de216f50 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -307,7 +307,7 @@ static void *__bpf_map_area_alloc(u64 size, union bpf_attr *attr, bool mmapable)
- 	 * __GFP_RETRY_MAYFAIL to avoid such situations.
- 	 */
+@@ -2234,6 +2234,9 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ 				 BPF_F_PROG_NO_CHARGE))
+ 		return -EINVAL;
  
--	const gfp_t gfp = __GFP_NOWARN | __GFP_ZERO | __GFP_ACCOUNT;
-+	const gfp_t gfp = map_flags_no_charge(__GFP_NOWARN | __GFP_ZERO, attr);
- 	int numa_node = bpf_map_attr_numa_node(attr);
- 	unsigned long align = 1;
- 	unsigned int flags = 0;
++	if (attr->prog_flags & BPF_F_PROG_NO_CHARGE && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
+ 	    (attr->prog_flags & BPF_F_ANY_ALIGNMENT) &&
+ 	    !bpf_capable())
 -- 
 2.17.1
 
