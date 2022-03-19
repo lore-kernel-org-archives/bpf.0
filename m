@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B429C43217
-	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE26C4332F
+	for <bpf@archiver.kernel.org>; Sat, 19 Mar 2022 17:31:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243756AbiCSRcn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Mar 2022 13:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S243773AbiCSRcp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Mar 2022 13:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243692AbiCSRcV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 19 Mar 2022 13:32:21 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FB946664;
-        Sat, 19 Mar 2022 10:30:57 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso13051871pjb.0;
-        Sat, 19 Mar 2022 10:30:57 -0700 (PDT)
+        with ESMTP id S243717AbiCSRcl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 19 Mar 2022 13:32:41 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52754457B1;
+        Sat, 19 Mar 2022 10:31:03 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id o13so7338313pgc.12;
+        Sat, 19 Mar 2022 10:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZbZuWBU2sc499QxzBGg0bo+ElRsdQRuA/wKM02GiSt0=;
-        b=JDzhcgxLaOZ0V5gQyGN26pppLmf+IEka5KXyc+sYktuWOVw1iyjcmYwMhfau6fSgW0
-         fr6qpqXP4nz1I9Wi3AdFDsrYzUoKQ5rcPKtdleHoqnbiEA1BR6lY5jMhpxNh/DZJLx1D
-         pJqny+cak/5s+YheGaxZCKKrSId/jE5qRPEjX8k2Tsw4yLAiheUuhGnXs4JQDY/do6N4
-         qD8kHpB00mbFSTf7EW7F2iGL8zO5+tc6YGyRebwiSnoNQLpxHnD9c17jbvdeE8S9rXFQ
-         gECgFIUCTgYZav51XtHHKH3EI32BVcZ6u1LuyVTOByOIkBHO0ac7oQxNpfi5+1K0agaS
-         IdJQ==
+        bh=cJVyZjeOEvx3Lfsyy6KEMt0pbjay35w3CRFKsCROdt0=;
+        b=OK4rLjPj7lNzt5BEEa9L1Z4QKJn9pYIcC9ajSWth0exTWw1+1u7BCl8D0VakqT6IAU
+         XiqRdOH1SNNrB82Q/huswOP4Djic+w+i/ATCAF0iFRKnuYzWMSlmLeCFj+p8H0mkCwll
+         uGaN1fq/gOyLCrQc4QFUX6yg3FDa/+Tm8Duqp/jK7xhrm8G0YJkeUdwydfI0Hi7h21o+
+         1MJA/7VNowNk3kjz8Dy3jqxyDhKGoWNqga1/bSRDlahTOhvLyJeVxSAv1CRN/qd7W+8a
+         umByxC08emMOptRp0tA0lz9BeVjkJFX2rlDaErusVMQqbeg1dGyzSRL9RLgIOBdgGOsk
+         fFGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZbZuWBU2sc499QxzBGg0bo+ElRsdQRuA/wKM02GiSt0=;
-        b=az9JXMl7RWECzVh8MG4/gdJDAdREzkgGWssiFEW51oi/REl67+09nfvWWQzGVlxPXY
-         oVrVo1FdDDXk61vz432KH9oKCpo4km7cvhIzcplcj3qCWog8M4RHI4bwg1y8t1L82UoR
-         d0JRbLB4zZE60tHsgAUB1IabwfZpQjIjlxo2fh/ouTPYG4Xxsgr63dBwx6uq/FMPuoJT
-         CjcBy0NejG+uscm3h4NjRsu7x1FwbQrmfNSbRqONM5kJseD+p/TZ7r4WBGnbrbPMXG1t
-         ch6dd97JXCSw4H/+5w7rJ78adnO4mAHMptL0KMJl9OR99cdqG00NLb0pS0sGxuErhmtA
-         Q8pQ==
-X-Gm-Message-State: AOAM532bsDYBSp31dU+cjO22bmjQ02HkfSCqkxgQWDi76EHt8F/OVxBP
-        lL1bIHPlbd/XNPVmLDlsHxg=
-X-Google-Smtp-Source: ABdhPJxy2a+rHVqh1VHAdTv82D7TgvdaSm91ZkM3za+b6cl7Kt8elH7cuNexrX827Jw5FearElHdtg==
-X-Received: by 2002:a17:902:8f96:b0:153:62bb:c4a3 with SMTP id z22-20020a1709028f9600b0015362bbc4a3mr5131018plo.154.1647711057087;
-        Sat, 19 Mar 2022 10:30:57 -0700 (PDT)
+        bh=cJVyZjeOEvx3Lfsyy6KEMt0pbjay35w3CRFKsCROdt0=;
+        b=0WgSZSfd7Q+RZ3juNq/VVRMe7XxC4aqt4z7JcIYl+VXs6D7VHjA18VZMkBMCzmtP1a
+         HGm3Ddi4EScJp2UDzOV2FI3HxEivOt7NhaGsfDBKD6JUplmvZMfp2KjC07jEawV23kiJ
+         wrKiQln+pFcf5V5bFIpRjloNcx5/r0lgkKzu7ikCeck79sODl7GvYCovsbmBhR8SMLJO
+         xoEnD8YCGMvFHc8srHV+OUhTAqNrpE/3jLiU1IucExHTWzuySOnQ2pSWVKeaVf+0YRLZ
+         8Iae0PSSSyM081Y5PE9J60r8lZBApoFIA+zePxxQjjHY9On5/vH7nG1BriUCelnYNs34
+         3WTw==
+X-Gm-Message-State: AOAM532kEcy7t/uIctCnvWkYAcl30UsZLe6HLYKfw28gOyODD09LgMIm
+        HQJsoeNdP3FrP3YXtjZ5QwEwIoLrd2zJEpYVgbQ=
+X-Google-Smtp-Source: ABdhPJwmiilJbVdPYG4/QB253/81b+H5bYLkd9Pn7OxLgGgpM8MfUoP7wNhIy4RR8R9itochanvoZA==
+X-Received: by 2002:a62:684:0:b0:4f7:803:d1b0 with SMTP id 126-20020a620684000000b004f70803d1b0mr16231429pfg.10.1647711051443;
+        Sat, 19 Mar 2022 10:30:51 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:4ab8:5400:3ff:fee9:a154])
-        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.56
+        by smtp.gmail.com with ESMTPSA id k21-20020aa788d5000000b004f71bff2893sm12722136pff.67.2022.03.19.10.30.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Mar 2022 10:30:56 -0700 (PDT)
+        Sat, 19 Mar 2022 10:30:50 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     roman.gushchin@linux.dev, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH 13/14] bpf: selftests: Add test case for BPF_F_NO_CHARTE
-Date:   Sat, 19 Mar 2022 17:30:35 +0000
-Message-Id: <20220319173036.23352-14-laoar.shao@gmail.com>
+Subject: [PATCH 09/14] bpf: Add no charge flag for bpf prog
+Date:   Sat, 19 Mar 2022 17:30:31 +0000
+Message-Id: <20220319173036.23352-10-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
 References: <20220319173036.23352-1-laoar.shao@gmail.com>
@@ -65,103 +65,99 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF_F_NO_CHARTE test case for various maps. Below is the result,
-$ ./test_maps
-...
-test_no_charge:PASS
-...
+A no charge flag is also introduced for bpf prog, which is similar with
+the no charge flag introduced for bpf map. The usecase of it is the same
+too.
+
+It is added in bpf_attr for BPF_PROG_LOAD command, and then set in
+bpf_prog_aux for the memory allocation which is not at the loading path.
+There're 4B holes after the member max_rdwr_access in struct bpf_prog_aux,
+so we can place the new member there.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- .../selftests/bpf/map_tests/no_charg.c        | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/map_tests/no_charg.c
+ include/linux/bpf.h            | 8 ++++++++
+ include/uapi/linux/bpf.h       | 3 +++
+ kernel/bpf/syscall.c           | 4 +++-
+ tools/include/uapi/linux/bpf.h | 3 +++
+ 4 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/map_tests/no_charg.c b/tools/testing/selftests/bpf/map_tests/no_charg.c
-new file mode 100644
-index 000000000000..db18685a53f7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/map_tests/no_charg.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <sys/syscall.h>
-+#include <linux/bpf.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <errno.h>
-+
-+#include <test_maps.h>
-+
-+struct map_attr {
-+	__u32 map_type;
-+	char *map_name;
-+	__u32 key_size;
-+	__u32 value_size;
-+	__u32 max_entries;
-+	__u32 map_flags;
-+};
-+
-+static struct map_attr attrs[] = {
-+	{BPF_MAP_TYPE_HASH, "BPF_MAP_TYPE_HASH", 4, 4, 10},
-+	{BPF_MAP_TYPE_ARRAY, "BPF_MAP_TYPE_ARRAY", 4, 4, 10},
-+	{BPF_MAP_TYPE_PROG_ARRAY, "BPF_MAP_TYPE_PROG_ARRAY", 4, 4, 10},
-+	{BPF_MAP_TYPE_PERF_EVENT_ARRAY, "BPF_MAP_TYPE_PERF_EVENT_ARRAY", 4, 4, 10},
-+	{BPF_MAP_TYPE_PERCPU_HASH, "BPF_MAP_TYPE_PERCPU_HASH", 4, 4, 10},
-+	{BPF_MAP_TYPE_PERCPU_ARRAY, "BPF_MAP_TYPE_PERCPU_ARRAY", 4, 4, 10},
-+	{BPF_MAP_TYPE_STACK_TRACE, "BPF_MAP_TYPE_STACK_TRACE", 4, 8, 10},
-+	{BPF_MAP_TYPE_CGROUP_ARRAY, "BPF_MAP_TYPE_CGROUP_ARRAY", 4, 4, 10},
-+	{BPF_MAP_TYPE_LRU_HASH, "BPF_MAP_TYPE_LRU_HASH", 4, 4, 10},
-+	{BPF_MAP_TYPE_LRU_PERCPU_HASH, "BPF_MAP_TYPE_LRU_PERCPU_HASH", 4, 4, 10},
-+	{BPF_MAP_TYPE_LPM_TRIE, "BPF_MAP_TYPE_LPM_TRIE", 32, 4, 10, BPF_F_NO_PREALLOC},
-+	{BPF_MAP_TYPE_DEVMAP, "BPF_MAP_TYPE_DEVMAP", 4, 4, 10},
-+	{BPF_MAP_TYPE_SOCKMAP, "BPF_MAP_TYPE_SOCKMAP", 4, 4, 10},
-+	{BPF_MAP_TYPE_CPUMAP, "BPF_MAP_TYPE_CPUMAP", 4, 4, 10},
-+	{BPF_MAP_TYPE_XSKMAP, "BPF_MAP_TYPE_XSKMAP", 4, 4, 10},
-+	{BPF_MAP_TYPE_SOCKHASH, "BPF_MAP_TYPE_SOCKHASH", 4, 4, 10},
-+	{BPF_MAP_TYPE_REUSEPORT_SOCKARRAY, "BPF_MAP_TYPE_REUSEPORT_SOCKARRAY", 4, 4, 10},
-+	{BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE, "BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE", 8, 4, 0},
-+	{BPF_MAP_TYPE_QUEUE, "BPF_MAP_TYPE_QUEUE", 0, 4, 10},
-+	{BPF_MAP_TYPE_DEVMAP_HASH, "BPF_MAP_TYPE_DEVMAP_HASH", 4, 4, 10},
-+	{BPF_MAP_TYPE_RINGBUF, "BPF_MAP_TYPE_RINGBUF", 0, 0, 4096},
-+	{BPF_MAP_TYPE_BLOOM_FILTER, "BPF_MAP_TYPE_BLOOM_FILTER", 0, 4, 10},
-+};
-+
-+static __u32 flags[] = {
-+	BPF_F_NO_CHARGE,
-+};
-+
-+void test_map_flags(union bpf_attr *attr, char *name)
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 90a542d5a411..69ff3e35b8f2 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -214,6 +214,13 @@ map_flags_no_charge(gfp_t flags, union bpf_attr *attr)
+ 	return flags |= (attr->map_flags & BPF_F_NO_CHARGE) ? 0 : __GFP_ACCOUNT;
+ }
+ 
++static inline gfp_t
++prog_flags_no_charge(gfp_t flags, union bpf_attr *attr)
 +{
-+	int mfd;
-+
-+	mfd = syscall(SYS_bpf, BPF_MAP_CREATE, attr, sizeof(*attr));
-+	CHECK(mfd <= 0 && mfd != -EPERM, "no_charge", "%s error: %s\n",
-+		name, strerror(errno));
-+
-+	if (mfd > 0)
-+		close(mfd);
++	return flags |= (attr->prog_flags & BPF_F_PROG_NO_CHARGE) ?
++					0 : __GFP_ACCOUNT;
 +}
 +
-+void test_no_charge(void)
-+{
-+	union bpf_attr attr;
-+	int i, j;
+ static inline gfp_t
+ bpf_flags_no_charge(gfp_t flags, bool no_charge)
+ {
+@@ -958,6 +965,7 @@ struct bpf_prog_aux {
+ 	u32 ctx_arg_info_size;
+ 	u32 max_rdonly_access;
+ 	u32 max_rdwr_access;
++	bool no_charge; /* dont' charge memory to memcg */
+ 	struct btf *attach_btf;
+ 	const struct bpf_ctx_arg_aux *ctx_arg_info;
+ 	struct mutex dst_mutex; /* protects dst_* pointers below, *after* prog becomes visible */
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 93ee04fb8c62..3c98b1b77db6 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1121,6 +1121,9 @@ enum {
+  * fully support xdp frags.
+  */
+ 	BPF_F_XDP_HAS_FRAGS		= (1U << 5),
 +
-+	memset(&attr, 0, sizeof(attr));
-+	for (i = 0; i < sizeof(flags) / sizeof(__u32); i++) {
-+		for (j = 0; j < sizeof(attrs) / sizeof(struct map_attr); j++) {
-+			attr.map_type = attrs[j].map_type;
-+			attr.key_size = attrs[j].key_size;
-+			attr.value_size = attrs[j].value_size;
-+			attr.max_entries = attrs[j].max_entries;
-+			attr.map_flags = attrs[j].map_flags | flags[i];
-+			test_map_flags(&attr, attrs[j].map_name);
-+		}
-+	}
++/* Don't charge memory to memcg */
++	BPF_F_PROG_NO_CHARGE	= (1U << 6),
+ };
+ 
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e84aeefa05f4..346f3df9fa1d 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2230,7 +2230,8 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ 				 BPF_F_TEST_STATE_FREQ |
+ 				 BPF_F_SLEEPABLE |
+ 				 BPF_F_TEST_RND_HI32 |
+-				 BPF_F_XDP_HAS_FRAGS))
++				 BPF_F_XDP_HAS_FRAGS |
++				 BPF_F_PROG_NO_CHARGE))
+ 		return -EINVAL;
+ 
+ 	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) &&
+@@ -2317,6 +2318,7 @@ static int bpf_prog_load(union bpf_attr *attr, bpfptr_t uattr)
+ 	prog->aux->offload_requested = !!attr->prog_ifindex;
+ 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
+ 	prog->aux->xdp_has_frags = attr->prog_flags & BPF_F_XDP_HAS_FRAGS;
++	prog->aux->no_charge = attr->prog_flags & BPF_F_PROG_NO_CHARGE;
+ 
+ 	err = security_bpf_prog_alloc(prog->aux);
+ 	if (err)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 71a4d8fdc880..89752e5c11c0 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1121,6 +1121,9 @@ enum {
+  * fully support xdp frags.
+  */
+ 	BPF_F_XDP_HAS_FRAGS		= (1U << 5),
 +
-+	printf("%s:PASS\n", __func__);
-+}
++/* Don't charge memory to memcg */
++	BPF_F_PROG_NO_CHARGE	= (1U << 6),
+ };
+ 
+ /* link_create.kprobe_multi.flags used in LINK_CREATE command for
 -- 
 2.17.1
 
