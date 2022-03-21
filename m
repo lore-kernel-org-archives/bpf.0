@@ -2,59 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C25C433FE
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:59:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D84C433EF
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 23:03:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiCUXAi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 19:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S231710AbiCUXEs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 19:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbiCUW7K (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:59:10 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25753324D64;
-        Mon, 21 Mar 2022 15:46:45 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id 185so7675664vsq.8;
-        Mon, 21 Mar 2022 15:46:45 -0700 (PDT)
+        with ESMTP id S231888AbiCUXEg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 19:04:36 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF31E185946;
+        Mon, 21 Mar 2022 15:50:29 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id w4so13950601ply.13;
+        Mon, 21 Mar 2022 15:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KLkiceh7FVS00nQi94x7eJVMtBdQbeaIibQoKaWYl8E=;
-        b=caRSOC3C4scd0H//UxWuKxVs05sAzJncJTZaouCVpdJz+RlMT9Bojz47Vi7CFlKp0c
-         YEmy2SUy4tN5dH1vQtLhDdUvhc3CsI3Drb/1Qox1DGJ8jqPflIjXCvxnmOkL/j6bCys6
-         gNCluTsTCCW5mJYv+T5aLL40BsUU+u+1poIvyIxsBhZsmLVih7y54uDx9ltEvBFA5W/M
-         MhYLnO/73VpP8lJgWUd2lfg1oSUpVOKFYaOpyv2wEHf7VA3ZRF4zgDJSoN4NLQsD/VRF
-         l6Lj6QBXLj5SKxzIrZXdDGn3aYTlnBfgzSGjUKgzI8vgTPAsoleHBHFbgD69BkDcHRXR
-         WUow==
+        bh=DjDIX8FrnNGu2sjrMpbegjPBjATRwYY4jn7Ao70Kxyo=;
+        b=IaV+U83i5jJzWL8L+pKxUmTUm0rPMYYOsiZUl+5853A/3WhOMJimBY37LgFdAg9+C4
+         raODH5QYd1S8pEOSUHR5KU8kDwcLUZTp5htU64Lvpqruj45p1VilJKYTK503JNGKJcsW
+         0soXjGYIZpy2b+1izOhgzubWaySAQ0guXKN6PifYwEtKEO3IHZSkl4mPfSlvn1cziW+X
+         V2KAQXldEzaaom5rZoP2aVRv/dLfn4cBi8sM+L5IPA22AxetjrV99i0XMeWeFKGFDRXv
+         XQWxPa/vvXQ2ViqzsELJRMzdQV9Pd+pKv4slWwPClhaELCZyUWB4fsRNDZDwAROHhHe5
+         QSPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KLkiceh7FVS00nQi94x7eJVMtBdQbeaIibQoKaWYl8E=;
-        b=H1LvL5Xh0JvEJuCPx7t+4QA2XfYDGcuhDugYHGLQOD0NBkG4zPTUNTjYWx54A0J8BD
-         zPGDNY4LEty9Dl9Qed+uTzneFDbKCCureBiWPIiJpW13/25OzvgyyUjK7xtHhZ0fF8Uh
-         x43tyAGJUmAFfr03jsjoPL9ynGOkOzl6PZKG7ZZ4Z++F7FxVD3axBLUb4bWCOBV6UQMo
-         W47DxdL8/a/RH8RLPZkOkQRXJBMLUSXDoTcT7xKRfXPJk+zNk8gUt3Usj0xoxe7Dtovm
-         BtzeGq38+YueULF5dadtT5oImHBigIPlvpQekwkty+WEWCsuOV5efVCgrGcJMlMDxY+r
-         5cZQ==
-X-Gm-Message-State: AOAM530hGKUr79LnRSkX5hUsS+XWLDPTgjn7GJZ4A/rvpFDYGmhkZiqH
-        8HGlBTlJdHiE8vhZe8gmC+Wlgb3qzi7sRCJM6mag/T04
-X-Google-Smtp-Source: ABdhPJxCsMaQmrzfv8GKYMyK9qiHMXFUsezbm2wUfdUgXGXQmuYRJDRyumiEJQNikiKCEm0N2orr+DETmegYhv9f6aw=
-X-Received: by 2002:a17:903:32c7:b0:154:4156:f384 with SMTP id
- i7-20020a17090332c700b001544156f384mr11038638plr.34.1647900736459; Mon, 21
- Mar 2022 15:12:16 -0700 (PDT)
+        bh=DjDIX8FrnNGu2sjrMpbegjPBjATRwYY4jn7Ao70Kxyo=;
+        b=Be6LPVV+R9OXfzjFSlyWnyK4oGhj/a1acJNZiAsCDMm8KBnSZUpBwSGcviUhHWDcnV
+         hlrbExmlQ1Ya7BDw45+r5XJz9p02DnZ2IiP0XOvCoJEzN2GfZ+xujlTB5T1S5cQOwKFD
+         wO8sA/tPAq7mzQv5hXa3kKX0lev7I3VAvF2iD+D4Hu5F4JFGSVSb5kD+1wfYzJDUvTD8
+         0gVZEeJxQxBWkOAi3qgg+B9s2953irb624W3Y3ZGMWbg6WQlDmtHeEM8Jro5N5+wZAxh
+         1M97XtnJ/YLVPjiiDhtFMO9TMxN4HlhXb2VTLOqPs+T5ZCj86+gEa1mGPKkebl9Sqphg
+         7CMw==
+X-Gm-Message-State: AOAM530rHLW2o8IAZj4IjosCUA5+R4qAfLCccy4kweFnJFC+rJKWA4Fz
+        8E0Lk+/Vj3flu6SzV+/C6xwYiiOd14AyEwDJlVY=
+X-Google-Smtp-Source: ABdhPJw9lrVe9NKMoe6AyhEoPhg1LpuOlXp8HBaE8bBK/xHhap0NsTF5dieSqAx7Rc6F2gLPnSouhFRil+H7jvXDXcE=
+X-Received: by 2002:a17:90b:3d03:b0:1c6:74bf:418a with SMTP id
+ pt3-20020a17090b3d0300b001c674bf418amr1494432pjb.33.1647903029013; Mon, 21
+ Mar 2022 15:50:29 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220321140327.777f9554@canb.auug.org.au> <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
  <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net> <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
  <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net> <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
  <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net> <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
  <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net> <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
- <20220322090541.7d06c8cb@canb.auug.org.au>
-In-Reply-To: <20220322090541.7d06c8cb@canb.auug.org.au>
+ <20220322090541.7d06c8cb@canb.auug.org.au> <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
+ <20220322094526.436ca4f7@elm.ozlabs.ibm.com>
+In-Reply-To: <20220322094526.436ca4f7@elm.ozlabs.ibm.com>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 21 Mar 2022 15:12:05 -0700
-Message-ID: <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
+Date:   Mon, 21 Mar 2022 15:50:17 -0700
+Message-ID: <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
 Subject: Re: linux-next: build warnings after merge of the tip tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -83,44 +84,23 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 3:05 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Mon, Mar 21, 2022 at 3:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Hi all,
+> Hi Alexei,
 >
-> On Mon, 21 Mar 2022 09:52:58 -0700 Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> On Mon, 21 Mar 2022 15:12:05 -0700 Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 > >
-> > On Mon, Mar 21, 2022 at 9:45 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > It's presumably not in any of the pull requests I already have
-> > > > pending, but it would be nice if I saw some details of _what_ you are
-> > > > complaining about, and not just the complaint itself ;)
-> > >
-> > > Duh, right. It's this series:
-> > >
-> > >   https://lore.kernel.org/bpf/164757541675.26179.17727138330733641017.git-patchwork-notify@kernel.org/
-> > >
-> > > That went into bpf-next last Friday. I just checked but haven't found a
-> > > pull for it yet.
-> >
-> > Thanks. I can confirm it's not in any of the pull requests I have
-> > pending, so I'll just start doing my normal work and try to remember
-> > to look out for this issue later.
+> > That makes little sense. It's not an unusual merge conflict.
+> > Peter's endbr series conflict with Masami's fprobe.
+> > Peter has a trivial patch that fixes objtool warning.
+> > The question is how to land that patch.
+> > I think the best is for Linus to apply it after bpf-next->net-next gets
+> > merged.
 >
-> The normal path for bpf-next code is via the net-next tree.  But the
-> above series has not yet been merged into the net-next tree so is only
-> in the bpf-next tree.
->
-> So, what am I to do?  Drop the bpf-next tree from linux-next until this
-> is resolved?  Some input from the BPF people would be useful.
->
-> Dave, Jakub, please do not merge the bpf-bext tree into the net-next
-> tree for now.
+> Peter has other concerns, please read the thread and consider them.
 
-That makes little sense. It's not an unusual merge conflict.
-Peter's endbr series conflict with Masami's fprobe.
-Peter has a trivial patch that fixes objtool warning.
-The question is how to land that patch.
-I think the best is for Linus to apply it after bpf-next->net-next gets
-merged.
-
-We're preparing bpf-next PR right now.
+Masami is an expert in kprobe. He copy pasted a bit of kprobe logic
+to make it into 'multi kprobe' (he calls it fprobe).
+I believe he knows what he's doing.
+Steven reviewed and tested that set.
+We've tested it as well and don't have any correctness or api concerns.
