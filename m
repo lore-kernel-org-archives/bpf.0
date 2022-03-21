@@ -2,190 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23348C433F5
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A10AC433F5
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:46:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbiCUWq3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 18:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
+        id S229664AbiCUWrv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 18:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiCUWq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:46:28 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52AF47FC29
-        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 15:25:02 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id h21so11344812ila.7
-        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 15:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QwTc/aZgWxAonyYAcThWgkliP6pLXbLK64gZl/J+QyU=;
-        b=E/prtRg0vk6i5Lfx6RswCwmwH3UM2COQOlYWeROLObirP6Eo9A5sgWsOznGbRHsXD3
-         rp6Om/d297aNJNek8jMLDb2CsaRQ1Vbb1yMjwtxzCq2VyuqoMwFYUC7CMHFdOndxFbHT
-         UQEqj039SGPUYOsIgXulCBFR2LDsxKlQF0+5SJ0ov4PzOEwYNuqx3vVwg0Wb5PtiuqsB
-         3jhSegjeZdEU7krLu7V8/3ZsExzPkQebewTggCN0ot4mJ3tMMfF2RI2A21KaxQuBTtXG
-         e41ASl6qxZCYTZOMJu61m9gBIo/hYSlPgyq1q/mB5Tu+QfS0T74zS+SB4Jm0XLHgHpne
-         2Pjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QwTc/aZgWxAonyYAcThWgkliP6pLXbLK64gZl/J+QyU=;
-        b=tezsGzYIT9MOQP2vznvK59/VbOLc/nz3Bsi1SciHKmWHB2iYMJfv2r0UNRHoubJFLP
-         8/rFD7wmCGaGsXMgMaygN0o/zGw2Zos68sWUkn/Rt5gXOboozUhylhPULdOFUXen4B+E
-         DRMzyARQ2jqGYjisE00hC0q886T15/0vtJm0BOuSdIw/S6of/2kgzObAEl1BLjGTJvjs
-         LIvipvUiUlxnyIwhARSKB7RdKYhGRvhcNa+5IrLIl0XqQW/bqQjDBVMkoUcrvuqtU3Sd
-         1iZtyOB38N0G0OO6XVnZhPh8yq0jzLjSAbupYrNZmgq5/MnOJbf4ea2d9xIE+FwdU5ow
-         yh2Q==
-X-Gm-Message-State: AOAM5304JDXXPLtSEi0yECHU2vZbnkn/YBx2+JmvIin3FCs2sfkOkuVn
-        NoKhitjmIx5bumMBWZpmP3SuQ1dPuCb0ej4Z0fQE+N1A
-X-Google-Smtp-Source: ABdhPJwKsHyXN+pTc5MKoHf5XZ2IRNEDGJHx+1U1nnAZtxqRfaOPL53tI6QgPOCzYXafF91hzG6NlGCO1X1mYCy6aAs=
-X-Received: by 2002:a05:6e02:16c7:b0:2c7:e458:d863 with SMTP id
- 7-20020a056e0216c700b002c7e458d863mr10051488ilx.71.1647901418355; Mon, 21 Mar
- 2022 15:23:38 -0700 (PDT)
+        with ESMTP id S229797AbiCUWrf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 18:47:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E612636E819;
+        Mon, 21 Mar 2022 15:27:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D205B81A4D;
+        Mon, 21 Mar 2022 22:03:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C557C340F8;
+        Mon, 21 Mar 2022 22:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647900223;
+        bh=Q7gazwmOiF1+pGMUPd49Zh6pNO4LTkSrTEg1R9lEwig=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UcdkgUCRnjf+T4JeLeEPezb1Ad/rZaYpJCzlzw+MAAsHZhewgbzIci6bVvXeWCs3C
+         NzLq0oOHw++hHBtel/l5NqWbtchprKX2E14ME0S7FxWGfQvfi7reAx0ZORM37A0AFS
+         4XjpUf2TOohmM14Hs9nJ99b1zg9xmXHgBi8RZgF7Rq9IxmH7SW14mSK9MQBLb9eELd
+         7XFOSDInMs4wfF8UxggDApnwTbmYaeaFdMIpzIKYrkeRFrJbRlEcBna5w7AimpJSLk
+         Ah3ogsoHbm7In2pe4B/cEo5qE2fknhVVv35bIDnqPjdO/wY6ZRoSiubeWOg2KKj67b
+         6HqQcv3FYlyrA==
+Received: by mail-yb1-f171.google.com with SMTP id z8so30552512ybh.7;
+        Mon, 21 Mar 2022 15:03:43 -0700 (PDT)
+X-Gm-Message-State: AOAM53198xCckhrOc75EsO+z744t/vpjDxCgYcQH61yC3eBCY4R3tamZ
+        gnJbi8J2ITYvz2wC+9x5ENVg26ptNpkMecKnH9Q=
+X-Google-Smtp-Source: ABdhPJwUdLaKpQIQDkJmLsTAFWXPlXvioL7Q/635HKNveO8Z14I2OOLoc+cD3XHJ0vLQNRs6TluOSbPrGrvsR6WLsik=
+X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
+ j1-20020a258b81000000b0062917d568c1mr23210434ybl.449.1647900222062; Mon, 21
+ Mar 2022 15:03:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <CH2PR21MB1430AFEB81F5F7930E8027C1FA089@CH2PR21MB1430.namprd21.prod.outlook.com>
- <CAEf4BzYsGVSTS5t=OBPpMKcGm8F0aB4PG=dxK+Pg=UeP18o0NA@mail.gmail.com> <CH2PR21MB14307F582468BB431CAABA4DFA0C9@CH2PR21MB1430.namprd21.prod.outlook.com>
-In-Reply-To: <CH2PR21MB14307F582468BB431CAABA4DFA0C9@CH2PR21MB1430.namprd21.prod.outlook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 21 Mar 2022 15:23:27 -0700
-Message-ID: <CAEf4Bzbyn4qGNN6m0XDAMw2GTNFPBEfwHNgzxN31ERRgBXZLwg@mail.gmail.com>
-Subject: Re: [EXTERNAL] Re: [PATCH bpf-next] Support load time binding of bpf-helpers.
-To:     Alan Jowett <Alan.Jowett@microsoft.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAPhsuW64x8_m1pNN9gC8LA8ajAmy+5O3y+iOaC7ixSXU=J624Q@mail.gmail.com>
+ <CAO-hwJL+A5hqzGBCVCtp4diuM-_Aii+HAKNfz5oMZBTHCQrEkQ@mail.gmail.com>
+In-Reply-To: <CAO-hwJL+A5hqzGBCVCtp4diuM-_Aii+HAKNfz5oMZBTHCQrEkQ@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 21 Mar 2022 15:03:31 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7W_pGHFb4MyZHaFk9TV9zYaLXoTS_0hLoeqGOB8htRBg@mail.gmail.com>
+Message-ID: <CAPhsuW7W_pGHFb4MyZHaFk9TV9zYaLXoTS_0hLoeqGOB8htRBg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
+ descriptor from an eBPF program
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 10:37 AM Alan Jowett <Alan.Jowett@microsoft.com> wr=
-ote:
+On Mon, Mar 21, 2022 at 9:20 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
 >
-> Thanks for the feedback, I appreciate it. Any suggestions on how to make =
-the output more visually appealing?
+> On Fri, Mar 18, 2022 at 10:10 PM Song Liu <song@kernel.org> wrote:
+> >
+> > On Fri, Mar 18, 2022 at 9:17 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Make use of BPF_HID_ATTACH_RDESC_FIXUP so we can trigger an rdesc fixup
+> > > in the bpf world.
+> > >
+> > > Whenever the program gets attached/detached, the device is reconnected
+> > > meaning that userspace will see it disappearing and reappearing with
+> > > the new report descriptor.
+> > >
+> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > >
+> > > ---
+> > >
+> > > changes in v3:
+> > > - ensure the ctx.size is properly bounded by allocated size
+> > > - s/link_attached/post_link_attach/
+> > > - removed the switch statement with only one case
+> > >
+> > > changes in v2:
+> > > - split the series by bpf/libbpf/hid/selftests and samples
+> > > ---
+> > >  drivers/hid/hid-bpf.c  | 62 ++++++++++++++++++++++++++++++++++++++++++
+> > >  drivers/hid/hid-core.c |  3 +-
+> > >  include/linux/hid.h    |  6 ++++
+> > >  3 files changed, 70 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/hid/hid-bpf.c b/drivers/hid/hid-bpf.c
+> > > index 5060ebcb9979..45c87ff47324 100644
+> > > --- a/drivers/hid/hid-bpf.c
+> > > +++ b/drivers/hid/hid-bpf.c
+> > > @@ -50,6 +50,14 @@ static struct hid_device *hid_bpf_fd_to_hdev(int fd)
+> > >         return hdev;
+> > >  }
+> > >
+> > > +static int hid_reconnect(struct hid_device *hdev)
+> > > +{
+> > > +       if (!test_and_set_bit(ffs(HID_STAT_REPROBED), &hdev->status))
+> > > +               return device_reprobe(&hdev->dev);
+> > > +
+> > > +       return 0;
+> > > +}
+> > > +
+> > >  static int hid_bpf_pre_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> > >  {
+> > >         int err = 0;
+> > > @@ -92,6 +100,12 @@ static int hid_bpf_pre_link_attach(struct hid_device *hdev, enum bpf_hid_attach_
+> > >         return err;
+> > >  }
+> > >
+> > > +static void hid_bpf_post_link_attach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> > > +{
+> > > +       if (type == BPF_HID_ATTACH_RDESC_FIXUP)
+> > > +               hid_reconnect(hdev);
+> > > +}
+> > > +
+> > >  static void hid_bpf_array_detach(struct hid_device *hdev, enum bpf_hid_attach_type type)
+> > >  {
+> > >         switch (type) {
+> > > @@ -99,6 +113,9 @@ static void hid_bpf_array_detach(struct hid_device *hdev, enum bpf_hid_attach_ty
+> > >                 kfree(hdev->bpf.device_data);
+> > >                 hdev->bpf.device_data = NULL;
+> > >                 break;
+> > > +       case BPF_HID_ATTACH_RDESC_FIXUP:
+> > > +               hid_reconnect(hdev);
+> > > +               break;
+> > >         default:
+> > >                 /* do nothing */
+> > >                 break;
+> > > @@ -116,6 +133,9 @@ static int hid_bpf_run_progs(struct hid_device *hdev, struct hid_bpf_ctx_kern *c
+> > >         case HID_BPF_DEVICE_EVENT:
+> > >                 type = BPF_HID_ATTACH_DEVICE_EVENT;
+> > >                 break;
+> > > +       case HID_BPF_RDESC_FIXUP:
+> > > +               type = BPF_HID_ATTACH_RDESC_FIXUP;
+> > > +               break;
+> > >         default:
+> > >                 return -EINVAL;
+> > >         }
+> > > @@ -155,11 +175,53 @@ u8 *hid_bpf_raw_event(struct hid_device *hdev, u8 *data, int *size)
+> > >         return ctx.data;
+> > >  }
+> > >
+> > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+> > > +{
+> > > +       int ret;
+> > > +       struct hid_bpf_ctx_kern ctx = {
+> > > +               .type = HID_BPF_RDESC_FIXUP,
+> > > +               .hdev = hdev,
+> > > +               .size = *size,
+> > > +       };
+> > > +
+> > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
+> >
+> > Do we need to lock bpf_hid_mutex before calling bpf_hid_link_empty()?
+> > (or maybe we
+> > already did?)
 >
-> If there was a IANA equivalent for assigning helper function id's then it=
- might be possible to support having the same IDs on multiple platforms, bu=
-t as it exists today the various platforms are developed separately, with n=
-o simple way to co-ordinate. The benefit of using symbols over numeric id's=
- is that it reduces the possibility of identifier collision, where differen=
-t platforms might define helper ID # to mean different things, but it's les=
-s likely that different platforms will define bpf_foo_bar to have different=
- semantics.
+> The mutex is not locked before this call, indeed.
 >
-> Conceptually, this is like the relocations done using BTF data for CORE, =
-where the offsets into structures can vary depending on the kernel version.=
- In this scenario the helper IDs can vary with the relocation being done ba=
-sed on symbols stored in the ELF file.
+> However, bpf_hid_link_empty() is an inlined function that just calls
+> in the end list_empty(). Given that all the list heads are created
+> just once for the entire life of the HID device, I *think* this is
+> thread safe and does not require mutex locking.
 
-Please don't top post, reply inline instead.
-
-We have a BPF Foundation and BPF Steering Committee for coordinating
-things like this across different platforms. Adding extra relocations
-just for BPF helper IDs seems to go in the wrong direction from
-minimizing the amount of runtime BPF instruction adjustments (to
-simplify things like BPF signing, etc).
+Hmm.. I guess you are right.
 
 >
-> Regards,
-> Alan Jowett
+> (I might be wrong)
 >
-> -----Original Message-----
-> From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Sent: Tuesday, March 8, 2022 4:49 PM
-> To: Alan Jowett <Alan.Jowett@microsoft.com>
-> Cc: bpf@vger.kernel.org
-> Subject: [EXTERNAL] Re: [PATCH bpf-next] Support load time binding of bpf=
--helpers.
+> So when first plugging in the device, if there is a fighting process
+> that attempts to add a program, if the program managed to insert
+> itself before we enter this code, then the list won't be empty and we
+> will execute BPF_PROG_RUN_ARRAY(), and if not, well, we ignore it and
+> wait for reconnect().
 >
-> On Tue, Mar 8, 2022 at 9:20 AM Alan Jowett <Alan.Jowett@microsoft.com> wr=
-ote:
-> >
-> > BPF helper function names are common across different platforms, but
-> > the id assigned to helper functions may vary. This change provides an
-> > option to generate eBPF ELF files with relocations for helper
-> > functions which permits resolving helper function names to ids at load
-> > time instead of at compile time.
-> >
-> > Add a level of indirection to bpf_doc.py (and generated
-> > bpf_helper_defs.h) to permit compile time generation of bpf-helper
-> > function declarations to facilitating late binding of bpf-helpers to
-> > helper id for cases where different platforms use different helper
-> > ids, but the same helper functions.
-> >
-> > Example use case would be:
-> > "#define BPF_HELPER(return_type, name, args, id) \
-> >     extern return_type name args"
-> >
-> > To generate:
-> > extern void * bpf_map_lookup_elem (void *map, const void *key);
-> >
-> > Instead of:
-> > static void *(*bpf_map_lookup_elem) (void *map, const void *key) \
-> >     =3D (void*) 1;
-> >
-> > This would result in the bpf-helpers having external linkage and
-> > permit late binding of BPF programs to helper function ids.
-> >
->
-> Ugh...
->
-> BPF_HELPER(void*, bpf_map_lookup_elem, (void *map, const void *key), 1);
->
-> Looks pretty awful :(
->
-> But I also have the question about why different platforms should have di=
-fferent IDs for the same subset of BPF helpers? Wouldn't it be better to pr=
-eserve IDs across platforms to simplify cross-platform BPF object files?
->
-> We can probably also define some range for platform-specific BPF helpers =
-starting from some high ID?
->
-> > Signed-off-by: Alan Jowett <alanjo@microsoft.com>
-> > ---
-> >  scripts/bpf_helpers_doc.py | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-> > index 867ada23281c..442b5e87687e 100755
-> > --- a/scripts/bpf_helpers_doc.py
-> > +++ b/scripts/bpf_helpers_doc.py
-> > @@ -519,6 +519,10 @@ class PrinterHelpers(Printer):
-> >          for fwd in self.type_fwds:
-> >              print('%s;' % fwd)
-> >          print('')
-> > +        print('#ifndef BPF_HELPER')
-> > +        print('#define BPF_HELPER(return_type, name, args, id) static =
-return_type(*name) args =3D (void*) id')
-> > +        print('#endif')
-> > +        print('')
-> >
-> >      def print_footer(self):
-> >          footer =3D ''
-> > @@ -558,7 +562,7 @@ class PrinterHelpers(Printer):
-> >                  print(' *{}{}'.format(' \t' if line else '', line))
-> >
-> >          print(' */')
-> > -        print('static %s %s(*%s)(' % (self.map_type(proto['ret_type'])=
-,
-> > +        print('BPF_HELPER(%s%s, %s, (' %
-> > + (self.map_type(proto['ret_type']),
-> >                                        proto['ret_star'], proto['name']=
-), end=3D'')
-> >          comma =3D ''
-> >          for i, a in enumerate(proto['args']):
-> > @@ -577,7 +581,7 @@ class PrinterHelpers(Printer):
-> >              comma =3D ', '
-> >              print(one_arg, end=3D'')
-> >
-> > -        print(') =3D (void *) %d;' % len(self.seen_helpers))
-> > +        print('), %d);' % len(self.seen_helpers))
-> >          print('')
-> >
-> >
-> > ######################################################################
-> > #########
-> > --
-> > 2.25.1
+> But now I am starting to wonder if I need to also protect
+> BPF_PROG_RUN_ARRAY() under bpf_hid_mutex...
+
+I think this is not necessary.
+
+Thanks,
+Song
