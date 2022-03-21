@@ -2,52 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B35AAC433F5
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 15:20:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1374C4332F
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 15:20:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350125AbiCUPWU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 11:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S1348584AbiCUPWV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 11:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346488AbiCUPWM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1346605AbiCUPWM (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 21 Mar 2022 11:22:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A6D25280;
-        Mon, 21 Mar 2022 08:20:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E798524F1A
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 08:20:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CDA860F8B;
-        Mon, 21 Mar 2022 15:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E53E6C340F3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 726C560F7F
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 15:20:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D5794C340F0;
         Mon, 21 Mar 2022 15:20:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647876010;
-        bh=2CAHA9p/lUe4Hg4xsMq7t8E74hPfxVHUgBidSh6Ufz8=;
+        s=k20201202; t=1647876009;
+        bh=BUVAzhJcMLkTJspxWiiFOSQHUEHGhYmldJW6g+u5E3o=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=TYayVpUW+sIGuhmnqmbfNOPtkjUCpzJTiMemmdPkJtQZJQeZ7SMs4/VxgBR+/jMtv
-         Y4ttKo298r/gdmFs6n5XmoSLJhMa8qNUBHxiygTkCgo5qE9WiU46Ddm68POcWQlDn8
-         7xhiif/PkQldYDjLGMJIvXtQE6LKjng9HADujbLjfCRiSjPTDI9EpMb7VI6wNAwh42
-         9tgHQBfk7pECdST/i+6H6vUJIqevFv+rTFMeYXEDlZUOTdNHt3RdfYjJrlS6D9wphw
-         l2hci6qrVTfonZnD937rq2BBXQXmxR5oITV1S63NiuP+BRISVz1qFv2OmzOpsNcZTo
-         Q1LFEfMj+lndQ==
+        b=U4UZ/OoIyZdTZJdeSAWGBuw/PZvD7q/HgXDRvRnRYJn5jVWAuL8UzZ0GP+bHTQMS6
+         FpT7tYtT4usBKBd5w+r5mlXAwfoliO/2HNq7IMSOp90b7Z7W+3Xda531f2N74ULYZz
+         NuS5qLaGPVaDmmQH91ACQiN2LNNJKpRER5OfMW9WACy8iU5gjOn2VdTEV8JK9I956m
+         WIb5I+Oa/7O3FaYVRPyy5x3DKiAHAsl+EKjWq3fDqsAk1oIu81L43fzMA5CJIL0634
+         nBVWkAzKd8gF6J/z+VeTbOse0b423c1GhyLwO2bcsRKQmISkuIlGNDSRg5WsO6/v7X
+         uGDu1w0ttpbvw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7862F03845;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BD3D3E6D44B;
         Mon, 21 Mar 2022 15:20:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: bpftool: fix print error when show bpf map
+Subject: Re: [PATCH v2 bpf-next] libbpf: Close fd in bpf_object__reuse_map
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164787600981.20941.8225798299544558290.git-patchwork-notify@kernel.org>
+Message-Id: <164787600977.20941.4773407661485029217.git-patchwork-notify@kernel.org>
 Date:   Mon, 21 Mar 2022 15:20:09 +0000
-References: <20220320060815.7716-1-laoar.shao@gmail.com>
-In-Reply-To: <20220320060815.7716-1-laoar.shao@gmail.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, joannekoong@fb.com
+References: <20220319030533.3132250-1-hengqi.chen@gmail.com>
+In-Reply-To: <20220319030533.3132250-1-hengqi.chen@gmail.com>
+To:     Hengqi Chen <hengqi.chen@gmail.com>
+Cc:     bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -57,24 +54,20 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Sun, 20 Mar 2022 06:08:14 +0000 you wrote:
-> If there is no btf_id or frozen, it will not show the pids,
-> but the pids doesn't depends on any one of them.
+On Sat, 19 Mar 2022 11:05:33 +0800 you wrote:
+> pin_fd is dup-ed and assigned in bpf_map__reuse_fd. Close it
+> in bpf_object__reuse_map after reuse.
 > 
-> Below is the result after this change,
-> $ ./bpftool map show
-> 2: lpm_trie  flags 0x1
-> 	key 8B  value 8B  max_entries 1  memlock 4096B
-> 	pids systemd(1)
-> 3: lpm_trie  flags 0x1
-> 	key 20B  value 8B  max_entries 1  memlock 4096B
-> 	pids systemd(1)
+> Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > [...]
 
 Here is the summary with links:
-  - bpf: bpftool: fix print error when show bpf map
-    https://git.kernel.org/bpf/bpf-next/c/1824d8ea75f2
+  - [v2,bpf-next] libbpf: Close fd in bpf_object__reuse_map
+    https://git.kernel.org/bpf/bpf-next/c/d0f325c34c2f
 
 You are awesome, thank you!
 -- 
