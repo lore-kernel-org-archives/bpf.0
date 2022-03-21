@@ -2,84 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8D34C433EF
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:56:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D62E4C433F5
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:59:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231416AbiCUW5n (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 18:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
+        id S231950AbiCUXAW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 19:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbiCUW5a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:57:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A6047FC07
-        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 15:37:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233222AbiCUW66 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 18:58:58 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C339A52E52;
+        Mon, 21 Mar 2022 15:46:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C5E612AC
-        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 21:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F17D1C340EE;
-        Mon, 21 Mar 2022 21:50:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647899411;
-        bh=h3un91uY7Om9yGJP/5UalJ7CphAkPzNemFDa21m4Amw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WymNJb114YQyK1qjZwtafdqbqZ5FbPnxlwl/0OP+ZJ6/xGGtNIFTkzwMZewDjo4Qv
-         alMwiw9xoX/0t/zE+UxYcova00/dD2NZW7M+yehgWy6rgSmGuJlL3bkamh026LS7eE
-         wHzXSWKyEvbxxKvbSb2hEvwo4bAoYNC1DqXPmo9FBaoDgKETA6DCjSV9cHUqsw+ix6
-         zkgeUfaVNNSq8pX0p82nJr4TCl1G8ICOaSssUddQ2XSoqZ48VrjqNUTZU3OSxfclWq
-         22lZg+WzaVHsxH914AaANZQjYjDmSIOuWuVCMGKPkfdD7w6C2XPK7hFqcln39b1SnN
-         qDSeubDxHVyPg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D5ADEEAC096;
-        Mon, 21 Mar 2022 21:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMqTq6cStz4xXV;
+        Tue, 22 Mar 2022 09:46:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1647902770;
+        bh=H8PBqR3nVa0lXAbzk96iqy7WYNZPPnz2jeC1t20qCF8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Nv2gboPVn/xp89O61PpDCFVDLttqjE0/u4+agmberg9y//+EPDKRwHRdHVAx1AmOQ
+         ++rsq/cFU5PPEToFobcS3s/N6XTvEsR8UtZ+9U8zwFV7vNKVjFfcedRLiu/7fuRduh
+         vQaK3mxTYr3Rxs6nqmX3Qa71boFlV/N6klXxFCWpYNDjNyfCIKzkc/w5YxEpFfYtaj
+         JsfEcWDlbpMdb5G6dBMhA6hR9hs7IzTA1IeqZIxp1zWen/LQ9JAQOfJYzR1lETUWht
+         49XKzOxocHboQbdxTNrqxfETaOs9BbfZybA9Qymc8JSzl9Aix0AlZnhZW4gzSQR7BQ
+         CZbv0zrLtbZZA==
+Date:   Tue, 22 Mar 2022 09:46:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>,
+        Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: linux-next: build warnings after merge of the tip tree
+Message-ID: <20220322094526.436ca4f7@elm.ozlabs.ibm.com>
+In-Reply-To: <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
+References: <20220321140327.777f9554@canb.auug.org.au>
+        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
+        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
+        <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
+        <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
+        <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
+        <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
+        <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
+        <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
+        <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+        <20220322090541.7d06c8cb@canb.auug.org.au>
+        <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpftool: fix a bug in subskeleton code generation
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164789941087.5210.5420849441093302224.git-patchwork-notify@kernel.org>
-Date:   Mon, 21 Mar 2022 21:50:10 +0000
-References: <20220320032009.3106133-1-yhs@fb.com>
-In-Reply-To: <20220320032009.3106133-1-yhs@fb.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, delyank@fb.com
+Content-Type: multipart/signed; boundary="Sig_/Cu0BfOMHZbomI3JHSdJT/3a";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+--Sig_/Cu0BfOMHZbomI3JHSdJT/3a
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Hi Alexei,
 
-On Sat, 19 Mar 2022 20:20:09 -0700 you wrote:
-> Compiled with clang by adding LLVM=1 both kernel and selftests/bpf
-> build, I hit the following compilation error:
-> 
-> In file included from /.../tools/testing/selftests/bpf/prog_tests/subskeleton.c:6:
->   ./test_subskeleton_lib.subskel.h:168:6: error: variable 'err' is used uninitialized whenever
->       'if' condition is true [-Werror,-Wsometimes-uninitialized]
->           if (!s->progs)
->               ^~~~~~~~~
->   ./test_subskeleton_lib.subskel.h:181:11: note: uninitialized use occurs here
->           errno = -err;
->                    ^~~
->   ./test_subskeleton_lib.subskel.h:168:2: note: remove the 'if' if its condition is always false
->           if (!s->progs)
->           ^~~~~~~~~~~~~~
-> 
-> [...]
+On Mon, 21 Mar 2022 15:12:05 -0700 Alexei Starovoitov <alexei.starovoitov@g=
+mail.com> wrote:
+>
+> That makes little sense. It's not an unusual merge conflict.
+> Peter's endbr series conflict with Masami's fprobe.
+> Peter has a trivial patch that fixes objtool warning.
+> The question is how to land that patch.
+> I think the best is for Linus to apply it after bpf-next->net-next gets
+> merged.
 
-Here is the summary with links:
-  - [bpf-next] bpftool: fix a bug in subskeleton code generation
-    https://git.kernel.org/bpf/bpf-next/c/f97b8b9bd630
+Peter has other concerns, please read the thread and consider them.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/Cu0BfOMHZbomI3JHSdJT/3a
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI5AC8ACgkQAVBC80lX
+0GzcsAgAot0lRVnBEEWV9hhB+YPJDN1/HKUcKWm96ubGregiybHyYGuX5lmvbkyK
+sF0/8tQFMMA6fK+PxkZytEtDQKbQn6/c5394HkEiJ/ISWMtFDJ8xCr3dPoU7rVG4
+0BKLOkmcLGPuK7zRfBGe/xtAENj1g46CDMDKaGpJOqkABMzw9BFlQUZsGYhJDCXB
+ZBMwXD88Gcz+5wVtiCJPnLHjGKj4jTxclAm7HYA0b13nb0TaxfRyIGCJekzHET34
+IDMS0UjNT2JafuKj426Yqlx7Mk3sc85uwMYlkLA4pCaP+VYXyhbW1VDiaZZf/ry/
+7sJceaOu3fF4RgzHXeFU7ZFbHajuJQ==
+=/K55
+-----END PGP SIGNATURE-----
+
+--Sig_/Cu0BfOMHZbomI3JHSdJT/3a--
