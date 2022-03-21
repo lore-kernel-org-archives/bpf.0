@@ -2,92 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B523C433FE
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 23:18:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A422C433EF
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 23:19:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiCUXTo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 19:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S232290AbiCUXU5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 19:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbiCUXSR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:18:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729945C35A;
-        Mon, 21 Mar 2022 16:07:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78056B81A66;
-        Mon, 21 Mar 2022 22:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D08C340E8;
-        Mon, 21 Mar 2022 22:55:04 +0000 (UTC)
-Date:   Mon, 21 Mar 2022 18:55:03 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <20220321185503.0dcb5d9c@gandalf.local.home>
-In-Reply-To: <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
-References: <20220321140327.777f9554@canb.auug.org.au>
-        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
-        <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
-        <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
-        <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
-        <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
-        <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
-        <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
-        <20220322090541.7d06c8cb@canb.auug.org.au>
-        <CAADnVQJnZpQjUv-dw7SU-WwTOn_tZ8xmy5ydRn=g_m-9UyS2kw@mail.gmail.com>
-        <20220322094526.436ca4f7@elm.ozlabs.ibm.com>
-        <CAADnVQKg7GPVpg-22B2Ym5HFVoGaquoFZDEkRwTDgXzm+L8OOw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S232598AbiCUXUo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 19:20:44 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DEB3620E2;
+        Mon, 21 Mar 2022 16:11:30 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id p5so10654053pfo.5;
+        Mon, 21 Mar 2022 16:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZewwJE5XfIuup8vPS+K4oqWDNd0mldqHSrelxp9/gx4=;
+        b=Xceux2tV0MfkN84VgB0qF1jKRpocH8y+vit0oOlRe33Jbi+HIQ7K3GmPrR7s/xmK2V
+         hQ/XIjIYYykhF5aLyqm0qIIE58d4k0W10CbVkcPbIHedCLXcsE5G4qq1O9AcZ4oWHd9E
+         Jul2ckEYElDhkZ+H95GPJ79kGc1+G4wTVamSJdCW9claiodoAw8gxTdfDv8MUY+/ViYo
+         5bQdrVDdOQA+BYm51yEXwl8ryD0O42U4CNlvH3yiAfibYpCSxG5QDKrqWgxkmXtXguM0
+         zbXHkXx4GlqVFvQ8f9G0OF9eEh7F9Zfn6YJAFlJId59kFT1dQCrHBFl9QfC4TgPJixbs
+         JZng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZewwJE5XfIuup8vPS+K4oqWDNd0mldqHSrelxp9/gx4=;
+        b=z8Qy9z3AY230SrDxskJTROxePPW1ETXj13OiIt0QzdzO6xla0Ns/iUVxbk9T6U6H6v
+         0Hsc/sNEsMJBe3qpwCFPIYnSWpA1ZwT6Qct4tVuLEKS6RPVKy5E64vYt3VRItiCG26Bt
+         9K0SU9Gixq/+Q0vhLny2B3gTUzr3gTZKMRnBESLKunPzkK624XIhPctuPajrDaz72V9o
+         72nIq3H8cSkU/lV6o3k/Vi9/eHQ3QHBSe0BvuFzC1/4Le4BesKN6Nq5ru/DtPLvipNie
+         vJiKjeDVdTOWrsPZYZS8fLSq3SN7Qb8T2AQDE+5/4Dp/2f/Av9f0stOzr01xQwOVQc57
+         +Slg==
+X-Gm-Message-State: AOAM530eCefFuNvW0OLEdM/vNin+viznUdXEpvbMFp3MezUp9rLuZ1tD
+        3IPtuYYQJGuzjXUkndam0FjdH620E9TXN4Qy9RI=
+X-Google-Smtp-Source: ABdhPJyOwkUCfaJbCb2f/rGtBuwRCI5/X4xzDNoML42aYW8uAv84DeSqGV479u36yBAqmJ7AMz6GYeKHBP54n3+9l2w=
+X-Received: by 2002:a62:bd0e:0:b0:4f6:e07f:d4ee with SMTP id
+ a14-20020a62bd0e000000b004f6e07fd4eemr26529286pff.46.1647904290106; Mon, 21
+ Mar 2022 16:11:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20220321224608.55798-1-alexei.starovoitov@gmail.com> <CAHk-=wheGrBxOfMpWhQg1iswCKYig8vADnFVsA4oFWTY9NU5jA@mail.gmail.com>
+In-Reply-To: <CAHk-=wheGrBxOfMpWhQg1iswCKYig8vADnFVsA4oFWTY9NU5jA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 21 Mar 2022 16:11:19 -0700
+Message-ID: <CAADnVQK=JsytH_OtT6Q6fnijkTyv7NANV2902woQ6XT-fwWXQA@mail.gmail.com>
+Subject: Re: pull-request: bpf-next 2022-03-21
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 21 Mar 2022 15:50:17 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Mon, Mar 21, 2022 at 4:02 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Mar 21, 2022 at 3:46 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > The following pull-request contains BPF updates for your *net-next* tree.
+>
+> No
+>
+> This is the tree that contains bad architecture code that was NAK'ed
+> by both x86 and arm64 people respectively.
 
-> > Peter has other concerns, please read the thread and consider them.  
-> 
-> Masami is an expert in kprobe. He copy pasted a bit of kprobe logic
-> to make it into 'multi kprobe' (he calls it fprobe).
-> I believe he knows what he's doing.
-> Steven reviewed and tested that set.
-> We've tested it as well and don't have any correctness or api concerns.
+I missed the nacks.
 
-I tested it from a ftrace perspective, not an IBT or other work being done
-in the x86 world.
+Did you look at the code?
+In particular:
+https://lore.kernel.org/bpf/164735286243.1084943.7477055110527046644.stgit@devnote2/
 
-I'm fine with the work being done in kernel/tracing/ but it still requires
-the arch maintainer's acks for anything in arch/. I was under the
-impression that the arch specific code was Cc'ing the arch maintainers
-(which I always do when I touch their code). But I missed that they were
-not. That's my fault, I should have caught that.
+it's a copy paste of arch/x86/kernel/kprobes/core.c
 
--- Steve
+How is it "bad architecture code" ?
+
+> In particular, I think it's this part:
+>
+> > Masami Hiramatsu (11):
+> >       fprobe: Add ftrace based probe APIs
+> >       rethook: Add a generic return hook
+> >       rethook: x86: Add rethook x86 implementation
+> >       arm64: rethook: Add arm64 rethook implementation
+> >       powerpc: Add rethook support
+> >       ARM: rethook: Add rethook arm implementation
+> >       fprobe: Add exit_handler support
+> >       fprobe: Add sample program for fprobe
+> >       fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+> >       docs: fprobe: Add fprobe description to ftrace-use.rst
+> >       fprobe: Add a selftest for fprobe
+>
+> That was added very late to the linux-next tree, and that causes build
+> warnings because of interactions with other changes.
+
+To be fair Masami's set got to v12 revision and was ready
+before Peter's endbr set.
+If I didn't miss any email the only known issue
+is missing endbr annotation.
