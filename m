@@ -2,83 +2,190 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 644C3C433F5
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 21:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23348C433F5
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:45:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiCUVKL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 17:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S229447AbiCUWq3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 18:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiCUVKK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 17:10:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C8735AAE;
-        Mon, 21 Mar 2022 14:08:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F292EB819C7;
-        Mon, 21 Mar 2022 21:08:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD0CC340E8;
-        Mon, 21 Mar 2022 21:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647896921;
-        bh=9R1HG55IiLHxyMr19TMRy4BRam3sXhg+kNYxQxoAbh8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I3x57HGCa67NtNtZwQlzlwJXxltfZ0cQgqWK3OHIlbgfsLD5YWabP/d/NrepNX0kr
-         SrzpkMfxDcfiC/xkgm0r17emmX8TZSueJgFvslLUQTt0Qn3EgxJpN3hjrtVtkAJ8Qk
-         /I6+yI7nMoVi3lVNiHIGxPsqypc513JyGWK9WeoTkanZXsv4WOh27Txzfx2kkJ+0AO
-         kiBUL5TO57IxE/aS7Y6vK/LDr55UHzt2GgfTiq12Sbbr+oQYiOhQETv2mzEx0ajtEB
-         wuRhJcHLW3wiLbbJnBYsDBpIaXDg594lprkUskWlwO1Ga81aV8ZMPNmxvpon01tQdC
-         ICiUMsJpepk2Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 32D7F40407; Mon, 21 Mar 2022 18:08:39 -0300 (-03)
-Date:   Mon, 21 Mar 2022 18:08:39 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Kui-Feng Lee <kuifeng@fb.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v4 1/4] dwarf_loader: Receive per-thread data on
- worker threads.
-Message-ID: <YjjpV5rzYgBZIuBg@kernel.org>
-References: <20220126192039.2840752-1-kuifeng@fb.com>
- <20220126192039.2840752-2-kuifeng@fb.com>
- <CAEf4BzarN4L8U+hLnvZrNg0CR-oQr25OFs_W_tfW3aAHGAVFWw@mail.gmail.com>
- <YfJudZmSS1yTkeP/@kernel.org>
- <CAEf4Bza8xB+yFb4qGPvM7YwvHCb1zQ8yosGbKj63vcRM7d9aLg@mail.gmail.com>
- <Yij/BSPgMl8/HEhg@kernel.org>
- <CAEf4BzZX8Q5MPt62+68nRoQNPe=3jnVkcEMMJwPzoU51YCBszg@mail.gmail.com>
- <CAEf4BzYxOgNjC+nFJGY_wpnOZZ-Jik=15L0aSq3Uxbiamc0h+w@mail.gmail.com>
- <c9c436a6935bb39e4135d4f0d7efd1ecc49d660b.camel@fb.com>
+        with ESMTP id S229457AbiCUWq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 18:46:28 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52AF47FC29
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 15:25:02 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id h21so11344812ila.7
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 15:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QwTc/aZgWxAonyYAcThWgkliP6pLXbLK64gZl/J+QyU=;
+        b=E/prtRg0vk6i5Lfx6RswCwmwH3UM2COQOlYWeROLObirP6Eo9A5sgWsOznGbRHsXD3
+         rp6Om/d297aNJNek8jMLDb2CsaRQ1Vbb1yMjwtxzCq2VyuqoMwFYUC7CMHFdOndxFbHT
+         UQEqj039SGPUYOsIgXulCBFR2LDsxKlQF0+5SJ0ov4PzOEwYNuqx3vVwg0Wb5PtiuqsB
+         3jhSegjeZdEU7krLu7V8/3ZsExzPkQebewTggCN0ot4mJ3tMMfF2RI2A21KaxQuBTtXG
+         e41ASl6qxZCYTZOMJu61m9gBIo/hYSlPgyq1q/mB5Tu+QfS0T74zS+SB4Jm0XLHgHpne
+         2Pjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QwTc/aZgWxAonyYAcThWgkliP6pLXbLK64gZl/J+QyU=;
+        b=tezsGzYIT9MOQP2vznvK59/VbOLc/nz3Bsi1SciHKmWHB2iYMJfv2r0UNRHoubJFLP
+         8/rFD7wmCGaGsXMgMaygN0o/zGw2Zos68sWUkn/Rt5gXOboozUhylhPULdOFUXen4B+E
+         DRMzyARQ2jqGYjisE00hC0q886T15/0vtJm0BOuSdIw/S6of/2kgzObAEl1BLjGTJvjs
+         LIvipvUiUlxnyIwhARSKB7RdKYhGRvhcNa+5IrLIl0XqQW/bqQjDBVMkoUcrvuqtU3Sd
+         1iZtyOB38N0G0OO6XVnZhPh8yq0jzLjSAbupYrNZmgq5/MnOJbf4ea2d9xIE+FwdU5ow
+         yh2Q==
+X-Gm-Message-State: AOAM5304JDXXPLtSEi0yECHU2vZbnkn/YBx2+JmvIin3FCs2sfkOkuVn
+        NoKhitjmIx5bumMBWZpmP3SuQ1dPuCb0ej4Z0fQE+N1A
+X-Google-Smtp-Source: ABdhPJwKsHyXN+pTc5MKoHf5XZ2IRNEDGJHx+1U1nnAZtxqRfaOPL53tI6QgPOCzYXafF91hzG6NlGCO1X1mYCy6aAs=
+X-Received: by 2002:a05:6e02:16c7:b0:2c7:e458:d863 with SMTP id
+ 7-20020a056e0216c700b002c7e458d863mr10051488ilx.71.1647901418355; Mon, 21 Mar
+ 2022 15:23:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9c436a6935bb39e4135d4f0d7efd1ecc49d660b.camel@fb.com>
-X-Url:  http://acmel.wordpress.com
+References: <CH2PR21MB1430AFEB81F5F7930E8027C1FA089@CH2PR21MB1430.namprd21.prod.outlook.com>
+ <CAEf4BzYsGVSTS5t=OBPpMKcGm8F0aB4PG=dxK+Pg=UeP18o0NA@mail.gmail.com> <CH2PR21MB14307F582468BB431CAABA4DFA0C9@CH2PR21MB1430.namprd21.prod.outlook.com>
+In-Reply-To: <CH2PR21MB14307F582468BB431CAABA4DFA0C9@CH2PR21MB1430.namprd21.prod.outlook.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 21 Mar 2022 15:23:27 -0700
+Message-ID: <CAEf4Bzbyn4qGNN6m0XDAMw2GTNFPBEfwHNgzxN31ERRgBXZLwg@mail.gmail.com>
+Subject: Re: [EXTERNAL] Re: [PATCH bpf-next] Support load time binding of bpf-helpers.
+To:     Alan Jowett <Alan.Jowett@microsoft.com>
+Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Mon, Mar 21, 2022 at 07:06:06PM +0000, Kui-Feng Lee escreveu:
-> On Wed, 2022-03-09 at 16:18 -0800, Andrii Nakryiko wrote:
-> > On Wed, Mar 9, 2022 at 4:14 PM Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > I did check locally with latest pahole master, and it seems like
-> > > something is wrong with generated BTF. I get three selftests
-> > > failure
-> > > if I use latest pahole compiled from master.
+On Fri, Mar 11, 2022 at 10:37 AM Alan Jowett <Alan.Jowett@microsoft.com> wr=
+ote:
+>
+> Thanks for the feedback, I appreciate it. Any suggestions on how to make =
+the output more visually appealing?
+>
+> If there was a IANA equivalent for assigning helper function id's then it=
+ might be possible to support having the same IDs on multiple platforms, bu=
+t as it exists today the various platforms are developed separately, with n=
+o simple way to co-ordinate. The benefit of using symbols over numeric id's=
+ is that it reduces the possibility of identifier collision, where differen=
+t platforms might define helper ID # to mean different things, but it's les=
+s likely that different platforms will define bpf_foo_bar to have different=
+ semantics.
+>
+> Conceptually, this is like the relocations done using BTF data for CORE, =
+where the offsets into structures can vary depending on the kernel version.=
+ In this scenario the helper IDs can vary with the relocation being done ba=
+sed on symbols stored in the ELF file.
 
-> > > Kui-Feng, please take a look when you get a chance. Arnaldo, please
-> > > hold off from releasing a new version for now.
- 
-> I just figure out the root cuase.
-> It caused by missing info from percpu_secinfo when collecting data from
-> threads.  The encoder stores it separatedly from struct btf, and we
-> have separated different encoders for threads.  They are not merged
-> together.  I will fixed it ASAP.
+Please don't top post, reply inline instead.
 
-Cool, looking forward to the fix.
+We have a BPF Foundation and BPF Steering Committee for coordinating
+things like this across different platforms. Adding extra relocations
+just for BPF helper IDs seems to go in the wrong direction from
+minimizing the amount of runtime BPF instruction adjustments (to
+simplify things like BPF signing, etc).
 
-- Arnaldo
+>
+> Regards,
+> Alan Jowett
+>
+> -----Original Message-----
+> From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Sent: Tuesday, March 8, 2022 4:49 PM
+> To: Alan Jowett <Alan.Jowett@microsoft.com>
+> Cc: bpf@vger.kernel.org
+> Subject: [EXTERNAL] Re: [PATCH bpf-next] Support load time binding of bpf=
+-helpers.
+>
+> On Tue, Mar 8, 2022 at 9:20 AM Alan Jowett <Alan.Jowett@microsoft.com> wr=
+ote:
+> >
+> > BPF helper function names are common across different platforms, but
+> > the id assigned to helper functions may vary. This change provides an
+> > option to generate eBPF ELF files with relocations for helper
+> > functions which permits resolving helper function names to ids at load
+> > time instead of at compile time.
+> >
+> > Add a level of indirection to bpf_doc.py (and generated
+> > bpf_helper_defs.h) to permit compile time generation of bpf-helper
+> > function declarations to facilitating late binding of bpf-helpers to
+> > helper id for cases where different platforms use different helper
+> > ids, but the same helper functions.
+> >
+> > Example use case would be:
+> > "#define BPF_HELPER(return_type, name, args, id) \
+> >     extern return_type name args"
+> >
+> > To generate:
+> > extern void * bpf_map_lookup_elem (void *map, const void *key);
+> >
+> > Instead of:
+> > static void *(*bpf_map_lookup_elem) (void *map, const void *key) \
+> >     =3D (void*) 1;
+> >
+> > This would result in the bpf-helpers having external linkage and
+> > permit late binding of BPF programs to helper function ids.
+> >
+>
+> Ugh...
+>
+> BPF_HELPER(void*, bpf_map_lookup_elem, (void *map, const void *key), 1);
+>
+> Looks pretty awful :(
+>
+> But I also have the question about why different platforms should have di=
+fferent IDs for the same subset of BPF helpers? Wouldn't it be better to pr=
+eserve IDs across platforms to simplify cross-platform BPF object files?
+>
+> We can probably also define some range for platform-specific BPF helpers =
+starting from some high ID?
+>
+> > Signed-off-by: Alan Jowett <alanjo@microsoft.com>
+> > ---
+> >  scripts/bpf_helpers_doc.py | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+> > index 867ada23281c..442b5e87687e 100755
+> > --- a/scripts/bpf_helpers_doc.py
+> > +++ b/scripts/bpf_helpers_doc.py
+> > @@ -519,6 +519,10 @@ class PrinterHelpers(Printer):
+> >          for fwd in self.type_fwds:
+> >              print('%s;' % fwd)
+> >          print('')
+> > +        print('#ifndef BPF_HELPER')
+> > +        print('#define BPF_HELPER(return_type, name, args, id) static =
+return_type(*name) args =3D (void*) id')
+> > +        print('#endif')
+> > +        print('')
+> >
+> >      def print_footer(self):
+> >          footer =3D ''
+> > @@ -558,7 +562,7 @@ class PrinterHelpers(Printer):
+> >                  print(' *{}{}'.format(' \t' if line else '', line))
+> >
+> >          print(' */')
+> > -        print('static %s %s(*%s)(' % (self.map_type(proto['ret_type'])=
+,
+> > +        print('BPF_HELPER(%s%s, %s, (' %
+> > + (self.map_type(proto['ret_type']),
+> >                                        proto['ret_star'], proto['name']=
+), end=3D'')
+> >          comma =3D ''
+> >          for i, a in enumerate(proto['args']):
+> > @@ -577,7 +581,7 @@ class PrinterHelpers(Printer):
+> >              comma =3D ', '
+> >              print(one_arg, end=3D'')
+> >
+> > -        print(') =3D (void *) %d;' % len(self.seen_helpers))
+> > +        print('), %d);' % len(self.seen_helpers))
+> >          print('')
+> >
+> >
+> > ######################################################################
+> > #########
+> > --
+> > 2.25.1
