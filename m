@@ -2,133 +2,208 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 813E9C433FE
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:48:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81934C433FE
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 22:50:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiCUWtw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 18:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S230044AbiCUWvo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 18:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiCUWtU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 18:49:20 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6453A7207;
-        Mon, 21 Mar 2022 15:29:25 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229835AbiCUWvW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 18:51:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C08765AD;
+        Mon, 21 Mar 2022 15:42:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KMpbB31LYz4xc3;
-        Tue, 22 Mar 2022 09:05:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1647900345;
-        bh=gmYh7GMo3XiS2P6h/BZ+GHGO/dGum+YMp62zDLTtDtU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UNqQg1QalL1tX0zvuuptb7aZrlkz+7F2pEf4x51k9xBVs6OisaV3HoMoEXhz3Uzat
-         SVYSuK/xfxB8/08mO32OjWTJDoo8kc2lxGDQiAsYJrTCiGz8xsWIbtU7UkXySpiFVA
-         OwfM8bsABe6ymCTzslPuakDymH+eMJ/DPiyb7ZuxOOt665cUSUlYJp1bAySmznO2qQ
-         nKMdbMg4TCcnCDrMiorgFElL1Ffp2cpPTqSimXHza8kI4Wa6QAlu1H4dX5h5EULdiV
-         rLfuC+q2ZNMFIh8DxxfeaNtQ3BIWWQyyl44hSghG57u1sos0jyP8nHSov+psZMcIeY
-         rjvJQPocLwGPg==
-Date:   Tue, 22 Mar 2022 09:05:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: build warnings after merge of the tip tree
-Message-ID: <20220322090541.7d06c8cb@canb.auug.org.au>
-In-Reply-To: <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
-References: <20220321140327.777f9554@canb.auug.org.au>
-        <Yjh11UjDZogc3foM@hirez.programming.kicks-ass.net>
-        <Yjh3xZuuY3QcZ1Bn@hirez.programming.kicks-ass.net>
-        <Yjh4xzSWtvR+vqst@hirez.programming.kicks-ass.net>
-        <YjiBbF+K4FKZyn6T@hirez.programming.kicks-ass.net>
-        <YjiZhRelDJeX4dfR@hirez.programming.kicks-ass.net>
-        <YjidpOZZJkF6aBTG@hirez.programming.kicks-ass.net>
-        <CAHk-=wigO=68WA8aMZnH9o8qRUJQbNJPERosvW82YuScrUTo7Q@mail.gmail.com>
-        <YjirfOJ2HQAnTrU4@hirez.programming.kicks-ass.net>
-        <CAHk-=wguO61ACXPSz=hmCxNTzqE=mNr_bWLv6GH5jCVZLBL=qw@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F3D7612AF;
+        Mon, 21 Mar 2022 21:52:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4DBAC340E8;
+        Mon, 21 Mar 2022 21:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647899522;
+        bh=4QhNB4U5yqvJwvu7RDkVWcIdf4LcwWmmFOFLShPBW6o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gFMSq3ffEzu1h8hOXbIVCubQny+yp3noE6EgcB47LCCaUdKyDUCjM/Gb7S9loYWXR
+         Dy9A7xXkoC9lKQUEgP4RUVZ9QwiZOot99c+H4DpG0lIJVawEbpgaG5bVI6hQkK8V9X
+         ZLFS1MmC0zVnDIiWCjBVQ0HUbCxFjhgId0GiaocHq4/a23g95OLokdjaJLHPzSCnUn
+         VX47VlafdEwFzcEQCtLgbopLbP0f57Q4O3rUZ755wf1FBF+n8gd79anPOLJF7BAzFf
+         BMUKcH8Txef+aUKhnwdkOLEdav9sE9we0HiwkmIWhfU3T8mYyCA1zNUSyVocsWIuVy
+         TN7T4qJwBb/6w==
+Received: by mail-yb1-f177.google.com with SMTP id t11so30522809ybi.6;
+        Mon, 21 Mar 2022 14:52:02 -0700 (PDT)
+X-Gm-Message-State: AOAM5323YyW49WrPS8Lp+sNrfSAUm1CNYR7VSRUzJLVLgipmp7L0yfdU
+        KPW/jUGXcgOgyGoTyKTqgqyaX0PzTZJh17FkS6M=
+X-Google-Smtp-Source: ABdhPJxjGIOAMCTeBOhtLKMEA7eHCjAjE7I4xUoxWVAUgKRZLQc4bIwIq4yvPoes8lioBv1QfOq4MXGYC+JLAx43Ug4=
+X-Received: by 2002:a25:40d3:0:b0:633:bb21:2860 with SMTP id
+ n202-20020a2540d3000000b00633bb212860mr16895055yba.9.1647899521925; Mon, 21
+ Mar 2022 14:52:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NW1DkACVm_Mf38+_y.WTVWm";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-3-benjamin.tissoires@redhat.com> <CAPhsuW5qseqVs4=hz3VvSJ2ObqB2kTbKXoaOCh=5vjoU_AXnKQ@mail.gmail.com>
+ <CAO-hwJ+WSi645HhNV_BYACoJe2UTc4KZzqH0oHocfnBR8xUYEQ@mail.gmail.com>
+In-Reply-To: <CAO-hwJ+WSi645HhNV_BYACoJe2UTc4KZzqH0oHocfnBR8xUYEQ@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 21 Mar 2022 14:51:51 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4+b66Keh_f+UoApM8UenhnJ5wD_SaatAFDms9=g7ENyw@mail.gmail.com>
+Message-ID: <CAPhsuW4+b66Keh_f+UoApM8UenhnJ5wD_SaatAFDms9=g7ENyw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 02/17] bpf: introduce hid program type
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
---Sig_/NW1DkACVm_Mf38+_y.WTVWm
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Mon, 21 Mar 2022 09:52:58 -0700 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
+On Mon, Mar 21, 2022 at 9:07 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
 >
-> On Mon, Mar 21, 2022 at 9:45 AM Peter Zijlstra <peterz@infradead.org> wro=
-te:
+> Hi Song,
+>
+> many thanks for the quick response.
+>
+> On Fri, Mar 18, 2022 at 9:48 PM Song Liu <song@kernel.org> wrote:
+[...]
+> >
+> > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> >
+> > We need to mirror these changes to tools/include/uapi/linux/bpf.h.
+>
+> OK. I did that in patch 4/17 but I can bring in the changes there too.
+
+Let's keep changes to the two files in the same patch. This will make
+sure they are back ported together.
+
+[...]
+> > > +enum hid_bpf_event {
+> > > +       HID_BPF_UNDEF = 0,
+> > > +       HID_BPF_DEVICE_EVENT,           /* when attach type is BPF_HID_DEVICE_EVENT */
+> > > +       HID_BPF_RDESC_FIXUP,            /* ................... BPF_HID_RDESC_FIXUP */
+> > > +       HID_BPF_USER_EVENT,             /* ................... BPF_HID_USER_EVENT */
+> >
+> > Why don't we have a DRIVER_EVENT type here?
+>
+> For driver event, I want to have a little bit more of information
+> which tells which event we have:
+> - HID_BPF_DRIVER_PROBE
+> - HID_BPF_DRIVER_SUSPEND
+> - HID_BPF_DRIVER_RAW_REQUEST
+> - HID_BPF_DRIVER_RAW_REQUEST_ANSWER
+> - etc...
+>
+> However, I am not entirely sure on the implementation of all of those,
+> so I left them aside for now.
+>
+> I'll work on that for v4.
+
+This set is already pretty big. I guess we can add them in a follow-up set.
+
+>
+> >
 > > >
-> > > It's presumably not in any of the pull requests I already have
-> > > pending, but it would be nice if I saw some details of _what_ you are
-> > > complaining about, and not just the complaint itself ;) =20
+> > [...]
+> > > +
+> > > +BPF_CALL_3(bpf_hid_get_data, struct hid_bpf_ctx_kern*, ctx, u64, offset, u64, size)
+> > > +{
+> > > +       if (!size)
+> > > +               return 0UL;
+> > > +
+> > > +       if (offset + size > ctx->allocated_size)
+> > > +               return 0UL;
+> > > +
+> > > +       return (unsigned long)(ctx->data + offset);
+> > > +}
+> > > +
+> > > +static const struct bpf_func_proto bpf_hid_get_data_proto = {
+> > > +       .func      = bpf_hid_get_data,
+> > > +       .gpl_only  = true,
+> > > +       .ret_type  = RET_PTR_TO_ALLOC_MEM_OR_NULL,
+> > > +       .arg1_type = ARG_PTR_TO_CTX,
+> > > +       .arg2_type = ARG_ANYTHING,
+> > > +       .arg3_type = ARG_CONST_ALLOC_SIZE_OR_ZERO,
 > >
-> > Duh, right. It's this series:
+> > I think we should use ARG_CONST_SIZE or ARG_CONST_SIZE_OR_ZERO?
+>
+> I initially tried this with ARG_CONST_SIZE_OR_ZERO but it doesn't work
+> for 2 reasons:
+> - we need to pair the argument ARG_CONST_SIZE_* with a pointer to a
+> memory just before, which doesn't really make sense here
+> - ARG_CONST_SIZE_* isn't handled in the same way
+> ARG_CONST_ALLOC_SIZE_OR_ZERO is. The latter tells the verifier that
+> the given size is the available size of the returned
+> PTR_TO_ALLOC_MEM_OR_NULL, which is exactly what we want.
+
+I misread the logic initially. It makes sense now.
+
+>
 > >
-> >   https://lore.kernel.org/bpf/164757541675.26179.17727138330733641017.g=
-it-patchwork-notify@kernel.org/
+> > > +};
+> > > +
+> > > +static const struct bpf_func_proto *
+> > > +hid_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+> > > +{
+> > > +       switch (func_id) {
+> > > +       case BPF_FUNC_hid_get_data:
+> > > +               return &bpf_hid_get_data_proto;
+> > > +       default:
+> > > +               return bpf_base_func_proto(func_id);
+> > > +       }
+> > > +}
+> > [...]
+> > > +
+> > > +static int hid_bpf_prog_test_run(struct bpf_prog *prog,
+> > > +                                const union bpf_attr *attr,
+> > > +                                union bpf_attr __user *uattr)
+> > > +{
+> > > +       struct hid_device *hdev = NULL;
+> > > +       struct bpf_prog_array *progs;
+> > > +       bool valid_prog = false;
+> > > +       int i;
+> > > +       int target_fd, ret;
+> > > +       void __user *data_out = u64_to_user_ptr(attr->test.data_out);
+> > > +       void __user *data_in = u64_to_user_ptr(attr->test.data_in);
+> > > +       u32 user_size_in = attr->test.data_size_in;
+> > > +       u32 user_size_out = attr->test.data_size_out;
+> > > +       u32 allocated_size = max(user_size_in, user_size_out);
+> > > +       struct hid_bpf_ctx_kern ctx = {
+> > > +               .type = HID_BPF_USER_EVENT,
+> > > +               .allocated_size = allocated_size,
+> > > +       };
+> > > +
+> > > +       if (!hid_hooks.hdev_from_fd)
+> > > +               return -EOPNOTSUPP;
+> > > +
+> > > +       if (attr->test.ctx_size_in != sizeof(int))
+> > > +               return -EINVAL;
 > >
-> > That went into bpf-next last Friday. I just checked but haven't found a
-> > pull for it yet. =20
->=20
-> Thanks. I can confirm it's not in any of the pull requests I have
-> pending, so I'll just start doing my normal work and try to remember
-> to look out for this issue later.
+> > ctx_size_in is always 4 bytes?
+>
+> Yes. Basically what I had in mind is that the "ctx" for
+> user_prog_test_run is the file descriptor to the sysfs that represent
+> the HID device.
+> This seemed to me to be the easiest to handle for users.
+>
+> I'm open to suggestions though.
 
-The normal path for bpf-next code is via the net-next tree.  But the
-above series has not yet been merged into the net-next tree so is only
-in the bpf-next tree.
+How about we use data_in? ctx for test_run usually means the program ctx,
+which is struct hid_bpf_ctx here.
 
-So, what am I to do?  Drop the bpf-next tree from linux-next until this
-is resolved?  Some input from the BPF people would be useful.
-
-Dave, Jakub, please do not merge the bpf-bext tree into the net-next
-tree for now.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NW1DkACVm_Mf38+_y.WTVWm
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmI49rUACgkQAVBC80lX
-0GyZSwf/YAF9koEMRaqDbLHeyzvHSVVuqJ5aiqYdatLo85YQJEjezT2PWUv4WlVH
-iRC7bB9X+nzuwy+y9K2Cp0oC8a5XN/StPltylx+n6hCX/RLzJmiuLBzHu0RS8F9u
-kZ/YQap95KE2cc92SR/UMoGzngXmCjBvem/S7CJw4VZaHlSQStjR/LcwKhKHi/gq
-9S8zQhT5el5feN5dnJesUFLpiUqkhKP64L2pwmrMS0zG7ZksObEqEweal70AC0gV
-vVk3yygoku4YYCQMVHSVDUSLt5esDWotFzWrmFI9//P7ot29u68i8C7MFxgUumcW
-P3TwfTIEItlxQ46dt5Ip2Ob4HhFNWA==
-=O/2P
------END PGP SIGNATURE-----
-
---Sig_/NW1DkACVm_Mf38+_y.WTVWm--
+Thanks,
+Song
