@@ -2,98 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4692C433EF
-	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 23:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3484AC433F5
+	for <bpf@archiver.kernel.org>; Mon, 21 Mar 2022 23:13:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232153AbiCUXGA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Mar 2022 19:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S231821AbiCUXOs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Mar 2022 19:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbiCUXFn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Mar 2022 19:05:43 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B9335501;
-        Mon, 21 Mar 2022 15:53:04 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 15:52:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1647903126;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5vBCwulztWfYNXCCd5nLd9nkIIOOV0oW+khzPjrbeWg=;
-        b=WhEhuNzza4VU68ud6Ylk9EXGGT/FqYsp8gRvcpumIshsDFuRNUhzze9i/IFBcfpGRGRo4Z
-        8w/aDAuBtP7Szrv0C9eNc9TUxV09+PPP9DVzxK9o/d07lpkTAIpOsgec9nWYxC8JyZxmSU
-        8ylMDSwXN4hmRmJZKfogCkLIuLCH+f8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/14] bpf: Allow not to charge bpf memory
-Message-ID: <YjkBkIHde+fWHw9K@carbon.dhcp.thefacebook.com>
-References: <20220319173036.23352-1-laoar.shao@gmail.com>
+        with ESMTP id S231643AbiCUXOU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Mar 2022 19:14:20 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76683EBAB
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 16:02:56 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id g24so20654764lja.7
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 16:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tBwRJ7GvCh4HtlZQddJMPuKbvebn+hY/0aFRZGnCyYw=;
+        b=RM2ROADzKcYZGbkgNThMWejZQKWAdtKsOo5GYb0Nbw9kcwMn7+aoDS82B5mu+F+MvP
+         neUMee81Lurcv6z5MROmZ4/LuNOvF073FfdHZeoP0m+zA75pI0bqsqApnXq35iu/nnAA
+         SwI/+2l8/2ufeXsFybX2V0dOUOj5T0tD4i3VY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tBwRJ7GvCh4HtlZQddJMPuKbvebn+hY/0aFRZGnCyYw=;
+        b=Nuofe0zzPsNFklr899BNYVp+rRvJtFU999mS9t5jxhS/Do3vje9lgMjMv5am5vUpUk
+         5Kn0IJvqS217h9WZ5rYk/eVt9xqpqi+avU1fLdShm/Qpqz9r6VULGmmDKEsnfjmuOrkI
+         yl/hqY8yOaC1m56pMxT0pTqVIZN0tyH0crM4jLr3kUVJ11vFF0qAjSEUbZXaAx8Jpdga
+         NAF0jRHBHjxTju/6+7VmuIAhRgnMS9C9EvrLC4O5gfDTC5HU0Zs/1WcfFMyObajvU5jr
+         dCJL50PgRh4Rk9iqDLnsMO93RogDCeptEzc6DJE3lOZnQQIdTG5POClso/y5Jfl2KRaW
+         HBPA==
+X-Gm-Message-State: AOAM530dBIA4f2i7yTk70hwFmZuVRuEStSwnyCHw1RTQVhUQ3+Qq8+LA
+        KLCs6zPwOIGA6k24CHpqh03+5poFsFMKeUeEdHE=
+X-Google-Smtp-Source: ABdhPJwQF6jGpNNxej8asCb6RSFI4CqHvgn5in8CkxDkFuoghgILObIW0Rnwh1gm0pUGpphfyvrl4g==
+X-Received: by 2002:a2e:8952:0:b0:249:786c:bb5d with SMTP id b18-20020a2e8952000000b00249786cbb5dmr9589873ljk.242.1647903724156;
+        Mon, 21 Mar 2022 16:02:04 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id d25-20020a194f19000000b0044a2ad98dcasm486901lfb.167.2022.03.21.16.02.01
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 16:02:02 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id a26so8999704lfg.10
+        for <bpf@vger.kernel.org>; Mon, 21 Mar 2022 16:02:01 -0700 (PDT)
+X-Received: by 2002:a19:e048:0:b0:448:2caa:7ed2 with SMTP id
+ g8-20020a19e048000000b004482caa7ed2mr16491603lfj.449.1647903721198; Mon, 21
+ Mar 2022 16:02:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220319173036.23352-1-laoar.shao@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+References: <20220321224608.55798-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20220321224608.55798-1-alexei.starovoitov@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 21 Mar 2022 16:01:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wheGrBxOfMpWhQg1iswCKYig8vADnFVsA4oFWTY9NU5jA@mail.gmail.com>
+Message-ID: <CAHk-=wheGrBxOfMpWhQg1iswCKYig8vADnFVsA4oFWTY9NU5jA@mail.gmail.com>
+Subject: Re: pull-request: bpf-next 2022-03-21
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello, Yafang!
+On Mon, Mar 21, 2022 at 3:46 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> The following pull-request contains BPF updates for your *net-next* tree.
 
-Thank you for continuing working on this!
+No
 
-On Sat, Mar 19, 2022 at 05:30:22PM +0000, Yafang Shao wrote:
-> After switching to memcg-based bpf memory accounting, the bpf memory is
-> charged to the loader's memcg by defaut, that causes unexpected issues for
-> us. For instance, the container of the loader-which loads the bpf programs
-> and pins them on bpffs-may restart after pinning the progs and maps. After
-> the restart, the pinned progs and maps won't belong to the new container
-> any more, while they actually belong to an offline memcg left by the
-> previous generation. That inconsistent behavior will make trouble for the
-> memory resource management for this container.
+This is the tree that contains bad architecture code that was NAK'ed
+by both x86 and arm64 people respectively.
 
-I'm looking at this text and increasingly feeling that it's not a bpf-specific
-problem and it shouldn't be solved as one.
+In particular, I think it's this part:
 
-Is there any significant reason why the loader can't temporarily enter the
-root cgroup before creating bpf maps/progs? I know it will require some changes
-in the userspace code, but so do new bpf flags.
+> Masami Hiramatsu (11):
+>       fprobe: Add ftrace based probe APIs
+>       rethook: Add a generic return hook
+>       rethook: x86: Add rethook x86 implementation
+>       arm64: rethook: Add arm64 rethook implementation
+>       powerpc: Add rethook support
+>       ARM: rethook: Add rethook arm implementation
+>       fprobe: Add exit_handler support
+>       fprobe: Add sample program for fprobe
+>       fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe
+>       docs: fprobe: Add fprobe description to ftrace-use.rst
+>       fprobe: Add a selftest for fprobe
 
-> 
-> The reason why these progs and maps have to be persistent across multiple
-> generations is that these progs and maps are also used by other processes
-> which are not in this container. IOW, they can't be removed when this
-> container is restarted. Take a specific example, bpf program for clsact
-> qdisc is loaded by a agent running in a container, which not only loads
-> bpf program but also processes the data generated by this program and do
-> some other maintainace things.
-> 
-> In order to keep the charging behavior consistent, we used to consider a
-> way to recharge these pinned maps and progs again after the container is
-> restarted, but after the discussion[1] with Roman, we decided to go
-> another direction that don't charge them to the container in the first
-> place. TL;DR about the mentioned disccussion: recharging is not a generic
-> solution and it may take too much risk.
-> 
-> This patchset is the solution of no charge. Two flags are introduced in
-> union bpf_attr, one for bpf map and another for bpf prog. The user who
-> doesn't want to charge to current memcg can use these two flags. These two
-> flags are only permitted for sys admin as these memory will be accounted to
-> the root memcg only.
+That was added very late to the linux-next tree, and that causes build
+warnings because of interactions with other changes.
 
-If we're going with bpf-specific flags (which I'd prefer not to), let's
-define them as the way to create system-wide bpf objects which are expected
-to outlive the original cgroup. With expectations that they will be treated
-as belonging to the root cgroup by any sort of existing or future resource
-accounting (e.g. if we'll start accounting CPU used by bpf prgrams).
+Not ok.
 
-But then again: why just not create them in the root cgroup?
-
-Thanks!
+                   Linus
