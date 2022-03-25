@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0183C433FE
-	for <bpf@archiver.kernel.org>; Fri, 25 Mar 2022 05:30:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E39CC433EF
+	for <bpf@archiver.kernel.org>; Fri, 25 Mar 2022 05:30:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiCYFbh convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 25 Mar 2022 01:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S1354767AbiCYFbj convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 25 Mar 2022 01:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352996AbiCYFbg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Mar 2022 01:31:36 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F97580E8
-        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:02 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 22P0IV2w028869
-        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:01 -0700
+        with ESMTP id S1354761AbiCYFbh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Mar 2022 01:31:37 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F074580E8
+        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:04 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22P0IVC7003746
+        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:03 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3f0rh9dupa-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f0rh6dum1-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:01 -0700
-Received: from twshared23935.04.prn5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:03 -0700
+Received: from twshared4295.42.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Thu, 24 Mar 2022 22:30:00 -0700
+ 15.1.2308.21; Thu, 24 Mar 2022 22:30:02 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 4A68814CB0B83; Thu, 24 Mar 2022 22:29:46 -0700 (PDT)
+        id 9C6BB14CB0B9C; Thu, 24 Mar 2022 22:29:55 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Alan Maguire <alan.maguire@oracle.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 1/7] libbpf: add BPF-side of USDT support
-Date:   Thu, 24 Mar 2022 22:29:35 -0700
-Message-ID: <20220325052941.3526715-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 5/7] libbpf: add x86-specific USDT arg spec parsing logic
+Date:   Thu, 24 Mar 2022 22:29:39 -0700
+Message-ID: <20220325052941.3526715-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220325052941.3526715-1-andrii@kernel.org>
 References: <20220325052941.3526715-1-andrii@kernel.org>
@@ -42,8 +42,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: qS6mkP0gCTJ0aVdiXG9_7wgoJ2bKYfN1
-X-Proofpoint-GUID: qS6mkP0gCTJ0aVdiXG9_7wgoJ2bKYfN1
+X-Proofpoint-GUID: Y2o7Uo0bzCfxdFrm8fgDdECj4Kys6fLL
+X-Proofpoint-ORIG-GUID: Y2o7Uo0bzCfxdFrm8fgDdECj4Kys6fLL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-25_01,2022-03-24_01,2022-02-23_01
@@ -51,321 +51,141 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BPF-side implementation of libbpf-provided USDT support. This
-consists of single header library, usdt.bpf.h, which is meant to be used
-from user's BPF-side source code. This header is added to the list of
-installed libbpf header, along bpf_helpers.h and others.
+Add x86/x86_64-specific USDT argument specification parsing. Each
+architecture will require their own logic, as all this is arch-specific
+assembly-based notation. Architectures that libbpf doesn't support for
+USDTs will pr_warn() with specific error and return -ENOTSUP.
 
-BPF-side implementation consists of two BPF maps:
-  - spec map, which contains "a USDT spec" which encodes information
-    necessary to be able to fetch USDT arguments and other information
-    (argument count, user-provided cookie value, etc) at runtime;
-  - IP-to-spec-ID map, which is only used on kernels that don't support
-    BPF cookie feature. It allows to lookup spec ID based on the place
-    in user application that triggers USDT program.
+We use sscanf() as a very powerful and easy to use string parser. Those
+spaces in sscanf's format string mean "skip any whitespaces", which is
+pretty nifty (and somewhat little known) feature.
 
-These maps have default sizes, 256 and 1024, which are chosen
-conservatively to not waste a lot of space, but handling a lot of common
-cases. But there could be cases when user application needs to either
-trace a lot of different USDTs, or USDTs are heavily inlined and their
-arguments are located in a lot of differing locations. For such cases it
-might be necessary to size those maps up, which libbpf allows to do by
-overriding BPF_USDT_MAX_SPEC_CNT and BPF_USDT_MAX_IP_CNT macros.
-
-It is an important aspect to keep in mind. Single USDT (user-space
-equivalent of kernel tracepoint) can have multiple USDT "call sites".
-That is, single logical USDT is triggered from multiple places in user
-application. This can happen due to function inlining. Each such inlined
-instance of USDT invocation can have its own unique USDT argument
-specification (instructions about the location of the value of each of
-USDT arguments). So while USDT looks very similar to usual uprobe or
-kernel tracepoint, under the hood it's actually a collection of uprobes,
-each potentially needing different spec to know how to fetch arguments.
-
-User-visible API consists of three helper functions:
-  - bpf_usdt_arg_cnt(), which returns number of arguments of current USDT;
-  - bpf_usdt_arg(), which reads value of specified USDT argument (by
-    it's zero-indexed position) and returns it as 64-bit value;
-  - bpf_usdt_cookie(), which functions like BPF cookie for USDT
-    programs; this is necessary as libbpf doesn't allow specifying actual
-    BPF cookie and utilizes it internally for USDT support implementation.
-
-Each bpf_usdt_xxx() APIs expect struct pt_regs * context, passed into
-BPF program. On kernels that don't support BPF cookie it is used to
-fetch absolute IP address of the underlying uprobe.
-
-usdt.bpf.h also provides BPF_USDT() macro, which functions like
-BPF_PROG() and BPF_KPROBE() and allows much more user-friendly way to
-get access to USDT arguments, if USDT definition is static and known to
-the user. It is expected that majority of use cases won't have to use
-bpf_usdt_arg_cnt() and bpf_usdt_arg() directly and BPF_USDT() will cover
-all their needs.
-
-Last, usdt.bpf.h is utilizing BPF CO-RE for one single purpose: to
-detect kernel support for BPF cookie. If BPF CO-RE dependency is
-undesirable, user application can redefine BPF_USDT_HAS_BPF_COOKIE to
-either a boolean constant (or equivalently zero and non-zero), or even
-point it to its own .rodata variable that can be specified from user's
-application user-space code. It is important that
-BPF_USDT_HAS_BPF_COOKIE is known to BPF verifier as static value (thus
-.rodata and not just .data), as otherwise BPF code will still contain
-bpf_get_attach_cookie() BPF helper call and will fail validation at
-runtime, if not dead-code eliminated.
+All this was tested on little-endian architecture, so bit shifts are
+probably off on big-endian, which our CI will hopefully prove.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/Makefile   |   2 +-
- tools/lib/bpf/usdt.bpf.h | 228 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 229 insertions(+), 1 deletion(-)
- create mode 100644 tools/lib/bpf/usdt.bpf.h
+ tools/lib/bpf/usdt.c | 105 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index b8b37fe76006..b4fbe8bed555 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -239,7 +239,7 @@ install_lib: all_cmd
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 22f5f56992f8..5cf809db60aa 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -1007,8 +1007,113 @@ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note,
+ 	return 0;
+ }
  
- SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h	     \
- 	    bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h	     \
--	    skel_internal.h libbpf_version.h
-+	    skel_internal.h libbpf_version.h usdt.bpf.h
- GEN_HDRS := $(BPF_GENERATED)
- 
- INSTALL_PFX := $(DESTDIR)$(prefix)/include/bpf
-diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
-new file mode 100644
-index 000000000000..8ee084b2e6b5
---- /dev/null
-+++ b/tools/lib/bpf/usdt.bpf.h
-@@ -0,0 +1,228 @@
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+#ifndef __USDT_BPF_H__
-+#define __USDT_BPF_H__
++/* Architecture-specific logic for parsing USDT argument location specs */
 +
-+#include <linux/errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
++#if defined(__x86_64__) || defined(__i386__)
 +
-+/* Below types and maps are internal implementation details of libpf's USDT
-+ * support and are subjects to change. Also, usdt_xxx() API helpers should be
-+ * considered an unstable API as well and might be adjusted based on user
-+ * feedback from using libbpf's USDT support in production.
-+ */
-+
-+/* User can override BPF_USDT_MAX_SPEC_CNT to change default size of internal
-+ * map that keeps track of USDT argument specifications. This might be
-+ * necessary if there are a lot of USDT attachments.
-+ */
-+#ifndef BPF_USDT_MAX_SPEC_CNT
-+#define BPF_USDT_MAX_SPEC_CNT 256
-+#endif
-+/* User can override BPF_USDT_MAX_IP_CNT to change default size of internal
-+ * map that keeps track of IP (memory address) mapping to USDT argument
-+ * specification.
-+ * Note, if kernel supports BPF cookies, this map is not used and could be
-+ * resized all the way to 1 to save a bit of memory.
-+ */
-+#ifndef BPF_USDT_MAX_IP_CNT
-+#define BPF_USDT_MAX_IP_CNT 1024
-+#endif
-+/* We use BPF CO-RE to detect support for BPF cookie from BPF side. This is
-+ * the only dependency on CO-RE, so if it's undesirable, user can override
-+ * BPF_USDT_HAS_BPF_COOKIE to specify whether to BPF cookie is supported or not.
-+ */
-+#ifndef BPF_USDT_HAS_BPF_COOKIE
-+#define BPF_USDT_HAS_BPF_COOKIE \
-+	bpf_core_enum_value_exists(enum bpf_func_id___usdt, BPF_FUNC_get_attach_cookie___usdt)
-+#endif
-+
-+enum __bpf_usdt_arg_type {
-+	BPF_USDT_ARG_CONST,
-+	BPF_USDT_ARG_REG,
-+	BPF_USDT_ARG_REG_DEREF,
-+};
-+
-+struct __bpf_usdt_arg_spec {
-+	__u64 val_off;
-+	enum __bpf_usdt_arg_type arg_type;
-+	short reg_off;
-+	bool arg_signed;
-+	char arg_bitshift;
-+};
-+
-+/* should match USDT_MAX_ARG_CNT in usdt.c exactly */
-+#define BPF_USDT_MAX_ARG_CNT 12
-+struct __bpf_usdt_spec {
-+	struct __bpf_usdt_arg_spec args[BPF_USDT_MAX_ARG_CNT];
-+	__u64 usdt_cookie;
-+	short arg_cnt;
-+};
-+
-+__weak struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, BPF_USDT_MAX_SPEC_CNT);
-+	__type(key, int);
-+	__type(value, struct __bpf_usdt_spec);
-+} __bpf_usdt_specs SEC(".maps");
-+
-+__weak struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, BPF_USDT_MAX_IP_CNT);
-+	__type(key, long);
-+	__type(value, struct __bpf_usdt_spec);
-+} __bpf_usdt_specs_ip_to_id SEC(".maps");
-+
-+/* don't rely on user's BPF code to have latest definition of bpf_func_id */
-+enum bpf_func_id___usdt {
-+	BPF_FUNC_get_attach_cookie___usdt = 0xBAD, /* value doesn't matter */
-+};
-+
-+static inline int __bpf_usdt_spec_id(struct pt_regs *ctx)
++static int calc_pt_regs_off(const char *reg_name)
 +{
-+	if (!BPF_USDT_HAS_BPF_COOKIE) {
-+		long ip = PT_REGS_IP(ctx);
-+		int *spec_id_ptr;
++	static struct {
++		const char *names[4];
++		size_t pt_regs_off;
++	} reg_map[] = {
++#if __x86_64__
++#define reg_off(reg64, reg32) offsetof(struct pt_regs, reg64)
++#else
++#define reg_off(reg64, reg32) offsetof(struct pt_regs, reg32)
++#endif
++		{ {"rip", "eip", "", ""}, reg_off(rip, eip) },
++		{ {"rax", "eax", "ax", "al"}, reg_off(rax, eax) },
++		{ {"rbx", "ebx", "bx", "bl"}, reg_off(rbx, ebx) },
++		{ {"rcx", "ecx", "cx", "cl"}, reg_off(rcx, ecx) },
++		{ {"rdx", "edx", "dx", "dl"}, reg_off(rdx, edx) },
++		{ {"rsi", "esi", "si", "sil"}, reg_off(rsi, esi) },
++		{ {"rdi", "edi", "di", "dil"}, reg_off(rdi, edi) },
++		{ {"rbp", "ebp", "bp", "bpl"}, reg_off(rbp, ebp) },
++		{ {"rsp", "esp", "sp", "spl"}, reg_off(rsp, esp) },
++#undef reg_off
++#if __x86_64__
++		{ {"r8", "r8d", "r8w", "r8b"}, offsetof(struct pt_regs, r8) },
++		{ {"r9", "r9d", "r9w", "r9b"}, offsetof(struct pt_regs, r9) },
++		{ {"r10", "r10d", "r10w", "r10b"}, offsetof(struct pt_regs, r10) },
++		{ {"r11", "r11d", "r11w", "r11b"}, offsetof(struct pt_regs, r11) },
++		{ {"r12", "r12d", "r12w", "r12b"}, offsetof(struct pt_regs, r12) },
++		{ {"r13", "r13d", "r13w", "r13b"}, offsetof(struct pt_regs, r13) },
++		{ {"r14", "r14d", "r14w", "r14b"}, offsetof(struct pt_regs, r14) },
++		{ {"r15", "r15d", "r15w", "r15b"}, offsetof(struct pt_regs, r15) },
++#endif
++	};
++	int i, j;
 +
-+		spec_id_ptr = bpf_map_lookup_elem(&__bpf_usdt_specs_ip_to_id, &ip);
-+		return spec_id_ptr ? *spec_id_ptr : -ESRCH;
++	for (i = 0; i < ARRAY_SIZE(reg_map); i++) {
++		for (j = 0; j < ARRAY_SIZE(reg_map[i].names); j++) {
++			if (strcmp(reg_name, reg_map[i].names[j]) == 0)
++				return reg_map[i].pt_regs_off;
++		}
 +	}
 +
-+	return bpf_get_attach_cookie(ctx);
++	pr_warn("usdt: unrecognized register '%s'\n", reg_name);
++	return -ENOENT;
 +}
 +
-+/* Return number of USDT arguments defined for currently traced USDT. */
-+__hidden __weak
-+int bpf_usdt_arg_cnt(struct pt_regs *ctx)
++static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
 +{
-+	struct __bpf_usdt_spec *spec;
-+	int spec_id;
++	char *reg_name = NULL;
++	int arg_sz, len, reg_off;
++	long off;
 +
-+	spec_id = __bpf_usdt_spec_id(ctx);
-+	if (spec_id < 0)
++	if (3 == sscanf(arg_str, " %d @ %ld ( %%%m[^)] ) %n", &arg_sz, &off, &reg_name, &len)) {
++		/* -4@-20(%rbp) */
++		arg->arg_type = USDT_ARG_REG_DEREF;
++		arg->val_off = off;
++		reg_off = calc_pt_regs_off(reg_name);
++		free(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off = reg_off;
++	} else if (2 == sscanf(arg_str, " %d @ %%%ms %n", &arg_sz, &reg_name, &len)) {
++		/* -4@%eax */
++		arg->arg_type = USDT_ARG_REG;
++		arg->val_off = 0;
++
++		reg_off = calc_pt_regs_off(reg_name);
++		free(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off = reg_off;
++	} else if (2 == sscanf(arg_str, " %d @ $%ld %n", &arg_sz, &off, &len)) {
++		/* 4@$71 */
++		arg->arg_type = USDT_ARG_CONST;
++		arg->val_off = off;
++		arg->reg_off = 0;
++	} else {
++		pr_warn("usdt: unrecognized arg #%d spec '%s'\n", arg_num, arg_str);
 +		return -EINVAL;
++	}
 +
-+	spec = bpf_map_lookup_elem(&__bpf_usdt_specs, &spec_id);
-+	if (!spec)
-+		return -EINVAL;
++	arg->arg_signed = arg_sz < 0;
++	if (arg_sz < 0)
++		arg_sz = -arg_sz;
 +
-+	return spec->arg_cnt;
-+}
-+
-+/* Fetch USDT argument *arg* (zero-indexed) and put its value into *res.
-+ * Returns 0 on success; negative error, otherwise.
-+ * On error *res is guaranteed to be set to zero.
-+ */
-+__hidden __weak
-+int bpf_usdt_arg(struct pt_regs *ctx, int arg, long *res)
-+{
-+	struct __bpf_usdt_spec *spec;
-+	struct __bpf_usdt_arg_spec *arg_spec;
-+	unsigned long val;
-+	int err, spec_id;
-+
-+	*res = 0;
-+
-+	spec_id = __bpf_usdt_spec_id(ctx);
-+	if (spec_id < 0)
-+		return -ESRCH;
-+
-+	spec = bpf_map_lookup_elem(&__bpf_usdt_specs, &spec_id);
-+	if (!spec)
-+		return -ESRCH;
-+
-+	if (arg >= spec->arg_cnt)
-+		return -ENOENT;
-+
-+	arg_spec = &spec->args[arg];
-+	switch (arg_spec->arg_type) {
-+	case BPF_USDT_ARG_CONST:
-+		val = arg_spec->val_off;
-+		break;
-+	case BPF_USDT_ARG_REG:
-+		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
-+		if (err)
-+			return err;
-+		break;
-+	case BPF_USDT_ARG_REG_DEREF:
-+		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
-+		if (err)
-+			return err;
-+		err = bpf_probe_read_user(&val, sizeof(val), (void *)val + arg_spec->val_off);
-+		if (err)
-+			return err;
++	switch (arg_sz) {
++	case 1: case 2: case 4: case 8:
++		arg->arg_bitshift = 64 - arg_sz * 8;
 +		break;
 +	default:
++		pr_warn("usdt: unsupported arg #%d (spec '%s') size: %d\n",
++			arg_num, arg_str, arg_sz);
 +		return -EINVAL;
 +	}
 +
-+	val <<= arg_spec->arg_bitshift;
-+	if (arg_spec->arg_signed)
-+		val = ((long)val) >> arg_spec->arg_bitshift;
-+	else
-+		val = val >> arg_spec->arg_bitshift;
-+	*res = val;
-+	return 0;
++	return len;
 +}
 +
-+/* Retrieve user-specified cookie value provided during attach as
-+ * bpf_usdt_opts.usdt_cookie. This serves the same purpose as BPF cookie
-+ * returned by bpf_get_attach_cookie(). Libbpf's support for USDT is itself
-+ * utilizaing BPF cookies internally, so user can't use BPF cookie directly
-+ * for USDT programs and has to use bpf_usdt_cookie() API instead.
-+ */
-+__hidden __weak
-+long bpf_usdt_cookie(struct pt_regs *ctx)
-+{
-+	struct __bpf_usdt_spec *spec;
-+	int spec_id;
++#else
 +
-+	spec_id = __bpf_usdt_spec_id(ctx);
-+	if (spec_id < 0)
-+		return 0;
+ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+ {
+ 	pr_warn("usdt: libbpf doesn't support USDTs on current architecture\n");
+ 	return -ENOTSUP;
+ }
 +
-+	spec = bpf_map_lookup_elem(&__bpf_usdt_specs, &spec_id);
-+	if (!spec)
-+		return 0;
-+
-+	return spec->usdt_cookie;
-+}
-+
-+/* we rely on ___bpf_apply() and ___bpf_narg() macros already defined in bpf_tracing.h */
-+#define ___bpf_usdt_args0() ctx
-+#define ___bpf_usdt_args1(x) ___bpf_usdt_args0(), ({ long _x; bpf_usdt_arg(ctx, 0, &_x); (void *)_x; })
-+#define ___bpf_usdt_args2(x, args...) ___bpf_usdt_args1(args), ({ long _x; bpf_usdt_arg(ctx, 1, &_x); (void *)_x; })
-+#define ___bpf_usdt_args3(x, args...) ___bpf_usdt_args2(args), ({ long _x; bpf_usdt_arg(ctx, 2, &_x); (void *)_x; })
-+#define ___bpf_usdt_args4(x, args...) ___bpf_usdt_args3(args), ({ long _x; bpf_usdt_arg(ctx, 3, &_x); (void *)_x; })
-+#define ___bpf_usdt_args5(x, args...) ___bpf_usdt_args4(args), ({ long _x; bpf_usdt_arg(ctx, 4, &_x); (void *)_x; })
-+#define ___bpf_usdt_args6(x, args...) ___bpf_usdt_args5(args), ({ long _x; bpf_usdt_arg(ctx, 5, &_x); (void *)_x; })
-+#define ___bpf_usdt_args7(x, args...) ___bpf_usdt_args6(args), ({ long _x; bpf_usdt_arg(ctx, 6, &_x); (void *)_x; })
-+#define ___bpf_usdt_args8(x, args...) ___bpf_usdt_args7(args), ({ long _x; bpf_usdt_arg(ctx, 7, &_x); (void *)_x; })
-+#define ___bpf_usdt_args9(x, args...) ___bpf_usdt_args8(args), ({ long _x; bpf_usdt_arg(ctx, 8, &_x); (void *)_x; })
-+#define ___bpf_usdt_args10(x, args...) ___bpf_usdt_args9(args), ({ long _x; bpf_usdt_arg(ctx, 9, &_x); (void *)_x; })
-+#define ___bpf_usdt_args11(x, args...) ___bpf_usdt_args10(args), ({ long _x; bpf_usdt_arg(ctx, 10, &_x); (void *)_x; })
-+#define ___bpf_usdt_args12(x, args...) ___bpf_usdt_args11(args), ({ long _x; bpf_usdt_arg(ctx, 11, &_x); (void *)_x; })
-+#define ___bpf_usdt_args(args...) ___bpf_apply(___bpf_usdt_args, ___bpf_narg(args))(args)
-+
-+/*
-+ * BPF_USDT serves the same purpose for USDT handlers as BPF_PROG for
-+ * tp_btf/fentry/fexit BPF programs and BPF_KPROBE for kprobes.
-+ * Original struct pt_regs * context is preserved as 'ctx' argument.
-+ */
-+#define BPF_USDT(name, args...)						    \
-+name(struct pt_regs *ctx);						    \
-+static __attribute__((always_inline)) typeof(name(0))			    \
-+____##name(struct pt_regs *ctx, ##args);				    \
-+typeof(name(0)) name(struct pt_regs *ctx)				    \
-+{									    \
-+        _Pragma("GCC diagnostic push")					    \
-+        _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
-+        return ____##name(___bpf_usdt_args(args));			    \
-+        _Pragma("GCC diagnostic pop")					    \
-+}									    \
-+static __attribute__((always_inline)) typeof(name(0))			    \
-+____##name(struct pt_regs *ctx, ##args)
-+
-+#endif /* __USDT_BPF_H__ */
++#endif
 -- 
 2.30.2
 
