@@ -2,39 +2,39 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85816C433FE
-	for <bpf@archiver.kernel.org>; Fri, 25 Mar 2022 05:30:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BB13C433F5
+	for <bpf@archiver.kernel.org>; Fri, 25 Mar 2022 05:30:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354761AbiCYFbk convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 25 Mar 2022 01:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37324 "EHLO
+        id S1354825AbiCYFbl convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 25 Mar 2022 01:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354825AbiCYFbi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Mar 2022 01:31:38 -0400
+        with ESMTP id S1354971AbiCYFbj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Mar 2022 01:31:39 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA2B583A8
-        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A53583AC
+        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:05 -0700 (PDT)
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22P0IYjO027218
-        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:04 -0700
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22P0IX0P027067
+        for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:05 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f02uw6mt3-9
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f02uw6mt9-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 24 Mar 2022 22:30:04 -0700
-Received: from twshared4295.42.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+Received: from twshared1376.03.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2308.21; Thu, 24 Mar 2022 22:30:02 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 89EDF14CB0B96; Thu, 24 Mar 2022 22:29:53 -0700 (PDT)
+        id B707614CB0BA0; Thu, 24 Mar 2022 22:29:57 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Alan Maguire <alan.maguire@oracle.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [PATCH bpf-next 4/7] libbpf: wire up spec management and other arch-independent USDT logic
-Date:   Thu, 24 Mar 2022 22:29:38 -0700
-Message-ID: <20220325052941.3526715-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 6/7] selftests/bpf: add basic USDT selftests
+Date:   Thu, 24 Mar 2022 22:29:40 -0700
+Message-ID: <20220325052941.3526715-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220325052941.3526715-1-andrii@kernel.org>
 References: <20220325052941.3526715-1-andrii@kernel.org>
@@ -42,8 +42,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 7ubKxmpWtY5OCTws_q6Hfmm8jdG5AKtu
-X-Proofpoint-GUID: 7ubKxmpWtY5OCTws_q6Hfmm8jdG5AKtu
+X-Proofpoint-ORIG-GUID: LCo2qqvDAOIZ08kBwAsw5eR15o7_2GKc
+X-Proofpoint-GUID: LCo2qqvDAOIZ08kBwAsw5eR15o7_2GKc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-25_01,2022-03-24_01,2022-02-23_01
@@ -51,280 +51,476 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Last part of architecture-agnostic user-space USDT handling logic is to
-set up BPF spec and, optionally, IP-to-ID maps from user-space.
-usdt_manager performs a compact spec ID allocation to utilize
-fixed-sized BPF maps as efficiently as possible. We also use hashmap to
-deduplicate USDT arg spec strings and map identical strings to single
-USDT spec, minimizing the necessary BPF map size. usdt_manager supports
-arbitrary sequences of attachment and detachment, both of the same USDT
-and multiple different USDTs and internally maintains a free list of
-unused spec IDs. bpf_link_usdt's logic is extended with proper setup and
-teardown of this spec ID free list and supporting BPF maps.
+Add semaphore-based USDT to test_progs itself and write basic tests to
+valicate both auto-attachment and manual attachment logic, as well as
+BPF-side functionality.
+
+Also add subtests to validate that libbpf properly deduplicates USDT
+specs and handles spec overflow situations correctly, as well as proper
+"rollback" of partially-attached multi-spec USDT.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/usdt.c | 167 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 166 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile          |   1 +
+ tools/testing/selftests/bpf/prog_tests/usdt.c | 314 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_usdt.c | 115 +++++++
+ 3 files changed, 430 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_usdt.c
 
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index 86d5d8390eb1..22f5f56992f8 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -74,6 +74,10 @@ struct usdt_manager {
- 	struct bpf_map *specs_map;
- 	struct bpf_map *ip_to_id_map;
- 
-+	int *free_spec_ids;
-+	size_t free_spec_cnt;
-+	size_t next_free_spec_id;
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 3820608faf57..18e22def3bdb 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -400,6 +400,7 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
+ 		     $(TRUNNER_BPF_PROGS_DIR)/*.h			\
+ 		     $$(INCLUDE_DIR)/vmlinux.h				\
+ 		     $(wildcard $(BPFDIR)/bpf_*.h)			\
++		     $(wildcard $(BPFDIR)/*.bpf.h)			\
+ 		     | $(TRUNNER_OUTPUT) $$(BPFOBJ)
+ 	$$(call $(TRUNNER_BPF_BUILD_RULE),$$<,$$@,			\
+ 					  $(TRUNNER_BPF_CFLAGS))
+diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
+new file mode 100644
+index 000000000000..44a20d8c45d7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+@@ -0,0 +1,314 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
 +
- 	bool has_bpf_cookie;
- 	bool has_sema_refcnt;
- };
-@@ -118,6 +122,7 @@ void usdt_manager_free(struct usdt_manager *man)
- 	if (!man)
- 		return;
- 
-+	free(man->free_spec_ids);
- 	free(man);
- }
- 
-@@ -623,6 +628,9 @@ struct bpf_link_usdt {
- 
- 	struct usdt_manager *usdt_man;
- 
-+	size_t spec_cnt;
-+	int *spec_ids;
++#define _SDT_HAS_SEMAPHORES 1
++#include <sys/sdt.h>
 +
- 	size_t uprobe_cnt;
- 	struct {
- 		long abs_ip;
-@@ -633,11 +641,52 @@ struct bpf_link_usdt {
- static int bpf_link_usdt_detach(struct bpf_link *link)
- {
- 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
-+	struct usdt_manager *man = usdt_link->usdt_man;
- 	int i;
- 
- 	for (i = 0; i < usdt_link->uprobe_cnt; i++) {
- 		/* detach underlying uprobe link */
- 		bpf_link__destroy(usdt_link->uprobes[i].link);
-+		/* there is no need to update specs map because it will be
-+		 * unconditionally overwritten on subsequent USDT attaches,
-+		 * but if BPF cookies are not used we need to remove entry
-+		 * from ip_to_id map, otherwise we'll run into false
-+		 * conflicting IP errors
-+		 */
-+		if (!man->has_bpf_cookie) {
-+			/* not much we can do about errors here */
-+			(void)bpf_map_delete_elem(bpf_map__fd(man->ip_to_id_map),
-+						  &usdt_link->uprobes[i].abs_ip);
-+		}
++#include "test_usdt.skel.h"
++#include "test_urandom_usdt.skel.h"
++
++int lets_test_this(int);
++
++static volatile int idx = 2;
++static volatile __u64 bla = 0xFEDCBA9876543210ULL;
++static volatile short nums[] = {-1, -2, -3, };
++
++static volatile struct {
++	int x;
++	signed char y;
++} t1 = { 1, -127 };
++
++#define SEC(name) __attribute__((section(name), used))
++
++unsigned short test_usdt0_semaphore SEC(".probes");
++unsigned short test_usdt3_semaphore SEC(".probes");
++unsigned short test_usdt12_semaphore SEC(".probes");
++
++static void __always_inline trigger_func(int x) {
++	long y = 42;
++
++	if (test_usdt0_semaphore)
++		STAP_PROBE(test, usdt0);
++	if (test_usdt3_semaphore)
++		STAP_PROBE3(test, usdt3, x, y, &bla);
++	if (test_usdt12_semaphore) {
++		STAP_PROBE12(test, usdt12,
++			     x, x + 1, y, x + y, 5,
++			     y / 7, bla, &bla, -9, nums[x],
++			     nums[idx], t1.y);
 +	}
++}
 +
-+	/* try to return the list of previously used spec IDs to usdt_manager
-+	 * for future reuse for subsequent USDT attaches
-+	 */
-+	if (!man->free_spec_ids) {
-+		/* if there were no free spec IDs yet, just transfer our IDs */
-+		man->free_spec_ids = usdt_link->spec_ids;
-+		man->free_spec_cnt = usdt_link->spec_cnt;
-+		usdt_link->spec_ids = NULL;
-+	} else {
-+		/* otherwise concat IDs */
-+		size_t new_cnt = man->free_spec_cnt + usdt_link->spec_cnt;
-+		int *new_free_ids;
-+
-+		new_free_ids = libbpf_reallocarray(man->free_spec_ids, new_cnt,
-+						   sizeof(*new_free_ids));
-+		/* If we couldn't resize free_spec_ids, we'll just leak
-+		 * a bunch of free IDs; this is very unlikely to happen and if
-+		 * system is so exausted on memory, it's the least of user's
-+		 * concerns, probably.
-+		 * So just do our best here to return those IDs to usdt_manager.
-+		 */
-+		if (new_free_ids) {
-+			memcpy(new_free_ids + man->free_spec_cnt, usdt_link->spec_ids,
-+			       usdt_link->spec_cnt * sizeof(*usdt_link->spec_ids));
-+			man->free_spec_ids = new_free_ids;
-+			man->free_spec_cnt = new_cnt;
-+		}
- 	}
- 
- 	return 0;
-@@ -647,17 +696,82 @@ static void bpf_link_usdt_dealloc(struct bpf_link *link)
- {
- 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
- 
-+	free(usdt_link->spec_ids);
- 	free(usdt_link->uprobes);
- 	free(usdt_link);
- }
- 
-+static int prepare_spec_id(struct usdt_manager *man, struct bpf_link_usdt *link,
-+			   struct hashmap *specs_hash, struct usdt_target *target,
-+			   int *spec_id, bool *id_exists)
++static void subtest_basic_usdt(void)
 +{
-+	void *tmp;
-+	bool reused;
++	LIBBPF_OPTS(bpf_usdt_opts, opts);
++	struct test_usdt *skel;
++	struct test_usdt__bss *bss;
 +	int err;
 +
-+	/* check if we already assigned spec ID for this spec string */
-+	if (hashmap__find(specs_hash, target->spec_str, &tmp)) {
-+		*id_exists = true;
-+		*spec_id = (long)tmp;
++	skel = test_usdt__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	bss = skel->bss;
++	bss->my_pid = getpid();
++
++	err = test_usdt__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	/* usdt0 won't be auto-attached */
++	opts.usdt_cookie = 0xcafedeadbeeffeed;
++	skel->links.usdt0 = bpf_program__attach_usdt(skel->progs.usdt0,
++						     0 /*self*/, "/proc/self/exe",
++						     "test", "usdt0", &opts);
++	if (!ASSERT_OK_PTR(skel->links.usdt0, "usdt0_link"))
++		goto cleanup;
++
++	trigger_func(1);
++
++	ASSERT_EQ(bss->usdt0_called, 1, "usdt0_called");
++	ASSERT_EQ(bss->usdt3_called, 1, "usdt3_called");
++	ASSERT_EQ(bss->usdt12_called, 1, "usdt12_called");
++
++	ASSERT_EQ(bss->usdt0_cookie, 0xcafedeadbeeffeed, "usdt0_cookie");
++	ASSERT_EQ(bss->usdt0_arg_cnt, 0, "usdt0_arg_cnt");
++	ASSERT_EQ(bss->usdt0_arg_ret, -ENOENT, "usdt0_arg_ret");
++
++	/* auto-attached usdt3 gets default zero cookie value */
++	ASSERT_EQ(bss->usdt3_cookie, 0, "usdt3_cookie");
++	ASSERT_EQ(bss->usdt3_arg_cnt, 3, "usdt3_arg_cnt");
++
++	ASSERT_EQ(bss->usdt3_arg_rets[0], 0, "usdt3_arg1_ret");
++	ASSERT_EQ(bss->usdt3_arg_rets[1], 0, "usdt3_arg2_ret");
++	ASSERT_EQ(bss->usdt3_arg_rets[2], 0, "usdt3_arg3_ret");
++	ASSERT_EQ(bss->usdt3_args[0], 1, "usdt3_arg1");
++	ASSERT_EQ(bss->usdt3_args[1], 42, "usdt3_arg2");
++	ASSERT_EQ(bss->usdt3_args[2], (uintptr_t)&bla, "usdt3_arg3");
++
++	/* auto-attached usdt12 gets default zero cookie value */
++	ASSERT_EQ(bss->usdt12_cookie, 0, "usdt12_cookie");
++	ASSERT_EQ(bss->usdt12_arg_cnt, 12, "usdt12_arg_cnt");
++
++	ASSERT_EQ(bss->usdt12_args[0], 1, "usdt12_arg1");
++	ASSERT_EQ(bss->usdt12_args[1], 1 + 1, "usdt12_arg2");
++	ASSERT_EQ(bss->usdt12_args[2], 42, "usdt12_arg3");
++	ASSERT_EQ(bss->usdt12_args[3], 42 + 1, "usdt12_arg4");
++	ASSERT_EQ(bss->usdt12_args[4], 5, "usdt12_arg5");
++	ASSERT_EQ(bss->usdt12_args[5], 42 / 7, "usdt12_arg6");
++	ASSERT_EQ(bss->usdt12_args[6], bla, "usdt12_arg7");
++	ASSERT_EQ(bss->usdt12_args[7], (uintptr_t)&bla, "usdt12_arg8");
++	ASSERT_EQ(bss->usdt12_args[8], -9, "usdt12_arg9");
++	ASSERT_EQ(bss->usdt12_args[9], nums[1], "usdt12_arg10");
++	ASSERT_EQ(bss->usdt12_args[10], nums[idx], "usdt12_arg11");
++	ASSERT_EQ(bss->usdt12_args[11], t1.y, "usdt12_arg12");
++
++	/* trigger_func() is marked __always_inline, so USDT invocations will be
++	 * inlined in two different places, meaning that each USDT will have
++	 * at least 2 different places to be attached to. This verifies that
++	 * bpf_program__attach_usdt() handles this properly and attaches to
++	 * all possible places of USDT invocation.
++	 */
++	trigger_func(2);
++
++	ASSERT_EQ(bss->usdt0_called, 2, "usdt0_called");
++	ASSERT_EQ(bss->usdt3_called, 2, "usdt3_called");
++	ASSERT_EQ(bss->usdt12_called, 2, "usdt12_called");
++
++	/* only check values that depend on trigger_func()'s input value */
++	ASSERT_EQ(bss->usdt3_args[0], 2, "usdt3_arg1");
++
++	ASSERT_EQ(bss->usdt12_args[0], 2, "usdt12_arg1");
++	ASSERT_EQ(bss->usdt12_args[1], 2 + 1, "usdt12_arg2");
++	ASSERT_EQ(bss->usdt12_args[3], 42 + 2, "usdt12_arg4");
++	ASSERT_EQ(bss->usdt12_args[9], nums[2], "usdt12_arg10");
++
++	/* detach and re-attach usdt3 */
++	bpf_link__destroy(skel->links.usdt3);
++
++	opts.usdt_cookie = 0xBADC00C51E;
++	skel->links.usdt3 = bpf_program__attach_usdt(skel->progs.usdt3, -1 /* any pid */,
++						     "/proc/self/exe", "test", "usdt3", &opts);
++	if (!ASSERT_OK_PTR(skel->links.usdt3, "usdt3_reattach"))
++		goto cleanup;
++
++	trigger_func(3);
++
++	ASSERT_EQ(bss->usdt3_called, 3, "usdt3_called");
++	/* this time usdt3 has custom cookie */
++	ASSERT_EQ(bss->usdt3_cookie, 0xBADC00C51E, "usdt3_cookie");
++	ASSERT_EQ(bss->usdt3_arg_cnt, 3, "usdt3_arg_cnt");
++
++	ASSERT_EQ(bss->usdt3_arg_rets[0], 0, "usdt3_arg1_ret");
++	ASSERT_EQ(bss->usdt3_arg_rets[1], 0, "usdt3_arg2_ret");
++	ASSERT_EQ(bss->usdt3_arg_rets[2], 0, "usdt3_arg3_ret");
++	ASSERT_EQ(bss->usdt3_args[0], 3, "usdt3_arg1");
++	ASSERT_EQ(bss->usdt3_args[1], 42, "usdt3_arg2");
++	ASSERT_EQ(bss->usdt3_args[2], (uintptr_t)&bla, "usdt3_arg3");
++
++cleanup:
++	test_usdt__destroy(skel);
++}
++
++unsigned short test_usdt_100_semaphore SEC(".probes");
++unsigned short test_usdt_300_semaphore SEC(".probes");
++unsigned short test_usdt_400_semaphore SEC(".probes");
++
++#define R10(F, X)  F(X+0); F(X+1);F(X+2); F(X+3); F(X+4); \
++		   F(X+5); F(X+6); F(X+7); F(X+8); F(X+9);
++#define R100(F, X) R10(F,X+ 0);R10(F,X+10);R10(F,X+20);R10(F,X+30);R10(F,X+40); \
++		   R10(F,X+50);R10(F,X+60);R10(F,X+70);R10(F,X+80);R10(F,X+90);
++
++/* carefully control that we get exactly 100 inlines by preventing inlining */
++static void __always_inline f100(int x)
++{
++	STAP_PROBE1(test, usdt_100, x);
++}
++
++__weak void trigger_100_usdts(void)
++{
++	R100(f100, 0);
++}
++
++/* we shouldn't be able to attach to test:usdt2_300 USDT as we don't have as
++ * many slots for specs. It's important that each STAP_PROBE2() invocation
++ * (after untolling) gets different arg spec due to compiler inlining i as
++ * a constant
++ */
++static void __always_inline f300(int x)
++{
++	STAP_PROBE1(test, usdt_300, x);
++}
++
++__weak void trigger_300_usdts(void)
++{
++	R100(f300, 0);
++	R100(f300, 100);
++	R100(f300, 200);
++}
++
++static void __always_inline f400(int /*unused*/ )
++{
++	static int x;
++
++	STAP_PROBE1(test, usdt_400, x++);
++}
++
++/* this time we have 400 different USDT call sites, but they have uniform
++ * argument location, so libbpf's spec string deduplication logic should keep
++ * spec count use very small and so we should be able to attach to all 400
++ * call sites
++ */
++__weak void trigger_400_usdts(void)
++{
++	R100(f400, 0);
++	R100(f400, 100);
++	R100(f400, 200);
++	R100(f400, 300);
++}
++
++static void subtest_multispec_usdt(void)
++{
++	LIBBPF_OPTS(bpf_usdt_opts, opts);
++	struct test_usdt *skel;
++	struct test_usdt__bss *bss;
++	int err, i;
++
++	skel = test_usdt__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	bss = skel->bss;
++	bss->my_pid = getpid();
++
++	err = test_usdt__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	/* usdt_100 is auto-attached and there are 100 inlined call sites,
++	 * let's validate that all of them are properly attached to and
++	 * handled from BPF side
++	 */
++	trigger_100_usdts();
++
++	ASSERT_EQ(bss->usdt_100_called, 100, "usdt_100_called");
++	ASSERT_EQ(bss->usdt_100_sum, 99 * 100 / 2, "usdt_100_sum");
++
++	/* Stress test free spec ID tracking. By default libbpf allows up to
++	 * 256 specs to be used, so if we don't return free spec IDs back
++	 * after few detachments and re-attachments we should run out of
++	 * available spec IDs.
++	 */
++	for (i = 0; i < 2; i++) {
++		bpf_link__destroy(skel->links.usdt_100);
++
++		skel->links.usdt_100 = bpf_program__attach_usdt(skel->progs.usdt_100, -1,
++							        "/proc/self/exe",
++								"test", "usdt_100", NULL);
++		if (!ASSERT_OK_PTR(skel->links.usdt_100, "usdt_100_reattach"))
++			goto cleanup;
++
++		bss->usdt_100_sum = 0;
++		trigger_100_usdts();
++
++		ASSERT_EQ(bss->usdt_100_called, (i + 1) * 100 + 100, "usdt_100_called");
++		ASSERT_EQ(bss->usdt_100_sum, 99 * 100 / 2, "usdt_100_sum");
++	}
++
++	/* Now let's step it up and try to attach USDT that requires more than
++	 * 256 attach points with different specs for each.
++	 * Note that we need trigger_300_usdts() only to actually have 300
++	 * USDT call sites, we are not going to actually trace them.
++	 */
++	trigger_300_usdts();
++
++	/* we'll reuse usdt_100 BPF program for usdt_300 test */
++	bpf_link__destroy(skel->links.usdt_100);
++	skel->links.usdt_100 = bpf_program__attach_usdt(skel->progs.usdt_100, -1, "/proc/self/exe",
++							"test", "usdt_300", NULL);
++	err = -errno;
++	if (!ASSERT_ERR_PTR(skel->links.usdt_100, "usdt_300_bad_attach"))
++		goto cleanup;
++	ASSERT_EQ(err, -E2BIG, "usdt_300_attach_err");
++
++	/* let's check that there are no "dangling" BPF programs attached due
++	 * to partial success of the above test:usdt_300 attachment
++	 */
++	bss->usdt_100_called = 0;
++	bss->usdt_100_sum = 0;
++
++	f300(777); /* this is 301st instance of usdt_300 */
++
++	ASSERT_EQ(bss->usdt_100_called, 0, "usdt_301_called");
++	ASSERT_EQ(bss->usdt_100_sum, 0, "usdt_301_sum");
++
++	/* This time we have USDT with 400 inlined invocations, but arg specs
++	 * should be the same across all sites, so libbpf will only need to
++	 * use one spec and thus we'll be able to attach 400 uprobes
++	 * successfully.
++	 *
++	 * Again, we are reusing usdt_100 BPF program.
++	 */
++	skel->links.usdt_100 = bpf_program__attach_usdt(skel->progs.usdt_100, -1,
++							"/proc/self/exe",
++							"test", "usdt_400", NULL);
++	if (!ASSERT_OK_PTR(skel->links.usdt_100, "usdt_400_attach"))
++		goto cleanup;
++
++	trigger_400_usdts();
++
++	ASSERT_EQ(bss->usdt_100_called, 400, "usdt_400_called");
++	ASSERT_EQ(bss->usdt_100_sum, 399 * 400 / 2, "usdt_400_sum");
++
++cleanup:
++	test_usdt__destroy(skel);
++}
++
++void test_usdt(void)
++{
++	if (test__start_subtest("basic"))
++		subtest_basic_usdt();
++	if (test__start_subtest("multispec"))
++		subtest_multispec_usdt();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_usdt.c b/tools/testing/selftests/bpf/progs/test_usdt.c
+new file mode 100644
+index 000000000000..cb800910d794
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_usdt.c
+@@ -0,0 +1,115 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/usdt.bpf.h>
++
++int my_pid;
++
++int usdt0_called;
++u64 usdt0_cookie;
++int usdt0_arg_cnt;
++int usdt0_arg_ret;
++
++SEC("usdt")
++int usdt0(struct pt_regs *ctx)
++{
++	long tmp;
++
++	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
 +		return 0;
-+	}
 +
-+	/* otherwise get next free spec ID, giving preference to free list */
-+	tmp = libbpf_reallocarray(link->spec_ids, link->spec_cnt + 1, sizeof(*link->spec_ids));
-+	if (!tmp)
-+		return -ENOMEM;
-+	link->spec_ids = tmp;
++	__sync_fetch_and_add(&usdt0_called, 1);
 +
-+	if (man->free_spec_cnt) {
-+		*spec_id = man->free_spec_ids[man->free_spec_cnt - 1];
-+		man->free_spec_cnt--;
-+		reused = true;
-+	} else {
-+		*spec_id = man->next_free_spec_id;
-+		man->next_free_spec_id++;
-+		reused = false;
-+	}
-+
-+	/* cache spec ID for current spec string for future lookups */
-+	err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
-+	if (err) {
-+		/* undo usdt_manager state changes, if we got an error */
-+		if (reused)
-+			man->free_spec_cnt++;
-+		else
-+			man->next_free_spec_id--;
-+		return err;
-+	}
-+
-+	*id_exists = false;
-+	link->spec_ids[link->spec_cnt] = *spec_id;
-+	link->spec_cnt++;
++	usdt0_cookie = bpf_usdt_cookie(ctx);
++	usdt0_arg_cnt = bpf_usdt_arg_cnt(ctx);
++	/* should return -ENOENT */
++	usdt0_arg_ret = bpf_usdt_arg(ctx, 0, &tmp);
 +	return 0;
 +}
 +
-+static size_t specs_hash_fn(const void *key, void *ctx)
-+{
-+	const char *s = key;
++int usdt3_called;
++u64 usdt3_cookie;
++int usdt3_arg_cnt;
++int usdt3_arg_rets[3];
++u64 usdt3_args[3];
 +
-+	return str_hash(s);
++SEC("usdt//proc/self/exe:test:usdt3")
++int usdt3(struct pt_regs *ctx)
++{
++	long tmp;
++
++	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
++		return 0;
++
++	__sync_fetch_and_add(&usdt3_called, 1);
++
++	usdt3_cookie = bpf_usdt_cookie(ctx);
++	usdt3_arg_cnt = bpf_usdt_arg_cnt(ctx);
++
++	usdt3_arg_rets[0] = bpf_usdt_arg(ctx, 0, &tmp);
++	usdt3_args[0] = (int)tmp;
++
++	usdt3_arg_rets[1] = bpf_usdt_arg(ctx, 1, &tmp);
++	usdt3_args[1] = (long)tmp;
++
++	usdt3_arg_rets[2] = bpf_usdt_arg(ctx, 2, &tmp);
++	usdt3_args[2] = (uintptr_t)tmp;
++
++	return 0;
 +}
 +
-+static bool specs_equal_fn(const void *key1, const void *key2, void *ctx)
-+{
-+	const char *s1 = key1;
-+	const char *s2 = key2;
++int usdt12_called;
++u64 usdt12_cookie;
++int usdt12_arg_cnt;
++u64 usdt12_args[12];
 +
-+	return strcmp(s1, s2) == 0;
++SEC("usdt//proc/self/exe:test:usdt12")
++int BPF_USDT(usdt12, int a1, int a2, long a3, long a4, unsigned a5,
++		     long a6, __u64 a7, uintptr_t a8, int a9, short a10,
++		     short a11, signed char a12)
++{
++	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
++		return 0;
++
++	__sync_fetch_and_add(&usdt12_called, 1);
++
++	usdt12_cookie = bpf_usdt_cookie(ctx);
++	usdt12_arg_cnt = bpf_usdt_arg_cnt(ctx);
++
++	usdt12_args[0] = a1;
++	usdt12_args[1] = a2;
++	usdt12_args[2] = a3;
++	usdt12_args[3] = a4;
++	usdt12_args[4] = a5;
++	usdt12_args[5] = a6;
++	usdt12_args[6] = a7;
++	usdt12_args[7] = a8;
++	usdt12_args[8] = a9;
++	usdt12_args[9] = a10;
++	usdt12_args[10] = a11;
++	usdt12_args[11] = a12;
++	return 0;
 +}
 +
- struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct bpf_program *prog,
- 					  pid_t pid, const char *path,
- 					  const char *usdt_provider, const char *usdt_name,
- 					  long usdt_cookie)
- {
--	int i, fd, err;
-+	int i, fd, err, spec_map_fd, ip_map_fd;
- 	LIBBPF_OPTS(bpf_uprobe_opts, opts);
-+	struct hashmap *specs_hash = NULL;
- 	struct bpf_link_usdt *link = NULL;
- 	struct usdt_target *targets = NULL;
- 	size_t target_cnt;
-@@ -669,6 +783,9 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 		return libbpf_err_ptr(-EINVAL);
- 	}
- 
-+	spec_map_fd = bpf_map__fd(man->specs_map);
-+	ip_map_fd = bpf_map__fd(man->ip_to_id_map);
++int usdt_100_called;
++int usdt_100_sum;
 +
- 	/* TODO: perform path resolution similar to uprobe's */
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0) {
-@@ -704,6 +821,12 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 		goto err_out;
- 	}
- 
-+	specs_hash = hashmap__new(specs_hash_fn, specs_equal_fn, NULL);
-+	if (IS_ERR(specs_hash)) {
-+		err = PTR_ERR(specs_hash);
-+		goto err_out;
-+	}
++SEC("usdt//proc/self/exe:test:usdt_100")
++int BPF_USDT(usdt_100, int x)
++{
++	long tmp;
 +
- 	link = calloc(1, sizeof(*link));
- 	if (!link) {
- 		err = -ENOMEM;
-@@ -723,8 +846,48 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	for (i = 0; i < target_cnt; i++) {
- 		struct usdt_target *target = &targets[i];
- 		struct bpf_link *uprobe_link;
-+		bool reused;
-+		int spec_id;
++	if (my_pid != (bpf_get_current_pid_tgid() >> 32))
++		return 0;
 +
-+		/* Spec ID can be either reused or newly allocated. If it is
-+		 * newly allocated, we'll need to fill out spec map, otherwise
-+		 * entire spec should be valid and can be just used by a new
-+		 * uprobe. We reuse spec when USDT arg spec is identical. We
-+		 * also never share specs between two different USDT
-+		 * attachments ("links"), so all the reused specs already
-+		 * share USDT cookie value implicitly.
-+		 */
-+		err = prepare_spec_id(man, link, specs_hash, target, &spec_id, &reused);
-+		if (err)
-+			goto err_out;
++	__sync_fetch_and_add(&usdt_100_called, 1);
++	__sync_fetch_and_add(&usdt_100_sum, x);
 +
-+		if (!reused &&
-+		    bpf_map_update_elem(spec_map_fd, &spec_id, &target->spec, BPF_ANY)) {
-+			err = -errno;
-+			pr_warn("usdt: failed to set USDT spec #%d for '%s:%s' in '%s': %d\n",
-+				spec_id, usdt_provider, usdt_name, path, err);
-+			/* make sure we don't return this bad spec ID into the
-+			 * pool of free spec IDs
-+			 */
-+			link->spec_cnt--;
-+			goto err_out;
-+		}
-+		if (!man->has_bpf_cookie &&
-+		    bpf_map_update_elem(ip_map_fd, &target->abs_ip, &spec_id, BPF_NOEXIST)) {
-+			err = -errno;
-+			if (err == -EEXIST) {
-+				pr_warn("usdt: IP collision detected for spec #%d for '%s:%s' in '%s'\n",
-+				        spec_id, usdt_provider, usdt_name, path);
-+			} else {
-+				pr_warn("usdt: failed to map IP 0x%lx to spec #%d for '%s:%s' in '%s': %d\n",
-+					target->abs_ip, spec_id, usdt_provider, usdt_name,
-+					path, err);
-+			}
-+			goto err_out;
-+		}
- 
- 		opts.ref_ctr_offset = target->sema_off;
-+		opts.bpf_cookie = man->has_bpf_cookie ? spec_id : 0;
- 		uprobe_link = bpf_program__attach_uprobe_opts(prog, pid, path,
- 							      target->rel_ip, &opts);
- 		err = libbpf_get_error(link);
-@@ -740,6 +903,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	}
- 
- 	free(targets);
-+	hashmap__free(specs_hash);
- 	elf_end(elf);
- 	close(fd);
- 
-@@ -749,6 +913,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	bpf_link__destroy(&link->link);
- 
- 	free(targets);
-+	hashmap__free(specs_hash);
- 	if (elf)
- 		elf_end(elf);
- 	close(fd);
++	bpf_printk("X is %d, sum is %d", x, usdt_100_sum);
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.30.2
 
