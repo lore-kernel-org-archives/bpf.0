@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C700C4321E
-	for <bpf@archiver.kernel.org>; Sun, 27 Mar 2022 02:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 606C4C3526F
+	for <bpf@archiver.kernel.org>; Sun, 27 Mar 2022 02:54:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233371AbiC0C4D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Mar 2022 22:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S233392AbiC0C4E (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 26 Mar 2022 22:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiC0Czy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233105AbiC0Czy (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 26 Mar 2022 22:55:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4091EC42;
-        Sat, 26 Mar 2022 19:54:14 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D5EDFD8;
+        Sat, 26 Mar 2022 19:54:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F2F260ED0;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B8E8B80BEB;
+        Sun, 27 Mar 2022 02:54:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99354C3410F;
         Sun, 27 Mar 2022 02:54:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB8AC340E8;
-        Sun, 27 Mar 2022 02:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648349652;
-        bh=yMz1qRo2c8PMxZJ4OYHCmlv1drANw/ow3ic99thb9dw=;
+        s=k20201202; t=1648349653;
+        bh=fZ0EYz2DjIW4qH93e1IVyGOAJ3sfRxIRBbhQEX5FPEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RzFb5gCzaPf2X9xmDoxTkM8rUf3TM8YxnRZDRQb8PgkHCIeeM/wvqU8b5AiVdRfH2
-         aApWSZ+hF8DP2E4F0Qv+fgN2Gnb2KSZFp1jLkzvU4vMJ4OHlfZG4W6PKD4LddnbOVK
-         rGNoM+JuBpn5f9u6Q/6sRoipPwltMcoxtD8VkfR4JFqp5IinpC4iqq/jfrpv0eETJ6
-         IQg/zNADnjz+CbFwYbH6Ofnl0WGkM+kBQyZ2hze5ayEGELeAKLFQ9hoycbyUNXinHS
-         rrDwsoCLke1JyEdRy+9xXdQbmiZ9d0ViT7LveGy0k8GwW4KmMz75sTaKPUdNwBjMC7
-         JcDYY2NucVnHA==
+        b=qkC4ixd/Nsp/FD5THosq2yAT10UtmpmfRMssyPee9Si60MWm5LnKcYlHFneYJnp/o
+         a/RemIgalRxZovCAaIx6h3ahLGnJpatIo/5V4oXTxN1fOaUWm8kQS0U54CgrcHq3gP
+         HsXx0nyM9L6tT9e6hlEu+8BAc2yz+HuhV/sdHGrPRlz+Xwj9VOcJYCsOdbfJoI7O/p
+         ee0xjPr9tnLh/wir3jJGdjvtcW76S85xUSF3hJnyKBuPX7FpyWStIh7xNY5R1R7Ks5
+         YgtCBR8vnWSL2ps0edD3YRUOciqy9k10decn32YXpb+rnlJF6IAATMwud5DfVKY86R
+         vVJqpRglz2VPQ==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net 09/13] docs: netdev: make the testing requirement more stringent
-Date:   Sat, 26 Mar 2022 19:53:56 -0700
-Message-Id: <20220327025400.2481365-10-kuba@kernel.org>
+Subject: [PATCH net 12/13] docs: netdev: broaden the new vs old code formatting guidelines
+Date:   Sat, 26 Mar 2022 19:53:59 -0700
+Message-Id: <20220327025400.2481365-13-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220327025400.2481365-1-kuba@kernel.org>
 References: <20220327025400.2481365-1-kuba@kernel.org>
@@ -48,39 +48,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These days we often ask for selftests so let's update our
-testing requirements.
+Convert the "should I use new or old comment formatting" to cover
+all formatting. This makes the question itself shorter.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- Documentation/networking/netdev-FAQ.rst | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ Documentation/networking/netdev-FAQ.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index 85a0af5dca65..26110201f301 100644
+index a7367a757a4b..47ea5d052c0b 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -196,11 +196,15 @@ as possible alternative mechanisms.
+@@ -183,10 +183,10 @@ Is the comment style convention different for the networking content?
+    * another line of text
+    */
  
- What level of testing is expected before I submit my change?
- ------------------------------------------------------------
--If your changes are against ``net-next``, the expectation is that you
--have tested by layering your changes on top of ``net-next``.  Ideally
--you will have done run-time testing specific to your change, but at a
--minimum, your changes should survive an ``allyesconfig`` and an
--``allmodconfig`` build without new warnings or failures.
-+At the very minimum your changes must survive an ``allyesconfig`` and an
-+``allmodconfig`` build with ``W=1`` set without new warnings or failures.
-+
-+Ideally you will have done run-time testing specific to your change,
-+and the patch series contains a set of kernel selftest for
-+``tools/testing/selftests/net`` or using the KUnit framework.
-+
-+You are expected to test your changes on top of the relevant networking
-+tree (``net`` or ``net-next``) and not e.g. a stable tree or ``linux-next``.
+-I am working in existing code that has the former comment style and not the latter. Should I submit new code in the former style or the latter?
+------------------------------------------------------------------------------------------------------------------------------------------------
+-Make it the latter style, so that eventually all code in the domain
+-of netdev is of this format.
++I am working in existing code which uses non-standard formatting. Which formatting should I use?
++------------------------------------------------------------------------------------------------
++Make your code follow the most recent guidelines, so that eventually all code
++in the domain of netdev is in the preferred format.
  
- How do I post corresponding changes to user space components?
- -------------------------------------------------------------
+ I found a bug that might have possible security implications or similar. Should I mail the main netdev maintainer off-list?
+ ---------------------------------------------------------------------------------------------------------------------------
 -- 
 2.34.1
 
