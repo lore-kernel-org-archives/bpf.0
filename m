@@ -2,83 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ADE2C433FE
-	for <bpf@archiver.kernel.org>; Sun, 27 Mar 2022 02:54:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC3FFC433F5
+	for <bpf@archiver.kernel.org>; Sun, 27 Mar 2022 10:36:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbiC0C4e (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Mar 2022 22:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S232519AbiC0Kh4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 27 Mar 2022 06:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbiC0C4e (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 26 Mar 2022 22:56:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106EF427F1;
-        Sat, 26 Mar 2022 19:54:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S232496AbiC0Khz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 27 Mar 2022 06:37:55 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E4452B26;
+        Sun, 27 Mar 2022 03:36:13 -0700 (PDT)
+Received: from [192.168.1.11] (dynamic-078-055-201-104.78.55.pool.telefonica.de [78.55.201.104])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A164E60E9E;
-        Sun, 27 Mar 2022 02:54:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC2DC34100;
-        Sun, 27 Mar 2022 02:54:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648349652;
-        bh=Ymms6xCtmq72Ojp991fo5pHDOd1C+6SngUKoV4QeW3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TRiMjoXSx+iIoCKDgDeBiyxKPIS1VwbHSXd2zP7kJwWO4BbMNuw+L7MHZGfMU/iia
-         AbrI7sdLgFXcwDUr+I4jQ29O9QxlRfQwWWDN4Ifg+aT98/Pyumb3yav4SD7XejNSlD
-         85ZDD5+2FOfd41hMjkMO2lgy5PHFXtwRAF69A4Km20I94ZgJPYhE+dDmEQuWvHsmwe
-         QGihwkTzOgbKUugGYll4qjvueJJBmT7mtJI5gwWo9fCpEXk2GUU45vbcHqH03nAJRp
-         7ukvXO7ZDt9lECifAMa6Ol9rdq2xm7drvKUKTD3DZ0K3dz+hbj0PeviTCbK+hMsBjx
-         naXvUGPwpIagg==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
-        f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net 08/13] docs: netdev: add a question about re-posting frequency
-Date:   Sat, 26 Mar 2022 19:53:55 -0700
-Message-Id: <20220327025400.2481365-9-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220327025400.2481365-1-kuba@kernel.org>
-References: <20220327025400.2481365-1-kuba@kernel.org>
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id C11CF61EA1923;
+        Sun, 27 Mar 2022 12:36:09 +0200 (CEST)
+Message-ID: <7edcd673-decf-7b4e-1f6e-f2e0e26f757a@molgen.mpg.de>
+Date:   Sun, 27 Mar 2022 12:36:07 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: BUG: Bad page state in process systemd-udevd (was: [PATCH v9
+ bpf-next 1/9] x86/Kconfig: select HAVE_ARCH_HUGE_VMALLOC with
+ HAVE_ARCH_HUGE_VMAP)
+Content-Language: en-US
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+To:     Song Liu <song@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kernel-team@fb.com, peterz@infradead.org, x86@kernel.org,
+        iii@linux.ibm.com, Song Liu <songliubraving@fb.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        regressions@lists.linux.dev
+References: <20220204185742.271030-1-song@kernel.org>
+ <20220204185742.271030-2-song@kernel.org>
+ <14444103-d51b-0fb3-ee63-c3f182f0b546@molgen.mpg.de>
+In-Reply-To: <14444103-d51b-0fb3-ee63-c3f182f0b546@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have to tell people to stop reposting to often lately,
-or not to repost while the discussion is ongoing.
-Document this.
+Dear Song,
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- Documentation/networking/netdev-FAQ.rst | 11 +++++++++++
- 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index d2ad55db7d8a..85a0af5dca65 100644
---- a/Documentation/networking/netdev-FAQ.rst
-+++ b/Documentation/networking/netdev-FAQ.rst
-@@ -140,6 +140,17 @@ No, please resend the entire patch series and make sure you do number your
- patches such that it is clear this is the latest and greatest set of patches
- that can be applied.
- 
-+I have received review feedback, when should I post a revised version of the patches?
-+-------------------------------------------------------------------------------------
-+Allow at least 24 hours to pass between postings. This will ensure reviewers
-+from all geographical locations have a chance to chime in. Do not wait
-+too long (weeks) between postings either as it will make it harder for reviewers
-+to recall all the context.
-+
-+Make sure you address all the feedback in your new posting. Do not post a new
-+version of the code if the discussion about the previous version is still
-+ongoing, unless directly instructed by a reviewer.
-+
- I submitted multiple versions of a patch series and it looks like a version other than the last one has been accepted, what should I do?
- ----------------------------------------------------------------------------------------------------------------------------------------
- There is no revert possible, once it is pushed out, it stays like that.
--- 
-2.34.1
+Am 26.03.22 um 19:46 schrieb Paul Menzel:
+> #regzbot introduced: fac54e2bfb5be2b0bbf115fe80d45f59fd773048
+> #regzbot title: BUG: Bad page state in process systemd-udevd
 
+> Am 04.02.22 um 19:57 schrieb Song Liu:
+>> From: Song Liu <songliubraving@fb.com>
+>>
+>> This enables module_alloc() to allocate huge page for 2MB+ requests.
+>> To check the difference of this change, we need enable config
+>> CONFIG_PTDUMP_DEBUGFS, and call module_alloc(2MB). Before the change,
+>> /sys/kernel/debug/page_tables/kernel shows pte for this map. With the
+>> change, /sys/kernel/debug/page_tables/ show pmd for thie map.
+>>
+>> Signed-off-by: Song Liu <songliubraving@fb.com>
+>> ---
+>>   arch/x86/Kconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> index 6fddb63271d9..e0e0d00cf103 100644
+>> --- a/arch/x86/Kconfig
+>> +++ b/arch/x86/Kconfig
+>> @@ -159,6 +159,7 @@ config X86
+>>       select HAVE_ALIGNED_STRUCT_PAGE        if SLUB
+>>       select HAVE_ARCH_AUDITSYSCALL
+>>       select HAVE_ARCH_HUGE_VMAP        if X86_64 || X86_PAE
+>> +    select HAVE_ARCH_HUGE_VMALLOC        if HAVE_ARCH_HUGE_VMAP
+>>       select HAVE_ARCH_JUMP_LABEL
+>>       select HAVE_ARCH_JUMP_LABEL_RELATIVE
+>>       select HAVE_ARCH_KASAN            if X86_64
+> 
+> Testing Linus’ current master branch, Linux logs critical messages like 
+> below:
+> 
+>      BUG: Bad page state in process systemd-udevd  pfn:102e03
+> 
+> I bisected to your commit fac54e2bfb5 (x86/Kconfig: select 
+> HAVE_ARCH_HUGE_VMALLOC with HAVE_ARCH_HUGE_VMAP).
+
+Sorry, I forget to mention, that this is a 32-bit (i686) userspace, but 
+a 64-bit Linux kernel, so it might be the same issue as mentioned in 
+commit eed1fcee556f (x86: Disable HAVE_ARCH_HUGE_VMALLOC on 32-bit x86), 
+but didn’t fix the issue for 64-bit Linux kernel and 32-bit userspace.
+
+
+Kind regards,
+
+Paul
