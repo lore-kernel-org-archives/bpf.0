@@ -2,80 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F65CC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFDFEC433FE
 	for <bpf@archiver.kernel.org>; Sun, 27 Mar 2022 02:54:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiC0Czt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 26 Mar 2022 22:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S232854AbiC0Czu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 26 Mar 2022 22:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbiC0Czq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 26 Mar 2022 22:55:46 -0400
+        with ESMTP id S232934AbiC0Czs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 26 Mar 2022 22:55:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF29DFD8;
-        Sat, 26 Mar 2022 19:54:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF70E1EC42;
+        Sat, 26 Mar 2022 19:54:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C4E460EC7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A51660EDA;
+        Sun, 27 Mar 2022 02:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEC0C340F3;
         Sun, 27 Mar 2022 02:54:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5F2C340E8;
-        Sun, 27 Mar 2022 02:54:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648349648;
-        bh=Bx8vRJo8BZLqD2FbKxf4j8jrurF4ZgI7QwiWZ7HUvC4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Lo+9Csz5mR3xcGpLtPJlDQwfFznFfTXS+FbnD/VNbAnMkWvbCItWB+rTYG9Oyxyim
-         chsIMYiEdW4xYaI32HkJgjVSiVS5C+2VK3gbYba3P7/r7nl0qYN5q5CELBDlbBbPGq
-         NFycScYZb9T6lOEJJCQBK2ltvhQtg4cndYT7CZjCOwWT/C+WDkloFhQzphcxvTtJ6R
-         FnRoGPxQ54CpLH74NFdkjXpzezzoIe+zwdCF2bCM7Gc3AACVfRaN7DAZ048ru2YPsm
-         DcieZFSbGhtGHkeiqzmqve/LfOK7dEOfh7NcH5K8wxo6LjyX34zUcXqOHR2bEpsCu/
-         kHr1BIh4xKGCw==
+        s=k20201202; t=1648349649;
+        bh=M5z98S+65E4DMWEg25efhFzYzd8sW4PDeLAD71pyQ4s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=O3c9RBEiiDz0F545CkC7Cenb/oypAPgeZkZyD8h8XFPHLAWv5LDhUIFPHPYZweHM7
+         jBmb+dkE6JIQmEeg3lm6khGwHeoKlCb3Ase1PxCddSnBhl5auA7br68UKe26nNDX2w
+         oqH+ghiOxuq9XxgMBfoIk8qkm/5u4Tn6IONah8cRQHaZUBYIuBpVsDHB4NmGOmuc/d
+         /xZRoChgJr4GysJe+eL1HZKa54Shyir7QgtysBXketE8aEp+UlkvAZCUYBJvR6zprg
+         eugphDOYS5HmYlBpcdaJoFvCeiqBJEd/+vTduAoDez0S/vI42+s5RKu4O2GkE2x7ys
+         R/Co+jV533zzA==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net 00/13] docs: update and move the netdev-FAQ
-Date:   Sat, 26 Mar 2022 19:53:47 -0700
-Message-Id: <20220327025400.2481365-1-kuba@kernel.org>
+Subject: [PATCH net 03/13] docs: netdev: move the patch marking section up
+Date:   Sat, 26 Mar 2022 19:53:50 -0700
+Message-Id: <20220327025400.2481365-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220327025400.2481365-1-kuba@kernel.org>
+References: <20220327025400.2481365-1-kuba@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A section of documentation for tree-specific process quirks had
-been created a while back. There's only one tree in it, so far,
-the tip tree, but the contents seem to answer similar questions
-as we answer in the netdev-FAQ. Move the netdev-FAQ.
+We want people to mark their patches with net and net-next in the subject.
+Many miss doing that. Move the FAQ section which points that out up, and
+place it after the section which enumerates the trees, that seems like
+a pretty logical place for it. Since the two sections are together we
+can remove a little bit (not too much) of the repetition.
 
-Take this opportunity to touch up and update a few sections.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ Documentation/networking/netdev-FAQ.rst | 28 ++++++++++++-------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-Jakub Kicinski (13):
-  docs: netdev: replace references to old archives
-  docs: netdev: minor reword
-  docs: netdev: move the patch marking section up
-  docs: netdev: turn the net-next closed into a Warning
-  docs: netdev: shorten the name and mention msgid for patch status
-  docs: netdev: rephrase the 'Under review' question
-  docs: netdev: rephrase the 'should I update patchwork' question
-  docs: netdev: add a question about re-posting frequency
-  docs: netdev: make the testing requirement more stringent
-  docs: netdev: add missing back ticks
-  docs: netdev: call out the merge window in tag checking
-  docs: netdev: broaden the new vs old code formatting guidelines
-  docs: netdev: move the netdev-FAQ to the process pages
-
- Documentation/bpf/bpf_devel_QA.rst            |   2 +-
- Documentation/networking/index.rst            |   3 +-
- .../process/maintainer-handbooks.rst          |   1 +
- .../maintainer-netdev.rst}                    | 114 +++++++++++-------
- MAINTAINERS                                   |   1 +
- 5 files changed, 73 insertions(+), 48 deletions(-)
- rename Documentation/{networking/netdev-FAQ.rst => process/maintainer-netdev.rst} (76%)
-
+diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
+index f7e5755e013e..0bff899f286f 100644
+--- a/Documentation/networking/netdev-FAQ.rst
++++ b/Documentation/networking/netdev-FAQ.rst
+@@ -35,6 +35,20 @@ mainline tree from Linus, and ``net-next`` is where the new code goes
+ - https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+ - https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+ 
++How do I indicate which tree (net vs. net-next) my patch should be in?
++----------------------------------------------------------------------
++To help maintainers and CI bots you should explicitly mark which tree
++your patch is targeting. Assuming that you use git, use the prefix
++flag::
++
++  git format-patch --subject-prefix='PATCH net-next' start..finish
++
++Use ``net`` instead of ``net-next`` (always lower case) in the above for
++bug-fix ``net`` content.  If you don't use git, then note the only magic
++in the above is just the subject text of the outgoing e-mail, and you
++can manually change it yourself with whatever MUA you are comfortable
++with.
++
+ How often do changes from these trees make it to the mainline Linus tree?
+ -------------------------------------------------------------------------
+ To understand this, you need to know a bit of background information on
+@@ -90,20 +104,6 @@ and note the top of the "tags" section.  If it is rc1, it is early in
+ the dev cycle.  If it was tagged rc7 a week ago, then a release is
+ probably imminent.
+ 
+-How do I indicate which tree (net vs. net-next) my patch should be in?
+-----------------------------------------------------------------------
+-Firstly, think whether you have a bug fix or new "next-like" content.
+-Then once decided, assuming that you use git, use the prefix flag, i.e.
+-::
+-
+-  git format-patch --subject-prefix='PATCH net-next' start..finish
+-
+-Use ``net`` instead of ``net-next`` (always lower case) in the above for
+-bug-fix ``net`` content.  If you don't use git, then note the only magic
+-in the above is just the subject text of the outgoing e-mail, and you
+-can manually change it yourself with whatever MUA you are comfortable
+-with.
+-
+ I sent a patch and I'm wondering what happened to it - how can I tell whether it got merged?
+ --------------------------------------------------------------------------------------------
+ Start by looking at the main patchworks queue for netdev:
 -- 
 2.34.1
 
