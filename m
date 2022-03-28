@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDED8C433FE
-	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 23:27:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49E53C433EF
+	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 23:27:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbiC1X26 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Mar 2022 19:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
+        id S230392AbiC1X3F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Mar 2022 19:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbiC1X2r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:28:47 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD5037026
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:27:00 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id h83-20020a25d056000000b0063380d246ceso12043372ybg.3
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:27:00 -0700 (PDT)
+        with ESMTP id S230403AbiC1X2t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Mar 2022 19:28:49 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE60D2DD7C
+        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:27:07 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2e643f85922so130560977b3.2
+        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:27:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=fd8zO3I7cR3jn/Jx1EW0YLNB0c8F/thF/fGaitvvb58=;
-        b=jhWfrBgC3Vidx16ZXPyaLDraZh3tQuBYXM724VRgco4ncvfxUi7yyZL7BAMENECuRr
-         c8ZOwIgO5+uZy4p89VQXhbbCrSL8Cd0fRgY7Qgttlf7fm0fUgJe7cfxJoGx0+cGnFh7N
-         KEB+IRtL1LlXsuam7rw7lu71qt2dGcSOIUCAjAPnee7ZkCJxJfye0EhEXY60jtniThLR
-         W/hBrZyqmOKkZUOvGE6itlT47MOqBU1C+DuAI8pS9d/x1QpFDWyaip6AFrUXzzx+rM4Q
-         qHMX7xcid4VCbEkpxBxj7NPPx8jYtHKTG09Hyjy3FN0YubprJa9gxwYNJH5xntFBiNm3
-         06uA==
+        bh=62T0/TU1Sa4Wqe+eN5txv4UBeKWrByFVFuAcfl2TJUY=;
+        b=WuFWAPyS7pgyWDgjtlzsKpFPsxxPd9tgW0nM0IULEGbEsaEs5zE0BwR/iV0yiRyiUr
+         C9LzDD7OQikFacW2EZ3HgTOERW8ioeMdDmGtbxjGjdAvIgFqPAGlWSKO/Fo07kxOusQj
+         xXQTuUoN7COi2/I3yvyXPwYeetZ2hVDiAs6t36XmpeIj0N0pXu41bgEpHgFvTMqjwxGS
+         YkJ0glvboVcb8xY9ZZdbAAgSHoReMnojd0N4VWMYdi2aBcDvyxepEb8RTHF4ZzMUgt9m
+         qUiIro8106ztVL4WbMUEwnsQ0Z0mF/k9xEPBZD0X3XV3XPniYpCSNqCpBNG82OklWGGW
+         su1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=fd8zO3I7cR3jn/Jx1EW0YLNB0c8F/thF/fGaitvvb58=;
-        b=y0jZHTXhNL5PJ2qDbf3Pm1bEOzGb/Lkyw5S4RSZFC4+Mi5iatAdJrrmCrxqopvFXRt
-         S1VZ/RYJWXlIguUXo3ojxva5TJIW9o+QCMgx68OJs9LS1Z5IYFQ+APN4wmoiSpPsrL7K
-         /aaONMLKCx0W9TUEjbFhofrZ727u0fJ+1f1kAMfECz6ZIQBq/dmkYb0POURgdr4e0K7B
-         C8TAwXQ2CyIThV9zS6h0k/Fv4MGGZNRixUruY7tMBZnq1fNzwfptARp821bJvOHmu2Pl
-         HkrqccaIoxzC8XsYAGnh19AEd4LYvGcrVJUQB+b43RN46tcxiIqc0ahcRBZXYrg5NWEq
-         I8vw==
-X-Gm-Message-State: AOAM53071tBm+jw5SCuspH9fFfB59vlcKe3/2XWHAJeoOjbJyqNUyS6a
-        SqZrURVGamTLxqRbMwed72BtrTTy8+7x
-X-Google-Smtp-Source: ABdhPJx9mX24vBUXKujfAxpZd4EOEF4CDe3zBNIYlkFzjKX9KG29aQUbCRbBy+3NfgADLi4J9ufU7jNV4G8B
+        bh=62T0/TU1Sa4Wqe+eN5txv4UBeKWrByFVFuAcfl2TJUY=;
+        b=pqOYc0tACzrhpK3YQDF3QIXBirtD/1UgCGCn9VHh1w3V1yHPD7Q9N7idEhGT7H8LZe
+         KxyiownYNL61qu8AV2bMIACcHezL6S+PeWPqtrsgMtA0b2EFvUbrUtUXBuw5C8xaCI4U
+         LfSM5NsaXbe/jxDCt/giMynJ6XvrkcktTUfdgyYLkh3sLpt61VkeeoSuLWytfHA3VNTw
+         NJ5KSBPFUC6vlfdCPaMu+HI1rwWi7SpKHSixifvb6+08Z3NnyCOAtpUXAABhZQwrksGA
+         qtFDAwNbcgmTrpWhYYiKtvBFBxETIirmuWOBAshPjqWQZP197nWwPmSa2Dbn8XZX8Cye
+         hpiA==
+X-Gm-Message-State: AOAM530dXIsPtJ2vZFUvtkJUVLqwrjTkmy5ibpDhsFT9dwiwv9REx+zF
+        Y81T2BkV9viUKUPROYfje5j/4ZnfOYxW
+X-Google-Smtp-Source: ABdhPJyGiiWxc4ARHStwB+ZXo/aW9HRYLxvc/de+ZQtJa8gJqpvKLIH6JBfkA9BFTOaLI3PuawSjmI+3PmmF
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:9d6a:527d:cf46:71e2])
- (user=irogers job=sendgmr) by 2002:a0d:eb4c:0:b0:2e5:bd5c:12cf with SMTP id
- u73-20020a0deb4c000000b002e5bd5c12cfmr28160203ywe.116.1648510019835; Mon, 28
- Mar 2022 16:26:59 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 16:26:45 -0700
+ (user=irogers job=sendgmr) by 2002:a25:ba04:0:b0:623:ed7a:701d with SMTP id
+ t4-20020a25ba04000000b00623ed7a701dmr25269976ybg.209.1648510026853; Mon, 28
+ Mar 2022 16:27:06 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 16:26:48 -0700
 In-Reply-To: <20220328232648.2127340-1-irogers@google.com>
-Message-Id: <20220328232648.2127340-4-irogers@google.com>
+Message-Id: <20220328232648.2127340-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20220328232648.2127340-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 3/6] perf cpumap: Add is_subset function
+Subject: [PATCH v2 6/6] perf evlist: Respect all_cpus when setting user_requested_cpus
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -91,56 +91,93 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Returns true if the second argument is a subset of the first.
+If all_cpus is calculated it represents the merge/union of all
+evsel cpu maps. By default user_requested_cpus is computed to be
+the online CPUs. For uncore events, it is often the case currently
+that all_cpus is a subset of user_requested_cpus. Metrics printed
+without aggregation and with metric-only, in print_no_aggr_metric,
+iterate over user_requested_cpus assuming every CPU has a metric to
+print. For each CPU the prefix is printed, but then if the
+evsel's cpus doesn't contain anything you get an empty line like
+the following on a 2 socket 36 core SkylakeX:
+
+```
+$ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000
+     1.000453137 CPU0                       0.00
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137 CPU18                      0.00
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     1.000453137
+     2.003717143 CPU0                       0.00
+...
+```
+
+While it is possible to be lazier in printing the prefix and
+trailing newline, having user_requested_cpus not be a subset of
+all_cpus is preferential so that wasted work isn't done elsewhere
+user_requested_cpus is used. The change modifies user_requested_cpus
+to be the intersection of user specified CPUs, or default all online
+CPUs, with the CPUs computed through the merge of all evsel cpu maps.
+
+New behavior:
+```
+$ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000
+     1.001086325 CPU0                       0.00
+     1.001086325 CPU18                      0.00
+     2.003671291 CPU0                       0.00
+     2.003671291 CPU18                      0.00
+...
+```
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/cpumap.c                  | 20 ++++++++++++++++++++
- tools/lib/perf/include/internal/cpumap.h |  1 +
- 2 files changed, 21 insertions(+)
+ tools/perf/util/evlist.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-index ee66760f1e63..23701024e0c0 100644
---- a/tools/lib/perf/cpumap.c
-+++ b/tools/lib/perf/cpumap.c
-@@ -319,6 +319,26 @@ struct perf_cpu perf_cpu_map__max(struct perf_cpu_map *map)
- 	return map->nr > 0 ? map->map[map->nr - 1] : result;
- }
+diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+index cb2cf4463c08..1a3308ec35f1 100644
+--- a/tools/perf/util/evlist.c
++++ b/tools/perf/util/evlist.c
+@@ -1036,6 +1036,8 @@ int evlist__create_maps(struct evlist *evlist, struct target *target)
+ 	if (!cpus)
+ 		goto out_delete_threads;
  
-+/** Is 'b' a subset of 'a'. */
-+bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b)
-+{
-+	if (a == b || !b)
-+		return true;
-+	if (!a || b->nr > a->nr)
-+		return false;
-+
-+	for (int i = 0, j = 0; i < a->nr; i++) {
-+		if (a->map[i].cpu > b->map[j].cpu)
-+			return false;
-+		if (a->map[i].cpu == b->map[j].cpu) {
-+			j++;
-+			if (j == b->nr)
-+				return true;
-+		}
-+	}
-+	return false;
-+}
-+
- /*
-  * Merge two cpumaps
-  *
-diff --git a/tools/lib/perf/include/internal/cpumap.h b/tools/lib/perf/include/internal/cpumap.h
-index 1973a18c096b..35dd29642296 100644
---- a/tools/lib/perf/include/internal/cpumap.h
-+++ b/tools/lib/perf/include/internal/cpumap.h
-@@ -25,5 +25,6 @@ struct perf_cpu_map {
- #endif
++	if (evlist->core.all_cpus)
++		cpus = perf_cpu_map__intersect(cpus, evlist->core.all_cpus);
+ 	evlist->core.has_user_cpus = !!target->cpu_list && !target->hybrid;
  
- int perf_cpu_map__idx(const struct perf_cpu_map *cpus, struct perf_cpu cpu);
-+bool perf_cpu_map__is_subset(const struct perf_cpu_map *a, const struct perf_cpu_map *b);
- 
- #endif /* __LIBPERF_INTERNAL_CPUMAP_H */
+ 	perf_evlist__set_maps(&evlist->core, cpus, threads);
 -- 
 2.35.1.1021.g381101b075-goog
 
