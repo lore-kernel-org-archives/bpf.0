@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98056C433FE
-	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 23:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B38E1C43219
+	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 23:27:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiC1X2s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Mar 2022 19:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S230456AbiC1X2t (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Mar 2022 19:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbiC1X2r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Mar 2022 19:28:47 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9374639692
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:26:58 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id j133-20020a25d28b000000b006337bb01016so11949424ybg.11
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:26:58 -0700 (PDT)
+        with ESMTP id S230437AbiC1X2t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Mar 2022 19:28:49 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FB85AECE
+        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:27:05 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2ea6741dc72so34418397b3.12
+        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 16:27:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=4v15mL/KsIPcjfWANW6CoPVghkgsTalbfK+klAHCJek=;
-        b=Z+T8cdctJOlwOxOPCD8FwbVN5jmTHQhwkJeSpfR5EUpH8oHbldDxVNFatl9FApzrYe
-         jJoV2TD71fCY1Xk3UPGG3ldm7deIvEPOOwnwgkHcBSWsTAz9SU31GvMHRqko2Tsl+UWa
-         atqnoPx546YcT3rQ5IuzgDkFPi4CjarrDjerygQTCbC2/968Y8SN6x3v6/mUob/Drbi8
-         ME7HsxtVLQAtCxW4kQuNYrwg/JgYahEiQJxSd/6f7Am/HbHBHhDFOyWXyzMx0LWJVqug
-         ha74LCrLi0ejucXjBRd5k1Is5VI7MyLwxSIYGh67nSI5vgTpS42+Unm/DANEc5XldaX5
-         Xm0A==
+        bh=HI7lVdFOSrlQd5wT9t/SBLu67RK0OyhqHS+mLTojDoE=;
+        b=OOfLyxjdfGI/Zzi87JL87OQfMszCNTUskyTB3iTykwAXRjAEpDXIS+voGrvIAZfDpR
+         Epwup6CsDlPPO2kU6QMzOn0Epm3iM+kImr6kf8OxgLNzzbnruKyXgm/LeewSSA3k0yqp
+         favmnY4DSQkIBaEiZz6q5NwUzkwJ78hb2Y4huCXqqEqyWjpOuVAB67CcxkD9vdR/hOfJ
+         1u2AhCfGi1Mi+uCrQi8MiQH9uaS7hzSH+fiRw0fJ6TwTPMsnj4O6XGGzZLMpkd9BNXO9
+         fGG+9nyuNkcRx+Dxg1AF6oDiL2h9rmOclzepyuG1ulyjca+zHJxSTl+seEh1kjNQXI3I
+         S4RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=4v15mL/KsIPcjfWANW6CoPVghkgsTalbfK+klAHCJek=;
-        b=IFcD5HdIEPBVmk0JbTmKJ7yNs+XEub9esvyTAJO27ztM80CB5OB1I/uzm2WGATXuEZ
-         IjNPCyc0JQLXxtitSvdq8fe6YZ0vKmjz21x9fihm9xuEQ+WGt1erIFcpA8KwVc3DogaL
-         JfPmuUOHPGrQiijfoT7cfU6kvyVI6aUnX/6KQxdThlgS+J7naxFPi2ok2PhtA024khHw
-         9nfnwb9w+P2NLR32uwGQoZV1O7PKMCXQur1ES9jDEYLNGsqgDhe3Yd2yHpcfETbQNbFW
-         8LpNidWEZ2922cZQ9fr3pEeQs45Ya1LD5h9Z1NTM9j1BfIV8MdZdvhAEwg3ntSu9Y4+L
-         n6Sw==
-X-Gm-Message-State: AOAM530EIrB063oPHt2r2r0c9HbAK8vj+UhGMVZepO5ameMrdQBY7QPb
-        oDHZPoAv4Kksnjl7IDKdwZB5K3yjDPhS
-X-Google-Smtp-Source: ABdhPJxKqcBq06zaby/ljA8yCASn4AANh+tfk1ttaLKylHz4aHnc3KQov81yk153WqOHf8Xek4FEkUrT+AgG
+        bh=HI7lVdFOSrlQd5wT9t/SBLu67RK0OyhqHS+mLTojDoE=;
+        b=VcWWlJS5b/A13jZXP+xJ5R0t5aAkmcEFD7tfea3VmD5NJVTdIp/T4OSajlsvyNNW6k
+         UI32WZdo4S1XolnA/NXv/4lw8DFFd/dn2A/4XlivKxdXdwHo2Yc3W8VQ3E8ZA+PKcjZU
+         fHPfJHUKffCytuMmh2sWH2FE75bITtDGdURljfY5Fozar0ouyMWw1zQSLun9u3LeB68C
+         OB2sAzIGZVTKFQiJo+jACL3RIz02PyVJmOQmyiQgaqaUIBag4IsT0sdEITZSufh9BxE0
+         8zThmjr8FoYN2+POOX5MB8c7EQiFWtgi22fguSeRsCdq9YvjPpb0CNNoh29K7uzcHwUq
+         pyZA==
+X-Gm-Message-State: AOAM5306MBnwSburuZgJo0mOmmwUrXafF6npugebbz9ihi7ik5UQ9SOY
+        91bx0EUQywxySo2u0ERzzfh259wFxe2/
+X-Google-Smtp-Source: ABdhPJxq3SawZ28lJ97d+m1B27jGZL3+ADhO9V4EPLQfdWt+wZImHtVrn+mTGk9KAcNNkDb7tpvSE9m8TcX9
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:9d6a:527d:cf46:71e2])
- (user=irogers job=sendgmr) by 2002:a25:608:0:b0:634:5ff5:7c65 with SMTP id
- 8-20020a250608000000b006345ff57c65mr24798354ybg.282.1648510017688; Mon, 28
- Mar 2022 16:26:57 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 16:26:44 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:241:b0:633:d3e1:ff5e with SMTP id
+ k1-20020a056902024100b00633d3e1ff5emr25241467ybs.625.1648510024506; Mon, 28
+ Mar 2022 16:27:04 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 16:26:47 -0700
 In-Reply-To: <20220328232648.2127340-1-irogers@google.com>
-Message-Id: <20220328232648.2127340-3-irogers@google.com>
+Message-Id: <20220328232648.2127340-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20220328232648.2127340-1-irogers@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 2/6] perf evlist: Rename cpus to user_requested_cpus
+Subject: [PATCH v2 5/6] perf cpumap: Add intersect function.
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -91,541 +91,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-evlist contains cpus and all_cpus. all_cpus is the union of the cpu maps
-of all evsels. For non-task targets, cpus is set to be cpus requested
-from the command line, defaulting to all online cpus if no cpus are
-specified. For an uncore event, all_cpus may be just CPU 0 or every online
-CPU. This causes all_cpus to have fewer values than the cpus variable
-which is confusing given the 'all' in the name. To try to make the behavior
-clearer, rename cpus to user_requested_cpus and add comments on the two
-struct variables.
+The merge function gives the union of two cpu maps. Add an intersect
+function which will be used in the next change.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/evlist.c                  | 28 ++++++++++++------------
- tools/lib/perf/include/internal/evlist.h |  7 +++++-
- tools/perf/arch/arm/util/cs-etm.c        |  8 +++----
- tools/perf/arch/arm64/util/arm-spe.c     |  2 +-
- tools/perf/arch/x86/util/intel-bts.c     |  2 +-
- tools/perf/arch/x86/util/intel-pt.c      |  4 ++--
- tools/perf/bench/evlist-open-close.c     |  2 +-
- tools/perf/builtin-ftrace.c              |  2 +-
- tools/perf/builtin-record.c              |  6 ++---
- tools/perf/builtin-stat.c                | 10 ++++-----
- tools/perf/builtin-top.c                 |  2 +-
- tools/perf/util/auxtrace.c               |  2 +-
- tools/perf/util/bpf_ftrace.c             |  4 ++--
- tools/perf/util/evlist.c                 | 15 +++++++------
- tools/perf/util/record.c                 |  6 ++---
- tools/perf/util/sideband_evlist.c        |  3 ++-
- tools/perf/util/stat-display.c           |  2 +-
- tools/perf/util/synthetic-events.c       |  2 +-
- tools/perf/util/top.c                    |  8 ++++---
- 19 files changed, 62 insertions(+), 53 deletions(-)
+ tools/lib/perf/cpumap.c              | 38 ++++++++++++++++++++++++++++
+ tools/lib/perf/include/perf/cpumap.h |  2 ++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
-index 9a770bfdc804..1b15ba13c477 100644
---- a/tools/lib/perf/evlist.c
-+++ b/tools/lib/perf/evlist.c
-@@ -41,10 +41,10 @@ static void __perf_evlist__propagate_maps(struct perf_evlist *evlist,
- 	 */
- 	if (!evsel->own_cpus || evlist->has_user_cpus) {
- 		perf_cpu_map__put(evsel->cpus);
--		evsel->cpus = perf_cpu_map__get(evlist->cpus);
--	} else if (!evsel->system_wide && perf_cpu_map__empty(evlist->cpus)) {
-+		evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
-+	} else if (!evsel->system_wide && perf_cpu_map__empty(evlist->user_requested_cpus)) {
- 		perf_cpu_map__put(evsel->cpus);
--		evsel->cpus = perf_cpu_map__get(evlist->cpus);
-+		evsel->cpus = perf_cpu_map__get(evlist->user_requested_cpus);
- 	} else if (evsel->cpus != evsel->own_cpus) {
- 		perf_cpu_map__put(evsel->cpus);
- 		evsel->cpus = perf_cpu_map__get(evsel->own_cpus);
-@@ -123,10 +123,10 @@ static void perf_evlist__purge(struct perf_evlist *evlist)
- 
- void perf_evlist__exit(struct perf_evlist *evlist)
- {
--	perf_cpu_map__put(evlist->cpus);
-+	perf_cpu_map__put(evlist->user_requested_cpus);
- 	perf_cpu_map__put(evlist->all_cpus);
- 	perf_thread_map__put(evlist->threads);
--	evlist->cpus = NULL;
-+	evlist->user_requested_cpus = NULL;
- 	evlist->all_cpus = NULL;
- 	evlist->threads = NULL;
- 	fdarray__exit(&evlist->pollfd);
-@@ -155,9 +155,9 @@ void perf_evlist__set_maps(struct perf_evlist *evlist,
- 	 * original reference count of 1.  If that is not the case it is up to
- 	 * the caller to increase the reference count.
- 	 */
--	if (cpus != evlist->cpus) {
--		perf_cpu_map__put(evlist->cpus);
--		evlist->cpus = perf_cpu_map__get(cpus);
-+	if (cpus != evlist->user_requested_cpus) {
-+		perf_cpu_map__put(evlist->user_requested_cpus);
-+		evlist->user_requested_cpus = perf_cpu_map__get(cpus);
- 	}
- 
- 	if (threads != evlist->threads) {
-@@ -294,7 +294,7 @@ int perf_evlist__id_add_fd(struct perf_evlist *evlist,
- 
- int perf_evlist__alloc_pollfd(struct perf_evlist *evlist)
- {
--	int nr_cpus = perf_cpu_map__nr(evlist->cpus);
-+	int nr_cpus = perf_cpu_map__nr(evlist->user_requested_cpus);
- 	int nr_threads = perf_thread_map__nr(evlist->threads);
- 	int nfds = 0;
- 	struct perf_evsel *evsel;
-@@ -426,7 +426,7 @@ mmap_per_evsel(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 	       int idx, struct perf_mmap_param *mp, int cpu_idx,
- 	       int thread, int *_output, int *_output_overwrite)
- {
--	struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->cpus, cpu_idx);
-+	struct perf_cpu evlist_cpu = perf_cpu_map__cpu(evlist->user_requested_cpus, cpu_idx);
- 	struct perf_evsel *evsel;
- 	int revent;
- 
-@@ -536,7 +536,7 @@ mmap_per_cpu(struct perf_evlist *evlist, struct perf_evlist_mmap_ops *ops,
- 	     struct perf_mmap_param *mp)
- {
- 	int nr_threads = perf_thread_map__nr(evlist->threads);
--	int nr_cpus    = perf_cpu_map__nr(evlist->cpus);
-+	int nr_cpus    = perf_cpu_map__nr(evlist->user_requested_cpus);
- 	int cpu, thread;
- 
- 	for (cpu = 0; cpu < nr_cpus; cpu++) {
-@@ -564,8 +564,8 @@ static int perf_evlist__nr_mmaps(struct perf_evlist *evlist)
- {
- 	int nr_mmaps;
- 
--	nr_mmaps = perf_cpu_map__nr(evlist->cpus);
--	if (perf_cpu_map__empty(evlist->cpus))
-+	nr_mmaps = perf_cpu_map__nr(evlist->user_requested_cpus);
-+	if (perf_cpu_map__empty(evlist->user_requested_cpus))
- 		nr_mmaps = perf_thread_map__nr(evlist->threads);
- 
- 	return nr_mmaps;
-@@ -576,7 +576,7 @@ int perf_evlist__mmap_ops(struct perf_evlist *evlist,
- 			  struct perf_mmap_param *mp)
- {
- 	struct perf_evsel *evsel;
--	const struct perf_cpu_map *cpus = evlist->cpus;
-+	const struct perf_cpu_map *cpus = evlist->user_requested_cpus;
- 	const struct perf_thread_map *threads = evlist->threads;
- 
- 	if (!ops || !ops->get || !ops->mmap)
-diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
-index 4cefade540bd..e3e64f37db7b 100644
---- a/tools/lib/perf/include/internal/evlist.h
-+++ b/tools/lib/perf/include/internal/evlist.h
-@@ -19,7 +19,12 @@ struct perf_evlist {
- 	int			 nr_entries;
- 	int			 nr_groups;
- 	bool			 has_user_cpus;
--	struct perf_cpu_map	*cpus;
-+	/**
-+	 * The cpus passed from the command line or all online CPUs by
-+	 * default.
-+	 */
-+	struct perf_cpu_map	*user_requested_cpus;
-+	/** The union of all evsel cpu maps. */
- 	struct perf_cpu_map	*all_cpus;
- 	struct perf_thread_map	*threads;
- 	int			 nr_mmaps;
-diff --git a/tools/perf/arch/arm/util/cs-etm.c b/tools/perf/arch/arm/util/cs-etm.c
-index cbc555245959..11c71aa219f7 100644
---- a/tools/perf/arch/arm/util/cs-etm.c
-+++ b/tools/perf/arch/arm/util/cs-etm.c
-@@ -199,7 +199,7 @@ static int cs_etm_set_option(struct auxtrace_record *itr,
- 			     struct evsel *evsel, u32 option)
- {
- 	int i, err = -EINVAL;
--	struct perf_cpu_map *event_cpus = evsel->evlist->core.cpus;
-+	struct perf_cpu_map *event_cpus = evsel->evlist->core.user_requested_cpus;
- 	struct perf_cpu_map *online_cpus = perf_cpu_map__new(NULL);
- 
- 	/* Set option of each CPU we have */
-@@ -299,7 +299,7 @@ static int cs_etm_recording_options(struct auxtrace_record *itr,
- 				container_of(itr, struct cs_etm_recording, itr);
- 	struct perf_pmu *cs_etm_pmu = ptr->cs_etm_pmu;
- 	struct evsel *evsel, *cs_etm_evsel = NULL;
--	struct perf_cpu_map *cpus = evlist->core.cpus;
-+	struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
- 	bool privileged = perf_event_paranoid_check(-1);
- 	int err = 0;
- 
-@@ -522,7 +522,7 @@ cs_etm_info_priv_size(struct auxtrace_record *itr __maybe_unused,
- {
- 	int i;
- 	int etmv3 = 0, etmv4 = 0, ete = 0;
--	struct perf_cpu_map *event_cpus = evlist->core.cpus;
-+	struct perf_cpu_map *event_cpus = evlist->core.user_requested_cpus;
- 	struct perf_cpu_map *online_cpus = perf_cpu_map__new(NULL);
- 
- 	/* cpu map is not empty, we have specific CPUs to work with */
-@@ -713,7 +713,7 @@ static int cs_etm_info_fill(struct auxtrace_record *itr,
- 	u32 offset;
- 	u64 nr_cpu, type;
- 	struct perf_cpu_map *cpu_map;
--	struct perf_cpu_map *event_cpus = session->evlist->core.cpus;
-+	struct perf_cpu_map *event_cpus = session->evlist->core.user_requested_cpus;
- 	struct perf_cpu_map *online_cpus = perf_cpu_map__new(NULL);
- 	struct cs_etm_recording *ptr =
- 			container_of(itr, struct cs_etm_recording, itr);
-diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
-index 5860bbaea95a..86e2e926aa0e 100644
---- a/tools/perf/arch/arm64/util/arm-spe.c
-+++ b/tools/perf/arch/arm64/util/arm-spe.c
-@@ -144,7 +144,7 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
- 			container_of(itr, struct arm_spe_recording, itr);
- 	struct perf_pmu *arm_spe_pmu = sper->arm_spe_pmu;
- 	struct evsel *evsel, *arm_spe_evsel = NULL;
--	struct perf_cpu_map *cpus = evlist->core.cpus;
-+	struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
- 	bool privileged = perf_event_paranoid_check(-1);
- 	struct evsel *tracking_evsel;
- 	int err;
-diff --git a/tools/perf/arch/x86/util/intel-bts.c b/tools/perf/arch/x86/util/intel-bts.c
-index 4a76d49d25d6..d68a0f48e41e 100644
---- a/tools/perf/arch/x86/util/intel-bts.c
-+++ b/tools/perf/arch/x86/util/intel-bts.c
-@@ -110,7 +110,7 @@ static int intel_bts_recording_options(struct auxtrace_record *itr,
- 			container_of(itr, struct intel_bts_recording, itr);
- 	struct perf_pmu *intel_bts_pmu = btsr->intel_bts_pmu;
- 	struct evsel *evsel, *intel_bts_evsel = NULL;
--	const struct perf_cpu_map *cpus = evlist->core.cpus;
-+	const struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
- 	bool privileged = perf_event_paranoid_check(-1);
- 
- 	if (opts->auxtrace_sample_mode) {
-diff --git a/tools/perf/arch/x86/util/intel-pt.c b/tools/perf/arch/x86/util/intel-pt.c
-index 8c31578d6f4a..38ec2666ec12 100644
---- a/tools/perf/arch/x86/util/intel-pt.c
-+++ b/tools/perf/arch/x86/util/intel-pt.c
-@@ -382,7 +382,7 @@ static int intel_pt_info_fill(struct auxtrace_record *itr,
- 			ui__warning("Intel Processor Trace: TSC not available\n");
- 	}
- 
--	per_cpu_mmaps = !perf_cpu_map__empty(session->evlist->core.cpus);
-+	per_cpu_mmaps = !perf_cpu_map__empty(session->evlist->core.user_requested_cpus);
- 
- 	auxtrace_info->type = PERF_AUXTRACE_INTEL_PT;
- 	auxtrace_info->priv[INTEL_PT_PMU_TYPE] = intel_pt_pmu->type;
-@@ -632,7 +632,7 @@ static int intel_pt_recording_options(struct auxtrace_record *itr,
- 	struct perf_pmu *intel_pt_pmu = ptr->intel_pt_pmu;
- 	bool have_timing_info, need_immediate = false;
- 	struct evsel *evsel, *intel_pt_evsel = NULL;
--	const struct perf_cpu_map *cpus = evlist->core.cpus;
-+	const struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
- 	bool privileged = perf_event_paranoid_check(-1);
- 	u64 tsc_bit;
- 	int err;
-diff --git a/tools/perf/bench/evlist-open-close.c b/tools/perf/bench/evlist-open-close.c
-index de56601f69ee..5a27691469ed 100644
---- a/tools/perf/bench/evlist-open-close.c
-+++ b/tools/perf/bench/evlist-open-close.c
-@@ -151,7 +151,7 @@ static int bench_evlist_open_close__run(char *evstr)
- 
- 	init_stats(&time_stats);
- 
--	printf("  Number of cpus:\t%d\n", perf_cpu_map__nr(evlist->core.cpus));
-+	printf("  Number of cpus:\t%d\n", perf_cpu_map__nr(evlist->core.user_requested_cpus));
- 	printf("  Number of threads:\t%d\n", evlist->core.threads->nr);
- 	printf("  Number of events:\t%d (%d fds)\n",
- 		evlist->core.nr_entries, evlist__count_evsel_fds(evlist));
-diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
-index ad9ce1bfffa1..7de07bb16d23 100644
---- a/tools/perf/builtin-ftrace.c
-+++ b/tools/perf/builtin-ftrace.c
-@@ -301,7 +301,7 @@ static int set_tracing_cpumask(struct perf_cpu_map *cpumap)
- 
- static int set_tracing_cpu(struct perf_ftrace *ftrace)
- {
--	struct perf_cpu_map *cpumap = ftrace->evlist->core.cpus;
-+	struct perf_cpu_map *cpumap = ftrace->evlist->core.user_requested_cpus;
- 
- 	if (!target__has_cpu(&ftrace->target))
- 		return 0;
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 0b4abed555d8..ba74fab02e62 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -987,7 +987,7 @@ static int record__thread_data_init_maps(struct record_thread *thread_data, stru
- 	int m, tm, nr_mmaps = evlist->core.nr_mmaps;
- 	struct mmap *mmap = evlist->mmap;
- 	struct mmap *overwrite_mmap = evlist->overwrite_mmap;
--	struct perf_cpu_map *cpus = evlist->core.cpus;
-+	struct perf_cpu_map *cpus = evlist->core.user_requested_cpus;
- 
- 	thread_data->nr_mmaps = bitmap_weight(thread_data->mask->maps.bits,
- 					      thread_data->mask->maps.nbits);
-@@ -1881,7 +1881,7 @@ static int record__synthesize(struct record *rec, bool tail)
- 		return err;
- 	}
- 
--	err = perf_event__synthesize_cpu_map(&rec->tool, rec->evlist->core.cpus,
-+	err = perf_event__synthesize_cpu_map(&rec->tool, rec->evlist->core.user_requested_cpus,
- 					     process_synthesized_event, NULL);
- 	if (err < 0) {
- 		pr_err("Couldn't synthesize cpu map.\n");
-@@ -3675,7 +3675,7 @@ static int record__init_thread_default_masks(struct record *rec, struct perf_cpu
- static int record__init_thread_masks(struct record *rec)
- {
- 	int ret = 0;
--	struct perf_cpu_map *cpus = rec->evlist->core.cpus;
-+	struct perf_cpu_map *cpus = rec->evlist->core.user_requested_cpus;
- 
- 	if (!record__threads_enabled(rec))
- 		return record__init_thread_default_masks(rec, cpus);
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index b81ae5053218..a96f106dc93a 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -804,7 +804,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
- 	if (group)
- 		evlist__set_leader(evsel_list);
- 
--	if (!cpu_map__is_dummy(evsel_list->core.cpus)) {
-+	if (!cpu_map__is_dummy(evsel_list->core.user_requested_cpus)) {
- 		if (affinity__setup(&saved_affinity) < 0)
- 			return -1;
- 		affinity = &saved_affinity;
-@@ -1458,7 +1458,7 @@ static int perf_stat_init_aggr_mode(void)
- 	aggr_cpu_id_get_t get_id = aggr_mode__get_aggr(stat_config.aggr_mode);
- 
- 	if (get_id) {
--		stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.cpus,
-+		stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.user_requested_cpus,
- 							 get_id, /*data=*/NULL);
- 		if (!stat_config.aggr_map) {
- 			pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
-@@ -1472,8 +1472,8 @@ static int perf_stat_init_aggr_mode(void)
- 	 * taking the highest cpu number to be the size of
- 	 * the aggregation translate cpumap.
- 	 */
--	if (evsel_list->core.cpus)
--		nr = perf_cpu_map__max(evsel_list->core.cpus).cpu;
-+	if (evsel_list->core.user_requested_cpus)
-+		nr = perf_cpu_map__max(evsel_list->core.user_requested_cpus).cpu;
- 	else
- 		nr = 0;
- 	stat_config.cpus_aggr_map = cpu_aggr_map__empty_new(nr + 1);
-@@ -1630,7 +1630,7 @@ static int perf_stat_init_aggr_mode_file(struct perf_stat *st)
- 	if (!get_id)
- 		return 0;
- 
--	stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.cpus, get_id, env);
-+	stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.user_requested_cpus, get_id, env);
- 	if (!stat_config.aggr_map) {
- 		pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
- 		return -1;
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 9b08e44a31d9..fd8fd913c533 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1021,7 +1021,7 @@ static int perf_top__start_counters(struct perf_top *top)
- 
- 	evlist__for_each_entry(evlist, counter) {
- try_again:
--		if (evsel__open(counter, top->evlist->core.cpus,
-+		if (evsel__open(counter, top->evlist->core.user_requested_cpus,
- 				     top->evlist->core.threads) < 0) {
- 
- 			/*
-diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-index 9e48652662d4..df1c5bbbaa0d 100644
---- a/tools/perf/util/auxtrace.c
-+++ b/tools/perf/util/auxtrace.c
-@@ -174,7 +174,7 @@ void auxtrace_mmap_params__set_idx(struct auxtrace_mmap_params *mp,
- 	mp->idx = idx;
- 
- 	if (per_cpu) {
--		mp->cpu = perf_cpu_map__cpu(evlist->core.cpus, idx);
-+		mp->cpu = perf_cpu_map__cpu(evlist->core.user_requested_cpus, idx);
- 		if (evlist->core.threads)
- 			mp->tid = perf_thread_map__pid(evlist->core.threads, 0);
- 		else
-diff --git a/tools/perf/util/bpf_ftrace.c b/tools/perf/util/bpf_ftrace.c
-index 4f4d3aaff37c..7a4297d8fd2c 100644
---- a/tools/perf/util/bpf_ftrace.c
-+++ b/tools/perf/util/bpf_ftrace.c
-@@ -38,7 +38,7 @@ int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
- 
- 	/* don't need to set cpu filter for system-wide mode */
- 	if (ftrace->target.cpu_list) {
--		ncpus = perf_cpu_map__nr(ftrace->evlist->core.cpus);
-+		ncpus = perf_cpu_map__nr(ftrace->evlist->core.user_requested_cpus);
- 		bpf_map__set_max_entries(skel->maps.cpu_filter, ncpus);
- 	}
- 
-@@ -63,7 +63,7 @@ int perf_ftrace__latency_prepare_bpf(struct perf_ftrace *ftrace)
- 		fd = bpf_map__fd(skel->maps.cpu_filter);
- 
- 		for (i = 0; i < ncpus; i++) {
--			cpu = perf_cpu_map__cpu(ftrace->evlist->core.cpus, i).cpu;
-+			cpu = perf_cpu_map__cpu(ftrace->evlist->core.user_requested_cpus, i).cpu;
- 			bpf_map_update_elem(fd, &cpu, &val, BPF_ANY);
- 		}
- 	}
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 9bb79e049957..cb2cf4463c08 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -440,7 +440,7 @@ static void __evlist__disable(struct evlist *evlist, char *evsel_name)
- 	bool has_imm = false;
- 
- 	// See explanation in evlist__close()
--	if (!cpu_map__is_dummy(evlist->core.cpus)) {
-+	if (!cpu_map__is_dummy(evlist->core.user_requested_cpus)) {
- 		if (affinity__setup(&saved_affinity) < 0)
- 			return;
- 		affinity = &saved_affinity;
-@@ -500,7 +500,7 @@ static void __evlist__enable(struct evlist *evlist, char *evsel_name)
- 	struct affinity saved_affinity, *affinity = NULL;
- 
- 	// See explanation in evlist__close()
--	if (!cpu_map__is_dummy(evlist->core.cpus)) {
-+	if (!cpu_map__is_dummy(evlist->core.user_requested_cpus)) {
- 		if (affinity__setup(&saved_affinity) < 0)
- 			return;
- 		affinity = &saved_affinity;
-@@ -565,7 +565,7 @@ static int evlist__enable_event_cpu(struct evlist *evlist, struct evsel *evsel,
- static int evlist__enable_event_thread(struct evlist *evlist, struct evsel *evsel, int thread)
- {
- 	int cpu;
--	int nr_cpus = perf_cpu_map__nr(evlist->core.cpus);
-+	int nr_cpus = perf_cpu_map__nr(evlist->core.user_requested_cpus);
- 
- 	if (!evsel->core.fd)
- 		return -EINVAL;
-@@ -580,7 +580,7 @@ static int evlist__enable_event_thread(struct evlist *evlist, struct evsel *evse
- 
- int evlist__enable_event_idx(struct evlist *evlist, struct evsel *evsel, int idx)
- {
--	bool per_cpu_mmaps = !perf_cpu_map__empty(evlist->core.cpus);
-+	bool per_cpu_mmaps = !perf_cpu_map__empty(evlist->core.user_requested_cpus);
- 
- 	if (per_cpu_mmaps)
- 		return evlist__enable_event_cpu(evlist, evsel, idx);
-@@ -1301,10 +1301,11 @@ void evlist__close(struct evlist *evlist)
- 	struct affinity affinity;
- 
- 	/*
--	 * With perf record core.cpus is usually NULL.
-+	 * With perf record core.user_requested_cpus is usually NULL.
- 	 * Use the old method to handle this for now.
- 	 */
--	if (!evlist->core.cpus || cpu_map__is_dummy(evlist->core.cpus)) {
-+	if (!evlist->core.user_requested_cpus ||
-+	    cpu_map__is_dummy(evlist->core.user_requested_cpus)) {
- 		evlist__for_each_entry_reverse(evlist, evsel)
- 			evsel__close(evsel);
- 		return;
-@@ -1367,7 +1368,7 @@ int evlist__open(struct evlist *evlist)
- 	 * Default: one fd per CPU, all threads, aka systemwide
- 	 * as sys_perf_event_open(cpu = -1, thread = -1) is EINVAL
- 	 */
--	if (evlist->core.threads == NULL && evlist->core.cpus == NULL) {
-+	if (evlist->core.threads == NULL && evlist->core.user_requested_cpus == NULL) {
- 		err = evlist__create_syswide_maps(evlist);
- 		if (err < 0)
- 			goto out_err;
-diff --git a/tools/perf/util/record.c b/tools/perf/util/record.c
-index 007a64681416..5b09ecbb05dc 100644
---- a/tools/perf/util/record.c
-+++ b/tools/perf/util/record.c
-@@ -106,7 +106,7 @@ void evlist__config(struct evlist *evlist, struct record_opts *opts, struct call
- 	if (opts->group)
- 		evlist__set_leader(evlist);
- 
--	if (perf_cpu_map__cpu(evlist->core.cpus, 0).cpu < 0)
-+	if (perf_cpu_map__cpu(evlist->core.user_requested_cpus, 0).cpu < 0)
- 		opts->no_inherit = true;
- 
- 	use_comm_exec = perf_can_comm_exec();
-@@ -244,7 +244,7 @@ bool evlist__can_select_event(struct evlist *evlist, const char *str)
- 
- 	evsel = evlist__last(temp_evlist);
- 
--	if (!evlist || perf_cpu_map__empty(evlist->core.cpus)) {
-+	if (!evlist || perf_cpu_map__empty(evlist->core.user_requested_cpus)) {
- 		struct perf_cpu_map *cpus = perf_cpu_map__new(NULL);
- 
- 		if (cpus)
-@@ -252,7 +252,7 @@ bool evlist__can_select_event(struct evlist *evlist, const char *str)
- 
- 		perf_cpu_map__put(cpus);
- 	} else {
--		cpu = perf_cpu_map__cpu(evlist->core.cpus, 0);
-+		cpu = perf_cpu_map__cpu(evlist->core.user_requested_cpus, 0);
- 	}
- 
- 	while (1) {
-diff --git a/tools/perf/util/sideband_evlist.c b/tools/perf/util/sideband_evlist.c
-index 748371ac22be..388846f17bc1 100644
---- a/tools/perf/util/sideband_evlist.c
-+++ b/tools/perf/util/sideband_evlist.c
-@@ -114,7 +114,8 @@ int evlist__start_sb_thread(struct evlist *evlist, struct target *target)
- 	}
- 
- 	evlist__for_each_entry(evlist, counter) {
--		if (evsel__open(counter, evlist->core.cpus, evlist->core.threads) < 0)
-+		if (evsel__open(counter, evlist->core.user_requested_cpus,
-+				evlist->core.threads) < 0)
- 			goto out_delete_evlist;
- 	}
- 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 9cbe351b141f..138e3ab9d638 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -929,7 +929,7 @@ static void print_no_aggr_metric(struct perf_stat_config *config,
- 	int all_idx;
- 	struct perf_cpu cpu;
- 
--	perf_cpu_map__for_each_cpu(cpu, all_idx, evlist->core.cpus) {
-+	perf_cpu_map__for_each_cpu(cpu, all_idx, evlist->core.user_requested_cpus) {
- 		struct evsel *counter;
- 		bool first = true;
- 
-diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-index b654de0841f8..27acdc5e5723 100644
---- a/tools/perf/util/synthetic-events.c
-+++ b/tools/perf/util/synthetic-events.c
-@@ -2127,7 +2127,7 @@ int perf_event__synthesize_stat_events(struct perf_stat_config *config, struct p
- 		return err;
- 	}
- 
--	err = perf_event__synthesize_cpu_map(tool, evlist->core.cpus, process, NULL);
-+	err = perf_event__synthesize_cpu_map(tool, evlist->core.user_requested_cpus, process, NULL);
- 	if (err < 0) {
- 		pr_err("Couldn't synthesize thread map.\n");
- 		return err;
-diff --git a/tools/perf/util/top.c b/tools/perf/util/top.c
-index c1ebfc5d2e0c..b8b32431d2f7 100644
---- a/tools/perf/util/top.c
-+++ b/tools/perf/util/top.c
-@@ -95,15 +95,17 @@ size_t perf_top__header_snprintf(struct perf_top *top, char *bf, size_t size)
- 
- 	if (target->cpu_list)
- 		ret += SNPRINTF(bf + ret, size - ret, ", CPU%s: %s)",
--				perf_cpu_map__nr(top->evlist->core.cpus) > 1 ? "s" : "",
-+				perf_cpu_map__nr(top->evlist->core.user_requested_cpus) > 1
-+				? "s" : "",
- 				target->cpu_list);
- 	else {
- 		if (target->tid)
- 			ret += SNPRINTF(bf + ret, size - ret, ")");
- 		else
- 			ret += SNPRINTF(bf + ret, size - ret, ", %d CPU%s)",
--					perf_cpu_map__nr(top->evlist->core.cpus),
--					perf_cpu_map__nr(top->evlist->core.cpus) > 1 ? "s" : "");
-+					perf_cpu_map__nr(top->evlist->core.user_requested_cpus),
-+					perf_cpu_map__nr(top->evlist->core.user_requested_cpus) > 1
-+					? "s" : "");
- 	}
- 
- 	perf_top__reset_sample_counters(top);
+diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
+index 384d5e076ee4..60cccd05f243 100644
+--- a/tools/lib/perf/cpumap.c
++++ b/tools/lib/perf/cpumap.c
+@@ -390,3 +390,41 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
+ 	perf_cpu_map__put(orig);
+ 	return merged;
+ }
++
++struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
++					     struct perf_cpu_map *other)
++{
++	struct perf_cpu *tmp_cpus;
++	int tmp_len;
++	int i, j, k;
++	struct perf_cpu_map *merged = NULL;
++
++	if (perf_cpu_map__is_subset(other, orig))
++		return orig;
++	if (perf_cpu_map__is_subset(orig, other)) {
++		perf_cpu_map__put(orig);
++		return perf_cpu_map__get(other);
++	}
++
++	tmp_len = max(orig->nr, other->nr);
++	tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
++	if (!tmp_cpus)
++		return NULL;
++
++	i = j = k = 0;
++	while (i < orig->nr && j < other->nr) {
++		if (orig->map[i].cpu < other->map[j].cpu)
++			i++;
++		else if (orig->map[i].cpu > other->map[j].cpu)
++			j++;
++		else {
++			j++;
++			tmp_cpus[k++] = orig->map[i++];
++		}
++	}
++	if (k)
++		merged = cpu_map__trim_new(k, tmp_cpus);
++	free(tmp_cpus);
++	perf_cpu_map__put(orig);
++	return merged;
++}
+diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
+index 4a2edbdb5e2b..a2a7216c0b78 100644
+--- a/tools/lib/perf/include/perf/cpumap.h
++++ b/tools/lib/perf/include/perf/cpumap.h
+@@ -19,6 +19,8 @@ LIBPERF_API struct perf_cpu_map *perf_cpu_map__read(FILE *file);
+ LIBPERF_API struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map);
+ LIBPERF_API struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
+ 						     struct perf_cpu_map *other);
++LIBPERF_API struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
++							 struct perf_cpu_map *other);
+ LIBPERF_API void perf_cpu_map__put(struct perf_cpu_map *map);
+ LIBPERF_API struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx);
+ LIBPERF_API int perf_cpu_map__nr(const struct perf_cpu_map *cpus);
 -- 
 2.35.1.1021.g381101b075-goog
 
