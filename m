@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4F88C433EF
-	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 18:17:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2077CC433F5
+	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 18:17:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245140AbiC1SSz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Mar 2022 14:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51386 "EHLO
+        id S234280AbiC1SS5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Mar 2022 14:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245155AbiC1SSx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Mar 2022 14:18:53 -0400
+        with ESMTP id S245169AbiC1SSw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Mar 2022 14:18:52 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D29664BE4
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 11:17:04 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e6402f436cso125181177b3.3
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 11:17:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DE6633B0
+        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 11:16:59 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2e68c93bb30so124756627b3.18
+        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 11:16:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Co/xGv2r3vy215Bwt4aigwl1bl7HKveKP+Fei159KlE=;
-        b=LbBYuHIY/48PfIRKpw8E8PnJduzQlIo56f9znECRVUiit6mXogAIo8SY0yiEWIrwDf
-         H+im3pZUl/nDJ4fvgnKasUU1K1xVjXbubAm/eMWWwwk0ockfzFTJRMwwRNxecSmToFhm
-         UO+5YKMyW5/HhgOhpHkIruvtE8szlXIOIVJAJojReiUEQSIu/DQHL462ZIlcmsD5z+ap
-         OQjV0rp7GEuxmOopaK5XJsvItMoXo34eKsKuXpJU+cwQML1VNyQGXJwekTXU57DnJJVP
-         S1jOt9//M7UQE1oKqFD6QRPJjqC36zsE55+f89yP2bmhdWV/nKb+LAq4m7NToXCqYNVi
-         2rqQ==
+        bh=Me/7ozlD/ZpN60GWxY7vr2NpUMtv/HbFvHkjvcqVM5w=;
+        b=e92QG3GhviC5BOH5Sj0NgXCkdeGdVwE9NmuRYiA0qa1DSRS1Tm+owdUQE4PEIMVmRw
+         u0IBU+Na4SiLjWRtKRpP9dxnT7XAFyhlRmopj3TuADV7kbVz86A5kFVrBRdXlMq8j4CH
+         ICuiwmCut5LTqrybH3I2Q1mQY+vtxfFeFWXyvVlcezB0+wggv4u8MeuXP73AtwKACrhp
+         zK7iqGq5LUKJLhUn02vPW2a4LbTycH5EHtZO12MPZ1y0Rce1x6Vlj3Ja+1CPtpbi7iBL
+         gSFFhgCvGcQQ30fqiuEzkJzq/0/E+9zaiFpFHSKpEegjnYTZ1rRdzbsEzSQ36eJSf2D2
+         9gjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Co/xGv2r3vy215Bwt4aigwl1bl7HKveKP+Fei159KlE=;
-        b=OwJ7JG5N3+f0EOY9b5AApDWEKqzXulSRhu4SBI934AhurxYosOZrDCHyYsEPmTFQ5h
-         jkAG+YeewB4ZODJ3cm6izb3dT14GvdEKaDwtBLLGvhogyXHFy679BcAFIK5XFbAT7YFD
-         75DdEhkGGxqzv1rQKajK8tNTEu+TESQjab2yR/IYWVqgXWMiypqbIwlg4/spkIvydEl+
-         HA47yq7py3sRPRdz/9IlQTXDq5L1igOaq70rclU0p35/Z9mx8JUB9+VLXunoAe5pJx8D
-         OxWrE7yf+Fr81Qn57viUn6V7c1lAGIbdzj9pOxEN1Kv8Oe43OCV4iJEjANLfYY1MB4fB
-         Fu3g==
-X-Gm-Message-State: AOAM5303iP4mIQ+ThLGB74eEDjJdtBAAbnJytmiWzo2bqMfqbODcn9ij
-        ZrD14NOSb1A5pvIl/wb6b/lGnbM=
-X-Google-Smtp-Source: ABdhPJzzpMZaBHZsAkx/GCJpvD1aeHhtXj6W+TnG4b19zrp1qyNZHwjUnklZPOHVtmXCOLhlH8GWZGE=
+        bh=Me/7ozlD/ZpN60GWxY7vr2NpUMtv/HbFvHkjvcqVM5w=;
+        b=777VklRFUgT2YR7VONZnQHLK3yKOM47VcGmv/gsAND89FJh5YwO6mV0akrqYPt4OrF
+         q0YXqcr2ARvcOn/xvx+8F5zIzXWGOJUhvcahkUmhywPQxg9O5UAfmKwOYs6ZQoEJHPeZ
+         ifT11CqeQzPwR4d2z0ZE5nXypHi9PwpwjLfJqnC1zpM1jGsdGeCCycbXzefmm4Tb4glF
+         Udfl1hYE2Ppr3ovrDSC71522KNDfjBGhHaDnXPClpvFaShbBvBoaH/tDz5tdL1J5Vqi3
+         khKOgWZw9v6EM6TLk0iZpK4SEEL+cKne0WjUepjuZKBEh85mBhyV5QjX5y6FBOwFShZv
+         xGZg==
+X-Gm-Message-State: AOAM530eGD7JR52QSHCMwVatL9gR/R+vfL1z9PQXn5t2awP/9tTX1QGg
+        l7a/SIo5SSqruAHpAwnRdL/2Gmk=
+X-Google-Smtp-Source: ABdhPJyOv4M0ANoYtFUTlHXFDTqNWvdiiVDt5tHeJgSFrBy1e3QbU7A632UstS6XZNYZGVdc1ZKehZk=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:a900:e0f6:cf98:d8c8])
- (user=sdf job=sendgmr) by 2002:a25:2388:0:b0:633:ca61:bd48 with SMTP id
- j130-20020a252388000000b00633ca61bd48mr24219224ybj.120.1648491423711; Mon, 28
- Mar 2022 11:17:03 -0700 (PDT)
-Date:   Mon, 28 Mar 2022 11:16:44 -0700
+ (user=sdf job=sendgmr) by 2002:a05:6902:91e:b0:621:b123:de46 with SMTP id
+ bu30-20020a056902091e00b00621b123de46mr24523858ybb.76.1648491418731; Mon, 28
+ Mar 2022 11:16:58 -0700 (PDT)
+Date:   Mon, 28 Mar 2022 11:16:42 -0700
 In-Reply-To: <20220328181644.1748789-1-sdf@google.com>
-Message-Id: <20220328181644.1748789-8-sdf@google.com>
+Message-Id: <20220328181644.1748789-6-sdf@google.com>
 Mime-Version: 1.0
 References: <20220328181644.1748789-1-sdf@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH bpf-next 7/7] selftests/bpf: verify lsm_cgroup struct sock access
+Subject: [PATCH bpf-next 5/7] libbpf: add lsm_cgoup_sock type
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -61,154 +61,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sk_priority & sk_mark are writable, the rest is readonly.
-
-Add new ldx_offset fixups to lookup the offset of struct field.
-Allow using test.kfunc regardless of prog_type.
-
-One interesting thing here is that the verifier doesn't
-really force me to add NULL checks anywhere :-/
+lsm_cgroup/ is the prefix for BPF_LSM_CGROUP.
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/testing/selftests/bpf/test_verifier.c   | 54 ++++++++++++++++++-
- .../selftests/bpf/verifier/lsm_cgroup.c       | 34 ++++++++++++
- 2 files changed, 87 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/verifier/lsm_cgroup.c
+ tools/lib/bpf/libbpf.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index a2cd236c32eb..d6bc55c54aaa 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -75,6 +75,12 @@ struct kfunc_btf_id_pair {
- 	int insn_idx;
- };
- 
-+struct ldx_offset {
-+	const char *strct;
-+	const char *field;
-+	int insn_idx;
-+};
-+
- struct bpf_test {
- 	const char *descr;
- 	struct bpf_insn	insns[MAX_INSNS];
-@@ -102,6 +108,7 @@ struct bpf_test {
- 	int fixup_map_ringbuf[MAX_FIXUPS];
- 	int fixup_map_timer[MAX_FIXUPS];
- 	struct kfunc_btf_id_pair fixup_kfunc_btf_id[MAX_FIXUPS];
-+	struct ldx_offset fixup_ldx[MAX_FIXUPS];
- 	/* Expected verifier log output for result REJECT or VERBOSE_ACCEPT.
- 	 * Can be a tab-separated sequence of expected strings. An empty string
- 	 * means no log verification.
-@@ -755,6 +762,7 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	int *fixup_map_ringbuf = test->fixup_map_ringbuf;
- 	int *fixup_map_timer = test->fixup_map_timer;
- 	struct kfunc_btf_id_pair *fixup_kfunc_btf_id = test->fixup_kfunc_btf_id;
-+	struct ldx_offset *fixup_ldx = test->fixup_ldx;
- 
- 	if (test->fill_helper) {
- 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
-@@ -967,6 +975,50 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 			fixup_kfunc_btf_id++;
- 		} while (fixup_kfunc_btf_id->kfunc);
- 	}
-+
-+	if (fixup_ldx->strct) {
-+		const struct btf_member *memb;
-+		const struct btf_type *tp;
-+		const char *name;
-+		struct btf *btf;
-+		int btf_id;
-+		int off;
-+		int i;
-+
-+		btf = btf__load_vmlinux_btf();
-+
-+		do {
-+			off = -1;
-+			if (!btf)
-+				goto next_ldx;
-+
-+			btf_id = btf__find_by_name_kind(btf,
-+							fixup_ldx->strct,
-+							BTF_KIND_STRUCT);
-+			if (btf_id < 0)
-+				goto next_ldx;
-+
-+			tp = btf__type_by_id(btf, btf_id);
-+			memb = btf_members(tp);
-+
-+			for (i = 0; i < btf_vlen(tp); i++) {
-+				name = btf__name_by_offset(btf,
-+							   memb->name_off);
-+				if (strcmp(fixup_ldx->field, name) == 0) {
-+					off = memb->offset / 8;
-+					break;
-+				}
-+				memb++;
-+			}
-+
-+next_ldx:
-+			prog[fixup_ldx->insn_idx].off = off;
-+			fixup_ldx++;
-+
-+		} while (fixup_ldx->strct);
-+
-+		btf__free(btf);
-+	}
- }
- 
- struct libcap {
-@@ -1131,7 +1183,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
- 		opts.log_level = 4;
- 	opts.prog_flags = pflags;
- 
--	if (prog_type == BPF_PROG_TYPE_TRACING && test->kfunc) {
-+	if (test->kfunc) {
- 		int attach_btf_id;
- 
- 		attach_btf_id = libbpf_find_vmlinux_btf_id(test->kfunc,
-diff --git a/tools/testing/selftests/bpf/verifier/lsm_cgroup.c b/tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-new file mode 100644
-index 000000000000..af0efe783511
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-@@ -0,0 +1,34 @@
-+#define SK_WRITABLE_FIELD(tp, field, size, res) \
-+{ \
-+	.descr = field, \
-+	.insns = { \
-+		/* r1 = *(u64 *)(r1 + 0) */ \
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), \
-+		/* r1 = *(u64 *)(r1 + offsetof(struct socket, sk)) */ \
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), \
-+		/* r2 = *(u64 *)(r1 + offsetof(struct sock, <field>)) */ \
-+		BPF_LDX_MEM(size, BPF_REG_2, BPF_REG_1, 0), \
-+		/* *(u64 *)(r1 + offsetof(struct sock, <field>)) = r2 */ \
-+		BPF_STX_MEM(size, BPF_REG_1, BPF_REG_2, 0), \
-+		BPF_MOV64_IMM(BPF_REG_0, 1), \
-+		BPF_EXIT_INSN(), \
-+	}, \
-+	.result = res, \
-+	.errstr = res ? "no write support to 'struct sock' at off" : "", \
-+	.prog_type = BPF_PROG_TYPE_LSM, \
-+	.expected_attach_type = BPF_LSM_CGROUP, \
-+	.kfunc = "socket_post_create", \
-+	.fixup_ldx = { \
-+		{ "socket", "sk", 1 }, \
-+		{ tp, field, 2 }, \
-+		{ tp, field, 3 }, \
-+	}, \
-+}
-+
-+SK_WRITABLE_FIELD("sock_common", "skc_family", BPF_H, REJECT),
-+SK_WRITABLE_FIELD("sock", "sk_sndtimeo", BPF_DW, REJECT),
-+SK_WRITABLE_FIELD("sock", "sk_priority", BPF_W, ACCEPT),
-+SK_WRITABLE_FIELD("sock", "sk_mark", BPF_W, ACCEPT),
-+SK_WRITABLE_FIELD("sock", "sk_pacing_rate", BPF_DW, REJECT),
-+
-+#undef SK_WRITABLE_FIELD
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 809fe209cdcc..195c9f078726 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8666,6 +8666,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("freplace/",		EXT, 0, SEC_ATTACH_BTF, attach_trace),
+ 	SEC_DEF("lsm/",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
+ 	SEC_DEF("lsm.s/",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
++	SEC_DEF("lsm_cgroup/",	LSM, BPF_LSM_CGROUP, SEC_ATTACH_BTF),
+ 	SEC_DEF("iter/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter),
+ 	SEC_DEF("iter.s/",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_iter),
+ 	SEC_DEF("syscall",		SYSCALL, 0, SEC_SLEEPABLE),
+@@ -9087,6 +9088,7 @@ void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
+ 		*kind = BTF_KIND_TYPEDEF;
+ 		break;
+ 	case BPF_LSM_MAC:
++	case BPF_LSM_CGROUP:
+ 		*prefix = BTF_LSM_PREFIX;
+ 		*kind = BTF_KIND_FUNC;
+ 		break;
 -- 
 2.35.1.1021.g381101b075-goog
 
