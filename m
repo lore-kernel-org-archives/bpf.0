@@ -2,174 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 412D5C433FE
-	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 17:49:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A35AC433EF
+	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 17:51:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240875AbiC1Rux (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Mar 2022 13:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52620 "EHLO
+        id S244822AbiC1RxK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Mar 2022 13:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238979AbiC1Rux (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Mar 2022 13:50:53 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D0B3C4B7;
-        Mon, 28 Mar 2022 10:49:12 -0700 (PDT)
-Received: by mail-lj1-f176.google.com with SMTP id a30so12799584ljq.13;
-        Mon, 28 Mar 2022 10:49:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EyQ8IXVuGy+MjhTeeviL9/NWr5Oku+oE3kNpUwAlM28=;
-        b=mzUsrqs1v9Oox0FLiZXA0oFdHuqoEo4Bzxx8RTE8IW2/gN/kMRw5hJyIY1cmLV6Vch
-         b6Nuh4yNiUtWICDHF+U+Xi7w19MAMZYQopDF/k/64vSbPj2J08FkzE1YDipEaOJdrHwp
-         i+7eYODLfGrZRKcuVHHvxaO+HAVbX1MsVmpewDujMWBFaIHgdYaKrEJZC4ZFAr7k8t9X
-         hFVDpYaLKnGJsiG8kU0DmOQoHIU5kS2DLvZY89xpazFhW6uNRSc9fd28pfIeFJrlerbB
-         U/r3suyr+U/rD0SEZ0uJV4lF0txJxYuDjEbQGfgMglFrMVwOqvk0Wlkxo9mj4Z9ctItd
-         gKJQ==
-X-Gm-Message-State: AOAM531oqij7enAauyfowhgvcSv9RMgJUMYpCgsdQYG0i3mSfBFW9g8W
-        MaPas58lBD2uy/kRC2pGlmPcRXaile2sd4wAM40=
-X-Google-Smtp-Source: ABdhPJylsb5/U29MfMdIeOIKZdvUSIE4MIawm5G11yaSRrZfEr1IXA3xAF9bfyuvUtx6BVZVZ6Fg7r4xnLNf7VJDTG4=
-X-Received: by 2002:a05:651c:248:b0:245:5b3d:9abb with SMTP id
- x8-20020a05651c024800b002455b3d9abbmr21451205ljn.366.1648489750323; Mon, 28
- Mar 2022 10:49:10 -0700 (PDT)
+        with ESMTP id S244770AbiC1Rwz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Mar 2022 13:52:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3B03CA5F;
+        Mon, 28 Mar 2022 10:51:14 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KS0YQ3KRMz67Q7R;
+        Tue, 29 Mar 2022 01:48:42 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 28 Mar 2022 19:51:11 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <corbet@lwn.net>, <viro@zeniv.linux.org.uk>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
+        <shuah@kernel.org>, <mcoquelin.stm32@gmail.com>,
+        <alexandre.torgue@foss.st.com>, <zohar@linux.ibm.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 03/18] bpf-preload: Generalize object pinning from the kernel
+Date:   Mon, 28 Mar 2022 19:50:18 +0200
+Message-ID: <20220328175033.2437312-4-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220322185709.141236-1-namhyung@kernel.org> <20220322185709.141236-3-namhyung@kernel.org>
- <20220328113946.GA8939@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220328113946.GA8939@worktop.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 28 Mar 2022 10:48:59 -0700
-Message-ID: <CAM9d7ciQQEypvv2a2zQLHNc7p3NNxF59kASxHoFMCqiQicKwBA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow path
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 4:39 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Mar 22, 2022 at 11:57:09AM -0700, Namhyung Kim wrote:
-> > diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-> > index ee2fd7614a93..c88deda77cf2 100644
-> > --- a/kernel/locking/mutex.c
-> > +++ b/kernel/locking/mutex.c
-> > @@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
-> >       }
-> >
-> >       set_current_state(state);
-> > +     trace_contention_begin(lock, 0);
-> >       for (;;) {
-> >               bool first;
-> >
-> > @@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
-> >  skip_wait:
-> >       /* got the lock - cleanup and rejoice! */
-> >       lock_acquired(&lock->dep_map, ip);
-> > +     trace_contention_end(lock, 0);
-> >
-> >       if (ww_ctx)
-> >               ww_mutex_lock_acquired(ww, ww_ctx);
->
-> (note: it's possible to get to this trace_contention_end() without ever
-> having passed a _begin -- fixed in the below)
->
-> > @@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
-> >  err:
-> >       __set_current_state(TASK_RUNNING);
-> >       __mutex_remove_waiter(lock, &waiter);
-> > +     trace_contention_end(lock, ret);
-> >  err_early_kill:
-> >       raw_spin_unlock(&lock->wait_lock);
-> >       debug_mutex_free_waiter(&waiter);
->
->
-> So there was one thing here, that might or might not be important, but
-> is somewhat inconsistent with the whole thing. That is, do you want to
-> include optimistic spinning in the contention time or not?
+Rename bpf_iter_link_pin_kernel() to bpf_obj_do_pin_kernel(), to match the
+user space counterpart bpf_obj_do_pin() and similarly to the latter, accept
+a generic object pointer and its type, so that the preload method can pin
+not only links but also maps and progs.
 
-Yes, this was in a grey area and would create begin -> begin -> end
-path for mutexes.  But I think tools can handle it with the flags.
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ kernel/bpf/inode.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
 
->
-> Because currently you do it sometimes.
->
-> Also, if you were to add LCB_F_MUTEX then you could have something like:
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index 1f2d468abf58..a9d725db4cf4 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -414,9 +414,10 @@ static const struct inode_operations bpf_dir_iops = {
+ 	.unlink		= simple_unlink,
+ };
+ 
+-/* pin iterator link into bpffs */
+-static int bpf_iter_link_pin_kernel(struct dentry *parent,
+-				    const char *name, struct bpf_link *link)
++/* pin object into bpffs */
++static int bpf_obj_do_pin_kernel(struct dentry *parent,
++				 const char *name, void *raw,
++				 enum bpf_type type)
+ {
+ 	umode_t mode = S_IFREG | S_IRUSR;
+ 	struct dentry *dentry;
+@@ -428,8 +429,22 @@ static int bpf_iter_link_pin_kernel(struct dentry *parent,
+ 		inode_unlock(parent->d_inode);
+ 		return PTR_ERR(dentry);
+ 	}
+-	ret = bpf_mkobj_ops(dentry, mode, link, &bpf_link_iops,
+-			    &bpf_iter_fops);
++
++	switch (type) {
++	case BPF_TYPE_PROG:
++		ret = bpf_mkprog(dentry, mode, raw);
++		break;
++	case BPF_TYPE_MAP:
++		ret = bpf_mkmap(dentry, mode, raw);
++		break;
++	case BPF_TYPE_LINK:
++		ret = bpf_mklink(dentry, mode, raw);
++		break;
++	default:
++		ret = -EOPNOTSUPP;
++		break;
++	}
++
+ 	dput(dentry);
+ 	inode_unlock(parent->d_inode);
+ 	return ret;
+@@ -726,8 +741,8 @@ static int populate_bpffs(struct dentry *parent)
+ 		goto out_put;
+ 	for (i = 0; i < BPF_PRELOAD_LINKS; i++) {
+ 		bpf_link_inc(objs[i].link);
+-		err = bpf_iter_link_pin_kernel(parent,
+-					       objs[i].link_name, objs[i].link);
++		err = bpf_obj_do_pin_kernel(parent, objs[i].link_name,
++					    objs[i].link, BPF_TYPE_LINK);
+ 		if (err) {
+ 			bpf_link_put(objs[i].link);
+ 			goto out_put;
+-- 
+2.32.0
 
-Yep, I'm ok with having the mutex flag.  Do you want me to send
-v5 with this change or would you like to do it by yourself?
-
-Thanks,
-Namhyung
-
-
->
->
-> --- a/kernel/locking/mutex.c
-> +++ b/kernel/locking/mutex.c
-> @@ -602,12 +602,14 @@ __mutex_lock_common(struct mutex *lock,
->         preempt_disable();
->         mutex_acquire_nest(&lock->dep_map, subclass, 0, nest_lock, ip);
->
-> +       trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
->         if (__mutex_trylock(lock) ||
->             mutex_optimistic_spin(lock, ww_ctx, NULL)) {
->                 /* got the lock, yay! */
->                 lock_acquired(&lock->dep_map, ip);
->                 if (ww_ctx)
->                         ww_mutex_set_context_fastpath(ww, ww_ctx);
-> +               trace_contention_end(lock, 0);
->                 preempt_enable();
->                 return 0;
->         }
-> @@ -644,7 +646,7 @@ __mutex_lock_common(struct mutex *lock,
->         }
->
->         set_current_state(state);
-> -       trace_contention_begin(lock, 0);
-> +       trace_contention_begin(lock, LCB_F_MUTEX);
->         for (;;) {
->                 bool first;
->
-> @@ -684,10 +686,16 @@ __mutex_lock_common(struct mutex *lock,
->                  * state back to RUNNING and fall through the next schedule(),
->                  * or we must see its unlock and acquire.
->                  */
-> -               if (__mutex_trylock_or_handoff(lock, first) ||
-> -                   (first && mutex_optimistic_spin(lock, ww_ctx, &waiter)))
-> +               if (__mutex_trylock_or_handoff(lock, first))
->                         break;
->
-> +               if (first) {
-> +                       trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
-> +                       if (mutex_optimistic_spin(lock, ww_ctx, &waiter))
-> +                               break;
-> +                       trace_contention_begin(lock, LCB_F_MUTEX);
-> +               }
-> +
->                 raw_spin_lock(&lock->wait_lock);
->         }
->         raw_spin_lock(&lock->wait_lock);
-> @@ -723,8 +731,8 @@ __mutex_lock_common(struct mutex *lock,
->  err:
->         __set_current_state(TASK_RUNNING);
->         __mutex_remove_waiter(lock, &waiter);
-> -       trace_contention_end(lock, ret);
->  err_early_kill:
-> +       trace_contention_end(lock, ret);
->         raw_spin_unlock(&lock->wait_lock);
->         debug_mutex_free_waiter(&waiter);
->         mutex_release(&lock->dep_map, ip);
