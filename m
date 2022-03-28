@@ -2,216 +2,209 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2E55C433FE
-	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 21:25:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81434C433FE
+	for <bpf@archiver.kernel.org>; Mon, 28 Mar 2022 22:11:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiC1V1h (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Mar 2022 17:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S229525AbiC1WN0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Mar 2022 18:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiC1V1f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Mar 2022 17:27:35 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B500013926C
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 14:25:44 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 125-20020a1c0283000000b0038d043aac51so290220wmc.0
-        for <bpf@vger.kernel.org>; Mon, 28 Mar 2022 14:25:44 -0700 (PDT)
+        with ESMTP id S229455AbiC1WNZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Mar 2022 18:13:25 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3332B35843;
+        Mon, 28 Mar 2022 15:02:01 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id z7so18864960iom.1;
+        Mon, 28 Mar 2022 15:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1G+GATea/gEtUw/pWJqQ7Ixi4GCktSB1NgpSqf6SUpc=;
-        b=ff3pbwSNU4OAWweoWrN7aL23MQscP4KSYMsHZHsOC017RgC7WbeViHy1tfJAFmN/lQ
-         qFp8xCMw3u+dl/WdgmtmFbZqfFMl58je1HZUNky8io5xTnbaPRkXQ0p9+/bqFsnrV13e
-         87CnLMXfFAyqOPugLMqgnQXA6f0hv+SOIMNb34gnrh6Uz6AI78Fkp4AuyeHzB0d6uLcG
-         24glXp8ngdRF5tzOTnN1VkSFOoL4g8eAO23bcA6Az6CbvyuOLOjBzyYj9FiQnp3FzjIy
-         Oa0ziPsOihA8dfCKzeX/IHsSZgFu39XCtQjS47BWtppn9IvP/uTn5PoEVWvC2O2FdHiy
-         1q2A==
+        bh=Zku73QpalQjK7mBNfRnqmkOyZliZDHv6CNwYX93bSZc=;
+        b=W+nx2Rs6t4ExOmIqnQeOQD4iJiAsZfVSjiPnDOEoC/PKN0duaeeK+1RfeOBQOF0bYR
+         zIVxDalhLdptimGuGHIEcTFR8MpB8preZuosCSp+LNTX5eHhwGbdhODb9JTnZcLPuT1I
+         QLOMdrrNMAqatCzNY/tm4cqE5mqSjVp0Q/Tu8PY7CF8uCnSmvjGF1mYwh7HEitLEIxWD
+         sI6mZA/N2BW2IsplbUB42Bz0gdBt4R2fZZP1qMmENIuO5OiIC+b0U4MAt6670q1CDugT
+         6PPJTaNT+2GePra2dTPgvFff94DWcxW3cdhHlYkEX8UXDhvu6QOPGNs/qFv8HpxukLcj
+         /I4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1G+GATea/gEtUw/pWJqQ7Ixi4GCktSB1NgpSqf6SUpc=;
-        b=uGvmFqfWnAYEtz3BAlUvK5Ks0onw6hb2BWciVr+x0co2WPvtDctuDpKDSeA+ERoH31
-         UqMHq07v0oyr9EpQFdyy0fE/37d7TBGNXc8br029PRa7q0ua1Q4PGicYHJlvKLPYFD8I
-         0RKZta0zNh7Rpk3R/4onOUN8rw95ZWT4aiNe97Jv5SXhn0s4TAPB4Iv9IiUy8bMRRQLO
-         eRunes3mkr9GJhBd8pT713TrZ97iJM1BIzFpJtsWgdTDFxkpUHYj5rFkg6c9dLN6mxoj
-         XVAWk8H6X3Omqu+ks+A6e2tF22fo+Nq/abAGzpg+6fVzNsYpnQehQ4WHq2q3Ls3tc9Zo
-         qaWA==
-X-Gm-Message-State: AOAM533P83o7BzPEqgmag74sYRsgK5+95Oh7CbMO3gFCp919lGPATQvG
-        Xt0be7dbVrw7NzXKnqVir7UUM+DIU+jmtx2rR6Rp4w==
-X-Google-Smtp-Source: ABdhPJxqDLS9Je1WTyYK6Q9CxOUbLtpYQHy7lZgCBXI5DykbKcNLXZhVSdUAPUvSuW//+FNsHKaW+O1uZ4s6yxxHfHY=
-X-Received: by 2002:a05:600c:2905:b0:381:67e2:3992 with SMTP id
- i5-20020a05600c290500b0038167e23992mr1686003wmd.182.1648502734235; Mon, 28
- Mar 2022 14:25:34 -0700 (PDT)
+        bh=Zku73QpalQjK7mBNfRnqmkOyZliZDHv6CNwYX93bSZc=;
+        b=pdqIzV06jo8SuEFXfdXAT24GbBjOdrLTiH9csBtepeqvT1dJFRX/20EhU+1IKOX8AI
+         w3Y1RbVevhUugNZnjbiytYwsbXj31mGKAVIE8EHewFtuAE7xoBFBl2lnmRX3sswsjbM0
+         5FNRlQgQdA/IA3Iu0jkTYwRatCbdVvrPakVJBW9yIk428y6K7VIGckMKxH1Be2bPECyN
+         /F3ZPg1NhW3bqa0Q0SJ+3ct6VRMkBXKdKgaDJiwKisJdm+dsEmD9LWD4xx35y9AZ+uJp
+         HDArddwVU7y8aZ3ymkYnYATSE2DHdpcFQq9kcmp46EngiMjefqTXQWm9/KOsdWKqwYxJ
+         R7ZQ==
+X-Gm-Message-State: AOAM531DMSrArzbqz4JDBhWCNJIm30453f2DY9Tsq73GWJtIpRx/hhxY
+        x61zTWerfb738B/jmIKuDYZNP5iQ6akyk5SH3KXWiT2m
+X-Google-Smtp-Source: ABdhPJyta6fjjW/oHgljQRh12/jOLrq4xulwQgvJrCe6paXK4K0lFuDYs3HHKwvHP2IIgblrMB9kJD1xtRWcuN06kfM=
+X-Received: by 2002:a05:6e02:1562:b0:2c9:cb97:9a4 with SMTP id
+ k2-20020a056e02156200b002c9cb9709a4mr1324007ilu.71.1648503345774; Mon, 28 Mar
+ 2022 14:35:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220328062414.1893550-1-irogers@google.com> <20220328062414.1893550-4-irogers@google.com>
- <YkIaYq2alnNUiIfr@kernel.org> <CAP-5=fVfYtu=wcfUQEzwuJMhxexi3d8hVqF5QFLkj_FWPHLK5Q@mail.gmail.com>
- <CE94B4BA-5073-4332-A13E-2CD20379AA19@gmail.com>
-In-Reply-To: <CE94B4BA-5073-4332-A13E-2CD20379AA19@gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 28 Mar 2022 14:25:21 -0700
-Message-ID: <CAP-5=fV+DiB=_+R+g+FLgLOyY5q205OGjfsaZntVKFy4jM4rcg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] perf cpumap: Add intersect function.
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-7-benjamin.tissoires@redhat.com> <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
+ <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
+ <CAEf4BzYVu9JVJvKZK3S9HGwpyPiWrwKPGsTz3wXC_+vmRYGdNw@mail.gmail.com> <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
+In-Reply-To: <CAO-hwJKPxKCzxCKGpH85j5VG3bQk+7axDYpxYoy-12yL7AQj2w@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 28 Mar 2022 14:35:34 -0700
+Message-ID: <CAEf4BzZA7Wmg=N42ib_r9Jm8THXuGGR3CPgTqMyw9n2=gd_+Kg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
+ descriptor from an eBPF program
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 2:00 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
+On Sun, Mar 27, 2022 at 11:57 PM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
 >
+> On Fri, Mar 25, 2022 at 6:00 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Wed, Mar 23, 2022 at 9:08 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > Hi Alexei,
+> > >
+> > > On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+> > > > <benjamin.tissoires@redhat.com> wrote:
+> > > > >
+> > > > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+> > > > > +{
+> > > > > +       int ret;
+> > > > > +       struct hid_bpf_ctx_kern ctx = {
+> > > > > +               .type = HID_BPF_RDESC_FIXUP,
+> > > > > +               .hdev = hdev,
+> > > > > +               .size = *size,
+> > > > > +       };
+> > > > > +
+> > > > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
+> > > > > +       if (!ctx.data)
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
+> > > > > +
+> > > > > +       ret = hid_bpf_run_progs(hdev, &ctx);
+> > > > > +       if (ret)
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       if (ctx.size > ctx.allocated_size)
+> > > > > +               goto ignore_bpf;
+> > > > > +
+> > > > > +       *size = ctx.size;
+> > > > > +
+> > > > > +       if (*size) {
+> > > > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
+> > > > > +       } else {
+> > > > > +               rdesc = NULL;
+> > > > > +               kfree(ctx.data);
+> > > > > +       }
+> > > > > +
+> > > > > +       return rdesc;
+> > > > > +
+> > > > > + ignore_bpf:
+> > > > > +       kfree(ctx.data);
+> > > > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > > > > +}
+> > > > > +
+> > > > >  int __init hid_bpf_module_init(void)
+> > > > >  {
+> > > > >         struct bpf_hid_hooks hooks = {
+> > > > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
+> > > > >                 .pre_link_attach = hid_bpf_pre_link_attach,
+> > > > > +               .post_link_attach = hid_bpf_post_link_attach,
+> > > > >                 .array_detach = hid_bpf_array_detach,
+> > > > >         };
+> > > > >
+> > > > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > > > > index 937fab7eb9c6..3182c39db006 100644
+> > > > > --- a/drivers/hid/hid-core.c
+> > > > > +++ b/drivers/hid/hid-core.c
+> > > > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
+> > > > >                 return -ENODEV;
+> > > > >         size = device->dev_rsize;
+> > > > >
+> > > > > -       buf = kmemdup(start, size, GFP_KERNEL);
+> > > > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
+> > > > > +       buf = hid_bpf_report_fixup(device, start, &size);
+> > > >
+> > > > Looking at this patch and the majority of other patches...
+> > > > the code is doing a lot of work to connect HID side with bpf.
+> > > > At the same time the evolution of the patch series suggests
+> > > > that these hook points are not quite stable. More hooks and
+> > > > helpers are being added.
+> > > > It tells us that it's way too early to introduce a stable
+> > > > interface between HID and bpf.
+> > >
+> > > I understand that you might be under the impression that the interface
+> > > is changing a lot, but this is mostly due to my poor knowledge of all
+> > > the arcanes of eBPF.
+> > > The overall way HID-BPF works is to work on a single array, and we
+> > > should pretty much be sorted out. There are a couple of helpers to be
+> > > able to communicate with the device, but the API has been stable in
+> > > the kernel for those for quite some time now.
+> > >
+> > > The variations in the hooks is mostly because I don't know what is the
+> > > best representation we can use in eBPF for those, and the review
+> > > process is changing that.
+> >
+> > I think such a big feature as this one, especially that most BPF folks
+> > are (probably) not familiar with the HID subsystem in the kernel,
+> > would benefit from a bit of live discussion during BPF office hours.
+> > Do you think you can give a short overview of what you are trying to
+> > achieve with some background context on HID specifics at one of the
+> > next BPF office hours? We have a meeting scheduled every week on
+> > Thursday, 9am Pacific time. But people need to put their topic onto
+> > the agenda, otherwise the meeting is cancelled. See [0] for
+> > spreadsheet and links to Zoom meeting, agenda, etc.
 >
+> This sounds like a good idea. I just added my topic on the agenda and
+> will prepare some slides.
 >
-> On March 28, 2022 5:54:06 PM GMT-03:00, Ian Rogers <irogers@google.com> wrote:
-> >On Mon, Mar 28, 2022 at 1:28 PM Arnaldo Carvalho de Melo
-> ><acme@kernel.org> wrote:
-> >>
-> >> Em Sun, Mar 27, 2022 at 11:24:12PM -0700, Ian Rogers escreveu:
-> >> > The merge function gives the union of two cpu maps. Add an intersect
-> >> > function which will be used in the next change.
-> >> >
-> >> > Signed-off-by: Ian Rogers <irogers@google.com>
-> >> > ---
-> >> >  tools/lib/perf/cpumap.c              | 38 ++++++++++++++++++++++++++++
-> >> >  tools/lib/perf/include/perf/cpumap.h |  2 ++
-> >> >  2 files changed, 40 insertions(+)
-> >> >
-> >> > diff --git a/tools/lib/perf/cpumap.c b/tools/lib/perf/cpumap.c
-> >> > index 953bc50b0e41..56b4d213039f 100644
-> >> > --- a/tools/lib/perf/cpumap.c
-> >> > +++ b/tools/lib/perf/cpumap.c
-> >> > @@ -393,3 +393,41 @@ struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
-> >> >       perf_cpu_map__put(orig);
-> >> >       return merged;
-> >> >  }
-> >> > +
-> >> > +struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
-> >> > +                                          struct perf_cpu_map *other)
-> >> > +{
-> >> > +     struct perf_cpu *tmp_cpus;
-> >> > +     int tmp_len;
-> >> > +     int i, j, k;
-> >> > +     struct perf_cpu_map *merged = NULL;
-> >> > +
-> >> > +     if (perf_cpu_map__is_subset(other, orig))
-> >> > +             return orig;
-> >> > +     if (perf_cpu_map__is_subset(orig, other)) {
-> >> > +             perf_cpu_map__put(orig);
-> >>
-> >> Why this put(orig)?
-> >
-> >As with merge, if orig isn't returned then it is put.
+
+Great! Unfortunately I personally have a conflict this week and won't
+be able to attend, so I'll have to catch up somehow through word of
+mouth :( Next week's BPF office hours would be best, but I don't want
+to delay discussions just because of me.
+
+> Cheers,
+> Benjamin
 >
-> For merge I can see it dropping a reference, i.e. get b and merge it into a, after that b was "consumed"
+> >
+> >   [0] https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXjywWa0AejEveU
+> >
+> > [...]
+> >
 >
-> But for intersect?
-
-The current use case is the intersect of all online CPUs with the
-merge of all CPU maps from evsels. So we can generally just reuse
-all_cpus, or the common case of both maps contain every CPU. I think
-the pattern makes code like:
-
-evlist->cpus = perf_cpu_map__intersect(evlist->cpus, other);
-
-not quite as messy, as without the put you need:
-
-tmp = perf_cpu_map__intersect(evlist->cpus, other);
-perf_cpu_map__put(evlist->cpus);
-evlist->cpus = tmp;
-
-I'm somewhat agnostic on what the API should be, but it'd be nice if
-merge and intersect behaved in a similar way.
-
-Thanks,
-Ian
-
-> >
-> >> > +             return perf_cpu_map__get(other);
-> >>
-> >> And why the get here and not on the first if?
-> >
-> >The first argument orig is either put or returned while the second may
-> >be returned only if the reference count is incremented. We could
-> >change the API for merge and intersect to put both arguments, or to
-> >not put either argument.
-> >
-> >Thanks,
-> >Ian
-> >
-> >> > +     }
-> >> > +
-> >> > +     tmp_len = max(orig->nr, other->nr);
-> >> > +     tmp_cpus = malloc(tmp_len * sizeof(struct perf_cpu));
-> >> > +     if (!tmp_cpus)
-> >> > +             return NULL;
-> >> > +
-> >> > +     i = j = k = 0;
-> >> > +     while (i < orig->nr && j < other->nr) {
-> >> > +             if (orig->map[i].cpu < other->map[j].cpu)
-> >> > +                     i++;
-> >> > +             else if (orig->map[i].cpu > other->map[j].cpu)
-> >> > +                     j++;
-> >> > +             else {
-> >> > +                     j++;
-> >> > +                     tmp_cpus[k++] = orig->map[i++];
-> >> > +             }
-> >> > +     }
-> >> > +     if (k)
-> >> > +             merged = cpu_map__trim_new(k, tmp_cpus);
-> >> > +     free(tmp_cpus);
-> >> > +     perf_cpu_map__put(orig);
-> >> > +     return merged;
-> >> > +}
-> >> > diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
-> >> > index 4a2edbdb5e2b..a2a7216c0b78 100644
-> >> > --- a/tools/lib/perf/include/perf/cpumap.h
-> >> > +++ b/tools/lib/perf/include/perf/cpumap.h
-> >> > @@ -19,6 +19,8 @@ LIBPERF_API struct perf_cpu_map *perf_cpu_map__read(FILE *file);
-> >> >  LIBPERF_API struct perf_cpu_map *perf_cpu_map__get(struct perf_cpu_map *map);
-> >> >  LIBPERF_API struct perf_cpu_map *perf_cpu_map__merge(struct perf_cpu_map *orig,
-> >> >                                                    struct perf_cpu_map *other);
-> >> > +LIBPERF_API struct perf_cpu_map *perf_cpu_map__intersect(struct perf_cpu_map *orig,
-> >> > +                                                      struct perf_cpu_map *other);
-> >> >  LIBPERF_API void perf_cpu_map__put(struct perf_cpu_map *map);
-> >> >  LIBPERF_API struct perf_cpu perf_cpu_map__cpu(const struct perf_cpu_map *cpus, int idx);
-> >> >  LIBPERF_API int perf_cpu_map__nr(const struct perf_cpu_map *cpus);
-> >> > --
-> >> > 2.35.1.1021.g381101b075-goog
-> >>
-> >> --
-> >>
-> >> - Arnaldo
