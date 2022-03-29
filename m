@@ -2,73 +2,77 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB9E0C433FE
-	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 04:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E99C433FE
+	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:08:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbiC2Eye (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Mar 2022 00:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S232266AbiC2FKa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Mar 2022 01:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiC2Eyd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Mar 2022 00:54:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F2435AAE;
-        Mon, 28 Mar 2022 21:52:51 -0700 (PDT)
+        with ESMTP id S232262AbiC2FK2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Mar 2022 01:10:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D002D115B;
+        Mon, 28 Mar 2022 22:08:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05034B80E5E;
-        Tue, 29 Mar 2022 04:52:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F86C340ED;
-        Tue, 29 Mar 2022 04:52:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 764CC61457;
+        Tue, 29 Mar 2022 05:08:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C644C34110;
+        Tue, 29 Mar 2022 05:08:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648529568;
-        bh=nqtB51WbL533ssiMiWnXoFzRKK3tHm0SboYWFYoGas8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AITz1Q/fLsZb40JAq2rmZd7/yGi8qkxegN30pgF3p9QYTlW6I4UbbfHPZW8XFkP2P
-         r7cGTbZyUfDaV8GacobSTIx+onP1T1//5gNnw9jXnoCAYSlzooJNOmMLngbTzU6aBV
-         e3p+zn0StVWXFbX0xykcR7nfcQzNTfNkBa8HZ82UGusFWuPtktOaVl/J6DyXyBJSk0
-         Glkh2j/ZlLCMWB/d22Pxrkk4ZNzTkQdw6eaX1kVy41jrdPYHBRzWoqJrcrYkT+2ghx
-         FsolsnNgFXqm5TJxAGjRJLjPTZCZMfiOJHLQt0+QJV7QjupOvOudzbRa+IJAYR5XNj
-         XgRwW19rOmOfg==
-Date:   Mon, 28 Mar 2022 21:52:47 -0700
+        s=k20201202; t=1648530524;
+        bh=SQPfqsNvIbtB/mPXmku6u4/+/U4nHoOxy19MUhP3/U4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ox5xLf/wAZ+7mr9+R4dDUesDYPCtrwcyd9Y5Erc1aYZrMlLj7ODNijea70qrq/Kts
+         OnLZ88vGv7148Ztx+BQJjTN2dqlYyxBaGkSBtUFGyOxhElzzsKZ3W3A1qzn2nyHr4/
+         IKh2t9BJbFadGpFugv9HHxMP3MM/bjFMZIPnxKf5inoho7QzS+nNVgoqIrm4IKBkaf
+         /DePvJI5IEC3Np6yWqjGikq9ro2BmYLLNgEXEdJPAFx7mXnt0jfwSJdZRV5VgoJZgo
+         OS+Tm5AIjJLogHCW43Dlh/6spS0LLLfiqfMbkDqTnN91qhwPkSC1areLBumlI781EB
+         1EbVzlADclsnw==
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Cc:     <andrew@lunn.ch>, <bpf@vger.kernel.org>, <corbet@lwn.net>,
-        <davem@davemloft.net>, <f.fainelli@gmail.com>,
-        <linux-doc@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>
-Subject: Re: [PATCH net 00/13] docs: update and move the netdev-FAQ
-Message-ID: <20220328215247.69d31c4a@kernel.org>
-In-Reply-To: <20220329043808.95053-1-kuniyu@amazon.co.jp>
-References: <20220327025400.2481365-1-kuba@kernel.org>
-        <20220329043808.95053-1-kuniyu@amazon.co.jp>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
+        f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net v2 01/14] docs: netdev: replace references to old archives
+Date:   Mon, 28 Mar 2022 22:08:17 -0700
+Message-Id: <20220329050830.2755213-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220329050830.2755213-1-kuba@kernel.org>
+References: <20220329050830.2755213-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 29 Mar 2022 13:38:08 +0900 Kuniyuki Iwashima wrote:
-> From:   Jakub Kicinski <kuba@kernel.org>
-> Date:   Sat, 26 Mar 2022 19:53:47 -0700
-> > A section of documentation for tree-specific process quirks had
-> > been created a while back. There's only one tree in it, so far,
-> > the tip tree, but the contents seem to answer similar questions
-> > as we answer in the netdev-FAQ. Move the netdev-FAQ.
-> > 
-> > Take this opportunity to touch up and update a few sections.  
-> 
-> Thanks for update!
-> 
-> I would like to clarify one thing about this website.
-> 
->   http://vger.kernel.org/~davem/net-next.html
-> 
-> I often check this before submitting patches.  I like this much, but it
-> seems not working properly for now.  Is this no longer maintained or by
-> coincidence this time?  If I could help something, please let me know :)
+Most people use (or should use) lore at this point.
+Replace the pointers to older archiving systems.
 
-Sorry about that, DaveM has been traveling during this merge window. 
-He said he'll fix it soon.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ Documentation/networking/netdev-FAQ.rst | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
+index e26532f49760..25b8a7de737c 100644
+--- a/Documentation/networking/netdev-FAQ.rst
++++ b/Documentation/networking/netdev-FAQ.rst
+@@ -16,10 +16,8 @@ Note that some subsystems (e.g. wireless drivers) which have a high
+ volume of traffic have their own specific mailing lists.
+ 
+ The netdev list is managed (like many other Linux mailing lists) through
+-VGER (http://vger.kernel.org/) and archives can be found below:
+-
+--  http://marc.info/?l=linux-netdev
+--  http://www.spinics.net/lists/netdev/
++VGER (http://vger.kernel.org/) with archives available at
++https://lore.kernel.org/netdev/
+ 
+ Aside from subsystems like that mentioned above, all network-related
+ Linux development (i.e. RFC, review, comments, etc.) takes place on
+-- 
+2.34.1
+
