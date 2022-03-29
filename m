@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB90DC433FE
-	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 066D2C433F5
+	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbiC2FKp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Mar 2022 01:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S232285AbiC2FKo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Mar 2022 01:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbiC2FKc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232291AbiC2FKc (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 29 Mar 2022 01:10:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F818636B;
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1C85FDB;
         Mon, 28 Mar 2022 22:08:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5093B815AA;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8B292CE1754;
         Tue, 29 Mar 2022 05:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E74C34100;
-        Tue, 29 Mar 2022 05:08:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E61C34111;
+        Tue, 29 Mar 2022 05:08:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648530528;
-        bh=vdjnHae9b0yzMsExMtKNC+WLL55dm1Lg2N7VoIhWL24=;
+        s=k20201202; t=1648530527;
+        bh=NatzCXB0aPSVFPpNVuRVhJQSjaINFph+hqtkv+/sTDg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W8Mz5RkARNFo3A/b3V1DEMDphv1PPEJnbGTyOFSJJfsXF5c+vVCqso3pE2qPfU+G4
-         TaIrE7HN480TEesVxx3IOWqMRhlE1Tpio3nSK8hYEDfpSomBYCRLwbyoJXniploFtY
-         8gdKvoD6g5zLYFpMpUZffzvw7CqSYdabpUI3skU6arJGbMA7sy6ZlCZlyhoQ8ich8N
-         9EBFwBmb9itGGnpf43FDNUrc6o/afgwF2TlFASSmv2Gp5fw+cBIBFHe3a0gsuvgsnS
-         VgWaJz3lmgD7IZDcMLXvIDJ/k7OrXSVtU9KHbLP41pabcdUeQZhSZd5jHHqxM+exY5
-         gKhaibueVaZ+Q==
+        b=lLwpIdpa50Zo97saRCnTyZRlS6GqvXabaSulq513kbpStWecWbXfI6y60unjNldiX
+         A8eF3Z+4p3fb1Y44z1CZf4vqIT7yJUcqCJ0YS0mXjb/mPdtWQ/16mepBe1Aw0BLLep
+         NqUmZ4XU5RRBhVlfuQCBJzdeTutgOlah+x8WZ8LtbY+5X6hqCYjzUgs+pXiTcheY+J
+         vLZ9NqmAO1tvVB29YuZlUyf2OtqQjqiB+robbu+R4MO6Foa3UnihzUV80ks7Sf1cYB
+         0+2E8v6czHKrINZTdctIaclbiLmpTRJxdB3ml/hZs/1b9j+Z3DaL6YTBdZ/W7fr+Kr
+         gd2JNrHVNE4SQ==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 08/14] docs: netdev: rephrase the 'should I update patchwork' question
-Date:   Mon, 28 Mar 2022 22:08:24 -0700
-Message-Id: <20220329050830.2755213-9-kuba@kernel.org>
+Subject: [PATCH net v2 05/14] docs: netdev: note that RFC postings are allowed any time
+Date:   Mon, 28 Mar 2022 22:08:21 -0700
+Message-Id: <20220329050830.2755213-6-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220329050830.2755213-1-kuba@kernel.org>
 References: <20220329050830.2755213-1-kuba@kernel.org>
@@ -48,32 +48,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make the question shorter and adjust the start of the answer accordingly.
+Document that RFCs are allowed during the merge window.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+--
+v2: new patch
 ---
- Documentation/networking/netdev-FAQ.rst | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Documentation/networking/netdev-FAQ.rst | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index 00ac300ebe6a..9c455d08510d 100644
+index 041993258dda..f4c77efa75d4 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -125,9 +125,11 @@ Asking the maintainer for status updates on your
- patch is a good way to ensure your patch is ignored or pushed to the
- bottom of the priority list.
+@@ -74,6 +74,9 @@ sent to netdev, but knowing the above, you can predict that in advance.
+   Do not send new ``net-next`` content to netdev during the
+   period during which ``net-next`` tree is closed.
  
--I submitted multiple versions of the patch series. Should I directly update patchwork for the previous versions of these patch series?
----------------------------------------------------------------------------------------------------------------------------------------
--No, please don't interfere with the patch status on patchwork, leave
-+Should I directly update patchwork state of my own patches?
-+-----------------------------------------------------------
-+It may be tempting to help the maintainers and update the state of your
-+own patches when you post a new version or spot a bug. Please do not do that.
-+Interfering with the patch status on patchwork will only cause confusion. Leave
- it to the maintainer to figure out what is the most recent and current
- version that should be applied. If there is any doubt, the maintainer
- will reply and ask what should be done.
++RFC patches sent for review only are obviously welcome at any time
++(use ``--subject-prefix='RFC net-next'`` with ``git format-patch``).
++
+ Shortly after the two weeks have passed (and vX.Y-rc1 is released), the
+ tree for ``net-next`` reopens to collect content for the next (vX.Y+1)
+ release.
 -- 
 2.34.1
 
