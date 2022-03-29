@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 422F0C4332F
-	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB90DC433FE
+	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiC2FKn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Mar 2022 01:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
+        id S232347AbiC2FKp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Mar 2022 01:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbiC2FKb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:10:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5093462FC;
-        Mon, 28 Mar 2022 22:08:49 -0700 (PDT)
+        with ESMTP id S232292AbiC2FKc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Mar 2022 01:10:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F818636B;
+        Mon, 28 Mar 2022 22:08:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9EDD0CE18CA;
-        Tue, 29 Mar 2022 05:08:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A8EC34113;
-        Tue, 29 Mar 2022 05:08:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5093B815AA;
+        Tue, 29 Mar 2022 05:08:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E74C34100;
+        Tue, 29 Mar 2022 05:08:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648530525;
-        bh=18LOwxv9Crwm5nuEP3OKoqUwMwIaZcaevvmmZ1Z0ICg=;
+        s=k20201202; t=1648530528;
+        bh=vdjnHae9b0yzMsExMtKNC+WLL55dm1Lg2N7VoIhWL24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tQiF9mAvkz9VlCBkW7KDYUP5v4m1XcqqY3FsWVo36/wiVumjtBMZpDGfV2YERHIAg
-         LCJGW67mTL1r2mDNLlXS8DNjgfyC/26KPZlvU13HuYMUC2j1UwIl76BlWWzJgWkavO
-         TsouoDdUeF4TSwAQ+x2yN61IXs23Hes6MuzXqkP+k+nHALn4am05uCc4XmorUSOnao
-         eQMke+VT2FI8hOPEwK615pvDlx9e5u6TV+v7Ox60TupjgV1W6Vrbn7fRilpOw4Gr98
-         EA10jWjXcXNNp76C1rEJ9J6mxvIG6h3iMleQA7qVOF+m92cOjtI04W4FW2aDEH443o
-         y0+RRTbMH79iA==
+        b=W8Mz5RkARNFo3A/b3V1DEMDphv1PPEJnbGTyOFSJJfsXF5c+vVCqso3pE2qPfU+G4
+         TaIrE7HN480TEesVxx3IOWqMRhlE1Tpio3nSK8hYEDfpSomBYCRLwbyoJXniploFtY
+         8gdKvoD6g5zLYFpMpUZffzvw7CqSYdabpUI3skU6arJGbMA7sy6ZlCZlyhoQ8ich8N
+         9EBFwBmb9itGGnpf43FDNUrc6o/afgwF2TlFASSmv2Gp5fw+cBIBFHe3a0gsuvgsnS
+         VgWaJz3lmgD7IZDcMLXvIDJ/k7OrXSVtU9KHbLP41pabcdUeQZhSZd5jHHqxM+exY5
+         gKhaibueVaZ+Q==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 03/14] docs: netdev: move the patch marking section up
-Date:   Mon, 28 Mar 2022 22:08:19 -0700
-Message-Id: <20220329050830.2755213-4-kuba@kernel.org>
+Subject: [PATCH net v2 08/14] docs: netdev: rephrase the 'should I update patchwork' question
+Date:   Mon, 28 Mar 2022 22:08:24 -0700
+Message-Id: <20220329050830.2755213-9-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220329050830.2755213-1-kuba@kernel.org>
 References: <20220329050830.2755213-1-kuba@kernel.org>
@@ -48,62 +48,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We want people to mark their patches with net and net-next in the subject.
-Many miss doing that. Move the FAQ section which points that out up, and
-place it after the section which enumerates the trees, that seems like
-a pretty logical place for it. Since the two sections are together we
-can remove a little bit (not too much) of the repetition.
-
-v2: also remove the text for non-git setups, we want people to use git.
+Make the question shorter and adjust the start of the answer accordingly.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- Documentation/networking/netdev-FAQ.rst | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ Documentation/networking/netdev-FAQ.rst | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index f7e5755e013e..fd5f5a1a0846 100644
+index 00ac300ebe6a..9c455d08510d 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -35,6 +35,17 @@ mainline tree from Linus, and ``net-next`` is where the new code goes
- - https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
- - https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
+@@ -125,9 +125,11 @@ Asking the maintainer for status updates on your
+ patch is a good way to ensure your patch is ignored or pushed to the
+ bottom of the priority list.
  
-+How do I indicate which tree (net vs. net-next) my patch should be in?
-+----------------------------------------------------------------------
-+To help maintainers and CI bots you should explicitly mark which tree
-+your patch is targeting. Assuming that you use git, use the prefix
-+flag::
-+
-+  git format-patch --subject-prefix='PATCH net-next' start..finish
-+
-+Use ``net`` instead of ``net-next`` (always lower case) in the above for
-+bug-fix ``net`` content.
-+
- How often do changes from these trees make it to the mainline Linus tree?
- -------------------------------------------------------------------------
- To understand this, you need to know a bit of background information on
-@@ -90,20 +101,6 @@ and note the top of the "tags" section.  If it is rc1, it is early in
- the dev cycle.  If it was tagged rc7 a week ago, then a release is
- probably imminent.
- 
--How do I indicate which tree (net vs. net-next) my patch should be in?
------------------------------------------------------------------------
--Firstly, think whether you have a bug fix or new "next-like" content.
--Then once decided, assuming that you use git, use the prefix flag, i.e.
--::
--
--  git format-patch --subject-prefix='PATCH net-next' start..finish
--
--Use ``net`` instead of ``net-next`` (always lower case) in the above for
--bug-fix ``net`` content.  If you don't use git, then note the only magic
--in the above is just the subject text of the outgoing e-mail, and you
--can manually change it yourself with whatever MUA you are comfortable
--with.
--
- I sent a patch and I'm wondering what happened to it - how can I tell whether it got merged?
- --------------------------------------------------------------------------------------------
- Start by looking at the main patchworks queue for netdev:
+-I submitted multiple versions of the patch series. Should I directly update patchwork for the previous versions of these patch series?
+---------------------------------------------------------------------------------------------------------------------------------------
+-No, please don't interfere with the patch status on patchwork, leave
++Should I directly update patchwork state of my own patches?
++-----------------------------------------------------------
++It may be tempting to help the maintainers and update the state of your
++own patches when you post a new version or spot a bug. Please do not do that.
++Interfering with the patch status on patchwork will only cause confusion. Leave
+ it to the maintainer to figure out what is the most recent and current
+ version that should be applied. If there is any doubt, the maintainer
+ will reply and ask what should be done.
 -- 
 2.34.1
 
