@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E1B5C433EF
-	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B82DBC433F5
+	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiC2FKq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Mar 2022 01:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S232306AbiC2FKs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Mar 2022 01:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiC2FKm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232307AbiC2FKm (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 29 Mar 2022 01:10:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C3B65D0;
-        Mon, 28 Mar 2022 22:08:51 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FA7BC92;
+        Mon, 28 Mar 2022 22:08:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D486B816AA;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EF53B8128F;
+        Tue, 29 Mar 2022 05:08:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DC5C34116;
         Tue, 29 Mar 2022 05:08:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B23C6C34110;
-        Tue, 29 Mar 2022 05:08:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648530529;
-        bh=597EzgyqUo5HMoPJfzujtM5GBcYMh6YxaHst/EREyU4=;
+        s=k20201202; t=1648530531;
+        bh=hi1FoOl5SFC8RxD/oG8PLi6b4942NDmvCh7csz/0tD0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PY3pXkMJXHfJO7z2MObhIyGS47wUKwUHgySADVIVqDbvfK7VX1HinweHctAWXbbBI
-         3b5t5e+lxaZ8U2fVu3avspf+HUNFI33BVVF6zfgGZ8ZmQNqZyZPLO+wBX2LR9eQ7bu
-         zaQO2RTeqyeM9EkYAlth3rYdMabfnSnm6DGQsLsvCGxUdxmN1AmWA79n5SlTBUQGq2
-         1oTy4Eh7KJSKfp1VW67nvuXqF+gQCGvUjc16pb8GIZjihCPTWuFM7gbnnxCb9Y8/i7
-         lS7CMFO/TCAuhLCN/c1ylL+6fOfuOV2GUIGfGgMPmcrW89Ed/mwEJ6Zo/zGT/+JWmG
-         m4r5od9pq2Nyw==
+        b=h1k9yPcikxXQ/62q87WBP4r1MghH9UjyPYGQSsi5uvNfHG249QkoIrK+JK9BCZA3v
+         EkddNFmK/Dg4xkpEejG8OYa44dnmOhyVo87XUH8dE9P0h9AXWUL712QJThHkYisI83
+         axkuq2Z+BbCZVxlaujhJHHQPM3U3qpTq+ylikfZUGZkppRTwN/2uhuTV/eDqEWQwND
+         1p5M+ARswUjnu0NukCQ4bTSjz8UFFfUoMKTMkq6akvSCg15i1vUsZqnR/W1oSfa9nM
+         9mkhgaBaWsR0R+TCg+el+xiT+Ycg33iYjdvOtlshukK8GA8RQCkn6KJRdbswRp0zLX
+         r7GrXQV3pf69A==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 09/14] docs: netdev: add a question about re-posting frequency
-Date:   Mon, 28 Mar 2022 22:08:25 -0700
-Message-Id: <20220329050830.2755213-10-kuba@kernel.org>
+Subject: [PATCH net v2 13/14] docs: netdev: broaden the new vs old code formatting guidelines
+Date:   Mon, 28 Mar 2022 22:08:29 -0700
+Message-Id: <20220329050830.2755213-14-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220329050830.2755213-1-kuba@kernel.org>
 References: <20220329050830.2755213-1-kuba@kernel.org>
@@ -48,38 +48,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have to tell people to stop reposting to often lately,
-or not to repost while the discussion is ongoing.
-Document this.
+Convert the "should I use new or old comment formatting" to cover
+all formatting. This makes the question itself shorter.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- Documentation/networking/netdev-FAQ.rst | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ Documentation/networking/netdev-FAQ.rst | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index 9c455d08510d..f8b89dc81cab 100644
+index a18e4e671e85..c456b5225d66 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -140,6 +140,17 @@ No, please resend the entire patch series and make sure you do number your
- patches such that it is clear this is the latest and greatest set of patches
- that can be applied.
+@@ -183,10 +183,10 @@ Is the comment style convention different for the networking content?
+    * another line of text
+    */
  
-+I have received review feedback, when should I post a revised version of the patches?
-+-------------------------------------------------------------------------------------
-+Allow at least 24 hours to pass between postings. This will ensure reviewers
-+from all geographical locations have a chance to chime in. Do not wait
-+too long (weeks) between postings either as it will make it harder for reviewers
-+to recall all the context.
-+
-+Make sure you address all the feedback in your new posting. Do not post a new
-+version of the code if the discussion about the previous version is still
-+ongoing, unless directly instructed by a reviewer.
-+
- I submitted multiple versions of a patch series and it looks like a version other than the last one has been accepted, what should I do?
- ----------------------------------------------------------------------------------------------------------------------------------------
- There is no revert possible, once it is pushed out, it stays like that.
+-I am working in existing code that has the former comment style and not the latter. Should I submit new code in the former style or the latter?
+------------------------------------------------------------------------------------------------------------------------------------------------
+-Make it the latter style, so that eventually all code in the domain
+-of netdev is of this format.
++I am working in existing code which uses non-standard formatting. Which formatting should I use?
++------------------------------------------------------------------------------------------------
++Make your code follow the most recent guidelines, so that eventually all code
++in the domain of netdev is in the preferred format.
+ 
+ I found a bug that might have possible security implications or similar. Should I mail the main netdev maintainer off-list?
+ ---------------------------------------------------------------------------------------------------------------------------
 -- 
 2.34.1
 
