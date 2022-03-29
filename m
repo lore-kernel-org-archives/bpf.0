@@ -2,75 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27980C43219
-	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:09:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45D7BC433EF
+	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 06:04:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbiC2FKu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Mar 2022 01:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        id S232816AbiC2GF6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Mar 2022 02:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232303AbiC2FKm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:10:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786A1A1AE;
-        Mon, 28 Mar 2022 22:08:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08828B816AF;
-        Tue, 29 Mar 2022 05:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5251DC34113;
-        Tue, 29 Mar 2022 05:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648530530;
-        bh=iG4nUMUQvCfeB3hYqsLbEyek7IQMg3zQLz65BIzoLOI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mNb98lZQO0A/6FW9d7cNpbAzgI/DLFXJPGqqideZ2CSQUHvTepPOjto3nKbMOjjlH
-         bydygwBPua5Lceum340B6hSe3jCRff0A4LRqd+E9mHu+2GXT3VPCI3yOSRnK8UFz7/
-         K78elL2DF2cSbp57quEs5jGcd3wPDw6yVKqqf4gRY62YBlmGCkKhTShIbaiM+qTAtg
-         DAdfUf4OYWskJUIRVWvIocWCA8108kgA/f92+1cmj/881lYuokNNR6EVPGbFipkPc0
-         /clh2c6krvtWxQ+EzrJP1Ft1JHqOcjLLwELs5WIdlxYPJbkBdjZjeQgPhVrgvSpCWR
-         W7g+o0oFD3VWQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     davem@davemloft.net
-Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
-        f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 12/14] docs: netdev: call out the merge window in tag checking
-Date:   Mon, 28 Mar 2022 22:08:28 -0700
-Message-Id: <20220329050830.2755213-13-kuba@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220329050830.2755213-1-kuba@kernel.org>
-References: <20220329050830.2755213-1-kuba@kernel.org>
+        with ESMTP id S231264AbiC2GF5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Mar 2022 02:05:57 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E5C340EE;
+        Mon, 28 Mar 2022 23:04:15 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id e5so16706109pls.4;
+        Mon, 28 Mar 2022 23:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cHaiaQIME2TQ3hPRlAjtXhCt8wua+8gQtHxEI6CbZtk=;
+        b=Q4mO8z5cfhWgW9a6f2LL2NdkpUte+YKVoSjBJv9J/xTs8ZRrAm2+i+vRdgJDSh6CJk
+         iWz6YMWkqaQ7cxwhD5VIX8pM7nj0qyhjEEahdWXkZNRIME0Pz85tMF6lst9EcOwebnVe
+         DsmYeshd6Cw6Mg7bH2kki8e+K4gdU7WfMpGzp8Aj22ZHLqIrTMurjN+EhPwylEiD9rFV
+         DqPjW0NYg1YTVJwsZ7BzQZz/PdtlBagrv+38g1V0sC9tclEH2fvmRTqDIYiKct0hhGxe
+         rQnd2HyNjgE/ctnDNurQ4gStlxo3lgKcdA/mXPxfaUQeSYyeGwNovOi1oUJbq26dkBeW
+         TQ1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cHaiaQIME2TQ3hPRlAjtXhCt8wua+8gQtHxEI6CbZtk=;
+        b=bd/xVQ9EcOspEPh/HGG3C7sFqEK16k2vj5zBaatrmU2+egyvsIasX+NAbgdvYR/zf6
+         KAW9i7cRmQRwhNnPdaLaSIR9Wccq3mF6XPcn1+4IMAMDCICOyFMtOhbcv4C6brMCS/Sz
+         SXimrBeyRcSqyQcXBrT+cqIMb/UEsnWFyKwNIMLxgTpMbLKvX535dcw78f9E5QYFo2Yl
+         j2RsOn6x//LnjoT1ccf21TT4dFtCWonwJh/OI7rpkU3dUj+4GxFu2tv4IPjXj8PGzTCs
+         0Nixml3TR+FE0FOmEuLJQDQ3G2ECeC4ngR1wCmdJBXVyPhgQNUVhIU7fVAUh/bPjPYnA
+         u8QA==
+X-Gm-Message-State: AOAM533+V1h0aAGnswIo11Rk/OXSkIpSCeF9Z1YT4m0yvkqmWD+txnvm
+        taqcx0jLxxzNvII6fn6/+5A=
+X-Google-Smtp-Source: ABdhPJwpc1mBqz646V7xYK+gns4cYmtoPl5rD1zPom/CyRatt2rrPPiNVAL9QwwnI20vHF/KYoHbsA==
+X-Received: by 2002:a17:903:249:b0:153:857c:a1fe with SMTP id j9-20020a170903024900b00153857ca1femr29078333plh.44.1648533855368;
+        Mon, 28 Mar 2022 23:04:15 -0700 (PDT)
+Received: from localhost.localdomain (192.243.120.99.16clouds.com. [192.243.120.99])
+        by smtp.gmail.com with ESMTPSA id mi18-20020a17090b4b5200b001c9a9b60489sm1415677pjb.7.2022.03.28.23.04.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 23:04:14 -0700 (PDT)
+From:   davidcomponentone@gmail.com
+To:     keescook@chromium.org
+Cc:     davidcomponentone@gmail.com, luto@amacapital.net, wad@chromium.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Guang <yang.guang5@zte.com.cn>
+Subject: [PATCH] selftests/seccomp: Add SKIP for failed unshare()
+Date:   Tue, 29 Mar 2022 14:03:59 +0800
+Message-Id: <d623360ac7fdc3d8e1a8bc34e018f1aba6bd7e73.1648516943.git.yang.guang5@zte.com.cn>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the most important case to the question about "where are we
-in the cycle" - the case of net-next being closed.
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Running the seccomp tests under the kernel with "defconfig"
+shouldn't fail. Because the CONFIG_USER_NS is not support
+in "defconfig". So skip this test case is better.
+
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
 ---
- Documentation/networking/netdev-FAQ.rst | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index 294ad9b0162d..a18e4e671e85 100644
---- a/Documentation/networking/netdev-FAQ.rst
-+++ b/Documentation/networking/netdev-FAQ.rst
-@@ -103,7 +103,9 @@ So where are we now in this cycle?
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 313bb0cbfb1e..e9a61cb2eb88 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -3742,7 +3742,10 @@ TEST(user_notification_fault_recv)
+ 	struct seccomp_notif req = {};
+ 	struct seccomp_notif_resp resp = {};
  
- and note the top of the "tags" section.  If it is rc1, it is early in
- the dev cycle.  If it was tagged rc7 a week ago, then a release is
--probably imminent.
-+probably imminent. If the most recent tag is a final release tag
-+(without an ``-rcN`` suffix) - we are most likely in a merge window
-+and ``net-next`` is closed.
+-	ASSERT_EQ(unshare(CLONE_NEWUSER), 0);
++	ASSERT_EQ(unshare(CLONE_NEWUSER), 0) {
++		if (errno == EINVAL)
++			SKIP(return, "kernel missing CLONE_NEWUSER support");
++	}
  
- How can I tell the status of a patch I've sent?
- -----------------------------------------------
+ 	listener = user_notif_syscall(__NR_getppid,
+ 				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
 -- 
-2.34.1
+2.30.2
 
