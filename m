@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A4DC43219
-	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:08:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B432C41535
+	for <bpf@archiver.kernel.org>; Tue, 29 Mar 2022 05:08:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiC2FKb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S232290AbiC2FKb (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 29 Mar 2022 01:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbiC2FK2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Mar 2022 01:10:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646BB10F8;
-        Mon, 28 Mar 2022 22:08:46 -0700 (PDT)
+        with ESMTP id S232272AbiC2FKa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Mar 2022 01:10:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009165FDB;
+        Mon, 28 Mar 2022 22:08:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 010DE61477;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5ABEB8129E;
+        Tue, 29 Mar 2022 05:08:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 173FDC34110;
         Tue, 29 Mar 2022 05:08:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AF26C34112;
-        Tue, 29 Mar 2022 05:08:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648530525;
-        bh=+Vb/d+QtzOBqo/ycx6OvL5BZXjJUpw7EnMkEx/Q0eC4=;
+        s=k20201202; t=1648530526;
+        bh=Y73qK9ruF5HFRSBlgXRAQY5JQ8nYLtLAB1qQ9NgYAOg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dNeATK7zs8iRq3iSbwFxU+WE4gvsT4vNkluA4uJjwNDC1ZwVmK7WGV24nm79Hb1X0
-         crqiG5suz7VhlZgIbY7Rii27D86Hkh39N6zq6Es2z4RpYjgEpr+LgFG628h1ugH1wz
-         M6TptLkbI8Wp4dadWJvpLdq69lNZaATNLqQDUxHZ1t1nCY4cKwGP1PDXWM11EeWBT5
-         1niKsWhwnU1JjDBqBIN7muBTLwYPmFzhazNk7gi756f5IUXaZXwOvMzm+c13aYfbAW
-         upsv2m9qEt+EYLkPm3ndpYn09qALnYkmwLr79Mg2p7+yNL7zkjiCE5edM1mJYgH1y4
-         KNt5OHi/L197w==
+        b=idextr0fg2Ru8CsMZ00ULm/MlaGnn27vJS3hZ/jN4EDCTWSW1E4B/HJKraIKmS+Gi
+         Bsqkz3omB0zAHIRCKR/85bjCE6bHj3+lE1BaWIKP0gCq0kzcZTx086U8o0qQO3m+zw
+         fwb7z54hekoavzIe0nd8NTsl4PocxPIM8eYQqEHySnoRNfOQIRza68njM/Ce2mTUJ8
+         MykSZbhR2365tViBMuoU09jSLMOjzZzEU8mGcWR5b0+jKotfn8r6eh54absuDIYVAU
+         1w7YQJV2v6L1xuoVjH7KdEFG10IgQppK8r9rvO10MiuZGFOcq2ndh/XVA69XItq4EM
+         iMXcsEzhc4Vzw==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 02/14] docs: netdev: minor reword
-Date:   Mon, 28 Mar 2022 22:08:18 -0700
-Message-Id: <20220329050830.2755213-3-kuba@kernel.org>
+Subject: [PATCH net v2 04/14] docs: netdev: turn the net-next closed into a Warning
+Date:   Mon, 28 Mar 2022 22:08:20 -0700
+Message-Id: <20220329050830.2755213-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220329050830.2755213-1-kuba@kernel.org>
 References: <20220329050830.2755213-1-kuba@kernel.org>
@@ -48,26 +48,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-that -> those
+Use the sphinx Warning box to make the net-next being closed
+stand out more.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- Documentation/networking/netdev-FAQ.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/networking/netdev-FAQ.rst | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index 25b8a7de737c..f7e5755e013e 100644
+index fd5f5a1a0846..041993258dda 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -19,7 +19,7 @@ The netdev list is managed (like many other Linux mailing lists) through
- VGER (http://vger.kernel.org/) with archives available at
- https://lore.kernel.org/netdev/
+@@ -70,8 +70,9 @@ relating to vX.Y
+ An announcement indicating when ``net-next`` has been closed is usually
+ sent to netdev, but knowing the above, you can predict that in advance.
  
--Aside from subsystems like that mentioned above, all network-related
-+Aside from subsystems like those mentioned above, all network-related
- Linux development (i.e. RFC, review, comments, etc.) takes place on
- netdev.
+-IMPORTANT: Do not send new ``net-next`` content to netdev during the
+-period during which ``net-next`` tree is closed.
++.. warning::
++  Do not send new ``net-next`` content to netdev during the
++  period during which ``net-next`` tree is closed.
  
+ Shortly after the two weeks have passed (and vX.Y-rc1 is released), the
+ tree for ``net-next`` reopens to collect content for the next (vX.Y+1)
 -- 
 2.34.1
 
