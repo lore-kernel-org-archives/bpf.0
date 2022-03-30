@@ -2,171 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94156C433EF
-	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 18:28:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA2DC433F5
+	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 18:37:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350434AbiC3S3r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 14:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S1349169AbiC3Siw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 14:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243935AbiC3S3l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Mar 2022 14:29:41 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAE813CF1
-        for <bpf@vger.kernel.org>; Wed, 30 Mar 2022 11:26:30 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id w4so30464081wrg.12
-        for <bpf@vger.kernel.org>; Wed, 30 Mar 2022 11:26:29 -0700 (PDT)
+        with ESMTP id S1350056AbiC3SZP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Mar 2022 14:25:15 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C649CF14;
+        Wed, 30 Mar 2022 11:22:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso906841pjh.3;
+        Wed, 30 Mar 2022 11:22:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yrVy6mGFfTezARgPXoahkDtUgtA05SdD0ISAtqjQGmo=;
-        b=jeqXOpWvuvTFAZ5ufyJ6gMquwMoLSR57f2nzBHCjKg89AFDu8SChd/gG11luYWyf/D
-         2CzAPJvMu3VE37HnTb9n1joxjZ8rZDv/jLDDQxoVM13w9/HSGar33+yelws0I0RzDXuD
-         x2FC6sCuQ9+sVj/AU5EaPqcneuIHFnQREQK/aMTMnhAMlvN3cHdfJ8kvton6FPr1ui7l
-         TyizdoluHflvQQylTJfOXWxZfJrf+Q445FSF/JpxF90ldhCvP4quYkT1gFYAnZIwXKwy
-         TrGMEBsTo5N+WAfY46pjgOj3zGDxRdC25j6ZfW1QRM2FQ67tj18/9FH5vik6eMeh2Euq
-         8AWQ==
+        bh=+CAeQ6WbO75b05CAGgEyrOcN/e8ROoiFTSHaPW0jBEU=;
+        b=W9mnOdTJXi67DDGPDvM/CI7eE6yWDHJKjY77YMX5aYlBYvnffHWK17C8Cb1lUi3X1A
+         /e4/iaifYgfXWjdsta3C3K8yoO090sUdApnAaAyf8mEADC6v2dOia2eMoQvZ0Ht2e30s
+         BcCn00DtCu5QXB9vb2NCfra9khR8kcoZvht/Nawa9CwDcaHjSXxPuxnd8CUROC5c+pXC
+         ImusgsO9px5vn0X+ZswQgxp9rdFYInYG5F5DpwBAnP7Py++PEjxDFRy9JeaYOSbxYw2s
+         UGLeAPZkDrc6LVYWcbzWq7Ad0OtZdYSZXxScLaP2LrAIEoitWcnYweUky1uT+YHJ4V2E
+         5jYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yrVy6mGFfTezARgPXoahkDtUgtA05SdD0ISAtqjQGmo=;
-        b=kpIKbaXmYSsVnb/CslAL240LNMmtE/KVWmi0fPOjkpJfEoVlW4PMCW+2P96wSw46MA
-         4YO+BW14fc4kEpDMkH04Hp+YK4QXpZ9Z1tpSVKN7mDuRyXE9rQ9bcdOvvKCmTTkx/6AK
-         STk8Ulqw9uHaee8QmysfdQLb/ZGY9DOXSnqTp/NIW9NHLuUzfhy6Ny5mwMqAc5kJa5Jc
-         FNiZfLkuCvzsHvtf9tOylo9CKG5rKEHA21eU6IN9HHznRYsJJZk/mNLD057nztE3gOLC
-         51oUCUwFbsoU8fHln2qd3tMAV+fFZNz6kNL6i6o4Z+dOPpJzci+09ZZvzvo4eQZ55JNK
-         LE4A==
-X-Gm-Message-State: AOAM533Amr4em4MI4GhKpYS9p81cLEF5abSFdvCS2SBjymGsslTECo45
-        3lrDpXxUZJZe5G/1fokpqa0NiYxhn/D/tag/BsUNNA==
-X-Google-Smtp-Source: ABdhPJyHXpZ33Cgj5l28R7EnxJQfhSJzEztJTVsFHQXl/nJtwWID/KYZkpjVOJJC80I9hdIvxXiGJ1M1XbFYufMG0uk=
-X-Received: by 2002:a5d:68ce:0:b0:204:1a8c:749a with SMTP id
- p14-20020a5d68ce000000b002041a8c749amr821161wrw.392.1648664788452; Wed, 30
- Mar 2022 11:26:28 -0700 (PDT)
+        bh=+CAeQ6WbO75b05CAGgEyrOcN/e8ROoiFTSHaPW0jBEU=;
+        b=hGoPIQIl4zRvNbNwadMIwgckx62Umad3L7S/2n0jfeevt4oum4ugXioipAZEwFfSJG
+         o5dsPwlJTGwrsBhO3arlJn1XSn7jZacc3+uCWGsLvR/4yIhri68+hc88gooSSz2oVulJ
+         vH63xUieGbV9HqKf9Q/sovVNP7QoWIzz+EdabWACuKFiat38mWzMciSNyToeSEpergpT
+         Ob8C//hm5+Oa//7voT4zx2SrX203iE2KcU3I/vdptgnJ6fMvKrOcMv/gy2gU1kegpPDi
+         NJjJzjZtiS8VrWIMH1h3h3ZBMUH/8JVnYqr7mq60gbneshylYurNVVVMjCGPusefs+nP
+         8dOw==
+X-Gm-Message-State: AOAM531o3THBaGslMLS8XTDMrDLe5ReQXwKN2mGi5YFmbXXpIL9yKcm8
+        xyJH/zef0xtAS2IkE1hjJvnTEbeeCw+yetucsWjm5Ptw
+X-Google-Smtp-Source: ABdhPJyYxmyaH69ztISMlFUIhBXJ6kSvz8m/+MHArZXryyDLLdkJ7zwHk5XRiWm72rVNX35roncs4phtAedywt9F07c=
+X-Received: by 2002:a17:902:ba83:b0:154:727e:5fc5 with SMTP id
+ k3-20020a170902ba8300b00154727e5fc5mr633290pls.55.1648664563315; Wed, 30 Mar
+ 2022 11:22:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220324234123.1608337-1-haoluo@google.com> <9cdf860d-8370-95b5-1688-af03265cc874@fb.com>
- <CA+khW7g3hy61qnvtqUizaW+qB6wk=Y9cjivhORshOk=ZzTXJ-A@mail.gmail.com>
- <CA+khW7iq+UKsfQxdT3QpSqPUFN8gQWWDLoQ9zxB=uWTs63AZEA@mail.gmail.com>
- <20220329093753.26wc3noelqrwlrcj@apollo.legion> <CA+khW7jW47SALTfxMKfQoA0Qwqd22GC0z4S5juFTbxLfTSbFEQ@mail.gmail.com>
- <20220329232956.gbsr65jdbe4lw2m6@ast-mbp> <CA+khW7jyvp4PKGu5GS8GDf=Lr4EdRUz8kraaTfiZ2oGm704Cpw@mail.gmail.com>
- <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com>
-In-Reply-To: <CAADnVQLTBhCTAx1a_nev7CgMZxv1Bb7ecz1AFRin8tHmjPREJA@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 30 Mar 2022 11:26:17 -0700
-Message-ID: <CA+khW7iqiKTLi75oSPe+ibV8afR_SPgtg7Q+nEswmMOFZaAebA@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/2] Mmapable task local storage.
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220329181935.2183-1-beaub@linux.microsoft.com>
+ <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
+ <20220329201057.GA2549@kbox> <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
+ <20220329231137.GA3357@kbox> <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
+ <20220330163411.GA1812@kbox>
+In-Reply-To: <20220330163411.GA1812@kbox>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 30 Mar 2022 11:22:32 -0700
+Message-ID: <CAADnVQKQw+K2CoCW-nA=bngKtjP495wpB1yhEXNjKg4wSeXAWg@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
+ created events
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 11:16 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Mar 30, 2022 at 11:06 AM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Tue, Mar 29, 2022 at 4:30 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
+On Wed, Mar 30, 2022 at 9:34 AM Beau Belgrave <beaub@linux.microsoft.com> wrote:
 > > >
-> > > On Tue, Mar 29, 2022 at 10:43:42AM -0700, Hao Luo wrote:
-> > > > On Tue, Mar 29, 2022 at 2:37 AM Kumar Kartikeya Dwivedi
-> > > > <memxor@gmail.com> wrote:
-> > > > >
-> > > > > On Mon, Mar 28, 2022 at 11:16:15PM IST, Hao Luo wrote:
-> > > > > > On Mon, Mar 28, 2022 at 10:39 AM Hao Luo <haoluo@google.com> wrote:
-> > > > > > >
-> > > > > > > Hi Yonghong,
-> > > > > > >
-> > > > > > > On Fri, Mar 25, 2022 at 12:16 PM Yonghong Song <yhs@fb.com> wrote:
-> > > > > > > >
-> > > > > > > > On 3/24/22 4:41 PM, Hao Luo wrote:
-> > > > > > > > > Some map types support mmap operation, which allows userspace to
-> > > > > > > > > communicate with BPF programs directly. Currently only arraymap
-> > > > > > > > > and ringbuf have mmap implemented.
-> > > > > > > > >
-> > > > > > > > > However, in some use cases, when multiple program instances can
-> > > > > > > > > run concurrently, global mmapable memory can cause race. In that
-> > > > > > > > > case, userspace needs to provide necessary synchronizations to
-> > > > > > > > > coordinate the usage of mapped global data. This can be a source
-> > > > > > > > > of bottleneck.
-> > > > > > > >
-> > > > > > > > I can see your use case here. Each calling process can get the
-> > > > > > > > corresponding bpf program task local storage data through
-> > > > > > > > mmap interface. As you mentioned, there is a tradeoff
-> > > > > > > > between more memory vs. non-global synchronization.
-> > > > > > > >
-> > > > > > > > I am thinking that another bpf_iter approach can retrieve
-> > > > > > > > the similar result. We could implement a bpf_iter
-> > > > > > > > for task local storage map, optionally it can provide
-> > > > > > > > a tid to retrieve the data for that particular tid.
-> > > > > > > > This way, user space needs an explicit syscall, but
-> > > > > > > > does not need to allocate more memory than necessary.
-> > > > > > > >
-> > > > > > > > WDYT?
-> > > > > > > >
-> > > > > > >
-> > > > > > > Thanks for the suggestion. I have two thoughts about bpf_iter + tid and mmap:
-> > > > > > >
-> > > > > > > - mmap prevents the calling task from reading other task's value.
-> > > > > > > Using bpf_iter, one can pass other task's tid to get their values. I
-> > > > > > > assume there are two potential ways of passing tid to bpf_iter: one is
-> > > > > > > to use global data in bpf prog, the other is adding tid parameterized
-> > > > > > > iter_link. For the first, it's not easy for unpriv tasks to use. For
-> > > > > > > the second, we need to create one iter_link object for each interested
-> > > > > > > tid. It may not be easy to use either.
-> > > > > > >
-> > > > > > > - Regarding adding an explicit syscall. I thought about adding
-> > > > > > > write/read syscalls for task local storage maps, just like reading
-> > > > > > > values from iter_link. Writing or reading task local storage map
-> > > > > > > updates/reads the current task's value. I think this could achieve the
-> > > > > > > same effect as mmap.
-> > > > > > >
-> > > > > >
-> > > > > > Actually, my use case of using mmap on task local storage is to allow
-> > > > > > userspace to pass FDs into bpf prog. Some of the helpers I want to add
-> > > > > > need to take an FD as parameter and the bpf progs can run
-> > > > > > concurrently, thus using global data is racy. Mmapable task local
-> > > > > > storage is the best solution I can find for this purpose.
-> > > > > >
-> > > > > > Song also mentioned to me offline, that mmapable task local storage
-> > > > > > may be useful for his use case.
-> > > > > >
-> > > > > > I am actually open to other proposals.
-> > > > > >
-> > > > >
-> > > > > You could also use a syscall prog, and use bpf_prog_test_run to update local
-> > > > > storage for current. Data can be passed for that specific prog invocation using
-> > > > > ctx. You might have to enable bpf_task_storage helpers in it though, since they
-> > > > > are not allowed to be called right now.
-> > > > >
-> > > >
-> > > > The loading process needs CAP_BPF to load bpf_prog_test_run. I'm
-> > > > thinking of allowing any thread including unpriv ones to be able to
-> > > > pass data to the prog and update their own storage.
-> > >
-> > > If I understand the use case correctly all of this mmap-ing is only to
-> > > allow unpriv userspace to access a priv map via unpriv mmap() syscall.
-> > > But the map can be accessed as unpriv already.
-> > > Pin it with the world read creds and do map_lookup sys_bpf cmd on it.
-> >
-> > Right, but, if I understand correctly, with
-> > sysctl_unprivileged_bpf_disabled, unpriv tasks are not able to make
-> > use of __sys_bpf(). Is there anything I missed?
->
-> That sysctl is a heavy hammer. Let's fix it instead.
-> map lookup/update/delete can be allowed for unpriv for certain map types.
-> There are permissions checks in corresponding lookup/update calls already.
+> > > But you are fine with uprobe costs? uprobes appear to be much more costly
+> > > than a syscall approach on the hardware I've run on.
 
-This sounds great. If we can allow basic map operations for some map
-types, it will change many use cases I'm looking at. Let me take a
-look and report back.
+Care to share the numbers?
+uprobe over USDT is a single trap.
+Not much slower compared to syscall with kpti.
+
+> >
+> > Can we achieve the same/similar performance with sys_bpf(BPF_PROG_RUN)?
+> >
+>
+> I think so, the tough part is how do you let the user-space know which
+> program is attached to run? In the current code this is done by the BPF
+> program attaching to the event via perf and we run the one there if
+> any when data is emitted out via write calls.
+>
+> I would want to make sure that operators can decide where the user-space
+> data goes (perf/ftrace/eBPF) after the code has been written. With the
+> current code this is done via the tracepoint callbacks that perf/ftrace
+> hook up when operators enable recording via perf, tracefs, libbpf, etc.
+>
+> We have managed code (C#/Java) where we cannot utilize stubs or traps
+> easily due to code movement. So we are limited in how we can approach
+> this problem. Having the interface be mmap/write has enabled this
+> for us, since it's easy to interact with in most languages and gives us
+> lifetime management of the trace objects between user-space and the
+> kernel.
+
+Then you should probably invest into making USDT work inside
+java applications instead of reinventing the wheel.
+
+As an alternative you can do a dummy write or any other syscall
+and attach bpf on the kernel side.
+No kernel changes are necessary.
