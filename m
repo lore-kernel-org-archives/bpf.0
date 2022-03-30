@@ -2,79 +2,157 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DF14C433F5
-	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 13:30:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DE97C433EF
+	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 15:10:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344108AbiC3NcA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 09:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
+        id S242594AbiC3PL5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 11:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346054AbiC3Nb7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Mar 2022 09:31:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4047B37A94
-        for <bpf@vger.kernel.org>; Wed, 30 Mar 2022 06:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB841B81ACC
-        for <bpf@vger.kernel.org>; Wed, 30 Mar 2022 13:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B05CC34111;
-        Wed, 30 Mar 2022 13:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648647011;
-        bh=JktdeNgsCfPOibKWgTTiwnF0tFIIx4KUV9D6KhRuCZA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=NL/VjyvbYnw+SWXY5P7Ws4iNvZfpKnQaRWkcMFGNw4EdcJmhopRiUGgGt7khBiz3I
-         tByRU5Oz6w3MOUSBAi4UjM8Cxgrj1cG8BpiIBKq9V22GRcLTgNed4Nt7aW/mAAkTbF
-         NsQ1ugXmqKKF+a1vr+O9KEytyMLOFZw7hQbwA5kmxrRvaBrw31dnbtglP4SMKAN+b0
-         kCuAp2x2binX+AeIl8hydabDGHGQVDmi9tZeHwiGM1j/kLxzTprz3CBUzTadJ76GiT
-         bbt5JSwQdk+FxtCH+sBzKndKIicCIrVNNO3xSQi7N7dlRkiDLUnRKhAjjELueZud/Q
-         V3m2/APSxdzFQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6BD6AE6BBCA;
-        Wed, 30 Mar 2022 13:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234594AbiC3PL4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Mar 2022 11:11:56 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F11DC12D9;
+        Wed, 30 Mar 2022 08:10:11 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id mj15-20020a17090b368f00b001c637aa358eso179021pjb.0;
+        Wed, 30 Mar 2022 08:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=08ZIHe97hKgGRNdhJ3R+mGHQwESozHQxKj/yR7DOnYQ=;
+        b=VJdlu3DeKaZO46DZkkPim+IaxaPHUMkxQ7iuq1DAzFEGWYwU0ZxytSHx8OCbtmaLZI
+         K7XDgwSqM41nIol2+X1HQP5EFP1xUXlSprMWFTL7X8pZw2N1VqDhXRyrHIy/xld+E5yl
+         RTeSsiO4ADu82oRmLPv4WkQvBw7xaG74f+cR4+pXbaFfe91Ev2P7hAwSW9jeOupD502U
+         OSdEEufKFk126p62wPX8fMfJQCA9K9lIhXViKlOVAhtEYwkXNHcVK2+gcP/0UwnROsCA
+         61q4KCS32nfkt03YhJ/nKUH7XFsHE29hwg5IYSXbyc2fmiZrbgalLUGevzUfAl541O2i
+         dm6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=08ZIHe97hKgGRNdhJ3R+mGHQwESozHQxKj/yR7DOnYQ=;
+        b=mANR1m0JmiA6MM/ylTV+76NB9a1+Swyj1Hvj3KWxGYu8A57nrFWIEmC6AzP4WuBW3V
+         Sopjxl5gssniuhw5zCQvtlEs7i8jkXUKdFsKnsrYIRZAHATsKgaNkO9zefRihURHLY+z
+         fo6w04f9pMNZDQ0n3mgAYz9E7jGXxlN30zXcjntsVoVm+2NxKvl2YYUiffMgwFX5Qb/T
+         MSGa/dNMifu1cFSIqvc9sFw80UYvre4AGkAKdbFaEOsRlONBc9QLUDy2F/TaZhyTZ2Tq
+         DRDPwpynkG0oKloytytz3WJ7EOawehix9ot3xfVBFj6kYC6GojsONxLDbA6wbPyXZrml
+         uDuA==
+X-Gm-Message-State: AOAM531aGMGK2TVqAioiW81PjDOZBdD+orx6mnklKjugx5QoCIcKLuJP
+        l6kdsk/CmSSafSIla+eMYXyVF/Ow1fhDce6bFKI=
+X-Google-Smtp-Source: ABdhPJwP5RzxHCh+RFfoMVtH/7zzE16gLS6dgmc1BQAsyXd7m+QzB3RvQajZXh01DqjXpZHNSwJ8QX186doxHFmKaPg=
+X-Received: by 2002:a17:902:e80e:b0:154:1e0a:ca3f with SMTP id
+ u14-20020a170902e80e00b001541e0aca3fmr88223plg.64.1648653010597; Wed, 30 Mar
+ 2022 08:10:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpftool: explicit errno handling in skeletons
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164864701143.1602.9317565462778370541.git-patchwork-notify@kernel.org>
-Date:   Wed, 30 Mar 2022 13:30:11 +0000
-References: <3b6bfbb770c79ae64d8de26c1c1bd9d53a4b85f8.camel@fb.com>
-In-Reply-To: <3b6bfbb770c79ae64d8de26c1c1bd9d53a4b85f8.camel@fb.com>
-To:     Delyan Kratunov <delyank@fb.com>
-Cc:     daniel@iogearbox.net, ast@kernel.org, andrii@kernel.org,
-        bpf@vger.kernel.org, yhs@fb.com
+References: <20220329234924.39053-1-alexei.starovoitov@gmail.com>
+ <20220329184123.59cfad63@kernel.org> <CAADnVQJNS_U97aqaNxtAhuvZCK6oiDA-tDoAEyDMYnCBbfaZkg@mail.gmail.com>
+ <20220330135217.b6d0433831f2b3fa420458ae@kernel.org> <20220330181539.c1d289f010cf46e873c16b6c@kernel.org>
+In-Reply-To: <20220330181539.c1d289f010cf46e873c16b6c@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 30 Mar 2022 08:09:59 -0700
+Message-ID: <CAADnVQJvzYn3Yw4-exrvUUTFijq0yEJruLkxfzutEgJUVtUj3g@mail.gmail.com>
+Subject: Re: pull-request: bpf 2022-03-29
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Wed, Mar 30, 2022 at 2:15 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> On Wed, 30 Mar 2022 13:52:17 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> > On Tue, 29 Mar 2022 18:51:22 -0700
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > On Tue, Mar 29, 2022 at 6:41 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> > > >
+> > > > On Tue, 29 Mar 2022 16:49:24 -0700 Alexei Starovoitov wrote:
+> > > > > Hi David, hi Jakub,
+> > > > >
+> > > > > The following pull-request contains BPF updates for your *net* tree.
+> > > > >
+> > > > > We've added 16 non-merge commits during the last 1 day(s) which contain
+> > > > > a total of 24 files changed, 354 insertions(+), 187 deletions(-).
+> > > > >
+> > > > > The main changes are:
+> > > > >
+> > > > > 1) x86 specific bits of fprobe/rethook, from Masami and Peter.
+> > > > >
+> > > > > 2) ice/xsk fixes, from Maciej and Magnus.
+> > > > >
+> > > > > 3) Various small fixes, from Andrii, Yonghong, Geliang and others.
+> > > >
+> > > > There are some new sparse warnings here that look semi-legit.
+> > > > As in harmless but not erroneous.
+> > >
+> > > Both are new warnings and not due to these patches, right?
+> > >
+> > > > kernel/trace/rethook.c:68:9: error: incompatible types in comparison expression (different address spaces):
+> > > > kernel/trace/rethook.c:68:9:    void ( [noderef] __rcu * )( ... )
+> > > > kernel/trace/rethook.c:68:9:    void ( * )( ... )
+> > > >
+> > > > 66 void rethook_free(struct rethook *rh)
+> > > > 67 {
+> > > > 68         rcu_assign_pointer(rh->handler, NULL);
+> > > > 69
+> > > > 70         call_rcu(&rh->rcu, rethook_free_rcu);
+> > > > 71 }
+> > > >
+> > > > Looks like this should be a WRITE_ONCE() ?
+> > >
+> > > Masami, please take a look.
+> >
+> > Yeah, I think we should make this rcu pointer (and read side must use rcu_dereference())
+> > because this rh->handler becomes the key to disable this rethook.
+> > Let me fix that.
+>
+> Sorry, please ignore this. Since the handler pointed by rh->handler never
+> be removed (unless removed by modules, but this will not happen while
+> the rethook is running), YES, WRITE_ONCE() is enough.
+> Please add below.
+>
+> From 92c9c784458f03900823360981812220ce3c7bf3 Mon Sep 17 00:00:00 2001
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> Date: Wed, 30 Mar 2022 18:13:42 +0900
+> Subject: [PATCH] rethook: Fix to use WRITE_ONCE() for rethook::handler
+>
+> Since the function pointered by rethook::handler never be removed when
+> the rethook is alive, it doesn't need to use rcu_assign_pointer() to
+> update it. Just use WRITE_ONCE().
+>
+> Reported-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-This patch was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Could you please send it as a proper patch so it registers in patchwork?
 
-On Mon, 21 Mar 2022 23:29:18 +0000 you wrote:
-> Andrii noticed that since f97b8b9bd630 (bpftool: Fix a bug in subskeleton code generation)
-> the subskeleton code allows bpf_object__destroy_subskeleton to overwrite
-> the errno that subskeleton__open would return with. While this is not
-> currently an issue, let's make it future-proof.
-> 
-> This patch explicitly tracks err in subskeleton__open and skeleton__create
-> (i.e. calloc failure is explicitly ENOMEM) and ensures that errno
-> is -err on the error return path. The skeleton code had to be changed
-> since maps and progs codegen is shared with subskeletons.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] bpftool: explicit errno handling in skeletons
-    https://git.kernel.org/bpf/bpf/c/522574fd7864
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+>  kernel/trace/rethook.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
+> index ab463a4d2b23..b56833700d23 100644
+> --- a/kernel/trace/rethook.c
+> +++ b/kernel/trace/rethook.c
+> @@ -65,7 +65,7 @@ static void rethook_free_rcu(struct rcu_head *head)
+>   */
+>  void rethook_free(struct rethook *rh)
+>  {
+> -       rcu_assign_pointer(rh->handler, NULL);
+> +       WRITE_ONCE(rh->handler, NULL);
+>
+>         call_rcu(&rh->rcu, rethook_free_rcu);
+>  }
+> --
+> 2.25.1
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
