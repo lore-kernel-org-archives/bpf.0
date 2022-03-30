@@ -2,183 +2,328 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FBCFC4332F
-	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 21:24:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2AAC433FE
+	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 21:27:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiC3VZ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 17:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S1351204AbiC3V3B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 17:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiC3VZz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Mar 2022 17:25:55 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F9D212ABA;
-        Wed, 30 Mar 2022 14:24:09 -0700 (PDT)
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EC31220DEE59;
-        Wed, 30 Mar 2022 14:24:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EC31220DEE59
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648675449;
-        bh=ldB55PLaWGwkTJ/8hF8Op9amqeTslGaolYjAZkrAJkM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tOyTby/mYxcvIfexhqlgh+h+ujRQBbTGbJ3+/wpVxLNnJqvddwL5MLmYgNgoxH7Rt
-         OC+uQey4tJK0xjiqTQIKU6jJHuDsTfxagWG/q1WxLujcAzIG44/eIYSgRQEdY5XPyE
-         AcR55pnpPt8goxRg8FgpR4PtQZGOppu0qkvAn7Wc=
-Date:   Wed, 30 Mar 2022 14:24:02 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Song Liu <song@kernel.org>, rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-Message-ID: <20220330212402.GA2719@kbox>
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
- <20220329201057.GA2549@kbox>
- <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
- <20220329231137.GA3357@kbox>
- <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
- <20220330163411.GA1812@kbox>
- <CAADnVQKQw+K2CoCW-nA=bngKtjP495wpB1yhEXNjKg4wSeXAWg@mail.gmail.com>
- <20220330191551.GA2377@kbox>
- <1402984893.199881.1648670246676.JavaMail.zimbra@efficios.com>
+        with ESMTP id S232691AbiC3V3A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Mar 2022 17:29:00 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419C644747;
+        Wed, 30 Mar 2022 14:27:14 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id x31so13450773pfh.9;
+        Wed, 30 Mar 2022 14:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=tNpJ5Wp3g9qLmfmWDDWFXCwZdVqr76NxjlK+EkTDsUE=;
+        b=lEisIQQ8NkZDjFI04IeUbqVRNXz8mEJXiM2w5qCn/v6isXda0A5o3rtlMaFs8BXBrj
+         /9SItqnxfdDoCsj5EoAthdhMEZH6wLOOxBvvXLaJIRMVSlPieRUYR+gol+wuXLk6Rmow
+         1WOhELGOOq5tpn3aRPeqSH0T4W3tPd+IZdHxtFWKRE2D1LQSZOKfLVXAg6skFtYZAegW
+         B3mScsxteen1R1X0teejTHJWWlAkt26FmZbQ7CzKeDolm0L/J3ch5uROhedUT4q1hL8S
+         WOPZu2sP0hWWXIZ3r4//biHsv4admaAFtudDtQGD+vaGsyNHOtKG4lpNDRtmlOVKMsC7
+         RC9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=tNpJ5Wp3g9qLmfmWDDWFXCwZdVqr76NxjlK+EkTDsUE=;
+        b=Eyd4ZhTJRmqurUI1SECUNC5LH99GJ6T4io1HP++QXKO81xeW8Omk53Sgw4N+AwJof2
+         oQDvKj6Qd4nvRD+YFFy49IoVEhRvESh6P70dgCs7/8LtpXe97JXyKp+RcAPf74b46LPZ
+         S2gXWDV5c/TqFiCWYf7lwbh5Wtf+x+hmGj/msXK7u3gG4o21gdXUfyiGq9TvrtmVGxXB
+         k97EDgQrunU3L5dkxpSINm0thOLBUZrK/7h7p0BnEsAbWzp6mkWy2DnGdsjHVhy6u3hg
+         0nn8WrCJWF5CF3ItjZxWfI2vC7CrzlPkWEkJ84HEs9wOr90T23k/XV3JTQ7GJh0/aviq
+         pv3g==
+X-Gm-Message-State: AOAM531eUNijaVVd9aEQ4zqbTjcp3vMTrf5oGtqFBgWBULMlyVkChCpb
+        AYWB7O4rPvcye67ClGd9nP8=
+X-Google-Smtp-Source: ABdhPJzXZipcBVSePl6qxrEsG59gZGosBgV2kvbFHEVhGP6w5ADkZKG8xwDNoANpsMDxot0qnQVqWQ==
+X-Received: by 2002:a63:290:0:b0:386:5374:b8b5 with SMTP id 138-20020a630290000000b003865374b8b5mr7682497pgc.528.1648675633648;
+        Wed, 30 Mar 2022 14:27:13 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:500::1:e77])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6da3a1a3bsm25273090pfk.8.2022.03.30.14.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 14:27:13 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 14:27:09 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3 06/17] HID: allow to change the report
+ descriptor from an eBPF program
+Message-ID: <20220330212709.6bpfhnmvon4dd7xc@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220318161528.1531164-1-benjamin.tissoires@redhat.com>
+ <20220318161528.1531164-7-benjamin.tissoires@redhat.com>
+ <CAADnVQLvhWxEtHETg0tasJ7Fp5JHNRYWdjhnxi1y1gBpXS=bvQ@mail.gmail.com>
+ <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1402984893.199881.1648670246676.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAO-hwJJXR3jtAvLF1phUa5pKZzVkDxAAHO5+7R50hL-fVhDYyA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 03:57:26PM -0400, Mathieu Desnoyers wrote:
-> ----- On Mar 30, 2022, at 3:15 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
+On Wed, Mar 23, 2022 at 05:08:25PM +0100, Benjamin Tissoires wrote:
+> Hi Alexei,
 > 
-> > On Wed, Mar 30, 2022 at 11:22:32AM -0700, Alexei Starovoitov wrote:
-> >> On Wed, Mar 30, 2022 at 9:34 AM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> >> > > >
-> >> > > > But you are fine with uprobe costs? uprobes appear to be much more costly
-> >> > > > than a syscall approach on the hardware I've run on.
-> >> 
-> >> Care to share the numbers?
-> >> uprobe over USDT is a single trap.
-> >> Not much slower compared to syscall with kpti.
-> >> 
-> > 
-> > Sure, these are the numbers we have from a production device.
-> > 
-> > They are captured via perf via PERF_COUNT_HW_CPU_CYCLES.
-> > It's running a 20K loop emitting 4 bytes of data out.
-> > Each 4 byte event time is recorded via perf.
-> > At the end we have the total time and the max seen.
-> > 
-> > null numbers represent a 20K loop with just perf start/stop ioctl costs.
-> > 
-> > null: min=2863, avg=2953, max=30815
-> > uprobe: min=10994, avg=11376, max=146682
-> > uevent: min=7043, avg=7320, max=95396
-> > lttng: min=6270, avg=6508, max=41951
-> > 
-> > These costs include the data getting into a buffer, so they represent
-> > what we would see in production vs the trap cost alone. For uprobe this
-> > means we created a uprobe and attached it via tracefs to get the above
-> > numbers.
+> On Tue, Mar 22, 2022 at 11:51 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, Mar 18, 2022 at 9:16 AM Benjamin Tissoires
+> > <benjamin.tissoires@redhat.com> wrote:
+> > >
+> > > +u8 *hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *size)
+> > > +{
+> > > +       int ret;
+> > > +       struct hid_bpf_ctx_kern ctx = {
+> > > +               .type = HID_BPF_RDESC_FIXUP,
+> > > +               .hdev = hdev,
+> > > +               .size = *size,
+> > > +       };
+> > > +
+> > > +       if (bpf_hid_link_empty(&hdev->bpf, BPF_HID_ATTACH_RDESC_FIXUP))
+> > > +               goto ignore_bpf;
+> > > +
+> > > +       ctx.data = kmemdup(rdesc, HID_MAX_DESCRIPTOR_SIZE, GFP_KERNEL);
+> > > +       if (!ctx.data)
+> > > +               goto ignore_bpf;
+> > > +
+> > > +       ctx.allocated_size = HID_MAX_DESCRIPTOR_SIZE;
+> > > +
+> > > +       ret = hid_bpf_run_progs(hdev, &ctx);
+> > > +       if (ret)
+> > > +               goto ignore_bpf;
+> > > +
+> > > +       if (ctx.size > ctx.allocated_size)
+> > > +               goto ignore_bpf;
+> > > +
+> > > +       *size = ctx.size;
+> > > +
+> > > +       if (*size) {
+> > > +               rdesc = krealloc(ctx.data, *size, GFP_KERNEL);
+> > > +       } else {
+> > > +               rdesc = NULL;
+> > > +               kfree(ctx.data);
+> > > +       }
+> > > +
+> > > +       return rdesc;
+> > > +
+> > > + ignore_bpf:
+> > > +       kfree(ctx.data);
+> > > +       return kmemdup(rdesc, *size, GFP_KERNEL);
+> > > +}
+> > > +
+> > >  int __init hid_bpf_module_init(void)
+> > >  {
+> > >         struct bpf_hid_hooks hooks = {
+> > >                 .hdev_from_fd = hid_bpf_fd_to_hdev,
+> > >                 .pre_link_attach = hid_bpf_pre_link_attach,
+> > > +               .post_link_attach = hid_bpf_post_link_attach,
+> > >                 .array_detach = hid_bpf_array_detach,
+> > >         };
+> > >
+> > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > > index 937fab7eb9c6..3182c39db006 100644
+> > > --- a/drivers/hid/hid-core.c
+> > > +++ b/drivers/hid/hid-core.c
+> > > @@ -1213,7 +1213,8 @@ int hid_open_report(struct hid_device *device)
+> > >                 return -ENODEV;
+> > >         size = device->dev_rsize;
+> > >
+> > > -       buf = kmemdup(start, size, GFP_KERNEL);
+> > > +       /* hid_bpf_report_fixup() ensures we work on a copy of rdesc */
+> > > +       buf = hid_bpf_report_fixup(device, start, &size);
+> >
+> > Looking at this patch and the majority of other patches...
+> > the code is doing a lot of work to connect HID side with bpf.
+> > At the same time the evolution of the patch series suggests
+> > that these hook points are not quite stable. More hooks and
+> > helpers are being added.
+> > It tells us that it's way too early to introduce a stable
+> > interface between HID and bpf.
 > 
-> [...]
+> I understand that you might be under the impression that the interface
+> is changing a lot, but this is mostly due to my poor knowledge of all
+> the arcanes of eBPF.
+> The overall way HID-BPF works is to work on a single array, and we
+> should pretty much be sorted out. There are a couple of helpers to be
+> able to communicate with the device, but the API has been stable in
+> the kernel for those for quite some time now.
 > 
-> I assume here that by "lttng" you specifically refer to lttng-ust (LTTng's
-> user-space tracer), am I correct ?
+> The variations in the hooks is mostly because I don't know what is the
+> best representation we can use in eBPF for those, and the review
+> process is changing that.
 > 
-
-Yes, this is ust.
-
-> By removing the "null" baseline overhead, my rough calculations are that the
-> average overhead for lttng-ust in your results is (in cpu cycles):
+> > We suggest to use __weak global functions and unstable kfunc helpers
+> > to achieve the same goal.
+> > This way HID side and bpf side can evolve without introducing
+> > stable uapi burden.
+> > For example this particular patch can be compressed to:
+> > __weak int hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+> > unsigned int *size)
+> > {
+> >    return 0;
+> > }
+> > ALLOW_ERROR_INJECTION(ALLOW_ERROR_INJECTION, ERRNO);
+> >
+> > - buf = kmemdup(start, size, GFP_KERNEL);
+> > + if (!hid_bpf_report_fixup(device, start, &size))
+> > +   buf = kmemdup(start, size, GFP_KERNEL);
+> >
+> > Then bpf program can replace hid_bpf_report_fixup function and adjust its
+> > return value while reading args.
 > 
-> 6270-2863 = 3555
+> I appreciate the suggestion and gave it a try, but AFAICT this doesn't
+> work for HID (please correct me if I am wrong):
 > 
-> So I'm unsure what is the frequency of your CPU, but guessing around 3.5GHz
-> this is in the area of 1 microsecond. On an Intel CPU, this is much larger
-> than what I would expect. 
+> - I tried to use __weak to replace the ugly struct bpf_hid_hooks
 > 
-> Can you share your test program, hardware characteristics, kernel version,
-> glibc version, and whether the program is compiled as a 32-bit or 64-bit
-> binary ?
+> This struct is in place simply because the HID module can be compiled
+> in as a kernel module and we might not have the symbols available from
+> kernel/bpf when it is a separate module.
+
+why is that? The kernel modules should be compiled with BTF and
+bpf infra can attach to those functions the same way.
+__weak suggestion in the above is not to override it by the module.
+It's there to prevent compiler from inlining it.
+__weak int hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+   unsigned int *size) {...}
+Will be only one.
+Either in kernel proper or in kernel module. It's up to HID subsystem.
+
+> Either I did something wrong, but it seems that when we load the
+> module in the kernel, there is no magic that overrides the weak
+> symbols from the ones from the modules.
 > 
+> - for hid_bpf_report_fixup(), this would mean that a BPF program could
+> overwrite the function
+> 
+> This is great, but I need to have one program per device, not one
+> globally defined function.
+> I can not have a generic report_fixup in the system, simply because
+> you might need 2 different functions for 2 different devices.
 
-This is how we are measuring:
-
-#define PERF_START() \
-do \
-{ \
-        ioctl(perf_fd, PERF_EVENT_IOC_RESET, 0); \
-	ioctl(perf_fd, PERF_EVENT_IOC_ENABLE, 0); \
-} while (0)
-
-#define PERF_END(__cycles) \
-do \
-{ \
-	ioctl(perf_fd, PERF_EVENT_IOC_DISABLE, 0); \
-	read(perf_fd, &__cycles, sizeof(__cycles)); \
-} while (0)
-
-struct perf_event_attr pe;
-long long min, max, total;
-int i, perf_fd;
-
-memset(&pe, 0, sizeof(pe));
-
-pe.type = PERF_TYPE_HARDWARE;
-pe.size = sizeof(pe);
-pe.config = PERF_COUNT_HW_CPU_CYCLES;
-pe.disabled = 1;
-pe.exclude_hv = 1;
-
-perf_fd = perf_event_open(&pe, 0, -1, -1, 0); 
-
-min = max = total = 0;
-
-for (i = 0; i < 20000; ++i)
+That's fine. Take a look at how libxdp is doing the chaining.
+One bpf prog is attached to a main entry point and it does
+demux (or call other progs sequentially) based on its own logic.
+For example you have bpf prog that does:
+SEC("fentry/hid_bpf_report_fixup")
+int main_hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+   unsigned int *size)
 {
-	long long cycles;
-
-	PERF_START();
-	probe();
-	PERF_END(cycles);
-
-	if (i == 0 || cycles < min)
-		min = cycles;
-
-	if (cycles > max)
-		max = cycles;
-
-	total += cycles;
+  if (hdev->id == ..)
+    another_bpf_prog();
 }
 
-probe() here could be a call to writev or to the lttng trace call.
+Or call another bpf prog via bpf_tail_call.
 
-> Can you confirm that lttng-ust is not calling one getcpu system call per
-> event ? This might be the case if run a 32-bit x86 binary and have a
-> glibc < 2.35, or a kernel too old to provide CONFIG_RSEQ or don't have
-> CONFIG_RSEQ=y in your kernel configuration. You can validate this by
-> running your lttng-ust test program with a system call tracer.
+There are lots of option to connect them.
+
+You can also have N bpf progs. All look like:
+SEC("fentry/hid_bpf_report_fixup")
+int first_hid_bpf_report_fixup(struct hid_device *hdev, u8 *rdesc,
+   unsigned int *size)
+{
+  if (hdev->id != mine_id)
+    return 0;
+  // do work;
+}
+
+And attach them all as fmod_ret type bpf prog to the same
+kernel hid_bpf_report_fixup() function.
+The bpf trampoline will call them sequentially.
+
 > 
+> We could solve that by auto-generating the bpf program based on which
+> devices are available, but that would mean that users will see a
+> reconnect of all of their input devices when they plug in a new one,
+> and will also require them to have LLVM installed, which I do not
+> want.
 
-We don't have CONFIG_RSEQ, so that is likely the cause. LTTng is always
-going to be the fastest thing out there. It's pure user mode :)
+Of course. No need to regenrated them with LLVM on the fly.
 
-> Thanks,
+> - for stuff like hid_bpf_raw_event(), I want to have multiple programs
+> attached to the various devices, and not necessarily the same across
+> devices.
 > 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+> This is basically the same as above, except that I need to chain programs.
 
-Thanks,
--Beau
+Chaining is already available for fentry/fexit/fmod_ret programs.
+ 
+> For instance, we could have a program that "fixes" one device, but I
+> also want to attach a tracing program on top of it to monitor what is
+> happening.
+
+That's also possible.
+You can have a main bpf prog as entry point that calls global functions
+of this bpf program. Later you can install another bpf prog that
+will replace one of the previously loaded global bpf functions.
+So fully programmable and arbitrary chaining is available.
+
+> >
+> > Similar approach can be done with all other hooks.
+> >
+> > Once api between HID and bpf stabilizes we can replace nop functions
+> > with writeable tracepoints to make things a bit more stable
+> > while still allowing for change of the interface in the future.
+> >
+> > The amount of bpf specific code in HID core will be close to zero
+> > while bpf can be used to flexibly tweak it.
+> 
+> Again, I like the idea, but I clearly don't see where you want to go.
+> From what I see, this is incompatible with the use cases I have.
+> 
+> >
+> > kfunc is a corresponding mechanism to introduce unstable api
+> > from bpf into the kernel instead of stable helpers.
+> > Just whitelist some functions as unstable kfunc helpers and call them
+> > from bpf progs.
+> > See net/bpf/test_run.c and bpf_kfunc_call* for inspiration.
+> >
+> 
+> I also like this idea.
+> 
+> However, for hid_hw_raw_request() I can not blindly enable that
+> function in all program types. This function makes the kernel sleep,
+> and so we can not use it while in IRQ context.
+> I think I can detect if we are in IRQ or not, but is it really worth
+> enabling it across all BPF program types when we know that only
+> SEC("hid/user_event") will use it?
+
+There are sleepable and non-sleepable fmod_ret/fentry/fexit programs.
+The hid subsystem would need to white list all ALLOW_ERROR_INJECTION
+kernel functions approriately.
+So that sleepable bpf prog won't attach to a hook where IRQs are disabled.
+
+> Also, I am not sure how we can make bpf_hid_get_data() work with that.
+> We need to teach the verifier how much memory is provided, and I do
+> not see how you can do that with kfunc.
+
+If there is anything missing in the verifier let's extend that.
+Everyone will benefit.
+
+PS
+Sorry for delay. Looks like your emails are going into some sort
+of queue in my gmail and receive them later. Or some other odd
+filtering is going on. Maybe it's related to giant cc list in your patches.
