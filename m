@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 896E4C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED3D8C43217
 	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 04:25:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242551AbiC3E1M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 00:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
+        id S242556AbiC3E1N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 00:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242524AbiC3E1C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S242523AbiC3E1C (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 30 Mar 2022 00:27:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12053DF6A;
-        Tue, 29 Mar 2022 21:25:18 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454F5DF58;
+        Tue, 29 Mar 2022 21:25:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D32761515;
-        Wed, 30 Mar 2022 04:25:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BECFC340EE;
-        Wed, 30 Mar 2022 04:25:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1410B81B38;
+        Wed, 30 Mar 2022 04:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451F7C340F2;
+        Wed, 30 Mar 2022 04:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648614317;
-        bh=K61ZB8eL6+rIPGneJi8e6vZ8cd5Fs9s7rksmt7GGVNs=;
+        s=k20201202; t=1648614313;
+        bh=xUrwySdk8pPWDD17ccX90NEP3D7DzJVSGSGlzNVJ3lY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aAYswTubeEK+kZkY2wp9k+iqcR2Q/2P/C6oP4A6gw2ptcWg3Hknv2zNiS2dh/Imkq
-         f9thuehkd9RFPKeb6U6XSryVwInkluDLy67SZ5+vTKOP+dEcAKjIuPcdLlFVrAcuh8
-         KtoRd2wFbNgbb30DJOzpVlTrCnuCenDq7U64CrRL2n/lT/MvzLaH1iPrENxPDFd5cE
-         nfHC1D6RblzAf3EvUQDsB9kLQj4KFpfQluYP11Z36F5vXPJ10NQ/7+cbcq4IoYODHO
-         WT3iOJ1rpOewbcU8JDzVKxM95zuxW8KkrLYYbsVAGNi9lwEEUaBvxAhCWDBR8NRcMX
-         m387O7qrLs4uQ==
+        b=VlC1kSJ2BPl5WFsAK9ywdoWnCJn+RRBLY1/V9H40+EtFDIIvOaCN7LRH0ZL/q/t1n
+         HXjddKaAcu/lqtc2A5L3lG34RhstkQeHW6nEalmAM+nIYj+KL3OZN89+/jaYay8rD3
+         BSwQ4cVAvJ7XqSvcDE6AMZYMhx7jasxcKGPMiicxL0fz9tvCgv3CBdFy4sJYl3rRuY
+         b89OcyyUR1W6LwNyroJsfoD5uheOGAfCmQMaH/0QyHIkArN1hVycZU5RnQ0BVtw9HR
+         PgZ8PCO/Va4PVrJ2XjiRpEx1/Q7ZqsvEv2JQ/RED1mnzNyuNKbMi2zmG+es07Rgt1/
+         2R2P0R0RRJEqA==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v3 10/14] docs: netdev: make the testing requirement more stringent
-Date:   Tue, 29 Mar 2022 21:25:01 -0700
-Message-Id: <20220330042505.2902770-11-kuba@kernel.org>
+Subject: [PATCH net v3 04/14] docs: netdev: turn the net-next closed into a Warning
+Date:   Tue, 29 Mar 2022 21:24:55 -0700
+Message-Id: <20220330042505.2902770-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330042505.2902770-1-kuba@kernel.org>
 References: <20220330042505.2902770-1-kuba@kernel.org>
@@ -48,40 +48,31 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These days we often ask for selftests so let's update our
-testing requirements.
+Use the sphinx Warning box to make the net-next being closed
+stand out more.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- Documentation/networking/netdev-FAQ.rst | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ Documentation/networking/netdev-FAQ.rst | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index f8b89dc81cab..1388f78cfbc5 100644
+index fd5f5a1a0846..041993258dda 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -196,11 +196,15 @@ as possible alternative mechanisms.
+@@ -70,8 +70,9 @@ relating to vX.Y
+ An announcement indicating when ``net-next`` has been closed is usually
+ sent to netdev, but knowing the above, you can predict that in advance.
  
- What level of testing is expected before I submit my change?
- ------------------------------------------------------------
--If your changes are against ``net-next``, the expectation is that you
--have tested by layering your changes on top of ``net-next``.  Ideally
--you will have done run-time testing specific to your change, but at a
--minimum, your changes should survive an ``allyesconfig`` and an
--``allmodconfig`` build without new warnings or failures.
-+At the very minimum your changes must survive an ``allyesconfig`` and an
-+``allmodconfig`` build with ``W=1`` set without new warnings or failures.
-+
-+Ideally you will have done run-time testing specific to your change,
-+and the patch series contains a set of kernel selftest for
-+``tools/testing/selftests/net`` or using the KUnit framework.
-+
-+You are expected to test your changes on top of the relevant networking
-+tree (``net`` or ``net-next``) and not e.g. a stable tree or ``linux-next``.
+-IMPORTANT: Do not send new ``net-next`` content to netdev during the
+-period during which ``net-next`` tree is closed.
++.. warning::
++  Do not send new ``net-next`` content to netdev during the
++  period during which ``net-next`` tree is closed.
  
- How do I post corresponding changes to user space components?
- -------------------------------------------------------------
+ Shortly after the two weeks have passed (and vX.Y-rc1 is released), the
+ tree for ``net-next`` reopens to collect content for the next (vX.Y+1)
 -- 
 2.34.1
 
