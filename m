@@ -2,64 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB607C433EF
-	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 04:17:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8F56C43219
+	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 04:25:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242483AbiC3ETV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 00:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
+        id S242505AbiC3E07 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 00:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiC3ETU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Mar 2022 00:19:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A17A23454B;
-        Tue, 29 Mar 2022 21:17:35 -0700 (PDT)
+        with ESMTP id S229891AbiC3E06 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Mar 2022 00:26:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3DBDF58;
+        Tue, 29 Mar 2022 21:25:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B92C5B81B2F;
-        Wed, 30 Mar 2022 04:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FC5C34111;
-        Wed, 30 Mar 2022 04:17:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A4BB61552;
+        Wed, 30 Mar 2022 04:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B58EC34112;
+        Wed, 30 Mar 2022 04:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648613852;
-        bh=QF70sGA2dTEZu1WjPvyP1I8S4BZZv+sAiFS9irFzaQg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m9rTMwpzathH9iBCgP7eZ3mHn4nnccuQhWyFckzOxSsP20l3ezdDkwpxGhX4PMqN4
-         oHZgTXQmF5cKVRA52N/pRGLajE2dm6tGcXF18GTF920YVQt2Q36nnTGHcwbCAG0HeD
-         acXM9NCRzrS6p5Q94v5zXTZ45Z9Y12ZfQq28nxZ1kSkK7H1it88UMHk0+1TMJY8Dyb
-         ty8MuGbXNEAona+jLj5jyK4DNfX60R1B9KltH/w48yBgJTnm0npFS3XPCN3MAyIJgy
-         wwSyWUd6G7ZS/xERn8+DiNI64ORucWRcBsaK9mpH6bwhUYc1PbMiPaCoN28uyFpxLj
-         Dkr+Fo+PvErLA==
-Date:   Tue, 29 Mar 2022 21:17:30 -0700
+        s=k20201202; t=1648614312;
+        bh=ibPzGpYP5ul+5VCwSW0FJEX+gMTvTy87AoOUvx1t1b4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gENQQOITiXvTvlLW1paZURN/arNkdkzqbUnpqtvSP4miMNGZeI9Ji9uNEEc8ETnLU
+         SSu19DbQ7zKvqMFHsYlChkFnO+mPeTnO2C1dVpxB94VVDigH8aimFdNq7iJo2JYLXI
+         sbUqAfsEwy36xI43jHr9lpvGSIV68pFxGCNZn6nlHOoPZvUKriRPtkJMh8YC7iEZBA
+         Q9+A0gdHMrXn5Ool+hgrbmy/AKck5MwoTmMsTuWoPCYVryVHa3qortECi+SLuYa1TR
+         utbABR+wbBuAgySfH2eWLxM2+4ou046/C+hz8ROi/8vygW15wLyJOMrwovvKE/0mGi
+         kZfEd4iUl4W9Q==
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        andrew@lunn.ch
-Subject: Re: [PATCH net v2 07/14] docs: netdev: rephrase the 'Under review'
- question
-Message-ID: <20220329211730.71024b45@kernel.org>
-In-Reply-To: <6c1836e4-0ac1-a743-5b91-c6b1867b8338@gmail.com>
-References: <20220329050830.2755213-1-kuba@kernel.org>
-        <20220329050830.2755213-8-kuba@kernel.org>
-        <6c1836e4-0ac1-a743-5b91-c6b1867b8338@gmail.com>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
+        f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net v3 02/14] docs: netdev: minor reword
+Date:   Tue, 29 Mar 2022 21:24:53 -0700
+Message-Id: <20220330042505.2902770-3-kuba@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220330042505.2902770-1-kuba@kernel.org>
+References: <20220330042505.2902770-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 29 Mar 2022 20:33:05 -0700 Florian Fainelli wrote:
-> > -48h).  So be patient.  Asking the maintainer for status updates on your
-> > +48h). But be patient, if your patch is active in patchwork (i.e. it's
-> > +listed on the project's patch list) the chances it was missed are close to zero.
-> > +Asking the maintainer for status updates on your
-> >   patch is a good way to ensure your patch is ignored or pushed to the
-> >   bottom of the priority list.  
-> 
-> I would reword that at some point, this feels a little bit retaliating.
+that -> those
 
-Let me drop the last sentence, we can always at it back if people start
-pinging us.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ Documentation/networking/netdev-FAQ.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
+index 25b8a7de737c..f7e5755e013e 100644
+--- a/Documentation/networking/netdev-FAQ.rst
++++ b/Documentation/networking/netdev-FAQ.rst
+@@ -19,7 +19,7 @@ The netdev list is managed (like many other Linux mailing lists) through
+ VGER (http://vger.kernel.org/) with archives available at
+ https://lore.kernel.org/netdev/
+ 
+-Aside from subsystems like that mentioned above, all network-related
++Aside from subsystems like those mentioned above, all network-related
+ Linux development (i.e. RFC, review, comments, etc.) takes place on
+ netdev.
+ 
+-- 
+2.34.1
+
