@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E132C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE244C433EF
 	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 04:25:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242515AbiC3E1A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 00:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S235419AbiC3E07 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 00:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242499AbiC3E06 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S239331AbiC3E06 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 30 Mar 2022 00:26:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D572FDFE2;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB0ADF77;
         Tue, 29 Mar 2022 21:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6630E61561;
-        Wed, 30 Mar 2022 04:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD663C340F0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE3E961557;
         Wed, 30 Mar 2022 04:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1FD4C34113;
+        Wed, 30 Mar 2022 04:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648614314;
-        bh=GiQdRnvOD79OWqlDvg6Sf9vtrfZD84+3sCIuYPexe1U=;
+        s=k20201202; t=1648614313;
+        bh=UsrRGzreh0yhSlb7JDzUQnpiSfmiX+Wi47jWa5ruVEA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gSGhcRD5JWoHlxMqNPIsPDmbTMb30xYVQxshK/PgfHfWBQXBwMAoUskIe7KaDS6wu
-         56DVEfK1Nm0CkEfo5JaEdzVbzcj3DFPGmxyHjsF1qt0vg+4CJSrjzUHz4PoHpnkPoT
-         QZDLtyRK5yn12tfKgzWQpkUrS4D6oN9mRZNqhU1oaQIZDYNsAjZgsZ0wXteAofXp7v
-         3v+6aplyh1PiCluiPQCNuI1/ZjYgHc50hXS3p++tt7A5NsW7+lXnvLfVoV+hOpCHts
-         R1/mYaJXLria8Ppt6b2TzfzyjZb6nKArKT6ozLv+vNZC38PTgxbAx185P/anecl+L6
-         MLP7TzMJuHFQg==
+        b=pg1VmtAQv9x8fnu25+qLYB8QZXzEsbwcjhu00JGeGXTGVacEiQ04SbTTrxtcauaos
+         wEIOL4yh+IB1ejODBRF0TwpG0T+bab/6TMrhTs2c9pCfZw1wSfWZdDl4jdj/EAIGxe
+         xiXky+fRMaou7sgAenGYf4pvNf9fzvCrfnLWn41SqM9eOWy7DhiMBsizqc4jELV/4Q
+         arDwCqTaSTJH0I60TOmgWSnwwD6xWxHWL/DuUu+2EwyldS/v9oWZU8toB5adik0naY
+         xmsKTUmCxUV9J92IJ4/ojFHB0Ov8ZBT+Y3q5MY9u6aSBvcj1AnMYpXcWrvZnUnwVoq
+         BlwoQw2LAY04g==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v3 05/14] docs: netdev: note that RFC postings are allowed any time
-Date:   Tue, 29 Mar 2022 21:24:56 -0700
-Message-Id: <20220330042505.2902770-6-kuba@kernel.org>
+Subject: [PATCH net v3 03/14] docs: netdev: move the patch marking section up
+Date:   Tue, 29 Mar 2022 21:24:54 -0700
+Message-Id: <20220330042505.2902770-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330042505.2902770-1-kuba@kernel.org>
 References: <20220330042505.2902770-1-kuba@kernel.org>
@@ -48,31 +48,64 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Document that RFCs are allowed during the merge window.
+We want people to mark their patches with net and net-next in the subject.
+Many miss doing that. Move the FAQ section which points that out up, and
+place it after the section which enumerates the trees, that seems like
+a pretty logical place for it. Since the two sections are together we
+can remove a little bit (not too much) of the repetition.
+
+v2: also remove the text for non-git setups, we want people to use git.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
-v2: new patch
----
- Documentation/networking/netdev-FAQ.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/networking/netdev-FAQ.rst | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index 041993258dda..f4c77efa75d4 100644
+index f7e5755e013e..fd5f5a1a0846 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -74,6 +74,9 @@ sent to netdev, but knowing the above, you can predict that in advance.
-   Do not send new ``net-next`` content to netdev during the
-   period during which ``net-next`` tree is closed.
+@@ -35,6 +35,17 @@ mainline tree from Linus, and ``net-next`` is where the new code goes
+ - https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+ - https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
  
-+RFC patches sent for review only are obviously welcome at any time
-+(use ``--subject-prefix='RFC net-next'`` with ``git format-patch``).
++How do I indicate which tree (net vs. net-next) my patch should be in?
++----------------------------------------------------------------------
++To help maintainers and CI bots you should explicitly mark which tree
++your patch is targeting. Assuming that you use git, use the prefix
++flag::
 +
- Shortly after the two weeks have passed (and vX.Y-rc1 is released), the
- tree for ``net-next`` reopens to collect content for the next (vX.Y+1)
- release.
++  git format-patch --subject-prefix='PATCH net-next' start..finish
++
++Use ``net`` instead of ``net-next`` (always lower case) in the above for
++bug-fix ``net`` content.
++
+ How often do changes from these trees make it to the mainline Linus tree?
+ -------------------------------------------------------------------------
+ To understand this, you need to know a bit of background information on
+@@ -90,20 +101,6 @@ and note the top of the "tags" section.  If it is rc1, it is early in
+ the dev cycle.  If it was tagged rc7 a week ago, then a release is
+ probably imminent.
+ 
+-How do I indicate which tree (net vs. net-next) my patch should be in?
+-----------------------------------------------------------------------
+-Firstly, think whether you have a bug fix or new "next-like" content.
+-Then once decided, assuming that you use git, use the prefix flag, i.e.
+-::
+-
+-  git format-patch --subject-prefix='PATCH net-next' start..finish
+-
+-Use ``net`` instead of ``net-next`` (always lower case) in the above for
+-bug-fix ``net`` content.  If you don't use git, then note the only magic
+-in the above is just the subject text of the outgoing e-mail, and you
+-can manually change it yourself with whatever MUA you are comfortable
+-with.
+-
+ I sent a patch and I'm wondering what happened to it - how can I tell whether it got merged?
+ --------------------------------------------------------------------------------------------
+ Start by looking at the main patchworks queue for netdev:
 -- 
 2.34.1
 
