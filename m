@@ -2,68 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E71F5C433EF
-	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 11:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57456C433F5
+	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 13:30:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343530AbiC3LLH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 07:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
+        id S1346052AbiC3Nb6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 09:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243071AbiC3LLG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Mar 2022 07:11:06 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFAA3EAAE;
-        Wed, 30 Mar 2022 04:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=yvZCXQhb37MOgxLXU/XqW9QmTlcuArhm2RsVvTAH3qo=; b=fjbHNdMzCsKzmXBcjUyke+JK+d
-        LjJoer1GnS3wELRRqzIDeA4xu1xsaNcB+otbKA4M7vy7TZ5wN7mAWLpfVHWoNCq7KY5j9NdnhTJiZ
-        ONv7YK0DqZzZVYUnB6dK89OBy2gPfK3C740Nu3xTlE18OrfM3kiCjnaJbNMNja1MPkNW0/QQG2rVM
-        w/5VHCgWvnyjO9hS6iC+ddI+/jgDeI+4yR8a95SDGxI5rpjTd5ajcmyqgqXTCMYXPNtlpi4lROLcN
-        +YIZ9oo0ooPKbvhYnuvGR4qnd2NIW9LuTc+i9g1cmC7CQ5gTlQ4QVeJ0YEMuGIASA75d/cGy82Wim
-        hs0KkJJQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nZWC7-001AYf-Pz; Wed, 30 Mar 2022 11:08:55 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1B233986215; Wed, 30 Mar 2022 13:08:54 +0200 (CEST)
-Date:   Wed, 30 Mar 2022 13:08:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <20220330110853.GK8939@worktop.programming.kicks-ass.net>
-References: <20220322185709.141236-1-namhyung@kernel.org>
- <20220322185709.141236-3-namhyung@kernel.org>
- <20220328113946.GA8939@worktop.programming.kicks-ass.net>
- <CAM9d7ciQQEypvv2a2zQLHNc7p3NNxF59kASxHoFMCqiQicKwBA@mail.gmail.com>
+        with ESMTP id S1346036AbiC3Nb5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Mar 2022 09:31:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6A62126E;
+        Wed, 30 Mar 2022 06:30:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BCEF60F1F;
+        Wed, 30 Mar 2022 13:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 94F2EC34112;
+        Wed, 30 Mar 2022 13:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648647011;
+        bh=cU8FjeWxOjskSz09ATG64xR2J22qjPfKR5JAlqWFTsU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oIazSJ8dJkTweVSaLD7gv52wfnAvgvMuz1q8BPkHFCO0roeMMghRjdBSgte27H1iO
+         e/2VMnIw3AY/86nhOPPmWKEzPffyyeidH6grDO99f7YnyW3OQpMp7P1vvGJEIaDqaG
+         GZtcTuSZnes1DtTe33oLC8HnFlPFTOo+AQB7D5Dak4do8vuyeZDWtGOjzTmsG2pCNN
+         fw7d2MU90Hib43+nKL6Os1iemRSqoS3V6WBIV84lo92nIiAmRJYEKMrf5nkmYlhL/u
+         /IR0TA12HQolm1HwmlRlAVzqzMnvWcmKZsBYXhCu3hgkKiJVsyRC2YRkQwPZcwQj//
+         a6TbmvGDnkRRg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7624FF0384B;
+        Wed, 30 Mar 2022 13:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7ciQQEypvv2a2zQLHNc7p3NNxF59kASxHoFMCqiQicKwBA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: Fix sparse warnings in kprobe_multi_resolve_syms
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164864701147.1602.6890084343658807023.git-patchwork-notify@kernel.org>
+Date:   Wed, 30 Mar 2022 13:30:11 +0000
+References: <20220330110510.398558-1-jolsa@kernel.org>
+In-Reply-To: <20220330110510.398558-1-jolsa@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 10:48:59AM -0700, Namhyung Kim wrote:
-> > Also, if you were to add LCB_F_MUTEX then you could have something like:
-> 
-> Yep, I'm ok with having the mutex flag.  Do you want me to send
-> v5 with this change or would you like to do it by yourself?
+Hello:
 
-I'll frob my thing on top. No need to repost.
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Wed, 30 Mar 2022 13:05:10 +0200 you wrote:
+> Adding missing __user tags to fix sparse warnings:
+> 
+> kernel/trace/bpf_trace.c:2370:34: warning: incorrect type in argument 2 (different address spaces)
+> kernel/trace/bpf_trace.c:2370:34:    expected void const [noderef] __user *from
+> kernel/trace/bpf_trace.c:2370:34:    got void const *usyms
+> kernel/trace/bpf_trace.c:2376:51: warning: incorrect type in argument 2 (different address spaces)
+> kernel/trace/bpf_trace.c:2376:51:    expected char const [noderef] __user *src
+> kernel/trace/bpf_trace.c:2376:51:    got char const *
+> kernel/trace/bpf_trace.c:2443:49: warning: incorrect type in argument 1 (different address spaces)
+> kernel/trace/bpf_trace.c:2443:49:    expected void const *usyms
+> kernel/trace/bpf_trace.c:2443:49:    got void [noderef] __user *[assigned] usyms
+> 
+> [...]
+
+Here is the summary with links:
+  - bpf: Fix sparse warnings in kprobe_multi_resolve_syms
+    https://git.kernel.org/bpf/bpf/c/d31e0386a2f1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
