@@ -2,43 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C60EC4332F
-	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 04:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 896E4C433FE
+	for <bpf@archiver.kernel.org>; Wed, 30 Mar 2022 04:25:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242537AbiC3E1K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Mar 2022 00:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S242551AbiC3E1M (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Mar 2022 00:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242522AbiC3E1C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S242524AbiC3E1C (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 30 Mar 2022 00:27:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EE3DF12;
-        Tue, 29 Mar 2022 21:25:17 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12053DF6A;
+        Tue, 29 Mar 2022 21:25:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96A68B81B3B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D32761515;
+        Wed, 30 Mar 2022 04:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BECFC340EE;
         Wed, 30 Mar 2022 04:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB23BC34111;
-        Wed, 30 Mar 2022 04:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648614315;
-        bh=l58mJnP81DtmPGRPX5qWvZ3Q2ots0mc89rQXBZoafjQ=;
+        s=k20201202; t=1648614317;
+        bh=K61ZB8eL6+rIPGneJi8e6vZ8cd5Fs9s7rksmt7GGVNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jgbQubZUZ5HGW59kwd414J/Wj6kT1sHSErfPKwplGBQVy8s1D+7CQ929ewaPoeR9I
-         WZSUEqNNPOjmet5Bqb5UUnw7scdoYvJnOznlG6Ry3H5tJJX5M2x7HEb9LpFS0tZs+V
-         6+E8H9PdaZQNGqU+WMNF2iCo+tIwk/n+o3xcwG6Knfu+PFpQNaxhgRst3EOfofJsqQ
-         8K+TkLaMdoUcQ24iBj0BmKjTp/vH6ef4Nl1Zj5GWKTzZQ86rtoIS8ZJ1UwIRpISpNA
-         +NJJAyHyy1vOJLVJ+fQayew9f9ideNR00W1E7caRHJkRBworVSGTcsYd9a2FtNeLSe
-         j+jSHg/OmA4oQ==
+        b=aAYswTubeEK+kZkY2wp9k+iqcR2Q/2P/C6oP4A6gw2ptcWg3Hknv2zNiS2dh/Imkq
+         f9thuehkd9RFPKeb6U6XSryVwInkluDLy67SZ5+vTKOP+dEcAKjIuPcdLlFVrAcuh8
+         KtoRd2wFbNgbb30DJOzpVlTrCnuCenDq7U64CrRL2n/lT/MvzLaH1iPrENxPDFd5cE
+         nfHC1D6RblzAf3EvUQDsB9kLQj4KFpfQluYP11Z36F5vXPJ10NQ/7+cbcq4IoYODHO
+         WT3iOJ1rpOewbcU8JDzVKxM95zuxW8KkrLYYbsVAGNi9lwEEUaBvxAhCWDBR8NRcMX
+         m387O7qrLs4uQ==
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, pabeni@redhat.com, corbet@lwn.net,
         bpf@vger.kernel.org, linux-doc@vger.kernel.org, andrew@lunn.ch,
         f.fainelli@gmail.com, Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v3 07/14] docs: netdev: rephrase the 'Under review' question
-Date:   Tue, 29 Mar 2022 21:24:58 -0700
-Message-Id: <20220330042505.2902770-8-kuba@kernel.org>
+Subject: [PATCH net v3 10/14] docs: netdev: make the testing requirement more stringent
+Date:   Tue, 29 Mar 2022 21:25:01 -0700
+Message-Id: <20220330042505.2902770-11-kuba@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220330042505.2902770-1-kuba@kernel.org>
 References: <20220330042505.2902770-1-kuba@kernel.org>
@@ -48,37 +48,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The semantics of "Under review" have shifted. Reword the question
-about it a bit and focus it on the response time.
+These days we often ask for selftests so let's update our
+testing requirements.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
-v3: remove the going back to the end of the queue threat
----
- Documentation/networking/netdev-FAQ.rst | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Documentation/networking/netdev-FAQ.rst | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/networking/netdev-FAQ.rst b/Documentation/networking/netdev-FAQ.rst
-index e10a8140d642..00ac300ebe6a 100644
+index f8b89dc81cab..1388f78cfbc5 100644
 --- a/Documentation/networking/netdev-FAQ.rst
 +++ b/Documentation/networking/netdev-FAQ.rst
-@@ -116,10 +116,12 @@ patch. Patches are indexed by the ``Message-ID`` header of the emails
- which carried them so if you have trouble finding your patch append
- the value of ``Message-ID`` to the URL above.
+@@ -196,11 +196,15 @@ as possible alternative mechanisms.
  
--The above only says "Under Review".  How can I find out more?
---------------------------------------------------------------
-+How long before my patch is accepted?
-+-------------------------------------
- Generally speaking, the patches get triaged quickly (in less than
--48h).  So be patient.  Asking the maintainer for status updates on your
-+48h). But be patient, if your patch is active in patchwork (i.e. it's
-+listed on the project's patch list) the chances it was missed are close to zero.
-+Asking the maintainer for status updates on your
- patch is a good way to ensure your patch is ignored or pushed to the
- bottom of the priority list.
+ What level of testing is expected before I submit my change?
+ ------------------------------------------------------------
+-If your changes are against ``net-next``, the expectation is that you
+-have tested by layering your changes on top of ``net-next``.  Ideally
+-you will have done run-time testing specific to your change, but at a
+-minimum, your changes should survive an ``allyesconfig`` and an
+-``allmodconfig`` build without new warnings or failures.
++At the very minimum your changes must survive an ``allyesconfig`` and an
++``allmodconfig`` build with ``W=1`` set without new warnings or failures.
++
++Ideally you will have done run-time testing specific to your change,
++and the patch series contains a set of kernel selftest for
++``tools/testing/selftests/net`` or using the KUnit framework.
++
++You are expected to test your changes on top of the relevant networking
++tree (``net`` or ``net-next``) and not e.g. a stable tree or ``linux-next``.
  
+ How do I post corresponding changes to user space components?
+ -------------------------------------------------------------
 -- 
 2.34.1
 
