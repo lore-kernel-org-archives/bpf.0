@@ -2,49 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AECBC433EF
-	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 15:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD6B6C433F5
+	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 15:02:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349732AbiDAO5o (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Apr 2022 10:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S1349719AbiDAO5n (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Apr 2022 10:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352046AbiDAOtt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:49:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9EC2B120F;
-        Fri,  1 Apr 2022 07:40:55 -0700 (PDT)
+        with ESMTP id S1350940AbiDAOsM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Apr 2022 10:48:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184B854BE7;
+        Fri,  1 Apr 2022 07:38:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC9C611E2;
-        Fri,  1 Apr 2022 14:40:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF12C340EE;
-        Fri,  1 Apr 2022 14:40:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA14D60F6C;
+        Fri,  1 Apr 2022 14:38:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC1BC340F2;
+        Fri,  1 Apr 2022 14:38:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824054;
-        bh=z2US9SuqGeb8MNBIv52FpTTXwXw4NnMl51Uz1mvkp6E=;
+        s=k20201202; t=1648823917;
+        bh=QM0cLyfNKrTAM7OlGaJiN8ROVCfhfYRYebCXWf9bRPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qMoAZ+pBRsYRxuWpSb305oYrsZ63LfVI0xiJOXxxPZzmCNYS2pmGIrND1RjKtFpFQ
-         N8pXn4aVny2NjXJUW4067oB2hsdkqxqQtSoAePs+2woQJnMVcKiMWIksmGG45Zu2Ir
-         3yn0gdxIvrj2We+AjKuMQHB5uUWhC7QSRNxXQUKov91X8JDRyES38VNWP+kT7cASrR
-         RGeyvtdYc/CXp9eSMwfasEuagbCQdKYGW6JcVH8i8hT3FTX8hHWGSToplde0NJoTgq
-         6wm9ZvtozweK8Fyfnu1QDV19gvFr1RvthZlK8LQh29LmH8/UOP0/v2TsERkOXG8eX4
-         lePdBZ6lJZXqw==
+        b=FGxFDJ+thRxwP/Bs4kehCNlq51u/Vpxjn4Sh1gjDyqiTVTgwSJszMCwH9mwNYdsbV
+         WAnVbGiOYimo2vN8T7NxveU/ztpKMl3mpwKI9k1L2xFfScgm8n8iFtIVAyQJY69Wzt
+         td9RW+bFOxeClisYVaFabZNgilhk1S9Z8InCSpnbcWqZ3ubpdhEHc7+I0M3UnH3pK7
+         RZ6vcRQGLgNxjiVivujiRK8ZXETVDor4F2fvGcQ5WbFdWnVi9AlzL1CmL620TuWHHN
+         lG2fzWQGZ7+fqmYagIBmwQLZjg3l7m0cBKzRA/bY2AJjPXmfPZ5OjTlHRzqkWBAOTR
+         03vXhRIlg23UQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Harold Huang <baymaxhuang@gmail.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
-        pabeni@redhat.com, mst@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        netdev@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 68/98] tuntap: add sanity checks about msg_controllen in sendmsg
-Date:   Fri,  1 Apr 2022 10:37:12 -0400
-Message-Id: <20220401143742.1952163-68-sashal@kernel.org>
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
+        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 18/98] bpf: Make dst_port field in struct bpf_sock 16-bit wide
+Date:   Fri,  1 Apr 2022 10:36:22 -0400
+Message-Id: <20220401143742.1952163-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
 References: <20220401143742.1952163-1-sashal@kernel.org>
@@ -56,69 +53,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Harold Huang <baymaxhuang@gmail.com>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-[ Upstream commit 74a335a07a17d131b9263bfdbdcb5e40673ca9ca ]
+[ Upstream commit 4421a582718ab81608d8486734c18083b822390d ]
 
-In patch [1], tun_msg_ctl was added to allow pass batched xdp buffers to
-tun_sendmsg. Although we donot use msg_controllen in this path, we should
-check msg_controllen to make sure the caller pass a valid msg_ctl.
+Menglong Dong reports that the documentation for the dst_port field in
+struct bpf_sock is inaccurate and confusing. From the BPF program PoV, the
+field is a zero-padded 16-bit integer in network byte order. The value
+appears to the BPF user as if laid out in memory as so:
 
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fe8dd45bb7556246c6b76277b1ba4296c91c2505
+  offsetof(struct bpf_sock, dst_port) + 0  <port MSB>
+                                      + 8  <port LSB>
+                                      +16  0x00
+                                      +24  0x00
 
-Reported-by: Eric Dumazet <eric.dumazet@gmail.com>
-Suggested-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Harold Huang <baymaxhuang@gmail.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Link: https://lore.kernel.org/r/20220303022441.383865-1-baymaxhuang@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+32-, 16-, and 8-bit wide loads from the field are all allowed, but only if
+the offset into the field is 0.
+
+32-bit wide loads from dst_port are especially confusing. The loaded value,
+after converting to host byte order with bpf_ntohl(dst_port), contains the
+port number in the upper 16-bits.
+
+Remove the confusion by splitting the field into two 16-bit fields. For
+backward compatibility, allow 32-bit wide loads from offsetof(struct
+bpf_sock, dst_port).
+
+While at it, allow loads 8-bit loads at offset [0] and [1] from dst_port.
+
+Reported-by: Menglong Dong <imagedong@tencent.com>
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Link: https://lore.kernel.org/r/20220130115518.213259-2-jakub@cloudflare.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/tap.c   | 3 ++-
- drivers/net/tun.c   | 3 ++-
- drivers/vhost/net.c | 1 +
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ include/uapi/linux/bpf.h |  3 ++-
+ net/core/filter.c        | 10 +++++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/tap.c b/drivers/net/tap.c
-index 8e3a28ba6b28..ba2ef5437e16 100644
---- a/drivers/net/tap.c
-+++ b/drivers/net/tap.c
-@@ -1198,7 +1198,8 @@ static int tap_sendmsg(struct socket *sock, struct msghdr *m,
- 	struct xdp_buff *xdp;
- 	int i;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 791f31dd0abe..b5f3b5a476d1 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5347,7 +5347,8 @@ struct bpf_sock {
+ 	__u32 src_ip4;
+ 	__u32 src_ip6[4];
+ 	__u32 src_port;		/* host byte order */
+-	__u32 dst_port;		/* network byte order */
++	__be16 dst_port;	/* network byte order */
++	__u16 :16;		/* zero padding */
+ 	__u32 dst_ip4;
+ 	__u32 dst_ip6[4];
+ 	__u32 state;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 76e406965b6f..a65de7ac60aa 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7966,6 +7966,7 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 			      struct bpf_insn_access_aux *info)
+ {
+ 	const int size_default = sizeof(__u32);
++	int field_size;
  
--	if (ctl && (ctl->type == TUN_MSG_PTR)) {
-+	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
-+	    ctl && ctl->type == TUN_MSG_PTR) {
- 		for (i = 0; i < ctl->num; i++) {
- 			xdp = &((struct xdp_buff *)ctl->ptr)[i];
- 			tap_get_user_xdp(q, xdp);
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 45a67e72a02c..02de8d998bfa 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -2489,7 +2489,8 @@ static int tun_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	if (!tun)
- 		return -EBADFD;
+ 	if (off < 0 || off >= sizeof(struct bpf_sock))
+ 		return false;
+@@ -7977,7 +7978,6 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 	case offsetof(struct bpf_sock, family):
+ 	case offsetof(struct bpf_sock, type):
+ 	case offsetof(struct bpf_sock, protocol):
+-	case offsetof(struct bpf_sock, dst_port):
+ 	case offsetof(struct bpf_sock, src_port):
+ 	case offsetof(struct bpf_sock, rx_queue_mapping):
+ 	case bpf_ctx_range(struct bpf_sock, src_ip4):
+@@ -7986,6 +7986,14 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 	case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
+ 		bpf_ctx_record_field_size(info, size_default);
+ 		return bpf_ctx_narrow_access_ok(off, size, size_default);
++	case bpf_ctx_range(struct bpf_sock, dst_port):
++		field_size = size == size_default ?
++			size_default : sizeof_field(struct bpf_sock, dst_port);
++		bpf_ctx_record_field_size(info, field_size);
++		return bpf_ctx_narrow_access_ok(off, size, field_size);
++	case offsetofend(struct bpf_sock, dst_port) ...
++	     offsetof(struct bpf_sock, dst_ip4) - 1:
++		return false;
+ 	}
  
--	if (ctl && (ctl->type == TUN_MSG_PTR)) {
-+	if (m->msg_controllen == sizeof(struct tun_msg_ctl) &&
-+	    ctl && ctl->type == TUN_MSG_PTR) {
- 		struct tun_page tpage;
- 		int n = ctl->num;
- 		int flush = 0;
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 28ef323882fb..792ab5f23647 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -473,6 +473,7 @@ static void vhost_tx_batch(struct vhost_net *net,
- 		goto signal_used;
- 
- 	msghdr->msg_control = &ctl;
-+	msghdr->msg_controllen = sizeof(ctl);
- 	err = sock->ops->sendmsg(sock, msghdr, 0);
- 	if (unlikely(err < 0)) {
- 		vq_err(&nvq->vq, "Fail to batch sending packets\n");
+ 	return size == size_default;
 -- 
 2.34.1
 
