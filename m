@@ -2,59 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3CE5C433FE
-	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 16:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F3A0C43219
+	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 16:32:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237064AbiDAQeA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Apr 2022 12:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S242859AbiDAQeC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Apr 2022 12:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349447AbiDAQdM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:33:12 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE4D2A3A5F
-        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 09:05:50 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id h4so4852005wrc.13
-        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 09:05:50 -0700 (PDT)
+        with ESMTP id S1346755AbiDAQcw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Apr 2022 12:32:52 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31EE2A03CD
+        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 09:05:30 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id a1so4887704wrh.10
+        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 09:05:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hklOial7Zin/mLTXaf/iXnKaJeASDMWSnjZgJ7Zag2s=;
-        b=GdVx/x1hfwTLunRYxNvqUPUbdWWogD+G59+vrK1Zq0dApIBz7crwov2uLpbp0evF8O
-         qyUs9lIaANPw7O3KhU0Zv+L3e4dEEHrRSw0fe7XhJprf7ouW42E8StAP8ujLRS+NX073
-         JX6UcTPifPB46dqCJmLfy2NV2PHFdgkgVexgvyiEWdMDeKoVc1JF4svhuFtn5Nc4JBfp
-         T+Jiq+ne3W8vPxJAK4sSPrK9MQyefGBUVJRBIbyUMcFpRZdVknmPqgEZbyOC2n4eB2o1
-         cehZoqEN1gFUCChxzyMLol4VthqQGHFEtXln2pC52IumpLT1tXGylESGda8PwvsaVsDu
-         zXhQ==
+        bh=QYAmnc7x668b3Mtc5NMdeiZF/b7YzgDGFiavTzqx5m8=;
+        b=gKgXzErmNosOcaf1AGPsGzv8GmZd6HqtgCK4ZUfUw8idZ7blI8Y7WQjH2J3mF5HmwL
+         ODGyazxm7Rj8HWemehlqco3IRPreGlqO7R6WWncb9FrAotpOEalfsaX5nTAt1gJTn51i
+         +C+8R4/oktnlOXMq5xwmEmczUlfW5WJdQjoPrMPpsHrwXz/Thnp/pQDyJp+nMwhr24KE
+         6MiMO4RULfoMTY3L7ghFpPsysV6kRiWXAL5hOCbkobJ+OBLjV7aLCohQp6d6M6kQJSv2
+         U3LoM5V7Ah6xWefm4RBglFaBXWIwhg8NsPs8yKrEu4Qp+fHxT+SqLhoEEuJQ48/VDOzL
+         8Mlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=hklOial7Zin/mLTXaf/iXnKaJeASDMWSnjZgJ7Zag2s=;
-        b=sqMZL0b11UcDCZnf2TSnIYkx6JwE1oPbbt0q4zklq5x9IeW5w2g+AnHK6eJeqBwRrR
-         S9TsZY8qP459hqSMuS8TOx1nTp+k8RpKOVfNV+dk4CGYQx9Q9Zcyzx1wZQMqqQdu7IBH
-         rAHSu8w77Hs7k5NNHN2rw2oJqVxHSYDuKG1eKvQqTv5mSzc/ZH7mFRiXt7S94WYBKg7q
-         kiEQAhgMk1MAS4F55SuE++d96nYI2eWmMYmvcSCBhfEtRn9hoI/wZzQca1XrBfe5TqzG
-         OQy2umwButCnYvoG/m08mEP8Wmq5erfaou1ZCthKM5WaJWQhtNfyK44+iZTxtMImLJcI
-         Zkrg==
-X-Gm-Message-State: AOAM532qehSQGGPhm8TAI5qDes4H2O3bSXceWZvs1zWT6Ss6Aq0IFESr
-        OY1Ql0yVgGfbQicfeu0FucgwUw==
-X-Google-Smtp-Source: ABdhPJz7ieQF66lrWTCTnXwP+yJlWhUuGDKKDSZue48u1bteSU3Fw+ZtxqA7MmlmJWdrwlmtyich1Q==
-X-Received: by 2002:adf:db4b:0:b0:203:e76f:fc45 with SMTP id f11-20020adfdb4b000000b00203e76ffc45mr8010081wrj.549.1648829108697;
-        Fri, 01 Apr 2022 09:05:08 -0700 (PDT)
+        bh=QYAmnc7x668b3Mtc5NMdeiZF/b7YzgDGFiavTzqx5m8=;
+        b=b4HSncvd31voWQgKxXHuv8y142aGN6shGVywJRWm1PUtvnIch6MJ0rCjzwKDyV7Uz3
+         IhiRM5l7/RXVmlDOCMvBh51ibZnxmqduGRLTjpdX2aft52s4XhXsrtrJMd85w8Q6dF/U
+         BC2sjw3abEYvJULSOy6NCCJZuOxaLWAZj1NEDzNwRfaL41JHfKIX+8n7YMmYy+w9+sG0
+         lUqKcPDoHvLRpfhjY5lnqOh5k6uSs2b0CFJFKEEIKFkfLLBjWXxO4jpiwMsyGuQ6av5h
+         HpadeDmXeZB0DZwvLfVVUMRLChWChnVa6EJINEz7BO8jMU+2inUeLNCsxaXWBdLRK3Xh
+         LHrA==
+X-Gm-Message-State: AOAM5320fPr5G2wPd0qkH8ovgcdDCjrs8PUzXPtu7Ls6D4u1JxCJe0gf
+        pKmQDKLEKWxUO1GvQwNDjalQ5w==
+X-Google-Smtp-Source: ABdhPJwVjjkeC6kliJrcb4WvZDn88XBkkBVGgIRYvygMlC4cdKLtHAUut12LgOOv0NPmpfJp/NdnZg==
+X-Received: by 2002:a5d:6849:0:b0:204:975:acf1 with SMTP id o9-20020a5d6849000000b002040975acf1mr8253511wrw.557.1648829094934;
+        Fri, 01 Apr 2022 09:04:54 -0700 (PDT)
 Received: from [192.168.178.8] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c4ed100b0038ca32d0f26sm2497333wmq.17.2022.04.01.09.05.07
+        by smtp.gmail.com with ESMTPSA id h3-20020adffd43000000b00205dc8459e5sm2397843wrs.7.2022.04.01.09.04.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 09:05:08 -0700 (PDT)
-Message-ID: <8457bd5f-0541-e128-b033-05131381c590@isovalent.com>
-Date:   Fri, 1 Apr 2022 17:05:07 +0100
+        Fri, 01 Apr 2022 09:04:54 -0700 (PDT)
+Message-ID: <f2f8634f-7921-dc7d-e5cb-571ea82f487d@isovalent.com>
+Date:   Fri, 1 Apr 2022 17:04:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH bpf-next 3/3] bpf/bpftool: handle libbpf_probe_prog_type
- errors
+Subject: Re: [PATCH bpf-next 1/3] bpf/bpftool: add syscall prog type
 Content-Language: en-GB
 To:     Milan Landaverde <milan@mdaverde.com>, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -63,9 +62,9 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         davemarchevsky@fb.com, sdf@google.com, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20220331154555.422506-1-milan@mdaverde.com>
- <20220331154555.422506-4-milan@mdaverde.com>
+ <20220331154555.422506-2-milan@mdaverde.com>
 From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20220331154555.422506-4-milan@mdaverde.com>
+In-Reply-To: <20220331154555.422506-2-milan@mdaverde.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
@@ -73,32 +72,55 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 2022-03-31 11:45 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
-> Previously [1], we were using bpf_probe_prog_type which returned a
-> bool, but the new libbpf_probe_bpf_prog_type can return a negative
-> error code on failure. This change decides for bpftool to declare
-> a program type is not available on probe failure.
-> 
-> [1] https://lore.kernel.org/bpf/20220202225916.3313522-3-andrii@kernel.org/
+> In addition to displaying the program type in bpftool prog show
+> this enables us to be able to query bpf_prog_type_syscall
+> availability through feature probe as well as see
+> which helpers are available in those programs (such as
+> bpf_sys_bpf and bpf_sys_close)
 > 
 > Signed-off-by: Milan Landaverde <milan@mdaverde.com>
 > ---
->  tools/bpf/bpftool/feature.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/bpf/bpftool/prog.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-> index c2f43a5d38e0..b2fbaa7a6b15 100644
-> --- a/tools/bpf/bpftool/feature.c
-> +++ b/tools/bpf/bpftool/feature.c
-> @@ -564,7 +564,7 @@ probe_prog_type(enum bpf_prog_type prog_type, bool *supported_types,
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index bc4e05542c2b..8643b37d4e43 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -68,6 +68,7 @@ const char * const prog_type_name[] = {
+>  	[BPF_PROG_TYPE_EXT]			= "ext",
+>  	[BPF_PROG_TYPE_LSM]			= "lsm",
+>  	[BPF_PROG_TYPE_SK_LOOKUP]		= "sk_lookup",
+> +	[BPF_PROG_TYPE_SYSCALL]			= "syscall",
+>  };
 >  
->  		res = probe_prog_type_ifindex(prog_type, ifindex);
->  	} else {
-> -		res = libbpf_probe_bpf_prog_type(prog_type, NULL);
-> +		res = libbpf_probe_bpf_prog_type(prog_type, NULL) > 0;
->  	}
->  
->  #ifdef USE_LIBCAP
+>  const size_t prog_type_name_size = ARRAY_SIZE(prog_type_name);
 
 Reviewed-by: Quentin Monnet <quentin@isovalent.com>
 
-Thanks!
+Thanks! This one should have been caught by CI :/. Instead it complains
+when you add it. This is because BPF_PROG_TYPE_SYSCALL in the UAPI
+header has a comment next to it, and the regex used in
+tools/testing/selftests/bpf/test_bpftool_synctypes.py to extract the
+program types does not account for it. The fix should be:
+
+------
+diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+index 6bf21e47882a..cd239cbfd80c 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
++++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+@@ -180,7 +180,7 @@ class FileExtractor(object):
+         @enum_name: name of the enum to parse
+         """
+         start_marker = re.compile(f'enum {enum_name} {{\n')
+-        pattern = re.compile('^\s*(BPF_\w+),?$')
++        pattern = re.compile('^\s*(BPF_\w+),?( /\* .* \*/)?$')
+         end_marker = re.compile('^};')
+         parser = BlockParser(self.reader)
+         parser.search_block(start_marker)
+------
+
+I can submit this separately as a patch.
+
+Quentin
