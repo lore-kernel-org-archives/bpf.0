@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD486C4167B
-	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 14:55:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AECBC433EF
+	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 15:02:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349726AbiDAO5o (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1349732AbiDAO5o (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 1 Apr 2022 10:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350066AbiDAOrI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:47:08 -0400
+        with ESMTP id S1352046AbiDAOtt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Apr 2022 10:49:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CFF2A03FC;
-        Fri,  1 Apr 2022 07:37:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9EC2B120F;
+        Fri,  1 Apr 2022 07:40:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5B2B60915;
-        Fri,  1 Apr 2022 14:36:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7709AC340F2;
-        Fri,  1 Apr 2022 14:36:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DC9C611E2;
+        Fri,  1 Apr 2022 14:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF12C340EE;
+        Fri,  1 Apr 2022 14:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823791;
+        s=k20201202; t=1648824054;
         bh=z2US9SuqGeb8MNBIv52FpTTXwXw4NnMl51Uz1mvkp6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aXBntU8Y55DhgI2a7cIPEmWFZnyJ9i3ScEE1agmt7Atyy2LwYmJbmz6MDnOmr0p4r
-         2BVaNiareYG+hRCifSCHRjGQpwR01/Du4WzddCXmkxpJPqwRSQahDgrbUPfEfIylIz
-         YRMypehPiqCi/pqCTUXa1iu72+9W+qcq79WomDtjdtoOefSOhR/dkoB/a00NCsnEwO
-         i8y7eFI+HBfpKP2rmIWN5CAAvRaUFPEwx6Ir7cHBRqAuKxiN3qwD7KWBUE+mTqGM4k
-         RNvG6QChdQrlMp3cjvZ/OeEAfEd+o2YdwL7hc3F2N81g2JRoSUH7Jvb+ZgqNAb4R8W
-         n1ONGNDkcKrMw==
+        b=qMoAZ+pBRsYRxuWpSb305oYrsZ63LfVI0xiJOXxxPZzmCNYS2pmGIrND1RjKtFpFQ
+         N8pXn4aVny2NjXJUW4067oB2hsdkqxqQtSoAePs+2woQJnMVcKiMWIksmGG45Zu2Ir
+         3yn0gdxIvrj2We+AjKuMQHB5uUWhC7QSRNxXQUKov91X8JDRyES38VNWP+kT7cASrR
+         RGeyvtdYc/CXp9eSMwfasEuagbCQdKYGW6JcVH8i8hT3FTX8hHWGSToplde0NJoTgq
+         6wm9ZvtozweK8Fyfnu1QDV19gvFr1RvthZlK8LQh29LmH8/UOP0/v2TsERkOXG8eX4
+         lePdBZ6lJZXqw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Harold Huang <baymaxhuang@gmail.com>,
@@ -42,12 +42,12 @@ Cc:     Harold Huang <baymaxhuang@gmail.com>,
         daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
         netdev@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.16 079/109] tuntap: add sanity checks about msg_controllen in sendmsg
-Date:   Fri,  1 Apr 2022 10:32:26 -0400
-Message-Id: <20220401143256.1950537-79-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 68/98] tuntap: add sanity checks about msg_controllen in sendmsg
+Date:   Fri,  1 Apr 2022 10:37:12 -0400
+Message-Id: <20220401143742.1952163-68-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401143256.1950537-1-sashal@kernel.org>
-References: <20220401143256.1950537-1-sashal@kernel.org>
+In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
+References: <20220401143742.1952163-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
