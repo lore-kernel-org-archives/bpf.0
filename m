@@ -2,96 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02FB4C433FE
-	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 16:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28C24C433F5
+	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 16:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239034AbiDAQaF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Apr 2022 12:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S235756AbiDAQeA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Apr 2022 12:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346190AbiDAQ1x (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Apr 2022 12:27:53 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1E825D
-        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 08:58:12 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id 9so3672952iou.5
-        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 08:58:12 -0700 (PDT)
+        with ESMTP id S1349039AbiDAQdH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Apr 2022 12:33:07 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0C32A1EBF
+        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 09:05:42 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id p26-20020a05600c1d9a00b0038ccbff1951so3583527wms.1
+        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 09:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
-        b=ea/IE/fe0VT/Rd2tjIq/T5uvj1KigQvyuF63fwmr58Epj4H7G6yUy7U1w0tkzNRX3d
-         stblNmSfNTlJOAyYOqhZUihlV//5gdYlfbG3FJPVku+U8s+os579AyHpvO9YKhFvdXxe
-         7ns9sglzF7d4QqAVTR+/QJBAyRghLLTY5DvAA=
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sjfwJQGdgK4o6lp5qgare8KfoLw0OxKyARMv1JLsw+s=;
+        b=eMI5L4xnBQmxhQ7cT4ChcsSBYTztKqAiSNKMIlYjhkWBrAbWxwY1zl+P2d+kHGnWCh
+         V4hTzYzKBA8crL7lJ+ke9bSOAEWypV9yLe1slPBw0CJnL8oXLrvVHVepIjazSUNyVxCn
+         M6GH4m6drXzVf2iNIT06ur/RTL5Xl9OmUGNa1cQAKcRGVmfARMaa3IK/y7YZbdwIZtcy
+         +7B8hpC5ZTV5F7rHfcMkWpWsV75A339xTk89/T9J6eqLhip4CvFzcw1I81ZPGzq0csp4
+         nJYl+C4aGqiqaDKGCrIXJ5rpg2e+5kFJR7io2DNciSYpJK0ng6Ic2WGN85kIfXGdJt59
+         DftQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
-        b=TLy1oC1qpyPrVv1mC1LGrDX4630Ch/XALVNRh5UiNSYwHtAeJhnmfuIYj97WrKcc9j
-         0KsjZs4ArYiFt7NXlkoxXrS5HfX6LXNsQBoYEt58NnayaFNR/H54oayjt6FJddKJ1JU7
-         Fp5mfYqqYN+3fxnfeRAok3gsnkQMbB/E6eSWPheJ7O4sZjrrR1Wdo0ROCfrRXnFn6uvy
-         2cUP1fjTmRmB+HFmpyvvCrCw2gq6yPOfr3Dqr+uNjESubbNIbJ+SE6L9+85u/CUjmTiD
-         b08NRbdF4Aupp+du9HGIBJHSskOOJ3cOLJHBnUUhZnhZ9JjJ+Dio1J/RrTupEwRvjTQp
-         9Inw==
-X-Gm-Message-State: AOAM5303xJPh+9S4P/qzE9OIVnCdSJP9dNgojdDU4frQZxySlzZ95MsC
-        +JNaHNG7A7IHR4T/vmyVtMhHOQ==
-X-Google-Smtp-Source: ABdhPJyVm5eJ6v6Sn0EKwc9zkAf28JqyDggWSu+3Pg9ORPXF0VPnMhMj12LBcd0SANEOxBPO/LSt/Q==
-X-Received: by 2002:a05:6602:3787:b0:649:ec10:183b with SMTP id be7-20020a056602378700b00649ec10183bmr185159iob.117.1648828691712;
-        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id c15-20020a92b74f000000b002c9cc44ede9sm1458833ilm.86.2022.04.01.08.58.10
+        bh=sjfwJQGdgK4o6lp5qgare8KfoLw0OxKyARMv1JLsw+s=;
+        b=sYDdmsCKG09EM+N9Y8aAfGyCT5IcAtNp+WbfXEmNoYRsNUI8DRNnmLAzxZI5yMSx1J
+         Ei6VPZqdfgPpvtfXRlF4hVqMYxJMxj+4lecIws5pGmq7+McCta9L06RWr1cUJlg1hzF0
+         yk+bOx+rDlfAdHGL/7h3uvhdWAWfPhSDs8IPLOd0jDEuaC/+ZoNDTq8ZVG1H3JsaSkrO
+         p/QiEc+9DOnwK+EYydG5KwWdVwM4frr7qb71x4F+McEC7xd6B5d7wEZlP0e5iPbc1yKl
+         YYXK7j/EPnKdx3J3H5c4n1NuksLaKVMZMd51a76g6vyLCn0Hwj04IaJsFkdt1co1brUE
+         V9/g==
+X-Gm-Message-State: AOAM530WCzVDcF1+kFKVIaF78Rm9x8oIs0LSdVL3LOtC5eleV3HAaH1O
+        3dPtRbSbPFMvYe/+y4+0FvxgMQ==
+X-Google-Smtp-Source: ABdhPJx+lm62SiIUpPeMCMBfhVARpAvnAuoK+9DB1KYT4WBwBGPOgKFeFh4IFjf3SAW2luc8hCKnFQ==
+X-Received: by 2002:a1c:f70a:0:b0:37c:533d:d296 with SMTP id v10-20020a1cf70a000000b0037c533dd296mr9057296wmh.147.1648829104298;
+        Fri, 01 Apr 2022 09:05:04 -0700 (PDT)
+Received: from [192.168.178.8] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id y15-20020a056000168f00b002057a9f9f5csm3071247wrd.31.2022.04.01.09.05.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
-Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
- functions
-To:     Haowen Bai <baihaowen@meizu.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7af611e7-88dd-9525-dccc-92bda4d1fb8d@linuxfoundation.org>
-Date:   Fri, 1 Apr 2022 09:58:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 01 Apr 2022 09:05:03 -0700 (PDT)
+Message-ID: <4612c72e-0256-0c99-c2b1-92e93a4c4416@isovalent.com>
+Date:   Fri, 1 Apr 2022 17:05:02 +0100
 MIME-Version: 1.0
-In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH bpf-next 2/3] bpf/bpftool: add missing link types
+Content-Language: en-GB
+To:     Milan Landaverde <milan@mdaverde.com>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        davemarchevsky@fb.com, sdf@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220331154555.422506-1-milan@mdaverde.com>
+ <20220331154555.422506-3-milan@mdaverde.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220331154555.422506-3-milan@mdaverde.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 3/31/22 8:15 PM, Haowen Bai wrote:
-> Return boolean values ("true" or "false") instead of 1 or 0 from bool
-> functions.  This fixes the following warnings from coccicheck:
+2022-03-31 11:45 UTC-0400 ~ Milan Landaverde <milan@mdaverde.com>
+> Will display the link type names in bpftool link show output
 > 
-> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
-> return of 0/1 in function 'get_packet_dst' with return type bool
-> 
-
-Thank you for including details on how the problem was found.
-
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> Signed-off-by: Milan Landaverde <milan@mdaverde.com>
 > ---
+>  tools/bpf/bpftool/link.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+> index 97dec81950e5..9392ef390828 100644
+> --- a/tools/bpf/bpftool/link.c
+> +++ b/tools/bpf/bpftool/link.c
+> @@ -20,6 +20,8 @@ static const char * const link_type_name[] = {
+>  	[BPF_LINK_TYPE_CGROUP]			= "cgroup",
+>  	[BPF_LINK_TYPE_ITER]			= "iter",
+>  	[BPF_LINK_TYPE_NETNS]			= "netns",
+> +	[BPF_LINK_TYPE_XDP]				= "xdp",
+> +	[BPF_LINK_TYPE_PERF_EVENT]		= "perf_event",
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Since this goes into bpf-next, we should add BPF_LINK_TYPE_KPROBE_MULTI
+as well.
 
-thanks,
--- Shuah
+Quentin
