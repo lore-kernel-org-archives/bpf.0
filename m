@@ -2,143 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63FA2C4332F
-	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 15:02:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02FB4C433FE
+	for <bpf@archiver.kernel.org>; Fri,  1 Apr 2022 16:28:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbiDAPEL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 1 Apr 2022 11:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S239034AbiDAQaF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 1 Apr 2022 12:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349842AbiDAO6I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Apr 2022 10:58:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37028160141;
-        Fri,  1 Apr 2022 07:45:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C72E060AC0;
-        Fri,  1 Apr 2022 14:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE19EC34112;
-        Fri,  1 Apr 2022 14:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648824302;
-        bh=p0lrJlKrVgc16/tpif2TS+ZCGj6bNUmABgF8O8twQUo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=faRmfnbMsF5uGPeppkDwbGNUFyECrHoK2QyOx0awGgfVlQBK1M31NEp61yQbkuirC
-         aFKWDSiWz7rcgUxK9CnMEZh5PW6ASmSV6Jv85FLinKMxY6u7lApydK8IR/YxwDdK4K
-         8nlaMkS3mGpH1TMmyIchDNyIwsVf7xiT12vDJBb/pJwBwRbSkxLqR9rpcnKQ+P2XGO
-         rRjDOceBIqSBc6TythNCsQTNGHIedVF51W+Ne6Mlj/wS6nCjKG8/QfofpT7RNxWRi8
-         zPL7hq/9Rr2uWdSlQcPssMGpMUR1/rUtXeKRkuqziIhMlYZ/qDfV3lNFUrREzL+okO
-         v8Yb6S+nk/jFQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
-        Menglong Dong <imagedong@tencent.com>,
+        with ESMTP id S1346190AbiDAQ1x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Apr 2022 12:27:53 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1E825D
+        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 08:58:12 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id 9so3672952iou.5
+        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 08:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
+        b=ea/IE/fe0VT/Rd2tjIq/T5uvj1KigQvyuF63fwmr58Epj4H7G6yUy7U1w0tkzNRX3d
+         stblNmSfNTlJOAyYOqhZUihlV//5gdYlfbG3FJPVku+U8s+os579AyHpvO9YKhFvdXxe
+         7ns9sglzF7d4QqAVTR+/QJBAyRghLLTY5DvAA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oaN9C0oDq1idmqd2LmsOaaxM8zUlCcCIJMIjqQvndL4=;
+        b=TLy1oC1qpyPrVv1mC1LGrDX4630Ch/XALVNRh5UiNSYwHtAeJhnmfuIYj97WrKcc9j
+         0KsjZs4ArYiFt7NXlkoxXrS5HfX6LXNsQBoYEt58NnayaFNR/H54oayjt6FJddKJ1JU7
+         Fp5mfYqqYN+3fxnfeRAok3gsnkQMbB/E6eSWPheJ7O4sZjrrR1Wdo0ROCfrRXnFn6uvy
+         2cUP1fjTmRmB+HFmpyvvCrCw2gq6yPOfr3Dqr+uNjESubbNIbJ+SE6L9+85u/CUjmTiD
+         b08NRbdF4Aupp+du9HGIBJHSskOOJ3cOLJHBnUUhZnhZ9JjJ+Dio1J/RrTupEwRvjTQp
+         9Inw==
+X-Gm-Message-State: AOAM5303xJPh+9S4P/qzE9OIVnCdSJP9dNgojdDU4frQZxySlzZ95MsC
+        +JNaHNG7A7IHR4T/vmyVtMhHOQ==
+X-Google-Smtp-Source: ABdhPJyVm5eJ6v6Sn0EKwc9zkAf28JqyDggWSu+3Pg9ORPXF0VPnMhMj12LBcd0SANEOxBPO/LSt/Q==
+X-Received: by 2002:a05:6602:3787:b0:649:ec10:183b with SMTP id be7-20020a056602378700b00649ec10183bmr185159iob.117.1648828691712;
+        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c15-20020a92b74f000000b002c9cc44ede9sm1458833ilm.86.2022.04.01.08.58.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 08:58:11 -0700 (PDT)
+Subject: Re: [PATCH] selftests/bpf: Return true/false (not 1/0) from bool
+ functions
+To:     Haowen Bai <baihaowen@meizu.com>, Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, daniel@iogearbox.net,
-        andrii@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 06/37] bpf: Make dst_port field in struct bpf_sock 16-bit wide
-Date:   Fri,  1 Apr 2022 10:44:15 -0400
-Message-Id: <20220401144446.1954694-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220401144446.1954694-1-sashal@kernel.org>
-References: <20220401144446.1954694-1-sashal@kernel.org>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <7af611e7-88dd-9525-dccc-92bda4d1fb8d@linuxfoundation.org>
+Date:   Fri, 1 Apr 2022 09:58:10 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1648779354-14700-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+On 3/31/22 8:15 PM, Haowen Bai wrote:
+> Return boolean values ("true" or "false") instead of 1 or 0 from bool
+> functions.  This fixes the following warnings from coccicheck:
+> 
+> ./tools/testing/selftests/bpf/progs/test_xdp_noinline.c:567:9-10: WARNING:
+> return of 0/1 in function 'get_packet_dst' with return type bool
+> ./tools/testing/selftests/bpf/progs/test_l4lb_noinline.c:221:9-10: WARNING:
+> return of 0/1 in function 'get_packet_dst' with return type bool
+> 
 
-[ Upstream commit 4421a582718ab81608d8486734c18083b822390d ]
+Thank you for including details on how the problem was found.
 
-Menglong Dong reports that the documentation for the dst_port field in
-struct bpf_sock is inaccurate and confusing. From the BPF program PoV, the
-field is a zero-padded 16-bit integer in network byte order. The value
-appears to the BPF user as if laid out in memory as so:
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
 
-  offsetof(struct bpf_sock, dst_port) + 0  <port MSB>
-                                      + 8  <port LSB>
-                                      +16  0x00
-                                      +24  0x00
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-32-, 16-, and 8-bit wide loads from the field are all allowed, but only if
-the offset into the field is 0.
-
-32-bit wide loads from dst_port are especially confusing. The loaded value,
-after converting to host byte order with bpf_ntohl(dst_port), contains the
-port number in the upper 16-bits.
-
-Remove the confusion by splitting the field into two 16-bit fields. For
-backward compatibility, allow 32-bit wide loads from offsetof(struct
-bpf_sock, dst_port).
-
-While at it, allow loads 8-bit loads at offset [0] and [1] from dst_port.
-
-Reported-by: Menglong Dong <imagedong@tencent.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/r/20220130115518.213259-2-jakub@cloudflare.com
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/uapi/linux/bpf.h |  3 ++-
- net/core/filter.c        | 10 +++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 63038eb23560..4d0d932a7017 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3068,7 +3068,8 @@ struct bpf_sock {
- 	__u32 src_ip4;
- 	__u32 src_ip6[4];
- 	__u32 src_port;		/* host byte order */
--	__u32 dst_port;		/* network byte order */
-+	__be16 dst_port;	/* network byte order */
-+	__u16 :16;		/* zero padding */
- 	__u32 dst_ip4;
- 	__u32 dst_ip6[4];
- 	__u32 state;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index d39518f691b4..54c5e3c379f6 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6708,6 +6708,7 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 			      struct bpf_insn_access_aux *info)
- {
- 	const int size_default = sizeof(__u32);
-+	int field_size;
- 
- 	if (off < 0 || off >= sizeof(struct bpf_sock))
- 		return false;
-@@ -6719,7 +6720,6 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 	case offsetof(struct bpf_sock, family):
- 	case offsetof(struct bpf_sock, type):
- 	case offsetof(struct bpf_sock, protocol):
--	case offsetof(struct bpf_sock, dst_port):
- 	case offsetof(struct bpf_sock, src_port):
- 	case bpf_ctx_range(struct bpf_sock, src_ip4):
- 	case bpf_ctx_range_till(struct bpf_sock, src_ip6[0], src_ip6[3]):
-@@ -6727,6 +6727,14 @@ bool bpf_sock_is_valid_access(int off, int size, enum bpf_access_type type,
- 	case bpf_ctx_range_till(struct bpf_sock, dst_ip6[0], dst_ip6[3]):
- 		bpf_ctx_record_field_size(info, size_default);
- 		return bpf_ctx_narrow_access_ok(off, size, size_default);
-+	case bpf_ctx_range(struct bpf_sock, dst_port):
-+		field_size = size == size_default ?
-+			size_default : sizeof_field(struct bpf_sock, dst_port);
-+		bpf_ctx_record_field_size(info, field_size);
-+		return bpf_ctx_narrow_access_ok(off, size, field_size);
-+	case offsetofend(struct bpf_sock, dst_port) ...
-+	     offsetof(struct bpf_sock, dst_ip4) - 1:
-+		return false;
- 	}
- 
- 	return size == size_default;
--- 
-2.34.1
-
+thanks,
+-- Shuah
