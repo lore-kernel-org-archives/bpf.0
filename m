@@ -2,48 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB472C433F5
-	for <bpf@archiver.kernel.org>; Sat,  2 Apr 2022 00:29:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 312BDC433FE
+	for <bpf@archiver.kernel.org>; Sat,  2 Apr 2022 00:30:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbiDBAbo convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 1 Apr 2022 20:31:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S233911AbiDBAb4 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 1 Apr 2022 20:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbiDBAbo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 1 Apr 2022 20:31:44 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4361A48A4
-        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 17:29:53 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2320C0se010114
-        for <bpf@vger.kernel.org>; Fri, 1 Apr 2022 17:29:53 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f69yn8kdf-1
+        with ESMTP id S234770AbiDBAby (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 1 Apr 2022 20:31:54 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509EF1A635A
+        for <bpf@vger.kernel.org>; Fri,  1 Apr 2022 17:30:01 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 2320C4BK010055
+        for <bpf@vger.kernel.org>; Fri, 1 Apr 2022 17:30:01 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3f5gpcjnfb-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 17:29:53 -0700
-Received: from twshared10896.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 01 Apr 2022 17:30:00 -0700
+Received: from twshared5730.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 1 Apr 2022 17:29:52 -0700
+ 15.1.2308.21; Fri, 1 Apr 2022 17:29:59 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 7685D15EB5185; Fri,  1 Apr 2022 17:29:45 -0700 (PDT)
+        id B136615EB51A6; Fri,  1 Apr 2022 17:29:53 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Alan Maguire <alan.maguire@oracle.com>,
         Dave Marchevsky <davemarchevsky@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v2 bpf-next 0/7] Add libbpf support for USDTs
-Date:   Fri, 1 Apr 2022 17:29:37 -0700
-Message-ID: <20220402002944.382019-1-andrii@kernel.org>
+Subject: [PATCH v2 bpf-next 4/7] libbpf: wire up spec management and other arch-independent USDT logic
+Date:   Fri, 1 Apr 2022 17:29:41 -0700
+Message-ID: <20220402002944.382019-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220402002944.382019-1-andrii@kernel.org>
+References: <20220402002944.382019-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: aNl1HfDeR5b9BAcIcpe_j2YhJ7aLRM1s
-X-Proofpoint-ORIG-GUID: aNl1HfDeR5b9BAcIcpe_j2YhJ7aLRM1s
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: gfdVYtFHmZZQ1imOYlwlycsZQ7-eIxGM
+X-Proofpoint-GUID: gfdVYtFHmZZQ1imOYlwlycsZQ7-eIxGM
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-04-01_08,2022-03-31_01,2022-02-23_01
@@ -51,121 +52,280 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add libbpf support for USDT (User Statically-Defined Tracing) probes.
-USDTs is important part of tracing, and BPF, ecosystem, widely used in
-mission-critical production applications for observability, performance
-analysis, and debugging.
+Last part of architecture-agnostic user-space USDT handling logic is to
+set up BPF spec and, optionally, IP-to-ID maps from user-space.
+usdt_manager performs a compact spec ID allocation to utilize
+fixed-sized BPF maps as efficiently as possible. We also use hashmap to
+deduplicate USDT arg spec strings and map identical strings to single
+USDT spec, minimizing the necessary BPF map size. usdt_manager supports
+arbitrary sequences of attachment and detachment, both of the same USDT
+and multiple different USDTs and internally maintains a free list of
+unused spec IDs. bpf_link_usdt's logic is extended with proper setup and
+teardown of this spec ID free list and supporting BPF maps.
 
-And while USDTs themselves are pretty complicated abstraction built on top of
-uprobes, for end-users USDT is as natural a primitive as uprobes themselves.
-And thus it's important for libbpf to provide best possible user experience
-when it comes to build tracing applications relying on USDTs.
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/usdt.c | 168 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 167 insertions(+), 1 deletion(-)
 
-USDTs historically presented a lot of challenges for libbpf's no
-compilation-on-the-fly general approach to BPF tracing. BCC utilizes power of
-on-the-fly source code generation and compilation using its embedded Clang
-toolchain, which was impractical for more lightweight and thus more rigid
-libbpf-based approach. But still, with enough diligence and BPF cookies it's
-possible to implement USDT support that feels as natural as tracing any
-uprobe.
-
-This patch set is the culmination of such effort to add libbpf USDT support
-following the spirit and philosophy of BPF CO-RE (even though it's not
-inherently relying on BPF CO-RE much, see patch #1 for some notes regarding
-this). Each respective patch has enough details and explanations, so I won't
-go into details here.
-
-In the end, I think the overall usability of libbpf's USDT support *exceeds*
-the status quo set by BCC due to the elimination of awkward runtime USDT
-supporting code generation. It also exceeds BCC's capabilities due to the use
-of BPF cookie. This eliminates the need to determine a USDT call site (and
-thus specifics about how exactly to fetch arguments) based on its *absolute IP
-address*, which is impossible with shared libraries if no PID is specified (as
-we then just *can't* know absolute IP at which shared library is loaded,
-because it might be different for each process). With BPF cookie this is not
-a problem as we record "call site ID" directly in a BPF cookie value. This
-makes it possible to do a system-wide tracing of a USDT defined in a shared
-library. Think about tracing some USDT in libc across any process in the
-system, both running at the time of attachment and all the new processes
-started *afterwards*. This is a very powerful capability that allows more
-efficient observability and tracing tooling.
-
-Once this functionality lands, the plan is to extend libbpf-bootstrap ([0])
-with an USDT example. It will also become possible to start converting BCC
-tools that rely on USDTs to their libbpf-based counterparts ([1]).
-
-It's worth noting that preliminary version of this code was currently used and
-tested in production code running fleet-wide observability toolkit.
-
-Libbpf functionality is broken down into 5 mostly logically independent parts,
-for ease of reviewing:
-  - patch #1 adds BPF-side implementation;
-  - patch #2 adds user-space APIs and wires bpf_link for USDTs;
-  - patch #3 adds the most mundate pieces: handling ELF, parsing USDT notes,
-    dealing with memory segments, relative vs absolute addresses, etc;
-  - patch #4 adds internal ID allocation and setting up/tearing down of
-    BPF-side state (spec and IP-to-ID mapping);
-  - patch #5 implements x86/x86-64-specific logic of parsing USDT argument
-    specifications;
-  - patch #6 adds testing of various basic aspects of handling of USDT;
-  - patch #7 extends the set of tests with more combinations of semaphore,
-    executable vs shared library, and PID filter options.
-
-  [0] https://github.com/libbpf/libbpf-bootstrap
-  [1] https://github.com/iovisor/bcc/tree/master/libbpf-tools
-
-v1->v2:
-  - huge high-level comment describing how all the moving parts fit together
-    (Alan, Alexei);
-  - switched from `__hidden __weak` to `static inline __noinline` for now, as
-    there is a bug in BPF linker breaking final BPF object file due to invalid
-    .BTF.ext data; I want to fix it separately at which point I'll switch back
-    to __hidden __weak again. The fix isn't trivial, so I don't want to block
-    on that. Same for __weak variable lookup bug that Henqi reported.
-  - various fixes and improvements, addressing other feedback (Alan, Hengqi);
-
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Dave Marchevsky <davemarchevsky@fb.com>
-Cc: Hengqi Chen <hengqi.chen@gmail.com>
-
-Andrii Nakryiko (7):
-  libbpf: add BPF-side of USDT support
-  libbpf: wire up USDT API and bpf_link integration
-  libbpf: add USDT notes parsing and resolution logic
-  libbpf: wire up spec management and other arch-independent USDT logic
-  libbpf: add x86-specific USDT arg spec parsing logic
-  selftests/bpf: add basic USDT selftests
-  selftests/bpf: add urandom_read shared lib and USDTs
-
- Documentation/bpf/bpf_devel_QA.rst            |    3 +
- tools/lib/bpf/Build                           |    3 +-
- tools/lib/bpf/Makefile                        |    2 +-
- tools/lib/bpf/libbpf.c                        |  100 +-
- tools/lib/bpf/libbpf.h                        |   31 +
- tools/lib/bpf/libbpf.map                      |    1 +
- tools/lib/bpf/libbpf_internal.h               |   19 +
- tools/lib/bpf/usdt.bpf.h                      |  256 ++++
- tools/lib/bpf/usdt.c                          | 1277 +++++++++++++++++
- tools/testing/selftests/bpf/Makefile          |   25 +-
- tools/testing/selftests/bpf/prog_tests/usdt.c |  421 ++++++
- .../selftests/bpf/progs/test_urandom_usdt.c   |   70 +
- tools/testing/selftests/bpf/progs/test_usdt.c |   96 ++
- .../selftests/bpf/progs/test_usdt_multispec.c |   32 +
- tools/testing/selftests/bpf/urandom_read.c    |   63 +-
- .../testing/selftests/bpf/urandom_read_aux.c  |    9 +
- .../testing/selftests/bpf/urandom_read_lib1.c |   13 +
- .../testing/selftests/bpf/urandom_read_lib2.c |    8 +
- 18 files changed, 2406 insertions(+), 23 deletions(-)
- create mode 100644 tools/lib/bpf/usdt.bpf.h
- create mode 100644 tools/lib/bpf/usdt.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/usdt.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_urandom_usdt.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_usdt_multispec.c
- create mode 100644 tools/testing/selftests/bpf/urandom_read_aux.c
- create mode 100644 tools/testing/selftests/bpf/urandom_read_lib1.c
- create mode 100644 tools/testing/selftests/bpf/urandom_read_lib2.c
-
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index c9eff690e291..afbae742c081 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -236,6 +236,10 @@ struct usdt_manager {
+ 	struct bpf_map *specs_map;
+ 	struct bpf_map *ip_to_spec_id_map;
+ 
++	int *free_spec_ids;
++	size_t free_spec_cnt;
++	size_t next_free_spec_id;
++
+ 	bool has_bpf_cookie;
+ 	bool has_sema_refcnt;
+ };
+@@ -280,6 +284,7 @@ void usdt_manager_free(struct usdt_manager *man)
+ 	if (IS_ERR_OR_NULL(man))
+ 		return;
+ 
++	free(man->free_spec_ids);
+ 	free(man);
+ }
+ 
+@@ -786,6 +791,9 @@ struct bpf_link_usdt {
+ 
+ 	struct usdt_manager *usdt_man;
+ 
++	size_t spec_cnt;
++	int *spec_ids;
++
+ 	size_t uprobe_cnt;
+ 	struct {
+ 		long abs_ip;
+@@ -796,11 +804,52 @@ struct bpf_link_usdt {
+ static int bpf_link_usdt_detach(struct bpf_link *link)
+ {
+ 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
++	struct usdt_manager *man = usdt_link->usdt_man;
+ 	int i;
+ 
+ 	for (i = 0; i < usdt_link->uprobe_cnt; i++) {
+ 		/* detach underlying uprobe link */
+ 		bpf_link__destroy(usdt_link->uprobes[i].link);
++		/* there is no need to update specs map because it will be
++		 * unconditionally overwritten on subsequent USDT attaches,
++		 * but if BPF cookies are not used we need to remove entry
++		 * from ip_to_spec_id map, otherwise we'll run into false
++		 * conflicting IP errors
++		 */
++		if (!man->has_bpf_cookie) {
++			/* not much we can do about errors here */
++			(void)bpf_map_delete_elem(bpf_map__fd(man->ip_to_spec_id_map),
++						  &usdt_link->uprobes[i].abs_ip);
++		}
++	}
++
++	/* try to return the list of previously used spec IDs to usdt_manager
++	 * for future reuse for subsequent USDT attaches
++	 */
++	if (!man->free_spec_ids) {
++		/* if there were no free spec IDs yet, just transfer our IDs */
++		man->free_spec_ids = usdt_link->spec_ids;
++		man->free_spec_cnt = usdt_link->spec_cnt;
++		usdt_link->spec_ids = NULL;
++	} else {
++		/* otherwise concat IDs */
++		size_t new_cnt = man->free_spec_cnt + usdt_link->spec_cnt;
++		int *new_free_ids;
++
++		new_free_ids = libbpf_reallocarray(man->free_spec_ids, new_cnt,
++						   sizeof(*new_free_ids));
++		/* If we couldn't resize free_spec_ids, we'll just leak
++		 * a bunch of free IDs; this is very unlikely to happen and if
++		 * system is so exausted on memory, it's the least of user's
++		 * concerns, probably.
++		 * So just do our best here to return those IDs to usdt_manager.
++		 */
++		if (new_free_ids) {
++			memcpy(new_free_ids + man->free_spec_cnt, usdt_link->spec_ids,
++			       usdt_link->spec_cnt * sizeof(*usdt_link->spec_ids));
++			man->free_spec_ids = new_free_ids;
++			man->free_spec_cnt = new_cnt;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -810,22 +859,96 @@ static void bpf_link_usdt_dealloc(struct bpf_link *link)
+ {
+ 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
+ 
++	free(usdt_link->spec_ids);
+ 	free(usdt_link->uprobes);
+ 	free(usdt_link);
+ }
+ 
++static size_t specs_hash_fn(const void *key, void *ctx)
++{
++	const char *s = key;
++
++	return str_hash(s);
++}
++
++static bool specs_equal_fn(const void *key1, const void *key2, void *ctx)
++{
++	const char *s1 = key1;
++	const char *s2 = key2;
++
++	return strcmp(s1, s2) == 0;
++}
++
++static int allocate_spec_id(struct usdt_manager *man, struct hashmap *specs_hash,
++			    struct bpf_link_usdt *link, struct usdt_target *target,
++			    int *spec_id, bool *is_new)
++{
++	void *tmp;
++	int err;
++
++	/* check if we already allocated spec ID for this spec string */
++	if (hashmap__find(specs_hash, target->spec_str, &tmp)) {
++		*spec_id = (long)tmp;
++		*is_new = false;
++		return 0;
++	}
++
++	/* otherwise it's a new ID that needs to be set up in specs map and
++	 * returned back to usdt_manager when USDT link is detached
++	 */
++	tmp = libbpf_reallocarray(link->spec_ids, link->spec_cnt + 1, sizeof(*link->spec_ids));
++	if (!tmp)
++		return -ENOMEM;
++	link->spec_ids = tmp;
++
++	/* get next free spec ID, giving preference to free list, if not empty */
++	if (man->free_spec_cnt) {
++		*spec_id = man->free_spec_ids[man->free_spec_cnt - 1];
++
++		/* cache spec ID for current spec string for future lookups */
++		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
++		if (err)
++			 return err;
++
++		man->free_spec_cnt--;
++	} else {
++		/* don't allocate spec ID bigger than what fits in specs map */
++		if (man->next_free_spec_id >= bpf_map__max_entries(man->specs_map))
++			return -E2BIG;
++
++		*spec_id = man->next_free_spec_id;
++
++		/* cache spec ID for current spec string for future lookups */
++		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
++		if (err)
++			 return err;
++
++		man->next_free_spec_id++;
++	}
++
++	/* remember new spec ID in the link for later return back to free list on detach */
++	link->spec_ids[link->spec_cnt] = *spec_id;
++	link->spec_cnt++;
++	*is_new = true;
++	return 0;
++}
++
+ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct bpf_program *prog,
+ 					  pid_t pid, const char *path,
+ 					  const char *usdt_provider, const char *usdt_name,
+ 					  long usdt_cookie)
+ {
+-	int i, fd, err;
++	int i, fd, err, spec_map_fd, ip_map_fd;
+ 	LIBBPF_OPTS(bpf_uprobe_opts, opts);
++	struct hashmap *specs_hash = NULL;
+ 	struct bpf_link_usdt *link = NULL;
+ 	struct usdt_target *targets = NULL;
+ 	size_t target_cnt;
+ 	Elf *elf;
+ 
++	spec_map_fd = bpf_map__fd(man->specs_map);
++	ip_map_fd = bpf_map__fd(man->ip_to_spec_id_map);
++
+ 	/* TODO: perform path resolution similar to uprobe's */
+ 	fd = open(path, O_RDONLY);
+ 	if (fd < 0) {
+@@ -861,6 +984,12 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 		goto err_out;
+ 	}
+ 
++	specs_hash = hashmap__new(specs_hash_fn, specs_equal_fn, NULL);
++	if (IS_ERR(specs_hash)) {
++		err = PTR_ERR(specs_hash);
++		goto err_out;
++	}
++
+ 	link = calloc(1, sizeof(*link));
+ 	if (!link) {
+ 		err = -ENOMEM;
+@@ -880,8 +1009,43 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	for (i = 0; i < target_cnt; i++) {
+ 		struct usdt_target *target = &targets[i];
+ 		struct bpf_link *uprobe_link;
++		bool is_new;
++		int spec_id;
++
++		/* Spec ID can be either reused or newly allocated. If it is
++		 * newly allocated, we'll need to fill out spec map, otherwise
++		 * entire spec should be valid and can be just used by a new
++		 * uprobe. We reuse spec when USDT arg spec is identical. We
++		 * also never share specs between two different USDT
++		 * attachments ("links"), so all the reused specs already
++		 * share USDT cookie value implicitly.
++		 */
++		err = allocate_spec_id(man, specs_hash, link, target, &spec_id, &is_new);
++		if (err)
++			goto err_out;
++
++		if (is_new && bpf_map_update_elem(spec_map_fd, &spec_id, &target->spec, BPF_ANY)) {
++			err = -errno;
++			pr_warn("usdt: failed to set USDT spec #%d for '%s:%s' in '%s': %d\n",
++				spec_id, usdt_provider, usdt_name, path, err);
++			goto err_out;
++		}
++		if (!man->has_bpf_cookie &&
++		    bpf_map_update_elem(ip_map_fd, &target->abs_ip, &spec_id, BPF_NOEXIST)) {
++			err = -errno;
++			if (err == -EEXIST) {
++				pr_warn("usdt: IP collision detected for spec #%d for '%s:%s' in '%s'\n",
++				        spec_id, usdt_provider, usdt_name, path);
++			} else {
++				pr_warn("usdt: failed to map IP 0x%lx to spec #%d for '%s:%s' in '%s': %d\n",
++					target->abs_ip, spec_id, usdt_provider, usdt_name,
++					path, err);
++			}
++			goto err_out;
++		}
+ 
+ 		opts.ref_ctr_offset = target->sema_off;
++		opts.bpf_cookie = man->has_bpf_cookie ? spec_id : 0;
+ 		uprobe_link = bpf_program__attach_uprobe_opts(prog, pid, path,
+ 							      target->rel_ip, &opts);
+ 		err = libbpf_get_error(uprobe_link);
+@@ -897,6 +1061,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	}
+ 
+ 	free(targets);
++	hashmap__free(specs_hash);
+ 	elf_end(elf);
+ 	close(fd);
+ 
+@@ -906,6 +1071,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	bpf_link__destroy(&link->link);
+ 
+ 	free(targets);
++	hashmap__free(specs_hash);
+ 	if (elf)
+ 		elf_end(elf);
+ 	close(fd);
 -- 
 2.30.2
 
