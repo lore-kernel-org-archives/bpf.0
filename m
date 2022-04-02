@@ -2,135 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6CB0C433F5
-	for <bpf@archiver.kernel.org>; Sat,  2 Apr 2022 07:29:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9703DC433EF
+	for <bpf@archiver.kernel.org>; Sat,  2 Apr 2022 08:50:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiDBHbF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 2 Apr 2022 03:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S1349199AbiDBIw1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 2 Apr 2022 04:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiDBHbD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 2 Apr 2022 03:31:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0BB173B2B;
-        Sat,  2 Apr 2022 00:29:09 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KVpXG040nzgYKZ;
-        Sat,  2 Apr 2022 15:27:25 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Sat, 2 Apr
- 2022 15:29:06 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf-next v2] bpf, arm64: Sign return address for jited code
-Date:   Sat, 2 Apr 2022 03:39:42 -0400
-Message-ID: <20220402073942.3782529-1-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+        with ESMTP id S230100AbiDBIw1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 2 Apr 2022 04:52:27 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA3D403C3;
+        Sat,  2 Apr 2022 01:50:32 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:47232.458224640
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.43 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id 190901001DC;
+        Sat,  2 Apr 2022 16:50:21 +0800 (CST)
+Received: from  ([172.27.8.53])
+        by gateway-151646-dep-b7fbf7d79-9vctg with ESMTP id 7c40bd6158ac417ba079583c19fc5d74 for ast@kernel.org;
+        Sat, 02 Apr 2022 16:50:31 CST
+X-Transaction-ID: 7c40bd6158ac417ba079583c19fc5d74
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 172.27.8.53
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+From:   Song Chen <chensong_2000@189.cn>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Song Chen <chensong_2000@189.cn>
+Subject: [PATCH v2] sample: bpf: syscall_tp_user: print result of verify_map
+Date:   Sat,  2 Apr 2022 16:57:08 +0800
+Message-Id: <1648889828-12417-1-git-send-email-chensong_2000@189.cn>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sign return address for jited code when the kernel is built with pointer
-authentication enabled.
+At the end of the test, we already print out
+    prog <prog number>: map ids <...> <...>
+Value is the number read from kernel through bpf map, further print out
+    verify map:<map id> val:<...>
+will help users to understand the program runs successfully.
 
-1. Sign LR with paciasp instruction before LR is pushed to stack. Since
-   paciasp acts like landing pads for function entry, no need to insert
-   bti instruction before paciasp.
-
-2. Authenticate LR with autiasp instruction after LR is poped from stack.
-
-For bpf tail call, the stack frame constructed by the caller is reused by
-the callee. That is, the stack frame is constructed by the caller and
-destructed by the callee. Thus LR is signed and pushed to the stack in the
-caller's prologue, and poped from the stack and authenticated in the
-callee's epilogue.
-
-For bpf2bpf call, the caller and callee construct their own stack frames,
-and sign and authenticate their own LRs.
-
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Signed-off-by: Song Chen <chensong_2000@189.cn>
 ---
+ samples/bpf/syscall_tp_user.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v1->v2:
-- Add bpf tail call and bpf2bpf call description to commit message
-- Rebased to bpf-next
-
- arch/arm64/net/bpf_jit.h      |  3 +++
- arch/arm64/net/bpf_jit_comp.c | 12 ++++++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index 3920213244f0..194c95ccc1cf 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -263,6 +263,9 @@
- /* HINTs */
- #define A64_HINT(x) aarch64_insn_gen_hint(x)
- 
-+#define A64_PACIASP A64_HINT(AARCH64_INSN_HINT_PACIASP)
-+#define A64_AUTIASP A64_HINT(AARCH64_INSN_HINT_AUTIASP)
+diff --git a/samples/bpf/syscall_tp_user.c b/samples/bpf/syscall_tp_user.c
+index a0ebf1833ed3..c55383068384 100644
+--- a/samples/bpf/syscall_tp_user.c
++++ b/samples/bpf/syscall_tp_user.c
+@@ -36,6 +36,9 @@ static void verify_map(int map_id)
+ 		fprintf(stderr, "failed: map #%d returns value 0\n", map_id);
+ 		return;
+ 	}
 +
- /* BTI */
- #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
- #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 093fa9ea1083..8ab4035dea27 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -236,7 +236,8 @@ static bool is_lsi_offset(int offset, int scale)
- }
- 
- /* Tail call offset to jump into */
--#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL)
-+#if IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) || \
-+	IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)
- #define PROLOGUE_OFFSET 9
- #else
- #define PROLOGUE_OFFSET 8
-@@ -278,8 +279,11 @@ static int build_prologue(struct jit_ctx *ctx, bool ebpf_from_cbpf)
- 	 *
- 	 */
- 
-+	/* Sign lr */
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
-+		emit(A64_PACIASP, ctx);
- 	/* BTI landing pad */
--	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
-+	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
- 		emit(A64_BTI_C, ctx);
- 
- 	/* Save FP and LR registers to stay align with ARM64 AAPCS */
-@@ -580,6 +584,10 @@ static void build_epilogue(struct jit_ctx *ctx)
- 	/* Set return value */
- 	emit(A64_MOV(1, A64_R(0), r0), ctx);
- 
-+	/* Authenticate lr */
-+	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL))
-+		emit(A64_AUTIASP, ctx);
++	printf("verify map:%d val: %d\n", map_id, val);
 +
- 	emit(A64_RET(A64_LR), ctx);
- }
- 
+ 	val = 0;
+ 	if (bpf_map_update_elem(map_id, &key, &val, BPF_ANY) != 0) {
+ 		fprintf(stderr, "map_update failed: %s\n", strerror(errno));
 -- 
-2.30.2
+2.25.1
 
