@@ -2,322 +2,321 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB5C9C433FE
-	for <bpf@archiver.kernel.org>; Sun,  3 Apr 2022 16:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E837C433F5
+	for <bpf@archiver.kernel.org>; Sun,  3 Apr 2022 16:28:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbiDCQKL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 3 Apr 2022 12:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
+        id S1358324AbiDCQal (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Apr 2022 12:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiDCQKJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:10:09 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83AF039836
-        for <bpf@vger.kernel.org>; Sun,  3 Apr 2022 09:08:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id bh17so15291232ejb.8
-        for <bpf@vger.kernel.org>; Sun, 03 Apr 2022 09:08:14 -0700 (PDT)
+        with ESMTP id S1352478AbiDCQak (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Apr 2022 12:30:40 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3AF44
+        for <bpf@vger.kernel.org>; Sun,  3 Apr 2022 09:28:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id yy13so15407262ejb.2
+        for <bpf@vger.kernel.org>; Sun, 03 Apr 2022 09:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aw9Z8syibvVPGLl55rs0k1Ml1FM/2mk1tEZsyZQf12Y=;
-        b=HPLRqzYQp9dur0uHs22n4Q32ucFcBdBHJvR7Pfr5ykE2SMpgaOfU2CMQPrXbxanWxv
-         UjLiHcRo2JC9wAwu2MxIpuaLTG/1gVfeAnX4FGZc5yGGLMhFsfocev1UGurAX1jw4bof
-         jTmR4Blpi7j1dqPaBedVV2jtTiY8bIFC9onHqQ1k0xEM9QWKEUEJB1JPYAd9+3ZhXLGG
-         KEGyFvVXYxvKEZqUt6PgDO6toiP/4eO36sk8b18t2vVYllpW5u672wrrw16Tq7lSNpms
-         Mk8O2b1c0AnpJ9kP4XBLX55xPHdbkhIUlMPe9EajyfUy08UQz40dbrWdXCaNRrGlP1fj
-         Zpzw==
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DtUiWz/udmP+qktO1RORhitFU4p9rJPKhCmdA8YtM/4=;
+        b=p2Y4hBhSp6psMksL4k8ooVelOnmPjbafLHH0j8dvqO293bsqjCBSnHkiblMLUy+eBm
+         ghF0ZWoc8oU28KS/cDmy9rGBScJJ5IqB6N8QYz8mjpUb9cxzTwM9LLpyDChm6KMazb7B
+         Q364cbARDr3z90kFqmk0UhBqZW51Sq0bP2aj0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aw9Z8syibvVPGLl55rs0k1Ml1FM/2mk1tEZsyZQf12Y=;
-        b=UK+Yr9RXECPyKSbrYQxbL9R2tx+i4O8UrCH9rpN752YHjQE/VCbwHW3yn0DhR5E6k/
-         UX+ipLWApx9KtHwbxoW4ymns84YcSR9W9S2z9hyidgqjBpxXQkRRd3KCKxgmYjFJcXQ/
-         NnXpNsRLgRc8a7OLxCz0T2Wu8KmrUSMROIjHYcH7dowbvEsHsaakr0zP0fPFgvX6qvr9
-         zkFhyUw9pApLpTesYggRCMjxXLHRKSyZ7qYvaTQTT+84aZYlDjV2d7GGtfu2pCHuI+bx
-         dRJ/E860UctU0uUydHSLzqB68z6TE/DW6YAwo9QkkToHJO/+nlw6WebD9T3PDOj0L978
-         bsnA==
-X-Gm-Message-State: AOAM530nXuKiDpJ7qSDx96j5BaYREyApJT0L0ckql4V3BmQ0jrNXsvyZ
-        0Xodcyyvk8nYaaH22FTWcaCEaFRahG9zBw==
-X-Google-Smtp-Source: ABdhPJxiBkUQfgL+M/Tdeyp2luNqcDkuMQwXABcm0xHNXLYQQoEdjWfZI2Y7GXJhqeyqMu+AH8zM2w==
-X-Received: by 2002:a17:907:1b27:b0:6d9:ceb6:7967 with SMTP id mp39-20020a1709071b2700b006d9ceb67967mr7911250ejc.186.1649002092992;
-        Sun, 03 Apr 2022 09:08:12 -0700 (PDT)
-Received: from erthalion.local (dslb-094-222-030-091.094.222.pools.vodafone-ip.de. [94.222.30.91])
-        by smtp.gmail.com with ESMTPSA id z12-20020a17090674cc00b006df9afdda91sm3332053ejl.185.2022.04.03.09.08.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 09:08:12 -0700 (PDT)
-From:   Dmitrii Dolgov <9erthalion6@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, yhs@fb.com,
-        songliubraving@fb.com
-Cc:     Dmitrii Dolgov <9erthalion6@gmail.com>
-Subject: [RFC PATCH bpf-next 1/2] bpf: tracing: Introduce prio field for bpf_prog
-Date:   Sun,  3 Apr 2022 18:07:17 +0200
-Message-Id: <20220403160718.13730-2-9erthalion6@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220403160718.13730-1-9erthalion6@gmail.com>
-References: <20220403160718.13730-1-9erthalion6@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DtUiWz/udmP+qktO1RORhitFU4p9rJPKhCmdA8YtM/4=;
+        b=CZGDiB5yUoina2nb3alUxGqKnCSFIIncOrXhPVdIiVf02VyB5C0sumD0U9mPtmxMpP
+         PwrdzrW7cG0kJwt6IqzAOe3pjexiwiuUgYDh/Miq7R4OytMK0dfUlYoPpjmlbDTbTZbc
+         0XBhrrUnxppDLRq4+VYyBZqoJvanZ5qwxwDseM/bKBDkWO19su6xkY/00E1bSzSJJCmy
+         62KYiDu2TzQvISJEEe6dVrnfLNmPZ3OfXkQr8BmBy0ti4OJg/XNUwl2KQWtZEoV7qdsn
+         L9vmvbtyeMGisayhgKF0KT14QOV9i9/6EOhvf5kwtw+V/ERzg3ot3eGN0MEIoDRRq4zL
+         FtMQ==
+X-Gm-Message-State: AOAM530LLRp/cb9apXS7ekV1HEZCcpSRDE4LTL5ZJksr0wTodnp1wNOI
+        D/X+IEvtr7uZvm+ZxhJXMk7hsLHeJIxVh3Z2SRWVVg==
+X-Google-Smtp-Source: ABdhPJwSgOkF9TA5+KrakewnUhwfRl9VZLKb3tJNfkfGixXQ676ITS5hbI7IY23qMj/pwvPnpBhBOnYfHdiAjjxnabw=
+X-Received: by 2002:a17:907:160b:b0:6e1:116e:7a59 with SMTP id
+ hb11-20020a170907160b00b006e1116e7a59mr7432985ejc.579.1649003323297; Sun, 03
+ Apr 2022 09:28:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220329133001.2283509-1-maximmi@nvidia.com>
+In-Reply-To: <20220329133001.2283509-1-maximmi@nvidia.com>
+From:   Arthur Fabre <afabre@cloudflare.com>
+Date:   Sun, 3 Apr 2022 16:28:32 +0000
+Message-ID: <CAOn4ftuxiQZh9RkBsPwUeyt+QdDafrhu_APxgETp7yzSzoukZg@mail.gmail.com>
+Subject: Re: [PATCH bpf v4] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Tariq Toukan <tariqt@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add prio field into bpf_prog_array_item. The field signals what is the
-priority of the item in the array. Use it in bpf_prog_array_copy to
-place the new item in the array according to the priority. The change
-doesn't cover bpf_prog_array_update_at yet.
+On Tue, Mar 29, 2022 at 1:30 PM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+>
+> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
+> validates the address family of the socket. It supports IPv4 packets in
+> AF_INET6 dual-stack sockets.
+>
+> On the other hand, bpf_tcp_check_syncookie looks only at the address
+> family of the socket, ignoring the real IP version in headers, and
+> validates only the packet size. This implementation has some drawbacks:
+>
+> 1. Packets are not validated properly, allowing a BPF program to trick
+>    bpf_tcp_check_syncookie into handling an IPv6 packet on an IPv4
+>    socket.
+>
+> 2. Dual-stack sockets fail the checks on IPv4 packets. IPv4 clients end
+>    up receiving a SYNACK with the cookie, but the following ACK gets
+>    dropped.
+>
+> This patch fixes these issues by changing the checks in
+> bpf_tcp_check_syncookie to match the ones in bpf_tcp_gen_syncookie. IP
+> version from the header is taken into account, and it is validated
+> properly with address family.
+>
+> Fixes: 399040847084 ("bpf: add helper to check for a valid SYN cookie")
+> Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+> Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> ---
+>  net/core/filter.c                             | 17 +++-
+>  .../bpf/test_tcp_check_syncookie_user.c       | 78 ++++++++++++++-----
+>  2 files changed, 72 insertions(+), 23 deletions(-)
+>
+> v2 changes: moved from bpf-next to bpf.
+>
+> v3 changes: added a selftest.
+>
+> v4 changes: none, CCed Jakub and Arthur from Cloudflare.
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index a7044e98765e..64470a727ef7 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7016,24 +7016,33 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, sk, void *, iph, u32, iph_len
+>         if (!th->ack || th->rst || th->syn)
+>                 return -ENOENT;
+>
+> +       if (unlikely(iph_len < sizeof(struct iphdr)))
+> +               return -EINVAL;
+> +
+>         if (tcp_synq_no_recent_overflow(sk))
+>                 return -ENOENT;
+>
+>         cookie = ntohl(th->ack_seq) - 1;
+>
+> -       switch (sk->sk_family) {
+> -       case AF_INET:
+> -               if (unlikely(iph_len < sizeof(struct iphdr)))
+> +       /* Both struct iphdr and struct ipv6hdr have the version field at the
+> +        * same offset so we can cast to the shorter header (struct iphdr).
+> +        */
+> +       switch (((struct iphdr *)iph)->version) {
+> +       case 4:
+> +               if (sk->sk_family == AF_INET6 && ipv6_only_sock(sk))
+>                         return -EINVAL;
+>
+>                 ret = __cookie_v4_check((struct iphdr *)iph, th, cookie);
+>                 break;
+>
+>  #if IS_BUILTIN(CONFIG_IPV6)
+> -       case AF_INET6:
+> +       case 6:
+>                 if (unlikely(iph_len < sizeof(struct ipv6hdr)))
+>                         return -EINVAL;
+>
+> +               if (sk->sk_family != AF_INET6)
+> +                       return -EINVAL;
+> +
+>                 ret = __cookie_v6_check((struct ipv6hdr *)iph, th, cookie);
+>                 break;
+>  #endif /* CONFIG_IPV6 */
+> diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+> index b9e991d43155..e7775d3bbe08 100644
+> --- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+> +++ b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
+> @@ -18,8 +18,9 @@
+>  #include "bpf_rlimit.h"
+>  #include "cgroup_helpers.h"
+>
+> -static int start_server(const struct sockaddr *addr, socklen_t len)
+> +static int start_server(const struct sockaddr *addr, socklen_t len, bool dual)
+>  {
+> +       int mode = !dual;
+>         int fd;
+>
+>         fd = socket(addr->sa_family, SOCK_STREAM, 0);
+> @@ -28,6 +29,14 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
+>                 goto out;
+>         }
+>
+> +       if (addr->sa_family == AF_INET6) {
+> +               if (setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&mode,
+> +                              sizeof(mode)) == -1) {
+> +                       log_err("Failed to set the dual-stack mode");
+> +                       goto close_out;
+> +               }
+> +       }
+> +
+>         if (bind(fd, addr, len) == -1) {
+>                 log_err("Failed to bind server socket");
+>                 goto close_out;
+> @@ -47,24 +56,17 @@ static int start_server(const struct sockaddr *addr, socklen_t len)
+>         return fd;
+>  }
+>
+> -static int connect_to_server(int server_fd)
+> +static int connect_to_server(const struct sockaddr *addr, socklen_t len)
+>  {
+> -       struct sockaddr_storage addr;
+> -       socklen_t len = sizeof(addr);
+>         int fd = -1;
+>
+> -       if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
+> -               log_err("Failed to get server addr");
+> -               goto out;
+> -       }
+> -
+> -       fd = socket(addr.ss_family, SOCK_STREAM, 0);
+> +       fd = socket(addr->sa_family, SOCK_STREAM, 0);
+>         if (fd == -1) {
+>                 log_err("Failed to create client socket");
+>                 goto out;
+>         }
+>
+> -       if (connect(fd, (const struct sockaddr *)&addr, len) == -1) {
+> +       if (connect(fd, (const struct sockaddr *)addr, len) == -1) {
+>                 log_err("Fail to connect to server");
+>                 goto close_out;
+>         }
+> @@ -116,7 +118,8 @@ static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
+>         return map_fd;
+>  }
+>
+> -static int run_test(int server_fd, int results_fd, bool xdp)
+> +static int run_test(int server_fd, int results_fd, bool xdp,
+> +                   const struct sockaddr *addr, socklen_t len)
+>  {
+>         int client = -1, srv_client = -1;
+>         int ret = 0;
+> @@ -142,7 +145,7 @@ static int run_test(int server_fd, int results_fd, bool xdp)
+>                 goto err;
+>         }
+>
+> -       client = connect_to_server(server_fd);
+> +       client = connect_to_server(addr, len);
+>         if (client == -1)
+>                 goto err;
+>
+> @@ -199,12 +202,30 @@ static int run_test(int server_fd, int results_fd, bool xdp)
+>         return ret;
+>  }
+>
+> +static bool get_port(int server_fd, in_port_t *port)
+> +{
+> +       struct sockaddr_in addr;
+> +       socklen_t len = sizeof(addr);
+> +
+> +       if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
+> +               log_err("Failed to get server addr");
+> +               return false;
+> +       }
+> +
+> +       /* sin_port and sin6_port are located at the same offset. */
+> +       *port = addr.sin_port;
+> +       return true;
+> +}
+> +
+>  int main(int argc, char **argv)
+>  {
+>         struct sockaddr_in addr4;
+>         struct sockaddr_in6 addr6;
+> +       struct sockaddr_in addr4dual;
+> +       struct sockaddr_in6 addr6dual;
+>         int server = -1;
+>         int server_v6 = -1;
+> +       int server_dual = -1;
+>         int results = -1;
+>         int err = 0;
+>         bool xdp;
+> @@ -224,25 +245,43 @@ int main(int argc, char **argv)
+>         addr4.sin_family = AF_INET;
+>         addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+>         addr4.sin_port = 0;
+> +       memcpy(&addr4dual, &addr4, sizeof(addr4dual));
+>
+>         memset(&addr6, 0, sizeof(addr6));
+>         addr6.sin6_family = AF_INET6;
+>         addr6.sin6_addr = in6addr_loopback;
+>         addr6.sin6_port = 0;
+>
+> -       server = start_server((const struct sockaddr *)&addr4, sizeof(addr4));
+> -       if (server == -1)
+> +       memset(&addr6dual, 0, sizeof(addr6dual));
+> +       addr6dual.sin6_family = AF_INET6;
+> +       addr6dual.sin6_addr = in6addr_any;
+> +       addr6dual.sin6_port = 0;
+> +
+> +       server = start_server((const struct sockaddr *)&addr4, sizeof(addr4),
+> +                             false);
+> +       if (server == -1 || !get_port(server, &addr4.sin_port))
+>                 goto err;
+>
+>         server_v6 = start_server((const struct sockaddr *)&addr6,
+> -                                sizeof(addr6));
+> -       if (server_v6 == -1)
+> +                                sizeof(addr6), false);
+> +       if (server_v6 == -1 || !get_port(server_v6, &addr6.sin6_port))
+> +               goto err;
+> +
+> +       server_dual = start_server((const struct sockaddr *)&addr6dual,
+> +                                  sizeof(addr6dual), true);
+> +       if (server_dual == -1 || !get_port(server_dual, &addr4dual.sin_port))
+> +               goto err;
+> +
+> +       if (run_test(server, results, xdp,
+> +                    (const struct sockaddr *)&addr4, sizeof(addr4)))
+>                 goto err;
+>
+> -       if (run_test(server, results, xdp))
+> +       if (run_test(server_v6, results, xdp,
+> +                    (const struct sockaddr *)&addr6, sizeof(addr6)))
+>                 goto err;
+>
+> -       if (run_test(server_v6, results, xdp))
+> +       if (run_test(server_dual, results, xdp,
+> +                    (const struct sockaddr *)&addr4dual, sizeof(addr4dual)))
+>                 goto err;
+>
+>         printf("ok\n");
+> @@ -252,6 +291,7 @@ int main(int argc, char **argv)
+>  out:
+>         close(server);
+>         close(server_v6);
+> +       close(server_dual);
+>         close(results);
+>         return err;
+>  }
+> --
+> 2.30.2
 
-Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
----
- drivers/media/rc/bpf-lirc.c    |  4 ++--
- include/linux/bpf.h            |  3 ++-
- include/linux/trace_events.h   |  7 ++++---
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/core.c              | 19 +++++++++++++++++--
- kernel/bpf/syscall.c           |  2 +-
- kernel/events/core.c           |  8 ++++----
- kernel/trace/bpf_trace.c       |  8 +++++---
- tools/include/uapi/linux/bpf.h |  1 +
- 9 files changed, 37 insertions(+), 16 deletions(-)
+Thanks for the fix and the test! Looks sane to me, and it passes the
+tests we have internally (but we only test IPv4 :/).
 
-diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
-index 3eff08d7b8e5..b240149bd004 100644
---- a/drivers/media/rc/bpf-lirc.c
-+++ b/drivers/media/rc/bpf-lirc.c
-@@ -160,7 +160,7 @@ static int lirc_bpf_attach(struct rc_dev *rcdev, struct bpf_prog *prog)
- 		goto unlock;
- 	}
- 
--	ret = bpf_prog_array_copy(old_array, NULL, prog, 0, &new_array);
-+	ret = bpf_prog_array_copy(old_array, NULL, prog, 0, 0, &new_array);
- 	if (ret < 0)
- 		goto unlock;
- 
-@@ -193,7 +193,7 @@ static int lirc_bpf_detach(struct rc_dev *rcdev, struct bpf_prog *prog)
- 	}
- 
- 	old_array = lirc_rcu_dereference(raw->progs);
--	ret = bpf_prog_array_copy(old_array, prog, NULL, 0, &new_array);
-+	ret = bpf_prog_array_copy(old_array, prog, NULL, 0, 0, &new_array);
- 	/*
- 	 * Do not use bpf_prog_array_delete_safe() as we would end up
- 	 * with a dummy entry in the array, and the we would free the
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdb5298735ce..f00ac9e5bfa2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1235,6 +1235,7 @@ struct bpf_prog_array_item {
- 	union {
- 		struct bpf_cgroup_storage *cgroup_storage[MAX_BPF_CGROUP_STORAGE_TYPE];
- 		u64 bpf_cookie;
-+		u32 prio;
- 	};
- };
- 
-@@ -1274,7 +1275,7 @@ int bpf_prog_array_copy_info(struct bpf_prog_array *array,
- int bpf_prog_array_copy(struct bpf_prog_array *old_array,
- 			struct bpf_prog *exclude_prog,
- 			struct bpf_prog *include_prog,
--			u64 bpf_cookie,
-+			u64 bpf_cookie, u32 prio,
- 			struct bpf_prog_array **new_array);
- 
- struct bpf_run_ctx {};
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index e6e95a9f07a5..06996f85def8 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -736,7 +736,7 @@ trace_trigger_soft_disabled(struct trace_event_file *file)
- 
- #ifdef CONFIG_BPF_EVENTS
- unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx);
--int perf_event_attach_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie);
-+int perf_event_attach_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie, u32 prio);
- void perf_event_detach_bpf_prog(struct perf_event *event);
- int perf_event_query_prog_array(struct perf_event *event, void __user *info);
- int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *prog);
-@@ -754,7 +754,7 @@ static inline unsigned int trace_call_bpf(struct trace_event_call *call, void *c
- }
- 
- static inline int
--perf_event_attach_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie)
-+perf_event_attach_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie, u32 prio)
- {
- 	return -EOPNOTSUPP;
- }
-@@ -871,7 +871,8 @@ extern void ftrace_profile_free_filter(struct perf_event *event);
- void perf_trace_buf_update(void *record, u16 type);
- void *perf_trace_buf_alloc(int size, struct pt_regs **regs, int *rctxp);
- 
--int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog, u64 bpf_cookie);
-+int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog,
-+			u64 bpf_cookie, u32 prio);
- void perf_event_free_bpf_prog(struct perf_event *event);
- 
- void bpf_trace_run1(struct bpf_prog *prog, u64 arg1);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index d14b10b85e51..10054c034518 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1481,6 +1481,7 @@ union bpf_attr {
- 				 * accessible through bpf_get_attach_cookie() BPF helper
- 				 */
- 				__u64		bpf_cookie;
-+				__u32		prio;
- 			} perf_event;
- 			struct {
- 				__u32		flags;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 13e9dbeeedf3..8a89cc69c74b 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2405,13 +2405,14 @@ int bpf_prog_array_update_at(struct bpf_prog_array *array, int index,
- int bpf_prog_array_copy(struct bpf_prog_array *old_array,
- 			struct bpf_prog *exclude_prog,
- 			struct bpf_prog *include_prog,
--			u64 bpf_cookie,
-+			u64 bpf_cookie, u32 prio,
- 			struct bpf_prog_array **new_array)
- {
- 	int new_prog_cnt, carry_prog_cnt = 0;
- 	struct bpf_prog_array_item *existing, *new;
- 	struct bpf_prog_array *array;
- 	bool found_exclude = false;
-+	bool found_less_prio = false;
- 
- 	/* Figure out how many existing progs we need to carry over to
- 	 * the new array.
-@@ -2458,16 +2459,30 @@ int bpf_prog_array_copy(struct bpf_prog_array *old_array,
- 			    existing->prog == &dummy_bpf_prog.prog)
- 				continue;
- 
-+			if (include_prog && existing->prio <= prio) {
-+				found_less_prio = true;
-+
-+				new->prog = include_prog;
-+				new->prio = prio;
-+				new->bpf_cookie = bpf_cookie;
-+
-+				new++;
-+			}
-+
- 			new->prog = existing->prog;
- 			new->bpf_cookie = existing->bpf_cookie;
-+			new->prio = existing->prio;
- 			new++;
- 		}
- 	}
--	if (include_prog) {
-+
-+	if (include_prog && !found_less_prio) {
- 		new->prog = include_prog;
- 		new->bpf_cookie = bpf_cookie;
-+		new->prio = prio;
- 		new++;
- 	}
-+
- 	new->prog = NULL;
- 	*new_array = array;
- 	return 0;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cdaa1152436a..72fb3d2c30a4 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3009,7 +3009,7 @@ static int bpf_perf_link_attach(const union bpf_attr *attr, struct bpf_prog *pro
- 	}
- 
- 	event = perf_file->private_data;
--	err = perf_event_set_bpf_prog(event, prog, attr->link_create.perf_event.bpf_cookie);
-+	err = perf_event_set_bpf_prog(event, prog, attr->link_create.perf_event.bpf_cookie, 0);
- 	if (err) {
- 		bpf_link_cleanup(&link_primer);
- 		goto out_put_file;
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index cfde994ce61c..283464c870f2 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -5753,7 +5753,7 @@ static long _perf_ioctl(struct perf_event *event, unsigned int cmd, unsigned lon
- 		if (IS_ERR(prog))
- 			return PTR_ERR(prog);
- 
--		err = perf_event_set_bpf_prog(event, prog, 0);
-+		err = perf_event_set_bpf_prog(event, prog, 0, 0);
- 		if (err) {
- 			bpf_prog_put(prog);
- 			return err;
-@@ -10172,7 +10172,7 @@ static inline bool perf_event_is_tracing(struct perf_event *event)
- }
- 
- int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog,
--			    u64 bpf_cookie)
-+			    u64 bpf_cookie, u32 prio)
- {
- 	bool is_kprobe, is_tracepoint, is_syscall_tp;
- 
-@@ -10203,7 +10203,7 @@ int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog,
- 			return -EACCES;
- 	}
- 
--	return perf_event_attach_bpf_prog(event, prog, bpf_cookie);
-+	return perf_event_attach_bpf_prog(event, prog, bpf_cookie, prio);
- }
- 
- void perf_event_free_bpf_prog(struct perf_event *event)
-@@ -10226,7 +10226,7 @@ static void perf_event_free_filter(struct perf_event *event)
- }
- 
- int perf_event_set_bpf_prog(struct perf_event *event, struct bpf_prog *prog,
--			    u64 bpf_cookie)
-+			    u64 bpf_cookie, u32 prio)
- {
- 	return -ENOENT;
- }
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 836f021cb609..be3b282f2909 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1877,7 +1877,7 @@ static DEFINE_MUTEX(bpf_event_mutex);
- 
- int perf_event_attach_bpf_prog(struct perf_event *event,
- 			       struct bpf_prog *prog,
--			       u64 bpf_cookie)
-+			       u64 bpf_cookie, u32 prio)
- {
- 	struct bpf_prog_array *old_array;
- 	struct bpf_prog_array *new_array;
-@@ -1904,7 +1904,9 @@ int perf_event_attach_bpf_prog(struct perf_event *event,
- 		goto unlock;
- 	}
- 
--	ret = bpf_prog_array_copy(old_array, NULL, prog, bpf_cookie, &new_array);
-+	ret = bpf_prog_array_copy(old_array, NULL, prog, bpf_cookie,
-+										prio, &new_array);
-+
- 	if (ret < 0)
- 		goto unlock;
- 
-@@ -1931,7 +1933,7 @@ void perf_event_detach_bpf_prog(struct perf_event *event)
- 		goto unlock;
- 
- 	old_array = bpf_event_rcu_dereference(event->tp_event->prog_array);
--	ret = bpf_prog_array_copy(old_array, event->prog, NULL, 0, &new_array);
-+	ret = bpf_prog_array_copy(old_array, event->prog, NULL, 0, 0, &new_array);
- 	if (ret == -ENOENT)
- 		goto unlock;
- 	if (ret < 0) {
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index d14b10b85e51..10054c034518 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1481,6 +1481,7 @@ union bpf_attr {
- 				 * accessible through bpf_get_attach_cookie() BPF helper
- 				 */
- 				__u64		bpf_cookie;
-+				__u32		prio;
- 			} perf_event;
- 			struct {
- 				__u32		flags;
--- 
-2.32.0
-
+Acked-by: Arthur Fabre <afabre@cloudflare.com>
