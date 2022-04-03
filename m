@@ -2,105 +2,168 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B471C433EF
-	for <bpf@archiver.kernel.org>; Sun,  3 Apr 2022 16:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8D23C433F5
+	for <bpf@archiver.kernel.org>; Sun,  3 Apr 2022 16:08:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232964AbiDCQKJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 3 Apr 2022 12:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40090 "EHLO
+        id S231406AbiDCQKL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Apr 2022 12:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiDCQKI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:10:08 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC2B3982F
-        for <bpf@vger.kernel.org>; Sun,  3 Apr 2022 09:08:10 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id f18so3283108edc.5
-        for <bpf@vger.kernel.org>; Sun, 03 Apr 2022 09:08:10 -0700 (PDT)
+        with ESMTP id S233255AbiDCQKL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Apr 2022 12:10:11 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F4B3982F
+        for <bpf@vger.kernel.org>; Sun,  3 Apr 2022 09:08:17 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id yy13so15352003ejb.2
+        for <bpf@vger.kernel.org>; Sun, 03 Apr 2022 09:08:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hanYBf6ntGMX8alKY8GpfKVwvT1p2AjZMh65KWY/3eM=;
-        b=A3HKQNEL6HQvcnybDBS/8S9A7QB5fA0jDSBFyHyPsmTxz+c9U2JREf8vlx+Pq6/QvJ
-         tt2FHCkfIclqsUg8ekVtapVlTkr5FzSSXeoBz1RCDP8PtsFbQaVlWAAH3bSLunUUe9jZ
-         41u6yCIlpyrH1h2vooKzOy9v20WLJv+86drzT4QN+HUOX8gQ0PR+iCv6JbuJjzVRvSDK
-         Vrfga0UlRPu5dWNUGThE60IgweCs2qSE+maVBFcDsUiC5hFqwfhGGJj2HxgFXTtywFU+
-         v0qzZXrfhg0GIslLkjKdg/s4xRQPy6TUsFesDDAuuYy6BWDqyGlb5bpXAuC2PXlLg+/1
-         zOqg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ZmF+ymoe8wOdYdz0lGumCQH9uSAZdCIQqrCOPr17rPc=;
+        b=DUookdZRR1A1cAEMlfp9QfVjiJQbPsOUrsssj+mvZHHxh9ZBA5z7zYUkM7zpSFQdFb
+         h0UY4bTaH9y6ezfABiJ36g3pkyDyuAFk/TIQnKREjHMEKdb9HZsBLaSvuYRABrN6L213
+         uzo2LGK6VIoFvEkBT4ojXPaHBvxvmseLACYqYe8pb6GdYNTWNOA4yGZ7JN3ExdDr5zPv
+         QswYYzUc6DB+bpppDmYDDtGjCudeEpsKCugVHRaxsOreBLFBfM9dMMlOi97pGsKWFlGy
+         EAgwUZmLZ2Nyd9uYcupeEZrw9J9OmUqk4QygMzn6M725NhPX8PHTEumBOelHBBHicBX9
+         TwSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hanYBf6ntGMX8alKY8GpfKVwvT1p2AjZMh65KWY/3eM=;
-        b=rXNW+TW81A02DA41JCRB82tZMd3ifAYpiIST8+S59X8VaoaTbpCYFUlzxZPy3KPCZz
-         K/i91xJjtvzkSfalGTWyWzx7a+taEMLEtZ+OePE6b5wd7YgrRnJSGOjCPtU9gBnPZL8l
-         Gqn5nTJi0Q7CSRC2WWPjAym+eByHna4hjZy0ZnK0vF1ceb5Dq6MziijqqWl/lpEoSbs/
-         YDaaMbxLaOeiAg0WpKEe4LaspOPYDyw8lEsgMgcsQ38gwuLldvxf/4PHn9dj4NYcaTx+
-         Z8p2k58Unf93Oei/7UQis/ovblhC4ZxtZt+lA0MUwweTLw9nP1LXIrr9efYKx7sufhmZ
-         RPhQ==
-X-Gm-Message-State: AOAM532DhACZcSwMr7GOm7ZN1rL9z6J+o/EAwloJbgVml2ptpgNU4rjn
-        oyVAtZgWox7iEUbpGEPYO+oNYkAnjkPMeg==
-X-Google-Smtp-Source: ABdhPJxuDEqT9bqL+5jF6yyusPb1+dKVn4p68yB4Srs57n6iZbvYUgqecRGiMeUkZStui9LstV4k6w==
-X-Received: by 2002:aa7:c789:0:b0:413:605d:8d17 with SMTP id n9-20020aa7c789000000b00413605d8d17mr29306819eds.100.1649002089553;
-        Sun, 03 Apr 2022 09:08:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ZmF+ymoe8wOdYdz0lGumCQH9uSAZdCIQqrCOPr17rPc=;
+        b=sS5uO5vWufT1s4bYSae6akWYKUwtGQNF6xE3vClPXZIEclTByjO27uz0AfS2OXClG9
+         fXQ6F/pf5/KSJZDiYYQQkl7dM2Fj8PVoTb3eZ906Eu6o1T13HMGm78QoV85j0PxrdC66
+         LFXXmZCpiYpR1q8OdJpqkgbNvBfpZ0DAGWq3f+9gZ0ivrmPwAmJO1Xehh38/H+oALa/i
+         Rg7Iuh3w90aow95rk7X1UMwg+JEOMHqqsnOcgegBD53/fNONze7R2sRMrl/gqoOOJsLg
+         H+4SfBs/4dhB9NHioN0LEIRLUnURslWT3wI/rxkhSzSypHwRgB7ht+YXv1RuieqEas98
+         jpJQ==
+X-Gm-Message-State: AOAM5304e+Cu9CXdFTT5e+hboPHlYjlyYU3BHXJXkmfUGUTotKVxoXvI
+        e0hi44D2QjJvarJPcuV8Dkx/qRSbk1Puyg==
+X-Google-Smtp-Source: ABdhPJw2LA+K8BX4UEtJ9kWe4Cqd8IZFPZZu7hoGmYfNWILcnIChlaw0xTu/LzFqGizIyZHjLoHb8w==
+X-Received: by 2002:a17:907:3e8d:b0:6e7:f1fe:5912 with SMTP id hs13-20020a1709073e8d00b006e7f1fe5912mr728542ejc.314.1649002095848;
+        Sun, 03 Apr 2022 09:08:15 -0700 (PDT)
 Received: from erthalion.local (dslb-094-222-030-091.094.222.pools.vodafone-ip.de. [94.222.30.91])
-        by smtp.gmail.com with ESMTPSA id z12-20020a17090674cc00b006df9afdda91sm3332053ejl.185.2022.04.03.09.08.08
+        by smtp.gmail.com with ESMTPSA id z12-20020a17090674cc00b006df9afdda91sm3332053ejl.185.2022.04.03.09.08.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 09:08:09 -0700 (PDT)
+        Sun, 03 Apr 2022 09:08:15 -0700 (PDT)
 From:   Dmitrii Dolgov <9erthalion6@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, yhs@fb.com,
         songliubraving@fb.com
 Cc:     Dmitrii Dolgov <9erthalion6@gmail.com>
-Subject: [RFC PATCH bpf-next 0/2] Priorities for bpf progs attached to the same tracepoint
-Date:   Sun,  3 Apr 2022 18:07:16 +0200
-Message-Id: <20220403160718.13730-1-9erthalion6@gmail.com>
+Subject: [RFC PATCH bpf-next 2/2] libbpf: Allow setting bpf_prog priority
+Date:   Sun,  3 Apr 2022 18:07:18 +0200
+Message-Id: <20220403160718.13730-3-9erthalion6@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220403160718.13730-1-9erthalion6@gmail.com>
+References: <20220403160718.13730-1-9erthalion6@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With growing number of various products and tools using BPF it could
-easily happen that multiple BPF programs from different processes will
-be attached to the same tracepoint. It seems that in such case there is
-no way to specify a custom order in which those programs may want to be
-executed -- it will depend on the order in which they were attached.
+Introduce prio field in opts structures (bpf_tracepoint_opts,
+bpf_link_create_opts, bpf_perf_event_opts) to pass a priority value for
+the bpf_prog when a new bpf link is created. This value will be further
+used in perf_event_set_bpf_prog to specify in which order to execute
+bpf_progs attached to the same tracepoint.
 
-Consider an example when the BPF program A is attached to tracepoint T,
-the BFP program B needs to be attached to the T as well and start
-before/end after the A (e.g. to monitor the whole process of A +
-tracepoint in some way).  If the program A could not be changed and is
-attached before B, the order specified above will not be possible.
+Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
+---
+ kernel/bpf/syscall.c   | 3 ++-
+ tools/lib/bpf/bpf.c    | 1 +
+ tools/lib/bpf/bpf.h    | 1 +
+ tools/lib/bpf/libbpf.c | 4 +++-
+ tools/lib/bpf/libbpf.h | 6 ++++--
+ 5 files changed, 11 insertions(+), 4 deletions(-)
 
-One way to address this in a limited, but less invasive way is to
-utilize link options structure to pass the desired priority to
-perf_event_set_bpf_prog, and add new bpf_prog into the bpf_prog_array
-based on its value. This will allow to specify the priority value via
-bpf_tracepoint_opts when attaching a new prog.
-
-Does this make sense? There maybe a better way to achieve this, I would
-be glad to hear any feedback on it.
-
-Dmitrii Dolgov (2):
-  bpf: tracing: Introduce prio field for bpf_prog
-  libbpf: Allow setting bpf_prog priority
-
- drivers/media/rc/bpf-lirc.c    |  4 ++--
- include/linux/bpf.h            |  3 ++-
- include/linux/trace_events.h   |  7 ++++---
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/core.c              | 19 +++++++++++++++++--
- kernel/bpf/syscall.c           |  3 ++-
- kernel/events/core.c           |  8 ++++----
- kernel/trace/bpf_trace.c       |  8 +++++---
- tools/include/uapi/linux/bpf.h |  1 +
- tools/lib/bpf/bpf.c            |  1 +
- tools/lib/bpf/bpf.h            |  1 +
- tools/lib/bpf/libbpf.c         |  4 +++-
- tools/lib/bpf/libbpf.h         |  6 ++++--
- 13 files changed, 47 insertions(+), 19 deletions(-)
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 72fb3d2c30a4..629852b35b21 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3009,7 +3009,8 @@ static int bpf_perf_link_attach(const union bpf_attr *attr, struct bpf_prog *pro
+ 	}
+ 
+ 	event = perf_file->private_data;
+-	err = perf_event_set_bpf_prog(event, prog, attr->link_create.perf_event.bpf_cookie, 0);
++	err = perf_event_set_bpf_prog(event, prog, attr->link_create.perf_event.bpf_cookie,
++								  attr->link_create.perf_event.prio);
+ 	if (err) {
+ 		bpf_link_cleanup(&link_primer);
+ 		goto out_put_file;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index cf27251adb92..029c9809bf9b 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -851,6 +851,7 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		break;
+ 	case BPF_PERF_EVENT:
+ 		attr.link_create.perf_event.bpf_cookie = OPTS_GET(opts, perf_event.bpf_cookie, 0);
++		attr.link_create.perf_event.prio = OPTS_GET(opts, perf_event.prio, 0);
+ 		if (!OPTS_ZEROED(opts, perf_event))
+ 			return libbpf_err(-EINVAL);
+ 		break;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index f4b4afb6d4ba..9a8ec9081ba7 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -412,6 +412,7 @@ struct bpf_link_create_opts {
+ 	union {
+ 		struct {
+ 			__u64 bpf_cookie;
++			__u32 prio;
+ 		} perf_event;
+ 		struct {
+ 			__u32 flags;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 809fe209cdcc..e09c00b53772 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9912,7 +9912,8 @@ struct bpf_link *bpf_program__attach_perf_event_opts(const struct bpf_program *p
+ 
+ 	if (kernel_supports(prog->obj, FEAT_PERF_LINK)) {
+ 		DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts,
+-			.perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0));
++			.perf_event.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0),
++			.perf_event.prio = OPTS_GET(opts, prio, 0));
+ 
+ 		link_fd = bpf_link_create(prog_fd, pfd, BPF_PERF_EVENT, &link_opts);
+ 		if (link_fd < 0) {
+@@ -10663,6 +10664,7 @@ struct bpf_link *bpf_program__attach_tracepoint_opts(const struct bpf_program *p
+ 		return libbpf_err_ptr(-EINVAL);
+ 
+ 	pe_opts.bpf_cookie = OPTS_GET(opts, bpf_cookie, 0);
++	pe_opts.prio = OPTS_GET(opts, prio, 0);
+ 
+ 	pfd = perf_event_open_tracepoint(tp_category, tp_name);
+ 	if (pfd < 0) {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 05dde85e19a6..30f1808a4b49 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -394,8 +394,9 @@ struct bpf_perf_event_opts {
+ 	size_t sz;
+ 	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
+ 	__u64 bpf_cookie;
++	__u32 prio;
+ };
+-#define bpf_perf_event_opts__last_field bpf_cookie
++#define bpf_perf_event_opts__last_field prio
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_perf_event(const struct bpf_program *prog, int pfd);
+@@ -508,8 +509,9 @@ struct bpf_tracepoint_opts {
+ 	size_t sz;
+ 	/* custom user-provided value fetchable through bpf_get_attach_cookie() */
+ 	__u64 bpf_cookie;
++	__u32 prio;
+ };
+-#define bpf_tracepoint_opts__last_field bpf_cookie
++#define bpf_tracepoint_opts__last_field prio
+ 
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_tracepoint(const struct bpf_program *prog,
 -- 
 2.32.0
 
