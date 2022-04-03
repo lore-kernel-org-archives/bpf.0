@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7D4FC433EF
-	for <bpf@archiver.kernel.org>; Sun,  3 Apr 2022 14:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3834C4332F
+	for <bpf@archiver.kernel.org>; Sun,  3 Apr 2022 14:43:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359049AbiDCOpM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 3 Apr 2022 10:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S1359058AbiDCOpN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 3 Apr 2022 10:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359020AbiDCOpG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 3 Apr 2022 10:45:06 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9193388D;
-        Sun,  3 Apr 2022 07:43:12 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id h19so6706789pfv.1;
-        Sun, 03 Apr 2022 07:43:12 -0700 (PDT)
+        with ESMTP id S1359050AbiDCOpI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 3 Apr 2022 10:45:08 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4690396BE;
+        Sun,  3 Apr 2022 07:43:14 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso1004258pju.1;
+        Sun, 03 Apr 2022 07:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=sOFjfSMnG30lHn+Yoz/l/DHCL+27lA4clMfQyl/6D4M=;
-        b=AZeBJQGFjUUiY05NywDQp7gONkA2ExEMeJ/V9L3yHIPWABY5HdK88n34COlKJQuneY
-         v0xz1VhnG0U7TKkERZUwRGsh8TifdcHiTKH25NtIa40681AWHVnLPTNvjXhQup3YdF9e
-         i++O0iiQ6UflQO5DEwQvH4YvrNSVeZ54oTYSho1KIe7k8yb8az+Ey+msAvMxvCZ9g6Ih
-         lXt3oO/RrAdOfX2Xsld1Qi7uLJMntLHqSBtMskaw5hEWA6g6P3x9CYAPpupCl+M0GPQ+
-         WfGehlwe1HfcMMq8XwZdoIfXuT/h6UING84Yyr6Z0B9wnQybH2jJVkWQS8qu6J1B1jgM
-         RJfg==
+        bh=5CxbSxA/J1soVGI5URWZ3SJvoX16Jti84XlHml42gb0=;
+        b=CGwtQuWXU/VwhcRt7NCPMRag0RxSznS6oEMmSlI/uZ30bVxa79K9LBvTXpeNLtW0Wl
+         Dk5Y71QMfKxgkBdBJqVB1bgt7jIcd3+J9jXJYvSegnZqZZk/2adPP2WqyStW6Qm+Cg7I
+         K7EydzJO2vBPBwvPsmb/X27d8SCwsJMvRwlTd/NK6+DNFqq6hseoAhc/Ql8Iykliap+t
+         b8hZEH7JQKlumlK34TdbEbSp7srUj8BP3tTeQtit1Gb6ijTsbpTH2YlGSAz48Xo3P7FV
+         blm8ii1fZHbgayNyM3LnCVgzujsBhpqblFojiFBnKXQcUre2LF0os4exMzGQtA3oFpZF
+         oYLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sOFjfSMnG30lHn+Yoz/l/DHCL+27lA4clMfQyl/6D4M=;
-        b=nOGBEZnNJZRP7Y7G7DdjJ+Qh5HDekYaivYMT5yHygeEnwYPmywaMJDSV6tSKx1Ptr6
-         H8T+k1DwrvCysklPBPMse9gpNCj15aEQ81QMVOWaR3HWZi433zi3LUw7ueAXLt//CSkZ
-         MXL1tMqCQ/uEP1q2hwjwoHh5SLGNQWsqpCap9XDM1bBjM0o13M1CwOy5rKj8e1t4sBBX
-         oObhTmrJzTTvbLCjMcR4Rj/aWNJ+WukQWmRkJ/pEtVqL73RB6nTRebED3V1/xVVJfNGX
-         L8xD3v1R2e3AtJAlRBWoovzKz1C3Ci7ri9AcC4ZNFNBbK/rqxPEUEYDEynJkF+iEgaaP
-         DgqQ==
-X-Gm-Message-State: AOAM530LnvHChAEdX+QG7UZ/kuZdOSJ0VnMLvL2cLNpw1mp4uAzFDLkX
-        kUWY6aT2xjVe3qE/qJBN9uA=
-X-Google-Smtp-Source: ABdhPJyyxnF8DPsdX9vUroivyQCzmBsQQWqM6ohN4nuucYbQAslXphejm0NZv5oxIme/EBBjf0hvcA==
-X-Received: by 2002:a05:6a00:438b:b0:4fa:a67c:7ca0 with SMTP id bt11-20020a056a00438b00b004faa67c7ca0mr19795268pfb.5.1648996992065;
-        Sun, 03 Apr 2022 07:43:12 -0700 (PDT)
+        bh=5CxbSxA/J1soVGI5URWZ3SJvoX16Jti84XlHml42gb0=;
+        b=FWTz8LpOBtKwAdKNnmVaDsoRoXoBcK1BUWpvQP5FuGC/UEBhC0ZwI0n8vC2UYxfDTE
+         QI+OruwSyt85yZRfIqISpnJPJioHlkOYD42P4lWcfTN9cZ//gsD5ij6QgZnVPJl4Sra2
+         SQ+C/uHZkUL3Qcpe72x3/R1s9rsdguDAgkcWbGJkH9Qprf9rYTlksGISr79jBkY0H+cW
+         puCioBRWEDIpaXjw/RXYd3ZokwolSSyCUR7nlpoX2EvEHE/6fwXZNXMLaYorSjeXyx2P
+         IDyFKqe8JGjha5LLUBak0J/wVSY2NXOQqFjqLx5mTNtyWLxxlmXcEVbWUu2D3h1AEgbj
+         Ro+Q==
+X-Gm-Message-State: AOAM530Gf57YNC7NOZAL4QIIXzvK9wDU0sY6R5ZrDu+Cb4NUvr31t0ga
+        0/u4pBkPw2JGBo4pXBBb9Dw=
+X-Google-Smtp-Source: ABdhPJyZ3MeZYp7fgly/e9xEJIXa59fmV7ckCKAEZ4S5NEUtvnjv2F4NaPOLcRjF+RGKGF/LHJ2peA==
+X-Received: by 2002:a17:90a:8581:b0:1b2:7541:af6c with SMTP id m1-20020a17090a858100b001b27541af6cmr21633631pjn.48.1648996994414;
+        Sun, 03 Apr 2022 07:43:14 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:51a7:5400:3ff:feee:9f61])
-        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm9464910pfl.44.2022.04.03.07.43.11
+        by smtp.gmail.com with ESMTPSA id c18-20020a056a000ad200b004cdccd3da08sm9464910pfl.44.2022.04.03.07.43.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 07:43:11 -0700 (PDT)
+        Sun, 03 Apr 2022 07:43:13 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v2 2/9] bpf: selftests: Use bpf strict all ctor in xdping
-Date:   Sun,  3 Apr 2022 14:42:53 +0000
-Message-Id: <20220403144300.6707-3-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v2 4/9] bpf: samples: Replace RLIMIT_MEMLOCK with LIBBPF_STRICT_ALL in xdpsock_user
+Date:   Sun,  3 Apr 2022 14:42:55 +0000
+Message-Id: <20220403144300.6707-5-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220403144300.6707-1-laoar.shao@gmail.com>
 References: <20220403144300.6707-1-laoar.shao@gmail.com>
@@ -65,53 +65,47 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Aoid using the deprecated RLIMIT_MEMLOCK.
+Avoid using the deprecated RLIMIT_MEMLOCK.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/xdping.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ samples/bpf/xdpsock_user.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/xdping.c b/tools/testing/selftests/bpf/xdping.c
-index c567856fd1bc..46ba0d7f73e8 100644
---- a/tools/testing/selftests/bpf/xdping.c
-+++ b/tools/testing/selftests/bpf/xdping.c
-@@ -12,7 +12,6 @@
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 6f3fe30ad283..be7d2572e3e6 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -25,7 +25,6 @@
  #include <string.h>
- #include <unistd.h>
- #include <libgen.h>
+ #include <sys/capability.h>
+ #include <sys/mman.h>
 -#include <sys/resource.h>
- #include <net/if.h>
- #include <sys/types.h>
  #include <sys/socket.h>
-@@ -20,6 +19,7 @@
- 
- #include "bpf/bpf.h"
- #include "bpf/libbpf.h"
-+#include "bpf_rlimit.h"
- 
- #include "xdping.h"
- #include "testing_helpers.h"
-@@ -89,7 +89,6 @@ int main(int argc, char **argv)
+ #include <sys/types.h>
+ #include <sys/un.h>
+@@ -1886,7 +1885,6 @@ int main(int argc, char **argv)
  {
- 	__u32 mode_flags = XDP_FLAGS_DRV_MODE | XDP_FLAGS_SKB_MODE;
- 	struct addrinfo *a, hints = { .ai_family = AF_INET };
+ 	struct __user_cap_header_struct hdr = { _LINUX_CAPABILITY_VERSION_3, 0 };
+ 	struct __user_cap_data_struct data[2] = { { 0 } };
 -	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
- 	__u16 count = XDPING_DEFAULT_COUNT;
- 	struct pinginfo pinginfo = { 0 };
- 	const char *optstr = "c:I:NsS";
-@@ -167,11 +166,6 @@ int main(int argc, char **argv)
- 		freeaddrinfo(a);
- 	}
+ 	bool rx = false, tx = false;
+ 	struct sched_param schparam;
+ 	struct xsk_umem_info *umem;
+@@ -1917,11 +1915,8 @@ int main(int argc, char **argv)
+ 				data[1].effective, data[1].inheritable, data[1].permitted);
+ 		}
+ 	} else {
+-		if (setrlimit(RLIMIT_MEMLOCK, &r)) {
+-			fprintf(stderr, "ERROR: setrlimit(RLIMIT_MEMLOCK) \"%s\"\n",
+-				strerror(errno));
+-			exit(EXIT_FAILURE);
+-		}
++		/* Use libbpf 1.0 API mode */
++		libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
  
--	if (setrlimit(RLIMIT_MEMLOCK, &r)) {
--		perror("setrlimit(RLIMIT_MEMLOCK)");
--		return 1;
--	}
--
- 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
- 
- 	if (bpf_prog_test_load(filename, BPF_PROG_TYPE_XDP, &obj, &prog_fd)) {
+ 		if (opt_num_xsks > 1)
+ 			load_xdp_program(argv, &obj);
 -- 
 2.17.1
 
