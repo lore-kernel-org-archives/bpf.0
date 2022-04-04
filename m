@@ -2,122 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EA7AC43217
-	for <bpf@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BBD2C4332F
+	for <bpf@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355462AbiDDV1m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S1382371AbiDDV2H (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Apr 2022 17:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379222AbiDDQrT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:47:19 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053335DFF;
-        Mon,  4 Apr 2022 09:45:22 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y10so9499225pfa.7;
-        Mon, 04 Apr 2022 09:45:22 -0700 (PDT)
+        with ESMTP id S1380163AbiDDTGM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Apr 2022 15:06:12 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C3027CC0
+        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 12:04:13 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id e16so19029869lfc.13
+        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 12:04:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
-        b=K+zWzR4ruy+ZtnYKb3uQ8qPZ1rB96be4f9KbPJeqM2bII/wOKRfwJBp9khKYpdzZNw
-         p/HQY9ehgjEtNQA3UubppVVM2P3enmFvLuFNI2VYINSU8+ehqH1PUud6XiJrJ31Fx+1N
-         9Mw4kdlWm8JhkOo4TWsGUExTMTrl3ji9q4OyAg57DWOcT4X54WgiyRHSF39tOum+DFz/
-         PCtuDEaRjqI075K956dVofjVavlxFPT9gfTJwGH1zzpqTw6kmRYZ/vPvlJ9mLorG7VCX
-         xOWeFzQd44DIsWpLNCyHiCC/aZXwnF4wxYBBg6HkBljldJPYGG7drQ/eGiaJ8MNzP9Y2
-         FmlA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fMBfc7eL+6zjLdy0vSSw1qZlaczmxaLzkc9n5aXfXlk=;
+        b=j5orvnr202OY0tbmNTqcYsXPmh8DqYP2lR2d4TxUKEIJhAOW+cyfNGVyk42mOtvwjt
+         Qq2u/zxlYFYqCAYorKAclT35X3nldPvO1OMEFnM0a07jFJb288uJlPx28UXvHIeJtW3R
+         XtYAQUz/brIkyJDSVxboelcbWa7s8m014zXph/GA3TSQpDVlwIOovrvQbeOPPnImLdSQ
+         oQB/B3SQqVLK43/4DD7QHWK+pFnnQnHBo9W0p3aaJDasWbRBqXIlkUAqFUTzmvUvxpcb
+         cqJJB3FjUeOvzrVAtfCcnhvTXSEWZEePej7n7gOTZQk1LbZJMSKkuNGpOVJm8Ox2F/ev
+         oblA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
-        b=H5VRk/Lfvm1WmWeEu5Pj03YQ5HzxULNix3HL42gNovU5fKBi7Gfq+4c+wbHof6fnQm
-         XNFPEXGTD4+ynVRz5sjhefZVBQyCYni/zgBfZYZUlauvUF/0TlubP1Jh5HD6J0w1uzEA
-         xd+EsaBE8kaUTeJkP4xEkm1smhchDjCdWWLO9spfK5Get9tmPKA+UK2KARrZKkd5J54Z
-         3C8qSmi7WsaVpUGd7j/jOMgXw7eSee1bLrXhYiURwlQG6KXACPCPqR+9Z99RAjE5y/Ez
-         PMSn7+A7K7JP7cers2kBKctOca37cPsDIPpa0YYGxMFJcX8aVp7UepO0VS5ODfbJriG+
-         +8jg==
-X-Gm-Message-State: AOAM531Tm4Rj2wahuchYVJh2nL1TtMys4h6x3Z/TGjhGiKRNMZW8wLJb
-        yAZMKXk5NrOJadGD9Sg/reo=
-X-Google-Smtp-Source: ABdhPJykjuTWmrEFansk8XIVGuyt/Galx5GJ9a/oS+WxZ9T0MRsu62DxJHiJKdurLYFsP8Kx1hHJDA==
-X-Received: by 2002:a63:338e:0:b0:398:4302:c503 with SMTP id z136-20020a63338e000000b003984302c503mr633219pgz.217.1649090721580;
-        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id np8-20020a17090b4c4800b001c70aeab380sm11035pjb.41.2022.04.04.09.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix issues in parse_num_list()
-Date:   Tue,  5 Apr 2022 00:45:14 +0800
-Message-Id: <20220404164514.1814897-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fMBfc7eL+6zjLdy0vSSw1qZlaczmxaLzkc9n5aXfXlk=;
+        b=yJuBQ6U0ULq5uEZK9UifArwM/DvgjBsC+NpIhIe0zJQtgJLtjK64pg1Rl11GYD2Lem
+         MnwlqVInYAREYPJpnRPW+xswGQkZgCFfWXa65Bkx+M+WGCHUw8L+BGzvwTRUDTgD/b0t
+         AWfloWbRyU0xd/U/MOwE19UX2iyz2lTRJanEHyb+T8QOArS3Kse9T1fHwq5OFVyUaNPY
+         55GWiVTJdHrSuqNbWOIHeAaq5NJ61AAIYp+QhWEsrH40iOtRVHOQ97fdH5h6F3vjn4/9
+         sKrqXh8F4qPwzr2wC+/flJvH197c+7P+y2Hu0JhU0lP9kJRg5KMzo8Ic2YSvHG13jVZ2
+         mvnw==
+X-Gm-Message-State: AOAM532u8GAhbxsJDEEwhD5XWXwGuFLfWU7dbs9KdGSz5AORiyLnxvoy
+        SjEzQlACIr11Z9DMaDDMCdgZ5KfqzooN1hLdaLU=
+X-Google-Smtp-Source: ABdhPJxn+CRsYZaukOxGftlFj13woBtDFAOsDIRsSGGz1DVoNAbeVCyD18lqr3Q7WVbcWbzMd+t2JK1QQ0ULi9NCTDo=
+X-Received: by 2002:a05:6512:2311:b0:44b:4bb:3425 with SMTP id
+ o17-20020a056512231100b0044b04bb3425mr644546lfu.288.1649099051489; Mon, 04
+ Apr 2022 12:04:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220402015826.3941317-1-joannekoong@fb.com> <20220402015826.3941317-3-joannekoong@fb.com>
+ <20220404073437.htzs76gxcm6cpert@apollo.legion>
+In-Reply-To: <20220404073437.htzs76gxcm6cpert@apollo.legion>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Mon, 4 Apr 2022 12:04:00 -0700
+Message-ID: <CAJnrk1ad_DtfgjskQ0Rkcmuk_A2TBYbGn2xcgz3dPuf-8cOkOQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/7] bpf: Add MEM_RELEASE as a bpf_type_flag
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Joanne Koong <joannekoong@fb.com>, bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There are some issues in parse_num_list():
+On Mon, Apr 4, 2022 at 12:34 AM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Sat, Apr 02, 2022 at 07:28:21AM IST, Joanne Koong wrote:
+> > From: Joanne Koong <joannelkoong@gmail.com>
+> >
+> > Currently, we hardcode in the verifier which functions are release
+> > functions. We have no way of differentiating which argument is the one
+> > to be released (we assume it will always be the first argument).
+> >
+> > This patch adds MEM_RELEASE as a bpf_type_flag. This allows us to
+> > determine which argument in the function needs to be released, and
+> > removes having to hardcode a list of release functions into the
+> > verifier.
+> >
+> > Please note that currently, we only support one release argument in a
+> > helper function. In the future, if/when we need to support several
+> > release arguments within the function, MEM_RELEASE is necessary
+> > since there needs to be a way of differentiating which arguments are the
+> > release ones.
+> >
+> > In the near future, MEM_RELEASE will be used by dynptr helper functions
+> > such as bpf_free.
+> >
+> > Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+> > ---
+[...]
+> > @@ -6693,7 +6693,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+> >                       return err;
+> >       }
+> >
+> > -     if (is_release_function(func_id)) {
+> > +     if (meta.ref_obj_id) {
+>
+> The meta.ref_obj_id field is set unconditionally whenever we see a
+> reg->ref_obj_id, e.g. when we pass a refcounted argument to non-release
+> function. Wouldn't making this conditional only on meta.ref_obj_id lead to
+> release of that register now? Or did I miss some change above which prevents
+> this case?
+>
+Yes, unfortunately you are right. This wouldn't work for the cases
+where a refcounted arg is passed to a non-release function, since that
+also sets the meta.ref_obj_id. Thanks for catching this!
 
-1. The end variable is assigned twice when parsing_end is true.
-2. The function does not check that parsing_end should finally be false.
+> To make things clear, I'm talking of this sequence:
+>
+> p = acquire();
+> helper_foo(p);   // meta.ref_obj_id would be set, and p is released
+> release(p);      // error, as p.ref_obj_id has no reference state
+>
+> Besides, in my series this PTR_RELEASE / MEM_RELEASE tagging is only needed
+> because the release function can take a NULL pointer, so we need to know the
+> register of the argument to be released, and then make sure it is refcounted,
+> otherwise it must be NULL (and whether NULL is permitted or not is checked
+> earlier during argument checks). That doesn't seem to be true for bpf_free in
+> your series, as it can only take ARG_PTR_TO_DYNPTR (but maybe it should also
+> set PTR_MAYBE_NULL).
+>
+In the dynptr case, there will be several release-type functions (eg
+bpf_free, bpf_ringbuf_discard, bpf_ringbuf_submit). The motivation
+behind this patch was to have some way of signifying this instead of
+having to specify in the verifier the particular functions. Please let
+me know if this addresses your comment or if there's something in
+between the lines in your reply that I'm missing
 
-Clean up parse_num_list() and fix these issues.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 795b6798ccee..82f0e2d99c23 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- 		if (errno)
- 			return -errno;
- 
--		if (parsing_end)
--			end = num;
--		else
-+		if (!parsing_end) {
- 			start = num;
-+			if (*next == '-') {
-+				s = next + 1;
-+				parsing_end = true;
-+				continue;
-+			}
-+		}
- 
--		if (!parsing_end && *next == '-') {
--			s = next + 1;
--			parsing_end = true;
--			continue;
--		} else if (*next == ',') {
-+		if (*next == ',') {
- 			parsing_end = false;
- 			s = next + 1;
- 			end = num;
-@@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- 			set[i] = true;
- 	}
- 
--	if (!set)
-+	if (!set || parsing_end)
- 		return -EINVAL;
- 
- 	*num_set = set;
--- 
-2.35.1
-
+> >               err = release_reference(env, meta.ref_obj_id);
+> >               if (err) {
+> >                       verbose(env, "func %s#%d reference has not been acquired before\n",
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 9aafec3a09ed..a935ce7a63bc 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -6621,7 +6621,7 @@ static const struct bpf_func_proto bpf_sk_release_proto = {
+> >       .func           = bpf_sk_release,
+> >       .gpl_only       = false,
+> >       .ret_type       = RET_INTEGER,
+> > -     .arg1_type      = ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+> > +     .arg1_type      = ARG_PTR_TO_BTF_ID_SOCK_COMMON | MEM_RELEASE,
+> >  };
+> >
+> >  BPF_CALL_5(bpf_xdp_sk_lookup_udp, struct xdp_buff *, ctx,
+> > --
+> > 2.30.2
+> >
+>
+> --
+> Kartikeya
