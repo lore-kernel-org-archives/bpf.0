@@ -2,40 +2,40 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB191C43219
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:50:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B56FC433F5
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:54:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiDECwS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 4 Apr 2022 22:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
+        id S230014AbiDEC4H convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 4 Apr 2022 22:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiDECvv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:51:51 -0400
+        with ESMTP id S230368AbiDECzs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Apr 2022 22:55:48 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6537A348A4E
-        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 18:59:25 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234NPDWY001074
-        for <bpf@vger.kernel.org>; Mon, 4 Apr 2022 16:42:37 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65A723E3E5
+        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 19:04:54 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234NPGoq005664
+        for <bpf@vger.kernel.org>; Mon, 4 Apr 2022 16:42:30 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f857x2d8a-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f6m6hx05f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 16:42:37 -0700
-Received: from twshared20084.04.prn5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 16:42:30 -0700
+Received: from twshared12717.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 4 Apr 2022 16:42:30 -0700
+ 15.1.2308.21; Mon, 4 Apr 2022 16:42:22 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id C99981661B53B; Mon,  4 Apr 2022 16:42:17 -0700 (PDT)
+        id 796181661B504; Mon,  4 Apr 2022 16:42:05 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Alan Maguire <alan.maguire@oracle.com>,
         Dave Marchevsky <davemarchevsky@fb.com>,
         Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v3 bpf-next 7/7] selftests/bpf: add urandom_read shared lib and USDTs
-Date:   Mon, 4 Apr 2022 16:42:02 -0700
-Message-ID: <20220404234202.331384-8-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 1/7] libbpf: add BPF-side of USDT support
+Date:   Mon, 4 Apr 2022 16:41:56 -0700
+Message-ID: <20220404234202.331384-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220404234202.331384-1-andrii@kernel.org>
 References: <20220404234202.331384-1-andrii@kernel.org>
@@ -43,8 +43,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: hWVs7HEV5oTYeiA-gdauu67bssXgF-kY
-X-Proofpoint-ORIG-GUID: hWVs7HEV5oTYeiA-gdauu67bssXgF-kY
+X-Proofpoint-ORIG-GUID: 6aZNbuxT24W-AzwXFjYVTm8k62YhLjDV
+X-Proofpoint-GUID: 6aZNbuxT24W-AzwXFjYVTm8k62YhLjDV
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-04-04_09,2022-03-31_01,2022-02-23_01
@@ -52,445 +52,350 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend urandom_read helper binary to include USDTs of 4 combinations:
-semaphore/semaphoreless (refcounted and non-refcounted) and based in
-executable or shared library. We also extend urandom_read with ability
-to report it's own PID to parent process and wait for parent process to
-ready itself up for tracing urandom_read. We utilize popen() and
-underlying pipe properties for proper signaling.
+Add BPF-side implementation of libbpf-provided USDT support. This
+consists of single header library, usdt.bpf.h, which is meant to be used
+from user's BPF-side source code. This header is added to the list of
+installed libbpf header, along bpf_helpers.h and others.
 
-Once urandom_read is ready, we add few tests to validate that libbpf's
-USDT attachment handles all the above combinations of semaphore (or lack
-of it) and static or shared library USDTs. Also, we validate that libbpf
-handles shared libraries both with PID filter and without one (i.e., -1
-for PID argument).
+BPF-side implementation consists of two BPF maps:
+  - spec map, which contains "a USDT spec" which encodes information
+    necessary to be able to fetch USDT arguments and other information
+    (argument count, user-provided cookie value, etc) at runtime;
+  - IP-to-spec-ID map, which is only used on kernels that don't support
+    BPF cookie feature. It allows to lookup spec ID based on the place
+    in user application that triggers USDT program.
 
-Having the shared library case tested with and without PID is important
-because internal logic differs on kernels that don't support BPF
-cookies. On such older kernels, attaching to USDTs in shared libraries
-without specifying concrete PID doesn't work in principle, because it's
-impossible to determine shared library's load address to derive absolute
-IPs for uprobe attachments. Without absolute IPs, it's impossible to
-perform correct look up of USDT spec based on uprobe's absolute IP (the
-only kind available from BPF at runtime). This is not the problem on
-newer kernels with BPF cookie as we don't need IP-to-ID lookup because
-BPF cookie value *is* spec ID.
+These maps have default sizes, 256 and 1024, which are chosen
+conservatively to not waste a lot of space, but handling a lot of common
+cases. But there could be cases when user application needs to either
+trace a lot of different USDTs, or USDTs are heavily inlined and their
+arguments are located in a lot of differing locations. For such cases it
+might be necessary to size those maps up, which libbpf allows to do by
+overriding BPF_USDT_MAX_SPEC_CNT and BPF_USDT_MAX_IP_CNT macros.
 
-So having those two situations as separate subtests is good because
-libbpf CI is able to test latest selftests against old kernels (e.g.,
-4.9 and 5.5), so we'll be able to disable PID-less shared lib attachment
-for old kernels, but will still leave PID-specific one enabled to validate
-this legacy logic is working correctly.
+It is an important aspect to keep in mind. Single USDT (user-space
+equivalent of kernel tracepoint) can have multiple USDT "call sites".
+That is, single logical USDT is triggered from multiple places in user
+application. This can happen due to function inlining. Each such inlined
+instance of USDT invocation can have its own unique USDT argument
+specification (instructions about the location of the value of each of
+USDT arguments). So while USDT looks very similar to usual uprobe or
+kernel tracepoint, under the hood it's actually a collection of uprobes,
+each potentially needing different spec to know how to fetch arguments.
 
-Acked-by: Dave Marchevsky <davemarchevsky@fb.com>
+User-visible API consists of three helper functions:
+  - bpf_usdt_arg_cnt(), which returns number of arguments of current USDT;
+  - bpf_usdt_arg(), which reads value of specified USDT argument (by
+    it's zero-indexed position) and returns it as 64-bit value;
+  - bpf_usdt_cookie(), which functions like BPF cookie for USDT
+    programs; this is necessary as libbpf doesn't allow specifying actual
+    BPF cookie and utilizes it internally for USDT support implementation.
+
+Each bpf_usdt_xxx() APIs expect struct pt_regs * context, passed into
+BPF program. On kernels that don't support BPF cookie it is used to
+fetch absolute IP address of the underlying uprobe.
+
+usdt.bpf.h also provides BPF_USDT() macro, which functions like
+BPF_PROG() and BPF_KPROBE() and allows much more user-friendly way to
+get access to USDT arguments, if USDT definition is static and known to
+the user. It is expected that majority of use cases won't have to use
+bpf_usdt_arg_cnt() and bpf_usdt_arg() directly and BPF_USDT() will cover
+all their needs.
+
+Last, usdt.bpf.h is utilizing BPF CO-RE for one single purpose: to
+detect kernel support for BPF cookie. If BPF CO-RE dependency is
+undesirable, user application can redefine BPF_USDT_HAS_BPF_COOKIE to
+either a boolean constant (or equivalently zero and non-zero), or even
+point it to its own .rodata variable that can be specified from user's
+application user-space code. It is important that
+BPF_USDT_HAS_BPF_COOKIE is known to BPF verifier as static value (thus
+.rodata and not just .data), as otherwise BPF code will still contain
+bpf_get_attach_cookie() BPF helper call and will fail validation at
+runtime, if not dead-code eliminated.
+
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |  11 +-
- tools/testing/selftests/bpf/prog_tests/usdt.c | 108 ++++++++++++++++++
- .../selftests/bpf/progs/test_urandom_usdt.c   |  70 ++++++++++++
- .../selftests/bpf/progs/test_usdt_multispec.c |   2 -
- tools/testing/selftests/bpf/urandom_read.c    |  63 +++++++++-
- .../testing/selftests/bpf/urandom_read_aux.c  |   9 ++
- .../testing/selftests/bpf/urandom_read_lib1.c |  13 +++
- .../testing/selftests/bpf/urandom_read_lib2.c |   8 ++
- 8 files changed, 275 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_urandom_usdt.c
- create mode 100644 tools/testing/selftests/bpf/urandom_read_aux.c
- create mode 100644 tools/testing/selftests/bpf/urandom_read_lib1.c
- create mode 100644 tools/testing/selftests/bpf/urandom_read_lib2.c
+ tools/lib/bpf/Makefile   |   2 +-
+ tools/lib/bpf/usdt.bpf.h | 256 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 257 insertions(+), 1 deletion(-)
+ create mode 100644 tools/lib/bpf/usdt.bpf.h
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 0f8c55dfd844..bafdc5373a13 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -168,9 +168,15 @@ $(OUTPUT)/%:%.c
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(LINK.c) $^ $(LDLIBS) -o $@
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index b8b37fe76006..b4fbe8bed555 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -239,7 +239,7 @@ install_lib: all_cmd
  
--$(OUTPUT)/urandom_read: urandom_read.c
-+$(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c
-+	$(call msg,LIB,,$@)
-+	$(Q)$(CC) $(CFLAGS) -fPIC $(LDFLAGS) $^ $(LDLIBS) --shared -o $@
-+
-+$(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
- 	$(call msg,BINARY,,$@)
--	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $< $(LDLIBS) -Wl,--build-id=sha1 -o $@
-+	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.c,$^)			       \
-+		  liburandom_read.so $(LDLIBS)	       			       \
-+		  -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
+ SRC_HDRS := bpf.h libbpf.h btf.h libbpf_common.h libbpf_legacy.h xsk.h	     \
+ 	    bpf_helpers.h bpf_tracing.h bpf_endian.h bpf_core_read.h	     \
+-	    skel_internal.h libbpf_version.h
++	    skel_internal.h libbpf_version.h usdt.bpf.h
+ GEN_HDRS := $(BPF_GENERATED)
  
- $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
- 	$(call msg,MOD,,$@)
-@@ -493,6 +499,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
- 			 btf_helpers.c flow_dissector_load.h		\
- 			 cap_helpers.c
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
-+		       $(OUTPUT)/liburandom_read.so			\
- 		       ima_setup.sh					\
- 		       $(wildcard progs/btf_dump_test_case_*.c)
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
-diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-index 0677c9bfd40b..a71f51bdc08d 100644
---- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-@@ -6,6 +6,7 @@
- #include "../sdt.h"
- 
- #include "test_usdt.skel.h"
-+#include "test_urandom_usdt.skel.h"
- 
- int lets_test_this(int);
- 
-@@ -304,10 +305,117 @@ static void subtest_multispec_usdt(void)
- 	test_usdt__destroy(skel);
- }
- 
-+static FILE *urand_spawn(int *pid)
-+{
-+	FILE *f;
-+
-+	/* urandom_read's stdout is wired into f */
-+	f = popen("./urandom_read 1 report-pid", "r");
-+	if (!f)
-+		return NULL;
-+
-+	if (fscanf(f, "%d", pid) != 1) {
-+		pclose(f);
-+		return NULL;
-+	}
-+
-+	return f;
-+}
-+
-+static int urand_trigger(FILE **urand_pipe)
-+{
-+	int exit_code;
-+
-+	/* pclose() waits for child process to exit and returns their exit code */
-+	exit_code = pclose(*urand_pipe);
-+	*urand_pipe = NULL;
-+
-+	return exit_code;
-+}
-+
-+static void subtest_urandom_usdt(bool auto_attach)
-+{
-+	struct test_urandom_usdt *skel;
-+	struct test_urandom_usdt__bss *bss;
-+	struct bpf_link *l;
-+	FILE *urand_pipe = NULL;
-+	int err, urand_pid = 0;
-+
-+	skel = test_urandom_usdt__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	urand_pipe = urand_spawn(&urand_pid);
-+	if (!ASSERT_OK_PTR(urand_pipe, "urand_spawn"))
-+		goto cleanup;
-+
-+	bss = skel->bss;
-+	bss->urand_pid = urand_pid;
-+
-+	if (auto_attach) {
-+		err = test_urandom_usdt__attach(skel);
-+		if (!ASSERT_OK(err, "skel_auto_attach"))
-+			goto cleanup;
-+	} else {
-+		l = bpf_program__attach_usdt(skel->progs.urand_read_without_sema,
-+					     urand_pid, "./urandom_read",
-+					     "urand", "read_without_sema", NULL);
-+		if (!ASSERT_OK_PTR(l, "urand_without_sema_attach"))
-+			goto cleanup;
-+		skel->links.urand_read_without_sema = l;
-+
-+		l = bpf_program__attach_usdt(skel->progs.urand_read_with_sema,
-+					     urand_pid, "./urandom_read",
-+					     "urand", "read_with_sema", NULL);
-+		if (!ASSERT_OK_PTR(l, "urand_with_sema_attach"))
-+			goto cleanup;
-+		skel->links.urand_read_with_sema = l;
-+
-+		l = bpf_program__attach_usdt(skel->progs.urandlib_read_without_sema,
-+					     urand_pid, "./liburandom_read.so",
-+					     "urandlib", "read_without_sema", NULL);
-+		if (!ASSERT_OK_PTR(l, "urandlib_without_sema_attach"))
-+			goto cleanup;
-+		skel->links.urandlib_read_without_sema = l;
-+
-+		l = bpf_program__attach_usdt(skel->progs.urandlib_read_with_sema,
-+					     urand_pid, "./liburandom_read.so",
-+					     "urandlib", "read_with_sema", NULL);
-+		if (!ASSERT_OK_PTR(l, "urandlib_with_sema_attach"))
-+			goto cleanup;
-+		skel->links.urandlib_read_with_sema = l;
-+
-+	}
-+
-+	/* trigger urandom_read USDTs */
-+	ASSERT_OK(urand_trigger(&urand_pipe), "urand_exit_code");
-+
-+	ASSERT_EQ(bss->urand_read_without_sema_call_cnt, 1, "urand_wo_sema_cnt");
-+	ASSERT_EQ(bss->urand_read_without_sema_buf_sz_sum, 256, "urand_wo_sema_sum");
-+
-+	ASSERT_EQ(bss->urand_read_with_sema_call_cnt, 1, "urand_w_sema_cnt");
-+	ASSERT_EQ(bss->urand_read_with_sema_buf_sz_sum, 256, "urand_w_sema_sum");
-+
-+	ASSERT_EQ(bss->urandlib_read_without_sema_call_cnt, 1, "urandlib_wo_sema_cnt");
-+	ASSERT_EQ(bss->urandlib_read_without_sema_buf_sz_sum, 256, "urandlib_wo_sema_sum");
-+
-+	ASSERT_EQ(bss->urandlib_read_with_sema_call_cnt, 1, "urandlib_w_sema_cnt");
-+	ASSERT_EQ(bss->urandlib_read_with_sema_buf_sz_sum, 256, "urandlib_w_sema_sum");
-+
-+cleanup:
-+	if (urand_pipe)
-+		pclose(urand_pipe);
-+	test_urandom_usdt__destroy(skel);
-+}
-+
- void test_usdt(void)
- {
- 	if (test__start_subtest("basic"))
- 		subtest_basic_usdt();
- 	if (test__start_subtest("multispec"))
- 		subtest_multispec_usdt();
-+	if (test__start_subtest("urand_auto_attach"))
-+		subtest_urandom_usdt(true /* auto_attach */);
-+	if (test__start_subtest("urand_pid_attach"))
-+		subtest_urandom_usdt(false /* auto_attach */);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_urandom_usdt.c b/tools/testing/selftests/bpf/progs/test_urandom_usdt.c
+ INSTALL_PFX := $(DESTDIR)$(prefix)/include/bpf
+diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
 new file mode 100644
-index 000000000000..3539b02bd5f7
+index 000000000000..60237acf6b02
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_urandom_usdt.c
-@@ -0,0 +1,70 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/tools/lib/bpf/usdt.bpf.h
+@@ -0,0 +1,256 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
 +/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++#ifndef __USDT_BPF_H__
++#define __USDT_BPF_H__
 +
-+#include "vmlinux.h"
++#include <linux/errno.h>
 +#include <bpf/bpf_helpers.h>
-+#include <bpf/usdt.bpf.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
 +
-+int urand_pid;
++/* Below types and maps are internal implementation details of libbpf's USDT
++ * support and are subjects to change. Also, bpf_usdt_xxx() API helpers should
++ * be considered an unstable API as well and might be adjusted based on user
++ * feedback from using libbpf's USDT support in production.
++ */
 +
-+int urand_read_without_sema_call_cnt;
-+int urand_read_without_sema_buf_sz_sum;
++/* User can override BPF_USDT_MAX_SPEC_CNT to change default size of internal
++ * map that keeps track of USDT argument specifications. This might be
++ * necessary if there are a lot of USDT attachments.
++ */
++#ifndef BPF_USDT_MAX_SPEC_CNT
++#define BPF_USDT_MAX_SPEC_CNT 256
++#endif
++/* User can override BPF_USDT_MAX_IP_CNT to change default size of internal
++ * map that keeps track of IP (memory address) mapping to USDT argument
++ * specification.
++ * Note, if kernel supports BPF cookies, this map is not used and could be
++ * resized all the way to 1 to save a bit of memory.
++ */
++#ifndef BPF_USDT_MAX_IP_CNT
++#define BPF_USDT_MAX_IP_CNT (4 * BPF_USDT_MAX_SPEC_CNT)
++#endif
++/* We use BPF CO-RE to detect support for BPF cookie from BPF side. This is
++ * the only dependency on CO-RE, so if it's undesirable, user can override
++ * BPF_USDT_HAS_BPF_COOKIE to specify whether to BPF cookie is supported or not.
++ */
++#ifndef BPF_USDT_HAS_BPF_COOKIE
++#define BPF_USDT_HAS_BPF_COOKIE \
++	bpf_core_enum_value_exists(enum bpf_func_id___usdt, BPF_FUNC_get_attach_cookie___usdt)
++#endif
 +
-+SEC("usdt/./urandom_read:urand:read_without_sema")
-+int BPF_USDT(urand_read_without_sema, int iter_num, int iter_cnt, int buf_sz)
-+{
-+	if (urand_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
++enum __bpf_usdt_arg_type {
++	BPF_USDT_ARG_CONST,
++	BPF_USDT_ARG_REG,
++	BPF_USDT_ARG_REG_DEREF,
++};
 +
-+	__sync_fetch_and_add(&urand_read_without_sema_call_cnt, 1);
-+	__sync_fetch_and_add(&urand_read_without_sema_buf_sz_sum, buf_sz);
-+
-+	return 0;
-+}
-+
-+int urand_read_with_sema_call_cnt;
-+int urand_read_with_sema_buf_sz_sum;
-+
-+SEC("usdt/./urandom_read:urand:read_with_sema")
-+int BPF_USDT(urand_read_with_sema, int iter_num, int iter_cnt, int buf_sz)
-+{
-+	if (urand_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&urand_read_with_sema_call_cnt, 1);
-+	__sync_fetch_and_add(&urand_read_with_sema_buf_sz_sum, buf_sz);
-+
-+	return 0;
-+}
-+
-+int urandlib_read_without_sema_call_cnt;
-+int urandlib_read_without_sema_buf_sz_sum;
-+
-+SEC("usdt/./liburandom_read.so:urandlib:read_without_sema")
-+int BPF_USDT(urandlib_read_without_sema, int iter_num, int iter_cnt, int buf_sz)
-+{
-+	if (urand_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&urandlib_read_without_sema_call_cnt, 1);
-+	__sync_fetch_and_add(&urandlib_read_without_sema_buf_sz_sum, buf_sz);
-+
-+	return 0;
-+}
-+
-+int urandlib_read_with_sema_call_cnt;
-+int urandlib_read_with_sema_buf_sz_sum;
-+
-+SEC("usdt/./liburandom_read.so:urandlib:read_with_sema")
-+int BPF_USDT(urandlib_read_with_sema, int iter_num, int iter_cnt, int buf_sz)
-+{
-+	if (urand_pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+
-+	__sync_fetch_and_add(&urandlib_read_with_sema_call_cnt, 1);
-+	__sync_fetch_and_add(&urandlib_read_with_sema_buf_sz_sum, buf_sz);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_usdt_multispec.c b/tools/testing/selftests/bpf/progs/test_usdt_multispec.c
-index 3a090681f981..aa6de32b50d1 100644
---- a/tools/testing/selftests/bpf/progs/test_usdt_multispec.c
-+++ b/tools/testing/selftests/bpf/progs/test_usdt_multispec.c
-@@ -26,8 +26,6 @@ int BPF_USDT(usdt_100, int x)
- 	__sync_fetch_and_add(&usdt_100_called, 1);
- 	__sync_fetch_and_add(&usdt_100_sum, x);
- 
--	bpf_printk("X is %d, sum is %d", x, usdt_100_sum);
--
- 	return 0;
- }
- 
-diff --git a/tools/testing/selftests/bpf/urandom_read.c b/tools/testing/selftests/bpf/urandom_read.c
-index db781052758d..e92644d0fa75 100644
---- a/tools/testing/selftests/bpf/urandom_read.c
-+++ b/tools/testing/selftests/bpf/urandom_read.c
-@@ -1,32 +1,85 @@
-+#include <stdbool.h>
- #include <stdio.h>
- #include <unistd.h>
-+#include <errno.h>
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <fcntl.h>
- #include <stdlib.h>
-+#include <signal.h>
-+
-+#define _SDT_HAS_SEMAPHORES 1
-+#include "sdt.h"
-+
-+#define SEC(name) __attribute__((section(name), used))
- 
- #define BUF_SIZE 256
- 
-+/* defined in urandom_read_aux.c */
-+void urand_read_without_sema(int iter_num, int iter_cnt, int read_sz);
-+/* these are coming from urandom_read_lib{1,2}.c */
-+void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz);
-+void urandlib_read_without_sema(int iter_num, int iter_cnt, int read_sz);
-+
-+unsigned short urand_read_with_sema_semaphore SEC(".probes");
-+
- static __attribute__((noinline))
- void urandom_read(int fd, int count)
- {
--       char buf[BUF_SIZE];
--       int i;
-+	char buf[BUF_SIZE];
-+	int i;
-+
-+	for (i = 0; i < count; ++i) {
-+		read(fd, buf, BUF_SIZE);
-+
-+		/* trigger USDTs defined in executable itself */
-+		urand_read_without_sema(i, count, BUF_SIZE);
-+		STAP_PROBE3(urand, read_with_sema, i, count, BUF_SIZE);
- 
--       for (i = 0; i < count; ++i)
--               read(fd, buf, BUF_SIZE);
-+		/* trigger USDTs defined in shared lib */
-+		urandlib_read_without_sema(i, count, BUF_SIZE);
-+		urandlib_read_with_sema(i, count, BUF_SIZE);
-+	}
-+}
-+
-+static volatile bool parent_ready;
-+
-+static void handle_sigpipe(int sig)
-+{
-+	parent_ready = true;
- }
- 
- int main(int argc, char *argv[])
- {
- 	int fd = open("/dev/urandom", O_RDONLY);
- 	int count = 4;
-+	bool report_pid = false;
- 
- 	if (fd < 0)
- 		return 1;
- 
--	if (argc == 2)
-+	if (argc >= 2)
- 		count = atoi(argv[1]);
-+	if (argc >= 3) {
-+		report_pid = true;
-+		/* install SIGPIPE handler to catch when parent closes their
-+		 * end of the pipe (on the other side of our stdout)
-+		 */
-+		signal(SIGPIPE, handle_sigpipe);
-+	}
-+
-+	/* report PID and wait for parent process to send us "signal" by
-+	 * closing stdout
++struct __bpf_usdt_arg_spec {
++	/* u64 scalar interpreted depending on arg_type, see below */
++	__u64 val_off;
++	/* arg location case, see bpf_udst_arg() for details */
++	enum __bpf_usdt_arg_type arg_type;
++	/* offset of referenced register within struct pt_regs */
++	short reg_off;
++	/* whether arg should be interpreted as signed value */
++	bool arg_signed;
++	/* number of bits that need to be cleared and, optionally,
++	 * sign-extended to cast arguments that are 1, 2, or 4 bytes
++	 * long into final 8-byte u64/s64 value returned to user
 +	 */
-+	if (report_pid) {
-+		while (!parent_ready) {
-+			fprintf(stdout, "%d\n", getpid());
-+			fflush(stdout);
-+		}
-+		/* at this point stdout is closed, parent process knows our
-+		 * PID and is ready to trace us
-+		 */
++	char arg_bitshift;
++};
++
++/* should match USDT_MAX_ARG_CNT in usdt.c exactly */
++#define BPF_USDT_MAX_ARG_CNT 12
++struct __bpf_usdt_spec {
++	struct __bpf_usdt_arg_spec args[BPF_USDT_MAX_ARG_CNT];
++	__u64 usdt_cookie;
++	short arg_cnt;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, BPF_USDT_MAX_SPEC_CNT);
++	__type(key, int);
++	__type(value, struct __bpf_usdt_spec);
++} __bpf_usdt_specs SEC(".maps") __weak;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(max_entries, BPF_USDT_MAX_IP_CNT);
++	__type(key, long);
++	__type(value, __u32);
++} __bpf_usdt_ip_to_spec_id SEC(".maps") __weak;
++
++/* don't rely on user's BPF code to have latest definition of bpf_func_id */
++enum bpf_func_id___usdt {
++	BPF_FUNC_get_attach_cookie___usdt = 0xBAD, /* value doesn't matter */
++};
++
++static __always_inline
++int __bpf_usdt_spec_id(struct pt_regs *ctx)
++{
++	if (!BPF_USDT_HAS_BPF_COOKIE) {
++		long ip = PT_REGS_IP(ctx);
++		int *spec_id_ptr;
++
++		spec_id_ptr = bpf_map_lookup_elem(&__bpf_usdt_ip_to_spec_id, &ip);
++		return spec_id_ptr ? *spec_id_ptr : -ESRCH;
 +	}
- 
- 	urandom_read(fd, count);
- 
-diff --git a/tools/testing/selftests/bpf/urandom_read_aux.c b/tools/testing/selftests/bpf/urandom_read_aux.c
-new file mode 100644
-index 000000000000..6132edcfea74
---- /dev/null
-+++ b/tools/testing/selftests/bpf/urandom_read_aux.c
-@@ -0,0 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+#include "sdt.h"
 +
-+void urand_read_without_sema(int iter_num, int iter_cnt, int read_sz)
-+{
-+	/* semaphore-less USDT */
-+	STAP_PROBE3(urand, read_without_sema, iter_num, iter_cnt, read_sz);
++	return bpf_get_attach_cookie(ctx);
 +}
-diff --git a/tools/testing/selftests/bpf/urandom_read_lib1.c b/tools/testing/selftests/bpf/urandom_read_lib1.c
-new file mode 100644
-index 000000000000..86186e24b740
---- /dev/null
-+++ b/tools/testing/selftests/bpf/urandom_read_lib1.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+#define _SDT_HAS_SEMAPHORES 1
-+#include "sdt.h"
 +
-+#define SEC(name) __attribute__((section(name), used))
-+
-+unsigned short urandlib_read_with_sema_semaphore SEC(".probes");
-+
-+void urandlib_read_with_sema(int iter_num, int iter_cnt, int read_sz)
++/* Return number of USDT arguments defined for currently traced USDT. */
++static inline __noinline
++int bpf_usdt_arg_cnt(struct pt_regs *ctx)
 +{
-+	STAP_PROBE3(urandlib, read_with_sema, iter_num, iter_cnt, read_sz);
-+}
-diff --git a/tools/testing/selftests/bpf/urandom_read_lib2.c b/tools/testing/selftests/bpf/urandom_read_lib2.c
-new file mode 100644
-index 000000000000..9d401ad9838f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/urandom_read_lib2.c
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
-+#include "sdt.h"
++	struct __bpf_usdt_spec *spec;
++	int spec_id;
 +
-+void urandlib_read_without_sema(int iter_num, int iter_cnt, int read_sz)
-+{
-+	STAP_PROBE3(urandlib, read_without_sema, iter_num, iter_cnt, read_sz);
++	spec_id = __bpf_usdt_spec_id(ctx);
++	if (spec_id < 0)
++		return -ESRCH;
++
++	spec = bpf_map_lookup_elem(&__bpf_usdt_specs, &spec_id);
++	if (!spec)
++		return -ESRCH;
++
++	return spec->arg_cnt;
 +}
++
++/* Fetch USDT argument #*arg_num* (zero-indexed) and put its value into *res.
++ * Returns 0 on success; negative error, otherwise.
++ * On error *res is guaranteed to be set to zero.
++ */
++static inline __noinline
++int bpf_usdt_arg(struct pt_regs *ctx, __u64 arg_num, long *res)
++{
++	struct __bpf_usdt_spec *spec;
++	struct __bpf_usdt_arg_spec *arg_spec;
++	unsigned long val;
++	int err, spec_id;
++
++	*res = 0;
++
++	spec_id = __bpf_usdt_spec_id(ctx);
++	if (spec_id < 0)
++		return -ESRCH;
++
++	spec = bpf_map_lookup_elem(&__bpf_usdt_specs, &spec_id);
++	if (!spec)
++		return -ESRCH;
++
++	if (arg_num >= BPF_USDT_MAX_ARG_CNT || arg_num >= spec->arg_cnt)
++		return -ENOENT;
++
++	arg_spec = &spec->args[arg_num];
++	switch (arg_spec->arg_type) {
++	case BPF_USDT_ARG_CONST:
++		/* Arg is just a constant ("-4@$-9" in USDT arg spec).
++		 * value is recorded in arg_spec->val_off directly.
++		 */
++		val = arg_spec->val_off;
++		break;
++	case BPF_USDT_ARG_REG:
++		/* Arg is in a register (e.g, "8@%rax" in USDT arg spec),
++		 * so we read the contents of that register directly from
++		 * struct pt_regs. To keep things simple user-space parts
++		 * record offsetof(struct pt_regs, <regname>) in arg_spec->reg_off.
++		 */
++		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
++		if (err)
++			return err;
++		break;
++	case BPF_USDT_ARG_REG_DEREF:
++		/* Arg is in memory addressed by register, plus some offset
++		 * (e.g., "-4@-1204(%rbp)" in USDT arg spec). Register is
++		 * identified lik with BPF_USDT_ARG_REG case, and the offset
++		 * is in arg_spec->val_off. We first fetch register contents
++		 * from pt_regs, then do another user-space probe read to
++		 * fetch argument value itself.
++		 */
++		err = bpf_probe_read_kernel(&val, sizeof(val), (void *)ctx + arg_spec->reg_off);
++		if (err)
++			return err;
++		err = bpf_probe_read_user(&val, sizeof(val), (void *)val + arg_spec->val_off);
++		if (err)
++			return err;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	/* cast arg from 1, 2, or 4 bytes to final 8 byte size clearing
++	 * necessary upper arg_bitshift bits, with sign extension if argument
++	 * is signed
++	 */
++	val <<= arg_spec->arg_bitshift;
++	if (arg_spec->arg_signed)
++		val = ((long)val) >> arg_spec->arg_bitshift;
++	else
++		val = val >> arg_spec->arg_bitshift;
++	*res = val;
++	return 0;
++}
++
++/* Retrieve user-specified cookie value provided during attach as
++ * bpf_usdt_opts.usdt_cookie. This serves the same purpose as BPF cookie
++ * returned by bpf_get_attach_cookie(). Libbpf's support for USDT is itself
++ * utilizaing BPF cookies internally, so user can't use BPF cookie directly
++ * for USDT programs and has to use bpf_usdt_cookie() API instead.
++ */
++static inline __noinline
++long bpf_usdt_cookie(struct pt_regs *ctx)
++{
++	struct __bpf_usdt_spec *spec;
++	int spec_id;
++
++	spec_id = __bpf_usdt_spec_id(ctx);
++	if (spec_id < 0)
++		return 0;
++
++	spec = bpf_map_lookup_elem(&__bpf_usdt_specs, &spec_id);
++	if (!spec)
++		return 0;
++
++	return spec->usdt_cookie;
++}
++
++/* we rely on ___bpf_apply() and ___bpf_narg() macros already defined in bpf_tracing.h */
++#define ___bpf_usdt_args0() ctx
++#define ___bpf_usdt_args1(x) ___bpf_usdt_args0(), ({ long _x; bpf_usdt_arg(ctx, 0, &_x); (void *)_x; })
++#define ___bpf_usdt_args2(x, args...) ___bpf_usdt_args1(args), ({ long _x; bpf_usdt_arg(ctx, 1, &_x); (void *)_x; })
++#define ___bpf_usdt_args3(x, args...) ___bpf_usdt_args2(args), ({ long _x; bpf_usdt_arg(ctx, 2, &_x); (void *)_x; })
++#define ___bpf_usdt_args4(x, args...) ___bpf_usdt_args3(args), ({ long _x; bpf_usdt_arg(ctx, 3, &_x); (void *)_x; })
++#define ___bpf_usdt_args5(x, args...) ___bpf_usdt_args4(args), ({ long _x; bpf_usdt_arg(ctx, 4, &_x); (void *)_x; })
++#define ___bpf_usdt_args6(x, args...) ___bpf_usdt_args5(args), ({ long _x; bpf_usdt_arg(ctx, 5, &_x); (void *)_x; })
++#define ___bpf_usdt_args7(x, args...) ___bpf_usdt_args6(args), ({ long _x; bpf_usdt_arg(ctx, 6, &_x); (void *)_x; })
++#define ___bpf_usdt_args8(x, args...) ___bpf_usdt_args7(args), ({ long _x; bpf_usdt_arg(ctx, 7, &_x); (void *)_x; })
++#define ___bpf_usdt_args9(x, args...) ___bpf_usdt_args8(args), ({ long _x; bpf_usdt_arg(ctx, 8, &_x); (void *)_x; })
++#define ___bpf_usdt_args10(x, args...) ___bpf_usdt_args9(args), ({ long _x; bpf_usdt_arg(ctx, 9, &_x); (void *)_x; })
++#define ___bpf_usdt_args11(x, args...) ___bpf_usdt_args10(args), ({ long _x; bpf_usdt_arg(ctx, 10, &_x); (void *)_x; })
++#define ___bpf_usdt_args12(x, args...) ___bpf_usdt_args11(args), ({ long _x; bpf_usdt_arg(ctx, 11, &_x); (void *)_x; })
++#define ___bpf_usdt_args(args...) ___bpf_apply(___bpf_usdt_args, ___bpf_narg(args))(args)
++
++/*
++ * BPF_USDT serves the same purpose for USDT handlers as BPF_PROG for
++ * tp_btf/fentry/fexit BPF programs and BPF_KPROBE for kprobes.
++ * Original struct pt_regs * context is preserved as 'ctx' argument.
++ */
++#define BPF_USDT(name, args...)						    \
++name(struct pt_regs *ctx);						    \
++static __attribute__((always_inline)) typeof(name(0))			    \
++____##name(struct pt_regs *ctx, ##args);				    \
++typeof(name(0)) name(struct pt_regs *ctx)				    \
++{									    \
++        _Pragma("GCC diagnostic push")					    \
++        _Pragma("GCC diagnostic ignored \"-Wint-conversion\"")		    \
++        return ____##name(___bpf_usdt_args(args));			    \
++        _Pragma("GCC diagnostic pop")					    \
++}									    \
++static __attribute__((always_inline)) typeof(name(0))			    \
++____##name(struct pt_regs *ctx, ##args)
++
++#endif /* __USDT_BPF_H__ */
 -- 
 2.30.2
 
