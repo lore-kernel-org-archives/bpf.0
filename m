@@ -2,101 +2,188 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D41C5C4167D
-	for <bpf@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35EEDC35276
+	for <bpf@archiver.kernel.org>; Mon,  4 Apr 2022 21:27:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378051AbiDDV1y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
+        id S1379467AbiDDV2D (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Apr 2022 17:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379467AbiDDRLV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:11:21 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2FC13D16
-        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 10:09:23 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id i15so2038761qvh.0
-        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 10:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding;
-        bh=VcPjK2xIshaSha7P/73c4uJIeEh9LCIV9h696014eSY=;
-        b=0/1W3PtmahDM2zaiwQOfAOI7x0n7aJlY78Edx82FG8yn3sBRYT/xK8rwyUWlSIPkVk
-         FbhTcMOufB5eBtNbzu+A7OVMx2KouPMqLL4fqMN5fXrX9FdDb+g8E/WNbt7rmfNyOJqQ
-         3yTps2pezT8XzRvoiqVDfU0khY6BzaT9b9y+qgU1cNgUC5dLdbyJ926rZhqt1ZSdlvB7
-         wu1tox0qINOoXy+nUe+Na9v9dWOAA/GUbXFNkrYHSwHS3aWbXTRBR4ZEacGNaIi8qzUK
-         oh7jsSFehuBrZbWoTHGlWiHmYACJyn+L1iSBP/T8RxtxXRT0rUV4Sb16jlJtGgFKMGWg
-         lnkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=VcPjK2xIshaSha7P/73c4uJIeEh9LCIV9h696014eSY=;
-        b=Ys6zkZn+WLubL0hfil33+dcSP3TmwEGtLArL8Vsi/B5C2E5BZTkGfQoZVn6Tx3UuGo
-         KoWMsiSQM85q9Tss/gshXNX1JkLE65jPA+ugs49VfYhtMlmIKguTpg4ffTzw5HEWsAAj
-         FxEpFvfwhlXXhkAOpcHA4JzAUETxlAJhyrT7tmI/u/AgUDq03tPjdD+3f26NSp7xV4Q/
-         jeNo/F+TD0upqckVWiVf/thIt+5XrrCoImQvFBIGD93t5LsI6ceq8Lnq2cvzZA7tiFB+
-         S0vhTa+F6CZatnLdD1aqK/2z4CX41Z/WFDH7SgT2NPjbF7PfwyyRyK5orz99DR/I4znT
-         n5LA==
-X-Gm-Message-State: AOAM533vjE73wXfc+7J9+tKliv+hYao/nzf8hKJUGJXoh6Q+Rh2QWvzR
-        NfaBu9UHk3XzxDSKwk7hRHU77g==
-X-Google-Smtp-Source: ABdhPJw975xdZtFy73BXNqDffuAX0xg4/F4udCpxsEE662P0gVWTk/Y3sjsyhUGgB9jNpu/nvzm/zA==
-X-Received: by 2002:ad4:5f0f:0:b0:441:1e3a:dbc with SMTP id fo15-20020ad45f0f000000b004411e3a0dbcmr485180qvb.99.1649092162831;
-        Mon, 04 Apr 2022 10:09:22 -0700 (PDT)
-Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
-        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm7312292qki.49.2022.04.04.10.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:09:22 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 13:09:21 -0400
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     lsf-pc@lists.linuxfoundation.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-nvme@lists.infradead.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: LSF/MM/BPF: 2022: Call for Proposals VIRTUAL OPTION
-Message-ID: <YksmQSfuIx/OiNA8@localhost.localdomain>
+        with ESMTP id S1380397AbiDDUBB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Apr 2022 16:01:01 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD5430576
+        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 12:59:02 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234Hk0ud030624;
+        Mon, 4 Apr 2022 12:58:46 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=s4Li5XCGk5bj9SiO8xywkgSLlOQbDQWzWEcZTii52vg=;
+ b=F0Mm9KuX0Rkw3KJtdjIWV5kzImaQp+Wo47t93dQrRoWbxcXVZpdALvOEz7GFamrFPeRq
+ qg+El5W4cQmjpqC8JlFqo9cNVIYU33R/LwUb9xXltFEyWJ+sTEI4676ZjCSAELffTpIT
+ 2nu/PzgMQL+QbAeZ8prR+gEJQOIkZ7jpc/g= 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2108.outbound.protection.outlook.com [104.47.58.108])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f82702tc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 12:58:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UK/3zx+9sV7IFxuUMSLWJNE3ZEQPYK39Z7weSenmJom49f9gMEDuL+fRNHnyVYKyR4xbkYQcb65tmLVQQh580cSSy82o9Kh7qrXyAH9A9K0MZaFaeBFEi/8Xc1rgLGE5Y/OSMp037sIkY/LC2CdFi2sQqG4yQyWynrZsKSBUbjw6Dcin4u1hS/dZBKZbD5yUr5YuUcGYRWBAQ73Peada1E2Slng1uyohwJpcJqaesfJPVFnarO7qW4nCKR7MUucEUjFCl/oujjtP4uWshPOLtSMrOhRI/uIYkO2kYFVl7Dyr+wKjWsNC7f5Dp0XJ+0eRRA7aqHgJ1jtNFIP2KskARw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s4Li5XCGk5bj9SiO8xywkgSLlOQbDQWzWEcZTii52vg=;
+ b=gmrn4oFZA35+xd4leYU1RO+CVj/6UsjPDNqJTvt20gGQL02M0Kwc2ePs+IH+6WWik7Jw0Dh1RNt8Zl8FPSFLEVnS5YnspyjB83+vkOM1pUf9u5FkkKHmU34HTTh8hiWSG6ucACSGbhmiHfCOrkuhd/FhNdHsrkwKJkk6U6FIpBcRz0vy5U0KUNlOwVmjL6Z4MQbBPzir4hkK2FAv5Pwlr95xJhRjDvQONnPs4EZMXOaEVJsbs0a/0eTwvW5F7gI4WfNMFt4pIM2wku/MGV9uLojZOYHEmPRk+RUqXReyaGyzN+8pZMsGwTUTM/GzDNao2Y/6Mm+Y1yz9fC3t2tuuuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from DM6PR15MB4039.namprd15.prod.outlook.com (2603:10b6:5:2b2::20)
+ by MN2PR15MB2989.namprd15.prod.outlook.com (2603:10b6:208:ed::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 19:58:42 +0000
+Received: from DM6PR15MB4039.namprd15.prod.outlook.com
+ ([fe80::5ca4:f6e8:5d75:1abc]) by DM6PR15MB4039.namprd15.prod.outlook.com
+ ([fe80::5ca4:f6e8:5d75:1abc%8]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
+ 19:58:42 +0000
+Message-ID: <37157072-3350-65b0-e0d5-222ace84ba8c@fb.com>
+Date:   Mon, 4 Apr 2022 15:58:40 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 bpf-next 4/7] libbpf: wire up spec management and other
+ arch-independent USDT logic
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        ast@kernel.org, daniel@iogearbox.net
+Cc:     kernel-team@fb.com, Alan Maguire <alan.maguire@oracle.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+References: <20220402002944.382019-1-andrii@kernel.org>
+ <20220402002944.382019-5-andrii@kernel.org>
+From:   Dave Marchevsky <davemarchevsky@fb.com>
+In-Reply-To: <20220402002944.382019-5-andrii@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR22CA0011.namprd22.prod.outlook.com
+ (2603:10b6:208:238::16) To DM6PR15MB4039.namprd15.prod.outlook.com
+ (2603:10b6:5:2b2::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d99bcb42-a659-4c9f-17dc-08da167584c4
+X-MS-TrafficTypeDiagnostic: MN2PR15MB2989:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR15MB2989536AD9395D89F2C9A646A0E59@MN2PR15MB2989.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3qK82s3FnjKPCEHImkaa+uS4clld+G+COxmept1QGWwEJMaREPDJHVa+jdS8gOdVLUkuGBtbIEuq7hdwzHO6MCqcINNBG+OxfUsklW0cDDb0A05iRBBTR+8uJc+gPL8x2NtEs+77/hQnm3EYo6pJN86g+9U90RennxmAYLlhVcvuiYBUX13Dexa1tz3MtekCmhhUui1EsZbQxc3E2vG6gZBZ3PwiTz5cM9eT25AKVtT6t6J1ZZc58tXihmO4l8Vp9sG/SPJUIjIs7K1ASv04oYOGUR93kenJPCUd4No4OO0LMfn/OR0o5px0thFA9Dj+tivc8p+XO7e22q3SCWnmA0C+4m/zjFKfwKM/eOBFzYgbBKE41U2nKvthPOTdQo1Hc4M7eoMg+yWgdOe4arS652woNujC5w+mvLOsSDeZsAljb+SbM4ZIs/GqE6O2zt7esphQh94O/b8qlMrEiqIXnzaS1yv2LnN/EgnavmGQWeMPr/3dIvcaPlkYqnhrnJOhrUvgx1rx7EhRidEtYZErOloYhsWqGP9hvGZBXY/ztEZw5KSmkrU0UrW1gEuHo/c7Ot0N0C19+QBJZJqwkVYmaGzEw0zWz8tlNoHESxplPqjoUu59FT0/mi3cP+MmRpLB0rWKcA8Epz/msSyMvsx21e4FFFrDFHcPIuvnVExQelVyMMIEjLh+BujnE8OzUaWsPCdWrmxBqIL9aPzYdFxRP9vjnXC6W3exxDvkSsLmRU0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB4039.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(6486002)(6506007)(53546011)(8676002)(508600001)(83380400001)(66946007)(2616005)(5660300002)(6512007)(66556008)(2906002)(4326008)(36756003)(31686004)(86362001)(8936002)(316002)(186003)(54906003)(38100700002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXVIdkE0UGNKbFpXZGVvek1sWlA4TW5wZzNkZHQxR0ZTaEtLS0RhVlF3TUw3?=
+ =?utf-8?B?V3kzbmRJc2JZRSs3a0lHT2k2QXFCSkFreW1wa3VMbDM3L1dqSWpoY3RHd2Y1?=
+ =?utf-8?B?aUxDU2VzdVhrQnJEbHE0VjcwRS8yT1NFUllmc2drV0pTemFxT2pnZkpPZTB6?=
+ =?utf-8?B?aXdSWlc4b1NFWEkvVFl3WnR4dld3a2lBdm5tRkNmMGtCUzJ0dGdaNW9ZdlZ4?=
+ =?utf-8?B?dmlTbkNXOCtOZHhhdXV6TmkzWVppSmtRUHBueXBmdkg3QTM5cjhjR29RMVJq?=
+ =?utf-8?B?R2w4TGx2blZmTVh5di9qZHZ5amgycWgwT0lPVHFkenNNQ3JTdnNRMkl1M1VI?=
+ =?utf-8?B?ZmtXYStuMWlta21JdEtaNXFTVllzN01yM29TQnZSZmZFOU1nTkxkZG5YeDkv?=
+ =?utf-8?B?aUl5aVEzdUtiU3puajBGR2I5YmcyalcvcXF3eHRQbVlKaFMzaytHcnlZK3hi?=
+ =?utf-8?B?aFd4WW92ZGp1UU1zZjJCS3ZDMURGUVp0UGIyamNwL2grM1hDUE9DYnRpQXZr?=
+ =?utf-8?B?R1g5UVBVNUUxdkRpb1NPZG8rQU9MZGVjWjZRZ210Mk5VYlI2R1R0aWh5TEJR?=
+ =?utf-8?B?czl0em9HZHdzcmFzblhlMTZmWFJhcEsxdmdDSnhFdzlIL2t1WDJDcXpwU0Nu?=
+ =?utf-8?B?aXppbHdFcDZFWGwxdFpKRVV3VTFhdUFnMDNNVERWN2xmRTFJU0lOc2xHaW9y?=
+ =?utf-8?B?cG5zQjd6NHpTeTFkdjgvN1FQQU1XS0RJMkI4NTZjRlFUVHJsM0NlSmZUczNa?=
+ =?utf-8?B?Y0RvaHNZNDc0YnV2RGJBVkt1WENKT2pUL2M4UWphYnFnQ0xoVWlKZGxOc1Iv?=
+ =?utf-8?B?TDFRajZCOXoxUHZJeWtKejVtdENzQklvSnYxV2E4NW42U2QzYU5DcEJSSm9J?=
+ =?utf-8?B?NG1ydnpaVmVCbnNhVDNsZW1UV29OOTNoSWJOM2VQeXp5Z2lBc0tyOEt0Y2V5?=
+ =?utf-8?B?OUc0VzdmZk15VEtVRStVd1B5SUpmeUF0MEJOQ1p1NE5SbG83ZzhSUGZRVnli?=
+ =?utf-8?B?ZHFDK3V0aWtmL1NJNFV0NExRUXNHOVdFTWZDcHg4OFo0Wm9rNExQSStqZFJ6?=
+ =?utf-8?B?U1prM245TURFK3FNNjNWY0xTNVZ6SlVIK0dJNFFTYW5SS2VKZW1kQ3h5U0Zm?=
+ =?utf-8?B?bllmOHA1b2tsM1lOK3ZxZTZoYTVNeVhWYzMyK2tkTmdkYm44YU5NTEkvWHJ6?=
+ =?utf-8?B?ZENVQUE5eE56SDZmQlhTdHhLOStMNGVPV2puUlE3a3JWcHQzTllJMkFTcU5y?=
+ =?utf-8?B?L0NXWHRUcGdBWHZFa3VmWFBhc3NMNFBPc1NqWkk5WTh3b0tsQ0YzZ0tUU3dU?=
+ =?utf-8?B?VlJCSlNUS2FLblM3cGUrdWhjTzA4U2M3Z2FBNjdvTFg4cVNNeVc1ejNVODVV?=
+ =?utf-8?B?czA5SVAyUlhyUUVwWTJCTXVCSlkrVUtOY2I1YUpNZ2Y4ME5PRWpRRXRqSzUz?=
+ =?utf-8?B?cUhFTXdCUjF4UjJuTUhUQXlBWUprT1BSdTRJSitwelFrVkZuSlRFUDhtd1Uz?=
+ =?utf-8?B?Zk9EVlEyRFUycjNUb0FkdjdndVNlYUdHUDlhL1NiV09EU2lqc1o4RThCSU55?=
+ =?utf-8?B?aUxRWERPZk9PdmRVdytNRk1vVC9GTVp4bG83a1UwdVU1a3RCeG9nQXVWeXdW?=
+ =?utf-8?B?UXliTjNrc2grSjFqQlI2OC9ESGxJTTJwMXZQUDNvOUpseW9ZckNzcmNYc2lZ?=
+ =?utf-8?B?MHpGY2h4WFVyRUo5d0ZtdjdjYXVUTkp6MDYyM01NVDBoWFZpdHJQUXUwc09n?=
+ =?utf-8?B?bngyQ1BZR3NYcUpDZ1l1dk1iVGZqWjNXNUdLa3ZXNzMzeUc4UDgrTUJmdWJt?=
+ =?utf-8?B?ZTZDeWVJZlVMTERhVE5tcGlWVWlycy82OEs5aThiUHVGeEttNFNVTnlHeEp2?=
+ =?utf-8?B?S1Q5aFJqMS9XN3ZRR24wQ3pkVUZKcEJnNTgxK1F6YVdCMnlvZ09KWG1PbC9i?=
+ =?utf-8?B?WFE0UTNPcmJ6ZWNkVkFVZ1lFQ09uZ3R4U3VVZngrVWpBRU43L1JDTUZobVor?=
+ =?utf-8?B?NEVzVVlicXBxcUR1ZXYvRmJsNGxZNEN4K2p3U2d1Vk56NTRrUWFSc1lJcWRF?=
+ =?utf-8?B?VDgwQ0FXVFk5MW95SHA1RE02ZUZpZUFnUWU1bVNsL1M5RUtlMXAvMldKbUcv?=
+ =?utf-8?B?WVdEV3ZmZ2F4emNCT3IzMDJFajY2dXVURUgvV1YxWjZzUVJEOGZxUitldEZz?=
+ =?utf-8?B?TjNWVXJYOFVMZTVpOFovSWtmU09SU0pTYWszSTNyS3RPdkJ1cU1obUdZcWlx?=
+ =?utf-8?B?eUJXazBEa2poM1BaakhqQUozdHM4RHArdGNhTlhFYmlGei9waVRvamIwSFoy?=
+ =?utf-8?B?WHNzZWV0QzJRY0h6WjVNM2dmTHZrZjVTcGVZYVlLS3lWQ3pCek1hU05OVm1i?=
+ =?utf-8?Q?fJz2zmScizMfhDv1vTte5G/8SJp0kqLeAIjMB?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d99bcb42-a659-4c9f-17dc-08da167584c4
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB4039.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 19:58:42.2180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cbcr44l9mToPVTq8l31x7T7JJrtSTwUzD2Sa5oeRMr89j3bweH03WqOdW6eDPI5Ib59Ffq7s45s1ukyLxs3Gnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2989
+X-Proofpoint-ORIG-GUID: AR__OvvtagZPVdQ6Hp4YW_uEg20NcP5x
+X-Proofpoint-GUID: AR__OvvtagZPVdQ6Hp4YW_uEg20NcP5x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-04_08,2022-03-31_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a follow up to the original CFP, you can find here
+On 4/1/22 8:29 PM, Andrii Nakryiko wrote:   
+> Last part of architecture-agnostic user-space USDT handling logic is to
+> set up BPF spec and, optionally, IP-to-ID maps from user-space.
+> usdt_manager performs a compact spec ID allocation to utilize
+> fixed-sized BPF maps as efficiently as possible. We also use hashmap to
+> deduplicate USDT arg spec strings and map identical strings to single
+> USDT spec, minimizing the necessary BPF map size. usdt_manager supports
+> arbitrary sequences of attachment and detachment, both of the same USDT
+> and multiple different USDTs and internally maintains a free list of
+> unused spec IDs. bpf_link_usdt's logic is extended with proper setup and
+> teardown of this spec ID free list and supporting BPF maps.
+> 
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  tools/lib/bpf/usdt.c | 168 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 167 insertions(+), 1 deletion(-)
 
-https://lore.kernel.org/all/YfGnDRM%2FPe4jzbSr@localhost.localdomain/
+[...]
 
-This is for those who have been waiting for a virtual option.  Those plans have
-solidified and now we have an actual process we would like you to follow.
+> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> index c9eff690e291..afbae742c081 100644
+> --- a/tools/lib/bpf/usdt.c
+> +++ b/tools/lib/bpf/usdt.c
 
-IF YOU WANT A VIRTUAL INVITE PLEASE FILL OUT THE GOOGLE FORM AND INDICATE YOU
-WOULD LIKE TO ATTEND VIRTUALLY
+[...]
 
-https://forms.gle/uD5tbZYGpaRXPnE19
+> +static size_t specs_hash_fn(const void *key, void *ctx)
+> +{
+> +	const char *s = key;
+> +
+> +	return str_hash(s);
+> +}
+> +
+> +static bool specs_equal_fn(const void *key1, const void *key2, void *ctx)
+> +{
+> +	const char *s1 = key1;
+> +	const char *s2 = key2;
+> +
+> +	return strcmp(s1, s2) == 0;
+> +}
 
-The track leaders will send out individual invites for the virtual component of
-LSF/MM/BPF.  From there you will register like normal, making sure to select the
-virtual option during registration, and then the Linux Foundation will email you
-with the connection details closer to the conference.
+IIUC, you're not worried about diabolical strings in strcmp and str_hash here
+because of sanity checking in parse_usdt_note?
 
-The virtual component will be hosted on Zoom.  We will attempt to make this as
-seamless as possible, but anticipate it being essentially a glorified
-live-stream.
+Anyways,
 
-Those who already filled out the form indicating you want the virtual option
-don't need to re-submit, we've got you on our lists already.  We will be sending
-these invites out as quickly as possible as we need to make sure we have an
-accurate count for the Linux Foundation.
-
-Thank you on behalf of the program committee:
-
-        Josef Bacik (Filesystems)
-        Amir Goldstein (Filesystems)
-        Martin K. Petersen (Storage)
-        Omar Sandoval (Storage)
-        Michal Hocko (MM)
-        Dan Williams (MM)
-        Alexei Starovoitov (BPF)
-        Daniel Borkmann (BPF)
+Reviewed-by: Dave Marchevsky <davemarchevsky@fb.com>
