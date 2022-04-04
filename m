@@ -2,78 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A26CC433F5
-	for <bpf@archiver.kernel.org>; Mon,  4 Apr 2022 22:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A512BC433EF
+	for <bpf@archiver.kernel.org>; Mon,  4 Apr 2022 22:48:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiDDWsp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Apr 2022 18:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60106 "EHLO
+        id S236188AbiDDWuV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Apr 2022 18:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238057AbiDDWsK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Apr 2022 18:48:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C641FCD2
-        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 15:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED1AB81A52
-        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 22:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 08EE5C34113;
-        Mon,  4 Apr 2022 22:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649109613;
-        bh=OqTTXfglCOvI2yvj/dbL9xTsR4cuO5jcxbUEv8Bgzvs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=m4n9aZtS69ES2Edn003nA6gDVlCnZsuqN19MH9kxWemuUfnUXbeFXwyWV6OMvirEB
-         wv00OjHu1rPVflp9cSv9MaTloyO7bOfpRMDBPKx92nPgArASn4A2YzOvjlOmUmqL0a
-         wcfH9Z3uc1MZh1kiOP2ZBYLGeOOnZ0e41V4H7P9LUdaWH+ohNBfJsktlFS9p2+jhuA
-         6LwrrWOQ8wJsqqgXZYFDvNcqcXb4rml295lmhyLd6C4iwgnd9rKt/uFdXONGjKs/ms
-         uNiGe4H/9zZBwcOGH0ZsFR1BrUOaH9smhvCiierE/sycF0XyZ0XwKqOycSVvi9T7iT
-         mcos4jLxYUOhw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E21D5E85B8C;
-        Mon,  4 Apr 2022 22:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S241870AbiDDWuH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Apr 2022 18:50:07 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645685FF31;
+        Mon,  4 Apr 2022 15:03:22 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id qh7so12790956ejb.11;
+        Mon, 04 Apr 2022 15:03:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hmBtyCSBQacoipPmCsuxywFD7dGIDZdmjd0lU4ylOC0=;
+        b=pazOs1LZxFd2QSm53DZDOmnlSGL7KVTCzaflxn6GZaEfIhOmBo2eYNSD3QyaUBlMmF
+         PDvUVKoKWwkTjbOfqyeXnfh9Jgb82xStxac7ZU875JYlSRaNL589m0Eag3qEXKtfl0Rt
+         u3jfzSQdgDMP49rqHXDyezikswxxal3NDEn2EC3i1e+ZnwP+8OW4gIJAU20PTAye15h1
+         jJ4guY3Hh9bfSmL6OtBSx96yWxu6cVNe54f7A1DuQn2NdDa2gTWtnqlvzq0PIH6p3Jx8
+         GsYc4yBDYZTLS7lPy2kRe/oLtBaTn3OdMYAmbUjkb6mC0CMBRlKFcb3b7uDsDCA7fP7c
+         fQug==
+X-Gm-Message-State: AOAM533VVEVS3sx303nMNd4gvHwft/JbswCrWXKcHggDLOF3Z9HWFSjU
+        Wj6L3Kj/MBrQMbMntLG8cJ3gixiuGD0=
+X-Google-Smtp-Source: ABdhPJxKA6fBw682sFl4Rl5c6DEScQABE7R7uLVGQ9ljvzFS17MEqGICnW1ZnXnU+j/LkFmf4Gl7rw==
+X-Received: by 2002:a17:907:9482:b0:6da:a24e:e767 with SMTP id dm2-20020a170907948200b006daa24ee767mr292233ejc.479.1649109800676;
+        Mon, 04 Apr 2022 15:03:20 -0700 (PDT)
+Received: from t490s.teknoraver.net (net-93-144-169-96.cust.dsl.teletu.it. [93.144.169.96])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170906145000b006bdaf981589sm4806743ejc.81.2022.04.04.15.03.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 15:03:20 -0700 (PDT)
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: make unprivileged BPF a compile time choice
+Date:   Tue,  5 Apr 2022 00:03:14 +0200
+Message-Id: <20220404220314.112912-1-mcroce@linux.microsoft.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Define SYS_NANOSLEEP_KPROBE_NAME for
- aarch64
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164910961292.9198.7184406194523003743.git-patchwork-notify@kernel.org>
-Date:   Mon, 04 Apr 2022 22:00:12 +0000
-References: <20220404142101.27900-1-iii@linux.ibm.com>
-In-Reply-To: <20220404142101.27900-1-iii@linux.ibm.com>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii.nakryiko@gmail.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, borntraeger@linux.ibm.com,
-        agordeev@linux.ibm.com, bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Matteo Croce <mcroce@microsoft.com>
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Add a compile time option to permanently disable unprivileged BPF and
+the corresponding sysctl handler so that there's absolutely no
+concern about unprivileged BPF being enabled from userspace during
+runtime. Special purpose kernels can benefit from the build-time
+assurance that unprivileged eBPF is disabled in all of their kernel
+builds rather than having to rely on userspace to permanently disable
+it at boot time.
+The default behaviour is left unchanged, which is: unprivileged BPF
+compiled in but disabled at boot.
 
-On Mon,  4 Apr 2022 16:21:01 +0200 you wrote:
-> attach_probe selftest fails on aarch64 with `failed to create kprobe
-> 'sys_nanosleep+0x0' perf event: No such file or directory`. This is
-> because, like on several other architectures, nanosleep has a prefix.
-> 
-> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> ---
->  tools/testing/selftests/bpf/test_progs.h | 2 ++
->  1 file changed, 2 insertions(+)
+Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+---
+ kernel/bpf/Kconfig   | 10 +++++++++-
+ kernel/bpf/syscall.c |  4 +++-
+ kernel/sysctl.c      |  4 ++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Define SYS_NANOSLEEP_KPROBE_NAME for aarch64
-    https://git.kernel.org/bpf/bpf-next/c/d298761746d5
-
-You are awesome, thank you!
+diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+index d56ee177d5f8..dfaef1ac1516 100644
+--- a/kernel/bpf/Kconfig
++++ b/kernel/bpf/Kconfig
+@@ -67,10 +67,18 @@ config BPF_JIT_DEFAULT_ON
+ 	def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
+ 	depends on HAVE_EBPF_JIT && BPF_JIT
+ 
++config BPF_UNPRIV
++	bool "Unprivileged BPF"
++	default y
++	depends on BPF_SYSCALL
++	help
++	  Enables unprivileged BPF and the corresponding
++	  /proc/sys/kernel/unprivileged_bpf_disabled knob.
++
+ config BPF_UNPRIV_DEFAULT_OFF
+ 	bool "Disable unprivileged BPF by default"
+ 	default y
+-	depends on BPF_SYSCALL
++	depends on BPF_UNPRIV
+ 	help
+ 	  Disables unprivileged BPF by default by setting the corresponding
+ 	  /proc/sys/kernel/unprivileged_bpf_disabled knob to 2. An admin can
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index cdaa1152436a..b7e6aca87a18 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -53,7 +53,9 @@ static DEFINE_IDR(link_idr);
+ static DEFINE_SPINLOCK(link_idr_lock);
+ 
+ int sysctl_unprivileged_bpf_disabled __read_mostly =
+-	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
++	IS_BUILTIN(CONFIG_BPF_UNPRIV) ?
++		(IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0)
++		: 1;
+ 
+ static const struct bpf_map_ops * const bpf_map_types[] = {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 830aaf8ca08e..a5b6e960ca58 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -184,6 +184,7 @@ void __weak unpriv_ebpf_notify(int new_state)
+ {
+ }
+ 
++#ifdef CONFIG_BPF_UNPRIV
+ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 			      void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -206,6 +207,7 @@ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 
+ 	return ret;
+ }
++#endif /* CONFIG_BPF_UNPRIV */
+ #endif /* CONFIG_BPF_SYSCALL && CONFIG_SYSCTL */
+ 
+ /*
+@@ -2300,6 +2302,7 @@ static struct ctl_table kern_table[] = {
+ 	},
+ #endif
+ #ifdef CONFIG_BPF_SYSCALL
++#ifdef CONFIG_BPF_UNPRIV
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+ 		.data		= &sysctl_unprivileged_bpf_disabled,
+@@ -2309,6 +2312,7 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO,
+ 	},
++#endif
+ 	{
+ 		.procname	= "bpf_stats_enabled",
+ 		.data		= &bpf_stats_enabled_key.key,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 
