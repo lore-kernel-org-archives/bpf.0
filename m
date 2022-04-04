@@ -2,364 +2,331 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69F19C433EF
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:34:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D6BFC433F5
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:36:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiDECgG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Apr 2022 22:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S229726AbiDECiO convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 4 Apr 2022 22:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiDECgF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:36:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B8237EAB4
-        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 18:32:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19A1CB81B00
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 00:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB04CC340F3
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 00:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649117086;
-        bh=oXjOq1gK7Yp901jopfGeilhzM0QjUvKiUx2MQVyavq8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g1zk8z4kENMFcU8RpRw6LLKT9gzlkG5yoTduRDO4vTaALtnnTD9z7ne8OirHDIniA
-         XDxtbsr7k5bMyU044WZN7plt4VoUw15zKtvH5DhOrhBlruLh1lqTU9LfY+L/MXkONq
-         gfJeLZ7yARuSGCSZ24AulL8B26ZeTznF7MeD9yMvxM6LraaJSqmXIiRRnudaVDwn2X
-         Xi9ZNd+eQL/f5aKbf/2NzXguKQGSYAf8dIfqIL4R4+OOGcMZ8LMVc4jTnSTs3iU0ok
-         h5jTTi35Gd+qwMZuw2DnT1NzaXj5VuZqB5OPDg8UXmGXBJDpJfCOUODfjYg8ptcy1I
-         DQ0NBwwplmj6g==
-Received: by mail-ed1-f48.google.com with SMTP id b24so12966385edu.10
-        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 17:04:46 -0700 (PDT)
-X-Gm-Message-State: AOAM532rs4dZiOKmJg1ZqC18XRV5AXa2vlDvb8c/GsswtGfDrJwrTbsD
-        v414Rl4cJ4wIkAT3rKVpeYQAJ4EG+59mpt5fpVEl6A==
-X-Google-Smtp-Source: ABdhPJw4ecsR1WcDp5GfJ+5Qx78Y5oC3P/6Rd+mO1TpIt3z+d+NR3xbLnOYUEH+9TySywhPANQkEvyHehMVu9U0rdbs=
-X-Received: by 2002:a50:a408:0:b0:41c:cdc7:88bd with SMTP id
- u8-20020a50a408000000b0041ccdc788bdmr694617edb.399.1649117084756; Mon, 04 Apr
- 2022 17:04:44 -0700 (PDT)
+        with ESMTP id S229885AbiDECiF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Apr 2022 22:38:05 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568D0235742
+        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 18:37:18 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234NPIPY005698
+        for <bpf@vger.kernel.org>; Mon, 4 Apr 2022 16:42:23 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f6m6hx04u-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 16:42:23 -0700
+Received: from twshared20084.04.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 4 Apr 2022 16:42:20 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 9C69E1661B521; Mon,  4 Apr 2022 16:42:11 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
+Subject: [PATCH v3 bpf-next 4/7] libbpf: wire up spec management and other arch-independent USDT logic
+Date:   Mon, 4 Apr 2022 16:41:59 -0700
+Message-ID: <20220404234202.331384-5-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220404234202.331384-1-andrii@kernel.org>
+References: <20220404234202.331384-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <CANn89iJjyp7s1fYB6VCqLhUnF+mmEXyw8GMpFC9Vi22usBsgAQ@mail.gmail.com>
- <CANn89iJaeBneeqiDBUh_ppEQGne_eyPp-BCVYjEyvoYkUxrDxg@mail.gmail.com>
- <20220331231312.GA4285@paulmck-ThinkPad-P17-Gen-1> <CANn89i+rfrkRrdYAq8Baq04n_ACq+VdB+UcsMoq7U-dB-2hKJA@mail.gmail.com>
- <20220401000642.GB4285@paulmck-ThinkPad-P17-Gen-1> <CANn89iJtfTiSz4v+L3YW+b_gzNoPLz_wuAmXGrNJXqNs9BU9cA@mail.gmail.com>
- <20220401130114.GC4285@paulmck-ThinkPad-P17-Gen-1> <CANn89iLicuKS2wDjY1D5qNT4c-ob=D2n1NnRnm5fGg4LFuW1Kg@mail.gmail.com>
- <20220401152037.GD4285@paulmck-ThinkPad-P17-Gen-1> <20220401152814.GA2841044@paulmck-ThinkPad-P17-Gen-1>
- <20220401154837.GA2842076@paulmck-ThinkPad-P17-Gen-1> <7a90a9b5-df13-6824-32d1-931f19c96cba@quicinc.com>
-In-Reply-To: <7a90a9b5-df13-6824-32d1-931f19c96cba@quicinc.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 5 Apr 2022 02:04:34 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ4FzbFu5NfdRMParp3Ome=ygVAqQPs2v6UGzRDt2LC6iw@mail.gmail.com>
-Message-ID: <CACYkzJ4FzbFu5NfdRMParp3Ome=ygVAqQPs2v6UGzRDt2LC6iw@mail.gmail.com>
-Subject: Re: [BUG] rcu-tasks : should take care of sparse cpu masks
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Cc:     paulmck@kernel.org, Eric Dumazet <edumazet@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Stanislav Fomichev <sdf@google.com>, andrii@kernel.org,
-        ast@kernel.org, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: gP-bpvzceknhZHbZOKEgngD0wqoK9FNJ
+X-Proofpoint-GUID: gP-bpvzceknhZHbZOKEgngD0wqoK9FNJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-04_09,2022-03-31_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 7:45 AM Neeraj Upadhyay <quic_neeraju@quicinc.com> wrote:
->
-> Hi,
->
-> Trying to understand the issue.
->
-> On 4/1/2022 9:18 PM, Paul E. McKenney wrote:
-> > On Fri, Apr 01, 2022 at 08:28:14AM -0700, Paul E. McKenney wrote:
-> >> [ Adding Andrii and Alexei at Andrii's request. ]
-> >>
-> >> On Fri, Apr 01, 2022 at 08:20:37AM -0700, Paul E. McKenney wrote:
-> >>> On Fri, Apr 01, 2022 at 06:24:13AM -0700, Eric Dumazet wrote:
-> >>>> On Fri, Apr 1, 2022 at 6:01 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>>>>
-> >>>>> On Thu, Mar 31, 2022 at 09:39:02PM -0700, Eric Dumazet wrote:
-> >>>>>> On Thu, Mar 31, 2022 at 5:06 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>>>>>>
-> >>>>>>> On Thu, Mar 31, 2022 at 04:28:04PM -0700, Eric Dumazet wrote:
-> >>>>>>>> On Thu, Mar 31, 2022 at 4:13 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>>>>>>>>
-> >>>>>>>>> The initial setting of ->percpu_enqueue_shift forces all in-range CPU
-> >>>>>>>>> IDs to shift down to zero.  The grace-period kthread is allowed to run
-> >>>>>>>>> where it likes.  The callback lists are protected by locking, even in
-> >>>>>>>>> the case of local access, so this should be safe.
-> >>>>>>>>>
-> >>>>>>>>> Or am I missing your point?
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> In fact I have been looking at this code, because we bisected a
-> >>>>>>>> regression back to this patch:
-> >>>>>>>>
-> >>>>>>>> 4fe192dfbe5ba9780df699d411aa4f25ba24cf61 rcu-tasks: Shorten
-> >>>>>>>> per-grace-period sleep for RCU Tasks Trace
-> >>>>>>>>
-> >>>>>>>> It is very possible the regression comes because the RCU task thread
-> >>>>>>>> is using more cpu cycles, from 'CPU 0'  where our system daemons are
-> >>>>>>>> pinned.
-> >>>>>>>
-> >>>>>>> Heh!  I did express that concern when creating that patch, but was
-> >>>>>>> assured that the latency was much more important.
-> >>>>>>>
-> >>>>>>> Yes, that patch most definitely increases CPU utilization during RCU Tasks
-> >>>>>>> Trace grace periods.  If you can tolerate longer grace-period latencies,
-> >>>>>>> it might be worth toning it down a bit.  The ask was for about twice
-> >>>>>>> the latency I achieved in my initial attempt, and I made the mistake of
-> >>>>>>> forwarding that attempt out for testing.  They liked the shorter latency
-> >>>>>>> very much, and objected strenuously to the thought that I might detune
-> >>>>>>> it back to the latency that they originally asked for.  ;-)
-> >>>>>>>
-> >>>>>>> But I can easily provide the means to detune it through use of a kernel
-> >>>>>>> boot parameter or some such, if that would help.
-> >>>>>>>
-> >>>>>>>> But I could not spot where the RCU task kthread is forced to run on CPU 0.
-> >>>>>>>
-> >>>>>>> I never did intend this kthread be bound anywhere.  RCU's policy is
-> >>>>>>> that any binding of its kthreads is the responsibility of the sysadm,
-> >>>>>>> be that carbon-based or otherwise.
-> >>>>>>>
-> >>>>>>> But this kthread is spawned early enough that only CPU 0 is online,
-> >>>>>>> so maybe the question is not "what is binding it to CPU 0?" but rather
-> >>>>>>> "why isn't something kicking it off of CPU 0?"
-> >>>>>>
-> >>>>>> I guess the answer to this question can be found in the following
-> >>>>>> piece of code :)
-> >>>>>>
-> >>>>>> rcu_read_lock();
-> >>>>>> for_each_process_thread(g, t)
-> >>>>>>          rtp->pertask_func(t, &holdouts);
-> >>>>>> rcu_read_unlock();
-> >>>>>>
-> >>>>>>
-> >>>>>> With ~150,000 threads on a 256 cpu host, this holds current cpu for
-> >>>>>> very long times:
-> >>>>>>
-> >>>>>>   rcu_tasks_trace    11 [017]  5010.544762:
-> >>>>>> probe:rcu_tasks_wait_gp: (ffffffff963fb4b0)
-> >>>>>>   rcu_tasks_trace    11 [017]  5010.600396:
-> >>>>>> probe:rcu_tasks_trace_postscan: (ffffffff963fb7c0)
-> >>>>>
-> >>>>> So about 55 milliseconds for the tasklist scan, correct?  Or am I
-> >>>>> losing the plot here?
-> >>>>>
-> >>>>>>   rcu_tasks_trace    11 [022]  5010.618783:
-> >>>>>> probe:check_all_holdout_tasks_trace: (ffffffff963fb850)
-> >>>>>>   rcu_tasks_trace    11 [022]  5010.618840:
-> >>>>>> probe:rcu_tasks_trace_postgp: (ffffffff963fba70)
-> >>>>>>
-> >>>>>> In this case, CPU 22 is the victim, not CPU 0 :)
-> >>>>>
-> >>>>> My faith in the scheduler is restored!  ;-)
-> >>>>>
-> >>>>> My position has been that this tasklist scan does not need to be broken
-> >>>>> up because it should happen only when a sleepable BPF program is removed,
-> >>>>> which is a rare event.
-> >>>>
-> >>>> Hmm... what about  bpf_sk_storage_free() ?
-> >>>>
-> >>>> Definitely not a rare event.
-> >>>
-> >>> Hmmm...  Are the BPF guys using call_rcu_tasks_trace() to free things that
-> >>> are not trampolines for sleepable BPF programs?  Kind of looks like it.
-> >>>
-> >>> Maybe RCU Tasks Trace was too convenient to use?  ;-)
-> >>>
-> >>>>> In addition, breaking up this scan is not trivial, because as far as I
-> >>>>> know there is no way to force a given task to stay in the list.  I would
-> >>>>> have to instead use something like rcu_lock_break(), and restart the
-> >>>>> scan if either of the nailed-down pair of tasks was removed from the list.
-> >>>>> In a system where tasks were coming and going very frequently, it might
-> >>>>> be that such a broken-up scan would never complete.
-> >>>>>
-> >>>>> I can imagine tricks where the nailed-down tasks are kept on a list,
-> >>>>> and the nailed-downness is moved to the next task when those tasks
-> >>>>> are removed.  I can also imagine a less-than-happy response to such
-> >>>>> a proposal.
-> >>>>>
-> >>>>> So I am not currently thinking in terms of breaking up this scan.
-> >>>>>
-> >>>>> Or is there some trick that I am missing?
-> >>>>>
-> >>>>> In the meantime, a simple patch that reduces the frequency of the scan
-> >>>>> by a factor of two.  But this would not be the scan of the full tasklist,
-> >>>>> but rather the frequency of the calls to check_all_holdout_tasks_trace().
-> >>>>> And the total of these looks to be less than 20 milliseconds, if I am
-> >>>>> correctly interpreting your trace.  And most of that 20 milliseconds
-> >>>>> is sleeping.
-> >>>>>
-> >>>>> Nevertheless, the patch is at the end of this email.
-> >>>>>
-> >>>>> Other than that, I could imagine batching removal of sleepable BPF
-> >>>>> programs and using a single grace period for all of their trampolines.
-> >>>>> But are there enough sleepable BPF programs ever installed to make this
-> >>>>> a useful approach?
-> >>>>>
-> >>>>> Or is the status quo in fact acceptable?  (Hey, I can dream, can't I?)
-> >>>>>
-> >>>>>                                                          Thanx, Paul
-> >>>>>
-> >>>>>>>> I attempted to backport to our kernel all related patches that were
-> >>>>>>>> not yet backported,
-> >>>>>>>> and we still see a regression in our tests.
-> >>>>>>>
-> >>>>>>> The per-grace-period CPU consumption of rcu_tasks_trace was intentionally
-> >>>>>>> increased by the above commit, and I never have done anything to reduce
-> >>>>>>> that CPU consumption.  In part because you are the first to call my
-> >>>>>>> attention to it.
-> >>>>>>>
-> >>>>>>> Oh, and one other issue that I very recently fixed, that has not
-> >>>>>>> yet reached mainline, just in case it matters.  If you are building a
-> >>>>>>> CONFIG_PREEMPT_NONE=y or CONFIG_PREEMPT_VOLUNTARY=y kernel, but also have
-> >>>>>>> CONFIG_RCU_TORTURE_TEST=m (or, for that matter, =y, but please don't in
-> >>>>>>> production!), then your kernel will use RCU Tasks instead of vanilla RCU.
-> >>>>>>> (Note well, RCU Tasks, not RCU Tasks Trace, the latter being necessaary
-> >>>>>>> for sleepable BPF programs regardless of kernel .config).
-> >>>>>>>
-> >>>>>>>> Please ignore the sha1 in this current patch series, this is only to
-> >>>>>>>> show my current attempt to fix the regression in our tree.
-> >>>>>>>>
-> >>>>>>>> 450b3244f29b rcu-tasks: Don't remove tasks with pending IPIs from holdout list
-> >>>>>>>> 5f88f7e9cc36 rcu-tasks: Create per-CPU callback lists
-> >>>>>>>> 1a943d0041dc rcu-tasks: Introduce ->percpu_enqueue_shift for dynamic
-> >>>>>>>> queue selection
-> >>>>>>>> ea5289f12fce rcu-tasks: Convert grace-period counter to grace-period
-> >>>>>>>> sequence number
-> >>>>>>>> 22efd5093c3b rcu/segcblist: Prevent useless GP start if no CBs to accelerate
-> >>>>>>>> 16dee1b3babf rcu: Implement rcu_segcblist_is_offloaded() config dependent
-> >>>>>>>> 8cafaadb6144 rcu: Add callbacks-invoked counters
-> >>>>>>>> 323234685765 rcu/tree: Make rcu_do_batch count how many callbacks were executed
-> >>>>>>>> f48f3386a1cc rcu/segcblist: Add additional comments to explain smp_mb()
-> >>>>>>>> 4408105116de rcu/segcblist: Add counters to segcblist datastructure
-> >>>>>>>> 4a0b89a918d6 rcu/tree: segcblist: Remove redundant smp_mb()s
-> >>>>>>>> 38c0d18e8740 rcu: Add READ_ONCE() to rcu_do_batch() access to rcu_divisor
-> >>>>>>>> 0b5d1031b509 rcu/segcblist: Add debug checks for segment lengths
-> >>>>>>>> 8a82886fbf02 rcu_tasks: Convert bespoke callback list to rcu_segcblist structure
-> >>>>>>>> cbd452a5c01f rcu-tasks: Use spin_lock_rcu_node() and friends
-> >>>>>>>> 073222be51f3 rcu-tasks: Add a ->percpu_enqueue_lim to the rcu_tasks structure
-> >>>>>>>> 5af10fb0f8fb rcu-tasks: Abstract checking of callback lists
-> >>>>>>>> d3e8be598546 rcu-tasks: Abstract invocations of callbacks
-> >>>>>>>> 65784460a392 rcu-tasks: Use workqueues for multiple
-> >>>>>>>> rcu_tasks_invoke_cbs() invocations
-> >>>>>>>> dd6413e355f1 rcu-tasks: Make rcu_barrier_tasks*() handle multiple
-> >>>>>>>> callback queues
-> >>>>>>>> 2499cb3c438e rcu-tasks: Add rcupdate.rcu_task_enqueue_lim to set
-> >>>>>>>> initial queueing
-> >>>>>>>> a859f409a503 rcu-tasks: Count trylocks to estimate call_rcu_tasks() contention
-> >>>>>>>> 4ab253ca056e rcu-tasks: Avoid raw-spinlocked wakeups from
-> >>>>>>>> call_rcu_tasks_generic()
-> >>>>>>>> e9a3563fe76e rcu-tasks: Use more callback queues if contention encountered
-> >>>>>>>> 4023187fe31d rcu-tasks: Use separate ->percpu_dequeue_lim for callback
-> >>>>>>>> dequeueing
-> >>>>>>>> 533be3bd47c3 rcu: Provide polling interfaces for Tree RCU grace periods
-> >>>>>>>> f7e5a81d7953 rcu-tasks: Use fewer callbacks queues if callback flood ends
-> >>>>>>>> bb7ad9078e1b rcu-tasks: Fix computation of CPU-to-list shift counts
-> >>>>>>>> d9cebde55539 rcu-tasks: Use order_base_2() instead of ilog2()
-> >>>>>>>> 95606f1248f5 rcu-tasks: Set ->percpu_enqueue_shift to zero upon contention
-> >>>>>
-> >>>>>
-> >>>>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> >>>>> index 65d6e21a607a..141e2b4c70cc 100644
-> >>>>> --- a/kernel/rcu/tasks.h
-> >>>>> +++ b/kernel/rcu/tasks.h
-> >>>>> @@ -1640,10 +1640,10 @@ static int __init rcu_spawn_tasks_trace_kthread(void)
-> >>>>>                  rcu_tasks_trace.gp_sleep = HZ / 10;
-> >>>>>                  rcu_tasks_trace.init_fract = HZ / 10;
-> >>>>>          } else {
-> >>>>> -               rcu_tasks_trace.gp_sleep = HZ / 200;
-> >>>>> +               rcu_tasks_trace.gp_sleep = HZ / 100;
-> >>>>>                  if (rcu_tasks_trace.gp_sleep <= 0)
-> >>>>>                          rcu_tasks_trace.gp_sleep = 1;
-> >>>>> -               rcu_tasks_trace.init_fract = HZ / 200;
-> >>>>> +               rcu_tasks_trace.init_fract = HZ / 100;
-> >>>>>                  if (rcu_tasks_trace.init_fract <= 0)
-> >>>>>                          rcu_tasks_trace.init_fract = 1;
-> >>>>>          }
-> >>>>
-> >>>> It seems that if the scan time is > 50ms in some common cases (at
-> >>>> least at Google scale),
-> >>>> the claim of having a latency of 10ms is not reasonable.
-> >>>
-> >>> But does the above patch make things better?  If it does, I will send
-> >>> you a proper patch with kernel boot parameters.  We can then discuss
-> >>> better autotuning, for example, making the defaults a function of the
-> >>> number of CPUs.
-> >>>
-> >>> Either way, that certainly is a fair point.  Another fair point is that
-> >>> the offending commit was in response to a bug report from your colleagues.  ;-)
-> >>>
-> >>> Except that I don't see any uses of synchronize_rcu_tasks_trace(), so
-> >>> I am at a loss as to why latency matters anymore.
-> >>>
-> >>> Is the issue the overall CPU consumption of the scan (which is my
-> >>> current guess) or the length of time that the scan runs without invoking
-> >>> cond_resched() or similar?
-> >>>
->
-> I agree on this part; depending on the results of increasing the sleep
-> time for trace kthread to 10 ms; if  scanning all threads is holding the
-> CPU, we can try cond_resched(), to isolate the issue. I checked other
-> commits in this code path. Don't see anything obvious impacting this.
-> However, will check more on this.
->
->
-> Thanks
-> Neeraj
->
-> >>> Either way, how frequently is call_rcu_tasks_trace() being invoked in
-> >>> your setup?  If it is being invoked frequently, increasing delays would
-> >>> allow multiple call_rcu_tasks_trace() instances to be served by a single
-> >>> tasklist scan.
-> >>>
-> >>>> Given that, I do not think bpf_sk_storage_free() can/should use
-> >>>> call_rcu_tasks_trace(),
-> >>>> we probably will have to fix this soon (or revert from our kernels)
-> >>>
-> >>> Well, you are in luck!!!  This commit added call_rcu_tasks_trace() to
-> >>> bpf_selem_unlink_storage_nolock(), which is invoked in a loop by
-> >>> bpf_sk_storage_free():
-> >>>
-> >>> 0fe4b381a59e ("bpf: Allow bpf_local_storage to be used by sleepable programs")
-> >>>
-> >>> This commit was authored by KP Singh, who I am adding on CC.  Or I would
-> >>> have, except that you beat me to it.  Good show!!!  ;-)
+Last part of architecture-agnostic user-space USDT handling logic is to
+set up BPF spec and, optionally, IP-to-ID maps from user-space.
+usdt_manager performs a compact spec ID allocation to utilize
+fixed-sized BPF maps as efficiently as possible. We also use hashmap to
+deduplicate USDT arg spec strings and map identical strings to single
+USDT spec, minimizing the necessary BPF map size. usdt_manager supports
+arbitrary sequences of attachment and detachment, both of the same USDT
+and multiple different USDTs and internally maintains a free list of
+unused spec IDs. bpf_link_usdt's logic is extended with proper setup and
+teardown of this spec ID free list and supporting BPF maps.
 
-Hello :)
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Reviewed-by: Dave Marchevsky <davemarchevsky@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/usdt.c | 168 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 167 insertions(+), 1 deletion(-)
 
-Martin, if this ends up being an issue we might have to go with the
-initial proposed approach
-of marking local storage maps explicitly as sleepable so that not all
-maps are forced to be
-synchronized via trace RCU.
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index f1670e3014ed..2799387c5465 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -239,6 +239,10 @@ struct usdt_manager {
+ 	struct bpf_map *specs_map;
+ 	struct bpf_map *ip_to_spec_id_map;
+ 
++	int *free_spec_ids;
++	size_t free_spec_cnt;
++	size_t next_free_spec_id;
++
+ 	bool has_bpf_cookie;
+ 	bool has_sema_refcnt;
+ };
+@@ -283,6 +287,7 @@ void usdt_manager_free(struct usdt_manager *man)
+ 	if (IS_ERR_OR_NULL(man))
+ 		return;
+ 
++	free(man->free_spec_ids);
+ 	free(man);
+ }
+ 
+@@ -789,6 +794,9 @@ struct bpf_link_usdt {
+ 
+ 	struct usdt_manager *usdt_man;
+ 
++	size_t spec_cnt;
++	int *spec_ids;
++
+ 	size_t uprobe_cnt;
+ 	struct {
+ 		long abs_ip;
+@@ -799,11 +807,52 @@ struct bpf_link_usdt {
+ static int bpf_link_usdt_detach(struct bpf_link *link)
+ {
+ 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
++	struct usdt_manager *man = usdt_link->usdt_man;
+ 	int i;
+ 
+ 	for (i = 0; i < usdt_link->uprobe_cnt; i++) {
+ 		/* detach underlying uprobe link */
+ 		bpf_link__destroy(usdt_link->uprobes[i].link);
++		/* there is no need to update specs map because it will be
++		 * unconditionally overwritten on subsequent USDT attaches,
++		 * but if BPF cookies are not used we need to remove entry
++		 * from ip_to_spec_id map, otherwise we'll run into false
++		 * conflicting IP errors
++		 */
++		if (!man->has_bpf_cookie) {
++			/* not much we can do about errors here */
++			(void)bpf_map_delete_elem(bpf_map__fd(man->ip_to_spec_id_map),
++						  &usdt_link->uprobes[i].abs_ip);
++		}
++	}
++
++	/* try to return the list of previously used spec IDs to usdt_manager
++	 * for future reuse for subsequent USDT attaches
++	 */
++	if (!man->free_spec_ids) {
++		/* if there were no free spec IDs yet, just transfer our IDs */
++		man->free_spec_ids = usdt_link->spec_ids;
++		man->free_spec_cnt = usdt_link->spec_cnt;
++		usdt_link->spec_ids = NULL;
++	} else {
++		/* otherwise concat IDs */
++		size_t new_cnt = man->free_spec_cnt + usdt_link->spec_cnt;
++		int *new_free_ids;
++
++		new_free_ids = libbpf_reallocarray(man->free_spec_ids, new_cnt,
++						   sizeof(*new_free_ids));
++		/* If we couldn't resize free_spec_ids, we'll just leak
++		 * a bunch of free IDs; this is very unlikely to happen and if
++		 * system is so exausted on memory, it's the least of user's
++		 * concerns, probably.
++		 * So just do our best here to return those IDs to usdt_manager.
++		 */
++		if (new_free_ids) {
++			memcpy(new_free_ids + man->free_spec_cnt, usdt_link->spec_ids,
++			       usdt_link->spec_cnt * sizeof(*usdt_link->spec_ids));
++			man->free_spec_ids = new_free_ids;
++			man->free_spec_cnt = new_cnt;
++		}
+ 	}
+ 
+ 	return 0;
+@@ -813,22 +862,96 @@ static void bpf_link_usdt_dealloc(struct bpf_link *link)
+ {
+ 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
+ 
++	free(usdt_link->spec_ids);
+ 	free(usdt_link->uprobes);
+ 	free(usdt_link);
+ }
+ 
++static size_t specs_hash_fn(const void *key, void *ctx)
++{
++	const char *s = key;
++
++	return str_hash(s);
++}
++
++static bool specs_equal_fn(const void *key1, const void *key2, void *ctx)
++{
++	const char *s1 = key1;
++	const char *s2 = key2;
++
++	return strcmp(s1, s2) == 0;
++}
++
++static int allocate_spec_id(struct usdt_manager *man, struct hashmap *specs_hash,
++			    struct bpf_link_usdt *link, struct usdt_target *target,
++			    int *spec_id, bool *is_new)
++{
++	void *tmp;
++	int err;
++
++	/* check if we already allocated spec ID for this spec string */
++	if (hashmap__find(specs_hash, target->spec_str, &tmp)) {
++		*spec_id = (long)tmp;
++		*is_new = false;
++		return 0;
++	}
++
++	/* otherwise it's a new ID that needs to be set up in specs map and
++	 * returned back to usdt_manager when USDT link is detached
++	 */
++	tmp = libbpf_reallocarray(link->spec_ids, link->spec_cnt + 1, sizeof(*link->spec_ids));
++	if (!tmp)
++		return -ENOMEM;
++	link->spec_ids = tmp;
++
++	/* get next free spec ID, giving preference to free list, if not empty */
++	if (man->free_spec_cnt) {
++		*spec_id = man->free_spec_ids[man->free_spec_cnt - 1];
++
++		/* cache spec ID for current spec string for future lookups */
++		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
++		if (err)
++			 return err;
++
++		man->free_spec_cnt--;
++	} else {
++		/* don't allocate spec ID bigger than what fits in specs map */
++		if (man->next_free_spec_id >= bpf_map__max_entries(man->specs_map))
++			return -E2BIG;
++
++		*spec_id = man->next_free_spec_id;
++
++		/* cache spec ID for current spec string for future lookups */
++		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
++		if (err)
++			 return err;
++
++		man->next_free_spec_id++;
++	}
++
++	/* remember new spec ID in the link for later return back to free list on detach */
++	link->spec_ids[link->spec_cnt] = *spec_id;
++	link->spec_cnt++;
++	*is_new = true;
++	return 0;
++}
++
+ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct bpf_program *prog,
+ 					  pid_t pid, const char *path,
+ 					  const char *usdt_provider, const char *usdt_name,
+ 					  long usdt_cookie)
+ {
++	int i, fd, err, spec_map_fd, ip_map_fd;
+ 	LIBBPF_OPTS(bpf_uprobe_opts, opts);
++	struct hashmap *specs_hash = NULL;
+ 	struct bpf_link_usdt *link = NULL;
+ 	struct usdt_target *targets = NULL;
+ 	size_t target_cnt;
+-	int i, fd, err;
+ 	Elf *elf;
+ 
++	spec_map_fd = bpf_map__fd(man->specs_map);
++	ip_map_fd = bpf_map__fd(man->ip_to_spec_id_map);
++
+ 	/* TODO: perform path resolution similar to uprobe's */
+ 	fd = open(path, O_RDONLY);
+ 	if (fd < 0) {
+@@ -864,6 +987,12 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 		goto err_out;
+ 	}
+ 
++	specs_hash = hashmap__new(specs_hash_fn, specs_equal_fn, NULL);
++	if (IS_ERR(specs_hash)) {
++		err = PTR_ERR(specs_hash);
++		goto err_out;
++	}
++
+ 	link = calloc(1, sizeof(*link));
+ 	if (!link) {
+ 		err = -ENOMEM;
+@@ -883,8 +1012,43 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	for (i = 0; i < target_cnt; i++) {
+ 		struct usdt_target *target = &targets[i];
+ 		struct bpf_link *uprobe_link;
++		bool is_new;
++		int spec_id;
++
++		/* Spec ID can be either reused or newly allocated. If it is
++		 * newly allocated, we'll need to fill out spec map, otherwise
++		 * entire spec should be valid and can be just used by a new
++		 * uprobe. We reuse spec when USDT arg spec is identical. We
++		 * also never share specs between two different USDT
++		 * attachments ("links"), so all the reused specs already
++		 * share USDT cookie value implicitly.
++		 */
++		err = allocate_spec_id(man, specs_hash, link, target, &spec_id, &is_new);
++		if (err)
++			goto err_out;
++
++		if (is_new && bpf_map_update_elem(spec_map_fd, &spec_id, &target->spec, BPF_ANY)) {
++			err = -errno;
++			pr_warn("usdt: failed to set USDT spec #%d for '%s:%s' in '%s': %d\n",
++				spec_id, usdt_provider, usdt_name, path, err);
++			goto err_out;
++		}
++		if (!man->has_bpf_cookie &&
++		    bpf_map_update_elem(ip_map_fd, &target->abs_ip, &spec_id, BPF_NOEXIST)) {
++			err = -errno;
++			if (err == -EEXIST) {
++				pr_warn("usdt: IP collision detected for spec #%d for '%s:%s' in '%s'\n",
++				        spec_id, usdt_provider, usdt_name, path);
++			} else {
++				pr_warn("usdt: failed to map IP 0x%lx to spec #%d for '%s:%s' in '%s': %d\n",
++					target->abs_ip, spec_id, usdt_provider, usdt_name,
++					path, err);
++			}
++			goto err_out;
++		}
+ 
+ 		opts.ref_ctr_offset = target->sema_off;
++		opts.bpf_cookie = man->has_bpf_cookie ? spec_id : 0;
+ 		uprobe_link = bpf_program__attach_uprobe_opts(prog, pid, path,
+ 							      target->rel_ip, &opts);
+ 		err = libbpf_get_error(uprobe_link);
+@@ -900,6 +1064,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	}
+ 
+ 	free(targets);
++	hashmap__free(specs_hash);
+ 	elf_end(elf);
+ 	close(fd);
+ 
+@@ -909,6 +1074,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	bpf_link__destroy(&link->link);
+ 
+ 	free(targets);
++	hashmap__free(specs_hash);
+ 	if (elf)
+ 		elf_end(elf);
+ 	close(fd);
+-- 
+2.30.2
 
-We can make the verifier reject loading programs that try to use
-non-sleepable local storage
-maps in sleepable programs.
-
-Do you think this is a feasible approach we can take or do you have
-other suggestions?
-
-> >>>
-> >>> If this commit provoked this issue, then the above patch might help.
-> >
-> > Another question...  Were there actually any sleepable BPF
-> > programs running on this system at that time?  If not, then maybe
-> > bpf_selem_unlink_storage_nolock() should check for that condition, and
-> > invoke call_rcu_tasks_trace() only if there are actually sleepable BPF
-> > programs running (or in the process of being removed.  If I understand
-> > correctly (ha!), if there were no sleepable BPF programs running, you
-> > would instead want call_rcu().  (Here I am assuming that non-sleepable
-> > BPF programs still run within a normal RCU read-side critical section.)
-> >
-> >                                                       Thanx, Paul
-> >
-> >>> I am also adding Neeraj Uphadhyay on CC for his thoughts, as he has
-> >>> also been throught this code.
-> >>>
-> >>> My response time may be a bit slow next week, but I will be checking
-> >>> email.
-> >>>
-> >>>                                                     Thanx, Paul
