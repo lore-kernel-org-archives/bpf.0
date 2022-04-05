@@ -2,175 +2,183 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB1CC433EF
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 14:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 769AFC433FE
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 15:22:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241039AbiDEOLK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S229785AbiDEPXO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 11:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389241AbiDENd3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:33:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E05CF136649
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 05:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649162206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=804HT8SjfbVYXmUKw0nZ/AD8aYvBB74vMh4fZSUu+vg=;
-        b=ACrxWJE5rpQigPv/gIHcFLSXWVXpFp60QZ0vWpOs5Ryc80kJDtmqCj2JydZTVzsRbepp6/
-        TkWidpUQPZBb/761y4zdkpvidV0Sa1dm+txsxcokffByXr2RyZMTyPPwY83FXgueDmivBI
-        JU6NT/bXiezrh+DCxyQ67SNr9Zk5JOQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-333-Q2I_k_SJMveiB2_epz6khw-1; Tue, 05 Apr 2022 08:36:44 -0400
-X-MC-Unique: Q2I_k_SJMveiB2_epz6khw-1
-Received: by mail-ed1-f69.google.com with SMTP id o11-20020aa7c50b000000b0041cbfe481f3so4115255edq.17
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 05:36:44 -0700 (PDT)
+        with ESMTP id S237937AbiDEOUq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 10:20:46 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A719151E6F;
+        Tue,  5 Apr 2022 06:09:15 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso2482461pju.1;
+        Tue, 05 Apr 2022 06:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3FFNV87EXG2IlcFtQbV+gadr6ihjV5o7kcHPrr2ZxtU=;
+        b=FxPklN7jYnofqaoSYi333INbk7S+qlkPuoG3q10/dDTQlILeiP1skMTiNiDboGCM1n
+         A4xDwzz55OV0SIbgYdBp8BPudlw+uNqz6cv5Lp1Si8tEbMihoEWfu6pCAsCR2RhDBV4w
+         XeMFvARIZ2RGOSNx818CBfe9UC7aofw9MQAKc3q9kZP+atdLEe9Ju8PllDEVyrTUu9QB
+         oRkGErEFf02jHiqCGZs1ocM5jyGW0vmah8tMcLqpykUF+Ug4lB7Yaubsa5fDF2Zg7sID
+         f1vFStdOBOTwVraoNYhRRoMgH2a82oe8Aovj/CyNmROkYHdwtuJt9vjhbzutYYM9bfse
+         fCnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
-         :subject:content-language:to:references:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=804HT8SjfbVYXmUKw0nZ/AD8aYvBB74vMh4fZSUu+vg=;
-        b=k9470xMpKMseqad3Jqb6Db8WaqZ1LdPK/7lYBEMIoIZy6CZzzQf2V5WwLlynXV9NWv
-         dnqfvB4p3yLHjHEulykHe2DRYTC1dVVWo8MH1rbLNkzQa0NMTwR8DZUySwpAxpLcFNb5
-         8YN2qqI1T2oT9kUtY1Lh7PsZK8sFC/j0WYw6I1NtRuYpZgob25Y6b5weOSwVpGIly0tV
-         jv4h79th8LNGYpCBO7+SbN9yVQYKMeHu6XokUjQ1UT5K/5JFCfnJjnCy1EsyM81O/nnA
-         JVQep/Sc9Q6zfgMp5Jwyyvs35R/VMHJi9cKELjC2WCbmD6Nco/NdF8ZmALI9aN+Oy8f8
-         axvQ==
-X-Gm-Message-State: AOAM533XuKeNgrXDoiWJF4Jdbuh6U9t8p7DcEMAERAWRXVc5MAvjzfkk
-        ySR4Jo1wiDqGbFIm4k/R6W2cdrfBIjjvennXZqXuwoZsSaIo3dPD0kyPUdhmvS74Hv3ik+1qinE
-        IyzCycLWpU9Mo
-X-Received: by 2002:a50:ff02:0:b0:419:2d32:44fe with SMTP id a2-20020a50ff02000000b004192d3244femr3340870edu.49.1649162203650;
-        Tue, 05 Apr 2022 05:36:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9AtGEgFvSWo3lUpB+5R90p9sRKfkZxZa/BELiSIH7ehc53aV1e1HVT28J/yZ5TGPjAn8ojA==
-X-Received: by 2002:a50:ff02:0:b0:419:2d32:44fe with SMTP id a2-20020a50ff02000000b004192d3244femr3340851edu.49.1649162203419;
-        Tue, 05 Apr 2022 05:36:43 -0700 (PDT)
-Received: from [192.168.2.20] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
-        by smtp.gmail.com with ESMTPSA id a1-20020a50da41000000b0041c83587300sm6014209edk.36.2022.04.05.05.36.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 05:36:42 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <88cf07a2-3bb6-5eda-0d99-d9491fd18669@redhat.com>
-Date:   Tue, 5 Apr 2022 14:36:41 +0200
+        bh=3FFNV87EXG2IlcFtQbV+gadr6ihjV5o7kcHPrr2ZxtU=;
+        b=6G/RaupNQ8V8s3zj4dGKvXN2dPACv63H8jLbrvqrsF9rYbk0yS2VaX1lfxS2db6eC6
+         ihf4qhIZuASaFOWmn7iYZUFjiYrgxL6aLFDwtlFofBOL6YOqoA4iws2pEHEl8inB44kA
+         VVdrDe/tXOmMUq5nqCQat7ax1ycK/JvmLINd1yqvKTSIXs0U/aXuNgCdik+lboi2LG11
+         aRt+9SzFXSvBxibZwVOkIwWil9N75CRf9Fz2UePayAC8iozfK39FWe36aEiEwXdO5Gkj
+         8mA/diibjma7nu91/VSXU344+zhixbno96ki50FA2xdzmli5hyzByDwwXQCpzbDtUDhp
+         etyA==
+X-Gm-Message-State: AOAM533Kl/emhvIKxMkaYCPJ6842bdB6B9r73OH8QIwfdfLmqyBOVI42
+        ducwL6dlZSvJIES9T82vG4MixNozG5WTYtkR6/8=
+X-Google-Smtp-Source: ABdhPJxjXPmjPJSkSoXv0dy9HmEmQGpx4g7jQasQCdfUTD1cvhaoUI41tRvAsvCGUmKHXpBwxUUFWg==
+X-Received: by 2002:a17:902:cecb:b0:154:68b6:cf61 with SMTP id d11-20020a170902cecb00b0015468b6cf61mr3333777plg.12.1649164155020;
+        Tue, 05 Apr 2022 06:09:15 -0700 (PDT)
+Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 06:09:14 -0700 (PDT)
+From:   Yafang Shao <laoar.shao@gmail.com>
+To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 00/27] bpf: RLIMIT_MEMLOCK cleanups 
+Date:   Tue,  5 Apr 2022 13:08:31 +0000
+Message-Id: <20220405130858.12165-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org, maximmi@nvidia.com,
-        alexandr.lobakin@intel.com
-Subject: Re: [PATCH bpf-next 05/10] ixgbe: xsk: terminate NAPI when XSK Rx
- queue gets full
-Content-Language: en-US
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        magnus.karlsson@intel.com, bjorn@kernel.org
-References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
- <20220405110631.404427-6-maciej.fijalkowski@intel.com>
-In-Reply-To: <20220405110631.404427-6-maciej.fijalkowski@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+We have switched to memcg based memory accouting and thus the rlimit is
+not needed any more. LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK was introduced in
+libbpf for backward compatibility, so we can use it instead now.
 
-On 05/04/2022 13.06, Maciej Fijalkowski wrote:
-> Correlate -ENOBUFS that was returned from xdp_do_redirect() with a XSK
-> Rx queue being full. In such case, terminate the softirq processing and
-> let the user space to consume descriptors from XSK Rx queue so that
-> there is room that driver can use later on.
-> 
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->   .../ethernet/intel/ixgbe/ixgbe_txrx_common.h  |  1 +
->   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  | 23 ++++++++++++-------
->   2 files changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h b/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h
-> index bba3feaf3318..f1f69ce67420 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h
-> @@ -8,6 +8,7 @@
->   #define IXGBE_XDP_CONSUMED	BIT(0)
->   #define IXGBE_XDP_TX		BIT(1)
->   #define IXGBE_XDP_REDIR		BIT(2)
-> +#define IXGBE_XDP_EXIT		BIT(3)
->   
->   #define IXGBE_TXD_CMD (IXGBE_TXD_CMD_EOP | \
->   		       IXGBE_TXD_CMD_RS)
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> index dd7ff66d422f..475244a2c6e4 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> @@ -109,9 +109,10 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
->   
->   	if (likely(act == XDP_REDIRECT)) {
->   		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
-> -		if (err)
-> -			goto out_failure;
-> -		return IXGBE_XDP_REDIR;
-> +		if (!err)
-> +			return IXGBE_XDP_REDIR;
-> +		result = (err == -ENOBUFS) ? IXGBE_XDP_EXIT : IXGBE_XDP_CONSUMED;
-> +		goto out_failure;
->   	}
->   
->   	switch (act) {
-> @@ -130,6 +131,9 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
->   		if (result == IXGBE_XDP_CONSUMED)
->   			goto out_failure;
->   		break;
-> +	case XDP_DROP:
-> +		result = IXGBE_XDP_CONSUMED;
-> +		break;
->   	default:
->   		bpf_warn_invalid_xdp_action(rx_ring->netdev, xdp_prog, act);
->   		fallthrough;
-> @@ -137,9 +141,6 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
->   out_failure:
->   		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
->   		fallthrough; /* handle aborts by dropping packet */
-> -	case XDP_DROP:
-> -		result = IXGBE_XDP_CONSUMED;
-> -		break;
->   	}
->   	return result;
->   }
-> @@ -304,10 +305,16 @@ int ixgbe_clean_rx_irq_zc(struct ixgbe_q_vector *q_vector,
->   		xdp_res = ixgbe_run_xdp_zc(adapter, rx_ring, bi->xdp);
->   
->   		if (xdp_res) {
-> -			if (xdp_res & (IXGBE_XDP_TX | IXGBE_XDP_REDIR))
-> +			if (xdp_res == IXGBE_XDP_EXIT) {
+This patchset cleanups the usage of RLIMIT_MEMLOCK in tools/bpf/,
+tools/testing/selftests/bpf and samples/bpf. The file
+tools/testing/selftests/bpf/bpf_rlimit.h is removed. The included header
+sys/resource.h is removed from many files as it is useless in these files.
 
-Micro optimization note: Having this as the first if()-statement
-defaults the compiler to think this is the likely() case. (But compilers
-can obviously be smarter and can easily choose that the IXGBE_XDP_REDIR
-branch is so simple that it takes it as the likely case).
-Just wanted to mention this, given this is fash-path code.
+- v3: Get rid of bpf_rlimit.h and fix some typos (Andrii)
+- v2: Use libbpf_set_strict_mode instead. (Andrii)
+- v1: https://lore.kernel.org/bpf/20220320060815.7716-2-laoar.shao@gmail.com/
 
-> +				failure = true;
-> +				xsk_buff_free(bi->xdp);
-> +				ixgbe_inc_ntc(rx_ring);
-> +				break;
+Yafang Shao (27):
+  bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xdping
+  bpf: selftests: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xdpxceiver
+  bpf: selftests: No need to include bpf_rlimit.h in test_tcpnotify_user
+  bpf: selftests: No need to include bpf_rlimit.h in flow_dissector_load
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    get_cgroup_id_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_cgroup_storage
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    get_cgroup_id_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lpm_map
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lru_map
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_skb_cgroup_id_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock_addr
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sockmap
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sysctl
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tag
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_tcp_check_syncookie_user
+  bpf: selftests: Set libbpf 1.0 API mode explicitly in
+    test_verifier_log
+  bpf: samples: Set libbpf 1.0 API mode explicitly in hbm
+  bpf: selftests: Get rid of bpf_rlimit.h
+  bpf: selftests: No need to include sys/resource.h in some files
+  bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xdpsock_user
+  bpf: samples: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK in
+    xsk_fwd
+  bpf: samples: No need to include sys/resource.h in many files
+  bpf: bpftool: Remove useless return value of libbpf_set_strict_mode
+  bpf: bpftool: Set LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK for legacy libbpf
+  bpf: bpftool: remove RLIMIT_MEMLOCK
+  bpf: runqslower: Use libbpf 1.0 API mode instead of RLIMIT_MEMLOCK
 
-I was wondering if we have a situation where we should set xdp_xmit bit
-to trigger the call to xdp_do_flush_map later in function, but I assume
-you have this covered.
+ samples/bpf/cpustat_user.c                    |  1 -
+ samples/bpf/hbm.c                             |  5 ++--
+ samples/bpf/ibumad_user.c                     |  1 -
+ samples/bpf/map_perf_test_user.c              |  1 -
+ samples/bpf/offwaketime_user.c                |  1 -
+ samples/bpf/sockex2_user.c                    |  1 -
+ samples/bpf/sockex3_user.c                    |  1 -
+ samples/bpf/spintest_user.c                   |  1 -
+ samples/bpf/syscall_tp_user.c                 |  1 -
+ samples/bpf/task_fd_query_user.c              |  1 -
+ samples/bpf/test_lru_dist.c                   |  1 -
+ samples/bpf/test_map_in_map_user.c            |  1 -
+ samples/bpf/test_overhead_user.c              |  1 -
+ samples/bpf/tracex2_user.c                    |  1 -
+ samples/bpf/tracex3_user.c                    |  1 -
+ samples/bpf/tracex4_user.c                    |  1 -
+ samples/bpf/tracex5_user.c                    |  1 -
+ samples/bpf/tracex6_user.c                    |  1 -
+ samples/bpf/xdp1_user.c                       |  1 -
+ samples/bpf/xdp_adjust_tail_user.c            |  1 -
+ samples/bpf/xdp_monitor_user.c                |  1 -
+ samples/bpf/xdp_redirect_cpu_user.c           |  1 -
+ samples/bpf/xdp_redirect_map_multi_user.c     |  1 -
+ samples/bpf/xdp_redirect_user.c               |  1 -
+ samples/bpf/xdp_router_ipv4_user.c            |  1 -
+ samples/bpf/xdp_rxq_info_user.c               |  1 -
+ samples/bpf/xdp_sample_pkts_user.c            |  1 -
+ samples/bpf/xdp_sample_user.c                 |  1 -
+ samples/bpf/xdp_tx_iptunnel_user.c            |  1 -
+ samples/bpf/xdpsock_user.c                    |  9 ++----
+ samples/bpf/xsk_fwd.c                         |  7 ++---
+ tools/bpf/bpftool/common.c                    |  8 ------
+ tools/bpf/bpftool/feature.c                   |  2 --
+ tools/bpf/bpftool/main.c                      |  6 ++--
+ tools/bpf/bpftool/main.h                      |  2 --
+ tools/bpf/bpftool/map.c                       |  2 --
+ tools/bpf/bpftool/pids.c                      |  1 -
+ tools/bpf/bpftool/prog.c                      |  3 --
+ tools/bpf/bpftool/struct_ops.c                |  2 --
+ tools/bpf/runqslower/runqslower.c             | 18 ++----------
+ tools/testing/selftests/bpf/bench.c           |  1 -
+ tools/testing/selftests/bpf/bpf_rlimit.h      | 28 -------------------
+ .../selftests/bpf/flow_dissector_load.c       |  6 ++--
+ .../selftests/bpf/get_cgroup_id_user.c        |  4 ++-
+ tools/testing/selftests/bpf/prog_tests/btf.c  |  1 -
+ .../selftests/bpf/test_cgroup_storage.c       |  4 ++-
+ tools/testing/selftests/bpf/test_dev_cgroup.c |  4 ++-
+ tools/testing/selftests/bpf/test_lpm_map.c    |  4 ++-
+ tools/testing/selftests/bpf/test_lru_map.c    |  4 ++-
+ .../selftests/bpf/test_skb_cgroup_id_user.c   |  4 ++-
+ tools/testing/selftests/bpf/test_sock.c       |  4 ++-
+ tools/testing/selftests/bpf/test_sock_addr.c  |  4 ++-
+ tools/testing/selftests/bpf/test_sockmap.c    |  5 ++--
+ tools/testing/selftests/bpf/test_sysctl.c     |  4 ++-
+ tools/testing/selftests/bpf/test_tag.c        |  4 ++-
+ .../bpf/test_tcp_check_syncookie_user.c       |  4 ++-
+ .../selftests/bpf/test_tcpnotify_user.c       |  1 -
+ .../testing/selftests/bpf/test_verifier_log.c |  5 ++--
+ .../selftests/bpf/xdp_redirect_multi.c        |  1 -
+ tools/testing/selftests/bpf/xdping.c          |  8 ++----
+ tools/testing/selftests/bpf/xdpxceiver.c      |  6 ++--
+ 61 files changed, 57 insertions(+), 142 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/bpf_rlimit.h
 
-> +			} else if (xdp_res & (IXGBE_XDP_TX | IXGBE_XDP_REDIR)) {
->   				xdp_xmit |= xdp_res;
-> -			else
-> +			} else {
->   				xsk_buff_free(bi->xdp);
-> +			}
->   
->   			bi->xdp = NULL;
->   			total_rx_packets++;
+-- 
+2.17.1
 
