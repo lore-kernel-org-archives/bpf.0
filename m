@@ -2,104 +2,127 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD877C433F5
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99D18C433F5
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:22:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243388AbiDFFYR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S236028AbiDFFYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1850378AbiDFCwO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:52:14 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66054181149;
-        Tue,  5 Apr 2022 16:52:16 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e22so1074856ioe.11;
-        Tue, 05 Apr 2022 16:52:16 -0700 (PDT)
+        with ESMTP id S1847748AbiDFCUQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 22:20:16 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048065640D
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 16:38:07 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id e22so1044053ioe.11
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 16:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
-        b=qP2Je91cC5X9wuYLjZp8TH9PNetiSDkDUC4K9LVY0XsP70Z0P360X7QBCcp544wpWn
-         uj80MoZx+E/whCCVsJBl7bHFLs4zX9YT1v0DtGIo2TXQVILm6wSdrAYbxEVLaPSpMPRG
-         SIKIBtv9TFPsCcXbNOHKCqINnfCryFkkOuEUG17CZIPI7EC5N++bXiQLtbGUwI3G1ktC
-         B4WGJJrB9L4fEuvWaEKUmpTr1MxaOMVrexGTVXwlaRX188e8xQqjFFpGQ/W7Qw+DtTJ8
-         44qAfRFH+M9VBi0NFgLYpeT8wWfgUW7inCLoeNUEeDAjzmUxiUZdp/P9BBnkLKTi4zUx
-         rLGw==
+        bh=J0VDn3TWssya7/c3pZXBannNTPpSZhPFSmYNNSwztHg=;
+        b=gW2KyGQ7bElr7Z+/g04+BuCCfjvnAckL9UlGRRoTvpc/FdkgRtoImlld80jmUUwAvd
+         RgQZ4cAIGuNXqeJJ1RURN3A+FVVLQE9+Fa04P26Hp32ny0AA5hvKZ16l7ghXk0+9dlzf
+         yWnwDvAmxB8Rbedw26a1cffnbkjOpGZ0ydk9vQAF7z8rftTEHFx6nVzhtsUW2LIyo4+l
+         gonodjpHwhDc7VS6dj/Ue/WpM3vuUfyBf1HSVNaiU8m1RejTKjI9WHxmu0GCRX+KU2VR
+         9CZ8LAg3ihtvr457N7UmrCZfB6LdEqWqRFsfuIfieX/WbFS8Vmnzsj1wKQ0Hc17RqXOK
+         hpmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=pHXomKH7znoD3NKtjCedrAePGvj1PU34oOzV9waUrWE=;
-        b=jdmo3pXGSLArTYozWH56R61Sa9Vm8CKn635zT3jwKfS6G9VwiGq4bMj1JGW9CWrIOC
-         zgZE0A9nu4gni9LSjQ04SWMPAmBsI/0DMPKKQASMPPCisp5MjyHQ3OVKnXvS+lqqBhS+
-         IrIYLQVlyQjkeQ4lU7+8XZ69SKvya7elwuXCydLM6ftV8DChQHldjiNBt0U9hOzzTghu
-         zgzsrQ11B6JFK79XWsA7ObyiiZ9KImBdGY/V8b5H7bePn8uc3LvbObG+OH182xmkd5GF
-         x+uP2goSxS/RGteWy1y61OHLobZTJLr6OzQySzcsXDJkaS7ybD0Hb2RqDeoxLXNZRB9T
-         nwPA==
-X-Gm-Message-State: AOAM533CEvHxR5iN4a6VcaGJ1GLQ7vWPtbG4Rz4rjPUfl+VRlZB4EMAP
-        bG9KOKVZeuBjyzxtK3lQd+zE4KQgH8bLN7SuFRw=
-X-Google-Smtp-Source: ABdhPJw6QDEx6357RD8/tWoPiOfZM+DJ9CdKHEhzqAWEeOUPTScS2FluYFnoR+Xgdc6Cy4lLB2keEra95hY1Z8CnTU4=
-X-Received: by 2002:a05:6638:772:b0:319:e4eb:adb with SMTP id
- y18-20020a056638077200b00319e4eb0adbmr3287706jad.237.1649202733374; Tue, 05
- Apr 2022 16:52:13 -0700 (PDT)
+        bh=J0VDn3TWssya7/c3pZXBannNTPpSZhPFSmYNNSwztHg=;
+        b=DALnV0vhrRXWKV9i6OSkZum5t/ax3PvMqKxUD1H230a1rvvIVaIUIi3rRNOdWDlgpk
+         avBohR4j9GC0y/4NKdEOJxUvwJBmcd8NP9v9W+cgp7ALJfrM4Wufa8umklyLdXqaxuLQ
+         WwsDIMFzWNoDSzqK05FaExEGyprndzOa0uOwKsKPRK1NUHd5UpAz3qMX2eULlPA8O+mn
+         cWhxDDnghHsoctLHoOcQQi4mb4ib2zvlz2k5y1s9EiG5xoWQSeKDFAOPAJovEQPLNrLP
+         2xfuMKP5Azf8hh3o1zbAYLy1G85E0TrKP2JuJusDoP4Q4ZnbJUlbpa006Q30D/C57pjn
+         FOiA==
+X-Gm-Message-State: AOAM532lgNQfMDxDiSjSuCw3xrBhrGsccv36cHAtHxqAlRAM3VMdkk3r
+        QGxRfisCUyQlYostc0MRo9Aea2isl+cbVYPNtvg=
+X-Google-Smtp-Source: ABdhPJxwaAzlWgM7RAglEYzRKlaIkTejW+hfWu8dHqRuWKj1V4R7ZMqPYN9zZOyXp4hNLpO9wOwF8qEYrfZNxCTnYEc=
+X-Received: by 2002:a05:6638:3395:b0:323:8a00:7151 with SMTP id
+ h21-20020a056638339500b003238a007151mr3155713jav.93.1649201886427; Tue, 05
+ Apr 2022 16:38:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405163728.56471-1-ytcoode@gmail.com>
-In-Reply-To: <20220405163728.56471-1-ytcoode@gmail.com>
+References: <20220404083816.1560501-1-nborisov@suse.com>
+In-Reply-To: <20220404083816.1560501-1-nborisov@suse.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 16:52:02 -0700
-Message-ID: <CAEf4BzZLw-QeXgb1HRR-b3D5NqQRs_iqOFcZmokvmf6rXTy-iw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Date:   Tue, 5 Apr 2022 16:37:55 -0700
+Message-ID: <CAEf4BzZrz42Ffe37n+NbiVsvzHX995=1P_tTun-bHzL8kXOpeg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Add btf__field_exists
+To:     Nikolay Borisov <nborisov@suse.com>
+Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 9:39 AM Yuntao Wang <ytcoode@gmail.com> wrote:
+On Mon, Apr 4, 2022 at 1:38 AM Nikolay Borisov <nborisov@suse.com> wrote:
 >
-> The checks preceding CHECK macro are redundant, remove them.
+> Hello,
 >
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> Here are 2 patches with which I want to probe what's the sentiments towards 2
+> changes:
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> index 16048978a1ef..5f2ab720dabd 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-> @@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
->                         good_user_stack = true;
->         }
+> 1. Introduction of libbpf APIs similar to the bpf counterparts: bpf_core_field_exists,
+> bpf_core_type_exists and bpf_core_enum_value_exists. Of those I've implemented only
+> the first one and the reasoning behind this is in the patch itself. However, the
+> TLDR is that there can be cases where based on the kernel version we have to make a
+> decision in userspace what set of kprobes to use. There are currently no convenince
+> api's to do this so one has to essentially open code the checks that can be provided
+> by the aforementioned APIs.
 >
-> -       if (!good_kern_stack)
-> -           CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-> -       if (!good_user_stack)
-> -           CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
-> +       CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-> +       CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
 
-I suspect it was to avoid super long verbose logs, as each CHECK()
-emits one line into output and here we might be getting a lot of
-samples. So let's keep it as is. But for the future let's try getting
-rid of CHECK()s as much as possible in favor of ASSERT_xxx(). Thanks.
+The problem is that what you've implemented is not a user-space
+equivalent of bpf_core_xxx() macros. CO-RE has extra logic around
+___<flavor> suffixes, extra type checks, etc, etc. Helper you are
+adding does a very straightforward strings check, which isn't hard to
+implement and it doesn't have to be a set in stone API. So I'm a bit
+hesitant to add this.
 
->  }
+But I can share what I did in similar situations where I had to do
+some CO-RE check both on BPF side and know its result in user-space. I
+built a separate very simple BPF skeleton and all it did was perform
+various feature checks (including those that require CO-RE) and then
+returned the result through global variables. You can then trigger
+such BPF feature-checking program either through bpf_prog_test_run or
+through whatever other means (I actually did a simple sys_enter
+program in my case). See [0] for BPF program side and [1] for
+user-space activation/consumption of that.
+
+The benefit of this approach is that there is no way BPF and
+user-space sides can get "out of sync" in terms of their feature
+checking. With skeleton it's also extremely simple to do all this.
+
+  [0] https://github.com/anakryiko/retsnoop/blob/master/src/calib_feat.bpf.c
+  [1] https://github.com/anakryiko/retsnoop/blob/master/src/mass_attacher.c#L483-L529
+
+
+> 2. The kernel has for_each_member macro but the libbpf library doesn't provide it,
+> this results in having to open code members enumeration in various places such as
+> in find_member_by_name/find_struct_ops_kern_types/bpf_map__init_kern_struct_ops/
+> parse_btf_map_def  and in the newly introduced btf__field_exists. So how about
+> bringing the convenience macro to libbpf?
+
+see my comment, not sure it's worth it
+
 >
->  void test_get_stack_raw_tp(void)
+> The reason why this series is RFC is if people agree with the proposed changed
+> I'd be happy to extend it to add more *exists* APIs and do the conversion to
+> using the  for_each_member macro.
+>
+> Nikolay Borisov (2):
+>   libbpf: Add userspace version of for_each_member macro
+>   libbpf: Add btf__field_exists
+>
+>  tools/lib/bpf/btf.c      | 28 ++++++++++++++++++++++++++++
+>  tools/lib/bpf/btf.h      |  8 ++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 37 insertions(+)
+>
 > --
-> 2.35.1
+> 2.25.1
 >
