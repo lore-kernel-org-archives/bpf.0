@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E9E7C433EF
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 15:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B9A2C433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 15:23:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240343AbiDEPYx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 11:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S236745AbiDEPZD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 11:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348517AbiDEOV2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:21:28 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ACD5B3F3;
-        Tue,  5 Apr 2022 06:09:27 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i11so10826478plg.12;
-        Tue, 05 Apr 2022 06:09:27 -0700 (PDT)
+        with ESMTP id S1344185AbiDEOX2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 10:23:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A3A6C4A1;
+        Tue,  5 Apr 2022 06:09:48 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so2458777pjn.3;
+        Tue, 05 Apr 2022 06:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0QWMaI7ktwqgQ1b499WIyw00i54AjU4DzzhQoij8TdI=;
-        b=JAzDvU1SuUx7Ba+7M2mroxMU1D6kuD21qFm4hWCXwOIx8PTullbdXmfJ0qoI/JqB8s
-         2Ckijg1R5gCUv0sGRlSBBNHasgYr+GQy1FGhanTOEdw79fyw+6n4AE++F5S6JEn+NmFz
-         +Md0fyE830qm8HnrN/p8An2D8Gq+DHiJ2JKufm4v8ncYK94+8Pd9D9yghZf8FpOSKawo
-         aCcBFpgCu0iYh1SvPuY8w9RQl96kJh+NKziBx1E7yr5prcvAWv57CZimWvJt2pOFbhaL
-         SrX31kV/Y2Qp0y5eZPu+sIcb9Wg+IMWgiye1WgoYRjP2WY1+KfziCNTZaodoJFTSwyDh
-         qEqg==
+        bh=29tSKU5CIi5toN+mzQg/xoJLGhPPII1qeJKEVizdgAc=;
+        b=SRHOtseHc3pgC9262T5fALIRfUCgNFOtq/kJ4SSuFnNHnhNZqZZQlXEkANgg+trIdE
+         +54wu9Q2BZeb4Q1ImhlCL+Y0MSDccyemKVgVR4hvitsZyEUfw6d6Dr3hRd6JaOAvfoui
+         LT57HVqFG0GGB0svFLzQM94lCbkgsA0f+ZLtmEZNLUNUcwOMCKPoPbXPF2fgq0NHhtcm
+         KSWeHn6ljeMP2ezaaZ2oVj9omtIzWS/PGjL4d10F5ebDQ53qcPZ2Sw0kEpOLKZD6fdWl
+         kQCWK6AsPwdYWvj6bT4fDQXn6EZkMsD012l2zTdunmsfURrW77h0er5kZSfQAn19mPAy
+         IHqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0QWMaI7ktwqgQ1b499WIyw00i54AjU4DzzhQoij8TdI=;
-        b=0OHWK+NkQao+SEHMYXdhN8ZcO8OYgDcZ7gt7Ov3mh0JLlCSbutZNSOKwd10r5MmNZV
-         GcFFPb5gayWLsh9jPEPrqRi1wivadc0ZMXmpZtT/6oFa5LOdwwYLM5LJ8G+FQwuX6TFq
-         FZHQRBo42mWaSLD9ME9l6kSmH+FXEGt1cUfvOHA3iPBnQU6HHtBLVl0NcLfC14T3W20I
-         LqFahryE1OF8l9JU9yjrsXT2jjBMInbZq+rch0s/ORJjUjb51PP1lKXr7USg0Q4fAaSj
-         PTfKBuR8j+sKgtmMWlwkd0VE8KIwU7FxKO5tEPTsJMBTtKNPmRyJl4wGvHYg6UDCN+w3
-         4few==
-X-Gm-Message-State: AOAM533fudWFQ4n+16dS6fhdB5NaMpbZ+ARKITVAy38rTm8iVbbGkEpb
-        IT+pRPU3fF6UygIzlrWLWsQ=
-X-Google-Smtp-Source: ABdhPJwDFY5iXB+uk99Hao2I9M70rbX8/JFQb6RVxPzIR9h5GuCKSibwwZOano0NEoZtRrQTHIfVjA==
-X-Received: by 2002:a17:902:70cc:b0:154:1cc8:9df8 with SMTP id l12-20020a17090270cc00b001541cc89df8mr3395036plt.32.1649164166857;
-        Tue, 05 Apr 2022 06:09:26 -0700 (PDT)
+        bh=29tSKU5CIi5toN+mzQg/xoJLGhPPII1qeJKEVizdgAc=;
+        b=l/dl6DDcL/C3aBUGKfJ+yVmXMQ1fbfan8fFsrw1DV2L0GLlQB0MS5o0AH1A/D9z01K
+         Nh6x8HklUlDaPhgAxfETe4YRYLLJfCvkkpAsXv3O8i1gNTsO7R9r17vmSzzPqbWpd0CH
+         h5osieMpSkuhjpXHjFBCsvaV1XNR5XTrCy/+Q5koCXemmawC1uBAELD0QYdpk80v5abF
+         uc04cMG3FNOoCGfDgtHSki1uxlA/Og09quKwBmtAwdB1dqfQ3yOREr++2wxGItBEIo4G
+         vzjKhffkMY+e9e4nvxR7GoCqZjApB9bC/5+wSEUiOdoIGQHVviTWWOlJn2JrZ8KAYy/s
+         LwCg==
+X-Gm-Message-State: AOAM532oJnFRAW/0Uf866Z0JEFgmRoMTwD/2BAPPktvQi1FZZ6J2X/K8
+        kSyjH7oI/0OVUA4MIXR+J1w=
+X-Google-Smtp-Source: ABdhPJxpSXI5Hwcc+Th8R/v5CnSoyL21gAJjIWwHO38u7LmooE/0eNucZHJWA/m1F2s6Zcc1vfCAYw==
+X-Received: by 2002:a17:90b:2406:b0:1ca:ab60:60ae with SMTP id nr6-20020a17090b240600b001caab6060aemr4085058pjb.226.1649164188292;
+        Tue, 05 Apr 2022 06:09:48 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.25
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:26 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:47 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 09/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lru_map
-Date:   Tue,  5 Apr 2022 13:08:40 +0000
-Message-Id: <20220405130858.12165-10-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 24/27] bpf: bpftool: Remove useless return value of libbpf_set_strict_mode
+Date:   Tue,  5 Apr 2022 13:08:55 +0000
+Message-Id: <20220405130858.12165-25-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -65,36 +65,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-included bpf_rlimit.h.
+libbpf_set_strict_mode alwasy return 0, so we don't need to check whether
+the return value is 0 or not.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/test_lru_map.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/main.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
-index 563bbe18c172..a6aa2d121955 100644
---- a/tools/testing/selftests/bpf/test_lru_map.c
-+++ b/tools/testing/selftests/bpf/test_lru_map.c
-@@ -18,7 +18,6 @@
- #include <bpf/libbpf.h>
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index e81227761f5d..451cefc2d0da 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -507,9 +507,7 @@ int main(int argc, char **argv)
+ 		 * It will still be rejected if users use LIBBPF_STRICT_ALL
+ 		 * mode for loading generated skeleton.
+ 		 */
+-		ret = libbpf_set_strict_mode(LIBBPF_STRICT_ALL & ~LIBBPF_STRICT_MAP_DEFINITIONS);
+-		if (ret)
+-			p_err("failed to enable libbpf strict mode: %d", ret);
++		libbpf_set_strict_mode(LIBBPF_STRICT_ALL & ~LIBBPF_STRICT_MAP_DEFINITIONS);
+ 	}
  
- #include "bpf_util.h"
--#include "bpf_rlimit.h"
- #include "../../../include/linux/filter.h"
- 
- #define LOCAL_FREE_TARGET	(128)
-@@ -878,6 +877,9 @@ int main(int argc, char **argv)
- 	assert(nr_cpus != -1);
- 	printf("nr_cpus:%d\n\n", nr_cpus);
- 
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
- 	for (f = 0; f < ARRAY_SIZE(map_flags); f++) {
- 		unsigned int tgt_free = (map_flags[f] & BPF_F_NO_COMMON_LRU) ?
- 			PERCPU_FREE_TARGET : LOCAL_FREE_TARGET;
+ 	argc -= optind;
 -- 
 2.17.1
 
