@@ -2,163 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D14EC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BFF8C4321E
 	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 19:53:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389769AbiDEP0g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 11:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S1389760AbiDEP0a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 11:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384598AbiDEOSP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:18:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4321511D7B1
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 06:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649163862;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fzRIFCCGFmB+iA5S8VpxVvRYiZXdeCsQA0S+H3U05wI=;
-        b=UrEJIW1ys4DxVVBgIJZPAlastLTWPOsYbkDBNnnKkexZkDCVQoauPjANlBnGYDIQ9tcg0X
-        NMO/3TCqrUNVJQX5Qevk0pqvjpOtzgZTizHdnh8mz7lFhAPxuQcsToImxibEipYHsR8rUC
-        Q5Vsk8iq1LhpNGWcz69mZez/tV//JLU=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-16PBlhnKONqZMO_nyLsM-Q-1; Tue, 05 Apr 2022 09:04:21 -0400
-X-MC-Unique: 16PBlhnKONqZMO_nyLsM-Q-1
-Received: by mail-ed1-f70.google.com with SMTP id b24-20020a50e798000000b0041631767675so7171187edn.23
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 06:04:20 -0700 (PDT)
+        with ESMTP id S1347302AbiDEOV2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 10:21:28 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3683759A6F;
+        Tue,  5 Apr 2022 06:09:26 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r66so2155543pgr.3;
+        Tue, 05 Apr 2022 06:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CCF1afPoawtHj0JOT1YQhvzf/ufI9/Oj+shVoKXn1Y8=;
+        b=fZLMgfdtHl+NM3WmcMNrwWJPDKgRQt2/1OM07KtMCrcmk2U2vmIpJBjscRNQAcklge
+         RuBehxhNk/sFgRQ/ja43GuH+Plx5oh3u/OiQ5wETBNtWNVWY+2DN9ijhri17gBzNdKTy
+         MVb9nvuzayns4tOL0GFFORhcDfseJQFVnPSQ9k7vYAC5RSesEQqC2tgDRRb0xR2bHjrf
+         Malb7fC47ISfHqvEZ+CZDlPNPFRMKkZKdttRzrFoAFOeS0YPm1CNf1hxEuzEKtisUvls
+         fq9JWFXhzkkmfaWmHXIHY7cDAVUexFXXryUdluZC868pnTX7J2fMbS4m87wjj36Q8/xj
+         e0Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
-         :subject:content-language:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=fzRIFCCGFmB+iA5S8VpxVvRYiZXdeCsQA0S+H3U05wI=;
-        b=j/Eaf3ZzOHXVAFElZyPqRC0yC3Vv62xSege4jg6jMsXu7Mnr5jVQQRwZ8vRwkEjE27
-         6eG5Uf8P0TyiYL6gFL1oS2muV72CigqP1SxXGLi+2BTpZIWiHQTqGrPQE/9P/NYIIzZb
-         Fm2ZMlwmS0Ezr1dpb5pNLm4NkiAH+W/8h0Xk94r5LSF1JjVrdB+M3yxWTbefv93hUuYD
-         BU8ew8l1oiowgssklaLrKWqC6L1NQHzGa/vPg76XTEtX0yT0+0+t9RagTPv9eV2hXS3u
-         oP6/8pgZnQkajVmC8LJtpruha0mHB+9gVOQ0HsDf6riL9gnxEtBxDPYnkF2bAgsi0Yvx
-         PH/Q==
-X-Gm-Message-State: AOAM531D4rVt7u4ormwqhS6gMnJumvW+ov9RyxlLII10zVPBi8VnMaAd
-        spvWoxSJY+eR2qxYNHb5yLa6uU9+EMpQ+4ZLbgqwGQphkdzKFHXMGKgkyNTTaXiuP4eD5X2u80b
-        n00Ugw1b4ePOD
-X-Received: by 2002:a05:6402:1941:b0:413:2b7e:676e with SMTP id f1-20020a056402194100b004132b7e676emr3583310edz.114.1649163859640;
-        Tue, 05 Apr 2022 06:04:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxp1RKUnKCUMwO4uT52gnvGTPVPeT+az47jhMyWGygUQOCkmYThSrOGP6A2+746Vwb01HDRrQ==
-X-Received: by 2002:a05:6402:1941:b0:413:2b7e:676e with SMTP id f1-20020a056402194100b004132b7e676emr3583279edz.114.1649163859376;
-        Tue, 05 Apr 2022 06:04:19 -0700 (PDT)
-Received: from [192.168.2.20] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
-        by smtp.gmail.com with ESMTPSA id qa30-20020a170907869e00b006df9ff41154sm5574905ejc.141.2022.04.05.06.04.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 06:04:18 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <8bb40f98-2f1f-c331-23d4-ed94a6a1ce76@redhat.com>
-Date:   Tue, 5 Apr 2022 15:04:17 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CCF1afPoawtHj0JOT1YQhvzf/ufI9/Oj+shVoKXn1Y8=;
+        b=n8AKa5I4lvLgqsGh7unM/4K5AaA5/3nqYvFKhFQ5+PH5Ln6fxkz3Q79ProBahA6xMc
+         ByzotV5hvL6t8B+E9RiUniXytAkwY7jIENFsCS6wSUflj1BSFVGnyyo5M0ZQ+y9Tqp/Y
+         iuv2gtqpeJJN7VLNvVzlxPSSq7Y3BR8y0znbyZYIyQkPtk1GEk3SRFOa2msi8BBQODBf
+         f2eFqO4Lni0AfW4paA57IQuPFkXXchgU1zyheL/qGajvs6rrGRf7yg1EowTpEpL3NNDq
+         XmaScyFfpsjgRvZb5DB1g+rPmIwOhLrJ6kOrbnnrXGdCoZ1mIJUwfuOdhApy4Qo8loAd
+         Dz4A==
+X-Gm-Message-State: AOAM5327GPGq0HpgOUNJwATszqrsqzV8CljDK4kZwOOFU42cPCp5N+ac
+        FX/tf+OOdPLyz0buR/okfKk=
+X-Google-Smtp-Source: ABdhPJy0gv5QTBC2xRp/kRNuSuV/7NhyZvy59r7ywNFTqEeprnQIDvH98c+dZzkcvN3HTsksVxmQqQ==
+X-Received: by 2002:a62:6d47:0:b0:4fe:15fa:301d with SMTP id i68-20020a626d47000000b004fe15fa301dmr3531643pfc.29.1649164165715;
+        Tue, 05 Apr 2022 06:09:25 -0700 (PDT)
+Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 06:09:24 -0700 (PDT)
+From:   Yafang Shao <laoar.shao@gmail.com>
+To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 08/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_lpm_map
+Date:   Tue,  5 Apr 2022 13:08:39 +0000
+Message-Id: <20220405130858.12165-9-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
+References: <20220405130858.12165-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org, maximmi@nvidia.com,
-        alexandr.lobakin@intel.com,
-        Toke Hoiland Jorgensen <toke@redhat.com>
-Subject: Re: [PATCH bpf-next 04/10] i40e: xsk: terminate NAPI when XSK Rx
- queue gets full
-Content-Language: en-US
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        magnus.karlsson@intel.com, bjorn@kernel.org
-References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
- <20220405110631.404427-5-maciej.fijalkowski@intel.com>
-In-Reply-To: <20220405110631.404427-5-maciej.fijalkowski@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
+included bpf_rlimit.h.
 
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ tools/testing/selftests/bpf/test_lpm_map.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On 05/04/2022 13.06, Maciej Fijalkowski wrote:
-> Correlate -ENOBUFS that was returned from xdp_do_redirect() with a XSK
-> Rx queue being full. In such case, terminate the softirq processing and
-> let the user space to consume descriptors from XSK Rx queue so that
-> there is room that driver can use later on.
-> 
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> ---
->   .../ethernet/intel/i40e/i40e_txrx_common.h    |  1 +
->   drivers/net/ethernet/intel/i40e/i40e_xsk.c    | 21 ++++++++++++-------
->   2 files changed, 15 insertions(+), 7 deletions(-)
-> 
-[...]
-
-I noticed you are only doing this for the Zero-Copy variants.
-Wouldn't this also be a benefit for normal AF_XDP ?
-
-
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> index c1d25b0b0ca2..9f9e4ce9a24d 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> @@ -161,9 +161,10 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
->   
->   	if (likely(act == XDP_REDIRECT)) {
->   		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
-> -		if (err)
-> -			goto out_failure;
-> -		return I40E_XDP_REDIR;
-> +		if (!err)
-> +			return I40E_XDP_REDIR;
-> +		result = (err == -ENOBUFS) ? I40E_XDP_EXIT : I40E_XDP_CONSUMED;
-> +		goto out_failure;
->   	}
->   
->   	switch (act) {
-> @@ -175,6 +176,9 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
->   		if (result == I40E_XDP_CONSUMED)
->   			goto out_failure;
->   		break;
-> +	case XDP_DROP:
-> +		result = I40E_XDP_CONSUMED;
-> +		break;
->   	default:
->   		bpf_warn_invalid_xdp_action(rx_ring->netdev, xdp_prog, act);
->   		fallthrough;
-> @@ -182,9 +186,6 @@ static int i40e_run_xdp_zc(struct i40e_ring *rx_ring, struct xdp_buff *xdp)
->   out_failure:
->   		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
->   		fallthrough; /* handle aborts by dropping packet */
-> -	case XDP_DROP:
-> -		result = I40E_XDP_CONSUMED;
-> -		break;
->   	}
->   	return result;
->   }
-> @@ -370,6 +371,12 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
->   		xsk_buff_dma_sync_for_cpu(bi, rx_ring->xsk_pool);
->   
->   		xdp_res = i40e_run_xdp_zc(rx_ring, bi);
-> +		if (xdp_res == I40E_XDP_EXIT) {
-> +			failure = true;
-> +			xsk_buff_free(bi);
-> +			next_to_clean = (next_to_clean + 1) & count_mask;
-> +			break;
-> +		}
->   		i40e_handle_xdp_result_zc(rx_ring, bi, rx_desc, &rx_packets,
->   					  &rx_bytes, size, xdp_res);
->   		total_rx_packets += rx_packets;
-> @@ -382,7 +389,7 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
->   	cleaned_count = (next_to_clean - rx_ring->next_to_use - 1) & count_mask;
->   
->   	if (cleaned_count >= I40E_RX_BUFFER_WRITE)
-> -		failure = !i40e_alloc_rx_buffers_zc(rx_ring, cleaned_count);
-> +		failure |= !i40e_alloc_rx_buffers_zc(rx_ring, cleaned_count);
->   
->   	i40e_finalize_xdp_rx(rx_ring, xdp_xmit);
->   	i40e_update_rx_stats(rx_ring, total_rx_bytes, total_rx_packets);
-> 
+diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
+index aa294612e0a7..789c9748d241 100644
+--- a/tools/testing/selftests/bpf/test_lpm_map.c
++++ b/tools/testing/selftests/bpf/test_lpm_map.c
+@@ -26,7 +26,6 @@
+ #include <bpf/bpf.h>
+ 
+ #include "bpf_util.h"
+-#include "bpf_rlimit.h"
+ 
+ struct tlpm_node {
+ 	struct tlpm_node *next;
+@@ -791,6 +790,9 @@ int main(void)
+ 	/* we want predictable, pseudo random tests */
+ 	srand(0xf00ba1);
+ 
++	/* Use libbpf 1.0 API mode */
++	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
++
+ 	test_lpm_basic();
+ 	test_lpm_order();
+ 
+-- 
+2.17.1
 
