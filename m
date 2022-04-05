@@ -2,119 +2,344 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08AA6C35273
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E53C4167B
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446592AbiDEXqL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S1451445AbiDEXqy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572996AbiDERna (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:43:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D588CB91AE;
-        Tue,  5 Apr 2022 10:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649180491; x=1680716491;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=d1uggptIEOdH6XP927KXNMIpnt0NmVSeFNANlHp6nPQ=;
-  b=AAU/kxUvSzhEcigPIu96Y5JOYZY+9iUEM5gmtvyLnr/EgIUHoRqgIMVL
-   BavdfY7ZpHp8edoItMSoePA6XqIbSSedbYkl2DHp6SXFh07fTp+1BeYDl
-   cci9CTb7dnCJ4f3Cy8loJAhXcM3UFYGv01juWngneu93ybSolfD0/ISVH
-   bjs0jCMFNY8C90VmQx6wD4CDeCk+FBgx3VRcQn4X2/c9+l5Ip+LBB8bAu
-   FXwUc33/EIhiko6V2mvYdLP4GFb4v6LHTncVR4y+Fe7El3uHeTz9fJMwS
-   WQDv3JTHyo+MWeNsdoW7Zw6XW08FgyfQh7hMLiSYsIpM0YJbQxX/VapKM
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="259651073"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="259651073"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 10:41:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="523555238"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Apr 2022 10:41:25 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbnBE-0003dj-Br;
-        Tue, 05 Apr 2022 17:41:24 +0000
-Date:   Wed, 6 Apr 2022 01:40:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     kbuild-all@lists.01.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-        kernel-team@fb.com, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH bpf 4/4] arm64: rethook: Replace kretprobe trampoline
- with rethook
-Message-ID: <202204060119.lme7uoGl-lkp@intel.com>
-References: <164915126392.982637.10302202550404803304.stgit@devnote2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164915126392.982637.10302202550404803304.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        with ESMTP id S1577688AbiDEXMk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 19:12:40 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1381FFD6FE
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 14:44:23 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb4f03f212so4904097b3.2
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 14:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=KBjl56TVtVd7q+bYPsHoA+X4J5WyYi1pwYLGq1N+s4o=;
+        b=ERO6H3mMb0t5cYLJbv98Jw3M7LEmMVB6vS1qNi3MeE78zpoxgWfFVN965G9bS/e2FU
+         TU09/OndI4iQc+UddELgFpu1lij+wsREJPfwlybTPnv73IIptyzp//TAE7C6zLVZjnnD
+         HSzMGQiBrS32nuMUUlXaoNpiA1QNRSuCWwpZvPbA4ByUhF2Ecbdc01XcIbcBWJLCwafB
+         VKA1uEmJdXKD8dCQMNuyvqPISukoG7HiCeGb4OIj8vKqDlrBp+RzMWTS7lH/d4BEpzbN
+         Zz9Jq5TYMIuO3W0PBJRvtjS8BFS7b2C7yGr0jcIjqzMPGtG3UkMtpr9TDLvPtGIW2xeb
+         lYIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=KBjl56TVtVd7q+bYPsHoA+X4J5WyYi1pwYLGq1N+s4o=;
+        b=iyWd0TBUlVld9BUenQSG0/gRp1CyLhO8lLBCMjsPgsS5Kl0XDP3jdc0/eAZ3cYDpmO
+         uUMxAbRDE6HmzUUrjEXylRfZWgV8Cw46FMcJRq/NyzumZwiVkP/0KhntUkDdeyAvmSQz
+         QFlM4tYbWVHuO9ucbkv8bvlsA2bYtbCy7q6WCFDeZ179Cis6W+lhxs7h2Fo09AUXC4OC
+         9nVuAznKLoOkaRDjEg5xxMJH+g15k3GH1uO9HNhHBVHdGNnpR27rimhkAGsNtZJCLVC2
+         pKsl95+dAuDd/sWPKrDk15UUR8UGb24eVlnoeEdThtYbbIeZO73yjIGm+YNDISc0TiSL
+         PO3Q==
+X-Gm-Message-State: AOAM531I4c8cuJgFq9daiUiyaGW5/cdrlb1KfRniDK7jmCvkYV/86ZnZ
+        udC5gURo1H6TeMW8JmzVpvSPcZI=
+X-Google-Smtp-Source: ABdhPJwgLv3CzySA5O5G95jbcm/6EQ9BPEmCkHfA7L/HPrFD/TLmPVEt68gprqKaW4ODffTEtw79jeE=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:73b5:ffab:2024:2901])
+ (user=sdf job=sendgmr) by 2002:a25:9b85:0:b0:63d:ad6c:aae8 with SMTP id
+ v5-20020a259b85000000b0063dad6caae8mr4011205ybo.609.1649195039993; Tue, 05
+ Apr 2022 14:43:59 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 14:43:41 -0700
+In-Reply-To: <20220405214342.1968262-1-sdf@google.com>
+Message-Id: <20220405214342.1968262-7-sdf@google.com>
+Mime-Version: 1.0
+References: <20220405214342.1968262-1-sdf@google.com>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH bpf-next v2 6/7] selftests/bpf: lsm_cgroup functional test
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Masami,
+Functional test that exercises the following:
 
-I love your patch! Perhaps something to improve:
+1. apply default sk_priority policy
+2. permit TX-only AF_PACKET socket
+3. cgroup attach/detach/replace
+4. reusing trampoline shim
 
-[auto build test WARNING on bpf/master]
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ .../selftests/bpf/prog_tests/lsm_cgroup.c     | 158 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/lsm_cgroup.c  |  94 +++++++++++
+ 2 files changed, 252 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_cgroup.c
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220406/202204060119.lme7uoGl-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/74084aa7903f112b1c3df1f864d49b15d8aba270
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-        git checkout 74084aa7903f112b1c3df1f864d49b15d8aba270
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kernel/rethook.c:11:22: warning: no previous prototype for 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-      11 | unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/arch_rethook_trampoline_callback +11 arch/arm64/kernel/rethook.c
-
-     9	
-    10	/* This is called from arch_rethook_trampoline() */
-  > 11	unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-    12	{
-    13		return rethook_trampoline_handler(regs, regs->regs[29]);
-    14	}
-    15	NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-    16	
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+new file mode 100644
+index 000000000000..e786b63d81e2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+@@ -0,0 +1,158 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <test_progs.h>
++
++#include "lsm_cgroup.skel.h"
++#include "cgroup_helpers.h"
++
++void test_lsm_cgroup(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, attach_opts);
++	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, update_opts);
++	int cgroup_fd, cgroup_fd2, err, fd, prio;
++	struct lsm_cgroup *skel = NULL;
++	int post_create_prog_fd2 = -1;
++	int post_create_prog_fd = -1;
++	int bind_link_fd2 = -1;
++	int bind_prog_fd2 = -1;
++	int alloc_prog_fd = -1;
++	int bind_prog_fd = -1;
++	int bind_link_fd = -1;
++	socklen_t socklen;
++
++	cgroup_fd = test__join_cgroup("/sock_policy");
++	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
++		goto close_skel;
++
++	cgroup_fd2 = create_and_get_cgroup("/sock_policy2");
++	if (!ASSERT_GE(cgroup_fd2, 0, "create second cgroup"))
++		goto close_skel;
++
++	skel = lsm_cgroup__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		goto close_cgroup;
++
++	post_create_prog_fd = bpf_program__fd(skel->progs.socket_post_create);
++	post_create_prog_fd2 = bpf_program__fd(skel->progs.socket_post_create2);
++	bind_prog_fd = bpf_program__fd(skel->progs.socket_bind);
++	bind_prog_fd2 = bpf_program__fd(skel->progs.socket_bind2);
++	alloc_prog_fd = bpf_program__fd(skel->progs.socket_alloc);
++
++	err = bpf_prog_attach(alloc_prog_fd, cgroup_fd, BPF_LSM_CGROUP, 0);
++	if (!ASSERT_OK(err, "attach alloc_prog_fd"))
++		goto detach_cgroup;
++
++	/* Make sure replacing works.
++	 */
++
++	err = bpf_prog_attach(post_create_prog_fd, cgroup_fd,
++			      BPF_LSM_CGROUP, 0);
++	if (!ASSERT_OK(err, "attach post_create_prog_fd"))
++		goto close_cgroup;
++
++	attach_opts.replace_prog_fd = post_create_prog_fd;
++	err = bpf_prog_attach_opts(post_create_prog_fd2, cgroup_fd,
++				   BPF_LSM_CGROUP, &attach_opts);
++	if (!ASSERT_OK(err, "prog replace post_create_prog_fd"))
++		goto detach_cgroup;
++
++	/* Try the same attach/replace via link API.
++	 */
++
++	bind_link_fd = bpf_link_create(bind_prog_fd, cgroup_fd,
++				       BPF_LSM_CGROUP, NULL);
++	if (!ASSERT_GE(bind_link_fd, 0, "link create bind_prog_fd"))
++		goto detach_cgroup;
++
++	update_opts.old_prog_fd = bind_prog_fd;
++	update_opts.flags = BPF_F_REPLACE;
++
++	err = bpf_link_update(bind_link_fd, bind_prog_fd2, &update_opts);
++	if (!ASSERT_OK(err, "link update bind_prog_fd"))
++		goto detach_cgroup;
++
++	/* Attach another instance of bind program to another cgroup.
++	 * This should trigger the reuse of the trampoline shim (two
++	 * programs attaching to the same btf_id).
++	 */
++
++	bind_link_fd2 = bpf_link_create(bind_prog_fd2, cgroup_fd2,
++					BPF_LSM_CGROUP, NULL);
++	if (!ASSERT_GE(bind_link_fd2, 0, "link create bind_prog_fd2"))
++		goto detach_cgroup;
++
++	/* AF_UNIX is prohibited.
++	 */
++
++	fd = socket(AF_UNIX, SOCK_STREAM, 0);
++	ASSERT_LT(fd, 0, "socket(AF_UNIX)");
++
++	/* AF_INET6 gets default policy (sk_priority).
++	 */
++
++	fd = socket(AF_INET6, SOCK_STREAM, 0);
++	if (!ASSERT_GE(fd, 0, "socket(SOCK_STREAM)"))
++		goto detach_cgroup;
++
++	prio = 0;
++	socklen = sizeof(prio);
++	ASSERT_GE(getsockopt(fd, SOL_SOCKET, SO_PRIORITY, &prio, &socklen), 0,
++		  "getsockopt");
++	ASSERT_EQ(prio, 123, "sk_priority");
++
++	close(fd);
++
++	/* TX-only AF_PACKET is allowed.
++	 */
++
++	ASSERT_LT(socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)), 0,
++		  "socket(AF_PACKET, ..., ETH_P_ALL)");
++
++	fd = socket(AF_PACKET, SOCK_RAW, 0);
++	ASSERT_GE(fd, 0, "socket(AF_PACKET, ..., 0)");
++
++	/* TX-only AF_PACKET can not be rebound.
++	 */
++
++	struct sockaddr_ll sa = {
++		.sll_family = AF_PACKET,
++		.sll_protocol = htons(ETH_P_ALL),
++	};
++	ASSERT_LT(bind(fd, (struct sockaddr *)&sa, sizeof(sa)), 0,
++		  "bind(ETH_P_ALL)");
++
++	close(fd);
++
++	/* Make sure other cgroup doesn't trigger the programs.
++	 */
++
++	if (!ASSERT_OK(join_cgroup(""), "join root cgroup"))
++		goto detach_cgroup;
++
++	fd = socket(AF_INET6, SOCK_STREAM, 0);
++	if (!ASSERT_GE(fd, 0, "socket(SOCK_STREAM)"))
++		goto detach_cgroup;
++
++	prio = 0;
++	socklen = sizeof(prio);
++	ASSERT_GE(getsockopt(fd, SOL_SOCKET, SO_PRIORITY, &prio, &socklen), 0,
++		  "getsockopt");
++	ASSERT_EQ(prio, 0, "sk_priority");
++
++	close(fd);
++
++detach_cgroup:
++	ASSERT_GE(bpf_prog_detach2(post_create_prog_fd2, cgroup_fd,
++				   BPF_LSM_CGROUP), 0, "detach_create");
++	close(bind_link_fd);
++	/* Don't close bind_link_fd2, exercise cgroup release cleanup. */
++	ASSERT_GE(bpf_prog_detach2(alloc_prog_fd, cgroup_fd,
++				   BPF_LSM_CGROUP), 0, "detach_alloc");
++
++close_cgroup:
++	close(cgroup_fd);
++close_skel:
++	lsm_cgroup__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+new file mode 100644
+index 000000000000..fd3b2daa26aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++#ifndef AF_PACKET
++#define AF_PACKET 17
++#endif
++
++#ifndef AF_UNIX
++#define AF_UNIX 1
++#endif
++
++#ifndef EPERM
++#define EPERM 1
++#endif
++
++static __always_inline int real_create(struct socket *sock, int family,
++				       int protocol)
++{
++	struct sock *sk;
++
++	/* Reject non-tx-only AF_PACKET.
++	 */
++	if (family == AF_PACKET && protocol != 0)
++		return 0; /* EPERM */
++
++	sk = sock->sk;
++	if (!sk)
++		return 1;
++
++	/* The rest of the sockets get default policy.
++	 */
++	sk->sk_priority = 123;
++	return 1;
++}
++
++SEC("lsm_cgroup/socket_post_create")
++int BPF_PROG(socket_post_create, struct socket *sock, int family,
++	     int type, int protocol, int kern)
++{
++	return real_create(sock, family, protocol);
++}
++
++SEC("lsm_cgroup/socket_post_create")
++int BPF_PROG(socket_post_create2, struct socket *sock, int family,
++	     int type, int protocol, int kern)
++{
++	return real_create(sock, family, protocol);
++}
++
++static __always_inline int real_bind(struct socket *sock,
++				     struct sockaddr *address,
++				     int addrlen)
++{
++	struct sockaddr_ll sa = {};
++
++	if (sock->sk->__sk_common.skc_family != AF_PACKET)
++		return 1;
++
++	if (sock->sk->sk_kern_sock)
++		return 1;
++
++	bpf_probe_read_kernel(&sa, sizeof(sa), address);
++	if (sa.sll_protocol)
++		return 0; /* EPERM */
++
++	return 1;
++}
++
++SEC("lsm_cgroup/socket_bind")
++int BPF_PROG(socket_bind, struct socket *sock, struct sockaddr *address,
++	     int addrlen)
++{
++	return real_bind(sock, address, addrlen);
++}
++
++SEC("lsm_cgroup/socket_bind")
++int BPF_PROG(socket_bind2, struct socket *sock, struct sockaddr *address,
++	     int addrlen)
++{
++	return real_bind(sock, address, addrlen);
++}
++
++SEC("lsm_cgroup/sk_alloc_security")
++int BPF_PROG(socket_alloc, struct sock *sk, int family, gfp_t priority)
++{
++	if (family == AF_UNIX)
++		return 0; /* EPERM */
++	return 1;
++}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1.1094.g7c7d902a7c-goog
+
