@@ -2,164 +2,267 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0654AC352A1
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33B43C43219
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343502AbiDEXpE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S1359367AbiDEXp1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442634AbiDEPiD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:38:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE52C178680;
-        Tue,  5 Apr 2022 06:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649166759; x=1680702759;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=I2lgRPonevESO58QwyznLbLPnONfG/J3aXgrCvzjQ0k=;
-  b=EzJvSB7X6Wf3YE7cCt42ZbTiVNg7XjeUek3Vmhj71DcqfI1a/bGAsa/9
-   cHwKQdzsCqKpydrnKu+JeR6UrjDTNVtSDq9v8E1mFobNz/6ENOjd0HKwh
-   FgUtqi2l9oozrmNWSP484pWyVwVUQpWFRbmn3XXFwMlk3IaiEb+fmR+JF
-   GeZNdxJoclBU2p40lPysGFk1U2NKgXivb4QojUeZRvEHtv4e38LjMUHt/
-   6jx/dRIlX+hVCkE4LegR+CTJ8rXuMkpbWIWt9ujtdUP4k+gEgyRbshy5q
-   L2A8Xv4giJEGqAf+/NUmCxik4HT4ObWpbZQx2JTPVFLruaPHD4JCPVqNz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="259583179"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="259583179"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:52:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="789862273"
-Received: from boxer.igk.intel.com (HELO boxer) ([10.102.20.173])
-  by fmsmga006.fm.intel.com with ESMTP; 05 Apr 2022 06:52:37 -0700
-Date:   Tue, 5 Apr 2022 15:52:36 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        magnus.karlsson@intel.com, bjorn@kernel.org, brouer@redhat.com,
-        netdev@vger.kernel.org, maximmi@nvidia.com,
-        alexandr.lobakin@intel.com
-Subject: Re: [PATCH bpf-next 05/10] ixgbe: xsk: terminate NAPI when XSK Rx
- queue gets full
-Message-ID: <YkxJpLPMkUrl1hoZ@boxer>
-References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
- <20220405110631.404427-6-maciej.fijalkowski@intel.com>
- <88cf07a2-3bb6-5eda-0d99-d9491fd18669@redhat.com>
+        with ESMTP id S1577947AbiDEXRq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 19:17:46 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43062654C;
+        Tue,  5 Apr 2022 14:46:23 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 235IiJmT024505;
+        Tue, 5 Apr 2022 21:46:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=Ju5JwQzu+kyrxxnHcPiGoqfobNAGbsuStRP1G7f67R0=;
+ b=PgHaG0tmOLQbBysNVeTiHP7ecZriP9bT3i27rLA+aODXR01wLDH/dcgRueqvOrZ0PTZd
+ Q1kSJeS5zn4f3Qy4lvLhgo51RZBo2Ahbx84PRUy/u/LYf8fuTD9IdLaq7+W1vRSgLD8+
+ dHzfPeajPojz0RvzDm9tv+o1jD444KnNtENKLtHbD+stFPwExec/v/yzNt6j0Vs9/aaG
+ IWq2UPKNvdhHbSnAKp9s9z/5fsjgO8Rwf56eMhgEUqs6CIe4tOJgNaKxtJLE7RhJ64xC
+ E45Rt4tYBYeZODzxvW9O2i6LSgVq1Clk8Og68ReFh0tV/V3uFXfLXQZr4+tl01IB8kJ4 tw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6f1t7b17-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 05 Apr 2022 21:46:07 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 235Lfpg8008143;
+        Tue, 5 Apr 2022 21:46:07 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f6cx440gd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 05 Apr 2022 21:46:07 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U1s7FI2gIuoG/vbP/Q2IDXlpc1AIGYizgEOd7Iqo0sUvMt0PCUUhIoMHMGxyo30f7visU+PCO4zRzIpdAQdXE6o9ZjOzJkWBNARlSECWViiB8KGtXmD5FESmPov6/UD70ouwDca76MvYFLFoF+tAJr9rzKonqpxwJqD0qqKqzKB5C9ysmicZ5gKIxrRmQhoy5rqnHq8N/Y1apbe3mqBxs36SwCCLyCirb/MycRw+pYGSx6qZKQFGn3JaVizLez+AIPrcVy7yXaPjXbU9M5R+0X8qa20I+oh0L+2Zpq9Q7la9mL1B95q5q4t+GWT/Hj0HbpHn1+Me2ekh9AuzSwD8pw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ju5JwQzu+kyrxxnHcPiGoqfobNAGbsuStRP1G7f67R0=;
+ b=WYIsNrx7IC/w9CkIVeX1dRcyemsWFfUIT61+sWfQX+5pHAHuIBJZUX5+xnCqjxeGVx4XuKgNvLGVO4JjPD1Tny8aj2PD5bMHPSrGAf5j+29deQb9qo3x3rfQD6RqFeZJQxf/D5pfZGF0x8kdsNgBQduZojPQkrTofDe96aiLOUHazSP92dTrd5byeruckEqtE3RPg/mvLxNJ9HDLLPL6nALjqyiV2pduQWiOJW7R+IAZ1vyc5s2gqSeLvh+OsDo2BbvPwijlCM5Pt7jmUX25qPUGkPQzUvqMndn4ACuGhf1IQDEFjqdYnZRyuwmATbFMHJKXpyIjMzwTQmZUt5KThw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ju5JwQzu+kyrxxnHcPiGoqfobNAGbsuStRP1G7f67R0=;
+ b=RGFxH8MV7v4823Eg1jAxYGFP8SZwX5at/e3SiyeuweR56yYbF/zDAY4iw28ClYf6cQw4aAe7GW1EeDDKDHT9sU4HxbSWzBa35A9WwVWqXe5YjxmuKtefmioNdDdoRMZs8RSw2Qv8QXN+TFSkfbRZfl5OTmmTMBjdIIBPljZX9C4=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by BN6PR10MB1362.namprd10.prod.outlook.com (2603:10b6:404:42::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 21:46:05 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::bc05:7970:d543:fd52]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::bc05:7970:d543:fd52%3]) with mapi id 15.20.5123.031; Tue, 5 Apr 2022
+ 21:46:05 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: uprobe tests should verify param/return values
+Date:   Tue,  5 Apr 2022 22:45:56 +0100
+Message-Id: <1649195156-9465-3-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1649195156-9465-1-git-send-email-alan.maguire@oracle.com>
+References: <1649195156-9465-1-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: AM4PR0302CA0016.eurprd03.prod.outlook.com
+ (2603:10a6:205:2::29) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88cf07a2-3bb6-5eda-0d99-d9491fd18669@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ef5b1ca2-7496-4e34-d9cb-08da174daf4f
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1362:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR10MB1362394A86A554DD5394D40DEFE49@BN6PR10MB1362.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: v8BDu/kNVfolFruT4CtwgkuCJ228qAWKclm0EfDcx5LtW7RwTNKKScYJIOYm7CzDIjTkDHiD6EHC8emEyDsD+5P2GggN+PGc00IBEN/ibebQhXQYok9CpnV9XI1HKkQtQ0lTGXoFiruxHHpL+RcFcJNhG2mozFbLT76rkA7qc0qf0ICrQLtnvCmcvIAb2S+5XfN2tIwtuuyHmLdj3VRYM5/SbslswuM3GSihcoVhA30Z771mvFUeyuewYyyBfLXqSXwQIDiYLPW0bpV+MjBxyYhINFce/+7EI3KrTWRnAkJkjgRwI4dswIo/FJRyfVpQ7JoXLZRAuM1RcuUsHQ0PJJzG5Etxx23pEPFJhFmiWWu+71Aci2HEct7L78MjqNtSXN7Ohwmv/ZX20bQ+fHGhuLYAiOcPAldQisn1ofgze+6I2zWYaqi+xW59f2kItMzxr4RXf8y/23W45DCBqMYaVVcgTuL84w7Lx68NP7jG5VZGsgABhBTynPN3vJqb01pIl/ewqBy2w9M/HM913QPCT8kzMCOsXXBT215EPYSneuP8tjV4ismf28nHIoTO4R0ysDXLeJnimC0lXC0Bt5jl1QrxWwB+u2auGzC0r+zvyrnRhOVZGpI1nlPvTuA3SgGmhkD0IpZU+BSmW8rajYNfiLz6bLKM0vTiTy183vi1/nWvM2QLJEO1rWKqo0BzO+3ChBPLqP/989rWZzihA5isZg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(66946007)(4326008)(66556008)(66476007)(44832011)(8676002)(2906002)(38350700002)(38100700002)(52116002)(6512007)(6506007)(6666004)(5660300002)(15650500001)(8936002)(7416002)(107886003)(186003)(83380400001)(2616005)(316002)(6486002)(86362001)(36756003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cWF47l754h2S8QN34HqB04lXNO1XH4ZON7FYW7slxOgdr7vflA0bi44uaiNW?=
+ =?us-ascii?Q?jKPz+0gHXoVOi53EUvMSG5vZv5iJKgmvLlPOT63hMol4kr4/8/Mlla4Ur7L3?=
+ =?us-ascii?Q?QbAM+4HLQ46iaF/GbUUZ58x+UVv2OJxC6J11UXAVslxwM/WNFb2GzhOARgDK?=
+ =?us-ascii?Q?gPc2EyN5CXO/ps4Zjb+HkSnGWMEIqb94zjZ+RRGtmDC9XzOFZZLMnrWJBYeR?=
+ =?us-ascii?Q?DhqAiTX5qoW2beBtATLveg16apRtV1YFD2i00wpQrcPFOPMP8nQhPufvrzi6?=
+ =?us-ascii?Q?J2KNFWteK0/dDNz4jfs0EgGpmZl5lyWFoIfh7p+8NWEkjsiyg+D5LUgPo7Up?=
+ =?us-ascii?Q?IxCmMgb/o3Qm+T2bGvxXB+GxRqAy8Os3RM/yVhYFzdnRPzg8CWQg2foAlmrU?=
+ =?us-ascii?Q?r5Ffzn7MZb5P+UTGR/wUb2EbW96q4jAXf2ERBdFustuOS0vP5qDMBhZlQZzE?=
+ =?us-ascii?Q?a4AgXENxv2Tu3HwIhPcplJDQxG238F89cMYlpMUQg5qaLNBFnxR3Q0aw7L4F?=
+ =?us-ascii?Q?xtAfpB7I4RewqlGN1oeuepJsed/Z+Yc12qIncT6XeFJ0vQO3czop12O55Hht?=
+ =?us-ascii?Q?+7YJ750HtY0kdkDFRGCXDXEamKgOH39MsF4A/g3MOtHmtCcfrB3Oi+oUQ4wR?=
+ =?us-ascii?Q?+wsTmx//zAxZc2A9wrfGJKsO+iy9+Z0wMSFBcfzKdXEB+x3MVd3GJWNJPN8b?=
+ =?us-ascii?Q?EihsvUM7KhQtIs1X8Dbu1+Pz9KbYb/f7oGin1woFwzWHnBMupK3/oybqwJus?=
+ =?us-ascii?Q?dOlH6jqGYt6zILAjfVGTlfsSrdLVWt9v8t1cX8iy7tAyNoCst3rxGv292O7l?=
+ =?us-ascii?Q?8GoY6VX5z5/pBtLuJ4kkNLd6sjIkSEW7xZrMdFgOjdCkhLCXh0jhBLAIBnTR?=
+ =?us-ascii?Q?Wx2z+Yuu5q0YK7ia0BhPyV2ZtBSNpbPzgvqzDgrNdTmMUCORmV/4htpECNLC?=
+ =?us-ascii?Q?iVQ4Q5D3YMWiRAGV31uvK65d5PMy8l5sRLgf1jfnVKfbVNhcdnmqpK/TTGC8?=
+ =?us-ascii?Q?fgleTc3l8uSyp7TlpCWItiubj1/iFhgSzLP3C5D7L3gHRgGRgdDZI58gnPk+?=
+ =?us-ascii?Q?LUuMM3axAjdYPQlnWW3Gq1E053DZz6clIx9adLqA6j2HYakWsTcYDs0c7qOk?=
+ =?us-ascii?Q?BtvxTjg8ck2//nXTV2Rctg2M+SIvWWU+3732Q7fJ6Qjxd6aQ1akxTmzsoo5l?=
+ =?us-ascii?Q?1GJZOSg1moNGfguYW6wzLwVwi4YDahEMkF/dCIduIrsmFSXGC+vflRWFzHow?=
+ =?us-ascii?Q?S9vB7rd8UXkiqs/cFae3SvXxj5EwVNyT5GjdkR83LC0kpWvXCw18YO08oOuR?=
+ =?us-ascii?Q?KYvWHVmlHIeAhbBXsk7y/5UWjbmrDh9ACigtUDwdtD2tzksRb1qIPLGxlNDT?=
+ =?us-ascii?Q?7DdYCewazmK21cbY/L0k0NKdXry6HY5L4Ed2M2YRKhtW953lfAiGHarr27e7?=
+ =?us-ascii?Q?w6XZvjV8kx858IhhLCMSNlFFOicntF5aRAi0rfIgQ5DxUA5ACCUtxnvNZuyO?=
+ =?us-ascii?Q?c+pCk6u8h3F/z+WKLMxN8GqCq2h0XMw//XaV8vmYrJGnlImOJXiQB0zPFhnO?=
+ =?us-ascii?Q?W18yVq2bz8y2P/LhKIvDi03T5Uwg8+tCcx3flnuphb48loFYRrIKMQYxnMHo?=
+ =?us-ascii?Q?IUJt+CACmfO79/tRprFN1RqWlqcTV0Lk5ZeW1DkVhWBtJLnYhcM4CGO93/EF?=
+ =?us-ascii?Q?os5gOnhVzbqbYtBzZ2OdmIpZccYJW4FoUxI3WRlQMb08xNqrdmi7hob3R3Pt?=
+ =?us-ascii?Q?BiVJg5ym90HYaAPjAtxQSahz2F13Xug=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef5b1ca2-7496-4e34-d9cb-08da174daf4f
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 21:46:04.9243
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UbqejXaUxmMUpf/VtqfxQmn8XbFm5ytGohKsX55OWYP8daA+9rhCIKD9jEuvLh128I0YpWrGr5+Bi7dXCEInVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1362
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-04-05_07:2022-04-04,2022-04-05 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204050119
+X-Proofpoint-ORIG-GUID: LZgaoT2E5h578JvDnW7naDoB-R12xPH0
+X-Proofpoint-GUID: LZgaoT2E5h578JvDnW7naDoB-R12xPH0
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 02:36:41PM +0200, Jesper Dangaard Brouer wrote:
-> 
-> On 05/04/2022 13.06, Maciej Fijalkowski wrote:
-> > Correlate -ENOBUFS that was returned from xdp_do_redirect() with a XSK
-> > Rx queue being full. In such case, terminate the softirq processing and
-> > let the user space to consume descriptors from XSK Rx queue so that
-> > there is room that driver can use later on.
-> > 
-> > Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> > ---
-> >   .../ethernet/intel/ixgbe/ixgbe_txrx_common.h  |  1 +
-> >   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c  | 23 ++++++++++++-------
-> >   2 files changed, 16 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h b/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h
-> > index bba3feaf3318..f1f69ce67420 100644
-> > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h
-> > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_txrx_common.h
-> > @@ -8,6 +8,7 @@
-> >   #define IXGBE_XDP_CONSUMED	BIT(0)
-> >   #define IXGBE_XDP_TX		BIT(1)
-> >   #define IXGBE_XDP_REDIR		BIT(2)
-> > +#define IXGBE_XDP_EXIT		BIT(3)
-> >   #define IXGBE_TXD_CMD (IXGBE_TXD_CMD_EOP | \
-> >   		       IXGBE_TXD_CMD_RS)
-> > diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> > index dd7ff66d422f..475244a2c6e4 100644
-> > --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> > +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
-> > @@ -109,9 +109,10 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
-> >   	if (likely(act == XDP_REDIRECT)) {
-> >   		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
-> > -		if (err)
-> > -			goto out_failure;
-> > -		return IXGBE_XDP_REDIR;
-> > +		if (!err)
-> > +			return IXGBE_XDP_REDIR;
-> > +		result = (err == -ENOBUFS) ? IXGBE_XDP_EXIT : IXGBE_XDP_CONSUMED;
-> > +		goto out_failure;
-> >   	}
-> >   	switch (act) {
-> > @@ -130,6 +131,9 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
-> >   		if (result == IXGBE_XDP_CONSUMED)
-> >   			goto out_failure;
-> >   		break;
-> > +	case XDP_DROP:
-> > +		result = IXGBE_XDP_CONSUMED;
-> > +		break;
-> >   	default:
-> >   		bpf_warn_invalid_xdp_action(rx_ring->netdev, xdp_prog, act);
-> >   		fallthrough;
-> > @@ -137,9 +141,6 @@ static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
-> >   out_failure:
-> >   		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
-> >   		fallthrough; /* handle aborts by dropping packet */
-> > -	case XDP_DROP:
-> > -		result = IXGBE_XDP_CONSUMED;
-> > -		break;
-> >   	}
-> >   	return result;
-> >   }
-> > @@ -304,10 +305,16 @@ int ixgbe_clean_rx_irq_zc(struct ixgbe_q_vector *q_vector,
-> >   		xdp_res = ixgbe_run_xdp_zc(adapter, rx_ring, bi->xdp);
-> >   		if (xdp_res) {
-> > -			if (xdp_res & (IXGBE_XDP_TX | IXGBE_XDP_REDIR))
-> > +			if (xdp_res == IXGBE_XDP_EXIT) {
-> 
-> Micro optimization note: Having this as the first if()-statement
-> defaults the compiler to think this is the likely() case. (But compilers
-> can obviously be smarter and can easily choose that the IXGBE_XDP_REDIR
-> branch is so simple that it takes it as the likely case).
-> Just wanted to mention this, given this is fash-path code.
+uprobe/uretprobe tests don't do any validation of arguments/return values,
+and without this we can't be sure we are attached to the right function,
+or that we are indeed attached to a uprobe or uretprobe.  To fix this
+validate argument and return value for auto-attached functions.
 
-Good point. Since we're 'likely-fying' redirect path in
-ixgbe_run_xdp_zc(), maybe it would make sense to make the branch that does
-xdp_res & IXGBE_XDP_REDIR check as the likely() one.
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ .../selftests/bpf/prog_tests/uprobe_autoattach.c   | 16 ++++++++++----
+ .../selftests/bpf/progs/test_uprobe_autoattach.c   | 25 +++++++++++++++-------
+ 2 files changed, 29 insertions(+), 12 deletions(-)
 
-> 
-> > +				failure = true;
-> > +				xsk_buff_free(bi->xdp);
-> > +				ixgbe_inc_ntc(rx_ring);
-> > +				break;
-> 
-> I was wondering if we have a situation where we should set xdp_xmit bit
-> to trigger the call to xdp_do_flush_map later in function, but I assume
-> you have this covered.
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+index 03b15d6..ff85f1f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+@@ -5,14 +5,16 @@
+ #include "test_uprobe_autoattach.skel.h"
+ 
+ /* uprobe attach point */
+-static void autoattach_trigger_func(void)
++static noinline int autoattach_trigger_func(int arg)
+ {
+-	asm volatile ("");
++	return arg + 1;
+ }
+ 
+ void test_uprobe_autoattach(void)
+ {
+ 	struct test_uprobe_autoattach *skel;
++	int trigger_val = 100;
++	size_t malloc_sz = 1;
+ 	char *mem;
+ 
+ 	skel = test_uprobe_autoattach__open_and_load();
+@@ -22,12 +24,18 @@ void test_uprobe_autoattach(void)
+ 	if (!ASSERT_OK(test_uprobe_autoattach__attach(skel), "skel_attach"))
+ 		goto cleanup;
+ 
++	skel->bss->uprobe_byname_parm1 = trigger_val;
++	skel->bss->uretprobe_byname_rc  = trigger_val + 1;
++	skel->bss->uprobe_byname2_parm1 = malloc_sz;
++	skel->bss->uretprobe_byname2_rc = getpid();
++
+ 	/* trigger & validate uprobe & uretprobe */
+-	autoattach_trigger_func();
++	(void) autoattach_trigger_func(trigger_val);
+ 
+ 	/* trigger & validate shared library u[ret]probes attached by name */
+-	mem = malloc(1);
++	mem = malloc(malloc_sz);
+ 	free(mem);
++	(void) getpid();
+ 
+ 	ASSERT_EQ(skel->bss->uprobe_byname_res, 1, "check_uprobe_byname_res");
+ 	ASSERT_EQ(skel->bss->uretprobe_byname_res, 2, "check_uretprobe_byname_res");
+diff --git a/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c b/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
+index b442fb5..db104bd 100644
+--- a/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
++++ b/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
+@@ -1,15 +1,20 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2022, Oracle and/or its affiliates. */
+ 
+-#include <linux/ptrace.h>
+-#include <linux/bpf.h>
++#include "vmlinux.h"
++
++#include <bpf/bpf_core_read.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
+ 
++int uprobe_byname_parm1 = 0;
+ int uprobe_byname_res = 0;
++int uretprobe_byname_rc = 0;
+ int uretprobe_byname_res = 0;
++size_t uprobe_byname2_parm1 = 0;
+ int uprobe_byname2_res = 0;
+-int uretprobe_byname2_res = 0;
++int uretprobe_byname2_rc = 0;
++pid_t uretprobe_byname2_res = 0;
+ 
+ /* This program cannot auto-attach, but that should not stop other
+  * programs from attaching.
+@@ -23,14 +28,16 @@ int handle_uprobe_noautoattach(struct pt_regs *ctx)
+ SEC("uprobe//proc/self/exe:autoattach_trigger_func")
+ int handle_uprobe_byname(struct pt_regs *ctx)
+ {
+-	uprobe_byname_res = 1;
++	if (PT_REGS_PARM1_CORE(ctx) == uprobe_byname_parm1)
++		uprobe_byname_res = 1;
+ 	return 0;
+ }
+ 
+ SEC("uretprobe//proc/self/exe:autoattach_trigger_func")
+ int handle_uretprobe_byname(struct pt_regs *ctx)
+ {
+-	uretprobe_byname_res = 2;
++	if (PT_REGS_RC_CORE(ctx) == uretprobe_byname_rc)
++		uretprobe_byname_res = 2;
+ 	return 0;
+ }
+ 
+@@ -38,14 +45,16 @@ int handle_uretprobe_byname(struct pt_regs *ctx)
+ SEC("uprobe/libc.so.6:malloc")
+ int handle_uprobe_byname2(struct pt_regs *ctx)
+ {
+-	uprobe_byname2_res = 3;
++	if (PT_REGS_PARM1_CORE(ctx) == uprobe_byname2_parm1)
++		uprobe_byname2_res = 3;
+ 	return 0;
+ }
+ 
+-SEC("uretprobe/libc.so.6:free")
++SEC("uretprobe/libc.so.6:getpid")
+ int handle_uretprobe_byname2(struct pt_regs *ctx)
+ {
+-	uretprobe_byname2_res = 4;
++	if (PT_REGS_RC_CORE(ctx) == uretprobe_byname2_rc)
++		uretprobe_byname2_res = 4;
+ 	return 0;
+ }
+ 
+-- 
+1.8.3.1
 
-For every previous successful redirect xdp_xmit will be set with
-corresponding bits that came out of ixgbe_run_xdp_zc(), so if we got to
-the point of full XSK Rx queue, xdp_do_flush_map() will be called
-eventually. Before doing so, idea is to give the current buffer back to
-the XSK buffer pool and increment the "next_to_clean" which acts as the
-head pointer on HW Rx ring. IOW, consume the current buffer/descriptor and
-yield the CPU to the user space.
-
-> 
-> > +			} else if (xdp_res & (IXGBE_XDP_TX | IXGBE_XDP_REDIR)) {
-> >   				xdp_xmit |= xdp_res;
-> > -			else
-> > +			} else {
-> >   				xsk_buff_free(bi->xdp);
-> > +			}
-> >   			bi->xdp = NULL;
-> >   			total_rx_packets++;
-> 
