@@ -2,126 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7B8DC35296
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8240C4707F
 	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbiDEXor (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S240178AbiDEXox (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457746AbiDEQjs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:39:48 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6692BD763D;
-        Tue,  5 Apr 2022 09:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649176669; x=1680712669;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5RSlp6HXelOR2zS05HfhC2TVbJnLORr7nkmIa+29OyI=;
-  b=Obv5+DlQMwyNYmYcXk3U5HVWbrByyaxG2ZhQVGvIJA798pgX8FwYrqIg
-   AdHH1xy8eJkKd2gxpi3vSHTDscfRiicpc10W6ElhOBjkgb70JApAE8Jfb
-   ADO69NLT4QJg2MMW94VNaqoxEQNvg7yYGgGH99jQ1JUy/yamZ7mvzkuj6
-   VnQD8XbPIhYQwYcC4h4Ndcp+lyhnKlxwqJDsNvOOteAGgAj4lEX93VGhK
-   lh8LxRwTDvHEAEPy15AYiNG50BZIXPzpQaN3uj3paLADLTkBbuEXtKv5h
-   QfsEGAacaSJGU1ZcxtHvDGdy8hkcdPEKAZ2r9Xim2wUD7erZHr18L2cYg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="321492686"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="321492686"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 09:37:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="722116667"
-Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
-  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2022 09:37:27 -0700
-From:   Tony Nguyen <anthony.l.nguyen@intel.com>
-To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        netdev@vger.kernel.org, anthony.l.nguyen@intel.com,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
-        Shwetha Nagaraju <shwetha.nagaraju@intel.com>
-Subject: [PATCH net 1/3] ice: synchronize_rcu() when terminating rings
-Date:   Tue,  5 Apr 2022 09:38:01 -0700
-Message-Id: <20220405163803.63815-2-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220405163803.63815-1-anthony.l.nguyen@intel.com>
-References: <20220405163803.63815-1-anthony.l.nguyen@intel.com>
+        with ESMTP id S1457676AbiDEQev (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 12:34:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE63FC6EC0;
+        Tue,  5 Apr 2022 09:32:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 685B7617D0;
+        Tue,  5 Apr 2022 16:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46925C385A1;
+        Tue,  5 Apr 2022 16:32:49 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 12:32:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     patchwork-bot+netdevbpf@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        beaub@linux.microsoft.com, mhiramat@kernel.org,
+        linux-trace-devel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
+        torvalds@linux-foundation.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, linux-kbuild@vger.kernel.org,
+        masahiroy@kernel.org
+Subject: Re: [PATCH] tracing: Move user_events.h temporarily out of
+ include/uapi
+Message-ID: <20220405123247.2e98661d@gandalf.local.home>
+In-Reply-To: <164917564862.18481.12734568923836492201.git-patchwork-notify@kernel.org>
+References: <20220401143903.188384f3@gandalf.local.home>
+        <164917564862.18481.12734568923836492201.git-patchwork-notify@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+On Tue, 05 Apr 2022 16:20:48 +0000
+patchwork-bot+netdevbpf@kernel.org wrote:
 
-Unfortunately, the ice driver doesn't respect the RCU critical section that
-XSK wakeup is surrounded with. To fix this, add synchronize_rcu() calls to
-paths that destroy resources that might be in use.
+> Hello:
+> 
+> This patch was applied to netdev/net-next.git (master)
+> by Steven Rostedt (Google) <rostedt@goodmis.org>:
 
-This was addressed in other AF_XDP ZC enabled drivers, for reference see
-for example commit b3873a5be757 ("net/i40e: Fix concurrency issues
-between config flow and XSK")
+It was added to Linus's tree too.
 
-Fixes: efc2214b6047 ("ice: Add support for XDP")
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/ice/ice.h      | 2 +-
- drivers/net/ethernet/intel/ice/ice_main.c | 4 +++-
- drivers/net/ethernet/intel/ice/ice_xsk.c  | 4 +++-
- 3 files changed, 7 insertions(+), 3 deletions(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5cfff569cab8bf544bab62c911c5d6efd5af5e05
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index 26eaee0b6503..8ed3c9ab7ff7 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -671,7 +671,7 @@ static inline struct ice_pf *ice_netdev_to_pf(struct net_device *netdev)
- 
- static inline bool ice_is_xdp_ena_vsi(struct ice_vsi *vsi)
- {
--	return !!vsi->xdp_prog;
-+	return !!READ_ONCE(vsi->xdp_prog);
- }
- 
- static inline void ice_set_ring_xdp(struct ice_tx_ring *ring)
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 1d2ca39add95..d2039a9306b8 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2758,8 +2758,10 @@ int ice_destroy_xdp_rings(struct ice_vsi *vsi)
- 
- 	ice_for_each_xdp_txq(vsi, i)
- 		if (vsi->xdp_rings[i]) {
--			if (vsi->xdp_rings[i]->desc)
-+			if (vsi->xdp_rings[i]->desc) {
-+				synchronize_rcu();
- 				ice_free_tx_ring(vsi->xdp_rings[i]);
-+			}
- 			kfree_rcu(vsi->xdp_rings[i], rcu);
- 			vsi->xdp_rings[i] = NULL;
- 		}
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index dfbcaf08520e..33b28a72ffcb 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -41,8 +41,10 @@ static void ice_qp_reset_stats(struct ice_vsi *vsi, u16 q_idx)
- static void ice_qp_clean_rings(struct ice_vsi *vsi, u16 q_idx)
- {
- 	ice_clean_tx_ring(vsi->tx_rings[q_idx]);
--	if (ice_is_xdp_ena_vsi(vsi))
-+	if (ice_is_xdp_ena_vsi(vsi)) {
-+		synchronize_rcu();
- 		ice_clean_tx_ring(vsi->xdp_rings[q_idx]);
-+	}
- 	ice_clean_rx_ring(vsi->rx_rings[q_idx]);
- }
- 
--- 
-2.31.1
-
+-- Steve
