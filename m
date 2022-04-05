@@ -2,212 +2,158 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A788AC433FE
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3671C433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455953AbiDEXrW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S1455706AbiDEXrS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457649AbiDEQYE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:24:04 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4789F3B9
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 09:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649175722; bh=szf/cJYLQOZWni9lQf7ZhLfzr+7rhBIA+E3sIp1+wJc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=bZfL/NxYUY/nWW3qF2ZJjXG7Dg3pNQUyUnVHMCdlQYcK8KhjV2XIlaKccjneeCkFwe+UCJcmiHojHKBIADLU4Ikbupp+K45ltqzCRWzFjDPZMJ3/O7vaBcjp67kmvgMnWI7P0TCKjW99cXK8bk+5rylTUO1IAsJur8Jnb/KOHY4RMaxTIYqnDQ1lTkISegPfoAVdUD6+eHMiQt4gKQJoSBEhNaGN2pU/bjA9ttpnY4VZfD8LFNi+2w1An9PfTYYCHWIluLdQOnyvy9qkUs33ycWByVBKC8R7NedWGNHjON7zbO7QJDyfam89JJ2UClf7U5zwYsNlK8flfJ4iFI5e4A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649175722; bh=MjWoY0XQ7yCC8DRinMvFIWEycwD9ENQrbHuDSvHQo40=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=QZqQZtXrXXr+kG1OaAGR8Qn0h22DavyioI6fHj1usmFCPqfQk8tQXvolZqg3SQvh/W0Nuv0T5zGX2AYVLxAj9eiQkIJyD/5kj1LCyQJKBgCt7YeKkyYi1rqEQUnWFCH1aTzNEUiMEPTOxKWN75UfbQG2AvV7uZsjc//Nbr8u8pkbOcd5ieeLWq/Kr8xKN/1drb2wiykVfYRVCSr9KhChmWf3nosToXopMFGmlcxdmbHYy/V+v1rF1NKkAU8PZHQKcJervgnJWq41qGIQxnhHgp02Nhh/mxFhno06j4KJ1DUqqFDVTNoh99mw8mM+fcs97dodAzpjpLFFo6+fz2H9wQ==
-X-YMail-OSG: zQyH2LwVM1lp5wptu1Nu6P6xp3FdwTzJCg9Lej0g55C5Xx0XIRvIQ05IUhF81Xa
- p5wo8I1T_FGz5a.8kX7LA.b37J19Sa53hRJwhiWeUEz0vNsHWCZ4Zw8ii81Awkjj0Gk8GHkvtcKt
- JBgvws_8K8YjlxSr3DgFY7b9uTWdblyYIjBK9tHDGhHLPi0pq_ZGwvP4Pszxk5mEmqQb.ecXvauS
- 3uVHa7k5mgaWEQ9.xJnR1BNEh5CXais8nD.voUgflz2WxJnhRulTYQ_s5hjDIBMfyIJ6.N_m7CXQ
- pxC46xxx9gSozYR6ffjr.SLgNTxb3.xrWdXmQ3vKVEUtkvCC2QxbK2QkKAyYpYc7p5j4NjYPyXGS
- uK3NDvg6a9ynh8e1.Vt0v5gyBrGgdZP00r4n6C41JCCETeT_BwtjsDgN4hYPSYuIKKvVA5Bw.aMo
- 8CJ0zW2G.uvcecyYN4GKTRI2pUAfIHD5dhoIZWZkrVQH.zmFeuZIB5T0gV1tgD2P8YJpZFPhyW2q
- 3mG3qzvduo66EOgEyniniTs57H2nebdeRyaWflufxY9pYu_pk5ZDT_ftZhA1a6pw2H0EkOq88V7a
- CXER_19r_9N3Gw9iOtemV_Ip4H25Xq6OfftLt.GTr.n_.BX7pYd63zeJtFsCE22LImCE7fN4VNKN
- Nop0eL23X2KvJJrQI3EGmNzQVP7Bbew2cVZeNLRwdp2P8i2gg22C4W.cG3q4uQ24fK2sxUA1n9NZ
- i3z9gTrvNEFRo_Jqn9pt5i0L_nGvWtdNYRDDsLwSe7VA3pwjpJINAtCWe0iilbPU8f9OO9Pade6K
- MzzFtSLMhzhSFARvhqkOOW5IDc3LwHg0dv4iOgSR3SRmD0_tmMH6.rj6tKKWhhS7IT.KFZjaILr8
- GyWYjD_hc9lGUTt9lSU2DYoiRKTu6CO8FJzEP0uz0T8rpzOJgmtt9axS2xqEb62VtkLpt.N0t74h
- 61R5hpRnUjCa1IDwAslSGt.vYPCHM3bZ1IbEgr29EyMdasfmXRWp5VtTYPgia9LBhzCSgrTBU9fI
- FCGnWpVhg_eXTGgRKoUnb8IxtUC1DNFPVNKeVlnCOTwVX2EjMuwPfbI.XOwt6XjQQ8vlpJko_PMd
- X_n_SW9mCGqGvtBFIa5XBfID9pjmF.BDJBmTIkBuIUTtl9iXDtQZ8xRnVBsPmrsP2OHkx7h.C.kT
- NgEWrcNmNy1l1jmP0AGTMtXIMaza92pxwqPYhqEpdARZaWi_g2RdDlaTc1pXubLpzoqI92wf68N1
- Z4jCCpMkm3yjfFA8nGqTxtMc9LG_OIl.2FRtwBmgUEuFai4hZUvFS10QsgYMQXhslH2cKpYvcfZX
- wKMzAleqOjU7WuAkPCx5LkGLZL2_eCPbg2Bn4GMlcqaJ1uKrCt12c.4k_5B.bTMhXd7ARp88EACu
- 79CBisyF280Aj2dwhkcmwHuaDMD449DDyQzY6l6JdE5qZvSl7RvT6Ckhu9Ml7iksUEMroGMicaMu
- bti8mRpar5mkedy_AOxThS8l46n2uSHNr8vs7abj_o9u9ykY18P5lJIrYi9tW9ZGdn0ZhK_1fqej
- 1Lck.Ig0FCYlp2qDft_xZr1VATGM1Gue_TWbpX2izkpS2bS4T2QZZF8q7FgE6WWvki4Ut.eZImyy
- .cNRifDt6GlQErfWY3mUn3.L8efdsmXVwggeBTKja1hnandR1RROlB3OnPBNch8FFAFiZnOhvAXr
- QIjHOGd5HjN4lxsee4tcq1ADCo8UoZxbgiEULZRx5a_UHjbtpexPcu7PFTuyeXbsNe4qJmLQY5Qs
- XzxDp3xlUqZcCh06XH1XsuAhtIH6.0zGeMZ65XRvSKE_XQsAKxgM5ukcIOXxXMPcYTD1VTYrDhKH
- c.AaIVuH3Rc2.6d7.ac2nHWtLILdFBEhx2mcP9ekRNsABsUqG4xD3dykanY8e3mYVMC0.ieDQk2n
- OQbEbhfBkt1DQqdP.g3tVCdmDZWcNVWmvMGw0fYzqvicvnXGi01FHwTrUvP6ENNRDh6d84BrUevr
- QioA4Gg0RDKJug0e.Jl2jm9abJEojMxAxwmWzxR.O0n8qZfYo0s_zBK655X.O3GUSl9ZvLn75nq1
- 1CC0q.V2UcuNkx_lb5Z9x6hFFZixe7VLqytr1BAVIZZWlXRypUeXtVND0ZB9IMIRHx2mJrw2l2fS
- Bf_fJ9OHXPEfwBlG80hEqu9C21UKSfOLni7bAO_yUjP6ZvHToll22s24VlPQ3BE__5B8gQNX5Qet
- TFSx_AgGA48hwvK22F0vvPa1gMQ8Y4ZiOoiRere2IY4PonJv99q6MnJaS_jLHBKicawqnkrZpUf0
- yK3F3agTG7yf2B6E-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Tue, 5 Apr 2022 16:22:02 +0000
-Received: by hermes--canary-production-bf1-665cdb9985-6hz22 (VZM Hermes SMTP Server) with ESMTPA ID 3e6e483849819b115c06d1b80343537d;
-          Tue, 05 Apr 2022 16:21:58 +0000 (UTC)
-Message-ID: <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
-Date:   Tue, 5 Apr 2022 09:21:53 -0700
+        with ESMTP id S1577945AbiDEXRq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 19:17:46 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A7825582;
+        Tue,  5 Apr 2022 14:46:21 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 235J49jc006378;
+        Tue, 5 Apr 2022 21:46:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=corp-2021-07-09; bh=INFStmJuLBDz+zTtGjWYnKY1C7uahJ8lJUW26FkZRfg=;
+ b=ZXkVIyjgaFn77p5aKW4Vl2p7s1uORJ+XuzA5BiOgs0eQNwJiT0d195XnZZj3JVPeXJra
+ 3/+2jaDXhMa8py2PwzvdDlwqWljLnm2kYOPZPeRSN/h14ywUSbPcUzL6e02Zzmt/UgbZ
+ MABc9picQjxIjb0Uepok4uKq4n7yBLB8kBoEcEiKLNy+nGwE1hUO/0vUq8uerxV9eYCW
+ tR63oKrls7V5qpF9Mz4X3ck31/IWBHq7hoide4KgOFz7nBIJKVj7feKA7xT51J6j2ZBK
+ BJ/81ZG0dQqMkf5n70nphWtDq3QqlU9lkYznpjXMl5VVXaVXV/ozvkY5ALZPoOj0+OJE bA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d31fb12-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 05 Apr 2022 21:46:04 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 235Letwx029195;
+        Tue, 5 Apr 2022 21:46:03 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2174.outbound.protection.outlook.com [104.47.58.174])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f6cx3yhwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 05 Apr 2022 21:46:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SkwXgv8h8p+R3sbvMd4KmnuaLsWi12VBay9ZY6wXYF1uBRSgK1ER0XWqff3fNa+xsIoo0jukbobpfKntaUF3aFwSzcprIncFUedBj4S0HxmZxMW/9RwmZtNXzwfFBv9hJkfB8fuNbWEAC08Fm5SADSNkT45thihKJKT5bOaSmlIEJYNlvbGYk3ylL7mVkf0m6MhXjwpYGC5hntCbvc3we2ywpx5jayrIHyVbob+H4jUbDsMQa2NTa/uSI8+vo8JM/duoDQxeY8yDpDttvQ8V+al5c8qG64s9omL53eDxrU9AwvmedG5dzTUdMk+IAaAfnKe6a3NUVzIxKPoGYOCtIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=INFStmJuLBDz+zTtGjWYnKY1C7uahJ8lJUW26FkZRfg=;
+ b=UcxkAU/wGSDo2K49cdLxmlFTDlVVocwJHIVlnTxtTqOv2twomGJNNSe8A1fJa+CzfxHCDdM0GAr2iwF+1i4LzMkfjiEScOP3VEj5B/AgvQTD/0us3KdFvAfAw+CkOLR7KVvQXcGgq9ImZ0sXb/St6/+UqAVKaY4x7frRexh1tSEn6YMeRd0qbxMz8YIQoY0Dq0FBMN0G8kvXrkf/fh1yGTrz5QactecEojFE/SGZtbn1x+70r93wiirNEXggw/bUpB0OUM833iXw0CAbYM6QdawQXywSLB7r4yJmsmiKb7z3LMRzqL6bEjbb3cDde9uUxHWUJ+Y9MqqEkbPhEVQG3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=INFStmJuLBDz+zTtGjWYnKY1C7uahJ8lJUW26FkZRfg=;
+ b=uZJZYd6Y6rI4arDbeytatIj8UH5ClzE393pFDNVyXtHIyeUMLzbY1E5HyuxkJmJparaNB3eYzWaD6K38q5lhQzy/BDC66tBerl76ToT1c45sSq7PPM/ULWoFvNy/P+fbFxClIsfQfuzORLWCiUvzudJMX+SUhgg7nQzPIC1O2cU=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by BN6PR10MB1362.namprd10.prod.outlook.com (2603:10b6:404:42::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 21:46:01 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::bc05:7970:d543:fd52]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::bc05:7970:d543:fd52%3]) with mapi id 15.20.5123.031; Tue, 5 Apr 2022
+ 21:46:01 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     andrii@kernel.org, daniel@iogearbox.net, ast@kernel.org
+Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf-next 0/2]  libbpf: uprobe name-based attach followups
+Date:   Tue,  5 Apr 2022 22:45:54 +0100
+Message-Id: <1649195156-9465-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: AM4PR0302CA0016.eurprd03.prod.outlook.com
+ (2603:10a6:205:2::29) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
- programs
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Djalal Harouni <tixxdz@gmail.com>,
-        KP Singh <kpsingh@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
- <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
- <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
- <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
- <c2e57f10b62940eba3cfcae996e20e3c@huawei.com>
- <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
- <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5b2c17f4-4e2d-4b3d-d8c5-08da174dad29
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1362:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR10MB13626790D2C8BB61A60CAF19EFE49@BN6PR10MB1362.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: euUiYOz6OMAPQpQlEwGKNm2NaGquWSVamjL2jkMApmQK2GVmtNrYH6RpuMEIVYzKCZ+4z7lffjjE9CTouLjftOmAtjzW+ZHTpyJrzqB9eWyu3vMQuPPuXH6L/VlivQCmfOT5RyNBDKn3qth2aZlJ0wXS+qhgoKXEsgAkdCiofTMSgHZehhq94/+aUJDNJzMiioRfT7u7Al8951nvMzGkxa5Tt5J+734ZeUOz9Mp8XHKn3AMMJKHw5ScfNWl89zlFUW/GZsvuHt+/E7cmC+WAQeau5WBzzWdh8XQmGm1gnVfp0UgWSS2QaybCWAoHZnTnAbnL248IYNN4MTwrG05QxriVGli0HoMHfhXuiypqsHoyikJYNLLzifWylMGP8346O8j7JIclGMxdHPTdYHaXjKRXqA8f0jT9b5GHHSRSMafE4AZIQ1btj9NjTcx7dM6OnBLd1qNgve+l2H5m9figqw65aRnjEtxZf1hV10QQuCldPoVqskTmhOFt8B3BX5JWUHV2kDwkMzwmNJz63JGgVrMe4Tx1SqVlw7+SGBKFo08C1kH0R3CkRGvwSbjlqysbTywhJi1tsfbVQF/nLFQ5E1gbESu4/QcPAj3wKdGCtT+t5uWKVTDgf2Q8tBLUr6HWHz4tQD2XcbvBjQ1P6PSGGsv+z+hRkq97x1rRU0HVYrKt9r8FAnH8B8tq3lQD0k9/3UYhElsTjnUSix+Hf1pDi2chz32XoYmH164flJfBCmhZpL8JSQzL4D1bXYQK6WBB9BzqUi0jArYbDGXDYgDc+608kWRgNfvmhibjqAZxWgA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(66946007)(4326008)(66556008)(66476007)(44832011)(8676002)(2906002)(38350700002)(38100700002)(52116002)(6512007)(6506007)(6666004)(5660300002)(8936002)(7416002)(107886003)(186003)(4744005)(83380400001)(2616005)(316002)(6486002)(86362001)(966005)(36756003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yVUKtkAK8ZgRR5qD3QPEqe36RS/C1aHnWz0EXzb7qPAc/Q44HnMfsk4yig9U?=
+ =?us-ascii?Q?UYGf39GcIeUSTyNl8Jx7NY1Zj3qsTLT9mzpBVuEga2T+fnKaZKbcLbomBXrB?=
+ =?us-ascii?Q?m8Ki4NVSLhEyhhJj3v/BPplgFbaFJtBh5jJFwHsd2MXWFnKGPLRuZnHrydi5?=
+ =?us-ascii?Q?igsm+zX1auCd7Gg+/k4K9YQjUzm+yH02pe6k4QRG3gwJfPM9cyph91UQts1L?=
+ =?us-ascii?Q?KtBUUaok0USqlevPRI6+z7zZqJnngqxAiZLBAR6NqYbUa0YTpjzK5FTpbaLp?=
+ =?us-ascii?Q?NBMQ5TjGzSa0jJpk4cluVQ3gyc6YXCmwQECzMUXNlmKNKac9kuR5C2L/Q5qJ?=
+ =?us-ascii?Q?EEqiK2HC3RjAKTpOIiVXDgXyY7JJh7RMMjcYO/woKWbHHdX6k/s17bZJ1HxI?=
+ =?us-ascii?Q?Dizwsx6djU+undfhJo7lg20tMLog3ouw3zSY0idN1OR1iybTHZ2utqAjwqiM?=
+ =?us-ascii?Q?2lIp/f6rWpKGqEEEc3ce3b47gxodaUWDhh2ML8IpXnR2C71oDDJZB7jO5lpo?=
+ =?us-ascii?Q?09mzg0jQKkRP8O8k8P4Pdl2K1KT5meU9+qRfRc8c14+VuGWtnVukYre3Y3uc?=
+ =?us-ascii?Q?2WcJVAdP1+a9jI9m6AVBbncpJC82AGHNeepdN4eH28ylzWI4EyKsXXAp/BYF?=
+ =?us-ascii?Q?/8hxJLqvRLMmCSQfXZqPR84XtNObIB/CR6XJCcYp8MnWTFTX/EgLsnhWuvfG?=
+ =?us-ascii?Q?tuxYoKpq3jAv9icBmGEBqztudZ1vr4OcA8AXB/gfLxrYO+S3/AFl+Id9TW+S?=
+ =?us-ascii?Q?pXe9vv2JchwAhVIXGUbq3t4qtDJ1jNa+2ZZaiyFK1ZHOSI8E3ZL/ea6U/FPJ?=
+ =?us-ascii?Q?O8jWbhKpuwhaRxYQocMRF78FJdsrLFUsHguud5uM4cDDHJESRzu7gPCoCGog?=
+ =?us-ascii?Q?4uV6xuboOd5weQapin8ycNe9YkueldUFamYiKwI9F6EUiuGPiiYpWbZz0z+y?=
+ =?us-ascii?Q?iB3/NWnLOIdkAkdlZymFPo/NBLppp7P5ADM7PwzL7OL37B+QG0ckT88tj7hN?=
+ =?us-ascii?Q?eGvcT01gJesKNADTmxL7YLAT3yjSh4UXfpizRIxFMljPkPjx3q/FjKgvgga3?=
+ =?us-ascii?Q?WdDiIepwpZ7vsCRHw1Y8oTjSYUPlOHJYQBmkyOwQzYzOjjZPqI2eZEttbdl1?=
+ =?us-ascii?Q?rHoxjmeRD31fDy2I7ERUIUvHdKUyT8seerIeuCjLmyEVVKTNL6M/WLDLCV/r?=
+ =?us-ascii?Q?43QBXSV5lmg0HBzjdBszofQN1l/Qu0zSXU0MeZ9e+WBbxXo+f4frNjCbrNXS?=
+ =?us-ascii?Q?ZMY/vn/m2+D2dweXzmrovnh0uSEp6ywRn3vyEmsUxzqTHq5X3dq3T8BeC6mk?=
+ =?us-ascii?Q?YSgQkaZAQAEKkxXFy7ycwO180GQUw8EXfpUYWroN2D59qjfhz4QVjE61RF+f?=
+ =?us-ascii?Q?U6+MUZq7r5VEMdjlcEQ905HJz8zT/XDEZFZxG9HqmGJBfdIof0kf0DH2zYfk?=
+ =?us-ascii?Q?UCvrHDk3RQhZJfRTldRjdAQCqFt1ccKKyM2hCxpEVw6dn6nIBMUrhe8Ax63R?=
+ =?us-ascii?Q?lnG+KystFRieXRQnOCD9XqghGLd4bOqfYOCESSkiVZsH06Gu6nzIc8TjnIM9?=
+ =?us-ascii?Q?JoaQXrgJJ8XoTUF2RaAQaitY6YRStKMAmJf6p+h/2+vwnHS9pFMNnI/kv/cN?=
+ =?us-ascii?Q?EDvq53Qejx4CrIRFK4BSXFoM3qZwRvG+2e4rkeciUwcRkHFhLDrfaJYGuOAY?=
+ =?us-ascii?Q?zAzqxXXr9Gyw8v6yAkRGZRqXe4eZ2djsX2jQ5eYTM0mGcW0oe3WZZHNNZyCl?=
+ =?us-ascii?Q?y2IdcIyza5PX6fOwaRoCENihPzM3IS4=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b2c17f4-4e2d-4b3d-d8c5-08da174dad29
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 21:46:01.3714
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r5mKcIwNzJDb13z6cuV/d5tRr6zhB5byAoWC/xGPQ0Z2JI5wAafhYRRCfz2Diwcg9Sv+/5946e8MY8QCFrEZ5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1362
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-04-05_07:2022-04-04,2022-04-05 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=748 phishscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204050119
+X-Proofpoint-GUID: ynqb0Ji5PPW4nA9VYJbj7mQ1pze5CQvX
+X-Proofpoint-ORIG-GUID: ynqb0Ji5PPW4nA9VYJbj7mQ1pze5CQvX
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/5/2022 8:29 AM, Roberto Sassu wrote:
->> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
->> Sent: Tuesday, April 5, 2022 4:50 PM
->> On 4/4/2022 10:20 AM, Roberto Sassu wrote:
->>>> From: Djalal Harouni [mailto:tixxdz@gmail.com]
->>>> Sent: Monday, April 4, 2022 9:45 AM
->>>> On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
->>>>> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
->>>>> <alexei.starovoitov@gmail.com> wrote:
->>>> ...
->>>>>>> Pinning
->>>>>>> them to unreachable inodes intuitively looked the
->>>>>>> way to go for achieving the stated goal.
->>>>>> We can consider inodes in bpffs that are not unlinkable by root
->>>>>> in the future, but certainly not for this use case.
->>>>> Can this not be already done by adding a BPF_LSM program to the
->>>>> inode_unlink LSM hook?
->>>>>
->>>> Also, beside of the inode_unlink... and out of curiosity: making
->> sysfs/bpffs/
->>>> readonly after pinning, then using bpf LSM hooks
->>>> sb_mount|remount|unmount...
->>>> family combining bpf() LSM hook... isn't this enough to:
->>>> 1. Restrict who can pin to bpffs without using a full MAC
->>>> 2. Restrict who can delete or unmount bpf filesystem
->>>>
->>>> ?
->>> I'm thinking to implement something like this.
->>>
->>> First, I add a new program flag called
->>> BPF_F_STOP_ONCONFIRM, which causes the ref count
->>> of the link to increase twice at creation time. In this way,
->>> user space cannot make the link disappear, unless a
->>> confirmation is explicitly sent via the bpf() system call.
->>>
->>> Another advantage is that other LSMs can decide
->>> whether or not they allow a program with this flag
->>> (in the bpf security hook).
->>>
->>> This would work regardless of the method used to
->>> load the eBPF program (user space or kernel space).
->>>
->>> Second, I extend the bpf() system call with a new
->>> subcommand, BPF_LINK_CONFIRM_STOP, which
->>> decreasres the ref count for the link of the programs
->>> with the BPF_F_STOP_ONCONFIRM flag. I will also
->>> introduce a new security hook (something like
->>> security_link_confirm_stop), so that an LSM has the
->>> opportunity to deny the stop (the bpf security hook
->>> would not be sufficient to determine exactly for
->>> which link the confirmation is given, an LSM should
->>> be able to deny the stop for its own programs).
->> Would you please stop referring to a set of eBPF programs
->> loaded into the BPF LSM as an LSM? Call it a BPF security
->> module (BSM) if you must use an abbreviation. An LSM is a
->> provider of security_ hooks. In your case that is BPF. When
->> you call the set of eBPF programs an LSM it is like calling
->> an SELinux policy an LSM.
-> An eBPF program could be a provider of security_ hooks
-> too.
+Follow-up series to [1] to address some suggestions from Andrii to
+improve parsing and make it more robust (patch 1) and to improve
+validation of u[ret]probe firing by validating expected argument
+and return values.
 
-No, it can't. If I look in /sys/kernel/security/lsm what
-you see is "bpf". The LSM is BPF. What BPF does in its
-hooks is up to it and its responsibility.
+[1] https://lore.kernel.org/bpf/164903521182.13106.12656654142629368774.git-patchwork-notify@kernel.org/
 
->   The bpf LSM is an aggregator, similarly to your
-> infrastructure to manage built-in LSMs. Maybe, calling
-> it second-level LSM or secondary LSM would better
-> represent this new class.
+Alan Maguire (2):
+  libbpf: improve string handling for uprobe name-based attach
+  selftests/bpf: uprobe tests should verify param/return values
 
-It isn't an LSM, and adding a qualifier doesn't make it
-one and only adds to the confusion.
+ tools/lib/bpf/libbpf.c                             | 77 +++++++++-------------
+ tools/lib/bpf/libbpf_internal.h                    |  5 ++
+ .../selftests/bpf/prog_tests/uprobe_autoattach.c   | 16 +++--
+ .../selftests/bpf/progs/test_uprobe_autoattach.c   | 25 ++++---
+ 4 files changed, 64 insertions(+), 59 deletions(-)
 
-> The only differences are the registration method, (SEC
-> directive instead of DEFINE_LSM), and what the hook
-> implementation can access.
+-- 
+1.8.3.1
 
-Those two things pretty well define what an LSM is.
-
-> The implementation of a security_ hook via eBPF can
-> follow the same structure of built-in LSMs, i.e. it can be
-> uniquely responsible for enforcing and be policy-agnostic,
-> and can retrieve the decisions based on a policy from a
-> component implemented somewhere else.
-
-The BPF LSM provides mechanism. The eBPF programs provide policy.
-
->
-> Hopefully, I understood the basic principles correctly.
-> I let the eBPF maintainers comment on this.
->
-> Thanks
->
-> Roberto
->
-> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-> Managing Director: Li Peng, Zhong Ronghua
->
->>> What do you think?
->>>
->>> Thanks
->>>
->>> Roberto
->>>
->>> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
->>> Managing Director: Li Peng, Zhong Ronghua
