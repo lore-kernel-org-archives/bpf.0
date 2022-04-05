@@ -2,50 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9025AC35274
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AB15C35273
 	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 11:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345423AbiDELvv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 07:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        id S1345370AbiDELvp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 07:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380470AbiDELmh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1380495AbiDELmh (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 5 Apr 2022 07:42:37 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C65010C51C;
-        Tue,  5 Apr 2022 04:06:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC11078FDF;
+        Tue,  5 Apr 2022 04:07:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649156817; x=1680692817;
+  t=1649156821; x=1680692821;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+Aolclux8i1rGH7iiut9nf4LrUExs626hnt2Qp+7Ez4=;
-  b=iDO3FEUt7IsiLYwGwnNvaTiBF3GBqwR1tiSvqEEOnHqFbgmqFJ3m6Ler
-   9yH2UPL+YCZBvXQkBZ9k5tBU9xLLXyx0EYuhiBn+bGmr14d61k6aj1YVf
-   EM7O3Sn1PB4miAUbmCBWwz4Gk71I7vUP0mrZ/gu2xv2DTWSADfl8DrS69
-   HhKBcVsUXtlcZRwBWq02+cD4o/8yNqoH4WoLTYjG5BXNELY6HRsp1skjH
-   00V1paPV42FhjPUeat99tRHYf9//fQrtH+VsokB0FkIvktrNHkw7Av/4I
-   02e26yGvGKfFIiBBvTMgrMctLa7lZ/BcflLB/IRUsCYNYYctPQz3jwfnB
+  bh=tNyPP4zMu6+m0eD0jhm5nRuJJvIC5tf1PRKFyd4P1Vo=;
+  b=GT9si91Jcb11RnQwHXKZVuSXXDZaIeE3Ac6fbMqSjNkuqV4f1/mqw/fc
+   ZDsf1I5cR5avQL/R4ke3ZWxuri4eh/wTrGkDtfC1hMAP6brlzlVNWOcpd
+   idgjZaRtgnoDtr7MUjQLUlWPE8S2PwUWb/A8JFgJgMKpiD8QrhVBRjhvh
+   azFQb/VFn1WtNMmImqg4OEV3bUGpaU5TRR1eNn5EUUtN4iRau5nB9sf9w
+   9G6le30Q7hAvpFLMU97rdR0vdsz9HsNnx9RnAJnwXwnnGPRfSLkkMkRzx
+   6NC+vF3wY+BHj2EuIAu8XfGETc97TBPC5t6Rw7vBS0o32veAvBIyCToVK
    w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241307982"
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241308010"
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="241307982"
+   d="scan'208";a="241308010"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:06:57 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:07:01 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="641570837"
+   d="scan'208";a="641570860"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 04:06:55 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 04:06:59 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         magnus.karlsson@intel.com, bjorn@kernel.org
 Cc:     netdev@vger.kernel.org, brouer@redhat.com, maximmi@nvidia.com,
         alexandr.lobakin@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next 06/10] ice: xsk: diversify return values from xsk_wakeup call paths
-Date:   Tue,  5 Apr 2022 13:06:27 +0200
-Message-Id: <20220405110631.404427-7-maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf-next 08/10] ixgbe: xsk: diversify return values from xsk_wakeup call paths
+Date:   Tue,  5 Apr 2022 13:06:29 +0200
+Message-Id: <20220405110631.404427-9-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
 References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
@@ -60,7 +60,7 @@ return code as the case that XSK is not in the bound state. Returning
 same code from ndo_xsk_wakeup can be misleading and simply makes it
 harder to follow what is going on.
 
-Change ENXIOs in ice's ndo_xsk_wakeup() implementations to EINVALs, so
+Change ENXIOs in ixgbe's ndo_xsk_wakeup() implementations to EINVALs, so
 that when probing it is clear that something is wrong on the driver
 side, not in the xsk_{recv,send}msg.
 
@@ -70,30 +70,35 @@ sides, so let's keep it that way.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 6 +++---
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index 2439141cfa9d..272c0daf9ed3 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -929,13 +929,13 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+index 475244a2c6e4..c8870da7af72 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -523,10 +523,10 @@ int ixgbe_xsk_wakeup(struct net_device *dev, u32 qid, u32 flags)
  		return -ENETDOWN;
  
- 	if (!ice_is_xdp_ena_vsi(vsi))
+ 	if (!READ_ONCE(adapter->xdp_prog))
 -		return -ENXIO;
 +		return -EINVAL;
  
- 	if (queue_id >= vsi->num_txq)
+ 	if (qid >= adapter->num_xdp_queues)
 -		return -ENXIO;
 +		return -EINVAL;
  
- 	if (!vsi->xdp_rings[queue_id]->xsk_pool)
+ 	ring = adapter->xdp_ring[qid];
+ 
+@@ -534,7 +534,7 @@ int ixgbe_xsk_wakeup(struct net_device *dev, u32 qid, u32 flags)
+ 		return -ENETDOWN;
+ 
+ 	if (!ring->xsk_pool)
 -		return -ENXIO;
 +		return -EINVAL;
  
- 	ring = vsi->xdp_rings[queue_id];
- 
+ 	if (!napi_if_scheduled_mark_missed(&ring->q_vector->napi)) {
+ 		u64 eics = BIT_ULL(ring->q_vector->v_idx);
 -- 
 2.33.1
 
