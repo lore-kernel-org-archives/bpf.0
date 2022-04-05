@@ -2,116 +2,147 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62DFBC433F5
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 11:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 334BDC4167E
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 11:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241211AbiDELvM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 07:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
+        id S243922AbiDELvb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 07:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380412AbiDELme (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1380423AbiDELme (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 5 Apr 2022 07:42:34 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3765E457B2;
-        Tue,  5 Apr 2022 04:06:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060CF10BBF4;
+        Tue,  5 Apr 2022 04:06:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649156807; x=1680692807;
+  t=1649156810; x=1680692810;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ytWUfx3/ys0CGOoMx9C2IYY7bI8XUBc9hMr4xRvcsP4=;
-  b=Jwn3H0O5IhZDql5+qUrrMj5E0+rYqY37Hs2iQPXibFidoH7bRuvfvpBB
-   obzye3U5wjNqgslnrPxrHvkrvgOPheheNqdzMcGLp/kp3xscf1P4tO++/
-   ovIo3QHcLUvi9z7QIUk+AkXyrrYq6NHQB5cEC5RIM1QSHpJC4GOGQCyZI
-   4ccz+UXHgyzfuN5H0bRp3nFOy/oV1gHxwqShfsExSf82V8qZ4Ed+0OcfT
-   tP9qIMQqVCIPWnVDcsz8vB1VGZ62ycmHd35h3P/hI5LzIsjhVgnDSmpfh
-   NXbkgIg2EtV/E6p15uQ6S0jz4mKUehr08/iWGpzUzbB0dYLePxnJvCKOK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241307948"
+  bh=JgaTU7sgVI5xvX23l5Zz5pnDBNJRfRd9PQn2BcJjRxo=;
+  b=goRM7iDtX44VhksJwKq/wsUYyMAAJtVOGv9yr/7OC6Avnh/PYy4LaixZ
+   5Ag4+qwJMO4uv8TRbwEPOrIOBt4zjR0LGFjWfO58Pb6IYk/Zi5Tq2Xr1/
+   6JTCuNAmL9eHa8NZDhtQJ3ltdQm0TqnGnZKBRin9E48bYjZZW+wrM0bLG
+   nHle7e11pN88JcheH1VUg97pIZ1arKjiXzq1s60LpAEmNWLzFOUT+TddC
+   jWsHig2yVOTt5GHGzUStyymPj1yYiGi4KpSkKnUTSdGMTbYXP5zZoN1fk
+   9JoCt/HKT4Hd63HwoLC7h9OTeDEqd62hv3QuN1RojkgSlxek9Q2umS/Vt
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241307964"
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="241307948"
+   d="scan'208";a="241307964"
 Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:06:45 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 04:06:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="641570801"
+   d="scan'208";a="641570814"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 04:06:43 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 04:06:47 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         magnus.karlsson@intel.com, bjorn@kernel.org
 Cc:     netdev@vger.kernel.org, brouer@redhat.com, maximmi@nvidia.com,
         alexandr.lobakin@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf-next 01/10] xsk: improve xdp_do_redirect() error codes
-Date:   Tue,  5 Apr 2022 13:06:22 +0200
-Message-Id: <20220405110631.404427-2-maciej.fijalkowski@intel.com>
+Subject: [PATCH bpf-next 03/10] ice: xsk: terminate NAPI when XSK Rx queue gets full
+Date:   Tue,  5 Apr 2022 13:06:24 +0200
+Message-Id: <20220405110631.404427-4-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
 References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn@kernel.org>
+Correlate -ENOBUFS that was returned from xdp_do_redirect() with a XSK
+Rx queue being full. In such case, terminate the softirq processing and
+let the user space to consume descriptors from XSK Rx queue so that
+there is room that driver can use later on.
 
-The error codes returned by xdp_do_redirect() when redirecting a frame
-to an AF_XDP socket has not been very useful. A driver could not
-distinguish between different errors. Prior this change the following
-codes where used:
-
-Socket not bound or incorrect queue/netdev: EINVAL
-XDP frame/AF_XDP buffer size mismatch: ENOSPC
-Could not allocate buffer (copy mode): ENOSPC
-AF_XDP Rx buffer full: ENOSPC
-
-After this change:
-
-Socket not bound or incorrect queue/netdev: EINVAL
-XDP frame/AF_XDP buffer size mismatch: ENOSPC
-Could not allocate buffer (copy mode): ENOMEM
-AF_XDP Rx buffer full: ENOBUFS
-
-An AF_XDP zero-copy driver can now potentially determine if the
-failure was due to a full Rx buffer, and if so stop processing more
-frames, yielding to the userland AF_XDP application.
-
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- net/xdp/xsk.c       | 2 +-
- net/xdp/xsk_queue.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_txrx.h |  1 +
+ drivers/net/ethernet/intel/ice/ice_xsk.c  | 25 +++++++++++++++--------
+ 2 files changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 2c34caee0fd1..f75e121073e7 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -184,7 +184,7 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp)
- 	xsk_xdp = xsk_buff_alloc(xs->pool);
- 	if (!xsk_xdp) {
- 		xs->rx_dropped++;
--		return -ENOSPC;
-+		return -ENOMEM;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index cead3eb149bd..f5a906c03669 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -133,6 +133,7 @@ static inline int ice_skb_pad(void)
+ #define ICE_XDP_CONSUMED	BIT(0)
+ #define ICE_XDP_TX		BIT(1)
+ #define ICE_XDP_REDIR		BIT(2)
++#define ICE_XDP_EXIT		BIT(3)
+ 
+ #define ICE_RX_DMA_ATTR \
+ 	(DMA_ATTR_SKIP_CPU_SYNC | DMA_ATTR_WEAK_ORDERING)
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index dfbcaf08520e..2439141cfa9d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -538,9 +538,10 @@ ice_run_xdp_zc(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 
+ 	if (likely(act == XDP_REDIRECT)) {
+ 		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
+-		if (err)
+-			goto out_failure;
+-		return ICE_XDP_REDIR;
++		if (!err)
++			return ICE_XDP_REDIR;
++		result = (err == -ENOBUFS) ? ICE_XDP_EXIT : ICE_XDP_CONSUMED;
++		goto out_failure;
  	}
  
- 	xsk_copy_xdp(xsk_xdp, xdp, len);
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 801cda5d1938..644479e65578 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -382,7 +382,7 @@ static inline int xskq_prod_reserve_desc(struct xsk_queue *q,
- 	u32 idx;
+ 	switch (act) {
+@@ -551,15 +552,15 @@ ice_run_xdp_zc(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 		if (result == ICE_XDP_CONSUMED)
+ 			goto out_failure;
+ 		break;
++	case XDP_DROP:
++		result = ICE_XDP_CONSUMED;
++		break;
+ 	default:
+ 		bpf_warn_invalid_xdp_action(rx_ring->netdev, xdp_prog, act);
+ 		fallthrough;
+ 	case XDP_ABORTED:
+ out_failure:
+ 		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
+-		fallthrough;
+-	case XDP_DROP:
+-		result = ICE_XDP_CONSUMED;
+ 		break;
+ 	}
  
- 	if (xskq_prod_is_full(q))
--		return -ENOSPC;
-+		return -ENOBUFS;
+@@ -628,10 +629,16 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
  
- 	/* A, matches D */
- 	idx = q->cached_prod++ & q->ring_mask;
+ 		xdp_res = ice_run_xdp_zc(rx_ring, xdp, xdp_prog, xdp_ring);
+ 		if (xdp_res) {
+-			if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))
++			if (xdp_res == ICE_XDP_EXIT) {
++				failure = true;
++				xsk_buff_free(xdp);
++				ice_bump_ntc(rx_ring);
++				break;
++			} else if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR)) {
+ 				xdp_xmit |= xdp_res;
+-			else
++			} else {
+ 				xsk_buff_free(xdp);
++			}
+ 
+ 			total_rx_bytes += size;
+ 			total_rx_packets++;
+@@ -666,7 +673,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 		ice_receive_skb(rx_ring, skb, vlan_tag);
+ 	}
+ 
+-	failure = !ice_alloc_rx_bufs_zc(rx_ring, ICE_DESC_UNUSED(rx_ring));
++	failure |= !ice_alloc_rx_bufs_zc(rx_ring, ICE_DESC_UNUSED(rx_ring));
+ 
+ 	ice_finalize_xdp_rx(xdp_ring, xdp_xmit);
+ 	ice_update_rx_ring_stats(rx_ring, total_rx_packets, total_rx_bytes);
 -- 
 2.33.1
 
