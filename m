@@ -2,119 +2,158 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB4DFC47080
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61107C4167E
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445891AbiDEXqA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
+        id S1453043AbiDEXrG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577588AbiDEXMd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:12:33 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48C1F844B
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 14:44:10 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id b6-20020a5b0b46000000b0063dcbfa6dd3so321096ybr.2
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 14:44:10 -0700 (PDT)
+        with ESMTP id S1577684AbiDEXMk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 19:12:40 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72D8FCBC3
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 14:44:21 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2eb5d4fbd54so4829467b3.4
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 14:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=Y3boLJhnsnsX21RxEJ5dbfl+5imWo3Z17WnpkTr+aec=;
-        b=kiINLgYgk8+neprx3cxKEu/hgrZy0GjmVu62OtEH6+4huoJOm/rTKY/W8vmyaWXCv8
-         7H5tO+nbtdeXtVl1GtLseqWflh+S/JHhxtPAPQO3fcoumT7+mvcmKvBRTpdBx81MzS3n
-         TOKC+hoCGBHKkFtpkmrXwi8eyoXpNgGIoage6PNMAqZ8kRYcUl7Z+/XuLA8dGYhxX+V3
-         55DqHuMebW3aTuv7O0d4aXZiAT0cXHSLNqfEqAOB9jwxbDppt8+Quz2mKS4teJbEFL4l
-         z78ALvUndePGswYz8B2vDMCjBO9Jw4mMH6XuSNSAqXDCw6gqkI/pgHdLzXcAqs+bCKhY
-         nyKQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=6NblM4DdSDjYKjDgLxEintAgK2IySwji0MbdGVjQAJ0=;
+        b=aH7t3UmNuSMetoAxnT29hxQBjyn++fuJ7enCmtqyWIsfGhMm81NfSU5Nsxn6Fj9iuA
+         TD7F3D5JrZ9gjaADebR/1Y6cS6NJneMk4y3euudNGGK4sQfKW+8r/CwY7VbgYJDbgqLA
+         Hn+nTh34dLgSC5vLlYbRCxxi0ln6Fw6i/Ba8vnN9S+9E8McgZTlcpLsmMVQz5ER5pNYW
+         rQHwOYEx9T/ZvNJfJHXwlzP0ZGC6PMD8wlYPt11XffIgFhYO89O4en2PzT/qLTkyzX9p
+         6Cfv7Spx/dXn5IbU95dJzaEYQHoj/3xpDXcOJt9GLg93KSMeaMqD5u+FaMYQeRL0Nzej
+         JKUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=Y3boLJhnsnsX21RxEJ5dbfl+5imWo3Z17WnpkTr+aec=;
-        b=aND+YLgxLOa+wroisHWI60aTFQURwCcCKQC3rjRC5GFAGtYrk4JWEFG0fl3Drf9EQd
-         ujhrJvYVFMdK41arogYYzZhcO7FFUorjmHVHdOJpolXfc4uIjyihwFy7VmrAjcF6rHna
-         vRUl8z1PXvp08xpyxebM4mmc9vwWBU8+ty0AKUq/ahKGc6CvdoWKOZ1PUyW1Kh5DBfW1
-         AMe5YkFMXHG6NEIv7tMdUt6KPX6t+KJuojS/x3sL5/rqZXwqa5kcQTyv7eGsVH0m3K5B
-         w78yMYTVRHHTeRObX/pZGdv89SY+vbzafv0iTHBjgRmZFJpNGqCLjHZ33DoHf8jlbi9E
-         NsgQ==
-X-Gm-Message-State: AOAM531gyIK+T2zNxdleAfrofGQGV3YLtzyV/zZMt9Bro1YF4VJUi8Al
-        F/CfeFE9JmMRt7b2sV6HKrWWXak=
-X-Google-Smtp-Source: ABdhPJxiP2tCmr6iQpjkbYbORTJcwwwRFgZsSZ4os+YthLUmWORLtK39qI75Qhc8a/m5HXT2aYTkTes=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=6NblM4DdSDjYKjDgLxEintAgK2IySwji0MbdGVjQAJ0=;
+        b=tLxMPn7UaPUqYFysYBTf+Ilb0NCih+4+pzkmox0XrJxd7wKzblgcTcm9vgi44XuXe7
+         TjSQvVCf8cSDM7ENojvPdcGWOfnkBklC4GKkaUcwvwPwbnzqc5XsFLZ+UFEFNXL5dWbp
+         DPkzjQHmCNkC9IPlOXUCaLhqhhIHG2bA+MnxbgHzRzPzEIGpLou4Ug13A1bMTsYV0jih
+         usVul8ELLBUzOqfaQ4KxuBHrrMa4yqrn7Pi9JBMf+FdFPnNDl+kYH3CMJdL3Db3/CayV
+         0AogHLLKnilCDCfJLas0jyncfxXyypFrJ5x3W2lGa3CR2WrRsX7z9icAlEJ5MsgWBYy+
+         B/kQ==
+X-Gm-Message-State: AOAM533Z88vL+VMDFd/5XEWC9Y6WMle+ky4I50wLZIxy050wUBHgdph8
+        vzZJ67yg9WKB313hizAsGjuiIT4=
+X-Google-Smtp-Source: ABdhPJz3bIH4Nxzw2caA4SgqgSA/xVwcc5VpbPucgbV0dvxX8YFSZFFqtXVW0z6sHMfbuDac/SI7xW8=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:73b5:ffab:2024:2901])
- (user=sdf job=sendgmr) by 2002:a25:af41:0:b0:633:905f:9e9b with SMTP id
- c1-20020a25af41000000b00633905f9e9bmr4347275ybj.77.1649195025088; Tue, 05 Apr
- 2022 14:43:45 -0700 (PDT)
-Date:   Tue,  5 Apr 2022 14:43:35 -0700
-Message-Id: <20220405214342.1968262-1-sdf@google.com>
+ (user=sdf job=sendgmr) by 2002:a81:b288:0:b0:2d6:39d5:31a1 with SMTP id
+ q130-20020a81b288000000b002d639d531a1mr4504807ywh.506.1649195035035; Tue, 05
+ Apr 2022 14:43:55 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 14:43:39 -0700
+In-Reply-To: <20220405214342.1968262-1-sdf@google.com>
+Message-Id: <20220405214342.1968262-5-sdf@google.com>
 Mime-Version: 1.0
+References: <20220405214342.1968262-1-sdf@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH bpf-next v2 0/7] bpf: cgroup_sock lsm flavor
+Subject: [PATCH bpf-next v2 4/7] bpf: allow writing to a subset of sock fields
+ from lsm progtype
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>, kafai@fb.com,
-        kpsingh@kernel.org
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series implements new lsm flavor for attaching per-cgroup programs to
-existing lsm hooks. The cgroup is taken out of 'current', unless
-the first argument of the hook is 'struct socket'. In this case,
-the cgroup association is taken out of socket. The attachment
-looks like a regular per-cgroup attachment: we add new BPF_LSM_CGROUP
-attach type which, together with attach_btf_id, signals per-cgroup lsm.
-Behind the scenes, we allocate trampoline shim program and
-attach to lsm. This program looks up cgroup from current/socket
-and runs cgroup's effective prog array. The rest of the per-cgroup BPF
-stays the same: hierarchy, local storage, retval conventions
-(return 1 == success).
+For now, allow only the obvious ones, like sk_priority and sk_mark.
 
-Current limitations:
-* haven't considered sleepable bpf; can be extended later on
-* not sure the verifier does the right thing with null checks;
-  see latest selftest for details
-* total of 10 (global) per-cgroup LSM attach points; this bloats
-  bpf_cgroup a bit
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ kernel/bpf/bpf_lsm.c  | 58 +++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c |  3 ++-
+ 2 files changed, 60 insertions(+), 1 deletion(-)
 
-Cc: ast@kernel.org
-Cc: daniel@iogearbox.net
-Cc: kafai@fb.com
-Cc: kpsingh@kernel.org
-
-v2:
-- addressed build bot failures
-
-Stanislav Fomichev (7):
-  bpf: add bpf_func_t and trampoline helpers
-  bpf: per-cgroup lsm flavor
-  bpf: minimize number of allocated lsm slots per program
-  bpf: allow writing to a subset of sock fields from lsm progtype
-  libbpf: add lsm_cgoup_sock type
-  selftests/bpf: lsm_cgroup functional test
-  selftests/bpf: verify lsm_cgroup struct sock access
-
- include/linux/bpf-cgroup-defs.h               |   8 +
- include/linux/bpf.h                           |  24 +-
- include/linux/bpf_lsm.h                       |   8 +
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/bpf_lsm.c                          | 147 ++++++++++++
- kernel/bpf/btf.c                              |  11 +
- kernel/bpf/cgroup.c                           | 209 ++++++++++++++++--
- kernel/bpf/syscall.c                          |  10 +
- kernel/bpf/trampoline.c                       | 205 ++++++++++++++---
- kernel/bpf/verifier.c                         |   4 +-
- tools/include/uapi/linux/bpf.h                |   1 +
- tools/lib/bpf/libbpf.c                        |   2 +
- .../selftests/bpf/prog_tests/lsm_cgroup.c     | 158 +++++++++++++
- .../testing/selftests/bpf/progs/lsm_cgroup.c  |  94 ++++++++
- tools/testing/selftests/bpf/test_verifier.c   |  54 ++++-
- .../selftests/bpf/verifier/lsm_cgroup.c       |  34 +++
- 16 files changed, 912 insertions(+), 58 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/lsm_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 8b948ec9ab73..cc13da18d8b3 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -332,7 +332,65 @@ bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+ const struct bpf_prog_ops lsm_prog_ops = {
+ };
+ 
++static int lsm_btf_struct_access(struct bpf_verifier_log *log,
++					const struct btf *btf,
++					const struct btf_type *t, int off,
++					int size, enum bpf_access_type atype,
++					u32 *next_btf_id,
++					enum bpf_type_flag *flag)
++{
++	const struct btf_type *sock_type;
++	struct btf *btf_vmlinux;
++	s32 type_id;
++	size_t end;
++
++	if (atype == BPF_READ)
++		return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
++					 flag);
++
++	btf_vmlinux = bpf_get_btf_vmlinux();
++	if (!btf_vmlinux) {
++		bpf_log(log, "no vmlinux btf\n");
++		return -EOPNOTSUPP;
++	}
++
++	type_id = btf_find_by_name_kind(btf_vmlinux, "sock", BTF_KIND_STRUCT);
++	if (type_id < 0) {
++		bpf_log(log, "'struct sock' not found in vmlinux btf\n");
++		return -EINVAL;
++	}
++
++	sock_type = btf_type_by_id(btf_vmlinux, type_id);
++
++	if (t != sock_type) {
++		bpf_log(log, "only 'struct sock' writes are supported\n");
++		return -EACCES;
++	}
++
++	switch (off) {
++	case bpf_ctx_range(struct sock, sk_priority):
++		end = offsetofend(struct sock, sk_priority);
++		break;
++	case bpf_ctx_range(struct sock, sk_mark):
++		end = offsetofend(struct sock, sk_mark);
++		break;
++	default:
++		bpf_log(log, "no write support to 'struct sock' at off %d\n", off);
++		return -EACCES;
++	}
++
++	if (off + size > end) {
++		bpf_log(log,
++			"write access at off %d with size %d beyond the member of 'struct sock' ended at %zu\n",
++			off, size, end);
++		return -EACCES;
++	}
++
++	return NOT_INIT;
++}
++
+ const struct bpf_verifier_ops lsm_verifier_ops = {
+ 	.get_func_proto = bpf_lsm_func_proto,
+ 	.is_valid_access = btf_ctx_access,
++	.btf_struct_access = lsm_btf_struct_access,
+ };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1d2f2e7babb2..d42ee0033755 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12843,7 +12843,8 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 				insn->code = BPF_LDX | BPF_PROBE_MEM |
+ 					BPF_SIZE((insn)->code);
+ 				env->prog->aux->num_exentries++;
+-			} else if (resolve_prog_type(env->prog) != BPF_PROG_TYPE_STRUCT_OPS) {
++			} else if (resolve_prog_type(env->prog) != BPF_PROG_TYPE_STRUCT_OPS &&
++				   resolve_prog_type(env->prog) != BPF_PROG_TYPE_LSM) {
+ 				verbose(env, "Writes through BTF pointers are not allowed\n");
+ 				return -EINVAL;
+ 			}
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 
