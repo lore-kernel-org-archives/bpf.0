@@ -2,65 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 133FBC38161
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC2B7C433FE
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449557AbiDEXqb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
+        id S1343932AbiDEXpJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457758AbiDEQlL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:41:11 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F221E43AD6;
-        Tue,  5 Apr 2022 09:39:12 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id u14so15895pjj.0;
-        Tue, 05 Apr 2022 09:39:12 -0700 (PDT)
+        with ESMTP id S1458055AbiDERGb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 13:06:31 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD77AC074
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 10:04:32 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 7so5627930pfu.13
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 10:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=h0Ezkowr2vA+TSkiAQHrFqf3CTenq1qGRwHjwra0sLA=;
-        b=N4YLCezFpaFlp26K2sW2ESPajZSoXYWOnj+h1n8qRp3nR6g6MBUfk1pfub5qP8x+lK
-         rd2p9fxCOawPf2OKJjyz1ET2rwsJmp6GkRVkU6VUmrw6DjqTTNZH4BK3IY/Xs67uAAS/
-         Gx6QlAomXXDTJFKvsk53YrF6klSeprkImsmgPaiXY0iH6tBgVgoK17p9g/2XR7hG2wdm
-         5zr5q91q4xpKpSid2G5/RCt2mKwS0C9LbpovyzkPC7omWhzHMFEyk2cgy1jBj05JPMor
-         yb8AGuP29MFNS5ZE9nTuPfRd+wzl/VXQvszFIfAN4tFXA3sIwqfgASaGq77CGR6tzV+D
-         10gA==
+        bh=pROGuwStiro9rcSYW3YeAtKJaGC9ZWqC+E1qhRzShxk=;
+        b=tA6Lp2KTlzqbzCItB0ys8viPQghH3YJ6+SdbGwcrPNlITBfn8nt3mBaneYmi6Ifz19
+         CJiVBsCpL+c6HqbbfYgHzDZsuF/gkKXK2lc4bTgNxgAK0/S4mz/rsh1hqwAlMUKEjKul
+         w4GTz21a+EhIjdikEvLqtLFgIfLRaNS4O1VLUqQ4S1I5lgeSNNvm0TyL80b59lj1OXUa
+         hXj0ircE3zWV8P0ASeIP76xonjuC1AoHwd7xnKPxA8+7Ewp9e+chhvgblMU270xglxj+
+         rlavD5UNtimCx/YI+j+fTfO8nmEkwYIbCLnqEcie9L/jpvqMoWWcBJR7XFjpUQvB+ZAa
+         7E8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=h0Ezkowr2vA+TSkiAQHrFqf3CTenq1qGRwHjwra0sLA=;
-        b=lHb+ZHljAjuOCyKniELAiAm+cPIK8v0bVne4XzyBZQxjtSinoesnOi/tut9KtiYBXW
-         DDQINbhYMgZED2rQ5VJrY7wTiDy7l5WTbrsK6ZrODFgK9q4QqWH431qxPL0sGPJrdBP4
-         wlRZFUP3T+KLT+wihA2wETuH4NG0NnBLfsTxTb30ddFckxp1v1ZI2ev5Ty/fBpEC7iEM
-         RBSvKykhlR4nKCuRL/ZSQaEh6prPrfKN9pfi/Z8k6iQpjp7fRRixxF0vpP4GUt4iVczl
-         NqYuHWHHsII5sdHjfL1SxkGPQ9DarEj37rppqSwq10SyG42vMc6a7NxaLqmU+7NJgibq
-         lq9A==
-X-Gm-Message-State: AOAM530R37wQ54MjJxNyyb54Zu/StMOveLmSZE/dwI9rbR8Rns29vDTs
-        qaTBCGFVMlHThEHzU+CoIdc=
-X-Google-Smtp-Source: ABdhPJxnTEGJd3Tj4Dvmdh+v7GzN2T87vgpt31Bse4ScpzbbZRyF/5EVLbAhrn40PriKpj4xSVy/4g==
-X-Received: by 2002:a17:902:728f:b0:156:24d3:ae1a with SMTP id d15-20020a170902728f00b0015624d3ae1amr4336617pll.9.1649176752483;
-        Tue, 05 Apr 2022 09:39:12 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm17079538pfk.88.2022.04.05.09.39.07
+        bh=pROGuwStiro9rcSYW3YeAtKJaGC9ZWqC+E1qhRzShxk=;
+        b=bCefu1/9/X7Mven+h/RGqSZv0yr4rAL+YuBtVBF413WFHqp1stM0XiN5CufVM1EuL/
+         ElQAHB53l2rAiUTTqKH6xnbzVUF4Wi4fhCfYvlp3b9ulqH9prx2BNwCMje3RQ+otFa1K
+         0uQH+Xg5SJHqix6KO+lwQ3xVOnBa+S5KHI1Cl7rhkJYmiovQvYzZWa3Wonnzf3FTh5pc
+         MedfjQ6gMoRmTntL7HsQ/wEVxEJYCSW1OZwKcgCdb6QuaDlXotcut4tqJDxYNI9l1VKd
+         g6lEjk7imWzeAPClzBaLYUrwUVqqC6UAbrHP3epzD93XlNGX/YamxY3yFRM6RL8Pg8tQ
+         niSw==
+X-Gm-Message-State: AOAM5306qjmexiAgGD4QcNaBc0Z/tC6DzRrzjMezi0EQumfZbIsXDEWJ
+        R6LMloDRDcyAPZCzFugRx7oW+UJOU5NqxCr5
+X-Google-Smtp-Source: ABdhPJwD7B9L7RiPiFfKaGMQkGtYLA2hahKEheRhiKEh42v4f/MZK/KIfpScH9FOO2wpWsopqWEb2w==
+X-Received: by 2002:a65:4647:0:b0:399:11b1:810b with SMTP id k7-20020a654647000000b0039911b1810bmr3638651pgr.449.1649178271389;
+        Tue, 05 Apr 2022 10:04:31 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id m7-20020a625807000000b004fe0a89f24fsm7796142pfb.112.2022.04.05.10.04.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:39:11 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
-Date:   Wed,  6 Apr 2022 00:37:28 +0800
-Message-Id: <20220405163728.56471-1-ytcoode@gmail.com>
+        Tue, 05 Apr 2022 10:04:30 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     bpf@vger.kernel.org
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        "KP Singh" <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
+Subject: [PATCH] bpf: Fix KASAN use-after-free Read in compute_effective_progs
+Date:   Tue,  5 Apr 2022 10:03:56 -0700
+Message-Id: <20220405170356.43128-1-tadeusz.struk@linaro.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,30 +69,99 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The checks preceding CHECK macro are redundant, remove them.
+Syzbot found a Use After Free bug in compute_effective_progs().
+The reproducer creates a number of BPF links, and causes a fault
+injected alloc to fail, while calling bpf_link_detach on them.
+Link detach triggers the link to be freed by bpf_link_free(),
+which calls __cgroup_bpf_detach() and update_effective_progs().
+If the memory allocation in this function fails, the function restores
+the pointer to the bpf_cgroup_link on the cgroup list, but the memory
+gets freed just after it returns. After this, every subsequent call to
+update_effective_progs() causes this already deallocated pointer to be
+dereferenced in prog_list_length(), and triggers KASAN UAF error.
+To fix this don't preserve the pointer to the link on the cgroup list
+in __cgroup_bpf_detach(), but proceed with the cleanup and retry calling
+update_effective_progs() again afterwards.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+
+Cc: "Alexei Starovoitov" <ast@kernel.org>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>
+Cc: "Martin KaFai Lau" <kafai@fb.com>
+Cc: "Song Liu" <songliubraving@fb.com>
+Cc: "Yonghong Song" <yhs@fb.com>
+Cc: "John Fastabend" <john.fastabend@gmail.com>
+Cc: "KP Singh" <kpsingh@kernel.org>
+Cc: <netdev@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+
+Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
+Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
+Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 ---
- tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ kernel/bpf/cgroup.c | 25 ++++++++++++++-----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-index 16048978a1ef..5f2ab720dabd 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
-@@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
- 			good_user_stack = true;
- 	}
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 128028efda64..b6307337a3c7 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -723,10 +723,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	pl->link = NULL;
  
--	if (!good_kern_stack)
--	    CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
--	if (!good_user_stack)
--	    CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
-+	CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
-+	CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
+ 	err = update_effective_progs(cgrp, atype);
+-	if (err)
+-		goto cleanup;
+-
+-	/* now can actually delete it from this cgroup list */
++	/*
++	 * Proceed regardless of error. The link and/or prog will be freed
++	 * just after this function returns so just delete it from this
++	 * cgroup list and retry calling update_effective_progs again later.
++	 */
+ 	list_del(&pl->node);
+ 	kfree(pl);
+ 	if (list_empty(progs))
+@@ -735,12 +736,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	if (old_prog)
+ 		bpf_prog_put(old_prog);
+ 	static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+-	return 0;
+ 
+-cleanup:
+-	/* restore back prog or link */
+-	pl->prog = old_prog;
+-	pl->link = link;
++	/* In case of error call update_effective_progs again */
++	if (err)
++		err = update_effective_progs(cgrp, atype);
++
+ 	return err;
  }
  
- void test_get_stack_raw_tp(void)
+@@ -881,6 +881,7 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
+ 	struct bpf_cgroup_link *cg_link =
+ 		container_of(link, struct bpf_cgroup_link, link);
+ 	struct cgroup *cg;
++	int err;
+ 
+ 	/* link might have been auto-detached by dying cgroup already,
+ 	 * in that case our work is done here
+@@ -896,8 +897,10 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
+ 		return;
+ 	}
+ 
+-	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+-				    cg_link->type));
++	err = __cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
++				  cg_link->type);
++	if (err)
++		pr_warn("cgroup_bpf_detach() failed, err %d\n", err);
+ 
+ 	cg = cg_link->cgroup;
+ 	cg_link->cgroup = NULL;
 -- 
 2.35.1
-
