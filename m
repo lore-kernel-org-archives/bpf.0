@@ -2,242 +2,238 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC12FC433F5
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:30:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB870C433F5
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:30:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbiDFFYl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
+        id S238779AbiDFFYy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2360332AbiDFD3a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:29:30 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80897A1B5;
-        Tue,  5 Apr 2022 17:06:41 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id x4so1134193iop.7;
-        Tue, 05 Apr 2022 17:06:41 -0700 (PDT)
+        with ESMTP id S1848129AbiDFCUo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 22:20:44 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D03B278C4C
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 16:42:01 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id k15so789036ils.0
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 16:42:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=a3uMVUs0pn/UnCcTOPF5ZwVE7HfFfyD9+Ot9Na3BVDg=;
-        b=Sn10JKm5Gx81Pb9OAi6xGf7VB1Ch3jSbp5gOqq1G8UWNcNp2We6C0osV9LAQJZd5co
-         /jJgcaqfdJ1vpR4sj4bAUd8H+k8++2SaS6WAANVD3ZVgRZNWPFdkFGcJ0WSWEIllFMYX
-         uatxTj1zt02nzSpzjozns85ATeJGMkrpvXnwV4u9dvvVUwWlPeyw2uwS3gy51zBrPLIZ
-         GtxzYaQaPNGqvpu1xF1+AW7iMC2r3+v3mI2Cap8cLmopZlgH0lVi9pEp7WHqv9rpFPU1
-         l9pXMvCMivjpKOs/TCSCYb903Y9bvN2P/HmCireQ2XeqLFKc2Wxtgb2MIGvMNsV/XDWD
-         QtXw==
+        bh=J+s4EBg6oNjINCUsGVa2xLDsL/rTh43KO7vKQHBTY1w=;
+        b=QGAm/b+DRGAJpXn8Urp3046EdFT0SPPUW2QrxVT59HL4zWFu3f9bOn0fJ9kju4i8vH
+         0YpJ42KGCTQuXHLnnpm4LM2qo2BxwDWZ5Ks4IBoNoLoCnk4Ic2WoiS5F7JuA77TVGKxT
+         5x0gsqBZF1yN5TKLsy703GJyvRTLgcwRSnzSzdtesQkHHw+ehCaCMRIHyv0CyE6oTkUn
+         sZyZoqEJouhcIYXB1+yZJH8+0SzxBNP8j6XqhIVBFuN126QcQgGWUPa4R9hJumvSfcxs
+         xSvg24C+yPHVgyZSHqqQ1RG6YGJtJXM8003heEKjsxEUQqY6Qi1GI4sbZX0weOeCjDsK
+         h6yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=a3uMVUs0pn/UnCcTOPF5ZwVE7HfFfyD9+Ot9Na3BVDg=;
-        b=2tE+Uivqe388CJFSO4f++T8iXMjpNPMRNjzW79oNIV3gKlUCG0uA5hyvOZMh1mzKzb
-         mIsQ6ifky7E6KWs4h43N6kQqnU5RGuUke4iDJjSaw4LzdpOxO1yjBhGzuNXiyVOIcW96
-         r9vguuHmP+xxSO8vICF9wwhC+L3Id63i1e2WwC583XPceqM4ObSGRkRiPTndcNObzDos
-         F+3doSTtH3fAhNxX8RoumIcozx8tDWqguYoKGFFoEyi7qC29tsBIIo99PJmEV7dmFlcC
-         o+7BZZWZU7jYE2zjEZ61UhCQ0/tSB1WtsjhZzmA7Qv12wn/EifYOT5d47p79KPNCZVW/
-         AmSA==
-X-Gm-Message-State: AOAM5300iZY3Fv7FrUIAZk7iUCqTyUhcT1DV9bJvcJQIi8i16k7j4U8c
-        EArVheRC0pwgzrwTbF5SS27CsHqzIsdgnNgKIJ8=
-X-Google-Smtp-Source: ABdhPJzGj/GFTls1C8LAXPe5rdMV1t91aQf9IZ8VFJuT1Ht+PqB/QUaSF5fRCRGwrSuONWHnvwJWnJxLmtb+0gxqBLs=
-X-Received: by 2002:a05:6638:1685:b0:323:9fed:890a with SMTP id
- f5-20020a056638168500b003239fed890amr3250312jat.103.1649203600893; Tue, 05
- Apr 2022 17:06:40 -0700 (PDT)
+        bh=J+s4EBg6oNjINCUsGVa2xLDsL/rTh43KO7vKQHBTY1w=;
+        b=r8dYPP1EML7dNjVwGqXkzfwLu5rRLvzOWMJJLJf/i3jW9VewyyrBeGKCtlaDEiBK1F
+         T3P5teb5FduRGoguBC80u26VmGR1/62BYXGe9YNeDjCA1QLUoIWVre+p1GMawM85G3Uh
+         QzQIk0cBvwSpTM/ls8nqcU+rQbPKrMUO985TEwZI2tkxqbggi/blf8qIaqHUw5h8VhuJ
+         n+tRSnDCTenQd9dGbV7bwCS9pTEBEmleJf0wx0dPIrX+UyN23aO6FOFMTuEEq0T61LSL
+         tTknHk1MM5XmamTKuhgRwr7ufte2alJ76oRrwiJ14ztDnGaJv54k1hKSbyr7xA6NUdf4
+         WjqA==
+X-Gm-Message-State: AOAM531vAq1k1rt9lSBk50kk8apMxow3P5se36fteH+CgrLiNkWZA4k1
+        nYgcmb9QhUWxsxbmprpZSSzl+eTEJAZnPKP5ZA4CNQk1lHI=
+X-Google-Smtp-Source: ABdhPJwS+dXujA+vha6f3AKms8yQWauIUM6gSae85wanezfpBl1XuEQhS3GpQ5AmwVrG880igjvx8kRn8hMQeHeUjT0=
+X-Received: by 2002:a05:6e02:1562:b0:2ca:50f1:72f3 with SMTP id
+ k2-20020a056e02156200b002ca50f172f3mr2802623ilu.71.1649202116430; Tue, 05 Apr
+ 2022 16:41:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <1649195156-9465-1-git-send-email-alan.maguire@oracle.com> <1649195156-9465-2-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1649195156-9465-2-git-send-email-alan.maguire@oracle.com>
+References: <20220402002944.382019-1-andrii@kernel.org> <20220402002944.382019-3-andrii@kernel.org>
+ <22359fb1-33a2-ee2c-4300-a07b175825e6@fb.com> <CAEf4BzYdhnGE7HZLrjF0E2-XFwVrQf7G=uVaWJd7p2qaQMsvTg@mail.gmail.com>
+ <5b7e5a08-a2aa-72dd-8bb2-7b10e7ff32b4@fb.com>
+In-Reply-To: <5b7e5a08-a2aa-72dd-8bb2-7b10e7ff32b4@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 17:06:30 -0700
-Message-ID: <CAEf4BzZuz5NVzDa=srfvuMtMg6Jmy85bAaBkgSXiz8h2aTQ9Hw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: improve string handling for uprobe
- name-based attach
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
+Date:   Tue, 5 Apr 2022 16:41:45 -0700
+Message-ID: <CAEf4BzYbiy+ch8Q_rZW0BhWmm7-7zzk8tJDXBNo9u6PjdMObWg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 2/7] libbpf: wire up USDT API and bpf_link integration
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
+        Kernel Team <kernel-team@fb.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Hengqi Chen <hengqi.chen@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 2:46 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Mon, Apr 4, 2022 at 6:00 PM Dave Marchevsky <davemarchevsky@fb.com> wrote:
 >
-> For uprobe attach, libraries are identified by matching a ".so"
-> substring in the binary path.  This matches a lot of patterns that do
-> not conform to library .so[.version] suffixes, so instead match a ".so"
-> _suffix_, and if that fails match a ".so." substring for the versioned
-> library case.
+> On 4/4/22 12:18 AM, Andrii Nakryiko wrote:
+> > On Sun, Apr 3, 2022 at 8:12 PM Dave Marchevsky <davemarchevsky@fb.com> wrote:
+> >>
+> >> On 4/1/22 8:29 PM, Andrii Nakryiko wrote:
+> >>> Wire up libbpf USDT support APIs without yet implementing all the
+> >>> nitty-gritty details of USDT discovery, spec parsing, and BPF map
+> >>> initialization.
+> >>>
+> >>> User-visible user-space API is simple and is conceptually very similar
+> >>> to uprobe API.
+> >>>
+> >>> bpf_program__attach_usdt() API allows to programmatically attach given
+> >>> BPF program to a USDT, specified through binary path (executable or
+> >>> shared lib), USDT provider and name. Also, just like in uprobe case, PID
+> >>> filter is specified (0 - self, -1 - any process, or specific PID).
+> >>> Optionally, USDT cookie value can be specified. Such single API
+> >>> invocation will try to discover given USDT in specified binary and will
+> >>> use (potentially many) BPF uprobes to attach this program in correct
+> >>> locations.
+> >>>
+> >>> Just like any bpf_program__attach_xxx() APIs, bpf_link is returned that
+> >>> represents this attachment. It is a virtual BPF link that doesn't have
+> >>> direct kernel object, as it can consist of multiple underlying BPF
+> >>> uprobe links. As such, attachment is not atomic operation and there can
+> >>> be brief moment when some USDT call sites are attached while others are
+> >>> still in the process of attaching. This should be taken into
+> >>> consideration by user. But bpf_program__attach_usdt() guarantees that
+> >>> in the case of success all USDT call sites are successfully attached, or
+> >>> all the successfuly attachments will be detached as soon as some USDT
+> >>> call sites failed to be attached. So, in theory, there could be cases of
+> >>> failed bpf_program__attach_usdt() call which did trigger few USDT
+> >>> program invocations. This is unavoidable due to multi-uprobe nature of
+> >>> USDT and has to be handled by user, if it's important to create an
+> >>> illusion of atomicity.
+> >>
+> >> It would be useful to be able to control the behavior in response to attach
+> >> failure in bpf_program__attach_usdt. Specifically I'd like to be able to
+> >> choose between existing "all attaches succeed or entire operation fails" and
+> >> "_any_ attach succeeds or entire operation fails". Few reasons for this:
+> >>
+> >>  * Tools like BOLT were not playing nicely with USDTs for some time ([0],[1])
+> >>  * BCC's logic was changed to support more granular 'attach failure' logic ([2])
+> >>  * At FB I still see some multi-probe USDTs with incorrect-looking locations on
+> >>    some of the probes
+> >>
+> >> Note that my change for 2nd bullet was to handle ".so in shortlived process"
+> >> usecase, which this lib handles by properly supporting pid = -1. But it's since
+> >> come in handy to avoid 3rd bullet's issue from causing trouble.
+> >>
+> >> Production tracing tools would be less brittle if they could control this attach
+> >> failure logic.
+> >>
+> >
+> > So, we have bpf_usdt_opts for that and can add this in the future. The
+> > reason I didn't do it from the outset is that no other attach API
+> > currently has this partial success behavior. For example, multi-attach
+> > kprobe that we recently added is also an all-or-nothing API. So I
+> > wanted to start out with this stricter approach and only allow to
+> > change that if/when we have a clear case where this is objectively not
+> > enough. The BOLT case you mentioned normally should have been solved
+> > by fixing BOLT tooling itself, not by sloppier attach behavior in
+> > kernel or libbpf.
+>
+> Re: BOLT - agreed that it's better to find the root cause and fix that. But for
+> some time before root fix is deployed there will be binaries with some incorrect
+> USDT notes, and tracing programs will still want to use valid USDT notes to
+> collect data. I think this happens fairly often.
+>
+> In fact I found an example last week while investigating something unrelated.
+> Here's a (snipped) 'readelf -n' from a binary in a prod env:
+>
+>   stapsdt              0x0000007f       NT_STAPSDT (SystemTap probe descriptors)
+>     Provider: thrift
+>     Name: thread_manager_task_stats
+>     Location: 0x0000000000000077, Base: 0x0000000000000000, Semaphore: 0x0000000000000000
+>     Arguments: -8@-256(%rbp) -8@-248(%rbp) -8@-240(%rbp) -8@-232(%rbp) -8@-224(%rbp)
+>   stapsdt              0x0000007f       NT_STAPSDT (SystemTap probe descriptors)
+>     Provider: thrift
+>     Name: thread_manager_task_stats
+>     Location: 0x0000000002bd1eb3, Base: 0x0000000000000000, Semaphore: 0x0000000000000000
+>     Arguments: -8@-272(%rbp) -8@-264(%rbp) -8@-256(%rbp) -8@-248(%rbp) -8@-240(%rbp)
+>
+> Coming from thrift [0]. Note that this is an ET_EXEC ELF, so the first probe's
+> location is certainly invalid. Second looks reasonable. IIUC if I wanted to
+> attach to this USDT, find_elf_seg would fail to find a segment for first probe,
+> causing collect_usdt_targets to error out as well. BCC complains about this
+> ([1]) but continues.
+>
+>   [0]: https://github.com/facebook/fbthrift/blob/main/thrift/lib/cpp/concurrency/ThreadManager.cpp#L1003
+>   [1]: https://github.com/iovisor/bcc/blob/master/src/cc/bcc_elf.c#L127
 >
 
-You are making two separate changes in one patch, let's split them.
+Good thing is that we have an easy way to add these options (opts
+struct), but let me first investigate what's going on here and try to
+root cause it. Giving a too easy "way out" for cases like this
+disincentivizes root causing and fixing the actual underlying issue.
+I'll leave this relaxed option as a follow up based on additional
+production rollout results.
 
-> For uprobe auto-attach, the parsing can be simplified for the SEC()
-> name to a single ssscanf(); the return value of the sscanf can then
-
-too many sss :)
-
-> be used to distinguish between sections that simply specify
-> "u[ret]probe" (and thus cannot auto-attach), those that specify
-> "u[ret]probe/binary_path:function+offset" etc.
+> >
+> > For the [2], if you re-read comments, I've suggested to allow adding
+> > one USDT at a time instead of the "partial failure is ok" option,
+> > which you ended up doing. So your initial frustration was from
+> > suboptimal BCC API. After you added init_usdt() call that allowed to
+> > generate code for each individual binary+USDT target, you had all the
+> > control you needed, right? So here, bpf_program__attach_usdt() is a
+> > logical equivalent of that init_usdt() call from BCC, so should be all
+> > good. If bpf_program__attach_usdt() fails for some process/binary that
+> > is now gone, you can just ignore and continue attaching for other
+> > binaries, right?
 >
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  tools/lib/bpf/libbpf.c          | 77 ++++++++++++++++-------------------------
->  tools/lib/bpf/libbpf_internal.h |  5 +++
->  2 files changed, 35 insertions(+), 47 deletions(-)
+> You're right, goal of that BCC PR was to relax strictness at USDT level, not
+> probe level. I included it to demonstrate that giving users more control over
+> attach behavior has been useful in the past. If BCC had similar strictness
+> at probe level I would've sent a PR to address that as well, as it would've
+> broken a tracing daemon by now.
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 91ce94b..3f23e88 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -10750,7 +10750,7 @@ static int resolve_full_path(const char *file, char *result, size_t result_sz)
->         const char *search_paths[3] = {};
->         int i;
->
-> -       if (strstr(file, ".so")) {
-> +       if (str_has_sfx(file, ".so") || strstr(file, ".so.")) {
->                 search_paths[0] = getenv("LD_LIBRARY_PATH");
->                 search_paths[1] = "/usr/lib64:/usr/lib";
->                 search_paths[2] = arch_specific_lib_paths();
-> @@ -10897,60 +10897,43 @@ static int resolve_full_path(const char *file, char *result, size_t result_sz)
->  static int attach_uprobe(const struct bpf_program *prog, long cookie, struct bpf_link **link)
->  {
->         DECLARE_LIBBPF_OPTS(bpf_uprobe_opts, opts);
-> -       char *func, *probe_name, *func_end;
-> -       char *func_name, binary_path[512];
-> -       unsigned long long raw_offset;
-> +       char *probe_type = NULL, *binary_path = NULL, *func_name = NULL;
-> +       int n, ret = -EINVAL;
->         size_t offset = 0;
-> -       int n;
->
->         *link = NULL;
->
-> -       opts.retprobe = str_has_pfx(prog->sec_name, "uretprobe");
-> -       if (opts.retprobe)
-> -               probe_name = prog->sec_name + sizeof("uretprobe") - 1;
-> -       else
-> -               probe_name = prog->sec_name + sizeof("uprobe") - 1;
-> -       if (probe_name[0] == '/')
-> -               probe_name++;
-> -
-> -       /* handle SEC("u[ret]probe") - format is valid, but auto-attach is impossible. */
-> -       if (strlen(probe_name) == 0)
-> -               return 0;
-> -
-> -       snprintf(binary_path, sizeof(binary_path), "%s", probe_name);
-> -       /* ':' should be prior to function+offset */
-> -       func_name = strrchr(binary_path, ':');
-> -       if (!func_name) {
-> +       n = sscanf(prog->sec_name, "%m[^/]/%m[^:]:%m[a-zA-Z0-9_.]+%zu",
+> >>   [0]: https://github.com/facebookincubator/BOLT/commit/ea49a61463c65775aa796a9ef7a1199f20d2a698
+> >>   [1]: https://github.com/facebookincubator/BOLT/commit/93860e02a19227be4963a68aa99ea0e09771052b
+> >>   [2]: https://github.com/iovisor/bcc/pull/2476
+> >>
+> >>> USDT BPF programs themselves are marked in BPF source code as either
+> >>> SEC("usdt"), in which case they won't be auto-attached through
+> >>> skeleton's <skel>__attach() method, or it can have a full definition,
+> >>> which follows the spirit of fully-specified uprobes:
+> >>> SEC("usdt/<path>:<provider>:<name>"). In the latter case skeleton's
+> >>> attach method will attempt auto-attachment. Similarly, generic
+> >>> bpf_program__attach() will have enought information to go off of for
+> >>> parameterless attachment.
+> >>>
+> >>> USDT BPF programs are actually uprobes, and as such for kernel they are
+> >>> marked as BPF_PROG_TYPE_KPROBE.
+> >>>
+> >>> Another part of this patch is USDT-related feature probing:
+> >>>   - BPF cookie support detection from user-space;
+> >>>   - detection of kernel support for auto-refcounting of USDT semaphore.
+> >>>
+> >>> The latter is optional. If kernel doesn't support such feature and USDT
+> >>> doesn't rely on USDT semaphores, no error is returned. But if libbpf
+> >>> detects that USDT requires setting semaphores and kernel doesn't support
+> >>> this, libbpf errors out with explicit pr_warn() message. Libbpf doesn't
+> >>> support poking process's memory directly to increment semaphore value,
+> >>> like BCC does on legacy kernels, due to inherent raciness and danger of
+> >>> such process memory manipulation. Libbpf let's kernel take care of this
+> >>> properly or gives up.
+> >>>
+> >>> Logistically, all the extra USDT-related infrastructure of libbpf is put
+> >>> into a separate usdt.c file and abstracted behind struct usdt_manager.
+> >>> Each bpf_object has lazily-initialized usdt_manager pointer, which is
+> >>> only instantiated if USDT programs are attempted to be attached. Closing
+> >>> BPF object frees up usdt_manager resources. usdt_manager keeps track of
+> >>> USDT spec ID assignment and few other small things.
+> >>>
+> >>> Subsequent patches will fill out remaining missing pieces of USDT
+> >>> initialization and setup logic.
+> >>>
+> >>> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> >>> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> >>> ---
+> >>>  tools/lib/bpf/Build             |   3 +-
+> >>>  tools/lib/bpf/libbpf.c          | 100 +++++++-
+> >>>  tools/lib/bpf/libbpf.h          |  31 +++
+> >>>  tools/lib/bpf/libbpf.map        |   1 +
+> >>>  tools/lib/bpf/libbpf_internal.h |  19 ++
+> >>>  tools/lib/bpf/usdt.c            | 426 ++++++++++++++++++++++++++++++++
+> >>>  6 files changed, 571 insertions(+), 9 deletions(-)
+> >>>  create mode 100644 tools/lib/bpf/usdt.c
+> >>
 
-note that previously you were using %li for offset which allows
-decimal and hexadecimal formats, I think that's convenient, let's
-allow that still
-
-> +                  &probe_type, &binary_path, &func_name, &offset);
-> +       switch (n) {
-> +       case 1:
-> +               /* handle SEC("u[ret]probe") - format is valid, but auto-attach is impossible. */
-> +               ret = 0;
-> +               break;
-> +       case 2:
->                 pr_warn("section '%s' missing ':function[+offset]' specification\n",
->                         prog->sec_name);
-
-please use 'prog '%s': ' prefix in these attach_xxx() functions for consistency
-
-> -               return -EINVAL;
-> -       }
-> -       func_name[0] = '\0';
-> -       func_name++;
-> -       n = sscanf(func_name, "%m[a-zA-Z0-9_.]+%li", &func, &offset);
-> -       if (n < 1) {
-> -               pr_warn("uprobe name '%s' is invalid\n", func_name);
-> -               return -EINVAL;
-> -       }
-> -       if (opts.retprobe && offset != 0) {
-> -               free(func);
-> -               pr_warn("uretprobes do not support offset specification\n");
-> -               return -EINVAL;
-> -       }
-> -
-> -       /* Is func a raw address? */
-> -       errno = 0;
-> -       raw_offset = strtoull(func, &func_end, 0);
-> -       if (!errno && !*func_end) {
-> -               free(func);
-> -               func = NULL;
-> -               offset = (size_t)raw_offset;
-> +               break;
-> +       case 3:
-> +       case 4:
-> +               opts.retprobe = str_has_pfx(prog->sec_name, "uretprobe");
-
-you just parsed probe_type, strcmp() against that instead, no need for
-prefix check
-
-> +               if (opts.retprobe && offset != 0) {
-> +                       pr_warn("uretprobes do not support offset specification\n");
-> +                       break;
-> +               }
-> +               opts.func_name = func_name;
-> +               *link = bpf_program__attach_uprobe_opts(prog, -1, binary_path, offset, &opts);
-> +               ret = libbpf_get_error(*link);
-> +               break;
-> +       default:
-> +               pr_warn("uprobe name '%s' is invalid\n", prog->sec_name);
-
-Add "prog '%s': " prefix. Also, the section name is not an uprobe
-name. Maybe "prog '%s': invalid format of section definition '%s'\n"?
-
-> +               break;
->         }
-> -       opts.func_name = func;
-> +       free(probe_type);
-> +       free(binary_path);
-> +       free(func_name);
->
-> -       *link = bpf_program__attach_uprobe_opts(prog, -1, binary_path, offset, &opts);
-> -       free(func);
-> -       return libbpf_get_error(*link);
-> +       return ret;
->  }
->
->  struct bpf_link *bpf_program__attach_uprobe(const struct bpf_program *prog,
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-> index b6247dc..155702a 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -103,6 +103,11 @@
->  #define str_has_pfx(str, pfx) \
->         (strncmp(str, pfx, __builtin_constant_p(pfx) ? sizeof(pfx) - 1 : strlen(pfx)) == 0)
->
-> +/* similar for suffix */
-> +#define str_has_sfx(str, sfx) \
-> +       (strlen(sfx) <= strlen(str) ? \
-> +        strncmp(str + strlen(str) - strlen(sfx), sfx, strlen(sfx)) == 0 : 0)
-> +
-
-so str_has_pfx() is a macro to avoid strlen() for string literals.
-Here you don't do any optimization like that and instead calculating
-and recalculating strlen() multiple times. Just make this a static
-inline helper function?
-
-and you don't need strncmp() anymore, strcmp() is as safe after all
-the strlen() checks and calculations
-
-
-
->  /* Symbol versioning is different between static and shared library.
->   * Properly versioned symbols are needed for shared library, but
->   * only the symbol of the new version is needed for static library.
-> --
-> 1.8.3.1
->
+[...]
