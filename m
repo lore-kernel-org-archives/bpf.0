@@ -2,232 +2,212 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86833C43219
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A788AC433FE
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453353AbiDEXrK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
+        id S1455953AbiDEXrW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577621AbiDEXMg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:12:36 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3795CF7F5B
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 14:44:14 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2eb7d137101so4616297b3.12
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 14:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Ef67EnXWWhCb2BYe2KO6rF+1VUv5TW07S9SVbOQXy7g=;
-        b=J4G2I65mvrsZaQKVgzq5ohqRykvDGgexG0oPDdKoMCyKS/pmHFCAEIh+feMIt2zVun
-         q5Er3hHnAFr+auynneQu9NNH0t9VkXlJed8Zj+dQr0KwaSSlfkmvqPdwDE9VRH4fFcTa
-         hlGTksX8Hh0mBP1uL6Lux888X4zeMeNLnqXn27Cuc9A9NBjtvD0TsMq4Gupzoqf/mVXN
-         DcTiWOz9T7rZuU6imAuTl+RSx5UUVR6QZCPXwifjuI0SdTgwX4q6bwp+Lh0UPMJVYUAp
-         mmBHA0VN3DyjRl5Or2BM84uKQBgmCBNoHEnYprpQjJjrla1F1tcSR/AoYokgWDySeteT
-         nuYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Ef67EnXWWhCb2BYe2KO6rF+1VUv5TW07S9SVbOQXy7g=;
-        b=M5Jgu5pySVR+idT+0bTCx+ySVHs2OJI9pnphUATrjaTG2hMc7YEVbA4HyzVOdhscmb
-         RkdKXyoO43AbI4D12/ZVuhbQZYMoZHeZDSDjOZOrelsU+cRME2fZxI3evRvdQuxaY9eF
-         G5LD5LO1vfHLJhckaa58+mIuchIwrgLZjuETlMMWZdpfR8qP1zuuJgEXhhHGZIhxDROC
-         NTHyWV2js8JRaeMMaF/Nv7f0QXa8dOAmkHRPKdQYyhfDDd4pTEZVHKJdOLaJwhn1vCXy
-         FWRxT+hQonS7baZ4N3rzRqauACGE/MwhlhaTfrBj8973l+a1OglrPEg5xgnKKw4vNnfO
-         WQKw==
-X-Gm-Message-State: AOAM533UKkAgR7L7TUXvqldnE0HlebnIJ8oW0+GTFaCS9tWqyXR4MS4k
-        QzW6KUG9pJjbto1c0IQaBHeYcBo=
-X-Google-Smtp-Source: ABdhPJwA90IuQhTY9kpiqRpGPw00uHt1oblCwF8RTdKKkahmlNwx3J5b0/oWh+H8r/eEhmUn2lQmmXg=
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:73b5:ffab:2024:2901])
- (user=sdf job=sendgmr) by 2002:a81:6689:0:b0:2eb:6dc1:6a58 with SMTP id
- a131-20020a816689000000b002eb6dc16a58mr4592992ywc.47.1649195027666; Tue, 05
- Apr 2022 14:43:47 -0700 (PDT)
-Date:   Tue,  5 Apr 2022 14:43:36 -0700
-In-Reply-To: <20220405214342.1968262-1-sdf@google.com>
-Message-Id: <20220405214342.1968262-2-sdf@google.com>
-Mime-Version: 1.0
-References: <20220405214342.1968262-1-sdf@google.com>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH bpf-next v2 1/7] bpf: add bpf_func_t and trampoline helpers
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1457649AbiDEQYE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 12:24:04 -0400
+Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4789F3B9
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 09:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649175722; bh=szf/cJYLQOZWni9lQf7ZhLfzr+7rhBIA+E3sIp1+wJc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=bZfL/NxYUY/nWW3qF2ZJjXG7Dg3pNQUyUnVHMCdlQYcK8KhjV2XIlaKccjneeCkFwe+UCJcmiHojHKBIADLU4Ikbupp+K45ltqzCRWzFjDPZMJ3/O7vaBcjp67kmvgMnWI7P0TCKjW99cXK8bk+5rylTUO1IAsJur8Jnb/KOHY4RMaxTIYqnDQ1lTkISegPfoAVdUD6+eHMiQt4gKQJoSBEhNaGN2pU/bjA9ttpnY4VZfD8LFNi+2w1An9PfTYYCHWIluLdQOnyvy9qkUs33ycWByVBKC8R7NedWGNHjON7zbO7QJDyfam89JJ2UClf7U5zwYsNlK8flfJ4iFI5e4A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649175722; bh=MjWoY0XQ7yCC8DRinMvFIWEycwD9ENQrbHuDSvHQo40=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=QZqQZtXrXXr+kG1OaAGR8Qn0h22DavyioI6fHj1usmFCPqfQk8tQXvolZqg3SQvh/W0Nuv0T5zGX2AYVLxAj9eiQkIJyD/5kj1LCyQJKBgCt7YeKkyYi1rqEQUnWFCH1aTzNEUiMEPTOxKWN75UfbQG2AvV7uZsjc//Nbr8u8pkbOcd5ieeLWq/Kr8xKN/1drb2wiykVfYRVCSr9KhChmWf3nosToXopMFGmlcxdmbHYy/V+v1rF1NKkAU8PZHQKcJervgnJWq41qGIQxnhHgp02Nhh/mxFhno06j4KJ1DUqqFDVTNoh99mw8mM+fcs97dodAzpjpLFFo6+fz2H9wQ==
+X-YMail-OSG: zQyH2LwVM1lp5wptu1Nu6P6xp3FdwTzJCg9Lej0g55C5Xx0XIRvIQ05IUhF81Xa
+ p5wo8I1T_FGz5a.8kX7LA.b37J19Sa53hRJwhiWeUEz0vNsHWCZ4Zw8ii81Awkjj0Gk8GHkvtcKt
+ JBgvws_8K8YjlxSr3DgFY7b9uTWdblyYIjBK9tHDGhHLPi0pq_ZGwvP4Pszxk5mEmqQb.ecXvauS
+ 3uVHa7k5mgaWEQ9.xJnR1BNEh5CXais8nD.voUgflz2WxJnhRulTYQ_s5hjDIBMfyIJ6.N_m7CXQ
+ pxC46xxx9gSozYR6ffjr.SLgNTxb3.xrWdXmQ3vKVEUtkvCC2QxbK2QkKAyYpYc7p5j4NjYPyXGS
+ uK3NDvg6a9ynh8e1.Vt0v5gyBrGgdZP00r4n6C41JCCETeT_BwtjsDgN4hYPSYuIKKvVA5Bw.aMo
+ 8CJ0zW2G.uvcecyYN4GKTRI2pUAfIHD5dhoIZWZkrVQH.zmFeuZIB5T0gV1tgD2P8YJpZFPhyW2q
+ 3mG3qzvduo66EOgEyniniTs57H2nebdeRyaWflufxY9pYu_pk5ZDT_ftZhA1a6pw2H0EkOq88V7a
+ CXER_19r_9N3Gw9iOtemV_Ip4H25Xq6OfftLt.GTr.n_.BX7pYd63zeJtFsCE22LImCE7fN4VNKN
+ Nop0eL23X2KvJJrQI3EGmNzQVP7Bbew2cVZeNLRwdp2P8i2gg22C4W.cG3q4uQ24fK2sxUA1n9NZ
+ i3z9gTrvNEFRo_Jqn9pt5i0L_nGvWtdNYRDDsLwSe7VA3pwjpJINAtCWe0iilbPU8f9OO9Pade6K
+ MzzFtSLMhzhSFARvhqkOOW5IDc3LwHg0dv4iOgSR3SRmD0_tmMH6.rj6tKKWhhS7IT.KFZjaILr8
+ GyWYjD_hc9lGUTt9lSU2DYoiRKTu6CO8FJzEP0uz0T8rpzOJgmtt9axS2xqEb62VtkLpt.N0t74h
+ 61R5hpRnUjCa1IDwAslSGt.vYPCHM3bZ1IbEgr29EyMdasfmXRWp5VtTYPgia9LBhzCSgrTBU9fI
+ FCGnWpVhg_eXTGgRKoUnb8IxtUC1DNFPVNKeVlnCOTwVX2EjMuwPfbI.XOwt6XjQQ8vlpJko_PMd
+ X_n_SW9mCGqGvtBFIa5XBfID9pjmF.BDJBmTIkBuIUTtl9iXDtQZ8xRnVBsPmrsP2OHkx7h.C.kT
+ NgEWrcNmNy1l1jmP0AGTMtXIMaza92pxwqPYhqEpdARZaWi_g2RdDlaTc1pXubLpzoqI92wf68N1
+ Z4jCCpMkm3yjfFA8nGqTxtMc9LG_OIl.2FRtwBmgUEuFai4hZUvFS10QsgYMQXhslH2cKpYvcfZX
+ wKMzAleqOjU7WuAkPCx5LkGLZL2_eCPbg2Bn4GMlcqaJ1uKrCt12c.4k_5B.bTMhXd7ARp88EACu
+ 79CBisyF280Aj2dwhkcmwHuaDMD449DDyQzY6l6JdE5qZvSl7RvT6Ckhu9Ml7iksUEMroGMicaMu
+ bti8mRpar5mkedy_AOxThS8l46n2uSHNr8vs7abj_o9u9ykY18P5lJIrYi9tW9ZGdn0ZhK_1fqej
+ 1Lck.Ig0FCYlp2qDft_xZr1VATGM1Gue_TWbpX2izkpS2bS4T2QZZF8q7FgE6WWvki4Ut.eZImyy
+ .cNRifDt6GlQErfWY3mUn3.L8efdsmXVwggeBTKja1hnandR1RROlB3OnPBNch8FFAFiZnOhvAXr
+ QIjHOGd5HjN4lxsee4tcq1ADCo8UoZxbgiEULZRx5a_UHjbtpexPcu7PFTuyeXbsNe4qJmLQY5Qs
+ XzxDp3xlUqZcCh06XH1XsuAhtIH6.0zGeMZ65XRvSKE_XQsAKxgM5ukcIOXxXMPcYTD1VTYrDhKH
+ c.AaIVuH3Rc2.6d7.ac2nHWtLILdFBEhx2mcP9ekRNsABsUqG4xD3dykanY8e3mYVMC0.ieDQk2n
+ OQbEbhfBkt1DQqdP.g3tVCdmDZWcNVWmvMGw0fYzqvicvnXGi01FHwTrUvP6ENNRDh6d84BrUevr
+ QioA4Gg0RDKJug0e.Jl2jm9abJEojMxAxwmWzxR.O0n8qZfYo0s_zBK655X.O3GUSl9ZvLn75nq1
+ 1CC0q.V2UcuNkx_lb5Z9x6hFFZixe7VLqytr1BAVIZZWlXRypUeXtVND0ZB9IMIRHx2mJrw2l2fS
+ Bf_fJ9OHXPEfwBlG80hEqu9C21UKSfOLni7bAO_yUjP6ZvHToll22s24VlPQ3BE__5B8gQNX5Qet
+ TFSx_AgGA48hwvK22F0vvPa1gMQ8Y4ZiOoiRere2IY4PonJv99q6MnJaS_jLHBKicawqnkrZpUf0
+ yK3F3agTG7yf2B6E-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Tue, 5 Apr 2022 16:22:02 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-6hz22 (VZM Hermes SMTP Server) with ESMTPA ID 3e6e483849819b115c06d1b80343537d;
+          Tue, 05 Apr 2022 16:21:58 +0000 (UTC)
+Message-ID: <fb804242-da2c-4213-9dc3-f09ea42f0355@schaufler-ca.com>
+Date:   Tue, 5 Apr 2022 09:21:53 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+ <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+ <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+ <c2e57f10b62940eba3cfcae996e20e3c@huawei.com>
+ <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+ <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I'll be adding lsm cgroup specific helpers that grab
-trampoline mutex.
+On 4/5/2022 8:29 AM, Roberto Sassu wrote:
+>> From: Casey Schaufler [mailto:casey@schaufler-ca.com]
+>> Sent: Tuesday, April 5, 2022 4:50 PM
+>> On 4/4/2022 10:20 AM, Roberto Sassu wrote:
+>>>> From: Djalal Harouni [mailto:tixxdz@gmail.com]
+>>>> Sent: Monday, April 4, 2022 9:45 AM
+>>>> On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
+>>>>> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
+>>>>> <alexei.starovoitov@gmail.com> wrote:
+>>>> ...
+>>>>>>> Pinning
+>>>>>>> them to unreachable inodes intuitively looked the
+>>>>>>> way to go for achieving the stated goal.
+>>>>>> We can consider inodes in bpffs that are not unlinkable by root
+>>>>>> in the future, but certainly not for this use case.
+>>>>> Can this not be already done by adding a BPF_LSM program to the
+>>>>> inode_unlink LSM hook?
+>>>>>
+>>>> Also, beside of the inode_unlink... and out of curiosity: making
+>> sysfs/bpffs/
+>>>> readonly after pinning, then using bpf LSM hooks
+>>>> sb_mount|remount|unmount...
+>>>> family combining bpf() LSM hook... isn't this enough to:
+>>>> 1. Restrict who can pin to bpffs without using a full MAC
+>>>> 2. Restrict who can delete or unmount bpf filesystem
+>>>>
+>>>> ?
+>>> I'm thinking to implement something like this.
+>>>
+>>> First, I add a new program flag called
+>>> BPF_F_STOP_ONCONFIRM, which causes the ref count
+>>> of the link to increase twice at creation time. In this way,
+>>> user space cannot make the link disappear, unless a
+>>> confirmation is explicitly sent via the bpf() system call.
+>>>
+>>> Another advantage is that other LSMs can decide
+>>> whether or not they allow a program with this flag
+>>> (in the bpf security hook).
+>>>
+>>> This would work regardless of the method used to
+>>> load the eBPF program (user space or kernel space).
+>>>
+>>> Second, I extend the bpf() system call with a new
+>>> subcommand, BPF_LINK_CONFIRM_STOP, which
+>>> decreasres the ref count for the link of the programs
+>>> with the BPF_F_STOP_ONCONFIRM flag. I will also
+>>> introduce a new security hook (something like
+>>> security_link_confirm_stop), so that an LSM has the
+>>> opportunity to deny the stop (the bpf security hook
+>>> would not be sufficient to determine exactly for
+>>> which link the confirmation is given, an LSM should
+>>> be able to deny the stop for its own programs).
+>> Would you please stop referring to a set of eBPF programs
+>> loaded into the BPF LSM as an LSM? Call it a BPF security
+>> module (BSM) if you must use an abbreviation. An LSM is a
+>> provider of security_ hooks. In your case that is BPF. When
+>> you call the set of eBPF programs an LSM it is like calling
+>> an SELinux policy an LSM.
+> An eBPF program could be a provider of security_ hooks
+> too.
 
-No functional changes.
+No, it can't. If I look in /sys/kernel/security/lsm what
+you see is "bpf". The LSM is BPF. What BPF does in its
+hooks is up to it and its responsibility.
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- include/linux/bpf.h     | 11 ++++---
- kernel/bpf/trampoline.c | 63 +++++++++++++++++++++++------------------
- 2 files changed, 40 insertions(+), 34 deletions(-)
+>   The bpf LSM is an aggregator, similarly to your
+> infrastructure to manage built-in LSMs. Maybe, calling
+> it second-level LSM or secondary LSM would better
+> represent this new class.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdb5298735ce..487aba40ce52 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -52,6 +52,8 @@ typedef u64 (*bpf_callback_t)(u64, u64, u64, u64, u64);
- typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
- 					struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
-+typedef unsigned int (*bpf_func_t)(const void *,
-+				   const struct bpf_insn *);
- struct bpf_iter_seq_info {
- 	const struct seq_operations *seq_ops;
- 	bpf_iter_init_seq_priv_t init_seq_private;
-@@ -798,8 +800,7 @@ struct bpf_dispatcher {
- static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
- 	const void *ctx,
- 	const struct bpf_insn *insnsi,
--	unsigned int (*bpf_func)(const void *,
--				 const struct bpf_insn *))
-+	bpf_func_t bpf_func)
- {
- 	return bpf_func(ctx, insnsi);
- }
-@@ -827,8 +828,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
--		unsigned int (*bpf_func)(const void *,			\
--					 const struct bpf_insn *))	\
-+		bpf_func_t bpf_func)					\
- 	{								\
- 		return bpf_func(ctx, insnsi);				\
- 	}								\
-@@ -839,8 +839,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 	unsigned int bpf_dispatcher_##name##_func(			\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
--		unsigned int (*bpf_func)(const void *,			\
--					 const struct bpf_insn *));	\
-+		bpf_func_t bpf_func);					\
- 	extern struct bpf_dispatcher bpf_dispatcher_##name;
- #define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
- #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index ada97751ae1b..0c4fd194e801 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -407,42 +407,34 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
- 	}
- }
- 
--int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
-+static int __bpf_trampoline_link_prog(struct bpf_prog *prog,
-+				      struct bpf_trampoline *tr)
- {
- 	enum bpf_tramp_prog_type kind;
- 	int err = 0;
- 	int cnt;
- 
- 	kind = bpf_attach_type_to_tramp(prog);
--	mutex_lock(&tr->mutex);
--	if (tr->extension_prog) {
-+	if (tr->extension_prog)
- 		/* cannot attach fentry/fexit if extension prog is attached.
- 		 * cannot overwrite extension prog either.
- 		 */
--		err = -EBUSY;
--		goto out;
--	}
-+		return -EBUSY;
-+
- 	cnt = tr->progs_cnt[BPF_TRAMP_FENTRY] + tr->progs_cnt[BPF_TRAMP_FEXIT];
- 	if (kind == BPF_TRAMP_REPLACE) {
- 		/* Cannot attach extension if fentry/fexit are in use. */
--		if (cnt) {
--			err = -EBUSY;
--			goto out;
--		}
-+		if (cnt)
-+			return -EBUSY;
- 		tr->extension_prog = prog;
--		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
--					 prog->bpf_func);
--		goto out;
--	}
--	if (cnt >= BPF_MAX_TRAMP_PROGS) {
--		err = -E2BIG;
--		goto out;
-+		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
-+					  prog->bpf_func);
- 	}
--	if (!hlist_unhashed(&prog->aux->tramp_hlist)) {
-+	if (cnt >= BPF_MAX_TRAMP_PROGS)
-+		return -E2BIG;
-+	if (!hlist_unhashed(&prog->aux->tramp_hlist))
- 		/* prog already linked */
--		err = -EBUSY;
--		goto out;
--	}
-+		return -EBUSY;
- 	hlist_add_head(&prog->aux->tramp_hlist, &tr->progs_hlist[kind]);
- 	tr->progs_cnt[kind]++;
- 	err = bpf_trampoline_update(tr);
-@@ -450,30 +442,45 @@ int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
- 		hlist_del_init(&prog->aux->tramp_hlist);
- 		tr->progs_cnt[kind]--;
- 	}
--out:
-+	return err;
-+}
-+
-+int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
-+{
-+	int err;
-+
-+	mutex_lock(&tr->mutex);
-+	err = __bpf_trampoline_link_prog(prog, tr);
- 	mutex_unlock(&tr->mutex);
- 	return err;
- }
- 
--/* bpf_trampoline_unlink_prog() should never fail. */
--int bpf_trampoline_unlink_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
-+static int __bpf_trampoline_unlink_prog(struct bpf_prog *prog,
-+					struct bpf_trampoline *tr)
- {
- 	enum bpf_tramp_prog_type kind;
- 	int err;
- 
- 	kind = bpf_attach_type_to_tramp(prog);
--	mutex_lock(&tr->mutex);
- 	if (kind == BPF_TRAMP_REPLACE) {
- 		WARN_ON_ONCE(!tr->extension_prog);
- 		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP,
- 					 tr->extension_prog->bpf_func, NULL);
- 		tr->extension_prog = NULL;
--		goto out;
-+		return err;
- 	}
- 	hlist_del_init(&prog->aux->tramp_hlist);
- 	tr->progs_cnt[kind]--;
--	err = bpf_trampoline_update(tr);
--out:
-+	return bpf_trampoline_update(tr);
-+}
-+
-+/* bpf_trampoline_unlink_prog() should never fail. */
-+int bpf_trampoline_unlink_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
-+{
-+	int err;
-+
-+	mutex_lock(&tr->mutex);
-+	err = __bpf_trampoline_unlink_prog(prog, tr);
- 	mutex_unlock(&tr->mutex);
- 	return err;
- }
--- 
-2.35.1.1094.g7c7d902a7c-goog
+It isn't an LSM, and adding a qualifier doesn't make it
+one and only adds to the confusion.
 
+> The only differences are the registration method, (SEC
+> directive instead of DEFINE_LSM), and what the hook
+> implementation can access.
+
+Those two things pretty well define what an LSM is.
+
+> The implementation of a security_ hook via eBPF can
+> follow the same structure of built-in LSMs, i.e. it can be
+> uniquely responsible for enforcing and be policy-agnostic,
+> and can retrieve the decisions based on a policy from a
+> component implemented somewhere else.
+
+The BPF LSM provides mechanism. The eBPF programs provide policy.
+
+>
+> Hopefully, I understood the basic principles correctly.
+> I let the eBPF maintainers comment on this.
+>
+> Thanks
+>
+> Roberto
+>
+> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+> Managing Director: Li Peng, Zhong Ronghua
+>
+>>> What do you think?
+>>>
+>>> Thanks
+>>>
+>>> Roberto
+>>>
+>>> HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+>>> Managing Director: Li Peng, Zhong Ronghua
