@@ -2,86 +2,232 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73387C433F5
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86833C43219
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:10:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454204AbiDEXrP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S1453353AbiDEXrK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457748AbiDEQjt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:39:49 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97459D76C0;
-        Tue,  5 Apr 2022 09:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649176670; x=1680712670;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1a6ZVwGCUfADZf6orM/CqhG/a4zc3vyK0G6QcP2tC1g=;
-  b=jw7EDf+L+XqJwajMyR42JEIswrrDGZ4pSArz507OxRXOrrSAfyQLz9tF
-   KnW8nIOCPI8bJk0boVtN7JSYJhRI2ZechXQ0sEQ4EfIE8c/4vYDUbT7x5
-   lQPDHi3wngQM9kv33FFVkluHHG5wI2t7l6ek6gqzpdWyMf/iQF+BHeRsz
-   Yy0epPF2rxib/LHmeuRC/lDg2XWUIONA2Oje9sgGCZ/+fknZaSS0E8mB+
-   A4OxjW9hp4vtoEXxmZEDj+RX0aU0ZKFgpm6kz9/2yPvCYY6ZaxfaXqNZ5
-   /E4eUf3JdaWzG1D4cK58bjDXK2L7iZnerz1SadrAmti14EpUXCIEnD9VM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="321492689"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="321492689"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 09:37:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="722116672"
-Received: from anguy11-desk2.jf.intel.com ([10.166.244.147])
-  by orsmga005.jf.intel.com with ESMTP; 05 Apr 2022 09:37:27 -0700
-From:   Tony Nguyen <anthony.l.nguyen@intel.com>
-To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        netdev@vger.kernel.org, anthony.l.nguyen@intel.com,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org,
-        Shwetha Nagaraju <shwetha.nagaraju@intel.com>
-Subject: [PATCH net 2/3] ice: xsk: fix VSI state check in ice_xsk_wakeup()
-Date:   Tue,  5 Apr 2022 09:38:02 -0700
-Message-Id: <20220405163803.63815-3-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220405163803.63815-1-anthony.l.nguyen@intel.com>
-References: <20220405163803.63815-1-anthony.l.nguyen@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S1577621AbiDEXMg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 19:12:36 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3795CF7F5B
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 14:44:14 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2eb7d137101so4616297b3.12
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 14:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=Ef67EnXWWhCb2BYe2KO6rF+1VUv5TW07S9SVbOQXy7g=;
+        b=J4G2I65mvrsZaQKVgzq5ohqRykvDGgexG0oPDdKoMCyKS/pmHFCAEIh+feMIt2zVun
+         q5Er3hHnAFr+auynneQu9NNH0t9VkXlJed8Zj+dQr0KwaSSlfkmvqPdwDE9VRH4fFcTa
+         hlGTksX8Hh0mBP1uL6Lux888X4zeMeNLnqXn27Cuc9A9NBjtvD0TsMq4Gupzoqf/mVXN
+         DcTiWOz9T7rZuU6imAuTl+RSx5UUVR6QZCPXwifjuI0SdTgwX4q6bwp+Lh0UPMJVYUAp
+         mmBHA0VN3DyjRl5Or2BM84uKQBgmCBNoHEnYprpQjJjrla1F1tcSR/AoYokgWDySeteT
+         nuYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=Ef67EnXWWhCb2BYe2KO6rF+1VUv5TW07S9SVbOQXy7g=;
+        b=M5Jgu5pySVR+idT+0bTCx+ySVHs2OJI9pnphUATrjaTG2hMc7YEVbA4HyzVOdhscmb
+         RkdKXyoO43AbI4D12/ZVuhbQZYMoZHeZDSDjOZOrelsU+cRME2fZxI3evRvdQuxaY9eF
+         G5LD5LO1vfHLJhckaa58+mIuchIwrgLZjuETlMMWZdpfR8qP1zuuJgEXhhHGZIhxDROC
+         NTHyWV2js8JRaeMMaF/Nv7f0QXa8dOAmkHRPKdQYyhfDDd4pTEZVHKJdOLaJwhn1vCXy
+         FWRxT+hQonS7baZ4N3rzRqauACGE/MwhlhaTfrBj8973l+a1OglrPEg5xgnKKw4vNnfO
+         WQKw==
+X-Gm-Message-State: AOAM533UKkAgR7L7TUXvqldnE0HlebnIJ8oW0+GTFaCS9tWqyXR4MS4k
+        QzW6KUG9pJjbto1c0IQaBHeYcBo=
+X-Google-Smtp-Source: ABdhPJwA90IuQhTY9kpiqRpGPw00uHt1oblCwF8RTdKKkahmlNwx3J5b0/oWh+H8r/eEhmUn2lQmmXg=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:73b5:ffab:2024:2901])
+ (user=sdf job=sendgmr) by 2002:a81:6689:0:b0:2eb:6dc1:6a58 with SMTP id
+ a131-20020a816689000000b002eb6dc16a58mr4592992ywc.47.1649195027666; Tue, 05
+ Apr 2022 14:43:47 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 14:43:36 -0700
+In-Reply-To: <20220405214342.1968262-1-sdf@google.com>
+Message-Id: <20220405214342.1968262-2-sdf@google.com>
+Mime-Version: 1.0
+References: <20220405214342.1968262-1-sdf@google.com>
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH bpf-next v2 1/7] bpf: add bpf_func_t and trampoline helpers
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+I'll be adding lsm cgroup specific helpers that grab
+trampoline mutex.
 
-ICE_DOWN is dedicated for pf->state. Check for ICE_VSI_DOWN being set on
-vsi->state in ice_xsk_wakeup().
+No functional changes.
 
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/bpf.h     | 11 ++++---
+ kernel/bpf/trampoline.c | 63 +++++++++++++++++++++++------------------
+ 2 files changed, 40 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index 33b28a72ffcb..866ee4df9671 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -920,7 +920,7 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
- 	struct ice_vsi *vsi = np->vsi;
- 	struct ice_tx_ring *ring;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..487aba40ce52 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -52,6 +52,8 @@ typedef u64 (*bpf_callback_t)(u64, u64, u64, u64, u64);
+ typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
+ 					struct bpf_iter_aux_info *aux);
+ typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
++typedef unsigned int (*bpf_func_t)(const void *,
++				   const struct bpf_insn *);
+ struct bpf_iter_seq_info {
+ 	const struct seq_operations *seq_ops;
+ 	bpf_iter_init_seq_priv_t init_seq_private;
+@@ -798,8 +800,7 @@ struct bpf_dispatcher {
+ static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
+ 	const void *ctx,
+ 	const struct bpf_insn *insnsi,
+-	unsigned int (*bpf_func)(const void *,
+-				 const struct bpf_insn *))
++	bpf_func_t bpf_func)
+ {
+ 	return bpf_func(ctx, insnsi);
+ }
+@@ -827,8 +828,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
+ 	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
+ 		const void *ctx,					\
+ 		const struct bpf_insn *insnsi,				\
+-		unsigned int (*bpf_func)(const void *,			\
+-					 const struct bpf_insn *))	\
++		bpf_func_t bpf_func)					\
+ 	{								\
+ 		return bpf_func(ctx, insnsi);				\
+ 	}								\
+@@ -839,8 +839,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
+ 	unsigned int bpf_dispatcher_##name##_func(			\
+ 		const void *ctx,					\
+ 		const struct bpf_insn *insnsi,				\
+-		unsigned int (*bpf_func)(const void *,			\
+-					 const struct bpf_insn *));	\
++		bpf_func_t bpf_func);					\
+ 	extern struct bpf_dispatcher bpf_dispatcher_##name;
+ #define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
+ #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index ada97751ae1b..0c4fd194e801 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -407,42 +407,34 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
+ 	}
+ }
  
--	if (test_bit(ICE_DOWN, vsi->state))
-+	if (test_bit(ICE_VSI_DOWN, vsi->state))
- 		return -ENETDOWN;
+-int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
++static int __bpf_trampoline_link_prog(struct bpf_prog *prog,
++				      struct bpf_trampoline *tr)
+ {
+ 	enum bpf_tramp_prog_type kind;
+ 	int err = 0;
+ 	int cnt;
  
- 	if (!ice_is_xdp_ena_vsi(vsi))
+ 	kind = bpf_attach_type_to_tramp(prog);
+-	mutex_lock(&tr->mutex);
+-	if (tr->extension_prog) {
++	if (tr->extension_prog)
+ 		/* cannot attach fentry/fexit if extension prog is attached.
+ 		 * cannot overwrite extension prog either.
+ 		 */
+-		err = -EBUSY;
+-		goto out;
+-	}
++		return -EBUSY;
++
+ 	cnt = tr->progs_cnt[BPF_TRAMP_FENTRY] + tr->progs_cnt[BPF_TRAMP_FEXIT];
+ 	if (kind == BPF_TRAMP_REPLACE) {
+ 		/* Cannot attach extension if fentry/fexit are in use. */
+-		if (cnt) {
+-			err = -EBUSY;
+-			goto out;
+-		}
++		if (cnt)
++			return -EBUSY;
+ 		tr->extension_prog = prog;
+-		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
+-					 prog->bpf_func);
+-		goto out;
+-	}
+-	if (cnt >= BPF_MAX_TRAMP_PROGS) {
+-		err = -E2BIG;
+-		goto out;
++		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
++					  prog->bpf_func);
+ 	}
+-	if (!hlist_unhashed(&prog->aux->tramp_hlist)) {
++	if (cnt >= BPF_MAX_TRAMP_PROGS)
++		return -E2BIG;
++	if (!hlist_unhashed(&prog->aux->tramp_hlist))
+ 		/* prog already linked */
+-		err = -EBUSY;
+-		goto out;
+-	}
++		return -EBUSY;
+ 	hlist_add_head(&prog->aux->tramp_hlist, &tr->progs_hlist[kind]);
+ 	tr->progs_cnt[kind]++;
+ 	err = bpf_trampoline_update(tr);
+@@ -450,30 +442,45 @@ int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
+ 		hlist_del_init(&prog->aux->tramp_hlist);
+ 		tr->progs_cnt[kind]--;
+ 	}
+-out:
++	return err;
++}
++
++int bpf_trampoline_link_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
++{
++	int err;
++
++	mutex_lock(&tr->mutex);
++	err = __bpf_trampoline_link_prog(prog, tr);
+ 	mutex_unlock(&tr->mutex);
+ 	return err;
+ }
+ 
+-/* bpf_trampoline_unlink_prog() should never fail. */
+-int bpf_trampoline_unlink_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
++static int __bpf_trampoline_unlink_prog(struct bpf_prog *prog,
++					struct bpf_trampoline *tr)
+ {
+ 	enum bpf_tramp_prog_type kind;
+ 	int err;
+ 
+ 	kind = bpf_attach_type_to_tramp(prog);
+-	mutex_lock(&tr->mutex);
+ 	if (kind == BPF_TRAMP_REPLACE) {
+ 		WARN_ON_ONCE(!tr->extension_prog);
+ 		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP,
+ 					 tr->extension_prog->bpf_func, NULL);
+ 		tr->extension_prog = NULL;
+-		goto out;
++		return err;
+ 	}
+ 	hlist_del_init(&prog->aux->tramp_hlist);
+ 	tr->progs_cnt[kind]--;
+-	err = bpf_trampoline_update(tr);
+-out:
++	return bpf_trampoline_update(tr);
++}
++
++/* bpf_trampoline_unlink_prog() should never fail. */
++int bpf_trampoline_unlink_prog(struct bpf_prog *prog, struct bpf_trampoline *tr)
++{
++	int err;
++
++	mutex_lock(&tr->mutex);
++	err = __bpf_trampoline_unlink_prog(prog, tr);
+ 	mutex_unlock(&tr->mutex);
+ 	return err;
+ }
 -- 
-2.31.1
+2.35.1.1094.g7c7d902a7c-goog
 
