@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C2A7C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB05EC433F5
 	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 15:24:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351586AbiDEPZr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 11:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S1355258AbiDEPZv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 11:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355258AbiDEOVj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:21:39 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393F652F0;
-        Tue,  5 Apr 2022 06:09:34 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q142so9209584pgq.9;
-        Tue, 05 Apr 2022 06:09:34 -0700 (PDT)
+        with ESMTP id S239713AbiDEOWz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 10:22:55 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0986A433;
+        Tue,  5 Apr 2022 06:09:46 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id bo5so12048814pfb.4;
+        Tue, 05 Apr 2022 06:09:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kEvX7e1LRk8hq7EVC3eBy2OeVtrJmQlrIB7WWAJzilU=;
-        b=aAXm1ETsLlBg2pebplD2DAO8ZOpD8sm3uSZtJsg9vwmAg0ZExijiYvoiZr+4iG4e1H
-         U6rm2IL2gwyTBTywqvmn2Sp4+ZmiUrNFw9Lgw2i1AEWZzsatJYBQxpPAyuUpLYpFa6lc
-         ED7oiFFQ7NlzuzTbS3cEvSPfFcqosfZn6Hg5s6YHDuDRo5ckOPI3yT0xXrnR3bKcp3HI
-         iB835vR/jzg0XQz6k0bROHd162OQruI4Lli449zaxIwYM9eZqUaZzSJv1mYLqidZwv5n
-         BnCXZkfOGdSGH/2ab8++dCS2CGDkCQGA9+3A7JrbU3XGSfiWhYT+PcQczYScoU1ywNgg
-         b6EA==
+        bh=6m7ShcbASdrto/3TsaoHbBXRCyYeXuWGLlXaER69zS8=;
+        b=OSQiFVkSzzdo38CkZyMYBw1cWEhozWr71fgIEwkmRokuJmsa6OfIdmGOHPyKVK8vOC
+         z8VvyKZZWxj012CK6f5dln/zgBaYFiUp2cY4uS93vOTwCsx4xrOHY9Zb72xnHhms2Lh8
+         YNVsWSLFmQvKIvNVbFjj5RU9S8W5eYaJbyplCDAwtLy96FrrVLb676yZGyR1cgJcpPDs
+         Z3QJcrXNqFkdN5RxX1BATSptpGSSyEZSrPhAb76i6LcegqpL7iEoB1VkJjFFT4AbwBT8
+         cieKdNo9+bqmPy4GqMdq2CH3l+01Zfp/2juhp6F9834jEnNylc/POBHb/ZyYQ9cUYrPm
+         vBEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kEvX7e1LRk8hq7EVC3eBy2OeVtrJmQlrIB7WWAJzilU=;
-        b=Xo7l+gXtcUyGJeJCTOc0j+FFgYGZug6RcWPt9jlS8DWoaTpEinekObjl4LlQLmtd6P
-         VZtXpKEntW+hj4qI5A+RWGazRXU6hwwYEMevIaWpfaVNeP9QnaM/6b84YprlVsndy5cS
-         hx1lSVK6zXXeDW6VMxRm53Wug1m3JNJtZnBHRNI3zcaXQuxqflC97is8o55TiHnFjwAi
-         HoKkqcS36RDqBJBT300iyeyOfKfkdk04wr3K8y7Dd3ELoDAtRp0LwuNZ2fmOzSJ2juf5
-         VnEg/XIhr3CyBKLjckBrcQqbTreEsPtfIcXHsRGo4SjV+zGoP1OhbpWT/F/T28jNTcW2
-         Qs6Q==
-X-Gm-Message-State: AOAM533K6lbM2VB27pqNOah3iPOZuuqUita6+vXMws//jBmlaLeRW0Rq
-        S0ZBOpoCbrshWU15ZtEwGfM=
-X-Google-Smtp-Source: ABdhPJzV/FBtnA3fMwNnZGWzf3lprriAFgMU658FYakS9xPeDccuO6wPRtGV1fDrEV7npZ5AzY+Teg==
-X-Received: by 2002:a05:6a00:87:b0:4fb:39f9:bb9d with SMTP id c7-20020a056a00008700b004fb39f9bb9dmr3585296pfj.48.1649164174417;
-        Tue, 05 Apr 2022 06:09:34 -0700 (PDT)
+        bh=6m7ShcbASdrto/3TsaoHbBXRCyYeXuWGLlXaER69zS8=;
+        b=49NcARhslURQaEPXuEpQPwUIOZosS5BD+mvVFu2JdzVniA5Q/PSz+GvsAe1MIokFvJ
+         EZip2a4g5FFnUh1hj6C4HvjFKzK6Q28Kaw9XnxC4tYm+JHh/gFy7i2Ow+F7bmuac78hF
+         0bxKZw3Pd7tfdhge0+xE4tErjYjwTUoEcHU7KrP/g8PaZnCmRGF9cVgzrr+JTu1VfxWk
+         xCuTYEyFa/27kdsOQeLdmP7mEqy2DBVDnsEbQDbUG6CkFxYwxzXe4zQWyjNFegXj+H6T
+         JVZzmK7DToaJ7OKS/wEVJ/FLitpyQwkOIOOZwFNoTlceDC1CStbrA0MWvtdeVsccyUqG
+         XPYA==
+X-Gm-Message-State: AOAM532n5O0XuUz+aJDJLPnu+KLF3vK8IAafI7pAap8OxZIU0AgLQqdc
+        uqKI9nm01Boh0MEq53XLLg8=
+X-Google-Smtp-Source: ABdhPJxQqYtQUBceYfwYXVOgG/KTSA2UXDDpRCn8C+rr/K3M+nQqpLD5s8QxDg+zQmz5kDfQqJt5JQ==
+X-Received: by 2002:a05:6a00:1d85:b0:4fa:9dba:f1f2 with SMTP id z5-20020a056a001d8500b004fa9dbaf1f2mr3592645pfw.31.1649164181867;
+        Tue, 05 Apr 2022 06:09:41 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.33
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:33 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:40 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 15/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_tag
-Date:   Tue,  5 Apr 2022 13:08:46 +0000
-Message-Id: <20220405130858.12165-16-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 20/27] bpf: selftests: No need to include sys/resource.h in some files
+Date:   Tue,  5 Apr 2022 13:08:51 +0000
+Message-Id: <20220405130858.12165-21-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -65,36 +65,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-included bpf_rlimit.h.
+sys/resource.h is useless in these files.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/test_tag.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/bench.c              | 1 -
+ tools/testing/selftests/bpf/prog_tests/btf.c     | 1 -
+ tools/testing/selftests/bpf/xdp_redirect_multi.c | 1 -
+ 3 files changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_tag.c b/tools/testing/selftests/bpf/test_tag.c
-index 0851c42ee31c..5546b05a0486 100644
---- a/tools/testing/selftests/bpf/test_tag.c
-+++ b/tools/testing/selftests/bpf/test_tag.c
-@@ -20,7 +20,6 @@
- #include <bpf/bpf.h>
- 
- #include "../../../include/linux/filter.h"
--#include "bpf_rlimit.h"
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
+index f973320e6dbf..f061cc20e776 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -8,7 +8,6 @@
+ #include <fcntl.h>
+ #include <pthread.h>
+ #include <sys/sysinfo.h>
+-#include <sys/resource.h>
+ #include <signal.h>
+ #include "bench.h"
  #include "testing_helpers.h"
- 
- static struct bpf_insn prog[BPF_MAXINSNS];
-@@ -189,6 +188,9 @@ int main(void)
- 	uint32_t tests = 0;
- 	int i, fd_map;
- 
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
- 	fd_map = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(int),
- 				sizeof(int), 1, &opts);
- 	assert(fd_map > 0);
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index ec823561b912..84aae639ddb5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -8,7 +8,6 @@
+ #include <linux/filter.h>
+ #include <linux/unistd.h>
+ #include <bpf/bpf.h>
+-#include <sys/resource.h>
+ #include <libelf.h>
+ #include <gelf.h>
+ #include <string.h>
+diff --git a/tools/testing/selftests/bpf/xdp_redirect_multi.c b/tools/testing/selftests/bpf/xdp_redirect_multi.c
+index aaedbf4955c3..c03b3a75991f 100644
+--- a/tools/testing/selftests/bpf/xdp_redirect_multi.c
++++ b/tools/testing/selftests/bpf/xdp_redirect_multi.c
+@@ -10,7 +10,6 @@
+ #include <net/if.h>
+ #include <unistd.h>
+ #include <libgen.h>
+-#include <sys/resource.h>
+ #include <sys/ioctl.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
 -- 
 2.17.1
 
