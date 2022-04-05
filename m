@@ -2,713 +2,289 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 730ACC433F5
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B99E5C433F5
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 03:16:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiDEDAJ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 4 Apr 2022 23:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S229968AbiDEDSF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Apr 2022 23:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiDEDAB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Apr 2022 23:00:01 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C072E8E19A
-        for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 19:13:58 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234NPHDG007714
-        for <bpf@vger.kernel.org>; Mon, 4 Apr 2022 16:42:18 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f826y43c5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 16:42:18 -0700
-Received: from twshared31479.05.prn5.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 4 Apr 2022 16:42:16 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 901021661B51D; Mon,  4 Apr 2022 16:42:09 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v3 bpf-next 3/7] libbpf: add USDT notes parsing and resolution logic
-Date:   Mon, 4 Apr 2022 16:41:58 -0700
-Message-ID: <20220404234202.331384-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220404234202.331384-1-andrii@kernel.org>
-References: <20220404234202.331384-1-andrii@kernel.org>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: -behYcq6j_CXbuuJBwpcdzdI3BWKFEKZ
-X-Proofpoint-GUID: -behYcq6j_CXbuuJBwpcdzdI3BWKFEKZ
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S230142AbiDEDSE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Apr 2022 23:18:04 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757A31ADAA;
+        Mon,  4 Apr 2022 20:16:07 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso1253813pjb.0;
+        Mon, 04 Apr 2022 20:16:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=0hBIkvHvq/7fDWyXw9rjCsWjYoU6DAh0xPQu7saIkJg=;
+        b=T+zh3bD6ItDB//CKGUn6duxN7NiULAw7ioTHjb1Ucy7CdmeaY/lGYtU4cWaa5buQR2
+         z2V+RhYEEMb5sNbcTexpOgNHEskk7lEf38xHkHGTVK1VcYIQlieTzcUDOJokqqFOzHtZ
+         DtrbgycDl8BsXLKNHKahQ4kl5BTxr0Y35pGO0BGWBQ7qdpSR62V19cBf2e4peH5M1kcH
+         JUBBjiaNhcBwN4dZ7Hon6CCYuFuBXtjPDFq6mltmzLYlZnZim5G7Ih7O6exiJddZpFWy
+         7UVKKvMoG8yOJuci9/Bjv7dDJtHPQ0tdOhcQZPVdtmoNj9/O5uRpH/QuKWr06wlq5Xjk
+         kbpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0hBIkvHvq/7fDWyXw9rjCsWjYoU6DAh0xPQu7saIkJg=;
+        b=XZBKoW3TTdCAujnid3o9bkiPxKhpDVLM81jLvae2b35NEhic11vAAxcgm707p4bcT1
+         zxU96rNS4QGRxyibNW58YxJXw4VhwW976BFddzt9VMMAkQbStEAhC/kbERYTA/HlcNQG
+         ScgWK42Ix5K/+Fmnl9Z4gFzo0Ywjg8n6X5SsAToRSht24LRJGzVavAHCGXK5D9nmN1Ca
+         e4/DKI91xhdrba1srRSAzkKNG/mrJNsKgP/yQ4C0CNGj01IzetKVBxmRbAs1rnracXop
+         tbOSKZYsoJfClGQa25i0wys05rITaJKyY9lNEYCBzlW8VAZQnq8FPx8iFtpCGO2xXD2n
+         M6Gw==
+X-Gm-Message-State: AOAM530GAuNx0JFDgdQLK9gFpNt/b+CyaW28jjAo5sh63qtZqcgHtrjJ
+        zuWBQtWbF+9TlUlO8gmeogk=
+X-Google-Smtp-Source: ABdhPJxxZ4il8XaN+8ORBNZBQo8DXCNdQKAJCrZRqdYaAfztZGsDjH/tnftqlgoB3NpjT58vjRJIpQ==
+X-Received: by 2002:a17:902:c94c:b0:154:58e4:6f5a with SMTP id i12-20020a170902c94c00b0015458e46f5amr1353937pla.142.1649128566757;
+        Mon, 04 Apr 2022 20:16:06 -0700 (PDT)
+Received: from [192.168.0.4] ([182.213.254.91])
+        by smtp.gmail.com with ESMTPSA id t69-20020a637848000000b0039831d6dc23sm11272568pgc.94.2022.04.04.20.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 20:16:06 -0700 (PDT)
+Message-ID: <cdd68de3-7803-2921-45ee-6769b4a86265@gmail.com>
+Date:   Tue, 5 Apr 2022 12:16:01 +0900
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_09,2022-03-31_01,2022-02-23_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net v2] net: sfc: add missing xdp queue reinitialization
+Content-Language: en-US
+To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        ecree.xilinx@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com
+References: <20220330163703.25086-1-ap420073@gmail.com>
+ <20220401110606.whyr5hnesb4ya67q@gmail.com>
+ <8f22d067-fb84-cc76-9249-d68af9601d44@gmail.com>
+ <20220404103627.zczltvxz4pjrpqay@gmail.com>
+From:   Taehee Yoo <ap420073@gmail.com>
+In-Reply-To: <20220404103627.zczltvxz4pjrpqay@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement architecture-agnostic parts of USDT parsing logic. The code is
-the documentation in this case, it's futile to try to succinctly
-describe how USDT parsing is done in any sort of concreteness. But
-still, USDTs are recorded in special ELF notes section (.note.stapsdt),
-where each USDT call site is described separately. Along with USDT
-provider and USDT name, each such note contains USDT argument
-specification, which uses assembly-like syntax to describe how to fetch
-value of USDT argument. USDT arg spec could be just a constant, or
-a register, or a register dereference (most common cases in x86_64), but
-it technically can be much more complicated cases, like offset relative
-to global symbol and stuff like that. One of the later patches will
-implement most common subset of this for x86 and x86-64 architectures,
-which seems to handle a lot of real-world production application.
+On 4/4/22 19:36, Martin Habets wrote:
 
-USDT arg spec contains a compact encoding allowing usdt.bpf.h from
-previous patch to handle the above 3 cases. Instead of recording which
-register might be needed, we encode register's offset within struct
-pt_regs to simplify BPF-side implementation. USDT argument can be of
-different byte sizes (1, 2, 4, and 8) and signed or unsigned. To handle
-this, libbpf pre-calculates necessary bit shifts to do proper casting
-and sign-extension in a short sequences of left and right shifts.
+Hi Martin,
 
-The rest is in the code with sometimes extensive comments and references
-to external "documentation" for USDTs.
+ > Hi Taehee,
+ >
+ > On Sat, Apr 02, 2022 at 03:48:14AM +0900, Taehee Yoo wrote:
+ >> On 4/1/22 20:06, Martin Habets wrote:
+ >>
+ >> Hi Martin,
+ >> Thank you so much for your review!
+ >>
+ >>> Hi Taehee,
+ >>>
+ >>> Thanks for looking into this. Unfortunately efx_realloc_channels()
+ >>> has turned out to be quite fragile over the years, so I'm
+ >>> keen to remove it in stead of patching it up all the time.
+ >>
+ >> I agree with you.
+ >> efx_realloc_channels() is too complex.
+ >>
+ >>>
+ >>> Could you try the patch below please?
+ >>> If it works ok for you as well we'll be able to remove
+ >>> efx_realloc_channels(). The added advantage of this approach
+ >>> is that the netdev notifiers get informed of the change.
+ >>
+ >> I tested your patch and I found a page reference count problem.
+ >> How to test:
+ >> 1. set up XDP_TX
+ >> 2. traffic on
+ >> 3. traffic off
+ >> 4. ring buffer size change
+ >> 5. loop from 2 to 4.
+ >>
+ >> [   87.836195][   T72] BUG: Bad page state in process kworker/u16:1
+ >> pfn:125445
+ >> [   87.843356][   T72] page:000000003725f642 refcount:-2 mapcount:0
+ >> mapping:0000000000000000 index:0x0 pfn:0x125445
+ >> [   87.853783][   T72] flags: 0x200000000000000(node=0|zone=2)
+ >>
+ >> [   87.859391][   T72] raw: 0200000000000000 dead000000000100
+ >> dead000000000122 0000000000000000
+ >> [   87.867928][   T72] raw: 0000000000000000 0000000000000000
+ >> fffffffeffffffff 0000000000000000
+ >> [   87.876569][   T72] page dumped because: nonzero _refcount
+ >>
+ >> [   87.882125][   T72] Modules linked in: af_packet sfc ixgbe mtd 
+atlantic
+ >> coretemp mdio hwmon sch_fq_codel msr bpf_prelx
+ >> [   87.895331][   T72] CPU: 0 PID: 72 Comm: kworker/u16:1 Not tainted
+ >> 5.17.0+ #62 dbf33652f22e5147659e7e2472bb962779c4833
+ >> [   87.906350][   T72] Hardware name: ASUS System Product Name/PRIME 
+Z690-P
+ >> D4, BIOS 0603 11/01/2021
+ >> [   87.915360][   T72] Workqueue: netns cleanup_net
+ >>
+ >> [   87.920087][   T72] Call Trace:
+ >>
+ >> [   87.923311][   T72]  <TASK>
+ >>
+ >> [   87.926188][   T72]  dump_stack_lvl+0x56/0x7b
+ >>
+ >> [   87.930597][   T72]  bad_page.cold.125+0x63/0x93
+ >>
+ >> [   87.935288][   T72]  free_pcppages_bulk+0x63c/0x6f0
+ >>
+ >> [   87.940232][   T72]  free_unref_page+0x8b/0xf0
+ >>
+ >> [   87.944749][   T72]  efx_fini_rx_queue+0x15f/0x210 [sfc
+ >> 49c5d4f562a40c6a7ed913c25f5bd4e126bcfa4e]
+ >
+ > Looks to me like this is in efx_fini_rx_recycle_ring().
+ > It could be a side effect of the memory leak you report below.
+ > If this is in efx_fini_rx_recycle_ring() I'll post a patch for
+ > that soon on a separate thread.
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Dave Marchevsky <davemarchevsky@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/usdt.c | 582 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 581 insertions(+), 1 deletion(-)
+Thanks for that!
 
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index 781aa1d128f1..f1670e3014ed 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -183,10 +183,56 @@
-  * gain.
-  */
- 
-+#define USDT_BASE_SEC ".stapsdt.base"
-+#define USDT_SEMA_SEC ".probes"
-+#define USDT_NOTE_SEC  ".note.stapsdt"
-+#define USDT_NOTE_TYPE 3
-+#define USDT_NOTE_NAME "stapsdt"
-+
-+/* should match exactly enum __bpf_usdt_arg_type from bpf_usdt.bpf.h */
-+enum usdt_arg_type {
-+	USDT_ARG_CONST,
-+	USDT_ARG_REG,
-+	USDT_ARG_REG_DEREF,
-+};
-+
-+/* should match exactly struct __bpf_usdt_arg_spec from bpf_usdt.bpf.h */
-+struct usdt_arg_spec {
-+	__u64 val_off;
-+	enum usdt_arg_type arg_type;
-+	short reg_off;
-+	bool arg_signed;
-+	char arg_bitshift;
-+};
-+
-+/* should match BPF_USDT_MAX_ARG_CNT in usdt.bpf.h */
-+#define USDT_MAX_ARG_CNT 12
-+
-+/* should match struct __bpf_usdt_spec from usdt.bpf.h */
-+struct usdt_spec {
-+	struct usdt_arg_spec args[USDT_MAX_ARG_CNT];
-+	__u64 usdt_cookie;
-+	short arg_cnt;
-+};
-+
-+struct usdt_note {
-+	const char *provider;
-+	const char *name;
-+	/* USDT args specification string, e.g.:
-+	 * "-4@%esi -4@-24(%rbp) -4@%ecx 2@%ax 8@%rdx"
-+	 */
-+	const char *args;
-+	long loc_addr;
-+	long base_addr;
-+	long sema_addr;
-+};
-+
- struct usdt_target {
- 	long abs_ip;
- 	long rel_ip;
- 	long sema_off;
-+	struct usdt_spec spec;
-+	const char *spec_str;
- };
- 
- struct usdt_manager {
-@@ -292,11 +338,450 @@ static int sanity_check_usdt_elf(Elf *elf, const char *path)
- 	return 0;
- }
- 
-+static int find_elf_sec_by_name(Elf *elf, const char *sec_name, GElf_Shdr *shdr, Elf_Scn **scn)
-+{
-+	Elf_Scn *sec = NULL;
-+	size_t shstrndx;
-+
-+	if (elf_getshdrstrndx(elf, &shstrndx))
-+		return -EINVAL;
-+
-+	/* check if ELF is corrupted and avoid calling elf_strptr if yes */
-+	if (!elf_rawdata(elf_getscn(elf, shstrndx), NULL))
-+		return -EINVAL;
-+
-+	while ((sec = elf_nextscn(elf, sec)) != NULL) {
-+		char *name;
-+
-+		if (!gelf_getshdr(sec, shdr))
-+			return -EINVAL;
-+
-+		name = elf_strptr(elf, shstrndx, shdr->sh_name);
-+		if (name && strcmp(sec_name, name) == 0) {
-+			*scn = sec;
-+			return 0;
-+		}
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+struct elf_seg {
-+	long start;
-+	long end;
-+	long offset;
-+	bool is_exec;
-+};
-+
-+static int cmp_elf_segs(const void *_a, const void *_b)
-+{
-+	const struct elf_seg *a = _a;
-+	const struct elf_seg *b = _b;
-+
-+	return a->start < b->start ? -1 : 1;
-+}
-+
-+static int parse_elf_segs(Elf *elf, const char *path, struct elf_seg **segs, size_t *seg_cnt)
-+{
-+	GElf_Phdr phdr;
-+	size_t n;
-+	int i, err;
-+	struct elf_seg *seg;
-+	void *tmp;
-+
-+	*seg_cnt = 0;
-+
-+	if (elf_getphdrnum(elf, &n)) {
-+		err = -errno;
-+		return err;
-+	}
-+
-+	for (i = 0; i < n; i++) {
-+		if (!gelf_getphdr(elf, i, &phdr)) {
-+			err = -errno;
-+			return err;
-+		}
-+
-+		pr_debug("usdt: discovered PHDR #%d in '%s': vaddr 0x%lx memsz 0x%lx offset 0x%lx type 0x%lx flags 0x%lx\n",
-+			 i, path, (long)phdr.p_vaddr, (long)phdr.p_memsz, (long)phdr.p_offset,
-+			 (long)phdr.p_type, (long)phdr.p_flags);
-+		if (phdr.p_type != PT_LOAD)
-+			continue;
-+
-+		tmp = libbpf_reallocarray(*segs, *seg_cnt + 1, sizeof(**segs));
-+		if (!tmp)
-+			return -ENOMEM;
-+
-+		*segs = tmp;
-+		seg = *segs + *seg_cnt;
-+		(*seg_cnt)++;
-+
-+		seg->start = phdr.p_vaddr;
-+		seg->end = phdr.p_vaddr + phdr.p_memsz;
-+		seg->offset = phdr.p_offset;
-+		seg->is_exec = phdr.p_flags & PF_X;
-+	}
-+
-+	if (*seg_cnt == 0) {
-+		pr_warn("usdt: failed to find PT_LOAD program headers in '%s'\n", path);
-+		return -ESRCH;
-+	}
-+
-+	qsort(*segs, *seg_cnt, sizeof(**segs), cmp_elf_segs);
-+	return 0;
-+}
-+
-+static int parse_lib_segs(int pid, const char *lib_path, struct elf_seg **segs, size_t *seg_cnt)
-+{
-+	char path[PATH_MAX], line[PATH_MAX], mode[16];
-+	size_t seg_start, seg_end, seg_off;
-+	struct elf_seg *seg;
-+	int tmp_pid, i, err;
-+	FILE *f;
-+
-+	*seg_cnt = 0;
-+
-+	/* Handle containerized binaries only accessible from
-+	 * /proc/<pid>/root/<path>. They will be reported as just /<path> in
-+	 * /proc/<pid>/maps.
-+	 */
-+	if (sscanf(lib_path, "/proc/%d/root%s", &tmp_pid, path) == 2 && pid == tmp_pid)
-+		goto proceed;
-+
-+	if (!realpath(lib_path, path)) {
-+		pr_warn("usdt: failed to get absolute path of '%s' (err %d), using path as is...\n",
-+			lib_path, -errno);
-+		strcpy(path, lib_path);
-+	}
-+
-+proceed:
-+	sprintf(line, "/proc/%d/maps", pid);
-+	f = fopen(line, "r");
-+	if (!f) {
-+		err = -errno;
-+		pr_warn("usdt: failed to open '%s' to get base addr of '%s': %d\n",
-+			line, lib_path, err);
-+		return err;
-+	}
-+
-+	/* We need to handle lines with no path at the end:
-+	 *
-+	 * 7f5c6f5d1000-7f5c6f5d3000 rw-p 001c7000 08:04 21238613      /usr/lib64/libc-2.17.so
-+	 * 7f5c6f5d3000-7f5c6f5d8000 rw-p 00000000 00:00 0
-+	 * 7f5c6f5d8000-7f5c6f5d9000 r-xp 00000000 103:01 362990598    /data/users/andriin/linux/tools/bpf/usdt/libhello_usdt.so
-+	 */
-+	while (fscanf(f, "%zx-%zx %s %zx %*s %*d%[^\n]\n",
-+		      &seg_start, &seg_end, mode, &seg_off, line) == 5) {
-+		void *tmp;
-+
-+		/* to handle no path case (see above) we need to capture line
-+		 * without skipping any whitespaces. So we need to strip
-+		 * leading whitespaces manually here
-+		 */
-+		i = 0;
-+		while (isblank(line[i]))
-+			i++;
-+		if (strcmp(line + i, path) != 0)
-+			continue;
-+
-+		pr_debug("usdt: discovered segment for lib '%s': addrs %zx-%zx mode %s offset %zx\n",
-+			 path, seg_start, seg_end, mode, seg_off);
-+
-+		/* ignore non-executable sections for shared libs */
-+		if (mode[2] != 'x')
-+			continue;
-+
-+		tmp = libbpf_reallocarray(*segs, *seg_cnt + 1, sizeof(**segs));
-+		if (!tmp) {
-+			err = -ENOMEM;
-+			goto err_out;
-+		}
-+
-+		*segs = tmp;
-+		seg = *segs + *seg_cnt;
-+		*seg_cnt += 1;
-+
-+		seg->start = seg_start;
-+		seg->end = seg_end;
-+		seg->offset = seg_off;
-+		seg->is_exec = true;
-+	}
-+
-+	if (*seg_cnt == 0) {
-+		pr_warn("usdt: failed to find '%s' (resolved to '%s') within PID %d memory mappings\n",
-+			lib_path, path, pid);
-+		err = -ESRCH;
-+		goto err_out;
-+	}
-+
-+	qsort(*segs, *seg_cnt, sizeof(**segs), cmp_elf_segs);
-+	err = 0;
-+err_out:
-+	fclose(f);
-+	return err;
-+}
-+
-+static struct elf_seg *find_elf_seg(struct elf_seg *segs, size_t seg_cnt, long addr, bool relative)
-+{
-+	struct elf_seg *seg;
-+	int i;
-+
-+	if (relative) {
-+		/* for shared libraries, address is relative offset and thus
-+		 * should be fall within logical offset-based range of
-+		 * [offset_start, offset_end)
-+		 */
-+		for (i = 0, seg = segs; i < seg_cnt; i++, seg++) {
-+			if (seg->offset <= addr && addr < seg->offset + (seg->end - seg->start))
-+				return seg;
-+		}
-+	} else {
-+		/* for binaries, address is absolute and thus should be within
-+		 * absolute address range of [seg_start, seg_end)
-+		 */
-+		for (i = 0, seg = segs; i < seg_cnt; i++, seg++) {
-+			if (seg->start <= addr && addr < seg->end)
-+				return seg;
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+static int parse_usdt_note(Elf *elf, const char *path, long base_addr,
-+			   GElf_Nhdr *nhdr, const char *data, size_t name_off, size_t desc_off,
-+			   struct usdt_note *usdt_note);
-+
-+static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note, long usdt_cookie);
-+
- static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *path, pid_t pid,
- 				const char *usdt_provider, const char *usdt_name, long usdt_cookie,
- 				struct usdt_target **out_targets, size_t *out_target_cnt)
- {
--	return -ENOTSUP;
-+	size_t off, name_off, desc_off, seg_cnt = 0, lib_seg_cnt = 0, target_cnt = 0;
-+	struct elf_seg *segs = NULL, *lib_segs = NULL;
-+	struct usdt_target *targets = NULL, *target;
-+	long base_addr = 0;
-+	Elf_Scn *notes_scn, *base_scn;
-+	GElf_Shdr base_shdr, notes_shdr;
-+	GElf_Ehdr ehdr;
-+	GElf_Nhdr nhdr;
-+	Elf_Data *data;
-+	int err;
-+
-+	*out_targets = NULL;
-+	*out_target_cnt = 0;
-+
-+	err = find_elf_sec_by_name(elf, USDT_NOTE_SEC, &notes_shdr, &notes_scn);
-+	if (err) {
-+		pr_warn("usdt: no USDT notes section (%s) found in '%s'\n", USDT_NOTE_SEC, path);
-+		return err;
-+	}
-+
-+	if (notes_shdr.sh_type != SHT_NOTE || !gelf_getehdr(elf, &ehdr)) {
-+		pr_warn("usdt: invalid USDT notes section (%s) in '%s'\n", USDT_NOTE_SEC, path);
-+		return -EINVAL;
-+	}
-+
-+	err = parse_elf_segs(elf, path, &segs, &seg_cnt);
-+	if (err) {
-+		pr_warn("usdt: failed to process ELF program segments for '%s': %d\n", path, err);
-+		goto err_out;
-+	}
-+
-+	/* .stapsdt.base ELF section is optional, but is used for prelink
-+	 * offset compensation (see a big comment further below)
-+	 */
-+	if (find_elf_sec_by_name(elf, USDT_BASE_SEC, &base_shdr, &base_scn) == 0)
-+		base_addr = base_shdr.sh_addr;
-+
-+	data = elf_getdata(notes_scn, 0);
-+	off = 0;
-+	while ((off = gelf_getnote(data, off, &nhdr, &name_off, &desc_off)) > 0) {
-+		long usdt_abs_ip, usdt_rel_ip, usdt_sema_off = 0;
-+		struct usdt_note note;
-+		struct elf_seg *seg = NULL;
-+		void *tmp;
-+
-+		err = parse_usdt_note(elf, path, base_addr, &nhdr,
-+				      data->d_buf, name_off, desc_off, &note);
-+		if (err)
-+			goto err_out;
-+
-+		if (strcmp(note.provider, usdt_provider) != 0 || strcmp(note.name, usdt_name) != 0)
-+			continue;
-+
-+		/* We need to compensate "prelink effect". See [0] for details,
-+		 * relevant parts quoted here:
-+		 *
-+		 * Each SDT probe also expands into a non-allocated ELF note. You can
-+		 * find this by looking at SHT_NOTE sections and decoding the format;
-+		 * see below for details. Because the note is non-allocated, it means
-+		 * there is no runtime cost, and also preserved in both stripped files
-+		 * and .debug files.
-+		 *
-+		 * However, this means that prelink won't adjust the note's contents
-+		 * for address offsets. Instead, this is done via the .stapsdt.base
-+		 * section. This is a special section that is added to the text. We
-+		 * will only ever have one of these sections in a final link and it
-+		 * will only ever be one byte long. Nothing about this section itself
-+		 * matters, we just use it as a marker to detect prelink address
-+		 * adjustments.
-+		 *
-+		 * Each probe note records the link-time address of the .stapsdt.base
-+		 * section alongside the probe PC address. The decoder compares the
-+		 * base address stored in the note with the .stapsdt.base section's
-+		 * sh_addr. Initially these are the same, but the section header will
-+		 * be adjusted by prelink. So the decoder applies the difference to
-+		 * the probe PC address to get the correct prelinked PC address; the
-+		 * same adjustment is applied to the semaphore address, if any.
-+		 *
-+		 *   [0] https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation
-+		 */
-+		usdt_rel_ip = usdt_abs_ip = note.loc_addr;
-+		if (base_addr) {
-+			usdt_abs_ip += base_addr - note.base_addr;
-+			usdt_rel_ip += base_addr - note.base_addr;
-+		}
-+
-+		if (ehdr.e_type == ET_EXEC) {
-+			/* When attaching uprobes (which what USDTs basically
-+			 * are) kernel expects a relative IP to be specified,
-+			 * so if we are attaching to an executable ELF binary
-+			 * (i.e., not a shared library), we need to calculate
-+			 * proper relative IP based on ELF's load address
-+			 */
-+			seg = find_elf_seg(segs, seg_cnt, usdt_abs_ip, false /* relative */);
-+			if (!seg) {
-+				err = -ESRCH;
-+				pr_warn("usdt: failed to find ELF program segment for '%s:%s' in '%s' at IP 0x%lx\n",
-+					usdt_provider, usdt_name, path, usdt_abs_ip);
-+				goto err_out;
-+			}
-+			if (!seg->is_exec) {
-+				err = -ESRCH;
-+				pr_warn("usdt: matched ELF binary '%s' segment [0x%lx, 0x%lx) for '%s:%s' at IP 0x%lx is not executable\n",
-+					path, seg->start, seg->end, usdt_provider, usdt_name,
-+					usdt_abs_ip);
-+				goto err_out;
-+			}
-+
-+			usdt_rel_ip = usdt_abs_ip - (seg->start - seg->offset);
-+		} else if (!man->has_bpf_cookie) { /* ehdr.e_type == ET_DYN */
-+			/* If we don't have BPF cookie support but need to
-+			 * attach to a shared library, we'll need to know and
-+			 * record absolute addresses of attach points due to
-+			 * the need to lookup USDT spec by absolute IP of
-+			 * triggered uprobe. Doing this resolution is only
-+			 * possible when we have a specific PID of the process
-+			 * that's using specified shared library. BPF cookie
-+			 * removes the absolute address limitation as we don't
-+			 * need to do this lookup (we just use BPF cookie as
-+			 * an index of USDT spec), so for newer kernels with
-+			 * BPF cookie support libbpf supports USDT attachment
-+			 * to shared libraries with no PID filter.
-+			 */
-+			if (pid < 0) {
-+				pr_warn("usdt: attaching to shared libaries without specific PID is not supported on current kernel\n");
-+				err = -ENOTSUP;
-+				goto err_out;
-+			}
-+
-+			/* lib_segs are lazily initialized only if necessary */
-+			if (lib_seg_cnt == 0) {
-+				err = parse_lib_segs(pid, path, &lib_segs, &lib_seg_cnt);
-+				if (err) {
-+					pr_warn("usdt: failed to get memory segments in PID %d for shared library '%s': %d\n",
-+						pid, path, err);
-+					goto err_out;
-+				}
-+			}
-+
-+			seg = find_elf_seg(lib_segs, lib_seg_cnt, usdt_rel_ip, true /* relative */);
-+			if (!seg) {
-+				err = -ESRCH;
-+				pr_warn("usdt: failed to find shared lib memory segment for '%s:%s' in '%s' at relative IP 0x%lx\n",
-+					usdt_provider, usdt_name, path, usdt_rel_ip);
-+				goto err_out;
-+			}
-+
-+			usdt_abs_ip = seg->start + (usdt_rel_ip - seg->offset);
-+		}
-+
-+		pr_debug("usdt: probe for '%s:%s' in %s '%s': addr 0x%lx base 0x%lx (resolved abs_ip 0x%lx rel_ip 0x%lx) args '%s' in segment [0x%lx, 0x%lx) at offset 0x%lx\n",
-+			 usdt_provider, usdt_name, ehdr.e_type == ET_EXEC ? "exec" : "lib ", path,
-+			 note.loc_addr, note.base_addr, usdt_abs_ip, usdt_rel_ip, note.args,
-+			 seg ? seg->start : 0, seg ? seg->end : 0, seg ? seg->offset : 0);
-+
-+		/* Adjust semaphore address to be a relative offset */
-+		if (note.sema_addr) {
-+			if (!man->has_sema_refcnt) {
-+				pr_warn("usdt: kernel doesn't support USDT semaphore refcounting for '%s:%s' in '%s'\n",
-+					usdt_provider, usdt_name, path);
-+				err = -ENOTSUP;
-+				goto err_out;
-+			}
-+
-+			seg = find_elf_seg(segs, seg_cnt, note.sema_addr, false /* relative */);
-+			if (!seg) {
-+				err = -ESRCH;
-+				pr_warn("usdt: failed to find ELF loadable segment with semaphore of '%s:%s' in '%s' at 0x%lx\n",
-+					usdt_provider, usdt_name, path, note.sema_addr);
-+				goto err_out;
-+			}
-+			if (seg->is_exec) {
-+				err = -ESRCH;
-+				pr_warn("usdt: matched ELF binary '%s' segment [0x%lx, 0x%lx] for semaphore of '%s:%s' at 0x%lx is executable\n",
-+					path, seg->start, seg->end, usdt_provider, usdt_name,
-+					note.sema_addr);
-+				goto err_out;
-+			}
-+
-+			usdt_sema_off = note.sema_addr - (seg->start - seg->offset);
-+
-+			pr_debug("usdt: sema  for '%s:%s' in %s '%s': addr 0x%lx base 0x%lx (resolved 0x%lx) in segment [0x%lx, 0x%lx] at offset 0x%lx\n",
-+				 usdt_provider, usdt_name, ehdr.e_type == ET_EXEC ? "exec" : "lib ",
-+				 path, note.sema_addr, note.base_addr, usdt_sema_off,
-+				 seg->start, seg->end, seg->offset);
-+		}
-+
-+		/* Record adjusted addresses and offsets and parse USDT spec */
-+		tmp = libbpf_reallocarray(targets, target_cnt + 1, sizeof(*targets));
-+		if (!tmp) {
-+			err = -ENOMEM;
-+			goto err_out;
-+		}
-+		targets = tmp;
-+
-+		target = &targets[target_cnt];
-+		memset(target, 0, sizeof(*target));
-+
-+		target->abs_ip = usdt_abs_ip;
-+		target->rel_ip = usdt_rel_ip;
-+		target->sema_off = usdt_sema_off;
-+
-+		/* notes->args references strings from Elf itself, so they can
-+		 * be referenced safely until elf_end() call
-+		 */
-+		target->spec_str = note.args;
-+
-+		err = parse_usdt_spec(&target->spec, &note, usdt_cookie);
-+		if (err)
-+			goto err_out;
-+
-+		target_cnt++;
-+	}
-+
-+	*out_targets = targets;
-+	*out_target_cnt = target_cnt;
-+	err = target_cnt;
-+
-+err_out:
-+	free(segs);
-+	free(lib_segs);
-+	if (err < 0)
-+		free(targets);
-+	return err;
- }
- 
- struct bpf_link_usdt {
-@@ -414,6 +899,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 		link->uprobe_cnt++;
- 	}
- 
-+	free(targets);
- 	elf_end(elf);
- 	close(fd);
- 
-@@ -422,8 +908,102 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- err_out:
- 	bpf_link__destroy(&link->link);
- 
-+	free(targets);
- 	if (elf)
- 		elf_end(elf);
- 	close(fd);
- 	return libbpf_err_ptr(err);
- }
-+
-+/* Parse out USDT ELF note from '.note.stapsdt' section.
-+ * Logic inspired by perf's code.
-+ */
-+static int parse_usdt_note(Elf *elf, const char *path, long base_addr,
-+			   GElf_Nhdr *nhdr, const char *data, size_t name_off, size_t desc_off,
-+			   struct usdt_note *note)
-+{
-+	const char *provider, *name, *args;
-+	long addrs[3];
-+	size_t len;
-+
-+	/* sanity check USDT note name and type first */
-+	if (strncmp(data + name_off, USDT_NOTE_NAME, nhdr->n_namesz) != 0)
-+		return -EINVAL;
-+	if (nhdr->n_type != USDT_NOTE_TYPE)
-+		return -EINVAL;
-+
-+	/* sanity check USDT note contents ("description" in ELF terminology) */
-+	len = nhdr->n_descsz;
-+	data = data + desc_off;
-+
-+	/* +3 is the very minimum required to store three empty strings */
-+	if (len < sizeof(addrs) + 3)
-+		return -EINVAL;
-+
-+	/* get location, base, and semaphore addrs */
-+	memcpy(&addrs, data, sizeof(addrs));
-+
-+	/* parse string fields: provider, name, args */
-+	provider = data + sizeof(addrs);
-+
-+	name = (const char *)memchr(provider, '\0', data + len - provider);
-+	if (!name) /* non-zero-terminated provider */
-+		return -EINVAL;
-+	name++;
-+	if (name >= data + len || *name == '\0') /* missing or empty name */
-+		return -EINVAL;
-+
-+	args = memchr(name, '\0', data + len - name);
-+	if (!args) /* non-zero-terminated name */
-+		return -EINVAL;
-+	++args;
-+	if (args >= data + len) /* missing arguments spec */
-+		return -EINVAL;
-+
-+	note->provider = provider;
-+	note->name = name;
-+	if (*args == '\0' || *args == ':')
-+		note->args = "";
-+	else
-+		note->args = args;
-+	note->loc_addr = addrs[0];
-+	note->base_addr = addrs[1];
-+	note->sema_addr = addrs[2];
-+
-+	return 0;
-+}
-+
-+static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg);
-+
-+static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note, long usdt_cookie)
-+{
-+	const char *s;
-+	int len;
-+
-+	spec->usdt_cookie = usdt_cookie;
-+	spec->arg_cnt = 0;
-+
-+	s = note->args;
-+	while (s[0]) {
-+		if (spec->arg_cnt >= USDT_MAX_ARG_CNT) {
-+			pr_warn("usdt: too many USDT arguments (> %d) for '%s:%s' with args spec '%s'\n",
-+				USDT_MAX_ARG_CNT, note->provider, note->name, note->args);
-+			return -E2BIG;
-+		}
-+
-+		len = parse_usdt_arg(s, spec->arg_cnt, &spec->args[spec->arg_cnt]);
-+		if (len < 0)
-+			return len;
-+
-+		s += len;
-+		spec->arg_cnt++;
-+	}
-+
-+	return 0;
-+}
-+
-+static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
-+{
-+	pr_warn("usdt: libbpf doesn't support USDTs on current architecture\n");
-+	return -ENOTSUP;
-+}
--- 
-2.30.2
+ >
+ >> [   87.953756][   T72]  efx_stop_channels+0xef/0x1b0 [sfc
+ >> 49c5d4f562a40c6a7ed913c25f5bd4e126bcfa4e]
+ >> [   87.962699][   T72]  efx_net_stop+0x4d/0x60 [sfc
+ >> 49c5d4f562a40c6a7ed913c25f5bd4e126bcfa4e]
+ >> [   87.971029][   T72]  __dev_close_many+0x8b/0xf0
+ >>
+ >> [   87.975618][   T72]  dev_close_many+0x7d/0x120
+ >>
+ >> [ ... ]
+ >>
+ >>
+ >> In addition, I would like to share issues that I'm currently looking 
+into:
+ >> 1. TX DMA error
+ >> when interface down/up or ring buffer size changes, TX DMA error 
+would occur
+ >> because tx_queue can be used before initialization.
+ >> But It will be fixed by the below patch.
+ >>
+ >>   static void efx_ethtool_get_wol(struct net_device *net_dev,
+ >> diff --git a/drivers/net/ethernet/sfc/tx.c 
+b/drivers/net/ethernet/sfc/tx.c
+ >> index d16e031e95f4..6983799e1c05 100644
+ >> --- a/drivers/net/ethernet/sfc/tx.c
+ >> +++ b/drivers/net/ethernet/sfc/tx.c
+ >> @@ -443,6 +443,9 @@ int efx_xdp_tx_buffers(struct efx_nic *efx, int n,
+ >> struct xdp_frame **xdpfs,
+ >>          if (unlikely(!tx_queue))
+ >>                  return -EINVAL;
+ >>
+ >> +       if (!tx_queue->initialised)
+ >> +               return -EINVAL;
+ >> +
+ >>          if (efx->xdp_txq_queues_mode != EFX_XDP_TX_QUEUES_DEDICATED)
+ >>                  HARD_TX_LOCK(efx->net_dev, tx_queue->core_txq, cpu);
+ >>
+ >> diff --git a/drivers/net/ethernet/sfc/tx_common.c
+ >> b/drivers/net/ethernet/sfc/tx_common.c
+ >> index d530cde2b864..9bc8281b7f5b 100644
+ >> --- a/drivers/net/ethernet/sfc/tx_common.c
+ >> +++ b/drivers/net/ethernet/sfc/tx_common.c
+ >> @@ -101,6 +101,8 @@ void efx_fini_tx_queue(struct efx_tx_queue 
+*tx_queue)
+ >>          netif_dbg(tx_queue->efx, drv, tx_queue->efx->net_dev,
+ >>                    "shutting down TX queue %d\n", tx_queue->queue);
+ >>
+ >> +       tx_queue->initialised = false;
+ >> +
+ >>          if (!tx_queue->buffer)
+ >>                  return;
+ >
+ > Looks ok, but xmit_hard should never be called on an interface that
+ > is down. Makes me wonder if we have a seqence issue in our ndo_stop API.
+ >
 
+I think it's an XDP tx_queue specific issue.
+Sorry that I didn't provide that information.
+When a packet is received and it acts XDP_TX, it calls 
+efx_xdp_tx_buffers() and it uses xdp tx_queue and sends it to hardware 
+directly.
+So, ->ndo_start_xmit is not called.
+And that bug occurs when the first interface up.
+->ndo_stop has never called, So I think this is not an issue of ->ndo_stop.
+
+ >>
+ >> After your patch, unfortunately, it can't fix ring buffer size 
+change case.
+ >> It can fix only interface down/up case.
+ >> I will look into this more.
+ >>
+ >> 2. Memory leak
+ >> There is a memory leak in ring buffer size change logic.
+ >> reproducer:
+ >>     while :
+ >>     do
+ >>         ethtool -G <interface name> rx 2048 tx 2048
+ >>         ethtool -G <interface name> rx 1024 tx 1024
+ >>     done
+ >
+ > Is this with my patch or only with yours?
+ > Thanks a lot for testing this.
+ >
+
+Memory leak still occurs with your patch(do not use efx_realloc_channels())
+
+Thanks a lot,
+Taehee Yoo
+
+ > Martin
+ >
+ >> Thanks a lot,
+ >> Taehee Yoo
+ >>
+ >>>
+ >>> Regards,
+ >>> Martin Habets <habetsm.xilinx@gmail.com>
+ >>>
+ >>> ---
+ >>>    drivers/net/ethernet/sfc/ethtool.c |   13 ++++++++++++-
+ >>>    1 file changed, 12 insertions(+), 1 deletion(-)
+ >>>
+ >>> diff --git a/drivers/net/ethernet/sfc/ethtool.c
+ >> b/drivers/net/ethernet/sfc/ethtool.c
+ >>> index 48506373721a..8cfbe61737bb 100644
+ >>> --- a/drivers/net/ethernet/sfc/ethtool.c
+ >>> +++ b/drivers/net/ethernet/sfc/ethtool.c
+ >>> @@ -179,6 +179,7 @@ efx_ethtool_set_ringparam(struct net_device 
+*net_dev,
+ >>>    {
+ >>>    	struct efx_nic *efx = netdev_priv(net_dev);
+ >>>    	u32 txq_entries;
+ >>> +	int rc = 0;
+ >>>
+ >>>    	if (ring->rx_mini_pending || ring->rx_jumbo_pending ||
+ >>>    	    ring->rx_pending > EFX_MAX_DMAQ_SIZE ||
+ >>> @@ -198,7 +199,17 @@ efx_ethtool_set_ringparam(struct net_device 
+*net_dev,
+ >>>    			   "increasing TX queue size to minimum of %u\n",
+ >>>    			   txq_entries);
+ >>>
+ >>> -	return efx_realloc_channels(efx, ring->rx_pending, txq_entries);
+ >>> +	/* Apply the new settings */
+ >>> +	efx->rxq_entries = ring->rx_pending;
+ >>> +	efx->txq_entries = ring->tx_pending;
+ >>> +
+ >>> +	/* Update the datapath with the new settings if the interface is 
+up */
+ >>> +	if (!efx_check_disabled(efx) && netif_running(efx->net_dev)) {
+ >>> +		dev_close(net_dev);
+ >>> +		rc = dev_open(net_dev, NULL);
+ >>> +	}
+ >>> +
+ >>> +	return rc;
+ >>>    }
+ >>>
+ >>>    static void efx_ethtool_get_wol(struct net_device *net_dev,
+ >
