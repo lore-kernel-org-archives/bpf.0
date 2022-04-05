@@ -2,331 +2,159 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D6BFC433F5
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D9FC433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 02:36:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiDECiO convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 4 Apr 2022 22:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S229719AbiDECiR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Apr 2022 22:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiDECiF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229808AbiDECiF (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 4 Apr 2022 22:38:05 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568D0235742
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D31832D92C4
         for <bpf@vger.kernel.org>; Mon,  4 Apr 2022 18:37:18 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234NPIPY005698
-        for <bpf@vger.kernel.org>; Mon, 4 Apr 2022 16:42:23 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f6m6hx04u-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 16:42:23 -0700
-Received: from twshared20084.04.prn5.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 4 Apr 2022 16:42:20 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 9C69E1661B521; Mon,  4 Apr 2022 16:42:11 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>
-Subject: [PATCH v3 bpf-next 4/7] libbpf: wire up spec management and other arch-independent USDT logic
-Date:   Mon, 4 Apr 2022 16:41:59 -0700
-Message-ID: <20220404234202.331384-5-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220404234202.331384-1-andrii@kernel.org>
-References: <20220404234202.331384-1-andrii@kernel.org>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0E5B6177A
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 00:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57772C341C5
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 00:00:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649116837;
+        bh=zFyw1VrfGv7NEuMWOTezqzL8GubbV0WO1PDpwo/w7kk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IzT8pKglPQrYQePYYNDTTvWosEy8MxZkq3wR0piD8u7iSz63ghJ7anCpsXVy8rPww
+         h8sb6BeBAosTUPJfJSBf5tC/Uc9Zc7IhUFp3EN+3Y4bey3Juna89uPMBgdz3W6AXN8
+         KvMFgfyNzawLqWgHmU50yAJKNxBLRXw3d+NWJeiFYcgugGX/GADSzk/5G8g9++kPxr
+         OpF27iOsOSCNOr0NIjmDYXJCtgmcKH1aCT/Qss+bZqX0jw6YqWJZnXdaS1BIF6FzjI
+         YW3kHL8sWBe0nwkHW+VswjM/Okte+nrlOhP3czPdm/y4SX3zE8ViE7mZZZHIzCb+Y/
+         aCTsH/tzvnYAg==
+Received: by mail-ed1-f47.google.com with SMTP id c42so5565374edf.3
+        for <bpf@vger.kernel.org>; Mon, 04 Apr 2022 17:00:37 -0700 (PDT)
+X-Gm-Message-State: AOAM530OKCLAs/VCPOPwtnkedEY6aXRu2G77Nrhro4nCdJEkb9JCoV6M
+        gQeKJHzPyTtIM7HruMOXBBgWG5/nrkhL1LCFGgxvkw==
+X-Google-Smtp-Source: ABdhPJx00CBmV+NQNnGWVZ6pCbTPeYWoi7t9WNITl4M8WQe+QSjOqLEi5/uSRAkUXHVhCjpjoCKilOkyYU4kDA3K4zE=
+X-Received: by 2002:aa7:c157:0:b0:418:f8e3:4c87 with SMTP id
+ r23-20020aa7c157000000b00418f8e34c87mr671966edp.271.1649116835186; Mon, 04
+ Apr 2022 17:00:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: gP-bpvzceknhZHbZOKEgngD0wqoK9FNJ
-X-Proofpoint-GUID: gP-bpvzceknhZHbZOKEgngD0wqoK9FNJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_09,2022-03-31_01,2022-02-23_01
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+ <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+ <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+ <c2e57f10b62940eba3cfcae996e20e3c@huawei.com> <CAADnVQJSso+GSXC-QmNmj0GBPZzxRCRfqAcQbqD-6y0CtMSopQ@mail.gmail.com>
+In-Reply-To: <CAADnVQJSso+GSXC-QmNmj0GBPZzxRCRfqAcQbqD-6y0CtMSopQ@mail.gmail.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 5 Apr 2022 02:00:24 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+Message-ID: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Last part of architecture-agnostic user-space USDT handling logic is to
-set up BPF spec and, optionally, IP-to-ID maps from user-space.
-usdt_manager performs a compact spec ID allocation to utilize
-fixed-sized BPF maps as efficiently as possible. We also use hashmap to
-deduplicate USDT arg spec strings and map identical strings to single
-USDT spec, minimizing the necessary BPF map size. usdt_manager supports
-arbitrary sequences of attachment and detachment, both of the same USDT
-and multiple different USDTs and internally maintains a free list of
-unused spec IDs. bpf_link_usdt's logic is extended with proper setup and
-teardown of this spec ID free list and supporting BPF maps.
+On Tue, Apr 5, 2022 at 12:49 AM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Apr 4, 2022 at 10:21 AM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+> >
+> > > From: Djalal Harouni [mailto:tixxdz@gmail.com]
+> > > Sent: Monday, April 4, 2022 9:45 AM
+> > > On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
+> > > >
+> > > > On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > ...
+> > > > >
+> > > > > > Pinning
+> > > > > > them to unreachable inodes intuitively looked the
+> > > > > > way to go for achieving the stated goal.
+> > > > >
+> > > > > We can consider inodes in bpffs that are not unlinkable by root
+> > > > > in the future, but certainly not for this use case.
+> > > >
+> > > > Can this not be already done by adding a BPF_LSM program to the
+> > > > inode_unlink LSM hook?
+> > > >
+> > >
+> > > Also, beside of the inode_unlink... and out of curiosity: making sysfs/bpffs/
+> > > readonly after pinning, then using bpf LSM hooks
+> > > sb_mount|remount|unmount...
+> > > family combining bpf() LSM hook... isn't this enough to:
+> > > 1. Restrict who can pin to bpffs without using a full MAC
+> > > 2. Restrict who can delete or unmount bpf filesystem
+> > >
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Dave Marchevsky <davemarchevsky@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/usdt.c | 168 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 167 insertions(+), 1 deletion(-)
+I like this approach better, you will have to restrict the BPF, if you
+want to implement MAC policy using BPF.
 
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index f1670e3014ed..2799387c5465 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -239,6 +239,10 @@ struct usdt_manager {
- 	struct bpf_map *specs_map;
- 	struct bpf_map *ip_to_spec_id_map;
- 
-+	int *free_spec_ids;
-+	size_t free_spec_cnt;
-+	size_t next_free_spec_id;
-+
- 	bool has_bpf_cookie;
- 	bool has_sema_refcnt;
- };
-@@ -283,6 +287,7 @@ void usdt_manager_free(struct usdt_manager *man)
- 	if (IS_ERR_OR_NULL(man))
- 		return;
- 
-+	free(man->free_spec_ids);
- 	free(man);
- }
- 
-@@ -789,6 +794,9 @@ struct bpf_link_usdt {
- 
- 	struct usdt_manager *usdt_man;
- 
-+	size_t spec_cnt;
-+	int *spec_ids;
-+
- 	size_t uprobe_cnt;
- 	struct {
- 		long abs_ip;
-@@ -799,11 +807,52 @@ struct bpf_link_usdt {
- static int bpf_link_usdt_detach(struct bpf_link *link)
- {
- 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
-+	struct usdt_manager *man = usdt_link->usdt_man;
- 	int i;
- 
- 	for (i = 0; i < usdt_link->uprobe_cnt; i++) {
- 		/* detach underlying uprobe link */
- 		bpf_link__destroy(usdt_link->uprobes[i].link);
-+		/* there is no need to update specs map because it will be
-+		 * unconditionally overwritten on subsequent USDT attaches,
-+		 * but if BPF cookies are not used we need to remove entry
-+		 * from ip_to_spec_id map, otherwise we'll run into false
-+		 * conflicting IP errors
-+		 */
-+		if (!man->has_bpf_cookie) {
-+			/* not much we can do about errors here */
-+			(void)bpf_map_delete_elem(bpf_map__fd(man->ip_to_spec_id_map),
-+						  &usdt_link->uprobes[i].abs_ip);
-+		}
-+	}
-+
-+	/* try to return the list of previously used spec IDs to usdt_manager
-+	 * for future reuse for subsequent USDT attaches
-+	 */
-+	if (!man->free_spec_ids) {
-+		/* if there were no free spec IDs yet, just transfer our IDs */
-+		man->free_spec_ids = usdt_link->spec_ids;
-+		man->free_spec_cnt = usdt_link->spec_cnt;
-+		usdt_link->spec_ids = NULL;
-+	} else {
-+		/* otherwise concat IDs */
-+		size_t new_cnt = man->free_spec_cnt + usdt_link->spec_cnt;
-+		int *new_free_ids;
-+
-+		new_free_ids = libbpf_reallocarray(man->free_spec_ids, new_cnt,
-+						   sizeof(*new_free_ids));
-+		/* If we couldn't resize free_spec_ids, we'll just leak
-+		 * a bunch of free IDs; this is very unlikely to happen and if
-+		 * system is so exausted on memory, it's the least of user's
-+		 * concerns, probably.
-+		 * So just do our best here to return those IDs to usdt_manager.
-+		 */
-+		if (new_free_ids) {
-+			memcpy(new_free_ids + man->free_spec_cnt, usdt_link->spec_ids,
-+			       usdt_link->spec_cnt * sizeof(*usdt_link->spec_ids));
-+			man->free_spec_ids = new_free_ids;
-+			man->free_spec_cnt = new_cnt;
-+		}
- 	}
- 
- 	return 0;
-@@ -813,22 +862,96 @@ static void bpf_link_usdt_dealloc(struct bpf_link *link)
- {
- 	struct bpf_link_usdt *usdt_link = container_of(link, struct bpf_link_usdt, link);
- 
-+	free(usdt_link->spec_ids);
- 	free(usdt_link->uprobes);
- 	free(usdt_link);
- }
- 
-+static size_t specs_hash_fn(const void *key, void *ctx)
-+{
-+	const char *s = key;
-+
-+	return str_hash(s);
-+}
-+
-+static bool specs_equal_fn(const void *key1, const void *key2, void *ctx)
-+{
-+	const char *s1 = key1;
-+	const char *s2 = key2;
-+
-+	return strcmp(s1, s2) == 0;
-+}
-+
-+static int allocate_spec_id(struct usdt_manager *man, struct hashmap *specs_hash,
-+			    struct bpf_link_usdt *link, struct usdt_target *target,
-+			    int *spec_id, bool *is_new)
-+{
-+	void *tmp;
-+	int err;
-+
-+	/* check if we already allocated spec ID for this spec string */
-+	if (hashmap__find(specs_hash, target->spec_str, &tmp)) {
-+		*spec_id = (long)tmp;
-+		*is_new = false;
-+		return 0;
-+	}
-+
-+	/* otherwise it's a new ID that needs to be set up in specs map and
-+	 * returned back to usdt_manager when USDT link is detached
-+	 */
-+	tmp = libbpf_reallocarray(link->spec_ids, link->spec_cnt + 1, sizeof(*link->spec_ids));
-+	if (!tmp)
-+		return -ENOMEM;
-+	link->spec_ids = tmp;
-+
-+	/* get next free spec ID, giving preference to free list, if not empty */
-+	if (man->free_spec_cnt) {
-+		*spec_id = man->free_spec_ids[man->free_spec_cnt - 1];
-+
-+		/* cache spec ID for current spec string for future lookups */
-+		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
-+		if (err)
-+			 return err;
-+
-+		man->free_spec_cnt--;
-+	} else {
-+		/* don't allocate spec ID bigger than what fits in specs map */
-+		if (man->next_free_spec_id >= bpf_map__max_entries(man->specs_map))
-+			return -E2BIG;
-+
-+		*spec_id = man->next_free_spec_id;
-+
-+		/* cache spec ID for current spec string for future lookups */
-+		err = hashmap__add(specs_hash, target->spec_str, (void *)(long)*spec_id);
-+		if (err)
-+			 return err;
-+
-+		man->next_free_spec_id++;
-+	}
-+
-+	/* remember new spec ID in the link for later return back to free list on detach */
-+	link->spec_ids[link->spec_cnt] = *spec_id;
-+	link->spec_cnt++;
-+	*is_new = true;
-+	return 0;
-+}
-+
- struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct bpf_program *prog,
- 					  pid_t pid, const char *path,
- 					  const char *usdt_provider, const char *usdt_name,
- 					  long usdt_cookie)
- {
-+	int i, fd, err, spec_map_fd, ip_map_fd;
- 	LIBBPF_OPTS(bpf_uprobe_opts, opts);
-+	struct hashmap *specs_hash = NULL;
- 	struct bpf_link_usdt *link = NULL;
- 	struct usdt_target *targets = NULL;
- 	size_t target_cnt;
--	int i, fd, err;
- 	Elf *elf;
- 
-+	spec_map_fd = bpf_map__fd(man->specs_map);
-+	ip_map_fd = bpf_map__fd(man->ip_to_spec_id_map);
-+
- 	/* TODO: perform path resolution similar to uprobe's */
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0) {
-@@ -864,6 +987,12 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 		goto err_out;
- 	}
- 
-+	specs_hash = hashmap__new(specs_hash_fn, specs_equal_fn, NULL);
-+	if (IS_ERR(specs_hash)) {
-+		err = PTR_ERR(specs_hash);
-+		goto err_out;
-+	}
-+
- 	link = calloc(1, sizeof(*link));
- 	if (!link) {
- 		err = -ENOMEM;
-@@ -883,8 +1012,43 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	for (i = 0; i < target_cnt; i++) {
- 		struct usdt_target *target = &targets[i];
- 		struct bpf_link *uprobe_link;
-+		bool is_new;
-+		int spec_id;
-+
-+		/* Spec ID can be either reused or newly allocated. If it is
-+		 * newly allocated, we'll need to fill out spec map, otherwise
-+		 * entire spec should be valid and can be just used by a new
-+		 * uprobe. We reuse spec when USDT arg spec is identical. We
-+		 * also never share specs between two different USDT
-+		 * attachments ("links"), so all the reused specs already
-+		 * share USDT cookie value implicitly.
-+		 */
-+		err = allocate_spec_id(man, specs_hash, link, target, &spec_id, &is_new);
-+		if (err)
-+			goto err_out;
-+
-+		if (is_new && bpf_map_update_elem(spec_map_fd, &spec_id, &target->spec, BPF_ANY)) {
-+			err = -errno;
-+			pr_warn("usdt: failed to set USDT spec #%d for '%s:%s' in '%s': %d\n",
-+				spec_id, usdt_provider, usdt_name, path, err);
-+			goto err_out;
-+		}
-+		if (!man->has_bpf_cookie &&
-+		    bpf_map_update_elem(ip_map_fd, &target->abs_ip, &spec_id, BPF_NOEXIST)) {
-+			err = -errno;
-+			if (err == -EEXIST) {
-+				pr_warn("usdt: IP collision detected for spec #%d for '%s:%s' in '%s'\n",
-+				        spec_id, usdt_provider, usdt_name, path);
-+			} else {
-+				pr_warn("usdt: failed to map IP 0x%lx to spec #%d for '%s:%s' in '%s': %d\n",
-+					target->abs_ip, spec_id, usdt_provider, usdt_name,
-+					path, err);
-+			}
-+			goto err_out;
-+		}
- 
- 		opts.ref_ctr_offset = target->sema_off;
-+		opts.bpf_cookie = man->has_bpf_cookie ? spec_id : 0;
- 		uprobe_link = bpf_program__attach_uprobe_opts(prog, pid, path,
- 							      target->rel_ip, &opts);
- 		err = libbpf_get_error(uprobe_link);
-@@ -900,6 +1064,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	}
- 
- 	free(targets);
-+	hashmap__free(specs_hash);
- 	elf_end(elf);
- 	close(fd);
- 
-@@ -909,6 +1074,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	bpf_link__destroy(&link->link);
- 
- 	free(targets);
-+	hashmap__free(specs_hash);
- 	if (elf)
- 		elf_end(elf);
- 	close(fd);
--- 
-2.30.2
+Can you please try implementing something using these hooks?
 
+> > > ?
+> >
+> > I'm thinking to implement something like this.
+> >
+> > First, I add a new program flag called
+> > BPF_F_STOP_ONCONFIRM, which causes the ref count
+> > of the link to increase twice at creation time. In this way,
+> > user space cannot make the link disappear, unless a
+> > confirmation is explicitly sent via the bpf() system call.
+
+I don't like this approach, this just sounds like an intentional
+dangling reference, prone to refcounting errors and it does not
+really solve the purpose you want to achieve.
+
+And you will still need a policy around the BPF syscall,
+so why not just use the LSM hooks as suggested above?
+
+> >
+> > Another advantage is that other LSMs can decide
+> > whether or not they allow a program with this flag
+> > (in the bpf security hook).
+> >
+> > This would work regardless of the method used to
+> > load the eBPF program (user space or kernel space).
+> >
+> > Second, I extend the bpf() system call with a new
+> > subcommand, BPF_LINK_CONFIRM_STOP, which
+> > decreases the ref count for the link of the programs
+> > with the BPF_F_STOP_ONCONFIRM flag. I will also
+> > introduce a new security hook (something like
+> > security_link_confirm_stop), so that an LSM has the
+> > opportunity to deny the stop (the bpf security hook
+> > would not be sufficient to determine exactly for
+> > which link the confirmation is given, an LSM should
+> > be able to deny the stop for its own programs).
+> >
+> > What do you think?
+>
+> Hack upon a hack? Makes no sense.
