@@ -2,115 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE421C4321E
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95D62C47081
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445323AbiDEXpt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53484 "EHLO
+        id S1450861AbiDEXqs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572942AbiDERWU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:22:20 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A38914012
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 10:20:21 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso2550602pjb.0
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 10:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=093XqrLc3aDE9RURN7mfyfamRYRk+ypyCNdIjaQ8Zng=;
-        b=c+bZkybxtTPC0a8NMb2K9SXaYTqs4UQKlFXD29C1WsTGFVfKM7qbZzOrU2IcwkRTd3
-         gxqYgEJwEWILBMgivNKWMArY6qykcEDSitZGBbxsjMUiyXszzJE1nm9+gGLFGUrrWrfc
-         jXiUvZEwTv8qponb3mhIrToSzQhdSn3ONrciT4p5mdVe3kBzv5HcC8BZSB3lSohTyl+T
-         HjauPxmN3O6Qjw4n37bSoPtTELJZ6qfNEVOAGbZl6XYRhlKTieQhtV3Zz4z9UkonLnaT
-         AASGUIWnK+olzU/lHcjheBR3kaXfQJAiYuyOgxZap/h4CdWH840Sf41t6cGf36oEjc5q
-         OXIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=093XqrLc3aDE9RURN7mfyfamRYRk+ypyCNdIjaQ8Zng=;
-        b=5A0RYw27+A9jUsU1UYsEFwhv+KvXY2nlCoPa/jyxaV2nErziKXyA3sLjTrRS1sa3UU
-         QnrOeKMYObTUvR7VcQtPy4ak47DiTOWQheItBl/mKpdTpiK9XbTXNWP2nWDFz89HtCKk
-         9ESZl9MsmjS6Nh40djg/YWiaTfQTe2EnI2ZMxGrXtCqLt2pQcKHmbjMK9T/FtoCT/vX8
-         KljFfaQ4aweFWv+NP2BjnzGfqEnSjfBKQasVfmmViYG/0I7nMZUsvFJrsGpMmwVW57VL
-         vIY7LPFQQgzgh5Pv4d4HwpMRGRWmPfgOMwE6RC8g0ewmqI+YAufqAo+e5cg7nFUZEtGe
-         NWIg==
-X-Gm-Message-State: AOAM531QG0zldR85R3G2DbY9zYAwJ5ZCOlu/6lUugh+leerzRNBn3mxe
-        y5HXYYjWkpOfZku04Jg+eiBqwUTpmVE=
-X-Google-Smtp-Source: ABdhPJy00tr50fQax3vyuLC06ncb1GE7InDltZ3oOHW1creGIAP3s173agP9ABo3ln7kKdR64Wyk7w==
-X-Received: by 2002:a17:902:d481:b0:154:7f0b:62fb with SMTP id c1-20020a170902d48100b001547f0b62fbmr4579887plg.41.1649179221035;
-        Tue, 05 Apr 2022 10:20:21 -0700 (PDT)
-Received: from MacBook-Pro.local ([2620:10d:c090:500::1:67aa])
-        by smtp.gmail.com with ESMTPSA id pg14-20020a17090b1e0e00b001c75634df70sm2966194pjb.31.2022.04.05.10.20.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 10:20:20 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 10:20:17 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Dmitry Dolgov <9erthalion6@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>
-Subject: Re: [RFC PATCH bpf-next 0/2] Priorities for bpf progs attached to
- the same tracepoint
-Message-ID: <20220405172017.o3qi7v7edth2s7tr@MacBook-Pro.local>
-References: <20220403160718.13730-1-9erthalion6@gmail.com>
- <CAEf4BzZ7=AfL5fAU8aYT20RWY9tG5qU+Fgv-JC0GTLpGOGgAEg@mail.gmail.com>
- <20220404152953.6uu3sgqepo724yiu@ddolgov.remote.csb>
+        with ESMTP id S1457131AbiDEQCq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 12:02:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60C1965CE;
+        Tue,  5 Apr 2022 08:29:40 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXs1t6CNPz681Vp;
+        Tue,  5 Apr 2022 23:26:42 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 17:29:37 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Tue, 5 Apr 2022 17:29:37 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Topic: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Index: AQHYQsxoL5kXhl8+JE6PJPNWV+NOTqzYppqAgABrSsCAAo7zgIAAEt0AgAOU8YCAALoz0IABTtSAgAAmCSA=
+Date:   Tue, 5 Apr 2022 15:29:37 +0000
+Message-ID: <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+        <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+        <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+        <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+        <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+        <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+        <c2e57f10b62940eba3cfcae996e20e3c@huawei.com>
+ <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+In-Reply-To: <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.221.206]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404152953.6uu3sgqepo724yiu@ddolgov.remote.csb>
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:29:53PM +0200, Dmitry Dolgov wrote:
-> > On Sun, Apr 03, 2022 at 05:17:46PM -0700, Andrii Nakryiko wrote:
-> > On Sun, Apr 3, 2022 at 9:08 AM Dmitrii Dolgov <9erthalion6@gmail.com> wrote:
-> > >
-> > > With growing number of various products and tools using BPF it could
-> > > easily happen that multiple BPF programs from different processes will
-> > > be attached to the same tracepoint. It seems that in such case there is
-> > > no way to specify a custom order in which those programs may want to be
-> > > executed -- it will depend on the order in which they were attached.
-> > >
-> > > Consider an example when the BPF program A is attached to tracepoint T,
-> > > the BFP program B needs to be attached to the T as well and start
-> > > before/end after the A (e.g. to monitor the whole process of A +
-> > > tracepoint in some way).  If the program A could not be changed and is
-> > > attached before B, the order specified above will not be possible.
-> > >
-> > > One way to address this in a limited, but less invasive way is to
-> > > utilize link options structure to pass the desired priority to
-> > > perf_event_set_bpf_prog, and add new bpf_prog into the bpf_prog_array
-> > > based on its value. This will allow to specify the priority value via
-> > > bpf_tracepoint_opts when attaching a new prog.
-> > >
-> > > Does this make sense? There maybe a better way to achieve this, I would
-> > > be glad to hear any feedback on it.
-> >
-> > Not really. What's the real use case where you need to define relative
-> > order of BPF programs on the same kprobe or tracepoint. Each of them
-> > is supposed to be independent of each other and not depend on any
-> > order of their execution. Further, given such tracing programs are
-> > read-only relative to the kernel (they can't change kernel behavior),
-> > the order is supposed to be irrelevant.
-> 
-> The immediate trigger for this idea was inconvenience we faced, trying
-> to instrument one bpf prog with another. I guess the best practice in
-> such case would be to attach to fentry/fexit of the target bpf prog, 
-
-yes. that's a recommended way.
-
-> but
-> from what I understand in this case there is no way to get information
-> about tracepoint arguments the target prog has received. 
-
-Not quite. fentry/fexit have access to the arguments of instrumented bpf prog.
-See fexit_bpf2bpf.c
-In case of tracepoint the fentry prog will see the same 'ctx' pointer as
-bpf prog attached to a tp.
+PiBGcm9tOiBDYXNleSBTY2hhdWZsZXIgW21haWx0bzpjYXNleUBzY2hhdWZsZXItY2EuY29tXQ0K
+PiBTZW50OiBUdWVzZGF5LCBBcHJpbCA1LCAyMDIyIDQ6NTAgUE0NCj4gT24gNC80LzIwMjIgMTA6
+MjAgQU0sIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4+IEZyb206IERqYWxhbCBIYXJvdW5pIFtt
+YWlsdG86dGl4eGR6QGdtYWlsLmNvbV0NCj4gPj4gU2VudDogTW9uZGF5LCBBcHJpbCA0LCAyMDIy
+IDk6NDUgQU0NCj4gPj4gT24gU3VuLCBBcHIgMywgMjAyMiBhdCA1OjQyIFBNIEtQIFNpbmdoIDxr
+cHNpbmdoQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+Pj4gT24gU2F0LCBBcHIgMiwgMjAyMiBhdCAx
+OjU1IEFNIEFsZXhlaSBTdGFyb3ZvaXRvdg0KPiA+Pj4gPGFsZXhlaS5zdGFyb3ZvaXRvdkBnbWFp
+bC5jb20+IHdyb3RlOg0KPiA+PiAuLi4NCj4gPj4+Pj4gUGlubmluZw0KPiA+Pj4+PiB0aGVtIHRv
+IHVucmVhY2hhYmxlIGlub2RlcyBpbnR1aXRpdmVseSBsb29rZWQgdGhlDQo+ID4+Pj4+IHdheSB0
+byBnbyBmb3IgYWNoaWV2aW5nIHRoZSBzdGF0ZWQgZ29hbC4NCj4gPj4+PiBXZSBjYW4gY29uc2lk
+ZXIgaW5vZGVzIGluIGJwZmZzIHRoYXQgYXJlIG5vdCB1bmxpbmthYmxlIGJ5IHJvb3QNCj4gPj4+
+PiBpbiB0aGUgZnV0dXJlLCBidXQgY2VydGFpbmx5IG5vdCBmb3IgdGhpcyB1c2UgY2FzZS4NCj4g
+Pj4+IENhbiB0aGlzIG5vdCBiZSBhbHJlYWR5IGRvbmUgYnkgYWRkaW5nIGEgQlBGX0xTTSBwcm9n
+cmFtIHRvIHRoZQ0KPiA+Pj4gaW5vZGVfdW5saW5rIExTTSBob29rPw0KPiA+Pj4NCj4gPj4gQWxz
+bywgYmVzaWRlIG9mIHRoZSBpbm9kZV91bmxpbmsuLi4gYW5kIG91dCBvZiBjdXJpb3NpdHk6IG1h
+a2luZw0KPiBzeXNmcy9icGZmcy8NCj4gPj4gcmVhZG9ubHkgYWZ0ZXIgcGlubmluZywgdGhlbiB1
+c2luZyBicGYgTFNNIGhvb2tzDQo+ID4+IHNiX21vdW50fHJlbW91bnR8dW5tb3VudC4uLg0KPiA+
+PiBmYW1pbHkgY29tYmluaW5nIGJwZigpIExTTSBob29rLi4uIGlzbid0IHRoaXMgZW5vdWdoIHRv
+Og0KPiA+PiAxLiBSZXN0cmljdCB3aG8gY2FuIHBpbiB0byBicGZmcyB3aXRob3V0IHVzaW5nIGEg
+ZnVsbCBNQUMNCj4gPj4gMi4gUmVzdHJpY3Qgd2hvIGNhbiBkZWxldGUgb3IgdW5tb3VudCBicGYg
+ZmlsZXN5c3RlbQ0KPiA+Pg0KPiA+PiA/DQo+ID4gSSdtIHRoaW5raW5nIHRvIGltcGxlbWVudCBz
+b21ldGhpbmcgbGlrZSB0aGlzLg0KPiA+DQo+ID4gRmlyc3QsIEkgYWRkIGEgbmV3IHByb2dyYW0g
+ZmxhZyBjYWxsZWQNCj4gPiBCUEZfRl9TVE9QX09OQ09ORklSTSwgd2hpY2ggY2F1c2VzIHRoZSBy
+ZWYgY291bnQNCj4gPiBvZiB0aGUgbGluayB0byBpbmNyZWFzZSB0d2ljZSBhdCBjcmVhdGlvbiB0
+aW1lLiBJbiB0aGlzIHdheSwNCj4gPiB1c2VyIHNwYWNlIGNhbm5vdCBtYWtlIHRoZSBsaW5rIGRp
+c2FwcGVhciwgdW5sZXNzIGENCj4gPiBjb25maXJtYXRpb24gaXMgZXhwbGljaXRseSBzZW50IHZp
+YSB0aGUgYnBmKCkgc3lzdGVtIGNhbGwuDQo+ID4NCj4gPiBBbm90aGVyIGFkdmFudGFnZSBpcyB0
+aGF0IG90aGVyIExTTXMgY2FuIGRlY2lkZQ0KPiA+IHdoZXRoZXIgb3Igbm90IHRoZXkgYWxsb3cg
+YSBwcm9ncmFtIHdpdGggdGhpcyBmbGFnDQo+ID4gKGluIHRoZSBicGYgc2VjdXJpdHkgaG9vayku
+DQo+ID4NCj4gPiBUaGlzIHdvdWxkIHdvcmsgcmVnYXJkbGVzcyBvZiB0aGUgbWV0aG9kIHVzZWQg
+dG8NCj4gPiBsb2FkIHRoZSBlQlBGIHByb2dyYW0gKHVzZXIgc3BhY2Ugb3Iga2VybmVsIHNwYWNl
+KS4NCj4gPg0KPiA+IFNlY29uZCwgSSBleHRlbmQgdGhlIGJwZigpIHN5c3RlbSBjYWxsIHdpdGgg
+YSBuZXcNCj4gPiBzdWJjb21tYW5kLCBCUEZfTElOS19DT05GSVJNX1NUT1AsIHdoaWNoDQo+ID4g
+ZGVjcmVhc3JlcyB0aGUgcmVmIGNvdW50IGZvciB0aGUgbGluayBvZiB0aGUgcHJvZ3JhbXMNCj4g
+PiB3aXRoIHRoZSBCUEZfRl9TVE9QX09OQ09ORklSTSBmbGFnLiBJIHdpbGwgYWxzbw0KPiA+IGlu
+dHJvZHVjZSBhIG5ldyBzZWN1cml0eSBob29rIChzb21ldGhpbmcgbGlrZQ0KPiA+IHNlY3VyaXR5
+X2xpbmtfY29uZmlybV9zdG9wKSwgc28gdGhhdCBhbiBMU00gaGFzIHRoZQ0KPiA+IG9wcG9ydHVu
+aXR5IHRvIGRlbnkgdGhlIHN0b3AgKHRoZSBicGYgc2VjdXJpdHkgaG9vaw0KPiA+IHdvdWxkIG5v
+dCBiZSBzdWZmaWNpZW50IHRvIGRldGVybWluZSBleGFjdGx5IGZvcg0KPiA+IHdoaWNoIGxpbmsg
+dGhlIGNvbmZpcm1hdGlvbiBpcyBnaXZlbiwgYW4gTFNNIHNob3VsZA0KPiA+IGJlIGFibGUgdG8g
+ZGVueSB0aGUgc3RvcCBmb3IgaXRzIG93biBwcm9ncmFtcykuDQo+IA0KPiBXb3VsZCB5b3UgcGxl
+YXNlIHN0b3AgcmVmZXJyaW5nIHRvIGEgc2V0IG9mIGVCUEYgcHJvZ3JhbXMNCj4gbG9hZGVkIGlu
+dG8gdGhlIEJQRiBMU00gYXMgYW4gTFNNPyBDYWxsIGl0IGEgQlBGIHNlY3VyaXR5DQo+IG1vZHVs
+ZSAoQlNNKSBpZiB5b3UgbXVzdCB1c2UgYW4gYWJicmV2aWF0aW9uLiBBbiBMU00gaXMgYQ0KPiBw
+cm92aWRlciBvZiBzZWN1cml0eV8gaG9va3MuIEluIHlvdXIgY2FzZSB0aGF0IGlzIEJQRi4gV2hl
+bg0KPiB5b3UgY2FsbCB0aGUgc2V0IG9mIGVCUEYgcHJvZ3JhbXMgYW4gTFNNIGl0IGlzIGxpa2Ug
+Y2FsbGluZw0KPiBhbiBTRUxpbnV4IHBvbGljeSBhbiBMU00uDQoNCkFuIGVCUEYgcHJvZ3JhbSBj
+b3VsZCBiZSBhIHByb3ZpZGVyIG9mIHNlY3VyaXR5XyBob29rcw0KdG9vLiBUaGUgYnBmIExTTSBp
+cyBhbiBhZ2dyZWdhdG9yLCBzaW1pbGFybHkgdG8geW91cg0KaW5mcmFzdHJ1Y3R1cmUgdG8gbWFu
+YWdlIGJ1aWx0LWluIExTTXMuIE1heWJlLCBjYWxsaW5nDQppdCBzZWNvbmQtbGV2ZWwgTFNNIG9y
+IHNlY29uZGFyeSBMU00gd291bGQgYmV0dGVyDQpyZXByZXNlbnQgdGhpcyBuZXcgY2xhc3MuDQoN
+ClRoZSBvbmx5IGRpZmZlcmVuY2VzIGFyZSB0aGUgcmVnaXN0cmF0aW9uIG1ldGhvZCwgKFNFQw0K
+ZGlyZWN0aXZlIGluc3RlYWQgb2YgREVGSU5FX0xTTSksIGFuZCB3aGF0IHRoZSBob29rDQppbXBs
+ZW1lbnRhdGlvbiBjYW4gYWNjZXNzLg0KDQpUaGUgaW1wbGVtZW50YXRpb24gb2YgYSBzZWN1cml0
+eV8gaG9vayB2aWEgZUJQRiBjYW4NCmZvbGxvdyB0aGUgc2FtZSBzdHJ1Y3R1cmUgb2YgYnVpbHQt
+aW4gTFNNcywgaS5lLiBpdCBjYW4gYmUNCnVuaXF1ZWx5IHJlc3BvbnNpYmxlIGZvciBlbmZvcmNp
+bmcgYW5kIGJlIHBvbGljeS1hZ25vc3RpYywNCmFuZCBjYW4gcmV0cmlldmUgdGhlIGRlY2lzaW9u
+cyBiYXNlZCBvbiBhIHBvbGljeSBmcm9tIGENCmNvbXBvbmVudCBpbXBsZW1lbnRlZCBzb21ld2hl
+cmUgZWxzZS4NCg0KSG9wZWZ1bGx5LCBJIHVuZGVyc3Rvb2QgdGhlIGJhc2ljIHByaW5jaXBsZXMg
+Y29ycmVjdGx5Lg0KSSBsZXQgdGhlIGVCUEYgbWFpbnRhaW5lcnMgY29tbWVudCBvbiB0aGlzLg0K
+DQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdt
+YkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFpob25nIFJvbmdodWEN
+Cg0KPiA+IFdoYXQgZG8geW91IHRoaW5rPw0KPiA+DQo+ID4gVGhhbmtzDQo+ID4NCj4gPiBSb2Jl
+cnRvDQo+ID4NCj4gPiBIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1
+NjA2Mw0KPiA+IE1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBaaG9uZyBSb25naHVhDQoNCg==
