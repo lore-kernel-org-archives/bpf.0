@@ -2,409 +2,185 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A042C433EF
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC503C433F5
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:20:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243789AbiDFFVI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
+        id S235162AbiDFFWi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1842546AbiDFBby (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 21:31:54 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7FF1B785
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 16:14:29 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id x9so716181ilc.3
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 16:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jV5AjJ1zPgXJSuZlhvWQ5OTeQeQgB4LqOcBYHXbKvgI=;
-        b=oqUF+eFyJWvNOrUw21bR0GV8yWRU4hbtygAIbm2O+qrngZD3B3Wgvs+9MXhQUrONQp
-         qL/aoafzzet1LYaHVwYawj3P3c4FiWLdsPg9cNsRxbC491+FYdg5F45Y2yuw3X49Sovn
-         9ft9oKXOnB9qck7Eq50W7/fcL103Id8jqBQWiGpUez3D5Gtwq4mCzyiaYCcrnJwChMnR
-         RjEHYDAhD2/qD7CgWZEb7c6qIgcS0jVO+oMZQHb2XjBf7YliRwekWWYBYeH6U9AqU7q3
-         nV1X39CaatOYCxTbTCMZCM2EcSjmcMG7/J9Lro25Z/7AGaVmjmKTp5VdKjOo8oVTwSzI
-         cmXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jV5AjJ1zPgXJSuZlhvWQ5OTeQeQgB4LqOcBYHXbKvgI=;
-        b=xThKmtmsbBLV5KPZ1+MH4SMndgp8YhDzrRCdsj25Li41RDAuO7HpSa2PcdFERc8VIa
-         W6OFp7cZtLosyLi970IMCtXagEBsL6aIqlvv0X7Kk+OoBtQ4pPlfbPUK7Rmp7pRgCuLR
-         vhcqp9MazJrKJnacm+iUf3CPuI+SETAEtoRiCUKh6KoOoJkFseNKcSiu/lpl5Lyl/Ly8
-         No1PzebU9Yj6UI3fVl7sVPbi4m8CYkMdz/FDPnmMH3XA3wUKDteSDs3woskTZCynYbn2
-         PQEun6IxyIrfBfPCmjZvBBz9TQMpZqdyNZoF1xzeLjUx1XpsrCLTxHg8kXAy5NXkTPKP
-         ohDg==
-X-Gm-Message-State: AOAM533bnc5TwcZAllvVhMMyl38PkvWjhdKyK7TsI2SSir5ubi6HaphB
-        8MFbNMlGs/pIYNbeVTLTFt0AOmxMu9ogl1u51oA=
-X-Google-Smtp-Source: ABdhPJwT9TodnnIecDeI2kAprSBLbY4u8ErSZlalBeYSGDZ0mrhPWCD8/hzwveMIgiyc2U6rF9STyTk6lZr5QC/3asE=
-X-Received: by 2002:a92:cd89:0:b0:2c9:bdf3:c5dd with SMTP id
- r9-20020a92cd89000000b002c9bdf3c5ddmr2604934ilb.252.1649200468315; Tue, 05
- Apr 2022 16:14:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220405204158.2496618-1-mykolal@fb.com>
-In-Reply-To: <20220405204158.2496618-1-mykolal@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 16:14:17 -0700
-Message-ID: <CAEf4BzYhUp3UqfMfENqM_A7Dz=TkaV44eCoNzoD6x2yRs1NNyA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Improve by-name subtest selection
- logic in prog_tests
-To:     Mykola Lysenko <mykolal@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        with ESMTP id S1851022AbiDFDCA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 23:02:00 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9A5ECC6B;
+        Tue,  5 Apr 2022 16:54:42 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 235I0ba4009240;
+        Tue, 5 Apr 2022 16:54:41 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=qqxmrWDNqRS1xQ8TeAr3ewvJqGk6RGm8tql375O4Jng=;
+ b=KhK1XXjE3lJ+9wGRSc4jhJQu666J1gsHeVHexOCcKVtmfw/4+5IAQdZivXUPYvsmj3s3
+ 1VJd1Qaxv5iNIQ/nstcm1xjBjcuH0w4+gZGSE6a7OiC5lbh3I7w4NHfmT0gY1ywUuamV
+ 5a2clGl6F7XX8cK+8pZQYngPecL+ozICuPA= 
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2174.outbound.protection.outlook.com [104.47.73.174])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f826ybyw9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Apr 2022 16:54:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nUi/DB9jsllG+aDZzthDPgbRan0aaT0CqbADToFI9PfS+EcyOoE14s2+qgd13bYv2h/ybJyfhnMdFLcEikT/gVrqIHN/nx7B6j9EocZCmmQsGY4Wr9fVB+1NfHuVmHw6/mk2kmN82CWwjyl/UP5eq7XkoP8q8eMIMsx5kbPM2Vgv8CaSeDyufN8SRzBaIBF/LjB241rvrDbIleyq+RF14pEB1s+n8c8ZYlvMR8Dq40PQUsBfl9R1YLpMMtTBD9i8FNqJHaw7HfIJMtPX6i57QslsiLnIo0yN0W888hfFmFJk4fEAb9GcGLFNeNMRertk8XhbVaZDkYkcZO2soy14xw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qqxmrWDNqRS1xQ8TeAr3ewvJqGk6RGm8tql375O4Jng=;
+ b=Lh2Lp80Tk+ebDj66GT1vz1ORnIC8wtK70ZxwCj+S+Ta4CISM0yygQCK2HFyCTXW9HpiC5WEZ3ujlyrmrA2kFE8fwnzOV/rmbpqKjzU7WrLDluRKA6SMaaECv5Mt+RquBJT86AKWS8kRl/R5les8os1BjOm1M8dDojbTm2RnF3CSITT947x3xF90gtefdI+RCX8u5HocH96ZCDhp7Lk7whGW5I6EvI8lmuLytLWETic1b0pH9ZW9ZfGiztSXVni7okKAyIn3IKoUJO1TQxtDKPQ9lwqj0yPt/lvDd7eo4L3qcQV/36kXENZAlEEWqLgkEjxs4IN47kxwXI3sr1TNggg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by DM5PR15MB1804.namprd15.prod.outlook.com (2603:10b6:4:58::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5123.31; Tue, 5 Apr 2022 23:54:37 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::e150:276a:b882:dda7]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::e150:276a:b882:dda7%7]) with mapi id 15.20.5123.031; Tue, 5 Apr 2022
+ 23:54:37 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Song Liu <song@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        "andrii@kernel.org" <andrii@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>
+Subject: Re: [PATCH bpf 0/4] introduce HAVE_ARCH_HUGE_VMALLOC_FLAG for
+ bpf_prog_pack
+Thread-Topic: [PATCH bpf 0/4] introduce HAVE_ARCH_HUGE_VMALLOC_FLAG for
+ bpf_prog_pack
+Thread-Index: AQHYRIo6ffSmNDMip0KdC6K8yX1qc6zY+Z8AgAE0IQCAAXb7AIAFSdYAgAEZXAA=
+Date:   Tue, 5 Apr 2022 23:54:37 +0000
+Message-ID: <482D450C-9006-4979-8736-A9F1B47246E4@fb.com>
+References: <20220330225642.1163897-1-song@kernel.org>
+ <YkU+ADIeWACbgFNA@infradead.org>
+ <F3447905-8D42-46C0-B324-988A0E4E52E7@fb.com>
+ <6AA91984-7DF3-4820-91DF-DD6CA251B638@fb.com>
+ <YkvqtvNFtzDNkEhy@infradead.org>
+In-Reply-To: <YkvqtvNFtzDNkEhy@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.80.82.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 514ea588-ac1c-49ce-153a-08da175fa4b2
+x-ms-traffictypediagnostic: DM5PR15MB1804:EE_
+x-microsoft-antispam-prvs: <DM5PR15MB1804039F5B512FE3D98133F2B3E49@DM5PR15MB1804.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: c2jFIxzeTIeFKLjRKzMS765BmBsRgcTqG4ZhbDqBfOal+RCFNTvHB+n2LusOhtpkjweTYHV/zKIrK/IcaLFYC/bfIWSXbpJYtOaq9jFEbTRlEysdvI6fNflolKvgKoj08Lrm63Nd4t4IVkDO18bVIEdq0+cHQp4B/u8WYVs1on4QyOl2Nr9w+nUYe7B+2okmW0JbJIWSYohQJhtWp4k6aHpA/HzjbJd6wOnI69FTfOIp6FmQUvIZUeDl8VUR8WEsuftQk0KfhaYzZLZNzQxI43GN/cwo7/GWHkXVrYZRZtjHoLdmGu2ytnB3QcjGbBQa6EVE52voMZk0SJ+R5C5h+szI4jDDc7VLywwR45NAQdbpwfuBTWlPgF8o0ZQeeA+4IYqBv11p2azkccEzkhYnCRlkzwbX1DhW0r5Y4ve51s8RUFuXc+VM9wbUyOsYcddKKabkQPrh8n5rocj0g8a7o0zHROb7u6O+dMLB0dBjVJa6trRsQIW76HIWEYVGcCg5+ilBaikSu3MtzsX+OxJE9QMWwBITtTgWbTXZIhE0rYs130Kr1A8PuvOEJeFxO8IIvj1tQkMjf7mQ7z9ZYXEUFD9vTOH2RR0ezfAUXG19KCoIu4dfoFMqzVO6K5LSGZ0M9s+pPeuLFpkWaia7krHOt0/YTRrUCOxkVwHH03dit/lNSercVD1H4Sop6EAID3Kax4Z6swWucPCy3JuiMUJSa9whctLdS2rDUsVcDlOKKinDxzyNLnB/kp4U6oCHCGVBIF1smyMqCPjMlOa2K0a66w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(38070700005)(71200400001)(7416002)(122000001)(86362001)(38100700002)(2906002)(8936002)(36756003)(186003)(2616005)(53546011)(6512007)(91956017)(8676002)(6486002)(66476007)(508600001)(66556008)(66946007)(6506007)(76116006)(316002)(64756008)(66446008)(4326008)(54906003)(6916009)(33656002)(14583001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QHuttHchwjtFwio6x+cch++TnX61o2Wo0zYRvmBJIaikNYwxlYyLWXo3Ffe0?=
+ =?us-ascii?Q?vHo0ylWtM6AJiSVVBC5p9IMdPZWoD1i8FqBPK/UKj1QeOo3uhnsdPe7ZRxWa?=
+ =?us-ascii?Q?tyrxqPHii3iWmRPffKqxOH4SXVlIQJyvqomzKN96xug2UZRnthwHIv94omH2?=
+ =?us-ascii?Q?6WioyhNKhgXUvwcnFPdf+pjNJs1UYPDzLvLb7KKZFoZwO7QIqQmTMOhcc8B0?=
+ =?us-ascii?Q?cs+MP4QXN7DWWACtTdKr4q52acf6HpxtJWm7yQdFOH/3nRKo+3nrg55p6K5z?=
+ =?us-ascii?Q?zJhOZ/AjG6kCXxi/+5nMb7tZFDUXG0qbkEEoWRhtmKGl+8zp81nf8OviBqTQ?=
+ =?us-ascii?Q?SYBzQR8fyw21PJ3jSC2jxRFh211UQDjeWcay5YM6YXczRFZCoXSn4akgBHJ3?=
+ =?us-ascii?Q?wLZ+LqNThv3MBYAZtdUNzAhWDL4ADPsxPHegC0Tba4PTNi2Kk42K/Csf5f6+?=
+ =?us-ascii?Q?JeeYOQBslw3TazyYERKrORlU2nAsyRkLuWpMCbdUChdS7X7eS+SNo48QJLdl?=
+ =?us-ascii?Q?nvVzss1+hbM+mCWGOpnp0otPelF2gPLu/0lJ5UaEDWsA/rb/4xhDpD1DQ5Pe?=
+ =?us-ascii?Q?kz0pI46+UjG2Gru8fsw6xKDmAErKjbVzr7P90iyjel27L5JSxq1qV1NBU43Y?=
+ =?us-ascii?Q?/ihP25sDjIVt/ewjyvWwN9h9R1bzhbgARdQsJdkNX6kYg7gmZR/X+vBChRMX?=
+ =?us-ascii?Q?GDw3BdVH/lj4qXsdaXp0wLpfkbbyg9KtJtFAbawhpGLPjLS3hlDZAceK2Eph?=
+ =?us-ascii?Q?80r9fMxg+nv9C3ixNpLGaEmZF3wAAP+jQpYxvB1m5K8Pt5fMXXGI7O9CLgVv?=
+ =?us-ascii?Q?NWoara5j2yeM3NHxsTyHhCXsqPY6g1V/dqdKC5wJtexCgfyJXgJG7pSXXVHX?=
+ =?us-ascii?Q?wd1KCnoferusdS2D0Pe/Qvl4mUI6BEJgkXpaWMGxFwLHW4QnTkmCiS6xQS5q?=
+ =?us-ascii?Q?Kh+tjAyxYsl6F1VqbrDI6M+jilB3A1lt6c5HWmmluIgoBWvr7CcN1FWXK4gq?=
+ =?us-ascii?Q?wpmI/6DhkdzwuOwHoB2z7pDVX5c0h3QmAgn16L19H6WLDJZp3yNmc57V0p9q?=
+ =?us-ascii?Q?QQlnW813UMBrRkcbH+2vT15vQpoF8EdxDFFpjpmDRGmjQDJw+kpJ7YsM4YI6?=
+ =?us-ascii?Q?lhQ7tcx+4Xn5Qwz822fKGraTs0vcFiffUp6CoOpSuXkx506EpA3R3UmAsXiO?=
+ =?us-ascii?Q?BU3Aa/YD0Yoc/3Q2yrh8xpxwySVyOU3tOkJrVCEscrbg/4XK3bo8MMpByABZ?=
+ =?us-ascii?Q?4sDqokn14QO8pM/BfysDbXCPntg+bzmYrikrdiHoL3xQE2mqdPIntOY11oJ+?=
+ =?us-ascii?Q?Nd9o97KUUEKYhiISGW2JOegOyw4pQ8Nm9vnx6fisBX83bL7zGHJFPXENR1Y7?=
+ =?us-ascii?Q?kbmea/aMETRuBjR6pV/a7D6Ak1qbBV4IZm6fxp3WVw5ojeQx3Cpu7dwrxkx2?=
+ =?us-ascii?Q?IPWLXFSC2ITCsvRUyYV23+X0tCaz0gIJTaJ8rVq8tI9PV0QCM9nIADXXk4eT?=
+ =?us-ascii?Q?En+C/c9WRjasL2Vvpue67liV44OdVxb6hO9BBcEwf+D14ROFfigsTOMWq3pk?=
+ =?us-ascii?Q?r7bUsvTpUS2yqJmi26uGjJKvTzzmWeYbOFnXMpqojT3xJArxJxNCawd/JK+o?=
+ =?us-ascii?Q?7jK10AuuYek8zwzJ2StuBEU5JMDtpQlegW8o5naUhwXsys2UiTfJcsJeA/Zu?=
+ =?us-ascii?Q?EVtpz1q1/aM/4SGEwJRk+cLHVvhENSRhDLBEzaE8hm8RDpB/f+/KRZ6KUAYZ?=
+ =?us-ascii?Q?GFY7iZmD4TFhMbH3VAMDo3az407wFSiccF/yaxJpu699fage8DDo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8CA306781FF3BD43BD81B09631D0720C@namprd15.prod.outlook.com>
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 514ea588-ac1c-49ce-153a-08da175fa4b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2022 23:54:37.7719
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: v06S8TU81pBk7B0RCnJHDYKlsVYkiVph4xrPUdExd2Qva78ZwaD6AXtOiAppw24qFA+zICsKHtL0rVwFXewnbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1804
+X-Proofpoint-ORIG-GUID: GgN7tVFU65_vh8wVEdt3TOX7gnwKIl-S
+X-Proofpoint-GUID: GgN7tVFU65_vh8wVEdt3TOX7gnwKIl-S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-05_08,2022-04-05_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 1:45 PM Mykola Lysenko <mykolal@fb.com> wrote:
->
-> Improve subtest selection logic when using -t/-a/-d parameters.
-> In particular, more than one subtest can be specified or a
-> combination of tests / subtests.
->
-> -a send_signal -d send_signal/send_signal_nmi* - runs send_signal
-> test without nmi tests
->
-> -a send_signal/send_signal_nmi*,find_vma - runs two send_signal
-> subtests and find_vma test
->
-
-Only somewhat related, but while we are at this topic. Can you please
-check whether equivalent approach works:
-
--a send_signal/send_signal_nmi* -a find_vma
-
-i.e., multi -a/-d/-t/-b are concatenating their selectors.
-
-> This will allow us to have granular control over which subtests
-> to disable in the CI system instead of disabling whole tests.
->
-> Also, add new selftest to avoid possible regression when
-> changing prog_test test name selection logic.
->
-> Signed-off-by: Mykola Lysenko <mykolal@fb.com>
-> ---
->  .../selftests/bpf/prog_tests/arg_parsing.c    |  88 ++++++++++
->  tools/testing/selftests/bpf/test_progs.c      | 157 +++++++++---------
->  tools/testing/selftests/bpf/test_progs.h      |  16 +-
->  tools/testing/selftests/bpf/testing_helpers.c |  87 ++++++++++
->  tools/testing/selftests/bpf/testing_helpers.h |   6 +
->  5 files changed, 266 insertions(+), 88 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/arg_parsing.c
->
-
-[...]
-
-> +static void test_parse_test_list(void)
-> +{
-> +       struct test_set test_set;
-> +
-> +       init_test_set(&test_set);
-> +
-> +       parse_test_list("arg_parsing", &test_set, true);
-
-ASSER_OK() return value?
-
-> +       if (CHECK(test_set.cnt != 1, "parse_test_list subtest argument", "Unexpected number of tests in num table %d\n", test_set.cnt))
-
-please don't use CHECK()s in new tests, we only add ASSERT_xxx() now.
-Also line length should be under 100 characters (except for the case
-when we have a long string literal, we don't break string literals, no
-matter how long).
-
-> +               goto error;
-> +       if (!ASSERT_OK_PTR(test_set.tests, "tests__initialized"))
-> +               goto error;
-> +       if (CHECK(!test_set.tests[0].whole_test, "parse_test_list subtest argument", "Expected test 0 to be initialized"))
-> +               goto error;
-> +       if (CHECK(strcmp("arg_parsing", test_set.tests[0].name), "parse_test_list subtest argument", "Expected test 0 to be initialized"))
-> +               goto error;
-> +       free_test_set(&test_set);
-> +
-> +       parse_test_list("arg_parsing,bpf_cookie", &test_set, true);
-> +       if (CHECK(test_set.cnt != 2, "parse_test_list subtest argument", "Unexpected number of tests in num table %d\n", test_set.cnt))
-> +               goto error;
-> +       if (!ASSERT_OK_PTR(test_set.tests, "tests__initialized"))
-> +               goto error;
-> +       if (CHECK(!test_set.tests[0].whole_test, "parse_test_list subtest argument", "Expected test 0 to be fully runnable"))
-> +               goto error;
-> +       if (CHECK(!test_set.tests[1].whole_test, "parse_test_list subtest argument", "Expected test 1 to be fully runnable"))
-> +               goto error;
-
-nit: I think there is no need to goto error after each check. We need
-goto error if subsequent checks can crash due to some invalid state.
-In this case, validating the value of few independent values is ok to
-always check without goto error jumps. Makes tests shorter and
-simpler.
 
 
-> +       if (CHECK(strcmp("arg_parsing", test_set.tests[0].name), "parse_test_list subtest argument", "Expected test 0 to be arg_parsing"))
-> +               goto error;
-> +       if (CHECK(strcmp("bpf_cookie", test_set.tests[1].name), "parse_test_list subtest argument", "Expected test 1 to be bpf_cookie"))
-> +               goto error;
-> +       free_test_set(&test_set);
-> +
-> +       parse_test_list("arg_parsing/test_parse_test_list,bpf_cookie", &test_set, true);
-> +       if (CHECK(test_set.cnt != 2, "parse_test_list subtest argument", "Unexpected number of tests in num table %d\n", test_set.cnt))
-> +               goto error;
+> On Apr 5, 2022, at 12:07 AM, Christoph Hellwig <hch@infradead.org> wrote:
+> 
+> On Fri, Apr 01, 2022 at 10:22:00PM +0000, Song Liu wrote:
+>>>> Please fix the underlying issues instead of papering over them and
+>>>> creating a huge maintainance burden for others.
+>> 
+>> After reading the code a little more, I wonder what would be best strategy. 
+>> IIUC, most of the kernel is not ready for huge page backed vmalloc memory.
+>> For example, all the module_alloc cannot work with huge pages at the moment.
+>> And the error Paul Menzel reported in drm_fb_helper.c will probably hit 
+>> powerpc with 5.17 kernel as-is? (trace attached below) 
+>> 
+>> Right now, we have VM_NO_HUGE_VMAP to let a user to opt out of huge pages. 
+>> However, given there are so many users of vmalloc, vzalloc, etc., we 
+>> probably do need a flag for the user to opt-in? 
+>> 
+>> Does this make sense? Any recommendations are really appreciated. 
+> 
+> I think there is multiple aspects here:
+> 
+> - if we think that the kernel is not ready for hugepage backed vmalloc
+>   in general we need to disable it in powerpc for now.
 
-[...]
+Nicholas and Claudio, 
 
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> index 0a4b45d7b515..671e37cada4b 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -3,6 +3,7 @@
->   */
->  #define _GNU_SOURCE
->  #include "test_progs.h"
-> +#include "testing_helpers.h"
->  #include "cgroup_helpers.h"
->  #include <argp.h>
->  #include <pthread.h>
-> @@ -82,14 +83,14 @@ int usleep(useconds_t usec)
->  static bool should_run(struct test_selector *sel, int num, const char *name)
->  {
->         int i;
-> -
+What do you think about the status of hugepage backed vmalloc on powerpc? 
+I found module_alloc and kvm_s390_pv_alloc_vm() opt-out of huge pages.
+But I am not aware of users that benefit from huge pages (except vfs hash,
+which was mentioned in 8abddd968a30). Does an opt-in flag (instead of 
+current opt-out flag, VM_NO_HUGE_VMAP) make sense to you? 
 
-keep empty line between variable declaration block and first statement
+Thanks,
+Song
 
->         for (i = 0; i < sel->blacklist.cnt; i++) {
-> -               if (glob_match(name, sel->blacklist.strs[i]))
-> +               if (glob_match(name, sel->blacklist.tests[i].name) &&
-> +                   sel->blacklist.tests[i].whole_test)
->                         return false;
->         }
->
->         for (i = 0; i < sel->whitelist.cnt; i++) {
-> -               if (glob_match(name, sel->whitelist.strs[i]))
-> +               if (glob_match(name, sel->whitelist.tests[i].name))
->                         return true;
->         }
->
+> - if we think even in the longer run only some users can cope with
+>   hugepage backed vmalloc we need to turn it into an opt-in in
+>   general and not just for x86
+> - there still to appear various unresolved underlying x86 specific
+>   issues that need to be fixed either way
 
-[...]
-
-> -bool test__start_subtest(const char *name)
-> +bool test__start_subtest(const char *subtest_name)
->  {
->         struct prog_test_def *test = env.test;
->
-> @@ -205,17 +246,21 @@ bool test__start_subtest(const char *name)
->
->         test->subtest_num++;
->
-> -       if (!name || !name[0]) {
-> +       if (!subtest_name || !subtest_name[0]) {
->                 fprintf(env.stderr,
->                         "Subtest #%d didn't provide sub-test name!\n",
->                         test->subtest_num);
->                 return false;
->         }
->
-> -       if (!should_run(&env.subtest_selector, test->subtest_num, name))
-> +       if (!should_run_subtest(&env.test_selector,
-> +                               &env.subtest_selector,
-
-we don't have subtest_selector anymore, do we?
-
-also, do you think that maybe combining should_run and
-should_rub_subtest would be a good idea? You can distinguish by having
-subtest_name NULL when you need to check only test?
-
-> +                               test->subtest_num,
-> +                               test->test_name,
-> +                               subtest_name))
->                 return false;
->
-> -       test->subtest_name = strdup(name);
-> +       test->subtest_name = strdup(subtest_name);
->         if (!test->subtest_name) {
->                 fprintf(env.stderr,
->                         "Subtest #%d: failed to copy subtest name!\n",
-> @@ -527,63 +572,29 @@ static int libbpf_print_fn(enum libbpf_print_level level,
->         return 0;
->  }
->
-
-[...]
-
-> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-> index eec4c7385b14..6a465a98341e 100644
-> --- a/tools/testing/selftests/bpf/test_progs.h
-> +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -37,7 +37,6 @@ typedef __u16 __sum16;
->  #include <bpf/bpf_endian.h>
->  #include "trace_helpers.h"
->  #include "testing_helpers.h"
-> -#include "flow_dissector_load.h"
->
->  enum verbosity {
->         VERBOSE_NONE,
-> @@ -46,14 +45,21 @@ enum verbosity {
->         VERBOSE_SUPER,
->  };
->
-> -struct str_set {
-> -       const char **strs;
-> +struct prog_test {
-> +       char *name;
-> +       char **subtests;
-> +       int subtest_cnt;
-> +       bool whole_test;
-> +};
-> +
-> +struct test_set {
-> +       struct prog_test *tests;
-
-prog_test is a bad name, IMO. it's a "test filter", right? Let's call it that?
-
-test_set isn't most accurate as well, maybe test_filter_set or test_set_filter?
-
->         int cnt;
->  };
->
->  struct test_selector {
-> -       struct str_set whitelist;
-> -       struct str_set blacklist;
-> +       struct test_set whitelist;
-> +       struct test_set blacklist;
->         bool *num_set;
->         int num_set_len;
->  };
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-> index 795b6798ccee..d2160d2a1303 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.c
-> +++ b/tools/testing/selftests/bpf/testing_helpers.c
-> @@ -6,6 +6,7 @@
->  #include <errno.h>
->  #include <bpf/bpf.h>
->  #include <bpf/libbpf.h>
-> +#include "test_progs.h"
->  #include "testing_helpers.h"
->
->  int parse_num_list(const char *s, bool **num_set, int *num_set_len)
-> @@ -69,6 +70,92 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
->         return 0;
->  }
->
-> +int parse_test_list(const char *s,
-> +                   struct test_set *test_set,
-> +                   bool is_glob_pattern)
-> +{
-> +       char *input, *state = NULL, *next;
-> +       struct prog_test *tmp, *tests = NULL;
-> +       int i, j, cnt = 0;
-> +
-> +       input = strdup(s);
-> +       if (!input)
-> +               return -ENOMEM;
-> +
-> +       while ((next = strtok_r(state ? NULL : input, ",", &state))) {
-> +               char *subtest_str = strchr(next, '/');
-> +               char *pattern = NULL;
-> +
-> +               tmp = realloc(tests, sizeof(*tests) * (cnt + 1));
-> +               if (!tmp)
-> +                       goto err;
-> +               tests = tmp;
-> +
-> +               tests[cnt].subtest_cnt = 0;
-> +               tests[cnt].subtests = NULL;
-> +               tests[cnt].whole_test = false;
-> +
-> +               if (subtest_str) {
-> +                       char **tmp_subtests = NULL;
-
-need an empty line between variable declarations and statements
-
-> +                       *subtest_str = '\0';
-> +                       int subtest_cnt = tests[cnt].subtest_cnt;
-> +
-> +                       tmp_subtests = realloc(tests[cnt].subtests,
-> +                                              sizeof(*tmp_subtests) *
-> +                                              (subtest_cnt + 1));
-> +                       if (!tmp_subtests)
-> +                               goto err;
-> +                       tests[cnt].subtests = tmp_subtests;
-> +
-> +                       tests[cnt].subtests[subtest_cnt] = strdup(subtest_str + 1);
-> +                       if (!tests[cnt].subtests[subtest_cnt])
-> +                               goto err;
-> +
-> +                       tests[cnt].subtest_cnt++;
-> +               } else {
-> +                       tests[cnt].whole_test = true;
-
-isn't whole_test equivalent to subtest_cnt > 0? Why keeping extra bool
-of state then?
-
-> +               }
-> +
-> +               if (is_glob_pattern) {
-> +                       pattern = "%s";
-> +                       tests[cnt].name = malloc(strlen(next) + 1);
-> +               } else {
-> +                       pattern = "*%s*";
-> +                       tests[cnt].name = malloc(strlen(next) + 2 + 1);
-> +               }
-> +
-> +               if (!tests[cnt].name)
-> +                       goto err;
-> +
-> +               sprintf(tests[cnt].name, pattern, next);
-> +
-> +               cnt++;
-> +       }
-> +
-> +       tmp = realloc(test_set->tests, sizeof(*tests) * (cnt + test_set->cnt));
-> +       if (!tmp)
-> +               goto err;
-> +
-> +       memcpy(tmp + test_set->cnt, tests, sizeof(*tests) * cnt);
-> +       test_set->tests = tmp;
-> +       test_set->cnt += cnt;
-> +
-> +       free(tests);
-> +       free(input);
-> +       return 0;
-> +
-> +err:
-> +       for (i = 0; i < cnt; i++) {
-> +               for (j = 0; j < tests[i].subtest_cnt; j++)
-> +                       free(tests[i].subtests[j]);
-> +
-> +               free(tests[i].name);
-> +       }
-> +       free(tests);
-> +       free(input);
-> +       return -ENOMEM;
-> +}
-> +
->  __u32 link_info_prog_id(const struct bpf_link *link, struct bpf_link_info *info)
->  {
->         __u32 info_len = sizeof(*info);
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-> index f46ebc476ee8..d2f502184cd1 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.h
-> +++ b/tools/testing/selftests/bpf/testing_helpers.h
-> @@ -12,3 +12,9 @@ int bpf_test_load_program(enum bpf_prog_type type, const struct bpf_insn *insns,
->                           size_t insns_cnt, const char *license,
->                           __u32 kern_version, char *log_buf,
->                           size_t log_buf_sz);
-> +
-> +/*
-> + * below function is exported for testing in prog_test test
-> + */
-> +struct test_set;
-> +int parse_test_list(const char *s, struct test_set *test_set, bool is_glob_pattern);
-> --
-> 2.30.2
->
