@@ -2,178 +2,294 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 919C9C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73825C433EF
 	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:30:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359399AbiDFFZj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        id S1348218AbiDFFZ0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354500AbiDFEmc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 00:42:32 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290961B84F2
-        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 17:41:32 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id d185so787551pgc.13
-        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 17:41:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JNIkX0cIxSTx1cEGWiPXk1sRwkxti5aN0q8XCwmOdVs=;
-        b=BQ3mlkcqgMmWN75B7yBnykBtkfW2mEIjJZzSw3vB7d6CaYDZ2SybGUxBSjAFyTGoP8
-         MInLYKr+MVRnD6uNkJrtKFTNyBtSY1WtBtp8ANsJefxp2qBogEHpXfB/b9cVgU77yxRS
-         wFpVUqHa/dWTdqCtuG2bufxhxfgF8RS68OK/9mGYTHpBDc2tVRPfyh3XmMb4SCUd0cre
-         kVJh83h5Bz9DW1F/RyF6yz88Qi6IcoTLThDfYDAbfMDyZdDrfNFZ/hO/wvxLVUpenqKo
-         WBqdq1ohxBzRU/93ucoVanNiLYrbuFeLE/kZlzzkwJp5mLDy+WNJKP7XZ5GCR4irwf2c
-         Bjsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JNIkX0cIxSTx1cEGWiPXk1sRwkxti5aN0q8XCwmOdVs=;
-        b=AseqTRksyyMSVdF383z3oYVxzdPd18armpCZf9mxR17qUmAHhtmy5qjn3+et9KeCQn
-         5hz4czD04Cid0MjDzOgctjBnNocpczjfL9ZXw3/GL2BNwdeJklGf7+lFdivFhF8CyhJF
-         TEdgi0qM2PBVsrkPlFrJHywiOZMi0/g+ANoa9W1cxRSbI3N0z9o4nudX8JOIkfY0uhFL
-         0dypFbZYZxd0H6M7QhxvKi6aGIsPTbk/TDYrrMzZV9kE+h7dVwePPPmeY1J2aRKYzpC3
-         utfAwsGypdbGxUs10AcVyugFFQDLW+j55jCFJSiXr5hrMYwv7N9GZkiZTWABHqK7dZeb
-         CZJQ==
-X-Gm-Message-State: AOAM5331kHKgcbvwlWCPb0L5Uxvoy6hBCoh9enQwPLj8CUYg8qp8Y5o3
-        IFW9bqzPX5s73o7hVYzEMjIJ6XDH0n5jwg==
-X-Google-Smtp-Source: ABdhPJz+komkEUBZzriD9xwWZrWqZ3pHzgygOww8SokPJgvbkV45bGaYhCVWA26bUqdYA9pvoMXA3A==
-X-Received: by 2002:a63:5317:0:b0:399:58e9:882b with SMTP id h23-20020a635317000000b0039958e9882bmr5003470pgb.306.1649205691829;
-        Tue, 05 Apr 2022 17:41:31 -0700 (PDT)
-Received: from localhost ([112.79.140.207])
-        by smtp.gmail.com with ESMTPSA id z2-20020aa79902000000b004fb05c04b53sm17795392pff.103.2022.04.05.17.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 17:41:31 -0700 (PDT)
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v1 1/2] bpf: Ensure type tags precede modifiers in BTF
-Date:   Wed,  6 Apr 2022 06:11:20 +0530
-Message-Id: <20220406004121.282699-2-memxor@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406004121.282699-1-memxor@gmail.com>
-References: <20220406004121.282699-1-memxor@gmail.com>
+        with ESMTP id S1835848AbiDFAdn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 20:33:43 -0400
+Received: from sonic312-30.consmr.mail.ne1.yahoo.com (sonic312-30.consmr.mail.ne1.yahoo.com [66.163.191.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FA2104A7E
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 15:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649198856; bh=kuHtMKHl/c2qIGNhAGVZoANBI56QWLO5me7QncFB0/4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lw/b5SvbMVXuoNhOkN60MTNvRK0sDPou7k8Sm8/fDot5jNIhKwRd3eHlRDH4X++09rQEJw1wr+aKES2kF0F5dOMKeDQUZQ6F4HZOWGED0RDC4zr9xcZY9Qk6H8JLGIQho7PvJeTl8oKy7KnIOIiPnQQ7B7oSZHdV7nV34QwwpPvCV1hoQGTxbT/4rS1hlwLxnfvKtak1zmDmffa+AUzFsTThb4ap/GSRNi9jovUUtR5yK7ddvNvJrvphSyDebb/pwGdWdzuXAqm2VSIbgKe10iBQx3wYqNt0U7V+Z2fvGSGZwR7tJu3GBEoFohyivhXzK9FuIP48+lJCqFVNv9I8hQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1649198856; bh=VbxZHvRlQ3ApM+hvxQitthNUVXoy1RKh/KVchJBGZGS=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=oGp9qOO4oZpK+WQMwTyI6AQctVQpLckSVRDCMM9EY4+URlBQmX+gpK78IfGzEbJ1WQOoAgSAqaV7gbPSvkBrQmDEU+odSwN0Z7UaU315n38j5LFqVI6pfJGjwXZEkE0sJ20imT5mnbnidmwOGI5FZKeajBcL6gMT9w9tZ6VAPJSnOE5tnZANcnkdMh7dqLfFizhLODK+mnLGixLVyp1AgVBsFojT0K3uAfCKlTIeoM31WO7VJJKdaVbU1W5+cjem8eiUyG/ev9ipDWUvQK/goHUd0yZOMuHWRMtTMakOWirSW07wdwQdxNy89lTohXsPGu8sAAXcWlEgAmiEApvXZw==
+X-YMail-OSG: KM__rusVM1mvT51zYphGFvuxV3vMoEUz.64XbPOnJeUfM3Q02p8tjzbCHPbxK90
+ xEbDliiZmXka7VwlPeFd9D1DD5e1OCiK71seGddNJdacxGYZBFqNL38S22jUAAh2NKwCZgZ3a1qm
+ b68mSbOJTcl892WIwb.mTv9vYc9nK6H9jOBvffECkgbEOIuJ2OTT0OCGlYe38K9gXdoiudYOOpHl
+ 2fh_s6WdkypLC5Nfeyk4z1adY.Se94Xlv.8WW64_g.Q6gsD7htFWlmyKKuIjT7IOL6GjWm9Szqd1
+ R3UV59okWBjij2lkAmEvm1OGVvxhNPUS.liSAj2FU0qfbfjIyuTRodjmQ44ijXaF_l.ncSA6E7D2
+ 52uqJTjoWIGYu33gu7Y9smglgLO03sxROpSKDJjLYSmqq5TZV191mqxNk6qpvwyo1.It_zg1CqAM
+ _I4TYKmrHvNzptK8N1w3ksNztLX_e0N5gHbhAJlQPW5Bw6ykmInAWc_WUaCDq_nMTrMNQ0.BQLAW
+ WCRbo_nap91myK7S6jaZMMJbCJQlKQ0d19nAP0GXwM.U0k4qdC3wPw9KG8_ejbIeSpZDDcf8IzrJ
+ 4bQvcIjmYkKtr30WANdICKGFIG6qoNp9Fg95.2kjpGHvmwHPuO6qR9YqjocDnUP97EQvkTGUoZTC
+ fmWLce.3nw8OaynFbR2KRNYiUriJl8uXIATVYpJyjRTwAIa8rjrwbAhxUP5NVN_nxvbt9B0qD1vL
+ iF5dcCV7zA.vqsgkTlPIKvL7geTOs3C_5Q.EkNfAn5PlCJi3y1zODah_iTZ4ecECSgQVOQRR_lvQ
+ 5sUCI4wSaPH5EOmTNV6q7bTyu3MxHVIaMUAIVoLi_8k4EtldfkqaEeKispwKxjk.YDkONtPJE0Cc
+ pE8iFJVkuJaeEnENzECZy3vMXBzWkyWrlOzxhd.x5VcN.LvY_kezvJ9przKkPd24eoo3B9kOZUKP
+ NS_jcRoQPrm.gnozfYxNufkt9qbgJaWqXnPjXRpcK_nHwdGqJ9SrZII7p1ZaQmL_NGh5eShl5Ak0
+ oCDgnLQHlke0.mPoBs.DXXK7r8bayP2uWHxez.cMKyi2mCozH06SzzozGsmV2DV4wRVeNnQ5NnD7
+ duFgvP9y0siotq8UHHEY2GCd5kkjmdaAUd1iyLgVlxPeMAd89ho9zCouqCHg9YuIHw3L_NEVlpyt
+ 6bEP0KxoUYtsVKOeWmn1lqMZxOkdMux8JF.jzEan8uwwC2iFVX62Zh.3mtBLMy4wCtI2ydJ7NwVg
+ kIvCoToLc5RDNWmOhaNfzcZ9SpG03jdgluv5cLh1oyTvjJti37BVGbQVSuFKambK6zz6fPT3JpqQ
+ Td7uMTzGQLDd3aM3r4lpQwkkq6ZgvfZuI74TGG1Qz72OiRGT6ElyxmqgTz9DPI0QPCS8zFtBd5wN
+ g7GXxswBII_DtM6v2a2SqBZlQJnDZCEbYwvF6Rsb7KLhj9nTdtNLv40B05j5uX6eOcjh6.gjicjh
+ 4n2hzMomOHjxFoL26zmw2HZQXDRB9WrXRegbN6o9ZS7S56GISCNn0e.GVx1_ANGl1Y9ITLgc3mkj
+ aeGxLxguvgu5LBpKKyxuQl92.GCrYlYGg9HBZk_gNpX.esY3Yg6VvCP7BctyRlX5CWY0a9REhZJK
+ YiZHe20QUET91dvI8o.O7mlwNgp2u8k7LNi3gGdWWoDQLdXbXVKDqqN8p.OkQ_PT6MQFWhvWD6Hq
+ lQi_UcfdeW3nTE0YTi7wBXLRaPZq2rA6YO6mbYysziXrkHmx9aCMWS1.7xLOO2J43QzBZ7VjWuOp
+ mr2bspwwUWdOji.Vpcv8AgMMWnL2l9RHnGmuIXsm.HAAsC.rmVV9vmPHZtotu0A2DOfy6b8a.kDo
+ 88dY442gAarDTf8zkzmeXacI80hqCh0bPv.qB_AqAuDz8UFgHzXk6kRu6lMfytQN56jEeBNu5Xav
+ WAcMHhj._SoyiuB1CBQ_SLZ1CY5EpL3Iyd3J9TY3sxDmLjffnDicxHqypaiKCVj_kLP6XvZDVPDC
+ iyDxzHS.Msc7c3OGGTk6..15qsMeGybeAzJrJPCL1fE309eHGaV_S4Jk04LwlcKG_q0pxqPS7NCO
+ lvKrLp6NdUSkWJWPqisJBlzCNx0nElmqBXE2hAc2_hYCT_zwuwkjKJLWpKiy5Q8p8ZXptLMQaK_n
+ h7bPvT_uLr4.6T.jmGFpAcr.PEWhdDEqORzK1ytMR5S1ocjyiSITC5gOz0z6sv3U1VufvspTMC_V
+ OyGNoO0g8_WnT_BFdlHO7W5vCSMmUK1kEBFdnH8P0oNSTwlTNikou0acFupkLZ0z2
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ne1.yahoo.com with HTTP; Tue, 5 Apr 2022 22:47:36 +0000
+Received: by hermes--canary-production-bf1-665cdb9985-4zttc (VZM Hermes SMTP Server) with ESMTPA ID eaa50fa1da4b68d1bc9a73fb183248ea;
+          Tue, 05 Apr 2022 22:47:33 +0000 (UTC)
+Message-ID: <5ce85845-824c-32fb-3807-6f9ab95ad6fe@schaufler-ca.com>
+Date:   Tue, 5 Apr 2022 15:47:30 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3281; h=from:subject; bh=J/cmcMe/JMBC1AyOKGN0Jr2OdkeowJ/jpyva+PhQfQw=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBiTOGSBpnvBG/guav7uNTAxHj7muG1Zo16nnRskmaJ B6npiYOJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCYkzhkgAKCRBM4MiGSL8RyqsnEA CPoE3x9CpuNZ4qZRhUbx4AIFffesoVy0OtFKJip4DOy78DxjQFEZyjCIN/K3lIx4O/QV7BowfMMtk5 9InfyYHFBqqymQMuQha3dl3Lh8PVVWiDsWnNoBvPaI4Cl4/CiquvKh1cWgEP8Mr3lyrpW3QTUfSuxI TfJT92zo98Ox9zvhbo7jdRfXR1BxNjD0Bry55Cs2Y0I/CSY3MK34/ZjvsfLSsZWUOm0FtO7KDtZNha v8j7bxJfnVqwuBJLM4Yvw+2fzD7zLXdtxpl/kJXSGasyDvDe867dhDQXgJR9Q12VSO959sCCfb29Si 4j+TyWD1cAqExFuIxGRmdPJ8sPIZbzByccNhvhL4qVRyFFjia2V7/yd0y95dbDzGPD2J5XLLnlKXGb TOYA8bGKyvNpW2E/jtX3WOmDsQHUgAaDLRc/LJamhTHjwDNZW5UBI3TqAdoMcCo/SpZ5ip6bO29KHK YSn0Q+t7Sl3PCY5BTGYFGMRmnV6Yf4sy9It2QX8QJjUMH0epDd4mlg7R2TB5z6o77J6pngTKjYq2HM lGMlwPEijlZVQ4s6rpQCcPZ0iWznDWW/8cc0VD+LCbg8+bC0/X9UJukDVWdHYGWmJaFQLMwcCN/8DJ aYUhZN3PmoKLWJ9wHcrvbeveOVcjNw/SzcFyFHsY31n2qT03wdBdiKMok+kA==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [POC][USER SPACE][PATCH] Introduce LSM to protect pinned objects
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huawei.com>, corbet@lwn.net,
+        viro@zeniv.linux.org.uk, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, tixxdz@gmail.com,
+        shuah@kernel.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, zohar@linux.ibm.com
+Cc:     linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <CACYkzJ7ZVbL2MG7ugmDEfogSPAHkYYMCHxRO_eBCJJmBZyn6Rw@mail.gmail.com>
+ <20220405131116.3810418-1-roberto.sassu@huawei.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220405131116.3810418-1-roberto.sassu@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20001 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It is guaranteed that for modifiers, clang always places type tags
-before other modifiers, and then the base type. We would like to rely on
-this guarantee inside the kernel to make it simple to parse type tags
-from BTF.
+On 4/5/2022 6:11 AM, Roberto Sassu wrote:
+> Introduce a new LSM to protect pinned objects in a bpf filesystem
 
-However, a user would be allowed to construct a BTF without such
-guarantees. Hence, add a pass to check that in modifier chains, type
-tags only occur at the head of the chain, and then don't occur later in
-the chain.
+This is *not an LSM*. Do not call it an LSM. It is a set of
+eBPF programs. We have all the opportunities for confusion
+that we need. I suggested that you call this a BPF security
+module (BSM) earlier today. You have any number of things
+you can call this that won't be objectionable.
 
-If we see a type tag, we can have one or more type tags preceding other
-modifiers that then never have another type tag. If we see other
-modifiers, all modifiers following them should never be a type tag.
+> instance. This is useful for example to ensure that an LSM will always
+> enforce its policy, even despite root tries to unload the corresponding
+> eBPF program.
 
-Instead of having to walk chains we verified previously, we can remember
-the last good modifier type ID which headed a good chain. At that point,
-we must have verified all other chains headed by type IDs less than it.
-This makes the verification process less costly, and it becomes a simple
-O(n) pass.
+How is this going to ensure that SELinux enforces its policy?
+AppArmor has no eBPF program that corresponds to its policy,
+neither does any other existing LSM, save BPF. Your claim is
+nonsensical in the face of LSM behavior.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- kernel/bpf/btf.c | 51 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
-
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0918a39279f6..4a73f5b8127e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4541,6 +4541,45 @@ static int btf_parse_hdr(struct btf_verifier_env *env)
- 	return 0;
- }
- 
-+static int btf_check_type_tags(struct btf_verifier_env *env,
-+			       struct btf *btf, int start_id)
-+{
-+	int i, n, good_id = start_id - 1;
-+	bool in_tags;
-+
-+	n = btf_nr_types(btf);
-+	for (i = start_id; i < n; i++) {
-+		const struct btf_type *t;
-+
-+		t = btf_type_by_id(btf, i);
-+		if (!t)
-+			return -EINVAL;
-+		if (!btf_type_is_modifier(t))
-+			continue;
-+
-+		cond_resched();
-+
-+		in_tags = btf_type_is_type_tag(t);
-+		while (btf_type_is_modifier(t)) {
-+			if (btf_type_is_type_tag(t)) {
-+				if (!in_tags) {
-+					btf_verifier_log(env, "Type tags don't precede modifiers");
-+					return -EINVAL;
-+				}
-+			} else if (in_tags) {
-+				in_tags = false;
-+			}
-+			if (t->type <= good_id)
-+				break;
-+			t = btf_type_by_id(btf, t->type);
-+			if (!t)
-+				return -EINVAL;
-+		}
-+		good_id = i;
-+	}
-+	return 0;
-+}
-+
- static struct btf *btf_parse(bpfptr_t btf_data, u32 btf_data_size,
- 			     u32 log_level, char __user *log_ubuf, u32 log_size)
- {
-@@ -4608,6 +4647,10 @@ static struct btf *btf_parse(bpfptr_t btf_data, u32 btf_data_size,
- 	if (err)
- 		goto errout;
- 
-+	err = btf_check_type_tags(env, btf, 1);
-+	if (err)
-+		goto errout;
-+
- 	if (log->level && bpf_verifier_log_full(log)) {
- 		err = -ENOSPC;
- 		goto errout;
-@@ -4809,6 +4852,10 @@ struct btf *btf_parse_vmlinux(void)
- 	if (err)
- 		goto errout;
- 
-+	err = btf_check_type_tags(env, btf, 1);
-+	if (err)
-+		goto errout;
-+
- 	/* btf_parse_vmlinux() runs under bpf_verifier_lock */
- 	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);
- 
-@@ -4894,6 +4941,10 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
- 	if (err)
- 		goto errout;
- 
-+	err = btf_check_type_tags(env, btf, btf_nr_types(base_btf));
-+	if (err)
-+		goto errout;
-+
- 	btf_verifier_env_free(env);
- 	refcount_set(&btf->refcnt, 1);
- 	return btf;
--- 
-2.35.1
-
+> Achieve the protection by denying inode unlink and unmount of the
+> protected bpf filesystem instance. Since protected inodes hold a
+> reference of the link of loaded programs (e.g. LSM hooks), denying
+> operations on them will prevent the ref count of the links from reaching
+> zero, ensuring that the programs remain always active.
+>
+> Enable the protection only for the instance created by the user space
+> counterpart of the LSM, and don't interfere with other instances, so
+> that their behavior remains unchanged.
+>
+> Suggested-by: Djalal Harouni <tixxdz@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>   .gitignore       |  4 +++
+>   Makefile         | 18 ++++++++++++++
+>   bpffs_lsm_kern.c | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
+>   bpffs_lsm_user.c | 60 +++++++++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 145 insertions(+)
+>   create mode 100644 .gitignore
+>   create mode 100644 Makefile
+>   create mode 100644 bpffs_lsm_kern.c
+>   create mode 100644 bpffs_lsm_user.c
+>
+> diff --git a/.gitignore b/.gitignore
+> new file mode 100644
+> index 000000000000..7fa02964f1dc
+> --- /dev/null
+> +++ b/.gitignore
+> @@ -0,0 +1,4 @@
+> +*.o
+> +vmlinux.h
+> +bpffs_lsm_kern.skel.h
+> +bpffs_lsm_user
+> diff --git a/Makefile b/Makefile
+> new file mode 100644
+> index 000000000000..c3d805759db3
+> --- /dev/null
+> +++ b/Makefile
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +all: bpffs_lsm_user
+> +
+> +clean:
+> +	rm -rf bpffs_lsm.skel.h vmlinux.h bpffs_lsm_kern.o bpffs_lsm_user
+> +
+> +vmlinux.h:
+> +	/usr/sbin/bpftool btf dump file /sys/kernel/btf/vmlinux format c > \
+> +			  vmlinux.h
+> +
+> +bpffs_lsm_kern.skel.h: bpffs_lsm_kern.o
+> +	bpftool gen skeleton $< > $@
+> +
+> +bpffs_lsm_kern.o: bpffs_lsm_kern.c vmlinux.h
+> +	clang -Wall -Werror -g -O2 -target bpf -c $< -o $@
+> +
+> +bpffs_lsm_user: bpffs_lsm_user.c bpffs_lsm_kern.skel.h bpffs_lsm_kern.o
+> +	cc -Wall -Werror -g -o $@ $< -lbpf
+> diff --git a/bpffs_lsm_kern.c b/bpffs_lsm_kern.c
+> new file mode 100644
+> index 000000000000..b3ccb2a75c95
+> --- /dev/null
+> +++ b/bpffs_lsm_kern.c
+> @@ -0,0 +1,63 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Authors:
+> + * Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Implement an LSM to protect a bpf filesystem instance.
+> + */
+> +
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_core_read.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +uint32_t monitored_pid = 0;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
+> +	__uint(map_flags, BPF_F_NO_PREALLOC);
+> +	__type(key, int);
+> +	__type(value, sizeof(uint8_t));
+> +} inode_storage_map SEC(".maps");
+> +
+> +SEC("lsm/sb_set_mnt_opts")
+> +int BPF_PROG(sb_set_mnt_opts, struct super_block *sb, void *mnt_opts,
+> +	     unsigned long kern_flags, unsigned long *set_kern_flags)
+> +{
+> +	u32 pid;
+> +
+> +	pid = bpf_get_current_pid_tgid() >> 32;
+> +	if (pid != monitored_pid)
+> +		return 0;
+> +
+> +	if (!bpf_inode_storage_get(&inode_storage_map, sb->s_root->d_inode, 0,
+> +				   BPF_LOCAL_STORAGE_GET_F_CREATE))
+> +		return -EPERM;
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("lsm/inode_unlink")
+> +int BPF_PROG(inode_unlink, struct inode *dir, struct dentry *dentry)
+> +{
+> +	if (bpf_inode_storage_get(&inode_storage_map,
+> +				  dir->i_sb->s_root->d_inode, 0, 0))
+> +		return -EPERM;
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("lsm/sb_umount")
+> +int BPF_PROG(sb_umount, struct vfsmount *mnt, int flags)
+> +{
+> +	if (bpf_inode_storage_get(&inode_storage_map,
+> +				  mnt->mnt_sb->s_root->d_inode, 0, 0))
+> +		return -EPERM;
+> +
+> +	return 0;
+> +}
+> diff --git a/bpffs_lsm_user.c b/bpffs_lsm_user.c
+> new file mode 100644
+> index 000000000000..e20180cc5db9
+> --- /dev/null
+> +++ b/bpffs_lsm_user.c
+> @@ -0,0 +1,60 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + *
+> + * Implement the user space side of the LSM for bpffs.
+> + */
+> +
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <stdio.h>
+> +#include <errno.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <limits.h>
+> +#include <sys/mount.h>
+> +#include <sys/stat.h>
+> +
+> +#include "bpffs_lsm_kern.skel.h"
+> +
+> +#define MOUNT_FLAGS (MS_NOSUID | MS_NODEV | MS_NOEXEC | MS_RELATIME)
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	char mntpoint[] = "/tmp/bpf_private_mountXXXXXX";
+> +	char path[PATH_MAX];
+> +	struct bpffs_lsm_kern *skel;
+> +	int ret, i;
+> +
+> +	skel = bpffs_lsm_kern__open_and_load();
+> +	if (!skel)
+> +		return -EINVAL;
+> +
+> +	ret = bpffs_lsm_kern__attach(skel);
+> +	if (ret < 0)
+> +		goto out_destroy;
+> +
+> +	mkdtemp(mntpoint);
+> +
+> +	skel->bss->monitored_pid = getpid();
+> +	ret = mount(mntpoint, mntpoint, "bpf", MOUNT_FLAGS, NULL);
+> +	skel->bss->monitored_pid = 0;
+> +
+> +	if (ret < 0)
+> +		goto out_destroy;
+> +
+> +	for (i = 0; i < skel->skeleton->prog_cnt; i++) {
+> +		snprintf(path, sizeof(path), "%s/%s", mntpoint,
+> +			 skel->skeleton->progs[i].name);
+> +		ret = bpf_link__pin(*skel->skeleton->progs[i].link, path);
+> +		if (ret < 0)
+> +			goto out_destroy;
+> +	}
+> +
+> +	ret = 0;
+> +out_destroy:
+> +	bpffs_lsm_kern__destroy(skel);
+> +	return ret;
+> +}
