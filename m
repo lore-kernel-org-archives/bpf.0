@@ -2,127 +2,180 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11129C433F5
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12E52C4167D
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 00:09:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445647AbiDEXpz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 19:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S1444567AbiDEXpo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 19:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452819AbiDEWc2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:32:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02191A3BB;
-        Tue,  5 Apr 2022 14:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649193999; x=1680729999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+oTJs1jfnV9NW0n9SL3+E3IODEjehGaO0faXtMV5Vvo=;
-  b=bggTod5tcaE8W4le11d67CSJn7zWg4hJdb1i4ZVnNMwxYMk9yNjviSIx
-   Xkb70JazRAekFm3YtV3AJ1VnjRfXmPjWPHxRYYWIGQA82a15W0ZG1AB5C
-   +xnNaqypsoxbvMS59UWXX9JOXwd+IM3az0HpHiXoDvp6WlAavV3z+H2oZ
-   ZSFVDR7TYOfeTWoI2kANPXBbjNnJJAFaz3BAUW6dryNo3ysLQ7JuRjQSe
-   7Uw9QYEQ+Wuq+I7sAP7OahdlXoUrVcDyvF0vmo41/Z9bcppoGPjXt0c35
-   sIEY+I29s5pARRqSkcPtDmzH1+yDnCOyZIlIkHLo2k9gu46RVXa1nLURC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="347310054"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="347310054"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="641773595"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 14:26:34 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbqh8-0003ly-3e;
-        Tue, 05 Apr 2022 21:26:34 +0000
-Date:   Wed, 6 Apr 2022 05:25:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-        kernel-team@fb.com, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH bpf 4/4] arm64: rethook: Replace kretprobe trampoline
- with rethook
-Message-ID: <202204060512.Pzw5bnTd-lkp@intel.com>
-References: <164915126392.982637.10302202550404803304.stgit@devnote2>
+        with ESMTP id S1452913AbiDEPzm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 11:55:42 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CB6E29DC;
+        Tue,  5 Apr 2022 07:58:07 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id m16so409786plx.3;
+        Tue, 05 Apr 2022 07:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iE/Y9WscNLHu6w2KEIZCPXwIElVoVHM0BzES9hjgoSw=;
+        b=phlbuxVtZrq+ny/cBitrnv1EdI2+ifY+dU7QMLrWR4vTUYhhs5DmvkW8pGnjEt00dY
+         aeztRgO/rJiLIbsJOMkp2X5p+zBpqygo3MmguP1fKSF3+Lf8WmwLmYa414Z6tbkq7PtB
+         ZlM8l2daOyMhZ2URU1jsuj+cAFosdKMB1hJVwUE82ZFfIxAwOpVLrf4SjgSs9s9MuxmX
+         RLSMFtHho+fNSTZvCXpwoVQPSjCeD+aUdFQhTpIpZuUCgFohEgx7bCH/+TM6bTLv0uvp
+         1FIYjib+PWttI6jjFrcNZVQV5hky9BB97FMuLw/RLCV3Wb1dJv9c8ovyUbgUvR0hSBfX
+         5MtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iE/Y9WscNLHu6w2KEIZCPXwIElVoVHM0BzES9hjgoSw=;
+        b=4Y8cYfRBm59eJPxQZU/tfjiJh2iYvkFpS2w6Cw3TAkdNcCX3u2LyUo8GMWZH//+OjG
+         cLXm69gDW4ukUPmtV0q2ivaUkRyYS9m9doGmGeiz1AVNqZX+/Q26DJZZ2EgmmYsCiz0k
+         oR7b3xh0wRbVgeziLHhj14Sn38b2G5N9NX+GD80/KAwh6dTMesB13cAeHTsZLVs80sBD
+         gnhpf3ZMB8uVT7fXozx1w/CFPj/L8078T8gSwsf2pT3B/aekQuFjYMaC+sv08R6at7ll
+         UdhbQ1uBFcUfMWwE8PXXpZhWEHOhtMAXB8s/o2Mweyu84JALipPluLf0R99rlDUSedmX
+         d7dg==
+X-Gm-Message-State: AOAM531EBN1gGfLY4w/4kxFsWIlTw99VuukBrtP/UG1HjS/FqVmClVRL
+        l6gcNM6UWywcb7Chrcj3pdQ=
+X-Google-Smtp-Source: ABdhPJzFpTmAHMEddWr7RNGzwiIMRPlsV5EWgeWLor8A7Szuf1ubXoh5DmZkW0YKEv0eiO9ET3XgJw==
+X-Received: by 2002:a17:90b:1e0e:b0:1c7:5b03:1d8b with SMTP id pg14-20020a17090b1e0e00b001c75b031d8bmr4558131pjb.121.1649170687106;
+        Tue, 05 Apr 2022 07:58:07 -0700 (PDT)
+Received: from [192.168.0.115] ([113.173.105.8])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a000b4a00b004fd9a6a2a39sm16660710pfo.184.2022.04.05.07.58.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 07:58:06 -0700 (PDT)
+Message-ID: <bdd4104d-390e-74c7-0de1-a275044831a5@gmail.com>
+Date:   Tue, 5 Apr 2022 21:58:01 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <164915126392.982637.10302202550404803304.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] cgroup: Kill the parent controller when its last child
+ is killed
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>
+Cc:     cgroups@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20220404142535.145975-1-minhquangbui99@gmail.com>
+ <Ykss1N/VYX7femqw@slm.duckdns.org> <20220405091158.GA13806@blackbody.suse.cz>
+From:   Bui Quang Minh <minhquangbui99@gmail.com>
+In-Reply-To: <20220405091158.GA13806@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Masami,
+On 4/5/22 16:11, Michal Koutný wrote:
+> On Mon, Apr 04, 2022 at 07:37:24AM -1000, Tejun Heo <tj@kernel.org> wrote:
+>> And the suggested behavior doesn't make much sense to me. It doesn't
+>> actually solve the underlying problem but instead always make css
+>> destructions recursive which can lead to surprises for normal use cases.
+> 
+> I also don't like the nested special-case use percpu_ref_kill().
 
-I love your patch! Perhaps something to improve:
+After thinking more carefully, I agree with your points. The recursive 
+css destruction only does not fixup the previous parents' metadata 
+correctly and it is not a desirable behavior too.
 
-[auto build test WARNING on bpf/master]
+> I looked at this and my supposed solution turned out to be a revert of
+> commit 3c606d35fe97 ("cgroup: prevent mount hang due to memory
+> controller lifetime"). So at the unmount time it's necessary to distinguish
+> children that are in the process of removal from children than are online or
+> pinned indefinitely.
+> 
+> What about:
+> 
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -2205,11 +2205,14 @@ static void cgroup_kill_sb(struct super_block *sb)
+>          struct cgroup_root *root = cgroup_root_from_kf(kf_root);
+> 
+>          /*
+> -        * If @root doesn't have any children, start killing it.
+> +        * If @root doesn't have any children held by residual state (e.g.
+> +        * memory controller), start killing it, flush workqueue to filter out
+> +        * transiently offlined children.
+>           * This prevents new mounts by disabling percpu_ref_tryget_live().
+>           *
+>           * And don't kill the default root.
+>           */
+> +       flush_workqueue(cgroup_destroy_wq);
+>          if (list_empty(&root->cgrp.self.children) && root != &cgrp_dfl_root &&
+>              !percpu_ref_is_dying(&root->cgrp.self.refcnt)) {
+>                  cgroup_bpf_offline(&root->cgrp);
+> 
+> (I suspect there's technically still possible a race between concurrent unmount
+> and the last rmdir but the flush on kill_sb path should be affordable and it
+> prevents unnecessarily conserved cgroup roots.)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-config: arm64-randconfig-r022-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060512.Pzw5bnTd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/74084aa7903f112b1c3df1f864d49b15d8aba270
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-        git checkout 74084aa7903f112b1c3df1f864d49b15d8aba270
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+Your proposed solution looks good to me. As with my example the flush 
+will guarantee the rmdir and its deferred work has been executed before 
+cleaning up in umount path.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+But what do you think about
 
-All warnings (new ones prefixed by >>):
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index f01ff231a484..5578ee76e789 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -2215,6 +2215,7 @@ static void cgroup_kill_sb(struct super_block *sb)
+                 cgroup_bpf_offline(&root->cgrp);
+                 percpu_ref_kill(&root->cgrp.self.refcnt);
+         }
++       root->cgrp.flags |= CGRP_UMOUNT;
+         cgroup_put(&root->cgrp);
+         kernfs_kill_sb(sb);
+  }
+@@ -5152,12 +5153,28 @@ static void css_release_work_fn(struct 
+work_struct *work)
+                 container_of(work, struct cgroup_subsys_state, 
+destroy_work);
+         struct cgroup_subsys *ss = css->ss;
+         struct cgroup *cgrp = css->cgroup;
++       struct cgroup *parent = cgroup_parent(cgrp);
 
->> arch/arm64/kernel/rethook.c:11:22: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-                        ^
-   arch/arm64/kernel/rethook.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
+         mutex_lock(&cgroup_mutex);
 
+         css->flags |= CSS_RELEASED;
+         list_del_rcu(&css->sibling);
 
-vim +/arch_rethook_trampoline_callback +11 arch/arm64/kernel/rethook.c
++       /*
++        * If parent doesn't have any children, start killing it.
++        * And don't kill the default root.
++        */
++       if (parent && list_empty(&parent->self.children) &&
++           parent->flags & CGRP_UMOUNT &&
++           parent != &cgrp_dfl_root.cgrp &&
++           !percpu_ref_is_dying(&parent->self.refcnt)) {
++#ifdef CONFIG_CGROUP_BPF
++               if (!percpu_ref_is_dying(&cgrp->bpf.refcnt))
++                       cgroup_bpf_offline(parent);
++#endif
++               percpu_ref_kill(&parent->self.refcnt);
++       }
++
+         if (ss) {
+                 /* css release path */
+                 if (!list_empty(&css->rstat_css_node)) {
 
-     9	
-    10	/* This is called from arch_rethook_trampoline() */
-  > 11	unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-    12	{
-    13		return rethook_trampoline_handler(regs, regs->regs[29]);
-    14	}
-    15	NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-    16	
+The idea is to set a flag in the umount path, in the rmdir it will 
+destroy the css in case its direct parent is umounted, no recursive 
+here. This is just an incomplete example, we may need to reset that flag 
+when remounting.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Quang Minh.
