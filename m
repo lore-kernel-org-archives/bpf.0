@@ -2,78 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87E7CC433EF
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90EECC433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:22:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242196AbiDFFYF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S244000AbiDFFYL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390337AbiDFDEn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:04:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BD33E07;
-        Tue,  5 Apr 2022 17:00:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCA06153E;
-        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B6B5C385A1;
-        Wed,  6 Apr 2022 00:00:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649203214;
-        bh=KMNIOTy7tQqMiQJt2a1NiAN3Cf5KwEY7COeHi3Y3npQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WY3GCFkU9JF3B4v5HSCFdz0Gj1g3tb96D7PZJkiSm3vvC8jb4MWHldVEgv5bCarKh
-         FWQCvugxZ2/CJSFokNg9fa9+Hgivxt8yKUATeDfmS/qrTyAEFf2bzVv73Qyz8tTQmd
-         wV32dqGQxfQP6I+vUAWitf0/Fu8a5GWZ+W+O3SjU03jfpTzmIPE0DzxD+79U/Mamls
-         smqmtdr/Bvo2LEC6L8pXtT6x62lQUBUDe0+CpAL1stRKfhEU1ZMsz+691auXyuZHM3
-         7TNBTaLkX2QOSi+7vwLyYimeZf/XStjOuJcZHj/p6CRltTsVivnrOoHA/zHGyBJIfx
-         Fk1tgNG+yQunw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C5D48E6D402;
-        Wed,  6 Apr 2022 00:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1845804AbiDFCBU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 22:01:20 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEF724B0B1;
+        Tue,  5 Apr 2022 16:28:49 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id e22so1024084ioe.11;
+        Tue, 05 Apr 2022 16:28:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PUMn2pJdmTqU9T1LboNHqySso6NmNTYjmvIQ/4E+6jg=;
+        b=gNe8qsL51ziO0gB71BLSIYx0dhQmBI6zDUfVHVMAec4jf0pQWeA1zZ2h4sxZU8GVXA
+         gwUULa+cnWQ/VxFgfOj97piyqAh4IFJLybVUZPOCK9XmdbSbzVB2zd3tGNBgypwj1rPh
+         9muXPJS+9ogRaxX9AaruMwEI28RqkVAL4VCFJBahhFKgRrqycnSZO67AiPJq57+Jg0hN
+         rkbNi5jOgama1LtciEKjBZY0SR+ZZVR6qdmiR80UIKktan1Dvey1RiQ+ZlK3Zw+5Migj
+         3daCkrMJ2AETNxGIOuJDRDH2L7/CvWH+q99dqTdC3xZ0VlLhj0MZAV5UWFtqFqID5Lo2
+         fHvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PUMn2pJdmTqU9T1LboNHqySso6NmNTYjmvIQ/4E+6jg=;
+        b=rN3eEdp/SYNWmwvXGfgmKmKZsRrv4BzKOFEm4SxYML0J3qPzFiMoipP6baKEfG1JbN
+         upXHLesc1oJ8+1XZwwRz2gT5tos+y48BVwhvoQDkPSLOws9RJ9bpnjvQJ+xmVALREHxy
+         pxhix35DWiagjAu6foNxRXriCmMitlmBJ1NkdgYx6SjOY8YiCfRV5QfSPasqypMOLdU9
+         7nIaWhU3sxAhUVE6EdLjsJw24eTUq7ZNBfkoDYoUbqmvF2N9TuyS8MVvQtYYA2wX0+/6
+         ehZXep5Eq2U721KJ/pgYk25qEtR71tl8QnJGStJcXMQ44GnCCWtBdj6qmd2N/rCCbnvI
+         Btsg==
+X-Gm-Message-State: AOAM532HDWpEaATrBYEa+fP5TB21WjqzzdlZpzjVssOyoiV4qUE6oJ/j
+        l3D439WzCFShQE4z7G2dTon4vGVGKfpmxD2dakw=
+X-Google-Smtp-Source: ABdhPJyKqUsGJx3oQJikLMMo7nQ3XQuZBU6aXhgu0HkBIbtVmBQTJNGbQwnmNfviladdps3TCxWYY7vRUoJCBgdNSMY=
+X-Received: by 2002:a6b:8bd7:0:b0:646:2804:5c73 with SMTP id
+ n206-20020a6b8bd7000000b0064628045c73mr2711308iod.112.1649201328273; Tue, 05
+ Apr 2022 16:28:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix file descriptor leak in
- load_kallsyms()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164920321379.789.15662598832496347807.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 00:00:13 +0000
-References: <20220405145711.49543-1-ytcoode@gmail.com>
-In-Reply-To: <20220405145711.49543-1-ytcoode@gmail.com>
+References: <CAEf4BzZrc=wr4FLkWkOSEeprzybA8JTipsnr_U1kYA0785WkTw@mail.gmail.com>
+ <20220405062403.22591-1-ytcoode@gmail.com>
+In-Reply-To: <20220405062403.22591-1-ytcoode@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 5 Apr 2022 16:28:37 -0700
+Message-ID: <CAEf4BzbSbMMoZM-3fkhZnbxk0bu5ySDO782WGbgcKUzs-u6N_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix issues in parse_num_list()
 To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        john fastabend <john.fastabend@gmail.com>,
+        Martin Lau <kafai@fb.com>, KP Singh <kpsingh@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue,  5 Apr 2022 22:57:11 +0800 you wrote:
-> Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
-> 
+On Mon, Apr 4, 2022 at 11:24 PM Yuntao Wang <ytcoode@gmail.com> wrote:
+>
+> There are some issues in parse_num_list():
+>
+> First, the end variable is assigned twice when parsing_end is true, it is
+> unnecessary.
+>
+> Second, the function does not check that parsing_end is false after parsing
+> argument. Thus, if the final part of the argument is something like '4-',
+> parse_num_list() will discard it instead of returning -EINVAL.
+>
+> Clean up parse_num_list() and fix these issues.
+>
+> Before:
+>
+>  $ ./test_progs -n 2,4-
+>  #2 atomic_bounds:OK
+>  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>
+> After:
+>
+>  $ ./test_progs -n 2,4-
+>  Failed to parse test numbers.
+>
 > Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 > ---
->  tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+> v1 -> v2: add more details to commit message
+>
+>  tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+> index 795b6798ccee..82f0e2d99c23 100644
+> --- a/tools/testing/selftests/bpf/testing_helpers.c
+> +++ b/tools/testing/selftests/bpf/testing_helpers.c
+> @@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
+>                 if (errno)
+>                         return -errno;
+>
+> -               if (parsing_end)
+> -                       end = num;
+> -               else
+> +               if (!parsing_end) {
+>                         start = num;
+> +                       if (*next == '-') {
+> +                               s = next + 1;
+> +                               parsing_end = true;
+> +                               continue;
+> +                       }
+> +               }
+>
+> -               if (!parsing_end && *next == '-') {
+> -                       s = next + 1;
+> -                       parsing_end = true;
+> -                       continue;
+> -               } else if (*next == ',') {
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix file descriptor leak in load_kallsyms()
-    https://git.kernel.org/bpf/bpf-next/c/2d0df01974ce
+I think the new structure of the code is actually harder to follow and
+there is no need to change this code in the first place just to
+optimize away parsing_end assignmet.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> +               if (*next == ',') {
+>                         parsing_end = false;
+>                         s = next + 1;
+>                         end = num;
+> @@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
+>                         set[i] = true;
+>         }
+>
+> -       if (!set)
+> +       if (!set || parsing_end)
+>                 return -EINVAL;
+>
 
+this is a real fix, please submit just and drop the first part of the patch
 
+>         *num_set = set;
+> --
+> 2.35.1
+>
