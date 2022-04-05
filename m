@@ -2,153 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A28C433FE
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24580C433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbiDFFXQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S235123AbiDFFX0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2361123AbiDFDoO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 23:44:14 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBB12F380;
-        Tue,  5 Apr 2022 17:14:42 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id x4so1151510iop.7;
-        Tue, 05 Apr 2022 17:14:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SiOlR7FQJECBOngSYr/kuLzweA1EIkoBcnX8l6to9uQ=;
-        b=le8BEi0VjD5Ae1R/wuwFFNbhuY9lw10ryYLA0FmZctLnyacLgCwJG1BIp4YgQcgAWV
-         b0XVKd2LVvPs+4yMbmW8brHidFH5/0V2FS6fy3eA5plejZaNpluOcM4CzBf0qoLynrRR
-         sqW3e7064QWMfAaz1WIFX0GBwrpJzwOs2lF5RWRX1pgBty6vVkm3YGJkeqJl30GVCobB
-         QcE79C8lqLNmWt7f0hBNIWw4tXbvY8VK3ny6Ff39EQqVltNSCNCrTWyD9+N/X29MocMs
-         b3dQeQl4T/FkbpxXmVDl/136PR7yInprTyLbXCsEMoCMMJTq2QxjDcTcki72HeOThrsD
-         lEJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SiOlR7FQJECBOngSYr/kuLzweA1EIkoBcnX8l6to9uQ=;
-        b=nvuyNCJAOqnvAjDup11TxeUG2XnfQTUFtGVQvALUU4nT+5/04XyOAogBSOes0rbbFD
-         ACpw1NDWLZKnK9oxk7aZ9KXD6q39fQIUrIxvvPUazicVQ2xeb+m8Q7walRu/U39cRMMh
-         LPgT4lB5BnMm5XIP2bqq1C/p5AxGA+JKzVwLU6AAljRIOECYFfK9LrPxY0h8bC15WEdd
-         /EMBYJ1kH8nz3PfeT8gxRgCp9yBXyMatIElT/+5ZPP7xzK8+IZRWZSdUmtWBoWBTc1zE
-         qnCEBjKn+VnIQAgWxZe9IWlMmSLLX2AxuDVlgT9n/nwSM+QhRYp22dIVxTehdR9kjj7o
-         2rVg==
-X-Gm-Message-State: AOAM533Xdhmk65ObuKqiI8SP9MBy9sP2gSxgV+6oIJPjr1Eeft+sFSZM
-        qiSJpX27lNFYJf5YNtAEek/3KemjFxOJ6hKpAak=
-X-Google-Smtp-Source: ABdhPJwVu1DPW5n60puGM4lH9sfxPcoUjaEyTVOLV56L1dafDbbFbddC43gaFUKD9quqBOD2RIg+Pn3QQfX6b8Q9F5E=
-X-Received: by 2002:a05:6638:2105:b0:323:68db:2e4e with SMTP id
- n5-20020a056638210500b0032368db2e4emr3423030jaj.234.1649204082111; Tue, 05
- Apr 2022 17:14:42 -0700 (PDT)
+        with ESMTP id S1584007AbiDEX5s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 19:57:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B067E15AAFF;
+        Tue,  5 Apr 2022 15:10:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F891B81FF1;
+        Tue,  5 Apr 2022 22:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A36FC385A5;
+        Tue,  5 Apr 2022 22:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649196613;
+        bh=413WPoWJxK5FtCbvBY6deUOHmDqE/X/cMye095WXlJY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pzEjk5eE/E87tq1YG8HsafcBcz62Q1wvTmKmIUP+FNmKKuLYixYDn8qiS2XzHLbW/
+         vTltkqQxNSSeAFM7ZfXvjGbtMsAA67hIGf5DsgRRXQ4qL/msicIPLsgEl/57MUzkRT
+         AT/q0aqgiLXv89xPAbBUB6/r7OFpfXA8w8+2dOKX3RTNeYg78NmSPZw3r5xXIFtsuU
+         fxaT46sJ5L0aNYcGVh+NPdKkojXC7a8wCuILGAfK/NkBSuRwIkYl36Y2+c0uBttL3c
+         qOHZMj2H+Ontnsz6Gd5dt+vDMuqtQ+yYgaGuqqAodYdKJSTuBFYSS2GjGkA1C7l7lY
+         XOX4Hxf0/aS8g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0B9A5E85BCB;
+        Tue,  5 Apr 2022 22:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <1649195156-9465-1-git-send-email-alan.maguire@oracle.com> <1649195156-9465-3-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1649195156-9465-3-git-send-email-alan.maguire@oracle.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 17:14:31 -0700
-Message-ID: <CAEf4Bza+E7A0T5hvKz9Thb7t4-WWdO0xPEYuFb0y1qe7v19Vvg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: uprobe tests should verify
- param/return values
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] bpf, arm64: Sign return address for jited code
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164919661303.14188.16221204846341071276.git-patchwork-notify@kernel.org>
+Date:   Tue, 05 Apr 2022 22:10:13 +0000
+References: <20220402073942.3782529-1-xukuohai@huawei.com>
+In-Reply-To: <20220402073942.3782529-1-xukuohai@huawei.com>
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        daniel@iogearbox.net, ast@kernel.org, zlim.lnx@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 2:46 PM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> uprobe/uretprobe tests don't do any validation of arguments/return values,
-> and without this we can't be sure we are attached to the right function,
-> or that we are indeed attached to a uprobe or uretprobe.  To fix this
-> validate argument and return value for auto-attached functions.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  .../selftests/bpf/prog_tests/uprobe_autoattach.c   | 16 ++++++++++----
->  .../selftests/bpf/progs/test_uprobe_autoattach.c   | 25 +++++++++++++++-------
->  2 files changed, 29 insertions(+), 12 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-> index 03b15d6..ff85f1f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-> @@ -5,14 +5,16 @@
->  #include "test_uprobe_autoattach.skel.h"
->
->  /* uprobe attach point */
-> -static void autoattach_trigger_func(void)
-> +static noinline int autoattach_trigger_func(int arg)
->  {
-> -       asm volatile ("");
+Hello:
 
-don't remove asm volatile, with static functions compiler can still do
-function transformations and stuff. From GCC documentation for
-noinline attribute ([0]):
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-  noinline
+On Sat, 2 Apr 2022 03:39:42 -0400 you wrote:
+> Sign return address for jited code when the kernel is built with pointer
+> authentication enabled.
+> 
+> 1. Sign LR with paciasp instruction before LR is pushed to stack. Since
+>    paciasp acts like landing pads for function entry, no need to insert
+>    bti instruction before paciasp.
+> 
+> [...]
 
-      This function attribute prevents a function from being
-considered for inlining. If the function does not have side effects,
-there are optimizations other than inlining that cause function calls
-to be optimized away, although the function call is live. To keep such
-calls from being optimized away, put
+Here is the summary with links:
+  - [bpf-next,v2] bpf, arm64: Sign return address for jited code
+    https://git.kernel.org/bpf/bpf-next/c/042152c27c3b
 
-      asm ("");
-
-  [0] https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes
-
-So I suppose noinline + asm volatile is the most safe combination :)
-for static functions
-
-> +       return arg + 1;
->  }
->
->  void test_uprobe_autoattach(void)
->  {
->         struct test_uprobe_autoattach *skel;
-> +       int trigger_val = 100;
-> +       size_t malloc_sz = 1;
->         char *mem;
->
->         skel = test_uprobe_autoattach__open_and_load();
-
-[...]
-
->
-> -SEC("uretprobe/libc.so.6:free")
-> +SEC("uretprobe/libc.so.6:getpid")
->  int handle_uretprobe_byname2(struct pt_regs *ctx)
->  {
-> -       uretprobe_byname2_res = 4;
-> +       if (PT_REGS_RC_CORE(ctx) == uretprobe_byname2_rc)
-> +               uretprobe_byname2_res = 4;
-
-Instead of checking equality on BPF side, it's more convenient to
-record the actual captured value into global variable and let
-user-space part check and log it properly. So if something goes wrong,
-we don't just have matched/not matched flag, but we see an actual
-value captured.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-With that, let's better switch uretprobe from free to malloc (we
-additionally check that uprobe and uretprobe can coexist properly on
-the same function) and capture returned pointer from malloc(). We can
-then compare that pointer to the mem variable. How cool is that? :)
-
->         return 0;
->  }
->
-> --
-> 1.8.3.1
->
