@@ -2,99 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AF22C43219
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 139A9C433F5
 	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 19:53:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242422AbiDEP0G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 11:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S1389776AbiDEP0l (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 11:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239511AbiDEOUx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:20:53 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17A5AA74;
-        Tue,  5 Apr 2022 06:09:24 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n8so3872808plh.1;
-        Tue, 05 Apr 2022 06:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=e7h678A3Z9dtT+vLHepLvCuBNMaFE7eBOdemadD1GkA=;
-        b=gL60ETTYwMSF9S6lSfB+riFJwONbr0gQ0XOOmbeDQ8MfDPDWgGAXDkRQkNnWQkHbrI
-         GUc1Yx7KC51He/ojiI+iGoyfNlw9YJskqZNQBOtvJFnDHpXn6KSCiiS7G08NRIn4jJ47
-         xM2StckvVGB6eTa4lUxyiag/BzPYRk7L5xGqL+UWc1+xubFKcBjHtuqqqi7M7HZglY6S
-         RoTmlLYpfaiqTDLJLtuttWh0Ixj/7anxJqEFgp4qq0yqqCqKJZ/Ogy7D+8JwoExMOuDL
-         VXn1aQTJciAk8uzu+rsRsfIgBSnzr6iFVR9FnVgXx0nYlgMMWB3H0BZgPirpMVW79EdR
-         hLrw==
+        with ESMTP id S1380940AbiDEOQj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 10:16:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25C8315D3B7
+        for <bpf@vger.kernel.org>; Tue,  5 Apr 2022 06:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649163637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=azvmiUh+/dFI8v+3SQr0ihCgP4dAaSj/8MnAViPhi+0=;
+        b=ZfgePaINPfnjQU6JaGerlHqyxHRbAu1NvxFVB5vgISBqgj6EDbKAhTMggeXQUXoxvVClKN
+        YiOzdQTnfRwxlAcJ2b7XT5C0CcFpCuEb0+XI70PTsEpqx0+7lZCSs6Zr915s/bRvf5qpPj
+        xMIe4/zJEMcodIO6KEEkCAxUK1YYd+0=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-114-OXDdvfL1OYi7V8Dten1CRQ-1; Tue, 05 Apr 2022 09:00:28 -0400
+X-MC-Unique: OXDdvfL1OYi7V8Dten1CRQ-1
+Received: by mail-ej1-f71.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so6286460ejw.9
+        for <bpf@vger.kernel.org>; Tue, 05 Apr 2022 06:00:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=e7h678A3Z9dtT+vLHepLvCuBNMaFE7eBOdemadD1GkA=;
-        b=NQMbEcNfyk97XIaAfboLKgzRdSU3KfgRZ1+GTGnPfgh5Ea/Nl8petPUkpab4UzJq3d
-         MwBeyF8sQ8EN/zk1V0Z623F2WFBuqP8w6hwDJzChRRyxRnjFS6LTxAFJ6+FqCTCKL+lB
-         OGt0WPDxP59Km6g219VDug0oApEyOy+ZRJdSkWquqPNDKGuPleyQduXbdK+RZkpkKQvt
-         VciEZt3OHbPTwTRfxQGQcmK7Cu94a/seYG/fUhPT9j+dQeWYil2dZRCxThBCJiI6t7Il
-         V/o7qO0hM+6YamPquvwM7ijG0Ph2NZsCs+P5wFBp0XOfROEkpvWmdXK395ULu5StyxkT
-         0bUw==
-X-Gm-Message-State: AOAM531nNb5u11WuRds42DJ74rtltCljCMpv1xUm/NGfBrZWQ6xL5oSd
-        WANNI2uV4CgJPHFwZ6NKy+w=
-X-Google-Smtp-Source: ABdhPJz+VL0kHePQd8+gB9dHNyE2n0Xf9ckgX8e2hOjiCTRh3uvdCTSNR4hu7LF28GL3CJts4yoVMw==
-X-Received: by 2002:a17:902:ba8c:b0:14f:d9b7:ab4 with SMTP id k12-20020a170902ba8c00b0014fd9b70ab4mr3372059pls.23.1649164163919;
-        Tue, 05 Apr 2022 06:09:23 -0700 (PDT)
-Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:23 -0700 (PDT)
-From:   Yafang Shao <laoar.shao@gmail.com>
-To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 07/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in get_cgroup_id_user
-Date:   Tue,  5 Apr 2022 13:08:38 +0000
-Message-Id: <20220405130858.12165-8-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
-References: <20220405130858.12165-1-laoar.shao@gmail.com>
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=azvmiUh+/dFI8v+3SQr0ihCgP4dAaSj/8MnAViPhi+0=;
+        b=pF1l2Yq7qFbBiQ6MjYSjowKMEIgEacOQRcnoH5APWMxhLBUAq27DbMUUz1eiOBgpzc
+         KrWqqtInFZAy7tchNSNdzXSWaQWTRq9OTHp4qkKwfdlqcET9Ioaud1pavGVrMab5FMm2
+         O84TY80MLmIKRtFlDBKvJ4vSezi08osfhcmZqWtCB/wilPPrFaAjimt/0D0emvOydiwi
+         KrEUj+ET52N/x4VHQNhlh4yWNp2I7I8J+T4PeuIkHYWcHa8HyDggf3pa5LHXAW9yBFwA
+         Sp0zVwXzIkrmL2Aa6bqBF+2MtsAHoyzmxEW2r2cL8wq4XvOqivmcRwp8b91VG+Whivdy
+         z89A==
+X-Gm-Message-State: AOAM530Yirv5ESy9MMC9hoJPzCO+5TJUVqONasSlljrVJk2kjo6BVtvw
+        Tdd9Yk2FQDe+bT3Q7I0BXTM1daPP2R8j/qmjTPWHc7fudTNTaYc1eCKrSlgKb9fP3M0j6ACH4+u
+        TY+3esJFvdEp7
+X-Received: by 2002:a05:6402:51c6:b0:419:8269:f33d with SMTP id r6-20020a05640251c600b004198269f33dmr3433834edd.264.1649163626820;
+        Tue, 05 Apr 2022 06:00:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz4dz3DTx2/UEbFiJXnLOy01NscM9Mvf8IaOKzmIFuOKHuprPdRu+9YHI0N77kS5wEuOM9Jfw==
+X-Received: by 2002:a05:6402:51c6:b0:419:8269:f33d with SMTP id r6-20020a05640251c600b004198269f33dmr3433807edd.264.1649163626569;
+        Tue, 05 Apr 2022 06:00:26 -0700 (PDT)
+Received: from [192.168.2.20] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
+        by smtp.gmail.com with ESMTPSA id o3-20020aa7c7c3000000b00410d407da2esm6329516eds.13.2022.04.05.06.00.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:00:26 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <fdc503fa-9ecb-113f-4dd6-774765c3b2ba@redhat.com>
+Date:   Tue, 5 Apr 2022 15:00:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org, maximmi@nvidia.com,
+        alexandr.lobakin@intel.com
+Subject: Re: [PATCH bpf-next 02/10] xsk: diversify return codes in
+ xsk_rcv_check()
+Content-Language: en-US
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        magnus.karlsson@intel.com, bjorn@kernel.org
+References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
+ <20220405110631.404427-3-maciej.fijalkowski@intel.com>
+In-Reply-To: <20220405110631.404427-3-maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-included bpf_rlimit.h.
 
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
----
- tools/testing/selftests/bpf/test_dev_cgroup.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
-index c299d3452695..7886265846a0 100644
---- a/tools/testing/selftests/bpf/test_dev_cgroup.c
-+++ b/tools/testing/selftests/bpf/test_dev_cgroup.c
-@@ -15,7 +15,6 @@
- 
- #include "cgroup_helpers.h"
- #include "testing_helpers.h"
--#include "bpf_rlimit.h"
- 
- #define DEV_CGROUP_PROG "./dev_cgroup.o"
- 
-@@ -28,6 +27,9 @@ int main(int argc, char **argv)
- 	int prog_fd, cgroup_fd;
- 	__u32 prog_cnt;
- 
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
- 	if (bpf_prog_test_load(DEV_CGROUP_PROG, BPF_PROG_TYPE_CGROUP_DEVICE,
- 			  &obj, &prog_fd)) {
- 		printf("Failed to load DEV_CGROUP program\n");
--- 
-2.17.1
+On 05/04/2022 13.06, Maciej Fijalkowski wrote:
+> Inspired by patch that made xdp_do_redirect() return values for XSKMAP
+> more meaningful, return -ENXIO instead of -EINVAL for socket being
+> unbound in xsk_rcv_check() as this is the usual value that is returned
+> for such event. In turn, it is now possible to easily distinguish what
+> went wrong, which is a bit harder when for both cases checked, -EINVAL
+> was returned.
+
+I like this as it makes it easier to troubleshoot.
+Could you update the description to explain how to debug this easily.
+E.g. via this bpftrace one liner:
+
+
+  bpftrace -e 'tracepoint:xdp:xdp_redirect* {@err[-args->err] = count();}'
+
+
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+
+>   net/xdp/xsk.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index f75e121073e7..040c73345b7c 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -217,7 +217,7 @@ static bool xsk_is_bound(struct xdp_sock *xs)
+>   static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp)
+>   {
+>   	if (!xsk_is_bound(xs))
+> -		return -EINVAL;
+> +		return -ENXIO;
+>   
+>   	if (xs->dev != xdp->rxq->dev || xs->queue_id != xdp->rxq->queue_index)
+>   		return -EINVAL;
+> 
 
