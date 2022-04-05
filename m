@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE5C4C43219
-	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 15:22:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C330C433EF
+	for <bpf@archiver.kernel.org>; Tue,  5 Apr 2022 15:23:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238050AbiDEPYp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Apr 2022 11:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S239426AbiDEPYt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Apr 2022 11:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349766AbiDEOV2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:21:28 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED455E166;
-        Tue,  5 Apr 2022 06:09:29 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso2483076pju.1;
-        Tue, 05 Apr 2022 06:09:29 -0700 (PDT)
+        with ESMTP id S1344603AbiDEOXe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 10:23:34 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054216E57D;
+        Tue,  5 Apr 2022 06:09:51 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id bo5so12049081pfb.4;
+        Tue, 05 Apr 2022 06:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OPrHB+ul5cjXOBXXxlRLC+/NJsyFs7dnp8ZXR8kklU8=;
-        b=HS9fU9bmAMuprPxLFCp9p/nRkUYSheUJiWlaC1YBzUkBG3gtt/sjuDpGQcPKunhY5B
-         6pvmKAZnTuYh69wPwNk5UNYZvXSjnSbFqUVYI8GUqZEXHZUKvB9HYcVd9+sSoUKUev8b
-         abbFbhQz3EZfY5cpwWhDZ0XuDQu22SNddt2QGGo5cB+Mfm1ecXCtYAaD2VD9PEJioLnt
-         TGA7ZJrc/74XZ9JhwiZLodxz7zwVuBco6fJ0LWPeewb/f+oO5snBitrq5tUUwYh0U87n
-         BLyHpPADmBmbsh2+/8LYZpMcqofjhzK6sAEQ5u2SSSfusiLLbv9cjhwsaonox8yTfH2D
-         Q8HQ==
+        bh=viexwUu6gnOnfIlYwhyzP+WSqVfYyHd1EwzTfJFHZY4=;
+        b=nPPziC8khx4ZMAODfwzHa85gBNwjsRXugR8TTtPF7f9QdLZj1Jizd0gjzQy6hSsoiu
+         NRwWLXwd7njSn+2RzIapMw4pHcMonOfxa+AQOy8lXvp+iq3q4mDIgDdWxg+5CiRRfW9m
+         j1u+wj2YNdMZR5nXCLtEoYCX/fdsm4ff9A4eWFFvVYP5BZl9CweGg9hzFm6zvWHpGGsd
+         LCYnkFUNOzz/IuXJ/eMmAZIyRhv8dK91TmTLEorB8u+VtMcsJZVauuOBQiZl37Ai4Q7R
+         3I8cRtWJpBHTuh3YjVq1e+seAqhiAYG41k/6eTSRm3nJiOx0+IkJTpE0y61J+6XjAUAG
+         njXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OPrHB+ul5cjXOBXXxlRLC+/NJsyFs7dnp8ZXR8kklU8=;
-        b=GZ69WhymEFOC7N+wGqOor1e5fU/woGpJvxxbJyBW7vusrUrAyh5ktra/6hDqKeMTPp
-         jwL8kkbQo/v/cyXZrYZKVeIesrFVAIjsdSfh1kyXk8ob+iJfJogTBZNpTZOuxNWNlB3w
-         4qbbd4Ke4MG6h9St3EX+SBJ0/Ih0CM3iovnnpFtWjNFCpWnsWf7UhZCc7do+tu7Hojr4
-         oiDXZJaNVOY3Mef3N4Iu72ibZ/MA71XxYk2Da0wyDkuuhX1FzfUiNrLZotD1Z9qgVDlj
-         mJtegR5PkFKXIJfA+2XxmnAncti7YReBrq4ry1RyA5JdFNd4CGUG6HuJ9VRIqvLjq4/D
-         3N4g==
-X-Gm-Message-State: AOAM533qAk8pV+2luTzdkx0j9w+rHUZI9KVPBy5IREUgpXU80hltDUvN
-        n2+W5d4ixKU4/uyqh8ab06I=
-X-Google-Smtp-Source: ABdhPJxPJyrsrCLrL4pVQh9Kroy8fyVk2agrxliG/YO6+wZrwZ0ijCMaMeQyi0HojEkZl7pBT1+DIw==
-X-Received: by 2002:a17:903:1cb:b0:156:c35f:7f3c with SMTP id e11-20020a17090301cb00b00156c35f7f3cmr3555209plh.114.1649164169285;
-        Tue, 05 Apr 2022 06:09:29 -0700 (PDT)
+        bh=viexwUu6gnOnfIlYwhyzP+WSqVfYyHd1EwzTfJFHZY4=;
+        b=J0wtzGtlDji3Zjt2Oe4aheW2tdkq2M+BQGAaehTP7DBWSlNaAxtDzoYzXiMoi7wRdH
+         2vdrKcWvLjSIH3OoVvxpW3RdzTYkEZZ1xI193FzlKDRUO83+CPzAGaNNFnmPZ33rKJCP
+         fnM6Gi+hgQwGVHEx5YhPY32L2437n6i746MQ48dd3odzJXGzSQJZS8jHTIGLRGgatj3a
+         GMzXabt94XBpVCVCZPsKv83oeheYLnC7hg6qLWD3Le/hWdaCIczKNMXiZaVVbWBbWbtR
+         bKmz1ZZwU7yjYE6C+9TKWKNn3hKNFR5hj2aryOwNt3qDPa+5MJJiOq/xyTRw/LL//XRf
+         h8zA==
+X-Gm-Message-State: AOAM533RGVTjWPT1JFAjT14io9SeJQQ5tplpMS4I/qHI4MUxb2lLwoqC
+        iyjiGKRlDM/UJ61joQlFYIc=
+X-Google-Smtp-Source: ABdhPJzz8Z80hgaw7IgYqAslbwHdj0QKDlGnoyg4O/lXKfpHYZ2L2hSGuBJL27+FCuzrgHcdhuQrrQ==
+X-Received: by 2002:a65:6951:0:b0:381:f10:ccaa with SMTP id w17-20020a656951000000b003810f10ccaamr2723596pgq.587.1649164190512;
+        Tue, 05 Apr 2022 06:09:50 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:5271:5400:3ff:feef:3aee])
-        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.28
+        by smtp.gmail.com with ESMTPSA id s135-20020a63778d000000b0038259e54389sm13147257pgc.19.2022.04.05.06.09.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:09:28 -0700 (PDT)
+        Tue, 05 Apr 2022 06:09:50 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next v3 11/27] bpf: selftests: Set libbpf 1.0 API mode explicitly in test_sock_addr
-Date:   Tue,  5 Apr 2022 13:08:42 +0000
-Message-Id: <20220405130858.12165-12-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next v3 26/27] bpf: bpftool: remove RLIMIT_MEMLOCK
+Date:   Tue,  5 Apr 2022 13:08:57 +0000
+Message-Id: <20220405130858.12165-27-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220405130858.12165-1-laoar.shao@gmail.com>
 References: <20220405130858.12165-1-laoar.shao@gmail.com>
@@ -65,36 +65,131 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Let's set libbpf 1.0 API mode explicitly, then we can get rid of the
-included bpf_rlimit.h.
+As we have already set LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK, we don't need to
+bump RLIMIT_MEMLOCK any more.
 
 Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- tools/testing/selftests/bpf/test_sock_addr.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/common.c     | 8 --------
+ tools/bpf/bpftool/feature.c    | 2 --
+ tools/bpf/bpftool/main.h       | 2 --
+ tools/bpf/bpftool/map.c        | 2 --
+ tools/bpf/bpftool/pids.c       | 1 -
+ tools/bpf/bpftool/prog.c       | 3 ---
+ tools/bpf/bpftool/struct_ops.c | 2 --
+ 7 files changed, 20 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_sock_addr.c b/tools/testing/selftests/bpf/test_sock_addr.c
-index f3d5d7ac6505..458564fcfc82 100644
---- a/tools/testing/selftests/bpf/test_sock_addr.c
-+++ b/tools/testing/selftests/bpf/test_sock_addr.c
-@@ -19,7 +19,6 @@
- #include <bpf/libbpf.h>
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index 0c1e06cf50b9..c740142c24d8 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -17,7 +17,6 @@
+ #include <linux/magic.h>
+ #include <net/if.h>
+ #include <sys/mount.h>
+-#include <sys/resource.h>
+ #include <sys/stat.h>
+ #include <sys/vfs.h>
  
- #include "cgroup_helpers.h"
--#include "bpf_rlimit.h"
- #include "bpf_util.h"
+@@ -119,13 +118,6 @@ static bool is_bpffs(char *path)
+ 	return (unsigned long)st_fs.f_type == BPF_FS_MAGIC;
+ }
  
- #ifndef ENOTSUPP
-@@ -1418,6 +1417,9 @@ int main(int argc, char **argv)
- 	if (cgfd < 0)
- 		goto err;
+-void set_max_rlimit(void)
+-{
+-	struct rlimit rinf = { RLIM_INFINITY, RLIM_INFINITY };
+-
+-	setrlimit(RLIMIT_MEMLOCK, &rinf);
+-}
+-
+ static int
+ mnt_fs(const char *target, const char *type, char *buff, size_t bufflen)
+ {
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index f041c4a6a1f2..be130e35462f 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -1136,8 +1136,6 @@ static int do_probe(int argc, char **argv)
+ 	__u32 ifindex = 0;
+ 	char *ifname;
  
-+	/* Use libbpf 1.0 API mode */
-+	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
-+
- 	if (run_tests(cgfd))
- 		goto err;
+-	set_max_rlimit();
+-
+ 	while (argc) {
+ 		if (is_prefix(*argv, "kernel")) {
+ 			if (target != COMPONENT_UNSPEC) {
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 6e9277ffc68c..aa99ffab451a 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -102,8 +102,6 @@ int detect_common_prefix(const char *arg, ...);
+ void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
+ void usage(void) __noreturn;
  
+-void set_max_rlimit(void);
+-
+ int mount_tracefs(const char *target);
+ 
+ struct obj_ref {
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index c26378f20831..877387ef79c7 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1342,8 +1342,6 @@ static int do_create(int argc, char **argv)
+ 		goto exit;
+ 	}
+ 
+-	set_max_rlimit();
+-
+ 	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, &attr);
+ 	if (fd < 0) {
+ 		p_err("map create failed: %s", strerror(errno));
+diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
+index bb6c969a114a..e2d00d3cd868 100644
+--- a/tools/bpf/bpftool/pids.c
++++ b/tools/bpf/bpftool/pids.c
+@@ -108,7 +108,6 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
+ 		p_err("failed to create hashmap for PID references");
+ 		return -1;
+ 	}
+-	set_max_rlimit();
+ 
+ 	skel = pid_iter_bpf__open();
+ 	if (!skel) {
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 8643b37d4e43..5c2c63df92e8 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1604,8 +1604,6 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+ 		}
+ 	}
+ 
+-	set_max_rlimit();
+-
+ 	if (verifier_logs)
+ 		/* log_level1 + log_level2 + stats, but not stable UAPI */
+ 		open_opts.kernel_log_level = 1 + 2 + 4;
+@@ -2303,7 +2301,6 @@ static int do_profile(int argc, char **argv)
+ 		}
+ 	}
+ 
+-	set_max_rlimit();
+ 	err = profiler_bpf__load(profile_obj);
+ 	if (err) {
+ 		p_err("failed to load profile_obj");
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index e08a6ff2866c..2535f079ed67 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -501,8 +501,6 @@ static int do_register(int argc, char **argv)
+ 	if (libbpf_get_error(obj))
+ 		return -1;
+ 
+-	set_max_rlimit();
+-
+ 	if (bpf_object__load(obj)) {
+ 		bpf_object__close(obj);
+ 		return -1;
 -- 
 2.17.1
 
