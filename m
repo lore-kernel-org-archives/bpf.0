@@ -2,105 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57E90C433FE
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 18:17:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C65FBC4332F
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 18:18:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbiDFSTe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 14:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
+        id S240612AbiDFSUW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 14:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241494AbiDFSTT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:19:19 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB9810781D;
-        Wed,  6 Apr 2022 10:01:50 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id bx5so3117507pjb.3;
-        Wed, 06 Apr 2022 10:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tji3uryA80ryL0v5i/4cJLB5FmNIif56xmTcuZ+KJ1E=;
-        b=VKGbuIMCQkgcPN2TDBgIhQ0kOQ5fkECxM375spzc9MjKK3AH4Ss+8I8/w0TwxzGZbr
-         yjEIW1kMpL5UwR1ByOoQuTEmwmZ5ihewS3bXAPBrTmZkNtFo/Exj6Z4QOoPDVpOXqEa+
-         X6FPILUSP6D3YB7DWDU7Jdw37z5u1JX1ojLmwZ30eY/6ono4+TJeSEqks+f77pJx0VNb
-         P38COxMVPO4tGwAxAg43DcCXd9MVWqpad9quPgVZEwgn1qtOLFcsnQjMln6foAhj/yzm
-         uiJHXRrTqlM5gty/vGc5IrBp7CctkWXdH8jJIGMgwp35/mg7Zn/xYnraYhXVa0RUc0rg
-         fV0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tji3uryA80ryL0v5i/4cJLB5FmNIif56xmTcuZ+KJ1E=;
-        b=VR42+s8nWqdxOLTmFXzomEQuyirTtRfFL132GEXsRNHflgozZkblSlNRlZH+7Ggvg+
-         0/KfFem5XGSzX+4qA3y9FGo9zHpKzAeiZDWc3n/W7DXyCakHpPmedrOkej07m0QzQpDR
-         RIgviZjdva5CGrum1DVYVJaWdNNLBCaFPo7EiEjaiNnw5PQvfNDOkKVm3IVrF4oCV8jd
-         kJ+r/GVNoBpet6sTVgtrmQu/k+hGfIu/udDWRAnmQLaZQRSWjBaK3NMHkfyP5v23YDLD
-         BDKUJtD1zfi+vq67GHDsCslmMU61kk+hEuOSoImhubDkvPzYo7T9BCaqT94TSvFS04H0
-         bslg==
-X-Gm-Message-State: AOAM533c/jtMy6uoLjK8TiGdGDFgoI4RxW4ysIjt6IiBXx3ul67Y7OUq
-        5Es7JOwP2EZZw3SaPxPHzdAQVFrhw+UUJvT5e1mngQul
-X-Google-Smtp-Source: ABdhPJwnrYWN+wCHETrUl7CszfjDyZfqz3h5NA96wUGgNIvVDzoB+9XhRVEIkQ3LYGAY8vAr6aG3dWoV31bu/qaLbk0=
-X-Received: by 2002:a17:903:32c5:b0:156:b466:c8ed with SMTP id
- i5-20020a17090332c500b00156b466c8edmr9561560plr.34.1649264510205; Wed, 06 Apr
- 2022 10:01:50 -0700 (PDT)
+        with ESMTP id S240430AbiDFSTe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Apr 2022 14:19:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C29FFF4F;
+        Wed,  6 Apr 2022 10:00:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 546B9617DB;
+        Wed,  6 Apr 2022 17:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 99845C385A5;
+        Wed,  6 Apr 2022 17:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649264413;
+        bh=Xhk5SOzpGqN61TwyKV3hSuwu45jxXYiMouo5aJDKIAc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=S/o/CNjCvuORSfZUrRC0Nar/WqdJ4ffZKZD/OcNTAosKm7HpRZ0s5QcPByu3LrQP5
+         4LlqujxwzBXT6IxxNwtngEeQwoWvHjBJJDNzMYPRzGslwjvjKa2ctMdWienSpbBEvV
+         U6T+KrL0sBlBLLW3C3w21YrUccyFsKRXoSH7dUbRv2jNnfuTDIf/ep1+Ir6palwizL
+         jGmyjESSLGOeq85VfQySDor4w4y5aHrHV5pfk66vugpV4z0lFC12DMLzgF0z+EKjmS
+         owh9ouX65W2QRX60EK4e2gLPDx6wj/E68MN5HhdeHK4qBSRo46prRerfRJtg0zDYw5
+         7xt7FyO+K82zg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 762ACE85D53;
+        Wed,  6 Apr 2022 17:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220405075531.GB30877@worktop.programming.kicks-ass.net>
- <CAADnVQJ1_9sBqRngG_J+84whx9j7d7qOSzMaJvhc0evDBQfE3w@mail.gmail.com> <20220406104643.GB2731@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220406104643.GB2731@worktop.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 6 Apr 2022 10:01:39 -0700
-Message-ID: <CAADnVQLnHYQDM650v7JBw4TkmWOR5FMyEbTw31ySEyccM8QDCg@mail.gmail.com>
-Subject: Re: [PATCH] x86,bpf: Avoid IBT objtool warning
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, X86 ML <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v5 1/2] bpf: Support dual-stack sockets in
+ bpf_tcp_check_syncookie
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164926441347.11980.16956318462962965009.git-patchwork-notify@kernel.org>
+Date:   Wed, 06 Apr 2022 17:00:13 +0000
+References: <20220406124113.2795730-1-maximmi@nvidia.com>
+In-Reply-To: <20220406124113.2795730-1-maximmi@nvidia.com>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        jakub@cloudflare.com, afabre@cloudflare.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, shuah@kernel.org, hawk@kernel.org,
+        tariqt@nvidia.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 3:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Apr 05, 2022 at 09:58:28AM -0700, Alexei Starovoitov wrote:
-> > On Tue, Apr 5, 2022 at 12:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > >
-> > > Clang can inline emit_indirect_jump() and then folds constants, which
-> > > results in:
-> > >
-> > >   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x6a4: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
-> > >   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x67d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
-> > >   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x386: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
-> > >   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x35d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
-> > >
-> > > Suppress the optimization such that it must emit a code reference to
-> > > the __x86_indirect_thunk_array[] base.
-> > >
-> > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > ---
-> > >  arch/x86/net/bpf_jit_comp.c |    1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > --- a/arch/x86/net/bpf_jit_comp.c
-> > > +++ b/arch/x86/net/bpf_jit_comp.c
-> > > @@ -412,6 +412,7 @@ static void emit_indirect_jump(u8 **ppro
-> > >                 EMIT_LFENCE();
-> > >                 EMIT2(0xFF, 0xE0 + reg);
-> > >         } else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
-> > > +               OPTIMIZER_HIDE_VAR(reg);
-> > >                 emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
-> > >         } else
-> > >  #endif
-> >
-> > Looks good. Please cc bpf@vger and all bpf maintainers in the future.
->
-> Oh right, I'll go add an alias for that.
->
-> > We can take it through the bpf tree if you prefer.
->
-> I'll take it through the x86/urgent tree if you don't mind.
+Hello:
 
-Sure. Then pls add:
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Wed, 6 Apr 2022 15:41:12 +0300 you wrote:
+> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
+> validates the address family of the socket. It supports IPv4 packets in
+> AF_INET6 dual-stack sockets.
+> 
+> On the other hand, bpf_tcp_check_syncookie looks only at the address
+> family of the socket, ignoring the real IP version in headers, and
+> validates only the packet size. This implementation has some drawbacks:
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v5,1/2] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
+    https://git.kernel.org/bpf/bpf/c/2e8702cc0cfa
+  - [bpf,v5,2/2] bpf: Adjust bpf_tcp_check_syncookie selftest to test dual-stack sockets
+    https://git.kernel.org/bpf/bpf/c/53968dafc4a6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
