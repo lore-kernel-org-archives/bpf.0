@@ -2,214 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C519C433FE
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 19:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FE9CC433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 19:59:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233040AbiDFTyh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 15:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S233135AbiDFUBr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 16:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbiDFTxt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 15:53:49 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A74D269A76
-        for <bpf@vger.kernel.org>; Wed,  6 Apr 2022 10:23:39 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id r11so2422683ila.1
-        for <bpf@vger.kernel.org>; Wed, 06 Apr 2022 10:23:39 -0700 (PDT)
+        with ESMTP id S233459AbiDFUBW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Apr 2022 16:01:22 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE600207CB2
+        for <bpf@vger.kernel.org>; Wed,  6 Apr 2022 10:14:13 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id z6so3825493iot.0
+        for <bpf@vger.kernel.org>; Wed, 06 Apr 2022 10:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gE7Ga79qWwEBvc16Of582X+cA59raEi7RH56zIEc1Jg=;
-        b=exAZOWKSf2RqV4cfCIVwbzg/bovqaMqbJq9hMtIg8Q2ouSFL0f91kHuwGa/hPy4ruZ
-         VUqXEyWIYCEDBkOR6FlWxKmsTnXWFmbSOK0gsShstvnulDaAFDjKwfXMfF/4IDzhGOqM
-         ylPsOVpCYZ3ThrJzY4JSoF4JntAgIV1gF5vv4q+kR507z17K4DaGREMNloBaneZomvuE
-         FDAwxikQ/5DQv8aj8+flurCs3HINOxs8YgSzhrCQIjME+2NaM0MzEbzfWKlySmBr/Zc/
-         IuzZgs/OF90lYc1dEaXsnGumDVfmVkTdFOFq37Krnz8HVOVrM26RYQYLz5eAIh5CZ+db
-         t4Og==
+         :cc:content-transfer-encoding;
+        bh=D1PIQapcDkBATRQ5KIkpg+isIy6zoi9Foj80zIF7ATU=;
+        b=gxuThjz8edK/muePVCo+8qS+OkNAhjlwwAvY0FvNuyusDjQkq0alYfxvzFCGcOm5l3
+         UQMUqmjUDzbpU1Ptag0yS/tH1zwHum6gZRYEWnvRuxe5fY/J+eFgNLk1TXRnRUo+Cq+h
+         5qdgH40JXpnkc5WNTFJNoWXYnAgW/HB4djR6auht1zWJc/VFa0/T4olqbFGqtQyqI4E1
+         x7N3Oed1UJCrNLATncJtAtd21jDalXNzHm0e5801z88po8QJtFj/PlC4WuVYXPf9a47i
+         G5iyoeaK5kQU6kHGyvsQGDwbyD5YTUhOD/ULNOmk63S6eAxK2Y2huIlKvwSKrAxLPIu/
+         NjRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gE7Ga79qWwEBvc16Of582X+cA59raEi7RH56zIEc1Jg=;
-        b=Z20yemLTsk3hW11N3j6CQZlyzWW4i12EWs80ObC2ZRqJdztiC2ZWRWDMAAMorFK6ge
-         VJfOHBjDXLkcXenm9Ok0vRB8sVEroDO5/v4hGQMha73Sm0Auj7GKm4EcMFts2uvhNy6X
-         CrgN/5cSErU9WwLvCCY1vthgTNQ80n5joihdXehdyvEE51IZzZRfVKhTikhJT8mjdhLX
-         yFSNu9HWa4VmEpcwwSKIq9S33KIb7rmAIyDbYXgh5j9T77f0ebc0+svktyYYZiQvnJfo
-         Je55oFJwPk4ilZ7/nxPwoqSxZWmhuQE4vGbVu+UK7HiQ4A+DjActqresdPPQnGd4p8xt
-         tAVA==
-X-Gm-Message-State: AOAM532U4rwY1l0D1zPNpZ9dmA77zuS3CBV2q5HT2D0VPs0uMEd4C89y
-        dslJTMxdSlJC4Wh6jHLsWoKa4lQVLamiAWTtQGs=
-X-Google-Smtp-Source: ABdhPJzQsfFKCw64uwoH89zx1t1Egm53i57ekcrMnJhUXKLfvDCTsVnZUrJhRet+z+DyUWnqkK1KaP+yJ3XNoanBHYg=
-X-Received: by 2002:a05:6e02:1a8f:b0:2c9:da3d:e970 with SMTP id
- k15-20020a056e021a8f00b002c9da3de970mr4635196ilv.239.1649265818647; Wed, 06
- Apr 2022 10:23:38 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=D1PIQapcDkBATRQ5KIkpg+isIy6zoi9Foj80zIF7ATU=;
+        b=BbRCXeWFz6BCQM6Vju+Se9GOEGq5Ibe2a0bqHlGCBmqlVd41u5g42yPU9BYx5j1me/
+         euHYF/eHK58KtbBcy3srMqX3jVw28pJ2J1Rp3W2Np4PVNiyYk5cRiVl8FCN2kW1hOGGu
+         CIvpQBMazKGnNVidkCJ2DFee0CYqpZ4L+3Z7uVGhKymSzKX7ECBvDRpnCknH6haxCRfa
+         vto8Meu3V0KQ+ckWaLX6iaC+QYe9C3jlfAM08u3uPqwY2fiLVfUXwRYhkHpNarf4loxw
+         1QaPH0Gw4tPNGHlPcSWQVlPmoyUDBs+eRMnEFYfv5dAjzOA7n8Yuhw76w+uO07qvXDBU
+         wMSg==
+X-Gm-Message-State: AOAM530LRX+QeS9weCbgHcRVnmbqvDkhqm4/PpDHPfBAwq4+B9e0GfkL
+        +fyeYkbbqrF9Xg3XvxVbYtTAYBseaLwTg8l4ulE=
+X-Google-Smtp-Source: ABdhPJzogupI3cjcmQlAZ3Heu41JmvkYgJFRVmJApsztZ6fv/P48/Y5CfWyhxjldTwPiAryhJIaXuZkktT5wDLN93a0=
+X-Received: by 2002:a05:6638:3395:b0:323:8a00:7151 with SMTP id
+ h21-20020a056638339500b003238a007151mr5058543jav.93.1649265253177; Wed, 06
+ Apr 2022 10:14:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220404234202.331384-1-andrii@kernel.org> <20220404234202.331384-6-andrii@kernel.org>
-In-Reply-To: <20220404234202.331384-6-andrii@kernel.org>
+References: <20220404083816.1560501-1-nborisov@suse.com> <CAEf4BzZrz42Ffe37n+NbiVsvzHX995=1P_tTun-bHzL8kXOpeg@mail.gmail.com>
+ <414907a7-1447-6d1d-98a1-0827d07768fd@suse.com>
+In-Reply-To: <414907a7-1447-6d1d-98a1-0827d07768fd@suse.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 6 Apr 2022 10:23:27 -0700
-Message-ID: <CAEf4BzbETp3S4-HebGBNjFm1fCCAuytSqTp=SNXgXFSqsgCQOQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 5/7] libbpf: add x86-specific USDT arg spec
- parsing logic
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Hengqi Chen <hengqi.chen@gmail.com>
+Date:   Wed, 6 Apr 2022 10:14:02 -0700
+Message-ID: <CAEf4BzYASJB4H0WBqVAWoBC2zF-UyZ44Tgi17TDgVZH+D_g=cA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Add btf__field_exists
+To:     Nikolay Borisov <nborisov@suse.com>
+Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 4:42 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+On Tue, Apr 5, 2022 at 11:41 PM Nikolay Borisov <nborisov@suse.com> wrote:
 >
-> Add x86/x86_64-specific USDT argument specification parsing. Each
-> architecture will require their own logic, as all this is arch-specific
-> assembly-based notation. Architectures that libbpf doesn't support for
-> USDTs will pr_warn() with specific error and return -ENOTSUP.
 >
-> We use sscanf() as a very powerful and easy to use string parser. Those
-> spaces in sscanf's format string mean "skip any whitespaces", which is
-> pretty nifty (and somewhat little known) feature.
 >
-> All this was tested on little-endian architecture, so bit shifts are
-> probably off on big-endian, which our CI will hopefully prove.
+> On 6.04.22 =D0=B3. 2:37 =D1=87., Andrii Nakryiko wrote:
+> > The problem is that what you've implemented is not a user-space
+> > equivalent of bpf_core_xxx() macros. CO-RE has extra logic around
+> > ___<flavor> suffixes, extra type checks, etc, etc. Helper you are
+> > adding does a very straightforward strings check, which isn't hard to
+> > implement and it doesn't have to be a set in stone API. So I'm a bit
+> > hesitant to add this.
+> >
+> > But I can share what I did in similar situations where I had to do
+> > some CO-RE check both on BPF side and know its result in user-space. I
+> > built a separate very simple BPF skeleton and all it did was perform
+> > various feature checks (including those that require CO-RE) and then
+> > returned the result through global variables. You can then trigger
+> > such BPF feature-checking program either through bpf_prog_test_run or
+> > through whatever other means (I actually did a simple sys_enter
+> > program in my case). See [0] for BPF program side and [1] for
+> > user-space activation/consumption of that.
+> >
+> > The benefit of this approach is that there is no way BPF and
+> > user-space sides can get "out of sync" in terms of their feature
+> > checking. With skeleton it's also extremely simple to do all this.
+> >
+> >    [0]https://github.com/anakryiko/retsnoop/blob/master/src/calib_feat.=
+bpf.c
+> >    [1]https://github.com/anakryiko/retsnoop/blob/master/src/mass_attach=
+er.c#L483-L529
+> >
 >
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> Reviewed-by: Dave Marchevsky <davemarchevsky@fb.com>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
+>
+> That's indeed neat, however what is the minimum kernel version required
+> to have global variables work ? AFAIU one requirement is to use a
+> recent-enough libbpf which supports the skeleton functionality which is
+> fine, userspace components can be updated somewhat easily than target
+> kernels.
 
-Ilya, would you be interested in implementing at least some limited
-support of USDT parameters for s390x? It would be good to have
-big-endian platform supported and tested. aarch64 would be nice as
-well, but I'm not sure who's the expert on that to help with.
+You need Linux 5.5 for global variables mapping into user-space (added
+in [0]). But you don't need to use global variables to pass
+information back to user-space. You can just do a trivial
+BPF_MAP_TYPE_ARRAY for this. It's a bit more verbose to work with from
+BPF and user-space side, but effectively is the same for this case.
+Then you basically have no extra Linux version constraints just
+because of this feature probing. Only the need to have vmlinux BTF.
 
->  tools/lib/bpf/usdt.c | 105 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 105 insertions(+)
->
-> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-> index 2799387c5465..1bce2eab5e89 100644
-> --- a/tools/lib/bpf/usdt.c
-> +++ b/tools/lib/bpf/usdt.c
-> @@ -1168,8 +1168,113 @@ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note,
->         return 0;
->  }
->
-> +/* Architecture-specific logic for parsing USDT argument location specs */
-> +
-> +#if defined(__x86_64__) || defined(__i386__)
-> +
-> +static int calc_pt_regs_off(const char *reg_name)
-> +{
-> +       static struct {
-> +               const char *names[4];
-> +               size_t pt_regs_off;
-> +       } reg_map[] = {
-> +#if __x86_64__
-> +#define reg_off(reg64, reg32) offsetof(struct pt_regs, reg64)
-> +#else
-> +#define reg_off(reg64, reg32) offsetof(struct pt_regs, reg32)
-> +#endif
-> +               { {"rip", "eip", "", ""}, reg_off(rip, eip) },
-> +               { {"rax", "eax", "ax", "al"}, reg_off(rax, eax) },
-> +               { {"rbx", "ebx", "bx", "bl"}, reg_off(rbx, ebx) },
-> +               { {"rcx", "ecx", "cx", "cl"}, reg_off(rcx, ecx) },
-> +               { {"rdx", "edx", "dx", "dl"}, reg_off(rdx, edx) },
-> +               { {"rsi", "esi", "si", "sil"}, reg_off(rsi, esi) },
-> +               { {"rdi", "edi", "di", "dil"}, reg_off(rdi, edi) },
-> +               { {"rbp", "ebp", "bp", "bpl"}, reg_off(rbp, ebp) },
-> +               { {"rsp", "esp", "sp", "spl"}, reg_off(rsp, esp) },
-> +#undef reg_off
-> +#if __x86_64__
-> +               { {"r8", "r8d", "r8w", "r8b"}, offsetof(struct pt_regs, r8) },
-> +               { {"r9", "r9d", "r9w", "r9b"}, offsetof(struct pt_regs, r9) },
-> +               { {"r10", "r10d", "r10w", "r10b"}, offsetof(struct pt_regs, r10) },
-> +               { {"r11", "r11d", "r11w", "r11b"}, offsetof(struct pt_regs, r11) },
-> +               { {"r12", "r12d", "r12w", "r12b"}, offsetof(struct pt_regs, r12) },
-> +               { {"r13", "r13d", "r13w", "r13b"}, offsetof(struct pt_regs, r13) },
-> +               { {"r14", "r14d", "r14w", "r14b"}, offsetof(struct pt_regs, r14) },
-> +               { {"r15", "r15d", "r15w", "r15b"}, offsetof(struct pt_regs, r15) },
-> +#endif
-> +       };
-> +       int i, j;
-> +
-> +       for (i = 0; i < ARRAY_SIZE(reg_map); i++) {
-> +               for (j = 0; j < ARRAY_SIZE(reg_map[i].names); j++) {
-> +                       if (strcmp(reg_name, reg_map[i].names[j]) == 0)
-> +                               return reg_map[i].pt_regs_off;
-> +               }
-> +       }
-> +
-> +       pr_warn("usdt: unrecognized register '%s'\n", reg_name);
-> +       return -ENOENT;
-> +}
-> +
-> +static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
-> +{
-> +       char *reg_name = NULL;
-> +       int arg_sz, len, reg_off;
-> +       long off;
-> +
-> +       if (sscanf(arg_str, " %d @ %ld ( %%%m[^)] ) %n", &arg_sz, &off, &reg_name, &len) == 3) {
-> +               /* Memory dereference case, e.g., -4@-20(%rbp) */
-> +               arg->arg_type = USDT_ARG_REG_DEREF;
-> +               arg->val_off = off;
-> +               reg_off = calc_pt_regs_off(reg_name);
-> +               free(reg_name);
-> +               if (reg_off < 0)
-> +                       return reg_off;
-> +               arg->reg_off = reg_off;
-> +       } else if (sscanf(arg_str, " %d @ %%%ms %n", &arg_sz, &reg_name, &len) == 2) {
-> +               /* Register read case, e.g., -4@%eax */
-> +               arg->arg_type = USDT_ARG_REG;
-> +               arg->val_off = 0;
-> +
-> +               reg_off = calc_pt_regs_off(reg_name);
-> +               free(reg_name);
-> +               if (reg_off < 0)
-> +                       return reg_off;
-> +               arg->reg_off = reg_off;
-> +       } else if (sscanf(arg_str, " %d @ $%ld %n", &arg_sz, &off, &len) == 2) {
-> +               /* Constant value case, e.g., 4@$71 */
-> +               arg->arg_type = USDT_ARG_CONST;
-> +               arg->val_off = off;
-> +               arg->reg_off = 0;
-> +       } else {
-> +               pr_warn("usdt: unrecognized arg #%d spec '%s'\n", arg_num, arg_str);
-> +               return -EINVAL;
-> +       }
-> +
-> +       arg->arg_signed = arg_sz < 0;
-> +       if (arg_sz < 0)
-> +               arg_sz = -arg_sz;
-> +
-> +       switch (arg_sz) {
-> +       case 1: case 2: case 4: case 8:
-> +               arg->arg_bitshift = 64 - arg_sz * 8;
-> +               break;
-> +       default:
-> +               pr_warn("usdt: unsupported arg #%d (spec '%s') size: %d\n",
-> +                       arg_num, arg_str, arg_sz);
-> +               return -EINVAL;
-> +       }
-> +
-> +       return len;
-> +}
-> +
-> +#else
-> +
->  static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
->  {
->         pr_warn("usdt: libbpf doesn't support USDTs on current architecture\n");
->         return -ENOTSUP;
->  }
-> +
-> +#endif
-> --
-> 2.30.2
->
+  [0] fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
