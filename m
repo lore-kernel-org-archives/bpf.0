@@ -2,171 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88405C433FE
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95A28C433FE
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 05:21:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236169AbiDFFWw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 01:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S231336AbiDFFXQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 01:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1849917AbiDFCpH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:45:07 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24909291BB2;
-        Tue,  5 Apr 2022 16:47:24 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id r2so1071995iod.9;
-        Tue, 05 Apr 2022 16:47:24 -0700 (PDT)
+        with ESMTP id S2361123AbiDFDoO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Apr 2022 23:44:14 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBB12F380;
+        Tue,  5 Apr 2022 17:14:42 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id x4so1151510iop.7;
+        Tue, 05 Apr 2022 17:14:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=c+XYrd0Oyx5bZokyYgKdQAHq6tFoBY4IZr2oyMITbE8=;
-        b=XHy9gts7ur+Kuy4KpYalW0V+9qqmnaSmfkL+H0hvD5mZrNCwFSv3wDlp5F+BLGvrfy
-         xmF2TRe+9UWg6WXAWB7ZU5g5TlJAtKFJ7l9mlCGANs/pGwqKlduEvf6sNl2G3MRXdJFl
-         e1c6gEndG9gJQM6tSSvKF3BOzqWUSfbsua7DSJDNxNpY8Oph2EIaYmiu1Utbn1UYyZCM
-         ZXiL8Y76UXUI6ezDHhJWzd80OwZJaTJRaoOnI2QaKQrh5jHG9XUTCZPDNNBjH7eimIQ4
-         +v0zdAFoIl4+7im1VIY7IyUZyeimH9dLY3Uo+xi8IWeWkjNa3ybmZI1/Y7nrONfPqqld
-         OmOQ==
+        bh=SiOlR7FQJECBOngSYr/kuLzweA1EIkoBcnX8l6to9uQ=;
+        b=le8BEi0VjD5Ae1R/wuwFFNbhuY9lw10ryYLA0FmZctLnyacLgCwJG1BIp4YgQcgAWV
+         b0XVKd2LVvPs+4yMbmW8brHidFH5/0V2FS6fy3eA5plejZaNpluOcM4CzBf0qoLynrRR
+         sqW3e7064QWMfAaz1WIFX0GBwrpJzwOs2lF5RWRX1pgBty6vVkm3YGJkeqJl30GVCobB
+         QcE79C8lqLNmWt7f0hBNIWw4tXbvY8VK3ny6Ff39EQqVltNSCNCrTWyD9+N/X29MocMs
+         b3dQeQl4T/FkbpxXmVDl/136PR7yInprTyLbXCsEMoCMMJTq2QxjDcTcki72HeOThrsD
+         lEJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=c+XYrd0Oyx5bZokyYgKdQAHq6tFoBY4IZr2oyMITbE8=;
-        b=htRv9bYYn7In7j/AChHoufLS24OE8MLEOQ4o96PoSwnzQsR/0SxwJDUcpXEKQBHWfA
-         5YAEbpFXxg+s9c8yea1yrYPh2Nc+u56yvz0ScbWlK0AwKAGGwUVuE1hfXeH1JBcsxRby
-         /NTVRN/f/Iy1ccegEcz5kHhMumcOxlCw652lqrAdsV/LcQLc0MITyNF9GAU9PzTxbHXg
-         jEwjhcpjvcFr6bzOUpGXi/0/GzDLiJ/FQ9KJuiiHkFh6UOT3fOc8rjWy3LQA2VY0goHi
-         Pt+3ayFIzTOxadp3R+BM94AKZzdEdsTyPhbEITK6f+lmFO24hY9PJ9x94o/tWaKdM5rn
-         MDgA==
-X-Gm-Message-State: AOAM530iPll2XM0s2TPRa19UOVCVcgEBdxi8JNmtGHBiMtuLSdwgwakv
-        7nx/hk0QOCY/+IhrugOV8alDBS3cOlVOx5LxF0g=
-X-Google-Smtp-Source: ABdhPJxMFIZrH/Vkj5PwnSRm6Lo8J2BA5ONUmBR4cQxKL0V8Cu/CrwzAKcERZ/PqaPaAwcz2NcGa+f4MHUMQ5kS1LLw=
-X-Received: by 2002:a05:6602:185a:b0:645:d914:35e9 with SMTP id
- d26-20020a056602185a00b00645d91435e9mr2796386ioi.154.1649202443390; Tue, 05
- Apr 2022 16:47:23 -0700 (PDT)
+        bh=SiOlR7FQJECBOngSYr/kuLzweA1EIkoBcnX8l6to9uQ=;
+        b=nvuyNCJAOqnvAjDup11TxeUG2XnfQTUFtGVQvALUU4nT+5/04XyOAogBSOes0rbbFD
+         ACpw1NDWLZKnK9oxk7aZ9KXD6q39fQIUrIxvvPUazicVQ2xeb+m8Q7walRu/U39cRMMh
+         LPgT4lB5BnMm5XIP2bqq1C/p5AxGA+JKzVwLU6AAljRIOECYFfK9LrPxY0h8bC15WEdd
+         /EMBYJ1kH8nz3PfeT8gxRgCp9yBXyMatIElT/+5ZPP7xzK8+IZRWZSdUmtWBoWBTc1zE
+         qnCEBjKn+VnIQAgWxZe9IWlMmSLLX2AxuDVlgT9n/nwSM+QhRYp22dIVxTehdR9kjj7o
+         2rVg==
+X-Gm-Message-State: AOAM533Xdhmk65ObuKqiI8SP9MBy9sP2gSxgV+6oIJPjr1Eeft+sFSZM
+        qiSJpX27lNFYJf5YNtAEek/3KemjFxOJ6hKpAak=
+X-Google-Smtp-Source: ABdhPJwVu1DPW5n60puGM4lH9sfxPcoUjaEyTVOLV56L1dafDbbFbddC43gaFUKD9quqBOD2RIg+Pn3QQfX6b8Q9F5E=
+X-Received: by 2002:a05:6638:2105:b0:323:68db:2e4e with SMTP id
+ n5-20020a056638210500b0032368db2e4emr3423030jaj.234.1649204082111; Tue, 05
+ Apr 2022 17:14:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <1648654000-21758-1-git-send-email-alan.maguire@oracle.com>
- <CAEf4BzZdV60ZeNt1YfS8qoB69pggSe+=gjnDZ1tZy00L4Quazw@mail.gmail.com> <alpine.LRH.2.23.451.2204051116110.9651@MyRouter>
-In-Reply-To: <alpine.LRH.2.23.451.2204051116110.9651@MyRouter>
+References: <1649195156-9465-1-git-send-email-alan.maguire@oracle.com> <1649195156-9465-3-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1649195156-9465-3-git-send-email-alan.maguire@oracle.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 5 Apr 2022 16:47:12 -0700
-Message-ID: <CAEf4Bzam5qnm16fc2g1--GLokN3KpdJpoDrTK27ZcbVWYCcYYg@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 0/5] libbpf: name-based u[ret]probe attach
+Date:   Tue, 5 Apr 2022 17:14:31 -0700
+Message-ID: <CAEf4Bza+E7A0T5hvKz9Thb7t4-WWdO0xPEYuFb0y1qe7v19Vvg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: uprobe tests should verify
+ param/return values
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Yucong Sun <sunyucong@gmail.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 3:28 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Tue, Apr 5, 2022 at 2:46 PM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> On Mon, 4 Apr 2022, Andrii Nakryiko wrote:
+> uprobe/uretprobe tests don't do any validation of arguments/return values,
+> and without this we can't be sure we are attached to the right function,
+> or that we are indeed attached to a uprobe or uretprobe.  To fix this
+> validate argument and return value for auto-attached functions.
 >
-> > On Wed, Mar 30, 2022 at 8:27 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> > >
-> > > This patch series focuses on supporting name-based attach - similar
-> > > to that supported for kprobes - for uprobe BPF programs.
-> > >
-> > > Currently attach for such probes is done by determining the offset
-> > > manually, so the aim is to try and mimic the simplicity of kprobe
-> > > attach, making use of uprobe opts to specify a name string.
-> > > Patch 1 supports expansion of the binary_path argument used for
-> > > bpf_program__attach_uprobe_opts(), allowing it to determine paths
-> > > for programs and shared objects automatically, allowing for
-> > > specification of "libc.so.6" rather than the full path
-> > > "/usr/lib64/libc.so.6".
-> > >
-> > > Patch 2 adds the "func_name" option to allow uprobe attach by
-> > > name; the mechanics are described there.
-> > >
-> > > Having name-based support allows us to support auto-attach for
-> > > uprobes; patch 3 adds auto-attach support while attempting
-> > > to handle backwards-compatibility issues that arise.  The format
-> > > supported is
-> > >
-> > > u[ret]probe/binary_path:[raw_offset|function[+offset]]
-> > >
-> > > For example, to attach to libc malloc:
-> > >
-> > > SEC("uprobe//usr/lib64/libc.so.6:malloc")
-> > >
-> > > ..or, making use of the path computation mechanisms introduced in patch 1
-> > >
-> > > SEC("uprobe/libc.so.6:malloc")
-> > >
-> > > Finally patch 4 add tests to the attach_probe selftests covering
-> > > attach by name, with patch 5 covering skeleton auto-attach.
-> > >
-> > > Changes since v4 [1]:
-> > > - replaced strtok_r() usage with copying segments from static char *; avoids
-> > >   unneeded string allocation (Andrii, patch 1)
-> > > - switched to using access() instead of stat() when checking path-resolved
-> > >   binary (Andrii, patch 1)
-> > > - removed computation of .plt offset for instrumenting shared library calls
-> > >   within binaries.  Firstly it proved too brittle, and secondly it was somewhat
-> > >   unintuitive in that this form of instrumentation did not support function+offset
-> > >   as the "local function in binary" and "shared library function in shared library"
-> > >   cases did.  We can still instrument library calls, just need to do it in the
-> > >   library .so (patch 2)
-> >
-> > ah, that's too bad, it seemed like a nice and clever idea. What was
-> > brittle? Curious to learn for the future.
-> >
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  .../selftests/bpf/prog_tests/uprobe_autoattach.c   | 16 ++++++++++----
+>  .../selftests/bpf/progs/test_uprobe_autoattach.c   | 25 +++++++++++++++-------
+>  2 files changed, 29 insertions(+), 12 deletions(-)
 >
-> On Ubuntu, Daniel reported selftest failures which corresponded to the
-> cases where we attached to a library function in a non-library - i.e. used
-> the .plt computations.  I reproduced this failure myself, and it seemed
-> that although we were correctly computing the size of the .plt initial
-> code - 16 bytes - and each .plt entry - again 16 bytes - finding the
-> .rela.plt entry and using its index as the basis for figuring out which
-> .plt entry to instrument wasn't working.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+> index 03b15d6..ff85f1f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
+> @@ -5,14 +5,16 @@
+>  #include "test_uprobe_autoattach.skel.h"
 >
-> Specifically, the .rela.plt entry for "free" was 146, but the actual .plt
-> location of free was the 372 entry in the .plt table.  I'm not clear on
-> why, but the the correspondence betweeen .rela.plt and .plt order
-> isn't present on Ubuntu.
+>  /* uprobe attach point */
+> -static void autoattach_trigger_func(void)
+> +static noinline int autoattach_trigger_func(int arg)
+>  {
+> -       asm volatile ("");
 
-Ok, curious. I'm not a big expert on PLT and stuff, but would be
-curious to look at such an ELF file and see if we are missing
-something that can be recovered from PLT relocations maybe? If you
-happen to have a small ELF with repro case, please share.
+don't remove asm volatile, with static functions compiler can still do
+function transformations and stuff. From GCC documentation for
+noinline attribute ([0]):
+
+  noinline
+
+      This function attribute prevents a function from being
+considered for inlining. If the function does not have side effects,
+there are optimizations other than inlining that cause function calls
+to be optimized away, although the function call is live. To keep such
+calls from being optimized away, put
+
+      asm ("");
+
+  [0] https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes
+
+So I suppose noinline + asm volatile is the most safe combination :)
+for static functions
+
+> +       return arg + 1;
+>  }
+>
+>  void test_uprobe_autoattach(void)
+>  {
+>         struct test_uprobe_autoattach *skel;
+> +       int trigger_val = 100;
+> +       size_t malloc_sz = 1;
+>         char *mem;
+>
+>         skel = test_uprobe_autoattach__open_and_load();
+
+[...]
 
 >
-> > The fact that function+offset isn't supported int this "mode"
-> seems
-> > totally fine to me, we can provide a nice descriptive error in this
-> > case anyways.
-> >
->
-> I'll try and figure out exactly what's going on above; would be nice if we
-> can still add this in the future.
+> -SEC("uretprobe/libc.so.6:free")
+> +SEC("uretprobe/libc.so.6:getpid")
+>  int handle_uretprobe_byname2(struct pt_regs *ctx)
+>  {
+> -       uretprobe_byname2_res = 4;
+> +       if (PT_REGS_RC_CORE(ctx) == uretprobe_byname2_rc)
+> +               uretprobe_byname2_res = 4;
 
-Yep, definitely, provided we are sure it will keep working reliably :)
+Instead of checking equality on BPF side, it's more convenient to
+record the actual captured value into global variable and let
+user-space part check and log it properly. So if something goes wrong,
+we don't just have matched/not matched flag, but we see an actual
+value captured.
 
->
-> > Anyways, all the added functionality makes sense and we can further
-> > improve on it if necessary and possible. I've found a few small issues
-> > with your patches and fixed some of them while applying, please do a
-> > follow up for the rest.
->
-> Yep, will do, thanks for the fix-ups! Ilya has fixed a few of the issues
-> too, so I'll have some follow-ups for the rest shortly. I'll take a look
-> at adding aarch64 to libbpf CI too, that would be great.
 
-Awesome, aarch64 seems like a logical addition, thanks!
+With that, let's better switch uretprobe from free to malloc (we
+additionally check that uprobe and uretprobe can coexist properly on
+the same function) and capture returned pointer from malloc(). We can
+then compare that pointer to the mem variable. How cool is that? :)
 
+>         return 0;
+>  }
 >
-> > Thanks, great work and great addition to
-> > libbpf!
-> >
+> --
+> 1.8.3.1
 >
-> Thanks again!
