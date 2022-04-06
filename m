@@ -2,111 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FE9CC433EF
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 19:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 372AEC433F5
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 20:09:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233135AbiDFUBr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 16:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S234088AbiDFUK4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 16:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbiDFUBW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 16:01:22 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE600207CB2
-        for <bpf@vger.kernel.org>; Wed,  6 Apr 2022 10:14:13 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id z6so3825493iot.0
-        for <bpf@vger.kernel.org>; Wed, 06 Apr 2022 10:14:13 -0700 (PDT)
+        with ESMTP id S232533AbiDFUKt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Apr 2022 16:10:49 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFEF1E374C
+        for <bpf@vger.kernel.org>; Wed,  6 Apr 2022 10:25:37 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id z7so3824550iom.1
+        for <bpf@vger.kernel.org>; Wed, 06 Apr 2022 10:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=D1PIQapcDkBATRQ5KIkpg+isIy6zoi9Foj80zIF7ATU=;
-        b=gxuThjz8edK/muePVCo+8qS+OkNAhjlwwAvY0FvNuyusDjQkq0alYfxvzFCGcOm5l3
-         UQMUqmjUDzbpU1Ptag0yS/tH1zwHum6gZRYEWnvRuxe5fY/J+eFgNLk1TXRnRUo+Cq+h
-         5qdgH40JXpnkc5WNTFJNoWXYnAgW/HB4djR6auht1zWJc/VFa0/T4olqbFGqtQyqI4E1
-         x7N3Oed1UJCrNLATncJtAtd21jDalXNzHm0e5801z88po8QJtFj/PlC4WuVYXPf9a47i
-         G5iyoeaK5kQU6kHGyvsQGDwbyD5YTUhOD/ULNOmk63S6eAxK2Y2huIlKvwSKrAxLPIu/
-         NjRg==
+         :cc;
+        bh=ggMiBLd7ZOWtjzjD6Un6ZVq1KDYAxjij9mfV1L5UOfc=;
+        b=OYsMQRgQSzJcxcLicpCrOAQ10fMKaO5Jn3mzVl3exVBSq9puagWkscXZy9oW2o3INz
+         PLTeUuvzQ8EKNDrmGCx1uCz9Iv4Ow+Kk6C9YJCYqkb7ip09y00P3FqhqMLVa9Ako6aTy
+         RcSNlEnH6/GpE2frCLl+2SHdIWiG6/NFBtRGxR3JzhnR83NK61AqXDvgFK7PvLHJR9hf
+         uzaljKwJHv4MuUDjVa0R18WzzRwk4flbnzNmmK6IMAjQB02KaJIj2CRn0w8yy6oZtjcb
+         jTOo1BTM0XkqxGILcsuCEhildvZM5LRb17CDMMfccNk8HjZvCT88qKUMz1J2lI8zPTFN
+         l+/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=D1PIQapcDkBATRQ5KIkpg+isIy6zoi9Foj80zIF7ATU=;
-        b=BbRCXeWFz6BCQM6Vju+Se9GOEGq5Ibe2a0bqHlGCBmqlVd41u5g42yPU9BYx5j1me/
-         euHYF/eHK58KtbBcy3srMqX3jVw28pJ2J1Rp3W2Np4PVNiyYk5cRiVl8FCN2kW1hOGGu
-         CIvpQBMazKGnNVidkCJ2DFee0CYqpZ4L+3Z7uVGhKymSzKX7ECBvDRpnCknH6haxCRfa
-         vto8Meu3V0KQ+ckWaLX6iaC+QYe9C3jlfAM08u3uPqwY2fiLVfUXwRYhkHpNarf4loxw
-         1QaPH0Gw4tPNGHlPcSWQVlPmoyUDBs+eRMnEFYfv5dAjzOA7n8Yuhw76w+uO07qvXDBU
-         wMSg==
-X-Gm-Message-State: AOAM530LRX+QeS9weCbgHcRVnmbqvDkhqm4/PpDHPfBAwq4+B9e0GfkL
-        +fyeYkbbqrF9Xg3XvxVbYtTAYBseaLwTg8l4ulE=
-X-Google-Smtp-Source: ABdhPJzogupI3cjcmQlAZ3Heu41JmvkYgJFRVmJApsztZ6fv/P48/Y5CfWyhxjldTwPiAryhJIaXuZkktT5wDLN93a0=
-X-Received: by 2002:a05:6638:3395:b0:323:8a00:7151 with SMTP id
- h21-20020a056638339500b003238a007151mr5058543jav.93.1649265253177; Wed, 06
- Apr 2022 10:14:13 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=ggMiBLd7ZOWtjzjD6Un6ZVq1KDYAxjij9mfV1L5UOfc=;
+        b=JfsZsjnw6YbhdcXKuEO229uXasYhrWWXIe82r0U8HuDmWycilS3aBm2ERQiZ5j0DF/
+         PtNlOrvD5TuEumZdeQv6CXpe17aXkj0TtCIfTMxurkBM5QKvEUwsZODBf2I9PTGBewSU
+         jAqhLuuGyMTcG8nOng1fxTs8RBQbn2YehvphMtpf3mW5mZNqkhhC8Sb0hnqqttb7jdT/
+         lD9iy7IgZpaSmDhcRPc13KDaaFcgw3FSByqJYrtNwvCkIGiBQICKaMQaldQfk/c/hONX
+         mcyX6ayTNR/s/X11FkLDgGcVqmavIeK/32/biMXreo6qKadBs3anzf0kSyzGld9lyCap
+         32Xg==
+X-Gm-Message-State: AOAM532DuQvPcqTkl3l0DhOkrnRZhWMCMf5EORW3zz022OrYkVOQ5iuI
+        WBMb4gR5OUSY90FfPZSv27cPEHEC/EhgJcEwfn86tx5z
+X-Google-Smtp-Source: ABdhPJyPD1NXSLENxiNh4Krx8RV9nWXfbsKJcL3qfORk3WaNJh4xqfJkHKRDPaCQZTQJgUaKDlNUyS70DaSVostvi+8=
+X-Received: by 2002:a05:6638:1685:b0:323:9fed:890a with SMTP id
+ f5-20020a056638168500b003239fed890amr5142215jat.103.1649265936934; Wed, 06
+ Apr 2022 10:25:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220404083816.1560501-1-nborisov@suse.com> <CAEf4BzZrz42Ffe37n+NbiVsvzHX995=1P_tTun-bHzL8kXOpeg@mail.gmail.com>
- <414907a7-1447-6d1d-98a1-0827d07768fd@suse.com>
-In-Reply-To: <414907a7-1447-6d1d-98a1-0827d07768fd@suse.com>
+References: <50b0dbb.2936.17fff506075.Coremail.wuzongyo@mail.ustc.edu.cn>
+In-Reply-To: <50b0dbb.2936.17fff506075.Coremail.wuzongyo@mail.ustc.edu.cn>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 6 Apr 2022 10:14:02 -0700
-Message-ID: <CAEf4BzYASJB4H0WBqVAWoBC2zF-UyZ44Tgi17TDgVZH+D_g=cA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Add btf__field_exists
-To:     Nikolay Borisov <nborisov@suse.com>
-Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
+Date:   Wed, 6 Apr 2022 10:25:26 -0700
+Message-ID: <CAEf4BzYMq92tHd+fqyLZwgykSf7j-Rbw-4H+Y+Xe5C-rnjnAxQ@mail.gmail.com>
+Subject: Re: [Question] Failed to load ebpf program with BTF-defined map
+To:     wuzongyo@mail.ustc.edu.cn
+Cc:     bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:41 PM Nikolay Borisov <nborisov@suse.com> wrote:
+On Wed, Apr 6, 2022 at 10:09 AM <wuzongyo@mail.ustc.edu.cn> wrote:
 >
+> Hi,
 >
+> I wrote a simple tc-bpf program like that:
 >
-> On 6.04.22 =D0=B3. 2:37 =D1=87., Andrii Nakryiko wrote:
-> > The problem is that what you've implemented is not a user-space
-> > equivalent of bpf_core_xxx() macros. CO-RE has extra logic around
-> > ___<flavor> suffixes, extra type checks, etc, etc. Helper you are
-> > adding does a very straightforward strings check, which isn't hard to
-> > implement and it doesn't have to be a set in stone API. So I'm a bit
-> > hesitant to add this.
-> >
-> > But I can share what I did in similar situations where I had to do
-> > some CO-RE check both on BPF side and know its result in user-space. I
-> > built a separate very simple BPF skeleton and all it did was perform
-> > various feature checks (including those that require CO-RE) and then
-> > returned the result through global variables. You can then trigger
-> > such BPF feature-checking program either through bpf_prog_test_run or
-> > through whatever other means (I actually did a simple sys_enter
-> > program in my case). See [0] for BPF program side and [1] for
-> > user-space activation/consumption of that.
-> >
-> > The benefit of this approach is that there is no way BPF and
-> > user-space sides can get "out of sync" in terms of their feature
-> > checking. With skeleton it's also extremely simple to do all this.
-> >
-> >    [0]https://github.com/anakryiko/retsnoop/blob/master/src/calib_feat.=
-bpf.c
-> >    [1]https://github.com/anakryiko/retsnoop/blob/master/src/mass_attach=
-er.c#L483-L529
-> >
+>     #include <linux/bpf.h>
+>     #include <linux/pkt_cls.h>
+>     #include <linx/types.h>
+>     #include <bpf/bpf_helpers.h>
 >
+>     struct {
+>         __uint(type, BPF_MAP_TYPE_HASH);
+>         __uint(max_entries, 1);
+>         __type(key, int);
+>         __type(value, int);
+>     } hmap SEC(".maps");
 >
-> That's indeed neat, however what is the minimum kernel version required
-> to have global variables work ? AFAIU one requirement is to use a
-> recent-enough libbpf which supports the skeleton functionality which is
-> fine, userspace components can be updated somewhat easily than target
-> kernels.
+>     SEC("classifier")
+>     int _classifier(struct __sk_buff *skb)
+>     {
+>         int key = 0;
+>         int *val;
+>
+>         val = bpf_map_lookup_elem(&hmap, &key);
+>         if (!val)
+>             return TC_ACT_OK;
+>         return TC_ACT_OK;
+>     }
+>
+>     char __license[] SEC("license") = "GPL";
+>
+> Then I tried to use tc to load the program:
+>
+>     tc qdisc add dev eth0 clsact
+>     tc filter add dev eth0 egress bpf da obj test_bpf.o
+>
+> But the program loading failed with error messages:
+>     Prog section 'classifier' rejected: Permission denied (13)!
+>     - Type:          3
+>     - Instructions:  9 (0 over limit
+>     - License:       GPL
+>
+>     Verifier analysis:
+>
+>     Error fetching program/map!
+>     Unable to load program
+>
+> I tried to replace the map definition with the following code and the program is loaded successfully!
+>
+>     struct bpf_map_def SEC("maps") hmap = {
+>         .type = BPF_MAP_TYPE_HASH,
+>         .key_size = sizeof(int),
+>         .value_size = sizeof(int),
+>         .max_entries = 1,
+>     };
+>
+> With bpftrace, I can find that the errno -EACCES is returned by function do_check(). But I am still confused what's wrong with it.
+>
+> Linux Version: 5.17.0-rc3+ with CONFIG_DEBUG_INFO_BTF=y
+> TC Version: 5.14.0
+>
+> Any suggestion will be appreciated!
+>
 
-You need Linux 5.5 for global variables mapping into user-space (added
-in [0]). But you don't need to use global variables to pass
-information back to user-space. You can just do a trivial
-BPF_MAP_TYPE_ARRAY for this. It's a bit more verbose to work with from
-BPF and user-space side, but effectively is the same for this case.
-Then you basically have no extra Linux version constraints just
-because of this feature probing. Only the need to have vmlinux BTF.
+This is an iproute2 question, please find their mailing list and ask
+there. Or bypass iproute2 and use libbpf-provided TC APIS
+(bpf_tc_xxx()) to do all this directly from your application without
+shelling out or delegating to iproute2
 
-  [0] fc9702273e2e ("bpf: Add mmap() support for BPF_MAP_TYPE_ARRAY")
+
+> Thanks
+>
