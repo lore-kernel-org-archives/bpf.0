@@ -2,83 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D1E3C433FE
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 16:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0701AC433F5
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 17:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbiDFQ5C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 12:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S238493AbiDFRHA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 13:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238273AbiDFQ4p (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 12:56:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64213468CC;
-        Wed,  6 Apr 2022 07:20:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B825B82252;
-        Wed,  6 Apr 2022 14:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D4F4C385A6;
-        Wed,  6 Apr 2022 14:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649254813;
-        bh=31uDdoV1TPC9gI4HFhbd7m4q67CwQW2mh97T95us+IA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=t6ykpFrY1yAUFKmaBoaORP9J8Nzuo9YrCPy3YRsidcM8gXRW1pGNflAXpfVQgg2eZ
-         BjhdfTyzHzU4kApNqLL+WJkovfln755zfNnNK/UOjp74RYpciwcyWC5GMlTRfs5m2B
-         q9I7oTasDdJ1KPbh8GtTshD2yNlY8iORWEUMBaoAbG+6G1gq2gsk22Mwso1yeJI2CU
-         uVKWQQWxdQKAE+Z1jurK0tTOssRXy6Poo59GqT0rQQVkCIroGVenQmylh4n+9outWc
-         yiOqcJTUS4Lc4WHH2kB0j1LY0hN+cEkarouVpVhQ3NbIvv8L6tV3ejDYvM7STMQo5A
-         5Zj4MZMGCQJlA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EBAC7E8DBDA;
-        Wed,  6 Apr 2022 14:20:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S238505AbiDFRGu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Apr 2022 13:06:50 -0400
+X-Greylist: delayed 425 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 07:46:01 PDT
+Received: from ustc.edu.cn (email6.ustc.edu.cn [IPv6:2001:da8:d800::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4063C33B031
+        for <bpf@vger.kernel.org>; Wed,  6 Apr 2022 07:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mail.ustc.edu.cn; s=dkim; h=Received:Date:From:To:Subject:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID;
+        bh=M+gQwr5UHy+fMPv7KTQBkKhZXL0NQ6ynmHWPYMxg8cw=; b=oFTiHw9mZrhit
+        AfQVxd3SkqQ4cYIrrjRBct4YY3LNI//CiqYQH9szdmzzFvQ4Lqwu2Xy2lLnpPo6+
+        k+Cyx6sB+NheQVJG1xr+AW96HzneaKGNLazCcT3bCIWU6mj6n+Ky+APSwBSAH8iT
+        nck+3TcmMRxTH1wOZWW7GRflQcyJ/o=
+Received: by ajax-webmail-newmailweb.ustc.edu.cn (Coremail) ; Wed, 6 Apr
+ 2022 22:38:52 +0800 (GMT+08:00)
+X-Originating-IP: [222.64.172.188]
+Date:   Wed, 6 Apr 2022 22:38:52 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wuzongyo@mail.ustc.edu.cn
+To:     bpf@vger.kernel.org
+Subject: [Question] Failed to load ebpf program with BTF-defined map
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT3.0.8 dev build
+ 20210401(c5ff3689) Copyright (c) 2002-2022 www.mailtech.cn ustccn
+X-SendMailWithSms: false
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/3][pull request] Intel Wired LAN Driver Updates
- 2022-04-05
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164925481296.16469.9237290319102354767.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 14:20:12 +0000
-References: <20220405163803.63815-1-anthony.l.nguyen@intel.com>
-In-Reply-To: <20220405163803.63815-1-anthony.l.nguyen@intel.com>
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, maciej.fijalkowski@intel.com,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, bpf@vger.kernel.org
+Message-ID: <50b0dbb.2936.17fff506075.Coremail.wuzongyo@mail.ustc.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: LkAmygAHDtb8pU1iaNsDAA--.0W
+X-CM-SenderInfo: pzx200xj1rqzxdloh3xvwfhvlgxou0/1tbiAQwICVQhoFZrBAAAsg
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Hi,
 
-This series was applied to netdev/net.git (master)
-by Tony Nguyen <anthony.l.nguyen@intel.com>:
+I wrote a simple tc-bpf program like that:
 
-On Tue,  5 Apr 2022 09:38:00 -0700 you wrote:
-> Maciej Fijalkowski says:
-> 
-> We were solving issues around AF_XDP busy poll's not-so-usual scenarios,
-> such as very big busy poll budgets applied to very small HW rings. This
-> set carries the things that were found during that work that apply to
-> net tree.
-> 
-> [...]
+    #include <linux/bpf.h>
+    #include <linux/pkt_cls.h>
+    #include <linx/types.h>
+    #include <bpf/bpf_helpers.h>
 
-Here is the summary with links:
-  - [net,1/3] ice: synchronize_rcu() when terminating rings
-    https://git.kernel.org/netdev/net/c/f9124c68f05f
-  - [net,2/3] ice: xsk: fix VSI state check in ice_xsk_wakeup()
-    https://git.kernel.org/netdev/net/c/72b915a2b444
-  - [net,3/3] ice: clear cmd_type_offset_bsz for TX rings
-    https://git.kernel.org/netdev/net/c/e19778e6c911
+    struct {
+        __uint(type, BPF_MAP_TYPE_HASH);
+        __uint(max_entries, 1);
+        __type(key, int);
+        __type(value, int);
+    } hmap SEC(".maps");
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+    SEC("classifier")
+    int _classifier(struct __sk_buff *skb)
+    {
+        int key = 0;
+        int *val;
 
+        val = bpf_map_lookup_elem(&hmap, &key);
+        if (!val)
+            return TC_ACT_OK;
+        return TC_ACT_OK;
+    }
+
+    char __license[] SEC("license") = "GPL";
+
+Then I tried to use tc to load the program:
+    
+    tc qdisc add dev eth0 clsact
+    tc filter add dev eth0 egress bpf da obj test_bpf.o
+
+But the program loading failed with error messages:
+    Prog section 'classifier' rejected: Permission denied (13)!
+    - Type:          3
+    - Instructions:  9 (0 over limit
+    - License:       GPL
+
+    Verifier analysis:
+
+    Error fetching program/map!
+    Unable to load program
+
+I tried to replace the map definition with the following code and the program is loaded successfully!
+
+    struct bpf_map_def SEC("maps") hmap = {
+        .type = BPF_MAP_TYPE_HASH,
+        .key_size = sizeof(int),
+        .value_size = sizeof(int),
+        .max_entries = 1,
+    };
+
+With bpftrace, I can find that the errno -EACCES is returned by function do_check(). But I am still confused what's wrong with it.
+
+Linux Version: 5.17.0-rc3+ with CONFIG_DEBUG_INFO_BTF=y
+TC Version: 5.14.0
+
+Any suggestion will be appreciated!
+
+Thanks
 
