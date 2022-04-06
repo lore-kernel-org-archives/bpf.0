@@ -2,81 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C65FBC4332F
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 18:18:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E44C433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 19:15:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240612AbiDFSUW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 14:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S229673AbiDFTRQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 15:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240430AbiDFSTe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 14:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C29FFF4F;
-        Wed,  6 Apr 2022 10:00:14 -0700 (PDT)
+        with ESMTP id S229836AbiDFTPh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Apr 2022 15:15:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B08216F99;
+        Wed,  6 Apr 2022 10:20:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 546B9617DB;
-        Wed,  6 Apr 2022 17:00:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99845C385A5;
-        Wed,  6 Apr 2022 17:00:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E52DDB824E9;
+        Wed,  6 Apr 2022 17:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E92AC385A5;
+        Wed,  6 Apr 2022 17:20:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649264413;
-        bh=Xhk5SOzpGqN61TwyKV3hSuwu45jxXYiMouo5aJDKIAc=;
+        s=k20201202; t=1649265612;
+        bh=MMU5XGllo+8yHGXnAXzQ3+JJnqca7TBXCTyeXdUvgaA=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=S/o/CNjCvuORSfZUrRC0Nar/WqdJ4ffZKZD/OcNTAosKm7HpRZ0s5QcPByu3LrQP5
-         4LlqujxwzBXT6IxxNwtngEeQwoWvHjBJJDNzMYPRzGslwjvjKa2ctMdWienSpbBEvV
-         U6T+KrL0sBlBLLW3C3w21YrUccyFsKRXoSH7dUbRv2jNnfuTDIf/ep1+Ir6palwizL
-         jGmyjESSLGOeq85VfQySDor4w4y5aHrHV5pfk66vugpV4z0lFC12DMLzgF0z+EKjmS
-         owh9ouX65W2QRX60EK4e2gLPDx6wj/E68MN5HhdeHK4qBSRo46prRerfRJtg0zDYw5
-         7xt7FyO+K82zg==
+        b=DOaGlWEJrdtAqZXkQyVy1N1txuyk5/oz1bUyME6JV2nkUEFsT8JHPimoJpJklBtMH
+         TRCG7xju/Au4KsRZWr1o5UdPB7gxYqJn/pMhcX7AM8VNjlQu14tPhV/T9eyhB59wau
+         Q7C3OAcWZBtjsebYCxAYHByjH2VEPtwdbbsdwUC6AvsECoD/cVuZFUXpMxqJAKmQ5J
+         uHqdk9f2P0ucLYNOFVhTXCQ2Iy+6abGm70xwF4pWdnzuwJZgXjU+C1wd3T0Lk8fsG5
+         rdeEBc1dBsJ8LkoSKp280LbLEOXF9PqgafaPqbO/F8Nzqto4RsloqLVeu49HxmNeCm
+         kaoLomJdkzvxQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 762ACE85D53;
-        Wed,  6 Apr 2022 17:00:13 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B49CE85BCB;
+        Wed,  6 Apr 2022 17:20:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v5 1/2] bpf: Support dual-stack sockets in
- bpf_tcp_check_syncookie
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Fix issues in parse_num_list()
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164926441347.11980.16956318462962965009.git-patchwork-notify@kernel.org>
-Date:   Wed, 06 Apr 2022 17:00:13 +0000
-References: <20220406124113.2795730-1-maximmi@nvidia.com>
-In-Reply-To: <20220406124113.2795730-1-maximmi@nvidia.com>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        jakub@cloudflare.com, afabre@cloudflare.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, shuah@kernel.org, hawk@kernel.org,
-        tariqt@nvidia.com
+Message-Id: <164926561223.23950.5441480485947664508.git-patchwork-notify@kernel.org>
+Date:   Wed, 06 Apr 2022 17:20:12 +0000
+References: <20220406003622.73539-1-ytcoode@gmail.com>
+In-Reply-To: <20220406003622.73539-1-ytcoode@gmail.com>
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     andrii.nakryiko@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-On Wed, 6 Apr 2022 15:41:12 +0300 you wrote:
-> bpf_tcp_gen_syncookie looks at the IP version in the IP header and
-> validates the address family of the socket. It supports IPv4 packets in
-> AF_INET6 dual-stack sockets.
+On Wed,  6 Apr 2022 08:36:22 +0800 you wrote:
+> The function does not check that parsing_end is false after parsing
+> argument. Thus, if the final part of the argument is something like '4-',
+> which is invalid, parse_num_list() will discard it instead of returning
+> -EINVAL.
 > 
-> On the other hand, bpf_tcp_check_syncookie looks only at the address
-> family of the socket, ignoring the real IP version in headers, and
-> validates only the packet size. This implementation has some drawbacks:
+> Before:
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v5,1/2] bpf: Support dual-stack sockets in bpf_tcp_check_syncookie
-    https://git.kernel.org/bpf/bpf/c/2e8702cc0cfa
-  - [bpf,v5,2/2] bpf: Adjust bpf_tcp_check_syncookie selftest to test dual-stack sockets
-    https://git.kernel.org/bpf/bpf/c/53968dafc4a6
+  - [bpf-next,v3] selftests/bpf: Fix issues in parse_num_list()
+    https://git.kernel.org/bpf/bpf-next/c/958ddfd75d83
 
 You are awesome, thank you!
 -- 
