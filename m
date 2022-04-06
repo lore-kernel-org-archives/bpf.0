@@ -2,166 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88FAEC433EF
-	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 14:22:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6997EC433EF
+	for <bpf@archiver.kernel.org>; Wed,  6 Apr 2022 14:28:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbiDFOYo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Apr 2022 10:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S234775AbiDFOaq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Apr 2022 10:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbiDFOYL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 6 Apr 2022 10:24:11 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5E6267AC6;
-        Tue,  5 Apr 2022 20:44:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0V9JmreT_1649216654;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V9JmreT_1649216654)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 06 Apr 2022 11:44:16 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v9 13/32] virtio_ring: packed: extract the logic of alloc state and extra
-Date:   Wed,  6 Apr 2022 11:43:27 +0800
-Message-Id: <20220406034346.74409-14-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
-References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
+        with ESMTP id S234901AbiDFOaZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Apr 2022 10:30:25 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440C9501B45;
+        Wed,  6 Apr 2022 03:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6OzT4OmHz+L2j/EDCMxP9gXB/ot5T8KVaZBqTZv1Ez0=; b=n5X36hvd6MbjoxFRIpTKDcjiFW
+        Jz5Y3vAxfgH8fP8YEKASBAXzQhZqeUQ9oYG/ytpO4hyasBMRkKI34KV9R6PH7ixw1miNLhmtXgI3G
+        WLNABrkOzKfcnx6wXifQs0cm1VXdAxaco7bfUJwUzPdkdHHU+GWIb7Aza6qcu7hslbEO8u8UTwnsN
+        2TBCrnJjmWAka8mmR660bNHsozgMIcf28LvZVNDPJICZ/kC4i5E6cLaOafRyejMFpfgT3vzRsgE+F
+        FtC3qZY71RdKBijIqKT3OUsYX/lN0ZsiIuEtah9q3DLQT8nSTV0ktdfCH0aIACHwMLqUqIX1nXd9s
+        6eDa4PoQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nc3BV-007iGk-KW; Wed, 06 Apr 2022 10:46:45 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 967C6986199; Wed,  6 Apr 2022 12:46:43 +0200 (CEST)
+Date:   Wed, 6 Apr 2022 12:46:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, X86 ML <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86,bpf: Avoid IBT objtool warning
+Message-ID: <20220406104643.GB2731@worktop.programming.kicks-ass.net>
+References: <20220405075531.GB30877@worktop.programming.kicks-ass.net>
+ <CAADnVQJ1_9sBqRngG_J+84whx9j7d7qOSzMaJvhc0evDBQfE3w@mail.gmail.com>
 MIME-Version: 1.0
-X-Git-Hash: 881cb3483d12
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQJ1_9sBqRngG_J+84whx9j7d7qOSzMaJvhc0evDBQfE3w@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Separate the logic for alloc desc_state and desc_extra, which will
-be called separately by subsequent patches.
+On Tue, Apr 05, 2022 at 09:58:28AM -0700, Alexei Starovoitov wrote:
+> On Tue, Apr 5, 2022 at 12:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> >
+> > Clang can inline emit_indirect_jump() and then folds constants, which
+> > results in:
+> >
+> >   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x6a4: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
+> >   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x67d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
+> >   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x386: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
+> >   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x35d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
+> >
+> > Suppress the optimization such that it must emit a code reference to
+> > the __x86_indirect_thunk_array[] base.
+> >
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  arch/x86/net/bpf_jit_comp.c |    1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -412,6 +412,7 @@ static void emit_indirect_jump(u8 **ppro
+> >                 EMIT_LFENCE();
+> >                 EMIT2(0xFF, 0xE0 + reg);
+> >         } else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
+> > +               OPTIMIZER_HIDE_VAR(reg);
+> >                 emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
+> >         } else
+> >  #endif
+> 
+> Looks good. Please cc bpf@vger and all bpf maintainers in the future.
 
-Use struct vring_packed to pass desc_state, desc_extra.
+Oh right, I'll go add an alias for that.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- drivers/virtio/virtio_ring.c | 51 ++++++++++++++++++++++++++----------
- 1 file changed, 37 insertions(+), 14 deletions(-)
+> We can take it through the bpf tree if you prefer.
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index ea451ae2aaef..5b5976c5742e 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -1876,6 +1876,34 @@ static int vring_alloc_queue_packed(struct virtio_device *vdev,
- 	return -ENOMEM;
- }
- 
-+static int vring_alloc_state_extra_packed(u32 num,
-+					  struct vring_desc_state_packed **desc_state,
-+					  struct vring_desc_extra **desc_extra)
-+{
-+	struct vring_desc_state_packed *state;
-+	struct vring_desc_extra *extra;
-+
-+	state = kmalloc_array(num, sizeof(struct vring_desc_state_packed), GFP_KERNEL);
-+	if (!state)
-+		goto err_desc_state;
-+
-+	memset(state, 0, num * sizeof(struct vring_desc_state_packed));
-+
-+	extra = vring_alloc_desc_extra(num);
-+	if (!extra)
-+		goto err_desc_extra;
-+
-+	*desc_state = state;
-+	*desc_extra = extra;
-+
-+	return 0;
-+
-+err_desc_extra:
-+	kfree(state);
-+err_desc_state:
-+	return -ENOMEM;
-+}
-+
- static struct virtqueue *vring_create_virtqueue_packed(
- 	unsigned int index,
- 	unsigned int num,
-@@ -1891,8 +1919,11 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	dma_addr_t ring_dma_addr, driver_event_dma_addr, device_event_dma_addr;
- 	struct vring_packed_desc_event *driver, *device;
- 	size_t ring_size_in_bytes, event_size_in_bytes;
-+	struct vring_desc_state_packed *state;
-+	struct vring_desc_extra *extra;
- 	struct vring_packed_desc *ring;
- 	struct vring_virtqueue *vq;
-+	int err;
- 
- 	if (vring_alloc_queue_packed(vdev, num, &ring, &driver, &device,
- 				     &ring_dma_addr, &driver_event_dma_addr,
-@@ -1949,22 +1980,16 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	vq->packed.event_flags_shadow = 0;
- 	vq->packed.avail_used_flags = 1 << VRING_PACKED_DESC_F_AVAIL;
- 
--	vq->packed.desc_state = kmalloc_array(num,
--			sizeof(struct vring_desc_state_packed),
--			GFP_KERNEL);
--	if (!vq->packed.desc_state)
--		goto err_desc_state;
-+	err = vring_alloc_state_extra_packed(num, &state, &extra);
-+	if (err)
-+		goto err_state_extra;
- 
--	memset(vq->packed.desc_state, 0,
--		num * sizeof(struct vring_desc_state_packed));
-+	vq->packed.desc_state = state;
-+	vq->packed.desc_extra = extra;
- 
- 	/* Put everything in free lists. */
- 	vq->free_head = 0;
- 
--	vq->packed.desc_extra = vring_alloc_desc_extra(num);
--	if (!vq->packed.desc_extra)
--		goto err_desc_extra;
--
- 	/* No callback?  Tell other side not to bother us. */
- 	if (!callback) {
- 		vq->packed.event_flags_shadow = VRING_PACKED_EVENT_FLAG_DISABLE;
-@@ -1977,9 +2002,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	spin_unlock(&vdev->vqs_list_lock);
- 	return &vq->vq;
- 
--err_desc_extra:
--	kfree(vq->packed.desc_state);
--err_desc_state:
-+err_state_extra:
- 	kfree(vq);
- err_vq:
- 	vring_free_queue(vdev, event_size_in_bytes, device, device_event_dma_addr);
--- 
-2.31.0
-
+I'll take it through the x86/urgent tree if you don't mind.
