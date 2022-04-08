@@ -2,146 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07FB3C433FE
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08BAFC433EF
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:41:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238482AbiDHSUf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Apr 2022 14:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S239141AbiDHSnH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 14:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238478AbiDHSUb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:20:31 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EB01A590E;
-        Fri,  8 Apr 2022 11:18:27 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 2so9364456pjw.2;
-        Fri, 08 Apr 2022 11:18:27 -0700 (PDT)
+        with ESMTP id S239062AbiDHSmt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 14:42:49 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC44181159
+        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 11:40:45 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id r11so7080701ila.1
+        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 11:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=18I+RyxgUeMQH1gbioCsbZ117JmCwekdtCCEBKsOPhE=;
-        b=FQr3WOhq72nRoN40TG6jBdn/4lORwIkEO3TFfWxyjU5xl1CgdYxOvuBxQWszFg0O/w
-         8BzAnlECyZX0wlM74X8yyZqwVNUuj2YsL1QkmwOqO38PanUlAXc4UOXPaN1BkQAoBjtu
-         P8LcDmcrBILVqJ409r0a/kWO++uiWDPV7eICazm2ARzdYJtxz6OtZMubgkcnEoiQcQg5
-         kPgu9l8dIgiPSFNKAg0Mft5ZTrqzonbmmLJHER17TSfLvokbMI7uXnjkGjA2Ckc0QUcr
-         JH2yfJvsROwnDqt5S7Jw4csmwAZaH7al3Hzkdx6tqmkZT02jPQ/XIrGHPm0QMmEUCLJb
-         3Scw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2+0NbECOTepiFR95PH7iBNDLaq38jykJqVNkLQyHaX0=;
+        b=Skr9tdXmnlB3bZmZnu0t0hACfbtzAEyNvCznGKRs2jkfMCehxuhKSvFDHm0E3r52WD
+         nMphZk1WctlJVkORwccOqbf4fZM7QaFo6gVdcIylbM1kb6RbKOyTCZkfgIBo0ExKlO6V
+         k5CGuj44e7xSd+Zqr3u0tducYk4UilwHX7JqcrBGtKaNoQeYPOZhCKLHFitxDmmNRCSh
+         JPgXUAVbGS1L28HpY3mrbUz/ohcsgzlFyKUBs50+8muMCMhGafrxYwv79F+V7/6LGKlR
+         YWL3aulrtW7Ah3goU7HDMxwwOKtExmcHCU41L0l7vokJ6vK7fT73tYpZCJszazDXZc6n
+         MQUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=18I+RyxgUeMQH1gbioCsbZ117JmCwekdtCCEBKsOPhE=;
-        b=r9o+QrNHDKuQz7/Nw2hMjYUqdDyR4iSiUcOAv2x04oI0nDJOqTPQrprcERT66DvEpd
-         knWSsjRRjaRDI+tfWlYXpv4JVAC+7Qwzei9MEw0mvGco+K+r9LkoVkTfdhLaF4Janrty
-         VWFhT8B4wJGvJjUsxOtxNtustq3fVFA5S7mGa4KX+H7vvH7YexMPSW87lFVNW4GnnSlx
-         uvzeoOac87yI2WyXx6U3AG/qZi+iA8WTLXYqWW49iivPtHQiA1D0d1yHKdbA6NfGyThW
-         JZHwPR6APKHr5Vrm6Tm462FXZyuv0RsOFbXOAA0E4cNvsgCYuZeOqIplGTpRnQDAULjy
-         pLhQ==
-X-Gm-Message-State: AOAM532wbDhP1MxhH2MweRDWQzckgSa5SeQ3Gmak5wwml+YrQSsmT3Oc
-        7PcMb82aNWQyt30bQNJX8Yy08SWWggw=
-X-Google-Smtp-Source: ABdhPJzQZgoZy5f1pyUYi5gAK1Uvyi1PY67ShSOnTC+LIaj4re4v/d0V9RNL1VnQ8W0ycGEeAQWzXA==
-X-Received: by 2002:a17:90b:1e0e:b0:1c7:5b03:1d8b with SMTP id pg14-20020a17090b1e0e00b001c75b031d8bmr23009417pjb.121.1649441906611;
-        Fri, 08 Apr 2022 11:18:26 -0700 (PDT)
-Received: from localhost.localdomain ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id d59-20020a17090a6f4100b001cb4b786e64sm2725388pjk.28.2022.04.08.11.18.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 11:18:26 -0700 (PDT)
-From:   Taehee Yoo <ap420073@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, irusskikh@marvell.com, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, bpf@vger.kernel.org
-Cc:     ap420073@gmail.com
-Subject: [PATCH net-next v4 3/3] net: atlantic: Implement .ndo_xdp_xmit handler
-Date:   Fri,  8 Apr 2022 18:17:14 +0000
-Message-Id: <20220408181714.15354-4-ap420073@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220408181714.15354-1-ap420073@gmail.com>
-References: <20220408181714.15354-1-ap420073@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2+0NbECOTepiFR95PH7iBNDLaq38jykJqVNkLQyHaX0=;
+        b=DV7uLai52siRe8gvK1is29VNWoVD4bLZtMy82qzd0W6IYMSTxProU3SS32clRDXSV0
+         3CR4RzAT+KCiSokNCJKrLGafKiaL/+UakBkBQt1yExSD3tqmh3PaxdDJFE2FbPOAFtLb
+         DFhRJyjMFnHwkVjIndsPhn4SJEoxuOM9AXWc2zpjHBVEzKTyc7wMjF1+R0LP49987evJ
+         6X4uULajlbh3conCvSHkC8ymg53ww2Q8oDDYECjgd13vPbGQqK0Uq3eyruzxeAWpjNIy
+         knkdvuU0bN40/xZGhl7XewHRaX9SKV7tmp/NX+w/NNsNJRPlk51iGJHgkP7NPrlfwHs2
+         3mRA==
+X-Gm-Message-State: AOAM531SZV7/k0iwiJxQtG7jGJfrNFPLh7MHPX4SOXueHunRO7bV1zLQ
+        jpESX2AUwiCkhWGFPJZcLrvueEduT8jxa9EiZBNjzCUE
+X-Google-Smtp-Source: ABdhPJxHyun9ENxoD+AUh/euM7EhsJTh5B3ckKMH6h4ThjkGwxUHb5ojKa8LYBKXFjusw2TjxVGUnqcseF8/G5f1tzo=
+X-Received: by 2002:a05:6e02:1a8f:b0:2c9:da3d:e970 with SMTP id
+ k15-20020a056e021a8f00b002c9da3de970mr9062599ilv.239.1649443244815; Fri, 08
+ Apr 2022 11:40:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220408181425.2287230-1-andrii@kernel.org>
+In-Reply-To: <20220408181425.2287230-1-andrii@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 8 Apr 2022 11:40:34 -0700
+Message-ID: <CAEf4BzYLYEVic8gfbL1PvhJgpKeVEs0-VM=tgU2kq7ufZPx=CQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] Fix handling of CO-RE relos for __weak subprogs
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-aq_xdp_xmit() is the callback function of .ndo_xdp_xmit.
-It internally calls aq_nic_xmit_xdpf() to send packet.
+On Fri, Apr 8, 2022 at 11:14 AM Andrii Nakryiko <andrii@kernel.org> wrote:
+>
+> Fix the issue accidentally discovered during libbpf USDT support testing.
+> Libbpf overzealously complained about CO-RE relocations belonging to the code
+> of a __weak subprog that got overriden by another instance of that function.
+>
+> Fix the issue fixed, return back to __weak __hidden annotation for USDT
 
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
----
+"With the issue fixed", sigh...
 
-v4:
- - No changed
-
-v3:
- - No changed
-
-v2:
- - No changed
-
- .../net/ethernet/aquantia/atlantic/aq_main.c  |  1 +
- .../net/ethernet/aquantia/atlantic/aq_ring.c  | 23 +++++++++++++++++++
- .../net/ethernet/aquantia/atlantic/aq_ring.h  |  2 ++
- 3 files changed, 26 insertions(+)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_main.c b/drivers/net/ethernet/aquantia/atlantic/aq_main.c
-index 43012648a351..a0c428db886f 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_main.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_main.c
-@@ -508,6 +508,7 @@ static const struct net_device_ops aq_ndev_ops = {
- 	.ndo_vlan_rx_kill_vid = aq_ndo_vlan_rx_kill_vid,
- 	.ndo_setup_tc = aq_ndo_setup_tc,
- 	.ndo_bpf = aq_xdp,
-+	.ndo_xdp_xmit = aq_xdp_xmit,
- };
- 
- static int __init aq_ndev_init_module(void)
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-index d2953a84073e..e788f9095a96 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.c
-@@ -401,6 +401,29 @@ static void aq_rx_checksum(struct aq_ring_s *self,
- 		__skb_incr_checksum_unnecessary(skb);
- }
- 
-+int aq_xdp_xmit(struct net_device *dev, int num_frames,
-+		struct xdp_frame **frames, u32 flags)
-+{
-+	struct aq_nic_s *aq_nic = netdev_priv(dev);
-+	unsigned int vec, i, drop = 0;
-+	int cpu = smp_processor_id();
-+	struct aq_nic_cfg_s *aq_cfg;
-+	struct aq_ring_s *ring;
-+
-+	aq_cfg = aq_nic_get_cfg(aq_nic);
-+	vec = cpu % aq_cfg->vecs;
-+	ring = aq_nic->aq_ring_tx[AQ_NIC_CFG_TCVEC2RING(aq_cfg, 0, vec)];
-+
-+	for (i = 0; i < num_frames; i++) {
-+		struct xdp_frame *xdpf = frames[i];
-+
-+		if (aq_nic_xmit_xdpf(aq_nic, ring, xdpf) == NETDEV_TX_BUSY)
-+			drop++;
-+	}
-+
-+	return num_frames - drop;
-+}
-+
- static struct sk_buff *aq_xdp_run_prog(struct aq_nic_s *aq_nic,
- 				       struct xdp_buff *xdp,
- 				       struct aq_ring_s *rx_ring,
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
-index 6a86d9cfac35..31e19dff6c1e 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_ring.h
-@@ -197,6 +197,8 @@ void aq_ring_update_queue_state(struct aq_ring_s *ring);
- void aq_ring_queue_wake(struct aq_ring_s *ring);
- void aq_ring_queue_stop(struct aq_ring_s *ring);
- bool aq_ring_tx_clean(struct aq_ring_s *self);
-+int aq_xdp_xmit(struct net_device *dev, int num_frames,
-+		struct xdp_frame **frames, u32 flags);
- int aq_ring_rx_clean(struct aq_ring_s *self,
- 		     struct napi_struct *napi,
- 		     int *work_done,
--- 
-2.17.1
-
+> BPF-side APIs.
+>
+> And add CO-RE relos to linked_funcs selftest to ensure such combo keeps
+> working going forward.
+>
+> Andrii Nakryiko (3):
+>   libbpf: don't error out on CO-RE relos for overriden weak subprogs
+>   libbpf: use weak hidden modifier for USDT BPF-side API functions
+>   selftests/bpf: add CO-RE relos into linked_funcs selftests
+>
+>  tools/lib/bpf/libbpf.c                            | 15 +++++++++++----
+>  tools/lib/bpf/usdt.bpf.h                          |  6 +++---
+>  tools/testing/selftests/bpf/progs/linked_funcs1.c |  8 ++++++++
+>  tools/testing/selftests/bpf/progs/linked_funcs2.c |  8 ++++++++
+>  4 files changed, 30 insertions(+), 7 deletions(-)
+>
+> --
+> 2.30.2
+>
