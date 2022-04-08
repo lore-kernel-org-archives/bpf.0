@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1440C433F5
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F8C5C433EF
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:14:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiDHSQr convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Apr 2022 14:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S236921AbiDHSQt convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Apr 2022 14:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiDHSQq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:16:46 -0400
+        with ESMTP id S229836AbiDHSQs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 14:16:48 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02DF13F2E
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 11:14:42 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 238GqqC3022002
-        for <bpf@vger.kernel.org>; Fri, 8 Apr 2022 11:14:42 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E6E33
+        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 11:14:44 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 238EKgHZ020689
+        for <bpf@vger.kernel.org>; Fri, 8 Apr 2022 11:14:44 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fad7yvyt1-4
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fa1fvt05t-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 11:14:36 -0700
-Received: from twshared27284.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 11:14:43 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 8 Apr 2022 11:14:33 -0700
+ 15.1.2308.21; Fri, 8 Apr 2022 11:14:43 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id DDA9216F8734C; Fri,  8 Apr 2022 11:14:28 -0700 (PDT)
+        id 148D016F87398; Fri,  8 Apr 2022 11:14:33 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/3] libbpf: don't error out on CO-RE relos for overriden weak subprogs
-Date:   Fri, 8 Apr 2022 11:14:23 -0700
-Message-ID: <20220408181425.2287230-2-andrii@kernel.org>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: add CO-RE relos into linked_funcs selftests
+Date:   Fri, 8 Apr 2022 11:14:25 -0700
+Message-ID: <20220408181425.2287230-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220408181425.2287230-1-andrii@kernel.org>
 References: <20220408181425.2287230-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ABlcz39Y9Q077BqA-vvqwJhZVkrmSnMd
-X-Proofpoint-GUID: ABlcz39Y9Q077BqA-vvqwJhZVkrmSnMd
+X-Proofpoint-GUID: aZ122DukdG3LiNHoxD0ZL5BnwlvQiTNv
+X-Proofpoint-ORIG-GUID: aZ122DukdG3LiNHoxD0ZL5BnwlvQiTNv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-04-08_05,2022-04-08_01,2022-02-23_01
@@ -49,49 +49,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-During BPF static linking, all the ELF relocations and .BTF.ext
-information (including CO-RE relocations) are preserved for __weak
-subprograms that were logically overriden by either previous weak
-subprogram instance or by corresponding "strong" (non-weak) subprogram.
-This is just how native user-space linkers work, nothing new.
+Add CO-RE relocations into __weak subprogs for multi-file linked_funcs
+selftest to make sure libbpf handles such combination well.
 
-But libbpf is over-zealous when processing CO-RE relocation to error out
-when CO-RE relocation belonging to such eliminated weak subprogram is
-encountered. Instead of erroring out on this expected situation, log
-debug-level message and skip the relocation.
-
-Fixes: db2b8b06423c ("libbpf: Support CO-RE relocations for multi-prog sections")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/linked_funcs1.c | 8 ++++++++
+ tools/testing/selftests/bpf/progs/linked_funcs2.c | 8 ++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 9deb1fc67f19..465b7c0996f1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5687,10 +5687,17 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			insn_idx = rec->insn_off / BPF_INSN_SZ;
- 			prog = find_prog_by_sec_insn(obj, sec_idx, insn_idx);
- 			if (!prog) {
--				pr_warn("sec '%s': failed to find program at insn #%d for CO-RE offset relocation #%d\n",
--					sec_name, insn_idx, i);
--				err = -EINVAL;
--				goto out;
-+				/* When __weak subprog is "overridden" by another instance
-+				 * of the subprog from a different object file, linker still
-+				 * appends all the .BTF.ext info that used to belong to that
-+				 * eliminated subprogram.
-+				 * This is similar to what x86-64 linker does for relocations.
-+				 * So just ignore such relocations just like we ignore
-+				 * subprog instructions when discovering subprograms.
-+				 */
-+				pr_debug("sec '%s': skipping CO-RE relocation #%d for insn #%d belonging to eliminated weak subprogram\n",
-+					 sec_name, i, insn_idx);
-+				continue;
- 			}
- 			/* no need to apply CO-RE relocation if the program is
- 			 * not going to be loaded
+diff --git a/tools/testing/selftests/bpf/progs/linked_funcs1.c b/tools/testing/selftests/bpf/progs/linked_funcs1.c
+index b964ec1390c2..963b393c37e8 100644
+--- a/tools/testing/selftests/bpf/progs/linked_funcs1.c
++++ b/tools/testing/selftests/bpf/progs/linked_funcs1.c
+@@ -4,6 +4,7 @@
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
+ 
+ /* weak and shared between two files */
+ const volatile int my_tid __weak;
+@@ -44,6 +45,13 @@ void set_output_ctx1(__u64 *ctx)
+ /* this weak instance should win because it's the first one */
+ __weak int set_output_weak(int x)
+ {
++	static volatile int whatever;
++
++	/* make sure we use CO-RE relocations in a weak function, this used to
++	 * cause problems for BPF static linker
++	 */
++	whatever = bpf_core_type_size(struct task_struct);
++
+ 	output_weak1 = x;
+ 	return x;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/linked_funcs2.c b/tools/testing/selftests/bpf/progs/linked_funcs2.c
+index 575e958e60b7..db195872f4eb 100644
+--- a/tools/testing/selftests/bpf/progs/linked_funcs2.c
++++ b/tools/testing/selftests/bpf/progs/linked_funcs2.c
+@@ -4,6 +4,7 @@
+ #include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
+ 
+ /* weak and shared between both files */
+ const volatile int my_tid __weak;
+@@ -44,6 +45,13 @@ void set_output_ctx2(__u64 *ctx)
+ /* this weak instance should lose, because it will be processed second */
+ __weak int set_output_weak(int x)
+ {
++	static volatile int whatever;
++
++	/* make sure we use CO-RE relocations in a weak function, this used to
++	 * cause problems for BPF static linker
++	 */
++	whatever = 2 * bpf_core_type_size(struct task_struct);
++
+ 	output_weak2 = x;
+ 	return 2 * x;
+ }
 -- 
 2.30.2
 
