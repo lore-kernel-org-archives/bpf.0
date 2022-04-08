@@ -2,187 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F676C4332F
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 03:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7503AC433EF
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 04:15:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234066AbiDHD7J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 7 Apr 2022 23:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S234221AbiDHER2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 00:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbiDHD6m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:58:42 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849CBEA778
-        for <bpf@vger.kernel.org>; Thu,  7 Apr 2022 20:56:32 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2eb4f03f212so65805077b3.2
-        for <bpf@vger.kernel.org>; Thu, 07 Apr 2022 20:56:32 -0700 (PDT)
+        with ESMTP id S232658AbiDHER2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 00:17:28 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EAC2E0F20;
+        Thu,  7 Apr 2022 21:15:25 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8481238pjk.4;
+        Thu, 07 Apr 2022 21:15:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=px/VRI5+tmvW8TY4DxlEQefxFci8hBygfH+hQRwc2I4=;
-        b=jK13o5ns/33SqXgzujtB4Nxs9SV3lbqEfNf0l7f4cKbJ8BtJXG8JhtTrv6Ai2BRlEl
-         PsTUd0J0QaEWpCUXE+VCR8nDFk7Y6nV1Yozfvut3l7m5nSaov6CKzDY54e8a2V3QbhO+
-         LFfiDSRRVUMROTV6cf8OqnIOftobtohgynSdX4r4iSQUrnsmZZl1SH6t0hxAYIKDKO5v
-         g8tF7sOTmSSf+Q3/Zs/Dlh6E9bgEp8Qu1QXketKA5vffysyL+KE+GTd4DGu2+PbSYgNU
-         MEiZWs6eRTb8zr+IO4XY9VLyrGD7E9kQRKtsiynXDuYkijgu8kbuQZdhEXiequ5HjFFn
-         mTug==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4+rOEzFAMJJgXNy15jCz7SsQISiJWacBJllHkfSFDfk=;
+        b=KTJGOHY1jWaNKMCowdV/0KshrzntST/NJ2chxhHVG54H7LfhRJb3PdOmoV4vHk+dKM
+         RUFI7CS0leoZ+SvwHFyaN0W9MuV+RqDQ0RQvW8CDZl8rWUtEC3fn+9n9RRJaV6StWf7K
+         rEMdl/86TDCo2CaDLveZaSAECeIy2KSZOJOs+acpnWyXp1UXGkhylydCDBPvi4d4721j
+         GsIPPpMlcazsxT/Nd7gulCvAiaDdKMNhAmuIVisB3FcPHEEsp3pCIVCjRF58drpMXMSw
+         1ZaeoiuxjGZC4xakz68ISoyZgv2lCPNYkijTEkS6dWaj9aXqMZZC+fm1J5szybcNCDdZ
+         VUSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=px/VRI5+tmvW8TY4DxlEQefxFci8hBygfH+hQRwc2I4=;
-        b=we5zWSKBy7HiMTzZlCA+Nl7JlX9wT0fMTZj5vWUVOgF2b0yN04J+9JuvKsseUpIWOX
-         gxNRNF4cRDxPLGlcc0JyM9ZnxqZeC3VDI7F9tkL2jmm1XgSTqBhnU/W7XcIRz6R9aYWz
-         jEg8oUu1n7zYdsjIfadS9siNPR4HXJDvvyguwtXsCkrTG2RpSoPtbwEg8oHCXD7dhfYI
-         XyBD+rmRyQJxIYzNlFbxIbPYUmUM78wIKM+O47wJP/rPSmUvwU/7MnBapGzf23eWACtt
-         LfotykPnVfQQE3Qecsa2BcvF9R4kheEWQ6yDHCS5vpRBsXwLVCzfh3Ffb7pJcOKYZ8xe
-         RIGg==
-X-Gm-Message-State: AOAM530kLrHsH4WZwmouLhsLrrk03KRdxs0nYr2qLWb/6C3TtDzBIjXk
-        m72D4oFllTr9Kypas+7vFgTvTYxaK4I+
-X-Google-Smtp-Source: ABdhPJyW3JGV3PPDdlOL7zs8MeFlVd0fGndXJiqQfDxHalseZrrLAuX3NNP+EbZB2svyS4mWYSkhL5+D0oPL
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:560:aa27:649e:a07d])
- (user=irogers job=sendgmr) by 2002:a5b:7cf:0:b0:623:df1c:b83d with SMTP id
- t15-20020a5b07cf000000b00623df1cb83dmr12538139ybq.75.1649390191633; Thu, 07
- Apr 2022 20:56:31 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 20:56:15 -0700
-In-Reply-To: <20220408035616.1356953-1-irogers@google.com>
-Message-Id: <20220408035616.1356953-5-irogers@google.com>
-Mime-Version: 1.0
-References: <20220408035616.1356953-1-irogers@google.com>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v3 4/5] perf evlist: Respect all_cpus when setting user_requested_cpus
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4+rOEzFAMJJgXNy15jCz7SsQISiJWacBJllHkfSFDfk=;
+        b=cY68dX53NWczIZHElkIC2XYCqlZrbGDqpfHgi/53HNGxCoK6dZ+xEQJGt7xe4GlnZu
+         1V0KThCOa+jWFeGlPTAaJ1TVliTjVZgXIM+GMMlr3EDzNHzpMpSdXbzlLSD7XorR1P7X
+         EmWjq7MwLDueO1In5eHREMv1OMv7eB8/eQDUPNN4a51cxpGsBdDDbDtFl7PeePDUtF2Q
+         3o2MpqUa9aAMagxV5m3ulR8tlzUUgxoyks5sCtbF2axoOyVRv9KVk64KeZHMTMGc5FeQ
+         w6vQ0qVvTS9bwbRG4fff8p809R0cPP1BpVI0xUxPrPsGpBE+wArUIA//0j/IURl0I5M9
+         snxg==
+X-Gm-Message-State: AOAM530g7yz6R9NT5hriCdSwU054V5LV8el/cjHdj03ekyi9+HJSC8YT
+        nq+LCQjjkmBEMjLTuu7xdVc=
+X-Google-Smtp-Source: ABdhPJzBrWIOQA+LTz4iR7Gep1go2uzqC8EpRYuxlUgPRF1HnaokeSNqgrWe/R9KPRFBDelGdd1EGA==
+X-Received: by 2002:a17:903:1104:b0:154:c628:e7c2 with SMTP id n4-20020a170903110400b00154c628e7c2mr17648425plh.54.1649391324970;
+        Thu, 07 Apr 2022 21:15:24 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.8])
+        by smtp.gmail.com with ESMTPSA id f14-20020a056a0022ce00b004fabe9fac23sm25789042pfj.151.2022.04.07.21.15.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 21:15:24 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     skhan@linuxfoundation.org
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, hengqi.chen@gmail.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, shuah@kernel.org, songliubraving@fb.com,
+        yhs@fb.com, ytcoode@gmail.com
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix return value checks in perf_event_stackmap.c
+Date:   Fri,  8 Apr 2022 12:14:52 +0800
+Message-Id: <20220408041452.933944-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.0.rc2
+In-Reply-To: <7ac36fbe-aa44-9311-320b-1e953c29a3c4@linuxfoundation.org>
+References: <7ac36fbe-aa44-9311-320b-1e953c29a3c4@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If all_cpus is calculated it represents the merge/union of all
-evsel cpu maps. By default user_requested_cpus is computed to be
-the online CPUs. For uncore events, it is often the case currently
-that all_cpus is a subset of user_requested_cpus. Metrics printed
-without aggregation and with metric-only, in print_no_aggr_metric,
-iterate over user_requested_cpus assuming every CPU has a metric to
-print. For each CPU the prefix is printed, but then if the
-evsel's cpus doesn't contain anything you get an empty line like
-the following on a 2 socket 36 core SkylakeX:
+The bpf_get_stackid() function may also return 0 on success.
 
-```
-$ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000
-     1.000453137 CPU0                       0.00
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137 CPU18                      0.00
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     1.000453137
-     2.003717143 CPU0                       0.00
-...
-```
+Correct checks from 'val > 0' to 'val >= 0' to ensure that they cover all
+possible success return values.
 
-While it is possible to be lazier in printing the prefix and
-trailing newline, having user_requested_cpus not be a subset of
-all_cpus is preferential so that wasted work isn't done elsewhere
-user_requested_cpus is used. The change modifies user_requested_cpus
-to be the intersection of user specified CPUs, or default all online
-CPUs, with the CPUs computed through the merge of all evsel cpu maps.
-
-New behavior:
-```
-$ perf stat -A -M DRAM_BW_Use -a --metric-only -I 1000
-     1.001086325 CPU0                       0.00
-     1.001086325 CPU18                      0.00
-     2.003671291 CPU0                       0.00
-     2.003671291 CPU18                      0.00
-...
-```
-
-Signed-off-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 ---
- tools/perf/util/evlist.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+v1 -> v2: update commit message
 
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 52ea004ba01e..196d57b905a0 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -1036,6 +1036,13 @@ int evlist__create_maps(struct evlist *evlist, struct target *target)
- 	if (!cpus)
- 		goto out_delete_threads;
+ tools/testing/selftests/bpf/progs/perf_event_stackmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
+index b3fcb5274ee0..f793280a3238 100644
+--- a/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
++++ b/tools/testing/selftests/bpf/progs/perf_event_stackmap.c
+@@ -35,10 +35,10 @@ int oncpu(void *ctx)
+ 	long val;
  
-+	if (evlist->core.all_cpus) {
-+		struct perf_cpu_map *tmp;
-+
-+		tmp = perf_cpu_map__intersect(cpus, evlist->core.all_cpus);
-+		perf_cpu_map__put(cpus);
-+		cpus = tmp;
-+	}
- 	evlist->core.has_user_cpus = !!target->cpu_list && !target->hybrid;
+ 	val = bpf_get_stackid(ctx, &stackmap, 0);
+-	if (val > 0)
++	if (val >= 0)
+ 		stackid_kernel = 2;
+ 	val = bpf_get_stackid(ctx, &stackmap, BPF_F_USER_STACK);
+-	if (val > 0)
++	if (val >= 0)
+ 		stackid_user = 2;
  
- 	perf_evlist__set_maps(&evlist->core, cpus, threads);
+ 	trace = bpf_map_lookup_elem(&stackdata_map, &key);
 -- 
-2.35.1.1178.g4f1659d476-goog
+2.35.0.rc2
 
