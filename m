@@ -2,97 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0F4C433EF
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 08:00:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BEA4C433EF
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 08:00:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbiDHICE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Apr 2022 04:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
+        id S230504AbiDHICK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 04:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiDHIBo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:01:44 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5E310C53B
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 00:59:37 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id s137so4405093pgs.5
-        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 00:59:37 -0700 (PDT)
+        with ESMTP id S230247AbiDHIBp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 04:01:45 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15107B899A
+        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 00:59:41 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so4453544pja.0
+        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 00:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=FMmMRvz2wpiFXADd8ztgqwA27nwVwkC4Zjzj9YEIuSw=;
-        b=fHK2LXIMVUWHQW2lA4DSI+k0blnzEI2zzsQvbRS5XL4hlXmtAH7Yq3V3sJe7r3GNoN
-         iDg0+mT7pzlR4vJ3kRyQPpO/slfNazuiGKXQdvuslAbBszcEejxweEXUbGaCeZSq1q+W
-         hVreUwKWMnv5U6H6Pcq+wpgXWfB1+ZP4cpF58=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=NY8xOiFRC45WMkXj+lZSSjre7Dq+XGQYqd0Btgd7XrE=;
+        b=N3iBeHhHWAMDW40/wB0HDDI2Q1M14kG8Zr8q0/gJd+wVLHSlt6TFSSVETBfzMV/QVu
+         SDZOvvYxI3SdVW/1WO2yAwkw2BTIvABkYih5uVxqR6BMUFBwiQqQZeQAmf7EDdwk1Eyu
+         Sh7AzOwGkRcPryyhZzy9CriFwYI2DOuJLye6Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FMmMRvz2wpiFXADd8ztgqwA27nwVwkC4Zjzj9YEIuSw=;
-        b=FRsI8HVNXQHHqKr4+TSEgzPQ5FD6jhvjSQB51NbkhnVObdx9W9/c7BPK25k+NV1Wvq
-         HUB7TjJ6f2lgvnrUq4rTCUXYciJ4iFDciu1V6UgD//v78IlJb65LzFbiDjhGr83aD+0E
-         p5I2UTogGvdmqzA74IsHwQdkGyt3KOvT7eJgcYCpvtbtNeQ0IC7OZqDBKfktITpmNv13
-         OqCueqi6xHKm0AtnINEHSlMRbmCHAdcRwxRwgNs5yhZWj792EjjSamoJWxZ0gFJdzZre
-         oM1VNzYsdHzpAgD7LInL1+P27aLUlDH9oA4I+dYY4Avgkd2QgWBpVjbIMMrRn9Izmpxp
-         ip2w==
-X-Gm-Message-State: AOAM532OCdcm7kye4L+3RAe6XQ+Hlg5HNcpI7w0b0nKr/KkCEmypZBBb
-        85/hzEVmMFIzc2HfrwPdCpLYtJV7FJfa1A==
-X-Google-Smtp-Source: ABdhPJzFZnYABNHvxc4LyEfXkk7x6A6jqmDZeHD17gdgQhH+GKaJlFU2EYZERnAKMRjeYM6OwBVewA==
-X-Received: by 2002:a62:f20d:0:b0:505:6ec8:4ee6 with SMTP id m13-20020a62f20d000000b005056ec84ee6mr5476677pfh.5.1649404776165;
-        Fri, 08 Apr 2022 00:59:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=NY8xOiFRC45WMkXj+lZSSjre7Dq+XGQYqd0Btgd7XrE=;
+        b=tKKvvTpKpv1jji8vDjNgutYV/fmY7PmsQCJrzbe1fgsVPl766jnP2xfOyL4mY5B1K0
+         jxXYQqRQQYT3/QYVa2mnqbQzx/YDDN1etf6RvlIYcMHK8PCIi8QISlhZ9Px29NCki32B
+         Vh/65zHEGWv1ZEOS4ZANwyG4leRl/OHy7KeMe17hTCJW2EyYbUeeouODc+s5fzZU9Vr7
+         oqxkDx1/PqB4ImNJyW6XSivIF+wFjjzBHVx111CF+l6hAbFB+vusiuXQ2EUYu+1jKjBm
+         r6ezWB3ndiF3xzmA7oftlWWmF6ETKfsjhy/eWEMWr3mpci4u+3peFvhNJfiI9uKRfFgf
+         guyQ==
+X-Gm-Message-State: AOAM531S/B74ioCnS9U+5KXAoavua+mWnTvpxkYyDIBZWO/tbjpMI0jN
+        g3+SO5lUa1aHDDMXPkathvniXg==
+X-Google-Smtp-Source: ABdhPJw4MNVAaZ0bJScpZXNEM97evt4PweNLjZEvlN7EBcCQs6Jdbgl/PzTLfQoLGwqZFjcjc1biWQ==
+X-Received: by 2002:a17:90a:94c7:b0:1ca:a0e3:356d with SMTP id j7-20020a17090a94c700b001caa0e3356dmr20357424pjw.171.1649404779404;
+        Fri, 08 Apr 2022 00:59:39 -0700 (PDT)
 Received: from localhost.swdvt.lab.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l2-20020a637c42000000b003644cfa0dd1sm20507448pgn.79.2022.04.08.00.59.34
+        by smtp.gmail.com with ESMTPSA id l2-20020a637c42000000b003644cfa0dd1sm20507448pgn.79.2022.04.08.00.59.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 08 Apr 2022 00:59:35 -0700 (PDT)
+        Fri, 08 Apr 2022 00:59:39 -0700 (PDT)
 From:   Michael Chan <michael.chan@broadcom.com>
 To:     davem@davemloft.net
 Cc:     netdev@vger.kernel.org, kuba@kernel.org, gospo@broadcom.com,
         bpf@vger.kernel.org, john.fastabend@gmail.com, toke@redhat.com,
         lorenzo@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         echaudro@redhat.com, pabeni@redhat.com
-Subject: [PATCH net-next v4 00/11] bnxt: Support XDP multi buffer
-Date:   Fri,  8 Apr 2022 03:58:55 -0400
-Message-Id: <1649404746-31033-1-git-send-email-michael.chan@broadcom.com>
+Subject: [PATCH net-next v4 02/11] bnxt: add flag to denote that an xdp program is currently attached
+Date:   Fri,  8 Apr 2022 03:58:57 -0400
+Message-Id: <1649404746-31033-3-git-send-email-michael.chan@broadcom.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1649404746-31033-1-git-send-email-michael.chan@broadcom.com>
+References: <1649404746-31033-1-git-send-email-michael.chan@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000d0d5e205dc1ff9eb"
+        boundary="00000000000000282605dc1ffa04"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
---000000000000d0d5e205dc1ff9eb
+--00000000000000282605dc1ffa04
 
-This series adds XDP multi buffer support, allowing MTU to go beyond
-the page size limit.
+From: Andy Gospodarek <gospo@broadcom.com>
 
-v4: Rebase with latest net-next
-v3: Simplify page mode buffer size calculation
-    Check to make sure XDP program supports multipage packets
-v2: Fix uninitialized variable warnings in patch 1 and 10.
+This will be used to determine if bnxt_rx_xdp should be called
+rather than calling it every time.
 
-Andy Gospodarek (11):
-  bnxt: refactor bnxt_rx_xdp to separate xdp_init_buff/xdp_prepare_buff
-  bnxt: add flag to denote that an xdp program is currently attached
-  bnxt: refactor bnxt_rx_pages operate on skb_shared_info
-  bnxt: rename bnxt_rx_pages to bnxt_rx_agg_pages_skb
-  bnxt: adding bnxt_rx_agg_pages_xdp for aggregated xdp
-  bnxt: set xdp_buff pfmemalloc flag if needed
-  bnxt: change receive ring space parameters
-  bnxt: add page_pool support for aggregation ring when using xdp
-  bnxt: adding bnxt_xdp_build_skb to build skb from multibuffer xdp_buff
-  bnxt: support transmit and free of aggregation buffers
-  bnxt: XDP multibuffer enablement
+Signed-off-by: Andy Gospodarek <gospo@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 304 +++++++++++++-----
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     |  16 +-
- .../net/ethernet/broadcom/bnxt/bnxt_ethtool.c |   2 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 191 +++++++++--
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  16 +-
- 5 files changed, 416 insertions(+), 113 deletions(-)
-
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 826d94c49d26..f6973f57ccd2 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1729,6 +1729,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	struct bnxt_sw_rx_bd *rx_buf;
+ 	unsigned int len;
+ 	u8 *data_ptr, agg_bufs, cmp_type;
++	bool xdp_active = false;
+ 	dma_addr_t dma_addr;
+ 	struct sk_buff *skb;
+ 	struct xdp_buff xdp;
+@@ -1842,11 +1843,17 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 
+ 	if (bnxt_xdp_attached(bp, rxr)) {
+ 		bnxt_xdp_buff_init(bp, rxr, cons, &data_ptr, &len, &xdp);
++		xdp_active = true;
++	}
++
++	/* skip running XDP prog if there are aggregation bufs */
++	if (!agg_bufs && xdp_active) {
+ 		if (bnxt_rx_xdp(bp, rxr, cons, xdp, data, &len, event)) {
+ 			rc = 1;
+ 			goto next_rx;
+ 		}
+ 	}
++
+ 	if (len <= bp->rx_copy_thresh) {
+ 		skb = bnxt_copy_skb(bnapi, data_ptr, len, dma_addr);
+ 		bnxt_reuse_rx_data(rxr, cons, data);
 -- 
 2.18.1
 
 
---000000000000d0d5e205dc1ff9eb
+--00000000000000282605dc1ffa04
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -163,13 +179,13 @@ FSWQptLx+kiu63idTII4r3k/7+dJ5AhLRr4WCoXEme2GZkfSbYC3fEL46tb1w7w+25OEFCv1MtDZ
 DauX1eWVM+KepL7zoSNzVbTipc65WuZFLR8ngOwkpknqvS9n/nKd885m23oIocC+GA4xggJtMIIC
 aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
 EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwQeU+Y6hbenPzRMJsw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEIkqTwPgOUw2N+VtA/54lUFpnx7lCT+
-WjU+jCYC2ibvMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDQw
-ODA3NTkzNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPsFSV1v0fpVPTHZfFumKcVAD8NuIg01
+PTzg8CABiiipMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMDQw
+ODA3NTkzOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
 SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQCWjtqGrdzc7sEyi9bdQIM+G1Vl7DjaNdkEwIwXCUVeQH+wLA1P
-kGuAHRRNR8k7Xg52Qt/XiMFa4G2oZ4bRvsSQS4QoGtFAALkgjIfgNIP7YGGejzLKoLksedNysW1o
-winFWm0qPcA+ibI3kVUn1xXDBQ+EkNluiR5BO7HaH9Ka9EZyr7Hbiww5wtZ2u7TMM/aMXN+s9QCq
-q1GijnC5Ju7EReSmUxoI8ShpI4agFgaV6BjeOKpwmgIXlcjTS0s5v3hzl92EOCCsPzhhYxTW4s21
-C1/SYuagg0LbqO/XE6u9zCdeulnjAoLdDfJyZB/lUuM4K3czi3Kj2MHyp4dLpepy
---000000000000d0d5e205dc1ff9eb--
+ATANBgkqhkiG9w0BAQEFAASCAQB9Zj2Jx4ZaTQ0LCJFCxV+Q3gCcgfmmsc7OUbHscyRhAmuYqQ8G
+rbHS5VQa1EKZezKXXuhhouwKHCKDSXAwCqefS8HOzcK9ACeZpJoH5Y71KDBZQ6TgVTByVnxdT+Qy
+1oPQzv7BoW/A2oaJxDf8nhKCg9W56cRZDm868s6+AUD38JGIFYmTAh2BD3Enox1Rp3DDB6ldJcf6
+g5N1d4cafz7l4tkCc1fkLmF6+td7KmzxRjr2aBR763+P4GDWXksTyBjexHFBgELJ5iUWIFQJNwHf
+yJct3MJuLiUSvq6MapKXQpWKv0V0L7bsu2Gk45Np9vYlVoO5P0Ep+evqfCp0iwmt
+--00000000000000282605dc1ffa04--
