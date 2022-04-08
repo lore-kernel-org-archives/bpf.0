@@ -2,73 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36024C433EF
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 21:09:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B302C433EF
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 21:09:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiDHVLM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Apr 2022 17:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S239739AbiDHVLp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 17:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiDHVLL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:11:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16DE12AF0
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 14:09:04 -0700 (PDT)
+        with ESMTP id S235231AbiDHVLo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 17:11:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF7ED112E;
+        Fri,  8 Apr 2022 14:09:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C311B82C8F
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 21:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5257C385A1
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 21:09:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9614B61F4E;
+        Fri,  8 Apr 2022 21:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E91BAC385A9;
+        Fri,  8 Apr 2022 21:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649452141;
-        bh=FCrG/TbHf1Rx9sHdO4EIxvzfBALSoavhFb04g88YGsk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=olNkjqkwqrNOCsg53C3bkTwT9vdUUremrOpCYr3BEmEkIeiPvMknFN15zJRQVOQAM
-         /i++emyk4d5DKMDntgd5DcqoVzhKgI2oFz5gci4J2rZIPIgrKxMexcMaZ2iTYzXx6O
-         kMBdolC4NGTAe6Af/3fQIwwTQTGqQIL332phtocLxw1AxOZSr9EUlAgHWJg6cM67Gd
-         5BnG23TDhQ4NBxNnYq1RojSpdBaEj48NMv/IRoEO5YzvhhWCg9049IcbS5lYkHlgQB
-         6bcg+QVZ7dfIH3Y0mx0+Gpm6ngZH5u0Fp4XD4vReFThhs1kalOPMzeaqUFizldLr0E
-         vRGKGB3MTIU4w==
-Received: by mail-yb1-f171.google.com with SMTP id d138so17155489ybc.13
-        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 14:09:01 -0700 (PDT)
-X-Gm-Message-State: AOAM531nhWm3FvvZKsallDHBs9kVZ3NvF49Qut+c1fUBltzUUQWZ+TAK
-        idi35XN6D0vxhDKkZX2XqAsG0nY+E9J5Xehae+I=
-X-Google-Smtp-Source: ABdhPJxfgEn7G6vAEODlTHpOUaVG/HddChBwmvDzzMO3A/+INXpZz4NcGM9XXv1Da5Yv8I8Lh0yWvL4nt4PTQpQ/jEE=
-X-Received: by 2002:a05:6902:1506:b0:63e:4f1b:40ae with SMTP id
- q6-20020a056902150600b0063e4f1b40aemr8473256ybu.322.1649452140956; Fri, 08
- Apr 2022 14:09:00 -0700 (PDT)
+        s=k20201202; t=1649452179;
+        bh=ctz8WQ3vKMre+QNyDwXcKe5E06K2scqAFaURoxJnheQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=caqIH1P3c550eqqFd4LTN05WxLA1HMrfcEDTrB3uk4gxgnD/agcVpAl1ju0V8zjYh
+         QrkOAjIU985pu/vpxGUw1dfZeacNwp+y7GaE69mRuy5PodiIiqMCqmxTBQPbXXrYXZ
+         AzicUplt2F4ikDo1aItoAc23nbJKm1FDZZAwBf3AfcrymvkCMPb/hjhGTDrE4TndSA
+         DJEXCePFvE8FTdFzK9CQaRW3vWVnbUZl522hzuCBjikiVW33fg2Mek4eD1QHVUezXm
+         dXZk7wGgtbAahYoTpmTvPElxVKTc0Y0wuXOEWJMzsI9w+mbVLKipg4izncPPAO5sHa
+         yNvGFL6MTCPVQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4686E85B76;
+        Fri,  8 Apr 2022 21:09:38 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220408203433.2988727-1-andrii@kernel.org> <20220408203433.2988727-3-andrii@kernel.org>
-In-Reply-To: <20220408203433.2988727-3-andrii@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 8 Apr 2022 14:08:50 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6ZYEzibrw380sWVdHvOtJ7UtC=E_fT2ohYK_QUa-Zjqg@mail.gmail.com>
-Message-ID: <CAPhsuW6ZYEzibrw380sWVdHvOtJ7UtC=E_fT2ohYK_QUa-Zjqg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] libbpf: support target-less SEC()
- definitions for BTF-backed programs
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix return value checks in
+ perf_event_stackmap.c
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164945217886.693.13574650471014956022.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Apr 2022 21:09:38 +0000
+References: <20220408041452.933944-1-ytcoode@gmail.com>
+In-Reply-To: <20220408041452.933944-1-ytcoode@gmail.com>
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     skhan@linuxfoundation.org, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, hengqi.chen@gmail.com,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, shuah@kernel.org, songliubraving@fb.com,
+        yhs@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 1:34 PM Andrii Nakryiko <andrii@kernel.org> wrote:
->
-> Similar to previous patch, support target-less definitions like
-> SEC("fentry"), SEC("freplace"), etc. For such BTF-backed program types
-> it is expected that user will specify BTF target programmatically at
-> runtime using bpf_program__set_attach_target() *before* load phase. If
-> not, libbpf will report this as an error.
->
-> Aslo use SEC_ATTACH_BTF flag instead of explicitly listing a set of
-> types that are expected to require attach_btf_id. This was an accidental
-> omission during custom SEC() support refactoring.
->
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Hello:
 
-Acked-by: Song Liu <songliubraving@fb.com>
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Fri,  8 Apr 2022 12:14:52 +0800 you wrote:
+> The bpf_get_stackid() function may also return 0 on success.
+> 
+> Correct checks from 'val > 0' to 'val >= 0' to ensure that they cover all
+> possible success return values.
+> 
+> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v2] selftests/bpf: Fix return value checks in perf_event_stackmap.c
+    https://git.kernel.org/bpf/bpf-next/c/658d87687cd5
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
