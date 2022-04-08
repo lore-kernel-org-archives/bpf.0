@@ -2,114 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F8C5C433EF
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:14:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C007C433F5
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:18:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbiDHSQt convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Apr 2022 14:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S237262AbiDHSUF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 14:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiDHSQs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:16:48 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E6E33
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 11:14:44 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 238EKgHZ020689
-        for <bpf@vger.kernel.org>; Fri, 8 Apr 2022 11:14:44 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fa1fvt05t-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 08 Apr 2022 11:14:43 -0700
-Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 8 Apr 2022 11:14:43 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 148D016F87398; Fri,  8 Apr 2022 11:14:33 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 3/3] selftests/bpf: add CO-RE relos into linked_funcs selftests
-Date:   Fri, 8 Apr 2022 11:14:25 -0700
-Message-ID: <20220408181425.2287230-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220408181425.2287230-1-andrii@kernel.org>
-References: <20220408181425.2287230-1-andrii@kernel.org>
+        with ESMTP id S229902AbiDHSUD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 14:20:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859E614927D;
+        Fri,  8 Apr 2022 11:17:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF6ED621CB;
+        Fri,  8 Apr 2022 18:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C54C385A5;
+        Fri,  8 Apr 2022 18:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649441878;
+        bh=2ktX+yf7nlWuKQl8q5/RMFvhZuO9VS2BLEbBsxrsXao=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cxCkp7xhXkWweVSor0PqOXRuURnpf77+LmxH6H5tzI5ZSQ2VmzIXGKsgp3OBw80tp
+         9A6vkZzbApQO/OadYgNxfLoyGrLUkyHHjq1kWnLDFsTLoV7pro9rU4WIzMME+8filX
+         bDe3dRqlDa3QmTF6OBHEUgnPnsywG9OcpC6IFCSBRB3/O8opNg1q3jX+mtekehnedi
+         /SzJhNqtpggJSDi1mvI44KNKzF9qA3ob2rerks3u+H81Fy1faRTCGVOZtGqoj16OIV
+         8003FaMuVjUinj/1y0Mxm0R/q6NaIQFUabuZzkQCieHEfGgP2NXbhkXemdGnyHNA4i
+         0y4VBUd+0MN3g==
+Date:   Fri, 8 Apr 2022 11:17:56 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        magnus.karlsson@intel.com, bjorn@kernel.org,
+        netdev@vger.kernel.org, brouer@redhat.com,
+        alexandr.lobakin@intel.com, Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: Re: [PATCH bpf-next 00/10] xsk: stop softirq processing on full XSK
+ Rx queue
+Message-ID: <20220408111756.1339cb68@kernel.org>
+In-Reply-To: <82a1e9c1-6039-7ead-e663-2b0298f31ada@nvidia.com>
+References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
+        <8a81791e-342e-be8b-fc96-312f30b44be6@nvidia.com>
+        <Yk/7mkNi52hLKyr6@boxer>
+        <82a1e9c1-6039-7ead-e663-2b0298f31ada@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: aZ122DukdG3LiNHoxD0ZL5BnwlvQiTNv
-X-Proofpoint-ORIG-GUID: aZ122DukdG3LiNHoxD0ZL5BnwlvQiTNv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_05,2022-04-08_01,2022-02-23_01
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add CO-RE relocations into __weak subprogs for multi-file linked_funcs
-selftest to make sure libbpf handles such combination well.
+On Fri, 8 Apr 2022 15:48:44 +0300 Maxim Mikityanskiy wrote:
+> >> 4. A slow or malicious AF_XDP application may easily cause an overflow of
+> >> the hardware receive ring. Your feature introduces a mechanism to pause the
+> >> driver while the congestion is on the application side, but no symmetric
+> >> mechanism to pause the application when the driver is close to an overflow.
+> >> I don't know the behavior of Intel NICs on overflow, but in our NICs it's
+> >> considered a critical error, that is followed by a recovery procedure, so
+> >> it's not something that should happen under normal workloads.  
+> > 
+> > I'm not sure I follow on this one. Feature is about overflowing the XSK
+> > receive ring, not the HW one, right?  
+> 
+> Right. So we have this pipeline of buffers:
+> 
+> NIC--> [HW RX ring] --NAPI--> [XSK RX ring] --app--> consumes packets
+> 
+> Currently, when the NIC puts stuff in HW RX ring, NAPI always runs and 
+> drains it either to XSK RX ring or to /dev/null if XSK RX ring is full. 
+> The driver fulfills its responsibility to prevent overflows of HW RX 
+> ring. If the application doesn't consume quick enough, the frames will 
+> be leaked, but it's only the application's issue, the driver stays 
+> consistent.
+> 
+> After the feature, it's possible to pause NAPI from the userspace 
+> application, effectively disrupting the driver's consistency. I don't 
+> think an XSK application should have this power.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/progs/linked_funcs1.c | 8 ++++++++
- tools/testing/selftests/bpf/progs/linked_funcs2.c | 8 ++++++++
- 2 files changed, 16 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/linked_funcs1.c b/tools/testing/selftests/bpf/progs/linked_funcs1.c
-index b964ec1390c2..963b393c37e8 100644
---- a/tools/testing/selftests/bpf/progs/linked_funcs1.c
-+++ b/tools/testing/selftests/bpf/progs/linked_funcs1.c
-@@ -4,6 +4,7 @@
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
- 
- /* weak and shared between two files */
- const volatile int my_tid __weak;
-@@ -44,6 +45,13 @@ void set_output_ctx1(__u64 *ctx)
- /* this weak instance should win because it's the first one */
- __weak int set_output_weak(int x)
- {
-+	static volatile int whatever;
-+
-+	/* make sure we use CO-RE relocations in a weak function, this used to
-+	 * cause problems for BPF static linker
-+	 */
-+	whatever = bpf_core_type_size(struct task_struct);
-+
- 	output_weak1 = x;
- 	return x;
- }
-diff --git a/tools/testing/selftests/bpf/progs/linked_funcs2.c b/tools/testing/selftests/bpf/progs/linked_funcs2.c
-index 575e958e60b7..db195872f4eb 100644
---- a/tools/testing/selftests/bpf/progs/linked_funcs2.c
-+++ b/tools/testing/selftests/bpf/progs/linked_funcs2.c
-@@ -4,6 +4,7 @@
- #include "vmlinux.h"
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
- 
- /* weak and shared between both files */
- const volatile int my_tid __weak;
-@@ -44,6 +45,13 @@ void set_output_ctx2(__u64 *ctx)
- /* this weak instance should lose, because it will be processed second */
- __weak int set_output_weak(int x)
- {
-+	static volatile int whatever;
-+
-+	/* make sure we use CO-RE relocations in a weak function, this used to
-+	 * cause problems for BPF static linker
-+	 */
-+	whatever = 2 * bpf_core_type_size(struct task_struct);
-+
- 	output_weak2 = x;
- 	return 2 * x;
- }
--- 
-2.30.2
-
++1
+cover letter refers to busy poll, but did that test enable prefer busy
+poll w/ the timeout configured right? It seems like similar goal can 
+be achieved with just that.
