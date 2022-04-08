@@ -2,87 +2,163 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C007C433F5
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:18:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B491FC433F5
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 18:18:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbiDHSUF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Apr 2022 14:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52328 "EHLO
+        id S238468AbiDHSUT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 14:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiDHSUD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:20:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859E614927D;
-        Fri,  8 Apr 2022 11:17:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF6ED621CB;
-        Fri,  8 Apr 2022 18:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8C54C385A5;
-        Fri,  8 Apr 2022 18:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649441878;
-        bh=2ktX+yf7nlWuKQl8q5/RMFvhZuO9VS2BLEbBsxrsXao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cxCkp7xhXkWweVSor0PqOXRuURnpf77+LmxH6H5tzI5ZSQ2VmzIXGKsgp3OBw80tp
-         9A6vkZzbApQO/OadYgNxfLoyGrLUkyHHjq1kWnLDFsTLoV7pro9rU4WIzMME+8filX
-         bDe3dRqlDa3QmTF6OBHEUgnPnsywG9OcpC6IFCSBRB3/O8opNg1q3jX+mtekehnedi
-         /SzJhNqtpggJSDi1mvI44KNKzF9qA3ob2rerks3u+H81Fy1faRTCGVOZtGqoj16OIV
-         8003FaMuVjUinj/1y0Mxm0R/q6NaIQFUabuZzkQCieHEfGgP2NXbhkXemdGnyHNA4i
-         0y4VBUd+0MN3g==
-Date:   Fri, 8 Apr 2022 11:17:56 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        magnus.karlsson@intel.com, bjorn@kernel.org,
-        netdev@vger.kernel.org, brouer@redhat.com,
-        alexandr.lobakin@intel.com, Tariq Toukan <tariqt@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH bpf-next 00/10] xsk: stop softirq processing on full XSK
- Rx queue
-Message-ID: <20220408111756.1339cb68@kernel.org>
-In-Reply-To: <82a1e9c1-6039-7ead-e663-2b0298f31ada@nvidia.com>
-References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
-        <8a81791e-342e-be8b-fc96-312f30b44be6@nvidia.com>
-        <Yk/7mkNi52hLKyr6@boxer>
-        <82a1e9c1-6039-7ead-e663-2b0298f31ada@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S229902AbiDHSUT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 8 Apr 2022 14:20:19 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D80F94C2;
+        Fri,  8 Apr 2022 11:18:15 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso10455914pjh.3;
+        Fri, 08 Apr 2022 11:18:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=wXgb8HYaQt0XcDJdC/yTCvLoUZGTSXKuWJ5zl3TtwT0=;
+        b=Mm4HZA8geMHj27oYLWvb4GZALzx4ch5xY07LtXgl9seP+GhJ4Z/yOYiEqjig5pm8nI
+         TyGJhmAE140IY8IGIBKzPUduK77IyBURS56upMh0JAwwG6qsg3FG4Y1Qxjr5z/tfpU/Q
+         5m0bsdlBCXo6kt/LgpbDIhcs9iYSnvfapkYjOnAZOhAJL5BlfmRf69ZuIOFCOPbPaQ0t
+         EcIVEa5cBvfywMy0xw+/DU/UC9u9Yane007pKbPGIE37t0M/pXOPru+SRbW2lJWlfQqw
+         9QLdKfCVPeRlLhmVsxFQqc8VFVjrhHX9Ywlkb9hEJyDrVrm6v2RyXpSMNe7Wus1eDdBy
+         QATg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wXgb8HYaQt0XcDJdC/yTCvLoUZGTSXKuWJ5zl3TtwT0=;
+        b=ON7y33z9NxnMzFwTV0mKszHNO1jyzSqRKc0/Ob8qQKAMWfNP0sN49BUlcxse+Y43+e
+         5ylAzmk/FcVSMKeLnI7/DQRVloL8Nlcwm4IBzTjV7Ikw727DVgfwyVSvKVz7x4s6ZJlw
+         xKZYuoGGgcM9O7RosByzmObzxV2Y1wWG+K6nTGxYKO00CFi2Dfj97ablefQQgCycbgyH
+         w0/BrH/A5iYmQtORUU9KEcTrHHHPwr/hcvxMV1Krbivhq4jO6jYg95gGdpAifhubpbBV
+         gHKFiKIjh3dWbMPY4jXed/mSoKtze4ueaReR/O0EQmLm8ZQepn8u+IeIi0jyBdN5Twyp
+         Xaow==
+X-Gm-Message-State: AOAM533u/sj7OzfglXyJHqVBENxUZnr56g7krWkeKvVnzBztqo8uxHm4
+        vqI5w6mzWfJVvqO6EhHmekE=
+X-Google-Smtp-Source: ABdhPJwFgw56rWy8SrZKLbmU+pSp4IFQ08Ou3mBAyFt62lw62C16deuwbWvQkCMGkRdnwGC14vxWMQ==
+X-Received: by 2002:a17:90a:2f46:b0:1ca:88b6:d0cf with SMTP id s64-20020a17090a2f4600b001ca88b6d0cfmr23562084pjd.12.1649441893577;
+        Fri, 08 Apr 2022 11:18:13 -0700 (PDT)
+Received: from localhost.localdomain ([182.213.254.91])
+        by smtp.gmail.com with ESMTPSA id d59-20020a17090a6f4100b001cb4b786e64sm2725388pjk.28.2022.04.08.11.18.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 11:18:13 -0700 (PDT)
+From:   Taehee Yoo <ap420073@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, irusskikh@marvell.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        kpsingh@kernel.org, bpf@vger.kernel.org
+Cc:     ap420073@gmail.com
+Subject: [PATCH net-next v4 0/3] net: atlantic: Add XDP support
+Date:   Fri,  8 Apr 2022 18:17:11 +0000
+Message-Id: <20220408181714.15354-1-ap420073@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 8 Apr 2022 15:48:44 +0300 Maxim Mikityanskiy wrote:
-> >> 4. A slow or malicious AF_XDP application may easily cause an overflow of
-> >> the hardware receive ring. Your feature introduces a mechanism to pause the
-> >> driver while the congestion is on the application side, but no symmetric
-> >> mechanism to pause the application when the driver is close to an overflow.
-> >> I don't know the behavior of Intel NICs on overflow, but in our NICs it's
-> >> considered a critical error, that is followed by a recovery procedure, so
-> >> it's not something that should happen under normal workloads.  
-> > 
-> > I'm not sure I follow on this one. Feature is about overflowing the XSK
-> > receive ring, not the HW one, right?  
-> 
-> Right. So we have this pipeline of buffers:
-> 
-> NIC--> [HW RX ring] --NAPI--> [XSK RX ring] --app--> consumes packets
-> 
-> Currently, when the NIC puts stuff in HW RX ring, NAPI always runs and 
-> drains it either to XSK RX ring or to /dev/null if XSK RX ring is full. 
-> The driver fulfills its responsibility to prevent overflows of HW RX 
-> ring. If the application doesn't consume quick enough, the frames will 
-> be leaked, but it's only the application's issue, the driver stays 
-> consistent.
-> 
-> After the feature, it's possible to pause NAPI from the userspace 
-> application, effectively disrupting the driver's consistency. I don't 
-> think an XSK application should have this power.
+This patchset is to make atlantic to support multi-buffer XDP.
 
-+1
-cover letter refers to busy poll, but did that test enable prefer busy
-poll w/ the timeout configured right? It seems like similar goal can 
-be achieved with just that.
+The first patch implement control plane of xdp.
+The aq_xdp(), callback of .xdp_bpf is added.
+
+The second patch implements data plane of xdp.
+XDP_TX, XDP_DROP, and XDP_PASS is supported.
+__aq_ring_xdp_clean() is added to receive and execute xdp program.
+aq_nic_xmit_xdpf() is added to send packet by XDP.
+
+The third patch implements callback of .ndo_xdp_xmit.
+aq_xdp_xmit() is added to send redirected packets and it internally
+calls aq_nic_xmit_xdpf().
+
+Memory model is MEM_TYPE_PAGE_ORDER0 so it doesn't reuse rx page when
+XDP_TX, XDP_PASS, XDP_REDIRECT.
+
+Default the maximum rx frame size is 2K.
+If xdp is attached, size is changed to about 3K.
+It can be reused when XDP_DROP, and XDP_ABORTED.
+
+Atlantic driver has AQ_CFG_RX_PAGEORDER option and it will be always 0
+if xdp is attached.
+
+LRO will be disabled if XDP program supports only single buffer.
+
+AQC chip supports 32 multi-queues and 8 vectors(irq).
+There are two options.
+1. under 8 cores and maximum 4 tx queues per core.
+2. under 4 cores and maximum 8 tx queues per core.
+
+Like other drivers, these tx queues can be used only for XDP_TX,
+XDP_REDIRECT queue. If so, no tx_lock is needed.
+But this patchset doesn't use this strategy because getting hardware tx
+queue index cost is too high.
+So, tx_lock is used in the aq_nic_xmit_xdpf().
+
+single-core, single queue, 80% cpu utilization.
+
+  30.75%  bpf_prog_xxx_xdp_prog_tx  [k] bpf_prog_xxx_xdp_prog_tx
+  10.35%  [kernel]                  [k] aq_hw_read_reg <---------- here
+   4.38%  [kernel]                  [k] get_page_from_freelist
+
+single-core, 8 queues, 100% cpu utilization, half PPS.
+
+  45.56%  [kernel]                  [k] aq_hw_read_reg <---------- here
+  17.58%  bpf_prog_xxx_xdp_prog_tx  [k] bpf_prog_xxx_xdp_prog_tx
+   4.72%  [kernel]                  [k] hw_atl_b0_hw_ring_rx_receive
+
+Performance result(64 Byte)
+1. XDP_TX
+  a. xdp_geieric, single core
+    - 2.5Mpps, 100% cpu
+  b. xdp_driver, single core
+    - 4.5Mpps, 80% cpu
+  c. xdp_generic, 8 core(hyper thread)
+    - 6.3Mpps, 5~10% cpu
+  d. xdp_driver, 8 core(hyper thread)
+    - 6.3Mpps, 5% cpu
+
+2. XDP_REDIRECT
+  a. xdp_generic, single core
+    - 2.3Mpps
+  b. xdp_driver, single core
+    - 4.5Mpps
+
+v4:
+ - Fix compile warning
+
+v3:
+ - Change wrong PPS performance result 40% -> 80% in single
+   core(Intel i3-12100)
+ - Separate aq_nic_map_xdp() from aq_nic_map_skb()
+ - Drop multi buffer packets if single buffer XDP is attached
+ - Disable LRO when single buffer XDP is attached
+ - Use xdp_get_{frame/buff}_len()
+
+v2:
+ - Do not use inline in C file
+
+Taehee Yoo (3):
+  net: atlantic: Implement xdp control plane
+  net: atlantic: Implement xdp data plane
+  net: atlantic: Implement .ndo_xdp_xmit handler
+
+ .../net/ethernet/aquantia/atlantic/aq_cfg.h   |   1 +
+ .../ethernet/aquantia/atlantic/aq_ethtool.c   |   8 +
+ .../net/ethernet/aquantia/atlantic/aq_main.c  |  87 ++++
+ .../net/ethernet/aquantia/atlantic/aq_main.h  |   2 +
+ .../net/ethernet/aquantia/atlantic/aq_nic.c   | 137 ++++++
+ .../net/ethernet/aquantia/atlantic/aq_nic.h   |   5 +
+ .../net/ethernet/aquantia/atlantic/aq_ring.c  | 415 ++++++++++++++++--
+ .../net/ethernet/aquantia/atlantic/aq_ring.h  |  17 +
+ .../net/ethernet/aquantia/atlantic/aq_vec.c   |  23 +-
+ .../net/ethernet/aquantia/atlantic/aq_vec.h   |   6 +
+ .../aquantia/atlantic/hw_atl/hw_atl_a0.c      |   6 +-
+ .../aquantia/atlantic/hw_atl/hw_atl_b0.c      |  10 +-
+ 12 files changed, 675 insertions(+), 42 deletions(-)
+
+-- 
+2.17.1
+
