@@ -2,74 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5767C433FE
-	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 21:09:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C41C433F5
+	for <bpf@archiver.kernel.org>; Fri,  8 Apr 2022 21:09:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239754AbiDHVLq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 8 Apr 2022 17:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S234529AbiDHVLr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 8 Apr 2022 17:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234529AbiDHVLo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S234343AbiDHVLo (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 8 Apr 2022 17:11:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE5B13DC0
-        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 14:09:40 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9F5CC514
+        for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 14:09:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B6461FF5
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EA7961FE8
         for <bpf@vger.kernel.org>; Fri,  8 Apr 2022 21:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 02617C385AE;
-        Fri,  8 Apr 2022 21:09:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D1336C385A6;
+        Fri,  8 Apr 2022 21:09:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649452179;
-        bh=bw+wwOVluT6VbBfatXAAmx6U7J2ZW45sKFXbrEa0Jtc=;
+        s=k20201202; t=1649452178;
+        bh=QIjB2h0N9DFN/9biAQkJxRgkeLFjcmib829Y9qA9M0M=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=A6+mj2YfPZHTIHThUxHUdhcTT7B+NR3MouoMx7vbDvX6lCzjFMX80TdRBLBEjB05P
-         ozt/z99iufS9poQut5keo0oIZMU6H6bwo9rAvN9nCYiJyM0NeBgEnMwFpDlNM7hTYu
-         pSEg+pnhoq/oiqhx38m2W3R+D04TayWeg3l/18IvsjUm/QOD46HKWiUQXc+lbVBhQ1
-         hSrGzRQybYZbzw9GZQy7R1XYhZ6zuJ8Z0Y0258ABmkgoq7tka4pl2+jvIxgKDhj48u
-         FOTCOLZ7DGBfUWNPcyPDTzdmvgxDxbnyKzJA4q7TrTju2HDvXCtspwXyTM1Z9AeaE9
-         ZSJxwhXhflzFg==
+        b=ZX2WGUQ91dNE2KVPndAX61boSqWeIfkb4RVQQBfe2jQ38jyr+CrmXmMMSLk+S8eaG
+         t1Yid0Cj4WdFGXPHGtBlLOG5Xv1IySW34Zer/2GsvKRPlqOzsfvpjwTIw74AvG7EfV
+         mWfKdImvSAX1jyPjVIoiCo+nEw2MUS8BYXmYU4Kx2bSDJxwrxu2DJmqEcOLdU0vmnF
+         rC8dWkn7O2/apcCLHM0Kn0qTOsQJ6YYB+ZGsi5MXusMowAkraJHhqn6hHKJ91V8tXU
+         +EylktW3F0GpdBS255w65D/jj3IT2Chf79iPM7jV0fUyRp1l/udYebjajby6sBwQ+x
+         AzSGfiWmnlhig==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E2774E8DD18;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFB75E85D53;
         Fri,  8 Apr 2022 21:09:38 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] samples: bpf: xdp_router_ipv4: move routes monitor
- in a dedicated thread
+Subject: Re: [PATCH bpf-next 0/3] Fix handling of CO-RE relos for __weak subprogs
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164945217892.693.14111454866072100440.git-patchwork-notify@kernel.org>
+Message-Id: <164945217878.693.11166040212712392434.git-patchwork-notify@kernel.org>
 Date:   Fri, 08 Apr 2022 21:09:38 +0000
-References: <e364b817c69ded73be24b677ab47a157f7c21b64.1649167911.git.lorenzo@kernel.org>
-In-Reply-To: <e364b817c69ded73be24b677ab47a157f7c21b64.1649167911.git.lorenzo@kernel.org>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
+References: <20220408181425.2287230-1-andrii@kernel.org>
+In-Reply-To: <20220408181425.2287230-1-andrii@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
 Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        lorenzo.bianconi@redhat.com, andrii@kernel.org
+        kernel-team@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Tue,  5 Apr 2022 16:15:14 +0200 you wrote:
-> In order to not miss any netlink message from the kernel, move routes
-> monitor to a dedicated thread.
+On Fri, 8 Apr 2022 11:14:22 -0700 you wrote:
+> Fix the issue accidentally discovered during libbpf USDT support testing.
+> Libbpf overzealously complained about CO-RE relocations belonging to the code
+> of a __weak subprog that got overriden by another instance of that function.
 > 
-> Fixes: 85bf1f51691c ("samples: bpf: Convert xdp_router_ipv4 to XDP samples helper")
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  samples/bpf/Makefile               |  2 +-
->  samples/bpf/xdp_router_ipv4_user.c | 86 +++++++++++++++++++-----------
->  2 files changed, 55 insertions(+), 33 deletions(-)
+> Fix the issue fixed, return back to __weak __hidden annotation for USDT
+> BPF-side APIs.
+> 
+> [...]
 
 Here is the summary with links:
-  - [bpf-next] samples: bpf: xdp_router_ipv4: move routes monitor in a dedicated thread
-    https://git.kernel.org/bpf/bpf-next/c/587323cf6a6a
+  - [bpf-next,1/3] libbpf: don't error out on CO-RE relos for overriden weak subprogs
+    https://git.kernel.org/bpf/bpf-next/c/e89d57d938c8
+  - [bpf-next,2/3] libbpf: use weak hidden modifier for USDT BPF-side API functions
+    https://git.kernel.org/bpf/bpf-next/c/2fa5b0f290e1
+  - [bpf-next,3/3] selftests/bpf: add CO-RE relos into linked_funcs selftests
+    https://git.kernel.org/bpf/bpf-next/c/8555defe4861
 
 You are awesome, thank you!
 -- 
