@@ -2,82 +2,193 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51CA0C433EF
-	for <bpf@archiver.kernel.org>; Mon, 11 Apr 2022 17:07:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FB4FC433EF
+	for <bpf@archiver.kernel.org>; Mon, 11 Apr 2022 17:35:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiDKRKD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Apr 2022 13:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S244581AbiDKRiC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Apr 2022 13:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235105AbiDKRKD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:10:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC32F1FCD8;
-        Mon, 11 Apr 2022 10:07:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9133961736;
-        Mon, 11 Apr 2022 17:07:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6980EC385A4;
-        Mon, 11 Apr 2022 17:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649696868;
-        bh=zuIe1s4v0t4bbjsE+1TfmJB8us8+U2Yt33ASuWZjdCU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AFOhIOI0ySF4Euc0At3UCntZCIPfQdzmGY7J+ciGuOlq5babrNYN5wJjEo0UjmK48
-         K6+CTFnP6sxGiohfKEMdSzZC/lnAe2cQV8UO296ViVqiwixj/y+jmQ40TD6+jXWUkm
-         kQVfxK+s2P9XQD0Xpa8jJAEme34YlB2acARad6gS1W2Gj5a+/h9oCjldKccvBx6x6t
-         +QdVVnQzGgJPPf373UsV76AfCjXPcFXoZ5l1zsN4EvX0lZAwS6RglAUnAWRAb1uepO
-         KD81E6z13LulmxUmqf3W6SSo9YmjjcdwhAmQjrJUMFMasdc6D1UwFDHbOnEDxNByUI
-         v8/+0qRWE7aKQ==
-Date:   Mon, 11 Apr 2022 10:07:46 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     Maxim Mikityanskiy <maximmi@nvidia.com>, bpf@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, magnus.karlsson@intel.com,
-        bjorn@kernel.org, netdev@vger.kernel.org, brouer@redhat.com,
-        alexandr.lobakin@intel.com, Tariq Toukan <tariqt@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH bpf-next 00/10] xsk: stop softirq processing on full XSK
- Rx queue
-Message-ID: <20220411100746.1231a5a6@kernel.org>
-In-Reply-To: <YlRNPuHdN5RTZjDn@boxer>
-References: <20220405110631.404427-1-maciej.fijalkowski@intel.com>
-        <8a81791e-342e-be8b-fc96-312f30b44be6@nvidia.com>
-        <Yk/7mkNi52hLKyr6@boxer>
-        <82a1e9c1-6039-7ead-e663-2b0298f31ada@nvidia.com>
-        <20220408111756.1339cb68@kernel.org>
-        <YlRNPuHdN5RTZjDn@boxer>
+        with ESMTP id S1348883AbiDKRhe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Apr 2022 13:37:34 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552512E080
+        for <bpf@vger.kernel.org>; Mon, 11 Apr 2022 10:35:20 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23BGdBSS021120
+        for <bpf@vger.kernel.org>; Mon, 11 Apr 2022 10:35:20 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=NHH6RviNAH6XZY+a20b/Nz6R9VCrU4Hm9x/69A7F1Zg=;
+ b=LiGiyhWVgWfWjoLQeFnm38Sx2LrwWith9tSKk36DiJ56VypYk5SXxYZ8BsuYniJyiZAs
+ HCXDGmcyU2IIFN36F70r3qxA5EmZ41eEOIr3DwEswz4ScxX33sMIQn3jIBgpEND5Uexx
+ dlaslE9XXPBXnRKnUfgvd05Gm3zbRCBx5bo= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fb7ujjp5u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 11 Apr 2022 10:35:20 -0700
+Received: from twshared29473.14.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 11 Apr 2022 10:35:19 -0700
+Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
+        id 460D0225EE27; Mon, 11 Apr 2022 10:35:12 -0700 (PDT)
+From:   Kui-Feng Lee <kuifeng@fb.com>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <kernel-team@fb.com>
+CC:     Kui-Feng Lee <kuifeng@fb.com>
+Subject: [PATCH bpf-next v4 4/5] lib/bpf: Assign cookies to links in libbpf.
+Date:   Mon, 11 Apr 2022 10:34:28 -0700
+Message-ID: <20220411173429.4139609-5-kuifeng@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220411173429.4139609-1-kuifeng@fb.com>
+References: <20220411173429.4139609-1-kuifeng@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: jPFclXww_YyOzRhW-xEEem7XCwAKEUwz
+X-Proofpoint-ORIG-GUID: jPFclXww_YyOzRhW-xEEem7XCwAKEUwz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-11_07,2022-04-11_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 11 Apr 2022 17:46:06 +0200 Maciej Fijalkowski wrote:
-> > +1
-> > cover letter refers to busy poll, but did that test enable prefer busy
-> > poll w/ the timeout configured right? It seems like similar goal can 
-> > be achieved with just that.  
-> 
-> AF_XDP busy poll where app and driver runs on same core, without
-> configuring gro_flush_timeout and napi_defer_hard_irqs does not bring much
-> value, so all of the busy poll tests were done with:
-> 
-> echo 2 | sudo tee /sys/class/net/ens4f1/napi_defer_hard_irqs
-> echo 200000 | sudo tee /sys/class/net/ens4f1/gro_flush_timeout
-> 
-> That said, performance can still suffer and packets would not make it up
-> to user space even with timeout being configured in the case I'm trying to
-> improve.
+Add a cookie field to the attributes of bpf_link_create().
+Add bpf_program__attach_trace_opts() to attach a cookie to a link.
 
-Does the system not break out of busy poll then? See if the NAPI
-hrtimer fires or not.
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ tools/lib/bpf/bpf.c      |  7 +++++++
+ tools/lib/bpf/bpf.h      |  3 +++
+ tools/lib/bpf/libbpf.c   | 33 +++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   | 12 ++++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 5 files changed, 56 insertions(+)
 
-It's a 2k queue IIRC, with timeout of 200us, so 10Mpps at least.
-What rate is l2fwd sustaining without these patches?
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index cf27251adb92..c2454979c3c4 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -863,6 +863,13 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		if (!OPTS_ZEROED(opts, kprobe_multi))
+ 			return libbpf_err(-EINVAL);
+ 		break;
++	case BPF_TRACE_FENTRY:
++	case BPF_TRACE_FEXIT:
++	case BPF_MODIFY_RETURN:
++		attr.link_create.tracing.bpf_cookie =3D OPTS_GET(opts, tracing.bpf_coo=
+kie, 0);
++		if (!OPTS_ZEROED(opts, tracing))
++			return libbpf_err(-EINVAL);
++		break;
+ 	default:
+ 		if (!OPTS_ZEROED(opts, flags))
+ 			return libbpf_err(-EINVAL);
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index f4b4afb6d4ba..4cdbabcccefc 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -410,6 +410,9 @@ struct bpf_link_create_opts {
+ 	__u32 iter_info_len;
+ 	__u32 target_btf_id;
+ 	union {
++		struct {
++			__u64 bpf_cookie;
++		} tracing;
+ 		struct {
+ 			__u64 bpf_cookie;
+ 		} perf_event;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index bf4f7ac54ebf..8586e1efd780 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -11262,6 +11262,39 @@ struct bpf_link *bpf_program__attach_trace(const=
+ struct bpf_program *prog)
+ 	return bpf_program__attach_btf_id(prog);
+ }
+=20
++struct bpf_link *bpf_program__attach_trace_opts(const struct bpf_program=
+ *prog,
++						const struct bpf_trace_opts *opts)
++{
++	char errmsg[STRERR_BUFSIZE];
++	struct bpf_link *link;
++	int prog_fd, pfd;
++
++	LIBBPF_OPTS(bpf_link_create_opts, link_opts);
++
++	prog_fd =3D bpf_program__fd(prog);
++	if (prog_fd < 0) {
++		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
++		return libbpf_err_ptr(-EINVAL);
++	}
++
++	link =3D calloc(1, sizeof(*link));
++	if (!link)
++		return libbpf_err_ptr(-ENOMEM);
++	link->detach =3D &bpf_link__detach_fd;
++
++	link_opts.tracing.bpf_cookie =3D OPTS_GET(opts, bpf_cookie, 0);
++	pfd =3D bpf_link_create(prog_fd, 0, prog->expected_attach_type, &link_o=
+pts);
++	if (pfd < 0) {
++		pfd =3D -errno;
++		free(link);
++		pr_warn("prog '%s': failed to attach: %s\n",
++			prog->name, libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
++		return libbpf_err_ptr(pfd);
++	}
++	link->fd =3D pfd;
++	return (struct bpf_link *)link;
++}
++
+ struct bpf_link *bpf_program__attach_lsm(const struct bpf_program *prog)
+ {
+ 	return bpf_program__attach_btf_id(prog);
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 63d66f1adf1a..e0dd3f9a5aca 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -563,8 +563,20 @@ bpf_program__attach_tracepoint_opts(const struct bpf=
+_program *prog,
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_raw_tracepoint(const struct bpf_program *prog,
+ 				   const char *tp_name);
++
++struct bpf_trace_opts {
++	/* size of this struct, for forward/backward compatibility */
++	size_t sz;
++	/* custom user-provided value fetchable through bpf_get_attach_cookie()=
+ */
++	__u64 bpf_cookie;
++};
++#define bpf_trace_opts__last_field bpf_cookie
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_trace(const struct bpf_program *prog);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_trace_opts(const struct bpf_program *prog, const str=
+uct bpf_trace_opts *opts);
++
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_lsm(const struct bpf_program *prog);
+ LIBBPF_API struct bpf_link *
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 82f6d62176dd..9235da802e31 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -424,6 +424,7 @@ LIBBPF_0.6.0 {
+ LIBBPF_0.7.0 {
+ 	global:
+ 		bpf_btf_load;
++		bpf_program__attach_trace_opts;
+ 		bpf_program__expected_attach_type;
+ 		bpf_program__log_buf;
+ 		bpf_program__log_level;
+--=20
+2.30.2
 
-You may have to either increase the timeout or increase the frequency
-of repoll from user space (with a smaller budget).
