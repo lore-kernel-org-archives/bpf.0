@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D7BC433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DFC1C433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:02:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbiDLMEz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S1344094AbiDLME5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351367AbiDLMCh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:02:37 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6FC76E06;
-        Tue, 12 Apr 2022 03:58:57 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id l7so31104712ejn.2;
-        Tue, 12 Apr 2022 03:58:57 -0700 (PDT)
+        with ESMTP id S1351819AbiDLMCn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:02:43 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D287DA89;
+        Tue, 12 Apr 2022 03:59:13 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id l7so31105884ejn.2;
+        Tue, 12 Apr 2022 03:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8gxZv9czNrqSsp+NwDMxwad6YKQOb4DD102M9ETWSEU=;
-        b=ITHb5Z6Ro2j7h9KvVs8LnHP+X9FORr367PPN32rttpJ+hrNMecB/3XZ4h+su6UDu5Q
-         UHw8l+Pjwclo5Ysc5IzDvHR9VYp8P7ICq84aWXUN5djTntioSeCBzqLrmWEVOmxMzo/i
-         lTo2zLR/QC4uKo0xVTLDz3Stqpju1oz1DsJ3jrjvDHTyr+zTXgTAcEffm7Wio8myKENt
-         wbSzkkHS7T+8h5HggSK/6g02VLekQa/Em0l750WCJr+KqES7vhEzWKH+ooie57tmdXlR
-         7uNWoRy+loFZl+7EYx6sA58obekFJFD4IGE7LZEGMkR2VSocff0x2mtDG+azcl2C6gjr
-         ZO/g==
+        bh=woYPht1iAY/ITrpUe+WmESGMoM6pZPj3PA3p1Q9RO1s=;
+        b=GLAEL/Wnep8C6HgHiZIeQleRfVNhSS+4/IX8MmJQcWytrQ4gxe72994e2BvJApV3Gh
+         +mNin1xpG/WQ/D6ovz8BvFIqNOhFfWp/fZ9cgSKQ6eTUvGI8WcXlhs4/GKGrhpXEsGcl
+         rxCeEihBgqEqVzLatl4dCY8obePJoW+H0b4qyhgf1gmsVkm6qKM8NMjq0JX/A60ZN6UD
+         hBFrqYvcL+vhI34TqDRks6xnYoKdpyCqNKlPKc+msvi2JB4Ux9bNUCcuj2rklCJkH1A7
+         ++xTwBP8+uSMDY4K8o4JFoOrMZefXLk5jdDqQ80MG0AM7Vz/QbJOlik0jeja5ONs+AdT
+         fHGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8gxZv9czNrqSsp+NwDMxwad6YKQOb4DD102M9ETWSEU=;
-        b=rfbcZ8MSUe61tPDzhcYqVo/dnDjjsptHZ3NjcOY7JkBqmJfN5oj1BVzf2ug3Wtbrtz
-         0TmD95eZIdQ+b5uRJK9pd7s74/v1B//lAJERlhuQZq8JUspMjLK0rHy4duUaF4UBsw3I
-         Tst+4ydUT9h17vo+NoaGEikdpRLPN/fwwdvyquHwy/sxDf450DkkjsZjdKG3zLmnO2M6
-         AbVXTHutfChYy1CztKQI3E4meMFq7iWlA/g6Cx1cmMxtEeBBtdjGUrKUMB1G968z3PTo
-         ucQrkyhNvAYFbk++whBZDw9FSXubTIeOGpQK+hASxN+NgBIqETpuGVMPFCwHdic5nwVu
-         ArTQ==
-X-Gm-Message-State: AOAM532+DLgoUmZBYLW5RYgT/dSz4T4ufwvolgqCnmVtAykGS1k3uH/H
-        x+zMA/JkoyZ2ZU64XwcYWDg=
-X-Google-Smtp-Source: ABdhPJzNTHWGl2lSK5El9AwYn/g4QL+TmEsz0QZcXmoF0HHdlRFYvO6ANFjRh9vxOm6k30pcEG3CMw==
-X-Received: by 2002:a17:906:2883:b0:6e8:7012:4185 with SMTP id o3-20020a170906288300b006e870124185mr14014409ejd.204.1649761135581;
-        Tue, 12 Apr 2022 03:58:55 -0700 (PDT)
+        bh=woYPht1iAY/ITrpUe+WmESGMoM6pZPj3PA3p1Q9RO1s=;
+        b=WCWlT/kM5P5OgiaBKycKJxJvd3BmGZJ6qPEETKc+Df80eu7bpw7a4hTwpPbfyz9uQL
+         jLWQiQojv6Jtrnx8s7p3u9wxxOR/j4WJwsjqlHEbcT4+Z0vJRnrjcPb4ZGqRPSA1tzWN
+         17bACKIJl46aroIN/8l9I1I9ElBiiCdEnmPUX0L+7BxSK7dKSnq4j+Q9IEyAIWExFyvA
+         GsuJ3HdoTZ49rQgvc9D9NQCJ2xSe/dUwKjAFFDf95tsTHfgKPPLs1tTKY4BahnqTCjFs
+         rx+1PUhIpGN+SQbLDVenYFewvSGvrVS9BVXFvKljJqyvvAvb9S4pGpN6Ecgn4X9Jl6Pu
+         +v+Q==
+X-Gm-Message-State: AOAM531b6UHsK46X666r/hiif2eBdUHJQt76RjNQnylloEiahfqxscy5
+        QtDvjlCWt41i50DFx+wknWQ=
+X-Google-Smtp-Source: ABdhPJysV63pOngoiWallc/o6MAAi1ONJ0q1M9shqH9IFFtJ3yFNQc/buwFaIzPGEAMqB8pNQlQ0+A==
+X-Received: by 2002:a17:906:1603:b0:6ce:362:c938 with SMTP id m3-20020a170906160300b006ce0362c938mr34468664ejd.253.1649761151541;
+        Tue, 12 Apr 2022 03:59:11 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.58.54
+        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.59.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 03:58:55 -0700 (PDT)
+        Tue, 12 Apr 2022 03:59:11 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,11 +84,10 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next v2 03/18] net: dsa: sja1105: reorder sja1105_first_entry_longer_than with memory allocation
-Date:   Tue, 12 Apr 2022 12:58:15 +0200
-Message-Id: <20220412105830.3495846-4-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH net-next v2 15/18] net: netcp: Remove usage of list iterator for list_add() after loop body
+Date:   Tue, 12 Apr 2022 12:58:27 +0200
+Message-Id: <20220412105830.3495846-16-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412105830.3495846-1-jakobkoschel@gmail.com>
 References: <20220412105830.3495846-1-jakobkoschel@gmail.com>
@@ -98,60 +97,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sja1105_first_entry_longer_than() does not make use of the full struct
-sja1105_gate_entry *e, just of e->interval which is set from the passed
-entry_time.
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer pointing to the location
+where the element should be inserted [1].
 
-This means that if there is a gate conflict, we have allocated e for
-nothing, just to free it later. Reorder the memory allocation and the
-function call, to avoid that and simplify the error unwind path.
+Before, the code implicitly used the head when no element was found
+when using &next->list. The new 'pos' variable is set to the list head
+by default and overwritten if the list exits early, marking the
+insertion point for list_add().
 
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/net/dsa/sja1105/sja1105_vl.c | 17 +++++------------
- 1 file changed, 5 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/ti/netcp_core.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
-index 369be2ac3587..e5ea8eb9ec4e 100644
---- a/drivers/net/dsa/sja1105/sja1105_vl.c
-+++ b/drivers/net/dsa/sja1105/sja1105_vl.c
-@@ -36,7 +36,11 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
+diff --git a/drivers/net/ethernet/ti/netcp_core.c b/drivers/net/ethernet/ti/netcp_core.c
+index 16507bff652a..f25104b5a31b 100644
+--- a/drivers/net/ethernet/ti/netcp_core.c
++++ b/drivers/net/ethernet/ti/netcp_core.c
+@@ -471,6 +471,7 @@ struct netcp_hook_list {
+ int netcp_register_txhook(struct netcp_intf *netcp_priv, int order,
+ 			  netcp_hook_rtn *hook_rtn, void *hook_data)
  {
- 	struct sja1105_gate_entry *e;
- 	struct list_head *pos;
--	int rc;
-+
-+	pos = sja1105_first_entry_longer_than(&gating_cfg->entries,
-+					      entry_time, extack);
-+	if (IS_ERR(pos))
-+		return PTR_ERR(pos);
++	struct list_head *pos = &netcp_priv->txhook_list_head;
+ 	struct netcp_hook_list *entry;
+ 	struct netcp_hook_list *next;
+ 	unsigned long flags;
+@@ -485,10 +486,12 @@ int netcp_register_txhook(struct netcp_intf *netcp_priv, int order,
  
- 	e = kzalloc(sizeof(*e), GFP_KERNEL);
- 	if (!e)
-@@ -45,22 +49,11 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
- 	e->rule = rule;
- 	e->gate_state = gate_state;
- 	e->interval = entry_time;
--
--	pos = sja1105_first_entry_longer_than(&gating_cfg->entries,
--					      e->interval, extack);
--	if (IS_ERR(pos)) {
--		rc = PTR_ERR(pos);
--		goto err;
--	}
--
- 	list_add(&e->list, pos->prev);
- 
- 	gating_cfg->num_entries++;
+ 	spin_lock_irqsave(&netcp_priv->lock, flags);
+ 	list_for_each_entry(next, &netcp_priv->txhook_list_head, list) {
+-		if (next->order > order)
++		if (next->order > order) {
++			pos = &next->list;
+ 			break;
++		}
+ 	}
+-	__list_add(&entry->list, next->list.prev, &next->list);
++	list_add_tail(&entry->list, pos);
+ 	spin_unlock_irqrestore(&netcp_priv->lock, flags);
  
  	return 0;
--err:
--	kfree(e);
--	return rc;
- }
+@@ -520,6 +523,7 @@ EXPORT_SYMBOL_GPL(netcp_unregister_txhook);
+ int netcp_register_rxhook(struct netcp_intf *netcp_priv, int order,
+ 			  netcp_hook_rtn *hook_rtn, void *hook_data)
+ {
++	struct list_head *pos = &netcp_priv->rxhook_list_head;
+ 	struct netcp_hook_list *entry;
+ 	struct netcp_hook_list *next;
+ 	unsigned long flags;
+@@ -534,10 +538,12 @@ int netcp_register_rxhook(struct netcp_intf *netcp_priv, int order,
  
- /* The gate entries contain absolute times in their e->interval field. Convert
+ 	spin_lock_irqsave(&netcp_priv->lock, flags);
+ 	list_for_each_entry(next, &netcp_priv->rxhook_list_head, list) {
+-		if (next->order > order)
++		if (next->order > order) {
++			pos = &next->list;
+ 			break;
++		}
+ 	}
+-	__list_add(&entry->list, next->list.prev, &next->list);
++	list_add_tail(&entry->list, pos);
+ 	spin_unlock_irqrestore(&netcp_priv->lock, flags);
+ 
+ 	return 0;
 -- 
 2.25.1
 
