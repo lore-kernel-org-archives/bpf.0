@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D6FBC433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D98BBC4332F
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbiDLMuH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        id S1354309AbiDLMuE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355297AbiDLMsK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:48:10 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCED62CD;
-        Tue, 12 Apr 2022 05:16:41 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v4so8599953edl.7;
-        Tue, 12 Apr 2022 05:16:41 -0700 (PDT)
+        with ESMTP id S1355280AbiDLMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:48:09 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F371226E1;
+        Tue, 12 Apr 2022 05:16:33 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z99so13494631ede.5;
+        Tue, 12 Apr 2022 05:16:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0WZ3VKnVxGM80qdLHkweZkrBfRptzeVUXSKm7/OGDn8=;
-        b=jHIIcESqNWLqokGpKfh4YWlmbXIj1lpsqtH5XYszmhDU3tq/FIVh2csMvH+YrFhuN7
-         hjt3Q05Ttr48pdRZWa3LRlCPOhhwxDwNMtf+FwK+XMyaEDW7g3wM99hIJlZho+2z9HVA
-         Uops0rojEuKytF3Z63OHDKkt1EXtNbR+gJ82Dw9d+S6S+ahGMcDnsZpyKPa7GnHdmXtH
-         ZoWa4Aa/X96KMx2OdKPlquIG7gI8jh4c6HuEz1Pq95xmK2zo3buo8NMv9Vy14n3wSzqU
-         UwOExVEbSWb0F2f/G44vlo4HKFr44eOh7X64Jegdl0KKefl8o9Jg21kY4/WHSVQi/1rl
-         rrag==
+        bh=lwv0OP8MEFPtBT1zINZmdonMBn1rL8mDzX3cu0httRY=;
+        b=Nrx9PppmSSTaBksft/090SSleOxLNQ168KaZqdPde5zNNfnOffkWaVzLw6BMxacwbR
+         UAjGFEhao5GDH+VGb8yYgE4lNujVITlt7DTYSjj3eV+fO6PK3uewLodumM8NSppQDVUc
+         /OMz+Ndyg/JrNrymjRUj2fFE7XHmGj/xHdcQWi0Il9jHquCtkY9fxrpR3af35rOiFnlZ
+         5rH6MDhHkXKgviLz10C9htS5M5Z2rRSNE+ej1J8UvcwG8f5+8xM9rrsWJKlIlYWZRxgD
+         LE1E3FWCn7bLljRsUimHqjvI0RKAaKiz6iHw0LRoifpwzxwreEYLobLHKiR/cRS9ydGl
+         4KZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0WZ3VKnVxGM80qdLHkweZkrBfRptzeVUXSKm7/OGDn8=;
-        b=QtdsMHhJxNC0KOmP7yV07rzWaE+6l1bX0DIQ+XUe6OekGC+Gu00nnGcnf0nU2MSM/E
-         ClP7m/JuOUPLru8E3pfdSxGQDKfFXZ4S5vbjXgqWiNKO3fhCiaP5yh4CRKvhmXBasHiN
-         fmpNI6+RgRbdKBAy/0SEtFFB1YdYA0HrjlslUnLfAj5G+1HxIWkx9A+tpy6UmdCGTEOg
-         H/10frvalCxXa/lxyK6KuCSiPMPBo2zgNZNeuy4qdDhj+lhTKW1IUn+RO6cLjecFe/cu
-         x4rTG5qJuHjuoLl5PCyLPgYNDMANHDmrfsS3WHtlsrZyXBdAXX8SZjNvScRkqpdWjoQ3
-         vf4A==
-X-Gm-Message-State: AOAM533VaWkNZBnDqWN+DM4wQuH3AJ86ZfwPPqCQc4CtoACyRUL/0aM2
-        l6NU73LfEveXocBh7Lyf+vU=
-X-Google-Smtp-Source: ABdhPJyErqiLg6C0liUUmkq0/55+jKlY2qozidbEehxTilHbpBR21vFsB/5rB5E60MJjeR/OKEUKyg==
-X-Received: by 2002:a05:6402:5254:b0:41d:7abe:3e08 with SMTP id t20-20020a056402525400b0041d7abe3e08mr10795420edd.153.1649765799882;
-        Tue, 12 Apr 2022 05:16:39 -0700 (PDT)
+        bh=lwv0OP8MEFPtBT1zINZmdonMBn1rL8mDzX3cu0httRY=;
+        b=plWT1lpVeOlgQF0fNnKTZ/2UnedN5hMjk3eSDprU6bvvVnpPsHLbIKVMAZ+NyNWjz+
+         +X0ZF4h1S09c3DwWgozz0VTgBaYsxpuQLrOQtaPnAxrPaS56QHSwT6IgN8TQ5jnUYXIq
+         stuM7ddClW7BE4HVTJpAcOG+zg+HfOH7Ee0BNvju+U+loH+sciib56jWQ/5sEETuVC+U
+         c51HI76Vg1uwNTEqKMdWPwI9hF6OwiT5PIypgFJ2hJkHK+trPM57XjdYKqwUOK5/fOWR
+         id4/3tHLGv0qiboyAgmmxuSDzUM7gxBWAjP5DtXnSkjYraSNmU27NjDI2fcrLaboE4eh
+         8Bnw==
+X-Gm-Message-State: AOAM533pWmCdcAGFZEA1TXG5KST4Jl4EQvA8U7jKGXKAFiSC1vhow00+
+        6Lv98+4aO75/oZO/DF8k05k=
+X-Google-Smtp-Source: ABdhPJzY2ezbuKR/noX2ghuCmN5SBYP3Gx6pBGYKXHCtWqGnOQkVdyu/LlA9QKxQZv/DPvFNVlz3zA==
+X-Received: by 2002:a05:6402:2682:b0:41d:2f74:7269 with SMTP id w2-20020a056402268200b0041d2f747269mr21742861edd.255.1649765792395;
+        Tue, 12 Apr 2022 05:16:32 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.38
+        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 05:16:39 -0700 (PDT)
+        Tue, 12 Apr 2022 05:16:32 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -88,9 +88,9 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v3 12/18] net: qede: Replace usage of found with dedicated list iterator variable
-Date:   Tue, 12 Apr 2022 14:15:51 +0200
-Message-Id: <20220412121557.3553555-13-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v3 07/18] net: dsa: Replace usage of found with dedicated list iterator variable
+Date:   Tue, 12 Apr 2022 14:15:46 +0200
+Message-Id: <20220412121557.3553555-8-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412121557.3553555-1-jakobkoschel@gmail.com>
 References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
@@ -114,37 +114,41 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/ethernet/qlogic/qede/qede_rdma.c | 11 +++++------
+ net/dsa/dsa.c | 11 +++++------
  1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_rdma.c b/drivers/net/ethernet/qlogic/qede/qede_rdma.c
-index 6304514a6f2c..2eb03ffe2484 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_rdma.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_rdma.c
-@@ -246,18 +246,17 @@ static void qede_rdma_change_mtu(struct qede_dev *edev)
- static struct qede_rdma_event_work *
- qede_rdma_get_free_event_node(struct qede_dev *edev)
- {
--	struct qede_rdma_event_work *event_node = NULL;
--	bool found = false;
-+	struct qede_rdma_event_work *event_node = NULL, *iter;
+diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
+index 89c6c86e746f..645522c4dd4a 100644
+--- a/net/dsa/dsa.c
++++ b/net/dsa/dsa.c
+@@ -112,22 +112,21 @@ const struct dsa_device_ops *dsa_find_tagger_by_name(const char *buf)
  
--	list_for_each_entry(event_node, &edev->rdma_info.rdma_event_list,
-+	list_for_each_entry(iter, &edev->rdma_info.rdma_event_list,
- 			    list) {
--		if (!work_pending(&event_node->work)) {
+ const struct dsa_device_ops *dsa_tag_driver_get(int tag_protocol)
+ {
+-	struct dsa_tag_driver *dsa_tag_driver;
++	struct dsa_tag_driver *dsa_tag_driver = NULL, *iter;
+ 	const struct dsa_device_ops *ops;
+-	bool found = false;
+ 
+ 	request_module("%s%d", DSA_TAG_DRIVER_ALIAS, tag_protocol);
+ 
+ 	mutex_lock(&dsa_tag_drivers_lock);
+-	list_for_each_entry(dsa_tag_driver, &dsa_tag_drivers_list, list) {
+-		ops = dsa_tag_driver->ops;
++	list_for_each_entry(iter, &dsa_tag_drivers_list, list) {
++		ops = iter->ops;
+ 		if (ops->proto == tag_protocol) {
 -			found = true;
-+		if (!work_pending(&iter->work)) {
-+			event_node = iter;
++			dsa_tag_driver = iter;
  			break;
  		}
  	}
  
--	if (!found) {
-+	if (!event_node) {
- 		event_node = kzalloc(sizeof(*event_node), GFP_ATOMIC);
- 		if (!event_node) {
- 			DP_NOTICE(edev,
+-	if (found) {
++	if (dsa_tag_driver) {
+ 		if (!try_module_get(dsa_tag_driver->owner))
+ 			ops = ERR_PTR(-ENOPROTOOPT);
+ 	} else {
 -- 
 2.25.1
 
