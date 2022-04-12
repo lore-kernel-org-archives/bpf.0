@@ -2,66 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F4BC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CD9C4321E
 	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 08:37:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358866AbiDLIcP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 04:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46346 "EHLO
+        id S1358878AbiDLIcV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 04:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358827AbiDLHmQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65B2653E26
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 00:19:23 -0700 (PDT)
+        with ESMTP id S1357567AbiDLHka (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 03:40:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70E0A3055A
+        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 00:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649747962;
+        s=mimecast20190719; t=1649747763;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Yuz95x1G3zlqb83uNRLz/nX1y2Nb6heM9sreLygHM+8=;
-        b=e1xsGA0u6k5ZzQuDGpM/i83UMVxauBVEGYneTs/iMGaPzymbSZYNASxECQTqIKj+fMymyn
-        hQVGp5+O8G68QuBNZ2IKDKLnn8meKQ8Xwv60fugrUt09YGE7lpcolO319+B2y3ZIPBxr1i
-        eEyc4XLRXjoG3nAHVQQ5E5bxdLYlQ9c=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=WVzkj+bZmYlT5FAR8tqeVhbuQLiJC56RxAwusezhQ84=;
+        b=Ipj5ds9Utagz21lJ3xj664pkZLGXcShNWfs2unJjKlJJ2/t39e50wjxGiKT5aNxSmCugFN
+        8K91I42SlcGvPJbB6iyJDuPrxMYP1FYi+kSkBJ1/K/MNRiit0xNapO3BcgRq0fEQGqLyWL
+        ftME8HOM1EjNAtD1pGpcIdHAFEeHEk0=
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
+ [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399-zGV3Q2d9PgeG0w86cdiZKA-1; Tue, 12 Apr 2022 03:19:21 -0400
-X-MC-Unique: zGV3Q2d9PgeG0w86cdiZKA-1
-Received: by mail-pj1-f69.google.com with SMTP id c9-20020a17090a1d0900b001caaf769af6so1095291pjd.2
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 00:19:20 -0700 (PDT)
+ us-mta-324-vs4S_ziFPr6JWHVyKV73bg-1; Tue, 12 Apr 2022 03:16:00 -0400
+X-MC-Unique: vs4S_ziFPr6JWHVyKV73bg-1
+Received: by mail-pj1-f70.google.com with SMTP id u4-20020a17090a5e4400b001cba059a4fbso1080825pji.7
+        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 00:16:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Yuz95x1G3zlqb83uNRLz/nX1y2Nb6heM9sreLygHM+8=;
-        b=kFXUthuUuZNb8tfDRBB0PJpkNG5134GH9czVAlZcPAuY3N66XHD5PoKIDMmidU2FOw
-         BUaUd8smbSg54zbK3+OZ+HQdNLRU84eKZOPqLd//P8Xq+X+XDZbYHFUAcY6i7PHWjoQf
-         MdiNZjQcOkiAg2lxvwTU95Udn+lcN3240Xxty4HiH/nyfaK3XgdtEKvQsyAzZdgS/Qp7
-         zS6cP7LLvmALG8BU+cbL0iwyV0ZvCweFp//7Ssj1OLaWjxrLTDuO8lb4NxDFF/zIUY5x
-         wrySAC3/ACpXSJgGE8plcmiDrNzrzFM6f+t2BUhF9b0BM5r0XdHUr+z1LAkWyu0zw3Z4
-         kgbQ==
-X-Gm-Message-State: AOAM532aNKEeyRUVAwBt8z0/IAVbjjP4v9jB60tUc6LBi9uOb8DAwVcV
-        zvkyerJ+eBnm4zm+WWR29M+7tM5sK+cK5IwHvAo4e5G6kF+P4pGCGUT5jH6Qfss5pc0+KddZ9ce
-        wxJBbhL2GS8yr
-X-Received: by 2002:a63:ce45:0:b0:399:1124:fbfe with SMTP id r5-20020a63ce45000000b003991124fbfemr30142576pgi.542.1649747959960;
-        Tue, 12 Apr 2022 00:19:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJybC3H9odgtD5WvWO3Wfz5iznlcc/pnW1u61iazVEqAlovz3OVbp6nLoj0UKzRc5hYeHz5xRQ==
-X-Received: by 2002:a63:ce45:0:b0:399:1124:fbfe with SMTP id r5-20020a63ce45000000b003991124fbfemr30142555pgi.542.1649747959749;
-        Tue, 12 Apr 2022 00:19:19 -0700 (PDT)
+        bh=WVzkj+bZmYlT5FAR8tqeVhbuQLiJC56RxAwusezhQ84=;
+        b=IPA/CfqJg1lGGJlUe4exHoqLBnLHmJhlmkukh1Rg9aizn3lEJs7XVax5CNRfU7LByM
+         J4LgnDGT8q+EiAJGcwF3vAdYqF8lpfVsoAFiEKQBw7C5r8I5Bp1TKCn8rm3YL5pax3a4
+         PeblJYCez4N6aga8Wv5ilMMdOI5oiBhFdIVGRJwWPTvwoLgC1M3KhO99Mmh91Up7cPjI
+         /b5H2kYfwjF1H9xHa6sp+8yEu3EY/8MWuRZUJqy11mBWEyX6DKIP0IbKI/9Usm97F++T
+         /I5Uk1Z0mSkFaPS9r2lEL9x6Mg+kxGkEjG74cwyeE/hdxU8uq2Z6ZwQHdtD51UOn+TYK
+         p+rg==
+X-Gm-Message-State: AOAM533hqDBrEhAF/WVrxsPUKPMM12aibT8v2pX5QKOp8Cee+BS+VLJV
+        SrZPJVnS2Vh0NhEVCjvUL+PtMLbg/g1xpFHQgKHTPCIJu7x7wHEbVap8r4ptvxap194CUGuCgFS
+        kiAK4TdmPFMt5
+X-Received: by 2002:a17:902:6b89:b0:154:623c:9517 with SMTP id p9-20020a1709026b8900b00154623c9517mr35687015plk.45.1649747759848;
+        Tue, 12 Apr 2022 00:15:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw7Spm6ydmB4c+gNo+WzpTpSsuGx/B9P8qij+KvJBZZhrNiJwtOL5scK9AARgGePEjvxDGr1g==
+X-Received: by 2002:a17:902:6b89:b0:154:623c:9517 with SMTP id p9-20020a1709026b8900b00154623c9517mr35687003plk.45.1649747759617;
+        Tue, 12 Apr 2022 00:15:59 -0700 (PDT)
 Received: from [10.72.14.5] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001b89e05e2b2sm1791569pjb.34.2022.04.12.00.19.10
+        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm1705890pjy.35.2022.04.12.00.15.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 00:19:19 -0700 (PDT)
-Message-ID: <2776b925-1989-40b2-44ed-6964105e22cb@redhat.com>
-Date:   Tue, 12 Apr 2022 15:19:08 +0800
+        Tue, 12 Apr 2022 00:15:59 -0700 (PDT)
+Message-ID: <ccd0fd5d-389a-70e9-ae48-406514e383d6@redhat.com>
+Date:   Tue, 12 Apr 2022 15:15:44 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v9 29/32] virtio_net: get ringparam by
- virtqueue_get_vring_max_size()
+Subject: Re: [PATCH v9 27/32] virtio: add helper virtio_find_vqs_ctx_size()
 Content-Language: en-US
 To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         virtualization@lists.linux-foundation.org
@@ -93,9 +92,9 @@ Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
         kvm@vger.kernel.org, bpf@vger.kernel.org
 References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
- <20220406034346.74409-30-xuanzhuo@linux.alibaba.com>
+ <20220406034346.74409-28-xuanzhuo@linux.alibaba.com>
 From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220406034346.74409-30-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <20220406034346.74409-28-xuanzhuo@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -104,36 +103,40 @@ X-Mailing-List: bpf@vger.kernel.org
 
 
 在 2022/4/6 上午11:43, Xuan Zhuo 写道:
-> Use virtqueue_get_vring_max_size() in virtnet_get_ringparam() to set
-> tx,rx_max_pending.
+> Introduce helper virtio_find_vqs_ctx_size() to call find_vqs and specify
+> the maximum size of each vq ring.
 >
 > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
 
 
 Acked-by: Jason Wang <jasowang@redhat.com>
 
 
->   drivers/net/virtio_net.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+> ---
+>   include/linux/virtio_config.h | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 >
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index dad497a47b3a..96d96c666c8c 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -2177,10 +2177,10 @@ static void virtnet_get_ringparam(struct net_device *dev,
->   {
->   	struct virtnet_info *vi = netdev_priv(dev);
->   
-> -	ring->rx_max_pending = virtqueue_get_vring_size(vi->rq[0].vq);
-> -	ring->tx_max_pending = virtqueue_get_vring_size(vi->sq[0].vq);
-> -	ring->rx_pending = ring->rx_max_pending;
-> -	ring->tx_pending = ring->tx_max_pending;
-> +	ring->rx_max_pending = virtqueue_get_vring_max_size(vi->rq[0].vq);
-> +	ring->tx_max_pending = virtqueue_get_vring_max_size(vi->sq[0].vq);
-> +	ring->rx_pending = virtqueue_get_vring_size(vi->rq[0].vq);
-> +	ring->tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
+> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> index 0f7def7ddfd2..22e29c926946 100644
+> --- a/include/linux/virtio_config.h
+> +++ b/include/linux/virtio_config.h
+> @@ -235,6 +235,18 @@ int virtio_find_vqs_ctx(struct virtio_device *vdev, unsigned nvqs,
+>   				      ctx, desc);
 >   }
 >   
->   
+> +static inline
+> +int virtio_find_vqs_ctx_size(struct virtio_device *vdev, u32 nvqs,
+> +				 struct virtqueue *vqs[],
+> +				 vq_callback_t *callbacks[],
+> +				 const char * const names[],
+> +				 u32 sizes[],
+> +				 const bool *ctx, struct irq_affinity *desc)
+> +{
+> +	return vdev->config->find_vqs(vdev, nvqs, vqs, callbacks, names, sizes,
+> +				      ctx, desc);
+> +}
+> +
+>   /**
+>    * virtio_device_ready - enable vq use in probe function
+>    * @vdev: the device
 
