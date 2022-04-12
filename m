@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24D1CC433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:03:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 331CFC433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:03:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348059AbiDLMF0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S1348312AbiDLMF1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351671AbiDLMCl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:02:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210477C177;
-        Tue, 12 Apr 2022 03:59:05 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id d10so21936953edj.0;
-        Tue, 12 Apr 2022 03:59:04 -0700 (PDT)
+        with ESMTP id S1351243AbiDLMCg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:02:36 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D20C76595;
+        Tue, 12 Apr 2022 03:58:53 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bg10so36566167ejb.4;
+        Tue, 12 Apr 2022 03:58:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=f1NofSwJuKbiTcVP4Eyds36Vn/5/VoS2zfBkRtVaGBU=;
-        b=n6T5ecYV25fQHGfNg04fPw61yjwu7JDQTTNAYkQ9iq76fS3t1EFlg4sEVWOWrgqA3N
-         Zceu32aAeOl7lmZEF/zjOCTE75lPxENShcxrpfYwRJXIHaHVnHM1lCTPnfJCN46vsUUe
-         nG20IXu/k/W3ICvqeVxPzFk3d8lv4FGYLL8Tr/zkoUvJg4WJETkI1UkSsLd+fnXVzRvI
-         8R2xZUQaIi/w6R+HTmBxRMLz6u27TwDrxxKDOooluwuS98grOg3n+JAKITo9k96Ahsjs
-         6c4HqqS5TBco+rhmH2+9IlttsCuhYjKUmyvCQvA3sB6GJ7eB23jrxVHWfE/ilIHopviP
-         KEIw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+eJGktqK5V7HDq2U3VQXwapNjHNoENEgBXt1QNATELQ=;
+        b=ZoFzb3tloXo+McRmkV6Gjg4GWW6lT27yGVpQhLtkyv6VtKJAkz3EOXC4aqUvcXQxTA
+         fZk3vQyLWDrVKZghgFc8vooDWaYuBRlPXfhKU+uU/xhrw6hd7uU4BFjbWhlzkFjAmGPZ
+         AIZAfM2nYSXw9Ziw9eywORZ+2hSZYIx9hW/8V3WAYu6elqDnzP3N5e2LzkpnKJ43TMAg
+         iLr3BrXHMV+92mMcEL6FrJKEr+fP3v1xYy4dAD5BLkMFLvOjt24AkA2BpkvT1SFiy4I5
+         OnZ9KtzFh9kv4tfn0kHZtUOosQl6A6yWQT8ZQdfvLARlvhWkUPNuOfcm+A8pYz1USsFA
+         K9dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=f1NofSwJuKbiTcVP4Eyds36Vn/5/VoS2zfBkRtVaGBU=;
-        b=TLkk6hI8qQS0iUV4j6kFkz/gC5NRHxBph2wKw/GcjwKdFIU7zCHHJh7qTs2QmtgJYq
-         o5rhCowf87DuuDKMD5cKt1kUT2quQ2D/pgl2+roaMoQPHp/J/es+fqyAjYswQJuKTQLJ
-         ppvDHcHrzjjl4Rn6E0Pftsx51dFJtbuiMFd4gq0CRwxS2mVXtwkyarUH/Vy8hLIN10B4
-         fpgvJzmuYGRlpfD7A6EMMFXuHvLcwueRcahtNr8Jo4M3gi767zHKe6Eq/EPyl23in49D
-         j1msvbVgFJGbrYEcHgAwaepfjO3mw2cfTzyAfr7l9LNu3yKtoZEg1DhHyy9+hZkJSSNs
-         lfDQ==
-X-Gm-Message-State: AOAM532z7VhAGkiStiy2BFQ4rEcHfvu5j6yAaknWG3doxef1Z/U/VO9z
-        n2TJMU83jNBYSc54YmWh8/g=
-X-Google-Smtp-Source: ABdhPJww4VztHgPETgge0WiT8dVHVxq4hCMuMg+N8Qnx2EdYhMmQHtCPKaNvbs/sNSU5bCdevBnUHg==
-X-Received: by 2002:a05:6402:2945:b0:41d:aad:c824 with SMTP id ed5-20020a056402294500b0041d0aadc824mr26102204edb.364.1649761143563;
-        Tue, 12 Apr 2022 03:59:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+eJGktqK5V7HDq2U3VQXwapNjHNoENEgBXt1QNATELQ=;
+        b=HMopq+KcYuG1ZW1IisA9oALTsc3/VcHlfzlq+0hZeFOCYfuO379WjlwsUemsE63Cos
+         MTYUNOVx6byXWjOz/Tge4TvBuY95G8b0191x5eTq5lylheH/JT9OS73rRVc6O2I03JBQ
+         e1tFfmHi/XW8qkRgRTw+9y0Y8bi5rqRX+61MslrPmK9NuescZjISUKDQZP/s59vBtHAi
+         EjpOS2Dx8yUAhVoEV5CHWBVUmucAgHNiqXBFV7x8ewCfTmdDWi54Ymm6FYRp74aoQAQU
+         W0Jb+Sipvorb7hzQx8ZKOravOUBmx6s5/WLYbd+kzJhZMe27TS+eD/CFCZkQCwFtvM9d
+         B7WQ==
+X-Gm-Message-State: AOAM530T+L/eNdT5RVPQjLsa+io+2t9EbIi9HZIln5YyLnfZJe81tHbj
+        ykjOm9UwoJoZv0q1n25i72HOd05fRggIlQ==
+X-Google-Smtp-Source: ABdhPJxep0FXI5E4VuHszT83H2dajpT8we3g05o3csYxYlKrvvyOU9hf7TeqHG/soEwhIlAY6GoNJQ==
+X-Received: by 2002:a17:906:1603:b0:6ce:362:c938 with SMTP id m3-20020a170906160300b006ce0362c938mr34467412ejd.253.1649761131410;
+        Tue, 12 Apr 2022 03:58:51 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.59.02
+        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.58.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 03:59:03 -0700 (PDT)
+        Tue, 12 Apr 2022 03:58:50 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -85,62 +85,113 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v2 09/18] qed: Use dedicated list iterator variable
-Date:   Tue, 12 Apr 2022 12:58:21 +0200
-Message-Id: <20220412105830.3495846-10-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v2 00/18] Remove use of list iterator after loop body
+Date:   Tue, 12 Apr 2022 12:58:12 +0200
+Message-Id: <20220412105830.3495846-1-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220412105830.3495846-1-jakobkoschel@gmail.com>
-References: <20220412105830.3495846-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+When the list iterator loop does not exit early the list iterator variable
+contains a type-confused pointer to a 'bogus' list element computed based
+on the head [1].
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable [1].
+Often a 'found' variable is used to ensure the list iterator
+variable is only accessed after the loop body if the loop did exit early
+(using a break or goto).
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/net/ethernet/qlogic/qed/qed_dev.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+In other cases that list iterator variable is used in
+combination to access the list member which reverses the invocation of
+container_of() and brings back a "safe" pointer to the head of the list.
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-index 672480c9d195..e920e7dcf66a 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-@@ -174,7 +174,7 @@ int qed_db_recovery_add(struct qed_dev *cdev,
- int qed_db_recovery_del(struct qed_dev *cdev,
- 			void __iomem *db_addr, void *db_data)
- {
--	struct qed_db_recovery_entry *db_entry = NULL;
-+	struct qed_db_recovery_entry *db_entry = NULL, *iter;
- 	struct qed_hwfn *p_hwfn;
- 	int rc = -EINVAL;
- 
-@@ -190,12 +190,13 @@ int qed_db_recovery_del(struct qed_dev *cdev,
- 
- 	/* Protect the list */
- 	spin_lock_bh(&p_hwfn->db_recovery_info.lock);
--	list_for_each_entry(db_entry,
-+	list_for_each_entry(iter,
- 			    &p_hwfn->db_recovery_info.list, list_entry) {
- 		/* search according to db_data addr since db_addr is not unique (roce) */
--		if (db_entry->db_data == db_data) {
--			qed_db_recovery_dp_entry(p_hwfn, db_entry, "Deleting");
--			list_del(&db_entry->list_entry);
-+		if (iter->db_data == db_data) {
-+			qed_db_recovery_dp_entry(p_hwfn, iter, "Deleting");
-+			list_del(&iter->list_entry);
-+			db_entry = iter;
- 			rc = 0;
- 			break;
- 		}
--- 
+Since, due to this code patten, there were quite a few bugs discovered [2],
+Linus concluded that the rule should be to never use the list iterator
+after the loop and introduce a dedicated pointer for that [3].
+
+With the new gnu11 standard, it will now be possible to limit the scope
+of the list iterator variable to the traversal loop itself by defining
+the variable within the for loop.
+This, however, requires to remove all uses of the list iterator after
+the loop.
+
+Based on input from Paolo Abeni [4], Vinicius Costa Gomes [5], and
+Jakub Kicinski [6], I've splitted all the net-next related changes into
+two patch sets, where this is part 1.
+
+v1->v2:
+- Fixed commit message for PATCH 14/18 and used dedicated variable
+  pointing to the position (Edward Cree)
+- Removed redundant check in mv88e6xxx_port_vlan() (Vladimir Oltean)
+- Refactor mv88e6xxx_port_vlan() using separate list iterator functions
+  (Vladimir Oltean)
+- Refactor sja1105_insert_gate_entry() to use separate list iterator
+  functions (Vladimir Oltean)
+- Allow early return in sja1105_insert_gate_entry() if
+  sja1105_first_entry_longer_than() didn't find any element
+  (Vladimir Oltean)
+- Use list_add_tail() instead of list_add() in sja1105_insert_gate_entry()
+  (Jakub Kicinski)
+- net: netcp: also use separate 'pos' variable instead of duplicating list_add()
+
+Link: https://lwn.net/Articles/887097/ [1]
+Link: https://lore.kernel.org/linux-kernel/20220217184829.1991035-4-jakobkoschel@gmail.com/ [2]
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [3]
+Link: https://lore.kernel.org/linux-kernel/7393b673c626fd75f2b4f8509faa5459254fb87c.camel@redhat.com/ [4]
+Link: https://lore.kernel.org/linux-kernel/877d8a3sww.fsf@intel.com/ [5]
+Link: https://lore.kernel.org/linux-kernel/20220403205502.1b34415d@kernel.org/ [6]
+
+Jakob Koschel (18):
+  connector: Replace usage of found with dedicated list iterator
+    variable
+  net: dsa: sja1105: remove use of iterator after list_for_each_entry()
+    loop
+  net: dsa: sja1105: reorder sja1105_first_entry_longer_than with memory
+    allocation
+  net: dsa: sja1105: use list_add_tail(pos) instead of
+    list_add(pos->prev)
+  net: dsa: mv88e6xxx: remove redundant check in mv88e6xxx_port_vlan()
+  net: dsa: mv88e6xxx: refactor mv88e6xxx_port_vlan()
+  net: dsa: Replace usage of found with dedicated list iterator variable
+  net: sparx5: Replace usage of found with dedicated list iterator
+    variable
+  qed: Use dedicated list iterator variable
+  qed: Replace usage of found with dedicated list iterator variable
+  qed: Remove usage of list iterator variable after the loop
+  net: qede: Replace usage of found with dedicated list iterator
+    variable
+  net: qede: Remove check of list iterator against head past the loop
+    body
+  sfc: Remove usage of list iterator for list_add() after the loop body
+  net: netcp: Remove usage of list iterator for list_add() after loop
+    body
+  ps3_gelic: Replace usage of found with dedicated list iterator
+    variable
+  ipvlan: Remove usage of list iterator variable for the loop body
+  team: Remove use of list iterator variable for
+    list_for_each_entry_from()
+
+ drivers/connector/cn_queue.c                  | 13 ++---
+ drivers/net/dsa/mv88e6xxx/chip.c              | 57 ++++++++++---------
+ drivers/net/dsa/sja1105/sja1105_vl.c          | 51 +++++++++--------
+ .../microchip/sparx5/sparx5_mactable.c        | 25 ++++----
+ drivers/net/ethernet/qlogic/qed/qed_dev.c     | 11 ++--
+ drivers/net/ethernet/qlogic/qed/qed_iwarp.c   | 26 ++++-----
+ drivers/net/ethernet/qlogic/qed/qed_spq.c     |  6 +-
+ .../net/ethernet/qlogic/qede/qede_filter.c    | 11 ++--
+ drivers/net/ethernet/qlogic/qede/qede_rdma.c  | 11 ++--
+ drivers/net/ethernet/sfc/rx_common.c          |  8 ++-
+ drivers/net/ethernet/ti/netcp_core.c          | 14 +++--
+ .../net/ethernet/toshiba/ps3_gelic_wireless.c | 30 +++++-----
+ drivers/net/ipvlan/ipvlan_main.c              |  7 ++-
+ drivers/net/team/team.c                       | 20 ++++---
+ net/dsa/dsa.c                                 | 11 ++--
+ 15 files changed, 163 insertions(+), 138 deletions(-)
+
+
+base-commit: 3e732ebf7316ac83e8562db7e64cc68aec390a18
+--
 2.25.1
 
