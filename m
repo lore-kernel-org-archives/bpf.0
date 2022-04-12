@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF68AC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF58AC43219
 	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354128AbiDLMtu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S1353413AbiDLMtq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355312AbiDLMsK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:48:10 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB95DFEA;
-        Tue, 12 Apr 2022 05:16:48 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i27so36939014ejd.9;
-        Tue, 12 Apr 2022 05:16:48 -0700 (PDT)
+        with ESMTP id S1355276AbiDLMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:48:09 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88A1F5;
+        Tue, 12 Apr 2022 05:16:27 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id w18so22061951edi.13;
+        Tue, 12 Apr 2022 05:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yEn2KXl6YaWL8lEsoeTa0NhbbIFQf0W1A7EAGx1tWC4=;
-        b=iXJMdwpNrxt7RXikTigM+URh+seDNwmTBeP54jN6oatM9hD1I1qjtOAyt6rGEXqP15
-         cpcE0OlWaDY8NarYxMocprMaFJZx8nqBB2tW6LPkyAV9+i4IlC3n9Z+vheu/faQaFbJs
-         xNt4I7wFDeNIaqRsGQbGhPfy5tmM2/JNonlVMZ5sLYkcDgctqeb2aNmgeh9Vrry/Hr64
-         7VxLVBOINIG/PyrTnB0EBKGmYHymLdoGlhkoNDatkk0Qs5zabcqaKMO9ig8hNQX0WfLR
-         aZYpNg/1B/WDrNUbgOAO5y7K/M3WCiYcVFCODA+3dUppRLfb71j1kLsKBQgJ1deOiAQy
-         ja6Q==
+        bh=ky3MoM/ZXCS0RcXaCsseb5+miwfvst1Flp3YDairGIg=;
+        b=Xl9KpFn65ILeLpPDIRZBPb95ZmXjferRlNp6HPxpkd1j1QF8DXXvk9S3NSa3GyjL3b
+         5WjKzS+ISRKAlDXBdzjNJttH7hETKPz0YkMyOcMzfGb2+oS9tI/kKHVvK3y8deZ4tuaf
+         NKB5ia1EYiiphdafJX10nkDwQnEM2tMZC9asN9FSqeO8zdCVu9xg72bjFDLiZ8sO2i3q
+         zx81w9qKu4uPh2ca7EM6S+RMohZfp+0Q/x3EFJlX/fBppcdX896rQZOq9U7Aof5YfLGg
+         9vHJP3+076uELgNbmY9/87m4bTRNG14IU7JsKZ0pUSSiwfvcLlHAroQwS6vGKJ9OiPlA
+         wIcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yEn2KXl6YaWL8lEsoeTa0NhbbIFQf0W1A7EAGx1tWC4=;
-        b=smz9p2C5nJp4095IqxV2XYc/jfwr8fQ816aGpCSrc8a200tUfkIrY05aRz+6EqjwBP
-         byaTTJMsvWNeP944/09q2mCMzODgiozdCrljM89HwlimbhazadCPG9smFJJFq9Y1cWUv
-         +c57278/LmVJ9io4OCR7wktsj2uIy8iqybcRlfPIPbZ2WJor1k/JiZd9rNXx6K/B5GmD
-         zf/2crPsAETOHEFuNYWBwuWzCs4nttya6N7PNTH2U8+nPzJP7Gi1Qvg3P8AjEa2yurXR
-         OP2kHoLFsEJt28oJ+WFWl9dz+AxitLSs1q3NMpOOzqaSAQkD7SPn5XFmj/I64RHDrmnJ
-         K4ow==
-X-Gm-Message-State: AOAM533xBfgB1spc6LWQg+bGpbEh6RzskVQLhFhOOnCTVvqtCe6FNYPI
-        mTgH3R85ozGeZYSO61YBspk=
-X-Google-Smtp-Source: ABdhPJwp6F4IY9GIHKJ2nyRemruLcULeHd8S9uL+NtdbVF54Vrmg47gla/xTzUwjIcaXB048+q2uCw==
-X-Received: by 2002:a17:907:168a:b0:6da:9177:9fdd with SMTP id hc10-20020a170907168a00b006da91779fddmr34596105ejc.757.1649765807446;
-        Tue, 12 Apr 2022 05:16:47 -0700 (PDT)
+        bh=ky3MoM/ZXCS0RcXaCsseb5+miwfvst1Flp3YDairGIg=;
+        b=gKHmVfPLf45iQCUF5rOFS9QnTdIbpaaCRah46PC9EUgvf2LPw7Hde4Cdk40xqBosh1
+         HjKjSk/t1U7BG2gUG4bZEuYaqHFZR2UZpvMRQNM7VE90fjCdmGihNBIbX084cSbQn4Sj
+         5+hJlw66tJy7axXDfTvdm6Hql9LbqLq82rcBJCPeL5TbnDapHDmblgDh2Oz+mjJnb5zk
+         FgFpr1WCVwL/mlYIA4POoXT6PI5CyTN6z1OC2uSK8MWT9bae4e9e/mLb6i/kE7fzH7FE
+         06zWPf4UmJNHjhz7n/FDTC8ekpiAhsuWtmL4OBmuu8gRaXCkOVG2TdDbG2XbDETKk7Fv
+         7TIA==
+X-Gm-Message-State: AOAM5312fAoOZqXgOWmg4ZRhxlpKcUZTaa1jvKi+Asg+rTLAaTU47uTl
+        JgZlBnFP6lMtTZks4Rq7c0g=
+X-Google-Smtp-Source: ABdhPJwqiMKCloQu7lPo6bm5yONqwcUrI2WJNOkYvlBGU31dOESCjYQsFkAtckDbWpPnqOdkuMwE/Q==
+X-Received: by 2002:a05:6402:4487:b0:41d:9622:3292 with SMTP id er7-20020a056402448700b0041d96223292mr1925545edb.330.1649765785753;
+        Tue, 12 Apr 2022 05:16:25 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.45
+        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 05:16:47 -0700 (PDT)
+        Tue, 12 Apr 2022 05:16:25 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -87,10 +87,11 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v3 17/18] ipvlan: Remove usage of list iterator variable for the loop body
-Date:   Tue, 12 Apr 2022 14:15:56 +0200
-Message-Id: <20220412121557.3553555-18-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v3 03/18] net: dsa: sja1105: reorder sja1105_first_entry_longer_than with memory allocation
+Date:   Tue, 12 Apr 2022 14:15:42 +0200
+Message-Id: <20220412121557.3553555-4-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412121557.3553555-1-jakobkoschel@gmail.com>
 References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
@@ -100,57 +101,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation to limit the scope of the list iterator variable to the
-list traversal loop, use a dedicated pointer to iterate through the
-list [1].
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Since that variable should not be used past the loop iteration, a
-separate variable is used to 'remember the current location within the
-loop'.
+sja1105_first_entry_longer_than() does not make use of the full struct
+sja1105_gate_entry *e, just of e->interval which is set from the passed
+entry_time.
 
-To either continue iterating from that position or start a new
-iteration (if the previous iteration was complete) list_prepare_entry()
-is used.
+This means that if there is a gate conflict, we have allocated e for
+nothing, just to free it later. Reorder the memory allocation and the
+function call, to avoid that and simplify the error unwind path.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/ipvlan/ipvlan_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/dsa/sja1105/sja1105_vl.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
-index 696e245f6d00..063d7c30e944 100644
---- a/drivers/net/ipvlan/ipvlan_main.c
-+++ b/drivers/net/ipvlan/ipvlan_main.c
-@@ -9,7 +9,7 @@
- static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
- 				struct netlink_ext_ack *extack)
+diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
+index 369be2ac3587..e5ea8eb9ec4e 100644
+--- a/drivers/net/dsa/sja1105/sja1105_vl.c
++++ b/drivers/net/dsa/sja1105/sja1105_vl.c
+@@ -36,7 +36,11 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
  {
--	struct ipvl_dev *ipvlan;
-+	struct ipvl_dev *ipvlan, *tmp = NULL;
- 	unsigned int flags;
- 	int err;
+ 	struct sja1105_gate_entry *e;
+ 	struct list_head *pos;
+-	int rc;
++
++	pos = sja1105_first_entry_longer_than(&gating_cfg->entries,
++					      entry_time, extack);
++	if (IS_ERR(pos))
++		return PTR_ERR(pos);
  
-@@ -26,8 +26,10 @@ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
- 						       flags & ~IFF_NOARP,
- 						       extack);
- 			}
--			if (unlikely(err))
-+			if (unlikely(err)) {
-+				tmp = ipvlan;
- 				goto fail;
-+			}
- 		}
- 		if (nval == IPVLAN_MODE_L3S) {
- 			/* New mode is L3S */
-@@ -43,6 +45,7 @@ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
+ 	e = kzalloc(sizeof(*e), GFP_KERNEL);
+ 	if (!e)
+@@ -45,22 +49,11 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
+ 	e->rule = rule;
+ 	e->gate_state = gate_state;
+ 	e->interval = entry_time;
+-
+-	pos = sja1105_first_entry_longer_than(&gating_cfg->entries,
+-					      e->interval, extack);
+-	if (IS_ERR(pos)) {
+-		rc = PTR_ERR(pos);
+-		goto err;
+-	}
+-
+ 	list_add(&e->list, pos->prev);
+ 
+ 	gating_cfg->num_entries++;
+ 
  	return 0;
+-err:
+-	kfree(e);
+-	return rc;
+ }
  
- fail:
-+	ipvlan = list_prepare_entry(tmp, &port->ipvlans, pnode);
- 	/* Undo the flags changes that have been done so far. */
- 	list_for_each_entry_continue_reverse(ipvlan, &port->ipvlans, pnode) {
- 		flags = ipvlan->dev->flags;
+ /* The gate entries contain absolute times in their e->interval field. Convert
 -- 
 2.25.1
 
