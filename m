@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44FE4C433FE
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:02:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0274EC433FE
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:02:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241460AbiDLME7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S245085AbiDLMFA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351698AbiDLMCm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:02:42 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D4878064;
-        Tue, 12 Apr 2022 03:59:06 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z12so9293337edl.2;
-        Tue, 12 Apr 2022 03:59:06 -0700 (PDT)
+        with ESMTP id S1351382AbiDLMCh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:02:37 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC0878062;
+        Tue, 12 Apr 2022 03:58:59 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id u15so17893593ejf.11;
+        Tue, 12 Apr 2022 03:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LXuHnml0JyQ7WUWtSyqxCdcrvdOAihH7ECEcB+ac3FQ=;
-        b=DzUPG84H8N/FLvC0Fzqh3CHkiQQIDKYRbYQfw0yB8lm+Tu5z3o0Gjc3qh5j8U4arNE
-         axFe3x4HXbs+v+4j21ajIKgkE216LfLui8ZVEZzQBfBGVBjmaLpSiLjzwXuNflo68eWC
-         1f1fbfRM3DwL54hEgoCu1SB6TRKgVFbS/ABFIqEWjTGp56TOM0kS7UvCsDSfK5kc98+k
-         z2EGI4N/uGvSxuTU8nnKaMMXDdV25Gtog9z38iwENXYdgW5ugUOZkF7gboMUAzcPyGG4
-         EcIdwZ9JTKu4GZUWamRxnJ8CuyFGf6TxRTjzt4h9GEKrhx3+1R8fGIbPeyeZ3U6D50Bl
-         kaIg==
+        bh=PwlvdFh40zWrnBHSnvRolkyWcqqdHXS406E/ZGgN6EM=;
+        b=qbvgYgagzSXxv6YmhWQbxqNdOmSbQgfVFVfg080pnmD2QQT4ewAjsptb6A151wy3qB
+         l6YN8srio8jNhYnocQB9/Du9NaXc7tZUtoTURut7ItC2ERogITRXDModlgdtZqjY2hoA
+         vYjbslfGvCzth9QlMXFSRC8+gpbvhVtL9EnROoIzIai1bv0v+3U8etOIs85gXb2avuu0
+         wXup3n/MaYi0FQUmW7W9MseeBhsedGuwcgBndyFWy1KvjzSHRp3PnwiU33VAYbjVdr+k
+         XXZ7rWh6GJt6kkgM93uVduBBw0Piopt0wRQtEsiohjxYPFVFZXdutCjO5dD/WJCTgmfj
+         RZdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LXuHnml0JyQ7WUWtSyqxCdcrvdOAihH7ECEcB+ac3FQ=;
-        b=Mir/9TVnsqazb7nnRQZzwLoGXlKCGIBuzLOVy73e0u6LlZIs0g70eTx4RoO4OnRMTD
-         TX9aKRRP3kXt95Ud7rBrhxXw0ra4kqEpwXHK7Je14/m//YEy9ByUa11jTqNNZ8HtjfhU
-         +X/LJOqq5siUjWewtmPgzGLWGcODr+PoBbG2JA52WC0E0jkSY02mHnmmlAkPtrz4FfqD
-         hdui+hxpmgdDM2oTiwcVvV67y25KlvY03W08Rd1UpipJp7mme4qO5HHn+7gq7OQaOYiZ
-         sRbULMOCdKJXWLwsKelnJbRvadaA6yWodPhi8Z2EcPz/qiIrIICuUD2zVBQuZYZTqko/
-         B44A==
-X-Gm-Message-State: AOAM530RUf1p3uCjR+WJM8MYrU0/j1eGBqBg9xoh3Ed43U6RnxUXMDKg
-        VFK36X+eZwxo1tF4mQkqXbM=
-X-Google-Smtp-Source: ABdhPJyetCjNVNopFWEtxM0VBYDqEdoFylmGuoPncu2FETfCzgQjhmIkfQSwfETuCixsiIEEb+WRaA==
-X-Received: by 2002:a05:6402:50cf:b0:418:ee57:ed9 with SMTP id h15-20020a05640250cf00b00418ee570ed9mr37913776edb.37.1649761144789;
-        Tue, 12 Apr 2022 03:59:04 -0700 (PDT)
+        bh=PwlvdFh40zWrnBHSnvRolkyWcqqdHXS406E/ZGgN6EM=;
+        b=eXih0CSBXAC41lKBORjVqYfvD/7vSt0q9b0TVgKByaPdsCMlVt8478ELjS16uHmX+7
+         xlhycBZncNyBKQqx6vWirlkaUkR0AtHxFT2GWRC3XJsUs0NwDa1ACVfqhaZdlUF4/Cz0
+         LU/d21Lb0xz8tCiXfPkzk6eiFn/CQbwvaBVCZ/n+KeqZo7rsajGEGniUYuM2oVqH1DH+
+         p4aOC/zP8G9scXMshMoOQfJARCquLrK6pxG8ELKV8cNek2wJ5qPruYJ7Osc2a0+EO7wS
+         904ugEPLvdMtAOYLcKEbMnxYZa/CiUQIXk2GDitYIRYEs9FirNXIQp4sqXXQklXdrteY
+         +/WQ==
+X-Gm-Message-State: AOAM532khrwTbBNj2M2XdcUDuMUvdIBsToCBFcB7n/h1kKMnc7zBZauQ
+        A3u//cJ0Hw9Sl9/p2hZ/Uio=
+X-Google-Smtp-Source: ABdhPJwA+rvSjheEa32LQoy9hOd6Zb25JtwO8XMjJGvYpQlukrjH+4wgEFqK8xj7XJh4Ax1vjoAg/g==
+X-Received: by 2002:a17:906:c111:b0:6db:cf0e:3146 with SMTP id do17-20020a170906c11100b006dbcf0e3146mr34735453ejc.280.1649761138218;
+        Tue, 12 Apr 2022 03:58:58 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.59.03
+        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.58.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 03:59:04 -0700 (PDT)
+        Tue, 12 Apr 2022 03:58:57 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,10 +84,11 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v2 10/18] qed: Replace usage of found with dedicated list iterator variable
-Date:   Tue, 12 Apr 2022 12:58:22 +0200
-Message-Id: <20220412105830.3495846-11-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v2 05/18] net: dsa: mv88e6xxx: remove redundant check in mv88e6xxx_port_vlan()
+Date:   Tue, 12 Apr 2022 12:58:17 +0200
+Message-Id: <20220412105830.3495846-6-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412105830.3495846-1-jakobkoschel@gmail.com>
 References: <20220412105830.3495846-1-jakobkoschel@gmail.com>
@@ -97,78 +98,36 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+We know that "dev > dst->last_switch" in the "else" block.
+In other words, that "dev - dst->last_switch" is > 0.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+dsa_port_bridge_num_get(dp) can be 0, but the check
+"if (bridge_num + dst->last_switch != dev) continue", rewritten as
+"if (bridge_num != dev - dst->last_switch) continue", aka
+"if (bridge_num != something which cannot be 0) continue",
+makes it redundant to have the extra "if (!bridge_num) continue" logic,
+since a bridge_num of zero would have been skipped anyway.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/net/ethernet/qlogic/qed/qed_iwarp.c | 26 ++++++++++-----------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_iwarp.c b/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
-index 1d1d4caad680..198c9321bf51 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
-@@ -1630,38 +1630,36 @@ static struct qed_iwarp_listener *
- qed_iwarp_get_listener(struct qed_hwfn *p_hwfn,
- 		       struct qed_iwarp_cm_info *cm_info)
- {
--	struct qed_iwarp_listener *listener = NULL;
-+	struct qed_iwarp_listener *listener = NULL, *iter;
- 	static const u32 ip_zero[4] = { 0, 0, 0, 0 };
--	bool found = false;
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 64f4fdd02902..b3aa0e5bc842 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1404,9 +1404,6 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ 		list_for_each_entry(dp, &dst->ports, list) {
+ 			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
  
--	list_for_each_entry(listener,
-+	list_for_each_entry(iter,
- 			    &p_hwfn->p_rdma_info->iwarp.listen_list,
- 			    list_entry) {
--		if (listener->port == cm_info->local_port) {
--			if (!memcmp(listener->ip_addr,
-+		if (iter->port == cm_info->local_port) {
-+			if (!memcmp(iter->ip_addr,
- 				    ip_zero, sizeof(ip_zero))) {
--				found = true;
-+				listener = iter;
- 				break;
- 			}
+-			if (!bridge_num)
+-				continue;
+-
+ 			if (bridge_num + dst->last_switch != dev)
+ 				continue;
  
--			if (!memcmp(listener->ip_addr,
-+			if (!memcmp(iter->ip_addr,
- 				    cm_info->local_ip,
- 				    sizeof(cm_info->local_ip)) &&
--			    (listener->vlan == cm_info->vlan)) {
--				found = true;
-+			    iter->vlan == cm_info->vlan) {
-+				listener = iter;
- 				break;
- 			}
- 		}
- 	}
- 
--	if (found) {
-+	if (listener)
- 		DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener found = %p\n",
- 			   listener);
--		return listener;
--	}
-+	else
-+		DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener not found\n");
- 
--	DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener not found\n");
--	return NULL;
-+	return listener;
- }
- 
- static int
 -- 
 2.25.1
 
