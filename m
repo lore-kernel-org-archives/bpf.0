@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2004BC433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1AEEC433FE
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354169AbiDLMtx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S1354188AbiDLMt4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355277AbiDLMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:48:09 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFBA1122;
-        Tue, 12 Apr 2022 05:16:30 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id d10so22173728edj.0;
-        Tue, 12 Apr 2022 05:16:30 -0700 (PDT)
+        with ESMTP id S1355298AbiDLMsK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:48:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B57630C;
+        Tue, 12 Apr 2022 05:16:42 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id g20so22088310edw.6;
+        Tue, 12 Apr 2022 05:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3KCYsQY/y5IS+uLLSbczPyROpjTi5JnKwjdboy6JQyM=;
-        b=Ijr9vklL6LjkEtOCaT7sYYYQ1JtbZJC3Vy+rq3yG6nRRVMc9KwA9fVYAQM2QFTx3te
-         fA1fdxQAVJvrSYrECndrbRE75qFl+qYh4CO9rfv6QEvMfAf7QnFmHXNnBigOrqmZJFOj
-         4YFuDyMa9pgKJlDwAQkTL5NHD33vXD2ad8/cyrUHQlsd5F4ff9rtdkpiSkpcKzyPAOSF
-         sRw6w9Klo7XF16I3sOPabF2X5GAPATD0n1zRQUytlwLqAGtEd6JESH2eQYsGbcMN9PhZ
-         UHZQf2fjN7DU1F9cL1t6h/PD8w2/WDFIIMq7ZuEcgxcoRWfNY7eMnrF1MAxkvIJVI6/y
-         eYkQ==
+        bh=fIZenjsGtzoZOCvRY/8dIr7NFNGibTLVVWT+oNYuIJo=;
+        b=B3JbozYnAsYrhTrCLfnOEQgqcUEBBjdTVGzZY8i2oXu6qiEKY4WGQ+nZax/SPoyrH/
+         MtU6HsTDAJvD4IsNIgsUDEtXsA64ASHBETvwdigEhXgo3XBfcziYfLdDjNgS6Vt1pSCy
+         3WAtVg5E7lCj4zAwXKGgL0IAfqwuS5KzLjrEHZ9iVRviDypuh9MhpZ0MF2RsWvUCfT4F
+         h9tFp9ivz+1HiZMiKurUdbIcPUowK09o9GXN96vGpp8GCRyOhiPF5WkW3LBeGuIS4tjn
+         7t83wbMDS1vch+3YWPPrGsp/7lVIGwW0SFtftyNEfte1fOhvI47i+T3Sr5CtX5TDqg8n
+         NfwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3KCYsQY/y5IS+uLLSbczPyROpjTi5JnKwjdboy6JQyM=;
-        b=700te9s/6r9q5D7yTfPNtGLQ90uzas9wbPCUAJA0oEgqQ1fyRTtJN3uROyBKP5PR00
-         mlwWGbFpsWd/XGOvKXq+x3saRuxqhyYpxh4dJr6JptIXkVLbBN7TbKvj2Fsh47hpy9yW
-         Am+fAlQGpFIwykULqj0gBzQSzRQEl0MLBg4mkANyO/d54rUUsw3tT8+TdIUGEMtO5HSY
-         gyKTjKKzrBjl1HtIQrus06fYvGrII0iPL2PRg4Ajx9dssghFUSSNpjIA5DW9oI6BdiSf
-         4qfwEfQl1Uwbne44JZWjLjCuSBFkdu3oZM0SHFyjP5EuXKey0oGhRoh/hjNkUa10SYx6
-         CQiw==
-X-Gm-Message-State: AOAM532k5U7xd3hzr1bn0SVR20WJvhOD5Byiqss6ZRGS+tep2DmnoOTh
-        41kBhxcMCBir5gT4hc4npAc=
-X-Google-Smtp-Source: ABdhPJyO6d0xiIlTTteAtNGMnPmGJvkkKfwwAvDDwF+Cb+4gNJBr9YV5I3Djws/hxiMNELH/5QJCbQ==
-X-Received: by 2002:aa7:cd18:0:b0:41d:8df8:86e5 with SMTP id b24-20020aa7cd18000000b0041d8df886e5mr3998410edw.248.1649765788895;
-        Tue, 12 Apr 2022 05:16:28 -0700 (PDT)
+        bh=fIZenjsGtzoZOCvRY/8dIr7NFNGibTLVVWT+oNYuIJo=;
+        b=UkbzZTHpzwDkvt46q8QfwNxsIBfhBCiMGJHDAfQVnaWqlmQwAtKKdf9suFIWUE19F8
+         JxhlEEm5adhTqbh/c8GHhvs+V2YWTcZuFAkSqHmH4MxphVXwWamt5yxpYuRkkBoP6OEP
+         D+4qopGtbpDlkF0sJZvj5zgmqC4mwdPWcKeas4jGUBYPVxwW6vChH7WJN1JpPdT1WZW6
+         fXf+mR2IrPmaFEg81tCe/mb58JpisJw2sn8u22OiaZkb90wIBQ2m/+n7es/Pcl4gy2nv
+         Je17sGeq27egUSobfIkqdcqHJtXae/XCaWmAcXyokk1srXC1wihL/tdMXztbPFAhUrBM
+         y90A==
+X-Gm-Message-State: AOAM530n1ojC83RzdIGDYh65PHxqPr6SzV0RdncsBnLhImP7gR7j5oQg
+        cKKBMfXNHvjdygCsCBBjLjc=
+X-Google-Smtp-Source: ABdhPJwDfV+cQJD9CzS4ZdVikUG8/+h06MLGlj/jsIreyMXRVVEEnBC7EzcAcN2EN9dZw38wcye90w==
+X-Received: by 2002:a05:6402:254e:b0:418:d759:dc48 with SMTP id l14-20020a056402254e00b00418d759dc48mr38922894edb.104.1649765801315;
+        Tue, 12 Apr 2022 05:16:41 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.27
+        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 05:16:28 -0700 (PDT)
+        Tue, 12 Apr 2022 05:16:40 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -87,11 +87,10 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next v3 05/18] net: dsa: mv88e6xxx: remove redundant check in mv88e6xxx_port_vlan()
-Date:   Tue, 12 Apr 2022 14:15:44 +0200
-Message-Id: <20220412121557.3553555-6-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH net-next v3 13/18] net: qede: Remove check of list iterator against head past the loop body
+Date:   Tue, 12 Apr 2022 14:15:52 +0200
+Message-Id: <20220412121557.3553555-14-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412121557.3553555-1-jakobkoschel@gmail.com>
 References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
@@ -101,38 +100,54 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+When list_for_each_entry() completes the iteration over the whole list
+without breaking the loop, the iterator value will be a bogus pointer
+computed based on the head element.
 
-We know that "dev > dst->last_switch" in the "else" block.
-In other words, that "dev - dst->last_switch" is > 0.
+While it is safe to use the pointer to determine if it was computed
+based on the head element, either with list_entry_is_head() or
+&pos->member == head, using the iterator variable after the loop should
+be avoided.
 
-dsa_port_bridge_num_get(dp) can be 0, but the check
-"if (bridge_num + dst->last_switch != dev) continue", rewritten as
-"if (bridge_num != dev - dst->last_switch) continue", aka
-"if (bridge_num != something which cannot be 0) continue",
-makes it redundant to have the extra "if (!bridge_num) continue" logic,
-since a bridge_num of zero would have been skipped anyway.
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer to point to the found element [1].
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_filter.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 64f4fdd02902..b3aa0e5bc842 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1404,9 +1404,6 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
- 		list_for_each_entry(dp, &dst->ports, list) {
- 			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+index 3010833ddde3..3d167e37e654 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+@@ -829,18 +829,21 @@ int qede_configure_vlan_filters(struct qede_dev *edev)
+ int qede_vlan_rx_kill_vid(struct net_device *dev, __be16 proto, u16 vid)
+ {
+ 	struct qede_dev *edev = netdev_priv(dev);
+-	struct qede_vlan *vlan;
++	struct qede_vlan *vlan = NULL;
++	struct qede_vlan *iter;
+ 	int rc = 0;
  
--			if (!bridge_num)
--				continue;
--
- 			if (bridge_num + dst->last_switch != dev)
- 				continue;
+ 	DP_VERBOSE(edev, NETIF_MSG_IFDOWN, "Removing vlan 0x%04x\n", vid);
  
+ 	/* Find whether entry exists */
+ 	__qede_lock(edev);
+-	list_for_each_entry(vlan, &edev->vlan_list, list)
+-		if (vlan->vid == vid)
++	list_for_each_entry(iter, &edev->vlan_list, list)
++		if (iter->vid == vid) {
++			vlan = iter;
+ 			break;
++		}
+ 
+-	if (list_entry_is_head(vlan, &edev->vlan_list, list)) {
++	if (!vlan) {
+ 		DP_VERBOSE(edev, (NETIF_MSG_IFUP | NETIF_MSG_IFDOWN),
+ 			   "Vlan isn't configured\n");
+ 		goto out;
 -- 
 2.25.1
 
