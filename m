@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4001C433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:02:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E615C433EF
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:03:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347337AbiDLMFL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S1347481AbiDLMFO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351520AbiDLMCk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:02:40 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0929A7A9BE;
-        Tue, 12 Apr 2022 03:59:01 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id p15so36531187ejc.7;
-        Tue, 12 Apr 2022 03:59:00 -0700 (PDT)
+        with ESMTP id S1351861AbiDLMCo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:02:44 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042B525C41;
+        Tue, 12 Apr 2022 03:59:15 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id k23so36524851ejd.3;
+        Tue, 12 Apr 2022 03:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6t7Nl01e4cvCsyopQipowOOZNCNPO7CspXlgqSRJfN8=;
-        b=eSGSjXghlomi9azQlGr8ioc93WtOY0TuT/i6asBU/eQ+Q1w2HuQr9Vbj0Lv+K2Uwd6
-         lXdCp6Vbsjqb5Tp7v0fWY/1qyy/i8g8zwSwikdYrSgIRB7uQP9o+u+3aqohN3d5QBPnP
-         O4mRo1gAyGu1nbzgZwnvP9EAz/wI6yc3NzZ4bclnifBH7zuHLKkaqhGX1U63ThGSZauP
-         WZ+sMhbur0UIkqVmNVJeRpye8a4Q3jZgiinMGQQxTzyF3nF8Mw+K59r+DiRp3aQNsYpa
-         DdIpdyl4Ejhf0ewOKioasVXY5lbD/Pnm2HFjg4mbFodfu/4l26vi13SEfg+nBtyg/yVz
-         7lbA==
+        bh=yEn2KXl6YaWL8lEsoeTa0NhbbIFQf0W1A7EAGx1tWC4=;
+        b=URvL9FZUMvjRzGB0WY1iPLeCXHhDUEaiCKAeaq9DreTRV6TJKfwQJPMKhreF+Dixnd
+         pBHkJaQ55xK6U0qEQAUUHJhei/1HkTYr9CMuZuv5xcquScWATx9bXv03phP9h55z8x3Q
+         /kv5CpqBwpJELAOG4RG8G2PK3UXoOZzAEtFy08pFrPfiUPDIIzqyzaXds7M+7dXgULCx
+         Wp5MpHUpOqV+F4jF4jlbFXpjszk91C6FLxeg6me72qzTAuq1l1BjXoQhQqEe+hcD7z7+
+         wBQ8yX8jBmuXVADIPvQu7QqgQW46l1lT3fS6+FlThAPeSAg3UcBqQf/dH9K4WVTUQsJS
+         ZXPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6t7Nl01e4cvCsyopQipowOOZNCNPO7CspXlgqSRJfN8=;
-        b=oclKrK7c9HqaJaaBfF1Nj7Kg4mgNicC2XkPLZnOZQSV3BE4cPRJ9wQs/PSrqrQMZyw
-         Jee/cIpRElrGBK0ozSSDrYGlrW9SVl+IdCLOtHQ2GtndiFAClajKTgecYq2ndJhxQKwa
-         ZuT4auf/+F8ps2C7ZPsIZp49efoEiRR9W+wNI0yuvEBCtByj6536b7JMKRyQ7+fP+1cy
-         RvnH7O8yqoT/ZbXHlf25YrRMNBfk1ABDwV+61v1AyLj0SdBz8+Q0YHACCVD+2aR74LTA
-         JD3KUxvIzJwrMFGJnTYGQWtuRK9GpAwZ6NIL1YeFAZed8iNVMslYc+pKUu8aPPE02YPz
-         UCcQ==
-X-Gm-Message-State: AOAM530LE6k7PJAciSwWr+2FuEs6FU1NJPYSgtVuo/i7J/rB3d5fCuDb
-        NMcmgurfsz1E6b3nFVHWMAo=
-X-Google-Smtp-Source: ABdhPJwVYANoguUGdZzhpnrpdU22VVN93loOJ+LRG4RlNJ4J6OzE+BXNUMPf7L3VgsdYHMP9/kOrsw==
-X-Received: by 2002:a17:907:72c3:b0:6e8:a265:4232 with SMTP id du3-20020a17090772c300b006e8a2654232mr5352112ejc.86.1649761139587;
-        Tue, 12 Apr 2022 03:58:59 -0700 (PDT)
+        bh=yEn2KXl6YaWL8lEsoeTa0NhbbIFQf0W1A7EAGx1tWC4=;
+        b=r6PHNA1077RtYmDbVrxu8895mXBEHj221zOjlvUyLyTJx0MCFTR/uheC0L7yeoGWeJ
+         SmqSucT8gvlQ87WxOg7+9v9fdGuw5+9Cm6fT6x7D+D5pYrt7zbaOrVBeBUqqrlOIH2/Z
+         uep9AIQ11bEG+nmI1DfWyh3B4DMB+Z9GS7lykBGPtYWS9R8V2IgWAPPbWO97YXqASYiM
+         swMpq7m7HhrjbDec6vhxIkGWxMYBNhJRAz3vepDMuglcROfI70AX/MfigMERwp7ICySq
+         ZAOb5hrmy2o23+fLgW1KtRFWYtRY0a3/OmD79HcMPQggH4EYe/LAMSyEzX6GErqs2AU1
+         CsSQ==
+X-Gm-Message-State: AOAM532m5KJECUxC66tqaKfFRzyYvWhoXtcbV27RJq8HUSoJsEnd9YOV
+        y4aOH00jWuAxzV3QcvWUVFk=
+X-Google-Smtp-Source: ABdhPJy+DjrS/xahd3xLVpron0+j23as0+9YQ53EYS9Uq69Hn4VrKk/rFYW1m5I2aqag/NAtAYndXw==
+X-Received: by 2002:a17:906:2883:b0:6e8:7012:4185 with SMTP id o3-20020a170906288300b006e870124185mr14015586ejd.204.1649761154171;
+        Tue, 12 Apr 2022 03:59:14 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.58.58
+        by smtp.googlemail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm16986370edz.35.2022.04.12.03.59.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 03:58:59 -0700 (PDT)
+        Tue, 12 Apr 2022 03:59:13 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,11 +84,10 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next v2 06/18] net: dsa: mv88e6xxx: refactor mv88e6xxx_port_vlan()
-Date:   Tue, 12 Apr 2022 12:58:18 +0200
-Message-Id: <20220412105830.3495846-7-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH net-next v2 17/18] ipvlan: Remove usage of list iterator variable for the loop body
+Date:   Tue, 12 Apr 2022 12:58:29 +0200
+Message-Id: <20220412105830.3495846-18-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412105830.3495846-1-jakobkoschel@gmail.com>
 References: <20220412105830.3495846-1-jakobkoschel@gmail.com>
@@ -98,110 +97,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To avoid bugs and speculative execution exploits due to type-confused
-pointers at the end of a list_for_each_entry() loop, one measure is to
-restrict code to not use the iterator variable outside the loop block.
+In preparation to limit the scope of the list iterator variable to the
+list traversal loop, use a dedicated pointer to iterate through the
+list [1].
 
-In the case of mv88e6xxx_port_vlan(), this isn't a problem, as we never
-let the loops exit through "natural causes" anyway, by using a "found"
-variable and then using the last "dp" iterator prior to the break, which
-is a safe thing to do.
+Since that variable should not be used past the loop iteration, a
+separate variable is used to 'remember the current location within the
+loop'.
 
-Nonetheless, with the expected new syntax, this pattern will no longer
-be possible.
+To either continue iterating from that position or start a new
+iteration (if the previous iteration was complete) list_prepare_entry()
+is used.
 
-Profit off of the occasion and break the two port finding methods into
-smaller sub-functions. Somehow, returning a copy of the iterator pointer
-is still accepted.
-
-This change makes it redundant to have a "bool found", since the "dp"
-from mv88e6xxx_port_vlan() now holds NULL if we haven't found what we
-were looking for.
-
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 54 ++++++++++++++++++--------------
- 1 file changed, 31 insertions(+), 23 deletions(-)
+ drivers/net/ipvlan/ipvlan_main.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index b3aa0e5bc842..1f35e89053e6 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1378,42 +1378,50 @@ static int mv88e6xxx_set_mac_eee(struct dsa_switch *ds, int port,
- 	return 0;
- }
- 
-+static struct dsa_port *mv88e6xxx_find_port(struct dsa_switch_tree *dst,
-+					    int sw_index, int port)
-+{
-+	struct dsa_port *dp;
-+
-+	list_for_each_entry(dp, &dst->ports, list)
-+		if (dp->ds->index == sw_index && dp->index == port)
-+			return dp;
-+
-+	return NULL;
-+}
-+
-+static struct dsa_port *
-+mv88e6xxx_find_port_by_bridge_num(struct dsa_switch_tree *dst,
-+				  unsigned int bridge_num)
-+{
-+	struct dsa_port *dp;
-+
-+	list_for_each_entry(dp, &dst->ports, list)
-+		if (dsa_port_bridge_num_get(dp) == bridge_num)
-+			return dp;
-+
-+	return NULL;
-+}
-+
- /* Mask of the local ports allowed to receive frames from a given fabric port */
- static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
+index 696e245f6d00..063d7c30e944 100644
+--- a/drivers/net/ipvlan/ipvlan_main.c
++++ b/drivers/net/ipvlan/ipvlan_main.c
+@@ -9,7 +9,7 @@
+ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
+ 				struct netlink_ext_ack *extack)
  {
- 	struct dsa_switch *ds = chip->ds;
- 	struct dsa_switch_tree *dst = ds->dst;
- 	struct dsa_port *dp, *other_dp;
--	bool found = false;
- 	u16 pvlan;
+-	struct ipvl_dev *ipvlan;
++	struct ipvl_dev *ipvlan, *tmp = NULL;
+ 	unsigned int flags;
+ 	int err;
  
--	/* dev is a physical switch */
- 	if (dev <= dst->last_switch) {
--		list_for_each_entry(dp, &dst->ports, list) {
--			if (dp->ds->index == dev && dp->index == port) {
--				/* dp might be a DSA link or a user port, so it
--				 * might or might not have a bridge.
--				 * Use the "found" variable for both cases.
--				 */
--				found = true;
--				break;
--			}
--		}
--	/* dev is a virtual bridge */
-+		/* dev is a physical switch */
-+		dp = mv88e6xxx_find_port(dst, dev, port);
- 	} else {
--		list_for_each_entry(dp, &dst->ports, list) {
--			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
--
--			if (bridge_num + dst->last_switch != dev)
--				continue;
--
--			found = true;
--			break;
--		}
-+		/* dev is a virtual bridge */
-+		dp = mv88e6xxx_find_port_by_bridge_num(dst,
-+						       dev - dst->last_switch);
- 	}
+@@ -26,8 +26,10 @@ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
+ 						       flags & ~IFF_NOARP,
+ 						       extack);
+ 			}
+-			if (unlikely(err))
++			if (unlikely(err)) {
++				tmp = ipvlan;
+ 				goto fail;
++			}
+ 		}
+ 		if (nval == IPVLAN_MODE_L3S) {
+ 			/* New mode is L3S */
+@@ -43,6 +45,7 @@ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
+ 	return 0;
  
- 	/* Prevent frames from unknown switch or virtual bridge */
--	if (!found)
-+	if (!dp)
- 		return 0;
- 
- 	/* Frames from DSA links and CPU ports can egress any local port */
+ fail:
++	ipvlan = list_prepare_entry(tmp, &port->ipvlans, pnode);
+ 	/* Undo the flags changes that have been done so far. */
+ 	list_for_each_entry_continue_reverse(ipvlan, &port->ipvlans, pnode) {
+ 		flags = ipvlan->dev->flags;
 -- 
 2.25.1
 
