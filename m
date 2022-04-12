@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D98BBC4332F
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE24DC433FE
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354309AbiDLMuE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S242858AbiDLMuJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355280AbiDLMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:48:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F371226E1;
-        Tue, 12 Apr 2022 05:16:33 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z99so13494631ede.5;
-        Tue, 12 Apr 2022 05:16:33 -0700 (PDT)
+        with ESMTP id S1355299AbiDLMsK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:48:10 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604D3DEC7;
+        Tue, 12 Apr 2022 05:16:47 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id g18so11988787ejc.10;
+        Tue, 12 Apr 2022 05:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lwv0OP8MEFPtBT1zINZmdonMBn1rL8mDzX3cu0httRY=;
-        b=Nrx9PppmSSTaBksft/090SSleOxLNQ168KaZqdPde5zNNfnOffkWaVzLw6BMxacwbR
-         UAjGFEhao5GDH+VGb8yYgE4lNujVITlt7DTYSjj3eV+fO6PK3uewLodumM8NSppQDVUc
-         /OMz+Ndyg/JrNrymjRUj2fFE7XHmGj/xHdcQWi0Il9jHquCtkY9fxrpR3af35rOiFnlZ
-         5rH6MDhHkXKgviLz10C9htS5M5Z2rRSNE+ej1J8UvcwG8f5+8xM9rrsWJKlIlYWZRxgD
-         LE1E3FWCn7bLljRsUimHqjvI0RKAaKiz6iHw0LRoifpwzxwreEYLobLHKiR/cRS9ydGl
-         4KZg==
+        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
+        b=MbpelD1kO9fpd+TInbPP84SQTrTYFohS7QmbpAgzqeblyAZFn3SqJtplp4zUHPDIN+
+         TiPBFcZy1uzoaGj6w8UCN6eSvYKqFm/GpqOxZZDGhiOnnw64ZPG+a3cL8ayI5PBKEmiV
+         Bm5PiVvPrfxKiQYkNWj/y67f/behHd+xZYG6SJ27oZudVrF4fvY8p1PDKl019RGHD90r
+         od4La0PkXqCWYS8vORcSOuwIokgKkz4LnPqN9FF8H6Gz4v61Oxb2jWhUrpJgNql9m2mM
+         RmUwLOrTNPjZ+TlQ2pnRdHrWNs7b6qt/pSyuJ7YK37HQvNRjkmsEEhMx0Y0j+so2ZdhI
+         C92A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lwv0OP8MEFPtBT1zINZmdonMBn1rL8mDzX3cu0httRY=;
-        b=plWT1lpVeOlgQF0fNnKTZ/2UnedN5hMjk3eSDprU6bvvVnpPsHLbIKVMAZ+NyNWjz+
-         +X0ZF4h1S09c3DwWgozz0VTgBaYsxpuQLrOQtaPnAxrPaS56QHSwT6IgN8TQ5jnUYXIq
-         stuM7ddClW7BE4HVTJpAcOG+zg+HfOH7Ee0BNvju+U+loH+sciib56jWQ/5sEETuVC+U
-         c51HI76Vg1uwNTEqKMdWPwI9hF6OwiT5PIypgFJ2hJkHK+trPM57XjdYKqwUOK5/fOWR
-         id4/3tHLGv0qiboyAgmmxuSDzUM7gxBWAjP5DtXnSkjYraSNmU27NjDI2fcrLaboE4eh
-         8Bnw==
-X-Gm-Message-State: AOAM533pWmCdcAGFZEA1TXG5KST4Jl4EQvA8U7jKGXKAFiSC1vhow00+
-        6Lv98+4aO75/oZO/DF8k05k=
-X-Google-Smtp-Source: ABdhPJzY2ezbuKR/noX2ghuCmN5SBYP3Gx6pBGYKXHCtWqGnOQkVdyu/LlA9QKxQZv/DPvFNVlz3zA==
-X-Received: by 2002:a05:6402:2682:b0:41d:2f74:7269 with SMTP id w2-20020a056402268200b0041d2f747269mr21742861edd.255.1649765792395;
-        Tue, 12 Apr 2022 05:16:32 -0700 (PDT)
+        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
+        b=ajjky8+bEmdeOr93RrGzX1xaw8vSjxMEPkqwP2eBT1dM/2hoB1Y8jQCkNRka0pVEkt
+         ltXpwPy6sr72fgewMNgW0WwTB6fevGusPtASdirTYcjcQBSptda2eGHqTwUGjiFUtSnP
+         D43+Tw4Rwy18CWD3cwi6J73Jrt//QBVldeG3zoKqsBl+ktFltbLRDaptSGL8yjrmGdlF
+         xrnyPQPS1G8WhbFyve0J5OHCpgjRRjfYWoNkwEj5LorwWRmcI+f/TJD33dLUzKn+5uHa
+         +rQN8OMCoiqJZvA+a+BRAahVQ27NV1VuOiGEpYjEGs/QkCjPu8IbFpmrPO+HwzAQIIPe
+         hFWw==
+X-Gm-Message-State: AOAM530MFvkphX+jdEQR+Sd4dy/JD5BpQ3kgOB7PpSXYmr8gaR8zrGFl
+        uNE4wG+wVzWxHbVz5wv39P4=
+X-Google-Smtp-Source: ABdhPJyMo6KTIk8H1Og/i+lDyMmyHBej66pIRzx61AXonnOv1vkfSgXfoiYQQvHnWxdCDwIqyLYSRw==
+X-Received: by 2002:a17:906:a046:b0:6b9:20c:47c1 with SMTP id bg6-20020a170906a04600b006b9020c47c1mr34222677ejb.615.1649765805743;
+        Tue, 12 Apr 2022 05:16:45 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.30
+        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 05:16:32 -0700 (PDT)
+        Tue, 12 Apr 2022 05:16:45 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -88,9 +88,9 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v3 07/18] net: dsa: Replace usage of found with dedicated list iterator variable
-Date:   Tue, 12 Apr 2022 14:15:46 +0200
-Message-Id: <20220412121557.3553555-8-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v3 16/18] ps3_gelic: Replace usage of found with dedicated list iterator variable
+Date:   Tue, 12 Apr 2022 14:15:55 +0200
+Message-Id: <20220412121557.3553555-17-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412121557.3553555-1-jakobkoschel@gmail.com>
 References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
@@ -114,41 +114,81 @@ the variable was set, can determine if the break/goto was hit.
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- net/dsa/dsa.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ .../net/ethernet/toshiba/ps3_gelic_wireless.c | 30 +++++++++----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
-index 89c6c86e746f..645522c4dd4a 100644
---- a/net/dsa/dsa.c
-+++ b/net/dsa/dsa.c
-@@ -112,22 +112,21 @@ const struct dsa_device_ops *dsa_find_tagger_by_name(const char *buf)
- 
- const struct dsa_device_ops *dsa_tag_driver_get(int tag_protocol)
+diff --git a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
+index dc14a66583ff..c8a016c902cd 100644
+--- a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
++++ b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
+@@ -1495,14 +1495,14 @@ static int gelic_wl_start_scan(struct gelic_wl_info *wl, int always_scan,
+  */
+ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
  {
--	struct dsa_tag_driver *dsa_tag_driver;
-+	struct dsa_tag_driver *dsa_tag_driver = NULL, *iter;
- 	const struct dsa_device_ops *ops;
--	bool found = false;
++	struct gelic_wl_scan_info *target = NULL, *iter, *tmp;
+ 	struct gelic_eurus_cmd *cmd = NULL;
+-	struct gelic_wl_scan_info *target, *tmp;
+ 	struct gelic_wl_scan_info *oldest = NULL;
+ 	struct gelic_eurus_scan_info *scan_info;
+ 	unsigned int scan_info_size;
+ 	union iwreq_data data;
+ 	unsigned long this_time = jiffies;
+-	unsigned int data_len, i, found, r;
++	unsigned int data_len, i, r;
+ 	void *buf;
  
- 	request_module("%s%d", DSA_TAG_DRIVER_ALIAS, tag_protocol);
+ 	pr_debug("%s:start\n", __func__);
+@@ -1539,14 +1539,14 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
+ 	wl->scan_stat = GELIC_WL_SCAN_STAT_GOT_LIST;
  
- 	mutex_lock(&dsa_tag_drivers_lock);
--	list_for_each_entry(dsa_tag_driver, &dsa_tag_drivers_list, list) {
--		ops = dsa_tag_driver->ops;
-+	list_for_each_entry(iter, &dsa_tag_drivers_list, list) {
-+		ops = iter->ops;
- 		if (ops->proto == tag_protocol) {
--			found = true;
-+			dsa_tag_driver = iter;
- 			break;
+ 	/* mark all entries are old */
+-	list_for_each_entry_safe(target, tmp, &wl->network_list, list) {
+-		target->valid = 0;
++	list_for_each_entry_safe(iter, tmp, &wl->network_list, list) {
++		iter->valid = 0;
+ 		/* expire too old entries */
+-		if (time_before(target->last_scanned + wl->scan_age,
++		if (time_before(iter->last_scanned + wl->scan_age,
+ 				this_time)) {
+-			kfree(target->hwinfo);
+-			target->hwinfo = NULL;
+-			list_move_tail(&target->list, &wl->network_free_list);
++			kfree(iter->hwinfo);
++			iter->hwinfo = NULL;
++			list_move_tail(&iter->list, &wl->network_free_list);
  		}
  	}
  
--	if (found) {
-+	if (dsa_tag_driver) {
- 		if (!try_module_get(dsa_tag_driver->owner))
- 			ops = ERR_PTR(-ENOPROTOOPT);
- 	} else {
+@@ -1569,22 +1569,22 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
+ 			continue;
+ 		}
+ 
+-		found = 0;
++		target = NULL;
+ 		oldest = NULL;
+-		list_for_each_entry(target, &wl->network_list, list) {
+-			if (ether_addr_equal(&target->hwinfo->bssid[2],
++		list_for_each_entry(iter, &wl->network_list, list) {
++			if (ether_addr_equal(&iter->hwinfo->bssid[2],
+ 					     &scan_info->bssid[2])) {
+-				found = 1;
++				target = iter;
+ 				pr_debug("%s: same BBS found scanned list\n",
+ 					 __func__);
+ 				break;
+ 			}
+ 			if (!oldest ||
+-			    (target->last_scanned < oldest->last_scanned))
+-				oldest = target;
++			    (iter->last_scanned < oldest->last_scanned))
++				oldest = iter;
+ 		}
+ 
+-		if (!found) {
++		if (!target) {
+ 			/* not found in the list */
+ 			if (list_empty(&wl->network_free_list)) {
+ 				/* expire oldest */
 -- 
 2.25.1
 
