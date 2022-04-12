@@ -2,52 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B221C433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 16:56:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B097C433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 16:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiDLQ6r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 12:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
+        id S1350794AbiDLQ6y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 12:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbiDLQ6r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:58:47 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3CD5F8E7
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 09:56:29 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23CG0tGr032707
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 09:56:29 -0700
+        with ESMTP id S232565AbiDLQ6y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 12:58:54 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DD95F4DA
+        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 09:56:35 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23CF1BTZ006103
+        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 09:56:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=lhNQy+GGaRLg/MBDv/8rgljix57m03hUii1N8vjTq80=;
- b=cL1PLKI6xiZlwcB1iv10xthvae6CwEJ01HJM0UjOnWCk1cEMl7KJ7SBBVD0MP1cv9BlG
- bOLdVPh3RUawZn803UR4CmCr7pViNMHDmGfbYjCZi/bmNsfYiNXQJyhT/IaMcLxEntaS
- NYMQbz1rGQkjrD5yAZI6zbjkzr8Ewcji9KM= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=JjGY84GprNaIvI3O6OSYkkHP21ND2YkBchVlP0VaEnI=;
+ b=VRxfcvDgsGR1fSdAGW/JzbWthp6bGxbIF6NmjDwjisFXjBIXkHHxMQDGyxUEtHVMHY7w
+ li7IvidUi37YsQOyOaaMX0gTHvrQ6aZLgiFHgKVpYCEHxucOwZ/qKgsHA6Z6EJnSJ7Wf
+ VkTqrLWBk5QOlrpjBJjMw0F+3YMG2+VOxkU= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fcy5qva9y-2
+        by m0089730.ppops.net (PPS) with ESMTPS id 3fckykgw2r-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 09:56:28 -0700
-Received: from twshared29473.14.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 09:56:34 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 12 Apr 2022 09:56:27 -0700
+ 15.1.2308.21; Tue, 12 Apr 2022 09:56:31 -0700
 Received: by devbig931.frc1.facebook.com (Postfix, from userid 460691)
-        id 7E615230915A; Tue, 12 Apr 2022 09:56:24 -0700 (PDT)
+        id C556A230915F; Tue, 12 Apr 2022 09:56:24 -0700 (PDT)
 From:   Kui-Feng Lee <kuifeng@fb.com>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andrii@kernel.org>, <kernel-team@fb.com>
 CC:     Kui-Feng Lee <kuifeng@fb.com>
-Subject: [PATCH bpf-next v5 0/5] Attach a cookie to a tracing program.
-Date:   Tue, 12 Apr 2022 09:55:50 -0700
-Message-ID: <20220412165555.4146407-1-kuifeng@fb.com>
+Subject: [PATCH bpf-next v5 2/5] bpf, x86: Create bpf_tramp_run_ctx on the caller thread's stack
+Date:   Tue, 12 Apr 2022 09:55:52 -0700
+Message-ID: <20220412165555.4146407-3-kuifeng@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220412165555.4146407-1-kuifeng@fb.com>
+References: <20220412165555.4146407-1-kuifeng@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: CYfABFuPBcfbskS1qZRn0b4p-9eFbOII
-X-Proofpoint-GUID: CYfABFuPBcfbskS1qZRn0b4p-9eFbOII
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: 6nbbZFNbKkBgB5Un6fXVXpFUKIziaMJA
+X-Proofpoint-GUID: 6nbbZFNbKkBgB5Un6fXVXpFUKIziaMJA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
@@ -55,75 +57,284 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow users to attach a 64-bits cookie to a bpf_link of fentry, fexit,
-or fmod_ret.
+BPF trampolines will create a bpf_tramp_run_ctx, a bpf_run_ctx, on
+stacks and set/reset the current bpf_run_ctx before/after calling a
+bpf_prog.
 
-This patchset includes several major changes.
+Signed-off-by: Kui-Feng Lee <kuifeng@fb.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 55 +++++++++++++++++++++++++++++++++++++
+ include/linux/bpf.h         | 17 +++++++++---
+ kernel/bpf/syscall.c        |  7 +++--
+ kernel/bpf/trampoline.c     | 20 +++++++++++---
+ 4 files changed, 89 insertions(+), 10 deletions(-)
 
- - Define struct bpf_tramp_links to replace bpf_tramp_prog.
-   struct bpf_tramp_links collects bpf_links of a trampoline
-
- - Generate a trampoline to call bpf_progs of given bpf_links.
-
- - Trampolines always set/reset bpf_run_ctx before/after
-   calling/leaving a tracing program.
-
- - Attach a cookie to a bpf_link of fentry/fexit/fmod_ret.  The value
-   will be available when running the associated bpf_prog.
-
-The major differences from v4:
-
- - Remove condition checking in __bpf_prog_{enter,exit)
-
-The major differences from v3:
-
- - rebase v3 to latest tip.
-
-The major differences from v2:
-
- - Move the allocations of run_ctx (struct bpf_tramp_run_ctx) out of
-   invoke_bpf_prog().
-
- - Move hlist_node out of bpf_link and introduce struct bpf_tramp_link
-   to own hlist_node.
-
- - Store cookies at struct bpf_tracing_link.
-
- - Use SIB byte to reduce the number of instructions to set cookie
-   values. (Use RSP directly)
-
-v1: https://lore.kernel.org/all/20220126214809.3868787-1-kuifeng@fb.com/
-v2: https://lore.kernel.org/bpf/20220316004231.1103318-1-kuifeng@fb.com/
-v3: https://lore.kernel.org/bpf/20220407192552.2343076-1-kuifeng@fb.com/
-v4: https://lore.kernel.org/bpf/20220411173429.4139609-1-kuifeng@fb.com/
-
-Kui-Feng Lee (5):
-  bpf, x86: Generate trampolines from bpf_tramp_links
-  bpf, x86: Create bpf_tramp_run_ctx on the caller thread's stack
-  bpf, x86: Attach a cookie to fentry/fexit/fmod_ret.
-  lib/bpf: Assign cookies to links in libbpf.
-  selftest/bpf: The test cses of BPF cookie for fentry/fexit/fmod_ret.
-
- arch/x86/net/bpf_jit_comp.c                   | 98 +++++++++++++++----
- include/linux/bpf.h                           | 56 ++++++++---
- include/linux/bpf_types.h                     |  1 +
- include/uapi/linux/bpf.h                      |  9 ++
- kernel/bpf/bpf_struct_ops.c                   | 69 ++++++++-----
- kernel/bpf/syscall.c                          | 57 +++++++----
- kernel/bpf/trampoline.c                       | 93 +++++++++++-------
- kernel/trace/bpf_trace.c                      | 17 ++++
- net/bpf/bpf_dummy_struct_ops.c                | 35 ++++++-
- tools/bpf/bpftool/link.c                      |  1 +
- tools/include/uapi/linux/bpf.h                |  8 ++
- tools/lib/bpf/bpf.c                           |  7 ++
- tools/lib/bpf/bpf.h                           |  3 +
- tools/lib/bpf/libbpf.c                        | 33 +++++++
- tools/lib/bpf/libbpf.h                        | 12 +++
- tools/lib/bpf/libbpf.map                      |  1 +
- .../selftests/bpf/prog_tests/bpf_cookie.c     | 52 ++++++++++
- .../selftests/bpf/progs/test_bpf_cookie.c     | 24 +++++
- 18 files changed, 459 insertions(+), 117 deletions(-)
-
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 4dcc0b1ac770..0f521be68f7b 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1766,10 +1766,26 @@ static int invoke_bpf_prog(const struct btf_func_=
+model *m, u8 **pprog,
+ {
+ 	u8 *prog =3D *pprog;
+ 	u8 *jmp_insn;
++	int ctx_cookie_off =3D offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+ 	struct bpf_prog *p =3D l->link.prog;
+=20
++	/* mov rdi, 0 */
++	emit_mov_imm64(&prog, BPF_REG_1, 0, 0);
++
++	/* Prepare struct bpf_tramp_run_ctx.
++	 *
++	 * bpf_tramp_run_ctx is already preserved by
++	 * arch_prepare_bpf_trampoline().
++	 *
++	 * mov QWORD PTR [rsp + ctx_cookie_off], rdi
++	 */
++	EMIT4(0x48, 0x89, 0x7C, 0x24); EMIT1(ctx_cookie_off);
++
+ 	/* arg1: mov rdi, progs[i] */
+ 	emit_mov_imm64(&prog, BPF_REG_1, (long) p >> 32, (u32) (long) p);
++	/* arg2: mov rsi, rsp (struct bpf_run_ctx *) */
++	EMIT3(0x48, 0x89, 0xE6);
++
+ 	if (emit_call(&prog,
+ 		      p->aux->sleepable ? __bpf_prog_enter_sleepable :
+ 		      __bpf_prog_enter, prog))
+@@ -1815,6 +1831,8 @@ static int invoke_bpf_prog(const struct btf_func_mo=
+del *m, u8 **pprog,
+ 	emit_mov_imm64(&prog, BPF_REG_1, (long) p >> 32, (u32) (long) p);
+ 	/* arg2: mov rsi, rbx <- start time in nsec */
+ 	emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
++	/* arg3: mov rdx, rsp (struct bpf_run_ctx *) */
++	EMIT3(0x48, 0x89, 0xE2);
+ 	if (emit_call(&prog,
+ 		      p->aux->sleepable ? __bpf_prog_exit_sleepable :
+ 		      __bpf_prog_exit, prog))
+@@ -2079,6 +2097,16 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
+mage *im, void *image, void *i
+ 		}
+ 	}
+=20
++	if (nr_args < 3 && (fentry->nr_links || fexit->nr_links || fmod_ret->nr=
+_links))
++		EMIT1(0x52);	/* push rdx */
++
++	if (fentry->nr_links || fexit->nr_links || fmod_ret->nr_links) {
++		/* Prepare struct bpf_tramp_run_ctx.
++		 * sub rsp, sizeof(struct bpf_tramp_run_ctx)
++		 */
++		EMIT4(0x48, 0x83, 0xEC, sizeof(struct bpf_tramp_run_ctx));
++	}
++
+ 	if (fentry->nr_links)
+ 		if (invoke_bpf(m, &prog, fentry, regs_off,
+ 			       flags & BPF_TRAMP_F_RET_FENTRY_RET))
+@@ -2098,6 +2126,15 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
+mage *im, void *image, void *i
+ 	}
+=20
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
++		/* pop struct bpf_tramp_run_ctx
++		 * add rsp, sizeof(struct bpf_tramp_run_ctx)
++		 */
++		if (fentry->nr_links || fexit->nr_links || fmod_ret->nr_links)
++			EMIT4(0x48, 0x83, 0xC4, sizeof(struct bpf_tramp_run_ctx));
++
++		if (nr_args < 3 && (fentry->nr_links || fexit->nr_links || fmod_ret->n=
+r_links))
++			EMIT1(0x5A); /* pop rdx */
++
+ 		restore_regs(m, &prog, nr_args, regs_off);
+=20
+ 		/* call original function */
+@@ -2110,6 +2147,15 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
+mage *im, void *image, void *i
+ 		im->ip_after_call =3D prog;
+ 		memcpy(prog, x86_nops[5], X86_PATCH_SIZE);
+ 		prog +=3D X86_PATCH_SIZE;
++
++		if (nr_args < 3 && (fentry->nr_links || fexit->nr_links || fmod_ret->n=
+r_links))
++			EMIT1(0x52);	/* push rdx */
++
++		/* Prepare struct bpf_tramp_run_ctx.
++		 * sub rsp, sizeof(struct bpf_tramp_run_ctx)
++		 */
++		if (fentry->nr_links || fexit->nr_links || fmod_ret->nr_links)
++			EMIT4(0x48, 0x83, 0xEC, sizeof(struct bpf_tramp_run_ctx));
+ 	}
+=20
+ 	if (fmod_ret->nr_links) {
+@@ -2133,6 +2179,15 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_i=
+mage *im, void *image, void *i
+ 			goto cleanup;
+ 		}
+=20
++	/* pop struct bpf_tramp_run_ctx
++	 * add rsp, sizeof(struct bpf_tramp_run_ctx)
++	 */
++	if (fentry->nr_links || fexit->nr_links || fmod_ret->nr_links)
++		EMIT4(0x48, 0x83, 0xC4, sizeof(struct bpf_tramp_run_ctx));
++
++	if (nr_args < 3 && (fentry->nr_links || fexit->nr_links || fmod_ret->nr=
+_links))
++		EMIT1(0x5A); /* pop rdx */
++
+ 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+ 		restore_regs(m, &prog, nr_args, regs_off);
+=20
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2f7909eb51ec..d87df049e6b1 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -681,6 +681,8 @@ struct bpf_tramp_links {
+ 	int nr_links;
+ };
+=20
++struct bpf_tramp_run_ctx;
++
+ /* Different use cases for BPF trampoline:
+  * 1. replace nop at the function entry (kprobe equivalent)
+  *    flags =3D BPF_TRAMP_F_RESTORE_REGS
+@@ -707,10 +709,11 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_im=
+age *tr, void *image, void *i
+ 				struct bpf_tramp_links *tlinks,
+ 				void *orig_call);
+ /* these two functions are called from generated trampoline */
+-u64 notrace __bpf_prog_enter(struct bpf_prog *prog);
+-void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start);
+-u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog);
+-void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start)=
+;
++u64 notrace __bpf_prog_enter(struct bpf_prog *prog, struct bpf_tramp_run=
+_ctx *run_ctx);
++void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start, struct bp=
+f_tramp_run_ctx *run_ctx);
++u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog, struct bpf=
+_tramp_run_ctx *run_ctx);
++void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start,
++				       struct bpf_tramp_run_ctx *run_ctx);
+ void notrace __bpf_tramp_enter(struct bpf_tramp_image *tr);
+ void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
+=20
+@@ -1304,6 +1307,12 @@ struct bpf_trace_run_ctx {
+ 	u64 bpf_cookie;
+ };
+=20
++struct bpf_tramp_run_ctx {
++	struct bpf_run_ctx run_ctx;
++	u64 bpf_cookie;
++	struct bpf_run_ctx *saved_run_ctx;
++};
++
+ static inline struct bpf_run_ctx *bpf_set_run_ctx(struct bpf_run_ctx *ne=
+w_ctx)
+ {
+ 	struct bpf_run_ctx *old_ctx =3D NULL;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 3078c0c9317f..56e69a582b21 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4775,6 +4775,7 @@ static bool syscall_prog_is_valid_access(int off, i=
+nt size,
+ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size=
+)
+ {
+ 	struct bpf_prog * __maybe_unused prog;
++	struct bpf_tramp_run_ctx __maybe_unused run_ctx;
+=20
+ 	switch (cmd) {
+ 	case BPF_MAP_CREATE:
+@@ -4802,13 +4803,15 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr =
+*, attr, u32, attr_size)
+ 			return -EINVAL;
+ 		}
+=20
+-		if (!__bpf_prog_enter_sleepable(prog)) {
++		run_ctx.bpf_cookie =3D 0;
++		run_ctx.saved_run_ctx =3D NULL;
++		if (!__bpf_prog_enter_sleepable(prog, &run_ctx)) {
+ 			/* recursion detected */
+ 			bpf_prog_put(prog);
+ 			return -EBUSY;
+ 		}
+ 		attr->test.retval =3D bpf_prog_run(prog, (void *) (long) attr->test.ct=
+x_in);
+-		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats *=
+/);
++		__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats *=
+/, &run_ctx);
+ 		bpf_prog_put(prog);
+ 		return 0;
+ #endif
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index d5e6bc5517cb..baf1b65d523e 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -568,11 +568,14 @@ static void notrace inc_misses_counter(struct bpf_p=
+rog *prog)
+  * [2..MAX_U64] - execute bpf prog and record execution time.
+  *     This is start time.
+  */
+-u64 notrace __bpf_prog_enter(struct bpf_prog *prog)
++u64 notrace __bpf_prog_enter(struct bpf_prog *prog, struct bpf_tramp_run=
+_ctx *run_ctx)
+ 	__acquires(RCU)
+ {
+ 	rcu_read_lock();
+ 	migrate_disable();
++
++	run_ctx->saved_run_ctx =3D bpf_set_run_ctx(&run_ctx->run_ctx);
++
+ 	if (unlikely(__this_cpu_inc_return(*(prog->active)) !=3D 1)) {
+ 		inc_misses_counter(prog);
+ 		return 0;
+@@ -602,29 +605,38 @@ static void notrace update_prog_stats(struct bpf_pr=
+og *prog,
+ 	}
+ }
+=20
+-void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
++void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start, struct bp=
+f_tramp_run_ctx *run_ctx)
+ 	__releases(RCU)
+ {
++	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++
+ 	update_prog_stats(prog, start);
+ 	__this_cpu_dec(*(prog->active));
+ 	migrate_enable();
+ 	rcu_read_unlock();
+ }
+=20
+-u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog)
++u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog, struct bpf=
+_tramp_run_ctx *run_ctx)
+ {
+ 	rcu_read_lock_trace();
+ 	migrate_disable();
+ 	might_fault();
++
+ 	if (unlikely(__this_cpu_inc_return(*(prog->active)) !=3D 1)) {
+ 		inc_misses_counter(prog);
+ 		return 0;
+ 	}
++
++	run_ctx->saved_run_ctx =3D bpf_set_run_ctx(&run_ctx->run_ctx);
++
+ 	return bpf_prog_start_time();
+ }
+=20
+-void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start)
++void notrace __bpf_prog_exit_sleepable(struct bpf_prog *prog, u64 start,
++				       struct bpf_tramp_run_ctx *run_ctx)
+ {
++	bpf_reset_run_ctx(run_ctx->saved_run_ctx);
++
+ 	update_prog_stats(prog, start);
+ 	__this_cpu_dec(*(prog->active));
+ 	migrate_enable();
 --=20
 2.30.2
 
