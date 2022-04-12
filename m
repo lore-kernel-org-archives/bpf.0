@@ -2,62 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F9FEC433EF
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:27:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B4F4C433EF
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:47:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346092AbiDLMaM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
+        id S1353900AbiDLMtc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353230AbiDLM1z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:27:55 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA79FA;
-        Tue, 12 Apr 2022 04:37:20 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lc2so16159195ejb.12;
-        Tue, 12 Apr 2022 04:37:20 -0700 (PDT)
+        with ESMTP id S1355300AbiDLMsK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Apr 2022 08:48:10 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4666265B0;
+        Tue, 12 Apr 2022 05:16:44 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id w18so22062861edi.13;
+        Tue, 12 Apr 2022 05:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Ireb+u2fz+HNDp7W/0u9tq1dE6EEB8pXAEENxA5hKe0=;
-        b=N3/DiKCNwWEXj6baA/2A7S/u+N9x0cmIYnpFq5u882hKTkppGapWKjCAzu6HvUzdTb
-         sYHXpr6qZJwnrsqJWLdgMv0sg/7fxY1FO0iUCbgAS/aWCtA+qdSsgSjdtQ3Vl3kikFaH
-         Ity+WWj1mcX+25gbyeHsj2h2Yom8e5qNmDrIgfpEJ0jbVf13S1FtMLyYY+CamfhXm4Hh
-         kByIIuYOH90KylSxKVeYQ7BkbiYp8IvlnQyKLDAbYLYocFfUF8J226MVMo374edYU8Wi
-         iUcGMPq5CQsOFI0pyC/0IOSBJpjRAvS2afx8ubJTpSig8FABBB3LfG2S4Ep5WP5xXqft
-         F3Ow==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8gQ6t5VVe/uNOUtGlR6al3lXmeQqaLcWf63crRRXcTk=;
+        b=GaL7OZMeSJZLNzac7dGY6GkRQ2aL9Irf3a08tKQEYIvHwvuBKQGr31iXYH6IUDyvQG
+         xIYTLarW+xWxm+V0T1wv8k4ChtjcKFpUKPBmw27qaUjEircxpmeAiL3N96F65A2MiVHZ
+         +ZzfJ+0d1o5izKeXx06HCIQqTi5JLpJeYyH1FJt3okNFpZNpqM3PnPKOCp0O4EtpJmVL
+         Svwi+0w5f4EdUbZaVjax+kJCwSTSeG2AB91FPqNLBDf909qCQsSlb7jB2fmhDBZsBLTA
+         2jFwW81ySO0vmjw7vlS0tS9tUga8tMT7snUgDtfy7ahcxPz9L9IUpK7VAov4qKMYHbxG
+         lWTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=Ireb+u2fz+HNDp7W/0u9tq1dE6EEB8pXAEENxA5hKe0=;
-        b=D0KMMDv721CqO0pRdzvq1kUkQu+OQsixGEM/4WalE8RmwAzNGk+g2BbclxN9+i+V+9
-         RryVJ7PtCNBC9oVjzWxvFh7jruFumzeUTryQkMiL7PxEAlui7bLRJGHsswUfquXqUGwu
-         7k0LqasSrfTazscANSJsA8RuOwWv003Kfgo5hHJtU1FF56i/BMIQBul1iQE2/sUt+CGI
-         3pQ7gxD6Pp/6yGJg3jUbuFFvgk9PWrDoZA+oaFFONMacTU/g4BFphe0T3glDWNh6GOBR
-         A7NtrVfaMZLml5Htb5LbiPLHsxw0dov5iNwYyDkcAEdpzHk0DSDtbGmVLf7hsn1cRQCf
-         1xfQ==
-X-Gm-Message-State: AOAM532ghH5Y2AgEEsy2W/HO4dGzvjdTWyVsfle7zLxsF3avG+YXbfog
-        J/rMDofXfl4e7VdGsZu79cQ=
-X-Google-Smtp-Source: ABdhPJyVdngo1HvueM2ZUMpF2ABzA9tTU6Hq/Z1IehvEZwx5+grwH5M0xobTdptT/tEuHm5m8cBuXw==
-X-Received: by 2002:a17:907:160b:b0:6e8:58c1:8850 with SMTP id hb11-20020a170907160b00b006e858c18850mr14414194ejc.284.1649763438997;
-        Tue, 12 Apr 2022 04:37:18 -0700 (PDT)
-Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.gmail.com with ESMTPSA id fu13-20020a170907b00d00b006e8ae97f91asm947697ejc.64.2022.04.12.04.37.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Apr 2022 04:37:18 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH net-next v2 05/18] net: dsa: mv88e6xxx: remove redundant
- check in mv88e6xxx_port_vlan()
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8gQ6t5VVe/uNOUtGlR6al3lXmeQqaLcWf63crRRXcTk=;
+        b=vV/ubxvmYZCzAGAe/AAqe/OW6nCyJjONQdGp+JX8LokOxY9ZEPBOb87/nBmkbmf7BS
+         BbBNSb1NfSrAOmI0x7GxxSmMlsE3bXpvFZEBETPkh9zLOKJQq5TuR3P8YoYSY/+4iRGH
+         dVvhL8emhTJ0xkOSxu21q6ilgBt76aidxcexG3PKLBZ6RkUKhAyopUM8CLR549Kim9De
+         1SRs1XcuGEZksAwF8fkUMu7GtvToThPCghhcZ0X1D9HHqK7OD3aRFWtZ8QpdfsykuSaO
+         V4sKjKMl5GHZk16XP5Yz0aSNqNPX5iPhGeUafBLwAnQ409xXsfKoEkV4qgKwyBsc+3LJ
+         pGOQ==
+X-Gm-Message-State: AOAM5312CA+qKEpgW8HRw1Sokry4SepKiWe6Y//z3TMCoRIEYnTTvwXL
+        doFSDWPBGqAINQ2J4z5viyg=
+X-Google-Smtp-Source: ABdhPJw/4AH2YmoIy5Wm0cqWRgQzdObpBFSpo58uqE51g0zvdv7/JvyxpHsuL0VqQgWWX7EBOEC23Q==
+X-Received: by 2002:a05:6402:5212:b0:41d:7e13:b817 with SMTP id s18-20020a056402521200b0041d7e13b817mr9064711edd.224.1649765802803;
+        Tue, 12 Apr 2022 05:16:42 -0700 (PDT)
+Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 05:16:42 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <YlViPWWKhvoV2DLN@shell.armlinux.org.uk>
-Date:   Tue, 12 Apr 2022 13:37:17 +0200
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Andrew Lunn <andrew@lunn.ch>,
         Vivien Didelot <vivien.didelot@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Vladimir Oltean <olteanv@gmail.com>,
@@ -79,78 +72,83 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Casper Andersson <casper.casan@gmail.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Michael Walle <michael@walle.cc>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         Colin Ian King <colin.king@intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Michael Walle <michael@walle.cc>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
         Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8BAFAAD1-D9AB-4339-BE81-18BE564F78F6@gmail.com>
-References: <20220412105830.3495846-1-jakobkoschel@gmail.com>
- <20220412105830.3495846-6-jakobkoschel@gmail.com>
- <YlViPWWKhvoV2DLN@shell.armlinux.org.uk>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH net-next v3 14/18] sfc: Remove usage of list iterator for list_add() after the loop body
+Date:   Tue, 12 Apr 2022 14:15:53 +0200
+Message-Id: <20220412121557.3553555-15-jakobkoschel@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220412121557.3553555-1-jakobkoschel@gmail.com>
+References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer pointing to the location
+where the element should be inserted [1].
 
+Before, the code implicitly used the head when no element was found
+when using &new->list. The new 'pos' variable is set to the list head
+by default and overwritten if the list exits early, marking the
+insertion point for list_add().
 
-> On 12. Apr 2022, at 13:27, Russell King (Oracle) =
-<linux@armlinux.org.uk> wrote:
->=20
-> On Tue, Apr 12, 2022 at 12:58:17PM +0200, Jakob Koschel wrote:
->> We know that "dev > dst->last_switch" in the "else" block.
->> In other words, that "dev - dst->last_switch" is > 0.
->>=20
->> dsa_port_bridge_num_get(dp) can be 0, but the check
->> "if (bridge_num + dst->last_switch !=3D dev) continue", rewritten as
->> "if (bridge_num !=3D dev - dst->last_switch) continue", aka
->> "if (bridge_num !=3D something which cannot be 0) continue",
->> makes it redundant to have the extra "if (!bridge_num) continue" =
-logic,
->> since a bridge_num of zero would have been skipped anyway.
->>=20
->> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
->> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
->=20
-> Isn't this Vladimir's patch?
->=20
-> If so, it should be commited as Vladimir as the author, and Vladimir's
-> sign-off should appear before yours. When sending out such patches,
-> there should be a From: line for Vladimir as the first line in the =
-body
-> of the patch email.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+ drivers/net/ethernet/sfc/rx_common.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-yes, you are right. I wasn't sure on how to send those commits, but
-I guess if I just set the commit author correctly it should be fine.
-
-regarding the order: I thought I did it correctly doing bottom up but
-I confused the order, wasn't on purpose. Sorry about that.
-
-I'll resend after verifying all the authors and sign-offs are correct.
-
->=20
-> The same goes for the next mv88e6xxx patch in this series - I think
-> both of these are the patches Vladimir sent in his email:
->=20
-> https://lore.kernel.org/r/20220408123101.p33jpynhqo67hebe@skbuf
->=20
-> Thanks.
->=20
-> --=20
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
-
-Thanks for pointing it out!
-Jakob
+diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
+index 1b22c7be0088..80894a35ea79 100644
+--- a/drivers/net/ethernet/sfc/rx_common.c
++++ b/drivers/net/ethernet/sfc/rx_common.c
+@@ -555,7 +555,7 @@ efx_rx_packet_gro(struct efx_channel *channel, struct efx_rx_buffer *rx_buf,
+  */
+ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+ {
+-	struct list_head *head = &efx->rss_context.list;
++	struct list_head *head = *pos = &efx->rss_context.list;
+ 	struct efx_rss_context *ctx, *new;
+ 	u32 id = 1; /* Don't use zero, that refers to the master RSS context */
+ 
+@@ -563,8 +563,10 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+ 
+ 	/* Search for first gap in the numbering */
+ 	list_for_each_entry(ctx, head, list) {
+-		if (ctx->user_id != id)
++		if (ctx->user_id != id) {
++			pos = &ctx->list;
+ 			break;
++		}
+ 		id++;
+ 		/* Check for wrap.  If this happens, we have nearly 2^32
+ 		 * allocated RSS contexts, which seems unlikely.
+@@ -582,7 +584,7 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+ 
+ 	/* Insert the new entry into the gap */
+ 	new->user_id = id;
+-	list_add_tail(&new->list, &ctx->list);
++	list_add_tail(&new->list, pos);
+ 	return new;
+ }
+ 
+-- 
+2.25.1
 
