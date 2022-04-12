@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BE47C433F5
-	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 223FAC433F5
+	for <bpf@archiver.kernel.org>; Tue, 12 Apr 2022 12:48:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351818AbiDLMuS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 08:50:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S1348112AbiDLMuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Apr 2022 08:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355289AbiDLMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1355275AbiDLMsJ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 12 Apr 2022 08:48:09 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E402DC6;
-        Tue, 12 Apr 2022 05:16:35 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id ks6so12300791ejb.1;
-        Tue, 12 Apr 2022 05:16:35 -0700 (PDT)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5067D4D;
+        Tue, 12 Apr 2022 05:16:28 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l7so31496545ejn.2;
+        Tue, 12 Apr 2022 05:16:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7YEqjlB8bsXZ45gzNCMwH2JxmTxm4dwtRKumhhyyThw=;
-        b=YNr2UaIoVBm1gjKBZcHcnmPhf4WTQeX+rX7KYA5+ykygfZe0kUfdl5DZ3cS5l0wgBw
-         b5C/2mpLo9NyroQnIH4jj0COM0U/XUJzVkMf6yzHmOAlPLQY+D8T3Ns1uXB3RSoh47s8
-         FIWtZwC0ZV0smMW9eKbW4qXGaDwCpKYfuYhD/8WI9XpXLSSoYmLzS7cqQlVIt3BQ7uw9
-         nrTmpUld2SWoVeoG5DBsi11eSd5oX5hdzs1hb7dipWvUak4B1avN0OWnYg6J7VFop52e
-         ipeVkFr0FXMa9tYCzTqpGFZctlGojArHmwvUAfBWJiUGaY+G6aQCY+dGaUaZZopbuzl3
-         zGfw==
+        bh=PxsivQPQxoWJpzdCzth3DXDecoJwiEJJ2qSzCxa8YbM=;
+        b=lWOmxFnPNwbm8PLBwdGYB1wolXb20JkNG0Q9pmhmmpJXoyEiLdbikuZifyIR8QCi4U
+         +qB+LtEDYjxmQm1ifVf51eNsGKXi2+3HOgUTtQgHjmNO2k9CJa4JCEKAz7UhweV+p2Nh
+         2GRyY0LdytDmgW+0bDSA3FBVyc7TNpZzDS52UpyzdK9JVPmEWoEkmSCk9kpp/KXwFqJJ
+         Ulwjm0QuNrOqoygRv2YyUwtQ7/c0tIl3XMGfR+VV698YR69zb98JZwbzoDIgzWC/DZuX
+         IJEd8OeqWKXt8DxPaUHVcowJTXIZXcAwu2q2xrftFeG+Cf+KebJF7io/jVKXsw0VgnQW
+         i0JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7YEqjlB8bsXZ45gzNCMwH2JxmTxm4dwtRKumhhyyThw=;
-        b=sGQbUosZaUwlorHUvn0h8tGy4gQvR1eIToFA+1C4y43fFe5+NiPf6iCq1S4Xnxkrd7
-         BqCdHv0XbuD+prVJnqd0N2qvf9lSz0yVCIGTE8WkIgiJMRHoPsyt86PyiwHwyEc/nXVs
-         79bKAA9sLqC3prHCQ5voSmwpust5S+V3a4/UBrt4gblFnoVzbw9+fI/QLVaUwsIiTwF4
-         g8KJ+gR30A/xXt762Y765wu4Jkmnlv93PPOZRovSU0KhFnEzjGRfbDffhFF6SZcdefFl
-         TOvp4pBMgsuVd+VeveyNGkLM+0t5dauOrim6QvCnPUo1B26g5PCbLgn0Adbw5G9oE3up
-         uJ1w==
-X-Gm-Message-State: AOAM531QC7zZoTl4Pxopf9n2AWH8db5LOqsDbPOBppEq7dhqKcw2K8PQ
-        krQeLyfHlu559PoiKJCiXTc=
-X-Google-Smtp-Source: ABdhPJwUmqeWXtb6lIaaztLs77X2brPeFa6CWYt3mnOHEOfaakHnSMNRhJ62b1XbkIoXgW+njj+NGw==
-X-Received: by 2002:a17:907:9805:b0:6db:4c33:7883 with SMTP id ji5-20020a170907980500b006db4c337883mr35423908ejc.555.1649765793997;
-        Tue, 12 Apr 2022 05:16:33 -0700 (PDT)
+        bh=PxsivQPQxoWJpzdCzth3DXDecoJwiEJJ2qSzCxa8YbM=;
+        b=cdkpHcORFRBl65b1G/wQey+3JQSZXNTNfVmkpAilZSmal7rdr6B29m20y42JqvWsKO
+         B9hLjMEr9nAqhdMsLNxhqTFJJsV5vxCWB0l2wStzeEa9fGY4///DmMiTJawbV4mJZbER
+         CQAvL9Ryu5Q6KGpXC9qW74h9aKubxv9HvfA2zygzwLFbUR30z6AwLYIl/eU2RfEL9cuz
+         VKuyihrRfRMU68U/D4z2DWigF1V2Fj3ZR0fL/GAWxGLtm6gF8a/deLZOY7gEC9woIm4l
+         w/zGSNNvnBWqXHTpZtZeD0JxIPY2ekLnCf6Y6Vrfn0QpWYznvYuj84KMOJSEezlMRyhJ
+         QsFQ==
+X-Gm-Message-State: AOAM5327OCdwNI557xrWfj7qrBRguxiTOyGRPsfu8ODFpJ5mK7Siw8TP
+        L6VjZ4dNXhVmKSvWa9uhfw0=
+X-Google-Smtp-Source: ABdhPJxAdCFtUSX3ENrld4C1yXNOR/WQGNKAc/WgL1/eO9a/L10FloY6hbye5LONG2PmrbSXS9K7/A==
+X-Received: by 2002:a17:906:d552:b0:6e8:4ee4:748 with SMTP id cr18-20020a170906d55200b006e84ee40748mr19352388ejc.58.1649765787342;
+        Tue, 12 Apr 2022 05:16:27 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.32
+        by smtp.googlemail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm8827900ejb.143.2022.04.12.05.16.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 05:16:33 -0700 (PDT)
+        Tue, 12 Apr 2022 05:16:26 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -87,10 +87,11 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v3 08/18] net: sparx5: Replace usage of found with dedicated list iterator variable
-Date:   Tue, 12 Apr 2022 14:15:47 +0200
-Message-Id: <20220412121557.3553555-9-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v3 04/18] net: dsa: sja1105: use list_add_tail(pos) instead of list_add(pos->prev)
+Date:   Tue, 12 Apr 2022 14:15:43 +0200
+Message-Id: <20220412121557.3553555-5-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220412121557.3553555-1-jakobkoschel@gmail.com>
 References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
@@ -100,77 +101,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+When passed a non-head list element, list_add_tail() actually adds the
+new element to its left, which is what we want. Despite the slightly
+confusing name, use the dedicated function which does the same thing as
+the open-coded list_add(pos->prev).
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- .../microchip/sparx5/sparx5_mactable.c        | 25 +++++++++----------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ drivers/net/dsa/sja1105/sja1105_vl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c b/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
-index a5837dbe0c7e..bb8d9ce79ac2 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c
-@@ -362,8 +362,7 @@ static void sparx5_mact_handle_entry(struct sparx5 *sparx5,
- 				     unsigned char mac[ETH_ALEN],
- 				     u16 vid, u32 cfg2)
- {
--	struct sparx5_mact_entry *mact_entry;
--	bool found = false;
-+	struct sparx5_mact_entry *mact_entry = NULL, *iter;
- 	u16 port;
+diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
+index e5ea8eb9ec4e..7fe9b18f1cbd 100644
+--- a/drivers/net/dsa/sja1105/sja1105_vl.c
++++ b/drivers/net/dsa/sja1105/sja1105_vl.c
+@@ -49,7 +49,7 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
+ 	e->rule = rule;
+ 	e->gate_state = gate_state;
+ 	e->interval = entry_time;
+-	list_add(&e->list, pos->prev);
++	list_add_tail(&e->list, pos);
  
- 	if (LRN_MAC_ACCESS_CFG_2_MAC_ENTRY_ADDR_TYPE_GET(cfg2) !=
-@@ -378,28 +377,28 @@ static void sparx5_mact_handle_entry(struct sparx5 *sparx5,
- 		return;
+ 	gating_cfg->num_entries++;
  
- 	mutex_lock(&sparx5->mact_lock);
--	list_for_each_entry(mact_entry, &sparx5->mact_entries, list) {
--		if (mact_entry->vid == vid &&
--		    ether_addr_equal(mac, mact_entry->mac)) {
--			found = true;
--			mact_entry->flags |= MAC_ENT_ALIVE;
--			if (mact_entry->port != port) {
-+	list_for_each_entry(iter, &sparx5->mact_entries, list) {
-+		if (iter->vid == vid &&
-+		    ether_addr_equal(mac, iter->mac)) {
-+			iter->flags |= MAC_ENT_ALIVE;
-+			if (iter->port != port) {
- 				dev_warn(sparx5->dev, "Entry move: %d -> %d\n",
--					 mact_entry->port, port);
--				mact_entry->port = port;
--				mact_entry->flags |= MAC_ENT_MOVED;
-+					 iter->port, port);
-+				iter->port = port;
-+				iter->flags |= MAC_ENT_MOVED;
- 			}
- 			/* Entry handled */
-+			mact_entry = iter;
- 			break;
- 		}
- 	}
- 	mutex_unlock(&sparx5->mact_lock);
- 
--	if (found && !(mact_entry->flags & MAC_ENT_MOVED))
-+	if (mact_entry && !(mact_entry->flags & MAC_ENT_MOVED))
- 		/* Present, not moved */
- 		return;
- 
--	if (!found) {
-+	if (!mact_entry) {
- 		/* Entry not found - now add */
- 		mact_entry = alloc_mact_entry(sparx5, mac, vid, port);
- 		if (!mact_entry)
 -- 
 2.25.1
 
