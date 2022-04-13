@@ -2,166 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E696AC433EF
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 23:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A43C433F5
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 23:20:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237564AbiDMXKq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Apr 2022 19:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
+        id S238974AbiDMXWo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 19:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239127AbiDMXKp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Apr 2022 19:10:45 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A856A37AAB;
-        Wed, 13 Apr 2022 16:08:22 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1neln7-0002b3-6M; Thu, 14 Apr 2022 00:48:49 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1neln6-000WBX-JK; Thu, 14 Apr 2022 00:48:48 +0200
-Subject: Re: [PATCH bpf-next v5 4/6] bpf: Add helpers to issue and check SYN
- cookies in XDP
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org
-Cc:     Tariq Toukan <tariqt@nvidia.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joe Stringer <joe@cilium.io>,
-        Florent Revest <revest@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Florian Westphal <fw@strlen.de>
-References: <20220413134120.3253433-1-maximmi@nvidia.com>
- <20220413134120.3253433-5-maximmi@nvidia.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <e75057fd-42d4-071e-b8b9-0b93e643adfd@iogearbox.net>
-Date:   Thu, 14 Apr 2022 00:48:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        with ESMTP id S239255AbiDMXWh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 19:22:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919CB23BC5;
+        Wed, 13 Apr 2022 16:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4426EB827B6;
+        Wed, 13 Apr 2022 23:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ED42CC385A8;
+        Wed, 13 Apr 2022 23:20:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649892012;
+        bh=5R/Ql6nUWlubaSJoDrexvl54CKfH/1QZCH5YDJ2gAGM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=L0ZqrdTuTDyTVuvZPWS41CI7OLHbUO5yRXEjpErM6XDh3F6b5TcvIzcatHhJG7Pgc
+         pxefgYVJFJK81C+5Qz6sDENGvKNIc8+rcF6b7Xt5to2UIXEqDp/iHlf73jYfHmWVJ4
+         gLAtm8XFujVAaUPbagxasRYJLi+Str1MpZewZf1ns56+dK0io3+Qafpw+D+Isq+snP
+         6cMMYXEfgD9DK7QItH21YMP4btSH0zyQ3GP8BHs6F8had8kTXP91sIutan70oNRftw
+         nkBcMY0rapHOV5NTyJ0Mo4MJMq7M7RzNIAxYDnGwdmDm4cruvcyR7QeE/3TGVXkClW
+         88ndNGXVK44eQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0B5DE8DD5E;
+        Wed, 13 Apr 2022 23:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20220413134120.3253433-5-maximmi@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26511/Wed Apr 13 10:22:45 2022)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: remove unnecessary type castings
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164989201185.8845.18106759702805707773.git-patchwork-notify@kernel.org>
+Date:   Wed, 13 Apr 2022 23:20:11 +0000
+References: <20220413015048.12319-1-yuzhe@nfschina.com>
+In-Reply-To: <20220413015048.12319-1-yuzhe@nfschina.com>
+To:     Yu Zhe <yuzhe@nfschina.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        kernel-janitors@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/13/22 3:41 PM, Maxim Mikityanskiy wrote:
-[...]
->   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 7446b0ba4e38..428cc63ecdf7 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7425,6 +7425,124 @@ static const struct bpf_func_proto bpf_skb_set_tstamp_proto = {
->   	.arg3_type      = ARG_ANYTHING,
->   };
->   
-> +BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv4, struct iphdr *, iph,
-> +	   struct tcphdr *, th, u32, th_len)
-> +{
-> +#ifdef CONFIG_SYN_COOKIES
-> +	u32 cookie;
-> +	u16 mss;
-> +
-> +	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
-> +		return -EINVAL;
-> +
-> +	mss = tcp_parse_mss_option(th, 0) ?: TCP_MSS_DEFAULT;
-> +	cookie = __cookie_v4_init_sequence(iph, th, &mss);
-> +
-> +	return cookie | ((u64)mss << 32);
-> +#else
-> +	return -EOPNOTSUPP;
-> +#endif /* CONFIG_SYN_COOKIES */
+Hello:
 
-This (and for other added helpers below) will be rather tricky to probe for availability
-e.g. via `bpftool feature probe [...]`. Much better if you wrap the ifdef CONFIG_SYN_COOKIES
-around the {xdp,tc_cls_act}_func_proto() instead as we do elsewhere.
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-> +}
-> +
-> +static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv4_proto = {
-> +	.func		= bpf_tcp_raw_gen_syncookie_ipv4,
-> +	.gpl_only	= true, /* __cookie_v4_init_sequence() is GPL */
-> +	.pkt_access	= true,
-> +	.ret_type	= RET_INTEGER,
-> +	.arg1_type	= ARG_PTR_TO_MEM,
-> +	.arg1_size	= sizeof(struct iphdr),
-> +	.arg2_type	= ARG_PTR_TO_MEM,
-> +	.arg3_type	= ARG_CONST_SIZE,
-> +};
-> +
-> +BPF_CALL_3(bpf_tcp_raw_gen_syncookie_ipv6, struct ipv6hdr *, iph,
-> +	   struct tcphdr *, th, u32, th_len)
-> +{
-> +#ifndef CONFIG_SYN_COOKIES
-> +	return -EOPNOTSUPP;
-> +#elif !IS_BUILTIN(CONFIG_IPV6)
-> +	return -EPROTONOSUPPORT;
-> +#else
-> +	const u16 mss_clamp = IPV6_MIN_MTU - sizeof(struct tcphdr) -
-> +		sizeof(struct ipv6hdr);
-> +	u32 cookie;
-> +	u16 mss;
-> +
-> +	if (unlikely(th_len < sizeof(*th) || th_len != th->doff * 4))
-> +		return -EINVAL;
-> +
-> +	mss = tcp_parse_mss_option(th, 0) ?: mss_clamp;
-> +	cookie = __cookie_v6_init_sequence(iph, th, &mss);
-> +
-> +	return cookie | ((u64)mss << 32);
-> +#endif
-> +}
-> +
-> +static const struct bpf_func_proto bpf_tcp_raw_gen_syncookie_ipv6_proto = {
-> +	.func		= bpf_tcp_raw_gen_syncookie_ipv6,
-> +	.gpl_only	= true, /* __cookie_v6_init_sequence() is GPL */
-> +	.pkt_access	= true,
-> +	.ret_type	= RET_INTEGER,
-> +	.arg1_type	= ARG_PTR_TO_MEM,
-> +	.arg1_size	= sizeof(struct ipv6hdr),
-> +	.arg2_type	= ARG_PTR_TO_MEM,
-> +	.arg3_type	= ARG_CONST_SIZE,
-> +};
-[...]
->   
->   bool bpf_helper_changes_pkt_data(void *func)
-> @@ -7837,6 +7955,14 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->   		return &bpf_tcp_check_syncookie_proto;
->   	case BPF_FUNC_tcp_gen_syncookie:
->   		return &bpf_tcp_gen_syncookie_proto;
-> +	case BPF_FUNC_tcp_raw_gen_syncookie_ipv4:
-> +		return &bpf_tcp_raw_gen_syncookie_ipv4_proto;
-> +	case BPF_FUNC_tcp_raw_gen_syncookie_ipv6:
-> +		return &bpf_tcp_raw_gen_syncookie_ipv6_proto;
-> +	case BPF_FUNC_tcp_raw_check_syncookie_ipv4:
-> +		return &bpf_tcp_raw_check_syncookie_ipv4_proto;
-> +	case BPF_FUNC_tcp_raw_check_syncookie_ipv6:
-> +		return &bpf_tcp_raw_check_syncookie_ipv6_proto;
->   #endif
->   	default:
->   		return bpf_sk_base_func_proto(func_id);
+On Tue, 12 Apr 2022 18:50:48 -0700 you wrote:
+> remove unnecessary void* type castings.
+> 
+> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> ---
+>  kernel/bpf/bpf_struct_ops.c | 4 ++--
+>  kernel/bpf/hashtab.c        | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+
+Here is the summary with links:
+  - bpf: remove unnecessary type castings
+    https://git.kernel.org/bpf/bpf-next/c/241d50ec5d79
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
