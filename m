@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FF29C4332F
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 05:37:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8FFCC4167B
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 05:37:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiDMFkC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Apr 2022 01:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
+        id S232465AbiDMFkD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 01:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiDMFkB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231567AbiDMFkB (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 13 Apr 2022 01:40:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCC731518;
-        Tue, 12 Apr 2022 22:37:40 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KdWXG0f14zgYYm;
-        Wed, 13 Apr 2022 13:35:42 +0800 (CST)
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2310731226;
+        Tue, 12 Apr 2022 22:37:39 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KdWYX5q7pz1HBpK;
+        Wed, 13 Apr 2022 13:36:48 +0800 (CST)
 Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
  (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 13:37:30 +0800
+ 2022 13:37:23 +0800
 From:   Xu Kuohai <xukuohai@huawei.com>
 To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
@@ -46,12 +46,10 @@ CC:     Will Deacon <will@kernel.org>,
         Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Delyan Kratunov <delyank@fb.com>
-Subject: [PATCH bpf-next 2/5] bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
-Date:   Wed, 13 Apr 2022 01:49:56 -0400
-Message-ID: <20220413054959.1053668-3-xukuohai@huawei.com>
+Subject: [PATCH bpf-next 0/5] bpf trampoline for arm64
+Date:   Wed, 13 Apr 2022 01:49:54 -0400
+Message-ID: <20220413054959.1053668-1-xukuohai@huawei.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220413054959.1053668-1-xukuohai@huawei.com>
-References: <20220413054959.1053668-1-xukuohai@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -63,140 +61,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-is_valid_bpf_tramp_flags() is not relevant to architecture, so move it
-to the public trampoline code.
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- arch/x86/net/bpf_jit_comp.c | 20 --------------------
- include/linux/bpf.h         |  5 +++++
- kernel/bpf/bpf_struct_ops.c |  4 ++--
- kernel/bpf/trampoline.c     | 36 +++++++++++++++++++++++++++++++++---
- 4 files changed, 40 insertions(+), 25 deletions(-)
+Tested on qemu, result:
+ #55 fentry_fexit:OK
+ #56 fentry_test:OK
+ #58 fexit_sleep:OK
+ #59 fexit_stress:OK
+ #60 fexit_test:OK
+ #67 get_func_args_test:OK
+ #68 get_func_ip_test:OK
+ #101 modify_return:OK
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 8fe35ed11fd6..774f05f92737 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -1900,23 +1900,6 @@ static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
- 	return 0;
- }
- 
--static bool is_valid_bpf_tramp_flags(unsigned int flags)
--{
--	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
--	    (flags & BPF_TRAMP_F_SKIP_FRAME))
--		return false;
--
--	/*
--	 * BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
--	 * and it must be used alone.
--	 */
--	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
--	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
--		return false;
--
--	return true;
--}
--
- /* Example:
-  * __be16 eth_type_trans(struct sk_buff *skb, struct net_device *dev);
-  * its 'struct btf_func_model' will be nr_args=2
-@@ -1995,9 +1978,6 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- 	if (nr_args > 6)
- 		return -ENOTSUPP;
- 
--	if (!is_valid_bpf_tramp_flags(flags))
--		return -EINVAL;
--
- 	/* Generated trampoline stack layout:
- 	 *
- 	 * RBP + 8         [ return address  ]
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index bdb5298735ce..c650b7fe87ee 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -706,6 +706,11 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *i
- 				const struct btf_func_model *m, u32 flags,
- 				struct bpf_tramp_progs *tprogs,
- 				void *orig_call);
-+int bpf_prepare_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
-+			   const struct btf_func_model *m, u32 flags,
-+			   struct bpf_tramp_progs *tprogs,
-+			   void *orig_call);
-+
- /* these two functions are called from generated trampoline */
- u64 notrace __bpf_prog_enter(struct bpf_prog *prog);
- void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start);
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 21069dbe9138..5f9bdd530df2 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -325,8 +325,8 @@ int bpf_struct_ops_prepare_trampoline(struct bpf_tramp_progs *tprogs,
- 	tprogs[BPF_TRAMP_FENTRY].progs[0] = prog;
- 	tprogs[BPF_TRAMP_FENTRY].nr_progs = 1;
- 	flags = model->ret_size > 0 ? BPF_TRAMP_F_RET_FENTRY_RET : 0;
--	return arch_prepare_bpf_trampoline(NULL, image, image_end,
--					   model, flags, tprogs, NULL);
-+	return bpf_prepare_trampoline(NULL, image, image_end, model, flags,
-+				      tprogs, NULL);
- }
- 
- static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index ada97751ae1b..6bd61f9cff7a 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -360,9 +360,9 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 	if (ip_arg)
- 		flags |= BPF_TRAMP_F_IP_ARG;
- 
--	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
--					  &tr->func.model, flags, tprogs,
--					  tr->func.addr);
-+	err = bpf_prepare_trampoline(im, im->image, im->image + PAGE_SIZE,
-+				     &tr->func.model, flags, tprogs,
-+				     tr->func.addr);
- 	if (err < 0)
- 		goto out;
- 
-@@ -641,6 +641,36 @@ arch_prepare_bpf_trampoline(struct bpf_tramp_image *tr, void *image, void *image
- 	return -ENOTSUPP;
- }
- 
-+static bool is_valid_bpf_tramp_flags(unsigned int flags)
-+{
-+	if ((flags & BPF_TRAMP_F_RESTORE_REGS) &&
-+	    (flags & BPF_TRAMP_F_SKIP_FRAME))
-+		return false;
-+
-+	/*
-+	 * BPF_TRAMP_F_RET_FENTRY_RET is only used by bpf_struct_ops,
-+	 * and it must be used alone.
-+	 */
-+	if ((flags & BPF_TRAMP_F_RET_FENTRY_RET) &&
-+	    (flags & ~BPF_TRAMP_F_RET_FENTRY_RET))
-+		return false;
-+
-+	return true;
-+}
-+
-+int
-+bpf_prepare_trampoline(struct bpf_tramp_image *tr, void *image, void *image_end,
-+		       const struct btf_func_model *m, u32 flags,
-+		       struct bpf_tramp_progs *tprogs,
-+		       void *orig_call)
-+{
-+	if (!is_valid_bpf_tramp_flags(flags))
-+		return -EINVAL;
-+
-+	return arch_prepare_bpf_trampoline(tr, image, image_end, m, flags,
-+					   tprogs, orig_call);
-+}
-+
- static int __init init_trampolines(void)
- {
- 	int i;
+Xu Kuohai (5):
+  arm64: ftrace: Add ftrace direct call support
+  bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+  selftests/bpf: Fix trivial typo in fentry_fexit.c
+
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/ftrace.h               |  10 +
+ arch/arm64/kernel/asm-offsets.c               |   1 +
+ arch/arm64/kernel/entry-ftrace.S              |  18 +-
+ arch/arm64/net/bpf_jit.h                      |  14 +-
+ arch/arm64/net/bpf_jit_comp.c                 | 390 +++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c                   |  20 -
+ include/linux/bpf.h                           |   5 +
+ kernel/bpf/bpf_struct_ops.c                   |   4 +-
+ kernel/bpf/trampoline.c                       |  36 +-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ 11 files changed, 470 insertions(+), 34 deletions(-)
+
 -- 
 2.30.2
 
