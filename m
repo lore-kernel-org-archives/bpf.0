@@ -2,49 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE7F7C433FE
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 15:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D119C4332F
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 15:31:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236545AbiDMPd1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Apr 2022 11:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
+        id S236542AbiDMPd3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 11:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236549AbiDMPd0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Apr 2022 11:33:26 -0400
+        with ESMTP id S236544AbiDMPd1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 11:33:27 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3BE37AB0;
-        Wed, 13 Apr 2022 08:31:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826B837BEF;
+        Wed, 13 Apr 2022 08:31:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649863860; x=1681399860;
+  t=1649863865; x=1681399865;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=W0ivcRo/CNJCiHsXXiZIy0nwpm+Mc6B1Iwk6iOajJno=;
-  b=BBjEnQ50sRuDbeD1+YRY6b8+h8LCR0t5PyXTaeSIMrLfUGqz3dbPUBSn
-   JkFY3aKv/102/bRuXLyvydYeHdCWuutwf+ByjcQexyFWtNcogeATxBo2z
-   AkrHfoNwW2FH+yFSgrKZmrxca9Rcx4XPMr5QmRIH6CwVgdiAdJcrkd/qT
-   kQEjaEmaOId35jZHzDY9oEdfCb3SxFidmGIgk+r+BISpFPq/nTXFDxCk4
-   jtEXqn3xjZq5pm2IfGUtMWtJl/ttqk3tKphRv4G0s48oOvqiNjqljA4tw
-   Enp6xweA13RbkcxoV1wiD/fAaojznDSZ12SNNm75QYxPQs2LuTwIv0P1L
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261544320"
+  bh=jYH2RJS/d0A3UuePhevxDHsE0BibcVkMT3K9xBY9ZEY=;
+  b=hYTW6Y73SKvIuZ+d7eanPxmsVfQwoOPhCIp7HEf5K+8iYX9wEQs2Aa91
+   Xph5kU2gH0hx3EnAIkkPcDNeIZAg9WcJe9JBRvIlTKUoRP2bcp+0wpb4H
+   S7JZtRG4eecoXDyIS+ruXQhOdV+56H0i3jPHKLu1J37Ht8hE312NolA/2
+   pZmvG6A56eAfKMRsuFukoBjn8ULc6r3LnjBlc9bK2dNeI7M7/uZUMblJz
+   YBTkMy0tmHLOKA5zyfSm7w8V847VtJrxZ4Hcm/dboJavgnvL/n3MdeXqy
+   BeijZb1ICpOopR8GWQXzQmta4c3Fv2WLetHdsscSpnRgUzmoq0NNMVMZY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261544344"
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="261544320"
+   d="scan'208";a="261544344"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:30:59 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 08:31:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="573318405"
+   d="scan'208";a="573318427"
 Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orsmga008.jf.intel.com with ESMTP; 13 Apr 2022 08:30:57 -0700
+  by orsmga008.jf.intel.com with ESMTP; 13 Apr 2022 08:31:02 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
 Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com,
         alexandr.lobakin@intel.com, maximmi@nvidia.com, kuba@kernel.org,
         bjorn@kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 bpf-next 11/14] mlx5: xsk: diversify return values from xsk_wakeup call paths
-Date:   Wed, 13 Apr 2022 17:30:12 +0200
-Message-Id: <20220413153015.453864-12-maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 bpf-next 13/14] ice: xsk: avoid refilling single Rx descriptors
+Date:   Wed, 13 Apr 2022 17:30:14 +0200
+Message-Id: <20220413153015.453864-14-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220413153015.453864-1-maciej.fijalkowski@intel.com>
 References: <20220413153015.453864-1-maciej.fijalkowski@intel.com>
@@ -54,37 +54,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, when debugging AF_XDP workloads, one can correlate the -ENXIO
-return code as the case that XSK is not in the bound state. Returning
-same code from ndo_xsk_wakeup can be misleading and simply makes it
-harder to follow what is going on.
-
-Change ENXIO in mlx5's ndo_xsk_wakeup() implementation to EINVAL, so
-that when probing it is clear that something is wrong on the driver
-side, not the xsk_{recv,send}msg.
-
-There is a -ENETDOWN that can happen from both kernel/driver sides
-though, but I don't have a correct replacement for this on one of the
-sides, so let's keep it that way.
+Call alloc Rx routine for ZC driver only when the amount of unallocated
+descriptors exceeds given threshold.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-index 3ec0c17db010..4902ef74fedf 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/tx.c
-@@ -23,7 +23,7 @@ int mlx5e_xsk_wakeup(struct net_device *dev, u32 qid, u32 flags)
- 	c = priv->channels.c[ix];
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 53c299eebd99..c26b408ba419 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -587,6 +587,7 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 	unsigned int xdp_xmit = 0;
+ 	struct bpf_prog *xdp_prog;
+ 	bool failure = false;
++	int entries_to_alloc;
  
- 	if (unlikely(!test_bit(MLX5E_CHANNEL_STATE_XSK, c->state)))
--		return -ENXIO;
-+		return -EINVAL;
+ 	/* ZC patch is enabled only when XDP program is set,
+ 	 * so here it can not be NULL
+@@ -678,7 +679,9 @@ int ice_clean_rx_irq_zc(struct ice_rx_ring *rx_ring, int budget)
+ 		ice_receive_skb(rx_ring, skb, vlan_tag);
+ 	}
  
- 	if (!napi_if_scheduled_mark_missed(&c->napi)) {
- 		/* To avoid WQE overrun, don't post a NOP if async_icosq is not
+-	failure |= !ice_alloc_rx_bufs_zc(rx_ring, ICE_DESC_UNUSED(rx_ring));
++	entries_to_alloc = ICE_DESC_UNUSED(rx_ring);
++	if (entries_to_alloc > ICE_RING_QUARTER(rx_ring))
++		failure |= !ice_alloc_rx_bufs_zc(rx_ring, entries_to_alloc);
+ 
+ 	ice_finalize_xdp_rx(xdp_ring, xdp_xmit);
+ 	ice_update_rx_ring_stats(rx_ring, total_rx_packets, total_rx_bytes);
 -- 
 2.33.1
 
