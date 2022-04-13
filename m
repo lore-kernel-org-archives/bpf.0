@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8FFCC4167B
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 05:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1671AC4167E
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 05:37:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiDMFkD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S232469AbiDMFkD (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 13 Apr 2022 01:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiDMFkB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:40:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2310731226;
-        Tue, 12 Apr 2022 22:37:39 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KdWYX5q7pz1HBpK;
-        Wed, 13 Apr 2022 13:36:48 +0800 (CST)
+        with ESMTP id S232456AbiDMFkC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 01:40:02 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786953151C;
+        Tue, 12 Apr 2022 22:37:42 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KdWTY5vjpzBsFD;
+        Wed, 13 Apr 2022 13:33:21 +0800 (CST)
 Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
  (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
- 2022 13:37:23 +0800
+ 2022 13:37:38 +0800
 From:   Xu Kuohai <xukuohai@huawei.com>
 To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
@@ -46,10 +46,12 @@ CC:     Will Deacon <will@kernel.org>,
         Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Delyan Kratunov <delyank@fb.com>
-Subject: [PATCH bpf-next 0/5] bpf trampoline for arm64
-Date:   Wed, 13 Apr 2022 01:49:54 -0400
-Message-ID: <20220413054959.1053668-1-xukuohai@huawei.com>
+Subject: [PATCH bpf-next 5/5] selftests/bpf: Fix trivial typo in fentry_fexit.c
+Date:   Wed, 13 Apr 2022 01:49:59 -0400
+Message-ID: <20220413054959.1053668-6-xukuohai@huawei.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220413054959.1053668-1-xukuohai@huawei.com>
+References: <20220413054959.1053668-1-xukuohai@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -61,39 +63,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf trampoline support for arm64. Most of the logic is the same as
-x86.
+The "ipv6" word in assertion message should be "fentry_fexit".
 
-Tested on qemu, result:
- #55 fentry_fexit:OK
- #56 fentry_test:OK
- #58 fexit_sleep:OK
- #59 fexit_stress:OK
- #60 fexit_test:OK
- #67 get_func_args_test:OK
- #68 get_func_ip_test:OK
- #101 modify_return:OK
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ tools/testing/selftests/bpf/prog_tests/fentry_fexit.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Xu Kuohai (5):
-  arm64: ftrace: Add ftrace direct call support
-  bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
-  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
-  bpf, arm64: bpf trampoline for arm64
-  selftests/bpf: Fix trivial typo in fentry_fexit.c
-
- arch/arm64/Kconfig                            |   2 +
- arch/arm64/include/asm/ftrace.h               |  10 +
- arch/arm64/kernel/asm-offsets.c               |   1 +
- arch/arm64/kernel/entry-ftrace.S              |  18 +-
- arch/arm64/net/bpf_jit.h                      |  14 +-
- arch/arm64/net/bpf_jit_comp.c                 | 390 +++++++++++++++++-
- arch/x86/net/bpf_jit_comp.c                   |  20 -
- include/linux/bpf.h                           |   5 +
- kernel/bpf/bpf_struct_ops.c                   |   4 +-
- kernel/bpf/trampoline.c                       |  36 +-
- .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
- 11 files changed, 470 insertions(+), 34 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+index 130f5b82d2e6..e3c139bde46e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
++++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
+@@ -28,8 +28,8 @@ void test_fentry_fexit(void)
+ 
+ 	prog_fd = fexit_skel->progs.test1.prog_fd;
+ 	err = bpf_prog_test_run_opts(prog_fd, &topts);
+-	ASSERT_OK(err, "ipv6 test_run");
+-	ASSERT_OK(topts.retval, "ipv6 test retval");
++	ASSERT_OK(err, "fentry_fexit test_run");
++	ASSERT_OK(topts.retval, "fentry_fexit test retval");
+ 
+ 	fentry_res = (__u64 *)fentry_skel->bss;
+ 	fexit_res = (__u64 *)fexit_skel->bss;
 -- 
 2.30.2
 
