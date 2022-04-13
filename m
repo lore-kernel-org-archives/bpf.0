@@ -2,223 +2,244 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8364C433EF
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 03:26:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 782E8C433EF
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 04:10:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiDMD27 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Apr 2022 23:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S232276AbiDMEMl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 00:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiDMD26 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Apr 2022 23:28:58 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF01F1127;
-        Tue, 12 Apr 2022 20:26:37 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0V9xXClK_1649820390;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V9xXClK_1649820390)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 13 Apr 2022 11:26:32 +0800
-Message-ID: <1649820210.3432868-4-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v9 12/32] virtio_ring: packed: extract the logic of alloc queue
-Date:   Wed, 13 Apr 2022 11:23:30 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S231138AbiDMEMc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 00:12:32 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EB025EA2;
+        Tue, 12 Apr 2022 21:10:11 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id k25so581535iok.8;
+        Tue, 12 Apr 2022 21:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KAPHVgbv3fQELslstn41lPFxszGxCyixVC5Zh9pgEtg=;
+        b=dOcmDUHfJtdNteWlEBxvPoi3/TzURwn/VK8LoXt2VH/71wctpZYSfIl1ET0eZIMETr
+         1I8jbV+JxxarnKoGokR89hN0CZrYqaJZ96s9KKvziP8CWTDcXsTiJhMPlQ1kqBSky+vR
+         9voQWBvmKeXjGQiDJQWH1aCckQYfvkSAoe3XF6atNckwucZbLeVN727TzdlReczv6dLu
+         +KIkCz/FUFM32hoWW1Rh/ltp5HP6LDsCb2YsocTFc8ia1lxZehMTFMcKhjkWVUIsKwCH
+         UMTrrXc+uZxqNH/Iu2FdTU1SiwCxIIp3yCsHGNX9lMsohzYeCQJBrOjwAfsHCPtLcoYs
+         WGjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KAPHVgbv3fQELslstn41lPFxszGxCyixVC5Zh9pgEtg=;
+        b=5Cp/6Ejme4HrwFS+/pQiU2L1Um9PX662UfIVyrybBINboDltgqfR1r4KdUbUs2Lsgx
+         ZAgJRn38eGLFxVjFs2eEr4RFAFB/Ml3NH5TLc4pZW+mwqE9tjLRijWSdydFbWXtGpJxZ
+         b4EAMjgjIABTHA606gP2r1eXX5nKvgwRQ7b3uduf98AqJfJvUbdIAYppKiyDwU7CdRWn
+         oC/TeBRbPHDTyZO183RBDODLHB2l3h7pGfRNDNsqKr7dWKTAqhPL/32+KD2NdkxSXaKQ
+         4OKWD0A6I6q3yqLBmhibcEtbS3Udo02kCyUkp7T2Gtiq+C9rANoJ1xSOjpyVxcvopJ7Z
+         0rPQ==
+X-Gm-Message-State: AOAM532OqhCWVETjRqvPZHCH2NQsrbW+5SzUVIgP+gn9xAPImWpHv8Hc
+        z32pTCoB4vIYMFpUQjlP9cQkSgkr48J3YGuZWSk=
+X-Google-Smtp-Source: ABdhPJyfiUjeVZeTcUztwo4qHei4D0o9K90Bvi+B+Vth9eNR59cfnw2Lg5n/pyBSt5Pwz9aTprXYZfFZKgqqzr6kBcQ=
+X-Received: by 2002:a02:cc07:0:b0:326:3976:81ad with SMTP id
+ n7-20020a02cc07000000b00326397681admr5032584jap.237.1649823010614; Tue, 12
+ Apr 2022 21:10:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220331122822.14283-1-houtao1@huawei.com> <CAEf4Bzb7keBS8vXgV5JZzwgNGgMV0X3_guQ_m9JW3X6fJBDpPQ@mail.gmail.com>
+ <5a990687-b336-6f44-589b-8bd972882beb@huawei.com>
+In-Reply-To: <5a990687-b336-6f44-589b-8bd972882beb@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Apr 2022 21:09:59 -0700
+Message-ID: <CAEf4BzaUmqDUeKBjSQgLNULx=f-3ipK57Y2qEbND0XuuL9aNvw@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 0/2] bpf: Introduce ternary search tree for
+ string key
+To:     Hou Tao <houtao1@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
- <20220406034346.74409-13-xuanzhuo@linux.alibaba.com>
- <4da7b8dc-74ca-fc1b-fbdb-21f9943e8d45@redhat.com>
-In-Reply-To: <4da7b8dc-74ca-fc1b-fbdb-21f9943e8d45@redhat.com>
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 12 Apr 2022 14:28:24 +0800, Jason Wang <jasowang@redhat.com> wrote:
+On Fri, Apr 8, 2022 at 8:08 PM Hou Tao <houtao1@huawei.com> wrote:
 >
-> =E5=9C=A8 2022/4/6 =E4=B8=8A=E5=8D=8811:43, Xuan Zhuo =E5=86=99=E9=81=93:
-> > Separate the logic of packed to create vring queue.
-> >
-> > For the convenience of passing parameters, add a structure
-> > vring_packed.
-> >
-> > This feature is required for subsequent virtuqueue reset vring.
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > ---
-> >   drivers/virtio/virtio_ring.c | 70 ++++++++++++++++++++++++++++--------
-> >   1 file changed, 56 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> > index 33864134a744..ea451ae2aaef 100644
-> > --- a/drivers/virtio/virtio_ring.c
-> > +++ b/drivers/virtio/virtio_ring.c
-> > @@ -1817,19 +1817,17 @@ static struct vring_desc_extra *vring_alloc_des=
-c_extra(unsigned int num)
-> >   	return desc_extra;
-> >   }
-> >
-> > -static struct virtqueue *vring_create_virtqueue_packed(
-> > -	unsigned int index,
-> > -	unsigned int num,
-> > -	unsigned int vring_align,
-> > -	struct virtio_device *vdev,
-> > -	bool weak_barriers,
-> > -	bool may_reduce_num,
-> > -	bool context,
-> > -	bool (*notify)(struct virtqueue *),
-> > -	void (*callback)(struct virtqueue *),
-> > -	const char *name)
-> > +static int vring_alloc_queue_packed(struct virtio_device *vdev,
-> > +				    u32 num,
-> > +				    struct vring_packed_desc **_ring,
-> > +				    struct vring_packed_desc_event **_driver,
-> > +				    struct vring_packed_desc_event **_device,
-> > +				    dma_addr_t *_ring_dma_addr,
-> > +				    dma_addr_t *_driver_event_dma_addr,
-> > +				    dma_addr_t *_device_event_dma_addr,
-> > +				    size_t *_ring_size_in_bytes,
-> > +				    size_t *_event_size_in_bytes)
-> >   {
-> > -	struct vring_virtqueue *vq;
-> >   	struct vring_packed_desc *ring;
-> >   	struct vring_packed_desc_event *driver, *device;
-> >   	dma_addr_t ring_dma_addr, driver_event_dma_addr, device_event_dma_ad=
-dr;
-> > @@ -1857,6 +1855,52 @@ static struct virtqueue *vring_create_virtqueue_=
-packed(
-> >   	if (!device)
-> >   		goto err_device;
-> >
-> > +	*_ring                   =3D ring;
-> > +	*_driver                 =3D driver;
-> > +	*_device                 =3D device;
-> > +	*_ring_dma_addr          =3D ring_dma_addr;
-> > +	*_driver_event_dma_addr  =3D driver_event_dma_addr;
-> > +	*_device_event_dma_addr  =3D device_event_dma_addr;
-> > +	*_ring_size_in_bytes     =3D ring_size_in_bytes;
-> > +	*_event_size_in_bytes    =3D event_size_in_bytes;
+> Hi,
 >
->
-> I wonder if we can simply factor out split and packed from struct
-> vring_virtqueue:
->
-> struct vring_virtqueue {
->  =C2=A0=C2=A0=C2=A0 union {
->  =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 struct {} split;
->  =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 struct {} packed;
->  =C2=A0=C2=A0=C2=A0 };
-> };
->
-> to
->
-> struct vring_virtqueue_split {};
-> struct vring_virtqueue_packed {};
->
-> Then we can do things like:
->
-> vring_create_virtqueue_packed(struct virtio_device *vdev, u32 num,
-> struct vring_virtqueue_packed *packed);
->
-> and
->
-> vring_vritqueue_attach_packed(struct vring_virtqueue *vq, struct
-> vring_virtqueue_packed packed);
+> On 4/7/2022 1:38 AM, Andrii Nakryiko wrote:
+> > On Thu, Mar 31, 2022 at 5:04 AM Hou Tao <houtao1@huawei.com> wrote:
+> >> Hi,
+> >>
+> >> The initial motivation for the patchset is due to the suggestion of Alexei.
+> >> During the discuss of supporting of string key in hash-table, he saw the
+> >> space efficiency of ternary search tree under our early test and suggest
+> >> us to post it as a new bpf map [1].
+> >>
+> >> Ternary search tree is a special trie where nodes are arranged in a
+> >> manner similar to binary search tree, but with up to three children
+> >> rather than two. The three children correpond to nodes whose value is
+> >> less than, equal to, and greater than the value of current node
+> >> respectively.
+> >>
+> >> In ternary search tree map, only the valid content of string is saved.
+> >> The trailing null byte and unused bytes after it are not saved. If there
+> >> are common prefixes between these strings, the prefix is only saved once.
+> >> Compared with other space optimized trie (e.g. HAT-trie, succinct trie),
+> >> the advantage of ternary search tree is simple and being writeable.
+> >>
+> >> Below are diagrams for ternary search map when inserting hello, he,
+> >> test and tea into it:
+> >>
+> >> 1. insert "hello"
+> >>
+> >>         [ hello ]
+> >>
+> >> 2. insert "he": need split "hello" into "he" and "llo"
+> >>
+> >>          [ he ]
+> >>             |
+> >>             *
+> >>             |
+> >>          [ llo ]
+> >>
+> >> 3. insert "test": add it as right child of "he"
+> >>
+> >>          [ he ]
+> >>             |
+> >>             *-------x
+> >>             |       |
+> >>          [ llo ] [ test ]
+> >>
+> >> 5. insert "tea": split "test" into "te" and "st",
+> >>    and insert "a" as left child of "st"
+> >>
+> >>          [ he ]
+> >>             |
+> >>      x------*-------x
+> >>      |      |       |
+> >>   [ ah ] [ llo ] [ te ]
+> >>                     |
+> >>                     *
+> >>                     |
+> >>                  [ st ]
+> >>                     |
+> >>                x----*
+> >>                |
+> >>              [ a ]
+> >>
+> >> As showed in above diagrams, the common prefix between "test" and "tea"
+> >> is "te" and it only is saved once. Also add benchmarks to compare the
+> >> memory usage and lookup performance between ternary search tree and
+> >> hash table. When the common prefix is lengthy (~192 bytes) and the
+> >> length of suffix is about 64 bytes, there are about 2~3 folds memory
+> >> saving compared with hash table. But the memory saving comes at prices:
+> >> the lookup performance of tst is about 2~3 slower compared with hash
+> >> table. See more benchmark details on patch #2.
+> >>
+> >> Comments and suggestions are always welcome.
+> >>
+> > Have you heard and tried qp-trie ([0]) by any chance? It is elegant
+> > and simple data structure. By all the available benchmarks it handily
+> > beats Red-Black trees in terms of memory usage and performance (though
+> > it of course depends on the data set, just like "memory compression"
+> > for ternary tree of yours depends on large set of common prefixes).
+> > qp-trie based BPF map seems (at least on paper) like a better
+> > general-purpose BPF map that is dynamically sized (avoiding current
+> > HASHMAP limitations) and stores keys in sorted order (and thus allows
+> > meaningful ordered iteration *and*, importantly for longest prefix
+> > match tree, allows efficient prefix matches). I did a quick experiment
+> > about a month ago trying to replace libbpf's internal use of hashmap
+> > with qp-trie for BTF string dedup and it was slightly slower than
+> > hashmap (not surprisingly, though, because libbpf over-sizes hashmap
+> > to avoid hash collisions and long chains in buckets), but it was still
+> > very decent even in that scenario. So I've been mulling the idea of
+> > implementing BPF map based on qp-trie elegant design and ideas, but
+> > can't find time to do this.
+> I have heard about it when check the space efficient of HAT trie [0], because
+> qp-trie needs to save the whole string key in the leaf node and its space
+> efficiency can not be better than ternary search tree for strings with common
+> prefix, so I did not consider about it. But I will do some benchmarks to check
+> the lookup performance and space efficiency of qp-trie and tst for string with
+> common prefix and strings without much common prefix.
+> If qp-trie is better, I think I can take the time to post it as a bpf map if you
+> are OK with that.
 
-This idea is very similar to my previous idea, just without introducing a n=
-ew
-structure.
-
-I'd be more than happy to revise this.
-
-Thanks.
-
+You can probably always craft a data set where prefix sharing is so
+prevalent that space savings are very significant. But I think for a
+lot of real-world data it won't be as extreme and qp-trie might be
+very comparable (if not more memory-efficient) due to very compact
+node layout (which was the point of qp-trie). So I'd be really curious
+to see some comparisons. Would be great if you can try both!
 
 >
-> Thanks
 >
+> >
+> > This prefix sharing is nice when you have a lot of long common
+> > prefixes, but I'm a bit skeptical that as a general-purpose BPF data
+> > structure it's going to be that beneficial. 192 bytes of common
+> > prefixes seems like a very unusual dataset :)
+> Yes. The case with common prefix I known is full file path.
+> > More specifically about TST implementation in your paches. One global
+> > per-map lock I think is a very big downside. We have LPM trie which is
+> > very slow in big part due to global lock. It might be possible to
+> > design more granular schema for TST, but this whole in-place splitting
+> > logic makes this harder. I think qp-trie can be locked in a granular
+> > fashion much more easily by having a "hand over hand" locking: lock
+> > parent, find child, lock child, unlock parent, move into child node.
+> > Something like that would be more scalable overall, especially if the
+> > access pattern is not focused on a narrow set of nodes.
+> Yes. The global lock is a problem but the splitting is not in-place. I will try
+> to figure out whether the lock can be more scalable after the benchmark test
+> between qp-trie and tst.
+
+Great, looking forward!
+
 >
-> > +
-> > +	return 0;
-> > +
-> > +err_device:
-> > +	vring_free_queue(vdev, event_size_in_bytes, driver, driver_event_dma_=
-addr);
-> > +
-> > +err_driver:
-> > +	vring_free_queue(vdev, ring_size_in_bytes, ring, ring_dma_addr);
-> > +
-> > +err_ring:
-> > +	return -ENOMEM;
-> > +}
-> > +
-> > +static struct virtqueue *vring_create_virtqueue_packed(
-> > +	unsigned int index,
-> > +	unsigned int num,
-> > +	unsigned int vring_align,
-> > +	struct virtio_device *vdev,
-> > +	bool weak_barriers,
-> > +	bool may_reduce_num,
-> > +	bool context,
-> > +	bool (*notify)(struct virtqueue *),
-> > +	void (*callback)(struct virtqueue *),
-> > +	const char *name)
-> > +{
-> > +	dma_addr_t ring_dma_addr, driver_event_dma_addr, device_event_dma_add=
-r;
-> > +	struct vring_packed_desc_event *driver, *device;
-> > +	size_t ring_size_in_bytes, event_size_in_bytes;
-> > +	struct vring_packed_desc *ring;
-> > +	struct vring_virtqueue *vq;
-> > +
-> > +	if (vring_alloc_queue_packed(vdev, num, &ring, &driver, &device,
-> > +				     &ring_dma_addr, &driver_event_dma_addr,
-> > +				     &device_event_dma_addr,
-> > +				     &ring_size_in_bytes,
-> > +				     &event_size_in_bytes))
-> > +		goto err_ring;
-> > +
-> >   	vq =3D kmalloc(sizeof(*vq), GFP_KERNEL);
-> >   	if (!vq)
-> >   		goto err_vq;
-> > @@ -1939,9 +1983,7 @@ static struct virtqueue *vring_create_virtqueue_p=
-acked(
-> >   	kfree(vq);
-> >   err_vq:
-> >   	vring_free_queue(vdev, event_size_in_bytes, device, device_event_dma=
-_addr);
-> > -err_device:
-> >   	vring_free_queue(vdev, event_size_in_bytes, driver, driver_event_dma=
-_addr);
-> > -err_driver:
-> >   	vring_free_queue(vdev, ring_size_in_bytes, ring, ring_dma_addr);
-> >   err_ring:
-> >   	return NULL;
+> Regards,
+> Tao
+>
+> [0]: https://github.com/Tessil/hat-trie
+> >
+> > Anyways, I love data structures and this one is an interesting idea.
+> > But just my few cents of "production-readiness" for general-purpose
+> > data structures for BPF.
+> >
+> >   [0] https://dotat.at/prog/qp/README.html
+> >
+> >> Regards,
+> >> Tao
+> >>
+> >> [1]: https://lore.kernel.org/bpf/CAADnVQJUJp3YBcpESwR3Q1U6GS1mBM=Vp-qYuQX7eZOaoLjdUA@mail.gmail.com/
+> >>
+> >> Hou Tao (2):
+> >>   bpf: Introduce ternary search tree for string key
+> >>   selftests/bpf: add benchmark for ternary search tree map
+> >>
+> >>  include/linux/bpf_types.h                     |   1 +
+> >>  include/uapi/linux/bpf.h                      |   1 +
+> >>  kernel/bpf/Makefile                           |   1 +
+> >>  kernel/bpf/bpf_tst.c                          | 411 +++++++++++++++++
+> >>  tools/include/uapi/linux/bpf.h                |   1 +
+> >>  tools/testing/selftests/bpf/Makefile          |   5 +-
+> >>  tools/testing/selftests/bpf/bench.c           |   6 +
+> >>  .../selftests/bpf/benchs/bench_tst_map.c      | 415 ++++++++++++++++++
+> >>  .../selftests/bpf/benchs/run_bench_tst.sh     |  54 +++
+> >>  tools/testing/selftests/bpf/progs/tst_bench.c |  70 +++
+> >>  10 files changed, 964 insertions(+), 1 deletion(-)
+> >>  create mode 100644 kernel/bpf/bpf_tst.c
+> >>  create mode 100644 tools/testing/selftests/bpf/benchs/bench_tst_map.c
+> >>  create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_tst.sh
+> >>  create mode 100644 tools/testing/selftests/bpf/progs/tst_bench.c
+> >>
+> >> --
+> >> 2.31.1
+> >>
+> > .
 >
