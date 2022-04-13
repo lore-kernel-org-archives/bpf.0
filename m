@@ -2,564 +2,493 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E61EC433F5
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 05:36:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09389C433F5
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 05:37:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiDMFi2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Apr 2022 01:38:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S232221AbiDMFkB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 01:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiDMFi1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Apr 2022 01:38:27 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E243134B
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 22:36:06 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso5197365pjb.5
-        for <bpf@vger.kernel.org>; Tue, 12 Apr 2022 22:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0btC3YEAIrPaHdOcoW1wMBrMrNyTGkh2OrvmMCL77QY=;
-        b=GPOs5xn/2a8yNfMawE1Y7gFjXobAHvWQfrWGHZm2VDt8PLbcBRY6DLD+pga1KEyH0f
-         2DGv+4xr2/tpy4bps0gcIGprk+mkEXB/9rRWMu0Kn1V5wV2NmDEpIdFXNPgbp9NUw/S6
-         6Ks7qPF96rszD/9fj9jsfs3NkioEKfGZV8zwPRh7OPRnoyDU1qxG+ApquBfUlrv8HW1A
-         IEUfLMQOABzTNQxFJkqtwlz3KTWdKe3Hsw5aXKaUVjHjJ9+eBYQEcMwBu94WxlrkaHbQ
-         ThSnt1peLmBPPYciVY9LVRnJpYBaU4FZ0SuFtybZh+hZ5IG4OeKaYr7L0VeOxh9jeyRL
-         TzWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0btC3YEAIrPaHdOcoW1wMBrMrNyTGkh2OrvmMCL77QY=;
-        b=eEV705EoQ+wBI3WEn4AeoMa5mg4B401JC8aeb+/5sRHBGdMxz7RxwG5HpeFfps9TPT
-         5I9WoHZYlq8CGCrkmvC/7saC0i3rO/DrVX0rS6cSoEPZTTJ5iLSpw5D0ZpDT9yFiOZ8I
-         mkuyQ9z2/oZPrp2n1M13HoCnC02oZQo0NRmVWC0Yifoo5+PKvJ3YNQvmid0s9easjB/f
-         aXi4YBy0vLzht6bzSiRDSpBZjyykonxIhaGiZ7cc4y1ZMeRP7I/EMIu2ZD6i8gNVNX+i
-         qx663B8ApzI93yeDfJUyRi4fk5KUxX2Z7vFBvxQ3NfWRv4yOPcIwKfHuV5O1R0LWvnHy
-         DimA==
-X-Gm-Message-State: AOAM533b7TU93pR0HsIs//dGcFO36Ua8fgknuo5YBN3mwsnG44YM3SfV
-        x2tW+CRKgKv6Q+xuur15omQ=
-X-Google-Smtp-Source: ABdhPJzm8wOmB1BT08SINGYY9tSGHfB05jDgVUs5bRMlYU1WLV7i+CahxS+c6+nepmtw+GYQtzArog==
-X-Received: by 2002:a17:90a:e7cd:b0:1c7:acbd:215d with SMTP id kb13-20020a17090ae7cd00b001c7acbd215dmr8851502pjb.153.1649828165158;
-        Tue, 12 Apr 2022 22:36:05 -0700 (PDT)
-Received: from localhost ([112.79.166.120])
-        by smtp.gmail.com with ESMTPSA id j63-20020a636e42000000b003987df110edsm4695111pgc.42.2022.04.12.22.36.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 22:36:04 -0700 (PDT)
-Date:   Wed, 13 Apr 2022 11:06:04 +0530
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To:     Joanne Koong <joannelkoong@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        with ESMTP id S232173AbiDMFkB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 01:40:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2902E3134B;
+        Tue, 12 Apr 2022 22:37:40 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KdWXM2CQxzgYbq;
+        Wed, 13 Apr 2022 13:35:47 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 13:37:35 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH bpf-next v4 05/13] bpf: Allow storing referenced kptr in
- map
-Message-ID: <20220413053604.c4nhjeb7mmmcfxod@apollo.legion>
-References: <20220409093303.499196-1-memxor@gmail.com>
- <20220409093303.499196-6-memxor@gmail.com>
- <CAJnrk1YkUDDLiLBiwb8UtpjqhBRkNdq0C22z3yVo=7RyLOXn1A@mail.gmail.com>
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+Subject: [PATCH bpf-next 4/5] bpf, arm64: bpf trampoline for arm64
+Date:   Wed, 13 Apr 2022 01:49:58 -0400
+Message-ID: <20220413054959.1053668-5-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220413054959.1053668-1-xukuohai@huawei.com>
+References: <20220413054959.1053668-1-xukuohai@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJnrk1YkUDDLiLBiwb8UtpjqhBRkNdq0C22z3yVo=7RyLOXn1A@mail.gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 04:35:11AM IST, Joanne Koong wrote:
-> On Mon, Apr 11, 2022 at 12:25 AM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > Extending the code in previous commit, introduce referenced kptr
-> > support, which needs to be tagged using 'kptr_ref' tag instead. Unlike
-> > unreferenced kptr, referenced kptr have a lot more restrictions. In
-> > addition to the type matching, only a newly introduced bpf_kptr_xchg
-> > helper is allowed to modify the map value at that offset. This transfers
-> > the referenced pointer being stored into the map, releasing the
-> > references state for the program, and returning the old value and
-> > creating new reference state for the returned pointer.
-> >
-> > Similar to unreferenced pointer case, return value for this case will
-> > also be PTR_TO_BTF_ID_OR_NULL. The reference for the returned pointer
-> > must either be eventually released by calling the corresponding release
-> > function, otherwise it must be transferred into another map.
-> >
-> > It is also allowed to call bpf_kptr_xchg with a NULL pointer, to clear
-> > the value, and obtain the old value if any.
-> >
-> > BPF_LDX, BPF_STX, and BPF_ST cannot access referenced kptr. A future
-> > commit will permit using BPF_LDX for such pointers, but attempt at
-> > making it safe, since the lifetime of object won't be guaranteed.
-> >
-> > There are valid reasons to enforce the restriction of permitting only
-> > bpf_kptr_xchg to operate on referenced kptr. The pointer value must be
-> > consistent in face of concurrent modification, and any prior values
-> > contained in the map must also be released before a new one is moved
-> > into the map. To ensure proper transfer of this ownership, bpf_kptr_xchg
-> > returns the old value, which the verifier would require the user to
-> > either free or move into another map, and releases the reference held
-> > for the pointer being moved in.
-> >
-> > In the future, direct BPF_XCHG instruction may also be permitted to work
-> > like bpf_kptr_xchg helper.
-> >
-> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > ---
-> >  include/linux/bpf.h            |   7 +++
-> >  include/uapi/linux/bpf.h       |  12 ++++
-> >  kernel/bpf/btf.c               |  10 ++-
-> >  kernel/bpf/helpers.c           |  21 +++++++
-> >  kernel/bpf/verifier.c          | 107 +++++++++++++++++++++++++++++----
-> >  tools/include/uapi/linux/bpf.h |  12 ++++
-> >  6 files changed, 155 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index a6d1982e8118..bd682c29883a 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -160,10 +160,15 @@ enum {
-> >         BPF_MAP_VALUE_OFF_MAX = 8,
-> >  };
-> >
-> > +enum {
-> > +       BPF_MAP_VALUE_OFF_F_REF = (1U << 0),
-> I personally find this name very confusing. What does the "f" in
-> "OFF_F_REF" stand for? Also, I think adding in a comment for this
-> would help out future readers.
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
-The f is for 'flag', similar to e.g. BPF_F_LOCK. I'll add a comment.
-Also it can probably be type rather than flag.
+fentry before bpf trampoline hooked:
+ mov x9, x30
+ nop
 
-> > +};
-> > +
-> >  struct bpf_map_value_off_desc {
-> >         u32 offset;
-> >         u32 btf_id;
-> >         struct btf *btf;
-> > +       int flags;
-> It's unclear from reading this what flags refers to. Maybe adding a
-> comment here that flags holds values from the enum above (and maybe we
-> should give the enum a more descriptive name?) would make it clearer?
+fentry after bpf trampoline hooked:
+ mov x9, x30
+ bl  <bpf_trampoline>
 
-I'll give the enum a name and rename it to 'type'. Then, for dynptr case,
-you can add other types of dynptr that can be embedded in map value.
+Tested on qemu, result:
+ #55 fentry_fexit:OK
+ #56 fentry_test:OK
+ #58 fexit_sleep:OK
+ #59 fexit_stress:OK
+ #60 fexit_test:OK
+ #67 get_func_args_test:OK
+ #68 get_func_ip_test:OK
+ #101 modify_return:OK
 
-> >  };
-> >
-> >  struct bpf_map_value_off {
-> > @@ -416,6 +421,7 @@ enum bpf_arg_type {
-> >         ARG_PTR_TO_STACK,       /* pointer to stack */
-> >         ARG_PTR_TO_CONST_STR,   /* pointer to a null terminated read-only string */
-> >         ARG_PTR_TO_TIMER,       /* pointer to bpf_timer */
-> > +       ARG_PTR_TO_KPTR,        /* pointer to kptr */
-> This is only a "pointer to a referenced kptr", correct?
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ arch/arm64/net/bpf_jit.h      |  14 +-
+ arch/arm64/net/bpf_jit_comp.c | 338 +++++++++++++++++++++++++++++++++-
+ 2 files changed, 348 insertions(+), 4 deletions(-)
 
-Yes. I'll update the comment.
+diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
+index 194c95ccc1cf..e29761dc8004 100644
+--- a/arch/arm64/net/bpf_jit.h
++++ b/arch/arm64/net/bpf_jit.h
+@@ -86,9 +86,18 @@
+ 		AARCH64_INSN_VARIANT_64BIT, \
+ 		AARCH64_INSN_LDST_##ls##_PAIR_##type)
+ /* Rn -= 16; Rn[0] = Rt; Rn[8] = Rt2; */
+-#define A64_PUSH(Rt, Rt2, Rn) A64_LS_PAIR(Rt, Rt2, Rn, -16, STORE, PRE_INDEX)
++#define A64_PUSH(Rt, Rt2, Rn) \
++	A64_LS_PAIR(Rt, Rt2, Rn, -16, STORE, PRE_INDEX)
+ /* Rt = Rn[0]; Rt2 = Rn[8]; Rn += 16; */
+-#define A64_POP(Rt, Rt2, Rn)  A64_LS_PAIR(Rt, Rt2, Rn, 16, LOAD, POST_INDEX)
++#define A64_POP(Rt, Rt2, Rn) \
++	A64_LS_PAIR(Rt, Rt2, Rn, 16, LOAD, POST_INDEX)
++
++/* Rn[imm] = Xt1; Rn[imm + 8] = Xt2 */
++#define A64_STP(Xt1, Xt2, Xn, imm)  \
++	A64_LS_PAIR(Xt1, Xt2, Xn, imm, STORE, SIGNED_OFFSET)
++/* Xt1 = Rn[imm]; Xt2 = Rn[imm + 8] */
++#define A64_LDP(Xt1, Xt2, Xn, imm)  \
++	A64_LS_PAIR(Xt1, Xt2, Xn, imm, LOAD, SIGNED_OFFSET)
+ 
+ /* Load/store exclusive */
+ #define A64_SIZE(sf) \
+@@ -270,6 +279,7 @@
+ #define A64_BTI_C  A64_HINT(AARCH64_INSN_HINT_BTIC)
+ #define A64_BTI_J  A64_HINT(AARCH64_INSN_HINT_BTIJ)
+ #define A64_BTI_JC A64_HINT(AARCH64_INSN_HINT_BTIJC)
++#define A64_NOP    A64_HINT(AARCH64_INSN_HINT_NOP)
+ 
+ /* DMB */
+ #define A64_DMB_ISH aarch64_insn_gen_dmb(AARCH64_INSN_MB_ISH)
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 1a1c3ea75ee2..5f6bd755050f 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1333,10 +1333,16 @@ static int validate_code(struct jit_ctx *ctx)
+ 
+ 	for (i = 0; i < ctx->idx; i++) {
+ 		u32 a64_insn = le32_to_cpu(ctx->image[i]);
+-
+ 		if (a64_insn == AARCH64_BREAK_FAULT)
+ 			return -1;
+ 	}
++	return 0;
++}
++
++static int validate_ctx(struct jit_ctx *ctx)
++{
++	if (validate_code(ctx))
++		return -1;
+ 
+ 	if (WARN_ON_ONCE(ctx->exentry_idx != ctx->prog->aux->num_exentries))
+ 		return -1;
+@@ -1461,7 +1467,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 	build_epilogue(&ctx);
+ 
+ 	/* 3. Extra pass to validate JITed code. */
+-	if (validate_code(&ctx)) {
++	if (validate_ctx(&ctx)) {
+ 		bpf_jit_binary_free(header);
+ 		prog = orig_prog;
+ 		goto out_off;
+@@ -1532,6 +1538,334 @@ void bpf_jit_free_exec(void *addr)
+ 	return vfree(addr);
+ }
+ 
++static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_prog *p,
++			    int args_off, int retval_off, bool save_ret)
++{
++	u32 *branch;
++	u64 enter_prog;
++	u64 exit_prog;
++	u8 tmp = bpf2a64[TMP_REG_1];
++	u8 r0 = bpf2a64[BPF_REG_0];
++
++	if (p->aux->sleepable) {
++		enter_prog = (u64)__bpf_prog_enter_sleepable;
++		exit_prog = (u64)__bpf_prog_exit_sleepable;
++	} else {
++		enter_prog = (u64)__bpf_prog_enter;
++		exit_prog = (u64)__bpf_prog_exit;
++	}
++
++	/* bl __bpf_prog_enter */
++	emit_addr_mov_i64(A64_R(0), (const u64)p, ctx);
++	emit_addr_mov_i64(tmp, enter_prog, ctx);
++	emit(A64_BLR(tmp), ctx);
++
++	/*
++	 * if (__bpf_prog_enter(prog) == 0)
++	 *         goto skip_exec_of_prog;
++	 */
++	branch = ctx->image + ctx->idx;
++	emit(A64_NOP, ctx);
++
++	/* move return value to x19 */
++	emit(A64_MOV(1, A64_R(19), r0), ctx);
++
++	/* bl bpf_prog */
++	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
++	if (!p->jited)
++		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
++	emit_addr_mov_i64(tmp, (const u64)p->bpf_func, ctx);
++	emit(A64_BLR(tmp), ctx);
++
++	/* store return value */
++	if (save_ret)
++		emit(A64_STR64I(r0, A64_SP, retval_off), ctx);
++
++	if (ctx->image) {
++		int offset = &ctx->image[ctx->idx] - branch;
++		*branch = A64_CBZ(1, A64_R(0), offset);
++	}
++
++	/* bl __bpf_prog_exit */
++	emit_addr_mov_i64(A64_R(0), (const u64)p, ctx);
++	emit(A64_MOV(1, A64_R(1), A64_R(19)), ctx);
++	emit_addr_mov_i64(tmp, exit_prog, ctx);
++	emit(A64_BLR(tmp), ctx);
++}
++
++static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_progs *tp,
++			       int args_off, int retval_off, u32 **branches)
++{
++	int i;
++
++	/* The first fmod_ret program will receive a garbage return value.
++	 * Set this to 0 to avoid confusing the program.
++	 */
++	emit(A64_STR64I(A64_ZR, A64_SP, retval_off), ctx);
++	for (i = 0; i < tp->nr_progs; i++) {
++		invoke_bpf_prog(ctx, tp->progs[i], args_off, retval_off, true);
++		/*
++		 * if (*(u64 *)(sp + retval_off) !=  0)
++		 *	goto do_fexit;
++		 */
++		emit(A64_LDR64I(A64_R(10), A64_SP, retval_off), ctx);
++		/* Save the location of branch, and generate a nop.
++		 * This nop will be replaced with a cbnz later.
++		 */
++		branches[i] = ctx->image + ctx->idx;
++		emit(A64_NOP, ctx);
++	}
++}
++
++static void save_args(struct jit_ctx *ctx, int args_off, int nargs)
++{
++	int i;
++
++	for (i = 0; i < nargs; i++) {
++		emit(A64_STR64I(i, A64_SP, args_off), ctx);
++		args_off += 8;
++	}
++}
++
++static void restore_args(struct jit_ctx *ctx, int args_off, int nargs)
++{
++	int i;
++
++	for (i = 0; i < nargs; i++) {
++		emit(A64_LDR64I(i, A64_SP, args_off), ctx);
++		args_off += 8;
++	}
++}
++
++/*
++ * Based on the x86's implementation of arch_prepare_bpf_trampoline().
++ *
++ * We dpend on DYNAMIC_FTRACE_WITH_REGS to set return address and nop.
++ *
++ * fentry before bpf trampoline hooked:
++ *   mov x9, x30
++ *   nop
++ *
++ * fentry after bpf trampoline hooked:
++ *   mov x9, x30
++ *   bl  <bpf_trampoline>
++ *
++ */
++static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
++			      struct bpf_tramp_progs *tprogs, void *orig_call,
++			      int nargs, u32 flags)
++{
++	int i;
++	int stack_size;
++	int retaddr_off;
++	int regs_off;
++	int retval_off;
++	int args_off;
++	int nargs_off;
++	struct bpf_tramp_progs *fentry = &tprogs[BPF_TRAMP_FENTRY];
++	struct bpf_tramp_progs *fexit = &tprogs[BPF_TRAMP_FEXIT];
++	struct bpf_tramp_progs *fmod_ret = &tprogs[BPF_TRAMP_MODIFY_RETURN];
++	bool save_ret;
++	u32 **branches = NULL;
++
++	/*
++	 * trampoline stack layout:
++	 *                  [ parent ip       ]
++	 *                  [ FP              ]
++	 * SP + retaddr_off [ self ip         ]
++	 * FP               [ FP              ]
++	 *
++	 * sp + regs_off    [ x19             ] callee-saved regs, currently
++	 *                                      only x19 is used
++	 *
++	 * SP + retval_off  [ return value    ] BPF_TRAMP_F_CALL_ORIG or
++	 *                                      BPF_TRAMP_F_RET_FENTRY_RET flags
++	 *
++	 *                  [ argN            ]
++	 *                  [ ...             ]
++	 * sp + args_off    [ arg1            ]
++	 *
++	 * SP + nargs_off   [ args count      ]
++	 *
++	 * SP + 0           [ traced function ] BPF_TRAMP_F_IP_ARG flag
++	 */
++
++	stack_size = 0;
++	/* room for IP address argument */
++	if (flags & BPF_TRAMP_F_IP_ARG)
++		stack_size += 8;
++
++	nargs_off = stack_size;
++	/* room for args count */
++	stack_size += 8;
++
++	args_off = stack_size;
++	/* room for args */
++	stack_size += nargs * 8;
++
++	/* room for return value */
++	retval_off = stack_size;
++	save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
++	if (save_ret)
++		stack_size += 8;
++
++	/* room for callee-saved registers, currently only x19 is used */
++	regs_off = stack_size;
++	stack_size += 8;
++
++	retaddr_off = stack_size + 8;
++
++	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
++		emit(A64_BTI_C, ctx);
++
++	/* frame for parent function */
++	emit(A64_PUSH(A64_FP, A64_R(9), A64_SP), ctx);
++	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
++
++	/* frame for patched function */
++	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
++	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
++
++	/* allocate stack space */
++	emit(A64_SUB_I(1, A64_SP, A64_SP, stack_size), ctx);
++
++	if (flags & BPF_TRAMP_F_IP_ARG) {
++		/* save ip address of the traced function */
++		emit_addr_mov_i64(A64_R(10), (const u64)orig_call, ctx);
++		emit(A64_STR64I(A64_R(10), A64_SP, 0), ctx);
++	}
++
++	/* save args count*/
++	emit(A64_MOVZ(1, A64_R(10), nargs, 0), ctx);
++	emit(A64_STR64I(A64_R(10), A64_SP, nargs_off), ctx);
++
++	/* save args */
++	save_args(ctx, args_off, nargs);
++
++	/* save callee saved registers */
++	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
++
++	if (flags & BPF_TRAMP_F_CALL_ORIG) {
++		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
++		emit_addr_mov_i64(A64_R(10), (const u64)__bpf_tramp_enter, ctx);
++		emit(A64_BLR(A64_R(10)), ctx);
++	}
++
++	for (i = 0; i < fentry->nr_progs; i++)
++		invoke_bpf_prog(ctx, fentry->progs[i], args_off, retval_off,
++				flags & BPF_TRAMP_F_RET_FENTRY_RET);
++
++	if (fmod_ret->nr_progs) {
++		branches = kcalloc(fmod_ret->nr_progs, sizeof(u32 *),
++				   GFP_KERNEL);
++		if (!branches)
++			return -ENOMEM;
++
++		invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
++				   branches);
++	}
++
++	if (flags & BPF_TRAMP_F_CALL_ORIG) {
++		restore_args(ctx, args_off, nargs);
++		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
++		emit(A64_BLR(A64_R(10)), ctx);
++		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
++		im->ip_after_call = ctx->image + ctx->idx;
++		emit(A64_NOP, ctx);
++	}
++
++	/* update the branches saved in invoke_bpf_mod_ret with cbnz */
++	for (i = 0; i < fmod_ret->nr_progs && ctx->image != NULL; i++) {
++		int offset = &ctx->image[ctx->idx] - branches[i];
++		*branches[i] = A64_CBNZ(1, A64_R(10), offset);
++	}
++
++	for (i = 0; i < fexit->nr_progs; i++)
++		invoke_bpf_prog(ctx, fexit->progs[i], args_off, retval_off,
++				false);
++
++	if (flags & BPF_TRAMP_F_RESTORE_REGS)
++		restore_args(ctx, args_off, nargs);
++
++	if (flags & BPF_TRAMP_F_CALL_ORIG) {
++		im->ip_epilogue = ctx->image + ctx->idx;
++		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
++		emit_addr_mov_i64(A64_R(10), (const u64)__bpf_tramp_exit, ctx);
++		emit(A64_BLR(A64_R(10)), ctx);
++	}
++
++	/* restore x19 */
++	emit(A64_LDR64I(A64_R(19), A64_SP, regs_off), ctx);
++
++	if (save_ret)
++		emit(A64_LDR64I(A64_R(0), A64_SP, retval_off), ctx);
++
++	/* reset SP  */
++	emit(A64_MOV(1, A64_SP, A64_FP), ctx);
++
++	/* pop frames  */
++	emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
++	emit(A64_POP(A64_FP, A64_R(9), A64_SP), ctx);
++
++	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
++		/* skip patched function, return to parent */
++		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
++		emit(A64_RET(A64_R(9)), ctx);
++	} else {
++		/* return to patched function */
++		emit(A64_MOV(1, A64_R(10), A64_LR), ctx);
++		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
++		emit(A64_RET(A64_R(10)), ctx);
++	}
++
++	if (ctx->image)
++		bpf_flush_icache(ctx->image, ctx->image + ctx->idx);
++
++	kfree(branches);
++
++	return ctx->idx;
++}
++
++int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
++				void *image_end, const struct btf_func_model *m,
++				u32 flags, struct bpf_tramp_progs *tprogs,
++				void *orig_call)
++{
++	int ret;
++	int nargs = m->nr_args;
++	int max_insns = ((long)image_end - (long)image) / AARCH64_INSN_SIZE;
++	struct jit_ctx ctx = {
++		.image = NULL,
++		.idx = 0
++	};
++
++	/* we depends on ftrace to set return address and place nop */
++	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++		return -ENOTSUPP;
++
++	/* the first 8 arguments are passed by registers */
++	if (nargs > 8)
++		return -ENOTSUPP;
++
++	ret =  prepare_trampoline(&ctx, im, tprogs, orig_call, nargs, flags);
++	if (ret < 0)
++		return ret;
++
++	if (ret > max_insns)
++		return -EFBIG;
++
++	ctx.image = image;
++	ctx.idx = 0;
++
++	jit_fill_hole(image, (unsigned int)(image_end - image));
++	ret = prepare_trampoline(&ctx, im, tprogs, orig_call, nargs, flags);
++
++	if (ret > 0 && validate_code(&ctx) < 0)
++		ret = -EINVAL;
++
++	return ret;
++}
++
+ static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+ 			     void *addr, u32 *insn)
+ {
+-- 
+2.30.2
 
-> >         __BPF_ARG_TYPE_MAX,
-> >
-> >         /* Extended arg_types. */
-> > @@ -425,6 +431,7 @@ enum bpf_arg_type {
-> >         ARG_PTR_TO_SOCKET_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
-> >         ARG_PTR_TO_ALLOC_MEM_OR_NULL    = PTR_MAYBE_NULL | ARG_PTR_TO_ALLOC_MEM,
-> >         ARG_PTR_TO_STACK_OR_NULL        = PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
-> > +       ARG_PTR_TO_BTF_ID_OR_NULL       = PTR_MAYBE_NULL | ARG_PTR_TO_BTF_ID,
-> >
-> >         /* This must be the last entry. Its purpose is to ensure the enum is
-> >          * wide enough to hold the higher bits reserved for bpf_type_flag.
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index d14b10b85e51..444fe6f1cf35 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -5143,6 +5143,17 @@ union bpf_attr {
-> >   *             The **hash_algo** is returned on success,
-> >   *             **-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
-> >   *             invalid arguments are passed.
-> > + *
-> > + * void *bpf_kptr_xchg(void *map_value, void *ptr)
-> > + *     Description
-> > + *             Exchange kptr at pointer *map_value* with *ptr*, and return the
-> > + *             old value. *ptr* can be NULL, otherwise it must be a referenced
-> > + *             pointer which will be released when this helper is called.
-> > + *     Return
-> > + *             The old value of kptr (which can be NULL). The returned pointer
-> > + *             if not NULL, is a reference which must be released using its
-> > + *             corresponding release function, or moved into a BPF map before
-> > + *             program exit.
-> >   */
-> >  #define __BPF_FUNC_MAPPER(FN)          \
-> >         FN(unspec),                     \
-> > @@ -5339,6 +5350,7 @@ union bpf_attr {
-> >         FN(copy_from_user_task),        \
-> >         FN(skb_set_tstamp),             \
-> >         FN(ima_file_hash),              \
-> > +       FN(kptr_xchg),                  \
-> >         /* */
-> >
-> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 28b1d9e9124e..43ea9ed5652e 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -3177,6 +3177,7 @@ enum {
-> >  struct btf_field_info {
-> >         u32 type_id;
-> >         u32 off;
-> > +       int flags;
-> >  };
-> >
-> >  static int btf_find_field_struct(const struct btf *btf, const struct btf_type *t,
-> > @@ -3194,6 +3195,7 @@ static int btf_find_field_kptr(const struct btf *btf, const struct btf_type *t,
-> >                                u32 off, int sz, struct btf_field_info *info)
-> >  {
-> >         u32 res_id;
-> > +       int flags;
-> >
-> >         /* For PTR, sz is always == 8 */
-> >         if (!btf_type_is_ptr(t))
-> > @@ -3205,7 +3207,11 @@ static int btf_find_field_kptr(const struct btf *btf, const struct btf_type *t,
-> >         /* Reject extra tags */
-> >         if (btf_type_is_type_tag(btf_type_by_id(btf, t->type)))
-> >                 return -EINVAL;
-> > -       if (strcmp("kptr", __btf_name_by_offset(btf, t->name_off)))
-> > +       if (!strcmp("kptr", __btf_name_by_offset(btf, t->name_off)))
-> > +               flags = 0;
-> > +       else if (!strcmp("kptr_ref", __btf_name_by_offset(btf, t->name_off)))
-> > +               flags = BPF_MAP_VALUE_OFF_F_REF;
-> > +       else
-> >                 return -EINVAL;
-> >
-> >         /* Get the base type */
-> > @@ -3216,6 +3222,7 @@ static int btf_find_field_kptr(const struct btf *btf, const struct btf_type *t,
-> >
-> >         info->type_id = res_id;
-> >         info->off = off;
-> > +       info->flags = flags;
-> >         return BTF_FIELD_FOUND;
-> >  }
-> >
-> > @@ -3420,6 +3427,7 @@ struct bpf_map_value_off *btf_parse_kptrs(const struct btf *btf,
-> >                 tab->off[i].offset = info_arr[i].off;
-> >                 tab->off[i].btf_id = id;
-> >                 tab->off[i].btf = off_btf;
-> > +               tab->off[i].flags = info_arr[i].flags;
-> >                 tab->nr_off = i + 1;
-> >         }
-> >         return tab;
-> > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> > index 315053ef6a75..a437d0f0458a 100644
-> > --- a/kernel/bpf/helpers.c
-> > +++ b/kernel/bpf/helpers.c
-> > @@ -1374,6 +1374,25 @@ void bpf_timer_cancel_and_free(void *val)
-> >         kfree(t);
-> >  }
-> >
-> > +BPF_CALL_2(bpf_kptr_xchg, void *, map_value, void *, ptr)
-> > +{
-> > +       unsigned long *kptr = map_value;
-> > +
-> > +       return xchg(kptr, (unsigned long)ptr);
-> > +}
-> > +
-> > +static u32 bpf_kptr_xchg_btf_id;
-> > +
-> > +const struct bpf_func_proto bpf_kptr_xchg_proto = {
-> > +       .func         = bpf_kptr_xchg,
-> > +       .gpl_only     = false,
-> > +       .ret_type     = RET_PTR_TO_BTF_ID_OR_NULL,
-> > +       .ret_btf_id   = &bpf_kptr_xchg_btf_id,
-> > +       .arg1_type    = ARG_PTR_TO_KPTR,
-> > +       .arg2_type    = ARG_PTR_TO_BTF_ID_OR_NULL | PTR_RELEASE,
-> > +       .arg2_btf_id  = &bpf_kptr_xchg_btf_id,
-> > +};
-> > +
-> >  const struct bpf_func_proto bpf_get_current_task_proto __weak;
-> >  const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
-> >  const struct bpf_func_proto bpf_probe_read_user_proto __weak;
-> > @@ -1452,6 +1471,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
-> >                 return &bpf_timer_start_proto;
-> >         case BPF_FUNC_timer_cancel:
-> >                 return &bpf_timer_cancel_proto;
-> > +       case BPF_FUNC_kptr_xchg:
-> > +               return &bpf_kptr_xchg_proto;
-> >         default:
-> >                 break;
-> >         }
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 6cc08526e049..92efe6c3999c 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -258,6 +258,7 @@ struct bpf_call_arg_meta {
-> >         struct btf *ret_btf;
-> >         u32 ret_btf_id;
-> >         u32 subprogno;
-> > +       struct bpf_map_value_off_desc *kptr_off_desc;
-> >  };
-> >
-> >  struct btf *btf_vmlinux;
-> > @@ -480,7 +481,8 @@ static bool is_release_function(enum bpf_func_id func_id)
-> >  {
-> >         return func_id == BPF_FUNC_sk_release ||
-> >                func_id == BPF_FUNC_ringbuf_submit ||
-> > -              func_id == BPF_FUNC_ringbuf_discard;
-> > +              func_id == BPF_FUNC_ringbuf_discard ||
-> > +              func_id == BPF_FUNC_kptr_xchg;
-> >  }
-> >
-> >  static bool may_be_acquire_function(enum bpf_func_id func_id)
-> > @@ -500,7 +502,8 @@ static bool is_acquire_function(enum bpf_func_id func_id,
-> >         if (func_id == BPF_FUNC_sk_lookup_tcp ||
-> >             func_id == BPF_FUNC_sk_lookup_udp ||
-> >             func_id == BPF_FUNC_skc_lookup_tcp ||
-> > -           func_id == BPF_FUNC_ringbuf_reserve)
-> > +           func_id == BPF_FUNC_ringbuf_reserve ||
-> > +           func_id == BPF_FUNC_kptr_xchg)
-> >                 return true;
-> >
-> >         if (func_id == BPF_FUNC_map_lookup_elem &&
-> > @@ -3525,6 +3528,12 @@ static int map_kptr_match_type(struct bpf_verifier_env *env,
-> >         /* We need to verify reg->type and reg->btf, before accessing reg->btf */
-> >         reg_name = kernel_type_name(reg->btf, reg->btf_id);
-> >
-> > +       /* For ref_ptr case, release function check should ensure we get one
-> > +        * referenced PTR_TO_BTF_ID, and that its fixed offset is 0. For the
-> I don't fully understand why the first sentence in this comment is
-> relevant to this function - this seems like it belongs more to
-> check_func_arg_reg_off() for the PTR_TO_BTF_ID case?
->
-
-It is just meant to say that some of the checks that are required for referenced
-kptr case are already covered by those for normal release functions, so it is
-not required to redo them here. This function is called for both bpf_kptr_xchg
-and normal BPF insns.
-
-> > +        * normal store of unreferenced kptr, we must ensure var_off is zero.
-> > +        * Since ref_ptr cannot be accessed directly by BPF insns, checks for
-> > +        * reg->off and reg->ref_obj_id are not needed here.
-> > +        */
->
-> >         if (__check_ptr_off_reg(env, reg, regno, true))
-> >                 return -EACCES;
-> >
-> > @@ -3557,6 +3566,12 @@ static int check_map_kptr_access(struct bpf_verifier_env *env, u32 regno,
-> >         if (BPF_MODE(insn->code) != BPF_MEM)
-> >                 goto end;
-> >
-> > +       /* We cannot directly access kptr_ref */
-> > +       if (off_desc->flags & BPF_MAP_VALUE_OFF_F_REF) {
-> > +               verbose(env, "accessing referenced kptr disallowed\n");
-> > +               return -EACCES;
-> > +       }
-> > +
-> >         if (class == BPF_LDX) {
-> >                 val_reg = reg_state(env, value_regno);
-> >                 /* We can simply mark the value_regno receiving the pointer
-> > @@ -5278,6 +5293,59 @@ static int process_timer_func(struct bpf_verifier_env *env, int regno,
-> >         return 0;
-> >  }
-> >
-> > +static int process_kptr_func(struct bpf_verifier_env *env, int regno,
-> > +                            struct bpf_call_arg_meta *meta)
-> > +{
-> > +       struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-> > +       struct bpf_map_value_off_desc *off_desc;
-> > +       struct bpf_map *map_ptr = reg->map_ptr;
-> > +       u32 kptr_off;
-> > +       int ret;
-> > +
-> > +       if (!tnum_is_const(reg->var_off)) {
-> > +               verbose(env,
-> > +                       "R%d doesn't have constant offset. kptr has to be at the constant offset\n",
-> > +                       regno);
-> > +               return -EINVAL;
-> > +       }
-> > +       if (!map_ptr->btf) {
-> > +               verbose(env, "map '%s' has to have BTF in order to use bpf_kptr_xchg\n",
-> > +                       map_ptr->name);
-> > +               return -EINVAL;
-> > +       }
-> > +       if (!map_value_has_kptrs(map_ptr)) {
-> > +               ret = PTR_ERR(map_ptr->kptr_off_tab);
-> > +               if (ret == -E2BIG)
-> > +                       verbose(env, "map '%s' has more than %d kptr\n", map_ptr->name,
-> > +                               BPF_MAP_VALUE_OFF_MAX);
-> > +               else if (ret == -EEXIST)
-> > +                       verbose(env, "map '%s' has repeating kptr BTF tags\n", map_ptr->name);
-> > +               else
-> > +                       verbose(env, "map '%s' has no valid kptr\n", map_ptr->name);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       meta->map_ptr = map_ptr;
-> > +       /* Check access for BPF_WRITE */
-> > +       meta->raw_mode = true;
-> > +       ret = check_helper_mem_access(env, regno, sizeof(u64), false, meta);
-> Do you need to check access here for both BPF_WRITE and BPF_READ since
-> you are also reading the map value when you do the xchg?
-
-I have a fix for this for the next version :). Actually it should be the
-opposite, that is we just need to check map is both read/write. So it should do
-a check with meta->raw_mode = false. We already prevent BPF_F_RDONLY_PROG from
-being set, so map is either BPF_F_WRONLY_PROG, or both read/write. In the first
-case, BPF_READ won't work, which is needed to support xchg, so we only need to
-reject that case.
-
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> > +       kptr_off = reg->off + reg->var_off.value;
-> > +       off_desc = bpf_map_kptr_off_contains(map_ptr, kptr_off);
-> > +       if (!off_desc) {
-> > +               verbose(env, "off=%d doesn't point to kptr\n", kptr_off);
-> > +               return -EACCES;
-> > +       }
-> > +       if (!(off_desc->flags & BPF_MAP_VALUE_OFF_F_REF)) {
-> > +               verbose(env, "off=%d kptr isn't referenced kptr\n", kptr_off);
-> > +               return -EACCES;
-> > +       }
-> > +       meta->kptr_off_desc = off_desc;
-> > +       return 0;
-> > +}
-> > +
-> >  static bool arg_type_is_mem_ptr(enum bpf_arg_type type)
-> >  {
-> >         return base_type(type) == ARG_PTR_TO_MEM ||
-> > @@ -5418,6 +5486,7 @@ static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
-> >  static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
-> >  static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
-> >  static const struct bpf_reg_types timer_types = { .types = { PTR_TO_MAP_VALUE } };
-> > +static const struct bpf_reg_types kptr_types = { .types = { PTR_TO_MAP_VALUE } };
-> >
-> >  static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
-> >         [ARG_PTR_TO_MAP_KEY]            = &map_key_value_types,
-> > @@ -5445,11 +5514,13 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
-> >         [ARG_PTR_TO_STACK]              = &stack_ptr_types,
-> >         [ARG_PTR_TO_CONST_STR]          = &const_str_ptr_types,
-> >         [ARG_PTR_TO_TIMER]              = &timer_types,
-> > +       [ARG_PTR_TO_KPTR]               = &kptr_types,
-> >  };
-> >
-> >  static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
-> >                           enum bpf_arg_type arg_type,
-> > -                         const u32 *arg_btf_id)
-> > +                         const u32 *arg_btf_id,
-> > +                         struct bpf_call_arg_meta *meta)
-> >  {
-> >         struct bpf_reg_state *regs = cur_regs(env), *reg = &regs[regno];
-> >         enum bpf_reg_type expected, type = reg->type;
-> > @@ -5502,8 +5573,11 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
-> >                         arg_btf_id = compatible->btf_id;
-> >                 }
-> >
-> > -               if (!btf_struct_ids_match(&env->log, reg->btf, reg->btf_id, reg->off,
-> > -                                         btf_vmlinux, *arg_btf_id)) {
-> > +               if (meta->func_id == BPF_FUNC_kptr_xchg) {
-> > +                       if (map_kptr_match_type(env, meta->kptr_off_desc, reg, regno))
-> > +                               return -EACCES;
-> > +               } else if (!btf_struct_ids_match(&env->log, reg->btf, reg->btf_id, reg->off,
-> > +                                                btf_vmlinux, *arg_btf_id)) {
-> >                         verbose(env, "R%d is of type %s but %s is expected\n",
-> >                                 regno, kernel_type_name(reg->btf, reg->btf_id),
-> >                                 kernel_type_name(btf_vmlinux, *arg_btf_id));
-> > @@ -5613,7 +5687,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
-> >                  */
-> >                 goto skip_type_check;
-> >
-> > -       err = check_reg_type(env, regno, arg_type, fn->arg_btf_id[arg]);
-> > +       err = check_reg_type(env, regno, arg_type, fn->arg_btf_id[arg], meta);
-> >         if (err)
-> >                 return err;
-> >
-> > @@ -5778,6 +5852,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
-> >                         verbose(env, "string is not zero-terminated\n");
-> >                         return -EINVAL;
-> >                 }
-> > +       } else if (arg_type == ARG_PTR_TO_KPTR) {
-> > +               if (process_kptr_func(env, regno, meta))
-> > +                       return -EACCES;
-> >         }
-> >
-> >         return err;
-> > @@ -6120,10 +6197,10 @@ static bool check_btf_id_ok(const struct bpf_func_proto *fn)
-> >         int i;
-> >
-> >         for (i = 0; i < ARRAY_SIZE(fn->arg_type); i++) {
-> > -               if (fn->arg_type[i] == ARG_PTR_TO_BTF_ID && !fn->arg_btf_id[i])
-> > +               if (base_type(fn->arg_type[i]) == ARG_PTR_TO_BTF_ID && !fn->arg_btf_id[i])
-> >                         return false;
-> >
-> > -               if (fn->arg_type[i] != ARG_PTR_TO_BTF_ID && fn->arg_btf_id[i])
-> > +               if (base_type(fn->arg_type[i]) != ARG_PTR_TO_BTF_ID && fn->arg_btf_id[i])
-> >                         return false;
-> >         }
-> >
-> > @@ -7007,21 +7084,25 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
-> >                         regs[BPF_REG_0].btf_id = meta.ret_btf_id;
-> >                 }
-> >         } else if (base_type(ret_type) == RET_PTR_TO_BTF_ID) {
-> > +               struct btf *ret_btf;
-> >                 int ret_btf_id;
-> >
-> >                 mark_reg_known_zero(env, regs, BPF_REG_0);
-> >                 regs[BPF_REG_0].type = PTR_TO_BTF_ID | ret_flag;
-> > -               ret_btf_id = *fn->ret_btf_id;
-> > +               if (func_id == BPF_FUNC_kptr_xchg) {
-> > +                       ret_btf = meta.kptr_off_desc->btf;
-> > +                       ret_btf_id = meta.kptr_off_desc->btf_id;
-> > +               } else {
-> > +                       ret_btf = btf_vmlinux;
-> > +                       ret_btf_id = *fn->ret_btf_id;
-> > +               }
-> >                 if (ret_btf_id == 0) {
-> >                         verbose(env, "invalid return type %u of func %s#%d\n",
-> >                                 base_type(ret_type), func_id_name(func_id),
-> >                                 func_id);
-> >                         return -EINVAL;
-> >                 }
-> > -               /* current BPF helper definitions are only coming from
-> > -                * built-in code with type IDs from  vmlinux BTF
-> > -                */
-> > -               regs[BPF_REG_0].btf = btf_vmlinux;
-> > +               regs[BPF_REG_0].btf = ret_btf;
-> >                 regs[BPF_REG_0].btf_id = ret_btf_id;
-> >         } else {
-> >                 verbose(env, "unknown return type %u of func %s#%d\n",
-> > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> > index d14b10b85e51..444fe6f1cf35 100644
-> > --- a/tools/include/uapi/linux/bpf.h
-> > +++ b/tools/include/uapi/linux/bpf.h
-> > @@ -5143,6 +5143,17 @@ union bpf_attr {
-> >   *             The **hash_algo** is returned on success,
-> >   *             **-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
-> >   *             invalid arguments are passed.
-> > + *
-> > + * void *bpf_kptr_xchg(void *map_value, void *ptr)
-> > + *     Description
-> > + *             Exchange kptr at pointer *map_value* with *ptr*, and return the
-> > + *             old value. *ptr* can be NULL, otherwise it must be a referenced
-> > + *             pointer which will be released when this helper is called.
-> > + *     Return
-> > + *             The old value of kptr (which can be NULL). The returned pointer
-> > + *             if not NULL, is a reference which must be released using its
-> > + *             corresponding release function, or moved into a BPF map before
-> > + *             program exit.
-> >   */
-> >  #define __BPF_FUNC_MAPPER(FN)          \
-> >         FN(unspec),                     \
-> > @@ -5339,6 +5350,7 @@ union bpf_attr {
-> >         FN(copy_from_user_task),        \
-> >         FN(skb_set_tstamp),             \
-> >         FN(ima_file_hash),              \
-> > +       FN(kptr_xchg),                  \
-> >         /* */
-> >
-> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> > --
-> > 2.35.1
-> >
-
---
-Kartikeya
