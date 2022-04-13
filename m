@@ -2,189 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0CD2C433F5
-	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 08:06:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 481D3C433EF
+	for <bpf@archiver.kernel.org>; Wed, 13 Apr 2022 08:18:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbiDMIJP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Apr 2022 04:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S229518AbiDMIUz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 04:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiDMIJN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Apr 2022 04:09:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A1FE23BCB
-        for <bpf@vger.kernel.org>; Wed, 13 Apr 2022 01:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649837212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3oVDDbPJyK3HgpM5oKcpbE9J9tBIr9ChlAXnnhFjPGo=;
-        b=Rq0q8++Xi27HcGMM6eqZPq/o/KxjUDCaRcJ9trsqEXRF9Y94Ll5SjwnocNTk+SW3GwVeor
-        pg0ZsmNJxFX8PJJb9/w/3ZPbTvc+B8YRs9rQBExCnAjMuK7GdNJWj2GMVoVHbfNZOzJFDq
-        PFvN9yzRIo2qjLC2FgKOxVHo+1vFxeI=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-338-r4WOd62zO6CP0tHkY1RTuA-1; Wed, 13 Apr 2022 04:06:51 -0400
-X-MC-Unique: r4WOd62zO6CP0tHkY1RTuA-1
-Received: by mail-pj1-f69.google.com with SMTP id e12-20020a17090a7c4c00b001cb1b3274c9so842341pjl.4
-        for <bpf@vger.kernel.org>; Wed, 13 Apr 2022 01:06:51 -0700 (PDT)
+        with ESMTP id S229447AbiDMIUw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 04:20:52 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C512A4EA02;
+        Wed, 13 Apr 2022 01:18:31 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id t25so1404385edt.9;
+        Wed, 13 Apr 2022 01:18:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=NM1pfbSgTEQ9uckWSvNkdocJAYN18ejH2fT6Ofk0eeU=;
+        b=ZO7+1DjFeRVhMTsgznRttF4gB2w6B0IYKtFlA4KFq1h3iyBj5QYxSIJne7Yh506ZqM
+         swB8QzLiPoWAF3LMh/l3KgD4/mNV4sn59GaBuq53ifDYJ6XuI8eoXMS+5IhfE3NKTDB/
+         I4zsbZ5y//peeXAXtyPrmwrTYKsLaEVebBGl+MJmM70/yZUB/e0WGb3YVaxtS0h1vOUV
+         7z+2mxqxR0TqdfF1n8LGT7V81mhY2K9kNXpsvuTebVelCQRK3PT0oTHKyMEwiPUGb15s
+         FN7kEnSW2tGnQUNQWa/CAboo8LsqaQvW3AqfeP4IN1PEMq1kjLOJjqSJx/cXQ7Gfo5pP
+         dacw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3oVDDbPJyK3HgpM5oKcpbE9J9tBIr9ChlAXnnhFjPGo=;
-        b=D6/Ju0cKTBYB2tlU0ySKawjl98bDTbE1w3puMQRy5pjX002s6KdaLusbh1Y7rgfzsj
-         RQfiE6sjQH85FmejdYnO3Z24NEZEofN+wQQ9sV9Qd6Tu9rEGgbzbdsFXzs9yq+7XBSIL
-         GcokYeQo/zVIdGLpEEqHMXCfJT2u9AnaCOHbRJfRDZW9POX+Z0eZ2yqsro6JA9UHGTnB
-         r3VMfN355VoKF9e4XuHBM6bbWHXYz5LzM82aC/EtLzTIITxpQcua/7ERqZyXUvtE28et
-         O5cOLJICLPQiZ1mcMsMBuTbUAKw6VaUhJOTVvl4qBiscyyxyvG2mN+WoRSM2r1wWHa/j
-         yCEQ==
-X-Gm-Message-State: AOAM532k0+V3fuhN4Z2BsyXpJ/+fSDWyS255kTOAiQhrtkVC0KL/5cAr
-        x/tZPvvgHaYlL0O81uoIir+sVj2d6HpybBLo6bwof9e7XiT3M0k8yStSiyQs5zEA0DMi/YN3HSj
-        FGMEQrwDRIa7A
-X-Received: by 2002:a17:90b:1e06:b0:1cb:b742:ba0d with SMTP id pg6-20020a17090b1e0600b001cbb742ba0dmr9526911pjb.24.1649837209894;
-        Wed, 13 Apr 2022 01:06:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxA8440BQVqz6KdwXBOHrMtT4WnGyMxsQffyGtbEDMm0ObQF/C2qu9IScvqE/FloA/61fylAQ==
-X-Received: by 2002:a17:90b:1e06:b0:1cb:b742:ba0d with SMTP id pg6-20020a17090b1e0600b001cbb742ba0dmr9526892pjb.24.1649837209610;
-        Wed, 13 Apr 2022 01:06:49 -0700 (PDT)
-Received: from [10.72.13.223] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id p10-20020a17090a680a00b001c7bf7d32f9sm1982517pjj.55.2022.04.13.01.06.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 01:06:49 -0700 (PDT)
-Message-ID: <96d1fe97-2e8a-ae8a-a35f-bba2ce0f44b4@redhat.com>
-Date:   Wed, 13 Apr 2022 16:06:33 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v9 32/32] virtio_net: support set_ringparam
-Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=NM1pfbSgTEQ9uckWSvNkdocJAYN18ejH2fT6Ofk0eeU=;
+        b=4oYCjJbieANqcKitPvuDQtwmKylNPYDxfJWaWL55dau8F21zzBqQy7lmw+kPV6ygSB
+         O5+a120Fa8tiSHGOTNy/JjYSWXrPSmHKk5L2chR0pvO/UYB1T/XE1U6k4VKeYR5Dvhi2
+         vkUtKf7PnSqzWbHfiM3/kP4uSqts/Uhh+cSF7s7EHHzYSpyQK3l3lYv0+9GIltTJwS3U
+         EYSP9JjDzdYQRudRu5DU1/anLsEup1pM7cSov3x9Ercp4UMQLnYmeMFUpzNViST4ZQXG
+         PCadDI+7Fp5jug5EwgPetj3vbGIdtrEFqVgtnxxCz8FcmvYsprehwnmNipDOa6Vr5SvJ
+         fXiA==
+X-Gm-Message-State: AOAM5338BfN21HvhjmqbZeQm/3EgPsoGAlUYtEbbIy+dOOSN9wTvavIf
+        TiXS5c+9Pp9ZoASGhpMkBu0=
+X-Google-Smtp-Source: ABdhPJz1zFDl7IwBBpiJdJJrHQx/gNJ9eFMxB5nFGFZzuNCuKc3atEKIDRvXQCvDLr+YN63LNf2RhA==
+X-Received: by 2002:a05:6402:51c6:b0:419:8269:f33d with SMTP id r6-20020a05640251c600b004198269f33dmr41758137edd.264.1649837910214;
+        Wed, 13 Apr 2022 01:18:30 -0700 (PDT)
+Received: from smtpclient.apple (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id u4-20020a170906780400b006ce69ff6050sm13728111ejm.69.2022.04.13.01.18.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 Apr 2022 01:18:29 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH net-next v3 14/18] sfc: Remove usage of list iterator for
+ list_add() after the loop body
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220412142905.54489567@kernel.org>
+Date:   Wed, 13 Apr 2022 10:18:28 +0200
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jiri Pirko <jiri@resnulli.us>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org
-References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
- <20220406034346.74409-33-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220406034346.74409-33-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        KP Singh <kpsingh@kernel.org>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Michael Walle <michael@walle.cc>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Colin Ian King <colin.king@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        bpf@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: 7bit
+Message-Id: <132EC4A3-4397-4124-B736-0C3057B63B26@gmail.com>
+References: <20220412121557.3553555-1-jakobkoschel@gmail.com>
+ <20220412121557.3553555-15-jakobkoschel@gmail.com>
+ <20220412142905.54489567@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
-在 2022/4/6 上午11:43, Xuan Zhuo 写道:
-> Support set_ringparam based on virtio queue reset.
->
-> Users can use ethtool -G eth0 <ring_num> to modify the ring size of
-> virtio-net.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
+> On 12. Apr 2022, at 23:29, Jakub Kicinski <kuba@kernel.org> wrote:
+> 
+> On Tue, 12 Apr 2022 14:15:53 +0200 Jakob Koschel wrote:
+>> -	struct list_head *head = &efx->rss_context.list;
+>> +	struct list_head *head = *pos = &efx->rss_context.list;
+> 
+> ENOTBUILT, please wait with the reposting. Since you posted two
+> versions today I guess that's 2x 24h? :)
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+oh gosh, seems like I indeed forgot to build this commit.
+Sorry about all the mess :( Also I'll wait with reposting (not
+going to make the same mistake twice ;)).
 
-(One thing that I see is that, when resize fails, the param reported via 
-get_ringparam might be wrong, this is a corner case but might worth to 
-fix in the future).
-
-
-> ---
->   drivers/net/virtio_net.c | 47 ++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 47 insertions(+)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index ba6859f305f7..37e4e27f1e4e 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -2264,6 +2264,52 @@ static void virtnet_get_ringparam(struct net_device *dev,
->   	ring->tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
->   }
->   
-> +static int virtnet_set_ringparam(struct net_device *dev,
-> +				 struct ethtool_ringparam *ring,
-> +				 struct kernel_ethtool_ringparam *kernel_ring,
-> +				 struct netlink_ext_ack *extack)
-> +{
-> +	struct virtnet_info *vi = netdev_priv(dev);
-> +	u32 rx_pending, tx_pending;
-> +	struct receive_queue *rq;
-> +	struct send_queue *sq;
-> +	int i, err;
-> +
-> +	if (ring->rx_mini_pending || ring->rx_jumbo_pending)
-> +		return -EINVAL;
-> +
-> +	rx_pending = virtqueue_get_vring_size(vi->rq[0].vq);
-> +	tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
-> +
-> +	if (ring->rx_pending == rx_pending &&
-> +	    ring->tx_pending == tx_pending)
-> +		return 0;
-> +
-> +	if (ring->rx_pending > virtqueue_get_vring_max_size(vi->rq[0].vq))
-> +		return -EINVAL;
-> +
-> +	if (ring->tx_pending > virtqueue_get_vring_max_size(vi->sq[0].vq))
-> +		return -EINVAL;
-> +
-> +	for (i = 0; i < vi->max_queue_pairs; i++) {
-> +		rq = vi->rq + i;
-> +		sq = vi->sq + i;
-> +
-> +		if (ring->tx_pending != tx_pending) {
-> +			err = virtnet_tx_resize(vi, sq, ring->tx_pending);
-> +			if (err)
-> +				return err;
-> +		}
-> +
-> +		if (ring->rx_pending != rx_pending) {
-> +			err = virtnet_rx_resize(vi, rq, ring->rx_pending);
-> +			if (err)
-> +				return err;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
->   
->   static void virtnet_get_drvinfo(struct net_device *dev,
->   				struct ethtool_drvinfo *info)
-> @@ -2497,6 +2543,7 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
->   	.get_drvinfo = virtnet_get_drvinfo,
->   	.get_link = ethtool_op_get_link,
->   	.get_ringparam = virtnet_get_ringparam,
-> +	.set_ringparam = virtnet_set_ringparam,
->   	.get_strings = virtnet_get_strings,
->   	.get_sset_count = virtnet_get_sset_count,
->   	.get_ethtool_stats = virtnet_get_ethtool_stats,
-
+I messed up three times yesterday, was really not on a high.
+I'll be more careful in the future to not the the same kind of
+mistakes again :/
