@@ -2,321 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BCF9C433F5
-	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 16:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68C3AC4332F
+	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 16:39:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiDNQ0O (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Apr 2022 12:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S238775AbiDNQlf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Apr 2022 12:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343631AbiDNQUU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:20:20 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B5ED3735
-        for <bpf@vger.kernel.org>; Thu, 14 Apr 2022 08:58:08 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id t25so9878057lfg.7
-        for <bpf@vger.kernel.org>; Thu, 14 Apr 2022 08:58:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kUk5JygR0JjFN0Ag0erLGQrnwAWSH4YiuZY4dZAUjEA=;
-        b=RUbUHj5EPVqvPqq+TcTWjMmObEujlnlWApV821IL5t8M1uRkgwTulDUjjbOYSN4WPI
-         khljhSPQXRuJdDH4uiwC1DuxXhbbJ6pL9FW8RLdDZcFHCR5UpB5YLdtM26KPv1SW6pfP
-         ujTm+FG8ENp0TFeKo4LPSnBmEsPABXqMKaotUtnJ8o8Xy/K7NcTEqq2uPLqDqP4SVu4e
-         ST2uclRcXxmgNbxoBPrfZi4qnvI4WgKjrm4IW24N4YzZbyAx7JeNtu55MmD3LmDYpsBE
-         sYNCKTdE8F3O24nudhXaMfo7x7SBMqviG/NuUZBRQ8VUfGK72/yqPM1d6lvk5bJC+Qvg
-         wpfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kUk5JygR0JjFN0Ag0erLGQrnwAWSH4YiuZY4dZAUjEA=;
-        b=Hc+KH7llRC31GWuAPrTpvhTUYXRUKM9VgY+qMRig+roBdZeufHxOQQsSZyYs7hhN17
-         v0/XiWB5rDy4rZ3+zempQNedPuEh9iHg84FWb34rfbyYNQ0p8Jk20OtyKyCACB6z6UMW
-         zDFzHGW7AhOYHZ3mAiJXycIhZ87oZ32NeaJbU8GfoxbJWdQOp7xX1uIRYksOD/0mMU8c
-         FnWJW3srmUB3xKXXpcwh2J7aUOaSPVV68QBfm+DY/18CJVUHRRQb/SNU2RO4FXtOGXix
-         XH8fDxLV3Mf7lH00kVhQy+yEop1azcjqjSesaYD1kWhqCFIz+xbMd+4cVjjszhkA1NAU
-         HcJg==
-X-Gm-Message-State: AOAM532Yb08k+5gR3tPK8VhNT4mp9/vOsBQrVMufGF7XJ/YAQPlOyXjl
-        rLUMsUzfgd6aZfATcj0VeknKTE0AoeIqGbM07hAjNg==
-X-Google-Smtp-Source: ABdhPJy2QACz18n8/ud36eXsqX63eh5pWrMDuc8LQppovQ/4vOzDL0k5gg3rF/y3T/W7c6TeiIEZadlBMiRVNIn9qxQ=
-X-Received: by 2002:ac2:4e66:0:b0:46b:c3d3:e203 with SMTP id
- y6-20020ac24e66000000b0046bc3d3e203mr2421966lfs.380.1649951886772; Thu, 14
- Apr 2022 08:58:06 -0700 (PDT)
+        with ESMTP id S239622AbiDNQlV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Apr 2022 12:41:21 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF10EAACB3;
+        Thu, 14 Apr 2022 09:10:08 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KfPY44gfNz1HBMx;
+        Fri, 15 Apr 2022 00:09:28 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Apr
+ 2022 00:10:04 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+Subject: [PATCH bpf-next v2 0/6] bpf trampoline for arm64
+Date:   Thu, 14 Apr 2022 12:22:14 -0400
+Message-ID: <20220414162220.1985095-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220414134134.247912-1-yangjihong1@huawei.com>
-In-Reply-To: <20220414134134.247912-1-yangjihong1@huawei.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 14 Apr 2022 08:57:54 -0700
-Message-ID: <CAKwvOdmZCS784R5myuA=MgSnxQfS6sPUsBKbbax_QN1fSMNzbQ@mail.gmail.com>
-Subject: Re: [PATCH] perf llvm: Fix compile bpf failed to cope with latest llvm
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, nathan@kernel.org, trix@redhat.com,
-        ak@linux.intel.com, adrian.hunter@intel.com, james.clark@arm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 6:42 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> Inline assembly used by asm/sysreg.h is incompatible with latest llvm,
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
-With "latest" llvm makes it sound like LLVM has regressed. Has it? Or
-have the headers changed in a way where now inline asm from a
-different target (x86) than what's being targeted (BPF)? Perhaps
-fixing that is simpler?
+Tested on qemu, result:
+ #55 fentry_fexit:OK
+ #56 fentry_test:OK
+ #58 fexit_sleep:OK
+ #59 fexit_stress:OK
+ #60 fexit_test:OK
+ #67 get_func_args_test:OK
+ #68 get_func_ip_test:OK
+ #101 modify_return:OK
 
-Clang will validate inline asm before LLVM drops unreferenced static
-inline functions; this was a headache getting i386 building with
-clang, but not insurmountable.
+v2:
+- Add Song's ACK
+- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+  style (patch 3)
+- Fix a deadloop issue in ftrace selftest (patch 2)
+- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+  ftrace direct call is not only used by bpf trampoline.
 
-> If bpf C program include "linux/ptrace.h" (which is common), compile will fail:
->
->  # perf --debug verbose record -e bpf-output/no-inherit,name=evt/ \
->                               -e ./perf_bpf_test.c/map:channel.event=evt/ ls
->  [SNIP]
->  /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:20:7: error: invalid output constraint '=a' in asm
->                           : "="REG_OUT (res)
->                            ^
->  /lib/modules/5.17/build/./arch/x86/include/asm/arch_hweight.h:48:7: error: invalid output constraint '=a' in asm
->                           : "="REG_OUT (res)
->                            ^
->  In file included from /root/projects/perf-bpf/perf_bpf_test.c:2:
->  In file included from /lib/modules/5.17/build/./include/linux/ptrace.h:6:
->  In file included from /lib/modules/5.17/build/./include/linux/sched.h:12:
->  In file included from /lib/modules/5.17/build/./arch/x86/include/asm/current.h:6:
->  In file included from /lib/modules/5.17/build/./arch/x86/include/asm/percpu.h:27:
->  In file included from /lib/modules/5.17/build/./include/linux/kernel.h:25:
->  In file included from /lib/modules/5.17/build/./include/linux/math.h:6:
->  /lib/modules/5.17.0/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
->          asm ("mulq %2; divq %3" : "=a" (q)
->  [SNIP]
->  # cat /root/projects/perf-bpf/perf_bpf_test.c
->  /************************ BEGIN **************************/
->  #include <uapi/linux/bpf.h>
->  #include <linux/ptrace.h>
->  #include <linux/types.h>
->  #define SEC(NAME) __attribute__((section(NAME), used))
->
->  struct bpf_map_def {
->          unsigned int type;
->          unsigned int key_size;
->          unsigned int value_size;
->          unsigned int max_entries;
->  };
->
->  static int (*perf_event_output)(void *, struct bpf_map_def *, int, void *,
->      unsigned long) = (void *)BPF_FUNC_perf_event_output;
->
->  struct bpf_map_def SEC("maps") channel = {
->          .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
->          .key_size = sizeof(int),
->          .value_size = sizeof(__u32),
->          .max_entries = __NR_CPUS__,
->  };
->
->  #define MIN_BYTES 1024
->
->  SEC("func=vfs_read")
->  int bpf_myprog(struct pt_regs *ctx)
->  {
->          long bytes = ctx->dx;
->          if (bytes >= MIN_BYTES) {
->                  perf_event_output(ctx, &channel, BPF_F_CURRENT_CPU,
->                                    &bytes, sizeof(bytes));
->          }
->
->          return 0;
->  }
->
-> char _license[] SEC("license") = "GPL";
-> int _version SEC("version") = LINUX_VERSION_CODE;
-> /************************* END ***************************/
->
-> Compilation command is modified to be the same as that in samples/bpf/Makefile,
-> use clang | opt | llvm-dis | llc chain of commands to solve the problem.
-> see the comment in samples/bpf/Makefile.
->
-> Modifications:
-> 1. Change "clang --target bpf" to chain of commands "clang | opt | llvm-dis | llc"
+v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
 
-This will drop the --target flag. That will mess up the default target
-triple, and can affect command line option feature detection.
+Xu Kuohai (6):
+  arm64: ftrace: Add ftrace direct call support
+  ftrace: Fix deadloop caused by direct call in ftrace selftest
+  bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+  selftests/bpf: Fix trivial typo in fentry_fexit.c
 
-> 2. Delete "CLANG_EMIT_LLVM" and "LLVM_OPTIONS_PIPE" macros from the compilation
->    command because the two macros are not defined and the content is empty.
-> 3. Add options llvm.llvm-opt-path, llvm.llvm-dis-path, and llvm.llc-path to
->    perf config for user-defined settings, which are similar to llvm.clang-path.
-> 4. Add "-Wno-address-of-packed-member" to resolve the compilation warning of
->    "/lib/modules/5.17/build/./arch/x86/include/asm/processor.h:552:17: \
->     warning: taking address of packed member 'sp0' of class or structure \
->     'x86_hw_tss' may result in an unaligned pointer value [-Waddress-of-packed-member]
->         this_cpu_write(cpu_tss_rw.x86_tss.sp0, sp0);
->                        ^~~~~~~~~~~~~~~~~~~~~~
->    /lib/modules/5.17/build/./include/linux/percpu-defs.h:508:68: note: \
->    expanded from macro 'this_cpu_write' \
->     #define this_cpu_write(pcp, val)        __pcpu_size_call(this_cpu_write_, pcp, val)",
->    which is similar to that of sample/bpf/Makefile.
->
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  tools/perf/Documentation/perf-config.txt | 16 ++++++++++-
->  tools/perf/util/llvm-utils.c             | 35 ++++++++++++++++++------
->  tools/perf/util/llvm-utils.h             |  4 +++
->  3 files changed, 45 insertions(+), 10 deletions(-)
->
-> diff --git a/tools/perf/Documentation/perf-config.txt b/tools/perf/Documentation/perf-config.txt
-> index 0420e71698ee..48f12bd6ca9a 100644
-> --- a/tools/perf/Documentation/perf-config.txt
-> +++ b/tools/perf/Documentation/perf-config.txt
-> @@ -655,6 +655,15 @@ llvm.*::
->         llvm.clang-path::
->                 Path to clang. If omit, search it from $PATH.
->
-> +       llvm.llvm-opt-path::
-> +               Path to llvm opt. If omit, search it from $PATH.
-> +
-> +       llvm.llvm-dis-path::
-> +               Path to llvm-dis. If omit, search it from $PATH.
-> +
-> +       llvm.llc-path::
-> +               Path to llc. If omit, search it from $PATH.
-> +
->         llvm.clang-bpf-cmd-template::
->                 Cmdline template. Below lines show its default value. Environment
->                 variable is used to pass options.
-> @@ -662,8 +671,13 @@ llvm.*::
->                 "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
->                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
->                 "-Wno-unused-value -Wno-pointer-sign "          \
-> +               "-Wno-address-of-packed-member "                \
->                 "-working-directory $WORKING_DIR "              \
-> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-> +               "-c \"$CLANG_SOURCE\" "                               \
-> +               "-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
-> +               "$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
-> +               "$LLVM_DIS_EXEC | "                                   \
-> +               "$LLC_EXEC -march=bpf -filetype=obj -o -"
->
->         llvm.clang-opt::
->                 Options passed to clang.
-> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
-> index 96c8ef60f4f8..c939681dfafb 100644
-> --- a/tools/perf/util/llvm-utils.c
-> +++ b/tools/perf/util/llvm-utils.c
-> @@ -24,11 +24,18 @@
->                 "-DLINUX_VERSION_CODE=$LINUX_VERSION_CODE "     \
->                 "$CLANG_OPTIONS $PERF_BPF_INC_OPTIONS $KERNEL_INC_OPTIONS " \
->                 "-Wno-unused-value -Wno-pointer-sign "          \
-> +               "-Wno-address-of-packed-member "                \
->                 "-working-directory $WORKING_DIR "              \
-> -               "-c \"$CLANG_SOURCE\" -target bpf $CLANG_EMIT_LLVM -O2 -o - $LLVM_OPTIONS_PIPE"
-> +               "-c \"$CLANG_SOURCE\" "                               \
-> +               "-O2 -emit-llvm -Xclang -disable-llvm-passes -o - | " \
-> +               "$LLVM_OPT_EXEC -O2 -mtriple=bpf-pc-linux | "         \
-> +               "$LLVM_DIS_EXEC | "                                   \
-> +               "$LLC_EXEC -march=bpf -filetype=obj -o -"
->
->  struct llvm_param llvm_param = {
->         .clang_path = "clang",
-> +       .llvm_opt_path = "opt",
-> +       .llvm_dis_path = "llvm-dis",
->         .llc_path = "llc",
->         .clang_bpf_cmd_template = CLANG_BPF_CMD_DEFAULT_TEMPLATE,
->         .clang_opt = NULL,
-> @@ -48,6 +55,12 @@ int perf_llvm_config(const char *var, const char *value)
->
->         if (!strcmp(var, "clang-path"))
->                 llvm_param.clang_path = strdup(value);
-> +       else if (!strcmp(var, "llvm-opt-path"))
-> +               llvm_param.llvm_opt_path = strdup(value);
-> +       else if (!strcmp(var, "llvm-dis-path"))
-> +               llvm_param.llvm_dis_path = strdup(value);
-> +       else if (!strcmp(var, "llc-path"))
-> +               llvm_param.llc_path = strdup(value);
->         else if (!strcmp(var, "clang-bpf-cmd-template"))
->                 llvm_param.clang_bpf_cmd_template = strdup(value);
->         else if (!strcmp(var, "clang-opt"))
-> @@ -456,6 +469,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->         char linux_version_code_str[64];
->         const char *clang_opt = llvm_param.clang_opt;
->         char clang_path[PATH_MAX], llc_path[PATH_MAX], abspath[PATH_MAX], nr_cpus_avail_str[64];
-> +       char llvm_opt_path[PATH_MAX], llvm_dis_path[PATH_MAX];
->         char serr[STRERR_BUFSIZE];
->         char *kbuild_dir = NULL, *kbuild_include_opts = NULL,
->              *perf_bpf_include_opts = NULL;
-> @@ -475,9 +489,10 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->         if (!template)
->                 template = CLANG_BPF_CMD_DEFAULT_TEMPLATE;
->
-> -       err = search_program_and_warn(llvm_param.clang_path,
-> -                            "clang", clang_path);
-> -       if (err)
-> +       if (search_program_and_warn(llvm_param.clang_path, "clang", clang_path) ||
-> +           search_program_and_warn(llvm_param.llvm_opt_path, "opt", llvm_opt_path) ||
-> +           search_program_and_warn(llvm_param.llvm_dis_path, "llvm-dis", llvm_dis_path) ||
-> +           search_program_and_warn(llvm_param.llc_path, "llc", llc_path))
->                 return -ENOENT;
->
->         /*
-> @@ -495,21 +510,23 @@ int llvm__compile_bpf(const char *path, void **p_obj_buf,
->
->         snprintf(linux_version_code_str, sizeof(linux_version_code_str),
->                  "0x%x", kernel_version);
-> -       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0)
-> +       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir) < 0) {
-> +               err = -ENOMEM;
->                 goto errout;
-> +       }
-> +
->         force_set_env("NR_CPUS", nr_cpus_avail_str);
->         force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
->         force_set_env("CLANG_EXEC", clang_path);
-> +       force_set_env("LLVM_OPT_EXEC", llvm_opt_path);
-> +       force_set_env("LLVM_DIS_EXEC", llvm_dis_path);
-> +       force_set_env("LLC_EXEC", llc_path);
->         force_set_env("CLANG_OPTIONS", clang_opt);
->         force_set_env("KERNEL_INC_OPTIONS", kbuild_include_opts);
->         force_set_env("PERF_BPF_INC_OPTIONS", perf_bpf_include_opts);
->         force_set_env("WORKING_DIR", kbuild_dir ? : ".");
->
->         if (opts) {
-> -               err = search_program_and_warn(llvm_param.llc_path, "llc", llc_path);
-> -               if (err)
-> -                       goto errout;
-> -
->                 err = -ENOMEM;
->                 if (asprintf(&pipe_template, "%s -emit-llvm | %s -march=bpf %s -filetype=obj -o -",
->                               template, llc_path, opts) < 0) {
-> diff --git a/tools/perf/util/llvm-utils.h b/tools/perf/util/llvm-utils.h
-> index 7878a0e3fa98..e276d10f85b4 100644
-> --- a/tools/perf/util/llvm-utils.h
-> +++ b/tools/perf/util/llvm-utils.h
-> @@ -11,6 +11,10 @@
->  struct llvm_param {
->         /* Path of clang executable */
->         const char *clang_path;
-> +       /* Path of llvm opt executable */
-> +       const char *llvm_opt_path;
-> +       /* Path of llvm-dis executable */
-> +       const char *llvm_dis_path;
->         /* Path of llc executable */
->         const char *llc_path;
->         /*
-> --
-> 2.30.GIT
->
-
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/ftrace.h               |  10 +
+ arch/arm64/kernel/asm-offsets.c               |   1 +
+ arch/arm64/kernel/entry-ftrace.S              |  28 +-
+ arch/arm64/net/bpf_jit.h                      |  14 +-
+ arch/arm64/net/bpf_jit_comp.c                 | 390 +++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c                   |  20 -
+ include/linux/bpf.h                           |   5 +
+ kernel/bpf/bpf_struct_ops.c                   |   4 +-
+ kernel/bpf/trampoline.c                       |  35 +-
+ kernel/trace/trace_selftest.c                 |   4 +-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ 12 files changed, 482 insertions(+), 35 deletions(-)
 
 -- 
-Thanks,
-~Nick Desaulniers
+2.30.2
+
