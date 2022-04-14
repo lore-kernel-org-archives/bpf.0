@@ -2,66 +2,42 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B2AC433EF
-	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 01:50:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E11DC433F5
+	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 02:07:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236064AbiDNBxL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Apr 2022 21:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S236086AbiDNCJi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Apr 2022 22:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235553AbiDNBxK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:53:10 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE3E222A0
-        for <bpf@vger.kernel.org>; Wed, 13 Apr 2022 18:50:47 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id p21so3924960ioj.4
-        for <bpf@vger.kernel.org>; Wed, 13 Apr 2022 18:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xl9w1l2oo+sk/eBLMxGxZCvBdicGIrirC0HC6XDv7y8=;
-        b=QH3o4ihT4/V3LmKcoSijLJ01kRG5uq6tUFrzJflB3hFkdZsJMMQE/BA41GL7+yy9w+
-         q25qs94/pVpMrKko8ozHgK4/jSFOyzZVcgN0KXeBuWdlJauaI64DTICQ/JhxSXDekNDt
-         BqQNqWPfgj99cJ2wF3KUDyUigzo+vpuD9LYpHQZerLFjTahRhElVfa7rXOVUhMsu+rsB
-         h1pOxKXc2JM707jgOlaG4Sf8yJN1FOQjpIIvnsgmofIfrjMcY9R0Qp1TYgQN2iLCC3sC
-         Gr3oFPhnY7eWQG25RflFwYUkP6bZVZjrWVaF3u43v4zDZRDZUkVHD+Yvy7xn6FuExmRJ
-         bnZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xl9w1l2oo+sk/eBLMxGxZCvBdicGIrirC0HC6XDv7y8=;
-        b=F0t9sUribhCU0KpA8YQXtR+bDyNCcLQwIbGFFT7dfkSzycEO3U43ukbf0sm4xRaL/z
-         3brVXyUgrEcyUiZWJZn21ZkhQt9HpEj5s3r/rMy8T7l5we9de9R/RdvsNHiCPYlGSxre
-         BU/ZESdErGUvBX+6zIn7pdIhpmtEwRWzgtE/43PLdgrEBmowy5D6m1w8VvAIcht1fYl8
-         Iaf1hTruefw8axnoXtAQPKYl9wegCTm6qKYepJjPT3obGXOdJW3pQcCeKzTC2pdUbAXz
-         4oOEjP37RbrO5rKuPie1OKiahndi6OX78QxYoj/tjNkAJLW/lQUeRUbcli3lZWexWRh6
-         9SUg==
-X-Gm-Message-State: AOAM533WWDD+jAHlPiBKTrfGZz1bS9V27ZAUBXEreeN3GMpThwELgT3n
-        DFTLq+cJ9OpjtTiKvI/v8VJ8oUsHI1wOUIw8+gTBhOQzx6Aw06yz
-X-Google-Smtp-Source: ABdhPJzBBCs6/LWrXHWcpMhc91/C8vSczaB6eUi4dc1VGrYaU2CkWiOQ+xEqkIb6lAJUTGeAi1qKc+3lnNCC5XZ/NTY=
-X-Received: by 2002:a5d:874b:0:b0:64c:9859:67d0 with SMTP id
- k11-20020a5d874b000000b0064c985967d0mr243962iol.76.1649901046707; Wed, 13 Apr
- 2022 18:50:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220413140629.GA22650@L-PF27918B-1352.localdomain> <CAEf4BzYvBHwsFrp52ZqhP=H1WDdpEeovJcgctv2nioAvBg6FBw@mail.gmail.com>
-In-Reply-To: <CAEf4BzYvBHwsFrp52ZqhP=H1WDdpEeovJcgctv2nioAvBg6FBw@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 14 Apr 2022 09:50:10 +0800
-Message-ID: <CALOAHbAvikKyrSTm6J9YSP0-7ifkxku2q2FeUsZMyxYdDdCqpg@mail.gmail.com>
-Subject: Re: [Question] bpf map value increase unexpectedly with tracepoint qdisc/qdisc_dequeue
+        with ESMTP id S229821AbiDNCJi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Apr 2022 22:09:38 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BC840A2E
+        for <bpf@vger.kernel.org>; Wed, 13 Apr 2022 19:07:14 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=wuzongyong@linux.alibaba.com;NM=1;PH=DS;RN=2;SR=0;TI=SMTPD_---0VA05mnn_1649902032;
+Received: from localhost(mailfrom:wuzongyong@linux.alibaba.com fp:SMTPD_---0VA05mnn_1649902032)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 14 Apr 2022 10:07:12 +0800
+Date:   Thu, 14 Apr 2022 10:07:09 +0800
+From:   Wu Zongyong <wuzongyong@linux.alibaba.com>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     bpf <bpf@vger.kernel.org>
+Subject: Re: [Question] bpf map value increase unexpectedly with tracepoint
+ qdisc/qdisc_dequeue
+Message-ID: <20220414020709.GA27635@L-PF27918B-1352.localdomain>
+Reply-To: Wu Zongyong <wuzongyong@linux.alibaba.com>
+References: <20220413140629.GA22650@L-PF27918B-1352.localdomain>
+ <CAEf4BzYvBHwsFrp52ZqhP=H1WDdpEeovJcgctv2nioAvBg6FBw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYvBHwsFrp52ZqhP=H1WDdpEeovJcgctv2nioAvBg6FBw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 8:25 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
+On Wed, Apr 13, 2022 at 12:30:51PM -0700, Andrii Nakryiko wrote:
 > On Wed, Apr 13, 2022 at 12:08 PM Wu Zongyong
 > <wuzongyong@linux.alibaba.com> wrote:
 > >
@@ -114,20 +90,29 @@ On Thu, Apr 14, 2022 at 8:25 AM Andrii Nakryiko
 > >
 > > Any suggestion is appreciated!
 > >
->
+> 
 > First, why do you use HASH map for single-key map? ARRAY would make
 > more sense for keys that are small integers. But I assume your real
 > world use case needs bigger and more random keys, right?
 >
+Yes, this just is a simple test.
+
+> 
 > Second, you have two race conditions. One, you overwrite the value in
 > the map with this bpf_map_update_elem(..., 0). Use BPF_NOEXISTS for
 > initialization to avoid overwriting something that another CPU already
 > set. Another one is your *value += 1 is non-atomic, so you are loosing
 > updates as well. Use __sync_fetch_and_add(value, 1) for atomic
 > increment.
->
+
+__sync_fetch_and_add do solve my problem. Thanks!
+
+I have tried to use spinlock to prevent race conditions, but it seems
+that spinlock cannot be used in tracepoint.
+
+> 
 > Something like this:
->
+> 
 > value = bpf_map_lookup_elem(&count_map, &key);
 > if (!value) {
 >     /* BPF_NOEXIST won't allow to override the value that's already set */
@@ -136,22 +121,9 @@ On Thu, Apr 14, 2022 at 8:25 AM Andrii Nakryiko
 > }
 > if (!value)
 >     return 0;
->
+> 
 > __sync_fetch_and_add(value, 1);
->
-
-Hi Andrii,
-
-I'm curious that if we should do it as below,
-
-new_value = *value + 1;
-bpf_map_update_elem(&count_map, &key, &new_value, BPF_EXIST);
-
-in case someone, e.g. bpftool, may delete this elem in parallel.
-
-BTW, why don't we have a helper like bpf_map_lookup_elem_value() which
-returns the value directly instead of the addr of the value ?
-
--- 
-Thanks
-Yafang
+> 
+> 
+> > Thanks,
+> > Wu Zongyong
