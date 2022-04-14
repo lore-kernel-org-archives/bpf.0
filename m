@@ -2,180 +2,485 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA5CC4332F
-	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 16:39:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28374C433EF
+	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 16:42:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237880AbiDNQmD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Apr 2022 12:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S229502AbiDNQoh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Apr 2022 12:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbiDNQlY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:41:24 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AA5BA313;
-        Thu, 14 Apr 2022 09:10:14 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfPYB2wzyzfYp8;
-        Fri, 15 Apr 2022 00:09:34 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Apr
- 2022 00:10:11 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-Subject: [PATCH bpf-next v2 1/6] arm64: ftrace: Add ftrace direct call support
-Date:   Thu, 14 Apr 2022 12:22:15 -0400
-Message-ID: <20220414162220.1985095-2-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220414162220.1985095-1-xukuohai@huawei.com>
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+        with ESMTP id S242032AbiDNQms (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Apr 2022 12:42:48 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DF5111DF9
+        for <bpf@vger.kernel.org>; Thu, 14 Apr 2022 09:12:36 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id h16-20020a056902009000b00628a70584b2so4685423ybs.6
+        for <bpf@vger.kernel.org>; Thu, 14 Apr 2022 09:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=pPBA9ngXkQ7pfQr/obANkqANrFFR6bnlc1gj50FTqLw=;
+        b=cVEh5XP0m5Hme4LgtEZDvyhD4cYhHetpC2S69ENBS0NzxE5Il3yZdmjhW49uvyQKQk
+         GiHZ+sO/uAomqUQ1cbW6Ml0aNS0fZ59py3m6Z4ud7hrkx7lAAib95RI+2S4YP6Msgri6
+         MrbIdzTu83pNNI8HEj6UsB1jTEXHi2bPAyStsEHrHzAHW1Z9/ubsuDBr4xbBDceOXYPl
+         QxhYdLg1Dqg4v8N2BWm3RuZMzbeV3MTN7J77GOibc2XBG1qtYWOxk7cG4YWViSjfRA2/
+         JSO2OmZVbLPs7hvnRGJU+qdb3O09qF9YSi4oT/zYN33y0lDQyItPO+EyQaLqCYqBIAOu
+         m7cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=pPBA9ngXkQ7pfQr/obANkqANrFFR6bnlc1gj50FTqLw=;
+        b=RrGw4fnhKjUHN0ZQkXFY2382DXWg7szGPlTw2rpqgqnil6fZ0RS99K94sXrSsXUqlR
+         zRt3rjLQSEohvA0VcFqonRGIZ8RIWuQLunRhnbBeH7rcFTMvNX8iHDRCBge6zskaRCD5
+         wJ2fQSceRGozb++i2piQepG+9EKDXQYaliDAUyUwDnXN+x5zaipXRM00WIPqqnaAJ3hn
+         zBpWYNh3+6pJKIp2IM3J3cuqq18Ir8SKxEZjsfR+T9WzOyYMcGoIuo9+9JuPGpsbQkfX
+         HIf9wS9mZHOzKJyv6giUry8f2IYO1QUboVn57A3lqgPo/l/fk58bvhRnB98RnuXhQ90H
+         mBiA==
+X-Gm-Message-State: AOAM532eciDV+djrdeiHq6kvTqkqNZMjZ4Paebed/xgcItbo0mt8lD1i
+        3i4+PcfThEnat5oTo3ZEWib1biI=
+X-Google-Smtp-Source: ABdhPJzdXfTIvTcdZDzYDBuEXcRfrOCIWv7x8zdiIUn3fKJaH1nh4yDCUcaXPM53TttqHBbRnYzEHi0=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:45c6:42d5:e443:72cc])
+ (user=sdf job=sendgmr) by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
+ t7-20020a056902018700b0063d9c95edcamr2200850ybh.81.1649952755335; Thu, 14 Apr
+ 2022 09:12:35 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 09:12:33 -0700
+Message-Id: <20220414161233.170780-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH bpf-next v2] bpf: move rcu lock management out of BPF_PROG_RUN routines
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        Stanislav Fomichev <sdf@google.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ftrace direct support for arm64.
+Commit 7d08c2c91171 ("bpf: Refactor BPF_PROG_RUN_ARRAY family of macros
+into functions") switched a bunch of BPF_PROG_RUN macros to inline
+routines. This changed the semantic a bit. Due to arguments expansion
+of macros, it used to be:
 
-1. When there is custom trampoline only, replace the fentry nop to a
-   jump instruction that jumps directly to the custom trampoline.
+	rcu_read_lock();
+	array = rcu_dereference(cgrp->bpf.effective[atype]);
+	...
 
-2. When ftrace trampoline and custom trampoline coexist, jump from
-   fentry to ftrace trampoline first, then jump to custom trampoline
-   when ftrace trampoline exits. The current unused register
-   pt_regs->orig_x0 is used as an intermediary for jumping from ftrace
-   trampoline to custom trampoline.
+Now, with with inline routines, we have:
+	array_rcu = rcu_dereference(cgrp->bpf.effective[atype]);
+	/* array_rcu can be kfree'd here */
+	rcu_read_lock();
+	array = rcu_dereference(array_rcu);
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
+I'm assuming in practice rcu subsystem isn't fast enough to trigger
+this but let's use rcu API properly.
+
+Also, rename to lower caps to not confuse with macros. Additionally,
+drop and expand BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY.
+
+See [1] for more context.
+
+  [1] https://lore.kernel.org/bpf/CAKH8qBs60fOinFdxiiQikK_q0EcVxGvNTQoWvHLEUGbgcj1UYg@mail.gmail.com/T/#u
+
+v2
+- keep rcu locks inside by passing cgroup_bpf
+
+Cc: Martin KaFai Lau <kafai@fb.com>
+Fixes: 7d08c2c91171 ("bpf: Refactor BPF_PROG_RUN_ARRAY family of macros into functions")
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- arch/arm64/Kconfig               |  2 ++
- arch/arm64/include/asm/ftrace.h  | 10 ++++++++++
- arch/arm64/kernel/asm-offsets.c  |  1 +
- arch/arm64/kernel/entry-ftrace.S | 18 +++++++++++++++---
- 4 files changed, 28 insertions(+), 3 deletions(-)
+ drivers/media/rc/bpf-lirc.c |   8 ++-
+ include/linux/bpf.h         | 115 +++-------------------------------
+ kernel/bpf/cgroup.c         | 121 +++++++++++++++++++++++++++++++-----
+ kernel/trace/bpf_trace.c    |   5 +-
+ 4 files changed, 121 insertions(+), 128 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 57c4c995965f..81cc330daafc 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -177,6 +177,8 @@ config ARM64
- 	select HAVE_DYNAMIC_FTRACE
- 	select HAVE_DYNAMIC_FTRACE_WITH_REGS \
- 		if $(cc-option,-fpatchable-function-entry=2)
-+	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS \
-+		if DYNAMIC_FTRACE_WITH_REGS
- 	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
- 		if DYNAMIC_FTRACE_WITH_REGS
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 1494cfa8639b..3a363d6a3bd0 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -78,6 +78,16 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
- 	return addr;
+diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
+index 3eff08d7b8e5..fe17c7f98e81 100644
+--- a/drivers/media/rc/bpf-lirc.c
++++ b/drivers/media/rc/bpf-lirc.c
+@@ -216,8 +216,12 @@ void lirc_bpf_run(struct rc_dev *rcdev, u32 sample)
+ 
+ 	raw->bpf_sample = sample;
+ 
+-	if (raw->progs)
+-		BPF_PROG_RUN_ARRAY(raw->progs, &raw->bpf_sample, bpf_prog_run);
++	if (raw->progs) {
++		rcu_read_lock();
++		bpf_prog_run_array(rcu_dereference(raw->progs),
++				   &raw->bpf_sample, bpf_prog_run);
++		rcu_read_unlock();
++	}
  }
  
-+static inline void arch_ftrace_set_direct_caller(struct pt_regs *regs,
-+						 unsigned long addr)
+ /*
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..7bf441563ffc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1221,7 +1221,7 @@ u64 bpf_event_output(struct bpf_map *map, u64 flags, void *meta, u64 meta_size,
+ /* an array of programs to be executed under rcu_lock.
+  *
+  * Typical usage:
+- * ret = BPF_PROG_RUN_ARRAY(&bpf_prog_array, ctx, bpf_prog_run);
++ * ret = bpf_prog_run_array(rcu_dereference(&bpf_prog_array), ctx, bpf_prog_run);
+  *
+  * the structure returned by bpf_prog_array_alloc() should be populated
+  * with program pointers and the last pointer must be NULL.
+@@ -1315,83 +1315,22 @@ static inline void bpf_reset_run_ctx(struct bpf_run_ctx *old_ctx)
+ 
+ typedef u32 (*bpf_prog_run_fn)(const struct bpf_prog *prog, const void *ctx);
+ 
+-static __always_inline int
+-BPF_PROG_RUN_ARRAY_CG_FLAGS(const struct bpf_prog_array __rcu *array_rcu,
+-			    const void *ctx, bpf_prog_run_fn run_prog,
+-			    int retval, u32 *ret_flags)
+-{
+-	const struct bpf_prog_array_item *item;
+-	const struct bpf_prog *prog;
+-	const struct bpf_prog_array *array;
+-	struct bpf_run_ctx *old_run_ctx;
+-	struct bpf_cg_run_ctx run_ctx;
+-	u32 func_ret;
+-
+-	run_ctx.retval = retval;
+-	migrate_disable();
+-	rcu_read_lock();
+-	array = rcu_dereference(array_rcu);
+-	item = &array->items[0];
+-	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+-	while ((prog = READ_ONCE(item->prog))) {
+-		run_ctx.prog_item = item;
+-		func_ret = run_prog(prog, ctx);
+-		if (!(func_ret & 1) && !IS_ERR_VALUE((long)run_ctx.retval))
+-			run_ctx.retval = -EPERM;
+-		*(ret_flags) |= (func_ret >> 1);
+-		item++;
+-	}
+-	bpf_reset_run_ctx(old_run_ctx);
+-	rcu_read_unlock();
+-	migrate_enable();
+-	return run_ctx.retval;
+-}
+-
+-static __always_inline int
+-BPF_PROG_RUN_ARRAY_CG(const struct bpf_prog_array __rcu *array_rcu,
+-		      const void *ctx, bpf_prog_run_fn run_prog,
+-		      int retval)
+-{
+-	const struct bpf_prog_array_item *item;
+-	const struct bpf_prog *prog;
+-	const struct bpf_prog_array *array;
+-	struct bpf_run_ctx *old_run_ctx;
+-	struct bpf_cg_run_ctx run_ctx;
+-
+-	run_ctx.retval = retval;
+-	migrate_disable();
+-	rcu_read_lock();
+-	array = rcu_dereference(array_rcu);
+-	item = &array->items[0];
+-	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+-	while ((prog = READ_ONCE(item->prog))) {
+-		run_ctx.prog_item = item;
+-		if (!run_prog(prog, ctx) && !IS_ERR_VALUE((long)run_ctx.retval))
+-			run_ctx.retval = -EPERM;
+-		item++;
+-	}
+-	bpf_reset_run_ctx(old_run_ctx);
+-	rcu_read_unlock();
+-	migrate_enable();
+-	return run_ctx.retval;
+-}
+-
+ static __always_inline u32
+-BPF_PROG_RUN_ARRAY(const struct bpf_prog_array __rcu *array_rcu,
++bpf_prog_run_array(const struct bpf_prog_array *array,
+ 		   const void *ctx, bpf_prog_run_fn run_prog)
+ {
+ 	const struct bpf_prog_array_item *item;
+ 	const struct bpf_prog *prog;
+-	const struct bpf_prog_array *array;
+ 	struct bpf_run_ctx *old_run_ctx;
+ 	struct bpf_trace_run_ctx run_ctx;
+ 	u32 ret = 1;
+ 
+-	migrate_disable();
+-	rcu_read_lock();
+-	array = rcu_dereference(array_rcu);
++	RCU_LOCKDEP_WARN(!rcu_read_lock_held(), "no rcu lock held");
++
+ 	if (unlikely(!array))
+-		goto out;
++		return ret;
++
++	migrate_disable();
+ 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+ 	item = &array->items[0];
+ 	while ((prog = READ_ONCE(item->prog))) {
+@@ -1400,50 +1339,10 @@ BPF_PROG_RUN_ARRAY(const struct bpf_prog_array __rcu *array_rcu,
+ 		item++;
+ 	}
+ 	bpf_reset_run_ctx(old_run_ctx);
+-out:
+-	rcu_read_unlock();
+ 	migrate_enable();
+ 	return ret;
+ }
+ 
+-/* To be used by __cgroup_bpf_run_filter_skb for EGRESS BPF progs
+- * so BPF programs can request cwr for TCP packets.
+- *
+- * Current cgroup skb programs can only return 0 or 1 (0 to drop the
+- * packet. This macro changes the behavior so the low order bit
+- * indicates whether the packet should be dropped (0) or not (1)
+- * and the next bit is a congestion notification bit. This could be
+- * used by TCP to call tcp_enter_cwr()
+- *
+- * Hence, new allowed return values of CGROUP EGRESS BPF programs are:
+- *   0: drop packet
+- *   1: keep packet
+- *   2: drop packet and cn
+- *   3: keep packet and cn
+- *
+- * This macro then converts it to one of the NET_XMIT or an error
+- * code that is then interpreted as drop packet (and no cn):
+- *   0: NET_XMIT_SUCCESS  skb should be transmitted
+- *   1: NET_XMIT_DROP     skb should be dropped and cn
+- *   2: NET_XMIT_CN       skb should be transmitted and cn
+- *   3: -err              skb should be dropped
+- */
+-#define BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY(array, ctx, func)		\
+-	({						\
+-		u32 _flags = 0;				\
+-		bool _cn;				\
+-		u32 _ret;				\
+-		_ret = BPF_PROG_RUN_ARRAY_CG_FLAGS(array, ctx, func, 0, &_flags); \
+-		_cn = _flags & BPF_RET_SET_CN;		\
+-		if (_ret && !IS_ERR_VALUE((long)_ret))	\
+-			_ret = -EFAULT;			\
+-		if (!_ret)				\
+-			_ret = (_cn ? NET_XMIT_CN : NET_XMIT_SUCCESS);	\
+-		else					\
+-			_ret = (_cn ? NET_XMIT_DROP : _ret);		\
+-		_ret;					\
+-	})
+-
+ #ifdef CONFIG_BPF_SYSCALL
+ DECLARE_PER_CPU(int, bpf_prog_active);
+ extern struct mutex bpf_stats_enabled_mutex;
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 128028efda64..9e95c03f8f7f 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -22,6 +22,69 @@
+ DEFINE_STATIC_KEY_ARRAY_FALSE(cgroup_bpf_enabled_key, MAX_CGROUP_BPF_ATTACH_TYPE);
+ EXPORT_SYMBOL(cgroup_bpf_enabled_key);
+ 
++static int
++bpf_prog_run_array_cg_flags(const struct cgroup_bpf *cgrp,
++			    enum cgroup_bpf_attach_type atype,
++			    const void *ctx, bpf_prog_run_fn run_prog,
++			    int retval, u32 *ret_flags)
 +{
-+	/*
-+	 * Place custom trampoline address in regs->orig_x0 to let ftrace
-+	 * trampoline jump to it.
-+	 */
-+	regs->orig_x0 = addr;
++	const struct bpf_prog_array_item *item;
++	const struct bpf_prog *prog;
++	const struct bpf_prog_array *array;
++	struct bpf_run_ctx *old_run_ctx;
++	struct bpf_cg_run_ctx run_ctx;
++	u32 func_ret;
++
++	run_ctx.retval = retval;
++	migrate_disable();
++	rcu_read_lock();
++	array = rcu_dereference(cgrp->effective[atype]);
++	item = &array->items[0];
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
++	while ((prog = READ_ONCE(item->prog))) {
++		run_ctx.prog_item = item;
++		func_ret = run_prog(prog, ctx);
++		if (!(func_ret & 1) && !IS_ERR_VALUE((long)run_ctx.retval))
++			run_ctx.retval = -EPERM;
++		*(ret_flags) |= (func_ret >> 1);
++		item++;
++	}
++	bpf_reset_run_ctx(old_run_ctx);
++	rcu_read_unlock();
++	migrate_enable();
++	return run_ctx.retval;
 +}
 +
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- struct dyn_ftrace;
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index 1197e7679882..b1ed0bf01c59 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -80,6 +80,7 @@ int main(void)
-   DEFINE(S_SDEI_TTBR1,		offsetof(struct pt_regs, sdei_ttbr1));
-   DEFINE(S_PMR_SAVE,		offsetof(struct pt_regs, pmr_save));
-   DEFINE(S_STACKFRAME,		offsetof(struct pt_regs, stackframe));
-+  DEFINE(S_ORIG_X0,		offsetof(struct pt_regs, orig_x0));
-   DEFINE(PT_REGS_SIZE,		sizeof(struct pt_regs));
-   BLANK();
- #ifdef CONFIG_COMPAT
-diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-index e535480a4069..dfe62c55e3a2 100644
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -60,6 +60,9 @@
- 	str	x29, [sp, #S_FP]
- 	.endif
- 
-+	/* Set orig_x0 to zero  */
-+	str     xzr, [sp, #S_ORIG_X0]
++static int
++bpf_prog_run_array_cg(const struct cgroup_bpf *cgrp,
++		      enum cgroup_bpf_attach_type atype,
++		      const void *ctx, bpf_prog_run_fn run_prog,
++		      int retval)
++{
++	const struct bpf_prog_array_item *item;
++	const struct bpf_prog *prog;
++	const struct bpf_prog_array *array;
++	struct bpf_run_ctx *old_run_ctx;
++	struct bpf_cg_run_ctx run_ctx;
 +
- 	/* Save the callsite's SP and LR */
- 	add	x10, sp, #(PT_REGS_SIZE + 16)
- 	stp	x9, x10, [sp, #S_LR]
-@@ -119,12 +122,21 @@ ftrace_common_return:
- 	/* Restore the callsite's FP, LR, PC */
- 	ldr	x29, [sp, #S_FP]
- 	ldr	x30, [sp, #S_LR]
--	ldr	x9, [sp, #S_PC]
--
-+	ldr	x10, [sp, #S_PC]
++	run_ctx.retval = retval;
++	migrate_disable();
++	rcu_read_lock();
++	array = rcu_dereference(cgrp->effective[atype]);
++	item = &array->items[0];
++	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
++	while ((prog = READ_ONCE(item->prog))) {
++		run_ctx.prog_item = item;
++		if (!run_prog(prog, ctx) && !IS_ERR_VALUE((long)run_ctx.retval))
++			run_ctx.retval = -EPERM;
++		item++;
++	}
++	bpf_reset_run_ctx(old_run_ctx);
++	rcu_read_unlock();
++	migrate_enable();
++	return run_ctx.retval;
++}
 +
-+	ldr	x11, [sp, #S_ORIG_X0]
-+	cbz	x11, 1f
-+	/* Set x9 to parent ip before jump to custom trampoline */
-+	mov	x9,  x30
-+	/* Set lr to self ip */
-+	ldr	x30, [sp, #S_PC]
-+	/* Set x10 (used for return address) to custom trampoline */
-+	mov	x10, x11
-+1:
- 	/* Restore the callsite's SP */
- 	add	sp, sp, #PT_REGS_SIZE + 16
+ void cgroup_bpf_offline(struct cgroup *cgrp)
+ {
+ 	cgroup_get(cgrp);
+@@ -1075,11 +1138,38 @@ int __cgroup_bpf_run_filter_skb(struct sock *sk,
+ 	bpf_compute_and_save_data_end(skb, &saved_data_end);
  
--	ret	x9
-+	ret	x10
- SYM_CODE_END(ftrace_common)
+ 	if (atype == CGROUP_INET_EGRESS) {
+-		ret = BPF_PROG_CGROUP_INET_EGRESS_RUN_ARRAY(
+-			cgrp->bpf.effective[atype], skb, __bpf_prog_run_save_cb);
++		u32 flags = 0;
++		bool cn;
++
++		ret = bpf_prog_run_array_cg_flags(
++			&cgrp->bpf, atype,
++			skb, __bpf_prog_run_save_cb, 0, &flags);
++
++		/* Return values of CGROUP EGRESS BPF programs are:
++		 *   0: drop packet
++		 *   1: keep packet
++		 *   2: drop packet and cn
++		 *   3: keep packet and cn
++		 *
++		 * The returned value is then converted to one of the NET_XMIT
++		 * or an error code that is then interpreted as drop packet
++		 * (and no cn):
++		 *   0: NET_XMIT_SUCCESS  skb should be transmitted
++		 *   1: NET_XMIT_DROP     skb should be dropped and cn
++		 *   2: NET_XMIT_CN       skb should be transmitted and cn
++		 *   3: -err              skb should be dropped
++		 */
++
++		cn = flags & BPF_RET_SET_CN;
++		if (ret && !IS_ERR_VALUE((long)ret))
++			ret = -EFAULT;
++		if (!ret)
++			ret = (cn ? NET_XMIT_CN : NET_XMIT_SUCCESS);
++		else
++			ret = (cn ? NET_XMIT_DROP : ret);
+ 	} else {
+-		ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[atype], skb,
+-					    __bpf_prog_run_save_cb, 0);
++		ret = bpf_prog_run_array_cg(&cgrp->bpf, atype,
++					    skb, __bpf_prog_run_save_cb, 0);
+ 		if (ret && !IS_ERR_VALUE((long)ret))
+ 			ret = -EFAULT;
+ 	}
+@@ -1109,8 +1199,7 @@ int __cgroup_bpf_run_filter_sk(struct sock *sk,
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
  
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+-	return BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[atype], sk,
+-				     bpf_prog_run, 0);
++	return bpf_prog_run_array_cg(&cgrp->bpf, atype, sk, bpf_prog_run, 0);
+ }
+ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sk);
+ 
+@@ -1155,8 +1244,8 @@ int __cgroup_bpf_run_filter_sock_addr(struct sock *sk,
+ 	}
+ 
+ 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+-	return BPF_PROG_RUN_ARRAY_CG_FLAGS(cgrp->bpf.effective[atype], &ctx,
+-					   bpf_prog_run, 0, flags);
++	return bpf_prog_run_array_cg_flags(&cgrp->bpf, atype,
++					   &ctx, bpf_prog_run, 0, flags);
+ }
+ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sock_addr);
+ 
+@@ -1182,8 +1271,8 @@ int __cgroup_bpf_run_filter_sock_ops(struct sock *sk,
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+ 
+-	return BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[atype], sock_ops,
+-				     bpf_prog_run, 0);
++	return bpf_prog_run_array_cg(&cgrp->bpf, atype, sock_ops, bpf_prog_run,
++				     0);
+ }
+ EXPORT_SYMBOL(__cgroup_bpf_run_filter_sock_ops);
+ 
+@@ -1200,8 +1289,7 @@ int __cgroup_bpf_check_dev_permission(short dev_type, u32 major, u32 minor,
+ 
+ 	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(current);
+-	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[atype], &ctx,
+-				    bpf_prog_run, 0);
++	ret = bpf_prog_run_array_cg(&cgrp->bpf, atype, &ctx, bpf_prog_run, 0);
+ 	rcu_read_unlock();
+ 
+ 	return ret;
+@@ -1366,8 +1454,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
+ 
+ 	rcu_read_lock();
+ 	cgrp = task_dfl_cgroup(current);
+-	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[atype], &ctx,
+-				    bpf_prog_run, 0);
++	ret = bpf_prog_run_array_cg(&cgrp->bpf, atype, &ctx, bpf_prog_run, 0);
+ 	rcu_read_unlock();
+ 
+ 	kfree(ctx.cur_val);
+@@ -1459,7 +1546,7 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	}
+ 
+ 	lock_sock(sk);
+-	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[CGROUP_SETSOCKOPT],
++	ret = bpf_prog_run_array_cg(&cgrp->bpf, CGROUP_SETSOCKOPT,
+ 				    &ctx, bpf_prog_run, 0);
+ 	release_sock(sk);
+ 
+@@ -1559,7 +1646,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	}
+ 
+ 	lock_sock(sk);
+-	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[CGROUP_GETSOCKOPT],
++	ret = bpf_prog_run_array_cg(&cgrp->bpf, CGROUP_GETSOCKOPT,
+ 				    &ctx, bpf_prog_run, retval);
+ 	release_sock(sk);
+ 
+@@ -1608,7 +1695,7 @@ int __cgroup_bpf_run_filter_getsockopt_kern(struct sock *sk, int level,
+ 	 * be called if that data shouldn't be "exported".
+ 	 */
+ 
+-	ret = BPF_PROG_RUN_ARRAY_CG(cgrp->bpf.effective[CGROUP_GETSOCKOPT],
++	ret = bpf_prog_run_array_cg(&cgrp->bpf, CGROUP_GETSOCKOPT,
+ 				    &ctx, bpf_prog_run, retval);
+ 	if (ret < 0)
+ 		return ret;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index b26f3da943de..f15b826f9899 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -129,7 +129,10 @@ unsigned int trace_call_bpf(struct trace_event_call *call, void *ctx)
+ 	 * out of events when it was updated in between this and the
+ 	 * rcu_dereference() which is accepted risk.
+ 	 */
+-	ret = BPF_PROG_RUN_ARRAY(call->prog_array, ctx, bpf_prog_run);
++	rcu_read_lock();
++	ret = bpf_prog_run_array(rcu_dereference(call->prog_array),
++				 ctx, bpf_prog_run);
++	rcu_read_unlock();
+ 
+  out:
+ 	__this_cpu_dec(bpf_prog_active);
 -- 
-2.30.2
+2.36.0.rc0.470.gd361397f0d-goog
 
