@@ -2,78 +2,122 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D09E8C433FE
-	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 06:35:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A998DC433F5
+	for <bpf@archiver.kernel.org>; Thu, 14 Apr 2022 08:11:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239639AbiDNGiF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Apr 2022 02:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S235010AbiDNINz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Apr 2022 04:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiDNGiE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Apr 2022 02:38:04 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F3C3137D;
-        Wed, 13 Apr 2022 23:35:40 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kf8pD4gxMz1HBvq;
-        Thu, 14 Apr 2022 14:35:00 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2375.24; Thu, 14 Apr 2022 14:35:36 +0800
-Message-ID: <d405cd60-c071-0daf-3174-670d1c8a2009@huawei.com>
-Date:   Thu, 14 Apr 2022 14:35:26 +0800
+        with ESMTP id S231398AbiDNINz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Apr 2022 04:13:55 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A58746658
+        for <bpf@vger.kernel.org>; Thu, 14 Apr 2022 01:11:31 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id n17so141921ljc.11
+        for <bpf@vger.kernel.org>; Thu, 14 Apr 2022 01:11:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WJlEdUxItHncTxzEbs260EsD9mgpD7B42dxtRERT3hI=;
+        b=g2ecaIQtYOiNnjMNswlHllmS0uoXO2Sy2SUzKggM7WWJk7typh8/wiGdgRhz9GWYZF
+         sPv+QL0vXeRKRXbuzKad5I6Hg207cw+Tk/3f1bY7xPniPOLKORK+4o7AB5OWdjH2hFKk
+         0wo25TKiTNY2ub+YehDIBl7e0+JXZXlq84cMGPQ64bhC2iPe1LO9GUaNyqJWuviRRy8q
+         GwhyE4yUKbVj3iHyb+3i5tjrBHvo9o6Jaoim3ffCkTKZoHEUC/W0TeYD0UMCJxhiqg3M
+         CICJYD4GPfUay4uVQ9lsINj8U+fnXSyWaYXR5wzFTxTUdPoqqaTSn+wv6JGOUDv2Q/OS
+         MX/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WJlEdUxItHncTxzEbs260EsD9mgpD7B42dxtRERT3hI=;
+        b=m/z47M6BMztwhlmpV4zvmHBBq9DwKg13ADHp5lBL0LBpchhHuaplQTDp1Ecsr3sJzL
+         EHP9hoOVP+k3wFo/yovOTSjLVcPtaZlKMuKpN40lwxJLSHloQLYhd5xyWjSr9RFWSRAt
+         2VC5/6W2ivme3tv1blemEN3Nv3P82QRYWmuEkoeS1ESEgUfYbWT44ChWEsX0uvTG6m6R
+         BH6/+k6xN2Go/yEHZo+wQFkxEtBEb5ttLCTuLU1ksEu568R/HwO83lQmvstG6nfHWAcN
+         0HxL3GWvwuJgGt9qImy32ZSpkDHV+KmYh1vq680ILlADwg5vzQLvEI9EUcedA5p0RUT9
+         wZPg==
+X-Gm-Message-State: AOAM532gt/ywWGT72rY4Cn5yocnAAozqGIM7ZZbmyv+Tv1pxPgassULp
+        x3wNS1GjQ2RA0JjDAE4X6AAG6+icWEz11Nfu
+X-Google-Smtp-Source: ABdhPJzsU7axWC0m6sowjy98vES1tSAV+SfnhptRq8hqppKJMRd6gSbD2Cv78WKscYwUEq8CnFNdEg==
+X-Received: by 2002:a2e:9b0d:0:b0:24b:64ff:b6f9 with SMTP id u13-20020a2e9b0d000000b0024b64ffb6f9mr960182lji.140.1649923888845;
+        Thu, 14 Apr 2022 01:11:28 -0700 (PDT)
+Received: from localhost.localdomain ([5.188.167.245])
+        by smtp.googlemail.com with ESMTPSA id c25-20020a2e6819000000b00247de61d3fdsm116858lja.113.2022.04.14.01.11.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 01:11:28 -0700 (PDT)
+From:   Sergey Matyukevich <geomatsi@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Vladimir Isaev <isaev@synopsys.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Sergey Matyukevich <sergey.matyukevich@synopsys.com>
+Subject: [PATCH] ARC: bpf: define uapi for BPF_PROG_TYPE_PERF_EVENT program type
+Date:   Thu, 14 Apr 2022 11:11:26 +0300
+Message-Id: <20220414081126.3176820-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH bpf-next 1/5] arm64: ftrace: Add ftrace direct call
- support
-Content-Language: en-US
-To:     Song Liu <songliubraving@fb.com>
-CC:     bpf <bpf@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, X86 ML <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-References: <20220413054959.1053668-1-xukuohai@huawei.com>
- <20220413054959.1053668-2-xukuohai@huawei.com>
- <D829ABEB-5504-4682-9A20-AAD21AFE3CB3@fb.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <D829ABEB-5504-4682-9A20-AAD21AFE3CB3@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/14/2022 1:58 PM, Song Liu wrote:
-> Just one nitpick for 2/5: as we move is_valid_bpf_tramp_flags to
-> trampoline.c, we should change the multi-line comment into net
-> style:
+From: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
 
-Thanks for your suggestion, will fix in v2.
+Define appropriate uapi for the BPF_PROG_TYPE_PERF_EVENT program type
+by exporting the user_regs_struct structure instead of the pt_regs
+structure that is in-kernel only.
+
+Signed-off-by: Sergey Matyukevich <sergey.matyukevich@synopsys.com>
+---
+
+Originally I sent this patch via linux-snps-arc mailing list: see [1].
+However this patch accompanies ARC support for libbpf bpf_tracing.h
+accepted to bpf kernel tree: see [2].
+
+So it looks like it makes sense to post this patch here as well.
+I will also update linux-snps-arc patch series accordingly.
+
+Regards,
+Sergey
+
+[1] https://lore.kernel.org/linux-snps-arc/20220408155804.587197-1-geomatsi@gmail.com/
+[2] https://lore.kernel.org/bpf/20220408224442.599566-1-geomatsi@gmail.com/ 
+
+
+ arch/arc/include/asm/perf_event.h          | 4 ++++
+ arch/arc/include/uapi/asm/bpf_perf_event.h | 9 +++++++++
+ 2 files changed, 13 insertions(+)
+ create mode 100644 arch/arc/include/uapi/asm/bpf_perf_event.h
+
+diff --git a/arch/arc/include/asm/perf_event.h b/arch/arc/include/asm/perf_event.h
+index 4c919c0f4b30..d5719a260864 100644
+--- a/arch/arc/include/asm/perf_event.h
++++ b/arch/arc/include/asm/perf_event.h
+@@ -63,4 +63,8 @@ struct arc_reg_cc_build {
+ 
+ #define PERF_COUNT_ARC_HW_MAX	(PERF_COUNT_HW_MAX + 8)
+ 
++#ifdef CONFIG_PERF_EVENTS
++#define perf_arch_bpf_user_pt_regs(regs) (struct user_regs_struct *)regs
++#endif
++
+ #endif /* __ASM_PERF_EVENT_H */
+diff --git a/arch/arc/include/uapi/asm/bpf_perf_event.h b/arch/arc/include/uapi/asm/bpf_perf_event.h
+new file mode 100644
+index 000000000000..6cb1c2823288
+--- /dev/null
++++ b/arch/arc/include/uapi/asm/bpf_perf_event.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI__ASM_BPF_PERF_EVENT_H__
++#define _UAPI__ASM_BPF_PERF_EVENT_H__
++
++#include <asm/ptrace.h>
++
++typedef struct user_regs_struct bpf_user_pt_regs_t;
++
++#endif /* _UAPI__ASM_BPF_PERF_EVENT_H__ */
+-- 
+2.35.1
+
