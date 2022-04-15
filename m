@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45489C433FE
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E2B3C43219
+	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353332AbiDOMde (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 08:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S1353378AbiDOMdf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 08:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353811AbiDOMdR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:33:17 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E372F03F;
-        Fri, 15 Apr 2022 05:30:48 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bh17so15141665ejb.8;
-        Fri, 15 Apr 2022 05:30:48 -0700 (PDT)
+        with ESMTP id S1353857AbiDOMd3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 08:33:29 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6FF2F03F;
+        Fri, 15 Apr 2022 05:31:01 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id l7so15185022ejn.2;
+        Fri, 15 Apr 2022 05:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=UiT3RVqcqw/2HXUfTd1U2cSmXIntDYXehGziaThTk/w=;
-        b=GuZnsylT3pcSouW5ddrLgN/m/YCesZsnWJ/E2onIZFIgxUc1qQptGQ3sweZxexEYv1
-         vKlJMVgVRvAHa7/xdpFsMQ7uN3QSB6rhQkI5NwIS+W5EXVWFe0Bn0kjiOkXq0IBLCkuj
-         lclTi38+gNurzHOHabPerljHiV+bP8CqpHqv8YsEab7edLhwB/IWh/ItcQeZ8y+awFYY
-         R40H+T+SiaWZmaxtr/yh0dEt2Em33fUKgR21HmEKqqnYjBTxJgzmiwJG7e8Y8Wu0KHia
-         cxok0g1QeVV7AlcK2vRmUgq2jI19VWMbd6X2aIXlxOrQF1HXjHfs/YnAFJ3UmApH9h3/
-         0f/Q==
+        bh=LXuHnml0JyQ7WUWtSyqxCdcrvdOAihH7ECEcB+ac3FQ=;
+        b=VTgQeHrkpIHgOEGZvW6m7lK+ww/hBIaLxp/ed1YbHFERxY7K8zgmthq8r0MO/eDheA
+         64RJAUDP0PCNupTiFSXSD0K9TwZw/VBqVra2httvVSuGRa0rtzP8UWtbBnmILYXL6Z2H
+         sr5X4+IEfwB6d5kKRo4eDMfm2O1ZmyozhlUEFzHkyPeS+S7EEuZSM7ink8BrFdT5ZLz3
+         GIxrZW9NwL5XcJZvTEmI8dg0NdKEWbX31YU7MxwkMeQJhRou9/SCt1Ujs+st1SvtgpVw
+         9aQDWxS22TjT0DPrnK2A3NtIzbFZtU+RaSWnUyyUovnBEkNcZnYSmXiUDfvziK0b2SLX
+         cyEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=UiT3RVqcqw/2HXUfTd1U2cSmXIntDYXehGziaThTk/w=;
-        b=wM9XIzzl7v9Ao3wDnKn3Z1gs9cPI1vFqDZNCISJmtQZYtMiLQzIeKuOqjKyokbFZRF
-         9k2PKVvJ9ECWMCGNWqSO08rGrzSJ/IOYjpM/yg1lS/FgNJIbHGfZFIu2NU5zcCOyQm3j
-         WE1NVNetl/vrhNcrepSFmTJXcM6EMe6h0j10Vii9k4AZSKN8KFqmmQoEjsoCmJi+aurB
-         ZRCWy9XK/m94L9+/z4hSJOwIcobGP4ATjaoZnPJNk10RdYZLff8s6+uOuzJ389U2uym2
-         1TAQjL31bwh/c680v4JdqEl/P+mbkZFscwBeyjzfCWDn1LcPDUyOVVp83L4OhoERBIL9
-         XnhQ==
-X-Gm-Message-State: AOAM53398aMoj2TJ9H1LtIYm81RFS/A/nMSoYlcBMN+mWiZwOt2/U8YF
-        8fH0wXjaNSY8SbtvGbVL58Y=
-X-Google-Smtp-Source: ABdhPJxpgeSXdYhbvP5O8IUq9aUGmAkJDetH/MVX0ebgJq8cESmyiLB+RwgqipJncxMfJg4FKayNBg==
-X-Received: by 2002:a17:906:4d1a:b0:6e8:8860:8a72 with SMTP id r26-20020a1709064d1a00b006e888608a72mr6334437eju.540.1650025847533;
-        Fri, 15 Apr 2022 05:30:47 -0700 (PDT)
+        bh=LXuHnml0JyQ7WUWtSyqxCdcrvdOAihH7ECEcB+ac3FQ=;
+        b=jyumd+Y07D6xT8FUWRRZp5q+cNdnmyrz4tTDn4JqRPjR2eNKcbgcvVDI7fSFOwkPL3
+         I8LmbxZzi4OWRtjxKdXiZwTKH5tw191MkMPrDftgQZ6SpyQ5+uRrrOM28NXRwFegGCjZ
+         CJ+eus6IgcC0TgR6snJ1GVD8u6irOOVeeH5eChLS9E283IU3J51mePkpwQ1mkdsxoOCq
+         UrMXC69OgV2IAM17fYyShjbZhuSZK4wflxLVMKfYboGUbJEEupF6FMzCBvQl1S90Gz/z
+         lGBfev3ZRv2xVm3zUOBvqsbLpw0zC0zdVyUALh3xIQJSWgy2LikG2l73G8tq+7if+yta
+         hpXg==
+X-Gm-Message-State: AOAM533fh04TNMb5kzgzwOZvFXUYvuOjKCBzY33u0FIjQFEEK1B3FVVm
+        a3n5/+GNDpYMe8Sf0lxRPiU=
+X-Google-Smtp-Source: ABdhPJxoOHJKRpfHC4KfhLHKEeHHtK1KA32Oh4BvD5pxRHzbDl+DHwOIhAvuB9jirqfyrBrH+vb+KQ==
+X-Received: by 2002:a17:907:9485:b0:6da:aa54:a88 with SMTP id dm5-20020a170907948500b006daaa540a88mr6248462ejc.427.1650025859818;
+        Fri, 15 Apr 2022 05:30:59 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.30.46
+        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.30.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 05:30:47 -0700 (PDT)
+        Fri, 15 Apr 2022 05:30:59 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,11 +84,10 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next v4 02/18] net: dsa: sja1105: remove use of iterator after list_for_each_entry() loop
-Date:   Fri, 15 Apr 2022 14:29:31 +0200
-Message-Id: <20220415122947.2754662-3-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: [PATCH net-next v4 10/18] qed: Replace usage of found with dedicated list iterator variable
+Date:   Fri, 15 Apr 2022 14:29:39 +0200
+Message-Id: <20220415122947.2754662-11-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220415122947.2754662-1-jakobkoschel@gmail.com>
 References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
@@ -98,108 +97,78 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-The link below explains that there is a desire to syntactically change
-list_for_each_entry() and list_for_each() such that it becomes
-impossible to use the iterator variable outside the scope of the loop.
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-Although sja1105_insert_gate_entry() makes legitimate use of the
-iterator pointer when it breaks out, the pattern it uses may become
-illegal, so it needs to change.
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
-It is deemed acceptable to use a copy of the loop iterator, and
-sja1105_insert_gate_entry() only needs to know the list_head element
-before which the list insertion should be made. So let's profit from the
-occasion and refactor the list iteration to a dedicated function.
-
-An additional benefit is given by the fact that with the helper function
-in place, we no longer need to special-case the empty list, since it is
-equivalent to not having found any gating entry larger than the
-specified interval in the list. We just need to insert at the tail of
-that list (list_add vs list_add_tail on an empty list does the same
-thing).
-
-Link: https://patchwork.kernel.org/project/netdevbpf/patch/20220407102900.3086255-3-jakobkoschel@gmail.com/#24810127
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/dsa/sja1105/sja1105_vl.c | 46 ++++++++++++++++++----------
- 1 file changed, 29 insertions(+), 17 deletions(-)
+ drivers/net/ethernet/qlogic/qed/qed_iwarp.c | 26 ++++++++++-----------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
-index b7e95d60a6e4..369be2ac3587 100644
---- a/drivers/net/dsa/sja1105/sja1105_vl.c
-+++ b/drivers/net/dsa/sja1105/sja1105_vl.c
-@@ -7,6 +7,27 @@
- 
- #define SJA1105_SIZE_VL_STATUS			8
- 
-+static struct list_head *
-+sja1105_first_entry_longer_than(struct list_head *entries,
-+				s64 interval,
-+				struct netlink_ext_ack *extack)
-+{
-+	struct sja1105_gate_entry *p;
-+
-+	list_for_each_entry(p, entries, list) {
-+		if (p->interval == interval) {
-+			NL_SET_ERR_MSG_MOD(extack, "Gate conflict");
-+			return ERR_PTR(-EBUSY);
-+		}
-+
-+		if (interval < p->interval)
-+			return &p->list;
-+	}
-+
-+	/* Empty list, or specified interval is largest within the list */
-+	return entries;
-+}
-+
- /* Insert into the global gate list, sorted by gate action time. */
- static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
- 				     struct sja1105_rule *rule,
-@@ -14,6 +35,7 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
- 				     struct netlink_ext_ack *extack)
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_iwarp.c b/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
+index 1d1d4caad680..198c9321bf51 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
+@@ -1630,38 +1630,36 @@ static struct qed_iwarp_listener *
+ qed_iwarp_get_listener(struct qed_hwfn *p_hwfn,
+ 		       struct qed_iwarp_cm_info *cm_info)
  {
- 	struct sja1105_gate_entry *e;
-+	struct list_head *pos;
- 	int rc;
+-	struct qed_iwarp_listener *listener = NULL;
++	struct qed_iwarp_listener *listener = NULL, *iter;
+ 	static const u32 ip_zero[4] = { 0, 0, 0, 0 };
+-	bool found = false;
  
- 	e = kzalloc(sizeof(*e), GFP_KERNEL);
-@@ -24,25 +46,15 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
- 	e->gate_state = gate_state;
- 	e->interval = entry_time;
+-	list_for_each_entry(listener,
++	list_for_each_entry(iter,
+ 			    &p_hwfn->p_rdma_info->iwarp.listen_list,
+ 			    list_entry) {
+-		if (listener->port == cm_info->local_port) {
+-			if (!memcmp(listener->ip_addr,
++		if (iter->port == cm_info->local_port) {
++			if (!memcmp(iter->ip_addr,
+ 				    ip_zero, sizeof(ip_zero))) {
+-				found = true;
++				listener = iter;
+ 				break;
+ 			}
  
--	if (list_empty(&gating_cfg->entries)) {
--		list_add(&e->list, &gating_cfg->entries);
--	} else {
--		struct sja1105_gate_entry *p;
--
--		list_for_each_entry(p, &gating_cfg->entries, list) {
--			if (p->interval == e->interval) {
--				NL_SET_ERR_MSG_MOD(extack,
--						   "Gate conflict");
--				rc = -EBUSY;
--				goto err;
--			}
--
--			if (e->interval < p->interval)
--				break;
--		}
--		list_add(&e->list, p->list.prev);
-+	pos = sja1105_first_entry_longer_than(&gating_cfg->entries,
-+					      e->interval, extack);
-+	if (IS_ERR(pos)) {
-+		rc = PTR_ERR(pos);
-+		goto err;
+-			if (!memcmp(listener->ip_addr,
++			if (!memcmp(iter->ip_addr,
+ 				    cm_info->local_ip,
+ 				    sizeof(cm_info->local_ip)) &&
+-			    (listener->vlan == cm_info->vlan)) {
+-				found = true;
++			    iter->vlan == cm_info->vlan) {
++				listener = iter;
+ 				break;
+ 			}
+ 		}
  	}
  
-+	list_add(&e->list, pos->prev);
-+
- 	gating_cfg->num_entries++;
+-	if (found) {
++	if (listener)
+ 		DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener found = %p\n",
+ 			   listener);
+-		return listener;
+-	}
++	else
++		DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener not found\n");
  
- 	return 0;
+-	DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener not found\n");
+-	return NULL;
++	return listener;
+ }
+ 
+ static int
 -- 
 2.25.1
 
