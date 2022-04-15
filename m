@@ -2,159 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA95FC433EF
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 17:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70923C433F5
+	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 17:49:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244769AbiDORqU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 13:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S1343644AbiDORvg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 13:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244573AbiDORqT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 13:46:19 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29E3B7C56;
-        Fri, 15 Apr 2022 10:43:50 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23FHbGiw024517;
-        Fri, 15 Apr 2022 10:43:49 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=BkCv1jb9e7zzOgyDNKc6ANn7vi/p2t+usKDmpF3/TAQ=;
- b=SFN/2em+lqE30tU9AbFt8+0r5XRBObqZuhRzzJdxBUB8ghFdojQy2Mbg4A4qkxovxOlo
- k/xBMMfxLeAzlIKz/02nzLmkxOTCICzstv7zEHfzvD9NM3vyZDp7/lr8MDcU9O2WR0er
- dw62bEO/C9oLlLUU78v5enYCoEoP6ag8l3k= 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3fewgqc6n8-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 15 Apr 2022 10:43:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bwbwAECJcRT4xR4E0+d7OFDX4GowCyxBD397K4YvF2YUXOYrmRe3tivIuJ5j2u0MFvwL3bYfOXz2i3zq0SyOeyLhYLlc1QorXZsnebP1FeN5QOJIdk5u/IJn76irh7LRwJy9H1RN4lLW1nnuAbZDvxVQ163xs1+/03F4ME73R85XWGtjuhO54XSR+xqgy4UNEUuqsVtKxoIG4H5nmbUrcyNzq9ctHlzm5KCBd6glq0/8p+HoKE5eA4wSL1RmgnUJPsdKd1Ix14YBV+qxiPD76FStMElaM3tnstqb7ytk/rEuc9gQRtzta16WblNM1+hBJvKgh2VigL8q9EckM2Gc6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BkCv1jb9e7zzOgyDNKc6ANn7vi/p2t+usKDmpF3/TAQ=;
- b=ixBIaGM20rGtZ4bpS1eBBqksnzuwW4sDsuslwWEbu1i7G0rX2LZeHoAAlcBsUh0xC5H3WnbVhevjqTLQjJxf50TlrpzcTgDGggMvVOy5bTrbbrhj6KXNz0Dd3ErWMWIxi0fiJg8ySvtYcDv9gl30kdzfKJ40hm20MBZPYEkLD/Lk3caoA6Mz47UQLdlWOSEIDEmuDDcnTYZ4z+lkklVLtq8cHyfS7Fcb9LWcL6qifpiLgbU0qAOIfntJ2YVqKHDapVjk2P3PDmf2zcWVRxyRhl32FOerxnw6IJHZLXQqilOSPP9ZtMDZFPAeu8SZoOXGfGppcwtiNYGMoMExjqkDeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from CO1PR15MB4969.namprd15.prod.outlook.com (2603:10b6:303:e4::23)
- by DM5PR15MB1706.namprd15.prod.outlook.com (2603:10b6:4:59::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
- 2022 17:43:44 +0000
-Received: from CO1PR15MB4969.namprd15.prod.outlook.com
- ([fe80::8120:700f:26f8:b29e]) by CO1PR15MB4969.namprd15.prod.outlook.com
- ([fe80::8120:700f:26f8:b29e%7]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
- 17:43:44 +0000
-From:   Rik van Riel <riel@fb.com>
-To:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC:     "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
-        "hch@lst.de" <hch@lst.de>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        Kernel Team <Kernel-team@fb.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v4 bpf 2/4] page_alloc: use vmalloc_huge for large system
- hash
-Thread-Topic: [PATCH v4 bpf 2/4] page_alloc: use vmalloc_huge for large system
- hash
-Thread-Index: AQHYUOlZtVqcyre6jkeQP4tXYjuws6zxPt4A
-Date:   Fri, 15 Apr 2022 17:43:44 +0000
-Message-ID: <5e5e4759efef83250f9511d4ab0e1ba34f987ce5.camel@fb.com>
-References: <20220415164413.2727220-1-song@kernel.org>
-         <20220415164413.2727220-3-song@kernel.org>
-In-Reply-To: <20220415164413.2727220-3-song@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 11411500-3beb-4363-da15-08da1f077c90
-x-ms-traffictypediagnostic: DM5PR15MB1706:EE_
-x-microsoft-antispam-prvs: <DM5PR15MB17063B69BF9E95546EA2F44EA3EE9@DM5PR15MB1706.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WGUzQ1iJ+YEXSCUJuaWUhUMgLYoseMIRR/chalEiRWcV6DABc7cw7pyRlpOkPd6qrnFxcANG5j3BFG90fSbu21f/eDQ3v2mYHvzhQbS4exeA6HJ6gI6GD8RAXegINwGKtZwYU4fU+nCwl95++v6f+h4KIV5C3QN/mEx5oTqyfB4DkJRtETgwRSvJi3avjKcypjUOuNoEppJHo020J8opHRU5ShjoMGWEs4X+Wnqw3aWGeqlluwQ2Q/8OkrBVKOzM/DerATBSvXoO6YRRtyqr7DXnPGtOcstXYUdaWpH23CsbB+sBRKq2VxM8twEwc86lQ1Kf0ixqqGK5s/ZFIxZB6BG+GoxGwOh2TrhxNlilm/Khif2FtrMUKib0fUTknGXGrhLmAGWIahLULxMPSNSAUOEPO5Fd128KsQG+uGYsxArZ4t146bhwaAQWHTaXzoeMJ1X+JyO6V3yvOe4PGKhJwS/RwzoX3aMm9j/DUelNMiUvOYmPSs6iXpgtmBUp40mFQ4TqTNuGpRQXtigaFT01PTl2i0V62a4L+UI4BMsaxEBJnAnBXUhpaAlr9Nf8NqiVEshw2VyWDCvP4Osn9f8Ncr7NW1nR5Lzdn1B3V8vAgad1witbIbVf3zIWkzbwruvE28BQVYf3F7xfmjy4kqMVPXI7BtDGvgvc9tAO7jG5xPGAaRB2XZPQa/DTungOYm1zFUqReA9yiXwfMOeyqnM4ZfAqcgjK+tSFlxw565PCpho=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR15MB4969.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(66446008)(54906003)(38070700005)(110136005)(76116006)(66946007)(2616005)(6506007)(6512007)(122000001)(186003)(8936002)(7416002)(6486002)(91956017)(2906002)(5660300002)(71200400001)(316002)(4326008)(86362001)(4744005)(508600001)(66476007)(8676002)(66556008)(36756003)(64756008)(14583001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bkI0WjljVzR5VXNXRGRFK2cvc3o1b0c4Ri9Eczl3Ukhmd3VkSWQ4dXk2cVpK?=
- =?utf-8?B?YW9hbEplNHB6Rm1nVHBodTVEbUpvdEN4THhFUzV5NlZMOTNSejJSd2lkbmZX?=
- =?utf-8?B?b0xLSENBcXR3SzI1Y0xZcXV5MkMwajh2cmZXNTVubjJxYllWS2swTDA3c3F6?=
- =?utf-8?B?OFNKeEc1RXlkOUE2bGNiL25BQ3ZQZTgzUXJWOGFqcU5LZXdoTDc2N0xkcTJ0?=
- =?utf-8?B?T1h1SXZjTUJudktlU3RxOTZPUkZIZDMySGJvWDkyR29sc1NyL2ZvV2ZpdEN5?=
- =?utf-8?B?bHZjQWhOS28vUW5OaDNLZm9PWCtSU3RYRTB1S3djK2Y2UGhNL1p3OVVHR2hq?=
- =?utf-8?B?SUNldVBHeUdCdnBIWmZPd1N2bUdtSXR2RFpUQ0VKZmFWU3VsWFd4aTBlVi9p?=
- =?utf-8?B?VXBsZ0VxNGRuMnNCb2ZsZU5wNkE1eFlVVmFDUm1sSnRoajVXK0FzTWoyRm9a?=
- =?utf-8?B?K25tcXZDNGtHWjVxRkpKUkFJK0JEUlhrcGw4ZVY5czRPT2M0elFQMWJVcFJa?=
- =?utf-8?B?NWlBWkEvdlJhbWRmZWV4NUVGY0V1U25mczV2dHJ3VS9GVlc0b3Q3T0thNHVO?=
- =?utf-8?B?c2tLUW5CNy9oTHZkYnR0S1U1b3NOalI2Q0VtK1pXdmVVZVZ0VVc3bnZZVmZi?=
- =?utf-8?B?ODRjSVhWOE1Oa0FyUG5mSCs4NlFpdGNTMEh4TmM2Z0trSlZybDZ3Qy9yR3h6?=
- =?utf-8?B?Snk0N1QwbmxvZ3JqV3F2aEtIK2tWV3pzQklXSTVmZVFkSDV3b3Q4Wm0yZGZH?=
- =?utf-8?B?Zk5JRE5TZmFhSERPNnJ6SzY1TGlhVVhtUWoyZ1F5SVdiWlYwUzBYYkF2ZDlp?=
- =?utf-8?B?aTJtRzc2UXFUYmY2Y3JJRGVFM2NkcHpUSzJOd1BRSW8xUy9ONlhrUUtqZEl1?=
- =?utf-8?B?VE9wSVB1TGFidm1uNi9oMThVampuaFBzNjhlazUvVDZncmJxRmtwd1RpR0xh?=
- =?utf-8?B?UzVNYTlCU1A2ekh0c011dzh4ejFBL3hlYXFCN2lqM0R6eGMzRUNxclJ6MWNx?=
- =?utf-8?B?RTVERmFYTmJYL1Z4RXRiTGdDU29GbDNqU09JcTM3VnNwQXJPaE9QYm0xaFZT?=
- =?utf-8?B?amMyTzhTcmFrMVh1cWtlYitaMmh3bEJIZXVDclV0anpGck9YTmVUVitkd1Jx?=
- =?utf-8?B?VDJlRVBOWXhXaGdjdHpFQkNhd0JYaHQySkg4dzhQU2FZRmlyYVUrTFlxUk9K?=
- =?utf-8?B?N2tJK0xXY2pBU3BHb1Vsem9FcHllbVd1VmF2dUpNamUvK2JjLzFQU3NpMGw0?=
- =?utf-8?B?QlVjdmRUeHVzZmp4UVN5Yk0wZFNJaVlFSjB3aUl6RWJDb3RYR3pVNTBibEla?=
- =?utf-8?B?MHJUUGRsTjJZbEFiT3FUWm0wYndaY0xWN3M2MEFVSk1wS1QwREhZbVNrRHdz?=
- =?utf-8?B?Y0RNbTA4NHFyNDV5OWw2MkF1QTZBWE91VjRQa0J4OStFUmJTb0NzRnFWbS9N?=
- =?utf-8?B?MzBLTmdKYnNlZ2lLb04rQU44MUk3R1A1WGIrL0JFdzhDaElNbXJuS0xSbEtz?=
- =?utf-8?B?VVdkYVlZY1ZDeitXVlJ3eFNvdElmcjN2dVh5b2IvdXFTUjFjUWxya2xabjll?=
- =?utf-8?B?NkpUZ1pSYUdYR05oV0NMb2hzSDFNN1krYzNqZDlEZG5XSHhIL0FMQlhWZUgv?=
- =?utf-8?B?OEVPSWdHMFlNaWkrSG1VcGVCMkw3dURBZi9sNnFRbDZVZFRXeWRwVUN1NzZk?=
- =?utf-8?B?ZExUM1lBVFh0cWRIRGxDdVhnSWdIVEFEOThtTjFaa05SbG1MT3pxWi94eDhi?=
- =?utf-8?B?bWJGeWRMKzlRcVo4L0g3RnFwRHZXZXVBTWZoaDVjb0RxOWFjN0VqOU1zT1RO?=
- =?utf-8?B?RGFsRFdiaVhYait2aGZTYVNlbHlmVTFFbysxTzUvdjBHTHdHZHE4bWV3aW9Z?=
- =?utf-8?B?ZmhxZjdkRTFrTG8rQnp4Ni9oMXpKaFJZOC8xWlJXV3oxR3RBOWx5VldjS2dM?=
- =?utf-8?B?NHVTcmxzMHExSzA2OGFUL2EwcFV2N1NFUkY2dFdLOGkwOWlYTWFtK1l5cllN?=
- =?utf-8?B?enBxU2oxd0Y1dFYzZ3JVS0JhRlF2L0J0cUgyUmsrSzROeTU0VSt3QzUzbkl5?=
- =?utf-8?B?cmZYL0ZNQnFqVFJlWGRQaUUwQ3J3Wk5uYkZwWmpQY3VUMVdHL1NHQUljR1hm?=
- =?utf-8?B?VTI5UTV0TU1ERElLTzZwZTJqZDJuU1hYQ3JJOXR3N2pFbkhyTjVaQTFqRmZl?=
- =?utf-8?B?SjhadkIxME4zY1pHaGZMY3hJaUdvbDJxT2lOQ0VKQ3lVTzkwS3RLajU3Y3Zu?=
- =?utf-8?B?Wk9rczBKT2JreEcydURhTDliWTZ4Tjh4U25TM1I1MklHdEhiQXNWWGNLOVQr?=
- =?utf-8?B?aDd0Z0NIWTBqRnNHUmpzTkZUUFNtb0JUbHVNM1dQeHdLZkladWNDRElxNlIx?=
- =?utf-8?Q?oWBJzaxPF58GIads=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4AE497C0F99BCA4FA78ACDBE2C9C7CA4@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S237028AbiDORvg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 13:51:36 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3578BBD7DA
+        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 10:49:07 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id h11so10210765ljb.2
+        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 10:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=5XM54esi5Eok3jDOxJYtKt57YMeODoXOKraxTOsy46A=;
+        b=Zlj+UxV1OEdo2amDF/6snrU6BTkSnlTKLx9JQA1EOXt7CUtUBOtr/fJRotCHhyoOPM
+         FRmw6NSd31W1jS/ORt1zMO+tKGJoZFWCDBU+hB0HX1JW344Vr5vT7Gjs09UUc582DI+c
+         6nlt2C8QBJzbZgQUocNy++5sjxs4HZ8tigL+I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=5XM54esi5Eok3jDOxJYtKt57YMeODoXOKraxTOsy46A=;
+        b=l2WVBcrPeca+vQeji7cdL0UheJBlCZChLdX7U0EChzEIg7WHdzeyvykYy8+tNR09k7
+         vuG8WTjNjnOs7eZkNAAYAFAwcO44laoVL2dkkJoklre81P4dNJUWgoBsviTJblm08xFu
+         OC9tGfIck8XauqVtc2w5s5aZkYKuwdHmgA7+BzfXgqeb5vocrTg2FKk2mzxgLOkd2mJ2
+         RjJCgQ+CcZ8+7/iW7NU+vZnKZI7t7n6/NNVIAHSLW/6Rw9G6E2pqnaSblo8+x4TxtAMa
+         0gMp8bAqyRuV1rl42M8RGWMdjEXYHBxVZVSSj4X7Nk3Q4Jy3xYHQ4t1p7l7M9dkNNfEK
+         5YVg==
+X-Gm-Message-State: AOAM530He+kyirnIPOtdsiltPqM8WEyz9t2qO+XKT6isjtmeuhVsL5R6
+        UNn4xQEoMIFekVDYkgEmSKhhbg==
+X-Google-Smtp-Source: ABdhPJx4AQcQqkFmb2Jedw4hUQ60/atpnS9qOHwSSvBbUIe6jE8kEq7L7dHPtTXnFIg+Zp36ZK+3Lg==
+X-Received: by 2002:a2e:9b59:0:b0:24b:439c:8928 with SMTP id o25-20020a2e9b59000000b0024b439c8928mr147324ljj.154.1650044945340;
+        Fri, 15 Apr 2022 10:49:05 -0700 (PDT)
+Received: from cloudflare.com (2a01-110f-4809-d800-0000-0000-0000-0f9c.aa.ipv6.supernova.orange.pl. [2a01:110f:4809:d800::f9c])
+        by smtp.gmail.com with ESMTPSA id m14-20020a2ea58e000000b0024c87adf6e3sm329773ljp.35.2022.04.15.10.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 10:49:04 -0700 (PDT)
+References: <20220407223112.1204582-1-sdf@google.com>
+ <20220407223112.1204582-4-sdf@google.com>
+ <20220408225628.oog4a3qteauhqkdn@kafai-mbp.dhcp.thefacebook.com>
+ <87fsmmp1pi.fsf@cloudflare.com>
+ <CAKH8qBuqPQjZ==CjD=rO8dui9LNcUNRFOg7ROETRxbuMYnzBEg@mail.gmail.com>
+User-agent: mu4e 1.6.10; emacs 27.2
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org
+Subject: Re: [PATCH bpf-next v3 3/7] bpf: minimize number of allocated lsm
+ slots per program
+Date:   Fri, 15 Apr 2022 19:39:35 +0200
+In-reply-to: <CAKH8qBuqPQjZ==CjD=rO8dui9LNcUNRFOg7ROETRxbuMYnzBEg@mail.gmail.com>
+Message-ID: <878rs66xv3.fsf@cloudflare.com>
 MIME-Version: 1.0
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR15MB4969.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11411500-3beb-4363-da15-08da1f077c90
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 17:43:44.0665
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b6rSSKzNw35EeBKS2jtFCfVm4axeuRvZbwlEfh5gBb/GFsMt4yobw6LFXOcdfMXI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1706
-X-Proofpoint-GUID: gA18Js8ouIIiRBtj1vM3p6jSiL-oHKfO
-X-Proofpoint-ORIG-GUID: gA18Js8ouIIiRBtj1vM3p6jSiL-oHKfO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-15_06,2022-04-15_01,2022-02-23_01
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA0LTE1IGF0IDA5OjQ0IC0wNzAwLCBTb25nIExpdSB3cm90ZToNCj4gVXNl
-IHZtYWxsb2NfaHVnZSgpIGluIGFsbG9jX2xhcmdlX3N5c3RlbV9oYXNoKCkgc28gdGhhdCBsYXJn
-ZSBzeXN0ZW0NCj4gaGFzaA0KPiAoPj0gUE1EX1NJWkUpIGNvdWxkIGJlbmVmaXQgZnJvbSBodWdl
-IHBhZ2VzLiBOb3RlIHRoYXQgdm1hbGxvY19odWdlDQo+IG9ubHkNCj4gYWxsb2NhdGVzIGh1Z2Ug
-cGFnZXMgZm9yIHN5c3RlbXMgd2l0aCBIQVZFX0FSQ0hfSFVHRV9WTUFMTE9DLg0KPiANCj4gUmV2
-aWV3ZWQtYnk6IENocmlzdG9waCBIZWxsd2lnIDxoY2hAbHN0LmRlPg0KPiBTaWduZWQtb2ZmLWJ5
-OiBTb25nIExpdSA8c29uZ0BrZXJuZWwub3JnPg0KDQpSZXZpZXdlZC1ieTogUmlrIHZhbiBSaWVs
-IDxyaWVsQHN1cnJpZWwuY29tPg0K
+On Mon, Apr 11, 2022 at 11:44 AM -07, Stanislav Fomichev wrote:
+> On Sat, Apr 9, 2022 at 11:10 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
+
+[...]
+
+>> [^1] It looks like we can easily switch from cgroup->bpf.progs[] from
+>>      list_head to hlist_head and save some bytes!
+>>
+>>      We only access the list tail in __cgroup_bpf_attach(). We can
+>>      either iterate over the list and eat the cost there or push the new
+>>      prog onto the front.
+>>
+>>      I think we treat cgroup->bpf.progs[] everywhere like an unordered
+>>      set. Except for __cgroup_bpf_query, where the user might notice the
+>>      order change in the BPF_PROG_QUERY dump.
+>
+>
+> [...]
+>
+>> [^2] Unrelated, but we would like to propose a
+>>      CGROUP_INET[46]_POST_CONNECT hook in the near future to make it
+>>      easier to bind UDP sockets to 4-tuple without creating conflicts:
+>>
+>>      https://github.com/cloudflare/cloudflare-blog/tree/master/2022-02-connectx/ebpf_connect4
+>
+> Do you think those new lsm hooks can be used instead? If not, what's missing?
+
+Same as for CGROUP_INET hooks, there is no post-connect() LSM hook.
+
+Why are we looking for a post-connect hook?
+
+Having a pre- and a post- connect hook, would allow us to turn the whole
+connect() syscall into a critical section with synchronization done in
+BPF - lock on pre-connect, unlock on post-connect.
+
+Why do we want to serialize connect() calls?
+
+To check for 4-tuple conflict with an existing unicast UDP socket, in
+which case we want fail connect() if there is a conflict.
+
+That said, ideally we would rather have a mechanism like
+IP_BIND_ADDRESS_NO_PORT, but for UDP, and one that allows selecting both
+an local IP and port.
+
+We're hoping to put together an RFC sometime this quarter.
