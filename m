@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E2B3C43219
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5200CC4321E
+	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353378AbiDOMdf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 08:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S1353383AbiDOMdg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 08:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353857AbiDOMd3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:33:29 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6FF2F03F;
-        Fri, 15 Apr 2022 05:31:01 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id l7so15185022ejn.2;
-        Fri, 15 Apr 2022 05:31:01 -0700 (PDT)
+        with ESMTP id S1353828AbiDOMdX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 08:33:23 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130D7329A7;
+        Fri, 15 Apr 2022 05:30:55 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id s18so15235618ejr.0;
+        Fri, 15 Apr 2022 05:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LXuHnml0JyQ7WUWtSyqxCdcrvdOAihH7ECEcB+ac3FQ=;
-        b=VTgQeHrkpIHgOEGZvW6m7lK+ww/hBIaLxp/ed1YbHFERxY7K8zgmthq8r0MO/eDheA
-         64RJAUDP0PCNupTiFSXSD0K9TwZw/VBqVra2httvVSuGRa0rtzP8UWtbBnmILYXL6Z2H
-         sr5X4+IEfwB6d5kKRo4eDMfm2O1ZmyozhlUEFzHkyPeS+S7EEuZSM7ink8BrFdT5ZLz3
-         GIxrZW9NwL5XcJZvTEmI8dg0NdKEWbX31YU7MxwkMeQJhRou9/SCt1Ujs+st1SvtgpVw
-         9aQDWxS22TjT0DPrnK2A3NtIzbFZtU+RaSWnUyyUovnBEkNcZnYSmXiUDfvziK0b2SLX
-         cyEA==
+        bh=Vf75TiqrDs9Xy+FgQuO5VDyKrFCIlVjIyCetakykwl0=;
+        b=NnMy+nbbwu/FZGFdNgPth+OQJ2zH1oy44F8EuK/ZITnBseQ65d4wpQtYyU0GWr25lf
+         XQOU3oOkIsiBEPEF0qJzEOKiAcQFaQgV/B68GaoszGIZ9qRO8CahbsqocqeYNB6NTSf6
+         PGQcvhwB2dpez64XytqOEnycrIB2/hxEQzdep6Pq7UZ0Yfcbc2F+JKZfTQqPlj3Jtul3
+         ZD6rIEnYrLwRkSx7G7k39+ga+AZCPgtZEXJb/lNtNcEVKFEi8Q5RMNq9uL2C76cNFGFD
+         Pm2E5tfYntiCGIf2MdYfPhU68NY7qfzgH1P0qg8gQqJeLRI5zEJnKa6ny1SomEzEEscS
+         ZYJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LXuHnml0JyQ7WUWtSyqxCdcrvdOAihH7ECEcB+ac3FQ=;
-        b=jyumd+Y07D6xT8FUWRRZp5q+cNdnmyrz4tTDn4JqRPjR2eNKcbgcvVDI7fSFOwkPL3
-         I8LmbxZzi4OWRtjxKdXiZwTKH5tw191MkMPrDftgQZ6SpyQ5+uRrrOM28NXRwFegGCjZ
-         CJ+eus6IgcC0TgR6snJ1GVD8u6irOOVeeH5eChLS9E283IU3J51mePkpwQ1mkdsxoOCq
-         UrMXC69OgV2IAM17fYyShjbZhuSZK4wflxLVMKfYboGUbJEEupF6FMzCBvQl1S90Gz/z
-         lGBfev3ZRv2xVm3zUOBvqsbLpw0zC0zdVyUALh3xIQJSWgy2LikG2l73G8tq+7if+yta
-         hpXg==
-X-Gm-Message-State: AOAM533fh04TNMb5kzgzwOZvFXUYvuOjKCBzY33u0FIjQFEEK1B3FVVm
-        a3n5/+GNDpYMe8Sf0lxRPiU=
-X-Google-Smtp-Source: ABdhPJxoOHJKRpfHC4KfhLHKEeHHtK1KA32Oh4BvD5pxRHzbDl+DHwOIhAvuB9jirqfyrBrH+vb+KQ==
-X-Received: by 2002:a17:907:9485:b0:6da:aa54:a88 with SMTP id dm5-20020a170907948500b006daaa540a88mr6248462ejc.427.1650025859818;
-        Fri, 15 Apr 2022 05:30:59 -0700 (PDT)
+        bh=Vf75TiqrDs9Xy+FgQuO5VDyKrFCIlVjIyCetakykwl0=;
+        b=P2YrtKYviMws5Zw0tnR5njDaZ+Pqjuf/lFKwPFHo4fC49rZtwzlaTvkX/4JwYn8EG4
+         iAWLjyDf3cIFxb/rwIWXU/AFhaS7BRv/ZNZcd9CWBUc3xNU6MkuUk6ileFHGN/lmNw0d
+         rBsNYD7cN955yDkwfgUW80ka/Ysm8oWe80m8g4ijcVPV5e/db74sxNoGOfZzmTEA53qB
+         8CQsOfGC57HY5WNhbYnTZ+VItjf/6rOLFDhbNr2c90AdKgHy1vzTSGtHhXal58xz3wZr
+         nTa8PoUVx6lRb83rxWjcbU43mv783mKn3IdGEdT2Ld8tIy83Tf5u6uXEp2erRvBLkinj
+         MT4g==
+X-Gm-Message-State: AOAM531PqfnJOlsSBi1ZjsZ2jC4ZNrHR8aetev2l1zx7UnyXdFdbX3kK
+        q1nFFwdX2JQb/LlTiedJ284=
+X-Google-Smtp-Source: ABdhPJyS5BRdJjz7m9bebTrVHa9qnOLqUP9LzEfhGCSHpCFUqwUMkCigLFx49atN5YXIpkbxiNMw+w==
+X-Received: by 2002:a17:906:7d83:b0:6ce:fee:9256 with SMTP id v3-20020a1709067d8300b006ce0fee9256mr6293515ejo.647.1650025853620;
+        Fri, 15 Apr 2022 05:30:53 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.30.58
+        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 05:30:59 -0700 (PDT)
+        Fri, 15 Apr 2022 05:30:53 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,10 +84,11 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v4 10/18] qed: Replace usage of found with dedicated list iterator variable
-Date:   Fri, 15 Apr 2022 14:29:39 +0200
-Message-Id: <20220415122947.2754662-11-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v4 06/18] net: dsa: mv88e6xxx: refactor mv88e6xxx_port_vlan()
+Date:   Fri, 15 Apr 2022 14:29:35 +0200
+Message-Id: <20220415122947.2754662-7-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220415122947.2754662-1-jakobkoschel@gmail.com>
 References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
@@ -97,78 +98,112 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+To avoid bugs and speculative execution exploits due to type-confused
+pointers at the end of a list_for_each_entry() loop, one measure is to
+restrict code to not use the iterator variable outside the loop block.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+In the case of mv88e6xxx_port_vlan(), this isn't a problem, as we never
+let the loops exit through "natural causes" anyway, by using a "found"
+variable and then using the last "dp" iterator prior to the break, which
+is a safe thing to do.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Nonetheless, with the expected new syntax, this pattern will no longer
+be possible.
+
+Profit off of the occasion and break the two port finding methods into
+smaller sub-functions. Somehow, returning a copy of the iterator pointer
+is still accepted.
+
+This change makes it redundant to have a "bool found", since the "dp"
+from mv88e6xxx_port_vlan() now holds NULL if we haven't found what we
+were looking for.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/ethernet/qlogic/qed/qed_iwarp.c | 26 ++++++++++-----------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 54 ++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_iwarp.c b/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
-index 1d1d4caad680..198c9321bf51 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_iwarp.c
-@@ -1630,38 +1630,36 @@ static struct qed_iwarp_listener *
- qed_iwarp_get_listener(struct qed_hwfn *p_hwfn,
- 		       struct qed_iwarp_cm_info *cm_info)
- {
--	struct qed_iwarp_listener *listener = NULL;
-+	struct qed_iwarp_listener *listener = NULL, *iter;
- 	static const u32 ip_zero[4] = { 0, 0, 0, 0 };
--	bool found = false;
- 
--	list_for_each_entry(listener,
-+	list_for_each_entry(iter,
- 			    &p_hwfn->p_rdma_info->iwarp.listen_list,
- 			    list_entry) {
--		if (listener->port == cm_info->local_port) {
--			if (!memcmp(listener->ip_addr,
-+		if (iter->port == cm_info->local_port) {
-+			if (!memcmp(iter->ip_addr,
- 				    ip_zero, sizeof(ip_zero))) {
--				found = true;
-+				listener = iter;
- 				break;
- 			}
- 
--			if (!memcmp(listener->ip_addr,
-+			if (!memcmp(iter->ip_addr,
- 				    cm_info->local_ip,
- 				    sizeof(cm_info->local_ip)) &&
--			    (listener->vlan == cm_info->vlan)) {
--				found = true;
-+			    iter->vlan == cm_info->vlan) {
-+				listener = iter;
- 				break;
- 			}
- 		}
- 	}
- 
--	if (found) {
-+	if (listener)
- 		DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener found = %p\n",
- 			   listener);
--		return listener;
--	}
-+	else
-+		DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener not found\n");
- 
--	DP_VERBOSE(p_hwfn, QED_MSG_RDMA, "listener not found\n");
--	return NULL;
-+	return listener;
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index b3aa0e5bc842..1f35e89053e6 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1378,42 +1378,50 @@ static int mv88e6xxx_set_mac_eee(struct dsa_switch *ds, int port,
+ 	return 0;
  }
  
- static int
++static struct dsa_port *mv88e6xxx_find_port(struct dsa_switch_tree *dst,
++					    int sw_index, int port)
++{
++	struct dsa_port *dp;
++
++	list_for_each_entry(dp, &dst->ports, list)
++		if (dp->ds->index == sw_index && dp->index == port)
++			return dp;
++
++	return NULL;
++}
++
++static struct dsa_port *
++mv88e6xxx_find_port_by_bridge_num(struct dsa_switch_tree *dst,
++				  unsigned int bridge_num)
++{
++	struct dsa_port *dp;
++
++	list_for_each_entry(dp, &dst->ports, list)
++		if (dsa_port_bridge_num_get(dp) == bridge_num)
++			return dp;
++
++	return NULL;
++}
++
+ /* Mask of the local ports allowed to receive frames from a given fabric port */
+ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ {
+ 	struct dsa_switch *ds = chip->ds;
+ 	struct dsa_switch_tree *dst = ds->dst;
+ 	struct dsa_port *dp, *other_dp;
+-	bool found = false;
+ 	u16 pvlan;
+ 
+-	/* dev is a physical switch */
+ 	if (dev <= dst->last_switch) {
+-		list_for_each_entry(dp, &dst->ports, list) {
+-			if (dp->ds->index == dev && dp->index == port) {
+-				/* dp might be a DSA link or a user port, so it
+-				 * might or might not have a bridge.
+-				 * Use the "found" variable for both cases.
+-				 */
+-				found = true;
+-				break;
+-			}
+-		}
+-	/* dev is a virtual bridge */
++		/* dev is a physical switch */
++		dp = mv88e6xxx_find_port(dst, dev, port);
+ 	} else {
+-		list_for_each_entry(dp, &dst->ports, list) {
+-			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+-
+-			if (bridge_num + dst->last_switch != dev)
+-				continue;
+-
+-			found = true;
+-			break;
+-		}
++		/* dev is a virtual bridge */
++		dp = mv88e6xxx_find_port_by_bridge_num(dst,
++						       dev - dst->last_switch);
+ 	}
+ 
+ 	/* Prevent frames from unknown switch or virtual bridge */
+-	if (!found)
++	if (!dp)
+ 		return 0;
+ 
+ 	/* Frames from DSA links and CPU ports can egress any local port */
 -- 
 2.25.1
 
