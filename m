@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02EAFC433F5
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 584F0C433FE
+	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353523AbiDOMdy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 08:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S1353531AbiDOMdz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 08:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353413AbiDOMdi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:33:38 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7407F34BAD;
-        Fri, 15 Apr 2022 05:31:09 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id b15so9774308edn.4;
-        Fri, 15 Apr 2022 05:31:09 -0700 (PDT)
+        with ESMTP id S1353456AbiDOMdk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 08:33:40 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F31853B75;
+        Fri, 15 Apr 2022 05:31:12 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id b15so9774440edn.4;
+        Fri, 15 Apr 2022 05:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
-        b=Qcq+Xf4e3YTiZqpi1kDHhhboydOztDEQ/qzg11/bQZpcZ5OMlnmCSPXafO9UO4RpPZ
-         a1z1rkTn8xOK6FYspcYnmq10+DUw8SNsLrbteQlmjqWk9i2J+LMOWRCaRvTBEE8dsQzZ
-         tgIYg1XiuxiKis/ZMYZl/cc0xQms3WkmQh3HIowJfOWtb2d/YcC9TDh8RxJjs29/ryPo
-         /hDuPTf2bAST7o/GjGY70xHoDdoYPDdspBXdWsLhtf8Dqqn4Sg9XealPYXf3C9GQkgVU
-         extjWJ6cxHDf5ccBe/5wci0y+dFSMPN/FN/AGsyCJMVdWlwC11CP6AeaI7UkUFd7QW/Q
-         0Dmw==
+        bh=/A0b7QXPnRxcdjzjvBy95srF3RhPajcOL797uVjW17k=;
+        b=XPxIYgo6M0hFOfIDjd1x3rJvr403xWmkCv4BfN5SzQ6rl/o2LtUELnVEK2flTgl7Mu
+         h9HynkeZlcHvrZKXB463qAGm4ubHnZ3K84JE6vUQ2VAllYUyaKrzCWHOr4clD8wcI+rZ
+         QpgplpTYCxRlhudFZFTA3TZD85lBUtoeJR2ZadxDeZWKjD8aVgCwTAxdaBFqyCFEJ1J8
+         PEwKA6HHOLREZ0lK50ZwI1XpJLo79AgBKnxd7WsP5o/j86FlHeBFkz4B3rHD3RofjoY7
+         6FtJSZWBNVcMaDMJQhhI3uZMtMt0Od6Y/b3KCJAVC6iktp21nwQegu5vn8S6PUNDQGsm
+         aPaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
-        b=UxdzzQx3biwdoq4Yb/6RcqB/2NgcwUdd3X/XUnz/ZH7yZLe9sHsL3dSNgwOlUIqp/0
-         6l72jOk+lraMAQuyH/0gYtV/GgoObrU0UT+/1DMDLiuhIC8rwMnK9zL8/TprSGIlC/i+
-         H6QVLoRWYfkvFxlil0XcnrS6UaBMxw2XHTGfXlq58EY23RDTrQpaJUhFm+sG7tvLhRGD
-         xGdf7EJ2k88Kq+5VxUL+YT3FNNYLWlQLaLY/GYJatUDuc5aHzVts9nrTnZU5HhJZWQzv
-         BhfpjM+1Ph3LA6YtYZwki6FPBt//cuThu+yNUjNHRTBd7C7tTQpiLlh9Fe6TcfDwLfVT
-         gaSA==
-X-Gm-Message-State: AOAM5303OBHjIkiKYIq8oBPYhF0uskXahmroiu55g/B4UDKUgVpF2JcG
-        ZcsFSqT3Gzx6p3/hsbT5g94=
-X-Google-Smtp-Source: ABdhPJyRR5EQLZetfaFe/PXTA+3sITIi57Mj56J/yW/SH+ezORAO8tglIbaosyrYsJHBfqd1aV3psA==
-X-Received: by 2002:a05:6402:35d6:b0:41f:95b8:a945 with SMTP id z22-20020a05640235d600b0041f95b8a945mr8053585edc.40.1650025868052;
-        Fri, 15 Apr 2022 05:31:08 -0700 (PDT)
+        bh=/A0b7QXPnRxcdjzjvBy95srF3RhPajcOL797uVjW17k=;
+        b=yV93RsrKv2eXNK4Yp3IBumxMJfYADj/UedZSjRlbp0KL3gWeV94AyUX/VEufsPhKZ1
+         CCfbHdykxjhWTXwfmJ2CREXahuK/mz5RinyDDYOCEm8IHspsVMNfzyHZsw5jwerfBs+9
+         rW8qdvW1UtnVzlaUFcTkUckVeZ1bQGGN2uvk1jL9b+OMJg7V/BD/GTv3C/A0XNg3zaNk
+         IdSihJ2dp/HLmnLpkBgxAlaPNnxrX44LaFpiWDCu9ypWDqjb5oi0r6Hx23PufnyabqZI
+         hDsBhlbDZjhmoRx3yOxrnzr2J++oWXIWt/Fj0vvxZkEdYDzTiSQ/XgJW9yYMw2k5oinO
+         hA0A==
+X-Gm-Message-State: AOAM53185VhOVh2lzAeQG3AW3YtegOZpjemFAee6LNhyFg/Z4N7ceZW7
+        2AJPJVDT3Ur29sucbP7kUEM=
+X-Google-Smtp-Source: ABdhPJzMXbUYQrLVI7KhkcyMDrJ0/R3dZbgsUde+fJ0qaBD2PAAuaj6vloHxnRVzxDfc0Lz8L3X0Bw==
+X-Received: by 2002:a05:6402:26cb:b0:421:e28f:4776 with SMTP id x11-20020a05640226cb00b00421e28f4776mr4442275edd.400.1650025870912;
+        Fri, 15 Apr 2022 05:31:10 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.31.06
+        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.31.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 05:31:07 -0700 (PDT)
+        Fri, 15 Apr 2022 05:31:10 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -85,9 +85,9 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v4 16/18] ps3_gelic: Replace usage of found with dedicated list iterator variable
-Date:   Fri, 15 Apr 2022 14:29:45 +0200
-Message-Id: <20220415122947.2754662-17-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v4 18/18] team: Remove use of list iterator variable for list_for_each_entry_from()
+Date:   Fri, 15 Apr 2022 14:29:47 +0200
+Message-Id: <20220415122947.2754662-19-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220415122947.2754662-1-jakobkoschel@gmail.com>
 References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
@@ -97,95 +97,103 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+In preparation to limit the scope of the list iterator variable to the
+list traversal loop, use a dedicated pointer to iterate through the
+list [1].
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+Since that variable should not be used past the loop iteration, a
+separate variable is used to 'remember the current location within the
+loop'.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+To either continue iterating from that position or skip the iteration
+(if the previous iteration was complete) list_prepare_entry() is used.
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- .../net/ethernet/toshiba/ps3_gelic_wireless.c | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/net/team/team.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
-index dc14a66583ff..c8a016c902cd 100644
---- a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
-+++ b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
-@@ -1495,14 +1495,14 @@ static int gelic_wl_start_scan(struct gelic_wl_info *wl, int always_scan,
-  */
- static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
+diff --git a/drivers/net/team/team.c b/drivers/net/team/team.c
+index b07dde6f0abf..688c4393f099 100644
+--- a/drivers/net/team/team.c
++++ b/drivers/net/team/team.c
+@@ -2425,17 +2425,17 @@ static int team_nl_send_options_get(struct team *team, u32 portid, u32 seq,
+ 				    int flags, team_nl_send_func_t *send_func,
+ 				    struct list_head *sel_opt_inst_list)
  {
-+	struct gelic_wl_scan_info *target = NULL, *iter, *tmp;
- 	struct gelic_eurus_cmd *cmd = NULL;
--	struct gelic_wl_scan_info *target, *tmp;
- 	struct gelic_wl_scan_info *oldest = NULL;
- 	struct gelic_eurus_scan_info *scan_info;
- 	unsigned int scan_info_size;
- 	union iwreq_data data;
- 	unsigned long this_time = jiffies;
--	unsigned int data_len, i, found, r;
-+	unsigned int data_len, i, r;
- 	void *buf;
++	struct team_option_inst *opt_inst, *tmp = NULL;
+ 	struct nlattr *option_list;
+ 	struct nlmsghdr *nlh;
+ 	void *hdr;
+-	struct team_option_inst *opt_inst;
+ 	int err;
+ 	struct sk_buff *skb = NULL;
+ 	bool incomplete;
+ 	int i;
  
- 	pr_debug("%s:start\n", __func__);
-@@ -1539,14 +1539,14 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
- 	wl->scan_stat = GELIC_WL_SCAN_STAT_GOT_LIST;
+-	opt_inst = list_first_entry(sel_opt_inst_list,
+-				    struct team_option_inst, tmp_list);
++	tmp = list_first_entry(sel_opt_inst_list,
++			       struct team_option_inst, tmp_list);
  
- 	/* mark all entries are old */
--	list_for_each_entry_safe(target, tmp, &wl->network_list, list) {
--		target->valid = 0;
-+	list_for_each_entry_safe(iter, tmp, &wl->network_list, list) {
-+		iter->valid = 0;
- 		/* expire too old entries */
--		if (time_before(target->last_scanned + wl->scan_age,
-+		if (time_before(iter->last_scanned + wl->scan_age,
- 				this_time)) {
--			kfree(target->hwinfo);
--			target->hwinfo = NULL;
--			list_move_tail(&target->list, &wl->network_free_list);
-+			kfree(iter->hwinfo);
-+			iter->hwinfo = NULL;
-+			list_move_tail(&iter->list, &wl->network_free_list);
- 		}
- 	}
+ start_again:
+ 	err = __send_and_alloc_skb(&skb, team, portid, send_func);
+@@ -2456,7 +2456,9 @@ static int team_nl_send_options_get(struct team *team, u32 portid, u32 seq,
+ 		goto nla_put_failure;
  
-@@ -1569,22 +1569,22 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
- 			continue;
- 		}
- 
--		found = 0;
-+		target = NULL;
- 		oldest = NULL;
--		list_for_each_entry(target, &wl->network_list, list) {
--			if (ether_addr_equal(&target->hwinfo->bssid[2],
-+		list_for_each_entry(iter, &wl->network_list, list) {
-+			if (ether_addr_equal(&iter->hwinfo->bssid[2],
- 					     &scan_info->bssid[2])) {
--				found = 1;
-+				target = iter;
- 				pr_debug("%s: same BBS found scanned list\n",
- 					 __func__);
+ 	i = 0;
++	opt_inst = list_prepare_entry(tmp, sel_opt_inst_list, tmp_list);
+ 	incomplete = false;
++	tmp = NULL;
+ 	list_for_each_entry_from(opt_inst, sel_opt_inst_list, tmp_list) {
+ 		err = team_nl_fill_one_option_get(skb, team, opt_inst);
+ 		if (err) {
+@@ -2464,6 +2466,7 @@ static int team_nl_send_options_get(struct team *team, u32 portid, u32 seq,
+ 				if (!i)
+ 					goto errout;
+ 				incomplete = true;
++				tmp = opt_inst;
  				break;
  			}
- 			if (!oldest ||
--			    (target->last_scanned < oldest->last_scanned))
--				oldest = target;
-+			    (iter->last_scanned < oldest->last_scanned))
-+				oldest = iter;
- 		}
+ 			goto errout;
+@@ -2707,14 +2710,14 @@ static int team_nl_send_port_list_get(struct team *team, u32 portid, u32 seq,
+ 	struct nlattr *port_list;
+ 	struct nlmsghdr *nlh;
+ 	void *hdr;
+-	struct team_port *port;
++	struct team_port *port, *tmp = NULL;
+ 	int err;
+ 	struct sk_buff *skb = NULL;
+ 	bool incomplete;
+ 	int i;
  
--		if (!found) {
-+		if (!target) {
- 			/* not found in the list */
- 			if (list_empty(&wl->network_free_list)) {
- 				/* expire oldest */
+-	port = list_first_entry_or_null(&team->port_list,
+-					struct team_port, list);
++	tmp = list_first_entry_or_null(&team->port_list,
++				       struct team_port, list);
+ 
+ start_again:
+ 	err = __send_and_alloc_skb(&skb, team, portid, send_func);
+@@ -2744,7 +2747,9 @@ static int team_nl_send_port_list_get(struct team *team, u32 portid, u32 seq,
+ 		err = team_nl_fill_one_port_get(skb, one_port);
+ 		if (err)
+ 			goto errout;
+-	} else if (port) {
++	} else {
++		port = list_prepare_entry(tmp, &team->port_list, list);
++		tmp = NULL;
+ 		list_for_each_entry_from(port, &team->port_list, list) {
+ 			err = team_nl_fill_one_port_get(skb, port);
+ 			if (err) {
+@@ -2752,6 +2757,7 @@ static int team_nl_send_port_list_get(struct team *team, u32 portid, u32 seq,
+ 					if (!i)
+ 						goto errout;
+ 					incomplete = true;
++					tmp = port;
+ 					break;
+ 				}
+ 				goto errout;
 -- 
 2.25.1
 
