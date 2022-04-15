@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D534C433EF
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1C1FC433EF
+	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353478AbiDOMdm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 08:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S1353494AbiDOMdp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 08:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353845AbiDOMd2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:33:28 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26BC329A7;
-        Fri, 15 Apr 2022 05:30:59 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id v15so9741150edb.12;
-        Fri, 15 Apr 2022 05:30:59 -0700 (PDT)
+        with ESMTP id S1353806AbiDOMdP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 08:33:15 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F36329A7;
+        Fri, 15 Apr 2022 05:30:47 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id k23so15160586ejd.3;
+        Fri, 15 Apr 2022 05:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f1NofSwJuKbiTcVP4Eyds36Vn/5/VoS2zfBkRtVaGBU=;
-        b=gYd+11KdtVMsDo8ipZsM/pQACHdNkS8JfxV0xuiuqis3dZ1pGHZbRoHPczkRjYJMbt
-         m9KqEmAkE72nFZxe8blHGEEKKXopOYqzlWTveYZNUpqKfTUZYdA1n1ZD3Dnqt39XYGHn
-         l98WgM5lNOqWfXdgw+XRNoagXSlOxxiIBK9Vg/Fo748Ik52rGAK5OU39lMU2Jvzzv5Fq
-         laUhA+97OK6zanNVEtJmblQOAyqVhsHhKoT9y0jULvTfcwCYWiDnXKaRgJBVrFONP8ot
-         OYRjwiqQr0IF50+YiA8AVgk5N5/uki4UXE8KqUYb6MRf/v8KmcdtCGf1/iMO8cg0LSuI
-         OFFA==
+        bh=cM7cNDbZdzDRR54XOLUdiPP1jrQ7jBG9dEAYVsbcNLE=;
+        b=bik80RG5BJTj91DXG4BprsO4mTgco6QGIGjMUUl1T6dHSIeviC5xOCFZG/C6Qu1H0o
+         w0Wyqs2Jkg/jOvbH5xOVandyeLruRMdekZJKLlTYeZj9IvKfZ4VgGlUM03zWK2uj2yKW
+         S7oTi0BiBI7hnkPTSfm2Ov2T4+2baYv+e+Eo1397jsaVCR5jVGXSGWvric8XNDkHm+qz
+         2xsaNdKknQV8mDknd2sO1NRdYlgNHbPAKF6m3kIPTUthoFPBKCntItTshu/lAaNGZrp8
+         X0tRh9j1wd6I4bAGXyH+CGQrKM/ETEt9Xq8lniL+7bIH88uGUvb2xi1fnTOo9RTqqdZS
+         H4SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f1NofSwJuKbiTcVP4Eyds36Vn/5/VoS2zfBkRtVaGBU=;
-        b=7c+tEoBML4mfszzcKl2Y6EXIwKvNOBW4TtxqGmaabp+YX6YUkBwp4whpDGN79OuQT7
-         0/a3MX/x9ewOLbQptdiMQTgnm4o8BO+3uta/lC1Wylrvh9Sw364hOircj794t92Ashcp
-         MAqKN455sxbM8Lvh/3bHnU/1ExyOunyoq6xajqf2TONMhBQ2I4oLLX9gQSxWaxYMwDXx
-         de/f0wKmTsMNYtM7PSr7WkucQoXjf+b7fIVKWBqHqHLGE4zRm/eICmx69srp9TfOPbgr
-         qcn94eLz2OdW8tMlFykt+ItUfGDz140Bh/L8oucHHQ9Lc2aMtjtYNi6UFBYwhx0R5mHj
-         taPw==
-X-Gm-Message-State: AOAM532+QaNnG7oqDnQCjvUXtEnFHvIgPsOUF/99mS5zjzsy2zzuc8Mu
-        RVxtJR3DMk2SGn2OTdHJtag=
-X-Google-Smtp-Source: ABdhPJy5eEqVwSt0S2+qGSltSh+dzs3Ju/Vei9bEaex5c5UKnqBo+y80ySXR0HvL4iQnHznifRljEA==
-X-Received: by 2002:a05:6402:2707:b0:419:5b7d:fd21 with SMTP id y7-20020a056402270700b004195b7dfd21mr8078596edd.51.1650025858331;
-        Fri, 15 Apr 2022 05:30:58 -0700 (PDT)
+        bh=cM7cNDbZdzDRR54XOLUdiPP1jrQ7jBG9dEAYVsbcNLE=;
+        b=Xz5n4F9FD8CXjKVJMSpRO/usZoizg64szCphB5cNES54krIl6k7hAfw+x6H2EXhZym
+         OJ0af2hDFozHwEe2UcH1GjXz9xypIED6Cf/Z/8lkMwq1haxDaTPYELDsZCNvSkFzFu41
+         4geu4eRu83Ts/nhSqLdSy//IWfZxTZqD3ZlhcHELYbFcJIVZjXAQsZQoG6M6VqBse7fQ
+         o/X3rfo1lI0r8ECVvCGQd2x5Kiu5IiHjIvLB3cHHez8na8rAr08+fs0dJ2+3NA5lvhSd
+         PaH4teXmq12yNvH36f2tvv2XKUUTeEHvOBTuxgf8EI6EPdJz+xwOSywrg2K8SSDG5d00
+         JfCw==
+X-Gm-Message-State: AOAM5339yin53ls9sW0u6FfiGfAn/ShcCaPPJkgDuIhqyw+Fr/Tpu2Kf
+        +pLEjfapH4n+rPoFPFSl4ck=
+X-Google-Smtp-Source: ABdhPJyDoVWG26VAB7SBkp1JY1foVvcNpUoGUFZg6AUnrhSJ8MrmB1N6dz6LykMqhp6U5q2nqjcU7Q==
+X-Received: by 2002:a17:907:3e0d:b0:6e8:cccd:de80 with SMTP id hp13-20020a1709073e0d00b006e8cccdde80mr6017929ejc.162.1650025846062;
+        Fri, 15 Apr 2022 05:30:46 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.30.56
+        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.30.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 05:30:57 -0700 (PDT)
+        Fri, 15 Apr 2022 05:30:45 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -85,9 +85,9 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v4 09/18] qed: Use dedicated list iterator variable
-Date:   Fri, 15 Apr 2022 14:29:38 +0200
-Message-Id: <20220415122947.2754662-10-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v4 01/18] connector: Replace usage of found with dedicated list iterator variable
+Date:   Fri, 15 Apr 2022 14:29:30 +0200
+Message-Id: <20220415122947.2754662-2-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220415122947.2754662-1-jakobkoschel@gmail.com>
 References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
@@ -102,45 +102,49 @@ macro in the future it should be avoided to use the list iterator
 variable after the loop body.
 
 To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable [1].
+concluded to use a separate iterator variable instead of a
+found boolean [1].
+
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/ethernet/qlogic/qed/qed_dev.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/connector/cn_queue.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-index 672480c9d195..e920e7dcf66a 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
-@@ -174,7 +174,7 @@ int qed_db_recovery_add(struct qed_dev *cdev,
- int qed_db_recovery_del(struct qed_dev *cdev,
- 			void __iomem *db_addr, void *db_data)
+diff --git a/drivers/connector/cn_queue.c b/drivers/connector/cn_queue.c
+index 996f025eb63c..ed77599b0b25 100644
+--- a/drivers/connector/cn_queue.c
++++ b/drivers/connector/cn_queue.c
+@@ -92,20 +92,19 @@ int cn_queue_add_callback(struct cn_queue_dev *dev, const char *name,
+ 
+ void cn_queue_del_callback(struct cn_queue_dev *dev, const struct cb_id *id)
  {
--	struct qed_db_recovery_entry *db_entry = NULL;
-+	struct qed_db_recovery_entry *db_entry = NULL, *iter;
- 	struct qed_hwfn *p_hwfn;
- 	int rc = -EINVAL;
+-	struct cn_callback_entry *cbq, *n;
+-	int found = 0;
++	struct cn_callback_entry *cbq = NULL, *iter, *n;
  
-@@ -190,12 +190,13 @@ int qed_db_recovery_del(struct qed_dev *cdev,
- 
- 	/* Protect the list */
- 	spin_lock_bh(&p_hwfn->db_recovery_info.lock);
--	list_for_each_entry(db_entry,
-+	list_for_each_entry(iter,
- 			    &p_hwfn->db_recovery_info.list, list_entry) {
- 		/* search according to db_data addr since db_addr is not unique (roce) */
--		if (db_entry->db_data == db_data) {
--			qed_db_recovery_dp_entry(p_hwfn, db_entry, "Deleting");
--			list_del(&db_entry->list_entry);
-+		if (iter->db_data == db_data) {
-+			qed_db_recovery_dp_entry(p_hwfn, iter, "Deleting");
-+			list_del(&iter->list_entry);
-+			db_entry = iter;
- 			rc = 0;
+ 	spin_lock_bh(&dev->queue_lock);
+-	list_for_each_entry_safe(cbq, n, &dev->queue_list, callback_entry) {
+-		if (cn_cb_equal(&cbq->id.id, id)) {
+-			list_del(&cbq->callback_entry);
+-			found = 1;
++	list_for_each_entry_safe(iter, n, &dev->queue_list, callback_entry) {
++		if (cn_cb_equal(&iter->id.id, id)) {
++			list_del(&iter->callback_entry);
++			cbq = iter;
  			break;
  		}
+ 	}
+ 	spin_unlock_bh(&dev->queue_lock);
+ 
+-	if (found)
++	if (cbq)
+ 		cn_queue_release_callback(cbq);
+ }
+ 
 -- 
 2.25.1
 
