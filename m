@@ -2,152 +2,140 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 509C8C43217
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 12:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FD6CC433F5
+	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 13:38:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353543AbiDOMd4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 08:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S238710AbiDONlG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 09:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353434AbiDOMdj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:33:39 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93F252E4C;
-        Fri, 15 Apr 2022 05:31:10 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z12so9795415edl.2;
-        Fri, 15 Apr 2022 05:31:10 -0700 (PDT)
+        with ESMTP id S1347472AbiDONlF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 09:41:05 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6875DA7E;
+        Fri, 15 Apr 2022 06:38:37 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t12so7143165pll.7;
+        Fri, 15 Apr 2022 06:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yEn2KXl6YaWL8lEsoeTa0NhbbIFQf0W1A7EAGx1tWC4=;
-        b=b3hc5PlQNJwnipmFgPKwKobkYuBqu+VhbGWKUONdb7h8D0d0QpzlgKH51PWjk95WTj
-         ADJ4mluAmAow9uamrXzOVaO9sedPih8JXQg90Vp3D1U92O6F899Tf10rxWd7mAQjHEQA
-         Szl5d9kjQph2s2n7ZeS5O3MZOHbMGtfCwoSSDSjugBjqNC9T4FwaS+WJ27MLXp8aIGVs
-         DStAyL1wpAzpwElDS8FsoZW3S0OtwFzTPi8FKiZu1nwZMkCYJFTcEzRuXgZEBCkvC2DF
-         h85SkTuD2SDpZQrDmEoOr3Eq95jeyRza5A0Porbl8XGQU+vuJ1UPBCPW5+GyonbvM5KD
-         kwWQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M9rx3SpLFg0yQGkL9rFlw3lXIc0eurp55pdhU3Cwimk=;
+        b=RGBADwoDDLTNmBXMbPPibrgnThWpZsdF4Cg8GMAch+oDuOUbSPOHihCnEyOCg+oy/Y
+         DkhRQVGkJcFdrCPm09lm8TOAZNvcZGQkPX4n8dBT06wr1vADFyC21HiPtFn2hTL1HnES
+         abU1Ko956Xlvvz9jLdsPEtbJ/SU6jX1dh6iKCFyTdrIs3v/HbNKH+cFPIRSf2zZRa24O
+         ZEfC4RMNurOZGJb/r/+ef84a2La0Q+s2Np/TlM4/0hlOntv4+bmeRSBOoEM3ETbm2fwW
+         mZjkgkhHM2P2XWPVo0pqdgJD5xLGEApWRtVrzKbTNkND31RQKuCO8ulQZxqR698yl0a3
+         N29w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yEn2KXl6YaWL8lEsoeTa0NhbbIFQf0W1A7EAGx1tWC4=;
-        b=EB6YUtloTLDhzvM8XkR4JBQwYonwdMtBFVdzYA+6WqIeUT4YsyLIlh3po/h9e4cEu3
-         qPbD7hfnNXsDDLCO/i+sfpBlQdwllMyJvRQIxEGMHw2AhbNyQVQWxt8dJRDS2WeHVt+P
-         5HtZp+dCqPMdBr6P5IF4H288nXvoMTeYPOTngpX0BKmS7LcaKlJIm9ssOMWv/Hj/+mks
-         eEKG2hcCppjJWDgZ4FjeV0lRdJAts4Qc6akBs5cIBususpFDoNiJIdiuMZ6jocuWvGQi
-         4DE+5btg9243WqSg4LZVloY1lf2kO4Km6n61Ej0cIX9PEjetrkdrLHUabVI9MOhXZ9Vy
-         GQSg==
-X-Gm-Message-State: AOAM532cHyo1Rd24+JoWd0uTv0QrFDVmqN7kVchxI5GmydY9io56wDqV
-        tE/j/QSgGlqTx4F0SS0+yok=
-X-Google-Smtp-Source: ABdhPJxFA6/82EYIOUmoGfM6Rwv35qSZg1kJewtxaRvXjq59AYMYC+/ozksdzIoDL0AQZRXVthp7Cw==
-X-Received: by 2002:a50:d613:0:b0:41d:71bb:4af3 with SMTP id x19-20020a50d613000000b0041d71bb4af3mr8166908edi.99.1650025869469;
-        Fri, 15 Apr 2022 05:31:09 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id bo14-20020a170906d04e00b006ce98d9c3e3sm1649533ejb.194.2022.04.15.05.31.08
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M9rx3SpLFg0yQGkL9rFlw3lXIc0eurp55pdhU3Cwimk=;
+        b=QPAYUiP21C3vp18Jl3voAsHSGJA9RgWV/mjc4Zge7R/eJ0JCnRqyN46oSpgWIOtJ5W
+         GAHhjs9eY0UY3OfOhgB0Uv8BjNYmcIKKM96Wc6hSfKqTENvEwuigOOHyg9AWJA4zOoZg
+         HZQ1PERw+RB4gEr9ljyy4vgSqTBCLhEuLOrb+0ZPRSqzcrjRAeA7unminiVT5HDKFERs
+         Mj4r7KyW+rPz32NXw7YE1dXyvwzZ9uNtksSz9SguRB1aNjUwoUQIheo9ankmw6W3ixsy
+         EHPnan0Ry7I0QXBjuywRxHLguj9lbtfUyW+g0jWLKS678fJUP7NVDSISO/7OvE6JMUfi
+         oO8g==
+X-Gm-Message-State: AOAM531bgYQuUOTvfqAGnoBb8wKfetu6SiJrGHWeR25jxqlWY6HAS4Pz
+        qAInzwEUFx58mLPCCab5G58=
+X-Google-Smtp-Source: ABdhPJxC2ecEADuDf7c9/EcF1MlqYrpbH2/Erq7cnCc7MBmBa0VIRIFj/M+p8QKuksJh7sWmOZCQQA==
+X-Received: by 2002:a17:902:7298:b0:158:3a08:3163 with SMTP id d24-20020a170902729800b001583a083163mr30186108pll.133.1650029916593;
+        Fri, 15 Apr 2022 06:38:36 -0700 (PDT)
+Received: from localhost ([112.79.142.104])
+        by smtp.gmail.com with ESMTPSA id 35-20020a631763000000b0039d93f8c2f0sm4541611pgx.24.2022.04.15.06.38.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 05:31:08 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Fri, 15 Apr 2022 06:38:36 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 19:08:39 +0530
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v4 17/18] ipvlan: Remove usage of list iterator variable for the loop body
-Date:   Fri, 15 Apr 2022 14:29:46 +0200
-Message-Id: <20220415122947.2754662-18-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220415122947.2754662-1-jakobkoschel@gmail.com>
-References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Chenbo Feng <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Daniel Wagner <daniel.wagner@bmw-carit.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH bpf-next 05/11] samples: bpf: use host bpftool to
+ generate vmlinux.h, not target
+Message-ID: <20220415133839.y6tjf3ymbvbrntx4@apollo.legion>
+References: <20220414223704.341028-1-alobakin@pm.me>
+ <20220414223704.341028-6-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414223704.341028-6-alobakin@pm.me>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation to limit the scope of the list iterator variable to the
-list traversal loop, use a dedicated pointer to iterate through the
-list [1].
+On Fri, Apr 15, 2022 at 04:15:50AM IST, Alexander Lobakin wrote:
+> Use the host build of bpftool (bootstrap) instead of the target one
+> to generate vmlinux.h/skeletons for the BPF samples. Otherwise, when
+> host != target, samples compilation fails with:
+>
+> /bin/sh: line 1: samples/bpf/bpftool/bpftool: failed to exec: Exec
+> format error
+>
+> Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
 
-Since that variable should not be used past the loop iteration, a
-separate variable is used to 'remember the current location within the
-loop'.
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-To either continue iterating from that position or start a new
-iteration (if the previous iteration was complete) list_prepare_entry()
-is used.
+>  samples/bpf/Makefile | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> index 97203c0de252..02f999a8ef84 100644
+> --- a/samples/bpf/Makefile
+> +++ b/samples/bpf/Makefile
+> @@ -291,12 +291,13 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+>
+>  BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
+>  BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
+> -BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
+> +BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
+>  $(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
+>  	    $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
+>  		OUTPUT=$(BPFTOOL_OUTPUT)/ \
+>  		LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
+> -		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
+> +		LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/ \
+> +		bootstrap
+>
+>  $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
+>  	$(call msg,MKDIR,$@)
+> --
+> 2.35.2
+>
+>
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/net/ipvlan/ipvlan_main.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ipvlan/ipvlan_main.c b/drivers/net/ipvlan/ipvlan_main.c
-index 696e245f6d00..063d7c30e944 100644
---- a/drivers/net/ipvlan/ipvlan_main.c
-+++ b/drivers/net/ipvlan/ipvlan_main.c
-@@ -9,7 +9,7 @@
- static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
- 				struct netlink_ext_ack *extack)
- {
--	struct ipvl_dev *ipvlan;
-+	struct ipvl_dev *ipvlan, *tmp = NULL;
- 	unsigned int flags;
- 	int err;
- 
-@@ -26,8 +26,10 @@ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
- 						       flags & ~IFF_NOARP,
- 						       extack);
- 			}
--			if (unlikely(err))
-+			if (unlikely(err)) {
-+				tmp = ipvlan;
- 				goto fail;
-+			}
- 		}
- 		if (nval == IPVLAN_MODE_L3S) {
- 			/* New mode is L3S */
-@@ -43,6 +45,7 @@ static int ipvlan_set_port_mode(struct ipvl_port *port, u16 nval,
- 	return 0;
- 
- fail:
-+	ipvlan = list_prepare_entry(tmp, &port->ipvlans, pnode);
- 	/* Undo the flags changes that have been done so far. */
- 	list_for_each_entry_continue_reverse(ipvlan, &port->ipvlans, pnode) {
- 		flags = ipvlan->dev->flags;
--- 
-2.25.1
-
+--
+Kartikeya
