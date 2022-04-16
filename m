@@ -2,140 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD0F1C433EF
-	for <bpf@archiver.kernel.org>; Fri, 15 Apr 2022 23:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E4D6C433F5
+	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 02:05:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356663AbiDPAAm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 20:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S229752AbiDPCHK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 22:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356668AbiDPAAi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 20:00:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83C498F51;
-        Fri, 15 Apr 2022 16:58:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7743FB831BC;
-        Fri, 15 Apr 2022 23:58:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BBDDC385AF;
-        Fri, 15 Apr 2022 23:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650067086;
-        bh=5uISNHkYs1nGeyc2gtdd+Tm04KE96qpSVHvbrefArMc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Jt1cEPvPZxAt277UsraKj/YntuLhptaIO0NeOoBBAJDmYF1z/mStui6jXWV0GMnqX
-         dyqYf1TMHxb7PWpzyRt3oSlha9fe5zBVnyqmlGednBX8P8ko8N0HTexKDk6c3tSBB3
-         6zqYAjjxPryXxFbyZorSqbmnRaq0y/GhyOhgo+j28OJ56+USX+9R9asuXC3wIvmnp6
-         kQQAaz0T2BsILtv3OkI/ql1VWrXFjGpJ6m9eu//RlLL/uJv8NQj6HCHVSVeuxz4yky
-         HTw0KcX6ibn7YJNAHwznAY8jC5kD2sPOO6N2ZOGx3cQooF71AT8R9zJnTj1DSKOrIU
-         mHkpoX9jMejVg==
-Received: by mail-yb1-f173.google.com with SMTP id g34so16776700ybj.1;
-        Fri, 15 Apr 2022 16:58:06 -0700 (PDT)
-X-Gm-Message-State: AOAM532Cg/Vb84C7a3lB+QOQ+68eRDpWdx+kRuKVIREfrIidwRT2FUQT
-        dsHtTUmnmzjDnWzIXTsyn8gC9HQd7RHWJ1g9KuU=
-X-Google-Smtp-Source: ABdhPJybxj+8d+7EJs75ezIJxY82zI1XIdOLEnfK0kcbWGxveLN8Fw6lKBxYoaZjVWq1p2nZnBaUqci3FtMl9NxCLmw=
-X-Received: by 2002:a25:8546:0:b0:61e:1d34:ec71 with SMTP id
- f6-20020a258546000000b0061e1d34ec71mr1262667ybn.259.1650067085117; Fri, 15
- Apr 2022 16:58:05 -0700 (PDT)
+        with ESMTP id S229639AbiDPCGG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 22:06:06 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86CB82DE4;
+        Fri, 15 Apr 2022 18:55:43 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id r1so8270691vsi.12;
+        Fri, 15 Apr 2022 18:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bxHqb8WimKEbeuMOXj7uS2B/33CXla8+s/0GV1tVsaY=;
+        b=gIlvwt3xYpUb4e74b3w/piI2491YaM5CwPoLTITXU6+31o6AUkyajC8HIxUzbxri19
+         NoeOC7/PcBXg0OEzqxc8gBA38orkG87RodLT/c5emfbt4/XbqEhfVZC/HjGYuRgKATwp
+         d4NErbEscLWXZ8TzkgjKLtpT7jPimlsUIrcr8x/Fs97NwnSH4iEHVBCZ4kZX1e56hA2b
+         EsgUUzyfUzTo9vQaXP8IZBHElsiihB8IO/RUZxWPon72kwGRLgJcXX35CWNFv/nSpLmG
+         hWKWIa2EaWTkXFXEw8x3mIpVjqeYLlQQ5u2FOI4a+pZI0n12/1nIgjt3afYrC5FALlqZ
+         v/dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bxHqb8WimKEbeuMOXj7uS2B/33CXla8+s/0GV1tVsaY=;
+        b=R/Syw+O8/5Jwk26LXadwSGslycu4X+RP2IPt/bsnA9f5LzOTW/h5Da2T+BEbrzZ3bA
+         PMoJ8mcPX9zCtfC66GqICK/fHkDaT+XYiQuQNScZlsVh242acLM85aOf5zSO4uURPLl8
+         yT3DFE9/RqZMbN6Qj26kQWZE3ZYY4jG3w3fbeHUW8GUD4Tadqc5w8WNxuq66mTPL9TDu
+         tr3Bf+JvyexjQ7p+tKNX67Ss8bFLIkBfmrXIABmQFOJpq9ONAj+Lp2BS0LE68OO2xYei
+         vk9Jm2ahLMLP/Qf43IFFFFGUtag68oLMkY9b1fqCjW1Zg2Me3shJ7AnrbYUpEtJ6rNd6
+         1YrA==
+X-Gm-Message-State: AOAM5328Nq5HgrzFtPNSnYyNiwhmRb0KQzo2715hKFVkCIA01guWTds9
+        9XFmgM+dRFFEAA00nLBMd6hU+W5Ye17MdlY+JNTufR4B
+X-Google-Smtp-Source: ABdhPJw2rmlQZyvzdy/y2IWrJrzPSIFk0PKy/oNH5Hczd2zycxoi75ShkPXrHahpWHW21aNzXPvBKk7/NfKK8dR1JSQ=
+X-Received: by 2002:a17:902:7209:b0:158:c67b:3915 with SMTP id
+ ba9-20020a170902720900b00158c67b3915mr1621820plb.67.1650072496848; Fri, 15
+ Apr 2022 18:28:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-12-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-12-alobakin@pm.me>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 15 Apr 2022 16:57:53 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7AV+RSqmH3WOSB6uvS2oiXH-Tgfx84H0rEC9_NyZ3SNA@mail.gmail.com>
-Message-ID: <CAPhsuW7AV+RSqmH3WOSB6uvS2oiXH-Tgfx84H0rEC9_NyZ3SNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 11/11] samples: bpf: xdpsock: fix -Wmaybe-uninitialized
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+References: <20220414161233.170780-1-sdf@google.com>
+In-Reply-To: <20220414161233.170780-1-sdf@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 16 Apr 2022 01:28:05 +0000
+Message-ID: <CAADnVQJ-kiWJopu+VjLDXYb9ifjKyA2h8MO=CaQppNxbHqH=-Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: move rcu lock management out of
+ BPF_PROG_RUN routines
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
+        Martin KaFai Lau <kafai@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:47 PM Alexander Lobakin <alobakin@pm.me> wrote:
->
-> Fix two sort-of-false-positives in the xdpsock userspace part:
->
-> samples/bpf/xdpsock_user.c: In function 'main':
-> samples/bpf/xdpsock_user.c:1531:47: warning: 'tv_usec' may be used uninitialized in this function [-Wmaybe-uninitialized]
->  1531 |                         pktgen_hdr->tv_usec = htonl(tv_usec);
->       |                                               ^~~~~~~~~~~~~~
-> samples/bpf/xdpsock_user.c:1500:26: note: 'tv_usec' was declared here
->  1500 |         u32 idx, tv_sec, tv_usec;
->       |                          ^~~~~~~
-> samples/bpf/xdpsock_user.c:1530:46: warning: 'tv_sec' may be used uninitialized in this function [-Wmaybe-uninitialized]
->  1530 |                         pktgen_hdr->tv_sec = htonl(tv_sec);
->       |                                              ^~~~~~~~~~~~~
-> samples/bpf/xdpsock_user.c:1500:18: note: 'tv_sec' was declared here
->  1500 |         u32 idx, tv_sec, tv_usec;
->       |                  ^~~~~~
->
-> Both variables are always initialized when @opt_tstamp == true and
-> they're being used also only when @opt_tstamp == true. However, that
-> variable comes from the BSS and is being toggled from another
-> function. They can't be executed simultaneously to actually trigger
-> undefined behaviour, but purely technically it is a correct warning.
-> Just initialize them with zeroes.
->
-> Fixes: eb68db45b747 ("samples/bpf: xdpsock: Add timestamp for Tx-only operation")
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+On Thu, Apr 14, 2022 at 9:12 AM Stanislav Fomichev <sdf@google.com> wrote:
+> +static int
+> +bpf_prog_run_array_cg_flags(const struct cgroup_bpf *cgrp,
+> +                           enum cgroup_bpf_attach_type atype,
+> +                           const void *ctx, bpf_prog_run_fn run_prog,
+> +                           int retval, u32 *ret_flags)
+> +{
+> +       const struct bpf_prog_array_item *item;
+> +       const struct bpf_prog *prog;
+> +       const struct bpf_prog_array *array;
+> +       struct bpf_run_ctx *old_run_ctx;
+> +       struct bpf_cg_run_ctx run_ctx;
+> +       u32 func_ret;
+> +
+> +       run_ctx.retval = retval;
+> +       migrate_disable();
+> +       rcu_read_lock();
+> +       array = rcu_dereference(cgrp->effective[atype]);
+> +       item = &array->items[0];
+> +       old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
+> +       while ((prog = READ_ONCE(item->prog))) {
+> +               run_ctx.prog_item = item;
+> +               func_ret = run_prog(prog, ctx);
+...
+> +       ret = bpf_prog_run_array_cg(&cgrp->bpf, CGROUP_GETSOCKOPT,
+>                                     &ctx, bpf_prog_run, retval);
 
-Acked-by: Song Liu <songliubraving@fb.com>
-
-> ---
->  samples/bpf/xdpsock_user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-> index 399b999fcec2..1dc7ad5dbef4 100644
-> --- a/samples/bpf/xdpsock_user.c
-> +++ b/samples/bpf/xdpsock_user.c
-> @@ -1496,7 +1496,7 @@ static void rx_drop_all(void)
->  static int tx_only(struct xsk_socket_info *xsk, u32 *frame_nb,
->                    int batch_size, unsigned long tx_ns)
->  {
-> -       u32 idx, tv_sec, tv_usec;
-> +       u32 idx, tv_sec = 0, tv_usec = 0;
->         unsigned int i;
->
->         while (xsk_ring_prod__reserve(&xsk->tx, batch_size, &idx) <
-> --
-> 2.35.2
->
->
+Did you check the asm that bpf_prog_run gets inlined
+after being passed as a pointer to a function?
+Crossing fingers... I suspect not every compiler can do that :(
+De-virtualization optimization used to be tricky.
