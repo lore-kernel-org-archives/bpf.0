@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5E76C433FE
-	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 06:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D0BAC433EF
+	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 06:51:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiDPGlD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 16 Apr 2022 02:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S229551AbiDPGx7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Apr 2022 02:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiDPGlC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:41:02 -0400
+        with ESMTP id S229445AbiDPGx6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Apr 2022 02:53:58 -0400
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75646100E0F
-        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 23:38:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6391B10EC44
+        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 23:51:25 -0700 (PDT)
 Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id 48B05B1DE622; Fri, 15 Apr 2022 23:35:40 -0700 (PDT)
+        id 03663B1DE616; Fri, 15 Apr 2022 23:35:38 -0700 (PDT)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     andrii@kernel.org, memxor@gmail.com, ast@kernel.org,
         daniel@iogearbox.net, toke@redhat.com,
         Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v2 7/7] bpf: Dynptr tests
-Date:   Fri, 15 Apr 2022 23:34:29 -0700
-Message-Id: <20220416063429.3314021-8-joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v2 1/7] bpf: Add MEM_UNINIT as a bpf_type_flag
+Date:   Fri, 15 Apr 2022 23:34:23 -0700
+Message-Id: <20220416063429.3314021-2-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220416063429.3314021-1-joannelkoong@gmail.com>
 References: <20220416063429.3314021-1-joannelkoong@gmail.com>
@@ -33,1060 +33,604 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds tests for dynptrs. These include scenarios that the
-verifier needs to reject, as well as some successful use cases of
-dynptrs that should pass.
+Instead of having uninitialized versions of arguments as separate
+bpf_arg_types (eg ARG_PTR_TO_UNINIT_MEM as the uninitialized version
+of ARG_PTR_TO_MEM), we can instead use MEM_UNINIT as a bpf_type_flag
+modifier to denote that the argument is uninitialized.
 
-Some of the failure scenarios include checking against invalid
-bpf_dynptr_puts, invalid writes, invalid reads, and invalid ringbuf
-API usages.
+Doing so cleans up some of the logic in the verifier. We no longer
+need to do two checks against an argument type (eg "if
+(base_type(arg_type) =3D=3D ARG_PTR_TO_MEM || base_type(arg_type) =3D=3D
+ARG_PTR_TO_UNINIT_MEM)"), since uninitialized and initialized
+versions of the same argument type will now share the same base type.
+
+In the near future, MEM_UNINIT will be used by dynptr helper functions
+as well.
 
 Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
 ---
- .../testing/selftests/bpf/prog_tests/dynptr.c | 138 ++++
- .../testing/selftests/bpf/progs/dynptr_fail.c | 643 ++++++++++++++++++
- .../selftests/bpf/progs/dynptr_success.c      | 217 ++++++
- 3 files changed, 998 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/dynptr_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/dynptr_success.c
+ include/linux/bpf.h      | 17 +++++++++--------
+ kernel/bpf/bpf_lsm.c     |  4 ++--
+ kernel/bpf/cgroup.c      |  4 ++--
+ kernel/bpf/helpers.c     | 12 ++++++------
+ kernel/bpf/stackmap.c    |  6 +++---
+ kernel/bpf/verifier.c    | 36 +++++++++++++-----------------------
+ kernel/trace/bpf_trace.c | 30 +++++++++++++++---------------
+ net/core/filter.c        | 26 +++++++++++++-------------
+ 8 files changed, 63 insertions(+), 72 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/test=
-ing/selftests/bpf/prog_tests/dynptr.c
-new file mode 100644
-index 000000000000..5bf161e1838c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -0,0 +1,138 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Facebook */
-+
-+#include <test_progs.h>
-+#include "dynptr_fail.skel.h"
-+#include "dynptr_success.skel.h"
-+
-+size_t log_buf_sz =3D 1048576; /* 1 MB */
-+static char obj_log_buf[1048576];
-+
-+struct {
-+	const char *prog_name;
-+	const char *expected_err_msg;
-+} dynptr_tests[] =3D {
-+	/* failure cases */
-+	{"missing_put", "spi=3D0 is an unreleased dynptr"},
-+	{"missing_put_callback", "spi=3D0 is an unreleased dynptr"},
-+	{"put_nonalloc", "arg 1 is an unacquired reference"},
-+	{"put_data_slice", "type=3Dalloc_mem expected=3Dfp"},
-+	{"put_uninit_dynptr", "arg 1 is an unacquired reference"},
-+	{"use_after_put", "Expected an initialized dynptr as arg #3"},
-+	{"alloc_twice", "Arg #3 dynptr has to be an uninitialized dynptr"},
-+	{"add_dynptr_to_map1", "invalid indirect read from stack"},
-+	{"add_dynptr_to_map2", "invalid indirect read from stack"},
-+	{"ringbuf_invalid_access", "invalid mem access 'scalar'"},
-+	{"ringbuf_invalid_api",
-+		"func bpf_ringbuf_submit#132 reference has not been acquired before"},
-+	{"ringbuf_out_of_bounds", "value is outside of the allowed memory range=
-"},
-+	{"data_slice_out_of_bounds", "value is outside of the allowed memory ra=
-nge"},
-+	{"data_slice_use_after_put", "invalid mem access 'scalar'"},
-+	{"invalid_helper1", "invalid indirect read from stack"},
-+	{"invalid_helper2", "Expected an initialized dynptr as arg #3"},
-+	{"invalid_write1", "direct write into dynptr is not permitted"},
-+	{"invalid_write2", "direct write into dynptr is not permitted"},
-+	{"invalid_write3", "direct write into dynptr is not permitted"},
-+	{"invalid_write4", "direct write into dynptr is not permitted"},
-+	{"invalid_read1", "invalid read from stack"},
-+	{"invalid_read2", "cannot pass in non-zero dynptr offset"},
-+	{"invalid_read3", "invalid read from stack"},
-+	{"invalid_offset", "invalid write to stack"},
-+	{"global", "R3 type=3Dmap_value expected=3Dfp"},
-+	{"put_twice", "arg 1 is an unacquired reference"},
-+	{"put_twice_callback", "arg 1 is an unacquired reference"},
-+	{"invalid_nested_dynptrs1", "direct write into dynptr is not permitted"=
-},
-+	{"invalid_nested_dynptrs2", "Arg #3 cannot be a memory reference for an=
-other dynptr"},
-+	{"invalid_ref_mem1", "Arg #1 cannot be a referenced object"},
-+	{"invalid_ref_mem2", "Arg #1 cannot be a referenced object"},
-+	{"zero_slice_access", "invalid access to memory, mem_size=3D0 off=3D0 s=
-ize=3D1"},
-+	/* success cases */
-+	{"test_basic", NULL},
-+	{"test_data_slice", NULL},
-+	{"test_ringbuf", NULL},
-+	{"test_alloc_zero_bytes", NULL},
-+};
-+
-+static void verify_fail(const char *prog_name, const char *expected_err_=
-msg)
-+{
-+	LIBBPF_OPTS(bpf_object_open_opts, opts);
-+	struct bpf_program *prog;
-+	struct dynptr_fail *skel;
-+	int err;
-+
-+	opts.kernel_log_buf =3D obj_log_buf;
-+	opts.kernel_log_size =3D log_buf_sz;
-+	opts.kernel_log_level =3D 1;
-+
-+	skel =3D dynptr_fail__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "dynptr_fail__open_opts"))
-+		return;
-+
-+	bpf_object__for_each_program(prog, skel->obj)
-+		bpf_program__set_autoload(prog, false);
-+
-+	prog =3D bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		return;
-+
-+	bpf_program__set_autoload(prog, true);
-+
-+	err =3D dynptr_fail__load(skel);
-+
-+	ASSERT_ERR(err, "dynptr_fail__load");
-+
-+	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg), "expected_err=
-_msg")) {
-+		fprintf(stderr, "Expected err_msg: %s\n", expected_err_msg);
-+		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-+	}
-+
-+	dynptr_fail__destroy(skel);
-+}
-+
-+static void verify_success(const char *prog_name)
-+{
-+	struct dynptr_success *skel;
-+	struct bpf_program *prog;
-+	struct bpf_link *link;
-+
-+	skel =3D dynptr_success__open();
-+	if (!ASSERT_OK_PTR(skel, "dynptr_success__open"))
-+		return;
-+
-+	skel->bss->pid =3D getpid();
-+
-+	dynptr_success__load(skel);
-+	if (!ASSERT_OK_PTR(skel, "dynptr_success__load"))
-+		return;
-+
-+	prog =3D bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-+		return;
-+
-+	link =3D bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach"))
-+		return;
-+
-+	usleep(1);
-+
-+	ASSERT_EQ(skel->bss->err, 0, "err");
-+
-+	bpf_link__destroy(link);
-+
-+	dynptr_success__destroy(skel);
-+}
-+
-+void test_dynptr(void)
-+{
-+	int i;
-+
-+	for (i =3D 0; i < ARRAY_SIZE(dynptr_tests); i++) {
-+		if (!test__start_subtest(dynptr_tests[i].prog_name))
-+			continue;
-+
-+		if (dynptr_tests[i].expected_err_msg)
-+			verify_fail(dynptr_tests[i].prog_name, dynptr_tests[i].expected_err_m=
-sg);
-+		else
-+			verify_success(dynptr_tests[i].prog_name);
-+	}
-+}
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
-ing/selftests/bpf/progs/dynptr_fail.c
-new file mode 100644
-index 000000000000..215069cb7e0d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -0,0 +1,643 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Facebook */
-+
-+#include <string.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct bpf_dynptr);
-+} array_map SEC(".maps");
-+
-+struct sample {
-+	int pid;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 12);
-+} ringbuf SEC(".maps");
-+
-+int err =3D 0;
-+int val;
-+
-+/* Every bpf_dynptr_alloc call must have a corresponding bpf_dynptr_put =
-call */
-+SEC("raw_tp/sys_nanosleep")
-+int missing_put(void *ctx)
-+{
-+	struct bpf_dynptr mem;
-+
-+	bpf_dynptr_alloc(8, 0, &mem);
-+
-+	/* missing a call to bpf_dynptr_put(&mem) */
-+
-+	return 0;
-+}
-+
-+/* A non-alloc-ed dynptr can't be used by bpf_dynptr_put */
-+SEC("raw_tp/sys_nanosleep")
-+int put_nonalloc(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	__u32 x =3D 0;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+/* A data slice from a dynptr can't be used by bpf_dynptr_put */
-+SEC("raw_tp/sys_nanosleep")
-+int put_data_slice(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	void *data;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	data =3D bpf_dynptr_data(&ptr, 0, 8);
-+	if (!data)
-+		goto done;
-+
-+	/* this should fail */
-+	bpf_dynptr_put(data);
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
-+
-+/* Can't call bpf_dynptr_put on a non-initialized dynptr */
-+SEC("raw_tp/sys_nanosleep")
-+int put_uninit_dynptr(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	/* this should fail */
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+/* A dynptr can't be used after bpf_dynptr_put has been called on it */
-+SEC("raw_tp/sys_nanosleep")
-+int use_after_put(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	char read_data[64] =3D {};
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	/* this should fail */
-+	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Can't bpf_dynptr_alloc an existing allocated bpf_dynptr that bpf_dynp=
-tr_put
-+ * hasn't been called on yet
-+ */
-+SEC("raw_tp/sys_nanosleep")
-+int alloc_twice(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_dynptr_alloc(2, 0, &ptr);
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Can't access a ring buffer record after submit or discard has been ca=
-lled
-+ * on the dynptr
-+ */
-+SEC("raw_tp/sys_nanosleep")
-+int ringbuf_invalid_access(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	struct sample *sample;
-+
-+	err =3D bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr);
-+	sample =3D bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-+	if (!sample)
-+		goto done;
-+
-+	sample->pid =3D 123;
-+
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	/* this should fail */
-+	err =3D sample->pid;
-+
-+	return 0;
-+
-+done:
-+	bpf_ringbuf_discard_dynptr(&ptr, 0);
-+	return 0;
-+}
-+
-+/* Can't call non-dynptr ringbuf APIs on a dynptr ringbuf sample */
-+SEC("raw_tp/sys_nanosleep")
-+int ringbuf_invalid_api(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	struct sample *sample;
-+
-+	err =3D bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr);
-+	sample =3D bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-+	if (!sample)
-+		goto done;
-+
-+	sample->pid =3D 123;
-+
-+	/* invalid API use. need to use dynptr API to submit/discard */
-+	bpf_ringbuf_submit(sample, 0);
-+
-+done:
-+	bpf_ringbuf_discard_dynptr(&ptr, 0);
-+	return 0;
-+}
-+
-+/* Can't access memory outside a ringbuf record range */
-+SEC("raw_tp/sys_nanosleep")
-+int ringbuf_out_of_bounds(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	struct sample *sample;
-+
-+	err =3D bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr);
-+	sample =3D bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-+	if (!sample)
-+		goto done;
-+
-+	/* Can't access beyond sample range */
-+	*(__u8 *)((void *)sample + sizeof(*sample)) =3D 123;
-+
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+
-+done:
-+	bpf_ringbuf_discard_dynptr(&ptr, 0);
-+	return 0;
-+}
-+
-+/* Can't add a dynptr to a map */
-+SEC("raw_tp/sys_nanosleep")
-+int add_dynptr_to_map1(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	char buf[64] =3D {};
-+	int key =3D 0;
-+
-+	err =3D bpf_dynptr_from_mem(buf, sizeof(buf), 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_map_update_elem(&array_map, &key, &ptr, 0);
-+
-+	return 0;
-+}
-+
-+/* Can't add a struct with an embedded dynptr to a map */
-+SEC("raw_tp/sys_nanosleep")
-+int add_dynptr_to_map2(void *ctx)
-+{
-+	struct info {
-+		int x;
-+		struct bpf_dynptr ptr;
-+	};
-+	struct info x;
-+	int key =3D 0;
-+
-+	bpf_dynptr_alloc(8, 0, &x.ptr);
-+
-+	/* this should fail */
-+	bpf_map_update_elem(&array_map, &key, &x, 0);
-+
-+	return 0;
-+}
-+
-+/* Can't pass in a dynptr as an arg to a helper function that doesn't ta=
-ke in a
-+ * dynptr argument
-+ */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_helper1(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_strncmp((const char *)&ptr, sizeof(ptr), "hello!");
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+/* A dynptr can't be passed into a helper function at a non-zero offset =
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..12b90de9c46d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -342,7 +342,9 @@ enum bpf_type_flag {
+ 	 */
+ 	MEM_PERCPU		=3D BIT(4 + BPF_BASE_TYPE_BITS),
+=20
+-	__BPF_TYPE_LAST_FLAG	=3D MEM_PERCPU,
++	MEM_UNINIT		=3D BIT(5 + BPF_BASE_TYPE_BITS),
++
++	__BPF_TYPE_LAST_FLAG	=3D MEM_UNINIT,
+ };
+=20
+ /* Max number of base types. */
+@@ -361,16 +363,11 @@ enum bpf_arg_type {
+ 	ARG_CONST_MAP_PTR,	/* const argument used as pointer to bpf_map */
+ 	ARG_PTR_TO_MAP_KEY,	/* pointer to stack used as map key */
+ 	ARG_PTR_TO_MAP_VALUE,	/* pointer to stack used as map value */
+-	ARG_PTR_TO_UNINIT_MAP_VALUE,	/* pointer to valid memory used to store a=
+ map value */
+=20
+-	/* the following constraints used to prototype bpf_memcmp() and other
+-	 * functions that access data on eBPF program stack
++	/* Used to prototype bpf_memcmp() and other functions that access data
++	 * on eBPF program stack
+ 	 */
+ 	ARG_PTR_TO_MEM,		/* pointer to valid memory (stack, packet, map value) =
 */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_helper2(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	char read_data[64] =3D {};
-+	__u64 x =3D 0;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 8, 0);
-+
-+	return 0;
-+}
-+
-+/* A data slice can't be accessed out of bounds */
-+SEC("raw_tp/sys_nanosleep")
-+int data_slice_out_of_bounds(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	void *data;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	data =3D bpf_dynptr_data(&ptr, 0, 8);
-+	if (!data)
-+		goto done;
-+
-+	/* can't index out of bounds of the data slice */
-+	val =3D *((char *)data + 8);
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
-+
-+/* A data slice can't be used after bpf_dynptr_put is called */
-+SEC("raw_tp/sys_nanosleep")
-+int data_slice_use_after_put(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	void *data;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	data =3D bpf_dynptr_data(&ptr, 0, 8);
-+	if (!data)
-+		goto done;
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	/* this should fail */
-+	val =3D *(__u8 *)data;
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
-+
-+/*
-+ * A bpf_dynptr can't be written directly to by the bpf program,
-+ * only through dynptr helper functions
-+ */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_write1(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	__u8 x =3D 0;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	/* this should fail */
-+	memcpy(&ptr, &x, sizeof(x));
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A bpf_dynptr at a non-zero offset can't be written directly to
-+ * by the bpf program, only through dynptr helper functions
-+ */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_write2(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	char read_data[64] =3D {};
-+	__u8 x =3D 0, y =3D 0;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+
-+	/* this should fail */
-+	memcpy((void *)&ptr, &y, sizeof(y));
-+
-+	bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
-+
-+	return 0;
-+}
-+
-+/* A non-const write into a dynptr is not permitted */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_write3(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	char stack_buf[16];
-+	unsigned long len;
-+	__u8 x =3D 0;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	memcpy(stack_buf, &val, sizeof(val));
-+	len =3D stack_buf[0] & 0xf;
-+
-+	/* this should fail */
-+	memcpy((void *)&ptr + len, &x, sizeof(x));
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+static int invalid_write4_callback(__u32 index, void *data)
-+{
-+	/* this should fail */
-+	*(__u32 *)data =3D 123;
-+
-+	bpf_dynptr_put(data);
-+
-+	return 0;
-+}
-+
-+/* An invalid write can't occur in a callback function */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_write4(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	__u64 x =3D 0;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+
-+	bpf_loop(10, invalid_write4_callback, &ptr, 0);
-+
-+	return 0;
-+}
-+
-+/* A globally-defined bpf_dynptr can't be used (it must reside as a stac=
-k frame) */
-+struct bpf_dynptr global_dynptr;
-+SEC("raw_tp/sys_nanosleep")
-+int global(void *ctx)
-+{
-+	/* this should fail */
-+	bpf_dynptr_alloc(4, 0, &global_dynptr);
-+
-+	bpf_dynptr_put(&global_dynptr);
-+
-+	return 0;
-+}
-+
-+/* A direct read should fail */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_read1(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	__u32 x =3D 2;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+
-+	/* this should fail */
-+	val =3D *(int *)&ptr;
-+
-+	return 0;
-+}
-+
-+/* A direct read at an offset should fail */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_read2(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	char read_data[64] =3D {};
-+	__u64 x =3D 0;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_dynptr_read(read_data, sizeof(read_data), (void *)&ptr + 1, 0);
-+
-+	return 0;
-+}
-+
-+/* A direct read at an offset into the lower stack slot should fail */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_read3(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	struct bpf_dynptr ptr2 =3D {};
-+	__u32 x =3D 2;
-+
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr);
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr2);
-+
-+	/* this should fail */
-+	memcpy(&val, (void *)&ptr + 8, sizeof(val));
-+
-+	return 0;
-+}
-+
-+/* Calling bpf_dynptr_from_mem on an offset should fail */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_offset(void *ctx)
-+{
-+	struct bpf_dynptr ptr =3D {};
-+	__u64 x =3D 0;
-+
-+	/* this should fail */
-+	bpf_dynptr_from_mem(&x, sizeof(x), 0, &ptr + 1);
-+
-+	return 0;
-+}
-+
-+/* Can't call bpf_dynptr_put twice */
-+SEC("raw_tp/sys_nanosleep")
-+int put_twice(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	/* this second put should fail */
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+static int put_twice_callback_fn(__u32 index, void *data)
-+{
-+	/* this should fail */
-+	bpf_dynptr_put(data);
-+	val =3D index;
-+	return 0;
-+}
-+
-+/* Test that calling bpf_dynptr_put twice, where the 2nd put happens wit=
-hin a
-+ * calback function, fails
-+ */
-+SEC("raw_tp/sys_nanosleep")
-+int put_twice_callback(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	bpf_loop(10, put_twice_callback_fn, &ptr, 0);
-+
-+	return 0;
-+}
-+
-+static int missing_put_callback_fn(__u32 index, void *data)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_alloc(8, 0, &ptr);
-+
-+	val =3D index;
-+
-+	/* missing bpf_dynptr_put(&ptr) */
-+
-+	return 0;
-+}
-+
-+/* Any dynptr initialized within a callback must have bpf_dynptr_put cal=
-led */
-+SEC("raw_tp/sys_nanosleep")
-+int missing_put_callback(void *ctx)
-+{
-+	bpf_loop(10, missing_put_callback_fn, NULL, 0);
-+	return 0;
-+}
-+
-+/* We can't have nested dynptrs or else the dynptr stack data can be wri=
-tten into */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_nested_dynptrs1(void *ctx)
-+{
-+	struct bpf_dynptr local;
-+	struct bpf_dynptr ptr;
-+	char write_data[64] =3D {};
-+
-+	bpf_dynptr_alloc(16, 0, &ptr);
-+
-+	/* this should fail */
-+	bpf_dynptr_from_mem(&ptr, sizeof(ptr), 0, &local);
-+
-+	bpf_dynptr_write(&local, 0, write_data, sizeof(ptr));
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_nested_dynptrs2(void *ctx)
-+{
-+	struct bpf_dynptr local;
-+	struct bpf_dynptr ptr;
-+	char write_data[64] =3D {};
-+
-+	bpf_dynptr_from_mem(&ptr, sizeof(ptr), 0, &local);
-+
-+	/* this should fail */
-+	bpf_dynptr_alloc(16, 0, &ptr);
-+
-+	bpf_dynptr_write(&local, 0, write_data, sizeof(ptr));
-+
-+	bpf_dynptr_put(&ptr);
-+
-+	return 0;
-+}
-+
-+/* Can't have local dynptr to referenced memory */
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_ref_mem1(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	struct bpf_dynptr local;
-+	void *data;
-+
-+	bpf_dynptr_alloc(16, 0, &ptr);
-+	data =3D bpf_dynptr_data(&ptr, 0, 8);
-+	if (!data)
-+		goto done;
-+
-+	/* this should fail */
-+	bpf_dynptr_from_mem(data, 1, 0, &local);
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
-+
-+SEC("raw_tp/sys_nanosleep")
-+int invalid_ref_mem2(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	struct bpf_dynptr local;
-+	struct sample *sample;
-+
-+	err =3D bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(*sample), 0, &ptr);
-+	sample =3D bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-+	if (!sample)
-+		goto done;
-+
-+	/* this should fail */
-+	bpf_dynptr_from_mem(sample, sizeof(*sample), 0, &local);
-+
-+done:
-+	bpf_ringbuf_discard_dynptr(&ptr, 0);
-+	return 0;
-+}
-+
-+/* Can't access memory in a zero-slice */
-+SEC("raw_tp/sys_nanosleep")
-+int zero_slice_access(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	void *data;
-+
-+	bpf_dynptr_alloc(0, 0, &ptr);
-+
-+	data =3D bpf_dynptr_data(&ptr, 0, 0);
-+	if (!data)
-+		goto done;
-+
-+	/* this should fail */
-+	*(__u8 *)data =3D 23;
-+
-+	val =3D *(__u8 *)data;
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/t=
-esting/selftests/bpf/progs/dynptr_success.c
-new file mode 100644
-index 000000000000..e23ece559f56
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
-@@ -0,0 +1,217 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Facebook */
-+
-+#include <string.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "errno.h"
-+
-+char _license[] SEC("license") =3D "GPL";
-+
-+int pid =3D 0;
-+int err =3D 0;
-+int val;
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 1 << 12);
-+} ringbuf SEC(".maps");
-+
-+SEC("tp/syscalls/sys_enter_nanosleep")
-+int test_basic(void *ctx)
-+{
-+	char write_data[64] =3D "hello there, world!!";
-+	char read_data[64] =3D {}, buf[64] =3D {};
-+	struct bpf_dynptr ptr =3D {};
-+	int i;
-+
-+	if (bpf_get_current_pid_tgid() >> 32 !=3D pid)
-+		return 0;
-+
-+	err =3D bpf_dynptr_from_mem(buf, sizeof(buf), 0, &ptr);
-+	if (err)
-+		return 0;
-+
-+	/* Write data into the dynptr */
-+	err =3D bpf_dynptr_write(&ptr, 0, write_data, sizeof(write_data));
-+	if (err)
-+		return 0;
-+
-+	/* Read the data that was written into the dynptr */
-+	err =3D bpf_dynptr_read(read_data, sizeof(read_data), &ptr, 0);
-+	if (err)
-+		return 0;
-+
-+	/* Ensure the data we read matches the data we wrote */
-+	for (i =3D 0; i < sizeof(read_data); i++) {
-+		if (read_data[i] !=3D write_data[i]) {
-+			err =3D 1;
-+			return 0;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("tp/syscalls/sys_enter_nanosleep")
-+int test_data_slice(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	__u32 alloc_size =3D 16;
-+	void *data;
-+
-+	if (bpf_get_current_pid_tgid() >> 32 !=3D pid)
-+		return 0;
-+
-+	/* test passing in an invalid flag */
-+	err =3D bpf_dynptr_alloc(alloc_size, 1, &ptr);
-+	if (err !=3D -EINVAL) {
-+		err =3D 1;
-+		goto done;
-+	}
-+	bpf_dynptr_put(&ptr);
-+
-+	err =3D bpf_dynptr_alloc(alloc_size, 0, &ptr);
-+	if (err)
-+		goto done;
-+
-+	/* Try getting a data slice that is out of range */
-+	data =3D bpf_dynptr_data(&ptr, alloc_size + 1, 1);
-+	if (data) {
-+		err =3D 2;
-+		goto done;
-+	}
-+
-+	/* Try getting more bytes than available */
-+	data =3D bpf_dynptr_data(&ptr, 0, alloc_size + 1);
-+	if (data) {
-+		err =3D 3;
-+		goto done;
-+	}
-+
-+	data =3D bpf_dynptr_data(&ptr, 0, sizeof(int));
-+	if (!data) {
-+		err =3D 4;
-+		goto done;
-+	}
-+
-+	*(__u32 *)data =3D 999;
-+
-+	err =3D bpf_probe_read_kernel(&val, sizeof(val), data);
-+	if (err)
-+		goto done;
-+
-+	if (val !=3D *(int *)data)
-+		err =3D 5;
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
-+
-+static int ringbuf_callback(__u32 index, void *data)
-+{
-+	struct sample *sample;
-+
-+	struct bpf_dynptr *ptr =3D (struct bpf_dynptr *)data;
-+
-+	sample =3D bpf_dynptr_data(ptr, 0, sizeof(*sample));
-+	if (!sample) {
-+		err =3D 2;
-+		return 0;
-+	}
-+
-+	sample->pid +=3D val;
-+
-+	return 0;
-+}
-+
-+SEC("tp/syscalls/sys_enter_nanosleep")
-+int test_ringbuf(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	struct sample *sample;
-+
-+	if (bpf_get_current_pid_tgid() >> 32 !=3D pid)
-+		return 0;
-+
-+	val =3D 100;
-+
-+	/* check that you can reserve a dynamic size reservation */
-+	err =3D bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	if (err)
-+		goto done;
-+
-+	sample =3D bpf_dynptr_data(&ptr, 0, sizeof(*sample));
-+	if (!sample) {
-+		err =3D 1;
-+		goto done;
-+	}
-+
-+	sample->pid =3D 123;
-+
-+	/* Can pass dynptr to callback functions */
-+	bpf_loop(10, ringbuf_callback, &ptr, 0);
-+
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+
-+done:
-+	bpf_ringbuf_discard_dynptr(&ptr, 0);
-+	return 0;
-+}
-+
-+SEC("tp/syscalls/sys_enter_nanosleep")
-+int test_alloc_zero_bytes(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	void *data;
-+	__u8 x =3D 0;
-+
-+	if (bpf_get_current_pid_tgid() >> 32 !=3D pid)
-+		return 0;
-+
-+	err =3D bpf_dynptr_alloc(0, 0, &ptr);
-+	if (err)
-+		goto done;
-+
-+	err =3D bpf_dynptr_write(&ptr, 0, &x, sizeof(x));
-+	if (err !=3D -EINVAL) {
-+		err =3D 1;
-+		goto done;
-+	}
-+
-+	err =3D bpf_dynptr_read(&x, sizeof(x), &ptr, 0);
-+	if (err !=3D -EINVAL) {
-+		err =3D 2;
-+		goto done;
-+	}
-+
-+	/* try to access memory we don't have access to */
-+	data =3D bpf_dynptr_data(&ptr, 0, 1);
-+	if (data) {
-+		err =3D 3;
-+		goto done;
-+	}
-+
-+	data =3D bpf_dynptr_data(&ptr, 0, 0);
-+	if (!data) {
-+		err =3D 4;
-+		goto done;
-+	}
-+
-+	err =3D 0;
-+
-+done:
-+	bpf_dynptr_put(&ptr);
-+	return 0;
-+}
+-	ARG_PTR_TO_UNINIT_MEM,	/* pointer to memory does not need to be initial=
+ized,
+-				 * helper function must fill all bytes or clear
+-				 * them in error case.
+-				 */
+=20
+ 	ARG_CONST_SIZE,		/* number of bytes accessed from memory */
+ 	ARG_CONST_SIZE_OR_ZERO,	/* number of bytes accessed from memory or 0 */
+@@ -400,6 +397,10 @@ enum bpf_arg_type {
+ 	ARG_PTR_TO_SOCKET_OR_NULL	=3D PTR_MAYBE_NULL | ARG_PTR_TO_SOCKET,
+ 	ARG_PTR_TO_ALLOC_MEM_OR_NULL	=3D PTR_MAYBE_NULL | ARG_PTR_TO_ALLOC_MEM,
+ 	ARG_PTR_TO_STACK_OR_NULL	=3D PTR_MAYBE_NULL | ARG_PTR_TO_STACK,
++	/* pointer to memory does not need to be initialized, helper function m=
+ust fill
++	 * all bytes or clear them in error case.
++	 */
++	ARG_PTR_TO_MEM_UNINIT		=3D MEM_UNINIT | ARG_PTR_TO_MEM,
+=20
+ 	/* This must be the last entry. Its purpose is to ensure the enum is
+ 	 * wide enough to hold the higher bits reserved for bpf_type_flag.
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 064eccba641d..11ebadc82e8d 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -94,7 +94,7 @@ static const struct bpf_func_proto bpf_ima_inode_hash_p=
+roto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	=3D &bpf_ima_inode_hash_btf_ids[0],
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE,
+ 	.allowed	=3D bpf_ima_inode_hash_allowed,
+ };
+@@ -112,7 +112,7 @@ static const struct bpf_func_proto bpf_ima_file_hash_=
+proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	=3D &bpf_ima_file_hash_btf_ids[0],
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE,
+ 	.allowed	=3D bpf_ima_inode_hash_allowed,
+ };
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 128028efda64..4947e3324480 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1724,7 +1724,7 @@ static const struct bpf_func_proto bpf_sysctl_get_c=
+urrent_value_proto =3D {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -1744,7 +1744,7 @@ static const struct bpf_func_proto bpf_sysctl_get_n=
+ew_value_proto =3D {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE,
+ };
+=20
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 315053ef6a75..a47aae5c7335 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -103,7 +103,7 @@ const struct bpf_func_proto bpf_map_pop_elem_proto =3D=
+ {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_CONST_MAP_PTR,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MAP_VALUE,
++	.arg2_type	=3D ARG_PTR_TO_MAP_VALUE | MEM_UNINIT,
+ };
+=20
+ BPF_CALL_2(bpf_map_peek_elem, struct bpf_map *, map, void *, value)
+@@ -116,7 +116,7 @@ const struct bpf_func_proto bpf_map_peek_elem_proto =3D=
+ {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_CONST_MAP_PTR,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MAP_VALUE,
++	.arg2_type	=3D ARG_PTR_TO_MAP_VALUE | MEM_UNINIT,
+ };
+=20
+ const struct bpf_func_proto bpf_get_prandom_u32_proto =3D {
+@@ -237,7 +237,7 @@ const struct bpf_func_proto bpf_get_current_comm_prot=
+o =3D {
+ 	.func		=3D bpf_get_current_comm,
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -616,7 +616,7 @@ const struct bpf_func_proto bpf_get_ns_current_pid_tg=
+id_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_ANYTHING,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type      =3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type      =3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type      =3D ARG_CONST_SIZE,
+ };
+=20
+@@ -663,7 +663,7 @@ const struct bpf_func_proto bpf_copy_from_user_proto =
+=3D {
+ 	.func		=3D bpf_copy_from_user,
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -693,7 +693,7 @@ const struct bpf_func_proto bpf_copy_from_user_task_p=
+roto =3D {
+ 	.func		=3D bpf_copy_from_user_task,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ 	.arg4_type	=3D ARG_PTR_TO_BTF_ID,
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 34725bfa1e97..24fdda340008 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -465,7 +465,7 @@ const struct bpf_func_proto bpf_get_stack_proto =3D {
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+@@ -493,7 +493,7 @@ const struct bpf_func_proto bpf_get_task_stack_proto =
+=3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
+ 	.arg1_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+@@ -556,7 +556,7 @@ const struct bpf_func_proto bpf_get_stack_proto_pe =3D=
+ {
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d175b70067b3..355566979e36 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5134,12 +5134,6 @@ static int process_timer_func(struct bpf_verifier_=
+env *env, int regno,
+ 	return 0;
+ }
+=20
+-static bool arg_type_is_mem_ptr(enum bpf_arg_type type)
+-{
+-	return base_type(type) =3D=3D ARG_PTR_TO_MEM ||
+-	       base_type(type) =3D=3D ARG_PTR_TO_UNINIT_MEM;
+-}
+-
+ static bool arg_type_is_mem_size(enum bpf_arg_type type)
+ {
+ 	return type =3D=3D ARG_CONST_SIZE ||
+@@ -5273,7 +5267,6 @@ static const struct bpf_reg_types timer_types =3D {=
+ .types =3D { PTR_TO_MAP_VALUE }
+ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_M=
+AX] =3D {
+ 	[ARG_PTR_TO_MAP_KEY]		=3D &map_key_value_types,
+ 	[ARG_PTR_TO_MAP_VALUE]		=3D &map_key_value_types,
+-	[ARG_PTR_TO_UNINIT_MAP_VALUE]	=3D &map_key_value_types,
+ 	[ARG_CONST_SIZE]		=3D &scalar_types,
+ 	[ARG_CONST_SIZE_OR_ZERO]	=3D &scalar_types,
+ 	[ARG_CONST_ALLOC_SIZE_OR_ZERO]	=3D &scalar_types,
+@@ -5287,7 +5280,6 @@ static const struct bpf_reg_types *compatible_reg_t=
+ypes[__BPF_ARG_TYPE_MAX] =3D {
+ 	[ARG_PTR_TO_BTF_ID]		=3D &btf_ptr_types,
+ 	[ARG_PTR_TO_SPIN_LOCK]		=3D &spin_lock_types,
+ 	[ARG_PTR_TO_MEM]		=3D &mem_types,
+-	[ARG_PTR_TO_UNINIT_MEM]		=3D &mem_types,
+ 	[ARG_PTR_TO_ALLOC_MEM]		=3D &alloc_mem_types,
+ 	[ARG_PTR_TO_INT]		=3D &int_ptr_types,
+ 	[ARG_PTR_TO_LONG]		=3D &int_ptr_types,
+@@ -5451,8 +5443,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 		return -EACCES;
+ 	}
+=20
+-	if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE ||
+-	    base_type(arg_type) =3D=3D ARG_PTR_TO_UNINIT_MAP_VALUE) {
++	if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE) {
+ 		err =3D resolve_map_arg_type(env, meta, &arg_type);
+ 		if (err)
+ 			return err;
+@@ -5528,8 +5519,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 		err =3D check_helper_mem_access(env, regno,
+ 					      meta->map_ptr->key_size, false,
+ 					      NULL);
+-	} else if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE ||
+-		   base_type(arg_type) =3D=3D ARG_PTR_TO_UNINIT_MAP_VALUE) {
++	} else if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE) {
+ 		if (type_may_be_null(arg_type) && register_is_null(reg))
+ 			return 0;
+=20
+@@ -5541,7 +5531,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 			verbose(env, "invalid map_ptr to access map->value\n");
+ 			return -EACCES;
+ 		}
+-		meta->raw_mode =3D (arg_type =3D=3D ARG_PTR_TO_UNINIT_MAP_VALUE);
++		meta->raw_mode =3D arg_type & MEM_UNINIT;
+ 		err =3D check_helper_mem_access(env, regno,
+ 					      meta->map_ptr->value_size, false,
+ 					      meta);
+@@ -5568,11 +5558,11 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+ 			return -EACCES;
+ 	} else if (arg_type =3D=3D ARG_PTR_TO_FUNC) {
+ 		meta->subprogno =3D reg->subprogno;
+-	} else if (arg_type_is_mem_ptr(arg_type)) {
++	} else if (base_type(arg_type) =3D=3D ARG_PTR_TO_MEM) {
+ 		/* The access to this pointer is only checked when we hit the
+ 		 * next is_mem_size argument below.
+ 		 */
+-		meta->raw_mode =3D (arg_type =3D=3D ARG_PTR_TO_UNINIT_MEM);
++		meta->raw_mode =3D arg_type & MEM_UNINIT;
+ 	} else if (arg_type_is_mem_size(arg_type)) {
+ 		bool zero_size_allowed =3D (arg_type =3D=3D ARG_CONST_SIZE_OR_ZERO);
+=20
+@@ -5894,15 +5884,15 @@ static bool check_raw_mode_ok(const struct bpf_fu=
+nc_proto *fn)
+ {
+ 	int count =3D 0;
+=20
+-	if (fn->arg1_type =3D=3D ARG_PTR_TO_UNINIT_MEM)
++	if (fn->arg1_type =3D=3D ARG_PTR_TO_MEM_UNINIT)
+ 		count++;
+-	if (fn->arg2_type =3D=3D ARG_PTR_TO_UNINIT_MEM)
++	if (fn->arg2_type =3D=3D ARG_PTR_TO_MEM_UNINIT)
+ 		count++;
+-	if (fn->arg3_type =3D=3D ARG_PTR_TO_UNINIT_MEM)
++	if (fn->arg3_type =3D=3D ARG_PTR_TO_MEM_UNINIT)
+ 		count++;
+-	if (fn->arg4_type =3D=3D ARG_PTR_TO_UNINIT_MEM)
++	if (fn->arg4_type =3D=3D ARG_PTR_TO_MEM_UNINIT)
+ 		count++;
+-	if (fn->arg5_type =3D=3D ARG_PTR_TO_UNINIT_MEM)
++	if (fn->arg5_type =3D=3D ARG_PTR_TO_MEM_UNINIT)
+ 		count++;
+=20
+ 	/* We only support one arg being in raw mode at the moment,
+@@ -5915,9 +5905,9 @@ static bool check_raw_mode_ok(const struct bpf_func=
+_proto *fn)
+ static bool check_args_pair_invalid(enum bpf_arg_type arg_curr,
+ 				    enum bpf_arg_type arg_next)
+ {
+-	return (arg_type_is_mem_ptr(arg_curr) &&
++	return (base_type(arg_curr) =3D=3D ARG_PTR_TO_MEM &&
+ 	        !arg_type_is_mem_size(arg_next)) ||
+-	       (!arg_type_is_mem_ptr(arg_curr) &&
++	       (base_type(arg_curr) !=3D ARG_PTR_TO_MEM &&
+ 		arg_type_is_mem_size(arg_next));
+ }
+=20
+@@ -5929,7 +5919,7 @@ static bool check_arg_pair_ok(const struct bpf_func=
+_proto *fn)
+ 	 * helper function specification.
+ 	 */
+ 	if (arg_type_is_mem_size(fn->arg1_type) ||
+-	    arg_type_is_mem_ptr(fn->arg5_type)  ||
++	    base_type(fn->arg5_type) =3D=3D ARG_PTR_TO_MEM ||
+ 	    check_args_pair_invalid(fn->arg1_type, fn->arg2_type) ||
+ 	    check_args_pair_invalid(fn->arg2_type, fn->arg3_type) ||
+ 	    check_args_pair_invalid(fn->arg3_type, fn->arg4_type) ||
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 7fa2ebc07f60..36fe08097b3b 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -175,7 +175,7 @@ const struct bpf_func_proto bpf_probe_read_user_proto=
+ =3D {
+ 	.func		=3D bpf_probe_read_user,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -212,7 +212,7 @@ const struct bpf_func_proto bpf_probe_read_user_str_p=
+roto =3D {
+ 	.func		=3D bpf_probe_read_user_str,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -238,7 +238,7 @@ const struct bpf_func_proto bpf_probe_read_kernel_pro=
+to =3D {
+ 	.func		=3D bpf_probe_read_kernel,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -273,7 +273,7 @@ const struct bpf_func_proto bpf_probe_read_kernel_str=
+_proto =3D {
+ 	.func		=3D bpf_probe_read_kernel_str,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -293,7 +293,7 @@ static const struct bpf_func_proto bpf_probe_read_com=
+pat_proto =3D {
+ 	.func		=3D bpf_probe_read_compat,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -312,7 +312,7 @@ static const struct bpf_func_proto bpf_probe_read_com=
+pat_str_proto =3D {
+ 	.func		=3D bpf_probe_read_compat_str,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	=3D ARG_ANYTHING,
+ };
+@@ -610,7 +610,7 @@ static const struct bpf_func_proto bpf_perf_event_rea=
+d_value_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_CONST_MAP_PTR,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -1112,7 +1112,7 @@ static const struct bpf_func_proto bpf_get_branch_s=
+napshot_proto =3D {
+ 	.func		=3D bpf_get_branch_snapshot,
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg1_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg2_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ };
+=20
+@@ -1406,7 +1406,7 @@ static const struct bpf_func_proto bpf_get_stack_pr=
+oto_tp =3D {
+ 	.gpl_only	=3D true,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+@@ -1469,12 +1469,12 @@ BPF_CALL_3(bpf_perf_prog_read_value, struct bpf_p=
+erf_event_data_kern *, ctx,
+ }
+=20
+ static const struct bpf_func_proto bpf_perf_prog_read_value_proto =3D {
+-         .func           =3D bpf_perf_prog_read_value,
+-         .gpl_only       =3D true,
+-         .ret_type       =3D RET_INTEGER,
+-         .arg1_type      =3D ARG_PTR_TO_CTX,
+-         .arg2_type      =3D ARG_PTR_TO_UNINIT_MEM,
+-         .arg3_type      =3D ARG_CONST_SIZE,
++	.func           =3D bpf_perf_prog_read_value,
++	.gpl_only       =3D true,
++	.ret_type       =3D RET_INTEGER,
++	.arg1_type      =3D ARG_PTR_TO_CTX,
++	.arg2_type      =3D ARG_PTR_TO_MEM_UNINIT,
++	.arg3_type      =3D ARG_CONST_SIZE,
+ };
+=20
+ BPF_CALL_4(bpf_read_branch_records, struct bpf_perf_event_data_kern *, c=
+tx,
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a7044e98765e..9aafec3a09ed 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1743,7 +1743,7 @@ static const struct bpf_func_proto bpf_skb_load_byt=
+es_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -1777,7 +1777,7 @@ static const struct bpf_func_proto bpf_flow_dissect=
+or_load_bytes_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -1821,7 +1821,7 @@ static const struct bpf_func_proto bpf_skb_load_byt=
+es_relative_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ 	.arg5_type	=3D ARG_ANYTHING,
+ };
+@@ -3943,7 +3943,7 @@ static const struct bpf_func_proto bpf_xdp_load_byt=
+es_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -3970,7 +3970,7 @@ static const struct bpf_func_proto bpf_xdp_store_by=
+tes_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -4544,7 +4544,7 @@ static const struct bpf_func_proto bpf_skb_get_tunn=
+el_key_proto =3D {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE,
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+@@ -4579,7 +4579,7 @@ static const struct bpf_func_proto bpf_skb_get_tunn=
+el_opt_proto =3D {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+-	.arg2_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg2_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg3_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -5386,7 +5386,7 @@ const struct bpf_func_proto bpf_sk_getsockopt_proto=
+ =3D {
+ 	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+ 	.arg2_type	=3D ARG_ANYTHING,
+ 	.arg3_type	=3D ARG_ANYTHING,
+-	.arg4_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg4_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg5_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -5420,7 +5420,7 @@ static const struct bpf_func_proto bpf_sock_addr_ge=
+tsockopt_proto =3D {
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+ 	.arg3_type	=3D ARG_ANYTHING,
+-	.arg4_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg4_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg5_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -5544,7 +5544,7 @@ static const struct bpf_func_proto bpf_sock_ops_get=
+sockopt_proto =3D {
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+ 	.arg3_type	=3D ARG_ANYTHING,
+-	.arg4_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg4_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg5_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -5656,7 +5656,7 @@ static const struct bpf_func_proto bpf_skb_get_xfrm=
+_state_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ 	.arg5_type	=3D ARG_ANYTHING,
+ };
+@@ -10741,7 +10741,7 @@ static const struct bpf_func_proto sk_reuseport_l=
+oad_bytes_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ };
+=20
+@@ -10759,7 +10759,7 @@ static const struct bpf_func_proto sk_reuseport_l=
+oad_bytes_relative_proto =3D {
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_CTX,
+ 	.arg2_type	=3D ARG_ANYTHING,
+-	.arg3_type	=3D ARG_PTR_TO_UNINIT_MEM,
++	.arg3_type	=3D ARG_PTR_TO_MEM_UNINIT,
+ 	.arg4_type	=3D ARG_CONST_SIZE,
+ 	.arg5_type	=3D ARG_ANYTHING,
+ };
 --=20
 2.30.2
 
