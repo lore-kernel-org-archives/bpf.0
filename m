@@ -2,115 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38AE1C43217
-	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 02:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6476BC4332F
+	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 02:20:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiDPCKQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 22:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S229762AbiDPCWj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 22:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiDPCGY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:06:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D222765827;
-        Fri, 15 Apr 2022 18:57:16 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KgGX26D0Pz1HBhn;
-        Sat, 16 Apr 2022 09:56:34 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 09:57:12 +0800
-Message-ID: <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com>
-Date:   Sat, 16 Apr 2022 09:57:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
-Content-Language: en-US
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        with ESMTP id S229764AbiDPCWR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 22:22:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0989258E4F;
+        Fri, 15 Apr 2022 19:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=bUAJkklJHXouTvJvon6xbqqyKuElapQGuj6PBphCcfo=; b=Xar28tDBlyh51k6qHs4/qv6klW
+        JKgvCYizkt8JvdgPqL/H1j3LkMzhitRPp0hQ0HS6a9NWVvVxTToJjKNkJI7Dyn4yWIPHbqL5glTOM
+        OypgRvApQK3LjTjzi6JSMObnW8ON+wq2JRYUf9KOOtk6/OJMAh77Vv9toU//TkDz/65KgGQBzrs/P
+        fAOhOwvrC+mjeqg4aSRZLMme4Ue6z5bBKOSbhwkdO3f3xMQOA9b23o/z+AUqtaLyHbnLFOxkvvFsn
+        oM7JwAFu8SGO+AVK146Dzu8JrS2izXKe/H42yEiaHvsOuw+P2NyOL6rV3BSXPkGJEMroIniPDimcU
+        8VWh4f1Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nfXSF-00BuRc-6s; Sat, 16 Apr 2022 01:42:27 +0000
+Date:   Fri, 15 Apr 2022 18:42:27 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Song Liu <song@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
         open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, <hpa@zytor.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
-References: <20220414162220.1985095-1-xukuohai@huawei.com>
- <20220414162220.1985095-6-xukuohai@huawei.com>
- <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Christoph Hellwig <hch@infradead.org>, imbrenda@linux.ibm.com
+Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+Message-ID: <YlofA8u760BE8e0B@bombadil.infradead.org>
+References: <20220415164413.2727220-1-song@kernel.org>
+ <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
+ <CAPhsuW6LY8g6SZpW0CBOe22FUd2e3oSq4RW1GDxZoPmHYBqwvw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW6LY8g6SZpW0CBOe22FUd2e3oSq4RW1GDxZoPmHYBqwvw@mail.gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 4/16/2022 1:12 AM, Andrii Nakryiko wrote:
-> On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
->>
->> Add bpf trampoline support for arm64. Most of the logic is the same as
->> x86.
->>
->> fentry before bpf trampoline hooked:
->>  mov x9, x30
->>  nop
->>
->> fentry after bpf trampoline hooked:
->>  mov x9, x30
->>  bl  <bpf_trampoline>
->>
->> Tested on qemu, result:
->>  #55 fentry_fexit:OK
->>  #56 fentry_test:OK
->>  #58 fexit_sleep:OK
->>  #59 fexit_stress:OK
->>  #60 fexit_test:OK
->>  #67 get_func_args_test:OK
->>  #68 get_func_ip_test:OK
->>  #101 modify_return:OK
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> Acked-by: Song Liu <songliubraving@fb.com>
->> ---
+On Fri, Apr 15, 2022 at 06:34:16PM -0700, Song Liu wrote:
+> On Fri, Apr 15, 2022 at 12:05 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Fri, Apr 15, 2022 at 09:44:09AM -0700, Song Liu wrote:
+> > > Changes v3 => v4:
+> > > 1. Fix __weak module_alloc_huge; remove unused vmalloc_huge; rename
+> > >    __vmalloc_huge => vmalloc_huge. (Christoph Hellwig)
+> > > 2. Use vzalloc (as it was before vmalloc_no_huge) and clean up comments in
+> > >    kvm_s390_pv_alloc_vm.
+> > >
+> > > Changes v2 => v3:
+> > > 1. Use __vmalloc_huge in alloc_large_system_hash.
+> > > 2. Use EXPORT_SYMBOL_GPL for new functions. (Christoph Hellwig)
+> > > 3. Add more description about the issues and changes.(Christoph Hellwig,
+> > >    Rick Edgecombe).
+> > >
+> > > Changes v1 => v2:
+> > > 1. Add vmalloc_huge(). (Christoph Hellwig)
+> > > 2. Add module_alloc_huge(). (Christoph Hellwig)
+> > > 3. Add Fixes tag and Link tag. (Thorsten Leemhuis)
+> > >
+> > > Enabling HAVE_ARCH_HUGE_VMALLOC on x86_64 and use it for bpf_prog_pack has
+> > > caused some issues [1], as many users of vmalloc are not yet ready to
+> > > handle huge pages. To enable a more smooth transition to use huge page
+> > > backed vmalloc memory, this set replaces VM_NO_HUGE_VMAP flag with an new
+> > > opt-in flag, VM_ALLOW_HUGE_VMAP. More discussions about this topic can be
+> > > found at [2].
+> > >
+> > > Patch 1 removes VM_NO_HUGE_VMAP and adds VM_ALLOW_HUGE_VMAP.
+> > > Patch 2 uses VM_ALLOW_HUGE_VMAP in bpf_prog_pack.
+> > >
+> > > [1] https://lore.kernel.org/lkml/20220204185742.271030-1-song@kernel.org/
+> > > [2] https://lore.kernel.org/linux-mm/20220330225642.1163897-1-song@kernel.org/
+> >
+> > Looks good except for that I think this should just wait for v5.19. The
+> > fixes are so large I can't see why this needs to be rushed in other than
+> > the first assumptions of the optimizations had some flaws addressed here.
 > 
-> Can you please also take a look at [0], which is an ongoing work to
-> add support for BPF cookie to BPF trampoline-based BPF programs. It's
-> very close to being done, so it would be good if you can implement
-> that at the same time.
+> We need these changes to fix issues like [3]. Note that there might
+> still be some
+> undiscovered issues with huge page backed vmalloc memory on powerpc, which
+> had HAVE_ARCH_HUGE_VMALLOC enabled since the 5.15 kernel. As we
+> agreed, the new opt-in flag is a safer approach here. We probably should have
+> 1/4 and 2/4 back ported to stable. Therefore, I think shipping this
+> set now would
+> give us a more reliable 5.18 release.
+> 
+> Does this make sense?
 
-OK, I'll take a look and try to implemnt it.
+Yes absolutely, but that sounds like that optimization should just be
+reverted completely from v5.18 isntead then no? Or if one can skip the
+optimizations for v5.18 with a small patch, and then enable for v5.19.
+
+  Luis
