@@ -2,154 +2,264 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D90BFC433EF
-	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 06:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06297C433EF
+	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 06:53:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiDPGza convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 16 Apr 2022 02:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
+        id S229768AbiDPGzy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 16 Apr 2022 02:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDPGza (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:55:30 -0400
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CA210EC46
-        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 23:52:58 -0700 (PDT)
+        with ESMTP id S229445AbiDPGzy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 16 Apr 2022 02:55:54 -0400
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C8B10EC44
+        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 23:53:22 -0700 (PDT)
 Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id D4E74B1DE613; Fri, 15 Apr 2022 23:35:38 -0700 (PDT)
+        id 82DE1B1DE619; Fri, 15 Apr 2022 23:35:39 -0700 (PDT)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     andrii@kernel.org, memxor@gmail.com, ast@kernel.org,
         daniel@iogearbox.net, toke@redhat.com,
         Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v2 0/7] Dynamic pointers
-Date:   Fri, 15 Apr 2022 23:34:22 -0700
-Message-Id: <20220416063429.3314021-1-joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v2 2/7] bpf: Add OBJ_RELEASE as a bpf_type_flag
+Date:   Fri, 15 Apr 2022 23:34:24 -0700
+Message-Id: <20220416063429.3314021-3-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220416063429.3314021-1-joannelkoong@gmail.com>
+References: <20220416063429.3314021-1-joannelkoong@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset implements the basics of dynamic pointers in bpf.
+Currently, we hardcode in the verifier which functions are release
+functions. We have no way of differentiating which argument is the one
+to be released (we assume it will always be the first argument).
 
-A dynamic pointer (struct bpf_dynptr) is a pointer that stores extra metadata
-alongside the address it points to. This abstraction is useful in bpf, given
-that every memory access in a bpf program must be safe. The verifier and bpf
-helper functions can use the metadata to enforce safety guarantees for things 
-such as dynamically sized strings and kernel heap allocations.
+This patch adds OBJ_RELEASE as a bpf_type_flag. This allows us to
+determine which argument in the function needs to be released, and
+removes having to hardcode a list of release functions into the
+verifier.
 
-From the program side, the bpf_dynptr is an opaque struct and the verifier
-will enforce that its contents are never written to by the program.
-It can only be written to through specific bpf helper functions.
+Please note that currently, we only support one release argument in a
+helper function. In the future, if/when we need to support several
+release arguments within the function, OBJ_RELEASE is necessary
+since there needs to be a way of differentiating which arguments are the
+release ones.
 
-There are several uses cases for dynamic pointers in bpf programs. A list of
-some are: dynamically sized ringbuf reservations without any extra memcpys,
-dynamic string parsing and memory comparisons, dynamic memory allocations that
-can be persisted in a map, and dynamic parsing of sk_buff and xdp_md packet
-data.
+In the near future, OBJ_RELEASE will be used by dynptr helper functions
+such as bpf_dynptr_put.
 
-At a high-level, the patches are as follows:
-1/7 - Adds MEM_UNINIT as a bpf_type_flag
-2/7 - Adds MEM_RELEASE as a bpf_type_flag
-3/7 - Adds bpf_dynptr_from_mem, bpf_dynptr_alloc, and bpf_dynptr_put
-4/7 - Adds bpf_dynptr_read and bpf_dynptr_write
-5/7 - Adds dynptr data slices (ptr to underlying dynptr memory)
-6/7 - Adds dynptr support for ring buffers
-7/7 - Tests to check that verifier rejects certain fail cases and passes
-certain success cases
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+---
+ include/linux/bpf.h          |  4 +++-
+ include/linux/bpf_verifier.h |  3 +--
+ kernel/bpf/btf.c             |  3 ++-
+ kernel/bpf/ringbuf.c         |  4 ++--
+ kernel/bpf/verifier.c        | 44 +++++++++++++++++-------------------
+ net/core/filter.c            |  2 +-
+ 6 files changed, 30 insertions(+), 30 deletions(-)
 
-This is the first dynptr patchset in a larger series. The next series of
-patches will add persisting dynamic memory allocations in maps, parsing packet
-data through dynptrs, dynptrs to referenced objects, convenience helpers for
-using dynptrs as iterators, and more helper functions for interacting with
-strings and memory dynamically.
-
-Changelog:
-----------
-v1 -> v2:
-v1: https://lore.kernel.org/bpf/20220402015826.3941317-1-joannekoong@fb.com/
-
-1/7 -
-    * Remove ARG_PTR_TO_MAP_VALUE_UNINIT alias and use
-      ARG_PTR_TO_MAP_VALUE | MEM_UNINIT directly (Andrii)
-    * Drop arg_type_is_mem_ptr() wrapper function (Andrii)
-
-2/7 - 
-    * Change name from MEM_RELEASE to OBJ_RELEASE (Andrii)
-    * Use meta.release_ref instead of ref_obj_id != 0 to determine whether
-      to release reference (Kumar)
-    * Drop type_is_release_mem() wrapper function (Andrii) 
-	
-3/7 -
-    * Add checks for nested dynptrs edge-cases, which could lead to corrupt
-    * writes of the dynptr stack variable.
-    * Add u64 flags to bpf_dynptr_from_mem() and bpf_dynptr_alloc() (Andrii)
-    * Rename from bpf_malloc/bpf_free to bpf_dynptr_alloc/bpf_dynptr_put
-      (Alexei)
-    * Support alloc flag __GFP_ZERO (Andrii) 
-    * Reserve upper 8 bits in dynptr size and offset fields instead of
-      reserving just the upper 4 bits (Andrii)
-    * Allow dynptr zero-slices (Andrii) 
-    * Use the highest bit for is_rdonly instead of the 28th bit (Andrii)
-    * Rename check_* functions to is_* functions for better readability
-      (Andrii)
-    * Add comment for code that checks the spi bounds (Andrii)
-
-4/7 -
-    * Fix doc description for bpf_dynpt_read (Toke)
-    * Move bpf_dynptr_check_off_len() from function patch 1 to here (Andrii)
-
-5/7 -
-    * When finding the id for the dynptr to associate the data slice with,
-      look for dynptr arg instead of assuming it is BPF_REG_1.
-
-6/7 -
-    * Add __force when casting from unsigned long to void * (kernel test robot)
-    * Expand on docs for ringbuf dynptr APIs (Andrii)
-
-7/7 -
-    * Use table approach for defining test programs and error messages (Andrii)
-    * Print out full log if there’s an error (Andrii)
-    * Use bpf_object__find_program_by_name() instead of specifying
-      program name as a string (Andrii)
-    * Add 6 extra cases: invalid_nested_dynptrs1, invalid_nested_dynptrs2,
-      invalid_ref_mem1, invalid_ref_mem2, zero_slice_access,
-      and test_alloc_zero_bytes
-    * Add checking for edge cases (eg allocing with invalid flags)
-
-Joanne Koong (7):
-  bpf: Add MEM_UNINIT as a bpf_type_flag
-  bpf: Add OBJ_RELEASE as a bpf_type_flag
-  bpf: Add bpf_dynptr_from_mem, bpf_dynptr_alloc, bpf_dynptr_put
-  bpf: Add bpf_dynptr_read and bpf_dynptr_write
-  bpf: Add dynptr data slices
-  bpf: Dynptr support for ring buffers
-  bpf: Dynptr tests
-
- include/linux/bpf.h                           | 109 ++-
- include/linux/bpf_verifier.h                  |  33 +-
- include/uapi/linux/bpf.h                      | 110 +++
- kernel/bpf/bpf_lsm.c                          |   4 +-
- kernel/bpf/btf.c                              |   3 +-
- kernel/bpf/cgroup.c                           |   4 +-
- kernel/bpf/helpers.c                          | 212 +++++-
- kernel/bpf/ringbuf.c                          |  75 +-
- kernel/bpf/stackmap.c                         |   6 +-
- kernel/bpf/verifier.c                         | 538 +++++++++++++--
- kernel/trace/bpf_trace.c                      |  30 +-
- net/core/filter.c                             |  28 +-
- scripts/bpf_doc.py                            |   2 +
- tools/include/uapi/linux/bpf.h                | 110 +++
- .../testing/selftests/bpf/prog_tests/dynptr.c | 138 ++++
- .../testing/selftests/bpf/progs/dynptr_fail.c | 643 ++++++++++++++++++
- .../selftests/bpf/progs/dynptr_success.c      | 217 ++++++
- 17 files changed, 2148 insertions(+), 114 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/dynptr_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/dynptr_success.c
-
--- 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 12b90de9c46d..29964cdb1dd6 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -344,7 +344,9 @@ enum bpf_type_flag {
+=20
+ 	MEM_UNINIT		=3D BIT(5 + BPF_BASE_TYPE_BITS),
+=20
+-	__BPF_TYPE_LAST_FLAG	=3D MEM_UNINIT,
++	OBJ_RELEASE		=3D BIT(6 + BPF_BASE_TYPE_BITS),
++
++	__BPF_TYPE_LAST_FLAG	=3D OBJ_RELEASE,
+ };
+=20
+ /* Max number of base types. */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c1fc4af47f69..7a01adc9e13f 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -523,8 +523,7 @@ int check_ptr_off_reg(struct bpf_verifier_env *env,
+ 		      const struct bpf_reg_state *reg, int regno);
+ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 			   const struct bpf_reg_state *reg, int regno,
+-			   enum bpf_arg_type arg_type,
+-			   bool is_release_func);
++			   enum bpf_arg_type arg_type, bool arg_release);
+ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_re=
+g_state *reg,
+ 			     u32 regno);
+ int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *re=
+g,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0918a39279f6..e5b765a84aec 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5830,7 +5830,8 @@ static int btf_check_func_arg_match(struct bpf_veri=
+fier_env *env,
+ 		ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+ 		ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+=20
+-		ret =3D check_func_arg_reg_off(env, reg, regno, ARG_DONTCARE, rel);
++		ret =3D check_func_arg_reg_off(env, reg, regno, ARG_DONTCARE,
++					     rel && reg->ref_obj_id);
+ 		if (ret < 0)
+ 			return ret;
+=20
+diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+index 710ba9de12ce..5173fd37590f 100644
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -404,7 +404,7 @@ BPF_CALL_2(bpf_ringbuf_submit, void *, sample, u64, f=
+lags)
+ const struct bpf_func_proto bpf_ringbuf_submit_proto =3D {
+ 	.func		=3D bpf_ringbuf_submit,
+ 	.ret_type	=3D RET_VOID,
+-	.arg1_type	=3D ARG_PTR_TO_ALLOC_MEM,
++	.arg1_type	=3D ARG_PTR_TO_ALLOC_MEM | OBJ_RELEASE,
+ 	.arg2_type	=3D ARG_ANYTHING,
+ };
+=20
+@@ -417,7 +417,7 @@ BPF_CALL_2(bpf_ringbuf_discard, void *, sample, u64, =
+flags)
+ const struct bpf_func_proto bpf_ringbuf_discard_proto =3D {
+ 	.func		=3D bpf_ringbuf_discard,
+ 	.ret_type	=3D RET_VOID,
+-	.arg1_type	=3D ARG_PTR_TO_ALLOC_MEM,
++	.arg1_type	=3D ARG_PTR_TO_ALLOC_MEM | OBJ_RELEASE,
+ 	.arg2_type	=3D ARG_ANYTHING,
+ };
+=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 355566979e36..8deb588a19ce 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -257,6 +257,7 @@ struct bpf_call_arg_meta {
+ 	struct btf *ret_btf;
+ 	u32 ret_btf_id;
+ 	u32 subprogno;
++	bool release_ref;
+ };
+=20
+ struct btf *btf_vmlinux;
+@@ -471,17 +472,6 @@ static bool type_may_be_null(u32 type)
+ 	return type & PTR_MAYBE_NULL;
+ }
+=20
+-/* Determine whether the function releases some resources allocated by a=
+nother
+- * function call. The first reference type argument will be assumed to b=
+e
+- * released by release_reference().
+- */
+-static bool is_release_function(enum bpf_func_id func_id)
+-{
+-	return func_id =3D=3D BPF_FUNC_sk_release ||
+-	       func_id =3D=3D BPF_FUNC_ringbuf_submit ||
+-	       func_id =3D=3D BPF_FUNC_ringbuf_discard;
+-}
+-
+ static bool may_be_acquire_function(enum bpf_func_id func_id)
+ {
+ 	return func_id =3D=3D BPF_FUNC_sk_lookup_tcp ||
+@@ -5359,11 +5349,10 @@ static int check_reg_type(struct bpf_verifier_env=
+ *env, u32 regno,
+=20
+ int check_func_arg_reg_off(struct bpf_verifier_env *env,
+ 			   const struct bpf_reg_state *reg, int regno,
+-			   enum bpf_arg_type arg_type,
+-			   bool is_release_func)
++			   enum bpf_arg_type arg_type, bool arg_release)
+ {
+-	bool fixed_off_ok =3D false, release_reg;
+ 	enum bpf_reg_type type =3D reg->type;
++	bool fixed_off_ok =3D false;
+=20
+ 	switch ((u32)type) {
+ 	case SCALAR_VALUE:
+@@ -5388,18 +5377,15 @@ int check_func_arg_reg_off(struct bpf_verifier_en=
+v *env,
+ 	 * fixed offset.
+ 	 */
+ 	case PTR_TO_BTF_ID:
+-		/* When referenced PTR_TO_BTF_ID is passed to release function,
+-		 * it's fixed offset must be 0. We rely on the property that
+-		 * only one referenced register can be passed to BPF helpers and
+-		 * kfuncs. In the other cases, fixed offset can be non-zero.
++		/* If a referenced PTR_TO_BTF_ID will be released, its fixed offset
++		 * must be 0.
+ 		 */
+-		release_reg =3D is_release_func && reg->ref_obj_id;
+-		if (release_reg && reg->off) {
++		if (arg_release && reg->off) {
+ 			verbose(env, "R%d must have zero offset when passed to release func\n=
+",
+ 				regno);
+ 			return -EINVAL;
+ 		}
+-		/* For release_reg =3D=3D true, fixed_off_ok must be false, but we
++		/* For arg_release =3D=3D true, fixed_off_ok must be false, but we
+ 		 * already checked and rejected reg->off !=3D 0 above, so set to
+ 		 * true to allow fixed offset for all other cases.
+ 		 */
+@@ -5459,7 +5445,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ 	if (err)
+ 		return err;
+=20
+-	err =3D check_func_arg_reg_off(env, reg, regno, arg_type, is_release_fu=
+nction(meta->func_id));
++	err =3D check_func_arg_reg_off(env, reg, regno, arg_type, arg_type & OB=
+J_RELEASE);
+ 	if (err)
+ 		return err;
+=20
+@@ -5476,6 +5462,18 @@ static int check_func_arg(struct bpf_verifier_env =
+*env, u32 arg,
+ 		}
+ 		meta->ref_obj_id =3D reg->ref_obj_id;
+ 	}
++	if (arg_type & OBJ_RELEASE) {
++		if (!reg->ref_obj_id) {
++			verbose(env, "arg %d is an unacquired reference\n", regno);
++			return -EINVAL;
++		}
++		if (meta->release_ref) {
++			verbose(env, "verifier internal error: more than one release_ref arg =
+R%d\n",
++				regno);
++			return -EFAULT;
++		}
++		meta->release_ref =3D true;
++	}
+=20
+ 	if (arg_type =3D=3D ARG_CONST_MAP_PTR) {
+ 		/* bpf_map_xxx(map_ptr) call: remember that map_ptr */
+@@ -6688,7 +6686,7 @@ static int check_helper_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn
+ 			return err;
+ 	}
+=20
+-	if (is_release_function(func_id)) {
++	if (meta.release_ref) {
+ 		err =3D release_reference(env, meta.ref_obj_id);
+ 		if (err) {
+ 			verbose(env, "func %s#%d reference has not been acquired before\n",
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 9aafec3a09ed..849611a1a51a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6621,7 +6621,7 @@ static const struct bpf_func_proto bpf_sk_release_p=
+roto =3D {
+ 	.func		=3D bpf_sk_release,
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
++	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON | OBJ_RELEASE,
+ };
+=20
+ BPF_CALL_5(bpf_xdp_sk_lookup_udp, struct xdp_buff *, ctx,
+--=20
 2.30.2
 
