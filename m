@@ -2,69 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8EAFC433EF
-	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 02:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38AE1C43217
+	for <bpf@archiver.kernel.org>; Sat, 16 Apr 2022 02:08:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiDPCKP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Apr 2022 22:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S229623AbiDPCKQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Apr 2022 22:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiDPCJL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:09:11 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850C606F6
-        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 19:06:39 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id a10so7475795qvm.8
-        for <bpf@vger.kernel.org>; Fri, 15 Apr 2022 19:06:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2aZT5zhZbSY/+EJMti4wIaGahOw4Saj1zZaSQ83TiLY=;
-        b=TLzukGIBKc4DPM3h0EHYMlG3b6TJyF72PvxuYy8MlfKCGm/ZA8wse2o5AcsvGTaIhq
-         Ocie9QpiLm8AlDvFmGpslI2c7CEyRtoh6P5570UVYOTTbTIkXQubMNMhq30pQhQTJLbK
-         etBk42/Y/t52ZX/6S+i2ulNsGR4zzwXB7EwMifvTRt/hwHK13cI+QD64K3OxBTrkMu3e
-         G9jD+LT9rixt/6lXG1eq/lFtZtEiZmCLVLYXRok/zEfTnXCOd9+gUevPRof4Sesz+HiF
-         vYDSB1zfsK+VHh3mGF3u3ASWTYPPRVdBWQnq+GYuM8DsaEUPy3TcDIAFIUS2nSj9yux6
-         ORNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2aZT5zhZbSY/+EJMti4wIaGahOw4Saj1zZaSQ83TiLY=;
-        b=dp5TwMnxVEAP/oX1/95EBM0OpjOKgqOcTkhUaCWDTmMFB7a4gFhi2cfvzrHPOFfIpx
-         sp/AkFTaA+m1wNdnx9Ty7QWBqeTKKRNTHbB61AbqWugPyDuIIx3znqau2/yvHT2nzhuT
-         yhflpTN245+0cT97Q5nJLeGEeX5t0tCNmdx4Xz87ZyIbAIru/qZALeg2ZEdpzds+ZcHk
-         UNhgYJ0ryZSBOLU0eWAj3agoSax9Elnay7GU3M/0iexcL0oKIPgqvwneYUABwiTDvo2y
-         enO+RZQvF6cydyXdxhzRr2HHtm4tcLQO0k5KcqTOA2zkwi9aDSE+NzySQkC6sXBlrImu
-         bsrQ==
-X-Gm-Message-State: AOAM531x4tzrDN3cu5QMw56Bupmg2jPg9j+omx1K5RnukjYzpBSrr1yx
-        5bUokjHevznZ6rbryRAN86ouOArVjgvuzbq9sTiy54N+
-X-Google-Smtp-Source: ABdhPJyV8EKL9lc4gruqNBHsoU34wRrMfjSsfcL0D/wJKhq/Y7h90lAXZ+5ltwUcDasy3qlK3Peqavny0/JmX7yG4R8=
-X-Received: by 2002:a17:902:7209:b0:158:c67b:3915 with SMTP id
- ba9-20020a170902720900b00158c67b3915mr1516832plb.67.1650070260378; Fri, 15
- Apr 2022 17:51:00 -0700 (PDT)
+        with ESMTP id S229699AbiDPCGY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Apr 2022 22:06:24 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D222765827;
+        Fri, 15 Apr 2022 18:57:16 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KgGX26D0Pz1HBhn;
+        Sat, 16 Apr 2022 09:56:34 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 09:57:12 +0800
+Message-ID: <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com>
+Date:   Sat, 16 Apr 2022 09:57:12 +0800
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-1-alobakin@pm.me>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sat, 16 Apr 2022 00:50:49 +0000
-Message-ID: <CAADnVQ+rGR9vaDD1GM3mPgTkece711KZ+ME1MPWN8KYohydZyQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/11] bpf: random unpopular userspace fixes (32
- bit et al.)
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, <hpa@zytor.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+References: <20220414162220.1985095-1-xukuohai@huawei.com>
+ <20220414162220.1985095-6-xukuohai@huawei.com>
+ <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:44 PM Alexander Lobakin <alobakin@pm.me> wrote:
+On 4/16/2022 1:12 AM, Andrii Nakryiko wrote:
+> On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+>>
+>> Add bpf trampoline support for arm64. Most of the logic is the same as
+>> x86.
+>>
+>> fentry before bpf trampoline hooked:
+>>  mov x9, x30
+>>  nop
+>>
+>> fentry after bpf trampoline hooked:
+>>  mov x9, x30
+>>  bl  <bpf_trampoline>
+>>
+>> Tested on qemu, result:
+>>  #55 fentry_fexit:OK
+>>  #56 fentry_test:OK
+>>  #58 fexit_sleep:OK
+>>  #59 fexit_stress:OK
+>>  #60 fexit_test:OK
+>>  #67 get_func_args_test:OK
+>>  #68 get_func_ip_test:OK
+>>  #101 modify_return:OK
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Acked-by: Song Liu <songliubraving@fb.com>
+>> ---
+> 
+> Can you please also take a look at [0], which is an ongoing work to
+> add support for BPF cookie to BPF trampoline-based BPF programs. It's
+> very close to being done, so it would be good if you can implement
+> that at the same time.
 
-Please do not send encrypted patches.
-Use plain text.
-
-Also for bpf fixes please use [PATCH bpf] subject.
-cc maintainers and bpf@vger only.
-There is no need to spam such a huge list of people.
+OK, I'll take a look and try to implemnt it.
