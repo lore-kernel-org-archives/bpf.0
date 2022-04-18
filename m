@@ -2,107 +2,219 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66BEDC433F5
-	for <bpf@archiver.kernel.org>; Mon, 18 Apr 2022 10:06:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63AB4C433FE
+	for <bpf@archiver.kernel.org>; Mon, 18 Apr 2022 13:09:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbiDRKJ0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Apr 2022 06:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        id S241231AbiDRNLh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Apr 2022 09:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbiDRKJZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Apr 2022 06:09:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A015612612;
-        Mon, 18 Apr 2022 03:06:46 -0700 (PDT)
+        with ESMTP id S243231AbiDRNJ6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Apr 2022 09:09:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2770637A07;
+        Mon, 18 Apr 2022 05:49:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA45611AF;
-        Mon, 18 Apr 2022 10:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65657C385A7;
-        Mon, 18 Apr 2022 10:06:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91DA2B80EE7;
+        Mon, 18 Apr 2022 12:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C345BC385A1;
+        Mon, 18 Apr 2022 12:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650276405;
-        bh=uoe2eTNjXAnSgEGbVFQxizx4XBjSzBp1lG6cswI6xbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z4OT4i/LC2k/i92kWLfFKtTVBpAdJZEhrTM79Ipn6nV/ODqs9njDujOE7UGufhLQE
-         Do/HYbG4P6USOC8UsXPXuco19gPIs7rtCCd0Q3D6LSgvEU++x3yzPanyMqL06a1Fm9
-         aIIGSGvhWMb31LZbEuWeAEMUSjSc8Mly75z+om044xpunk0PUPohekuF8NmKJW9Rl1
-         4DywuvNrUFLI25dNnj/mashbTnlGTNXaZkLZHCAnCDWRjavDNqH5NBuxw3m6IIaFWI
-         vgV74FuUatDEOEi5SzMXSz4+aXblqTJNQjcDWglnKZ7EDbpbYmQ0eSH5YgD0p4uul1
-         B5eHWHALx3iWA==
-Date:   Mon, 18 Apr 2022 13:06:36 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        s=k20201202; t=1650286148;
+        bh=wT4/WeIwjYBzff+W5ZOYqpym7Y597fnbp/CAYefVOIE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sgjn8gsRszB6q4ey1OP/i5SzwAo5b60Dtcb7gpMpCZZV82QYAPyEcXKZZjZK9rlgV
+         K+fUMDnTzqiaFrYyAQujbrgYQEbGEL5zcUuPsVq8jILIGkxMThZ7smJUyZk0nRWBbP
+         S/8NhCSCWiDX3AEzy/gNF0Sssb4JXfkNT3QxVcNuSXp0rJ00pl9+6bO1qreOrUlvtu
+         AO5dCuXrj+yCkWKa6wPqmi0shzqXCycS76wM/mni9vqxhF/NgjuFFOTlLtw3vRLa3r
+         z8fngrW8+fpq823RjavNKC0GzI2nNryfYc5zP+3DeAg0GixTPx3UOou6Av3SN6G6AN
+         f+fU2Ns2C7FVA==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <Yl04LO/PfB3GocvU@kernel.org>
-References: <20220415164413.2727220-1-song@kernel.org>
- <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org>
- <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: [PATCHv2 bpf-next 3/4] bpf: Resolve symbols with kallsyms_lookup_names for kprobe multi link
+Date:   Mon, 18 Apr 2022 14:48:33 +0200
+Message-Id: <20220418124834.829064-4-jolsa@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220418124834.829064-1-jolsa@kernel.org>
+References: <20220418124834.829064-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+Using kallsyms_lookup_names function to speed up symbols lookup in
+kprobe multi link attachment and replacing with it the current
+kprobe_multi_resolve_syms function.
 
-On Sat, Apr 16, 2022 at 10:26:08PM +0000, Song Liu wrote:
-> > On Apr 16, 2022, at 1:30 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> > 
-> > Maybe I am missing something, but I really don't think this is ready
-> > for prime-time. We should effectively disable it all, and have people
-> > think through it a lot more.
-> 
-> This has been discussed on lwn.net: https://lwn.net/Articles/883454/. 
-> AFAICT, the biggest concern is whether reserving minimal 2MB for BPF
-> programs is a good trade-off for memory usage. This is again my fault
-> not to state the motivation clearly: the primary gain comes from less 
-> page table fragmentation and thus better iTLB efficiency. 
+This speeds up bpftrace kprobe attachment:
 
-Reserving 2MB pages for BPF programs will indeed reduce the fragmentation,
-but OTOH it will reduce memory utilization. If for large systems this may
-not be an issue, on smaller machines trading off memory for iTLB
-performance may be not that obvious.
+  # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+  ...
+  6.5681 +- 0.0225 seconds time elapsed  ( +-  0.34% )
+
+After:
+
+  # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+  ...
+  0.5661 +- 0.0275 seconds time elapsed  ( +-  4.85% )
+
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/trace/bpf_trace.c | 113 +++++++++++++++++++++++----------------
+ 1 file changed, 67 insertions(+), 46 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index b26f3da943de..f49cdc46a21f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2226,6 +2226,60 @@ struct bpf_kprobe_multi_run_ctx {
+ 	unsigned long entry_ip;
+ };
  
-> Other folks (in recent thread on this topic and offline in other 
-> discussions) also showed strong interests in using similar technical 
-> for text of kernel modules. So I would really like to learn your 
-> opinion on this. There are many details we can optimize, but I guess 
-> the general mechanism has to be something like:
->  - allocate a huge page, make it safe, and set it as executable;
->  - as users (BPF, kernel module, etc.) request memory for text, give
->    a chunk of the huge page to the user. 
->  - use some mechanism to update the chunk of memory safely. 
-
-There are use-cases that require 4K pages with non-default permissions in
-the direct map and the pages not necessarily should be executable. There
-were several suggestions to implement caches of 4K pages backed by 2M
-pages.
-
-I believe that "allocate huge page and split it to basic pages to hand out
-to users" concept should be implemented at page allocator level and I
-posted and RFC for this a while ago:
-
-https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org/
-
++struct user_syms {
++	const char **syms;
++	char *buf;
++};
++
++static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32 cnt)
++{
++	unsigned long __user usymbol;
++	const char **syms = NULL;
++	char *buf = NULL, *p;
++	int err = -EFAULT;
++	unsigned int i;
++
++	err = -ENOMEM;
++	syms = kvmalloc(cnt * sizeof(*syms), GFP_KERNEL);
++	if (!syms)
++		goto error;
++
++	buf = kvmalloc(cnt * KSYM_NAME_LEN, GFP_KERNEL);
++	if (!buf)
++		goto error;
++
++	for (p = buf, i = 0; i < cnt; i++) {
++		if (__get_user(usymbol, usyms + i)) {
++			err = -EFAULT;
++			goto error;
++		}
++		err = strncpy_from_user(p, (const char __user *) usymbol, KSYM_NAME_LEN);
++		if (err == KSYM_NAME_LEN)
++			err = -E2BIG;
++		if (err < 0)
++			goto error;
++		syms[i] = p;
++		p += err + 1;
++	}
++
++	err = 0;
++	us->syms = syms;
++	us->buf = buf;
++
++error:
++	if (err) {
++		kvfree(syms);
++		kvfree(buf);
++	}
++	return err;
++}
++
++static void free_user_syms(struct user_syms *us)
++{
++	kvfree(us->syms);
++	kvfree(us->buf);
++}
++
+ static void bpf_kprobe_multi_link_release(struct bpf_link *link)
+ {
+ 	struct bpf_kprobe_multi_link *kmulti_link;
+@@ -2346,53 +2400,12 @@ kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
+ 	kprobe_multi_link_prog_run(link, entry_ip, regs);
+ }
+ 
+-static int
+-kprobe_multi_resolve_syms(const void __user *usyms, u32 cnt,
+-			  unsigned long *addrs)
++static int symbols_cmp(const void *a, const void *b)
+ {
+-	unsigned long addr, size;
+-	const char __user **syms;
+-	int err = -ENOMEM;
+-	unsigned int i;
+-	char *func;
+-
+-	size = cnt * sizeof(*syms);
+-	syms = kvzalloc(size, GFP_KERNEL);
+-	if (!syms)
+-		return -ENOMEM;
+-
+-	func = kmalloc(KSYM_NAME_LEN, GFP_KERNEL);
+-	if (!func)
+-		goto error;
+-
+-	if (copy_from_user(syms, usyms, size)) {
+-		err = -EFAULT;
+-		goto error;
+-	}
+-
+-	for (i = 0; i < cnt; i++) {
+-		err = strncpy_from_user(func, syms[i], KSYM_NAME_LEN);
+-		if (err == KSYM_NAME_LEN)
+-			err = -E2BIG;
+-		if (err < 0)
+-			goto error;
+-		err = -EINVAL;
+-		addr = kallsyms_lookup_name(func);
+-		if (!addr)
+-			goto error;
+-		if (!kallsyms_lookup_size_offset(addr, &size, NULL))
+-			goto error;
+-		addr = ftrace_location_range(addr, addr + size - 1);
+-		if (!addr)
+-			goto error;
+-		addrs[i] = addr;
+-	}
++	const char **str_a = (const char **) a;
++	const char **str_b = (const char **) b;
+ 
+-	err = 0;
+-error:
+-	kvfree(syms);
+-	kfree(func);
+-	return err;
++	return strcmp(*str_a, *str_b);
+ }
+ 
+ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+@@ -2438,7 +2451,15 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 			goto error;
+ 		}
+ 	} else {
+-		err = kprobe_multi_resolve_syms(usyms, cnt, addrs);
++		struct user_syms us;
++
++		err = copy_user_syms(&us, usyms, cnt);
++		if (err)
++			goto error;
++
++		sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
++		err = kallsyms_lookup_names(us.syms, cnt, addrs);
++		free_user_syms(&us);
+ 		if (err)
+ 			goto error;
+ 	}
 -- 
-Sincerely yours,
-Mike.
+2.35.1
+
