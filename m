@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE7E3C433FE
-	for <bpf@archiver.kernel.org>; Mon, 18 Apr 2022 13:09:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79B10C433EF
+	for <bpf@archiver.kernel.org>; Mon, 18 Apr 2022 13:12:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241272AbiDRNLp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Apr 2022 09:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
+        id S240360AbiDRNP2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Apr 2022 09:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242816AbiDRNJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:09:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9512369C6;
-        Mon, 18 Apr 2022 05:49:01 -0700 (PDT)
+        with ESMTP id S243140AbiDRNJv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Apr 2022 09:09:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F65377C8;
+        Mon, 18 Apr 2022 05:49:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2E87B80EDB;
-        Mon, 18 Apr 2022 12:48:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 005B7C385A1;
-        Mon, 18 Apr 2022 12:48:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01BEB6124A;
+        Mon, 18 Apr 2022 12:49:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAE41C385A8;
+        Mon, 18 Apr 2022 12:49:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650286138;
-        bh=l5dooTjbgCNig025z/CpTFdhYCb1guxzIXi8auXSJ1I=;
+        s=k20201202; t=1650286158;
+        bh=lBl8uds7Jfl9k1iKeNXaVIGGGJfONnxxms9Sd0YLPoo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hGZlpXTtzMxkqwRnpBxWwuPLvnGxRVMlX30XmdfK4s5DDoy4MeBWTXsxtuBxaoEWH
-         mJSpRi1BCInVFtuCO9qofR4+zv4imTIvfHyi0yYgKojUwiPYXB9GD7Di/zCJBDJRyK
-         vN3oMA1gHMjtL0zuyhh3n2NGJcSWc0TQ98zBUaLSE4cr63h/rMPBYXd5JrYbhNCO5C
-         GE9LcDw5GUXzaJPtmvlTk664jj7fO4+X3gVKajpRXZTUAIzhI4w5OPR+87Q96NwZuK
-         DpKvjLvmQFiGdc+YtZRrz+gv5LzHcZY6QPa2bF0E7rboV0zTxmcmpKtbOzQzjEntjn
-         HW8Y2h9Kng27A==
+        b=NF63zzSyYP9XW4uApY83MraFba3LZD9+2F5T+tpML1DyFTcjL9dIcO8PB0wjD7p5d
+         JmKifUGp7XxNpv9eMA5sq3ecPlpGySyQDNiKfSL5viOSTAqVBT2F71dA2TARQ2Vux+
+         yGD+20a4Ggd0V7HkOG98Z+yFGf6CwiO8ys5jrsWiMqK7tH5w8ML3dGBpsUhX9shBVZ
+         doXnbLhiZqhoAGgM8sYTqY3bLvK5xYllo4bLj32+6SgOmuxva+7ZE6w4FjmFCfwwYr
+         TIxHtVP0gO2hlfGqM453QCfA+B8lqC3e/OKhM7Z7tjlgBCRfjHx94Muj8GoNKZhu4e
+         AD35I4qdvek9g==
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -42,9 +42,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>
-Subject: [PATCHv2 bpf-next 2/4] fprobe: Resolve symbols with kallsyms_lookup_names
-Date:   Mon, 18 Apr 2022 14:48:32 +0200
-Message-Id: <20220418124834.829064-3-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 4/4] selftests/bpf: Add attach bench test
+Date:   Mon, 18 Apr 2022 14:48:34 +0200
+Message-Id: <20220418124834.829064-5-jolsa@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220418124834.829064-1-jolsa@kernel.org>
 References: <20220418124834.829064-1-jolsa@kernel.org>
@@ -54,72 +54,199 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Using kallsyms_lookup_names to speed up symbols lookup
-in register_fprobe_syms API.
+Adding test that reads all functions from ftrace available_filter_functions
+file and attach them all through kprobe_multi API.
 
-This requires syms array to be alphabetically sorted.
+It also prints stats info with -v option, like on my setup:
+
+  test_bench_attach: found 48712 functions
+  test_bench_attach: attached in   1.069s
+  test_bench_attach: detached in   0.373s
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/trace/fprobe.c | 32 ++++++++++++--------------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
+ .../bpf/prog_tests/kprobe_multi_test.c        | 136 ++++++++++++++++++
+ .../selftests/bpf/progs/kprobe_multi_empty.c  |  12 ++
+ 2 files changed, 148 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 89d9f994ebb0..6419501a0036 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -85,39 +85,31 @@ static void fprobe_exit_handler(struct rethook_node *rh, void *data,
- }
- NOKPROBE_SYMBOL(fprobe_exit_handler);
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index b9876b55fc0c..05f0fab8af89 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -2,6 +2,9 @@
+ #include <test_progs.h>
+ #include "kprobe_multi.skel.h"
+ #include "trace_helpers.h"
++#include "kprobe_multi_empty.skel.h"
++#include "bpf/libbpf_internal.h"
++#include "bpf/hashmap.h"
  
-+static int symbols_cmp(const void *a, const void *b)
+ static void kprobe_multi_test_run(struct kprobe_multi *skel, bool test_return)
+ {
+@@ -301,6 +304,137 @@ static void test_attach_api_fails(void)
+ 	kprobe_multi__destroy(skel);
+ }
+ 
++static inline __u64 get_time_ns(void)
 +{
-+	const char **str_a = (const char **) a;
-+	const char **str_b = (const char **) b;
++	struct timespec t;
 +
-+	return strcmp(*str_a, *str_b);
++	clock_gettime(CLOCK_MONOTONIC, &t);
++	return (__u64) t.tv_sec * 1000000000 + t.tv_nsec;
 +}
 +
- /* Convert ftrace location address from symbols */
- static unsigned long *get_ftrace_locations(const char **syms, int num)
++static size_t symbol_hash(const void *key, void *ctx __maybe_unused)
++{
++	return str_hash((const char *) key);
++}
++
++static bool symbol_equal(const void *key1, const void *key2, void *ctx __maybe_unused)
++{
++	return strcmp((const char *) key1, (const char *) key2) == 0;
++}
++
++#define DEBUGFS "/sys/kernel/debug/tracing/"
++
++static int get_syms(char ***symsp, size_t *cntp)
++{
++	size_t cap = 0, cnt = 0, i;
++	char *name, **syms = NULL;
++	struct hashmap *map;
++	char buf[256];
++	FILE *f;
++	int err;
++
++	/*
++	 * The available_filter_functions contains many duplicates,
++	 * but other than that all symbols are usable in kprobe multi
++	 * interface.
++	 * Filtering out duplicates by using hashmap__add, which won't
++	 * add existing entry.
++	 */
++	f = fopen(DEBUGFS "available_filter_functions", "r");
++	if (!f)
++		return -EINVAL;
++
++	map = hashmap__new(symbol_hash, symbol_equal, NULL);
++	err = libbpf_get_error(map);
++	if (err)
++		goto error;
++
++	while (fgets(buf, sizeof(buf), f)) {
++		/* skip modules */
++		if (strchr(buf, '['))
++			continue;
++		if (sscanf(buf, "%ms$*[^\n]\n", &name) != 1)
++			continue;
++		err = hashmap__add(map, name, NULL);
++		if (err) {
++			free(name);
++			if (err == -EEXIST)
++				continue;
++			goto error;
++		}
++		err = libbpf_ensure_mem((void **) &syms, &cap,
++					sizeof(*syms), cnt + 1);
++		if (err) {
++			free(name);
++			goto error;
++		}
++		syms[cnt] = name;
++		cnt++;
++	}
++
++	*symsp = syms;
++	*cntp = cnt;
++
++error:
++	fclose(f);
++	hashmap__free(map);
++	if (err) {
++		for (i = 0; i < cnt; i++)
++			free(syms[cnt]);
++		free(syms);
++	}
++	return err;
++}
++
++static void test_bench_attach(void)
++{
++	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
++	struct kprobe_multi_empty *skel = NULL;
++	long attach_start_ns, attach_end_ns;
++	long detach_start_ns, detach_end_ns;
++	double attach_delta, detach_delta;
++	struct bpf_link *link = NULL;
++	char **syms = NULL;
++	size_t cnt, i;
++
++	if (!ASSERT_OK(get_syms(&syms, &cnt), "get_syms"))
++		return;
++
++	skel = kprobe_multi_empty__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
++		goto cleanup;
++
++	opts.syms = (const char **) syms;
++	opts.cnt = cnt;
++
++	attach_start_ns = get_time_ns();
++	link = bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_empty,
++						     NULL, &opts);
++	attach_end_ns = get_time_ns();
++
++	if (!ASSERT_OK_PTR(link, "bpf_program__attach_kprobe_multi_opts"))
++		goto cleanup;
++
++	detach_start_ns = get_time_ns();
++	bpf_link__destroy(link);
++	detach_end_ns = get_time_ns();
++
++	attach_delta = (attach_end_ns - attach_start_ns) / 1000000000.0;
++	detach_delta = (detach_end_ns - detach_start_ns) / 1000000000.0;
++
++	fprintf(stderr, "%s: found %lu functions\n", __func__, cnt);
++	fprintf(stderr, "%s: attached in %7.3lfs\n", __func__, attach_delta);
++	fprintf(stderr, "%s: detached in %7.3lfs\n", __func__, detach_delta);
++
++cleanup:
++	kprobe_multi_empty__destroy(skel);
++	if (syms) {
++		for (i = 0; i < cnt; i++)
++			free(syms[i]);
++		free(syms);
++	}
++}
++
+ void test_kprobe_multi_test(void)
  {
--	unsigned long addr, size;
- 	unsigned long *addrs;
--	int i;
- 
- 	/* Convert symbols to symbol address */
- 	addrs = kcalloc(num, sizeof(*addrs), GFP_KERNEL);
- 	if (!addrs)
- 		return ERR_PTR(-ENOMEM);
- 
--	for (i = 0; i < num; i++) {
--		addr = kallsyms_lookup_name(syms[i]);
--		if (!addr)	/* Maybe wrong symbol */
--			goto error;
--
--		/* Convert symbol address to ftrace location. */
--		if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
--			goto error;
-+	/* kallsyms_lookup_names expects sorted symbols */
-+	sort(syms, num, sizeof(*syms), symbols_cmp, NULL);
- 
--		addr = ftrace_location_range(addr, addr + size - 1);
--		if (!addr) /* No dynamic ftrace there. */
--			goto error;
-+	if (!kallsyms_lookup_names(syms, num, addrs))
-+		return addrs;
- 
--		addrs[i] = addr;
--	}
--
--	return addrs;
--
--error:
- 	kfree(addrs);
--
- 	return ERR_PTR(-ENOENT);
+ 	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+@@ -320,4 +454,6 @@ void test_kprobe_multi_test(void)
+ 		test_attach_api_syms();
+ 	if (test__start_subtest("attach_api_fails"))
+ 		test_attach_api_fails();
++	if (test__start_subtest("bench_attach"))
++		test_bench_attach();
  }
- 
+diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+new file mode 100644
+index 000000000000..be9e3d891d46
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++SEC("kprobe.multi/*")
++int test_kprobe_empty(struct pt_regs *ctx)
++{
++	return 0;
++}
 -- 
 2.35.1
 
