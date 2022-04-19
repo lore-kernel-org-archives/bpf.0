@@ -2,431 +2,243 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA2CFC433EF
-	for <bpf@archiver.kernel.org>; Tue, 19 Apr 2022 19:02:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC1B6C433F5
+	for <bpf@archiver.kernel.org>; Tue, 19 Apr 2022 19:24:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357515AbiDSTEu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Apr 2022 15:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51050 "EHLO
+        id S1350599AbiDST04 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Apr 2022 15:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357525AbiDSTEF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Apr 2022 15:04:05 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073DA3F8A8
-        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:01:15 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2ebf1d99068so155358987b3.9
-        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:01:14 -0700 (PDT)
+        with ESMTP id S1356148AbiDST0y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Apr 2022 15:26:54 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81863EAA0
+        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:24:07 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id p10so31121962lfa.12
+        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:24:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=7FEbUMCmq3os2Yda/eEiHufzKdbzHqu7v9kf+ItQjhA=;
-        b=OVFj2O/jmF37yyWx1bCZqitlC9OSfN8rt9YbFUCGV8uko2CMB45Xgqmvw2WI9k7jo2
-         j51v8ehbBomHOrXhi+4iSB6zngbwNhlKA2gQvOpIVAuXUxeVFqmzt3k2pku4juwFLci9
-         ghEKQ3wyNCWL6C2zmfov7p3XEMWcMap8emFRAaQ+7ikG8d1DvqTKUE9VVUWPSO/CCkeL
-         N92KKhcuAYKVMaDDI4DMHyAZd6Y8KzsEngX5Y2853vo6KpxASD+x+kauxccgqdcHF82b
-         dU/KqLlq4PxGddwapAo9DJfHOSYu+wksODJY9A5SKRcwHTWsMNtN2AA88DTv8DdiC8Bs
-         1Ung==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Zzeym1q9fwXeXkyhUjPG1VYZ/CmTb5B19aE23OsyfGw=;
+        b=kO41nrgAm1/KJaEjxOacny7isjiYlaGy6OZp1J+CWumDmMkZaA/ty3rBQAFmOpg9vn
+         sESt6J4qtdUang8NOFXBsPa2d8brliwx4Y0Cw+IHi/FP/ZdwxZvQ23GQGrX/7rh6iTK0
+         Yxq6JwB8yOTiuuznWYLapOlqjYyav1bysMa9N6cDbh8F410IfhF6aB5DELftME0FmfhI
+         xdIf95ttW2A4/dNOXkZUE81E3H22jT4W2qp7KG3JDKG76KuqXX6snT0wMWuzuVmHUA96
+         NOnpGDSSrmVMZgzcCIfR0Jt1cM+jLhV/hfGRdsQ5Slqis28Sybqc+IgxRHrKu9XbpjLR
+         Ghew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=7FEbUMCmq3os2Yda/eEiHufzKdbzHqu7v9kf+ItQjhA=;
-        b=UiPuCEqtzey1zuHGy24nZEgNyIPnqRtmzFdQ8lloIdaPeUBWXD3LP93bg/8gwuamgV
-         2Hom2JTn9JkRD1/rmQG9gVwQ2FsiF81/It6XrPdlvq/q3SGRE/6KF9fZHazw0B/Jt4o+
-         +8C+u19S4+xDqIOhQLABok4kjXTUsnlZO4/DRUWx57QbLzNCwCGYoQC7SOPdzZ39togG
-         26Gu3ISUADfh+EDsnl4Yvea+8keKk1Hs4DCw6rhsxlY5QsjZ7hUkZ4KT/8GlesITBnvi
-         PV2wr7WcyqS/p9dLUYD24VZhDiMchRLbogvDYP8SjxpgB7kOE8suelm1anHY5euhBRMO
-         7wnw==
-X-Gm-Message-State: AOAM5306CskNrRyBHvrlwX6eXFj9gwyphD0WkThCTkGqezshp9qAGZLA
-        onVR2XIpC4b7c9TclIVaY/K7hQo=
-X-Google-Smtp-Source: ABdhPJzySR8R/wgZlQEwxQexYL8k++2PDSdxvQVuzK8L3wIV+ySYwKbC6M5oTl57KrYVaR1zZGVzwrE=
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:37f:6746:8e66:a291])
- (user=sdf job=sendgmr) by 2002:a25:41cf:0:b0:641:1857:ac7c with SMTP id
- o198-20020a2541cf000000b006411857ac7cmr16662119yba.281.1650394874254; Tue, 19
- Apr 2022 12:01:14 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 12:00:52 -0700
-In-Reply-To: <20220419190053.3395240-1-sdf@google.com>
-Message-Id: <20220419190053.3395240-8-sdf@google.com>
-Mime-Version: 1.0
-References: <20220419190053.3395240-1-sdf@google.com>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH bpf-next v5 7/8] selftests/bpf: lsm_cgroup functional test
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Zzeym1q9fwXeXkyhUjPG1VYZ/CmTb5B19aE23OsyfGw=;
+        b=7k5/Gs1TFzc4KTJXP6aSSGbtYbc0qSTC+CCPQ01IcBeOc3aMcz3wHoC0DIRU3tU7rH
+         eQIu6g+tH4P8PUxX0Q9FZHrEmUBMh/HOlqwYMwmMqrIJwCbxEw33C0gxTtZmwD8q0k8h
+         Re8o2tejZR64FCl1CHkh5/4TJata6SZQAe5XkaQWjYMdmE8xsk1jTbzk3k3Cjq/OZNAU
+         sGhetyv+WZlwtyO01/AHU6iDyGc9ioWi3CIqLfxNnMRkFNIl2eQOCgBL9PW+qUmhpDXk
+         Jdu+NC0IzmxBi72qJpM2UpQ1J3y98Kn1EGTMbg2q7Z+e6EyVQbR+KpqdC3TtzZTgvbOE
+         obKQ==
+X-Gm-Message-State: AOAM532p0UftQn/ATblRdSB9MgHPsxsmOACu137yQCUORCB5xO1/C0bL
+        ar+uLLtAm0dDb3KaYwJxZ/nKGy7tUI/+8BvdqZI=
+X-Google-Smtp-Source: ABdhPJwJ6/mj3gGUJDP1EWecIisUIOFDGfuUxGC/hm3Sk3o43tEgMu/Fr6Utbx9/YgoGwvBzKmK9uov1jqRxarFmHTE=
+X-Received: by 2002:a05:6512:10c5:b0:471:924f:1eed with SMTP id
+ k5-20020a05651210c500b00471924f1eedmr7755111lfg.641.1650396245899; Tue, 19
+ Apr 2022 12:24:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220416063429.3314021-1-joannelkoong@gmail.com>
+ <20220416063429.3314021-4-joannelkoong@gmail.com> <20220416174205.hezp2jnow3hqk6s6@apollo.legion>
+ <CAJnrk1adv16+wgEN+euJgfhXFQ+TUDjL36Bo=w_TtzqgomX00Q@mail.gmail.com> <20220418235718.izeq7kkwinedpkuj@apollo.legion>
+In-Reply-To: <20220418235718.izeq7kkwinedpkuj@apollo.legion>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Tue, 19 Apr 2022 12:23:55 -0700
+Message-ID: <CAJnrk1ag9PT1iXMzB5cxJEnwESYndYE_LozvBuL_Db2degJ-CQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/7] bpf: Add bpf_dynptr_from_mem,
+ bpf_dynptr_alloc, bpf_dynptr_put
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Functional test that exercises the following:
+On Mon, Apr 18, 2022 at 4:57 PM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Tue, Apr 19, 2022 at 03:50:38AM IST, Joanne Koong wrote:
+> > ()On Sat, Apr 16, 2022 at 10:42 AM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > > [...]
+> > > >
+> > > >       if (arg_type =3D=3D ARG_CONST_MAP_PTR) {
+> > > > @@ -5565,6 +5814,44 @@ static int check_func_arg(struct bpf_verifie=
+r_env *env, u32 arg,
+> > > >               bool zero_size_allowed =3D (arg_type =3D=3D ARG_CONST=
+_SIZE_OR_ZERO);
+> > > >
+> > > >               err =3D check_mem_size_reg(env, reg, regno, zero_size=
+_allowed, meta);
+> > > > +     } else if (arg_type_is_dynptr(arg_type)) {
+> > > > +             /* Can't pass in a dynptr at a weird offset */
+> > > > +             if (reg->off % BPF_REG_SIZE) {
+> > >
+> > > In invalid_helper2 test, you are passing &dynptr + 8, which means reg=
+ will be
+> > > fp-8 (assuming dynptr is at top of stack), get_spi will compute spi a=
+s 0, so
+> > > spi-1 will lead to OOB access for the second dynptr stack slot. If yo=
+u run the
+> > > dynptr test under KASAN, you should see a warning for this.
+> > >
+> > > So we should ensure here that reg->off is atleast -16.
+> > I think this is already checked against in is_spi_bounds(), where we
+> > explicitly check that spi - 1 and spi is between [0, the allocated
+> > stack). is_spi_bounds() gets called in "is_dynptr_reg_valid_init()" a
+> > few lines down where we check if the initialized dynptr arg that's
+> > passed in by the program is valid.
+> >
+> > On my local environment, I simulated this "reg->off =3D -8" case and
+> > this fails the is_dynptr_reg_valid_init() -> is_spi_bounds() check and
+> > we get back the correct verifier error "Expected an initialized dynptr
+> > as arg #3" without any OOB accesses. I also tried running it with
+> > CONFIG_KASAN=3Dy as well and didn't see any warnings show up. But maybe
+> > I'm missing something in this analysis - what are your thoughts?
+>
+> I should have been clearer, the report is for accessing state->stack[spi =
+-
+> 1].slot_type[0] in is_dynptr_reg_valid_init, when the program is being lo=
+aded.
+>
+> I can understand why you might not see the warning. It is accessing
+> state->stack[spi - 1], and the allocation comes from kmalloc slab cache, =
+so if
+> another allocation has an object that covers the region being touched, KA=
+SAN
+> probably won't complain, and you won't see the warning.
+>
+> Getting back the correct result for the test can also happen if you don't=
+ load
+> STACK_DYNPTR at the state->stack[spi - 1].slot_type[0] byte. The test is =
+passing
+> for me too, fwiw.
+>
+> Anyway, digging into this reveals the real problem.
+>
+> >>> static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, st=
+ruct bpf_reg_state *reg,
+> >>>                                  enum bpf_arg_type arg_type)
+> >>> {
+> >>>     struct bpf_func_state *state =3D func(env, reg);
+> >>>     int spi =3D get_spi(reg->off);
+> >>>
+>
+> Here, for reg->off =3D -8, get_spi is (-(-8) - 1)/BPF_REG_SIZE =3D 0.
+" >
+> >>>     if (!is_spi_bounds_valid(state, spi, BPF_DYNPTR_NR_SLOTS) ||
+>
+> is_spi_bounds_valid will return true, probably because of the unintended
+> conversion of the expression (spi - nr_slots + 1) to unsigned, so the tes=
+t
+Oh interesting. I missed that arithmetic on int and unsigned always
+casts the result to unsigned if both have the same conversion rank.
+Thanks for pointing this out. I'll change nr_slots to int.
 
-1. apply default sk_priority policy
-2. permit TX-only AF_PACKET socket
-3. cgroup attach/detach/replace
-4. reusing trampoline shim
+> against >=3D 0 is always true (compiler will optimize it out), and just t=
+est
+> whether spi < allocated_stacks.
+>
+> You should probably declare nr_slots as int, instead of u32. Just doing t=
+his
+> should be enough to prevent this, without ensuring reg->off is <=3D -16.
+>
+> >>>         state->stack[spi].slot_type[0] !=3D STACK_DYNPTR ||
+>
+> Execution moves on to this, which is (second dynptr slot is STACK_DYNPTR)=
+.
+>
+> >>>         state->stack[spi - 1].slot_type[0] !=3D STACK_DYNPTR ||
+>
+> and it accesses state->stack[-1].slot_type[0] here, which triggers the KA=
+SAN
+> warning for me.
+>
+> >>>         !state->stack[spi].spilled_ptr.dynptr.first_slot)
+> >>>             return false;
+> >>>
+> >>>     /* ARG_PTR_TO_DYNPTR takes any type of dynptr */
+> >>>     if (arg_type =3D=3D ARG_PTR_TO_DYNPTR)
+> >>>             return true;
+> >>>
+> >>>     return state->stack[spi].spilled_ptr.dynptr.type =3D=3D arg_to_dy=
+nptr_type(arg_type);
+> >>> }
+>
+> > > [...]
+>
+> There is another issue I noticed while basing other work on this. You hav=
+e
+> declared bpf_dynptr in UAPI header as:
+>
+>         struct bpf_dynptr {
+>                 __u64 :64;
+>                 __u64 :64;
+>         } __attribute__((aligned(8)));
+>
+> Sadly, in C standard, the compiler is under no obligation to initialize p=
+adding
+> bits when the object is zero initialized (using =3D {}). It is worse, whe=
+n
+> unrelated struct fields are assigned the padding bits are assumed to atta=
+in
+> unspecified values, but compilers are usually conservative in that case (=
+C11
+> 6.2.6.1 p6).
+Thanks for noting this. By "padding bits", you are referring to the
+unnamed fields, correct?
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- .../selftests/bpf/prog_tests/lsm_cgroup.c     | 213 ++++++++++++++++++
- .../testing/selftests/bpf/progs/lsm_cgroup.c  | 126 +++++++++++
- 2 files changed, 339 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
- create mode 100644 tools/testing/selftests/bpf/progs/lsm_cgroup.c
+From the commit message in 5eaed6eedbe9, I see:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-new file mode 100644
-index 000000000000..fbd6ed29f7d4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <test_progs.h>
-+
-+#include "lsm_cgroup.skel.h"
-+#include "cgroup_helpers.h"
-+#include "network_helpers.h"
-+
-+void test_lsm_cgroup(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_prog_attach_opts, attach_opts);
-+	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, update_opts);
-+	int cgroup_fd, cgroup_fd2, err, fd, prio;
-+	int listen_fd, client_fd, accepted_fd;
-+	struct lsm_cgroup *skel = NULL;
-+	int post_create_prog_fd2 = -1;
-+	int post_create_prog_fd = -1;
-+	int bind_link_fd2 = -1;
-+	int bind_prog_fd2 = -1;
-+	int alloc_prog_fd = -1;
-+	int bind_prog_fd = -1;
-+	int bind_link_fd = -1;
-+	int clone_prog_fd = -1;
-+	socklen_t socklen;
-+
-+	cgroup_fd = test__join_cgroup("/sock_policy");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		goto close_skel;
-+
-+	cgroup_fd2 = create_and_get_cgroup("/sock_policy2");
-+	if (!ASSERT_GE(cgroup_fd2, 0, "create second cgroup"))
-+		goto close_skel;
-+
-+	skel = lsm_cgroup__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto close_cgroup;
-+
-+	post_create_prog_fd = bpf_program__fd(skel->progs.socket_post_create);
-+	post_create_prog_fd2 = bpf_program__fd(skel->progs.socket_post_create2);
-+	bind_prog_fd = bpf_program__fd(skel->progs.socket_bind);
-+	bind_prog_fd2 = bpf_program__fd(skel->progs.socket_bind2);
-+	alloc_prog_fd = bpf_program__fd(skel->progs.socket_alloc);
-+	clone_prog_fd = bpf_program__fd(skel->progs.socket_clone);
-+
-+	err = bpf_prog_attach(alloc_prog_fd, cgroup_fd, BPF_LSM_CGROUP, 0);
-+	if (!ASSERT_OK(err, "attach alloc_prog_fd"))
-+		goto detach_cgroup;
-+
-+	err = bpf_prog_attach(clone_prog_fd, cgroup_fd, BPF_LSM_CGROUP, 0);
-+	if (!ASSERT_OK(err, "attach clone_prog_fd"))
-+		goto detach_cgroup;
-+
-+	/* Make sure replacing works.
-+	 */
-+
-+	err = bpf_prog_attach(post_create_prog_fd, cgroup_fd,
-+			      BPF_LSM_CGROUP, 0);
-+	if (!ASSERT_OK(err, "attach post_create_prog_fd"))
-+		goto close_cgroup;
-+
-+	attach_opts.replace_prog_fd = post_create_prog_fd;
-+	err = bpf_prog_attach_opts(post_create_prog_fd2, cgroup_fd,
-+				   BPF_LSM_CGROUP, &attach_opts);
-+	if (!ASSERT_OK(err, "prog replace post_create_prog_fd"))
-+		goto detach_cgroup;
-+
-+	/* Try the same attach/replace via link API.
-+	 */
-+
-+	bind_link_fd = bpf_link_create(bind_prog_fd, cgroup_fd,
-+				       BPF_LSM_CGROUP, NULL);
-+	if (!ASSERT_GE(bind_link_fd, 0, "link create bind_prog_fd"))
-+		goto detach_cgroup;
-+
-+	update_opts.old_prog_fd = bind_prog_fd;
-+	update_opts.flags = BPF_F_REPLACE;
-+
-+	err = bpf_link_update(bind_link_fd, bind_prog_fd2, &update_opts);
-+	if (!ASSERT_OK(err, "link update bind_prog_fd"))
-+		goto detach_cgroup;
-+
-+	/* Attach another instance of bind program to another cgroup.
-+	 * This should trigger the reuse of the trampoline shim (two
-+	 * programs attaching to the same btf_id).
-+	 */
-+
-+	bind_link_fd2 = bpf_link_create(bind_prog_fd2, cgroup_fd2,
-+					BPF_LSM_CGROUP, NULL);
-+	if (!ASSERT_GE(bind_link_fd2, 0, "link create bind_prog_fd2"))
-+		goto detach_cgroup;
-+
-+	/* AF_UNIX is prohibited.
-+	 */
-+
-+	fd = socket(AF_UNIX, SOCK_STREAM, 0);
-+	ASSERT_LT(fd, 0, "socket(AF_UNIX)");
-+
-+	/* AF_INET6 gets default policy (sk_priority).
-+	 */
-+
-+	fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (!ASSERT_GE(fd, 0, "socket(SOCK_STREAM)"))
-+		goto detach_cgroup;
-+
-+	prio = 0;
-+	socklen = sizeof(prio);
-+	ASSERT_GE(getsockopt(fd, SOL_SOCKET, SO_PRIORITY, &prio, &socklen), 0,
-+		  "getsockopt");
-+	ASSERT_EQ(prio, 123, "sk_priority");
-+
-+	close(fd);
-+
-+	/* TX-only AF_PACKET is allowed.
-+	 */
-+
-+	ASSERT_LT(socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ALL)), 0,
-+		  "socket(AF_PACKET, ..., ETH_P_ALL)");
-+
-+	fd = socket(AF_PACKET, SOCK_RAW, 0);
-+	ASSERT_GE(fd, 0, "socket(AF_PACKET, ..., 0)");
-+
-+	/* TX-only AF_PACKET can not be rebound.
-+	 */
-+
-+	struct sockaddr_ll sa = {
-+		.sll_family = AF_PACKET,
-+		.sll_protocol = htons(ETH_P_ALL),
-+	};
-+	ASSERT_LT(bind(fd, (struct sockaddr *)&sa, sizeof(sa)), 0,
-+		  "bind(ETH_P_ALL)");
-+
-+	close(fd);
-+
-+	/* Trigger passive open.
-+	 */
-+
-+	listen_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-+	ASSERT_GE(listen_fd, 0, "start_server");
-+	client_fd = connect_to_fd(listen_fd, 0);
-+	ASSERT_GE(client_fd, 0, "connect_to_fd");
-+	accepted_fd = accept(listen_fd, NULL, NULL);
-+	ASSERT_GE(accepted_fd, 0, "accept");
-+
-+	prio = 0;
-+	socklen = sizeof(prio);
-+	ASSERT_GE(getsockopt(accepted_fd, SOL_SOCKET, SO_PRIORITY, &prio, &socklen), 0,
-+		  "getsockopt");
-+	ASSERT_EQ(prio, 234, "sk_priority");
-+
-+	/* These are replaced and never called. */
-+	ASSERT_EQ(skel->bss->called_socket_post_create, 0, "called_create");
-+	ASSERT_EQ(skel->bss->called_socket_bind, 0, "called_bind");
-+
-+	/* AF_INET6+SOCK_STREAM
-+	 * AF_PACKET+SOCK_RAW
-+	 * listen_fd
-+	 * client_fd
-+	 * accepted_fd
-+	 */
-+	ASSERT_EQ(skel->bss->called_socket_post_create2, 5, "called_create2");
-+
-+	/* start_server
-+	 * bind(ETH_P_ALL)
-+	 */
-+	ASSERT_EQ(skel->bss->called_socket_bind2, 2, "called_bind2");
-+	/* Single accept(). */
-+	ASSERT_EQ(skel->bss->called_socket_clone, 1, "called_clone");
-+
-+	/* AF_UNIX+SOCK_STREAM (failed)
-+	 * AF_INET6+SOCK_STREAM
-+	 * AF_PACKET+SOCK_RAW (failed)
-+	 * AF_PACKET+SOCK_RAW
-+	 * listen_fd
-+	 * client_fd
-+	 * accepted_fd
-+	 */
-+	ASSERT_EQ(skel->bss->called_socket_alloc, 7, "called_alloc");
-+
-+	/* Make sure other cgroup doesn't trigger the programs.
-+	 */
-+
-+	if (!ASSERT_OK(join_cgroup(""), "join root cgroup"))
-+		goto detach_cgroup;
-+
-+	fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (!ASSERT_GE(fd, 0, "socket(SOCK_STREAM)"))
-+		goto detach_cgroup;
-+
-+	prio = 0;
-+	socklen = sizeof(prio);
-+	ASSERT_GE(getsockopt(fd, SOL_SOCKET, SO_PRIORITY, &prio, &socklen), 0,
-+		  "getsockopt");
-+	ASSERT_EQ(prio, 0, "sk_priority");
-+
-+	close(fd);
-+
-+detach_cgroup:
-+	ASSERT_GE(bpf_prog_detach2(post_create_prog_fd2, cgroup_fd,
-+				   BPF_LSM_CGROUP), 0, "detach_create");
-+	close(bind_link_fd);
-+	/* Don't close bind_link_fd2, exercise cgroup release cleanup. */
-+	ASSERT_GE(bpf_prog_detach2(alloc_prog_fd, cgroup_fd,
-+				   BPF_LSM_CGROUP), 0, "detach_alloc");
-+	ASSERT_GE(bpf_prog_detach2(clone_prog_fd, cgroup_fd,
-+				   BPF_LSM_CGROUP), 0, "detach_clone");
-+
-+close_cgroup:
-+	close(cgroup_fd);
-+close_skel:
-+	lsm_cgroup__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-new file mode 100644
-index 000000000000..70f4ffd90d49
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#ifndef AF_PACKET
-+#define AF_PACKET 17
-+#endif
-+
-+#ifndef AF_UNIX
-+#define AF_UNIX 1
-+#endif
-+
-+#ifndef EPERM
-+#define EPERM 1
-+#endif
-+
-+int called_socket_post_create;
-+int called_socket_post_create2;
-+int called_socket_bind;
-+int called_socket_bind2;
-+int called_socket_alloc;
-+int called_socket_clone;
-+
-+static __always_inline int real_create(struct socket *sock, int family,
-+				       int protocol)
-+{
-+	struct sock *sk;
-+
-+	/* Reject non-tx-only AF_PACKET.
-+	 */
-+	if (family == AF_PACKET && protocol != 0)
-+		return 0; /* EPERM */
-+
-+	sk = sock->sk;
-+	if (!sk)
-+		return 1;
-+
-+	/* The rest of the sockets get default policy.
-+	 */
-+	sk->sk_priority = 123;
-+	return 1;
-+}
-+
-+/* __cgroup_bpf_run_lsm_socket */
-+SEC("lsm_cgroup/socket_post_create")
-+int BPF_PROG(socket_post_create, struct socket *sock, int family,
-+	     int type, int protocol, int kern)
-+{
-+	called_socket_post_create++;
-+	return real_create(sock, family, protocol);
-+}
-+
-+/* __cgroup_bpf_run_lsm_socket */
-+SEC("lsm_cgroup/socket_post_create")
-+int BPF_PROG(socket_post_create2, struct socket *sock, int family,
-+	     int type, int protocol, int kern)
-+{
-+	called_socket_post_create2++;
-+	return real_create(sock, family, protocol);
-+}
-+
-+static __always_inline int real_bind(struct socket *sock,
-+				     struct sockaddr *address,
-+				     int addrlen)
-+{
-+	struct sockaddr_ll sa = {};
-+
-+	if (sock->sk->__sk_common.skc_family != AF_PACKET)
-+		return 1;
-+
-+	if (sock->sk->sk_kern_sock)
-+		return 1;
-+
-+	bpf_probe_read_kernel(&sa, sizeof(sa), address);
-+	if (sa.sll_protocol)
-+		return 0; /* EPERM */
-+
-+	return 1;
-+}
-+
-+/* __cgroup_bpf_run_lsm_socket */
-+SEC("lsm_cgroup/socket_bind")
-+int BPF_PROG(socket_bind, struct socket *sock, struct sockaddr *address,
-+	     int addrlen)
-+{
-+	called_socket_bind++;
-+	return real_bind(sock, address, addrlen);
-+}
-+
-+/* __cgroup_bpf_run_lsm_socket */
-+SEC("lsm_cgroup/socket_bind")
-+int BPF_PROG(socket_bind2, struct socket *sock, struct sockaddr *address,
-+	     int addrlen)
-+{
-+	called_socket_bind2++;
-+	return real_bind(sock, address, addrlen);
-+}
-+
-+/* __cgroup_bpf_run_lsm_current (via bpf_lsm_current_hooks) */
-+SEC("lsm_cgroup/sk_alloc_security")
-+int BPF_PROG(socket_alloc, struct sock *sk, int family, gfp_t priority)
-+{
-+	called_socket_alloc++;
-+	if (family == AF_UNIX)
-+		return 0; /* EPERM */
-+	return 1;
-+}
-+
-+/* __cgroup_bpf_run_lsm_sock */
-+SEC("lsm_cgroup/inet_csk_clone")
-+int BPF_PROG(socket_clone, struct sock *newsk, const struct request_sock *req)
-+{
-+	called_socket_clone++;
-+
-+	if (!newsk)
-+		return 1;
-+
-+	/* Accepted request sockets get a different priority.
-+	 */
-+	newsk->sk_priority = 234;
-+	return 1;
-+}
--- 
-2.36.0.rc0.470.gd361397f0d-goog
+INTERNATIONAL STANDARD =C2=A9ISO/IEC ISO/IEC 9899:201x
+  Programming languages =E2=80=94 C
+  http://www.open-std.org/Jtc1/sc22/wg14/www/docs/n1547.pdf
+  page 157:
+  Except where explicitly stated otherwise, for the purposes of
+  this subclause unnamed members of objects of structure and union
+  type do not participate in initialization. Unnamed members of
+  structure objects have indeterminate value even after initialization.
 
+so it seems like the best way to address that here is to just have the
+fields be explicitly named, like something like
+
+struct bpf_dynptr {
+    __u64 anon1;
+    __u64 anon2;
+} __attribute__((aligned(8)))
+
+Do you agree with this assessment?
+
+>
+> See 5eaed6eedbe9 ("bpf: Fix a bpf_timer initialization issue") on how thi=
+s has
+> bitten us once before.
+>
+> I was kinda surprised you don't hit this with your selftests, since in th=
+e BPF
+> assembly of dynptr_fail.o/dynptr_success.o I seldom see stack location of=
+ dynptr
+> being zeroed out. But after applying the fix for the above issue, I see t=
+his
+> error and many failing tests (only 26/36 passed).
+>
+> verifier internal error: variable not initialized on stack in mark_as_dyn=
+ptr_data
+>
+> So I think the bug above was papering over this issue? I will look at it =
+in more
+> detail later.
+>
+> --
+> Kartikeya
