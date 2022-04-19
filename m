@@ -2,100 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E8DDC433F5
-	for <bpf@archiver.kernel.org>; Tue, 19 Apr 2022 19:26:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF3D3C433F5
+	for <bpf@archiver.kernel.org>; Tue, 19 Apr 2022 19:28:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241944AbiDST3H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Apr 2022 15:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
+        id S1345095AbiDSTan (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Apr 2022 15:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234737AbiDST3H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Apr 2022 15:29:07 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9133220BFA
-        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:26:23 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t25so31159392lfg.7
-        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:26:23 -0700 (PDT)
+        with ESMTP id S1344857AbiDSTal (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Apr 2022 15:30:41 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F2F40A1E
+        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:27:57 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id w5so8575956lji.4
+        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=cQ2XodLDn72F9VLOveLun46ikGLt3CPocwdsyYU7erQ=;
-        b=qZCVJ4aK0FM5nlekvWAcMOeJdQt1b4leNFxyKWB4okhVMUU7ZTPeeRo4xgK0KsioNf
-         HENQhAtNz9+fJZiJ7qtGx0QLvpAnOY2HJGUfPnd0wdWfLbL0BvoYw9hmDfFMJHNvSdGg
-         VtVJZMHfmRs4wVVqZkjWhj2JlxVVAwIfZMLGu9ctkzJ0tVrGHexeMpvRSr0V7b8t8D8R
-         8R0I12Xz9MMpxa35Rkd310h2IVKTVGtZbv6XNrNHJCsnHrsqaSOEuQv3fikldbm5mw8L
-         0gJz0sJSorjeZpYn2hkyquGUaHPmt1EiQF7YwvYijOvCYbKq3ciotUy6mzhvpVaYBug3
-         bUWw==
+        bh=/3mAvdy0ga85ggIH3HoGB0ePtskeVfNvDlSSUq9jS0A=;
+        b=QvNx6FxecAp/z7mkZwwjndqXRE72gf91AcAXVa+k62ZgBfXGYm/WwmIqt/J18sYwhc
+         i2StNOuJVaOsCjV7cve0T1U3qOs/WN1wFMwJTv6daJNph0klA03P+VQS+HViCxN/bhCX
+         eLHeAXjYrEG6AHsQ2gChTGLFMTqfXijO7Vj+0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=cQ2XodLDn72F9VLOveLun46ikGLt3CPocwdsyYU7erQ=;
-        b=srIqFqFehrq41QK0B/o7SUY3dX5PVqbotNmUg0FMcruCEy0V7XfXDkgzPyRYbHKOLY
-         eTqrXg3ZQ6egMyGFqjHOdAlJKZByD0PtzeAXIQh+SRZuFsYrMEgCDvA/gzSJlKgQcgAE
-         4nrrT+HIowcXxUcrHPQVTNPfsCQ7mQhl+2HZtl9/KaBuRTQlTBH0eteje2y0on/EE8OO
-         lr3eebjCKVSM2HrIS/Y3kOhX+PNaHeHmjxxnOscFLZauLykJx3pwZ5djxo/CfxqUD8AH
-         ZnzWA9TOc6TXMSp65AaTdhYztu5nvS3c2waZ3cw9HMEFo7VqP+ffw30FkvxJpjpYgQcH
-         QC7g==
-X-Gm-Message-State: AOAM530AXeD4dewZVRGsAPyisFVTLHPvYVvYyrQZj3enoy5p+WyY3FM9
-        3VuYUF0E5z0VtE8FBlfVTAmo2D2ncFfsMsIdaQs1gNdy
-X-Google-Smtp-Source: ABdhPJz8Qv1DexVsWFlqsIBZjHEFcSN+8dtzMcofDSGK0TbT8efb7VriPg3AB8BkcuNF17SVZRvqMqMXiPXlaNRRjbk=
-X-Received: by 2002:a05:6512:10c5:b0:471:924f:1eed with SMTP id
- k5-20020a05651210c500b00471924f1eedmr7760202lfg.641.1650396381900; Tue, 19
- Apr 2022 12:26:21 -0700 (PDT)
+        bh=/3mAvdy0ga85ggIH3HoGB0ePtskeVfNvDlSSUq9jS0A=;
+        b=WLX2e5nUWvZTVVJjJcImvclPm6ICxgC0+c5rMVLIcryWyhMp7NITXUuFxZyoaPq3Y1
+         Wq9ElnKLiRJR0r5aAiX4Io+SPr7IcH+mN3YZaFBIAl7YFFZ3mI2gze30I0C98gBmEUYj
+         /WnvQYZ6zE3y9j2muavZIzZQ6n2tE6TKlHNDSnH79AFrUYsWmsE1wMYx0pEzt4QSYVba
+         JxQkxM90LmEIhzg7PfsVB31zO18V7p73kFsHJdy03b9pe3Cx3JhVQ2rBqOD2VJPy+zY7
+         yJB/VtP0QymMDq02+yXaKy6B8y69q5wxKZ8O4Mp1plnRUqU+4C6uHNVfwWqWQ7j0Tw0M
+         aBLQ==
+X-Gm-Message-State: AOAM531iDRpLq3SpJmjknCbcHVnIuWetr2pSJS7OAe9d4HB5PFLXjU3S
+        Pjq/1Ns2gBwQ5/fvSEqAv2ygitxQD4pv8N4n4TQ=
+X-Google-Smtp-Source: ABdhPJwA+qbOTXXklE1HyioQcqaEwwWggZg6FssJYQ1Q5FPckNR+ocmdbKcTsO9373Kc0DRRnBd1fQ==
+X-Received: by 2002:a2e:b8d5:0:b0:24c:814a:6190 with SMTP id s21-20020a2eb8d5000000b0024c814a6190mr10873356ljp.531.1650396475657;
+        Tue, 19 Apr 2022 12:27:55 -0700 (PDT)
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
+        by smtp.gmail.com with ESMTPSA id p11-20020a056512312b00b0046d48dbe2efsm1595007lfd.103.2022.04.19.12.27.55
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 12:27:55 -0700 (PDT)
+Received: by mail-lj1-f175.google.com with SMTP id h11so21786818ljb.2
+        for <bpf@vger.kernel.org>; Tue, 19 Apr 2022 12:27:55 -0700 (PDT)
+X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
+ h19-20020a0565123c9300b0044b04bac334mr12102115lfv.27.1650396055810; Tue, 19
+ Apr 2022 12:20:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220416063429.3314021-1-joannelkoong@gmail.com>
- <20220416063429.3314021-2-joannelkoong@gmail.com> <20220419045928.nlr6dvrlmrjdf6qq@MBP-98dd607d3435.dhcp.thefacebook.com>
-In-Reply-To: <20220419045928.nlr6dvrlmrjdf6qq@MBP-98dd607d3435.dhcp.thefacebook.com>
-From:   Joanne Koong <joannelkoong@gmail.com>
-Date:   Tue, 19 Apr 2022 12:26:11 -0700
-Message-ID: <CAJnrk1aQ_2a9Qr3t-G7re8E3gvfhp3RTV00CX8Uw9=4cj63VcQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/7] bpf: Add MEM_UNINIT as a bpf_type_flag
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+References: <20220415164413.2727220-1-song@kernel.org> <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
+ <YlpPW9SdCbZnLVog@infradead.org> <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
+ <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
+ <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
+ <Yl4F4w5NY3v0icfx@bombadil.infradead.org> <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
+ <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
+In-Reply-To: <Yl8CicJGHpTrOK8m@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 19 Apr 2022 12:20:39 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
+Message-ID: <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Song Liu <songliubraving@fb.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "song@kernel.org" <song@kernel.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dborkman@redhat.com" <dborkman@redhat.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "bp@alien8.de" <bp@alien8.de>, "mbenes@suse.cz" <mbenes@suse.cz>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 9:59 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, Apr 19, 2022 at 11:42 AM Mike Rapoport <rppt@kernel.org> wrote:
 >
-> On Fri, Apr 15, 2022 at 11:34:23PM -0700, Joanne Koong wrote:
-> > -     ARG_PTR_TO_UNINIT_MEM,  /* pointer to memory does not need to be initialized,
-> > +     /* pointer to memory does not need to be initialized, helper function must fill
-> > +      * all bytes or clear them in error case.
-> > +      */
-> > +     ARG_PTR_TO_MEM_UNINIT           = MEM_UNINIT | ARG_PTR_TO_MEM,
->
-> Could you keep the name as ARG_PTR_TO_UNINIT_MEM ?
-> This will avoid churn in all the lines below.
->
-> > -     .arg2_type      = ARG_PTR_TO_UNINIT_MEM,
-> > +     .arg2_type      = ARG_PTR_TO_MEM_UNINIT,
-> ...
-> > -     .arg2_type      = ARG_PTR_TO_UNINIT_MEM,
-> > +     .arg2_type      = ARG_PTR_TO_MEM_UNINIT,
-> ...
-> > -     if (fn->arg1_type == ARG_PTR_TO_UNINIT_MEM)
-> > +     if (fn->arg1_type == ARG_PTR_TO_MEM_UNINIT)
-> >               count++;
-> > -     if (fn->arg2_type == ARG_PTR_TO_UNINIT_MEM)
-> > +     if (fn->arg2_type == ARG_PTR_TO_MEM_UNINIT)
-> >               count++;
-> > -     if (fn->arg3_type == ARG_PTR_TO_UNINIT_MEM)
-> > +     if (fn->arg3_type == ARG_PTR_TO_MEM_UNINIT)
-> >               count++;
-> > -     if (fn->arg4_type == ARG_PTR_TO_UNINIT_MEM)
-> > +     if (fn->arg4_type == ARG_PTR_TO_MEM_UNINIT)
-> >               count++;
-> > -     if (fn->arg5_type == ARG_PTR_TO_UNINIT_MEM)
-> > +     if (fn->arg5_type == ARG_PTR_TO_MEM_UNINIT)
-> >               count++;
-> etc.
-Will do - I'll make this edit for v3.
+> I'd say that bpf_prog_pack was a cure for symptoms and this project tries
+> to address more general problem.
+> But you are right, it'll take some time and won't land in 5.19.
+
+Just to update people: I've just applied Song's [1/4] patch, which
+means that the whole current hugepage vmalloc thing is effectively
+disabled (because nothing opts in).
+
+And I suspect that will be the status for 5.18, unless somebody comes
+up with some very strong arguments for (re-)starting using huge pages.
+
+                      Linus
