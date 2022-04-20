@@ -2,137 +2,134 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F26E4C433F5
-	for <bpf@archiver.kernel.org>; Wed, 20 Apr 2022 11:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A4CDC433FE
+	for <bpf@archiver.kernel.org>; Wed, 20 Apr 2022 11:43:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378220AbiDTLnM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Apr 2022 07:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
+        id S1352684AbiDTLqA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Apr 2022 07:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378219AbiDTLnM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Apr 2022 07:43:12 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0BA419B6
-        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 04:40:25 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id u7so2463092lfs.8
-        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 04:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=VKyqkiHMAMbxDabOm41Pe1xqBptH6ILp/RHTVhXWA1M=;
-        b=kisidZ359JBb2iHL/bs4DBq6P+KC4o80zwOVfnjZQHPodqgRP5BAp2fyZ6cZgEt8zE
-         PdNRwdX0xLOeLSG2KLzLVAb5bMVCZ3+gpIhypWAiKJo6XQ5wpokPAE8AtKWXqavhHruc
-         KrCoetQGLT8a6gVZHLHXC+6IPSmqj4aMQYItg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=VKyqkiHMAMbxDabOm41Pe1xqBptH6ILp/RHTVhXWA1M=;
-        b=Dk82MFlJPkc65F06JTWdnbHHa7rq7zzjhq6hmunolBZRFoX6iOhd9ZuyR6p4YfX1kw
-         yHF4ez3LDIRV+fxNK45Ga1s/DZaOCRlsCxpRaycNt5FWiBX/VsUr54QEoykCY10O+ZuX
-         +eO4vqwUxpPDUyJ5Hbnis9GFxDkIUIepMcXo0e1INq+dxDcOFRq7ffv9wKemQ0LsPcMa
-         j4akvry6VuVZBAVXsAwd5FEtNK+Av74ZU0BB215LL7DLvgunO1MaVOQmG7XhXPhg53Ie
-         YTNuH1Q+NRyOdgAz4hM2fDH6sTOqCmyRXY3rfTCoBrjtJCXdxHT8yco13oxiCNjLLsP0
-         thAQ==
-X-Gm-Message-State: AOAM530A0s3pqVZzxa8ETQsDTwr4obgWbeYVPWlzAtnbOJBcdY2vXMgE
-        CZ7x28dGvrscxjrMYeBjmINGhQ==
-X-Google-Smtp-Source: ABdhPJzkCWJhhf8Yp+Zwsj308WiZ2xxy/9KDJBid23/aNj/yJesRU+Lww+2dSgxuR3dGzJ9bPFcfTw==
-X-Received: by 2002:a05:6512:b1a:b0:471:add8:99e9 with SMTP id w26-20020a0565120b1a00b00471add899e9mr4788534lfu.300.1650454824118;
-        Wed, 20 Apr 2022 04:40:24 -0700 (PDT)
-Received: from cloudflare.com (79.184.126.143.ipv4.supernova.orange.pl. [79.184.126.143])
-        by smtp.gmail.com with ESMTPSA id j7-20020a056512028700b00471bab03deesm195633lfp.38.2022.04.20.04.40.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 04:40:23 -0700 (PDT)
-References: <20211201181040.23337-1-alexei.starovoitov@gmail.com>
- <20211201181040.23337-6-alexei.starovoitov@gmail.com>
-User-agent: mu4e 1.6.10; emacs 27.2
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net, andrii@kernel.org,
-        bpf@vger.kernel.org, kernel-team@fb.com, kernel-team@cloudflare.com
-Subject: Re: [PATCH v5 bpf-next 05/17] bpf: Pass a set of bpf_core_relo-s to
- prog_load command.
-Date:   Wed, 20 Apr 2022 13:32:36 +0200
-In-reply-to: <20211201181040.23337-6-alexei.starovoitov@gmail.com>
-Message-ID: <87sfq8f0ex.fsf@cloudflare.com>
+        with ESMTP id S1352651AbiDTLpz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Apr 2022 07:45:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0EA9419BF
+        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 04:43:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59DEAB81D1C
+        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 11:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8429C385A4
+        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 11:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650454986;
+        bh=SJX0hL833Q2ataycRYrB6BhXBqWa4plfzhGevB+mLF0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=H9AtkhIaDOQCpmpniEKXzeRK/B8Auf7tvM7/FFl+cRE9DfsWQIi9uULIdw8+HXmy7
+         GYIhiejgF8gVm2P2hHQuOgH8HwY00k53Xqatu/F7e7kTEHmXNV6ugkboizTiMBUN2y
+         J454630Ka8MYTwxbkxJlwYPXOdamiCcFMdoLJZMG/40aErlrsZ4vsdVuG0fzNX9TDl
+         tPTFQsnrE/UQexew+4hac7NGpYk3QOq3yGk8hC0VrAPwNPxfat3mROCGj2tFkK4EqM
+         ktSPggD9gZNSlIpQEooDyaKZEMbf3XVCRhUvrn4K2m0SSSDy9UV+rZm16UO5OG3m7u
+         EdvB6FAgo9K8w==
+Received: by mail-ej1-f46.google.com with SMTP id ks6so3007055ejb.1
+        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 04:43:06 -0700 (PDT)
+X-Gm-Message-State: AOAM533nnlI8U/Lg51d2hACnm2pHxzjqXtUmD6pwaAoqlxoMRLZjnwLf
+        ZEHhDn4SV1e1z/62DiQLDgTLnEdQQAZYmxWcTe82lw==
+X-Google-Smtp-Source: ABdhPJyANcMdvA+ktghYJ4f27ywVan8fgMqIgZ69qYBtSH3bIIwYJZEjs0aaoX0yznuqG16ZBoHNgWlTZ78/VQ4KW/g=
+X-Received: by 2002:a17:907:6089:b0:6db:a3d7:3fa9 with SMTP id
+ ht9-20020a170907608900b006dba3d73fa9mr18759957ejc.593.1650454985018; Wed, 20
+ Apr 2022 04:43:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20220414162220.1985095-1-xukuohai@huawei.com> <20220414162220.1985095-6-xukuohai@huawei.com>
+ <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
+ <6c18a27f-c983-58f3-1dc0-5192f7df232a@huawei.com> <82e7faec-7f0c-573f-4945-de7072744dcb@huawei.com>
+In-Reply-To: <82e7faec-7f0c-573f-4945-de7072744dcb@huawei.com>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 20 Apr 2022 13:42:54 +0200
+X-Gmail-Original-Message-ID: <CACYkzJ6QZek1VV-QgO52Kp9X4cCJnXaD7QJFkMtMLtzDTzDDsA@mail.gmail.com>
+Message-ID: <CACYkzJ6QZek1VV-QgO52Kp9X4cCJnXaD7QJFkMtMLtzDTzDDsA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, hpa@zytor.com,
+        Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Alexei,
-
-On Wed, Dec 01, 2021 at 10:10 AM -08, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
+On Wed, Apr 20, 2022 at 9:44 AM Xu Kuohai <xukuohai@huawei.com> wrote:
 >
-> struct bpf_core_relo is generated by llvm and processed by libbpf.
-> It's a de-facto uapi.
-> With CO-RE in the kernel the struct bpf_core_relo becomes uapi de-jure.
-> Add an ability to pass a set of 'struct bpf_core_relo' to prog_load command
-> and let the kernel perform CO-RE relocations.
+> On 4/16/2022 9:57 AM, Xu Kuohai wrote:
+> > On 4/16/2022 1:12 AM, Andrii Nakryiko wrote:
+> >> On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+> >>>
+> >>> Add bpf trampoline support for arm64. Most of the logic is the same as
+> >>> x86.
+> >>>
+> >>> fentry before bpf trampoline hooked:
+> >>>  mov x9, x30
+> >>>  nop
+> >>>
+> >>> fentry after bpf trampoline hooked:
+> >>>  mov x9, x30
+> >>>  bl  <bpf_trampoline>
+> >>>
+> >>> Tested on qemu, result:
+> >>>  #55 fentry_fexit:OK
+> >>>  #56 fentry_test:OK
+> >>>  #58 fexit_sleep:OK
+> >>>  #59 fexit_stress:OK
+> >>>  #60 fexit_test:OK
+> >>>  #67 get_func_args_test:OK
+> >>>  #68 get_func_ip_test:OK
+> >>>  #101 modify_return:OK
+> >>>
+> >>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> >>> Acked-by: Song Liu <songliubraving@fb.com>
+> >>> ---
+> >>
+> >> Can you please also take a look at [0], which is an ongoing work to
+> >> add support for BPF cookie to BPF trampoline-based BPF programs. It's
+> >> very close to being done, so it would be good if you can implement
+> >> that at the same time.
+> >
+> > OK, I'll take a look and try to implemnt it.
 >
-> Note the struct bpf_line_info and struct bpf_func_info have the same
-> layout when passed from LLVM to libbpf and from libbpf to the kernel
-> except "insn_off" fields means "byte offset" when LLVM generates it.
-> Then libbpf converts it to "insn index" to pass to the kernel.
-> The struct bpf_core_relo's "insn_off" field is always "byte offset".
->
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  include/linux/bpf.h            |  8 ++++
->  include/uapi/linux/bpf.h       | 59 +++++++++++++++++++++++++-
->  kernel/bpf/btf.c               |  6 +++
->  kernel/bpf/syscall.c           |  2 +-
->  kernel/bpf/verifier.c          | 76 ++++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h | 59 +++++++++++++++++++++++++-
->  tools/lib/bpf/relo_core.h      | 53 ------------------------
->  7 files changed, 207 insertions(+), 56 deletions(-)
->
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index cad0829710be..8bbf08fbab66 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1732,6 +1732,14 @@ bool bpf_prog_has_kfunc_call(const struct bpf_prog *prog);
->  const struct btf_func_model *
->  bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
->  			 const struct bpf_insn *insn);
-> +struct bpf_core_ctx {
-> +	struct bpf_verifier_log *log;
-> +	const struct btf *btf;
-> +};
-> +
-> +int bpf_core_apply(struct bpf_core_ctx *ctx, const struct bpf_core_relo *relo,
-> +		   int relo_idx, void *insn);
-> +
->  #else /* !CONFIG_BPF_SYSCALL */
->  static inline struct bpf_prog *bpf_prog_get(u32 ufd)
->  {
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 9e66b1880020..c26871263f1f 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -1342,8 +1342,10 @@ union bpf_attr {
->  			/* or valid module BTF object fd or 0 to attach to vmlinux */
->  			__u32		attach_btf_obj_fd;
->  		};
-> -		__u32		:32;		/* pad */
-> +		__u32		core_relo_cnt;	/* number of bpf_core_relo */
->  		__aligned_u64	fd_array;	/* array of FDs */
-> +		__aligned_u64	core_relos;
-> +		__u32		core_relo_rec_size; /* sizeof(struct bpf_core_relo) */
->  	};
->  
->  	struct { /* anonymous struct used by BPF_OBJ_* commands */
+> already implemented, but there are some conflicts between these two
+> series, will send v3 after trampoline cookie are merged.
 
-I think I've spotted a breakage.
-
-Plugging the 4 byte hole with core_relo_cnt means that programs built
-against < v5.17 headers pass garbage as core_relo_cnt value.
-
-That in turn makes check_core_relo() fail with -EINVAL, which fails
-PROG_LOAD.
-
-[...]
+Awesome work, Thanks for doing this!
