@@ -2,112 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A94C433EF
-	for <bpf@archiver.kernel.org>; Wed, 20 Apr 2022 10:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 424F5C433F5
+	for <bpf@archiver.kernel.org>; Wed, 20 Apr 2022 11:39:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352334AbiDTKnq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Apr 2022 06:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
+        id S1378145AbiDTLls (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Apr 2022 07:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352448AbiDTKnq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Apr 2022 06:43:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0875F101F0;
-        Wed, 20 Apr 2022 03:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650451259; x=1681987259;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=potqXVYX3OmiIRlmNKrPcjYJve3h2E3TfCZOfajoLII=;
-  b=jRQLXEFE7O+xbTplljjZhrYH6m+bRiOATr4uKMlPQKjbLHdw+F38WDcC
-   fuv7VNv1BFe3uedHKJ/+mOtkC/5htYOwRbUmUuluGlIpgUkdpztZOtIp9
-   wMM+k+Wn1vPYL/CLRq/++62LGlcuaEp4JCV7T6pVTXdhlG/GNVuw26oO6
-   Z8Me8DOlZuea+oW8XrGhR0m+DbPZ4G4ciE38aMvwS6eKsPQ3wtJqiNvTU
-   Hv//Qh87AvlyE5c3+CvYaOI05K1HRAkfJwCqEBYFkSrC3aAKmQOW+tHtn
-   TXiUvgJO1qxCDSehwR3SZ1rt8/PosqQpBCKilHvRtWdi/hI9vZn1CuvZ5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="350445387"
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="350445387"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 03:40:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,275,1643702400"; 
-   d="scan'208";a="555142556"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2022 03:40:55 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23KAer2s026937;
-        Wed, 20 Apr 2022 11:40:53 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Jeff Evanson <jeff.evanson@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH 1/2] Fix race in igc_xdp_xmit_zc
-Date:   Wed, 20 Apr 2022 12:37:08 +0200
-Message-Id: <20220420103708.1841070-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220415210421.11217-1-jeff.evanson@qsc.com>
-References: <20220415210421.11217-1-jeff.evanson@qsc.com>
+        with ESMTP id S1378203AbiDTLlq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Apr 2022 07:41:46 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E742741FA2
+        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 04:38:59 -0700 (PDT)
+Received: from fsav412.sakura.ne.jp (fsav412.sakura.ne.jp [133.242.250.111])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 23KBccxD031880;
+        Wed, 20 Apr 2022 20:38:39 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav412.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp);
+ Wed, 20 Apr 2022 20:38:38 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav412.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 23KBccoa031877
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 20 Apr 2022 20:38:38 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <909c72b6-83f9-69a0-af80-d9cb3bc2bd0e@I-love.SAKURA.ne.jp>
+Date:   Wed, 20 Apr 2022 20:38:36 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: How to disassemble a BPF program?
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+To:     bpf <bpf@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <4ed4a01e-3d1e-bf1e-803a-608df187bde5@I-love.SAKURA.ne.jp>
+In-Reply-To: <4ed4a01e-3d1e-bf1e-803a-608df187bde5@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jeff Evanson <jeff.evanson@gmail.com>
-Date: Fri, 15 Apr 2022 15:04:21 -0600
+Ping?
 
-> in igc_xdp_xmit_zc, initialize next_to_use while holding the netif_tx_lock
-> to prevent racing with other users of the tx ring
+Since how to fix this "current top five crasher" bug depends on how a kernel
+socket is created via BPF program, this bug wants help from BPF developers.
+
+On 2022/04/12 20:04, Tetsuo Handa wrote:
+> Hello.
 > 
-> Signed-off-by: Jeff Evanson <jeff.evanson@qsc.com>
-> ---
->  drivers/net/ethernet/intel/igc/igc_main.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> I'm not a BPF user, but I want to know what a BPF program stored in
+> "static const char program[2053] =" at
+> https://lkml.kernel.org/r/c389e47f-8f82-fd62-8c1d-d9481d2f71ff@I-love.SAKURA.ne.jp
+> is doing so that I can parse syzkaller-generated BPF programs like C programs.
 > 
-> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index 1c00ee310c19..a36a18c84aeb 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -2598,7 +2598,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
->  	struct netdev_queue *nq = txring_txq(ring);
->  	union igc_adv_tx_desc *tx_desc = NULL;
->  	int cpu = smp_processor_id();
-> -	u16 ntu = ring->next_to_use;
-> +	u16 ntu;
-
-Please don't break the RCT (reverse christmas tree) style here. You
-should move it to the bottom of the declaration block, ideally
-combine it with the declaration of @budget as they're both u16s.
-
->  	struct xdp_desc xdp_desc;
->  	u16 budget;
->  
-> @@ -2607,6 +2607,8 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
->  
->  	__netif_tx_lock(nq, cpu);
->  
-> +	ntu = ring->next_to_use;
-> +
-
-There's no need for this empty newline I believe.
-
->  	budget = igc_desc_unused(ring);
->  
->  	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
-> -- 
-> 2.17.1
-
-Thanks,
-Al
+> Do you have a utility for this purpose?
+> 
+> Regards.
