@@ -2,31 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9729C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA5E0C433FE
 	for <bpf@archiver.kernel.org>; Thu, 21 Apr 2022 00:41:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355827AbiDUAob (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1383486AbiDUAob (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 20 Apr 2022 20:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383505AbiDUAmV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:42:21 -0400
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6772613D
-        for <bpf@vger.kernel.org>; Wed, 20 Apr 2022 17:39:32 -0700 (PDT)
-Date:   Thu, 21 Apr 2022 00:39:22 +0000
+        with ESMTP id S1383530AbiDUAmZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Apr 2022 20:42:25 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DB82A262;
+        Wed, 20 Apr 2022 17:39:37 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 00:39:32 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1650501571;
-        bh=wuC1+vhay3ASZ7SmRAfdiwma2HlM/uaJNS3a/KTFZuQ=;
+        s=protonmail2; t=1650501575;
+        bh=0PStfJn/A30V4r63nD53fw6U9MRSxUFeg0SQxYCDl8o=;
         h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
          References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
          Feedback-ID:Message-ID;
-        b=NIW25xfbt5y/meQ91SkENqxh9jDr3xHuEFfIe9oFetZeS9Esx9nq8D+f3xtwOA4R5
-         b8GP5uR12nhhBLrs6GCiJ9HDeL2dRxCDOeTJFvJrsvupR+G9tQBAfOuRy3NbmPIKQG
-         yUsJCTvZzpOmbj9S6V4ErjLhrazOgUcobhQeqJXW4HwXhIeTgHVcnj+sK2WvRUkvNp
-         dnrx3QM6E4YCMKtE3+EIDd8FW/HTImIihzbNRxk28a1+yBz0CpoF09lH7OXpmdDOl+
-         bWGk2DnVUw9kxrDqtPC+fMy3Eakf9VhoJseNmaf9Rycy1KX5opa+VHbFubileRA6jJ
-         71UbHrbwvhDsQ==
+        b=ha5O7GsYjAxVIWUiwEWS6Wh5ksolr7RWStN0fdNIJ4VKKHWIRQCtr+M06ZWxebTuW
+         vhPVsPi2kytoKb9p90Ziwj2ZT+KPMZ1jXcVqqHchqse4S/0jcOUPyM7PM5N+qZ4WkU
+         4k4dlSRssuF+OIoMhDXH4fKm/4l4HLB1pl+nLsAmFildlGsK4XKckGPjUQOve0rsk7
+         cwaEtCPHImlTgg6dDkMdKMls+EjdbjJZ/VD/AxWg1Wfauq2sy4zdW4DaNttbPEM5FV
+         davbM8BIOnKyQl6s3wJgCNuNXlP1GHlHIehk2M4F60+Y0ixcbzaqgkz+G32ZZKp6AW
+         Vg8LiqmlPGU7Q==
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>
@@ -38,8 +38,8 @@ Cc:     Alexander Lobakin <alobakin@pm.me>,
         bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH v2 bpf 05/11] samples/bpf: add 'asm/mach-generic' include path for every MIPS
-Message-ID: <20220421003152.339542-6-alobakin@pm.me>
+Subject: [PATCH v2 bpf 07/11] samples/bpf: fix uin64_t format literals
+Message-ID: <20220421003152.339542-8-alobakin@pm.me>
 In-Reply-To: <20220421003152.339542-1-alobakin@pm.me>
 References: <20220421003152.339542-1-alobakin@pm.me>
 Feedback-ID: 22809121:user:proton
@@ -50,46 +50,81 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the following:
+There's a couple places where uin64_t is being passed as an %lu
+format argument. That type is defined as unsigned long on 64-bit
+systems and as unsigned long long on 32-bit, so neither %lu nor
+%llu are not universal.
+One of the options is %PRIu64, but since it's always 8-byte long,
+just cast it to the _proper_ __u64 and print as %llu.
 
-In file included from samples/bpf/tracex2_kern.c:7:
-In file included from ./include/linux/skbuff.h:13:
-In file included from ./include/linux/kernel.h:22:
-In file included from ./include/linux/bitops.h:33:
-In file included from ./arch/mips/include/asm/bitops.h:20:
-In file included from ./arch/mips/include/asm/barrier.h:11:
-./arch/mips/include/asm/addrspace.h:13:10: fatal error: 'spaces.h' file not=
- found
- #include <spaces.h>
-          ^~~~~~~~~~
-
-'arch/mips/include/asm/mach-generic' should always be included as
-many other MIPS include files rely on this.
-Move it from under CONFIG_MACH_LOONGSON64 to let it be included
-for every MIPS.
-
-Fixes: 058107abafc7 ("samples/bpf: Add include dir for MIPS Loongson64 to f=
-ix build errors")
-Acked-by: Song Liu <songliubraving@fb.com>
+Fixes: 51570a5ab2b7 ("A Sample of using socket cookie and uid for traffic m=
+onitoring")
+Fixes: 00f660eaf378 ("Sample program using SO_COOKIE")
 Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 ---
- samples/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ samples/bpf/cookie_uid_helper_example.c | 12 ++++++------
+ samples/bpf/lwt_len_hist_user.c         |  7 ++++---
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 38638845db9d..70323ac1114f 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -194,8 +194,8 @@ ifeq ($(ARCH), mips)
- TPROGS_CFLAGS +=3D -D__SANE_USERSPACE_TYPES__
- ifdef CONFIG_MACH_LOONGSON64
- BPF_EXTRA_CFLAGS +=3D -I$(srctree)/arch/mips/include/asm/mach-loongson64
--BPF_EXTRA_CFLAGS +=3D -I$(srctree)/arch/mips/include/asm/mach-generic
- endif
-+BPF_EXTRA_CFLAGS +=3D -I$(srctree)/arch/mips/include/asm/mach-generic
- endif
+diff --git a/samples/bpf/cookie_uid_helper_example.c b/samples/bpf/cookie_u=
+id_helper_example.c
+index f0df3dda4b1f..269fac58fd5c 100644
+--- a/samples/bpf/cookie_uid_helper_example.c
++++ b/samples/bpf/cookie_uid_helper_example.c
+@@ -207,9 +207,9 @@ static void print_table(void)
+ =09=09=09error(1, errno, "fail to get entry value of Key: %u\n",
+ =09=09=09=09curN);
+ =09=09} else {
+-=09=09=09printf("cookie: %u, uid: 0x%x, Packet Count: %lu,"
+-=09=09=09=09" Bytes Count: %lu\n", curN, curEntry.uid,
+-=09=09=09=09curEntry.packets, curEntry.bytes);
++=09=09=09printf("cookie: %u, uid: 0x%x, Packet Count: %llu, Bytes Count: %=
+llu\n",
++=09=09=09       curN, curEntry.uid, (__u64)curEntry.packets,
++=09=09=09       (__u64)curEntry.bytes);
+ =09=09}
+ =09}
+ }
+@@ -265,9 +265,9 @@ static void udp_client(void)
+ =09=09if (res < 0)
+ =09=09=09error(1, errno, "lookup sk stat failed, cookie: %lu\n",
+ =09=09=09      cookie);
+-=09=09printf("cookie: %lu, uid: 0x%x, Packet Count: %lu,"
+-=09=09=09" Bytes Count: %lu\n\n", cookie, dataEntry.uid,
+-=09=09=09dataEntry.packets, dataEntry.bytes);
++=09=09printf("cookie: %llu, uid: 0x%x, Packet Count: %llu, Bytes Count: %l=
+lu\n\n",
++=09=09       (__u64)cookie, dataEntry.uid, (__u64)dataEntry.packets,
++=09=09       (__u64)dataEntry.bytes);
+ =09}
+ =09close(s_send);
+ =09close(s_rcv);
+diff --git a/samples/bpf/lwt_len_hist_user.c b/samples/bpf/lwt_len_hist_use=
+r.c
+index 430a4b7e353e..c682faa75a2b 100644
+--- a/samples/bpf/lwt_len_hist_user.c
++++ b/samples/bpf/lwt_len_hist_user.c
+@@ -44,7 +44,8 @@ int main(int argc, char **argv)
 
- TPROGS_CFLAGS +=3D -Wall -O2
+ =09while (bpf_map_get_next_key(map_fd, &key, &next_key) =3D=3D 0) {
+ =09=09if (next_key >=3D MAX_INDEX) {
+-=09=09=09fprintf(stderr, "Key %lu out of bounds\n", next_key);
++=09=09=09fprintf(stderr, "Key %llu out of bounds\n",
++=09=09=09=09(__u64)next_key);
+ =09=09=09continue;
+ =09=09}
+
+@@ -66,8 +67,8 @@ int main(int argc, char **argv)
+
+ =09for (i =3D 1; i <=3D max_key + 1; i++) {
+ =09=09stars(starstr, data[i - 1], max_value, MAX_STARS);
+-=09=09printf("%8ld -> %-8ld : %-8ld |%-*s|\n",
+-=09=09       (1l << i) >> 1, (1l << i) - 1, data[i - 1],
++=09=09printf("%8ld -> %-8ld : %-8lld |%-*s|\n",
++=09=09       (1l << i) >> 1, (1l << i) - 1, (__u64)data[i - 1],
+ =09=09       MAX_STARS, starstr);
+ =09}
+
 --
 2.36.0
 
