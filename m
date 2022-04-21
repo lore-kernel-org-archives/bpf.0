@@ -2,79 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AA54C433EF
-	for <bpf@archiver.kernel.org>; Thu, 21 Apr 2022 00:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 292A9C433F5
+	for <bpf@archiver.kernel.org>; Thu, 21 Apr 2022 00:41:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbiDUAnh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Apr 2022 20:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S230219AbiDUAoa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Apr 2022 20:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380488AbiDUAnd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Apr 2022 20:43:33 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A4523140;
-        Wed, 20 Apr 2022 17:40:45 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so6344205pjb.2;
-        Wed, 20 Apr 2022 17:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rfclIFAaCRj3lQhBUsZRIMVHC921jKyUGA7KZs0JIxQ=;
-        b=ADc9TTJt+cbaLMa570d9rdQUxkG44C+hEEzdxM7Uxvay7RuSoiHTQsXoH8CEtBeb+j
-         wPazNyCTBOQAshoOjkhPoZzLNmNAHbDFYYgt3Sj18Fmc+UOtx5I5v4MKSBktYd/LqFoK
-         sCqNe//hf5TheNaZXXZ5QCflskmrl2XVTUlxt6qPAFc6V0MQr6iEd+hfTcxVZbU/rUha
-         KpA1TR4ikK+hdikR0U5m/TYRQxWMZ4C0TRKE7vpSJMykg1wYgDgvron6BpJzSMngq11f
-         Lxvms3zl3Jj3gBEmqhTkLfD2nrdpvA+B7sOd23EEwv0Td44GYP3aG71Yz3ZVQ4tvUWCR
-         m1DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rfclIFAaCRj3lQhBUsZRIMVHC921jKyUGA7KZs0JIxQ=;
-        b=bTNrfEf5kAGmZtimINNGjgDNgesFJhhPO/CbzFqehwlVVHONiPoat+/Ws1C/uAU+QH
-         1AiHXkuCWsr+s/DN7NE3pTd65AeHXsuoxYAvjwKG4PKFbwp0xx1MmX4zOIFAQbGdspHi
-         ZClrd9upYYQtmTUib5bnx9ghLrjG+N7NBw97+tbQ3zf+mRlcQKbFZq+x1smrAaHUuVoR
-         /9njbP1KVW0jXs7BUlvpmEo/PNGdIwcI0XOnLnxPsbOtgF5ELASA7Du+2saGTM4/tnIK
-         jQiDTFxRZLs8o/guM3gE4Q28zVbipu7rpcDbSqVJcgRZedia6hZqZ12PBlKzBeGfd47w
-         28yw==
-X-Gm-Message-State: AOAM531b2DHjRxCuIK8L3BGLVI/Q1E6qjHpbeie9pNZKs8WnIzq26IXl
-        CAGmvDt7o+Rj4pJysm7L+V3K/xIUswT062x796M=
-X-Google-Smtp-Source: ABdhPJzCd26tkkmotF+5V2NfYiZAWce3+X+m49nMnUeZeWHQtEwNy/n46ZWFZ999vH1JvS7D7LcrMva4bEJF8ckUHM4=
-X-Received: by 2002:a17:90a:4f0e:b0:1d2:c449:8484 with SMTP id
- p14-20020a17090a4f0e00b001d2c4498484mr7353875pjh.26.1650501645416; Wed, 20
- Apr 2022 17:40:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220421003152.339542-1-alobakin@pm.me>
-In-Reply-To: <20220421003152.339542-1-alobakin@pm.me>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Apr 2022 17:40:34 -0700
-Message-ID: <CAADnVQJJiBO5T3dvYaifhu3crmce7CH9b5ioc1u4=Y25SUxVRA@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 00/11] bpf: random unpopular userspace fixes (32
- bit et al)
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S1383512AbiDUAmW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Apr 2022 20:42:22 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC0627B23;
+        Wed, 20 Apr 2022 17:39:34 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 00:39:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1650501572;
+        bh=v6gaFkC1lQ5OvOGA5jP895MtmOBP8Tdf6LrASizShuo=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=PFdTuOoCFpxSp4uLdYHgSLDaZVZwi7hatwlWmCfdP56Da7ptv/UBE8hO/VLSl1xAn
+         lOkh92ooqW1lM/YySkpa4nxE/nsmnRPHmkW/Rhd1ZuDTDvT2o5k0hmI+E1/DsA+O7O
+         TDyzviRTM4/nByU25Ar99spr1lC7wo7phHzCAeKvcKcgpNBojGFUJqhalRb0WyzN6l
+         oIRGiLBv5xH0tkPZJxCTDur070BWsA3iRt0dAYOOwnHlItFmjiGlkAbG5h7KcS05nB
+         zkV9ViBIHO//ZKcyS+V2Q7NsHosR/zRyXrk/0VNx9rggxhcHxfwXC6BRowRIcFARbS
+         mezfQjhZThggg==
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Song Liu <songliubraving@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH v2 bpf 06/11] samples/bpf: use host bpftool to generate vmlinux.h, not target
+Message-ID: <20220421003152.339542-7-alobakin@pm.me>
+In-Reply-To: <20220421003152.339542-1-alobakin@pm.me>
+References: <20220421003152.339542-1-alobakin@pm.me>
+Feedback-ID: 22809121:user:proton
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 5:38 PM Alexander Lobakin <alobakin@pm.me> wrote:
+Use the host build of bpftool (bootstrap) instead of the target one
+to generate vmlinux.h/skeletons for the BPF samples. Otherwise, when
+host !=3D target, samples compilation fails with:
 
-Again?
+/bin/sh: line 1: samples/bpf/bpftool/bpftool: failed to exec: Exec
+format error
 
------BEGIN PGP MESSAGE-----
-Version: ProtonMail
+Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ samples/bpf/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-wcFMA165ASBBe6s8AQ/8C9y4TqXgASA5xBT7UIf2GyTQRjKWcy/6kT1dkjkF
-FldAOhehhgLYjLJzNAIkecOQfz/XNapW3GdrQDq11pq9Bzs1SJJekGXlHVIW
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 70323ac1114f..2bb9088a8d91 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -291,12 +291,13 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_S=
+RC)/Makefile) | $(LIBBPF_OU
 
-Sorry I'm tossing the series out of patchwork.
+ BPFTOOLDIR :=3D $(TOOLS_PATH)/bpf/bpftool
+ BPFTOOL_OUTPUT :=3D $(abspath $(BPF_SAMPLES_PATH))/bpftool
+-BPFTOOL :=3D $(BPFTOOL_OUTPUT)/bpftool
++BPFTOOL :=3D $(BPFTOOL_OUTPUT)/bootstrap/bpftool
+ $(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefi=
+le) | $(BPFTOOL_OUTPUT)
+ =09    $(MAKE) -C $(BPFTOOLDIR) srctree=3D$(BPF_SAMPLES_PATH)/../../ \
+ =09=09OUTPUT=3D$(BPFTOOL_OUTPUT)/ \
+ =09=09LIBBPF_OUTPUT=3D$(LIBBPF_OUTPUT)/ \
+-=09=09LIBBPF_DESTDIR=3D$(LIBBPF_DESTDIR)/
++=09=09LIBBPF_DESTDIR=3D$(LIBBPF_DESTDIR)/ \
++=09=09bootstrap
+
+ $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
+ =09$(call msg,MKDIR,$@)
+--
+2.36.0
+
+
