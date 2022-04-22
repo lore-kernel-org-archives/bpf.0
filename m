@@ -2,110 +2,181 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33379C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 22:34:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DF6FC433FE
+	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 22:35:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbiDVWhX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Apr 2022 18:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
+        id S233231AbiDVWip (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Apr 2022 18:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiDVWhH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Apr 2022 18:37:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A754024766C;
-        Fri, 22 Apr 2022 14:49:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7235EB831F5;
-        Fri, 22 Apr 2022 19:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 059E8C385A0;
-        Fri, 22 Apr 2022 19:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650654261;
-        bh=/hQTHTPZ+8EMV0t0+BWR+cNB6HkAVNSrcB0f4XxB0uo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e7W3PV+GoD7Ha2W0fT29yk3eI7sObxvOyea9pB3TA1nfeWcqBP30+4EL8qO0cddDL
-         1naoJHDmxy8N+1iTy+DK01hyZyG7fz0Pfl8lyLTvmXcJ5P6WtI/pXOrx6M2NqEUNW6
-         Nf7Rt5g13AQ71tnz7xlxL7k/vLzfMc6qetAcK1+7xVHwqYUcVsKHGe3ezcwCpn4j/1
-         2jvX2cOBgJ/tot0Yee12YrzrbowKIv+JPWSFbV55/P3oJqt/a69YITOULv1f7WtRGT
-         jJYEqX/oSDbivZ6hFmiZpsMCUeM8iRAkEAgWNRPpYvftLAIgEALjYJb9yzvv/mnck1
-         K+eT13/x+c1TA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CACD9400B1; Fri, 22 Apr 2022 16:04:18 -0300 (-03)
-Date:   Fri, 22 Apr 2022 16:04:18 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Milian Wolff <milian.wolff@kdab.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Blake Jones <blakejones@google.com>
-Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
-Message-ID: <YmL8MlTX12zHtzbd@kernel.org>
-References: <20220422053401.208207-1-namhyung@kernel.org>
- <35121321.B44TWeBT9p@milian-workstation>
- <CAM9d7cjU6RGMStG4YOW5D50Sx4PRia2dfzcPKxb4JLh5Q668mw@mail.gmail.com>
+        with ESMTP id S233038AbiDVWi2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Apr 2022 18:38:28 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E132E7090;
+        Fri, 22 Apr 2022 14:46:12 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id y11so5852699ilp.4;
+        Fri, 22 Apr 2022 14:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=nkDUZxbdA+hWXU65q6VAaFr0TzgsldQALWu4ZWoYD0M=;
+        b=bJee/rEr6BUaMfw59k5TozahkYw7co4nWcHIgP7F/BLY3AQxJmRDWGyNmCqMgHqNnd
+         Flea4d5Up76qniaRAJ4C2k/8sMCcT3ykbdFE9NS1awQ+KBF4SAfKVcz6OM7j9P52Ay9K
+         LRuKC2wwfBFW+3nlRGuKNTjUY7noZf0V4lL3zErNRVJ6tCkYZ1xSvDr4POoVqIbAfrv2
+         v4YeKLBVoeDDntDlhumrNv5qsXIS8IXCIElGtvrMcmWpLMMymhHA63TPkjazsM4RiYd3
+         zvaBuErlj2qcOgVugdIdb5az3E5zUktuiO3B3D7lXFqXw14jX2AbQaJQ3I7NBMnnb0xq
+         57zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nkDUZxbdA+hWXU65q6VAaFr0TzgsldQALWu4ZWoYD0M=;
+        b=YDPmwEnGEB6xZgIbUgHMmVBBk7BBR+YXdOlpF3B8LUn6zwrn2j0RVvf2YkMyxISGSS
+         kZrlwXBPb1z1lMbrraHsKg9RoPucS8qJIiE/Pe7pTuTh6cooNUeh3a4vLD2zJYa33z5J
+         KWT+QFkZJ/Y/b2yLp0ox0N71Vs04gBBlbeUYrR8MhnTXfBAFzCc/eN1NVbo59htmhFHX
+         Bgvz3LORsRm6atlVu0VMIMXL+DyqDS+QcX41BnsDymcf4jxDYljUsIMKu2vQ1QcVuPKl
+         j/HwBhz+MMCryin1HraSgRwvmgXe/krXsLY7hLjKbMKDEzJhxanjFbQJLTMMUKPDF/rC
+         qMrg==
+X-Gm-Message-State: AOAM5337vw9s6gfvkAG37ElAkWYHdQMP+ExE2ig5MllWVUBYCWgMwkSD
+        yzC9v2o9ryDHPEybDX/qOxC4uAL1z6HVyq25Uhg=
+X-Google-Smtp-Source: ABdhPJzNGJm4jcKbD/R3aBuDb2M63BaNg5fLvioWsh96gpit7/9Ok02JoYIVS32OS5cVounn+0kxBToAAOEfAI254hY=
+X-Received: by 2002:a92:cd8d:0:b0:2cd:81ce:79bd with SMTP id
+ r13-20020a92cd8d000000b002cd81ce79bdmr221037ilb.252.1650663972085; Fri, 22
+ Apr 2022 14:46:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cjU6RGMStG4YOW5D50Sx4PRia2dfzcPKxb4JLh5Q668mw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
+References: <20220421130056.2510372-1-cuigaosheng1@huawei.com>
+ <CAEf4Bza3inoAHsS0w=nKXNgxyFqzPXJVyDHq03Foody6Vgp7=Q@mail.gmail.com> <60b4e208-efed-c2fb-d1e0-125e5409c861@huawei.com>
+In-Reply-To: <60b4e208-efed-c2fb-d1e0-125e5409c861@huawei.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 22 Apr 2022 14:46:01 -0700
+Message-ID: <CAEf4BzY3j8=uNvvwZXsFEANR84bXMWY2OH+eZi_sSsiLutYhVQ@mail.gmail.com>
+Subject: Re: [PATCH -next] libbpf: Add additional null-pointer checking in make_parent_dir
+To:     cuigaosheng <cuigaosheng1@huawei.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        gongruiqi1@huawei.com, wangweiyang2@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Fri, Apr 22, 2022 at 08:01:15AM -0700, Namhyung Kim escreveu:
-> Hi Milian,
- 
-> On Fri, Apr 22, 2022 at 3:21 AM Milian Wolff <milian.wolff@kdab.com> wrote:
-> > On Freitag, 22. April 2022 07:33:57 CEST Namhyung Kim wrote:
-> > > This is the first version of off-cpu profiling support.  Together with
-> > > (PMU-based) cpu profiling, it can show holistic view of the performance
-> > > characteristics of your application or system.
+On Thu, Apr 21, 2022 at 7:55 PM cuigaosheng <cuigaosheng1@huawei.com> wrote=
+:
+>
+> This email adjusts the code format.
+>
+> I don't understand why we don't check path for NULL, bpf_link__pin is an
+> external
+> interface, It will be called by external functions and provide input
+> parameters,
 
-> > Hey Namhyung,
+that external interface expects non-NULL string as input argument,
+which is a default throughout libbpf's API. You will get SIGSEGV in
+lots of cases if you pass NULL where you are not supposed to, e.g.,
+bpf_object__open_file() and many others. It doesn't mean that libbpf
+should check any pointer argument for NULL.
 
-> > this is awesome news! In hotspot, I've long done off-cpu profiling manually by
-> > looking at the time between --switch-events. The downside is that we also need
-> > to track the sched:sched_switch event to get a call stack. But this approach
-> > also works with dwarf based unwinding, and also includes kernel stacks.
-> 
-> Thanks, I've also briefly thought about the switch event based off-cpu
-> profiling as it doesn't require root.  But collecting call stacks is hard and
-> I'd like to do it in kernel/bpf to reduce the overhead.
+You can argue that strdup(NULL) shouldn't crash but it doesn't. It's
+because strdup() has a contract that it shouldn't be passed NULL. So
+is the case here.
 
-It would be great to have both in perf. Right now since we have one in
-hotspot that is working, perfecting the other method, Namhyung's, using
-BPF to reduce the amount of data to postprocess in userspace, looks
-great.
- 
-> > > With BPF, it can aggregate scheduling stats for interested tasks
-> > > and/or states and convert the data into a form of perf sample records.
-> > > I chose the bpf-output event which is a software event supposed to be
-> > > consumed by BPF programs and renamed it as "offcpu-time".  So it
-> > > requires no change on the perf report side except for setting sample
-> > > types of bpf-output event.
-> > >
-> > > Basically it collects userspace callstack for tasks as it's what users
-> > > want mostly.  Maybe we can add support for the kernel stacks but I'm
-> > > afraid that it'd cause more overhead.  So the offcpu-time event will
-> > > always have callchains regardless of the command line option, and it
-> > > enables the children mode in perf report by default.
+
+> for example in samples/bpf/hbm.c:
+>
+> > 201         link =3D bpf_program__attach_cgroup(bpf_prog, cg1);
+> > 202         if (libbpf_get_error(link)) {
+> > 203                 fprintf(stderr, "ERROR: bpf_program__attach_cgroup
+> > failed\n");
+> > 204                 goto err;
+> > 205         }
+> > 206
+> > 207         sprintf(cg_pin_path, "/sys/fs/bpf/hbm%d", cg_id);
+> > 208         rc =3D bpf_link__pin(link, cg_pin_path);
+> > 209         if (rc < 0) {
+> > 210                 printf("ERROR: bpf_link__pin failed: %d\n", rc);
+> > 211                 goto err;
+> > 212         }
+>
+> if cg_pin_path is NULL, strdup(NULL) will trigger a segmentation fault in
+> make_parent_dir, I think we should avoid this and add null-pointer checki=
+ng
+> for path, just like check_path:
+> >  7673 static int check_path(const char *path)
+> >  7674 {
+> >  7675         char *cp, errmsg[STRERR_BUFSIZE];
+> >  7676         struct statfs st_fs;
+> >  7677         char *dname, *dir;
+> >  7678         int err =3D 0;
+> >  7679
+> >  7680         if (path =3D=3D NULL)
+> >  7681                 return -EINVAL;
+> >  7682
+> >  7683         dname =3D strdup(path);
+> >  7684         if (dname =3D=3D NULL)
+> >  7685                 return -ENOMEM;
+> >  7686
+> >  7687         dir =3D dirname(dname);
+> >  7688         if (statfs(dir, &st_fs)) {
+> >  7689                 cp =3D libbpf_strerror_r(errno, errmsg,
+> > sizeof(errmsg));
+> >  7690                 pr_warn("failed to statfs %s: %s\n", dir, cp);
+> >  7691                 err =3D -errno;
+> >  7692         }
+> >  7693         free(dname);
+> >  7694
+> >  7695         if (!err && st_fs.f_type !=3D BPF_FS_MAGIC) {
+> >  7696                 pr_warn("specified path %s is not on BPF FS\n",
+> > path);
+> >  7697                 err =3D -EINVAL;
+> >  7698         }
+> >  7699
+> >  7700         return err;
+> >  7701 }
+>
+> Thanks.
+>
+>
+> =E5=9C=A8 2022/4/22 0:55, Andrii Nakryiko =E5=86=99=E9=81=93:
+> > On Thu, Apr 21, 2022 at 6:01 AM Gaosheng Cui <cuigaosheng1@huawei.com> =
+wrote:
+> >> The make_parent_dir is called without null-pointer checking for path,
+> >> such as bpf_link__pin. To ensure there is no null-pointer dereference
+> >> in make_parent_dir, so make_parent_dir requires additional null-pointe=
+r
+> >> checking for path.
+> >>
+> >> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> >> ---
+> >>   tools/lib/bpf/libbpf.c | 3 +++
+> >>   1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> >> index b53e51884f9e..5786e6184bf5 100644
+> >> --- a/tools/lib/bpf/libbpf.c
+> >> +++ b/tools/lib/bpf/libbpf.c
+> >> @@ -7634,6 +7634,9 @@ static int make_parent_dir(const char *path)
+> >>          char *dname, *dir;
+> >>          int err =3D 0;
+> >>
+> >> +       if (path =3D=3D NULL)
+> >> +               return -EINVAL;
+> >> +
+> > API contract is that path shouldn't be NULL. Just like we don't check
+> > link, obj, prog for NULL in every single API, I don't think we need to
+> > do it here, unless I'm missing something?
 > >
-> > Has anything changed wrt perf/bpf and user applications not compiled with `-
-> > fno-omit-frame-pointer`? I.e. does this new utility only work for specially
-> > compiled applications, or do we also get backtraces for "normal" binaries that
-> > we can install through package managers?
-> 
-> I am not aware of such changes, it still needs a frame pointer to get
-> backtraces.
-
-I see this as an initial limitation, one that we can lift later?
-
-- Arnaldo
+> >>          dname =3D strdup(path);
+> >>          if (dname =3D=3D NULL)
+> >>                  return -ENOMEM;
+> >> --
+> >> 2.25.1
+> >>
+> > .
