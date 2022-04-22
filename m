@@ -2,103 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 696DDC4332F
-	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 15:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07466C43219
+	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 15:05:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449195AbiDVPFc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Apr 2022 11:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48364 "EHLO
+        id S1441901AbiDVPIK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Apr 2022 11:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449198AbiDVPE2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Apr 2022 11:04:28 -0400
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE3C5D647;
-        Fri, 22 Apr 2022 08:01:28 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id w5so9968134lji.4;
-        Fri, 22 Apr 2022 08:01:27 -0700 (PDT)
+        with ESMTP id S1449152AbiDVPIH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Apr 2022 11:08:07 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE28353E34;
+        Fri, 22 Apr 2022 08:05:11 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id j8so11419399pll.11;
+        Fri, 22 Apr 2022 08:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wqQRIgQO3ULhYUlV88GiQPjDyhm28U+v+Mde/WfWJ9Y=;
+        b=BqbK74JSPzP6KIbaGsdg/rX1PeqFGdvvCjQ5fkfBU+YHhDjYPfJBJhsCX7I0OFh63M
+         ArwrL5Mi+L30o72sLuQ7RfkmQH9KN3b6vjL/f18JpteylDgh1FuiIUA2F/N4VKdPkE2E
+         FPFxq5tDWcDws/LfQW95RocuWVdwEGxpmDiF9wpVMyxdgYJHbz4K8b+yPX18CUdztIoK
+         PVlqwMLouGkd/UGk8oP3hlP2Un9pwt/N13lKjJK8Vv9b0UeHeeDbWmpzlbuX9IrO+82d
+         0STeRRJ1Ad2zi9I7/ggBQudity8kNdl+TpdCFDXovCTgtPzOr52HwS3aqpwLl26cXEyr
+         QfkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fiWLR17VDpLKbRo+43T1nudbmv7jbS4IG24R19EwcNM=;
-        b=yMo/T1/vhPe4MnWmd37bbXE6AbI/jeWcL7bTy+LHTuq5eNUjFiQrvkgL+W6vbNsHdF
-         vQ93e9ME/4pman1yQ/HS/ySp9FcLlwsXwvr/AaP5Wf9LUb0nA+vBVxhsBzmwB1W3HeAA
-         CpH2pcjKl2+C6x4KTB4dZ+neEUS3eP61Ek3TOwby73/qqlYk5JZRRWl6QMZes64T3gxr
-         tT2T2o2Athoriy2eWWt8wKfO8J3PEO+93ZSlRP1sDGFFGAjeOGY3eWypIm4enbExtIPb
-         /D1l1eHgssnfswiY0JktHn04SB7i014x/iF5Ewupu7NGNGhUTXoNCEzqgNc5FKIQjWPt
-         DuVQ==
-X-Gm-Message-State: AOAM533LSXNAYLEqTp8jDh5zKJhcN70H/9NP+YYYwsfi8lzSwuYszx1G
-        D3Pq19CMqDnRFSG+Kw9hJ8JxpdwKcX1qY4xSfuQ=
-X-Google-Smtp-Source: ABdhPJz0aFWprrOW9PDtR3C4kUFYsFk3pNN4qhgIVvgnXXxHQJJWo1vSVKJNqXx7Qu5hvrI65GmkiPmE444yntBOynA=
-X-Received: by 2002:a2e:a793:0:b0:24e:e3bd:b3a8 with SMTP id
- c19-20020a2ea793000000b0024ee3bdb3a8mr2949005ljf.457.1650639686346; Fri, 22
- Apr 2022 08:01:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220422053401.208207-1-namhyung@kernel.org> <35121321.B44TWeBT9p@milian-workstation>
-In-Reply-To: <35121321.B44TWeBT9p@milian-workstation>
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=wqQRIgQO3ULhYUlV88GiQPjDyhm28U+v+Mde/WfWJ9Y=;
+        b=EescU5Ahyw1tonGs6SpbL/T/MPcc97+UpNeQVqnWshpcvJc9Ny04bynJJEt8EH8KHc
+         q8sN4nXuwnTQeva2q/ydLQQIdlddiBowVbjHf9n7qEMgPlzmW1pnTr4fQZU+PjfxFjxc
+         H1QRtoXxPinGB0fHsTfVKEV7ObwMCj8h9NYJ0H0F0dwGdjfODOIUsJQ+Ie7HZiMQQV2v
+         tt5qCypqMA1ntaAAA1LcxKGE4ud6rQP7hBhPzoKh4NJgix+U4wQe4JSatJIswzujserz
+         mNyySab18RVsvKfXxFnHMieG4EL9QLJ+qF5xLltAqqjtSZak5UxtxOkh2Vns3ApL7o8r
+         0Acw==
+X-Gm-Message-State: AOAM530/6Na8XOecxrfs32R07lD8bn7hUcycnr2LlF7MfXtybuH38reB
+        bcdAiiEbUh+lIHcjIewZdjs=
+X-Google-Smtp-Source: ABdhPJzaxFg5a+d65TzZeCdDPAtNnJmv058PJW0I2F7Abc2d7ge99y9zpTxEJGT+crpH8DSIqc42zw==
+X-Received: by 2002:a17:902:d2c5:b0:158:f839:4d82 with SMTP id n5-20020a170902d2c500b00158f8394d82mr5037189plc.17.1650639911299;
+        Fri, 22 Apr 2022 08:05:11 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4f00:3590:5deb:57fb:7322:f9d4])
+        by smtp.gmail.com with ESMTPSA id s11-20020a6550cb000000b0039daee7ed0fsm2390279pgp.19.2022.04.22.08.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 08:05:10 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 22 Apr 2022 08:01:15 -0700
-Message-ID: <CAM9d7cjU6RGMStG4YOW5D50Sx4PRia2dfzcPKxb4JLh5Q668mw@mail.gmail.com>
-Subject: Re: [RFC 0/4] perf record: Implement off-cpu profiling with BPF (v1)
-To:     Milian Wolff <milian.wolff@kdab.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Andi Kleen <ak@linux.intel.com>,
         Ian Rogers <irogers@google.com>,
         Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        bpf <bpf@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
         Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH 1/4] perf report: Do not extend sample type of bpf-output event
+Date:   Fri, 22 Apr 2022 08:05:04 -0700
+Message-Id: <20220422150507.222488-2-namhyung@kernel.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+In-Reply-To: <20220422150507.222488-1-namhyung@kernel.org>
+References: <20220422150507.222488-1-namhyung@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Milian,
+Currently evsel__new_idx() sets more sample_type bits when it finds a
+BPF-output event.  But it should honor what's recorded in the perf
+data file rather than blindly sets the bits.  Otherwise it could lead
+to a parse error when it recorded with a modified sample_type.
 
-On Fri, Apr 22, 2022 at 3:21 AM Milian Wolff <milian.wolff@kdab.com> wrote:
->
-> On Freitag, 22. April 2022 07:33:57 CEST Namhyung Kim wrote:
-> > Hello,
-> >
-> > This is the first version of off-cpu profiling support.  Together with
-> > (PMU-based) cpu profiling, it can show holistic view of the performance
-> > characteristics of your application or system.
->
-> Hey Namhyung,
->
-> this is awesome news! In hotspot, I've long done off-cpu profiling manually by
-> looking at the time between --switch-events. The downside is that we also need
-> to track the sched:sched_switch event to get a call stack. But this approach
-> also works with dwarf based unwinding, and also includes kernel stacks.
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/evsel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, I've also briefly thought about the switch event based off-cpu
-profiling as it doesn't require root.  But collecting call stacks is hard and
-I'd like to do it in kernel/bpf to reduce the overhead.
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 2a1729e7aee4..5f947adc16cb 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -269,8 +269,8 @@ struct evsel *evsel__new_idx(struct perf_event_attr *attr, int idx)
+ 		return NULL;
+ 	evsel__init(evsel, attr, idx);
+ 
+-	if (evsel__is_bpf_output(evsel)) {
+-		evsel->core.attr.sample_type |= (PERF_SAMPLE_RAW | PERF_SAMPLE_TIME |
++	if (evsel__is_bpf_output(evsel) && !attr->sample_type) {
++		evsel->core.attr.sample_type = (PERF_SAMPLE_RAW | PERF_SAMPLE_TIME |
+ 					    PERF_SAMPLE_CPU | PERF_SAMPLE_PERIOD),
+ 		evsel->core.attr.sample_period = 1;
+ 	}
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
 
->
-> > With BPF, it can aggregate scheduling stats for interested tasks
-> > and/or states and convert the data into a form of perf sample records.
-> > I chose the bpf-output event which is a software event supposed to be
-> > consumed by BPF programs and renamed it as "offcpu-time".  So it
-> > requires no change on the perf report side except for setting sample
-> > types of bpf-output event.
-> >
-> > Basically it collects userspace callstack for tasks as it's what users
-> > want mostly.  Maybe we can add support for the kernel stacks but I'm
-> > afraid that it'd cause more overhead.  So the offcpu-time event will
-> > always have callchains regardless of the command line option, and it
-> > enables the children mode in perf report by default.
->
-> Has anything changed wrt perf/bpf and user applications not compiled with `-
-> fno-omit-frame-pointer`? I.e. does this new utility only work for specially
-> compiled applications, or do we also get backtraces for "normal" binaries that
-> we can install through package managers?
-
-I am not aware of such changes, it still needs a frame pointer to get
-backtraces.
-
-Thanks,
-Namhyung
