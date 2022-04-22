@@ -2,126 +2,234 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC63C433F5
-	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 16:35:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8260BC4321E
+	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 16:43:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449753AbiDVQil (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Apr 2022 12:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S1449794AbiDVQqr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Apr 2022 12:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392046AbiDVQik (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Apr 2022 12:38:40 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB535EBC9;
-        Fri, 22 Apr 2022 09:35:46 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id c15so10284306ljr.9;
-        Fri, 22 Apr 2022 09:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M6cSf3rWybJaak8I5ckt3kVwPSyC+Ht3yWyW9Q792IM=;
-        b=Sm8c4eAfIv0o+xf2IQZ0xOiTa9eR8RMQ6Y0jLcIPkfwWor0+zgK1lo6zGL5+1zmOjN
-         u2WZSv0zsvOBABGm+SUxMcV7GiPA9e3WokAhnPL5oT97HV1sQwZWd/WLMu+cVYMTyO2r
-         8E6SPzLiXvxZQ4N18DxT6ZKVrnvowato2uy+3oXOMPXdgmIXkfQF61ji72EJLRb+5oX0
-         FTBwJBsbksmwTfF6Uk1sM98K6ehfdc3yC0672vZgSbHhRrl5+LopOZgZSEq2R+uv4BQp
-         67ntIlf0zy8UJYpjIbJqXEp6VyxkMN/H6j8Ig1KpBHevTNCX8gNpZF5LAo7WV3hUhTNv
-         yz8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M6cSf3rWybJaak8I5ckt3kVwPSyC+Ht3yWyW9Q792IM=;
-        b=bWa2f6YL7BNMd+NntnTJzAuaJP9+fUUfvaAhI8VT9CbjJ369/fC/RhIbwRz5Dgossc
-         Kl2L0InAxS+b7l55d8N1d7BvTwzM/VrOA17yjcqP9lp/F0TxYuXfnsFxc0GBc8NDJwnn
-         GHX0QWkt5mZZRXnt0Dl7Au6KA5H8zJhwq0SwyLhoNAmf9AX1JUcIlzaF6n1SPVVmiTrn
-         tHHhvoZ1H7ZWReZGVljeDlE/S6rOyY3tkvSFqcoDsJ/LaCL/2rvJCC74KvWmr3HYfhib
-         SjjAc11I1LzehpUsy4K7W3QAykVRWK+H3jLgN68PsoQsiauQCRxUloUZpqvht78rZC9p
-         I58g==
-X-Gm-Message-State: AOAM531tV3rysBlbj72iov6IImB6YoomHVEWxlpOdQ5VgnD6+XILT6pw
-        sGaQXPfIBraqX8GDJK3swaoxCLCcNPaqHTE1nPXVae7sKr8=
-X-Google-Smtp-Source: ABdhPJzOYUBER/oqKzKvMuhm2RDD85bXcqgWlxmwa2hIva0T/DTuVh6cPegKLtrLDK3gLipky2xaaVWXc7bDf1krAe0=
-X-Received: by 2002:a2e:894e:0:b0:24d:bc0f:2238 with SMTP id
- b14-20020a2e894e000000b0024dbc0f2238mr3247631ljk.509.1650645344918; Fri, 22
- Apr 2022 09:35:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1650575919.git.peilin.ye@bytedance.com> <b606e0355949a3ca8081ee29d9d22f2f30e898bd.1650575919.git.peilin.ye@bytedance.com>
-In-Reply-To: <b606e0355949a3ca8081ee29d9d22f2f30e898bd.1650575919.git.peilin.ye@bytedance.com>
-From:   William Tu <u9012063@gmail.com>
-Date:   Fri, 22 Apr 2022 09:35:08 -0700
-Message-ID: <CALDO+SYfemnqVkQY6kbQ23hgtdcUSimExJQob90rZLd8xvzsXw@mail.gmail.com>
-Subject: Re: [PATCH net 3/3] ip_gre, ip6_gre: Fix race condition on o_seqno in
- collect_md mode
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        "xeb@mail.ru" <xeb@mail.ru>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S1449799AbiDVQqp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Apr 2022 12:46:45 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E155F5F27B;
+        Fri, 22 Apr 2022 09:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650645825; x=1682181825;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xADDbnxaU1b4Q/20IqRJCpY+MhrD0ojhcwpEDkBPSpk=;
+  b=lMXJNfWaUdGMo95RYuhzGqkb0Nl75AS2LZU3dBgAsm+xBWi8y5OpL00Q
+   5TDGBFvh9RFEzakixzeunIka+jmF3lUbBFzfMnHymNBtln5Ok1N6YkNWl
+   y+Y9E3hbMgCY8dWCURAyU9a4UnFNJMJgGMYmVfDY/AGWA3c95KO8jKPhI
+   S/M1MoYDJfkfbm7gYzlKlxfrdp5/VYlfKNbthMMh+QbNPuLZ399neeO/C
+   k+z9y7yOz6jF08FjQ6rtYoFNZbUpgwuLVaW37uKm0zckCNCZHMkHMxm2U
+   o0kJHXUfyhE+vFg2n47lhCTO6FExPOR9t2iLij8dTwK48kERuqr9ooX2I
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="244650074"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="244650074"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 09:43:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="530926142"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga006.jf.intel.com with ESMTP; 22 Apr 2022 09:43:36 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23MGhZw6006484;
+        Fri, 22 Apr 2022 17:43:35 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc:     Larysa Zaremba <larysa.zaremba@intel.com>,
+        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Subject: Re: Accessing XDP packet memory from the end
+Date:   Fri, 22 Apr 2022 18:41:37 +0200
+Message-Id: <20220422164137.875143-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <87czhagxuw.fsf@toke.dk>
+References: <20220421155620.81048-1-larysa.zaremba@intel.com> <87czhagxuw.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 3:09 PM Peilin Ye <yepeilin.cs@gmail.com> wrote:
->
-> From: Peilin Ye <peilin.ye@bytedance.com>
->
-> As pointed out by Jakub Kicinski, currently using TUNNEL_SEQ in
-> collect_md mode is racy for [IP6]GRE[TAP] devices.  Consider the
-> following sequence of events:
->
-> 1. An [IP6]GRE[TAP] device is created in collect_md mode using "ip link
->    add ... external".  "ip" ignores "[o]seq" if "external" is specified,
->    so TUNNEL_SEQ is off, and the device is marked as NETIF_F_LLTX (i.e.
->    it uses lockless TX);
-> 2. Someone sets TUNNEL_SEQ on outgoing skb's, using e.g.
->    bpf_skb_set_tunnel_key() in an eBPF program attached to this device;
-> 3. gre_fb_xmit() or __gre6_xmit() processes these skb's:
->
->         gre_build_header(skb, tun_hlen,
->                          flags, protocol,
->                          tunnel_id_to_key32(tun_info->key.tun_id),
->                          (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
->                                               : 0);   ^^^^^^^^^^^^^^^^^
->
-> Since we are not using the TX lock (&txq->_xmit_lock), multiple CPUs may
-> try to do this tunnel->o_seqno++ in parallel, which is racy.  Fix it by
-> making o_seqno atomic_t.
->
-> As mentioned by Eric Dumazet in commit b790e01aee74 ("ip_gre: lockless
-> xmit"), making o_seqno atomic_t increases "chance for packets being out
-> of order at receiver" when NETIF_F_LLTX is on.
->
-> Maybe a better fix would be:
->
-> 1. Do not ignore "oseq" in external mode.  Users MUST specify "oseq" if
->    they want the kernel to allow sequencing of outgoing packets;
-> 2. Reject all outgoing TUNNEL_SEQ packets if the device was not created
->    with "oseq".
->
-> Unfortunately, that would break userspace.
->
-> We could now make [IP6]GRE[TAP] devices always NETIF_F_LLTX, but let us
-> do it in separate patches to keep this fix minimal.
->
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Fixes: 77a5196a804e ("gre: add sequence number for collect md mode.")
-> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-> ---
+From: Toke Høiland-Jørgensen <toke@redhat.com>
+Date: Thu, 21 Apr 2022 19:17:11 +0200
 
-LGTM
-Acked-by: William Tu <u9012063@gmail.com>
+> Larysa Zaremba <larysa.zaremba@intel.com> writes:
+> 
+> > Dear all,
+> > Our team has encountered a need of accessing data_meta in a following way:
+> >
+> > int xdp_meta_prog(struct xdp_md *ctx)
+> > {
+> > 	void *data_meta_ptr = (void *)(long)ctx->data_meta;
+> > 	void *data_end = (void *)(long)ctx->data_end;
+> > 	void *data = (void *)(long)ctx->data;
+> > 	u64 data_size = sizeof(u32);
+> > 	u32 magic_meta;
+> > 	u8 offset;
+> >
+> > 	offset = (u8)((s64)data - (s64)data_meta_ptr);
+> > 	if (offset < data_size) {
+> > 		bpf_printk("invalid offset: %ld\n", offset);
+> > 		return XDP_DROP;
+> > 	}
+> >
+> > 	data_meta_ptr += offset;
+> > 	data_meta_ptr -= data_size;
+> >
+> > 	if (data_meta_ptr + data_size > data) {
+> > 		return XDP_DROP;
+> > 	}
+> > 		
+> > 	magic_meta = *((u32 *)data);
+> > 	bpf_printk("Magic: %d\n", magic_meta);
+> > 	return XDP_PASS;
+> > }
+> >
+> > Unfortunately, verifier claims this code attempts to access packet with
+> > an offset of -2 (a constant part) and negative offset is generally forbidden.
+> >
+> > For now we have 2 solutions, one is using bpf_xdp_adjust_meta(),
+> > which is pretty good, but not ideal for the hot path.
+> > The second one is the patch at the end.
+> >
+> > Do you see any other way of accessing memory from the end of data_meta/data?
+> > What do you think about both suggested solutions?
+> 
+> The problem is that the compiler is generating code that the verifier
+> doesn't understand. It's notoriously hard to get LLVM to produce code
+> that preserves the right bounds checks which is why projects like Cilium
+> use helpers with inline ASM to produce the right loads, like in [0].
+> 
+> Adapting that cilium helper to load from the metadata area, your example
+> can be rewritten as follows (which works just fine with no verifier
+> changes):
+> 
+> static __always_inline int
+> xdp_load_meta_bytes(const struct xdp_md *ctx, __u64 off, void *to, const __u64 len)
+> {
+> 	void *from;
+> 	int ret;
+> 	/* LLVM tends to generate code that verifier doesn't understand,
+> 	 * so force it the way we want it in order to open up a range
+> 	 * on the reg.
+> 	 */
+> 	asm volatile("r1 = *(u32 *)(%[ctx] +8)\n\t"
+> 		     "r2 = *(u32 *)(%[ctx] +0)\n\t"
+> 		     "%[off] &= %[offmax]\n\t"
+> 		     "r1 += %[off]\n\t"
+> 		     "%[from] = r1\n\t"
+> 		     "r1 += %[len]\n\t"
+> 		     "if r1 > r2 goto +2\n\t"
+> 		     "%[ret] = 0\n\t"
+> 		     "goto +1\n\t"
+> 		     "%[ret] = %[errno]\n\t"
+> 		     : [ret]"=r"(ret), [from]"=r"(from)
+> 		     : [ctx]"r"(ctx), [off]"r"(off), [len]"ri"(len),
+> 		       [offmax]"i"(__CTX_OFF_MAX), [errno]"i"(-EINVAL)
+> 		     : "r1", "r2");
+> 	if (!ret)
+> 		__builtin_memcpy(to, from, len);
+> 	return ret;
+> }
+> 
+> 
+> SEC("xdp")
+> int xdp_meta_prog(struct xdp_md *ctx)
+> {
+>         void *data_meta_ptr = (void *)(long)ctx->data_meta;
+>         void *data = (void *)(long)ctx->data;
+>         __u32 magic_meta;
+>         __u8 offset;
+> 	int ret;
+> 
+>         offset = (__u8)((__s64)data - (__s64)data_meta_ptr);
+> 	ret = xdp_load_meta_bytes(ctx, offset - 4, &magic_meta, sizeof(magic_meta));
+> 	if (ret) {
+> 		bpf_printk("load bytes failed: %d\n", ret);
+>                 return XDP_DROP;
+> 	}
+> 
+>         bpf_printk("Magic: %d\n", magic_meta);
+>         return XDP_PASS;
+> }
+
+At the moment, we use this (based on Cilium's and your), it works
+just like we want C code to work previously:
+
+#define __CTX_OFF_MAX 0xff
+
+static __always_inline void *
+can_i_access_meta_please(const struct xdp_md *ctx, __u64 off, const __u64 len)
+{
+	void *ret;
+
+	/* LLVM tends to generate code that verifier doesn't understand,
+	 * so force it the way we want it in order to open up a range
+	 * on the reg.
+	 */
+	asm volatile("r1 = *(u32 *)(%[ctx] +8)\n\t"
+		     "r2 = *(u32 *)(%[ctx] +0)\n\t"
+		     "%[off] &= %[offmax]\n\t"
+		     "r1 += %[off]\n\t"
+		     "%[ret] = r1\n\t"
+		     "r1 += %[len]\n\t"
+		     "if r1 > r2 goto +1\n\t"
+		     "goto +1\n\t"
+		     "%[ret] = %[null]\n\t"
+		     : [ret]"=r"(ret)
+		     : [ctx]"r"(ctx), [off]"r"(off), [len]"ri"(len),
+		       [offmax]"i"(__CTX_OFF_MAX), [null]"i"(NULL)
+		     : "r1", "r2");
+
+	return ret;
+}
+
+SEC("xdp")
+int xdp_prognum_n0_meta(struct xdp_md *ctx)
+{
+	void *data_meta = (void *)(__s64)ctx->data_meta;
+	void *data = (void *)(__s64)ctx->data;
+	struct xdp_meta_generic *md;
+	__u64 offset;
+
+	offset = (__u64)((__s64)data - (__s64)data_meta);
+
+	md = can_i_access_meta_please(ctx, offset, sizeof(*md));
+	if (__builtin_expect(!md, 0)) {
+		bpf_printk("No you can't\n");
+		return XDP_DROP;
+	}
+
+	bpf_printk("Magic: 0x%04x\n", md->magic_id);
+	return XDP_PASS;
+}
+
+Thanks for the help! It's a shame LLVM still suck on generating
+correct object code from C.
+I guess we'll define a helper above in one of the headers to not
+copy-paste it back and forth between each program wanting to
+access only the generic part of the metadata (which is always being
+placed at the end).
+
+> 
+> -Toke
+> 
+> 
+> [0] https://github.com/cilium/cilium/blob/master/bpf/include/bpf/ctx/xdp.h#L35
+
+Thanks,
+Al
