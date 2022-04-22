@@ -2,255 +2,319 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2D65C433F5
-	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 00:49:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA2AC433F5
+	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 00:51:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442983AbiDVAwq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Apr 2022 20:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S239404AbiDVAyB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Apr 2022 20:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442974AbiDVAwq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Apr 2022 20:52:46 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEFB266
-        for <bpf@vger.kernel.org>; Thu, 21 Apr 2022 17:49:53 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id bj36so7699784ljb.13
-        for <bpf@vger.kernel.org>; Thu, 21 Apr 2022 17:49:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cyff/BYI4BHHE42Yn0eFG23oOJzOlK0YmbtegqLYiEA=;
-        b=e8s2jMFqv2bC+sQVxlpzwEDZh7oycaV9S+2wmssqFmvul0CDY0M5+RlJpkTTP7Z9QR
-         qi9yPXjrrlRQyUgqlQaVvL3akjasMHpEFWtfDD/ePQ8hkfHJdbNSK+y2EjwrrzH/Sitb
-         /ZrMeAG6mxUhL9QmT6M7P1gmlMuuvtG6NFBDY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cyff/BYI4BHHE42Yn0eFG23oOJzOlK0YmbtegqLYiEA=;
-        b=ffd36qc5HcNR1HmsuHLQplHtgninsLJl95+yztFStDKG5dZdsf99rXkuOx6kX9rdr1
-         4KXWT/6PatDz5dtbrHtORbtkVqkCVEsyV6tbo0wqOF0r8pSpmt/VT1uZ7XYfzOCuDA2D
-         v5OYBHVU9C31tou0bQmQ9nyq6U0PwL6lvePRimTYJYRDlxaOQVVb+45xGcLRvFZbSGv2
-         RQ7ILNakkRIFywqB89GXTdKOVVxoUTGqxhe8wIYRWmdLXRmPe7c+x6rGOsWXgI/KuXvr
-         uSke/26lsEGnTQ60hseR56yfw+Abzf3ZyPweeccagY5BsxfLqt1st+SKtene5Y22KqRI
-         uNLA==
-X-Gm-Message-State: AOAM530C6j0zPtHbVthXcHqS2XLNYDbQFUw8Oabuap3w7uCKAA2SQnNr
-        SRICBwwb7U3l45o81a1hq2I5fL9jJK81eBE63AM=
-X-Google-Smtp-Source: ABdhPJwDoTs4WBf6LXRP9+A/M9aZctnz13/tTsgs76D22etjOtjcBAAYTHP4WvCNlncesSbgW6AoRw==
-X-Received: by 2002:a2e:7e04:0:b0:24d:abc8:5b16 with SMTP id z4-20020a2e7e04000000b0024dabc85b16mr1294117ljc.390.1650588591309;
-        Thu, 21 Apr 2022 17:49:51 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id h29-20020a19ca5d000000b0047052f6ed1esm58664lfj.91.2022.04.21.17.49.49
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 17:49:50 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id h11so7739072ljb.2
-        for <bpf@vger.kernel.org>; Thu, 21 Apr 2022 17:49:49 -0700 (PDT)
-X-Received: by 2002:a2e:9d46:0:b0:24c:7f1d:73cc with SMTP id
- y6-20020a2e9d46000000b0024c7f1d73ccmr1288388ljj.358.1650588589383; Thu, 21
- Apr 2022 17:49:49 -0700 (PDT)
+        with ESMTP id S1442990AbiDVAyB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Apr 2022 20:54:01 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD29F13D58
+        for <bpf@vger.kernel.org>; Thu, 21 Apr 2022 17:51:08 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23LNWhf6025707
+        for <bpf@vger.kernel.org>; Thu, 21 Apr 2022 17:51:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=3WGxdHxarxaW8PjuDsYbWnjeLLy1sQFj8j2bhlO2L5w=;
+ b=AhqA/dloJG7QtRdzTwvQ6XC3VSM6ayqp3o1bQ+WXNTXG++kGuNDYsPFZcM6TkxZa8r0D
+ hnQo3v5y0i/h8OXnHZ5m2/KikcbxHKTmvMr48tPsh8VToBR+28BgxUDy+wtsh47c7MEY
+ 2A/dS3X9IXKmQitoEYm0new2LxfBFeZAQas= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3fjvsvyj0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 21 Apr 2022 17:51:07 -0700
+Received: from twshared5730.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Apr 2022 17:51:05 -0700
+Received: by devvm4403.frc0.facebook.com (Postfix, from userid 153359)
+        id 53FC15F56A21; Thu, 21 Apr 2022 17:51:01 -0700 (PDT)
+From:   Takshak Chahande <ctakshak@fb.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <kernel-team@fb.com>,
+        <ctakshak@fb.com>, <ndixit@fb.com>, <kafai@fb.com>,
+        <andriin@fb.com>
+Subject: [PATCH v2 bpf-next 2/2] selftests/bpf: handle batch operations for map-in-map bpf-maps
+Date:   Thu, 21 Apr 2022 17:50:44 -0700
+Message-ID: <20220422005044.4099919-2-ctakshak@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220422005044.4099919-1-ctakshak@fb.com>
+References: <20220422005044.4099919-1-ctakshak@fb.com>
 MIME-Version: 1.0
-References: <20220415164413.2727220-1-song@kernel.org> <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org> <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
- <Yl4F4w5NY3v0icfx@bombadil.infradead.org> <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
- <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
- <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
- <1650511496.iys9nxdueb.astroid@bobo.none> <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
- <1650530694.evuxjgtju7.astroid@bobo.none> <CAHk-=wi_D0o7YLYDpW-m3HgD7HeHR45L7UYxWi2iYdc5n99P3A@mail.gmail.com>
- <1650582120.hf4z0mkw8v.astroid@bobo.none>
-In-Reply-To: <1650582120.hf4z0mkw8v.astroid@bobo.none>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 21 Apr 2022 17:49:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh_7npMESkkeJ0dZC=EDPhn8+iyg528rE_GjnKpsUkT=A@mail.gmail.com>
-Message-ID: <CAHk-=wh_7npMESkkeJ0dZC=EDPhn8+iyg528rE_GjnKpsUkT=A@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ast@kernel.org" <ast@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 33qh0pyIf6B_LNtJh3lRe6xbSUcm1Bbx
+X-Proofpoint-ORIG-GUID: 33qh0pyIf6B_LNtJh3lRe6xbSUcm1Bbx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-21_06,2022-04-21_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 4:30 PM Nicholas Piggin <npiggin@gmail.com> wrote:
->
-> VM_FLUSH_RESET_PERMS was because bpf uses the arch module allocation
-> code which was not capable of dealing with huge pages in the arch
-> specific direct map manipulation stuff was unable to deal with it.
-> An x86 bug.
+This patch adds up test cases that handles 4 combinations:
+a) outer map: BPF_MAP_TYPE_ARRAY_OF_MAPS
+   inner maps: BPF_MAP_TYPE_ARRAY and BPF_MAP_TYPE_HASH
+b) outer map: BPF_MAP_TYPE_HASH_OF_MAPS
+   inner maps: BPF_MAP_TYPE_ARRAY and BPF_MAP_TYPE_HASH
 
-.. and a power one? The only thing really special in  __module_alloc()
-on power is that same VM_FLUSH_RESET_PERMS.
+Changes v1 =3D> v2:
+1. Fixed no format arguments error (Andrii)
 
-Why had you otherwise disabled it there on powerpc too?
+Signed-off-by: Takshak Chahande <ctakshak@fb.com>
+---
+ .../bpf/map_tests/map_in_map_batch_ops.c      | 232 ++++++++++++++++++
+ 1 file changed, 232 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/map_in_map_batc=
+h_ops.c
 
-> > And that bug was an issue on power too.
->
-> I missed it, which bug was that?
+diff --git a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c=
+ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+new file mode 100644
+index 000000000000..9b705ec9562e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <stdio.h>
++#include <errno.h>
++#include <string.h>
++#include <unistd.h>
++
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include <test_maps.h>
++
++#define OUTER_MAP_ENTRIES 10
++
++static __u32 get_map_id_from_fd(int map_fd)
++{
++	struct bpf_map_info map_info =3D {};
++	uint32_t info_len =3D sizeof(map_info);
++	int ret;
++
++	ret =3D bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
++	CHECK(ret < 0, "Finding map info failed", "error:%s\n",
++	      strerror(errno));
++
++	return map_info.id;
++}
++
++/* This creates number of OUTER_MAP_ENTRIES maps that will be stored
++ * in outer map and return the created map_fds
++ */
++static void create_inner_maps(enum bpf_map_type map_type,
++			      __u32 *inner_map_fds)
++{
++	int map_fd, map_index, ret;
++	__u32 map_key =3D 0, map_id;
++	char map_name[15];
++
++	for (map_index =3D 0; map_index < OUTER_MAP_ENTRIES; map_index++) {
++		memset(map_name, 0, sizeof(map_name));
++		sprintf(map_name, "inner_map_fd_%d", map_index);
++		map_fd =3D bpf_map_create(map_type, map_name, sizeof(__u32),
++					sizeof(__u32), 1, NULL);
++		CHECK(map_fd < 0,
++		      "inner bpf_map_create() failed",
++		      "map_type=3D(%d) map_name(%s), error:%s\n",
++		      map_type, map_name, strerror(errno));
++
++		/* keep track of the inner map fd as it is required
++		 * to add records in outer map
++		 */
++		inner_map_fds[map_index] =3D map_fd;
++
++		/* Add entry into this created map
++		 * eg: map1 key =3D 0, value =3D map1's map id
++		 *     map2 key =3D 0, value =3D map2's map id
++		 */
++		map_id =3D get_map_id_from_fd(map_fd);
++		ret =3D bpf_map_update_elem(map_fd, &map_key, &map_id, 0);
++		CHECK(ret !=3D 0,
++		      "bpf_map_update_elem failed",
++		      "map_type=3D(%d) map_name(%s), error:%s\n",
++		      map_type, map_name, strerror(errno));
++	}
++}
++
++static int create_outer_map(enum bpf_map_type map_type, __u32 inner_map_=
+fd)
++{
++	int outer_map_fd;
++
++	LIBBPF_OPTS(bpf_map_create_opts, attr);
++	attr.inner_map_fd =3D inner_map_fd;
++	outer_map_fd =3D bpf_map_create(map_type, "outer_map", sizeof(__u32),
++				      sizeof(__u32), OUTER_MAP_ENTRIES,
++				      &attr);
++	CHECK(outer_map_fd < 0,
++	      "outer bpf_map_create()",
++	      "map_type=3D(%d), error:%s\n",
++	      map_type, strerror(errno));
++
++	return outer_map_fd;
++}
++
++static void validate_fetch_results(int outer_map_fd, __u32 *inner_map_fd=
+s,
++				   __u32 *fetched_keys, __u32 *fetched_values,
++				   __u32 max_entries_fetched)
++{
++	__u32 inner_map_key, inner_map_value;
++	int inner_map_fd, entry, err;
++	__u32 outer_map_value;
++
++	for (entry =3D 0; entry < max_entries_fetched; ++entry) {
++		outer_map_value =3D fetched_values[entry];
++		inner_map_fd =3D bpf_map_get_fd_by_id(outer_map_value);
++		CHECK(inner_map_fd < 0,
++		      "Failed to get inner map fd",
++		      "from id(%d), error=3D%s\n",
++		      outer_map_value, strerror(errno));
++		err =3D bpf_map_get_next_key(inner_map_fd, NULL, &inner_map_key);
++		CHECK(err !=3D 0,
++		      "Failed to get inner map key",
++		      "error=3D%s\n", strerror(errno));
++
++		err =3D bpf_map_lookup_elem(inner_map_fd, &inner_map_key,
++					  &inner_map_value);
++		CHECK(err !=3D 0,
++		      "Failed to get inner map value",
++		      "for key(%d), error=3D%s\n",
++		      inner_map_key, strerror(errno));
++
++		/* Actual value validation */
++		CHECK(outer_map_value !=3D inner_map_value,
++		      "Failed to validate inner map value",
++		      "fetched(%d) and lookedup(%d)!\n",
++		      outer_map_value, inner_map_value);
++	}
++}
++
++static void fetch_and_validate(int outer_map_fd,
++			       __u32 *inner_map_fds,
++			       struct bpf_map_batch_opts *opts,
++			       __u32 batch_size, bool delete_entries)
++{
++	__u32 *fetched_keys, *fetched_values, fetched_entries =3D 0;
++	__u32 next_batch_key =3D 0, step_size =3D 5;
++	int err, retries =3D 0, max_retries =3D 3;
++	__u32 value_size =3D sizeof(__u32);
++
++	fetched_keys =3D calloc(batch_size, value_size);
++	fetched_values =3D calloc(batch_size, value_size);
++
++	while (fetched_entries < batch_size) {
++		err =3D delete_entries
++		      ? bpf_map_lookup_and_delete_batch(outer_map_fd,
++				      fetched_entries ? &next_batch_key : NULL,
++				      &next_batch_key,
++				      fetched_keys + fetched_entries,
++				      fetched_values + fetched_entries,
++				      &step_size, opts)
++		      : bpf_map_lookup_batch(outer_map_fd,
++				      fetched_entries ? &next_batch_key : NULL,
++				      &next_batch_key,
++				      fetched_keys + fetched_entries,
++				      fetched_values + fetched_entries,
++				      &step_size, opts);
++		CHECK((err < 0 && (errno !=3D ENOENT && errno !=3D ENOSPC)),
++		      "lookup with steps failed",
++		      "error: %s\n", strerror(errno));
++
++		fetched_entries +=3D step_size;
++		/* retry for max_retries if ENOSPC */
++		if (errno =3D=3D ENOSPC)
++			++retries;
++
++		if (retries >=3D max_retries)
++			break;
++	}
++
++	CHECK((fetched_entries !=3D batch_size && err !=3D ENOSPC),
++	      "Unable to fetch expected entries !",
++	      "fetched_entries(%d) and batch_size(%d) error: (%d):%s\n",
++	      fetched_entries, batch_size, errno, strerror(errno));
++
++	/* validate the fetched entries */
++	validate_fetch_results(outer_map_fd, inner_map_fds, fetched_keys,
++			       fetched_values, fetched_entries);
++	printf("batch_op is successful for batch_size(%d)\n", batch_size);
++
++	free(fetched_keys);
++	free(fetched_values);
++}
++
++static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
++				  enum bpf_map_type inner_map_type)
++{
++	__u32 *outer_map_keys, *inner_map_fds;
++	__u32 max_entries =3D OUTER_MAP_ENTRIES;
++	__u32 value_size =3D sizeof(__u32);
++	int batch_size[2] =3D {5, 10};
++	__u32 map_index, op_index;
++	int outer_map_fd, ret;
++	DECLARE_LIBBPF_OPTS(bpf_map_batch_opts, opts,
++			    .elem_flags =3D 0,
++			    .flags =3D 0,
++	);
++
++	outer_map_keys =3D calloc(max_entries, value_size);
++	inner_map_fds =3D calloc(max_entries, value_size);
++	create_inner_maps(inner_map_type, inner_map_fds);
++
++	outer_map_fd =3D create_outer_map(outer_map_type, *inner_map_fds);
++	/* create outer map keys */
++	for (map_index =3D 0; map_index < max_entries; map_index++)
++		outer_map_keys[map_index] =3D
++			((outer_map_type =3D=3D BPF_MAP_TYPE_ARRAY_OF_MAPS)
++			 ? 9 : 1000) - map_index;
++
++	/* batch operation - map_update */
++	ret =3D bpf_map_update_batch(outer_map_fd, outer_map_keys,
++				   inner_map_fds, &max_entries, &opts);
++	CHECK(ret !=3D 0,
++	      "Failed to update the outer map batch ops",
++	      "error=3D%s\n", strerror(errno));
++
++	/* batch operation - map_lookup */
++	for (op_index =3D 0; op_index < 2; ++op_index)
++		fetch_and_validate(outer_map_fd, inner_map_fds, &opts,
++				   batch_size[op_index], false);
++
++	/* batch operation - map_lookup_delete */
++	if (outer_map_type =3D=3D BPF_MAP_TYPE_HASH_OF_MAPS)
++		fetch_and_validate(outer_map_fd, inner_map_fds, &opts,
++				   max_entries, true /*delete*/);
++
++	free(inner_map_fds);
++	free(outer_map_keys);
++}
++
++void test_map_in_map_batch_ops_array(void)
++{
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY);
++	printf("%s:PASS with inner ARRAY map\n", __func__);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH);
++	printf("%s:PASS with inner HASH map\n", __func__);
++}
++
++void test_map_in_map_batch_ops_hash(void)
++{
++	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY);
++	printf("%s:PASS with inner ARRAY map\n", __func__);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH);
++	printf("%s:PASS with inner HASH map\n", __func__);
++}
+--=20
+2.30.2
 
-See above. At least it's very strongly implied by how the powerpc
-__module_alloc() function also used
-
-                    VM_FLUSH_RESET_PERMS | VM_NO_HUGE_VMAP,
-
-because there isn't much else going on.
-
-> No I don't notice. More work to support huge allocations for
-> executable mappings, sure. But the arch's implementation explicitly
-> does not support that yet. That doesn't make huge vmalloc broken!
-> Ridiculous. It works fine.
-
-There are several other reports of problems that weren't related to
-permissions (at least not obviously so).
-
-You were pointed at one of them in this thread:
-
-    https://lore.kernel.org/all/14444103-d51b-0fb3-ee63-c3f182f0b546@molgen.mpg.de/
-
-and yes, it also happened on x86-64, but my point this whole time has
-been that x86-64 gets A *LOT* MORE TEST COVERAGE.
-
-See the difference? The fact that it has workedc for you on powerpc
-doesn't mean that it's fine on powerpc.  It only means that powerpc
-gets about one thousandth of the test coverage that x86-64 gets.
-
-> You did just effectively disable it on x86 though.
-
-I disabled it *EVERYWHERE*.
-
-What is so hard to understand about that?
-
-Why are you so convinced this is about x86?
-
-It's not.
-
-> There really aren't all these "issues" you're imagining. They
-> aren't noticable now, on power or s390, because they have
-> non-buggy HAVE_ARCH_HUGE_VMALLOC implementations.
-
-So I really think you've not tested it.
-
-How many of those powerpc or s390 machines do you think test drivers
-that do vmalloc_to_page() and then do something with that 'struct page
-*'?
-
-Seriously. Why are you so convinced that "oh, any vmalloc() can be
-converted to large pages"?
-
-I really think the only reason you think that is because it ran on
-machines that basically have almost no drivers in use, and are all
-very homogenous, and just didn't happen to hit the bugs.
-
-IOW, I think you are probably entirely right that x86 has its own set
-of excitement (the bpf thread has this thing about how x86 does RO
-differently from other architectures), and there are likely x86
-specific bugs *TOO*.
-
-But let's just pick a random driver that uses vmalloc (literally
-random - I just grepped for it and started looking at it):
-
-   drivers/infiniband/hw/qib/qib_file_ops.c
-
-and it unquestionably does absolutely disgusting things, and if
-looking at the code makes you go "nobody should do that", then I won't
-disagree all that much.
-
-But as an example of what it does, it basically does things like this:
-
-        rcd->subctxt_uregbase = vmalloc_user(...);
-
-and then you can mmap it in user space in mmap_kvaddr():
-
-                addr = rcd->subctxt_uregbase;
-                size = PAGE_SIZE * subctxt_cnt;
-        ...
-        vma->vm_pgoff = (unsigned long) addr >> PAGE_SHIFT;
-        vma->vm_ops = &qib_file_vm_ops;
-
-and then the page fault routine is:
-
-    static const struct vm_operations_struct qib_file_vm_ops = {
-            .fault = qib_file_vma_fault,
-    };
-
-and that function qib_file_vma_fault() does things like this:
-
-        page = vmalloc_to_page((void *)(vmf->pgoff << PAGE_SHIFT));
-        if (!page)
-                return VM_FAULT_SIGBUS;
-
-        get_page(page);
-        vmf->page = page;
-
-        return 0;
-
-and let me just claim
-
- (a) I bet you have never EVER tested this kind of insane code on powerpc
-
- (b) do you think this will work great if vmalloc() allocates large pages?
-
-Can you now see what I'm saying?
-
-Can you now admit that the whole "nmake vmalloc() do large pages
-without explicit opt-in" was a HORRIBLE MISTAKE.
-
-> If you're really going to insist on this will you apply this to fix
-> (some of) the performance regressions it introduced?
-
-No.
-
-That patch is disgusting and there is no excuse for applying something
-crap like that.
-
-What I applied was the first in a series of patches that do it sanely.
-That whole "a sane way forward" thing.
-
-See
-
-    https://lore.kernel.org/all/20220415164413.2727220-3-song@kernel.org/
-
-for [PATCH 2/4] in the series for this particular issue.
-
-But I'm not applying anything else than the "disable this mess" before
-we have more discussion and consensus.
-
-And dammit, you had better just admit that this wasn't some x86-only thing.
-
-Powerpc and s390 were BROKEN GARBAGE AND JUST DIDN'T HAVE THE TEST COVERAGE.
-
-Seriously.
-
-And the thing is, your opt-out approach was just POINTLESS. The actual
-cases that are performance-critical are likely in the single digits.
-
-It's probably just that big-hash case and maybe a *couple* of other
-cases (ie the bpf jit really wants to use it).
-
-So opt-in is clearly the correct thing to do.
-
-Do you now understand why I applied that "users must opt-in" patch?
-
-Do you now understand that this is not some "x86" thing?
-
-                Linus
