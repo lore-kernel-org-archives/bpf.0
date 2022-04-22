@@ -2,214 +2,202 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C4DFC433F5
-	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 17:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54417C433FE
+	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 17:27:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240660AbiDVROH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Apr 2022 13:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S229774AbiDVRas (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Apr 2022 13:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354116AbiDVROF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Apr 2022 13:14:05 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613FC97284;
-        Fri, 22 Apr 2022 10:10:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650647440; x=1682183440;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=6H07zzq3V6Q/VQ+zNdCUfAQpxUxup5lZvmlW0gvtA7k=;
-  b=NQ5ZbB2frhEIhPXMZ6mm+p2GgTY1uLuf/G/8OeysXmt4PNBdtrP3M2oW
-   Wql+dRWj/M81Mcfw5iI3g+y3n1UuQSJfFXeYnqKWS6B8LZdVMpk4IuACN
-   T4dUkDklamjnaLfOe3eORtEKMDaiamKbVAHXs8jnpmEqn2g/wnpZ39j09
-   qUHZNpMj1Avk9C2roEd7/lyUA6so8wWXIV2uUciUvyHEIyEJqcX9beav7
-   fKGM4E8fsNyxEFkBGUtTcIvstg17BUQBN8Dp3kFTXVLRwtDQlxT6sgWEB
-   t88SL/i6bbsZ05xtDOJ9pqyKBFEa4V3H/W2ftXE+uOmWwLPp3kYoZ40By
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="289853115"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="289853115"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 10:10:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="659113092"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Apr 2022 10:10:32 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 22 Apr 2022 10:10:32 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 22 Apr 2022 10:10:31 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Fri, 22 Apr 2022 10:10:31 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Fri, 22 Apr 2022 10:10:31 -0700
+        with ESMTP id S231902AbiDVRar (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Apr 2022 13:30:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20606.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::606])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB018DFD66;
+        Fri, 22 Apr 2022 10:27:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H+nDecI86heb08CKUaohv9Rn9R0Sn177XpyjhhTrd/X78IR33i/g4pBMjh8RLgv/vIAMTS86REiSrXjD+Vv4S0174n7RzKxh+PuyndmJvNhTLLRqYyfkNPj+qeRg8Ne7hi5DM1oQMItIUvah0R03kRC3BfpQAoMlU0rRAuntnH8mhmrOzzyOyoypnJXpERL8RfTe4fi191udNx5uyFnHjlQe7SqUMHE0UMuZd1kZjyvmRmxUE+1X3CXDo5W3Z1t4241tSPJ1jsQOYSmOAksthGnZeF1NFr3lr6bi2E9uEF7Lr0gOafsNhN4kx0yDRE7Yd98twKbul6SLSwaS7vclzg==
+ b=ZUOD38dWQXO4GlY90Ocniye2C2h6lFDuEeIwh/3MFVOmQTTUb9tCUQzXFardyUMLs0z/4lN3YBJFju2LCgAIwZOM+zq+JmnibXK7XVAiVdt7psJjzVpvMVjvOnedFmnsM81plZWMP/fMt5HVS1z8G8AylGBw3QAML7JjmrUYrQpF16KH/jUroarEv0Ivo8ujjhEqwmOpbF7zevxJAuMb1HNYopppEo3eWSQdf1/GcdqBaNt9bshmBvr8HZcg8dy6/j8oBzFIeEaZD2VS4q5j8p+Z/22Q8JLzrAH/GOuyaKCYuHo7eDQVdwbdE3m/uj1U/EQ3kWO2L/bsmJp0+CfX6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6H07zzq3V6Q/VQ+zNdCUfAQpxUxup5lZvmlW0gvtA7k=;
- b=Uw54FMEqvisay4e6vdGhLbPvkYKhfsyeeo4yhQiIhn6c8E6zLtWoqEqyJKjgDD4dcEVrH4SP+UvRYCOczO2QH+3gj8e2gmi7PVvW+okIaa7F3jrpO5fv9/OlaUTzTP2GkD9t7oYwnsKZGyQfQRsgEax1/+R4PVW95r+peX5Hp0V3nZzpvA3+9tISBj1kYvlmbMKzpNdQc6tSBTQ3jkeAnmi2UgmSVStxiwxuELwP90MQ/00My9E7Akx8vAMNjbIdRKt+GHTzRGuB80qtPVbgvjyZH3maTYXho+j3cJBBTm+Bp1/7SsTqXGziivrkkbeXNqN3K67/3QgK3N2JSwS8Mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by MN2PR11MB4711.namprd11.prod.outlook.com (2603:10b6:208:24e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
- 2022 17:10:27 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::34f6:8e1d:ac6b:6e03%12]) with mapi id 15.20.5186.015; Fri, 22 Apr
- 2022 17:10:27 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>
-CC:     "songliubraving@fb.com" <songliubraving@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Kernel-team@fb.com" <Kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Thread-Topic: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Thread-Index: AQHYUOjaBVzlZEmkq0yuNBGgG1oCjazxVckAgACoe4CAAPegAIAACf+AgAAgOgCAAlYLAIAA9TuAgAAUCQCAAD2rgIAA23qAgAAKuICAAhm2gIAAJ/4AgAA00QCAAHKLAIAAB8GAgACFUwCAACY8gIAACuGAgAAXVICAANQIAA==
-Date:   Fri, 22 Apr 2022 17:10:27 +0000
-Message-ID: <b88a1097c994a72e9d8abfdcc43a4a0f9003d65a.camel@intel.com>
-References: <20220415164413.2727220-1-song@kernel.org>
-         <YlnCBqNWxSm3M3xB@bombadil.infradead.org> <YlpPW9SdCbZnLVog@infradead.org>
-         <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
-         <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
-         <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
-         <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
-         <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
-         <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
-         <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
-         <1650511496.iys9nxdueb.astroid@bobo.none>
-         <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
-         <1650530694.evuxjgtju7.astroid@bobo.none>
-         <25437eade8b2ecf52ff9666a7de9e36928b7d28f.camel@intel.com>
-         <CAHk-=wiQcg=7++Odg08=eZZgdX4NKcPqiqGKXHNXqesTtfkmmA@mail.gmail.com>
-         <1650584815.0dtcbd4qky.astroid@bobo.none>
-         <310d562b80ad328e19a4959356600e4efe49cf4c.camel@intel.com>
-         <1650596505.bxrmjmgjur.astroid@bobo.none>
-         <1650601109.vb3owbt14k.astroid@bobo.none>
-In-Reply-To: <1650601109.vb3owbt14k.astroid@bobo.none>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 05e9d711-ff8c-45f3-77f4-08da2482ff5d
-x-ms-traffictypediagnostic: MN2PR11MB4711:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <MN2PR11MB47110173470DFB46292DB280C9F79@MN2PR11MB4711.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: dPA7H0jWRnX0AA8+c51lNS7dBurUm/B6v/ps69kjZloJdvJYmMshl/12lnwUleOTrcq5unkjHJDIoRMzTjE/597muth7DMckKyfr3L/6E1JCgO/wAEMqnW6oVQSdRTQsODlCGqaOjjHI0M5H6Pz+ygS+SBymu/KyHUvBlKd350mLJ4GO0QANrX5aGx+Q4XGgIGou5lNgXoJGrj7MI5u/SbP89WSB9tmpXVNaQzP47w7EtpIhaKg38mPx951FTxOSpvJ6aK/hDLVK3LLjn6/JrWpJIkkc4uoE1MO5dp8XyRk7mjFp1J5XqzZZua1vAb6fb2stLrg+vkGR/sUVTcwhWTyQDu9+44dI+e//kSh8ejH4Fm0D3qc2ZuNjAVhiUUztRCrjq6qAIfJFsrTcdYrzxqrZMp+Ozz1OKdus6UQ/KeQPBG9HCP9JzHuFuHYxSAOEVhE8X0vfxIdJT6sL06o82nWnkP3CaX80YzdSMS39XAkwPIHvBp7bkvPIEZ3YF6PL0cCgUgm+kQmStVpujBn+k5YhQo4PkG3MRiLyMKhmP0a+STk3nBkdUMnpIlm8ldLY/jy0eEG6rA0gpnHQ09jPakp2LnDQMIwxYSK+hnU7waVofdcxg46GAIgF30gTbKjlMpWMx6ghJ9tBTkbxh9qrmuck8WzcBRMzQ/NQIKE0Nsl9kXLZGElthJOMJVW2OsHoHynEg8XCJhKk9Ghi/RJ920kcByvZ2g+hj1mB03vr4nUOt0Nv9JTiJcKtfJb4u5Jm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(4744005)(8936002)(6506007)(36756003)(66476007)(66556008)(26005)(508600001)(316002)(7416002)(64756008)(66446008)(54906003)(83380400001)(2616005)(186003)(8676002)(82960400001)(122000001)(2906002)(5660300002)(6512007)(4326008)(6486002)(110136005)(86362001)(38100700002)(38070700005)(66946007)(91956017)(76116006)(71200400001)(99106002)(14583001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MXVPaWo3Q1pxOHZxT1BPTVZBL3JvSVdQalpBeVdhUEplSHZJbjRMSlZKdmsw?=
- =?utf-8?B?QkJQellNM2hzWUVIbncvazcrTmVSZ1R1ckRJUkNVdmNZUkNrTkRyZCs2Uldw?=
- =?utf-8?B?TGdHSUtZaGxVVnp3UVNPYkpydXdSdXc2YVBnTFR1R1NScG90c2VRS0QvWGxZ?=
- =?utf-8?B?NEoxaldHM0FCVThFSmd6N0xDd2V5dnNDT1IySk50VW0vTWtMaERiVzBic096?=
- =?utf-8?B?bGQvelZpZmRzRWJ0c1pRTUN2MFF3R0RUVXd6d3hwZ3VJazRhU3dabjVnMlpU?=
- =?utf-8?B?MzUyNys4cklBTGltcXpNNEFsZFR3eWpkTDV5VTNpSTNEZC9tQmR3K3N6c0Qy?=
- =?utf-8?B?b0QzVTVWVXY5M1ZmZmpoYlU5NThPQ0ZKMCtJbUJBSkJFbStpRk5oYnJ5SVJs?=
- =?utf-8?B?eXhaSUwybmh3R3pYcDVWY0NkdmlxQkMyMlpYUkwxL0p4WktmN2hEUFJPRjZJ?=
- =?utf-8?B?d0p2VmFxaytYZzVmd3MxVXg2d2tUODVPNG5kaDh4SVhQVEZhb0RhL21SY3g2?=
- =?utf-8?B?M2drT09nNEZ5bHYrM0QrTTZES3YwWnJQSm4rRlJmTG5HQWJMVEgzcFE4UFJR?=
- =?utf-8?B?dUJFcEpOOHd5dFJiZS9QamhROUxyTkFHZTY0VnRPV05pWVlwRFpJZ3FndWlp?=
- =?utf-8?B?V2s2WXgrY01XaDIzQkQ3cnA1cjJlVFAzTEhQaDhOaHcyWjUwK3E1RFR4REJt?=
- =?utf-8?B?eGEzNWRhcFhaRXBTaWJFWXJxMHptclBaUXFySmxNZTFsSkM5NlFxOWVaNWNs?=
- =?utf-8?B?ajl6R09hMFl6VVlCTjh1dGdxRUovYyt2aS9VY1RkejVqVW5kaDA5dHJiZVQ2?=
- =?utf-8?B?WDZwT1ZFNU5nYXlnRll2VHlaZkdZODFUK0J3UXZ5S0VGYmhvaWI1ckpLZWJK?=
- =?utf-8?B?Z1ordlJ4WnRJUis2aHppeWoyOXVRV0czRXlGYlVoSW51M0Z5Y0RNVWVQdW5E?=
- =?utf-8?B?ZjBjT2N4TXVaM1dTMjRQc1U2bmNJUWY1a0ovVWdSdjhqalRmU2xPUndSa0FD?=
- =?utf-8?B?NFNGSGNxZEVYdmcwMW50eHhhZG9wR1J2SndkVi8wMngyQUo2OG5vcW9JQ0ZK?=
- =?utf-8?B?UVluZ1BrYzF0c3JOalFqTmNCNTgxbW1rWFRMa0VweWRrWm9KQmtKK1FYeWVu?=
- =?utf-8?B?bnEvaVo2ZUZRZlBWRDg4ZzJqZWxRZUlCckhUMy9mYXJLbk5ESit4WGxDQWtQ?=
- =?utf-8?B?ZU5aVXJ5NmtoU2I0eXdlZDJkazY0aW1SdTRvblNwb2RYR2F0eGJKUlN5eUhY?=
- =?utf-8?B?S3FLVFZaMjdzekhpdGVUU0tTcmhLSUN6ellsQWxCMWtqRE5RTVp4bHlEekxh?=
- =?utf-8?B?VTB4ZDltemlOUjM2TExRVFk3YUE2VC9LMjM0UUcxd2NLRDVkckd3N1FnWUdJ?=
- =?utf-8?B?c3NWbmRCR2hoTXdESGJVd1pUTDE4aXIvcWZXbVZtMmVXTjYxc0xvekZ0WEp3?=
- =?utf-8?B?anB1aC9xM2dRNCtyZGxETlUyY0JJZkkxM2NWWTJveWY4UmZsVitsYnFITG0w?=
- =?utf-8?B?WTRrMTFyOEQwZkNsSE82eFkyZ3JJdWw5SnRPSEw5b0tTL1FpR042aXpDQWtw?=
- =?utf-8?B?QjZPKzBDME9xWnJjQ1FpektRWCtZMm1Pcys4N09NYVh4K1NPTkE2WGIzUGhw?=
- =?utf-8?B?REtEWkExY2tvQ0hJNmZyNEJxNXhVMGc5ZkliaEhyRzlPWk52SFZKOHA0Qjha?=
- =?utf-8?B?UFNteGtKZ3NzL3pMZXVhUWozYncrS0ZoREpZV214dm0yMFJVMXV5Wkp6U2Fl?=
- =?utf-8?B?U0pwWUl5ZGg2YTVxdDdvYmtMY05CcEhha3FSSGFDKzB0K01la0pWUVdrT0to?=
- =?utf-8?B?bDFMSUxkY0dGTngyVHhqSEE2aVVMQlZSS1FmV2hkTEI0OGNxL1NHcDViVTlE?=
- =?utf-8?B?cHZ3Y3hQeUNUOXo1TnJNQ1QxOXNLeUlkTTZWTktDdllnVkN6NVVQSXBxeWFw?=
- =?utf-8?B?QUIva255UWprVkw2aVRsd0ZvL1IrU0R1TWZoWU42T3grWHNESkY4T0drRG1l?=
- =?utf-8?B?anY1UXI4TDFtOW9iTHVGMm9rWG9JTG8rU2lZS240TFozQXYrQ3EyWXdsMEpF?=
- =?utf-8?B?RW9yd3hwVHp5L1JXVHl0clpLQXh4UVFzVmVwaU4zZTdWUjZsVFRsYWJkc0tS?=
- =?utf-8?B?OWtTeGR2dER5K1dEK3Bkd2JPZWZ3VHE2SktkREhFV2ZDNnpZY09sSFh3Uk5M?=
- =?utf-8?B?K095N3MwWngzdUU4Tnh6N2dqaGk4TStWdW1RMmtIK3ZPNElFRktHZ3dwSXE2?=
- =?utf-8?B?dlVUbk1qZS9PbXpLVFBObmVPdU9TWDUrNkRnME9Cd2tjMzhEbTJTT1VrZ0pz?=
- =?utf-8?B?ZHBKZGlUZ2NiV2t2YlZiRlJZai9HYVZKM095N0k5bkdEcHp2VFdlZElmUmRH?=
- =?utf-8?Q?TJe3Ou5Al5wrgTmd5SiM+MdN/Jk2LYUYyEFyl?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <52CCABBBA7C787489285F645B0B94BCB@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ bh=uq0pnxBXQ68eX7qJLAZxR5XuuIDPguXAFeeSXP55jXE=;
+ b=BY3fhcYqNdp2hs+TYkMKy9JU1s1uIOTsqYlO3EuxYBpOQwc26/oexsQR4gKVp65W0e8qOrVjysPQyqPw6554hzLSEOstI1gbCRMdmZzZHcRDekkUVP6dxteCtBq2BNg2rhuWoAZQeTFW4MvB18Nw81JUyVPF/q4HhhazwQi+uKsrKKNQDzchLwizc2SpYqo3MYs8c49vv9+roQdGwjNDABpj1ZTJ0l2VUHuSkh2j6sgFIJAih9AeaxX3F19Z7xdLo9an9Mf0be8wxm+ECqrmTgm9Qxm+RXWv9QIth2rAOFWqdR2r+FqUw84x5Rfbqwepa5zWy4MKQvXUEWx/awKzzA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uq0pnxBXQ68eX7qJLAZxR5XuuIDPguXAFeeSXP55jXE=;
+ b=bHBk4/D4aYc3VdoYAMNOC8gS/hmMvMgBQYkN/W9MlXfO5hjROg+Eaq16r6j4+mrY/y6lFT1OYwVdwAIi1Cii9SE8uBxmNasZhyEZrMdZpWgkaLACUjjEBZeEAXitVNF16lGpaQCrmM2tcqup+xdoW18Mhl7++Cd312N7VR6DhUCZ3oN2mb0bvIpC9RmgwBtByCMWhxJ4b3gXaSg5G2r9eiqDGwSc8hLfqBG6wvFXW5Hopi190ZO4sCMswvcQR9T5/2IYvZAjC5Tv9Ww7Z2mZ+xYLdHBmSvpAHcFqgiufhIYKQwAHLMSKvf9Tnd1vTueUbWinIF+WATrucyfDSsWmSg==
+Received: from DS7PR05CA0048.namprd05.prod.outlook.com (2603:10b6:8:2f::19) by
+ DM5PR12MB1898.namprd12.prod.outlook.com (2603:10b6:3:10d::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.14; Fri, 22 Apr 2022 17:24:36 +0000
+Received: from DM6NAM11FT052.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2f:cafe::cc) by DS7PR05CA0048.outlook.office365.com
+ (2603:10b6:8:2f::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.6 via Frontend
+ Transport; Fri, 22 Apr 2022 17:24:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ DM6NAM11FT052.mail.protection.outlook.com (10.13.172.111) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5186.14 via Frontend Transport; Fri, 22 Apr 2022 17:24:35 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Fri, 22 Apr
+ 2022 17:24:35 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 22 Apr
+ 2022 10:24:34 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.986.22 via Frontend Transport; Fri, 22 Apr
+ 2022 10:24:27 -0700
+From:   Maxim Mikityanskiy <maximmi@nvidia.com>
+To:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>
+CC:     Tariq Toukan <tariqt@nvidia.com>, Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David Ahern" <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "Jesper Dangaard Brouer" <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        Joe Stringer <joe@cilium.io>,
+        "Florent Revest" <revest@chromium.org>,
+        <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+        Florian Westphal <fw@strlen.de>, <pabeni@redhat.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>
+Subject: [PATCH bpf-next v6 0/5] New BPF helpers to accelerate synproxy
+Date:   Fri, 22 Apr 2022 20:24:16 +0300
+Message-ID: <20220422172422.4037988-1-maximmi@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05e9d711-ff8c-45f3-77f4-08da2482ff5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Apr 2022 17:10:27.4865
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: edc8a0b7-7241-4b29-42c1-08da2484f917
+X-MS-TrafficTypeDiagnostic: DM5PR12MB1898:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR12MB1898F138667AD3CF9F9E990BDCF79@DM5PR12MB1898.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cvGXVqR6WMJwjxVJHA214l3Mi+kcb6gSpO7pkzkhZsIJeYWiIPeaSPAUC7/4cAaDtKtqx/yRCMejWG2RN6wleYleI3qUf+HNxComZQ5TVd8L1SrwHwjyMLjfFVwQcHqnXXjOvfmCa9J0HLLjyhf0Trg/GdlEH2oFrqBowGZFDffYdHwGCsikUTJgsOubW1QjZ8Hy7PsEI5GIQkWCUMDijw371wY83rVq8pYmLauKG2ASdvYGp1lTRxCFvRYcHGY+JI2j7VKE05YTtHpBipC7M/6tWxpgezfW3JpjBrxC4/c9JuE5GJtlboqmv4H/w17XJH4vq9ApC1z6qUViQOx+5KhBGFcFNxjzbQWhaEPwZGtuS8/jujxmlsAi7KkTnWBZeouf22shnPTYh3jcY4C1sB8rL2/+ML3Y1uXpD2W9AZXX+8GBNv15sVO286wS3seX6/Jz70nSXT/UNK1ay3V4//MrfdvbYPLY6Rr+ilglguNJkM47pw0UrTxwLaHQ9ppsENUEdW/k2ZZoEttbB+1hopvg10VPTqDzqsvgN/Hokgxffyz3oildyrpsFfKCJWQ8+Bk5NtwNEbpA/+q9FxqRGB3MxP6DKrMO+W0ubjcXSzb7sh3uZAdzChXXz8JeEkUzplYvE5ibqgvbsLF8T0l2SMvTU7N1NcZdjyZgA0IUlNy2cuoEtQbO81EfarwZsuAIIa1fo/nfOxYZRkSf1XFBsXPzWDrGo2d17XfmY/n8tRXpjcEUfKd7cRflsMZYjTBn4BjQDFFJt28j62pMrFnqHwEhUxKu/gL09YAk6D3gKhVOZygF0opEJ1icZyAdwtBOSLoVYUEGHNFlR7DxRgeIkg==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(26005)(2616005)(336012)(426003)(47076005)(508600001)(1076003)(186003)(107886003)(4326008)(966005)(6666004)(2906002)(7696005)(36860700001)(83380400001)(356005)(81166007)(82310400005)(70586007)(70206006)(8676002)(86362001)(110136005)(54906003)(8936002)(316002)(5660300002)(40460700003)(36756003)(7416002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 17:24:35.7962
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /175H0jlRRdMk/Hitj041X0fyhAfwlYfuMNr+cUTQhnbbPldVBqyxoGMI3K0wLS7rPU8FaKM/FthzHOTlWndZY0kQgZd3nhlVGTy2SmGJvg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4711
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: edc8a0b7-7241-4b29-42c1-08da2484f917
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT052.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1898
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA0LTIyIGF0IDE0OjMxICsxMDAwLCBOaWNob2xhcyBQaWdnaW4gd3JvdGU6
-DQo+IEFueSBvdGhlciBjb25jZXJucyB3aXRoIHRoZSBmaXg/DQoNCkkgaGFkIGFub3RoZXIgY29u
-Y2VybiB3aXRoIHRoZSB2bWFsbG9jIGh1Z2UgcGFnZXMuIFBvc3NpYmx5IGdldHRpbmcNCmludG8g
-cGFyYW5vaWQgdGVycml0b3J5IGhlcmUsIGJ1dCBpdCdzIGFyb3VuZCB0aGUgbmV3IGJlaGF2aW9y
-IG9mDQpmcmVlaW5nIHZtYWxsb2MgcGFnZSB0YWJsZXMuIEF0IGxlYXN0IG9uIHg4NiB0aGlzIGRv
-ZXNuJ3QgaGFwcGVuIHZlcnkNCm9mdGVuLiBBRkFJQ1QgaXQgYWxsIGhhcHBlbnMgZHVyaW5nIGJv
-b3Qgb3IgZHVyaW5nIG1lbW9yeSBob3QgdW5wbHVnLg0KDQpUaGUgcmlzayB0aGlzIGVudGFpbHMg
-aXMgcmFjaW5nIGFnYWluc3QgYWxsIHRoZSBzb2Z0d2FyZSBwYWdlIHRhYmxlDQp3YWxrcyBhbmQg
-d2Fsa2luZyBhIGZyZWVkIHRhYmxlLiBBdCBsZWFzdCBvbiB4ODYgdGhlIHdhbGtzIG9mIHRoZQ0K
-a2VybmVsIHRhYmxlcyBhcmUgZG9uZSB3aXRoIG5vIGxvY2tzLCB3aGljaCB3b3JrcyBiZWNhdXNl
-IHRoZSBQVEUNCnVwZGF0ZXMgYXJlIGF0b21pYyBhbmQgcHJldHR5IG11Y2ggbmV2ZXIgZnJlZWQu
-IFNvbWUgb2YgdGhlIGtlcm5lbCBwYWdlDQp0YWJsZSB3YWxrcyBpbiB0aGUgZmF1bHQgaGFuZGxl
-ciBhcmUgYWN0dWFsbHkgdHJpZ2dlcmFibGUgZnJvbQ0KdXNlcnNwYWNlLg0KDQpTbyBpdCdzIGlu
-IHRoZSBjYXRlZ29yeSBvZiAiYWxyZWFkeSB0aGVyZSBpcyBhIGJ1ZyIgb3IgYSBsaXR0bGUgdHJv
-dWJsZQ0Kc29tZW9uZSBjb3VsZCBjYXVzZSB3aXRoIGEgbG90IG9mIGVmZm9ydC4gQXQgbGVhc3Qg
-dW50aWwgUEtTIHZtYWxsb2MNCm1lbW9yeSBzaG93cyB1cC4gQW55d2F5LCBhcyBsb25nIGFzIHdl
-IGFyZSBnb2luZyBvdmVyIHRoaXMgYWxsIGFnYWluIEkNCnRob3VnaHQgaXQgd2FzIHdvcnRoIGJy
-aW5naW5nIHVwLg0K
+The first patch of this series is an improvement to the existing
+syncookie BPF helper. The second patch is a documentation fix.
+
+The third patch allows BPF helpers to accept memory regions of fixed
+size without doing runtime size checks.
+
+The two last patches add new functionality that allows XDP to
+accelerate iptables synproxy.
+
+v1 of this series [1] used to include a patch that exposed conntrack
+lookup to BPF using stable helpers. It was superseded by series [2] by
+Kumar Kartikeya Dwivedi, which implements this functionality using
+unstable helpers.
+
+The fourth patch adds new helpers to issue and check SYN cookies without
+binding to a socket, which is useful in the synproxy scenario.
+
+The fifth patch adds a selftest, which consists of a script, an XDP
+program and a userspace control application. The XDP program uses
+socketless SYN cookie helpers and queries conntrack status instead of
+socket status. The userspace control application allows to tune
+parameters of the XDP program. This program also serves as a minimal
+example of usage of the new functionality.
+
+The draft of the new functionality was presented on Netdev 0x15 [3].
+
+v2 changes:
+
+Split into two series, submitted bugfixes to bpf, dropped the conntrack
+patches, implemented the timestamp cookie in BPF using bpf_loop, dropped
+the timestamp cookie patch.
+
+v3 changes:
+
+Moved some patches from bpf to bpf-next, dropped the patch that changed
+error codes, split the new helpers into IPv4/IPv6, added verifier
+functionality to accept memory regions of fixed size.
+
+v4 changes:
+
+Converted the selftest to the test_progs runner. Replaced some
+deprecated functions in xdp_synproxy userspace helper.
+
+v5 changes:
+
+Fixed a bug in the selftest. Added questionable functionality to support
+new helpers in TC BPF, added selftests for it.
+
+v6 changes:
+
+Wrap the new helpers themselves into #ifdef CONFIG_SYN_COOKIES, replaced
+fclose with pclose and fixed the MSS for IPv6 in the selftest.
+
+[1]: https://lore.kernel.org/bpf/20211020095815.GJ28644@breakpoint.cc/t/
+[2]: https://lore.kernel.org/bpf/20220114163953.1455836-1-memxor@gmail.com/
+[3]: https://netdevconf.info/0x15/session.html?Accelerating-synproxy-with-XDP
+
+Maxim Mikityanskiy (6):
+  bpf: Use ipv6_only_sock in bpf_tcp_gen_syncookie
+  bpf: Fix documentation of th_len in bpf_tcp_{gen,check}_syncookie
+  bpf: Allow helpers to accept pointers with a fixed size
+  bpf: Add helpers to issue and check SYN cookies in XDP
+  bpf: Add selftests for raw syncookie helpers
+  bpf: Allow the new syncookie helpers to work with SKBs
+
+ include/linux/bpf.h                           |  10 +
+ include/net/tcp.h                             |   1 +
+ include/uapi/linux/bpf.h                      |  88 +-
+ kernel/bpf/verifier.c                         |  26 +-
+ net/core/filter.c                             | 130 ++-
+ net/ipv4/tcp_input.c                          |   3 +-
+ scripts/bpf_doc.py                            |   4 +
+ tools/include/uapi/linux/bpf.h                |  88 +-
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../selftests/bpf/prog_tests/xdp_synproxy.c   | 144 +++
+ .../selftests/bpf/progs/xdp_synproxy_kern.c   | 819 ++++++++++++++++++
+ tools/testing/selftests/bpf/xdp_synproxy.c    | 466 ++++++++++
+ 13 files changed, 1760 insertions(+), 22 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
+ create mode 100644 tools/testing/selftests/bpf/progs/xdp_synproxy_kern.c
+ create mode 100644 tools/testing/selftests/bpf/xdp_synproxy.c
+
+-- 
+2.30.2
+
