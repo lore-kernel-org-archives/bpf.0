@@ -2,283 +2,586 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E39B8C433EF
-	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 04:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ED88C4321E
+	for <bpf@archiver.kernel.org>; Fri, 22 Apr 2022 05:37:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbiDVEed (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 22 Apr 2022 00:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
+        id S231343AbiDVFjm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 22 Apr 2022 01:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiDVEeb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 22 Apr 2022 00:34:31 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6E74C78C;
-        Thu, 21 Apr 2022 21:31:39 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d15so8241213pll.10;
-        Thu, 21 Apr 2022 21:31:39 -0700 (PDT)
+        with ESMTP id S230237AbiDVFg7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 22 Apr 2022 01:36:59 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EEE4F445;
+        Thu, 21 Apr 2022 22:34:07 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id h12so4830120plf.12;
+        Thu, 21 Apr 2022 22:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=aiWVqABu3voKTHZ4+w18aRluFcBYyu1qvKLlj6PvJis=;
-        b=kSGpplEFuO8wgaxMNmQJgmpXLyAr7kl+acxFY1AeFOm8D6Ij3LpcMnHsWbEYblJpbg
-         aGrDkao0EJ/g+ZRh0JYlOZR2NW6d7ml7M19LBRKjLe/Rjiz9ofDbTr4EnU+zD6oveE8X
-         pBwrWB25CMHKuLGUpzdh4O6IPApuOfWQ/q5zCf8aWJAgK3/v6J9czVQkPeBG5dWpM36m
-         9IC7pk9VQzcKB5Dzfu9YJN8WirWCEYH8xBnq6JbZBxeKmiEDj8BVr1pdWCpW3elYNsid
-         qq6/WC7vvYhqDGJnr5GpqKNKgMjJSa56L+g8K4Qv58Wpf+1b7M9ddK0NcLncXc5xyC7P
-         qwtA==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eGLKHmxjxA7RbR8RHgNL9UCWC8/SO4Ne5kRsH2k78iU=;
+        b=qszOBEKp2ELVJNJRhGKrWqXOY3b+DBXR5/XBsiOtnuGbb4iFqrsjVNkhXleQZORYcO
+         RgoMQuriRX3XFQ/oaWOa0M9XeJPN97FOEGOjsW91uXsHTsM9dnKpJGrrGQjRdkO99VwE
+         2MT20Qvz6lxUnB8T/ZhAc6JREgANoFobdxqnwEffo4YlGQkQ/bJ2dk4nW5cAC6YsGgjt
+         SvqQvaGUGAvaa0YmiW5a7V5weMQY/Qy0Lg6v5jfdkhjFcf5q90OmPgCgGO8IzZsLBTCF
+         C0YjeX/ZjeuMu6ayZzu3Bzxn7moEKbsp2yXnA0duJVG5/fsRPAhharMER52Xhm2ILC1e
+         W2yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=aiWVqABu3voKTHZ4+w18aRluFcBYyu1qvKLlj6PvJis=;
-        b=hl5KydrDpFD3AleVmL5HEltC8rkKyBei7rZf40/+rNwqMeQuhkVqbx35ps5225U97O
-         Vf82yAvgcgW40THAMByYMEbfGRz05iLpgGAgmffN/pud02iO879eFsiRWrvYlGsQowIt
-         1j6+ERRZmzw/ijxWPH+Vu7cvvp0u42yxkb6GvSdVuvLt3T2A8USiK6Kf2z6mSmssaSsS
-         bxdcA4SjpJhSO4G+IqLPUOreS6MHCk0Ky5LDxJlnxUn5XkR4fU3IhVUQayXvsIh+pziC
-         bws+auZpOFczbKimzT+fpq3xAbKwU7JfSlJNs5dbDwDJEqds4mZkeXppAgoGFpVi3Htk
-         PkvQ==
-X-Gm-Message-State: AOAM5334JLgQCgW0V9+Jo2Ay+aA3q8TcPGjlukWRjdlm1ILh7yS5r/yc
-        YMkY8F8LvCteBe6rb1SMOac=
-X-Google-Smtp-Source: ABdhPJzdLXI9YcJ9EaK/gWL4RP5q7HkH/jWUuM7o5U1NJbyXAEVxigcksSiFyn6Utl51EYqDhWcxTw==
-X-Received: by 2002:a17:902:7d83:b0:158:c7e9:1ff3 with SMTP id a3-20020a1709027d8300b00158c7e91ff3mr2768900plm.55.1650601899042;
-        Thu, 21 Apr 2022 21:31:39 -0700 (PDT)
-Received: from localhost (193-116-116-20.tpgi.com.au. [193.116.116.20])
-        by smtp.gmail.com with ESMTPSA id 1-20020a17090a0d4100b001cd4989fedasm4488950pju.38.2022.04.21.21.31.37
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=eGLKHmxjxA7RbR8RHgNL9UCWC8/SO4Ne5kRsH2k78iU=;
+        b=TR6+NcJ4sPDlwHmYjos2Ld+SxJW/inhm2Wfa9ApWe0QxmCEGdDXDrrfQwMup86PFJN
+         m8HiJLEkiJ7KGyLsuXoJ2en+mawcYBT1naswg/gmRC6d9lI7T+N9S2v1WDdvrajmEPN6
+         ywnxiV8g0TpQ4q7N8MqeSj/d+b8on2u6tCXNcqU918J+7xcPVQ/bOpMyKFgZD+uESEDC
+         29KdReFGbwaa4PtjlbJvyGWoPCgZrT41G0OwWtESArTRHOF8zqHQTL7zKhi3hfc51F0S
+         HSY3Uvlyo3Lb0RJvlps23xYcll0bF2KB78lOx4wAqvrifJKTGxp/+06GWTolKwHeOQ0q
+         /ZEw==
+X-Gm-Message-State: AOAM531codtZEUdKz+eIRyYVmoktCQ3DsltmyM6x3oIoZRxVa2p4aSCd
+        HzLAzkeuu61vKiA9R6+xL9A=
+X-Google-Smtp-Source: ABdhPJy3UUMntZCnSJi8DBgIEC1GM7oOJVJGZ0QH+kL74oR7ubEaSylhmftGJHGvc7qdWG04iaJ0xA==
+X-Received: by 2002:a17:903:11c7:b0:151:9769:3505 with SMTP id q7-20020a17090311c700b0015197693505mr2834718plh.72.1650605646539;
+        Thu, 21 Apr 2022 22:34:06 -0700 (PDT)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4f00:3590:32e3:a023:46c1:80cd])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm886519pgc.50.2022.04.21.22.34.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 21:31:38 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:31:33 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ast@kernel.org" <ast@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "dborkman@redhat.com" <dborkman@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "Kernel-team@fb.com" <Kernel-team@fb.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "song@kernel.org" <song@kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>
-References: <20220415164413.2727220-1-song@kernel.org>
-        <YlnCBqNWxSm3M3xB@bombadil.infradead.org> <YlpPW9SdCbZnLVog@infradead.org>
-        <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
-        <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
-        <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com> <Yl04LO/PfB3GocvU@kernel.org>
-        <Yl4F4w5NY3v0icfx@bombadil.infradead.org>
-        <88eafc9220d134d72db9eb381114432e71903022.camel@intel.com>
-        <B20F8051-301C-4DE4-A646-8A714AF8450C@fb.com> <Yl8CicJGHpTrOK8m@kernel.org>
-        <CAHk-=wh6um5AFR6TObsYY0v+jUSZxReiZM_5Kh4gAMU8Z8-jVw@mail.gmail.com>
-        <1650511496.iys9nxdueb.astroid@bobo.none>
-        <CAHk-=wiQ5=S3m2+xRbm-1H8fuQwWfQxnO7tHhKg8FjegxzdVaQ@mail.gmail.com>
-        <1650530694.evuxjgtju7.astroid@bobo.none>
-        <25437eade8b2ecf52ff9666a7de9e36928b7d28f.camel@intel.com>
-        <CAHk-=wiQcg=7++Odg08=eZZgdX4NKcPqiqGKXHNXqesTtfkmmA@mail.gmail.com>
-        <1650584815.0dtcbd4qky.astroid@bobo.none>
-        <310d562b80ad328e19a4959356600e4efe49cf4c.camel@intel.com>
-        <1650596505.bxrmjmgjur.astroid@bobo.none>
-In-Reply-To: <1650596505.bxrmjmgjur.astroid@bobo.none>
+        Thu, 21 Apr 2022 22:34:06 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Blake Jones <blakejones@google.com>
+Subject: [PATCH 2/4] perf record: Enable off-cpu analysis with BPF
+Date:   Thu, 21 Apr 2022 22:33:59 -0700
+Message-Id: <20220422053401.208207-3-namhyung@kernel.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
+In-Reply-To: <20220422053401.208207-1-namhyung@kernel.org>
+References: <20220422053401.208207-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-Id: <1650601109.vb3owbt14k.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Excerpts from Nicholas Piggin's message of April 22, 2022 1:08 pm:
-> Excerpts from Edgecombe, Rick P's message of April 22, 2022 12:29 pm:
->> On Fri, 2022-04-22 at 10:12 +1000, Nicholas Piggin wrote:
->>> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
->>> index e163372d3967..70933f4ed069 100644
->>> --- a/mm/vmalloc.c
->>> +++ b/mm/vmalloc.c
->>> @@ -2925,12 +2925,7 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
->>>                         if (nr !=3D nr_pages_request)
->>>                                 break;
->>>                 }
->>> -       } else
->>> -               /*
->>> -                * Compound pages required for remap_vmalloc_page if
->>> -                * high-order pages.
->>> -                */
->>> -               gfp |=3D __GFP_COMP;
->>> +       }
->>> =20
->>>         /* High-order pages or fallback path if "bulk" fails. */
->>> =20
->>> @@ -2944,6 +2939,13 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
->>>                         page =3D alloc_pages_node(nid, gfp, order);
->>>                 if (unlikely(!page))
->>>                         break;
->>> +               /*
->>> +                * Higher order allocations must be able to be
->>> treated as
->>> +                * indepdenent small pages by callers (as they can
->>> with
->>> +                * small page allocs).
->>> +                */
->>> +               if (order)
->>> +                       split_page(page, order);
->>> =20
->>>                 /*
->>>                  * Careful, we allocate and map page-order pages, but
->>=20
->> FWIW, I like this direction. I think it needs to free them differently
->> though? Since currently assumes they are high order pages in that path.
->=20
-> Yeah I got a bit excited there, but fairly sure that's the bug.
-> I'll do a proper patch.
+Add --off-cpu option to enable the off-cpu profiling with BPF.  It'd
+use a bpf_output event and rename it to "offcpu-time".  Samples will
+be synthesized at the end of the record session using data from a BPF
+map which contains the aggregated off-cpu time at context switches.
+So it needs root privilege to get the off-cpu profiling.
 
-So here's the patch on top of the revert. Only tested on a lowly
-powerpc machine, but it does fix this simple test case that does
-what the drm driver is obviously doing:
+Each sample will have a separate user stacktrace so it will skip
+kernel threads.  The sample ip will be set from the stacktrace and
+other sample data will be updated accordingly.  Currently it only
+handles some basic sample types.
 
-  size_t sz =3D PMD_SIZE;
-  void *mem =3D vmalloc(sz);
-  struct page *p =3D vmalloc_to_page(mem + PAGE_SIZE*3);
-  p->mapping =3D NULL;
-  p->index =3D 0;
-  INIT_LIST_HEAD(&p->lru);
-  vfree(mem);
+The sample timestamp is set to a dummy value just not to bother with
+other events during the sorting.  So it has a very big initial value
+and increase it on processing each samples.
 
-Without the below fix the same exact problem reproduces:
+Good thing is that it can be used together with regular profiling like
+cpu cycles.  If you don't want to that, you can use a dummy event to
+enable off-cpu profiling only.
 
-  BUG: Bad page state in process swapper/0  pfn:00743
-  page:(____ptrval____) refcount:0 mapcount:0 mapping:0000000000000000 inde=
-x:0x0 pfn:0x743
-  flags: 0x7ffff000000000(node=3D0|zone=3D0|lastcpupid=3D0x7ffff)
-  raw: 007ffff000000000 c00c00000001d0c8 c00c00000001d0c8 0000000000000000
-  raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-  page dumped because: corrupted mapping in tail page
-  Modules linked in:
-  CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc3-00082-gfc6fff4a7ce1-=
-dirty #2810
-  Call Trace:
-  [c000000002383940] [c0000000006ebb00] dump_stack_lvl+0x74/0xa8 (unreliabl=
-e)
-  [c000000002383980] [c0000000003dabdc] bad_page+0x12c/0x170=20
-  [c000000002383a00] [c0000000003dad08] free_tail_pages_check+0xe8/0x190
-  [c000000002383a30] [c0000000003dc45c] free_pcp_prepare+0x31c/0x4e0
-  [c000000002383a90] [c0000000003df9f0] free_unref_page+0x40/0x1b0
-  [c000000002383ad0] [c0000000003d7fc8] __vunmap+0x1d8/0x420=20
-  [c000000002383b70] [c00000000102e0d8] proc_vmalloc_init+0xdc/0x108
-  [c000000002383bf0] [c000000000011f80] do_one_initcall+0x60/0x2c0
-  [c000000002383cc0] [c000000001001658] kernel_init_freeable+0x32c/0x3cc
-  [c000000002383da0] [c000000000012564] kernel_init+0x34/0x1a0
-  [c000000002383e10] [c00000000000ce64] ret_from_kernel_thread+0x5c/0x64
+Example output:
+  $ sudo perf record --off-cpu perf bench sched messaging -l 1000
 
-Any other concerns with the fix?
+  $ sudo perf report --stdio --call-graph=no
+  # Total Lost Samples: 0
+  #
+  # Samples: 41K of event 'cycles'
+  # Event count (approx.): 42137343851
+  ...
 
-Thanks,
-Nick
+  # Samples: 1K of event 'offcpu-time'
+  # Event count (approx.): 587990831640
+  #
+  # Children      Self  Command          Shared Object       Symbol
+  # ........  ........  ...............  ..................  .........................
+  #
+      81.66%     0.00%  sched-messaging  libc-2.33.so        [.] __libc_start_main
+      81.66%     0.00%  sched-messaging  perf                [.] cmd_bench
+      81.66%     0.00%  sched-messaging  perf                [.] main
+      81.66%     0.00%  sched-messaging  perf                [.] run_builtin
+      81.43%     0.00%  sched-messaging  perf                [.] bench_sched_messaging
+      40.86%    40.86%  sched-messaging  libpthread-2.33.so  [.] __read
+      37.66%    37.66%  sched-messaging  libpthread-2.33.so  [.] __write
+       2.91%     2.91%  sched-messaging  libc-2.33.so        [.] __poll
+  ...
 
---
-mm/vmalloc: huge vmalloc backing pages should be split rather than compound
+As you can see it spent most of off-cpu time in read and write in
+bench_sched_messaging().  The --call-graph=no was added just to make
+the output concise here.
 
-Huge vmalloc higher-order backing pages were allocated with __GFP_COMP
-in order to allow the sub-pages to be refcounted by callers such as
-"remap_vmalloc_page [sic]" (remap_vmalloc_range).
+It uses perf hooks facility to control BPF program during the record
+session rather than adding new BPF/off-cpu specific calls.
 
-However a similar problem exists for other struct page fields callers
-use, for example fb_deferred_io_fault() takes a vmalloc'ed page and
-not only refcounts it but uses ->lru, ->mapping, ->index. This is not
-compatible with compound sub-pages.
-
-The correct approach is to use split high-order pages for the huge
-vmalloc backing. These allow callers to treat them in exactly the same
-way as individually-allocated order-0 pages.
-
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- mm/vmalloc.c | 36 +++++++++++++++++++++---------------
- 1 file changed, 21 insertions(+), 15 deletions(-)
+ tools/perf/Makefile.perf               |   1 +
+ tools/perf/builtin-record.c            |  21 +++
+ tools/perf/util/Build                  |   1 +
+ tools/perf/util/bpf_off_cpu.c          | 208 +++++++++++++++++++++++++
+ tools/perf/util/bpf_skel/off_cpu.bpf.c | 137 ++++++++++++++++
+ 5 files changed, 368 insertions(+)
+ create mode 100644 tools/perf/util/bpf_off_cpu.c
+ create mode 100644 tools/perf/util/bpf_skel/off_cpu.bpf.c
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 0b17498a34f1..09470361dc03 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2653,15 +2653,18 @@ static void __vunmap(const void *addr, int dealloca=
-te_pages)
- 	vm_remove_mappings(area, deallocate_pages);
-=20
- 	if (deallocate_pages) {
--		unsigned int page_order =3D vm_area_page_order(area);
--		int i, step =3D 1U << page_order;
-+		int i;
-=20
--		for (i =3D 0; i < area->nr_pages; i +=3D step) {
-+		for (i =3D 0; i < area->nr_pages; i++) {
- 			struct page *page =3D area->pages[i];
-=20
- 			BUG_ON(!page);
--			mod_memcg_page_state(page, MEMCG_VMALLOC, -step);
--			__free_pages(page, page_order);
-+			mod_memcg_page_state(page, MEMCG_VMALLOC, -1);
-+			/*
-+			 * High-order allocs for huge vmallocs are split, so
-+			 * can be freed as an array of order-0 allocations
-+			 */
-+			__free_pages(page, 0);
- 			cond_resched();
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 69473a836bae..ce333327182a 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -1041,6 +1041,7 @@ SKEL_TMP_OUT := $(abspath $(SKEL_OUT)/.tmp)
+ SKELETONS := $(SKEL_OUT)/bpf_prog_profiler.skel.h
+ SKELETONS += $(SKEL_OUT)/bperf_leader.skel.h $(SKEL_OUT)/bperf_follower.skel.h
+ SKELETONS += $(SKEL_OUT)/bperf_cgroup.skel.h $(SKEL_OUT)/func_latency.skel.h
++SKELETONS += $(SKEL_OUT)/off_cpu.skel.h
+ 
+ $(SKEL_TMP_OUT) $(LIBBPF_OUTPUT):
+ 	$(Q)$(MKDIR) -p $@
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index ba74fab02e62..3d24d528ba8e 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -49,6 +49,7 @@
+ #include "util/clockid.h"
+ #include "util/pmu-hybrid.h"
+ #include "util/evlist-hybrid.h"
++#include "util/off_cpu.h"
+ #include "asm/bug.h"
+ #include "perf.h"
+ #include "cputopo.h"
+@@ -162,6 +163,7 @@ struct record {
+ 	bool			buildid_mmap;
+ 	bool			timestamp_filename;
+ 	bool			timestamp_boundary;
++	bool			off_cpu;
+ 	struct switch_output	switch_output;
+ 	unsigned long long	samples;
+ 	unsigned long		output_max_size;	/* = 0: unlimited */
+@@ -903,6 +905,11 @@ static int record__config_text_poke(struct evlist *evlist)
+ 	return 0;
+ }
+ 
++static int record__config_off_cpu(struct record *rec)
++{
++	return off_cpu_prepare(rec->evlist);
++}
++
+ static bool record__kcore_readable(struct machine *machine)
+ {
+ 	char kcore[PATH_MAX];
+@@ -2596,6 +2603,9 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+ 	} else
+ 		status = err;
+ 
++	if (rec->off_cpu)
++		rec->bytes_written += off_cpu_write(rec->session);
++
+ 	record__synthesize(rec, true);
+ 	/* this will be recalculated during process_buildids() */
+ 	rec->samples = 0;
+@@ -3320,6 +3330,9 @@ static struct option __record_options[] = {
+ 	OPT_CALLBACK_OPTARG(0, "threads", &record.opts, NULL, "spec",
+ 			    "write collected trace data into several data files using parallel threads",
+ 			    record__parse_threads),
++#ifdef HAVE_BPF_SKEL
++	OPT_BOOLEAN(0, "off-cpu", &record.off_cpu, "Enable off-cpu analysis"),
++#endif
+ 	OPT_END()
+ };
+ 
+@@ -3968,6 +3981,14 @@ int cmd_record(int argc, const char **argv)
  		}
- 		atomic_long_sub(area->nr_pages, &nr_vmalloc_pages);
-@@ -2914,12 +2917,7 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
- 			if (nr !=3D nr_pages_request)
- 				break;
- 		}
--	} else
--		/*
--		 * Compound pages required for remap_vmalloc_page if
--		 * high-order pages.
--		 */
--		gfp |=3D __GFP_COMP;
-+	}
-=20
- 	/* High-order pages or fallback path if "bulk" fails. */
-=20
-@@ -2933,6 +2931,15 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
- 			page =3D alloc_pages_node(nid, gfp, order);
- 		if (unlikely(!page))
- 			break;
-+		/*
-+		 * Higher order allocations must be able to be treated as
-+		 * indepdenent small pages by callers (as they can with
-+		 * small-page vmallocs). Some drivers do their own refcounting
-+		 * on vmalloc_to_page() pages, some use page->mapping,
-+		 * page->lru, etc.
-+		 */
-+		if (order)
-+			split_page(page, order);
-=20
- 		/*
- 		 * Careful, we allocate and map page-order pages, but
-@@ -2992,11 +2999,10 @@ static void *__vmalloc_area_node(struct vm_struct *=
-area, gfp_t gfp_mask,
-=20
- 	atomic_long_add(area->nr_pages, &nr_vmalloc_pages);
- 	if (gfp_mask & __GFP_ACCOUNT) {
--		int i, step =3D 1U << page_order;
-+		int i;
-=20
--		for (i =3D 0; i < area->nr_pages; i +=3D step)
--			mod_memcg_page_state(area->pages[i], MEMCG_VMALLOC,
--					     step);
-+		for (i =3D 0; i < area->nr_pages; i++)
-+			mod_memcg_page_state(area->pages[i], MEMCG_VMALLOC, 1);
  	}
-=20
- 	/*
---=20
-2.35.1
+ 
++	if (rec->off_cpu) {
++		err = record__config_off_cpu(rec);
++		if (err) {
++			pr_err("record__config_off_cpu failed, error %d\n", err);
++			goto out;
++		}
++	}
++
+ 	if (record_opts__config(&rec->opts)) {
+ 		err = -EINVAL;
+ 		goto out;
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 9a7209a99e16..a51267d88ca9 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -147,6 +147,7 @@ perf-$(CONFIG_LIBBPF) += bpf_map.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
++perf-$(CONFIG_PERF_BPF_SKEL) += bpf_off_cpu.o
+ perf-$(CONFIG_BPF_PROLOGUE) += bpf-prologue.o
+ perf-$(CONFIG_LIBELF) += symbol-elf.o
+ perf-$(CONFIG_LIBELF) += probe-file.o
+diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
+new file mode 100644
+index 000000000000..1f87d2a9b86d
+--- /dev/null
++++ b/tools/perf/util/bpf_off_cpu.c
+@@ -0,0 +1,208 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "util/bpf_counter.h"
++#include "util/debug.h"
++#include "util/evsel.h"
++#include "util/evlist.h"
++#include "util/off_cpu.h"
++#include "util/perf-hooks.h"
++#include "util/session.h"
++#include <bpf/bpf.h>
++
++#include "bpf_skel/off_cpu.skel.h"
++
++#define MAX_STACKS  32
++/* we don't need actual timestamp, just want to put the samples at last */
++#define OFF_CPU_TIMESTAMP  (~0ull << 32)
++
++static struct off_cpu_bpf *skel;
++
++struct off_cpu_key {
++	u32 pid;
++	u32 tgid;
++	u32 stack_id;
++	u32 state;
++	u64 cgroup_id;
++};
++
++union off_cpu_data {
++	struct perf_event_header hdr;
++	u64 array[1024 / sizeof(u64)];
++};
++
++static int off_cpu_config(struct evlist *evlist)
++{
++	struct evsel *evsel;
++	struct perf_event_attr attr = {
++		.type	= PERF_TYPE_SOFTWARE,
++		.config = PERF_COUNT_SW_BPF_OUTPUT,
++		.size	= sizeof(attr), /* to capture ABI version */
++	};
++
++	evsel = evsel__new(&attr);
++	if (!evsel)
++		return -ENOMEM;
++
++	evsel->core.attr.freq = 1;
++	evsel->core.attr.sample_period = 1;
++	/* off-cpu analysis depends on stack trace */
++	evsel->core.attr.sample_type = PERF_SAMPLE_CALLCHAIN;
++
++	evlist__add(evlist, evsel);
++
++	free(evsel->name);
++	evsel->name = strdup("offcpu-time");
++	if (evsel->name == NULL)
++		return -ENOMEM;
++
++	return 0;
++}
++
++static void off_cpu_start(void *arg __maybe_unused)
++{
++	skel->bss->enabled = 1;
++}
++
++static void off_cpu_finish(void *arg __maybe_unused)
++{
++	skel->bss->enabled = 0;
++	off_cpu_bpf__destroy(skel);
++}
++
++int off_cpu_prepare(struct evlist *evlist)
++{
++	int err;
++
++	if (off_cpu_config(evlist) < 0) {
++		pr_err("Failed to config off-cpu BPF event\n");
++		return -1;
++	}
++
++	set_max_rlimit();
++
++	skel = off_cpu_bpf__open_and_load();
++	if (!skel) {
++		pr_err("Failed to open off-cpu skeleton\n");
++		return -1;
++	}
++
++	err = off_cpu_bpf__attach(skel);
++	if (err) {
++		pr_err("Failed to attach off-cpu skeleton\n");
++		goto out;
++	}
++
++	if (perf_hooks__set_hook("record_start", off_cpu_start, NULL) ||
++	    perf_hooks__set_hook("record_end", off_cpu_finish, NULL)) {
++		pr_err("Failed to attach off-cpu skeleton\n");
++		goto out;
++	}
++
++	return 0;
++
++out:
++	off_cpu_bpf__destroy(skel);
++	return -1;
++}
++
++int off_cpu_write(struct perf_session *session)
++{
++	int bytes = 0, size;
++	int fd, stack;
++	bool found = false;
++	u64 sample_type, val, sid = 0;
++	struct evsel *evsel;
++	struct perf_data_file *file = &session->data->file;
++	struct off_cpu_key prev, key;
++	union off_cpu_data data = {
++		.hdr = {
++			.type = PERF_RECORD_SAMPLE,
++			.misc = PERF_RECORD_MISC_USER,
++		},
++	};
++	u64 tstamp = OFF_CPU_TIMESTAMP;
++
++	skel->bss->enabled = 0;
++
++	evlist__for_each_entry(session->evlist, evsel) {
++		if (!strcmp(evsel__name(evsel), "offcpu-time")) {
++			found = true;
++			break;
++		}
++	}
++
++	if (!found) {
++		pr_err("offcpu-time evsel not found\n");
++		return 0;
++	}
++
++	sample_type = evsel->core.attr.sample_type;
++
++	if (sample_type & (PERF_SAMPLE_ID | PERF_SAMPLE_IDENTIFIER)) {
++		if (evsel->core.id)
++			sid = evsel->core.id[0];
++	}
++
++	fd = bpf_map__fd(skel->maps.off_cpu);
++	stack = bpf_map__fd(skel->maps.stacks);
++	memset(&prev, 0, sizeof(prev));
++
++	while (!bpf_map_get_next_key(fd, &prev, &key)) {
++		int n = 1;  /* start from perf_event_header */
++		int ip_pos = -1;
++
++		bpf_map_lookup_elem(fd, &key, &val);
++
++		if (sample_type & PERF_SAMPLE_IDENTIFIER)
++			data.array[n++] = sid;
++		if (sample_type & PERF_SAMPLE_IP) {
++			ip_pos = n;
++			data.array[n++] = 0;  /* will be updated */
++		}
++		if (sample_type & PERF_SAMPLE_TID)
++			data.array[n++] = (u64)key.pid << 32 | key.tgid;
++		if (sample_type & PERF_SAMPLE_TIME)
++			data.array[n++] = tstamp;
++		if (sample_type & PERF_SAMPLE_ID)
++			data.array[n++] = sid;
++		if (sample_type & PERF_SAMPLE_CPU)
++			data.array[n++] = 0;
++		if (sample_type & PERF_SAMPLE_PERIOD)
++			data.array[n++] = val;
++		if (sample_type & PERF_SAMPLE_CALLCHAIN) {
++			int len = 0;
++
++			/* data.array[n] is callchain->nr (updated later) */
++			data.array[n + 1] = PERF_CONTEXT_USER;
++			data.array[n + 2] = 0;
++
++			bpf_map_lookup_elem(stack, &key.stack_id, &data.array[n + 2]);
++			while (data.array[n + 2 + len])
++				len++;
++
++			/* update length of callchain */
++			data.array[n] = len + 1;
++
++			/* update sample ip with the first callchain entry */
++			if (ip_pos >= 0)
++				data.array[ip_pos] = data.array[n + 2];
++
++			/* calculate sample callchain data array length */
++			n += len + 2;
++		}
++		/* TODO: handle more sample types */
++
++		size = n * sizeof(u64);
++		data.hdr.size = size;
++		bytes += size;
++
++		if (perf_data_file__write(file, &data, size) < 0) {
++			pr_err("failed to write perf data, error: %m\n");
++			return bytes;
++		}
++
++		prev = key;
++		/* increase dummy timestamp to sort later samples */
++		tstamp++;
++	}
++	return bytes;
++}
+diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
+new file mode 100644
+index 000000000000..2bc6f7cc59ea
+--- /dev/null
++++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
+@@ -0,0 +1,137 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++// Copyright (c) 2022 Google
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++/* task->flags for off-cpu analysis */
++#define PF_KTHREAD   0x00200000  /* I am a kernel thread */
++
++/* task->state for off-cpu analysis */
++#define TASK_INTERRUPTIBLE	0x0001
++#define TASK_UNINTERRUPTIBLE	0x0002
++
++#define MAX_STACKS   32
++#define MAX_ENTRIES  102400
++
++struct tstamp_data {
++	__u32 stack_id;
++	__u32 state;
++	__u64 timestamp;
++};
++
++struct offcpu_key {
++	__u32 pid;
++	__u32 tgid;
++	__u32 stack_id;
++	__u32 state;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, MAX_STACKS * sizeof(__u64));
++	__uint(max_entries, MAX_ENTRIES);
++} stacks SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(struct tstamp_data));
++	__uint(max_entries, MAX_ENTRIES);
++} tstamp SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(key_size, sizeof(struct offcpu_key));
++	__uint(value_size, sizeof(__u64));
++	__uint(max_entries, MAX_ENTRIES);
++} off_cpu SEC(".maps");
++
++/* old kernel task_struct definition */
++struct task_struct___old {
++	long state;
++} __attribute__((preserve_access_index));
++
++int enabled = 0;
++
++/*
++ * recently task_struct->state renamed to __state so it made an incompatible
++ * change.  Use BPF CO-RE "ignored suffix rule" to deal with it like below:
++ *
++ * https://nakryiko.com/posts/bpf-core-reference-guide/#handling-incompatible-field-and-type-changes
++ */
++static inline int get_task_state(struct task_struct *t)
++{
++	if (bpf_core_field_exists(t->__state))
++		return BPF_CORE_READ(t, __state);
++
++	/* recast pointer to capture task_struct___old type for compiler */
++	struct task_struct___old *t_old = (void *)t;
++
++	/* now use old "state" name of the field */
++	return BPF_CORE_READ(t_old, state);
++}
++
++SEC("tp_btf/sched_switch")
++int on_switch(u64 *ctx)
++{
++	__u64 ts;
++	int state;
++	__u32 pid, stack_id;
++	struct task_struct *prev, *next;
++	struct tstamp_data elem, *pelem;
++
++	if (!enabled)
++		return 0;
++
++	prev = (struct task_struct *)ctx[1];
++	next = (struct task_struct *)ctx[2];
++	state = get_task_state(prev);
++
++	ts = bpf_ktime_get_ns();
++
++	if (prev->flags & PF_KTHREAD)
++		goto next;
++	if (state != TASK_INTERRUPTIBLE &&
++	    state != TASK_UNINTERRUPTIBLE)
++		goto next;
++
++	stack_id = bpf_get_stackid(ctx, &stacks,
++				   BPF_F_FAST_STACK_CMP | BPF_F_USER_STACK);
++
++	elem.timestamp = ts;
++	elem.state = state;
++	elem.stack_id = stack_id;
++
++	pid = prev->pid;
++	bpf_map_update_elem(&tstamp, &pid, &elem, BPF_ANY);
++
++next:
++	pid = next->pid;
++	pelem = bpf_map_lookup_elem(&tstamp, &pid);
++
++	if (pelem) {
++		struct offcpu_key key = {
++			.pid = next->pid,
++			.tgid = next->tgid,
++			.stack_id = pelem->stack_id,
++			.state = pelem->state,
++		};
++		__u64 delta = ts - pelem->timestamp;
++		__u64 *total;
++
++		total = bpf_map_lookup_elem(&off_cpu, &key);
++		if (total)
++			*total += delta;
++		else
++			bpf_map_update_elem(&off_cpu, &key, &delta, BPF_ANY);
++
++		bpf_map_delete_elem(&tstamp, &pid);
++	}
++
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "Dual BSD/GPL";
+-- 
+2.36.0.rc2.479.g8af0fa9b8e-goog
 
