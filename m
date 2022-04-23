@@ -2,92 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE703C433F5
-	for <bpf@archiver.kernel.org>; Sat, 23 Apr 2022 14:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AB45C4332F
+	for <bpf@archiver.kernel.org>; Sat, 23 Apr 2022 14:02:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiDWOE4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 23 Apr 2022 10:04:56 -0400
+        id S235900AbiDWOE5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 23 Apr 2022 10:04:57 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235930AbiDWOEy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 23 Apr 2022 10:04:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C53DBF59;
-        Sat, 23 Apr 2022 07:01:54 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c12so16969563plr.6;
-        Sat, 23 Apr 2022 07:01:54 -0700 (PDT)
+        with ESMTP id S235921AbiDWOEz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 23 Apr 2022 10:04:55 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA04CBF59;
+        Sat, 23 Apr 2022 07:01:58 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id q3so17001606plg.3;
+        Sat, 23 Apr 2022 07:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H3CJvqG5s6/hMko5YEaZXZn/sObbb3sfE0IRGAk5o8E=;
-        b=UgeesNcGviRFqNGb7Z5B+GN6MnXKUWTFFttkPALGHubFVtZgAHaHjcpk+Rr/q/qCwj
-         9puIAkeVq/QciPULw0pJw47JgllTETP4zdBLJIX4NUpRyuV6JMcmc+fCtG9zBHHhd8p+
-         grQwkC8St00QRPNZXBmMdN767seNvSf0Z2mxLNbEIykvygkNDEfFuQUAlXNyIsyD03wn
-         L86/JMtYC0Pfybo7ffI+nZZwmgZATWDXPrqGrRAvivDsR9DppjTqjk2DxZhSTjQHBLyk
-         5qit3u0M4lkxfTZ+pqKH7EU2/Iu5C9PntvvOtGOip24KwnLMheMrvAD0IVlnFe+2DuuF
-         Wvsg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qbWaCg87av5QkGfalhJMKMRl9w04duKo1d4+9bAwtbE=;
+        b=bidheqFHzJaEQrtqov76Lq0+9bgIH/WOepEafOSjysyFK0tL42mq8RAyMFXp8Uff1/
+         Eo8tK7Y1/Ra7Bag88koJjbC8xMsBkNN09f/zfD5Q4PduFKBRSs31yvki2x/RbTSmB8zD
+         EJkZEE9kuGdVJn6K8PRxQ6SxowsMH20HLnsJXmW+iAnq1MaLje4TrPNixxgY3+1nDOKS
+         tEut18gMuFReuJT+nLxSx2154HBglzSMCvGTZE82VaYGebXDVwydNkKaaoKaLR1sN4Yf
+         oGaeu6HacnHgm0CYDyb0EKj4/ugVXInLYdOcO85YuO/D8pM35SUhDOjZurO9/S3FtGQ0
+         hD4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=H3CJvqG5s6/hMko5YEaZXZn/sObbb3sfE0IRGAk5o8E=;
-        b=v4sdpgiMRpsaUpWFXroam8GO14ifgR2iG7rNMQVxHS5JZAC+F2omBrESHPWAWouKwI
-         ZJxfrcBr/w/6Ii1QK7Vorpm1gBKr09ShbFHQ/xJeayfV9+zW2osELpw8Xg76tr+90DGv
-         i2Bpz1m8SM9jdf8porZM8BKgNhm1OcV3ZO7npx0BOXROxV9gkCSjuXu0W9jHy+36iCoj
-         Ku4bGJH1w269yPI6QyoRJn5yFIwezQvF1JVGzeQRV0OQ+y9vU1vKXSWdjWCIExRwOZL9
-         RfCjzoDKO+tvTX5q9vKzSN6vf8vC4Fb/OT3u871c/uQp7UPfjBrR0UiIN/k0c3nKjvj6
-         z+hw==
-X-Gm-Message-State: AOAM530BgYQYy13zcVpQ7rDbf/Kg3ElYzTZoi8VrYItWkycNjggPY+Qg
-        sDulA8ZnTnJR84lz4ats6jY=
-X-Google-Smtp-Source: ABdhPJzCQzYgB6gnZ0FDpbZJujROM2lSqmH2Hfbhy0ATqoN5sUnbto7snxFYmA/a+0uDswL6LZhGUQ==
-X-Received: by 2002:a17:902:6a8a:b0:156:8ff6:daf0 with SMTP id n10-20020a1709026a8a00b001568ff6daf0mr9535201plk.117.1650722513717;
-        Sat, 23 Apr 2022 07:01:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qbWaCg87av5QkGfalhJMKMRl9w04duKo1d4+9bAwtbE=;
+        b=tFNHOdLE22EH+eCbh25FbKR+nQ/uahU4ExTJ7R/eVdwalDHmHdJpLUHOa0ec48cXrO
+         Tgxl1ZwAtkfILbLXT5p0PA1L0PUNviOInCyShnuqQ6V4PrBGWDM2PC+SQ4x20SvDIshv
+         niExlCOEwckZYFpRMnMpj4l9D7FrlTCuE8FTG6vs389irzH5lm9Ud/rXGZkzkk7hGbG7
+         b74s0M7FcSUi4Ln8h0Eon4y/LBFm+rh5TQunWY0qNeF3kONIqecgP2a2AKIUwEn+wbAM
+         KHzd3lBFdCs9DBc48JSpc1UQ17/PXsKdwVEc6L0M08EEUg23ruMQ/Ke6DSb+t242IKpD
+         HOBA==
+X-Gm-Message-State: AOAM530HTMHWP0uSMWmP4ipWW1ExgvoIFEumKrf36MDqNV4gnciSfbA+
+        hXN98IRHSo7ecWUaHcmtReM=
+X-Google-Smtp-Source: ABdhPJyaH8zf/+f/AVMGUEGUDi+GMYmz6CgEgdZSmoo8c2v4NKlxB1biZDPsBc1c5B9mF9Wr2w1upA==
+X-Received: by 2002:a17:90a:ab08:b0:1cd:34ec:c731 with SMTP id m8-20020a17090aab0800b001cd34ecc731mr21946385pjq.202.1650722518458;
+        Sat, 23 Apr 2022 07:01:58 -0700 (PDT)
 Received: from vultr.guest ([2001:19f0:6001:1e2f:5400:3ff:fef5:fd57])
-        by smtp.gmail.com with ESMTPSA id e6-20020a17090a77c600b001cd4989fedcsm9282071pjs.40.2022.04.23.07.01.52
+        by smtp.gmail.com with ESMTPSA id e6-20020a17090a77c600b001cd4989fedcsm9282071pjs.40.2022.04.23.07.01.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 07:01:53 -0700 (PDT)
+        Sat, 23 Apr 2022 07:01:57 -0700 (PDT)
 From:   Yafang Shao <laoar.shao@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         john.fastabend@gmail.com, kpsingh@kernel.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH bpf-next 0/4] bpf: Generate helpers for pinning through bpf object skeleton 
-Date:   Sat, 23 Apr 2022 14:00:54 +0000
-Message-Id: <20220423140058.54414-1-laoar.shao@gmail.com>
+Subject: [PATCH bpf-next 3/4] bpftool: Fix incorrect return in generated detach helper
+Date:   Sat, 23 Apr 2022 14:00:57 +0000
+Message-Id: <20220423140058.54414-4-laoar.shao@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20220423140058.54414-1-laoar.shao@gmail.com>
+References: <20220423140058.54414-1-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently there're helpers for allowing to open/load/attach BPF object
-through BPF object skeleton. Let's also add helpers for pinning through
-BPF object skeleton. It could simplify BPF userspace code which wants to
-pin the progs into bpffs.
+There is no return value of bpf_object__detach_skeleton(), so we'd
+better not return it, that is formal.
 
-After this change, with command 'bpftool gen skeleton XXX.bpf.o', the
-helpers for pinning BPF prog will be generated in BPF object skeleton.
+Fixes: 5dc7a8b21144 ("bpftool, selftests/bpf: Embed object file inside skeleton")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ tools/bpf/bpftool/gen.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The new helpers are named with __{pin, unpin}_prog, because it only pins
-bpf progs. If the user also wants to pin bpf maps, he can use
-LIBBPF_PIN_BY_NAME.
-
-Yafang Shao (4):
-  libbpf: Define DEFAULT_BPFFS
-  libbpf: Add helpers for pinning bpf prog through bpf object skeleton
-  bpftool: Fix incorrect return in generated detach helper
-  bpftool: Generate helpers for pinning prog through bpf object skeleton
-
- tools/bpf/bpftool/gen.c     | 18 ++++++++++-
- tools/lib/bpf/bpf_helpers.h |  2 +-
- tools/lib/bpf/libbpf.c      | 61 ++++++++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf.h      | 10 ++++--
- tools/lib/bpf/libbpf.map    |  2 ++
- 5 files changed, 88 insertions(+), 5 deletions(-)
-
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 7678af364793..8f76d8d9996c 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -1171,7 +1171,7 @@ static int do_skeleton(int argc, char **argv)
+ 		static inline void					    \n\
+ 		%1$s__detach(struct %1$s *obj)				    \n\
+ 		{							    \n\
+-			return bpf_object__detach_skeleton(obj->skeleton);  \n\
++			bpf_object__detach_skeleton(obj->skeleton);	    \n\
+ 		}							    \n\
+ 		",
+ 		obj_name
 -- 
 2.17.1
 
