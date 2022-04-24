@@ -2,497 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D8EFC433EF
-	for <bpf@archiver.kernel.org>; Sun, 24 Apr 2022 15:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CCEFC433F5
+	for <bpf@archiver.kernel.org>; Sun, 24 Apr 2022 15:34:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbiDXPh3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 24 Apr 2022 11:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S230518AbiDXPhi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 24 Apr 2022 11:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240460AbiDXPb1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 24 Apr 2022 11:31:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982A9170E3F;
-        Sun, 24 Apr 2022 08:28:25 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KmX840rmKz1JBRn;
-        Sun, 24 Apr 2022 23:27:32 +0800 (CST)
-Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
- (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 24 Apr
- 2022 23:28:21 +0800
-From:   Xu Kuohai <xukuohai@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        with ESMTP id S240091AbiDXPZP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 24 Apr 2022 11:25:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114039B9D
+        for <bpf@vger.kernel.org>; Sun, 24 Apr 2022 08:22:13 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id m20so4424885ejj.10
+        for <bpf@vger.kernel.org>; Sun, 24 Apr 2022 08:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JvwMaNfpyczcBz5FjlcmZ5tT4tBB4pJUkY5VC5Yl08k=;
+        b=Z4XeHrbt4PNpBQEEW2O8Cv/abfRosw9nTHVB11JUPU+VcHQ/OsH2PeKK3Vb++6ZuP6
+         Y1Iy2J5QaI3bzFjHOO+j8PtilLUjaceub84QlAlpbkbZZokSkx+q+r6/thQ3+Q+o3YhC
+         VT/9LvC77zoZdQD9jcmHpOSpq7LMw6fFpXmrq1VCEabtEM8W7ghuHi10H3lHDkTOYrLE
+         XEWkn6Hvu5pjOs5KDqh3hekPTVxDHcOsdWwwWsFQ0VQaVznN5wjm2Ria4Inx3bHlCoct
+         bfJyC2GyYYkmQk8tPhX3gFHpoKCn7sKnuq7WgMUig3wjo7msJmasGUZYsnXL0ipCJBGx
+         sJpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JvwMaNfpyczcBz5FjlcmZ5tT4tBB4pJUkY5VC5Yl08k=;
+        b=AvqI25ASpbbYUqpD9+MXcYOe81VUzzhkBaNhOkdPMeVeWVIbWzgKCmx8qjbLwUssM1
+         wCq6nQQe13b2KEZDsW7cYTTwoKUNhGPi7zLGbb3YlA16RwE+yczA3nQy6Zn34hooGUWX
+         W88Fgz11O4Vijbj8o54tssV0QK2xa+SpH6j9SV/8Sgstfxar5RZ+MAb/g0fjllRCq9oZ
+         5uSkFB7M+ryGuCGDMnJsnynQ6+V/pkuRMZwKn+lPdFeqt0jUEiELANpYQ6K62Q3IH7oR
+         plINS8IwSTO0eWiQnAWZ7d8dQX6ImJJaF345BfJHSrH/kpGQHWI70ILxt+IRqUCcbByO
+         9COA==
+X-Gm-Message-State: AOAM532vKkiUORuxiuOflPdvJKPqxakqGtmPRxOhgh1XyMQ7iVdDL/a/
+        Bjs8ncJXX1e8DOdbgf145uzcWQ==
+X-Google-Smtp-Source: ABdhPJzmw2hXC9+KxqcyIogQ1sGB29hYOGxq6qBBX2IiElUpSPzpeEwu7QAlHQ3yskB9NidScLhrew==
+X-Received: by 2002:a17:906:66c8:b0:6e8:8b06:1b32 with SMTP id k8-20020a17090666c800b006e88b061b32mr12265608ejp.236.1650813732169;
+        Sun, 24 Apr 2022 08:22:12 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id c13-20020a056402100d00b0042294fdbcf9sm3328082edu.14.2022.04.24.08.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Apr 2022 08:22:11 -0700 (PDT)
+Date:   Sun, 24 Apr 2022 23:22:04 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Timothy Hayes <timothy.hayes@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, John Garry <john.garry@huawei.com>,
         Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 6/7] bpf, arm64: bpf trampoline for arm64
-Date:   Sun, 24 Apr 2022 11:40:27 -0400
-Message-ID: <20220424154028.1698685-7-xukuohai@huawei.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220424154028.1698685-1-xukuohai@huawei.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH 1/3] perf: arm-spe: Fix addresses of synthesized SPE
+ events
+Message-ID: <20220424152204.GA1810164@leoy-ThinkPad-X240s>
+References: <20220421165205.117662-1-timothy.hayes@arm.com>
+ <20220421165205.117662-2-timothy.hayes@arm.com>
+ <20220424122831.GC978927@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.197]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220424122831.GC978927@leoy-ThinkPad-X240s>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf trampoline support for arm64. Most of the logic is the same as
-x86.
+On Sun, Apr 24, 2022 at 08:28:31PM +0800, Leo Yan wrote:
+> On Thu, Apr 21, 2022 at 05:52:03PM +0100, Timothy Hayes wrote:
+> > This patch corrects a bug whereby synthesized events from SPE
+> > samples are missing virtual addresses.
+> > 
+> > Signed-off-by: Timothy Hayes <timothy.hayes@arm.com>
+> 
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
-fentry before bpf trampoline hooked:
- mov x9, x30
- nop
+Supplement for fixed tag:
 
-fentry after bpf trampoline hooked:
- mov x9, x30
- bl  <bpf_trampoline>
+Since patches 01, 02 are fixing bugs, please add fixed tag [1]:
 
-Tested on qemu, result:
- #18  bpf_tcp_ca:OK
- #51  dummy_st_ops:OK
- #55  fentry_fexit:OK
- #56  fentry_test:OK
- #57  fexit_bpf2bpf:OK
- #58  fexit_sleep:OK
- #59  fexit_stress:OK
- #60  fexit_test:OK
- #67  get_func_args_test:OK
- #68  get_func_ip_test:OK
- #101 modify_return:OK
- #233 xdp_bpf2bpf:OK
+Fixes: 54f7815efef7 ("perf arm-spe: Fill address info for samples")
 
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- arch/arm64/net/bpf_jit.h      |   7 +
- arch/arm64/net/bpf_jit_comp.c | 344 +++++++++++++++++++++++++++++++++-
- 2 files changed, 350 insertions(+), 1 deletion(-)
+Thanks,
+Leo
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index 1c4b0075a3e2..82a624b0d16e 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -90,6 +90,13 @@
- /* Rt = Rn[0]; Rt2 = Rn[8]; Rn += 16; */
- #define A64_POP(Rt, Rt2, Rn)  A64_LS_PAIR(Rt, Rt2, Rn, 16, LOAD, POST_INDEX)
- 
-+/* Rn[imm] = Xt1; Rn[imm + 8] = Xt2 */
-+#define A64_STP(Xt1, Xt2, Xn, imm) \
-+	A64_LS_PAIR(Xt1, Xt2, Xn, imm, STORE, SIGNED_OFFSET)
-+/* Xt1 = Rn[imm]; Xt2 = Rn[imm + 8] */
-+#define A64_LDP(Xt1, Xt2, Xn, imm) \
-+	A64_LS_PAIR(Xt1, Xt2, Xn, imm, LOAD, SIGNED_OFFSET)
-+
- /* Load/store exclusive */
- #define A64_SIZE(sf) \
- 	((sf) ? AARCH64_INSN_SIZE_64 : AARCH64_INSN_SIZE_32)
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 293bdefc5d0c..cf8ca957c747 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1349,6 +1349,13 @@ static int validate_code(struct jit_ctx *ctx)
- 		if (a64_insn == AARCH64_BREAK_FAULT)
- 			return -1;
- 	}
-+	return 0;
-+}
-+
-+static int validate_ctx(struct jit_ctx *ctx)
-+{
-+	if (validate_code(ctx))
-+		return -1;
- 
- 	if (WARN_ON_ONCE(ctx->exentry_idx != ctx->prog->aux->num_exentries))
- 		return -1;
-@@ -1473,7 +1480,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	build_epilogue(&ctx);
- 
- 	/* 3. Extra pass to validate JITed code. */
--	if (validate_code(&ctx)) {
-+	if (validate_ctx(&ctx)) {
- 		bpf_jit_binary_free(header);
- 		prog = orig_prog;
- 		goto out_off;
-@@ -1544,6 +1551,341 @@ void bpf_jit_free_exec(void *addr)
- 	return vfree(addr);
- }
- 
-+static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_prog *p,
-+			    int args_off, int retval_off, bool save_ret)
-+{
-+	u32 *branch;
-+	u64 enter_prog;
-+	u64 exit_prog;
-+	u8 tmp = bpf2a64[TMP_REG_1];
-+	u8 r0 = bpf2a64[BPF_REG_0];
-+
-+	if (p->aux->sleepable) {
-+		enter_prog = (u64)__bpf_prog_enter_sleepable;
-+		exit_prog = (u64)__bpf_prog_exit_sleepable;
-+	} else {
-+		enter_prog = (u64)__bpf_prog_enter;
-+		exit_prog = (u64)__bpf_prog_exit;
-+	}
-+
-+	/* arg1: prog */
-+	emit_addr_mov_i64(A64_R(0), (const u64)p, ctx);
-+	/* bl __bpf_prog_enter */
-+	emit_addr_mov_i64(tmp, enter_prog, ctx);
-+	emit(A64_BLR(tmp), ctx);
-+
-+	/* if (__bpf_prog_enter(prog) == 0)
-+	 *         goto skip_exec_of_prog;
-+	 */
-+	branch = ctx->image + ctx->idx;
-+	emit(A64_NOP, ctx);
-+
-+	/* move return value to x19 */
-+	emit(A64_MOV(1, A64_R(19), r0), ctx);
-+
-+	/* bl bpf_prog */
-+	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
-+	if (!p->jited)
-+		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
-+	emit_addr_mov_i64(tmp, (const u64)p->bpf_func, ctx);
-+	emit(A64_BLR(tmp), ctx);
-+
-+	/* store return value */
-+	if (save_ret)
-+		emit(A64_STR64I(r0, A64_SP, retval_off), ctx);
-+
-+	if (ctx->image) {
-+		int offset = &ctx->image[ctx->idx] - branch;
-+		*branch = A64_CBZ(1, A64_R(0), offset);
-+	}
-+
-+	/* arg1: prog */
-+	emit_addr_mov_i64(A64_R(0), (const u64)p, ctx);
-+	/* arg2: start time */
-+	emit(A64_MOV(1, A64_R(1), A64_R(19)), ctx);
-+	/* bl __bpf_prog_exit */
-+	emit_addr_mov_i64(tmp, exit_prog, ctx);
-+	emit(A64_BLR(tmp), ctx);
-+}
-+
-+static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_progs *tp,
-+			       int args_off, int retval_off, u32 **branches)
-+{
-+	int i;
-+
-+	/* The first fmod_ret program will receive a garbage return value.
-+	 * Set this to 0 to avoid confusing the program.
-+	 */
-+	emit(A64_STR64I(A64_ZR, A64_SP, retval_off), ctx);
-+	for (i = 0; i < tp->nr_progs; i++) {
-+		invoke_bpf_prog(ctx, tp->progs[i], args_off, retval_off, true);
-+		/* if (*(u64 *)(sp + retval_off) !=  0)
-+		 *	goto do_fexit;
-+		 */
-+		emit(A64_LDR64I(A64_R(10), A64_SP, retval_off), ctx);
-+		/* Save the location of branch, and generate a nop.
-+		 * This nop will be replaced with a cbnz later.
-+		 */
-+		branches[i] = ctx->image + ctx->idx;
-+		emit(A64_NOP, ctx);
-+	}
-+}
-+
-+static void save_args(struct jit_ctx *ctx, int args_off, int nargs)
-+{
-+	int i;
-+
-+	for (i = 0; i < nargs; i++) {
-+		emit(A64_STR64I(i, A64_SP, args_off), ctx);
-+		args_off += 8;
-+	}
-+}
-+
-+static void restore_args(struct jit_ctx *ctx, int args_off, int nargs)
-+{
-+	int i;
-+
-+	for (i = 0; i < nargs; i++) {
-+		emit(A64_LDR64I(i, A64_SP, args_off), ctx);
-+		args_off += 8;
-+	}
-+}
-+
-+/*
-+ * Based on the x86's implementation of arch_prepare_bpf_trampoline().
-+ *
-+ * We rely on DYNAMIC_FTRACE_WITH_REGS to set return address and nop
-+ * for fentry.
-+ *
-+ * fentry before bpf trampoline hooked:
-+ *   mov x9, x30
-+ *   nop
-+ *
-+ * fentry after bpf trampoline hooked:
-+ *   mov x9, x30
-+ *   bl  <bpf_trampoline>
-+ *
-+ */
-+static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
-+			      struct bpf_tramp_progs *tprogs, void *orig_call,
-+			      int nargs, u32 flags)
-+{
-+	int i;
-+	int stack_size;
-+	int retaddr_off;
-+	int regs_off;
-+	int retval_off;
-+	int args_off;
-+	int nargs_off;
-+	int ip_off;
-+	struct bpf_tramp_progs *fentry = &tprogs[BPF_TRAMP_FENTRY];
-+	struct bpf_tramp_progs *fexit = &tprogs[BPF_TRAMP_FEXIT];
-+	struct bpf_tramp_progs *fmod_ret = &tprogs[BPF_TRAMP_MODIFY_RETURN];
-+	bool save_ret;
-+	u32 **branches = NULL;
-+
-+	/*
-+	 * trampoline stack layout:
-+	 *                  [ parent ip       ]
-+	 *                  [ FP              ]
-+	 * SP + retaddr_off [ self ip         ]
-+	 * FP               [ FP              ]
-+	 *
-+	 * sp + regs_off    [ x19             ] callee-saved regs, currently
-+	 *                                      only x19 is used
-+	 *
-+	 * SP + retval_off  [ return value    ] BPF_TRAMP_F_CALL_ORIG or
-+	 *                                      BPF_TRAMP_F_RET_FENTRY_RET flags
-+	 *
-+	 *                  [ argN            ]
-+	 *                  [ ...             ]
-+	 * sp + args_off    [ arg1            ]
-+	 *
-+	 * SP + nargs_off   [ args count      ]
-+	 *
-+	 * SP + ip_off      [ traced function ] BPF_TRAMP_F_IP_ARG flag
-+	 */
-+
-+	stack_size = 0;
-+	ip_off = stack_size;
-+
-+	/* room for IP address argument */
-+	if (flags & BPF_TRAMP_F_IP_ARG)
-+		stack_size += 8;
-+
-+	nargs_off = stack_size;
-+	/* room for args count */
-+	stack_size += 8;
-+
-+	args_off = stack_size;
-+	/* room for args */
-+	stack_size += nargs * 8;
-+
-+	/* room for return value */
-+	retval_off = stack_size;
-+	save_ret = flags & (BPF_TRAMP_F_CALL_ORIG | BPF_TRAMP_F_RET_FENTRY_RET);
-+	if (save_ret)
-+		stack_size += 8;
-+
-+	/* room for callee-saved registers, currently only x19 is used */
-+	regs_off = stack_size;
-+	stack_size += 8;
-+
-+	retaddr_off = stack_size + 8;
-+
-+	if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL))
-+		emit(A64_BTI_C, ctx);
-+
-+	/* frame for parent function */
-+	emit(A64_PUSH(A64_FP, A64_R(9), A64_SP), ctx);
-+	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
-+
-+	/* frame for patched function */
-+	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
-+	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
-+
-+	/* allocate stack space */
-+	emit(A64_SUB_I(1, A64_SP, A64_SP, stack_size), ctx);
-+
-+	if (flags & BPF_TRAMP_F_IP_ARG) {
-+		/* save ip address of the traced function */
-+		emit_addr_mov_i64(A64_R(10), (const u64)orig_call, ctx);
-+		emit(A64_STR64I(A64_R(10), A64_SP, ip_off), ctx);
-+	}
-+
-+	/* save args count*/
-+	emit(A64_MOVZ(1, A64_R(10), nargs, 0), ctx);
-+	emit(A64_STR64I(A64_R(10), A64_SP, nargs_off), ctx);
-+
-+	/* save args */
-+	save_args(ctx, args_off, nargs);
-+
-+	/* save callee saved registers */
-+	emit(A64_STR64I(A64_R(19), A64_SP, regs_off), ctx);
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
-+		emit_addr_mov_i64(A64_R(10), (const u64)__bpf_tramp_enter, ctx);
-+		emit(A64_BLR(A64_R(10)), ctx);
-+	}
-+
-+	for (i = 0; i < fentry->nr_progs; i++)
-+		invoke_bpf_prog(ctx, fentry->progs[i], args_off, retval_off,
-+				flags & BPF_TRAMP_F_RET_FENTRY_RET);
-+
-+	if (fmod_ret->nr_progs) {
-+		branches = kcalloc(fmod_ret->nr_progs, sizeof(u32 *),
-+				   GFP_KERNEL);
-+		if (!branches)
-+			return -ENOMEM;
-+
-+		invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
-+				   branches);
-+	}
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		restore_args(ctx, args_off, nargs);
-+		emit(A64_LDR64I(A64_R(10), A64_SP, retaddr_off), ctx);
-+		/* call original func */
-+		emit(A64_BLR(A64_R(10)), ctx);
-+		/* store return value */
-+		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
-+		/* reserve a nop */
-+		im->ip_after_call = ctx->image + ctx->idx;
-+		emit(A64_NOP, ctx);
-+	}
-+
-+	/* update the branches saved in invoke_bpf_mod_ret with cbnz */
-+	for (i = 0; i < fmod_ret->nr_progs && ctx->image != NULL; i++) {
-+		int offset = &ctx->image[ctx->idx] - branches[i];
-+		*branches[i] = A64_CBNZ(1, A64_R(10), offset);
-+	}
-+
-+	for (i = 0; i < fexit->nr_progs; i++)
-+		invoke_bpf_prog(ctx, fexit->progs[i], args_off, retval_off,
-+				false);
-+
-+	if (flags & BPF_TRAMP_F_RESTORE_REGS)
-+		restore_args(ctx, args_off, nargs);
-+
-+	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-+		im->ip_epilogue = ctx->image + ctx->idx;
-+		emit_addr_mov_i64(A64_R(0), (const u64)im, ctx);
-+		emit_addr_mov_i64(A64_R(10), (const u64)__bpf_tramp_exit, ctx);
-+		emit(A64_BLR(A64_R(10)), ctx);
-+	}
-+
-+	/* restore x19 */
-+	emit(A64_LDR64I(A64_R(19), A64_SP, regs_off), ctx);
-+
-+	if (save_ret)
-+		emit(A64_LDR64I(A64_R(0), A64_SP, retval_off), ctx);
-+
-+	/* reset SP  */
-+	emit(A64_MOV(1, A64_SP, A64_FP), ctx);
-+
-+	/* pop frames  */
-+	emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
-+	emit(A64_POP(A64_FP, A64_R(9), A64_SP), ctx);
-+
-+	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
-+		/* skip patched function, return to parent */
-+		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
-+		emit(A64_RET(A64_R(9)), ctx);
-+	} else {
-+		/* return to patched function */
-+		emit(A64_MOV(1, A64_R(10), A64_LR), ctx);
-+		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
-+		emit(A64_RET(A64_R(10)), ctx);
-+	}
-+
-+	if (ctx->image)
-+		bpf_flush_icache(ctx->image, ctx->image + ctx->idx);
-+
-+	kfree(branches);
-+
-+	return ctx->idx;
-+}
-+
-+int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
-+				void *image_end, const struct btf_func_model *m,
-+				u32 flags, struct bpf_tramp_progs *tprogs,
-+				void *orig_call)
-+{
-+	int ret;
-+	int nargs = m->nr_args;
-+	int max_insns = ((long)image_end - (long)image) / AARCH64_INSN_SIZE;
-+	struct jit_ctx ctx = {
-+		.image = NULL,
-+		.idx = 0
-+	};
-+
-+	/* the first 8 arguments are passed by registers */
-+	if (nargs > 8)
-+		return -ENOTSUPP;
-+
-+	ret = prepare_trampoline(&ctx, im, tprogs, orig_call, nargs, flags);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret > max_insns)
-+		return -EFBIG;
-+
-+	ctx.image = image;
-+	ctx.idx = 0;
-+
-+	jit_fill_hole(image, (unsigned int)(image_end - image));
-+	ret = prepare_trampoline(&ctx, im, tprogs, orig_call, nargs, flags);
-+
-+	if (ret > 0 && validate_code(&ctx) < 0)
-+		ret = -EINVAL;
-+
-+	if (ret > 0)
-+		ret *= AARCH64_INSN_SIZE;
-+
-+	return ret;
-+}
-+
- static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
- 			     void *addr, u32 *insn)
- {
--- 
-2.30.2
-
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst#n138
