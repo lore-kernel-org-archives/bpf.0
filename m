@@ -2,126 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE00C433EF
-	for <bpf@archiver.kernel.org>; Sun, 24 Apr 2022 14:53:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06927C433EF
+	for <bpf@archiver.kernel.org>; Sun, 24 Apr 2022 15:34:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238742AbiDXO4T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 24 Apr 2022 10:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S231969AbiDXPhD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 24 Apr 2022 11:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiDXO4S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 24 Apr 2022 10:56:18 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCEDA6E4
-        for <bpf@vger.kernel.org>; Sun, 24 Apr 2022 07:53:17 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id g6so2249505ejw.1
-        for <bpf@vger.kernel.org>; Sun, 24 Apr 2022 07:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PljnxRUh81pT/VZFsSxpCxfxThaMnEo3K5gwtxML1T4=;
-        b=HPK1Fjl//ahLaP1lNA4NCbDVTK5dLYlXgM5pM42npxjQZKjO5L9/PdF8l7lGR+id0d
-         ZnvgI0tC1zbFtZrmiJK2y52v84g9Y+w0AF5Zt9IAPvXJ1gHzny119IxGNvrK+e3TYJ4u
-         Y8rptqx/qBwsXxnS7f3mTiPtWUBlHBlQ8JkfVLwxpVb/UrRFErhEaZRwiX5S5Rv6vPXW
-         VQNWs1UCCJCC+rblI5xV7mDQLGIlW1+IdMc9fRmwH3q4frHl5f/WsbO1PmH/Hc+HBLm+
-         UOmY6g+Q/jK77zTLxpstRUKCEecv/HgTLR/EgcdKccd6Gp1y71jMUnHcF/iHoANcNRBN
-         BFcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PljnxRUh81pT/VZFsSxpCxfxThaMnEo3K5gwtxML1T4=;
-        b=xnB7Kh/wVoncfzppuSBi73eI2y25SKCSsaL8p5HkQSjZ4pB7a6noC4Unj9rWVtqK3w
-         UxLoksu2XpTAvugkZkes0yP+JFGA7/rI50502xGxOO4cbXkj5IhMAGwPIhSyr/vQ6DmQ
-         Jh0kHMmN6WPEXWWJ3yQXO+htExn28cuYciKqGhxPImyV63T3u18wwJhLQxPKeX6+Y7MA
-         MlUYbdVJWIcgl5OQEum7pXIcnvu9+VpnHhxtCA3NI74CzY0+PLeJYoP7mWG2tyhM7FqZ
-         4CJFdWMhTV2pY7GP7Geoeol8s+seF4kPnWzu0eDa+i/Vk+CaWQGfSHBVs295NJswFbn7
-         oM4A==
-X-Gm-Message-State: AOAM5335jt7letfCL+8FgiYamrX4SvRFK+6xBSNqcmIMz07bJCBr19BX
-        /BqVilDbEqe39LmLGgWLbGCQtg==
-X-Google-Smtp-Source: ABdhPJxP6gdki3QWyI62X0hWhCeuw+jp1SO/FmJ3sHN5jeLes6QLGVCoRpETcIf1m/9BtNHG/zYBEg==
-X-Received: by 2002:a17:907:6e25:b0:6f0:99d4:9711 with SMTP id sd37-20020a1709076e2500b006f099d49711mr12019128ejc.511.1650811995192;
-        Sun, 24 Apr 2022 07:53:15 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id gz15-20020a170906f2cf00b006f3802a963fsm1161681ejb.21.2022.04.24.07.53.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 07:53:14 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 22:53:07 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Timothy Hayes <timothy.hayes@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, John Garry <john.garry@huawei.com>,
+        with ESMTP id S240449AbiDXPbX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 24 Apr 2022 11:31:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEC8171C03;
+        Sun, 24 Apr 2022 08:28:20 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmX8l38tLzhYWb;
+        Sun, 24 Apr 2022 23:28:07 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 24 Apr
+ 2022 23:28:16 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 3/3] perf test: Add perf_event_attr test for Arm SPE
-Message-ID: <20220424145307.GE978927@leoy-ThinkPad-X240s>
-References: <20220421165205.117662-1-timothy.hayes@arm.com>
- <20220421165205.117662-4-timothy.hayes@arm.com>
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next v3 2/7] ftrace: Fix deadloop caused by direct call in ftrace selftest
+Date:   Sun, 24 Apr 2022 11:40:23 -0400
+Message-ID: <20220424154028.1698685-3-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220424154028.1698685-1-xukuohai@huawei.com>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421165205.117662-4-timothy.hayes@arm.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 05:52:05PM +0100, Timothy Hayes wrote:
-> Adds a perf_event_attr test for Arm SPE in which the presence of
-> physical addresses are checked when SPE unit is run with pa_enable=1.
-> 
-> Signed-off-by: Timothy Hayes <timothy.hayes@arm.com>
+After direct call is enabled for arm64, ftrace selftest enters a
+dead loop:
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
-Tested-by: Leo Yan <leo.yan@linaro.org>
+<trace_selftest_dynamic_test_func>:
+00  bti     c
+01  mov     x9, x30                            <trace_direct_tramp>:
+02  bl      <trace_direct_tramp>    ---------->     ret
+                                                     |
+                                         lr/x30 is 03, return to 03
+                                                     |
+03  mov     w0, #0x0   <-----------------------------|
+     |                                               |
+     |                   dead loop!                  |
+     |                                               |
+04  ret   ---- lr/x30 is still 03, go back to 03 ----|
 
-> ---
->  tools/perf/tests/attr/README                         |  1 +
->  .../perf/tests/attr/test-record-spe-physical-address | 12 ++++++++++++
->  2 files changed, 13 insertions(+)
->  create mode 100644 tools/perf/tests/attr/test-record-spe-physical-address
-> 
-> diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
-> index 454505d343fa..eb3f7d4bb324 100644
-> --- a/tools/perf/tests/attr/README
-> +++ b/tools/perf/tests/attr/README
-> @@ -60,6 +60,7 @@ Following tests are defined (with perf commands):
->    perf record -R kill                           (test-record-raw)
->    perf record -c 2 -e arm_spe_0// -- kill       (test-record-spe-period)
->    perf record -e arm_spe_0/period=3/ -- kill    (test-record-spe-period-term)
-> +  perf record -e arm_spe_0/pa_enable=1/ -- kill (test-record-spe-physical-address)
->    perf stat -e cycles kill                      (test-stat-basic)
->    perf stat kill                                (test-stat-default)
->    perf stat -d kill                             (test-stat-detailed-1)
-> diff --git a/tools/perf/tests/attr/test-record-spe-physical-address b/tools/perf/tests/attr/test-record-spe-physical-address
-> new file mode 100644
-> index 000000000000..7ebcf5012ce3
-> --- /dev/null
-> +++ b/tools/perf/tests/attr/test-record-spe-physical-address
-> @@ -0,0 +1,12 @@
-> +[config]
-> +command = record
-> +args    = --no-bpf-event -e arm_spe_0/pa_enable=1/ -- kill >/dev/null 2>&1
-> +ret     = 1
-> +arch    = aarch64
-> +
-> +[event-10:base-record-spe]
-> +# 622727 is the decimal of IP|TID|TIME|CPU|IDENTIFIER|DATA_SRC|PHYS_ADDR
-> +sample_type=622727
-> +
-> +# dummy event
-> +[event-1:base-record-spe]
-> \ No newline at end of file
-> -- 
-> 2.25.1
-> 
+The reason is that when the direct caller trace_direct_tramp() returns
+to the patched function trace_selftest_dynamic_test_func(), lr is still
+the address after the instrumented instruction in the patched function,
+so when the patched function exits, it returns to itself!
+
+To fix this issue, we need to restore lr before trace_direct_tramp()
+exits, so rewrite a dedicated trace_direct_tramp() for arm64.
+
+Reported-by: Li Huafei <lihuafei1@huawei.com>
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ kernel/trace/trace_selftest.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index abcadbe933bb..d2eff2b1d743 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -785,8 +785,24 @@ static struct fgraph_ops fgraph_ops __initdata  = {
+ };
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
++#ifdef CONFIG_ARM64
++extern void trace_direct_tramp(void);
++
++asm (
++"	.pushsection	.text, \"ax\", @progbits\n"
++"	.type		trace_direct_tramp, %function\n"
++"	.global		trace_direct_tramp\n"
++"trace_direct_tramp:"
++"	mov	x10, x30\n"
++"	mov	x30, x9\n"
++"	ret	x10\n"
++"	.size		trace_direct_tramp, .-trace_direct_tramp\n"
++"	.popsection\n"
++);
++#else
+ noinline __noclone static void trace_direct_tramp(void) { }
+ #endif
++#endif
+ 
+ /*
+  * Pretty much the same than for the function tracer from which the selftest
+-- 
+2.30.2
+
