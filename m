@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06927C433EF
-	for <bpf@archiver.kernel.org>; Sun, 24 Apr 2022 15:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E4A1C433F5
+	for <bpf@archiver.kernel.org>; Sun, 24 Apr 2022 15:34:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231969AbiDXPhD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 24 Apr 2022 11:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
+        id S232022AbiDXPhO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 24 Apr 2022 11:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240449AbiDXPbX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 24 Apr 2022 11:31:23 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEC8171C03;
-        Sun, 24 Apr 2022 08:28:20 -0700 (PDT)
+        with ESMTP id S240452AbiDXPbY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 24 Apr 2022 11:31:24 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4F6170E3F;
+        Sun, 24 Apr 2022 08:28:23 -0700 (PDT)
 Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KmX8l38tLzhYWb;
-        Sun, 24 Apr 2022 23:28:07 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KmX615WTxzGp53;
+        Sun, 24 Apr 2022 23:25:45 +0800 (CST)
 Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
  (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 24 Apr
- 2022 23:28:16 +0800
+ 2022 23:28:19 +0800
 From:   Xu Kuohai <xukuohai@huawei.com>
 To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
@@ -57,9 +57,9 @@ CC:     Catalin Marinas <catalin.marinas@arm.com>,
         Mark Brown <broonie@kernel.org>,
         Delyan Kratunov <delyank@fb.com>,
         Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf-next v3 2/7] ftrace: Fix deadloop caused by direct call in ftrace selftest
-Date:   Sun, 24 Apr 2022 11:40:23 -0400
-Message-ID: <20220424154028.1698685-3-xukuohai@huawei.com>
+Subject: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+Date:   Sun, 24 Apr 2022 11:40:25 -0400
+Message-ID: <20220424154028.1698685-5-xukuohai@huawei.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220424154028.1698685-1-xukuohai@huawei.com>
 References: <20220424154028.1698685-1-xukuohai@huawei.com>
@@ -74,65 +74,100 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-After direct call is enabled for arm64, ftrace selftest enters a
-dead loop:
+Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+it to replace nop with jump, or replace jump with nop.
 
-<trace_selftest_dynamic_test_func>:
-00  bti     c
-01  mov     x9, x30                            <trace_direct_tramp>:
-02  bl      <trace_direct_tramp>    ---------->     ret
-                                                     |
-                                         lr/x30 is 03, return to 03
-                                                     |
-03  mov     w0, #0x0   <-----------------------------|
-     |                                               |
-     |                   dead loop!                  |
-     |                                               |
-04  ret   ---- lr/x30 is still 03, go back to 03 ----|
-
-The reason is that when the direct caller trace_direct_tramp() returns
-to the patched function trace_selftest_dynamic_test_func(), lr is still
-the address after the instrumented instruction in the patched function,
-so when the patched function exits, it returns to itself!
-
-To fix this issue, we need to restore lr before trace_direct_tramp()
-exits, so rewrite a dedicated trace_direct_tramp() for arm64.
-
-Reported-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/trace/trace_selftest.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-index abcadbe933bb..d2eff2b1d743 100644
---- a/kernel/trace/trace_selftest.c
-+++ b/kernel/trace/trace_selftest.c
-@@ -785,8 +785,24 @@ static struct fgraph_ops fgraph_ops __initdata  = {
- };
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 8ab4035dea27..3f9bdfec54c4 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -9,6 +9,7 @@
  
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+#ifdef CONFIG_ARM64
-+extern void trace_direct_tramp(void);
+ #include <linux/bitfield.h>
+ #include <linux/bpf.h>
++#include <linux/memory.h>
+ #include <linux/filter.h>
+ #include <linux/printk.h>
+ #include <linux/slab.h>
+@@ -18,6 +19,7 @@
+ #include <asm/cacheflush.h>
+ #include <asm/debug-monitors.h>
+ #include <asm/insn.h>
++#include <asm/patching.h>
+ #include <asm/set_memory.h>
+ 
+ #include "bpf_jit.h"
+@@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
+ {
+ 	return vfree(addr);
+ }
 +
-+asm (
-+"	.pushsection	.text, \"ax\", @progbits\n"
-+"	.type		trace_direct_tramp, %function\n"
-+"	.global		trace_direct_tramp\n"
-+"trace_direct_tramp:"
-+"	mov	x10, x30\n"
-+"	mov	x30, x9\n"
-+"	ret	x10\n"
-+"	.size		trace_direct_tramp, .-trace_direct_tramp\n"
-+"	.popsection\n"
-+);
-+#else
- noinline __noclone static void trace_direct_tramp(void) { }
- #endif
-+#endif
- 
- /*
-  * Pretty much the same than for the function tracer from which the selftest
++static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
++			     void *addr, u32 *insn)
++{
++	if (!addr)
++		*insn = aarch64_insn_gen_nop();
++	else
++		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
++						    (unsigned long)addr,
++						    type);
++
++	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
++}
++
++int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
++		       void *old_addr, void *new_addr)
++{
++	int ret;
++	u32 old_insn;
++	u32 new_insn;
++	u32 replaced;
++	enum aarch64_insn_branch_type branch_type;
++
++	if (!is_bpf_text_address((long)ip))
++		/* Only poking bpf text is supported. Since kernel function
++		 * entry is set up by ftrace, we reply on ftrace to poke kernel
++		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
++		 * called after a failed poke with ftrace. In this case, there
++		 * is probably something wrong with fentry, so there is nothing
++		 * we can do here. See register_fentry, unregister_fentry and
++		 * modify_fentry for details.
++		 */
++		return -EINVAL;
++
++	if (poke_type == BPF_MOD_CALL)
++		branch_type = AARCH64_INSN_BRANCH_LINK;
++	else
++		branch_type = AARCH64_INSN_BRANCH_NOLINK;
++
++	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
++		return -EFAULT;
++
++	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
++		return -EFAULT;
++
++	mutex_lock(&text_mutex);
++	if (aarch64_insn_read(ip, &replaced)) {
++		ret = -EFAULT;
++		goto out;
++	}
++
++	if (replaced != old_insn) {
++		ret = -EFAULT;
++		goto out;
++	}
++
++	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
++out:
++	mutex_unlock(&text_mutex);
++	return ret;
++}
 -- 
 2.30.2
 
