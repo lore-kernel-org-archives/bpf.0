@@ -2,213 +2,134 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9B07C4321E
-	for <bpf@archiver.kernel.org>; Mon, 25 Apr 2022 22:21:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEC3EC433EF
+	for <bpf@archiver.kernel.org>; Mon, 25 Apr 2022 22:34:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiDYWYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Apr 2022 18:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55496 "EHLO
+        id S230156AbiDYWhT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Apr 2022 18:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343630AbiDYVwC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:52:02 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4FF3AA52
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 14:48:54 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso394247wma.0
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 14:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i3g7+LN6g47+LAildy/dOa6umRojr4CwCIm2qQex3m4=;
-        b=QkgFm5ud5f8TG4VRDKm54eW869BVn0aXDMQNiIZrXcX8hxpC/GbSSF1+mo1AJfQeBB
-         ruq79rNUJoiHZ++7Z/KhayHCk8Lf6J2naHQVvLEwoZUixMcOE8jaxTm+SBXT3qtwOZ5A
-         fDj5GWQQE/ukjvo7DTiYbZnB8dc6URBT4D4wCqjEVJ1B2PJWMmhk3st7OHXxPlbHHVG3
-         2Gj+FqsG40nOINNN8G3s5xKKjlhuRTReqMlqslcGA0NOKCz134/DLcfaLtEZrmxPfuAL
-         AIC53P9oFEopCr9kPhGotPK1U7rDWhCUcuwsbQchPY0+RMa1Ha/MbtANDIbCD/GyjTVi
-         UDNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i3g7+LN6g47+LAildy/dOa6umRojr4CwCIm2qQex3m4=;
-        b=1PGr4T+dAYLgvAe/5eGr/3vSDd8lfcNROgAwNiaAB2KB/yQ/sifnEWp/sIVewsshvA
-         TKCwaXzVJXgcSOEQWM/OEet9/N5toLBCwSn3y+Q5TM411l/y18W2rajIQ2nXXrff8LkR
-         QPJvWaI5LgsFOZ6hoaHtoceUfJcqqRyiyQRW8TNbolxjhcAuDNsLyy1Y6gyHVNfMKtco
-         kAs8RI90adgL5Pc1nvjG2+h9FIxVts41S0m9xzmvzaAl65Tso2/89kuz73aTLUfOS95i
-         niXO1F2dns//gw3AfG6PFnxPsdSptvXcyMYOAClqeWrpQeWa5rhkDZURMcEcWPqKHL77
-         G7nA==
-X-Gm-Message-State: AOAM533U1hE1dvMSmBxd9a7gtDth7gFq2kL3DIbiuSaHghZ/QH9n3/1I
-        xN6TBCjwCNduXuS7CSfgjDSG4Ce8i5ubIPXHw1O4mQ==
-X-Google-Smtp-Source: ABdhPJwZ/Me+/UZWIQaqf3MI5v8Kn/V3HnlN/Fp53TROB4hb7rFdoVgPg33rwI6iJ8Qgs4OxNU5pQsdQ/dCG6NPofho=
-X-Received: by 2002:a1c:2904:0:b0:37b:ea53:4cbf with SMTP id
- p4-20020a1c2904000000b0037bea534cbfmr18326125wmp.46.1650923333338; Mon, 25
- Apr 2022 14:48:53 -0700 (PDT)
+        with ESMTP id S232174AbiDYWhQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Apr 2022 18:37:16 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98916F8952;
+        Mon, 25 Apr 2022 15:34:10 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 0B439C009; Tue, 26 Apr 2022 00:34:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1650926049; bh=FO8lBDbgbFDnZpS6QEZLDuT4Og863KeNmQh+iSxsAos=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=4p5bDOi4kml8LAfT3y9DVdbqrU9AHDOLFRViKm0GcHmpdfk88q+p+pBWZI2QNN1r2
+         leaw/ggHd42no9n5L6wVZUTRKLMgI9TD8vRfNYrmZ8cicfWcjV+Ds0ZsZnNANOVImK
+         ENXAWv8H08j6U/ADSTHA7Bi+k2PtwfiMJVIRi6VCk+ur16DjOVEe7QZZC1/VPNO6EA
+         S5IaZ2VJNJQttpagCfiF4dmZdxMmCVcjNxx5GmN4WcuK7Foqjq7RCHJ8+JhVjJlf7V
+         Sdk7yDmRrq+FtTtpAOwmMMlylXRCP5vwd5SLYDgvYE93Sv1MKgQ7Z3bTn7kU9VYacc
+         7fJYAflviWvmw==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 17F84C009;
+        Tue, 26 Apr 2022 00:34:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1650926048; bh=FO8lBDbgbFDnZpS6QEZLDuT4Og863KeNmQh+iSxsAos=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vnlE41CTMa82HWCJ27fSorsXxGCcFFmWdefNZZNWKm42GWrkP6o7JuA0S8JAQhI1L
+         Ex6RtE5Qj3N0IeuF1lrcNCmNI4j8ANCzWdm5ZanNbXUpJMd2l6VolZk4E+0tRBMFWH
+         6z7WA1o8Dr14Dkt7NLdQ5wp15ClTp0Z/cP03W7PUiT744N2jFc41moSBiRtqt3u11A
+         3VCJSN/c+KiWOHdaZ/ertGicVTAvXQxFdRmvJCHnzRid7gW9/i+F7fXhuVlUtwicve
+         3noPTz7eZ2VUhMrZ9O3EvAwNrzCG/qTt0IM3rKcVzFaVzcGIxU4ON+7aaENHN0zvtr
+         IrjZFtAJaCksw==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 81b62d03;
+        Mon, 25 Apr 2022 22:34:00 +0000 (UTC)
+Date:   Tue, 26 Apr 2022 07:33:45 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH 1/4] tools/bpf/runqslower: musl compat: explicitly link
+ with libargp if found
+Message-ID: <YmchyUOkfKW1Qzxf@codewreck.org>
+References: <20220424051022.2619648-1-asmadeus@codewreck.org>
+ <20220424051022.2619648-2-asmadeus@codewreck.org>
+ <YmT1GxK1HimY2Os9@codewreck.org>
+ <80728495-e1fe-21bb-9814-6251648f8359@iogearbox.net>
 MIME-Version: 1.0
-References: <20220419222259.287515-1-sdf@google.com> <CAEf4BzYoA4xvqv7SaM2TvcbKef=m4n6TSGVNA34T2we05fRwpw@mail.gmail.com>
- <CAKH8qBsTiQA5knxoBSqxCYav89QdSN0j6t1EWX1MEVbAqLj6kg@mail.gmail.com> <20220425203759.yxyyvdarx4woegfg@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20220425203759.yxyyvdarx4woegfg@kafai-mbp.dhcp.thefacebook.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 25 Apr 2022 14:48:41 -0700
-Message-ID: <CAKH8qBvq54azM0TTpPNWdQJxEVLwQ0PPY1860njYbUqJpH319Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: use bpf_prog_run_array_cg_flags everywhere
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <80728495-e1fe-21bb-9814-6251648f8359@iogearbox.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 1:38 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Wed, Apr 20, 2022 at 03:30:43PM -0700, Stanislav Fomichev wrote:
-> > On Wed, Apr 20, 2022 at 3:04 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Tue, Apr 19, 2022 at 3:23 PM Stanislav Fomichev <sdf@google.com> wrote:
-> > > >
-> > > > Rename bpf_prog_run_array_cg_flags to bpf_prog_run_array_cg and
-> > > > use it everywhere. check_return_code already enforces sane
-> > > > return ranges for all cgroup types. (only egress and bind hooks have
-> > > > uncanonical return ranges, the rest is using [0, 1])
-> > > >
-> > > > No functional changes.
-> > > >
-> > > > Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> > > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > > > ---
-> > > >  include/linux/bpf-cgroup.h |  8 ++---
-> > > >  kernel/bpf/cgroup.c        | 70 ++++++++++++--------------------------
-> > > >  2 files changed, 24 insertions(+), 54 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> > > > index 88a51b242adc..669d96d074ad 100644
-> > > > --- a/include/linux/bpf-cgroup.h
-> > > > +++ b/include/linux/bpf-cgroup.h
-> > > > @@ -225,24 +225,20 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
-> > > >
-> > > >  #define BPF_CGROUP_RUN_SA_PROG(sk, uaddr, atype)                                      \
-> > > >  ({                                                                            \
-> > > > -       u32 __unused_flags;                                                    \
-> > > >         int __ret = 0;                                                         \
-> > > >         if (cgroup_bpf_enabled(atype))                                         \
-> > > >                 __ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, atype,     \
-> > > > -                                                         NULL,                \
-> > > > -                                                         &__unused_flags);    \
-> > > > +                                                         NULL, NULL);         \
-> > > >         __ret;                                                                 \
-> > > >  })
-> > > >
-> > > >  #define BPF_CGROUP_RUN_SA_PROG_LOCK(sk, uaddr, atype, t_ctx)                  \
-> > > >  ({                                                                            \
-> > > > -       u32 __unused_flags;                                                    \
-> > > >         int __ret = 0;                                                         \
-> > > >         if (cgroup_bpf_enabled(atype))  {                                      \
-> > > >                 lock_sock(sk);                                                 \
-> > > >                 __ret = __cgroup_bpf_run_filter_sock_addr(sk, uaddr, atype,     \
-> > > > -                                                         t_ctx,               \
-> > > > -                                                         &__unused_flags);    \
-> > > > +                                                         t_ctx, NULL);        \
-> > > >                 release_sock(sk);                                              \
-> > > >         }                                                                      \
-> > > >         __ret;                                                                 \
-> > > > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > > > index 0cb6211fcb58..f61eca32c747 100644
-> > > > --- a/kernel/bpf/cgroup.c
-> > > > +++ b/kernel/bpf/cgroup.c
-> > > > @@ -25,50 +25,18 @@ EXPORT_SYMBOL(cgroup_bpf_enabled_key);
-> > > >  /* __always_inline is necessary to prevent indirect call through run_prog
-> > > >   * function pointer.
-> > > >   */
-> > > > -static __always_inline int
-> > > > -bpf_prog_run_array_cg_flags(const struct cgroup_bpf *cgrp,
-> > > > -                           enum cgroup_bpf_attach_type atype,
-> > > > -                           const void *ctx, bpf_prog_run_fn run_prog,
-> > > > -                           int retval, u32 *ret_flags)
-> > > > -{
-> > > > -       const struct bpf_prog_array_item *item;
-> > > > -       const struct bpf_prog *prog;
-> > > > -       const struct bpf_prog_array *array;
-> > > > -       struct bpf_run_ctx *old_run_ctx;
-> > > > -       struct bpf_cg_run_ctx run_ctx;
-> > > > -       u32 func_ret;
-> > > > -
-> > > > -       run_ctx.retval = retval;
-> > > > -       migrate_disable();
-> > > > -       rcu_read_lock();
-> > > > -       array = rcu_dereference(cgrp->effective[atype]);
-> > > > -       item = &array->items[0];
-> > > > -       old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
-> > > > -       while ((prog = READ_ONCE(item->prog))) {
-> > > > -               run_ctx.prog_item = item;
-> > > > -               func_ret = run_prog(prog, ctx);
-> > > > -               if (!(func_ret & 1) && !IS_ERR_VALUE((long)run_ctx.retval))
-> > > > -                       run_ctx.retval = -EPERM;
-> > > > -               *(ret_flags) |= (func_ret >> 1);
-> > > > -               item++;
-> > > > -       }
-> > > > -       bpf_reset_run_ctx(old_run_ctx);
-> > > > -       rcu_read_unlock();
-> > > > -       migrate_enable();
-> > > > -       return run_ctx.retval;
-> > > > -}
-> > > > -
-> > > >  static __always_inline int
-> > > >  bpf_prog_run_array_cg(const struct cgroup_bpf *cgrp,
-> > > >                       enum cgroup_bpf_attach_type atype,
-> > > >                       const void *ctx, bpf_prog_run_fn run_prog,
-> > > > -                     int retval)
-> > > > +                     int retval, u32 *ret_flags)
-> > > >  {
-> > > >         const struct bpf_prog_array_item *item;
-> > > >         const struct bpf_prog *prog;
-> > > >         const struct bpf_prog_array *array;
-> > > >         struct bpf_run_ctx *old_run_ctx;
-> > > >         struct bpf_cg_run_ctx run_ctx;
-> > > > +       u32 func_ret;
-> > > >
-> > > >         run_ctx.retval = retval;
-> > > >         migrate_disable();
-> > > > @@ -78,8 +46,11 @@ bpf_prog_run_array_cg(const struct cgroup_bpf *cgrp,
-> > > >         old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
-> > > >         while ((prog = READ_ONCE(item->prog))) {
-> > > >                 run_ctx.prog_item = item;
-> > > > -               if (!run_prog(prog, ctx) && !IS_ERR_VALUE((long)run_ctx.retval))
-> > > > +               func_ret = run_prog(prog, ctx);
-> > > > +               if (!(func_ret & 1) && !IS_ERR_VALUE((long)run_ctx.retval))
-> > >
-> > > to be completely true to previous behavior, shouldn't there be
-> > >
-> > > if (ret_flags)
-> > >     func_ret &= 1;
-> > > if (!func_ret && !IS_ERR_VALUE(...))
-> > >
-> > > here?
-> > >
-> > > This might have been discussed previously and I missed it. If that's
-> > > so, please ignore.
-> >
-> > We are converting the cases where run_prog(prog, ctx) returns 0 or 1,
-> > so it seems like we don't have to reproduce the existing behavior
-> > 1-to-1?
-> > So I'm not sure it matters, or am I missing something?
-> A nit, how about testing 'if (ret_flags)' first such that
-> it is obvious which case will use higher bits in the return value.
-> The compiler may be able to optimize the ret_flags == NULL case also ?
->
-> Something like:
->
->         func_ret = run_prog(prog, ctx);
->         /* The cg bpf prog uses the higher bits of the return value */
->         if (ret_flags) {
->                 *(ret_flags) |= (func_ret >> 1);
->                 func_ret &= 1;
->         }
->         if (!func_ret && !IS_ERR_VALUE((long)run_ctx.retval))
->                 run_ctx.retval = -EPERM;
+Daniel Borkmann wrote on Mon, Apr 25, 2022 at 11:35:41PM +0200:
+> > I've dropped this patch from my alpine MR[1] and built things directly
+> > with make bpftool etc as suggested above, so my suggestion to make it
+> > more easily buildable that way is probably the way to go?
+> > [1] https://gitlab.alpinelinux.org/alpine/aports/-/merge_requests/33554
+> 
+> Thanks for looking into this, Dominique! I slightly massaged patch 3 & 4
+> and applied it to bpf-next tree.
 
-Sure, this should also address Andrii's point I think. Will resend a v2.
+Thanks!
+
+> I don't really mind about patch 1 & 2, though out of tools/bpf/ the only
+> one you /really/ might want to package is bpftool. The other tools are on
+> the legacy side of things and JIT disasm you can also get via bpftool anyway.
+
+I was thinking the other tools still had their uses, but I'll readily
+admit I've never had a need for them so wasn't sure if I should package
+them together or not.
+
+I can see the use of bpf_dbg, but it's occasional enough that people who
+need it can just build it when they need... Let's drop both patches and
+I'll remove the other legacy tools from package as well.
+
+My last concern would then just be to build it more easily. I just
+noticed I can actually 'make bpf/bpftool' directly from the tools/
+parent directory, but there's no equivalent for _install rules.
+
+Would something like this make sense? (I can resend as proper patch if
+so)
+----
+diff --git a/tools/Makefile b/tools/Makefile
+index db2f7b8ebed5..743d242aebb3 100644
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -112,6 +112,9 @@ cpupower_install:
+ cgroup_install counter_install firewire_install gpio_install hv_install iio_install perf_install bootconfig_install spi_install usb_install virtio_install vm_install bpf_install objtool_install wmi_install pci_install debugging_install tracing_install:
+        $(call descend,$(@:_install=),install)
+ 
++bpf/%_install: FORCE
++       $(call descend,$(@:_install=),install)
++
+ selftests_install:
+        $(call descend,testing/$(@:_install=),install)
+ 
+----
+
+
+> Given this is not covered by BPF CI, are you planning to regularly check
+> for musl compatibility before a new kernel is cut?
+
+alpine doesn't update the 'tools' subpackage with every kernel release,
+I'm not sure what the exact schedule is but from the looks of it it
+tracks LTS releases with updates every few months within the stable
+release or to the next one.
+
+
+I don't really have any resource to run a regular CI, but I guess I can
+check from time to time.. If I ever get around to adding a linux-next
+test to work's CI I can check bpftool builds at the same time, but who
+knows when that'll ever be.
+
+OTOH I had a first look last year (back when I tried to push
+ACTIONRETVAL to musl) and there haven't been any new incompatibility, so
+I think it's fine to just deal with minor hiccups when alpine upgrades
+once in a while.
+
+-- 
+Dominique
