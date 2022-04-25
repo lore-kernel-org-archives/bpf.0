@@ -2,124 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD61C433EF
-	for <bpf@archiver.kernel.org>; Mon, 25 Apr 2022 20:43:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C40DC433F5
+	for <bpf@archiver.kernel.org>; Mon, 25 Apr 2022 21:01:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245629AbiDYUq0 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Apr 2022 16:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
+        id S245336AbiDYVEY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Apr 2022 17:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245622AbiDYUqY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Apr 2022 16:46:24 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F65BECCEC
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 13:43:17 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PIVi2F009635
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 13:43:17 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fp10e910a-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 13:43:17 -0700
-Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 13:43:15 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 56C29652E7A1; Mon, 25 Apr 2022 13:40:35 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <kernel-team@fb.com>, <hch@infradead.org>, <peterz@infradead.org>,
-        <torvalds@linux-foundation.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v2 bpf 1/3] bpf: fill new bpf_prog_pack with illegal instructions
-Date:   Mon, 25 Apr 2022 13:39:45 -0700
-Message-ID: <20220425203947.3311308-2-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220425203947.3311308-1-song@kernel.org>
-References: <20220425203947.3311308-1-song@kernel.org>
+        with ESMTP id S231753AbiDYVEY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Apr 2022 17:04:24 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4991167C4;
+        Mon, 25 Apr 2022 14:01:18 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso309877wml.1;
+        Mon, 25 Apr 2022 14:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F0Wqha00tJlONZuaPT+kIQeQKt6+cyUurVU3OwL9MQ8=;
+        b=Cox9LyVwKYukwokad9zF3+dkLCkrBEMLcFoiTsgL3EcV2ue6iyY2KSSJl0MZMVTm5W
+         iTf1akXBASsM/m1o4cDefkTymgrUsu4kg0bcB70ohCuQzxdP60/DWaoXmAz9paRizmV2
+         7fIyk097aNIAkatUVyhiaE6tJNANsM/fYYEHCAALSJBCgOrJXLifFGYj2uGlQWSbHxI7
+         fN1MypHnLdh7S9vAri+LfJ37kduF71FJ7FFjhto6pXt583zVY3ye+kpU1XsLFJUPmb8h
+         A1fhiOnqY+2ZoLUGufeY4MYUOGljoTjRPPjeZHTEiFtq95812LpX7IMBFXiyZAVs0Acj
+         L73w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F0Wqha00tJlONZuaPT+kIQeQKt6+cyUurVU3OwL9MQ8=;
+        b=4vR1hNA9gcUdO79EzMv6CpsIzZZ/7nCvcjHjzFbWyfCI2h35Tdte6XGrJ7ns7bgMdj
+         t1BfBepsZoRkK7jRjY95H98FKkxcbqd7ff9/FySamW9znyhRVTUUqu+DN2eF4ebDXTRW
+         A7cuoCmT0zuEa6ASl5eBBXvDnwNHaW0H8FYAzb+KXj1TZfCUO2TTVM8ItuICUWo81aSW
+         vg0vrA+51gk9MbV0vNS3qE2xx5dG0yFv1gL/7uJNWPPGsVmRiDFd4XcWdODSiE8mZSM6
+         NMClyqyP2jcZCktx41hM2cLSDsBtDA8CZptGB7r0TTY71qIilYBsdROBDWMA56ZS8ua/
+         rNOg==
+X-Gm-Message-State: AOAM530WiPA9HSynneH0RxU/iFGXelAIi7BvpagpkWai9O4GNzVLDGF/
+        SKVPEvJcWbvbuP0KwmDQ3uQ=
+X-Google-Smtp-Source: ABdhPJyN+qjSO23iBiSRTCicfMm9+inXCycFjx6L88fyJtPxu99EfrcvJewaw6pSqSPd+yNZ9eANRg==
+X-Received: by 2002:a1c:ac44:0:b0:38e:a7df:3179 with SMTP id v65-20020a1cac44000000b0038ea7df3179mr18634853wme.61.1650920477587;
+        Mon, 25 Apr 2022 14:01:17 -0700 (PDT)
+Received: from [192.168.0.160] ([170.253.36.171])
+        by smtp.gmail.com with ESMTPSA id b2-20020adfc742000000b0020ac89e4241sm10732022wrh.31.2022.04.25.14.01.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 14:01:17 -0700 (PDT)
+Message-ID: <31702ffb-380f-69f9-ab87-3aec5b22537c@gmail.com>
+Date:   Mon, 25 Apr 2022 23:01:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: MNLorSazeK9Ou72qR_BHSDuX1mCNhyxQ
-X-Proofpoint-ORIG-GUID: MNLorSazeK9Ou72qR_BHSDuX1mCNhyxQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_10,2022-04-25_03,2022-02-23_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] bpf.2: Note that unused fields and padding in bpf_attr
+ must be zero
+Content-Language: en-US
+To:     Jakub Sitnicki <jakub@cloudflare.com>, linux-man@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Michael Kerrisk <mtk.manpages@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+References: <20220425160803.114851-1-jakub@cloudflare.com>
+From:   Alejandro Colomar <alx.manpages@gmail.com>
+In-Reply-To: <20220425160803.114851-1-jakub@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_prog_pack enables sharing huge pages among multiple BPF programs.
-These pages are marked as executable before the JIT engine fill it with
-BPF programs. To make these pages safe, fill the hole bpf_prog_pack with
-illegal instructions before making it executable.
+Hi Jakub,
 
-Fixes: 57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
-Fixes: 33c9805860e5 ("bpf: Introduce bpf_jit_binary_pack_[alloc|finalize|free]")
-Signed-off-by: Song Liu <song@kernel.org>
----
- kernel/bpf/core.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+On 4/25/22 18:08, Jakub Sitnicki wrote:
+> In a discussion regarding a potential backward incompatible change [1],
+> Andrii Nakryiko points out that unused bytes of bpf_attr should be
+> zero. Add this bit of information to the bpf(2) man page.
+> 
+> [1] https://lore.kernel.org/bpf/CAEf4BzbT4vQBnZzdD00SuPCDkeb4Cm=F6PLUoO_3X93UQD5hbQ@mail.gmail.com/
+> 
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 13e9dbeeedf3..132dfba389be 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -873,7 +873,7 @@ static size_t select_bpf_prog_pack_size(void)
- 	return size;
- }
- 
--static struct bpf_prog_pack *alloc_new_pack(void)
-+static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	struct bpf_prog_pack *pack;
- 
-@@ -886,6 +886,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
- 		kfree(pack);
- 		return NULL;
- 	}
-+	bpf_fill_ill_insns(pack->ptr, bpf_prog_pack_size);
- 	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
- 	list_add_tail(&pack->list, &pack_list);
- 
-@@ -895,7 +896,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
- 	return pack;
- }
- 
--static void *bpf_prog_pack_alloc(u32 size)
-+static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
- 	struct bpf_prog_pack *pack;
-@@ -910,6 +911,7 @@ static void *bpf_prog_pack_alloc(u32 size)
- 		size = round_up(size, PAGE_SIZE);
- 		ptr = module_alloc(size);
- 		if (ptr) {
-+			bpf_fill_ill_insns(ptr, size);
- 			set_vm_flush_reset_perms(ptr);
- 			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
- 			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
-@@ -923,7 +925,7 @@ static void *bpf_prog_pack_alloc(u32 size)
- 			goto found_free_area;
- 	}
- 
--	pack = alloc_new_pack();
-+	pack = alloc_new_pack(bpf_fill_ill_insns);
- 	if (!pack)
- 		goto out;
- 
-@@ -1102,7 +1104,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
- 
- 	if (bpf_jit_charge_modmem(size))
- 		return NULL;
--	ro_header = bpf_prog_pack_alloc(size);
-+	ro_header = bpf_prog_pack_alloc(size, bpf_fill_ill_insns);
- 	if (!ro_header) {
- 		bpf_jit_uncharge_modmem(size);
- 		return NULL;
--- 
-2.30.2
+Patch applied.
 
+Thanks,
+
+Alex
+
+> ---
+>   man2/bpf.2 | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/man2/bpf.2 b/man2/bpf.2
+> index 2d257eaa6..ee57226ee 100644
+> --- a/man2/bpf.2
+> +++ b/man2/bpf.2
+> @@ -142,7 +142,7 @@ provided via
+>   .IR attr ,
+>   which is a pointer to a union of type
+>   .I bpf_attr
+> -(see below).
+> +(see below). The unused fields and padding must be zeroed out before the call.
+
+But I changed it to add a separate line, instead of continuation in the 
+same one.
+
+>   The
+>   .I size
+>   argument is the size of the union pointed to by
