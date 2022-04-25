@@ -2,109 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C40DC433F5
-	for <bpf@archiver.kernel.org>; Mon, 25 Apr 2022 21:01:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A3E0C433F5
+	for <bpf@archiver.kernel.org>; Mon, 25 Apr 2022 22:21:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245336AbiDYVEY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 25 Apr 2022 17:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
+        id S229614AbiDYWYb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Apr 2022 18:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiDYVEY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Apr 2022 17:04:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4991167C4;
-        Mon, 25 Apr 2022 14:01:18 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso309877wml.1;
-        Mon, 25 Apr 2022 14:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=F0Wqha00tJlONZuaPT+kIQeQKt6+cyUurVU3OwL9MQ8=;
-        b=Cox9LyVwKYukwokad9zF3+dkLCkrBEMLcFoiTsgL3EcV2ue6iyY2KSSJl0MZMVTm5W
-         iTf1akXBASsM/m1o4cDefkTymgrUsu4kg0bcB70ohCuQzxdP60/DWaoXmAz9paRizmV2
-         7fIyk097aNIAkatUVyhiaE6tJNANsM/fYYEHCAALSJBCgOrJXLifFGYj2uGlQWSbHxI7
-         fN1MypHnLdh7S9vAri+LfJ37kduF71FJ7FFjhto6pXt583zVY3ye+kpU1XsLFJUPmb8h
-         A1fhiOnqY+2ZoLUGufeY4MYUOGljoTjRPPjeZHTEiFtq95812LpX7IMBFXiyZAVs0Acj
-         L73w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=F0Wqha00tJlONZuaPT+kIQeQKt6+cyUurVU3OwL9MQ8=;
-        b=4vR1hNA9gcUdO79EzMv6CpsIzZZ/7nCvcjHjzFbWyfCI2h35Tdte6XGrJ7ns7bgMdj
-         t1BfBepsZoRkK7jRjY95H98FKkxcbqd7ff9/FySamW9znyhRVTUUqu+DN2eF4ebDXTRW
-         A7cuoCmT0zuEa6ASl5eBBXvDnwNHaW0H8FYAzb+KXj1TZfCUO2TTVM8ItuICUWo81aSW
-         vg0vrA+51gk9MbV0vNS3qE2xx5dG0yFv1gL/7uJNWPPGsVmRiDFd4XcWdODSiE8mZSM6
-         NMClyqyP2jcZCktx41hM2cLSDsBtDA8CZptGB7r0TTY71qIilYBsdROBDWMA56ZS8ua/
-         rNOg==
-X-Gm-Message-State: AOAM530WiPA9HSynneH0RxU/iFGXelAIi7BvpagpkWai9O4GNzVLDGF/
-        SKVPEvJcWbvbuP0KwmDQ3uQ=
-X-Google-Smtp-Source: ABdhPJyN+qjSO23iBiSRTCicfMm9+inXCycFjx6L88fyJtPxu99EfrcvJewaw6pSqSPd+yNZ9eANRg==
-X-Received: by 2002:a1c:ac44:0:b0:38e:a7df:3179 with SMTP id v65-20020a1cac44000000b0038ea7df3179mr18634853wme.61.1650920477587;
-        Mon, 25 Apr 2022 14:01:17 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id b2-20020adfc742000000b0020ac89e4241sm10732022wrh.31.2022.04.25.14.01.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 14:01:17 -0700 (PDT)
-Message-ID: <31702ffb-380f-69f9-ab87-3aec5b22537c@gmail.com>
-Date:   Mon, 25 Apr 2022 23:01:15 +0200
+        with ESMTP id S1343547AbiDYVdR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Apr 2022 17:33:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D272252B0;
+        Mon, 25 Apr 2022 14:30:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B7086147E;
+        Mon, 25 Apr 2022 21:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B94CC385A9;
+        Mon, 25 Apr 2022 21:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650922211;
+        bh=xjGNuD4uYKuUJzeSWkeUROx9AjVzUsYZauu252ps7hA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=o5/CTEh74uaRaH5Ud3HV7kLOj26y3kIMWCY264ki2VM42SPKZ4nWKneMlP7pmHKIh
+         AOaCqYnCMFO+7YoTQwCKX1jbmKAgNqaPk5ab19LVT4ooDQFtpuUfe5n0l5DRWzck0K
+         lici1u7haemSOUF+aK1By7NSC05214+Fi+PR8P8uPziE8m4/wMpw4g2Vr+Lkw69RDv
+         5BaGiEeU4m9uz9JY0O7UVayL5cRQxT/8kA32YIS/b+FpkPAybjL7pWYiGlSM2Bh1gb
+         mHAsANM8WmK+srNoQPvtVYJfFif66M6ymN4qKLDvaOYRulbCzc1ST5dYQATPh0g/fx
+         wYUVMoUYDb2Hg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 41137E6D402;
+        Mon, 25 Apr 2022 21:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] bpf.2: Note that unused fields and padding in bpf_attr
- must be zero
-Content-Language: en-US
-To:     Jakub Sitnicki <jakub@cloudflare.com>, linux-man@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Michael Kerrisk <mtk.manpages@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20220425160803.114851-1-jakub@cloudflare.com>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <20220425160803.114851-1-jakub@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/4] tools/bpf: allow building with musl
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165092221126.11408.5748679293507022115.git-patchwork-notify@kernel.org>
+Date:   Mon, 25 Apr 2022 21:30:11 +0000
+References: <20220424051022.2619648-1-asmadeus@codewreck.org>
+In-Reply-To: <20220424051022.2619648-1-asmadeus@codewreck.org>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kpsingh@kernel.org,
+        john.fastabend@gmail.com, yhs@fb.com, songliubraving@fb.com,
+        kafai@fb.com, andrii@kernel.org, daniel@iogearbox.net,
+        ast@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Jakub,
+Hello:
 
-On 4/25/22 18:08, Jakub Sitnicki wrote:
-> In a discussion regarding a potential backward incompatible change [1],
-> Andrii Nakryiko points out that unused bytes of bpf_attr should be
-> zero. Add this bit of information to the bpf(2) man page.
+This series was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
+
+On Sun, 24 Apr 2022 14:10:18 +0900 you wrote:
+> Hi,
 > 
-> [1] https://lore.kernel.org/bpf/CAEf4BzbT4vQBnZzdD00SuPCDkeb4Cm=F6PLUoO_3X93UQD5hbQ@mail.gmail.com/
+> I'd like to build bpftool on alpine linux, which is musl based.
 > 
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-
-Patch applied.
-
-Thanks,
-
-Alex
-
-> ---
->   man2/bpf.2 | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> There are a few incompatibilities with it, I've commented on each patch
+> when I could think of alternative solutions.
 > 
-> diff --git a/man2/bpf.2 b/man2/bpf.2
-> index 2d257eaa6..ee57226ee 100644
-> --- a/man2/bpf.2
-> +++ b/man2/bpf.2
-> @@ -142,7 +142,7 @@ provided via
->   .IR attr ,
->   which is a pointer to a union of type
->   .I bpf_attr
-> -(see below).
-> +(see below). The unused fields and padding must be zeroed out before the call.
+> [...]
 
-But I changed it to add a separate line, instead of continuation in the 
-same one.
+Here is the summary with links:
+  - [1/4] tools/bpf/runqslower: musl compat: explicitly link with libargp if found
+    (no matching commit)
+  - [2/4] tools/bpf: musl compat: do not use DEFFILEMODE
+    (no matching commit)
+  - [3/4] tools/bpf: musl compat: replace nftw with FTW_ACTIONRETVAL
+    https://git.kernel.org/bpf/bpf-next/c/93bc2e9e943d
+  - [4/4] tools/bpf: replace sys/fcntl.h by fcntl.h
+    https://git.kernel.org/bpf/bpf-next/c/246bdfa52f33
 
->   The
->   .I size
->   argument is the size of the union pointed to by
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
