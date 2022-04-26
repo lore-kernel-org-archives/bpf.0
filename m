@@ -2,324 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C615DC433EF
-	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 00:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A46D1C433F5
+	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 03:30:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236441AbiDZAsz convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Apr 2022 20:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
+        id S243080AbiDZDdw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 25 Apr 2022 23:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240553AbiDZAsu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Apr 2022 20:48:50 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078F922BED
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:44 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PHP6um005268
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:44 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fmf9pxhcu-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:44 -0700
-Received: from twshared16308.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 17:45:43 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 5232B18FD8F68; Mon, 25 Apr 2022 17:45:34 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 09/10] libbpf: fix up verifier log for unguarded failed CO-RE relos
-Date:   Mon, 25 Apr 2022 17:45:10 -0700
-Message-ID: <20220426004511.2691730-10-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220426004511.2691730-1-andrii@kernel.org>
-References: <20220426004511.2691730-1-andrii@kernel.org>
+        with ESMTP id S241637AbiDZDda (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Apr 2022 23:33:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1223A218F
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 20:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25A79B81C06
+        for <bpf@vger.kernel.org>; Tue, 26 Apr 2022 03:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB218C385AA;
+        Tue, 26 Apr 2022 03:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650943813;
+        bh=qfbGCtcNjO3C424FYqhHFo96zxapyD00RmOGJW1E//8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=WkbikMJQrhxSVgjfccgOda2rGWkzMBwfLVEnYs17u4PS1emslS32M5a8zOVURJcg9
+         aTad8KhICcTEckSqx2eQjuQR8CABlGvjqin28thi3CGT+tvpcs6PfTNW3nrFWH+bLI
+         Eq7BJ5OzdAv22pVzQXGO28/LeKxp5L7fOn9yINztywozDerv0M2BXtHEh5Pc+uWWHd
+         9Cm5EV1ur5ucxvSkas4rnfXccmnvV7loB19pNUxT1uBA51EdYkHqbseWN52B+pLnsI
+         sk8yDx06FCCsrB/zcgqPg6JcqA4MRPK2Hy/Yre1sc0WxHqOr3aMpuYyBzoJhBjElr0
+         RwwLxabreo+ug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B13A5F67CA0;
+        Tue, 26 Apr 2022 03:30:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: hZm28JluQiwiGsIfNmDL_prraMF-mVAm
-X-Proofpoint-GUID: hZm28JluQiwiGsIfNmDL_prraMF-mVAm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-25_10,2022-04-25_03,2022-02-23_01
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v6 00/13] Introduce typed pointer support in BPF maps
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165094381372.16200.4266574915609138516.git-patchwork-notify@kernel.org>
+Date:   Tue, 26 Apr 2022 03:30:13 +0000
+References: <20220424214901.2743946-1-memxor@gmail.com>
+In-Reply-To: <20220424214901.2743946-1-memxor@gmail.com>
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, joannelkoong@gmail.com, toke@redhat.com,
+        brouer@redhat.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Teach libbpf to post-process BPF verifier log on BPF program load
-failure and detect known error patterns to provide user with more
-context.
+Hello:
 
-Currently there is one such common situation: an "unguarded" failed BPF
-CO-RE relocation. While failing CO-RE relocation is expected, it is
-expected to be property guarded in BPF code such that BPF verifier
-always eliminates BPF instructions corresponding to such failed CO-RE
-relos as dead code. In cases when user failed to take such precautions,
-BPF verifier provides the best log it can:
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-  123: (85) call unknown#195896080
-  invalid func unknown#195896080
+On Mon, 25 Apr 2022 03:18:48 +0530 you wrote:
+> This set enables storing pointers of a certain type in BPF map, and extends the
+> verifier to enforce type safety and lifetime correctness properties.
+> 
+> The infrastructure being added is generic enough for allowing storing any kind
+> of pointers whose type is available using BTF (user or kernel) in the future
+> (e.g. strongly typed memory allocation in BPF program), which are internally
+> tracked in the verifier as PTR_TO_BTF_ID, but for now the series limits them to
+> two kinds of pointers obtained from the kernel.
+> 
+> [...]
 
-Such incomprehensible log error is due to libbpf "poisoning" BPF
-instruction that corresponds to failed CO-RE relocation by replacing it
-with invalid `call 0xbad2310` instruction (195896080 == 0xbad2310 reads
-"bad relo" if you squint hard enough).
+Here is the summary with links:
+  - [bpf-next,v6,01/13] bpf: Allow storing unreferenced kptr in map
+    https://git.kernel.org/bpf/bpf-next/c/61df10c7799e
+  - [bpf-next,v6,02/13] bpf: Tag argument to be released in bpf_func_proto
+    https://git.kernel.org/bpf/bpf-next/c/8f14852e8911
+  - [bpf-next,v6,03/13] bpf: Allow storing referenced kptr in map
+    https://git.kernel.org/bpf/bpf-next/c/c0a5a21c25f3
+  - [bpf-next,v6,04/13] bpf: Prevent escaping of kptr loaded from maps
+    https://git.kernel.org/bpf/bpf-next/c/6efe152d4061
+  - [bpf-next,v6,05/13] bpf: Adapt copy_map_value for multiple offset case
+    https://git.kernel.org/bpf/bpf-next/c/4d7d7f69f4b1
+  - [bpf-next,v6,06/13] bpf: Populate pairs of btf_id and destructor kfunc in btf
+    https://git.kernel.org/bpf/bpf-next/c/5ce937d613a4
+  - [bpf-next,v6,07/13] bpf: Wire up freeing of referenced kptr
+    https://git.kernel.org/bpf/bpf-next/c/14a324f6a67e
+  - [bpf-next,v6,08/13] bpf: Teach verifier about kptr_get kfunc helpers
+    https://git.kernel.org/bpf/bpf-next/c/a1ef19599652
+  - [bpf-next,v6,09/13] bpf: Make BTF type match stricter for release arguments
+    https://git.kernel.org/bpf/bpf-next/c/2ab3b3808eb1
+  - [bpf-next,v6,10/13] libbpf: Add kptr type tag macros to bpf_helpers.h
+    https://git.kernel.org/bpf/bpf-next/c/ef89654f2bc7
+  - [bpf-next,v6,11/13] selftests/bpf: Add C tests for kptr
+    https://git.kernel.org/bpf/bpf-next/c/2cbc469a6fc3
+  - [bpf-next,v6,12/13] selftests/bpf: Add verifier tests for kptr
+    https://git.kernel.org/bpf/bpf-next/c/05a945deefaa
+  - [bpf-next,v6,13/13] selftests/bpf: Add test for strict BTF type check
+    https://git.kernel.org/bpf/bpf-next/c/792c0a345f0e
 
-Luckily, libbpf has all the necessary information to look up CO-RE
-relocation that failed and provide more human-readable description of
-what's going on:
-
-  5: <invalid CO-RE relocation>
-  failed to resolve CO-RE relocation <byte_off> [6] struct task_struct___bad.fake_field_subprog (0:2 @ offset 8)
-
-This hopefully makes it much easier to understand what's wrong with
-user's BPF program without googling magic constants.
-
-This BPF verifier log fixup is setup to be extensible and is going to be
-used for at least one other upcoming feature of libbpf in follow up patches.
-Libbpf is parsing lines of BPF verifier log starting from the very end.
-Currently it processes up to 10 lines of code looking for familiar
-patterns. This avoids wasting lots of CPU processing huge verifier logs
-(especially for log_level=2 verbosity level). Actual verification error
-should normally be found in last few lines, so this should work
-reliably.
-
-If libbpf needs to expand log beyond available log_buf_size, it
-truncates the end of the verifier log. Given verifier log normally ends
-with something like:
-
-  processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
-
-... truncating this on program load error isn't too bad (end user can
-always increase log size, if it needs to get complete log).
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c    | 144 ++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/relo_core.c |   8 +--
- tools/lib/bpf/relo_core.h |   6 ++
- 3 files changed, 154 insertions(+), 4 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 5ebbfe8b5e1c..7cb562f3c8bc 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5626,6 +5626,22 @@ static int record_relo_core(struct bpf_program *prog,
- 	return 0;
- }
- 
-+static const struct bpf_core_relo *find_relo_core(struct bpf_program *prog, int insn_idx)
-+{
-+	struct reloc_desc *relo;
-+	int i;
-+
-+	for (i = 0; i < prog->nr_reloc; i++) {
-+		relo = &prog->reloc_desc[i];
-+		if (relo->type != RELO_CORE || relo->insn_idx != insn_idx)
-+			continue;
-+
-+		return relo->core_relo;
-+	}
-+
-+	return NULL;
-+}
-+
- static int bpf_core_resolve_relo(struct bpf_program *prog,
- 				 const struct bpf_core_relo *relo,
- 				 int relo_idx,
-@@ -6696,6 +6712,8 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
- 	return 0;
- }
- 
-+static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz);
-+
- static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_program *prog,
- 					 struct bpf_insn *insns, int insns_cnt,
- 					 const char *license, __u32 kern_version,
-@@ -6842,6 +6860,10 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 		goto retry_load;
- 
- 	ret = -errno;
-+
-+	/* post-process verifier log to improve error descriptions */
-+	fixup_verifier_log(prog, log_buf, log_buf_size);
-+
- 	cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
- 	pr_warn("prog '%s': BPF program load failed: %s\n", prog->name, cp);
- 	pr_perm_msg(ret);
-@@ -6857,6 +6879,128 @@ static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_prog
- 	return ret;
- }
- 
-+static char *find_prev_line(char *buf, char *cur)
-+{
-+	char *p;
-+
-+	if (cur == buf) /* end of a log buf */
-+		return NULL;
-+
-+	p = cur - 1;
-+	while (p - 1 >= buf && *(p - 1) != '\n')
-+		p--;
-+
-+	return p;
-+}
-+
-+static void patch_log(char *buf, size_t buf_sz, size_t log_sz,
-+		      char *orig, size_t orig_sz, const char *patch)
-+{
-+	/* size of the remaining log content to the right from the to-be-replaced part */
-+	size_t rem_sz = (buf + log_sz) - (orig + orig_sz);
-+	size_t patch_sz = strlen(patch);
-+
-+	if (patch_sz != orig_sz) {
-+		/* If patch line(s) are longer than original piece of verifier log,
-+		 * shift log contents by (patch_sz - orig_sz) bytes to the right
-+		 * starting from after to-be-replaced part of the log.
-+		 *
-+		 * If patch line(s) are shorter than original piece of verifier log,
-+		 * shift log contents by (orig_sz - patch_sz) bytes to the left
-+		 * starting from after to-be-replaced part of the log
-+		 *
-+		 * We need to be careful about not overflowing available
-+		 * buf_sz capacity. If that's the case, we'll truncate the end
-+		 * of the original log, as necessary.
-+		 */
-+		if (patch_sz > orig_sz) {
-+			if (orig + patch_sz >= buf + buf_sz) {
-+				/* patch is big enough to cover remaining space completely */
-+				patch_sz -= (orig + patch_sz) - (buf + buf_sz) + 1;
-+				rem_sz = 0;
-+			} else if (patch_sz - orig_sz > buf_sz - log_sz) {
-+				/* patch causes part of remaining log to be truncated */
-+				rem_sz -= (patch_sz - orig_sz) - (buf_sz - log_sz);
-+			}
-+		}
-+		/* shift remaining log to the right by calculated amount */
-+		memmove(orig + patch_sz, orig + orig_sz, rem_sz);
-+	}
-+
-+	memcpy(orig, patch, patch_sz);
-+}
-+
-+static void fixup_log_failed_core_relo(struct bpf_program *prog,
-+				       char *buf, size_t buf_sz, size_t log_sz,
-+				       char *line1, char *line2, char *line3)
-+{
-+	/* Expected log for failed and not properly guarded CO-RE relocation:
-+	 * line1 -> 123: (85) call unknown#195896080
-+	 * line2 -> invalid func unknown#195896080
-+	 * line3 -> <anything else or end of buffer>
-+	 *
-+	 * "123" is the index of the instruction that was poisoned. We extract
-+	 * instruction index to find corresponding CO-RE relocation and
-+	 * replace this part of the log with more relevant information about
-+	 * failed CO-RE relocation.
-+	 */
-+	const struct bpf_core_relo *relo;
-+	struct bpf_core_spec spec;
-+	char patch[512], spec_buf[256];
-+	int insn_idx, err;
-+
-+	if (sscanf(line1, "%d: (%*d) call unknown#195896080\n", &insn_idx) != 1)
-+		return;
-+
-+	relo = find_relo_core(prog, insn_idx);
-+	if (!relo)
-+		return;
-+
-+	err = bpf_core_parse_spec(prog->name, prog->obj->btf, relo, &spec);
-+	if (err)
-+		return;
-+
-+	bpf_core_format_spec(spec_buf, sizeof(spec_buf), &spec);
-+	snprintf(patch, sizeof(patch),
-+		 "%d: <invalid CO-RE relocation>\n"
-+		 "failed to resolve CO-RE relocation %s\n",
-+		 insn_idx, spec_buf);
-+
-+	patch_log(buf, buf_sz, log_sz, line1, line3 - line1, patch);
-+}
-+
-+static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz)
-+{
-+	/* look for familiar error patterns in last N lines of the log */
-+	const size_t max_last_line_cnt = 10;
-+	char *prev_line, *cur_line, *next_line;
-+	size_t log_sz;
-+	int i;
-+
-+	if (!buf)
-+		return;
-+
-+	log_sz = strlen(buf) + 1;
-+	next_line = buf + log_sz - 1;
-+
-+	for (i = 0; i < max_last_line_cnt; i++, next_line = cur_line) {
-+		cur_line = find_prev_line(buf, next_line);
-+		if (!cur_line)
-+			return;
-+
-+		/* failed CO-RE relocation case */
-+		if (str_has_pfx(cur_line, "invalid func unknown#195896080\n")) {
-+			prev_line = find_prev_line(buf, cur_line);
-+			if (!prev_line)
-+				continue;
-+
-+			fixup_log_failed_core_relo(prog, buf, buf_sz, log_sz,
-+						   prev_line, cur_line, next_line);
-+			return;
-+		}
-+	}
-+}
-+
- static int bpf_program_record_relos(struct bpf_program *prog)
- {
- 	struct bpf_object *obj = prog->obj;
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 4a9ad0cfb474..ba4453dfd1ed 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -178,9 +178,9 @@ static bool core_relo_is_enumval_based(enum bpf_core_relo_kind kind)
-  * Enum value-based relocations (ENUMVAL_EXISTS/ENUMVAL_VALUE) use access
-  * string to specify enumerator's value index that need to be relocated.
-  */
--static int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
--			       const struct bpf_core_relo *relo,
--			       struct bpf_core_spec *spec)
-+int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
-+			const struct bpf_core_relo *relo,
-+			struct bpf_core_spec *spec)
- {
- 	int access_idx, parsed_len, i;
- 	struct bpf_core_accessor *acc;
-@@ -1054,7 +1054,7 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
-  * [<type-id>] (<type-name>) + <raw-spec> => <offset>@<spec>,
-  * where <spec> is a C-syntax view of recorded field access, e.g.: x.a[3].b
-  */
--static int bpf_core_format_spec(char *buf, size_t buf_sz, const struct bpf_core_spec *spec)
-+int bpf_core_format_spec(char *buf, size_t buf_sz, const struct bpf_core_spec *spec)
- {
- 	const struct btf_type *t;
- 	const struct btf_enum *e;
-diff --git a/tools/lib/bpf/relo_core.h b/tools/lib/bpf/relo_core.h
-index a28bf3711ce2..073039d8ca4f 100644
---- a/tools/lib/bpf/relo_core.h
-+++ b/tools/lib/bpf/relo_core.h
-@@ -84,4 +84,10 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
- 			int insn_idx, const struct bpf_core_relo *relo,
- 			int relo_idx, const struct bpf_core_relo_res *res);
- 
-+int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
-+		        const struct bpf_core_relo *relo,
-+		        struct bpf_core_spec *spec);
-+
-+int bpf_core_format_spec(char *buf, size_t buf_sz, const struct bpf_core_spec *spec);
-+
- #endif
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
