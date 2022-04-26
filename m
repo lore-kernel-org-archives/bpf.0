@@ -2,84 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 374B1C4332F
-	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 16:21:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A904C433EF
+	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 18:24:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241199AbiDZQYL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 26 Apr 2022 12:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
+        id S243844AbiDZS2F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 26 Apr 2022 14:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352941AbiDZQX4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 26 Apr 2022 12:23:56 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6481D3DA6;
-        Tue, 26 Apr 2022 09:20:46 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23QDDBSN029493;
-        Tue, 26 Apr 2022 09:20:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pfpt0220;
- bh=ubNDydfKF8ox4o7eLY4+glSSy0wWOtCY2o+4EHI1MYE=;
- b=ZEdn9nWk99jYF2jrEeDKvbX8VXT28JVb1QcIRVW8fEy42gmTzvYrFffrcPtxEX2jRE0x
- r2lOsEiLZY158Tua7XpdOimKZJDXq7LRmXE675I3Xz+DuwRmPqOIWJ4FiuFZaLgh2vqX
- iSsi+nycPFHT3E3+nG2ABGtt9pkfIcYRnwAWi9gcglTH0PjT8K5q053snlfGbMFytxtt
- 7t4eK1vKUZCrWcA0+PaV/+N0FLLVd0DofEV8Ga1vfOasu2l+v6J1VqjHXvb0i82KWoZ7
- YbTVJW4tzyTZYwXkrY6l7aPkWDqGYf4xajttfSowLnTCr7Gi7uqINmb6JUXDpEB1XPwP 3g== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3fp868av2y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 26 Apr 2022 09:20:21 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 26 Apr
- 2022 09:20:18 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 26 Apr 2022 09:20:18 -0700
-Received: from [10.193.34.141] (unknown [10.193.34.141])
-        by maili.marvell.com (Postfix) with ESMTP id 66A473F708A;
-        Tue, 26 Apr 2022 09:19:50 -0700 (PDT)
-Message-ID: <69541987-fe2e-c7ab-814e-06e5575cf4c0@marvell.com>
-Date:   Tue, 26 Apr 2022 18:19:46 +0200
+        with ESMTP id S1351241AbiDZS2E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 26 Apr 2022 14:28:04 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883DC197FBA
+        for <bpf@vger.kernel.org>; Tue, 26 Apr 2022 11:24:56 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c12so30992107plr.6
+        for <bpf@vger.kernel.org>; Tue, 26 Apr 2022 11:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=XtzYzShMVyd+kyzwCJxTHJDRp0RuH/SYetmF/PF7R9M=;
+        b=jNr5yb/P/y1J3TS8LV+BN4FcQEgoS9CftoHtqJV1h9zTBJKh8QoriNgM8BaQF/blKg
+         3Cyd0OBaTieIbYYgcBtRUU0qN3IiHbPmhM4wZd29bqWNOYgeGj/tP/L1Wdsfac/F729w
+         sxGoBuWv+h5lHXuaa4Vm4YR6ag0YCEeBw8azTwYtgC7RoAo/bOrJqtPsP4LRNTX4m8uC
+         +vikv2W6OKm49RoApnu1+tM2ycOHWob9nWtbfkXNlecJ4uFv2lM0usbOl3mG22pSlyOC
+         7JQO4CKk+tK8jkqplPC4PVW6GbIermVxJZLCPNzO8Y4eQyhLeHlIF0Q7pCgDDh6XX5hd
+         532Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=XtzYzShMVyd+kyzwCJxTHJDRp0RuH/SYetmF/PF7R9M=;
+        b=YgvuqMV5KQSsK5D0ziNzU6Qrg3qMfJRapeN+/4RwnAXVuSSAZ+Y6deDsFyIGknInR+
+         B3bvPwdyQrd2fV5FAKCk97TCblybSVhTcF6e47ukhaGNXSr9e++VPi4MDz/XyYJ36Ywv
+         gc65xOPFfbhCHd5Hgaz/VLn/KznU2xVqMVF6mB6sWQ9TaZyP0I+fkdt9MxVHZoR+EfzV
+         n9dWIsm3KUVpBHeEDLVbYOQn2DWAIgL4SfiJZVSKCAPo3WYxFKZzUpauk0QRmhuczfw6
+         AkS8hLnBmocozRpyo1YinxKgvmp1T7eSPgg1QOCty6GAVKXPOsftXZYaYgTwJiYju6rJ
+         mkow==
+X-Gm-Message-State: AOAM5303UVkWPlFYl9OHfk4U/qDTeze0JjSh7Nesv1e/2tDRlRc/R8I1
+        IK0AWM7iadS1RxNouN3CcK4=
+X-Google-Smtp-Source: ABdhPJxYRWuqvcN4i4YI5bA+jjoigEu8vxba9viHECOUCU2WmNd/+2cISNZQmfqh/KuXnm3plIF+Yg==
+X-Received: by 2002:a17:90a:df0f:b0:1d9:2372:b55e with SMTP id gp15-20020a17090adf0f00b001d92372b55emr22592933pjb.104.1650997495340;
+        Tue, 26 Apr 2022 11:24:55 -0700 (PDT)
+Received: from MacBook-Pro.local ([2620:10d:c090:500::2:3e5a])
+        by smtp.gmail.com with ESMTPSA id b4-20020a62a104000000b0050cf012cba1sm15970136pff.91.2022.04.26.11.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 11:24:54 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 11:24:51 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Kaixi Fan <fankaixi.li@bytedance.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: [External] [PATCH bpf-next v5 2/3] selftests/bpf: Move vxlan
+ tunnel testcases to test_progs
+Message-ID: <20220426182451.jjqo6eifnhz6ptfn@MacBook-Pro.local>
+References: <20220422120259.10185-1-fankaixi.li@bytedance.com>
+ <20220422120259.10185-3-fankaixi.li@bytedance.com>
+ <CAADnVQL9=XivjNeg3CyE67N3cp6xB+cetUhWG6b+DtXo-6x0VA@mail.gmail.com>
+ <CAEEdnKFjUQeZGYFF+gAtqEeyCzdz=5A91w-PFgAjsS-nkZ6BXw@mail.gmail.com>
+ <CAADnVQL2j-sLdDr+ZRHakKo8SVrKofCq3ffQJ8Fpqvr0gEXHPg@mail.gmail.com>
+ <CAEEdnKG-HeAhWrATMTOYKa7_OdKXs4NjrVrQpcxFXSicgNY1mw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101
- Thunderbird/100.0
-Subject: Re: [EXT] [PATCH net-next v5 0/3] net: atlantic: Add XDP support
-Content-Language: en-US
-To:     Taehee Yoo <ap420073@gmail.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <andrii@kernel.org>, <kafai@fb.com>,
-        <songliubraving@fb.com>, <yhs@fb.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>
-References: <20220417101247.13544-1-ap420073@gmail.com>
-From:   Igor Russkikh <irusskikh@marvell.com>
-In-Reply-To: <20220417101247.13544-1-ap420073@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: om_pomMjob5vOlAqzgoQO0ND_8GTfTj5
-X-Proofpoint-GUID: om_pomMjob5vOlAqzgoQO0ND_8GTfTj5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-26_05,2022-04-26_02,2022-02-23_01
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEEdnKG-HeAhWrATMTOYKa7_OdKXs4NjrVrQpcxFXSicgNY1mw@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thanks Taehee,
+On Sun, Apr 24, 2022 at 11:32:07AM +0800, Kaixi Fan wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> 于2022年4月24日周日 10:57写道：
+> >
+> > On Fri, Apr 22, 2022 at 7:51 PM Kaixi Fan <fankaixi.li@bytedance.com> wrote:
+> > >
+> > > Alexei Starovoitov <alexei.starovoitov@gmail.com> 于2022年4月23日周六 08:37写道：
+> > > >
+> > > > On Fri, Apr 22, 2022 at 5:04 AM <fankaixi.li@bytedance.com> wrote:
+> > > > > +#define VXLAN_TUNL_DEV0 "vxlan00"
+> > > > > +#define VXLAN_TUNL_DEV1 "vxlan11"
+> > > > > +#define IP6VXLAN_TUNL_DEV0 "ip6vxlan00"
+> > > > > +#define IP6VXLAN_TUNL_DEV1 "ip6vxlan11"
+> > > > > +
+> > > > > +#define SRC_INGRESS_PROG_PIN_FILE "/sys/fs/bpf/tc/test_tunnel_ingress_src"
+> > > > > +#define SRC_EGRESS_PROG_PIN_FILE "/sys/fs/bpf/tc/test_tunnel_egress_src"
+> > > > > +#define DST_EGRESS_PROG_PIN_FILE "/sys/fs/bpf/tc/test_tunnel_egress_dst"
+> > > > > +
+> > > > > +#define PING_ARGS "-c 3 -w 10 -q"
+> > >
+> > > Thanks for the suggestion.
+> > >
+> > > >
+> > > > Thanks for moving the test to test_progs,
+> > > > but its runtime is excessive.
+> > > >
+> > > > time ./test_progs -t tunnel
+> > > > #195 tunnel:OK
+> > > > Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
+> > > >
+> > > > real    0m26.530s
+> > > > user    0m0.075s
+> > > > sys    0m1.317s
+> > > >
+> > > > Please find a way to test the functionality in a second or so.
+> > >
+> > > Hi Alexei,
+> > > Do you mean the sys time should be in a second ?
+> >
+> > real time.
+> > sys time is already there.
+> > The big delta between real and sys time highlights
+> > inefficiency of the test. The test sleeps most of the time.
+> 
+> The tunnel test includes many types of tunnel testcases.  Add a new
+> tunnel testcase would increase test time.
+> So the real time could not be reduced into a second.
+> The test code calls many shell commands to setup test environments. It
+> may be the reason why there is a big
+> delta bettween real and sys time.
 
-v5 looks great with these pageorder changes.
+Try reducing the number of shell commands.
+For example, instead create+teardwon of netns keep it the same across
+different tunnel tests and clean up once.
 
-> v5:
->  - Use MEM_TYPE_PAGE_SHARED instead of MEM_TYPE_PAGE_ORDER0
->  - Use 2K frame size instead of 3K
->  - Use order-2 page allocation instead of order-0
->  - Rename aq_get_rxpage() to aq_alloc_rxpages()
->  - Add missing PageFree stats for ethtool
->  - Remove aq_unset_rxpage_xdp(), introduced by v2 patch due to
->    change of memory model
->  - Fix wrong last parameter value of xdp_prepare_buff()
->  - Add aq_get_rxpages_xdp() to increase page reference count
+> Reduce the ping packet interval would reduce the real and sys time
+> significantly.
+> real 0m7.088s
+> user 0m0.062s
+> sys 0m0.119s
 
-
-  Igor
+Please try to reduce it further. Clearly all 7 seconds CPU mainly sleeps.
