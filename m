@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A5B5C433EF
-	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 00:45:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCEA5C433F5
+	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 00:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240452AbiDZAso convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Apr 2022 20:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S231560AbiDZAsy convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Apr 2022 20:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240444AbiDZAsn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Apr 2022 20:48:43 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA65422BED
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:37 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PHP8il005375
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:37 -0700
+        with ESMTP id S240561AbiDZAsu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Apr 2022 20:48:50 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90913255B3
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:45 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PHP3ID006554
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:45 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fmf9pxhbx-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fmdgfxyfn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:37 -0700
-Received: from twshared31479.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:45 -0700
+Received: from twshared16308.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 17:45:35 -0700
+ 15.1.2375.24; Mon, 25 Apr 2022 17:45:43 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 3568418FD8F54; Mon, 25 Apr 2022 17:45:30 -0700 (PDT)
+        id 6299218FD8F73; Mon, 25 Apr 2022 17:45:36 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 07/10] libbpf: refactor CO-RE relo human description formatting routine
-Date:   Mon, 25 Apr 2022 17:45:08 -0700
-Message-ID: <20220426004511.2691730-8-andrii@kernel.org>
+Subject: [PATCH bpf-next 10/10] selftests/bpf: add libbpf's log fixup logic selftests
+Date:   Mon, 25 Apr 2022 17:45:11 -0700
+Message-ID: <20220426004511.2691730-11-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220426004511.2691730-1-andrii@kernel.org>
 References: <20220426004511.2691730-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: UNJ5vG0zZ0RGf3JNEYBTVuuuqbqTE1I5
-X-Proofpoint-GUID: UNJ5vG0zZ0RGf3JNEYBTVuuuqbqTE1I5
+X-Proofpoint-ORIG-GUID: SdHsTSiiqcZyvsywvDOz33s2WhrOxSFX
+X-Proofpoint-GUID: SdHsTSiiqcZyvsywvDOz33s2WhrOxSFX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-25_10,2022-04-25_03,2022-02-23_01
@@ -49,152 +49,214 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor how CO-RE relocation is formatted. Now it dumps human-readable
-representation, currently used by libbpf in either debug or error
-message output during CO-RE relocation resolution process, into provided
-buffer. This approach allows for better reuse of this functionality
-outside of CO-RE relocation resolution, which we'll use in next patch
-for providing better error message for BPF verifier rejecting BPF
-program due to unguarded failed CO-RE relocation.
+Add tests validating that libbpf is indeed patching up BPF verifier log
+with CO-RE relocation details. Also test partial and full truncation
+scenarios.
 
-It also gets rid of annoying "stitching" of libbpf_print() calls, which
-was the only place where we did this.
+This test might be a bit fragile due to changing BPF verifier log
+format. If that proves to be frequently breaking, we can simplify tests
+or remove the truncation subtests. But for now it seems useful to test
+it in those conditions that are otherwise rarely occuring in practice.
+
+Also test CO-RE relo failure in a subprog as that excercises subprogram CO-RE
+relocation mapping logic which doesn't work out of the box without extra
+relo storage previously done only for gen_loader case.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/relo_core.c | 64 +++++++++++++++++++++++----------------
- 1 file changed, 38 insertions(+), 26 deletions(-)
+ .../selftests/bpf/prog_tests/log_fixup.c      | 114 ++++++++++++++++++
+ .../selftests/bpf/progs/test_log_fixup.c      |  38 ++++++
+ tools/testing/selftests/bpf/test_progs.h      |  11 ++
+ 3 files changed, 163 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/log_fixup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_log_fixup.c
 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index adaa22160692..13d36a705464 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -1055,51 +1055,66 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
-  * [<type-id>] (<type-name>) + <raw-spec> => <offset>@<spec>,
-  * where <spec> is a C-syntax view of recorded field access, e.g.: x.a[3].b
-  */
--static void bpf_core_dump_spec(const char *prog_name, int level, const struct bpf_core_spec *spec)
-+static int bpf_core_format_spec(char *buf, size_t buf_sz, const struct bpf_core_spec *spec)
- {
- 	const struct btf_type *t;
- 	const struct btf_enum *e;
- 	const char *s;
- 	__u32 type_id;
--	int i;
-+	int i, len = 0;
+diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
+new file mode 100644
+index 000000000000..be3a956cb3a5
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <bpf/btf.h>
 +
-+#define append_buf(fmt, args...)				\
-+	({							\
-+		int r;						\
-+		r = snprintf(buf, buf_sz, fmt, ##args);		\
-+		len += r;					\
-+		if (r >= buf_sz)				\
-+			r = buf_sz;				\
-+		buf += r;					\
-+		buf_sz -= r;					\
-+	})
- 
- 	type_id = spec->root_type_id;
- 	t = btf_type_by_id(spec->btf, type_id);
- 	s = btf__name_by_offset(spec->btf, t->name_off);
- 
--	libbpf_print(level, "[%u] %s %s", type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
-+	append_buf("<%s> [%u] %s %s",
-+		   core_relo_kind_str(spec->relo_kind),
-+		   type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
- 
- 	if (core_relo_is_type_based(spec->relo_kind))
--		return;
-+		return len;
- 
- 	if (core_relo_is_enumval_based(spec->relo_kind)) {
- 		t = skip_mods_and_typedefs(spec->btf, type_id, NULL);
- 		e = btf_enum(t) + spec->raw_spec[0];
- 		s = btf__name_by_offset(spec->btf, e->name_off);
- 
--		libbpf_print(level, "::%s = %u", s, e->val);
--		return;
-+		append_buf("::%s = %u", s, e->val);
-+		return len;
- 	}
- 
- 	if (core_relo_is_field_based(spec->relo_kind)) {
- 		for (i = 0; i < spec->len; i++) {
- 			if (spec->spec[i].name)
--				libbpf_print(level, ".%s", spec->spec[i].name);
-+				append_buf(".%s", spec->spec[i].name);
- 			else if (i > 0 || spec->spec[i].idx > 0)
--				libbpf_print(level, "[%u]", spec->spec[i].idx);
-+				append_buf("[%u]", spec->spec[i].idx);
- 		}
- 
--		libbpf_print(level, " (");
-+		append_buf(" (");
- 		for (i = 0; i < spec->raw_len; i++)
--			libbpf_print(level, "%s%d", i == 0 ? "" : ":", spec->raw_spec[i]);
-+			append_buf("%s%d", i == 0 ? "" : ":", spec->raw_spec[i]);
- 
- 		if (spec->bit_offset % 8)
--			libbpf_print(level, " @ offset %u.%u)",
--				     spec->bit_offset / 8, spec->bit_offset % 8);
-+			append_buf(" @ offset %u.%u)", spec->bit_offset / 8, spec->bit_offset % 8);
- 		else
--			libbpf_print(level, " @ offset %u)", spec->bit_offset / 8);
--		return;
-+			append_buf(" @ offset %u)", spec->bit_offset / 8);
-+		return len;
- 	}
++#include "test_log_fixup.skel.h"
 +
-+	return len;
-+#undef append_buf
- }
++enum trunc_type {
++	TRUNC_NONE,
++	TRUNC_PARTIAL,
++	TRUNC_FULL,
++};
++
++static void bad_core_relo(size_t log_buf_size, enum trunc_type trunc_type)
++{
++	char log_buf[8 * 1024];
++	struct test_log_fixup* skel;
++	int err;
++
++	skel = test_log_fixup__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	bpf_program__set_autoload(skel->progs.bad_relo, true);
++	memset(log_buf, 0, sizeof(log_buf));
++	bpf_program__set_log_buf(skel->progs.bad_relo, log_buf, log_buf_size ?: sizeof(log_buf));
++
++	err = test_log_fixup__load(skel);
++	if (!ASSERT_ERR(err, "load_fail"))
++		goto cleanup;
++
++	ASSERT_HAS_SUBSTR(log_buf,
++			  "0: <invalid CO-RE relocation>\n"
++			  "failed to resolve CO-RE relocation <byte_sz> ",
++			  "log_buf_part1");
++
++	switch (trunc_type) {
++	case TRUNC_NONE:
++		ASSERT_HAS_SUBSTR(log_buf,
++				  "struct task_struct___bad.fake_field (0:1 @ offset 4)\n",
++				  "log_buf_part2");
++		ASSERT_HAS_SUBSTR(log_buf,
++				  "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n",
++				  "log_buf_end");
++		break;
++	case TRUNC_PARTIAL:
++		/* we should get full libbpf message patch */
++		ASSERT_HAS_SUBSTR(log_buf,
++				  "struct task_struct___bad.fake_field (0:1 @ offset 4)\n",
++				  "log_buf_part2");
++		/* we shouldn't get full end of BPF verifier log */
++		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n"),
++			    "log_buf_end");
++		break;
++	case TRUNC_FULL:
++		/* we shouldn't get second part of libbpf message patch */
++		ASSERT_NULL(strstr(log_buf, "struct task_struct___bad.fake_field (0:1 @ offset 4)\n"),
++			    "log_buf_part2");
++		/* we shouldn't get full end of BPF verifier log */
++		ASSERT_NULL(strstr(log_buf, "max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0\n"),
++			    "log_buf_end");
++		break;
++	}
++
++	if (env.verbosity > VERBOSE_NONE)
++		printf("LOG:   \n=================\n%s=================\n", log_buf);
++cleanup:
++	test_log_fixup__destroy(skel);
++}
++
++static void bad_core_relo_subprog(void)
++{
++	char log_buf[8 * 1024];
++	struct test_log_fixup* skel;
++	int err;
++
++	skel = test_log_fixup__open();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	bpf_program__set_autoload(skel->progs.bad_relo_subprog, true);
++	bpf_program__set_log_buf(skel->progs.bad_relo_subprog, log_buf, sizeof(log_buf));
++
++	err = test_log_fixup__load(skel);
++	if (!ASSERT_ERR(err, "load_fail"))
++		goto cleanup;
++
++	/* there should be no prog loading log because we specified per-prog log buf */
++	ASSERT_HAS_SUBSTR(log_buf,
++			  ": <invalid CO-RE relocation>\n"
++			  "failed to resolve CO-RE relocation <byte_off> ",
++			  "log_buf");
++	ASSERT_HAS_SUBSTR(log_buf,
++			  "struct task_struct___bad.fake_field_subprog (0:2 @ offset 8)\n",
++			  "log_buf");
++
++	if (env.verbosity > VERBOSE_NONE)
++		printf("LOG:   \n=================\n%s=================\n", log_buf);
++
++cleanup:
++	test_log_fixup__destroy(skel);
++}
++
++void test_log_fixup(void)
++{
++	if (test__start_subtest("bad_core_relo_trunc_none"))
++		bad_core_relo(0, TRUNC_NONE /* full buf */);
++	if (test__start_subtest("bad_core_relo_trunc_partial"))
++		bad_core_relo(300, TRUNC_PARTIAL /* truncate original log a bit */);
++	if (test__start_subtest("bad_core_relo_trunc_full"))
++		bad_core_relo(250, TRUNC_FULL  /* truncate also libbpf's message patch */);
++	if (test__start_subtest("bad_core_relo_subprog"))
++		bad_core_relo_subprog();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_log_fixup.c b/tools/testing/selftests/bpf/progs/test_log_fixup.c
+new file mode 100644
+index 000000000000..a78980d897b3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_log_fixup.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Platforms, Inc. and affiliates. */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++struct task_struct___bad {
++	int pid;
++	int fake_field;
++	void *fake_field_subprog;
++} __attribute__((preserve_access_index));
++
++SEC("?raw_tp/sys_enter")
++int bad_relo(const void *ctx)
++{
++	static struct task_struct___bad *t;
++
++	return bpf_core_field_size(t->fake_field);
++}
++
++static __noinline int bad_subprog(void)
++{
++	static struct task_struct___bad *t;
++
++	/* ugliness below is a field offset relocation */
++	return (void *)&t->fake_field_subprog - (void *)t;
++}
++
++SEC("?raw_tp/sys_enter")
++int bad_relo_subprog(const void *ctx)
++{
++	static struct task_struct___bad *t;
++
++	return bad_subprog() + bpf_core_field_size(t->pid);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 0a102ce460d6..d3fee3b98888 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -292,6 +292,17 @@ int test__join_cgroup(const char *path);
+ 	___ok;								\
+ })
  
- /*
-@@ -1168,6 +1183,7 @@ int bpf_core_calc_relo_insn(const char *prog_name,
- 	const char *local_name;
- 	__u32 local_id;
- 	const char *spec_str;
-+	char spec_buf[256];
- 	int i, j, err;
- 
- 	local_id = relo->type_id;
-@@ -1190,10 +1206,8 @@ int bpf_core_calc_relo_insn(const char *prog_name,
- 		return -EINVAL;
- 	}
- 
--	pr_debug("prog '%s': relo #%d: kind <%s> (%d), spec is ", prog_name,
--		 relo_idx, core_relo_kind_str(relo->kind), relo->kind);
--	bpf_core_dump_spec(prog_name, LIBBPF_DEBUG, local_spec);
--	libbpf_print(LIBBPF_DEBUG, "\n");
-+	bpf_core_format_spec(spec_buf, sizeof(spec_buf), local_spec);
-+	pr_debug("prog '%s': relo #%d: %s\n", prog_name, relo_idx, spec_buf);
- 
- 	/* TYPE_ID_LOCAL relo is special and doesn't need candidate search */
- 	if (relo->kind == BPF_CORE_TYPE_ID_LOCAL) {
-@@ -1217,17 +1231,15 @@ int bpf_core_calc_relo_insn(const char *prog_name,
- 		err = bpf_core_spec_match(local_spec, cands->cands[i].btf,
- 					  cands->cands[i].id, cand_spec);
- 		if (err < 0) {
--			pr_warn("prog '%s': relo #%d: error matching candidate #%d ",
--				prog_name, relo_idx, i);
--			bpf_core_dump_spec(prog_name, LIBBPF_WARN, cand_spec);
--			libbpf_print(LIBBPF_WARN, ": %d\n", err);
-+			bpf_core_format_spec(spec_buf, sizeof(spec_buf), cand_spec);
-+			pr_warn("prog '%s': relo #%d: error matching candidate #%d %s: %d\n ",
-+				prog_name, relo_idx, i, spec_buf, err);
- 			return err;
- 		}
- 
--		pr_debug("prog '%s': relo #%d: %s candidate #%d ", prog_name,
--			 relo_idx, err == 0 ? "non-matching" : "matching", i);
--		bpf_core_dump_spec(prog_name, LIBBPF_DEBUG, cand_spec);
--		libbpf_print(LIBBPF_DEBUG, "\n");
-+		bpf_core_format_spec(spec_buf, sizeof(spec_buf), cand_spec);
-+		pr_debug("prog '%s': relo #%d: %s candidate #%d %s\n", prog_name,
-+			 relo_idx, err == 0 ? "non-matching" : "matching", i, spec_buf);
- 
- 		if (err == 0)
- 			continue;
++#define ASSERT_HAS_SUBSTR(str, substr, name) ({				\
++	static int duration = 0;					\
++	const char *___str = str;					\
++	const char *___substr = substr;					\
++	bool ___ok = strstr(___str, ___substr) != NULL;			\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: '%s' is not a substring of '%s'\n",	\
++	      (name), ___substr, ___str);				\
++	___ok;								\
++})
++
+ #define ASSERT_OK(res, name) ({						\
+ 	static int duration = 0;					\
+ 	long long ___res = (res);					\
 -- 
 2.30.2
 
