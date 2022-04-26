@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B983C4332F
-	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 00:45:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C57B3C433F5
+	for <bpf@archiver.kernel.org>; Tue, 26 Apr 2022 00:45:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240431AbiDZAsm convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Apr 2022 20:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S240447AbiDZAso convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 25 Apr 2022 20:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240441AbiDZAsk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 25 Apr 2022 20:48:40 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2C8252B9
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:35 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23Q0XOBx001583
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:35 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fp6a3022f-1
+        with ESMTP id S240441AbiDZAsm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 25 Apr 2022 20:48:42 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240331BE97
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:37 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23PNidiC003561
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:36 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fmeytxkey-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:34 -0700
-Received: from twshared13315.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 25 Apr 2022 17:45:36 -0700
+Received: from twshared39027.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 25 Apr 2022 17:45:32 -0700
+ 15.1.2375.24; Mon, 25 Apr 2022 17:45:34 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 1485318FD8F2F; Mon, 25 Apr 2022 17:45:26 -0700 (PDT)
+        id 3FBBE18FD8F5A; Mon, 25 Apr 2022 17:45:32 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 05/10] selftests/bpf: add CO-RE relos and SEC("?...") to linked_funcs selftests
-Date:   Mon, 25 Apr 2022 17:45:06 -0700
-Message-ID: <20220426004511.2691730-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 08/10] libbpf: simplify bpf_core_parse_spec() signature
+Date:   Mon, 25 Apr 2022 17:45:09 -0700
+Message-ID: <20220426004511.2691730-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220426004511.2691730-1-andrii@kernel.org>
 References: <20220426004511.2691730-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: okzE226rv6UiZjiZz6qq1QJ_N66tUCFz
-X-Proofpoint-ORIG-GUID: okzE226rv6UiZjiZz6qq1QJ_N66tUCFz
+X-Proofpoint-GUID: u1Z7xFjeSlWBoY5FpYSSoN_rkW0wrkFH
+X-Proofpoint-ORIG-GUID: u1Z7xFjeSlWBoY5FpYSSoN_rkW0wrkFH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-25_10,2022-04-25_03,2022-02-23_01
@@ -49,83 +49,120 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Enhance linked_funcs selftest with two tricky features that might not
-obviously work correctly together. We add CO-RE relocations to entry BPF
-programs and mark those programs as non-autoloadable with SEC("?...")
-annotation. This makes sure that libbpf itself handles .BTF.ext CO-RE
-relocation data matching correctly for SEC("?...") programs, as well as
-ensures that BPF static linker handles this correctly (this was the case
-before, no changes are necessary, but it wasn't explicitly tested).
+Simplify bpf_core_parse_spec() signature to take struct bpf_core_relo as
+an input instead of requiring callers to decompose them into type_id,
+relo, spec_str, etc. This makes using and reusing this helper easier.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/linked_funcs.c | 6 ++++++
- tools/testing/selftests/bpf/progs/linked_funcs1.c     | 7 ++++++-
- tools/testing/selftests/bpf/progs/linked_funcs2.c     | 7 ++++++-
- 3 files changed, 18 insertions(+), 2 deletions(-)
+ tools/lib/bpf/relo_core.c | 34 +++++++++++++++-------------------
+ 1 file changed, 15 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/linked_funcs.c b/tools/testing/selftests/bpf/prog_tests/linked_funcs.c
-index e9916f2817ec..cad664546912 100644
---- a/tools/testing/selftests/bpf/prog_tests/linked_funcs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/linked_funcs.c
-@@ -14,6 +14,12 @@ void test_linked_funcs(void)
- 	if (!ASSERT_OK_PTR(skel, "skel_open"))
- 		return;
- 
-+	/* handler1 and handler2 are marked as SEC("?raw_tp/sys_enter") and
-+	 * are set to not autoload by default
-+	 */
-+	bpf_program__set_autoload(skel->progs.handler1, true);
-+	bpf_program__set_autoload(skel->progs.handler2, true);
-+
- 	skel->rodata->my_tid = syscall(SYS_gettid);
- 	skel->bss->syscall_id = SYS_getpgid;
- 
-diff --git a/tools/testing/selftests/bpf/progs/linked_funcs1.c b/tools/testing/selftests/bpf/progs/linked_funcs1.c
-index 963b393c37e8..b05571bc67d5 100644
---- a/tools/testing/selftests/bpf/progs/linked_funcs1.c
-+++ b/tools/testing/selftests/bpf/progs/linked_funcs1.c
-@@ -61,12 +61,17 @@ extern int set_output_val2(int x);
- /* here we'll force set_output_ctx2() to be __hidden in the final obj file */
- __hidden extern void set_output_ctx2(__u64 *ctx);
- 
--SEC("raw_tp/sys_enter")
-+SEC("?raw_tp/sys_enter")
- int BPF_PROG(handler1, struct pt_regs *regs, long id)
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index 13d36a705464..4a9ad0cfb474 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -179,28 +179,27 @@ static bool core_relo_is_enumval_based(enum bpf_core_relo_kind kind)
+  * string to specify enumerator's value index that need to be relocated.
+  */
+ static int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
+-			       __u32 type_id,
+-			       const char *spec_str,
+-			       enum bpf_core_relo_kind relo_kind,
++			       const struct bpf_core_relo *relo,
+ 			       struct bpf_core_spec *spec)
  {
-+	static volatile int whatever;
-+
- 	if (my_tid != (u32)bpf_get_current_pid_tgid() || id != syscall_id)
+ 	int access_idx, parsed_len, i;
+ 	struct bpf_core_accessor *acc;
+ 	const struct btf_type *t;
+-	const char *name;
++	const char *name, *spec_str;
+ 	__u32 id;
+ 	__s64 sz;
+ 
++	spec_str = btf__name_by_offset(btf, relo->access_str_off);
+ 	if (str_is_empty(spec_str) || *spec_str == ':')
+ 		return -EINVAL;
+ 
+ 	memset(spec, 0, sizeof(*spec));
+ 	spec->btf = btf;
+-	spec->root_type_id = type_id;
+-	spec->relo_kind = relo_kind;
++	spec->root_type_id = relo->type_id;
++	spec->relo_kind = relo->kind;
+ 
+ 	/* type-based relocations don't have a field access string */
+-	if (core_relo_is_type_based(relo_kind)) {
++	if (core_relo_is_type_based(relo->kind)) {
+ 		if (strcmp(spec_str, "0"))
+ 			return -EINVAL;
  		return 0;
+@@ -221,7 +220,7 @@ static int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
+ 	if (spec->raw_len == 0)
+ 		return -EINVAL;
  
-+	/* make sure we have CO-RE relocations in main program */
-+	whatever = bpf_core_type_size(struct task_struct);
-+
- 	set_output_val2(1000);
- 	set_output_ctx2(ctx); /* ctx definition is hidden in BPF_PROG macro */
+-	t = skip_mods_and_typedefs(btf, type_id, &id);
++	t = skip_mods_and_typedefs(btf, relo->type_id, &id);
+ 	if (!t)
+ 		return -EINVAL;
  
-diff --git a/tools/testing/selftests/bpf/progs/linked_funcs2.c b/tools/testing/selftests/bpf/progs/linked_funcs2.c
-index db195872f4eb..ee7e3848ee4f 100644
---- a/tools/testing/selftests/bpf/progs/linked_funcs2.c
-+++ b/tools/testing/selftests/bpf/progs/linked_funcs2.c
-@@ -61,12 +61,17 @@ extern int set_output_val1(int x);
- /* here we'll force set_output_ctx1() to be __hidden in the final obj file */
- __hidden extern void set_output_ctx1(__u64 *ctx);
+@@ -231,7 +230,7 @@ static int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
+ 	acc->idx = access_idx;
+ 	spec->len++;
  
--SEC("raw_tp/sys_enter")
-+SEC("?raw_tp/sys_enter")
- int BPF_PROG(handler2, struct pt_regs *regs, long id)
- {
-+	static volatile int whatever;
-+
- 	if (my_tid != (u32)bpf_get_current_pid_tgid() || id != syscall_id)
+-	if (core_relo_is_enumval_based(relo_kind)) {
++	if (core_relo_is_enumval_based(relo->kind)) {
+ 		if (!btf_is_enum(t) || spec->raw_len > 1 || access_idx >= btf_vlen(t))
+ 			return -EINVAL;
+ 
+@@ -240,7 +239,7 @@ static int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
  		return 0;
+ 	}
  
-+	/* make sure we have CO-RE relocations in main program */
-+	whatever = bpf_core_type_size(struct task_struct);
+-	if (!core_relo_is_field_based(relo_kind))
++	if (!core_relo_is_field_based(relo->kind))
+ 		return -EINVAL;
+ 
+ 	sz = btf__resolve_size(btf, id);
+@@ -301,7 +300,7 @@ static int bpf_core_parse_spec(const char *prog_name, const struct btf *btf,
+ 			spec->bit_offset += access_idx * sz * 8;
+ 		} else {
+ 			pr_warn("prog '%s': relo for [%u] %s (at idx %d) captures type [%d] of unexpected kind %s\n",
+-				prog_name, type_id, spec_str, i, id, btf_kind_str(t));
++				prog_name, relo->type_id, spec_str, i, id, btf_kind_str(t));
+ 			return -EINVAL;
+ 		}
+ 	}
+@@ -1182,7 +1181,6 @@ int bpf_core_calc_relo_insn(const char *prog_name,
+ 	const struct btf_type *local_type;
+ 	const char *local_name;
+ 	__u32 local_id;
+-	const char *spec_str;
+ 	char spec_buf[256];
+ 	int i, j, err;
+ 
+@@ -1192,17 +1190,15 @@ int bpf_core_calc_relo_insn(const char *prog_name,
+ 	if (!local_name)
+ 		return -EINVAL;
+ 
+-	spec_str = btf__name_by_offset(local_btf, relo->access_str_off);
+-	if (str_is_empty(spec_str))
+-		return -EINVAL;
+-
+-	err = bpf_core_parse_spec(prog_name, local_btf, local_id, spec_str,
+-				  relo->kind, local_spec);
++	err = bpf_core_parse_spec(prog_name, local_btf, relo, local_spec);
+ 	if (err) {
++		const char *spec_str;
 +
- 	set_output_val1(2000);
- 	set_output_ctx1(ctx); /* ctx definition is hidden in BPF_PROG macro */
++		spec_str = btf__name_by_offset(local_btf, relo->access_str_off);
+ 		pr_warn("prog '%s': relo #%d: parsing [%d] %s %s + %s failed: %d\n",
+ 			prog_name, relo_idx, local_id, btf_kind_str(local_type),
+ 			str_is_empty(local_name) ? "<anon>" : local_name,
+-			spec_str, err);
++			spec_str ?: "<?>", err);
+ 		return -EINVAL;
+ 	}
  
 -- 
 2.30.2
