@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E99EEC433FE
-	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 921D5C433FE
+	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:08:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbiD0QMA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 12:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51300 "EHLO
+        id S242308AbiD0QMF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Apr 2022 12:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242149AbiD0QLv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:11:51 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACFA3656CA;
-        Wed, 27 Apr 2022 09:07:43 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id j6so4310260ejc.13;
-        Wed, 27 Apr 2022 09:07:43 -0700 (PDT)
+        with ESMTP id S241922AbiD0QLy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Apr 2022 12:11:54 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCFF49A14C;
+        Wed, 27 Apr 2022 09:08:02 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id y3so4325550ejo.12;
+        Wed, 27 Apr 2022 09:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qNVAjw1AVjFVcrN+8QdteFz8g5Tvmj9OwlQ+tinUFvQ=;
-        b=p0CjnKtsMnzlXSan+xmDjBfzonLD0gMApaxy0ct+kXepD1c+CgoWufpZ7xlPEjp13e
-         gLcGyKMBQSBpyQPF9cxAyV98wvkH2yc5Z2e/CdRw3BEj2JTPqOmDipATYqk+hPXocdlp
-         qUsLCSk33xqCPmgw1OG13zKZRtq65VlMmW322pA39UFYq1pD/jL3ROc68c5Ary5HCd9Y
-         +w4TK2cP2obzOWnNfnu8mmoGnCUxjhieK5BJ9i0wyqx35enq3XkiauZmrYiRT5IjLVRT
-         LaWuoi3W72c8fEU3gKXTbjUgp+E4eVwTMEIM/a4rqTwxFifdQEEJSYi2nq6yxX9Fbp9j
-         6lqA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=uXZUMLY6oT5/pgJ3JE+0g8SiU8XVYCT+G02CN/YaIC8=;
+        b=fOg0kwucAT7Z1tCyzoXxHJk7ZWXzD71f/n3w9jXO9wukuuAReuE3yVOT24ZTZv+vZm
+         JVCT9LA60wN3RiFubbL0xNXDlmIptbiIcweT5+Iq+pQQ6rKMStHVdmh8zMziwlhhLDEp
+         o8LUjUr464P844d7LmXXYYURuZtwf7n778EPPFFl38Vs2y7Bk3MTfaIhIp0UGGuvWsZB
+         V0yaz+aX0zbM+kSLR5p0i1zfdWN4mxLTilWZrPILmf3nz43NVBsr/tdaBHWDSesveLIV
+         1IUaZlZjgjBxaddfiVtdP4ZDhvL2E1w47LgWAFMxtgcfPowPl68x/5o2vcZ6UJ411GuY
+         2b3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qNVAjw1AVjFVcrN+8QdteFz8g5Tvmj9OwlQ+tinUFvQ=;
-        b=FB40+tn3R0+LtfSU89xmN0mRKwnGpvvTSTtYtVr3Xodvc8CBu2jkIYgSzPPKf1JK9s
-         j7iuBNhaq6It0iIULkwyzzOCpslrwKXSD7odZnkgC64LoA7PSs7CJTUB7FbrHEcT9WxY
-         iSc85u+ET83O3XWbJJP3WAI8E+FpDosRRNJ83+AoR6EAxj54BnnOKrBcM5wHuGe+THcI
-         Pnz9h0R5Cgi/Mc4EhCXxKYTELHAHaCIa4EGdIxKV25O+KzmsD7RDGGKqUTZDWwamGeO5
-         kJ+YlmLRPCGoitCLExzZRFfatrWIMO/V1iup/qlyUpNashtqtp4/GFB7um/a8zYFUoIG
-         HeHQ==
-X-Gm-Message-State: AOAM530GcY8Sgossef9wxrr6AKJV1LZDQeVTqApQaNYzH8KWPnHF9QPx
-        hP5Lex1uLqrxhh6XatvVoK0=
-X-Google-Smtp-Source: ABdhPJzzqwCBxB0YQi8NRI6etX4swRNXByESX+xp6uAoxTdSxi7YiN64Mq1z4chsQQMWKW0/AR1L2A==
-X-Received: by 2002:a17:907:98eb:b0:6f3:ce56:c1a2 with SMTP id ke11-20020a17090798eb00b006f3ce56c1a2mr2982061ejc.173.1651075633659;
-        Wed, 27 Apr 2022 09:07:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=uXZUMLY6oT5/pgJ3JE+0g8SiU8XVYCT+G02CN/YaIC8=;
+        b=hwjTw+nQ93aGdLgdzdK4Rn/IjXnq8xeAW6iQA6tE08Pa1JHGHdWXxJJFYLJ1szlQDl
+         YORIYrODJknuj9NzkSDtUbC+uzqyCepsAWo80gElMi2h3RTzbZzdFJxZ3nTlWQ1LES0s
+         O/7KbWm1qsqIzDveYcxJ1xciboGwqABjn+Fb1UQlgduuUbHa1+Gi0OhqfVamC/sgByfg
+         SPVlcUJVqhLRYFWAjj6Syd6Wony9ebHNl2YsF5qQmqq0Xpih4V+1HPJsv9Io25BsVthX
+         ESBwjCA7RtAifuHHg9CKkHFBvXy2GM5vIy1jIQNR5GlJUzPwBh8TM19o09zXie+OxtBq
+         FhfQ==
+X-Gm-Message-State: AOAM530fx9BkysXPCfNMMz16BcE1nBqYJK5z8w3rR6y8amwl8wqxBdCe
+        s2Oo+0NG6FPmWMDZ7W9Q4QA=
+X-Google-Smtp-Source: ABdhPJxJlxuNbQqjV45PE6cobcBsqISDpGtNtIgUKkVpPXa5SbB8VitgJHOwbhD0WzWZbMVXZ0mgIQ==
+X-Received: by 2002:a17:906:a05a:b0:6ef:a44d:2f46 with SMTP id bg26-20020a170906a05a00b006efa44d2f46mr27868498ejb.192.1651075640777;
+        Wed, 27 Apr 2022 09:07:20 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.12
+        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:07:13 -0700 (PDT)
+        Wed, 27 Apr 2022 09:07:20 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -83,72 +83,53 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v5 00/18] Remove use of list iterator after loop body
-Date:   Wed, 27 Apr 2022 18:06:17 +0200
-Message-Id: <20220427160635.420492-1-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v5 05/18] net: dsa: mv88e6xxx: remove redundant check in mv88e6xxx_port_vlan()
+Date:   Wed, 27 Apr 2022 18:06:22 +0200
+Message-Id: <20220427160635.420492-6-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220427160635.420492-1-jakobkoschel@gmail.com>
+References: <20220427160635.420492-1-jakobkoschel@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When the list iterator loop does not exit early the list iterator variable
-contains a type-confused pointer to a 'bogus' list element computed based
-on the head [1].
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Often a 'found' variable is used to ensure the list iterator
-variable is only accessed after the loop body if the loop did exit early
-(using a break or goto).
+We know that "dev > dst->last_switch" in the "else" block.
+In other words, that "dev - dst->last_switch" is > 0.
 
-In other cases that list iterator variable is used in
-combination to access the list member which reverses the invocation of
-container_of() and brings back a "safe" pointer to the head of the list.
+dsa_port_bridge_num_get(dp) can be 0, but the check
+"if (bridge_num + dst->last_switch != dev) continue", rewritten as
+"if (bridge_num != dev - dst->last_switch) continue", aka
+"if (bridge_num != something which cannot be 0) continue",
+makes it redundant to have the extra "if (!bridge_num) continue" logic,
+since a bridge_num of zero would have been skipped anyway.
 
-Since, due to this code patten, there were quite a few bugs discovered [2],
-Linus concluded that the rule should be to never use the list iterator
-after the loop and introduce a dedicated pointer for that [3].
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-With the new gnu11 standard, it will now be possible to limit the scope
-of the list iterator variable to the traversal loop itself by defining
-the variable within the for loop.
-This, however, requires to remove all uses of the list iterator after
-the loop.
-
-Based on input from Paolo Abeni [4], Vinicius Costa Gomes [5], and
-Jakub Kicinski [6], I've splitted all the net-next related changes into
-two patch sets, where this is part 1.a
-
-v4->v5:
-- fix reverse-xmas tree in efx_alloc_rss_context_entry() (Martin Habets)
-
-v3->v4:
-- fix build issue in efx_alloc_rss_context_entry() (Jakub Kicinski)
-
-v2->v3:
-- fix commit authors and signed-off order regarding Vladimir's patches
-  (Sorry about that, wasn't intentional.)
-
-v1->v2:
-- Fixed commit message for PATCH 14/18 and used dedicated variable
-  pointing to the position (Edward Cree)
-- Removed redundant check in mv88e6xxx_port_vlan() (Vladimir Oltean)
-- Refactor mv88e6xxx_port_vlan() using separate list iterator functions
-  (Vladimir Oltean)
-- Refactor sja1105_insert_gate_entry() to use separate list iterator
-  functions (Vladimir Oltean)
-- Allow early return in sja1105_insert_gate_entry() if
-  sja1105_first_entry_longer_than() didn't find any element
-  (Vladimir Oltean)
-- Use list_add_tail() instead of list_add() in sja1105_insert_gate_entry()
-  (Jakub Kicinski)
-- net: netcp: also use separate 'pos' variable instead of duplicating list_add()
-
-Link: https://lwn.net/Articles/887097/ [1]
-Link: https://lore.kernel.org/linux-kernel/20220217184829.1991035-4-jakobkoschel@gmail.com/ [2]
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [3]
-Link: https://lore.kernel.org/linux-kernel/7393b673c626fd75f2b4f8509faa5459254fb87c.camel@redhat.com/ [4]
-Link: https://lore.kernel.org/linux-kernel/877d8a3sww.fsf@intel.com/ [5]
-Link: https://lore.kernel.org/linux-kernel/20220403205502.1b34415d@kernel.org/ [6]
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 64f4fdd02902..b3aa0e5bc842 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1404,9 +1404,6 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ 		list_for_each_entry(dp, &dst->ports, list) {
+ 			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+ 
+-			if (!bridge_num)
+-				continue;
+-
+ 			if (bridge_num + dst->last_switch != dev)
+ 				continue;
+ 
+-- 
+2.25.1
 
