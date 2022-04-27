@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA58DC433FE
-	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:09:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E94F8C433EF
+	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:09:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242398AbiD0QMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 12:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S241674AbiD0QNE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Apr 2022 12:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242296AbiD0QME (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:12:04 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA353E6E6D;
-        Wed, 27 Apr 2022 09:08:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id k23so4384556ejd.3;
-        Wed, 27 Apr 2022 09:08:27 -0700 (PDT)
+        with ESMTP id S241180AbiD0QMQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Apr 2022 12:12:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA61E4692E8;
+        Wed, 27 Apr 2022 09:08:28 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id dk23so4359289ejb.8;
+        Wed, 27 Apr 2022 09:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=V+mtTmsePMUlrvbA5Gxvy5O64p/39QZZ8B6LTk09adM=;
-        b=Hkxy0IEKCInDQhIHwWszLgmHYH27wUiu5nhfHuSds0ny6zxcsjzJuFYvcasAraAcXK
-         XharPWt16KsV4QDb7JrdvuM+8RmU4T647/y4Q7CWjLDD3mAEnFszewgn03OsKGZqTGdZ
-         dtOQrwcZI0OESJSOMYKI2hNrmU3D7pbiUhKIbTR4NH+J1DfH4RABBaFqwCQIYrJsN1if
-         YK4UXm1CsKw+Ez+Pa7EFZlXghqP7Pn9WA+VKpmdLvuXvhIgkfSips9y75xTHfdoIGsty
-         RcwT9fu+KvxsSkFr+hi488HDN0jqDbibcol5pUUb1ymbFcQ9cJxycGmwzR0BEKkWZSDO
-         uidA==
+        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
+        b=QdO1SZDa4iev+atCa/l33RZOTYxU8Tm6OBJDuf3wFR1IPldpmE0Zz1hGsOF0mrH3tp
+         Rrbgry+KLq2g5sBompEWvjwLxY/s/BnZGQGzzRqRqXLHBTYLUYGEpJu906ZngqiA10I2
+         p881qc+TsKdacaJize2/DNjc/WdmBcRP99WCcLj6IETGvqy23i2A6EI4klZ1jjJeda8b
+         SmmzFz4xtkLCcGeLFvx7Lz4Frop8YYjZXS/gLlZqdgiJGfMo9V1SPUpzzANTuBoVYNJK
+         IlRCbSielt0CFTgv7ZMUDxqDNtKQ026XVmFIuWJY91BdH+nbOdJPWD/XeYlhk3N5g+Nu
+         q1UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=V+mtTmsePMUlrvbA5Gxvy5O64p/39QZZ8B6LTk09adM=;
-        b=FOFaOHd/04qf4zFAYXgGEsRCfTFhvCnlD2kh1bVY6AQcpAVI6sATJae5YuAIv2SOqp
-         tQaEsi66rPqqVTal4lu61C3rOEls1+TkS1PCyvuYkBXqHKSpIDM7FQXwgaF8pc2PqMHR
-         KA7oHUL0WnisQG8AJ6vJsgL24gAn02SnE0RsknPbEdZ3w9A4XiLydT0MG5pEd1idthHj
-         NJk6A6u+1/qnqe3nYnNXxL2CA5Mac7MQqVCLkgJ/qyvsog6k/QAm3URDOpHhpvPVhzgc
-         8e1gEj/yfw6fWprmcFqPhsQ4iA/d8oKGcJV32j9B+sHqMte/fg5NmXDFi0wI0BVJVBjy
-         4trQ==
-X-Gm-Message-State: AOAM533bgpMqGdOlsCCxCzetPINt8/YtAFvvj9WwwYEdnm8EeTTIZLdN
-        K+aZCuNSH3+APOD+8PzH/Vw=
-X-Google-Smtp-Source: ABdhPJzxa9+NcJtLVPAcuSDhYJGek9dFCba/k1LpR14Atj5Kkk4JNNCxTqiszf04IOdTXlAqnpMKBQ==
-X-Received: by 2002:a17:907:3e92:b0:6f3:8ff4:66b2 with SMTP id hs18-20020a1709073e9200b006f38ff466b2mr16219496ejc.697.1651075653001;
-        Wed, 27 Apr 2022 09:07:33 -0700 (PDT)
+        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
+        b=GHpB+MIvPjCKU4rDadzd6MF7Cc2DySqujF66oXufFLiTFFF2W4zPi5hVRh5qobAvh4
+         2m3mHmUOkX0XcJ1TrB0Fwzqvas7rf9Ib1hMikS1Xnj/SW/ecP0LDyD59OYM3tm5cm5d8
+         RbOrhBmgwIAoPECIrh+XNDF2lWh2QjKkDLe0Rz7j8GBFjWlHezd3aAkpn1lL88mHuPGc
+         kEf7uYVdR8o7PXvaqtqCtPIeQz9qpNq1GJP+0tiXWoY7UVFO4JwE3o3S+P6UYFeyO9q8
+         QOBCmpy3DCdIpRexsFFktb5jK6P+lxG75Nvaw5pzmsWyG7P7IbJA0uzqXNBhDmQgC8tR
+         s44w==
+X-Gm-Message-State: AOAM530FRp/+INKadHlX7C94bGIHJPsetbT1IzGHQGnxN67+GjzFb6eU
+        wILWaUtEUaG/pYnxTaSIRH8=
+X-Google-Smtp-Source: ABdhPJxySUvwtY5DIqWX7IFtrekY9kkCubgf/t3517/f4PE7o1mxgYeQStUpKexVIlQ/w9B/1wLAJg==
+X-Received: by 2002:a17:907:7b8c:b0:6f3:a7d8:2609 with SMTP id ne12-20020a1709077b8c00b006f3a7d82609mr11153301ejc.53.1651075655941;
+        Wed, 27 Apr 2022 09:07:35 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.31
+        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:07:32 -0700 (PDT)
+        Wed, 27 Apr 2022 09:07:35 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,9 +84,9 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v5 14/18] sfc: Remove usage of list iterator for list_add() after the loop body
-Date:   Wed, 27 Apr 2022 18:06:31 +0200
-Message-Id: <20220427160635.420492-15-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v5 16/18] ps3_gelic: Replace usage of found with dedicated list iterator variable
+Date:   Wed, 27 Apr 2022 18:06:33 +0200
+Message-Id: <20220427160635.420492-17-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220427160635.420492-1-jakobkoschel@gmail.com>
 References: <20220427160635.420492-1-jakobkoschel@gmail.com>
@@ -96,53 +96,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation to limit the scope of a list iterator to the list
-traversal loop, use a dedicated pointer pointing to the location
-where the element should be inserted [1].
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Before, the code implicitly used the head when no element was found
-when using &new->list. The new 'pos' variable is set to the list head
-by default and overwritten if the list exits early, marking the
-insertion point for list_add().
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
+
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/net/ethernet/sfc/rx_common.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ .../net/ethernet/toshiba/ps3_gelic_wireless.c | 30 +++++++++----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
-index fa8b9aacca11..74c056210e0b 100644
---- a/drivers/net/ethernet/sfc/rx_common.c
-+++ b/drivers/net/ethernet/sfc/rx_common.c
-@@ -560,14 +560,17 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+diff --git a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
+index dc14a66583ff..c8a016c902cd 100644
+--- a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
++++ b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
+@@ -1495,14 +1495,14 @@ static int gelic_wl_start_scan(struct gelic_wl_info *wl, int always_scan,
+  */
+ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
  {
- 	struct list_head *head = &efx->rss_context.list;
- 	struct efx_rss_context *ctx, *new;
-+	struct list_head *pos = head;
- 	u32 id = 1; /* Don't use zero, that refers to the master RSS context */
++	struct gelic_wl_scan_info *target = NULL, *iter, *tmp;
+ 	struct gelic_eurus_cmd *cmd = NULL;
+-	struct gelic_wl_scan_info *target, *tmp;
+ 	struct gelic_wl_scan_info *oldest = NULL;
+ 	struct gelic_eurus_scan_info *scan_info;
+ 	unsigned int scan_info_size;
+ 	union iwreq_data data;
+ 	unsigned long this_time = jiffies;
+-	unsigned int data_len, i, found, r;
++	unsigned int data_len, i, r;
+ 	void *buf;
  
- 	WARN_ON(!mutex_is_locked(&efx->rss_lock));
+ 	pr_debug("%s:start\n", __func__);
+@@ -1539,14 +1539,14 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
+ 	wl->scan_stat = GELIC_WL_SCAN_STAT_GOT_LIST;
  
- 	/* Search for first gap in the numbering */
- 	list_for_each_entry(ctx, head, list) {
--		if (ctx->user_id != id)
-+		if (ctx->user_id != id) {
-+			pos = &ctx->list;
- 			break;
-+		}
- 		id++;
- 		/* Check for wrap.  If this happens, we have nearly 2^32
- 		 * allocated RSS contexts, which seems unlikely.
-@@ -585,7 +588,7 @@ struct efx_rss_context *efx_alloc_rss_context_entry(struct efx_nic *efx)
+ 	/* mark all entries are old */
+-	list_for_each_entry_safe(target, tmp, &wl->network_list, list) {
+-		target->valid = 0;
++	list_for_each_entry_safe(iter, tmp, &wl->network_list, list) {
++		iter->valid = 0;
+ 		/* expire too old entries */
+-		if (time_before(target->last_scanned + wl->scan_age,
++		if (time_before(iter->last_scanned + wl->scan_age,
+ 				this_time)) {
+-			kfree(target->hwinfo);
+-			target->hwinfo = NULL;
+-			list_move_tail(&target->list, &wl->network_free_list);
++			kfree(iter->hwinfo);
++			iter->hwinfo = NULL;
++			list_move_tail(&iter->list, &wl->network_free_list);
+ 		}
+ 	}
  
- 	/* Insert the new entry into the gap */
- 	new->user_id = id;
--	list_add_tail(&new->list, &ctx->list);
-+	list_add_tail(&new->list, pos);
- 	return new;
- }
+@@ -1569,22 +1569,22 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
+ 			continue;
+ 		}
  
+-		found = 0;
++		target = NULL;
+ 		oldest = NULL;
+-		list_for_each_entry(target, &wl->network_list, list) {
+-			if (ether_addr_equal(&target->hwinfo->bssid[2],
++		list_for_each_entry(iter, &wl->network_list, list) {
++			if (ether_addr_equal(&iter->hwinfo->bssid[2],
+ 					     &scan_info->bssid[2])) {
+-				found = 1;
++				target = iter;
+ 				pr_debug("%s: same BBS found scanned list\n",
+ 					 __func__);
+ 				break;
+ 			}
+ 			if (!oldest ||
+-			    (target->last_scanned < oldest->last_scanned))
+-				oldest = target;
++			    (iter->last_scanned < oldest->last_scanned))
++				oldest = iter;
+ 		}
+ 
+-		if (!found) {
++		if (!target) {
+ 			/* not found in the list */
+ 			if (list_empty(&wl->network_free_list)) {
+ 				/* expire oldest */
 -- 
 2.25.1
 
