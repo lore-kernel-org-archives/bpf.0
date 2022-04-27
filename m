@@ -2,60 +2,60 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C79A7C433F5
-	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 19:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1330DC433EF
+	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 19:11:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbiD0TNc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 15:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S229983AbiD0TOp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Apr 2022 15:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232705AbiD0TNT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 15:13:19 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5317E84EFD
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 12:03:52 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id c125so4239365iof.9
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 12:03:52 -0700 (PDT)
+        with ESMTP id S234045AbiD0TOK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Apr 2022 15:14:10 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3651E8F1A3
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 12:04:53 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id t4so583134ilo.12
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 12:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DSaqVjmVYqV6de9fd3OrWrMZBe/mT7LRLe+2rYXlueI=;
-        b=UcDxYuxhhii8lgf85htmvTq1+a1uoveTcv574BYDjnN7T5a7kyc5n+UruRyXR+Eml1
-         wuaolH85lKsOtAIs87e8sCJoA64fLZOJLhnmyMpJTh65FQAra28zs4q8b6uzbGM9hZdr
-         YZnqnwyJQ834KBW3mVMPh+UHr+K0m86s1qiLuxt22ROipJ0iRWz5LMLCFTYUIknqxCpL
-         jRSoA4wnl83kcaNj+QeAoIIo1JsiBE3W5tEdVwnALfVeFov62hBph5umMFdgZupvCTtL
-         GtzMXykYpJ5l2vK7LSBMu4oC6kzD0Dfx24OIwY7LkeQVDoaiNqKOSKMBl8Y0YlvIcRnq
-         Er2g==
+        bh=8IEiyj6iYS64RcqScEGEmFRIBA6kU45FZwvezAc1nDI=;
+        b=EpEyQZjYA37TOudM035S9jYRjQRGdi9jmQ2sLFO7W0TbYcpfajMlFocsm/MKoYhxsh
+         XwfHxx2+0kdWFAlo+ZVftTAbpXkbS0ts2oRWguJVfWLNvhwa+ZJuMMNxIzEwri+i1HLZ
+         uqUuKUhknzIQ8xJ+uCQJx1bqTgJNr3QcCWmPvDRMVBIBJLn7sKDrmtZ3rBVjBvyh25P1
+         sF/TzhZ1eAiTbx1V2zf1UjYkGptuaaUmrZsdtPUSGJofsfWUzE0ORXytHc+pgnCQ2bHt
+         aSsARrc8q03VGq/yj0m3qjW8A+l7jDpKok0TmeKx+S49hSzcwq5N3syPl3f8cDEoBT5x
+         +IwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DSaqVjmVYqV6de9fd3OrWrMZBe/mT7LRLe+2rYXlueI=;
-        b=N3pGdPvwt5vMKWbp/fVn1vzdp7ncNvgKLzi7kMmQ2+gkCQ6/a3HwrR/fNnbJn+GItD
-         F5gTY+5mu2R64Bvl8B1C3/PRqTv3nBTGRoBUymn/N9egx00ZHE8B2WZzxt3JlFV9TY3u
-         1mMeOh6F27eoAfvM5sDjKC+OYL39XXpOoaFIZCZSvhqxnwmjjk4L4xKpRbAnN3qJ/TZh
-         6tApKkxAbq+1sKatY2kxJqYVUGH7ZIGzkCK31diyXXDJv7ADNUcZMh7BvkHZqRVz3EA1
-         32lmJEva5wHO4jeP1pdTtegwPiA2ua91Zwqvwuc4FFHk65aD2mMkBLOZ9CIFt1v51OEv
-         7Dvw==
-X-Gm-Message-State: AOAM532biwpFA7bhjx/iKD8i+49lDkMJG74/p7wQhv5ZSlzYHpD78Idf
-        uTYb2NgGqfYAQUo0maBd9njkzmUyUU+qCMrgo2Y255epZto=
-X-Google-Smtp-Source: ABdhPJyjuh7mfqKnJZ0d4AClwjCZxMC9g5IF982me0a7ZHXAqvc9LBAs0SbwlhiTSNSiSnqGp9FopRvW8NkubRMiNi4=
-X-Received: by 2002:a05:6638:19c8:b0:328:6a22:8258 with SMTP id
- bi8-20020a05663819c800b003286a228258mr12999227jab.103.1651086231678; Wed, 27
- Apr 2022 12:03:51 -0700 (PDT)
+        bh=8IEiyj6iYS64RcqScEGEmFRIBA6kU45FZwvezAc1nDI=;
+        b=1pV6qDpC6uPXpGoRdg+dJISBklqE2ih8AMvyGbBfLq9i09kGVk1EfhSxGkWkHEPG8q
+         VDYV4KcROSy9/27WvHPCBe7a+vRqpn2X1+TkOFsFu2n4jtSiY7nTtixSyOTL2kodVGNu
+         Jv79N1YgbwLd/KNWXoY8uLAkXqWp6P9dDRoqWutJrFyeqloVsI/HamN5K7VjtB2uPGpo
+         FmHCJcI4X3K2TlITD0+PdTMO4wjaPXplkV9bZl1v0tj0CT1M8IoHxD2lCC+tS2OENl1R
+         zv1sGkT+0/jFvAjxnR/8WmasUTlvKRaJj3RTFAsa+cHJFY6VDneGGuVWwjVf2TixQVja
+         vRKA==
+X-Gm-Message-State: AOAM531m5e0cTj77CR9wNZNGIQg3sC5o41Bz703Js7KbCRnkYfzVzNkJ
+        YsiuQmLV96bC9z7lF0AAq+EW4PoRsK3sL++Xh25a46nu
+X-Google-Smtp-Source: ABdhPJzbxMhiGPgDrz71b7j5nd6DTiBwynNlJG8BVb3njfaQh7uefOC94+krW2wqRAxx/O2tIwPs4VA5H8NVVKhooEc=
+X-Received: by 2002:a92:cd8d:0:b0:2cd:81ce:79bd with SMTP id
+ r13-20020a92cd8d000000b002cd81ce79bdmr8474845ilb.252.1651086292643; Wed, 27
+ Apr 2022 12:04:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220422182254.13693-1-9erthalion6@gmail.com> <20220422182254.13693-3-9erthalion6@gmail.com>
-In-Reply-To: <20220422182254.13693-3-9erthalion6@gmail.com>
+References: <20220422182254.13693-1-9erthalion6@gmail.com>
+In-Reply-To: <20220422182254.13693-1-9erthalion6@gmail.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 27 Apr 2022 12:03:40 -0700
-Message-ID: <CAEf4BzYSTOPiiEsksftkp1xkSw9JuCwtmiuZw4+nqREM_G=yMw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 2/2] selftests/bpf: Add bpf link iter test
-To:     Dmitrii Dolgov <9erthalion6@gmail.com>
+Date:   Wed, 27 Apr 2022 12:04:41 -0700
+Message-ID: <CAEf4Bza4-50p8-TsjsvjnVzEYYHZMBk_yq5Kb2AvJ3gnBp4Xeg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 0/2] bpf: bpf link iterator
+To:     Dmitrii Dolgov <9erthalion6@gmail.com>, Yonghong Song <yhs@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>
+        Song Liu <songliubraving@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -63,78 +63,42 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Fri, Apr 22, 2022 at 11:23 AM Dmitrii Dolgov <9erthalion6@gmail.com> wrote:
 >
-> Add a simple test for bpf link iterator
+> Bpf links seem to be one of the important structures for which no
+> iterator is provided. Such iterator could be useful in those cases when
+> generic 'task/file' is not suitable or better performance is needed.
 >
-> Signed-off-by: Dmitrii Dolgov <9erthalion6@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/bpf_iter.c        | 15 +++++++++++++++
->  .../selftests/bpf/progs/bpf_iter_bpf_link.c    | 18 ++++++++++++++++++
->  2 files changed, 33 insertions(+)
+
+Overall looks good, I'll defer to Yonghong to validate kernel-side
+iterator logic. Yonghong, can you please take a look? Thanks!
+
+> The implementation is mostly copied from prog iterator, and I would like
+> to get any high-level feedback about what needs to be different or have
+> to be taken into account. As a side note, I would also appreciate if
+> someone could point me out to some guide about writing selftests for bpf
+> subsystem -- for some unclear reason I couldn't compile the test from
+> this changeset, and was testing it only manually with a custom test
+> program.
+>
+
+What was the error? Generally, you need very recent Clang (probably
+built from sources), latest pahole built from sources, and you should
+compile kernel before building selftests/bpf.
+
+
+> Dmitrii Dolgov (2):
+>   bpf: Add bpf_link iterator
+>   selftests/bpf: Add bpf_link test
+>
+>  include/linux/bpf.h                           |   1 +
+>  kernel/bpf/Makefile                           |   2 +-
+>  kernel/bpf/link_iter.c                        | 107 ++++++++++++++++++
+>  kernel/bpf/syscall.c                          |  19 ++++
+>  .../selftests/bpf/prog_tests/bpf_iter.c       |  15 +++
+>  .../selftests/bpf/progs/bpf_iter_bpf_link.c   |  18 +++
+>  6 files changed, 161 insertions(+), 1 deletion(-)
+>  create mode 100644 kernel/bpf/link_iter.c
 >  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_link.c
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> index 2c403ddc8076..e14a7a6d925c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> @@ -26,6 +26,7 @@
->  #include "bpf_iter_bpf_sk_storage_map.skel.h"
->  #include "bpf_iter_test_kern5.skel.h"
->  #include "bpf_iter_test_kern6.skel.h"
-> +#include "bpf_iter_bpf_link.skel.h"
->
->  static int duration;
->
-> @@ -1172,6 +1173,20 @@ static void test_buf_neg_offset(void)
->                 bpf_iter_test_kern6__destroy(skel);
->  }
->
-> +static void test_link_iter(void)
-> +{
-> +       struct bpf_iter_bpf_link *skel;
-> +
-> +       skel = bpf_iter_bpf_link__open_and_load();
-> +       if (CHECK(skel, "bpf_iter_bpf_link__open_and_load",
-> +                 "skeleton open_and_load unexpected success\n"))
-> +               return;
-> +
-
-please don't use CHECK() for new tests, you need ASSERT_OK_PTR() here
-
-> +       do_dummy_read(skel->progs.dump_bpf_link);
-> +
-> +       bpf_iter_bpf_link__destroy(skel);
-> +}
-> +
->  #define CMP_BUFFER_SIZE 1024
->  static char task_vma_output[CMP_BUFFER_SIZE];
->  static char proc_maps_output[CMP_BUFFER_SIZE];
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_link.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_link.c
-> new file mode 100644
-> index 000000000000..a5041fa1cda9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_link.c
-> @@ -0,0 +1,18 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2020 Facebook */
-> +#include "bpf_iter.h"
-> +#include <bpf/bpf_helpers.h>
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +SEC("iter/bpf_link")
-> +int dump_bpf_link(struct bpf_iter__bpf_link *ctx)
-
-see progs/bpf_iter.h, let's add bpf_iter__bpf_link there as well
-
-> +{
-> +       struct seq_file *seq = ctx->meta->seq;
-> +       struct bpf_link *link = ctx->link;
-> +       int link_id;
-> +
-> +       link_id = link->id;
-> +       bpf_seq_write(seq, &link_id, sizeof(link_id));
-> +       return 0;
-> +}
 > --
 > 2.32.0
 >
