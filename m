@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C67CC433F5
-	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8945C433EF
+	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:09:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241934AbiD0QML (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 12:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S242025AbiD0QMT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Apr 2022 12:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242199AbiD0QLw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:11:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D043656CC;
-        Wed, 27 Apr 2022 09:07:44 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id i27so4344371ejd.9;
-        Wed, 27 Apr 2022 09:07:44 -0700 (PDT)
+        with ESMTP id S242238AbiD0QL4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Apr 2022 12:11:56 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A41457F8C;
+        Wed, 27 Apr 2022 09:08:09 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so4369376ejd.5;
+        Wed, 27 Apr 2022 09:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cM7cNDbZdzDRR54XOLUdiPP1jrQ7jBG9dEAYVsbcNLE=;
-        b=A8Htft4EvwT9SqEU+mp432FPrRkA/A2mubCUNTACbh+9ZsCDSEQeCbubYFCiwV7et2
-         32mxvLXoLsmy0FtItW3NCx3Y+UPEdZSLQ34uE6is2mvJFMXm5umdPUJMLfzfJhTfmTi9
-         v1Po3076bdspN+L8sUvAzgbuQCbpJrqPGIUfhUwNKeBCU4j2xZ7cO+oHyyX9Bm/D3avW
-         jH2X/eRwkEoQkduB1jvkosr6wCQJvcQSFprdpnTZhOOATniOAsisRbmktjQ8at7BSBVA
-         p1AtT1AEESuli07A4n8ALTyJJVp7iEYcOTqOBMEs3Aospfy47uA1kxAMV7zbRYd6g9ao
-         /KMg==
+        bh=3BKs+pBPEYltsCMoPwYgKcbwLFhDzC1Y/+CPLcIFxmM=;
+        b=Q4jfMoI5WjWw4XYAaHu1x0te1gTTF/pJ9bwG1D3UmYTwPFRaYgjLLsbmhuhk/XZNFJ
+         Gs8uOU1t7JXsV/V7/4dDaMLIhUoBV2frgHYjQ5lQbEgd8FcSvsvHoouafbjEK3TIVsMj
+         +NVquu65opHryDgmkWpdBebfRUbtAI3oNqkDQInrMxRltVtO7H8w/6m0ySGIBVj+XaV7
+         a34xA7mMrfDVCwe1yMmIpA+jykOeQCZnIKzI15T9Z0JVYEBPoZg+21P5Xw7GptsP4b/I
+         PW0wcWSCPNMFhaU0An6yw00SZb7MHVda9Lrhtc6dbDnC/2USs2JWfJpTjLx3K14+psKU
+         5rcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cM7cNDbZdzDRR54XOLUdiPP1jrQ7jBG9dEAYVsbcNLE=;
-        b=Tt8b5oRg0PwOGmBhTPEtkIMVED+BRDogP53CJLI0G+uQ+3BJtTx6WSa300YjX1p86N
-         L3G0FV4cYe1IrqcnW9wS4D5szrPL85wqVz+c4EXqEK5YoHfxmJ+lJuLdJzR4R2PITLzN
-         qIvZ3KyEqexaXkdQkY0BS39VRWGc8Gxr3dNGx761n3dWtEk8bL0lZJlXJ/Ar3QLZytoO
-         la+0ofxTSnx8VrmI1OfQ+P103hwop1H60n/lZfqudi5LZyrOoXFukAkBWQpODOdqlmcd
-         yq6Z03wIa9glhRG/O5w2ewn80rByIIARuSJNBRgIvMe2y8fQwS49d1eJ7Y/1gnN+bL7s
-         Gd7w==
-X-Gm-Message-State: AOAM5306pTisCcxSd3oah/WOwsYLXugkKfGFgUGoiUU9anN06CsYbnsS
-        S4EnShIXpz85oQnmCro9VlY=
-X-Google-Smtp-Source: ABdhPJy+HnRcSWnVRLCgUM5UWKbVkDZcybwwpqzCGQ74DeVD0/Q0cuvO1YJJg3e+zws6FzlT91P3jw==
-X-Received: by 2002:a17:906:824a:b0:6f3:a07b:2568 with SMTP id f10-20020a170906824a00b006f3a07b2568mr12694721ejx.84.1651075635044;
-        Wed, 27 Apr 2022 09:07:15 -0700 (PDT)
+        bh=3BKs+pBPEYltsCMoPwYgKcbwLFhDzC1Y/+CPLcIFxmM=;
+        b=mEXBXimI2bL/MiZCWYvRIV1jhC2rtawToDfmVttIin2qv+iMcHbN/xzwCT1MuxzU4Z
+         l7FCU6RjJp1IzsqQqox3r+6wzVujRGu5PST1GU1SDMVhsprVTB9QErAdTpSt8/Sr3hA7
+         K45LGxW9zuWvQ48Rm6IIV+/tQXCbHGjXvAu/fYDajx7Ml2SjSD4OG3KxWepiBUaiDZkP
+         pa28MFFpODKmtERzitnP8+ilKIGF4bjyErWCOw1zGvr0wIM2RkATmGQXPYhShpnR0+0+
+         3tb+2QcSf5JOClAqhiugyxqsWvJYzXVB/8AcrvCSmQGZc67hIFbDDkHoYFd/zMPaEnUO
+         NZyA==
+X-Gm-Message-State: AOAM531JttBt6fMWSbbMhUJxZywTW43XXFce0Kvv2eZMNS3KkHK+nUIs
+        +/mYjPGiFGpbBLDBpvyG1ZU=
+X-Google-Smtp-Source: ABdhPJxeQHxPbZdIJ6XcQd2QkZ7X9v6YaYy7SDbsVYwTBp0P8/o+DdHREpRXEGzvpSxDNi7/SjRi0Q==
+X-Received: by 2002:a17:907:2d24:b0:6f3:91fd:db8f with SMTP id gs36-20020a1709072d2400b006f391fddb8fmr16274815ejc.150.1651075642191;
+        Wed, 27 Apr 2022 09:07:22 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.13
+        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:07:14 -0700 (PDT)
+        Wed, 27 Apr 2022 09:07:21 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -83,10 +83,11 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         Mike Rapoport <rppt@kernel.org>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v5 01/18] connector: Replace usage of found with dedicated list iterator variable
-Date:   Wed, 27 Apr 2022 18:06:18 +0200
-Message-Id: <20220427160635.420492-2-jakobkoschel@gmail.com>
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: [PATCH net-next v5 06/18] net: dsa: mv88e6xxx: refactor mv88e6xxx_port_vlan()
+Date:   Wed, 27 Apr 2022 18:06:23 +0200
+Message-Id: <20220427160635.420492-7-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220427160635.420492-1-jakobkoschel@gmail.com>
 References: <20220427160635.420492-1-jakobkoschel@gmail.com>
@@ -96,54 +97,113 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+To avoid bugs and speculative execution exploits due to type-confused
+pointers at the end of a list_for_each_entry() loop, one measure is to
+restrict code to not use the iterator variable outside the loop block.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+In the case of mv88e6xxx_port_vlan(), this isn't a problem, as we never
+let the loops exit through "natural causes" anyway, by using a "found"
+variable and then using the last "dp" iterator prior to the break, which
+is a safe thing to do.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Nonetheless, with the expected new syntax, this pattern will no longer
+be possible.
+
+Profit off of the occasion and break the two port finding methods into
+smaller sub-functions. Somehow, returning a copy of the iterator pointer
+is still accepted.
+
+This change makes it redundant to have a "bool found", since the "dp"
+from mv88e6xxx_port_vlan() now holds NULL if we haven't found what we
+were looking for.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- drivers/connector/cn_queue.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/net/dsa/mv88e6xxx/chip.c | 54 ++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/connector/cn_queue.c b/drivers/connector/cn_queue.c
-index 996f025eb63c..ed77599b0b25 100644
---- a/drivers/connector/cn_queue.c
-+++ b/drivers/connector/cn_queue.c
-@@ -92,20 +92,19 @@ int cn_queue_add_callback(struct cn_queue_dev *dev, const char *name,
- 
- void cn_queue_del_callback(struct cn_queue_dev *dev, const struct cb_id *id)
- {
--	struct cn_callback_entry *cbq, *n;
--	int found = 0;
-+	struct cn_callback_entry *cbq = NULL, *iter, *n;
- 
- 	spin_lock_bh(&dev->queue_lock);
--	list_for_each_entry_safe(cbq, n, &dev->queue_list, callback_entry) {
--		if (cn_cb_equal(&cbq->id.id, id)) {
--			list_del(&cbq->callback_entry);
--			found = 1;
-+	list_for_each_entry_safe(iter, n, &dev->queue_list, callback_entry) {
-+		if (cn_cb_equal(&iter->id.id, id)) {
-+			list_del(&iter->callback_entry);
-+			cbq = iter;
- 			break;
- 		}
- 	}
- 	spin_unlock_bh(&dev->queue_lock);
- 
--	if (found)
-+	if (cbq)
- 		cn_queue_release_callback(cbq);
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index b3aa0e5bc842..1f35e89053e6 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1378,42 +1378,50 @@ static int mv88e6xxx_set_mac_eee(struct dsa_switch *ds, int port,
+ 	return 0;
  }
  
++static struct dsa_port *mv88e6xxx_find_port(struct dsa_switch_tree *dst,
++					    int sw_index, int port)
++{
++	struct dsa_port *dp;
++
++	list_for_each_entry(dp, &dst->ports, list)
++		if (dp->ds->index == sw_index && dp->index == port)
++			return dp;
++
++	return NULL;
++}
++
++static struct dsa_port *
++mv88e6xxx_find_port_by_bridge_num(struct dsa_switch_tree *dst,
++				  unsigned int bridge_num)
++{
++	struct dsa_port *dp;
++
++	list_for_each_entry(dp, &dst->ports, list)
++		if (dsa_port_bridge_num_get(dp) == bridge_num)
++			return dp;
++
++	return NULL;
++}
++
+ /* Mask of the local ports allowed to receive frames from a given fabric port */
+ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ {
+ 	struct dsa_switch *ds = chip->ds;
+ 	struct dsa_switch_tree *dst = ds->dst;
+ 	struct dsa_port *dp, *other_dp;
+-	bool found = false;
+ 	u16 pvlan;
+ 
+-	/* dev is a physical switch */
+ 	if (dev <= dst->last_switch) {
+-		list_for_each_entry(dp, &dst->ports, list) {
+-			if (dp->ds->index == dev && dp->index == port) {
+-				/* dp might be a DSA link or a user port, so it
+-				 * might or might not have a bridge.
+-				 * Use the "found" variable for both cases.
+-				 */
+-				found = true;
+-				break;
+-			}
+-		}
+-	/* dev is a virtual bridge */
++		/* dev is a physical switch */
++		dp = mv88e6xxx_find_port(dst, dev, port);
+ 	} else {
+-		list_for_each_entry(dp, &dst->ports, list) {
+-			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+-
+-			if (bridge_num + dst->last_switch != dev)
+-				continue;
+-
+-			found = true;
+-			break;
+-		}
++		/* dev is a virtual bridge */
++		dp = mv88e6xxx_find_port_by_bridge_num(dst,
++						       dev - dst->last_switch);
+ 	}
+ 
+ 	/* Prevent frames from unknown switch or virtual bridge */
+-	if (!found)
++	if (!dp)
+ 		return 0;
+ 
+ 	/* Frames from DSA links and CPU ports can egress any local port */
 -- 
 2.25.1
 
