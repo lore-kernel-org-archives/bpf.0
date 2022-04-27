@@ -2,145 +2,118 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 983F8C433EF
-	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:10:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B89C43219
+	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:10:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242264AbiD0QNJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 12:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
+        id S241986AbiD0QNK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Apr 2022 12:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242278AbiD0QMD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:12:03 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F93496526;
-        Wed, 27 Apr 2022 09:08:20 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y3so4326522ejo.12;
-        Wed, 27 Apr 2022 09:08:19 -0700 (PDT)
+        with ESMTP id S241917AbiD0QMR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Apr 2022 12:12:17 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E0D3F3D53;
+        Wed, 27 Apr 2022 09:08:31 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d15so1960593plh.2;
+        Wed, 27 Apr 2022 09:08:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0WZ3VKnVxGM80qdLHkweZkrBfRptzeVUXSKm7/OGDn8=;
-        b=iYefV4x4cS2P5G6zvG61cBj8T2py/pIo/pjs0Q9iTwQdWI8zdKVZ+iw8xHm0OF578N
-         Uzt26JvfjZUW2E1xhbuyxsNYSzvthUBdnuF7xbo5yMRhTPUU4f4qkkZKiTb7iQaf/WhB
-         /NVvWxQ9VRsNlqNb2A8Lm2FeT/6uTp7jNqoJFVbdG6i7s68Fxz+UPfFnm2U+cuBS/lO0
-         YzSgsu0XtaWbRV9GWi9ix5UU4FqVq6EGD6xZu53Wc6vh7oEaiIDzsI1ZtAezpWGlAJ6Y
-         gdmp7zSN6Cik+iMJNUTOlzUx56lUG//1VO4MJDNdjOhY5M5juk1C594Gn81ZHlvaE9IO
-         Zppw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=no2dRxhaPo5kKkkNtYDviUL8aWZxcIpM0ihWfE784Qo=;
+        b=QSugq2x0W9ZgFZS2awb0WG1lP1D6yw+gw1IeXAl14ic+8y8v4p/ptpenf+qyKnO/aP
+         PtDMqmvYgNp7f5ji3XOX9KSZBcjjTH1W5s29F16RqsAhYBzAw/173R2GBEnaGHKabzk7
+         LRa74Ag+maLLZ7cOva724Wvu+fNrrndGJodwNBSWsFT9yrqQqQH4CQkib7hs74qVqrZV
+         wjgyIY/DvcbYflbFFz/soFDlXspEu6X7kJt84WRQy/eEoermUy4a8BoMc6MFlRD/9Cpw
+         YMfJdMNn4IKO++kv9ylkRPfmy6LF8MYM13x46HIax9NIIQv6j1cNB2SHJr6Uq6KYAXyR
+         icJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0WZ3VKnVxGM80qdLHkweZkrBfRptzeVUXSKm7/OGDn8=;
-        b=vYqw6vIApgx/em1jll91Zsa6v9Iw5EKbYSEwwh//fjxPi7kfBKbIoAQHGm59Rue0xc
-         mQXLocxRD4vSpyy8upWanhlq/1Q3dzDJqZM9kS/PjCxuGO2J+jD9JUyJc9elSWmpqDez
-         YkK1YkSZQZTYj2gk6aMBMZxruMN/zXpSHjEm8c7GxT8yAi2637TJoBzgGIp8mwHMBH3/
-         gifWp8uzhlmjN203EhEIiyNGw2fdHtB7qVMlkt5XFWdYySOp2BfNuZrSiPo9kfYLnAaA
-         eirzcf8897hM/iNjt4/omAEoP5rOl6HSkMV8fE/hVYvmERIRIhomvufNCgFlhfOCmCk0
-         2Qmw==
-X-Gm-Message-State: AOAM532nSoZhLm/S4jREZKfyCwHBM7axzAxgThyuzoOY6URiYjdG20He
-        jXjucBhhvRtAdaGe1PRiVB4=
-X-Google-Smtp-Source: ABdhPJzxkWZJssycANRkME55YZz1X8TDc5voDlGllps54WeGD9LALQXZ3eiyQ26eO0/xVC/EDO0p3g==
-X-Received: by 2002:a17:907:7ba3:b0:6ef:f9ca:f2da with SMTP id ne35-20020a1709077ba300b006eff9caf2damr16508279ejc.634.1651075650148;
-        Wed, 27 Apr 2022 09:07:30 -0700 (PDT)
-Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:07:29 -0700 (PDT)
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=no2dRxhaPo5kKkkNtYDviUL8aWZxcIpM0ihWfE784Qo=;
+        b=VvRtkw+ZPCnWgkbnJGesgLVluK93OD2jqY0UF4XyNi1E7OusptHXC2T/cNsz+5I3d8
+         e1ajqYdCi7qQVm2TrbWlN4U9gWzlTI4xh1ShWkz8L945QANXLCeDBwRBzwihRaunlAkQ
+         JFiUjcESxgN3jIzCifdnmX+VQqtOb/uPg+YpWsWi/9IFMO7DsA7OqrM3msPhSiN8Vd1k
+         4sLpft8KX8WpnfUTClblVnylaU3juJiJvxfynRWWCfOya2R5Iy9JbL8bMRDAQQl0v8Cn
+         vIGtG13atzRKJFsJc19zrYMFSY+Jw2kJVEVA1tin1De815FusP4QSxKpJaOaTIGqvPYa
+         rk9w==
+X-Gm-Message-State: AOAM532JOaM48LMDacGcQGoq/b/vdZzjohOgALviAhtcW3jWgDk23GdU
+        hxsWbT22D5+TFWDyOcNfHyWd++v+TdJpPtB/o20=
+X-Google-Smtp-Source: ABdhPJyJiYeFLo2KCPfmWmqXn3NYPJKWYK4GgiOxpR72sCQj0AxvJmSjoEeR1qTP7EuM8zgMlcNrDZq5Rz4ueQkrbQ8=
+X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id
+ m17-20020a17090a859100b001b9da102127mr44674409pjn.13.1651075660046; Wed, 27
+ Apr 2022 09:07:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <202204271656.OTIj2QNJ-lkp@intel.com> <Ymj5AJtiBx0UjEdT@8276d8ba1d54>
+In-Reply-To: <Ymj5AJtiBx0UjEdT@8276d8ba1d54>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 27 Apr 2022 09:07:29 -0700
+Message-ID: <CAADnVQLSfbc8rNQC+0rGxgJCbXYCENsAORZmiXqcXc+W0N8A0g@mail.gmail.com>
+Subject: Re: [PATCH] libbpf: fix returnvar.cocci warnings
+To:     kernel test robot <lkp@intel.com>,
+        Julia Lawall <julia.lawall@inria.fr>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v5 12/18] net: qede: Replace usage of found with dedicated list iterator variable
-Date:   Wed, 27 Apr 2022 18:06:29 +0200
-Message-Id: <20220427160635.420492-13-jakobkoschel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220427160635.420492-1-jakobkoschel@gmail.com>
-References: <20220427160635.420492-1-jakobkoschel@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+On Wed, Apr 27, 2022 at 1:04 AM kernel test robot <lkp@intel.com> wrote:
+>
+> From: kernel test robot <lkp@intel.com>
+>
+> tools/lib/bpf/relo_core.c:1064:8-11: Unneeded variable: "len". Return "0" on line 1086
+>
+>
+>  Remove unneeded variable used to store return value.
+>
+> Generated by: scripts/coccinelle/misc/returnvar.cocci
+>
+> Fixes: b58af63aab11 ("libbpf: Refactor CO-RE relo human description formatting routine")
+> CC: Andrii Nakryiko <andrii@kernel.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+> ---
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   f02ac5c95dfd45d2f50ecc68d79177de326c668c
+> commit: b58af63aab11e4ae00fe96de9505759cfdde8ee9 [6746/7265] libbpf: Refactor CO-RE relo human description formatting routine
+> :::::: branch date: 2 hours ago
+> :::::: commit date: 9 hours ago
+>
+>  tools/lib/bpf/relo_core.c |   10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> --- a/tools/lib/bpf/relo_core.c
+> +++ b/tools/lib/bpf/relo_core.c
+> @@ -1061,7 +1061,7 @@ static int bpf_core_format_spec(char *bu
+>         const struct btf_enum *e;
+>         const char *s;
+>         __u32 type_id;
+> -       int i, len = 0;
+> +       int i;
+>
+>  #define append_buf(fmt, args...)                               \
+>         ({                                                      \
+> @@ -1083,7 +1083,7 @@ static int bpf_core_format_spec(char *bu
+>                    type_id, btf_kind_str(t), str_is_empty(s) ? "<anon>" : s);
+>
+>         if (core_relo_is_type_based(spec->relo_kind))
+> -               return len;
+> +               return 0;
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+cocci is wrong.
+It missed append_buf() macro.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
-
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
----
- drivers/net/ethernet/qlogic/qede/qede_rdma.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/qlogic/qede/qede_rdma.c b/drivers/net/ethernet/qlogic/qede/qede_rdma.c
-index 6304514a6f2c..2eb03ffe2484 100644
---- a/drivers/net/ethernet/qlogic/qede/qede_rdma.c
-+++ b/drivers/net/ethernet/qlogic/qede/qede_rdma.c
-@@ -246,18 +246,17 @@ static void qede_rdma_change_mtu(struct qede_dev *edev)
- static struct qede_rdma_event_work *
- qede_rdma_get_free_event_node(struct qede_dev *edev)
- {
--	struct qede_rdma_event_work *event_node = NULL;
--	bool found = false;
-+	struct qede_rdma_event_work *event_node = NULL, *iter;
- 
--	list_for_each_entry(event_node, &edev->rdma_info.rdma_event_list,
-+	list_for_each_entry(iter, &edev->rdma_info.rdma_event_list,
- 			    list) {
--		if (!work_pending(&event_node->work)) {
--			found = true;
-+		if (!work_pending(&iter->work)) {
-+			event_node = iter;
- 			break;
- 		}
- 	}
- 
--	if (!found) {
-+	if (!event_node) {
- 		event_node = kzalloc(sizeof(*event_node), GFP_ATOMIC);
- 		if (!event_node) {
- 			DP_NOTICE(edev,
--- 
-2.25.1
-
+Please fix cocci so we don't have to manually deal with
+broken patches like this one.
