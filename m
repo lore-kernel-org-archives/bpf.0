@@ -2,51 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E94F8C433EF
-	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22267C433F5
+	for <bpf@archiver.kernel.org>; Wed, 27 Apr 2022 16:10:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241674AbiD0QNE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 12:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S242213AbiD0QNI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 27 Apr 2022 12:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241180AbiD0QMQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 12:12:16 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA61E4692E8;
-        Wed, 27 Apr 2022 09:08:28 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id dk23so4359289ejb.8;
-        Wed, 27 Apr 2022 09:08:28 -0700 (PDT)
+        with ESMTP id S242274AbiD0QMD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 27 Apr 2022 12:12:03 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C789496D7D;
+        Wed, 27 Apr 2022 09:08:20 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z19so2483305edx.9;
+        Wed, 27 Apr 2022 09:08:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
-        b=QdO1SZDa4iev+atCa/l33RZOTYxU8Tm6OBJDuf3wFR1IPldpmE0Zz1hGsOF0mrH3tp
-         Rrbgry+KLq2g5sBompEWvjwLxY/s/BnZGQGzzRqRqXLHBTYLUYGEpJu906ZngqiA10I2
-         p881qc+TsKdacaJize2/DNjc/WdmBcRP99WCcLj6IETGvqy23i2A6EI4klZ1jjJeda8b
-         SmmzFz4xtkLCcGeLFvx7Lz4Frop8YYjZXS/gLlZqdgiJGfMo9V1SPUpzzANTuBoVYNJK
-         IlRCbSielt0CFTgv7ZMUDxqDNtKQ026XVmFIuWJY91BdH+nbOdJPWD/XeYlhk3N5g+Nu
-         q1UQ==
+        bh=fIZenjsGtzoZOCvRY/8dIr7NFNGibTLVVWT+oNYuIJo=;
+        b=Loswq8nvbzRxDR73WmbwfNXIJGBqOC3T+Wyo24t48yxcjf//w0mo3l9Ym0uXu/cZ9A
+         Y22QBny9+t/M8zNI4cf7TfXze/2AggxqotMTFurZBhCPTYEO2+h9g9aiR/eJVXoKwegL
+         cjrR3bUQtRNgySrtOaBt9/Kf1FfoMlTT01nygxeQrimJB/zoCEAs2Emyt1RSc7c51bGm
+         Z7yuYGjT5B3iX0wv12wvEt2tcr2W+BQbB3Xp5mHBBe4BLBGoJ0tFH7b5ACm6jH9qYL7M
+         OSkvFVGEotQRL9Ne9eyhT7HWSsrS8qbM4eeLpI4OETGfcXP84f0qR8TqMxbhiHkvmY2B
+         jEhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vgJhsUA0t53G3i/our+ohO3psku9eyW28VU5QSKiZig=;
-        b=GHpB+MIvPjCKU4rDadzd6MF7Cc2DySqujF66oXufFLiTFFF2W4zPi5hVRh5qobAvh4
-         2m3mHmUOkX0XcJ1TrB0Fwzqvas7rf9Ib1hMikS1Xnj/SW/ecP0LDyD59OYM3tm5cm5d8
-         RbOrhBmgwIAoPECIrh+XNDF2lWh2QjKkDLe0Rz7j8GBFjWlHezd3aAkpn1lL88mHuPGc
-         kEf7uYVdR8o7PXvaqtqCtPIeQz9qpNq1GJP+0tiXWoY7UVFO4JwE3o3S+P6UYFeyO9q8
-         QOBCmpy3DCdIpRexsFFktb5jK6P+lxG75Nvaw5pzmsWyG7P7IbJA0uzqXNBhDmQgC8tR
-         s44w==
-X-Gm-Message-State: AOAM530FRp/+INKadHlX7C94bGIHJPsetbT1IzGHQGnxN67+GjzFb6eU
-        wILWaUtEUaG/pYnxTaSIRH8=
-X-Google-Smtp-Source: ABdhPJxySUvwtY5DIqWX7IFtrekY9kkCubgf/t3517/f4PE7o1mxgYeQStUpKexVIlQ/w9B/1wLAJg==
-X-Received: by 2002:a17:907:7b8c:b0:6f3:a7d8:2609 with SMTP id ne12-20020a1709077b8c00b006f3a7d82609mr11153301ejc.53.1651075655941;
-        Wed, 27 Apr 2022 09:07:35 -0700 (PDT)
+        bh=fIZenjsGtzoZOCvRY/8dIr7NFNGibTLVVWT+oNYuIJo=;
+        b=IJuIbpAr+mIUS6528lkzWOoUp6xQDmgd/tQINQJKN9T8gN/IaSw+b7b2AWutSTRhmC
+         S6uuRPuJwpoKXzBuA8LjsuMHWf9GxdUrPJY3rQyMXH3ApC5g91zuXuoP+AZYtbgRnJRR
+         iLM4y5imgGPfPuZCoMgTRQshavBfHoWl8XOwmPmHvc4GHVMaswCUXv/sXeoxPo7TX8Cb
+         J0Sy/PBXiSWCUKAMIktNfo8WlJYxz9PsWY23OEohYwH1p/UcvYvUHqmm7tgPRxcomYEa
+         7CVGAxoH007pMafB+qkqTKmSf0WxOjDH+0fr5xDDxfUIygspJAPwq6hS3AR7WKpVzwBv
+         QDSg==
+X-Gm-Message-State: AOAM533NFCjLtC0yYjhomFAilB7/8rmaqHyEErknogwVDxTKm56aLhX1
+        JX0IYalbPtry6SymB/jz0bQ=
+X-Google-Smtp-Source: ABdhPJycm/m7LkEc21AKXttuikHx7Z81DgO8aTXJSz0bAgx9hTWZ3Wde84ZzMxbdpyXArZqhFoaUAA==
+X-Received: by 2002:aa7:d393:0:b0:425:a8f8:663a with SMTP id x19-20020aa7d393000000b00425a8f8663amr30810362edq.323.1651075651612;
+        Wed, 27 Apr 2022 09:07:31 -0700 (PDT)
 Received: from localhost.localdomain (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.34
+        by smtp.googlemail.com with ESMTPSA id n5-20020a170906378500b006efb4ab6f59sm6984098ejc.86.2022.04.27.09.07.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 09:07:35 -0700 (PDT)
+        Wed, 27 Apr 2022 09:07:31 -0700 (PDT)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     "David S. Miller" <davem@davemloft.net>
 Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
@@ -84,9 +84,9 @@ Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
         "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Subject: [PATCH net-next v5 16/18] ps3_gelic: Replace usage of found with dedicated list iterator variable
-Date:   Wed, 27 Apr 2022 18:06:33 +0200
-Message-Id: <20220427160635.420492-17-jakobkoschel@gmail.com>
+Subject: [PATCH net-next v5 13/18] net: qede: Remove check of list iterator against head past the loop body
+Date:   Wed, 27 Apr 2022 18:06:30 +0200
+Message-Id: <20220427160635.420492-14-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220427160635.420492-1-jakobkoschel@gmail.com>
 References: <20220427160635.420492-1-jakobkoschel@gmail.com>
@@ -96,95 +96,54 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+When list_for_each_entry() completes the iteration over the whole list
+without breaking the loop, the iterator value will be a bogus pointer
+computed based on the head element.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+While it is safe to use the pointer to determine if it was computed
+based on the head element, either with list_entry_is_head() or
+&pos->member == head, using the iterator variable after the loop should
+be avoided.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+In preparation to limit the scope of a list iterator to the list
+traversal loop, use a dedicated pointer to point to the found element [1].
 
 Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- .../net/ethernet/toshiba/ps3_gelic_wireless.c | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_filter.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
-index dc14a66583ff..c8a016c902cd 100644
---- a/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
-+++ b/drivers/net/ethernet/toshiba/ps3_gelic_wireless.c
-@@ -1495,14 +1495,14 @@ static int gelic_wl_start_scan(struct gelic_wl_info *wl, int always_scan,
-  */
- static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_filter.c b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+index 3010833ddde3..3d167e37e654 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_filter.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_filter.c
+@@ -829,18 +829,21 @@ int qede_configure_vlan_filters(struct qede_dev *edev)
+ int qede_vlan_rx_kill_vid(struct net_device *dev, __be16 proto, u16 vid)
  {
-+	struct gelic_wl_scan_info *target = NULL, *iter, *tmp;
- 	struct gelic_eurus_cmd *cmd = NULL;
--	struct gelic_wl_scan_info *target, *tmp;
- 	struct gelic_wl_scan_info *oldest = NULL;
- 	struct gelic_eurus_scan_info *scan_info;
- 	unsigned int scan_info_size;
- 	union iwreq_data data;
- 	unsigned long this_time = jiffies;
--	unsigned int data_len, i, found, r;
-+	unsigned int data_len, i, r;
- 	void *buf;
+ 	struct qede_dev *edev = netdev_priv(dev);
+-	struct qede_vlan *vlan;
++	struct qede_vlan *vlan = NULL;
++	struct qede_vlan *iter;
+ 	int rc = 0;
  
- 	pr_debug("%s:start\n", __func__);
-@@ -1539,14 +1539,14 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
- 	wl->scan_stat = GELIC_WL_SCAN_STAT_GOT_LIST;
+ 	DP_VERBOSE(edev, NETIF_MSG_IFDOWN, "Removing vlan 0x%04x\n", vid);
  
- 	/* mark all entries are old */
--	list_for_each_entry_safe(target, tmp, &wl->network_list, list) {
--		target->valid = 0;
-+	list_for_each_entry_safe(iter, tmp, &wl->network_list, list) {
-+		iter->valid = 0;
- 		/* expire too old entries */
--		if (time_before(target->last_scanned + wl->scan_age,
-+		if (time_before(iter->last_scanned + wl->scan_age,
- 				this_time)) {
--			kfree(target->hwinfo);
--			target->hwinfo = NULL;
--			list_move_tail(&target->list, &wl->network_free_list);
-+			kfree(iter->hwinfo);
-+			iter->hwinfo = NULL;
-+			list_move_tail(&iter->list, &wl->network_free_list);
- 		}
- 	}
+ 	/* Find whether entry exists */
+ 	__qede_lock(edev);
+-	list_for_each_entry(vlan, &edev->vlan_list, list)
+-		if (vlan->vid == vid)
++	list_for_each_entry(iter, &edev->vlan_list, list)
++		if (iter->vid == vid) {
++			vlan = iter;
+ 			break;
++		}
  
-@@ -1569,22 +1569,22 @@ static void gelic_wl_scan_complete_event(struct gelic_wl_info *wl)
- 			continue;
- 		}
- 
--		found = 0;
-+		target = NULL;
- 		oldest = NULL;
--		list_for_each_entry(target, &wl->network_list, list) {
--			if (ether_addr_equal(&target->hwinfo->bssid[2],
-+		list_for_each_entry(iter, &wl->network_list, list) {
-+			if (ether_addr_equal(&iter->hwinfo->bssid[2],
- 					     &scan_info->bssid[2])) {
--				found = 1;
-+				target = iter;
- 				pr_debug("%s: same BBS found scanned list\n",
- 					 __func__);
- 				break;
- 			}
- 			if (!oldest ||
--			    (target->last_scanned < oldest->last_scanned))
--				oldest = target;
-+			    (iter->last_scanned < oldest->last_scanned))
-+				oldest = iter;
- 		}
- 
--		if (!found) {
-+		if (!target) {
- 			/* not found in the list */
- 			if (list_empty(&wl->network_free_list)) {
- 				/* expire oldest */
+-	if (list_entry_is_head(vlan, &edev->vlan_list, list)) {
++	if (!vlan) {
+ 		DP_VERBOSE(edev, (NETIF_MSG_IFUP | NETIF_MSG_IFDOWN),
+ 			   "Vlan isn't configured\n");
+ 		goto out;
 -- 
 2.25.1
 
