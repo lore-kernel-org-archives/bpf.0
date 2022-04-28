@@ -2,46 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B1FEC433FE
-	for <bpf@archiver.kernel.org>; Thu, 28 Apr 2022 04:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22E53C433EF
+	for <bpf@archiver.kernel.org>; Thu, 28 Apr 2022 04:16:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242651AbiD1ETB convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 28 Apr 2022 00:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
+        id S242667AbiD1ET2 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 28 Apr 2022 00:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242698AbiD1ES6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 28 Apr 2022 00:18:58 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6862A71A
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:15:43 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23S49dF6032171
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:15:43 -0700
+        with ESMTP id S239945AbiD1ET2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Apr 2022 00:19:28 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2136331376
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:16:15 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 23RLlOx8015530
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:16:14 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fqkncr0ms-2
+        by m0001303.ppops.net (PPS) with ESMTPS id 3fprrt9skf-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:15:43 -0700
-Received: from twshared13345.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:16:14 -0700
+Received: from twshared6447.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 27 Apr 2022 21:15:40 -0700
+ 15.1.2375.24; Wed, 27 Apr 2022 21:15:38 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id CFBDE192F88DF; Wed, 27 Apr 2022 21:15:32 -0700 (PDT)
+        id 9FFEC192F88C6; Wed, 27 Apr 2022 21:15:24 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 4/4] selftests/bpf: test bpf_map__set_autocreate() and related log fixup logic
-Date:   Wed, 27 Apr 2022 21:15:23 -0700
-Message-ID: <20220428041523.4089853-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 0/4] libbpf: allow to opt-out from BPF map creation
+Date:   Wed, 27 Apr 2022 21:15:19 -0700
+Message-ID: <20220428041523.4089853-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220428041523.4089853-1-andrii@kernel.org>
-References: <20220428041523.4089853-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: rkTMfX8V9Pr9iJDpT3mtn7Jp42KbUWcs
-X-Proofpoint-GUID: rkTMfX8V9Pr9iJDpT3mtn7Jp42KbUWcs
+X-Proofpoint-GUID: 0VGemi6thNSDc1A_EMmHYpo4BoWyGej6
+X-Proofpoint-ORIG-GUID: 0VGemi6thNSDc1A_EMmHYpo4BoWyGej6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
@@ -49,111 +47,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a subtest that excercises bpf_map__set_autocreate() API and
-validates that libbpf properly fixes up BPF verifier log with correct
-map information.
+Add bpf_map__set_autocreate() API which is a BPF map counterpart of
+bpf_program__set_autoload() and serves similar goal of allowing to build more
+flexible CO-RE applications. See patch #3 for example scenarios in which the
+need for such API came up previously.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/log_fixup.c      | 37 ++++++++++++++++++-
- .../selftests/bpf/progs/test_log_fixup.c      | 26 +++++++++++++
- 2 files changed, 62 insertions(+), 1 deletion(-)
+Patch #1 is a follow-up patch to previous patch set adding verifier log fixup
+logic, making sure bpf_core_format_spec()'s return result is used for
+something useful.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_fixup.c b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-index be3a956cb3a5..f4ffdcabf4e4 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_fixup.c
-@@ -85,7 +85,6 @@ static void bad_core_relo_subprog(void)
- 	if (!ASSERT_ERR(err, "load_fail"))
- 		goto cleanup;
- 
--	/* there should be no prog loading log because we specified per-prog log buf */
- 	ASSERT_HAS_SUBSTR(log_buf,
- 			  ": <invalid CO-RE relocation>\n"
- 			  "failed to resolve CO-RE relocation <byte_off> ",
-@@ -101,6 +100,40 @@ static void bad_core_relo_subprog(void)
- 	test_log_fixup__destroy(skel);
- }
- 
-+static void missing_map(void)
-+{
-+	char log_buf[8 * 1024];
-+	struct test_log_fixup* skel;
-+	int err;
-+
-+	skel = test_log_fixup__open();
-+	if (!ASSERT_OK_PTR(skel, "skel_open"))
-+		return;
-+
-+	bpf_map__set_autocreate(skel->maps.missing_map, false);
-+
-+	bpf_program__set_autoload(skel->progs.use_missing_map, true);
-+	bpf_program__set_log_buf(skel->progs.use_missing_map, log_buf, sizeof(log_buf));
-+
-+	err = test_log_fixup__load(skel);
-+	if (!ASSERT_ERR(err, "load_fail"))
-+		goto cleanup;
-+
-+	ASSERT_TRUE(bpf_map__autocreate(skel->maps.existing_map), "existing_map_autocreate");
-+	ASSERT_FALSE(bpf_map__autocreate(skel->maps.missing_map), "missing_map_autocreate");
-+
-+	ASSERT_HAS_SUBSTR(log_buf,
-+			  "8: <invalid BPF map reference>\n"
-+			  "BPF map 'missing_map' is referenced but wasn't created\n",
-+			  "log_buf");
-+
-+	if (env.verbosity > VERBOSE_NONE)
-+		printf("LOG:   \n=================\n%s=================\n", log_buf);
-+
-+cleanup:
-+	test_log_fixup__destroy(skel);
-+}
-+
- void test_log_fixup(void)
- {
- 	if (test__start_subtest("bad_core_relo_trunc_none"))
-@@ -111,4 +144,6 @@ void test_log_fixup(void)
- 		bad_core_relo(250, TRUNC_FULL  /* truncate also libbpf's message patch */);
- 	if (test__start_subtest("bad_core_relo_subprog"))
- 		bad_core_relo_subprog();
-+	if (test__start_subtest("missing_map"))
-+		missing_map();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_log_fixup.c b/tools/testing/selftests/bpf/progs/test_log_fixup.c
-index a78980d897b3..60450cb0e72e 100644
---- a/tools/testing/selftests/bpf/progs/test_log_fixup.c
-+++ b/tools/testing/selftests/bpf/progs/test_log_fixup.c
-@@ -35,4 +35,30 @@ int bad_relo_subprog(const void *ctx)
- 	return bad_subprog() + bpf_core_field_size(t->pid);
- }
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} existing_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, int);
-+} missing_map SEC(".maps");
-+
-+SEC("?raw_tp/sys_enter")
-+int use_missing_map(const void *ctx)
-+{
-+	int zero = 0, *value;
-+
-+	value = bpf_map_lookup_elem(&existing_map, &zero);
-+
-+	value = bpf_map_lookup_elem(&missing_map, &zero);
-+
-+	return value != NULL;
-+}
-+
- char _license[] SEC("license") = "GPL";
+Patch #2 is a small refactoring to avoid unnecessary verbose memory management
+around obj->maps array.
+
+Patch #3 adds and API and corresponding BPF verifier log fix up logic to
+provide human-comprehensible error message with useful details.
+
+Patch #4 adds a simple selftest validating both the API itself and libbpf's
+log fixup logic for it.
+
+Andrii Nakryiko (4):
+  libbpf: append "..." in fixed up log if CO-RE spec is truncated
+  libbpf: use libbpf_mem_ensure() when allocating new map
+  libbpf: allow to opt-out from creating BPF maps
+  selftests/bpf: test bpf_map__set_autocreate() and related log fixup
+    logic
+
+ tools/lib/bpf/libbpf.c                        | 169 +++++++++++++-----
+ tools/lib/bpf/libbpf.h                        |  22 +++
+ tools/lib/bpf/libbpf.map                      |   4 +-
+ .../selftests/bpf/prog_tests/log_fixup.c      |  37 +++-
+ .../selftests/bpf/progs/test_log_fixup.c      |  26 +++
+ 5 files changed, 209 insertions(+), 49 deletions(-)
+
 -- 
 2.30.2
 
