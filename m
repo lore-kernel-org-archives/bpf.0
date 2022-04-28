@@ -2,191 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BE3C433F5
-	for <bpf@archiver.kernel.org>; Thu, 28 Apr 2022 02:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1339C433F5
+	for <bpf@archiver.kernel.org>; Thu, 28 Apr 2022 04:15:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241597AbiD1C63 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 27 Apr 2022 22:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S232239AbiD1ES4 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 28 Apr 2022 00:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbiD1C62 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 27 Apr 2022 22:58:28 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB7C2AC45
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 19:55:13 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id w1so6264938lfa.4
-        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 19:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OjFlU+AjcClS88vFs2Df8WRkj/DB0d/1nH0WPO/lECE=;
-        b=qH2n3V2KkNSV6MK4tteqtwMD18ju6oX6RnhOGipUWuIqCdnss+DCdjK4lmaV5qJF/X
-         LClnB2xOlUZA/bM+NVzW68TTqOgHTFU8UOLFF8Qi2v0uqMfomAQelHVA+vvQzLZmoskD
-         +uXELr7acFbYxKiNiGaZr4newT4G8nCOyw3OujCX3fUvQ4MCRVBsUrsDV8CrsG4XPYep
-         xwWpfonEdhFWNFNZkdeLH9wGHF77E+VhYL65a++p81z+rNrj4o1sohAV9S2lfz/K4+qZ
-         C9VbT9erRpl8YMh7XdvifPYCe+RBg4Yb/Tk8sZvKAH7H0hspKLIVCS5BtKo3OZ1o57oA
-         7BGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OjFlU+AjcClS88vFs2Df8WRkj/DB0d/1nH0WPO/lECE=;
-        b=HlPfEQosnTxcDkzgVGgfWJ5lJ0JbFPiY2L/un38flG4JkqP0N+ui1DHPN4rfAsvGrW
-         y6TgeJI5vB+FSnIM1vdMYjJWFm1qmWiAu7xCw8hGFUeqGPijE0sGVqxG7vzpN57pTIAT
-         SgaZ1U0WouytRdWBF2vxB5ZkxjjYZU8cTSpER6xcFs5euP1e5gxfStK1P4kC+UkHtEsd
-         ZyRKKPW04a82ueiEUWy1WN/XJa8C7XSOwA5Hrd3StCiRFMHlLQToC2/sDv3e1AwAxwnU
-         qRqlGd5s5GJzJyz9tMsvuvf8uU/R1usJ+7rcNkXtR1x8PtMbeFMCp0Gsh+IE1zuxGDcy
-         cpWQ==
-X-Gm-Message-State: AOAM530PpHf0+D64iZnuDULUCbIkJJLYPUu9fr1EMaiYGFnrAXwxIfpq
-        rUesaVAHULrsogmE03f3siCocQ8pEY5xxelHHATm2s/L3PXOBQ==
-X-Google-Smtp-Source: ABdhPJw+02mR1JmZJQ4on9qrMqC99XDCXMs+CpuyaClIJ3yZNs63HPeAUDKY13UZzNRPXhsbzyeZaTqAVuqpiB8/VsQ=
-X-Received: by 2002:a05:6512:2307:b0:471:c299:7a47 with SMTP id
- o7-20020a056512230700b00471c2997a47mr21990821lfu.134.1651114511876; Wed, 27
- Apr 2022 19:55:11 -0700 (PDT)
+        with ESMTP id S242667AbiD1ESu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 28 Apr 2022 00:18:50 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088E82898F
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:15:34 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23RLlMeF009996
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:15:33 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fprsx9t1t-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 27 Apr 2022 21:15:33 -0700
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub103.TheFacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 21:15:30 -0700
+Received: from twshared16308.14.prn3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 27 Apr 2022 21:15:30 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id B70A1192F88D5; Wed, 27 Apr 2022 21:15:28 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/4] libbpf: use libbpf_mem_ensure() when allocating new map
+Date:   Wed, 27 Apr 2022 21:15:21 -0700
+Message-ID: <20220428041523.4089853-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220428041523.4089853-1-andrii@kernel.org>
+References: <20220428041523.4089853-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <20220427214337.716372-1-grantseltzer@gmail.com> <CAEf4Bza4fW0v7gGO+57hwoHhhaPTeQjHPYKU5P_NzYTYdoxMdA@mail.gmail.com>
-In-Reply-To: <CAEf4Bza4fW0v7gGO+57hwoHhhaPTeQjHPYKU5P_NzYTYdoxMdA@mail.gmail.com>
-From:   Grant Seltzer Richman <grantseltzer@gmail.com>
-Date:   Wed, 27 Apr 2022 22:55:01 -0400
-Message-ID: <CAO658oW381jwCAe24uiySjqz+=XRpGfDSai+=opK=z6a2y5gUw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] API function for retrieving data from percpu map
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: p_mj4jbylmKDGb6Mv_YwE1No0L-fRdCP
+X-Proofpoint-ORIG-GUID: p_mj4jbylmKDGb6Mv_YwE1No0L-fRdCP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-27_04,2022-04-27_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 6:16 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Apr 27, 2022 at 2:43 PM grantseltzer <grantseltzer@gmail.com> wrote:
-> >
-> > From: Grant Seltzer <grantseltzer@gmail.com>
-> >
-> > This adds a new API function used to retrieve all data from a
-> > percpu array or percpu hashmap.
-> >
-> > This is useful because the current interface for doing so
-> > requires knowledge of the layout of these BPF map internal
-> > structures.
-> >
-> > Signed-off-by: Grant Seltzer <grantseltzer@gmail.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 28 ++++++++++++++++++++++++++++
-> >  tools/lib/bpf/libbpf.h | 25 +++++++++++++++++++++++++
-> >  2 files changed, 53 insertions(+)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 873a29ce7781..8d72cff22688 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -36,6 +36,7 @@
-> >  #include <linux/perf_event.h>
-> >  #include <linux/ring_buffer.h>
-> >  #include <linux/version.h>
-> > +#include <linux/math.h>
-> >  #include <sys/epoll.h>
-> >  #include <sys/ioctl.h>
-> >  #include <sys/mman.h>
-> > @@ -4370,6 +4371,33 @@ int bpf_map__resize(struct bpf_map *map, __u32 max_entries)
-> >         return bpf_map__set_max_entries(map, max_entries);
-> >  }
-> >
-> > +void *bpf_map__get_percpu_value(const struct bpf_map *map, const void *key)
->
-> I'd rather avoid API that allocates memory on behalf of user (and
-> requires user to later free it) if possible. In this case there is no
-> need for libbpf itself to allocate memory, user can allocate enough
-> memory and pass it to libbpf.
+Reuse libbpf_mem_ensure() when adding a new map to the list of maps
+inside bpf_object. It takes care of proper resizing and reallocating of
+map array and zeroing out newly allocated memory.
 
-I see, this makes sense. I also considered defining a macro instead,
-similar to `bpf_object__for_each_program`, except something like
-`bpf_map__for_each_cpu`.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 37 ++++++++++---------------------------
+ 1 file changed, 10 insertions(+), 27 deletions(-)
 
->
-> I'm actually working on few related APIs to avoid using low-level
-> bpf_map_update_elem() from user-space. I want to add
-> bpf_map__update_elem(), bpf_map__lookup_elem(),
-> bpf_map__delete_elem(). It's TBD how it will look like for per-cpu
-> maps, but I didn't plan to have a separate API for that. It would just
-> change expectations of value size to be a value_size * num_cpus.
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a85d83390d67..ee43719a0376 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1433,36 +1433,19 @@ static int find_elf_var_offset(const struct bpf_object *obj, const char *name, _
+ 
+ static struct bpf_map *bpf_object__add_map(struct bpf_object *obj)
+ {
+-	struct bpf_map *new_maps;
+-	size_t new_cap;
+-	int i;
+-
+-	if (obj->nr_maps < obj->maps_cap)
+-		return &obj->maps[obj->nr_maps++];
+-
+-	new_cap = max((size_t)4, obj->maps_cap * 3 / 2);
+-	new_maps = libbpf_reallocarray(obj->maps, new_cap, sizeof(*obj->maps));
+-	if (!new_maps) {
+-		pr_warn("alloc maps for object failed\n");
+-		return ERR_PTR(-ENOMEM);
+-	}
++	struct bpf_map *map;
++	int err;
+ 
+-	obj->maps_cap = new_cap;
+-	obj->maps = new_maps;
++	err = libbpf_ensure_mem((void **)&obj->maps, &obj->maps_cap,
++				sizeof(*obj->maps), obj->nr_maps + 1);
++	if (err)
++		return ERR_PTR(err);
+ 
+-	/* zero out new maps */
+-	memset(obj->maps + obj->nr_maps, 0,
+-	       (obj->maps_cap - obj->nr_maps) * sizeof(*obj->maps));
+-	/*
+-	 * fill all fd with -1 so won't close incorrect fd (fd=0 is stdin)
+-	 * when failure (zclose won't close negative fd)).
+-	 */
+-	for (i = obj->nr_maps; i < obj->maps_cap; i++) {
+-		obj->maps[i].fd = -1;
+-		obj->maps[i].inner_map_fd = -1;
+-	}
++	map = &obj->maps[obj->nr_maps++];
++	map->fd = -1;
++	map->inner_map_fd = -1;
+ 
+-	return &obj->maps[obj->nr_maps++];
++	return map;
+ }
+ 
+ static size_t bpf_map_mmap_sz(const struct bpf_map *map)
+-- 
+2.30.2
 
-Ah ok, you actually mentioned this to me once before, about modeling
-the  API to accept key/value sizes and validate based on bpf_map's
-definition. Please let me know if I can help with this, I'd be happy
-to tackle it.
-
-
->
-> So stay tuned, hopefully very soon
->
-> > +{
-> > +
-> > +       if (!(bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY ||
-> > +               bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_HASH)) {
-> > +               return libbpf_err_ptr(-EINVAL);
-> > +       }
-> > +
-> > +       int num_cpus;
-> > +       __u32 value_size;
-> > +       num_cpus = libbpf_num_possible_cpus();
-> > +
-> > +       if (num_cpus < 0)
-> > +               return libbpf_err_ptr(-EBUSY);
-> > +
-> > +       value_size = bpf_map__value_size(map);
-> > +
-> > +       void *data = malloc(roundup(value_size, 8) * num_cpus);
-> > +       int err = bpf_map_lookup_elem(map->fd, key, data);
-> > +       if (err) {
-> > +               free(data);
-> > +               return libbpf_err_ptr(err);
-> > +       }
-> > +
-> > +       return data;
-> > +}
-> > +
-> >  static int
-> >  bpf_object__probe_loading(struct bpf_object *obj)
-> >  {
-> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> > index cdbfee60ea3e..99b218702dfb 100644
-> > --- a/tools/lib/bpf/libbpf.h
-> > +++ b/tools/lib/bpf/libbpf.h
-> > @@ -921,6 +921,31 @@ LIBBPF_API const void *bpf_map__initial_value(struct bpf_map *map, size_t *psize
-> >  LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_map__type() instead")
-> >  LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
-> >
-> > +/**
-> > + * @brief **bpf_map__get_percpu_value()** returns a pointer to an array
-> > + * of data stored in a per-cpu array or per-cpu hashmap at a specified
-> > + * key. Each element is padded to 8 bytes regardless of the value data
-> > + * type stored in the per-cpu map. The index of each element in the array
-> > + * corresponds with the cpu that the data was set from.
-> > + * @param map per-cpu array or per-cpu hashmap
-> > + * @param key the key or index in the map
-> > + * @return pointer to the array of data
-> > + *
-> > + * example usage:
-> > + *
-> > + *  values = bpf_map__get_percpu_value(bpfmap, (void*)&zero);
-> > + *  if (values == NULL) {
-> > + *     // error handling
-> > + *  }
-> > + *
-> > + *     void* ptr = values;
-> > + *  for (int i = 0; i < num_cpus; i++) {
-> > + *    printf("CPU %d: %ld\n", i, *(ulong*)ptr);
-> > + *    ptr += 8;
-> > + *  }
-> > + */
-> > +LIBBPF_API void *bpf_map__get_percpu_value(const struct bpf_map *map, const void *key);
-> > +
-> >  /**
-> >   * @brief **bpf_map__is_internal()** tells the caller whether or not the
-> >   * passed map is a special map created by libbpf automatically for things like
-> > --
-> > 2.34.1
-> >
