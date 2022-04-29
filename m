@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 485C9C4332F
-	for <bpf@archiver.kernel.org>; Fri, 29 Apr 2022 22:02:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80C25C433FE
+	for <bpf@archiver.kernel.org>; Fri, 29 Apr 2022 22:02:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381208AbiD2WFf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1381170AbiD2WFf (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 29 Apr 2022 18:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381242AbiD2WFd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1381241AbiD2WFd (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 29 Apr 2022 18:05:33 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C2FDC596;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B89DBD39;
         Fri, 29 Apr 2022 15:02:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1651269734; x=1682805734;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=46TkvwVe6kT2QHU1dppM94+iRV+lM/Q9yXNhuJoxKAY=;
-  b=Czh74OAyW0ES/ZzcQi0aWQpFN1ofC3xJbAzGJWft5Eo7hZsHrZjMubil
-   iTt6FqfAjoTnA0KA6mUOnm1xzKftSToPMCxhtlV1xtsNJPQGAeUy/TruX
-   0zBZCpKS0EmbPSHVesvBkpR2lvYQeDJGvhNVDtdj3n0N1WdEz23j7QrSq
-   g6ihZVc9MMPnOmt8i91/gdEPUv9PdJFVaLj5JG7An2ifTxeTv6OIfD7iT
-   Nu+cyXi02dSXBxJwzT4eJCF15HqrAgYj1rEob+v8tZkyqIaJkS0kvfqgz
-   SHLdlogFojuVkmALwFCUHtK60Ah/S1IHLYtVeYovRZRAjAdrYDwHMbKV6
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266609696"
+  bh=aLkF5iautQtoCByDZ1EM15ok+OCMKaaRGi5jkl6MJpQ=;
+  b=eNQAcrsOZHbj2OJsKND0an6z+MCQszW6we0BlFCUpsnMzkM21/I7Xx7K
+   eZfmoTdVPEJR41IMrM2Qe4dsmA7uyXDwkmKrQSseeUNvPCcyaSn7uoRUC
+   /ZwzG/wSsAlP08nI8ZE4VoiB3Bq3WtzZFtMRG1sMRbyVU8Ti/CV8aq8DF
+   ULDBEkxV57QzG1+EK9pyAEs+ecB3d5/TB7HFysm4SzqX6fyBBbkGQf841
+   buwpD/tgB6qWseA1gdKsHcPMDyVYcxkRtaVdkAoi7977HBLc47np6WEgZ
+   hKREeOp6HV3xp4RGDg1AC1v+0G9VFFCt353eq5pp6y3bNcnqJGEB3ow9T
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10332"; a="266609695"
 X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="266609696"
+   d="scan'208";a="266609695"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 15:02:10 -0700
 X-IronPort-AV: E=Sophos;i="5.91,186,1647327600"; 
-   d="scan'208";a="582419805"
+   d="scan'208";a="582419804"
 Received: from mjmartin-desk2.amr.corp.intel.com (HELO mjmartin-desk2.intel.com) ([10.212.217.201])
   by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 15:02:10 -0700
 From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
@@ -42,9 +42,9 @@ Cc:     Geliang Tang <geliang.tang@suse.com>, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, mptcp@lists.linux.dev,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         Mat Martineau <mathew.j.martineau@linux.intel.com>
-Subject: [PATCH bpf-next v2 8/8] selftests: bpf: verify first of struct mptcp_sock
-Date:   Fri, 29 Apr 2022 15:02:04 -0700
-Message-Id: <20220429220204.353225-9-mathew.j.martineau@linux.intel.com>
+Subject: [PATCH bpf-next v2 7/8] selftests: bpf: verify ca_name of struct mptcp_sock
+Date:   Fri, 29 Apr 2022 15:02:03 -0700
+Message-Id: <20220429220204.353225-8-mathew.j.martineau@linux.intel.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220429220204.353225-1-mathew.j.martineau@linux.intel.com>
 References: <20220429220204.353225-1-mathew.j.martineau@linux.intel.com>
@@ -56,92 +56,148 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Geliang Tang <geliang.tang@suse.com>
 
-This patch verifies the 'first' struct member of struct mptcp_sock, which
-points to the first subflow of msk. Save 'sk' in mptcp_storage, and verify
-it with 'first' in verify_msk().
+This patch verifies another member of struct mptcp_sock, ca_name. Add a
+new function get_msk_ca_name() to read the sysctl tcp_congestion_control
+and verify it in verify_msk().
 
 Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 ---
- tools/testing/selftests/bpf/bpf_mptcp_helpers.h | 1 +
- tools/testing/selftests/bpf/prog_tests/mptcp.c  | 8 ++++++++
- tools/testing/selftests/bpf/progs/mptcp_sock.c  | 5 +++++
- 3 files changed, 14 insertions(+)
+ .../testing/selftests/bpf/bpf_mptcp_helpers.h |  1 +
+ tools/testing/selftests/bpf/bpf_tcp_helpers.h |  4 ++++
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 24 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/mptcp_sock.c  |  4 ++++
+ 4 files changed, 33 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/bpf_mptcp_helpers.h b/tools/testing/selftests/bpf/bpf_mptcp_helpers.h
-index 463e4e061c96..b5a43b108982 100644
+index 87e15810997d..463e4e061c96 100644
 --- a/tools/testing/selftests/bpf/bpf_mptcp_helpers.h
 +++ b/tools/testing/selftests/bpf/bpf_mptcp_helpers.h
 @@ -10,6 +10,7 @@ struct mptcp_sock {
  	struct inet_connection_sock	sk;
  
  	__u32		token;
-+	struct sock	*first;
- 	char		ca_name[TCP_CA_NAME_MAX];
++	char		ca_name[TCP_CA_NAME_MAX];
  } __attribute__((preserve_access_index));
  
+ #endif
+diff --git a/tools/testing/selftests/bpf/bpf_tcp_helpers.h b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+index b1ede6f0b821..89750d732cfa 100644
+--- a/tools/testing/selftests/bpf/bpf_tcp_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+@@ -16,6 +16,10 @@ BPF_PROG(name, args)
+ #define SOL_TCP 6
+ #endif
+ 
++#ifndef TCP_CA_NAME_MAX
++#define TCP_CA_NAME_MAX	16
++#endif
++
+ #define tcp_jiffies32 ((__u32)bpf_jiffies64())
+ 
+ struct sock_common {
 diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index 4518aa6e661e..7e704f5aab05 100644
+index c5d96ba81e04..4518aa6e661e 100644
 --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
 +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -12,7 +12,9 @@
+@@ -5,10 +5,15 @@
+ #include "cgroup_helpers.h"
+ #include "network_helpers.h"
+ 
++#ifndef TCP_CA_NAME_MAX
++#define TCP_CA_NAME_MAX	16
++#endif
++
  struct mptcp_storage {
  	__u32 invoked;
  	__u32 is_mptcp;
-+	struct sock *sk;
  	__u32 token;
-+	struct sock *first;
- 	char ca_name[TCP_CA_NAME_MAX];
++	char ca_name[TCP_CA_NAME_MAX];
  };
  
-@@ -133,6 +135,12 @@ static int verify_msk(int map_fd, int client_fd)
+ static char monitor_log_path[64];
+@@ -79,11 +84,22 @@ static __u32 get_msk_token(void)
+ 	return token;
+ }
+ 
++void get_msk_ca_name(char ca_name[])
++{
++	FILE *stream = popen("sysctl -b net.ipv4.tcp_congestion_control", "r");
++
++	if (!fgets(ca_name, TCP_CA_NAME_MAX, stream))
++		log_err("Failed to read ca_name");
++
++	pclose(stream);
++}
++
+ static int verify_msk(int map_fd, int client_fd)
+ {
+ 	char *msg = "MPTCP subflow socket";
+ 	int err = 0, cfd = client_fd;
+ 	struct mptcp_storage val;
++	char ca_name[TCP_CA_NAME_MAX];
+ 	__u32 token;
+ 
+ 	token = get_msk_token();
+@@ -92,6 +108,8 @@ static int verify_msk(int map_fd, int client_fd)
+ 		return -1;
+ 	}
+ 
++	get_msk_ca_name(ca_name);
++
+ 	if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
+ 		perror("Failed to read socket storage");
+ 		return -1;
+@@ -115,6 +133,12 @@ static int verify_msk(int map_fd, int client_fd)
  		err++;
  	}
  
-+	if (val.first != val.sk) {
-+		log_err("Unexpected mptcp_sock.first %p != %p",
-+			val.first, val.sk);
++	if (strncmp(val.ca_name, ca_name, TCP_CA_NAME_MAX)) {
++		log_err("Unexpected mptcp_sock.ca_name %s != %s",
++			val.ca_name, ca_name);
 +		err++;
 +	}
 +
- 	if (strncmp(val.ca_name, ca_name, TCP_CA_NAME_MAX)) {
- 		log_err("Unexpected mptcp_sock.ca_name %s != %s",
- 			val.ca_name, ca_name);
+ 	return err;
+ }
+ 
 diff --git a/tools/testing/selftests/bpf/progs/mptcp_sock.c b/tools/testing/selftests/bpf/progs/mptcp_sock.c
-index 226571673800..b1e7f3b4330a 100644
+index c58c191d8416..226571673800 100644
 --- a/tools/testing/selftests/bpf/progs/mptcp_sock.c
 +++ b/tools/testing/selftests/bpf/progs/mptcp_sock.c
-@@ -13,7 +13,9 @@ extern bool CONFIG_MPTCP __kconfig;
- struct mptcp_storage {
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020, Tessares SA. */
+ 
++#include <string.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_mptcp_helpers.h"
+@@ -13,6 +14,7 @@ struct mptcp_storage {
  	__u32 invoked;
  	__u32 is_mptcp;
-+	struct sock *sk;
  	__u32 token;
-+	struct sock *first;
- 	char ca_name[TCP_CA_NAME_MAX];
++	char ca_name[TCP_CA_NAME_MAX];
  };
  
-@@ -52,6 +54,7 @@ int _sockops(struct bpf_sock_ops *ctx)
+ struct {
+@@ -49,6 +51,7 @@ int _sockops(struct bpf_sock_ops *ctx)
+ 			return 1;
  
  		storage->token = 0;
- 		bzero(storage->ca_name, TCP_CA_NAME_MAX);
-+		storage->first = NULL;
++		bzero(storage->ca_name, TCP_CA_NAME_MAX);
  	} else {
  		if (!CONFIG_MPTCP)
  			return 1;
-@@ -67,9 +70,11 @@ int _sockops(struct bpf_sock_ops *ctx)
+@@ -63,6 +66,7 @@ int _sockops(struct bpf_sock_ops *ctx)
+ 			return 1;
  
  		storage->token = msk->token;
- 		memcpy(storage->ca_name, msk->ca_name, TCP_CA_NAME_MAX);
-+		storage->first = msk->first;
++		memcpy(storage->ca_name, msk->ca_name, TCP_CA_NAME_MAX);
  	}
  	storage->invoked++;
  	storage->is_mptcp = tcp_sk->is_mptcp;
-+	storage->sk = (struct sock *)sk;
- 
- 	return 1;
- }
 -- 
 2.36.0
 
