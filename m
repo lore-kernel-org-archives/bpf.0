@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF952C433F5
-	for <bpf@archiver.kernel.org>; Sun,  1 May 2022 19:00:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 111D9C433EF
+	for <bpf@archiver.kernel.org>; Sun,  1 May 2022 19:00:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351422AbiEATDv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 1 May 2022 15:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S243787AbiEATEG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 1 May 2022 15:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346687AbiEATDs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 1 May 2022 15:03:48 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA5CCC6
-        for <bpf@vger.kernel.org>; Sun,  1 May 2022 12:00:22 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2416Tp3T009199
-        for <bpf@vger.kernel.org>; Sun, 1 May 2022 12:00:22 -0700
+        with ESMTP id S1355107AbiEATED (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 1 May 2022 15:04:03 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F867167D0
+        for <bpf@vger.kernel.org>; Sun,  1 May 2022 12:00:36 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 241DeL0c025399
+        for <bpf@vger.kernel.org>; Sun, 1 May 2022 12:00:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=DB/V8EV9IL0BwHpkchgZAowHLHCDycXLHpKtsINkUjI=;
- b=CEI5Rs3g5mVdJEE5uNFc2e9V12PtmqA/YVtY8bHszJhn2lp8cFLx9wiUr/P44CQkCagf
- tE92vWBDqJH5XzFNJ7bFb0lf3jh20mjvSn087esF5lba6mbq3L2cEY2eYobQw11U1K/d
- UUbBFqY0pHRojT3Pli2wO10BeAR5Vzlwf3Y= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fs2tmwmhq-3
+ bh=q8aWsUGV/E5Md6n7QjEHxFKn4Pb5XGc5avHCbXN8t5g=;
+ b=HNf8tR3RR28Hnvg1KNaKIEjxwN3eYd1K3WhOOmohw1mrWpJO5Gf/E6TIZSa6K3hM2134
+ kBdIelbB9XS7uUJ93hhnVjuO7N4lkqd+Bn+X/C2m3tcKzNrmZEuqhRMEGI55wvFJ4k3e
+ vH343Z27QqLE2H3c/d67d+g8fdIiUlf6B3w= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3fs0m7dyrm-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 01 May 2022 12:00:22 -0700
-Received: from twshared8053.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Sun, 01 May 2022 12:00:35 -0700
+Received: from twshared39027.37.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 1 May 2022 12:00:20 -0700
+ 15.1.2375.24; Sun, 1 May 2022 12:00:33 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 00F479C01F49; Sun,  1 May 2022 12:00:17 -0700 (PDT)
+        id 79C619C01F64; Sun,  1 May 2022 12:00:28 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 03/12] libbpf: Fix an error in 64bit relocation value computation
-Date:   Sun, 1 May 2022 12:00:17 -0700
-Message-ID: <20220501190017.2577688-1-yhs@fb.com>
+Subject: [PATCH bpf-next 05/12] bpftool: Add btf enum64 support
+Date:   Sun, 1 May 2022 12:00:28 -0700
+Message-ID: <20220501190028.2579037-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220501190002.2576452-1-yhs@fb.com>
 References: <20220501190002.2576452-1-yhs@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: rdowVeKlp0aSqW8oQxirNFD5076Z-4Iq
-X-Proofpoint-ORIG-GUID: rdowVeKlp0aSqW8oQxirNFD5076Z-4Iq
+X-Proofpoint-ORIG-GUID: p2Jx5WtE0Q8lLK-AD3xoKkWa5Ovlb4gg
+X-Proofpoint-GUID: p2Jx5WtE0Q8lLK-AD3xoKkWa5Ovlb4gg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-01_07,2022-04-28_01,2022-02-23_01
@@ -58,39 +58,185 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, the 64bit relocation value in the instruction
-is computed as follows:
-  __u64 imm =3D insn[0].imm + ((__u64)insn[1].imm << 32)
+Add BTF_KIND_ENUM64 support.
+For example, the following enum is defined in uapi bpf.h.
+  $ cat core.c
+  enum A {
+        BPF_F_INDEX_MASK                =3D 0xffffffffULL,
+        BPF_F_CURRENT_CPU               =3D BPF_F_INDEX_MASK,
+        BPF_F_CTXLEN_MASK               =3D (0xfffffULL << 32),
+  } g;
+Compiled with
+  clang -target bpf -O2 -g -c core.c
+Using bpftool to dump types and generate format C file:
+  $ bpftool btf dump file core.o
+  ...
+  [1] ENUM64 'A' size=3D8 vlen=3D3
+        'BPF_F_INDEX_MASK' val=3D4294967295ULL
+        'BPF_F_CURRENT_CPU' val=3D4294967295ULL
+        'BPF_F_CTXLEN_MASK' val=3D4503595332403200ULL
+  $ bpftool btf dump file core.o format c
+  ...
+  enum A {
+        BPF_F_INDEX_MASK =3D 4294967295ULL,
+        BPF_F_CURRENT_CPU =3D 4294967295ULL,
+        BPF_F_CTXLEN_MASK =3D 4503595332403200ULL,
+  };
+  ...
 
-Suppose insn[0].imm =3D -1 (0xffffffff) and insn[1].imm =3D 1.
-With the above computation, insn[0].imm will first sign-extend
-to 64bit -1 (0xffffffffFFFFFFFF) and then add 0x1FFFFFFFF,
-producing incorrect value 0xFFFFFFFF. The correct value
-should be 0x1FFFFFFFF.
-
-Changing insn[0].imm to __u32 first will prevent 64bit sign
-extension and fix the issue.
+The 64bit value is represented properly in BTF and C dump.
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/relo_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/bpf/bpftool/btf.c        | 47 ++++++++++++++++++++++++++++++++--
+ tools/bpf/bpftool/btf_dumper.c | 32 +++++++++++++++++++++++
+ tools/bpf/bpftool/gen.c        |  1 +
+ 3 files changed, 78 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index 2ed94daabbe5..f25ffd03c3b1 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -1024,7 +1024,7 @@ int bpf_core_patch_insn(const char *prog_name, stru=
-ct bpf_insn *insn,
- 			return -EINVAL;
- 		}
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index a2c665beda87..ae3c413fa3b1 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -40,6 +40,7 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =3D=
+ {
+ 	[BTF_KIND_FLOAT]	=3D "FLOAT",
+ 	[BTF_KIND_DECL_TAG]	=3D "DECL_TAG",
+ 	[BTF_KIND_TYPE_TAG]	=3D "TYPE_TAG",
++	[BTF_KIND_ENUM64]	=3D "ENUM64",
+ };
 =20
--		imm =3D insn[0].imm + ((__u64)insn[1].imm << 32);
-+		imm =3D (__u32)insn[0].imm + ((__u64)insn[1].imm << 32);
- 		if (res->validate && imm !=3D orig_val) {
- 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: go=
-t %llu, exp %llu -> %llu\n",
- 				prog_name, relo_idx,
+ struct btf_attach_point {
+@@ -228,10 +229,52 @@ static int dump_btf_type(const struct btf *btf, __u=
+32 id,
+ 			if (json_output) {
+ 				jsonw_start_object(w);
+ 				jsonw_string_field(w, "name", name);
+-				jsonw_uint_field(w, "val", v->val);
++				if (btf_kflag(t))
++					jsonw_uint_field(w, "val", v->val);
++				else
++					jsonw_int_field(w, "val", v->val);
+ 				jsonw_end_object(w);
+ 			} else {
+-				printf("\n\t'%s' val=3D%u", name, v->val);
++				if (btf_kflag(t))
++					printf("\n\t'%s' val=3D%u", name, v->val);
++				else
++					printf("\n\t'%s' val=3D%d", name, v->val);
++			}
++		}
++		if (json_output)
++			jsonw_end_array(w);
++		break;
++	}
++	case BTF_KIND_ENUM64: {
++		const struct btf_enum64 *v =3D (const void *)(t + 1);
++		__u16 vlen =3D BTF_INFO_VLEN(t->info);
++		int i;
++
++		if (json_output) {
++			jsonw_uint_field(w, "size", t->size);
++			jsonw_uint_field(w, "vlen", vlen);
++			jsonw_name(w, "values");
++			jsonw_start_array(w);
++		} else {
++			printf(" size=3D%u vlen=3D%u", t->size, vlen);
++		}
++		for (i =3D 0; i < vlen; i++, v++) {
++			const char *name =3D btf_str(btf, v->name_off);
++			__u64 val =3D (__u64)v->hi32 << 32 | v->lo32;
++
++			if (json_output) {
++				jsonw_start_object(w);
++				jsonw_string_field(w, "name", name);
++				if (btf_kflag(t))
++					jsonw_uint_field(w, "val", val);
++				else
++					jsonw_int_field(w, "val", val);
++				jsonw_end_object(w);
++			} else {
++				if (btf_kflag(t))
++					printf("\n\t'%s' val=3D%lluULL", name, val);
++				else
++					printf("\n\t'%s' val=3D%lldLL", name, val);
+ 			}
+ 		}
+ 		if (json_output)
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumpe=
+r.c
+index f5dddf8ef404..f9f38384b9a6 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -182,6 +182,35 @@ static int btf_dumper_enum(const struct btf_dumper *=
+d,
+ 	return 0;
+ }
+=20
++static int btf_dumper_enum64(const struct btf_dumper *d,
++			     const struct btf_type *t,
++			     const void *data)
++{
++	const struct btf_enum64 *enums =3D btf_enum64(t);
++	__u32 hi32, lo32;
++	__u64 value;
++	__u16 i;
++
++	if (t->size !=3D 8)
++		return -EINVAL;
++
++	value =3D *(__u64 *)data;
++	hi32 =3D value >> 32;
++	lo32 =3D (__u32)value;
++
++	for (i =3D 0; i < btf_vlen(t); i++) {
++		if (hi32 =3D=3D enums[i].hi32 && lo32 =3D=3D enums[i].lo32) {
++			jsonw_string(d->jw,
++				     btf__name_by_offset(d->btf,
++							 enums[i].name_off));
++			return 0;
++		}
++	}
++
++	jsonw_int(d->jw, value);
++	return 0;
++}
++
+ static bool is_str_array(const struct btf *btf, const struct btf_array *=
+arr,
+ 			 const char *s)
+ {
+@@ -542,6 +571,8 @@ static int btf_dumper_do_type(const struct btf_dumper=
+ *d, __u32 type_id,
+ 		return btf_dumper_array(d, type_id, data);
+ 	case BTF_KIND_ENUM:
+ 		return btf_dumper_enum(d, t, data);
++	case BTF_KIND_ENUM64:
++		return btf_dumper_enum64(d, t, data);
+ 	case BTF_KIND_PTR:
+ 		btf_dumper_ptr(d, t, data);
+ 		return 0;
+@@ -618,6 +649,7 @@ static int __btf_dumper_type_only(const struct btf *b=
+tf, __u32 type_id,
+ 			      btf__name_by_offset(btf, t->name_off));
+ 		break;
+ 	case BTF_KIND_ENUM:
++	case BTF_KIND_ENUM64:
+ 		BTF_PRINT_ARG("enum %s ",
+ 			      btf__name_by_offset(btf, t->name_off));
+ 		break;
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index 7678af364793..b80c3577057f 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -1746,6 +1746,7 @@ btfgen_mark_type(struct btfgen_info *info, unsigned=
+ int type_id, bool follow_poi
+ 	case BTF_KIND_INT:
+ 	case BTF_KIND_FLOAT:
+ 	case BTF_KIND_ENUM:
++	case BTF_KIND_ENUM64:
+ 	case BTF_KIND_STRUCT:
+ 	case BTF_KIND_UNION:
+ 		break;
 --=20
 2.30.2
 
