@@ -2,219 +2,340 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E97D8C4332F
-	for <bpf@archiver.kernel.org>; Mon,  2 May 2022 21:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEDE4C433EF
+	for <bpf@archiver.kernel.org>; Mon,  2 May 2022 21:37:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234807AbiEBVQT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 2 May 2022 17:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S237350AbiEBVkz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 2 May 2022 17:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387591AbiEBVQN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 2 May 2022 17:16:13 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A949F2DEE;
-        Mon,  2 May 2022 14:12:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651525963; x=1683061963;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=szTMMA+89v2H8xSDvTnXgwA74cZHtkhg7qzXfwihkzw=;
-  b=NKhRy5ZJCIJSWOy2Lp2621XM1ePJB+7Hinq6JsMvgxeBIAgx1hL/2PRO
-   IhKAcvfYDFWpHDLl9ViVGcNcxrOsLtNPptHwLOXJrQEUJ/yzo1HfpugF4
-   JCUgW8FSabzc83trHxey4cPHZICkN0oaFGi9kVyJ+nntBvJ0Cl/uJzywj
-   bH9447hcizMF7NTcQ99PATWDaq42XnnF3wpLQoIvmEMlFinFIRRLug2zi
-   5IXpuxCMau7Ke0fD9WDJXHcWB0/SsvuD9iQhUJZcCxBy761CVg0jzJreF
-   plejjy7NE+exazYJ3JvihrmRQO4Bojgt8Qto8eGii44+pjEadiQpDG5u6
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10335"; a="247878474"
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="247878474"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:12:42 -0700
-X-IronPort-AV: E=Sophos;i="5.91,193,1647327600"; 
-   d="scan'208";a="810393796"
-Received: from mjmartin-desk2.amr.corp.intel.com (HELO mjmartin-desk2.intel.com) ([10.212.141.55])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2022 14:12:42 -0700
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Geliang Tang <geliang.tang@suse.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, mptcp@lists.linux.dev,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>
-Subject: [PATCH bpf-next v3 7/8] selftests: bpf: verify ca_name of struct mptcp_sock
-Date:   Mon,  2 May 2022 14:12:33 -0700
-Message-Id: <20220502211235.142250-8-mathew.j.martineau@linux.intel.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220502211235.142250-1-mathew.j.martineau@linux.intel.com>
-References: <20220502211235.142250-1-mathew.j.martineau@linux.intel.com>
+        with ESMTP id S1344152AbiEBVky (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 2 May 2022 17:40:54 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2BAE0A4
+        for <bpf@vger.kernel.org>; Mon,  2 May 2022 14:37:23 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242LKJnt010808
+        for <bpf@vger.kernel.org>; Mon, 2 May 2022 14:37:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=ODACN0yUKip44oOeYmstNAHe8x5kZreCHzRJxBu1XmM=;
+ b=PbKMue4gk3WNSWVvFctZnEoC6IFGTpQBy0L9BSS/NQ9IdD75IbR+yRopBapilfe1eggt
+ npbgJpL4oaL20sTiAjUzXKG8q8mneHiJzvJjs8fCNwAQ4yg8KJl+rf5K0+a1fv40S81J
+ /IM3Fk5UuEmlE/PNNl2fnggkxYZrfNW/Upc= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ft6abnb83-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 02 May 2022 14:37:22 -0700
+Received: from twshared27672.24.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 2 May 2022 14:37:20 -0700
+Received: by devvm4403.frc0.facebook.com (Postfix, from userid 153359)
+        id 09F5668A3651; Mon,  2 May 2022 14:37:15 -0700 (PDT)
+From:   Takshak Chahande <ctakshak@fb.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <ctakshak@fb.com>,
+        <ndixit@fb.com>, <kafai@fb.com>, <andriin@fb.com>,
+        <daniel@iogearbox.net>, <yhs@fb.com>
+Subject: [PATCH bpf-next v4 2/2] selftests/bpf: handle batch operations for map-in-map bpf-maps
+Date:   Mon, 2 May 2022 14:37:05 -0700
+Message-ID: <20220502213705.1170077-2-ctakshak@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220502213705.1170077-1-ctakshak@fb.com>
+References: <20220502213705.1170077-1-ctakshak@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 0PacV2KZfPf5ZyFA4-BhUtyKnMTqY146
+X-Proofpoint-GUID: 0PacV2KZfPf5ZyFA4-BhUtyKnMTqY146
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-02_07,2022-05-02_03,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+This patch adds up test cases that handles 4 combinations:
+ a) outer map: BPF_MAP_TYPE_ARRAY_OF_MAPS
+    inner maps: BPF_MAP_TYPE_ARRAY and BPF_MAP_TYPE_HASH
+ b) outer map: BPF_MAP_TYPE_HASH_OF_MAPS
+    inner maps: BPF_MAP_TYPE_ARRAY and BPF_MAP_TYPE_HASH
 
-This patch verifies another member of struct mptcp_sock, ca_name. Add a
-new function get_msk_ca_name() to read the sysctl tcp_congestion_control
-and verify it in verify_msk().
-
-v3: Access the sysctl through the filesystem to avoid compatibility issues
-with the busybox sysctl command.
-
-Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Takshak Chahande <ctakshak@fb.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 ---
- .../testing/selftests/bpf/bpf_mptcp_helpers.h |  1 +
- tools/testing/selftests/bpf/bpf_tcp_helpers.h |  4 ++
- .../testing/selftests/bpf/prog_tests/mptcp.c  | 38 +++++++++++++++++++
- .../testing/selftests/bpf/progs/mptcp_sock.c  |  4 ++
- 4 files changed, 47 insertions(+)
+ .../bpf/map_tests/map_in_map_batch_ops.c      | 245 ++++++++++++++++++
+ 1 file changed, 245 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/map_tests/map_in_map_batc=
+h_ops.c
 
-diff --git a/tools/testing/selftests/bpf/bpf_mptcp_helpers.h b/tools/testing/selftests/bpf/bpf_mptcp_helpers.h
-index 87e15810997d..463e4e061c96 100644
---- a/tools/testing/selftests/bpf/bpf_mptcp_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_mptcp_helpers.h
-@@ -10,6 +10,7 @@ struct mptcp_sock {
- 	struct inet_connection_sock	sk;
- 
- 	__u32		token;
-+	char		ca_name[TCP_CA_NAME_MAX];
- } __attribute__((preserve_access_index));
- 
- #endif
-diff --git a/tools/testing/selftests/bpf/bpf_tcp_helpers.h b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
-index b1ede6f0b821..89750d732cfa 100644
---- a/tools/testing/selftests/bpf/bpf_tcp_helpers.h
-+++ b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
-@@ -16,6 +16,10 @@ BPF_PROG(name, args)
- #define SOL_TCP 6
- #endif
- 
-+#ifndef TCP_CA_NAME_MAX
-+#define TCP_CA_NAME_MAX	16
-+#endif
+v3->v4:
+- Addressed nits; kept this map test together in map_tests/  (Yonghong, A=
+ndrii)
+
+v2->v3:
+- Handled transient ENOSPC correctly, bug was found in BPF CI (Daniel)
+
+v1->v2:
+- Fixed no format arguments error (Andrii)
+
+diff --git a/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c=
+ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+new file mode 100644
+index 000000000000..3b56c874fbd6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/map_tests/map_in_map_batch_ops.c
+@@ -0,0 +1,245 @@
++// SPDX-License-Identifier: GPL-2.0
 +
- #define tcp_jiffies32 ((__u32)bpf_jiffies64())
- 
- struct sock_common {
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index c5d96ba81e04..f2d22507431c 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -5,10 +5,15 @@
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
- 
-+#ifndef TCP_CA_NAME_MAX
-+#define TCP_CA_NAME_MAX	16
-+#endif
++#include <stdio.h>
++#include <errno.h>
++#include <string.h>
++#include <unistd.h>
 +
- struct mptcp_storage {
- 	__u32 invoked;
- 	__u32 is_mptcp;
- 	__u32 token;
-+	char ca_name[TCP_CA_NAME_MAX];
- };
- 
- static char monitor_log_path[64];
-@@ -79,11 +84,36 @@ static __u32 get_msk_token(void)
- 	return token;
- }
- 
-+void get_msk_ca_name(char ca_name[])
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#include <test_maps.h>
++
++#define OUTER_MAP_ENTRIES 10
++
++static __u32 get_map_id_from_fd(int map_fd)
 +{
-+	size_t len;
-+	int fd;
++	struct bpf_map_info map_info =3D {};
++	uint32_t info_len =3D sizeof(map_info);
++	int ret;
 +
-+	fd = open("/proc/sys/net/ipv4/tcp_congestion_control", O_RDONLY);
-+	if (CHECK_FAIL(fd < 0)) {
-+		log_err("Failed to open tcp_congestion_control");
-+		return;
-+	}
++	ret =3D bpf_obj_get_info_by_fd(map_fd, &map_info, &info_len);
++	CHECK(ret < 0, "Finding map info failed", "error:%s\n",
++	      strerror(errno));
 +
-+	len = read(fd, ca_name, TCP_CA_NAME_MAX);
-+	if (CHECK_FAIL(len < 0)) {
-+		log_err("Failed to read ca_name");
-+		goto err;
-+	}
-+
-+	if (len > 0 && ca_name[len - 1] == '\n')
-+		ca_name[len - 1] = '\0';
-+
-+err:
-+	close(fd);
++	return map_info.id;
 +}
 +
- static int verify_msk(int map_fd, int client_fd)
- {
- 	char *msg = "MPTCP subflow socket";
- 	int err = 0, cfd = client_fd;
- 	struct mptcp_storage val;
-+	char ca_name[TCP_CA_NAME_MAX];
- 	__u32 token;
- 
- 	token = get_msk_token();
-@@ -92,6 +122,8 @@ static int verify_msk(int map_fd, int client_fd)
- 		return -1;
- 	}
- 
-+	get_msk_ca_name(ca_name);
++/* This creates number of OUTER_MAP_ENTRIES maps that will be stored
++ * in outer map and return the created map_fds
++ */
++static void create_inner_maps(enum bpf_map_type map_type,
++			      __u32 *inner_map_fds)
++{
++	int map_fd, map_index, ret;
++	__u32 map_key =3D 0, map_id;
++	char map_name[15];
 +
- 	if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
- 		perror("Failed to read socket storage");
- 		return -1;
-@@ -115,6 +147,12 @@ static int verify_msk(int map_fd, int client_fd)
- 		err++;
- 	}
- 
-+	if (strncmp(val.ca_name, ca_name, TCP_CA_NAME_MAX)) {
-+		log_err("Unexpected mptcp_sock.ca_name %s != %s",
-+			val.ca_name, ca_name);
-+		err++;
++	for (map_index =3D 0; map_index < OUTER_MAP_ENTRIES; map_index++) {
++		memset(map_name, 0, sizeof(map_name));
++		sprintf(map_name, "inner_map_fd_%d", map_index);
++		map_fd =3D bpf_map_create(map_type, map_name, sizeof(__u32),
++					sizeof(__u32), 1, NULL);
++		CHECK(map_fd < 0,
++		      "inner bpf_map_create() failed",
++		      "map_type=3D(%d) map_name(%s), error:%s\n",
++		      map_type, map_name, strerror(errno));
++
++		/* keep track of the inner map fd as it is required
++		 * to add records in outer map
++		 */
++		inner_map_fds[map_index] =3D map_fd;
++
++		/* Add entry into this created map
++		 * eg: map1 key =3D 0, value =3D map1's map id
++		 *     map2 key =3D 0, value =3D map2's map id
++		 */
++		map_id =3D get_map_id_from_fd(map_fd);
++		ret =3D bpf_map_update_elem(map_fd, &map_key, &map_id, 0);
++		CHECK(ret !=3D 0,
++		      "bpf_map_update_elem failed",
++		      "map_type=3D(%d) map_name(%s), error:%s\n",
++		      map_type, map_name, strerror(errno));
++	}
++}
++
++static int create_outer_map(enum bpf_map_type map_type, __u32 inner_map_=
+fd)
++{
++	int outer_map_fd;
++	LIBBPF_OPTS(bpf_map_create_opts, attr);
++
++	attr.inner_map_fd =3D inner_map_fd;
++	outer_map_fd =3D bpf_map_create(map_type, "outer_map", sizeof(__u32),
++				      sizeof(__u32), OUTER_MAP_ENTRIES,
++				      &attr);
++	CHECK(outer_map_fd < 0,
++	      "outer bpf_map_create()",
++	      "map_type=3D(%d), error:%s\n",
++	      map_type, strerror(errno));
++
++	return outer_map_fd;
++}
++
++static void validate_fetch_results(int outer_map_fd, __u32 *inner_map_fd=
+s,
++				   __u32 *fetched_keys, __u32 *fetched_values,
++				   __u32 max_entries_fetched)
++{
++	__u32 inner_map_key, inner_map_value;
++	int inner_map_fd, entry, err;
++	__u32 outer_map_value;
++
++	for (entry =3D 0; entry < max_entries_fetched; ++entry) {
++		outer_map_value =3D fetched_values[entry];
++		inner_map_fd =3D bpf_map_get_fd_by_id(outer_map_value);
++		CHECK(inner_map_fd < 0,
++		      "Failed to get inner map fd",
++		      "from id(%d), error=3D%s\n",
++		      outer_map_value, strerror(errno));
++		err =3D bpf_map_get_next_key(inner_map_fd, NULL, &inner_map_key);
++		CHECK(err !=3D 0,
++		      "Failed to get inner map key",
++		      "error=3D%s\n", strerror(errno));
++
++		err =3D bpf_map_lookup_elem(inner_map_fd, &inner_map_key,
++					  &inner_map_value);
++		CHECK(err !=3D 0,
++		      "Failed to get inner map value",
++		      "for key(%d), error=3D%s\n",
++		      inner_map_key, strerror(errno));
++
++		/* Actual value validation */
++		CHECK(outer_map_value !=3D inner_map_value,
++		      "Failed to validate inner map value",
++		      "fetched(%d) and lookedup(%d)!\n",
++		      outer_map_value, inner_map_value);
++	}
++}
++
++static void fetch_and_validate(int outer_map_fd,
++			       __u32 *inner_map_fds,
++			       struct bpf_map_batch_opts *opts,
++			       __u32 batch_size, bool delete_entries)
++{
++	__u32 *fetched_keys, *fetched_values, total_fetched =3D 0;
++	__u32 batch_key =3D 0, fetch_count, step_size;
++	int err, max_entries =3D OUTER_MAP_ENTRIES;
++	__u32 value_size =3D sizeof(__u32);
++
++	/* Total entries needs to be fetched */
++	fetched_keys =3D calloc(max_entries, value_size);
++	fetched_values =3D calloc(max_entries, value_size);
++	CHECK((!fetched_keys || !fetched_values),
++	      "Memory allocation failed for fetched_keys or fetched_values",
++	      "error=3D%s\n", strerror(errno));
++
++	for (step_size =3D batch_size;
++	     step_size <=3D max_entries;
++	     step_size +=3D batch_size) {
++		fetch_count =3D step_size;
++		err =3D delete_entries
++		      ? bpf_map_lookup_and_delete_batch(outer_map_fd,
++				      total_fetched ? &batch_key : NULL,
++				      &batch_key,
++				      fetched_keys + total_fetched,
++				      fetched_values + total_fetched,
++				      &fetch_count, opts)
++		      : bpf_map_lookup_batch(outer_map_fd,
++				      total_fetched ? &batch_key : NULL,
++				      &batch_key,
++				      fetched_keys + total_fetched,
++				      fetched_values + total_fetched,
++				      &fetch_count, opts);
++
++		if (err && errno =3D=3D ENOSPC) {
++			/* Fetch again with higher batch size */
++			total_fetched =3D 0;
++			continue;
++		}
++
++		CHECK((err < 0 && (errno !=3D ENOENT)),
++		      "lookup with steps failed",
++		      "error: %s\n", strerror(errno));
++
++		/* Update the total fetched number */
++		total_fetched +=3D fetch_count;
++		if (err)
++			break;
 +	}
 +
- 	return err;
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/mptcp_sock.c b/tools/testing/selftests/bpf/progs/mptcp_sock.c
-index c58c191d8416..226571673800 100644
---- a/tools/testing/selftests/bpf/progs/mptcp_sock.c
-+++ b/tools/testing/selftests/bpf/progs/mptcp_sock.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2020, Tessares SA. */
- 
-+#include <string.h>
- #include <linux/bpf.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_mptcp_helpers.h"
-@@ -13,6 +14,7 @@ struct mptcp_storage {
- 	__u32 invoked;
- 	__u32 is_mptcp;
- 	__u32 token;
-+	char ca_name[TCP_CA_NAME_MAX];
- };
- 
- struct {
-@@ -49,6 +51,7 @@ int _sockops(struct bpf_sock_ops *ctx)
- 			return 1;
- 
- 		storage->token = 0;
-+		bzero(storage->ca_name, TCP_CA_NAME_MAX);
- 	} else {
- 		if (!CONFIG_MPTCP)
- 			return 1;
-@@ -63,6 +66,7 @@ int _sockops(struct bpf_sock_ops *ctx)
- 			return 1;
- 
- 		storage->token = msk->token;
-+		memcpy(storage->ca_name, msk->ca_name, TCP_CA_NAME_MAX);
- 	}
- 	storage->invoked++;
- 	storage->is_mptcp = tcp_sk->is_mptcp;
--- 
-2.36.0
++	CHECK((total_fetched !=3D max_entries),
++	      "Unable to fetch expected entries !",
++	      "total_fetched(%d) and max_entries(%d) error: (%d):%s\n",
++	      total_fetched, max_entries, errno, strerror(errno));
++
++	/* validate the fetched entries */
++	validate_fetch_results(outer_map_fd, inner_map_fds, fetched_keys,
++			       fetched_values, total_fetched);
++	printf("batch_op(%s) is successful with batch_size(%d)\n",
++	       delete_entries ? "LOOKUP_AND_DELETE" : "LOOKUP", batch_size);
++
++	free(fetched_keys);
++	free(fetched_values);
++}
++
++static void _map_in_map_batch_ops(enum bpf_map_type outer_map_type,
++				  enum bpf_map_type inner_map_type)
++{
++	__u32 *outer_map_keys, *inner_map_fds;
++	__u32 max_entries =3D OUTER_MAP_ENTRIES;
++	LIBBPF_OPTS(bpf_map_batch_opts, opts);
++	__u32 value_size =3D sizeof(__u32);
++	int batch_size[2] =3D {5, 10};
++	__u32 map_index, op_index;
++	int outer_map_fd, ret;
++
++	outer_map_keys =3D calloc(max_entries, value_size);
++	inner_map_fds =3D calloc(max_entries, value_size);
++	CHECK((!outer_map_keys || !inner_map_fds),
++	      "Memory allocation failed for outer_map_keys or inner_map_fds",
++	      "error=3D%s\n", strerror(errno));
++
++	create_inner_maps(inner_map_type, inner_map_fds);
++
++	outer_map_fd =3D create_outer_map(outer_map_type, *inner_map_fds);
++	/* create outer map keys */
++	for (map_index =3D 0; map_index < max_entries; map_index++)
++		outer_map_keys[map_index] =3D
++			((outer_map_type =3D=3D BPF_MAP_TYPE_ARRAY_OF_MAPS)
++			 ? 9 : 1000) - map_index;
++
++	/* batch operation - map_update */
++	ret =3D bpf_map_update_batch(outer_map_fd, outer_map_keys,
++				   inner_map_fds, &max_entries, &opts);
++	CHECK(ret !=3D 0,
++	      "Failed to update the outer map batch ops",
++	      "error=3D%s\n", strerror(errno));
++
++	/* batch operation - map_lookup */
++	for (op_index =3D 0; op_index < 2; ++op_index)
++		fetch_and_validate(outer_map_fd, inner_map_fds, &opts,
++				   batch_size[op_index], false);
++
++	/* batch operation - map_lookup_delete */
++	if (outer_map_type =3D=3D BPF_MAP_TYPE_HASH_OF_MAPS)
++		fetch_and_validate(outer_map_fd, inner_map_fds, &opts,
++				   max_entries, true /*delete*/);
++
++	free(inner_map_fds);
++	free(outer_map_keys);
++}
++
++void test_map_in_map_batch_ops_array(void)
++{
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_ARRAY);
++	printf("%s:PASS with inner ARRAY map\n", __func__);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_ARRAY_OF_MAPS, BPF_MAP_TYPE_HASH);
++	printf("%s:PASS with inner HASH map\n", __func__);
++}
++
++void test_map_in_map_batch_ops_hash(void)
++{
++	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_ARRAY);
++	printf("%s:PASS with inner ARRAY map\n", __func__);
++	_map_in_map_batch_ops(BPF_MAP_TYPE_HASH_OF_MAPS, BPF_MAP_TYPE_HASH);
++	printf("%s:PASS with inner HASH map\n", __func__);
++}
+--=20
+2.30.2
 
