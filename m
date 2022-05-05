@@ -2,177 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50609C433F5
-	for <bpf@archiver.kernel.org>; Thu,  5 May 2022 13:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8050C433FE
+	for <bpf@archiver.kernel.org>; Thu,  5 May 2022 13:57:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378909AbiEENUm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 May 2022 09:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32992 "EHLO
+        id S1348398AbiEEOBY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 May 2022 10:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354075AbiEENUl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 May 2022 09:20:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E4B18E18;
-        Thu,  5 May 2022 06:17:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651756622; x=1683292622;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+6MCbEQSUwrgaPZw/EyhSqJQGKL9MpyVEdD0/n5EPeI=;
-  b=NidSsoJSQWI7Xil2Da5FncYmC4RR9xPSXdoS0FD3sT+aCpqFaMydh0jR
-   zTZYYVArzsQ22RV7a2W8ipjYbtZJxEEEgTmJHHbmjR5mx9PqHVidT6mz7
-   CbwMiqbM7zp8ZJx1xJzfYTbSmtwT6tv/+pJQjgxRWaWRXCkYzQao5cbdY
-   CUMFjfjAPphXSC22xGGUKV1jtcWZ+LckTt+h9Zhc6ZXYVuo7FpF9eASsY
-   LP5uAPQvvxNJyDRV18g8K7q95evwEIK9nYhYwsORjzNjVMV95YwKVEEZr
-   PG4QZN2+LAKlCsHZE+5JrJ/bAN9gTRPyN3/BBoD4ztn59bY2EdyEDiL5z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="331090656"
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="331090656"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 06:17:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="563235590"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 05 May 2022 06:16:58 -0700
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 245DGuYS009371;
-        Thu, 5 May 2022 14:16:56 +0100
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>
-Subject: [PATCH bpf-next v2] bpftool: Use sysfs vmlinux when dumping BTF by ID
-Date:   Thu,  5 May 2022 15:05:08 +0200
-Message-Id: <20220505130507.130670-1-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S238597AbiEEOBX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 May 2022 10:01:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADE220E4;
+        Thu,  5 May 2022 06:57:44 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KvFc53K4NzfbJY;
+        Thu,  5 May 2022 21:56:37 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
+ 2022 21:57:42 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andrii@kernel.org>, <kafai@fb.com>,
+        <songliubraving@fb.com>, <yhs@fb.com>, <john.fastabend@gmail.com>,
+        <kpsingh@kernel.org>, <christylee@fb.com>
+CC:     <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] perf: Fix pass 0 to PTR_ERR
+Date:   Thu, 5 May 2022 21:57:13 +0800
+Message-ID: <20220505135713.18496-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, dumping almost all BTFs specified by id requires
-using the -B option to pass the base BTF. For kernel module
-BTFs the vmlinux BTF sysfs path should work.
+Passing NULL to PTR_ERR will result in 0 (success), also move
+evlist__find_evsel_by_str() behind for minor optimization.
 
-This patch simplifies dumping by ID usage by attempting to
-use vmlinux BTF from sysfs, if the first try of loading BTF by ID
-fails with certain conditions and the ID corresponds to a kernel
-module BTF.
-
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Fixes: 924b1cd61148 ("perf: Stop using bpf_map__def() API")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- tools/bpf/bpftool/btf.c | 67 +++++++++++++++++++++++++++++++++++------
- 1 file changed, 58 insertions(+), 9 deletions(-)
+ tools/perf/util/bpf-loader.c | 15 ++++++++-------
+ tools/perf/util/bpf_map.c    |  2 +-
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index a2c665beda87..070e0c1595d7 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -459,6 +459,56 @@ static int dump_btf_c(const struct btf *btf,
- 	return err;
- }
- 
-+static const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
-+
-+static struct btf *get_vmlinux_btf_from_sysfs(void)
-+{
-+	struct btf *base;
-+
-+	base = btf__parse(sysfs_vmlinux, NULL);
-+	if (libbpf_get_error(base)) {
-+		p_err("failed to parse vmlinux BTF at '%s': %ld\n",
-+		      sysfs_vmlinux, libbpf_get_error(base));
-+		base = NULL;
-+	}
-+
-+	return base;
-+}
-+
-+static struct btf *btf_try_load_with_vmlinux(__u32 btf_id, struct btf **base)
-+{
-+	struct bpf_btf_info btf_info = {};
-+	unsigned int len;
-+	int btf_fd;
-+	int err;
-+
-+	btf_fd = bpf_btf_get_fd_by_id(btf_id);
-+	if (btf_fd < 0) {
-+		p_err("can't get BTF object by id (%u): %s",
-+		      btf_id, strerror(errno));
-+		return ERR_PTR(btf_fd);
-+	}
-+
-+	len = sizeof(btf_info);
-+	err = bpf_obj_get_info_by_fd(btf_fd, &btf_info, &len);
-+	close(btf_fd);
-+
-+	if (err) {
-+		p_err("can't get BTF (ID %u) object info: %s",
-+		      btf_id, strerror(errno));
-+		return ERR_PTR(err);
-+	}
-+
-+	if (!btf_info.kernel_btf) {
-+		p_err("BTF with ID %u is not a kernel module BTF, cannot use vmlinux as base",
-+		      btf_id);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	*base = get_vmlinux_btf_from_sysfs();
-+	return btf__load_from_kernel_by_id_split(btf_id, *base);
-+}
-+
- static int do_dump(int argc, char **argv)
+diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
+index f8ad581ea247..b301ffc8c6e7 100644
+--- a/tools/perf/util/bpf-loader.c
++++ b/tools/perf/util/bpf-loader.c
+@@ -1253,21 +1253,22 @@ __bpf_map__config_event(struct bpf_map *map,
+ 			struct parse_events_term *term,
+ 			struct evlist *evlist)
  {
- 	struct btf *btf = NULL, *base = NULL;
-@@ -536,18 +586,11 @@ static int do_dump(int argc, char **argv)
- 		NEXT_ARG();
- 	} else if (is_prefix(src, "file")) {
- 		const char sysfs_prefix[] = "/sys/kernel/btf/";
--		const char sysfs_vmlinux[] = "/sys/kernel/btf/vmlinux";
+-	struct bpf_map_op *op;
+ 	const char *map_name = bpf_map__name(map);
+-	struct evsel *evsel = evlist__find_evsel_by_str(evlist, term->val.str);
++	struct bpf_map_op *op;
++	struct evsel *evsel;
  
- 		if (!base_btf &&
- 		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
--		    strcmp(*argv, sysfs_vmlinux) != 0) {
--			base = btf__parse(sysfs_vmlinux, NULL);
--			if (libbpf_get_error(base)) {
--				p_err("failed to parse vmlinux BTF at '%s': %ld\n",
--				      sysfs_vmlinux, libbpf_get_error(base));
--				base = NULL;
--			}
--		}
-+		    strcmp(*argv, sysfs_vmlinux))
-+			base = get_vmlinux_btf_from_sysfs();
- 
- 		btf = btf__parse_split(*argv, base ?: base_btf);
- 		err = libbpf_get_error(btf);
-@@ -593,6 +636,12 @@ static int do_dump(int argc, char **argv)
- 	if (!btf) {
- 		btf = btf__load_from_kernel_by_id_split(btf_id, base_btf);
- 		err = libbpf_get_error(btf);
-+		if (err == -EINVAL && !base_btf) {
-+			p_info("Warning: valid base BTF was not specified with -B option, falling back on standard base BTF (sysfs vmlinux)");
-+			btf = btf_try_load_with_vmlinux(btf_id, &base);
-+			err = libbpf_get_error(btf);
-+		}
++	if (!map) {
++		pr_debug("Map '%s' is invalid\n", map_name);
++		return -BPF_LOADER_ERRNO__INTERNAL;
++	}
 +
- 		if (err) {
- 			p_err("get btf by id (%u): %s", btf_id, strerror(err));
- 			goto done;
++	evsel = evlist__find_evsel_by_str(evlist, term->val.str);
+ 	if (!evsel) {
+ 		pr_debug("Event (for '%s') '%s' doesn't exist\n",
+ 			 map_name, term->val.str);
+ 		return -BPF_LOADER_ERRNO__OBJCONF_MAP_NOEVT;
+ 	}
+ 
+-	if (!map) {
+-		pr_debug("Map '%s' is invalid\n", map_name);
+-		return PTR_ERR(map);
+-	}
+-
+ 	/*
+ 	 * No need to check key_size and value_size:
+ 	 * kernel has already checked them.
+diff --git a/tools/perf/util/bpf_map.c b/tools/perf/util/bpf_map.c
+index c863ae0c5cb5..c72aee6a91ee 100644
+--- a/tools/perf/util/bpf_map.c
++++ b/tools/perf/util/bpf_map.c
+@@ -36,7 +36,7 @@ int bpf_map__fprintf(struct bpf_map *map, FILE *fp)
+ 		return fd;
+ 
+ 	if (!map)
+-		return PTR_ERR(map);
++		return -EINVAL;
+ 
+ 	err = -ENOMEM;
+ 	key = malloc(bpf_map__key_size(map));
 -- 
-2.35.1
+2.17.1
 
