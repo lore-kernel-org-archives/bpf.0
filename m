@@ -2,79 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7946C4167B
-	for <bpf@archiver.kernel.org>; Mon,  9 May 2022 01:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16711C46467
+	for <bpf@archiver.kernel.org>; Mon,  9 May 2022 01:29:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234034AbiEIBa5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 8 May 2022 21:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
+        id S234255AbiEIBbD convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 8 May 2022 21:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235817AbiEIAyF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 8 May 2022 20:54:05 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C274E65CA;
-        Sun,  8 May 2022 17:50:12 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KxMsJ4HqXzXdlb;
-        Mon,  9 May 2022 08:45:24 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 08:50:08 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <hawk@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <kpsingh@kernel.org>
-CC:     <weiyongjun1@huawei.com>, <shaozhengchao@huawei.com>,
-        <yuehaibing@huawei.com>
-Subject: [PATCH bpf-next] samples/bpf: check detach prog exist or not in xdp_fwd
-Date:   Mon, 9 May 2022 08:51:05 +0800
-Message-ID: <20220509005105.271089-1-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S235652AbiEIAp6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 8 May 2022 20:45:58 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F304F6430
+        for <bpf@vger.kernel.org>; Sun,  8 May 2022 17:42:06 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 248NpBZq023563
+        for <bpf@vger.kernel.org>; Sun, 8 May 2022 17:42:06 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fwpgw5pm8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 08 May 2022 17:42:06 -0700
+Received: from twshared3657.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 8 May 2022 17:42:05 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 71CA019A4AD12; Sun,  8 May 2022 17:41:59 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 5/9] libbpf: complete field-based CO-RE helpers with field offset helper
+Date:   Sun, 8 May 2022 17:41:44 -0700
+Message-ID: <20220509004148.1801791-6-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220509004148.1801791-1-andrii@kernel.org>
+References: <20220509004148.1801791-1-andrii@kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
 Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
+X-Proofpoint-ORIG-GUID: xVSkajYUkcPtJ0iRG4G-7bggQykcWkXX
+X-Proofpoint-GUID: xVSkajYUkcPtJ0iRG4G-7bggQykcWkXX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-08_09,2022-05-06_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Before detach the prog, we should check detach prog exist or not.
+Add bpf_core_field_offset() helper to complete field-based CO-RE
+helpers. This helper can be useful for feature-detection and for some
+more advanced cases of field reading (e.g., reading flexible array members).
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- samples/bpf/xdp_fwd_user.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ tools/lib/bpf/bpf_core_read.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/samples/bpf/xdp_fwd_user.c b/samples/bpf/xdp_fwd_user.c
-index 1828487bae9a..a273ede3fd73 100644
---- a/samples/bpf/xdp_fwd_user.c
-+++ b/samples/bpf/xdp_fwd_user.c
-@@ -49,7 +49,18 @@ static int do_attach(int idx, int prog_fd, int map_fd, const char *name)
+diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
+index 5ad415f9051f..fd48b1ff59ca 100644
+--- a/tools/lib/bpf/bpf_core_read.h
++++ b/tools/lib/bpf/bpf_core_read.h
+@@ -143,6 +143,18 @@ enum bpf_enum_value_kind {
+ #define bpf_core_field_size(field...)					    \
+ 	__builtin_preserve_field_info(___bpf_field_ref(field), BPF_FIELD_BYTE_SIZE)
  
- static int do_detach(int idx, const char *name)
- {
--	int err;
-+	int err = 1;
-+	__u32 curr_prog_id;
++/*
++ * Convenience macro to get field's byte offset.
++ *
++ * Supports two forms:
++ *   - field reference through variable access:
++ *     bpf_core_field_offset(p->my_field);
++ *   - field reference through type and field names:
++ *     bpf_core_field_offset(struct my_type, my_field).
++ */
++#define bpf_core_field_offset(field...)					    \
++	__builtin_preserve_field_info(___bpf_field_ref(field), BPF_FIELD_BYTE_OFFSET)
 +
-+	if (bpf_xdp_query_id(idx, xdp_flags, &curr_prog_id)) {
-+		printf("ERROR: bpf_xdp_query_id failed\n");
-+		return err;
-+	}
-+
-+	if (!curr_prog_id) {
-+		printf("ERROR: flags(0x%x) xdp prog is not attached to %s\n", xdp_flags, name);
-+		return err;
-+	}
- 
- 	err = bpf_xdp_detach(idx, xdp_flags, NULL);
- 	if (err < 0)
+ /*
+  * Convenience macro to get BTF type ID of a specified type, using a local BTF
+  * information. Return 32-bit unsigned integer with type ID from program's own
 -- 
-2.17.1
+2.30.2
 
