@@ -2,134 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59D13C4332F
-	for <bpf@archiver.kernel.org>; Mon,  9 May 2022 23:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E74EC433EF
+	for <bpf@archiver.kernel.org>; Mon,  9 May 2022 23:43:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233405AbiEIXrq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 May 2022 19:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S231442AbiEIXrw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 May 2022 19:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235065AbiEIXrP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 May 2022 19:47:15 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721BB2CDEEC
-        for <bpf@vger.kernel.org>; Mon,  9 May 2022 16:38:42 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id q23so21470105wra.1
-        for <bpf@vger.kernel.org>; Mon, 09 May 2022 16:38:42 -0700 (PDT)
+        with ESMTP id S235080AbiEIXrQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 May 2022 19:47:16 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899DC25F7B0
+        for <bpf@vger.kernel.org>; Mon,  9 May 2022 16:39:10 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id z18so16990229iob.5
+        for <bpf@vger.kernel.org>; Mon, 09 May 2022 16:39:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=sEOoNgA37n+oAtmDFXjXYHfK9txRG9g+pJQQojjD46Y=;
-        b=XXu0vAfOWN76zZocMQkxmDXWgIDzGo83KaDB7NAjCJ2ILPSOZDv0fZ9UdN0P6frAwD
-         AwXmeS7Rjlnggyn135GHPcSKeRHe2VNehubW44MTeZXWk2lkSEXJj4O3w1Z7KdWO2z2i
-         rb4jQWCREBTTEZ5zOr+dOOdPArOAEFO8+5k3q34jtMoCvjMwbxBSb+2koRsh4rQ6PdQ1
-         ljjj6Vg9Fr5JqIVLgXyudWIV2JLHAqAjywTvH1eyhrm6EOVsWCzu9HRt07AwHjdRP4zh
-         ax5hKw2OL6a3O4+GmVpAwvm1YAtsAFkgroO1E7PjyDlvSutFIBZ7AA0axajHwjcEJd3n
-         SfBw==
+        bh=uWKJn8DHkZVw+edUk9BtXDRC9Lic4cQCQSdWRvgJWqQ=;
+        b=IKoH+ZAEbw/jmLAae049xyMyrX83Ua5VZXuit3UPLbhi9IZ8Ap6a/kbHJoTSKK9zdy
+         WYSNiDNXmeeLadufM7A8/rCEOCqMLGmbYaiGyuR8zoTyB9hfmGgVqGW+Cw3gelhlSaa8
+         fuFrj/YKxI+tN5SEbLzxeaneWBKQ0IMZxxmuMvP+Y5AozHGfdue6DLl95dMIvxzdYJ5a
+         /bzXC8mSc+mYe8Kf/87GYZD4eXvyDPmzo4GVTkdnW7riFJwPX5M61OA4t01NszpW8V1j
+         VqNVkrqR6rsW4pxFj6IVG0tgGcdWNE0jotKmvmrq414psdC++Dv5grv7SWD6KVZDndgV
+         jYZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sEOoNgA37n+oAtmDFXjXYHfK9txRG9g+pJQQojjD46Y=;
-        b=J3cmq+k1ueQ1M7V6ElwFGoFHmBSU0Qng2JpliN8xDxEZC4LjNOSUuQHP/8XaXq43iQ
-         Ifxl+Nag5/m9SQuPziHBH8+s8meiUIxgdGeHHSdfTtq2r/AGesNXDcH+8llzyjYc9f6W
-         OljnJWvQmRTGh9NfcFBTP3SVJo+t1QJ9cU1hdKjs7rRPzkY8yJYHMy4F1Z53+Jnuuwit
-         U9BBNeqXLbHOZdkpV5FUs6FX0r0rIVv9sd3g/covBRJ6RmvJk5UN4GGJ6wWIC7e8gmHK
-         BlDO1lzTWue/P/QZkv3Gc/XzgFdS7QLuC4vLFZ2rLycT/fz6MgGxdzhK6Io2QFAKYN9J
-         Y+hw==
-X-Gm-Message-State: AOAM532tg4GQWpL/bHir4K6EeVw+yUTSCnQLeNtjE/Y13WPw1fKEoM4C
-        nThxoD5PNvZigozZ2jorsyhCUrNWOlVLCQi+gZb1Mw==
-X-Google-Smtp-Source: ABdhPJzbOltZZaR3MgHCrXXhLNCDJBGfgjqHZbfMUBDfydO6J+pREiZbXz7ZkG+gqvomBwxUyol5h4urwh1GGFmxqEQ=
-X-Received: by 2002:adf:dc91:0:b0:20c:cb51:4160 with SMTP id
- r17-20020adfdc91000000b0020ccb514160mr5366046wrj.568.1652139520845; Mon, 09
- May 2022 16:38:40 -0700 (PDT)
+        bh=uWKJn8DHkZVw+edUk9BtXDRC9Lic4cQCQSdWRvgJWqQ=;
+        b=jRTejz3Oqw3aqYHAr4G2CGRJI3mmPjf/ZkaH4JZ5CPflbEF878K+1UfB2WYAXJ5ONC
+         6Q17ty1OuPP+gVtStscBDj/1a0uxZSzR07u5IrcJc0SoCDue+8wB8EU1AxAvpapSML4o
+         HuweFNQUkZFr/ccGqTJBGJLOKQtMoKUGOyB95XMAusy8iIyRRATNqNAO5EUb1rhN1BeD
+         qz4NDFu7zGU5i/sNliRntMuO3fmZpU71YbGYRJxxc7eV5saHeqqmjjqJU5hfWyOhNs2u
+         lGh5dXHoJJ+oHp7Nm6AbWEhcwTWu0dRwqRH4+L64PTHC6/JVAr8eAuv4UiFPj+GHSN+n
+         Ac/Q==
+X-Gm-Message-State: AOAM532hnO0gA2eIQEhVX7KFD4hEXNXiEIwWTp3JfVp+iedqmA+gIXke
+        xkrNYKwuV94wJAu2QjJFMI+OBKlCuwpLQWK3e64=
+X-Google-Smtp-Source: ABdhPJxRjDmw5mtlq4iv/eVwaw1QrSngVkkGOMMCc9SGEaT9LR/8SEQLh2Z1BwAAoO455nuYGdJPfRqnVrQbBNMN4xc=
+X-Received: by 2002:a05:6602:2acd:b0:65a:9f9d:23dc with SMTP id
+ m13-20020a0566022acd00b0065a9f9d23dcmr7350846iov.154.1652139549972; Mon, 09
+ May 2022 16:39:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429211540.715151-1-sdf@google.com> <20220429211540.715151-11-sdf@google.com>
- <CAEf4BzY3Nd2pi+O-x4bp41=joFgPXU2+UFqBusdjR08ME62k5g@mail.gmail.com>
-In-Reply-To: <CAEf4BzY3Nd2pi+O-x4bp41=joFgPXU2+UFqBusdjR08ME62k5g@mail.gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 9 May 2022 16:38:29 -0700
-Message-ID: <CAKH8qBtk6CpR-29R6sWicz_zW=RCYUrXZqBZbgF9eqt4XGgNqQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 10/10] selftests/bpf: verify lsm_cgroup struct
- sock access
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20220501190002.2576452-1-yhs@fb.com> <20220501190054.2580458-1-yhs@fb.com>
+In-Reply-To: <20220501190054.2580458-1-yhs@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 9 May 2022 16:38:59 -0700
+Message-ID: <CAEf4BzbiuoCOh0MFvh5CSPV1W+tVM6u0og6twNZ4wqpvSdWL7Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 10/12] selftests/bpf: add a test for enum64 value relocation
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 9, 2022 at 2:54 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Sun, May 1, 2022 at 12:01 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> On Fri, Apr 29, 2022 at 2:16 PM Stanislav Fomichev <sdf@google.com> wrote:
-> >
-> > sk_priority & sk_mark are writable, the rest is readonly.
-> >
-> > Add new ldx_offset fixups to lookup the offset of struct field.
-> > Allow using test.kfunc regardless of prog_type.
-> >
-> > One interesting thing here is that the verifier doesn't
-> > really force me to add NULL checks anywhere :-/
-> >
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > ---
-> >  tools/testing/selftests/bpf/test_verifier.c   | 54 ++++++++++++++++++-
-> >  .../selftests/bpf/verifier/lsm_cgroup.c       | 34 ++++++++++++
-> >  2 files changed, 87 insertions(+), 1 deletion(-)
-> >  create mode 100644 tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-> >
+> Add a test for enum64 value relocations.
 >
-> [...]
->
-> > diff --git a/tools/testing/selftests/bpf/verifier/lsm_cgroup.c b/tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-> > new file mode 100644
-> > index 000000000000..af0efe783511
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-> > @@ -0,0 +1,34 @@
-> > +#define SK_WRITABLE_FIELD(tp, field, size, res) \
-> > +{ \
-> > +       .descr = field, \
-> > +       .insns = { \
-> > +               /* r1 = *(u64 *)(r1 + 0) */ \
-> > +               BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), \
-> > +               /* r1 = *(u64 *)(r1 + offsetof(struct socket, sk)) */ \
-> > +               BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), \
-> > +               /* r2 = *(u64 *)(r1 + offsetof(struct sock, <field>)) */ \
-> > +               BPF_LDX_MEM(size, BPF_REG_2, BPF_REG_1, 0), \
-> > +               /* *(u64 *)(r1 + offsetof(struct sock, <field>)) = r2 */ \
-> > +               BPF_STX_MEM(size, BPF_REG_1, BPF_REG_2, 0), \
-> > +               BPF_MOV64_IMM(BPF_REG_0, 1), \
-> > +               BPF_EXIT_INSN(), \
-> > +       }, \
-> > +       .result = res, \
-> > +       .errstr = res ? "no write support to 'struct sock' at off" : "", \
-> > +       .prog_type = BPF_PROG_TYPE_LSM, \
-> > +       .expected_attach_type = BPF_LSM_CGROUP, \
-> > +       .kfunc = "socket_post_create", \
-> > +       .fixup_ldx = { \
-> > +               { "socket", "sk", 1 }, \
-> > +               { tp, field, 2 }, \
-> > +               { tp, field, 3 }, \
-> > +       }, \
-> > +}
-> > +
-> > +SK_WRITABLE_FIELD("sock_common", "skc_family", BPF_H, REJECT),
-> > +SK_WRITABLE_FIELD("sock", "sk_sndtimeo", BPF_DW, REJECT),
-> > +SK_WRITABLE_FIELD("sock", "sk_priority", BPF_W, ACCEPT),
-> > +SK_WRITABLE_FIELD("sock", "sk_mark", BPF_W, ACCEPT),
-> > +SK_WRITABLE_FIELD("sock", "sk_pacing_rate", BPF_DW, REJECT),
-> > +
->
-> have you tried writing it as C program and adding the test to
-> test_progs? Does something not work there?
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
 
-Seems like it should work, I don't see any issues with writing 5
-programs to test each field.
-But test_verified still feels like a better fit? Any reason in
-particular you'd prefer test_progs over test_verifier?
+Looks good, but can you also add some signed enums for testing?
+
+>  .../selftests/bpf/prog_tests/core_reloc.c     | 43 +++++++++++++++
+>  .../bpf/progs/btf__core_reloc_enum64val.c     |  3 ++
+>  .../progs/btf__core_reloc_enum64val___diff.c  |  3 ++
+>  .../btf__core_reloc_enum64val___err_missing.c |  3 ++
+>  ...btf__core_reloc_enum64val___val3_missing.c |  3 ++
+>  .../selftests/bpf/progs/core_reloc_types.h    | 47 ++++++++++++++++
+>  .../bpf/progs/test_core_reloc_enum64val.c     | 53 +++++++++++++++++++
+>  7 files changed, 155 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enum64val.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enum64val___diff.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enum64val___err_missing.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enum64val___val3_missing.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_enum64val.c
+>
+
+[...]
