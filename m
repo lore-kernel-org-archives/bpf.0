@@ -2,82 +2,79 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8899DC4167D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7946C4167B
 	for <bpf@archiver.kernel.org>; Mon,  9 May 2022 01:29:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbiEIBaz convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 8 May 2022 21:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S234034AbiEIBa5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 8 May 2022 21:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235647AbiEIApz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 8 May 2022 20:45:55 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055346430
-        for <bpf@vger.kernel.org>; Sun,  8 May 2022 17:42:03 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 248MkLDa014234
-        for <bpf@vger.kernel.org>; Sun, 8 May 2022 17:42:03 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3fxhwws2ba-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 08 May 2022 17:42:03 -0700
-Received: from twshared0725.22.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 8 May 2022 17:42:02 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 4490919A4AC81; Sun,  8 May 2022 17:41:53 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/9] libbpf: make __kptr and __kptr_ref unconditionally use btf_type_tag() attr
-Date:   Sun, 8 May 2022 17:41:41 -0700
-Message-ID: <20220509004148.1801791-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220509004148.1801791-1-andrii@kernel.org>
-References: <20220509004148.1801791-1-andrii@kernel.org>
+        with ESMTP id S235817AbiEIAyF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 8 May 2022 20:54:05 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C274E65CA;
+        Sun,  8 May 2022 17:50:12 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KxMsJ4HqXzXdlb;
+        Mon,  9 May 2022 08:45:24 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 08:50:08 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <hawk@kernel.org>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <kpsingh@kernel.org>
+CC:     <weiyongjun1@huawei.com>, <shaozhengchao@huawei.com>,
+        <yuehaibing@huawei.com>
+Subject: [PATCH bpf-next] samples/bpf: check detach prog exist or not in xdp_fwd
+Date:   Mon, 9 May 2022 08:51:05 +0800
+Message-ID: <20220509005105.271089-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 5enNK-LVFOoqhQvsgF-S12zXH_OL0e5W
-X-Proofpoint-ORIG-GUID: 5enNK-LVFOoqhQvsgF-S12zXH_OL0e5W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-08_09,2022-05-06_01,2022-02-23_01
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It will be annoying and surprising for users of __kptr and __kptr_ref if
-libbpf silently ignores them just because Clang used for compilation
-didn't support btf_type_tag(). It's much better to get clear compiler
-error than debug BPF verifier failures later on.
+Before detach the prog, we should check detach prog exist or not.
 
-Fixes: ef89654f2bc7 ("libbpf: Add kptr type tag macros to bpf_helpers.h")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- tools/lib/bpf/bpf_helpers.h | 5 -----
- 1 file changed, 5 deletions(-)
+ samples/bpf/xdp_fwd_user.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-index 5de3eb267125..bbae9a057bc8 100644
---- a/tools/lib/bpf/bpf_helpers.h
-+++ b/tools/lib/bpf/bpf_helpers.h
-@@ -149,13 +149,8 @@ enum libbpf_tristate {
+diff --git a/samples/bpf/xdp_fwd_user.c b/samples/bpf/xdp_fwd_user.c
+index 1828487bae9a..a273ede3fd73 100644
+--- a/samples/bpf/xdp_fwd_user.c
++++ b/samples/bpf/xdp_fwd_user.c
+@@ -49,7 +49,18 @@ static int do_attach(int idx, int prog_fd, int map_fd, const char *name)
  
- #define __kconfig __attribute__((section(".kconfig")))
- #define __ksym __attribute__((section(".ksyms")))
--#if __has_attribute(btf_type_tag)
- #define __kptr __attribute__((btf_type_tag("kptr")))
- #define __kptr_ref __attribute__((btf_type_tag("kptr_ref")))
--#else
--#define __kptr
--#define __kptr_ref
--#endif
+ static int do_detach(int idx, const char *name)
+ {
+-	int err;
++	int err = 1;
++	__u32 curr_prog_id;
++
++	if (bpf_xdp_query_id(idx, xdp_flags, &curr_prog_id)) {
++		printf("ERROR: bpf_xdp_query_id failed\n");
++		return err;
++	}
++
++	if (!curr_prog_id) {
++		printf("ERROR: flags(0x%x) xdp prog is not attached to %s\n", xdp_flags, name);
++		return err;
++	}
  
- #ifndef ___bpf_concat
- #define ___bpf_concat(a, b) a ## b
+ 	err = bpf_xdp_detach(idx, xdp_flags, NULL);
+ 	if (err < 0)
 -- 
-2.30.2
+2.17.1
 
