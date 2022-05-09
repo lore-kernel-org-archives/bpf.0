@@ -2,108 +2,211 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7DF2C433F5
-	for <bpf@archiver.kernel.org>; Sun,  8 May 2022 21:59:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F16DC433FE
+	for <bpf@archiver.kernel.org>; Mon,  9 May 2022 01:26:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbiEHWDQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 8 May 2022 18:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S233935AbiEIBam convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 8 May 2022 21:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiEHWDQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 8 May 2022 18:03:16 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5799C2634
-        for <bpf@vger.kernel.org>; Sun,  8 May 2022 14:59:25 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id i17so12203333pla.10
-        for <bpf@vger.kernel.org>; Sun, 08 May 2022 14:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0bapmjFe4m3fyOJt5RDfB7CtQ9OTOukK5tRFsesVWd4=;
-        b=QLCglWSp/nUfQ+yYC6DDpWUvRL7MZqA52oCvWGbgdJZF6t9q2p3Jory0tNdps+t1mf
-         rQGJQR2zObOnLr5QNYcxeT4pvz2buIp111YX7JHFurs2aM5TVkKWATlEeI5x4sjk4MuQ
-         NDU2VrsDdBsZI4A6JVCVg5Yn4gJc5COC9eKN0Cbc8k7QN034L6G/HIxlHDtcxcV3FPHD
-         j1yMbTQcsWYAKtkQ4HZB1HO2UY655u+7nxMMOQoRb0NOZhB9s09CJqP2JB2ZA32HpHRO
-         6Da/lv8UiGDnDFUda4GJd5eZ4C8YgU0SCAMj8Gws1S7KDeG6y292UAuxwRveHUDhN8Cw
-         2Reg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0bapmjFe4m3fyOJt5RDfB7CtQ9OTOukK5tRFsesVWd4=;
-        b=asBFyCsoJx/x8M9Tr5xa+OkA70nBRcOQjpw+lJDYeNDMSX4uTDI/chEk73D6m+q0Uf
-         qEpxv602Us89V2MYPemLx5rw7nLfENWk3ZkE73ruggweFxbi6ny53LBTRZRiTMKUgcJJ
-         Hdcd7786fEE4XIZ+aXhMmI8rCKS+UP5w3WwCm4hvWIyreivaEVKrqh163Dyoo6NNDzKN
-         A1dWaYqP9mf+b1ziOGvlKHf6J2Biq6NqEsIMWJHUGsYAuxp0kjSZu+LwMj08FuJp0/mH
-         ySBKluxALeAI9TBrOwezDOYQiTdXwo07K9hRmQRp06Hx3qVRW6ybILh3w426hEDecAG1
-         2qfQ==
-X-Gm-Message-State: AOAM532RN95bhnsZndzSSHGvc2V3+P/XFeTmS4lj1x0ddKT8VMlnJKbz
-        7jmFVUbJ6tGwfJlsU6TXrJSse0XzTuS8kX32gJxd1SN/
-X-Google-Smtp-Source: ABdhPJzKZhrgCSlMWOFMtpSe9Lcf2FfTS4GrXC8092FGw3qNfwObW4nMYxsOyhv1mfqto5ydUw/QImiGajn2GK8Yum8=
-X-Received: by 2002:a17:903:2d1:b0:156:7ceb:b56f with SMTP id
- s17-20020a17090302d100b001567cebb56fmr13580909plk.11.1652047164833; Sun, 08
- May 2022 14:59:24 -0700 (PDT)
+        with ESMTP id S235655AbiEIAp6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 8 May 2022 20:45:58 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A926573
+        for <bpf@vger.kernel.org>; Sun,  8 May 2022 17:42:07 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 248NQP6O023350
+        for <bpf@vger.kernel.org>; Sun, 8 May 2022 17:42:07 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fwm3p63rp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 08 May 2022 17:42:07 -0700
+Received: from twshared11660.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 8 May 2022 17:42:05 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id 7E1AF19A4AD1C; Sun,  8 May 2022 17:42:01 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 6/9] selftests/bpf: add bpf_core_field_offset() tests
+Date:   Sun, 8 May 2022 17:41:45 -0700
+Message-ID: <20220509004148.1801791-7-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220509004148.1801791-1-andrii@kernel.org>
+References: <20220509004148.1801791-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <20220424214901.2743946-1-memxor@gmail.com> <20220424214901.2743946-14-memxor@gmail.com>
- <20220426033937.jjcua6zchnka5dco@MBP-98dd607d3435.dhcp.thefacebook.com>
-In-Reply-To: <20220426033937.jjcua6zchnka5dco@MBP-98dd607d3435.dhcp.thefacebook.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Sun, 8 May 2022 14:59:13 -0700
-Message-ID: <CAADnVQKdB13TUDUsKPUEtgMgKWDG9xUDa1WO3v7HSufqU-sE-w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 13/13] selftests/bpf: Add test for strict BTF
- type check
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 8rRxHUcw7Ud9NIvjkybBi5pQceKp46EJ
+X-Proofpoint-ORIG-GUID: 8rRxHUcw7Ud9NIvjkybBi5pQceKp46EJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-08_09,2022-05-06_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 8:39 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Apr 25, 2022 at 03:19:01AM +0530, Kumar Kartikeya Dwivedi wrote:
-> >
-> > diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-> > index 2e03decb11b6..743ed34c1238 100644
-> > --- a/tools/testing/selftests/bpf/verifier/calls.c
-> > +++ b/tools/testing/selftests/bpf/verifier/calls.c
-> > @@ -138,6 +138,26 @@
-> >               { "bpf_kfunc_call_memb_release", 8 },
-> >       },
-> >  },
-> > +{
-> > +     "calls: invalid kfunc call: don't match first member type when passed to release kfunc",
-> > +     .insns = {
-> > +     BPF_MOV64_IMM(BPF_REG_0, 0),
-> > +     BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
-> > +     BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
-> > +     BPF_EXIT_INSN(),
-> > +     BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
-> > +     BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 0, 0),
-> > +     BPF_MOV64_IMM(BPF_REG_0, 0),
-> > +     BPF_EXIT_INSN(),
-> > +     },
-> > +     .prog_type = BPF_PROG_TYPE_SCHED_CLS,
-> > +     .result = REJECT,
-> > +     .errstr = "kernel function bpf_kfunc_call_memb1_release args#0 expected pointer",
-> > +     .fixup_kfunc_btf_id = {
-> > +             { "bpf_kfunc_call_memb_acquire", 1 },
-> > +             { "bpf_kfunc_call_memb1_release", 5 },
-> > +     },
-> > +},
->
-> Please add negative C tests as well.
-> Consider using SEC("?tc") logic added by commit 0d7fefebea552
-> and put a bunch of bpf progs that should fail to load in one .c
+Add test cases for bpf_core_field_offset() helper.
 
-Kumar,
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ .../selftests/bpf/prog_tests/core_reloc.c     | 13 ++++++++--
+ .../progs/btf__core_reloc_size___diff_offs.c  |  3 +++
+ .../selftests/bpf/progs/core_reloc_types.h    | 18 +++++++++++++
+ .../bpf/progs/test_core_reloc_size.c          | 25 ++++++++++++++++++-
+ 4 files changed, 56 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_size___diff_offs.c
 
-ping?
-Are you still working on the follow up?
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index f28f75aa9154..3712dfe1be59 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -277,13 +277,21 @@ static int duration = 0;
+ #define SIZE_OUTPUT_DATA(type)						\
+ 	STRUCT_TO_CHAR_PTR(core_reloc_size_output) {			\
+ 		.int_sz = sizeof(((type *)0)->int_field),		\
++		.int_off = offsetof(type, int_field),			\
+ 		.struct_sz = sizeof(((type *)0)->struct_field),		\
++		.struct_off = offsetof(type, struct_field),		\
+ 		.union_sz = sizeof(((type *)0)->union_field),		\
++		.union_off = offsetof(type, union_field),		\
+ 		.arr_sz = sizeof(((type *)0)->arr_field),		\
+-		.arr_elem_sz = sizeof(((type *)0)->arr_field[0]),	\
++		.arr_off = offsetof(type, arr_field),			\
++		.arr_elem_sz = sizeof(((type *)0)->arr_field[1]),	\
++		.arr_elem_off = offsetof(type, arr_field[1]),		\
+ 		.ptr_sz = 8, /* always 8-byte pointer for BPF */	\
++		.ptr_off = offsetof(type, ptr_field),			\
+ 		.enum_sz = sizeof(((type *)0)->enum_field),		\
++		.enum_off = offsetof(type, enum_field),			\
+ 		.float_sz = sizeof(((type *)0)->float_field),		\
++		.float_off = offsetof(type, float_field),		\
+ 	}
+ 
+ #define SIZE_CASE(name) {						\
+@@ -714,9 +722,10 @@ static const struct core_reloc_test_case test_cases[] = {
+ 	}),
+ 	BITFIELDS_ERR_CASE(bitfields___err_too_big_bitfield),
+ 
+-	/* size relocation checks */
++	/* field size and offset relocation checks */
+ 	SIZE_CASE(size),
+ 	SIZE_CASE(size___diff_sz),
++	SIZE_CASE(size___diff_offs),
+ 	SIZE_ERR_CASE(size___err_ambiguous),
+ 
+ 	/* validate type existence and size relocations */
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_size___diff_offs.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_size___diff_offs.c
+new file mode 100644
+index 000000000000..3824345d82ab
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_size___diff_offs.c
+@@ -0,0 +1,3 @@
++#include "core_reloc_types.h"
++
++void f(struct core_reloc_size___diff_offs x) {}
+diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+index c95c0cabe951..f9dc9766546e 100644
+--- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
++++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+@@ -785,13 +785,21 @@ struct core_reloc_bitfields___err_too_big_bitfield {
+  */
+ struct core_reloc_size_output {
+ 	int int_sz;
++	int int_off;
+ 	int struct_sz;
++	int struct_off;
+ 	int union_sz;
++	int union_off;
+ 	int arr_sz;
++	int arr_off;
+ 	int arr_elem_sz;
++	int arr_elem_off;
+ 	int ptr_sz;
++	int ptr_off;
+ 	int enum_sz;
++	int enum_off;
+ 	int float_sz;
++	int float_off;
+ };
+ 
+ struct core_reloc_size {
+@@ -814,6 +822,16 @@ struct core_reloc_size___diff_sz {
+ 	double float_field;
+ };
+ 
++struct core_reloc_size___diff_offs {
++	float float_field;
++	enum { YET_OTHER_VALUE = 123 } enum_field;
++	void *ptr_field;
++	int arr_field[4];
++	union { int x; } union_field;
++	struct { int x; } struct_field;
++	int int_field;
++};
++
+ /* Error case of two candidates with the fields (int_field) at the same
+  * offset, but with differing final relocation values: size 4 vs size 1
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_size.c b/tools/testing/selftests/bpf/progs/test_core_reloc_size.c
+index 6766addd2583..5b686053ce42 100644
+--- a/tools/testing/selftests/bpf/progs/test_core_reloc_size.c
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_size.c
+@@ -15,13 +15,21 @@ struct {
+ 
+ struct core_reloc_size_output {
+ 	int int_sz;
++	int int_off;
+ 	int struct_sz;
++	int struct_off;
+ 	int union_sz;
++	int union_off;
+ 	int arr_sz;
++	int arr_off;
+ 	int arr_elem_sz;
++	int arr_elem_off;
+ 	int ptr_sz;
++	int ptr_off;
+ 	int enum_sz;
++	int enum_off;
+ 	int float_sz;
++	int float_off;
+ };
+ 
+ struct core_reloc_size {
+@@ -41,13 +49,28 @@ int test_core_size(void *ctx)
+ 	struct core_reloc_size_output *out = (void *)&data.out;
+ 
+ 	out->int_sz = bpf_core_field_size(in->int_field);
++	out->int_off = bpf_core_field_offset(in->int_field);
++
+ 	out->struct_sz = bpf_core_field_size(in->struct_field);
++	out->struct_off = bpf_core_field_offset(in->struct_field);
++
+ 	out->union_sz = bpf_core_field_size(in->union_field);
++	out->union_off = bpf_core_field_offset(in->union_field);
++
+ 	out->arr_sz = bpf_core_field_size(in->arr_field);
+-	out->arr_elem_sz = bpf_core_field_size(struct core_reloc_size, arr_field[0]);
++	out->arr_off = bpf_core_field_offset(in->arr_field);
++
++	out->arr_elem_sz = bpf_core_field_size(struct core_reloc_size, arr_field[1]);
++	out->arr_elem_off = bpf_core_field_offset(struct core_reloc_size, arr_field[1]);
++
+ 	out->ptr_sz = bpf_core_field_size(struct core_reloc_size, ptr_field);
++	out->ptr_off = bpf_core_field_offset(struct core_reloc_size, ptr_field);
++
+ 	out->enum_sz = bpf_core_field_size(struct core_reloc_size, enum_field);
++	out->enum_off = bpf_core_field_offset(struct core_reloc_size, enum_field);
++
+ 	out->float_sz = bpf_core_field_size(struct core_reloc_size, float_field);
++	out->float_off = bpf_core_field_offset(struct core_reloc_size, float_field);
+ 
+ 	return 0;
+ }
+-- 
+2.30.2
+
