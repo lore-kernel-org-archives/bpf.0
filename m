@@ -2,221 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C28C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D56DC4332F
 	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 17:31:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348236AbiEJRfK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 May 2022 13:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
+        id S245112AbiEJRfL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 May 2022 13:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245112AbiEJRfJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S239114AbiEJRfJ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 10 May 2022 13:35:09 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF7236B66
-        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:31:08 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b6-20020a253406000000b006484c081280so15474796yba.5
-        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:31:08 -0700 (PDT)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3B0381B4
+        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:31:10 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r1-20020a1c2b01000000b00394398c5d51so1868787wmr.2
+        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+OItLiQE6V8bbnL9yESMNsFuPWf1H2cgWOWhkugLbts=;
-        b=C7uHnMQH/g8c4RQwEgQXe4iSngwlEhlbNu8w8o2e9ZZmCvYNC6h/ztU1TomM1+2+pU
-         5w6ss35/qQ8cdqeviXf88HW9jauycb9ePQV5jBs5xWONQdJlDCcFle9WlKJlTxrxI+cq
-         igyaKezOXn17wIMFftdSC2GmAmyb6RyjkcdlgAJ+XNUwZDnQWJV37t5qR5rEGTv2Nk2i
-         fJ1M2tkbFQV2scAO5/E0MfqdDmGR5HSZt6Wi6KaTLRcK2DaTVXuZuLUNzyHaqxhZS1B9
-         1NtWUdFoiiqselXALoSIBxFznLhceBwgbUDXiL30pb93svi0tSMUfDOB/iDNA5C+kDtU
-         Y6ow==
+        bh=86+dyCf/6HmXI3GRuClQFtu8rHXl41P9h7Bj3EV+OIc=;
+        b=RWByi1P501aV7KbOFn57eohhgkVOTWcupOLSPpCv2PLkfT+Exy8cDrqR+W0acvYYHW
+         8LDl4KU6pBa81msedpOIfIswWY6O0uRoEIqmm+xE6IxEUk0g8Ldiwz2I8e9QxR3OJ0nB
+         uY6kiPQmE0tIHW1+ocgz4HbcFlUUhvBFu597/N0H7QO6QpiyME0q3oH6ql5yaCKKMqTY
+         BuBJw7dQqhvW1c60bDh6ifQyxzVQCEQ2oul+yM9HevgfImNgNTL7/+inIcwyTBB/OOpv
+         +F4KjN8jwnLbzNxcDJ/Z/EJ6x5a35s/HYGwBMVa1Wvp+x57ZuLB2RYiu6QZChWFtuIzf
+         vjhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+OItLiQE6V8bbnL9yESMNsFuPWf1H2cgWOWhkugLbts=;
-        b=5NlBW6434gm63As2ASybm7c81apEmVZcNuMeUTglXx8vSkeH5vcg77Z7IDVxuLGKTW
-         bmEGBNNUS+XCyAKjX+vr6S/Asl2uZqm0GFSiQD4khNEh16hY2sS9uNCTpr/8qoASa5g9
-         vp0SzlXYsmz5Y1zw/yb7kzPnpOApsXMrL1+YXMUpwEiTxPwAk4Fza0B1UmTwfBeSHp9Y
-         eVXk9R1xyvdaK1RCYt6qbuUoWbf7hd0RKZffwcAMO3Nplrjx6bGhyoBKYkMjhCsH1Ix9
-         nGmhr5jYTvn3JkPdKFosEvK2YmS7c5xSbzbDnBlBCYeMbCwzvc6k69hgNjNAW6mplaLD
-         n5qw==
-X-Gm-Message-State: AOAM532fy3hcxQQ0XGGeuTczEF1CS8uQw5POehUI1kXdPMH5dGkWp6oB
-        xsaZYticZp6ugOLdWTlkwXu1tZE=
-X-Google-Smtp-Source: ABdhPJzn7uyZpM0TZ1IyM3QlV/L2ZjzJjdOoEArLgCgMJaHR3V0/cutOa8vWeP+TULrBJY7f1Ragtr0=
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:e4f0:6894:4cb0:4ccc])
- (user=sdf job=sendgmr) by 2002:a25:e056:0:b0:645:d68d:8474 with SMTP id
- x83-20020a25e056000000b00645d68d8474mr19379979ybg.294.1652203867668; Tue, 10
- May 2022 10:31:07 -0700 (PDT)
-Date:   Tue, 10 May 2022 10:31:05 -0700
-In-Reply-To: <20220510050546.tpuslkld4rlrqexp@MBP-98dd607d3435.dhcp.thefacebook.com>
-Message-Id: <YnqhWTshFLqMY9kl@google.com>
-Mime-Version: 1.0
-References: <20220429211540.715151-1-sdf@google.com> <20220429211540.715151-5-sdf@google.com>
- <20220510050546.tpuslkld4rlrqexp@MBP-98dd607d3435.dhcp.thefacebook.com>
-Subject: Re: [PATCH bpf-next v6 04/10] bpf: minimize number of allocated lsm
- slots per program
-From:   sdf@google.com
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=86+dyCf/6HmXI3GRuClQFtu8rHXl41P9h7Bj3EV+OIc=;
+        b=d5SkTYInYVaOyxfoH9by2ceOdxz8W56luloBfW7oUDQ95M6lALVPcmoPj5l37R1RPb
+         CmUrDMbgRnKwgYTDRvyE0vxWvsUuskwLjPY6AnGPd14Pew4KA6jWfFqfn8M9O9L3qrwo
+         U69i7vIqO9AR+0PCVjnRZRCujA2OClknID5rjKcMULyWMi5FgGXbBhbpfp9eaAqv1GMH
+         pI+HhDTqyMoShQxN8Z5DU4X4hye5vGEIkRAr89mSvNzfxlwvxv/KGsxGon30lb6UiUZA
+         zT1c3AATzlLMMakei6IVdVirQQdExT0thK80P1Vcdpym/mQNluvPmBb2FklLRVIT4eDZ
+         ej6A==
+X-Gm-Message-State: AOAM532OOEWF4xJqzF99kuXebQo67pwaW10C2oFSzuiChSHMKcckeVpS
+        0Mx2hM181ZpqQFZp0npIAvVrjgbDg4xCw8Lmgbse0n5E01k=
+X-Google-Smtp-Source: ABdhPJxOcZh+gy1GXzyP/EOqnV/zyefYeDjZ4eB7SwEShZLCHy2T0XWzpL7s9Ii2T/HzlQOD6WFTTej16eicLNKi2IA=
+X-Received: by 2002:a05:600c:a42:b0:393:d831:bf05 with SMTP id
+ c2-20020a05600c0a4200b00393d831bf05mr974751wmq.187.1652203868463; Tue, 10 May
+ 2022 10:31:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220429211540.715151-1-sdf@google.com> <20220429211540.715151-4-sdf@google.com>
+ <20220506230244.4t4p5gnbgg6i4tht@kafai-mbp.dhcp.thefacebook.com>
+ <CAKH8qBsQnzHPtuAiCs67YvTh9m+CmVR+-9wVKJggKjZnV_oYtg@mail.gmail.com> <20220510071334.duvldvzob777dt47@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20220510071334.duvldvzob777dt47@kafai-mbp.dhcp.thefacebook.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 10 May 2022 10:30:57 -0700
+Message-ID: <CAKH8qBsR_kgQ3ETwm++AL7vZDcq1H-56eykqDdAcrveH5+ejzA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 03/10] bpf: per-cgroup lsm flavor
+To:     Martin KaFai Lau <kafai@fb.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 05/09, Alexei Starovoitov wrote:
-> On Fri, Apr 29, 2022 at 02:15:34PM -0700, Stanislav Fomichev wrote:
-> > Previous patch adds 1:1 mapping between all 211 LSM hooks
-> > and bpf_cgroup program array. Instead of reserving a slot per
-> > possible hook, reserve 10 slots per cgroup for lsm programs.
-> > Those slots are dynamically allocated on demand and reclaimed.
+On Tue, May 10, 2022 at 12:13 AM Martin KaFai Lau <kafai@fb.com> wrote:
+>
+> On Mon, May 09, 2022 at 04:38:36PM -0700, Stanislav Fomichev wrote:
+> > > > +unsigned int __cgroup_bpf_run_lsm_current(const void *ctx,
+> > > > +                                       const struct bpf_insn *insn)
+> > > > +{
+> > > > +     const struct bpf_prog *shim_prog;
+> > > > +     struct cgroup *cgrp;
+> > > > +     int ret = 0;
+> > > From lsm_hook_defs.h, there are some default return values that are not 0.
+> > > Is it ok to always return 0 in cases like the cgroup array is empty ?
 > >
-> > It should be possible to eventually extend this idea to all hooks if
-> > the memory consumption is unacceptable and shrink overall effective
-> > programs array.
-> >
-> > struct cgroup_bpf {
-> > 	struct bpf_prog_array *    effective[33];        /*     0   264 */
-> > 	/* --- cacheline 4 boundary (256 bytes) was 8 bytes ago --- */
-> > 	struct hlist_head          progs[33];            /*   264   264 */
-> > 	/* --- cacheline 8 boundary (512 bytes) was 16 bytes ago --- */
-> > 	u8                         flags[33];            /*   528    33 */
-> >
-> > 	/* XXX 7 bytes hole, try to pack */
-> >
-> > 	struct list_head           storages;             /*   568    16 */
-> > 	/* --- cacheline 9 boundary (576 bytes) was 8 bytes ago --- */
-> > 	struct bpf_prog_array *    inactive;             /*   584     8 */
-> > 	struct percpu_ref          refcnt;               /*   592    16 */
-> > 	struct work_struct         release_work;         /*   608    72 */
-> >
-> > 	/* size: 680, cachelines: 11, members: 7 */
-> > 	/* sum members: 673, holes: 1, sum holes: 7 */
-> > 	/* last cacheline: 40 bytes */
-> > };
-> >
-> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > ---
-> >  include/linux/bpf-cgroup-defs.h |   3 +-
-> >  include/linux/bpf_lsm.h         |   6 --
-> >  kernel/bpf/bpf_lsm.c            |   5 --
-> >  kernel/bpf/cgroup.c             | 107 +++++++++++++++++++++++++++-----
-> >  4 files changed, 94 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/include/linux/bpf-cgroup-defs.h  
-> b/include/linux/bpf-cgroup-defs.h
-> > index d5a70a35dace..359d3f16abea 100644
-> > --- a/include/linux/bpf-cgroup-defs.h
-> > +++ b/include/linux/bpf-cgroup-defs.h
-> > @@ -10,7 +10,8 @@
-> >
-> >  struct bpf_prog_array;
-> >
-> > -#define CGROUP_LSM_NUM 211 /* will be addressed in the next patch */
-> > +/* Maximum number of concurrently attachable per-cgroup LSM hooks. */
-> > +#define CGROUP_LSM_NUM 10
-> >
-> >  enum cgroup_bpf_attach_type {
-> >  	CGROUP_BPF_ATTACH_TYPE_INVALID = -1,
-> > diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> > index 7f0e59f5f9be..613de44aa429 100644
-> > --- a/include/linux/bpf_lsm.h
-> > +++ b/include/linux/bpf_lsm.h
-> > @@ -43,7 +43,6 @@ extern const struct bpf_func_proto  
-> bpf_inode_storage_delete_proto;
-> >  void bpf_inode_storage_free(struct inode *inode);
-> >
-> >  int bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t  
-> *bpf_func);
-> > -int bpf_lsm_hook_idx(u32 btf_id);
-> >
-> >  #else /* !CONFIG_BPF_LSM */
-> >
-> > @@ -74,11 +73,6 @@ static inline int bpf_lsm_find_cgroup_shim(const  
-> struct bpf_prog *prog,
-> >  	return -ENOENT;
-> >  }
-> >
-> > -static inline int bpf_lsm_hook_idx(u32 btf_id)
-> > -{
-> > -	return -EINVAL;
-> > -}
-> > -
-> >  #endif /* CONFIG_BPF_LSM */
-> >
-> >  #endif /* _LINUX_BPF_LSM_H */
-> > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> > index a0e68ef5dfb1..1079c747e061 100644
-> > --- a/kernel/bpf/bpf_lsm.c
-> > +++ b/kernel/bpf/bpf_lsm.c
-> > @@ -91,11 +91,6 @@ int bpf_lsm_find_cgroup_shim(const struct bpf_prog  
-> *prog,
-> >  	return 0;
-> >  }
-> >
-> > -int bpf_lsm_hook_idx(u32 btf_id)
-> > -{
-> > -	return btf_id_set_index(&bpf_lsm_hooks, btf_id);
-> > -}
-> > -
-> >  int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
-> >  			const struct bpf_prog *prog)
-> >  {
-> > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> > index 9cc38454e402..787ff6cf8d42 100644
-> > --- a/kernel/bpf/cgroup.c
-> > +++ b/kernel/bpf/cgroup.c
-> > @@ -79,10 +79,13 @@ unsigned int __cgroup_bpf_run_lsm_sock(const void  
-> *ctx,
-> >  	shim_prog = (const struct bpf_prog *)((void *)insn - offsetof(struct  
-> bpf_prog, insnsi));
-> >
-> >  	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-> > -	if (likely(cgrp))
-> > +	if (likely(cgrp)) {
-> > +		rcu_read_lock(); /* See bpf_lsm_attach_type_get(). */
+> > That's a good point, I haven't thought about it. You're right, it
+> > seems like attaching to this hook for some LSMs will change the
+> > default from some error to zero.
+> > Let's start by prohibiting those hooks for now? I guess in theory,
+> > when we generate a trampoline, we can put this default value as an
+> > input arg to these new __cgroup_bpf_run_lsm_xxx helpers (in the
+> > future)?
+> After looking at arch_prepare_bpf_trampoline, return 0 here should be fine.
+> If I read it correctly, when the shim_prog returns 0, the trampoline
+> will call the original kernel function which is the bpf_lsm_##NAME()
+> defined in bpf_lsm.c and it will then return the zero/-ve DEFAULT.
 
-> I've looked at bpf_lsm_attach_type_get/put, but still don't get it :)
-> shim_prog->aux->cgroup_atype stays the same for the life of shim_prog.
-> atype_usecnt will go up and down, but atype_usecnt == 0 is the only
-> interesting one from the pov of selecting atype in _get().
-> And there shim_prog will be detached and trampoline destroyed.
-> The shim_prog->aux->cgroup_atype deref below cannot be happening on
-> freed shim_prog.
-> So what is the point of this critical section and sync_rcu() ?
-> It seems none of it is necessary.
+Not sure I read the same :-/ I'm assuming that for those cases we
+actually end up generating fmod_ret trampoline which seems to be
+unconditionally saving r0 into fp-8 ?
 
-I was trying to guard against the reuse of the same cgroup_atype:
+> > Another thing that seems to be related: there are a bunch of hooks
+> > that return void, so returning EPERM from the cgroup programs won't
+> > work as expected.
+> > I can probably record, at verification time, whether lsm_cgroup
+> > programs return any "non-success" return codes and prohibit attaching
+> > these progs to the void hooks?
+> hmm...yeah, BPF_LSM_CGROUP can be enforced to return either 0 or 1 as
+> most other cgroup-progs do.
+>
+> Do you have a use case that needs to return something other than -EPERM ?
 
-CPU0                                     CPU1
-__cgroup_bpf_run_lsm_socket:
-atype = shim_prog->aux->cgroup_atype
-                                          __cgroup_bpf_detach
-                                          bpf_lsm_attach_type_put(shim_prog  
-attach_btf_id)
-                                          __cgroup_bpf_attach(another hook)
-                                          bpf_lsm_attach_type_get(another  
-btf_id)
-                                          ^^^ can reuse the same cgroup_atype
-array = cgrp->effective[atype]
-^^^ run effective from another btf_id?
-
-So I added that sync_rcu to wait for existing shim_prog users to exit.
-Am I too paranoid? Maybe if I move bpf_lsm_attach_type_put deep into
-bpf_prog_put (deferred path) that won't be an issue and we can drop
-rcu_sync+read lock?
-
-> > It should be possible to eventually extend this idea to all hooks if
-> > the memory consumption is unacceptable and shrink overall effective
-> > programs array.
-
-> if BPF_LSM_CGROUP do atype differently looks too special.
-> Why not to do this generalization right now?
-> Do atype_get for all cgroup hooks and get rid of  
-> to_cgroup_bpf_attach_type ?
-> Combine ranges of attach_btf_id for lsm_cgroup and enum bpf_attach_type
-> for traditional cgroup hooks into single _get() method that returns a slot
-> in effective[] array ?
-> attach/detach/query apis won't notice this internal implementation detail.
-
-I'm being extra cautious by using this new allocation scheme for LSM only.
-If there is no general pushback, I can try to convert everything at the
-same time.
+We do already enforce 0/1 for cgroup progs (and we have helpers to
+expose custom errno). What I want to avoid is letting users attach
+programs that try to return the error for the void hooks. And it seems
+like we record that return range for a particular cgroup program and
+verify it at attach time, WDYT?
