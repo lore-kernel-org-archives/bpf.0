@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B384C4332F
-	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 00:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 397DCC433FE
+	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 00:18:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbiEJAWa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 May 2022 20:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
+        id S233662AbiEJAWc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 May 2022 20:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiEJAW3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 9 May 2022 20:22:29 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5699728C9C3
-        for <bpf@vger.kernel.org>; Mon,  9 May 2022 17:18:26 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id p18-20020aa78612000000b0050d1c170018so5384940pfn.15
-        for <bpf@vger.kernel.org>; Mon, 09 May 2022 17:18:26 -0700 (PDT)
+        with ESMTP id S233591AbiEJAWa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 May 2022 20:22:30 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC4428C9FD
+        for <bpf@vger.kernel.org>; Mon,  9 May 2022 17:18:30 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id s18-20020a17090aa11200b001d92f7609e8so6867984pjp.3
+        for <bpf@vger.kernel.org>; Mon, 09 May 2022 17:18:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=jUygyQcHmQCX+4t0PO9Lj98oGxUhwQRCqcIwRtRRuu0=;
-        b=b9L6wIY6W3JHgNc21GkxYFtPGgfmo5QUJKkjlOhi4hW3quxxLCFiGsyjlcSg3mOEte
-         xmYcnYmek/bOQXhLz+sI4VQviMEA+cmcQ45gAHFT3NM89PNw3VF2taoJOECrNh688Ieh
-         XVEE6g3VTkOhPesLqypGO5fy0bGZ8/jL+ZYAYtCCGQJukNlJAI77UUs0ewH/ySwBGf6S
-         euh6YXkx+e0I2eJNJCkjlpGpu/IgzPTDz31AoWxHLCsaa08vNcDkWlzYVZ3WX+++HFY+
-         JMd+L9/ZBEFMpxJLXdRZehKNGnT/yoi38iBjacCWDEVlkD8M9h/fuKz/vEF7G+xhBP93
-         CS6w==
+        bh=PLe94BZhE80q/pDQVvt5DmK8lXFEEEfCjMN3zuEnNPw=;
+        b=b2rDa5+JQZQE63OVUadnzrDA9sRT5AyfXJyIIB31LrDJUWYPfnBVOfa5ojXs9imp6d
+         DwF4Awnj/fUwKBhjAsgQY8m/yjkmSpC8h+esfZ2DRrbYeFr9Z/TmnLxUNToiDS3GuWhL
+         I1CZcBuzvF+TZLDnC8IEwjt7q1mTj3TCig5j9p1Ib8ZD2Ruj1aVOM/uCMLOLMW0lhB+V
+         JFmWTSNEtcFtJ3hkLXygufK/9TBzOJNp+Fh6TscWo5hSpcL6vJVLjYxwh5He67lJ6S5P
+         g9h25soVq8JfMXLQ4xTp/9u3XVMKLP8/QyHCB1uSKJk2RK02ZF3mB9ksJ9Py4vK/Ika7
+         3aDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=jUygyQcHmQCX+4t0PO9Lj98oGxUhwQRCqcIwRtRRuu0=;
-        b=A7NKmhtZ1bxj+idgORYAmxGBE0+bxFHFYWHBPiNOrmXr69PZsADMVJQ7BgLBmBQ4Od
-         QNiCG8mQDqnwevPLX0H441+yeJ4edP48uLPvM0YBXwuwTqMSSX+5SmBx12doUY0oOA2a
-         2pEzJ5MPI2yndGD3upm8VsSsvBoybqA+5KK648ADFi2x91nIN5zPdT33iadFQJfXAvmT
-         xhKou7lZK9/0ntKv9idV5Rr/IGCbmUe5h/3IBQgBJ0JnFQZ6/oZG35Wst1vlJ3806Rfo
-         zchqxVO6vL5xbzu2aQ4wbYXgI4ePpHm5sVXnIckIQOH7FdtlUqN/AYFLoF+mKKKcxvVh
-         xe9A==
-X-Gm-Message-State: AOAM533F+Bc0zfgeUHm5WZ/Y0zcA1bt9T4rdVfAmn/0ucIdxrJjTNVvc
-        d7SIwlipbqxrgCKEJEfcb2xw1bew3JSCkq9J
-X-Google-Smtp-Source: ABdhPJws2wA6fi+zGQOzH1vWd8zNdFXSGIXiWcInZijSRi9ZraL3D7PhFIBq8d5am7hWKt6LV39Xxn5hy8O21P2z
+        bh=PLe94BZhE80q/pDQVvt5DmK8lXFEEEfCjMN3zuEnNPw=;
+        b=aN9/NRbslWrz+mxWy0o1op/hSaYVe9ckN30JcjV7p6mYSw9fso4KoFGqJND9TEbjoA
+         cDTFH1dZOghcQb5AJHsjCZrpfaK1kFM8pa1tKZ/1HZV/a721kdqBoRXi1lYq7YndFtT9
+         HIFONPTv6/K9Zae8rrFztYH9GC57XAWmeEYdcFkZR/EnDPLxEY1Yc2uYlfUerNc3OSIM
+         iJoW8Fh/zJqIkCbW00yN9IXXmTefeNQIHIMfwOARpCdNqetQf98bBQZuvFfzjGomgm0j
+         f1fFni1CnzBBp8yOJqhRBC/+IBMP5h147rOKX7ZlpWnKQRftdXCRlHzIVLKLwWIA2qJv
+         Vpmw==
+X-Gm-Message-State: AOAM530TNvQx2rzYEI5Sn/NX3AjgBR9IP1xZaIRiz9e3L4S/CF22ClrN
+        fBh2ZOe1ysTxOn2i4Fp28lU6lsoVfJogyLaw
+X-Google-Smtp-Source: ABdhPJz/zhDfC/scR3LASeLDbHzHW221VoVK/8Sqq0+Z+mT9XUaQdCel9UEi8YE3fJyduB/0tUYYEcm0Ld+tn4Li
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:846:b0:50d:f02f:bb46 with SMTP
- id q6-20020a056a00084600b0050df02fbb46mr18110972pfk.74.1652141905673; Mon, 09
- May 2022 17:18:25 -0700 (PDT)
-Date:   Tue, 10 May 2022 00:18:01 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:e510:b0:1d9:ee23:9fa1 with SMTP
+ id t16-20020a17090ae51000b001d9ee239fa1mr16845pjy.0.1652141908990; Mon, 09
+ May 2022 17:18:28 -0700 (PDT)
+Date:   Tue, 10 May 2022 00:18:03 +0000
 In-Reply-To: <20220510001807.4132027-1-yosryahmed@google.com>
-Message-Id: <20220510001807.4132027-4-yosryahmed@google.com>
+Message-Id: <20220510001807.4132027-6-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220510001807.4132027-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [RFC PATCH bpf-next 3/9] libbpf: Add support for rstat progs and links
+Subject: [RFC PATCH bpf-next 5/9] bpf: add bpf_map_lookup_percpu_elem() helper
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -77,124 +77,230 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support to attach "cgroup_subsys/rstat" programs to a subsystem by
-calling bpf_program__attach_subsys. Currently, only CGROUP_SUBSYS_RSTAT
-programs are supported for attachment to subsystems.
+Add a helper for bpf programs to lookup a percpu element for a cpu other
+than the current one. This is useful for rstat flusher programs as they
+get called to aggregate stats from different cpus, regardless of the
+current cpu.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- tools/lib/bpf/bpf.c      |  3 +++
- tools/lib/bpf/bpf.h      |  3 +++
- tools/lib/bpf/libbpf.c   | 35 +++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |  3 +++
- tools/lib/bpf/libbpf.map |  1 +
- 5 files changed, 45 insertions(+)
+ include/linux/bpf.h            |  2 ++
+ include/uapi/linux/bpf.h       |  9 +++++++++
+ kernel/bpf/arraymap.c          | 11 ++++++++---
+ kernel/bpf/hashtab.c           | 25 +++++++++++--------------
+ kernel/bpf/helpers.c           | 26 ++++++++++++++++++++++++++
+ kernel/bpf/verifier.c          |  6 ++++++
+ tools/include/uapi/linux/bpf.h |  9 +++++++++
+ 7 files changed, 71 insertions(+), 17 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index cf27251adb92..abfff17cfa07 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -863,6 +863,9 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		if (!OPTS_ZEROED(opts, kprobe_multi))
- 			return libbpf_err(-EINVAL);
- 		break;
-+	case BPF_CGROUP_SUBSYS_RSTAT:
-+		attr.link_create.cgroup_subsys.name = ptr_to_u64(OPTS_GET(opts, cgroup_subsys.name, 0));
-+		break;
- 	default:
- 		if (!OPTS_ZEROED(opts, flags))
- 			return libbpf_err(-EINVAL);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index f4b4afb6d4ba..384767a9ffd3 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -413,6 +413,9 @@ struct bpf_link_create_opts {
- 		struct {
- 			__u64 bpf_cookie;
- 		} perf_event;
-+		struct {
-+			const char *name;
-+		} cgroup_subsys;
- 		struct {
- 			__u32 flags;
- 			__u32 cnt;
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 809fe209cdcc..56380953df55 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8715,6 +8715,7 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("cgroup/setsockopt",	CGROUP_SOCKOPT, BPF_CGROUP_SETSOCKOPT, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
- 	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
- 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE | SEC_SLOPPY_PFX),
-+	SEC_DEF("cgroup_subsys/rstat",	CGROUP_SUBSYS_RSTAT, 0, SEC_NONE),
- };
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index bdb5298735ce..f6fa35ffe311 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1665,6 +1665,8 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
+ 				   struct bpf_func_state *caller,
+ 				   struct bpf_func_state *callee);
  
- static size_t custom_sec_def_cnt;
-@@ -10957,6 +10958,40 @@ static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_l
- 	return libbpf_get_error(*link);
++void *bpf_percpu_hash_lookup(struct bpf_map *map, void *key, int cpu);
++void *bpf_percpu_array_lookup(struct bpf_map *map, void *key, int cpu);
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
+ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index fce5535579d6..015ed402c642 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1553,6 +1553,14 @@ union bpf_attr {
+  * 		Map value associated to *key*, or **NULL** if no entry was
+  * 		found.
+  *
++ * void *bpf_map_lookup_percpu_elem(struct bpf_map *map, const void *key, int cpu)
++ *	Description
++ *		Perform a lookup in percpu *map* for an entry associated to
++ *		*key* for the given *cpu*.
++ *	Return
++ *		Map value associated to *key* per *cpu*, or **NULL** if no entry
++ *		was found.
++ *
+  * long bpf_map_update_elem(struct bpf_map *map, const void *key, const void *value, u64 flags)
+  * 	Description
+  * 		Add or update the value of the entry associated to *key* in
+@@ -5169,6 +5177,7 @@ union bpf_attr {
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+ 	FN(map_lookup_elem),		\
++	FN(map_lookup_percpu_elem),	\
+ 	FN(map_update_elem),		\
+ 	FN(map_delete_elem),		\
+ 	FN(probe_read),			\
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 7f145aefbff8..945dae4c20eb 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -230,8 +230,7 @@ static int array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ 	return insn - insn_buf;
  }
  
-+struct bpf_link *bpf_program__attach_subsys(const struct bpf_program *prog,
-+					     const char *subsys_name)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, lopts,
-+			    .cgroup_subsys.name = subsys_name);
-+	struct bpf_link *link = NULL;
-+	char errmsg[STRERR_BUFSIZE];
-+	int err, prog_fd, link_fd;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	if (prog_fd < 0) {
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	link = calloc(1, sizeof(*link));
-+	if (!link)
-+		return libbpf_err_ptr(-ENOMEM);
-+	link->detach = &bpf_link__detach_fd;
-+
-+	link_fd = bpf_link_create(prog_fd, 0, BPF_CGROUP_SUBSYS_RSTAT, &lopts);
-+	if (link_fd < 0) {
-+		err = -errno;
-+		pr_warn("prog '%s': failed to attach: %s\n",
-+			prog->name, libbpf_strerror_r(err, errmsg,
-+						      sizeof(errmsg)));
-+		free(link);
-+		return libbpf_err_ptr(err);
-+	}
-+
-+	link->fd = link_fd;
-+	return link;
+-/* Called from eBPF program */
+-static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
++void *bpf_percpu_array_lookup(struct bpf_map *map, void *key, int cpu)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	u32 index = *(u32 *)key;
+@@ -239,7 +238,13 @@ static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
+ 	if (unlikely(index >= array->map.max_entries))
+ 		return NULL;
+ 
+-	return this_cpu_ptr(array->pptrs[index & array->index_mask]);
++	return per_cpu_ptr(array->pptrs[index & array->index_mask], cpu);
 +}
 +
- struct bpf_link *bpf_program__attach(const struct bpf_program *prog)
++/* Called from eBPF program */
++static void *percpu_array_map_lookup_elem(struct bpf_map *map, void *key)
++{
++	return bpf_percpu_array_lookup(map, key, smp_processor_id());
+ }
+ 
+ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value)
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 65877967f414..c6d4699d65e8 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -2150,27 +2150,24 @@ const struct bpf_map_ops htab_lru_map_ops = {
+ 	.iter_seq_info = &iter_seq_info,
+ };
+ 
+-/* Called from eBPF program */
+-static void *htab_percpu_map_lookup_elem(struct bpf_map *map, void *key)
++void *bpf_percpu_hash_lookup(struct bpf_map *map, void *key, int cpu)
  {
- 	struct bpf_link *link = NULL;
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 05dde85e19a6..eddbffcd39f7 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -537,6 +537,9 @@ bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_freplace(const struct bpf_program *prog,
- 			     int target_fd, const char *attach_func_name);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_subsys(const struct bpf_program *prog,
-+			   const char *subsys_name);
++	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+ 	struct htab_elem *l = __htab_map_lookup_elem(map, key);
  
- struct bpf_map;
+-	if (l)
+-		return this_cpu_ptr(htab_elem_get_ptr(l, map->key_size));
++	if (l) {
++		if (htab_is_lru(htab))
++			bpf_lru_node_set_ref(&l->lru_node);
++		return per_cpu_ptr(htab_elem_get_ptr(l, map->key_size), cpu);
++	}
+ 	else
+ 		return NULL;
+ }
  
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index dd35ee58bfaa..5583a2dbfb7c 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -447,4 +447,5 @@ LIBBPF_0.8.0 {
- 		libbpf_register_prog_handler;
- 		libbpf_unregister_prog_handler;
- 		bpf_program__attach_kprobe_multi_opts;
-+		bpf_program__attach_subsys;
- } LIBBPF_0.7.0;
+-static void *htab_lru_percpu_map_lookup_elem(struct bpf_map *map, void *key)
++/* Called from eBPF program */
++static void *htab_percpu_map_lookup_elem(struct bpf_map *map, void *key)
+ {
+-	struct htab_elem *l = __htab_map_lookup_elem(map, key);
+-
+-	if (l) {
+-		bpf_lru_node_set_ref(&l->lru_node);
+-		return this_cpu_ptr(htab_elem_get_ptr(l, map->key_size));
+-	}
+-
+-	return NULL;
++	return bpf_percpu_hash_lookup(map, key, smp_processor_id());
+ }
+ 
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value)
+@@ -2279,7 +2276,7 @@ const struct bpf_map_ops htab_lru_percpu_map_ops = {
+ 	.map_alloc = htab_map_alloc,
+ 	.map_free = htab_map_free,
+ 	.map_get_next_key = htab_map_get_next_key,
+-	.map_lookup_elem = htab_lru_percpu_map_lookup_elem,
++	.map_lookup_elem = htab_percpu_map_lookup_elem,
+ 	.map_lookup_and_delete_elem = htab_lru_percpu_map_lookup_and_delete_elem,
+ 	.map_update_elem = htab_lru_percpu_map_update_elem,
+ 	.map_delete_elem = htab_lru_map_delete_elem,
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index d124eed97ad7..abed4e1737f6 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -45,6 +45,30 @@ const struct bpf_func_proto bpf_map_lookup_elem_proto = {
+ 	.arg2_type	= ARG_PTR_TO_MAP_KEY,
+ };
+ 
++BPF_CALL_3(bpf_map_lookup_percpu_elem, struct bpf_map *, map, void *, key,
++	   int, cpu)
++{
++	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
++	switch (map->map_type) {
++	case BPF_MAP_TYPE_PERCPU_ARRAY:
++		return (unsigned long) bpf_percpu_array_lookup(map, key, cpu);
++	case BPF_MAP_TYPE_PERCPU_HASH:
++	case BPF_MAP_TYPE_LRU_PERCPU_HASH:
++		return (unsigned long) bpf_percpu_hash_lookup(map, key, cpu);
++	default:
++		return (unsigned long) NULL;
++	}
++}
++
++const struct bpf_func_proto bpf_map_lookup_percpu_elem_proto = {
++	.func		= bpf_map_lookup_percpu_elem,
++	.gpl_only	= false,
++	.ret_type	= RET_PTR_TO_MAP_VALUE_OR_NULL,
++	.arg1_type	= ARG_CONST_MAP_PTR,
++	.arg2_type	= ARG_PTR_TO_MAP_KEY,
++	.arg3_type	= ARG_ANYTHING,
++};
++
+ BPF_CALL_4(bpf_map_update_elem, struct bpf_map *, map, void *, key,
+ 	   void *, value, u64, flags)
+ {
+@@ -1414,6 +1438,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 	switch (func_id) {
+ 	case BPF_FUNC_map_lookup_elem:
+ 		return &bpf_map_lookup_elem_proto;
++	case BPF_FUNC_map_lookup_percpu_elem:
++		return &bpf_map_lookup_percpu_elem_proto;
+ 	case BPF_FUNC_map_update_elem:
+ 		return &bpf_map_update_elem_proto;
+ 	case BPF_FUNC_map_delete_elem:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d175b70067b3..2d7f7c9a970d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5879,6 +5879,12 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 		if (map->map_type != BPF_MAP_TYPE_TASK_STORAGE)
+ 			goto error;
+ 		break;
++	case BPF_FUNC_map_lookup_percpu_elem:
++		if (map->map_type != BPF_MAP_TYPE_PERCPU_HASH &&
++		    map->map_type != BPF_MAP_TYPE_LRU_PERCPU_HASH &&
++		    map->map_type != BPF_MAP_TYPE_PERCPU_ARRAY)
++			goto error;
++		break;
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index fce5535579d6..015ed402c642 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1553,6 +1553,14 @@ union bpf_attr {
+  * 		Map value associated to *key*, or **NULL** if no entry was
+  * 		found.
+  *
++ * void *bpf_map_lookup_percpu_elem(struct bpf_map *map, const void *key, int cpu)
++ *	Description
++ *		Perform a lookup in percpu *map* for an entry associated to
++ *		*key* for the given *cpu*.
++ *	Return
++ *		Map value associated to *key* per *cpu*, or **NULL** if no entry
++ *		was found.
++ *
+  * long bpf_map_update_elem(struct bpf_map *map, const void *key, const void *value, u64 flags)
+  * 	Description
+  * 		Add or update the value of the entry associated to *key* in
+@@ -5169,6 +5177,7 @@ union bpf_attr {
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+ 	FN(map_lookup_elem),		\
++	FN(map_lookup_percpu_elem),	\
+ 	FN(map_update_elem),		\
+ 	FN(map_delete_elem),		\
+ 	FN(probe_read),			\
 -- 
 2.36.0.512.ge40c2bad7a-goog
 
