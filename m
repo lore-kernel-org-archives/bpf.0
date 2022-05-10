@@ -2,149 +2,146 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B7E0C433F5
-	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 17:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B82BCC433F5
+	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 17:47:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348239AbiEJRfM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 May 2022 13:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S1348416AbiEJRvh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 May 2022 13:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239114AbiEJRfL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 May 2022 13:35:11 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD9D36173
-        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:31:13 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id e24so24798713wrc.9
-        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:31:13 -0700 (PDT)
+        with ESMTP id S1348431AbiEJRv2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 May 2022 13:51:28 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67CFC5D18C
+        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:47:30 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id y41so10715790pfw.12
+        for <bpf@vger.kernel.org>; Tue, 10 May 2022 10:47:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=bMS92GaQ7hO3xy/t9fwXMiFHFCxyk1U0M9qobTgqVWk=;
-        b=h3VopUxf73QReee+Ood03VkiuF8OW3nBBpEBiDDD0py+pMyj/vW7GIQqtIO7DJRIBT
-         NXARG8s6OTS5/k+czyEq/i9by5gM3i7o74mJrheJDSh2Rqpl+GXp8qbP1MByVp0w8DpL
-         sWUGdIOsA8iCWNTexFzgBCPcMMOxy6edvYJnoGFIWWfTmUyxZXhQ5UUxkEf0hr2pbExV
-         47lqiC8B8atrPb04Rj5jbt4V1tgLg0LUHvrivxu33tE85VVyBnSG2J7d208dZMp+nT6x
-         TZPagwo8JL3tkJjdQT0rW88UlYlbbSPMJw124SDMaOEFW4QzCR3641LxHnq/wwvayA4w
-         AAnw==
+        bh=ljQx4fzIgczdq4OX5LUrQFHCGSXxIfneJB7p2R2VJAc=;
+        b=Ev8FqoXoXm/WgwfWv1IFNjl5YLMcFkOLJzeSL71XNjKmAk2Pxm4eIuoIJoSB9Z3OTF
+         1HNEESJEU6c9Hn7WAQ+OEorKDdRR5cD/2NJB4/Ir8M3VyYXWxTQkrBxIHvN8jo6UDmHR
+         8J68hionXAAVQUABgsxG8iCJpu5z/tRF3w+McHiJOTJQQ4QrZ0CG9ASTQGjpGgfA76LI
+         FMwi2Ftbs5dRqMpJnMqyDwbERL89eiQUevhU211YA3+BVNJ2tVOIJOAfF9tIlqv5LqN/
+         iE4W03FRF8ar2joHm8cMilqjbGCQJiolbj2MUKtYjwH4WcwRcLkJ2ZSpdL0V23ojFqbk
+         juYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bMS92GaQ7hO3xy/t9fwXMiFHFCxyk1U0M9qobTgqVWk=;
-        b=4+2npol8Q40mFnSGWRVc4VDatXCozSofSADZ69htvr9JeXcj1PQT99RFmc7kAnjO60
-         ldXEAh3HVsIxjtwxQrx33233XfZz0x2HLuBRxiV189keS2jASyanVtTjjQglMV8RNVj2
-         1OqiLvaZI4pw8gpmcv0vMiD3utb4ntFqrFPrRaLksLEhPDYk4qf0Thv6qKIi7zTv8QSf
-         8wiZeDHf35l//u+cDWFoz8ZZNW4yxuqFx1votTIH6ULkLGQqSGtCfATZGPjw28o4l9r4
-         ezige9Azv5JQb9Mq/WAaFM6bkVzBDDG+r7DNp++59RnyxyyWi045n/BUCv7JNE4aww1k
-         njMQ==
-X-Gm-Message-State: AOAM5336OQE/fgsTBcxAa+ddZsxY8Oxvy6BlYXwDGjQp7MfGPznhA2qV
-        GCG327JWWugBkearXLfKZ000VzehlboJBtt52T6hFA==
-X-Google-Smtp-Source: ABdhPJzMoZQgpo+aZayZuRTimX/sAQryFjuKnc8OPfpsa/R/eOVislK2fcMnMdK/GTGkzvhimYsieSyeQKvdUFXiKPk=
-X-Received: by 2002:a5d:5707:0:b0:20a:c768:bc8 with SMTP id
- a7-20020a5d5707000000b0020ac7680bc8mr19704783wrv.565.1652203871843; Tue, 10
- May 2022 10:31:11 -0700 (PDT)
+        bh=ljQx4fzIgczdq4OX5LUrQFHCGSXxIfneJB7p2R2VJAc=;
+        b=a6uedY1W6iSyxKfeNyDHUcvuuuiDQ9mLtS3YKPWk+IQXfrIsWPkN2h3Dyn13YFGqYJ
+         rY60d21tB6pjAOo/n/XCM6qQ0caPtIoa5iPlmK48+UCuxhBmyn34uEjJsxls3otG6sU1
+         bCCz4u0Sdecdglq5mbEY/0KC1C6aj9i3FDreLNAT7vatXFIQZt+3rGR5z/sR4HYgvXwp
+         ov9S5qUQKfBqE0HZOyWlNsMC5YwPOWy/9uJGEWXHQxiFRLljyGn4PLMXi2k4UccRpXvs
+         50MY25i5S55uQVWSoXfJvJN6VG9Au0tHi2p2qwAqZj2QyaDtZgU4DjU0LQThL464LQOV
+         ByzA==
+X-Gm-Message-State: AOAM530KQRappYPtR7k8pSu0wtT5IegxT+QHFXKvG4FRhdgi+GYAkg2q
+        ZYevcpaEyZKKKirL1MoHbexcbWENkXJ0gdZLmBAI3K68
+X-Google-Smtp-Source: ABdhPJz6i9CTVeWIcg1nkkdQkIpz+2sCXHA8k5ucf/czi7jpNofm7aB+5MUSTY35LwT8zJkBa425xej1cjJHfYFj70w=
+X-Received: by 2002:a05:6a00:24d2:b0:510:9f7a:3eec with SMTP id
+ d18-20020a056a0024d200b005109f7a3eecmr12465311pfv.57.1652204849889; Tue, 10
+ May 2022 10:47:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220429211540.715151-1-sdf@google.com> <20220429211540.715151-11-sdf@google.com>
- <CAEf4BzY3Nd2pi+O-x4bp41=joFgPXU2+UFqBusdjR08ME62k5g@mail.gmail.com>
- <CAKH8qBtk6CpR-29R6sWicz_zW=RCYUrXZqBZbgF9eqt4XGgNqQ@mail.gmail.com> <CAEf4BzZvVzHd9Sb=uH+614fq0wrht1wBAyG1zh6ZJg-_Qz0-rA@mail.gmail.com>
-In-Reply-To: <CAEf4BzZvVzHd9Sb=uH+614fq0wrht1wBAyG1zh6ZJg-_Qz0-rA@mail.gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 10 May 2022 10:31:00 -0700
-Message-ID: <CAKH8qBv401RBdiouFD71JGZScG_oFD+3fUNav68JpzA=VWLkiA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 10/10] selftests/bpf: verify lsm_cgroup struct
- sock access
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
+References: <20220430215727.113472-1-langston.barrett@gmail.com>
+In-Reply-To: <20220430215727.113472-1-langston.barrett@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 10 May 2022 10:47:18 -0700
+Message-ID: <CAADnVQKZ1ceBodEbwyObd1vd0CbF6n5Ukn4zqKa4QhRytEiLzA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: KUnit-based soundness tests for tnums
+To:     Langston Barrett <langston.barrett@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 9, 2022 at 4:44 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon, May 2, 2022 at 1:15 AM Langston Barrett
+<langston.barrett@gmail.com> wrote:
 >
-> On Mon, May 9, 2022 at 4:38 PM Stanislav Fomichev <sdf@google.com> wrote:
-> >
-> > On Mon, May 9, 2022 at 2:54 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Fri, Apr 29, 2022 at 2:16 PM Stanislav Fomichev <sdf@google.com> wrote:
-> > > >
-> > > > sk_priority & sk_mark are writable, the rest is readonly.
-> > > >
-> > > > Add new ldx_offset fixups to lookup the offset of struct field.
-> > > > Allow using test.kfunc regardless of prog_type.
-> > > >
-> > > > One interesting thing here is that the verifier doesn't
-> > > > really force me to add NULL checks anywhere :-/
-> > > >
-> > > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > > > ---
-> > > >  tools/testing/selftests/bpf/test_verifier.c   | 54 ++++++++++++++++++-
-> > > >  .../selftests/bpf/verifier/lsm_cgroup.c       | 34 ++++++++++++
-> > > >  2 files changed, 87 insertions(+), 1 deletion(-)
-> > > >  create mode 100644 tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-> > > >
-> > >
-> > > [...]
-> > >
-> > > > diff --git a/tools/testing/selftests/bpf/verifier/lsm_cgroup.c b/tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-> > > > new file mode 100644
-> > > > index 000000000000..af0efe783511
-> > > > --- /dev/null
-> > > > +++ b/tools/testing/selftests/bpf/verifier/lsm_cgroup.c
-> > > > @@ -0,0 +1,34 @@
-> > > > +#define SK_WRITABLE_FIELD(tp, field, size, res) \
-> > > > +{ \
-> > > > +       .descr = field, \
-> > > > +       .insns = { \
-> > > > +               /* r1 = *(u64 *)(r1 + 0) */ \
-> > > > +               BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), \
-> > > > +               /* r1 = *(u64 *)(r1 + offsetof(struct socket, sk)) */ \
-> > > > +               BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), \
-> > > > +               /* r2 = *(u64 *)(r1 + offsetof(struct sock, <field>)) */ \
-> > > > +               BPF_LDX_MEM(size, BPF_REG_2, BPF_REG_1, 0), \
-> > > > +               /* *(u64 *)(r1 + offsetof(struct sock, <field>)) = r2 */ \
-> > > > +               BPF_STX_MEM(size, BPF_REG_1, BPF_REG_2, 0), \
-> > > > +               BPF_MOV64_IMM(BPF_REG_0, 1), \
-> > > > +               BPF_EXIT_INSN(), \
-> > > > +       }, \
-> > > > +       .result = res, \
-> > > > +       .errstr = res ? "no write support to 'struct sock' at off" : "", \
-> > > > +       .prog_type = BPF_PROG_TYPE_LSM, \
-> > > > +       .expected_attach_type = BPF_LSM_CGROUP, \
-> > > > +       .kfunc = "socket_post_create", \
-> > > > +       .fixup_ldx = { \
-> > > > +               { "socket", "sk", 1 }, \
-> > > > +               { tp, field, 2 }, \
-> > > > +               { tp, field, 3 }, \
-> > > > +       }, \
-> > > > +}
-> > > > +
-> > > > +SK_WRITABLE_FIELD("sock_common", "skc_family", BPF_H, REJECT),
-> > > > +SK_WRITABLE_FIELD("sock", "sk_sndtimeo", BPF_DW, REJECT),
-> > > > +SK_WRITABLE_FIELD("sock", "sk_priority", BPF_W, ACCEPT),
-> > > > +SK_WRITABLE_FIELD("sock", "sk_mark", BPF_W, ACCEPT),
-> > > > +SK_WRITABLE_FIELD("sock", "sk_pacing_rate", BPF_DW, REJECT),
-> > > > +
-> > >
-> > > have you tried writing it as C program and adding the test to
-> > > test_progs? Does something not work there?
-> >
-> > Seems like it should work, I don't see any issues with writing 5
-> > programs to test each field.
-> > But test_verified still feels like a better fit? Any reason in
-> > particular you'd prefer test_progs over test_verifier?
+> Add tests that check that each binary operation on tnums is a valid
+> abstraction of the corresponding operation on u64s. This soundness
+> condition is an important part of the security of eBPF.
 >
-> Adding that fixup_ldx->strct special handling didn't feel like the
-> best fit, tbh. test_progs is generally much nicer to deal with in
-> terms of CI and in terms of comprehending what's going on and
-> supporting the code longer term.
+> Signed-off-by: Langston Barrett <langston.barrett@gmail.com>
+> ---
+>
+> I also made sure that these tests are meaningful by changing the tnum
+> operations or test conditions and ensuring that they fail when such
+> erroneous modifications are made.
+>
+> This is my first time submitting a kernel patch. I've read through the
+> documentation on doing so, but apologies in advance if I've missed
+> something. Thank you very much for your time.
+>
+>  kernel/bpf/Kconfig     |   7 ++
+>  kernel/bpf/Makefile    |   2 +
+>  kernel/bpf/tnum_test.c | 208 +++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 217 insertions(+)
+>  create mode 100644 kernel/bpf/tnum_test.c
+>
+> diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+> index d56ee177d5f8..c1a726f33193 100644
+> --- a/kernel/bpf/Kconfig
+> +++ b/kernel/bpf/Kconfig
+> @@ -36,6 +36,13 @@ config BPF_SYSCALL
+>           Enable the bpf() system call that allows to manipulate BPF programs
+>           and maps via file descriptors.
+>
+> +config BPF_TNUM_TEST
+> +       tristate "Enable soundness tests for BPF tnums" if !KUNIT_ALL_TESTS
+> +       depends on BPF_SYSCALL && KUNIT=y
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         Enable KUnit-based soundness tests for BPF tnums.
+> +
+>  config BPF_JIT
+>         bool "Enable BPF Just In Time compiler"
+>         depends on BPF
+> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> index c1a9be6a4b9f..11d88798a538 100644
+> --- a/kernel/bpf/Makefile
+> +++ b/kernel/bpf/Makefile
+> @@ -40,3 +40,5 @@ obj-$(CONFIG_BPF_PRELOAD) += preload/
+>  obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
+>  $(obj)/relo_core.o: $(srctree)/tools/lib/bpf/relo_core.c FORCE
+>         $(call if_changed_rule,cc_o_c)
+> +
+> +obj-$(CONFIG_BPF_TNUM_TEST) += tnum_test.o
+> diff --git a/kernel/bpf/tnum_test.c b/kernel/bpf/tnum_test.c
+> new file mode 100644
+> index 000000000000..168780b648ac
+> --- /dev/null
+> +++ b/kernel/bpf/tnum_test.c
+> @@ -0,0 +1,208 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/* Soundness tests for tnums.
+> + *
+> + * Its important that tnums (and other BPF verifier analyses) soundly
+> + * overapproximate the runtime values of registers. If they fail to do so, then
+> + * kernel memory corruption may result (see e.g., CVE-2020-8835 and
+> + * CVE-2021-3490 for examples where unsound bounds tracking led to exploitable
+> + * bugs).
+> + *
+> + * The implementations of some tnum arithmetic operations have been proven
+> + * sound, see "Sound, Precise, and Fast Abstract Interpretation with Tristate
+> + * Numbers" (https://arxiv.org/abs/2105.05398). These tests corroborate these
+> + * results on actual machine hardware, protect against regressions if the
+> + * implementations change, and provide a template for testing new abstract
+> + * operations.
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/tnum.h>
+> +
+> +/* Some number of test cases, particular values not super important but chosen
+> + * to be most likely to trigger edge cases.
+> + */
+> +static u64 interesting_ints[] = { S64_MIN, S32_MIN, -1,             0,
+> +                                 1,       2,       U32_MAX, U64_MAX };
 
-This is not new, right? We already have a bunch of fixup_xxx things.
-I can try to move this into test_progs in largely the same manner if
-you prefer, having a C file per field seems like an overkill.
+Frankly I don't see how running the same test over and over
+again will help us discover bugs or catch a regression.
+Sorry not applying this.
