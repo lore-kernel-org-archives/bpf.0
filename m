@@ -2,125 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CB45C433F5
-	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 12:28:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1330DC433EF
+	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 12:45:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241806AbiEJMb6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 May 2022 08:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S241373AbiEJMtf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 May 2022 08:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241889AbiEJMbJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 May 2022 08:31:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826FE2B52CB;
-        Tue, 10 May 2022 05:27:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B29A60C52;
-        Tue, 10 May 2022 12:27:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17923C385C2;
-        Tue, 10 May 2022 12:26:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652185620;
-        bh=pSjwjxMQ0Xqxg/DyGW31H8wuzBaHCcrF1uhKi6HzOQE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GBTDNT2eENPnjoiPrBKgL7K+DJzPVKFFVBUaSWivU7jsvEz3DwIQKy+ZfiaJUuJ8J
-         9w04UXPhvw1eaGfQue85hU08Wmou4fDRsK/BQsiE+gTu0nv9RwDPI6tnCKULdugoWK
-         KVVK83/rrdq93zxaZ5uuV9Pn48c/8nzy9+BI6N0XiEABe2tVrJGFKbS23SofSwHb7t
-         haXzFui5SrxK1Rzlx+FCspRPf9oNovhxpg0tOAhPw9lLQM5qKHyJKzO6jCY8WAIzwd
-         gkVhLTE+/sf8VCr93SVNjioDE9+rka9tuuBrxJIbDl4ZiBmhKdleeXDkhgQT1G8Ggj
-         PKyIdx/QDmuuQ==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCHv6 bpf-next 3/5] fprobe: Resolve symbols with ftrace_lookup_symbols
-Date:   Tue, 10 May 2022 14:26:14 +0200
-Message-Id: <20220510122616.2652285-4-jolsa@kernel.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220510122616.2652285-1-jolsa@kernel.org>
-References: <20220510122616.2652285-1-jolsa@kernel.org>
+        with ESMTP id S241949AbiEJMte (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 May 2022 08:49:34 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BBF5521C
+        for <bpf@vger.kernel.org>; Tue, 10 May 2022 05:45:34 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id v10so14531195pgl.11
+        for <bpf@vger.kernel.org>; Tue, 10 May 2022 05:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=81CmoXK8W2fMc2E/XpNylErNEPWG7PeFWSGfTvENHek=;
+        b=BuizLo0eMVf1CFKzq5z5mJXXTCdmsbZnthwaSpGZvyOinz0zK1oVrwY+RjDSbz0lsj
+         W4/gcD2GsatA2CltDPm42940C9Zx8OlEiXWEDruJeUP+scX4B4Dn/BR45LSBkgx0ha/1
+         1lof9Sxe/0+TSOSmg+ZbSpzVPPfdI8D1n/IK23ovFovWMObnth4tWgSXWT44+EFOD5cw
+         YRdLOnhCKKUDhjj1PBpvvrU/SLEYIvonvF8JuhoBcVkVWvziCCxnA6XbN07WU1oTTJuX
+         9N9BICkQtsDiH2S5IvrqAAzmp2SqDTXhUfx7lB75VtVwJ+wJsJW+JGZukF4rewQyhJ7E
+         HF3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=81CmoXK8W2fMc2E/XpNylErNEPWG7PeFWSGfTvENHek=;
+        b=HySCVq93TNpDD0mqp+JQAYk+1/Ltgo/KNO58i2bHD1H1uOyMSzpVwis6gEaiDAj/k0
+         li544LquAAl0XkCCgwAnrySrry8FK3dxWIDHmeeIjsZpV8fut0hc/8tM17srK4HiyaMW
+         ib+xUcD1t65Bl7VzufRKAZthVzd/iwsaRQI3a/6Ux6I/y9ysaaiDVcirdzbtePuY6xOI
+         4ibCWEd0AYHPqNZ5Gpp78rhZTeVpxinTj7BpsGbRkMiMaud7Xx2zZmHaqIxUC0L4v2f0
+         nTB/8FtbQvMkjPITYmcCjapSXEhollBKjEWwkdGFdMSPhLtBfaLVvcxgq7nh+uYTA6Lt
+         6hdQ==
+X-Gm-Message-State: AOAM531sYx6ZJGwMxpM3i1YkfH1saGdpTSPugc8NYlI1JBiUQDqagtHS
+        Zt2OzZv4pHZCp5EVIQjZTh67crirYV8iZEoO
+X-Google-Smtp-Source: ABdhPJww7Eg4/Zxst2GZrQrVNwauUtpxNCsfNjZ19FUR133ytWOXTk+q1xGx0v1s2BhN+B7mV7yS+A==
+X-Received: by 2002:a63:2c8a:0:b0:3aa:86ea:f2c9 with SMTP id s132-20020a632c8a000000b003aa86eaf2c9mr16916062pgs.46.1652186733527;
+        Tue, 10 May 2022 05:45:33 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q187-20020a632ac4000000b003c14af5063fsm10345438pgq.87.2022.05.10.05.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 05:45:32 -0700 (PDT)
+Message-ID: <0e1b3d10-ae79-f987-187e-58109441ccee@kernel.dk>
+Date:   Tue, 10 May 2022 06:45:31 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [syzbot] KASAN: use-after-free Read in bio_poll
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
+Cc:     syzbot <syzbot+99938118dfd9e1b0741a@syzkaller.appspotmail.com>,
+        andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
+References: <00000000000029572505de968021@google.com>
+ <a72282ef-650c-143b-4b88-5185009c3ec2@kernel.dk> <YnmuRuO4yplt8p/p@T590>
+ <20220510055039.GA10576@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220510055039.GA10576@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Using ftrace_lookup_symbols to speed up symbols lookup
-in register_fprobe_syms API.
+On 5/9/22 11:50 PM, Christoph Hellwig wrote:
+> On Tue, May 10, 2022 at 08:13:58AM +0800, Ming Lei wrote:
+>>> Guys, should we just queue:
+>>>
+>>> ommit 9650b453a3d4b1b8ed4ea8bcb9b40109608d1faf
+>>> Author: Ming Lei <ming.lei@redhat.com>
+>>> Date:   Wed Apr 20 22:31:10 2022 +0800
+>>>
+>>>     block: ignore RWF_HIPRI hint for sync dio
+>>>
+>>> up for 5.18 and stable?
+>>
+>> I am fine with merging to 5.18 & stable.
+> 
+> I'm fine, too.  But are we sure this actually is one and the same
+> issue?  Otherwise I'll try to find some time to feed it to syzbot
+> first.
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- kernel/trace/fprobe.c | 32 ++++++++++++--------------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
+I re-wrote the reproducer a bit and can reproduce it, so I can certainly
+test a backport. But yes, I was skeptical on this being the same issue
+too. My initial reaction was that this is likely due to the bio being
+"downgraded" from polled to IRQ driven, and hence completes without an
+extra reference before the bio_poll() is done on it. Which is not the
+issue described in the referenced commit.
 
-diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-index 89d9f994ebb0..aac63ca9c3d1 100644
---- a/kernel/trace/fprobe.c
-+++ b/kernel/trace/fprobe.c
-@@ -85,39 +85,31 @@ static void fprobe_exit_handler(struct rethook_node *rh, void *data,
- }
- NOKPROBE_SYMBOL(fprobe_exit_handler);
- 
-+static int symbols_cmp(const void *a, const void *b)
-+{
-+	const char **str_a = (const char **) a;
-+	const char **str_b = (const char **) b;
-+
-+	return strcmp(*str_a, *str_b);
-+}
-+
- /* Convert ftrace location address from symbols */
- static unsigned long *get_ftrace_locations(const char **syms, int num)
- {
--	unsigned long addr, size;
- 	unsigned long *addrs;
--	int i;
- 
- 	/* Convert symbols to symbol address */
- 	addrs = kcalloc(num, sizeof(*addrs), GFP_KERNEL);
- 	if (!addrs)
- 		return ERR_PTR(-ENOMEM);
- 
--	for (i = 0; i < num; i++) {
--		addr = kallsyms_lookup_name(syms[i]);
--		if (!addr)	/* Maybe wrong symbol */
--			goto error;
--
--		/* Convert symbol address to ftrace location. */
--		if (!kallsyms_lookup_size_offset(addr, &size, NULL) || !size)
--			goto error;
-+	/* ftrace_lookup_symbols expects sorted symbols */
-+	sort(syms, num, sizeof(*syms), symbols_cmp, NULL);
- 
--		addr = ftrace_location_range(addr, addr + size - 1);
--		if (!addr) /* No dynamic ftrace there. */
--			goto error;
-+	if (!ftrace_lookup_symbols(syms, num, addrs))
-+		return addrs;
- 
--		addrs[i] = addr;
--	}
--
--	return addrs;
--
--error:
- 	kfree(addrs);
--
- 	return ERR_PTR(-ENOENT);
- }
- 
 -- 
-2.35.3
+Jens Axboe
 
