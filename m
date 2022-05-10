@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A5AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 00:19:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A27EC433F5
+	for <bpf@archiver.kernel.org>; Tue, 10 May 2022 00:19:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbiEJAXD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 9 May 2022 20:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S233577AbiEJAXF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 May 2022 20:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233577AbiEJAW3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S233570AbiEJAW3 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 9 May 2022 20:22:29 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3979E28C9C0
-        for <bpf@vger.kernel.org>; Mon,  9 May 2022 17:18:31 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id fy8-20020a17090b020800b001d8de2118ccso372765pjb.8
-        for <bpf@vger.kernel.org>; Mon, 09 May 2022 17:18:31 -0700 (PDT)
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442A28C9DD
+        for <bpf@vger.kernel.org>; Mon,  9 May 2022 17:18:27 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id t29-20020a056a00139d00b005107ebaefeaso3832498pfg.20
+        for <bpf@vger.kernel.org>; Mon, 09 May 2022 17:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Dj8G52Ku/C8Y7g0RB9bNxhRV9jY61G7LwBKsHFtUSBY=;
-        b=T2/IAHh55Gjn5HeBRFdMbJMuKc4A52+bUpWlUzeffogFLw8TTHeFLtYgq22aCDSH0T
-         9m4JTdgAoZuuUHr5I3kddwnsxcs8TQAQHDjK0UzNNzDxg/le5nOw/ffd5aukwJ4o5odv
-         hqrUXfaotL2uO9PHctmV7H/6ClL+ttTG+dlAwNNowSl/QZnHkF0tmiub103C3Lc+H366
-         YaCrxgdzJ1UEE5C+opIeGU7M6jGjOoESS0Kq0WQGfx5CJSHP7FogfGa56LdFw0/8ZBX/
-         QYaa6FmxrCLIdWPx0PReW/umNNuLKbGeFGSlAXTWp7OOLAXyLtxRE/8udLP34ZfvVWyw
-         p5Rw==
+        bh=KcVlDhYIqiGAy0xA6Ny1iEWIuZrHDDkBi7OMZAuyAKA=;
+        b=CbFDRQM+DJHPuLYLBakMiPuPtWC2dPz39UZfOmcu4qup9XyxZPCJINo69q4jZT4AoC
+         dLRunNzKgmtg9/SjwCmLiNW5Q87qDk2kiCE3Bvr3D+WjbNu8Syu3BhuMYSNbGa207ILF
+         Qh7apNc/4HgAHnDy45R3N6ppLnbRqI6AWkGDHHxN3ezenAc++v64jfbpcV8RvtKTW5OW
+         H5cK0SaNA8KayXojnjkq3df/p9zd5sCw6q/pivecBUNQfPA6gTBNzpdlsha/+JCX+EP2
+         b27F5hHeQOk9I6B+LWTtNHptDhwCCBC3wK41+O8Y1dY+/ywCr06lqwmPK5GvIEQsBDUo
+         dI5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Dj8G52Ku/C8Y7g0RB9bNxhRV9jY61G7LwBKsHFtUSBY=;
-        b=E0l6dCbImycXCnn/YL3xF4WA9GhSEBA6cK28xj2V6KCr1jCcZDaTvL/TJFYYLhFWcF
-         FfRHxAw0PYWlMgxhIg4lVzzkBWChjieDfTdhdgiUwrmQTrp/6IUGbVtH5ArY+uDVT+aV
-         x8nKUwaIEXjhWvoBZw1lBu/Vh3ABpJKDoIQ1VeKSNC5FNJRakF35ZgF4Eiyo5Ze4Abkv
-         mnhpPBioozOJGZeM+TmMJpkms8yKF0NwkcdO+ez5082qhunEDIgzOy+VKhmz8vCJaVgv
-         QM0JOWWuJKv+G3YNnBr5IxjdFoKoakmNcP35/t34U32/9F7xr5OiR72l2Htq/xMGwSNi
-         CYww==
-X-Gm-Message-State: AOAM530pIQv3qjrD+Ig1481/tTxWcw423dbjEKcOGO0DkQFkmPXHT1iy
-        ke8sGlp7zIC744T5eg74eCIdOJmPUpEGSzK2
-X-Google-Smtp-Source: ABdhPJwJDYWCoQr30dyGFQU8Ug2nQEwX5PR9g5M5GMtyX4z/IRwxNHeNkD3NdPQj8xC89ISB2tVjV9cDHDleViKi
+        bh=KcVlDhYIqiGAy0xA6Ny1iEWIuZrHDDkBi7OMZAuyAKA=;
+        b=4KISH5YLEiQZOj6SWzZUTLxoCvGKuFCWmmW9Ic/4VekkUAMUwPJuNSkq+KiBUmpE3F
+         d3+17XyyN1GyPji42M8LCJG0sY4uuFg370dKsjnhzoONd73XmPs1oKm4LkUa6R68/2rY
+         H5BwOC7ZbBzLQS41NeJyek9uoNae5vOthLmFkLSZtkmQ91Zd6MfZox21FAVMH02V9D0z
+         gtIlFel5L6mU9H/+rwN7m04uAAzAMG5l10VxsA1HvhYCBqJZRpX+rK7agJ9c0tWLnvfa
+         95jlLkIK6IxY6UlfQQRN0DsuPF5zZYKgcBT3leqNtxHaND9TLyNYTR7/20GtfACFJgMQ
+         5OxA==
+X-Gm-Message-State: AOAM5336WeZ6WY4creEQ7+c1rlzdmavg00K1N76gaj+VXUjg4Fr+5pKR
+        oSu50BtfwwqjrANqngZjxKm+CAeL8gLuAQ3+
+X-Google-Smtp-Source: ABdhPJzYYkjJ3ZLtAxYLy2pZUwKzXH4+bOWrXeRHBvANSFiGZs994Oo4pdOYa15sJhMjmUsYw0Y5YSKbOxkEbCUX
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a62:fb0f:0:b0:4f2:6d3f:5ffb with SMTP
- id x15-20020a62fb0f000000b004f26d3f5ffbmr17950305pfm.55.1652141910739; Mon,
- 09 May 2022 17:18:30 -0700 (PDT)
-Date:   Tue, 10 May 2022 00:18:04 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:90b:2311:b0:1d9:277e:edad with SMTP
+ id mt17-20020a17090b231100b001d9277eedadmr20549707pjb.190.1652141907370; Mon,
+ 09 May 2022 17:18:27 -0700 (PDT)
+Date:   Tue, 10 May 2022 00:18:02 +0000
 In-Reply-To: <20220510001807.4132027-1-yosryahmed@google.com>
-Message-Id: <20220510001807.4132027-7-yosryahmed@google.com>
+Message-Id: <20220510001807.4132027-5-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220510001807.4132027-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.0.512.ge40c2bad7a-goog
-Subject: [RFC PATCH bpf-next 6/9] cgroup: add v1 support to cgroup_get_from_id()
+Subject: [RFC PATCH bpf-next 4/9] bpf: add bpf rstat helpers
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -77,41 +77,163 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The current implementation of cgroup_get_from_id() only searches the
-default hierarchy for the given id. Make it compatible with cgroup v1 by
-looking through all the roots instead.
+Add bpf_cgroup_rstat_updated() and bpf_cgroup_rstat_flush() helpers
+to enable  bpf programs that collect and output cgroup stats
+to communicate with the rstat frameworkto add a cgroup to the rstat
+updated tree or trigger an rstat flush before reading stats.
 
-cgrp_dfl_root should be the first element in the list so there shouldn't
-be a performance impact for cgroup v2 users (in the case of a valid id).
+ARG_ANYTHING is used here for the struct *cgroup parameter. Would it be
+better to add a task_cgroup(subsys_id) helper that returns a cgroup
+pointer so that we can use a BTF argument instead?
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- kernel/cgroup/cgroup.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ include/uapi/linux/bpf.h       | 18 ++++++++++++++++++
+ kernel/bpf/helpers.c           | 30 ++++++++++++++++++++++++++++++
+ scripts/bpf_doc.py             |  2 ++
+ tools/include/uapi/linux/bpf.h | 18 ++++++++++++++++++
+ 4 files changed, 68 insertions(+)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index af703cfcb9d2..12700cd21973 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -5970,10 +5970,16 @@ void cgroup_path_from_kernfs_id(u64 id, char *buf, size_t buflen)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 0f4855fa85db..fce5535579d6 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5149,6 +5149,22 @@ union bpf_attr {
+  *		The **hash_algo** is returned on success,
+  *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
+  *		invalid arguments are passed.
++ *
++ * void bpf_cgroup_rstat_updated(struct cgroup *cgrp)
++ *	Description
++ *		Notify the rstat framework that bpf stats were updated for
++ *		*cgrp* on the current cpu. Directly calls cgroup_rstat_updated
++ *		with the given *cgrp* and the current cpu.
++ *	Return
++ *		0
++ *
++ * void bpf_cgroup_rstat_flush(struct cgroup *cgrp)
++ *	Description
++ *		Collect all per-cpu stats in *cgrp*'s subtree into global
++ *		counters and propagate them upwards. Directly calls
++ *		cgroup_rstat_flush_irqsafe with the given *cgrp*.
++ *	Return
++ *		0
   */
- struct cgroup *cgroup_get_from_id(u64 id)
- {
--	struct kernfs_node *kn;
-+	struct kernfs_node *kn = NULL;
- 	struct cgroup *cgrp = NULL;
-+	struct cgroup_root *root;
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5345,6 +5361,8 @@ union bpf_attr {
+ 	FN(copy_from_user_task),	\
+ 	FN(skb_set_tstamp),		\
+ 	FN(ima_file_hash),		\
++	FN(cgroup_rstat_updated),	\
++	FN(cgroup_rstat_flush),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 315053ef6a75..d124eed97ad7 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1374,6 +1374,32 @@ void bpf_timer_cancel_and_free(void *val)
+ 	kfree(t);
+ }
+ 
++BPF_CALL_1(bpf_cgroup_rstat_updated, struct cgroup *, cgrp)
++{
++	cgroup_rstat_updated(cgrp, smp_processor_id());
++	return 0;
++}
 +
-+	for_each_root(root) {
-+		kn = kernfs_find_and_get_node_by_id(root->kf_root, id);
-+		if (kn)
-+			break;
-+	}
++static const struct bpf_func_proto bpf_cgroup_rstat_updated_proto = {
++	.func		= bpf_cgroup_rstat_updated,
++	.gpl_only	= false,
++	.ret_type	= RET_VOID,
++	.arg1_type	= ARG_ANYTHING,
++};
++
++BPF_CALL_1(bpf_cgroup_rstat_flush, struct cgroup *, cgrp)
++{
++	cgroup_rstat_flush_irqsafe(cgrp);
++	return 0;
++}
++
++static const struct bpf_func_proto bpf_cgroup_rstat_flush_proto = {
++	.func		= bpf_cgroup_rstat_flush,
++	.gpl_only	= false,
++	.ret_type	= RET_VOID,
++	.arg1_type	= ARG_ANYTHING,
++};
++
+ const struct bpf_func_proto bpf_get_current_task_proto __weak;
+ const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_user_proto __weak;
+@@ -1426,6 +1452,10 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_loop_proto;
+ 	case BPF_FUNC_strncmp:
+ 		return &bpf_strncmp_proto;
++	case BPF_FUNC_cgroup_rstat_updated:
++		return &bpf_cgroup_rstat_updated_proto;
++	case BPF_FUNC_cgroup_rstat_flush:
++		return &bpf_cgroup_rstat_flush_proto;
+ 	default:
+ 		break;
+ 	}
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index 096625242475..9e2b08557a6f 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -633,6 +633,7 @@ class PrinterHelpers(Printer):
+             'struct socket',
+             'struct file',
+             'struct bpf_timer',
++            'struct cgroup',
+     ]
+     known_types = {
+             '...',
+@@ -682,6 +683,7 @@ class PrinterHelpers(Printer):
+             'struct socket',
+             'struct file',
+             'struct bpf_timer',
++            'struct cgroup',
+     }
+     mapped_types = {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 0f4855fa85db..fce5535579d6 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5149,6 +5149,22 @@ union bpf_attr {
+  *		The **hash_algo** is returned on success,
+  *		**-EOPNOTSUP** if the hash calculation failed or **-EINVAL** if
+  *		invalid arguments are passed.
++ *
++ * void bpf_cgroup_rstat_updated(struct cgroup *cgrp)
++ *	Description
++ *		Notify the rstat framework that bpf stats were updated for
++ *		*cgrp* on the current cpu. Directly calls cgroup_rstat_updated
++ *		with the given *cgrp* and the current cpu.
++ *	Return
++ *		0
++ *
++ * void bpf_cgroup_rstat_flush(struct cgroup *cgrp)
++ *	Description
++ *		Collect all per-cpu stats in *cgrp*'s subtree into global
++ *		counters and propagate them upwards. Directly calls
++ *		cgroup_rstat_flush_irqsafe with the given *cgrp*.
++ *	Return
++ *		0
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5345,6 +5361,8 @@ union bpf_attr {
+ 	FN(copy_from_user_task),	\
+ 	FN(skb_set_tstamp),		\
+ 	FN(ima_file_hash),		\
++	FN(cgroup_rstat_updated),	\
++	FN(cgroup_rstat_flush),		\
+ 	/* */
  
--	kn = kernfs_find_and_get_node_by_id(cgrp_dfl_root.kf_root, id);
- 	if (!kn)
- 		goto out;
- 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.36.0.512.ge40c2bad7a-goog
 
