@@ -2,38 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A3A6C433F5
-	for <bpf@archiver.kernel.org>; Thu, 12 May 2022 07:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A42AC433FE
+	for <bpf@archiver.kernel.org>; Thu, 12 May 2022 07:43:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351134AbiELHnp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 May 2022 03:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S1351133AbiELHnr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 May 2022 03:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351130AbiELHno (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 May 2022 03:43:44 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736AA1A15FA
+        with ESMTP id S1351143AbiELHnp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 May 2022 03:43:45 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38DA1A15FC
         for <bpf@vger.kernel.org>; Thu, 12 May 2022 00:43:43 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BMwZQu022821
-        for <bpf@vger.kernel.org>; Thu, 12 May 2022 00:43:43 -0700
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BMwW2c013980
+        for <bpf@vger.kernel.org>; Thu, 12 May 2022 00:43:42 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=1MX0HXf45SnWQTxzBfsIP7e6Kx4r5QDLBkFORamDFjs=;
- b=jVKfpV1t5WhmjRArcdd7yqHSIuf6JPJcNtGNhkas7IVdlaW5pTo1BYc7kEGsTwgsJr+I
- DYWMQzlm3adjevhMo5YNIpGdsvav8JpMyqGvYcneO7DtKi6DOxFOplK+/ATNcLtfP5X3
- 6r77p9DK5rDKequkxkVsA7unKdlUS9ka4Vw= 
+ bh=Y6w/YomUbNGL1juCVMUJNbemUhqF0oQ8EpnUOtoM028=;
+ b=j4SSgKq5Zg+QSNWgtb38TWl4K61u3t24Lx97+DME6nnnskqbTD3xDJucDnheuPFpwO0f
+ r1buQ+sXG2eFg3z/zy2lueix09dCk1ZtdRcH9VAbk5gEx3Q8KjIhaySE7fv+FipaehLj
+ FQGt7AGxJccQGaJlq5BPVR4gpDr15yLEOjo= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g055hrmew-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g04tb8s07-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 12 May 2022 00:43:42 -0700
-Received: from twshared41237.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+Received: from twshared11660.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Thu, 12 May 2022 00:43:41 -0700
 Received: by devbig077.ldc1.facebook.com (Postfix, from userid 158236)
-        id 85F9478F7CC7; Thu, 12 May 2022 00:43:28 -0700 (PDT)
+        id 6573C78F7CD5; Thu, 12 May 2022 00:43:30 -0700 (PDT)
 From:   Dave Marchevsky <davemarchevsky@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -43,9 +43,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         Yonghong Song <yhs@fb.com>, <kernel-team@fb.com>,
         Dave Marchevsky <davemarchevsky@fb.com>
-Subject: [RFC PATCH bpf-next 2/5] bpf: add get_reg_val helper
-Date:   Thu, 12 May 2022 00:43:18 -0700
-Message-ID: <20220512074321.2090073-3-davemarchevsky@fb.com>
+Subject: [RFC PATCH bpf-next 5/5] selftests/bpf: get_reg_val test exercising fxsave fetch
+Date:   Thu, 12 May 2022 00:43:21 -0700
+Message-ID: <20220512074321.2090073-6-davemarchevsky@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220512074321.2090073-1-davemarchevsky@fb.com>
 References: <20220512074321.2090073-1-davemarchevsky@fb.com>
@@ -53,380 +53,273 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: CpYuH_LKPXXCS_xWA1SwyhtsYEU0WVuO
-X-Proofpoint-GUID: CpYuH_LKPXXCS_xWA1SwyhtsYEU0WVuO
+X-Proofpoint-GUID: ngYHf1isjFeAufkQcAkWXpetX0K-gN3L
+X-Proofpoint-ORIG-GUID: ngYHf1isjFeAufkQcAkWXpetX0K-gN3L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-12_01,2022-05-12_01,2022-02-23_01
+ definitions=2022-05-11_07,2022-05-12_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a helper which reads the value of specified register into memory.
+Add a test which calls bpf_get_reg_val with an xmm reg after forcing fpu
+state save. The test program writes to %xmm10, then calls a BPF program
+which forces fpu save and calls bpf_get_reg_val. This guarantees that
+!fpregs_state_valid check will succeed, forcing bpf_get_reg_val to fetch
+%xmm10's value from task's fpu state.
 
-Currently, bpf programs only have access to general-purpose registers
-via struct pt_regs. Other registers, like SSE regs %xmm0-15, are
-inaccessible, which makes some tracing usecases impossible. For example,
-User Statically-Defined Tracing (USDT) probes may use SSE registers to
-pass their arguments on x86. While this patch adds support for %xmm0-15
-only, the helper is meant to be generic enough to support fetching any
-reg.
+A bpf_testmod_save_fpregs kfunc helper is added to bpf_testmod to enable
+'force fpu save'. Existing bpf_dummy_ops test infra is extended to
+support calling the kfunc.
 
-A useful "value of register" definition for bpf programs is "value of
-register before control transfer to kernel". pt_regs gives us this
-currently, so it's the default behavior of the new helper. Fetching the
-actual _current_ reg value is possible, though, by passing
-BPF_GETREG_F_CURRENT flag as part of input.
-
-For SSE regs we try to avoid digging around in task's fpu state by first
-reading _current_ value, then checking to see if the state of cpu's
-floating point regs matches task's view of them. If so, we can just
-return _current_ value.
-
-Further usecases which are straightforward to support, but
-unimplemented:
-  * using the helper to fetch general-purpose register value.
-  currently-unused pt_regs parameter exists for this reason.
-
-  * fetching rdtsc (w/ BPF_GETREG_F_CURRENT)
-
-  * other architectures. s390 specifically might benefit from similar
-  fpu reg fetching as USDT library was recently updated to support that
-  architecture.
+unload_bpf_testmod would often fail with -EAGAIN when running the test
+added in this patch, so a single retry w/ 20ms sleep is added.
 
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/uapi/linux/bpf.h       |  40 +++++++++
- kernel/trace/bpf_trace.c       | 148 +++++++++++++++++++++++++++++++++
- kernel/trace/bpf_trace.h       |   1 +
- tools/include/uapi/linux/bpf.h |  40 +++++++++
- 4 files changed, 229 insertions(+)
+ include/linux/bpf.h                           |  1 +
+ kernel/trace/bpf_trace.c                      |  2 +-
+ net/bpf/bpf_dummy_struct_ops.c                | 13 ++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 13 ++++++
+ tools/testing/selftests/bpf/prog_tests/usdt.c | 42 +++++++++++++++++++
+ .../selftests/bpf/progs/test_urandom_usdt.c   | 24 +++++++++++
+ tools/testing/selftests/bpf/test_progs.c      |  7 ++++
+ 7 files changed, 101 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 444fe6f1cf35..3ef8f683ed9e 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5154,6 +5154,18 @@ union bpf_attr {
-  *		if not NULL, is a reference which must be released using its
-  *		corresponding release function, or moved into a BPF map before
-  *		program exit.
-+ *
-+ * long bpf_get_reg_val(void *dst, u32 size, u64 getreg_spec, struct pt_=
-regs *regs, struct task_struct *tsk)
-+ *	Description
-+ *		Store the value of a SSE register specified by *getreg_spec*
-+ *		into memory region of size *size* specified by *dst*. *getreg_spec*
-+ *		is a combination of BPF_GETREG enum AND BPF_GETREG_F flag e.g.
-+ *		(BPF_GETREG_X86_XMM0 << 32) | BPF_GETREG_F_CURRENT.*
-+ *	Return
-+ *		0 on success
-+ *		**-ENOENT** if the system architecture does not have requested reg
-+ *		**-EINVAL** if *getreg_spec* is invalid
-+ *		**-EINVAL** if *size* !=3D bytes necessary to store requested reg va=
-l
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5351,6 +5363,7 @@ union bpf_attr {
- 	FN(skb_set_tstamp),		\
- 	FN(ima_file_hash),		\
- 	FN(kptr_xchg),			\
-+	FN(get_reg_val),		\
- 	/* */
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index be94833d390a..e642e4b8a726 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2223,6 +2223,7 @@ extern const struct bpf_func_proto bpf_find_vma_pro=
+to;
+ extern const struct bpf_func_proto bpf_loop_proto;
+ extern const struct bpf_func_proto bpf_strncmp_proto;
+ extern const struct bpf_func_proto bpf_copy_from_user_task_proto;
++extern const struct bpf_func_proto bpf_get_reg_val_proto;
 =20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-@@ -6318,6 +6331,33 @@ struct bpf_perf_event_value {
- 	__u64 running;
- };
-=20
-+/* bpf_get_reg_val register enum */
-+enum {
-+	BPF_GETREG_X86_XMM0 =3D 0,
-+	BPF_GETREG_X86_XMM1,
-+	BPF_GETREG_X86_XMM2,
-+	BPF_GETREG_X86_XMM3,
-+	BPF_GETREG_X86_XMM4,
-+	BPF_GETREG_X86_XMM5,
-+	BPF_GETREG_X86_XMM6,
-+	BPF_GETREG_X86_XMM7,
-+	BPF_GETREG_X86_XMM8,
-+	BPF_GETREG_X86_XMM9,
-+	BPF_GETREG_X86_XMM10,
-+	BPF_GETREG_X86_XMM11,
-+	BPF_GETREG_X86_XMM12,
-+	BPF_GETREG_X86_XMM13,
-+	BPF_GETREG_X86_XMM14,
-+	BPF_GETREG_X86_XMM15,
-+	__MAX_BPF_GETREG,
-+};
-+
-+/* bpf_get_reg_val flags */
-+enum {
-+	BPF_GETREG_F_NONE =3D 0,
-+	BPF_GETREG_F_CURRENT =3D (1U << 0),
-+};
-+
- enum {
- 	BPF_DEVCG_ACC_MKNOD	=3D (1ULL << 0),
- 	BPF_DEVCG_ACC_READ	=3D (1ULL << 1),
+ const struct bpf_func_proto *tracing_prog_func_proto(
+   enum bpf_func_id func_id, const struct bpf_prog *prog);
 diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index f15b826f9899..0de7d6b3af5b 100644
+index 0de7d6b3af5b..cb81142a751a 100644
 --- a/kernel/trace/bpf_trace.c
 +++ b/kernel/trace/bpf_trace.c
-@@ -28,6 +28,10 @@
+@@ -1300,7 +1300,7 @@ BPF_CALL_5(get_reg_val, void *, dst, u32, size,
+ BTF_ID_LIST(bpf_get_reg_val_ids)
+ BTF_ID(struct, pt_regs)
 =20
- #include <asm/tlb.h>
+-static const struct bpf_func_proto bpf_get_reg_val_proto =3D {
++const struct bpf_func_proto bpf_get_reg_val_proto =3D {
+ 	.func	=3D get_reg_val,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
+diff --git a/net/bpf/bpf_dummy_struct_ops.c b/net/bpf/bpf_dummy_struct_op=
+s.c
+index d0e54e30658a..1f3933cd8aa6 100644
+--- a/net/bpf/bpf_dummy_struct_ops.c
++++ b/net/bpf/bpf_dummy_struct_ops.c
+@@ -171,7 +171,20 @@ static int bpf_dummy_ops_btf_struct_access(struct bp=
+f_verifier_log *log,
+ 	return atype =3D=3D BPF_READ ? err : NOT_INIT;
+ }
 =20
-+#ifdef CONFIG_X86
-+#include <asm/fpu/context.h>
-+#endif
-+
- #include "trace_probe.h"
- #include "trace.h"
-=20
-@@ -1166,6 +1170,148 @@ static const struct bpf_func_proto bpf_get_func_a=
-rg_cnt_proto =3D {
- 	.arg1_type	=3D ARG_PTR_TO_CTX,
- };
-=20
-+#define XMM_REG_SZ 16
-+
-+#define __xmm_space_off(regno)				\
-+	case BPF_GETREG_X86_XMM ## regno:		\
-+		xmm_space_off =3D regno * 16;		\
-+		break;
-+
-+static long getreg_read_xmm_fxsave(u32 reg, struct task_struct *tsk,
-+				   void *data)
++static const struct bpf_func_proto *
++bpf_dummy_ops_get_func_proto(enum bpf_func_id func_id,
++			     const struct bpf_prog *prog)
 +{
-+	struct fxregs_state *fxsave;
-+	u32 xmm_space_off;
-+
-+	switch (reg) {
-+	__xmm_space_off(0);
-+	__xmm_space_off(1);
-+	__xmm_space_off(2);
-+	__xmm_space_off(3);
-+	__xmm_space_off(4);
-+	__xmm_space_off(5);
-+	__xmm_space_off(6);
-+	__xmm_space_off(7);
-+#ifdef	CONFIG_X86_64
-+	__xmm_space_off(8);
-+	__xmm_space_off(9);
-+	__xmm_space_off(10);
-+	__xmm_space_off(11);
-+	__xmm_space_off(12);
-+	__xmm_space_off(13);
-+	__xmm_space_off(14);
-+	__xmm_space_off(15);
-+#endif
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	fxsave =3D &tsk->thread.fpu.fpstate->regs.fxsave;
-+	memcpy(data, (void *)&fxsave->xmm_space + xmm_space_off, XMM_REG_SZ);
-+	return 0;
-+}
-+
-+#undef __xmm_space_off
-+
-+static bool getreg_is_xmm(u32 reg)
-+{
-+	return reg >=3D BPF_GETREG_X86_XMM0 && reg <=3D BPF_GETREG_X86_XMM15;
-+}
-+
-+#define __bpf_sse_read(regno)							\
-+	case BPF_GETREG_X86_XMM ## regno:					\
-+		asm("movdqa %%xmm" #regno ", %0" : "=3Dm"(*(char *)data));	\
-+		break;
-+
-+static long bpf_read_sse_reg(u32 reg, u32 flags, struct task_struct *tsk=
-,
-+			     void *data)
-+{
-+#ifdef CONFIG_X86
-+	unsigned long irq_flags;
-+	long err;
-+
-+	switch (reg) {
-+	__bpf_sse_read(0);
-+	__bpf_sse_read(1);
-+	__bpf_sse_read(2);
-+	__bpf_sse_read(3);
-+	__bpf_sse_read(4);
-+	__bpf_sse_read(5);
-+	__bpf_sse_read(6);
-+	__bpf_sse_read(7);
-+#ifdef CONFIG_X86_64
-+	__bpf_sse_read(8);
-+	__bpf_sse_read(9);
-+	__bpf_sse_read(10);
-+	__bpf_sse_read(11);
-+	__bpf_sse_read(12);
-+	__bpf_sse_read(13);
-+	__bpf_sse_read(14);
-+	__bpf_sse_read(15);
-+#endif /* CONFIG_X86_64 */
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (flags & BPF_GETREG_F_CURRENT)
-+		return 0;
-+
-+	if (!fpregs_state_valid(&tsk->thread.fpu, smp_processor_id())) {
-+		local_irq_save(irq_flags);
-+		err =3D getreg_read_xmm_fxsave(reg, tsk, data);
-+		local_irq_restore(irq_flags);
-+		return err;
-+	}
-+
-+	return 0;
-+#else
-+	return -ENOENT;
-+#endif /* CONFIG_X86 */
-+}
-+
-+#undef __bpf_sse_read
-+
-+BPF_CALL_5(get_reg_val, void *, dst, u32, size,
-+	   u64, getreg_spec, struct pt_regs *, regs,
-+	   struct task_struct *, tsk)
-+{
-+	u32 reg, flags;
-+
-+	reg =3D (u32)(getreg_spec >> 32);
-+	flags =3D (u32)getreg_spec;
-+	if (reg >=3D __MAX_BPF_GETREG)
-+		return -EINVAL;
-+
-+	if (getreg_is_xmm(reg)) {
-+#ifndef CONFIG_X86
-+		return -ENOENT;
-+#else
-+		if (size !=3D XMM_REG_SZ)
-+			return -EINVAL;
-+
-+		return bpf_read_sse_reg(reg, flags, tsk, dst);
-+	}
-+
-+	return -EINVAL;
-+#endif
-+}
-+
-+BTF_ID_LIST(bpf_get_reg_val_ids)
-+BTF_ID(struct, pt_regs)
-+
-+static const struct bpf_func_proto bpf_get_reg_val_proto =3D {
-+	.func	=3D get_reg_val,
-+	.ret_type	=3D RET_INTEGER,
-+	.arg1_type	=3D ARG_PTR_TO_UNINIT_MEM,
-+	.arg2_type	=3D ARG_CONST_SIZE,
-+	.arg3_type	=3D ARG_ANYTHING,
-+	.arg4_type	=3D ARG_PTR_TO_BTF_ID_OR_NULL,
-+	.arg4_btf_id	=3D &bpf_get_reg_val_ids[0],
-+	.arg5_type	=3D ARG_PTR_TO_BTF_ID_OR_NULL,
-+	.arg5_btf_id	=3D &btf_tracing_ids[BTF_TRACING_TYPE_TASK],
-+};
-+
- static const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *=
-prog)
- {
-@@ -1287,6 +1433,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
-nst struct bpf_prog *prog)
- 		return &bpf_find_vma_proto;
- 	case BPF_FUNC_trace_vprintk:
- 		return bpf_get_trace_vprintk_proto();
++	switch (func_id) {
 +	case BPF_FUNC_get_reg_val:
 +		return &bpf_get_reg_val_proto;
- 	default:
- 		return bpf_base_func_proto(func_id);
- 	}
-diff --git a/kernel/trace/bpf_trace.h b/kernel/trace/bpf_trace.h
-index 9acbc11ac7bb..b4b55706c2dd 100644
---- a/kernel/trace/bpf_trace.h
-+++ b/kernel/trace/bpf_trace.h
-@@ -29,6 +29,7 @@ TRACE_EVENT(bpf_trace_printk,
-=20
- #undef TRACE_INCLUDE_PATH
- #define TRACE_INCLUDE_PATH .
-+#undef TRACE_INCLUDE_FILE
- #define TRACE_INCLUDE_FILE bpf_trace
-=20
- #include <trace/define_trace.h>
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 444fe6f1cf35..3ef8f683ed9e 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5154,6 +5154,18 @@ union bpf_attr {
-  *		if not NULL, is a reference which must be released using its
-  *		corresponding release function, or moved into a BPF map before
-  *		program exit.
-+ *
-+ * long bpf_get_reg_val(void *dst, u32 size, u64 getreg_spec, struct pt_=
-regs *regs, struct task_struct *tsk)
-+ *	Description
-+ *		Store the value of a SSE register specified by *getreg_spec*
-+ *		into memory region of size *size* specified by *dst*. *getreg_spec*
-+ *		is a combination of BPF_GETREG enum AND BPF_GETREG_F flag e.g.
-+ *		(BPF_GETREG_X86_XMM0 << 32) | BPF_GETREG_F_CURRENT.*
-+ *	Return
-+ *		0 on success
-+ *		**-ENOENT** if the system architecture does not have requested reg
-+ *		**-EINVAL** if *getreg_spec* is invalid
-+ *		**-EINVAL** if *size* !=3D bytes necessary to store requested reg va=
-l
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5351,6 +5363,7 @@ union bpf_attr {
- 	FN(skb_set_tstamp),		\
- 	FN(ima_file_hash),		\
- 	FN(kptr_xchg),			\
-+	FN(get_reg_val),		\
- 	/* */
-=20
- /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-@@ -6318,6 +6331,33 @@ struct bpf_perf_event_value {
- 	__u64 running;
++	default:
++		return bpf_base_func_proto(func_id);
++	}
++}
++
+ static const struct bpf_verifier_ops bpf_dummy_verifier_ops =3D {
++	.get_func_proto =3D bpf_dummy_ops_get_func_proto,
+ 	.is_valid_access =3D bpf_dummy_ops_is_valid_access,
+ 	.btf_struct_access =3D bpf_dummy_ops_btf_struct_access,
  };
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tool=
+s/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index e585e1cefc77..b2b35138b097 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
++#include <asm/fpu/api.h>
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ #include <linux/error-injection.h>
+@@ -25,6 +26,13 @@ bpf_testmod_test_mod_kfunc(int i)
+ 	*(int *)this_cpu_ptr(&bpf_testmod_ksym_percpu) =3D i;
+ }
 =20
-+/* bpf_get_reg_val register enum */
-+enum {
-+	BPF_GETREG_X86_XMM0 =3D 0,
-+	BPF_GETREG_X86_XMM1,
-+	BPF_GETREG_X86_XMM2,
-+	BPF_GETREG_X86_XMM3,
-+	BPF_GETREG_X86_XMM4,
-+	BPF_GETREG_X86_XMM5,
-+	BPF_GETREG_X86_XMM6,
-+	BPF_GETREG_X86_XMM7,
-+	BPF_GETREG_X86_XMM8,
-+	BPF_GETREG_X86_XMM9,
-+	BPF_GETREG_X86_XMM10,
-+	BPF_GETREG_X86_XMM11,
-+	BPF_GETREG_X86_XMM12,
-+	BPF_GETREG_X86_XMM13,
-+	BPF_GETREG_X86_XMM14,
-+	BPF_GETREG_X86_XMM15,
-+	__MAX_BPF_GETREG,
++noinline void
++bpf_testmod_save_fpregs(void)
++{
++	kernel_fpu_begin();
++	kernel_fpu_end();
++}
++
+ struct bpf_testmod_btf_type_tag_1 {
+ 	int a;
+ };
+@@ -150,6 +158,7 @@ static struct bin_attribute bin_attr_bpf_testmod_file=
+ __ro_after_init =3D {
+=20
+ BTF_SET_START(bpf_testmod_check_kfunc_ids)
+ BTF_ID(func, bpf_testmod_test_mod_kfunc)
++BTF_ID(func, bpf_testmod_save_fpregs)
+ BTF_SET_END(bpf_testmod_check_kfunc_ids)
+=20
+ static const struct btf_kfunc_id_set bpf_testmod_kfunc_set =3D {
+@@ -166,6 +175,10 @@ static int bpf_testmod_init(void)
+ 	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &bpf_testmod=
+_kfunc_set);
+ 	if (ret < 0)
+ 		return ret;
++	ret =3D register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &bpf_testmo=
+d_kfunc_set);
++	if (ret < 0)
++		return ret;
++
+ 	if (bpf_fentry_test1(0) < 0)
+ 		return -EINVAL;
+ 	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testin=
+g/selftests/bpf/prog_tests/usdt.c
+index f98749ac74a7..3866cb004b22 100644
+--- a/tools/testing/selftests/bpf/prog_tests/usdt.c
++++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+@@ -8,6 +8,11 @@
+ #include "test_usdt.skel.h"
+ #include "test_urandom_usdt.skel.h"
+=20
++/* Need to keep consistent with definition in include/linux/bpf.h */
++struct bpf_dummy_ops_state {
++	int val;
 +};
 +
-+/* bpf_get_reg_val flags */
-+enum {
-+	BPF_GETREG_F_NONE =3D 0,
-+	BPF_GETREG_F_CURRENT =3D (1U << 0),
+ int lets_test_this(int);
+=20
+ static volatile int idx =3D 2;
+@@ -415,6 +420,41 @@ static void subtest_urandom_usdt(bool auto_attach)
+ 	test_urandom_usdt__destroy(skel);
+ }
+=20
++static void subtest_reg_val_fpustate(void)
++{
++	struct bpf_dummy_ops_state in_state;
++	struct test_urandom_usdt__bss *bss;
++	struct test_urandom_usdt *skel;
++	u64 in_args[1];
++	u64 regval[2];
++	int err, fd;
++
++	in_state.val =3D 0; /* unused */
++	in_args[0] =3D (unsigned long)&in_state;
++
++	LIBBPF_OPTS(bpf_test_run_opts, attr,
++		   .ctx_in =3D in_args,
++		   .ctx_size_in =3D sizeof(in_args),
++	);
++
++	skel =3D test_urandom_usdt__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++	bss =3D skel->bss;
++
++	fd =3D bpf_program__fd(skel->progs.save_fpregs_and_read);
++	regval[0] =3D 42;
++	regval[1] =3D 0;
++	asm("movdqa %0, %%xmm10" : "=3Dm"(*(char *)regval));
++
++	err =3D bpf_prog_test_run_opts(fd, &attr);
++	ASSERT_OK(err, "save_fpregs_and_read");
++	ASSERT_EQ(bss->fpregs_dummy_opts_xmm_val, 42, "fpregs_dummy_opts_xmm_va=
+l");
++
++	close(fd);
++	test_urandom_usdt__destroy(skel);
++}
++
+ void test_usdt(void)
+ {
+ 	if (test__start_subtest("basic"))
+@@ -425,4 +465,6 @@ void test_usdt(void)
+ 		subtest_urandom_usdt(true /* auto_attach */);
+ 	if (test__start_subtest("urand_pid_attach"))
+ 		subtest_urandom_usdt(false /* auto_attach */);
++	if (test__start_subtest("bpf_get_reg_val_fpustate"))
++		subtest_reg_val_fpustate();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_urandom_usdt.c b/tool=
+s/testing/selftests/bpf/progs/test_urandom_usdt.c
+index 575761863eb6..2c8b6709606a 100644
+--- a/tools/testing/selftests/bpf/progs/test_urandom_usdt.c
++++ b/tools/testing/selftests/bpf/progs/test_urandom_usdt.c
+@@ -67,6 +67,30 @@ int BPF_USDT(urandlib_read_with_sema, int iter_num, in=
+t iter_cnt, int buf_sz)
+ 	return 0;
+ }
+=20
++extern void bpf_testmod_save_fpregs(void) __ksym;
++
++u64 fpregs_dummy_opts_xmm_val;
++
++SEC("struct_ops/save_fpregs_and_read")
++int BPF_PROG(save_fpregs_and_read, struct bpf_dummy_ops_state *unused)
++{
++	struct task_struct *tsk;
++	u64 val[2];
++
++	bpf_testmod_save_fpregs();
++	tsk =3D bpf_get_current_task_btf();
++
++	bpf_get_reg_val(&val[0], 16, (u64)BPF_GETREG_X86_XMM10 << 32, NULL, tsk=
+);
++	__sync_fetch_and_add(&fpregs_dummy_opts_xmm_val, val[0]);
++
++	return 0;
++}
++
++SEC(".struct_ops")
++struct bpf_dummy_ops dummy_ops =3D {
++	.test_1 =3D (void *)save_fpregs_and_read,
 +};
 +
- enum {
- 	BPF_DEVCG_ACC_MKNOD	=3D (1ULL << 0),
- 	BPF_DEVCG_ACC_READ	=3D (1ULL << 1),
+ int urandlib_xmm_reg_read_buf_sz_sum;
+ SEC("usdt/./liburandom_read_xmm.so:urandlib:xmm_reg_read")
+ int BPF_USDT(urandlib_xmm_reg_read, int *f1, int *f2, int *f3, int a, in=
+t b,
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
+ftests/bpf/test_progs.c
+index a07da648af3b..27a3e8cb9c36 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -620,6 +620,9 @@ int kern_sync_rcu(void)
+=20
+ static void unload_bpf_testmod(void)
+ {
++	bool tried_again =3D false;
++
++again:
+ 	if (kern_sync_rcu())
+ 		fprintf(env.stderr, "Failed to trigger kernel-side RCU sync!\n");
+ 	if (delete_module("bpf_testmod", 0)) {
+@@ -627,6 +630,10 @@ static void unload_bpf_testmod(void)
+ 			if (verbose())
+ 				fprintf(stdout, "bpf_testmod.ko is already unloaded.\n");
+ 			return;
++		} else if (errno =3D=3D EAGAIN && !tried_again) {
++			tried_again =3D true;
++			usleep(20 * 1000);
++			goto again;
+ 		}
+ 		fprintf(env.stderr, "Failed to unload bpf_testmod.ko from kernel: %d\n=
+", -errno);
+ 		return;
 --=20
 2.30.2
 
