@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6363C4332F
-	for <bpf@archiver.kernel.org>; Thu, 12 May 2022 07:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8CE1C433F5
+	for <bpf@archiver.kernel.org>; Thu, 12 May 2022 07:47:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351143AbiELHq7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 May 2022 03:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S1351132AbiELHrY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 May 2022 03:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351132AbiELHqz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 May 2022 03:46:55 -0400
+        with ESMTP id S1351169AbiELHrX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 May 2022 03:47:23 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FCC3B3E5;
-        Thu, 12 May 2022 00:46:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C7A1B4341;
+        Thu, 12 May 2022 00:47:06 -0700 (PDT)
 Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C5M89N007075;
-        Thu, 12 May 2022 07:46:20 GMT
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24C5M3OQ006577;
+        Thu, 12 May 2022 07:46:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=rwQzzGuF0a2Ee6HDIGyhvnnYSGRvC/jU8t7gT9JQ/CQ=;
- b=RcfPWrnyuy2lIFpgU3DUT1WqkXZLb9TXR/IV7QGOI5uHQfJ35U8iBmjIdSNGKaIG7Gr+
- EZWNMEq9OB62e13f8YOv8YgnwrdqkuG2Au9Nc1bt/0k3MgtGkdcR375h3u4ApJ7OMFbO
- wBYyS+aTLsdq8S8iyo9vcPbIOEqXKLT8bDetxNIt/3LAMXnHzk04Tb+/Fr26ryzEKqf1
- ycbB9QSJsEC5RuEf7Bk8ej7rFw/Q7H4ZmlVUHM+UJImBuvWC/MP7JBb7OG8jEni7wrVs
- uo/PddIv+v+1QHiBzl2M2tHlRfZaqCJlI1+LRqWj3m6MES8SIGWma/m3YgpfFjd+Hdqi qw== 
+ bh=VBZOjHpgCwwmLhF8DcmwFXQrJpWd7JnASzI13GbYvPk=;
+ b=qZ2R2Tp5W8VPBVggMl0z1yixG8r3E5r1Oot/lCwcjHYUOfLNm1mu8bFcmGngNRVpj7GT
+ Xbln5VHo4X0xk+9S7TWi7aiy0hhoylvnlvTa/PL1Kioi6YnsKMd86xvJdxJUVvQM5cR6
+ inMHBKU9Fq+UOZBERwyfCavmpRKdWUufbeLY4SWDKbA89lIOvTXCOUlLR+EIOnKtacDK
+ YQw/mkFkxp9L3gcOpLBthbvh6muNRPbv8GBhR7H0QBcXp7eeDuzZ3E+k6TlcXa+JFqvi
+ Av2ovffE43fxK0Jefx+IY6fqP4o1U+iH31O5KIc0eyl+gtnExUIiK3+VjBc/j+gIsF9N lg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0v1d2e27-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0v1d2e71-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 07:46:20 +0000
+        Thu, 12 May 2022 07:46:38 +0000
 Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24C7WGPN005553;
-        Thu, 12 May 2022 07:46:19 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0v1d2e1k-1
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24C7DaOY021587;
+        Thu, 12 May 2022 07:46:37 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0v1d2e6g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 07:46:19 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24C7csAS023729;
-        Thu, 12 May 2022 07:46:17 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3fwgd8w4v4-1
+        Thu, 12 May 2022 07:46:37 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24C7bKUu028183;
+        Thu, 12 May 2022 07:46:34 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3fwgd8w5qy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 May 2022 07:46:17 +0000
+        Thu, 12 May 2022 07:46:34 +0000
 Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24C7WaXU41419126
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24C7kWAX43778386
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 12 May 2022 07:32:37 GMT
+        Thu, 12 May 2022 07:46:32 GMT
 Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E0959A4053;
-        Thu, 12 May 2022 07:46:14 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 9A9C0A4053;
+        Thu, 12 May 2022 07:46:32 +0000 (GMT)
 Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DD2BDA4040;
-        Thu, 12 May 2022 07:46:06 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 81FEFA4040;
+        Thu, 12 May 2022 07:46:24 +0000 (GMT)
 Received: from hbathini-workstation.ibm.com.com (unknown [9.211.109.30])
         by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 12 May 2022 07:46:06 +0000 (GMT)
+        Thu, 12 May 2022 07:46:24 +0000 (GMT)
 From:   Hari Bathini <hbathini@linux.ibm.com>
 To:     bpf@vger.kernel.org, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
@@ -73,17 +73,17 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Jordan Niethe <jniethe5@gmail.com>
-Subject: [PATCH 2/5] bpf ppc64: add support for atomic fetch operations
-Date:   Thu, 12 May 2022 13:15:43 +0530
-Message-Id: <20220512074546.231616-3-hbathini@linux.ibm.com>
+Subject: [PATCH 4/5] bpf ppc32: add support for BPF_ATOMIC bitwise operations
+Date:   Thu, 12 May 2022 13:15:45 +0530
+Message-Id: <20220512074546.231616-5-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220512074546.231616-1-hbathini@linux.ibm.com>
 References: <20220512074546.231616-1-hbathini@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -Kjc5MyExrba6Kgq84NamC5URDXi8djS
-X-Proofpoint-GUID: uZhAT8ckYT2tjDdvIUVwf_XF3de9gv-s
+X-Proofpoint-ORIG-GUID: 3AyS655gaBJcxWFAbUyAryJ4mYuYBicb
+X-Proofpoint-GUID: 9Lo--HSV7gwADoNhTag_bcpyUympL_gw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-11_07,2022-05-12_01,2022-02-23_01
@@ -96,67 +96,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding instructions for ppc64 for
+Adding instructions for ppc32 for
 
-atomic[64]_fetch_add
-atomic[64]_fetch_and
-atomic[64]_fetch_or
-atomic[64]_fetch_xor
+atomic_and
+atomic_or
+atomic_xor
+atomic_fetch_add
+atomic_fetch_and
+atomic_fetch_or
+atomic_fetch_xor
 
 Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp64.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ arch/powerpc/net/bpf_jit_comp32.c | 45 +++++++++++++++++++++----------
+ 1 file changed, 31 insertions(+), 14 deletions(-)
 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index b34ed88167f0..504fa459f9f3 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -792,17 +792,25 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
- 			else
- 				EMIT(PPC_RAW_LWARX(tmp2_reg, tmp1_reg, dst_reg, 0));
- 
-+			/* Save old value in _R0 */
-+			if (imm & BPF_FETCH)
-+				EMIT(PPC_RAW_MR(_R0, tmp2_reg));
-+
- 			switch (imm) {
- 			case BPF_ADD:
-+			case BPF_ADD | BPF_FETCH:
- 				EMIT(PPC_RAW_ADD(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			case BPF_AND:
-+			case BPF_AND | BPF_FETCH:
- 				EMIT(PPC_RAW_AND(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			case BPF_OR:
-+			case BPF_OR | BPF_FETCH:
- 				EMIT(PPC_RAW_OR(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			case BPF_XOR:
-+			case BPF_XOR | BPF_FETCH:
- 				EMIT(PPC_RAW_XOR(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			default:
-@@ -812,13 +820,17 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
- 				return -EOPNOTSUPP;
- 			}
- 
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index e46ed1e8c6ca..5604ae1b60ab 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -798,25 +798,42 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+ 		 * BPF_STX ATOMIC (atomic ops)
+ 		 */
+ 		case BPF_STX | BPF_ATOMIC | BPF_W:
+-			if (imm != BPF_ADD) {
+-				pr_err_ratelimited("eBPF filter atomic op code %02x (@%d) unsupported\n",
+-						   code, i);
+-				return -ENOTSUPP;
+-			}
+-
+-			/* *(u32 *)(dst + off) += src */
+-
+ 			bpf_set_seen_register(ctx, tmp_reg);
+ 			/* Get offset into TMP_REG */
+ 			EMIT(PPC_RAW_LI(tmp_reg, off));
++			tmp_idx = ctx->idx * 4;
+ 			/* load value from memory into r0 */
+ 			EMIT(PPC_RAW_LWARX(_R0, tmp_reg, dst_reg, 0));
+-			/* add value from src_reg into this */
+-			EMIT(PPC_RAW_ADD(_R0, _R0, src_reg));
 -			/* store result back */
-+			/* store new value */
- 			if (size == BPF_DW)
- 				EMIT(PPC_RAW_STDCX(tmp2_reg, tmp1_reg, dst_reg));
- 			else
- 				EMIT(PPC_RAW_STWCX(tmp2_reg, tmp1_reg, dst_reg));
- 			/* we're done if this succeeded */
- 			PPC_BCC_SHORT(COND_NE, tmp_idx);
-+
-+			/* For the BPF_FETCH variant, get old value into src_reg */
-+			if (imm & BPF_FETCH)
-+				EMIT(PPC_RAW_MR(src_reg, _R0));
+-			EMIT(PPC_RAW_STWCX(_R0, tmp_reg, dst_reg));
+-			/* we're done if this succeeded */
+-			PPC_BCC_SHORT(COND_NE, (ctx->idx - 3) * 4);
++			switch (imm) {
++			case BPF_ADD:
++			case BPF_ADD | BPF_FETCH:
++				EMIT(PPC_RAW_ADD(_R0, _R0, src_reg));
++				goto atomic_ops;
++			case BPF_AND:
++			case BPF_AND | BPF_FETCH:
++				EMIT(PPC_RAW_AND(_R0, _R0, src_reg));
++				goto atomic_ops;
++			case BPF_OR:
++			case BPF_OR | BPF_FETCH:
++				EMIT(PPC_RAW_OR(_R0, _R0, src_reg));
++				goto atomic_ops;
++			case BPF_XOR:
++			case BPF_XOR | BPF_FETCH:
++				EMIT(PPC_RAW_XOR(_R0, _R0, src_reg));
++atomic_ops:
++				/* For the BPF_FETCH variant, get old data into src_reg */
++				if (imm & BPF_FETCH)
++					EMIT(PPC_RAW_LWARX(src_reg, tmp_reg, dst_reg, 0));
++				/* store result back */
++				EMIT(PPC_RAW_STWCX(_R0, tmp_reg, dst_reg));
++				/* we're done if this succeeded */
++				PPC_BCC_SHORT(COND_NE, tmp_idx);
++				break;
++			default:
++				pr_err_ratelimited("eBPF filter atomic op code %02x (@%d) unsupported\n",
++						   code, i);
++				return -EOPNOTSUPP;
++			}
  			break;
  
- 		/*
+ 		case BPF_STX | BPF_ATOMIC | BPF_DW: /* *(u64 *)(dst + off) += src */
 -- 
 2.35.1
 
