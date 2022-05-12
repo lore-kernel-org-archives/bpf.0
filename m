@@ -2,194 +2,164 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1CC3C433F5
-	for <bpf@archiver.kernel.org>; Thu, 12 May 2022 16:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B2C9C433EF
+	for <bpf@archiver.kernel.org>; Thu, 12 May 2022 17:05:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356698AbiELQvW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 May 2022 12:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S1356824AbiELRFa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 May 2022 13:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356603AbiELQvA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 May 2022 12:51:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6F72C656
-        for <bpf@vger.kernel.org>; Thu, 12 May 2022 09:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F87B62039
-        for <bpf@vger.kernel.org>; Thu, 12 May 2022 16:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFE4C34100;
-        Thu, 12 May 2022 16:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652374257;
-        bh=AwmiJirMonAA/HfePONtmelH7hPCWd5wpPfVSD/ItSs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BOBo2r6RFIgw5l7XDa37GNQcNUNN84OK8YXPiwLjCImV1nUgzuTATmznuuZ+O0kL4
-         OsnoiombX6rwSfUjJuz7w+/AOrnEsAfhLGXrkCstGvK+Za/DFOK3cC0CxUrUj5dZ5G
-         yl6kk7c9f0aX4kWPalYU+ewSRHayacEg+5nOj85Pp5VMCFVzUqdubVt909GicJcB/2
-         Q+FQEi0oCHzzj/BOnKRFQARiSxEOyWDZRRgoQxZS0B8NXmvHy8UjmrZdLYfw6x1MZy
-         brwgF942KhjN76QhXBjD1J4euD6vpMS2j+zM0TGycPYXbPpd8P4n2xshkKauBrl/EE
-         51ps2pL3YhQkA==
-From:   KP Singh <kpsingh@kernel.org>
-To:     bpf@vger.kernel.org
-Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S1356839AbiELRF3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 May 2022 13:05:29 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA159269EFD;
+        Thu, 12 May 2022 10:05:26 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id p4so4906023qtq.12;
+        Thu, 12 May 2022 10:05:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+6B2p5x2MsdiGQqOHTdj/jEV/QOhWbmjHIG+C1y2HyI=;
+        b=HVddJcFC1vwFoH8Vz9W+YE8WP8SAZuUOcUt9Ej4BteJZh6FgiF99kmT/9ZYBL+usw1
+         qiib83DDdL3aaBc1OxTZz+gS8aZ9qYwWiW1KNbxaKdkB/MXSUYFvxRPawj61yo1s/iC3
+         sluENUT3lt3xWc2IrBI8zHt+VBLFlvb12a3nUADTZlDSRJXXpIwpjnuEx9z66IgpoB23
+         7fTqwO+QNedSMl6lLYFToYW9czCtAvOVIw7VzkJV5AHxSgCJ7OZpc8q0QZRDPNx+6NOC
+         nuDjbHKJID9PUeZ/iEIc4R6gYMsrYrahz6qxOI2IzDFXHNidQZvuYkxWCEdxdpHptsJK
+         jKpA==
+X-Gm-Message-State: AOAM5309LOmoBo9Dexjibc8PFz0yAGzNOXUne+5GZjtInjzPLxndkkib
+        9LLu6Oz6e3dwBoJbYmRuwws=
+X-Google-Smtp-Source: ABdhPJyerLlG0Vc9EMfOfjsIemvOVeJd5Nd6Zc4QkNV1NHFFQZtrSBUY2HOMiIDSb+A1DVnZY5rbVg==
+X-Received: by 2002:ac8:5896:0:b0:2f3:d231:58a9 with SMTP id t22-20020ac85896000000b002f3d23158a9mr741939qta.131.1652375125492;
+        Thu, 12 May 2022 10:05:25 -0700 (PDT)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-011.fbsv.net. [2a03:2880:20ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id t80-20020a374653000000b0069fc13ce231sm3183117qka.98.2022.05.12.10.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 May 2022 10:05:25 -0700 (PDT)
+Date:   Thu, 12 May 2022 10:05:22 -0700
+From:   David Vernet <void@manifault.com>
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf-next 1/2] bpf: Implement bpf_getxattr helper
-Date:   Thu, 12 May 2022 16:50:50 +0000
-Message-Id: <20220512165051.224772-2-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.36.0.550.gb090851708-goog
-In-Reply-To: <20220512165051.224772-1-kpsingh@kernel.org>
-References: <20220512165051.224772-1-kpsingh@kernel.org>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] bpf: use 'error_xxx' tags in
+ bpf_kprobe_multi_link_attach
+Message-ID: <20220512170522.3e47hwj53plhr4qq@dev0025.ash9.facebook.com>
+References: <20220512141710.116135-1-wanjiabing@vivo.com>
+ <20220512141710.116135-2-wanjiabing@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512141710.116135-2-wanjiabing@vivo.com>
+User-Agent: NeoMutt/20211029
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-LSMs like SELinux store security state in xattrs. bpf_getxattr enables
-BPF LSM to implement similar functionality. In combination with
-bpf_local_storage, xattrs can be used to develop more complex security
-policies.
+On Thu, May 12, 2022 at 10:17:08PM +0800, Wan Jiabing wrote:
+> Use 'error_addrs', 'error_cookies' and 'error_link' tags to make error
+> handling more efficient.
 
-This helper wraps around vfs_getxattr which can sleep and is, therefore,
-limited to sleepable programs.
+Can you add a bit more context to this commit summary? The added goto
+labels aren't what make the code more performant, it's the avoidance of
+unnecessary free calls on NULL pointers that (supposedly) does.
 
-Signed-off-by: KP Singh <kpsingh@kernel.org>
----
- include/uapi/linux/bpf.h       |  8 ++++++++
- kernel/trace/bpf_trace.c       | 26 ++++++++++++++++++++++++++
- scripts/bpf_doc.py             |  5 +++++
- tools/include/uapi/linux/bpf.h |  8 ++++++++
- 4 files changed, 47 insertions(+)
+> 
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  kernel/trace/bpf_trace.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 2eaac094caf8..3a8b69ef9a0d 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2467,20 +2467,20 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>  	if (uaddrs) {
+>  		if (copy_from_user(addrs, uaddrs, size)) {
+>  			err = -EFAULT;
+> -			goto error;
+> +			goto error_addrs;
+>  		}
+>  	} else {
+>  		struct user_syms us;
+>  
+>  		err = copy_user_syms(&us, usyms, cnt);
+>  		if (err)
+> -			goto error;
+> +			goto error_addrs;
+>  
+>  		sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
+>  		err = ftrace_lookup_symbols(us.syms, cnt, addrs);
+>  		free_user_syms(&us);
+>  		if (err)
+> -			goto error;
+> +			goto error_addrs;
+>  	}
+>  
+>  	ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
+> @@ -2488,18 +2488,18 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>  		cookies = kvmalloc(size, GFP_KERNEL);
+>  		if (!cookies) {
+>  			err = -ENOMEM;
+> -			goto error;
+> +			goto error_addrs;
+>  		}
+>  		if (copy_from_user(cookies, ucookies, size)) {
+>  			err = -EFAULT;
+> -			goto error;
+> +			goto error_cookies;
+>  		}
+>  	}
+>  
+>  	link = kzalloc(sizeof(*link), GFP_KERNEL);
+>  	if (!link) {
+>  		err = -ENOMEM;
+> -		goto error;
+> +		goto error_cookies;
+>  	}
+>  
+>  	bpf_link_init(&link->link, BPF_LINK_TYPE_KPROBE_MULTI,
+> @@ -2507,7 +2507,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>  
+>  	err = bpf_link_prime(&link->link, &link_primer);
+>  	if (err)
+> -		goto error;
+> +		goto error_link;
+>  
+>  	if (flags & BPF_F_KPROBE_MULTI_RETURN)
+>  		link->fp.exit_handler = kprobe_multi_link_handler;
+> @@ -2539,10 +2539,12 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+>  
+>  	return bpf_link_settle(&link_primer);
+>  
+> -error:
+> +error_link:
+>  	kfree(link);
+> -	kvfree(addrs);
+> +error_cookies:
+>  	kvfree(cookies);
+> +error_addrs:
+> +	kvfree(addrs);
+>  	return err;
+>  }
+>  #else /* !CONFIG_FPROBE */
+> -- 
+> 2.35.1
+> 
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0210f85131b3..ebd361c2e351 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5172,6 +5172,13 @@ union bpf_attr {
-  * 	Return
-  * 		Map value associated to *key* on *cpu*, or **NULL** if no entry
-  * 		was found or *cpu* is invalid.
-+ *
-+ * long bpf_getxattr(struct user_namespace *mnt_userns, struct dentry *dentry, const char *name, void *value, u64 value_size)
-+ *	Description
-+ *		Get the *value* of the xattr with the given *name*
-+ *		where *value_size* is the size of the *value* buffer.
-+ *	Return
-+ *		The number of bytes copied into *value*.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5370,6 +5377,7 @@ union bpf_attr {
- 	FN(ima_file_hash),		\
- 	FN(kptr_xchg),			\
- 	FN(map_lookup_percpu_elem),     \
-+	FN(getxattr),			\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 7141ca8a1c2d..185adbb9b1b6 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -20,6 +20,7 @@
- #include <linux/fprobe.h>
- #include <linux/bsearch.h>
- #include <linux/sort.h>
-+#include <linux/xattr.h>
- 
- #include <net/bpf_sk_storage.h>
- 
-@@ -1181,6 +1182,29 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-+BPF_CALL_5(bpf_getxattr, struct user_namespace *, mnt_userns, struct dentry *,
-+	   dentry, void *, name, void *, value, size_t, value_size)
-+{
-+	return vfs_getxattr(mnt_userns, dentry, name, value, value_size);
-+}
-+
-+BTF_ID_LIST(bpf_getxattr_btf_ids)
-+BTF_ID(struct, user_namespace)
-+BTF_ID(struct, dentry)
-+
-+static const struct bpf_func_proto bpf_getxattr_proto = {
-+	.func = bpf_getxattr,
-+	.gpl_only = false,
-+	.ret_type = RET_INTEGER,
-+	.arg1_type = ARG_PTR_TO_BTF_ID,
-+	.arg1_btf_id = &bpf_getxattr_btf_ids[0],
-+	.arg2_type = ARG_PTR_TO_BTF_ID,
-+	.arg2_btf_id = &bpf_getxattr_btf_ids[1],
-+	.arg3_type = ARG_PTR_TO_CONST_STR,
-+	.arg4_type = ARG_PTR_TO_UNINIT_MEM,
-+	.arg5_type = ARG_CONST_SIZE,
-+};
-+
- static const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1304,6 +1328,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_find_vma_proto;
- 	case BPF_FUNC_trace_vprintk:
- 		return bpf_get_trace_vprintk_proto();
-+	case BPF_FUNC_getxattr:
-+		return prog->aux->sleepable ? &bpf_getxattr_proto : NULL;
- 	default:
- 		return bpf_base_func_proto(func_id);
- 	}
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index 096625242475..be601c75c96c 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -633,6 +633,8 @@ class PrinterHelpers(Printer):
-             'struct socket',
-             'struct file',
-             'struct bpf_timer',
-+            'struct user_namespace',
-+            'struct dentry',
-     ]
-     known_types = {
-             '...',
-@@ -682,6 +684,9 @@ class PrinterHelpers(Printer):
-             'struct socket',
-             'struct file',
-             'struct bpf_timer',
-+            'struct user_namespace',
-+            'struct dentry',
-+
-     }
-     mapped_types = {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 0210f85131b3..ebd361c2e351 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5172,6 +5172,13 @@ union bpf_attr {
-  * 	Return
-  * 		Map value associated to *key* on *cpu*, or **NULL** if no entry
-  * 		was found or *cpu* is invalid.
-+ *
-+ * long bpf_getxattr(struct user_namespace *mnt_userns, struct dentry *dentry, const char *name, void *value, u64 value_size)
-+ *	Description
-+ *		Get the *value* of the xattr with the given *name*
-+ *		where *value_size* is the size of the *value* buffer.
-+ *	Return
-+ *		The number of bytes copied into *value*.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5370,6 +5377,7 @@ union bpf_attr {
- 	FN(ima_file_hash),		\
- 	FN(kptr_xchg),			\
- 	FN(map_lookup_percpu_elem),     \
-+	FN(getxattr),			\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
--- 
-2.36.0.550.gb090851708-goog
+Could you clarify what performance gains you observed from doing this? I
+wouldn't have expected avoiding a couple of calls and NULL checks to have a
+measurable impact on performance, and I'm wondering whether the complexity
+from having multiple goto labels is really worth any supposed performance
+gains.
 
+Thanks,
+David
