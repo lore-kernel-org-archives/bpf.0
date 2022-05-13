@@ -2,158 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94CD9C433F5
-	for <bpf@archiver.kernel.org>; Fri, 13 May 2022 21:37:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 491A5C433EF
+	for <bpf@archiver.kernel.org>; Fri, 13 May 2022 21:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353981AbiEMVhx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 May 2022 17:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S1384777AbiEMV6T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 May 2022 17:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiEMVhv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 May 2022 17:37:51 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524834A91B
-        for <bpf@vger.kernel.org>; Fri, 13 May 2022 14:37:50 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id x8so5213169pgr.4
-        for <bpf@vger.kernel.org>; Fri, 13 May 2022 14:37:50 -0700 (PDT)
+        with ESMTP id S1359385AbiEMV6S (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 May 2022 17:58:18 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E818AE58;
+        Fri, 13 May 2022 14:58:17 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id s12so4042621iln.11;
+        Fri, 13 May 2022 14:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Qu47h7zREAfemvwculnWduEowXo5JEccOKAE9qdNbXE=;
-        b=IhKR2nv9IAul0e0AWYx5gKx+ghXQYZrIZgNReYgFdSSPuqvkOHnfFrRGe3uWRRPgPa
-         g+0xm2nbVIW8YXtUn2KbkUy8c891oR0r/8CWkemYugJ46IdWX9asVpI4OhGXoPdMQpq1
-         2jmw0sJKRtElP6PU2Og4uUpdS+8DL8/+a/sgFAO+oJRJ4aa9YWLNKJqhL69Pz09zqHrX
-         OxYC8yVNP+tgc8lqH4IBeid2PZbe3XJtEZ5dmoSpZ0SzYXtHKryaqV0J/idvnWirRpBu
-         jqf09VIKmLOMr5xnIk0fG6T/jMqRXZCgaHQPVc3Dk7TT0BI9Qd4zInln7mCExMYMVrSY
-         ocuQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/g4X8dMOGR02D0Dhp9783zdhT0HlLns9M8X2Oitrueg=;
+        b=mxeZcdbjVVQ8DTsYW4qwUbmMwcr1XucBA+TjZIPlFB8/LaRfi+Y79xfu/UkIKI3b/n
+         gu4iNsOTBKnqW0XWFAP9rRW2iDru0KaKlwmC/LZYYtr2RqB1se5pqBnQ9R+C9h5F1HlA
+         1oYxP3x4snzMkZd/l36R2JBXKLER449AmBfolkJBzyffWSAvuUe8jh76Ceuv8yp24Qes
+         ymCbc0Eb3DuJZFYtghNoIKf5yLDDz5I0DF6geD1zecuf9JMlKyzKF6ezwLiGb2eZ/l59
+         nL09RVMcV9WsCaMyyYiWrTp/Ez25lm2noiw9BvF/JqpY4ezUX3pnn8r3Dr44E+Y5jI1T
+         +/iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qu47h7zREAfemvwculnWduEowXo5JEccOKAE9qdNbXE=;
-        b=lFluB5T+OumRfpysZn6eoSU0LzgxJ87J/sKLdXLaI6cRkYRh23KUEH+OqOHYm7ei92
-         O1leztce4VxJEY809g13mVRTijr7gyrCbCRryluuZZJ4qVRPTI7Q/fjcZ2Eqf0tnGHXW
-         +vtMq0t3+VWzs/fDx3PvbKwZi9zgHZFmPnpGTcapM4c4BVNy19U62GcXgBEptu2VKGjn
-         +6KOwK4ceD79c5YsxzZl0iicqM/ZpNBz/jfWt8gDrtDXvdirVTldyzVjMigWKYew3BF0
-         Thu0WM1UJn8EJooQjtodzGSanJudQyigKJCPGDiYYj/NpY4NnPdyAvGeFRGJmzdkN5h9
-         6Ckw==
-X-Gm-Message-State: AOAM533tgn+KvgV9OmaNjunVvrfNu01HBShOUkLiPxyfZzaBYzHDkjHO
-        4mD2W80kL76ongMmDdmvV9c=
-X-Google-Smtp-Source: ABdhPJwq7LXYEmpfrlLwtjlkZZJE1azGnEK3I9Ddb8LX4bOmpnHLrvo+qVhOtT9BcrOZGbPcgebcEA==
-X-Received: by 2002:a62:64d8:0:b0:50d:c2f6:9983 with SMTP id y207-20020a6264d8000000b0050dc2f69983mr6271198pfb.34.1652477869651;
-        Fri, 13 May 2022 14:37:49 -0700 (PDT)
-Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:7ccc])
-        by smtp.gmail.com with ESMTPSA id x186-20020a6386c3000000b003c14af50634sm2103980pgd.76.2022.05.13.14.37.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 14:37:49 -0700 (PDT)
-Date:   Fri, 13 May 2022 14:37:47 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Joanne Koong <joannelkoong@gmail.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net
-Subject: Re: [PATCH bpf-next v4 5/6] bpf: Add dynptr data slices
-Message-ID: <20220513213747.j3tj2qtbnjszy64n@MBP-98dd607d3435.dhcp.thefacebook.com>
-References: <20220509224257.3222614-1-joannelkoong@gmail.com>
- <20220509224257.3222614-6-joannelkoong@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/g4X8dMOGR02D0Dhp9783zdhT0HlLns9M8X2Oitrueg=;
+        b=fcMeZ9fEUq1eo2JW5m6sr95T/kWEQHAToFzY2lv8devtja0j12DoEB2BZgPS6q8BoF
+         2m0nmlRDcL1wQdjWXWw/sAPUNJ992CwQX44nO99VRF9QX5jPW9XRorBSpbzQ53Eh6s64
+         2sB3tI4TCDN8sdETG2XHH1o8DmjeWXvJuYmoXJO5v/p0iDCzmO+OEr+zJJCnSdAojwpU
+         ltMcX6EBiU2IEdl9GWSyjWyXXEUus4Fh4LtYNqgULni2KsjKUdnTTNs9ctVBuvq/kRtm
+         XzAkvnd3pt+nKCfY+nREwMJvM64USlgPyYx1MmAr/r5tuvMqztPh8sHOhqCxHEd9//lv
+         IjTg==
+X-Gm-Message-State: AOAM530GD3WjXg84HfSpKrfg0Ch1mT3RDU7eRTYSlhZfNGXwHxNu3TZ2
+        +vrMCvejtTnw8Ih1CCHorh/4EoLFO4PxlOIQe6Of36Mv5Ig=
+X-Google-Smtp-Source: ABdhPJwB2MtVMHKp1kgPnzr9W/wcbFqKVrUBGmBrhpBnZO7r0P1CzeRTxATakJ38UOewG0eV8SedjxRxotVaTubWrhk=
+X-Received: by 2002:a92:d250:0:b0:2d0:f240:d5f5 with SMTP id
+ v16-20020a92d250000000b002d0f240d5f5mr3213225ilg.252.1652479096525; Fri, 13
+ May 2022 14:58:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220509224257.3222614-6-joannelkoong@gmail.com>
+References: <20220512071819.199873-1-liuhangbin@gmail.com> <20220512071819.199873-2-liuhangbin@gmail.com>
+In-Reply-To: <20220512071819.199873-2-liuhangbin@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 13 May 2022 14:58:05 -0700
+Message-ID: <CAEf4BzZuj90MFaXci3av2BF+=m-P26Y3Zer8TogBiZ8fYsYP=g@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] selftests/bpf: Fix build error with ima_setup.sh
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 09, 2022 at 03:42:56PM -0700, Joanne Koong wrote:
->  	} else if (is_acquire_function(func_id, meta.map_ptr)) {
-> -		int id = acquire_reference_state(env, insn_idx);
-> +		int id = 0;
-> +
-> +		if (is_dynptr_ref_function(func_id)) {
-> +			int i;
-> +
-> +			/* Find the id of the dynptr we're acquiring a reference to */
-> +			for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-> +				if (arg_type_is_dynptr(fn->arg_type[i])) {
-> +					if (id) {
-> +						verbose(env, "verifier internal error: more than one dynptr arg in a dynptr ref func\n");
-> +						return -EFAULT;
-> +					}
-> +					id = stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
+On Thu, May 12, 2022 at 12:18 AM Hangbin Liu <liuhangbin@gmail.com> wrote:
+>
+> KP fixed ima_setup.sh missing issue when build test_progs separately with
+> commit 854055c0cf30 ("selftests/bpf: Fix flavored variants of
+> test_ima"). But the fix is incorrect because the build will failed with
+> error:
+>
+>   $ OUTPUT="/tmp/bpf" make test_progs
+>     [...]
+>   make: *** No rule to make target '/tmp/bpf/ima_setup.sh', needed by 'ima_setup.sh'.  Stop.
+>
+> Fix it by adding a new variable TRUNNER_EXTRA_BUILD to build extra binaries.
+> Left TRUNNER_EXTRA_FILES only for copying files
+>
+> Fixes: 854055c0cf30 ("selftests/bpf: Fix flavored variants of test_ima")
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 3820608faf57..5944d3a8fff6 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -466,10 +466,10 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:                             \
+>
+>  # non-flavored in-srctree builds receive special treatment, in particular, we
+>  # do not need to copy extra resources (see e.g. test_btf_dump_case())
+> -$(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
+> +$(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_BUILD) | $(TRUNNER_OUTPUT)
+>  ifneq ($2:$(OUTPUT),:$(shell pwd))
+>         $$(call msg,EXT-COPY,$(TRUNNER_BINARY),$(TRUNNER_EXTRA_FILES))
+> -       $(Q)rsync -aq $$^ $(TRUNNER_OUTPUT)/
+> +       $(Q)rsync -aq $(TRUNNER_EXTRA_FILES) $(TRUNNER_OUTPUT)/
+>  endif
+>
+>  $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)                      \
+> @@ -490,9 +490,9 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c      \
+>                          network_helpers.c testing_helpers.c            \
+>                          btf_helpers.c flow_dissector_load.h            \
+>                          cap_helpers.c
+> -TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko \
+> -                      ima_setup.sh                                     \
+> +TRUNNER_EXTRA_BUILD := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko \
+>                        $(wildcard progs/btf_dump_test_case_*.c)
 
-I'm afraid this approach doesn't work.
-Consider:
-  struct bpf_dynptr ptr;
-  u32 *data1, *data2;
 
-  bpf_dynptr_alloc(8, 0, &ptr);
-  data1 = bpf_dynptr_data(&ptr, 0, 8);
-  data2 = bpf_dynptr_data(&ptr, 8, 8);
-  if (data1)
-     *data2 = 0; /* this will succeed, but shouldn't */
+note that progs/btf_dump_test_case_*.c are not built, they are just
+copied over (C source files), so I don't think this fix is necessary.
 
-The same 'id' is being reused for data1 and data2 to make sure
-that bpf_dynptr_put(&ptr); will clear data1/data2,
-but data1 and data2 will look the same in mark_ptr_or_null_reg().
+btw, I tried running `OUTPUT="/tmp/bpf" make test_progs` and it didn't
+error out. But tbh, I'd recommend building everything instead of
+building individual targets.
 
-> +				}
-> +			}
-> +			if (!id) {
-> +				verbose(env, "verifier internal error: no dynptr args to a dynptr ref func\n");
-> +				return -EFAULT;
-> +			}
-> +		} else {
-> +			id = acquire_reference_state(env, insn_idx);
-> +			if (id < 0)
-> +				return id;
-> +		}
->  
-> -		if (id < 0)
-> -			return id;
->  		/* For mark_ptr_or_null_reg() */
->  		regs[BPF_REG_0].id = id;
->  		/* For release_reference() */
-> @@ -9810,7 +9864,8 @@ static void mark_ptr_or_null_regs(struct bpf_verifier_state *vstate, u32 regno,
->  	u32 id = regs[regno].id;
->  	int i;
->  
-> -	if (ref_obj_id && ref_obj_id == id && is_null)
-> +	if (ref_obj_id && ref_obj_id == id && is_null &&
-> +	    !is_ref_obj_id_dynptr(state, id))
 
-This bit is avoiding doing release of dynptr's id,
-because id is shared between dynptr and slice's id.
-
-In this patch I'm not sure what is the purpose of bpf_dynptr_data()
-being an acquire function. data1 and data2 are not acquiring.
-They're not incrementing refcnt of dynptr.
-
-I think normal logic of check_helper_call() that does:
-        if (type_may_be_null(regs[BPF_REG_0].type))
-                regs[BPF_REG_0].id = ++env->id_gen;
-
-should be preserved.
-It will give different id-s to data1 and data2 and the problem
-described earlier will not exist.
-
-The transfer of ref_obj_id from dynptr into data1 and data2 needs to happen,
-but this part:
-        u32 ref_obj_id = regs[regno].ref_obj_id;
-        u32 id = regs[regno].id;
-        int i;
-
-        if (ref_obj_id && ref_obj_id == id && is_null)
-                /* regs[regno] is in the " == NULL" branch.
-                 * No one could have freed the reference state before
-                 * doing the NULL check.
-                 */
-                WARN_ON_ONCE(release_reference_state(state, id));
-
-should be left alone.
-bpf_dynptr_put(&ptr); will release dynptr and will clear data1 and data2.
-if (!data1)
-   will not release dynptr, because data1->id != data1->ref_obj_id.
-
-In other words bpf_dynptr_data() should behave like is_ptr_cast_function().
-It should trasnfer ref_obj_id to R0, but should give new R0->id.
-See big comment in bpf_verifier.h next to ref_obj_id.
+> +TRUNNER_EXTRA_FILES := $(TRUNNER_EXTRA_BUILD) ima_setup.sh
+>  TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
+>  TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
+>  $(eval $(call DEFINE_TEST_RUNNER,test_progs))
+> @@ -513,6 +513,7 @@ endif
+>  TRUNNER_TESTS_DIR := map_tests
+>  TRUNNER_BPF_PROGS_DIR := progs
+>  TRUNNER_EXTRA_SOURCES := test_maps.c
+> +TRUNNER_EXTRA_BUILD :=
+>  TRUNNER_EXTRA_FILES :=
+>  TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
+>  TRUNNER_BPF_CFLAGS :=
+> --
+> 2.35.1
+>
