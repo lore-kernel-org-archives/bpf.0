@@ -2,291 +2,286 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A468BC433F5
-	for <bpf@archiver.kernel.org>; Sat, 14 May 2022 01:14:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49B61C433EF
+	for <bpf@archiver.kernel.org>; Sat, 14 May 2022 01:54:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiENBOA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 May 2022 21:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S229671AbiENByI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 May 2022 21:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiENBN7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 May 2022 21:13:59 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EB532FBE0
-        for <bpf@vger.kernel.org>; Fri, 13 May 2022 17:46:18 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id x12so8919366pgj.7
-        for <bpf@vger.kernel.org>; Fri, 13 May 2022 17:46:18 -0700 (PDT)
+        with ESMTP id S229628AbiENByH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 May 2022 21:54:07 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA5A3E9044;
+        Fri, 13 May 2022 16:56:19 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id p12so9039639pfn.0;
+        Fri, 13 May 2022 16:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=A72XN0PYiKlNvKMfjm4RN8XOy+GKxQ9/x8pKk0YN5Xs=;
-        b=nemRP+e64mEOh3NAQuEM5YiDXf5VCW4NTaAx5gmZicqLl9mVnDUW+9AUEJrn33MRSj
-         ybeC7E0mdKO9EzqIPdm+hdPV4DEIHdaZyEzIlL5HouR6jslmqdmGEV2NGidHg1STIxcm
-         1PMQlIaJrshmLoUEH8VDfoRRV5uhAqxv0/C5FDiME0VJQqASZ/1kwAhOc9nNvabtX5fN
-         DhRrK4KTX5FnBUA377TLRuxVluew6EdE4d35iGMFZWZwTmhNxzCvB/9mxNRiyAQ+Ukro
-         5lm3udHjoSy2PCdU3GpTciaUBrZVQ6mBAY3RSnRm7v7AQLklOzXiqe86hAFuT9g4WYTf
-         GsfQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rNVk9YDEQR+xtvNydQUUbuQjMkViiEzhXCU73eGldY8=;
+        b=GtOgBYsHjz8fWeluuBd2/RbUxS13aaMfZAKmP2jjQWF1BobR2tuD8CykQgf6CCsQFl
+         ExoJdEHODDUYD27rjr1m2JNEPyvf3wMSys3MgPHy98rSAshIJEXaYYki8vByR+95LKsi
+         hT1oP7r0HXKGEX0y1h1KbR3x/NUksQk8kzAsbviF6jhzoJt8/soHFJkrZA0ehg2vNGiw
+         lTTKv6KlMbbUAYDklf0K+BwKNSMe7+I5JhSJEp3dy7KXNanWk/1dbiBJjXXNQaxf1BgH
+         tDyyAxgZNc5pXX43xF/xGjIiL0HLZqzm90oHG92G/XEjr5ODGjNtVJm8+BU2b9xxK8Zh
+         RIzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=A72XN0PYiKlNvKMfjm4RN8XOy+GKxQ9/x8pKk0YN5Xs=;
-        b=jhZ+bEpfEAat0GeW0A0d5YwWjwo85B8eVmfrvKBDV/gsjy77rDbuS9lvfXCc4mNcxf
-         JMY+C8x/v/Uij8P//tX7wtat+j2Y2oTxAj5VA9SfqRP8o7MOA7rjPJnGnOgw3u7l39f3
-         2z4C9bW5vfZ4vdREf4Ha5sqkyOFVRriQMMSHVI/rR/Ez6oX4m5do8gCJsn62shv3CtJ/
-         0fMUqqtpjpmr9bTeqXKWbKIsLG+yMuaQbku9d8LqEBcW3/f7vY3Se8mQyIX7z0qE25uB
-         6DlOm8x69HfCHjCg2fv5kktwumsPzovi7f5gpHSMoil7OaPj79IZM8lJzViJ2uqrYXOb
-         Rdsw==
-X-Gm-Message-State: AOAM533zF7nu8XDZNQup0hGw8hGIzUhpeFFGy1zF6vz8WivZL6/LPhuI
-        azSFpjkMdbwqSg1++8dw0xROHO0/Lys=
-X-Google-Smtp-Source: ABdhPJylspnJP+6RTm74ySEgKHyE2s95Z5wT3+g5mFZSGMUgBJ+24XcAKz2IH7WQNsvyfsC4zoiLQA==
-X-Received: by 2002:a65:6d06:0:b0:3c6:890:5609 with SMTP id bf6-20020a656d06000000b003c608905609mr5866541pgb.357.1652488884034;
-        Fri, 13 May 2022 17:41:24 -0700 (PDT)
-Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:7ccc])
-        by smtp.gmail.com with ESMTPSA id w2-20020a17090abc0200b001d9253a32fcsm2117081pjr.36.2022.05.13.17.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 17:41:23 -0700 (PDT)
-Date:   Fri, 13 May 2022 17:41:21 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Dave Marchevsky <davemarchevsky@fb.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Rik van Riel <riel@surriel.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Yonghong Song <yhs@fb.com>, kernel-team@fb.com
-Subject: Re: [RFC PATCH bpf-next 2/5] bpf: add get_reg_val helper
-Message-ID: <20220514004121.qkbj3jgibpih3sxy@MBP-98dd607d3435.dhcp.thefacebook.com>
-References: <20220512074321.2090073-1-davemarchevsky@fb.com>
- <20220512074321.2090073-3-davemarchevsky@fb.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rNVk9YDEQR+xtvNydQUUbuQjMkViiEzhXCU73eGldY8=;
+        b=MPc5yDvlA5F8x8aRxQMi0Rc9tr2kBo2/kbdqEAGlS+8lMbAv/L9tBMCs0+VcKTDWhO
+         BLeRbLBoC1o13u8tYITUoetl0eQec/USg9MBtF5gl9wpEicAlqy7vVHDNovRkFwtmoXZ
+         62wtIMsuC75ma3aykLFRBj/gxOb5fhCwGOHrgm8myUX+p8fqp6MH5ZWmf5mWxz6t+e1E
+         NT1fCv0NKzabFHou8fy1eG34Vzc/kQsFgoZnY3oYSUqu7JfgPzSExH770uJDgrM8zb7D
+         VhrNbE2sDr6iJlXWHgRmnAbEoZTUhKbTEULxcPsnXznMU/fFch6DwkhigVN7b9HmSbqZ
+         h+Mw==
+X-Gm-Message-State: AOAM532P80JiyhdoF85toqz3djRDY/dwEYBhze1UU+WyzegvbCeNrEEe
+        GMOwa6DTCtsjkE1vtjCRKY/17yv/pB2wIjn4Jjc=
+X-Google-Smtp-Source: ABdhPJw6HF52OEgBlLp4vI9wJpNliFr+bRP1D9H7WO1lYtvQm28N5CilvEWQlUI8wsNSnYDxNTyWYmq32wFlUh/dAss=
+X-Received: by 2002:a05:6a00:1a08:b0:510:a1db:1a91 with SMTP id
+ g8-20020a056a001a0800b00510a1db1a91mr6616285pfv.69.1652486018354; Fri, 13 May
+ 2022 16:53:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512074321.2090073-3-davemarchevsky@fb.com>
+References: <20220513224827.662254-1-mathew.j.martineau@linux.intel.com> <20220513224827.662254-5-mathew.j.martineau@linux.intel.com>
+In-Reply-To: <20220513224827.662254-5-mathew.j.martineau@linux.intel.com>
+From:   Geliang Tang <geliangtang@gmail.com>
+Date:   Sat, 14 May 2022 07:53:36 +0800
+Message-ID: <CA+WQbwtN6KS0KzNKVp-7gioDR+DJ6Ks_kC-TB5viUb60HqHwuQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 4/7] selftests/bpf: test bpf_skc_to_mptcp_sock
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        MPTCP Upstream <mptcp@lists.linux.dev>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:43:18AM -0700, Dave Marchevsky wrote:
-> Add a helper which reads the value of specified register into memory.
-> 
-> Currently, bpf programs only have access to general-purpose registers
-> via struct pt_regs. Other registers, like SSE regs %xmm0-15, are
-> inaccessible, which makes some tracing usecases impossible. For example,
-> User Statically-Defined Tracing (USDT) probes may use SSE registers to
-> pass their arguments on x86. While this patch adds support for %xmm0-15
-> only, the helper is meant to be generic enough to support fetching any
-> reg.
-> 
-> A useful "value of register" definition for bpf programs is "value of
-> register before control transfer to kernel". pt_regs gives us this
-> currently, so it's the default behavior of the new helper. Fetching the
-> actual _current_ reg value is possible, though, by passing
-> BPF_GETREG_F_CURRENT flag as part of input.
-> 
-> For SSE regs we try to avoid digging around in task's fpu state by first
-> reading _current_ value, then checking to see if the state of cpu's
-> floating point regs matches task's view of them. If so, we can just
-> return _current_ value.
-> 
-> Further usecases which are straightforward to support, but
-> unimplemented:
->   * using the helper to fetch general-purpose register value.
->   currently-unused pt_regs parameter exists for this reason.
-> 
->   * fetching rdtsc (w/ BPF_GETREG_F_CURRENT)
-> 
->   * other architectures. s390 specifically might benefit from similar
->   fpu reg fetching as USDT library was recently updated to support that
->   architecture.
-> 
-> Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
+Mat Martineau <mathew.j.martineau@linux.intel.com> =E4=BA=8E2022=E5=B9=B45=
+=E6=9C=8814=E6=97=A5=E5=91=A8=E5=85=AD 06:48=E5=86=99=E9=81=93=EF=BC=9A
+>
+> From: Geliang Tang <geliang.tang@suse.com>
+>
+> This patch extends the MPTCP test base, to test the new helper
+> bpf_skc_to_mptcp_sock().
+>
+> Define struct mptcp_sock in bpf_tcp_helpers.h, use bpf_skc_to_mptcp_sock
+> to get the msk socket in progs/mptcp_sock.c and store the infos in
+> socket_storage_map.
+>
+> Get the infos from socket_storage_map in prog_tests/mptcp.c. Add a new
+> function verify_msk() to verify the infos of MPTCP socket, and rename
+> verify_sk() to verify_tsk() to verify TCP socket only.
+>
+> v2: Add CONFIG_MPTCP check for clearer error messages
+> v4:
+>  - use ASSERT_* instead of CHECK_FAIL (Andrii)
+>  - drop bpf_mptcp_helpers.h (Andrii)
+>
+> Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+> Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 > ---
->  include/uapi/linux/bpf.h       |  40 +++++++++
->  kernel/trace/bpf_trace.c       | 148 +++++++++++++++++++++++++++++++++
->  kernel/trace/bpf_trace.h       |   1 +
->  tools/include/uapi/linux/bpf.h |  40 +++++++++
->  4 files changed, 229 insertions(+)
-> 
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index 444fe6f1cf35..3ef8f683ed9e 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -5154,6 +5154,18 @@ union bpf_attr {
->   *		if not NULL, is a reference which must be released using its
->   *		corresponding release function, or moved into a BPF map before
->   *		program exit.
-> + *
-> + * long bpf_get_reg_val(void *dst, u32 size, u64 getreg_spec, struct pt_regs *regs, struct task_struct *tsk)
-> + *	Description
-> + *		Store the value of a SSE register specified by *getreg_spec*
-> + *		into memory region of size *size* specified by *dst*. *getreg_spec*
-> + *		is a combination of BPF_GETREG enum AND BPF_GETREG_F flag e.g.
-> + *		(BPF_GETREG_X86_XMM0 << 32) | BPF_GETREG_F_CURRENT.*
-> + *	Return
-> + *		0 on success
-> + *		**-ENOENT** if the system architecture does not have requested reg
-> + *		**-EINVAL** if *getreg_spec* is invalid
-> + *		**-EINVAL** if *size* != bytes necessary to store requested reg val
->   */
->  #define __BPF_FUNC_MAPPER(FN)		\
->  	FN(unspec),			\
-> @@ -5351,6 +5363,7 @@ union bpf_attr {
->  	FN(skb_set_tstamp),		\
->  	FN(ima_file_hash),		\
->  	FN(kptr_xchg),			\
-> +	FN(get_reg_val),		\
->  	/* */
->  
->  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> @@ -6318,6 +6331,33 @@ struct bpf_perf_event_value {
->  	__u64 running;
+>  tools/testing/selftests/bpf/bpf_tcp_helpers.h |  5 +++
+>  .../testing/selftests/bpf/prog_tests/mptcp.c  | 45 ++++++++++++++-----
+>  .../testing/selftests/bpf/progs/mptcp_sock.c  | 23 ++++++++--
+>  3 files changed, 58 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_tcp_helpers.h b/tools/testin=
+g/selftests/bpf/bpf_tcp_helpers.h
+> index 22e0c8849a17..90fecafc493d 100644
+> --- a/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+> +++ b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+> @@ -226,4 +226,9 @@ static __always_inline bool tcp_cc_eq(const char *a, =
+const char *b)
+>  extern __u32 tcp_slow_start(struct tcp_sock *tp, __u32 acked) __ksym;
+>  extern void tcp_cong_avoid_ai(struct tcp_sock *tp, __u32 w, __u32 acked)=
+ __ksym;
+>
+> +struct mptcp_sock {
+> +       struct inet_connection_sock     sk;
+> +
+> +} __attribute__((preserve_access_index));
+> +
+>  #endif
+> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testi=
+ng/selftests/bpf/prog_tests/mptcp.c
+> index cb0389ca8690..02e7fd8918e6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> @@ -11,14 +11,12 @@ struct mptcp_storage {
+>         __u32 is_mptcp;
 >  };
->  
-> +/* bpf_get_reg_val register enum */
-> +enum {
-> +	BPF_GETREG_X86_XMM0 = 0,
-> +	BPF_GETREG_X86_XMM1,
-> +	BPF_GETREG_X86_XMM2,
-> +	BPF_GETREG_X86_XMM3,
-> +	BPF_GETREG_X86_XMM4,
-> +	BPF_GETREG_X86_XMM5,
-> +	BPF_GETREG_X86_XMM6,
-> +	BPF_GETREG_X86_XMM7,
-> +	BPF_GETREG_X86_XMM8,
-> +	BPF_GETREG_X86_XMM9,
-> +	BPF_GETREG_X86_XMM10,
-> +	BPF_GETREG_X86_XMM11,
-> +	BPF_GETREG_X86_XMM12,
-> +	BPF_GETREG_X86_XMM13,
-> +	BPF_GETREG_X86_XMM14,
-> +	BPF_GETREG_X86_XMM15,
-> +	__MAX_BPF_GETREG,
-> +};
-
-Can we do BPF_GETREG_X86_XMM plus number instead?
-Enumerating every possible register will take quite some space in uapi
-and bpf progs probably won't be using these enum values directly anyway.
-usdt spec will have something like "xmm5" as a string.
-
-> +
-> +/* bpf_get_reg_val flags */
-> +enum {
-> +	BPF_GETREG_F_NONE = 0,
-> +	BPF_GETREG_F_CURRENT = (1U << 0),
-> +};
-> +
->  enum {
->  	BPF_DEVCG_ACC_MKNOD	= (1ULL << 0),
->  	BPF_DEVCG_ACC_READ	= (1ULL << 1),
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index f15b826f9899..0de7d6b3af5b 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -28,6 +28,10 @@
->  
->  #include <asm/tlb.h>
->  
-> +#ifdef CONFIG_X86
-> +#include <asm/fpu/context.h>
-> +#endif
-> +
->  #include "trace_probe.h"
->  #include "trace.h"
->  
-> @@ -1166,6 +1170,148 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
->  	.arg1_type	= ARG_PTR_TO_CTX,
->  };
->  
-> +#define XMM_REG_SZ 16
-> +
-> +#define __xmm_space_off(regno)				\
-> +	case BPF_GETREG_X86_XMM ## regno:		\
-> +		xmm_space_off = regno * 16;		\
-> +		break;
-> +
-> +static long getreg_read_xmm_fxsave(u32 reg, struct task_struct *tsk,
-> +				   void *data)
+>
+> -static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 i=
+s_mptcp)
+> +static int verify_tsk(int map_fd, int client_fd)
+>  {
+> +       char *msg =3D "plain TCP socket";
+>         int err, cfd =3D client_fd;
+>         struct mptcp_storage val;
+>
+> -       if (is_mptcp =3D=3D 1)
+> -               return 0;
+> -
+>         err =3D bpf_map_lookup_elem(map_fd, &cfd, &val);
+>         if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+>                 return err;
+> @@ -38,6 +36,31 @@ static int verify_sk(int map_fd, int client_fd, const =
+char *msg, __u32 is_mptcp)
+>         return err;
+>  }
+>
+> +static int verify_msk(int map_fd, int client_fd)
 > +{
-> +	struct fxregs_state *fxsave;
-> +	u32 xmm_space_off;
+> +       char *msg =3D "MPTCP subflow socket";
+> +       int err, cfd =3D client_fd;
+> +       struct mptcp_storage val;
 > +
-> +	switch (reg) {
-> +	__xmm_space_off(0);
-> +	__xmm_space_off(1);
-> +	__xmm_space_off(2);
-> +	__xmm_space_off(3);
-> +	__xmm_space_off(4);
-> +	__xmm_space_off(5);
-> +	__xmm_space_off(6);
-> +	__xmm_space_off(7);
-> +#ifdef	CONFIG_X86_64
-> +	__xmm_space_off(8);
-> +	__xmm_space_off(9);
-> +	__xmm_space_off(10);
-> +	__xmm_space_off(11);
-> +	__xmm_space_off(12);
-> +	__xmm_space_off(13);
-> +	__xmm_space_off(14);
-> +	__xmm_space_off(15);
-> +#endif
-> +	default:
-> +		return -EINVAL;
-> +	}
+> +       err =3D bpf_map_lookup_elem(map_fd, &cfd, &val);
+> +       if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+> +               return err;
 > +
-> +	fxsave = &tsk->thread.fpu.fpstate->regs.fxsave;
-> +	memcpy(data, (void *)&fxsave->xmm_space + xmm_space_off, XMM_REG_SZ);
-> +	return 0;
-
-It's all arch specific.
-This one and majority of other functions should probably go
-into arch/x86/net/bpf_jit_comp.c? instead of generic code.
-bpf_trace.c doesn't fit.
-
-Try to avoid all ifdef-s. It's a red flag.
-
-> +static long bpf_read_sse_reg(u32 reg, u32 flags, struct task_struct *tsk,
-> +			     void *data)
-> +{
-> +#ifdef CONFIG_X86
-> +	unsigned long irq_flags;
-> +	long err;
+> +       if (val.invoked !=3D 1) {
+> +               log_err("%s: unexpected invoked count %d !=3D 1",
+> +                       msg, val.invoked);
+> +               err++;
+> +       }
 > +
-> +	switch (reg) {
-> +	__bpf_sse_read(0);
-> +	__bpf_sse_read(1);
-> +	__bpf_sse_read(2);
-> +	__bpf_sse_read(3);
-> +	__bpf_sse_read(4);
-> +	__bpf_sse_read(5);
-> +	__bpf_sse_read(6);
-> +	__bpf_sse_read(7);
-> +#ifdef CONFIG_X86_64
-> +	__bpf_sse_read(8);
-> +	__bpf_sse_read(9);
-> +	__bpf_sse_read(10);
-> +	__bpf_sse_read(11);
-> +	__bpf_sse_read(12);
-> +	__bpf_sse_read(13);
-> +	__bpf_sse_read(14);
-> +	__bpf_sse_read(15);
-> +#endif /* CONFIG_X86_64 */
-> +	default:
-> +		return -EINVAL;
-> +	}
+> +       if (val.is_mptcp !=3D 1) {
+> +               log_err("%s: unexpected bpf_tcp_sock.is_mptcp %d !=3D 1",
+> +                       msg, val.is_mptcp);
+> +               err++;
+> +       }
 > +
-> +	if (flags & BPF_GETREG_F_CURRENT)
-> +		return 0;
+> +       return err;
+> +}
 > +
-> +	if (!fpregs_state_valid(&tsk->thread.fpu, smp_processor_id())) {
-> +		local_irq_save(irq_flags);
+>  static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
+>  {
+>         int client_fd, prog_fd, map_fd, err;
+> @@ -88,8 +111,8 @@ static int run_test(int cgroup_fd, int server_fd, bool=
+ is_mptcp)
+>                 goto out;
+>         }
+>
+> -       err +=3D is_mptcp ? verify_sk(map_fd, client_fd, "MPTCP subflow s=
+ocket", 1) :
+> -                         verify_sk(map_fd, client_fd, "plain TCP socket"=
+, 0);
+> +       err +=3D is_mptcp ? verify_msk(map_fd, client_fd) :
+> +                         verify_tsk(map_fd, client_fd);
+>
+>         close(client_fd);
+>
 
-why disable irqs?
 
-> +		err = getreg_read_xmm_fxsave(reg, tsk, data);
-> +		local_irq_restore(irq_flags);
-> +		return err;
-> +	}
+''''
+> @@ -103,25 +126,25 @@ void test_base(void)
+>         int server_fd, cgroup_fd;
+>
+>         cgroup_fd =3D test__join_cgroup("/mptcp");
+> -       if (CHECK_FAIL(cgroup_fd < 0))
+> +       if (!ASSERT_GE(cgroup_fd, 0, "test__join_cgroup"))
+>                 return;
+>
+>         /* without MPTCP */
+>         server_fd =3D start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
+> -       if (CHECK_FAIL(server_fd < 0))
+> +       if (!ASSERT_GE(server_fd, 0, "start_server"))
+>                 goto with_mptcp;
+>
+> -       CHECK_FAIL(run_test(cgroup_fd, server_fd, false));
+> +       ASSERT_OK(run_test(cgroup_fd, server_fd, false), "run_test tcp");
+>
+>         close(server_fd);
+>
+>  with_mptcp:
+>         /* with MPTCP */
+>         server_fd =3D start_mptcp_server(AF_INET, NULL, 0, 0);
+> -       if (CHECK_FAIL(server_fd < 0))
+> +       if (!ASSERT_GE(server_fd, 0, "start_mptcp_server"))
+>                 goto close_cgroup_fd;
+>
+> -       CHECK_FAIL(run_test(cgroup_fd, server_fd, true));
+> +       ASSERT_OK(run_test(cgroup_fd, server_fd, true), "run_test mptcp")=
+;
+'''
 
-What is the use case to read other task regs?
+Sorry Mat, this code using ASSERT_* instead of CHECK_FAIL should be
+squash into patch #3, it shouldn't in this patch. I'll send a v5 to
+MPTCP ML to fix this.
+
+Thanks,
+-Geliang
+
+>
+>         close(server_fd);
+>
+> diff --git a/tools/testing/selftests/bpf/progs/mptcp_sock.c b/tools/testi=
+ng/selftests/bpf/progs/mptcp_sock.c
+> index bc09dba0b078..3feb7ff578e2 100644
+> --- a/tools/testing/selftests/bpf/progs/mptcp_sock.c
+> +++ b/tools/testing/selftests/bpf/progs/mptcp_sock.c
+> @@ -7,6 +7,7 @@
+>  #include "bpf_tcp_helpers.h"
+>
+>  char _license[] SEC("license") =3D "GPL";
+> +extern bool CONFIG_MPTCP __kconfig;
+>
+>  struct mptcp_storage {
+>         __u32 invoked;
+> @@ -24,6 +25,7 @@ SEC("sockops")
+>  int _sockops(struct bpf_sock_ops *ctx)
+>  {
+>         struct mptcp_storage *storage;
+> +       struct mptcp_sock *msk;
+>         int op =3D (int)ctx->op;
+>         struct tcp_sock *tsk;
+>         struct bpf_sock *sk;
+> @@ -41,11 +43,24 @@ int _sockops(struct bpf_sock_ops *ctx)
+>                 return 1;
+>
+>         is_mptcp =3D bpf_core_field_exists(tsk->is_mptcp) ? tsk->is_mptcp=
+ : 0;
+> -       storage =3D bpf_sk_storage_get(&socket_storage_map, sk, 0,
+> -                                    BPF_SK_STORAGE_GET_F_CREATE);
+> -       if (!storage)
+> -               return 1;
+> +       if (!is_mptcp) {
+> +               storage =3D bpf_sk_storage_get(&socket_storage_map, sk, 0=
+,
+> +                                            BPF_SK_STORAGE_GET_F_CREATE)=
+;
+> +               if (!storage)
+> +                       return 1;
+> +       } else {
+> +               if (!CONFIG_MPTCP)
+> +                       return 1;
+> +
+> +               msk =3D bpf_skc_to_mptcp_sock(sk);
+> +               if (!msk)
+> +                       return 1;
+>
+> +               storage =3D bpf_sk_storage_get(&socket_storage_map, msk, =
+0,
+> +                                            BPF_SK_STORAGE_GET_F_CREATE)=
+;
+> +               if (!storage)
+> +                       return 1;
+> +       }
+>         storage->invoked++;
+>         storage->is_mptcp =3D is_mptcp;
+>
+> --
+> 2.36.1
+>
+>
