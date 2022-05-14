@@ -2,86 +2,77 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B054EC433F5
-	for <bpf@archiver.kernel.org>; Sat, 14 May 2022 02:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C27B5C433EF
+	for <bpf@archiver.kernel.org>; Sat, 14 May 2022 02:46:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiENCeJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 May 2022 22:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S229798AbiENCqA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 May 2022 22:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiENCeJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 May 2022 22:34:09 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7400C3320A2;
-        Fri, 13 May 2022 17:35:02 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id k8so8585165qki.8;
-        Fri, 13 May 2022 17:35:02 -0700 (PDT)
+        with ESMTP id S229782AbiENCp7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 May 2022 22:45:59 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1679833457F
+        for <bpf@vger.kernel.org>; Fri, 13 May 2022 17:47:19 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 137so8927260pgb.5
+        for <bpf@vger.kernel.org>; Fri, 13 May 2022 17:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s1kbN3Mmp5+Lk+oKdZJFTs+4qDj5+hrlbzkKJ/sOC7Q=;
-        b=L4Eo5SzXtcXZ1ZqgmcB3pFT6peaQuEjTQW8XHbdAPbGuRrJ32T+9GFmpLfV3NZzuMU
-         R4NTESVE2tQ31Tn/FKWcyQ6npgdqmzNHSaMiQIHmXy0EXJT488qBHi2PkEmYH/32GN82
-         IesAw3ivYOxpYN7Ae9P8fd3fkLZ3VQk5LwgdRZCgKTaLXsNR5/pMkZbbQ97uqyvXa99D
-         aYGzwgrr4jcXKVlQnlGPKWsEEANe0HAIbzGJPCFy0lnhdcBXXz4tCUbzrCFT2KXSlLpf
-         yrrRAAC7mzN7FGJ1nT3fOT3w0Jou5QvjaToBuSXvXU7Nmj2EbESLRuEMPClKMUI/sH/y
-         H5kw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4AaDHcfwNGWtIecKUdtT1K8sir+gsaoCyjEbK32tmuI=;
+        b=Oaq5CT4OdMAZMwCNX4enugiAYVVJtO6/v73JmyXYnnEnz3jyi2Qh9AKUrSwA2+tLkf
+         Pa2UukIZqgnwEn3wGYzJfDR3ur/cDmUEXlCxd0UgoyY6JT1yMQJn7tCPNpgEQcVMgJEt
+         6rnHNhcXB2Nq8QZRhJRBdlRAEVYvhwtbUtRRo5CsEf0a6VSOoOwIJtsihqUHzye+mCfY
+         H3o5uYjr0LuWwT8HnFCgSKnVxImaSJZNXuNoJmKkXQGtRvRMBI5sScEW05ScsQZoUdid
+         ySdMnnzfDOajJtWCzG2lndvW1chpNr9J0HTIpiVoANsQ2ag7FokdkNGRLoLlMlcwmL9t
+         WOuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s1kbN3Mmp5+Lk+oKdZJFTs+4qDj5+hrlbzkKJ/sOC7Q=;
-        b=TUypximYlx4uioOsq+3JVPw+FGCpnX5OF33vkA9i4WBTx91qWmMgPB+5/JpY7ZuWLC
-         sek5tla4hHfglgXO8tkfE/v8mdmGj8uLrIF9Q7EEnFj8wmIPS2MglQbgy/iuu3It4cHV
-         eZvImiOOCYP+2+WZqTvvpcZC092DdpB2px4yGg2Fjk0jP1f9LjqjM5cryWPnEYp2mG2g
-         eoHcROlw2HQe9jwK9zkUR+dp0t70FpAODi6z/GZTCvsLjz/n1vqLkLi7we05MBk2Vt12
-         n5o0lM8s1byuMNi+cDtTxjlqQkN4WgRErGkOvWzZt1EFHFtBdttSM6iVsvnnwzkOLTw8
-         MJyg==
-X-Gm-Message-State: AOAM531nyZ6BeLcsOMtwP7YwIBeTpKbJPh3DqiPPas5NZlJ3/PsBq+Sa
-        tNYKE20HPk0k/5lBXcu0MOwfiPQs3FTFSmWy9cuQ9bynuPc=
-X-Google-Smtp-Source: ABdhPJwfXOPE01/yRywnhBxbSsxVVjM3bYlxPufGQhDRtonP1eQsYBGqhDjggwn/0i+bSSSXMd+uK6TB9UbVmkSUHEE=
-X-Received: by 2002:ac8:570f:0:b0:2f3:db0a:4c37 with SMTP id
- 15-20020ac8570f000000b002f3db0a4c37mr6930864qtw.471.1652487707423; Fri, 13
- May 2022 17:21:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1652372970.git.lorenzo@kernel.org> <4841edea5de2ce5898092c057f61d45dec3d9a34.1652372970.git.lorenzo@kernel.org>
-In-Reply-To: <4841edea5de2ce5898092c057f61d45dec3d9a34.1652372970.git.lorenzo@kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4AaDHcfwNGWtIecKUdtT1K8sir+gsaoCyjEbK32tmuI=;
+        b=ptwaozaJOK/5mVKlKYDxSOBeqKAWPH0qWEdg2LDCk7SRCZALQslyhzc5MmsE+jtoAM
+         BiXNzNVIjRcDDNqBD+254N4veuO79Q8v1Xbdv+6Su6HboDqOBtK9IVUXN5/Sn526FF8y
+         GBYItiHIRJNcLB6Ri1UFqRPjbt1h41cp4s1TcIxvcwiVjZRO7gb88A+qQ51h3JIZ8qyY
+         a+vtcl7NFqtwdQdZ0M5BRuO0u0cMhZKn+dY9LXNAzsfkm5USJrCE/eATEdCt10joRSNC
+         sr93PKlW92nbbEYn+4NJv6haXg5a5naEmWh3h2y/D5kfst3uIw3dozZQBY5d+gHUkKjn
+         jkIA==
+X-Gm-Message-State: AOAM530rkh8sYMZntkX9tsc2qffEJ6BuLuDI7LLp5ERHkOZbkJgxxOGj
+        vSEcZ5QOtVWzBo8mmWqZMJk=
+X-Google-Smtp-Source: ABdhPJzAtyWI6wC31xLTonGGwmZNMT40Ud5Cq9UpfNJadpsrsA5Tzb2ZlPwdcY/V4Z0QQhO/bBDZbw==
+X-Received: by 2002:a62:6410:0:b0:4f3:9654:266d with SMTP id y16-20020a626410000000b004f39654266dmr6754230pfb.59.1652488988130;
+        Fri, 13 May 2022 17:43:08 -0700 (PDT)
+Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::4:7ccc])
+        by smtp.gmail.com with ESMTPSA id n5-20020a634d45000000b003db88f80c4asm2166137pgl.71.2022.05.13.17.43.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 17:43:07 -0700 (PDT)
+Date:   Fri, 13 May 2022 17:43:05 -0700
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 13 May 2022 17:21:36 -0700
-Message-ID: <CAADnVQKys77rY+FLkGJwdmdww+h2pGosx08RxVvYwwkjZLSwEQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests/bpf: add selftest for
- bpf_ct_refresh_timeout kfunc
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+To:     Dave Marchevsky <davemarchevsky@fb.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        netfilter-devel <netfilter-devel@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Rik van Riel <riel@surriel.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Yonghong Song <yhs@fb.com>, kernel-team@fb.com
+Subject: Re: [RFC PATCH bpf-next 3/5] libbpf: usdt lib wiring of xmm reads
+Message-ID: <20220514004305.nvgu72qza5xztya3@MBP-98dd607d3435.dhcp.thefacebook.com>
+References: <20220512074321.2090073-1-davemarchevsky@fb.com>
+ <20220512074321.2090073-4-davemarchevsky@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220512074321.2090073-4-davemarchevsky@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 12, 2022 at 9:34 AM Lorenzo Bianconi <lorenzo@kernel.org> wrote:
->
-> Install a new ct entry in order to perform a successful lookup and
-> test bpf_ct_refresh_timeout kfunc helper.
->
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+On Thu, May 12, 2022 at 12:43:19AM -0700, Dave Marchevsky wrote:
+> +		err = bpf_get_reg_val(&val, sizeof(val),
+> +				     ((u64)arg_spec->reg_off + BPF_GETREG_X86_XMM0) << 32,
+> +				     btf_regs, btf_task);
 
-CI is failing:
-test_bpf_nf_ct:FAIL:flush ct entries unexpected error: 32512 (errno 2)
-test_bpf_nf_ct:FAIL:create ct entry unexpected error: 32512 (errno 2)
-
-Please follow the links from patchwork for details.
+That illustrated the point from patch 2.
+The above is probably the typical usage.
+Just BPF_GETREG_X86_XMM in uapi enum would have been enough.
