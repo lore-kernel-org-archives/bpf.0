@@ -2,143 +2,226 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70112C433EF
-	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 05:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2CD0C433EF
+	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 06:56:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239844AbiEPFnV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 16 May 2022 01:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S240692AbiEPG4m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 May 2022 02:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239802AbiEPFnQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 May 2022 01:43:16 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98213DF7E
-        for <bpf@vger.kernel.org>; Sun, 15 May 2022 22:43:15 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G0ovfp000453
-        for <bpf@vger.kernel.org>; Sun, 15 May 2022 22:43:15 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g27rnqmk8-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sun, 15 May 2022 22:43:15 -0700
-Received: from twshared0725.22.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        with ESMTP id S240595AbiEPGzw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 May 2022 02:55:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751C5B1D;
+        Sun, 15 May 2022 23:55:50 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L1qjw6brpzgYLZ;
+        Mon, 16 May 2022 14:54:28 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 15 May 2022 22:43:13 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id D778C7AEBC95; Sun, 15 May 2022 22:41:02 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
-        <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
-        <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
-        Song Liu <song@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH bpf-next 4/5] module: introduce module_alloc_huge
-Date:   Sun, 15 May 2022 22:40:50 -0700
-Message-ID: <20220516054051.114490-5-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220516054051.114490-1-song@kernel.org>
-References: <20220516054051.114490-1-song@kernel.org>
+ 15.1.2375.24; Mon, 16 May 2022 14:55:46 +0800
+Message-ID: <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
+Date:   Mon, 16 May 2022 14:55:46 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: AYHK3JZu7BfgfKLxDx6oPiTj_CHIHVin
-X-Proofpoint-GUID: AYHK3JZu7BfgfKLxDx6oPiTj_CHIHVin
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-15_11,2022-05-13_01,2022-02-23_01
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20220424154028.1698685-1-xukuohai@huawei.com>
+ <20220424154028.1698685-5-xukuohai@huawei.com> <Yn5yb9F4uYkio4Xe@lakrids>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <Yn5yb9F4uYkio4Xe@lakrids>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce module_alloc_huge, which allocates huge page backed memory in
-module memory space. The primary user of this memory is bpf_prog_pack
-(multiple BPF programs sharing a huge page).
+On 5/13/2022 10:59 PM, Mark Rutland wrote:
+> On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
+>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+>> it to replace nop with jump, or replace jump with nop.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Acked-by: Song Liu <songliubraving@fb.com>
+>> ---
+>>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
+>>  1 file changed, 63 insertions(+)
+>>
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 8ab4035dea27..3f9bdfec54c4 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -9,6 +9,7 @@
+>>  
+>>  #include <linux/bitfield.h>
+>>  #include <linux/bpf.h>
+>> +#include <linux/memory.h>
+>>  #include <linux/filter.h>
+>>  #include <linux/printk.h>
+>>  #include <linux/slab.h>
+>> @@ -18,6 +19,7 @@
+>>  #include <asm/cacheflush.h>
+>>  #include <asm/debug-monitors.h>
+>>  #include <asm/insn.h>
+>> +#include <asm/patching.h>
+>>  #include <asm/set_memory.h>
+>>  
+>>  #include "bpf_jit.h"
+>> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
+>>  {
+>>  	return vfree(addr);
+>>  }
+>> +
+>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+>> +			     void *addr, u32 *insn)
+>> +{
+>> +	if (!addr)
+>> +		*insn = aarch64_insn_gen_nop();
+>> +	else
+>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+>> +						    (unsigned long)addr,
+>> +						    type);
+>> +
+>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+>> +}
+>> +
+>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>> +		       void *old_addr, void *new_addr)
+>> +{
+>> +	int ret;
+>> +	u32 old_insn;
+>> +	u32 new_insn;
+>> +	u32 replaced;
+>> +	enum aarch64_insn_branch_type branch_type;
+>> +
+>> +	if (!is_bpf_text_address((long)ip))
+>> +		/* Only poking bpf text is supported. Since kernel function
+>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
+>> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
+>> +		 * called after a failed poke with ftrace. In this case, there
+>> +		 * is probably something wrong with fentry, so there is nothing
+>> +		 * we can do here. See register_fentry, unregister_fentry and
+>> +		 * modify_fentry for details.
+>> +		 */
+>> +		return -EINVAL;
+> 
+> If you rely on ftrace to poke functions, why do you need to patch text
+> at all? Why does the rest of this function exist?
+> 
+> I really don't like having another piece of code outside of ftrace
+> patching the ftrace patch-site; this needs a much better explanation.
+> 
 
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Song Liu <song@kernel.org>
+Sorry for the incorrect explaination in the comment. I don't think it's
+reasonable to patch ftrace patch-site without ftrace code either.
 
----
-Note: This conflicts with the module.c => module/ split in modules-next.
-Current patch is for module.c in the bpf-next tree. After the split,
-__weak module_alloc_huge() should be added to kernel/module/main.c.
----
- arch/x86/kernel/module.c     | 21 +++++++++++++++++++++
- include/linux/moduleloader.h |  5 +++++
- kernel/module.c              |  8 ++++++++
- 3 files changed, 34 insertions(+)
+The patching logic in register_fentry, unregister_fentry and
+modify_fentry is as follows:
 
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index b98ffcf4d250..63f6a16c70dc 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -86,6 +86,27 @@ void *module_alloc(unsigned long size)
- 	return p;
- }
- 
-+void *module_alloc_huge(unsigned long size)
-+{
-+	gfp_t gfp_mask = GFP_KERNEL;
-+	void *p;
-+
-+	if (PAGE_ALIGN(size) > MODULES_LEN)
-+		return NULL;
-+
-+	p = __vmalloc_node_range(size, MODULE_ALIGN,
-+				 MODULES_VADDR + get_module_load_offset(),
-+				 MODULES_END, gfp_mask, PAGE_KERNEL,
-+				 VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
-+				 NUMA_NO_NODE, __builtin_return_address(0));
-+	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
-+		vfree(p);
-+		return NULL;
-+	}
-+
-+	return p;
-+}
-+
- #ifdef CONFIG_X86_32
- int apply_relocate(Elf32_Shdr *sechdrs,
- 		   const char *strtab,
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index 9e09d11ffe5b..d34743a88938 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -26,6 +26,11 @@ unsigned int arch_mod_section_prepend(struct module *mod, unsigned int section);
-    sections.  Returns NULL on failure. */
- void *module_alloc(unsigned long size);
- 
-+/* Allocator used for allocating memory in module memory space. If size is
-+ * greater than PMD_SIZE, allow using huge pages. Returns NULL on failure.
-+ */
-+void *module_alloc_huge(unsigned long size);
-+
- /* Free memory returned from module_alloc. */
- void module_memfree(void *module_region);
- 
-diff --git a/kernel/module.c b/kernel/module.c
-index 6cea788fd965..2af20ac3209c 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2839,6 +2839,14 @@ void * __weak module_alloc(unsigned long size)
- 			NUMA_NO_NODE, __builtin_return_address(0));
- }
- 
-+void * __weak module_alloc_huge(unsigned long size)
-+{
-+	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-+				    GFP_KERNEL, PAGE_KERNEL_EXEC,
-+				    VM_FLUSH_RESET_PERMS | VM_ALLOW_HUGE_VMAP,
-+				    NUMA_NO_NODE, __builtin_return_address(0));
-+}
-+
- bool __weak module_init_section(const char *name)
- {
- 	return strstarts(name, ".init");
--- 
-2.30.2
+if (tr->func.ftrace_managed)
+        ret = register_ftrace_direct((long)ip, (long)new_addr);
+else
+        ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
+                                 true);
+
+ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
+only used to patch bpf prog and bpf trampoline, which are not managed by
+ftrace.
+
+>> +
+>> +	if (poke_type == BPF_MOD_CALL)
+>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+>> +	else
+>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	mutex_lock(&text_mutex);
+>> +	if (aarch64_insn_read(ip, &replaced)) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (replaced != old_insn) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+> 
+> ... and where does the actual synchronization come from in this case?
+> 
+
+aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
+no other CPUs will fetch a half-new and half-old instruction.
+
+The scenario here is that there is a chance that another CPU fetches the
+old instruction after bpf_arch_text_poke() finishes, that is, different
+CPUs may execute different versions of instructions at the same time.
+
+1. When a new trampoline is attached, it doesn't seem to be an issue for
+different CPUs to jump to different trampolines temporarily.
+
+2. When an old trampoline is freed, we should wait for all other CPUs to
+exit the trampoline and make sure the trampoline is no longer reachable,
+IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
+tasks to do this.
+
+> Thanks,
+> Mark.
+> 
+>> +out:
+>> +	mutex_unlock(&text_mutex);
+>> +	return ret;
+>> +}
+>> -- 
+>> 2.30.2
+>>
+> .
 
