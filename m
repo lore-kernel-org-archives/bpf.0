@@ -2,133 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1405DC433EF
-	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 04:25:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 286EEC433F5
+	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 05:41:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235074AbiEPEZk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 May 2022 00:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
+        id S239806AbiEPFlT convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 16 May 2022 01:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbiEPEZj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 May 2022 00:25:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4948419002;
-        Sun, 15 May 2022 21:25:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C958460EF1;
-        Mon, 16 May 2022 04:25:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EB7C385AA;
-        Mon, 16 May 2022 04:25:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652675136;
-        bh=wkoCQQWOI/OVKH1UsJ9YAUTlpusbXlznvf72YaWzN7k=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CLuSkDkWjDqJUtOB4cZDaMTD7Mb1pLfHh7tcgD9Rxe7Uql/SJYAZFQlBbff7rGA97
-         QixQ0PcvXWBOek2r6CW++e2A7pQiAdnF48JwhR5GWROHk3Ti3mfs5kJlio9GO7evcK
-         RbFKQXHH1qwaPS9lDtyF2BF+kCl/aCKCxBNW/+64QhMUpZEhNdyHXRzt1cw70f+gkI
-         jZQdsupkXvCQ4tQXYeoEKObagASYqa5JPe34jpv5zJ4oYNqylSIchtnHNbwqR/Cxnk
-         kPW+A/Zu+qwXM2WBjnKT0eIs1w3w3Mtlqeoav70v1rvy5Ku9khX49opmzcQkbrPw6h
-         rjUj4++lTeEdA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BBD275C0440; Sun, 15 May 2022 21:25:35 -0700 (PDT)
-Date:   Sun, 15 May 2022 21:25:35 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
- rcu_idle_exit noinstr
-Message-ID: <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220515203653.4039075-1-jolsa@kernel.org>
+        with ESMTP id S239546AbiEPFlH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 May 2022 01:41:07 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FBFDF48
+        for <bpf@vger.kernel.org>; Sun, 15 May 2022 22:41:06 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24G0w9Sp014122
+        for <bpf@vger.kernel.org>; Sun, 15 May 2022 22:41:06 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g28fk7gj2-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sun, 15 May 2022 22:41:06 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 15 May 2022 22:41:05 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id E7C627AEBC12; Sun, 15 May 2022 22:40:57 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
+        <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
+        <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next 1/5] bpf: fill new bpf_prog_pack with illegal instructions
+Date:   Sun, 15 May 2022 22:40:47 -0700
+Message-ID: <20220516054051.114490-2-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220516054051.114490-1-song@kernel.org>
+References: <20220516054051.114490-1-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220515203653.4039075-1-jolsa@kernel.org>
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: z7UVKQR8g4s89WhJDdEBDHA3SWEFoqbM
+X-Proofpoint-GUID: z7UVKQR8g4s89WhJDdEBDHA3SWEFoqbM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-15_11,2022-05-13_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
-> Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
-> in rcu 'not watching' context and if there's tracer attached to
-> them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
-> warning like:
-> 
->   [    3.017540] WARNING: suspicious RCU usage
->   ...
->   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
->   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
->   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
->   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
->   [    3.018371]  fprobe_handler.part.0+0xab/0x150
->   [    3.018374]  0xffffffffa00080c8
->   [    3.018393]  ? arch_cpu_idle+0x5/0x10
->   [    3.018398]  arch_cpu_idle+0x5/0x10
->   [    3.018399]  default_idle_call+0x59/0x90
->   [    3.018401]  do_idle+0x1c3/0x1d0
-> 
-> The call path is following:
-> 
-> default_idle_call
->   rcu_idle_enter
->   arch_cpu_idle
->   rcu_idle_exit
-> 
-> The arch_cpu_idle and rcu_idle_exit are the only ones from above
-> path that are traceble and cause this problem on my setup.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+bpf_prog_pack enables sharing huge pages among multiple BPF programs.
+These pages are marked as executable before the JIT engine fill it with
+BPF programs. To make these pages safe, fill the hole bpf_prog_pack with
+illegal instructions before making it executable.
 
-From an RCU viewpoint:
+Fixes: 57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
+Fixes: 33c9805860e5 ("bpf: Introduce bpf_jit_binary_pack_[alloc|finalize|free]")
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ kernel/bpf/core.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 9cc91f0f3115..2d0c9d4696ad 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -873,7 +873,7 @@ static size_t select_bpf_prog_pack_size(void)
+ 	return size;
+ }
+ 
+-static struct bpf_prog_pack *alloc_new_pack(void)
++static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_insns)
+ {
+ 	struct bpf_prog_pack *pack;
+ 
+@@ -886,6 +886,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
+ 		kfree(pack);
+ 		return NULL;
+ 	}
++	bpf_fill_ill_insns(pack->ptr, bpf_prog_pack_size);
+ 	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
+ 	list_add_tail(&pack->list, &pack_list);
+ 
+@@ -895,7 +896,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
+ 	return pack;
+ }
+ 
+-static void *bpf_prog_pack_alloc(u32 size)
++static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
+ {
+ 	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
+ 	struct bpf_prog_pack *pack;
+@@ -910,6 +911,7 @@ static void *bpf_prog_pack_alloc(u32 size)
+ 		size = round_up(size, PAGE_SIZE);
+ 		ptr = module_alloc(size);
+ 		if (ptr) {
++			bpf_fill_ill_insns(ptr, size);
+ 			set_vm_flush_reset_perms(ptr);
+ 			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
+ 			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
+@@ -923,7 +925,7 @@ static void *bpf_prog_pack_alloc(u32 size)
+ 			goto found_free_area;
+ 	}
+ 
+-	pack = alloc_new_pack();
++	pack = alloc_new_pack(bpf_fill_ill_insns);
+ 	if (!pack)
+ 		goto out;
+ 
+@@ -1102,7 +1104,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
+ 
+ 	if (bpf_jit_charge_modmem(size))
+ 		return NULL;
+-	ro_header = bpf_prog_pack_alloc(size);
++	ro_header = bpf_prog_pack_alloc(size, bpf_fill_ill_insns);
+ 	if (!ro_header) {
+ 		bpf_jit_uncharge_modmem(size);
+ 		return NULL;
+-- 
+2.30.2
 
-[ I considered asking for an instrumentation_on() in rcu_idle_exit(),
-but there is no point given that local_irq_restore() isn't something
-you instrument anyway. ]
-
-> ---
->  arch/x86/kernel/process.c | 2 +-
->  kernel/rcu/tree.c         | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-> index b370767f5b19..1345cb0124a6 100644
-> --- a/arch/x86/kernel/process.c
-> +++ b/arch/x86/kernel/process.c
-> @@ -720,7 +720,7 @@ void arch_cpu_idle_dead(void)
->  /*
->   * Called from the generic idle code.
->   */
-> -void arch_cpu_idle(void)
-> +void noinstr arch_cpu_idle(void)
->  {
->  	x86_idle();
->  }
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index a4b8189455d5..20d529722f51 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -896,7 +896,7 @@ static void noinstr rcu_eqs_exit(bool user)
->   * If you add or remove a call to rcu_idle_exit(), be sure to test with
->   * CONFIG_RCU_EQS_DEBUG=y.
->   */
-> -void rcu_idle_exit(void)
-> +void noinstr rcu_idle_exit(void)
->  {
->  	unsigned long flags;
->  
-> -- 
-> 2.35.3
-> 
