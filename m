@@ -2,228 +2,144 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87772C433EF
-	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 07:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F1AC433F5
+	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 11:49:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241389AbiEPH6u (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 May 2022 03:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
+        id S230332AbiEPLta (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 May 2022 07:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbiEPH6o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 May 2022 03:58:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653D22AC4F;
-        Mon, 16 May 2022 00:58:41 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L1s2L3zc3zCskB;
-        Mon, 16 May 2022 15:53:46 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 16 May 2022 15:58:38 +0800
-Message-ID: <06b33393-8af5-9faa-6faa-acb5111865f6@huawei.com>
-Date:   Mon, 16 May 2022 15:58:37 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v3 4/7] bpf, arm64: Impelment
- bpf_arch_text_poke() for arm64
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-CC:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
+        with ESMTP id S229890AbiEPLt3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 May 2022 07:49:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B2FDF8D;
+        Mon, 16 May 2022 04:49:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72A1660FFC;
+        Mon, 16 May 2022 11:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5281AC385B8;
+        Mon, 16 May 2022 11:49:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652701765;
+        bh=1UjUf9qgR8mCHZ9pO5ibdXOTkA+2CnwKyYDerjjSjGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gMkYxYwaD2K0qgkQWrvFjMbEes4kia98EUUVJ/06WXfRTmnyYFI3+clNVoLAQu0/F
+         x+63icf6hFCM/xsO/+YqetIoB4x1gBd+Q0z+jkU58s/KBV5u+gOj1DguI8HjQPFHZJ
+         vvpflzD8mQqRkZEtvS5uJxpZqREmSgXWpzXkSehLhvHWGXMoA0snQrvlWtBU+MRVd8
+         Io7mXMB4rZKJVMePun91CFyq/qLWre8LzQ/Tr8EnQ5HwsN8K0vwCBskWRAyJi2LT75
+         IWBDOZ/t+kz0pTa6dUeW24jK/LLmqV9hPJLuMxUa4YMiCFSYw1elIzxapFohDrxy+r
+         75pBVqDXWPFjg==
+Date:   Mon, 16 May 2022 13:49:22 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220424154028.1698685-1-xukuohai@huawei.com>
- <20220424154028.1698685-5-xukuohai@huawei.com> <Yn5yb9F4uYkio4Xe@lakrids>
- <264ecbe1-4514-d6c8-182b-3af4babb457e@huawei.com>
- <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <YoH6yAtmzPQtWiFM@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
+        KP Singh <kpsingh@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH bpf-next 1/2] cpuidle/rcu: Making arch_cpu_idle and
+ rcu_idle_exit noinstr
+Message-ID: <20220516114922.GA349949@lothringen>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220516042535.GV1790663@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 5/16/2022 3:18 PM, Mark Rutland wrote:
-> On Mon, May 16, 2022 at 02:55:46PM +0800, Xu Kuohai wrote:
->> On 5/13/2022 10:59 PM, Mark Rutland wrote:
->>> On Sun, Apr 24, 2022 at 11:40:25AM -0400, Xu Kuohai wrote:
->>>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
->>>> it to replace nop with jump, or replace jump with nop.
->>>>
->>>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>>> Acked-by: Song Liu <songliubraving@fb.com>
->>>> ---
->>>>  arch/arm64/net/bpf_jit_comp.c | 63 +++++++++++++++++++++++++++++++++++
->>>>  1 file changed, 63 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->>>> index 8ab4035dea27..3f9bdfec54c4 100644
->>>> --- a/arch/arm64/net/bpf_jit_comp.c
->>>> +++ b/arch/arm64/net/bpf_jit_comp.c
->>>> @@ -9,6 +9,7 @@
->>>>  
->>>>  #include <linux/bitfield.h>
->>>>  #include <linux/bpf.h>
->>>> +#include <linux/memory.h>
->>>>  #include <linux/filter.h>
->>>>  #include <linux/printk.h>
->>>>  #include <linux/slab.h>
->>>> @@ -18,6 +19,7 @@
->>>>  #include <asm/cacheflush.h>
->>>>  #include <asm/debug-monitors.h>
->>>>  #include <asm/insn.h>
->>>> +#include <asm/patching.h>
->>>>  #include <asm/set_memory.h>
->>>>  
->>>>  #include "bpf_jit.h"
->>>> @@ -1529,3 +1531,64 @@ void bpf_jit_free_exec(void *addr)
->>>>  {
->>>>  	return vfree(addr);
->>>>  }
->>>> +
->>>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
->>>> +			     void *addr, u32 *insn)
->>>> +{
->>>> +	if (!addr)
->>>> +		*insn = aarch64_insn_gen_nop();
->>>> +	else
->>>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
->>>> +						    (unsigned long)addr,
->>>> +						    type);
->>>> +
->>>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
->>>> +}
->>>> +
->>>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
->>>> +		       void *old_addr, void *new_addr)
->>>> +{
->>>> +	int ret;
->>>> +	u32 old_insn;
->>>> +	u32 new_insn;
->>>> +	u32 replaced;
->>>> +	enum aarch64_insn_branch_type branch_type;
->>>> +
->>>> +	if (!is_bpf_text_address((long)ip))
->>>> +		/* Only poking bpf text is supported. Since kernel function
->>>> +		 * entry is set up by ftrace, we reply on ftrace to poke kernel
->>>> +		 * functions. For kernel funcitons, bpf_arch_text_poke() is only
->>>> +		 * called after a failed poke with ftrace. In this case, there
->>>> +		 * is probably something wrong with fentry, so there is nothing
->>>> +		 * we can do here. See register_fentry, unregister_fentry and
->>>> +		 * modify_fentry for details.
->>>> +		 */
->>>> +		return -EINVAL;
->>>
->>> If you rely on ftrace to poke functions, why do you need to patch text
->>> at all? Why does the rest of this function exist?
->>>
->>> I really don't like having another piece of code outside of ftrace
->>> patching the ftrace patch-site; this needs a much better explanation.
->>>
->>
->> Sorry for the incorrect explaination in the comment. I don't think it's
->> reasonable to patch ftrace patch-site without ftrace code either.
->>
->> The patching logic in register_fentry, unregister_fentry and
->> modify_fentry is as follows:
->>
->> if (tr->func.ftrace_managed)
->>         ret = register_ftrace_direct((long)ip, (long)new_addr);
->> else
->>         ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr,
->>                                  true);
->>
->> ftrace patch-site is patched by ftrace code. bpf_arch_text_poke() is
->> only used to patch bpf prog and bpf trampoline, which are not managed by
->> ftrace.
+On Sun, May 15, 2022 at 09:25:35PM -0700, Paul E. McKenney wrote:
+> On Sun, May 15, 2022 at 10:36:52PM +0200, Jiri Olsa wrote:
+> > Making arch_cpu_idle and rcu_idle_exit noinstr. Both functions run
+> > in rcu 'not watching' context and if there's tracer attached to
+> > them, which uses rcu (e.g. kprobe multi interface) it will hit RCU
+> > warning like:
+> > 
+> >   [    3.017540] WARNING: suspicious RCU usage
+> >   ...
+> >   [    3.018363]  kprobe_multi_link_handler+0x68/0x1c0
+> >   [    3.018364]  ? kprobe_multi_link_handler+0x3e/0x1c0
+> >   [    3.018366]  ? arch_cpu_idle_dead+0x10/0x10
+> >   [    3.018367]  ? arch_cpu_idle_dead+0x10/0x10
+> >   [    3.018371]  fprobe_handler.part.0+0xab/0x150
+> >   [    3.018374]  0xffffffffa00080c8
+> >   [    3.018393]  ? arch_cpu_idle+0x5/0x10
+> >   [    3.018398]  arch_cpu_idle+0x5/0x10
+> >   [    3.018399]  default_idle_call+0x59/0x90
+> >   [    3.018401]  do_idle+0x1c3/0x1d0
+> > 
+> > The call path is following:
+> > 
+> > default_idle_call
+> >   rcu_idle_enter
+> >   arch_cpu_idle
+> >   rcu_idle_exit
+> > 
+> > The arch_cpu_idle and rcu_idle_exit are the only ones from above
+> > path that are traceble and cause this problem on my setup.
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > 
-> Sorry, I had misunderstood. Thanks for the correction!
+> From an RCU viewpoint:
 > 
-> I'll have another look with that in mind.
->>>>> +
->>>> +	if (poke_type == BPF_MOD_CALL)
->>>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
->>>> +	else
->>>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
->>>> +		return -EFAULT;
->>>> +
->>>> +	mutex_lock(&text_mutex);
->>>> +	if (aarch64_insn_read(ip, &replaced)) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	if (replaced != old_insn) {
->>>> +		ret = -EFAULT;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	ret = aarch64_insn_patch_text_nosync((void *)ip, new_insn);
->>>
->>> ... and where does the actual synchronization come from in this case?
->>
->> aarch64_insn_patch_text_nosync() replaces an instruction atomically, so
->> no other CPUs will fetch a half-new and half-old instruction.
->>
->> The scenario here is that there is a chance that another CPU fetches the
->> old instruction after bpf_arch_text_poke() finishes, that is, different
->> CPUs may execute different versions of instructions at the same time.
->>
->> 1. When a new trampoline is attached, it doesn't seem to be an issue for
->> different CPUs to jump to different trampolines temporarily.
->>
->> 2. When an old trampoline is freed, we should wait for all other CPUs to
->> exit the trampoline and make sure the trampoline is no longer reachable,
->> IIUC, bpf_tramp_image_put() function already uses percpu_ref and rcu
->> tasks to do this.
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 > 
-> It would be good to have a comment for these points>
+> [ I considered asking for an instrumentation_on() in rcu_idle_exit(),
+> but there is no point given that local_irq_restore() isn't something
+> you instrument anyway. ]
 
-will add a comment for this in v4, thanks!
+So local_irq_save() in the beginning of rcu_idle_exit() is unsafe because
+it is instrumentable by the function (graph)  tracers and the irqsoff tracer.
 
-> Thanks,
-> Mark.
-> .
+Also it calls into lockdep that might make use of RCU.
 
+That's why rcu_idle_exit() is not noinstr yet. See this patch:
+
+https://lore.kernel.org/lkml/20220503100051.2799723-4-frederic@kernel.org/
+
+Thanks.
+
+> 
+> > ---
+> >  arch/x86/kernel/process.c | 2 +-
+> >  kernel/rcu/tree.c         | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> > index b370767f5b19..1345cb0124a6 100644
+> > --- a/arch/x86/kernel/process.c
+> > +++ b/arch/x86/kernel/process.c
+> > @@ -720,7 +720,7 @@ void arch_cpu_idle_dead(void)
+> >  /*
+> >   * Called from the generic idle code.
+> >   */
+> > -void arch_cpu_idle(void)
+> > +void noinstr arch_cpu_idle(void)
+> >  {
+> >  	x86_idle();
+> >  }
+> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > index a4b8189455d5..20d529722f51 100644
+> > --- a/kernel/rcu/tree.c
+> > +++ b/kernel/rcu/tree.c
+> > @@ -896,7 +896,7 @@ static void noinstr rcu_eqs_exit(bool user)
+> >   * If you add or remove a call to rcu_idle_exit(), be sure to test with
+> >   * CONFIG_RCU_EQS_DEBUG=y.
+> >   */
+> > -void rcu_idle_exit(void)
+> > +void noinstr rcu_idle_exit(void)
+> >  {
+> >  	unsigned long flags;
+> >  
+> > -- 
+> > 2.35.3
+> > 
