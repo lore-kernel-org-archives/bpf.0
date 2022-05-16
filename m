@@ -2,123 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BF5FC433FE
-	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 17:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB95EC433F5
+	for <bpf@archiver.kernel.org>; Mon, 16 May 2022 18:24:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344312AbiEPRg3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 May 2022 13:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S230377AbiEPSYU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 May 2022 14:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344360AbiEPRgQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 May 2022 13:36:16 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF96936E3C
-        for <bpf@vger.kernel.org>; Mon, 16 May 2022 10:36:11 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 90981240108
-        for <bpf@vger.kernel.org>; Mon, 16 May 2022 19:36:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1652722570; bh=vFwroQ+ZcFTzYzu6CcYEgLqnok5nhecsV5aUkDQole8=;
-        h=From:To:Subject:Date:From;
-        b=UdWvWWz4h0YiLfEM7ZzKL4SmPP0leSchFoQe3ii/5Wzlgb7VDOtHnptk22TeN5LlM
-         P7Z9vO0y3dfEeFR/XY8pGVj03RZKevkTMk98XW+Db9H6Ifb7jwHMqJTZ2nrU2MRfop
-         h5GUxtTbnv3ZOu1RV88boqEg0z+I1NoWgmxLHIyRjsDokwSdTwIMV6nv5ePnIKlFAf
-         nlmOwYOISYny24XJNFcUPpxbQO2OnzxKB0WdwwreGhYt+CNO5tY4+uw006k2TRGIwv
-         QXSQmq3+mWarS4UBOP26Hz950dyerOq0m83BRMerVuQY1Oy7UZ9Ss3ng0FA/uff951
-         /+OfbIXUyTCQA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4L25yK4cPPz9rxB;
-        Mon, 16 May 2022 19:36:09 +0200 (CEST)
-From:   =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, quentin@isovalent.com
-Subject: [PATCH bpf-next 11/12] selftests/bpf: Add test for libbpf_bpf_link_type_str
-Date:   Mon, 16 May 2022 17:35:39 +0000
-Message-Id: <20220516173540.3520665-12-deso@posteo.net>
-In-Reply-To: <20220516173540.3520665-1-deso@posteo.net>
-References: <20220516173540.3520665-1-deso@posteo.net>
+        with ESMTP id S1344736AbiEPSYU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 May 2022 14:24:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 325CF3DA56
+        for <bpf@vger.kernel.org>; Mon, 16 May 2022 11:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652725458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=id00oVYTmyhqPqdSLuA7jfzPXEfe8AjRZdJymH4RAy0=;
+        b=CU9kloDjTur+UsHLa/lQx06hotExcPeb56e4xyDxRirMK9czNbkgdKV/NSPFBET+pVKvq9
+        FCOvIWtyhr5j0swslJOT4yANX6hQnKHkMfEevJgQo+/T66TpamEDUkOTauCsm0d2UNL8Dh
+        e/Y8mZ2B+4o3ytxLvl2PwR7pW4wJoic=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-1c6qYXoiM3aIcpzbJ6od5Q-1; Mon, 16 May 2022 14:24:14 -0400
+X-MC-Unique: 1c6qYXoiM3aIcpzbJ6od5Q-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C9167382ECC8;
+        Mon, 16 May 2022 18:24:13 +0000 (UTC)
+Received: from asgard.redhat.com (unknown [10.36.110.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 61FD7153B8AC;
+        Mon, 16 May 2022 18:24:10 +0000 (UTC)
+Date:   Mon, 16 May 2022 20:24:07 +0200
+From:   Eugene Syromiatnikov <esyr@redhat.com>
+To:     Jiri Olsa <jolsa@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 0/4] Fix 32-bit arch and compat support for the
+ kprobe_multi attach type
+Message-ID: <20220516182407.GA15250@asgard.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change adds a test for libbpf_bpf_link_type_str. The test retrieves
-all variants of the bpf_link_type enumeration using BTF and makes sure
-that the function under test works as expected for them.
+As suggested in [1], the kprobe_multi interface is to be fixed for 32-bit
+architectures and compat, rather then disabled.  As it turned out,
+there are a couple of additional problems that are to be addressed:
+ - the absence of size overflow checks, leading to possible
+   out-of-bounds writes (addressed by the first patch);
+ - the assumption that long has the same size as u64, which would make
+   cookies arrays size calculation incorrect on 32-bit architectures
+   (addressed by the second patch);
+ - the addrs array passing API, that is incompatible with compat and has
+   to be changed (addressed in the fourth patch): those are kernel
+   addresses and not user ones (as was incorrectly stated in [2]);
+   this change is only semantical for 64-bit user/kernelspace,
+   so it shouldn't impact ABI there, at least.
 
-Signed-off-by: Daniel Müller <deso@posteo.net>
----
- .../selftests/bpf/prog_tests/libbpf_str.c     | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
+[1] https://lore.kernel.org/lkml/CAADnVQ+2gwhcMht4PuDnDOFKY68Wsq8QFz4Y69NBX_TLaSexQQ@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/20220510184155.GA8295@asgard.redhat.com/
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_str.c b/tools/testing/selftests/bpf/prog_tests/libbpf_str.c
-index f5fa09..1e45dd 100644
---- a/tools/testing/selftests/bpf/prog_tests/libbpf_str.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_str.c
-@@ -59,6 +59,51 @@ static void test_libbpf_bpf_attach_type_str(void)
- 	btf__free(btf);
- }
- 
-+/**
-+ * Test case to check that all bpf_link_type variants are covered by
-+ * libbpf_bpf_link_type_str.
-+ */
-+static void test_libbpf_bpf_link_type_str(void)
-+{
-+	struct btf *btf;
-+	const struct btf_type *t;
-+	const struct btf_enum *e;
-+	int i, n, id;
-+
-+	btf = btf__parse("/sys/kernel/btf/vmlinux", NULL);
-+	if (!ASSERT_OK_PTR(btf, "btf_parse"))
-+		return;
-+
-+	/* find enum bpf_link_type and enumerate each value */
-+	id = btf__find_by_name_kind(btf, "bpf_link_type", BTF_KIND_ENUM);
-+	if (!ASSERT_GT(id, 0, "bpf_link_type_id"))
-+		goto cleanup;
-+	t = btf__type_by_id(btf, id);
-+	e = btf_enum(t);
-+	n = btf_vlen(t);
-+	for (i = 0; i < n; e++, i++) {
-+		enum bpf_link_type link_type = (enum bpf_link_type)e->val;
-+		const char *link_type_name;
-+		const char *link_type_str;
-+		char buf[256];
-+
-+		if (link_type == MAX_BPF_LINK_TYPE)
-+			continue;
-+
-+		link_type_name = btf__str_by_offset(btf, e->name_off);
-+		link_type_str = libbpf_bpf_link_type_str(link_type);
-+		ASSERT_OK_PTR(link_type_str, link_type_name);
-+
-+		snprintf(buf, sizeof(buf), "BPF_LINK_TYPE_%s", link_type_str);
-+		uppercase(buf);
-+
-+		ASSERT_STREQ(buf, link_type_name, "exp_str_value");
-+	}
-+
-+cleanup:
-+	btf__free(btf);
-+}
-+
- /**
-  * Test case to check that all bpf_map_type variants are covered by
-  * libbpf_bpf_map_type_str.
-@@ -151,6 +196,9 @@ void test_libbpf_str(void)
- 	if (test__start_subtest("bpf_attach_type_str"))
- 		test_libbpf_bpf_attach_type_str();
- 
-+	if (test__start_subtest("bpf_link_type_str"))
-+		test_libbpf_bpf_link_type_str();
-+
- 	if (test__start_subtest("bpf_map_type_str"))
- 		test_libbpf_bpf_map_type_str();
- 
+Eugene Syromiatnikov (4):
+  bpf_trace: check size for overflow in bpf_kprobe_multi_link_attach
+  bpf_trace: support 32-bit kernels in bpf_kprobe_multi_link_attach
+  bpf_trace: handle compat in kprobe_multi_resolve_syms
+  bpf_trace: pass array of u64 values in kprobe_multi.addrs
+
+ kernel/trace/bpf_trace.c                           | 63 ++++++++++++++++------
+ tools/lib/bpf/bpf.h                                |  2 +-
+ tools/lib/bpf/libbpf.c                             |  8 +--
+ tools/lib/bpf/libbpf.h                             |  2 +-
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
+ .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  2 +-
+ 6 files changed, 54 insertions(+), 25 deletions(-)
+
 -- 
-2.30.2
+2.1.4
 
