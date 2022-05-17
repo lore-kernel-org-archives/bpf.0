@@ -2,208 +2,189 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE535C433F5
-	for <bpf@archiver.kernel.org>; Tue, 17 May 2022 07:06:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E4FEC433EF
+	for <bpf@archiver.kernel.org>; Tue, 17 May 2022 07:07:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiEQHGO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 May 2022 03:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S232181AbiEQHHg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 May 2022 03:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236153AbiEQHF6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 May 2022 03:05:58 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC596359
-        for <bpf@vger.kernel.org>; Tue, 17 May 2022 00:05:52 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id i8so2625680plr.13
-        for <bpf@vger.kernel.org>; Tue, 17 May 2022 00:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=wuqROjGK5NGFVKd47141nF0XHj01jigssNIAbAq8B7w=;
-        b=TwiatshiqLTe6R9OtUH8skwX03a0UE77zNGTyfDoIfR/3ZEerC9XS/Lx4GoMYbPfU5
-         zntS8jK5Kj2ShMWTd7YYBr40HJ5nfaRudQDZAwBUGt0h6gcuHbAP8LRMld+osh8H63E4
-         zqbAfe7+MxBOF+IpX6Q9+PGuodYki5I7YJ/h0CVqDXbB8TrWlJ7s734aY35SyxkksWvc
-         bGnJdFwau8UVSQuu7GSTCE2ZqzVuh42u/1rcPIh9B4VSTj/k7h9hjEB9xMwpzW41NEIP
-         wuwEJs7wsQ/fSh5SYdITgfW+3gu+vWWNSTIE7kssIk8izpsn/fnWCwgUWAmhxdjKC6tv
-         k43Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wuqROjGK5NGFVKd47141nF0XHj01jigssNIAbAq8B7w=;
-        b=GwZPVV+f5lDuFIlfNlil/iR25WCYWitx8V9bjUjHDvVzkk42zrS9o2sHyg2Wn3laUT
-         YcjcXqJBemrWYCu7Pyglga9vsjV0kvI1oZ2XnyvZuwdqSoeQDw1AFLmwu13HVtBiUMeV
-         C/Y3QRTUzGSWzjBnfcs+HqF3s8qoUWkHp2ZncqvK0o0AHeBl5JEpYiqDtbbAVAF4K2EU
-         Xrex7YJs2GTxZXERKggdKQKwG1TJTxRF73mXABQoZx65O2UJRogCa8zHlF+N/UZGk+Oo
-         vVkJibZAqo/Ebr6TxY5X5xSNaPBFG/L1Jt1VOE9GMtflr2KxfaCGCl0dEPND+VQqeMFT
-         9wqQ==
-X-Gm-Message-State: AOAM530YwXeAmCvmJ3N6Ju5Bgblnt8ppr/X5htZNPyGT9ynlUXfnWC/U
-        8xMaBXpk32EgqLOy8N81CGyBJA==
-X-Google-Smtp-Source: ABdhPJxOxQjsL6w9g0OLpHPCjF+bnU3XWXaFNVPHygxmeypO7lQGstrEd7PdWU4Q87yKtJNiFpHfmg==
-X-Received: by 2002:a17:90b:48c6:b0:1df:99d9:997f with SMTP id li6-20020a17090b48c600b001df99d9997fmr35838pjb.242.1652771151939;
-        Tue, 17 May 2022 00:05:51 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id e17-20020a62ee11000000b0050dc76281b8sm8188698pfi.146.2022.05.17.00.05.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 00:05:51 -0700 (PDT)
-Message-ID: <44a30595-6a50-6ded-5ecc-18fd1e56abda@bytedance.com>
-Date:   Tue, 17 May 2022 15:05:42 +0800
+        with ESMTP id S232105AbiEQHHe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 May 2022 03:07:34 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27EF46B08;
+        Tue, 17 May 2022 00:07:31 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L2RxY1HtxzhZ9q;
+        Tue, 17 May 2022 15:06:41 +0800 (CST)
+Received: from huawei.com (10.67.174.197) by kwepemi500013.china.huawei.com
+ (7.221.188.120) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 17 May
+ 2022 15:07:27 +0800
+From:   Xu Kuohai <xukuohai@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Delyan Kratunov <delyank@fb.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next v4 0/6] bpf trampoline for arm64
+Date:   Tue, 17 May 2022 03:18:32 -0400
+Message-ID: <20220517071838.3366093-1-xukuohai@huawei.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [External] Re: [PATCH bpf-next] selftests/bpf: fix some bugs in
- map_lookup_percpu_elem testcase
-To:     Yonghong Song <yhs@fb.com>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, jolsa@kernel.org, davemarchevsky@fb.com,
-        joannekoong@fb.com, geliang.tang@suse.com
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
-        cong.wang@bytedance.com, zhouchengming@bytedance.com,
-        yosryahmed@google.com
-References: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
- <80ab09cf-6072-a75a-082d-2721f6f907ef@fb.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <80ab09cf-6072-a75a-082d-2721f6f907ef@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.197]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-在 2022/5/17 上午11:09, Yonghong Song 写道:
->
->
-> On 5/15/22 7:24 PM, Feng zhou wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> comments from Andrii Nakryiko, details in here:
->> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/ 
->>
->>
->> use /* */ instead of //
->> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
->> use 8 bytes for value size
->> fix memory leak
->> use ASSERT_EQ instead of ASSERT_OK
->> add bpf_loop to fetch values on each possible CPU
->>
->> Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add 
->> test case for bpf_map_lookup_percpu_elem")
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->
-> LGTM with a few nits below.
-> Acked-by: Yonghong Song <yhs@fb.com>
->
-Ok, will do. Thanks.
+Add bpf trampoline support for arm64. Most of the logic is the same as
+x86.
 
->> ---
->>   .../bpf/prog_tests/map_lookup_percpu_elem.c   | 49 +++++++++------
->>   .../bpf/progs/test_map_lookup_percpu_elem.c   | 61 ++++++++++++-------
->>   2 files changed, 70 insertions(+), 40 deletions(-)
->>
->> diff --git 
->> a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c 
->> b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->> index 58b24c2112b0..89ca170f1c25 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
->> @@ -1,30 +1,39 @@
->> -// SPDX-License-Identifier: GPL-2.0
->> -// Copyright (c) 2022 Bytedance
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/* Copyright (c) 2022 Bytedance */
->>     #include <test_progs.h>
->
-> The above empty line is unnecessary.
->
->>   #include "test_map_lookup_percpu_elem.skel.h"
->>   -#define TEST_VALUE  1
->> -
->>   void test_map_lookup_percpu_elem(void)
->>   {
->>       struct test_map_lookup_percpu_elem *skel;
->> -    int key = 0, ret;
->> -    int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
->> -    int *buf;
->> +    __u64 key = 0, sum;
->> +    int ret, i;
->> +    int nr_cpus = libbpf_num_possible_cpus();
->> +    __u64 *buf;
->>   -    buf = (int *)malloc(nr_cpus*sizeof(int));
->> +    buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
->>       if (!ASSERT_OK_PTR(buf, "malloc"))
->>           return;
->> -    memset(buf, 0, nr_cpus*sizeof(int));
->> -    buf[0] = TEST_VALUE;
->>   -    skel = test_map_lookup_percpu_elem__open_and_load();
->> -    if (!ASSERT_OK_PTR(skel, 
->> "test_map_lookup_percpu_elem__open_and_load"))
->> -        return;
->> +    for (i=0; i<nr_cpus; i++)
->> +        buf[i] = i;
->> +    sum = (nr_cpus-1)*nr_cpus/2;
->> +
->> +    skel = test_map_lookup_percpu_elem__open();
->> +    if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
->> +        goto exit;
->> +
->> +    skel->rodata->nr_cpus = nr_cpus;
->> +
->> +    ret = test_map_lookup_percpu_elem__load(skel);
->> +    if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
->> +        goto cleanup;
->> +
->>       ret = test_map_lookup_percpu_elem__attach(skel);
->> -    ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
->> +    if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
->> +        goto cleanup;
->>         ret = 
->> bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, 
->> buf, 0);
->>       ASSERT_OK(ret, "percpu_array_map update");
->> @@ -37,10 +46,14 @@ void test_map_lookup_percpu_elem(void)
->>         syscall(__NR_getuid);
->>   -    ret = skel->bss->percpu_array_elem_val == TEST_VALUE &&
->> -          skel->bss->percpu_hash_elem_val == TEST_VALUE &&
->> -          skel->bss->percpu_lru_hash_elem_val == TEST_VALUE;
->> -    ASSERT_OK(!ret, "bpf_map_lookup_percpu_elem success");
->> +    test_map_lookup_percpu_elem__detach(skel);
->> +
->> +    ASSERT_EQ(skel->bss->percpu_array_elem_sum, sum, "percpu_array 
->> lookup percpu elem");
->> +    ASSERT_EQ(skel->bss->percpu_hash_elem_sum, sum, "percpu_hash 
->> lookup percpu elem");
->> +    ASSERT_EQ(skel->bss->percpu_lru_hash_elem_sum, sum, 
->> "percpu_lru_hash lookup percpu elem");
->>   +cleanup:
->>       test_map_lookup_percpu_elem__destroy(skel);
->> +exit:
->> +    free(buf);
->>   }
-> [...]
->> +struct read_percpu_elem_ctx {
->> +    void *map;
->> +    __u64 sum;
->> +};
->> +
->> +static int read_percpu_elem_callback(__u32 index, struct 
->> read_percpu_elem_ctx *ctx)
->> +{
->> +    __u64 key = 0;
->> +    __u64 *value;
->
-> Please add an empty line here.
->
->> +    value = bpf_map_lookup_percpu_elem(ctx->map, &key, index);
->> +    if (value)
->> +        ctx->sum += *value;
->> +    return 0;
->> +}
->> +
-> [...]
+Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
+result:
+ #9  /1     bpf_cookie/kprobe:OK
+ #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
+ #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
+ #9  /4     bpf_cookie/uprobe:OK
+ #9  /5     bpf_cookie/tracepoint:OK
+ #9  /6     bpf_cookie/perf_event:OK
+ #9  /7     bpf_cookie/trampoline:OK
+ #9  /8     bpf_cookie/lsm:OK
+ #9         bpf_cookie:FAIL
+ #18 /1     bpf_tcp_ca/dctcp:OK
+ #18 /2     bpf_tcp_ca/cubic:OK
+ #18 /3     bpf_tcp_ca/invalid_license:OK
+ #18 /4     bpf_tcp_ca/dctcp_fallback:OK
+ #18 /5     bpf_tcp_ca/rel_setsockopt:OK
+ #18        bpf_tcp_ca:OK
+ #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
+ #51 /2     dummy_st_ops/dummy_init_ret_value:OK
+ #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
+ #51 /4     dummy_st_ops/dummy_multiple_args:OK
+ #51        dummy_st_ops:OK
+ #55        fentry_fexit:OK
+ #56        fentry_test:OK
+ #57 /1     fexit_bpf2bpf/target_no_callees:OK
+ #57 /2     fexit_bpf2bpf/target_yes_callees:OK
+ #57 /3     fexit_bpf2bpf/func_replace:OK
+ #57 /4     fexit_bpf2bpf/func_replace_verify:OK
+ #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
+ #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
+ #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
+ #57 /8     fexit_bpf2bpf/func_replace_multi:OK
+ #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
+ #57        fexit_bpf2bpf:OK
+ #58        fexit_sleep:OK
+ #59        fexit_stress:OK
+ #60        fexit_test:OK
+ #67        get_func_args_test:OK
+ #68        get_func_ip_test:OK
+ #104       modify_return:OK
+ #237       xdp_bpf2bpf:OK
 
+bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
+failed due to lack of multi_kprobe on arm64.
+
+v4:
+- Run the test cases on raspberry pi 4b
+- Rebase and add cookie to trampoline
+- As Steve suggested, move trace_direct_tramp() back to entry-ftrace.S to
+  avoid messing up generic code with architecture specific code
+- As Jakub suggested, merge patch 4 and patch 5 of v3 to provide full function
+  in one patch
+- As Mark suggested, add a comment for the use of aarch64_insn_patch_text_nosync()
+- Do not generate trampoline for long jump to avoid triggering ftrace_bug
+- Round stack size to multiples of 16B to avoid SPAlignmentFault
+- Use callee saved register x20 to reduce the use of mov_i64
+- Add missing BTI J instructions
+- Trivial spelling and code sytle fixes
+
+v3: https://lore.kernel.org/bpf/20220424154028.1698685-1-xukuohai@huawei.com/
+- Append test results for bpf_tcp_ca, dummy_st_ops, fexit_bpf2bpf,
+  xdp_bpf2bpf
+- Support to poke bpf progs
+- Fix return value of arch_prepare_bpf_trampoline() to the total number
+  of bytes instead of number of instructions 
+- Do not check whether CONFIG_DYNAMIC_FTRACE_WITH_REGS is enabled in
+  arch_prepare_bpf_trampoline, since the trampoline may be hooked to a bpf
+  prog
+- Restrict bpf_arch_text_poke() to poke bpf text only, as kernel functions
+  are poked by ftrace
+- Rewrite trace_direct_tramp() in inline assembly in trace_selftest.c
+  to avoid messing entry-ftrace.S
+- isolate arch_ftrace_set_direct_caller() with macro
+  CONFIG_HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS to avoid compile error
+  when this macro is disabled
+- Some trivial code sytle fixes
+
+v2: https://lore.kernel.org/bpf/20220414162220.1985095-1-xukuohai@huawei.com/
+- Add Song's ACK
+- Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+  style (patch 3)
+- Fix a deadloop issue in ftrace selftest (patch 2)
+- Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+- Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+  ftrace direct call is not only used by bpf trampoline.
+
+v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
+
+Xu Kuohai (6):
+  arm64: ftrace: Add ftrace direct call support
+  ftrace: Fix deadloop caused by direct call in ftrace selftest
+  bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
+  bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+  bpf, arm64: bpf trampoline for arm64
+  selftests/bpf: Fix trivial typo in fentry_fexit.c
+
+ arch/arm64/Kconfig                            |   2 +
+ arch/arm64/include/asm/ftrace.h               |  22 +
+ arch/arm64/kernel/asm-offsets.c               |   1 +
+ arch/arm64/kernel/entry-ftrace.S              |  28 +-
+ arch/arm64/net/bpf_jit.h                      |   1 +
+ arch/arm64/net/bpf_jit_comp.c                 | 523 +++++++++++++++++-
+ arch/x86/net/bpf_jit_comp.c                   |  20 -
+ include/linux/bpf.h                           |   6 +
+ kernel/bpf/bpf_struct_ops.c                   |   4 +-
+ kernel/bpf/trampoline.c                       |  34 +-
+ kernel/trace/trace_selftest.c                 |   2 +
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ 12 files changed, 603 insertions(+), 44 deletions(-)
+
+-- 
+2.30.2
 
