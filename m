@@ -2,40 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75B15C433EF
-	for <bpf@archiver.kernel.org>; Tue, 17 May 2022 07:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0330DC433F5
+	for <bpf@archiver.kernel.org>; Tue, 17 May 2022 07:36:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241437AbiEQHgo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 May 2022 03:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S241526AbiEQHgr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 May 2022 03:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242248AbiEQHgV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 May 2022 03:36:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 756DB483AD
-        for <bpf@vger.kernel.org>; Tue, 17 May 2022 00:36:15 -0700 (PDT)
+        with ESMTP id S234762AbiEQHgk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 May 2022 03:36:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BB50BCB4
+        for <bpf@vger.kernel.org>; Tue, 17 May 2022 00:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652772974;
+        s=mimecast20190719; t=1652772998;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=R/nCNh/sCUOBHWKGEEFcQigdVp1a4yiAhFMpL8jlQok=;
-        b=VptWKs0PYcmSlvruenrxZyFcQ5ibLCOU/1qqq8hliLg1zfkUV7LUZa0IKaTuUskDgFEOgJ
-        fFxIbLVVb3Kq6wgB/sMMxH1+jw4m9kmJ1FI6HGWXJQsWPUmt0RInM3akMZK62P49frQcb8
-        AKPfHj6q8b/waYSEH5sTaN9YJh+tta8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z8TJGc65VPq8LFCB93HW2zYbRoFkSWlAyqA2j8NAtgg=;
+        b=hhghaI3IqtywUMrhE2LE4t0bc9NsTHxKy9xBBhlvpMeZJU6CkfMd7dirKKYQBjW2EkOc6z
+        HxHEf/73MBAqGkMiLzfWBYNJJWPMRk1rAxk4j7//9btsNjHexN5H2kjl9vgpO5y4N2RfJg
+        RTB/SOCE59qcD9NsLopxQtIMQXeyQjM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-161-6NBg8HGqOkOXwcR6MHJViA-1; Tue, 17 May 2022 03:36:11 -0400
-X-MC-Unique: 6NBg8HGqOkOXwcR6MHJViA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-250-kAUXOHQZNo-BaEpEg3KrOg-1; Tue, 17 May 2022 03:36:33 -0400
+X-MC-Unique: kAUXOHQZNo-BaEpEg3KrOg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5F9BD299E75D;
-        Tue, 17 May 2022 07:36:10 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C5131857F08;
+        Tue, 17 May 2022 07:36:32 +0000 (UTC)
 Received: from asgard.redhat.com (unknown [10.36.110.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C0E4E5739B3;
-        Tue, 17 May 2022 07:36:05 +0000 (UTC)
-Date:   Tue, 17 May 2022 09:36:03 +0200
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F15061568BA9;
+        Tue, 17 May 2022 07:36:28 +0000 (UTC)
+Date:   Tue, 17 May 2022 09:36:26 +0200
 From:   Eugene Syromiatnikov <esyr@redhat.com>
 To:     Jiri Olsa <jolsa@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -50,64 +51,90 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 0/4] Fix 32-bit arch and compat support for the
- kprobe_multi attach type
-Message-ID: <cover.1652772731.git.esyr@redhat.com>
+Subject: [PATCH bpf-next v3 2/4] bpf_trace: support 32-bit kernels in
+ bpf_kprobe_multi_link_attach
+Message-ID: <525b99881dc144b986e381eb23b12617a311f243.1652772731.git.esyr@redhat.com>
+References: <cover.1652772731.git.esyr@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1652772731.git.esyr@redhat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As suggested in [1], the kprobe_multi interface is to be fixed for 32-bit
-architectures and compat, rather then disabled.  As it turned out,
-there are a couple of additional problems that are to be addressed:
- - the absence of size overflow checks, leading to possible
-   out-of-bounds writes (addressed by the first patch; this one likely has
-   to be fixed in 5.18, where the version of the patch from [3]
-   may be preferrable, along with [4] to avoid applying the rest
-   of the series);
- - the assumption that long has the same size as u64, which would make
-   cookies arrays size calculation incorrect on 32-bit architectures
-   (addressed by the second patch);
- - the addrs array passing API, that is incompatible with compat and has
-   to be changed (addressed in the fourth patch): those are kernel
-   addresses and not user ones (as was incorrectly stated in [2]);
-   this change is only semantical for 64-bit user/kernelspace,
-   so it shouldn't impact ABI there, at least.
+It seems that there is no reason not to support 32-bit architectures;
+doing so requires a bit of rework with respect to cookies handling,
+however, as the current code implicitly assumes
+that sizeof(long) == sizeof(u64).
 
-[1] https://lore.kernel.org/lkml/CAADnVQ+2gwhcMht4PuDnDOFKY68Wsq8QFz4Y69NBX_TLaSexQQ@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/20220510184155.GA8295@asgard.redhat.com/
-[3] https://lore.kernel.org/lkml/20220516230455.GA25103@asgard.redhat.com/
-[4] https://lore.kernel.org/lkml/20220506142148.GA24802@asgard.redhat.com/
+Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+---
+ kernel/trace/bpf_trace.c | 17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-v3:
- - Rebased on top of bpf-next
- - Removed unnecessary size/cookies_size assignments as suggested
-   by Yonghong Sond
-
-v2: https://lore.kernel.org/lkml/20220516230441.GA22091@asgard.redhat.com/
- - Fixed the isses reported by CI
-
-v1: https://lore.kernel.org/lkml/20220516182657.GA28596@asgard.redhat.com/
-
-Eugene Syromiatnikov (4):
-  bpf_trace: check size for overflow in bpf_kprobe_multi_link_attach
-  bpf_trace: support 32-bit kernels in bpf_kprobe_multi_link_attach
-  bpf_trace: handle compat in copy_user_syms
-  bpf_trace: pass array of u64 values in kprobe_multi.addrs
-
- kernel/trace/bpf_trace.c                           | 67 ++++++++++++++++------
- tools/lib/bpf/bpf.h                                |  2 +-
- tools/lib/bpf/libbpf.c                             |  8 +--
- tools/lib/bpf/libbpf.h                             |  2 +-
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  2 +-
- .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  8 +--
- 6 files changed, 62 insertions(+), 27 deletions(-)
-
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 9c041be..a93a54f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2435,16 +2435,12 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 	struct bpf_link_primer link_primer;
+ 	void __user *ucookies;
+ 	unsigned long *addrs;
+-	u32 flags, cnt, size;
++	u32 flags, cnt, size, cookies_size;
+ 	void __user *uaddrs;
+ 	u64 *cookies = NULL;
+ 	void __user *usyms;
+ 	int err;
+ 
+-	/* no support for 32bit archs yet */
+-	if (sizeof(u64) != sizeof(void *))
+-		return -EOPNOTSUPP;
+-
+ 	if (prog->expected_attach_type != BPF_TRACE_KPROBE_MULTI)
+ 		return -EINVAL;
+ 
+@@ -2454,6 +2450,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 
+ 	uaddrs = u64_to_user_ptr(attr->link_create.kprobe_multi.addrs);
+ 	usyms = u64_to_user_ptr(attr->link_create.kprobe_multi.syms);
++	ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
+ 	if (!!uaddrs == !!usyms)
+ 		return -EINVAL;
+ 
+@@ -2461,8 +2458,11 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 	if (!cnt)
+ 		return -EINVAL;
+ 
+-	if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size))
++	if (check_mul_overflow(cnt, (u32)sizeof(*addrs), &size) ||
++	    (ucookies &&
++	     check_mul_overflow(cnt, (u32)sizeof(*cookies), &cookies_size))) {
+ 		return -EOVERFLOW;
++	}
+ 	addrs = kvmalloc(size, GFP_KERNEL);
+ 	if (!addrs)
+ 		return -ENOMEM;
+@@ -2486,14 +2486,13 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 			goto error;
+ 	}
+ 
+-	ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
+ 	if (ucookies) {
+-		cookies = kvmalloc(size, GFP_KERNEL);
++		cookies = kvmalloc(cookies_size, GFP_KERNEL);
+ 		if (!cookies) {
+ 			err = -ENOMEM;
+ 			goto error;
+ 		}
+-		if (copy_from_user(cookies, ucookies, size)) {
++		if (copy_from_user(cookies, ucookies, cookies_size)) {
+ 			err = -EFAULT;
+ 			goto error;
+ 		}
 -- 
 2.1.4
 
