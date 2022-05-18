@@ -2,470 +2,286 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1C66C433FE
-	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 21:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62FA9C433F5
+	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 21:08:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243063AbiERVBz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 17:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S243029AbiERVIi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 17:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243071AbiERVBJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 17:01:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F3A2D259F98
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 14:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652907638;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dOD7EgUrZMs2w5AxhmsuB8o7QpPaiPeR39zzsEEn6xM=;
-        b=G952f0e7e/MCf4xk3U9v0KlidHVSD67Eyon4Dkhtj7nCauITX1bq/dqit93XPKdkHgiUMh
-        DMjw/ZiY5X2rl3+Owk75uIUaJ5KF2JzV8SfuO1HbDtJMt9aJVw+QVfdIb8SPqrYt5lQJ1v
-        wh/WXcGabHthzHMkeKpUaXIrActbQpc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-Li_dvkYfMUegNwaQ0nNNTA-1; Wed, 18 May 2022 17:00:34 -0400
-X-MC-Unique: Li_dvkYfMUegNwaQ0nNNTA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C3D18811E75;
-        Wed, 18 May 2022 21:00:33 +0000 (UTC)
-Received: from plouf.redhat.com (unknown [10.39.192.58])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94BF22166B25;
-        Wed, 18 May 2022 21:00:30 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        with ESMTP id S242936AbiERVIh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 17:08:37 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE58DBCAF
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 14:08:35 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24IKi4xo012652;
+        Wed, 18 May 2022 14:08:19 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=G9kZth4ukSksgeVvTk3FL3CX3vraK8Snhx4mi/Bj92c=;
+ b=bktaxmkk2/NQ9W0DHXwQ3yJU8EXNQBgG80Znes2yfhxT/rQRSM6pLvJSNz9cB2LPTzNy
+ R7jtadMTSijJgWKIn/Tvffx+F+6NIunMP9IDzVPqBvIvgAEwRArIytLpyhUQOJITK/LJ
+ x+wLIgfUDyPtzxEDyCetb7pKuyFlp/4d67I= 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2171.outbound.protection.outlook.com [104.47.56.171])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3g4myhqbfm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 May 2022 14:08:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NE2CNBt8oYwH+dC9to5W2EBrbnjoybch2HKTYki51N/Ggt3hBE167dS5RI1jNDk4+vh2BD5GUdJPE6EVDRSY13uP9bknkZFtRMydFFA/XwqvP+7qQDmRsdvXXGXvOSy4LDrW+XZayvHhSB4+Eb+7cQ7wUhocnEX2I+U2rxste1cOdVihLJA9tQuNczguaD3nRENB0czgW7Hy2e4NEZBOKC66kFDZVy+LPEWLgELrShw37tL/7R8hTSyaA8fWO0UluAoNNxOt/ckUqUyqNz3Y7Um6CoSxggss1oX7LjKeGibkjY8zV/Xq53fw38mxet8l3J4uRDpGPAYO/x5RJPcJoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G9kZth4ukSksgeVvTk3FL3CX3vraK8Snhx4mi/Bj92c=;
+ b=kUQdKomnD1Rhx5rG/87oATclkkdI4qfk1VC7qhUAFSP+x3uDC1ITjJy0onfQixxGdK5SH97zBm7Hy/SywFIFjUaXMsN+xBlQ7iRsdQdSayFVzCs08g653fhCfoUN2ktnKVi9dnwgdygT45GBiu35JRX7JQ2Dwp1BdmbwnQo96/PeHl1JiqOmLQQQ36EPkExQMzJj/9U3O/cHy4K35XW9EYhJcjBHhw/BeFqtIvJoIjSXslJxNtpwkI+M3Ad4VXD2dnnqVqLTIKkTNdLOWr7GppMxXd9T45aNkpocZiGnZ/Hj3OcBHD4EhJzPS/sgGZ5ZHB8a980Z5KUImfSnWPTEYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by CO6PR15MB4228.namprd15.prod.outlook.com (2603:10b6:5:349::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.13; Wed, 18 May
+ 2022 21:08:17 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::5811:4996:bbfd:3c53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::5811:4996:bbfd:3c53%7]) with mapi id 15.20.5273.015; Wed, 18 May 2022
+ 21:08:17 +0000
+Message-ID: <77d65513-8318-2df2-8990-4bc02bf195f1@fb.com>
+Date:   Wed, 18 May 2022 14:08:13 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [PATCH bpf-next v2 08/18] libbpf: Add enum64 sanitization
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v5 15/17] samples/bpf: add new hid_mouse example
-Date:   Wed, 18 May 2022 22:59:22 +0200
-Message-Id: <20220518205924.399291-16-benjamin.tissoires@redhat.com>
-In-Reply-To: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
-References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+References: <20220514031221.3240268-1-yhs@fb.com>
+ <20220514031303.3243922-1-yhs@fb.com>
+ <CAEf4BzaAXz-DxvrjB94vs7Zv_y15-2kbF5528aPvpCru_f7=Aw@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <CAEf4BzaAXz-DxvrjB94vs7Zv_y15-2kbF5528aPvpCru_f7=Aw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BN6PR17CA0049.namprd17.prod.outlook.com
+ (2603:10b6:405:75::38) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 934fb9ce-84c3-4260-4207-08da39128752
+X-MS-TrafficTypeDiagnostic: CO6PR15MB4228:EE_
+X-Microsoft-Antispam-PRVS: <CO6PR15MB42280362E4ABE81D7B88F0A9D3D19@CO6PR15MB4228.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pgcpep09wuRl1/ZwXFMTjVgw9/MRuWxQRsfOBnZoCkubZdPhtXA6nfnT9z+N9VriQzmkRZCGEWAwsOUhbYzcMeJIW0850ZlSQmPOKfyoNEQYLIJfSChbKfEv7hXdGwc18XW2Dat22mFXkpFH9TyHXZE7YOaB5ipSJB4Q8SdKkoBfyFjcxu3zedMcbLfm8dgPSA9jihHoJwuu2hxeFY4Y1LrJgW31cl79/Rdi9+GZgC4jI9+AYJJo2282yi3G7A0QfckepcvT4D607ollVRxzHdwSF6okfS82yMdaCat2IdmwKP/oFZ5EzGzEYziwYQbHxf45MmjUhRHRAJ9cXvw34g6PFmjVvXydRZUXQ54xq6evgxBjFbPuL5Hbjh0aHiBncrUNQhrkJupuCUJUK3rTdZEziFsv643PLDGahKx80vQVngUVGSPbrSEefgy0fKqeCOP19xqo+JXID2peWVkvsdDzzevmtfIp9XNIMOq4tjvJ0SxXTNwDyZ72ObHc5wCfaXFXUXFOICOHdRR9a/WmyYpRVG2eQulRhvbWdVNrrALjYHcdySWoOsLPFEofFtQBsEXDqDrMy14HfUwWKYqTJPUDi/Hpo1l7bCQzmIl+s2eDdvdzy0DpWBRYlf9ckIYhIeMyot62E7kKFq6LK07+ugB1/moGUJM1ASJGBvFqvzi4mrZhd9hkZvpTaay09QSSKZx1ygOsWvsMl9VY/CeCvBYIaoEx5TKwe22KJ8kKbgQrOC8JTVmEJt7ZSCgZK0I0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(8936002)(5660300002)(66946007)(6512007)(6506007)(508600001)(38100700002)(2906002)(66556008)(53546011)(36756003)(31696002)(2616005)(54906003)(316002)(86362001)(31686004)(8676002)(6666004)(66476007)(6916009)(52116002)(6486002)(4326008)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SE84K3lpUzBwTFJUL2phdWQ3cjVVSXpjU0Y2S3pHUVhWNTFxMlVpV3JtQ3Ju?=
+ =?utf-8?B?ZFdlZitUcHNBck04UDRmZ0htdjd6Y3NuVUhGQlh1M0ZCVTVscllJVFpCY0RV?=
+ =?utf-8?B?WHpHSkg3NCtLek9uWUwrdU1LOGVkUklQWkFySWVPMjVkN1I3akNCcmEzL24x?=
+ =?utf-8?B?OHRkSldETDZIUnRMUFRvckdaK1h2eEYvaTVGM21DTGRJWjN1NThGY3Q2dGhZ?=
+ =?utf-8?B?MXNYZUh5NjhPU0JaaTlWbmZiamJaWXE3UkdNQTgrRHpyRkJCYUt4eGFGbFZ2?=
+ =?utf-8?B?U1hVeldRdktWbWd6OGFGSTk2M1JaaS9mdjZTWlBpQU03bjNiKytjK0IyOUsr?=
+ =?utf-8?B?OG9YRWR2UU0xVklQUXJhTVJ4L2hTam9yQ2ZnaHpNRXZTMFd1cXRLV3FTUC9Q?=
+ =?utf-8?B?emU5dWRmM0hZQTFpdGZLU0NPR1hRRm9UdHQ0THcvWVVsSDJwenVNend1bThm?=
+ =?utf-8?B?QVVWUTZkMExSUDZaczRNUU1vRm1HZnRSSkp5ZkltQ2wyek1OUGZJbDdDd0ZI?=
+ =?utf-8?B?eDJGY2JFSXRDS3FVTHk3Mmk4djgyclMrM2V1RlArUEQ5QS92cXQzV01oSmRO?=
+ =?utf-8?B?SkFiR1pYSlpaOUFHRXlxVXdsZFZLSEZCRVZlVHNjTm9LWEljSVZ0cW1Sc0ps?=
+ =?utf-8?B?QVltOUR2QnBva21kZmhvZ2FraHZDeE1JRlltZTFBSlk4RkUyc25pYW5hM3Zp?=
+ =?utf-8?B?ZTBsZ004MVJ1TDY3MGJGVk5lTVhDUkNMS0ROOVkyNWcvVytYZVpNWnltYW1V?=
+ =?utf-8?B?ZkVRNGZGcTZmWWZiUWZQTXIza3FmOE44OFpXS1ZYcWxkdDVUbVBBYWJJOWd5?=
+ =?utf-8?B?aEU3d3Jmb0hlMC9iZ0ZHOURwaFVURUtOQ0FsWHJiUTNNSlFyb0sxYnE4VFNm?=
+ =?utf-8?B?Q0oycWt5UWdlUE5UbDN6Z2RpY2VneFhzSWJjV1k1RDF1aFhpR2JHbVgrVDdt?=
+ =?utf-8?B?U0V4Y015VGR1Y2habW9XK3hKWFp6ZDZPaVVPajB1UmhoTzBUV1hLN1V6T25u?=
+ =?utf-8?B?dmFsemErcDNWMlN3ZHhTYUdCeE54aVlscGlmVU9jRTg1Uk5YamZjSC9NZ0pq?=
+ =?utf-8?B?S1ladC9YSWdJNlp2N3JaWkNTV1FFRklmd0JGazZPdTJYK0dVSTJtMWJhMnh0?=
+ =?utf-8?B?UnNnb0hLSy85VWxLNjVycnVWclp5MjREc3BDclNCY0FEUUFvKytTNFhaU0wv?=
+ =?utf-8?B?WExKWWxLbTVhYlJwVlM3WUZZYjJ1YjNQUms5bmlMZUd6ZTVhTUtLTm14M2pS?=
+ =?utf-8?B?dXVYT2g5aDkydXY0SkhIMmFqajdCSkt2QkV1OXVLOXd2VU1VdU9XZ0VXTVFO?=
+ =?utf-8?B?VXhGYnhQdEE2bzJLNTVmVjFXSHNDdFdMWkNaalp3ckFxcEd1bzdCVnQwMFpQ?=
+ =?utf-8?B?d0VabzFLM2grd3JvY252N0VmNFNGNWV4SHRNcmNZaFpRWmtiVkp4WWJ6ZmxS?=
+ =?utf-8?B?Zll5cUZPbTFpMHRScS9NVlRwR2cyemh1YnQrTXFFb2tldFNWKzE1TXpIR0cy?=
+ =?utf-8?B?cHlOcmNFUUpRR091Z0VncVBqTS9VWTdHTkU3d2ZEc1kwbmdyV0NrekI3NjYw?=
+ =?utf-8?B?b1gxRkxtdnlzV1VmT3Nzcm1ZRkFWcnlQQ2hnZk95SkZ1T2o1Ni9WOHc0Um8r?=
+ =?utf-8?B?WTJUbkxaaUx4YjNmS0d5UGNlZGJpelhVd2NIcEh6dGd5Y1AxVUhOR004cXJP?=
+ =?utf-8?B?OEVvK2J4ZUozK205NHU0bEdPb2lvRXYzOHF0Z3VHRXhIY1B6SzRScU9UVXJ5?=
+ =?utf-8?B?UkxTaThQaUdzWnFRb0FlaWo2K0NpbVFyak9qOVBjMU9FT1dpazVrV0dVY1Q0?=
+ =?utf-8?B?Y0VEeG1JL0I3WTlidlpnd2dsd1NSeTIvNTdMc0FZdGVCSHlaNkgwZG5MVDF0?=
+ =?utf-8?B?aUliZDg0UmJoYXF4MnZySmE0Q0VWdTBGcXBaNitZdm9sVGZwd1VzRFU5aGNw?=
+ =?utf-8?B?WHVXN0owemhtRWpTOTYyeEwyRnVqV3VPR3ZEQldVVXVVbVNUSDN1SXFOOUVK?=
+ =?utf-8?B?V1FlcS9mL0lBM283ODhuU1M5UWlxVXVjVDdWNnVNeG9NTGcrY0dicDNJeFcr?=
+ =?utf-8?B?bXJFaHlJR212SGlyQnFYakRURTJYZVZ6UmcxSndDYzNvM0hYSU1yUkxTNkNs?=
+ =?utf-8?B?S0xOUUZHM21PckhiK3NLY1p1OHVsb1FEVVVtNStBQk02Y0dGMzc2N1ZjSFRi?=
+ =?utf-8?B?RHRhakFLK2tXLzMxL0FaeVAwRTNNOXZxRjFGQjUwL1pQZnlNNnMyNFh6Vytw?=
+ =?utf-8?B?ak5QbldTVlZPcnFVYVUwcHZ4RXRNNHpIRlVrWWRWeEZ5Zk9OYVBUV2x1SHpl?=
+ =?utf-8?B?RjQwTHN2Z3orbFUrZ1dBeTd3c1FhaHA4VTI2UHh3TkYybktBOHhJVkpmQ3lE?=
+ =?utf-8?Q?nuBcVzGwFk7AWSJ4=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 934fb9ce-84c3-4260-4207-08da39128752
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 21:08:17.0105
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NeGGUn+DwB54KbUvFCfRqERsCIvgf27BIjWITVe5NN3ZQdvqptLU8JPq59nz9cL8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR15MB4228
+X-Proofpoint-ORIG-GUID: Nr56cGcuEAqbLzoxdRYM9ziMwWBgYFQ1
+X-Proofpoint-GUID: Nr56cGcuEAqbLzoxdRYM9ziMwWBgYFQ1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Everything should be available in the selftest part of the tree, but
-providing an example without uhid and hidraw will be more easy to
-follow for users.
 
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
----
+On 5/17/22 4:25 PM, Andrii Nakryiko wrote:
+> On Fri, May 13, 2022 at 8:13 PM Yonghong Song <yhs@fb.com> wrote:
+>>
+>> When old kernel does not support enum64 but user space btf
+>> contains non-zero enum kflag or enum64, libbpf needs to
+>> do proper sanitization so modified btf can be accepted
+>> by the kernel.
+>>
+>> Sanitization for enum kflag can be achieved by clearing
+>> the kflag bit. For enum64, the type is replaced with an
+>> union of integer member types and the integer member size
+>> must be smaller than enum64 size. If such an integer
+>> type cannot be found, a new type is created and used
+>> for union members.
+>>
+>> Signed-off-by: Yonghong Song <yhs@fb.com>
+>> ---
+>>   tools/lib/bpf/btf.h             |  3 +-
+>>   tools/lib/bpf/libbpf.c          | 53 +++++++++++++++++++++++++++++++--
+>>   tools/lib/bpf/libbpf_internal.h |  2 ++
+>>   3 files changed, 55 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+>> index 7da6970b8c9f..d4fe1300ed33 100644
+>> --- a/tools/lib/bpf/btf.h
+>> +++ b/tools/lib/bpf/btf.h
+>> @@ -395,9 +395,10 @@ btf_dump__dump_type_data(struct btf_dump *d, __u32 id,
+>>   #ifndef BTF_KIND_FLOAT
+>>   #define BTF_KIND_FLOAT         16      /* Floating point       */
+>>   #endif
+>> -/* The kernel header switched to enums, so these two were never #defined */
+>> +/* The kernel header switched to enums, so the following were never #defined */
+>>   #define BTF_KIND_DECL_TAG      17      /* Decl Tag */
+>>   #define BTF_KIND_TYPE_TAG      18      /* Type Tag */
+>> +#define BTF_KIND_ENUM64                19      /* Enum for up-to 64bit values */
+>>
+>>   static inline __u16 btf_kind(const struct btf_type *t)
+>>   {
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index 4867a930628b..f54e70b9953d 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -2114,6 +2114,7 @@ static const char *__btf_kind_str(__u16 kind)
+>>          case BTF_KIND_FLOAT: return "float";
+>>          case BTF_KIND_DECL_TAG: return "decl_tag";
+>>          case BTF_KIND_TYPE_TAG: return "type_tag";
+>> +       case BTF_KIND_ENUM64: return "enum64";
+>>          default: return "unknown";
+>>          }
+>>   }
+>> @@ -2642,9 +2643,10 @@ static bool btf_needs_sanitization(struct bpf_object *obj)
+>>          bool has_func = kernel_supports(obj, FEAT_BTF_FUNC);
+>>          bool has_decl_tag = kernel_supports(obj, FEAT_BTF_DECL_TAG);
+>>          bool has_type_tag = kernel_supports(obj, FEAT_BTF_TYPE_TAG);
+>> +       bool has_enum64 = kernel_supports(obj, FEAT_BTF_ENUM64);
+>>
+>>          return !has_func || !has_datasec || !has_func_global || !has_float ||
+>> -              !has_decl_tag || !has_type_tag;
+>> +              !has_decl_tag || !has_type_tag || !has_enum64;
+>>   }
+>>
+>>   static void bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
+>> @@ -2655,9 +2657,25 @@ static void bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
+>>          bool has_func = kernel_supports(obj, FEAT_BTF_FUNC);
+>>          bool has_decl_tag = kernel_supports(obj, FEAT_BTF_DECL_TAG);
+>>          bool has_type_tag = kernel_supports(obj, FEAT_BTF_TYPE_TAG);
+>> +       bool has_enum64 = kernel_supports(obj, FEAT_BTF_ENUM64);
+>> +       int min_int_size = 32, min_enum64_size = 32, min_int_tid = 0;
+>>          struct btf_type *t;
+>>          int i, j, vlen;
+>>
+>> +       if (!has_enum64) {
+>> +               for (i = 1; i < btf__type_cnt(btf); i++) {
+>> +                       t = (struct btf_type *)btf__type_by_id(btf, i);
+>> +                       if (btf_is_int(t) && t->size < min_int_size) {
+>> +                               min_int_size = t->size;
+>> +                               min_int_tid = i;
+>> +                       } else if (btf_is_enum64(t) && t->size < min_enum64_size) {
+>> +                               min_enum64_size = t->size;
+>> +                       }
+>> +               }
+>> +               if (min_int_size > min_enum64_size)
+>> +                       min_int_tid = btf__add_int(btf, "char", 1,  BTF_INT_SIGNED);
+>> +       }
+>> +
+> 
+> we do this search even if bpf_object's BTF doesn't have enum64, which
+> seems overly pessimistic. How about we just lazily (but
+> unconditionally) add new BTF_KIND_INT on first encountered enum64 and
+> remember it's id (see below)
+> 
+>>          for (i = 1; i < btf__type_cnt(btf); i++) {
+>>                  t = (struct btf_type *)btf__type_by_id(btf, i);
+>>
+>> @@ -2717,7 +2735,20 @@ static void bpf_object__sanitize_btf(struct bpf_object *obj, struct btf *btf)
+>>                          /* replace TYPE_TAG with a CONST */
+>>                          t->name_off = 0;
+>>                          t->info = BTF_INFO_ENC(BTF_KIND_CONST, 0, 0);
+>> -               }
+>> +               } else if (!has_enum64 && btf_is_enum(t)) {
+>> +                       /* clear the kflag */
+>> +                       t->info = btf_type_info(btf_kind(t), btf_vlen(t), false);
+>> +               } else if (!has_enum64 && btf_is_enum64(t)) {
+>> +                       /* replace ENUM64 with a union */
+>> +                       struct btf_member *m = btf_members(t);
+>> +
+> 
+> so here we just
+> 
+> if (enum64_placeholder_id == 0) {
+>      enum64_placeholder_id = btf__add_int(btf, "enum64_placeholder", t->size, 0);
+>      if (enum64_placeholder_id < 0) /* pr_warn and exit with error */
+> }
+> 
+> and then just use enum64_placeholder_id for each field type?
+> 
+> It seems much simpler than trying to find matching int (especially
+> given potentially non-8-byte size), so it seems better to just add our
+> own type.
 
-changes in v5:
-- bring back same features than v3, with the new API
+Besides this implementation, I had another idea to just add one
+int type unconditionally for enum64->union member type. To avoid adding
+this type unconditionally, I added the search part.
 
-changes in v4:
-- dropped the not-yet-implemented rdesc_fixup
-- use the new API
+Let me try the approach to add the new int type in the fly when
+needed.
 
-changes in v3:
-- use the new hid_get_data API
-- add a comment for the report descriptor fixup to explain what is done
-
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
----
- samples/bpf/.gitignore      |   1 +
- samples/bpf/Makefile        |  23 ++++++
- samples/bpf/hid_mouse.bpf.c | 134 ++++++++++++++++++++++++++++++
- samples/bpf/hid_mouse.c     | 157 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 315 insertions(+)
- create mode 100644 samples/bpf/hid_mouse.bpf.c
- create mode 100644 samples/bpf/hid_mouse.c
-
-diff --git a/samples/bpf/.gitignore b/samples/bpf/.gitignore
-index 0e7bfdbff80a..65440bd618b2 100644
---- a/samples/bpf/.gitignore
-+++ b/samples/bpf/.gitignore
-@@ -2,6 +2,7 @@
- cpustat
- fds_example
- hbm
-+hid_mouse
- ibumad
- lathist
- lwt_len_hist
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 03e3d3529ac9..dc74e26111f4 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -60,6 +60,8 @@ tprogs-y += xdp_redirect_map
- tprogs-y += xdp_redirect
- tprogs-y += xdp_monitor
- 
-+tprogs-y += hid_mouse
-+
- # Libbpf dependencies
- LIBBPF_SRC = $(TOOLS_PATH)/lib/bpf
- LIBBPF_OUTPUT = $(abspath $(BPF_SAMPLES_PATH))/libbpf
-@@ -125,6 +127,8 @@ xdp_redirect-objs := xdp_redirect_user.o $(XDP_SAMPLE)
- xdp_monitor-objs := xdp_monitor_user.o $(XDP_SAMPLE)
- xdp_router_ipv4-objs := xdp_router_ipv4_user.o $(XDP_SAMPLE)
- 
-+hid_mouse-objs := hid_mouse.o
-+
- # Tell kbuild to always build the programs
- always-y := $(tprogs-y)
- always-y += sockex1_kern.o
-@@ -349,6 +353,8 @@ $(obj)/hbm_out_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- $(obj)/hbm.o: $(src)/hbm.h
- $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- 
-+$(obj)/hid_mouse.o: $(obj)/hid_mouse.skel.h
-+
- # Override includes for xdp_sample_user.o because $(srctree)/usr/include in
- # TPROGS_CFLAGS causes conflicts
- XDP_SAMPLE_CFLAGS += -Wall -O2 \
-@@ -433,6 +439,23 @@ $(BPF_SKELS_LINKED): $(BPF_OBJS_LINKED) $(BPFTOOL)
- 	@echo "  BPF GEN-SKEL" $(@:.skel.h=)
- 	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=)) > $@
- 
-+# Generate BPF skeletons for non XDP progs
-+OTHER_BPF_SKELS := hid_mouse.skel.h
-+
-+hid_mouse.skel.h-deps := hid_mouse.bpf.o
-+
-+OTHER_BPF_SRCS_LINKED := $(patsubst %.skel.h,%.bpf.c, $(OTHER_BPF_SKELS))
-+OTHER_BPF_OBJS_LINKED := $(patsubst %.bpf.c,$(obj)/%.bpf.o, $(OTHER_BPF_SRCS_LINKED))
-+OTHER_BPF_SKELS_LINKED := $(addprefix $(obj)/,$(OTHER_BPF_SKELS))
-+
-+$(OTHER_BPF_SKELS_LINKED): $(OTHER_BPF_OBJS_LINKED) $(BPFTOOL)
-+	@echo "  BPF GEN-OBJ " $(@:.skel.h=)
-+	$(Q)$(BPFTOOL) gen object $(@:.skel.h=.lbpf.o) $(addprefix $(obj)/,$($(@F)-deps))
-+	@echo "  BPF GEN-SKEL" $(@:.skel.h=)
-+	$(Q)$(BPFTOOL) gen skeleton $(@:.skel.h=.lbpf.o) name $(notdir $(@:.skel.h=_lskel)) > $@
-+#	$(call msg,GEN-SKEL,$@)
-+#	$(Q)$(BPFTOOL) gen skeleton $< > $@
-+
- # asm/sysreg.h - inline assembly used by it is incompatible with llvm.
- # But, there is no easy way to fix it, so just exclude it since it is
- # useless for BPF samples.
-diff --git a/samples/bpf/hid_mouse.bpf.c b/samples/bpf/hid_mouse.bpf.c
-new file mode 100644
-index 000000000000..0113e603f7a7
---- /dev/null
-+++ b/samples/bpf/hid_mouse.bpf.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* following are kfuncs exported by HID for HID-BPF */
-+extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
-+			      unsigned int offset,
-+			      const size_t __sz) __ksym;
-+extern void hid_bpf_data_release(__u8 *data) __ksym;
-+extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx) __ksym;
-+
-+struct attach_prog_args {
-+	int prog_fd;
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+SEC("syscall")
-+int attach_prog(struct attach_prog_args *ctx)
-+{
-+	ctx->retval = hid_bpf_attach_prog(ctx->hid,
-+					  ctx->prog_fd,
-+					  0);
-+	return 0;
-+}
-+
-+SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_y_event, struct hid_bpf_ctx *hctx)
-+{
-+	s16 y;
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	bpf_printk("event: size: %d", hctx->size);
-+	bpf_printk("incoming event: %02x %02x %02x",
-+		   data[0],
-+		   data[1],
-+		   data[2]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[3],
-+		   data[4],
-+		   data[5]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[6],
-+		   data[7],
-+		   data[8]);
-+
-+	y = data[3] | (data[4] << 8);
-+
-+	y = -y;
-+
-+	data[3] = y & 0xFF;
-+	data[4] = (y >> 8) & 0xFF;
-+
-+	bpf_printk("modified event: %02x %02x %02x",
-+		   data[0],
-+		   data[1],
-+		   data[2]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[3],
-+		   data[4],
-+		   data[5]);
-+	bpf_printk("                %02x %02x %02x",
-+		   data[6],
-+		   data[7],
-+		   data[8]);
-+
-+	return 0;
-+}
-+
-+SEC("fmod_ret/hid_bpf_device_event")
-+int BPF_PROG(hid_x_event, struct hid_bpf_ctx *hctx)
-+{
-+	s16 x;
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 9 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	x = data[1] | (data[2] << 8);
-+
-+	x = -x;
-+
-+	data[1] = x & 0xFF;
-+	data[2] = (x >> 8) & 0xFF;
-+	return 0;
-+}
-+
-+SEC("fmod_ret/hid_bpf_rdesc_fixup")
-+int BPF_PROG(hid_rdesc_fixup, struct hid_bpf_ctx *hctx)
-+{
-+	__u8 *data = hid_bpf_get_data(hctx, 0 /* offset */, 4096 /* size */);
-+
-+	if (!data)
-+		return 0; /* EPERM check */
-+
-+	bpf_printk("rdesc: %02x %02x %02x",
-+		   data[0],
-+		   data[1],
-+		   data[2]);
-+	bpf_printk("       %02x %02x %02x",
-+		   data[3],
-+		   data[4],
-+		   data[5]);
-+	bpf_printk("       %02x %02x %02x ...",
-+		   data[6],
-+		   data[7],
-+		   data[8]);
-+
-+	/*
-+	 * The original report descriptor contains:
-+	 *
-+	 * 0x05, 0x01,                    //   Usage Page (Generic Desktop)      30
-+	 * 0x16, 0x01, 0x80,              //   Logical Minimum (-32767)          32
-+	 * 0x26, 0xff, 0x7f,              //   Logical Maximum (32767)           35
-+	 * 0x09, 0x30,                    //   Usage (X)                         38
-+	 * 0x09, 0x31,                    //   Usage (Y)                         40
-+	 *
-+	 * So byte 39 contains Usage X and byte 41 Usage Y.
-+	 *
-+	 * We simply swap the axes here.
-+	 */
-+	data[39] = 0x31;
-+	data[41] = 0x30;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/samples/bpf/hid_mouse.c b/samples/bpf/hid_mouse.c
-new file mode 100644
-index 000000000000..a74e0dc45755
---- /dev/null
-+++ b/samples/bpf/hid_mouse.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Benjamin Tissoires
-+ */
-+
-+/* not sure why but this doesn't get preoperly imported */
-+#define __must_check
-+
-+#include <assert.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <libgen.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <unistd.h>
-+
-+#include <linux/bpf.h>
-+#include <linux/errno.h>
-+
-+#include "bpf_util.h"
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+
-+#include "hid_mouse.skel.h"
-+
-+static bool running = true;
-+
-+struct attach_prog_args {
-+	int prog_fd;
-+	unsigned int hid;
-+	int retval;
-+};
-+
-+static void int_exit(int sig)
-+{
-+	running = false;
-+	exit(0);
-+}
-+
-+static void usage(const char *prog)
-+{
-+	fprintf(stderr,
-+		"%s: %s /sys/bus/hid/devices/0BUS:0VID:0PID:00ID\n\n",
-+		__func__, prog);
-+}
-+
-+static int get_hid_id(const char *path)
-+{
-+	const char *str_id, *dir;
-+	char uevent[1024];
-+	int fd;
-+
-+	memset(uevent, 0, sizeof(uevent));
-+	snprintf(uevent, sizeof(uevent) - 1, "%s/uevent", path);
-+
-+	fd = open(uevent, O_RDONLY | O_NONBLOCK);
-+	if (fd < 0)
-+		return -ENOENT;
-+
-+	close(fd);
-+
-+	dir = basename((char *)path);
-+
-+	str_id = dir + sizeof("0003:0001:0A37.");
-+	return (int)strtol(str_id, NULL, 16);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct hid_mouse_lskel *skel;
-+	struct bpf_program *prog;
-+	int err;
-+	const char *optstr = "";
-+	const char *sysfs_path;
-+	int opt, hid_id, attach_fd;
-+	struct attach_prog_args args = {
-+		.retval = -1,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattr,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
-+
-+	while ((opt = getopt(argc, argv, optstr)) != -1) {
-+		switch (opt) {
-+		default:
-+			usage(basename(argv[0]));
-+			return 1;
-+		}
-+	}
-+
-+	if (optind == argc) {
-+		usage(basename(argv[0]));
-+		return 1;
-+	}
-+
-+	sysfs_path = argv[optind];
-+	if (!sysfs_path) {
-+		perror("sysfs");
-+		return 1;
-+	}
-+
-+	skel = hid_mouse_lskel__open_and_load();
-+	if (!skel) {
-+		fprintf(stderr, "%s  %s:%d", __func__, __FILE__, __LINE__);
-+		return -1;
-+	}
-+
-+	hid_id = get_hid_id(sysfs_path);
-+
-+	if (hid_id < 0) {
-+		fprintf(stderr, "can not open HID device: %m\n");
-+		return 1;
-+	}
-+	args.hid = hid_id;
-+
-+	attach_fd = bpf_program__fd(skel->progs.attach_prog);
-+	if (attach_fd < 0) {
-+		fprintf(stderr, "can't locate attach prog: %m\n");
-+		return 1;
-+	}
-+
-+	bpf_object__for_each_program(prog, *skel->skeleton->obj) {
-+		/* ignore syscalls */
-+		if (bpf_program__get_type(prog) != BPF_PROG_TYPE_TRACING)
-+			continue;
-+
-+		args.retval = -1;
-+		args.prog_fd = bpf_program__fd(prog);
-+		err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+		if (err) {
-+			fprintf(stderr, "can't attach prog to hid device %d: %m (err: %d)\n",
-+				hid_id, err);
-+			return 1;
-+		}
-+	}
-+
-+	signal(SIGINT, int_exit);
-+	signal(SIGTERM, int_exit);
-+//
-+////	err = bpf_obj_get_info_by_fd(progs[0].fd, &info, &info_len);
-+////	if (err) {
-+////		printf("can't get prog info - %s\n", strerror(errno));
-+////		goto cleanup;
-+////	}
-+//
-+	while (running)
-+		;
-+
-+// cleanup:
-+//	hid_mouse_lskel__destroy(skel);
-+//
-+//	return err;
-+}
--- 
-2.36.1
-
+> 
+> Please make sure to re-initialize t and m after that because
+> btf__add_int() invalidates underlying memory, so you need to re-fetch
+> btf__type_by_id().
+> 
+>> +                       vlen = btf_vlen(t);
+>> +                       t->info = BTF_INFO_ENC(BTF_KIND_UNION, 0, vlen);
+>> +                       for (j = 0; j < vlen; j++, m++) {
+>> +                               m->type = min_int_tid;
+>> +                               m->offset = 0;
+>> +                       }
+>> +                }
+>>          }
+>>   }
+>>
+[...]
