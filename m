@@ -2,56 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72AD7C433F5
-	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 22:57:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD39C4167B
+	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 22:57:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiERW5J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 18:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S231288AbiERW5L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 18:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiERW41 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 18:56:27 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A62BC5F7D
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:50 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 135-20020a25058d000000b0064dd6bc9cfdso2874197ybf.23
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:50 -0700 (PDT)
+        with ESMTP id S231598AbiERW4d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 18:56:33 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA656CF50
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:57 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id i16-20020a170902cf1000b001540b6a09e3so1598019plg.0
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=BFjmZhG7CpEBTsF/zKnk0U44MWRwVVUfrKHp4ZhHdIo=;
-        b=YJxnAQi8iXP/bICY8DgVoB54wmM/vroiYHniDkqa8YrX/zt81bL3+EHyzRVBdSn9qq
-         mQGEDzAol8FpZnYTiLQA3t0Ci5WwFsou3yavIdymJ9ZSqg5zrXytpR/dq+hhGO/NKQA3
-         hUs0VzapM/bRkOYyRsi8Cn4bvO1RibbsVOgcT2GmVMEhsEgc8mpCHW2OFS9thdo5RUEN
-         hekXO4mCQLxAa4fyToSl8Cx8BTSUSjmtpqkxp1iSZjFUscE5/75AwhmINBy+C8cvDdO6
-         eRXpJQO/xWU0VlBodRo3gLSHhM4aTOjAafztBRZd2TFWY9ckINXVu5Wu0507UAE2Q406
-         sbBg==
+        bh=2ifMzJdcStY/5O5m6nh5Ja6Hm2K26IpKO1V8xVAoPAA=;
+        b=YXhPrApKNkUQKwlm2mGARh4GMIFWll80cKgOCU0MXAqSBAntXKsil1cubi+/1mhEb8
+         Fu9CHujxwdnmwT82yz6cIzjBjLdWfyuJIJu9cNn1g4a1IOB900Lb5eiAIA4YQnPGlYto
+         tnP8wtQaFattfbLovkQChzNWJ7Ju6sL/n97UnxifSCZfwpse/dAIKN5Thfe6JReM2lhg
+         RFudkvkniz1nnpDb9w7AdH7NQcfdMvFoWeuxqw6EUc4sOfPvtFh5PldUQJCfppG1Ad01
+         DYVZVvxx5D6wYRk4Tym8g/6G7pdK+X3/jo8GHoHGdC+UbTiQwaskhDz57+15AnO7r3B8
+         HCIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=BFjmZhG7CpEBTsF/zKnk0U44MWRwVVUfrKHp4ZhHdIo=;
-        b=s5L/ABOACY3r9BjXN71snMV6Lid/YcXNBZJz08RMk434yeFH1MTd93A4AICXCk7+Bm
-         DVQvLvkjkhWLR/Rg4pbtv+cinnjOIy1wd2EBGuS4GAGrCL/DAO/+k3h7Pu2dMBh0IzDU
-         MSr4cBZlEUQQXvCCLNktOhzY6hK1ZRDobjkQFq2Dce9FTCT1GUmi+gmbkwChJj9c7h/D
-         HROeKIT/nn0gnWd9dYjRex9jYEdhL7omH/mcgHOZRxCBGNlMvtMJkIVkSwxXg6ZzdTxA
-         +W3GHESbSk0SPvsNfwEkMqwwLTjOY2IWYd30OZ2WoYsG232ey7LJmd9lVxQ3IAgHMR/u
-         Wdug==
-X-Gm-Message-State: AOAM530Gb8vQEMTcdbqje3L3Zb74VdU2SYiDWI3QYu5RM20XBexlditn
-        mRCSjUrG3ofshb4kCJakZecM0LE=
-X-Google-Smtp-Source: ABdhPJxgoeCvpOaOBA4VebtjgAEGJ99P805tt6wtJbxvjAUcJOQYdOrs40ZSTIH4LoXIsA0gTaEjCdA=
+        bh=2ifMzJdcStY/5O5m6nh5Ja6Hm2K26IpKO1V8xVAoPAA=;
+        b=gaMJtrrta9lcoOLvHo2GefWUWD6ZO5fOoWcn0q659ePeqQO2XKoIIpiOJyC19G8Sl+
+         MjjON5eLgFfQcUpc3MJUZguH2oWAUAtl2FG+2Bz4buNoWprJ7SiGm2PI6s+zqiDWwIBz
+         ME2JRtqoGT1XbGah6CDLh03q6SNYZk4oB8+1lzdlWcv/OLse+EX36bUzTjW4wrs5xgBF
+         3EcV11TFYxlIR+5rkXA6OIqhxVipLDXb7+9OkKAtJ0myNFmyfC/dn1NhTtSlhBPSXiaD
+         /bDOcIn1A+h9p2l4wU3IvUFk7efqYD4QYREKrB4/IALSiw/HViF3KTLixmQ31xgUg/1u
+         v4Zw==
+X-Gm-Message-State: AOAM533efVR6UlMwYRiPuPrXCdP2AsQc7g0dUrbyY4ILOf6G9qRGVVpi
+        vgA4bUNhV/Qkgjtm8NUfU9gYEF0=
+X-Google-Smtp-Source: ABdhPJw0k7LpVBazAYEoSnhzKwo955ffrSG+h/J0BWzBQFCMtKcK8ga39AoNhoSey4mBzYj/Qm0dpz0=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:f763:3448:2567:bf00])
- (user=sdf job=sendgmr) by 2002:a25:cd05:0:b0:64a:6b62:373 with SMTP id
- d5-20020a25cd05000000b0064a6b620373mr1949624ybf.264.1652914550345; Wed, 18
- May 2022 15:55:50 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:55:28 -0700
+ (user=sdf job=sendgmr) by 2002:a17:90b:4b02:b0:1df:d622:dd07 with SMTP id
+ lx2-20020a17090b4b0200b001dfd622dd07mr276056pjb.160.1652914557091; Wed, 18
+ May 2022 15:55:57 -0700 (PDT)
+Date:   Wed, 18 May 2022 15:55:31 -0700
 In-Reply-To: <20220518225531.558008-1-sdf@google.com>
-Message-Id: <20220518225531.558008-9-sdf@google.com>
+Message-Id: <20220518225531.558008-12-sdf@google.com>
 Mime-Version: 1.0
 References: <20220518225531.558008-1-sdf@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH bpf-next v7 08/11] libbpf: add lsm_cgoup_sock type
+Subject: [PATCH bpf-next v7 11/11] selftests/bpf: verify lsm_cgroup struct
+ sock access
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -61,33 +62,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-lsm_cgroup/ is the prefix for BPF_LSM_CGROUP.
+sk_priority & sk_mark are writable, the rest is readonly.
+
+One interesting thing here is that the verifier doesn't
+really force me to add NULL checks anywhere :-/
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/lib/bpf/libbpf.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../selftests/bpf/prog_tests/lsm_cgroup.c     | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ef7f302e542f..854449dcd072 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9027,6 +9027,7 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("fmod_ret.s+",		TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("fexit.s+",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("freplace+",		EXT, 0, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("lsm_cgroup+",		LSM, BPF_LSM_CGROUP, SEC_ATTACH_BTF),
- 	SEC_DEF("lsm+",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
- 	SEC_DEF("lsm.s+",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
- 	SEC_DEF("iter+",		TRACING, BPF_TRACE_ITER, SEC_ATTACH_BTF, attach_iter),
-@@ -9450,6 +9451,7 @@ void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
- 		*kind = BTF_KIND_TYPEDEF;
- 		break;
- 	case BPF_LSM_MAC:
-+	case BPF_LSM_CGROUP:
- 		*prefix = BTF_LSM_PREFIX;
- 		*kind = BTF_KIND_FUNC;
- 		break;
+diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+index 29292ec40343..64b6830e03f5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
++++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+@@ -270,8 +270,77 @@ static void test_lsm_cgroup_functional(void)
+ 	lsm_cgroup__destroy(skel);
+ }
+ 
++static int field_offset(const char *type, const char *field)
++{
++	const struct btf_member *memb;
++	const struct btf_type *tp;
++	const char *name;
++	struct btf *btf;
++	int btf_id;
++	int i;
++
++	btf = btf__load_vmlinux_btf();
++	if (!btf)
++		return -1;
++
++	btf_id = btf__find_by_name_kind(btf, type, BTF_KIND_STRUCT);
++	if (btf_id < 0)
++		return -1;
++
++	tp = btf__type_by_id(btf, btf_id);
++	memb = btf_members(tp);
++
++	for (i = 0; i < btf_vlen(tp); i++) {
++		name = btf__name_by_offset(btf,
++					   memb->name_off);
++		if (strcmp(field, name) == 0)
++			return memb->offset / 8;
++		memb++;
++	}
++
++	return -1;
++}
++
++static bool sk_writable_field(const char *type, const char *field, int size)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, opts,
++		    .expected_attach_type = BPF_LSM_CGROUP);
++	struct bpf_insn	insns[] = {
++		/* r1 = *(u64 *)(r1 + 0) */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0),
++		/* r1 = *(u64 *)(r1 + offsetof(struct socket, sk)) */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, field_offset("socket", "sk")),
++		/* r2 = *(u64 *)(r1 + offsetof(struct sock, <field>)) */
++		BPF_LDX_MEM(size, BPF_REG_2, BPF_REG_1, field_offset(type, field)),
++		/* *(u64 *)(r1 + offsetof(struct sock, <field>)) = r2 */
++		BPF_STX_MEM(size, BPF_REG_1, BPF_REG_2, field_offset(type, field)),
++		BPF_MOV64_IMM(BPF_REG_0, 1),
++		BPF_EXIT_INSN(),
++	};
++	int fd;
++
++	opts.attach_btf_id = libbpf_find_vmlinux_btf_id("socket_post_create",
++							opts.expected_attach_type);
++
++	fd = bpf_prog_load(BPF_PROG_TYPE_LSM, NULL, "GPL", insns, ARRAY_SIZE(insns), &opts);
++	if (fd >= 0)
++		close(fd);
++	return fd >= 0;
++}
++
++static void test_lsm_cgroup_access(void)
++{
++	ASSERT_FALSE(sk_writable_field("sock_common", "skc_family", BPF_H), "skc_family");
++	ASSERT_FALSE(sk_writable_field("sock", "sk_sndtimeo", BPF_DW), "sk_sndtimeo");
++	ASSERT_TRUE(sk_writable_field("sock", "sk_priority", BPF_W), "sk_priority");
++	ASSERT_TRUE(sk_writable_field("sock", "sk_mark", BPF_W), "sk_mark");
++	ASSERT_FALSE(sk_writable_field("sock", "sk_pacing_rate", BPF_DW), "sk_pacing_rate");
++}
++
+ void test_lsm_cgroup(void)
+ {
+ 	if (test__start_subtest("functional"))
+ 		test_lsm_cgroup_functional();
++	if (test__start_subtest("access"))
++		test_lsm_cgroup_access();
+ }
 -- 
 2.36.1.124.g0e6072fb45-goog
 
