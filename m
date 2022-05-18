@@ -2,346 +2,187 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8495FC433F5
-	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 22:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D17FC4321E
+	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 22:57:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiERW45 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 18:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
+        id S230508AbiERW46 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 18:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiERW4L (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 18:56:11 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE2D13E99
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:42 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id v140-20020a252f92000000b0064d955c7b4eso2886538ybv.18
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:42 -0700 (PDT)
+        with ESMTP id S231338AbiERW4J (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 18:56:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F379C231C82
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:33 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fed8245a03so31560167b3.1
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=7/rGP9QR7/HGEwHx9YP+8NxN8ERbBSG5QGDqCVLF7+w=;
-        b=a54Ay9GhW9OOg62y9fNL6KxBkTLguA+gAjdRSOk9rQWwabNZ7kzICt3IpN8PJ5Slr+
-         rMYJwsosZ1aObd7AnESsBfB2J6m2qfjH6DXD5vIUwuf9BiaRwNbng8k4wqwJ/woR8SHV
-         W3C/rMENMogKXRINZuXqF+6WPlwQV2o7+Ot3rYRL3VBOcFxmtSBfXsf81Cv0d/IjiJry
-         o/s1CEViA9jSBvoEbBlYO+O3jlIR0uI7seDu5vdE6xfMZCb18sWAtNVwCIw4Ovr0PO8a
-         LyhnFZVF9LZZCLOTBbQQCwQ/DkVdO4UfKGn42vRPfldXyn8G2pHkbrPvwhYhnTbXYDW0
-         NLog==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=rxWuq5Eq9rqU9PxUcN0z4xXoIEFi0i+qUjtJPDAZx/k=;
+        b=rIKcbnBL3JN5WKyKtJyQVqOT6PxCDE4+aRM/ZCK/A3o8Wfl16hyne1D+KszZdgLuWm
+         fCU7HEUTDZw1hTsBh1DTo4e0b5M+HIT1sBcXKjJxFo9rECHcxJW8xOsIKRYY3DNUBzhu
+         44Qo3dGbHOo4/5iivn8BTUPElexp8h6JZCkJkgWQKqQm3iwEjEYlc+QsKcv9YX133ntS
+         P1X/PTS/mZ3w4igmOpf1M9deAHVbKCURE/dfYda1UuoHYy+usWy7j4Rc1iGgKwe+fX/8
+         2kdPS/liGUsf1HDDyEbJxzKDajKtzebDlgBlcamD1y6ctWrCL1RKlazOrdB3aliheRzY
+         Z7eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=7/rGP9QR7/HGEwHx9YP+8NxN8ERbBSG5QGDqCVLF7+w=;
-        b=aY/hZ5YM2vTUwbDofJeXZ1xxiGmnGIJunYs+hFlNdlTQ//lwwCdVhnc4mYh+D2y7j2
-         2RIq9vLs0t+8gfDVfj0CoIM6PxClILwzsuv92Aus89Qxpr9Jg1mki0+ftVlLiimg9eW2
-         vbdP9lEmHwB/22OQHsYq9EGHcWpQcEMipfN8ikZYiAd/8hpLS9jxhKE44tAvfMKT+YMo
-         sCsrnJgmIhVdgXFez5nzNH0i3kWh6ukQDeVbU9Mk/eGlKWfF4R7Mk/ROR6kuPJqphFhY
-         3oKBjaZo7tadFTvyfZHNk9iaFxx4xpw9W/juUJjIrMbc0Yq9VBieZrdUO9Cgx4srkgwz
-         8r8Q==
-X-Gm-Message-State: AOAM533QTSRfR1vocyeNSKjCWhTvxP1+4dI9VgpwmKZFvPqFrmeOqvuM
-        rQhYKe1P/uKmkV48xVPoyv7lE+M=
-X-Google-Smtp-Source: ABdhPJycPUCRhJ9By4BKdJmdAH4jblYzh6F46E/bAvMtEaMIBY8AE54RbSEsJyHt9qTJ0vXNlhy08ZU=
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=rxWuq5Eq9rqU9PxUcN0z4xXoIEFi0i+qUjtJPDAZx/k=;
+        b=piJ2Qp03PMWti3vtCN7GpU6ylzWRw7URFSmsPw0+p8/kH2Q9ty4wa1+Bt3eT0gL6ni
+         6rrnFtOBGx0vEGPrl422QDZEMDJSf5jXWGpTojTnnL+gOeZbYwZQ2zta4SObR/VLLLSX
+         s+yk/GluAMyqOXHmvnOe+LP4OmlDtjmlB3YjtN2xS2DpPzF+134Zq39YBJxhywemgJyQ
+         NvklELbUHa0LYekziUNxSpoDQ2UDZ3XuTAIKVU3o6s4Kaaop09jZkLBC1f9bOlDcXpAJ
+         hj3+QmDYNMVjqcIuuSVzfDeYZDtdCyhELLJTKnUqPE/VKDIHFW6/xWISw2ouQkGmtTHY
+         +UMg==
+X-Gm-Message-State: AOAM532DFzoEVq3Ac1d2u40yF2B05cHMmGEW6U0s7zrwfU+i3DGgxeu+
+        xacCdWb0Enbym7NnD4VB1Ufh3L0=
+X-Google-Smtp-Source: ABdhPJxbC6NHO5Blrz6es+xHjVpEwO/nnogItSvEYMXtjEZpB+z2PQgNj7Cx9un2nPXNwHY9kgPPlIw=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:f763:3448:2567:bf00])
- (user=sdf job=sendgmr) by 2002:a5b:f83:0:b0:63d:a251:2c51 with SMTP id
- q3-20020a5b0f83000000b0063da2512c51mr1768144ybh.594.1652914542186; Wed, 18
- May 2022 15:55:42 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:55:24 -0700
-In-Reply-To: <20220518225531.558008-1-sdf@google.com>
-Message-Id: <20220518225531.558008-5-sdf@google.com>
+ (user=sdf job=sendgmr) by 2002:a05:6902:18a:b0:64b:30ae:da2a with SMTP id
+ t10-20020a056902018a00b0064b30aeda2amr1691592ybh.314.1652914533156; Wed, 18
+ May 2022 15:55:33 -0700 (PDT)
+Date:   Wed, 18 May 2022 15:55:20 -0700
+Message-Id: <20220518225531.558008-1-sdf@google.com>
 Mime-Version: 1.0
-References: <20220518225531.558008-1-sdf@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH bpf-next v7 04/11] bpf: minimize number of allocated lsm slots
- per program
+Subject: [PATCH bpf-next v7 00/11] bpf: cgroup_sock lsm flavor
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>
+        Stanislav Fomichev <sdf@google.com>, kafai@fb.com,
+        kpsingh@kernel.org, jakub@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previous patch adds 1:1 mapping between all 211 LSM hooks
-and bpf_cgroup program array. Instead of reserving a slot per
-possible hook, reserve 10 slots per cgroup for lsm programs.
-Those slots are dynamically allocated on demand and reclaimed.
+This series implements new lsm flavor for attaching per-cgroup programs to
+existing lsm hooks. The cgroup is taken out of 'current', unless
+the first argument of the hook is 'struct socket'. In this case,
+the cgroup association is taken out of socket. The attachment
+looks like a regular per-cgroup attachment: we add new BPF_LSM_CGROUP
+attach type which, together with attach_btf_id, signals per-cgroup lsm.
+Behind the scenes, we allocate trampoline shim program and
+attach to lsm. This program looks up cgroup from current/socket
+and runs cgroup's effective prog array. The rest of the per-cgroup BPF
+stays the same: hierarchy, local storage, retval conventions
+(return 1 == success).
 
-struct cgroup_bpf {
-	struct bpf_prog_array *    effective[33];        /*     0   264 */
-	/* --- cacheline 4 boundary (256 bytes) was 8 bytes ago --- */
-	struct hlist_head          progs[33];            /*   264   264 */
-	/* --- cacheline 8 boundary (512 bytes) was 16 bytes ago --- */
-	u8                         flags[33];            /*   528    33 */
+Current limitations:
+* haven't considered sleepable bpf; can be extended later on
+* not sure the verifier does the right thing with null checks;
+  see latest selftest for details
+* total of 10 (global) per-cgroup LSM attach points
 
-	/* XXX 7 bytes hole, try to pack */
+Cc: ast@kernel.org
+Cc: daniel@iogearbox.net
+Cc: kafai@fb.com
+Cc: kpsingh@kernel.org
+Cc: jakub@cloudflare.com
 
-	struct list_head           storages;             /*   568    16 */
-	/* --- cacheline 9 boundary (576 bytes) was 8 bytes ago --- */
-	struct bpf_prog_array *    inactive;             /*   584     8 */
-	struct percpu_ref          refcnt;               /*   592    16 */
-	struct work_struct         release_work;         /*   608    72 */
+v7:
+- there were a lot of comments last time, hope I didn't forget anything,
+  some of the bigger ones:
+  - Martin: use/extend BTF_SOCK_TYPE_SOCKET
+  - Martin: expose bpf_set_retval
+  - Martin: reject 'return 0' at the verifier for 'void' hooks
+  - Martin: prog_query returns all BPF_LSM_CGROUP, prog_info
+    returns attach_btf_func_id
+  - Andrii: split libbpf changes
+  - Andrii: add field access test to test_progs, not test_verifier (still
+    using asm though)
+- things that I haven't addressed, stating them here explicitly, let
+  me know if some of these are still problematic:
+  1. Andrii: exposing only link-based api: seems like the changes
+     to support non-link-based ones are minimal, couple of lines,
+     so seems like it worth having it?
+  2. Alexei: applying cgroup_atype for all cgroup hooks, not only
+     cgroup lsm: looks a bit harder to apply everywhere that I
+     originally thought; with lsm cgroup, we have a shim_prog pointer where
+     we store cgroup_atype; for non-lsm programs, we don't have a
+     trace program where to store it, so we still need some kind
+     of global table to map from "static" hook to "dynamic" slot.
+     So I'm dropping this "can be easily extended" clause from the
+     description for now. I have converted this whole machinery
+     to an RCU-managed list to remove synchronize_rcu().
+- also note that I had to introduce new bpf_shim_tramp_link and
+  moved refcnt there; we need something to manage new bpf_tramp_link
 
-	/* size: 680, cachelines: 11, members: 7 */
-	/* sum members: 673, holes: 1, sum holes: 7 */
-	/* last cacheline: 40 bytes */
-};
+v6:
+- remove active count & stats for shim program (Martin KaFai Lau)
+- remove NULL/error check for btf_vmlinux (Martin)
+- don't check cgroup_atype in bpf_cgroup_lsm_shim_release (Martin)
+- use old_prog (instead of passed one) in __cgroup_bpf_detach (Martin)
+- make sure attach_btf_id is the same in __cgroup_bpf_replace (Martin)
+- enable cgroup local storage and test it (Martin)
+- properly implement prog query and add bpftool & tests (Martin)
+- prohibit non-shared cgroup storage mode for BPF_LSM_CGROUP (Martin)
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- include/linux/bpf-cgroup-defs.h |   3 +-
- include/linux/bpf_lsm.h         |   6 --
- kernel/bpf/bpf_lsm.c            |   5 --
- kernel/bpf/cgroup.c             | 135 +++++++++++++++++++++++++++++---
- 4 files changed, 125 insertions(+), 24 deletions(-)
+v5:
+- __cgroup_bpf_run_lsm_socket remove NULL sock/sk checks (Martin KaFai Lau)
+- __cgroup_bpf_run_lsm_{socket,current} s/prog/shim_prog/ (Martin)
+- make sure bpf_lsm_find_cgroup_shim works for hooks without args (Martin)
+- __cgroup_bpf_attach make sure attach_btf_id is the same when replacing (Martin)
+- call bpf_cgroup_lsm_shim_release only for LSM_CGROUP (Martin)
+- drop BPF_LSM_CGROUP from bpf_attach_type_to_tramp (Martin)
+- drop jited check from cgroup_shim_find (Martin)
+- new patch to convert cgroup_bpf to hlist_node (Jakub Sitnicki)
+- new shim flavor for 'struct sock' + list of exceptions (Martin)
 
-diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-defs.h
-index d5a70a35dace..359d3f16abea 100644
---- a/include/linux/bpf-cgroup-defs.h
-+++ b/include/linux/bpf-cgroup-defs.h
-@@ -10,7 +10,8 @@
- 
- struct bpf_prog_array;
- 
--#define CGROUP_LSM_NUM 211 /* will be addressed in the next patch */
-+/* Maximum number of concurrently attachable per-cgroup LSM hooks. */
-+#define CGROUP_LSM_NUM 10
- 
- enum cgroup_bpf_attach_type {
- 	CGROUP_BPF_ATTACH_TYPE_INVALID = -1,
-diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-index 7f0e59f5f9be..613de44aa429 100644
---- a/include/linux/bpf_lsm.h
-+++ b/include/linux/bpf_lsm.h
-@@ -43,7 +43,6 @@ extern const struct bpf_func_proto bpf_inode_storage_delete_proto;
- void bpf_inode_storage_free(struct inode *inode);
- 
- int bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func);
--int bpf_lsm_hook_idx(u32 btf_id);
- 
- #else /* !CONFIG_BPF_LSM */
- 
-@@ -74,11 +73,6 @@ static inline int bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- 	return -ENOENT;
- }
- 
--static inline int bpf_lsm_hook_idx(u32 btf_id)
--{
--	return -EINVAL;
--}
--
- #endif /* CONFIG_BPF_LSM */
- 
- #endif /* _LINUX_BPF_LSM_H */
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 654c23577ad3..96503c3e7a71 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -71,11 +71,6 @@ int bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- 	return 0;
- }
- 
--int bpf_lsm_hook_idx(u32 btf_id)
--{
--	return btf_id_set_index(&bpf_lsm_hooks, btf_id);
--}
--
- int bpf_lsm_verify_prog(struct bpf_verifier_log *vlog,
- 			const struct bpf_prog *prog)
- {
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 2c356a38f4cf..a959cdd22870 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -132,15 +132,110 @@ unsigned int __cgroup_bpf_run_lsm_current(const void *ctx,
- }
- 
- #ifdef CONFIG_BPF_LSM
-+struct list_head unused_bpf_lsm_atypes;
-+struct list_head used_bpf_lsm_atypes;
-+
-+struct bpf_lsm_attach_type {
-+	int index;
-+	u32 btf_id;
-+	int usecnt;
-+	struct list_head atypes;
-+	struct rcu_head rcu_head;
-+};
-+
-+static int __init bpf_lsm_attach_type_init(void)
-+{
-+	struct bpf_lsm_attach_type *atype;
-+	int i;
-+
-+	INIT_LIST_HEAD_RCU(&unused_bpf_lsm_atypes);
-+	INIT_LIST_HEAD_RCU(&used_bpf_lsm_atypes);
-+
-+	for (i = 0; i < CGROUP_LSM_NUM; i++) {
-+		atype = kzalloc(sizeof(*atype), GFP_KERNEL);
-+		if (!atype)
-+			continue;
-+
-+		atype->index = i;
-+		list_add_tail_rcu(&atype->atypes, &unused_bpf_lsm_atypes);
-+	}
-+
-+	return 0;
-+}
-+late_initcall(bpf_lsm_attach_type_init);
-+
- static enum cgroup_bpf_attach_type bpf_lsm_attach_type_get(u32 attach_btf_id)
- {
--	return CGROUP_LSM_START + bpf_lsm_hook_idx(attach_btf_id);
-+	struct bpf_lsm_attach_type *atype;
-+
-+	lockdep_assert_held(&cgroup_mutex);
-+
-+	list_for_each_entry_rcu(atype, &used_bpf_lsm_atypes, atypes) {
-+		if (atype->btf_id != attach_btf_id)
-+			continue;
-+
-+		atype->usecnt++;
-+		return CGROUP_LSM_START + atype->index;
-+	}
-+
-+	atype = list_first_or_null_rcu(&unused_bpf_lsm_atypes, struct bpf_lsm_attach_type, atypes);
-+	if (!atype)
-+		return -E2BIG;
-+
-+	list_del_rcu(&atype->atypes);
-+	atype->btf_id = attach_btf_id;
-+	atype->usecnt = 1;
-+	list_add_tail_rcu(&atype->atypes, &used_bpf_lsm_atypes);
-+
-+	return CGROUP_LSM_START + atype->index;
-+}
-+
-+static void bpf_lsm_attach_type_reclaim(struct rcu_head *head)
-+{
-+	struct bpf_lsm_attach_type *atype =
-+		container_of(head, struct bpf_lsm_attach_type, rcu_head);
-+
-+	atype->btf_id = 0;
-+	atype->usecnt = 0;
-+	list_add_tail_rcu(&atype->atypes, &unused_bpf_lsm_atypes);
-+}
-+
-+static void bpf_lsm_attach_type_put(u32 attach_btf_id)
-+{
-+	struct bpf_lsm_attach_type *atype;
-+
-+	lockdep_assert_held(&cgroup_mutex);
-+
-+	list_for_each_entry_rcu(atype, &used_bpf_lsm_atypes, atypes) {
-+		if (atype->btf_id != attach_btf_id)
-+			continue;
-+
-+		if (--atype->usecnt <= 0) {
-+			list_del_rcu(&atype->atypes);
-+			WARN_ON_ONCE(atype->usecnt < 0);
-+
-+			/* call_rcu here prevents atype reuse within
-+			 * the same rcu grace period.
-+			 * shim programs use __bpf_prog_enter_lsm_cgroup
-+			 * which starts RCU read section.
-+			 */
-+			call_rcu(&atype->rcu_head, bpf_lsm_attach_type_reclaim);
-+		}
-+
-+		return;
-+	}
-+
-+	WARN_ON_ONCE(1);
- }
- #else
- static enum cgroup_bpf_attach_type bpf_lsm_attach_type_get(u32 attach_btf_id)
- {
- 	return -EOPNOTSUPP;
- }
-+
-+static void bpf_lsm_attach_type_put(u32 attach_btf_id)
-+{
-+}
- #endif /* CONFIG_BPF_LSM */
- 
- void cgroup_bpf_offline(struct cgroup *cgrp)
-@@ -224,6 +319,7 @@ static void bpf_cgroup_link_auto_detach(struct bpf_cgroup_link *link)
- static void bpf_cgroup_lsm_shim_release(struct bpf_prog *prog)
- {
- 	bpf_trampoline_unlink_cgroup_shim(prog);
-+	bpf_lsm_attach_type_put(prog->aux->attach_btf_id);
- }
- 
- /**
-@@ -619,27 +715,37 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 
- 	progs = &cgrp->bpf.progs[atype];
- 
--	if (!hierarchy_allows_attach(cgrp, atype))
--		return -EPERM;
-+	if (!hierarchy_allows_attach(cgrp, atype)) {
-+		err = -EPERM;
-+		goto cleanup_attach_type;
-+	}
- 
--	if (!hlist_empty(progs) && cgrp->bpf.flags[atype] != saved_flags)
-+	if (!hlist_empty(progs) && cgrp->bpf.flags[atype] != saved_flags) {
- 		/* Disallow attaching non-overridable on top
- 		 * of existing overridable in this cgroup.
- 		 * Disallow attaching multi-prog if overridable or none
- 		 */
--		return -EPERM;
-+		err = -EPERM;
-+		goto cleanup_attach_type;
-+	}
- 
--	if (prog_list_length(progs) >= BPF_CGROUP_MAX_PROGS)
--		return -E2BIG;
-+	if (prog_list_length(progs) >= BPF_CGROUP_MAX_PROGS) {
-+		err = -E2BIG;
-+		goto cleanup_attach_type;
-+	}
- 
- 	pl = find_attach_entry(progs, prog, link, replace_prog,
- 			       flags & BPF_F_ALLOW_MULTI);
--	if (IS_ERR(pl))
--		return PTR_ERR(pl);
-+	if (IS_ERR(pl)) {
-+		err = PTR_ERR(pl);
-+		goto cleanup_attach_type;
-+	}
- 
- 	if (bpf_cgroup_storages_alloc(storage, new_storage, type,
--				      prog ? : link->link.prog, cgrp))
--		return -ENOMEM;
-+				      prog ? : link->link.prog, cgrp)) {
-+		err = -ENOMEM;
-+		goto cleanup_attach_type;
-+	}
- 
- 	if (pl) {
- 		old_prog = pl->prog;
-@@ -649,7 +755,8 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 		pl = kmalloc(sizeof(*pl), GFP_KERNEL);
- 		if (!pl) {
- 			bpf_cgroup_storages_free(new_storage);
--			return -ENOMEM;
-+			err = -ENOMEM;
-+			goto cleanup_attach_type;
- 		}
- 		if (hlist_empty(progs))
- 			hlist_add_head(&pl->node, progs);
-@@ -698,6 +805,10 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 		hlist_del(&pl->node);
- 		kfree(pl);
- 	}
-+
-+cleanup_attach_type:
-+	if (type == BPF_LSM_CGROUP)
-+		bpf_lsm_attach_type_put(new_prog->aux->attach_btf_id);
- 	return err;
- }
- 
+v4:
+- fix build when jit is on but syscall is off
+
+v3:
+- add BPF_LSM_CGROUP to bpftool
+- use simple int instead of refcnt_t (to avoid use-after-free
+  false positive)
+
+v2:
+- addressed build bot failures
+
+Stanislav Fomichev (11):
+  bpf: add bpf_func_t and trampoline helpers
+  bpf: convert cgroup_bpf.progs to hlist
+  bpf: per-cgroup lsm flavor
+  bpf: minimize number of allocated lsm slots per program
+  bpf: implement BPF_PROG_QUERY for BPF_LSM_CGROUP
+  bpf: allow writing to a subset of sock fields from lsm progtype
+  libbpf: implement bpf_prog_query_opts
+  libbpf: add lsm_cgoup_sock type
+  bpftool: implement cgroup tree for BPF_LSM_CGROUP
+  selftests/bpf: lsm_cgroup functional test
+  selftests/bpf: verify lsm_cgroup struct sock access
+
+ arch/x86/net/bpf_jit_comp.c                   |  24 +-
+ include/linux/bpf-cgroup-defs.h               |  11 +-
+ include/linux/bpf-cgroup.h                    |   9 +-
+ include/linux/bpf.h                           |  36 +-
+ include/linux/bpf_lsm.h                       |   8 +
+ include/linux/btf_ids.h                       |   3 +-
+ include/uapi/linux/bpf.h                      |   6 +
+ kernel/bpf/bpf_lsm.c                          | 103 ++++
+ kernel/bpf/btf.c                              |  11 +
+ kernel/bpf/cgroup.c                           | 487 +++++++++++++++---
+ kernel/bpf/core.c                             |   2 +
+ kernel/bpf/syscall.c                          |  14 +-
+ kernel/bpf/trampoline.c                       | 244 ++++++++-
+ kernel/bpf/verifier.c                         |  31 +-
+ tools/bpf/bpftool/cgroup.c                    |  77 ++-
+ tools/bpf/bpftool/common.c                    |   1 +
+ tools/include/linux/btf_ids.h                 |   4 +-
+ tools/include/uapi/linux/bpf.h                |   6 +
+ tools/lib/bpf/bpf.c                           |  42 +-
+ tools/lib/bpf/bpf.h                           |  15 +
+ tools/lib/bpf/libbpf.c                        |   2 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/lsm_cgroup.c     | 346 +++++++++++++
+ .../testing/selftests/bpf/progs/lsm_cgroup.c  | 160 ++++++
+ 24 files changed, 1480 insertions(+), 163 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_cgroup.c
+
 -- 
 2.36.1.124.g0e6072fb45-goog
 
