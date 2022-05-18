@@ -2,41 +2,41 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 357BAC433EF
-	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 21:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29B76C433FE
+	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 21:01:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242984AbiERVBT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 17:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S243049AbiERVBU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 17:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243049AbiERVBF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 17:01:05 -0400
+        with ESMTP id S242975AbiERVAX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 17:00:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51AA42573FE
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 14:00:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35ED52550B2
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 14:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652907634;
+        s=mimecast20190719; t=1652907620;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gC0dx605l5WeGGnTBbF9J16eadz0PSMt0gS7tJITGSE=;
-        b=AXJlo4Ov0uzBCVvPr9elL88o7gnDJBPRxbZnrTFmfb1L4ggcCby6KzHbOhhM90nv3jmr4i
-        PEwsZJhwVT6YjXtgkGrtwE7wqITEMoJJdkHuNnsVeT9b+8lcrMBStkcnU5/3SmhhmXZjyJ
-        j12B2yVz0bu1eXi1z4UkqPAcM40vUAI=
+        bh=tEF+66qA0wUsA595/mSAmCFMMreNnzteme04lvAe/m8=;
+        b=MhG3lnbe1jF2J0fwA3f8YdNzk4AgB8rILVGXAzkHbX/JOTqPpndxknGF1YjpWDVBabDGIw
+        x6TVCN/tJEjwfcmJwsYeg4Je/W1dQUDtDtOQail+bMUMBTf1bVNDVOspTce7vcsXPF9jAI
+        x0W/+PnrcCrpiWM5l+ee2ShWZG1RR1o=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-pVi_G_J8Nyy_ic7mB6udZg-1; Wed, 18 May 2022 17:00:29 -0400
-X-MC-Unique: pVi_G_J8Nyy_ic7mB6udZg-1
+ us-mta-381-flzaXyZLOFOsu1bS3crdLA-1; Wed, 18 May 2022 17:00:16 -0400
+X-MC-Unique: flzaXyZLOFOsu1bS3crdLA-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB9E8381078F;
-        Wed, 18 May 2022 21:00:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E83131D96CAB;
+        Wed, 18 May 2022 21:00:14 +0000 (UTC)
 Received: from plouf.redhat.com (unknown [10.39.192.58])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94DB82166B25;
-        Wed, 18 May 2022 21:00:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 87F7A2166B25;
+        Wed, 18 May 2022 21:00:10 +0000 (UTC)
 From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
 To:     Greg KH <gregkh@linuxfoundation.org>,
         Jiri Kosina <jikos@kernel.org>,
@@ -54,9 +54,9 @@ Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH bpf-next v5 12/17] selftests/bpf: add tests for bpf_hid_hw_request
-Date:   Wed, 18 May 2022 22:59:19 +0200
-Message-Id: <20220518205924.399291-13-benjamin.tissoires@redhat.com>
+Subject: [PATCH bpf-next v5 10/17] selftests/bpf/hid: add test to change the report size
+Date:   Wed, 18 May 2022 22:59:17 +0200
+Message-Id: <20220518205924.399291-11-benjamin.tissoires@redhat.com>
 In-Reply-To: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
 References: <20220518205924.399291-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
@@ -66,191 +66,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests for the newly implemented function.
-We test here only the GET_REPORT part because the other calls are pure
-HID protocol and won't infer the result of the test of the bpf hook.
+Use a different report with a bigger size and ensures we are doing
+things properly.
 
 Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
 ---
 
-changes in v5:
-- use the new hid_bpf_allocate_context() API
-- remove the need for ctx_in for syscall TEST_RUN
-
-changes in v3:
-- use the new hid_get_data API
-- directly use HID_FEATURE_REPORT and HID_REQ_GET_REPORT from uapi
-
-changes in v2:
-- split the series by bpf/libbpf/hid/selftests and samples
+new in v5
 ---
- tools/testing/selftests/bpf/prog_tests/hid.c | 114 ++++++++++++++++---
- tools/testing/selftests/bpf/progs/hid.c      |  59 ++++++++++
- 2 files changed, 155 insertions(+), 18 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/hid.c | 60 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/hid.c      | 15 ++++-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/hid.c b/tools/testing/selftests/bpf/prog_tests/hid.c
-index 47bc0a30c275..54c0a0fcd54d 100644
+index 719d220c8d86..47bc0a30c275 100644
 --- a/tools/testing/selftests/bpf/prog_tests/hid.c
 +++ b/tools/testing/selftests/bpf/prog_tests/hid.c
-@@ -77,12 +77,23 @@ static unsigned char rdesc[] = {
- 	0xc0,			/* END_COLLECTION */
- };
- 
-+static u8 feature_data[] = { 1, 2 };
-+
- struct attach_prog_args {
- 	int prog_fd;
- 	unsigned int hid;
- 	int retval;
- };
- 
-+struct hid_hw_request_syscall_args {
-+	__u8 data[10];
-+	unsigned int hid;
-+	int retval;
-+	size_t size;
-+	enum hid_report_type type;
-+	__u8 request_type;
-+};
-+
- static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
- static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
- 
-@@ -142,7 +153,7 @@ static void destroy(int fd)
- 
- static int uhid_event(int fd)
- {
--	struct uhid_event ev;
-+	struct uhid_event ev, answer;
- 	ssize_t ret;
- 
- 	memset(&ev, 0, sizeof(ev));
-@@ -183,6 +194,15 @@ static int uhid_event(int fd)
- 		break;
- 	case UHID_GET_REPORT:
- 		fprintf(stderr, "UHID_GET_REPORT from uhid-dev\n");
-+
-+		answer.type = UHID_GET_REPORT_REPLY;
-+		answer.u.get_report_reply.id = ev.u.get_report.id;
-+		answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
-+		answer.u.get_report_reply.size = sizeof(feature_data);
-+		memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
-+
-+		uhid_write(fd, &answer);
-+
- 		break;
- 	case UHID_SET_REPORT:
- 		fprintf(stderr, "UHID_SET_REPORT from uhid-dev\n");
-@@ -391,6 +411,7 @@ static int open_hidraw(int dev_id)
- struct test_params {
- 	struct hid *skel;
- 	int hidraw_fd;
-+	int hid_id;
- };
- 
- static int prep_test(int dev_id, const char *prog_name, struct test_params *test_data)
-@@ -419,27 +440,33 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
- 	if (!ASSERT_OK_PTR(hid_skel, "hid_skel_open"))
- 		goto cleanup;
- 
--	prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
--	if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
--		goto cleanup;
-+	if (prog_name) {
-+		prog = bpf_object__find_program_by_name(*hid_skel->skeleton->obj, prog_name);
-+		if (!ASSERT_OK_PTR(prog, "find_prog_by_name"))
-+			goto cleanup;
- 
--	bpf_program__set_autoload(prog, true);
-+		bpf_program__set_autoload(prog, true);
- 
--	err = hid__load(hid_skel);
--	if (!ASSERT_OK(err, "hid_skel_load"))
--		goto cleanup;
-+		err = hid__load(hid_skel);
-+		if (!ASSERT_OK(err, "hid_skel_load"))
-+			goto cleanup;
- 
--	attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
--	if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
--		err = attach_fd;
--		goto cleanup;
--	}
-+		attach_fd = bpf_program__fd(hid_skel->progs.attach_prog);
-+		if (!ASSERT_GE(attach_fd, 0, "locate attach_prog")) {
-+			err = attach_fd;
-+			goto cleanup;
-+		}
- 
--	args.prog_fd = bpf_program__fd(prog);
--	err = bpf_prog_test_run_opts(attach_fd, &tattr);
--	snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
--	if (!ASSERT_EQ(args.retval, 0, buf))
--		goto cleanup;
-+		args.prog_fd = bpf_program__fd(prog);
-+		err = bpf_prog_test_run_opts(attach_fd, &tattr);
-+		snprintf(buf, sizeof(buf), "attach_hid(%s)", prog_name);
-+		if (!ASSERT_EQ(args.retval, 0, buf))
-+			goto cleanup;
-+	} else {
-+		err = hid__load(hid_skel);
-+		if (!ASSERT_OK(err, "hid_skel_load"))
-+			goto cleanup;
-+	}
- 
- 	hidraw_fd = open_hidraw(dev_id);
- 	if (!ASSERT_GE(hidraw_fd, 0, "open_hidraw"))
-@@ -447,6 +474,7 @@ static int prep_test(int dev_id, const char *prog_name, struct test_params *test
- 
- 	test_data->skel = hid_skel;
- 	test_data->hidraw_fd = hidraw_fd;
-+	test_data->hid_id = hid_id;
- 
- 	return 0;
- 
-@@ -693,6 +721,54 @@ static int test_hid_change_report(int uhid_fd, int dev_id)
+@@ -17,6 +17,17 @@ static unsigned char rdesc[] = {
+ 	0xa1, 0x01,		/* COLLECTION (Application) */
+ 	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
+ 	0xa1, 0x00,			/* COLLECTION (Physical) */
++	0x85, 0x02,				/* REPORT_ID (2) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x08,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0xff,				/* LOGICAL_MAXIMUM (255) */
++	0x95, 0x08,				/* REPORT_COUNT (8) */
++	0x75, 0x08,				/* REPORT_SIZE (8) */
++	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
++	0xc0,				/* END_COLLECTION */
++	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
++	0xa1, 0x00,			/* COLLECTION (Physical) */
+ 	0x85, 0x01,				/* REPORT_ID (1) */
+ 	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
+ 	0x19, 0x01,				/* USAGE_MINIMUM (1) */
+@@ -635,6 +646,53 @@ static int test_attach_detach(int uhid_fd, int dev_id)
  	return ret;
  }
  
 +/*
-+ * Attach hid_user_raw_request to the given uhid device,
-+ * call the bpf program from userspace
-+ * check that the program is called and does the expected.
++ * Attach hid_change_report_id to the given uhid device,
++ * retrieve and open the matching hidraw node,
++ * inject one event in the uhid device,
++ * check that the program sees it and can change the data
 + */
-+static int test_hid_user_raw_request_call(int uhid_fd, int dev_id)
++static int test_hid_change_report(int uhid_fd, int dev_id)
 +{
 +	struct test_params params;
-+	int err, prog_fd;
++	int err, hidraw_fd = -1;
++	u8 buf[10] = {0};
 +	int ret = -1;
-+	struct hid_hw_request_syscall_args args = {
-+		.retval = -1,
-+		.type = HID_FEATURE_REPORT,
-+		.request_type = HID_REQ_GET_REPORT,
-+		.size = 10,
-+	};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, tattrs,
-+			    .ctx_in = &args,
-+			    .ctx_size_in = sizeof(args),
-+	);
 +
-+	err = prep_test(dev_id, NULL, &params);
-+	if (!ASSERT_EQ(err, 0, "prep_test()"))
++	err = prep_test(dev_id, "hid_change_report_id", &params);
++	if (!ASSERT_EQ(err, 0, "prep_test(hid_change_report_id)"))
 +		goto cleanup;
 +
-+	args.hid = params.hid_id;
-+	args.data[0] = 1; /* report ID */
++	hidraw_fd = params.hidraw_fd;
 +
-+	prog_fd = bpf_program__fd(params.skel->progs.hid_user_raw_request);
++	/* inject one event */
++	buf[0] = 1;
++	buf[1] = 42;
++	send_event(uhid_fd, buf, 6);
 +
-+	err = bpf_prog_test_run_opts(prog_fd, &tattrs);
-+	if (!ASSERT_EQ(err, 0, "bpf_prog_test_run_opts"))
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(hidraw_fd, buf, sizeof(buf));
++	if (!ASSERT_EQ(err, 9, "read_hidraw"))
 +		goto cleanup;
 +
-+	if (!ASSERT_EQ(args.retval, 2, "bpf_prog_test_run_opts_retval"))
++	if (!ASSERT_EQ(buf[0], 2, "hid_change_report_id"))
 +		goto cleanup;
 +
-+	if (!ASSERT_EQ(args.data[1], 2, "hid_user_raw_request_check_in"))
++	if (!ASSERT_EQ(buf[1], 42, "hid_change_report_id"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(buf[2], 0, "leftovers_from_previous_test"))
 +		goto cleanup;
 +
 +	ret = 0;
@@ -264,89 +155,41 @@ index 47bc0a30c275..54c0a0fcd54d 100644
  void serial_test_hid_bpf(void)
  {
  	int err, uhid_fd;
-@@ -720,6 +796,8 @@ void serial_test_hid_bpf(void)
+@@ -660,6 +718,8 @@ void serial_test_hid_bpf(void)
+ 	ASSERT_OK(err, "hid");
+ 	err = test_attach_detach(uhid_fd, dev_id);
  	ASSERT_OK(err, "hid_attach_detach");
- 	err = test_hid_change_report(uhid_fd, dev_id);
- 	ASSERT_OK(err, "hid_change_report");
-+	err = test_hid_user_raw_request_call(uhid_fd, dev_id);
++	err = test_hid_change_report(uhid_fd, dev_id);
 +	ASSERT_OK(err, "hid_change_report");
  
  	destroy(uhid_fd);
  
 diff --git a/tools/testing/selftests/bpf/progs/hid.c b/tools/testing/selftests/bpf/progs/hid.c
-index ee7529c47ad8..e3444d444303 100644
+index fc0a4241643a..ee7529c47ad8 100644
 --- a/tools/testing/selftests/bpf/progs/hid.c
 +++ b/tools/testing/selftests/bpf/progs/hid.c
-@@ -10,6 +10,13 @@ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
- 			      unsigned int offset,
- 			      const size_t __sz) __ksym;
- extern int hid_bpf_attach_prog(unsigned int hid_id, int prog_fd, u32 flags) __ksym;
-+extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
-+extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
-+extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
-+			      __u8 *data,
-+			      size_t len,
-+			      enum hid_report_type type,
-+			      int reqtype) __ksym;
+@@ -32,7 +32,20 @@ int BPF_PROG(hid_first_event, struct hid_bpf_ctx *hid_ctx)
  
- struct attach_prog_args {
- 	int prog_fd;
-@@ -56,3 +63,55 @@ int attach_prog(struct attach_prog_args *ctx)
- 					  0);
- 	return 0;
- }
+ 	rw_data[2] = rw_data[1] + 5;
+ 
+-	return 0;
++	return hid_ctx->size;
++}
 +
-+struct hid_hw_request_syscall_args {
-+	/* data needs to come at offset 0 so we can do a memcpy into it */
-+	__u8 data[10];
-+	unsigned int hid;
-+	int retval;
-+	size_t size;
-+	enum hid_report_type type;
-+	__u8 request_type;
-+};
-+
-+SEC("syscall")
-+int hid_user_raw_request(struct hid_hw_request_syscall_args *args)
++SEC("?fmod_ret/hid_bpf_device_event")
++int BPF_PROG(hid_change_report_id, struct hid_bpf_ctx *hid_ctx)
 +{
-+	struct hid_bpf_ctx *ctx;
-+	int i, ret = 0;
-+	__u8 *data;
++	__u8 *rw_data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 3 /* size */);
 +
-+	ctx = hid_bpf_allocate_context(args->hid);
-+	if (!ctx)
++	if (!rw_data)
 +		return 0; /* EPERM check */
 +
-+	/* We can not use the context data memory directly in the hid_bpf call,
-+	 * so we rely on the PTR_TO_MEM allocated in the hid_bpf_context
-+	 */
-+	data = hid_bpf_get_data(ctx, 0 /* offset */, 10 /* size */);
-+	if (!data)
-+		goto out; /* EPERM check */
++	rw_data[0] = 2;
 +
-+	__builtin_memcpy(data, args->data, sizeof(args->data));
-+
-+	if (args->size <= sizeof(args->data)) {
-+		ret = hid_bpf_hw_request(ctx,
-+					 data,
-+					 args->size,
-+					 args->type,
-+					 args->request_type);
-+		args->retval = ret;
-+		if (ret < 0)
-+			goto out;
-+	} else {
-+		ret = -7; /* -E2BIG */
-+		goto out;
-+	}
-+
-+	__builtin_memcpy(args->data, data, sizeof(args->data));
-+
-+ out:
-+	hid_bpf_release_context(ctx);
-+
-+	return ret;
-+}
++	return 9;
+ }
+ 
+ SEC("syscall")
 -- 
 2.36.1
 
