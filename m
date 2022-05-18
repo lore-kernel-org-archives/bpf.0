@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BCB2C433FE
-	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 22:57:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A712C433EF
+	for <bpf@archiver.kernel.org>; Wed, 18 May 2022 22:57:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiERW5y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 18:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
+        id S230404AbiERW5z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 18:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbiERW4K (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 18:56:10 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8A12265EA
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:36 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id d188-20020a25cdc5000000b00648429e5ab9so2906172ybf.13
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:36 -0700 (PDT)
+        with ESMTP id S231465AbiERW4O (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 18:56:14 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A515725C5
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:48 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fecc57ec14so31006117b3.11
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 15:55:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TmU3TPEQ71AzbFMJrCVCfzfvu+DBevj7Y5+l60jkcnw=;
-        b=Hsr7rkeJB/HX80tKJuoXVSAlGsYmIOfqMCoRsDOMv1A2V5RuaCNNR9BVnegOWYkxmt
-         0Ldw4GgDSFFP94Eo6iEu4ccs2lD9/bQO01WdNGDrOql71DggkXNccGW+veZxtdVmbmNd
-         4GyY/NwyeH2qsfAxqsNQ7a5e6gpTko9qlSpuN6dx+GI5U8m/Atdb6PrAX5xlPSImfI4c
-         O0drbzz0IQ60i3gbPsQlYfTWRDqfm/dYA/3ec8lnINkRU6Q4I3MK2gL4TMPD90RKQVbM
-         BHX3Sm+ZGZfiMagU5vi7LOeSCeI2nrJtyb72oX2bgj+VOYbKif1O9FQEb10LP1lDb73e
-         jTjg==
+        bh=2mJnOSjuai7q1tkEZvBJr5bmr2lBnPatwvJBByC7RYE=;
+        b=I/wJvpzYJraNkpUeMMIUlPg2zm9a9a/ke941W4BMFrZ2uvLjCbz8qDGT1eFjseucUR
+         QLQFIqIzevl7NSVUIvf6wFTX5MPwaL9Aky6cVpHl+b9V3FIm1o0O+LaZQAcuvjHg8lx9
+         YcKfuDOmH2EDXMsJslo7TJrXWWW41lxnT4gjZyF+aXPS7kxvPWpf3jYT3f7hEqnFzBvU
+         OUdD8GFNwF4Tczj9kL7Y7tReEziXbDJEbO8LJX/DrrVS31i+ghdS2A/I6mMl9wtfuma3
+         DDa43McAWaVTJ4w974UwJuJaxz2ooXpkr7vYhoKMzvKHywC61AwKdVT8vyvaJQYvpINP
+         O1Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TmU3TPEQ71AzbFMJrCVCfzfvu+DBevj7Y5+l60jkcnw=;
-        b=yjUgV/Mmb5b09UFyrR2+NfQs9Yma6SVjf1BBAsnSU/97jYzyqLjRH7jzXW3KWbPWEf
-         UcKqOorAgng35yRY2JSb5XSaxYPtKdn0USzB1rCqCpg6A/LTyfWVY6jEh3l4rQtIlvq3
-         YAjsOaK/fKPUbB70sWH9hFU9rhnvAGF65yEdHlnvqxvVwve2i0s7TEyPqkxZaBmXiAZr
-         zvg/egrCtsMiajC1zsZ4N61NjG+3omNq/6KYT/AUOf8OAEs4WqLHD1GnpR5Ms/uJelOC
-         tAFVd8S5zgr6CgkW+6p3oOa2ERf+W5qOO/YDz8eahPn6i7Kgs3BMxNYe4ZxrsJDcb4er
-         SuYA==
-X-Gm-Message-State: AOAM533UZnB7GXY52pnxcg/m+6oz26A2OTxYpM9ai9c744uC/mjE1FwR
-        SIsc9g1cJECP39rICESZnks0uHg=
-X-Google-Smtp-Source: ABdhPJxvP2lVCm3fAuqiwDxhA5l3tJKZjDngrv6uB7L6UsvWUmjra1avVr2Wlppvi3ARakPcoVEBpik=
+        bh=2mJnOSjuai7q1tkEZvBJr5bmr2lBnPatwvJBByC7RYE=;
+        b=1Fzw2HTiVBd37isovbgEmRYZuHpdtIndm/08UpBsM6dG0bZgTuklHrFejLx23IEjYt
+         ATCrkBUE3tMizE9CqzC9A8iJLUMUytIx0d2mAcmEbCQGo24lPBW50lumYvYyHK85fH4C
+         lL4c9JE5e7s87CaRL6rIrJHNJUHQs7uZ6k0kBSv47f+/DGavmlCVdkfep32E9NqfTtHU
+         Ja5hWHErI4Kf7kJDorjAMOz3mpym6L+KzVONGv6+NqC8Lu5FoAy/BwM3D1fVTssayu8B
+         KLD4pwku0yLLFYBDw7d4tQIO2MQWqqPo0PrK1bQFJP/TEm+bNZ1W4U/CVaTzq3SeOXpA
+         Cw/g==
+X-Gm-Message-State: AOAM532SZxpyYcejP/643nnezppnR4BZVDFBu5s7ogaU+6Aob9kr02mm
+        AXw/5Uw4Fh12ZYpFKPExxp4ja40=
+X-Google-Smtp-Source: ABdhPJxDqGihjPQJl8FPNGuzRHa+r13bolkMhbxwBkrjmzPziR5RANtVT6B6YCvwpUvkgdBJUxbiSyM=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:201:f763:3448:2567:bf00])
- (user=sdf job=sendgmr) by 2002:a25:dc02:0:b0:64d:b6a3:e0bf with SMTP id
- y2-20020a25dc02000000b0064db6a3e0bfmr1810299ybe.41.1652914535428; Wed, 18 May
- 2022 15:55:35 -0700 (PDT)
-Date:   Wed, 18 May 2022 15:55:21 -0700
+ (user=sdf job=sendgmr) by 2002:a81:3a57:0:b0:2f1:57ee:c671 with SMTP id
+ h84-20020a813a57000000b002f157eec671mr1822551ywa.104.1652914548210; Wed, 18
+ May 2022 15:55:48 -0700 (PDT)
+Date:   Wed, 18 May 2022 15:55:27 -0700
 In-Reply-To: <20220518225531.558008-1-sdf@google.com>
-Message-Id: <20220518225531.558008-2-sdf@google.com>
+Message-Id: <20220518225531.558008-8-sdf@google.com>
 Mime-Version: 1.0
 References: <20220518225531.558008-1-sdf@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH bpf-next v7 01/11] bpf: add bpf_func_t and trampoline helpers
+Subject: [PATCH bpf-next v7 07/11] libbpf: implement bpf_prog_query_opts
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -61,181 +61,155 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I'll be adding lsm cgroup specific helpers that grab
-trampoline mutex.
+Implement bpf_prog_query_opts as a more expendable version of
+bpf_prog_query. Expose new prog_attach_flags and attach_btf_func_id as
+well:
 
-No functional changes.
+* prog_attach_flags is a per-program attach_type; relevant only for
+  lsm cgroup program which might have different attach_flags
+  per attach_btf_id
+* attach_btf_func_id is a new field expose for prog_query which
+  specifies real btf function id for lsm cgroup attachments
 
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/linux/bpf.h     | 11 ++++----
- kernel/bpf/trampoline.c | 62 ++++++++++++++++++++++-------------------
- 2 files changed, 38 insertions(+), 35 deletions(-)
+ tools/include/uapi/linux/bpf.h |  5 ++++
+ tools/lib/bpf/bpf.c            | 42 +++++++++++++++++++++++++++-------
+ tools/lib/bpf/bpf.h            | 15 ++++++++++++
+ tools/lib/bpf/libbpf.map       |  1 +
+ 4 files changed, 55 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c107392b0ba7..ea3674a415f9 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -53,6 +53,8 @@ typedef u64 (*bpf_callback_t)(u64, u64, u64, u64, u64);
- typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
- 					struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_fini_seq_priv_t)(void *private_data);
-+typedef unsigned int (*bpf_func_t)(const void *,
-+				   const struct bpf_insn *);
- struct bpf_iter_seq_info {
- 	const struct seq_operations *seq_ops;
- 	bpf_iter_init_seq_priv_t init_seq_private;
-@@ -853,8 +855,7 @@ struct bpf_dispatcher {
- static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
- 	const void *ctx,
- 	const struct bpf_insn *insnsi,
--	unsigned int (*bpf_func)(const void *,
--				 const struct bpf_insn *))
-+	bpf_func_t bpf_func)
- {
- 	return bpf_func(ctx, insnsi);
- }
-@@ -883,8 +884,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
--		unsigned int (*bpf_func)(const void *,			\
--					 const struct bpf_insn *))	\
-+		bpf_func_t bpf_func)					\
- 	{								\
- 		return bpf_func(ctx, insnsi);				\
- 	}								\
-@@ -895,8 +895,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 	unsigned int bpf_dispatcher_##name##_func(			\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
--		unsigned int (*bpf_func)(const void *,			\
--					 const struct bpf_insn *));	\
-+		bpf_func_t bpf_func);					\
- 	extern struct bpf_dispatcher bpf_dispatcher_##name;
- #define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
- #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 93c7675f0c9e..01ce78c1df80 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -410,7 +410,7 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
- 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b9d2d6de63a7..432fc5f49567 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1432,6 +1432,7 @@ union bpf_attr {
+ 		__u32		attach_flags;
+ 		__aligned_u64	prog_ids;
+ 		__u32		prog_cnt;
++		__aligned_u64	prog_attach_flags; /* output: per-program attach_flags */
+ 	} query;
+ 
+ 	struct { /* anonymous struct used by BPF_RAW_TRACEPOINT_OPEN command */
+@@ -5911,6 +5912,10 @@ struct bpf_prog_info {
+ 	__u64 run_cnt;
+ 	__u64 recursion_misses;
+ 	__u32 verified_insns;
++	/* BTF ID of the function to attach to within BTF object identified
++	 * by btf_id.
++	 */
++	__u32 attach_btf_func_id;
+ } __attribute__((aligned(8)));
+ 
+ struct bpf_map_info {
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 4677644d80f4..f0c2c2ea5a93 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -968,28 +968,54 @@ int bpf_iter_create(int link_fd)
+ 	return libbpf_err_errno(fd);
  }
  
--int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
+-int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query_flags,
+-		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
++int bpf_prog_query_opts(int target_fd,
++			enum bpf_attach_type type,
++			struct bpf_prog_query_opts *opts)
  {
- 	enum bpf_tramp_prog_type kind;
- 	struct bpf_tramp_link *link_exiting;
-@@ -418,44 +418,33 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline
- 	int cnt = 0, i;
+ 	union bpf_attr attr;
+ 	int ret;
  
- 	kind = bpf_attach_type_to_tramp(link->link.prog);
--	mutex_lock(&tr->mutex);
--	if (tr->extension_prog) {
-+	if (tr->extension_prog)
- 		/* cannot attach fentry/fexit if extension prog is attached.
- 		 * cannot overwrite extension prog either.
- 		 */
--		err = -EBUSY;
--		goto out;
--	}
-+		return -EBUSY;
+ 	memset(&attr, 0, sizeof(attr));
++
++	if (!OPTS_VALID(opts, bpf_prog_query_opts))
++		return libbpf_err(-EINVAL);
++
+ 	attr.query.target_fd	= target_fd;
+ 	attr.query.attach_type	= type;
+-	attr.query.query_flags	= query_flags;
+-	attr.query.prog_cnt	= *prog_cnt;
+-	attr.query.prog_ids	= ptr_to_u64(prog_ids);
++	attr.query.query_flags	= OPTS_GET(opts, query_flags, 0);
++	attr.query.prog_cnt	= OPTS_GET(opts, prog_cnt, 0);
++	attr.query.prog_ids	= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
++	attr.query.prog_attach_flags = ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
  
- 	for (i = 0; i < BPF_TRAMP_MAX; i++)
- 		cnt += tr->progs_cnt[i];
+ 	ret = sys_bpf(BPF_PROG_QUERY, &attr, sizeof(attr));
  
- 	if (kind == BPF_TRAMP_REPLACE) {
- 		/* Cannot attach extension if fentry/fexit are in use. */
--		if (cnt) {
--			err = -EBUSY;
--			goto out;
--		}
-+		if (cnt)
-+			return -EBUSY;
- 		tr->extension_prog = link->link.prog;
--		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
--					 link->link.prog->bpf_func);
--		goto out;
--	}
--	if (cnt >= BPF_MAX_TRAMP_LINKS) {
--		err = -E2BIG;
--		goto out;
-+		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
-+					  link->link.prog->bpf_func);
- 	}
--	if (!hlist_unhashed(&link->tramp_hlist)) {
-+	if (cnt >= BPF_MAX_TRAMP_LINKS)
-+		return -E2BIG;
-+	if (!hlist_unhashed(&link->tramp_hlist))
- 		/* prog already linked */
--		err = -EBUSY;
--		goto out;
--	}
-+		return -EBUSY;
- 	hlist_for_each_entry(link_exiting, &tr->progs_hlist[kind], tramp_hlist) {
- 		if (link_exiting->link.prog != link->link.prog)
- 			continue;
- 		/* prog already linked */
--		err = -EBUSY;
--		goto out;
-+		return -EBUSY;
- 	}
+-	if (attach_flags)
+-		*attach_flags = attr.query.attach_flags;
+-	*prog_cnt = attr.query.prog_cnt;
++	if (OPTS_HAS(opts, prog_cnt))
++		opts->prog_cnt = attr.query.prog_cnt;
++	if (OPTS_HAS(opts, attach_flags))
++		opts->attach_flags = attr.query.attach_flags;
  
- 	hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
-@@ -465,30 +454,45 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline
- 		hlist_del_init(&link->tramp_hlist);
- 		tr->progs_cnt[kind]--;
- 	}
--out:
-+	return err;
+ 	return libbpf_err_errno(ret);
+ }
+ 
++int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query_flags,
++		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, p);
++	int ret;
++
++	p.query_flags = query_flags;
++	p.prog_ids = prog_ids;
++	p.prog_cnt = *prog_cnt;
++
++	ret = bpf_prog_query_opts(target_fd, type, &p);
++
++	if (attach_flags)
++		*attach_flags = p.attach_flags;
++	*prog_cnt = p.prog_cnt;
++
++	return ret;
 +}
 +
-+int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+{
-+	int err;
+ int bpf_prog_test_run(int prog_fd, int repeat, void *data, __u32 size,
+ 		      void *data_out, __u32 *size_out, __u32 *retval,
+ 		      __u32 *duration)
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 2e0d3731e4c0..11ffbed99637 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -484,9 +484,24 @@ LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
+ LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
+ LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
+ LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
 +
-+	mutex_lock(&tr->mutex);
-+	err = __bpf_trampoline_link_prog(link, tr);
- 	mutex_unlock(&tr->mutex);
- 	return err;
- }
- 
- /* bpf_trampoline_unlink_prog() should never fail. */
--int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
- {
- 	enum bpf_tramp_prog_type kind;
- 	int err;
- 
- 	kind = bpf_attach_type_to_tramp(link->link.prog);
--	mutex_lock(&tr->mutex);
- 	if (kind == BPF_TRAMP_REPLACE) {
- 		WARN_ON_ONCE(!tr->extension_prog);
- 		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP,
- 					 tr->extension_prog->bpf_func, NULL);
- 		tr->extension_prog = NULL;
--		goto out;
-+		return err;
- 	}
- 	hlist_del_init(&link->tramp_hlist);
- 	tr->progs_cnt[kind]--;
--	err = bpf_trampoline_update(tr);
--out:
-+	return bpf_trampoline_update(tr);
-+}
++struct bpf_prog_query_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	__u32 query_flags;
++	__u32 attach_flags; /* output argument */
++	__u32 *prog_ids;
++	__u32 prog_cnt; /* input+output argument */
++	__u32 *prog_attach_flags;
++};
++#define bpf_prog_query_opts__last_field prog_attach_flags
 +
-+/* bpf_trampoline_unlink_prog() should never fail. */
-+int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+{
-+	int err;
++LIBBPF_API int bpf_prog_query_opts(int target_fd,
++				   enum bpf_attach_type type,
++				   struct bpf_prog_query_opts *opts);
+ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
+ 			      __u32 query_flags, __u32 *attach_flags,
+ 			      __u32 *prog_ids, __u32 *prog_cnt);
 +
-+	mutex_lock(&tr->mutex);
-+	err = __bpf_trampoline_unlink_prog(link, tr);
- 	mutex_unlock(&tr->mutex);
- 	return err;
- }
+ LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
+ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
+ 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 6b36f46ab5d8..24f7a5147bf2 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -452,6 +452,7 @@ LIBBPF_0.8.0 {
+ 		bpf_map_delete_elem_flags;
+ 		bpf_object__destroy_subskeleton;
+ 		bpf_object__open_subskeleton;
++		bpf_prog_query_opts;
+ 		bpf_program__attach_kprobe_multi_opts;
+ 		bpf_program__attach_trace_opts;
+ 		bpf_program__attach_usdt;
 -- 
 2.36.1.124.g0e6072fb45-goog
 
