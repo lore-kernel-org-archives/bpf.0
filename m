@@ -2,48 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B177C433F5
-	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 23:30:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2106DC43217
+	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 23:30:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343595AbiESXa2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 May 2022 19:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S1343599AbiESXa3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 May 2022 19:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343550AbiESXaY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 19:30:24 -0400
+        with ESMTP id S245079AbiESXa0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 May 2022 19:30:26 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0520C108A94;
-        Thu, 19 May 2022 16:30:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B955B108A9E;
+        Thu, 19 May 2022 16:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653003022; x=1684539022;
+  t=1653003024; x=1684539024;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Fpbu7J+T3sEY5KzKGDHOZcdSlNTcq4FmV5F0zYAzn2c=;
-  b=nJ/ORpCTQ+oYPuwVv/WsHvciamTghyvXzVkkNEe6xubqincrW1yGUaRf
-   w3aUp1HWUcEsypVa76bzs8AypJLyJSLAgRz7CX4t7Xq0okpuDW5LajgGb
-   ixFu49KcYBSIYwa39Z5/K2JjF9OLlb+rE37PVfsU+RGDCe8YEur8uvDVw
-   bB5YsFkO8U02Lqoga4279C9DAJNzbigAoV5byXVNc7orFJuyCtG1nN6g4
-   O5IyzkfXtm6mrT5GKz47pvoQqWGKJzyWtauqLmqGW5xUNrDwxG+ATMTtQ
-   ulRZH9wJDMH6PpCE3r/SS8ss4MaZn2GMT8F3C8jeOBDy7g1UwdLC79AZ2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272547198"
+  bh=yL57FAH7UrgJbVY5BNbdOK3sEJquq2+jOQ3e/t7En0s=;
+  b=dkchTyz6rWba8jDlG9HfHWOoAn0jgjrQa4V8KSXOGgP7aVl0k3Avougs
+   WEKWDxYRpNrs80xc8PhQRBTt5yivdGVtR+NMBX5mb0lYHFzwtUQb01dv9
+   Nz4lDbkMAFmiULB+qeG6qkhsJsc+eySTTVOzC6wZjkUp9+8p1ir4cdbDq
+   T3RGD6ZUG9FZAu6yCs1qwCT0Tj5ZZCMPkLjr0nsVClg4UXPDRlYrFQjWW
+   mH7glqqfLvbJ5YA66RlKvZAC0NHOBG1kHUQneKtYihNlQB7HW3TK3+VOK
+   7aQnBO6Zrzj5GjyJa4URLwkJ3r52WjLuDEbJnUlRsCH7/e8//e89lViUe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272547200"
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="272547198"
+   d="scan'208";a="272547200"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:30:21 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:30:22 -0700
 X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
-   d="scan'208";a="570491195"
+   d="scan'208";a="570491197"
 Received: from mjmartin-desk2.amr.corp.intel.com (HELO mjmartin-desk2.intel.com) ([10.252.132.179])
   by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 16:30:21 -0700
 From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Geliang Tang <geliang.tang@suse.com>, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org, mptcp@lists.linux.dev,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
         Mat Martineau <mathew.j.martineau@linux.intel.com>
-Subject: [PATCH bpf-next v5 2/7] selftests/bpf: Enable CONFIG_IKCONFIG_PROC in config
-Date:   Thu, 19 May 2022 16:30:11 -0700
-Message-Id: <20220519233016.105670-3-mathew.j.martineau@linux.intel.com>
+Subject: [PATCH bpf-next v5 4/7] selftests/bpf: test bpf_skc_to_mptcp_sock
+Date:   Thu, 19 May 2022 16:30:13 -0700
+Message-Id: <20220519233016.105670-5-mathew.j.martineau@linux.intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220519233016.105670-1-mathew.j.martineau@linux.intel.com>
 References: <20220519233016.105670-1-mathew.j.martineau@linux.intel.com>
@@ -55,39 +56,145 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Geliang Tang <geliang.tang@suse.com>
 
-CONFIG_IKCONFIG_PROC is required by BPF selftests, otherwise we get
-errors like this:
+This patch extends the MPTCP test base, to test the new helper
+bpf_skc_to_mptcp_sock().
 
- libbpf: failed to open system Kconfig
- libbpf: failed to load object 'kprobe_multi'
- libbpf: failed to load BPF skeleton 'kprobe_multi': -22
+Define struct mptcp_sock in bpf_tcp_helpers.h, use bpf_skc_to_mptcp_sock
+to get the msk socket in progs/mptcp_sock.c and store the infos in
+socket_storage_map.
 
-It's because /proc/config.gz is opened in bpf_object__read_kconfig_file()
-in tools/lib/bpf/libbpf.c:
+Get the infos from socket_storage_map in prog_tests/mptcp.c. Add a new
+function verify_msk() to verify the infos of MPTCP socket, and rename
+verify_sk() to verify_tsk() to verify TCP socket only.
 
-        file = gzopen("/proc/config.gz", "r");
+v2: Add CONFIG_MPTCP check for clearer error messages
 
-So this patch enables CONFIG_IKCONFIG and CONFIG_IKCONFIG_PROC in
-tools/testing/selftests/bpf/config.
+v4:
+ - use ASSERT_* instead of CHECK_FAIL (Andrii)
+ - drop bpf_mptcp_helpers.h (Andrii)
 
-Suggested-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+v5:
+ - some 'ASSERT_*' were replaced in the next commit by mistake.
+ - Drop CONFIG_MPTCP (Martin)
+ - Use ASSERT_EQ (Andrii)
+
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 ---
- tools/testing/selftests/bpf/config | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/bpf_tcp_helpers.h |  5 ++++
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 27 ++++++++++++++-----
+ .../testing/selftests/bpf/progs/mptcp_sock.c  | 19 ++++++++++---
+ 3 files changed, 41 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 08c6e5a66d87..6840d4625e01 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -54,3 +54,5 @@ CONFIG_NF_DEFRAG_IPV6=y
- CONFIG_NF_CONNTRACK=y
- CONFIG_USERFAULTFD=y
- CONFIG_FPROBE=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
+diff --git a/tools/testing/selftests/bpf/bpf_tcp_helpers.h b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+index 22e0c8849a17..90fecafc493d 100644
+--- a/tools/testing/selftests/bpf/bpf_tcp_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+@@ -226,4 +226,9 @@ static __always_inline bool tcp_cc_eq(const char *a, const char *b)
+ extern __u32 tcp_slow_start(struct tcp_sock *tp, __u32 acked) __ksym;
+ extern void tcp_cong_avoid_ai(struct tcp_sock *tp, __u32 w, __u32 acked) __ksym;
+ 
++struct mptcp_sock {
++	struct inet_connection_sock	sk;
++
++} __attribute__((preserve_access_index));
++
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+index 7874d8264836..6f333e3aba9c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -12,14 +12,11 @@ struct mptcp_storage {
+ 	__u32 is_mptcp;
+ };
+ 
+-static int verify_sk(int map_fd, int client_fd, __u32 is_mptcp)
++static int verify_tsk(int map_fd, int client_fd)
+ {
+ 	int err, cfd = client_fd;
+ 	struct mptcp_storage val;
+ 
+-	if (is_mptcp == 1)
+-		return 0;
+-
+ 	err = bpf_map_lookup_elem(map_fd, &cfd, &val);
+ 	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+ 		return err;
+@@ -33,6 +30,24 @@ static int verify_sk(int map_fd, int client_fd, __u32 is_mptcp)
+ 	return err;
+ }
+ 
++static int verify_msk(int map_fd, int client_fd)
++{
++	int err, cfd = client_fd;
++	struct mptcp_storage val;
++
++	err = bpf_map_lookup_elem(map_fd, &cfd, &val);
++	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
++		return err;
++
++	if (!ASSERT_EQ(val.invoked, 1, "unexpected invoked count"))
++		err++;
++
++	if (!ASSERT_EQ(val.is_mptcp, 1, "unexpected is_mptcp"))
++		err++;
++
++	return err;
++}
++
+ static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
+ {
+ 	int client_fd, prog_fd, map_fd, err;
+@@ -64,8 +79,8 @@ static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
+ 		goto out;
+ 	}
+ 
+-	err += is_mptcp ? verify_sk(map_fd, client_fd, 1) :
+-			  verify_sk(map_fd, client_fd, 0);
++	err += is_mptcp ? verify_msk(map_fd, client_fd) :
++			  verify_tsk(map_fd, client_fd);
+ 
+ 	close(client_fd);
+ 
+diff --git a/tools/testing/selftests/bpf/progs/mptcp_sock.c b/tools/testing/selftests/bpf/progs/mptcp_sock.c
+index bc09dba0b078..dc73b3fbb50b 100644
+--- a/tools/testing/selftests/bpf/progs/mptcp_sock.c
++++ b/tools/testing/selftests/bpf/progs/mptcp_sock.c
+@@ -24,6 +24,7 @@ SEC("sockops")
+ int _sockops(struct bpf_sock_ops *ctx)
+ {
+ 	struct mptcp_storage *storage;
++	struct mptcp_sock *msk;
+ 	int op = (int)ctx->op;
+ 	struct tcp_sock *tsk;
+ 	struct bpf_sock *sk;
+@@ -41,11 +42,21 @@ int _sockops(struct bpf_sock_ops *ctx)
+ 		return 1;
+ 
+ 	is_mptcp = bpf_core_field_exists(tsk->is_mptcp) ? tsk->is_mptcp : 0;
+-	storage = bpf_sk_storage_get(&socket_storage_map, sk, 0,
+-				     BPF_SK_STORAGE_GET_F_CREATE);
+-	if (!storage)
+-		return 1;
++	if (!is_mptcp) {
++		storage = bpf_sk_storage_get(&socket_storage_map, sk, 0,
++					     BPF_SK_STORAGE_GET_F_CREATE);
++		if (!storage)
++			return 1;
++	} else {
++		msk = bpf_skc_to_mptcp_sock(sk);
++		if (!msk)
++			return 1;
+ 
++		storage = bpf_sk_storage_get(&socket_storage_map, msk, 0,
++					     BPF_SK_STORAGE_GET_F_CREATE);
++		if (!storage)
++			return 1;
++	}
+ 	storage->invoked++;
+ 	storage->is_mptcp = is_mptcp;
+ 
 -- 
 2.36.1
 
