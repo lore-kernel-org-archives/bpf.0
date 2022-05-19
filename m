@@ -2,213 +2,195 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77890C433EF
-	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 03:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BB1FC433EF
+	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 03:27:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiESDVQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 23:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45928 "EHLO
+        id S233075AbiESD1I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 23:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbiESDUe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 23:20:34 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F140362118
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:20:20 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fb7bf98f1aso35905257b3.5
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:20:20 -0700 (PDT)
+        with ESMTP id S231434AbiESD1H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 23:27:07 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303A5580CB
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:27:06 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id nk9-20020a17090b194900b001df2fcdc165so7587597pjb.0
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=dwmBV4G5Hrx+MlkRr6GaHrCf5HeOC3stEpj1wSJ3O8A=;
-        b=o5NjPzUznWE13DNTK0wFIG1NKbT9cGiL1lhWxHLGQ5r4bBD8e+wKWhYW3xk+khrigG
-         p3tBuKe6wk9kILLORw3RjNJgw3fqxOvAEaLz5tmFWYrQen1SMb3WKawQMFJShV1sw045
-         6iL9u6tHbnB4pXOc9c6ABTFFyfysO6NiVWBmEFBu4urYthwKcLYO0JgBZ2O9zSjB5Ts/
-         OdPHakQX8hM2snxYehC8fyLK8FCJQxjZv22U/i+kN81boFVA+QYITEfEXoRMV+OYQVmA
-         T/RiO5aoShu5XWQgrx+lb4PJs44plrEyd0wRRsN4CuB5yPzK+oAWfZ7oVifHOgBeNsB+
-         EuMA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=DvCDL7qLHs8BtEUJOCe3YyS8st6NCqz/zZeRA1wCMcs=;
+        b=1exOZE9PZibtx7F79PeelNge5roPEynlStGZRREWBc/+lfRew4fgeL9sI/jebZC8n1
+         W3aziSpV7BjjuH6EUHV6DK+gInM8hX1PdOF8HDiW3cCkPQPFBIZp0Tymcm/860mG4LJv
+         YbcvLKyMrLVeJ0+GMpS6NrPZoUuP4middCswHtVqHjZlY+833Ej584a+5QNmi2Se6dWz
+         Ai+mDo2PxyxAg8sxrXYTCIMCpA8WTFGzwBnG96Plz8+xuQhQnbneQa+sdI+5OY5SpbcR
+         T1A6lTHpfg4R5hKnbBexOstX7/Q//8VQDIhGKBRhbSZUrarOwd05ZfGPnLxb9QeikK7Z
+         TsQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=dwmBV4G5Hrx+MlkRr6GaHrCf5HeOC3stEpj1wSJ3O8A=;
-        b=5/IKyPWQnB6V02YyutEwRNrSWRWWwf5bGWRNz6lGYCL+Us17LsJ2Cvuomr/XgF3TB1
-         RNf6CWcDYOuwQw96gzNUR3NGfIVx2xIBaFbymM1xSsw1C1JJesE9Rj/aOW5Zswb6exYb
-         GKKTZMAwYpaAH/XN9YcLqWrMSZ7SJt75sH/mHnDomdfYbxEz0q8zVmsQgOd/o2nhTXJe
-         g9UirQDQeiFeDB5KulNfYPblvl3ISUr0yzgzPtTdu7mFAyebxIR1OOJOmy54YvEjs15Y
-         KozIDiRccFB56V64sONWuw84SWbKT1xje2qAvXXiJ1/XmgwM9LOxPUi00Ke8bceH1rop
-         dPAw==
-X-Gm-Message-State: AOAM530EAxRST6IlCY4XAojHbxQgOkjNC/ZWnTvCu6IMtXVm7P9g4DZF
-        hqdaKCQ8TqfxpvcZd8I4QroYyEmKEc/i
-X-Google-Smtp-Source: ABdhPJzSCHP7XeMQopIcnWVduwBBs6JvQNIRox8q0b96Ga/SO581j62Doa4cRRTYzHBanNwOkT+LHDHRV6G3
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a233:bf3c:6ac:2a98])
- (user=irogers job=sendgmr) by 2002:a25:230f:0:b0:64d:76e2:6aa5 with SMTP id
- j15-20020a25230f000000b0064d76e26aa5mr2481170ybj.116.1652930420577; Wed, 18
- May 2022 20:20:20 -0700 (PDT)
-Date:   Wed, 18 May 2022 20:20:04 -0700
-In-Reply-To: <20220519032005.1273691-1-irogers@google.com>
-Message-Id: <20220519032005.1273691-5-irogers@google.com>
-Mime-Version: 1.0
-References: <20220519032005.1273691-1-irogers@google.com>
-X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 4/5] perf bpf_counter: Tidy use of CPU map index
-From:   Ian Rogers <irogers@google.com>
-To:     Michael Petlan <mpetlan@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=DvCDL7qLHs8BtEUJOCe3YyS8st6NCqz/zZeRA1wCMcs=;
+        b=oNnRFVqC6DCN4J6Pi4GKoOGT/iVcpqAWMImrhAocKPXKIr4xRok41z1t6VOt/us8OU
+         Sb8Yzcptz4NmSiEuP18/WH1lgHbbW79w8l+NND6hNeQ/Vwl4JSOPCwmgB8plEq3sVmNQ
+         tZWqyiJS8fxxlFvWoaXjymjK2TbT3ou7D+2UJnHiQY3lZwUzsfD0qJznAGyy+6BGn2kE
+         ECy61gZ/L9kCM4CkE8GraTBmI6nK6hoRtzf8vyyFTRFz4Wj0W1TiU338pvc7RlxYF/Wz
+         LhUICnv2BaGxG5unLcHNkhgHGcn5riN6ddiAQGwEnoPDqwALfbWm9hO0ZFuooNN/lVY5
+         FIOA==
+X-Gm-Message-State: AOAM5314N6O28qFse9baGEUzCQP1kFtfiDLvTVwixHjc+ThtpyN247kg
+        eYUwAVivzAPTekHkSRpTkaUOYw==
+X-Google-Smtp-Source: ABdhPJxPK36YqflPnFkLOBUzTk8PKNRY2kI6ZmDVEPjgo4upOyHUWVIR9szL7xBocBGKmy7CsOLC/A==
+X-Received: by 2002:a17:902:c714:b0:161:64fa:97b6 with SMTP id p20-20020a170902c71400b0016164fa97b6mr2804299plp.40.1652930825689;
+        Wed, 18 May 2022 20:27:05 -0700 (PDT)
+Received: from [10.71.57.194] ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id j8-20020aa78d08000000b0050dc7628182sm2748973pfe.92.2022.05.18.20.26.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 20:27:05 -0700 (PDT)
+Message-ID: <196f6ae9-f899-16c8-a5d3-a1c771fa9900@bytedance.com>
+Date:   Thu, 19 May 2022 11:26:54 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.0
+Subject: Re: [External] Re: [PATCH bpf-next] selftests/bpf: fix some bugs in
+ map_lookup_percpu_elem testcase
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
+        john fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
         Dave Marchevsky <davemarchevsky@fb.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Joanne Koong <joannekoong@fb.com>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        duanxiongchun@bytedance.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        zhouchengming@bytedance.com, Yosry Ahmed <yosryahmed@google.com>
+References: <20220516022453.68420-1-zhoufeng.zf@bytedance.com>
+ <CAEf4BzZ0eRh4ufQnc69B=6WQt_Oy3DNPL-TM-rsUW1KX--SBvQ@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAEf4BzZ0eRh4ufQnc69B=6WQt_Oy3DNPL-TM-rsUW1KX--SBvQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF counters are typically running across all CPUs and so the CPU map
-index and CPU number are the same. There may be cases with offline CPUs
-where this isn't the case and so ensure the cpu map index for
-perf_counts is going to be a valid index by explicitly iterating over
-the CPU map. This also makes it clearer that users of perf_counts are
-using an index. Collapse some multiple uses of perf_counts into single
-uses.
+在 2022/5/19 上午8:17, Andrii Nakryiko 写道:
+> On Sun, May 15, 2022 at 7:25 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> comments from Andrii Nakryiko, details in here:
+>> https://lore.kernel.org/lkml/20220511093854.411-1-zhoufeng.zf@bytedance.com/T/
+>>
+>> use /* */ instead of //
+>> use libbpf_num_possible_cpus() instead of sysconf(_SC_NPROCESSORS_ONLN)
+>> use 8 bytes for value size
+>> fix memory leak
+>> use ASSERT_EQ instead of ASSERT_OK
+>> add bpf_loop to fetch values on each possible CPU
+>>
+>> Fixes: ed7c13776e20c74486b0939a3c1de984c5efb6aa ("selftests/bpf: add test case for bpf_map_lookup_percpu_elem")
+>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> ---
+>>   .../bpf/prog_tests/map_lookup_percpu_elem.c   | 49 +++++++++------
+>>   .../bpf/progs/test_map_lookup_percpu_elem.c   | 61 ++++++++++++-------
+>>   2 files changed, 70 insertions(+), 40 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>> index 58b24c2112b0..89ca170f1c25 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+>> @@ -1,30 +1,39 @@
+>> -// SPDX-License-Identifier: GPL-2.0
+>> -// Copyright (c) 2022 Bytedance
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+> heh, so for SPDX license comment the rule is to use // in .c files :)
+> so keep SPDX as // and all others as /* */
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/bpf_counter.c | 61 ++++++++++++++++++++---------------
- 1 file changed, 35 insertions(+), 26 deletions(-)
+will do. Thanks.
 
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index 3ce8d03cb7ec..d4931f54e1dd 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -224,25 +224,25 @@ static int bpf_program_profiler__disable(struct evsel *evsel)
- 
- static int bpf_program_profiler__read(struct evsel *evsel)
- {
--	// perf_cpu_map uses /sys/devices/system/cpu/online
--	int num_cpu = evsel__nr_cpus(evsel);
- 	// BPF_MAP_TYPE_PERCPU_ARRAY uses /sys/devices/system/cpu/possible
- 	// Sometimes possible > online, like on a Ryzen 3900X that has 24
- 	// threads but its possible showed 0-31 -acme
- 	int num_cpu_bpf = libbpf_num_possible_cpus();
- 	struct bpf_perf_event_value values[num_cpu_bpf];
- 	struct bpf_counter *counter;
-+	struct perf_counts_values *counts;
- 	int reading_map_fd;
- 	__u32 key = 0;
--	int err, cpu;
-+	int err, idx, bpf_cpu;
- 
- 	if (list_empty(&evsel->bpf_counter_list))
- 		return -EAGAIN;
- 
--	for (cpu = 0; cpu < num_cpu; cpu++) {
--		perf_counts(evsel->counts, cpu, 0)->val = 0;
--		perf_counts(evsel->counts, cpu, 0)->ena = 0;
--		perf_counts(evsel->counts, cpu, 0)->run = 0;
-+	perf_cpu_map__for_each_idx(idx, evsel__cpus(evsel)) {
-+		counts = perf_counts(evsel->counts, idx, 0);
-+		counts->val = 0;
-+		counts->ena = 0;
-+		counts->run = 0;
- 	}
- 	list_for_each_entry(counter, &evsel->bpf_counter_list, list) {
- 		struct bpf_prog_profiler_bpf *skel = counter->skel;
-@@ -256,10 +256,15 @@ static int bpf_program_profiler__read(struct evsel *evsel)
- 			return err;
- 		}
- 
--		for (cpu = 0; cpu < num_cpu; cpu++) {
--			perf_counts(evsel->counts, cpu, 0)->val += values[cpu].counter;
--			perf_counts(evsel->counts, cpu, 0)->ena += values[cpu].enabled;
--			perf_counts(evsel->counts, cpu, 0)->run += values[cpu].running;
-+		for (bpf_cpu = 0; bpf_cpu < num_cpu_bpf; bpf_cpu++) {
-+			idx = perf_cpu_map__idx(evsel__cpus(evsel),
-+						(struct perf_cpu){.cpu = bpf_cpu});
-+			if (idx == -1)
-+				continue;
-+			counts = perf_counts(evsel->counts, idx, 0);
-+			counts->val += values[bpf_cpu].counter;
-+			counts->ena += values[bpf_cpu].enabled;
-+			counts->run += values[bpf_cpu].running;
- 		}
- 	}
- 	return 0;
-@@ -621,6 +626,7 @@ static int bperf__read(struct evsel *evsel)
- 	struct bperf_follower_bpf *skel = evsel->follower_skel;
- 	__u32 num_cpu_bpf = cpu__max_cpu().cpu;
- 	struct bpf_perf_event_value values[num_cpu_bpf];
-+	struct perf_counts_values *counts;
- 	int reading_map_fd, err = 0;
- 	__u32 i;
- 	int j;
-@@ -639,29 +645,32 @@ static int bperf__read(struct evsel *evsel)
- 		case BPERF_FILTER_GLOBAL:
- 			assert(i == 0);
- 
--			perf_cpu_map__for_each_cpu(entry, j, all_cpu_map) {
--				cpu = entry.cpu;
--				perf_counts(evsel->counts, cpu, 0)->val = values[cpu].counter;
--				perf_counts(evsel->counts, cpu, 0)->ena = values[cpu].enabled;
--				perf_counts(evsel->counts, cpu, 0)->run = values[cpu].running;
-+			perf_cpu_map__for_each_cpu(entry, j, evsel__cpus(evsel)) {
-+				counts = perf_counts(evsel->counts, j, 0);
-+				counts->val = values[entry.cpu].counter;
-+				counts->ena = values[entry.cpu].enabled;
-+				counts->run = values[entry.cpu].running;
- 			}
- 			break;
- 		case BPERF_FILTER_CPU:
--			cpu = evsel->core.cpus->map[i].cpu;
--			perf_counts(evsel->counts, i, 0)->val = values[cpu].counter;
--			perf_counts(evsel->counts, i, 0)->ena = values[cpu].enabled;
--			perf_counts(evsel->counts, i, 0)->run = values[cpu].running;
-+			cpu = perf_cpu_map__cpu(evsel__cpus(evsel), i).cpu;
-+			assert(cpu >= 0);
-+			counts = perf_counts(evsel->counts, i, 0);
-+			counts->val = values[cpu].counter;
-+			counts->ena = values[cpu].enabled;
-+			counts->run = values[cpu].running;
- 			break;
- 		case BPERF_FILTER_PID:
- 		case BPERF_FILTER_TGID:
--			perf_counts(evsel->counts, 0, i)->val = 0;
--			perf_counts(evsel->counts, 0, i)->ena = 0;
--			perf_counts(evsel->counts, 0, i)->run = 0;
-+			counts = perf_counts(evsel->counts, 0, i);
-+			counts->val = 0;
-+			counts->ena = 0;
-+			counts->run = 0;
- 
- 			for (cpu = 0; cpu < num_cpu_bpf; cpu++) {
--				perf_counts(evsel->counts, 0, i)->val += values[cpu].counter;
--				perf_counts(evsel->counts, 0, i)->ena += values[cpu].enabled;
--				perf_counts(evsel->counts, 0, i)->run += values[cpu].running;
-+				counts->val += values[cpu].counter;
-+				counts->ena += values[cpu].enabled;
-+				counts->run += values[cpu].running;
- 			}
- 			break;
- 		default:
--- 
-2.36.1.124.g0e6072fb45-goog
+>
+>> +/* Copyright (c) 2022 Bytedance */
+>>
+>>   #include <test_progs.h>
+>>
+>>   #include "test_map_lookup_percpu_elem.skel.h"
+>>
+>> -#define TEST_VALUE  1
+>> -
+>>   void test_map_lookup_percpu_elem(void)
+>>   {
+>>          struct test_map_lookup_percpu_elem *skel;
+>> -       int key = 0, ret;
+>> -       int nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+>> -       int *buf;
+>> +       __u64 key = 0, sum;
+>> +       int ret, i;
+>> +       int nr_cpus = libbpf_num_possible_cpus();
+>> +       __u64 *buf;
+>>
+>> -       buf = (int *)malloc(nr_cpus*sizeof(int));
+>> +       buf = (__u64 *)malloc(nr_cpus*sizeof(__u64));
+> no need for casting
+
+casting means no '(__u64 *)'?
+just like this:
+'buf = malloc(nr_cpus * sizeof(__u64));'
+
+>
+>>          if (!ASSERT_OK_PTR(buf, "malloc"))
+>>                  return;
+>> -       memset(buf, 0, nr_cpus*sizeof(int));
+>> -       buf[0] = TEST_VALUE;
+>>
+>> -       skel = test_map_lookup_percpu_elem__open_and_load();
+>> -       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open_and_load"))
+>> -               return;
+>> +       for (i=0; i<nr_cpus; i++)
+> spaces between operators
+
+will do. Thanks.
+
+>
+>> +               buf[i] = i;
+>> +       sum = (nr_cpus-1)*nr_cpus/2;
+> same, please follow kernel code style
+
+will do. Thanks.
+
+>
+>> +
+>> +       skel = test_map_lookup_percpu_elem__open();
+>> +       if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
+>> +               goto exit;
+>> +
+> nit: keep it simple, init skel to NULL and use single cleanup goto
+> label that will destroy skel unconditionally (it deals with NULL just
+> fine)
+
+will do. Thanks.
+
+>> +       skel->rodata->nr_cpus = nr_cpus;
+>> +
+>> +       ret = test_map_lookup_percpu_elem__load(skel);
+>> +       if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
+>> +               goto cleanup;
+>> +
+>>          ret = test_map_lookup_percpu_elem__attach(skel);
+>> -       ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach");
+>> +       if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__attach"))
+>> +               goto cleanup;
+>>
+>>          ret = bpf_map_update_elem(bpf_map__fd(skel->maps.percpu_array_map), &key, buf, 0);
+>>          ASSERT_OK(ret, "percpu_array_map update");
+> [...]
+
 
