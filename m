@@ -2,56 +2,56 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D61D3C433FE
-	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 03:20:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32402C433EF
+	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 03:20:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiESDUm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 May 2022 23:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
+        id S233257AbiESDUp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 May 2022 23:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbiESDUa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 May 2022 23:20:30 -0400
+        with ESMTP id S233256AbiESDUm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 May 2022 23:20:42 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E22156C3C
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:20:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2AD9E8F
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:20:23 -0700 (PDT)
 Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fecc57ec14so35478437b3.11
-        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:20:19 -0700 (PDT)
+        for <bpf@vger.kernel.org>; Wed, 18 May 2022 20:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Vw3KOirpyKTYToukj5eB9PrIoaDLrka25Tzs+xxN/h8=;
-        b=Z2zErAYQFBvOZsDLGgCVtdKnayqjrK54AFt8EP2E2Oh158l/ncAdDQG5+nkAH0QlIV
-         w7DnPDdy3FXOINVtVZBSOzvkUEgdfz4/+VoRyMyoOLgsr994CrD1CRg/RdsxA/GvT/Hz
-         bm+Zf9z8iRcc0HpGKykfpNTndP5y04D6WwiZYddS+fKufM6Lx5V09WN5tsvU1ge+HQzY
-         /qhqa3u9ZpQtKhRgjOGtsCLskUfiTO7Em0DfZMhyWFHgyQZhLF2WpF9G8TQvNeRMQtSK
-         +CiaQJsSHY3iz9Kx8ES9aAG0WeS3ryGXwQ4Mkd0cqEVT1HYxMXCyp8t5FehS8WYhnB68
-         Q8bw==
+        bh=zOPOwprRKTfkv2cXPwTUV+M8mGP7sAVRSfOVmHTlIYc=;
+        b=WgulU1MbbPm1ebPPVzee939RrLS/wfdClBy6WBsf9AxICbC5Jn4XjlZn2jzTFpNpCt
+         cA1TFPFpox6xAhSvd2pr2XEpxu+K5vMcfO471UGnyxPePEvaDERSfh+RSH8uolfL4XN1
+         9ROqphMUPAw44LRD7MTSe+0oUcTe8FJrSqLGkhYJY2xh30dCJnUNpzxU1q+uv81GirGh
+         V3QH3DRXWAd1GenJoyU54JsP8CHQfayRQyyvyTKb7W/+a5lrSYHTm830EF/Av3Ob4u4j
+         VvQQ7p5q0HdTP/gcguhnhukM3bfWOVBjwoyVJrGIXLqO8vRMtVmNEwjcEaRq6Yb5GAW2
+         dGiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Vw3KOirpyKTYToukj5eB9PrIoaDLrka25Tzs+xxN/h8=;
-        b=RqVz4KwdniEZBjI1L0QcPyI54ky7X19k5GwGvjicybPCSnysSidamIsfWy+USG7BQm
-         5M8kqsc0ROiYaMX0tJxcpVOSDOykuE6xJSKOOpXCYb1zCMLCnswTyaX9vIGFzcYdstIU
-         LC+lNR5mqC9ZPTIobvoPXXs3C4pl3y65zEnebqeNVQQGkMDOYvUMWynVrd+b/maL3A/p
-         2bZ9RLRL14KCYjq56aaQGZ4k3e2Kelk3Z0Eew4v9G3HjX4kzmNxx5HuaO0FNIGMN63eU
-         oCBBL49mgVX+R7JwIToRl8QFQp1ZFDpWrv4cSef1V9CTo65y1kRoWXfBsGcUNaXEw+7s
-         U09g==
-X-Gm-Message-State: AOAM5336sFcULafZdIkmPE2ltz4t28/jNuugl3wKacvVHnA2FQj5GFpk
-        WOARnw30YFJsexfMoBxBWpUsvVaEQvV+
-X-Google-Smtp-Source: ABdhPJyaaIVriNuy73np/4IMrVPFn3NEblefL3EEPUZ7Ayeru4qkvqLGkIUzJ87NJEh8n9bjaM+xtdCjwHRq
+        bh=zOPOwprRKTfkv2cXPwTUV+M8mGP7sAVRSfOVmHTlIYc=;
+        b=J5OBkiRwfLBF1gH2pgGW3To2XFWHqS0gQ5slbg8ofrxc/k4L7oFuE3fEnQqtUdNUkO
+         rsAWyx6a7XfBGiXgMSFwlV0RIOwwXBgJwtywdANOWy1hU2FpX6STdKp0XTXSq56T3ktw
+         pPupAk5mJZCTbdaico5qDVvtibMOjVQnSai/3PAjmnJcJFbQxgrUt1PTpmS4asrlak76
+         wW1zYCED72nFRf0H3A2TLS0QUVGJusGQHi5rFG5F6qjShhrn4rFQyIty9q0r0H2FoUl3
+         DefGGxEmWdq41i0ny1MLDl9NtQxye2CCUBfLAQu6eK7xhhabSBKsbz5f7FkPbRJfK7rx
+         kGcA==
+X-Gm-Message-State: AOAM5312f+89Z5Zw0sY/UTkkPSABMk0RBygOvYBFk8/0D9mbp6vZTGX2
+        CAfs+5VYDrrn1a19+NL6/iUecKzjVEXa
+X-Google-Smtp-Source: ABdhPJy7PWcWfvRRE3C2+0YljTgf2w/TKm+iAAXYj/ISK6hEj7VzZa35KP78WgH+HVtPpjpMIzDkfvY/bJ53
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:a233:bf3c:6ac:2a98])
- (user=irogers job=sendgmr) by 2002:a25:2d67:0:b0:64d:a9b9:4954 with SMTP id
- s39-20020a252d67000000b0064da9b94954mr2547523ybe.5.1652930418306; Wed, 18 May
- 2022 20:20:18 -0700 (PDT)
-Date:   Wed, 18 May 2022 20:20:03 -0700
+ (user=irogers job=sendgmr) by 2002:a81:dd07:0:b0:2eb:f701:286e with SMTP id
+ e7-20020a81dd07000000b002ebf701286emr2483795ywn.341.1652930422878; Wed, 18
+ May 2022 20:20:22 -0700 (PDT)
+Date:   Wed, 18 May 2022 20:20:05 -0700
 In-Reply-To: <20220519032005.1273691-1-irogers@google.com>
-Message-Id: <20220519032005.1273691-4-irogers@google.com>
+Message-Id: <20220519032005.1273691-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20220519032005.1273691-1-irogers@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH 3/5] perf cpumap: Add perf_cpu_map__for_each_idx
+Subject: [PATCH 5/5] perf stat: Make use of index clearer with perf_counts
 From:   Ian Rogers <irogers@google.com>
 To:     Michael Petlan <mpetlan@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -83,26 +83,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A variant of perf_cpu_map__for_each_cpu that just iterates index values
-without the corresponding load of the CPU.
+Try to disambiguate further when perf_counts is being accessed it is
+with a cpu map index rather than a CPU.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/lib/perf/include/perf/cpumap.h | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/perf/util/stat-display.c | 22 ++++++++++++----------
+ tools/perf/util/stat.c         | 10 ++++------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/tools/lib/perf/include/perf/cpumap.h b/tools/lib/perf/include/perf/cpumap.h
-index 4a2edbdb5e2b..24de795b09bb 100644
---- a/tools/lib/perf/include/perf/cpumap.h
-+++ b/tools/lib/perf/include/perf/cpumap.h
-@@ -31,4 +31,7 @@ LIBPERF_API bool perf_cpu_map__has(const struct perf_cpu_map *map, struct perf_c
- 	     (idx) < perf_cpu_map__nr(cpus);			\
- 	     (idx)++, (cpu) = perf_cpu_map__cpu(cpus, idx))
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 98669ca5a86b..606f09b09226 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -764,11 +764,11 @@ static int cmp_val(const void *a, const void *b)
  
-+#define perf_cpu_map__for_each_idx(idx, cpus)				\
-+	for ((idx) = 0; (idx) < perf_cpu_map__nr(cpus); (idx)++)
+ static struct perf_aggr_thread_value *sort_aggr_thread(
+ 					struct evsel *counter,
+-					int nthreads, int ncpus,
+ 					int *ret,
+ 					struct target *_target)
+ {
+-	int cpu, thread, i = 0;
++	int nthreads = perf_thread_map__nr(counter->core.threads);
++	int i = 0;
+ 	double uval;
+ 	struct perf_aggr_thread_value *buf;
+ 
+@@ -776,13 +776,17 @@ static struct perf_aggr_thread_value *sort_aggr_thread(
+ 	if (!buf)
+ 		return NULL;
+ 
+-	for (thread = 0; thread < nthreads; thread++) {
++	for (int thread = 0; thread < nthreads; thread++) {
++		int idx;
+ 		u64 ena = 0, run = 0, val = 0;
+ 
+-		for (cpu = 0; cpu < ncpus; cpu++) {
+-			val += perf_counts(counter->counts, cpu, thread)->val;
+-			ena += perf_counts(counter->counts, cpu, thread)->ena;
+-			run += perf_counts(counter->counts, cpu, thread)->run;
++		perf_cpu_map__for_each_idx(idx, evsel__cpus(counter)) {
++			struct perf_counts_values *counts =
++				perf_counts(counter->counts, idx, thread);
 +
- #endif /* __LIBPERF_CPUMAP_H */
++			val += counts->val;
++			ena += counts->ena;
++			run += counts->run;
+ 		}
+ 
+ 		uval = val * counter->scale;
+@@ -817,13 +821,11 @@ static void print_aggr_thread(struct perf_stat_config *config,
+ 			      struct evsel *counter, char *prefix)
+ {
+ 	FILE *output = config->output;
+-	int nthreads = perf_thread_map__nr(counter->core.threads);
+-	int ncpus = perf_cpu_map__nr(counter->core.cpus);
+ 	int thread, sorted_threads;
+ 	struct aggr_cpu_id id;
+ 	struct perf_aggr_thread_value *buf;
+ 
+-	buf = sort_aggr_thread(counter, nthreads, ncpus, &sorted_threads, _target);
++	buf = sort_aggr_thread(counter, &sorted_threads, _target);
+ 	if (!buf) {
+ 		perror("cannot sort aggr thread");
+ 		return;
+diff --git a/tools/perf/util/stat.c b/tools/perf/util/stat.c
+index a77c28232298..37ea2d044708 100644
+--- a/tools/perf/util/stat.c
++++ b/tools/perf/util/stat.c
+@@ -237,14 +237,12 @@ void evlist__reset_prev_raw_counts(struct evlist *evlist)
+ 
+ static void evsel__copy_prev_raw_counts(struct evsel *evsel)
+ {
+-	int ncpus = evsel__nr_cpus(evsel);
+-	int nthreads = perf_thread_map__nr(evsel->core.threads);
++	int idx, nthreads = perf_thread_map__nr(evsel->core.threads);
+ 
+ 	for (int thread = 0; thread < nthreads; thread++) {
+-		for (int cpu = 0; cpu < ncpus; cpu++) {
+-			*perf_counts(evsel->counts, cpu, thread) =
+-				*perf_counts(evsel->prev_raw_counts, cpu,
+-					     thread);
++		perf_cpu_map__for_each_idx(idx, evsel__cpus(evsel)) {
++			*perf_counts(evsel->counts, idx, thread) =
++				*perf_counts(evsel->prev_raw_counts, idx, thread);
+ 		}
+ 	}
+ 
 -- 
 2.36.1.124.g0e6072fb45-goog
 
