@@ -2,31 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4139FC433EF
-	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 20:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AAB2C433EF
+	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 20:26:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244738AbiESUXz convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 16:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60284 "EHLO
+        id S244747AbiESU0c convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 16:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244740AbiESUXx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 16:23:53 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3838BF1358
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:23:38 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JFNtXX013262
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:23:37 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g5rgj29k6-1
+        with ESMTP id S244735AbiESU03 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 May 2022 16:26:29 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1ED2D1F4
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:26:29 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JKPGh6029522
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:26:29 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4d82ah2d-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:23:37 -0700
-Received: from twshared8307.18.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:26:28 -0700
+Received: from twshared0725.22.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 19 May 2022 13:23:35 -0700
+ 15.1.2375.28; Thu, 19 May 2022 13:26:22 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id ECA637D58F62; Thu, 19 May 2022 13:20:45 -0700 (PDT)
+        id 78BE17D58F7C; Thu, 19 May 2022 13:21:02 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-mm@kvack.org>
@@ -34,9 +34,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
         <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
         <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH v2 bpf-next 1/8] bpf: fill new bpf_prog_pack with illegal instructions
-Date:   Thu, 19 May 2022 13:20:30 -0700
-Message-ID: <20220519202037.2401584-2-song@kernel.org>
+Subject: [PATCH v2 bpf-next 8/8] bpf: simplify select_bpf_prog_pack_size
+Date:   Thu, 19 May 2022 13:20:37 -0700
+Message-ID: <20220519202037.2401584-9-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220519202037.2401584-1-song@kernel.org>
 References: <20220519202037.2401584-1-song@kernel.org>
@@ -44,8 +44,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: R7Pl3jJ6tFj4E4trieEdQrqIP7ulaKnU
-X-Proofpoint-ORIG-GUID: R7Pl3jJ6tFj4E4trieEdQrqIP7ulaKnU
+X-Proofpoint-GUID: gBnVVyMwyRT0WTu6pRA80UGgxLoXeV_L
+X-Proofpoint-ORIG-GUID: gBnVVyMwyRT0WTu6pRA80UGgxLoXeV_L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
@@ -53,74 +53,44 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_prog_pack enables sharing huge pages among multiple BPF programs.
-These pages are marked as executable before the JIT engine fill it with
-BPF programs. To make these pages safe, fill the hole bpf_prog_pack with
-illegal instructions before making it executable.
+Use huge_vmalloc_supported to simplify select_bpf_prog_pack_size, so that
+we don't allocate some huge pages and free them immediately.
 
-Fixes: 57631054fae6 ("bpf: Introduce bpf_prog_pack allocator")
-Fixes: 33c9805860e5 ("bpf: Introduce bpf_jit_binary_pack_[alloc|finalize|free]")
+Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- kernel/bpf/core.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ kernel/bpf/core.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 9cc91f0f3115..2d0c9d4696ad 100644
+index b64d91fcb0ba..62c8632a59a2 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -873,7 +873,7 @@ static size_t select_bpf_prog_pack_size(void)
+@@ -856,20 +856,14 @@ static size_t select_bpf_prog_pack_size(void)
+ 	size_t size;
+ 	void *ptr;
+ 
+-	size = BPF_HPAGE_SIZE * num_online_nodes();
+-	ptr = module_alloc_huge(size);
+-
+-	/* Test whether we can get huge pages. If not just use PAGE_SIZE
+-	 * packs.
+-	 */
+-	if (!ptr || !is_vm_area_hugepages(ptr)) {
++	if (huge_vmalloc_supported()) {
++		size = BPF_HPAGE_SIZE * num_online_nodes();
++		bpf_prog_pack_mask = BPF_HPAGE_MASK;
++	} else {
+ 		size = PAGE_SIZE;
+ 		bpf_prog_pack_mask = PAGE_MASK;
+-	} else {
+-		bpf_prog_pack_mask = BPF_HPAGE_MASK;
+ 	}
+ 
+-	vfree(ptr);
  	return size;
  }
  
--static struct bpf_prog_pack *alloc_new_pack(void)
-+static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	struct bpf_prog_pack *pack;
- 
-@@ -886,6 +886,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
- 		kfree(pack);
- 		return NULL;
- 	}
-+	bpf_fill_ill_insns(pack->ptr, bpf_prog_pack_size);
- 	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
- 	list_add_tail(&pack->list, &pack_list);
- 
-@@ -895,7 +896,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
- 	return pack;
- }
- 
--static void *bpf_prog_pack_alloc(u32 size)
-+static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insns)
- {
- 	unsigned int nbits = BPF_PROG_SIZE_TO_NBITS(size);
- 	struct bpf_prog_pack *pack;
-@@ -910,6 +911,7 @@ static void *bpf_prog_pack_alloc(u32 size)
- 		size = round_up(size, PAGE_SIZE);
- 		ptr = module_alloc(size);
- 		if (ptr) {
-+			bpf_fill_ill_insns(ptr, size);
- 			set_vm_flush_reset_perms(ptr);
- 			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
- 			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
-@@ -923,7 +925,7 @@ static void *bpf_prog_pack_alloc(u32 size)
- 			goto found_free_area;
- 	}
- 
--	pack = alloc_new_pack();
-+	pack = alloc_new_pack(bpf_fill_ill_insns);
- 	if (!pack)
- 		goto out;
- 
-@@ -1102,7 +1104,7 @@ bpf_jit_binary_pack_alloc(unsigned int proglen, u8 **image_ptr,
- 
- 	if (bpf_jit_charge_modmem(size))
- 		return NULL;
--	ro_header = bpf_prog_pack_alloc(size);
-+	ro_header = bpf_prog_pack_alloc(size, bpf_fill_ill_insns);
- 	if (!ro_header) {
- 		bpf_jit_uncharge_modmem(size);
- 		return NULL;
 -- 
 2.30.2
 
