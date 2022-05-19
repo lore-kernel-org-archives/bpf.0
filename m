@@ -2,31 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B080FC433F5
-	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 20:26:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D98D4C433FE
+	for <bpf@archiver.kernel.org>; Thu, 19 May 2022 20:32:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244728AbiESU0e convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 16:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36212 "EHLO
+        id S239880AbiESUcZ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 16:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244730AbiESU0b (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 16:26:31 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7CF38BC4
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:26:29 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JKPFKG027317
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:26:28 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g5b9vpb94-1
+        with ESMTP id S229503AbiESUcZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 May 2022 16:32:25 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0526E6B641
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:32:23 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24JKPmmn012733
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:32:23 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3g5h5d4yjh-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:26:28 -0700
-Received: from twshared29473.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 13:32:23 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 19 May 2022 13:26:28 -0700
+ 15.1.2375.28; Thu, 19 May 2022 13:32:21 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id DE6BF7D58F6A; Thu, 19 May 2022 13:20:54 -0700 (PDT)
+        id 2D80D7D58F79; Thu, 19 May 2022 13:21:00 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-mm@kvack.org>
@@ -34,19 +34,18 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
         <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
         <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH v2 bpf-next 5/8] bpf: use module_alloc_huge for bpf_prog_pack
-Date:   Thu, 19 May 2022 13:20:34 -0700
-Message-ID: <20220519202037.2401584-6-song@kernel.org>
+Subject: [PATCH v2 bpf-next 7/8] vmalloc: introduce huge_vmalloc_supported
+Date:   Thu, 19 May 2022 13:20:36 -0700
+Message-ID: <20220519202037.2401584-8-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220519202037.2401584-1-song@kernel.org>
 References: <20220519202037.2401584-1-song@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: TQG56qfWdHdsBPXNoySqwc__SKZ0yP_o
-X-Proofpoint-ORIG-GUID: TQG56qfWdHdsBPXNoySqwc__SKZ0yP_o
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: X10zIGV79ziPUPsmHK014lXb9UmKjHpc
+X-Proofpoint-ORIG-GUID: X10zIGV79ziPUPsmHK014lXb9UmKjHpc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-19_06,2022-05-19_03,2022-02-23_01
@@ -54,83 +53,50 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use module_alloc_huge for bpf_prog_pack so that BPF programs sit on
-PMD_SIZE pages. This benefits system performance by reducing iTLB miss
-rate. Benchmark of a real web service workload shows this change gives
-another ~0.2% performance boost on top of PAGE_SIZE bpf_prog_pack
-(which improve system throughput by ~0.5%).
+huge_vmalloc_supported() exposes vmap_allow_huge so that users of vmalloc
+APIs could know whether vmalloc will return huge pages.
 
-Also, remove set_vm_flush_reset_perms() from alloc_new_pack() and use
-set_memory_[nx|rw] in bpf_prog_pack_free(). This is because
-VM_FLUSH_RESET_PERMS does not work with huge pages yet. [1]
-
-[1] https://lore.kernel.org/bpf/aeeeaf0b7ec63fdba55d4834d2f524d8bf05b71b.camel@intel.com/
 Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- kernel/bpf/core.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ include/linux/vmalloc.h | 2 ++
+ mm/vmalloc.c            | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index cacd8684c3c4..b64d91fcb0ba 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -857,7 +857,7 @@ static size_t select_bpf_prog_pack_size(void)
- 	void *ptr;
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 5e0d0a60d9d5..3268e7e875ff 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -242,11 +242,13 @@ static inline void set_vm_flush_reset_perms(void *addr)
+ 	if (vm)
+ 		vm->flags |= VM_FLUSH_RESET_PERMS;
+ }
++bool huge_vmalloc_supported(void);
  
- 	size = BPF_HPAGE_SIZE * num_online_nodes();
--	ptr = module_alloc(size);
-+	ptr = module_alloc_huge(size);
+ #else
+ static inline void set_vm_flush_reset_perms(void *addr)
+ {
+ }
++bool huge_vmalloc_supported(void) { return false; }
+ #endif
  
- 	/* Test whether we can get huge pages. If not just use PAGE_SIZE
- 	 * packs.
-@@ -881,7 +881,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 		       GFP_KERNEL);
- 	if (!pack)
- 		return NULL;
--	pack->ptr = module_alloc(bpf_prog_pack_size);
-+	pack->ptr = module_alloc_huge(bpf_prog_pack_size);
- 	if (!pack->ptr) {
- 		kfree(pack);
- 		return NULL;
-@@ -890,7 +890,6 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
- 	list_add_tail(&pack->list, &pack_list);
+ /* for /proc/kcore */
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 07da85ae825b..d3b11317b025 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -72,6 +72,11 @@ early_param("nohugevmalloc", set_nohugevmalloc);
+ static const bool vmap_allow_huge = false;
+ #endif	/* CONFIG_HAVE_ARCH_HUGE_VMALLOC */
  
--	set_vm_flush_reset_perms(pack->ptr);
- 	set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 	set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 	return pack;
-@@ -909,10 +908,9 @@ static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insn
- 
- 	if (size > bpf_prog_pack_size) {
- 		size = round_up(size, PAGE_SIZE);
--		ptr = module_alloc(size);
-+		ptr = module_alloc_huge(size);
- 		if (ptr) {
- 			bpf_fill_ill_insns(ptr, size);
--			set_vm_flush_reset_perms(ptr);
- 			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
- 			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
- 		}
-@@ -949,6 +947,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- 
- 	mutex_lock(&pack_mutex);
- 	if (hdr->size > bpf_prog_pack_size) {
-+		set_memory_nx((unsigned long)hdr, hdr->size / PAGE_SIZE);
-+		set_memory_rw((unsigned long)hdr, hdr->size / PAGE_SIZE);
- 		module_memfree(hdr);
- 		goto out;
- 	}
-@@ -975,6 +975,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- 	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
- 				       bpf_prog_chunk_count(), 0) == 0) {
- 		list_del(&pack->list);
-+		set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-+		set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 		module_memfree(pack->ptr);
- 		kfree(pack);
- 	}
++bool huge_vmalloc_supported(void)
++{
++	return vmap_allow_huge;
++}
++
+ bool is_vmalloc_addr(const void *x)
+ {
+ 	unsigned long addr = (unsigned long)kasan_reset_tag(x);
 -- 
 2.30.2
 
