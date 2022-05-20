@@ -2,52 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74EE4C433F5
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 01:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9592EC433F5
+	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 01:21:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344404AbiETBVm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 May 2022 21:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S1344443AbiETBVv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 May 2022 21:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344383AbiETBVk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 21:21:40 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A7327CD5
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 18:21:38 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id c4-20020a170902c2c400b0015f16fb4a54so3352565pla.22
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 18:21:38 -0700 (PDT)
+        with ESMTP id S1344399AbiETBVn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 May 2022 21:21:43 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067D227CC8
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 18:21:42 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 185-20020a6304c2000000b003f5d1f7f49aso3385842pge.7
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 18:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ysbiIUs5o2z/FDHftPdhza+ymeMilu85Me2zCte6Iv0=;
-        b=RXxHWd/Y2k75L32XGdjIlD+Qco0V4mN2pXDBsLSot84ETRvW7QLrnjn12Egie/vtkO
-         UyzP9yoAVnSTwdozqLuRPetCkzaknxUbUh/R5YU9r80HXFtDMtHmUCyJrfEOgjwyY9Zu
-         yxpNQVABpbIXtuaBqaBfi/7WOUwjrkLQ58VvJMSHCjUvrSL3bQg0oLa1qk7hrYcUCnwV
-         po5mgzouqPsmVAtbazRDZpYSpzhrOexeN8BcWodNhjxsmEbiznoM+pIdylPrKGtclNuz
-         faxUrnWRmJK9EhT2j1XvnPDPjZRv7PAX2RjM4alvUCqx4o0Zq8xpwSL2LZtMUX4fzF9v
-         WE5g==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=18Er9O41CS051aXSe9usnmRbqjT27fNlHDiukFcMpPk=;
+        b=igx0wUTdQcYupX1yAJkzuiW3tixL4/rG9QHDOE1OuemDauucgS0b4WPm/qNDTqc6tj
+         dC8noNnsek02+MHALHDloPhHjY9PuAcO8cT0fqReQQSFMoKfhUaM0O2JYTV90eF5TW1T
+         1ZpTQAHA+bZ5+sSSYuH0fi+CeElAYVF0uv+c3gA5rToEvxuK4V4z2uk297hwMXxNn/CK
+         5nHug49g8iMgqh+7Bw17Kgzdbg90jtNx7QMIWVdBW/1UttBugbiKkD/nel+18aIOmhCW
+         DnVdrCrB08b/fwlSt9/iJh7/Z32kjo9kzvfKYcbNc635DkaxYvbgHuDNWDgJOr4EWfTq
+         +obQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ysbiIUs5o2z/FDHftPdhza+ymeMilu85Me2zCte6Iv0=;
-        b=xTYXXYK0y2l4U858rk4JyYsa9Qt9plfaYsKWvjUyXsSv5+zuQlfkgC0O9AA03CYfng
-         GJ3pdLpB9sXf6IXFrMDIYYalIZyWrcjGI2p6k5c5M7kbOp+ped61yEZvhF5in1OxX2fW
-         Ec2F4kqoS11DdHrjrw3FwBHMk9m33vztMSEus9bhcBAtf/HhlcjxvlNNq2l6Mc3vt6hN
-         Txx/efAXjDy/QFFmcVXd/gEW1lu3A1eAh9eM9tabrC3y4A0j7aLXJx/U30avP+XSTbNw
-         PTJ9F/+NxcFJR9wRmDEKNVjGVyH6+9/IDFEUYMNd2JNjIS+MJZsg1MRIPDTAfMnHVRVZ
-         KJFw==
-X-Gm-Message-State: AOAM530bWOBi1aA+F+2H+2eGjVRrh9uq/tNejxNSI2sLl5D+n5lDRvnc
-        BAo+eFPono/qenM7m8SXGMWVFBNxpaOLvjWh
-X-Google-Smtp-Source: ABdhPJy/3YA5GyFnf3xfAhncHWKxi5JHgqVbNbBPrVqZD/tiLRzjn17hN6fXwqJOlaQ3SLErXdF3N9yZZaVoOk/j
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=18Er9O41CS051aXSe9usnmRbqjT27fNlHDiukFcMpPk=;
+        b=jk7EJ2Lt4EvmGCesfrqYNmIiX0jshaAfICYmnKn/LJJ6fDFOIt0tWQ6YSR6Ptsb0UI
+         DByCvkndfWtk++dwHeLYK0tm3lruZBwDVIGf/a7Tv1fYeFiAsbMCBjGuwmyzT+q07qNb
+         G7BTCuiX3oj+JiL0ljBkbVzszoMJsC0btks2HnnERiauzhPv9ONpTZY4i7qqedg/v7ch
+         gYkE3JDZaiHtFA8NuWtDoYL3pUXmheI3luG6kYfu77GNJdCHEhpT0rbZmXLpsh8bpYVj
+         SkMD+WjGjI6iUedUNifUN4+p0M5reV5EQJCaFhfLRPlUNYToF+WvN2LyFc9pSzKg0s/6
+         s23Q==
+X-Gm-Message-State: AOAM531BiaoqGNLx8QLFClercbqX+uYQvzJMag6HZg3IpTVOug+6dilx
+        837ceKQeeJPYbxg6MqJa/PbIANUbjw/3F3or
+X-Google-Smtp-Source: ABdhPJz9ntngBIfCSaZOOirWq+VnWkQ9QbljpHNzGtI7ZAT0+hNeqeX9Vx2fzjW6MS3w55enQ0OqOdn0dJ+ys6A1
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a63:2048:0:b0:3db:7de7:34b4 with SMTP
- id r8-20020a632048000000b003db7de734b4mr6387103pgm.105.1653009697865; Thu, 19
- May 2022 18:21:37 -0700 (PDT)
-Date:   Fri, 20 May 2022 01:21:28 +0000
-Message-Id: <20220520012133.1217211-1-yosryahmed@google.com>
+ (user=yosryahmed job=sendgmr) by 2002:a62:e518:0:b0:4fa:9333:ddbd with SMTP
+ id n24-20020a62e518000000b004fa9333ddbdmr7319126pff.11.1653009701453; Thu, 19
+ May 2022 18:21:41 -0700 (PDT)
+Date:   Fri, 20 May 2022 01:21:30 +0000
+In-Reply-To: <20220520012133.1217211-1-yosryahmed@google.com>
+Message-Id: <20220520012133.1217211-3-yosryahmed@google.com>
 Mime-Version: 1.0
+References: <20220520012133.1217211-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [PATCH bpf-next v1 0/5] bpf: rstat: cgroup hierarchical stats
+Subject: [PATCH bpf-next v1 2/5] cgroup: bpf: add cgroup_rstat_updated() and
+ cgroup_rstat_flush() kfuncs
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -73,126 +78,73 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series allows for using bpf to collect hierarchical cgroup
-stats efficiently by integrating with the rstat framework. The rstat
-framework provides an efficient way to collect cgroup stats and
-propagate them through the cgroup hierarchy.
+Add cgroup_rstat_updated() and cgroup_rstat_flush() kfuncs to bpf
+tracing programs. bpf programs that make use of rstat can use these
+functions to inform rstat when they update stats for a cgroup, and when
+they need to flush the stats.
 
-* Background on rstat (I am using a subscriber analogy that is not
-commonly used):
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+---
+ kernel/cgroup/rstat.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-The rstat framework maintains a tree of cgroups that have updates and
-which cpus have updates. A subscriber to the rstat framework maintains
-their own stats. The framework is used to tell the subscriber when
-and what to flush, for the most efficient stats propagation. The
-workflow is as follows:
-
-- When a subscriber updates a cgroup on a cpu, it informs the rstat
-  framework by calling cgroup_rstat_updated(cgrp, cpu).
-
-- When a subscriber wants to read some stats for a cgroup, it asks
-  the rstat framework to initiate a stats flush (propagation) by calling
-  cgroup_rstat_flush(cgrp).
-
-- When the rstat framework initiates a flush, it makes callbacks to
-  subscribers to aggregate stats on cpus that have updates, and
-  propagate updates to their parent.
-
-Currently, the main subscribers to the rstat framework are cgroup
-subsystems (e.g. memory, block). This patch series allow bpf programs to
-become subscribers as well.
-
-Patches in this series are based off two patches in the mailing list:
-- bpf/btf: also allow kfunc in tracing and syscall programs
-- btf: Add a new kfunc set which allows to mark a function to be
-  sleepable
-
-Both by Benjamin Tissoires, from different versions of his HID patch
-series (the second patch seems to have been dropped in the last
-version).
-
-Patches in this series are organized as follows:
-* The first patch adds a hook point, bpf_rstat_flush(), that is called
-during rstat flushing. This allows bpf fentry programs to attach to it
-to be called during rstat flushing (effectively registering themselves
-as rstat flush callbacks).
-
-* The second patch adds cgroup_rstat_updated() and cgorup_rstat_flush()
-kfuncs, to allow bpf stat collectors and readers to communicate with rstat.
-
-* The third patch is actually v2 of a previously submitted patch [1]
-by Hao Luo. We agreed that it fits better as a part of this series. It
-introduces cgroup_iter programs that can dump stats for cgroups to
-userspace.
-v1 - > v2:
-- Getting the cgroup's reference at the time at attaching, instead of
-  at the time when iterating. (Yonghong) (context [1])
-- Remove .init_seq_private and .fini_seq_private callbacks for
-  cgroup_iter. They are not needed now. (Yonghong)
-
-* The fourth patch extends bpf selftests cgroup helpers, as necessary
-for the following patch.
-
-* The fifth  patch is a selftest that demonstrates the entire workflow.
-It includes programs that collect, aggregate, and dump per-cgroup stats
-by fully integrating with the rstat framework.
-
-[1]https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.com/
-
-RFC v2 -> v1:
-- Instead of introducing a new program type for rstat flushing, add an
-  empty hook point, bpf_rstat_flush(), and use fentry bpf programs to
-  attach to it and flush bpf stats.
-- Instead of using helpers, use kfuncs for rstat functions.
-- These changes simplify the patchset greatly, with minimal changes to
-  uapi.
-
-RFC v1 -> RFC v2:
-- Instead of rstat flush programs attach to subsystems, they now attach
-  to rstat (global flushers, not per-subsystem), based on discussions
-  with Tejun. The first patch is entirely rewritten.
-- Pass cgroup pointers to rstat flushers instead of cgroup ids. This is
-  much more flexibility and less likely to need a uapi update later.
-- rstat helpers are now only defined if CGROUP_CONFIG.
-- Most of the code is now only defined if CGROUP_CONFIG and
-  CONFIG_BPF_SYSCALL.
-- Move rstat helper protos from bpf_base_func_proto() to
-  tracing_prog_func_proto().
-- rstat helpers argument (cgroup pointer) is now ARG_PTR_TO_BTF_ID, not
-  ARG_ANYTHING.
-- Rewrote the selftest to use the cgroup helpers.
-- Dropped bpf_map_lookup_percpu_elem (already added by Feng).
-- Dropped patch to support cgroup v1 for cgroup_iter.
-- Dropped patch to define some cgroup_put() when !CONFIG_CGROUP. The
-  code that calls it is no longer compiled when !CONFIG_CGROUP.
-
-
-Hao Luo (1):
-  bpf: Introduce cgroup iter
-
-Yosry Ahmed (4):
-  cgroup: bpf: add a hook for bpf progs to attach to rstat flushing
-  cgroup: bpf: add cgroup_rstat_updated() and cgroup_rstat_flush()
-    kfuncs
-  selftests/bpf: extend cgroup helpers
-  bpf: add a selftest for cgroup hierarchical stats collection
-
- include/linux/bpf.h                           |   2 +
- include/uapi/linux/bpf.h                      |   6 +
- kernel/bpf/Makefile                           |   3 +
- kernel/bpf/cgroup_iter.c                      | 148 ++++++++
- kernel/cgroup/rstat.c                         |  40 +++
- tools/include/uapi/linux/bpf.h                |   6 +
- tools/testing/selftests/bpf/cgroup_helpers.c  | 159 +++++---
- tools/testing/selftests/bpf/cgroup_helpers.h  |  14 +-
- .../test_cgroup_hierarchical_stats.c          | 339 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
- .../selftests/bpf/progs/cgroup_vmscan.c       | 221 ++++++++++++
- 11 files changed, 899 insertions(+), 46 deletions(-)
- create mode 100644 kernel/bpf/cgroup_iter.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_cgroup_hierarchical_stats.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_vmscan.c
-
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index e7a88d2600bd..a16a851bc0a1 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -3,6 +3,11 @@
+ 
+ #include <linux/sched/cputime.h>
+ 
++#include <linux/bpf.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
++
++
+ static DEFINE_SPINLOCK(cgroup_rstat_lock);
+ static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
+ 
+@@ -141,7 +146,12 @@ static struct cgroup *cgroup_rstat_cpu_pop_updated(struct cgroup *pos,
+ 	return pos;
+ }
+ 
+-/* A hook for bpf stat collectors to attach to and flush their stats */
++/*
++ * A hook for bpf stat collectors to attach to and flush their stats.
++ * Together with providing bpf kfuncs for cgroup_rstat_updated() and
++ * cgroup_rstat_flush(), this enables a complete workflow where bpf progs that
++ * collect cgroup stats can integrate with rstat for efficient flushing.
++ */
+ __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+ 				     struct cgroup *parent, int cpu)
+ {
+@@ -476,3 +486,26 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
+ 		   "system_usec %llu\n",
+ 		   usage, utime, stime);
+ }
++
++/* Add bpf kfuncs for cgroup_rstat_updated() and cgroup_rstat_flush() */
++BTF_SET_START(bpf_rstat_check_kfunc_ids)
++BTF_ID(func, cgroup_rstat_updated)
++BTF_ID(func, cgroup_rstat_flush)
++BTF_SET_END(bpf_rstat_check_kfunc_ids)
++
++BTF_SET_START(bpf_rstat_sleepable_kfunc_ids)
++BTF_ID(func, cgroup_rstat_flush)
++BTF_SET_END(bpf_rstat_sleepable_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
++	.owner		= THIS_MODULE,
++	.check_set	= &bpf_rstat_check_kfunc_ids,
++	.sleepable_set	= &bpf_rstat_sleepable_kfunc_ids,
++};
++
++static int __init bpf_rstat_kfunc_init(void)
++{
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
++					 &bpf_rstat_kfunc_set);
++}
++late_initcall(bpf_rstat_kfunc_init);
 -- 
 2.36.1.124.g0e6072fb45-goog
 
