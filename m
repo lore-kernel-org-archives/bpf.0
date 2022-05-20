@@ -2,85 +2,193 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10551C433EF
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 23:58:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1070CC433F5
+	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 00:00:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243389AbiETX5z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 May 2022 19:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        id S1351624AbiEUAAa convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 20 May 2022 20:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiETX5y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 May 2022 19:57:54 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB8A1A0ADC
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 16:57:53 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id 2so458837iou.5
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 16:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hpuih7eD25YoaQgoLTJ1wM4vKXDRK+qjLExm0GvIyjw=;
-        b=E57J/zm47SygoqB1IVqnk7yPsB9njvpFSgxWyk0YjU07bDMLf+H9OJVWvvNKrM3gj8
-         5odTxHXu9uokgRwqiltMPe1UXkWsMQ5AAEMlMyhdaVs40Rd7H394KhXX+PmkXE251J+M
-         R+JEHlDurvCJP71gMcgf10zlX8lgukZde0RVShYdffHeK4QkwuwdSl5I0aX95kDtgIwk
-         vlAeb9MZgmNzZrsWX5lrxF5RC7F2gQeZZL/mPgUSd2PTZjl5YIUelY7O7dz2akEOJFim
-         qlyhI4FO2fyMuwEj5yeL6xaZ9FC3jIbCq7+LthJUShPyixRaYWjcTpUWP0hzHefJxw89
-         q25A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hpuih7eD25YoaQgoLTJ1wM4vKXDRK+qjLExm0GvIyjw=;
-        b=2Jpm2hgRDO9/FunkyUBnkeMSo74h8wYO9/qCAQy7HW+g6+TMGMVauCMRRCuAUbTv0S
-         ITOCQND+JVqHEV0W+CDS4yLInZ1LpB/rtb3JeiputGIBlgm72mwTAPpap87RYfQDx6o5
-         yIY5Pg9Vimz8A2iOUtaTo79Rle58OYxHcsGeIT9+IzpFPVI96yDU+hkvlvXNDZizsJkf
-         OR3YeYG1BPng80R4yLp/eZDADpCaHbkOPkq3+sXfkrjanKPjOCkHqXkeUbMTqUxh5kJy
-         ef/p4rZJ3VvUa3DhTXr9fxoU0aNIQD7pdUXvYQC/NCQXNXS9mEKjAJ7kuPdHYV3BRQC7
-         RghA==
-X-Gm-Message-State: AOAM532Pb8VVzr9zER2O+L5y5HVnPuwNR6PjcJZfqWboP3Fs+5+q8Ytl
-        PEatXIrGuVdhuBKle4hVD1fSM/msw4YdMn/3cIrTE/M1wjc=
-X-Google-Smtp-Source: ABdhPJx1+BCASC+BuZlsob2+AUZEok6xsrdlsNlIx5s73E+OIHCyA8sEdE6toFjDIkgkEgQUck+KqB9c8s8eIrbHwEw=
-X-Received: by 2002:a05:6602:2acd:b0:65a:9f9d:23dc with SMTP id
- m13-20020a0566022acd00b0065a9f9d23dcmr5875903iov.154.1653091072864; Fri, 20
- May 2022 16:57:52 -0700 (PDT)
+        with ESMTP id S236380AbiEUAA3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 May 2022 20:00:29 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7A01A0ADC
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:27 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KMsGCD018545
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:26 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g59tby8y4-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:26 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 20 May 2022 17:00:24 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id A1B4E7E221DD; Fri, 20 May 2022 16:58:12 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-mm@kvack.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
+        <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
+        <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v4 bpf-next 2/8] x86/alternative: introduce text_poke_set
+Date:   Fri, 20 May 2022 16:57:52 -0700
+Message-ID: <20220520235758.1858153-3-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220520235758.1858153-1-song@kernel.org>
+References: <20220520235758.1858153-1-song@kernel.org>
 MIME-Version: 1.0
-References: <CAK3+h2xA+K-yby7m+3Hp1G6qinafZPW1OB=Uk5-AKxUfztBtEA@mail.gmail.com>
-In-Reply-To: <CAK3+h2xA+K-yby7m+3Hp1G6qinafZPW1OB=Uk5-AKxUfztBtEA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 20 May 2022 16:57:41 -0700
-Message-ID: <CAEf4Bzbtj5UnkhHEiVxgbVByCoqiCp5zm_vSBq=+LFKVsLcCLg@mail.gmail.com>
-Subject: Re: libbpf: failed to load program 'vxlan_get_tunnel_src'
-To:     Vincent Li <vincent.mc.li@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: SrrXqDQc8siIbPtB9h-NNNKELNEx-KOB
+X-Proofpoint-GUID: SrrXqDQc8siIbPtB9h-NNNKELNEx-KOB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_08,2022-05-20_02,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:14 AM Vincent Li <vincent.mc.li@gmail.com> wrote:
->
-> Hi,
->
-> Here is my step to run bpf selftest on Ubuntu 20.04.2 LTS
->
-> git clone https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-> cd bpf-next; cp /boot/config-5.10.0-051000-generic .config; yes "" |
-> make oldconfig; make bzImage; make modules; cd
-> tools/testing/selftests/bpf/; make
->
-> then below, am I missing something in kernel config to cause "libbpf:
-> failed to load program 'vxlan_get_tunnel_src'"
->
-> ./test_progs -a tunnel
->
+Introduce a memset like API for text_poke. This will be used to fill the
+unused RX memory with illegal instructions.
 
-  > invalid func unknown#177
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ arch/x86/include/asm/text-patching.h |  1 +
+ arch/x86/kernel/alternative.c        | 67 +++++++++++++++++++++++-----
+ 2 files changed, 58 insertions(+), 10 deletions(-)
 
-Yes, you are missing bpf_trace_vprintk() (that's helper #177), which
-is called through log_err() -> bpf_printk() -> bpf_trace_vprintk().
-Either use recent enough kernel or remove log_err() statements.
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index d20ab0921480..1cc15528ce29 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -45,6 +45,7 @@ extern void *text_poke(void *addr, const void *opcode, size_t len);
+ extern void text_poke_sync(void);
+ extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
+ extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
++extern void *text_poke_set(void *addr, int c, size_t len);
+ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
+ 
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index d374cb3cf024..7563b5bc8328 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -994,7 +994,21 @@ static inline void unuse_temporary_mm(temp_mm_state_t prev_state)
+ __ro_after_init struct mm_struct *poking_mm;
+ __ro_after_init unsigned long poking_addr;
+ 
+-static void *__text_poke(void *addr, const void *opcode, size_t len)
++static void text_poke_memcpy(void *dst, const void *src, size_t len)
++{
++	memcpy(dst, src, len);
++}
++
++static void text_poke_memset(void *dst, const void *src, size_t len)
++{
++	int c = *(const int *)src;
++
++	memset(dst, c, len);
++}
++
++typedef void text_poke_f(void *dst, const void *src, size_t len);
++
++static void *__text_poke(text_poke_f func, void *addr, const void *src, size_t len)
+ {
+ 	bool cross_page_boundary = offset_in_page(addr) + len > PAGE_SIZE;
+ 	struct page *pages[2] = {NULL};
+@@ -1059,7 +1073,7 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
+ 	prev = use_temporary_mm(poking_mm);
+ 
+ 	kasan_disable_current();
+-	memcpy((u8 *)poking_addr + offset_in_page(addr), opcode, len);
++	func((u8 *)poking_addr + offset_in_page(addr), src, len);
+ 	kasan_enable_current();
+ 
+ 	/*
+@@ -1087,11 +1101,13 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
+ 			   (cross_page_boundary ? 2 : 1) * PAGE_SIZE,
+ 			   PAGE_SHIFT, false);
+ 
+-	/*
+-	 * If the text does not match what we just wrote then something is
+-	 * fundamentally screwy; there's nothing we can really do about that.
+-	 */
+-	BUG_ON(memcmp(addr, opcode, len));
++	if (func == text_poke_memcpy) {
++		/*
++		 * If the text does not match what we just wrote then something is
++		 * fundamentally screwy; there's nothing we can really do about that.
++		 */
++		BUG_ON(memcmp(addr, src, len));
++	}
+ 
+ 	local_irq_restore(flags);
+ 	pte_unmap_unlock(ptep, ptl);
+@@ -1118,7 +1134,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
+ {
+ 	lockdep_assert_held(&text_mutex);
+ 
+-	return __text_poke(addr, opcode, len);
++	return __text_poke(text_poke_memcpy, addr, opcode, len);
+ }
+ 
+ /**
+@@ -1137,7 +1153,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
+  */
+ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
+ {
+-	return __text_poke(addr, opcode, len);
++	return __text_poke(text_poke_memcpy, addr, opcode, len);
+ }
+ 
+ /**
+@@ -1167,7 +1183,38 @@ void *text_poke_copy(void *addr, const void *opcode, size_t len)
+ 
+ 		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
+ 
+-		__text_poke((void *)ptr, opcode + patched, s);
++		__text_poke(text_poke_memcpy, (void *)ptr, opcode + patched, s);
++		patched += s;
++	}
++	mutex_unlock(&text_mutex);
++	return addr;
++}
++
++/**
++ * text_poke_set - memset into (an unused part of) RX memory
++ * @addr: address to modify
++ * @c: the byte to fill the area with
++ * @len: length to copy, could be more than 2x PAGE_SIZE
++ *
++ * This is useful to overwrite unused regions of RX memory with illegal
++ * instructions.
++ */
++void *text_poke_set(void *addr, int c, size_t len)
++{
++	unsigned long start = (unsigned long)addr;
++	size_t patched = 0;
++
++	if (WARN_ON_ONCE(core_kernel_text(start)))
++		return NULL;
++
++	mutex_lock(&text_mutex);
++	while (patched < len) {
++		unsigned long ptr = start + patched;
++		size_t s;
++
++		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
++
++		__text_poke(text_poke_memset, (void *)ptr, (void *)&c, s);
+ 		patched += s;
+ 	}
+ 	mutex_unlock(&text_mutex);
+-- 
+2.30.2
 
-
-
-[...]
