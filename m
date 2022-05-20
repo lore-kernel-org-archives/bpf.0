@@ -2,154 +2,169 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78B6BC433EF
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 21:18:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D502C433F5
+	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 21:19:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238876AbiETVSj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 May 2022 17:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S1351251AbiETVTY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 May 2022 17:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbiETVSg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 May 2022 17:18:36 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA7319C74A;
-        Fri, 20 May 2022 14:18:34 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id n23so12335896edy.0;
-        Fri, 20 May 2022 14:18:34 -0700 (PDT)
+        with ESMTP id S245500AbiETVTX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 May 2022 17:19:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC1A19C777
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 14:19:21 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id f2so13087074wrc.0
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 14:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DDu/yTLze4KFg1yFxzaUGUfDQmxCo5o2Ixng2muyqhM=;
-        b=cGT/MLA73M02bfwmF153L+N9j9VGqt4svVWLmTvd8me8wufermxRixpqT7FiftfEWw
-         snz0jt0fvMmRJycvtC19EfxtGK0uJLEpqsINRZHAIqqJGJAidG3GhnE1JcDorl4KbQX0
-         U/yijzz++jneJNOfIv0LL0x7C6yfmr7DX6xT3nJk9Zto9Ra+FvcvEXKvVoeiVSAsGFdv
-         qw0xXE4mEi5xNL1V+f/6usYfu8dha1bsepuEf309yAsCpxjkgzYvoOeO4WkooK7VEDev
-         i+6XuTpJ/+khHFt4PCt8ogJCs284JujSoeaCEdicl39lyA+h5ojY5er7SAf3ZrVTH/Pr
-         g42w==
+        bh=fjiL3NxvzYrXKj45aHBa+PDLeI3SrPcf1o9kYao+3oU=;
+        b=f1SZJ5wLl9KsySVn8cTyhGlWJMoGbRfZWdXIbT19HvldLNIfxvW+e8t2QACM0vOjjl
+         TTkCnR8Uv4N+prXqmTruAvJV4jPFv1yFQG5Mcwc/JNk/2wd7QMX3xCRWlmOHUKqiOa8m
+         7rN49OeStoRttGDgdidlQT1/mlxLY42xKmmDXWeXODcWslDYXMO/z0UyC6ANAVntoFnN
+         dNYejFKQpABvj/LLi6y+ekG47MHIQYksaSFuqWQxHCnopiPAMI0U+V5dHZGF9MC72GLu
+         k9uItHw/yoSOK+kR4G3a/Qmt5aepyIBViRMr2gyaWIABqizZ0tr7XgaAqAuOnTlWVB55
+         E0tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DDu/yTLze4KFg1yFxzaUGUfDQmxCo5o2Ixng2muyqhM=;
-        b=xaYTWvq3jB9ymqJwktTlOmu5PrnxZWNgSSOTcw1f8ONkEqAtSkoxbSmd4aTAB+bH9Z
-         /vXBnGOt+a8+Z0nh4W4zlwE1nziC6Q5B1gpM1nd7lItRIU3BRfVU12mAOS4i6KC+oBTZ
-         axDnArJ5aNepuCCpqF2URxBtIbmS5TZ2HywDxTAgHyyKLmUjiIGIAunbw0kVYOiZ8yp4
-         boiTZCH4DdK2jj+v9H2pkVjsbvxAIQz9gunfQ1LTzlFRhniejiRO9vbIrId+LSz8Xxz0
-         stZ5MQKX3tniZgD4yKDtIx67h20BU1EVom+1hAlzwe5GGfLiT3g6y5AqOQpurNfET5Ud
-         3CLw==
-X-Gm-Message-State: AOAM530PEmh0BHEPZmM1WfpPA+KWTh7nRlRQ/xjDkxPNcxAfQzsUJuT6
-        CKZFAeL2GUO6yqDTHp3cPxbymmgllpVdekWWenHKkuMa
-X-Google-Smtp-Source: ABdhPJxjcBduBZ+3KMZKwOS16jDqf/LZsYbh4MNzUOUwuzvLfR/ciHJ9IfIzVmNsXrghMzHXByJKIR7piKRMzcpmlSM=
-X-Received: by 2002:a05:6402:1d48:b0:427:dfa3:2272 with SMTP id
- dz8-20020a0564021d4800b00427dfa32272mr12914264edb.333.1653081513187; Fri, 20
- May 2022 14:18:33 -0700 (PDT)
+        bh=fjiL3NxvzYrXKj45aHBa+PDLeI3SrPcf1o9kYao+3oU=;
+        b=73s9qkLWcp26sssUxoGTVvfjG7N71V8SwGW7PHy7Bq+CgV4eWF+teHSoXWXWCyL/uF
+         WD/aJIFBcfplNGB5s85+d3AyU6a2TRHWlMFHZaWMqsfMAgwTZWy/TY+uyIn0Nhy+GgwM
+         7f3l1od/2WmnZY6ij9TApbMg+7GOII7jXeni88Ym5hPdIOJBcb4/I3zR+tSJEcyoabTn
+         5nHCS6YBmgKmgO1oWPFVZny/tyljCiusF6sOyMajK745wreHvgWMGDoHgrrmQqPIRes4
+         itLlgj/qbY6XhvH71ujL6DjFr7wP/eFNyuqqoS9jmoO1ZmgX+quca052txyrnxdXbUUU
+         VBaA==
+X-Gm-Message-State: AOAM531kYd9lWmkGM/Av5RVOQ39Mjj48V0HFfzI64yTQHB0udb1WtfI5
+        Ox1Ocr5khGqe7laEnNLdrAO6UxmzwhsottBCBwrymw==
+X-Google-Smtp-Source: ABdhPJxqSoOtBnq+VE7TR7nxBu5p/47iKtCzXj6VNgKmecJ8rniStzCBDa3ZKu7nYV6YfZMbRec8O2mWvNPLdaBfTb0=
+X-Received: by 2002:adf:fb05:0:b0:20a:e113:8f3f with SMTP id
+ c5-20020adffb05000000b0020ae1138f3fmr10019749wrr.534.1653081559944; Fri, 20
+ May 2022 14:19:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518131638.3401509-1-xukuohai@huawei.com> <20220518131638.3401509-6-xukuohai@huawei.com>
-In-Reply-To: <20220518131638.3401509-6-xukuohai@huawei.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 20 May 2022 14:18:20 -0700
-Message-ID: <CAADnVQJr8Sc5d+XUAY2UnNbZ2TP5OCAQNm3eyTponbMfcpXbkQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 5/6] bpf, arm64: bpf trampoline for arm64
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-4-yosryahmed@google.com> <YodGI73xq8aIBrNM@slm.duckdns.org>
+ <CAJD7tkbvMcMWESMcWi6TtdCKLr6keBNGgZTnqcHZvBrPa1qWPw@mail.gmail.com>
+ <YodNLpxut+Zddnre@slm.duckdns.org> <73fd9853-5dab-8b59-24a0-74c0a6cae88e@fb.com>
+ <YofFli6UCX4J5YnU@slm.duckdns.org> <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
+In-Reply-To: <CA+khW7gjWVKrwCgDD-4ZdCf5CMcA4-YL0bLm6aWM74+qNQ4c0A@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 20 May 2022 14:18:42 -0700
+Message-ID: <CAJD7tkaJQjfSy+YARFRkqQ8m7OGJHO9v91mSk-cFeo9Z5UVJKg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/5] bpf: Introduce cgroup iter
+To:     Hao Luo <haoluo@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Yonghong Song <yhs@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, May 18, 2022 at 6:54 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+On Fri, May 20, 2022 at 12:43 PM Hao Luo <haoluo@google.com> wrote:
 >
-> Add bpf trampoline support for arm64. Most of the logic is the same as
-> x86.
+> Hi Tejun and Yonghong,
 >
-> Tested on raspberry pi 4b and qemu with KASLR disabled (avoid long jump),
-> result:
->  #9  /1     bpf_cookie/kprobe:OK
->  #9  /2     bpf_cookie/multi_kprobe_link_api:FAIL
->  #9  /3     bpf_cookie/multi_kprobe_attach_api:FAIL
->  #9  /4     bpf_cookie/uprobe:OK
->  #9  /5     bpf_cookie/tracepoint:OK
->  #9  /6     bpf_cookie/perf_event:OK
->  #9  /7     bpf_cookie/trampoline:OK
->  #9  /8     bpf_cookie/lsm:OK
->  #9         bpf_cookie:FAIL
->  #18 /1     bpf_tcp_ca/dctcp:OK
->  #18 /2     bpf_tcp_ca/cubic:OK
->  #18 /3     bpf_tcp_ca/invalid_license:OK
->  #18 /4     bpf_tcp_ca/dctcp_fallback:OK
->  #18 /5     bpf_tcp_ca/rel_setsockopt:OK
->  #18        bpf_tcp_ca:OK
->  #51 /1     dummy_st_ops/dummy_st_ops_attach:OK
->  #51 /2     dummy_st_ops/dummy_init_ret_value:OK
->  #51 /3     dummy_st_ops/dummy_init_ptr_arg:OK
->  #51 /4     dummy_st_ops/dummy_multiple_args:OK
->  #51        dummy_st_ops:OK
->  #55        fentry_fexit:OK
->  #56        fentry_test:OK
->  #57 /1     fexit_bpf2bpf/target_no_callees:OK
->  #57 /2     fexit_bpf2bpf/target_yes_callees:OK
->  #57 /3     fexit_bpf2bpf/func_replace:OK
->  #57 /4     fexit_bpf2bpf/func_replace_verify:OK
->  #57 /5     fexit_bpf2bpf/func_sockmap_update:OK
->  #57 /6     fexit_bpf2bpf/func_replace_return_code:OK
->  #57 /7     fexit_bpf2bpf/func_map_prog_compatibility:OK
->  #57 /8     fexit_bpf2bpf/func_replace_multi:OK
->  #57 /9     fexit_bpf2bpf/fmod_ret_freplace:OK
->  #57        fexit_bpf2bpf:OK
->  #58        fexit_sleep:OK
->  #59        fexit_stress:OK
->  #60        fexit_test:OK
->  #67        get_func_args_test:OK
->  #68        get_func_ip_test:OK
->  #104       modify_return:OK
->  #237       xdp_bpf2bpf:OK
+> On Fri, May 20, 2022 at 9:45 AM Tejun Heo <tj@kernel.org> wrote:
+> > On Fri, May 20, 2022 at 09:29:43AM -0700, Yonghong Song wrote:
+> > > Maybe you can have a bpf program signature like below:
+> > >
+> > > int BPF_PROG(dump_vmscan, struct bpf_iter_meta *meta, struct cgroup *cgrp,
+> > > struct cgroup *parent_cgrp)
+> > >
+> > > parent_cgrp is NULL when cgrp is the root cgroup.
+> > >
+> > > I would like the bpf program should send the following information to
+> > > user space:
+> > >    <parent cgroup dir name> <current cgroup dir name>
+> >
+> > I don't think parent cgroup dir name would be sufficient to reconstruct the
+> > path given that multiple cgroups in different subtrees can have the same
+> > name. For live cgroups, userspace can find the path from id (or ino) without
+> > traversing anything by constructing the fhandle, open it open_by_handle_at()
+> > and then reading /proc/self/fd/$FD symlink -
+> > https://lkml.org/lkml/2020/12/2/1126. This isn't available for dead cgroups
+> > but I'm not sure how much that'd matter given that they aren't visible from
+> > userspace anyway.
+> >
 >
-> bpf_cookie/multi_kprobe_link_api and bpf_cookie/multi_kprobe_attach_api
-> failed due to lack of multi_kprobe on arm64.
+> Sending cgroup id is better than cgroup dir name, also because IIUC
+> the path obtained from cgroup id depends on the namespace of the
+> userspace process. So if the dump file may be potentially read by
+> processes within a container, it's better to have the output
+> namespaced IMO.
 >
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> Acked-by: Song Liu <songliubraving@fb.com>
+> > >    <various stats interested by the user>
+> > >
+> > > This way, user space can easily construct the cgroup hierarchy stat like
+> > >                            cpu   mem   cpu pressure   mem pressure ...
+> > >    cgroup1                 ...
+> > >       child1               ...
+> > >         grandchild1        ...
+> > >       child2               ...
+> > >    cgroup 2                ...
+> > >       child 3              ...
+> > >         ...                ...
+> > >
+> > > the bpf iterator can have additional parameter like
+> > > cgroup_id = ... to only call bpf program once with that
+> > > cgroup_id if specified.
+>
+> Yep, this should work. We just need to make the cgroup_id parameter
+> optional. If it is specified when creating bpf_iter_link, we print for
+> that cgroup only. If it is not specified, we iterate over all cgroups.
+> If I understand correctly, sounds doable.
+>
+> > > The kernel part of cgroup_iter can call cgroup_rstat_flush()
+> > > before calling cgroup_iter bpf program.
+>
+> Sounds good to me as well. But my knowledge on rstat_flush is limited.
+> Yosry can give this a try.
+>
+> >
+> > Would it work to just pass in @cgrp and provide a group of helpers so that
+> > the program can do whatever it wanna do including looking up the full path
+> > and passing that to userspace?
+> >
+>
+> My understanding is, yes, doable. If we need the full path information
+> of a cgroup, helpers or kfuncs are needed.
+>
+> The userspace needs to specify the identity of the cgroup, when
+> creating bpf_iter. This identity could be cgroup id or fd. This
+> identity needs to be converted to cgroup object somewhere before
+> passing into bpf program to use.
 
-Catalin, Will, Mark,
 
-could you please ack this patch that you don't mind us
-taking this set through bpf-next ?
+Let's sum up the discussion here, I feel like we are losing track of
+the main problem. IIUC the main concern is that cgroup_iter is not
+effectively an iterator, it rather dumps information for one cgroup. I
+like the suggestion to make it iterate cgroups by default, and an
+optional cgroup_id parameter to make it only "iterate" this one
+cgroup. IIUC, this cgroup_id parameter would be a link parameter,
+similar to the current approach. Basically, we extend the current
+patch so that if cgroup_id is not specified the iterator gets called
+for all cgroups instead of one. This fixes the problem for our use
+case and also keeps cgroup_iter generic enough. Is my understanding
+correct? If yes, I don't see a need to flush rstat in the kernel on
+behalf of cgroup_iter progs.
