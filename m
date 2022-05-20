@@ -2,31 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1070CC433F5
-	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 00:00:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 844A1C433EF
+	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 00:00:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351624AbiEUAAa convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 20 May 2022 20:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S1354157AbiEUAAg convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 20 May 2022 20:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236380AbiEUAA3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 May 2022 20:00:29 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7A01A0ADC
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:27 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KMsGCD018545
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:26 -0700
+        with ESMTP id S236380AbiEUAAg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 May 2022 20:00:36 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825F21A0ADC
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:35 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KMrtvB023390
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:35 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g59tby8y4-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g604bq6qh-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:26 -0700
-Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:35 -0700
+Received: from twshared24024.25.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 20 May 2022 17:00:24 -0700
+ 15.1.2375.28; Fri, 20 May 2022 17:00:34 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id A1B4E7E221DD; Fri, 20 May 2022 16:58:12 -0700 (PDT)
+        id C84FB7E221EC; Fri, 20 May 2022 16:58:16 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-mm@kvack.org>
@@ -34,9 +34,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
         <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
         <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH v4 bpf-next 2/8] x86/alternative: introduce text_poke_set
-Date:   Fri, 20 May 2022 16:57:52 -0700
-Message-ID: <20220520235758.1858153-3-song@kernel.org>
+Subject: [PATCH v4 bpf-next 4/8] module: introduce module_alloc_huge
+Date:   Fri, 20 May 2022 16:57:54 -0700
+Message-ID: <20220520235758.1858153-5-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220520235758.1858153-1-song@kernel.org>
 References: <20220520235758.1858153-1-song@kernel.org>
@@ -44,8 +44,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: SrrXqDQc8siIbPtB9h-NNNKELNEx-KOB
-X-Proofpoint-GUID: SrrXqDQc8siIbPtB9h-NNNKELNEx-KOB
+X-Proofpoint-ORIG-GUID: N8ocT1TO60Ah0un658EOTo5MwyZoAaZi
+X-Proofpoint-GUID: N8ocT1TO60Ah0un658EOTo5MwyZoAaZi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-20_08,2022-05-20_02,2022-02-23_01
@@ -53,142 +53,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce a memset like API for text_poke. This will be used to fill the
-unused RX memory with illegal instructions.
+Introduce module_alloc_huge, which allocates huge page backed memory in
+module memory space. The primary user of this memory is bpf_prog_pack
+(multiple BPF programs sharing a huge page).
 
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Song Liu <song@kernel.org>
----
- arch/x86/include/asm/text-patching.h |  1 +
- arch/x86/kernel/alternative.c        | 67 +++++++++++++++++++++++-----
- 2 files changed, 58 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index d20ab0921480..1cc15528ce29 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -45,6 +45,7 @@ extern void *text_poke(void *addr, const void *opcode, size_t len);
- extern void text_poke_sync(void);
- extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
- extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
-+extern void *text_poke_set(void *addr, int c, size_t len);
- extern int poke_int3_handler(struct pt_regs *regs);
- extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
- 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index d374cb3cf024..7563b5bc8328 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -994,7 +994,21 @@ static inline void unuse_temporary_mm(temp_mm_state_t prev_state)
- __ro_after_init struct mm_struct *poking_mm;
- __ro_after_init unsigned long poking_addr;
- 
--static void *__text_poke(void *addr, const void *opcode, size_t len)
-+static void text_poke_memcpy(void *dst, const void *src, size_t len)
-+{
-+	memcpy(dst, src, len);
-+}
-+
-+static void text_poke_memset(void *dst, const void *src, size_t len)
-+{
-+	int c = *(const int *)src;
-+
-+	memset(dst, c, len);
-+}
-+
-+typedef void text_poke_f(void *dst, const void *src, size_t len);
-+
-+static void *__text_poke(text_poke_f func, void *addr, const void *src, size_t len)
- {
- 	bool cross_page_boundary = offset_in_page(addr) + len > PAGE_SIZE;
- 	struct page *pages[2] = {NULL};
-@@ -1059,7 +1073,7 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
- 	prev = use_temporary_mm(poking_mm);
- 
- 	kasan_disable_current();
--	memcpy((u8 *)poking_addr + offset_in_page(addr), opcode, len);
-+	func((u8 *)poking_addr + offset_in_page(addr), src, len);
- 	kasan_enable_current();
- 
- 	/*
-@@ -1087,11 +1101,13 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
- 			   (cross_page_boundary ? 2 : 1) * PAGE_SIZE,
- 			   PAGE_SHIFT, false);
- 
--	/*
--	 * If the text does not match what we just wrote then something is
--	 * fundamentally screwy; there's nothing we can really do about that.
--	 */
--	BUG_ON(memcmp(addr, opcode, len));
-+	if (func == text_poke_memcpy) {
-+		/*
-+		 * If the text does not match what we just wrote then something is
-+		 * fundamentally screwy; there's nothing we can really do about that.
-+		 */
-+		BUG_ON(memcmp(addr, src, len));
-+	}
- 
- 	local_irq_restore(flags);
- 	pte_unmap_unlock(ptep, ptl);
-@@ -1118,7 +1134,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
- {
- 	lockdep_assert_held(&text_mutex);
- 
--	return __text_poke(addr, opcode, len);
-+	return __text_poke(text_poke_memcpy, addr, opcode, len);
+---
+Note: This conflicts with the module.c => module/ split in modules-next.
+Current patch is for module.c in the bpf-next tree. After the split,
+__weak module_alloc_huge() should be added to kernel/module/main.c.
+---
+ arch/x86/kernel/module.c     | 21 +++++++++++++++++++++
+ include/linux/moduleloader.h |  5 +++++
+ kernel/module.c              |  8 ++++++++
+ 3 files changed, 34 insertions(+)
+
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index b98ffcf4d250..63f6a16c70dc 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -86,6 +86,27 @@ void *module_alloc(unsigned long size)
+ 	return p;
  }
  
- /**
-@@ -1137,7 +1153,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
-  */
- void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
- {
--	return __text_poke(addr, opcode, len);
-+	return __text_poke(text_poke_memcpy, addr, opcode, len);
- }
- 
- /**
-@@ -1167,7 +1183,38 @@ void *text_poke_copy(void *addr, const void *opcode, size_t len)
- 
- 		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
- 
--		__text_poke((void *)ptr, opcode + patched, s);
-+		__text_poke(text_poke_memcpy, (void *)ptr, opcode + patched, s);
-+		patched += s;
-+	}
-+	mutex_unlock(&text_mutex);
-+	return addr;
-+}
-+
-+/**
-+ * text_poke_set - memset into (an unused part of) RX memory
-+ * @addr: address to modify
-+ * @c: the byte to fill the area with
-+ * @len: length to copy, could be more than 2x PAGE_SIZE
-+ *
-+ * This is useful to overwrite unused regions of RX memory with illegal
-+ * instructions.
-+ */
-+void *text_poke_set(void *addr, int c, size_t len)
++void *module_alloc_huge(unsigned long size)
 +{
-+	unsigned long start = (unsigned long)addr;
-+	size_t patched = 0;
++	gfp_t gfp_mask = GFP_KERNEL;
++	void *p;
 +
-+	if (WARN_ON_ONCE(core_kernel_text(start)))
++	if (PAGE_ALIGN(size) > MODULES_LEN)
 +		return NULL;
 +
-+	mutex_lock(&text_mutex);
-+	while (patched < len) {
-+		unsigned long ptr = start + patched;
-+		size_t s;
++	p = __vmalloc_node_range(size, MODULE_ALIGN,
++				 MODULES_VADDR + get_module_load_offset(),
++				 MODULES_END, gfp_mask, PAGE_KERNEL,
++				 VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
++				 NUMA_NO_NODE, __builtin_return_address(0));
++	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
++		vfree(p);
++		return NULL;
++	}
 +
-+		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
++	return p;
++}
 +
-+		__text_poke(text_poke_memset, (void *)ptr, (void *)&c, s);
- 		patched += s;
- 	}
- 	mutex_unlock(&text_mutex);
+ #ifdef CONFIG_X86_32
+ int apply_relocate(Elf32_Shdr *sechdrs,
+ 		   const char *strtab,
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 9e09d11ffe5b..d34743a88938 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -26,6 +26,11 @@ unsigned int arch_mod_section_prepend(struct module *mod, unsigned int section);
+    sections.  Returns NULL on failure. */
+ void *module_alloc(unsigned long size);
+ 
++/* Allocator used for allocating memory in module memory space. If size is
++ * greater than PMD_SIZE, allow using huge pages. Returns NULL on failure.
++ */
++void *module_alloc_huge(unsigned long size);
++
+ /* Free memory returned from module_alloc. */
+ void module_memfree(void *module_region);
+ 
+diff --git a/kernel/module.c b/kernel/module.c
+index 6cea788fd965..2af20ac3209c 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -2839,6 +2839,14 @@ void * __weak module_alloc(unsigned long size)
+ 			NUMA_NO_NODE, __builtin_return_address(0));
+ }
+ 
++void * __weak module_alloc_huge(unsigned long size)
++{
++	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
++				    GFP_KERNEL, PAGE_KERNEL_EXEC,
++				    VM_FLUSH_RESET_PERMS | VM_ALLOW_HUGE_VMAP,
++				    NUMA_NO_NODE, __builtin_return_address(0));
++}
++
+ bool __weak module_init_section(const char *name)
+ {
+ 	return strstarts(name, ".init");
 -- 
 2.30.2
 
