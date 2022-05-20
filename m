@@ -2,31 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5171FC433F5
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:18:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48FD7C433FE
+	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:18:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344546AbiETDS4 convert rfc822-to-8bit (ORCPT
+        id S1345155AbiETDS4 convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 23:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345145AbiETDSy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1345148AbiETDSy (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 19 May 2022 23:18:54 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC0062BE3
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8689F5D5EA
         for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:53 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24JKmXCl032187
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K0467u029826
         for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:53 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3g5h5d6vrr-3
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g604bgqw6-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:52 -0700
-Received: from twshared0725.22.frc3.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:53 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 19 May 2022 20:18:50 -0700
+ 15.1.2375.28; Thu, 19 May 2022 20:18:46 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 2C0A27D8C2F7; Thu, 19 May 2022 20:16:05 -0700 (PDT)
+        id 6709E7D8C2E9; Thu, 19 May 2022 20:16:01 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-mm@kvack.org>
@@ -34,19 +34,18 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
         <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
         <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH v3 bpf-next 5/8] bpf: use module_alloc_huge for bpf_prog_pack
-Date:   Thu, 19 May 2022 20:15:45 -0700
-Message-ID: <20220520031548.338934-6-song@kernel.org>
+Subject: [PATCH v3 bpf-next 2/8] x86/alternative: introduce text_poke_set
+Date:   Thu, 19 May 2022 20:15:42 -0700
+Message-ID: <20220520031548.338934-3-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220520031548.338934-1-song@kernel.org>
 References: <20220520031548.338934-1-song@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 8yUOQx5CaYt6h08goPeYw1sHxUZOsjOk
-X-Proofpoint-ORIG-GUID: 8yUOQx5CaYt6h08goPeYw1sHxUZOsjOk
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: cFM28PAH73mfcui5jVeD4qsg2_aH4IaA
+X-Proofpoint-GUID: cFM28PAH73mfcui5jVeD4qsg2_aH4IaA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-20_01,2022-05-19_03,2022-02-23_01
@@ -54,83 +53,142 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use module_alloc_huge for bpf_prog_pack so that BPF programs sit on
-PMD_SIZE pages. This benefits system performance by reducing iTLB miss
-rate. Benchmark of a real web service workload shows this change gives
-another ~0.2% performance boost on top of PAGE_SIZE bpf_prog_pack
-(which improve system throughput by ~0.5%).
+Introduce a memset like API for text_poke. This will be used to fill the
+unused RX memory with illegal instructions.
 
-Also, remove set_vm_flush_reset_perms() from alloc_new_pack() and use
-set_memory_[nx|rw] in bpf_prog_pack_free(). This is because
-VM_FLUSH_RESET_PERMS does not work with huge pages yet. [1]
-
-[1] https://lore.kernel.org/bpf/aeeeaf0b7ec63fdba55d4834d2f524d8bf05b71b.camel@intel.com/
-Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- kernel/bpf/core.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/text-patching.h |  1 +
+ arch/x86/kernel/alternative.c        | 67 +++++++++++++++++++++++-----
+ 2 files changed, 58 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index cacd8684c3c4..b64d91fcb0ba 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -857,7 +857,7 @@ static size_t select_bpf_prog_pack_size(void)
- 	void *ptr;
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index d20ab0921480..1cc15528ce29 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -45,6 +45,7 @@ extern void *text_poke(void *addr, const void *opcode, size_t len);
+ extern void text_poke_sync(void);
+ extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
+ extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
++extern void *text_poke_set(void *addr, int c, size_t len);
+ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void text_poke_bp(void *addr, const void *opcode, size_t len, const void *emulate);
  
- 	size = BPF_HPAGE_SIZE * num_online_nodes();
--	ptr = module_alloc(size);
-+	ptr = module_alloc_huge(size);
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index d374cb3cf024..7563b5bc8328 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -994,7 +994,21 @@ static inline void unuse_temporary_mm(temp_mm_state_t prev_state)
+ __ro_after_init struct mm_struct *poking_mm;
+ __ro_after_init unsigned long poking_addr;
  
- 	/* Test whether we can get huge pages. If not just use PAGE_SIZE
- 	 * packs.
-@@ -881,7 +881,7 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 		       GFP_KERNEL);
- 	if (!pack)
- 		return NULL;
--	pack->ptr = module_alloc(bpf_prog_pack_size);
-+	pack->ptr = module_alloc_huge(bpf_prog_pack_size);
- 	if (!pack->ptr) {
- 		kfree(pack);
- 		return NULL;
-@@ -890,7 +890,6 @@ static struct bpf_prog_pack *alloc_new_pack(bpf_jit_fill_hole_t bpf_fill_ill_ins
- 	bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
- 	list_add_tail(&pack->list, &pack_list);
+-static void *__text_poke(void *addr, const void *opcode, size_t len)
++static void text_poke_memcpy(void *dst, const void *src, size_t len)
++{
++	memcpy(dst, src, len);
++}
++
++static void text_poke_memset(void *dst, const void *src, size_t len)
++{
++	int c = *(const int *)src;
++
++	memset(dst, c, len);
++}
++
++typedef void text_poke_f(void *dst, const void *src, size_t len);
++
++static void *__text_poke(text_poke_f func, void *addr, const void *src, size_t len)
+ {
+ 	bool cross_page_boundary = offset_in_page(addr) + len > PAGE_SIZE;
+ 	struct page *pages[2] = {NULL};
+@@ -1059,7 +1073,7 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
+ 	prev = use_temporary_mm(poking_mm);
  
--	set_vm_flush_reset_perms(pack->ptr);
- 	set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 	set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 	return pack;
-@@ -909,10 +908,9 @@ static void *bpf_prog_pack_alloc(u32 size, bpf_jit_fill_hole_t bpf_fill_ill_insn
+ 	kasan_disable_current();
+-	memcpy((u8 *)poking_addr + offset_in_page(addr), opcode, len);
++	func((u8 *)poking_addr + offset_in_page(addr), src, len);
+ 	kasan_enable_current();
  
- 	if (size > bpf_prog_pack_size) {
- 		size = round_up(size, PAGE_SIZE);
--		ptr = module_alloc(size);
-+		ptr = module_alloc_huge(size);
- 		if (ptr) {
- 			bpf_fill_ill_insns(ptr, size);
--			set_vm_flush_reset_perms(ptr);
- 			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
- 			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
- 		}
-@@ -949,6 +947,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+ 	/*
+@@ -1087,11 +1101,13 @@ static void *__text_poke(void *addr, const void *opcode, size_t len)
+ 			   (cross_page_boundary ? 2 : 1) * PAGE_SIZE,
+ 			   PAGE_SHIFT, false);
  
- 	mutex_lock(&pack_mutex);
- 	if (hdr->size > bpf_prog_pack_size) {
-+		set_memory_nx((unsigned long)hdr, hdr->size / PAGE_SIZE);
-+		set_memory_rw((unsigned long)hdr, hdr->size / PAGE_SIZE);
- 		module_memfree(hdr);
- 		goto out;
+-	/*
+-	 * If the text does not match what we just wrote then something is
+-	 * fundamentally screwy; there's nothing we can really do about that.
+-	 */
+-	BUG_ON(memcmp(addr, opcode, len));
++	if (func == text_poke_memcpy) {
++		/*
++		 * If the text does not match what we just wrote then something is
++		 * fundamentally screwy; there's nothing we can really do about that.
++		 */
++		BUG_ON(memcmp(addr, src, len));
++	}
+ 
+ 	local_irq_restore(flags);
+ 	pte_unmap_unlock(ptep, ptl);
+@@ -1118,7 +1134,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
+ {
+ 	lockdep_assert_held(&text_mutex);
+ 
+-	return __text_poke(addr, opcode, len);
++	return __text_poke(text_poke_memcpy, addr, opcode, len);
+ }
+ 
+ /**
+@@ -1137,7 +1153,7 @@ void *text_poke(void *addr, const void *opcode, size_t len)
+  */
+ void *text_poke_kgdb(void *addr, const void *opcode, size_t len)
+ {
+-	return __text_poke(addr, opcode, len);
++	return __text_poke(text_poke_memcpy, addr, opcode, len);
+ }
+ 
+ /**
+@@ -1167,7 +1183,38 @@ void *text_poke_copy(void *addr, const void *opcode, size_t len)
+ 
+ 		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
+ 
+-		__text_poke((void *)ptr, opcode + patched, s);
++		__text_poke(text_poke_memcpy, (void *)ptr, opcode + patched, s);
++		patched += s;
++	}
++	mutex_unlock(&text_mutex);
++	return addr;
++}
++
++/**
++ * text_poke_set - memset into (an unused part of) RX memory
++ * @addr: address to modify
++ * @c: the byte to fill the area with
++ * @len: length to copy, could be more than 2x PAGE_SIZE
++ *
++ * This is useful to overwrite unused regions of RX memory with illegal
++ * instructions.
++ */
++void *text_poke_set(void *addr, int c, size_t len)
++{
++	unsigned long start = (unsigned long)addr;
++	size_t patched = 0;
++
++	if (WARN_ON_ONCE(core_kernel_text(start)))
++		return NULL;
++
++	mutex_lock(&text_mutex);
++	while (patched < len) {
++		unsigned long ptr = start + patched;
++		size_t s;
++
++		s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len - patched);
++
++		__text_poke(text_poke_memset, (void *)ptr, (void *)&c, s);
+ 		patched += s;
  	}
-@@ -975,6 +975,8 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
- 	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
- 				       bpf_prog_chunk_count(), 0) == 0) {
- 		list_del(&pack->list);
-+		set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-+		set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
- 		module_memfree(pack->ptr);
- 		kfree(pack);
- 	}
+ 	mutex_unlock(&text_mutex);
 -- 
 2.30.2
 
