@@ -2,31 +2,31 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 844A1C433EF
-	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 00:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F8D3C433FE
+	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 00:00:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354157AbiEUAAg convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 20 May 2022 20:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S1354159AbiEUAAh convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 20 May 2022 20:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
         with ESMTP id S236380AbiEUAAg (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 20 May 2022 20:00:36 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825F21A0ADC
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FEB01A0AE2
         for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:35 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KMrtvB023390
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:35 -0700
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24KMsAm6021874
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:34 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g604bq6qh-3
+        by m0001303.ppops.net (PPS) with ESMTPS id 3g5wkrg2ru-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:35 -0700
-Received: from twshared24024.25.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 20 May 2022 17:00:34 -0700
+Received: from twshared10560.18.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 20 May 2022 17:00:34 -0700
+ 15.1.2375.28; Fri, 20 May 2022 17:00:32 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id C84FB7E221EC; Fri, 20 May 2022 16:58:16 -0700 (PDT)
+        id 0B1EE7E22204; Fri, 20 May 2022 16:58:21 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-mm@kvack.org>
@@ -34,9 +34,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
         <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
         <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH v4 bpf-next 4/8] module: introduce module_alloc_huge
-Date:   Fri, 20 May 2022 16:57:54 -0700
-Message-ID: <20220520235758.1858153-5-song@kernel.org>
+Subject: [PATCH v4 bpf-next 6/8] vmalloc: WARN for set_vm_flush_reset_perms() on huge pages
+Date:   Fri, 20 May 2022 16:57:56 -0700
+Message-ID: <20220520235758.1858153-7-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220520235758.1858153-1-song@kernel.org>
 References: <20220520235758.1858153-1-song@kernel.org>
@@ -44,8 +44,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: N8ocT1TO60Ah0un658EOTo5MwyZoAaZi
-X-Proofpoint-GUID: N8ocT1TO60Ah0un658EOTo5MwyZoAaZi
+X-Proofpoint-GUID: 7j70KGT89k7Bx7wKkwJiKVNG0N0bMf_g
+X-Proofpoint-ORIG-GUID: 7j70KGT89k7Bx7wKkwJiKVNG0N0bMf_g
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-20_08,2022-05-20_02,2022-02-23_01
@@ -53,89 +53,27 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce module_alloc_huge, which allocates huge page backed memory in
-module memory space. The primary user of this memory is bpf_prog_pack
-(multiple BPF programs sharing a huge page).
+VM_FLUSH_RESET_PERMS is not yet ready for huge pages, add a WARN to
+catch misuse soon.
 
+Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 Signed-off-by: Song Liu <song@kernel.org>
-
 ---
-Note: This conflicts with the module.c => module/ split in modules-next.
-Current patch is for module.c in the bpf-next tree. After the split,
-__weak module_alloc_huge() should be added to kernel/module/main.c.
----
- arch/x86/kernel/module.c     | 21 +++++++++++++++++++++
- include/linux/moduleloader.h |  5 +++++
- kernel/module.c              |  8 ++++++++
- 3 files changed, 34 insertions(+)
+ include/linux/vmalloc.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index b98ffcf4d250..63f6a16c70dc 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -86,6 +86,27 @@ void *module_alloc(unsigned long size)
- 	return p;
- }
- 
-+void *module_alloc_huge(unsigned long size)
-+{
-+	gfp_t gfp_mask = GFP_KERNEL;
-+	void *p;
-+
-+	if (PAGE_ALIGN(size) > MODULES_LEN)
-+		return NULL;
-+
-+	p = __vmalloc_node_range(size, MODULE_ALIGN,
-+				 MODULES_VADDR + get_module_load_offset(),
-+				 MODULES_END, gfp_mask, PAGE_KERNEL,
-+				 VM_DEFER_KMEMLEAK | VM_ALLOW_HUGE_VMAP,
-+				 NUMA_NO_NODE, __builtin_return_address(0));
-+	if (p && (kasan_alloc_module_shadow(p, size, gfp_mask) < 0)) {
-+		vfree(p);
-+		return NULL;
-+	}
-+
-+	return p;
-+}
-+
- #ifdef CONFIG_X86_32
- int apply_relocate(Elf32_Shdr *sechdrs,
- 		   const char *strtab,
-diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-index 9e09d11ffe5b..d34743a88938 100644
---- a/include/linux/moduleloader.h
-+++ b/include/linux/moduleloader.h
-@@ -26,6 +26,11 @@ unsigned int arch_mod_section_prepend(struct module *mod, unsigned int section);
-    sections.  Returns NULL on failure. */
- void *module_alloc(unsigned long size);
- 
-+/* Allocator used for allocating memory in module memory space. If size is
-+ * greater than PMD_SIZE, allow using huge pages. Returns NULL on failure.
-+ */
-+void *module_alloc_huge(unsigned long size);
-+
- /* Free memory returned from module_alloc. */
- void module_memfree(void *module_region);
- 
-diff --git a/kernel/module.c b/kernel/module.c
-index 6cea788fd965..2af20ac3209c 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2839,6 +2839,14 @@ void * __weak module_alloc(unsigned long size)
- 			NUMA_NO_NODE, __builtin_return_address(0));
- }
- 
-+void * __weak module_alloc_huge(unsigned long size)
-+{
-+	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-+				    GFP_KERNEL, PAGE_KERNEL_EXEC,
-+				    VM_FLUSH_RESET_PERMS | VM_ALLOW_HUGE_VMAP,
-+				    NUMA_NO_NODE, __builtin_return_address(0));
-+}
-+
- bool __weak module_init_section(const char *name)
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index b159c2789961..5e0d0a60d9d5 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -238,6 +238,7 @@ static inline void set_vm_flush_reset_perms(void *addr)
  {
- 	return strstarts(name, ".init");
+ 	struct vm_struct *vm = find_vm_area(addr);
+ 
++	WARN_ON_ONCE(is_vm_area_hugepages(addr));
+ 	if (vm)
+ 		vm->flags |= VM_FLUSH_RESET_PERMS;
+ }
 -- 
 2.30.2
 
