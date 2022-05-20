@@ -2,97 +2,263 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C13EAC433F5
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24557C433F5
+	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 04:43:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345168AbiETDTB convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 23:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
+        id S1345359AbiETEn3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 May 2022 00:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345145AbiETDTA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 23:19:00 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8059668F80
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:59 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24JKmcJn032487
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:58 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3g5h5d6vry-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:58 -0700
-Received: from twshared8307.18.frc3.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 19 May 2022 20:18:56 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 19BBB7D8C309; Thu, 19 May 2022 20:16:10 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-mm@kvack.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
-        <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
-        <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH v3 bpf-next 8/8] bpf: simplify select_bpf_prog_pack_size
-Date:   Thu, 19 May 2022 20:15:48 -0700
-Message-ID: <20220520031548.338934-9-song@kernel.org>
+        with ESMTP id S1345380AbiETEn1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 May 2022 00:43:27 -0400
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAD712FEF0
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 21:43:26 -0700 (PDT)
+Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
+        id 999CFC9E201A; Thu, 19 May 2022 21:43:23 -0700 (PDT)
+From:   Joanne Koong <joannelkoong@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH bpf-next v5 5/6] bpf: Add dynptr data slices
+Date:   Thu, 19 May 2022 21:42:44 -0700
+Message-Id: <20220520044245.3305025-6-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220520031548.338934-1-song@kernel.org>
-References: <20220520031548.338934-1-song@kernel.org>
+In-Reply-To: <20220520044245.3305025-1-joannelkoong@gmail.com>
+References: <20220520044245.3305025-1-joannelkoong@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: DStbXLmgz3PdCLCozD3JEjNuffvXUJ3L
-X-Proofpoint-ORIG-GUID: DStbXLmgz3PdCLCozD3JEjNuffvXUJ3L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-20_01,2022-05-19_03,2022-02-23_01
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use huge_vmalloc_supported to simplify select_bpf_prog_pack_size, so that
-we don't allocate some huge pages and free them immediately.
+This patch adds a new helper function
 
-Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Signed-off-by: Song Liu <song@kernel.org>
+void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len);
+
+which returns a pointer to the underlying data of a dynptr. *len*
+must be a statically known value. The bpf program may access the returned
+data slice as a normal buffer (eg can do direct reads and writes), since
+the verifier associates the length with the returned pointer, and
+enforces that no out of bounds accesses occur.
+
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
 ---
- kernel/bpf/core.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ include/linux/bpf.h            |  4 ++++
+ include/uapi/linux/bpf.h       | 12 ++++++++++++
+ kernel/bpf/helpers.c           | 28 ++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c          | 27 +++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 12 ++++++++++++
+ 5 files changed, 83 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index b64d91fcb0ba..b5dcc8f182b3 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -854,22 +854,15 @@ static LIST_HEAD(pack_list);
- static size_t select_bpf_prog_pack_size(void)
- {
- 	size_t size;
--	void *ptr;
--
--	size = BPF_HPAGE_SIZE * num_online_nodes();
--	ptr = module_alloc_huge(size);
- 
--	/* Test whether we can get huge pages. If not just use PAGE_SIZE
--	 * packs.
--	 */
--	if (!ptr || !is_vm_area_hugepages(ptr)) {
-+	if (huge_vmalloc_supported()) {
-+		size = BPF_HPAGE_SIZE * num_online_nodes();
-+		bpf_prog_pack_mask = BPF_HPAGE_MASK;
-+	} else {
- 		size = PAGE_SIZE;
- 		bpf_prog_pack_mask = PAGE_MASK;
--	} else {
--		bpf_prog_pack_mask = BPF_HPAGE_MASK;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index dce532393f3d..ddf97b12e180 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -398,6 +398,9 @@ enum bpf_type_flag {
+ 	/* DYNPTR points to a ringbuf record. */
+ 	DYNPTR_TYPE_RINGBUF	=3D BIT(9 + BPF_BASE_TYPE_BITS),
+=20
++	/* MEM is memory owned by a dynptr */
++	MEM_DYNPTR		=3D BIT(10 + BPF_BASE_TYPE_BITS),
++
+ 	__BPF_TYPE_FLAG_MAX,
+ 	__BPF_TYPE_LAST_FLAG	=3D __BPF_TYPE_FLAG_MAX - 1,
+ };
+@@ -488,6 +491,7 @@ enum bpf_return_type {
+ 	RET_PTR_TO_TCP_SOCK_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
+ 	RET_PTR_TO_SOCK_COMMON_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COM=
+MON,
+ 	RET_PTR_TO_ALLOC_MEM_OR_NULL	=3D PTR_MAYBE_NULL | MEM_ALLOC | RET_PTR_T=
+O_ALLOC_MEM,
++	RET_PTR_TO_DYNPTR_MEM_OR_NULL	=3D PTR_MAYBE_NULL | MEM_DYNPTR | RET_PTR=
+_TO_ALLOC_MEM,
+ 	RET_PTR_TO_BTF_ID_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
+=20
+ 	/* This must be the last entry. Its purpose is to ensure the enum is
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index d11603c5b87a..89d0932255ab 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5232,6 +5232,17 @@ union bpf_attr {
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+  *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+  *		is a read-only dynptr.
++ *
++ * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
++ *	Description
++ *		Get a pointer to the underlying dynptr data.
++ *
++ *		*len* must be a statically known value. The returned data slice
++ *		is invalidated whenever the dynptr is invalidated.
++ *	Return
++ *		Pointer to the underlying dynptr data, NULL if the dynptr is
++ *		read-only, if the dynptr is invalid, or if the offset and length
++ *		is out of bounds.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5436,6 +5447,7 @@ union bpf_attr {
+ 	FN(ringbuf_discard_dynptr),	\
+ 	FN(dynptr_read),		\
+ 	FN(dynptr_write),		\
++	FN(dynptr_data),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 726a4164ceca..47b36c4f71de 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1549,6 +1549,32 @@ const struct bpf_func_proto bpf_dynptr_write_proto=
+ =3D {
+ 	.arg4_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ };
+=20
++BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_kern *, ptr, u32, offset, =
+u32, len)
++{
++	int err;
++
++	if (!ptr->data)
++		return 0;
++
++	err =3D bpf_dynptr_check_off_len(ptr, offset, len);
++	if (err)
++		return 0;
++
++	if (bpf_dynptr_is_rdonly(ptr))
++		return 0;
++
++	return (unsigned long)(ptr->data + ptr->offset + offset);
++}
++
++const struct bpf_func_proto bpf_dynptr_data_proto =3D {
++	.func		=3D bpf_dynptr_data,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_PTR_TO_DYNPTR_MEM_OR_NULL,
++	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
++	.arg2_type	=3D ARG_ANYTHING,
++	.arg3_type	=3D ARG_CONST_ALLOC_SIZE_OR_ZERO,
++};
++
+ const struct bpf_func_proto bpf_get_current_task_proto __weak;
+ const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_user_proto __weak;
+@@ -1615,6 +1641,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_dynptr_read_proto;
+ 	case BPF_FUNC_dynptr_write:
+ 		return &bpf_dynptr_write_proto;
++	case BPF_FUNC_dynptr_data:
++		return &bpf_dynptr_data_proto;
+ 	default:
+ 		break;
  	}
- 
--	vfree(ptr);
- 	return size;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4b502b8a369e..79c68e28ae5a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -567,6 +567,8 @@ static const char *reg_type_str(struct bpf_verifier_e=
+nv *env,
+ 		strncpy(prefix, "rdonly_", 32);
+ 	if (type & MEM_ALLOC)
+ 		strncpy(prefix, "alloc_", 32);
++	if (type & MEM_DYNPTR)
++		strncpy(prefix, "dynptr_", 32);
+ 	if (type & MEM_USER)
+ 		strncpy(prefix, "user_", 32);
+ 	if (type & MEM_PERCPU)
+@@ -5640,6 +5642,7 @@ static const struct bpf_reg_types mem_types =3D {
+ 		PTR_TO_MAP_VALUE,
+ 		PTR_TO_MEM,
+ 		PTR_TO_MEM | MEM_ALLOC,
++		PTR_TO_MEM | MEM_DYNPTR,
+ 		PTR_TO_BUF,
+ 	},
+ };
+@@ -5803,6 +5806,7 @@ int check_func_arg_reg_off(struct bpf_verifier_env =
+*env,
+ 	case PTR_TO_MEM:
+ 	case PTR_TO_MEM | MEM_RDONLY:
+ 	case PTR_TO_MEM | MEM_ALLOC:
++	case PTR_TO_MEM | MEM_DYNPTR:
+ 	case PTR_TO_BUF:
+ 	case PTR_TO_BUF | MEM_RDONLY:
+ 	case SCALAR_VALUE:
+@@ -5837,6 +5841,14 @@ int check_func_arg_reg_off(struct bpf_verifier_env=
+ *env,
+ 	return __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
  }
- 
--- 
+=20
++static u32 stack_slot_get_id(struct bpf_verifier_env *env, struct bpf_re=
+g_state *reg)
++{
++	struct bpf_func_state *state =3D func(env, reg);
++	int spi =3D get_spi(reg->off);
++
++	return state->stack[spi].spilled_ptr.id;
++}
++
+ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			  struct bpf_call_arg_meta *meta,
+ 			  const struct bpf_func_proto *fn)
+@@ -7383,6 +7395,21 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
+ 		regs[BPF_REG_0].id =3D id;
+ 		/* For release_reference() */
+ 		regs[BPF_REG_0].ref_obj_id =3D id;
++	} else if (func_id =3D=3D BPF_FUNC_dynptr_data) {
++		int dynptr_id =3D 0, i;
++
++		/* Find the id of the dynptr we're acquiring a reference to */
++		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
++			if (arg_type_is_dynptr(fn->arg_type[i])) {
++				if (dynptr_id) {
++					verbose(env, "verifier internal error: multiple dynptr args in func=
+\n");
++					return -EFAULT;
++				}
++				dynptr_id =3D stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
++			}
++		}
++		/* For release_reference() */
++		regs[BPF_REG_0].ref_obj_id =3D dynptr_id;
+ 	}
+=20
+ 	do_refine_retval_range(regs, fn->ret_type, func_id, &meta);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index d11603c5b87a..89d0932255ab 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5232,6 +5232,17 @@ union bpf_attr {
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+  *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+  *		is a read-only dynptr.
++ *
++ * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
++ *	Description
++ *		Get a pointer to the underlying dynptr data.
++ *
++ *		*len* must be a statically known value. The returned data slice
++ *		is invalidated whenever the dynptr is invalidated.
++ *	Return
++ *		Pointer to the underlying dynptr data, NULL if the dynptr is
++ *		read-only, if the dynptr is invalid, or if the offset and length
++ *		is out of bounds.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5436,6 +5447,7 @@ union bpf_attr {
+ 	FN(ringbuf_discard_dynptr),	\
+ 	FN(dynptr_read),		\
+ 	FN(dynptr_write),		\
++	FN(dynptr_data),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+--=20
 2.30.2
 
