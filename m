@@ -2,129 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2588DC433FE
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DC9FC433F5
+	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:18:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237545AbiETDCi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 May 2022 23:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S1345135AbiETDSo convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 23:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344975AbiETDCh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 23:02:37 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC17BB82F8
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:02:34 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id nr2-20020a17090b240200b001df2b1bfc40so10323449pjb.5
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=T49autrwazSVPbqM6JLQ0qnBuicehxkova35EuZCJaU=;
-        b=YAQzupJhJUp7xZHECAP6liV1GLyneKC7ORPbdztHF98+Q7076sqC9DSsyMYsCmP6cA
-         oWwweI2rAbNR1XW76OAHHX4lpS3lIfOkzqlEwwScfdtl/YFj4oxt/7O2AA+TtnDWZAu3
-         0/8tnXWRPpE/h6SoJ+lwC43FRUQPlDADpf0y0r99L9hq/jeXx3sg1Lw9uJenlEYTz3ce
-         X0kJzXObUKCU7TOOJ30K4XEuS8xNv1TIaxRHNg9Qf0/aDLsQIdKLa/l0wrOuRfha3dgu
-         2/KpF94tfXYOkEX/1t6Lf1IuRtSmd9XMFw8WvsUvYNNQY2Aq791p0vpJ09dUsT0RNHIi
-         hgEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=T49autrwazSVPbqM6JLQ0qnBuicehxkova35EuZCJaU=;
-        b=UMBJe2tAwFBuDrdYXQq59Jd9oO8IFuKaH3TU+8ZQhNfcGUMuG+juInRc47Wic0XbUW
-         0tzOXqtUVUB5a2i58nIQPnQ+PlDT144goJ6/nzca6JNtud8qVdoAgLvlV9bR9LRVxAD1
-         uHqdbYODy96RKCIfM8hszB9wwfq6GnTAqEoG5CCX9+FK44rF1bWQGpnDWFrawWPE5GHB
-         F/PGIPdCLwrA9IP10gFMXGRRmUZ7iL7eMiZMSIDIDaPF3qGK7LVesZyCLs+BsO2jZIsq
-         7QwGsQN7er7QEd0yPQ8H9aIl4blIsYOqpKPcxjPeFP0em5prfupVz0534T+rHO5puyau
-         cxtA==
-X-Gm-Message-State: AOAM533O58C1QbJkTWXPmj8dsdxsa6iXD41V9fxL5Kvu9Y/3gf+VmF0Z
-        hlYiOIZ6URwIMoJd15rMmoUrlQ==
-X-Google-Smtp-Source: ABdhPJwOjHkRwZ7scwMzECt6n/SIMuW/O/aZf3GaVbzT7jr3FkELxpScQ0hys0wR4wtFxD+F+4Ucpg==
-X-Received: by 2002:a17:903:1c7:b0:161:9d6f:376a with SMTP id e7-20020a17090301c700b001619d6f376amr7770822plh.147.1653015754279;
-        Thu, 19 May 2022 20:02:34 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.225])
-        by smtp.gmail.com with ESMTPSA id n1-20020a170902e54100b0015e8d4eb219sm4574667plf.99.2022.05.19.20.02.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 20:02:33 -0700 (PDT)
-Message-ID: <344e2064-62f8-845e-7d1d-2afcaeb0e524@bytedance.com>
-Date:   Fri, 20 May 2022 11:02:24 +0800
+        with ESMTP id S1345127AbiETDSn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 May 2022 23:18:43 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5735EBF6
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:42 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24JKmYqw030912
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:41 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g59tbru88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:41 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 19 May 2022 20:18:40 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id A61D77D8C2FA; Thu, 19 May 2022 20:16:06 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-mm@kvack.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
+        <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
+        <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v3 bpf-next 6/8] vmalloc: WARN for set_vm_flush_reset_perms() on huge pages
+Date:   Thu, 19 May 2022 20:15:46 -0700
+Message-ID: <20220520031548.338934-7-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220520031548.338934-1-song@kernel.org>
+References: <20220520031548.338934-1-song@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [External] Re: [PATCH] bpf: avoid grabbing spin_locks of all cpus
- when no free elems
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20220518062715.27809-1-zhoufeng.zf@bytedance.com>
- <CAADnVQ+x-A87Z9_c+3vuRJOYm=gCOBXmyCJQ64CiCNukHS6FpA@mail.gmail.com>
- <6ae715b3-96b1-2b42-4d1a-5267444d586b@bytedance.com>
- <9c0c3e0b-33bc-51a7-7916-7278f14f308e@fb.com>
- <380fa11e-f15d-da1a-51f7-70e14ed58ffc@bytedance.com>
- <CAADnVQL9naBBKzQdAOWu2ZH=i7HA1VDi7uNzsDQ1TM9Jr+c0Ww@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQL9naBBKzQdAOWu2ZH=i7HA1VDi7uNzsDQ1TM9Jr+c0Ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 907j3rj0GTapVPnEH80N8XSJTq-HM3dZ
+X-Proofpoint-GUID: 907j3rj0GTapVPnEH80N8XSJTq-HM3dZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-20_01,2022-05-19_03,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-在 2022/5/20 上午12:12, Alexei Starovoitov 写道:
-> On Wed, May 18, 2022 at 8:12 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->> 在 2022/5/19 上午4:39, Yonghong Song 写道:
->>>
->>> On 5/17/22 11:57 PM, Feng Zhou wrote:
->>>> 在 2022/5/18 下午2:32, Alexei Starovoitov 写道:
->>>>> On Tue, May 17, 2022 at 11:27 PM Feng zhou
->>>>> <zhoufeng.zf@bytedance.com> wrote:
->>>>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>>>>
->>>>>> We encountered bad case on big system with 96 CPUs that
->>>>>> alloc_htab_elem() would last for 1ms. The reason is that after the
->>>>>> prealloc hashtab has no free elems, when trying to update, it will
->>>>>> still
->>>>>> grab spin_locks of all cpus. If there are multiple update users, the
->>>>>> competition is very serious.
->>>>>>
->>>>>> So this patch add is_empty in pcpu_freelist_head to check freelist
->>>>>> having free or not. If having, grab spin_lock, or check next cpu's
->>>>>> freelist.
->>>>>>
->>>>>> Before patch: hash_map performance
->>>>>> ./map_perf_test 1
->>> could you explain what parameter '1' means here?
->> This code is here:
->> samples/bpf/map_perf_test_user.c
->> samples/bpf/map_perf_test_kern.c
->> parameter '1' means testcase flag, test hash_map's performance
->> parameter '2048' means test hash_map's performance when free=0.
->> testcase flag '2048' is added by myself to reproduce the problem phenomenon.
-> Please convert it to selftests/bpf/bench,
-> so that everyone can reproduce the issue you're seeing
-> and can assess whether it's a real issue or a corner case.
->
-> Also please avoid adding indent in the patch.
-> Instead of
->   if (!s->extralist.is_empty) {
->    .. churn
->
-> do
->
->   if (s->extralist.is_empty)
+VM_FLUSH_RESET_PERMS is not yet ready for huge pages, add a WARN to
+catch misuse soon.
 
-Ok, will do. Thanks.
+Suggested-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ include/linux/vmalloc.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index b159c2789961..5e0d0a60d9d5 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -238,6 +238,7 @@ static inline void set_vm_flush_reset_perms(void *addr)
+ {
+ 	struct vm_struct *vm = find_vm_area(addr);
+ 
++	WARN_ON_ONCE(is_vm_area_hugepages(addr));
+ 	if (vm)
+ 		vm->flags |= VM_FLUSH_RESET_PERMS;
+ }
+-- 
+2.30.2
 
