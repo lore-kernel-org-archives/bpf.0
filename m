@@ -2,31 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A85CBC433EF
-	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 266EDC43217
+	for <bpf@archiver.kernel.org>; Fri, 20 May 2022 03:18:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345126AbiETDSw convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 23:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S1345142AbiETDSx convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 19 May 2022 23:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345144AbiETDSt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 May 2022 23:18:49 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB1C5D5EA
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:47 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24K0JkUO023226
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:47 -0700
+        with ESMTP id S1345155AbiETDSv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 May 2022 23:18:51 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED6514A26A
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:50 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24JLCXpd020396
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:49 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g60bngp2j-2
+        by m0001303.ppops.net (PPS) with ESMTPS id 3g5wkr9mn5-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:47 -0700
-Received: from twshared11660.23.frc3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 19 May 2022 20:18:49 -0700
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub204.TheFacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 19 May 2022 20:18:48 -0700
+Received: from twshared8307.18.frc3.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 19 May 2022 20:18:46 -0700
+ 15.1.2375.28; Thu, 19 May 2022 20:18:47 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 115CF7D8C2DF; Thu, 19 May 2022 20:15:59 -0700 (PDT)
+        id B65E77D8C2F0; Thu, 19 May 2022 20:16:02 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-mm@kvack.org>
@@ -34,16 +38,18 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <peterz@infradead.org>,
         <mcgrof@kernel.org>, <torvalds@linux-foundation.org>,
         <rick.p.edgecombe@intel.com>, <kernel-team@fb.com>,
         Song Liu <song@kernel.org>
-Subject: [PATCH v3 bpf-next 0/8] bpf_prog_pack followup
-Date:   Thu, 19 May 2022 20:15:40 -0700
-Message-ID: <20220520031548.338934-1-song@kernel.org>
+Subject: [PATCH v3 bpf-next 3/8] bpf: introduce bpf_arch_text_invalidate for bpf_prog_pack
+Date:   Thu, 19 May 2022 20:15:43 -0700
+Message-ID: <20220520031548.338934-4-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220520031548.338934-1-song@kernel.org>
+References: <20220520031548.338934-1-song@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: stt4W2Vd_oPxsfb5bwIwftOu6IMIdClU
-X-Proofpoint-GUID: stt4W2Vd_oPxsfb5bwIwftOu6IMIdClU
+X-Proofpoint-GUID: fBvxR8GaWdouGJ99gFXkN1G4ncZzim7v
+X-Proofpoint-ORIG-GUID: fBvxR8GaWdouGJ99gFXkN1G4ncZzim7v
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-20_01,2022-05-19_03,2022-02-23_01
@@ -51,54 +57,70 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes v2 => v3:
-1. Fix issues reported by kernel test robot <lkp@intel.com>.
+Introduce bpf_arch_text_invalidate and use it to fill unused part of the
+bpf_prog_pack with illegal instructions when a BPF program is freed.
 
-Changes v1 => v2:
-1. Add WARN to set_vm_flush_reset_perms() on huge pages. (Rick Edgecombe)
-2. Simplify select_bpf_prog_pack_size. (Rick Edgecombe)
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ arch/x86/net/bpf_jit_comp.c | 5 +++++
+ include/linux/bpf.h         | 1 +
+ kernel/bpf/core.c           | 8 ++++++++
+ 3 files changed, 14 insertions(+)
 
-As of 5.18-rc6, x86_64 uses bpf_prog_pack on 4kB pages. This set contains
-a few followups:
-  1/8 - 3/8 fills unused part of bpf_prog_pack with illegal instructions.
-  4/8 - 5/8 enables bpf_prog_pack on 2MB pages.
-
-The primary goal of bpf_prog_pack is to reduce iTLB miss rate and reduce
-direct memory mapping fragmentation. This leads to non-trivial performance
-improvements.
-
-For our web service production benchmark, bpf_prog_pack on 4kB pages
-gives 0.5% to 0.7% more throughput than not using bpf_prog_pack.
-bpf_prog_pack on 2MB pages 0.6% to 0.9% more throughput than not using
-bpf_prog_pack. Note that 0.5% is a huge improvement for our fleet. I
-believe this is also significant for other companies with many thousand
-servers.
-
-bpf_prog_pack on 2MB pages may use slightly more memory for systems
-without many BPF programs. However, such waste in memory (<2MB) is within
-noisy for modern x86_64 systems.
-
-Song Liu (8):
-  bpf: fill new bpf_prog_pack with illegal instructions
-  x86/alternative: introduce text_poke_set
-  bpf: introduce bpf_arch_text_invalidate for bpf_prog_pack
-  module: introduce module_alloc_huge
-  bpf: use module_alloc_huge for bpf_prog_pack
-  vmalloc: WARN for set_vm_flush_reset_perms() on huge pages
-  vmalloc: introduce huge_vmalloc_supported
-  bpf: simplify select_bpf_prog_pack_size
-
- arch/x86/include/asm/text-patching.h |  1 +
- arch/x86/kernel/alternative.c        | 67 +++++++++++++++++++++++-----
- arch/x86/kernel/module.c             | 21 +++++++++
- arch/x86/net/bpf_jit_comp.c          |  5 +++
- include/linux/bpf.h                  |  1 +
- include/linux/moduleloader.h         |  5 +++
- include/linux/vmalloc.h              |  7 +++
- kernel/bpf/core.c                    | 43 ++++++++++--------
- kernel/module.c                      |  8 ++++
- mm/vmalloc.c                         |  5 +++
- 10 files changed, 134 insertions(+), 29 deletions(-)
-
---
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index a2b6d197c226..f298b18a9a3d 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -228,6 +228,11 @@ static void jit_fill_hole(void *area, unsigned int size)
+ 	memset(area, 0xcc, size);
+ }
+ 
++int bpf_arch_text_invalidate(void *dst, size_t len)
++{
++	return IS_ERR_OR_NULL(text_poke_set(dst, 0xcc, len));
++}
++
+ struct jit_context {
+ 	int cleanup_addr; /* Epilogue code offset */
+ 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c107392b0ba7..f6dfa416f892 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2364,6 +2364,7 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
+ 
+ void *bpf_arch_text_copy(void *dst, void *src, size_t len);
++int bpf_arch_text_invalidate(void *dst, size_t len);
+ 
+ struct btf_id_set;
+ bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 2d0c9d4696ad..cacd8684c3c4 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -968,6 +968,9 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+ 	nbits = BPF_PROG_SIZE_TO_NBITS(hdr->size);
+ 	pos = ((unsigned long)hdr - (unsigned long)pack_ptr) >> BPF_PROG_CHUNK_SHIFT;
+ 
++	WARN_ONCE(bpf_arch_text_invalidate(hdr, hdr->size),
++		  "bpf_prog_pack bug: missing bpf_arch_text_invalidate?\n");
++
+ 	bitmap_clear(pack->bitmap, pos, nbits);
+ 	if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
+ 				       bpf_prog_chunk_count(), 0) == 0) {
+@@ -2740,6 +2743,11 @@ void * __weak bpf_arch_text_copy(void *dst, void *src, size_t len)
+ 	return ERR_PTR(-ENOTSUPP);
+ }
+ 
++int __weak bpf_arch_text_invalidate(void *dst, size_t len)
++{
++	return -ENOTSUPP;
++}
++
+ DEFINE_STATIC_KEY_FALSE(bpf_stats_enabled_key);
+ EXPORT_SYMBOL(bpf_stats_enabled_key);
+ 
+-- 
 2.30.2
+
