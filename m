@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5529BC433EF
-	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 11:33:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B3C7C433EF
+	for <bpf@archiver.kernel.org>; Sat, 21 May 2022 11:47:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbiEULcl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 21 May 2022 07:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
+        id S243870AbiEULrs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 21 May 2022 07:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355539AbiEULcB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 21 May 2022 07:32:01 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B696817D39F;
-        Sat, 21 May 2022 04:26:59 -0700 (PDT)
+        with ESMTP id S231287AbiEULro (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 21 May 2022 07:47:44 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE6F5F254;
+        Sat, 21 May 2022 04:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653132423; x=1684668423;
+  t=1653133663; x=1684669663;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=eSHQOnH8evDQZV/d9u1PVNuHXTx6c6o4uF+RXXCZ7Ic=;
-  b=RRSQvvkV8q7Mw2nUXU9SO9Bs90FN/ioEP9ca8JO4m2x0V1aNddElnm6L
-   Q/qHEaxN7i8S4GlVY9GyC10BPRZArbmbFEjkXy1Uezyx0wWPdFmj3JxGT
-   w4N9r1GUxMgi2kI32ObNRR5j6nOp+4Ty5+d5ccZ7fMoHG2qzX4cj8JMQE
-   7eAX35EBArbC5+oiCAp1GLYXZVGL4fhogoxlGAH/sibCRGC+YfALq1DuX
-   vWjYXH5twcW2pJ3bACQV3SAtAHZjqC2Ar9ar2vjZP4PaaqNVhAE1h5dkc
-   C+r4OoY6PX4bjpnj1dWkfGheQqWyQL3nyX4BbxqIglnoIFyQxMOEcfIzw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="260428045"
+  bh=5JYbmecEfaojoV0o0RHmSf31Bg5PL/dcrqKwNqVLbR8=;
+  b=fogFnyJFdEebJI8H2OgOkFQ0UFIgy9W9qeo3iOSn7/qZMC3EcdI9Qume
+   fBjLgY2Y1XR335zRJtHM3Mb/hf1iWAl+TJKU7S5SrtJU2wDuQHVHQ5RDB
+   bHxVOxJYqY3pm3w2U4PnKocYRT9ocdHE/ym2PfbSA6LjRmARdGp9G97WJ
+   E7zjZvY8mvVRtXunU5xMketKTN5feacevLQGopS3CvrK4sfJWk7SrgNYk
+   kqaG3lUuiG/100eEAOoRRsAuhL2POkpHA2WQVqfkbvbvCcNNEa11hHO2E
+   G2ka7Hho339v/ORoJVIXnhHrrS+BtbQ+36H+d+ai5bZcSOIxOMuyNj5Py
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10353"; a="272819376"
 X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="260428045"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 04:26:47 -0700
+   d="scan'208";a="272819376"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 04:47:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,242,1647327600"; 
-   d="scan'208";a="599742031"
+   d="scan'208";a="557873765"
 Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 21 May 2022 04:26:42 -0700
+  by orsmga002.jf.intel.com with ESMTP; 21 May 2022 04:47:38 -0700
 Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nsNFk-0006Eh-MW;
-        Sat, 21 May 2022 11:26:36 +0000
-Date:   Sat, 21 May 2022 19:26:22 +0800
+        id 1nsNa5-0006Fa-L8;
+        Sat, 21 May 2022 11:47:37 +0000
+Date:   Sat, 21 May 2022 19:47:07 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Yosry Ahmed <yosryahmed@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -63,14 +63,14 @@ Cc:     kbuild-all@lists.01.org, Stanislav Fomichev <sdf@google.com>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, cgroups@vger.kernel.org,
         Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH bpf-next v1 1/5] cgroup: bpf: add a hook for bpf progs to
- attach to rstat flushing
-Message-ID: <202205211930.7xTXJTBH-lkp@intel.com>
-References: <20220520012133.1217211-2-yosryahmed@google.com>
+Subject: Re: [PATCH bpf-next v1 2/5] cgroup: bpf: add cgroup_rstat_updated()
+ and cgroup_rstat_flush() kfuncs
+Message-ID: <202205211913.wPnVDaPm-lkp@intel.com>
+References: <20220520012133.1217211-3-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220520012133.1217211-2-yosryahmed@google.com>
+In-Reply-To: <20220520012133.1217211-3-yosryahmed@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -83,38 +83,44 @@ Thank you for the patch! Perhaps something to improve:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220520-093041
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-config: parisc-randconfig-r026-20220519 (https://download.01.org/0day-ci/archive/20220521/202205211930.7xTXJTBH-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220521/202205211913.wPnVDaPm-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
 reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/23c4c48fb35b084dc1173c7b9d23d4e6e1a084a3
+        # https://github.com/intel-lab-lkp/linux/commit/203797424b1159b12702cea9d9a20acc24ea92e0
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Yosry-Ahmed/bpf-rstat-cgroup-hierarchical-stats/20220520-093041
-        git checkout 23c4c48fb35b084dc1173c7b9d23d4e6e1a084a3
+        git checkout 203797424b1159b12702cea9d9a20acc24ea92e0
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash kernel/cgroup/
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash kernel/cgroup/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> kernel/cgroup/rstat.c:145:22: warning: no previous prototype for 'bpf_rstat_flush' [-Wmissing-prototypes]
-     145 | __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
+   kernel/cgroup/rstat.c:155:22: warning: no previous prototype for 'bpf_rstat_flush' [-Wmissing-prototypes]
+     155 | __weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
          |                      ^~~~~~~~~~~~~~~
+   kernel/cgroup/rstat.c:503:10: error: 'const struct btf_kfunc_id_set' has no member named 'sleepable_set'; did you mean 'release_set'?
+     503 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+         |          ^~~~~~~~~~~~~
+         |          release_set
+>> kernel/cgroup/rstat.c:503:27: warning: excess elements in struct initializer
+     503 |         .sleepable_set  = &bpf_rstat_sleepable_kfunc_ids,
+         |                           ^
+   kernel/cgroup/rstat.c:503:27: note: (near initialization for 'bpf_rstat_kfunc_set')
 
 
-vim +/bpf_rstat_flush +145 kernel/cgroup/rstat.c
+vim +503 kernel/cgroup/rstat.c
 
-   143	
-   144	/* A hook for bpf stat collectors to attach to and flush their stats */
- > 145	__weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
-   146					     struct cgroup *parent, int cpu)
-   147	{
-   148	}
-   149	
+   499	
+   500	static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
+   501		.owner		= THIS_MODULE,
+   502		.check_set	= &bpf_rstat_check_kfunc_ids,
+ > 503		.sleepable_set	= &bpf_rstat_sleepable_kfunc_ids,
+   504	};
+   505	
 
 -- 
 0-DAY CI Kernel Test Service
