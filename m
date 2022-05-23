@@ -2,124 +2,222 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9BB6C433F5
-	for <bpf@archiver.kernel.org>; Mon, 23 May 2022 22:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04EE8C433FE
+	for <bpf@archiver.kernel.org>; Mon, 23 May 2022 22:43:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiEWWiW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 May 2022 18:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36320 "EHLO
+        id S229847AbiEWWnX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 May 2022 18:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiEWWiQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 May 2022 18:38:16 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3951C9CF7D;
-        Mon, 23 May 2022 15:38:15 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id 2so6945363iou.5;
-        Mon, 23 May 2022 15:38:15 -0700 (PDT)
+        with ESMTP id S229379AbiEWWnX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 May 2022 18:43:23 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164F9ABF48;
+        Mon, 23 May 2022 15:43:22 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id 3so10798244ily.2;
+        Mon, 23 May 2022 15:43:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=WgfA+bj8h/yfvLtv8TQjcWpJiGYbRoi7JEJT7KRe+10=;
-        b=gacDjAeQh6oI7YHuiwPSGFwsV3CF57PtZWR9POoh7jzgX+t+opWpA1dnvhnh8pNHt2
-         irTzfrFP+T58xwnWZzI7TMGr6ltUwxZ9thY7wOyeuOcTOQpzRMq3MTANn75hiEDLvimx
-         2LkqFw4ADDzhUsVpIZyDjKYyZSPZSIqMkri+sbt1OKBNBeAdinFdn7AY9pdDMZSD8sHi
-         G5JatAMH8vpk/KZeY5Qwgf8r56MtS1EVs0BZNwGWWwY4hLtQIXoTXUoIaJ5qJWBZyI1B
-         iNk4ijFLQOKSQaFKKvC/oprDbb35shx17I8AfsGhLdhterZbPeqERz2MGVRwn/McDNYK
-         mGxA==
+        bh=4z/iwgVrp0ukuHP0yEWJrSr5H7DsDenyaC4SaaPjbgw=;
+        b=PO8qB/TmPhfrifhrSpsXzaKD1Uncs+AiuBTMfZaMbASr/c0rQun3FOK97jQXz4cffX
+         z8vzjGtq+EmTfbIMzcSZKPhllCUQFK0zr35zQIB7tA4pahXRGN0EVZX7qEKnltG2zzPK
+         bjEWXmpiHdRyMwqmorBusWx5/MYbiV11tvShlfOp/ck+LP/LUju77awDz+m73Kg2hWrN
+         0rrOOyEduQYVQ70lJdPaoWo3JHTQVK47Hz9LtskheDxWfBMsysdrn1Gp7ktGo8aZowNr
+         ls+38XPbISiVXcd7JB6y7ZdnOOXYEiWAQZM0FHnnNiL+Jv9g2i0JbGtboAwNoXkPpSk9
+         vb/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=WgfA+bj8h/yfvLtv8TQjcWpJiGYbRoi7JEJT7KRe+10=;
-        b=CnA2r/a6PWiLvBQJKY6D/tc41jMpkT1+gwFbFn+m2urwO7wgw88b2F15PZkTTJ4q6K
-         95OYVmHygvIheS9fwLHx6i+yXPL7W98b9qOmPgHZmypvDPrDY3kCi+EXgMqSg/8L874l
-         5JjrTxxy33vF5g0fqjpSkS/89OWBfR4QJ4nEwDsSYhJGF8tA/dQRaD2/gWng78qfZr8R
-         Os+i1ktplZE8AfGQjsz+o7k8k52cLxy/kM+lANswkhd9svqeAjiwpfNfuzitq68NJHf6
-         VchyG1MNSjliHZtTpwhpXR6rlZBI6tDio/paI48RZbYC3o6N9dZdkr4QcleKBuk4LBfQ
-         RuoQ==
-X-Gm-Message-State: AOAM533ykuOzL5zEqTdwML1A5nYtoU2a+au5jYq1NqfObu4fKJC0bt62
-        JsxMVeSTN/2A41vGjzhPFvmK/4NHMCueopXR41M=
-X-Google-Smtp-Source: ABdhPJx2nthqnJeOlu1EYtk5o5ecqX4NSf9T3KbKuJc6gbO4QF8jsAS27U+zJi6Zr28zSJZfr+Bsf/BbmatEKeYwHfY=
-X-Received: by 2002:a02:9f87:0:b0:32e:69ae:23df with SMTP id
- a7-20020a029f87000000b0032e69ae23dfmr12443446jam.237.1653345494552; Mon, 23
- May 2022 15:38:14 -0700 (PDT)
+        bh=4z/iwgVrp0ukuHP0yEWJrSr5H7DsDenyaC4SaaPjbgw=;
+        b=TKOMTvk/EfrghW5sHnRP2uuZwNukXAbj98jeaIifTrOE2CrbE2SQMVNh7yUgHpihaN
+         oe+focAUl0mWsbzFmf/Rwz8mgrnR0wskTOeFMyiJLdmdRG41DYqH7KfSIYg9ZLmuU8a6
+         5bPWkrmrcvVdXFGTqrJme8u0ltl+SWJ6m/0FGDPN/Ri3k/CfvPuGWKlnUVICe6BjVXDU
+         Rco/FRB1j+dwgUTV9dt6xgkLbCHf9HmYsU/uQU7DrRIrI8kdzc2HToysRfsbvVUGtUIw
+         ZIf5+N50qT8OHiLpSLfrz+09wrlVR4K1b4uG9kNCAXBWxd0qyF5LlLBawCKPoBdZriPy
+         foXQ==
+X-Gm-Message-State: AOAM530CvYOMqAvyRFgsTGcbfHeLFWN9ilyihJPIx7ktw0KESTTn2ODR
+        H1Rg/hYn7MYsOyQJCse+VzMeqtPlncmAjNwxCbc=
+X-Google-Smtp-Source: ABdhPJzJJVJD/PLQLgGbm7LIqKqw3cIejTXmDdnef3swmIMtAay3abe77le37tDVs+dST38MrDX9hIWp0TThoVKIvdw=
+X-Received: by 2002:a05:6e02:1352:b0:2d1:6424:60b8 with SMTP id
+ k18-20020a056e02135200b002d1642460b8mr11798302ilr.305.1653345801408; Mon, 23
+ May 2022 15:43:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523202649.6iiz4h2wf5ryx3w2@jup> <CAEf4BzaecP2XkzftmH7GeeTfj1E+pv=20=L4ztrxe4-JU7MuUw@mail.gmail.com>
- <20220523221954.dsqvy55ron4cfdqq@jup>
-In-Reply-To: <20220523221954.dsqvy55ron4cfdqq@jup>
+References: <20220510074659.2557731-1-jolsa@kernel.org> <CAEf4BzbK9zgetgE1yKkCANTZqizUrXgamJa2X0f0XmzQUdFrCQ@mail.gmail.com>
+ <YntnRixbfQ1HCm9T@krava> <Ynv+7iaaAbyM38B6@kernel.org> <CAEf4BzaQsF31f3WuU32wDCzo6bw7eY8E9zF6Lo218jfw-VQmcA@mail.gmail.com>
+ <YoTAhC+6j4JshqN8@krava> <YoYj6cb0aPNN/olH@krava> <CAEf4Bzaa60kZJbWT0xAqcDMyXBzbg98ShuizJAv7x+8_3X0ZBg@mail.gmail.com>
+ <Yokk5XRxBd72fqoW@kernel.org> <Yos8hq3NmBwemoJw@krava>
+In-Reply-To: <Yos8hq3NmBwemoJw@krava>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 May 2022 15:38:03 -0700
-Message-ID: <CAEf4BzY-K8UoT1HhXf=fwdWtY2fdprttUF27Zm6WwSUSRq8ycA@mail.gmail.com>
-Subject: Re: [PATCH] bpftool: mmaped fields missing map structure in generated skeletons
-To:     Michael Mullin <masmullin@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Date:   Mon, 23 May 2022 15:43:10 -0700
+Message-ID: <CAEf4BzYRJj8sXjYs2ioz6Qq7L2UshZDi4Kt0XLsLtwQSGCpAzg@mail.gmail.com>
+Subject: Re: [PATCHv2 0/3] perf tools: Fix prologue generation
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 23, 2022 at 3:19 PM Michael Mullin <masmullin@gmail.com> wrote:
+On Mon, May 23, 2022 at 12:49 AM Jiri Olsa <olsajiri@gmail.com> wrote:
 >
-> On Mon, May 23, 2022 at 03:02:31PM -0700, Andrii Nakryiko wrote:
-> > On Mon, May 23, 2022 at 1:26 PM Michael Mullin <masmullin@gmail.com> wrote:
-> > >
-> > > When generating a skeleton which has an mmaped map field, bpftool's
-> > > output is missing the map structure.  This causes a compile break when
-> > > the generated skeleton is compiled as the field belongs to the internal
-> > > struct maps, not directly to the obj.
-> > >
-> > > Signed-off-by: Michael Mullin <masmullin@gmail.com>
-> > > ---
-> > >  tools/bpf/bpftool/gen.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> > > index f158dc1c2149..b49293795ba0 100644
-> > > --- a/tools/bpf/bpftool/gen.c
-> > > +++ b/tools/bpf/bpftool/gen.c
-> > > @@ -853,7 +853,7 @@ codegen_maps_skeleton(struct bpf_object *obj, size_t map_cnt, bool mmaped)
-> > >                         i, bpf_map__name(map), i, ident);
-> > >                 /* memory-mapped internal maps */
-> > >                 if (mmaped && is_internal_mmapable_map(map, ident, sizeof(ident))) {
-> > > -                       printf("\ts->maps[%zu].mmaped = (void **)&obj->%s;\n",
-> > > +                       printf("\ts->maps[%zu].mmaped = (void **)&obj->maps.%s;\n",
+> On Sat, May 21, 2022 at 02:44:05PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Em Fri, May 20, 2022 at 02:46:49PM -0700, Andrii Nakryiko escreveu:
+> > > On Thu, May 19, 2022 at 4:03 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > On Wed, May 18, 2022 at 11:46:44AM +0200, Jiri Olsa wrote:
+> > > > > On Tue, May 17, 2022 at 03:02:53PM -0700, Andrii Nakryiko wrote:
+> > > > > > Jiri, libbpf v0.8 is out, can you please re-send your perf patches?
 > >
-> > That's not right. maps.my_map is struct bpf_map *, but mmaped is
-> > supposed to be a blob of memory that is memory-mapped into map.
+> > > > > yep, just made new fedora package.. will resend the perf changes soon
 > >
-> > Can you elaborate on how you trigger that compilation error with a
-> > small example?
+> > > > fedora package is on the way, but I'll need perf/core to merge
+> > > > the bpf_program__set_insns change.. Arnaldo, any idea when this
+> > > > could happen?
+> >
+> > > Can we land these patches through bpf-next to avoid such complicated
+> > > cross-tree dependencies? As I started removing libbpf APIs I also
+> > > noticed that perf is still using few other deprecated APIs:
+> > >   - bpf_map__next;
+> > >   - bpf_program__next;
+> > >   - bpf_load_program;
+> > >   - btf__get_from_id;
 >
-> I have an a very small example on github. I have added some sed fixes to
-> my Makefile make my sample program compile.
-> https://github.com/masmullin2000/libbpf-sample/tree/main/c/simple
+> these were added just to bypass the time window when they were not
+> available in the package, so can be removed now (in the patch below)
 >
-> https://github.com/masmullin2000/libbpf-sample/tree/02c7f945bf9027daedec04f485a320ba2df28204/c/simple
-> contains broken code.
+> >
+> > > It's trivial to fix up, but doing it across few trees will delay
+> > > libbpf work as well.
+> >
+> > > So let's land this through bpf-next, if Arnaldo doesn't mind?
+> >
+> > Yeah, that should be ok, the only consideration is that I'm submitting
+> > this today to Linus:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=tmp.perf/urgent&id=0ae065a5d265bc5ada13e350015458e0c5e5c351
+> >
+> > To address this:
+> >
+> > https://lore.kernel.org/linux-perf-users/f0add43b-3de5-20c5-22c4-70aff4af959f@scylladb.com/
+>
+> ok, we can do that via bpf-next, but of course there's a problem ;-)
+>
+> perf/core already has dependency commit [1]
+>
+> so either we wait for perf/core and bpf-next/master to sync or:
+>
+>   - perf/core reverts [1] and
+>   - bpf-next/master takes [1] and the rest
+>
+> I have the changes ready if you guys are ok with that
 
-You are missing -g when calling clang to generate debug info (DWARF
-and subsequently BTF). When BPF object file doesn't have BTF, we don't
-generate those bss/data/rodata/etc sections of the skeleton. You
-should be good just by adding -g.
+So, if I understand correctly, with merge window open bpf-next/master
+will get code from perf/core soon when we merge tip back in. So we can
+wait for that to happen and not revert anything.
+
+So please add the below patch to your series and resend once tip is
+merged into bpf-next? Thanks!
 
 >
-> I apologize if this is an incorrect way to share external code.  I
-> haven't found the proper way to share example code from
-> kernelnewbies.org
+> thanks,
+> jirka
 >
-> >
-> > >                                 i, ident);
-> > >                 }
-> > >                 i++;
-> > > --
-> > > 2.36.1
-> > >
+>
+> [1] https://lore.kernel.org/bpf/20220422100025.1469207-4-jolsa@kernel.org/
+>
+> ---
+> Subject: [PATCH bpf-next] perf tools: Remove the weak libbpf functions
+>
+> We added weak functions for some new libbpf functions because
+> they were not packaged at that time [1].
+>
+> These functions are now available in package, so we can remove
+> their weak perf variants.
+>
+> [1] https://lore.kernel.org/linux-perf-users/20211109140707.1689940-2-jolsa@kernel.org/
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/perf/util/bpf-event.c | 51 -------------------------------------
+>  1 file changed, 51 deletions(-)
+>
+> diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
+> index 94624733af7e..025f331b3867 100644
+> --- a/tools/perf/util/bpf-event.c
+> +++ b/tools/perf/util/bpf-event.c
+> @@ -22,57 +22,6 @@
+>  #include "record.h"
+>  #include "util/synthetic-events.h"
+>
+> -struct btf * __weak btf__load_from_kernel_by_id(__u32 id)
+> -{
+> -       struct btf *btf;
+> -#pragma GCC diagnostic push
+> -#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+> -       int err = btf__get_from_id(id, &btf);
+> -#pragma GCC diagnostic pop
+> -
+> -       return err ? ERR_PTR(err) : btf;
+> -}
+> -
+> -int __weak bpf_prog_load(enum bpf_prog_type prog_type,
+> -                        const char *prog_name __maybe_unused,
+> -                        const char *license,
+> -                        const struct bpf_insn *insns, size_t insn_cnt,
+> -                        const struct bpf_prog_load_opts *opts)
+> -{
+> -#pragma GCC diagnostic push
+> -#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+> -       return bpf_load_program(prog_type, insns, insn_cnt, license,
+> -                               opts->kern_version, opts->log_buf, opts->log_size);
+> -#pragma GCC diagnostic pop
+> -}
+> -
+> -struct bpf_program * __weak
+> -bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
+> -{
+> -#pragma GCC diagnostic push
+> -#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+> -       return bpf_program__next(prev, obj);
+> -#pragma GCC diagnostic pop
+> -}
+> -
+> -struct bpf_map * __weak
+> -bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
+> -{
+> -#pragma GCC diagnostic push
+> -#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+> -       return bpf_map__next(prev, obj);
+> -#pragma GCC diagnostic pop
+> -}
+> -
+> -const void * __weak
+> -btf__raw_data(const struct btf *btf_ro, __u32 *size)
+> -{
+> -#pragma GCC diagnostic push
+> -#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+> -       return btf__get_raw_data(btf_ro, size);
+> -#pragma GCC diagnostic pop
+> -}
+> -
+>  static int snprintf_hex(char *buf, size_t size, unsigned char *data, size_t len)
+>  {
+>         int ret = 0;
+> --
+> 2.35.3
+>
