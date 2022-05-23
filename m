@@ -2,188 +2,228 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C046AC433F5
-	for <bpf@archiver.kernel.org>; Mon, 23 May 2022 21:07:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B20C1C433F5
+	for <bpf@archiver.kernel.org>; Mon, 23 May 2022 21:07:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbiEWVHo convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 23 May 2022 17:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S229742AbiEWVHs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 May 2022 17:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiEWVHn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 May 2022 17:07:43 -0400
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91207980B
-        for <bpf@vger.kernel.org>; Mon, 23 May 2022 14:07:40 -0700 (PDT)
+        with ESMTP id S229595AbiEWVHr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 May 2022 17:07:47 -0400
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF0E79811
+        for <bpf@vger.kernel.org>; Mon, 23 May 2022 14:07:43 -0700 (PDT)
 Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id EBEE8CC6620B; Mon, 23 May 2022 14:07:26 -0700 (PDT)
+        id 3058CCC66256; Mon, 23 May 2022 14:07:34 -0700 (PDT)
 From:   Joanne Koong <joannelkoong@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH bpf-next v6 0/6] Dynamic pointers
-Date:   Mon, 23 May 2022 14:07:06 -0700
-Message-Id: <20220523210712.3641569-1-joannelkoong@gmail.com>
+        Joanne Koong <joannelkoong@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf-next v6 5/6] bpf: Add dynptr data slices
+Date:   Mon, 23 May 2022 14:07:11 -0700
+Message-Id: <20220523210712.3641569-6-joannelkoong@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220523210712.3641569-1-joannelkoong@gmail.com>
+References: <20220523210712.3641569-1-joannelkoong@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset implements the basics of dynamic pointers in bpf.
+This patch adds a new helper function
 
-A dynamic pointer (struct bpf_dynptr) is a pointer that stores extra metadata
-alongside the address it points to. This abstraction is useful in bpf given
-that every memory access in a bpf program must be safe. The verifier and bpf
-helper functions can use the metadata to enforce safety guarantees for things 
-such as dynamically sized strings and kernel heap allocations.
+void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len);
 
-From the program side, the bpf_dynptr is an opaque struct and the verifier
-will enforce that its contents are never written to by the program.
-It can only be written to through specific bpf helper functions.
+which returns a pointer to the underlying data of a dynptr. *len*
+must be a statically known value. The bpf program may access the returned
+data slice as a normal buffer (eg can do direct reads and writes), since
+the verifier associates the length with the returned pointer, and
+enforces that no out of bounds accesses occur.
 
-There are several uses cases for dynamic pointers in bpf programs. Some
-examples include: dynamically sized ringbuf reservations without extra
-memcpys, dynamic string parsing and memory comparisons, dynamic memory
-allocations that can be persisted in maps, and dynamic + ergonomic parsing of
-sk_buff and xdp_md packet data.
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+ include/linux/bpf.h            |  1 +
+ include/uapi/linux/bpf.h       | 12 ++++++++++++
+ kernel/bpf/helpers.c           | 28 ++++++++++++++++++++++++++++
+ kernel/bpf/verifier.c          | 23 +++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h | 12 ++++++++++++
+ 5 files changed, 76 insertions(+)
 
-At a high-level, the patches are as follows:
-1/6 - Adds verifier support for dynptrs
-2/6 - Adds bpf_dynptr_from_mem (local dynptr)
-3/6 - Adds dynptr support for ring buffers
-4/6 - Adds bpf_dynptr_read and bpf_dynptr_write
-5/6 - Adds dynptr data slices (ptr to the dynptr data)
-6/6 - Tests to check that the verifier rejects invalid cases and passes valid ones
-
-This is the first dynptr patchset in a larger series. The next series of
-patches will add dynptrs that support dynamic memory allocations that can also
-be persisted in maps, support for parsing packet data through dynptrs, convenience
-helpers for using dynptrs as iterators, and more helper functions for interacting
-with strings and memory dynamically.
-
-Changelog:
-----------
-v5 -> v6:
-v5:
-https://lore.kernel.org/bpf/20220520044245.3305025-1-joannelkoong@gmail.com/
-* enforce PTR_TO_MAP_VALUE for bpf_dynptr_from_mem data in check_helper_call
-instead of using DYNPTR_TYPE_LOCAL when checking func arg compatiblity
-* remove MEM_DYNPTR modifier
-
-v4 -> v5:
-v4:
-https://lore.kernel.org/bpf/20220509224257.3222614-1-joannelkoong@gmail.com/
-* Remove malloc dynptr; this will be part of the 2nd patchset while we
-figure out memory accounting
-* For data slices, only set the register's ref_obj_id to dynptr_id (Alexei)
-* Tidying (eg remove "inline", move offset checking to "check_func_arg_reg_off")
-(David)
-* Add a few new test cases, remove malloc-only ones.
-
-v3 -> v4: 
-v3:
-https://lore.kernel.org/bpf/20220428211059.4065379-1-joannelkoong@gmail.com/
-1/6 - Change mem ptr + size check to use more concise inequality expression
-(David + Andrii) 
-2/6 - Add check for meta->uninit_dynptr_regno not already set (Andrii)
-      Move DYNPTR_TYPE_FLAG_MASK to include/linux/bpf.h (Andrii) 
-3/6 - Remove four underscores for invoking BPF_CALL (Andrii)
-      Add __BPF_TYPE_FLAG_MAX and use it for __BPF_TYPE_LAST_FLAG (Andrii)
-4/6 - Fix capacity to be bpf_dynptr size value in check_off_len (Andrii)
-      Change -EINVAL to -E2BIG if len + offset is out of bounds (Andrii)
-5/6 - Add check for only 1 dynptr arg for dynptr data function (Andrii)
-6/6 - For ringbuf map, set max_entries from userspace (Andrii)
-      Use err ?: ... for interactring with dynptr APIs (Andrii)
-      Define array_map2 for add_dynptr_to_map2 test where value is a struct
-with an embedded dynptr
-      Remove ref id from missing_put_callback message, since on different
-environments, ref id is not always = 1
-
-v2 -> v3:
-v2:
-https://lore.kernel.org/bpf/20220416063429.3314021-1-joannelkoong@gmail.com/
-* Reorder patches (move ringbuffer patch to be right after the verifier +
-* malloc
-dynptr patchset)
-* Remove local type dynptrs (Andrii + Alexei)
-* Mark stack slot as STACK_MISC after any writes into a dynptr instead of
-* explicitly prohibiting writes (Alexei)
-* Pass number of slots, not memory size to is_spi_bounds_valid (Kumar) 
-* Check reference leaks by adding dynptr id to state->refs instead of checking
-stack slots (Alexei)
-
-v1 -> v2:
-v1: https://lore.kernel.org/bpf/20220402015826.3941317-1-joannekoong@fb.com/
-1/7 -
-    * Remove ARG_PTR_TO_MAP_VALUE_UNINIT alias and use
-      ARG_PTR_TO_MAP_VALUE | MEM_UNINIT directly (Andrii)
-    * Drop arg_type_is_mem_ptr() wrapper function (Andrii)
-2/7 - 
-    * Change name from MEM_RELEASE to OBJ_RELEASE (Andrii)
-    * Use meta.release_ref instead of ref_obj_id != 0 to determine whether
-      to release reference (Kumar)
-    * Drop type_is_release_mem() wrapper function (Andrii) 
-3/7 -
-    * Add checks for nested dynptrs edge-cases, which could lead to corrupt
-    * writes of the dynptr stack variable.
-    * Add u64 flags to bpf_dynptr_from_mem() and bpf_dynptr_alloc() (Andrii)
-    * Rename from bpf_malloc/bpf_free to bpf_dynptr_alloc/bpf_dynptr_put
-      (Alexei)
-    * Support alloc flag __GFP_ZERO (Andrii) 
-    * Reserve upper 8 bits in dynptr size and offset fields instead of
-      reserving just the upper 4 bits (Andrii)
-    * Allow dynptr zero-slices (Andrii) 
-    * Use the highest bit for is_rdonly instead of the 28th bit (Andrii)
-    * Rename check_* functions to is_* functions for better readability
-      (Andrii)
-    * Add comment for code that checks the spi bounds (Andrii)
-4/7 -
-    * Fix doc description for bpf_dynpt_read (Toke)
-    * Move bpf_dynptr_check_off_len() from function patch 1 to here (Andrii)
-5/7 -
-    * When finding the id for the dynptr to associate the data slice with,
-      look for dynptr arg instead of assuming it is BPF_REG_1.
-6/7 -
-    * Add __force when casting from unsigned long to void * (kernel test
-    * robot)
-    * Expand on docs for ringbuf dynptr APIs (Andrii)
-7/7 -
-    * Use table approach for defining test programs and error messages
-    * (Andrii)
-    * Print out full log if there’s an error (Andrii)
-    * Use bpf_object__find_program_by_name() instead of specifying
-      program name as a string (Andrii)
-    * Add 6 extra cases: invalid_nested_dynptrs1, invalid_nested_dynptrs2,
-      invalid_ref_mem1, invalid_ref_mem2, zero_slice_access,
-      and test_alloc_zero_bytes
-    * Add checking for edge cases (eg allocing with invalid flags)
-
-Joanne Koong (6):
-  bpf: Add verifier support for dynptrs
-  bpf: Add bpf_dynptr_from_mem for local dynptrs
-  bpf: Dynptr support for ring buffers
-  bpf: Add bpf_dynptr_read and bpf_dynptr_write
-  bpf: Add dynptr data slices
-  selftests/bpf: Dynptr tests
-
- include/linux/bpf.h                           |  42 ++
- include/linux/bpf_verifier.h                  |  20 +
- include/uapi/linux/bpf.h                      |  83 +++
- kernel/bpf/helpers.c                          | 177 ++++++
- kernel/bpf/ringbuf.c                          |  78 +++
- kernel/bpf/verifier.c                         | 267 +++++++-
- scripts/bpf_doc.py                            |   2 +
- tools/include/uapi/linux/bpf.h                |  83 +++
- .../testing/selftests/bpf/prog_tests/dynptr.c | 137 ++++
- .../testing/selftests/bpf/progs/dynptr_fail.c | 588 ++++++++++++++++++
- .../selftests/bpf/progs/dynptr_success.c      | 164 +++++
- 11 files changed, 1636 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/dynptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/dynptr_fail.c
- create mode 100644 tools/testing/selftests/bpf/progs/dynptr_success.c
-
--- 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 60dac491065e..e46cb1b2a90f 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -488,6 +488,7 @@ enum bpf_return_type {
+ 	RET_PTR_TO_TCP_SOCK_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_TCP_SOCK,
+ 	RET_PTR_TO_SOCK_COMMON_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_SOCK_COM=
+MON,
+ 	RET_PTR_TO_ALLOC_MEM_OR_NULL	=3D PTR_MAYBE_NULL | MEM_ALLOC | RET_PTR_T=
+O_ALLOC_MEM,
++	RET_PTR_TO_DYNPTR_MEM_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_ALLOC_MEM=
+,
+ 	RET_PTR_TO_BTF_ID_OR_NULL	=3D PTR_MAYBE_NULL | RET_PTR_TO_BTF_ID,
+=20
+ 	/* This must be the last entry. Its purpose is to ensure the enum is
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index efe2505650e6..f4009dbdf62d 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5238,6 +5238,17 @@ union bpf_attr {
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+  *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+  *		is a read-only dynptr.
++ *
++ * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
++ *	Description
++ *		Get a pointer to the underlying dynptr data.
++ *
++ *		*len* must be a statically known value. The returned data slice
++ *		is invalidated whenever the dynptr is invalidated.
++ *	Return
++ *		Pointer to the underlying dynptr data, NULL if the dynptr is
++ *		read-only, if the dynptr is invalid, or if the offset and length
++ *		is out of bounds.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5443,6 +5454,7 @@ union bpf_attr {
+ 	FN(ringbuf_discard_dynptr),	\
+ 	FN(dynptr_read),		\
+ 	FN(dynptr_write),		\
++	FN(dynptr_data),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 8cef3fb0d143..225806a02efb 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1549,6 +1549,32 @@ const struct bpf_func_proto bpf_dynptr_write_proto=
+ =3D {
+ 	.arg4_type	=3D ARG_CONST_SIZE_OR_ZERO,
+ };
+=20
++BPF_CALL_3(bpf_dynptr_data, struct bpf_dynptr_kern *, ptr, u32, offset, =
+u32, len)
++{
++	int err;
++
++	if (!ptr->data)
++		return 0;
++
++	err =3D bpf_dynptr_check_off_len(ptr, offset, len);
++	if (err)
++		return 0;
++
++	if (bpf_dynptr_is_rdonly(ptr))
++		return 0;
++
++	return (unsigned long)(ptr->data + ptr->offset + offset);
++}
++
++const struct bpf_func_proto bpf_dynptr_data_proto =3D {
++	.func		=3D bpf_dynptr_data,
++	.gpl_only	=3D false,
++	.ret_type	=3D RET_PTR_TO_DYNPTR_MEM_OR_NULL,
++	.arg1_type	=3D ARG_PTR_TO_DYNPTR,
++	.arg2_type	=3D ARG_ANYTHING,
++	.arg3_type	=3D ARG_CONST_ALLOC_SIZE_OR_ZERO,
++};
++
+ const struct bpf_func_proto bpf_get_current_task_proto __weak;
+ const struct bpf_func_proto bpf_get_current_task_btf_proto __weak;
+ const struct bpf_func_proto bpf_probe_read_user_proto __weak;
+@@ -1615,6 +1641,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
+ 		return &bpf_dynptr_read_proto;
+ 	case BPF_FUNC_dynptr_write:
+ 		return &bpf_dynptr_write_proto;
++	case BPF_FUNC_dynptr_data:
++		return &bpf_dynptr_data_proto;
+ 	default:
+ 		break;
+ 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a94b8211e34d..71355a74cd82 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5832,6 +5832,14 @@ int check_func_arg_reg_off(struct bpf_verifier_env=
+ *env,
+ 	return __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
+ }
+=20
++static u32 stack_slot_get_id(struct bpf_verifier_env *env, struct bpf_re=
+g_state *reg)
++{
++	struct bpf_func_state *state =3D func(env, reg);
++	int spi =3D get_spi(reg->off);
++
++	return state->stack[spi].spilled_ptr.id;
++}
++
+ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			  struct bpf_call_arg_meta *meta,
+ 			  const struct bpf_func_proto *fn)
+@@ -7384,6 +7392,21 @@ static int check_helper_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn
+ 		regs[BPF_REG_0].id =3D id;
+ 		/* For release_reference() */
+ 		regs[BPF_REG_0].ref_obj_id =3D id;
++	} else if (func_id =3D=3D BPF_FUNC_dynptr_data) {
++		int dynptr_id =3D 0, i;
++
++		/* Find the id of the dynptr we're acquiring a reference to */
++		for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
++			if (arg_type_is_dynptr(fn->arg_type[i])) {
++				if (dynptr_id) {
++					verbose(env, "verifier internal error: multiple dynptr args in func=
+\n");
++					return -EFAULT;
++				}
++				dynptr_id =3D stack_slot_get_id(env, &regs[BPF_REG_1 + i]);
++			}
++		}
++		/* For release_reference() */
++		regs[BPF_REG_0].ref_obj_id =3D dynptr_id;
+ 	}
+=20
+ 	do_refine_retval_range(regs, fn->ret_type, func_id, &meta);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index efe2505650e6..f4009dbdf62d 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -5238,6 +5238,17 @@ union bpf_attr {
+  *		0 on success, -E2BIG if *offset* + *len* exceeds the length
+  *		of *dst*'s data, -EINVAL if *dst* is an invalid dynptr or if *dst*
+  *		is a read-only dynptr.
++ *
++ * void *bpf_dynptr_data(struct bpf_dynptr *ptr, u32 offset, u32 len)
++ *	Description
++ *		Get a pointer to the underlying dynptr data.
++ *
++ *		*len* must be a statically known value. The returned data slice
++ *		is invalidated whenever the dynptr is invalidated.
++ *	Return
++ *		Pointer to the underlying dynptr data, NULL if the dynptr is
++ *		read-only, if the dynptr is invalid, or if the offset and length
++ *		is out of bounds.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -5443,6 +5454,7 @@ union bpf_attr {
+ 	FN(ringbuf_discard_dynptr),	\
+ 	FN(dynptr_read),		\
+ 	FN(dynptr_write),		\
++	FN(dynptr_data),		\
+ 	/* */
+=20
+ /* integer value in 'imm' field of BPF_CALL instruction selects which he=
+lper
+--=20
 2.30.2
 
