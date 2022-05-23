@@ -2,79 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CC7FC433FE
-	for <bpf@archiver.kernel.org>; Mon, 23 May 2022 18:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8ECFC433F5
+	for <bpf@archiver.kernel.org>; Mon, 23 May 2022 19:40:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243053AbiEWSrH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 May 2022 14:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S230397AbiEWTk0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 May 2022 15:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244613AbiEWSqe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 May 2022 14:46:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A050813FD47;
-        Mon, 23 May 2022 11:30:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87F9EB81221;
-        Mon, 23 May 2022 18:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E21CC34117;
-        Mon, 23 May 2022 18:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653330612;
-        bh=zWVDv4dbGwoq4snZdUxm70TnPh1v/67voIzRwGurLvo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fSkBk3ZMYZUd+ampc3vwe7YX/RUaWjctKGslJC8EqpHg0kd2NMSQ8eYgcibGBH7u1
-         ih2R+wNAS8yhPGQnZhUeNkOAj/wsyMWP3URkMQTmiGil1DKsObSviYFWyi59zj1iwy
-         d6tCqXrx2jXFto/4oNyldOmwG96hX6TbrGZ6bRTWSVIpxUhLyAaS70yNwc012eGjyD
-         D6CpLPWykUOU5BBGLkNdIH3sRLkU/F5pxtVYgsxMbV2bbnf86DbaswC5Kdl/+VXF5G
-         uEFTzxKRSpcZk5UFR9/drUeKzTs62DVY3STsU+oqi1onmvN3qdYISq/J89ZvjcNEZU
-         rk1HRSZcHgQ7w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22FD8F03948;
-        Mon, 23 May 2022 18:30:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232222AbiEWTkG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 May 2022 15:40:06 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F289D134E0A;
+        Mon, 23 May 2022 12:32:35 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id f9so31006925ejc.0;
+        Mon, 23 May 2022 12:32:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QcfD7S9L5CIBMVb1EXolT17SGjXBlADQiPbIJB52IyA=;
+        b=IwZ9LYtC/kjVD1M6tbz12irq8Bjctuz41W9HahQfPjerRw/YW3YxnYkgh9UWZ4Quen
+         2yCj0v2J2VF1uay2M9DISR7FsEEe43CYFE3HuLSXeSIGCbEtOeq6/l3IuzmNXYjF+wu3
+         5Dg6gdg82OWGoIL7OpG7167WELitd6HW6crfAFMQa3hnDybjdRzq4v8LGAOEblHD4DY1
+         oi+DvdvcEHVTXsD46i6ySsJX7R4CpWE5AFAVhWhM64moe4CYrP4jBIZixN2KrdwW/w7q
+         qi3l1J2QYt0w9IFJQzFk5PWq3VBvwb8AQ6RU3s5jj1vZGCgcS7qmmj9uYDCE+yJSuUc7
+         CGcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QcfD7S9L5CIBMVb1EXolT17SGjXBlADQiPbIJB52IyA=;
+        b=XLl2y+s0IG4GqiUF2lQf7/ThQYTGqRDA3AzcQ1WPBw2ppPr5nXYLOsW3kWZ6NelNwk
+         QpexuGEHVPi4aIcgVZbvPGXsrrvqaszhc3/GT7IoahegZKpWBuk98OKBQnmN3eQS81Ns
+         qv93BTUQEMckRle+UC9tBs1/2ARwM/BIo6AMkoga+B5sLN2RCuNVXVBSkYA63vUsA96k
+         sGVHgAvHR4jliYnz13iBlsGnPuFqPon4jUU8a87K0lh7aftvChqILi/IqEjFA3F9Oi/U
+         DCSnMoTj6syeTdnqgrnQo/uID6tDAHX87b0KXopzhgaJsdxWjU8TWk+5KM1/pUjoePZs
+         vrHQ==
+X-Gm-Message-State: AOAM531WXhu/5qiNhqMj0dfGhwoCFHrD9/ER13F3atizs5ug0iqiR/aN
+        fzmgrNPyeC47uGILoV65ZxBLbDWdwBjH7mbwoBQtAYJ0
+X-Google-Smtp-Source: ABdhPJxw9pwIsMqu/OAc7dTwPG7AWqN/ejln4mauKeqThFydT2EbigOI3GDPgwg+CT5OJiUmtTZOWBBeFZJ/4rvgLMA=
+X-Received: by 2002:a17:907:a427:b0:6fe:c73e:591c with SMTP id
+ sg39-20020a170907a42700b006fec73e591cmr8651452ejc.676.1653334354327; Mon, 23
+ May 2022 12:32:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] libbpf: fix typo in comment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165333061214.5065.10109451382087512586.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 May 2022 18:30:12 +0000
-References: <20220521111145.81697-71-Julia.Lawall@inria.fr>
-In-Reply-To: <20220521111145.81697-71-Julia.Lawall@inria.fr>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     ast@kernel.org, kernel-janitors@vger.kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20220521075736.1225397-1-zenczykowski@gmail.com>
+In-Reply-To: <20220521075736.1225397-1-zenczykowski@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 23 May 2022 12:32:22 -0700
+Message-ID: <CAADnVQJcDvyeQ3y=uVDj-7JfqtxE+nJk+d5oVQrBhhQpicYk6A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: print a little more info about maps via cat /sys/fs/bpf/pinned_name
+To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Cc:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Linux Network Development Mailing List 
+        <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Sat, 21 May 2022 13:11:21 +0200 you wrote:
-> Spelling mistake (triple letters) in comment.
-> Detected with the help of Coccinelle.
-> 
-> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
-> 
+On Sat, May 21, 2022 at 12:57 AM Maciej =C5=BBenczykowski
+<zenczykowski@gmail.com> wrote:
+>
+> From: Maciej =C5=BBenczykowski <maze@google.com>
+>
+> While this information can be fetched via bpftool,
+> the cli tool itself isn't always available on more limited systems.
+>
+> From the information printed particularly the 'id' is useful since
+> when combined with /proc/pid/fd/X and /proc/pid/fdinfo/X it allows
+> tracking down which bpf maps a process has open (which can be
+> useful for tracking down fd leaks).
+>
+> Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
 > ---
->  tools/lib/bpf/libbpf.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  kernel/bpf/inode.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> index 4f841e16779e..784266e258fe 100644
+> --- a/kernel/bpf/inode.c
+> +++ b/kernel/bpf/inode.c
+> @@ -257,6 +257,9 @@ static int map_seq_show(struct seq_file *m, void *v)
+>         if (unlikely(v =3D=3D SEQ_START_TOKEN)) {
+>                 seq_puts(m, "# WARNING!! The output is for debug purpose =
+only\n");
+>                 seq_puts(m, "# WARNING!! The output format will change\n"=
+);
+> +               seq_printf(m, "# type: %d, key_size: %d, value_size: %d, =
+max_entries: %d, id: %d\n",
+> +                          map->map_type, map->key_size, map->value_size,=
+ map->max_entries,
+> +                          map->id);
 
-Here is the summary with links:
-  - libbpf: fix typo in comment
-    https://git.kernel.org/bpf/bpf-next/c/bb412cf1d712
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Maybe use cat /sys/fs/bpf/maps.debug instead?
+It prints map id.
