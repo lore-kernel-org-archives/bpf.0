@@ -2,129 +2,191 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 969DFC433EF
-	for <bpf@archiver.kernel.org>; Tue, 24 May 2022 09:44:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8D18C433F5
+	for <bpf@archiver.kernel.org>; Tue, 24 May 2022 15:12:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235178AbiEXJox (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 May 2022 05:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
+        id S235238AbiEXPMk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 May 2022 11:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiEXJow (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 May 2022 05:44:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6239752E5F;
-        Tue, 24 May 2022 02:44:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDF9D1FB;
-        Tue, 24 May 2022 02:44:50 -0700 (PDT)
-Received: from e126130.arm.com (unknown [10.57.82.248])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4C7313F73D;
-        Tue, 24 May 2022 02:44:44 -0700 (PDT)
-From:   Douglas RAILLARD <douglas.raillard@arm.com>
-To:     bpf@vger.kernel.org
-Cc:     beata.michalska@arm.com,
-        Douglas Raillard <douglas.raillard@arm.com>,
+        with ESMTP id S233654AbiEXPMj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 May 2022 11:12:39 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3498A33D;
+        Tue, 24 May 2022 08:12:38 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t5so105514edc.2;
+        Tue, 24 May 2022 08:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1XavLDdHzelFmWJ9+pgUk0yb2GJUxOMHo5yqFSbed4U=;
+        b=fY+byTLZNmtu1GIwmP23F/BSNvSazTj6nd4gKVeAHYsn4dfxYU93P2qbeoPlKoTLQ3
+         BhpE8Ea1lSmDsyCT/b7pUD7+yPX7X5LYOgbCdfhx0VCeupGtjN8SMKIqHmWhVzEe9TQ4
+         +Kb2F7qtu1XmgF1H4Kl10s7a99sjyu02cBY/cPAUa1P8K8NreLDysfBma4Xzsk07HZmw
+         5p+zQC55tJqc2BDufOLrFSUizgpVyEQId4EHgmveDC15wtKFKXnGe6lif3X6k25fGn0W
+         WSu7s7gvPTveMipa2e/ngcG47lVBGYM8nQLkysIFhcga+c72qQIJ5A5IekOQ50AsSG2B
+         eANQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1XavLDdHzelFmWJ9+pgUk0yb2GJUxOMHo5yqFSbed4U=;
+        b=TA1qTDvvdS9VUqwICXuIVO5RWbO5DwSU2awfN23pN3+cK77uiLpGamvl08SQTBXWjK
+         o+dBBPtbsJfV/j9ptFUxvvoQ3wWMvl7HZRhiaDhOJaO/WXdMNxzLLEHRg6Ei0SlBdnC+
+         3DrUuScr6b5ksBgJEGgFQI9QlRFYDtFNsTv/yu61tEaWgsm7bXY52gXA5EEw1b5AV6ox
+         IiwByMDK0QHxMxqNRRGA5EULGjGpMUa/jHBxEvO2J4C8SsgQRvt6JF8GZOw3TdNTX76B
+         H8twFT4l9UThe9WV9a3DxJXS4sSVvvC697VudH1hOSTF4SLq1vivHMLt6vmAbnFbeldr
+         17MQ==
+X-Gm-Message-State: AOAM532kTWX7GSTIz+ZWcrFivQqWakABXXV/3XSp0MZgUciIfIxR2JE2
+        Okego/VTO8SMcHZjSXD0XVp52GDVb7r+QV2TgXA=
+X-Google-Smtp-Source: ABdhPJxe3+1zeD4MOFcUnzIuExnm4pSPOWOaFzSYeK3ztpYZqG7hqNhYP1Mt6DNvpUnCuOo6ST9rGP235P2bYTJPDs4=
+X-Received: by 2002:aa7:da8d:0:b0:42a:aa60:8af3 with SMTP id
+ q13-20020aa7da8d000000b0042aaa608af3mr29264843eds.94.1653405156815; Tue, 24
+ May 2022 08:12:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220520113728.12708-1-shung-hsi.yu@suse.com> <20220520113728.12708-3-shung-hsi.yu@suse.com>
+ <f9511485-cda4-4e5e-fe1f-60ffe57e27d1@fb.com> <0cf50c32-ab67-ef23-7b84-ef1d4e007c33@fb.com>
+ <YoyEbYGIoiULPQEk@syu-laptop>
+In-Reply-To: <YoyEbYGIoiULPQEk@syu-laptop>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 24 May 2022 08:12:24 -0700
+Message-ID: <CAADnVQ+gJ8ksqGRgYn0kbfTBm2BsvZyc-hRAMbAWhj05LdW6Lw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/4] bpf: verifier: explain opcode check in check_ld_imm()
+To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH v3] libbpf: Fix determine_ptr_size() guessing
-Date:   Tue, 24 May 2022 10:44:47 +0100
-Message-Id: <20220524094447.332186-1-douglas.raillard@arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        KP Singh <kpsingh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Douglas Raillard <douglas.raillard@arm.com>
+On Tue, May 24, 2022 at 12:11 AM Shung-Hsi Yu <shung-hsi.yu@suse.com> wrote:
+>
+> On Fri, May 20, 2022 at 05:25:36PM -0700, Yonghong Song wrote:
+> > On 5/20/22 4:50 PM, Yonghong Song wrote:
+> > > On 5/20/22 4:37 AM, Shung-Hsi Yu wrote:
+> > > > The BPF_SIZE check in the beginning of check_ld_imm() actually guard
+> > > > against program with JMP instructions that goes to the second
+> > > > instruction of BPF_LD_IMM64, but may be easily dismissed as an simple
+> > > > opcode check that's duplicating the effort of bpf_opcode_in_insntable().
+> > > >
+> > > > Add comment to better reflect the importance of the check.
+> > > >
+> > > > Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> > > > ---
+> > > >   kernel/bpf/verifier.c | 4 ++++
+> > > >   1 file changed, 4 insertions(+)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 79a2695ee2e2..133929751f80 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -9921,6 +9921,10 @@ static int check_ld_imm(struct
+> > > > bpf_verifier_env *env, struct bpf_insn *insn)
+> > > >       struct bpf_map *map;
+> > > >       int err;
+> > > > +    /* checks that this is not the second part of BPF_LD_IMM64, which is
+> > > > +     * skipped over during opcode check, but a JMP with invalid
+> > > > offset may
+> > > > +     * cause check_ld_imm() to be called upon it.
+> > > > +     */
+> > >
+> > > The check_ld_imm() call context is:
+> > >
+> > >                  } else if (class == BPF_LD) {
+> > >                          u8 mode = BPF_MODE(insn->code);
+> > >
+> > >                          if (mode == BPF_ABS || mode == BPF_IND) {
+> > >                                  err = check_ld_abs(env, insn);
+> > >                                  if (err)
+> > >                                          return err;
+> > >
+> > >                          } else if (mode == BPF_IMM) {
+> > >                                  err = check_ld_imm(env, insn);
+> > >                                  if (err)
+> > >                                          return err;
+> > >
+> > >                                  env->insn_idx++;
+> > >                                  sanitize_mark_insn_seen(env);
+> > >                          } else {
+> > >                                  verbose(env, "invalid BPF_LD mode\n");
+> > >                                  return -EINVAL;
+> > >                          }
+> > >                  }
+> > >
+> > > which is a normal checking of LD_imm64 insn.
+> > >
+> > > I think the to-be-added comment is incorrect and unnecessary.
+> >
+> > Okay, double check again and now I understand what happens
+> > when hitting the second insn of ldimm64 with a branch target.
+> > Here we have BPF_LD = 0 and BPF_IMM = 0, so for a branch
+> > target to the 2nd part of ldimm64, it will come to
+> > check_ld_imm() and have error "invalid BPF_LD_IMM insn"
+>
+> Yes, the 2nd instruction uses the reserved opcode 0, which could be
+> interpreted as BPF_LD | BPF_W | BPF_IMM.
+>
+> > So check_ld_imm() is to check whether the insn is a
+> > *legal* insn for the first part of ldimm64.
+> >
+> > So the comment may be rewritten as below.
+> >
+> > This is to verify whether an insn is a BPF_LD_IMM64
+> > or not. But since BPF_LD = 0 and BPF_IMM = 0, if the branch
+> > target comes to the second part of BPF_LD_IMM64,
+> > the control may come here as well.
+> >
+> > > >       if (BPF_SIZE(insn->code) != BPF_DW) {
+> > > >           verbose(env, "invalid BPF_LD_IMM insn\n");
+> > > >           return -EINVAL;
+>
+> After giving it a bit more though, maybe it'd be clearer if we simply detect
+> such case in the JMP branch of do_check().
+>
+> Something like this instead. Though I haven't tested yet, and it still check
+> the jump destination even it's a dead branch.
+>
+> ---
+>  kernel/bpf/verifier.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index aedac2ac02b9..59228806884e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12191,6 +12191,25 @@ static int do_check(struct bpf_verifier_env *env)
+>                         u8 opcode = BPF_OP(insn->code);
+>
+>                         env->jmps_processed++;
+> +
+> +                       /* check jump offset */
+> +                       if (opcode != BPF_CALL && opcode != BPF_EXIT) {
+> +                               u32 dst_insn_idx = env->insn_idx + insn->off + 1;
+> +                               struct bpf_insn *dst_insn = &insns[dst_insn_idx];
+> +
+> +                               if (dst_insn_idx > insn_cnt) {
+> +                                       verbose(env, "invalid JMP idx %d off %d beyond end of program insn_cnt %d\n", env->insn_idx, insn->off, insn_cnt);
+> +                                       return -EFAULT;
+> +                               }
+> +                               if (!bpf_opcode_in_insntable(dst_insn->code)) {
+> +                                       /* Should we simply tell the user that it's a
+> +                                        * jump to the 2nd LD_IMM64 instruction
+> +                                        * here? */
+> +                                       verbose(env, "idx %d JMP to idx %d with unknown opcode %02x\n", env->insn_idx, dst_insn_idx, insn->code);
+> +                                       return -EINVAL;
+> +                               }
+> +                       }
+> +
 
-One strategy employed by libbpf to guess the pointer size is by finding
-the size of "unsigned long" type. This is achieved by looking for a type
-of with the expected name and checking its size.
-
-Unfortunately, the C syntax is friendlier to humans than to computers
-as there is some variety in how such a type can be named. Specifically,
-gcc and clang do not use the same names for integer types in debug info:
-
-    - clang uses "unsigned long"
-    - gcc uses "long unsigned int"
-
-Lookup all the names for such a type so that libbpf can hope to find the
-information it wants.
-
-Acked-by: Yonghong Song <yhs@fb.com> 
-Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
----
- tools/lib/bpf/btf.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
-
- CHANGELOG
-    v2:
-        * Added missing case for "long"
-    v3:
-        * Refactor a bit to use a table
-        * Provide the type names used by gcc and clang in commit msg
-
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 1383e26c5d1f..65c492a6807f 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -470,12 +470,25 @@ const struct btf_type *btf__type_by_id(const struct btf *btf, __u32 type_id)
- 	return btf_type_by_id((struct btf *)btf, type_id);
- }
- 
-+static const char * const long_aliases[] = {
-+	"long",
-+	"long int",
-+	"int long",
-+	"unsigned long",
-+	"long unsigned",
-+	"unsigned long int",
-+	"unsigned int long",
-+	"long unsigned int",
-+	"long int unsigned",
-+	"int unsigned long",
-+	"int long unsigned",
-+};
-+
- static int determine_ptr_size(const struct btf *btf)
- {
- 	const struct btf_type *t;
- 	const char *name;
--	int i, n;
--
-+	int i, j, n;
- 	if (btf->base_btf && btf->base_btf->ptr_sz > 0)
- 		return btf->base_btf->ptr_sz;
- 
-@@ -489,12 +502,12 @@ static int determine_ptr_size(const struct btf *btf)
- 		if (!name)
- 			continue;
- 
--		if (strcmp(name, "long int") == 0 ||
--		    strcmp(name, "long unsigned int") == 0) {
--			if (t->size != 4 && t->size != 8)
--				continue;
--			return t->size;
--		}
-+		if (t->size != 4 && t->size != 8)
-+			continue;
-+
-+		for (j = 0; j < ARRAY_SIZE(long_aliases); j++)
-+			if (!strcmp(name, long_aliases[j]))
-+				return t->size;
- 	}
- 
- 	return -1;
--- 
-2.25.1
-
+This makes the code worse.
+There is no need for these patches.
