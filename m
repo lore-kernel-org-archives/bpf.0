@@ -2,135 +2,203 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CEF2C433F5
-	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 15:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A200C433F5
+	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 15:57:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243319AbiEZPdg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 May 2022 11:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S239681AbiEZP5h (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 May 2022 11:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347980AbiEZPde (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 May 2022 11:33:34 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F399DE312;
-        Thu, 26 May 2022 08:33:28 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id t26so2299970edt.0;
-        Thu, 26 May 2022 08:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7ZpvpLnrsJF4rcP8IoPyzSYJthw69jzv/0DWyfv1ap4=;
-        b=fBkV2uu9Npnu69dcSmKkFOlkS8TBncPnAKDHklZbAkCD+RrFZ5GN9GWrnJExLGd3tG
-         tltL2cCODt/Z2iIZ5UfXGKygYsit2mqeqR0k3XowGmg5EXCAISQfGt5IGJMNqjOAVaZB
-         Yojm2Vb3qzMXrl0mh2mfrbrGg1Fshr/41TWpObLYWspuRCq3iyINJlAJJEZxSgQYY6YO
-         9Tvn7BO45FhbarXL3p3oamfhOR9CLjDPLjntF7W18CBxDvLDFPr1AIlpLtZfYjs4DmO+
-         z58y5/yMjsXIUwNtP+W7UUtpTUnBV5pbngpt6CgiRjccV9tBoff4frV2JpBZs/iTYmce
-         LdHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7ZpvpLnrsJF4rcP8IoPyzSYJthw69jzv/0DWyfv1ap4=;
-        b=ODkpPblZPTJuZATbBbG3IbUU4jwpdGiY1NwxGO+m1R7KBC1dQxHIsADSlDNEwoZmSv
-         KwAykIQeHotJeloRmvAYZ8vJWpxCUjMhdxLf3ps+DirCHDuLaInREyjw0e3DKw906P2R
-         CCZ7PUraAjIiIZoV+a+BWvjYJiXeG6Azo5HCnA3mmNucbhpyUbgH7kHI6uubOomytn0d
-         143IdAWBKukci06/M4rZRgh6WJZv7jdQQ/AkwhF4oC0ShlZgxkz9L2tuIqinn7DXerC4
-         o4QXn+2WJE5IpVB1BlbaLP7uW9AZkrzJYkWCyD0ZONpr9icpISl5BM/I1qUO8FR520ly
-         Wp+w==
-X-Gm-Message-State: AOAM532KPVqBo/IfbBPLFDni4I1eRJStSVq7CnqKZybMNA9hFy/W3kYq
-        cvwHVuObCD9T5433AEw+bsc=
-X-Google-Smtp-Source: ABdhPJx56/6EKJWnJHStzTRdwDj07JhHuK/vXxBs/sztpDU6XbOnJwK60tzSKn/Fb7JWfrcd3npm3w==
-X-Received: by 2002:aa7:c683:0:b0:42a:b2cc:b345 with SMTP id n3-20020aa7c683000000b0042ab2ccb345mr40071484edq.282.1653579206777;
-        Thu, 26 May 2022 08:33:26 -0700 (PDT)
-Received: from krava (net-93-147-243-239.cust.vodafonedsl.it. [93.147.243.239])
-        by smtp.gmail.com with ESMTPSA id g10-20020a50d5ca000000b0042ad0358c8bsm935025edj.38.2022.05.26.08.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 08:33:26 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 26 May 2022 17:33:22 +0200
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
+        with ESMTP id S233267AbiEZP5g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 May 2022 11:57:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE45EDFC;
+        Thu, 26 May 2022 08:57:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FEDB61CC1;
+        Thu, 26 May 2022 15:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2D68C385A9;
+        Thu, 26 May 2022 15:57:29 +0000 (UTC)
+Date:   Thu, 26 May 2022 11:57:28 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] bpf: Use safer kvmalloc_array() where possible
-Message-ID: <Yo+dwv/OVFnPrvbs@krava>
-References: <Yo9VRVMeHbALyjUH@kili>
+        KP Singh <kpsingh@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+Subject: [PATCH v4] ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding
+ weak function
+Message-ID: <20220526115728.218517df@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yo9VRVMeHbALyjUH@kili>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, May 26, 2022 at 01:24:05PM +0300, Dan Carpenter wrote:
-> The kvmalloc_array() function is safer because it has a check for
-> integer overflows.  These sizes come from the user and I was not
-> able to see any bounds checking so an integer overflow seems like a
-> realistic concern.
-> 
-> Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Eugene was addressing these:
-  https://lore.kernel.org/bpf/399e634781822329e856103cddba975f58f0498c.1652982525.git.esyr@redhat.com/
+If an unused weak function was traced, it's call to fentry will still
+exist, which gets added into the __mcount_loc table. Ftrace will use
+kallsyms to retrieve the name for each location in __mcount_loc to display
+it in the available_filter_functions and used to enable functions via the
+name matching in set_ftrace_filter/notrace. Enabling these functions do
+nothing but enable an unused call to ftrace_caller. If a traced weak
+function is overridden, the symbol of the function would be used for it,
+which will either created duplicate names, or if the previous function was
+not traced, it would be incorrectly listed in available_filter_functions
+as a function that can be traced.
 
-I think using kvmalloc_array was one of the review comments
+This became an issue with BPF[1] as there are tooling that enables the
+direct callers via ftrace but then checks to see if the functions were
+actually enabled. The case of one function that was marked notrace, but
+was followed by an unused weak function that was traced. The unused
+function's call to fentry was added to the __mcount_loc section, and
+kallsyms retrieved the untraced function's symbol as the weak function was
+overridden. Since the untraced function would not get traced, the BPF
+check would detect this and fail.
 
-jirka
+The real fix would be to fix kallsyms to not show address of weak
+functions as the function before it. But that would require adding code in
+the build to add function size to kallsyms so that it can know when the
+function ends instead of just using the start of the next known symbol.
 
+In the mean time, this is a work around. Add a FTRACE_MCOUNT_MAX_OFFSET
+macro that if defined, ftrace will ignore any function that has its call
+to fentry/mcount that has an offset from the symbol that is greater than
+FTRACE_MCOUNT_MAX_OFFSET.
 
-> ---
->  kernel/trace/bpf_trace.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 10b157a6d73e..7a13e6ac6327 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -2263,11 +2263,11 @@ static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32
->  	int err = -ENOMEM;
->  	unsigned int i;
->  
-> -	syms = kvmalloc(cnt * sizeof(*syms), GFP_KERNEL);
-> +	syms = kvmalloc_array(cnt, sizeof(*syms), GFP_KERNEL);
->  	if (!syms)
->  		goto error;
->  
-> -	buf = kvmalloc(cnt * KSYM_NAME_LEN, GFP_KERNEL);
-> +	buf = kvmalloc_array(cnt, KSYM_NAME_LEN, GFP_KERNEL);
->  	if (!buf)
->  		goto error;
->  
-> @@ -2464,7 +2464,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  		return -EINVAL;
->  
->  	size = cnt * sizeof(*addrs);
-> -	addrs = kvmalloc(size, GFP_KERNEL);
-> +	addrs = kvmalloc_array(cnt, sizeof(*addrs), GFP_KERNEL);
->  	if (!addrs)
->  		return -ENOMEM;
->  
-> @@ -2489,7 +2489,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
->  
->  	ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
->  	if (ucookies) {
-> -		cookies = kvmalloc(size, GFP_KERNEL);
-> +		cookies = kvmalloc_array(cnt, sizeof(*addrs), GFP_KERNEL);
->  		if (!cookies) {
->  			err = -ENOMEM;
->  			goto error;
-> -- 
-> 2.35.1
-> 
+If CONFIG_HAVE_FENTRY is defined for x86, define FTRACE_MCOUNT_MAX_OFFSET
+to zero (unless IBT is enabled), which will have ftrace ignore all locations
+that are not at the start of the function (or one after the ENDBR
+instruction).
+
+[1] https://lore.kernel.org/all/20220412094923.0abe90955e5db486b7bca279@kernel.org/
+
+Acked-by: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+Changes since v3: https://lore.kernel.org/all/20220526103810.026560dd@gandalf.local.home/
+ - Implemented Peter Zijlstra's suggestion of using
+   offset of ENDBR_INSN_SIZE for max on x86.
+
+ arch/x86/include/asm/ftrace.h |  8 ++++++
+ kernel/trace/ftrace.c         | 50 +++++++++++++++++++++++++++++++++--
+ 2 files changed, 56 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 024d9797646e..4c9bfdf4dae7 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -9,6 +9,14 @@
+ # define MCOUNT_ADDR		((unsigned long)(__fentry__))
+ #define MCOUNT_INSN_SIZE	5 /* sizeof mcount call */
+ 
++#include <asm/ibt.h>
++
++/* Ignore unused weak functions which will have non zero offsets */
++#ifdef CONFIG_HAVE_FENTRY
++/* Add offset for endbr64 if IBT enabled */
++# define FTRACE_MCOUNT_MAX_OFFSET	ENDBR_INSN_SIZE
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ #define ARCH_SUPPORTS_FTRACE_OPS 1
+ #endif
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index d653ef4febc5..4a04eaf6436d 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3654,6 +3654,31 @@ static void add_trampoline_func(struct seq_file *m, struct ftrace_ops *ops,
+ 		seq_printf(m, " ->%pS", ptr);
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++static int print_rec(struct seq_file *m, unsigned long ip)
++{
++	unsigned long offset;
++	char str[KSYM_SYMBOL_LEN];
++	char *modname;
++	int ret;
++
++	ret = kallsyms_lookup(ip, NULL, &offset, &modname, str);
++	if (!ret || offset > FTRACE_MCOUNT_MAX_OFFSET)
++		return -1;
++
++	seq_puts(m, str);
++	if (modname)
++		seq_printf(m, " [%s]", modname);
++	return 0;
++}
++#else
++static int print_rec(struct seq_file *m, unsigned long ip)
++{
++	seq_printf(m, "%ps", (void *)ip);
++	return 0;
++}
++#endif
++
+ static int t_show(struct seq_file *m, void *v)
+ {
+ 	struct ftrace_iterator *iter = m->private;
+@@ -3678,7 +3703,9 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
+-	seq_printf(m, "%ps", (void *)rec->ip);
++	if (print_rec(m, rec->ip))
++		return 0;
++
+ 	if (iter->flags & FTRACE_ITER_ENABLED) {
+ 		struct ftrace_ops *ops;
+ 
+@@ -3996,6 +4023,24 @@ add_rec_by_index(struct ftrace_hash *hash, struct ftrace_glob *func_g,
+ 	return 0;
+ }
+ 
++#ifdef FTRACE_MCOUNT_MAX_OFFSET
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	unsigned long offset;
++
++	kallsyms_lookup(ip, NULL, &offset, modname, str);
++	if (offset > FTRACE_MCOUNT_MAX_OFFSET)
++		return -1;
++	return 0;
++}
++#else
++static int lookup_ip(unsigned long ip, char **modname, char *str)
++{
++	kallsyms_lookup(ip, NULL, NULL, modname, str);
++	return 0;
++}
++#endif
++
+ static int
+ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 		struct ftrace_glob *mod_g, int exclude_mod)
+@@ -4003,7 +4048,8 @@ ftrace_match_record(struct dyn_ftrace *rec, struct ftrace_glob *func_g,
+ 	char str[KSYM_SYMBOL_LEN];
+ 	char *modname;
+ 
+-	kallsyms_lookup(rec->ip, NULL, NULL, &modname, str);
++	if (lookup_ip(rec->ip, &modname, str))
++		return 0;
+ 
+ 	if (mod_g) {
+ 		int mod_matches = (modname) ? ftrace_match(modname, mod_g) : 0;
+-- 
+2.35.1
+
