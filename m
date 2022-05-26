@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23990C433F5
-	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 931EFC433F5
+	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:55:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348643AbiEZSzw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 May 2022 14:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S236476AbiEZSzz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 May 2022 14:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348571AbiEZSzn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 May 2022 14:55:43 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3560C966E
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:42 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QInovK019702
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:42 -0700
+        with ESMTP id S1348640AbiEZSzv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 May 2022 14:55:51 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E84C8BD0
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:50 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QInnAD015213
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=ZotRVy+u+cTA2GrULbN9T7RxnRlKQ1+TZX+ikE7WqC8=;
- b=gaKf/Z6Miq6ig8O69cr8FEz6GNn3vA0C7tQAN1CEj1E71mVnBkn6gDrNsXZ4WEui5OXh
- Ab81BvbI5otBD3/Ea8FN2fbF4pG7HATDp46ubycFjbaBs0OxzvIzxVFW1ClC9HHCd7zo
- 6llIouxCfvQiiv3B1L97mNZFDWhxt/xnZb4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ga8puu1g9-1
+ bh=LgZQvgh7NcHVNrJaS9FsKfHLb9S4kvOPYzd1ifQDYO8=;
+ b=VVx9pzKcfvngrvWfv2ZyBZAdzqCK19HTxjG1gyM/9lUxFNlxFExOPOlnZwkjI9hWDQ66
+ cw/+Edv7YkKZdCekOBm3dWl54W9T4DGufhspXiQ5CTwbnUPU4Jc2oK1qbz9nmi50Xc9I
+ yiV1EPh2l0wwoLYiXsq3ZoWfZBgewAQNNXI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gaafu2a01-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:42 -0700
-Received: from twshared10276.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:50 -0700
+Received: from twshared8508.05.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 26 May 2022 11:55:41 -0700
+ 15.1.2375.28; Thu, 26 May 2022 11:55:49 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 64409AD83D7F; Thu, 26 May 2022 11:55:30 -0700 (PDT)
+        id 22753AD83DD2; Thu, 26 May 2022 11:55:46 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 11/18] bpftool: Add btf enum64 support
-Date:   Thu, 26 May 2022 11:55:30 -0700
-Message-ID: <20220526185530.2550659-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 14/18] selftests/bpf: Add BTF_KIND_ENUM64 unit tests
+Date:   Thu, 26 May 2022 11:55:46 -0700
+Message-ID: <20220526185546.2551427-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220526185432.2545879-1-yhs@fb.com>
 References: <20220526185432.2545879-1-yhs@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 0g2gw-ffXRaesDEnwhCuH_PyKfRsU5k-
-X-Proofpoint-GUID: 0g2gw-ffXRaesDEnwhCuH_PyKfRsU5k-
+X-Proofpoint-GUID: hlmdBLUvcYN-innShgJsUxelsK67ZOf9
+X-Proofpoint-ORIG-GUID: hlmdBLUvcYN-innShgJsUxelsK67ZOf9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-26_10,2022-05-25_02,2022-02-23_01
@@ -58,213 +58,79 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add BTF_KIND_ENUM64 support.
-For example, the following enum is defined in uapi bpf.h.
-  $ cat core.c
-  enum A {
-        BPF_F_INDEX_MASK                =3D 0xffffffffULL,
-        BPF_F_CURRENT_CPU               =3D BPF_F_INDEX_MASK,
-        BPF_F_CTXLEN_MASK               =3D (0xfffffULL << 32),
-  } g;
-Compiled with
-  clang -target bpf -O2 -g -c core.c
-Using bpftool to dump types and generate format C file:
-  $ bpftool btf dump file core.o
-  ...
-  [1] ENUM64 'A' encoding=3DUNSIGNED size=3D8 vlen=3D3
-        'BPF_F_INDEX_MASK' val=3D4294967295ULL
-        'BPF_F_CURRENT_CPU' val=3D4294967295ULL
-        'BPF_F_CTXLEN_MASK' val=3D4503595332403200ULL
-  $ bpftool btf dump file core.o format c
-  ...
-  enum A {
-        BPF_F_INDEX_MASK =3D 4294967295ULL,
-        BPF_F_CURRENT_CPU =3D 4294967295ULL,
-        BPF_F_CTXLEN_MASK =3D 4503595332403200ULL,
-  };
-  ...
-
-Note that for raw btf output, the encoding (UNSIGNED or SIGNED)
-is printed out as well. The 64bit value is also represented properly
-in BTF and C dump.
+Add unit tests for basic BTF_KIND_ENUM64 encoding.
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/bpf/bpftool/btf.c        | 57 ++++++++++++++++++++++++++++++++--
- tools/bpf/bpftool/btf_dumper.c | 29 +++++++++++++++++
- tools/bpf/bpftool/gen.c        |  1 +
- 3 files changed, 84 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 36 ++++++++++++++++++++
+ tools/testing/selftests/bpf/test_btf.h       |  1 +
+ 2 files changed, 37 insertions(+)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 7e6accb9d9f7..0744bd1150be 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -40,6 +40,7 @@ static const char * const btf_kind_str[NR_BTF_KINDS] =3D=
- {
- 	[BTF_KIND_FLOAT]	=3D "FLOAT",
- 	[BTF_KIND_DECL_TAG]	=3D "DECL_TAG",
- 	[BTF_KIND_TYPE_TAG]	=3D "TYPE_TAG",
-+	[BTF_KIND_ENUM64]	=3D "ENUM64",
- };
-=20
- struct btf_attach_point {
-@@ -212,26 +213,76 @@ static int dump_btf_type(const struct btf *btf, __u=
-32 id,
- 	case BTF_KIND_ENUM: {
- 		const struct btf_enum *v =3D (const void *)(t + 1);
- 		__u16 vlen =3D BTF_INFO_VLEN(t->info);
-+		const char *encoding;
- 		int i;
-=20
-+		encoding =3D btf_kflag(t) ? "SIGNED" : "UNSIGNED";
- 		if (json_output) {
-+			jsonw_string_field(w, "encoding", encoding);
- 			jsonw_uint_field(w, "size", t->size);
- 			jsonw_uint_field(w, "vlen", vlen);
- 			jsonw_name(w, "values");
- 			jsonw_start_array(w);
- 		} else {
--			printf(" size=3D%u vlen=3D%u", t->size, vlen);
-+			printf(" encoding=3D%s size=3D%u vlen=3D%u", encoding, t->size, vlen)=
-;
-+		}
-+		for (i =3D 0; i < vlen; i++, v++) {
-+			const char *name =3D btf_str(btf, v->name_off);
-+
-+			if (json_output) {
-+				jsonw_start_object(w);
-+				jsonw_string_field(w, "name", name);
-+				if (btf_kflag(t))
-+					jsonw_int_field(w, "val", v->val);
-+				else
-+					jsonw_uint_field(w, "val", v->val);
-+				jsonw_end_object(w);
-+			} else {
-+				if (btf_kflag(t))
-+					printf("\n\t'%s' val=3D%d", name, v->val);
-+				else
-+					printf("\n\t'%s' val=3D%u", name, v->val);
-+			}
-+		}
-+		if (json_output)
-+			jsonw_end_array(w);
-+		break;
-+	}
-+	case BTF_KIND_ENUM64: {
-+		const struct btf_enum64 *v =3D btf_enum64(t);
-+		__u16 vlen =3D btf_vlen(t);
-+		const char *encoding;
-+		int i;
-+
-+		encoding =3D btf_kflag(t) ? "SIGNED" : "UNSIGNED";
-+		if (json_output) {
-+			jsonw_string_field(w, "encoding", encoding);
-+			jsonw_uint_field(w, "size", t->size);
-+			jsonw_uint_field(w, "vlen", vlen);
-+			jsonw_name(w, "values");
-+			jsonw_start_array(w);
-+		} else {
-+			printf(" encoding=3D%s size=3D%u vlen=3D%u", encoding, t->size, vlen)=
-;
- 		}
- 		for (i =3D 0; i < vlen; i++, v++) {
- 			const char *name =3D btf_str(btf, v->name_off);
-+			__u64 val =3D ((__u64)v->val_hi32 << 32) | v->val_lo32;
-=20
- 			if (json_output) {
- 				jsonw_start_object(w);
- 				jsonw_string_field(w, "name", name);
--				jsonw_uint_field(w, "val", v->val);
-+				if (btf_kflag(t))
-+					jsonw_int_field(w, "val", val);
-+				else
-+					jsonw_uint_field(w, "val", val);
- 				jsonw_end_object(w);
- 			} else {
--				printf("\n\t'%s' val=3D%u", name, v->val);
-+				if (btf_kflag(t))
-+					printf("\n\t'%s' val=3D%lldLL", name,
-+					       (unsigned long long)val);
-+				else
-+					printf("\n\t'%s' val=3D%lluULL", name,
-+					       (unsigned long long)val);
- 			}
- 		}
- 		if (json_output)
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumpe=
-r.c
-index f5dddf8ef404..125798b0bc5d 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -182,6 +182,32 @@ static int btf_dumper_enum(const struct btf_dumper *=
-d,
- 	return 0;
- }
-=20
-+static int btf_dumper_enum64(const struct btf_dumper *d,
-+			     const struct btf_type *t,
-+			     const void *data)
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
+/selftests/bpf/prog_tests/btf.c
+index 8e068e06b3e8..a986ee56c5f7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -4052,6 +4052,42 @@ static struct btf_raw_test raw_tests[] =3D {
+ 	.btf_load_err =3D true,
+ 	.err_str =3D "Type tags don't precede modifiers",
+ },
 +{
-+	const struct btf_enum64 *enums =3D btf_enum64(t);
-+	__u32 val_lo32, val_hi32;
-+	__u64 value;
-+	__u16 i;
-+
-+	value =3D *(__u64 *)data;
-+	val_lo32 =3D (__u32)value;
-+	val_hi32 =3D value >> 32;
-+
-+	for (i =3D 0; i < btf_vlen(t); i++) {
-+		if (val_lo32 =3D=3D enums[i].val_lo32 && val_hi32 =3D=3D enums[i].val_=
-hi32) {
-+			jsonw_string(d->jw,
-+				     btf__name_by_offset(d->btf,
-+							 enums[i].name_off));
-+			return 0;
-+		}
-+	}
-+
-+	jsonw_int(d->jw, value);
-+	return 0;
-+}
-+
- static bool is_str_array(const struct btf *btf, const struct btf_array *=
-arr,
- 			 const char *s)
- {
-@@ -542,6 +568,8 @@ static int btf_dumper_do_type(const struct btf_dumper=
- *d, __u32 type_id,
- 		return btf_dumper_array(d, type_id, data);
- 	case BTF_KIND_ENUM:
- 		return btf_dumper_enum(d, t, data);
-+	case BTF_KIND_ENUM64:
-+		return btf_dumper_enum64(d, t, data);
- 	case BTF_KIND_PTR:
- 		btf_dumper_ptr(d, t, data);
- 		return 0;
-@@ -618,6 +646,7 @@ static int __btf_dumper_type_only(const struct btf *b=
-tf, __u32 type_id,
- 			      btf__name_by_offset(btf, t->name_off));
- 		break;
- 	case BTF_KIND_ENUM:
-+	case BTF_KIND_ENUM64:
- 		BTF_PRINT_ARG("enum %s ",
- 			      btf__name_by_offset(btf, t->name_off));
- 		break;
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index 4c9477ff748d..14f5fe7f570e 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -1747,6 +1747,7 @@ btfgen_mark_type(struct btfgen_info *info, unsigned=
- int type_id, bool follow_poi
- 	case BTF_KIND_INT:
- 	case BTF_KIND_FLOAT:
- 	case BTF_KIND_ENUM:
-+	case BTF_KIND_ENUM64:
- 	case BTF_KIND_STRUCT:
- 	case BTF_KIND_UNION:
- 		break;
++	.descr =3D "enum64 test #1, unsigned, size 8",
++	.raw_types =3D {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),			/* [1] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_ENUM64, 0, 2), 8),	/* [2]=
+ */
++		BTF_ENUM64_ENC(NAME_TBD, 0, 0),
++		BTF_ENUM64_ENC(NAME_TBD, 1, 1),
++		BTF_END_RAW,
++	},
++	BTF_STR_SEC("\0a\0b\0c"),
++	.map_type =3D BPF_MAP_TYPE_ARRAY,
++	.map_name =3D "tag_type_check_btf",
++	.key_size =3D sizeof(int),
++	.value_size =3D 8,
++	.key_type_id =3D 1,
++	.value_type_id =3D 2,
++	.max_entries =3D 1,
++},
++{
++	.descr =3D "enum64 test #2, signed, size 4",
++	.raw_types =3D {
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),			/* [1] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_ENUM64, 1, 2), 4),	/* [2]=
+ */
++		BTF_ENUM64_ENC(NAME_TBD, -1, 0),
++		BTF_ENUM64_ENC(NAME_TBD, 1, 0),
++		BTF_END_RAW,
++	},
++	BTF_STR_SEC("\0a\0b\0c"),
++	.map_type =3D BPF_MAP_TYPE_ARRAY,
++	.map_name =3D "tag_type_check_btf",
++	.key_size =3D sizeof(int),
++	.value_size =3D 4,
++	.key_type_id =3D 1,
++	.value_type_id =3D 2,
++	.max_entries =3D 1,
++},
+=20
+ }; /* struct btf_raw_test raw_tests[] */
+=20
+diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selft=
+ests/bpf/test_btf.h
+index 128989bed8b7..38782bd47fdc 100644
+--- a/tools/testing/selftests/bpf/test_btf.h
++++ b/tools/testing/selftests/bpf/test_btf.h
+@@ -39,6 +39,7 @@
+ #define BTF_MEMBER_ENC(name, type, bits_offset)	\
+ 	(name), (type), (bits_offset)
+ #define BTF_ENUM_ENC(name, val) (name), (val)
++#define BTF_ENUM64_ENC(name, val_lo32, val_hi32) (name), (val_lo32), (va=
+l_hi32)
+ #define BTF_MEMBER_OFFSET(bitfield_size, bits_offset) \
+ 	((bitfield_size) << 24 | (bits_offset))
+=20
 --=20
 2.30.2
 
