@@ -2,52 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D33C433EF
-	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC14C433F5
+	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:54:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345987AbiEZSyl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 May 2022 14:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56250 "EHLO
+        id S1347094AbiEZSyw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 May 2022 14:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiEZSyk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 May 2022 14:54:40 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43074C5DBD
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:54:39 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QInucC022435
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:54:38 -0700
+        with ESMTP id S234416AbiEZSyu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 May 2022 14:54:50 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01018C5E69
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:54:49 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QInmmm015182
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:54:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=A5cQlO2PTcWiZmPDWKBU329a5Q29TVvZvnzK6AvPyig=;
- b=dDQEqC3JOsHkXnI4IkbuRDbOSOWgvYr8ivGlksloMY8A1PmRbaT1hyx0YXuFq22GLnDR
- 7CesWZKSCZnYczaF7lK5gvFGGMXknyxx/AVdls3gzIJXOWCeA9EqsOSequhlg+39PK7C
- GeiFfeg2A/WGxVLIouaXR78d8fqVaspgmdo= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ga5x8uwty-4
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=jCc/Sv8R7IUm2+KSHMlyI2AnyxI9kwFnmlWPhDcvUWY=;
+ b=apLA/Xo8Cj/pnD15I5EPIn4XMgUxh87mbdKxVjotxkRtFKqjEO3VX6GrtTd5d3lTqOmE
+ kxa6N/No5RyHETvnwuJUtnkpOT/fCifJjsAMguyDVowdubAjsYEfNg2dDruKZ8Lxbaiv
+ rAwhHTpjJ0O+KoT5Q+dOttvQwa9jb4zOKNU= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gaafu29s2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:54:38 -0700
-Received: from twshared26317.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:54:49 -0700
+Received: from twshared6696.05.ash7.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 26 May 2022 11:54:36 -0700
+ 15.1.2375.28; Thu, 26 May 2022 11:54:48 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 67ED0AD83C43; Thu, 26 May 2022 11:54:32 -0700 (PDT)
+        id DB575AD83CCC; Thu, 26 May 2022 11:54:42 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 00/18] bpf: Add 64bit enum value support
-Date:   Thu, 26 May 2022 11:54:32 -0700
-Message-ID: <20220526185432.2545879-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 02/18] libbpf: Permit 64bit relocation value
+Date:   Thu, 26 May 2022 11:54:42 -0700
+Message-ID: <20220526185442.2546806-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220526185432.2545879-1-yhs@fb.com>
+References: <20220526185432.2545879-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Fa_WcoqV5tekD09vJLWqbbHfnQyOIz8p
-X-Proofpoint-GUID: Fa_WcoqV5tekD09vJLWqbbHfnQyOIz8p
+X-Proofpoint-GUID: US1vNYPFoJNiWR9TeoGwPszPQIb-H9uC
+X-Proofpoint-ORIG-GUID: US1vNYPFoJNiWR9TeoGwPszPQIb-H9uC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-26_10,2022-05-25_02,2022-02-23_01
@@ -55,103 +58,190 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, btf only supports upto 32bit enum value with BTF_KIND_ENUM.
-But in kernel, some enum has 64bit values, e.g., in uapi bpf.h, we have
-  enum {
-        BPF_F_INDEX_MASK                =3D 0xffffffffULL,
-        BPF_F_CURRENT_CPU               =3D BPF_F_INDEX_MASK,
-        BPF_F_CTXLEN_MASK               =3D (0xfffffULL << 32),
-  };
-With BTF_KIND_ENUM, the value for BPF_F_CTXLEN_MASK will be encoded
-as 0 which is incorrect.
+Currently, the libbpf limits the relocation value to be 32bit
+since all current relocations have such a limit. But with
+BTF_KIND_ENUM64 support, the enum value could be 64bit.
+So let us permit 64bit relocation value in libbpf.
 
-To solve this problem, BTF_KIND_ENUM64 is proposed in this patch set
-to support enum 64bit values. Also, since sometimes there is a need
-to generate C code from btf, e.g., vmlinux.h, btf kflag support
-is also added for BTF_KIND_ENUM and BTF_KIND_ENUM64 to indicate
-signedness, helping proper value printout.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/lib/bpf/relo_core.c | 49 +++++++++++++++++++++------------------
+ tools/lib/bpf/relo_core.h |  4 ++--
+ 2 files changed, 29 insertions(+), 24 deletions(-)
 
-Changelog:
-  v2 -> v3:
-    - Implement separate btf_equal_enum()/btf_equal_enum64() and
-      btf_compat_enum()/btf_compat_enum64().
-    - Add a new enum64 placeholder type dynamicly for enum64 sanitization=
-.
-    - For bpftool output and unit selftest, printed out signed/unsigned
-      encoding as well.
-    - fix some issues with BTF_KIND_ENUM is doc and clarified sign extens=
-ion
-      rules for enum values.
-  v1 -> v2:
-    - Changed kflag default from signed to unsigned
-    - Fixed sanitization issue
-    - Broke down libbpf related patches for easier review
-    - Added more tests
-    - More code refactorization
-    - Corresponding llvm patch (to support enum64) is also updated
-
-Yonghong Song (18):
-  bpf: Add btf enum64 support
-  libbpf: Permit 64bit relocation value
-  libbpf: Fix an error in 64bit relocation value computation
-  libbpf: Refactor btf__add_enum() for future code sharing
-  libbpf: Add enum64 parsing and new enum64 public API
-  libbpf: Add enum64 deduplication support
-  libbpf: Add enum64 support for btf_dump
-  libbpf: Add enum64 sanitization
-  libbpf: Add enum64 support for bpf linking
-  libbpf: Add enum64 relocation support
-  bpftool: Add btf enum64 support
-  selftests/bpf: Fix selftests failure
-  selftests/bpf: Test new enum kflag and enum64 API functions
-  selftests/bpf: Add BTF_KIND_ENUM64 unit tests
-  selftests/bpf: Test BTF_KIND_ENUM64 for deduplication
-  selftests/bpf: Add a test for enum64 value relocations
-  selftests/bpf: Clarify llvm dependency with possible selftest failures
-  docs/bpf: Update documentation for BTF_KIND_ENUM64 support
-
- Documentation/bpf/btf.rst                     |  43 +++-
- include/linux/btf.h                           |  28 +++
- include/uapi/linux/btf.h                      |  17 +-
- kernel/bpf/btf.c                              | 142 +++++++++++--
- kernel/bpf/verifier.c                         |   2 +-
- tools/bpf/bpftool/btf.c                       |  57 ++++-
- tools/bpf/bpftool/btf_dumper.c                |  29 +++
- tools/bpf/bpftool/gen.c                       |   1 +
- tools/include/uapi/linux/btf.h                |  17 +-
- tools/lib/bpf/btf.c                           | 201 ++++++++++++++++--
- tools/lib/bpf/btf.h                           |  32 ++-
- tools/lib/bpf/btf_dump.c                      | 128 ++++++++---
- tools/lib/bpf/libbpf.c                        |  63 +++++-
- tools/lib/bpf/libbpf.map                      |   3 +
- tools/lib/bpf/libbpf_internal.h               |   2 +
- tools/lib/bpf/linker.c                        |   2 +
- tools/lib/bpf/relo_core.c                     | 105 +++++----
- tools/lib/bpf/relo_core.h                     |   4 +-
- tools/testing/selftests/bpf/README.rst        |  18 ++
- tools/testing/selftests/bpf/btf_helpers.c     |  25 ++-
- tools/testing/selftests/bpf/prog_tests/btf.c  | 153 +++++++++++--
- .../selftests/bpf/prog_tests/btf_write.c      | 126 ++++++++---
- .../selftests/bpf/prog_tests/core_reloc.c     |  58 +++++
- .../bpf/progs/btf__core_reloc_enum64val.c     |   3 +
- .../progs/btf__core_reloc_enum64val___diff.c  |   3 +
- .../btf__core_reloc_enum64val___err_missing.c |   3 +
- ...btf__core_reloc_enum64val___val3_missing.c |   3 +
- .../selftests/bpf/progs/core_reloc_types.h    |  78 +++++++
- .../bpf/progs/test_core_reloc_enum64val.c     |  70 ++++++
- tools/testing/selftests/bpf/test_btf.h        |   1 +
- 30 files changed, 1231 insertions(+), 186 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-m64val.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-m64val___diff.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-m64val___err_missing.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-m64val___val3_missing.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_enu=
-m64val.c
-
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index ba4453dfd1ed..aea16343a8f1 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -583,7 +583,7 @@ static int bpf_core_spec_match(struct bpf_core_spec *=
+local_spec,
+ static int bpf_core_calc_field_relo(const char *prog_name,
+ 				    const struct bpf_core_relo *relo,
+ 				    const struct bpf_core_spec *spec,
+-				    __u32 *val, __u32 *field_sz, __u32 *type_id,
++				    __u64 *val, __u32 *field_sz, __u32 *type_id,
+ 				    bool *validate)
+ {
+ 	const struct bpf_core_accessor *acc;
+@@ -708,7 +708,7 @@ static int bpf_core_calc_field_relo(const char *prog_=
+name,
+=20
+ static int bpf_core_calc_type_relo(const struct bpf_core_relo *relo,
+ 				   const struct bpf_core_spec *spec,
+-				   __u32 *val, bool *validate)
++				   __u64 *val, bool *validate)
+ {
+ 	__s64 sz;
+=20
+@@ -751,7 +751,7 @@ static int bpf_core_calc_type_relo(const struct bpf_c=
+ore_relo *relo,
+=20
+ static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
+ 				      const struct bpf_core_spec *spec,
+-				      __u32 *val)
++				      __u64 *val)
+ {
+ 	const struct btf_type *t;
+ 	const struct btf_enum *e;
+@@ -929,7 +929,7 @@ int bpf_core_patch_insn(const char *prog_name, struct=
+ bpf_insn *insn,
+ 			int insn_idx, const struct bpf_core_relo *relo,
+ 			int relo_idx, const struct bpf_core_relo_res *res)
+ {
+-	__u32 orig_val, new_val;
++	__u64 orig_val, new_val;
+ 	__u8 class;
+=20
+ 	class =3D BPF_CLASS(insn->code);
+@@ -954,28 +954,30 @@ int bpf_core_patch_insn(const char *prog_name, stru=
+ct bpf_insn *insn,
+ 		if (BPF_SRC(insn->code) !=3D BPF_K)
+ 			return -EINVAL;
+ 		if (res->validate && insn->imm !=3D orig_val) {
+-			pr_warn("prog '%s': relo #%d: unexpected insn #%d (ALU/ALU64) value: =
+got %u, exp %u -> %u\n",
++			pr_warn("prog '%s': relo #%d: unexpected insn #%d (ALU/ALU64) value: =
+got %u, exp %llu -> %llu\n",
+ 				prog_name, relo_idx,
+-				insn_idx, insn->imm, orig_val, new_val);
++				insn_idx, insn->imm, (unsigned long long)orig_val,
++				(unsigned long long)new_val);
+ 			return -EINVAL;
+ 		}
+ 		orig_val =3D insn->imm;
+ 		insn->imm =3D new_val;
+-		pr_debug("prog '%s': relo #%d: patched insn #%d (ALU/ALU64) imm %u -> =
+%u\n",
++		pr_debug("prog '%s': relo #%d: patched insn #%d (ALU/ALU64) imm %llu -=
+> %llu\n",
+ 			 prog_name, relo_idx, insn_idx,
+-			 orig_val, new_val);
++			 (unsigned long long)orig_val, (unsigned long long)new_val);
+ 		break;
+ 	case BPF_LDX:
+ 	case BPF_ST:
+ 	case BPF_STX:
+ 		if (res->validate && insn->off !=3D orig_val) {
+-			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDX/ST/STX) value:=
+ got %u, exp %u -> %u\n",
+-				prog_name, relo_idx, insn_idx, insn->off, orig_val, new_val);
++			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDX/ST/STX) value:=
+ got %u, exp %llu -> %llu\n",
++				prog_name, relo_idx, insn_idx, insn->off, (unsigned long long)orig_v=
+al,
++				(unsigned long long)new_val);
+ 			return -EINVAL;
+ 		}
+ 		if (new_val > SHRT_MAX) {
+-			pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) value too big: %u=
+\n",
+-				prog_name, relo_idx, insn_idx, new_val);
++			pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) value too big: %l=
+lu\n",
++				prog_name, relo_idx, insn_idx, (unsigned long long)new_val);
+ 			return -ERANGE;
+ 		}
+ 		if (res->fail_memsz_adjust) {
+@@ -987,8 +989,9 @@ int bpf_core_patch_insn(const char *prog_name, struct=
+ bpf_insn *insn,
+=20
+ 		orig_val =3D insn->off;
+ 		insn->off =3D new_val;
+-		pr_debug("prog '%s': relo #%d: patched insn #%d (LDX/ST/STX) off %u ->=
+ %u\n",
+-			 prog_name, relo_idx, insn_idx, orig_val, new_val);
++		pr_debug("prog '%s': relo #%d: patched insn #%d (LDX/ST/STX) off %llu =
+-> %llu\n",
++			 prog_name, relo_idx, insn_idx, (unsigned long long)orig_val,
++			 (unsigned long long)new_val);
+=20
+ 		if (res->new_sz !=3D res->orig_sz) {
+ 			int insn_bytes_sz, insn_bpf_sz;
+@@ -1026,18 +1029,18 @@ int bpf_core_patch_insn(const char *prog_name, st=
+ruct bpf_insn *insn,
+=20
+ 		imm =3D insn[0].imm + ((__u64)insn[1].imm << 32);
+ 		if (res->validate && imm !=3D orig_val) {
+-			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: go=
+t %llu, exp %u -> %u\n",
++			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: go=
+t %llu, exp %llu -> %llu\n",
+ 				prog_name, relo_idx,
+ 				insn_idx, (unsigned long long)imm,
+-				orig_val, new_val);
++				(unsigned long long)orig_val, (unsigned long long)new_val);
+ 			return -EINVAL;
+ 		}
+=20
+ 		insn[0].imm =3D new_val;
+-		insn[1].imm =3D 0; /* currently only 32-bit values are supported */
+-		pr_debug("prog '%s': relo #%d: patched insn #%d (LDIMM64) imm64 %llu -=
+> %u\n",
++		insn[1].imm =3D new_val >> 32;
++		pr_debug("prog '%s': relo #%d: patched insn #%d (LDIMM64) imm64 %llu -=
+> %llu\n",
+ 			 prog_name, relo_idx, insn_idx,
+-			 (unsigned long long)imm, new_val);
++			 (unsigned long long)imm, (unsigned long long)new_val);
+ 		break;
+ 	}
+ 	default:
+@@ -1261,10 +1264,12 @@ int bpf_core_calc_relo_insn(const char *prog_name=
+,
+ 			 * decision and value, otherwise it's dangerous to
+ 			 * proceed due to ambiguity
+ 			 */
+-			pr_warn("prog '%s': relo #%d: relocation decision ambiguity: %s %u !=3D=
+ %s %u\n",
++			pr_warn("prog '%s': relo #%d: relocation decision ambiguity: %s %llu =
+!=3D %s %llu\n",
+ 				prog_name, relo_idx,
+-				cand_res.poison ? "failure" : "success", cand_res.new_val,
+-				targ_res->poison ? "failure" : "success", targ_res->new_val);
++				cand_res.poison ? "failure" : "success",
++				(unsigned long long)cand_res.new_val,
++				targ_res->poison ? "failure" : "success",
++				(unsigned long long)targ_res->new_val);
+ 			return -EINVAL;
+ 		}
+=20
+diff --git a/tools/lib/bpf/relo_core.h b/tools/lib/bpf/relo_core.h
+index 073039d8ca4f..7df0da082f2c 100644
+--- a/tools/lib/bpf/relo_core.h
++++ b/tools/lib/bpf/relo_core.h
+@@ -46,9 +46,9 @@ struct bpf_core_spec {
+=20
+ struct bpf_core_relo_res {
+ 	/* expected value in the instruction, unless validate =3D=3D false */
+-	__u32 orig_val;
++	__u64 orig_val;
+ 	/* new value that needs to be patched up to */
+-	__u32 new_val;
++	__u64 new_val;
+ 	/* relocation unsuccessful, poison instruction, but don't fail load */
+ 	bool poison;
+ 	/* some relocations can't be validated against orig_val */
 --=20
 2.30.2
 
