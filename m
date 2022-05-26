@@ -2,104 +2,147 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C2C2C4332F
-	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:56:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9015C433F5
+	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 19:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348661AbiEZS41 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 May 2022 14:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
+        id S242960AbiEZTP6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 May 2022 15:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348722AbiEZS4X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 May 2022 14:56:23 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D036522E7
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:56:15 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QInvE1022477
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:56:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=qva6/2xAg9ElVHAksJQo7a/qeFCJ8algssTBFifePkE=;
- b=W4StbjW5PkpJILdybRH43j6FLvBdumnAIJ/9X+JiB5mqhl3rjMGSeScM2WHgWvwKNUNr
- PYU8V+SmrHDEhDvE8bEZfOv7z/m65qjdqqd3N+DXRPPES/hoXm2SUaCgkpSVnj4QIg6d
- Myaig01dITibc0lYQUFV7Raps35Jpblt8Lw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ga5x8ux5a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:56:14 -0700
-Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 26 May 2022 11:56:13 -0700
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id CEDBCAD83DF8; Thu, 26 May 2022 11:56:01 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 17/18] selftests/bpf: Clarify llvm dependency with possible selftest failures
-Date:   Thu, 26 May 2022 11:56:01 -0700
-Message-ID: <20220526185601.2552486-1-yhs@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220526185432.2545879-1-yhs@fb.com>
-References: <20220526185432.2545879-1-yhs@fb.com>
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Web3EM7lNUJqjQ9rFXpfPbdiybAyIJch
-X-Proofpoint-GUID: Web3EM7lNUJqjQ9rFXpfPbdiybAyIJch
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S229896AbiEZTP5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 May 2022 15:15:57 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E019CF52
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 12:15:56 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id i74so2543258ioa.4
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 12:15:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=w2dOZ6bp8A3fvOPrCxoccsER/gU+Zt9Vu0OlRdlnzVk=;
+        b=ppMBVwF3Fl6aCd64fY0BRERkvagmDfo7gUlU6cKPwzUCzabLVvjAzKR50NREYxVjQJ
+         kMqUVfUgvg6sH0DhgdPeRzDqB/ZS6Ny+jNAM4smOVkg8VjKg1ckMDdey6RsmSvh91m8S
+         zw/7UxisRe1P5unNuUx4DsEa6R79bPrhe+1h0np1B06jrm3vdbMr6kwcanm+atdzyzy2
+         X2zJlH1Yt/yFNIYaRIfSHy7SuimdM+J2RzeGr+X82MPdpf5ihE0PuRkvzGRgnED6zZoZ
+         wSXjHwObRNXi10RYyKRHVXrIGYWx02ybgTFnS5HL3yJe7TUhyJ0SGW3N8fDIv0QMNswr
+         wPuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=w2dOZ6bp8A3fvOPrCxoccsER/gU+Zt9Vu0OlRdlnzVk=;
+        b=Oo7TbUOyCz1dKvTeY85hJJfADBN6SKfbxyH/V8udNoXpwm9Zkhmw/FdFQF0t2BBlIE
+         KUV90RTaGYmhCPfDvw+ptaaGdZiC8JysOy/RZBtE1QklyGG/Lkq1V2dhPIVaWWaxMd3O
+         Vhd5UeYsWW8VTBGa4I/EYbQd03yQ96w1Ez7EZC5fFVY6TSf6CU8aPmFvgSS8qx0KEBFv
+         xOegeL5rEFEPitWLJMOL4TCoNPSKsJZCGPhMB3TvSM+D9qDy7UL4HbXQ4gLY04iQD/D4
+         rzM/MnuhkhoVouoGtcGYOuY7oXnaIxFIGkJtNVEfqiEIRFh+71uZkOeY1/oUeyBrO8ch
+         sd2w==
+X-Gm-Message-State: AOAM533eE8dGpT4/wkZ8qNs87FONRj/q+1ohP+Me3kiudelD8sBNS7LT
+        vAUryrOqih39UwT0IKlH9RSfbBnJC3sypHrXAZ9lAx7phNMs4Q==
+X-Google-Smtp-Source: ABdhPJzSDKZ9E7b6WBTtlJaA2XJES04mKZ8iM3gar8qhaJxD2tF4SUTOGx27ZIuo07X/BEBOYPfdJIOX4TvDxpZ9/KI=
+X-Received: by 2002:a05:6638:411f:b0:32e:a114:54e with SMTP id
+ ay31-20020a056638411f00b0032ea114054emr15534111jab.82.1653592555258; Thu, 26
+ May 2022 12:15:55 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-26_10,2022-05-25_02,2022-02-23_01
+From:   John Mazzie <john.p.mazzie@gmail.com>
+Date:   Thu, 26 May 2022 14:15:44 -0500
+Message-ID: <CAPxVHd+hHXFjc3DvK0G5RWnLChOTbGXHZp_W-exCE6onCMSRuA@mail.gmail.com>
+Subject: BPF_CORE_READ issue with nvme_submit_cmd kprobe.
+To:     bpf <bpf@vger.kernel.org>,
+        "John Mazzie (jmazzie)" <jmazzie@micron.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Certain subtests in selftests core_reloc and core_reloc_btfgen
-requires llvm ENUM64 support in llvm15. If an older compiler
-is used, these subtests will fail. Make this requirement clear
-in selftests README.rst file.
+While attempting to learn more about BPF and libbpf, I ran into an
+issue I can't quite seem to resolve.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/testing/selftests/bpf/README.rst | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+While writing some tools to practice tracing with libbpf, I came
+across a situation where I get an error when using BPF_CORE_READ,
+which appears to be that CO-RE relocation failed to find a
+corresponding field. Compilation doesn't complain, just when I try to
+execute.
 
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftes=
-ts/bpf/README.rst
-index eb1b7541f39d..a83d78a58014 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -266,3 +266,21 @@ from running test_progs will look like:
-   test_xdpwall:FAIL:Does LLVM have https://reviews.llvm.org/D109073? unexp=
-ected error: -4007
-=20
- __ https://reviews.llvm.org/D109073
-+
-+ENUM64 support and Clang version
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+There are a few selftests requiring LLVM ENUM64 support. The LLVM ENUM64 is
-+introduced in `Clang 15` [0_]. Without proper compiler support, the follow=
-ing selftests
-+will fail:
-+
-+.. code-block:: console
-+
-+  #45 /73    core_reloc/enum64val:FAIL
-+  #45 /74    core_reloc/enum64val___diff:FAIL
-+  #45 /75    core_reloc/enum64val___val3_missing:FAIL
-+  #46 /73    core_reloc_btfgen/enum64val:FAIL
-+  #46 /74    core_reloc_btfgen/enum64val___diff:FAIL
-+  #46 /75    core_reloc_btfgen/enum64val___val3_missing:FAIL
-+
-+.. _0: https://reviews.llvm.org/D124641
---=20
-2.30.2
+Error Message:
+---------------------------------------------
+8: (85) call unknown#195896080
+invalid func unknown#195896080
 
+I'm using the Makefile from libbpf-bootstrap to build my program. The
+other example programs build and execute properly, and I've also
+successfully used tracepoints to trace the nvme_setup_cmd and
+nvme_complete_rq functions. My issue appears to be when I attempt to
+use kprobes for the nvme_submit_cmd function.
+
+In the program I'm attempting to trace the nvme_command structure to
+get the opcode of the command in the function nvme_submit_cmd. I'm
+using Rocky Linux (RedHat based distro) with their kernel version of
+4.18. I verified the structures and interfaces in the source code, vs
+the default 4.18 version of the kernel and made the appropriate
+changes.
+
+traceopcode.bpf.c
+---------------------------------------------
+#include "vmlinux.h"
+#include <bpf/bpf_helpers.h>
+#include <bpf/bpf_tracing.h>
+#include <bpf/bpf_core_read.h>
+#include "traceopcode.h"
+
+char LICENSE[] SEC("license") = "Dual BSD/GPL";
+
+struct {
+    __uint(type, BPF_MAP_TYPE_RINGBUF);
+    __uint(max_entries, 1024 * 1024);
+} ring_buffer SEC(".maps");
+
+struct nvme_common_command {
+    __u8         opcode;
+} __attribute__((preserve_access_index));
+
+struct nvme_command {
+    union {
+        struct nvme_common_command common;
+    };
+} __attribute__((preserve_access_index));
+
+SEC("kprobe/nvme_submit_cmd")
+int BPF_KPROBE(nvme_submit_cmd, void *nvmeq, struct nvme_command *cmd,
+bool write_sq)
+{
+    struct opcode_event *e;
+
+    e = bpf_ringbuf_reserve(&ring_buffer, sizeof(*e), 0);
+    if (!e)
+        return 0;
+
+    e->opcode = BPF_CORE_READ(cmd, common.opcode);
+    //e->opcode = cmd->common.opcode;
+    bpf_ringbuf_submit(e, 0);
+
+   return 0;
+}
+
+
+traceopcode.h
+---------------------------------------------
+#ifndef __TRACEOPCODE_H
+#define __TRACEOPCODE_H
+
+struct opcode_event {
+    __u8 opcode;
+};
+
+#endif
+
+
+My userspace code is basically the same as the bootstrap example, with
+a modification to the handler that just prints out the opcode from the
+opcode_event structure. My guess is that I have some problem with how
+I'm defining the structs that I'm using for nvme_command, as they
+aren't part of vmlinux and need to be defined in my bpf program.
+
+Any help or guidance would be appreciated.
+
+Thanks,
+John Mazzie
