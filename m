@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0147C433F5
-	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B6AEC433EF
+	for <bpf@archiver.kernel.org>; Thu, 26 May 2022 18:55:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347549AbiEZSzH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 May 2022 14:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S1348249AbiEZSzN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 May 2022 14:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348643AbiEZSzG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 May 2022 14:55:06 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63F6C5DBD
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:05 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QIoAml007469
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:05 -0700
+        with ESMTP id S1348543AbiEZSzM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 May 2022 14:55:12 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97DE6C8BF1
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:10 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24QInu0J022421
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=hP7vab3XucXlSSWa1ouRRYC68wbPXsDW1MkLe9PrGH8=;
- b=VBJ8jI7oESeqFUgiJfbMi8U2pUhn/RouOvnd0FzUD6YrLtvKM7sS4i8zXdepAww7kQDo
- tcGiYwwtis0zWPFwYzgOrCEsKYtJBf/PQH109c8Gh7Rc+1SSfazB7AdQNPQNtvqEeY2C
- wUZQwm6Kotbp3wtI0MqDZF4jV3YArvFcTU8= 
+ bh=kDvpRGW+SpeVOM+IJnN/edaiVNHDjr8QfgfbAlc9Isc=;
+ b=Q8lsVNHPLn4bwscCBvKOrqQaBn11rc15HCPB5LzoUTWszHshMBychUY44oglvbFGEORY
+ nDMPQYXaMzd4dQTjNeLQQ4tp5kYB0sCNaa7HZUGZsPNJDNeNEKIVYJFjmtTGcckdDUMn
+ 1QLzuNUUQpGP8uKQqLfEYB1fnCiHpEdkUwY= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g93upqamy-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ga5x8uwxh-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:05 -0700
-Received: from twshared26317.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 26 May 2022 11:55:09 -0700
+Received: from twshared35153.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 26 May 2022 11:55:03 -0700
+ 15.1.2375.28; Thu, 26 May 2022 11:55:08 -0700
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-        id 65C28AD83CE5; Thu, 26 May 2022 11:54:53 -0700 (PDT)
+        id D794EAD83CF5; Thu, 26 May 2022 11:55:03 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 04/18] libbpf: Refactor btf__add_enum() for future code sharing
-Date:   Thu, 26 May 2022 11:54:53 -0700
-Message-ID: <20220526185453.2547758-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 06/18] libbpf: Add enum64 deduplication support
+Date:   Thu, 26 May 2022 11:55:03 -0700
+Message-ID: <20220526185503.2548083-1-yhs@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220526185432.2545879-1-yhs@fb.com>
 References: <20220526185432.2545879-1-yhs@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 9BfGitY6qiyypFuPQKEGt-hSiPsqIdAh
-X-Proofpoint-ORIG-GUID: 9BfGitY6qiyypFuPQKEGt-hSiPsqIdAh
+X-Proofpoint-ORIG-GUID: tFBOGI3Z6qVi-39n3t1ZyOHUg7DMnuCD
+X-Proofpoint-GUID: tFBOGI3Z6qVi-39n3t1ZyOHUg7DMnuCD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-26_10,2022-05-25_02,2022-02-23_01
@@ -58,84 +58,150 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor btf__add_enum() function to create a separate
-function btf_add_enum_common() so later the common function
-can be used to add enum64 btf type. There is no functionality
-change for this patch.
+Add enum64 deduplication support. BTF_KIND_ENUM64 handling
+is very similar to BTF_KIND_ENUM.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/lib/bpf/btf.c | 36 +++++++++++++++++++++---------------
- 1 file changed, 21 insertions(+), 15 deletions(-)
+ tools/lib/bpf/btf.c | 62 +++++++++++++++++++++++++++++++++++++++++++--
+ tools/lib/bpf/btf.h |  5 ++++
+ 2 files changed, 65 insertions(+), 2 deletions(-)
 
 diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index bb1e06eb1eca..9dd7f886732a 100644
+index 3bb6780f710d..78507dfa9fcb 100644
 --- a/tools/lib/bpf/btf.c
 +++ b/tools/lib/bpf/btf.c
-@@ -2115,20 +2115,8 @@ int btf__add_field(struct btf *btf, const char *na=
-me, int type_id,
- 	return 0;
+@@ -3568,7 +3568,7 @@ static bool btf_equal_int_tag(struct btf_type *t1, =
+struct btf_type *t2)
+ 	return info1 =3D=3D info2;
  }
 =20
--/*
-- * Append new BTF_KIND_ENUM type with:
-- *   - *name* - name of the enum, can be NULL or empty for anonymous enu=
-ms;
-- *   - *byte_sz* - size of the enum, in bytes.
-- *
-- * Enum initially has no enum values in it (and corresponds to enum forw=
-ard
-- * declaration). Enumerator values can be added by btf__add_enum_value()
-- * immediately after btf__add_enum() succeeds.
-- *
-- * Returns:
-- *   - >0, type ID of newly added BTF type;
-- *   - <0, on error.
-- */
--int btf__add_enum(struct btf *btf, const char *name, __u32 byte_sz)
-+static int btf_add_enum_common(struct btf *btf, const char *name, __u32 =
-byte_sz,
-+			       bool is_signed, __u8 kind)
+-/* Calculate type signature hash of ENUM. */
++/* Calculate type signature hash of ENUM/ENUM64. */
+ static long btf_hash_enum(struct btf_type *t)
  {
- 	struct btf_type *t;
- 	int sz, name_off =3D 0;
-@@ -2153,12 +2141,30 @@ int btf__add_enum(struct btf *btf, const char *na=
-me, __u32 byte_sz)
-=20
- 	/* start out with vlen=3D0; it will be adjusted when adding enum values=
- */
- 	t->name_off =3D name_off;
--	t->info =3D btf_type_info(BTF_KIND_ENUM, 0, 0);
-+	t->info =3D btf_type_info(kind, 0, is_signed);
- 	t->size =3D byte_sz;
-=20
- 	return btf_commit_type(btf, sz);
+ 	long h;
+@@ -3602,9 +3602,31 @@ static bool btf_equal_enum(struct btf_type *t1, st=
+ruct btf_type *t2)
+ 	return true;
  }
 =20
-+/*
-+ * Append new BTF_KIND_ENUM type with:
-+ *   - *name* - name of the enum, can be NULL or empty for anonymous enu=
-ms;
-+ *   - *byte_sz* - size of the enum, in bytes.
-+ *
-+ * Enum initially has no enum values in it (and corresponds to enum forw=
-ard
-+ * declaration). Enumerator values can be added by btf__add_enum_value()
-+ * immediately after btf__add_enum() succeeds.
-+ *
-+ * Returns:
-+ *   - >0, type ID of newly added BTF type;
-+ *   - <0, on error.
-+ */
-+int btf__add_enum(struct btf *btf, const char *name, __u32 byte_sz)
++static bool btf_equal_enum64(struct btf_type *t1, struct btf_type *t2)
 +{
-+	return btf_add_enum_common(btf, name, byte_sz, false, BTF_KIND_ENUM);
++	const struct btf_enum64 *m1, *m2;
++	__u16 vlen;
++	int i;
++
++	if (!btf_equal_common(t1, t2))
++		return false;
++
++	vlen =3D btf_vlen(t1);
++	m1 =3D btf_enum64(t1);
++	m2 =3D btf_enum64(t2);
++	for (i =3D 0; i < vlen; i++) {
++		if (m1->name_off !=3D m2->name_off || m1->val_lo32 !=3D m2->val_lo32 |=
+|
++		    m1->val_hi32 !=3D m2->val_hi32)
++			return false;
++		m1++;
++		m2++;
++	}
++	return true;
++}
++
+ static inline bool btf_is_enum_fwd(struct btf_type *t)
+ {
+-	return btf_is_enum(t) && btf_vlen(t) =3D=3D 0;
++	return btf_type_is_any_enum(t) && btf_vlen(t) =3D=3D 0;
+ }
+=20
+ static bool btf_compat_enum(struct btf_type *t1, struct btf_type *t2)
+@@ -3617,6 +3639,17 @@ static bool btf_compat_enum(struct btf_type *t1, s=
+truct btf_type *t2)
+ 	       t1->size =3D=3D t2->size;
+ }
+=20
++static bool btf_compat_enum64(struct btf_type *t1, struct btf_type *t2)
++{
++	if (!btf_is_enum_fwd(t1) && !btf_is_enum_fwd(t2))
++		return btf_equal_enum64(t1, t2);
++
++	/* ignore vlen when comparing */
++	return t1->name_off =3D=3D t2->name_off &&
++	       (t1->info & ~0xffff) =3D=3D (t2->info & ~0xffff) &&
++	       t1->size =3D=3D t2->size;
 +}
 +
  /*
-  * Append new enum value for the current ENUM type with:
-  *   - *name* - name of the enumerator value, can't be NULL or empty;
+  * Calculate type signature hash of STRUCT/UNION, ignoring referenced ty=
+pe IDs,
+  * as referenced type IDs equivalence is established separately during t=
+ype
+@@ -3829,6 +3862,7 @@ static int btf_dedup_prep(struct btf_dedup *d)
+ 			h =3D btf_hash_int_decl_tag(t);
+ 			break;
+ 		case BTF_KIND_ENUM:
++		case BTF_KIND_ENUM64:
+ 			h =3D btf_hash_enum(t);
+ 			break;
+ 		case BTF_KIND_STRUCT:
+@@ -3918,6 +3952,27 @@ static int btf_dedup_prim_type(struct btf_dedup *d=
+, __u32 type_id)
+ 		}
+ 		break;
+=20
++	case BTF_KIND_ENUM64:
++		h =3D btf_hash_enum(t);
++		for_each_dedup_cand(d, hash_entry, h) {
++			cand_id =3D (__u32)(long)hash_entry->value;
++			cand =3D btf_type_by_id(d->btf, cand_id);
++			if (btf_equal_enum64(t, cand)) {
++				new_id =3D cand_id;
++				break;
++			}
++			if (btf_compat_enum64(t, cand)) {
++				if (btf_is_enum_fwd(t)) {
++					/* resolve fwd to full enum */
++					new_id =3D cand_id;
++					break;
++				}
++				/* resolve canonical enum fwd to full enum */
++				d->map[cand_id] =3D type_id;
++			}
++		}
++		break;
++
+ 	case BTF_KIND_FWD:
+ 	case BTF_KIND_FLOAT:
+ 		h =3D btf_hash_common(t);
+@@ -4213,6 +4268,9 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, =
+__u32 cand_id,
+ 	case BTF_KIND_ENUM:
+ 		return btf_compat_enum(cand_type, canon_type);
+=20
++	case BTF_KIND_ENUM64:
++		return btf_compat_enum64(cand_type, canon_type);
++
+ 	case BTF_KIND_FWD:
+ 	case BTF_KIND_FLOAT:
+ 		return btf_equal_common(cand_type, canon_type);
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index a41463bf9060..b22c648c69ff 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -531,6 +531,11 @@ static inline bool btf_is_type_tag(const struct btf_=
+type *t)
+ 	return btf_kind(t) =3D=3D BTF_KIND_TYPE_TAG;
+ }
+=20
++static inline bool btf_type_is_any_enum(const struct btf_type *t)
++{
++	return btf_is_enum(t) || btf_is_enum64(t);
++}
++
+ static inline __u8 btf_int_encoding(const struct btf_type *t)
+ {
+ 	return BTF_INT_ENCODING(*(__u32 *)(t + 1));
 --=20
 2.30.2
 
