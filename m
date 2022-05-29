@@ -2,110 +2,193 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD902C433F5
-	for <bpf@archiver.kernel.org>; Sun, 29 May 2022 20:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB4AC433EF
+	for <bpf@archiver.kernel.org>; Sun, 29 May 2022 22:06:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiE2UQE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 29 May 2022 16:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S231877AbiE2WGa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 29 May 2022 18:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiE2UQE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 29 May 2022 16:16:04 -0400
+        with ESMTP id S230326AbiE2WG2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 29 May 2022 18:06:28 -0400
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D6854BD7;
-        Sun, 29 May 2022 13:16:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id C61105C0097;
-        Sun, 29 May 2022 16:15:59 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79537980D;
+        Sun, 29 May 2022 15:06:26 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id CDFB45C00DF;
+        Sun, 29 May 2022 18:06:25 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 29 May 2022 16:15:59 -0400
+  by compute2.internal (MEProxy); Sun, 29 May 2022 18:06:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1653855359; x=1653941759; bh=4yxj77r4xtmn7VVg4M5Kx65OM
-        Vx5pZUm+BegY1jUTqs=; b=qFVVB8EdYI/9IgSbYsKayEAOkKTcupcNibIro0Pal
-        g7jYea+fwsEFrbRG0ohFwgecGlaDmIy/v62MH/qHJlTITYpMRNnzXtHCT3ygObbQ
-        uR2vFjbUpSB7Nbs+kbbLR2kNTQyj2VXK4yPyRdwT4/zjTztVHoof3Fgh6s5IuuCV
-        Aig+8kVMX+/UA7emAZQeTHlJJgf3KTxLnTJtn1ex/sXPt1JabvoXF6AA63Wqf8Uf
-        f39+cvq9craC6HTwYCJQqm/M7GyGQOYbr6oW0jJ+UKWFVbEI0LvyFs9sd6yhdfym
-        NxBEYL6guLuwxZqlS8yU0i8ZgCwCuT170POLZT63pon0g==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1653861985; x=1653948385; bh=o5
+        Io0TbLicI9bF16Sf8cW9EWMZ3JMY7fjlIo1Z3Xc7o=; b=SBDRcitWGQXvRvn+aO
+        Wrd50+ZmOERLrrs5kT5xhO7yukm6NrgDpKs2fvhNvuGDsZq2q9a1t8GcJuDP7exV
+        O12nPS9pjKTtZacs6aVEeJd5HLlsAZ4DZoLnibt2z08kw7Ca0jXjcub7lkPD1zvk
+        3W5QB+bC8t03gtTkxQaCRDdiwUeFt996+Og63uFjNpGjvZXWmYsAwc6UfGLO+OCA
+        WR1F/yK/UFMrVzWrS/7VNbaprMSy3hTten0cRF0F0zQj0cRSnG5eeFCag0wrkvkh
+        DJVSet7gYpj6IOm54B4r3R8lHk/A1oboIGHty/mtEjkDOfkGZZZxpsG4MLupqhil
+        T9dw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1653855359; x=1653941759; bh=4yxj77r4xtmn7VVg4M5Kx65OMVx5pZUm+Be
-        gY1jUTqs=; b=x65kk18DVeSJm9vKbbAAYk+W6Ho3liePfwKiHAZBH6nWyDk8Jvw
-        4TO5VHYi1lijUQD5RjcjMpdFXS6cG6gme/vvK2eyNEC3uUP/3nqLBVqLJy0/jUpF
-        dN8TSdoC1bTfHF/LrdxFFUIbOwMBqFBTe4NBnREucKTNTt1AAMEPI6ueVaWkJJ8O
-        wZNhCbUczxExfq4BmovbpU6qfNEygM/+Ji17y6LAv9cnm4yXmmYqQheLxAgsFDZ0
-        2Zib/oT5CuKdYoYPxvLAH36DJywIvkDPRvI0dTrDPUcirfWQunI8enQC0kdYcVqm
-        cRW3AcYo3VKyO2oDRtmWXDRONESTOdXt2mA==
-X-ME-Sender: <xms:f9STYvKa3KrRDyaZGZOLlpkhiouPRsGkclMybPRqhUxcIIuW6ud4pQ>
-    <xme:f9STYjKBMe4Wgd-D5YkECJIFERka1a8vxivlYsqpvY7zySDcKRjuh1bSr9N3h2bqT
-    sAvDW-OdMkkX3fLfw>
-X-ME-Received: <xmr:f9STYntGn1LUp2GJ72Vp4O_8AVwYkvjyDUv3uUvoF1AQyOzl01FMDIfDxiB2aUoo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeeggddugeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
-    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
-    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvdeggfetgfelhefhueefke
-    duvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:f9STYobwai9dcQuLeUHni-PPXrL40xEBTlohxdZ6YW1WeLlowbN6OQ>
-    <xmx:f9STYmaRbHC7akBeIj5zolO1BpTOiBAslce8sU8y63789WzSRs__0w>
-    <xmx:f9STYsAoyme5Vx15GHrYEfMzqH55pDwg2sYGrUpuISM0JlmNfVS8Rg>
-    <xmx:f9STYtXcqmSPTF6pTsDj5jskbBw12Qz98BplBA0G-Qv5BscO-fJorw>
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1653861985; x=1653948385; bh=o5Io0TbLicI9b
+        F16Sf8cW9EWMZ3JMY7fjlIo1Z3Xc7o=; b=jKBR/C6gzd+WaOh+plsLpqQ4IZX91
+        po4sRDtLHDVzPpWLUDypf26UcKO3eYhP2r5df6O1f/+y4zChNQRFWSoYVarQUkHd
+        9YyYoFu48wB1CSUGaH5GjRaZPUQaizidYxs/t1rKSwtoFPn2Gs8eBrmysLww573S
+        qlhFgjSfJpKbLX5dQQbpcUG8okeXYDVA1q32s6aIlLS0P+9AAeKUQJy+vwTPQTpw
+        ZVSqvu7d7CsrXqlDMT7dow6knq0+8VMXsmbWu6bMAH75/wnnI0ETZ1eq/FAMx3Zt
+        LZGiVMgbzt1dFA3ml3dqiF2YTqFWnd3lgNa0I1524DUku1jD5IoBHTWtQ==
+X-ME-Sender: <xms:Ye6TYqpSNXlAXoBi5FscljcWhdCj2rJU1B16jeOEoXXhu-xcZnLlig>
+    <xme:Ye6TYooKp2xHRVGkUbuzsbKaWdhVcXTzMsjsL8CVmlBEXJc1hxi7w6QkgNkcM4I4j
+    Qcj46rDBWkB-AzyKw>
+X-ME-Received: <xmr:Ye6TYvPQL7G52Rc4zVt8b7dw7f-KtCzCFsjy4jVLr1gp8wSEdLvB_jwjSay7Fb4K>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrkeehgddtgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephffvve
+    fufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduieekvd
+    euteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:Ye6TYp61_QX39yfiYcoIAUXVRvrFDScWUR6A74xVo-1MGJVLkW69Pw>
+    <xmx:Ye6TYp4MHixciA3eVXTp9MET5f8Z8SfCdqGY_34LRIMr7aDGfzrgEw>
+    <xmx:Ye6TYpjvr-7f1zlA1iGoIMzUkrguSqVaHGWvPbLxm3w0HXMV2aMI4Q>
+    <xmx:Ye6TYs3dFnlPC6yHANyfVe6ujcmV1GphzdPWxgacQXTc4AydgI8f0Q>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 29 May 2022 16:15:58 -0400 (EDT)
+ 29 May 2022 18:06:25 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
 To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org
 Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpf, test_run: Remove unnecessary prog type checks
-Date:   Sun, 29 May 2022 15:15:41 -0500
-Message-Id: <0a9aaac329f76ddb17df1786b001117823ffefa5.1653855302.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add PROG_TEST_RUN selftest for BPF_PROG_TYPE_KPROBE
+Date:   Sun, 29 May 2022 17:06:06 -0500
+Message-Id: <a8f5faada9b96218d79beb7b7ddebe6a837a5536.1653861287.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1653861287.git.dxu@dxuuu.xyz>
+References: <cover.1653861287.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These checks were effectively noops b/c there's only one way these
-functions get called: through prog_ops dispatching. And since there's no
-other callers, we can be sure that `prog` is always the correct type.
+This commit adds a selftest to test that we can both PROG_TEST_RUN a
+kprobe prog and set its context.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- net/bpf/test_run.c | 6 ------
- 1 file changed, 6 deletions(-)
+ .../selftests/bpf/prog_tests/kprobe_ctx.c     | 57 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/kprobe_ctx.c  | 33 +++++++++++
+ 2 files changed, 90 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kprobe_ctx.c
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 56f059b3c242..2ca96acbc50a 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1420,9 +1420,6 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	void *data;
- 	int ret;
- 
--	if (prog->type != BPF_PROG_TYPE_FLOW_DISSECTOR)
--		return -EINVAL;
--
- 	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
- 		return -EINVAL;
- 
-@@ -1487,9 +1484,6 @@ int bpf_prog_test_run_sk_lookup(struct bpf_prog *prog, const union bpf_attr *kat
- 	u32 retval, duration;
- 	int ret = -EINVAL;
- 
--	if (prog->type != BPF_PROG_TYPE_SK_LOOKUP)
--		return -EINVAL;
--
- 	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
- 		return -EINVAL;
- 
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c b/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
+new file mode 100644
+index 000000000000..260966fd4506
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_ctx.c
+@@ -0,0 +1,57 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <linux/ptrace.h>
++#include "kprobe_ctx.skel.h"
++
++/*
++ * x86_64 happens to be one of the architectures that exports the
++ * kernel `struct pt_regs` to userspace ABI. For the architectures
++ * that don't, users will have to extract `struct pt_regs` from vmlinux
++ * BTF in order to use BPF_PROG_TYPE_KPROBE's BPF_PROG_RUN functionality.
++ *
++ * We choose to only test x86 here to keep the test simple.
++ */
++void test_kprobe_ctx(void)
++{
++#ifdef __x86_64__
++	struct pt_regs regs = {
++		.rdi = 1,
++		.rsi = 2,
++		.rdx = 3,
++		.rcx = 4,
++		.r8 = 5,
++	};
++
++	LIBBPF_OPTS(bpf_test_run_opts, tattr,
++		.ctx_in = &regs,
++		.ctx_size_in = sizeof(regs),
++	);
++
++	struct kprobe_ctx *skel = NULL;
++	int prog_fd;
++	int err;
++
++	skel = kprobe_ctx__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open"))
++		return;
++
++	skel->bss->expected_p1 = (void *)1;
++	skel->bss->expected_p2 = (void *)2;
++	skel->bss->expected_p3 = (void *)3;
++	skel->bss->expected_p4 = (void *)4;
++	skel->bss->expected_p5 = (void *)5;
++
++	prog_fd = bpf_program__fd(skel->progs.prog);
++	err = bpf_prog_test_run_opts(prog_fd, &tattr);
++	if (!ASSERT_OK(err, "bpf_prog_test_run"))
++		goto cleanup;
++
++	if (!ASSERT_TRUE(skel->bss->ret, "ret"))
++		goto cleanup;
++
++	if (!ASSERT_GT(tattr.duration, 0, "duration"))
++		goto cleanup;
++cleanup:
++	kprobe_ctx__destroy(skel);
++#endif
++}
+diff --git a/tools/testing/selftests/bpf/progs/kprobe_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_ctx.c
+new file mode 100644
+index 000000000000..98063c549930
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kprobe_ctx.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++volatile void *expected_p1;
++volatile void *expected_p2;
++volatile void *expected_p3;
++volatile void *expected_p4;
++volatile void *expected_p5;
++volatile bool ret = false;
++
++SEC("kprobe/this_function_does_not_exist")
++int prog(struct pt_regs *ctx)
++{
++	void *p1, *p2, *p3, *p4, *p5;
++
++	p1 = (void *)PT_REGS_PARM1(ctx);
++	p2 = (void *)PT_REGS_PARM2(ctx);
++	p3 = (void *)PT_REGS_PARM3(ctx);
++	p4 = (void *)PT_REGS_PARM4(ctx);
++	p5 = (void *)PT_REGS_PARM5(ctx);
++
++	if (p1 != expected_p1 || p2 != expected_p2 || p3 != expected_p3 ||
++	    p4 != expected_p4 || p5 != expected_p5)
++		return 0;
++
++	ret = true;
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.36.1
 
