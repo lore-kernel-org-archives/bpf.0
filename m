@@ -2,49 +2,49 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A7DEC433EF
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 13:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B28C7C55187
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 14:21:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238824AbiE3N6p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S237519AbiE3OVV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 10:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239541AbiE3N4s (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 09:56:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D4D972AC;
-        Mon, 30 May 2022 06:38:40 -0700 (PDT)
+        with ESMTP id S241079AbiE3ORM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 10:17:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91478110470;
+        Mon, 30 May 2022 06:44:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AE5EB80DAD;
-        Mon, 30 May 2022 13:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0A1C385B8;
-        Mon, 30 May 2022 13:38:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69167B80DC4;
+        Mon, 30 May 2022 13:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE19C385B8;
+        Mon, 30 May 2022 13:44:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917918;
-        bh=6t5NeJu6yyqi32lyvzzECvUispiw6aNCFOACj0b6dmQ=;
+        s=k20201202; t=1653918254;
+        bh=EI6kyMEv2r+oMfMB12oZQKomnwfH3xTNuKb7+f/Swr4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YCT/ysQrzg+vPV9TNDk6hv8C05K9J/jv+OIpd4BGQB0fhU7hhELmMHVYwRL1PtJ1a
-         xXqJvdIR9QJNn3IaMeW5Z4lksmlgSz6nltTTXPnjpJ0HxeSbkWI4/kP2TMGvr51Gic
-         k3knXptE/mij1dJ8Pci282AOLKYKYm0T5FdsQkbs2yC8gJ93u3Uuq9OcQrTm9hErMY
-         eMw3U3vG0tz182fPa8xd/csBR7FAleW1ImRbRvZOR6L/nuTXRNF4CQABdNamG9z/Ri
-         nIwm6+68V2wNk/RToB0WbY8TvoEuaBjQzjvZcMiwiCAurU/FscyvB04rflVKnnQJRQ
-         r2EEm04ZInVRg==
+        b=AeutlHaByfHlZEzwH5aurbO+18DCiz5avlVv568IS/fu1T06ZhwPd19HM8AZDTD71
+         We29Kitj6z+J9r3NImbQsSUT+80aoaBIQBPCcdQMcPS8TdWxCxYx8iYZoF0WOl4a2s
+         LFzJMSwNX9N1b6o+ndTIeuEYuaoQ09H5fo9Izv3IcysLvyVhtcTKbxzQDOFycAYpnZ
+         trj8yIYoZnfvWWHVV4t0V6K7PtKiUTaJ0KU62cOykC9vHkWyVotcJ8IdNaIzyeiwWV
+         iPmzSkn9uk/dl2w87ml1yTsd4sxQyeGzn5UHqZxa8rleg3iwel5AiY15oGYbUDbpvT
+         49PIysjHI9W2Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quentin Monnet <quentin@isovalent.com>,
+Cc:     Nikolay Borisov <nborisov@suse.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         ast@kernel.org, daniel@iogearbox.net,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 005/109] selftests/bpf: Fix parsing of prog types in UAPI hdr for bpftool sync
-Date:   Mon, 30 May 2022 09:36:41 -0400
-Message-Id: <20220530133825.1933431-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 03/76] selftests/bpf: Fix vfs_link kprobe definition
+Date:   Mon, 30 May 2022 09:42:53 -0400
+Message-Id: <20220530134406.1934928-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
-References: <20220530133825.1933431-1-sashal@kernel.org>
+In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
+References: <20220530134406.1934928-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,46 +53,41 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Quentin Monnet <quentin@isovalent.com>
+From: Nikolay Borisov <nborisov@suse.com>
 
-[ Upstream commit 4eeebce6ac4ad80ee8243bb847c98e0e55848d47 ]
+[ Upstream commit e299bcd4d16ff86f46c48df1062c8aae0eca1ed8 ]
 
-The script for checking that various lists of types in bpftool remain in
-sync with the UAPI BPF header uses a regex to parse enum bpf_prog_type.
-If this enum contains a set of values different from the list of program
-types in bpftool, it complains.
+Since commit 6521f8917082 ("namei: prepare for idmapped mounts")
+vfs_link's prototype was changed, the kprobe definition in
+profiler selftest in turn wasn't updated. The result is that all
+argument after the first are now stored in different registers. This
+means that self-test has been broken ever since. Fix it by updating the
+kprobe definition accordingly.
 
-This script should have reported the addition, some time ago, of the new
-BPF_PROG_TYPE_SYSCALL, which was not reported to bpftool's program types
-list. It failed to do so, because it failed to parse that new type from
-the enum. This is because the new value, in the BPF header, has an
-explicative comment on the same line, and the regex does not support
-that.
-
-Let's update the script to support parsing enum values when they have
-comments on the same line.
-
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Signed-off-by: Nikolay Borisov <nborisov@suse.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220404140944.64744-1-quentin@isovalent.com
+Link: https://lore.kernel.org/bpf/20220331140949.1410056-1-nborisov@suse.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_bpftool_synctypes.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/profiler.inc.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-index be54b7335a76..5717db4e0862 100755
---- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-+++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-@@ -172,7 +172,7 @@ class FileExtractor(object):
-         @enum_name: name of the enum to parse
-         """
-         start_marker = re.compile(f'enum {enum_name} {{\n')
--        pattern = re.compile('^\s*(BPF_\w+),?$')
-+        pattern = re.compile('^\s*(BPF_\w+),?(\s+/\*.*\*/)?$')
-         end_marker = re.compile('^};')
-         parser = BlockParser(self.reader)
-         parser.search_block(start_marker)
+diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
+index 4896fdf816f7..92331053dba3 100644
+--- a/tools/testing/selftests/bpf/progs/profiler.inc.h
++++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
+@@ -826,8 +826,9 @@ int kprobe_ret__do_filp_open(struct pt_regs* ctx)
+ 
+ SEC("kprobe/vfs_link")
+ int BPF_KPROBE(kprobe__vfs_link,
+-	       struct dentry* old_dentry, struct inode* dir,
+-	       struct dentry* new_dentry, struct inode** delegated_inode)
++	       struct dentry* old_dentry, struct user_namespace *mnt_userns,
++	       struct inode* dir, struct dentry* new_dentry,
++	       struct inode** delegated_inode)
+ {
+ 	struct bpf_func_stats_ctx stats_ctx;
+ 	bpf_stats_enter(&stats_ctx, profiler_bpf_vfs_link);
 -- 
 2.35.1
 
