@@ -2,44 +2,47 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD199C4321E
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 13:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A704C38A2C
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 13:57:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234370AbiE3Nrq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 09:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S234929AbiE3N52 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 09:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238093AbiE3No0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 09:44:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70519B1B2;
-        Mon, 30 May 2022 06:32:20 -0700 (PDT)
+        with ESMTP id S239428AbiE3N4h (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 09:56:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BB495DC4;
+        Mon, 30 May 2022 06:38:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43AF0B80DB7;
-        Mon, 30 May 2022 13:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB99C3411E;
-        Mon, 30 May 2022 13:32:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9712460F7B;
+        Mon, 30 May 2022 13:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3739DC385B8;
+        Mon, 30 May 2022 13:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917538;
-        bh=GqappdJ46XNiKfc/847FHFLyVCNgfObnyezwpSKixLM=;
+        s=k20201202; t=1653917902;
+        bh=cYbqQ0dMuwCZflYozzYeRbTkmB9Hzvvc14PryXL08Gw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pqyr/X1EWzEiHM7piiNBm4WZuhNMrubRRVTWOs21m4mO90Bm68sHk038E9rj1MK52
-         R9fqBGl3FdjAyTVR6PoYQlEcNsGdiL6bKfAeyFIFc6YY6axvG7mBVR19rQhq7S73W0
-         Q9caREOQNzBwhQwQYRSVrB0mATVtkR5cuY34poCmUekRgDF18IpGWqvAp/sTI75NBg
-         ZuMaLXbcO8DhRPjlD5AzMThd9r+HFZriOaS0js9IRCA5zf2EaRI37aOVmF+/oImU5+
-         o9kM/GtM/sVvH+jYY1b1qzjDZev2x4A0LdfR0xCaYrif1rf+Nkp9GRHxP7o4Bnu+s1
-         VQ8q8HLI0ysBA==
+        b=GUHhJ6KAF70VyGGHb4xkxBm/kIufPH+BnaT57GbFGMMJ7GN9wI7UJQ4jAmS36eSlT
+         7Hrp8faOumS4WVHEQXIKobm7KRXVKZ0IO50FDMRrrVO3X6ecEg0T3I5b/xuUpOrMVp
+         nxp6WYb5/JIfJlLcCnsOZtIH9+GG4zhx/W2LBPFgrn1YG196bx/uxiwAs97UffUeRg
+         kZGWPi5gJULZKcJjA9yWu/WWBnRr/LDBHa8KxWy0iLHZgZ4AK8tcp54pugJM5s8yjZ
+         uNGqeaVwjr4hImZAInFU78EhBmF2TL46T+vZ3bTFYwtYLYYnJt6bG3LTpWzMYcNyDV
+         A9j/LUo0oj+/w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Runqing Yang <rainkin1993@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 016/135] libbpf: Fix a bug with checking bpf_probe_read_kernel() support in old kernels
-Date:   Mon, 30 May 2022 09:29:34 -0400
-Message-Id: <20220530133133.1931716-16-sashal@kernel.org>
+Cc:     Yonghong Song <yhs@fb.com>, Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, sunyucong@gmail.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.17 134/135] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
+Date:   Mon, 30 May 2022 09:31:32 -0400
+Message-Id: <20220530133133.1931716-134-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530133133.1931716-1-sashal@kernel.org>
 References: <20220530133133.1931716-1-sashal@kernel.org>
@@ -51,75 +54,87 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Runqing Yang <rainkin1993@gmail.com>
+From: Yonghong Song <yhs@fb.com>
 
-[ Upstream commit d252a4a499a07bec21c65873f605c3a1ef52ffed ]
+[ Upstream commit 4050764cbaa25760aab40857f723393c07898474 ]
 
-Background:
-Libbpf automatically replaces calls to BPF bpf_probe_read_{kernel,user}
-[_str]() helpers with bpf_probe_read[_str](), if libbpf detects that
-kernel doesn't support new APIs. Specifically, libbpf invokes the
-probe_kern_probe_read_kernel function to load a small eBPF program into
-the kernel in which bpf_probe_read_kernel API is invoked and lets the
-kernel checks whether the new API is valid. If the loading fails, libbpf
-considers the new API invalid and replaces it with the old API.
+Latest llvm-project upstream had a change of behavior
+related to qualifiers on function return type ([1]).
+This caused selftests btf_dump/btf_dump failure.
+The following example shows what changed.
 
-static int probe_kern_probe_read_kernel(void)
-{
-	struct bpf_insn insns[] = {
-		BPF_MOV64_REG(BPF_REG_1, BPF_REG_10),	/* r1 = r10 (fp) */
-		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, -8),	/* r1 += -8 */
-		BPF_MOV64_IMM(BPF_REG_2, 8),		/* r2 = 8 */
-		BPF_MOV64_IMM(BPF_REG_3, 0),		/* r3 = 0 */
-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_probe_read_kernel),
-		BPF_EXIT_INSN(),
-	};
-	int fd, insn_cnt = ARRAY_SIZE(insns);
+  $ cat t.c
+  typedef const char * const (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
+  struct t {
+    int a;
+    fn_ptr_arr2_t l;
+  };
+  int foo(struct t *arg) {
+    return arg->a;
+  }
 
-	fd = bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL,
-                           "GPL", insns, insn_cnt, NULL);
-	return probe_fd(fd);
-}
+Compiled with latest upstream llvm15,
+  $ clang -O2 -g -target bpf -S -emit-llvm t.c
+The related generated debuginfo IR looks like:
+  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
+  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !32)
+  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
+  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
+  !20 = !DISubroutineType(types: !21)
+  !21 = !{!22, null}
+  !22 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !23, size: 64)
+  !23 = !DISubroutineType(types: !24)
+  !24 = !{!25, !28}
+  !25 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !26, size: 64)
+  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
+  !27 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+You can see two intermediate const qualifier to pointer are dropped in debuginfo IR.
 
-Bug:
-On older kernel versions [0], the kernel checks whether the version
-number provided in the bpf syscall, matches the LINUX_VERSION_CODE.
-If not matched, the bpf syscall fails. eBPF However, the
-probe_kern_probe_read_kernel code does not set the kernel version
-number provided to the bpf syscall, which causes the loading process
-alwasys fails for old versions. It means that libbpf will replace the
-new API with the old one even the kernel supports the new one.
+With llvm14, we have following debuginfo IR:
+  !16 = !DIDerivedType(tag: DW_TAG_typedef, name: "fn_ptr_arr2_t", file: !1, line: 1, baseType: !17)
+  !17 = !DICompositeType(tag: DW_TAG_array_type, baseType: !18, size: 320, elements: !34)
+  !18 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !19)
+  !19 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !20, size: 64)
+  !20 = !DISubroutineType(types: !21)
+  !21 = !{!22, null}
+  !22 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !23)
+  !23 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !24, size: 64)
+  !24 = !DISubroutineType(types: !25)
+  !25 = !{!26, !30}
+  !26 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !27)
+  !27 = !DIDerivedType(tag: DW_TAG_pointer_type, baseType: !28, size: 64)
+  !28 = !DIDerivedType(tag: DW_TAG_const_type, baseType: !29)
+  !29 = !DIBasicType(name: "char", size: 8, encoding: DW_ATE_signed_char)
+All const qualifiers are preserved.
 
-Solution:
-After a discussion in [1], the solution is using BPF_PROG_TYPE_TRACEPOINT
-program type instead of BPF_PROG_TYPE_KPROBE because kernel does not
-enfoce version check for tracepoint programs. I test the patch in old
-kernels (4.18 and 4.19) and it works well.
+To adapt the selftest to both old and new llvm, this patch removed
+the intermediate const qualifier in const-to-ptr types, to make the
+test succeed again.
 
-  [0] https://elixir.bootlin.com/linux/v4.19/source/kernel/bpf/syscall.c#L1360
-  [1] Closes: https://github.com/libbpf/libbpf/issues/473
+  [1] https://reviews.llvm.org/D125919
 
-Signed-off-by: Runqing Yang <rainkin1993@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220409144928.27499-1-rainkin1993@gmail.com
+Reported-by: Mykola Lysenko <mykolal@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20220523152044.3905809-1-yhs@fb.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 2 +-
+ tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 94a6a8543cbc..41515a770e3a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -4564,7 +4564,7 @@ static int probe_kern_probe_read_kernel(void)
- 	};
- 	int fd, insn_cnt = ARRAY_SIZE(insns);
+diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+index 1c7105fcae3c..4ee4748133fe 100644
+--- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
++++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
+@@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
  
--	fd = bpf_prog_load(BPF_PROG_TYPE_KPROBE, NULL, "GPL", insns, insn_cnt, NULL);
-+	fd = bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
- 	return probe_fd(fd);
- }
+ typedef char * (*fn_ptr_arr1_t[10])(int **);
  
+-typedef char * (* const (* const fn_ptr_arr2_t[5])())(char * (*)(int));
++typedef char * (* (* const fn_ptr_arr2_t[5])())(char * (*)(int));
+ 
+ struct struct_w_typedefs {
+ 	int_t a;
 -- 
 2.35.1
 
