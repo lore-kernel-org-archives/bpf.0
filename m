@@ -2,63 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F525C433FE
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 09:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB307C433F5
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 10:02:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiE3Jcu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 05:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S231781AbiE3KCD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 06:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiE3Jcs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 05:32:48 -0400
-X-Greylist: delayed 391 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 30 May 2022 02:32:47 PDT
-Received: from mail.blowncase.pl (mail.blowncase.pl [51.254.119.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD3526AFC
-        for <bpf@vger.kernel.org>; Mon, 30 May 2022 02:32:46 -0700 (PDT)
-Received: by mail.blowncase.pl (Postfix, from userid 1002)
-        id 94C6722785; Mon, 30 May 2022 09:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=blowncase.pl; s=mail;
-        t=1653902773; bh=lAA6x4vlwsZbBwtYK0Ria4xWnqSCnc02eqE3RKs7jUM=;
-        h=Date:From:To:Subject:From;
-        b=qtIQL63VqoJKh5eS1AxWeWMjQOzG0VzC1xDw2e0kOgAyWtYcEIK413dtfwLaKsjZp
-         Tgr5jvrodlexshuauHi7FdQjSRyWpcSyOtU/p3kadMwWJP8DnKsgji5QX36eJ+ix9r
-         e/9pt0C62Y7RakEiRxEiSXr0InSFpDxjNnCvXPka+KiPMBv8gxuX6Tnls9OoMoDnJk
-         vnFLIvlGOXKV4vgG9qzOeIFkr96g8bgWqr1NuM0ndtbhfgEN3JttE/Xi2sTyh5R1bf
-         2bXTLrg0qxQSnDuK3VJ/beDFJW5yULN/G9H54f+gHesr+9gPSaDOVOKQ6IDL97g8vW
-         TWbYEMEjhuiaw==
-Received: by mail.blowncase.pl for <bpf@vger.kernel.org>; Mon, 30 May 2022 09:26:03 GMT
-Message-ID: <20220530090056-0.1.j.2ndr.0.prrd2a6lqi@blowncase.pl>
-Date:   Mon, 30 May 2022 09:26:03 GMT
-From:   "Andrzej Biesiedny" <andrzej.biesiedny@blowncase.pl>
-To:     <bpf@vger.kernel.org>
-Subject: Reorganizacja przestrzeni magazynowej
-X-Mailer: mail.blowncase.pl
+        with ESMTP id S235047AbiE3KB4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 06:01:56 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE79F793B1;
+        Mon, 30 May 2022 03:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653904915; x=1685440915;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eWFXU1FqNlG5B/9DM+yltZRjaMGGPd6zhl4yLDxNnVE=;
+  b=ZTMjp5ZcNyAUNbVF6UaKAO3B4Si8hz68sYaSITRT8Ql3+vbeYBBDZPXL
+   JpmRsOJpTwxgEfkvIixEfISFDy9D2o3Uqy9vIh5rBJhQtWXD+ZfD41Rxw
+   b950PO7QxHn/tlaw2KtQ/hbbA7uURNVCcPnGGjwpsrelhh3/IlqGaD6H6
+   PQcK3GDN6gps4eYaiPMOsjdpRaj4gsXdeO+Gp74ba6ls5kMqD56qGYkhS
+   iO+lvJIXSBj6XuUM61SnMH8Hznu8Nmayb2Rl+teAuW/kWKwPaPy9sMgP6
+   EvGO58ouJRlENHqDfkqGwt/SXxW6vSrHmRHMHsi4fArhB0FH3VB7aCmZk
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10362"; a="273772964"
+X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
+   d="scan'208";a="273772964"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 May 2022 03:01:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,262,1647327600"; 
+   d="scan'208";a="644564836"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 30 May 2022 03:01:48 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nvcDb-0001eE-Mo;
+        Mon, 30 May 2022 10:01:47 +0000
+Date:   Mon, 30 May 2022 18:01:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     menglong8.dong@gmail.com, kuba@kernel.org
+Cc:     kbuild-all@lists.01.org, rostedt@goodmis.org, mingo@redhat.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        nhorman@tuxdriver.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/3] net: skb: use auto-generation to convert
+ skb drop reason to string
+Message-ID: <202205301730.inNRSOxX-lkp@intel.com>
+References: <20220530081201.10151-3-imagedong@tencent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220530081201.10151-3-imagedong@tencent.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
+Hi,
 
-czy poszukuj=C4=85 Pa=C5=84stwo rega=C5=82=C3=B3w magazynowych, kt=C3=B3r=
-e pozwol=C4=85 Pa=C5=84stwu odpowiednio zagospodarowa=C4=87 i ca=C5=82o=C5=
-=9Bciowo wykorzysta=C4=87 przestrze=C5=84 hali?=20
+Thank you for the patch! Perhaps something to improve:
 
-Chcia=C5=82bym zaproponowa=C4=87 Pa=C5=84stwu wytrzyma=C5=82e i stabilne =
-rega=C5=82y, szafy oraz pojemniki, a tak=C5=BCe skrzyniopalety i kontener=
-y samowy=C5=82adowcze.
+[auto build test WARNING on net-next/master]
 
-Nasze systemy magazynowe pozwalaj=C4=85 na bezpieczne sk=C5=82adowanie to=
-war=C3=B3w, produkt=C3=B3w i p=C3=B3=C5=82fabrykat=C3=B3w oraz gwarantuj=C4=
-=85 efektywne wykorzystanie dost=C4=99pnej przestrzeni.=20
+url:    https://github.com/intel-lab-lkp/linux/commits/menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 7e062cda7d90543ac8c7700fc7c5527d0c0f22ad
+config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220530/202205301730.inNRSOxX-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review menglong8-dong-gmail-com/reorganize-the-code-of-the-enum-skb_drop_reason/20220530-161614
+        git checkout 73e3b002fb9086fc734ba4dcc3041f9bb56eb1a2
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 ARCH=nios2 
 
-Ze swojej strony mo=C5=BCemy tak=C5=BCe zaproponowa=C4=87 Pa=C5=84stwu in=
-dywidualn=C4=85 wycen=C4=99 oraz transport.
-=20
-Chcieliby Pa=C5=84stwo sprawdzi=C4=87 nasz asortyment?=20
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
 
-Pozdrawiam
-Andrzej Biesiedny
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
