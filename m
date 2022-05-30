@@ -2,23 +2,23 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A8BAC4332F
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 08:58:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A06EC433F5
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 08:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbiE3I6j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 04:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
+        id S234584AbiE3I6p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 04:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbiE3I6f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 04:58:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE6D762B9;
-        Mon, 30 May 2022 01:58:34 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LBTml35SXz1JBq9;
-        Mon, 30 May 2022 16:56:55 +0800 (CST)
+        with ESMTP id S234541AbiE3I6k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 04:58:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB7656204;
+        Mon, 30 May 2022 01:58:36 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LBTnM2CPRzjXGm;
+        Mon, 30 May 2022 16:57:27 +0800 (CST)
 Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Mon, 30 May 2022 16:58:32 +0800
 Received: from k04.huawei.com (10.67.174.115) by
@@ -41,9 +41,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v3 4/6] libbpf: Unify memory address casting operation style
-Date:   Mon, 30 May 2022 17:28:13 +0800
-Message-ID: <20220530092815.1112406-5-pulehui@huawei.com>
+Subject: [PATCH bpf-next v3 6/6] selftests/bpf: Remove the casting about jited_ksyms and jited_linfo
+Date:   Mon, 30 May 2022 17:28:15 +0800
+Message-ID: <20220530092815.1112406-7-pulehui@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220530092815.1112406-1-pulehui@huawei.com>
 References: <20220530092815.1112406-1-pulehui@huawei.com>
@@ -58,51 +58,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The members of bpf_prog_info, which are line_info, jited_line_info,
-jited_ksyms and jited_func_lens, store u64 address pointed to the
-corresponding memory regions. Memory addresses are conceptually
-unsigned, (unsigned long) casting makes more sense, so let's make
-a change for conceptual uniformity.
+We have unified data extension operation of jited_ksyms and jited_linfo
+into zero extension, so there's no need to cast u64 memory address to
+long data type.
 
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- tools/lib/bpf/bpf_prog_linfo.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_prog_linfo.c b/tools/lib/bpf/bpf_prog_linfo.c
-index 5c503096ef43..7beb060d0671 100644
---- a/tools/lib/bpf/bpf_prog_linfo.c
-+++ b/tools/lib/bpf/bpf_prog_linfo.c
-@@ -127,7 +127,8 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
- 	prog_linfo->raw_linfo = malloc(data_sz);
- 	if (!prog_linfo->raw_linfo)
- 		goto err_free;
--	memcpy(prog_linfo->raw_linfo, (void *)(long)info->line_info, data_sz);
-+	memcpy(prog_linfo->raw_linfo, (void *)(unsigned long)info->line_info,
-+	       data_sz);
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index e6612f2bd0cf..65bdc4aa0a63 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -6599,8 +6599,8 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
+ 	}
  
- 	nr_jited_func = info->nr_jited_ksyms;
- 	if (!nr_jited_func ||
-@@ -148,7 +149,7 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
- 	if (!prog_linfo->raw_jited_linfo)
- 		goto err_free;
- 	memcpy(prog_linfo->raw_jited_linfo,
--	       (void *)(long)info->jited_line_info, data_sz);
-+	       (void *)(unsigned long)info->jited_line_info, data_sz);
+ 	if (CHECK(jited_linfo[0] != jited_ksyms[0],
+-		  "jited_linfo[0]:%lx != jited_ksyms[0]:%lx",
+-		  (long)(jited_linfo[0]), (long)(jited_ksyms[0]))) {
++		  "jited_linfo[0]:%llx != jited_ksyms[0]:%llx",
++		  jited_linfo[0], jited_ksyms[0])) {
+ 		err = -1;
+ 		goto done;
+ 	}
+@@ -6618,16 +6618,16 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
+ 		}
  
- 	/* Number of jited_line_info per jited func */
- 	prog_linfo->nr_jited_linfo_per_func = malloc(nr_jited_func *
-@@ -166,8 +167,8 @@ struct bpf_prog_linfo *bpf_prog_linfo__new(const struct bpf_prog_info *info)
- 		goto err_free;
+ 		if (CHECK(jited_linfo[i] <= jited_linfo[i - 1],
+-			  "jited_linfo[%u]:%lx <= jited_linfo[%u]:%lx",
+-			  i, (long)jited_linfo[i],
+-			  i - 1, (long)(jited_linfo[i - 1]))) {
++			  "jited_linfo[%u]:%llx <= jited_linfo[%u]:%llx",
++			  i, jited_linfo[i],
++			  i - 1, jited_linfo[i - 1])) {
+ 			err = -1;
+ 			goto done;
+ 		}
  
- 	if (dissect_jited_func(prog_linfo,
--			       (__u64 *)(long)info->jited_ksyms,
--			       (__u32 *)(long)info->jited_func_lens))
-+			       (__u64 *)(unsigned long)info->jited_ksyms,
-+			       (__u32 *)(unsigned long)info->jited_func_lens))
- 		goto err_free;
- 
- 	return prog_linfo;
+ 		if (CHECK(jited_linfo[i] - cur_func_ksyms > cur_func_len,
+-			  "jited_linfo[%u]:%lx - %lx > %u",
+-			  i, (long)jited_linfo[i], (long)cur_func_ksyms,
++			  "jited_linfo[%u]:%llx - %llx > %u",
++			  i, jited_linfo[i], cur_func_ksyms,
+ 			  cur_func_len)) {
+ 			err = -1;
+ 			goto done;
 -- 
 2.25.1
 
