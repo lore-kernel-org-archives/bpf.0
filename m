@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D1AC5518D
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 14:21:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66CA0C38A2D
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 14:21:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240939AbiE3OVX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 10:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S241249AbiE3OVY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241425AbiE3ORf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 10:17:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332F4C7BD;
-        Mon, 30 May 2022 06:46:59 -0700 (PDT)
+        with ESMTP id S240898AbiE3OQf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 10:16:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA0A1053FE;
+        Mon, 30 May 2022 06:44:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2037960FD4;
-        Mon, 30 May 2022 13:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0595C385B8;
-        Mon, 30 May 2022 13:46:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60BC2B80DA7;
+        Mon, 30 May 2022 13:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F054C385B8;
+        Mon, 30 May 2022 13:44:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653918418;
-        bh=jEQDOTSyoEKOF9759rFdyj0iuN0nKojdVw6RmdvTscU=;
+        s=k20201202; t=1653918244;
+        bh=Y3ci4aj1bWHDsYuaG5QQrbA8DGau5DUCSDNwP7ULckA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=COdYbR0gveEUh5THUGeGIQg3YuaHn9oyhHsWdwe9229Sxt6wDC500v2vhrHl+zEQk
-         oFefQoW7TUZ1et9osLt73sS2rHVhqQhFI2PLjwwU72miDxcmL8y12PKLXcDrP2fri4
-         oSs1ZnadjmV05x/aMbS1YBjI0AJJ4t9CB1FDdfiszdztHZH+waGuZP3wBkcGX28pO6
-         2MACve8FQVIvLiy8sk/4BKVmLG/fYKqOM9O8Q5rr28d0ni9PCGVU3V4zFO3q6qDP0R
-         MoaO3lhP4BfdfhjCdjY9Lwhl1JAcxh+7e3Bo9gs7cySS/ULmxeCd0uGBVL+GofEpeb
-         CMs6fW/Stafyg==
+        b=lE2klOa+CQTZqzonW+57iFJqYhdVQVJvR91kW+SeOWXsTEOyXTu5n9B0YoMJlkXCA
+         56vDus6PNbg7wywlbuVV7f/XjAB7RKPhrMOCN47e+pkuVbQutb3BbiGzTyNSBKE6Ep
+         Ot5kBjKIGpajfAeHTg+H5V7fo1FBfVlP/jxxg7/sgFWtA5QnkUrvJCcHCG+VFRiVAB
+         QBR4WkHVV3pAHFY/0MJ6hbwDK3EgxNXNLPdGbyi5J2nqi5on3hlXd7cF7+dB6LK/h2
+         7SY0n/WLYUU9WeCt2Kqxnmug5nIuZLPs59Qov0BaaPQHhGYa9tiflqzJLKk0v16t+r
+         z5BEcB09nlL1A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yonghong Song <yhs@fb.com>, Mykola Lysenko <mykolal@fb.com>,
@@ -40,12 +40,12 @@ Cc:     Yonghong Song <yhs@fb.com>, Mykola Lysenko <mykolal@fb.com>,
         ndesaulniers@google.com, sunyucong@gmail.com,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.10 75/76] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
-Date:   Mon, 30 May 2022 09:44:05 -0400
-Message-Id: <20220530134406.1934928-75-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 108/109] selftests/bpf: fix btf_dump/btf_dump due to recent clang change
+Date:   Mon, 30 May 2022 09:38:24 -0400
+Message-Id: <20220530133825.1933431-108-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220530134406.1934928-1-sashal@kernel.org>
-References: <20220530134406.1934928-1-sashal@kernel.org>
+In-Reply-To: <20220530133825.1933431-1-sashal@kernel.org>
+References: <20220530133825.1933431-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -123,7 +123,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
-index 31975c96e2c9..fe43556e1a61 100644
+index 8aaa24a00322..970598dda732 100644
 --- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
 +++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_syntax.c
 @@ -94,7 +94,7 @@ typedef void (* (*signal_t)(int, void (*)(int)))(int);
