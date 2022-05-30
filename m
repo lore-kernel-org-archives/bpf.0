@@ -2,46 +2,46 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DD59C433EF
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 13:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03F12C433F5
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 13:25:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbiE3NZA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 09:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S236610AbiE3NZB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 09:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236598AbiE3NYz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 09:24:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EA081986;
-        Mon, 30 May 2022 06:24:45 -0700 (PDT)
+        with ESMTP id S236636AbiE3NY4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 09:24:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B8A82157;
+        Mon, 30 May 2022 06:24:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B1C7B80D84;
-        Mon, 30 May 2022 13:24:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7ADBC3411A;
-        Mon, 30 May 2022 13:24:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED04CB80DAF;
+        Mon, 30 May 2022 13:24:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1885C3411C;
+        Mon, 30 May 2022 13:24:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653917082;
-        bh=EI6kyMEv2r+oMfMB12oZQKomnwfH3xTNuKb7+f/Swr4=;
+        s=k20201202; t=1653917087;
+        bh=7R34usxBQu7eJg2cIGwm/1IcqRrI7YppV2uXmYDwZpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GNbh0gZv03irjrTNTzR6KcQ/m1mWDSLy1VkkKWJD17qj5OFmkFaJjinOXR5JDN10+
-         ZFyYFv3FcoJgJSKtABcjw1HNYkLSZAcV1L4YkKgzwLS1LSxf/RMNLp/TGGEamyvycO
-         pDSv8gdXATj6uxFhYTIdapMdZRQkxo5D+OWUX/S7bhHqFRnBY58KPfsuL9lNOmMERn
-         Z84I4hoszsXx2HYSbwim8LRVo1u++X+rH0KhOQuNxXVvDvgTrZZnFFJOlDZkj1imh6
-         rq2WcFmY57J4HFpibffGBrVcLsJ+7Ku3d27/j/K2GdVQcqdwzBk2uVzULIUwq9eSUI
-         h+hlx4/EdSIYg==
+        b=tijY0XGkYwOuYSSbIVHvWiq5kamQCHYeHieepIoc4zq0dplJdbqvEHjR6R1s/M4uW
+         Grjk0jikPfN2Cza53LJXGW2FDUsLQUSb4j0Ft/6PCr4ZDV5n4ku6wy9A51+sJbAjKt
+         ZwZXkmTpx3lKC8GQOye78htDcVlSrHbkiAeIut969HY79XCZhd4yPvqBVuElVCqWQj
+         eLqlpEviAGMRQ6LnC4NaNZ7/7pdSuUyKxVoDWhFyLh98sA4ONrJhT8W5P8vBTOWqef
+         lZF/yFVpaeqUN9LDavcUbW9uPu7pjg6igZYaKZKZvaebxCTeXFW19BeHfHTusLMpuq
+         +yM3pNUn0SNrg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nikolay Borisov <nborisov@suse.com>,
+Cc:     Yuntao Wang <ytcoode@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         ast@kernel.org, daniel@iogearbox.net,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 006/159] selftests/bpf: Fix vfs_link kprobe definition
-Date:   Mon, 30 May 2022 09:21:51 -0400
-Message-Id: <20220530132425.1929512-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.18 009/159] selftests/bpf: Fix file descriptor leak in load_kallsyms()
+Date:   Mon, 30 May 2022 09:21:54 -0400
+Message-Id: <20220530132425.1929512-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220530132425.1929512-1-sashal@kernel.org>
 References: <20220530132425.1929512-1-sashal@kernel.org>
@@ -53,41 +53,52 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Nikolay Borisov <nborisov@suse.com>
+From: Yuntao Wang <ytcoode@gmail.com>
 
-[ Upstream commit e299bcd4d16ff86f46c48df1062c8aae0eca1ed8 ]
+[ Upstream commit 2d0df01974ce2b59b6f7d5bd3ea58d74f12ddf85 ]
 
-Since commit 6521f8917082 ("namei: prepare for idmapped mounts")
-vfs_link's prototype was changed, the kprobe definition in
-profiler selftest in turn wasn't updated. The result is that all
-argument after the first are now stored in different registers. This
-means that self-test has been broken ever since. Fix it by updating the
-kprobe definition accordingly.
+Currently, if sym_cnt > 0, it just returns and does not close file, fix it.
 
-Signed-off-by: Nikolay Borisov <nborisov@suse.com>
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220331140949.1410056-1-nborisov@suse.com
+Link: https://lore.kernel.org/bpf/20220405145711.49543-1-ytcoode@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/profiler.inc.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/trace_helpers.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 4896fdf816f7..92331053dba3 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -826,8 +826,9 @@ int kprobe_ret__do_filp_open(struct pt_regs* ctx)
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 3d6217e3aff7..9c4be2cdb21a 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -25,15 +25,12 @@ static int ksym_cmp(const void *p1, const void *p2)
  
- SEC("kprobe/vfs_link")
- int BPF_KPROBE(kprobe__vfs_link,
--	       struct dentry* old_dentry, struct inode* dir,
--	       struct dentry* new_dentry, struct inode** delegated_inode)
-+	       struct dentry* old_dentry, struct user_namespace *mnt_userns,
-+	       struct inode* dir, struct dentry* new_dentry,
-+	       struct inode** delegated_inode)
+ int load_kallsyms(void)
  {
- 	struct bpf_func_stats_ctx stats_ctx;
- 	bpf_stats_enter(&stats_ctx, profiler_bpf_vfs_link);
+-	FILE *f = fopen("/proc/kallsyms", "r");
++	FILE *f;
+ 	char func[256], buf[256];
+ 	char symbol;
+ 	void *addr;
+ 	int i = 0;
+ 
+-	if (!f)
+-		return -ENOENT;
+-
+ 	/*
+ 	 * This is called/used from multiplace places,
+ 	 * load symbols just once.
+@@ -41,6 +38,10 @@ int load_kallsyms(void)
+ 	if (sym_cnt)
+ 		return 0;
+ 
++	f = fopen("/proc/kallsyms", "r");
++	if (!f)
++		return -ENOENT;
++
+ 	while (fgets(buf, sizeof(buf), f)) {
+ 		if (sscanf(buf, "%p %c %s", &addr, &symbol, func) != 3)
+ 			break;
 -- 
 2.35.1
 
