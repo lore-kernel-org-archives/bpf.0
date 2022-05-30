@@ -2,108 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A06EC433F5
-	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 08:58:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB1B3C433EF
+	for <bpf@archiver.kernel.org>; Mon, 30 May 2022 09:13:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234584AbiE3I6p (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 May 2022 04:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
+        id S234696AbiE3JNy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 May 2022 05:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbiE3I6k (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 May 2022 04:58:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB7656204;
-        Mon, 30 May 2022 01:58:36 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LBTnM2CPRzjXGm;
-        Mon, 30 May 2022 16:57:27 +0800 (CST)
-Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 30 May 2022 16:58:32 +0800
-Received: from k04.huawei.com (10.67.174.115) by
- dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 30 May 2022 16:58:32 +0800
-From:   Pu Lehui <pulehui@huawei.com>
-To:     <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Luke Nelson <luke.r.nels@gmail.com>,
-        Xi Wang <xi.wang@gmail.com>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v3 6/6] selftests/bpf: Remove the casting about jited_ksyms and jited_linfo
-Date:   Mon, 30 May 2022 17:28:15 +0800
-Message-ID: <20220530092815.1112406-7-pulehui@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220530092815.1112406-1-pulehui@huawei.com>
-References: <20220530092815.1112406-1-pulehui@huawei.com>
+        with ESMTP id S232661AbiE3JNy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 May 2022 05:13:54 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDE95D188
+        for <bpf@vger.kernel.org>; Mon, 30 May 2022 02:13:53 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so13071829pju.1
+        for <bpf@vger.kernel.org>; Mon, 30 May 2022 02:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JNP+R0ohcLUjNtDJRZoqQVoepX4pDHJ5Tzsqw/Ip/us=;
+        b=1zsRDNM7+bOnSAXrGT8GTnB+LPiaiWeULGvPDxnh8ygbaIBhoXtWi5qIMtlR+0jVC3
+         mCvGt4XP1HvP05Ke+93gP1wyUTIWPC8TqTkPUCoiPi8wDLv8QUjVuAY9G0wfAwfbjglm
+         NoKvGVb3RhJ+KbFn1b/3H6xRut1xSH5jjCVxn04Hu4IuhaomW+hHiu/5rI8BZ8F3q5pX
+         eBlK0Kq1pBmWUk7cwGnPfxh4Z4PAB1MyZytQjrashWTXpKvEnWe8/jjjhSVvNtkcdGZ2
+         VnvSXj+wY3xyfzW3dI1WBCB648rq6dK65QaH+KQdProsmF9O+QYp5Geg7zOqauaANpg9
+         6iUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JNP+R0ohcLUjNtDJRZoqQVoepX4pDHJ5Tzsqw/Ip/us=;
+        b=uSzXfnnQJiTMUEDiyhjHicdzNhro+nxAk2ejDzCJAglDC8PF3cp4U7ZEZ8UsKNWH7e
+         2zAeHjZO1krvcbAv4vkGxlVNw8cCi3RrRjpNedd7cizpQTKD5AE0L2pfuKIHBICajffh
+         hoJfQ1yoYJTJbbuvTs2HuGMk1NlDnhCCUaaFZP8f1qicSfyx/RK+CYDOCTH2jF7vSlY+
+         FUVYbkIbh3sZ1e0gYTBMvAnYoRXjhTmZcS2YfxedqPr3ib3QCGD7XWDsU7ziPUYFN5fO
+         O0WHyqah56nBAnk45Il5MHOZXKCZau8WOnR24HK9H1ggBmpDGnmc+Hb3Qe9SBkDleESP
+         g4Hw==
+X-Gm-Message-State: AOAM531vXoHSEa0gyiA/siku2oHXVt/vQRYhzeF2E3x+Xm6/0Cc+NO33
+        TXU0AREdMc56KWFx4LLHvHWazg==
+X-Google-Smtp-Source: ABdhPJy6/T1nAe2l6F6QTn/YqY4r78bM0hS6jGpWftKdzqrtiEzTF325nNWOg/9YtvKgUD7qLfn7Yw==
+X-Received: by 2002:a17:903:22cc:b0:162:4d8b:e2eb with SMTP id y12-20020a17090322cc00b001624d8be2ebmr29890361plg.22.1653902032530;
+        Mon, 30 May 2022 02:13:52 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.225])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902ebc200b0015e8d4eb20dsm8640644plg.87.2022.05.30.02.13.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 May 2022 02:13:52 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH v3 0/2] Optimize performance of update hash-map when free is zero
+Date:   Mon, 30 May 2022 17:13:38 +0800
+Message-Id: <20220530091340.53443-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.115]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500019.china.huawei.com (7.185.36.180)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We have unified data extension operation of jited_ksyms and jited_linfo
-into zero extension, so there's no need to cast u64 memory address to
-long data type.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/prog_tests/btf.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+We encountered bad case on big system with 96 CPUs that
+alloc_htab_elem() would last for 1ms. The reason is that after the
+prealloc hashtab has no free elems, when trying to update, it will still
+grab spin_locks of all cpus. If there are multiple update users, the
+competition is very serious.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index e6612f2bd0cf..65bdc4aa0a63 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -6599,8 +6599,8 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 	}
- 
- 	if (CHECK(jited_linfo[0] != jited_ksyms[0],
--		  "jited_linfo[0]:%lx != jited_ksyms[0]:%lx",
--		  (long)(jited_linfo[0]), (long)(jited_ksyms[0]))) {
-+		  "jited_linfo[0]:%llx != jited_ksyms[0]:%llx",
-+		  jited_linfo[0], jited_ksyms[0])) {
- 		err = -1;
- 		goto done;
- 	}
-@@ -6618,16 +6618,16 @@ static int test_get_linfo(const struct prog_info_raw_test *test,
- 		}
- 
- 		if (CHECK(jited_linfo[i] <= jited_linfo[i - 1],
--			  "jited_linfo[%u]:%lx <= jited_linfo[%u]:%lx",
--			  i, (long)jited_linfo[i],
--			  i - 1, (long)(jited_linfo[i - 1]))) {
-+			  "jited_linfo[%u]:%llx <= jited_linfo[%u]:%llx",
-+			  i, jited_linfo[i],
-+			  i - 1, jited_linfo[i - 1])) {
- 			err = -1;
- 			goto done;
- 		}
- 
- 		if (CHECK(jited_linfo[i] - cur_func_ksyms > cur_func_len,
--			  "jited_linfo[%u]:%lx - %lx > %u",
--			  i, (long)jited_linfo[i], (long)cur_func_ksyms,
-+			  "jited_linfo[%u]:%llx - %llx > %u",
-+			  i, jited_linfo[i], cur_func_ksyms,
- 			  cur_func_len)) {
- 			err = -1;
- 			goto done;
+0001: Add is_empty to check whether the free list is empty or not before taking
+the lock.
+0002: Add benchmark to reproduce this worst case.
+
+Changelog:
+v2->v3: Addressed comments from Alexei Starovoitov, Andrii Nakryiko.
+- Adjust the way the benchmark is tested.
+- Adjust the code format.
+some details in here:
+https://lore.kernel.org/all/20220524075306.32306-1-zhoufeng.zf@bytedance.com/T/
+
+v1->v2: Addressed comments from Alexei Starovoitov.
+- add a benchmark to reproduce the issue.
+- Adjust the code format that avoid adding indent.
+some details in here:
+https://lore.kernel.org/all/877ac441-045b-1844-6938-fcaee5eee7f2@bytedance.com/T/
+
+Feng Zhou (2):
+  bpf: avoid grabbing spin_locks of all cpus when no free elems
+  selftest/bpf/benchs: Add bpf_map benchmark
+
+ kernel/bpf/percpu_freelist.c                  | 28 +++++-
+ kernel/bpf/percpu_freelist.h                  |  1 +
+ tools/testing/selftests/bpf/Makefile          |  4 +-
+ tools/testing/selftests/bpf/bench.c           |  2 +
+ .../benchs/bench_bpf_hashmap_full_update.c    | 96 +++++++++++++++++++
+ .../run_bench_bpf_hashmap_full_update.sh      | 11 +++
+ .../bpf/progs/bpf_hashmap_full_update_bench.c | 40 ++++++++
+ 7 files changed, 178 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
+
 -- 
-2.25.1
+2.20.1
 
