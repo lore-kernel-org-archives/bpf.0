@@ -2,53 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B348C433EF
-	for <bpf@archiver.kernel.org>; Tue, 31 May 2022 22:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C794C433FE
+	for <bpf@archiver.kernel.org>; Tue, 31 May 2022 22:50:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348477AbiEaWkP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 31 May 2022 18:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S1348557AbiEaWuS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 31 May 2022 18:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238162AbiEaWkO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 31 May 2022 18:40:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8773F9EB4A;
-        Tue, 31 May 2022 15:40:13 -0700 (PDT)
+        with ESMTP id S1348634AbiEaWuR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 31 May 2022 18:50:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B0BA0061;
+        Tue, 31 May 2022 15:50:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23DAD61468;
-        Tue, 31 May 2022 22:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6F7EAC3411D;
-        Tue, 31 May 2022 22:40:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B944CB8173F;
+        Tue, 31 May 2022 22:50:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60C4CC3411C;
+        Tue, 31 May 2022 22:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654036812;
-        bh=4cd7A12mmB7TOFG1oNOqmQmjZoSqWu2ThW8sKS2FhmY=;
+        s=k20201202; t=1654037413;
+        bh=4krzuHq2XEO+Dd9ce2RPc3T1kMROId1Rwx3zGEpNPUQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ePU8nggokZOUGbrVKMRgoXk1AjyOxfFmbvGUNPTB+EKtObcTwS/DQ61tZNjOePdSt
-         7zivQqMyoBXVO/01C0juKlMB7YWZlZ3FR0BsWEs/HJT8IpMX8CaE17jWTgjB8rQd+I
-         0Ogv/AX1cBPppgI+pMZ5DDJMNzs/fXFa7LDko+7KNBhcfa+Gsw7Gih1wE+VLFb8X+F
-         WFsFmx3OkC+TPqvRGVtaeV2JpMHkJK/3E+f07nbNDRTUcdZVPgEuZg37vCn12qRC9M
-         s+2liPRW3TEQEkfzYODhQ4Uhur2KJXhNijZdfyD3wE6Ab2xvbwj5+0pT9WMYu3XI/P
-         xON7OBoyJfBhA==
+        b=i4PKfPzPtVQAOzy4HWbhBkm/3pLKcDztNIn8ZnBa8jJy63wR97s5/f58Yda4G6brW
+         VGxvN4qtiY+Bu85ezS7MdEdXseMnEl+wrriepRxSokq+O/eL/K4CPffCLsZ9U0WFvA
+         8prUiPEivaTDON/Yow0JtusBD2TgSEud1sTP8/fv1wVLeKh/E8fyf1lkPJtFcI0uzy
+         hjFasiGRZX5aGX5drplxSgzBjosmjj6GDRfI54E7G8fP2mJ7wKCCXmyQ1DaljucgIB
+         Ab2+92z27dr4jtvzC1Xqm3IFrgVPxZzgO19uxlMwe/d1Vs2jLcDYTxZcX2WE0t6Bch
+         KbZI+mWKZZuSA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4D6A9F0394D;
-        Tue, 31 May 2022 22:40:12 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42649F0383D;
+        Tue, 31 May 2022 22:50:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Check for NULL ptr of btf in codegen_asserts
+Subject: Re: [PATCH bpf-next] sample: bpf: xdp_router_ipv4: allow the kernel to
+ send arp requests
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165403681231.3395.15965102902497727563.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 May 2022 22:40:12 +0000
-References: <20220523194917.igkgorco42537arb@jup>
-In-Reply-To: <20220523194917.igkgorco42537arb@jup>
-To:     Michael Mullin <masmullin@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Message-Id: <165403741326.9645.206199420871428808.git-patchwork-notify@kernel.org>
+Date:   Tue, 31 May 2022 22:50:13 +0000
+References: <60bde5496d108089080504f58199bcf1143ea938.1653471558.git.lorenzo@kernel.org>
+In-Reply-To: <60bde5496d108089080504f58199bcf1143ea938.1653471558.git.lorenzo@kernel.org>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, netdev@vger.kernel.org,
+        lorenzo.bianconi@redhat.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,19 +57,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Mon, 23 May 2022 15:49:17 -0400 you wrote:
-> bpf_object__btf() can return a NULL value.  If bpf_object__btf returns
-> null, do not progress through codegen_asserts(). This avoids a null ptr
-> dereference at the call btf__type_cnt() in the function find_type_for_map()
+On Wed, 25 May 2022 11:44:27 +0200 you wrote:
+> Forward the packet to the kernel if the gw router mac address is missing
+> in to trigger ARP discovery.
 > 
-> Signed-off-by: Michael Mullin <masmullin@gmail.com>
+> Fixes: 85bf1f51691c ("samples: bpf: Convert xdp_router_ipv4 to XDP samples helper")
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 > ---
->  tools/bpf/bpftool/gen.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  samples/bpf/xdp_router_ipv4.bpf.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
 Here is the summary with links:
-  - Check for NULL ptr of btf in codegen_asserts
-    https://git.kernel.org/bpf/bpf-next/c/d992a11f1171
+  - [bpf-next] sample: bpf: xdp_router_ipv4: allow the kernel to send arp requests
+    https://git.kernel.org/bpf/bpf-next/c/4c7cbcc9c097
 
 You are awesome, thank you!
 -- 
