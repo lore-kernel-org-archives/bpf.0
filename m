@@ -2,83 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBF0CC4332F
-	for <bpf@archiver.kernel.org>; Tue, 31 May 2022 22:50:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 890A1C433FE
+	for <bpf@archiver.kernel.org>; Tue, 31 May 2022 23:01:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348574AbiEaWuT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 31 May 2022 18:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S1348583AbiEaXBb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 31 May 2022 19:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348633AbiEaWuR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 31 May 2022 18:50:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BB2A0062;
-        Tue, 31 May 2022 15:50:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C125FB81744;
-        Tue, 31 May 2022 22:50:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 676F3C3411F;
-        Tue, 31 May 2022 22:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654037413;
-        bh=1ffP4TkVvgi6sPn0mAOKdWQJeMzHw+Y5jSkgORcq0E4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FQGC0vPJHF2v812MbjsSI7JBhC+nkrsu62q1PtPwswLKAXkeCQEWYtmdJQvFoQlgR
-         xR8M+hUEhlUStAGR26lDRluxMU5FZCrE6uyak8qQ3Xmarg0aQ1ajvHEDDSgLYsNPCX
-         Jkws8dJocrLartPwQQQiRRbf/PmLPfKwPm01/EpgaBS7u5tJCWKacrGazjswn6l6pa
-         EvCktRAykqz4V74M7LiS0bAbWItLZDrSaubQVxdP6nW91nCihi+VE7qmugEL2yFBAp
-         A9wFT2mqi61r4B42BzxHM78OPlNYXescDTc8gxt7p1gYY5R/2RFYA6UlPwsEuOkb9q
-         YuQQ6oSwIJo8w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4B243F0394F;
-        Tue, 31 May 2022 22:50:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1346457AbiEaXBa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 31 May 2022 19:01:30 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F16F8D698;
+        Tue, 31 May 2022 16:01:29 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nwArS-0004W3-2r; Wed, 01 Jun 2022 01:01:14 +0200
+Received: from [85.1.206.226] (helo=linux-2.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nwArR-000Czu-Lw; Wed, 01 Jun 2022 01:01:13 +0200
+Subject: Re: [PATCH] selftests net: fix bpf build error
+To:     Lina Wang <lina.wang@mediatek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej enczykowski <maze@google.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@intel.com, rong.a.chen@intel.com,
+        kernel test robot <oliver.sang@intel.com>
+References: <20220530062126.27808-1-lina.wang@mediatek.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <9c462ffc-f2c0-f542-4e61-251571da8c22@iogearbox.net>
+Date:   Wed, 1 Jun 2022 01:01:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] libbpf: Fix determine_ptr_size() guessing
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165403741330.9645.14080630675434689339.git-patchwork-notify@kernel.org>
-Date:   Tue, 31 May 2022 22:50:13 +0000
-References: <20220524094447.332186-1-douglas.raillard@arm.com>
-In-Reply-To: <20220524094447.332186-1-douglas.raillard@arm.com>
-To:     Douglas RAILLARD <douglas.raillard@arm.com>
-Cc:     bpf@vger.kernel.org, beata.michalska@arm.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20220530062126.27808-1-lina.wang@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26558/Tue May 31 10:05:17 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue, 24 May 2022 10:44:47 +0100 you wrote:
-> From: Douglas Raillard <douglas.raillard@arm.com>
+On 5/30/22 8:21 AM, Lina Wang wrote:
+> bpf_helpers.h has been moved to tools/lib/bpf since 5.10, so add more
+> incliding path.
 > 
-> One strategy employed by libbpf to guess the pointer size is by finding
-> the size of "unsigned long" type. This is achieved by looking for a type
-> of with the expected name and checking its size.
+> Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+> ---
+>   tools/testing/selftests/net/bpf/Makefile | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> Unfortunately, the C syntax is friendlier to humans than to computers
-> as there is some variety in how such a type can be named. Specifically,
-> gcc and clang do not use the same names for integer types in debug info:
+> diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+> index f91bf14bbee7..070251986dbe 100644
+> --- a/tools/testing/selftests/net/bpf/Makefile
+> +++ b/tools/testing/selftests/net/bpf/Makefile
+> @@ -2,6 +2,7 @@
+>   
+>   CLANG ?= clang
+>   CCINCLUDE += -I../../bpf
+> +CCINCLUDE += -I../../../../lib
+>   CCINCLUDE += -I../../../../../usr/include/
+>   
+>   TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
 > 
-> [...]
 
-Here is the summary with links:
-  - [v3] libbpf: Fix determine_ptr_size() guessing
-    https://git.kernel.org/bpf/bpf-next/c/8a140f1b12f7
+ From building the selftest in general, I'm getting:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+clang -O2 -target bpf -c bpf/nat6to4.c -I../../bpf -I../../../../lib -I../../../../../usr/include/ -o /root/daniel/bpf/tools/testing/selftests/net/bpf/nat6to4.o
+In file included from bpf/nat6to4.c:27:
+In file included from /usr/include/linux/bpf.h:11:
+/usr/include/linux/types.h:5:10: fatal error: 'asm/types.h' file not found
+#include <asm/types.h>
+          ^~~~~~~~~~~~~
+1 error generated.
 
-
+Could we reuse the build infra from tools/testing/selftests/bpf/ for nat6to4.c?
