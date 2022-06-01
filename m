@@ -2,244 +2,166 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3564ACCA479
-	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 20:42:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D11C43334
+	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 20:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiFAUmz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jun 2022 16:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S229775AbiFAUrr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jun 2022 16:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiFAUmn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:42:43 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3390925BC07
-        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 13:24:51 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id g3-20020a170902868300b00163cd75c014so1584496plo.14
-        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 13:24:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=54T1/nd7Ar1saIFy2CpdsVaApgaxKnLuSaVoh3/JVNg=;
-        b=EsVB6lJMtclVqPbqexifhv97yP83q8A4axOhKwR2DHUANB+BWRT6FFcov98WuNhopG
-         oNpMYFPILM9nXavQ/1y0QLCrs4sZpXYO5ffpYsE3P4tmEhQiw+rkUaQCzbLFSZkquf0R
-         cFzZPGXVtIqQeVpbVAa1RJDO9BMT1nUub9sVu0VfQhG0d8x5kW3d0u/YU+FvvK4Owswc
-         iv9q9FUKZuD4P0cmt8yebOoH/+pcHIh4jjKMN5GXexELs+rEg6di9To/19kUDj5BCmz6
-         R3l3DJrbeKT5DEjJJ/KMP1Uu2UfB+iTk9yhp9Ryzlunq+TgfqtuhyZmKpXFO7z9K8kKs
-         kPXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=54T1/nd7Ar1saIFy2CpdsVaApgaxKnLuSaVoh3/JVNg=;
-        b=wmbfYuds++NdYRrccG3h77E2G8tqGqcA2xQL778nDRZVWRfB4Pvbrl6kFWRaOy+Hgh
-         DNCWe52lGxCDjsIG1fN4PviP8o6UHHUo6c1L735BiY05D9Tn4Ul4E3zIvPhq8uIuTeCg
-         H+IKNBVrJ+QaeeOdpzaiHu9GnTJk5yGQl4pQjx0/ui8DyYR4bhABfuG/FbvYyLw+amdR
-         AlRu6uQkSQnSBC7IpqZgYCjwsl7xXDQtQwk6x5v4KZy2t3muRoER2UVt2t5MMfJXOqeR
-         12EvMhrckANGSQqOC4SVLW5RCCG5oriUwZv05RtkSXS0XU+3BnwoY/ZS+Mr5y63NWtZI
-         lFAQ==
-X-Gm-Message-State: AOAM530ngMvVV7hoWgjVayBQQi/ikpDddB7FdfxbL58QGym2hr93MEhI
-        P4ftBv2bigzq1Do14VbXy1oZqo4=
-X-Google-Smtp-Source: ABdhPJzhqupd72QVo6li7D+O80Q6vKMvYXBv7rPylVNJGGcDrbOfonQb0Js94kN26eULVgPAyVaFUdw=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:2310:b0:4fa:7eb1:e855 with SMTP id
- h16-20020a056a00231000b004fa7eb1e855mr1006189pfh.14.1654110155568; Wed, 01
- Jun 2022 12:02:35 -0700 (PDT)
-Date:   Wed,  1 Jun 2022 12:02:16 -0700
-In-Reply-To: <20220601190218.2494963-1-sdf@google.com>
-Message-Id: <20220601190218.2494963-10-sdf@google.com>
-Mime-Version: 1.0
-References: <20220601190218.2494963-1-sdf@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH bpf-next v8 09/11] bpftool: implement cgroup tree for BPF_LSM_CGROUP
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S230320AbiFAUrk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jun 2022 16:47:40 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A830226A097
+        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 13:43:17 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251ItwHD008404;
+        Wed, 1 Jun 2022 12:09:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=ykQuKKZF3XyNJnV6t2k6XpqEuNPksUTIECkWrEXq7WE=;
+ b=omLKYzKoM/g+7F+fAzxcUOUaIurwdy9IJrVMyhE+gIXjvpdHr92QXRuAfa1joFJBWIkS
+ EgQcOLmNaAp9ZZSt/N1w2QwavgqmoncQtyNP8SUHw3B7pG6+U7ntVaOtiVDfMA2drzbM
+ j66gw0GXmkU8QRS2qUoQBwPet0McNI5EtzE= 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge5vckhnw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Jun 2022 12:09:42 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RHlgV296VrNG9LuhBMp1MHjtCCJvXWicbQ/cup345QZR9jtlYHzoKIxkzwxteAD++0oSE+9kci6f8V/AjYVevQYqN8a2DNoDJyZv6DEqdVjQSkQDp2iEbeGAeEBjagypKb+aOeY8kfJC+yBkqVun5vx87clTM9l8sIPlwu0jmyNUO+1DSlxpfIFlkrOPP60RjpQnR3hQ7/JHhyJcop9txMJ+d6rlwBsHf4MgXkRrB2KnqybI6mrlbZ9rWAFcLBI0wi60OmnxLpXs5UhuvL5rx8WZAfVc5kAdgqHTJHa+RUqazTWKsr4TqO0DFxBh008OxqDCLJT1WDfTmFWz4voCCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ykQuKKZF3XyNJnV6t2k6XpqEuNPksUTIECkWrEXq7WE=;
+ b=QvykLFbTu9PkmoIAT0HEwKGWNhyWsiQwS9Iqfgwac7Aq80xN+hVM/Mi8TwkJca2f5VtM9MEMryYjDfBrPfaqLBTVp9n1F/QlEeTlYasEo88g26xsfAwUMQakBpbkxSnWkAzxSH7KICse0W4v2I5Jgoa2HfV/2IFaKfGkcxqQPkd5NVGWM4+3YJkE6SgLM3366w7JCv6XAaBd37ues8hbsFBAMSlRx2ajWVsRjn/NCtyAquo4Vc0HFRzbfcMzhEp9xj7+6NK5tHR33xdrODDKNN1wsHVJvEaEu1h9v8EBqtwP2p2ci4HzSwWe0+tczuWh7ZN5LRFzdx4SqIIlqB8oiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SN6PR15MB2416.namprd15.prod.outlook.com (2603:10b6:805:21::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Wed, 1 Jun
+ 2022 19:09:40 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::fde9:4:70a9:48c2]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::fde9:4:70a9:48c2%7]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
+ 19:09:39 +0000
+Message-ID: <5e0c8ccf-26bf-2f82-a6f8-dba07ea99403@fb.com>
+Date:   Wed, 1 Jun 2022 12:09:38 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.9.1
+Subject: Re: [PATCH bpf-next v3 07/18] libbpf: Add enum64 support for btf_dump
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+References: <20220526185432.2545879-1-yhs@fb.com>
+ <20220526185509.2548233-1-yhs@fb.com>
+ <CAEf4BzaJCisZuVWPtriqzZS3T=DehvNC1ouXiTJx=4msSmAoLw@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+In-Reply-To: <CAEf4BzaJCisZuVWPtriqzZS3T=DehvNC1ouXiTJx=4msSmAoLw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY3PR04CA0004.namprd04.prod.outlook.com
+ (2603:10b6:a03:217::9) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3d99965c-767b-4190-179d-08da440246fc
+X-MS-TrafficTypeDiagnostic: SN6PR15MB2416:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR15MB2416BF45DE92F3F41A3F4FBAD3DF9@SN6PR15MB2416.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QKNHMEg0VGpxVmVDWiBt4MGMiyi+69iTq9oUflsS/2kaOZ5mEfWE3MzvejTX63BlOLOueKxqi0ACakXD2cMRIgBfs+K7yycQs4V9atbDi4H2prMkEFGbGBu2JSdYvm58BoJgcD8pOpSvpFmSLtUHXU6DMAie6RVVSVphVF8LGYg6GlsGuRSidODQvuFzW1hFfP73dNcS0bdnaGW31cOffKTQn1PkrkLahlzi9NX6vf7SR7pg5v6xIbL6mcM9yLa65d8Rz42rIb6rbbtcCPs+0DqSF8EFx90EMorL/q9eJqcsnBTEA26UPvXZSaKcP9K8uLiQV/ZP4cALkaJ3r20hLgXGdEtcta/DykqzuLN5U7P3NrLtf5Bf5i0yRBzRrTh/GpkAskQBuYFmXLDBFIkUUGX6XYhiTrhLkdh29mJcVoP2adijuzAHW12M29ZSOJ3Gc2e3i1eKAVOrxZKGUAGJcjuhVwKIJQfpvq2m8yVTp59O4OrUyMzF3NKHNw9qypw42gHbyTPSQAlYkB0rUZDrQtE78XHHGJ+HNls4tFGIbJA+ezhkpChyGmDp9GOH2HP2DbcpSfub0K4zD+w/UutTxj+JRO2FFD9ttFsnrweM5VQpv09+yAKxREnYKlsk8ssy+Y4Rprv+uEJakA8LqxwW2WG54IheoyCbWqzG5SR2X9XOhUr+FqxkNdpyg6nv3wVPyPvf5Ev/86Xzovpd2a7qexCyn9owr7ZNckbeUU/qYJ7VjD4xdYuLDJOzqgp0pc0A
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(53546011)(4744005)(31696002)(8936002)(186003)(2906002)(508600001)(316002)(6486002)(2616005)(6916009)(83380400001)(86362001)(52116002)(6506007)(54906003)(31686004)(66556008)(8676002)(66476007)(66946007)(4326008)(6512007)(36756003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dEpoTnRkaUNtL0swVWIxN2pta0VVQkF2YXJKbmpkTGRhL3FSbVhZc1NnSVh4?=
+ =?utf-8?B?a2NndnRCVHhjU1UyenFubEI2Ync3RHNELzRBN2hoUEhKUEs4MG5ONEdoaTFq?=
+ =?utf-8?B?QzZ6eGxhNStDeW1obzdtNlBWZ05tdzRWRXZhcWdENUdneW5kcjZDclQvRWNo?=
+ =?utf-8?B?WE9KSkVWMU9rSnZkeWVNS3J5WHp6SmpGMFoyZTVHUlFQNnZ6TnFKb1g2aklv?=
+ =?utf-8?B?Yk10bG1HOU1OcEYwUkdkVTd2eXFLWGdFQzFmaVVtNFI0SE0rZFFHYUFkZjBP?=
+ =?utf-8?B?QTRmaGIyUmViK2lSRDdPNjlxRllaQUtOTnlWeWM2c1pwemdQUnQ1b1p4azNH?=
+ =?utf-8?B?Z3NyTmYyWW1EKytDU2Z2VWV5RjBNeUdvMGsvR09IejVOUFl6Y1E0ZGpwUVY4?=
+ =?utf-8?B?bEp4QmdiWENsTDk0N25SMHdKSXVVdzd2R2JIYW5iQmFCSHNKOHpReXo3OWVR?=
+ =?utf-8?B?NFBwWUNtL0RkYWtJcm9vY0wyeks5emRXUnBqS3RKNVdHNzJMRTRzRWNZNTcv?=
+ =?utf-8?B?UG96eGZiNExHcVlDbXY3OHFCM01kR3QxLzZ3WXIzMmluMnA2bGdwVnVnWHZy?=
+ =?utf-8?B?MHFHZG1tQWgxWFFZbkVSZFZ0RFpXZnlpeVFuaUF4a3FTVkhhYzIreDF1QUU1?=
+ =?utf-8?B?ZnpET255bnp0YytmamJoWENSSENHd2xPZUdkZG00d2hHV0pMeGZhZEYzN21V?=
+ =?utf-8?B?SjcweVNYNkNKZkllTUJkZlU2WndqeXI3SytxWlByL05sMW0zWXF0cGRpTFdE?=
+ =?utf-8?B?OTk2dUp1N2x4amZtVzhpaEIvNEd1QnVaQ2RyVzMySGQwL01nSFVjaTVka2Vu?=
+ =?utf-8?B?MFVsaHlTT3NOVHR1eWVxenljZWJtWGtnL3R1Q08rYTRNVUFuMW5YVWROMEpw?=
+ =?utf-8?B?WEZwVzkvTTdlWU90ckJkOTd0NkZ3RGhSNlFoTjlQWTdzNGdiUUtDak1FcE5P?=
+ =?utf-8?B?Z0NtM0V4S3ZJRStOSDZyVlZGd3R6Z20zWUxPRzdFWmJ3bFJQeUoyRnFHb29q?=
+ =?utf-8?B?eWdIZWdKNFY4anRmd2tnSFhhSzhwcHZiMWNidi9pVE54aXYwaEdGUjNLQ2Np?=
+ =?utf-8?B?ViswNWZrR0RzTTlxZW1QUldKdlNxZmFPaW9RK3RjSFRIUTFvYW0vYjA2VzNF?=
+ =?utf-8?B?NE5wNzQycEl0amFLdG56ZVp5bTU4WXh3emY4SGNBNldZR1ZneUNsOWhLdVhm?=
+ =?utf-8?B?U2JxL2MvYmhsSjdhL0ViRmxScnpacHhZcGk3cmgwNDlKV05Ea2JILzRtNm9Z?=
+ =?utf-8?B?QmpFeElpMVBNYTh3bHB0dHErektaUHlGRTZHbnRRTEp0ekFGOHBXbjlGdUU2?=
+ =?utf-8?B?U1h2UEpCalR1dVJRZkdVZUsyd09GZkVlV09mdEJsQ1Q5STNEMTllYWxjWE1x?=
+ =?utf-8?B?bnFveGRaS0E3TE5ESnpjMjU0QlVkc2ZlcWpLYVJMWU9uMjBaMVZvUURKT0U1?=
+ =?utf-8?B?SWVnWXdZV0t0aytjOGRiMjFXWjNLdm90ZlgwMW8rOC80NS9CYkNtSG9DMWZo?=
+ =?utf-8?B?dUlDWlpzNEdyQ2ZWMkdpT0E5TENiRTZGQWtRNmV5Vld1RktBdGdCVG5EUmN1?=
+ =?utf-8?B?M1ZFZ3FzdXRrVXRRL3Q3TTRIWDgzMXhtd1gwcW0vN1BFVkRqSjdGeUZ0N3Jt?=
+ =?utf-8?B?Unc0K3hMcUF1LzlyQWF1T1pSU0E1TWhlWnFOdnFacExFZXZERUtEdWdjL3dS?=
+ =?utf-8?B?Z1dweUZCS3k4NUN1OEhQWlNNbUppSWdzTEtHenFheW04YzFSSEsxR2JzdU5V?=
+ =?utf-8?B?ZjFQNzkrSTRMRCs1L1pPYVVYM1Z0dFp4cHZveUJZYjAxWTNoMmExWkdGSXJP?=
+ =?utf-8?B?L3RoYlJWMFRGdWZnVk9nZUVhZG9iK05RSUtrVWhzL1Z1Vy82M2pNZHpnZ2Mw?=
+ =?utf-8?B?LzVKMktTNUhnSWd3WmNyYnVsVnExY01sYnVFWlRvb0I5eU0zN253V0NCT3RC?=
+ =?utf-8?B?ZmtQTHhFTXVpN0svbXpJak5kcWV3cUhMNGlKMmNBazc4UUhra2lHakdteDNJ?=
+ =?utf-8?B?bUVhRFFYQ2JTM2c4ZG41MU15Yzl2cXUzWldRalNCamFYU01kMTBGL2ZwZlRC?=
+ =?utf-8?B?VXk1bjBWM2g4QnpYd05NTjhlZWRBZE0yVGgxMjFNNnNDSmdLZWU5VjIwUDMy?=
+ =?utf-8?B?WkV5YUJPTDVNQ3R4UnA0TGtFUjJFdSszQUljNC91cWZJRTdodkJGYTJTQjNm?=
+ =?utf-8?B?Q3BaR05XLzlaVFM0b1MrZHVmMGRqdjROaHVLUlhPQ21qL215dGQrM1pidm1N?=
+ =?utf-8?B?WDllZHZadVdyckVtU3BObGlmOFpHcXVwYVB3ejdFR0xVWFpSclJaOHFLUFZL?=
+ =?utf-8?B?cWNqcVV3MVpIUFppbXZDdGN6bnRNd3VUV010U0dnWkI4M1BLdVhIMkhoNHlr?=
+ =?utf-8?Q?lNaAgaBa/iIVgg4o=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d99965c-767b-4190-179d-08da440246fc
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 19:09:39.9146
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /X3Gw4Bbxyxoc3NiQFieIwlgkyWnM6dzNZB2OSlHSvFM/6V8vBm+ykR15/c/Dato
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR15MB2416
+X-Proofpoint-GUID: VKuLvWBTLoi_f9nMFQR-KWABhnrjIKCU
+X-Proofpoint-ORIG-GUID: VKuLvWBTLoi_f9nMFQR-KWABhnrjIKCU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-01_07,2022-06-01_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-$ bpftool --nomount prog loadall $KDIR/tools/testing/selftests/bpf/lsm_cgroup.o /sys/fs/bpf/x
-$ bpftool cgroup attach /sys/fs/cgroup lsm_cgroup pinned /sys/fs/bpf/x/socket_alloc
-$ bpftool cgroup attach /sys/fs/cgroup lsm_cgroup pinned /sys/fs/bpf/x/socket_bind
-$ bpftool cgroup attach /sys/fs/cgroup lsm_cgroup pinned /sys/fs/bpf/x/socket_clone
-$ bpftool cgroup attach /sys/fs/cgroup lsm_cgroup pinned /sys/fs/bpf/x/socket_post_create
-$ bpftool cgroup tree
-CgroupPath
-ID       AttachType      AttachFlags     Name
-/sys/fs/cgroup
-6        lsm_cgroup                      socket_post_create bpf_lsm_socket_post_create
-8        lsm_cgroup                      socket_bind     bpf_lsm_socket_bind
-10       lsm_cgroup                      socket_alloc    bpf_lsm_sk_alloc_security
-11       lsm_cgroup                      socket_clone    bpf_lsm_inet_csk_clone
 
-$ bpftool cgroup detach /sys/fs/cgroup lsm_cgroup pinned /sys/fs/bpf/x/socket_post_create
-$ bpftool cgroup tree
-CgroupPath
-ID       AttachType      AttachFlags     Name
-/sys/fs/cgroup
-8        lsm_cgroup                      socket_bind     bpf_lsm_socket_bind
-10       lsm_cgroup                      socket_alloc    bpf_lsm_sk_alloc_security
-11       lsm_cgroup                      socket_clone    bpf_lsm_inet_csk_clone
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/bpf/bpftool/cgroup.c | 79 +++++++++++++++++++++++++++-----------
- 1 file changed, 57 insertions(+), 22 deletions(-)
+On 5/31/22 4:57 PM, Andrii Nakryiko wrote:
+> On Thu, May 26, 2022 at 11:55 AM Yonghong Song <yhs@fb.com> wrote:
+>>
+>> Add enum64 btf dumping support. For long long and unsigned long long
+>> dump, suffixes 'LL' and 'ULL' are added to avoid compilation errors
+>> in some cases.
+>>
+>> Signed-off-by: Yonghong Song <yhs@fb.com>
+>> ---
+>>   tools/lib/bpf/btf.h      |   5 ++
+>>   tools/lib/bpf/btf_dump.c | 128 ++++++++++++++++++++++++++++++---------
+>>   2 files changed, 103 insertions(+), 30 deletions(-)
+>>
+> 
+> I suspect we have bug in btf_dump_get_enum_value(), we unconditionally
+> sign-extend values. It seems wrong. Can you please extend that part to
+> take into account signed bit (kflag) and do a proper signed/unsigned
+> casting? Thanks!
 
-diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-index 42421fe47a58..28f0f16b96ce 100644
---- a/tools/bpf/bpftool/cgroup.c
-+++ b/tools/bpf/bpftool/cgroup.c
-@@ -15,6 +15,7 @@
- #include <unistd.h>
- 
- #include <bpf/bpf.h>
-+#include <bpf/btf.h>
- 
- #include "main.h"
- 
-@@ -36,6 +37,7 @@
- 	"                        cgroup_inet_sock_release }"
- 
- static unsigned int query_flags;
-+static struct btf *btf_vmlinux;
- 
- static enum bpf_attach_type parse_attach_type(const char *str)
- {
-@@ -69,6 +71,7 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			 int level)
- {
- 	char prog_name[MAX_PROG_FULL_NAME];
-+	const char *attach_btf_name = NULL;
- 	struct bpf_prog_info info = {};
- 	const char *attach_type_str;
- 	__u32 info_len = sizeof(info);
-@@ -84,6 +87,19 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 	}
- 
- 	attach_type_str = libbpf_bpf_attach_type_str(attach_type);
-+
-+	if (btf_vmlinux &&
-+	    info.attach_btf_id < btf__type_cnt(btf_vmlinux)) {
-+		/* Note, we ignore info.attach_btf_obj_id for now. There
-+		 * is no good way to resolve btf_id to vmlinux
-+		 * or module btf.
-+		 */
-+		const struct btf_type *t = btf__type_by_id(btf_vmlinux,
-+							   info.attach_btf_id);
-+		attach_btf_name = btf__name_by_offset(btf_vmlinux,
-+						      t->name_off);
-+	}
-+
- 	get_prog_full_name(&info, prog_fd, prog_name, sizeof(prog_name));
- 	if (json_output) {
- 		jsonw_start_object(json_wtr);
-@@ -95,6 +111,10 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 		jsonw_string_field(json_wtr, "attach_flags",
- 				   attach_flags_str);
- 		jsonw_string_field(json_wtr, "name", prog_name);
-+		if (attach_btf_name)
-+			jsonw_string_field(json_wtr, "attach_btf_name", attach_btf_name);
-+		jsonw_uint_field(json_wtr, "attach_btf_obj_id", info.attach_btf_obj_id);
-+		jsonw_uint_field(json_wtr, "attach_btf_id", info.attach_btf_id);
- 		jsonw_end_object(json_wtr);
- 	} else {
- 		printf("%s%-8u ", level ? "    " : "", info.id);
-@@ -102,7 +122,13 @@ static int show_bpf_prog(int id, enum bpf_attach_type attach_type,
- 			printf("%-15s", attach_type_str);
- 		else
- 			printf("type %-10u", attach_type);
--		printf(" %-15s %-15s\n", attach_flags_str, prog_name);
-+		printf(" %-15s %-15s", attach_flags_str, prog_name);
-+		if (attach_btf_name)
-+			printf(" %-15s", attach_btf_name);
-+		else if (info.attach_btf_id)
-+			printf(" attach_btf_obj_id=%d attach_btf_id=%d",
-+			       info.attach_btf_obj_id, info.attach_btf_id);
-+		printf("\n");
- 	}
- 
- 	close(prog_fd);
-@@ -144,40 +170,48 @@ static int cgroup_has_attached_progs(int cgroup_fd)
- static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
- 				   int level)
- {
-+	LIBBPF_OPTS(bpf_prog_query_opts, p);
- 	const char *attach_flags_str;
- 	__u32 prog_ids[1024] = {0};
--	__u32 prog_cnt, iter;
--	__u32 attach_flags;
-+	__u32 attach_prog_flags[1024] = {0};
- 	char buf[32];
-+	__u32 iter;
- 	int ret;
- 
--	prog_cnt = ARRAY_SIZE(prog_ids);
--	ret = bpf_prog_query(cgroup_fd, type, query_flags, &attach_flags,
--			     prog_ids, &prog_cnt);
-+	p.query_flags = query_flags;
-+	p.prog_cnt = ARRAY_SIZE(prog_ids);
-+	p.prog_ids = prog_ids;
-+
-+	ret = bpf_prog_query_opts(cgroup_fd, type, &p);
- 	if (ret)
- 		return ret;
- 
--	if (prog_cnt == 0)
-+	if (p.prog_cnt == 0)
- 		return 0;
- 
--	switch (attach_flags) {
--	case BPF_F_ALLOW_MULTI:
--		attach_flags_str = "multi";
--		break;
--	case BPF_F_ALLOW_OVERRIDE:
--		attach_flags_str = "override";
--		break;
--	case 0:
--		attach_flags_str = "";
--		break;
--	default:
--		snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
--		attach_flags_str = buf;
--	}
-+	for (iter = 0; iter < p.prog_cnt; iter++) {
-+		__u32 attach_flags;
-+
-+		attach_flags = attach_prog_flags[iter] ?: p.attach_flags;
-+
-+		switch (attach_flags) {
-+		case BPF_F_ALLOW_MULTI:
-+			attach_flags_str = "multi";
-+			break;
-+		case BPF_F_ALLOW_OVERRIDE:
-+			attach_flags_str = "override";
-+			break;
-+		case 0:
-+			attach_flags_str = "";
-+			break;
-+		default:
-+			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
-+			attach_flags_str = buf;
-+		}
- 
--	for (iter = 0; iter < prog_cnt; iter++)
- 		show_bpf_prog(prog_ids[iter], type,
- 			      attach_flags_str, level);
-+	}
- 
- 	return 0;
- }
-@@ -542,5 +576,6 @@ static const struct cmd cmds[] = {
- 
- int do_cgroup(int argc, char **argv)
- {
-+	btf_vmlinux = libbpf_find_kernel_btf();
- 	return cmd_select(cmds, argc, argv, do_help);
- }
--- 
-2.36.1.255.ge46751e96f-goog
+You are right. Will fix.
 
+> 
+> Other than that, it looks good!
