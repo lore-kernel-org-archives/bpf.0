@@ -2,158 +2,458 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6D62C433EF
-	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 20:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00229C433EF
+	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 20:56:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiFAUyp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jun 2022 16:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        id S230317AbiFAU4O (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jun 2022 16:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiFAUyp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jun 2022 16:54:45 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15026212C8E
-        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 13:54:28 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id q13-20020a65624d000000b003fa74c57243so1465739pgv.19
-        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 13:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=MtH8Hz1X124NCWwEXnuLD44TX9SlL7+U3QIB1SL8T2g=;
-        b=H+zlnQUyQ7wgiN5l7ikqahpCnKh+GmSJ6KYEP2NY9Evx31r2htc7pgEbabKn+WEDMp
-         LSRCLZFslgH3grnQnRQu0hyQ7UHu6eP3v1ywzD/my7hdflbAJ3xpVEnwpULfj3Hpo3Oc
-         63XH8kvnROK/FH9EbgwEG0FI8H6gKC6UOW0FMC84/ekIOeEhVm4a5tbTzppYfq4Vxev+
-         4wrgQkEs3akijG9Z/RMAL1GVxs0bAXIkRM8BKgAByB9FS8h2BdZI2zaWinxXdM5LdIAa
-         OgDpH4dwuK2pNLmO3hNRJ+Dlzf3rO8DMsURGJ/dbD8i22nNB5c9HeGiop88rjVh1A1+P
-         TBFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=MtH8Hz1X124NCWwEXnuLD44TX9SlL7+U3QIB1SL8T2g=;
-        b=jC203cWZxlg/ut9wC+J0Sl6neT4zw8Kg5afQ+NiciGHtPlaTqMlJqyS49cVOv55E8I
-         elOV5MkQog9tpa7TP+1KBMD1bz//HFFWF9mT9+rQXPSATLm0hRUKgZxYt31xNKXtChq5
-         M4g6JFRCv9crORmWZbZ8Xgg+uL/n8waw87iLsLTbjtPFCB3kP4TSBUHLZbi0A3CxDp1D
-         eOukQxvzssxLJL3mWK3SB+jKBstyQs7f2a+tDZU8cX2As7QI0va6l4bnZfW/op+HpZ28
-         GNfstUyaBQpsD1r6edRwj+cwJ0sHStGI9uVDxKSPgreK5f4TToEyXwEwcUjUX4gIiiJc
-         n6bw==
-X-Gm-Message-State: AOAM533sYxeANTqTaHMFYPa1YDuy59PT12lQUYFa7gWTqb0UULXJdTp6
-        wyvHGc517G1Idc/mCz8SbTEE3Ac=
-X-Google-Smtp-Source: ABdhPJw8yDf18Kwulq7LUUNeI3POC5BlyGQGYNYGIkmaGrakDJMu3Zn8PP4V73Mn/uh+GBEgI4Hdc6Q=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:903:11d0:b0:156:6c35:9588 with SMTP id
- q16-20020a17090311d000b001566c359588mr880028plh.50.1654110159080; Wed, 01 Jun
- 2022 12:02:39 -0700 (PDT)
-Date:   Wed,  1 Jun 2022 12:02:18 -0700
-In-Reply-To: <20220601190218.2494963-1-sdf@google.com>
-Message-Id: <20220601190218.2494963-12-sdf@google.com>
-Mime-Version: 1.0
-References: <20220601190218.2494963-1-sdf@google.com>
-X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
-Subject: [PATCH bpf-next v8 11/11] selftests/bpf: verify lsm_cgroup struct
- sock access
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S230324AbiFAU4N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jun 2022 16:56:13 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5C841FA7
+        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 13:56:10 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251IbY7Q008407
+        for <bpf@vger.kernel.org>; Wed, 1 Jun 2022 13:19:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=ISZTSov+VbtkkWLimJwz0aGkaJWXaQ5M/SkYnHQvNlg=;
+ b=AMPo+UNWBWeWo1h0fCIfmsh0cM54+yYQHxEPJsZKReUUljetw378JAXVVDTm0pEbIbi+
+ 7V/tbLkqc5pmzlbZ/QhlCDpWOJhdUq1dn8s4O+HlBNZZ4Oc/1wUfysBciNprcgzPwjy5
+ P/Q1QaD3qL5/HQkByqcIhaBb8QW4H8Epl6M= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge5vcm05k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 13:19:48 -0700
+Received: from twshared18317.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 1 Jun 2022 13:19:47 -0700
+Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
+        id E19A3D254C26; Wed,  1 Jun 2022 13:16:54 -0700 (PDT)
+From:   Joanne Koong <joannekoong@fb.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <edumazet@google.com>, <kafai@fb.com>, <kuba@kernel.org>,
+        <davem@davemloft.net>, <pabeni@redhat.com>,
+        <testing@vger.kernel.org>, Joanne Koong <joannelkoong@gmail.com>,
+        <syzbot+015d756bbd1f8b5c8f09@syzkaller.appspotmail.com>,
+        Eric Dumazet <edumzet@google.com>
+Subject: [PATCH net-next v1 resend 1/2] net: Update bhash2 when socket's rcv saddr changes
+Date:   Wed, 1 Jun 2022 13:14:33 -0700
+Message-ID: <20220601201434.1710931-2-joannekoong@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220601201434.1710931-1-joannekoong@fb.com>
+References: <20220601201434.1710931-1-joannekoong@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: o25g5JbZMa95h-YsGYP25CDgrnvxTRh-
+X-Proofpoint-ORIG-GUID: o25g5JbZMa95h-YsGYP25CDgrnvxTRh-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-01_07,2022-06-01_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sk_priority & sk_mark are writable, the rest is readonly.
+From: Joanne Koong <joannelkoong@gmail.com>
 
-One interesting thing here is that the verifier doesn't
-really force me to add NULL checks anywhere :-/
+Commit d5a42de8bdbe ("net: Add a second bind table hashed by port and
+address") added a second bind table, bhash2, that hashes by a socket's po=
+rt
+and rcv address.
 
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
+However, there are two cases where the socket's rcv saddr can change
+after it has been binded:
+
+1) The case where there is a bind() call on "::" (IPADDR_ANY) and then
+a connect() call. The kernel will assign the socket an address when it
+handles the connect()
+
+2) In inet_sk_reselect_saddr(), which is called when rerouting fails
+when rebuilding the sk header (invoked by inet_sk_rebuild_header)
+
+In these two cases, we need to update the bhash2 table by removing the
+entry for the old address, and adding a new entry reflecting the updated
+address.
+
+Reported-by: syzbot+015d756bbd1f8b5c8f09@syzkaller.appspotmail.com
+Fixes: d5a42de8bdbe ("net: Add a second bind table hashed by port and add=
+ress")
+Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
+Reviewed-by: Eric Dumazet <edumzet@google.com>
 ---
- .../selftests/bpf/prog_tests/lsm_cgroup.c     | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ include/net/inet_hashtables.h |  6 ++-
+ include/net/ipv6.h            |  2 +-
+ net/dccp/ipv4.c               | 10 +++--
+ net/dccp/ipv6.c               |  4 +-
+ net/ipv4/af_inet.c            |  7 +++-
+ net/ipv4/inet_hashtables.c    | 69 ++++++++++++++++++++++++++++++++---
+ net/ipv4/tcp_ipv4.c           |  8 +++-
+ net/ipv6/inet6_hashtables.c   |  4 +-
+ net/ipv6/tcp_ipv6.c           |  4 +-
+ 9 files changed, 96 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-index a96057ec7dd4..a730acd9dfdd 100644
---- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -270,8 +270,77 @@ static void test_lsm_cgroup_functional(void)
- 	lsm_cgroup__destroy(skel);
+diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.=
+h
+index a0887b70967b..2c331ce6ca73 100644
+--- a/include/net/inet_hashtables.h
++++ b/include/net/inet_hashtables.h
+@@ -448,11 +448,13 @@ static inline void sk_rcv_saddr_set(struct sock *sk=
+, __be32 addr)
  }
- 
-+static int field_offset(const char *type, const char *field)
-+{
-+	const struct btf_member *memb;
-+	const struct btf_type *tp;
-+	const char *name;
-+	struct btf *btf;
-+	int btf_id;
-+	int i;
+=20
+ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+-			struct sock *sk, u64 port_offset,
++			struct sock *sk, u64 port_offset, bool prev_inaddr_any,
+ 			int (*check_established)(struct inet_timewait_death_row *,
+ 						 struct sock *, __u16,
+ 						 struct inet_timewait_sock **));
+=20
+ int inet_hash_connect(struct inet_timewait_death_row *death_row,
+-		      struct sock *sk);
++		      struct sock *sk, bool prev_inaddr_any);
 +
-+	btf = btf__load_vmlinux_btf();
-+	if (!btf)
-+		return -1;
-+
-+	btf_id = btf__find_by_name_kind(btf, type, BTF_KIND_STRUCT);
-+	if (btf_id < 0)
-+		return -1;
-+
-+	tp = btf__type_by_id(btf, btf_id);
-+	memb = btf_members(tp);
-+
-+	for (i = 0; i < btf_vlen(tp); i++) {
-+		name = btf__name_by_offset(btf,
-+					   memb->name_off);
-+		if (strcmp(field, name) == 0)
-+			return memb->offset / 8;
-+		memb++;
++int inet_bhash2_update_saddr(struct sock *sk);
+ #endif /* _INET_HASHTABLES_H */
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index 5b38bf1a586b..6a50aca56d50 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -1187,7 +1187,7 @@ int inet6_compat_ioctl(struct socket *sock, unsigne=
+d int cmd,
+ 		unsigned long arg);
+=20
+ int inet6_hash_connect(struct inet_timewait_death_row *death_row,
+-			      struct sock *sk);
++		       struct sock *sk, bool prev_inaddr_any);
+ int inet6_sendmsg(struct socket *sock, struct msghdr *msg, size_t size);
+ int inet6_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 		  int flags);
+diff --git a/net/dccp/ipv4.c b/net/dccp/ipv4.c
+index da6e3b20cd75..37a8bc3ee49e 100644
+--- a/net/dccp/ipv4.c
++++ b/net/dccp/ipv4.c
+@@ -47,12 +47,13 @@ int dccp_v4_connect(struct sock *sk, struct sockaddr =
+*uaddr, int addr_len)
+ 	const struct sockaddr_in *usin =3D (struct sockaddr_in *)uaddr;
+ 	struct inet_sock *inet =3D inet_sk(sk);
+ 	struct dccp_sock *dp =3D dccp_sk(sk);
++	struct ip_options_rcu *inet_opt;
+ 	__be16 orig_sport, orig_dport;
++	bool prev_inaddr_any =3D false;
+ 	__be32 daddr, nexthop;
+ 	struct flowi4 *fl4;
+ 	struct rtable *rt;
+ 	int err;
+-	struct ip_options_rcu *inet_opt;
+=20
+ 	dp->dccps_role =3D DCCP_ROLE_CLIENT;
+=20
+@@ -89,8 +90,11 @@ int dccp_v4_connect(struct sock *sk, struct sockaddr *=
+uaddr, int addr_len)
+ 	if (inet_opt =3D=3D NULL || !inet_opt->opt.srr)
+ 		daddr =3D fl4->daddr;
+=20
+-	if (inet->inet_saddr =3D=3D 0)
++	if (inet->inet_saddr =3D=3D 0) {
+ 		inet->inet_saddr =3D fl4->saddr;
++		prev_inaddr_any =3D true;
 +	}
 +
-+	return -1;
-+}
+ 	sk_rcv_saddr_set(sk, inet->inet_saddr);
+ 	inet->inet_dport =3D usin->sin_port;
+ 	sk_daddr_set(sk, daddr);
+@@ -105,7 +109,7 @@ int dccp_v4_connect(struct sock *sk, struct sockaddr =
+*uaddr, int addr_len)
+ 	 * complete initialization after this.
+ 	 */
+ 	dccp_set_state(sk, DCCP_REQUESTING);
+-	err =3D inet_hash_connect(&dccp_death_row, sk);
++	err =3D inet_hash_connect(&dccp_death_row, sk, prev_inaddr_any);
+ 	if (err !=3D 0)
+ 		goto failure;
+=20
+diff --git a/net/dccp/ipv6.c b/net/dccp/ipv6.c
+index fd44638ec16b..03013522acab 100644
+--- a/net/dccp/ipv6.c
++++ b/net/dccp/ipv6.c
+@@ -824,6 +824,7 @@ static int dccp_v6_connect(struct sock *sk, struct so=
+ckaddr *uaddr,
+ 	struct ipv6_pinfo *np =3D inet6_sk(sk);
+ 	struct dccp_sock *dp =3D dccp_sk(sk);
+ 	struct in6_addr *saddr =3D NULL, *final_p, final;
++	bool prev_inaddr_any =3D false;
+ 	struct ipv6_txoptions *opt;
+ 	struct flowi6 fl6;
+ 	struct dst_entry *dst;
+@@ -936,6 +937,7 @@ static int dccp_v6_connect(struct sock *sk, struct so=
+ckaddr *uaddr,
+ 	if (saddr =3D=3D NULL) {
+ 		saddr =3D &fl6.saddr;
+ 		sk->sk_v6_rcv_saddr =3D *saddr;
++		prev_inaddr_any =3D true;
+ 	}
+=20
+ 	/* set the source address */
+@@ -951,7 +953,7 @@ static int dccp_v6_connect(struct sock *sk, struct so=
+ckaddr *uaddr,
+ 	inet->inet_dport =3D usin->sin6_port;
+=20
+ 	dccp_set_state(sk, DCCP_REQUESTING);
+-	err =3D inet6_hash_connect(&dccp_death_row, sk);
++	err =3D inet6_hash_connect(&dccp_death_row, sk, prev_inaddr_any);
+ 	if (err)
+ 		goto late_failure;
+=20
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 93da9f783bec..ad627a99ff9d 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -1221,10 +1221,11 @@ static int inet_sk_reselect_saddr(struct sock *sk=
+)
+ 	struct inet_sock *inet =3D inet_sk(sk);
+ 	__be32 old_saddr =3D inet->inet_saddr;
+ 	__be32 daddr =3D inet->inet_daddr;
++	struct ip_options_rcu *inet_opt;
+ 	struct flowi4 *fl4;
+ 	struct rtable *rt;
+ 	__be32 new_saddr;
+-	struct ip_options_rcu *inet_opt;
++	int err;
+=20
+ 	inet_opt =3D rcu_dereference_protected(inet->inet_opt,
+ 					     lockdep_sock_is_held(sk));
+@@ -1253,6 +1254,10 @@ static int inet_sk_reselect_saddr(struct sock *sk)
+=20
+ 	inet->inet_saddr =3D inet->inet_rcv_saddr =3D new_saddr;
+=20
++	err =3D inet_bhash2_update_saddr(sk);
++	if (err)
++		return err;
 +
-+static bool sk_writable_field(const char *type, const char *field, int size)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts,
-+		    .expected_attach_type = BPF_LSM_CGROUP);
-+	struct bpf_insn	insns[] = {
-+		/* r1 = *(u64 *)(r1 + 0) */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0),
-+		/* r1 = *(u64 *)(r1 + offsetof(struct socket, sk)) */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, field_offset("socket", "sk")),
-+		/* r2 = *(u64 *)(r1 + offsetof(struct sock, <field>)) */
-+		BPF_LDX_MEM(size, BPF_REG_2, BPF_REG_1, field_offset(type, field)),
-+		/* *(u64 *)(r1 + offsetof(struct sock, <field>)) = r2 */
-+		BPF_STX_MEM(size, BPF_REG_1, BPF_REG_2, field_offset(type, field)),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	};
-+	int fd;
-+
-+	opts.attach_btf_id = libbpf_find_vmlinux_btf_id("socket_post_create",
-+							opts.expected_attach_type);
-+
-+	fd = bpf_prog_load(BPF_PROG_TYPE_LSM, NULL, "GPL", insns, ARRAY_SIZE(insns), &opts);
-+	if (fd >= 0)
-+		close(fd);
-+	return fd >= 0;
-+}
-+
-+static void test_lsm_cgroup_access(void)
-+{
-+	ASSERT_FALSE(sk_writable_field("sock_common", "skc_family", BPF_H), "skc_family");
-+	ASSERT_FALSE(sk_writable_field("sock", "sk_sndtimeo", BPF_DW), "sk_sndtimeo");
-+	ASSERT_TRUE(sk_writable_field("sock", "sk_priority", BPF_W), "sk_priority");
-+	ASSERT_TRUE(sk_writable_field("sock", "sk_mark", BPF_W), "sk_mark");
-+	ASSERT_FALSE(sk_writable_field("sock", "sk_pacing_rate", BPF_DW), "sk_pacing_rate");
-+}
-+
- void test_lsm_cgroup(void)
- {
- 	if (test__start_subtest("functional"))
- 		test_lsm_cgroup_functional();
-+	if (test__start_subtest("access"))
-+		test_lsm_cgroup_access();
+ 	/*
+ 	 * XXX The only one ugly spot where we need to
+ 	 * XXX really change the sockets identity after
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index e8de5e699b3f..0b43a30b6363 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -826,6 +826,54 @@ inet_bind2_bucket_find(struct inet_hashinfo *hinfo, =
+struct net *net,
+ 	return bhash2;
  }
--- 
-2.36.1.255.ge46751e96f-goog
+=20
++/* the lock for the socket's corresponding bhash entry must be held */
++int __inet_bhash2_update_saddr(struct sock *sk, struct inet_hashinfo *hi=
+nfo,
++			       struct net *net, int port, int l3mdev)
++{
++	struct inet_bind2_hashbucket *head2;
++	struct inet_bind2_bucket *tb2;
++
++	tb2 =3D inet_bind2_bucket_find(hinfo, net, port, l3mdev, sk,
++				     &head2);
++	if (!tb2) {
++		tb2 =3D inet_bind2_bucket_create(hinfo->bind2_bucket_cachep,
++					       net, head2, port, l3mdev, sk);
++		if (!tb2)
++			return -ENOMEM;
++	}
++
++	/* Remove the socket's old entry from bhash2 */
++	__sk_del_bind2_node(sk);
++
++	sk_add_bind2_node(sk, &tb2->owners);
++	inet_csk(sk)->icsk_bind2_hash =3D tb2;
++
++	return 0;
++}
++
++/* This should be called if/when a socket's rcv saddr changes after it h=
+as
++ * been binded.
++ */
++int inet_bhash2_update_saddr(struct sock *sk)
++{
++	struct inet_hashinfo *hinfo =3D sk->sk_prot->h.hashinfo;
++	int l3mdev =3D inet_sk_bound_l3mdev(sk);
++	struct inet_bind_hashbucket *head;
++	int port =3D inet_sk(sk)->inet_num;
++	struct net *net =3D sock_net(sk);
++	int err;
++
++	head =3D &hinfo->bhash[inet_bhashfn(net, port, hinfo->bhash_size)];
++
++	spin_lock_bh(&head->lock);
++
++	err =3D __inet_bhash2_update_saddr(sk, hinfo, net, port, l3mdev);
++
++	spin_unlock_bh(&head->lock);
++
++	return err;
++}
++
+ /* RFC 6056 3.3.4.  Algorithm 4: Double-Hash Port Selection Algorithm
+  * Note that we use 32bit integers (vs RFC 'short integers')
+  * because 2^16 is not a multiple of num_ephemeral and this
+@@ -840,7 +888,7 @@ inet_bind2_bucket_find(struct inet_hashinfo *hinfo, s=
+truct net *net,
+ static u32 *table_perturb;
+=20
+ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+-		struct sock *sk, u64 port_offset,
++		struct sock *sk, u64 port_offset, bool prev_inaddr_any,
+ 		int (*check_established)(struct inet_timewait_death_row *,
+ 			struct sock *, __u16, struct inet_timewait_sock **))
+ {
+@@ -858,11 +906,24 @@ int __inet_hash_connect(struct inet_timewait_death_=
+row *death_row,
+ 	int l3mdev;
+ 	u32 index;
+=20
++	l3mdev =3D inet_sk_bound_l3mdev(sk);
++
+ 	if (port) {
+ 		head =3D &hinfo->bhash[inet_bhashfn(net, port,
+ 						  hinfo->bhash_size)];
+ 		tb =3D inet_csk(sk)->icsk_bind_hash;
++
+ 		spin_lock_bh(&head->lock);
++
++		if (prev_inaddr_any) {
++			ret =3D __inet_bhash2_update_saddr(sk, hinfo, net, port,
++							 l3mdev);
++			if (ret) {
++				spin_unlock_bh(&head->lock);
++				return ret;
++			}
++		}
++
+ 		if (sk_head(&tb->owners) =3D=3D sk && !sk->sk_bind_node.next) {
+ 			inet_ehash_nolisten(sk, NULL, NULL);
+ 			spin_unlock_bh(&head->lock);
+@@ -875,8 +936,6 @@ int __inet_hash_connect(struct inet_timewait_death_ro=
+w *death_row,
+ 		return ret;
+ 	}
+=20
+-	l3mdev =3D inet_sk_bound_l3mdev(sk);
+-
+ 	inet_get_local_port_range(net, &low, &high);
+ 	high++; /* [32768, 60999] -> [32768, 61000[ */
+ 	remaining =3D high - low;
+@@ -987,13 +1046,13 @@ int __inet_hash_connect(struct inet_timewait_death=
+_row *death_row,
+  * Bind a port for a connect operation and hash it.
+  */
+ int inet_hash_connect(struct inet_timewait_death_row *death_row,
+-		      struct sock *sk)
++		      struct sock *sk, bool prev_inaddr_any)
+ {
+ 	u64 port_offset =3D 0;
+=20
+ 	if (!inet_sk(sk)->inet_num)
+ 		port_offset =3D inet_sk_port_offset(sk);
+-	return __inet_hash_connect(death_row, sk, port_offset,
++	return __inet_hash_connect(death_row, sk, port_offset, prev_inaddr_any,
+ 				   __inet_check_established);
+ }
+ EXPORT_SYMBOL_GPL(inet_hash_connect);
+diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+index dac2650f3863..adf8d750933d 100644
+--- a/net/ipv4/tcp_ipv4.c
++++ b/net/ipv4/tcp_ipv4.c
+@@ -203,6 +203,7 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr *=
+uaddr, int addr_len)
+ 	struct inet_sock *inet =3D inet_sk(sk);
+ 	struct tcp_sock *tp =3D tcp_sk(sk);
+ 	__be16 orig_sport, orig_dport;
++	bool prev_inaddr_any =3D false;
+ 	__be32 daddr, nexthop;
+ 	struct flowi4 *fl4;
+ 	struct rtable *rt;
+@@ -246,8 +247,11 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr =
+*uaddr, int addr_len)
+ 	if (!inet_opt || !inet_opt->opt.srr)
+ 		daddr =3D fl4->daddr;
+=20
+-	if (!inet->inet_saddr)
++	if (!inet->inet_saddr) {
+ 		inet->inet_saddr =3D fl4->saddr;
++		prev_inaddr_any =3D true;
++	}
++
+ 	sk_rcv_saddr_set(sk, inet->inet_saddr);
+=20
+ 	if (tp->rx_opt.ts_recent_stamp && inet->inet_daddr !=3D daddr) {
+@@ -273,7 +277,7 @@ int tcp_v4_connect(struct sock *sk, struct sockaddr *=
+uaddr, int addr_len)
+ 	 * complete initialization after this.
+ 	 */
+ 	tcp_set_state(sk, TCP_SYN_SENT);
+-	err =3D inet_hash_connect(tcp_death_row, sk);
++	err =3D inet_hash_connect(tcp_death_row, sk, prev_inaddr_any);
+ 	if (err)
+ 		goto failure;
+=20
+diff --git a/net/ipv6/inet6_hashtables.c b/net/ipv6/inet6_hashtables.c
+index 7d53d62783b1..c87c5933f3be 100644
+--- a/net/ipv6/inet6_hashtables.c
++++ b/net/ipv6/inet6_hashtables.c
+@@ -317,13 +317,13 @@ static u64 inet6_sk_port_offset(const struct sock *=
+sk)
+ }
+=20
+ int inet6_hash_connect(struct inet_timewait_death_row *death_row,
+-		       struct sock *sk)
++		       struct sock *sk, bool prev_inaddr_any)
+ {
+ 	u64 port_offset =3D 0;
+=20
+ 	if (!inet_sk(sk)->inet_num)
+ 		port_offset =3D inet6_sk_port_offset(sk);
+-	return __inet_hash_connect(death_row, sk, port_offset,
++	return __inet_hash_connect(death_row, sk, port_offset, prev_inaddr_any,
+ 				   __inet6_check_established);
+ }
+ EXPORT_SYMBOL_GPL(inet6_hash_connect);
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index f37dd4aa91c6..81e3312c2a97 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -152,6 +152,7 @@ static int tcp_v6_connect(struct sock *sk, struct soc=
+kaddr *uaddr,
+ 	struct ipv6_pinfo *np =3D tcp_inet6_sk(sk);
+ 	struct tcp_sock *tp =3D tcp_sk(sk);
+ 	struct in6_addr *saddr =3D NULL, *final_p, final;
++	bool prev_inaddr_any =3D false;
+ 	struct ipv6_txoptions *opt;
+ 	struct flowi6 fl6;
+ 	struct dst_entry *dst;
+@@ -289,6 +290,7 @@ static int tcp_v6_connect(struct sock *sk, struct soc=
+kaddr *uaddr,
+ 	if (!saddr) {
+ 		saddr =3D &fl6.saddr;
+ 		sk->sk_v6_rcv_saddr =3D *saddr;
++		prev_inaddr_any =3D true;
+ 	}
+=20
+ 	/* set the source address */
+@@ -309,7 +311,7 @@ static int tcp_v6_connect(struct sock *sk, struct soc=
+kaddr *uaddr,
+=20
+ 	tcp_set_state(sk, TCP_SYN_SENT);
+ 	tcp_death_row =3D sock_net(sk)->ipv4.tcp_death_row;
+-	err =3D inet6_hash_connect(tcp_death_row, sk);
++	err =3D inet6_hash_connect(tcp_death_row, sk, prev_inaddr_any);
+ 	if (err)
+ 		goto late_failure;
+=20
+--=20
+2.30.2
 
