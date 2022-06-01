@@ -2,92 +2,123 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F50C433EF
-	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 21:46:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C3BC43334
+	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 21:53:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiFAVqH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jun 2022 17:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S231825AbiFAVxQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jun 2022 17:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiFAVqG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jun 2022 17:46:06 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAF6BC07
-        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 14:46:05 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251HPftL010699
-        for <bpf@vger.kernel.org>; Wed, 1 Jun 2022 13:16:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=//UHTcHy0RRJYWzMXl1WsySl0RZInyogWdCnZYCDfuQ=;
- b=jNdUl+vWsDCt3mBZ85zAz0y3Vzit1M6oyrXaCugxbkpaGbimF1uCx1vrSNUMKkmFxC5n
- YURk/avPgvyaaH5HOQXh7qoj2pdhF0GcL8CMgHJDhO1eDObppv9p61IoFQK3i2/4CuGm
- IK8LvvP1IpbLej5gMOvUa18aJr9nDqTevAs= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge3wk4h2w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 13:16:59 -0700
-Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 1 Jun 2022 13:16:58 -0700
-Received: by devbig010.atn6.facebook.com (Postfix, from userid 115148)
-        id B922AD254BEE; Wed,  1 Jun 2022 13:16:33 -0700 (PDT)
-From:   Joanne Koong <joannekoong@fb.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <edumazet@google.com>, <kafai@fb.com>, <kuba@kernel.org>,
-        <davem@davemloft.net>, <pabeni@redhat.com>,
-        <testing@vger.kernel.org>, Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH net-next v1 resend 0/2] Update bhash2 when socket's rcv saddr changes
-Date:   Wed, 1 Jun 2022 13:14:32 -0700
-Message-ID: <20220601201434.1710931-1-joannekoong@fb.com>
-X-Mailer: git-send-email 2.30.2
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: G9M_N8O5pYgPQtgILTxF_FmB5KHknXH2
-X-Proofpoint-ORIG-GUID: G9M_N8O5pYgPQtgILTxF_FmB5KHknXH2
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S231871AbiFAVxJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jun 2022 17:53:09 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A8F14D05
+        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 14:53:07 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id v9so3375038lja.12
+        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 14:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8eNuzdi12vGlm/9RiRHvmNZSgJVbOpWJIw4GS5I5Q4s=;
+        b=HmTGJheseKdLgG0cvWLDEgdDaKSm6Wl5ngtjTFFez+9BFK4Yd91ToknHFEDvV7B+K9
+         BWGl+VL8JMTmLUqnJ85WkPA5HDS6e7baljBQYzFRA1/7V4ymGHt3SBc7/B/YyK7t1ST4
+         fXvE6ZTuXYiRy/a9kB+3UMWlind0Fcz5JA6UQ509NSW1OThsQXlx0DngqYshvFoj1kkV
+         DHUgvwQugyUMM7z+vHrmRq2HdgU4l8Pjb7iiFAV+C5ScELdTbX8RDzippP58pSrhJaZb
+         UYmOvDuphSn6t15tXqapw3eQn6O5WbEgaKn3WW+/9VeFp7tjKfTxuKHa0WmgIvxAqvuE
+         lQIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8eNuzdi12vGlm/9RiRHvmNZSgJVbOpWJIw4GS5I5Q4s=;
+        b=hZIvUCR0f2l5pyOJBrbrMYqNYmBLawIi0SCvnEUWSy0F+pavG76T/fhICcLvJLhraz
+         zL2Ep3mH5xxbmsjJGF604R2r66ySjx3nMGH2eLe9qJg8CyuI/5Mgc3LefCTKv8+B/Xp7
+         sZ/qJAxoSCOtV2ejDtdCVo/KZObm/eypUZ6iqSz+CxjMCxx5qXveQ6GoVITgU0wrk+RX
+         pRvpVeZXeW6I4e6cFr+ZeDb5Amjw+30YIDJhZU9bc9/DoYIeh+ltI5h+K4i8ZUru3N/0
+         3zqIFynfASTpH23MCCBzf6+dACmFkLnzOjxlexvlCUPHQehhf8nhiTJ6iRkUzn6A9U5g
+         knnw==
+X-Gm-Message-State: AOAM531ReRMWaDNez1e/YTlS9T9BuRrjK3lZyutXGqUerVgMgStJGCEB
+        PldKZgWyLxlHnFwZsGC3LwooOO3EqL0unMfey7U=
+X-Google-Smtp-Source: ABdhPJyHDVJekkoXaZVxv7megVKOtz/J7DR/xJU14EHdFoWMhD3ndpQqICQ8115gFVnqlDb3ru3OOeSa/MgE2ksQAMo=
+X-Received: by 2002:a2e:1f12:0:b0:255:67ae:b655 with SMTP id
+ f18-20020a2e1f12000000b0025567aeb655mr4697849ljf.303.1654120385947; Wed, 01
+ Jun 2022 14:53:05 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-01_07,2022-06-01_01,2022-02-23_01
+References: <20220526185432.2545879-1-yhs@fb.com> <20220526185503.2548083-1-yhs@fb.com>
+ <CAEf4BzaCiYvsfBLAqFKnciiL5QKKVqZp8enRbZTUUUekygCHUQ@mail.gmail.com> <4ddd80f8-24e1-2f6e-52e2-ed03af7760ed@fb.com>
+In-Reply-To: <4ddd80f8-24e1-2f6e-52e2-ed03af7760ed@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 1 Jun 2022 14:52:54 -0700
+Message-ID: <CAEf4BzaPmJs=buVOoT+mTpuJPBRVhzsJYFZ5dEvwTwDRAbGOdg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/18] libbpf: Add enum64 deduplication support
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Joanne Koong <joannelkoong@gmail.com>
+On Wed, Jun 1, 2022 at 11:31 AM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 5/31/22 4:50 PM, Andrii Nakryiko wrote:
+> > On Thu, May 26, 2022 at 11:55 AM Yonghong Song <yhs@fb.com> wrote:
+> >>
+> >> Add enum64 deduplication support. BTF_KIND_ENUM64 handling
+> >> is very similar to BTF_KIND_ENUM.
+> >>
+> >> Signed-off-by: Yonghong Song <yhs@fb.com>
+> >> ---
+> >>   tools/lib/bpf/btf.c | 62 +++++++++++++++++++++++++++++++++++++++++++--
+> >>   tools/lib/bpf/btf.h |  5 ++++
+> >>   2 files changed, 65 insertions(+), 2 deletions(-)
+> >>
+> >
+> > [...]
+> >
+> >> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> >> index a41463bf9060..b22c648c69ff 100644
+> >> --- a/tools/lib/bpf/btf.h
+> >> +++ b/tools/lib/bpf/btf.h
+> >> @@ -531,6 +531,11 @@ static inline bool btf_is_type_tag(const struct btf_type *t)
+> >>          return btf_kind(t) == BTF_KIND_TYPE_TAG;
+> >>   }
+> >>
+> >> +static inline bool btf_type_is_any_enum(const struct btf_type *t)
+> >
+> > btf_is_any_enum() for consistency with all other helpers?
+>
+> I am using btf_type_is_any_enum() since btf_type_is_* is the kernel
+> code convention and btf_type_is_any_enum() is used in relo_core.c
+> which is used by both kernel and libbpf.
+>
+> But I can change to btf_is_any_enum(). It should be okay.
+>
 
-As syzbot noted [1], there is an inconsistency in the bhash2 table in the c=
-ase
-where a socket's rcv saddr changes after it is binded. (For more details,
-please see the commit message of the first patch)
+Right, but all the btf_is_*() APIs are part of public libbpf API, so
+we should prioritize keeping that consistent. When Alexei was adding
+CO-RE logic from libbpf to kernel we had few more such naming
+mismatches. I don't remember if he added #define or just a small
+static wrapper, but we can do the same for kernel side.
 
-This patchset fixes that and adds a test that triggers the case where the s=
-k's
-rcv saddr changes. The subsequent listen() call should succeed.
+So yeah, please do rename, thanks!
 
-[1] https://lore.kernel.org/netdev/0000000000003f33bc05dfaf44fe@google.com/
 
-Joanne Koong (2):
-  net: Update bhash2 when socket's rcv saddr changes
-  selftests/net: Add sk_bind_sendto_listen test
-
- include/net/inet_hashtables.h                 |  6 +-
- include/net/ipv6.h                            |  2 +-
- net/dccp/ipv4.c                               | 10 ++-
- net/dccp/ipv6.c                               |  4 +-
- net/ipv4/af_inet.c                            |  7 +-
- net/ipv4/inet_hashtables.c                    | 69 ++++++++++++++--
- net/ipv4/tcp_ipv4.c                           |  8 +-
- net/ipv6/inet6_hashtables.c                   |  4 +-
- net/ipv6/tcp_ipv6.c                           |  4 +-
- tools/testing/selftests/net/.gitignore        |  1 +
- tools/testing/selftests/net/Makefile          |  1 +
- .../selftests/net/sk_bind_sendto_listen.c     | 82 +++++++++++++++++++
- 12 files changed, 180 insertions(+), 18 deletions(-)
- create mode 100644 tools/testing/selftests/net/sk_bind_sendto_listen.c
-
---=20
-2.30.2
-
+> >
+> > The rest looks great!
+> >
+> >> +{
+> >> +       return btf_is_enum(t) || btf_is_enum64(t);
+> >> +}
+> >> +
+> >>   static inline __u8 btf_int_encoding(const struct btf_type *t)
+> >>   {
+> >>          return BTF_INT_ENCODING(*(__u32 *)(t + 1));
+> >> --
+> >> 2.30.2
+> >>
