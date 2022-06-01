@@ -2,146 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 561C8C433F5
-	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 08:30:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61911C433FE
+	for <bpf@archiver.kernel.org>; Wed,  1 Jun 2022 08:42:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349109AbiFAIaj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jun 2022 04:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        id S233068AbiFAImH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jun 2022 04:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350773AbiFAIah (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jun 2022 04:30:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E77A4BFE9;
-        Wed,  1 Jun 2022 01:30:35 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LCj432ZBXzjXDv;
-        Wed,  1 Jun 2022 16:29:23 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 1 Jun 2022 16:30:32 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH net-next v4] ipv6: Fix signed integer overflow in __ip6_append_data
-Date:   Wed, 1 Jun 2022 16:48:03 +0800
-Message-ID: <20220601084803.1833344-1-wangyufen@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S234629AbiFAImE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jun 2022 04:42:04 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2ED5BE6E
+        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 01:42:02 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so1405069pjb.3
+        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 01:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17jbuB5ApQ2iSURu9wqbSRYsL+H5kiM4U+n5E3wCBBM=;
+        b=YYZpXVz73I9bIFut7IGyzJAak1gGAmGFP83a1uzg+MbXHP4zJnmYRW9bqGEDjGyR2I
+         HJXNd8uEjusQFPFgN6CF3/Or0xXd9WObAbppzV4d8Kjakf1n5Bqq541sZNKKbrak0Rf1
+         hrDXWpV3hBS7wdFZwABFJY2YTT0OEV3UliHm8En96ewOikvWUC24a3lWC5aEIyjl1Rq3
+         Pa6mrpOFzFDUQXjNa0LWgt2GDywWPnSzh6tHJvyuW2v+Jyn5xhWaNAl/abKtz2/oxhuw
+         DEZnaVlwaujCN2IiKgLcW9S1QrinBOu344RdmTHD3dq3DqOWnxjSb1oExOmkyerAVMQ+
+         kWNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17jbuB5ApQ2iSURu9wqbSRYsL+H5kiM4U+n5E3wCBBM=;
+        b=2dNGu0tiatbkWRiz4NyOIkDWH954uadL/o/IrU2NqK8WDlCZgEBHxQE/tX7gDNubYi
+         /uSK/bqSwZ53JH9dsL3HwlsYl9Vdule92Q7yhXgQqWW2nclP5r3R2MY3DBPkdscOYaHF
+         SYYln0/0Sa8NxtTZ2PDuAcJPJq1oAOEmwYvrEqhrYbXsA1QRnZVWaw0dA44+G4W9hmbQ
+         kDeZOxDW/Hx+NDjyNbRu+8piJrTFu67aU0I5dDY+Q4XSM2oZn25RpGDHpRUmsMBhSklQ
+         wELed+6j8vm3EX67g4spBG7LkPQoJcTmuRIF6qL7WE2MhxbUcncO+LGDp6EpARbnvhRU
+         AqYg==
+X-Gm-Message-State: AOAM532a/1o6C5hdjhw+Cr34Y3J5+rJgsXthg1ZSmnhQbrHRBZJdksIC
+        rRH/yRqyGlM+OONM+bN06eP3uQ==
+X-Google-Smtp-Source: ABdhPJwRgSG1EOyJ20GwRk9Y2BJbzzZUUJFfjUP4QN+PP1rE56lDFxd9N311EPujHZyQhJ1llk8qXQ==
+X-Received: by 2002:a17:902:8c90:b0:163:b989:3cd6 with SMTP id t16-20020a1709028c9000b00163b9893cd6mr17865260plo.170.1654072922062;
+        Wed, 01 Jun 2022 01:42:02 -0700 (PDT)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.241])
+        by smtp.gmail.com with ESMTPSA id u11-20020a63d34b000000b003c14af505f6sm827952pgi.14.2022.06.01.01.41.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Jun 2022 01:42:01 -0700 (PDT)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, wangdongdong.6@bytedance.com,
+        cong.wang@bytedance.com, zhouchengming@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH v4 0/2] Optimize performance of update hash-map when free is zero
+Date:   Wed,  1 Jun 2022 16:41:47 +0800
+Message-Id: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Resurrect ubsan overflow checks and ubsan report this warning,
-fix it by change the variable [length] type to size_t.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-UBSAN: signed-integer-overflow in net/ipv6/ip6_output.c:1489:19
-2147479552 + 8567 cannot be represented in type 'int'
-CPU: 0 PID: 253 Comm: err Not tainted 5.16.0+ #1
-Hardware name: linux,dummy-virt (DT)
-Call trace:
-  dump_backtrace+0x214/0x230
-  show_stack+0x30/0x78
-  dump_stack_lvl+0xf8/0x118
-  dump_stack+0x18/0x30
-  ubsan_epilogue+0x18/0x60
-  handle_overflow+0xd0/0xf0
-  __ubsan_handle_add_overflow+0x34/0x44
-  __ip6_append_data.isra.48+0x1598/0x1688
-  ip6_append_data+0x128/0x260
-  udpv6_sendmsg+0x680/0xdd0
-  inet6_sendmsg+0x54/0x90
-  sock_sendmsg+0x70/0x88
-  ____sys_sendmsg+0xe8/0x368
-  ___sys_sendmsg+0x98/0xe0
-  __sys_sendmmsg+0xf4/0x3b8
-  __arm64_sys_sendmmsg+0x34/0x48
-  invoke_syscall+0x64/0x160
-  el0_svc_common.constprop.4+0x124/0x300
-  do_el0_svc+0x44/0xc8
-  el0_svc+0x3c/0x1e8
-  el0t_64_sync_handler+0x88/0xb0
-  el0t_64_sync+0x16c/0x170
+We encountered bad case on big system with 96 CPUs that
+alloc_htab_elem() would last for 1ms. The reason is that after the
+prealloc hashtab has no free elems, when trying to update, it will still
+grab spin_locks of all cpus. If there are multiple update users, the
+competition is very serious.
 
-Changes since v1:
--Change the variable [length] type to unsigned, as Eric Dumazet suggested.
-Changes since v2:
--Don't change exthdrlen type in ip6_make_skb, as Paolo Abeni suggested.
-Changes since v3:
--Don't change ulen type in udpv6_sendmsg and l2tp_ip6_sendmsg, as
-Jakub Kicinski suggested.
+0001: Add is_empty to check whether the free list is empty or not before taking
+the lock.
+0002: Add benchmark to reproduce this worst case.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- include/net/ipv6.h    | 4 ++--
- net/ipv6/ip6_output.c | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changelog:
+v3->v4: Addressed comments from Daniel Borkmann.
+- Use READ_ONCE/WRITE_ONCE.
+some details in here:
+https://lore.kernel.org/all/20220530091340.53443-1-zhoufeng.zf@bytedance.com/
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index 5b38bf1a586b..de9dcc5652c4 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -1063,7 +1063,7 @@ int ip6_find_1stfragopt(struct sk_buff *skb, u8 **nexthdr);
- int ip6_append_data(struct sock *sk,
- 		    int getfrag(void *from, char *to, int offset, int len,
- 				int odd, struct sk_buff *skb),
--		    void *from, int length, int transhdrlen,
-+		    void *from, size_t length, int transhdrlen,
- 		    struct ipcm6_cookie *ipc6, struct flowi6 *fl6,
- 		    struct rt6_info *rt, unsigned int flags);
- 
-@@ -1079,7 +1079,7 @@ struct sk_buff *__ip6_make_skb(struct sock *sk, struct sk_buff_head *queue,
- struct sk_buff *ip6_make_skb(struct sock *sk,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
--			     void *from, int length, int transhdrlen,
-+			     void *from, size_t length, int transhdrlen,
- 			     struct ipcm6_cookie *ipc6,
- 			     struct rt6_info *rt, unsigned int flags,
- 			     struct inet_cork_full *cork);
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 4081b12a01ff..77e3f5970ce4 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1450,7 +1450,7 @@ static int __ip6_append_data(struct sock *sk,
- 			     struct page_frag *pfrag,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
--			     void *from, int length, int transhdrlen,
-+			     void *from, size_t length, int transhdrlen,
- 			     unsigned int flags, struct ipcm6_cookie *ipc6)
- {
- 	struct sk_buff *skb, *skb_prev = NULL;
-@@ -1798,7 +1798,7 @@ static int __ip6_append_data(struct sock *sk,
- int ip6_append_data(struct sock *sk,
- 		    int getfrag(void *from, char *to, int offset, int len,
- 				int odd, struct sk_buff *skb),
--		    void *from, int length, int transhdrlen,
-+		    void *from, size_t length, int transhdrlen,
- 		    struct ipcm6_cookie *ipc6, struct flowi6 *fl6,
- 		    struct rt6_info *rt, unsigned int flags)
- {
-@@ -1995,7 +1995,7 @@ EXPORT_SYMBOL_GPL(ip6_flush_pending_frames);
- struct sk_buff *ip6_make_skb(struct sock *sk,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
--			     void *from, int length, int transhdrlen,
-+			     void *from, size_t length, int transhdrlen,
- 			     struct ipcm6_cookie *ipc6, struct rt6_info *rt,
- 			     unsigned int flags, struct inet_cork_full *cork)
- {
+v2->v3: Addressed comments from Alexei Starovoitov, Andrii Nakryiko.
+- Adjust the way the benchmark is tested.
+- Adjust the code format.
+some details in here:
+https://lore.kernel.org/all/20220524075306.32306-1-zhoufeng.zf@bytedance.com/T/
+
+v1->v2: Addressed comments from Alexei Starovoitov.
+- add a benchmark to reproduce the issue.
+- Adjust the code format that avoid adding indent.
+some details in here:
+https://lore.kernel.org/all/877ac441-045b-1844-6938-fcaee5eee7f2@bytedance.com/T/
+
+Feng Zhou (2):
+  bpf: avoid grabbing spin_locks of all cpus when no free elems
+  selftest/bpf/benchs: Add bpf_map benchmark
+
+ kernel/bpf/percpu_freelist.c                  | 28 +++++-
+ kernel/bpf/percpu_freelist.h                  |  1 +
+ tools/testing/selftests/bpf/Makefile          |  4 +-
+ tools/testing/selftests/bpf/bench.c           |  2 +
+ .../benchs/bench_bpf_hashmap_full_update.c    | 96 +++++++++++++++++++
+ .../run_bench_bpf_hashmap_full_update.sh      | 11 +++
+ .../bpf/progs/bpf_hashmap_full_update_bench.c | 40 ++++++++
+ 7 files changed, 178 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/benchs/bench_bpf_hashmap_full_update.c
+ create mode 100755 tools/testing/selftests/bpf/benchs/run_bench_bpf_hashmap_full_update.sh
+ create mode 100644 tools/testing/selftests/bpf/progs/bpf_hashmap_full_update_bench.c
+
 -- 
-2.25.1
+2.20.1
 
