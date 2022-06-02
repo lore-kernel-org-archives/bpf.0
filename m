@@ -2,789 +2,159 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79BD1C43334
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 04:11:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A15BC433EF
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 06:17:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiFBELT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 00:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S229680AbiFBGRZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 02:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiFBELC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 00:11:02 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204520C6CE;
-        Wed,  1 Jun 2022 21:11:00 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id d12so1252258qke.5;
-        Wed, 01 Jun 2022 21:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6SaQB2KY5hg6A/cClHc+Er5tacEkWzmSGpRc1pU4Ce8=;
-        b=Bau+uP9R0LpNWLVrbbdidmqjTkIRm98LSk/M0y+BRiZJvJ8X4LD6T0Z+ijCm6PIiv9
-         wwISoTsJzmUYOm3lMJKd0RM+mViMamE+iVF1VAYp7Z4e67mWY5G3tvEgqhSO0e+Co/JJ
-         3mSl/7gL0+2BcvAnj8RFxwqqbzlVAgB4WQ632d4bOBLKzojg7IHWL2XBBZzjZ7CW4psE
-         Sfs259Hxiz+ikE2v321RHGtFcTB1sPWQSJ6dNiR5+yc4t0hrBfD7ZoIe9h8Z5ZFli+Uq
-         7I6BwFIT1dy5/S+hmJKiLGy2MvCWtQWX2phZJiGJSjd0DCbZTzUlec0HuLodP0pUU3Y7
-         pwdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6SaQB2KY5hg6A/cClHc+Er5tacEkWzmSGpRc1pU4Ce8=;
-        b=E2uv2qdMO80zlBEC3ZvWq1IP1+EFoP6lz1TW6llRRZANLlL9lv2O3whvlP1al44fy1
-         juNoZAaLUPaEdoIG+qTb18Jj7GBTtqn47mvVrKKUScAo0EKrOCNWv+hT02uvHvtscKyI
-         p+fjuOoz3Jk9J5VZRKRfy4h7xpgJ4MtXsuo+YPxOf6zLopixfWaTneH2zSnX1zWSVhx4
-         1jwk6HHfczKd4xllwm03bDYGapV+StfrSaJHeBhrOTE5PO7vJDEUmJh93n7tc+FMLAZK
-         saIbkTJHTA4dkqCMKFuGoMLQuDNqKESU60GdXhG/PpVwminU2gBW1G40z2Gyre/TPztf
-         H24w==
-X-Gm-Message-State: AOAM533Qa42Dd3c7bSC/7xtebhkNRWlg7/nHA3jOoN848xczK4wkBz+g
-        EpC/lz+vafqYjMFLIiAW87nJLDhQjz8=
-X-Google-Smtp-Source: ABdhPJzettd+5UO4ErfCUv0+Ddu74wWupigNSMNRw5VfjVY10q3wutHt+GVRoAueJM4756jlBE5UxA==
-X-Received: by 2002:a05:620a:244b:b0:6a5:b92e:9b with SMTP id h11-20020a05620a244b00b006a5b92e009bmr1944553qkn.610.1654143059261;
-        Wed, 01 Jun 2022 21:10:59 -0700 (PDT)
-Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:d7c6:fc22:5340:d891])
-        by smtp.gmail.com with ESMTPSA id i187-20020a3786c4000000b0069fc13ce1fesm2396654qkd.47.2022.06.01.21.10.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 21:10:58 -0700 (PDT)
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <xiyou.wangcong@gmail.com>,
-        Cong Wang <cong.wang@bytedance.com>
-Subject: [RFC Patch v5 4/5] net_sched: introduce eBPF based Qdisc
-Date:   Wed,  1 Jun 2022 21:10:27 -0700
-Message-Id: <20220602041028.95124-5-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220602041028.95124-1-xiyou.wangcong@gmail.com>
-References: <20220602041028.95124-1-xiyou.wangcong@gmail.com>
+        with ESMTP id S229483AbiFBGRX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 02:17:23 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A912198;
+        Wed,  1 Jun 2022 23:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654150642; x=1685686642;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ooI4sWwbnlbAAJn+k1VaNoQTx4NFNgg+b47kaovZw28=;
+  b=keXhzColze0ab9W2f9vaZOYgwIqvspKimGRUxSeERQliq5jQ9mKYjG2k
+   pUA9hQwDfQo7CeGduRwm0hFrYMk09oDG8Y6c1WvfXXo7GV7W16ivH6ZGU
+   hWHbXWjXmNOES/Wm4YCNKRpBwY8Xg9n5l489GkIQojgulYjGpHOtOvGBg
+   52CwAEBdt3I5lYe3lAeIhtpV1CNbEQgTN8a7WQk+8JzPO4rL7HCsYEF2j
+   6UJu5xubOX0nCNLH+7RHGFAunzx50hzmhH/BYlJYNPmj6uBk5z1FUZ0E1
+   h9CLAqrNYFuiAAUM+9SRj6qXJbzECtwIJLBvm2xs7PxGv/PITnHkU2v+0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257906700"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="257906700"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 23:17:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="563152976"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 23:17:12 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwe8u-0004mv-7k;
+        Thu, 02 Jun 2022 06:17:12 +0000
+Date:   Thu, 2 Jun 2022 14:16:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org,
+        Stanislav Fomichev <sdf@google.com>
+Subject: Re: [PATCH bpf-next v8 03/11] bpf: per-cgroup lsm flavor
+Message-ID: <202206021403.M9hFZdbY-lkp@intel.com>
+References: <20220601190218.2494963-4-sdf@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601190218.2494963-4-sdf@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce a new Qdisc which is completely managed by eBPF program
-of type BPF_PROG_TYPE_SCHED_QDISC. It accepts two eBPF programs of the
-same type, but one for enqueue and the other for dequeue.
+Hi Stanislav,
 
-And it interacts with Qdisc layer in two ways:
-1) It relies on Qdisc watchdog to handle throttling;
-2) It could pass the skb enqueue/dequeue down to child classes
+Thank you for the patch! Perhaps something to improve:
 
-The context of this eBPF program is different, as shown below:
+[auto build test WARNING on bpf-next/master]
 
-┌─────────────────┬───────────────┬────────────────────────────────────┐
-│                 │               │                                    │
-│   prog          │  input        │             output                 │
-│                 │               │                                    │
-├─────────────────┼───────────────┼────────────────────────────────────┤
-│                 │               │                                    │
-│                 │ ctx->skb      │      SCH_BPF_THROTTLE: ctx->delay  │
-│                 │               │                                    │
-│   enqueue       │ ctx->classid  │      SCH_BPF_QUEUED: None          │
-│                 │               │                                    │
-│                 │               │      SCH_BPF_DROP: None            │
-│                 │               │                                    │
-│                 │               │      SCH_BPF_CN: None              │
-│                 │               │                                    │
-│                 │               │      SCH_BPF_PASS: ctx->classid    │
-├─────────────────┼───────────────┼────────────────────────────────────┤
-│                 │               │                                    │
-│                 │               │      SCH_BPF_THROTTLE: ctx->delay  │
-│                 │               │                                    │
-│   dequeue       │ ctx->classid  │      SCH_BPF_DEQUEUED: ctx->skb    │
-│                 │               │                                    │
-│                 │               │      SCH_BPF_DROP: None            │
-│                 │               │                                    │
-│                 │               │      SCH_BPF_PASS: ctx->classid    │
-│                 │               │                                    │
-└─────────────────┴───────────────┴────────────────────────────────────┘
+url:    https://github.com/intel-lab-lkp/linux/commits/Stanislav-Fomichev/bpf-cgroup_sock-lsm-flavor/20220602-050600
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220602/202206021403.M9hFZdbY-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b364c76683f8ef241025a9556300778c07b590c2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/584b25fdd30894c312d577f4b6b83f93d64e464b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Stanislav-Fomichev/bpf-cgroup_sock-lsm-flavor/20220602-050600
+        git checkout 584b25fdd30894c312d577f4b6b83f93d64e464b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash kernel/bpf/
 
-Because eBPF maps are not directly visible to this Qdisc, so we have to
-rely on user-space dumping to retrieve the stats, which is not
-implemented yet as I don't find a right API to do this.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- include/linux/bpf.h            |   4 -
- include/linux/bpf_types.h      |   2 +
- include/uapi/linux/bpf.h       |  16 ++
- include/uapi/linux/pkt_sched.h |  17 ++
- net/core/filter.c              |  34 +++
- net/sched/Kconfig              |  15 +
- net/sched/Makefile             |   1 +
- net/sched/sch_bpf.c            | 485 +++++++++++++++++++++++++++++++++
- 8 files changed, 570 insertions(+), 4 deletions(-)
- create mode 100644 net/sched/sch_bpf.c
+All warnings (new ones prefixed by >>):
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 43fbb45b6fc2..cf04ddce2c2d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2274,10 +2274,6 @@ extern const struct bpf_func_proto bpf_loop_proto;
- extern const struct bpf_func_proto bpf_strncmp_proto;
- extern const struct bpf_func_proto bpf_copy_from_user_task_proto;
- extern const struct bpf_func_proto bpf_kptr_xchg_proto;
--extern const struct bpf_func_proto bpf_skb_map_push_proto;
--extern const struct bpf_func_proto bpf_skb_map_pop_proto;
--extern const struct bpf_func_proto bpf_flow_map_push_proto;
--extern const struct bpf_func_proto bpf_flow_map_pop_proto;
- 
- const struct bpf_func_proto *tracing_prog_func_proto(
-   enum bpf_func_id func_id, const struct bpf_prog *prog);
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index b1276f9f9d26..1baeea8771d2 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -8,6 +8,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_SCHED_CLS, tc_cls_act,
- 	      struct __sk_buff, struct sk_buff)
- BPF_PROG_TYPE(BPF_PROG_TYPE_SCHED_ACT, tc_cls_act,
- 	      struct __sk_buff, struct sk_buff)
-+BPF_PROG_TYPE(BPF_PROG_TYPE_SCHED_QDISC, tc_qdisc,
-+	      struct __sk_buff, struct sk_buff)
- BPF_PROG_TYPE(BPF_PROG_TYPE_XDP, xdp,
- 	      struct xdp_md, struct xdp_buff)
- #ifdef CONFIG_CGROUP_BPF
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index cd9cff0df639..148ec0c4e643 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -954,6 +954,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_LSM,
- 	BPF_PROG_TYPE_SK_LOOKUP,
- 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
-+	BPF_PROG_TYPE_SCHED_QDISC,
- };
- 
- enum bpf_attach_type {
-@@ -6765,4 +6766,19 @@ struct bpf_core_relo {
- 	enum bpf_core_relo_kind kind;
- };
- 
-+struct sch_bpf_ctx {
-+	struct __sk_buff *skb;
-+	__u32 classid;
-+	__u64 delay;
-+};
-+
-+enum {
-+	SCH_BPF_QUEUED,
-+	SCH_BPF_DEQUEUED = SCH_BPF_QUEUED,
-+	SCH_BPF_DROP,
-+	SCH_BPF_CN,
-+	SCH_BPF_THROTTLE,
-+	SCH_BPF_PASS,
-+};
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
-index f292b467b27f..b51eb712517a 100644
---- a/include/uapi/linux/pkt_sched.h
-+++ b/include/uapi/linux/pkt_sched.h
-@@ -1267,4 +1267,21 @@ enum {
- 
- #define TCA_ETS_MAX (__TCA_ETS_MAX - 1)
- 
-+#define TCA_SCH_BPF_FLAG_DIRECT _BITUL(0)
-+enum {
-+	TCA_SCH_BPF_UNSPEC,
-+	TCA_SCH_BPF_FLAGS,		/* u32 */
-+	TCA_SCH_BPF_ENQUEUE_PROG_NAME,	/* string */
-+	TCA_SCH_BPF_ENQUEUE_PROG_FD,	/* u32 */
-+	TCA_SCH_BPF_ENQUEUE_PROG_ID,	/* u32 */
-+	TCA_SCH_BPF_ENQUEUE_PROG_TAG,	/* data */
-+	TCA_SCH_BPF_DEQUEUE_PROG_NAME,	/* string */
-+	TCA_SCH_BPF_DEQUEUE_PROG_FD,	/* u32 */
-+	TCA_SCH_BPF_DEQUEUE_PROG_ID,	/* u32 */
-+	TCA_SCH_BPF_DEQUEUE_PROG_TAG,	/* data */
-+	__TCA_SCH_BPF_MAX,
-+};
-+
-+#define TCA_SCH_BPF_MAX (__TCA_SCH_BPF_MAX - 1)
-+
- #endif
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5af58eb48587..1205298a17ca 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -7813,6 +7813,28 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	}
- }
- 
-+const struct bpf_func_proto bpf_skb_map_push_proto __weak;
-+const struct bpf_func_proto bpf_skb_map_pop_proto __weak;
-+const struct bpf_func_proto bpf_flow_map_push_proto __weak;
-+const struct bpf_func_proto bpf_flow_map_pop_proto __weak;
-+
-+static const struct bpf_func_proto *
-+tc_qdisc_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+	case BPF_FUNC_skb_map_push:
-+		return &bpf_skb_map_push_proto;
-+	case BPF_FUNC_skb_map_pop:
-+		return &bpf_skb_map_pop_proto;
-+	case BPF_FUNC_flow_map_push:
-+		return &bpf_flow_map_push_proto;
-+	case BPF_FUNC_flow_map_pop:
-+		return &bpf_flow_map_pop_proto;
-+	default:
-+		return tc_cls_act_func_proto(func_id, prog);
-+	}
-+}
-+
- static const struct bpf_func_proto *
- xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -10476,6 +10498,18 @@ const struct bpf_prog_ops tc_cls_act_prog_ops = {
- 	.test_run		= bpf_prog_test_run_skb,
- };
- 
-+const struct bpf_verifier_ops tc_qdisc_verifier_ops = {
-+	.get_func_proto		= tc_qdisc_func_proto,
-+	.is_valid_access	= tc_cls_act_is_valid_access,
-+	.convert_ctx_access	= tc_cls_act_convert_ctx_access,
-+	.gen_prologue		= tc_cls_act_prologue,
-+	.gen_ld_abs		= bpf_gen_ld_abs,
-+};
-+
-+const struct bpf_prog_ops tc_qdisc_prog_ops = {
-+	.test_run		= bpf_prog_test_run_skb,
-+};
-+
- const struct bpf_verifier_ops xdp_verifier_ops = {
- 	.get_func_proto		= xdp_func_proto,
- 	.is_valid_access	= xdp_is_valid_access,
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index 1e8ab4749c6c..19f68aac79b1 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -439,6 +439,21 @@ config NET_SCH_ETS
- 
- 	  If unsure, say N.
- 
-+config NET_SCH_BPF
-+	tristate "eBPF based programmable queue discipline"
-+	help
-+	  This eBPF based queue discipline offers a way to program your
-+	  own packet scheduling algorithm. This is a classful qdisc which
-+	  also allows you to decide the hierarchy.
-+
-+	  Say Y here if you want to use the eBPF based programmable queue
-+	  discipline.
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called sch_bpf.
-+
-+	  If unsure, say N.
-+
- menuconfig NET_SCH_DEFAULT
- 	bool "Allow override default queue discipline"
- 	help
-diff --git a/net/sched/Makefile b/net/sched/Makefile
-index dd14ef413fda..9ef0d579f5ff 100644
---- a/net/sched/Makefile
-+++ b/net/sched/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_NET_SCH_FQ_PIE)	+= sch_fq_pie.o
- obj-$(CONFIG_NET_SCH_CBS)	+= sch_cbs.o
- obj-$(CONFIG_NET_SCH_ETF)	+= sch_etf.o
- obj-$(CONFIG_NET_SCH_TAPRIO)	+= sch_taprio.o
-+obj-$(CONFIG_NET_SCH_BPF)	+= sch_bpf.o
- 
- obj-$(CONFIG_NET_CLS_U32)	+= cls_u32.o
- obj-$(CONFIG_NET_CLS_ROUTE4)	+= cls_route.o
-diff --git a/net/sched/sch_bpf.c b/net/sched/sch_bpf.c
-new file mode 100644
-index 000000000000..e9eba23ef4d1
---- /dev/null
-+++ b/net/sched/sch_bpf.c
-@@ -0,0 +1,485 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Programmable Qdisc with eBPF
-+ *
-+ * Copyright (C) 2022, ByteDance, Cong Wang <cong.wang@bytedance.com>
-+ */
-+#include <linux/module.h>
-+#include <linux/types.h>
-+#include <linux/kernel.h>
-+#include <linux/jiffies.h>
-+#include <linux/string.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/skbuff.h>
-+#include <linux/slab.h>
-+#include <linux/filter.h>
-+#include <linux/bpf.h>
-+#include <net/netlink.h>
-+#include <net/pkt_sched.h>
-+#include <net/pkt_cls.h>
-+
-+#define ACT_BPF_NAME_LEN	256
-+
-+struct sch_bpf_prog {
-+	struct bpf_prog *prog;
-+	const char *name;
-+};
-+
-+struct sch_bpf_class {
-+	struct Qdisc_class_common common;
-+	struct Qdisc *qdisc;
-+
-+	unsigned int drops;
-+	unsigned int overlimits;
-+	struct gnet_stats_basic_sync bstats;
-+};
-+
-+struct sch_bpf_qdisc {
-+	struct tcf_proto __rcu *filter_list; /* optional external classifier */
-+	struct tcf_block *block;
-+	struct Qdisc_class_hash clhash;
-+	struct sch_bpf_prog enqueue_prog;
-+	struct sch_bpf_prog dequeue_prog;
-+
-+	struct qdisc_watchdog watchdog;
-+};
-+
-+static int sch_bpf_dump_prog(const struct sch_bpf_prog *prog, struct sk_buff *skb,
-+			     int name, int id, int tag)
-+{
-+	struct nlattr *nla;
-+
-+	if (prog->name &&
-+	    nla_put_string(skb, name, prog->name))
-+		return -EMSGSIZE;
-+
-+	if (nla_put_u32(skb, id, prog->prog->aux->id))
-+		return -EMSGSIZE;
-+
-+	nla = nla_reserve(skb, tag, sizeof(prog->prog->tag));
-+	if (!nla)
-+		return -EMSGSIZE;
-+
-+	memcpy(nla_data(nla), prog->prog->tag, nla_len(nla));
-+	return 0;
-+}
-+
-+static int sch_bpf_dump(struct Qdisc *sch, struct sk_buff *skb)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	struct nlattr *opts;
-+	u32 bpf_flags = 0;
-+
-+	opts = nla_nest_start_noflag(skb, TCA_OPTIONS);
-+	if (!opts)
-+		goto nla_put_failure;
-+
-+	if (bpf_flags && nla_put_u32(skb, TCA_SCH_BPF_FLAGS, bpf_flags))
-+		goto nla_put_failure;
-+
-+	if (sch_bpf_dump_prog(&q->enqueue_prog, skb, TCA_SCH_BPF_ENQUEUE_PROG_NAME,
-+			      TCA_SCH_BPF_ENQUEUE_PROG_ID, TCA_SCH_BPF_ENQUEUE_PROG_TAG))
-+		goto nla_put_failure;
-+	if (sch_bpf_dump_prog(&q->dequeue_prog, skb, TCA_SCH_BPF_DEQUEUE_PROG_NAME,
-+			      TCA_SCH_BPF_DEQUEUE_PROG_ID, TCA_SCH_BPF_DEQUEUE_PROG_TAG))
-+		goto nla_put_failure;
-+
-+	return nla_nest_end(skb, opts);
-+
-+nla_put_failure:
-+	return -1;
-+}
-+
-+static int sch_bpf_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
-+{
-+	return 0;
-+}
-+
-+static struct sch_bpf_class *sch_bpf_find(struct Qdisc *sch, u32 classid)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	struct Qdisc_class_common *clc;
-+
-+	clc = qdisc_class_find(&q->clhash, classid);
-+	if (!clc)
-+		return NULL;
-+	return container_of(clc, struct sch_bpf_class, common);
-+}
-+
-+static int sch_bpf_enqueue(struct sk_buff *skb, struct Qdisc *sch,
-+			   struct sk_buff **to_free)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	unsigned int len = qdisc_pkt_len(skb);
-+	struct sch_bpf_ctx ctx = {};
-+	struct sch_bpf_class *cl;
-+	int res = NET_XMIT_SUCCESS;
-+	struct bpf_prog *enqueue;
-+	s64 now;
-+
-+	enqueue = rcu_dereference(q->enqueue_prog.prog);
-+	bpf_compute_data_pointers(skb);
-+	ctx.skb = (struct __sk_buff *)skb;
-+	ctx.classid = sch->handle;
-+	res = bpf_prog_run(enqueue, &ctx);
-+	switch (res) {
-+	case SCH_BPF_THROTTLE:
-+		now = ktime_get_ns();
-+		qdisc_watchdog_schedule_ns(&q->watchdog, now + ctx.delay);
-+		qdisc_qstats_overlimit(sch);
-+		fallthrough;
-+	case SCH_BPF_QUEUED:
-+		return NET_XMIT_SUCCESS;
-+	case SCH_BPF_CN:
-+		return NET_XMIT_CN;
-+	case SCH_BPF_PASS:
-+		break;
-+	default:
-+		__qdisc_drop(skb, to_free);
-+		return NET_XMIT_DROP;
-+	}
-+
-+	cl = sch_bpf_find(sch, ctx.classid);
-+	if (!cl || !cl->qdisc) {
-+		if (res & __NET_XMIT_BYPASS)
-+			qdisc_qstats_drop(sch);
-+		__qdisc_drop(skb, to_free);
-+		return res;
-+	}
-+
-+	res = qdisc_enqueue(skb, cl->qdisc, to_free);
-+	if (res != NET_XMIT_SUCCESS) {
-+		if (net_xmit_drop_count(res)) {
-+			qdisc_qstats_drop(sch);
-+			cl->drops++;
-+		}
-+		return res;
-+	}
-+
-+	sch->qstats.backlog += len;
-+	sch->q.qlen++;
-+	return res;
-+}
-+
-+static struct sk_buff *sch_bpf_dequeue(struct Qdisc *sch)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	struct sk_buff *ret = NULL;
-+	struct sch_bpf_ctx ctx = {};
-+	struct bpf_prog *dequeue;
-+	struct sch_bpf_class *cl;
-+	s64 now;
-+	int res;
-+
-+	dequeue = rcu_dereference(q->dequeue_prog.prog);
-+	ctx.classid = sch->handle;
-+	res = bpf_prog_run(dequeue, &ctx);
-+	switch (res) {
-+	case SCH_BPF_DEQUEUED:
-+		ret = (struct sk_buff *)ctx.skb;
-+		break;
-+	case SCH_BPF_THROTTLE:
-+		now = ktime_get_ns();
-+		qdisc_watchdog_schedule_ns(&q->watchdog, now + ctx.delay);
-+		qdisc_qstats_overlimit(sch);
-+		cl->overlimits++;
-+		return NULL;
-+	case SCH_BPF_PASS:
-+		cl = sch_bpf_find(sch, ctx.classid);
-+		if (!cl || !cl->qdisc)
-+			return NULL;
-+		ret = qdisc_dequeue_peeked(cl->qdisc);
-+		if (ret) {
-+			qdisc_bstats_update(sch, ret);
-+			qdisc_qstats_backlog_dec(sch, ret);
-+			sch->q.qlen--;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static struct Qdisc *sch_bpf_leaf(struct Qdisc *sch, unsigned long arg)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+
-+	return cl->qdisc;
-+}
-+
-+static int sch_bpf_graft(struct Qdisc *sch, unsigned long arg, struct Qdisc *new,
-+			 struct Qdisc **old, struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+
-+	if (new)
-+		*old = qdisc_replace(sch, new, &cl->qdisc);
-+	return 0;
-+}
-+
-+static unsigned long sch_bpf_bind(struct Qdisc *sch, unsigned long parent,
-+				  u32 classid)
-+{
-+	return 0;
-+}
-+
-+static void sch_bpf_unbind(struct Qdisc *q, unsigned long cl)
-+{
-+}
-+
-+static unsigned long sch_bpf_search(struct Qdisc *sch, u32 handle)
-+{
-+	return (unsigned long)sch_bpf_find(sch, handle);
-+}
-+
-+static struct tcf_block *sch_bpf_tcf_block(struct Qdisc *sch, unsigned long cl,
-+					   struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+
-+	if (cl)
-+		return NULL;
-+	return q->block;
-+}
-+
-+static const struct nla_policy sch_bpf_policy[TCA_SCH_BPF_MAX + 1] = {
-+	[TCA_SCH_BPF_FLAGS]		= { .type = NLA_U32 },
-+	[TCA_SCH_BPF_ENQUEUE_PROG_FD]	= { .type = NLA_U32 },
-+	[TCA_SCH_BPF_ENQUEUE_PROG_NAME]	= { .type = NLA_NUL_STRING,
-+					    .len = ACT_BPF_NAME_LEN },
-+	[TCA_SCH_BPF_DEQUEUE_PROG_FD]	= { .type = NLA_U32 },
-+	[TCA_SCH_BPF_DEQUEUE_PROG_NAME]	= { .type = NLA_NUL_STRING,
-+					    .len = ACT_BPF_NAME_LEN },
-+};
-+
-+static int bpf_init_prog(struct nlattr *fd, struct nlattr *name, struct sch_bpf_prog *prog)
-+{
-+	char *prog_name = NULL;
-+	struct bpf_prog *fp;
-+	u32 bpf_fd;
-+
-+	if (!fd)
-+		return -EINVAL;
-+	bpf_fd = nla_get_u32(fd);
-+
-+	fp = bpf_prog_get_type(bpf_fd, BPF_PROG_TYPE_SCHED_QDISC);
-+	if (IS_ERR(fp))
-+		return PTR_ERR(fp);
-+
-+	if (name) {
-+		prog_name = nla_memdup(name, GFP_KERNEL);
-+		if (!prog_name) {
-+			bpf_prog_put(fp);
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	prog->name = prog_name;
-+	prog->prog = fp;
-+	return 0;
-+}
-+
-+static void bpf_cleanup_prog(struct sch_bpf_prog *prog)
-+{
-+	if (prog->prog)
-+		bpf_prog_put(prog->prog);
-+	kfree(prog->name);
-+}
-+
-+static int sch_bpf_change(struct Qdisc *sch, struct nlattr *opt,
-+			  struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	struct nlattr *tb[TCA_SCH_BPF_MAX + 1];
-+	int err;
-+
-+	if (!opt)
-+		return -EINVAL;
-+
-+	err = nla_parse_nested_deprecated(tb, TCA_SCH_BPF_MAX, opt,
-+					  sch_bpf_policy, NULL);
-+	if (err < 0)
-+		return err;
-+
-+	if (tb[TCA_SCH_BPF_FLAGS]) {
-+		u32 bpf_flags = nla_get_u32(tb[TCA_SCH_BPF_FLAGS]);
-+
-+		if (bpf_flags & ~TCA_SCH_BPF_FLAG_DIRECT)
-+			return -EINVAL;
-+	}
-+
-+	err = bpf_init_prog(tb[TCA_SCH_BPF_ENQUEUE_PROG_FD],
-+			    tb[TCA_SCH_BPF_ENQUEUE_PROG_NAME], &q->enqueue_prog);
-+	if (err)
-+		return err;
-+	err = bpf_init_prog(tb[TCA_SCH_BPF_DEQUEUE_PROG_FD],
-+			    tb[TCA_SCH_BPF_DEQUEUE_PROG_NAME], &q->dequeue_prog);
-+	return err;
-+}
-+
-+static int sch_bpf_init(struct Qdisc *sch, struct nlattr *opt,
-+			struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	int err;
-+
-+	qdisc_watchdog_init(&q->watchdog, sch);
-+	if (opt) {
-+		err = sch_bpf_change(sch, opt, extack);
-+		if (err)
-+			return err;
-+	}
-+
-+	err = tcf_block_get(&q->block, &q->filter_list, sch, extack);
-+	if (err)
-+		return err;
-+
-+	return qdisc_class_hash_init(&q->clhash);
-+}
-+
-+static void sch_bpf_reset(struct Qdisc *sch)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+
-+	qdisc_watchdog_cancel(&q->watchdog);
-+}
-+
-+static void sch_bpf_destroy(struct Qdisc *sch)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+
-+	qdisc_watchdog_cancel(&q->watchdog);
-+	tcf_block_put(q->block);
-+	qdisc_class_hash_destroy(&q->clhash);
-+	bpf_cleanup_prog(&q->enqueue_prog);
-+	bpf_cleanup_prog(&q->dequeue_prog);
-+}
-+
-+static int sch_bpf_change_class(struct Qdisc *sch, u32 classid,
-+				u32 parentid, struct nlattr **tca,
-+				unsigned long *arg,
-+				struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)*arg;
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+
-+	if (!cl) {
-+		cl = kzalloc(sizeof(*cl), GFP_KERNEL);
-+		if (!cl)
-+			return -ENOBUFS;
-+		qdisc_class_hash_insert(&q->clhash, &cl->common);
-+	}
-+
-+	qdisc_class_hash_grow(sch, &q->clhash);
-+	*arg = (unsigned long)cl;
-+	return 0;
-+}
-+
-+static int sch_bpf_delete(struct Qdisc *sch, unsigned long arg,
-+			  struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+
-+	qdisc_class_hash_remove(&q->clhash, &cl->common);
-+	if (cl->qdisc)
-+		qdisc_put(cl->qdisc);
-+	return 0;
-+}
-+
-+static int sch_bpf_dump_class(struct Qdisc *sch, unsigned long arg,
-+			      struct sk_buff *skb, struct tcmsg *tcm)
-+{
-+	return 0;
-+}
-+
-+static int
-+sch_bpf_dump_class_stats(struct Qdisc *sch, unsigned long arg, struct gnet_dump *d)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+	struct gnet_stats_queue qs = {
-+		.drops = cl->drops,
-+		.overlimits = cl->overlimits,
-+	};
-+	__u32 qlen = 0;
-+
-+	if (cl->qdisc)
-+		qdisc_qstats_qlen_backlog(cl->qdisc, &qlen, &qs.backlog);
-+	else
-+		qlen = 0;
-+
-+	if (gnet_stats_copy_basic(d, NULL, &cl->bstats, true) < 0 ||
-+	    gnet_stats_copy_queue(d, NULL, &qs, qlen) < 0)
-+		return -1;
-+	return 0;
-+}
-+
-+static void sch_bpf_walk(struct Qdisc *sch, struct qdisc_walker *arg)
-+{
-+	struct sch_bpf_qdisc *q = qdisc_priv(sch);
-+	struct sch_bpf_class *cl;
-+	unsigned int i;
-+
-+	if (arg->stop)
-+		return;
-+
-+	for (i = 0; i < q->clhash.hashsize; i++) {
-+		hlist_for_each_entry(cl, &q->clhash.hash[i], common.hnode) {
-+			if (arg->count < arg->skip) {
-+				arg->count++;
-+				continue;
-+			}
-+			if (arg->fn(sch, (unsigned long)cl, arg) < 0) {
-+				arg->stop = 1;
-+				return;
-+			}
-+			arg->count++;
-+		}
-+	}
-+}
-+
-+static const struct Qdisc_class_ops sch_bpf_class_ops = {
-+	.graft		=	sch_bpf_graft,
-+	.leaf		=	sch_bpf_leaf,
-+	.find		=	sch_bpf_search,
-+	.change		=	sch_bpf_change_class,
-+	.delete		=	sch_bpf_delete,
-+	.tcf_block	=	sch_bpf_tcf_block,
-+	.bind_tcf	=	sch_bpf_bind,
-+	.unbind_tcf	=	sch_bpf_unbind,
-+	.dump		=	sch_bpf_dump_class,
-+	.dump_stats	=	sch_bpf_dump_class_stats,
-+	.walk		=	sch_bpf_walk,
-+};
-+
-+static struct Qdisc_ops sch_bpf_qdisc_ops __read_mostly = {
-+	.cl_ops		=	&sch_bpf_class_ops,
-+	.id		=	"bpf",
-+	.priv_size	=	sizeof(struct sch_bpf_qdisc),
-+	.enqueue	=	sch_bpf_enqueue,
-+	.dequeue	=	sch_bpf_dequeue,
-+	.peek		=	qdisc_peek_dequeued,
-+	.init		=	sch_bpf_init,
-+	.reset		=	sch_bpf_reset,
-+	.destroy	=	sch_bpf_destroy,
-+	.change		=	sch_bpf_change,
-+	.dump		=	sch_bpf_dump,
-+	.dump_stats	=	sch_bpf_dump_stats,
-+	.owner		=	THIS_MODULE,
-+};
-+
-+static int __init sch_bpf_mod_init(void)
-+{
-+	return register_qdisc(&sch_bpf_qdisc_ops);
-+}
-+
-+static void __exit sch_bpf_mod_exit(void)
-+{
-+	unregister_qdisc(&sch_bpf_qdisc_ops);
-+}
-+
-+module_init(sch_bpf_mod_init)
-+module_exit(sch_bpf_mod_exit)
-+MODULE_AUTHOR("Cong Wang");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("eBPF queue discipline");
+>> kernel/bpf/cgroup.c:257:35: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+                                   if (atype >= CGROUP_LSM_START && atype <= CGROUP_LSM_END)
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/cgroup.c:252:35: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
+                                   if (atype >= CGROUP_LSM_START && atype <= CGROUP_LSM_END)
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +257 kernel/bpf/cgroup.c
+
+   226	
+   227	/**
+   228	 * cgroup_bpf_release() - put references of all bpf programs and
+   229	 *                        release all cgroup bpf data
+   230	 * @work: work structure embedded into the cgroup to modify
+   231	 */
+   232	static void cgroup_bpf_release(struct work_struct *work)
+   233	{
+   234		struct cgroup *p, *cgrp = container_of(work, struct cgroup,
+   235						       bpf.release_work);
+   236		struct bpf_prog_array *old_array;
+   237		struct list_head *storages = &cgrp->bpf.storages;
+   238		struct bpf_cgroup_storage *storage, *stmp;
+   239	
+   240		unsigned int atype;
+   241	
+   242		mutex_lock(&cgroup_mutex);
+   243	
+   244		for (atype = 0; atype < ARRAY_SIZE(cgrp->bpf.progs); atype++) {
+   245			struct hlist_head *progs = &cgrp->bpf.progs[atype];
+   246			struct bpf_prog_list *pl;
+   247			struct hlist_node *pltmp;
+   248	
+   249			hlist_for_each_entry_safe(pl, pltmp, progs, node) {
+   250				hlist_del(&pl->node);
+   251				if (pl->prog) {
+   252					if (atype >= CGROUP_LSM_START && atype <= CGROUP_LSM_END)
+   253						bpf_trampoline_unlink_cgroup_shim(pl->prog);
+   254					bpf_prog_put(pl->prog);
+   255				}
+   256				if (pl->link) {
+ > 257					if (atype >= CGROUP_LSM_START && atype <= CGROUP_LSM_END)
+   258						bpf_trampoline_unlink_cgroup_shim(pl->link->link.prog);
+   259					bpf_cgroup_link_auto_detach(pl->link);
+   260				}
+   261				kfree(pl);
+   262				static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+   263			}
+   264			old_array = rcu_dereference_protected(
+   265					cgrp->bpf.effective[atype],
+   266					lockdep_is_held(&cgroup_mutex));
+   267			bpf_prog_array_free(old_array);
+   268		}
+   269	
+   270		list_for_each_entry_safe(storage, stmp, storages, list_cg) {
+   271			bpf_cgroup_storage_unlink(storage);
+   272			bpf_cgroup_storage_free(storage);
+   273		}
+   274	
+   275		mutex_unlock(&cgroup_mutex);
+   276	
+   277		for (p = cgroup_parent(cgrp); p; p = cgroup_parent(p))
+   278			cgroup_bpf_put(p);
+   279	
+   280		percpu_ref_exit(&cgrp->bpf.refcnt);
+   281		cgroup_put(cgrp);
+   282	}
+   283	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
