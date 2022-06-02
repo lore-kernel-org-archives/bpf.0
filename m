@@ -2,40 +2,40 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F59AC43334
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 19:43:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2C77CCA47E
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 19:43:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238897AbiFBTnD convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Jun 2022 15:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S238878AbiFBTnF convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Jun 2022 15:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbiFBTmy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:42:54 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED2B60DD
+        with ESMTP id S238920AbiFBTmz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 15:42:55 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C64C45
         for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 12:42:52 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 252D0tNP023025
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 252C0S4o024895
         for <bpf@vger.kernel.org>; Thu, 2 Jun 2022 12:42:52 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gewq92pme-7
+        by m0001303.ppops.net (PPS) with ESMTPS id 3gevu4u0gr-14
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 12:42:52 -0700
-Received: from twshared24024.25.frc3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+Received: from twshared5413.23.frc3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 2 Jun 2022 12:42:45 -0700
+ 15.1.2375.28; Thu, 2 Jun 2022 12:42:49 -0700
 Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 117FA86C0112; Thu,  2 Jun 2022 12:37:22 -0700 (PDT)
+        id 0334A86C00DF; Thu,  2 Jun 2022 12:37:17 -0700 (PDT)
 From:   Song Liu <song@kernel.org>
 To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kernel-team@fb.com>, <rostedt@goodmis.org>, <jolsa@kernel.org>,
         <mhiramat@kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v2 bpf-next 5/5] bpf: trampoline: support FTRACE_OPS_FL_SHARE_IPMODIFY
-Date:   Thu, 2 Jun 2022 12:37:06 -0700
-Message-ID: <20220602193706.2607681-6-song@kernel.org>
+Subject: [PATCH v2 bpf-next 3/5] ftrace: introduce FTRACE_OPS_FL_SHARE_IPMODIFY
+Date:   Thu, 2 Jun 2022 12:37:04 -0700
+Message-ID: <20220602193706.2607681-4-song@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220602193706.2607681-1-song@kernel.org>
 References: <20220602193706.2607681-1-song@kernel.org>
@@ -43,8 +43,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 969mtVx525s5BnEIVjHspkzG3A2mjSqc
-X-Proofpoint-GUID: 969mtVx525s5BnEIVjHspkzG3A2mjSqc
+X-Proofpoint-ORIG-GUID: KTvxkukhaK8rv2yJqQrwcaZpoQLouY9I
+X-Proofpoint-GUID: KTvxkukhaK8rv2yJqQrwcaZpoQLouY9I
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
@@ -52,246 +52,419 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This allows bpf trampoline to trace kernel functions with live patch.
-Also, move bpf trampoline to *_ftrace_direct_multi APIs, which allows
-setting different flags of ftrace_ops.
+live patch and BPF trampoline (kfunc/kretfunc in bpftrace) are important
+features for modern systems. Currently, it is not possible to use live
+patch and BPF trampoline on the same kernel function at the same time.
+This is because of the resitriction that only one ftrace_ops with flag
+FTRACE_OPS_FL_IPMODIFY on the same kernel function.
+
+BPF trampoline uses direct ftrace_ops, which assumes IPMODIFY. However,
+not all direct ftrace_ops would overwrite the actual function. This means
+it is possible to have a non-IPMODIFY direct ftrace_ops to share the same
+kernel function with an IPMODIFY ftrace_ops.
+
+Introduce FTRACE_OPS_FL_SHARE_IPMODIFY, which allows the direct ftrace_ops
+to share with IPMODIFY ftrace_ops. With FTRACE_OPS_FL_SHARE_IPMODIFY flag
+set, the direct ftrace_ops would call the target function picked by the
+IPMODIFY ftrace_ops.
+
+Comment "IPMODIFY, DIRECT, and SHARE_IPMODIFY" in include/linux/ftrace.h
+contains more information about how SHARE_IPMODIFY interacts with IPMODIFY
+and DIRECT flags.
 
 Signed-off-by: Song Liu <song@kernel.org>
 ---
- include/linux/bpf.h     |   3 ++
- kernel/bpf/trampoline.c | 109 +++++++++++++++++++++++++++++++++++-----
- 2 files changed, 99 insertions(+), 13 deletions(-)
+ include/linux/ftrace.h |  74 +++++++++++++++++
+ kernel/trace/ftrace.c  | 179 ++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 242 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a6e06f384e81..20a8ed600ca6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -44,6 +44,7 @@ struct kobject;
- struct mem_cgroup;
- struct module;
- struct bpf_func_state;
-+struct ftrace_ops;
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 9023bf69f675..bfacf608de9c 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -98,6 +98,18 @@ static inline int ftrace_mod_get_kallsym(unsigned int symnum, unsigned long *val
+ }
+ #endif
  
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-@@ -816,6 +817,7 @@ struct bpf_tramp_image {
- struct bpf_trampoline {
- 	/* hlist for trampoline_table */
- 	struct hlist_node hlist;
-+	struct ftrace_ops *fops;
- 	/* serializes access to fields of this trampoline */
- 	struct mutex mutex;
- 	refcount_t refcnt;
-@@ -838,6 +840,7 @@ struct bpf_trampoline {
- 	struct bpf_tramp_image *cur_image;
- 	u64 selector;
- 	struct module *mod;
-+	bool indirect_call;
++/*
++ * FTRACE_OPS_CMD_* commands allow the ftrace core logic to request changes
++ * to a ftrace_ops.
++ *
++ * ENABLE_SHARE_IPMODIFY - enable FTRACE_OPS_FL_SHARE_IPMODIFY.
++ * DISABLE_SHARE_IPMODIFY - disable FTRACE_OPS_FL_SHARE_IPMODIFY.
++ */
++enum ftrace_ops_cmd {
++	FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY,
++	FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY,
++};
++
+ #ifdef CONFIG_FUNCTION_TRACER
+ 
+ extern int ftrace_enabled;
+@@ -189,6 +201,9 @@ ftrace_func_t ftrace_ops_get_func(struct ftrace_ops *ops);
+  *             ftrace_enabled.
+  * DIRECT - Used by the direct ftrace_ops helper for direct functions
+  *            (internal ftrace only, should not be used by others)
++ * SHARE_IPMODIFY - For direct ftrace_ops only. Set when the direct function
++ *            is ready to share same kernel function with IPMODIFY function
++ *            (live patch, etc.).
+  */
+ enum {
+ 	FTRACE_OPS_FL_ENABLED			= BIT(0),
+@@ -209,8 +224,66 @@ enum {
+ 	FTRACE_OPS_FL_TRACE_ARRAY		= BIT(15),
+ 	FTRACE_OPS_FL_PERMANENT                 = BIT(16),
+ 	FTRACE_OPS_FL_DIRECT			= BIT(17),
++	FTRACE_OPS_FL_SHARE_IPMODIFY		= BIT(18),
  };
  
- struct bpf_attach_target_info {
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 93c7675f0c9e..447c788c5520 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -27,6 +27,44 @@ static struct hlist_head trampoline_table[TRAMPOLINE_TABLE_SIZE];
- /* serializes access to trampoline_table */
- static DEFINE_MUTEX(trampoline_mutex);
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
++/*
++ * IPMODIFY, DIRECT, and SHARE_IPMODIFY.
++ *
++ * ftrace provides IPMODIFY flag for users to replace existing kernel
++ * function with a different version. This is achieved by setting regs->ip.
++ * The top user of IPMODIFY is live patch.
++ *
++ * DIRECT allows user to load custom trampoline on top of ftrace. DIRECT
++ * ftrace does not overwrite regs->ip. Instead, the custom trampoline is
++ * saved separately (for example, orig_ax on x86). The top user of DIRECT
++ * is bpf trampoline.
++ *
++ * It is not super rare to have both live patch and bpf trampoline on the
++ * same kernel function. Therefore, it is necessary to allow the two work
++ * with each other. Given that IPMODIFY and DIRECT target addressese are
++ * saved separately, this is feasible, but we need to be careful.
++ *
++ * The policy between IPMODIFY and DIRECT is:
++ *
++ *  1. Each kernel function can only have one IPMODIFY ftrace_ops;
++ *  2. Each kernel function can only have one DIRECT ftrace_ops;
++ *  3. DIRECT ftrace_ops may have IPMODIFY or not;
++ *  4. Each kernel function may have one non-DIRECT IPMODIFY ftrace_ops,
++ *     and one non-IPMODIFY DIRECT ftrace_ops at the same time. This
++ *     requires support from the DIRECT ftrace_ops. Specifically, the
++ *     DIRECT trampoline should call the kernel function at regs->ip.
++ *     If the DIRECT ftrace_ops supports sharing a function with ftrace_ops
++ *     with IPMODIFY, it should set flag SHARE_IPMODIFY.
++ *
++ * Some DIRECT ftrace_ops has an option to enable SHARE_IPMODIFY or not.
++ * Usually, the non-SHARE_IPMODIFY option gives better performance. To take
++ * advantage of this performance benefit, is necessary to only enable
++ * SHARE_IPMODIFY only when it is on the same function as an IPMODIFY
++ * ftrace_ops. There are two cases to consider:
++ *
++ *  1. IPMODIFY ftrace_ops is registered first. When the (non-IPMODIFY, and
++ *     non-SHARE_IPMODIFY) DIRECT ftrace_ops is registered later,
++ *     register_ftrace_direct_multi() returns -EAGAIN. If the user of
++ *     the DIRECT ftrace_ops can support SHARE_IPMODIFY, it should enable
++ *     SHARE_IPMODIFY and retry.
++ *  2. (non-IPMODIFY, and non-SHARE_IPMODIFY) DIRECT ftrace_ops is
++ *     registered first. When the IPMODIFY ftrace_ops is registered later,
++ *     it is necessary to ask the direct ftrace_ops to enable
++ *     SHARE_IPMODIFY support. This is achieved via ftrace_ops->ops_func
++ *     cmd=FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY. For more details on this
++ *     condition, check out prepare_direct_functions_for_ipmodify().
++ */
 +
-+static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, enum ftrace_ops_cmd cmd)
-+{
-+	struct bpf_trampoline *tr = ops->private;
-+	int ret;
++/*
++ * For most ftrace_ops_cmd,
++ * Returns:
++ *        0 - Success.
++ *        -EBUSY - The operation cannot process
++ *        -EAGAIN - The operation cannot process tempoorarily.
++ */
++typedef int (*ftrace_ops_func_t)(struct ftrace_ops *op, enum ftrace_ops_cmd cmd);
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ /* The hash used to know what functions callbacks trace */
+ struct ftrace_ops_hash {
+@@ -253,6 +326,7 @@ struct ftrace_ops {
+ 	unsigned long			trampoline;
+ 	unsigned long			trampoline_size;
+ 	struct list_head		list;
++	ftrace_ops_func_t		ops_func;
+ #endif
+ };
+ 
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 6a419f6bbbf0..868bbc753803 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -1865,7 +1865,8 @@ static void ftrace_hash_rec_enable_modify(struct ftrace_ops *ops,
+ /*
+  * Try to update IPMODIFY flag on each ftrace_rec. Return 0 if it is OK
+  * or no-needed to update, -EBUSY if it detects a conflict of the flag
+- * on a ftrace_rec, and -EINVAL if the new_hash tries to trace all recs.
++ * on a ftrace_rec, -EINVAL if the new_hash tries to trace all recs, and
++ * -EAGAIN if the ftrace_ops need to enable SHARE_IPMODIFY.
+  * Note that old_hash and new_hash has below meanings
+  *  - If the hash is NULL, it hits all recs (if IPMODIFY is set, this is rejected)
+  *  - If the hash is EMPTY_HASH, it hits nothing
+@@ -1875,6 +1876,7 @@ static int __ftrace_hash_update_ipmodify(struct ftrace_ops *ops,
+ 					 struct ftrace_hash *old_hash,
+ 					 struct ftrace_hash *new_hash)
+ {
++	bool is_ipmodify, is_direct, share_ipmodify;
+ 	struct ftrace_page *pg;
+ 	struct dyn_ftrace *rec, *end = NULL;
+ 	int in_old, in_new;
+@@ -1883,7 +1885,24 @@ static int __ftrace_hash_update_ipmodify(struct ftrace_ops *ops,
+ 	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+ 		return 0;
+ 
+-	if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY))
++	/*
++	 * The following are all the valid combinations of is_ipmodify,
++	 * is_direct, and share_ipmodify
++	 *
++	 *             is_ipmodify     is_direct     share_ipmodify
++	 *  #1              0               0                0
++	 *  #2              1               0                0
++	 *  #3              1               1                0
++	 *  #4              0               1                0
++	 *  #5              0               1                1
++	 */
++
++
++	is_ipmodify = ops->flags & FTRACE_OPS_FL_IPMODIFY;
++	is_direct = ops->flags & FTRACE_OPS_FL_DIRECT;
++
++	/* either ipmodify nor direct, skip */
++	if (!is_ipmodify && !is_direct)   /* combinations #1 */
+ 		return 0;
+ 
+ 	/*
+@@ -1893,6 +1912,30 @@ static int __ftrace_hash_update_ipmodify(struct ftrace_ops *ops,
+ 	if (!new_hash || !old_hash)
+ 		return -EINVAL;
+ 
++	share_ipmodify = ops->flags & FTRACE_OPS_FL_SHARE_IPMODIFY;
 +
 +	/*
-+	 * The normal locking order is
-+	 *    tr->mutex => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
-+	 *
-+	 * This is called from prepare_direct_functions_for_ipmodify, with
-+	 * direct_mutex locked. Use mutex_trylock() to avoid dead lock.
-+	 * Also, bpf_trampoline_update here should not lock direct_mutex.
++	 * This ops itself doesn't do ip_modify and it can share a fentry
++	 * with other ops with ipmodify, nothing to do.
 +	 */
-+	if (!mutex_trylock(&tr->mutex))
-+		return -EAGAIN;
++	if (!is_ipmodify && share_ipmodify)   /* combinations #5 */
++		return 0;
 +
-+	switch (cmd) {
-+	case FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY:
-+		tr->indirect_call = true;
-+		ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
-+		break;
-+	case FTRACE_OPS_CMD_DISABLE_SHARE_IPMODIFY:
-+		tr->indirect_call = false;
-+		tr->fops->flags &= ~FTRACE_OPS_FL_SHARE_IPMODIFY;
-+		ret = bpf_trampoline_update(tr, false /* lock_direct_mutex */);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	};
-+	mutex_unlock(&tr->mutex);
-+	return ret;
++	/*
++	 * Only three combinations of is_ipmodify, is_direct, and
++	 * share_ipmodify for the logic below:
++	 * #2 live patch
++	 * #3 direct with ipmodify
++	 * #4 direct without ipmodify
++	 *
++	 *             is_ipmodify     is_direct     share_ipmodify
++	 *  #2              1               0                0
++	 *  #3              1               1                0
++	 *  #4              0               1                0
++	 *
++	 * Only update/rollback rec->flags for is_ipmodify == 1 (#2 and #3)
++	 */
++
+ 	/* Update rec->flags */
+ 	do_for_each_ftrace_rec(pg, rec) {
+ 
+@@ -1906,12 +1949,18 @@ static int __ftrace_hash_update_ipmodify(struct ftrace_ops *ops,
+ 			continue;
+ 
+ 		if (in_new) {
+-			/* New entries must ensure no others are using it */
+-			if (rec->flags & FTRACE_FL_IPMODIFY)
+-				goto rollback;
+-			rec->flags |= FTRACE_FL_IPMODIFY;
+-		} else /* Removed entry */
++			if (rec->flags & FTRACE_FL_IPMODIFY) {
++				/* cannot have two ipmodify on same rec */
++				if (is_ipmodify)  /* combination #2 and #3 */
++					goto rollback;
++				/* let user enable share_ipmodify and retry */
++				return  -EAGAIN;  /* combination #4 */
++			} else if (is_ipmodify) {
++				rec->flags |= FTRACE_FL_IPMODIFY;
++			}
++		} else if (is_ipmodify) {/* Removed entry */
+ 			rec->flags &= ~FTRACE_FL_IPMODIFY;
++		}
+ 	} while_for_each_ftrace_rec();
+ 
+ 	return 0;
+@@ -3115,14 +3164,14 @@ static inline int ops_traces_mod(struct ftrace_ops *ops)
+ }
+ 
+ /*
+- * Check if the current ops references the record.
++ * Check if the current ops references the given ip.
+  *
+  * If the ops traces all functions, then it was already accounted for.
+  * If the ops does not trace the current record function, skip it.
+  * If the ops ignores the function via notrace filter, skip it.
+  */
+ static inline bool
+-ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
++ops_references_ip(struct ftrace_ops *ops, unsigned long ip)
+ {
+ 	/* If ops isn't enabled, ignore it */
+ 	if (!(ops->flags & FTRACE_OPS_FL_ENABLED))
+@@ -3134,16 +3183,29 @@ ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
+ 
+ 	/* The function must be in the filter */
+ 	if (!ftrace_hash_empty(ops->func_hash->filter_hash) &&
+-	    !__ftrace_lookup_ip(ops->func_hash->filter_hash, rec->ip))
++	    !__ftrace_lookup_ip(ops->func_hash->filter_hash, ip))
+ 		return false;
+ 
+ 	/* If in notrace hash, we ignore it too */
+-	if (ftrace_lookup_ip(ops->func_hash->notrace_hash, rec->ip))
++	if (ftrace_lookup_ip(ops->func_hash->notrace_hash, ip))
+ 		return false;
+ 
+ 	return true;
+ }
+ 
++/*
++ * Check if the current ops references the record.
++ *
++ * If the ops traces all functions, then it was already accounted for.
++ * If the ops does not trace the current record function, skip it.
++ * If the ops ignores the function via notrace filter, skip it.
++ */
++static inline bool
++ops_references_rec(struct ftrace_ops *ops, struct dyn_ftrace *rec)
++{
++	return ops_references_ip(ops, rec->ip);
 +}
-+#endif
 +
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog)
+ static int ftrace_update_code(struct module *mod, struct ftrace_page *new_pgs)
  {
- 	enum bpf_attach_type eatype = prog->expected_attach_type;
-@@ -87,7 +125,16 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key)
- 	tr = kzalloc(sizeof(*tr), GFP_KERNEL);
- 	if (!tr)
- 		goto out;
--
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+	tr->fops = kzalloc(sizeof(struct ftrace_ops), GFP_KERNEL);
-+	if (!tr->fops) {
-+		kfree(tr);
-+		tr = NULL;
-+		goto out;
+ 	bool init_nop = ftrace_need_init_nop();
+@@ -5519,6 +5581,14 @@ int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ 	if (ops->flags & FTRACE_OPS_FL_ENABLED)
+ 		return -EINVAL;
+ 
++	/*
++	 * if the ops does ipmodify, it cannot share the same fentry with
++	 * other functions with ipmodify.
++	 */
++	if ((ops->flags & FTRACE_OPS_FL_IPMODIFY) &&
++	    (ops->flags & FTRACE_OPS_FL_SHARE_IPMODIFY))
++		return -EINVAL;
++
+ 	hash = ops->func_hash->filter_hash;
+ 	if (ftrace_hash_empty(hash))
+ 		return -EINVAL;
+@@ -7901,6 +7971,83 @@ int ftrace_is_dead(void)
+ 	return ftrace_disabled;
+ }
+ 
++/*
++ * When registering ftrace_ops with IPMODIFY (not direct), it is necessary
++ * to make sure it doesn't conflict with any direct ftrace_ops. If there is
++ * existing direct ftrace_ops on a kernel function being patched, call
++ * FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY on it to enable sharing.
++ *
++ * @ops:     ftrace_ops being registered.
++ *
++ * Returns:
++ *         0 - @ops does have IPMODIFY or @ops itself is DIRECT, no change
++ *             needed;
++ *         1 - @ops has IPMODIFY, hold direct_mutex;
++ *         -EBUSY - currently registered DIRECT ftrace_ops does not support
++ *                  SHARE_IPMODIFY, we need to abort the register.
++ *         -EAGAIN - cannot make changes to currently registered DIRECT
++ *                   ftrace_ops at the moment, but we can retry later. This
++ *                   is needed to avoid potential deadlocks.
++ */
++static int prepare_direct_functions_for_ipmodify(struct ftrace_ops *ops)
++	__acquires(&direct_mutex)
++{
++	struct ftrace_func_entry *entry;
++	struct ftrace_hash *hash;
++	struct ftrace_ops *op;
++	int size, i, ret;
++
++	if (!(ops->flags & FTRACE_OPS_FL_IPMODIFY) ||
++	    (ops->flags & FTRACE_OPS_FL_DIRECT))
++		return 0;
++
++	mutex_lock(&direct_mutex);
++
++	hash = ops->func_hash->filter_hash;
++	size = 1 << hash->size_bits;
++	for (i = 0; i < size; i++) {
++		hlist_for_each_entry(entry, &hash->buckets[i], hlist) {
++			unsigned long ip = entry->ip;
++			bool found_op = false;
++
++			mutex_lock(&ftrace_lock);
++			do_for_each_ftrace_op(op, ftrace_ops_list) {
++				if (!(op->flags & FTRACE_OPS_FL_DIRECT))
++					continue;
++				if (op->flags & FTRACE_OPS_FL_SHARE_IPMODIFY)
++					break;
++				if (ops_references_ip(op, ip)) {
++					found_op = true;
++					break;
++				}
++			} while_for_each_ftrace_op(op);
++			mutex_unlock(&ftrace_lock);
++
++			if (found_op) {
++				if (!op->ops_func) {
++					ret = -EBUSY;
++					goto err_out;
++				}
++				ret = op->ops_func(op, FTRACE_OPS_CMD_ENABLE_SHARE_IPMODIFY);
++				if (ret)
++					goto err_out;
++			}
++		}
 +	}
-+	tr->fops->private = tr;
-+	tr->fops->ops_func = bpf_tramp_ftrace_ops_func;
-+#endif
- 	tr->key = key;
- 	INIT_HLIST_NODE(&tr->hlist);
- 	hlist_add_head(&tr->hlist, head);
-@@ -126,7 +173,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
++
++	/*
++	 * Didn't find any overlap with any direct function, or the direct
++	 * function can share with ipmodify. Hold direct_mutex to make sure
++	 * this doesn't change until we are done.
++	 */
++	return 1;
++
++err_out:
++	mutex_unlock(&direct_mutex);
++	return ret;
++
++}
++
+ /**
+  * register_ftrace_function - register a function for profiling
+  * @ops:	ops structure that holds the function for profiling.
+@@ -7913,17 +8060,27 @@ int ftrace_is_dead(void)
+  *       recursive loop.
+  */
+ int register_ftrace_function(struct ftrace_ops *ops)
++	__releases(&direct_mutex)
+ {
++	bool direct_mutex_locked;
  	int ret;
  
- 	if (tr->func.ftrace_managed)
--		ret = unregister_ftrace_direct((long)ip, (long)old_addr);
-+		ret = unregister_ftrace_direct_multi(tr->fops, (long)old_addr);
- 	else
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, NULL);
+ 	ftrace_ops_init(ops);
  
-@@ -135,15 +182,20 @@ static int unregister_fentry(struct bpf_trampoline *tr, void *old_addr)
++	ret = prepare_direct_functions_for_ipmodify(ops);
++	if (ret < 0)
++		return ret;
++
++	direct_mutex_locked = ret == 1;
++
+ 	mutex_lock(&ftrace_lock);
+ 
+ 	ret = ftrace_startup(ops, 0);
+ 
+ 	mutex_unlock(&ftrace_lock);
+ 
++	if (direct_mutex_locked)
++		mutex_unlock(&direct_mutex);
  	return ret;
  }
- 
--static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_addr)
-+static int modify_fentry(struct bpf_trampoline *tr, void *old_addr, void *new_addr,
-+			 bool lock_direct_mutex)
- {
- 	void *ip = tr->func.addr;
- 	int ret;
- 
--	if (tr->func.ftrace_managed)
--		ret = modify_ftrace_direct((long)ip, (long)old_addr, (long)new_addr);
--	else
-+	if (tr->func.ftrace_managed) {
-+		if (lock_direct_mutex)
-+			ret = modify_ftrace_direct_multi(tr->fops, (long)new_addr);
-+		else
-+			ret = modify_ftrace_direct_multi_nolock(tr->fops, (long)new_addr);
-+	} else {
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, old_addr, new_addr);
-+	}
- 	return ret;
- }
- 
-@@ -161,10 +213,15 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
- 	if (bpf_trampoline_module_get(tr))
- 		return -ENOENT;
- 
--	if (tr->func.ftrace_managed)
--		ret = register_ftrace_direct((long)ip, (long)new_addr);
--	else
-+	if (tr->func.ftrace_managed) {
-+		ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 0, 0);
-+		ret = register_ftrace_direct_multi(tr->fops, (long)new_addr);
-+		if (ret)
-+			ftrace_set_filter_ip(tr->fops, (unsigned long)ip, 1, 0);
-+
-+	} else {
- 		ret = bpf_arch_text_poke(ip, BPF_MOD_CALL, NULL, new_addr);
-+	}
- 
- 	if (ret)
- 		bpf_trampoline_module_put(tr);
-@@ -330,7 +387,7 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, u32 idx)
- 	return ERR_PTR(err);
- }
- 
--static int bpf_trampoline_update(struct bpf_trampoline *tr)
-+static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex)
- {
- 	struct bpf_tramp_image *im;
- 	struct bpf_tramp_links *tlinks;
-@@ -363,20 +420,45 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
- 	if (ip_arg)
- 		flags |= BPF_TRAMP_F_IP_ARG;
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+again:
-+	if (tr->indirect_call)
-+		flags |= BPF_TRAMP_F_ORIG_STACK;
-+#endif
-+
- 	err = arch_prepare_bpf_trampoline(im, im->image, im->image + PAGE_SIZE,
- 					  &tr->func.model, flags, tlinks,
- 					  tr->func.addr);
- 	if (err < 0)
- 		goto out;
- 
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+	if (tr->indirect_call)
-+		tr->fops->flags |= FTRACE_OPS_FL_SHARE_IPMODIFY;
-+#endif
-+
- 	WARN_ON(tr->cur_image && tr->selector == 0);
- 	WARN_ON(!tr->cur_image && tr->selector);
- 	if (tr->cur_image)
- 		/* progs already running at this address */
--		err = modify_fentry(tr, tr->cur_image->image, im->image);
-+		err = modify_fentry(tr, tr->cur_image->image, im->image, lock_direct_mutex);
- 	else
- 		/* first time registering */
- 		err = register_fentry(tr, im->image);
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-+	if (err == -EAGAIN) {
-+		if (WARN_ON_ONCE(tr->indirect_call))
-+			goto out;
-+		/* should only retry on the first register */
-+		if (WARN_ON_ONCE(tr->cur_image))
-+			goto out;
-+		tr->indirect_call = true;
-+		tr->fops->func = NULL;
-+		tr->fops->trampoline = 0;
-+		goto again;
-+	}
-+#endif
- 	if (err)
- 		goto out;
- 	if (tr->cur_image)
-@@ -460,7 +542,7 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline
- 
- 	hlist_add_head(&link->tramp_hlist, &tr->progs_hlist[kind]);
- 	tr->progs_cnt[kind]++;
--	err = bpf_trampoline_update(tr);
-+	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
- 	if (err) {
- 		hlist_del_init(&link->tramp_hlist);
- 		tr->progs_cnt[kind]--;
-@@ -487,7 +569,7 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampolin
- 	}
- 	hlist_del_init(&link->tramp_hlist);
- 	tr->progs_cnt[kind]--;
--	err = bpf_trampoline_update(tr);
-+	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
- out:
- 	mutex_unlock(&tr->mutex);
- 	return err;
-@@ -535,6 +617,7 @@ void bpf_trampoline_put(struct bpf_trampoline *tr)
- 	 * multiple rcu callbacks.
- 	 */
- 	hlist_del(&tr->hlist);
-+	kfree(tr->fops);
- 	kfree(tr);
- out:
- 	mutex_unlock(&trampoline_mutex);
+ EXPORT_SYMBOL_GPL(register_ftrace_function);
 -- 
 2.30.2
 
