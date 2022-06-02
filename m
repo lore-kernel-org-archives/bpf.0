@@ -2,87 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A446C43334
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 19:49:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14898C433EF
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 20:29:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238943AbiFBTtD convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Jun 2022 15:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
+        id S238934AbiFBU3Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 16:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238967AbiFBTs5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 15:48:57 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D5C35DD2
-        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 12:48:47 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2529sgXA008870
-        for <bpf@vger.kernel.org>; Thu, 2 Jun 2022 12:48:47 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3geu05bgdc-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 12:48:47 -0700
-Received: from twshared14818.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 2 Jun 2022 12:48:43 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 531D786C006A; Thu,  2 Jun 2022 12:37:12 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kernel-team@fb.com>, <rostedt@goodmis.org>, <jolsa@kernel.org>,
-        <mhiramat@kernel.org>, Song Liu <song@kernel.org>
-Subject: [PATCH v2 bpf-next 0/5] ftrace: host klp and bpf trampoline together
-Date:   Thu, 2 Jun 2022 12:37:01 -0700
-Message-ID: <20220602193706.2607681-1-song@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S232420AbiFBU3X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 16:29:23 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC4D19FB1
+        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 13:29:22 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id be31so9551518lfb.10
+        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 13:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XgIwryEYl9R87FoliWfIWDUH0oSQjlkLyRF0chemF48=;
+        b=NpV5ZzbeDCMQ/ZxHTujhAg4Q5vhkc0AbEclmoBn/d2Cs5b+U0+GJD5vl1LGXL+A9HO
+         /Kzpg6xk7jb0Colmv/3UZ4mABjbWBtTRR087HOmRLfWFUtzcq0Pw6ox3Sm32NHoywpT5
+         JFwJ7Ldxd8J6OAa4hRJZiPX1qlw49LBeTguEhJJ/nbYZsYyTuo9Y3ImPUv/R+WymTmYK
+         UGKFbzcYeTSSiQ7bpO8Rs33XIs/gEGp1rMVCTiBTlNlOzOMh/i82K/0QUrMM8H/yYdIR
+         tBgitLhHV56N55SePb9bQ/OCHdzGf6PzbpSTKOgaoH+QGcwnVWAMt2qKmOKZfU9tzYXU
+         sRcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XgIwryEYl9R87FoliWfIWDUH0oSQjlkLyRF0chemF48=;
+        b=V2VpAshTcjHkFLIfEfsjv2Ev1F4A8GY3dZ5/jX8T1SEyXl+2nx2/FhW1ZKKgx9JIgr
+         yN7bdTIrddXriyRylmbfp24ePVytRZOXb0nRI3JPNqk3bzWbypsTXEiJ6ITjXDLz44nN
+         liXVmHuN18ANto9dRybQ/np65FUO6urBx0mDzTnWcotOvO0Zrp663H12XFx9mN5rRIZE
+         H0d86kYc5OpdXGLOylh7ufYOf/3MmHJssknP6ob8rYp4LAVeXNRK/5xJ1lZu7907jIHH
+         KTW6fp8HL+OzPPoK8rMmb6l0JWUJxGgs6l3qixP1GL3WmzrUQoPluO/1N3r2lBOcmUHZ
+         oIxA==
+X-Gm-Message-State: AOAM533C2/cSiY+xakTxpTnxucZyCE7JC9sbFnfmIMBARmazXmqID44O
+        CYj8yYYrOcbS7yNUoQ+mgeQ2z8iXVRdQnn0vQPfROrG9
+X-Google-Smtp-Source: ABdhPJzHMDjVaSZhukwWstJvHtR91LJQze3Gk/tE6GFMBGT/3ni2WPx7Y+U7YKc35QvQRaXFk4gdOUowOWVh7lNQgDM=
+X-Received: by 2002:ac2:4e88:0:b0:477:c186:6e83 with SMTP id
+ o8-20020ac24e88000000b00477c1866e83mr50413788lfr.663.1654201760570; Thu, 02
+ Jun 2022 13:29:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: IN7z0R5WgFm31ggJEFLYfYjiIX4OVFRQ
-X-Proofpoint-ORIG-GUID: IN7z0R5WgFm31ggJEFLYfYjiIX4OVFRQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
+References: <CALo96CRkg4eH=Ee0qvx3YigyP9mPyzz6vhTtpqNN1n4mvUQUPA@mail.gmail.com>
+In-Reply-To: <CALo96CRkg4eH=Ee0qvx3YigyP9mPyzz6vhTtpqNN1n4mvUQUPA@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 2 Jun 2022 13:29:09 -0700
+Message-ID: <CAEf4BzbuiB2qRotoNVrgtmV7E+f1ouBLhJjy6Az4nhM+o9ttLw@mail.gmail.com>
+Subject: Re: Relocation error on 32 bit systems of longs from vmlinux.h
+To:     Matteo Nardi <matteo@exein.io>, Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes v1 => v2:
-1. Fix build errors for different config. (kernel test robot)
+On Wed, May 25, 2022 at 9:13 AM Matteo Nardi <matteo@exein.io> wrote:
+>
+> This program will compile and run fine on my 64 bit system, but it
+> will fail with a relocation error on 32 bit systems:
+>
+> SEC("tp/raw_syscalls/sys_enter")
+> int sys_enter(struct trace_event_raw_sys_enter *ctx) {
+>         long int n = ctx->id;
+>         bpf_printk("hello world %d", n);
+>         return 0;
+> }
+>
+> ```
+> libbpf: prog 'sys_enter': relo #0: insn #0 (LDX/ST/STX) accesses field
+> incorrectly. Make sure you are accessing pointers, unsigned integers,
+> or fields of matching type and size.
+> libbpf: prog 'sys_enter': BPF program load failed: Invalid argument
+> libbpf: prog 'sys_enter': -- BEGIN PROG LOAD LOG --
+> R1 type=ctx expected=fp
+> ; long int n = ctx->id;
+> 0: (85) call unknown#195896080
+> invalid func unknown#195896080
+> processed 1 insns (limit 1000000) max_states_per_insn 0 total_states 0
+> peak_states 0 mark_read 0
+> -- END PROG LOAD LOG --
+> libbpf: failed to load program 'sys_enter'
+> libbpf: failed to load object 'bootstrap_bpf'
+> libbpf: failed to load BPF skeleton 'bootstrap_bpf': -22
+> Failed to load and verify BPF skeleton
+> ```
+>
+> I'm cross-compiling using a Yocto build. I've reproduced this both
+> with arm and x86.
+>
+> From my understanding, the issue comes from the `long int` in
+> `trace_event_raw_sys_enter`, which is 64 bit in the compiled eBPF
+> program, but 32 bit in the target kernel.
+>
+> struct trace_event_raw_sys_enter {
+>         struct trace_entry ent;
+>         long int id;
+>         long unsigned int args[6];
+>         char __data[0];
+> } __attribute__((preserve_access_index));
+>
+> Indeed, manually changing the `id` definition  in `vmlinux.h` will fix
+> the relocation error:
+>
+> struct trace_event_raw_sys_enter {
+>         u32 id;
+> } __attribute__((preserve_access_index));
+>
+>
+> "Q: clang flag for target bpf?"[0] hints that using a native target
+> could help, but I guess that would completely break CORE relocations
+> since `preserve_access_index` is a `-target bpf`-specific attribute,
+> right?
+>
+> Am I missing something? If I had to fix the issue right now I would
+> replace all long definitions in `vmlinux.h` to u32 when targeting 32
+> bit systems. Could `bpftool btf dump` handle this?
+> We're using eBPF on embedded systems, where 32 bit is still fairly common.
+>
 
-Kernel Live Patch (livepatch, or klp) and bpf trampoline are important
-features for modern systems. This set allows the two to work on the same
-kernel function as the same time.
+This could work for long, but there is nothing that can be done for
+pointers. Good knews is that libbpf can auto-matically adjust such 64
+vs 32 bit accesses for pointers and *unsigned* integers, but you ran
+into an issue with signed integer, which isn't as easy to handle due
+to the need to do sign-extension.
 
-live patch uses ftrace with IPMODIFY, while bpf trampoline use direct
-ftrace. Existing policy does not allow the two to attach to the same kernel
-function. This is changed by fine tuning ftrace IPMODIFY policy, and allows
-one non-DIRECT IPMODIFY ftrace_ops and one non-IPMODIFY DIRECT ftrace_ops
-on the same kernel function at the same time. Please see 3/5 for more
-details on this.
+Libbpf could handle this transparently pretty easily if BPF had
+sign-extending load, though, so maybe the best long-term solution is
+to have one? It actually would make some other cases better and allow
+Clang to not generate a sequence of <<32, >>32 shift just for sign
+extensions. Alexei, Yonghong, WDYT?
 
-Note that, one of the constraint here is to let bpf trampoline use direct
-call when it is not working on the same function as live patch. This is
-achieved by allowing ftrace code to ask bpf trampoline to make changes.
-
-Jiri Olsa (1):
-  bpf, x64: Allow to use caller address from stack
-
-Song Liu (4):
-  ftrace: allow customized flags for ftrace_direct_multi ftrace_ops
-  ftrace: add modify_ftrace_direct_multi_nolock
-  ftrace: introduce FTRACE_OPS_FL_SHARE_IPMODIFY
-  bpf: trampoline: support FTRACE_OPS_FL_SHARE_IPMODIFY
-
- arch/x86/net/bpf_jit_comp.c |  13 +-
- include/linux/bpf.h         |   8 ++
- include/linux/ftrace.h      |  79 +++++++++++
- kernel/bpf/trampoline.c     | 109 +++++++++++++--
- kernel/trace/ftrace.c       | 269 +++++++++++++++++++++++++++++++-----
- 5 files changed, 424 insertions(+), 54 deletions(-)
-
---
-2.30.2
+> Thanks.
+>
+> Best regards,
+> Matteo Nardi
+>
+> [0] https://www.kernel.org/doc/html/latest/bpf/bpf_devel_QA.html#q-clang-flag-for-target-bpf
