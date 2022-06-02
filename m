@@ -2,152 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A369C43334
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 14:37:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78D78C43334
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 14:38:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235361AbiFBOhz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 10:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S236012AbiFBOiE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 10:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbiFBOhy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:37:54 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1040B2DA9C;
-        Thu,  2 Jun 2022 07:37:51 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5ECCF5C00E0;
-        Thu,  2 Jun 2022 10:37:48 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Thu, 02 Jun 2022 10:37:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1654180668; x=1654267068; bh=BzjRBbEu68
-        Kzk8yC4V4e2pbTUKKqIZY45MXe4ZImIak=; b=WQRNUcou5TAqDeXht8BzuPsoBR
-        Crp+v/UFTBIxi0spr1Fxtb2gOq0OyUjgHlAKxwJisASxTD5dYqmvlDa2pTt6u8IC
-        HS/1DmzzDnkmSiNOZMWlTGXPz5bR2fJo73GPqD5Ik26netbJCWS0dD+yhbie74Ji
-        qyBUsgYEK1Y2zYvbIU7mj+kN9PZLR4rlVAXxN6GGjvdH7iCeJuwz4i5Mqa93E87y
-        mzO2rmYd4lkt8zv8FtBAd7NLxRFEmfw8I/bHp7c8cTnvFDt/7I8+0qyafMP2bdyt
-        Vl/Om8uMpeyDKBUU2b+UEgqXjvITQMasazi38tkGEnpztB5Ft8NEWXCpb44Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1654180668; x=1654267068; bh=BzjRBbEu68Kzk8yC4V4e2pbTUKKq
-        IZY45MXe4ZImIak=; b=uFZlaPl/p0d+T6LLoet0CnPwBL82RRIG+/GTxIrVhnhA
-        hIbAPnEPAspo3h5WLAG4K2KF48d4iNK6Cc47igpo2tyUgWc03pn8uTP8sUxMLxWE
-        mkvVRtG2uFiTBVAuWSjgZcPNuLrprQ5w4mh1LgR2ElX9de/kc4yCyGsfXjqEeGWL
-        hh/lognlm+8vf4XpcpNarLKSwxXNtYXpk5wZ5BzitAbpJJhRRYeKcWkF1EE4LOsv
-        u8Q7rvwT5umpdpb3XyVE4/kiuHugHXnY71v4NvstgOtn+n7p5uUC+KUKT9uJrXZ5
-        n7H0LXe16yBb/UmGROGx3rUTMQhEaoUu9AEALuOzew==
-X-ME-Sender: <xms:PMuYYg4FTL-ZO80AV-QyIuIIkAViJJWMz8Gorg_-1ujzsc-3mZDnGA>
-    <xme:PMuYYh7XxtRZ5sMpsv49QFiIjoYmkZLbI-K_QQnvw82E196dgKnhfZjxQMTRavKPO
-    V29zFDqUxsA_oUrjA>
-X-ME-Received: <xmr:PMuYYvfj9oivpHy5P8QRZ8jBnpkt6bchbjPiTvyKIVMh-KYkWb8fSe_x7oTNIWs7NautkrHEYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledvgdejiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
-    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
-    ggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeeileeu
-    ieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:PMuYYlJmhsCk7t3w5NQWbb53m-rwrBYVX77SAzgntwISoSAcU-YWEQ>
-    <xmx:PMuYYkIBA2X_EYIn79pJrhsUUGtACiCn90VETHRiSftH0ToCWSoiBQ>
-    <xmx:PMuYYmxxJ5v69nMQISt532WDmX63jmRma6rthPEYoW7yDr-fnggkQQ>
-    <xmx:PMuYYpHBhI55sVA2ccPy3RVnMWN8R7MrcbX4CqeWbjlMoY3c7rW3Wg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Jun 2022 10:37:47 -0400 (EDT)
-Date:   Thu, 2 Jun 2022 09:37:46 -0500
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S234681AbiFBOh5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 10:37:57 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB3C3122D
+        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 07:37:56 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id i185so4926745pge.4
+        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 07:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Sk/LpREl6lCpYUK3sh4dhIYv+NwXzY+EQFNtou9uNgg=;
+        b=WU//QHTddMEmbobKV3WmcaFVCVlqESjL4yadeBcxJG2Ehcb0sSYTsZ2ImwxNeLk/vm
+         MlQdDacFExr4Y4YHDdLlFOOS1UjdqOIrJFDkP/uhF4qxxtDHANzfd/1htrEsoDczNBt9
+         pbsUknttci1Qm1XuPwq7iten0RYvQ3EgZAPklHaWN5NWPnYBt1zpZrUUMCnLDduM4fQZ
+         Jf+eiPYLSvXYm/5oFexTJemCClME2J4GAt69BjH4gRvnso9TSvpmG5pJdtSKY1ajWgPO
+         24aLoQGMyZ221R2i8b0wtiAv/IeG1ozi7UfMDcsGOIeD7POBBFykhNSQ7/+AHwBJdikp
+         NLMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Sk/LpREl6lCpYUK3sh4dhIYv+NwXzY+EQFNtou9uNgg=;
+        b=L1OJZqcygrGvSYzm+dXN11b2LLesNOjhtMkQ0UOsF1BiAqZTBSgs+ojdAV5CFPwE83
+         FlaV8X+LhjdP6LeT2MfZbpLsq/Ifl/+jCb8TgtHCGTCLrwrLtslcxuUyxdtVTMst3fwZ
+         P9PHqI4aKOdyI3L5E8VB59RIldCHE8/3yHL+eblTNaBoABRhA52qyXCFauunvy5CtGoB
+         h+QotBQXPCjzAUeO5vKKErJaYzPT2aqskvHRK/cs1YrH95WhT9+YZXSxfalsG1rlJpN9
+         w/UxHyA5Ij77bv4kj6gpuw7kvAaq+d41BGYpcs1+nO7+G/u/CSYuAxF2p48DF7nAM21U
+         +gKg==
+X-Gm-Message-State: AOAM533k3LWIBmUEQ3ZC/XOHb1Mdki5n7l6Y/gwGZZHCxmXDBaLD7m4t
+        iIXo8bjfO+tlyz8QvOJcTyA4Pg==
+X-Google-Smtp-Source: ABdhPJylye22XZAN19kga/OK9TT4aEC7VNrMVwD8tJrhsly5C9WmEfLmW7j0si2yIeXqk24ffGKw0Q==
+X-Received: by 2002:a63:f955:0:b0:3fc:cf92:cd26 with SMTP id q21-20020a63f955000000b003fccf92cd26mr4494997pgk.137.1654180675640;
+        Thu, 02 Jun 2022 07:37:55 -0700 (PDT)
+Received: from [192.168.254.36] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001df239bab14sm3440275pjd.46.2022.06.02.07.37.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jun 2022 07:37:54 -0700 (PDT)
+Message-ID: <41265f4d-45b4-a3a6-e0c0-5460d2a06377@linaro.org>
+Date:   Thu, 2 Jun 2022 07:37:53 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4] bpf: Fix KASAN use-after-free Read in
+ compute_effective_progs
+Content-Language: en-US
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Add PROG_TEST_RUN support to
- kprobe
-Message-ID: <20220602143746.dydumxrrvhb6jdv5@kashmir.localdomain>
-References: <cover.1653861287.git.dxu@dxuuu.xyz>
- <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
- <CAADnVQL6Duc5qdwkqf+DWqYhngE3Dj-J37=7QoVA3ycFoWBU2w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAADnVQL6Duc5qdwkqf+DWqYhngE3Dj-J37=7QoVA3ycFoWBU2w@mail.gmail.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux- stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
+References: <CAEf4BzY-p13huoqo6N7LJRVVj8rcjPeP3Cp=KDX4N2x9BkC9Zw@mail.gmail.com>
+ <20220517180420.87954-1-tadeusz.struk@linaro.org>
+ <7949d722-86e8-8122-e607-4b09944b76ae@linaro.org>
+ <CAEf4BzaD1Z6uOZwbquPYWB0_Z0+CkEKiXQ6zS2imiSHpTgX3pg@mail.gmail.com>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <CAEf4BzaD1Z6uOZwbquPYWB0_Z0+CkEKiXQ6zS2imiSHpTgX3pg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, May 31, 2022 at 11:07:31AM -0700, Alexei Starovoitov wrote:
-> On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > This commit adds PROG_TEST_RUN support to BPF_PROG_TYPE_KPROBE progs. On
-> > top of being generally useful for unit testing kprobe progs, this commit
-> > more specifically helps solve a relability problem with bpftrace BEGIN
-> > and END probes.
-> >
-> > BEGIN and END probes are run exactly once at the beginning and end of a
-> > bpftrace tracing session, respectively. bpftrace currently implements
-> > the probes by creating two dummy functions and attaching the BEGIN and
-> > END progs, if defined, to those functions and calling the dummy
-> > functions as appropriate. This works pretty well most of the time except
-> > for when distros strip symbols from bpftrace. Every now and then this
-> > happens and users get confused. Having PROG_TEST_RUN support will help
-> > solve this issue by allowing us to directly trigger uprobes from
-> > userspace.
-> >
-> > Admittedly, this is a pretty specific problem and could probably be
-> > solved other ways. However, PROG_TEST_RUN also makes unit testing more
-> > convenient, especially as users start building more complex tracing
-> > applications. So I see this as killing two birds with one stone.
-> 
-> bpftrace approach of uprobe-ing into BEGIN_trigger can
-> be solved with raw_tp prog.
-> "BEGIN" bpftrace's program doesn't have to be uprobe.
-> I can be raw_tp and prog_test_run command is
-> already implemented for raw_tp.
-> 
-> kprobe prog has pt_regs as arguments,
-> raw_tp has tracepoint args.
-> Both progs expect kernel addresses in args.
-> Passing 'struct pt_regs' filled with integers and non-kernel addresses
-> won't help to unit test bpf-kprobe programs.
-> There is little use in creating a dummy kprobe-bpf prog
-> that expects RDI to be 1 and RSI to be 2
-> (like selftest from patch 2 does) and running it.
+Hi Andrii,
+On 5/23/22 15:47, Andrii Nakryiko wrote:
+>> Hi Andrii,
+>> Do you have any more feedback? Does it look better to you now?
+> Hi, this is on my TODO list, but I need a bit more focused time to
+> think all this through and I haven't managed to get it in last week.
+> I'm worried about the percpu_ref_is_zero(&desc->bpf.refcnt) portion
+> and whether it can cause some skew in the calculated array index, I
+> need to look at this a bit more in depth. Sorry for the delay.
 
-Yeah that's a good point about the kprobe case. But AFAICT uprobes are
-implemented using a kprobe prog in which case it would be both possible
-and useful to insert userspace args and userspace addrspace addrs.
+Did you get a chance to look at this yet?
 
-> We already have raw_tp with similar args and such
-> progs can be executed already.
-> Whether SEC() part says kprobe/ or raw_tp/ doesn't change
-> much in the prog itself.
-
-I suppose so, and I guess you could always bpf_program__set_type(..).
-
-> More so raw_tp prog will work on all architectures,
-> whereas kprobe's pt_regs are arch specific.
-> So even if kprobe progs were runnable, bpftrace
-> should probably be using raw_tp to be arch independent.
-
-bpftrace has all the infra to pull arbitrary structs out of vmlinux BTF
-already. It should be fairly simple to get the arch-specific struct
-pt_regs size and construct a buffer of all 0s. And fall back to old
-logic (that'll be necessary for a while) if kprobe BPF_PROG_RUN or
-vmlinux BTF is missing.
-
-That being said, I didn't realize that when I put up the patch, so
-thanks for the hint. It sounds like it's probably simpler to just use
-raw_tp then.
-
-FWIW I still think this feature is useful, but since I probably won't
-use it in bpftrace I'm fine with dropping the patchset. If anyone still
-wants it in I'm also fine with continuing on it.
-
+-- 
 Thanks,
-Daniel
+Tadeusz
