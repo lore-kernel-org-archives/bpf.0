@@ -2,129 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B75C43334
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 03:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C957C433EF
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 04:11:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiFBD3Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jun 2022 23:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        id S229567AbiFBEK7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 00:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbiFBD3X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jun 2022 23:29:23 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4F4267CE6
-        for <bpf@vger.kernel.org>; Wed,  1 Jun 2022 20:29:17 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id c196so3661724pfb.1
-        for <bpf@vger.kernel.org>; Wed, 01 Jun 2022 20:29:17 -0700 (PDT)
+        with ESMTP id S229522AbiFBEK6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 00:10:58 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9CD208B2A;
+        Wed,  1 Jun 2022 21:10:56 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id v1so2666568qtx.5;
+        Wed, 01 Jun 2022 21:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=d7/X5D/XlWDgxC+lr9ny4gEaWSqGcdWBVlXv9V2nJSc=;
-        b=4zgwd/soJ4OlZOpXRWMVKCorWv2P8U3su0NGdknMw1o/lf/a30yo2AcvaHVixK4JcF
-         HEf5qgd8iNm+Iu7TGuu2W1/UAlo7NIcftpk4VWQyeAjUF4m3RkS1x0+QylTvUiPn+dut
-         0gAvKdf3riJQgRXO4pz/G7rmweSBnWdvYJmsAYhq+wR364cs2wiiVzu7zzRMQYV3G109
-         HHJiCxvOCctMT0SRMlJaiGxpSd4U8IgIT8sP9fNkHkuXAPdeo3jrj/I2q0IP+EjNieEG
-         b22fM9Zpj5PBalBM5lVDOBwBkL7xz4P42CIx8Q1qgw1Xd2Kker2XfNkgN2SGUIn+IV3W
-         30rw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=eDYIyMHCgFtYaLiwBC6u244sczCv8jasM7WvhfZObJE=;
+        b=pBmX55OoeAzCRYc/nILwQVUOYIfpTJSwiENOWQXIRJpsTYopjOURHTCoRQ289cIjkW
+         tz0y8/Iyz43nhQQMjtJLHkRTSrZg4QMWYsoOPlTsrKg4OiIp11fE5DkHbIoi55bA2+D7
+         3N9dm3Wh8inGo1B+UxWPpsXyhXo8Iaa49K4zkuvjL+qhqHDizuKn7USV6A3cgW2lU4zi
+         Doe92y+7Ao5MoPvUZZ6y/jh/qVGjeUYd/ueL+dyH1/eSsBxuPsPlEaNLeecM/viNV0qA
+         SJYu6lNjjJlGSRm6JvRhI0iepvOND8QtOVYPYN1Lz/zB+b56nMrl5ssFKbOxoRuNqh7l
+         6Y2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=d7/X5D/XlWDgxC+lr9ny4gEaWSqGcdWBVlXv9V2nJSc=;
-        b=7s2fKbAKi+Ibl55ZD5bzDT5NnIvDsJ+IY0nge/W44yDE///8zwK6koCaHzu3/itADu
-         DTjzTWzPvQM+gqOFP681PgtXX3+JaIPLdW/9+OhzjYKfNTKXNpykw4dey+ksio+GbA7L
-         H2oNcImHx7qfqblZfBz2tQ5oWnReC1OeL7TWhRu5hlA/E5FqyWPFAOIsmybUrXikk2oc
-         wm76T5IoDnGlwIa5XI8JbepjFfBwYQdhwhU6JElYF8OP83EiFe8hWFWHhY4p5rjW7VqS
-         yZZt7cPPBMUYmAZU3jmGZOwbGPAY0eqkN5Fc4bPqI9YHmJGtXzZJZUhKtXgv5awKyRmE
-         tfXg==
-X-Gm-Message-State: AOAM531zDx5A5iYxMDENJsfttwMu0gB6rDKc3jSrhrB3txXm+CK2PypK
-        H5zfgycacZL85V9JeU/5q0fglA==
-X-Google-Smtp-Source: ABdhPJz5XXjx1kduDqvTabORmcqulZrn95ibw4rCM4QDXk4FGV+QJnfefUP2GHpZKCvFFGv71aOTSQ==
-X-Received: by 2002:a05:6a00:889:b0:510:91e6:6463 with SMTP id q9-20020a056a00088900b0051091e66463mr2840480pfj.58.1654140556716;
-        Wed, 01 Jun 2022 20:29:16 -0700 (PDT)
-Received: from [10.71.57.194] ([139.177.225.241])
-        by smtp.gmail.com with ESMTPSA id v4-20020a1709028d8400b00163cdf1a200sm2239756plo.38.2022.06.01.20.29.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 20:29:16 -0700 (PDT)
-Message-ID: <6181d77a-66ed-76ff-35a4-b24134bc67fb@bytedance.com>
-Date:   Thu, 2 Jun 2022 11:29:09 +0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=eDYIyMHCgFtYaLiwBC6u244sczCv8jasM7WvhfZObJE=;
+        b=rFiUZ39aaY/D1jXEDL6aEKcBqLsQ7T1j4Q08xy33BdLqCbR2flEZ4UhOklgEPnx7gc
+         L/dNeO1Xk//uV2np/F1PpJh0JTYA8WX38HN5QB/FaWM4QOP0ZQyhrORVE7IOQq67gjG6
+         UaBNzcNsb4idUrCT6Bk6OlQFcV1DIDrMHG0ZWHdnIMPf0QdyKH58chYaY6nYd0cHMByE
+         5s6FZfb5njK/FMbt0RLKbDSmLXV8swnVC0oUqXUR7CCbBieHyHvoxYvAalZeZQKlqbuv
+         C4Vbx/q2aNItQ7M95vwNJgGyfqGv7edb0VR1fielVouoRI7K8EXC+yz79mzqsjWB3xJB
+         wRfA==
+X-Gm-Message-State: AOAM530y5XZls/6jNSZI2Qh0HtajLojWxXbhzn4vVHUah2IZBdqhcnDW
+        75fVpf/9V5pqXWvzZJyFuezHAFpLPzE=
+X-Google-Smtp-Source: ABdhPJzkQEQwQHqxrpCRbOqimu9e2MH1jceyRPB6cPwCNiX6WxFb8DnKlc891gD0sHKLqHuSlhZRzQ==
+X-Received: by 2002:a05:622a:50a:b0:2f9:2af9:7dbc with SMTP id l10-20020a05622a050a00b002f92af97dbcmr2280818qtx.279.1654143055487;
+        Wed, 01 Jun 2022 21:10:55 -0700 (PDT)
+Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:d7c6:fc22:5340:d891])
+        by smtp.gmail.com with ESMTPSA id i187-20020a3786c4000000b0069fc13ce1fesm2396654qkd.47.2022.06.01.21.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 21:10:55 -0700 (PDT)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: [RFC Patch v5 1/5] net: introduce skb_rbtree_walk_safe()
+Date:   Wed,  1 Jun 2022 21:10:24 -0700
+Message-Id: <20220602041028.95124-2-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220602041028.95124-1-xiyou.wangcong@gmail.com>
+References: <20220602041028.95124-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: Re: Re: [PATCH v4 2/2] selftest/bpf/benchs: Add bpf_map benchmark
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Dongdong Wang <wangdongdong.6@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>
-References: <20220601084149.13097-1-zhoufeng.zf@bytedance.com>
- <20220601084149.13097-3-zhoufeng.zf@bytedance.com>
- <CAADnVQ+qmvYK_Ttsjgo49Ga7paghicFg_O3=1sYZKbdps4877Q@mail.gmail.com>
- <041465f0-0fd3-fd39-0dac-8093a1c98c00@bytedance.com>
- <CAADnVQ+cCoH=DAoyLGtJ5HvdNVgFBgTW=wCHs1wvFQuwyhcWOw@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAADnVQ+cCoH=DAoyLGtJ5HvdNVgFBgTW=wCHs1wvFQuwyhcWOw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-在 2022/6/1 下午7:37, Alexei Starovoitov 写道:
-> On Wed, Jun 1, 2022 at 1:17 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
->> 在 2022/6/1 下午5:53, Alexei Starovoitov 写道:
->>> On Wed, Jun 1, 2022 at 10:42 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->>>> +struct {
->>>> +       __uint(type, BPF_MAP_TYPE_HASH);
->>>> +       __type(key, u32);
->>>> +       __type(value, u64);
->>>> +       __uint(max_entries, MAX_ENTRIES);
->>>> +} hash_map_bench SEC(".maps");
->>>> +
->>>> +u64 __attribute__((__aligned__(256))) percpu_time[256];
->>> aligned 256 ?
->>> What is the point?
->> I didn't think too much about it here, just referenced it from
->> tools/testing/selftests/bpf/progs/bloom_filter_bench.c
->>
->>>> +u64 nr_loops;
->>>> +
->>>> +static int loop_update_callback(__u32 index, u32 *key)
->>>> +{
->>>> +       u64 init_val = 1;
->>>> +
->>>> +       bpf_map_update_elem(&hash_map_bench, key, &init_val, BPF_ANY);
->>>> +       return 0;
->>>> +}
->>>> +
->>>> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
->>>> +int benchmark(void *ctx)
->>>> +{
->>>> +       u32 key = bpf_get_prandom_u32() % MAX_ENTRIES + MAX_ENTRIES;
->>> What is the point of random ?
->>> just key = MAX_ENTRIES would be the same, no?
->>> or key = -1 ?
->> If all threads on different cpu trigger sys_getpgid and lookup the same
->> key, it will cause
->> "ret = htab_lock_bucket(htab, b, hash, &flags);"
->> the lock competition here is fierce, and unnecessary overhead is
->> introduced,
->> and I don't want it to interfere with the test.
-> I see.
-> but using random leaves it to chance.
-> Use cpu+max_entries then?
+From: Cong Wang <cong.wang@bytedance.com>
 
-Ok, will do. Thanks.
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+---
+ include/linux/skbuff.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index da96f0d3e753..857fd813c1bc 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -3929,6 +3929,11 @@ static inline int __skb_grow_rcsum(struct sk_buff *skb, unsigned int len)
+ 		for (skb = skb_rb_first(root); skb != NULL;			\
+ 		     skb = skb_rb_next(skb))
+ 
++#define skb_rbtree_walk_safe(skb, tmp, root)					\
++		for (skb = skb_rb_first(root);					\
++		     tmp = skb ? skb_rb_next(skb) : NULL, (skb != NULL);	\
++		     skb = tmp)
++
+ #define skb_rbtree_walk_from(skb)						\
+ 		for (; skb != NULL;						\
+ 		     skb = skb_rb_next(skb))
+-- 
+2.34.1
 
