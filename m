@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2AB6C433EF
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 14:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DBEECCA478
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 14:39:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236094AbiFBOiZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 10:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S235993AbiFBOjl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 10:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236025AbiFBOiO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:38:14 -0400
+        with ESMTP id S236086AbiFBOjd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 10:39:33 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AFE1A8E29;
-        Thu,  2 Jun 2022 07:38:08 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LDT761sbfz67sRl;
-        Thu,  2 Jun 2022 22:34:42 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836FE20E6F0;
+        Thu,  2 Jun 2022 07:39:31 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LDT7T0DS0z688Mj;
+        Thu,  2 Jun 2022 22:35:01 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 2 Jun 2022 16:38:05 +0200
+ 15.1.2375.24; Thu, 2 Jun 2022 16:39:29 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kpsingh@kernel.org>
 CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 3/9] bpftool: Add flags parameter to open_obj_pinned_any() and open_obj_pinned()
-Date:   Thu, 2 Jun 2022 16:37:42 +0200
-Message-ID: <20220602143748.673971-4-roberto.sassu@huawei.com>
+Subject: [PATCH v2 7/9] bpftool: Add flags parameter in struct_ops functions
+Date:   Thu, 2 Jun 2022 16:37:46 +0200
+Message-ID: <20220602143748.673971-8-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220602143748.673971-1-roberto.sassu@huawei.com>
 References: <20220602143748.673971-1-roberto.sassu@huawei.com>
@@ -44,114 +44,144 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the flags parameter to open_obj_pinned_any() and open_obj_pinned(), so
-that it is possible to specify the right permissions when obtaining a file
-descriptor from a pinned object.
+Add the flags parameter to struct_ops functions, to distinguish between
+read-like and write-like operations on struct_ops maps.
 
-By default, the value passed to those functions is zero, so that there is
-no change in the current behavior.
+Also, always perform the search with read-only permission, and eventually
+obtain a new file descriptor if the requested permission is different.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- tools/bpf/bpftool/common.c | 15 ++++++++-------
- tools/bpf/bpftool/link.c   |  2 +-
- tools/bpf/bpftool/main.h   |  5 +++--
- 3 files changed, 12 insertions(+), 10 deletions(-)
+ tools/bpf/bpftool/struct_ops.c | 39 +++++++++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index a45b42ee8ab0..88e5e1900270 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -118,7 +118,7 @@ int mount_tracefs(const char *target)
- 	return err;
+diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
+index 2535f079ed67..e8252a76e115 100644
+--- a/tools/bpf/bpftool/struct_ops.c
++++ b/tools/bpf/bpftool/struct_ops.c
+@@ -130,7 +130,8 @@ static struct bpf_map_info *map_info_alloc(__u32 *alloc_len)
+  *    -1: Error and the caller should abort the iteration.
+  */
+ static int get_next_struct_ops_map(const char *name, int *res_fd,
+-				   struct bpf_map_info *info, __u32 info_len)
++				   struct bpf_map_info *info, __u32 info_len,
++				   __u32 flags)
+ {
+ 	__u32 id = info->id;
+ 	int err, fd;
+@@ -144,7 +145,7 @@ static int get_next_struct_ops_map(const char *name, int *res_fd,
+ 			return -1;
+ 		}
+ 
+-		fd = bpf_map_get_fd_by_id(id);
++		fd = bpf_map_get_fd_by_id_flags(id, BPF_F_RDONLY);
+ 		if (fd < 0) {
+ 			if (errno == ENOENT)
+ 				continue;
+@@ -162,6 +163,19 @@ static int get_next_struct_ops_map(const char *name, int *res_fd,
+ 
+ 		if (info->type == BPF_MAP_TYPE_STRUCT_OPS &&
+ 		    (!name || !strcmp(name, info->name))) {
++			if (flags != BPF_F_RDONLY) {
++				close(fd);
++
++				fd = bpf_map_get_fd_by_id_flags(id, flags);
++				if (fd < 0) {
++					if (errno == ENOENT)
++						continue;
++					p_err("can't get map by id (%u): %s",
++					      id, strerror(errno));
++					return -1;
++				}
++			}
++
+ 			*res_fd = fd;
+ 			return 1;
+ 		}
+@@ -186,7 +200,7 @@ typedef int (*work_func)(int fd, const struct bpf_map_info *info, void *data,
+  * Then call "func(fd, info, data, wtr)" on each struct_ops map found.
+  */
+ static struct res do_search(const char *name, work_func func, void *data,
+-			    struct json_writer *wtr)
++			    struct json_writer *wtr, __u32 flags)
+ {
+ 	struct bpf_map_info *info;
+ 	struct res res = {};
+@@ -201,7 +215,8 @@ static struct res do_search(const char *name, work_func func, void *data,
+ 
+ 	if (wtr)
+ 		jsonw_start_array(wtr);
+-	while ((err = get_next_struct_ops_map(name, &fd, info, info_len)) == 1) {
++	while ((err = get_next_struct_ops_map(name, &fd, info, info_len,
++					      flags)) == 1) {
+ 		res.nr_maps++;
+ 		err = func(fd, info, data, wtr);
+ 		if (err)
+@@ -235,7 +250,7 @@ static struct res do_search(const char *name, work_func func, void *data,
  }
  
--int open_obj_pinned(const char *path, bool quiet)
-+int open_obj_pinned(const char *path, bool quiet, __u32 flags)
+ static struct res do_one_id(const char *id_str, work_func func, void *data,
+-			    struct json_writer *wtr)
++			    struct json_writer *wtr, __u32 flags)
  {
- 	char *pname;
- 	int fd = -1;
-@@ -130,7 +130,7 @@ int open_obj_pinned(const char *path, bool quiet)
- 		goto out_ret;
+ 	struct bpf_map_info *info;
+ 	struct res res = {};
+@@ -251,7 +266,7 @@ static struct res do_one_id(const char *id_str, work_func func, void *data,
+ 		return res;
  	}
  
--	fd = bpf_obj_get(pname);
-+	fd = bpf_obj_get_flags(pname, flags);
+-	fd = bpf_map_get_fd_by_id(id);
++	fd = bpf_map_get_fd_by_id_flags(id, flags);
  	if (fd < 0) {
- 		if (!quiet)
- 			p_err("bpf obj get (%s): %s", pname,
-@@ -146,12 +146,13 @@ int open_obj_pinned(const char *path, bool quiet)
- 	return fd;
- }
- 
--int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
-+int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type,
-+			__u32 flags)
+ 		p_err("can't get map by id (%lu): %s", id, strerror(errno));
+ 		res.nr_errs++;
+@@ -300,16 +315,16 @@ static struct res do_one_id(const char *id_str, work_func func, void *data,
+ static struct res do_work_on_struct_ops(const char *search_type,
+ 					const char *search_term,
+ 					work_func func, void *data,
+-					struct json_writer *wtr)
++					struct json_writer *wtr, __u32 flags)
  {
- 	enum bpf_obj_type type;
- 	int fd;
- 
--	fd = open_obj_pinned(path, false);
-+	fd = open_obj_pinned(path, false, flags);
- 	if (fd < 0)
- 		return -1;
- 
-@@ -400,7 +401,7 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 	if (typeflag != FTW_F)
- 		goto out_ret;
- 
--	fd = open_obj_pinned(fpath, true);
-+	fd = open_obj_pinned(fpath, true, 0);
- 	if (fd < 0)
- 		goto out_ret;
- 
-@@ -761,7 +762,7 @@ int prog_parse_fds(int *argc, char ***argv, int **fds)
- 		path = **argv;
- 		NEXT_ARGP();
- 
--		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_PROG);
-+		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_PROG, 0);
- 		if ((*fds)[0] < 0)
- 			return -1;
- 		return 1;
-@@ -898,7 +899,7 @@ int map_parse_fds(int *argc, char ***argv, int **fds)
- 		path = **argv;
- 		NEXT_ARGP();
- 
--		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_MAP);
-+		(*fds)[0] = open_obj_pinned_any(path, BPF_OBJ_MAP, 0);
- 		if ((*fds)[0] < 0)
- 			return -1;
- 		return 1;
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 7a20931c3250..04447ad9b3b3 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -44,7 +44,7 @@ static int link_parse_fd(int *argc, char ***argv)
- 		path = **argv;
- 		NEXT_ARGP();
- 
--		return open_obj_pinned_any(path, BPF_OBJ_LINK);
-+		return open_obj_pinned_any(path, BPF_OBJ_LINK, 0);
+ 	if (search_type) {
+ 		if (is_prefix(search_type, "id"))
+-			return do_one_id(search_term, func, data, wtr);
++			return do_one_id(search_term, func, data, wtr, flags);
+ 		else if (!is_prefix(search_type, "name"))
+ 			usage();
  	}
  
- 	p_err("expected 'id' or 'pinned', got: '%s'?", **argv);
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 6c311f47147e..3f6c03afb2f8 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -141,8 +141,9 @@ void get_prog_full_name(const struct bpf_prog_info *prog_info, int prog_fd,
- int get_fd_type(int fd);
- const char *get_fd_type_name(enum bpf_obj_type type);
- char *get_fdinfo(int fd, const char *key);
--int open_obj_pinned(const char *path, bool quiet);
--int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type);
-+int open_obj_pinned(const char *path, bool quiet, __u32 flags);
-+int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type,
-+			__u32 flags);
- int mount_bpffs_for_pin(const char *name);
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(int *, char ***));
- int do_pin_fd(int fd, const char *name);
+-	return do_search(search_term, func, data, wtr);
++	return do_search(search_term, func, data, wtr, flags);
+ }
+ 
+ static int __do_show(int fd, const struct bpf_map_info *info, void *data,
+@@ -344,7 +359,7 @@ static int do_show(int argc, char **argv)
+ 	}
+ 
+ 	res = do_work_on_struct_ops(search_type, search_term, __do_show,
+-				    NULL, json_wtr);
++				    NULL, json_wtr, 0);
+ 
+ 	return cmd_retval(&res, !!search_term);
+ }
+@@ -433,7 +448,7 @@ static int do_dump(int argc, char **argv)
+ 	d.prog_id_as_func_ptr = true;
+ 
+ 	res = do_work_on_struct_ops(search_type, search_term, __do_dump, &d,
+-				    wtr);
++				    wtr, 0);
+ 
+ 	if (!json_output)
+ 		jsonw_destroy(&wtr);
+@@ -472,7 +487,7 @@ static int do_unregister(int argc, char **argv)
+ 	search_term = GET_ARG();
+ 
+ 	res = do_work_on_struct_ops(search_type, search_term,
+-				    __do_unregister, NULL, NULL);
++				    __do_unregister, NULL, NULL, 0);
+ 
+ 	return cmd_retval(&res, true);
+ }
 -- 
 2.25.1
 
