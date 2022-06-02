@@ -2,130 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93C91C433EF
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 10:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A369C43334
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 14:37:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiFBKiU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 06:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
+        id S235361AbiFBOhz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 10:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbiFBKiT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 06:38:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0A232B1947
-        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 03:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654166297;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cEcO6QyHnPHYS4Vy+YLs+KWkeAz9zsW0LykwJtSxyKE=;
-        b=F/8WLkUaKtHZPQjxMe8S5VsESWppVY2mIHN4OmfSOC5jqik+/IEhtOJWDysu8KtPuHqvq6
-        yNnnRMvQcrZNsVMUaGfE6HyQ1/CrNQrByw992g0owU4W7umz3hRtMM7SmSQ5oKQKRkjUZE
-        rzZiOTAgnuEQZeCAJjCdnwd/HCPDryI=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-6FFRm_ZNObStPmfOQgkI_Q-1; Thu, 02 Jun 2022 06:38:16 -0400
-X-MC-Unique: 6FFRm_ZNObStPmfOQgkI_Q-1
-Received: by mail-qv1-f69.google.com with SMTP id j2-20020a0cfd42000000b0045ad9cba5deso3191263qvs.5
-        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 03:38:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=cEcO6QyHnPHYS4Vy+YLs+KWkeAz9zsW0LykwJtSxyKE=;
-        b=KAe7YfTcMUHbcvj1XbeYd9I0X+4TGocTxwHkevfFe6ikLecmzyzoaHOLIHKqboHbDY
-         /zj9T6gC/sxwQulv4wG6O/ln7ImwtaDfs3GYb2Ig291+lsVEcSaVkLNLMFNEMdp0SnYF
-         NZ2sVNUyZTsNx7z2rFIbsQSd+HDnV7BpT/NqPVs9iklX63+vTHZ91bCaIvalZ+AqbWvo
-         lRMVg+0gFWuQp6xRaAPDA6GE/iYH14qcALMboPL472u8nj7skS3RoiMQmVLkTRHstiwz
-         TnD64iao2NIdsx4+E9wtSs/ijFC7CX0R9/MkfwnPBz3+8SdHlQ7kP+8+j065+qekEybi
-         28FA==
-X-Gm-Message-State: AOAM530yxmMsiNIdpGgcqPb7RVr1lh8ne1EOrKieLT7E7y0WsHOtZW5Z
-        zru2w6MmIlb42/irmsO1/oXghdUpK/T66QzO0ZoCkPMk7xKuxSvKEd5JW9fYCqlCaDCOVgeS8zv
-        OoV0s2xQhpHhl
-X-Received: by 2002:a05:6214:4104:b0:42c:1db0:da28 with SMTP id kc4-20020a056214410400b0042c1db0da28mr58094699qvb.67.1654166295383;
-        Thu, 02 Jun 2022 03:38:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyKaok4uC0gNMvnkmHdYFlz5ez7IZbeoh5p82LSlatVHUnTtlooLcZ5k/Za57l19xqbgWEIFg==
-X-Received: by 2002:a05:6214:4104:b0:42c:1db0:da28 with SMTP id kc4-20020a056214410400b0042c1db0da28mr58094671qvb.67.1654166295138;
-        Thu, 02 Jun 2022 03:38:15 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-112-184.dyn.eolo.it. [146.241.112.184])
-        by smtp.gmail.com with ESMTPSA id p21-20020a05620a15f500b0069fc13ce23esm2747275qkm.111.2022.06.02.03.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 03:38:14 -0700 (PDT)
-Message-ID: <4c9e3cf5122f4c2f8a2473c493891362e0a13b4a.camel@redhat.com>
-Subject: Re: [PATCH net-next v4] ipv6: Fix signed integer overflow in
- __ip6_append_data
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Wang Yufen <wangyufen@huawei.com>, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Thu, 02 Jun 2022 12:38:10 +0200
-In-Reply-To: <20220601084803.1833344-1-wangyufen@huawei.com>
-References: <20220601084803.1833344-1-wangyufen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S234681AbiFBOhy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 10:37:54 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1040B2DA9C;
+        Thu,  2 Jun 2022 07:37:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5ECCF5C00E0;
+        Thu,  2 Jun 2022 10:37:48 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 02 Jun 2022 10:37:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1654180668; x=1654267068; bh=BzjRBbEu68
+        Kzk8yC4V4e2pbTUKKqIZY45MXe4ZImIak=; b=WQRNUcou5TAqDeXht8BzuPsoBR
+        Crp+v/UFTBIxi0spr1Fxtb2gOq0OyUjgHlAKxwJisASxTD5dYqmvlDa2pTt6u8IC
+        HS/1DmzzDnkmSiNOZMWlTGXPz5bR2fJo73GPqD5Ik26netbJCWS0dD+yhbie74Ji
+        qyBUsgYEK1Y2zYvbIU7mj+kN9PZLR4rlVAXxN6GGjvdH7iCeJuwz4i5Mqa93E87y
+        mzO2rmYd4lkt8zv8FtBAd7NLxRFEmfw8I/bHp7c8cTnvFDt/7I8+0qyafMP2bdyt
+        Vl/Om8uMpeyDKBUU2b+UEgqXjvITQMasazi38tkGEnpztB5Ft8NEWXCpb44Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1654180668; x=1654267068; bh=BzjRBbEu68Kzk8yC4V4e2pbTUKKq
+        IZY45MXe4ZImIak=; b=uFZlaPl/p0d+T6LLoet0CnPwBL82RRIG+/GTxIrVhnhA
+        hIbAPnEPAspo3h5WLAG4K2KF48d4iNK6Cc47igpo2tyUgWc03pn8uTP8sUxMLxWE
+        mkvVRtG2uFiTBVAuWSjgZcPNuLrprQ5w4mh1LgR2ElX9de/kc4yCyGsfXjqEeGWL
+        hh/lognlm+8vf4XpcpNarLKSwxXNtYXpk5wZ5BzitAbpJJhRRYeKcWkF1EE4LOsv
+        u8Q7rvwT5umpdpb3XyVE4/kiuHugHXnY71v4NvstgOtn+n7p5uUC+KUKT9uJrXZ5
+        n7H0LXe16yBb/UmGROGx3rUTMQhEaoUu9AEALuOzew==
+X-ME-Sender: <xms:PMuYYg4FTL-ZO80AV-QyIuIIkAViJJWMz8Gorg_-1ujzsc-3mZDnGA>
+    <xme:PMuYYh7XxtRZ5sMpsv49QFiIjoYmkZLbI-K_QQnvw82E196dgKnhfZjxQMTRavKPO
+    V29zFDqUxsA_oUrjA>
+X-ME-Received: <xmr:PMuYYvfj9oivpHy5P8QRZ8jBnpkt6bchbjPiTvyKIVMh-KYkWb8fSe_x7oTNIWs7NautkrHEYw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledvgdejiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenfg
+    hrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
+    vdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqeenuc
+    ggtffrrghtthgvrhhnpeevuddugeeihfdtffehgffgudeggeegheetgfevhfekkeeileeu
+    ieejleekiedvgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:PMuYYlJmhsCk7t3w5NQWbb53m-rwrBYVX77SAzgntwISoSAcU-YWEQ>
+    <xmx:PMuYYkIBA2X_EYIn79pJrhsUUGtACiCn90VETHRiSftH0ToCWSoiBQ>
+    <xmx:PMuYYmxxJ5v69nMQISt532WDmX63jmRma6rthPEYoW7yDr-fnggkQQ>
+    <xmx:PMuYYpHBhI55sVA2ccPy3RVnMWN8R7MrcbX4CqeWbjlMoY3c7rW3Wg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 2 Jun 2022 10:37:47 -0400 (EDT)
+Date:   Thu, 2 Jun 2022 09:37:46 -0500
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Add PROG_TEST_RUN support to
+ kprobe
+Message-ID: <20220602143746.dydumxrrvhb6jdv5@kashmir.localdomain>
+References: <cover.1653861287.git.dxu@dxuuu.xyz>
+ <b544771c7bce102f2a97a34e2f5e7ebbb9ea0a24.1653861287.git.dxu@dxuuu.xyz>
+ <CAADnVQL6Duc5qdwkqf+DWqYhngE3Dj-J37=7QoVA3ycFoWBU2w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQL6Duc5qdwkqf+DWqYhngE3Dj-J37=7QoVA3ycFoWBU2w@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 2022-06-01 at 16:48 +0800, Wang Yufen wrote:
-> Resurrect ubsan overflow checks and ubsan report this warning,
-> fix it by change the variable [length] type to size_t.
+On Tue, May 31, 2022 at 11:07:31AM -0700, Alexei Starovoitov wrote:
+> On Sun, May 29, 2022 at 3:06 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > This commit adds PROG_TEST_RUN support to BPF_PROG_TYPE_KPROBE progs. On
+> > top of being generally useful for unit testing kprobe progs, this commit
+> > more specifically helps solve a relability problem with bpftrace BEGIN
+> > and END probes.
+> >
+> > BEGIN and END probes are run exactly once at the beginning and end of a
+> > bpftrace tracing session, respectively. bpftrace currently implements
+> > the probes by creating two dummy functions and attaching the BEGIN and
+> > END progs, if defined, to those functions and calling the dummy
+> > functions as appropriate. This works pretty well most of the time except
+> > for when distros strip symbols from bpftrace. Every now and then this
+> > happens and users get confused. Having PROG_TEST_RUN support will help
+> > solve this issue by allowing us to directly trigger uprobes from
+> > userspace.
+> >
+> > Admittedly, this is a pretty specific problem and could probably be
+> > solved other ways. However, PROG_TEST_RUN also makes unit testing more
+> > convenient, especially as users start building more complex tracing
+> > applications. So I see this as killing two birds with one stone.
 > 
-> UBSAN: signed-integer-overflow in net/ipv6/ip6_output.c:1489:19
-> 2147479552 + 8567 cannot be represented in type 'int'
-> CPU: 0 PID: 253 Comm: err Not tainted 5.16.0+ #1
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->   dump_backtrace+0x214/0x230
->   show_stack+0x30/0x78
->   dump_stack_lvl+0xf8/0x118
->   dump_stack+0x18/0x30
->   ubsan_epilogue+0x18/0x60
->   handle_overflow+0xd0/0xf0
->   __ubsan_handle_add_overflow+0x34/0x44
->   __ip6_append_data.isra.48+0x1598/0x1688
->   ip6_append_data+0x128/0x260
->   udpv6_sendmsg+0x680/0xdd0
->   inet6_sendmsg+0x54/0x90
->   sock_sendmsg+0x70/0x88
->   ____sys_sendmsg+0xe8/0x368
->   ___sys_sendmsg+0x98/0xe0
->   __sys_sendmmsg+0xf4/0x3b8
->   __arm64_sys_sendmmsg+0x34/0x48
->   invoke_syscall+0x64/0x160
->   el0_svc_common.constprop.4+0x124/0x300
->   do_el0_svc+0x44/0xc8
->   el0_svc+0x3c/0x1e8
->   el0t_64_sync_handler+0x88/0xb0
->   el0t_64_sync+0x16c/0x170
+> bpftrace approach of uprobe-ing into BEGIN_trigger can
+> be solved with raw_tp prog.
+> "BEGIN" bpftrace's program doesn't have to be uprobe.
+> I can be raw_tp and prog_test_run command is
+> already implemented for raw_tp.
 > 
-> Changes since v1:
-> -Change the variable [length] type to unsigned, as Eric Dumazet suggested.
-> Changes since v2:
-> -Don't change exthdrlen type in ip6_make_skb, as Paolo Abeni suggested.
-> Changes since v3:
-> -Don't change ulen type in udpv6_sendmsg and l2tp_ip6_sendmsg, as
-> Jakub Kicinski suggested.
+> kprobe prog has pt_regs as arguments,
+> raw_tp has tracepoint args.
+> Both progs expect kernel addresses in args.
+> Passing 'struct pt_regs' filled with integers and non-kernel addresses
+> won't help to unit test bpf-kprobe programs.
+> There is little use in creating a dummy kprobe-bpf prog
+> that expects RDI to be 1 and RSI to be 2
+> (like selftest from patch 2 does) and running it.
 
-I'm sorry for the multiple incremental feedback on this patch. It's
-somewhat tricky.
+Yeah that's a good point about the kprobe case. But AFAICT uprobes are
+implemented using a kprobe prog in which case it would be both possible
+and useful to insert userspace args and userspace addrspace addrs.
 
-AFAICS Jakub mentioned only udpv6_sendmsg(). In l2tp_ip6_sendmsg() we
-can have an overflow:
+> We already have raw_tp with similar args and such
+> progs can be executed already.
+> Whether SEC() part says kprobe/ or raw_tp/ doesn't change
+> much in the prog itself.
 
-        int transhdrlen = 4; /* zero session-id */
-        int ulen = len + transhdrlen;
+I suppose so, and I guess you could always bpf_program__set_type(..).
 
-when len >= INT_MAX - 4. That will be harmless, but I guess it could
-still trigger a noisy UBSAN splat. 
+> More so raw_tp prog will work on all architectures,
+> whereas kprobe's pt_regs are arch specific.
+> So even if kprobe progs were runnable, bpftrace
+> should probably be using raw_tp to be arch independent.
 
-Paolo
+bpftrace has all the infra to pull arbitrary structs out of vmlinux BTF
+already. It should be fairly simple to get the arch-specific struct
+pt_regs size and construct a buffer of all 0s. And fall back to old
+logic (that'll be necessary for a while) if kprobe BPF_PROG_RUN or
+vmlinux BTF is missing.
 
+That being said, I didn't realize that when I put up the patch, so
+thanks for the hint. It sounds like it's probably simpler to just use
+raw_tp then.
+
+FWIW I still think this feature is useful, but since I probably won't
+use it in bpftrace I'm fine with dropping the patchset. If anyone still
+wants it in I'm also fine with continuing on it.
+
+Thanks,
+Daniel
