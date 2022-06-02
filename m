@@ -2,34 +2,34 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57BD9CCA47F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EC7DCCA481
 	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 14:39:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236065AbiFBOjn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 10:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S236107AbiFBOjo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 10:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236137AbiFBOjd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 10:39:33 -0400
+        with ESMTP id S236031AbiFBOjc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 10:39:32 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2582326D356;
-        Thu,  2 Jun 2022 07:39:32 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LDT8k1lX6z67M3B;
-        Thu,  2 Jun 2022 22:36:06 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD581DAF2E;
+        Thu,  2 Jun 2022 07:39:30 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LDT8h64Z9z686LZ;
+        Thu,  2 Jun 2022 22:36:04 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 2 Jun 2022 16:39:29 +0200
+ 15.1.2375.24; Thu, 2 Jun 2022 16:39:28 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kpsingh@kernel.org>
 CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2 8/9] bpftool: Adjust map permissions
-Date:   Thu, 2 Jun 2022 16:37:47 +0200
-Message-ID: <20220602143748.673971-9-roberto.sassu@huawei.com>
+Subject: [PATCH v2 6/9] bpftool: Add flags parameter to map_parse_fd_and_info()
+Date:   Thu, 2 Jun 2022 16:37:45 +0200
+Message-ID: <20220602143748.673971-7-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220602143748.673971-1-roberto.sassu@huawei.com>
 References: <20220602143748.673971-1-roberto.sassu@huawei.com>
@@ -44,105 +44,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Request a read file descriptor for:
-- map subcommands: show_subset, show, dump, lookup, getnext and pin;
-- btf subcommand: dump;
-- prog subcommand: show (metadata);
-- struct_ops subcommands: show and dump;
-- do_build_table_cb(), to show the path of a pinned map.
+Add the flags parameter to map_parse_fd_and_info(), as this function is
+called directly by the functions implementing bpftool subcommands, so that
+it is possible to specify the right permissions for accessing a map.
+
+Still pass zero as value for flags, and adjust permissions in a later
+patch.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- tools/bpf/bpftool/btf.c        |  5 +++--
- tools/bpf/bpftool/common.c     |  5 +++--
- tools/bpf/bpftool/map.c        | 10 +++++-----
- tools/bpf/bpftool/prog.c       |  2 +-
- tools/bpf/bpftool/struct_ops.c |  4 ++--
- 5 files changed, 14 insertions(+), 12 deletions(-)
+ tools/bpf/bpftool/btf.c           |  2 +-
+ tools/bpf/bpftool/common.c        |  5 +++--
+ tools/bpf/bpftool/main.h          |  3 ++-
+ tools/bpf/bpftool/map.c           | 12 ++++++------
+ tools/bpf/bpftool/map_perf_ring.c |  3 ++-
+ 5 files changed, 14 insertions(+), 11 deletions(-)
 
 diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 69a7695030f9..a36710903549 100644
+index 98569252ef4a..69a7695030f9 100644
 --- a/tools/bpf/bpftool/btf.c
 +++ b/tools/bpf/bpftool/btf.c
-@@ -529,7 +529,8 @@ static int do_dump(int argc, char **argv)
+@@ -529,7 +529,7 @@ static int do_dump(int argc, char **argv)
  			return -1;
  		}
  
--		fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
-+		fd = map_parse_fd_and_info(&argc, &argv, &info, &len,
-+					   BPF_F_RDONLY);
+-		fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++		fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
  		if (fd < 0)
  			return -1;
  
-@@ -730,7 +731,7 @@ build_btf_type_table(struct hashmap *tab, enum bpf_obj_type type,
- 			fd = bpf_prog_get_fd_by_id(id);
- 			break;
- 		case BPF_OBJ_MAP:
--			fd = bpf_map_get_fd_by_id(id);
-+			fd = bpf_map_get_fd_by_id_flags(id, BPF_F_RDONLY);
- 			break;
- 		default:
- 			err = -1;
 diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 0816ea2f0be1..d20e1fa8a5fd 100644
+index 641810b78581..0816ea2f0be1 100644
 --- a/tools/bpf/bpftool/common.c
 +++ b/tools/bpf/bpftool/common.c
-@@ -228,7 +228,7 @@ int do_pin_any(int argc, char **argv, int (*get_fd)(int *, char ***, __u32))
+@@ -947,12 +947,13 @@ int map_parse_fd(int *argc, char ***argv, __u32 flags)
+ 	return fd;
+ }
+ 
+-int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len)
++int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len,
++			  __u32 flags)
+ {
  	int err;
  	int fd;
  
--	fd = get_fd(&argc, &argv, 0);
-+	fd = get_fd(&argc, &argv, BPF_F_RDONLY);
+-	fd = map_parse_fd(argc, argv, 0);
++	fd = map_parse_fd(argc, argv, flags);
  	if (fd < 0)
- 		return fd;
+ 		return -1;
  
-@@ -401,7 +401,8 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 	if (typeflag != FTW_F)
- 		goto out_ret;
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index 70b0ad6245b9..46c2f24f66fd 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -171,7 +171,8 @@ int prog_parse_fd(int *argc, char ***argv, __u32 flags);
+ int prog_parse_fds(int *argc, char ***argv, int **fds);
+ int map_parse_fd(int *argc, char ***argv, __u32 flags);
+ int map_parse_fds(int *argc, char ***argv, int **fds, __u32 flags);
+-int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len);
++int map_parse_fd_and_info(int *argc, char ***argv, void *info, __u32 *info_len,
++			  __u32 flags);
  
--	fd = open_obj_pinned(fpath, true, 0);
-+	/* WARNING: setting flags to BPF_F_RDONLY has effect only for maps. */
-+	fd = open_obj_pinned(fpath, true, BPF_F_RDONLY);
- 	if (fd < 0)
- 		goto out_ret;
- 
+ struct bpf_prog_linfo;
+ #ifdef HAVE_LIBBFD_SUPPORT
 diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index f253f69879a9..e4346c834e07 100644
+index 9a747918882e..f253f69879a9 100644
 --- a/tools/bpf/bpftool/map.c
 +++ b/tools/bpf/bpftool/map.c
-@@ -634,7 +634,7 @@ static int do_show_subset(int argc, char **argv)
- 		p_err("mem alloc failed");
- 		return -1;
- 	}
--	nb_fds = map_parse_fds(&argc, &argv, &fds, 0);
-+	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
- 	if (nb_fds < 1)
- 		goto exit_free;
+@@ -998,7 +998,7 @@ static int do_update(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
  
-@@ -702,7 +702,7 @@ static int do_show(int argc, char **argv)
- 			break;
- 		}
- 
--		fd = bpf_map_get_fd_by_id(id);
-+		fd = bpf_map_get_fd_by_id_flags(id, BPF_F_RDONLY);
- 		if (fd < 0) {
- 			if (errno == ENOENT)
- 				continue;
-@@ -910,7 +910,7 @@ static int do_dump(int argc, char **argv)
- 		p_err("mem alloc failed");
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
+ 	if (fd < 0)
  		return -1;
- 	}
--	nb_fds = map_parse_fds(&argc, &argv, &fds, 0);
-+	nb_fds = map_parse_fds(&argc, &argv, &fds, BPF_F_RDONLY);
- 	if (nb_fds < 1)
- 		goto exit_free;
  
 @@ -1077,7 +1077,7 @@ static int do_lookup(int argc, char **argv)
  	if (argc < 2)
  		usage();
  
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
  	if (fd < 0)
  		return -1;
  
@@ -150,46 +133,52 @@ index f253f69879a9..e4346c834e07 100644
  	if (argc < 2)
  		usage();
  
--	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
-+	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, BPF_F_RDONLY);
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
  	if (fd < 0)
  		return -1;
  
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 05480bf26a00..58d573badcb4 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -251,7 +251,7 @@ static void *find_metadata(int prog_fd, struct bpf_map_info *map_info)
- 		goto free_map_ids;
+@@ -1199,7 +1199,7 @@ static int do_delete(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
  
- 	for (i = 0; i < prog_info.nr_map_ids; i++) {
--		map_fd = bpf_map_get_fd_by_id(map_ids[i]);
-+		map_fd = bpf_map_get_fd_by_id_flags(map_ids[i], BPF_F_RDONLY);
- 		if (map_fd < 0)
- 			goto free_map_ids;
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
+ 	if (fd < 0)
+ 		return -1;
  
-diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
-index e8252a76e115..ced5fe62b1d7 100644
---- a/tools/bpf/bpftool/struct_ops.c
-+++ b/tools/bpf/bpftool/struct_ops.c
-@@ -359,7 +359,7 @@ static int do_show(int argc, char **argv)
- 	}
+@@ -1311,7 +1311,7 @@ static int do_create(int argc, char **argv)
+ 			if (!REQ_ARGS(2))
+ 				usage();
+ 			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
+-							     &info, &len);
++							     &info, &len, 0);
+ 			if (inner_map_fd < 0)
+ 				return -1;
+ 			attr.inner_map_fd = inner_map_fd;
+@@ -1358,7 +1358,7 @@ static int do_pop_dequeue(int argc, char **argv)
+ 	if (argc < 2)
+ 		usage();
  
- 	res = do_work_on_struct_ops(search_type, search_term, __do_show,
--				    NULL, json_wtr, 0);
-+				    NULL, json_wtr, BPF_F_RDONLY);
+-	fd = map_parse_fd_and_info(&argc, &argv, &info, &len);
++	fd = map_parse_fd_and_info(&argc, &argv, &info, &len, 0);
+ 	if (fd < 0)
+ 		return -1;
  
- 	return cmd_retval(&res, !!search_term);
- }
-@@ -448,7 +448,7 @@ static int do_dump(int argc, char **argv)
- 	d.prog_id_as_func_ptr = true;
+diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
+index 6b0c410152de..dcfc4724cd8d 100644
+--- a/tools/bpf/bpftool/map_perf_ring.c
++++ b/tools/bpf/bpftool/map_perf_ring.c
+@@ -135,7 +135,8 @@ int do_event_pipe(int argc, char **argv)
+ 	int err, map_fd;
  
- 	res = do_work_on_struct_ops(search_type, search_term, __do_dump, &d,
--				    wtr, 0);
-+				    wtr, BPF_F_RDONLY);
+ 	map_info_len = sizeof(map_info);
+-	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len);
++	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
++				       0);
+ 	if (map_fd < 0)
+ 		return -1;
  
- 	if (!json_output)
- 		jsonw_destroy(&wtr);
 -- 
 2.25.1
 
