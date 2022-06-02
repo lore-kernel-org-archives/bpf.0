@@ -2,56 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD2FC433EF
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 17:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E2DC433EF
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 19:40:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237739AbiFBRyU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 13:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S238906AbiFBTku convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 2 Jun 2022 15:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235859AbiFBRyT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 13:54:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8B2B07CD;
-        Thu,  2 Jun 2022 10:54:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9614DB820E4;
-        Thu,  2 Jun 2022 17:54:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95AF7C385A5;
-        Thu,  2 Jun 2022 17:54:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654192455;
-        bh=iuNz+r+pm8n9GIagL4R4dB3NTvRvPg2fwpYvcVveqbc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UHLyPtqNqBQgGs8GLeho7JBM0Y2Z7ouhZsFVEBs2n9PI2Wx9lrph7nLQiHK0K4QMP
-         PpQUQlvac0KpyVsVypLBqDjLTPL7qenPLjsmw31I0LSmcZxI7WjYWEsUSzk5ph4JUY
-         s4pDjvNpyg4QmAJvo19cOiIphoutOgmL0ozdSdS6WGFZHRgKM5xxrzsBC0dj3MVFLd
-         ISU5LRWGNs81rcBlCBbVXZ+aOm3ly9/aUzkjakI5/5TvIueeqlybvzqADhLl2yZRpG
-         Fwik3nuaqaZ7PI8icrxpO12I7Hmf6XUn0lol7USmyIRt1PTyGQbgrHpv+F5z0TM0G3
-         p2dgNmI3/qdOQ==
-Date:   Thu, 2 Jun 2022 10:54:13 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Varshini Elangovan <varshini.elangovan@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        hawk@kernel.org, john.fastabend@gmail.com, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: Add queue_index to xdp_rxq_info
-Message-ID: <20220602105413.437d33d9@kernel.org>
-In-Reply-To: <20220602173657.36252-1-varshini.elangovan@gmail.com>
-References: <20220602173657.36252-1-varshini.elangovan@gmail.com>
+        with ESMTP id S238907AbiFBTkh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 15:40:37 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D7F24BD7
+        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 12:39:50 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 252C0SGc024871
+        for <bpf@vger.kernel.org>; Thu, 2 Jun 2022 12:39:50 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3gevu4u016-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 12:39:50 -0700
+Received: from twshared35153.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 2 Jun 2022 12:39:48 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id AE1C286C00B8; Thu,  2 Jun 2022 12:37:13 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kernel-team@fb.com>, <rostedt@goodmis.org>, <jolsa@kernel.org>,
+        <mhiramat@kernel.org>, Song Liu <song@kernel.org>
+Subject: [PATCH v2 bpf-next 1/5] ftrace: allow customized flags for ftrace_direct_multi ftrace_ops
+Date:   Thu, 2 Jun 2022 12:37:02 -0700
+Message-ID: <20220602193706.2607681-2-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220602193706.2607681-1-song@kernel.org>
+References: <20220602193706.2607681-1-song@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: waEllGuq6kmiaybnaJQvdZ4D2Z737o_s
+X-Proofpoint-GUID: waEllGuq6kmiaybnaJQvdZ4D2Z737o_s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-02_05,2022-06-02_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu,  2 Jun 2022 23:06:57 +0530 Varshini Elangovan wrote:
-> Subject: [PATCH] staging: r8188eu: Add queue_index to xdp_rxq_info
+This enables users of ftrace_direct_multi to specify the flags based on
+the actual use case. For example, some users may not set flag IPMODIFY.
 
-For a second there I thought we had a wifi driver with XDP support 
-in staging :/
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ kernel/trace/ftrace.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 2fcd17857ff6..afe782ae28d3 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -5456,8 +5456,7 @@ int modify_ftrace_direct(unsigned long ip,
+ }
+ EXPORT_SYMBOL_GPL(modify_ftrace_direct);
+ 
+-#define MULTI_FLAGS (FTRACE_OPS_FL_IPMODIFY | FTRACE_OPS_FL_DIRECT | \
+-		     FTRACE_OPS_FL_SAVE_REGS)
++#define MULTI_FLAGS (FTRACE_OPS_FL_DIRECT | FTRACE_OPS_FL_SAVE_REGS)
+ 
+ static int check_direct_multi(struct ftrace_ops *ops)
+ {
+@@ -5547,7 +5546,7 @@ int register_ftrace_direct_multi(struct ftrace_ops *ops, unsigned long addr)
+ 	}
+ 
+ 	ops->func = call_direct_funcs;
+-	ops->flags = MULTI_FLAGS;
++	ops->flags |= MULTI_FLAGS;
+ 	ops->trampoline = FTRACE_REGS_ADDR;
+ 
+ 	err = register_ftrace_function(ops);
+-- 
+2.30.2
+
