@@ -2,88 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDC18C43334
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 01:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 290D2C43334
+	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 01:21:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbiFBBNL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 1 Jun 2022 21:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
+        id S233016AbiFBBVO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 1 Jun 2022 21:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiFBBNJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 1 Jun 2022 21:13:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E97528758E;
-        Wed,  1 Jun 2022 18:13:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BB30B81C24;
-        Thu,  2 Jun 2022 01:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E7B5C385B8;
-        Thu,  2 Jun 2022 01:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654132385;
-        bh=G5grTPv26ogr7c4feDvMsv1Nx9g3SxcX632swBPgmFA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j/fzQF0LQ7AWaN1cBLOu8iEJLlHknjw3e1VyogoO6ulcd2KxYKLzvwhK7nMGziPDS
-         o4u9SlZbh3rmKzQTK0liyOV1wbfcPg1r+vA315aOVWJsL/mG7sbXLWQMKAjlm4IbF9
-         MD2oklRdGFyPVGmavEEXdCwxXmrruk5JjDxRgsI5+kGDD9AaRU2VTJeMSBSxrpLvux
-         iW3E+ugLulv+bZJBs7gAqD0lahomkGP3p1q5QTq97CiHYpWei0LIiqab4uKzl3m/ek
-         Gu8Ly1OZymHh8KOrrWL7Uqyy5j4sYUYhp1X4JnEauVzV5DMkze/KB/XSR8OhiNmP1Y
-         OcEnaOKLsaLWQ==
-Date:   Wed, 1 Jun 2022 18:13:04 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Joanne Koong <joannekoong@fb.com>
-Cc:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <edumazet@google.com>, <kafai@fb.com>, <davem@davemloft.net>,
-        <pabeni@redhat.com>, <testing@vger.kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        <syzbot+015d756bbd1f8b5c8f09@syzkaller.appspotmail.com>,
-        Eric Dumazet <edumzet@google.com>
-Subject: Re: [PATCH net-next v1 resend 1/2] net: Update bhash2 when socket's
- rcv saddr changes
-Message-ID: <20220601181304.6459d831@kernel.org>
-In-Reply-To: <20220601201434.1710931-2-joannekoong@fb.com>
-References: <20220601201434.1710931-1-joannekoong@fb.com>
-        <20220601201434.1710931-2-joannekoong@fb.com>
+        with ESMTP id S232994AbiFBBVO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 1 Jun 2022 21:21:14 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7317FDFF4E;
+        Wed,  1 Jun 2022 18:21:13 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id 2so2522000qtw.0;
+        Wed, 01 Jun 2022 18:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i4/k1Y4z6iW3+036x59e6AS3ioClOeFXBzlJvKGBQ3c=;
+        b=jrdxIqCPMAS5AKPWNk3ElBCyxonj7tx2wMI0kqIaOnW6VkK5mHS+8Zzc586voz68z1
+         5MN5ExcQxJtGH9m1OQMKHXHDSA63RAeUGMYRzRfrb0U7+wZzyVwvXNLs2us9638C5nL5
+         4ZVpqYnzqRNill5xzL+XfZ3inBRKeePdTeqoNkAoDT358Y6h6IlWu40/PzA3ELWPuEP+
+         CaMswKMQ+laJh3aE/QyFZWx9/by/v669d33JhDSegHW35FrnsHkaLaUDd3vCDqhDb7TQ
+         6t1BUTzs+1p27dBjUShBmQtfQA2HIgiLyc8ed/A3rH7JxOuU74+XI9PEmzl6mAiOkhgU
+         yZiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i4/k1Y4z6iW3+036x59e6AS3ioClOeFXBzlJvKGBQ3c=;
+        b=Fgg4V3sfq30RUMM91RnRxu2UVwuEoBBdam+y5saCo423MmZtxRcMh+waZrrh4rNu5Z
+         /fIYzteeTWREpMe29zqZnam0C4AyarFcLq9NrHWlnWP3RM396kbHvqxmZUkvtwa8D5x+
+         hkvxpJmDGJb6E7Q08FkNOIv03g5WQV1T5BXwqkEbMM32KXNuIEJquKULSwBtz8KCRfYZ
+         MIjBCN08M3/R04Cxpll+fhkQRl9smJFd0dOwfZ52vUvnCNOejC4QtdWEOBh8ePHwkJbj
+         38mY93HWAmHlzhymiab6PoXGXctdyAmMEz09fCBbtqkHihh9b0eZ4TXz9rvBQES00aFQ
+         7JOw==
+X-Gm-Message-State: AOAM533vxCepxpZfXV7TlNC2JG5SektinR8drtpxKuFbYy6rC/0cW1Y8
+        rql5MbrCds/egYjP/6Ah5HN8m4+si2M=
+X-Google-Smtp-Source: ABdhPJyjncl9xSre/rCq9ixVwTU9kJ5mvulcYk8HMViPVD4aSsyydkJ4xtbkho7VIburuPpUOGi5DA==
+X-Received: by 2002:ac8:590a:0:b0:304:b5f4:941e with SMTP id 10-20020ac8590a000000b00304b5f4941emr2134024qty.46.1654132872409;
+        Wed, 01 Jun 2022 18:21:12 -0700 (PDT)
+Received: from pop-os.attlocal.net ([2600:1700:65a0:ab60:a168:6dba:43b7:3240])
+        by smtp.gmail.com with ESMTPSA id x4-20020ac87304000000b002f39b99f670sm2077654qto.10.2022.06.01.18.21.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 18:21:11 -0700 (PDT)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: [Patch bpf-next v3 0/4] sockmap: some performance optimizations
+Date:   Wed,  1 Jun 2022 18:21:01 -0700
+Message-Id: <20220602012105.58853-1-xiyou.wangcong@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 1 Jun 2022 13:14:33 -0700 Joanne Koong wrote:
-> From: Joanne Koong <joannelkoong@gmail.com>
->=20
-> Commit d5a42de8bdbe ("net: Add a second bind table hashed by port and
-> address") added a second bind table, bhash2, that hashes by a socket's po=
-rt
-> and rcv address.
->=20
-> However, there are two cases where the socket's rcv saddr can change
-> after it has been binded:
->=20
-> 1) The case where there is a bind() call on "::" (IPADDR_ANY) and then
-> a connect() call. The kernel will assign the socket an address when it
-> handles the connect()
->=20
-> 2) In inet_sk_reselect_saddr(), which is called when rerouting fails
-> when rebuilding the sk header (invoked by inet_sk_rebuild_header)
->=20
-> In these two cases, we need to update the bhash2 table by removing the
-> entry for the old address, and adding a new entry reflecting the updated
-> address.
->=20
-> Reported-by: syzbot+015d756bbd1f8b5c8f09@syzkaller.appspotmail.com
-> Fixes: d5a42de8bdbe ("net: Add a second bind table hashed by port and add=
-ress")
-> Signed-off-by: Joanne Koong <joannelkoong@gmail.com>
-> Reviewed-by: Eric Dumazet <edumzet@google.com>
+From: Cong Wang <cong.wang@bytedance.com>
 
-This one needs to be static:
+This patchset contains two optimizations for sockmap. The first one
+eliminates a skb_clone() and the second one eliminates a memset(). With 
+this patchset, the throughput of UDP transmission via sockmap gets
+improved by 61%.
 
-net/ipv4/inet_hashtables.c:830:5: warning: no previous prototype for =E2=80=
-=98__inet_bhash2_update_saddr=E2=80=99 [-Wmissing-prototypes]
-  830 | int __inet_bhash2_update_saddr(struct sock *sk, struct inet_hashinf=
-o *hinfo,
+v3: avoid touching tcp_recv_skb()
+
+v2: clean up coding style for tcp_read_skb()
+    get rid of some redundant variables
+    add a comment for ->read_skb()
+
+---
+
+Cong Wang (4):
+  tcp: introduce tcp_read_skb()
+  net: introduce a new proto_ops ->read_skb()
+  skmsg: get rid of skb_clone()
+  skmsg: get rid of unncessary memset()
+
+ include/linux/net.h |  4 ++++
+ include/net/tcp.h   |  1 +
+ include/net/udp.h   |  3 +--
+ net/core/skmsg.c    | 48 +++++++++++++++++----------------------------
+ net/ipv4/af_inet.c  |  3 ++-
+ net/ipv4/tcp.c      | 44 +++++++++++++++++++++++++++++++++++++++++
+ net/ipv4/udp.c      | 11 +++++------
+ net/ipv6/af_inet6.c |  3 ++-
+ net/unix/af_unix.c  | 23 +++++++++-------------
+ 9 files changed, 86 insertions(+), 54 deletions(-)
+
+-- 
+2.34.1
+
