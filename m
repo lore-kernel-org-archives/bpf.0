@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6F30CCA473
-	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95AA9C43334
+	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348705AbiFCTDs convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S1348706AbiFCTDv convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348706AbiFCTDp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:03:45 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4399D31204
-        for <bpf@vger.kernel.org>; Fri,  3 Jun 2022 12:03:44 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253Gme88030122
-        for <bpf@vger.kernel.org>; Fri, 3 Jun 2022 12:03:43 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gevuu9ffc-1
+        with ESMTP id S1348696AbiFCTDt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Jun 2022 15:03:49 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C40631201
+        for <bpf@vger.kernel.org>; Fri,  3 Jun 2022 12:03:48 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GmLmN007248
+        for <bpf@vger.kernel.org>; Fri, 3 Jun 2022 12:03:48 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gfnmv94r0-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:43 -0700
-Received: from twshared6447.05.prn5.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:48 -0700
+Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 3 Jun 2022 12:03:42 -0700
+ 15.1.2375.28; Fri, 3 Jun 2022 12:03:46 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id BA1AC1AC9C3C1; Fri,  3 Jun 2022 12:03:36 -0700 (PDT)
+        id E748B1AC9C408; Fri,  3 Jun 2022 12:03:42 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 03/15] libbpf: remove deprecated XDP APIs
-Date:   Fri, 3 Jun 2022 12:01:43 -0700
-Message-ID: <20220603190155.3924899-4-andrii@kernel.org>
+Subject: [PATCH bpf-next 06/15] libbpf: clean up perfbuf APIs
+Date:   Fri, 3 Jun 2022 12:01:46 -0700
+Message-ID: <20220603190155.3924899-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220603190155.3924899-1-andrii@kernel.org>
 References: <20220603190155.3924899-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: lYTUvPQxs6HDd9_lh8xue-Q_t_OFGbKR
-X-Proofpoint-ORIG-GUID: lYTUvPQxs6HDd9_lh8xue-Q_t_OFGbKR
+X-Proofpoint-ORIG-GUID: CkTOA75rOCdKRPTqjOZueKG0vul6hNoD
+X-Proofpoint-GUID: CkTOA75rOCdKRPTqjOZueKG0vul6hNoD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-03_06,2022-06-03_01,2022-02-23_01
@@ -49,183 +49,254 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Get rid of deprecated bpf_set_link*() and bpf_get_link*() APIs.
+Remove deprecated perfbuf APIs and clean up opts structs.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.h   | 20 -------------
- tools/lib/bpf/libbpf.map |  4 ---
- tools/lib/bpf/netlink.c  | 62 ++++++----------------------------------
- 3 files changed, 8 insertions(+), 78 deletions(-)
+ tools/lib/bpf/libbpf.c   | 54 +++++++-----------------------
+ tools/lib/bpf/libbpf.h   | 71 ++++------------------------------------
+ tools/lib/bpf/libbpf.map |  5 ---
+ 3 files changed, 18 insertions(+), 112 deletions(-)
 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 1b17a154bb63..422c9d4811f4 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -12012,6 +12012,9 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
+ 	return link;
+ }
+ 
++typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_event_header *hdr,
++							  void *private_data);
++
+ static enum bpf_perf_event_ret
+ perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 		       void **copy_mem, size_t *copy_size,
+@@ -12060,12 +12063,6 @@ perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+ 	return libbpf_err(ret);
+ }
+ 
+-__attribute__((alias("perf_event_read_simple")))
+-enum bpf_perf_event_ret
+-bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+-			   void **copy_mem, size_t *copy_size,
+-			   bpf_perf_event_print_t fn, void *private_data);
+-
+ struct perf_buffer;
+ 
+ struct perf_buffer_params {
+@@ -12199,12 +12196,11 @@ perf_buffer__open_cpu_buf(struct perf_buffer *pb, struct perf_event_attr *attr,
+ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
+ 					      struct perf_buffer_params *p);
+ 
+-DEFAULT_VERSION(perf_buffer__new_v0_6_0, perf_buffer__new, LIBBPF_0.6.0)
+-struct perf_buffer *perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
+-					    perf_buffer_sample_fn sample_cb,
+-					    perf_buffer_lost_fn lost_cb,
+-					    void *ctx,
+-					    const struct perf_buffer_opts *opts)
++struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
++				     perf_buffer_sample_fn sample_cb,
++				     perf_buffer_lost_fn lost_cb,
++				     void *ctx,
++				     const struct perf_buffer_opts *opts)
+ {
+ 	struct perf_buffer_params p = {};
+ 	struct perf_event_attr attr = {};
+@@ -12226,22 +12222,10 @@ struct perf_buffer *perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
+ 	return libbpf_ptr(__perf_buffer__new(map_fd, page_cnt, &p));
+ }
+ 
+-COMPAT_VERSION(perf_buffer__new_deprecated, perf_buffer__new, LIBBPF_0.0.4)
+-struct perf_buffer *perf_buffer__new_deprecated(int map_fd, size_t page_cnt,
+-						const struct perf_buffer_opts *opts)
+-{
+-	return perf_buffer__new_v0_6_0(map_fd, page_cnt,
+-				       opts ? opts->sample_cb : NULL,
+-				       opts ? opts->lost_cb : NULL,
+-				       opts ? opts->ctx : NULL,
+-				       NULL);
+-}
+-
+-DEFAULT_VERSION(perf_buffer__new_raw_v0_6_0, perf_buffer__new_raw, LIBBPF_0.6.0)
+-struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
+-						struct perf_event_attr *attr,
+-						perf_buffer_event_fn event_cb, void *ctx,
+-						const struct perf_buffer_raw_opts *opts)
++struct perf_buffer *perf_buffer__new_raw(int map_fd, size_t page_cnt,
++					 struct perf_event_attr *attr,
++					 perf_buffer_event_fn event_cb, void *ctx,
++					 const struct perf_buffer_raw_opts *opts)
+ {
+ 	struct perf_buffer_params p = {};
+ 
+@@ -12261,20 +12245,6 @@ struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
+ 	return libbpf_ptr(__perf_buffer__new(map_fd, page_cnt, &p));
+ }
+ 
+-COMPAT_VERSION(perf_buffer__new_raw_deprecated, perf_buffer__new_raw, LIBBPF_0.0.4)
+-struct perf_buffer *perf_buffer__new_raw_deprecated(int map_fd, size_t page_cnt,
+-						    const struct perf_buffer_raw_opts *opts)
+-{
+-	LIBBPF_OPTS(perf_buffer_raw_opts, inner_opts,
+-		.cpu_cnt = opts->cpu_cnt,
+-		.cpus = opts->cpus,
+-		.map_keys = opts->map_keys,
+-	);
+-
+-	return perf_buffer__new_raw_v0_6_0(map_fd, page_cnt, opts->attr,
+-					   opts->event_cb, opts->ctx, &inner_opts);
+-}
+-
+ static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
+ 					      struct perf_buffer_params *p)
+ {
 diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 0b2de10b5878..d1c93a1e7d66 100644
+index 71b19ae1659c..5dc4271fcdb7 100644
 --- a/tools/lib/bpf/libbpf.h
 +++ b/tools/lib/bpf/libbpf.h
-@@ -1164,15 +1164,6 @@ LIBBPF_API int bpf_map__get_next_key(const struct bpf_map *map,
-  */
- LIBBPF_API long libbpf_get_error(const void *ptr);
+@@ -1269,17 +1269,7 @@ typedef void (*perf_buffer_lost_fn)(void *ctx, int cpu, __u64 cnt);
  
--/* XDP related API */
--struct xdp_link_info {
--	__u32 prog_id;
--	__u32 drv_prog_id;
--	__u32 hw_prog_id;
--	__u32 skb_prog_id;
--	__u8 attach_mode;
--};
--
- struct bpf_xdp_set_link_opts {
- 	size_t sz;
- 	int old_fd;
-@@ -1180,17 +1171,6 @@ struct bpf_xdp_set_link_opts {
+ /* common use perf buffer options */
+ struct perf_buffer_opts {
+-	union {
+-		size_t sz;
+-		struct { /* DEPRECATED: will be removed in v1.0 */
+-			/* if specified, sample_cb is called for each sample */
+-			perf_buffer_sample_fn sample_cb;
+-			/* if specified, lost_cb is called for each batch of lost samples */
+-			perf_buffer_lost_fn lost_cb;
+-			/* ctx is provided to sample_cb and lost_cb */
+-			void *ctx;
+-		};
+-	};
++	size_t sz;
  };
- #define bpf_xdp_set_link_opts__last_field old_fd
+ #define perf_buffer_opts__last_field sz
  
--LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_attach() instead")
--LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
--LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_attach() instead")
--LIBBPF_API int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
--					const struct bpf_xdp_set_link_opts *opts);
--LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_query_id() instead")
--LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
--LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_query() instead")
--LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
--				     size_t info_size, __u32 flags);
+@@ -1300,21 +1290,6 @@ perf_buffer__new(int map_fd, size_t page_cnt,
+ 		 perf_buffer_sample_fn sample_cb, perf_buffer_lost_fn lost_cb, void *ctx,
+ 		 const struct perf_buffer_opts *opts);
+ 
+-LIBBPF_API struct perf_buffer *
+-perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
+-			perf_buffer_sample_fn sample_cb, perf_buffer_lost_fn lost_cb, void *ctx,
+-			const struct perf_buffer_opts *opts);
 -
- struct bpf_xdp_attach_opts {
- 	size_t sz;
- 	int old_prog_fd;
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use new variant of perf_buffer__new() instead")
+-struct perf_buffer *perf_buffer__new_deprecated(int map_fd, size_t page_cnt,
+-						const struct perf_buffer_opts *opts);
+-
+-#define perf_buffer__new(...) ___libbpf_overload(___perf_buffer_new, __VA_ARGS__)
+-#define ___perf_buffer_new6(map_fd, page_cnt, sample_cb, lost_cb, ctx, opts) \
+-	perf_buffer__new(map_fd, page_cnt, sample_cb, lost_cb, ctx, opts)
+-#define ___perf_buffer_new3(map_fd, page_cnt, opts) \
+-	perf_buffer__new_deprecated(map_fd, page_cnt, opts)
+-
+ enum bpf_perf_event_ret {
+ 	LIBBPF_PERF_EVENT_DONE	= 0,
+ 	LIBBPF_PERF_EVENT_ERROR	= -1,
+@@ -1328,21 +1303,9 @@ typedef enum bpf_perf_event_ret
+ 
+ /* raw perf buffer options, giving most power and control */
+ struct perf_buffer_raw_opts {
+-	union {
+-		struct {
+-			size_t sz;
+-			long :0;
+-			long :0;
+-		};
+-		struct { /* DEPRECATED: will be removed in v1.0 */
+-			/* perf event attrs passed directly into perf_event_open() */
+-			struct perf_event_attr *attr;
+-			/* raw event callback */
+-			perf_buffer_event_fn event_cb;
+-			/* ctx is provided to event_cb */
+-			void *ctx;
+-		};
+-	};
++	size_t sz;
++	long :0;
++	long :0;
+ 	/* if cpu_cnt == 0, open all on all possible CPUs (up to the number of
+ 	 * max_entries of given PERF_EVENT_ARRAY map)
+ 	 */
+@@ -1354,26 +1317,13 @@ struct perf_buffer_raw_opts {
+ };
+ #define perf_buffer_raw_opts__last_field map_keys
+ 
++struct perf_event_attr;
++
+ LIBBPF_API struct perf_buffer *
+ perf_buffer__new_raw(int map_fd, size_t page_cnt, struct perf_event_attr *attr,
+ 		     perf_buffer_event_fn event_cb, void *ctx,
+ 		     const struct perf_buffer_raw_opts *opts);
+ 
+-LIBBPF_API struct perf_buffer *
+-perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt, struct perf_event_attr *attr,
+-			    perf_buffer_event_fn event_cb, void *ctx,
+-			    const struct perf_buffer_raw_opts *opts);
+-
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use new variant of perf_buffer__new_raw() instead")
+-struct perf_buffer *perf_buffer__new_raw_deprecated(int map_fd, size_t page_cnt,
+-						    const struct perf_buffer_raw_opts *opts);
+-
+-#define perf_buffer__new_raw(...) ___libbpf_overload(___perf_buffer_new_raw, __VA_ARGS__)
+-#define ___perf_buffer_new_raw6(map_fd, page_cnt, attr, event_cb, ctx, opts) \
+-	perf_buffer__new_raw(map_fd, page_cnt, attr, event_cb, ctx, opts)
+-#define ___perf_buffer_new_raw3(map_fd, page_cnt, opts) \
+-	perf_buffer__new_raw_deprecated(map_fd, page_cnt, opts)
+-
+ LIBBPF_API void perf_buffer__free(struct perf_buffer *pb);
+ LIBBPF_API int perf_buffer__epoll_fd(const struct perf_buffer *pb);
+ LIBBPF_API int perf_buffer__poll(struct perf_buffer *pb, int timeout_ms);
+@@ -1382,15 +1332,6 @@ LIBBPF_API int perf_buffer__consume_buffer(struct perf_buffer *pb, size_t buf_id
+ LIBBPF_API size_t perf_buffer__buffer_cnt(const struct perf_buffer *pb);
+ LIBBPF_API int perf_buffer__buffer_fd(const struct perf_buffer *pb, size_t buf_idx);
+ 
+-typedef enum bpf_perf_event_ret
+-	(*bpf_perf_event_print_t)(struct perf_event_header *hdr,
+-				  void *private_data);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use perf_buffer__poll() or  perf_buffer__consume() instead")
+-LIBBPF_API enum bpf_perf_event_ret
+-bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
+-			   void **copy_mem, size_t *copy_size,
+-			   bpf_perf_event_print_t fn, void *private_data);
+-
+ struct bpf_prog_linfo;
+ struct bpf_prog_info;
+ 
 diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index bc5cbb0d16c2..acdd984e861a 100644
+index 92df305795a2..88c622b784d9 100644
 --- a/tools/lib/bpf/libbpf.map
 +++ b/tools/lib/bpf/libbpf.map
-@@ -91,7 +91,6 @@ LIBBPF_0.0.1 {
- 		bpf_prog_linfo__lfind_addr_func;
- 		bpf_prog_linfo__lfind;
- 		bpf_raw_tracepoint_open;
--		bpf_set_link_xdp_fd;
- 		bpf_task_fd_query;
- 		btf__fd;
- 		btf__find_by_name;
-@@ -120,7 +119,6 @@ LIBBPF_0.0.2 {
- 		bpf_map_lookup_elem_flags;
- 		bpf_object__btf;
- 		bpf_object__find_map_fd_by_name;
--		bpf_get_link_xdp_id;
- 		btf__dedup;
- 		btf__get_map_kv_tids;
- 		btf__get_nr_types;
-@@ -172,7 +170,6 @@ LIBBPF_0.0.5 {
+@@ -46,7 +46,6 @@ LIBBPF_0.0.1 {
+ 		bpf_object__unload;
+ 		bpf_object__unpin_maps;
+ 		bpf_object__unpin_programs;
+-		bpf_perf_event_read_simple;
+ 		bpf_prog_attach;
+ 		bpf_prog_detach;
+ 		bpf_prog_detach2;
+@@ -144,8 +143,6 @@ LIBBPF_0.0.4 {
+ 		btf__parse_elf;
+ 		libbpf_num_possible_cpus;
+ 		perf_buffer__free;
+-		perf_buffer__new;
+-		perf_buffer__new_raw;
+ 		perf_buffer__poll;
+ } LIBBPF_0.0.3;
  
- LIBBPF_0.0.6 {
- 	global:
--		bpf_get_link_xdp_info;
- 		bpf_map__get_pin_path;
- 		bpf_map__is_pinned;
- 		bpf_map__set_pin_path;
-@@ -231,7 +228,6 @@ LIBBPF_0.0.8 {
- 		bpf_program__is_lsm;
- 		bpf_program__set_attach_target;
- 		bpf_program__set_lsm;
--		bpf_set_link_xdp_fd_opts;
- } LIBBPF_0.0.7;
+@@ -369,9 +366,7 @@ LIBBPF_0.6.0 {
+ 		libbpf_minor_version;
+ 		libbpf_version_string;
+ 		perf_buffer__new;
+-		perf_buffer__new_deprecated;
+ 		perf_buffer__new_raw;
+-		perf_buffer__new_raw_deprecated;
+ } LIBBPF_0.5.0;
  
- LIBBPF_0.0.9 {
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index cbc8967d5402..6c013168032d 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -27,6 +27,14 @@ typedef int (*libbpf_dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
- typedef int (*__dump_nlmsg_t)(struct nlmsghdr *nlmsg, libbpf_dump_nlmsg_t,
- 			      void *cookie);
- 
-+struct xdp_link_info {
-+	__u32 prog_id;
-+	__u32 drv_prog_id;
-+	__u32 hw_prog_id;
-+	__u32 skb_prog_id;
-+	__u8 attach_mode;
-+};
-+
- struct xdp_id_md {
- 	int ifindex;
- 	__u32 flags;
-@@ -288,31 +296,6 @@ int bpf_xdp_detach(int ifindex, __u32 flags, const struct bpf_xdp_attach_opts *o
- 	return bpf_xdp_attach(ifindex, -1, flags, opts);
- }
- 
--int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
--			     const struct bpf_xdp_set_link_opts *opts)
--{
--	int old_fd = -1, ret;
--
--	if (!OPTS_VALID(opts, bpf_xdp_set_link_opts))
--		return libbpf_err(-EINVAL);
--
--	if (OPTS_HAS(opts, old_fd)) {
--		old_fd = OPTS_GET(opts, old_fd, -1);
--		flags |= XDP_FLAGS_REPLACE;
--	}
--
--	ret = __bpf_set_link_xdp_fd_replace(ifindex, fd, old_fd, flags);
--	return libbpf_err(ret);
--}
--
--int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
--{
--	int ret;
--
--	ret = __bpf_set_link_xdp_fd_replace(ifindex, fd, 0, flags);
--	return libbpf_err(ret);
--}
--
- static int __dump_link_nlmsg(struct nlmsghdr *nlh,
- 			     libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
- {
-@@ -413,30 +396,6 @@ int bpf_xdp_query(int ifindex, int xdp_flags, struct bpf_xdp_query_opts *opts)
- 	return 0;
- }
- 
--int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
--			  size_t info_size, __u32 flags)
--{
--	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
--	size_t sz;
--	int err;
--
--	if (!info_size)
--		return libbpf_err(-EINVAL);
--
--	err = bpf_xdp_query(ifindex, flags, &opts);
--	if (err)
--		return libbpf_err(err);
--
--	/* struct xdp_link_info field layout matches struct bpf_xdp_query_opts
--	 * layout after sz field
--	 */
--	sz = min(info_size, offsetofend(struct xdp_link_info, attach_mode));
--	memcpy(info, &opts.prog_id, sz);
--	memset((void *)info + sz, 0, info_size - sz);
--
--	return 0;
--}
--
- int bpf_xdp_query_id(int ifindex, int flags, __u32 *prog_id)
- {
- 	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
-@@ -463,11 +422,6 @@ int bpf_xdp_query_id(int ifindex, int flags, __u32 *prog_id)
- }
- 
- 
--int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
--{
--	return bpf_xdp_query_id(ifindex, flags, prog_id);
--}
--
- typedef int (*qdisc_config_t)(struct libbpf_nla_req *req);
- 
- static int clsact_config(struct libbpf_nla_req *req)
+ LIBBPF_0.7.0 {
 -- 
 2.30.2
 
