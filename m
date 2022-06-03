@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFEADC43334
-	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75BC0CCA473
+	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:03:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348713AbiFCTDy convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S1348727AbiFCTDz convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348719AbiFCTDx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:03:53 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829A531205
+        with ESMTP id S1348711AbiFCTDy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Jun 2022 15:03:54 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A9A3120B
         for <bpf@vger.kernel.org>; Fri,  3 Jun 2022 12:03:52 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GmRaR031381
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GmdDA030100
         for <bpf@vger.kernel.org>; Fri, 3 Jun 2022 12:03:52 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3geubb1te6-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gevuu9fg2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:52 -0700
+        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:51 -0700
 Received: from twshared0725.22.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 3 Jun 2022 12:03:50 -0700
+ 15.1.2375.28; Fri, 3 Jun 2022 12:03:51 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id C67101AC9C3DA; Fri,  3 Jun 2022 12:03:38 -0700 (PDT)
+        id 0311E1AC9C412; Fri,  3 Jun 2022 12:03:44 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 04/15] libbpf: remove deprecated probing APIs
-Date:   Fri, 3 Jun 2022 12:01:44 -0700
-Message-ID: <20220603190155.3924899-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 07/15] libbpf: remove prog_info_linear APIs
+Date:   Fri, 3 Jun 2022 12:01:47 -0700
+Message-ID: <20220603190155.3924899-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220603190155.3924899-1-andrii@kernel.org>
 References: <20220603190155.3924899-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: eAE1h2qmth4LP1lRPZQpdzVVmlhhZYkr
-X-Proofpoint-ORIG-GUID: eAE1h2qmth4LP1lRPZQpdzVVmlhhZYkr
+X-Proofpoint-GUID: RjYX9jyX6-BKbyqaa9XRY_bhXL5Z2pxY
+X-Proofpoint-ORIG-GUID: RjYX9jyX6-BKbyqaa9XRY_bhXL5Z2pxY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-03_06,2022-06-03_01,2022-02-23_01
@@ -49,250 +49,365 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Get rid of deprecated feature-probing APIs.
+Remove prog_info_linear-related APIs previously used by perf.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.h        |   8 ---
- tools/lib/bpf/libbpf.map      |   4 --
- tools/lib/bpf/libbpf_probes.c | 125 ++--------------------------------
- 3 files changed, 5 insertions(+), 132 deletions(-)
+ tools/lib/bpf/libbpf.c   | 248 ---------------------------------------
+ tools/lib/bpf/libbpf.h   |  66 -----------
+ tools/lib/bpf/libbpf.map |   3 -
+ 3 files changed, 317 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index d1c93a1e7d66..71b19ae1659c 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1412,14 +1412,6 @@ bpf_prog_linfo__lfind(const struct bpf_prog_linfo *prog_linfo,
-  * user, causing subsequent probes to fail. In this case, the caller may want
-  * to adjust that limit with setrlimit().
-  */
--LIBBPF_DEPRECATED_SINCE(0, 8, "use libbpf_probe_bpf_prog_type() instead")
--LIBBPF_API bool bpf_probe_prog_type(enum bpf_prog_type prog_type, __u32 ifindex);
--LIBBPF_DEPRECATED_SINCE(0, 8, "use libbpf_probe_bpf_map_type() instead")
--LIBBPF_API bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex);
--LIBBPF_DEPRECATED_SINCE(0, 8, "use libbpf_probe_bpf_helper() instead")
--LIBBPF_API bool bpf_probe_helper(enum bpf_func_id id, enum bpf_prog_type prog_type, __u32 ifindex);
--LIBBPF_DEPRECATED_SINCE(0, 8, "implement your own or use bpftool for feature detection")
--LIBBPF_API bool bpf_probe_large_insn_limit(__u32 ifindex);
- 
- /**
-  * @brief **libbpf_probe_bpf_prog_type()** detects if host kernel supports
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index acdd984e861a..38cc2dd4bff3 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -112,9 +112,6 @@ LIBBPF_0.0.1 {
- 
- LIBBPF_0.0.2 {
- 	global:
--		bpf_probe_helper;
--		bpf_probe_map_type;
--		bpf_probe_prog_type;
- 		bpf_map__resize;
- 		bpf_map_lookup_elem_flags;
- 		bpf_object__btf;
-@@ -200,7 +197,6 @@ LIBBPF_0.0.7 {
- 		bpf_object__detach_skeleton;
- 		bpf_object__load_skeleton;
- 		bpf_object__open_skeleton;
--		bpf_probe_large_insn_limit;
- 		bpf_program__attach;
- 		bpf_program__name;
- 		bpf_program__is_extension;
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 97b06cede56f..0b5398786bf3 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -17,47 +17,14 @@
- #include "libbpf.h"
- #include "libbpf_internal.h"
- 
--static bool grep(const char *buffer, const char *pattern)
--{
--	return !!strstr(buffer, pattern);
--}
--
--static int get_vendor_id(int ifindex)
--{
--	char ifname[IF_NAMESIZE], path[64], buf[8];
--	ssize_t len;
--	int fd;
--
--	if (!if_indextoname(ifindex, ifname))
--		return -1;
--
--	snprintf(path, sizeof(path), "/sys/class/net/%s/device/vendor", ifname);
--
--	fd = open(path, O_RDONLY | O_CLOEXEC);
--	if (fd < 0)
--		return -1;
--
--	len = read(fd, buf, sizeof(buf));
--	close(fd);
--	if (len < 0)
--		return -1;
--	if (len >= (ssize_t)sizeof(buf))
--		return -1;
--	buf[len] = '\0';
--
--	return strtol(buf, NULL, 0);
--}
--
- static int probe_prog_load(enum bpf_prog_type prog_type,
- 			   const struct bpf_insn *insns, size_t insns_cnt,
--			   char *log_buf, size_t log_buf_sz,
--			   __u32 ifindex)
-+			   char *log_buf, size_t log_buf_sz)
- {
- 	LIBBPF_OPTS(bpf_prog_load_opts, opts,
- 		.log_buf = log_buf,
- 		.log_size = log_buf_sz,
- 		.log_level = log_buf ? 1 : 0,
--		.prog_ifindex = ifindex,
- 	);
- 	int fd, err, exp_err = 0;
- 	const char *exp_msg = NULL;
-@@ -161,31 +128,10 @@ int libbpf_probe_bpf_prog_type(enum bpf_prog_type prog_type, const void *opts)
- 	if (opts)
- 		return libbpf_err(-EINVAL);
- 
--	ret = probe_prog_load(prog_type, insns, insn_cnt, NULL, 0, 0);
-+	ret = probe_prog_load(prog_type, insns, insn_cnt, NULL, 0);
- 	return libbpf_err(ret);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 422c9d4811f4..93b1e1f95e64 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -12546,254 +12546,6 @@ int perf_buffer__consume(struct perf_buffer *pb)
+ 	return 0;
  }
  
--bool bpf_probe_prog_type(enum bpf_prog_type prog_type, __u32 ifindex)
+-struct bpf_prog_info_array_desc {
+-	int	array_offset;	/* e.g. offset of jited_prog_insns */
+-	int	count_offset;	/* e.g. offset of jited_prog_len */
+-	int	size_offset;	/* > 0: offset of rec size,
+-				 * < 0: fix size of -size_offset
+-				 */
+-};
+-
+-static struct bpf_prog_info_array_desc bpf_prog_info_array_desc[] = {
+-	[BPF_PROG_INFO_JITED_INSNS] = {
+-		offsetof(struct bpf_prog_info, jited_prog_insns),
+-		offsetof(struct bpf_prog_info, jited_prog_len),
+-		-1,
+-	},
+-	[BPF_PROG_INFO_XLATED_INSNS] = {
+-		offsetof(struct bpf_prog_info, xlated_prog_insns),
+-		offsetof(struct bpf_prog_info, xlated_prog_len),
+-		-1,
+-	},
+-	[BPF_PROG_INFO_MAP_IDS] = {
+-		offsetof(struct bpf_prog_info, map_ids),
+-		offsetof(struct bpf_prog_info, nr_map_ids),
+-		-(int)sizeof(__u32),
+-	},
+-	[BPF_PROG_INFO_JITED_KSYMS] = {
+-		offsetof(struct bpf_prog_info, jited_ksyms),
+-		offsetof(struct bpf_prog_info, nr_jited_ksyms),
+-		-(int)sizeof(__u64),
+-	},
+-	[BPF_PROG_INFO_JITED_FUNC_LENS] = {
+-		offsetof(struct bpf_prog_info, jited_func_lens),
+-		offsetof(struct bpf_prog_info, nr_jited_func_lens),
+-		-(int)sizeof(__u32),
+-	},
+-	[BPF_PROG_INFO_FUNC_INFO] = {
+-		offsetof(struct bpf_prog_info, func_info),
+-		offsetof(struct bpf_prog_info, nr_func_info),
+-		offsetof(struct bpf_prog_info, func_info_rec_size),
+-	},
+-	[BPF_PROG_INFO_LINE_INFO] = {
+-		offsetof(struct bpf_prog_info, line_info),
+-		offsetof(struct bpf_prog_info, nr_line_info),
+-		offsetof(struct bpf_prog_info, line_info_rec_size),
+-	},
+-	[BPF_PROG_INFO_JITED_LINE_INFO] = {
+-		offsetof(struct bpf_prog_info, jited_line_info),
+-		offsetof(struct bpf_prog_info, nr_jited_line_info),
+-		offsetof(struct bpf_prog_info, jited_line_info_rec_size),
+-	},
+-	[BPF_PROG_INFO_PROG_TAGS] = {
+-		offsetof(struct bpf_prog_info, prog_tags),
+-		offsetof(struct bpf_prog_info, nr_prog_tags),
+-		-(int)sizeof(__u8) * BPF_TAG_SIZE,
+-	},
+-
+-};
+-
+-static __u32 bpf_prog_info_read_offset_u32(struct bpf_prog_info *info,
+-					   int offset)
 -{
--	struct bpf_insn insns[2] = {
--		BPF_MOV64_IMM(BPF_REG_0, 0),
--		BPF_EXIT_INSN()
--	};
+-	__u32 *array = (__u32 *)info;
 -
--	/* prefer libbpf_probe_bpf_prog_type() unless offload is requested */
--	if (ifindex == 0)
--		return libbpf_probe_bpf_prog_type(prog_type, NULL) == 1;
--
--	if (ifindex && prog_type == BPF_PROG_TYPE_SCHED_CLS)
--		/* nfp returns -EINVAL on exit(0) with TC offload */
--		insns[0].imm = 2;
--
--	errno = 0;
--	probe_prog_load(prog_type, insns, ARRAY_SIZE(insns), NULL, 0, ifindex);
--
--	return errno != EINVAL && errno != EOPNOTSUPP;
+-	if (offset >= 0)
+-		return array[offset / sizeof(__u32)];
+-	return -(int)offset;
 -}
 -
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len)
- {
-@@ -242,15 +188,13 @@ static int load_local_storage_btf(void)
- 				     strs, sizeof(strs));
- }
- 
--static int probe_map_create(enum bpf_map_type map_type, __u32 ifindex)
-+static int probe_map_create(enum bpf_map_type map_type)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, opts);
- 	int key_size, value_size, max_entries;
- 	__u32 btf_key_type_id = 0, btf_value_type_id = 0;
- 	int fd = -1, btf_fd = -1, fd_inner = -1, exp_err = 0, err;
- 
--	opts.map_ifindex = ifindex;
--
- 	key_size	= sizeof(__u32);
- 	value_size	= sizeof(__u32);
- 	max_entries	= 1;
-@@ -326,12 +270,6 @@ static int probe_map_create(enum bpf_map_type map_type, __u32 ifindex)
- 
- 	if (map_type == BPF_MAP_TYPE_ARRAY_OF_MAPS ||
- 	    map_type == BPF_MAP_TYPE_HASH_OF_MAPS) {
--		/* TODO: probe for device, once libbpf has a function to create
--		 * map-in-map for offload
--		 */
--		if (ifindex)
--			goto cleanup;
--
- 		fd_inner = bpf_map_create(BPF_MAP_TYPE_HASH, NULL,
- 					  sizeof(__u32), sizeof(__u32), 1, NULL);
- 		if (fd_inner < 0)
-@@ -370,15 +308,10 @@ int libbpf_probe_bpf_map_type(enum bpf_map_type map_type, const void *opts)
- 	if (opts)
- 		return libbpf_err(-EINVAL);
- 
--	ret = probe_map_create(map_type, 0);
-+	ret = probe_map_create(map_type);
- 	return libbpf_err(ret);
- }
- 
--bool bpf_probe_map_type(enum bpf_map_type map_type, __u32 ifindex)
+-static __u64 bpf_prog_info_read_offset_u64(struct bpf_prog_info *info,
+-					   int offset)
 -{
--	return probe_map_create(map_type, ifindex) == 1;
+-	__u64 *array = (__u64 *)info;
+-
+-	if (offset >= 0)
+-		return array[offset / sizeof(__u64)];
+-	return -(int)offset;
 -}
 -
- int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helper_id,
- 			    const void *opts)
- {
-@@ -407,7 +340,7 @@ int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helpe
- 	}
- 
- 	buf[0] = '\0';
--	ret = probe_prog_load(prog_type, insns, insn_cnt, buf, sizeof(buf), 0);
-+	ret = probe_prog_load(prog_type, insns, insn_cnt, buf, sizeof(buf));
- 	if (ret < 0)
- 		return libbpf_err(ret);
- 
-@@ -427,51 +360,3 @@ int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helpe
- 		return 0;
- 	return 1; /* assume supported */
- }
--
--bool bpf_probe_helper(enum bpf_func_id id, enum bpf_prog_type prog_type,
--		      __u32 ifindex)
+-static void bpf_prog_info_set_offset_u32(struct bpf_prog_info *info, int offset,
+-					 __u32 val)
 -{
--	struct bpf_insn insns[2] = {
--		BPF_EMIT_CALL(id),
--		BPF_EXIT_INSN()
--	};
--	char buf[4096] = {};
--	bool res;
+-	__u32 *array = (__u32 *)info;
 -
--	probe_prog_load(prog_type, insns, ARRAY_SIZE(insns), buf, sizeof(buf), ifindex);
--	res = !grep(buf, "invalid func ") && !grep(buf, "unknown func ");
+-	if (offset >= 0)
+-		array[offset / sizeof(__u32)] = val;
+-}
 -
--	if (ifindex) {
--		switch (get_vendor_id(ifindex)) {
--		case 0x19ee: /* Netronome specific */
--			res = res && !grep(buf, "not supported by FW") &&
--				!grep(buf, "unsupported function id");
--			break;
--		default:
--			break;
--		}
+-static void bpf_prog_info_set_offset_u64(struct bpf_prog_info *info, int offset,
+-					 __u64 val)
+-{
+-	__u64 *array = (__u64 *)info;
+-
+-	if (offset >= 0)
+-		array[offset / sizeof(__u64)] = val;
+-}
+-
+-struct bpf_prog_info_linear *
+-bpf_program__get_prog_info_linear(int fd, __u64 arrays)
+-{
+-	struct bpf_prog_info_linear *info_linear;
+-	struct bpf_prog_info info = {};
+-	__u32 info_len = sizeof(info);
+-	__u32 data_len = 0;
+-	int i, err;
+-	void *ptr;
+-
+-	if (arrays >> BPF_PROG_INFO_LAST_ARRAY)
+-		return libbpf_err_ptr(-EINVAL);
+-
+-	/* step 1: get array dimensions */
+-	err = bpf_obj_get_info_by_fd(fd, &info, &info_len);
+-	if (err) {
+-		pr_debug("can't get prog info: %s", strerror(errno));
+-		return libbpf_err_ptr(-EFAULT);
 -	}
 -
--	return res;
+-	/* step 2: calculate total size of all arrays */
+-	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+-		bool include_array = (arrays & (1UL << i)) > 0;
+-		struct bpf_prog_info_array_desc *desc;
+-		__u32 count, size;
+-
+-		desc = bpf_prog_info_array_desc + i;
+-
+-		/* kernel is too old to support this field */
+-		if (info_len < desc->array_offset + sizeof(__u32) ||
+-		    info_len < desc->count_offset + sizeof(__u32) ||
+-		    (desc->size_offset > 0 && info_len < desc->size_offset))
+-			include_array = false;
+-
+-		if (!include_array) {
+-			arrays &= ~(1UL << i);	/* clear the bit */
+-			continue;
+-		}
+-
+-		count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+-		size  = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+-
+-		data_len += count * size;
+-	}
+-
+-	/* step 3: allocate continuous memory */
+-	data_len = roundup(data_len, sizeof(__u64));
+-	info_linear = malloc(sizeof(struct bpf_prog_info_linear) + data_len);
+-	if (!info_linear)
+-		return libbpf_err_ptr(-ENOMEM);
+-
+-	/* step 4: fill data to info_linear->info */
+-	info_linear->arrays = arrays;
+-	memset(&info_linear->info, 0, sizeof(info));
+-	ptr = info_linear->data;
+-
+-	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+-		struct bpf_prog_info_array_desc *desc;
+-		__u32 count, size;
+-
+-		if ((arrays & (1UL << i)) == 0)
+-			continue;
+-
+-		desc  = bpf_prog_info_array_desc + i;
+-		count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+-		size  = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+-		bpf_prog_info_set_offset_u32(&info_linear->info,
+-					     desc->count_offset, count);
+-		bpf_prog_info_set_offset_u32(&info_linear->info,
+-					     desc->size_offset, size);
+-		bpf_prog_info_set_offset_u64(&info_linear->info,
+-					     desc->array_offset,
+-					     ptr_to_u64(ptr));
+-		ptr += count * size;
+-	}
+-
+-	/* step 5: call syscall again to get required arrays */
+-	err = bpf_obj_get_info_by_fd(fd, &info_linear->info, &info_len);
+-	if (err) {
+-		pr_debug("can't get prog info: %s", strerror(errno));
+-		free(info_linear);
+-		return libbpf_err_ptr(-EFAULT);
+-	}
+-
+-	/* step 6: verify the data */
+-	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+-		struct bpf_prog_info_array_desc *desc;
+-		__u32 v1, v2;
+-
+-		if ((arrays & (1UL << i)) == 0)
+-			continue;
+-
+-		desc = bpf_prog_info_array_desc + i;
+-		v1 = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
+-		v2 = bpf_prog_info_read_offset_u32(&info_linear->info,
+-						   desc->count_offset);
+-		if (v1 != v2)
+-			pr_warn("%s: mismatch in element count\n", __func__);
+-
+-		v1 = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
+-		v2 = bpf_prog_info_read_offset_u32(&info_linear->info,
+-						   desc->size_offset);
+-		if (v1 != v2)
+-			pr_warn("%s: mismatch in rec size\n", __func__);
+-	}
+-
+-	/* step 7: update info_len and data_len */
+-	info_linear->info_len = sizeof(struct bpf_prog_info);
+-	info_linear->data_len = data_len;
+-
+-	return info_linear;
 -}
 -
--/*
-- * Probe for availability of kernel commit (5.3):
-- *
-- * c04c0d2b968a ("bpf: increase complexity limit and maximum program size")
-- */
--bool bpf_probe_large_insn_limit(__u32 ifindex)
+-void bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear)
 -{
--	struct bpf_insn insns[BPF_MAXINSNS + 1];
 -	int i;
 -
--	for (i = 0; i < BPF_MAXINSNS; i++)
--		insns[i] = BPF_MOV64_IMM(BPF_REG_0, 1);
--	insns[BPF_MAXINSNS] = BPF_EXIT_INSN();
+-	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+-		struct bpf_prog_info_array_desc *desc;
+-		__u64 addr, offs;
 -
--	errno = 0;
--	probe_prog_load(BPF_PROG_TYPE_SCHED_CLS, insns, ARRAY_SIZE(insns), NULL, 0,
--			ifindex);
+-		if ((info_linear->arrays & (1UL << i)) == 0)
+-			continue;
 -
--	return errno != E2BIG && errno != EINVAL;
+-		desc = bpf_prog_info_array_desc + i;
+-		addr = bpf_prog_info_read_offset_u64(&info_linear->info,
+-						     desc->array_offset);
+-		offs = addr - ptr_to_u64(info_linear->data);
+-		bpf_prog_info_set_offset_u64(&info_linear->info,
+-					     desc->array_offset, offs);
+-	}
 -}
+-
+-void bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear)
+-{
+-	int i;
+-
+-	for (i = BPF_PROG_INFO_FIRST_ARRAY; i < BPF_PROG_INFO_LAST_ARRAY; ++i) {
+-		struct bpf_prog_info_array_desc *desc;
+-		__u64 addr, offs;
+-
+-		if ((info_linear->arrays & (1UL << i)) == 0)
+-			continue;
+-
+-		desc = bpf_prog_info_array_desc + i;
+-		offs = bpf_prog_info_read_offset_u64(&info_linear->info,
+-						     desc->array_offset);
+-		addr = offs + ptr_to_u64(info_linear->data);
+-		bpf_prog_info_set_offset_u64(&info_linear->info,
+-					     desc->array_offset, addr);
+-	}
+-}
+-
+ int bpf_program__set_attach_target(struct bpf_program *prog,
+ 				   int attach_prog_fd,
+ 				   const char *attach_func_name)
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 5dc4271fcdb7..e6357ea7bf41 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1396,72 +1396,6 @@ LIBBPF_API int libbpf_probe_bpf_map_type(enum bpf_map_type map_type, const void
+ LIBBPF_API int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type,
+ 				       enum bpf_func_id helper_id, const void *opts);
+ 
+-/*
+- * Get bpf_prog_info in continuous memory
+- *
+- * struct bpf_prog_info has multiple arrays. The user has option to choose
+- * arrays to fetch from kernel. The following APIs provide an uniform way to
+- * fetch these data. All arrays in bpf_prog_info are stored in a single
+- * continuous memory region. This makes it easy to store the info in a
+- * file.
+- *
+- * Before writing bpf_prog_info_linear to files, it is necessary to
+- * translate pointers in bpf_prog_info to offsets. Helper functions
+- * bpf_program__bpil_addr_to_offs() and bpf_program__bpil_offs_to_addr()
+- * are introduced to switch between pointers and offsets.
+- *
+- * Examples:
+- *   # To fetch map_ids and prog_tags:
+- *   __u64 arrays = (1UL << BPF_PROG_INFO_MAP_IDS) |
+- *           (1UL << BPF_PROG_INFO_PROG_TAGS);
+- *   struct bpf_prog_info_linear *info_linear =
+- *           bpf_program__get_prog_info_linear(fd, arrays);
+- *
+- *   # To save data in file
+- *   bpf_program__bpil_addr_to_offs(info_linear);
+- *   write(f, info_linear, sizeof(*info_linear) + info_linear->data_len);
+- *
+- *   # To read data from file
+- *   read(f, info_linear, <proper_size>);
+- *   bpf_program__bpil_offs_to_addr(info_linear);
+- */
+-enum bpf_prog_info_array {
+-	BPF_PROG_INFO_FIRST_ARRAY = 0,
+-	BPF_PROG_INFO_JITED_INSNS = 0,
+-	BPF_PROG_INFO_XLATED_INSNS,
+-	BPF_PROG_INFO_MAP_IDS,
+-	BPF_PROG_INFO_JITED_KSYMS,
+-	BPF_PROG_INFO_JITED_FUNC_LENS,
+-	BPF_PROG_INFO_FUNC_INFO,
+-	BPF_PROG_INFO_LINE_INFO,
+-	BPF_PROG_INFO_JITED_LINE_INFO,
+-	BPF_PROG_INFO_PROG_TAGS,
+-	BPF_PROG_INFO_LAST_ARRAY,
+-};
+-
+-struct bpf_prog_info_linear {
+-	/* size of struct bpf_prog_info, when the tool is compiled */
+-	__u32			info_len;
+-	/* total bytes allocated for data, round up to 8 bytes */
+-	__u32			data_len;
+-	/* which arrays are included in data */
+-	__u64			arrays;
+-	struct bpf_prog_info	info;
+-	__u8			data[];
+-};
+-
+-LIBBPF_DEPRECATED_SINCE(0, 6, "use a custom linear prog_info wrapper")
+-LIBBPF_API struct bpf_prog_info_linear *
+-bpf_program__get_prog_info_linear(int fd, __u64 arrays);
+-
+-LIBBPF_DEPRECATED_SINCE(0, 6, "use a custom linear prog_info wrapper")
+-LIBBPF_API void
+-bpf_program__bpil_addr_to_offs(struct bpf_prog_info_linear *info_linear);
+-
+-LIBBPF_DEPRECATED_SINCE(0, 6, "use a custom linear prog_info wrapper")
+-LIBBPF_API void
+-bpf_program__bpil_offs_to_addr(struct bpf_prog_info_linear *info_linear);
+-
+ /**
+  * @brief **libbpf_num_possible_cpus()** is a helper function to get the
+  * number of possible CPUs that the host kernel supports and expects.
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 88c622b784d9..1bb5d076b17e 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -118,9 +118,6 @@ LIBBPF_0.0.2 {
+ 		btf_ext__free;
+ 		btf_ext__get_raw_data;
+ 		btf_ext__new;
+-		bpf_program__get_prog_info_linear;
+-		bpf_program__bpil_addr_to_offs;
+-		bpf_program__bpil_offs_to_addr;
+ } LIBBPF_0.0.1;
+ 
+ LIBBPF_0.0.3 {
 -- 
 2.30.2
 
