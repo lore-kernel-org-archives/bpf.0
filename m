@@ -2,206 +2,173 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A31C433EF
-	for <bpf@archiver.kernel.org>; Thu,  2 Jun 2022 23:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EAF0C43334
+	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 01:52:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233869AbiFBXCo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 19:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
+        id S235708AbiFCBwm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 21:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiFBXCn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 19:02:43 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173152733;
-        Thu,  2 Jun 2022 16:02:42 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id g12so6775361lja.3;
-        Thu, 02 Jun 2022 16:02:42 -0700 (PDT)
+        with ESMTP id S238094AbiFCBwl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 21:52:41 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4133310C5
+        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 18:52:40 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id s23so6487973iog.13
+        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 18:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=l9X+C68T2s+Tz7as0XsMszfHryGUuoJbZpRFuNUCAA0=;
-        b=qGYzxtETjWH61KJv9JD8/onfKFxGXJp64M13vL6Sv+XWX8SxPvgLi7fCCDIlZ2uhsb
-         lALQv4Z8Gu2df5MLVk8nMN/vWXTrlS+Tr9XzdpfsDPyyNnPQEaLGmYWGjJMIwiw2Px0Q
-         IX0oqTXUlRWfjnbDUdXApjc0h42EbvcZhME4QkzI2CvLzrfw1hrAewUR+8t39HCqfM+k
-         CnA99ve8zbHeuJTbRbpFEQWGleNImsrRq3SzbXk+EO0Sa1qhBKvZyOX8D76jcOTClK9U
-         npgGfNXJznhjMO6TEF29eI2LfwdD5njOFXvVkyc8XElQ2WMaP3rzKVWGCsc7jfLSE9yb
-         lQtg==
+        bh=P4QoqGf+lZNXIWOxkAgl/BGLORs0Qx7HPXwKGTBwfro=;
+        b=k0fRqahWY6OiXNHa0BywgD0MqhfYzUw3Mh6CGsDDhr2nk9jD7DZHT5OpIwOIJ1L78H
+         JnJWHZNvI00ayN6Y5qrJbKWvWKK0xDAHATQPI8KjHacGUxUKpaTD37x7mSqze1zN4R9s
+         QGeatR19TfkgTDGcaMdDYw/A3O2Q3ISYHzA4NxtSjFlzccfUKk1L3a85NBJjni3qN+OY
+         mEhkPVnC0/Z1CkQyexvwqzMm0MNu5AsOYxF4qKinshwW9hCria+2OFo6peyymrQaGfMB
+         DCmpYB5A74vXTLf+D2tHv2QGL/sqMGJfBsB72HxrO0G7R1unhPiX6AXXMl85tuwqgVWX
+         cI6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=l9X+C68T2s+Tz7as0XsMszfHryGUuoJbZpRFuNUCAA0=;
-        b=q4unuba+GDZBpavFaJdzNeObDxZq/pik61jEsij5qmqIwm6OnFr4wXhgdo4zCZmNTw
-         3lMAGNffqSR8eEn7N0DTIzy7Ftf9Jt3VrkMMZwsn4viGY4rOxUhmrlMSXFuC/K6dbZNa
-         G+7//SOaKltdkYpXb/SSd/iY4IXXwNQ+PTn/3PqJqfUZrWpsEmN9A5X74YlyP8YUPkJT
-         21ox7p1P28jqeGmqa5qWGSm+OgUkBK2xHxS7LOF1mf5lDld2FxrfPC1cIsJ+e22XztPM
-         3cck8EKKjTdISmbG20yBRURjT25j0gvYTyJCDY7a1Z+Ec9VpbP6dDB7fM5R6+MP7CkoQ
-         gpzQ==
-X-Gm-Message-State: AOAM5315C74Pv7oWcXiatNYteSQavpvJeKS0gHcM7R5cRvJsgAQxV+jx
-        LYmup8TzetDLh4nKenZIcjZFeGk+t2TP0H1zOu6sqHZN
-X-Google-Smtp-Source: ABdhPJzbIu4z34eS+xiIIIPy7PPJKPvH8I66C2ODvC393N4LZSMzqHlYJeXRNsL7pEnDqhJ4Ia541lsj7UNrJndSS+o=
-X-Received: by 2002:a2e:3a16:0:b0:255:7811:2827 with SMTP id
- h22-20020a2e3a16000000b0025578112827mr2486239lja.130.1654210960410; Thu, 02
- Jun 2022 16:02:40 -0700 (PDT)
+        bh=P4QoqGf+lZNXIWOxkAgl/BGLORs0Qx7HPXwKGTBwfro=;
+        b=HJ4bmi71MEgrEv3+do8H1fV7WQMpxsazAq7zpYUpPovMu/mjcrCdZ/Av/DK+8EKhTl
+         y95EkGFCVWRjNKqqxLyzYyNp8a5fdZrz/cL3HfsVtVgYnZIOMQovQN4/3lJDiUD9f5ni
+         SqB9G36bRp8OloKK+m5pjBV7jbb8gqdte82qLcBdhfZT+lrfeexVMTORRdgccRApbjqI
+         KgfZ5N/Dm+y856/7J9sNZn2MY6F04kmQPXFG1ealQE9ekIH6+MJ3BL0fyZY1spIBjAdM
+         I7nf6suWZwTTPRj3fQ/odrDD7G9YX48YVUvxUvEmazD1/QQdvT3PQvo90Lc8LkDVijws
+         sdpQ==
+X-Gm-Message-State: AOAM530zsKJrRJSMCMkUrb40QWpypOLUIWy1XkBdy1WYuAsIfGWOJr1p
+        c54ZpTJQCjn2YbFXLtOKCwJdeX9pfSrgS/x6XLax/cUvqNY=
+X-Google-Smtp-Source: ABdhPJweWixJoRpuJQ30LEbpvj2VARwzg6MWahXC67zcXrdueuYMaP0VLFg5P7o0dvVWA+RRfsvSVCkEogh9FHvDutQ=
+X-Received: by 2002:a02:b18b:0:b0:331:6385:a257 with SMTP id
+ t11-20020a02b18b000000b003316385a257mr4026116jah.235.1654221159621; Thu, 02
+ Jun 2022 18:52:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220527205611.655282-1-jolsa@kernel.org> <20220527205611.655282-4-jolsa@kernel.org>
- <CAEf4BzbY19qe6Ftzev884R_xuS4H5OD_fRLOfeekbPWjd5jkiA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbY19qe6Ftzev884R_xuS4H5OD_fRLOfeekbPWjd5jkiA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 2 Jun 2022 16:02:28 -0700
-Message-ID: <CAEf4Bza84ei+Nmyh+aKHY_LSuDfziKjYTmphHQ39xCkooygbxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] bpf: Force cookies array to follow symbols sorting
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
+References: <CAPxVHdL-dT2GQh-HEkNjNoTEzA9DRL4W4ZfmUzc1+Bdz89fftQ@mail.gmail.com>
+ <CAEf4BzZg0r4YptYPu8Y_-qp=rY__W6dmb9kLwMV5MAH6C-2PSg@mail.gmail.com>
+ <CAPxVHdJbnu5fk5btxATWM5NTd0NofeJREuX_8R_2i3GX_ho87g@mail.gmail.com>
+ <CAPxVHd+_fmCvhhYWCtjjjvzNi5GNfoDP3=aHgihVwzSwN9vKnQ@mail.gmail.com> <CAEf4BzbhvD_f=y3SDAiFqNvuErcnXt4fErMRSfanjYQg5=7GJg@mail.gmail.com>
+In-Reply-To: <CAEf4BzbhvD_f=y3SDAiFqNvuErcnXt4fErMRSfanjYQg5=7GJg@mail.gmail.com>
+From:   John Mazzie <john.p.mazzie@gmail.com>
+Date:   Thu, 2 Jun 2022 20:52:28 -0500
+Message-ID: <CAPxVHdLMsotw3wFDM05kzb7O6kA4PM_uQ4D+DCXYcZbtwdt_ag@mail.gmail.com>
+Subject: Re: Tracing NVMe Driver with BPF missing events
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        "John Mazzie (jmazzie)" <jmazzie@micron.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 4:01 PM Andrii Nakryiko
+Thanks for the help. fentry/fexit seem to be working to get every
+event when tracing both events.
+
+I do have one question about how fentry/fexit work in regards to the
+function parameters. fexit can access the function parameters in
+addition to the return value. Let's say the parameters are pointers
+whose value changes between entry and exit on the probed function. Are
+the parameters being accessed on entry or exit in fexit. My assumption
+would be exit, so I could access the modified values. Is that correct?
+The data I'm pulling appears like it might just be the entry
+(non-configured) values.
+
+On Tue, May 24, 2022 at 6:40 PM Andrii Nakryiko
 <andrii.nakryiko@gmail.com> wrote:
 >
-> On Fri, May 27, 2022 at 1:57 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> On Tue, May 24, 2022 at 9:12 AM John Mazzie <john.p.mazzie@gmail.com> wrote:
 > >
-> > When user specifies symbols and cookies for kprobe_multi link
-> > interface it's very likely the cookies will be misplaced and
-> > returned to wrong functions (via get_attach_cookie helper).
+> > After thinking about this more, maybe it's more to do with the
+> > interrupt handler for nvme_complete_rq.
 > >
-> > The reason is that to resolve the provided functions we sort
-> > them before passing them to ftrace_lookup_symbols, but we do
-> > not do the same sort on the cookie values.
+> > In this situation, sometimes the handler for nvme_setup_cmd could be
+> > interrupted to handle nvme_complete_rq and in this situation the
+> > nvme_complete_rq handler wouldn't run. because the nvme_setup_cmd
+> > handler is not complete.
 > >
-> > Fixing this by using sort_r function with custom swap callback
-> > that swaps cookie values as well.
-> >
-> > Fixes: 0236fec57a15 ("bpf: Resolve symbols with ftrace_lookup_symbols for kprobe multi link")
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  kernel/trace/bpf_trace.c | 65 ++++++++++++++++++++++++++++++----------
-> >  1 file changed, 50 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 10b157a6d73e..e5c423b835ab 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2423,7 +2423,12 @@ kprobe_multi_link_handler(struct fprobe *fp, unsigned long entry_ip,
-> >         kprobe_multi_link_prog_run(link, entry_ip, regs);
-> >  }
-> >
-> > -static int symbols_cmp(const void *a, const void *b)
-> > +struct multi_symbols_sort {
-> > +       const char **funcs;
-> > +       u64 *cookies;
-> > +};
-> > +
-> > +static int symbols_cmp_r(const void *a, const void *b, const void *priv)
-> >  {
-> >         const char **str_a = (const char **) a;
-> >         const char **str_b = (const char **) b;
-> > @@ -2431,6 +2436,25 @@ static int symbols_cmp(const void *a, const void *b)
-> >         return strcmp(*str_a, *str_b);
-> >  }
-> >
-> > +static void symbols_swap_r(void *a, void *b, int size, const void *priv)
-> > +{
-> > +       const struct multi_symbols_sort *data = priv;
-> > +       const char **name_a = a, **name_b = b;
-> > +       u64 *cookie_a, *cookie_b;
-> > +
-> > +       cookie_a = data->cookies + (name_a - data->funcs);
-> > +       cookie_b = data->cookies + (name_b - data->funcs);
-> > +
-> > +       /* swap name_a/name_b and cookie_a/cookie_b values */
-> > +       swap(*name_a, *name_b);
-> > +       swap(*cookie_a, *cookie_b);
-> > +}
-> > +
-> > +static int symbols_cmp(const void *a, const void *b)
-> > +{
-> > +       return symbols_cmp_r(a, b, NULL);
-> > +}
-> > +
-> >  int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-> >  {
-> >         struct bpf_kprobe_multi_link *link = NULL;
-> > @@ -2468,6 +2492,19 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >         if (!addrs)
-> >                 return -ENOMEM;
-> >
-> > +       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
-> > +       if (ucookies) {
-> > +               cookies = kvmalloc(size, GFP_KERNEL);
-
-oh, and you'll have to rebase anyways after kvmalloc_array patch
-
-> > +               if (!cookies) {
-> > +                       err = -ENOMEM;
-> > +                       goto error;
-> > +               }
-> > +               if (copy_from_user(cookies, ucookies, size)) {
-> > +                       err = -EFAULT;
-> > +                       goto error;
-> > +               }
-> > +       }
-> > +
-> >         if (uaddrs) {
-> >                 if (copy_from_user(addrs, uaddrs, size)) {
-> >                         err = -EFAULT;
-> > @@ -2480,26 +2517,24 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
-> >                 if (err)
-> >                         goto error;
-> >
-> > -               sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
-> > +               if (cookies) {
-> > +                       struct multi_symbols_sort data = {
-> > +                               .cookies = cookies,
-> > +                               .funcs = us.syms,
-> > +                       };
-> > +
-> > +                       sort_r(us.syms, cnt, sizeof(*us.syms), symbols_cmp_r,
-> > +                              symbols_swap_r, &data);
-> > +               } else {
-> > +                       sort(us.syms, cnt, sizeof(*us.syms), symbols_cmp, NULL);
-> > +               }
+> > Is this understanding correct?
 >
-> maybe just always do sort_r, swap callback can just check if cookie
-> array is NULL and if not, additionally swap cookies? why have all
-> these different callbacks and complicate the code unnecessarily?
+> Yes.
 >
-> > +
-> >                 err = ftrace_lookup_symbols(us.syms, cnt, addrs);
-> >                 free_user_syms(&us);
-> >                 if (err)
-> >                         goto error;
-> >         }
+> > I'm assuming there is no real
+> > workaround for this situation, so we may just need to accept some
+> > missed events.
+>
+> Try using fentry/fexit programs instead. They use different reentrancy
+> protection which is at a per-program level.
+>
 > >
-> > -       ucookies = u64_to_user_ptr(attr->link_create.kprobe_multi.cookies);
-> > -       if (ucookies) {
-> > -               cookies = kvmalloc(size, GFP_KERNEL);
-> > -               if (!cookies) {
-> > -                       err = -ENOMEM;
-> > -                       goto error;
-> > -               }
-> > -               if (copy_from_user(cookies, ucookies, size)) {
-> > -                       err = -EFAULT;
-> > -                       goto error;
-> > -               }
-> > -       }
-> > -
-> >         link = kzalloc(sizeof(*link), GFP_KERNEL);
-> >         if (!link) {
-> >                 err = -ENOMEM;
-> > --
-> > 2.35.3
+> > John
 > >
+> > On Sat, May 21, 2022 at 11:52 AM John Mazzie <john.p.mazzie@gmail.com> wrote:
+> > >
+> > > In this case is a BPF program the individual handler of a tracepoint,
+> > > or in my context, a BPF program my compiled program that traces both
+> > > tracepoints? We aren't running any other BPF tracing during these
+> > > tests besides my program counting these 2 tracepoints.
+> > >
+> > > In my program I have 2 handlers, one for
+> > > tracepoint:nvme:nvme_setup_cmd and another for
+> > > tracepoint:nvme:nvme_complete_rq. I've created a PERCPU_HASH map for
+> > > each handler (unique map for each) to use that keeps track of each
+> > > time the handler is invoked. The only thing that handler is doing in
+> > > each case is incrementing the count value in the map. Though I do
+> > > filter by device on each tracepoint. If I comment out the
+> > > nvme_setup_cmd code the nvme_complete_rq does get the correct count.
+> > >
+> > > The user side of my program just prints the values for each of these
+> > > maps on a 10 second increment.
+> > >
+> > > I can share my code to make this easier, is it preferred that I upload
+> > > my code to github and share the link in this thread?
+> > >
+> > > I agree that your suggestion could be my issue, but I just want to
+> > > make sure we're on the same page since I'm less familiar with the
+> > > internals of BPF.
+> > >
+> > > Thanks,
+> > > John
+> > >
+> > > On Fri, May 20, 2022 at 7:10 PM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > > >
+> > > > On Wed, May 18, 2022 at 2:35 PM John Mazzie <john.p.mazzie@gmail.com> wrote:
+> > > > >
+> > > > > My group at Micron is using BPF and love the tracing capabilities it
+> > > > > provides. We are mainly focused on the storage subsystem and BPF has
+> > > > > been really helpful in understanding how the storage subsystem
+> > > > > interacts with our drives while running applications.
+> > > > >
+> > > > > In the process of developing a tool using BPF to trace the nvme
+> > > > > driver, we ran into an issue with some missing events. I wanted to
+> > > > > check to see if this is possibly a bug/limitation that I'm hitting or
+> > > > > if it's expected behavior with heavy tracing. We are trying to trace 2
+> > > > > trace points (nvme_setup_cmd and nvme_complete_rq) around 1M times a
+> > > > > second.
+> > > > > We noticed if we just trace one of the two, we see all the expected
+> > > > > events, but if we trace both at the same time, the nvme_complete_rq
+> > > >
+> > > > kprobe programs have per-CPU reentrancy protection. That is, if some
+> > > > BPF kprobe/tracepoint program is running and something happens (e.g.,
+> > > > BPF program calls some kernel function that has another BPF program
+> > > > attached to it, or preemption happens and another BPF program is
+> > > > supposed to run) that would trigger another BPF program, then that
+> > > > nested BPF program invocation will be skipped.
+> > > >
+> > > > This might be what happens in your case.
+> > > >
+> > > > > misses events. I am using two different percpu_hash maps to count both
+> > > > > events. One for setup and another for complete. My expectation was
+> > > > > that tracing these events would affect performance, somewhat, but not
+> > > > > miss events. Ultimately the tool would be used to trace nvme latencies
+> > > > > at the driver level by device and process.
+> > > > >
+> > > > > My tool was developed using libbpf v0.7, and I've tested on Rocky
+> > > > > Linux 8.5 (Kernel 4.18.0), Ubuntu 20.04 (Kernel 5.4) and Fedora 36
+> > > > > (Kernel 5.17.6) with the same results.
+> > > > >
+> > > > > Thanks,
+> > > > > John Mazzie
+> > > > > Principal Storage Solutions Engineer
+> > > > > Micron Technology, Inc.
