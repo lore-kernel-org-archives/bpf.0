@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22A5DC433EF
-	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:03:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCDC4C43334
+	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242997AbiFCTD4 convert rfc822-to-8bit (ORCPT
+        id S1348710AbiFCTD4 convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348725AbiFCTDz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:03:55 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCF130F78
+        with ESMTP id S1348719AbiFCTD4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Jun 2022 15:03:56 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E7630F7E
         for <bpf@vger.kernel.org>; Fri,  3 Jun 2022 12:03:53 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GmRaT031381
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GmiCY030375
         for <bpf@vger.kernel.org>; Fri, 3 Jun 2022 12:03:53 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3geubb1te6-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gevuu9fg1-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:53 -0700
-Received: from twshared0725.22.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:52 -0700
+Received: from twshared31479.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 3 Jun 2022 12:03:50 -0700
+ 15.1.2375.28; Fri, 3 Jun 2022 12:03:51 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id D8E5E1AC9C3EB; Fri,  3 Jun 2022 12:03:40 -0700 (PDT)
+        id 0FE5B1AC9C416; Fri,  3 Jun 2022 12:03:47 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 05/15] libbpf: remove deprecated BTF APIs
-Date:   Fri, 3 Jun 2022 12:01:45 -0700
-Message-ID: <20220603190155.3924899-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 08/15] libbpf: remove most other deprecated high-level APIs
+Date:   Fri, 3 Jun 2022 12:01:48 -0700
+Message-ID: <20220603190155.3924899-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220603190155.3924899-1-andrii@kernel.org>
 References: <20220603190155.3924899-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: vErviA3wvM_gbWwXzdhdnFHoT6pEnzMR
-X-Proofpoint-ORIG-GUID: vErviA3wvM_gbWwXzdhdnFHoT6pEnzMR
+X-Proofpoint-GUID: lVIt0-RYqB6Iion1TKFJuIKXDS59Xzoa
+X-Proofpoint-ORIG-GUID: lVIt0-RYqB6Iion1TKFJuIKXDS59Xzoa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-03_06,2022-06-03_01,2022-02-23_01
@@ -49,547 +49,880 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Get rid of deprecated BTF-related APIs.
+Remove a bunch of high-level bpf_object/bpf_map/bpf_program related
+APIs. All the APIs related to private per-object/map/prog state,
+program preprocessing callback, and generally everything multi-instance
+related is removed in a separate patch.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.c      | 183 +--------------------------------------
- tools/lib/bpf/btf.h      |  86 +-----------------
- tools/lib/bpf/btf_dump.c |  23 ++---
- tools/lib/bpf/libbpf.c   |  44 +++-------
- tools/lib/bpf/libbpf.map |  13 ---
- 5 files changed, 24 insertions(+), 325 deletions(-)
+ tools/lib/bpf/libbpf.c   | 241 ++++-----------------------------------
+ tools/lib/bpf/libbpf.h   | 163 +-------------------------
+ tools/lib/bpf/libbpf.map |  43 -------
+ 3 files changed, 26 insertions(+), 421 deletions(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 2e9c23bcdc67..93cec9402828 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -438,11 +438,6 @@ static int btf_parse_type_sec(struct btf *btf)
- 	return 0;
- }
- 
--__u32 btf__get_nr_types(const struct btf *btf)
--{
--	return btf->start_id + btf->nr_types - 1;
--}
--
- __u32 btf__type_cnt(const struct btf *btf)
- {
- 	return btf->start_id + btf->nr_types;
-@@ -1396,92 +1391,6 @@ struct btf *btf__load_from_kernel_by_id(__u32 id)
- 	return btf__load_from_kernel_by_id_split(id, NULL);
- }
- 
--int btf__get_from_id(__u32 id, struct btf **btf)
--{
--	struct btf *res;
--	int err;
--
--	*btf = NULL;
--	res = btf__load_from_kernel_by_id(id);
--	err = libbpf_get_error(res);
--
--	if (err)
--		return libbpf_err(err);
--
--	*btf = res;
--	return 0;
--}
--
--int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
--			 __u32 expected_key_size, __u32 expected_value_size,
--			 __u32 *key_type_id, __u32 *value_type_id)
--{
--	const struct btf_type *container_type;
--	const struct btf_member *key, *value;
--	const size_t max_name = 256;
--	char container_name[max_name];
--	__s64 key_size, value_size;
--	__s32 container_id;
--
--	if (snprintf(container_name, max_name, "____btf_map_%s", map_name) == max_name) {
--		pr_warn("map:%s length of '____btf_map_%s' is too long\n",
--			map_name, map_name);
--		return libbpf_err(-EINVAL);
--	}
--
--	container_id = btf__find_by_name(btf, container_name);
--	if (container_id < 0) {
--		pr_debug("map:%s container_name:%s cannot be found in BTF. Missing BPF_ANNOTATE_KV_PAIR?\n",
--			 map_name, container_name);
--		return libbpf_err(container_id);
--	}
--
--	container_type = btf__type_by_id(btf, container_id);
--	if (!container_type) {
--		pr_warn("map:%s cannot find BTF type for container_id:%u\n",
--			map_name, container_id);
--		return libbpf_err(-EINVAL);
--	}
--
--	if (!btf_is_struct(container_type) || btf_vlen(container_type) < 2) {
--		pr_warn("map:%s container_name:%s is an invalid container struct\n",
--			map_name, container_name);
--		return libbpf_err(-EINVAL);
--	}
--
--	key = btf_members(container_type);
--	value = key + 1;
--
--	key_size = btf__resolve_size(btf, key->type);
--	if (key_size < 0) {
--		pr_warn("map:%s invalid BTF key_type_size\n", map_name);
--		return libbpf_err(key_size);
--	}
--
--	if (expected_key_size != key_size) {
--		pr_warn("map:%s btf_key_type_size:%u != map_def_key_size:%u\n",
--			map_name, (__u32)key_size, expected_key_size);
--		return libbpf_err(-EINVAL);
--	}
--
--	value_size = btf__resolve_size(btf, value->type);
--	if (value_size < 0) {
--		pr_warn("map:%s invalid BTF value_type_size\n", map_name);
--		return libbpf_err(value_size);
--	}
--
--	if (expected_value_size != value_size) {
--		pr_warn("map:%s btf_value_type_size:%u != map_def_value_size:%u\n",
--			map_name, (__u32)value_size, expected_value_size);
--		return libbpf_err(-EINVAL);
--	}
--
--	*key_type_id = key->type;
--	*value_type_id = value->type;
--
--	return 0;
--}
--
- static void btf_invalidate_raw_data(struct btf *btf)
- {
- 	if (btf->raw_data) {
-@@ -2867,81 +2776,6 @@ const void *btf_ext__get_raw_data(const struct btf_ext *btf_ext, __u32 *size)
- 	return btf_ext->data;
- }
- 
--static int btf_ext_reloc_info(const struct btf *btf,
--			      const struct btf_ext_info *ext_info,
--			      const char *sec_name, __u32 insns_cnt,
--			      void **info, __u32 *cnt)
--{
--	__u32 sec_hdrlen = sizeof(struct btf_ext_info_sec);
--	__u32 i, record_size, existing_len, records_len;
--	struct btf_ext_info_sec *sinfo;
--	const char *info_sec_name;
--	__u64 remain_len;
--	void *data;
--
--	record_size = ext_info->rec_size;
--	sinfo = ext_info->info;
--	remain_len = ext_info->len;
--	while (remain_len > 0) {
--		records_len = sinfo->num_info * record_size;
--		info_sec_name = btf__name_by_offset(btf, sinfo->sec_name_off);
--		if (strcmp(info_sec_name, sec_name)) {
--			remain_len -= sec_hdrlen + records_len;
--			sinfo = (void *)sinfo + sec_hdrlen + records_len;
--			continue;
--		}
--
--		existing_len = (*cnt) * record_size;
--		data = realloc(*info, existing_len + records_len);
--		if (!data)
--			return libbpf_err(-ENOMEM);
--
--		memcpy(data + existing_len, sinfo->data, records_len);
--		/* adjust insn_off only, the rest data will be passed
--		 * to the kernel.
--		 */
--		for (i = 0; i < sinfo->num_info; i++) {
--			__u32 *insn_off;
--
--			insn_off = data + existing_len + (i * record_size);
--			*insn_off = *insn_off / sizeof(struct bpf_insn) + insns_cnt;
--		}
--		*info = data;
--		*cnt += sinfo->num_info;
--		return 0;
--	}
--
--	return libbpf_err(-ENOENT);
--}
--
--int btf_ext__reloc_func_info(const struct btf *btf,
--			     const struct btf_ext *btf_ext,
--			     const char *sec_name, __u32 insns_cnt,
--			     void **func_info, __u32 *cnt)
--{
--	return btf_ext_reloc_info(btf, &btf_ext->func_info, sec_name,
--				  insns_cnt, func_info, cnt);
--}
--
--int btf_ext__reloc_line_info(const struct btf *btf,
--			     const struct btf_ext *btf_ext,
--			     const char *sec_name, __u32 insns_cnt,
--			     void **line_info, __u32 *cnt)
--{
--	return btf_ext_reloc_info(btf, &btf_ext->line_info, sec_name,
--				  insns_cnt, line_info, cnt);
--}
--
--__u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_ext)
--{
--	return btf_ext->func_info.rec_size;
--}
--
--__u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_ext)
--{
--	return btf_ext->line_info.rec_size;
--}
--
- struct btf_dedup;
- 
- static struct btf_dedup *btf_dedup_new(struct btf *btf, const struct btf_dedup_opts *opts);
-@@ -3091,9 +2925,7 @@ static int btf_dedup_remap_types(struct btf_dedup *d);
-  * deduplicating structs/unions is described in greater details in comments for
-  * `btf_dedup_is_equiv` function.
-  */
--
--DEFAULT_VERSION(btf__dedup_v0_6_0, btf__dedup, LIBBPF_0.6.0)
--int btf__dedup_v0_6_0(struct btf *btf, const struct btf_dedup_opts *opts)
-+int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts)
- {
- 	struct btf_dedup *d;
- 	int err;
-@@ -3153,19 +2985,6 @@ int btf__dedup_v0_6_0(struct btf *btf, const struct btf_dedup_opts *opts)
- 	return libbpf_err(err);
- }
- 
--COMPAT_VERSION(btf__dedup_deprecated, btf__dedup, LIBBPF_0.0.2)
--int btf__dedup_deprecated(struct btf *btf, struct btf_ext *btf_ext, const void *unused_opts)
--{
--	LIBBPF_OPTS(btf_dedup_opts, opts, .btf_ext = btf_ext);
--
--	if (unused_opts) {
--		pr_warn("please use new version of btf__dedup() that supports options\n");
--		return libbpf_err(-ENOTSUP);
--	}
--
--	return btf__dedup(btf, &opts);
--}
--
- #define BTF_UNPROCESSED_ID ((__u32)-1)
- #define BTF_IN_PROGRESS_ID ((__u32)-2)
- 
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 951ac7475794..f59f91ad16fe 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -120,20 +120,12 @@ LIBBPF_API struct btf *libbpf_find_kernel_btf(void);
- 
- LIBBPF_API struct btf *btf__load_from_kernel_by_id(__u32 id);
- LIBBPF_API struct btf *btf__load_from_kernel_by_id_split(__u32 id, struct btf *base_btf);
--LIBBPF_DEPRECATED_SINCE(0, 6, "use btf__load_from_kernel_by_id instead")
--LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
- 
--LIBBPF_DEPRECATED_SINCE(0, 6, "intended for internal libbpf use only")
--LIBBPF_API int btf__finalize_data(struct bpf_object *obj, struct btf *btf);
--LIBBPF_DEPRECATED_SINCE(0, 6, "use btf__load_into_kernel instead")
--LIBBPF_API int btf__load(struct btf *btf);
- LIBBPF_API int btf__load_into_kernel(struct btf *btf);
- LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
- 				   const char *type_name);
- LIBBPF_API __s32 btf__find_by_name_kind(const struct btf *btf,
- 					const char *type_name, __u32 kind);
--LIBBPF_DEPRECATED_SINCE(0, 7, "use btf__type_cnt() instead; note that btf__get_nr_types() == btf__type_cnt() - 1")
--LIBBPF_API __u32 btf__get_nr_types(const struct btf *btf);
- LIBBPF_API __u32 btf__type_cnt(const struct btf *btf);
- LIBBPF_API const struct btf *btf__base_btf(const struct btf *btf);
- LIBBPF_API const struct btf_type *btf__type_by_id(const struct btf *btf,
-@@ -150,29 +142,10 @@ LIBBPF_API void btf__set_fd(struct btf *btf, int fd);
- LIBBPF_API const void *btf__raw_data(const struct btf *btf, __u32 *size);
- LIBBPF_API const char *btf__name_by_offset(const struct btf *btf, __u32 offset);
- LIBBPF_API const char *btf__str_by_offset(const struct btf *btf, __u32 offset);
--LIBBPF_DEPRECATED_SINCE(0, 7, "this API is not necessary when BTF-defined maps are used")
--LIBBPF_API int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
--				    __u32 expected_key_size,
--				    __u32 expected_value_size,
--				    __u32 *key_type_id, __u32 *value_type_id);
- 
- LIBBPF_API struct btf_ext *btf_ext__new(const __u8 *data, __u32 size);
- LIBBPF_API void btf_ext__free(struct btf_ext *btf_ext);
- LIBBPF_API const void *btf_ext__raw_data(const struct btf_ext *btf_ext, __u32 *size);
--LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_func_info was never meant as a public API and has wrong assumptions embedded in it; it will be removed in the future libbpf versions")
--int btf_ext__reloc_func_info(const struct btf *btf,
--			     const struct btf_ext *btf_ext,
--			     const char *sec_name, __u32 insns_cnt,
--			     void **func_info, __u32 *cnt);
--LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_line_info was never meant as a public API and has wrong assumptions embedded in it; it will be removed in the future libbpf versions")
--int btf_ext__reloc_line_info(const struct btf *btf,
--			     const struct btf_ext *btf_ext,
--			     const char *sec_name, __u32 insns_cnt,
--			     void **line_info, __u32 *cnt);
--LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_func_info is deprecated; write custom func_info parsing to fetch rec_size")
--__u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_ext);
--LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_line_info is deprecated; write custom line_info parsing to fetch rec_size")
--__u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_ext);
- 
- LIBBPF_API int btf__find_str(struct btf *btf, const char *s);
- LIBBPF_API int btf__add_str(struct btf *btf, const char *s);
-@@ -257,22 +230,12 @@ struct btf_dedup_opts {
- 
- LIBBPF_API int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts);
- 
--LIBBPF_API int btf__dedup_v0_6_0(struct btf *btf, const struct btf_dedup_opts *opts);
--
--LIBBPF_DEPRECATED_SINCE(0, 7, "use btf__dedup() instead")
--LIBBPF_API int btf__dedup_deprecated(struct btf *btf, struct btf_ext *btf_ext, const void *opts);
--#define btf__dedup(...) ___libbpf_overload(___btf_dedup, __VA_ARGS__)
--#define ___btf_dedup3(btf, btf_ext, opts) btf__dedup_deprecated(btf, btf_ext, opts)
--#define ___btf_dedup2(btf, opts) btf__dedup(btf, opts)
--
- struct btf_dump;
- 
- struct btf_dump_opts {
--	union {
--		size_t sz;
--		void *ctx; /* DEPRECATED: will be gone in v1.0 */
--	};
-+	size_t sz;
- };
-+#define btf_dump_opts__last_field sz
- 
- typedef void (*btf_dump_printf_fn_t)(void *ctx, const char *fmt, va_list args);
- 
-@@ -281,51 +244,6 @@ LIBBPF_API struct btf_dump *btf_dump__new(const struct btf *btf,
- 					  void *ctx,
- 					  const struct btf_dump_opts *opts);
- 
--LIBBPF_API struct btf_dump *btf_dump__new_v0_6_0(const struct btf *btf,
--						 btf_dump_printf_fn_t printf_fn,
--						 void *ctx,
--						 const struct btf_dump_opts *opts);
--
--LIBBPF_API struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
--						     const struct btf_ext *btf_ext,
--						     const struct btf_dump_opts *opts,
--						     btf_dump_printf_fn_t printf_fn);
--
--/* Choose either btf_dump__new() or btf_dump__new_deprecated() based on the
-- * type of 4th argument. If it's btf_dump's print callback, use deprecated
-- * API; otherwise, choose the new btf_dump__new(). ___libbpf_override()
-- * doesn't work here because both variants have 4 input arguments.
-- *
-- * (void *) casts are necessary to avoid compilation warnings about type
-- * mismatches, because even though __builtin_choose_expr() only ever evaluates
-- * one side the other side still has to satisfy type constraints (this is
-- * compiler implementation limitation which might be lifted eventually,
-- * according to the documentation). So passing struct btf_ext in place of
-- * btf_dump_printf_fn_t would be generating compilation warning.  Casting to
-- * void * avoids this issue.
-- *
-- * Also, two type compatibility checks for a function and function pointer are
-- * required because passing function reference into btf_dump__new() as
-- * btf_dump__new(..., my_callback, ...) and as btf_dump__new(...,
-- * &my_callback, ...) (not explicit ampersand in the latter case) actually
-- * differs as far as __builtin_types_compatible_p() is concerned. Thus two
-- * checks are combined to detect callback argument.
-- *
-- * The rest works just like in case of ___libbpf_override() usage with symbol
-- * versioning.
-- *
-- * C++ compilers don't support __builtin_types_compatible_p(), so at least
-- * don't screw up compilation for them and let C++ users pick btf_dump__new
-- * vs btf_dump__new_deprecated explicitly.
-- */
--#ifndef __cplusplus
--#define btf_dump__new(a1, a2, a3, a4) __builtin_choose_expr(				\
--	__builtin_types_compatible_p(typeof(a4), btf_dump_printf_fn_t) ||		\
--	__builtin_types_compatible_p(typeof(a4), void(void *, const char *, va_list)),	\
--	btf_dump__new_deprecated((void *)a1, (void *)a2, (void *)a3, (void *)a4),	\
--	btf_dump__new((void *)a1, (void *)a2, (void *)a3, (void *)a4))
--#endif
--
- LIBBPF_API void btf_dump__free(struct btf_dump *d);
- 
- LIBBPF_API int btf_dump__dump_type(struct btf_dump *d, __u32 id);
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 6b1bc1f43728..3ec18387c652 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -144,15 +144,17 @@ static void btf_dump_printf(const struct btf_dump *d, const char *fmt, ...)
- static int btf_dump_mark_referenced(struct btf_dump *d);
- static int btf_dump_resize(struct btf_dump *d);
- 
--DEFAULT_VERSION(btf_dump__new_v0_6_0, btf_dump__new, LIBBPF_0.6.0)
--struct btf_dump *btf_dump__new_v0_6_0(const struct btf *btf,
--				      btf_dump_printf_fn_t printf_fn,
--				      void *ctx,
--				      const struct btf_dump_opts *opts)
-+struct btf_dump *btf_dump__new(const struct btf *btf,
-+			       btf_dump_printf_fn_t printf_fn,
-+			       void *ctx,
-+			       const struct btf_dump_opts *opts)
- {
- 	struct btf_dump *d;
- 	int err;
- 
-+	if (!OPTS_VALID(opts, btf_dump_opts))
-+		return libbpf_err_ptr(-EINVAL);
-+
- 	if (!printf_fn)
- 		return libbpf_err_ptr(-EINVAL);
- 
-@@ -188,17 +190,6 @@ struct btf_dump *btf_dump__new_v0_6_0(const struct btf *btf,
- 	return libbpf_err_ptr(err);
- }
- 
--COMPAT_VERSION(btf_dump__new_deprecated, btf_dump__new, LIBBPF_0.0.4)
--struct btf_dump *btf_dump__new_deprecated(const struct btf *btf,
--					  const struct btf_ext *btf_ext,
--					  const struct btf_dump_opts *opts,
--					  btf_dump_printf_fn_t printf_fn)
--{
--	if (!printf_fn)
--		return libbpf_err_ptr(-EINVAL);
--	return btf_dump__new_v0_6_0(btf, printf_fn, opts ? opts->ctx : NULL, opts);
--}
--
- static int btf_dump_resize(struct btf_dump *d)
- {
- 	int err, last_id = btf__type_cnt(d->btf) - 1;
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 18af3f74e7a8..1b17a154bb63 100644
+index 93b1e1f95e64..0930028bb11d 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -3033,11 +3033,6 @@ static int btf_finalize_data(struct bpf_object *obj, struct btf *btf)
- 	return libbpf_err(err);
+@@ -31,7 +31,6 @@
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
+ #include <linux/filter.h>
+-#include <linux/list.h>
+ #include <linux/limits.h>
+ #include <linux/perf_event.h>
+ #include <linux/ring_buffer.h>
+@@ -484,6 +483,14 @@ enum libbpf_map_type {
+ 	LIBBPF_MAP_KCONFIG,
+ };
+ 
++struct bpf_map_def {
++	unsigned int type;
++	unsigned int key_size;
++	unsigned int value_size;
++	unsigned int max_entries;
++	unsigned int map_flags;
++};
++
+ struct bpf_map {
+ 	struct bpf_object *obj;
+ 	char *name;
+@@ -568,8 +575,6 @@ struct extern_desc {
+ 	};
+ };
+ 
+-static LIST_HEAD(bpf_objects_list);
+-
+ struct module_btf {
+ 	struct btf *btf;
+ 	char *name;
+@@ -638,12 +643,6 @@ struct bpf_object {
+ 
+ 	/* Information when doing ELF related work. Only valid if efile.elf is not NULL */
+ 	struct elf_state efile;
+-	/*
+-	 * All loaded bpf_object are linked in a list, which is
+-	 * hidden to caller. bpf_objects__<func> handlers deal with
+-	 * all objects.
+-	 */
+-	struct list_head list;
+ 
+ 	struct btf *btf;
+ 	struct btf_ext *btf_ext;
+@@ -1313,7 +1312,6 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 					  size_t obj_buf_sz,
+ 					  const char *obj_name)
+ {
+-	bool strict = (libbpf_mode & LIBBPF_STRICT_NO_OBJECT_LIST);
+ 	struct bpf_object *obj;
+ 	char *end;
+ 
+@@ -1351,9 +1349,6 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 	obj->kern_version = get_kernel_version();
+ 	obj->loaded = false;
+ 
+-	INIT_LIST_HEAD(&obj->list);
+-	if (!strict)
+-		list_add(&obj->list, &bpf_objects_list);
+ 	return obj;
  }
  
--int btf__finalize_data(struct bpf_object *obj, struct btf *btf)
--{
--	return btf_finalize_data(obj, btf);
--}
--
- static int bpf_object__finalize_btf(struct bpf_object *obj)
- {
- 	int err;
-@@ -4363,9 +4358,7 @@ bpf_object__collect_prog_relos(struct bpf_object *obj, Elf64_Shdr *shdr, Elf_Dat
+@@ -1386,10 +1381,7 @@ static int bpf_object__elf_init(struct bpf_object *obj)
+ 	}
  
- static int bpf_map_find_btf_info(struct bpf_object *obj, struct bpf_map *map)
- {
--	struct bpf_map_def *def = &map->def;
--	__u32 key_type_id = 0, value_type_id = 0;
--	int ret;
-+	int id;
- 
- 	if (!obj->btf)
- 		return -ENOENT;
-@@ -4374,31 +4367,22 @@ static int bpf_map_find_btf_info(struct bpf_object *obj, struct bpf_map *map)
- 	 * For struct_ops map, it does not need btf_key_type_id and
- 	 * btf_value_type_id.
- 	 */
--	if (map->sec_idx == obj->efile.btf_maps_shndx ||
--	    bpf_map__is_struct_ops(map))
-+	if (map->sec_idx == obj->efile.btf_maps_shndx || bpf_map__is_struct_ops(map))
- 		return 0;
- 
--	if (!bpf_map__is_internal(map)) {
--		pr_warn("Use of BPF_ANNOTATE_KV_PAIR is deprecated, use BTF-defined maps in .maps section instead\n");
--#pragma GCC diagnostic push
--#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
--		ret = btf__get_map_kv_tids(obj->btf, map->name, def->key_size,
--					   def->value_size, &key_type_id,
--					   &value_type_id);
--#pragma GCC diagnostic pop
--	} else {
+ 	if (obj->efile.obj_buf_sz > 0) {
 -		/*
--		 * LLVM annotates global data differently in BTF, that is,
--		 * only as '.data', '.bss' or '.rodata'.
+-		 * obj_buf should have been validated by
+-		 * bpf_object__open_buffer().
 -		 */
--		ret = btf__find_by_name(obj->btf, map->real_name);
--	}
--	if (ret < 0)
--		return ret;
-+	/*
-+	 * LLVM annotates global data differently in BTF, that is,
-+	 * only as '.data', '.bss' or '.rodata'.
-+	 */
-+	if (!bpf_map__is_internal(map))
-+		return -ENOENT;
-+
-+	id = btf__find_by_name(obj->btf, map->real_name);
-+	if (id < 0)
-+		return id;
++		/* obj_buf should have been validated by bpf_object__open_mem(). */
+ 		elf = elf_memory((char *)obj->efile.obj_buf, obj->efile.obj_buf_sz);
+ 	} else {
+ 		obj->efile.fd = open(obj->path, O_RDONLY | O_CLOEXEC);
+@@ -2305,6 +2297,13 @@ static int build_map_pin_path(struct bpf_map *map, const char *path)
+ 	return bpf_map__set_pin_path(map, buf);
+ }
  
--	map->btf_key_type_id = key_type_id;
--	map->btf_value_type_id = bpf_map__is_internal(map) ?
--				 ret : value_type_id;
-+	map->btf_key_type_id = 0;
-+	map->btf_value_type_id = id;
++/* should match definition in bpf_helpers.h */
++enum libbpf_pin_type {
++	LIBBPF_PIN_NONE,
++	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
++	LIBBPF_PIN_BY_NAME,
++};
++
+ int parse_btf_map_def(const char *map_name, struct btf *btf,
+ 		      const struct btf_type *def_t, bool strict,
+ 		      struct btf_map_def *map_def, struct btf_map_def *inner_def)
+@@ -3983,19 +3982,6 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
  	return 0;
  }
  
+-struct bpf_program *
+-bpf_object__find_program_by_title(const struct bpf_object *obj,
+-				  const char *title)
+-{
+-	struct bpf_program *pos;
+-
+-	bpf_object__for_each_program(pos, obj) {
+-		if (pos->sec_name && !strcmp(pos->sec_name, title))
+-			return pos;
+-	}
+-	return errno = ENOENT, NULL;
+-}
+-
+ static bool prog_is_subprog(const struct bpf_object *obj,
+ 			    const struct bpf_program *prog)
+ {
+@@ -4514,14 +4500,6 @@ int bpf_map__set_max_entries(struct bpf_map *map, __u32 max_entries)
+ 	return 0;
+ }
+ 
+-int bpf_map__resize(struct bpf_map *map, __u32 max_entries)
+-{
+-	if (!map || !max_entries)
+-		return libbpf_err(-EINVAL);
+-
+-	return bpf_map__set_max_entries(map, max_entries);
+-}
+-
+ static int
+ bpf_object__probe_loading(struct bpf_object *obj)
+ {
+@@ -7360,11 +7338,6 @@ static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog
+ 	return libbpf_err(err);
+ }
+ 
+-int bpf_program__load(struct bpf_program *prog, const char *license, __u32 kern_ver)
+-{
+-	return bpf_object_load_prog(prog->obj, prog, license, kern_ver);
+-}
+-
+ static int
+ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ {
+@@ -7416,13 +7389,6 @@ static int bpf_object_init_progs(struct bpf_object *obj, const struct bpf_object
+ 		prog->type = prog->sec_def->prog_type;
+ 		prog->expected_attach_type = prog->sec_def->expected_attach_type;
+ 
+-#pragma GCC diagnostic push
+-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+-		if (prog->sec_def->prog_type == BPF_PROG_TYPE_TRACING ||
+-		    prog->sec_def->prog_type == BPF_PROG_TYPE_EXT)
+-			prog->attach_prog_fd = OPTS_GET(opts, attach_prog_fd, 0);
+-#pragma GCC diagnostic pop
+-
+ 		/* sec_def can have custom callback which should be called
+ 		 * after bpf_program is initialized to adjust its properties
+ 		 */
+@@ -7528,36 +7494,6 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
+ 	return ERR_PTR(err);
+ }
+ 
+-static struct bpf_object *
+-__bpf_object__open_xattr(struct bpf_object_open_attr *attr, int flags)
+-{
+-	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
+-		.relaxed_maps = flags & MAPS_RELAX_COMPAT,
+-	);
+-
+-	/* param validation */
+-	if (!attr->file)
+-		return NULL;
+-
+-	pr_debug("loading %s\n", attr->file);
+-	return bpf_object_open(attr->file, NULL, 0, &opts);
+-}
+-
+-struct bpf_object *bpf_object__open_xattr(struct bpf_object_open_attr *attr)
+-{
+-	return libbpf_ptr(__bpf_object__open_xattr(attr, 0));
+-}
+-
+-struct bpf_object *bpf_object__open(const char *path)
+-{
+-	struct bpf_object_open_attr attr = {
+-		.file		= path,
+-		.prog_type	= BPF_PROG_TYPE_UNSPEC,
+-	};
+-
+-	return libbpf_ptr(__bpf_object__open_xattr(&attr, 0));
+-}
+-
+ struct bpf_object *
+ bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts)
+ {
+@@ -7569,6 +7505,11 @@ bpf_object__open_file(const char *path, const struct bpf_object_open_opts *opts)
+ 	return libbpf_ptr(bpf_object_open(path, NULL, 0, opts));
+ }
+ 
++struct bpf_object *bpf_object__open(const char *path)
++{
++	return bpf_object__open_file(path, NULL);
++}
++
+ struct bpf_object *
+ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+ 		     const struct bpf_object_open_opts *opts)
+@@ -7579,23 +7520,6 @@ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+ 	return libbpf_ptr(bpf_object_open(NULL, obj_buf, obj_buf_sz, opts));
+ }
+ 
+-struct bpf_object *
+-bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
+-			const char *name)
+-{
+-	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
+-		.object_name = name,
+-		/* wrong default, but backwards-compatible */
+-		.relaxed_maps = true,
+-	);
+-
+-	/* returning NULL is wrong, but backwards-compatible */
+-	if (!obj_buf || obj_buf_sz == 0)
+-		return errno = EINVAL, NULL;
+-
+-	return libbpf_ptr(bpf_object_open(NULL, obj_buf, obj_buf_sz, &opts));
+-}
+-
+ static int bpf_object_unload(struct bpf_object *obj)
+ {
+ 	size_t i;
+@@ -8028,11 +7952,6 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
+ 	return libbpf_err(err);
+ }
+ 
+-int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
+-{
+-	return bpf_object_load(attr->obj, attr->log_level, attr->target_btf_path);
+-}
+-
+ int bpf_object__load(struct bpf_object *obj)
+ {
+ 	return bpf_object_load(obj, 0, NULL);
+@@ -8663,33 +8582,9 @@ void bpf_object__close(struct bpf_object *obj)
+ 	}
+ 	zfree(&obj->programs);
+ 
+-	list_del(&obj->list);
+ 	free(obj);
+ }
+ 
+-struct bpf_object *
+-bpf_object__next(struct bpf_object *prev)
+-{
+-	struct bpf_object *next;
+-	bool strict = (libbpf_mode & LIBBPF_STRICT_NO_OBJECT_LIST);
+-
+-	if (strict)
+-		return NULL;
+-
+-	if (!prev)
+-		next = list_first_entry(&bpf_objects_list,
+-					struct bpf_object,
+-					list);
+-	else
+-		next = list_next_entry(prev, list);
+-
+-	/* Empty list is noticed here so don't need checking on entry. */
+-	if (&next->list == &bpf_objects_list)
+-		return NULL;
+-
+-	return next;
+-}
+-
+ const char *bpf_object__name(const struct bpf_object *obj)
+ {
+ 	return obj ? obj->name : libbpf_err_ptr(-EINVAL);
+@@ -8778,12 +8673,6 @@ __bpf_program__iter(const struct bpf_program *p, const struct bpf_object *obj,
+ 	return &obj->programs[idx];
+ }
+ 
+-struct bpf_program *
+-bpf_program__next(struct bpf_program *prev, const struct bpf_object *obj)
+-{
+-	return bpf_object__next_program(obj, prev);
+-}
+-
+ struct bpf_program *
+ bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
+ {
+@@ -8796,12 +8685,6 @@ bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prev)
+ 	return prog;
+ }
+ 
+-struct bpf_program *
+-bpf_program__prev(struct bpf_program *next, const struct bpf_object *obj)
+-{
+-	return bpf_object__prev_program(obj, next);
+-}
+-
+ struct bpf_program *
+ bpf_object__prev_program(const struct bpf_object *obj, struct bpf_program *next)
+ {
+@@ -8845,22 +8728,6 @@ const char *bpf_program__section_name(const struct bpf_program *prog)
+ 	return prog->sec_name;
+ }
+ 
+-const char *bpf_program__title(const struct bpf_program *prog, bool needs_copy)
+-{
+-	const char *title;
+-
+-	title = prog->sec_name;
+-	if (needs_copy) {
+-		title = strdup(title);
+-		if (!title) {
+-			pr_warn("failed to strdup program title\n");
+-			return libbpf_err_ptr(-ENOMEM);
+-		}
+-	}
+-
+-	return title;
+-}
+-
+ bool bpf_program__autoload(const struct bpf_program *prog)
+ {
+ 	return prog->autoload;
+@@ -8882,11 +8749,6 @@ int bpf_program__fd(const struct bpf_program *prog)
+ 	return bpf_program_nth_fd(prog, 0);
+ }
+ 
+-size_t bpf_program__size(const struct bpf_program *prog)
+-{
+-	return prog->insns_cnt * BPF_INSN_SZ;
+-}
+-
+ const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
+ {
+ 	return prog->insns;
+@@ -8988,39 +8850,6 @@ int bpf_program__set_type(struct bpf_program *prog, enum bpf_prog_type type)
+ 	return 0;
+ }
+ 
+-static bool bpf_program__is_type(const struct bpf_program *prog,
+-				 enum bpf_prog_type type)
+-{
+-	return prog ? (prog->type == type) : false;
+-}
+-
+-#define BPF_PROG_TYPE_FNS(NAME, TYPE)				\
+-int bpf_program__set_##NAME(struct bpf_program *prog)		\
+-{								\
+-	if (!prog)						\
+-		return libbpf_err(-EINVAL);			\
+-	return bpf_program__set_type(prog, TYPE);			\
+-}								\
+-								\
+-bool bpf_program__is_##NAME(const struct bpf_program *prog)	\
+-{								\
+-	return bpf_program__is_type(prog, TYPE);		\
+-}								\
+-
+-BPF_PROG_TYPE_FNS(socket_filter, BPF_PROG_TYPE_SOCKET_FILTER);
+-BPF_PROG_TYPE_FNS(lsm, BPF_PROG_TYPE_LSM);
+-BPF_PROG_TYPE_FNS(kprobe, BPF_PROG_TYPE_KPROBE);
+-BPF_PROG_TYPE_FNS(sched_cls, BPF_PROG_TYPE_SCHED_CLS);
+-BPF_PROG_TYPE_FNS(sched_act, BPF_PROG_TYPE_SCHED_ACT);
+-BPF_PROG_TYPE_FNS(tracepoint, BPF_PROG_TYPE_TRACEPOINT);
+-BPF_PROG_TYPE_FNS(raw_tracepoint, BPF_PROG_TYPE_RAW_TRACEPOINT);
+-BPF_PROG_TYPE_FNS(xdp, BPF_PROG_TYPE_XDP);
+-BPF_PROG_TYPE_FNS(perf_event, BPF_PROG_TYPE_PERF_EVENT);
+-BPF_PROG_TYPE_FNS(tracing, BPF_PROG_TYPE_TRACING);
+-BPF_PROG_TYPE_FNS(struct_ops, BPF_PROG_TYPE_STRUCT_OPS);
+-BPF_PROG_TYPE_FNS(extension, BPF_PROG_TYPE_EXT);
+-BPF_PROG_TYPE_FNS(sk_lookup, BPF_PROG_TYPE_SK_LOOKUP);
+-
+ __alias(bpf_program__expected_attach_type)
+ enum bpf_attach_type bpf_program__get_expected_attach_type(const struct bpf_program *prog);
+ 
+@@ -9792,11 +9621,6 @@ int bpf_map__fd(const struct bpf_map *map)
+ 	return map ? map->fd : libbpf_err(-EINVAL);
+ }
+ 
+-const struct bpf_map_def *bpf_map__def(const struct bpf_map *map)
+-{
+-	return map ? &map->def : libbpf_err_ptr(-EINVAL);
+-}
+-
+ static bool map_uses_real_name(const struct bpf_map *map)
+ {
+ 	/* Since libbpf started to support custom .data.* and .rodata.* maps,
+@@ -9951,11 +9775,6 @@ const void *bpf_map__initial_value(struct bpf_map *map, size_t *psize)
+ 	return map->mmaped;
+ }
+ 
+-bool bpf_map__is_offload_neutral(const struct bpf_map *map)
+-{
+-	return map->def.type == BPF_MAP_TYPE_PERF_EVENT_ARRAY;
+-}
+-
+ bool bpf_map__is_internal(const struct bpf_map *map)
+ {
+ 	return map->libbpf_type != LIBBPF_MAP_UNSPEC;
+@@ -10016,12 +9835,6 @@ __bpf_map__iter(const struct bpf_map *m, const struct bpf_object *obj, int i)
+ 	return &obj->maps[idx];
+ }
+ 
+-struct bpf_map *
+-bpf_map__next(const struct bpf_map *prev, const struct bpf_object *obj)
+-{
+-	return bpf_object__next_map(obj, prev);
+-}
+-
+ struct bpf_map *
+ bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
+ {
+@@ -10031,12 +9844,6 @@ bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *prev)
+ 	return __bpf_map__iter(prev, obj, 1);
+ }
+ 
+-struct bpf_map *
+-bpf_map__prev(const struct bpf_map *next, const struct bpf_object *obj)
+-{
+-	return bpf_object__prev_map(obj, next);
+-}
+-
+ struct bpf_map *
+ bpf_object__prev_map(const struct bpf_object *obj, const struct bpf_map *next)
+ {
+@@ -10082,12 +9889,6 @@ bpf_object__find_map_fd_by_name(const struct bpf_object *obj, const char *name)
+ 	return bpf_map__fd(bpf_object__find_map_by_name(obj, name));
+ }
+ 
+-struct bpf_map *
+-bpf_object__find_map_by_offset(struct bpf_object *obj, size_t offset)
+-{
+-	return libbpf_err_ptr(-ENOTSUP);
+-}
+-
+ static int validate_map_op(const struct bpf_map *map, size_t key_sz,
+ 			   size_t value_sz, bool check_value_sz)
+ {
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index e6357ea7bf41..9c2279b7b6ed 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -101,11 +101,6 @@ LIBBPF_API libbpf_print_fn_t libbpf_set_print(libbpf_print_fn_t fn);
+ /* Hide internal to user */
+ struct bpf_object;
+ 
+-struct bpf_object_open_attr {
+-	const char *file;
+-	enum bpf_prog_type prog_type;
+-};
+-
+ struct bpf_object_open_opts {
+ 	/* size of this struct, for forward/backward compatibility */
+ 	size_t sz;
+@@ -118,21 +113,12 @@ struct bpf_object_open_opts {
+ 	const char *object_name;
+ 	/* parse map definitions non-strictly, allowing extra attributes/data */
+ 	bool relaxed_maps;
+-	/* DEPRECATED: handle CO-RE relocations non-strictly, allowing failures.
+-	 * Value is ignored. Relocations always are processed non-strictly.
+-	 * Non-relocatable instructions are replaced with invalid ones to
+-	 * prevent accidental errors.
+-	 * */
+-	LIBBPF_DEPRECATED_SINCE(0, 6, "field has no effect")
+-	bool relaxed_core_relocs;
+ 	/* maps that set the 'pinning' attribute in their definition will have
+ 	 * their pin_path attribute set to a file in this directory, and be
+ 	 * auto-pinned to that path on load; defaults to "/sys/fs/bpf".
+ 	 */
+ 	const char *pin_root_path;
+-
+-	LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_program__set_attach_target() on each individual bpf_program")
+-	__u32 attach_prog_fd;
++	long :0;
+ 	/* Additional kernel config content that augments and overrides
+ 	 * system Kconfig for CONFIG_xxx externs.
+ 	 */
+@@ -215,20 +201,10 @@ LIBBPF_API struct bpf_object *
+ bpf_object__open_mem(const void *obj_buf, size_t obj_buf_sz,
+ 		     const struct bpf_object_open_opts *opts);
+ 
+-/* deprecated bpf_object__open variants */
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_object__open_mem() instead")
+-LIBBPF_API struct bpf_object *
+-bpf_object__open_buffer(const void *obj_buf, size_t obj_buf_sz,
+-			const char *name);
+-LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_object__open_file() instead")
+-LIBBPF_API struct bpf_object *
+-bpf_object__open_xattr(struct bpf_object_open_attr *attr);
++/* Load/unload object into/from kernel */
++LIBBPF_API int bpf_object__load(struct bpf_object *obj);
+ 
+-enum libbpf_pin_type {
+-	LIBBPF_PIN_NONE,
+-	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
+-	LIBBPF_PIN_BY_NAME,
+-};
++LIBBPF_API void bpf_object__close(struct bpf_object *object);
+ 
+ /* pin_maps and unpin_maps can both be called with a NULL path, in which case
+  * they will use the pin_path attribute of each map (and ignore all maps that
+@@ -242,20 +218,6 @@ LIBBPF_API int bpf_object__pin_programs(struct bpf_object *obj,
+ LIBBPF_API int bpf_object__unpin_programs(struct bpf_object *obj,
+ 					  const char *path);
+ LIBBPF_API int bpf_object__pin(struct bpf_object *object, const char *path);
+-LIBBPF_API void bpf_object__close(struct bpf_object *object);
+-
+-struct bpf_object_load_attr {
+-	struct bpf_object *obj;
+-	int log_level;
+-	const char *target_btf_path;
+-};
+-
+-/* Load/unload object into/from kernel */
+-LIBBPF_API int bpf_object__load(struct bpf_object *obj);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_object__load() instead")
+-LIBBPF_API int bpf_object__load_xattr(struct bpf_object_load_attr *attr);
+-LIBBPF_DEPRECATED_SINCE(0, 6, "bpf_object__unload() is deprecated, use bpf_object__close() instead")
+-LIBBPF_API int bpf_object__unload(struct bpf_object *obj);
+ 
+ LIBBPF_API const char *bpf_object__name(const struct bpf_object *obj);
+ LIBBPF_API unsigned int bpf_object__kversion(const struct bpf_object *obj);
+@@ -265,22 +227,10 @@ struct btf;
+ LIBBPF_API struct btf *bpf_object__btf(const struct bpf_object *obj);
+ LIBBPF_API int bpf_object__btf_fd(const struct bpf_object *obj);
+ 
+-LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_object__find_program_by_name() instead")
+-LIBBPF_API struct bpf_program *
+-bpf_object__find_program_by_title(const struct bpf_object *obj,
+-				  const char *title);
+ LIBBPF_API struct bpf_program *
+ bpf_object__find_program_by_name(const struct bpf_object *obj,
+ 				 const char *name);
+ 
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "track bpf_objects in application code instead")
+-struct bpf_object *bpf_object__next(struct bpf_object *prev);
+-#define bpf_object__for_each_safe(pos, tmp)			\
+-	for ((pos) = bpf_object__next(NULL),		\
+-		(tmp) = bpf_object__next(pos);		\
+-	     (pos) != NULL;				\
+-	     (pos) = (tmp), (tmp) = bpf_object__next(tmp))
+-
+ typedef void (*bpf_object_clear_priv_t)(struct bpf_object *, void *);
+ LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
+ LIBBPF_API int bpf_object__set_priv(struct bpf_object *obj, void *priv,
+@@ -298,9 +248,7 @@ LIBBPF_API int libbpf_find_vmlinux_btf_id(const char *name,
+ 
+ /* Accessors of bpf_program */
+ struct bpf_program;
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_object__next_program() instead")
+-struct bpf_program *bpf_program__next(struct bpf_program *prog,
+-				      const struct bpf_object *obj);
++
+ LIBBPF_API struct bpf_program *
+ bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prog);
+ 
+@@ -309,9 +257,6 @@ bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prog)
+ 	     (pos) != NULL;					\
+ 	     (pos) = bpf_object__next_program((obj), (pos)))
+ 
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_object__prev_program() instead")
+-struct bpf_program *bpf_program__prev(struct bpf_program *prog,
+-				      const struct bpf_object *obj);
+ LIBBPF_API struct bpf_program *
+ bpf_object__prev_program(const struct bpf_object *obj, struct bpf_program *prog);
+ 
+@@ -327,15 +272,9 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
+ 
+ LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog);
+ LIBBPF_API const char *bpf_program__section_name(const struct bpf_program *prog);
+-LIBBPF_API LIBBPF_DEPRECATED("BPF program title is confusing term; please use bpf_program__section_name() instead")
+-const char *bpf_program__title(const struct bpf_program *prog, bool needs_copy);
+ LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
+ 
+-/* returns program size in bytes */
+-LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_program__insn_cnt() instead")
+-LIBBPF_API size_t bpf_program__size(const struct bpf_program *prog);
+-
+ struct bpf_insn;
+ 
+ /**
+@@ -388,8 +327,6 @@ LIBBPF_API int bpf_program__set_insns(struct bpf_program *prog,
+  */
+ LIBBPF_API size_t bpf_program__insn_cnt(const struct bpf_program *prog);
+ 
+-LIBBPF_DEPRECATED_SINCE(0, 6, "use bpf_object__load() instead")
+-LIBBPF_API int bpf_program__load(struct bpf_program *prog, const char *license, __u32 kern_version);
+ LIBBPF_API int bpf_program__fd(const struct bpf_program *prog);
+ LIBBPF_DEPRECATED_SINCE(0, 7, "multi-instance bpf_program support is deprecated")
+ LIBBPF_API int bpf_program__pin_instance(struct bpf_program *prog,
+@@ -761,36 +698,6 @@ LIBBPF_API int bpf_program__set_prep(struct bpf_program *prog, int nr_instance,
+ LIBBPF_DEPRECATED_SINCE(0, 7, "multi-instance bpf_program support is deprecated")
+ LIBBPF_API int bpf_program__nth_fd(const struct bpf_program *prog, int n);
+ 
+-/*
+- * Adjust type of BPF program. Default is kprobe.
+- */
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_socket_filter(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_tracepoint(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_raw_tracepoint(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_kprobe(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_lsm(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_sched_cls(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_sched_act(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_xdp(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_perf_event(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_tracing(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_struct_ops(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_extension(struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__set_type() instead")
+-LIBBPF_API int bpf_program__set_sk_lookup(struct bpf_program *prog);
+-
+ LIBBPF_API enum bpf_prog_type bpf_program__type(const struct bpf_program *prog);
+ 
+ /**
+@@ -853,47 +760,6 @@ LIBBPF_API int
+ bpf_program__set_attach_target(struct bpf_program *prog, int attach_prog_fd,
+ 			       const char *attach_func_name);
+ 
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_socket_filter(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_tracepoint(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_raw_tracepoint(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_kprobe(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_lsm(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_sched_cls(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_sched_act(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_xdp(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_perf_event(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_tracing(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_struct_ops(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_extension(const struct bpf_program *prog);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_program__type() instead")
+-LIBBPF_API bool bpf_program__is_sk_lookup(const struct bpf_program *prog);
+-
+-/*
+- * No need for __attribute__((packed)), all members of 'bpf_map_def'
+- * are all aligned.  In addition, using __attribute__((packed))
+- * would trigger a -Wpacked warning message, and lead to an error
+- * if -Werror is set.
+- */
+-struct bpf_map_def {
+-	unsigned int type;
+-	unsigned int key_size;
+-	unsigned int value_size;
+-	unsigned int max_entries;
+-	unsigned int map_flags;
+-};
+-
+ /**
+  * @brief **bpf_object__find_map_by_name()** returns BPF map of
+  * the given name, if it exists within the passed BPF object
+@@ -908,16 +774,6 @@ bpf_object__find_map_by_name(const struct bpf_object *obj, const char *name);
+ LIBBPF_API int
+ bpf_object__find_map_fd_by_name(const struct bpf_object *obj, const char *name);
+ 
+-/*
+- * Get bpf_map through the offset of corresponding struct bpf_map_def
+- * in the BPF object file.
+- */
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_object__find_map_by_name() instead")
+-struct bpf_map *
+-bpf_object__find_map_by_offset(struct bpf_object *obj, size_t offset);
+-
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_object__next_map() instead")
+-struct bpf_map *bpf_map__next(const struct bpf_map *map, const struct bpf_object *obj);
+ LIBBPF_API struct bpf_map *
+ bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *map);
+ 
+@@ -927,8 +783,6 @@ bpf_object__next_map(const struct bpf_object *obj, const struct bpf_map *map);
+ 	     (pos) = bpf_object__next_map((obj), (pos)))
+ #define bpf_map__for_each bpf_object__for_each_map
+ 
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_object__prev_map() instead")
+-struct bpf_map *bpf_map__prev(const struct bpf_map *map, const struct bpf_object *obj);
+ LIBBPF_API struct bpf_map *
+ bpf_object__prev_map(const struct bpf_object *obj, const struct bpf_map *map);
+ 
+@@ -962,9 +816,6 @@ LIBBPF_API bool bpf_map__autocreate(const struct bpf_map *map);
+  */
+ LIBBPF_API int bpf_map__fd(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__reuse_fd(struct bpf_map *map, int fd);
+-/* get map definition */
+-LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 8, "use appropriate getters or setters instead")
+-const struct bpf_map_def *bpf_map__def(const struct bpf_map *map);
+ /* get map name */
+ LIBBPF_API const char *bpf_map__name(const struct bpf_map *map);
+ /* get/set map type */
+@@ -973,8 +824,6 @@ LIBBPF_API int bpf_map__set_type(struct bpf_map *map, enum bpf_map_type type);
+ /* get/set map size (max_entries) */
+ LIBBPF_API __u32 bpf_map__max_entries(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_max_entries(struct bpf_map *map, __u32 max_entries);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_map__set_max_entries() instead")
+-LIBBPF_API int bpf_map__resize(struct bpf_map *map, __u32 max_entries);
+ /* get/set map flags */
+ LIBBPF_API __u32 bpf_map__map_flags(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_map_flags(struct bpf_map *map, __u32 flags);
+@@ -1006,8 +855,6 @@ LIBBPF_API void *bpf_map__priv(const struct bpf_map *map);
+ LIBBPF_API int bpf_map__set_initial_value(struct bpf_map *map,
+ 					  const void *data, size_t size);
+ LIBBPF_API const void *bpf_map__initial_value(struct bpf_map *map, size_t *psize);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_map__type() instead")
+-LIBBPF_API bool bpf_map__is_offload_neutral(const struct bpf_map *map);
+ 
+ /**
+  * @brief **bpf_map__is_internal()** tells the caller whether or not the
 diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 38cc2dd4bff3..92df305795a2 100644
+index 1bb5d076b17e..f5ea2685b014 100644
 --- a/tools/lib/bpf/libbpf.map
 +++ b/tools/lib/bpf/libbpf.map
-@@ -95,7 +95,6 @@ LIBBPF_0.0.1 {
- 		btf__fd;
- 		btf__find_by_name;
- 		btf__free;
--		btf__get_from_id;
- 		btf__name_by_offset;
- 		btf__new;
- 		btf__resolve_size;
-@@ -116,18 +115,10 @@ LIBBPF_0.0.2 {
+@@ -3,13 +3,9 @@ LIBBPF_0.0.1 {
+ 		bpf_btf_get_fd_by_id;
+ 		bpf_map__btf_key_type_id;
+ 		bpf_map__btf_value_type_id;
+-		bpf_map__def;
+ 		bpf_map__fd;
+-		bpf_map__is_offload_neutral;
+ 		bpf_map__name;
+-		bpf_map__next;
+ 		bpf_map__pin;
+-		bpf_map__prev;
+ 		bpf_map__priv;
+ 		bpf_map__reuse_fd;
+ 		bpf_map__set_ifindex;
+@@ -29,21 +25,15 @@ LIBBPF_0.0.1 {
+ 		bpf_object__btf_fd;
+ 		bpf_object__close;
+ 		bpf_object__find_map_by_name;
+-		bpf_object__find_map_by_offset;
+-		bpf_object__find_program_by_title;
+ 		bpf_object__kversion;
+ 		bpf_object__load;
+ 		bpf_object__name;
+-		bpf_object__next;
+ 		bpf_object__open;
+-		bpf_object__open_buffer;
+-		bpf_object__open_xattr;
+ 		bpf_object__pin;
+ 		bpf_object__pin_maps;
+ 		bpf_object__pin_programs;
+ 		bpf_object__priv;
+ 		bpf_object__set_priv;
+-		bpf_object__unload;
+ 		bpf_object__unpin_maps;
+ 		bpf_object__unpin_programs;
+ 		bpf_prog_attach;
+@@ -53,35 +43,15 @@ LIBBPF_0.0.1 {
+ 		bpf_prog_get_next_id;
+ 		bpf_prog_query;
+ 		bpf_program__fd;
+-		bpf_program__is_kprobe;
+-		bpf_program__is_perf_event;
+-		bpf_program__is_raw_tracepoint;
+-		bpf_program__is_sched_act;
+-		bpf_program__is_sched_cls;
+-		bpf_program__is_socket_filter;
+-		bpf_program__is_tracepoint;
+-		bpf_program__is_xdp;
+-		bpf_program__load;
+-		bpf_program__next;
+ 		bpf_program__nth_fd;
+ 		bpf_program__pin;
+ 		bpf_program__pin_instance;
+-		bpf_program__prev;
+ 		bpf_program__priv;
+ 		bpf_program__set_expected_attach_type;
+ 		bpf_program__set_ifindex;
+-		bpf_program__set_kprobe;
+-		bpf_program__set_perf_event;
+ 		bpf_program__set_prep;
+ 		bpf_program__set_priv;
+-		bpf_program__set_raw_tracepoint;
+-		bpf_program__set_sched_act;
+-		bpf_program__set_sched_cls;
+-		bpf_program__set_socket_filter;
+-		bpf_program__set_tracepoint;
+ 		bpf_program__set_type;
+-		bpf_program__set_xdp;
+-		bpf_program__title;
+ 		bpf_program__unload;
+ 		bpf_program__unpin;
+ 		bpf_program__unpin_instance;
+@@ -110,7 +80,6 @@ LIBBPF_0.0.1 {
+ 
+ LIBBPF_0.0.2 {
+ 	global:
+-		bpf_map__resize;
  		bpf_map_lookup_elem_flags;
  		bpf_object__btf;
  		bpf_object__find_map_fd_by_name;
--		btf__dedup;
--		btf__get_map_kv_tids;
--		btf__get_nr_types;
- 		btf__get_raw_data;
--		btf__load;
- 		btf_ext__free;
--		btf_ext__func_info_rec_size;
- 		btf_ext__get_raw_data;
--		btf_ext__line_info_rec_size;
- 		btf_ext__new;
--		btf_ext__reloc_func_info;
--		btf_ext__reloc_line_info;
- 		bpf_program__get_prog_info_linear;
- 		bpf_program__bpil_addr_to_offs;
- 		bpf_program__bpil_offs_to_addr;
-@@ -137,7 +128,6 @@ LIBBPF_0.0.3 {
- 	global:
- 		bpf_map__is_internal;
- 		bpf_map_freeze;
--		btf__finalize_data;
- } LIBBPF_0.0.2;
- 
+@@ -129,7 +98,6 @@ LIBBPF_0.0.3 {
  LIBBPF_0.0.4 {
-@@ -151,7 +141,6 @@ LIBBPF_0.0.4 {
- 		bpf_program__attach_uprobe;
- 		btf_dump__dump_type;
- 		btf_dump__free;
--		btf_dump__new;
- 		btf__parse_elf;
- 		libbpf_num_possible_cpus;
- 		perf_buffer__free;
-@@ -373,11 +362,9 @@ LIBBPF_0.6.0 {
- 		btf__add_decl_tag;
- 		btf__add_type_tag;
- 		btf__dedup;
--		btf__dedup_deprecated;
- 		btf__raw_data;
- 		btf__type_cnt;
- 		btf_dump__new;
--		btf_dump__new_deprecated;
- 		libbpf_major_version;
- 		libbpf_minor_version;
- 		libbpf_version_string;
+ 	global:
+ 		bpf_link__destroy;
+-		bpf_object__load_xattr;
+ 		bpf_program__attach_kprobe;
+ 		bpf_program__attach_perf_event;
+ 		bpf_program__attach_raw_tracepoint;
+@@ -158,9 +126,6 @@ LIBBPF_0.0.6 {
+ 		bpf_program__attach_trace;
+ 		bpf_program__get_expected_attach_type;
+ 		bpf_program__get_type;
+-		bpf_program__is_tracing;
+-		bpf_program__set_tracing;
+-		bpf_program__size;
+ 		btf__find_by_name_kind;
+ 		libbpf_find_vmlinux_btf_id;
+ } LIBBPF_0.0.5;
+@@ -182,10 +147,6 @@ LIBBPF_0.0.7 {
+ 		bpf_object__open_skeleton;
+ 		bpf_program__attach;
+ 		bpf_program__name;
+-		bpf_program__is_extension;
+-		bpf_program__is_struct_ops;
+-		bpf_program__set_extension;
+-		bpf_program__set_struct_ops;
+ 		btf__align_of;
+ 		libbpf_find_kernel_btf;
+ } LIBBPF_0.0.6;
+@@ -204,9 +165,7 @@ LIBBPF_0.0.8 {
+ 		bpf_prog_attach_opts;
+ 		bpf_program__attach_cgroup;
+ 		bpf_program__attach_lsm;
+-		bpf_program__is_lsm;
+ 		bpf_program__set_attach_target;
+-		bpf_program__set_lsm;
+ } LIBBPF_0.0.7;
+ 
+ LIBBPF_0.0.9 {
+@@ -244,9 +203,7 @@ LIBBPF_0.1.0 {
+ 		bpf_map__value_size;
+ 		bpf_program__attach_xdp;
+ 		bpf_program__autoload;
+-		bpf_program__is_sk_lookup;
+ 		bpf_program__set_autoload;
+-		bpf_program__set_sk_lookup;
+ 		btf__parse;
+ 		btf__parse_raw;
+ 		btf__pointer_size;
 -- 
 2.30.2
 
