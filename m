@@ -2,75 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1315ACCA47B
-	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 02:00:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 977BFC433EF
+	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 02:00:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239209AbiFCCAA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 2 Jun 2022 22:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
+        id S238728AbiFCCAM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 2 Jun 2022 22:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238728AbiFCCAA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 2 Jun 2022 22:00:00 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C08639698
-        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 18:59:59 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o6-20020a17090a0a0600b001e2c6566046so11028832pjo.0
-        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 18:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MqFSQ7JwrMu9gS/4dQgsYHyf/4qxkz4eNPGGpzXZITY=;
-        b=i/Kgrw1Rj0fKj9Pg49Qkv4AU+DYwf8ZXFE+VvjF/yTVYP0bJwkmXluKpL9FHNEcAtN
-         /kNixOh2GYdhptkc1OECX4CmsKwbsQU5G/ct4qyohNSdG5+PztJxcC0Rs8iOBneGOCEX
-         onHaj6tRl/FkSHAQ3ihoMPEygoOjkeJNwac0qblicqTQ6t7IzYqUAYOxq3Kekv+4jJIh
-         etgMO08bb0MdkUXLgq25tAArgu7AVshD9PACc/OLQvPEhdbh5sZgXsqNp1/PcqoBMBLq
-         3SdvKRnWHHOGHw0IsdpvPXVDxIxKUiuLPHDvDcmSDtpMNpH3l69+5mjQEDUFUg+lEehF
-         0rAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MqFSQ7JwrMu9gS/4dQgsYHyf/4qxkz4eNPGGpzXZITY=;
-        b=umEcygnnwNmBjRhg5rziwLxKGscTBgwGJPJTsAfOPY8Pd+oG1AuR9Q7U95YZrZyZsb
-         gdlmlAZ8Ty6MLp4PMx3VjzGCDKUsvDirSbueEtU16ttQuSiom/gfjvb3/A1g+1MH5qz9
-         WB/3L986csQzP+MXTan2cqs3VvK0oO23CsR0xnYAdGbXoTMlZvp3hsoew1jUNQQkjp1U
-         kkeT8JmUVS41H8DABZUnVlH5kWWHaWeGB3/AaIZxDvW7vVK9LO0yIQ83jGP3Ga4ZY9Bv
-         tcF7w7brahG0QZ4IIe737nSNOSTTflMrsovbv55+xryjO9lu6Y1nlYE1N+mjZzFUvCB+
-         y99w==
-X-Gm-Message-State: AOAM533F+pctG+v2U1fRdUE8N6rDb9womhLcgKMkzZn47aGTXw/sW6Zn
-        1CHigtvXK79GbsGCYuuDePUKXPBtqu8/Oh1hTJpr1eiAj3g=
-X-Google-Smtp-Source: ABdhPJyc3j6ZtNOJqT3kHLnbUcM2qz/0qtcGJgjhUrAJw71cTq3wpbWhIvr/BXKF8PZIjKNQI8wFZ50zKJVkDxM9A8w=
-X-Received: by 2002:a17:90b:1a86:b0:1e8:2b80:5e07 with SMTP id
- ng6-20020a17090b1a8600b001e82b805e07mr1844193pjb.31.1654221598859; Thu, 02
- Jun 2022 18:59:58 -0700 (PDT)
+        with ESMTP id S238629AbiFCCAL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 2 Jun 2022 22:00:11 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92A6396A1
+        for <bpf@vger.kernel.org>; Thu,  2 Jun 2022 19:00:10 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2530qxb2022195
+        for <bpf@vger.kernel.org>; Thu, 2 Jun 2022 19:00:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=sp3U1HSD/aJThxsm3jYAyPeKxudSj1m1ADsCx0XKWLs=;
+ b=Ju+2FxlKzjiootyWnDo6qsGVmb4RWkky0F+7a76/Q/kxKQaQqdpL3g6R10BzecANhXIy
+ CMVVM4oH007O7OAPmE+MQVFaLkPEfkn/YQwsc3EA1V9uPRVnziY0FLcNmSKWtqbW69hy
+ 09xIqfmcFh7Vji/Bb4bTESa018OGtoXzSIA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge5vcvs4x-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 02 Jun 2022 19:00:10 -0700
+Received: from twshared17349.03.ash7.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 2 Jun 2022 19:00:09 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 3EC6EB299FB4; Thu,  2 Jun 2022 18:59:58 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next v4 12/18] selftests/bpf: Fix selftests failure
+Date:   Thu, 2 Jun 2022 18:59:58 -0700
+Message-ID: <20220603015958.1192140-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220603015855.1187538-1-yhs@fb.com>
+References: <20220603015855.1187538-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <20220601190218.2494963-1-sdf@google.com> <20220601190218.2494963-12-sdf@google.com>
- <20220603015225.lc4q3vkmsfnkgdq2@kafai-mbp>
-In-Reply-To: <20220603015225.lc4q3vkmsfnkgdq2@kafai-mbp>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Thu, 2 Jun 2022 18:59:47 -0700
-Message-ID: <CAKH8qBs6Wz+vukFomy7LEyohzM6mumsrgRRcyfy-0J_8drJ3ZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 11/11] selftests/bpf: verify lsm_cgroup struct
- sock access
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: vxnGWRrMir9ggL4QRtgHevMxPUM9gdaO
+X-Proofpoint-ORIG-GUID: vxnGWRrMir9ggL4QRtgHevMxPUM9gdaO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-03_01,2022-06-02_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 6:52 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Wed, Jun 01, 2022 at 12:02:18PM -0700, Stanislav Fomichev wrote:
-> > sk_priority & sk_mark are writable, the rest is readonly.
-> >
-> > One interesting thing here is that the verifier doesn't
-> > really force me to add NULL checks anywhere :-/
-> Are you aware if it is possible to get a NULL sk from some of the
-> bpf_lsm hooks ?
+The kflag is supported now for BTF_KIND_ENUM.
+So remove the test which tests verifier failure
+due to existence of kflag.
 
-No, I don't think it's relevant for lsm hooks. I'm more concerned
-about fentry/fexit which supposedly should go through the same
-verifier path and can be attached everywhere?
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/testing/selftests/bpf/prog_tests/btf.c | 20 --------------------
+ 1 file changed, 20 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing=
+/selftests/bpf/prog_tests/btf.c
+index ba5bde53d418..8e068e06b3e8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -2896,26 +2896,6 @@ static struct btf_raw_test raw_tests[] =3D {
+ 	.err_str =3D "Invalid btf_info kind_flag",
+ },
+=20
+-{
+-	.descr =3D "invalid enum kind_flag",
+-	.raw_types =3D {
+-		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),		/* [1] */
+-		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ENUM, 1, 1), 4),	/* [2] */
+-		BTF_ENUM_ENC(NAME_TBD, 0),
+-		BTF_END_RAW,
+-	},
+-	BTF_STR_SEC("\0A"),
+-	.map_type =3D BPF_MAP_TYPE_ARRAY,
+-	.map_name =3D "enum_type_check_btf",
+-	.key_size =3D sizeof(int),
+-	.value_size =3D sizeof(int),
+-	.key_type_id =3D 1,
+-	.value_type_id =3D 1,
+-	.max_entries =3D 4,
+-	.btf_load_err =3D true,
+-	.err_str =3D "Invalid btf_info kind_flag",
+-},
+-
+ {
+ 	.descr =3D "valid fwd kind_flag",
+ 	.raw_types =3D {
+--=20
+2.30.2
+
