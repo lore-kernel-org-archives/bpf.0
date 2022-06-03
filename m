@@ -2,37 +2,37 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B4FEC43334
-	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:04:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90925C433EF
+	for <bpf@archiver.kernel.org>; Fri,  3 Jun 2022 19:04:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348725AbiFCTD7 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S1348732AbiFCTEB convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 3 Jun 2022 15:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348724AbiFCTD6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 3 Jun 2022 15:03:58 -0400
+        with ESMTP id S1348749AbiFCTEA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 3 Jun 2022 15:04:00 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C6A31201
-        for <bpf@vger.kernel.org>; Fri,  3 Jun 2022 12:03:56 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253Gn8TP014044
-        for <bpf@vger.kernel.org>; Fri, 3 Jun 2022 12:03:56 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3geu05hxkj-2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5A43120E
+        for <bpf@vger.kernel.org>; Fri,  3 Jun 2022 12:03:59 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GmRs4021921
+        for <bpf@vger.kernel.org>; Fri, 3 Jun 2022 12:03:58 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gewq996un-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:56 -0700
-Received: from twshared16308.14.prn3.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 03 Jun 2022 12:03:58 -0700
+Received: from twshared3657.05.prn5.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 3 Jun 2022 12:03:55 -0700
+ 15.1.2375.28; Fri, 3 Jun 2022 12:03:57 -0700
 Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 34B391AC9C41E; Fri,  3 Jun 2022 12:03:49 -0700 (PDT)
+        id 4B5F71AC9C42D; Fri,  3 Jun 2022 12:03:53 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 09/15] libbpf: remove multi-instance and custom private data APIs
-Date:   Fri, 3 Jun 2022 12:01:49 -0700
-Message-ID: <20220603190155.3924899-10-andrii@kernel.org>
+Subject: [PATCH bpf-next 11/15] libbpf: remove internal multi-instance prog support
+Date:   Fri, 3 Jun 2022 12:01:51 -0700
+Message-ID: <20220603190155.3924899-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220603190155.3924899-1-andrii@kernel.org>
 References: <20220603190155.3924899-1-andrii@kernel.org>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: JVdmloqhxzWxBOcxdVw_7JIFLt_5HGme
-X-Proofpoint-ORIG-GUID: JVdmloqhxzWxBOcxdVw_7JIFLt_5HGme
+X-Proofpoint-ORIG-GUID: 5BnicJFiQco9E4gqLSF_exw9XXyiyuUv
+X-Proofpoint-GUID: 5BnicJFiQco9E4gqLSF_exw9XXyiyuUv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-03_06,2022-06-03_01,2022-02-23_01
@@ -49,402 +49,465 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove all the public APIs that are related to creating multi-instance
-bpf_programs through custom preprocessing callback and generally working
-with them.
-
-Also remove all the bpf_{object,map,program}__[set_]priv() APIs.
+Clean up internals that had to deal with the possibility of
+multi-instance bpf_programs. Libbpf 1.0 doesn't support this, so all
+this is not necessary now and can be simplified.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c   | 121 ++++-----------------------------------
- tools/lib/bpf/libbpf.h   |  91 -----------------------------
- tools/lib/bpf/libbpf.map |  10 ----
- 3 files changed, 10 insertions(+), 212 deletions(-)
+ tools/lib/bpf/libbpf.c | 317 +++++------------------------------------
+ 1 file changed, 34 insertions(+), 283 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0930028bb11d..d46a965ced9e 100644
+index d46a965ced9e..a9c71554f215 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -366,6 +366,16 @@ struct bpf_sec_def {
+@@ -366,16 +366,6 @@ struct bpf_sec_def {
  	libbpf_prog_attach_fn_t prog_attach_fn;
  };
  
-+struct bpf_prog_prep_result {
-+	struct bpf_insn *new_insn_ptr;
-+	int new_insn_cnt;
-+	int *pfd;
-+};
-+
-+typedef int (*bpf_program_prep_t)(struct bpf_program *prog, int n,
-+				  struct bpf_insn *insns, int insns_cnt,
-+				  struct bpf_prog_prep_result *res);
-+
- /*
-  * bpf_prog should be a better name but it has been used in
-  * linux/filter.h.
-@@ -426,8 +436,6 @@ struct bpf_program {
- 	bpf_program_prep_t preprocessor;
- 
- 	struct bpf_object *obj;
--	void *priv;
--	bpf_program_clear_priv_t clear_priv;
- 
- 	bool autoload;
- 	bool mark_btf_static;
-@@ -511,8 +519,6 @@ struct bpf_map {
- 	__u32 btf_key_type_id;
- 	__u32 btf_value_type_id;
- 	__u32 btf_vmlinux_value_type_id;
--	void *priv;
--	bpf_map_clear_priv_t clear_priv;
- 	enum libbpf_map_type libbpf_type;
- 	void *mmaped;
- 	struct bpf_struct_ops *st_ops;
-@@ -668,9 +674,6 @@ struct bpf_object {
- 	size_t log_size;
- 	__u32 log_level;
- 
--	void *priv;
--	bpf_object_clear_priv_t clear_priv;
--
- 	int *fd_array;
- 	size_t fd_array_cap;
- 	size_t fd_array_cnt;
-@@ -721,12 +724,6 @@ static void bpf_program__exit(struct bpf_program *prog)
- 	if (!prog)
- 		return;
- 
--	if (prog->clear_priv)
--		prog->clear_priv(prog, prog->priv);
--
--	prog->priv = NULL;
--	prog->clear_priv = NULL;
--
- 	bpf_program__unload(prog);
- 	zfree(&prog->name);
- 	zfree(&prog->sec_name);
-@@ -8072,12 +8069,6 @@ static int bpf_program_unpin_instance(struct bpf_program *prog, const char *path
- 	return 0;
- }
- 
--__attribute__((alias("bpf_program_pin_instance")))
--int bpf_object__pin_instance(struct bpf_program *prog, const char *path, int instance);
--
--__attribute__((alias("bpf_program_unpin_instance")))
--int bpf_program__unpin_instance(struct bpf_program *prog, const char *path, int instance);
--
- int bpf_program__pin(struct bpf_program *prog, const char *path)
- {
- 	int i, err;
-@@ -8513,11 +8504,6 @@ int bpf_object__pin(struct bpf_object *obj, const char *path)
- 
- static void bpf_map__destroy(struct bpf_map *map)
- {
--	if (map->clear_priv)
--		map->clear_priv(map, map->priv);
--	map->priv = NULL;
--	map->clear_priv = NULL;
--
- 	if (map->inner_map) {
- 		bpf_map__destroy(map->inner_map);
- 		zfree(&map->inner_map);
-@@ -8553,9 +8539,6 @@ void bpf_object__close(struct bpf_object *obj)
- 	if (IS_ERR_OR_NULL(obj))
- 		return;
- 
--	if (obj->clear_priv)
--		obj->clear_priv(obj, obj->priv);
--
- 	usdt_manager_free(obj->usdt_man);
- 	obj->usdt_man = NULL;
- 
-@@ -8615,22 +8598,6 @@ int bpf_object__set_kversion(struct bpf_object *obj, __u32 kern_version)
- 	return 0;
- }
- 
--int bpf_object__set_priv(struct bpf_object *obj, void *priv,
--			 bpf_object_clear_priv_t clear_priv)
--{
--	if (obj->priv && obj->clear_priv)
--		obj->clear_priv(obj, obj->priv);
--
--	obj->priv = priv;
--	obj->clear_priv = clear_priv;
--	return 0;
--}
--
--void *bpf_object__priv(const struct bpf_object *obj)
--{
--	return obj ? obj->priv : libbpf_err_ptr(-EINVAL);
--}
--
- int bpf_object__gen_loader(struct bpf_object *obj, struct gen_loader_opts *opts)
- {
- 	struct bpf_gen *gen;
-@@ -8697,22 +8664,6 @@ bpf_object__prev_program(const struct bpf_object *obj, struct bpf_program *next)
- 	return prog;
- }
- 
--int bpf_program__set_priv(struct bpf_program *prog, void *priv,
--			  bpf_program_clear_priv_t clear_priv)
--{
--	if (prog->priv && prog->clear_priv)
--		prog->clear_priv(prog, prog->priv);
--
--	prog->priv = priv;
--	prog->clear_priv = clear_priv;
--	return 0;
--}
--
--void *bpf_program__priv(const struct bpf_program *prog)
--{
--	return prog ? prog->priv : libbpf_err_ptr(-EINVAL);
--}
--
- void bpf_program__set_ifindex(struct bpf_program *prog, __u32 ifindex)
- {
- 	prog->prog_ifindex = ifindex;
-@@ -8779,37 +8730,6 @@ int bpf_program__set_insns(struct bpf_program *prog,
- 	return 0;
- }
- 
--int bpf_program__set_prep(struct bpf_program *prog, int nr_instances,
--			  bpf_program_prep_t prep)
--{
--	int *instances_fds;
--
--	if (nr_instances <= 0 || !prep)
--		return libbpf_err(-EINVAL);
--
--	if (prog->instances.nr > 0 || prog->instances.fds) {
--		pr_warn("Can't set pre-processor after loading\n");
--		return libbpf_err(-EINVAL);
--	}
--
--	instances_fds = malloc(sizeof(int) * nr_instances);
--	if (!instances_fds) {
--		pr_warn("alloc memory failed for fds\n");
--		return libbpf_err(-ENOMEM);
--	}
--
--	/* fill all fd with -1 */
--	memset(instances_fds, -1, sizeof(int) * nr_instances);
--
--	prog->instances.nr = nr_instances;
--	prog->instances.fds = instances_fds;
--	prog->preprocessor = prep;
--	return 0;
--}
--
--__attribute__((alias("bpf_program_nth_fd")))
--int bpf_program__nth_fd(const struct bpf_program *prog, int n);
--
- static int bpf_program_nth_fd(const struct bpf_program *prog, int n)
- {
- 	int fd;
-@@ -9735,27 +9655,6 @@ __u32 bpf_map__btf_value_type_id(const struct bpf_map *map)
- 	return map ? map->btf_value_type_id : 0;
- }
- 
--int bpf_map__set_priv(struct bpf_map *map, void *priv,
--		     bpf_map_clear_priv_t clear_priv)
--{
--	if (!map)
--		return libbpf_err(-EINVAL);
--
--	if (map->priv) {
--		if (map->clear_priv)
--			map->clear_priv(map, map->priv);
--	}
--
--	map->priv = priv;
--	map->clear_priv = clear_priv;
--	return 0;
--}
--
--void *bpf_map__priv(const struct bpf_map *map)
--{
--	return map ? map->priv : libbpf_err_ptr(-EINVAL);
--}
--
- int bpf_map__set_initial_value(struct bpf_map *map,
- 			       const void *data, size_t size)
- {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 9c2279b7b6ed..5eb3145b8945 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -231,13 +231,6 @@ LIBBPF_API struct bpf_program *
- bpf_object__find_program_by_name(const struct bpf_object *obj,
- 				 const char *name);
- 
--typedef void (*bpf_object_clear_priv_t)(struct bpf_object *, void *);
--LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
--LIBBPF_API int bpf_object__set_priv(struct bpf_object *obj, void *priv,
--				    bpf_object_clear_priv_t clear_priv);
--LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
--LIBBPF_API void *bpf_object__priv(const struct bpf_object *prog);
--
- LIBBPF_API int
- libbpf_prog_type_by_name(const char *name, enum bpf_prog_type *prog_type,
- 			 enum bpf_attach_type *expected_attach_type);
-@@ -260,13 +253,6 @@ bpf_object__next_program(const struct bpf_object *obj, struct bpf_program *prog)
- LIBBPF_API struct bpf_program *
- bpf_object__prev_program(const struct bpf_object *obj, struct bpf_program *prog);
- 
--typedef void (*bpf_program_clear_priv_t)(struct bpf_program *, void *);
--
--LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
--LIBBPF_API int bpf_program__set_priv(struct bpf_program *prog, void *priv,
--				     bpf_program_clear_priv_t clear_priv);
--LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
--LIBBPF_API void *bpf_program__priv(const struct bpf_program *prog);
- LIBBPF_API void bpf_program__set_ifindex(struct bpf_program *prog,
- 					 __u32 ifindex);
- 
-@@ -328,14 +314,6 @@ LIBBPF_API int bpf_program__set_insns(struct bpf_program *prog,
- LIBBPF_API size_t bpf_program__insn_cnt(const struct bpf_program *prog);
- 
- LIBBPF_API int bpf_program__fd(const struct bpf_program *prog);
--LIBBPF_DEPRECATED_SINCE(0, 7, "multi-instance bpf_program support is deprecated")
--LIBBPF_API int bpf_program__pin_instance(struct bpf_program *prog,
--					 const char *path,
--					 int instance);
--LIBBPF_DEPRECATED_SINCE(0, 7, "multi-instance bpf_program support is deprecated")
--LIBBPF_API int bpf_program__unpin_instance(struct bpf_program *prog,
--					   const char *path,
--					   int instance);
- 
- /**
-  * @brief **bpf_program__pin()** pins the BPF program to a file
-@@ -635,69 +613,6 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_iter(const struct bpf_program *prog,
- 			 const struct bpf_iter_attach_opts *opts);
- 
--/*
-- * Libbpf allows callers to adjust BPF programs before being loaded
-- * into kernel. One program in an object file can be transformed into
-- * multiple variants to be attached to different hooks.
-- *
-- * bpf_program_prep_t, bpf_program__set_prep and bpf_program__nth_fd
-- * form an API for this purpose.
-- *
-- * - bpf_program_prep_t:
-- *   Defines a 'preprocessor', which is a caller defined function
-- *   passed to libbpf through bpf_program__set_prep(), and will be
-- *   called before program is loaded. The processor should adjust
-- *   the program one time for each instance according to the instance id
-- *   passed to it.
-- *
-- * - bpf_program__set_prep:
-- *   Attaches a preprocessor to a BPF program. The number of instances
-- *   that should be created is also passed through this function.
-- *
-- * - bpf_program__nth_fd:
-- *   After the program is loaded, get resulting FD of a given instance
-- *   of the BPF program.
-- *
-- * If bpf_program__set_prep() is not used, the program would be loaded
-- * without adjustment during bpf_object__load(). The program has only
-- * one instance. In this case bpf_program__fd(prog) is equal to
-- * bpf_program__nth_fd(prog, 0).
-- */
 -struct bpf_prog_prep_result {
--	/*
--	 * If not NULL, load new instruction array.
--	 * If set to NULL, don't load this instance.
--	 */
 -	struct bpf_insn *new_insn_ptr;
 -	int new_insn_cnt;
--
--	/* If not NULL, result FD is written to it. */
 -	int *pfd;
 -};
 -
--/*
-- * Parameters of bpf_program_prep_t:
-- *  - prog:	The bpf_program being loaded.
-- *  - n:	Index of instance being generated.
-- *  - insns:	BPF instructions array.
-- *  - insns_cnt:Number of instructions in insns.
-- *  - res:	Output parameter, result of transformation.
-- *
-- * Return value:
-- *  - Zero:	pre-processing success.
-- *  - Non-zero:	pre-processing error, stop loading.
-- */
 -typedef int (*bpf_program_prep_t)(struct bpf_program *prog, int n,
 -				  struct bpf_insn *insns, int insns_cnt,
 -				  struct bpf_prog_prep_result *res);
 -
--LIBBPF_DEPRECATED_SINCE(0, 7, "use bpf_program__insns() for getting bpf_program instructions")
--LIBBPF_API int bpf_program__set_prep(struct bpf_program *prog, int nr_instance,
--				     bpf_program_prep_t prep);
--
--LIBBPF_DEPRECATED_SINCE(0, 7, "multi-instance bpf_program support is deprecated")
--LIBBPF_API int bpf_program__nth_fd(const struct bpf_program *prog, int n);
--
- LIBBPF_API enum bpf_prog_type bpf_program__type(const struct bpf_program *prog);
+ /*
+  * bpf_prog should be a better name but it has been used in
+  * linux/filter.h.
+@@ -429,22 +419,19 @@ struct bpf_program {
+ 	size_t log_size;
+ 	__u32 log_level;
  
- /**
-@@ -846,12 +761,6 @@ LIBBPF_API int bpf_map__set_ifindex(struct bpf_map *map, __u32 ifindex);
- LIBBPF_API __u64 bpf_map__map_extra(const struct bpf_map *map);
- LIBBPF_API int bpf_map__set_map_extra(struct bpf_map *map, __u64 map_extra);
+-	struct {
+-		int nr;
+-		int *fds;
+-	} instances;
+-	bpf_program_prep_t preprocessor;
+-
+ 	struct bpf_object *obj;
  
--typedef void (*bpf_map_clear_priv_t)(struct bpf_map *, void *);
--LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
--LIBBPF_API int bpf_map__set_priv(struct bpf_map *map, void *priv,
--				 bpf_map_clear_priv_t clear_priv);
--LIBBPF_DEPRECATED_SINCE(0, 7, "storage via set_priv/priv is deprecated")
--LIBBPF_API void *bpf_map__priv(const struct bpf_map *map);
- LIBBPF_API int bpf_map__set_initial_value(struct bpf_map *map,
- 					  const void *data, size_t size);
- LIBBPF_API const void *bpf_map__initial_value(struct bpf_map *map, size_t *psize);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index f5ea2685b014..38054248c942 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -6,11 +6,9 @@ LIBBPF_0.0.1 {
- 		bpf_map__fd;
- 		bpf_map__name;
- 		bpf_map__pin;
--		bpf_map__priv;
- 		bpf_map__reuse_fd;
- 		bpf_map__set_ifindex;
- 		bpf_map__set_inner_map_fd;
--		bpf_map__set_priv;
- 		bpf_map__unpin;
- 		bpf_map_delete_elem;
- 		bpf_map_get_fd_by_id;
-@@ -32,8 +30,6 @@ LIBBPF_0.0.1 {
- 		bpf_object__pin;
- 		bpf_object__pin_maps;
- 		bpf_object__pin_programs;
--		bpf_object__priv;
--		bpf_object__set_priv;
- 		bpf_object__unpin_maps;
- 		bpf_object__unpin_programs;
- 		bpf_prog_attach;
-@@ -43,18 +39,12 @@ LIBBPF_0.0.1 {
- 		bpf_prog_get_next_id;
- 		bpf_prog_query;
- 		bpf_program__fd;
--		bpf_program__nth_fd;
- 		bpf_program__pin;
--		bpf_program__pin_instance;
--		bpf_program__priv;
- 		bpf_program__set_expected_attach_type;
- 		bpf_program__set_ifindex;
--		bpf_program__set_prep;
--		bpf_program__set_priv;
- 		bpf_program__set_type;
- 		bpf_program__unload;
- 		bpf_program__unpin;
--		bpf_program__unpin_instance;
- 		bpf_prog_linfo__free;
- 		bpf_prog_linfo__new;
- 		bpf_prog_linfo__lfind_addr_func;
++	int fd;
+ 	bool autoload;
+ 	bool mark_btf_static;
+ 	enum bpf_prog_type type;
+ 	enum bpf_attach_type expected_attach_type;
++
+ 	int prog_ifindex;
+ 	__u32 attach_btf_obj_fd;
+ 	__u32 attach_btf_id;
+ 	__u32 attach_prog_fd;
++
+ 	void *func_info;
+ 	__u32 func_info_rec_size;
+ 	__u32 func_info_cnt;
+@@ -695,25 +682,10 @@ static Elf64_Rel *elf_rel_by_idx(Elf_Data *data, size_t idx);
+ 
+ void bpf_program__unload(struct bpf_program *prog)
+ {
+-	int i;
+-
+ 	if (!prog)
+ 		return;
+ 
+-	/*
+-	 * If the object is opened but the program was never loaded,
+-	 * it is possible that prog->instances.nr == -1.
+-	 */
+-	if (prog->instances.nr > 0) {
+-		for (i = 0; i < prog->instances.nr; i++)
+-			zclose(prog->instances.fds[i]);
+-	} else if (prog->instances.nr != -1) {
+-		pr_warn("Internal error: instances.nr is %d\n",
+-			prog->instances.nr);
+-	}
+-
+-	prog->instances.nr = -1;
+-	zfree(&prog->instances.fds);
++	zclose(prog->fd);
+ 
+ 	zfree(&prog->func_info);
+ 	zfree(&prog->line_info);
+@@ -797,6 +769,7 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 	prog->insns_cnt = prog->sec_insn_cnt;
+ 
+ 	prog->type = BPF_PROG_TYPE_UNSPEC;
++	prog->fd = -1;
+ 
+ 	/* libbpf's convention for SEC("?abc...") is that it's just like
+ 	 * SEC("abc...") but the corresponding bpf_program starts out with
+@@ -810,9 +783,6 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
+ 		prog->autoload = true;
+ 	}
+ 
+-	prog->instances.fds = NULL;
+-	prog->instances.nr = -1;
+-
+ 	/* inherit object's log_level */
+ 	prog->log_level = obj->log_level;
+ 
+@@ -6883,10 +6853,9 @@ static int libbpf_prepare_prog_load(struct bpf_program *prog,
+ 
+ static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_sz);
+ 
+-static int bpf_object_load_prog_instance(struct bpf_object *obj, struct bpf_program *prog,
+-					 struct bpf_insn *insns, int insns_cnt,
+-					 const char *license, __u32 kern_version,
+-					 int *prog_fd)
++static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
++				struct bpf_insn *insns, int insns_cnt,
++				const char *license, __u32 kern_version, int *prog_fd)
+ {
+ 	LIBBPF_OPTS(bpf_prog_load_opts, load_attr);
+ 	const char *prog_name = NULL;
+@@ -7253,88 +7222,6 @@ static int bpf_program_record_relos(struct bpf_program *prog)
+ 	return 0;
+ }
+ 
+-static int bpf_object_load_prog(struct bpf_object *obj, struct bpf_program *prog,
+-				const char *license, __u32 kern_ver)
+-{
+-	int err = 0, fd, i;
+-
+-	if (obj->loaded) {
+-		pr_warn("prog '%s': can't load after object was loaded\n", prog->name);
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (prog->instances.nr < 0 || !prog->instances.fds) {
+-		if (prog->preprocessor) {
+-			pr_warn("Internal error: can't load program '%s'\n",
+-				prog->name);
+-			return libbpf_err(-LIBBPF_ERRNO__INTERNAL);
+-		}
+-
+-		prog->instances.fds = malloc(sizeof(int));
+-		if (!prog->instances.fds) {
+-			pr_warn("Not enough memory for BPF fds\n");
+-			return libbpf_err(-ENOMEM);
+-		}
+-		prog->instances.nr = 1;
+-		prog->instances.fds[0] = -1;
+-	}
+-
+-	if (!prog->preprocessor) {
+-		if (prog->instances.nr != 1) {
+-			pr_warn("prog '%s': inconsistent nr(%d) != 1\n",
+-				prog->name, prog->instances.nr);
+-		}
+-		if (obj->gen_loader)
+-			bpf_program_record_relos(prog);
+-		err = bpf_object_load_prog_instance(obj, prog,
+-						    prog->insns, prog->insns_cnt,
+-						    license, kern_ver, &fd);
+-		if (!err)
+-			prog->instances.fds[0] = fd;
+-		goto out;
+-	}
+-
+-	for (i = 0; i < prog->instances.nr; i++) {
+-		struct bpf_prog_prep_result result;
+-		bpf_program_prep_t preprocessor = prog->preprocessor;
+-
+-		memset(&result, 0, sizeof(result));
+-		err = preprocessor(prog, i, prog->insns,
+-				   prog->insns_cnt, &result);
+-		if (err) {
+-			pr_warn("Preprocessing the %dth instance of program '%s' failed\n",
+-				i, prog->name);
+-			goto out;
+-		}
+-
+-		if (!result.new_insn_ptr || !result.new_insn_cnt) {
+-			pr_debug("Skip loading the %dth instance of program '%s'\n",
+-				 i, prog->name);
+-			prog->instances.fds[i] = -1;
+-			if (result.pfd)
+-				*result.pfd = -1;
+-			continue;
+-		}
+-
+-		err = bpf_object_load_prog_instance(obj, prog,
+-						    result.new_insn_ptr, result.new_insn_cnt,
+-						    license, kern_ver, &fd);
+-		if (err) {
+-			pr_warn("Loading the %dth instance of program '%s' failed\n",
+-				i, prog->name);
+-			goto out;
+-		}
+-
+-		if (result.pfd)
+-			*result.pfd = fd;
+-		prog->instances.fds[i] = fd;
+-	}
+-out:
+-	if (err)
+-		pr_warn("failed to load program '%s'\n", prog->name);
+-	return libbpf_err(err);
+-}
+-
+ static int
+ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ {
+@@ -7358,9 +7245,16 @@ bpf_object__load_progs(struct bpf_object *obj, int log_level)
+ 			continue;
+ 		}
+ 		prog->log_level |= log_level;
+-		err = bpf_object_load_prog(obj, prog, obj->license, obj->kern_version);
+-		if (err)
++
++		if (obj->gen_loader)
++			bpf_program_record_relos(prog);
++
++		err = bpf_object_load_prog(obj, prog, prog->insns, prog->insns_cnt,
++					   obj->license, obj->kern_version, &prog->fd);
++		if (err) {
++			pr_warn("prog '%s': failed to load: %d\n", prog->name, err);
+ 			return err;
++		}
+ 	}
+ 
+ 	bpf_object__free_relocs(obj);
+@@ -8006,11 +7900,16 @@ static int check_path(const char *path)
+ 	return err;
+ }
+ 
+-static int bpf_program_pin_instance(struct bpf_program *prog, const char *path, int instance)
++int bpf_program__pin(struct bpf_program *prog, const char *path)
+ {
+ 	char *cp, errmsg[STRERR_BUFSIZE];
+ 	int err;
+ 
++	if (prog->fd < 0) {
++		pr_warn("prog '%s': can't pin program that wasn't loaded\n", prog->name);
++		return libbpf_err(-EINVAL);
++	}
++
+ 	err = make_parent_dir(path);
+ 	if (err)
+ 		return libbpf_err(err);
+@@ -8019,164 +7918,35 @@ static int bpf_program_pin_instance(struct bpf_program *prog, const char *path,
+ 	if (err)
+ 		return libbpf_err(err);
+ 
+-	if (prog == NULL) {
+-		pr_warn("invalid program pointer\n");
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (instance < 0 || instance >= prog->instances.nr) {
+-		pr_warn("invalid prog instance %d of prog %s (max %d)\n",
+-			instance, prog->name, prog->instances.nr);
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (bpf_obj_pin(prog->instances.fds[instance], path)) {
++	if (bpf_obj_pin(prog->fd, path)) {
+ 		err = -errno;
+ 		cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
+-		pr_warn("failed to pin program: %s\n", cp);
++		pr_warn("prog '%s': failed to pin at '%s': %s\n", prog->name, path, cp);
+ 		return libbpf_err(err);
+ 	}
+-	pr_debug("pinned program '%s'\n", path);
+ 
++	pr_debug("prog '%s': pinned at '%s'\n", prog->name, path);
+ 	return 0;
+ }
+ 
+-static int bpf_program_unpin_instance(struct bpf_program *prog, const char *path, int instance)
++int bpf_program__unpin(struct bpf_program *prog, const char *path)
+ {
+ 	int err;
+ 
+-	err = check_path(path);
+-	if (err)
+-		return libbpf_err(err);
+-
+-	if (prog == NULL) {
+-		pr_warn("invalid program pointer\n");
++	if (prog->fd < 0) {
++		pr_warn("prog '%s': can't unpin program that wasn't loaded\n", prog->name);
+ 		return libbpf_err(-EINVAL);
+ 	}
+ 
+-	if (instance < 0 || instance >= prog->instances.nr) {
+-		pr_warn("invalid prog instance %d of prog %s (max %d)\n",
+-			instance, prog->name, prog->instances.nr);
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	err = unlink(path);
+-	if (err != 0)
+-		return libbpf_err(-errno);
+-
+-	pr_debug("unpinned program '%s'\n", path);
+-
+-	return 0;
+-}
+-
+-int bpf_program__pin(struct bpf_program *prog, const char *path)
+-{
+-	int i, err;
+-
+-	err = make_parent_dir(path);
+-	if (err)
+-		return libbpf_err(err);
+-
+-	err = check_path(path);
+-	if (err)
+-		return libbpf_err(err);
+-
+-	if (prog == NULL) {
+-		pr_warn("invalid program pointer\n");
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (prog->instances.nr <= 0) {
+-		pr_warn("no instances of prog %s to pin\n", prog->name);
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (prog->instances.nr == 1) {
+-		/* don't create subdirs when pinning single instance */
+-		return bpf_program_pin_instance(prog, path, 0);
+-	}
+-
+-	for (i = 0; i < prog->instances.nr; i++) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%d", path, i);
+-		if (len < 0) {
+-			err = -EINVAL;
+-			goto err_unpin;
+-		} else if (len >= PATH_MAX) {
+-			err = -ENAMETOOLONG;
+-			goto err_unpin;
+-		}
+-
+-		err = bpf_program_pin_instance(prog, buf, i);
+-		if (err)
+-			goto err_unpin;
+-	}
+-
+-	return 0;
+-
+-err_unpin:
+-	for (i = i - 1; i >= 0; i--) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%d", path, i);
+-		if (len < 0)
+-			continue;
+-		else if (len >= PATH_MAX)
+-			continue;
+-
+-		bpf_program_unpin_instance(prog, buf, i);
+-	}
+-
+-	rmdir(path);
+-
+-	return libbpf_err(err);
+-}
+-
+-int bpf_program__unpin(struct bpf_program *prog, const char *path)
+-{
+-	int i, err;
+-
+ 	err = check_path(path);
+ 	if (err)
+ 		return libbpf_err(err);
+ 
+-	if (prog == NULL) {
+-		pr_warn("invalid program pointer\n");
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (prog->instances.nr <= 0) {
+-		pr_warn("no instances of prog %s to pin\n", prog->name);
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	if (prog->instances.nr == 1) {
+-		/* don't create subdirs when pinning single instance */
+-		return bpf_program_unpin_instance(prog, path, 0);
+-	}
+-
+-	for (i = 0; i < prog->instances.nr; i++) {
+-		char buf[PATH_MAX];
+-		int len;
+-
+-		len = snprintf(buf, PATH_MAX, "%s/%d", path, i);
+-		if (len < 0)
+-			return libbpf_err(-EINVAL);
+-		else if (len >= PATH_MAX)
+-			return libbpf_err(-ENAMETOOLONG);
+-
+-		err = bpf_program_unpin_instance(prog, buf, i);
+-		if (err)
+-			return err;
+-	}
+-
+-	err = rmdir(path);
++	err = unlink(path);
+ 	if (err)
+ 		return libbpf_err(-errno);
+ 
++	pr_debug("prog '%s': unpinned from '%s'\n", prog->name, path);
+ 	return 0;
+ }
+ 
+@@ -8693,13 +8463,6 @@ int bpf_program__set_autoload(struct bpf_program *prog, bool autoload)
+ 	return 0;
+ }
+ 
+-static int bpf_program_nth_fd(const struct bpf_program *prog, int n);
+-
+-int bpf_program__fd(const struct bpf_program *prog)
+-{
+-	return bpf_program_nth_fd(prog, 0);
+-}
+-
+ const struct bpf_insn *bpf_program__insns(const struct bpf_program *prog)
+ {
+ 	return prog->insns;
+@@ -8730,27 +8493,15 @@ int bpf_program__set_insns(struct bpf_program *prog,
+ 	return 0;
+ }
+ 
+-static int bpf_program_nth_fd(const struct bpf_program *prog, int n)
++int bpf_program__fd(const struct bpf_program *prog)
+ {
+-	int fd;
+-
+ 	if (!prog)
+ 		return libbpf_err(-EINVAL);
+ 
+-	if (n >= prog->instances.nr || n < 0) {
+-		pr_warn("Can't get the %dth fd from program %s: only %d instances\n",
+-			n, prog->name, prog->instances.nr);
+-		return libbpf_err(-EINVAL);
+-	}
+-
+-	fd = prog->instances.fds[n];
+-	if (fd < 0) {
+-		pr_warn("%dth instance of program '%s' is invalid\n",
+-			n, prog->name);
++	if (prog->fd < 0)
+ 		return libbpf_err(-ENOENT);
+-	}
+ 
+-	return fd;
++	return prog->fd;
+ }
+ 
+ __alias(bpf_program__type)
 -- 
 2.30.2
 
