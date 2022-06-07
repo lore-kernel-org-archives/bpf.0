@@ -2,146 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F361CCA47F
-	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 11:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCC69C43334
+	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 12:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243063AbiFGLnG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jun 2022 07:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S231748AbiFGMMn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jun 2022 08:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiFGLnG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:43:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7295ABC0F;
-        Tue,  7 Jun 2022 04:43:03 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LHT1142sCzRkMm;
-        Tue,  7 Jun 2022 19:39:49 +0800 (CST)
-Received: from container.huawei.com (10.175.104.82) by
- canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 19:43:00 +0800
-From:   Wang Yufen <wangyufen@huawei.com>
-To:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
-        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH net-next v5 1/2] ipv6: Fix signed integer overflow in __ip6_append_data
-Date:   Tue, 7 Jun 2022 20:00:27 +0800
-Message-ID: <20220607120028.845916-1-wangyufen@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233558AbiFGMMm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jun 2022 08:12:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DB1377F0;
+        Tue,  7 Jun 2022 05:12:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A4E341F964;
+        Tue,  7 Jun 2022 12:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654603959; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u5DKSdr4Gj2oo6TtyI9YrO3jghnkl94Qx+e8RKCbCpw=;
+        b=GAqhOXDyliufamObMsP/nMztpzHEfqALmosSEVPYqW/eoQJNEGyE+zheWED8UGnAl7Uji/
+        ucSOe+6SxcekvCd9cczcsAJ7hrTy7eXKiGcN4paEvai1jJ29vAW5PWpN/QbOjkcyYjCy4O
+        e6KLGgG5uIhGUHFEFRGLl93o+O2ase0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 324EC13638;
+        Tue,  7 Jun 2022 12:12:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6pdhC7dAn2I/AgAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 07 Jun 2022 12:12:39 +0000
+Date:   Tue, 7 Jun 2022 14:12:37 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Michal Hocko <mhocko@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 5/5] bpf: add a selftest for cgroup
+ hierarchical stats collection
+Message-ID: <20220607121237.GC31717@blackbody.suse.cz>
+References: <20220520012133.1217211-1-yosryahmed@google.com>
+ <20220520012133.1217211-6-yosryahmed@google.com>
+ <20220603162339.GA25043@blackbody.suse.cz>
+ <CAJD7tkYwU5dW9Oof+pC81R9Bi-F=-EuiXpTn+HDeqbhTOTCcuw@mail.gmail.com>
+ <20220606123222.GA4377@blackbody.suse.cz>
+ <CAJD7tkbi7Gnnf4NiUt-J61G7185NsRcySvP6qOQsFKMou7qZJg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJD7tkbi7Gnnf4NiUt-J61G7185NsRcySvP6qOQsFKMou7qZJg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Resurrect ubsan overflow checks and ubsan report this warning,
-fix it by change the variable [length] type to size_t.
+On Mon, Jun 06, 2022 at 12:41:06PM -0700, Yosry Ahmed <yosryahmed@google.com> wrote:
+> I don't know if there is a standard way to handle this, but I think
+> you should know the configs of your kernel when you are loading a bpf
+> program?
 
-UBSAN: signed-integer-overflow in net/ipv6/ip6_output.c:1489:19
-2147479552 + 8567 cannot be represented in type 'int'
-CPU: 0 PID: 253 Comm: err Not tainted 5.16.0+ #1
-Hardware name: linux,dummy-virt (DT)
-Call trace:
-  dump_backtrace+0x214/0x230
-  show_stack+0x30/0x78
-  dump_stack_lvl+0xf8/0x118
-  dump_stack+0x18/0x30
-  ubsan_epilogue+0x18/0x60
-  handle_overflow+0xd0/0xf0
-  __ubsan_handle_add_overflow+0x34/0x44
-  __ip6_append_data.isra.48+0x1598/0x1688
-  ip6_append_data+0x128/0x260
-  udpv6_sendmsg+0x680/0xdd0
-  inet6_sendmsg+0x54/0x90
-  sock_sendmsg+0x70/0x88
-  ____sys_sendmsg+0xe8/0x368
-  ___sys_sendmsg+0x98/0xe0
-  __sys_sendmmsg+0xf4/0x3b8
-  __arm64_sys_sendmmsg+0x34/0x48
-  invoke_syscall+0x64/0x160
-  el0_svc_common.constprop.4+0x124/0x300
-  do_el0_svc+0x44/0xc8
-  el0_svc+0x3c/0x1e8
-  el0t_64_sync_handler+0x88/0xb0
-  el0t_64_sync+0x16c/0x170
+Isn't this one of purposes of BTF? (I don't know, I'm genuinely asking.)
 
-Changes since v1:
--Change the variable [length] type to unsigned, as Eric Dumazet suggested.
-Changes since v2:
--Don't change exthdrlen type in ip6_make_skb, as Paolo Abeni suggested.
-Changes since v3:
--Don't change ulen type in udpv6_sendmsg and l2tp_ip6_sendmsg, as
-Jakub Kicinski suggested.
+> If the CONFIG_CGROUPS=1 but CONFIG_MEMCG=0 I think everything will
+> work normally except that task_memcg() will always return NULL so no
+> stats will be collected, which makes sense.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
----
- include/net/ipv6.h    | 4 ++--
- net/ipv6/ip6_output.c | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+I was not able to track down what is the include chain to
+tools/testing/selftests/bpf/progs/cgroup_vmscan.c, i.e. how is the enum
+value memory_cgrp_id defined.
 
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index 5b38bf1a586b..de9dcc5652c4 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -1063,7 +1063,7 @@ int ip6_find_1stfragopt(struct sk_buff *skb, u8 **nexthdr);
- int ip6_append_data(struct sock *sk,
- 		    int getfrag(void *from, char *to, int offset, int len,
- 				int odd, struct sk_buff *skb),
--		    void *from, int length, int transhdrlen,
-+		    void *from, size_t length, int transhdrlen,
- 		    struct ipcm6_cookie *ipc6, struct flowi6 *fl6,
- 		    struct rt6_info *rt, unsigned int flags);
- 
-@@ -1079,7 +1079,7 @@ struct sk_buff *__ip6_make_skb(struct sock *sk, struct sk_buff_head *queue,
- struct sk_buff *ip6_make_skb(struct sock *sk,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
--			     void *from, int length, int transhdrlen,
-+			     void *from, size_t length, int transhdrlen,
- 			     struct ipcm6_cookie *ipc6,
- 			     struct rt6_info *rt, unsigned int flags,
- 			     struct inet_cork_full *cork);
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 4081b12a01ff..77e3f5970ce4 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1450,7 +1450,7 @@ static int __ip6_append_data(struct sock *sk,
- 			     struct page_frag *pfrag,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
--			     void *from, int length, int transhdrlen,
-+			     void *from, size_t length, int transhdrlen,
- 			     unsigned int flags, struct ipcm6_cookie *ipc6)
- {
- 	struct sk_buff *skb, *skb_prev = NULL;
-@@ -1798,7 +1798,7 @@ static int __ip6_append_data(struct sock *sk,
- int ip6_append_data(struct sock *sk,
- 		    int getfrag(void *from, char *to, int offset, int len,
- 				int odd, struct sk_buff *skb),
--		    void *from, int length, int transhdrlen,
-+		    void *from, size_t length, int transhdrlen,
- 		    struct ipcm6_cookie *ipc6, struct flowi6 *fl6,
- 		    struct rt6_info *rt, unsigned int flags)
- {
-@@ -1995,7 +1995,7 @@ EXPORT_SYMBOL_GPL(ip6_flush_pending_frames);
- struct sk_buff *ip6_make_skb(struct sock *sk,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
--			     void *from, int length, int transhdrlen,
-+			     void *from, size_t length, int transhdrlen,
- 			     struct ipcm6_cookie *ipc6, struct rt6_info *rt,
- 			     unsigned int flags, struct inet_cork_full *cork)
- {
--- 
-2.25.1
+(A custom kernel module build requires target kernel's header files, I
+could understand that compiling a BPF program requires them likewise and
+that's how this could work.
+Although, it goes against my undestanding of the CO-RE principle.)
+
+> There will be some overhead to running bpf programs that will always
+> do nothing, but I would argue that it's the userspace's fault here for
+> loading bpf programs on a non-compatible kernel.
+
+Yeah, running an empty program is non-issue in my eyes, I was rather
+considering whether the program uses proper offsets.
+
+Michal
 
