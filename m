@@ -2,295 +2,379 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB6E5CCA485
-	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 22:32:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C3B9C43334
+	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 00:27:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380562AbiFGWcM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jun 2022 18:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S231416AbiFHA1R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jun 2022 20:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385450AbiFGWba (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jun 2022 18:31:30 -0400
+        with ESMTP id S1448962AbiFGXJM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jun 2022 19:09:12 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1768278538;
-        Tue,  7 Jun 2022 12:24:31 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257G45og015314;
-        Tue, 7 Jun 2022 12:24:15 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3B7382E6A;
+        Tue,  7 Jun 2022 13:45:12 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257G3tnj007836;
+        Tue, 7 Jun 2022 13:44:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
  subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=BWNFgtxu4f/MoKkBqFr9Si5hlE+9kbnXEIGKry5OxE8=;
- b=qL9P0Ut3ZSf9FZ9xTx4PDLOZw9Ikxi7y5Ds/IjkJkbdToiBFTcklzbMj0zC3AS8LFSQS
- lYnHAI1A27KjJcugQKI7FmZuQuUzuhzxK/8VB2eD5e/VrtjER81rJdtRBy6n0cRKvXnH
- Nxl9M09ZEUlbJy5UAwIQUssezJT96WtZHsA= 
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2174.outbound.protection.outlook.com [104.47.55.174])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gj13cmfxg-1
+ mime-version; s=facebook; bh=L0OCQGVWCJ2nHt8tzUxJ7J4SHDfBinktbM/KqKKmwMA=;
+ b=DdT+xli/H/jdjx0IWdgX99Qdqwy2+SlBiGdIefkH3UQXxcD3uPIKzW5HkyvTaKRUzqiw
+ rr8aKyS98U1A1gv9Cwm1WPorcXEZbh072JD70tto18Q+fT8yJtNV6G9tjc3lo6CDOZRL
+ jHGSVQMdTqM8Ty9IsZSJvmyvfTQ/hTVmNgA= 
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2102.outbound.protection.outlook.com [104.47.70.102])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gj9djj8yf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jun 2022 12:24:15 -0700
+        Tue, 07 Jun 2022 13:44:21 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QK4d1+gspKn54IhO1aFezBAmpFdC9S2L9J8QMUwLWpB45184ik2n6NzgKYKZq2aw31Eat1UTyZl55EPahIqmE1l6bIiG2m+a/cbgfNNly8kts87IVD7rsJRRTJIidJqCt4PCSxtVnBOR6TqdGQJs7yP9R3ot/BRKEERwRAPdtQA0Zx7ZlkUGtKXQimfz70SIuF4z52hDu5soO0o7UBID9wK73ySG2vRNLRZMuOWE4KXPULbNOF2kWAlQXwEYeneeq9DuoDic7YTyBetsKO3CF8x2uertXMlQUeX17WArxK7rSMgZw+wf+9hAW3wOoHD3AWWUpxZW/n/c8VFKScPDvQ==
+ b=MSSWEIqw5JRmlRJWHC13c+MMZfuFX2ICjKPk6dhptdoQaYu744XQmijt8ZAzRM9T7hs7IOToUXcCA9fwm+tEADfxMQf7P9qrHVpurXlPmhvND15JbyWNYw7NyWJ0K3UkV5kV6K3N++D4hbhL+SpITEiJLz4UQOf3XoQGVFIcSfQPdIiGyfXvNFhNEPAo5qqdjbuYo0oG3WPmCiyb6o5ltQkJOOPeG5nG64xkng7hNIQQ8jVt7JvyaLAxnnIzXeAvUnbahfRc8U2i7BwTS3zxBwJ479cSDHLPq5q9eEMdcWWzMYbX5mcIQyuzctaWa3cNAlS/LBFeNw/odizMMld7+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BWNFgtxu4f/MoKkBqFr9Si5hlE+9kbnXEIGKry5OxE8=;
- b=mvbOPucsHwq5ElIekXpc1MBiCe1h4HZeMo5G062b37GPJSrW8279DdDbM5xsQXpAsc0joBoz1Y7J/XMtzRnXZzP+PgUtOU4+v/doPbotbrKEu/UjnyPfT7iTqNJ2c8ZanMywxPBiyMcQXVCn0xbRHuA4CCMxsRtsN+k5OhsLOuouc8sKputO9izkOFus/dpe/AZR9PPC4jgOB3aTgIs6bsYoMBT+phWkQEcjjSew+Pznr4VLMtuF5Err0Js097otJsNnfSlWsaoQnuLCY0v4kfqet7yEovRT5WYbg/aOZXPLTXOQjyp9giXGNiquHr+G5UN74WbfdQW3qq2vAXvL4A==
+ bh=L0OCQGVWCJ2nHt8tzUxJ7J4SHDfBinktbM/KqKKmwMA=;
+ b=EVsvGnrAj+Qck6QZFXlYcFMCmYAPpIhIwbCkf85Ug08mqAh9qrYNgyzLc4b510532hGLku1R1KNMYFqnKGjBGuORQvIPjLcwdKuq7jEKwrZvHZTwKes3uRaChanyCMSbXlXAz2R4PwJ8E31hraxsWSreAkXpbiCOpFWzfYE57LsyRP+5qI3yHyBJGvKoLLQYRMVYQcD8CSGqnBU7QgUyXYvJXJANDB64HdJD1Fx1IEnBB9+Rzr1dN0db0tzSMlpA7LHSDovdvV0sVhEIL3kPgd0imtjdjEbhtx8j78Rlt4oeeKaeElWSaYpI5FFnHswWwdzcjizdEFyUGOCKH5ji1A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 Received: from SA1PR15MB5016.namprd15.prod.outlook.com (2603:10b6:806:1db::19)
- by DM6PR15MB3797.namprd15.prod.outlook.com (2603:10b6:5:2b7::24) with
+ by MN2PR15MB2573.namprd15.prod.outlook.com (2603:10b6:208:124::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 19:24:13 +0000
+ 2022 20:44:19 +0000
 Received: from SA1PR15MB5016.namprd15.prod.outlook.com
  ([fe80::a09e:da84:3316:6eb0]) by SA1PR15MB5016.namprd15.prod.outlook.com
  ([fe80::a09e:da84:3316:6eb0%9]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 19:24:13 +0000
-Date:   Tue, 7 Jun 2022 12:24:10 -0700
+ 20:44:19 +0000
+Date:   Tue, 7 Jun 2022 13:44:16 -0700
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     Stanislav Fomichev <sdf@google.com>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
         daniel@iogearbox.net, andrii@kernel.org
-Subject: Re: [PATCH bpf-next v8 03/11] bpf: per-cgroup lsm flavor
-Message-ID: <20220607192410.sjcorcve3xlvi7co@kafai-mbp>
+Subject: Re: [PATCH bpf-next v8 05/11] bpf: implement BPF_PROG_QUERY for
+ BPF_LSM_CGROUP
+Message-ID: <20220607204416.3zjqhwmh3i25u6ev@kafai-mbp>
 References: <20220601190218.2494963-1-sdf@google.com>
- <20220601190218.2494963-4-sdf@google.com>
- <20220604061154.kefsehmyrnwgxstk@kafai-mbp>
- <CAKH8qBu0XzFJjh0EZrhgO7SidpdVaszGMmf-DNKmqmf2sLACrw@mail.gmail.com>
+ <20220601190218.2494963-6-sdf@google.com>
+ <20220604065935.lg5vegzhcqpd5laq@kafai-mbp>
+ <CAKH8qBvX2OL17pLNusN_W6q8GpoNs7X9=h9YMwsx7-2-QEer1g@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKH8qBu0XzFJjh0EZrhgO7SidpdVaszGMmf-DNKmqmf2sLACrw@mail.gmail.com>
-X-ClientProxiedBy: BYAPR01CA0044.prod.exchangelabs.com (2603:10b6:a03:94::21)
- To SA1PR15MB5016.namprd15.prod.outlook.com (2603:10b6:806:1db::19)
+In-Reply-To: <CAKH8qBvX2OL17pLNusN_W6q8GpoNs7X9=h9YMwsx7-2-QEer1g@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR13CA0061.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::6) To SA1PR15MB5016.namprd15.prod.outlook.com
+ (2603:10b6:806:1db::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1f4b28ed-9b0e-477b-7e1e-08da48bb4dce
-X-MS-TrafficTypeDiagnostic: DM6PR15MB3797:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR15MB3797A5A78AF76A04D23BF275D5A59@DM6PR15MB3797.namprd15.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 484a76ec-a672-42e5-19cb-08da48c67e66
+X-MS-TrafficTypeDiagnostic: MN2PR15MB2573:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR15MB25737794AA079608556C4997D5A59@MN2PR15MB2573.namprd15.prod.outlook.com>
 X-FB-Source: Internal
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fZXSHBRB9365eIecISkr+AZ41OGRjTpTH1b+RQ8eorKPNJ00udXIG+aorAugbKuiDH8w7NbvRtnVvGIzTVkiSTmpYiTc5xATVSKfVtxl7mpoSydYrhBx7/BWjEDDPuvVWbRtMwZrGbYynGcgGE3g+jaXUcK1sZsgHd7HN44zctlMx8+4ahffkwpPerH1/PIUiEnLRLJiHTZNeLFu8gEn3wJjIkDHOw/HxvUDO3LRZUt14Obeh6VSZdeTzaNAgsC2g/pGO6m9vASZbZhovV0cRHGWaI2nrxsQ5Z3JI093bCddPcVytjKNIfwBjoreoi+25sZZdxtakpGG90t5mbkaHwNZw546AGIm/4O3HnYRSgBokE+MLfveWJLfzXEoBgJqIAjJmvVSPCkpYc4tx5/9FfCHDdJl3S6X3j/45nq7pr35h6OWupBayG4uVBHo99h/S3aOvwGeqlr7LqxHdyXtN7LGS3gFAu8sRFE7/rJ7Hkk+4XKMLBEBXqC3xrVg0jHhpV5W8zJ496Zkd94f1nKdnUag3ECfo9mBdZfR9OJ/RV5U8FldpU6GJcFwuEa5813okQ/EDqDR4vPtFwNEVIwZhIcgF/wuOSU577Dmy7ERA5Hi3KiSOQfCvHMjrVQcSGhd/0D5IPTMAXhN0VDtfgnnjQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5016.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6916009)(9686003)(6512007)(8676002)(8936002)(186003)(86362001)(1076003)(4326008)(66946007)(66476007)(33716001)(66556008)(2906002)(5660300002)(6486002)(316002)(83380400001)(38100700002)(52116002)(508600001)(6506007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: F2Owt9gRvmWHZhbMjOEnI0zS1Ve5MnEhrEfVpUyZHmQq4U97Ikuz0gDYHnMNix4BzMk0k9TJdNZ0BVqeHbG7X9TbWhmCEmgjS6/dPUmoToCz8CBi/Ixkv+Fw6xyp1jYtJNKQkuhKd42inE8xob2+ptHP0rb2Z5Mn7FWT/E19wnjczOfYhMMTW08GOaeJEzacEwcoku4qcB/D0VEJxDXZg7rxmMqaO7WnVmpdnVIpx1bLCZjw+llGvzDOIAbLAku8irJbD6wPf7SKywS+8uPb3sVZTZc6OTpoIHg4sGMGM5tMaHBmMAeNrBjyhzzjAtBb91CqycrcTFa3Fyv3AK+xyllHqvw/i1+YPab+VpKii+hIEZFHdGegVU26b77TneXWkVVZBDbLn6s1m1cKMRGoAUryiTLOFetTk2MIh8mFso6EPgWQvq0pkafJfqMiX/5F8198MWXtI3mEjAqZivxFcRRCEroYFAYFRpYcS6gtduVVtADAkwBlQhgXBjmqbFHNFlHPUNzLXwI834wIHAGquSjNSy8AlakXIvuVOozlv2Cpl7XFP+5KORoJBkPwND2Oauz7SAq+LoaXm4cFD4hz+1Fu+AWdUzg8N9VappvdI/5btY4D0ZI8JbMuXw/y1XKXTgzhWDjWCoHXBOyPaPdL7A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5016.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(9686003)(316002)(6486002)(38100700002)(53546011)(86362001)(33716001)(1076003)(186003)(2906002)(6506007)(5660300002)(66476007)(66556008)(8676002)(4326008)(6666004)(8936002)(66946007)(6916009)(508600001)(83380400001)(52116002)(6512007);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?70eYtlwGOhqKsB+mKudbv7YlVsaoTPeXEpG9ZYsD+EbzZIiU6dUeK1mpjrZ8?=
- =?us-ascii?Q?nboc3t8NIV8AN5wmv7l4m5IvzoYdSwpqQiY70FvmWP8l6XPQq/ArWaWt7CNi?=
- =?us-ascii?Q?EHPZ680X4KmWsd8pds7spiRwWFRkQjxKocmLrnH/xmC/FW2tVZdRTM7YXQGw?=
- =?us-ascii?Q?L1YS1fvsmSjdBndygnf8ymlcW/g3zquDjZiEz72zoVRRD3Opd6t0nGgulGOI?=
- =?us-ascii?Q?t+WIhTXY+kEZUaxZEGWJsrwTpMXndfnI4ynf772RmhW8oRHfsbvBSHQlkbmw?=
- =?us-ascii?Q?NJTFEzg5XG+KW5tS7kDN5BlxEy7tPEfTJdWEC8fMWfWVeUutabIOKCtNOZhK?=
- =?us-ascii?Q?QpoHS70NSyAik3Nuv/edRZwrEpEXrm+SkRXBmJeHABUCgy52RXx9L5cj/n9e?=
- =?us-ascii?Q?fci7DaCjS21W8+NIsl0S1lIp3C+lzJ8r93yT1P1lNNfr5kghFIt/Qi9CYXek?=
- =?us-ascii?Q?oODtSkB6m4Z7beN7KJG8XJhk+/yMTWo2mF12qxS+bVlfLHT6B77AJMH77Uf7?=
- =?us-ascii?Q?X/ct2uM/KGwocowHNzsc+Td/jGrkCCSXh7lB/Wtb8imCR24pYOw8yY+hYRt8?=
- =?us-ascii?Q?9PwyMetXSh0GWlLGsfSVYvO0HLAsfIKAn1R40R0EgsqAxEOV8jB6r24MvInR?=
- =?us-ascii?Q?KP19hxyxN449w+1FOojEMpSslO0aym8BJv5rMOlkX5hJtbyuPzcgraknOnPv?=
- =?us-ascii?Q?0TC2zCh2WJgsCAwKYmz3TF+bzyCRD4OeTDvvLiLlQiOm//xVJz0mWhEnHIr0?=
- =?us-ascii?Q?I0kKM5yiGhsYeSDj9YbdSJhjvuz6V+rY9sDsVKxiwGimOwqxVRs6Wn5QgiYU?=
- =?us-ascii?Q?FkYkTa9IjOoPmJ8dKF4ZVV4bkyxiJXP2A908y6dVRNBjfL1VuABfqV5FaT0N?=
- =?us-ascii?Q?gIynKFdGIJ5y+yLDcIJ735lkv7vsv02PWpOeqXlRj0/8XNNMqiN3GZPVE1Xo?=
- =?us-ascii?Q?HzFY92HJsrQ1oaGrbv00e6jLJozem7YuVlN2cRJGb1R1iIsFWpcIO7PWhwqe?=
- =?us-ascii?Q?P/5lebO/KbxbJBRLTqbQnop8/rcq+RHMaHJihL5idv30xKuplXBfYASNJB1y?=
- =?us-ascii?Q?H3vOWoGGxNOqGPAQE93f4YfX7XNBB9KTI/L3+/k3OgiRmEdH6aAvJ84Up6YZ?=
- =?us-ascii?Q?gFVHZQdMKBhr8k+Sy0jzz+aDA0B8GQYK2k0a0bbyoo8tlbZ7lTUj7rRLaDHM?=
- =?us-ascii?Q?MiSoZLALB8xWol/qtNH5a7yUgyt1h87kn4HyXw2ztjkyOVX4diXJL82jQrVh?=
- =?us-ascii?Q?QoZWz1p6Y9GVQOP7rqXDtVM2wuBw683GcbmvBOPHpgwoB43YgPG1HwJ8Qvv8?=
- =?us-ascii?Q?HzDCDAUO5UUW/OuDKxHkVjTsDQM5PmzTAKdPjTb55vwARlN8op+mB5KSD8ih?=
- =?us-ascii?Q?4ACv59l9POmyjohwhjYtQ01UwXgusujJ83hr7SR2WhtQwZRI8KHbn3UVHXJ6?=
- =?us-ascii?Q?y2erei06elMuRhhAvigjYUfA3dPtwMPKjA9ypGuSM/87f5JbtOEwIagcqN+Q?=
- =?us-ascii?Q?PV30mY6ITtVMRHUYHOt936o9798ZyJf0xl7pdElmu4b7F/uSQf+09izR2UKG?=
- =?us-ascii?Q?zQG+e/GLOsOv4iD7MdEftGZajk7w65EFv01tFhOHfo6uwODEZinf4mH/0QNn?=
- =?us-ascii?Q?sgJoc9orGn0u7Afua5pRxuP3G1aDnjSEDEvUGEt098QSZ+hwMytjZZfVQ1XI?=
- =?us-ascii?Q?aepWI59UTKz87aQwwp8rKX7WumBpkjf1ow7coSWg1P9iG47BHVU2+ovoXqrS?=
- =?us-ascii?Q?6gBC3F0uGc9CQ3gmXeplowD7KjAGZg0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5t3+3mnOolFFbJ2F3nsWYLG4poyjwpbk/9zMa+GtqRTT9ItobAF7mOXwXMCt?=
+ =?us-ascii?Q?z8K+FegXB6bBC4WMSxUfl3zLh6vr5b3n3NzlSpDXCnJtg5FavWmxePycLwyq?=
+ =?us-ascii?Q?X/65cwbaHTtTVyxAImWiASPTMC1lTCiPyAG+NtHkRTNn5JfdZW6NY3GSBtPw?=
+ =?us-ascii?Q?3fLeC2KHoW8eFGUnqlzS41Fqq+j5QJ3mAWtazjlrQ50gaiEw39ytlD4peGDz?=
+ =?us-ascii?Q?rehjt8SHMFvJ1DSkUj9OMveAMgGxt5IJ7zIiYAFoJjetfh/3ISp6xNxHCSX6?=
+ =?us-ascii?Q?XRo/mdpm/aGRS0E7tQY+Zk5sijXsZ9KLexf1tUuZ0gv3yNjVNBOhl6y/JPUC?=
+ =?us-ascii?Q?SsK64uxSu06ay7htastZXlQmYDWja2+IRMGO6PnwYTx6YJqFNLIoOb74oUl9?=
+ =?us-ascii?Q?MM5X6gx2ElWH0zXdH5wo9WsZj+l63JF2uLElGrgfwbSF83DlXmLsDi1KTGkK?=
+ =?us-ascii?Q?fwx0zNDrB3jPNu6uDsTx3L10l50AZ9oQO1yQ9yOGNxePQ9GNdqvhHxTuZ2yh?=
+ =?us-ascii?Q?YHmgahD2eEmqo0Nn76ezVR1OlGE1kkX9Y4jHOmkbvKl7WkHzTJuoce+F5FWj?=
+ =?us-ascii?Q?kqpQFNYCaFuo0qjWximPqOxLLWROFBkMuaagQtq//Dd6tWIPjfVCdOQbi3Fq?=
+ =?us-ascii?Q?hmVRpXmFO9LEfiJpVcw2r9gPX/Ao72Wk8zfKg8bo9q2cOqJAKQxvOnB7chQ+?=
+ =?us-ascii?Q?qKS9smw/dSGfYqh1nf2bFTdvaDX7pZ+GwSg8Q94iIl2GPAGWxfKkYe8G73e+?=
+ =?us-ascii?Q?r9T8y3gmYocQ9RhU62vLGSkIr7NkOXy/QPx0JwCUbI6EyTRck2/F0hhUrAST?=
+ =?us-ascii?Q?AHJb6PpMZ79a6H38SbytKxBPDx1Q4PnAZs9eP06sYl//iOekXIyD9SU+8doz?=
+ =?us-ascii?Q?xWXC+VMz45XewWbv0yKVEyFDOqI6US8eeoYK9XNq0KBCCfe55BVtYi09bWGY?=
+ =?us-ascii?Q?qNrnr/IewoOHDbCWV+4ELisFgVKDG5JTifebuFndy9wRFT7D+XdpvxcZMz+K?=
+ =?us-ascii?Q?mtHTQ1OTfnYPOHEXsHlK7x60g6PhmJRJLDG6aUlSMmfDo1qxqYs2N/vgy6Q1?=
+ =?us-ascii?Q?pnE1FcdSROdKIL2NNo/3deIypH8LMmjyWhYCIm7n3JK9AU2qocFenVH2yVCX?=
+ =?us-ascii?Q?A5oFdMVBZ0k2xu0areWeqcTdKe6Hrd1+wdBHvnxmxsWTbZ+Gog7ENAX7uu4d?=
+ =?us-ascii?Q?cw5jm4RkxK41e0yNbpYmeDWjCFjfM/8w4w95AY0rJ3MV4vvXgZXfX2MZr+OU?=
+ =?us-ascii?Q?2v1nr6Dg1SGD4GlZsoXMBAluD+Z3+gGJO59uwGSJtKVVseyD/AezX1iZTGEP?=
+ =?us-ascii?Q?+y5mJkMDIX3UQQIesbwEDOSSz/dn34FkeDAYyAFWwXFWvcPf3MCeFHoovNqj?=
+ =?us-ascii?Q?OayJLOmJw8f5siZTRgSFTucnFu4F9LEsbu75DrkLgynxR2XkjFtailOuu9AE?=
+ =?us-ascii?Q?bUDgo07K9HKf3KB/aDY9sqcLwawMjWQK5+b3GYImdDTyo69pbEE46B2qc/FI?=
+ =?us-ascii?Q?bdiNaTAVqwACX6gD4YDHbjHpzFIe8RaO93XsIO3PiwNV0pk/irGsw/osCkA8?=
+ =?us-ascii?Q?I21066l5yrzi4t+w1dq3OMz76EGD4bkf59fR7UytKdlGjhy3sJW+yVxPw9HY?=
+ =?us-ascii?Q?iGczBHOfGbinWpAuQqbAN2P1nuzkO7X87LKyaX72Rr7cQEoSB3vVyr7a/fKG?=
+ =?us-ascii?Q?RQTiDOz7CDoQaaQLHr0wMEiKUI4RMg8OasZSbSH+xZtxbOiinivV7luZOjD0?=
+ =?us-ascii?Q?csup7xKmO/SOZS8M6XjKkQqo92nRTgY=3D?=
 X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f4b28ed-9b0e-477b-7e1e-08da48bb4dce
+X-MS-Exchange-CrossTenant-Network-Message-Id: 484a76ec-a672-42e5-19cb-08da48c67e66
 X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5016.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 19:24:12.9996
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 20:44:19.1142
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CGX1sN6WEqVUw7GMB6l4vXcWwc9FyWTqg3cwBK4T/UCRriJF1dk81VskcumT1DOq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3797
-X-Proofpoint-GUID: z6-Tjlt6iMPCXWj03bfQnoB1aSoakWyr
-X-Proofpoint-ORIG-GUID: z6-Tjlt6iMPCXWj03bfQnoB1aSoakWyr
+X-MS-Exchange-CrossTenant-UserPrincipalName: kCzwd+Bu+fFH9+rYKnhIMN4UG4gualqaGCMd+V6/H7IH13nk3UzIr6B6eFxokJv3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2573
+X-Proofpoint-GUID: vRYxbN-SgeQ-n250BlFDgb0Tdb7bMIsF
+X-Proofpoint-ORIG-GUID: vRYxbN-SgeQ-n250BlFDgb0Tdb7bMIsF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-07_08,2022-06-07_02,2022-02-23_01
+ definitions=2022-06-07_09,2022-06-07_02,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 03:46:21PM -0700, Stanislav Fomichev wrote:
-> > > +int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
-> > > +                                 struct bpf_attach_target_info *tgt_info,
-> > > +                                 int cgroup_atype)
-> > > +{
-> > > +     struct bpf_shim_tramp_link *shim_link = NULL;
-> > > +     struct bpf_trampoline *tr;
-> > > +     bpf_func_t bpf_func;
-> > > +     u64 key;
-> > > +     int err;
-> > > +
-> > > +     key = bpf_trampoline_compute_key(NULL, prog->aux->attach_btf,
-> > > +                                      prog->aux->attach_btf_id);
-> > Directly get tgt_info here instead of doing it
-> > in __cgroup_bpf_attach() and then passing in.
-> > This is the only place needed it.
-> 
-> Ack.
-> 
-> >         err = bpf_check_attach_target(NULL, prog, NULL,
-> >                                 prog->aux->attach_btf_id,
-> >                                 &tgt_info);
-> >         if (err)
-> >                 return err;
+On Mon, Jun 06, 2022 at 03:46:25PM -0700, Stanislav Fomichev wrote:
+> On Fri, Jun 3, 2022 at 11:59 PM Martin KaFai Lau <kafai@fb.com> wrote:
 > >
-> > > +
-> > > +     bpf_lsm_find_cgroup_shim(prog, &bpf_func);
-> > > +     tr = bpf_trampoline_get(key, tgt_info);
-> > > +     if (!tr)
-> > > +             return  -ENOMEM;
-> > > +
-> > > +     mutex_lock(&tr->mutex);
-> > > +
-> > > +     shim_link = cgroup_shim_find(tr, bpf_func);
-> > > +     if (shim_link) {
-> > > +             /* Reusing existing shim attached by the other program. */
-> > > +             atomic64_inc(&shim_link->link.link.refcnt);
-> > Use bpf_link_inc() instead to pair with bpf_link_put().
-> 
-> SG!
-> 
-> > > +             /* note, we're still holding tr refcnt from above */
-> > It has to do a bpf_trampoline_put(tr) after mutex_unlock(&tr->mutex).
-> > shim_link already holds one refcnt to tr.
-> 
-> Right, since we are not doing that reuse anymore; will add a deref here.
-> 
-> 
-> 
-> 
-> > > +
-> > > +             mutex_unlock(&tr->mutex);
-> > > +             return 0;
-> > > +     }
-> > > +
-> > > +     /* Allocate and install new shim. */
-> > > +
-> > > +     shim_link = cgroup_shim_alloc(prog, bpf_func, cgroup_atype);
-> > > +     if (!shim_link) {
-> > > +             err = -ENOMEM;
-> > > +             goto out;
-> > > +     }
-> > > +
-> > > +     err = __bpf_trampoline_link_prog(&shim_link->link, tr);
-> > > +     if (err)
-> > > +             goto out;
-> > > +
-> > > +     shim_link->trampoline = tr;
-> > > +     /* note, we're still holding tr refcnt from above */
-> > > +
-> > > +     mutex_unlock(&tr->mutex);
-> > > +
-> > > +     return 0;
-> > > +out:
-> > > +     mutex_unlock(&tr->mutex);
-> > > +
-> > > +     if (shim_link)
-> > > +             bpf_link_put(&shim_link->link.link);
-> > > +
-> > > +     bpf_trampoline_put(tr); /* bpf_trampoline_get above */
-> > Doing it here is because mutex_unlock(&tr->mutex) has
-> > to be done first?  A comment will be useful.
-> >
-> > How about passing tr to cgroup_shim_alloc(..., tr)
-> > which is initializing everything else in shim_link anyway.
-> > Then the 'if (!shim_link->trampoline)' in bpf_shim_tramp_link_release()
-> > can go away also.
-> > Like:
-> >
-> > static struct bpf_shim_tramp_link *cgroup_shim_alloc(const struct bpf_prog *prog,
-> >                                                      bpf_func_t bpf_func,
-> >                                                      struct bpf_trampoline *tr)
-> >
-> > {
-> >         /* ... */
-> >         shim_link->trampoline = tr;
-> 
-> I believe this part has to happen after __bpf_trampoline_link_prog;
-> otherwise bpf_shim_tramp_link_release might try to
-> unlink_prog/bpf_trampoline_put on the shim that wan't fully linked?
-Ah.  You are correct.  missed that.
-
-Yeah, I don't see a better way out unless a separate shim_link cleanup
-func is used during the error case.  That may be overkill.
-The current approach in the patch is better.
-
-> > > @@ -10474,6 +10486,23 @@ static int check_return_code(struct bpf_verifier_env *env)
-> > >       case BPF_PROG_TYPE_SK_LOOKUP:
-> > >               range = tnum_range(SK_DROP, SK_PASS);
-> > >               break;
-> > > +
-> > > +     case BPF_PROG_TYPE_LSM:
-> > > +             if (env->prog->expected_attach_type == BPF_LSM_CGROUP) {
-> > > +                     if (!env->prog->aux->attach_func_proto->type) {
-> > nit. Check 'if ( ... != BPF_LSM_CGROUP) return 0;' first to remove
-> > one level of indentation.
-> 
-> SG!
-> 
-> > > +                             /* Make sure programs that attach to void
-> > > +                              * hooks don't try to modify return value.
-> > > +                              */
-> > > +                             range = tnum_range(1, 1);
-> > > +                     }
-> > > +             } else {
-> > > +                     /* regular BPF_PROG_TYPE_LSM programs can return
-> > > +                      * any value.
-> > > +                      */
-> > > +                     return 0;
-> > > +             }
-> > > +             break;
-> > > +
-> > >       case BPF_PROG_TYPE_EXT:
-> > >               /* freplace program can return anything as its return value
-> > >                * depends on the to-be-replaced kernel func or bpf program.
-> > > @@ -10490,6 +10519,8 @@ static int check_return_code(struct bpf_verifier_env *env)
+> > On Wed, Jun 01, 2022 at 12:02:12PM -0700, Stanislav Fomichev wrote:
+> > > diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> > > index a27a6a7bd852..cb3338ef01e0 100644
+> > > --- a/kernel/bpf/cgroup.c
+> > > +++ b/kernel/bpf/cgroup.c
+> > > @@ -1035,6 +1035,7 @@ static int cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+> > >  static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+> > >                             union bpf_attr __user *uattr)
+> > >  {
+> > > +     __u32 __user *prog_attach_flags = u64_to_user_ptr(attr->query.prog_attach_flags);
+> > >       __u32 __user *prog_ids = u64_to_user_ptr(attr->query.prog_ids);
+> > >       enum bpf_attach_type type = attr->query.attach_type;
+> > >       enum cgroup_bpf_attach_type atype;
+> > > @@ -1042,50 +1043,92 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+> > >       struct hlist_head *progs;
+> > >       struct bpf_prog *prog;
+> > >       int cnt, ret = 0, i;
+> > > +     int total_cnt = 0;
+> > >       u32 flags;
 > > >
-> > >       if (!tnum_in(range, reg->var_off)) {
-> > >               verbose_invalid_scalar(env, reg, &range, "program exit", "R0");
-> > > +             if (env->prog->expected_attach_type == BPF_LSM_CGROUP)
-> > > +                     verbose(env, "BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
-> > This is not accurate to verbose on void-return only.
-> > For int-return lsm look, the BPF_LSM_CGROUP prog returning
-> > neither 0 nor 1 will also trigger this range check failure.
+> > > -     atype = to_cgroup_bpf_attach_type(type);
+> > > -     if (atype < 0)
+> > > -             return -EINVAL;
+> > > +     enum cgroup_bpf_attach_type from_atype, to_atype;
+> > >
+> > > -     progs = &cgrp->bpf.progs[atype];
+> > > -     flags = cgrp->bpf.flags[atype];
+> > > +     if (type == BPF_LSM_CGROUP) {
+> > > +             from_atype = CGROUP_LSM_START;
+> > > +             to_atype = CGROUP_LSM_END;
+> > Enforce prog_attach_flags for BPF_LSM_CGROUP:
+> >
+> >                 if (total_cnt && !prog_attach_flags)
+> >                         return -EINVAL;
 > 
-> verbose_invalid_scalar will handle the case for int-returning ones?
-> 
-> Maybe change that new verbose to "Note, BPF_LSM_CGROUP that attach to
-> void LSM hooks can't modify return value!" ?
-I was thinking only verbose_invalid_scalar is good enough.
+> All the comments make sense, will apply. The only thing that I'll
+> probably keep as is is the copy_to_user(flags) part. We can't move it
+> above because it hasn't been properly initialized there.
+Initialize earlier:
 
-Having the new 'void LSM hooks' message may confuse the lsm-hooks that
-have an int ret type and the bpf prog returns -1.
-If keeping this verbose,  I think adding
-'!attach_func_proto->type' check should be useful before
-printing.  No strong opinion here.
+if (type == BPF_LSM_CGROUP)
+{
+	from_atype = CGROUP_LSM_START;
+	to_atype = CGROUP_LSM_END;
+	flags = 0;
+} else {
+	from_atype = to_cgroup_bpf_attach_type(type);
+	if (from_atype < 0)
+		 return -EINVAL;
+	to_atype = from_atype;
+	flags = cgrp->bpf.flags[to_atype];
+}
+
+if (copy_to_user(&uattr->query.attach_flags, &flags...))
+	/* ... */
+
+for (atype = from_atype; atype <= to_atype; atype++) {
+	/* Figuring out total_cnt.
+	 * No need to get the flags here.
+	 /
+}
 
 > 
+> What I think I'll do is:
 > 
-> > >               return -EINVAL;
+> if (atype != to_atype) /* exported via prog_attach_flags */
+Check "from_atype != to_atype" and then reset flags back to 0?
+Yeah, that will work.  I think in that case checking
+BPF_LSM_CGROUP is more straight forward.
+
+Also no strong opinion here.  was just thinking to avoid
+multiple BPF_LSM_CGROUP checks because copying the flags
+before and after the for-loop is the same.
+
+
+>   flags = 0;
+> copy_to_user(.., flags,..);
+
+> 
+> That seems to better describe why we're not doing it?
+> 
+> 
+> > > +     } else {
+> > > +             from_atype = to_cgroup_bpf_attach_type(type);
+> > > +             if (from_atype < 0)
+> > > +                     return -EINVAL;
+> > > +             to_atype = from_atype;
+> > > +     }
+> > >
+> > > -     effective = rcu_dereference_protected(cgrp->bpf.effective[atype],
+> > > -                                           lockdep_is_held(&cgroup_mutex));
+> > > +     for (atype = from_atype; atype <= to_atype; atype++) {
+> > > +             progs = &cgrp->bpf.progs[atype];
+> > > +             flags = cgrp->bpf.flags[atype];
+> > >
+> > > -     if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE)
+> > > -             cnt = bpf_prog_array_length(effective);
+> > > -     else
+> > > -             cnt = prog_list_length(progs);
+> > > +             effective = rcu_dereference_protected(cgrp->bpf.effective[atype],
+> > > +                                                   lockdep_is_held(&cgroup_mutex));
+> > nit. This can be done under the BPF_F_QUERY_EFFECTIVE case below.
+> >
+> > >
+> > > -     if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
+> > > -             return -EFAULT;
+> > > -     if (copy_to_user(&uattr->query.prog_cnt, &cnt, sizeof(cnt)))
+> > > +             if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE)
+> > > +                     total_cnt += bpf_prog_array_length(effective);
+> > > +             else
+> > > +                     total_cnt += prog_list_length(progs);
+> > > +     }
+> > > +
+> > > +     if (type != BPF_LSM_CGROUP)
+> > > +             if (copy_to_user(&uattr->query.attach_flags, &flags, sizeof(flags)))
+> > > +                     return -EFAULT;
+> > nit. Move this copy_to_user(&uattr->query.attach_flags,...) to the
+> > 'if (type == BPF_LSM_CGROUP) { from_atype = .... } else { ... }' above.
+> > That will save a BPF_LSM_CGROUP test.
+> >
+> > I think the '== BPF_LSM_CGROUP' case needs to copy a 0 to user also.
+> >
+> > > +     if (copy_to_user(&uattr->query.prog_cnt, &total_cnt, sizeof(total_cnt)))
+> > >               return -EFAULT;
+> > > -     if (attr->query.prog_cnt == 0 || !prog_ids || !cnt)
+> > > +     if (attr->query.prog_cnt == 0 || !prog_ids || !total_cnt)
+> > >               /* return early if user requested only program count + flags */
+> > >               return 0;
+> > > -     if (attr->query.prog_cnt < cnt) {
+> > > -             cnt = attr->query.prog_cnt;
+> > > +
+> > > +     if (attr->query.prog_cnt < total_cnt) {
+> > > +             total_cnt = attr->query.prog_cnt;
+> > >               ret = -ENOSPC;
 > > >       }
 > > >
-> > > @@ -14713,6 +14744,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
-> > >               fallthrough;
-> > >       case BPF_MODIFY_RETURN:
-> > >       case BPF_LSM_MAC:
+> > > -     if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE) {
+> > > -             return bpf_prog_array_copy_to_user(effective, prog_ids, cnt);
+> > > -     } else {
+> > > -             struct bpf_prog_list *pl;
+> > > -             u32 id;
+> > > +     for (atype = from_atype; atype <= to_atype; atype++) {
+> > > +             if (total_cnt <= 0)
+> > nit. total_cnt cannot be -ve ?
+> > !total_cnt instead ?
+> > and may be do it in the for-loop test.
+> >
+> > > +                     break;
+> > >
+> > > -             i = 0;
+> > > -             hlist_for_each_entry(pl, progs, node) {
+> > > -                     prog = prog_list_prog(pl);
+> > > -                     id = prog->aux->id;
+> > > -                     if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+> > > -                             return -EFAULT;
+> > > -                     if (++i == cnt)
+> > > -                             break;
+> > > +             progs = &cgrp->bpf.progs[atype];
+> > > +             flags = cgrp->bpf.flags[atype];
+> > > +
+> > > +             effective = rcu_dereference_protected(cgrp->bpf.effective[atype],
+> > > +                                                   lockdep_is_held(&cgroup_mutex));
+> > nit. This can be done under the BPF_F_QUERY_EFFECTIVE case below.
+> >
+> > > +
+> > > +             if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE)
+> > > +                     cnt = bpf_prog_array_length(effective);
+> > > +             else
+> > > +                     cnt = prog_list_length(progs);
+> > > +
+> > > +             if (cnt >= total_cnt)
+> > > +                     cnt = total_cnt;
+> > nit. This seems to be the only reason that
+> > the "if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE)"
+> > need to be broken up into two halves.  One above and one below.
+> > It does not save much code.  How about repeating this one line
+> > 'cnt = min_t(int, cnt, total_cnt);' instead ?
+> >
+> > > +
+> > > +             if (attr->query.query_flags & BPF_F_QUERY_EFFECTIVE) {
+> > > +                     ret = bpf_prog_array_copy_to_user(effective, prog_ids, cnt);
+> > > +             } else {
+> > > +                     struct bpf_prog_list *pl;
+> > > +                     u32 id;
+> > > +
+> > > +                     i = 0;
+> > > +                     hlist_for_each_entry(pl, progs, node) {
+> > > +                             prog = prog_list_prog(pl);
+> > > +                             id = prog->aux->id;
+> > > +                             if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+> > > +                                     return -EFAULT;
+> > > +                             if (++i == cnt)
+> > > +                                     break;
+> > > +                     }
+> > >               }
+> > > +
+> > > +             if (prog_attach_flags)
+> > > +                     for (i = 0; i < cnt; i++)
+> > > +                             if (copy_to_user(prog_attach_flags + i, &flags, sizeof(flags)))
+> > > +                                     return -EFAULT;
+> > > +
+> > > +             prog_ids += cnt;
+> > > +             total_cnt -= cnt;
+> > > +             if (prog_attach_flags)
+> > > +                     prog_attach_flags += cnt;
+> > nit. Merge this into the above "if (prog_attach_flags)" case.
+> >
+> > >       }
+> > >       return ret;
+> > >  }
+> > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > index a237be4f8bb3..27492d44133f 100644
+> > > --- a/kernel/bpf/syscall.c
+> > > +++ b/kernel/bpf/syscall.c
+> > > @@ -3520,7 +3520,7 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+> > >       }
+> > >  }
+> > >
+> > > -#define BPF_PROG_QUERY_LAST_FIELD query.prog_cnt
+> > > +#define BPF_PROG_QUERY_LAST_FIELD query.prog_attach_flags
+> > >
+> > >  static int bpf_prog_query(const union bpf_attr *attr,
+> > >                         union bpf_attr __user *uattr)
+> > > @@ -3556,6 +3556,7 @@ static int bpf_prog_query(const union bpf_attr *attr,
+> > >       case BPF_CGROUP_SYSCTL:
+> > >       case BPF_CGROUP_GETSOCKOPT:
+> > >       case BPF_CGROUP_SETSOCKOPT:
 > > > +     case BPF_LSM_CGROUP:
-> > >       case BPF_TRACE_FENTRY:
-> > >       case BPF_TRACE_FEXIT:
-> > >               if (!btf_type_is_func(t)) {
+> > >               return cgroup_bpf_prog_query(attr, uattr);
+> > >       case BPF_LIRC_MODE2:
+> > >               return lirc_prog_query(attr, uattr);
+> > > @@ -4066,6 +4067,9 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+> > >
+> > >       if (prog->aux->btf)
+> > >               info.btf_id = btf_obj_id(prog->aux->btf);
+> > > +     info.attach_btf_id = prog->aux->attach_btf_id;
+> > > +     if (prog->aux->attach_btf)
+> > > +             info.attach_btf_obj_id = btf_obj_id(prog->aux->attach_btf);
+> > Need this also:
+> >
+> >         else if (prog->aux->dst_prog)
+> >                 info.attach_btf_obj_id = btf_obj_id(prog->aux->dst_prog->aux->attach_btf);
+> >
+> > >
+> > >       ulen = info.nr_func_info;
+> > >       info.nr_func_info = prog->aux->func_info_cnt;
+> > > --
+> > > 2.36.1.255.ge46751e96f-goog
+> > >
