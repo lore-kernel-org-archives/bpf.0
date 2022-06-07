@@ -2,89 +2,81 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FC6FCCA47C
-	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 11:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 689D8C433EF
+	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 11:43:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242572AbiFGLL1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jun 2022 07:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
+        id S243051AbiFGLnG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jun 2022 07:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243286AbiFGLLA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jun 2022 07:11:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4413393D5;
-        Tue,  7 Jun 2022 04:10:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A14BB81F69;
-        Tue,  7 Jun 2022 11:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D6967C34114;
-        Tue,  7 Jun 2022 11:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654600213;
-        bh=WNo/GKQfClkuUUNIAxhmLCRNfiQK1Xf045r+s/N/H8o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SQ86wqHt16s3t/HhIDRghw6tv1Fr4XmfFod2nVldf+4by1HHAr7y2iipnYixmHTgt
-         AWTq6nbJ1dQ2y9rnFS1ynEcTefv2hGU2SUirZfJJMfLgSQpwixk5dwwinsu/M88nNR
-         JNhIjl2Sn2nviAI0xAvOUKS4oWzhdjiMIuFVxpx/72E5uLcQ0xJCw/y8H90s3cvVRv
-         jKF0Rr6cSFt+urdSSxmKroTrYhLZaWLoaGGj5xLFN3aZISDOGj4CBLrosI9Qz/weV4
-         aQchIz9Jkk4QGZWQ9FC2Buk2jbuDKoLBsqRsYv7cI3pR6c9gLWauK/e0+d5N7qrQo6
-         a5kuQVC9VXS+g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B7F43E737E2;
-        Tue,  7 Jun 2022 11:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S242124AbiFGLnG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jun 2022 07:43:06 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C46BC23;
+        Tue,  7 Jun 2022 04:43:03 -0700 (PDT)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LHT2f0CpMzgYTL;
+        Tue,  7 Jun 2022 19:41:14 +0800 (CST)
+Received: from container.huawei.com (10.175.104.82) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 7 Jun 2022 19:43:01 +0800
+From:   Wang Yufen <wangyufen@huawei.com>
+To:     <davem@davemloft.net>, <yoshfuji@linux-ipv6.org>,
+        <dsahern@kernel.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH net-next v5 2/2] ipv6: Fix signed integer overflow in l2tp_ip6_sendmsg
+Date:   Tue, 7 Jun 2022 20:00:28 +0800
+Message-ID: <20220607120028.845916-2-wangyufen@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220607120028.845916-1-wangyufen@huawei.com>
+References: <20220607120028.845916-1-wangyufen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v4 0/3] reorganize the code of the enum
- skb_drop_reason
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165460021374.11944.12196215356756517705.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Jun 2022 11:10:13 +0000
-References: <20220606022436.331005-1-imagedong@tencent.com>
-In-Reply-To: <20220606022436.331005-1-imagedong@tencent.com>
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     kuba@kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        nhorman@tuxdriver.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        imagedong@tencent.com, dsahern@kernel.org, talalahmad@google.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+When len >= INT_MAX - transhdrlen, ulen = len + transhdrlen will be
+overflow. To fix, we can follow what udpv6 does and subtract the
+transhdrlen from the max.
 
-This series was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+---
+ net/l2tp/l2tp_ip6.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-On Mon,  6 Jun 2022 10:24:33 +0800 you wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> The code of skb_drop_reason is a little wild, let's reorganize them.
-> Three things and three patches:
-> 
-> 1) Move the enum 'skb_drop_reason' and related function to the standalone
->    header 'dropreason.h', as Jakub Kicinski suggested, as the skb drop
->    reasons are getting more and more.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v4,1/3] net: skb: move enum skb_drop_reason to standalone header file
-    https://git.kernel.org/netdev/net-next/c/ff8372a467fa
-  - [net-next,v4,2/3] net: skb: use auto-generation to convert skb drop reason to string
-    https://git.kernel.org/netdev/net-next/c/ec43908dd556
-  - [net-next,v4,3/3] net: dropreason: reformat the comment fo skb drop reasons
-    https://git.kernel.org/netdev/net-next/c/b160f7270e6d
-
-You are awesome, thank you!
+diff --git a/net/l2tp/l2tp_ip6.c b/net/l2tp/l2tp_ip6.c
+index c6ff8bf9b55f..9dbd801ddb98 100644
+--- a/net/l2tp/l2tp_ip6.c
++++ b/net/l2tp/l2tp_ip6.c
+@@ -504,14 +504,15 @@ static int l2tp_ip6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 	struct ipcm6_cookie ipc6;
+ 	int addr_len = msg->msg_namelen;
+ 	int transhdrlen = 4; /* zero session-id */
+-	int ulen = len + transhdrlen;
++	int ulen;
+ 	int err;
+ 
+ 	/* Rough check on arithmetic overflow,
+ 	 * better check is made in ip6_append_data().
+ 	 */
+-	if (len > INT_MAX)
++	if (len > INT_MAX - transhdrlen)
+ 		return -EMSGSIZE;
++	ulen = len + transhdrlen;
+ 
+ 	/* Mirror BSD error message compatibility */
+ 	if (msg->msg_flags & MSG_OOB)
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
