@@ -2,124 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9D5EC43334
-	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 14:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE7AEC433EF
+	for <bpf@archiver.kernel.org>; Tue,  7 Jun 2022 15:41:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243479AbiFGOWW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jun 2022 10:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        id S1344235AbiFGPlo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 7 Jun 2022 11:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238699AbiFGOWV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jun 2022 10:22:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDD737034;
-        Tue,  7 Jun 2022 07:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654611740; x=1686147740;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1uENdlWbgyIkZuBUo+RfpSMI6cTOPA2zidXVukSPb6s=;
-  b=h56I9pFe6sGjzTNqyczd4aOQbXgcIPKQ1Xo60N1DdFETVYlB5q2SYLUS
-   IUV219RHnKpuQ9eIeUZpZH3SNoW+E9hKi3m4qa+NPiIOzcBlUv7zmmsdc
-   dYXBHPmJk8BO+KCxCGr2aRZC8lgzpJYao5II/ko3wSH1FMpOGtyOnTud8
-   6WV034eLTGMC64F9cVK4k79f7yl7QyvNiNO/dGh7NyVGfOe+sJhp8aQBW
-   Jj/k93c8YUmFynDqlSOvfNGuri7JApIr9OihQbAE3y0NrCSx/ChC8gnGe
-   B7xX1pB0OmSpV16JociGu9riBrsrU65uJRwt/xsSIKT7kVXjB4dY6zZGb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="275498003"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="275498003"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 07:22:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="565456527"
-Received: from boxer.igk.intel.com ([10.102.20.173])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2022 07:22:18 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, magnus.karlsson@intel.com,
-        bjorn@kernel.org, Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH bpf] xsk: Fix handling of invalid descriptors in XSK Tx batching API
-Date:   Tue,  7 Jun 2022 16:22:00 +0200
-Message-Id: <20220607142200.576735-1-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.33.1
+        with ESMTP id S245474AbiFGPln (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 7 Jun 2022 11:41:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED49FC8BF3;
+        Tue,  7 Jun 2022 08:41:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2805FCE2261;
+        Tue,  7 Jun 2022 15:41:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8580C385A5;
+        Tue,  7 Jun 2022 15:41:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654616497;
+        bh=l+5X2UysSRek17uhSCRhsYUdPC9HnxURWjLyyr9B1U8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LJRKSWL+bB2h3/PYLBLj68c/xV0Q5L1GHSFMPBkDcWFKldIxEdTny/qPVFoFfPvHl
+         smMJVtm7sg1wKE6U6992txTarsRq3JiJbIsQ2Pl7zrn2v/I5ENWOFCl+x512tV5/G6
+         IZ2yQTLZL6lqAHSvEU0w+le5tH19cYZrhhBccZ9M=
+Date:   Tue, 7 Jun 2022 17:41:34 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?5bGx56u55bCP?= <mangosteen728@gmail.com>
+Cc:     ast <ast@kernel.org>, daniel <daniel@iogearbox.net>,
+        andrii <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH] bpf:add function
+Message-ID: <Yp9xrkeqUEWvZm9x@kroah.com>
+References: <CAB8PBH+EVX3iTr7Nu-QFHAom+VnjPLEk0hpWSi0QiyD5u-bKag@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAB8PBH+EVX3iTr7Nu-QFHAom+VnjPLEk0hpWSi0QiyD5u-bKag@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Xdpxceiver run on a AF_XDP ZC enabled driver revealed a problem with XSK
-Tx batching API. There is a test that checks how invalid Tx descriptors
-are handled by AF_XDP. Each valid descriptor is followed by invalid one
-on Tx side whereas the Rx side expects only to receive a set of valid
-descriptors.
+On Tue, Jun 07, 2022 at 09:28:58PM +0800, 山竹小 wrote:
+> Add the absolute path to get the executable corresponding tothe task
+> 
+> Signed-off-by: mangosteen728 < mangosteen728@gmail.com>
+> ---
+> Hi
+> This is my first attempt to submit patch, there are shortcomings
+> please more but wait.
+> 
+> In security audit often need to get the absolute path to the
+> executable of the process so I tried to add bpf_get_task_exe_path in
+> the helpers function to get.
+> 
+> The code currently only submits the implementation of the function and
+> how is this patch merge possible if I then add the relevant places。
+> 
+> thanks
+> mangosteen728
+> kernel/bpf/helpers.c | 37 +++++++++++++++++++++++++++++++++++++
+> 1 file changed, 37 insertions(+)
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 225806a..797f 850 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -257,6 +257,43 @@
+> .arg2_type = ARG_CONST_SIZE,
+> };
+> 
+> +BPF_CALL_3(bpf_get_task_exe_path, struct task_struct *, task, char *,
+> buf, u32, sz)
+> +{
+> + struct file *exe_file = NULL;
+> + char *p = NULL;
+> + long len = 0;
+> +
+> + if (!sz)
+> + return 0;
+> + exe_file = get_task_exe_file(tsk);
+> + if (IS_ERR_OR_NULL(exe_file))
+> + return 0;
+> + p = d_path(&exe_file->f_path, buf, sz);
+> + if (IS_ERR_OR_NULL(path)) {
+> + len = PTR_ERR(p);
+> + } else {
+> + len = buf + sz - p;
+> + memmove(buf, p, len);
+> + }
+> + fput(exe_file);
+> + return len;
+> +}
+> +
+> +static const struct bpf_func_proto bpf_get_task_exe_path_proto = {
+> + .func       = bpf_get_task_exe_path,
+> + .gpl_only   = false,
+> + .ret_type   = RET_INTEGER,
+> + .arg1_type  = ARG_PTR_TO_BTF_ID,
+> + .arg2_type  = ARG_PTR_TO_MEM,
+> + .arg3_type  = ARG_CONST_SIZE_OR_ZERO,
+> +};
+> +
 
-In current xsk_tx_peek_release_desc_batch() function, the amount of
-available descriptors is hidden inside xskq_cons_peek_desc_batch(). This
-can be problematic in cases where invalid descriptors are present due to
-the fact that xskq_cons_peek_desc_batch() returns only a count of valid
-descriptors. This means that it is impossible to properly update XSK
-ring state when calling xskq_cons_release_n().
+Something went really wrong with your patch :(
 
-To address this issue, pull out the contents of
-xskq_cons_peek_desc_batch() so that callers (currently only
-xsk_tx_peek_release_desc_batch()) will always be able to update the
-state of ring properly, as total count of entries is now available and
-use this value as an argument in xskq_cons_release_n(). By
-doing so, xskq_cons_peek_desc_batch() can be dropped altogether.
+But the larger issue is, there is no such thing as a "absolute path to a
+file" within the kernel, sorry.  This just is not going to work, and it
+has come up again and again and again with regards to other kernel
+subsystems many times.
 
-Fixes: 9349eb3a9d2a ("xsk: Introduce batched Tx descriptor interfaces")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- net/xdp/xsk.c       | 5 +++--
- net/xdp/xsk_queue.h | 8 --------
- 2 files changed, 3 insertions(+), 10 deletions(-)
+Step back and answer "why" you think you need a path to an executable?
+What needs this that you can not do it in userspace?  What are you going
+to do with this supposed information if you get it?
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index e0a4526ab66b..19ac872a6624 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -373,7 +373,8 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- 		goto out;
- 	}
- 
--	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, pool, max_entries);
-+	max_entries = xskq_cons_nb_entries(xs->tx, max_entries);
-+	nb_pkts = xskq_cons_read_desc_batch(xs->tx, pool, max_entries);
- 	if (!nb_pkts) {
- 		xs->tx->queue_empty_descs++;
- 		goto out;
-@@ -389,7 +390,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- 	if (!nb_pkts)
- 		goto out;
- 
--	xskq_cons_release_n(xs->tx, nb_pkts);
-+	xskq_cons_release_n(xs->tx, max_entries);
- 	__xskq_cons_release(xs->tx);
- 	xs->sk.sk_write_space(&xs->sk);
- 
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index a794410989cc..fb20bf7207cf 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -282,14 +282,6 @@ static inline bool xskq_cons_peek_desc(struct xsk_queue *q,
- 	return xskq_cons_read_desc(q, desc, pool);
- }
- 
--static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
--					    u32 max)
--{
--	u32 entries = xskq_cons_nb_entries(q, max);
--
--	return xskq_cons_read_desc_batch(q, pool, entries);
--}
--
- /* To improve performance in the xskq_cons_release functions, only update local state here.
-  * Reflect this to global state when we get new entries from the ring in
-  * xskq_cons_get_entries() and whenever Rx or Tx processing are completed in the NAPI loop.
--- 
-2.27.0
+And then think about filesystem namespaces...
 
+sorry, this isn't going to work.
+
+greg k-h
