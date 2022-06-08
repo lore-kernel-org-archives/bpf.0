@@ -2,67 +2,75 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCB2EC433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D869CCA47B
 	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 17:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiFHRzQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jun 2022 13:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S233115AbiFHRzP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jun 2022 13:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbiFHRzO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232999AbiFHRzO (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 8 Jun 2022 13:55:14 -0400
-X-Greylist: delayed 276 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 10:55:11 PDT
 Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C75443D3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE7C517D7;
         Wed,  8 Jun 2022 10:55:11 -0700 (PDT)
 Received: from SPMA-03.tubit.win.tu-berlin.de (localhost.localdomain [127.0.0.1])
-        by localhost (Email Security Appliance) with SMTP id 5519F6CC4C_2A0E168B;
-        Wed,  8 Jun 2022 17:50:32 +0000 (GMT)
+        by localhost (Email Security Appliance) with SMTP id 690BF6CC20_2A0E181B;
+        Wed,  8 Jun 2022 17:50:57 +0000 (GMT)
 Received: from mail.tu-berlin.de (mail.tu-berlin.de [141.23.12.141])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "exchange.tu-berlin.de", Issuer "DFN-Verein Global Issuing CA" (not verified))
-        by SPMA-03.tubit.win.tu-berlin.de (Sophos Email Appliance) with ESMTPS id 2194A6CC49_2A0E168F;
-        Wed,  8 Jun 2022 17:50:32 +0000 (GMT)
+        by SPMA-03.tubit.win.tu-berlin.de (Sophos Email Appliance) with ESMTPS id 2FA116CC17_2A0E181F;
+        Wed,  8 Jun 2022 17:50:57 +0000 (GMT)
 Received: from jt.fritz.box (77.183.106.143) by ex-04.svc.tu-berlin.de
  (10.150.18.8) with Microsoft SMTP Server id 15.2.986.22; Wed, 8 Jun 2022
- 19:50:31 +0200
+ 19:50:56 +0200
 From:   =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>,
         =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
-Subject: [PATCH bpf-next 0/2] Align BPF TCP CCs implementing cong_control() with non-BPF CCs
-Date:   Wed, 8 Jun 2022 19:48:41 +0200
-Message-ID: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
+Subject: [PATCH bpf-next 2/2] bpf: Require only one of cong_avoid() and cong_control() from a TCP CC
+Date:   Wed, 8 Jun 2022 19:48:43 +0200
+Message-ID: <20220608174843.1936060-3-jthinz@mailbox.tu-berlin.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
+References: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 X-SASI-RCODE: 200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=campus.tu-berlin.de; h=from:to:cc:subject:date:message-id:mime-version:content-type:content-transfer-encoding; s=dkim-tub; bh=tFIIq1mlQaYMEbUwEcOiqSBwB9Sl8ZXeLT5TWV11mtU=; b=jf7cRU+KRzX9doz7IHG0wgOSETjrUCSY6Eo4TqPpzzkEreZiPfFDIrHNfLv+GYQi46Kkn5QfFZIEzcX9HSKNTuJ+rnjv3KAyZclPSadNAcQAPBgXilutqPjey8dAFKZpnvnoa5pLDIzavHtCO8qUrh/JKj7+Ib+8aewmWPlRDV8=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=campus.tu-berlin.de; h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim-tub; bh=r/es0biJwheMd9/0Jrv0H/8TstFWSIIW0i0IHiK0hF8=; b=OADotppMlTZS/eQYL7EqbgANKGTrotXR2E/t0Y4qMeaoqa7DAfR0m5nWk+xuLHMeXKZdWfKbOPZz+lvjSeHfQYuclGLBeUIP5qunTNGsLXLZFHw4vMRmqbMIr9DoLfvQ9l8qpCMtmzpTZi7YoC9E3YZUBRi7TeGD6S75NBsGYfA=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello there,
+When a CC implements tcp_congestion_ops.cong_control(), the alternate
+cong_avoid() is not in use in the TCP stack. Do not force a BPF CC to
+implement cong_avoid() as a no-op by always requiring it.
 
-hope, I’m in the right place with bpf-next. Previous changes to
-bpf_tcp_ca.c seemed to have gone here, besides the MAINTAINERS file and
-get_maintainer.pl hinting more towards the neighboring net-next.
+An incomplete BPF CC implementing neither cong_avoid() nor
+cong_control() will still get rejected by
+tcp_register_congestion_control().
 
-This small series corrects some inconveniences for a BPF TCP CC that
-implements and uses tcp_congestion_ops.cong_control(). Until now, such a
-CC did not have all necessary write access to struct sock and
-unnecessarily needed to implement cong_avoid().
+Signed-off-by: Jörn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>
+---
+ net/ipv4/bpf_tcp_ca.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Jörn-Thorben Hinz (2):
-  bpf: Allow a TCP CC to write sk_pacing_rate and sk_pacing_status
-  bpf: Require only one of cong_avoid() and cong_control() from a TCP CC
-
- net/ipv4/bpf_tcp_ca.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 1f5c53ede4e5..37290d0bf134 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -17,6 +17,7 @@ extern struct bpf_struct_ops bpf_tcp_congestion_ops;
+ static u32 optional_ops[] = {
+ 	offsetof(struct tcp_congestion_ops, init),
+ 	offsetof(struct tcp_congestion_ops, release),
++	offsetof(struct tcp_congestion_ops, cong_avoid),
+ 	offsetof(struct tcp_congestion_ops, set_state),
+ 	offsetof(struct tcp_congestion_ops, cwnd_event),
+ 	offsetof(struct tcp_congestion_ops, in_ack_event),
 -- 
 2.30.2
 
