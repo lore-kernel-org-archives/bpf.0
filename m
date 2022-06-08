@@ -2,295 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D7EC43334
-	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 19:27:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36102C433EF
+	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 22:37:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235422AbiFHT1s (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jun 2022 15:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S236623AbiFHWhf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jun 2022 18:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiFHT1r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Jun 2022 15:27:47 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A24150B40
-        for <bpf@vger.kernel.org>; Wed,  8 Jun 2022 12:27:45 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id w27so28375998edl.7
-        for <bpf@vger.kernel.org>; Wed, 08 Jun 2022 12:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ime0uBhl8dZtvwaLFuJZVd540nG432k7Ukxn9kp1Kvw=;
-        b=avOAiY/Q7JFt+LCcHam9ROQrybpgXH50Nvl9ktPNdxY8Qpnl+lGiWlWlio/mo9SVYN
-         K8WiaHyiEevaX1XMfE6HjZcZjuRQUvp0xJMIy2YDT2uWuxtcrn+L0KKld8F9xxFIqJs+
-         ROaEJJZpzKssy4vaGb5Oq6TAv5nR28Zs3QtQq013DBwYCmmvTNM0uDOvVllWOr03ae0W
-         SdqapZNPkBO40HLbTgRMRWwo74rzsRucCYa3Cf//r+5U3fAIY7dZpOa30qKMKpKsmaHl
-         efbmClsxJMW+CSKnZ3BQ/NDQ6XSmQBmOMWM7vwsGRkvzqR79do4PPXuHem1JfZXC5M+I
-         2ygw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ime0uBhl8dZtvwaLFuJZVd540nG432k7Ukxn9kp1Kvw=;
-        b=mixyFLHHVfEBcjv2m0xvqZIAv6jlY/k0zZ1GlqQSIixNFyGfoNhGTxfkA4QTmZJbhH
-         5ORYu2vhDAZwgxugJZBslgiZLqc9hGUHWZ/g0RDTAoKtU4bRwD9a/293C3EXbOo+rXYU
-         oPnUo6DNL91MFtrboXsxoVkncJQg8ZpbcpW1e8C8EEN0snHEHaz1+CGnf1SrityJfxOy
-         IEcXBZZXRP4i8UxcudJUxuIVHF/4zfDpKzWl9XY+AJ7Djh7msL6CBfmmwqqA5knIv+FZ
-         1xQUarl6oIyOVAnn2CcfipGYPxevE82YaXNMn2Za585mjx+Fom872FBQ3RP76SCv7seI
-         dzWg==
-X-Gm-Message-State: AOAM5336vNCPkY7nf1Hq7CKgDdyGdGrdzcKZv5yRC8yZyZUrrR7fXPya
-        9e69JLSdyrEFe0WtZsNlBQA31R5Ub7tMYg==
-X-Google-Smtp-Source: ABdhPJyiu/2WqadWgYlGIt/RalX904VyTXTzp9p/YlKHRzXrHEz29Qmo8MtChpLwZsLB/NSh8tXUEg==
-X-Received: by 2002:a05:6402:43c5:b0:42d:e4f6:d63e with SMTP id p5-20020a05640243c500b0042de4f6d63emr41148178edc.303.1654716463185;
-        Wed, 08 Jun 2022 12:27:43 -0700 (PDT)
-Received: from localhost.localdomain (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id o9-20020a170906600900b006fec8e5b8a9sm9596730ejj.152.2022.06.08.12.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 12:27:42 -0700 (PDT)
-From:   Eduard Zingerman <eddyz87@gmail.com>
-To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, song@kernel.org,
-        joannelkoong@gmail.com
-Cc:     eddyz87@gmail.com
-Subject: [PATCH bpf-next v4 5/5] selftests/bpf: BPF test_prog selftests for bpf_loop inlining
-Date:   Wed,  8 Jun 2022 22:26:30 +0300
-Message-Id: <20220608192630.3710333-6-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220608192630.3710333-1-eddyz87@gmail.com>
-References: <20220608192630.3710333-1-eddyz87@gmail.com>
+        with ESMTP id S234574AbiFHWhd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jun 2022 18:37:33 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525A23F887;
+        Wed,  8 Jun 2022 15:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1654727830;
+        bh=6UcI+eHcxXsjfyDUhrglMMSQWDVdg3SyxvdHwQBpES0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=VL2nl8Zk1TeimCboWYa0kHvwhrF264awD8AUAUKR3r/sHr/4LA2yU7X1ZiUesn6BB
+         BuGvni/P8v2Ialm3RzhMM+yicfA4z4wLkC1TWv5xaGYbbdPfFQdJlayn8g7uUcZBea
+         iRwloFN01MPpfyy3iBGA2iP2bBy8jtosrjjxM2YU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from zweiundvierzig.fritz.box ([217.239.16.253]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MRmfo-1oAfAy0BoY-00TDFV; Thu, 09 Jun 2022 00:37:10 +0200
+From:   Jonas Lindner <jolindner@gmx.de>
+To:     paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org
+Cc:     trivial@kernel.org, Jonas Lindner <jolindner@gmx.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] selinux: fix typos in comments
+Date:   Thu,  9 Jun 2022 00:36:16 +0200
+Message-Id: <20220608223619.2287162-1-jolindner@gmx.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:E+DvfH46gyv8+k9caVZG/w/zdElgiIB/JC/XVRJZakZ/NLVeFjv
+ G+ha2gL0vRrLCftm/OC1EvjzNCWqa7IAwgQgkE8sdNTN5nqY7k7edaOsYdMybtawxiMNCpz
+ qcRUTypUBq6Kx2P7iPg5j0fy7Xd6ZGm0TPEcBQje9cWg5QBppeAojuJbQy2F24XtJPn0XHi
+ BUYUVFUbLpt8POUyiUDjQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:mqIas/Cr+H8=:7a1wAZKwOkfYZYBqT31v63
+ NveO4N/ZKZcq4RtTdBQ5uJDsQEq6s6SM0Z29D2k9vcjB5BljfOmTW94/LzkbFoRXgxC2nnSZs
+ UJdhTGqrsgjGItXB6AWokO0ED0YpqrUSGpyReKbPjSSe5DbiOOwVQQsskgnRIKQnRn1ZTX4NE
+ j9387e8zMk8Y2ExOiLNnwI6CI2zpXgJB15qkLlY/+oMYd5BLdHhvsvNHL62V/SdZmhiAahZit
+ hx2HQXJTkryJtLGMQqYMle2doR9nyApX2klNVp0SICHYB/YYKBGDCyYdbdrhZuaqTOcmuAiFH
+ gy/yQrGjs1Wh3NewD+a8xoWomlTw5NlYhGmneVsBufnVdaeZo6JVoPMnxR8XzdkyUKRHgSwwd
+ g84t9FFapl2M22enE6isL/gUhTtG/Ry3LRylGEsNzQrP1NHJ5ieae36UVVEd+dhJxU4nc03Yc
+ 7frq8Z/VXJtCrZJBPhah5MQqAm+crR3MJzK8Yz/7KSdvm3pUalwgmkWh515muL9PDpH68j1hO
+ Zy6/yqunqlS3qviWFJrGF67Bft+9A/6j+xOLpw2e3z5PIWXKPYw5azgDF3pIPldae4dWcPuql
+ tgZjwAmkO/vopuS6z//l480iuWFDZeqVH0vJu7ihedznnOq0o9T2olP6U4vX2+CK+7opGEPLA
+ 3g6mc9u/4Fc0daoKEe5feLTCLMjaL/pULSawHbbwhWNqQCULloEdmxYJeTQshdgtk4ZCSHubO
+ ug2E8XdJhFGwLy5kBz78nY3VejeLS7HrGv4EUHjWnhxgmq9yrB/aakeuSy6Y6ycH/T54ZHwfb
+ QDlQYgmSEntQcm1/6gXHo5DD2aIDeNHrSzyBQT1kmdA3uQdU1Emqcwr/t3NDEvYDESqUGgiY1
+ y7wug+71EQs4BRtUapsEma/YczUpZN6iOvvumpeb1HK/cXNSnfPA19iWw5Qpsqqi2lZvFJc38
+ xEGPGMcX5EMLlfD8fTeWs5McfPj6xsE1gNa4beoOTo0mIoRUkW4yST8Nx62a44nPvo54TR1wV
+ voEBkVHft8tof2LLoZvaiFRosyVIQDaorhYlvfCQIHZBDLUIRUUXVKriYZWrC988rvPYs6aek
+ sL+TiBh+uqxxa9dQp6QK8xVkb1jqSDGETOavGsfsppwPS7viI8hpFULQw==
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Two new test BPF programs for test_prog selftests checking bpf_loop
-behavior. Both are corner cases for bpf_loop inlinig transformation:
- - check that bpf_loop behaves correctly when callback function is not
-   a compile time constant
- - check that local function variables are not affected by allocating
-   additional stack storage for registers spilled by loop inlining
+selinux: fix typos in comments
+Signed-off-by: Jonas Lindner <jolindner@gmx.de>
+=2D--
+ security/selinux/hooks.c         | 4 ++--
+ security/selinux/include/audit.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- .../selftests/bpf/prog_tests/bpf_loop.c       |  62 ++++++++++
- tools/testing/selftests/bpf/progs/bpf_loop.c  | 114 ++++++++++++++++++
- 2 files changed, 176 insertions(+)
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index beceb89f68d9..d3f18d4a03c0 100644
+=2D-- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -640,7 +640,7 @@ static int selinux_set_mnt_opts(struct super_block *sb=
+,
+ 	 * we need to skip the double mount verification.
+ 	 *
+ 	 * This does open a hole in which we will not notice if the first
+-	 * mount using this sb set explict options and a second mount using
++	 * mount using this sb set explicit options and a second mount using
+ 	 * this sb does not set any security options.  (The first options
+ 	 * will be used for both mounts)
+ 	 */
+@@ -6795,7 +6795,7 @@ static u32 bpf_map_fmode_to_av(fmode_t fmode)
+ }
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_loop.c b/tools/testing/selftests/bpf/prog_tests/bpf_loop.c
-index 380d7a2072e3..4cd8a25afe68 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_loop.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_loop.c
-@@ -120,6 +120,64 @@ static void check_nested_calls(struct bpf_loop *skel)
- 	bpf_link__destroy(link);
- }
- 
-+static void check_non_constant_callback(struct bpf_loop *skel)
-+{
-+	struct bpf_link *link =
-+		bpf_program__attach(skel->progs.prog_non_constant_callback);
-+
-+	if (!ASSERT_OK_PTR(link, "link"))
-+		return;
-+
-+	skel->bss->callback_selector = 0x0F;
-+	usleep(1);
-+	ASSERT_EQ(skel->bss->g_output, 0x0F, "g_output #1");
-+
-+	skel->bss->callback_selector = 0xF0;
-+	usleep(1);
-+	ASSERT_EQ(skel->bss->g_output, 0xF0, "g_output #2");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+static void check_stack(struct bpf_loop *skel)
-+{
-+	struct bpf_link *link = bpf_program__attach(skel->progs.stack_check);
-+	const int max_key = 12;
-+	int key;
-+	int map_fd;
-+
-+	if (!ASSERT_OK_PTR(link, "link"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.map1);
-+
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map__fd"))
-+		goto out;
-+
-+	for (key = 1; key <= max_key; ++key) {
-+		int val = key;
-+		int err = bpf_map_update_elem(map_fd, &key, &val, BPF_NOEXIST);
-+
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto out;
-+	}
-+
-+	usleep(1);
-+
-+	for (key = 1; key <= max_key; ++key) {
-+		int val;
-+		int err = bpf_map_lookup_elem(map_fd, &key, &val);
-+
-+		if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+			goto out;
-+		if (!ASSERT_EQ(val, key + 1, "bad value in the map"))
-+			goto out;
-+	}
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
- void test_bpf_loop(void)
- {
- 	struct bpf_loop *skel;
-@@ -140,6 +198,10 @@ void test_bpf_loop(void)
- 		check_invalid_flags(skel);
- 	if (test__start_subtest("check_nested_calls"))
- 		check_nested_calls(skel);
-+	if (test__start_subtest("check_non_constant_callback"))
-+		check_non_constant_callback(skel);
-+	if (test__start_subtest("check_stack"))
-+		check_stack(skel);
- 
- 	bpf_loop__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_loop.c b/tools/testing/selftests/bpf/progs/bpf_loop.c
-index e08565282759..de1fc82d2710 100644
---- a/tools/testing/selftests/bpf/progs/bpf_loop.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_loop.c
-@@ -11,11 +11,19 @@ struct callback_ctx {
- 	int output;
- };
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 32);
-+	__type(key, int);
-+	__type(value, int);
-+} map1 SEC(".maps");
-+
- /* These should be set by the user program */
- u32 nested_callback_nr_loops;
- u32 stop_index = -1;
- u32 nr_loops;
- int pid;
-+int callback_selector;
- 
- /* Making these global variables so that the userspace program
-  * can verify the output through the skeleton
-@@ -111,3 +119,109 @@ int prog_nested_calls(void *ctx)
- 
- 	return 0;
- }
-+
-+static int callback_set_f0(int i, void *ctx)
-+{
-+	g_output = 0xF0;
-+	return 0;
-+}
-+
-+static int callback_set_0f(int i, void *ctx)
-+{
-+	g_output = 0x0F;
-+	return 0;
-+}
-+
-+/*
-+ * non-constant callback is a corner case for bpf_loop inline logic
-+ */
-+SEC("fentry/" SYS_PREFIX "sys_nanosleep")
-+int prog_non_constant_callback(void *ctx)
-+{
-+	struct callback_ctx data = {};
-+
-+	if (bpf_get_current_pid_tgid() >> 32 != pid)
-+		return 0;
-+
-+	int (*callback)(int i, void *ctx);
-+
-+	g_output = 0;
-+
-+	if (callback_selector == 0x0F)
-+		callback = callback_set_0f;
-+	else
-+		callback = callback_set_f0;
-+
-+	bpf_loop(1, callback, NULL, 0);
-+
-+	return 0;
-+}
-+
-+static int stack_check_inner_callback(void *ctx)
-+{
-+	return 0;
-+}
-+
-+static int map1_lookup_elem(int key)
-+{
-+	int *val = bpf_map_lookup_elem(&map1, &key);
-+
-+	return val ? *val : -1;
-+}
-+
-+static void map1_update_elem(int key, int val)
-+{
-+	bpf_map_update_elem(&map1, &key, &val, BPF_ANY);
-+}
-+
-+static int stack_check_outer_callback(void *ctx)
-+{
-+	int a = map1_lookup_elem(1);
-+	int b = map1_lookup_elem(2);
-+	int c = map1_lookup_elem(3);
-+	int d = map1_lookup_elem(4);
-+	int e = map1_lookup_elem(5);
-+	int f = map1_lookup_elem(6);
-+
-+	bpf_loop(1, stack_check_inner_callback, NULL, 0);
-+
-+	map1_update_elem(1, a + 1);
-+	map1_update_elem(2, b + 1);
-+	map1_update_elem(3, c + 1);
-+	map1_update_elem(4, d + 1);
-+	map1_update_elem(5, e + 1);
-+	map1_update_elem(6, f + 1);
-+
-+	return 0;
-+}
-+
-+/* Some of the local variables in stack_check and
-+ * stack_check_outer_callback would be allocated on stack by
-+ * compiler. This test should verify that stack content for these
-+ * variables is preserved between calls to bpf_loop (might be an issue
-+ * if loop inlining allocates stack slots incorrectly).
-+ */
-+SEC("fentry/" SYS_PREFIX "sys_nanosleep")
-+int stack_check(void *ctx)
-+{
-+	if (bpf_get_current_pid_tgid() >> 32 != pid)
-+		return 0;
-+
-+	int a = map1_lookup_elem(7);
-+	int b = map1_lookup_elem(8);
-+	int c = map1_lookup_elem(9);
-+	int d = map1_lookup_elem(10);
-+	int e = map1_lookup_elem(11);
-+	int f = map1_lookup_elem(12);
-+
-+	bpf_loop(1, stack_check_outer_callback, NULL, 0);
-+
-+	map1_update_elem(7,  a + 1);
-+	map1_update_elem(8, b + 1);
-+	map1_update_elem(9, c + 1);
-+	map1_update_elem(10, d + 1);
-+	map1_update_elem(11, e + 1);
-+	map1_update_elem(12, f + 1);
-+
-+	return 0;
-+}
--- 
-2.25.1
+ /* This function will check the file pass through unix socket or binder t=
+o see
+- * if it is a bpf related object. And apply correspinding checks on the b=
+pf
++ * if it is a bpf related object. And apply corresponding checks on the b=
+pf
+  * object based on the type. The bpf maps and programs, not like other fi=
+les and
+  * socket, are using a shared anonymous inode inside the kernel as their =
+inode.
+  * So checking that inode cannot identify if the process have privilege t=
+o
+diff --git a/security/selinux/include/audit.h b/security/selinux/include/a=
+udit.h
+index 1cba83d17f41..406bceb90c6c 100644
+=2D-- a/security/selinux/include/audit.h
++++ b/security/selinux/include/audit.h
+@@ -18,7 +18,7 @@
+ /**
+  *	selinux_audit_rule_init - alloc/init an selinux audit rule structure.
+  *	@field: the field this rule refers to
+- *	@op: the operater the rule uses
++ *	@op: the operator the rule uses
+  *	@rulestr: the text "target" of the rule
+  *	@rule: pointer to the new rule structure returned via this
+  *
+=2D-
+2.34.1
 
