@@ -2,170 +2,173 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3DD6C433EF
-	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 18:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C01FC433EF
+	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 19:27:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiFHSec (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jun 2022 14:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S235412AbiFHT1k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jun 2022 15:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiFHSeb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Jun 2022 14:34:31 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FF0A006E;
-        Wed,  8 Jun 2022 11:34:28 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258FPRoe014474;
-        Wed, 8 Jun 2022 11:34:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=facebook;
- bh=RCDII/xLmat5gK/OX9wjpRYZTmhUJ0vongr7nhftIcQ=;
- b=dQT67MELI4QR1HYOTlcJw/Ih4PIFQX4EjpRj6IJXhiFbyvXSX7YKBvynITEB5R7USRJv
- GK4j/Fwx30DjzoEdJM8crAIv21JRb2fygQcfRkEqxNu8Ujyid8rmE6r5vANAiTj8PM8I
- ER7yJozXWVMPZDXyioa33qb4kW7HTJEDXqo= 
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2040.outbound.protection.outlook.com [104.47.51.40])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gj9djrrmy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Jun 2022 11:34:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EBtxK92AGA3hOjpnrJZOpD5eIBrMfL4vGepJ6GZAM9bhkqSUxBKA6hnUzt9wbwpW+xbC3TWalewF49+8FsTMVJdEA5OyQCIHAQFmqY/yJTh7Qdcdo+8g+kzBCL/9S/cqU/cjPoVFO786NiwGoZVYroKkTMz8IKljhnPjhsIWnMiUUpjvHIp8r3oTJf4pdfVK9M9P6V30i8dgpZ2nN3i3UXH59vIJLLpLJuRmhLOtfVgk4R8wgUbZ3rGEfdbMeF2CKf1A7EZOfpCbkyhAizZIY7efdrMRWE8kXyK8dJQk9bD8fAsnXzv5+c0GOXgT8kJ6/xUuJu2ib9buji6saRWP+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rZR8HlN6Ym448S548tFHbpOYFriVaMf4usVKc2E4Moo=;
- b=nJzDpOZeAFE4yBnmJ8UNU6XdfZ60rERU3Z7eOdfNiH/nswYfLjOIzgqznhJByiqpzm126qKFHID735+hXy19QswYTNaWICGA3CuaHa/qEcrAt1FY0SbczO42v59JB2i8EtyWOeB9Hu9X1k7UqSY6lZyjyTlm+jFeGsDB3khsVoHw8DPC32eQuFPUepMYzssf2HMU2CdePaIvZXu4nY/TAN13zZZZ72ov8qzE7gHXjdR6mM35XEOYvW1vf/FDSox1dplsEMtzVvGMjIgna6uxndyjfQi3kRUsVY0tX6n9keiJXc9UfUMH6O/FJRsX67IbfbLWdMii2Y4HkpVy2N9HaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5016.namprd15.prod.outlook.com (2603:10b6:806:1db::19)
- by DM6PR15MB2490.namprd15.prod.outlook.com (2603:10b6:5:8e::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Wed, 8 Jun
- 2022 18:33:59 +0000
-Received: from SA1PR15MB5016.namprd15.prod.outlook.com
- ([fe80::a09e:da84:3316:6eb0]) by SA1PR15MB5016.namprd15.prod.outlook.com
- ([fe80::a09e:da84:3316:6eb0%9]) with mapi id 15.20.5332.012; Wed, 8 Jun 2022
- 18:33:59 +0000
-Date:   Wed, 8 Jun 2022 11:33:56 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     =?utf-8?Q?J=C3=B6rn-Thorben?= Hinz <jthinz@mailbox.tu-berlin.de>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] bpf: Require only one of cong_avoid() and
- cong_control() from a TCP CC
-Message-ID: <20220608183356.6lzoxkrfskmvhod2@kafai-mbp>
-References: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
- <20220608174843.1936060-3-jthinz@mailbox.tu-berlin.de>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220608174843.1936060-3-jthinz@mailbox.tu-berlin.de>
-X-ClientProxiedBy: SJ0PR03CA0107.namprd03.prod.outlook.com
- (2603:10b6:a03:333::22) To SA1PR15MB5016.namprd15.prod.outlook.com
- (2603:10b6:806:1db::19)
+        with ESMTP id S233460AbiFHT1k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jun 2022 15:27:40 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183F215C8BF
+        for <bpf@vger.kernel.org>; Wed,  8 Jun 2022 12:27:39 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id fu3so41876802ejc.7
+        for <bpf@vger.kernel.org>; Wed, 08 Jun 2022 12:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JEPvf8mFBSvMJuGlNjwgV8uLkKEQIN3Rku1ABAF7IcU=;
+        b=XAA6YIWp3bazblOPiZCcuwHHxO2JbY7pBpbqqhSBYAvIMZoXAMzvXDie0WndaZIgoh
+         OxWZEekr2h6VCn8leDhnhNBUNUsWxMkquGLpTxZpyGX/imF2Sp+NS9UdiKyw96cuhHUA
+         oKDgKUFodHB51/MnIvgY0uJh+DfvcIUWu3jS0iqcvRBYfRyAarUrFp8cnI6kOdhhcgOH
+         iviMgrYketCInSOJQ2vO+Rg99cN8A+O4ewC7R45noPoKoQCoRKNrTB5uImymE6VR6r4r
+         mVuo+zKdFcwlcbFvHpVknHJA7radhkK7bZSDi44JLOuwqwKr2yKc4uvXOR3WBMtw0t/1
+         XLUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JEPvf8mFBSvMJuGlNjwgV8uLkKEQIN3Rku1ABAF7IcU=;
+        b=U7wYJYQELF8VVkJeCor4fqrqrmNUxk+Xf/VHCIb07GtQ1UCrsj1l2n/wNZhtLco7Xc
+         08r5dkItvmQr9VBjq5/AvwXYzKRES1FphpIYiHVffQMJqxZot8+YoDaP2G7BSgP5+zPF
+         wBabSDql9vkL5AFpdwMrgw53arx00toGzn1vz4a9Y5HpYPHzA8CPKOhotVYzTLaiD/BZ
+         2AGaBQyzwxOobz962YfLOvtrgdLl3MjGWzkvcbnWnu75KjFsvnQfwX3uvG3kkQ5NEzk/
+         BoJtM4B5uy+7ACSufQC1au3LbwQVeFKm0YjOOKhOiynkuwJSXkQkr0BlRMKdQT8m8+GU
+         1msw==
+X-Gm-Message-State: AOAM530V4BLBRmCNynQSG03Bo77kleHX0us1/xxoNS5bleXt9c5Y7UcR
+        RjciR4gex4O7etIFopw3E9/XXemlctY9MA==
+X-Google-Smtp-Source: ABdhPJztiHx9NyfQAWyd+QD7y3SZvDlB5p/i9Zl4fEmtHA3Tco5HlfqBMcwFU8X8b3PMPA41ff3/jA==
+X-Received: by 2002:a17:906:9c82:b0:6e1:1d6c:914c with SMTP id fj2-20020a1709069c8200b006e11d6c914cmr32670523ejc.769.1654716457220;
+        Wed, 08 Jun 2022 12:27:37 -0700 (PDT)
+Received: from localhost.localdomain (boundsly.muster.volia.net. [93.72.16.93])
+        by smtp.gmail.com with ESMTPSA id o9-20020a170906600900b006fec8e5b8a9sm9596730ejj.152.2022.06.08.12.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 12:27:36 -0700 (PDT)
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com, song@kernel.org,
+        joannelkoong@gmail.com
+Cc:     eddyz87@gmail.com
+Subject: [PATCH bpf-next v4 0/5] bpf_loop inlining
+Date:   Wed,  8 Jun 2022 22:26:25 +0300
+Message-Id: <20220608192630.3710333-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f4830ccb-8d38-4bc7-2c28-08da497d7401
-X-MS-TrafficTypeDiagnostic: DM6PR15MB2490:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR15MB24906E2706265D65ACF20247D5A49@DM6PR15MB2490.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QGrUSmEzRy40sJwj9snpc9/BHvJ0xhloP2m+Y1hmncQgxn1fQUv/BbqP1bT5GgkBdX+DRR3zoI/cAABtqjqidNzLaTX2HbUdkqiA6SrJJn2oZ9vP0y8GSZxwwJlS51tu2/34PbfBgkvo9rEer3WPhBI7M1L+4SGjKG85jQomS/zPGiQqr9/O50lNvC2EAEeSCavRA1VX1nBk/qAQ21FpiJcKCoW68TYqkYdELRsvF0b+W8luxiutJK3LJ5ao+olaOXwbEJSZxFyDKgYb9H+Jm9hNldrgQDYqjAdzUYmEe0Jmy77oihy009LxZ9nXxdj8Q54ZCv200T3Pla/yQ5AieJq0rGKUdz4jgJtqgoLNWRRYq3T24P4h/79fBH9rTmI/TS39KWi/QQXTB6CeklIxj/KebfFcm/NgnG4DbWjjkD+5q6m96ax68ZQNHQ4XiORRoLzWCx/pgf5emaUhg5ESAQhdno64bQsu1T68FbkzQhD3wMbbiSHl7/SuRBPia6uqV/mv5gnXcl8juuE360dAHapPQjx8nThc18RJjL0gkVLofFJwofjCn+SWJRaE+IxyR49a8LMo+mZor7U8rZBpRlN0+cjYxPOF2t3K67DmLtaS5S72bspb8PbuxcHj4naR54AbIdcbkvRPOnwPfpODDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5016.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(8936002)(316002)(6486002)(6512007)(83380400001)(38100700002)(86362001)(1076003)(33716001)(186003)(2906002)(6506007)(66946007)(6666004)(66556008)(8676002)(5660300002)(6916009)(508600001)(54906003)(52116002)(66476007)(4326008)(9686003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?31EITchnxv0KCU0ERUUAGmjyEbN/45u01YKk81jdTeFq6/9ZKb/wPBH1HD?=
- =?iso-8859-1?Q?uQYwPh/coo3oGBRbDvq2RfU8v9fWzH+GNDC8jYa6jtbdOWC9IjfJlS+R1X?=
- =?iso-8859-1?Q?I3uDqUyFHWLhYz/7koRLUsnSBiaSrCrRAvLSDwLdUWk5wiPrexDUql1mf7?=
- =?iso-8859-1?Q?aHiFATmqyawAczJd4W4Zc+rqR0zRvT2MMdow8IeG/kVyNJNeVIcjwlbxmg?=
- =?iso-8859-1?Q?7nCcqYEuG5+4Ve1V1O35VxA3yd80DWymmELCxJ2jSVVdlO8OIHAbSgaZWh?=
- =?iso-8859-1?Q?mSjBUC+8NG5x+bRPHqZ3v0hVoRAQ9hv/GdThnjJZZNDPjEa4AvjjDh/MR3?=
- =?iso-8859-1?Q?5hdab9Mj4uDQEwJgcTwtl7XvWGde77id524YopJwL1o//Nnk9JKLee3+zS?=
- =?iso-8859-1?Q?RPjkqkZa9kDvPRibl4sUZSmjfL121YVqoybED4XkY1qPDK3W0kwjVHULny?=
- =?iso-8859-1?Q?/SHf7zk45Or4PK4DF8M5jMlNRMAWYEng6zdCKZ0lXfsjWOaOEPYhEemqYS?=
- =?iso-8859-1?Q?Kqu8acFqbXAp2K0/HhVmlar3Bfv0DvEJ5nS+BB5waB+C+X5sLeFluvdUUz?=
- =?iso-8859-1?Q?/wXVu00RG7k+0V6dVUzd4FKENRED7nuXao9kRGGpk+R2EFzO+QnKbypaL/?=
- =?iso-8859-1?Q?OYwBhfzurY/3/kHRNTpChRRRViXwxBE1QMIWq/46v07ookBSTF3DrHix9h?=
- =?iso-8859-1?Q?mw5GyLlfoVYF/hxQGX87i9MteTFh5Uwp6L5imtHla5iAz8q2OFz2lFjWi7?=
- =?iso-8859-1?Q?Z6c9VDtxACN6u9TZwc7XKV/gXLIgXqn7Ngf/q5q2wF90ZGbqU1a2IyYaGp?=
- =?iso-8859-1?Q?A0Ewd0sU48dQu9SM2faxB4y9vYAQagn1j8bnznL7Rx9qH82kSTAxxCWgRc?=
- =?iso-8859-1?Q?8s3GlPIyC/NyECyyLlO4jvKxlMPF8hDfCuyg3cT/9qqbRHpXprueV5oe1O?=
- =?iso-8859-1?Q?iy6seVC/c/A66Utj/1nSkNUvShdwNjLPLp7l7siCJfqNgfffM0pO837rvP?=
- =?iso-8859-1?Q?wtXFFVt3m4jwLRhfDbcAlD+GWP3RGKRAhUGEDLkv2FbbBxnXw3cvUJeTG2?=
- =?iso-8859-1?Q?UAmSmiQKqZHimpKnoZsy2gEanPMKw/p/rwc1HCIPMwpW41XK3cIlswwB0O?=
- =?iso-8859-1?Q?3ddMVaB7cLn3oR1E5pV9X4pYNx6QQhX6nM/F2RZjXvoL1vIDDokg4HEL9L?=
- =?iso-8859-1?Q?+rktGpdHuemAVMko5nZawGeOjh7mhgiEsfe9ePCU+qFP7oUyVJvTK5m4NA?=
- =?iso-8859-1?Q?wDUPoXsUZ3Xd/ahgP7Cff1jc9K0FPZmOumkmzMmrhGH94VJzDkZ4fciHh4?=
- =?iso-8859-1?Q?9C49RCAHELiLmchdD1cAxq2YBumB+WnpMDKkmsf05CKeSzedYMv4ulmEbb?=
- =?iso-8859-1?Q?DEnLcO6tpfsTpihLNyYkHpvqDe+/grwnUs6u2+inwKsxZ85Ztj7XmAJInS?=
- =?iso-8859-1?Q?Fxr0RqBLP+lbSp+32lvZaH6/iqobfXp3FoqV9yHR+ICOXsPGZ+Q7gFJ2d+?=
- =?iso-8859-1?Q?YIHHcZ00dwD4LwJ6YcpAspKxEQ7CFHtznSyKDbGyh2nBR2Zi5066awBvPT?=
- =?iso-8859-1?Q?HUGrd/PtkuzCsfF+bSF3cxXviogE4hXTPZ8r5R0ENQFNjD3l4Q6yI4byyE?=
- =?iso-8859-1?Q?YhT5KPiu5KiMtMWyLKhBb6chFGx+jbF66YspHPLrsn18l3SWYkRgwyPVPS?=
- =?iso-8859-1?Q?i71v2DDYvKcHqrejmrcJLQxuUVbOMiTgRVH5kcL1ys2m5mBoGvyj6dqUfa?=
- =?iso-8859-1?Q?dmv9tCuRVGLNKyCV3BAzLbex2q2LBAoBSG+bQtSLdTcjMrLiCk5ERfkfxY?=
- =?iso-8859-1?Q?G2G6vUX8uFKlFWx+r6rmvN6xkBM9/CA=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4830ccb-8d38-4bc7-2c28-08da497d7401
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5016.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2022 18:33:59.4038
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FhsdU/eHJD6+YABF2uyoIJgiij/0/CMDBpRgRFNVJZ5DGd+9aBcSw9yWRzX96l0R
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB2490
-X-Proofpoint-GUID: p18FrwoFqEu0eK6BI2oPky0ZoTN3Go2D
-X-Proofpoint-ORIG-GUID: p18FrwoFqEu0eK6BI2oPky0ZoTN3Go2D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 07:48:43PM +0200, Jörn-Thorben Hinz wrote:
-> When a CC implements tcp_congestion_ops.cong_control(), the alternate
-> cong_avoid() is not in use in the TCP stack. Do not force a BPF CC to
-> implement cong_avoid() as a no-op by always requiring it.
-> 
-> An incomplete BPF CC implementing neither cong_avoid() nor
-> cong_control() will still get rejected by
-> tcp_register_congestion_control().
-> 
-> Signed-off-by: Jörn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>
-> ---
->  net/ipv4/bpf_tcp_ca.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
-> index 1f5c53ede4e5..37290d0bf134 100644
-> --- a/net/ipv4/bpf_tcp_ca.c
-> +++ b/net/ipv4/bpf_tcp_ca.c
-> @@ -17,6 +17,7 @@ extern struct bpf_struct_ops bpf_tcp_congestion_ops;
->  static u32 optional_ops[] = {
->  	offsetof(struct tcp_congestion_ops, init),
->  	offsetof(struct tcp_congestion_ops, release),
-> +	offsetof(struct tcp_congestion_ops, cong_avoid),
-At least one of the cong_avoid() or cong_control() is needed.
-It is better to remove is_optional(moff) check and its optional_ops[]
-here.  Only depends on the tcp_register_congestion_control() which
-does a similar check at the beginning.
+Hi Everyone,
 
-Patch 1 looks good.  tcp_bbr.c also needs the sk_pacing fields.
+This is the next iteration of the patch. It includes changes suggested
+by Song, Joanne and Alexei. Please find updated intro message and
+change log below.
 
-A selftest is needed.  Can you share your bpf tcp-cc and
-use it as a selftest to exercise the change in this patch
-set ?
+This patch implements inlining of calls to bpf_loop helper function
+when bpf_loop's callback is statically known. E.g. the rewrite does
+the following transformation during BPF program processing:
 
+  bpf_loop(10, foo, NULL, 0);
 
->  	offsetof(struct tcp_congestion_ops, set_state),
->  	offsetof(struct tcp_congestion_ops, cwnd_event),
->  	offsetof(struct tcp_congestion_ops, in_ack_event),
-> -- 
-> 2.30.2
-> 
+ ->
+
+  for (int i = 0; i < 10; ++i)
+    foo(i, NULL);
+
+The transformation leads to measurable latency change for simple
+loops. Measurements using `benchs/run_bench_bpf_loop.sh` inside QEMU /
+KVM on i7-4710HQ CPU show a drop in latency from 14 ns/op to 2 ns/op.
+
+The change is split in five parts:
+
+* Update to test_verifier.c to specify expected and unexpected
+  instruction sequences. This allows to check BPF program rewrites
+  applied by e.g. do_mix_fixups function.
+
+* Update to test_verifier.c to specify BTF function infos and types
+  per test case. This is necessary for tests that load sub-program
+  addresses to a variable because of the checks applied by
+  check_ld_imm function.
+
+* The update to verifier.c that tracks state of the parameters for
+  each bpf_loop call in a program and decides whether it could be
+  replaced by a loop.
+
+* A set of test cases for `test_verifier` that use capabilities added
+  by the first two patches to verify instructions produced by inlining
+  logic.
+
+* Two test cases for `test_prog` to check that possible corner cases
+  behave as expected.
+
+Additional details are available in commit messages for each patch.
+
+Changes since v3:
+ - Function `adjust_stack_depth_for_loop_inlining` is replaced by
+   function `optimize_bpf_loop`. Function `optimize_bpf_loop` is
+   responsible for both stack depth adjustment and call instruction
+   replacement.
+ - Changes in `do_misc_fixups` are reverted.
+ - Changes in `adjust_subprog_starts_after_remove` are reverted and
+   function `adjust_loop_inline_subprogno` is removed. This is
+   possible because call to `optimize_bpf_loop` is placed before the
+   dead code removal in `opt_remove_dead_code` (in contrast to the
+   position of `do_misc_fixups` where inlining was done in v3).
+ - Field `bpf_insn_aux_data.loop_inline_state` is now a part of
+   anonymous union at the start of the `bpf_insn_aux_data`.
+ - Data structure `bpf_loop_inline_state` is simplified to use single
+   flag field `fit_for_inline` instead of separate fields
+   `flags_is_zero` & `callback_is_constant`.
+ - Macro definition `BPF_MAX_LOOPS` is moved from
+   `include/linux/bpf_verifier.h` to `include/linux/bpf.h` to avoid
+   include of `include/linux/bpf_verifier.h` in `bpf_iter.c`.
+ - `inline_bpf_loop` changed back to use array initialization and hard
+   coded offsets as in v2.
+ - Style / formatting updates.
+
+Changes since v2:
+ - fix for `stack_check` test case in `test_progs-no_alu32`, all tests
+   are passing now;
+ - v2 3/3 patch is split in three parts:
+   - kernel changes
+   - test_verifier changes
+   - test_prog changes
+ - updated `inline_bpf_loop` in `verifier.c` to calculate each offset
+   used in instructions to avoid "magic" numbers;
+ - removed newline handling logic in `fail_log` branch of
+   `do_single_test` in `test_verifier.c` to simplify the patch set;
+ - styling fixes suggested in review for v2 of this patch set.
+
+Changes since v1:
+ - allow to use SKIP_INSNS in instruction pattern specification in
+   test_verifier tests;
+ - fix for a bug in spill offset assignement for loop vars when
+   bpf_loop is located in a non-main function.
+
+Eduard Zingerman (5):
+  selftests/bpf: specify expected instructions in test_verifier tests
+  selftests/bpf: allow BTF specs and func infos in test_verifier tests
+  bpf: Inline calls to bpf_loop when callback is known
+  selftests/bpf: BPF test_verifier selftests for bpf_loop inlining
+  selftests/bpf: BPF test_prog selftests for bpf_loop inlining
+
+ include/linux/bpf.h                           |   3 +
+ include/linux/bpf_verifier.h                  |  12 +
+ kernel/bpf/bpf_iter.c                         |   9 +-
+ kernel/bpf/verifier.c                         | 168 ++++++++-
+ .../selftests/bpf/prog_tests/bpf_loop.c       |  62 ++++
+ tools/testing/selftests/bpf/prog_tests/btf.c  |   1 -
+ tools/testing/selftests/bpf/progs/bpf_loop.c  | 114 ++++++
+ tools/testing/selftests/bpf/test_btf.h        |   2 +
+ tools/testing/selftests/bpf/test_verifier.c   | 328 +++++++++++++++++-
+ .../selftests/bpf/verifier/bpf_loop_inline.c  | 244 +++++++++++++
+ 10 files changed, 916 insertions(+), 27 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/bpf_loop_inline.c
+
+-- 
+2.25.1
+
