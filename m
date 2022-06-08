@@ -2,58 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D927C43334
-	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 08:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 160C6C43334
+	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 09:10:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbiFHIv4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jun 2022 04:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S233812AbiFHJK2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jun 2022 05:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiFHIvO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Jun 2022 04:51:14 -0400
-X-Greylist: delayed 721 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Jun 2022 01:08:41 PDT
-Received: from mail.determinedfia.pl (mail.determinedfia.pl [46.183.184.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8826C1C286E
-        for <bpf@vger.kernel.org>; Wed,  8 Jun 2022 01:08:39 -0700 (PDT)
-Received: by mail.determinedfia.pl (Postfix, from userid 1001)
-        id AAB1244AA9; Wed,  8 Jun 2022 09:55:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=determinedfia.pl;
-        s=mail; t=1654674953;
-        bh=+v4TvgfMAIUHw3t+0TocdWSYyD3KeMvveWgkr5HZO0U=;
-        h=Date:From:To:Subject:From;
-        b=fmkV6o7HW/CVE8Fd5mkbtAE4IQauGD1zmWDMaAppoD9kzEFNQaIJHnuAGB08S8Dg4
-         7QabPQwQeAVI8RBgib4Ov6jFrO2663f+lc6TfLSyUmSpZuYXkV2O/8y/Rg+FOE7+e0
-         0Q2uUV5nrmDqLIg7FeDhqkcDPdkRz5aTM3B8+cq8Y1tvyg4GhnuywT8p8OFee0SQUc
-         3Oyogktlh3JsHCrKFEsHWMRGj9pdl4q9smaUfoZdRW7sCGCK/zxlnDYnWPKDrCh9nW
-         OSZT5+MWtwIYGipQcBLaJZPo42kGwLEDequPTGKMaaCLceDimL2EEwFW//spBn5aNM
-         rDpA52gEs8YQw==
-Received: by mail.determinedfia.pl for <bpf@vger.kernel.org>; Wed,  8 Jun 2022 07:55:18 GMT
-Message-ID: <20220608084500-0.1.3w.11bhp.0.plypofovp4@determinedfia.pl>
-Date:   Wed,  8 Jun 2022 07:55:18 GMT
-From:   "Adam Furgalski" <adam.furgalski@determinedfia.pl>
-To:     <bpf@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.determinedfia.pl
+        with ESMTP id S233923AbiFHJJT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jun 2022 05:09:19 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD721DE2CA
+        for <bpf@vger.kernel.org>; Wed,  8 Jun 2022 01:27:21 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id e2-20020a5ede02000000b006695f3d239aso4055609iok.17
+        for <bpf@vger.kernel.org>; Wed, 08 Jun 2022 01:27:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=t0gc/xzcJt5stiUMCfeqVbf3IgQyudlht9hZER0u1/o=;
+        b=RJEyLaK1yJbawLjnisb6ohn9x71rWOcS8pIQWVc6fKcm8WtBtXb0O6bxOHxAHcdOXW
+         hvH01wdAWCk5nAuxJfWqdBcYGnxx7z3KtoUfY+V61RkUvp313qsOLzNdwg2m++q9FkVh
+         qCC1TRsoY/QM+fZpRjk+AWA6UFRDttvsKH+NadJsjABDKcIy43gNDoqPF2ZrwX7jlfX1
+         2F4aHqNIPB3SFo2+KmtgFymgKsISVW+4je/srLmQ+3z5kJc64b1/ip5U0y1dXMPaSJNK
+         +U8auFSGwawnRNEdKJguNeCFEjWsyNHAZNn6aWKXQyeupAyLK0NVt5orN93VOmLYY538
+         m4fw==
+X-Gm-Message-State: AOAM533Sp8oHhdhmpUq/DHzmT0tBaeWSe/aOc1XehJVcs8eMh/Z27bS7
+        ZXAPMqh/6qhk90JIIR+htmeMJxBxpGSPuP4kLvbKoUjxj0Wq
+X-Google-Smtp-Source: ABdhPJy208H1/vg6mOS+YoCh8pcCwNJM7S0gj2tmb6mTfO3y45mAEVpOfNlxURU11Uc27dLH5j56Z47T04K1ADO+rBEwP1KnjFod
 MIME-Version: 1.0
+X-Received: by 2002:a05:6602:1682:b0:65d:f539:e30 with SMTP id
+ s2-20020a056602168200b0065df5390e30mr15247981iow.81.1654676840937; Wed, 08
+ Jun 2022 01:27:20 -0700 (PDT)
+Date:   Wed, 08 Jun 2022 01:27:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000527f4505e0eb795f@google.com>
+Subject: [syzbot] WARNING: locking bug in __inet_bind
+From:   syzbot <syzbot+089524dd375b122cfc88@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+        edumazet@google.com, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com,
+        yoshfuji@linux-ipv6.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Hello,
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+syzbot found the following issue on:
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+HEAD commit:    7e062cda7d90 Merge tag 'net-next-5.19' of git://git.kernel..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=11ae654df00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e2c9c27babb4d679
+dashboard link: https://syzkaller.appspot.com/bug?extid=089524dd375b122cfc88
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+089524dd375b122cfc88@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 11123 at kernel/locking/lockdep.c:906 look_up_lock_class+0x6a/0xd0 kernel/locking/lockdep.c:906
+Modules linked in:
+CPU: 0 PID: 11123 Comm: syz-executor.5 Not tainted 5.18.0-syzkaller-03023-g7e062cda7d90 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:look_up_lock_class+0x6a/0xd0 kernel/locking/lockdep.c:906
+Code: 85 c0 75 0a eb 57 48 8b 00 48 85 c0 74 4f 48 39 70 40 75 f2 48 8b 4f 18 48 39 88 b0 00 00 00 74 0b 48 81 3f a0 13 2a 8f 74 02 <0f> 0b 5d c3 9c 5a 80 e6 02 74 c2 e8 36 10 83 fa 85 c0 74 1f 8b 05
+RSP: 0018:ffffc9000551f888 EFLAGS: 00010006
+RAX: ffffffff900e6720 RBX: ffffffff905eb8c0 RCX: ffffffff8aee8220
+RDX: 0000000000000046 RSI: ffffffff90965fa0 RDI: ffff88806cacd070
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88806cacd070 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007fd663eb2700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd662d9c028 CR3: 000000007854a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ register_lock_class+0xbe/0x11b0 kernel/locking/lockdep.c:1256
+ __lock_acquire+0x10a/0x56c0 kernel/locking/lockdep.c:4901
+ lock_acquire kernel/locking/lockdep.c:5634 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5599
+ __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+ _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:178
+ spin_lock_bh include/linux/spinlock.h:354 [inline]
+ __lock_sock+0x145/0x260 net/core/sock.c:2826
+ lock_sock_nested+0xd6/0xf0 net/core/sock.c:3394
+ lock_sock include/net/sock.h:1691 [inline]
+ __inet_bind+0x8c4/0xc90 net/ipv4/af_inet.c:511
+ inet_bind+0x173/0x220 net/ipv4/af_inet.c:456
+ __sys_bind+0x1e9/0x250 net/socket.c:1776
+ __do_sys_bind net/socket.c:1787 [inline]
+ __se_sys_bind net/socket.c:1785 [inline]
+ __x64_sys_bind+0x6f/0xb0 net/socket.c:1785
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x7fd662c89109
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd663eb2168 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
+RAX: ffffffffffffffda RBX: 00007fd662d9bf60 RCX: 00007fd662c89109
+RDX: 0000000000000010 RSI: 00000000200001c0 RDI: 0000000000000015
+RBP: 00007fd662ce308d R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd235ff65f R14: 00007fd663eb2300 R15: 0000000000022000
+ </TASK>
 
 
-Pozdrawiam
-Adam Furgalski
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
