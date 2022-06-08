@@ -2,221 +2,100 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3338BC43334
-	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 00:28:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F61AC433EF
+	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 04:40:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353062AbiFHA2C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 7 Jun 2022 20:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S235049AbiFHEj6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jun 2022 00:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1835343AbiFGX4Q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 7 Jun 2022 19:56:16 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA42FAA74;
-        Tue,  7 Jun 2022 16:16:58 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 257GgADD022771;
-        Tue, 7 Jun 2022 15:18:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=ge55lUHQV/b/1Bgenf8r2E1VX3CPYsBNyp3KvC+L64w=;
- b=HW94/Baim+eMI/ICj8iHhIQpqZH9Xx8aVTfl2Ka94ANw0z/eUQMxMoBcxOKJ1Ywaacow
- rT3tGkTvKf0OHxcgzOAwce+MupHxrKRvsqLDMnhSOorvUuwsOR7YO5tic9Xv3cxGrG40
- lxmiSQAjN3wmeN6w2CeWfGh7riVGPa0E8bI= 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gjaduj899-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jun 2022 15:18:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KSnlW8L/RBokyxmXaPKuXmCLAUb8SWez+kWn1Tp7mnEGALy34cksppu3DcRpJKbN2M/j4bSUZ45imPgT/FBLCDESsIq7NDbzCoEiKVOjE28ENtIeiO/fB+uRVENB0zeXNZfxNFBYnNUgoHcJDiBqnZWSgf7AZQdoyeayMu3ni/Hgagp2ID6UOtFqW5K/vskR/6fAe71Douc5HjXdDRdMZMPCua059im7JA/JhzRNEhuTCNci7ZlDfRfJJPxMA3kLMmjTHBy3ob/xuVmreJXcn6xTnvET8GRqQHjstY420Rx2q1hLepus7pXslqDcsYW8WR2jN2E11fJlx0lA/7KoNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ge55lUHQV/b/1Bgenf8r2E1VX3CPYsBNyp3KvC+L64w=;
- b=J6EQkvplpNqE9vZc1FVNCKA4OI/sumAe4uH92wOz8muzK4PpRwYmvtMcmhEZmZHgf7aNR8rNVQqvQh5tqHOry9MmLMtawoxVNBO6QCcqIwj79lZ0EMYawCKo0xhTu347sjNEYNoGqO7SNsQ7QpZ8YTSB7bQd0UIf0PWH6pDQSPqv0MzGT/82xUDB8VQ4GPYLKiszf+zjVLDUS0yehcK9lNeAiHGLro7lpBofhjsJsa2L6sv52ZX9Ept7qk1w3LJODjUqKE1lmcwxdGwBwyd6kSgSM8EgTPWuyf+vuA+SYbxpcnPHWfleSEljIFxumfk8lUJdGcakqvKR8kccrS3W+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from SA1PR15MB5016.namprd15.prod.outlook.com (2603:10b6:806:1db::19)
- by MN2PR15MB3550.namprd15.prod.outlook.com (2603:10b6:208:1b8::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.19; Tue, 7 Jun
- 2022 22:17:58 +0000
-Received: from SA1PR15MB5016.namprd15.prod.outlook.com
- ([fe80::a09e:da84:3316:6eb0]) by SA1PR15MB5016.namprd15.prod.outlook.com
- ([fe80::a09e:da84:3316:6eb0%9]) with mapi id 15.20.5314.019; Tue, 7 Jun 2022
- 22:17:58 +0000
-Date:   Tue, 7 Jun 2022 15:17:56 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Subject: Re: [PATCH bpf-next v8 06/11] bpf: allow writing to a subset of sock
- fields from lsm progtype
-Message-ID: <20220607221756.ez4ntth5qnuev3ap@kafai-mbp>
-References: <20220601190218.2494963-1-sdf@google.com>
- <20220601190218.2494963-7-sdf@google.com>
- <20220604071808.rwzoktja73ijr3i7@kafai-mbp>
- <CAKH8qBv-cKrqvYjPh3P1JaWGLCTpBq3JtOEg+Py=a7BN_dVrPw@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKH8qBv-cKrqvYjPh3P1JaWGLCTpBq3JtOEg+Py=a7BN_dVrPw@mail.gmail.com>
-X-ClientProxiedBy: BY5PR04CA0024.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::34) To SA1PR15MB5016.namprd15.prod.outlook.com
- (2603:10b6:806:1db::19)
+        with ESMTP id S233084AbiFHEhw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jun 2022 00:37:52 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626F13F62EA;
+        Tue,  7 Jun 2022 19:29:40 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so17089125pjt.4;
+        Tue, 07 Jun 2022 19:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=x8jfXCoRdNo81j+YuOPFSNctg2Xa/rnwTNhEDAgXG5w=;
+        b=eha6Dy6wDGcKn1duwJ2Ok5ihZilh12rRdY4tzkCvkPTN+hImcZ3sA/5ttBQhFWCFsx
+         tV6Ng9/QrD+DBBLMdPr9u18mJTLd36JowYC+9CxqP+rlCO2UHy18iIBqHqxTDHOJ8ZSy
+         xu1Zv7uKflZjdzZZ/QQJ1LO2ykRrUW5F8DWxxcPjesWKq/esCCQkz6UmYucA8U4jviBJ
+         V3u4IYaDchwx2GkJzPhXILqbEbGsjr20Px0tD2XJ876BMGvuHaJJGPM6UQqFKTp05oOS
+         EltY9lfAkpGIi3+/S4t7ZjzThdskDM3sK2G6crlGfllqDebkIU9V4q+v8Otse91ZwzYG
+         yZ8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=x8jfXCoRdNo81j+YuOPFSNctg2Xa/rnwTNhEDAgXG5w=;
+        b=k3RXyBpb1ayORSutg1M/SDKJPW/v+eDwMQHwkoG2LQ8N/hur0Mb18pyoNpEdn1Z4/v
+         +g782zM5djmxy2jf0GaWYTNnchU0HnyQJ07PPElsswzY8/yPbg3HhZ8LtPrlOWeZ7nAX
+         vzwOI1pevuZZRnP2lK+7f+Wadahevq+mda+6syX4AX2ONP4afJmNugDFqdh4AHWRYy91
+         WStqQ24GZ6xTI4tFqxbYYXU/KIljl54RXyYpfkvQdyCzZJ8Hu8ETWajmiPpefjr3WijP
+         /cJZ+qsfOlqoZquP6h+eb24mJmG21N18qJORsJ9m+CZ0q61ugOw6vPk0HaNN5VRYR0EU
+         88ZQ==
+X-Gm-Message-State: AOAM531VMf5SE6g2TCp7CQc2id5k0ccuYyGHu0XvH0RxTintrKMq7lFe
+        TWH/ADrzcwJx1IZ+DBAOlNc=
+X-Google-Smtp-Source: ABdhPJwWSThahXMN4+i+EkbaZL0/wp99vhCBE+iKn2UwLEOs+eAF9DubXmQ1ZdhyE+nIOArhLyNHjQ==
+X-Received: by 2002:a17:902:db0a:b0:165:1672:480e with SMTP id m10-20020a170902db0a00b001651672480emr31655064plx.165.1654655362665;
+        Tue, 07 Jun 2022 19:29:22 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id w143-20020a627b95000000b0051b8e7765edsm13731862pfc.67.2022.06.07.19.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jun 2022 19:29:21 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 10:29:12 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] move AF_XDP APIs to libxdp
+Message-ID: <YqAJeHAL57cB9qJk@Laptop-X1>
+References: <20220607084003.898387-1-liuhangbin@gmail.com>
+ <87tu8w6cqa.fsf@toke.dk>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7d30a153-cf73-49fa-0c9f-08da48d393d4
-X-MS-TrafficTypeDiagnostic: MN2PR15MB3550:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR15MB355096E31624566D6031EFCED5A59@MN2PR15MB3550.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9iVmhrJKCA+lFfjbMnwRIas+RVGM8rWllyrr2QyS1g/Y7gJzdBasxhWDCk8q9oyN94wYR4R+rFYBBQtZbdHMgiBOV2AkquOIAb6163IvSvMJqvzHRrNUJrUarwVCf8kItqulVoPxdyjajY/jxUhY6ehCRGUEk4DOFpI8/mcXO0jgAVoKjARw67vPC7DtehhaPBbbakmAoEayN5DoTT/pi551g1mZMD199kwv5OzXJr7deuEmQmgjXloSzbm/5vn2K0AgVXCg10OKO8akB49C0aX5AZvjwX4FRV5SJKWwxkwhwU+1vIw+Vld/pB3sIRcs19PqUKrVqTity6ByZ2xUULGAHcOA+6j/eHS1xy76OeQQ62oURnbBZqm5FM0WH403c6NpdGM+pxONzB7hrDGYfXyRY1irvHzEQeIV43ftXLtpVdnac4k6iisIxmRs8VlYnaSEwsZU9GqgmBfeXfmaASQQ6yAay7Sup50eRDG8kay58Uyjd3NC+HJyuJHSYdMpQR/MB7MhQrW9DslP8E5f+col71DnyFND1q2mhnKwkDdwYIPsoVDvkO5d6w6g553eMMSF37FORbPd5je9TnL+qslI/rOnMoz/4Sl6EC02/fPMkPCW6ncydgc/98tnbVNuu0LfvPcOi5g78y00unQ3Cg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5016.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(4326008)(1076003)(186003)(9686003)(6512007)(6486002)(8676002)(86362001)(316002)(38100700002)(6916009)(66946007)(66556008)(33716001)(66476007)(2906002)(5660300002)(53546011)(52116002)(6506007)(83380400001)(508600001)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gMmcoAjvC0gwqjsJDfCA0yc+YeqWQWlJLkc7lL6mCivri0KzgE9dY2Uru27K?=
- =?us-ascii?Q?jQO52tdsbpoyPPGo0tgos9xFedhRZkv6jwXJE/cUpi5SeAr5O5oiuVVe+IGi?=
- =?us-ascii?Q?9gtjnJy3jYQ9BnSrBy9na6m3waZtSpDDMX+PyACNtt3zT5dRZVvYkgueHxGy?=
- =?us-ascii?Q?1iIUsf9Bo/hVcETVMnMQ4o5Rh5fepvWGusTeO8IWCXxSVG1+m1mM+F6xM/Om?=
- =?us-ascii?Q?VgF7+k+CV05fu5kM6RaUWYIwRz5z9pFmpsxF2NjMWhsOyrxPl+bSC/Rvvpns?=
- =?us-ascii?Q?yhcIHunFhZ5ooIqMk8FMXT0Qs2oUlQlBObnYH1uo8aNvUwond71nfYlEjiDB?=
- =?us-ascii?Q?pfI9/L3vDhh+7lD0rkguw+SCTxAiCGu5kbySA0JpOwq/I71tVYs2g+uxAcu5?=
- =?us-ascii?Q?lQwdiVBubV2Y3vS7kwlxbM/tr2R6uW9HTY/fWCOgV4BsXLlUS+UfUS1nyryM?=
- =?us-ascii?Q?+maCImjNcp4n3eXx69nZEzpU6BzJ/rsUUR4Gz/oUiYztaJx20vO2dxHwEQRC?=
- =?us-ascii?Q?j8SZxO6YeSzgoq3cs3PS8D1H4MaF6GGJX+g9NnZnVHT3dGVnWgM+K78Hw0qT?=
- =?us-ascii?Q?NpLc3KjREtAjh0Uai1AleZyX9LIv4oo2mBrN2QX0Zp5luzjg+Ju6nUjxSCPT?=
- =?us-ascii?Q?zFs0dFm+ZwauuRfMztd0dry2lVEWEQJHdjVRZSj4Ka2iNwRr3xDPMRoZxcyn?=
- =?us-ascii?Q?g6iK4RvJX4t4nHSH5bqQJFXh6/ACXEAAqYrERuCssNpfk035R9SsHJi0wS0H?=
- =?us-ascii?Q?9IpvPh6w9jMSeE2Lfe73dBEwhEu018mwns/FPdcOkvqG4bEwZH+keAwpSRkG?=
- =?us-ascii?Q?b0E9W1mmEbkBFwVzh77xCoTvi/TVgBxFNKstiShfxRx9J+t5HTQCNSX2rcPf?=
- =?us-ascii?Q?uzhYMC7KVFEZnm5lMtjaAmQHqImaDb2LpWtT/hyE67b3YilHcF1UPwvD/nHU?=
- =?us-ascii?Q?Cr2L+DPuJBLaceqjI+W7XD7nLPRGJa/FhR0LMG8PeLc0n+BlPEgffbU1co/C?=
- =?us-ascii?Q?+E6f7OuiuuAlNbAEEVMGORvlHpsPZWFxd6f0FFsGRRXo0vXM2VsuSQlyyEuI?=
- =?us-ascii?Q?ro4mVGWh9zreorZ0shH5t5uFxKrOq2mfIgRx8SWO8C8mXiESD2jpawhiJ833?=
- =?us-ascii?Q?56u8NcrnOTeYJcmxAYRXnHIU97TWhsMSJKo4wnuPMTklKseTBUeeYA2mPdqo?=
- =?us-ascii?Q?9qQkCUEfIQnM5IOUNg3hhly4cEP4RgOJkNFXLY8tcPFa+UeUXdUJeiDPb8Yz?=
- =?us-ascii?Q?1j8yRT3xIvyEf8G0KCgzbMrc9brSEP7g+ZNAmveBOIlr8/Et00TldLNjTpnP?=
- =?us-ascii?Q?wq0Naj3P8vHAO4lMTSdevzgNyCParibRspVqOzB52twLWwE7I36W9a8eTV8A?=
- =?us-ascii?Q?bi7CWFJQwdW4FkfdKz892hnLs7GcIU+WhCmLR6ejCXbgQSK4O4KrdEPOVmEO?=
- =?us-ascii?Q?npvaGiClq5mqDXuFb3iTmoONo+kGy8Q7gf0X6FS0Lzb+D1JEG+LHgTPDIfco?=
- =?us-ascii?Q?vbARbSh/chGyLTG5UKJJs1ZDNlPMsef1mB+adsWZJBpozf1tPraMMeddda1L?=
- =?us-ascii?Q?YmX3sm9FQmDW3MnirY3pUFJe9d5GrlnTqlCZaXcCx7KctoBBqOI/LfQ4XWAE?=
- =?us-ascii?Q?6eCuWqIEEAt7vFxqo8pJ95LtDI2TK8/sXAbNnQUk/KcWpHIQmuJzkMJ+fkaU?=
- =?us-ascii?Q?MpFnVUFe4dX0UswrFepBO7sB4pTWfyGeLgsy4j9Qe4LwUZbRrw1hSE2P8VHt?=
- =?us-ascii?Q?n4vmLC4EE+D+43XpK7l5bZnjGr6bgYk=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d30a153-cf73-49fa-0c9f-08da48d393d4
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5016.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2022 22:17:58.3511
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GQXGXeYw7ofazTh/COO+kthMkV5yLJJSD4yy1FPBX1xpxCfTgN+03vn7BmBY1Fa5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB3550
-X-Proofpoint-GUID: 8g-NKrVuG5qKR0Ma9jN3jS-81AQxuvt1
-X-Proofpoint-ORIG-GUID: 8g-NKrVuG5qKR0Ma9jN3jS-81AQxuvt1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-07_10,2022-06-07_02,2022-02-23_01
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87tu8w6cqa.fsf@toke.dk>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 03:46:29PM -0700, Stanislav Fomichev wrote:
-> On Sat, Jun 4, 2022 at 12:18 AM Martin KaFai Lau <kafai@fb.com> wrote:
+On Tue, Jun 07, 2022 at 11:31:57AM +0200, Toke Høiland-Jørgensen wrote:
+> Hangbin Liu <liuhangbin@gmail.com> writes:
+> 
+> > libbpf APIs for AF_XDP are deprecated starting from v0.7.
+> > Let's move to libxdp.
 > >
-> > On Wed, Jun 01, 2022 at 12:02:13PM -0700, Stanislav Fomichev wrote:
-> > > For now, allow only the obvious ones, like sk_priority and sk_mark.
-> > >
-> > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> > > ---
-> > >  kernel/bpf/bpf_lsm.c  | 58 +++++++++++++++++++++++++++++++++++++++++++
-> > >  kernel/bpf/verifier.c |  3 ++-
-> > >  2 files changed, 60 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> > > index 83aa431dd52e..feba8e96f58d 100644
-> > > --- a/kernel/bpf/bpf_lsm.c
-> > > +++ b/kernel/bpf/bpf_lsm.c
-> > > @@ -303,7 +303,65 @@ bool bpf_lsm_is_sleepable_hook(u32 btf_id)
-> > >  const struct bpf_prog_ops lsm_prog_ops = {
-> > >  };
-> > >
-> > > +static int lsm_btf_struct_access(struct bpf_verifier_log *log,
-> > > +                                     const struct btf *btf,
-> > > +                                     const struct btf_type *t, int off,
-> > > +                                     int size, enum bpf_access_type atype,
-> > > +                                     u32 *next_btf_id,
-> > > +                                     enum bpf_type_flag *flag)
-> > > +{
-> > > +     const struct btf_type *sock_type;
-> > > +     struct btf *btf_vmlinux;
-> > > +     s32 type_id;
-> > > +     size_t end;
-> > > +
-> > > +     if (atype == BPF_READ)
-> > > +             return btf_struct_access(log, btf, t, off, size, atype, next_btf_id,
-> > > +                                      flag);
-> > > +
-> > > +     btf_vmlinux = bpf_get_btf_vmlinux();
-> > > +     if (!btf_vmlinux) {
-> > > +             bpf_log(log, "no vmlinux btf\n");
-> > > +             return -EOPNOTSUPP;
-> > > +     }
-> > > +
-> > > +     type_id = btf_find_by_name_kind(btf_vmlinux, "sock", BTF_KIND_STRUCT);
-> > > +     if (type_id < 0) {
-> > > +             bpf_log(log, "'struct sock' not found in vmlinux btf\n");
-> > > +             return -EINVAL;
-> > > +     }
-> > > +
-> > > +     sock_type = btf_type_by_id(btf_vmlinux, type_id);
-> > > +
-> > > +     if (t != sock_type) {
-> > > +             bpf_log(log, "only 'struct sock' writes are supported\n");
-> > > +             return -EACCES;
-> > > +     }
-> > > +
-> > > +     switch (off) {
-> > > +     case bpf_ctx_range(struct sock, sk_priority):
-> > This looks wrong.  It should not allow to write at
-> > any bytes of the '__u32 sk_priority'.
+> > The first patch removed the usage of bpf_prog_load_xattr(). As we
+> > will remove the GCC diagnostic declaration in later patches.
 > 
-> SG, I'll change to offsetof() and will enfoce u32 size.
-> 
-> > > +             end = offsetofend(struct sock, sk_priority);
-> > > +             break;
-> > > +     case bpf_ctx_range(struct sock, sk_mark):
-> > Same here.
-> >
-> > Just came to my mind,
-> > if the current need is only sk_priority and sk_mark,
-> > do you think allowing bpf_setsockopt will be more useful instead ?
-> 
-> For my use-case I only need sk_priority, but I was thinking that we
-> can later extend that list as needed. But you suggestion to use
-> bpf_setsockopt sounds good, let me try to use that. That might be
-> better than poking directly into the fields.
-semi-related.
-bpf_setsockopt will have more options (and more useful) in the future.
-I am thinking to refactor the bpf_setsockopt() to avoid duplicate
-codes between the syscall setsockopt().  With sockptr_t, that may be
-easier to do now.  It will then be easier to allow most of the options
-in bpf_setsockopt().
+> Kartikeya started working on moving some of the XDP-related samples into
+> the xdp-tools repo[0]; maybe it's better to just include these AF_XDP
+> programs into that instead of adding a build-dep on libxdp to the kernel
+> samples?
 
-> 
-> > It currently has SO_MARK, SO_PRIORITY, and other options.
-> > Also, changing SO_MARK requires to clear the sk->sk_dst_cache.
-> > In general, is it safe to do bpf_setsockopt in all bpf_lsm hooks ?
-> 
-> It seems that we might need to more strictly control it (regardless of
-> helper or direct field access). Not all lsm hooks lock sk argument, so
-> we so maybe start with some allowlist of attach_btf_ids that can do
-> bpf_setsockopt? (I'll add existing hooks that work on new/unreferenced
-> or locked sockets to the list)
-Yeah, it seems a btf id list is needed.  Regardless of bpf_setsockopt()
-or not, locking the sk is needed to make changes.
+OK, makes sense to me. Should we remove these samples after the xdp-tools PR
+merged? What about xdpxceiver.c in selftests/bpf? Should that also be moved to
+xdp-tools?
+
+Thanks
+Hangbin
