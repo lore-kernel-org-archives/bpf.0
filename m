@@ -2,102 +2,175 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D663CCA482
-	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 04:40:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E7C3C433EF
+	for <bpf@archiver.kernel.org>; Wed,  8 Jun 2022 05:05:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbiFHEkA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 8 Jun 2022 00:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S233240AbiFHFFZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 8 Jun 2022 01:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbiFHEjh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 8 Jun 2022 00:39:37 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E436E40526D;
-        Tue,  7 Jun 2022 19:31:33 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id c14so17591294pgu.13;
-        Tue, 07 Jun 2022 19:31:33 -0700 (PDT)
+        with ESMTP id S233487AbiFHFEo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 8 Jun 2022 01:04:44 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40AAF2F91AF;
+        Tue,  7 Jun 2022 19:01:43 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id er5so25167292edb.12;
+        Tue, 07 Jun 2022 19:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WQvQY+ADLGT2QDH70b+ZWh3UHUjombhATOznDP82LSo=;
-        b=Rpju3qHcdktw3PMpD8A6ZKaFhlg1gB3Gtg97W/kqWJ5nJPUPzDDtEFo1pmDglljD6k
-         dLd2+tLbNEO18a2tavZDzNlPNMlH1ZpA6YSE84mRz9hBZYtcMxI1Vh+WPoDbdWjc100K
-         mLOmuu+KwaiEgbFrSNtfsXxoxYrshVLNM0fqxuqKWFEM78WOS0GAR3uOfWZLflkZKCpV
-         kD35UuMSWMrC3yiX6ee1DgSeG3rNbSU4x7yticKnuqpQeF4KUb+zQ1fk42/j1NfCFL4B
-         PgxDUyMKtcxYqfZDNpcRFD/6vAW2rJqYKC+lzyScFmG+U2a4t9sgfrU5dsVB6yJNUwSz
-         VBUA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hEdnGDbCA+kjfc/VIIcZxsDhGurHoaavILbT6X67kyg=;
+        b=cQIUjFP+F6YiiIhR2cdRRxWXvb4XMU1iLT7Zb1NhwqnRURCGl3G3NtwJTw4Ghwc/wW
+         wWqFkL/DshKNdnuowK6e27tsuGxNULjPY5MoH/eP2HP4MRPSP8eYrUrOx+OzkEDcGDZw
+         YWlbUyUO729PqRijuAmSyQEyOCwdlW4q1txqA4jIAx7q6BQG3BD/j8MgUfBawGfNNCNl
+         MmJibTV5AON1UlzhvpYzXc7nblm+Ac6oTcOxZdCW6V8aMVPjNo0MtTrFgTzMU/BbVjYc
+         0WFTfZkSJk4KzBRCoAm1Pv/3i1+v63xOrqCQ04gYfU0MZkCTGso2GQ9PLWxIQNfzt86n
+         QxfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WQvQY+ADLGT2QDH70b+ZWh3UHUjombhATOznDP82LSo=;
-        b=lmj/Zpz0nedL6S1Ny5LFiz6mvgw+1yZ/ikUjm9zjIv90KFC5tLCt86F29KdOAWsDAV
-         6fEtlVKdrjOkBP303Sx/mDOOIsmRWU/uWf40ETSA1xWf2OjFYEeRc/bLFrHN/m+LuU8w
-         94YdpMKjaWkmq7+pwJgvNklbxXld3jkaUzBDva1dbns/uD6chsl/EkpPHuh/jQ3+Pf6S
-         IFiQQNTdb6Ki0/bpXzueves1RRZ4Qe3WlvDVWVdB7pshM2iuwZaf5O/W/M0BjviNaZo+
-         Drb/SRb9zgf7hF9SUl1QxeolKY6Y/54JXdYgsQemGkc6vF+JHy0oU//y4Tz/BNgNlF+T
-         4sGQ==
-X-Gm-Message-State: AOAM530GbL+Kt+h6EnRlosMuj9sZU0VBogTBBRy7B1t83AhkIPaMT/0J
-        sxIP9rrOnpoCLaA079Zh0Tg=
-X-Google-Smtp-Source: ABdhPJyf581BY03EAX1U/cMXItUsWEKvpexvxdCH9iuV/UNPQJkQ9Knw/ayTsyYNuPsUKpVmXIm7wA==
-X-Received: by 2002:aa7:8d11:0:b0:51c:4f6d:1562 with SMTP id j17-20020aa78d11000000b0051c4f6d1562mr2423956pfe.14.1654655490220;
-        Tue, 07 Jun 2022 19:31:30 -0700 (PDT)
-Received: from Laptop-X1 ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id l5-20020a622505000000b0051c1b445094sm4905282pfl.7.2022.06.07.19.31.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 19:31:29 -0700 (PDT)
-Date:   Wed, 8 Jun 2022 10:31:20 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Networking <netdev@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hEdnGDbCA+kjfc/VIIcZxsDhGurHoaavILbT6X67kyg=;
+        b=vfogoTV4eK4dbJ4/1PQQphTQ8KKnu+C5YcxQEPADGM4+KS3xovULPunjvMudwGHE1M
+         iaHNbpWjakqajpDX1tIJGcsXzo76BgX2Dhtiygqd5NML7I0+n8/2pPhVuVv8jdxc9zUJ
+         JyW3IPOrOqo4/SC7KTlAl/7YppfxKzmpowrGJsEFvegB83iwRi1UP0s1UTL4n2Vrp/2p
+         NzDPKlafABq3JwTsvkOoCwbBASpkL/rZUtvy3KJaY/CSJqYtmHzkebS+iFPBy91HQN3F
+         RY06Ras4fyut5K/6D06sr/+twjIrBz+DfZuCymqwKmWVJRKLKZsEdfpBeu8RlWfSyEQ0
+         W6SQ==
+X-Gm-Message-State: AOAM533Lw8ePrA8p1hnktzE1PzzdjuB3LR1T1CEK10qGq9DL1TQOLAGb
+        JS4A3U1FPQIwV9cVAHMLpmVVvVtFKFeLVFxq9lk=
+X-Google-Smtp-Source: ABdhPJwuc8VC/RiWW4sM66ztXfWl92bMfnCwuwUheAWuApGkFMr1ZAcWSLjahwZnJ+kHT20IxBvzekzbwF3gOztePxQ=
+X-Received: by 2002:a05:6402:3895:b0:430:6a14:8ca3 with SMTP id
+ fd21-20020a056402389500b004306a148ca3mr23928805edb.421.1654653701506; Tue, 07
+ Jun 2022 19:01:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220606103734.92423-1-kurt@linutronix.de> <CAADnVQJ--oj+iZYXOwB1Rs9Qiy6Ph9HNha9pJyumVom0tiOFgg@mail.gmail.com>
+ <875ylc6djv.ffs@tglx> <c166aa47-e404-e6ee-0ec5-0ead1923f412@redhat.com>
+In-Reply-To: <c166aa47-e404-e6ee-0ec5-0ead1923f412@redhat.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 7 Jun 2022 19:01:29 -0700
+Message-ID: <CAADnVQKqo1XfrPO8OYA1VpArKHZotuDjGNtxM0AftUj_R+vU7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Add BPF-helper for accessing CLOCK_TAI
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] move AF_XDP APIs to libxdp
-Message-ID: <YqAJ+N/ULcRf6ad2@Laptop-X1>
-References: <20220607084003.898387-1-liuhangbin@gmail.com>
- <87tu8w6cqa.fsf@toke.dk>
- <CAEf4BzYegArxq+apR+GZ+cYNQtAnnxaZWKOAKd+3tnqpKdq3ng@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzYegArxq+apR+GZ+cYNQtAnnxaZWKOAKd+3tnqpKdq3ng@mail.gmail.com>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Geliang Tang <geliang.tang@suse.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 04:28:36PM -0700, Andrii Nakryiko wrote:
-> > Kartikeya started working on moving some of the XDP-related samples into
-> > the xdp-tools repo[0]; maybe it's better to just include these AF_XDP
-> > programs into that instead of adding a build-dep on libxdp to the kernel
-> > samples?
+On Tue, Jun 7, 2022 at 12:35 PM Jesper Dangaard Brouer
+<jbrouer@redhat.com> wrote:
+>
+>
+> On 07/06/2022 11.14, Thomas Gleixner wrote:
+> > Alexei,
 > >
-> 
-> Agree. Meanwhile it's probably better to make samples/bpf just compile
-> and use xsk.{c,h} from selftests/bpf.
+> > On Mon, Jun 06 2022 at 08:57, Alexei Starovoitov wrote:
+> >> On Mon, Jun 6, 2022 at 3:38 AM Kurt Kanzenbach <kurt@linutronix.de> wrote:
+> >>>
+> >>> From: Jesper Dangaard Brouer <brouer@redhat.com>
+> >>>
+> >>> Commit 3dc6ffae2da2 ("timekeeping: Introduce fast accessor to clock tai")
+> >>> introduced a fast and NMI-safe accessor for CLOCK_TAI. Especially in time
+> >>> sensitive networks (TSN), where all nodes are synchronized by Precision Time
+> >>> Protocol (PTP), it's helpful to have the possibility to generate timestamps
+> >>> based on CLOCK_TAI instead of CLOCK_MONOTONIC. With a BPF helper for TAI in
+> >>> place, it becomes very convenient to correlate activity across different
+> >>> machines in the network.
+> >>
+> >> That's a fresh feature. It feels risky to bake it into uapi already.
+> >
+> > What? That's just support for a different CLOCK. What's so risky about
+> > it?
+>
+> I didn't think it was "risky" as this is already exported as:
+>   EXPORT_SYMBOL_GPL(ktime_get_tai_fast_ns);
+>
+> Correct me if I'm wrong, but this simple gives BPF access to CLOCK_TAI
+> (see man clock_gettime(2)), right?
+> And CLOCK_TAI is not really a new/fresh type of CLOCK.
+>
+> Especially for networking we need this CLOCK_TAI time as HW LaunchTime
+> need this (e.g. see qdisc's sch_etf.c and sch_taprio.c).
 
-Hi Andrii,
+I see. I interpreted the commit log that commit 3dc6ffae2da2
+introduced TAI into the kernel for the first time.
+But it introduced the NMI safe version of it, right?
 
-I didn't find xsk.{c,h} in selftests/bpf. Do you mean xsk.{c,h} in
-tools/lib/bpf? Should I add
+> >
+> >> imo it would be better to annotate tk_core variable in vmlinux BTF.
+> >> Then progs will be able to read all possible timekeeper offsets.
+> >
+> > We are exposing APIs. APIs can be supported, but exposing implementation
+> > details creates ABIs of the worst sort because that prevents the kernel
+> > from changing the implementation. We've seen the fallout with the recent
+> > tracepoint changes already.
+>
+> Hmm... annotate tk_core variable in vmlinux BTF and letting BPF progs
+> access this seems like an unsafe approach and we tempt BPF-developers to
+> think other parts are okay to access.
 
-TPROGS_CFLAGS += -I$(srctree)/tools/lib/
+It is safe to access.
+Whether garbage will be read it's a different story.
 
-in samples/bpf/Makefile?
+The following works (with lose definition of 'works'):
 
-Thanks
-Hangbin
+extern const void tk_core __ksym;
+
+struct timekeeper {
+        long long offs_tai;
+} __attribute__((preserve_access_index));
+
+struct seqcount_raw_spinlock {
+} __attribute__((preserve_access_index));
+
+long get_clock_tai(void)
+{
+   long long off = 0;
+   void *addr = (void *)&tk_core +
+      ((bpf_core_type_size(struct seqcount_raw_spinlock) + 7) / 8) * 8 +
+      bpf_core_field_offset(struct timekeeper, offs_tai);
+
+   bpf_probe_read_kernel(&off, sizeof(off), addr);
+   return bpf_ktime_get_ns() + off;
+}
+
+It's ugly, but no kernel changes are necessary.
+If you need to access clock_tai you can do so on older kernels too.
+Even on android 4.19 kernels.
+
+It's not foolproof. Future kernel changes will break it,
+but CO-RE will detect the breakage.
+The prog author would have to adjust the prog every time.
+
+People do these kinds of tricks all the time.
+
+Note that above was possible even before CO-RE came to existence.
+The first day bpf_probe_read_kernel() became available 8 years ago
+the tracing progs could read any kernel memory.
+Even earlier kprobes could read it for 10+ years.
+
+And in all those years bpf progs accessing kernel internals
+didn't freeze kernel development. bpf progs don't extend
+uapi surface unless the changes are in uapi/bpf.h.
+
+Anyway I guess new helper bpf_ktime_get_tai_ns() is ok, since
+it's so trivial, but selftest is necessary.
