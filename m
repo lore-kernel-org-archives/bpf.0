@@ -2,130 +2,315 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70EFFC43334
-	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 20:52:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8652C43334
+	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 21:37:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbiFIUw5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jun 2022 16:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S239976AbiFIVht (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jun 2022 17:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235732AbiFIUw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:52:56 -0400
+        with ESMTP id S232003AbiFIVht (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jun 2022 17:37:49 -0400
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE472010CC;
-        Thu,  9 Jun 2022 13:52:54 -0700 (PDT)
-Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C434926523C;
+        Thu,  9 Jun 2022 14:37:47 -0700 (PDT)
+Received: from sslproxy03.your-server.de ([88.198.220.132])
         by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92.3)
         (envelope-from <daniel@iogearbox.net>)
-        id 1nzP95-000CoU-Ro; Thu, 09 Jun 2022 22:52:47 +0200
+        id 1nzPqV-00023F-Uo; Thu, 09 Jun 2022 23:37:40 +0200
 Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1nzP95-0006w1-Bv; Thu, 09 Jun 2022 22:52:47 +0200
-Subject: Re: [PATCH bpf-next 0/3] move AF_XDP APIs to libxdp
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vu?= =?UTF-8?Q?sen?= 
-        <toke@redhat.com>, Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-References: <20220607084003.898387-1-liuhangbin@gmail.com>
- <87tu8w6cqa.fsf@toke.dk> <YqAJeHAL57cB9qJk@Laptop-X1>
- <CAJ8uoz2g99N6HESyX1cGUWahSJRYQjXDG3m3f4_8APAvJNMHXw@mail.gmail.com>
- <CAEf4BzZsAqq4rOpE2FWA-GHB4OSntv9rMUvt=6sOj6+1wKMMZw@mail.gmail.com>
+        id 1nzPqV-000Hf9-Hs; Thu, 09 Jun 2022 23:37:39 +0200
+Subject: Re: [PATCH bpf-next] selftests/bpf: add lwt ip encap tests to
+ test_progs
+To:     Eyal Birger <eyal.birger@gmail.com>, shuah@kernel.org,
+        ast@kernel.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, posk@google.com
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20220607133135.271788-1-eyal.birger@gmail.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <59b8dda9-0cbb-4a70-2625-eaa8796ae5e5@iogearbox.net>
-Date:   Thu, 9 Jun 2022 22:52:46 +0200
+Message-ID: <f80edf4f-c795-1e1e-bac2-414189988156@iogearbox.net>
+Date:   Thu, 9 Jun 2022 23:37:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZsAqq4rOpE2FWA-GHB4OSntv9rMUvt=6sOj6+1wKMMZw@mail.gmail.com>
+In-Reply-To: <20220607133135.271788-1-eyal.birger@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.6/26567/Thu Jun  9 10:06:06 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/9/22 10:29 PM, Andrii Nakryiko wrote:
-> On Wed, Jun 8, 2022 at 3:18 AM Magnus Karlsson
-> <magnus.karlsson@gmail.com> wrote:
->> On Wed, Jun 8, 2022 at 9:55 AM Hangbin Liu <liuhangbin@gmail.com> wrote:
->>> On Tue, Jun 07, 2022 at 11:31:57AM +0200, Toke Høiland-Jørgensen wrote:
->>>> Hangbin Liu <liuhangbin@gmail.com> writes:
->>>>
->>>>> libbpf APIs for AF_XDP are deprecated starting from v0.7.
->>>>> Let's move to libxdp.
->>>>>
->>>>> The first patch removed the usage of bpf_prog_load_xattr(). As we
->>>>> will remove the GCC diagnostic declaration in later patches.
->>>>
->>>> Kartikeya started working on moving some of the XDP-related samples into
->>>> the xdp-tools repo[0]; maybe it's better to just include these AF_XDP
->>>> programs into that instead of adding a build-dep on libxdp to the kernel
->>>> samples?
->>>
->>> OK, makes sense to me. Should we remove these samples after the xdp-tools PR
->>> merged? What about xdpxceiver.c in selftests/bpf? Should that also be moved to
->>> xdp-tools?
->>
->> Andrii has submitted a patch [1] for moving xsk.[ch] from libbpf to
->> the xsk selftests so it can be used by xdpxceiver. This is a good idea
->> since xdpxceiver tests the low level kernel interfaces and should not
->> be in libxdp. I can also use those files as a start for implementing
->> control interface tests which are in the planning stages. But the
->> xdpsock sample shows how to use libxdp to write an AF_XDP program and
->> belongs more naturally with libxdp. So good that Kartikeya is moving
->> it over. Thanks!
->>
->> Another option would be to keep the xdpsock sample and require libxdp
->> as in your patch set, but you would have to make sure that everything
->> else in samples/bpf compiles neatly even if you do not have libxdp.
->> Test for the presence of libxdp in the Makefile and degrade gracefully
->> if you do not. But we would then have to freeze the xdpsock app as all
->> new development of samples should be in libxdp. Or we just turn
->> xdpsock into a README file and direct people to the samples in libxdp?
->> What do you think?
+Hi Eyal,
+
+On 6/7/22 3:31 PM, Eyal Birger wrote:
+> Port test_lwt_ip_encap.sh tests onto test_progs.
 > 
-> I think adding libxdp dependency for samples/bpf is a bad idea. Moving
-> samples to near libxdp makes more sense to me.
+> In addition, this commit adds "egress_md" tests which test a similar
+> flow as egress tests only they use gre devices in collect_md mode
+> for encapsulation and set the tunnel key using bpf_set_tunnel_key().
+> 
+> This introduces minor changes to test_lwt_ip_encap.{sh,c} for consistency
+> with the new tests:
+> 
+> - GRE key must exist as bpf_set_tunnel_key() explicitly sets the
+>    TUNNEL_KEY flag
+> 
+> - Source address for GRE traffic is set to IP*_5 instead of IP*_1 since
+>    GRE traffic is sent via veth5 so its address is selected when using
+>    bpf_set_tunnel_key()
+> 
+> Note: currently these programs use the legacy section name convention
+> as iproute2 lwt configuration does not support providing function names.
+> 
+> Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
+> ---
+>   .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 582 ++++++++++++++++++
+>   .../selftests/bpf/progs/test_lwt_ip_encap.c   |  51 +-
+>   .../selftests/bpf/test_lwt_ip_encap.sh        |   6 +-
+>   3 files changed, 633 insertions(+), 6 deletions(-)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> new file mode 100644
+> index 000000000000..e1b6f3ce6045
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> @@ -0,0 +1,582 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+> +
+> +/* Setup/topology:
+> + *
+> + *    NS1             NS2             NS3
+> + *   veth1 <---> veth2   veth3 <---> veth4 (the top route)
+> + *   veth5 <---> veth6   veth7 <---> veth8 (the bottom route)
+> + *
+> + *   each vethN gets IP[4|6]_N address
+> + *
+> + *   IP*_SRC = IP*_1
+> + *   IP*_DST = IP*_4
+> + *
+> + *   all tests test pings from IP*_SRC to IP*_DST
+> + *
+> + *   by default, routes are configured to allow packets to go
+> + *   IP*_1 <=> IP*_2 <=> IP*_3 <=> IP*_4 (the top route)
+> + *
+> + *   a GRE device is installed in NS3 with IP*_GRE, and
+> + *   NS1/NS2 are configured to route packets to IP*_GRE via IP*_8
+> + *   (the bottom route)
+> + *
+> + * Tests:
+> + *
+> + *   1. routes NS2->IP*_DST are brought down, so the only way a ping
+> + *      from IP*_SRC to IP*_DST can work is via IP*_GRE
+> + *
+> + *   2a. in an egress test, a bpf LWT_XMIT program is installed on veth1
+> + *       that encaps the packets with an IP/GRE header to route to IP*_GRE
+> + *
+> + *       ping: SRC->[encap at veth1:egress]->GRE:decap->DST
+> + *       ping replies go DST->SRC directly
+> + *
+> + *   2b. in an ingress test, a bpf LWT_IN program is installed on veth2
+> + *       that encaps the packets with an IP/GRE header to route to IP*_GRE
+> + *
+> + *       ping: SRC->[encap at veth2:ingress]->GRE:decap->DST
+> + *       ping replies go DST->SRC directly
+> + *
+> + *   2c. in an egress_md test, a bpf LWT_XMIT program is installed on a
+> + *       route towards collect_md gre{,6} devices in NS1 and sets the tunnel
+> + *       key such that packets are encapsulated with an IP/GRE header to route
+> + *       to IP*_GRE
+> + *
+> + *       ping: SRC->[encap at gre{,6}_md:xmit]->GRE:decap->DST
+> + *       ping replies go DST->SRC directly
+> + */
+> +
+[...]
 
-+1 on moving them out from samples/bpf/ to somewhere near libxdp repo given
-it'll be usage example of libxdp.
+Thanks a lot for porting the test into test_progs! Looks like the BPF CI currently
+bails out here:
 
-More generally, the useful XDP-related things could migrate from samples/bpf/
-over to either https://github.com/xdp-project/bpf-examples/ or
-https://github.com/xdp-project/xdp-tools and then we could potentially toss
-the samples/bpf/ dir from the kernel tree.
+https://github.com/kernel-patches/bpf/runs/6812283921?check_suite_focus=true
 
-These days there are tons of howtos and example progs out in the wild and
-better tooling/framework available for users to get started. Taking XDP
-aside for a bit, a lot of stuff in samples/bpf/ is just outdated.
+Andrii, looks like we might be missing CONFIG_NET_VRF in vmtest config-latest.*?
 
-Brendan recently also started drafting guidelines (wip) for newbies getting
-into development with pointers where to look [0]. So really, there's less and
-less good reason for samples/bpf/ these days.
-
-   [0] http://vger.kernel.org/bpfconf2022_material/lsfmmbpf2022-bpf-wip-guidelines.pdf
-
->> [1] https://lore.kernel.org/bpf/20220603190155.3924899-2-andrii@kernel.org/
->>
->>> Thanks
->>> Hangbin
+[...]
+   #98/1    lwt_ip_encap/lwt_ipv4_encap_egress:OK
+   #98/2    lwt_ip_encap/lwt_ipv6_encap_egress:OK
+   setup_namespaces:PASS:ip netns add ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_3 0 nsec
+   lwt_ip_encap_test:PASS:setup namespaces 0 nsec
+   setup_links_and_routes:PASS:ip link add veth1 netns ns_lwt_1 type veth peer name veth2 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth3 netns ns_lwt_2 type veth peer name veth4 netns ns_lwt_3 0 nsec
+   setup_links_and_routes:PASS:ip link add veth5 netns ns_lwt_1 type veth peer name veth6 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth7 netns ns_lwt_2 type veth peer name veth8 netns ns_lwt_3 0 nsec
+   open_netns:PASS:malloc token 0 nsec
+   open_netns:PASS:open /proc/self/ns/net 0 nsec
+   open_netns:PASS:open netns fd 0 nsec
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   open_netns:PASS:setns_by_fd 0 nsec
+   setup_ns:PASS:setns 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   setup_vrf:FAIL:ip link add red type vrf table 1001 unexpected error: 512 (errno 0)
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   close_netns:PASS:setns_by_fd 0 nsec
+   lwt_ip_encap_test:FAIL:setup links and routes unexpected error: -1 (errno 0)
+   setup_namespaces:PASS:ip netns delete ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_3 0 nsec
+   #98/3    lwt_ip_encap/lwt_ipv4_encap_egress_vrf:FAIL
+   setup_namespaces:PASS:ip netns add ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_3 0 nsec
+   lwt_ip_encap_test:PASS:setup namespaces 0 nsec
+   setup_links_and_routes:PASS:ip link add veth1 netns ns_lwt_1 type veth peer name veth2 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth3 netns ns_lwt_2 type veth peer name veth4 netns ns_lwt_3 0 nsec
+   setup_links_and_routes:PASS:ip link add veth5 netns ns_lwt_1 type veth peer name veth6 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth7 netns ns_lwt_2 type veth peer name veth8 netns ns_lwt_3 0 nsec
+   open_netns:PASS:malloc token 0 nsec
+   open_netns:PASS:open /proc/self/ns/net 0 nsec
+   open_netns:PASS:open netns fd 0 nsec
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   open_netns:PASS:setns_by_fd 0 nsec
+   setup_ns:PASS:setns 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   setup_vrf:FAIL:ip link add red type vrf table 1001 unexpected error: 512 (errno 0)
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   close_netns:PASS:setns_by_fd 0 nsec
+   lwt_ip_encap_test:FAIL:setup links and routes unexpected error: -1 (errno 0)
+   setup_namespaces:PASS:ip netns delete ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_3 0 nsec
+   #98/4    lwt_ip_encap/lwt_ipv6_encap_egress_vrf:FAIL
+   #98/5    lwt_ip_encap/lwt_ipv4_encap_ingress:OK
+   #98/6    lwt_ip_encap/lwt_ipv6_encap_ingress:OK
+   setup_namespaces:PASS:ip netns add ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_3 0 nsec
+   lwt_ip_encap_test:PASS:setup namespaces 0 nsec
+   setup_links_and_routes:PASS:ip link add veth1 netns ns_lwt_1 type veth peer name veth2 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth3 netns ns_lwt_2 type veth peer name veth4 netns ns_lwt_3 0 nsec
+   setup_links_and_routes:PASS:ip link add veth5 netns ns_lwt_1 type veth peer name veth6 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth7 netns ns_lwt_2 type veth peer name veth8 netns ns_lwt_3 0 nsec
+   open_netns:PASS:malloc token 0 nsec
+   open_netns:PASS:open /proc/self/ns/net 0 nsec
+   open_netns:PASS:open netns fd 0 nsec
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   open_netns:PASS:setns_by_fd 0 nsec
+   setup_ns:PASS:setns 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   setup_vrf:FAIL:ip link add red type vrf table 1001 unexpected error: 512 (errno 0)
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   close_netns:PASS:setns_by_fd 0 nsec
+   lwt_ip_encap_test:FAIL:setup links and routes unexpected error: -1 (errno 0)
+   setup_namespaces:PASS:ip netns delete ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_3 0 nsec
+   #98/7    lwt_ip_encap/lwt_ipv4_encap_ingress_vrf:FAIL
+   setup_namespaces:PASS:ip netns add ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns add ns_lwt_3 0 nsec
+   lwt_ip_encap_test:PASS:setup namespaces 0 nsec
+   setup_links_and_routes:PASS:ip link add veth1 netns ns_lwt_1 type veth peer name veth2 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth3 netns ns_lwt_2 type veth peer name veth4 netns ns_lwt_3 0 nsec
+   setup_links_and_routes:PASS:ip link add veth5 netns ns_lwt_1 type veth peer name veth6 netns ns_lwt_2 0 nsec
+   setup_links_and_routes:PASS:ip link add veth7 netns ns_lwt_2 type veth peer name veth8 netns ns_lwt_3 0 nsec
+   open_netns:PASS:malloc token 0 nsec
+   open_netns:PASS:open /proc/self/ns/net 0 nsec
+   open_netns:PASS:open netns fd 0 nsec
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   open_netns:PASS:setns_by_fd 0 nsec
+   setup_ns:PASS:setns 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   write_sysctl:PASS:open sysctl 0 nsec
+   write_sysctl:PASS:write sysctl 0 nsec
+   setup_vrf:FAIL:ip link add red type vrf table 1001 unexpected error: 512 (errno 0)
+   setns_by_fd:PASS:setns 0 nsec
+   setns_by_fd:PASS:unshare 0 nsec
+   setns_by_fd:PASS:remount private /sys 0 nsec
+   setns_by_fd:PASS:umount2 /sys 0 nsec
+   setns_by_fd:PASS:mount /sys 0 nsec
+   setns_by_fd:PASS:mount /sys/fs/bpf 0 nsec
+   close_netns:PASS:setns_by_fd 0 nsec
+   lwt_ip_encap_test:FAIL:setup links and routes unexpected error: -1 (errno 0)
+   setup_namespaces:PASS:ip netns delete ns_lwt_1 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_2 0 nsec
+   setup_namespaces:PASS:ip netns delete ns_lwt_3 0 nsec
+   #98/8    lwt_ip_encap/lwt_ipv6_encap_ingress_vrf:FAIL
+   #98/9    lwt_ip_encap/lwt_ipv4_encap_egress_md:OK
+   #98/10   lwt_ip_encap/lwt_ipv6_encap_egress_md:OK
+   #98      lwt_ip_encap:FAIL
+   #99/1    map_init/pcpu_map_init:OK
+   #99/2    map_init/pcpu_lru_map_init:OK
+   #99      map_init:OK
+[...]
