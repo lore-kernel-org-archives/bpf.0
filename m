@@ -2,68 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09055CCA47E
-	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 20:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70EFFC43334
+	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 20:52:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345178AbiFIUra (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jun 2022 16:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
+        id S231340AbiFIUw5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jun 2022 16:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345132AbiFIUr2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:47:28 -0400
-Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB1E3A71A;
-        Thu,  9 Jun 2022 13:47:25 -0700 (PDT)
-Received: from SPMA-04.tubit.win.tu-berlin.de (localhost.localdomain [127.0.0.1])
-        by localhost (Email Security Appliance) with SMTP id 2515F973CED_2A25C5BB;
-        Thu,  9 Jun 2022 20:47:23 +0000 (GMT)
-Received: from mail.tu-berlin.de (bulkmail.tu-berlin.de [141.23.12.143])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "exchange.tu-berlin.de", Issuer "DFN-Verein Global Issuing CA" (not verified))
-        by SPMA-04.tubit.win.tu-berlin.de (Sophos Email Appliance) with ESMTPS id DEDEF973CC0_2A25C5AF;
-        Thu,  9 Jun 2022 20:47:22 +0000 (GMT)
-Received: from jt.fritz.box (77.11.250.240) by ex-02.svc.tu-berlin.de
- (10.150.18.6) with Microsoft SMTP Server id 15.2.986.22; Thu, 9 Jun 2022
- 22:47:22 +0200
-From:   =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        with ESMTP id S235732AbiFIUw4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jun 2022 16:52:56 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE472010CC;
+        Thu,  9 Jun 2022 13:52:54 -0700 (PDT)
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nzP95-000CoU-Ro; Thu, 09 Jun 2022 22:52:47 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1nzP95-0006w1-Bv; Thu, 09 Jun 2022 22:52:47 +0200
+Subject: Re: [PATCH bpf-next 0/3] move AF_XDP APIs to libxdp
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vu?= =?UTF-8?Q?sen?= 
+        <toke@redhat.com>, Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>,
-        =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
-Subject: [PATCH bpf-next v2 0/2] Align BPF TCP CCs implementing cong_control() with non-BPF CCs
-Date:   Thu, 9 Jun 2022 22:47:00 +0200
-Message-ID: <20220609204702.2351369-1-jthinz@mailbox.tu-berlin.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
-References: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20220607084003.898387-1-liuhangbin@gmail.com>
+ <87tu8w6cqa.fsf@toke.dk> <YqAJeHAL57cB9qJk@Laptop-X1>
+ <CAJ8uoz2g99N6HESyX1cGUWahSJRYQjXDG3m3f4_8APAvJNMHXw@mail.gmail.com>
+ <CAEf4BzZsAqq4rOpE2FWA-GHB4OSntv9rMUvt=6sOj6+1wKMMZw@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <59b8dda9-0cbb-4a70-2625-eaa8796ae5e5@iogearbox.net>
+Date:   Thu, 9 Jun 2022 22:52:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAEf4BzZsAqq4rOpE2FWA-GHB4OSntv9rMUvt=6sOj6+1wKMMZw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SASI-RCODE: 200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=campus.tu-berlin.de; h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim-tub; bh=TZXB+oAuuLA3aluMpGgggja2dnCmhr6NparVyR0TbeM=; b=UKeSCqrSy+ng2XGHKRExB+9A5ayrFMEeQDA2K3FcvCjXwpiEMkVObolK/Bcw2Oardmifk7a9Ht6j9zcbseuDk3UCMD5lG500uCu8lopS5DrEbXQ/X6cmUTE8wEyf1IR3Lqxf1uJdJVe093CySCJG46ejJB0lNZAQc7KHbqNsy+I=
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26567/Thu Jun  9 10:06:06 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This small series corrects some inconveniences for a BPF TCP CC that
-implements and uses tcp_congestion_ops.cong_control(). Until now, such a
-CC did not have all necessary write access to struct sock and
-unnecessarily needed to implement cong_avoid().
+On 6/9/22 10:29 PM, Andrii Nakryiko wrote:
+> On Wed, Jun 8, 2022 at 3:18 AM Magnus Karlsson
+> <magnus.karlsson@gmail.com> wrote:
+>> On Wed, Jun 8, 2022 at 9:55 AM Hangbin Liu <liuhangbin@gmail.com> wrote:
+>>> On Tue, Jun 07, 2022 at 11:31:57AM +0200, Toke Høiland-Jørgensen wrote:
+>>>> Hangbin Liu <liuhangbin@gmail.com> writes:
+>>>>
+>>>>> libbpf APIs for AF_XDP are deprecated starting from v0.7.
+>>>>> Let's move to libxdp.
+>>>>>
+>>>>> The first patch removed the usage of bpf_prog_load_xattr(). As we
+>>>>> will remove the GCC diagnostic declaration in later patches.
+>>>>
+>>>> Kartikeya started working on moving some of the XDP-related samples into
+>>>> the xdp-tools repo[0]; maybe it's better to just include these AF_XDP
+>>>> programs into that instead of adding a build-dep on libxdp to the kernel
+>>>> samples?
+>>>
+>>> OK, makes sense to me. Should we remove these samples after the xdp-tools PR
+>>> merged? What about xdpxceiver.c in selftests/bpf? Should that also be moved to
+>>> xdp-tools?
+>>
+>> Andrii has submitted a patch [1] for moving xsk.[ch] from libbpf to
+>> the xsk selftests so it can be used by xdpxceiver. This is a good idea
+>> since xdpxceiver tests the low level kernel interfaces and should not
+>> be in libxdp. I can also use those files as a start for implementing
+>> control interface tests which are in the planning stages. But the
+>> xdpsock sample shows how to use libxdp to write an AF_XDP program and
+>> belongs more naturally with libxdp. So good that Kartikeya is moving
+>> it over. Thanks!
+>>
+>> Another option would be to keep the xdpsock sample and require libxdp
+>> as in your patch set, but you would have to make sure that everything
+>> else in samples/bpf compiles neatly even if you do not have libxdp.
+>> Test for the presence of libxdp in the Makefile and degrade gracefully
+>> if you do not. But we would then have to freeze the xdpsock app as all
+>> new development of samples should be in libxdp. Or we just turn
+>> xdpsock into a README file and direct people to the samples in libxdp?
+>> What do you think?
+> 
+> I think adding libxdp dependency for samples/bpf is a bad idea. Moving
+> samples to near libxdp makes more sense to me.
 
----
-v2:
- - Drop redundant check for required functions and just rely on
-   tcp_register_congestion_control() (Martin KaFai Lau)
++1 on moving them out from samples/bpf/ to somewhere near libxdp repo given
+it'll be usage example of libxdp.
 
-Jörn-Thorben Hinz (2):
-  bpf: Allow a TCP CC to write sk_pacing_rate and sk_pacing_status
-  bpf: Require only one of cong_avoid() and cong_control() from a TCP CC
+More generally, the useful XDP-related things could migrate from samples/bpf/
+over to either https://github.com/xdp-project/bpf-examples/ or
+https://github.com/xdp-project/xdp-tools and then we could potentially toss
+the samples/bpf/ dir from the kernel tree.
 
- net/ipv4/bpf_tcp_ca.c | 38 ++++++--------------------------------
- 1 file changed, 6 insertions(+), 32 deletions(-)
+These days there are tons of howtos and example progs out in the wild and
+better tooling/framework available for users to get started. Taking XDP
+aside for a bit, a lot of stuff in samples/bpf/ is just outdated.
 
--- 
-2.30.2
+Brendan recently also started drafting guidelines (wip) for newbies getting
+into development with pointers where to look [0]. So really, there's less and
+less good reason for samples/bpf/ these days.
 
+   [0] http://vger.kernel.org/bpfconf2022_material/lsfmmbpf2022-bpf-wip-guidelines.pdf
+
+>> [1] https://lore.kernel.org/bpf/20220603190155.3924899-2-andrii@kernel.org/
+>>
+>>> Thanks
+>>> Hangbin
