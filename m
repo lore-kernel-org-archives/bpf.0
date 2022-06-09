@@ -2,226 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4D6C43334
-	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 20:35:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C920C433EF
+	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 20:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234450AbiFIUfD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jun 2022 16:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        id S236345AbiFIUr3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jun 2022 16:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233864AbiFIUfD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jun 2022 16:35:03 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E9720F6F
-        for <bpf@vger.kernel.org>; Thu,  9 Jun 2022 13:35:01 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s13so27450403ljd.4
-        for <bpf@vger.kernel.org>; Thu, 09 Jun 2022 13:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gM6EdEJv2ehBisgqSAHjQr46BdQDLkLt/URs2O3TGYA=;
-        b=MESQc1jLo21VEUYuNrzpWhNzOGKwprgdt39kTO7+Pk4AwR/uBG8psVWZZ4Ucj6fs34
-         eC1KjHbKn0/EtTW33It/9HUCIRA5ntadq+z/Bqq0AVegwMBkqo3CFqXsIcr+HgekJAed
-         rwx9G1J8U7lXg1vrOirioyAA2m8HDew8ISPny8OiiAVdzkOBklXSnCawg+LxGNG8ykwI
-         VgxCUHPWW7Xpll0+3Ug6qImUTUCPwM0gs71wA5eFJ5xLO3piz8OC3If7VUaFwaa14W0q
-         P9f8NcK9B3XMs1B8uh2EAPPX9KQoMB49REUIQhEZZRtBG+RywPWeCDOnjw4qyjTGc9vA
-         EkUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gM6EdEJv2ehBisgqSAHjQr46BdQDLkLt/URs2O3TGYA=;
-        b=mBvrKT3rpeKR9KBIqOPTGrsZoNLk5mm6SdXsDP0ZDy7dEBiZXEXzKXjD3waFJeE+Zl
-         2Aa+mqH/oh826JPbpWJcVU48bNCBCC5caBQDA4oum3Qxa5NL4+UCmx5y4Qf8vgsWC4Ji
-         MlOBKjDl++Ty7OazMvRwkJOsydiel0HWSvocAegCcEuNCLTeTpOGDkEojnnhqdcpieje
-         5Guda2l3Jspvd86vgNXlTEzIH9N56Tjm07opIdv5C7+xrsr+1KRhjf+w2UW76qLLbwrQ
-         28H3QtwMuVFNFejDf7vc8UPFfM5WG7FVqStuTpODtvAWe3WOp9UVKZ4GRmHIgyJv/q4C
-         cA5Q==
-X-Gm-Message-State: AOAM532FbJ8YVqL6l/kzoPkQXiOz9ShLFsJiJvGaYI2CKDafh3F07H2s
-        WNq1xYMtEfGpczKpoLnfrQQdyTEe4kjQnfbPlC8=
-X-Google-Smtp-Source: ABdhPJyrSyUnL6UxV8fWqLTHbbyNYJ22zsnoFdCAX4SZXq8saxfdzJ9Lqv+kDzn5NYKThchzA0V9w0djgLoKBX6Mw28=
-X-Received: by 2002:a2e:bd13:0:b0:246:1ff8:6da1 with SMTP id
- n19-20020a2ebd13000000b002461ff86da1mr59872894ljq.219.1654806899852; Thu, 09
- Jun 2022 13:34:59 -0700 (PDT)
+        with ESMTP id S1345178AbiFIUr2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jun 2022 16:47:28 -0400
+Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48C83B2A8;
+        Thu,  9 Jun 2022 13:47:25 -0700 (PDT)
+Received: from SPMA-01.tubit.win.tu-berlin.de (localhost.localdomain [127.0.0.1])
+        by localhost (Email Security Appliance) with SMTP id 2D40C7E08B8_2A25C5CB;
+        Thu,  9 Jun 2022 20:47:24 +0000 (GMT)
+Received: from mail.tu-berlin.de (bulkmail.tu-berlin.de [141.23.12.143])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "exchange.tu-berlin.de", Issuer "DFN-Verein Global Issuing CA" (not verified))
+        by SPMA-01.tubit.win.tu-berlin.de (Sophos Email Appliance) with ESMTPS id CB6A7833590_2A25C5BF;
+        Thu,  9 Jun 2022 20:47:23 +0000 (GMT)
+Received: from jt.fritz.box (77.11.250.240) by ex-02.svc.tu-berlin.de
+ (10.150.18.6) with Microsoft SMTP Server id 15.2.986.22; Thu, 9 Jun 2022
+ 22:47:23 +0200
+From:   =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>,
+        =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
+Subject: [PATCH bpf-next v2 2/2] bpf: Require only one of cong_avoid() and cong_control() from a TCP CC
+Date:   Thu, 9 Jun 2022 22:47:02 +0200
+Message-ID: <20220609204702.2351369-3-jthinz@mailbox.tu-berlin.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220609204702.2351369-1-jthinz@mailbox.tu-berlin.de>
+References: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
+ <20220609204702.2351369-1-jthinz@mailbox.tu-berlin.de>
 MIME-Version: 1.0
-References: <20220524055748.4064533-1-andrii@kernel.org>
-In-Reply-To: <20220524055748.4064533-1-andrii@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 9 Jun 2022 13:34:47 -0700
-Message-ID: <CAEf4BzbLA=Gkvv3rQw4_jsRb0yMcJ-e=mVMtHmnQGZ7OTffnSA@mail.gmail.com>
-Subject: Re: [PATCH] BUG: demonstration of uprobe/uretprobe corrupted stack traces
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, rihams@fb.com,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SASI-RCODE: 200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=campus.tu-berlin.de; h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim-tub; bh=RZHvJDUsnsYb3eTPep0aSCF1yaWNmmjr4+iDzKm1+DI=; b=UjGji9WRH77gFeSDuH5aEujF0rohDVAMdA6gxCa/YJKCW50txQWI32nQlmR/xZ10BpUQqsmlpsF5t1XnqW57CdAw5RNw8dC42826tou1f4T1rdFIZz0dqzLZh3cqmOwpdeZMTDJzxYfmg3Xg0QuqbUndEQ3LFe7fliAMoLNOOS8=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, May 23, 2022 at 10:58 PM Andrii Nakryiko <andrii@kernel.org> wrote:
->
-> Hi Masami,
->
-> We've got reports about partially corrupt stack traces when being captured from
-> uretprobes. Trying the simplest repro seems to confirm that something is not
-> quite right here. I'll try to debug it a bit more this week, but I was hoping
-> for you to take a look as well, if you get a chance.
->
+Remove the check for required and optional functions in a struct
+tcp_congestion_ops from bpf_tcp_ca.c. Rely on
+tcp_register_congestion_control() to reject a BPF CC that does not
+implement all required functions, as it will do for a non-BPF CC.
 
-A friendly ping! See below, at this point I'm mostly concerned about #2.
+When a CC implements tcp_congestion_ops.cong_control(), the alternate
+cong_avoid() is not in use in the TCP stack. Previously, a BPF CC was
+still forced to implement cong_avoid() as a no-op since it was
+non-optional in bpf_tcp_ca.c.
 
+Signed-off-by: Jörn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>
+---
+ net/ipv4/bpf_tcp_ca.c | 32 --------------------------------
+ 1 file changed, 32 deletions(-)
 
-> Simple repro built on top of BPF selftests.
->
->   $ sudo ./test_progs -a uprobe_autoattach -v
->   ...
->   FN ADDR 0x55fde0 - 0x55fdef
->   UPROBE SZ 40 (CNT 5)       URETPROBE SZ 40 (CNT 5)
->   UPROBE 0x55fde0           URETPROBE 0x55ffd4
->   UPROBE 0x584653           URETPROBE 0x584653
->   UPROBE 0x585cc9           URETPROBE 0x585cc9
->   UPROBE 0x7fa9a31eaca3     URETPROBE 0x7fa9a31eaca3
->   UPROBE 0x5541f689495641d7 URETPROBE 0x5541f689495641d7
->   ...
->   #203     uprobe_autoattach:OK
->   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> There seem to be two distinct problems.
->
-> 1. Last two entries for both uprobe and uretprobe stacks are not user-space
-> addressed (0x7fa9a31eaca3) and the very last one doesn't even look like a valid
-> address (0x5541f689495641d7).
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 1f5c53ede4e5..39b64f317499 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -14,18 +14,6 @@
+ /* "extern" is to avoid sparse warning.  It is only used in bpf_struct_ops.c. */
+ extern struct bpf_struct_ops bpf_tcp_congestion_ops;
+ 
+-static u32 optional_ops[] = {
+-	offsetof(struct tcp_congestion_ops, init),
+-	offsetof(struct tcp_congestion_ops, release),
+-	offsetof(struct tcp_congestion_ops, set_state),
+-	offsetof(struct tcp_congestion_ops, cwnd_event),
+-	offsetof(struct tcp_congestion_ops, in_ack_event),
+-	offsetof(struct tcp_congestion_ops, pkts_acked),
+-	offsetof(struct tcp_congestion_ops, min_tso_segs),
+-	offsetof(struct tcp_congestion_ops, sndbuf_expand),
+-	offsetof(struct tcp_congestion_ops, cong_control),
+-};
+-
+ static u32 unsupported_ops[] = {
+ 	offsetof(struct tcp_congestion_ops, get_info),
+ };
+@@ -51,18 +39,6 @@ static int bpf_tcp_ca_init(struct btf *btf)
+ 	return 0;
+ }
+ 
+-static bool is_optional(u32 member_offset)
+-{
+-	unsigned int i;
+-
+-	for (i = 0; i < ARRAY_SIZE(optional_ops); i++) {
+-		if (member_offset == optional_ops[i])
+-			return true;
+-	}
+-
+-	return false;
+-}
+-
+ static bool is_unsupported(u32 member_offset)
+ {
+ 	unsigned int i;
+@@ -268,14 +244,6 @@ static int bpf_tcp_ca_init_member(const struct btf_type *t,
+ 		return 1;
+ 	}
+ 
+-	if (!btf_type_resolve_func_ptr(btf_vmlinux, member->type, NULL))
+-		return 0;
+-
+-	/* Ensure bpf_prog is provided for compulsory func ptr */
+-	prog_fd = (int)(*(unsigned long *)(udata + moff));
+-	if (!prog_fd && !is_optional(moff) && !is_unsupported(moff))
+-		return -EINVAL;
+-
+ 	return 0;
+ }
+ 
+-- 
+2.30.2
 
-We can probably ignore this one, because I suspect it's due to my
-system-wide libc was built without frame-pointers. So once we got into
-some API inside libc stack traces got corrupted. But the one below
-about not getting an address of a probed function for uretprobe still
-stands. Can you please take a look? Thank you!
-
->
-> 2. Looking at first entry for UPROBE vs URETPROBE, you can see that uprobe
-> one's is correct and points exactly to the beginning of autoattach_trigger_func
-> (0x55fde0) as expected, but uretprobe entry (0x55ffd4) is way out of
-> autoattach_trigger_func (which is just 15 bytes long and ends at 0x55fdef).
-> Using addr2line it shows that it points to:
->
->   0x000000000055ffd4: test_uprobe_autoattach at /data/users/andriin/linux/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c:33
->
-> Which is a valid function and location to which autoattach_trigger_func()
-> should return (see objdump snippet below), but from uretprobe I'd imagine that
-> we are going to get address within traced user function (that is 0x55fde0 -
-> 0x55fdef range), not the return address in a parent function.
->
->      55ffc4:       89 83 3c 08 00 00       mov    %eax,0x83c(%rbx)
->      55ffca:       8b 45 e8                mov    -0x18(%rbp),%eax
->      55ffcd:       89 c7                   mov    %eax,%edi
->      55ffcf:       e8 0c fe ff ff          call   55fde0 <autoattach_trigger_func>
-> -->  55ffd4:       89 45 a8                mov    %eax,-0x58(%rbp)
->      55ffd7:       ba ef fd 55 00          mov    $0x55fdef,%edx
->
-> Both issues above seem unexpected, can you please see if I have some wrong
-> assumptions here?
->
-> Thanks in advance for taking a look!
->
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Riham Selim <rihams@fb.com>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  tools/testing/selftests/bpf/Makefile               |  3 ++-
->  .../selftests/bpf/prog_tests/uprobe_autoattach.c   | 14 ++++++++++++++
->  .../selftests/bpf/progs/test_uprobe_autoattach.c   | 11 +++++++++++
->  3 files changed, 27 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 2d3c8c8f558a..0d3109c8d8d5 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -23,7 +23,8 @@ BPF_GCC               ?= $(shell command -v bpf-gcc;)
->  SAN_CFLAGS     ?=
->  CFLAGS += -g -O0 -rdynamic -Wall -Werror $(GENFLAGS) $(SAN_CFLAGS)     \
->           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
-> -         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
-> +         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT) -fno-omit-frame-pointer
-> +
->  LDFLAGS += $(SAN_CFLAGS)
->  LDLIBS += -lelf -lz -lrt -lpthread
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-> index 35b87c7ba5be..c0fbe4d240be 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_autoattach.c
-> @@ -10,6 +10,7 @@ static noinline int autoattach_trigger_func(int arg)
->         asm volatile ("");
->         return arg + 1;
->  }
-> +static noinline int autoattach_trigger_func_post(int arg) { return 0; }
->
->  void test_uprobe_autoattach(void)
->  {
-> @@ -17,6 +18,7 @@ void test_uprobe_autoattach(void)
->         int trigger_val = 100, trigger_ret;
->         size_t malloc_sz = 1;
->         char *mem;
-> +       int i;
->
->         skel = test_uprobe_autoattach__open_and_load();
->         if (!ASSERT_OK_PTR(skel, "skel_open"))
-> @@ -30,6 +32,18 @@ void test_uprobe_autoattach(void)
->         /* trigger & validate uprobe & uretprobe */
->         trigger_ret = autoattach_trigger_func(trigger_val);
->
-> +       printf("FN ADDR %p - %p\n", autoattach_trigger_func, autoattach_trigger_func_post);
-> +       printf("UPROBE SZ %d (CNT %d)      URETPROBE SZ %d (CNT %d)\n",
-> +               skel->bss->uprobe_stack_sz,
-> +               skel->bss->uprobe_stack_sz / 8,
-> +               skel->bss->uretprobe_stack_sz,
-> +               skel->bss->uretprobe_stack_sz / 8);
-> +       for (i = 0; i < skel->bss->uprobe_stack_sz / 8; i++) {
-> +               printf("UPROBE %-18p URETPROBE %-18p\n",
-> +                       (void *)skel->bss->uprobe_stack[i],
-> +                       (void *)skel->bss->uretprobe_stack[i]);
-> +       }
-> +
->         skel->bss->test_pid = getpid();
->
->         /* trigger & validate shared library u[ret]probes attached by name */
-> diff --git a/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c b/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
-> index ab75522e2eeb..f630f83b4426 100644
-> --- a/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
-> +++ b/tools/testing/selftests/bpf/progs/test_uprobe_autoattach.c
-> @@ -27,11 +27,19 @@ int handle_uprobe_noautoattach(struct pt_regs *ctx)
->         return 0;
->  }
->
-> +__u64 uprobe_stack[128];
-> +__u64 uretprobe_stack[128];
-> +int uprobe_stack_sz, uretprobe_stack_sz;
-> +
->  SEC("uprobe//proc/self/exe:autoattach_trigger_func")
->  int handle_uprobe_byname(struct pt_regs *ctx)
->  {
->         uprobe_byname_parm1 = PT_REGS_PARM1_CORE(ctx);
->         uprobe_byname_ran = 1;
-> +
-> +       uprobe_stack_sz = bpf_get_stack(ctx,
-> +                                       uprobe_stack, sizeof(uprobe_stack),
-> +                                       BPF_F_USER_STACK);
->         return 0;
->  }
->
-> @@ -40,6 +48,9 @@ int handle_uretprobe_byname(struct pt_regs *ctx)
->  {
->         uretprobe_byname_rc = PT_REGS_RC_CORE(ctx);
->         uretprobe_byname_ran = 2;
-> +       uretprobe_stack_sz = bpf_get_stack(ctx,
-> +                                          uretprobe_stack, sizeof(uretprobe_stack),
-> +                                          BPF_F_USER_STACK);
->         return 0;
->  }
->
-> --
-> 2.30.2
->
