@@ -2,52 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8269EC433EF
-	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 12:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A23BC43334
+	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 12:20:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245160AbiFIMKT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jun 2022 08:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S232236AbiFIMUS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jun 2022 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245164AbiFIMKS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jun 2022 08:10:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9960B26520D;
-        Thu,  9 Jun 2022 05:10:15 -0700 (PDT)
+        with ESMTP id S245421AbiFIMUP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jun 2022 08:20:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3AC1E4BC7
+        for <bpf@vger.kernel.org>; Thu,  9 Jun 2022 05:20:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2789BB82D53;
-        Thu,  9 Jun 2022 12:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3690C341C4;
-        Thu,  9 Jun 2022 12:10:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C958761821
+        for <bpf@vger.kernel.org>; Thu,  9 Jun 2022 12:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33C88C3411B;
+        Thu,  9 Jun 2022 12:20:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654776612;
-        bh=PwBBBz/dC7cgFr8moGbFG7v4skdx3aTmukVX1l9htzc=;
+        s=k20201202; t=1654777213;
+        bh=LBx+6tw5V998JcIrxfnJRh5WND1lSEBwKSN0gCsbSVQ=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FR3+qoKH0jU5DSwFRsaTQE1ge6SqA5GUN785MvKid/Thz3i12gHRQ0eu3WmqFxSyD
-         QSKmG2Jhu5+qsRV5iWrTMz8NKtzNENDaaAnAvo5IO/bPPsW4GdGpqHSvlYHKmyBr/i
-         vQfeAzs9+WxUrO2gm7+s6xBY2O/qNY5yN4GMBZaNU8/hoRr841q+smeZIIevlI6cTr
-         2TOIvgn+V3H//SxBBFT5UPf9Q76ZU6xhiTPyvhukwWDnywvAFlIYtuyqBgFVhxEMjR
-         Ax2OV10TWbsJAgiLVradd8N05imn/PzdOwI//bt0CwkDDbutYFq1zBpgeYQfFZChXE
-         XRr5Zh14c8w9g==
+        b=WfyReUkz19flBkp04U7RQGwZNDZd+2dPEx22bPy30ElygZc9GD4QKYAcXeGNG7HjX
+         FttaLbpMJIBzhUtOM1qjlWtE+aIBjFxodKMMEzqSy7yHmWEWSXCgJu/gYHHnZetP5G
+         KLRG/Lzm/RUibss5DyR20fOGr6Pg2pkgxnPgacqZdbMTzC8n/7LVHrzjQqeu1vQR1h
+         W6LHh/5KJYQ+X3lLLqkhw1i/ZYvTczD4VJyO9cSNrXMEROpjefItrXIQNfnuB0lm56
+         6x8JZI+2IQIzDgEHj/3XFxZkcabdw2xEyL5SUlRabOndXLgHE6gex3muaA+hMLyHuF
+         Xe4i9qwJwvh0w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9B4AE737F0;
-        Thu,  9 Jun 2022 12:10:12 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1CB03E737F0;
+        Thu,  9 Jun 2022 12:20:13 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf, docs: Fix typo "BFP_ALU" to "BPF_ALU"
+Subject: Re: [PATCH bpf-next] libbpf: fix uprobe symbol file offset calculation
+ logic
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165477661275.11342.4271222664827162362.git-patchwork-notify@kernel.org>
-Date:   Thu, 09 Jun 2022 12:10:12 +0000
-References: <20220609083937.245749-1-fujimotoksouke0@gmail.com>
-In-Reply-To: <20220609083937.245749-1-fujimotoksouke0@gmail.com>
-To:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-Cc:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, linux-doc@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, fujimotoksouke0@gmail.com
+Message-Id: <165477721311.18609.5520888533028654570.git-patchwork-notify@kernel.org>
+Date:   Thu, 09 Jun 2022 12:20:13 +0000
+References: <20220606220143.3796908-1-andrii@kernel.org>
+In-Reply-To: <20220606220143.3796908-1-andrii@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, rihams@fb.com, alan.maguire@oracle.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -57,17 +56,19 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Thu,  9 Jun 2022 04:39:37 -0400 you wrote:
-> "BFP" should be "BPF"
+On Mon, 6 Jun 2022 15:01:43 -0700 you wrote:
+> Fix libbpf's bpf_program__attach_uprobe() logic of determining
+> function's *file offset* (which is what kernel is actually expecting)
+> when attaching uprobe/uretprobe by function name. Previously calculation
+> was determining virtual address offset relative to base load address,
+> which (offset) is not always the same as file offset (though very
+> frequently it is which is why this went unnoticed for a while).
 > 
-> Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
-> ---
->  Documentation/bpf/instruction-set.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> [...]
 
 Here is the summary with links:
-  - bpf, docs: Fix typo "BFP_ALU" to "BPF_ALU"
-    https://git.kernel.org/bpf/bpf-next/c/492f99e4190a
+  - [bpf-next] libbpf: fix uprobe symbol file offset calculation logic
+    https://git.kernel.org/bpf/bpf-next/c/fe92833524e3
 
 You are awesome, thank you!
 -- 
