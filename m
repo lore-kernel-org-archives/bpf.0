@@ -2,38 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A978CCA47B
-	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 13:59:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C9BFC43334
+	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 14:01:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232920AbiFJN7w (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jun 2022 09:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38246 "EHLO
+        id S231311AbiFJOBU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jun 2022 10:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236558AbiFJN7i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1349985AbiFJN7i (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 10 Jun 2022 09:59:38 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7254203A2A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FDF1F5E24;
         Fri, 10 Jun 2022 06:59:32 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LKMtg3YYhz683Pb;
-        Fri, 10 Jun 2022 21:55:55 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LKMtf5cfmz67NMW;
+        Fri, 10 Jun 2022 21:55:54 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 10 Jun 2022 15:59:30 +0200
+ 15.1.2375.24; Fri, 10 Jun 2022 15:59:29 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kpsingh@kernel.org>
 CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v3 1/2] bpf: Add bpf_verify_signature() helper
-Date:   Fri, 10 Jun 2022 15:59:15 +0200
-Message-ID: <20220610135916.1285509-2-roberto.sassu@huawei.com>
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v3 0/2] bpf: Add bpf_verify_signature() helper
+Date:   Fri, 10 Jun 2022 15:59:14 +0200
+Message-ID: <20220610135916.1285509-1-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220610135916.1285509-1-roberto.sassu@huawei.com>
-References: <20220610135916.1285509-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -45,178 +42,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the bpf_verify_signature() helper, to give eBPF security modules the
-ability to check the validity of a signature against supplied data, by
-using system-provided keys as trust anchor.
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-The new helper makes it possible to enforce mandatory policies, as eBPF
-programs might be allowed to make security decisions only based on data
-sources the system administrator approves.
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
-The caller should specify the identifier of the keyring containing the keys
-for signature verification: 0 for the primary keyring (immutable keyring of
-system keys); 1 for both the primary and secondary keyring (where keys can
-be added only if they are vouched for by existing keys in those keyrings);
-2 for the platform keyring (primarily used by the integrity subsystem to
-verify a kexec'ed kerned image and, possibly, the initramfs signature);
-0xffff for the session keyring (for testing purposes).
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
 
-The caller should also specify the type of signature. Currently only PKCS#7
-is supported.
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing a new helper:
+bpf_verify_signature(). Its job is simply to call the signature verification
+function corresponding to the passed signature type, with the keyring selected
+through the passed keyring identifier.
 
-Since the maximum number of parameters of an eBPF helper is 5, the keyring
-and signature types share one (keyring ID: low 16 bits, signature type:
-high 16 bits).
+Since verify_pkcs7_signature() is doing crypto operations, it must be
+called by a sleepable program. This restricts the set of functions that can
+call the associated helper (for example, lsm.s/bpf is suitable,
+fexit/array_map_update_elem is not).
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reported-by: kernel test robot <lkp@intel.com> (cast warning)
----
- include/uapi/linux/bpf.h       | 17 +++++++++++++
- kernel/bpf/bpf_lsm.c           | 46 ++++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h | 17 +++++++++++++
- 3 files changed, 80 insertions(+)
+The added test checks the ability of an eBPF program to verify module-style
+appended signatures, as produced by the kernel tool sign-file, currently
+used to sign kernel modules.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f4009dbdf62d..97521857e44a 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5249,6 +5249,22 @@ union bpf_attr {
-  *		Pointer to the underlying dynptr data, NULL if the dynptr is
-  *		read-only, if the dynptr is invalid, or if the offset and length
-  *		is out of bounds.
-+ *
-+ * long bpf_verify_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u32 info)
-+ *	Description
-+ *		Verify a signature of length *siglen* against the supplied data
-+ *		with length *datalen*. *info* contains the keyring identifier
-+ *		(low 16 bits) and the signature type (high 16 bits). The keyring
-+ *		identifier can have the following values (some defined in
-+ *		verification.h): 0 for the primary keyring (immutable keyring of
-+ *		system keys); 1 for both the primary and secondary keyring
-+ *		(where keys can be added only if they are vouched for by
-+ *		existing keys in those keyrings); 2 for the platform keyring
-+ *		(primarily used by the integrity subsystem to verify a kexec'ed
-+ *		kerned image and, possibly, the initramfs signature); 0xffff for
-+ *		the session keyring (for testing purposes).
-+ *	Return
-+ *		0 on success, a negative value on error.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5455,6 +5471,7 @@ union bpf_attr {
- 	FN(dynptr_read),		\
- 	FN(dynptr_write),		\
- 	FN(dynptr_data),		\
-+	FN(verify_signature),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index c1351df9f7ee..20bd850ea3ee 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -16,6 +16,8 @@
- #include <linux/bpf_local_storage.h>
- #include <linux/btf_ids.h>
- #include <linux/ima.h>
-+#include <linux/verification.h>
-+#include <linux/module_signature.h>
- 
- /* For every LSM hook that allows attachment of BPF programs, declare a nop
-  * function where a BPF program can be attached.
-@@ -132,6 +134,46 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+BPF_CALL_5(bpf_verify_signature, u8 *, data, u32, datalen, u8 *, sig,
-+	   u32, siglen, u32, info)
-+{
-+	unsigned long keyring_id = info & U16_MAX;
-+	enum pkey_id_type id_type = info >> 16;
-+	const struct cred *cred = current_cred();
-+	struct key *keyring;
-+
-+	if (keyring_id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING &&
-+	    keyring_id != U16_MAX)
-+		return -EINVAL;
-+
-+	keyring = (keyring_id == U16_MAX) ?
-+		  cred->session_keyring : (struct key *)keyring_id;
-+
-+	switch (id_type) {
-+	case PKEY_ID_PKCS7:
-+		return verify_pkcs7_signature(data, datalen, sig, siglen,
-+					      keyring,
-+					      VERIFYING_UNSPECIFIED_SIGNATURE,
-+					      NULL, NULL);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
-+static const struct bpf_func_proto bpf_verify_signature_proto = {
-+	.func		= bpf_verify_signature,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM,
-+	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg3_type	= ARG_PTR_TO_MEM,
-+	.arg4_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg5_type	= ARG_ANYTHING,
-+	.allowed	= bpf_ima_inode_hash_allowed,
-+};
-+#endif
-+
- static const struct bpf_func_proto *
- bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -158,6 +200,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
- 	case BPF_FUNC_get_attach_cookie:
- 		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+	case BPF_FUNC_verify_signature:
-+		return prog->aux->sleepable ? &bpf_verify_signature_proto : NULL;
-+#endif
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f4009dbdf62d..97521857e44a 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5249,6 +5249,22 @@ union bpf_attr {
-  *		Pointer to the underlying dynptr data, NULL if the dynptr is
-  *		read-only, if the dynptr is invalid, or if the offset and length
-  *		is out of bounds.
-+ *
-+ * long bpf_verify_signature(u8 *data, u32 datalen, u8 *sig, u32 siglen, u32 info)
-+ *	Description
-+ *		Verify a signature of length *siglen* against the supplied data
-+ *		with length *datalen*. *info* contains the keyring identifier
-+ *		(low 16 bits) and the signature type (high 16 bits). The keyring
-+ *		identifier can have the following values (some defined in
-+ *		verification.h): 0 for the primary keyring (immutable keyring of
-+ *		system keys); 1 for both the primary and secondary keyring
-+ *		(where keys can be added only if they are vouched for by
-+ *		existing keys in those keyrings); 2 for the platform keyring
-+ *		(primarily used by the integrity subsystem to verify a kexec'ed
-+ *		kerned image and, possibly, the initramfs signature); 0xffff for
-+ *		the session keyring (for testing purposes).
-+ *	Return
-+ *		0 on success, a negative value on error.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5455,6 +5471,7 @@ union bpf_attr {
- 	FN(dynptr_read),		\
- 	FN(dynptr_write),		\
- 	FN(dynptr_data),		\
-+	FN(verify_signature),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+The patch set is organized as follows.
+
+Patch 1 introduces the new helper. Patch 2 adds the test for the new
+helper.
+
+Changelog
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+Roberto Sassu (2):
+  bpf: Add bpf_verify_signature() helper
+  selftests/bpf: Add test for bpf_verify_signature() helper
+
+ include/uapi/linux/bpf.h                      |  17 ++
+ kernel/bpf/bpf_lsm.c                          |  46 ++++
+ tools/include/uapi/linux/bpf.h                |  17 ++
+ tools/testing/selftests/bpf/Makefile          |  11 +-
+ tools/testing/selftests/bpf/config            |   1 +
+ .../selftests/bpf/prog_tests/verify_sig.c     | 200 ++++++++++++++++++
+ .../selftests/bpf/progs/test_verify_sig.c     | 160 ++++++++++++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 100 +++++++++
+ 8 files changed, 549 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+
 -- 
 2.25.1
 
