@@ -2,61 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 035B1C433EF
-	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 15:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FDDAC433EF
+	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 15:56:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346118AbiFJP4v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jun 2022 11:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S242354AbiFJP4x (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jun 2022 11:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348217AbiFJP4s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1349334AbiFJP4s (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 10 Jun 2022 11:56:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA191D5AA6;
-        Fri, 10 Jun 2022 08:56:46 -0700 (PDT)
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25AEuXFJ007584;
-        Fri, 10 Jun 2022 15:56:10 GMT
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2FE1D5AAA;
+        Fri, 10 Jun 2022 08:56:47 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25AFR7SE025200;
+        Fri, 10 Jun 2022 15:56:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=dJb/lXj3jl4VfTDeImilpTex2ktNmB2l4+NNwzRr3Vk=;
- b=jVv6BO89bEccN9FwAt90AcZS8oNEYCMZv13bD5WgNgZxvxx09N/lGoGP6A5JQPrtW7t0
- ac0mCCEFhqSWgaf9iIjTLWyuF5qjuUFfNRvQYBdHL9wt158vF35M+ZEBthr1o3B99C8w
- B0hNrRLPg9v2HTZe5cirbYC+rgPhFgbiOL0xS81MdvwmVUxB8byNtCbunmSID5e3dwJi
- isNxbBCIlp/WJp1XrlCfBhvOG8BhRxFnik2vkP4Cs7AsnWHBHYwD7gspcvQxGPOuM71T
- BwGIF/bOdZc74DDbiiIbZ03D4lBOTjx66GpNc2dg8N4cz23kmDSDSFrK+A05VSYEB9DX Qg== 
+ bh=I1afDjTRkcT29LEzqpObNh6JGr7EtIyVa/zoHKUbahQ=;
+ b=pRdUC0U/Z6HIsy8Xp+mGDsEIkhb7UZToGW1ZYWq4hwHpeb8tiGFTQVk6CLOSswFkkOru
+ l+5lqYysWrICcRKpcuaq1Ya2oTD+GeEyYI565dMhgxkHDZjrbQfdYBodGYDY9iu+rPGD
+ 3lWdsMLs2KYJReFjsPgxH5UY9uPumHl0jmGoey9UdBkfrzIXsh964c304HVNWnat/HtO
+ EsPaoZpkGefuQXkTRw7XaG2DoazEjEr8/phXTFb3D/XsFV3BKrs0IERsGOcmsDrGuAUr
+ sJ11HsUxTTIxGPcYSoWMPGWhvYXzflsTLMKSN5ExvSqRgO76JGIm6QZtRnO77u8uLC9B Iw== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm85ps28b-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm8ksggjs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 15:56:10 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25AFoCEe008049;
-        Fri, 10 Jun 2022 15:56:09 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm85ps27q-1
+        Fri, 10 Jun 2022 15:56:18 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25AFjClZ015303;
+        Fri, 10 Jun 2022 15:56:17 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gm8ksggjc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 15:56:09 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25AFoRX3013860;
-        Fri, 10 Jun 2022 15:56:07 GMT
+        Fri, 10 Jun 2022 15:56:17 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25AFo4Np029817;
+        Fri, 10 Jun 2022 15:56:15 GMT
 Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gfy19gefb-1
+        by ppma06ams.nl.ibm.com with ESMTP id 3gfxnj0gad-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jun 2022 15:56:07 +0000
+        Fri, 10 Jun 2022 15:56:14 +0000
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25AFu5YN21955070
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25AFuC5B21365010
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jun 2022 15:56:05 GMT
+        Fri, 10 Jun 2022 15:56:12 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 327704C044;
-        Fri, 10 Jun 2022 15:56:05 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id B430E4C040;
+        Fri, 10 Jun 2022 15:56:12 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 772214C040;
-        Fri, 10 Jun 2022 15:56:01 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id A62D44C04A;
+        Fri, 10 Jun 2022 15:56:09 +0000 (GMT)
 Received: from hbathini-workstation.in.ibm.com (unknown [9.203.106.231])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jun 2022 15:56:01 +0000 (GMT)
+        Fri, 10 Jun 2022 15:56:09 +0000 (GMT)
 From:   Hari Bathini <hbathini@linux.ibm.com>
 To:     bpf@vger.kernel.org, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Cc:     Michael Ellerman <mpe@ellerman.id.au>,
@@ -74,94 +74,130 @@ Cc:     Michael Ellerman <mpe@ellerman.id.au>,
         KP Singh <kpsingh@kernel.org>,
         Jordan Niethe <jniethe5@gmail.com>,
         Russell Currey <ruscur@russell.cc>
-Subject: [PATCH v2 2/5] bpf ppc64: add support for atomic fetch operations
-Date:   Fri, 10 Jun 2022 21:25:49 +0530
-Message-Id: <20220610155552.25892-3-hbathini@linux.ibm.com>
+Subject: [PATCH v2 4/5] bpf ppc32: add support for BPF_ATOMIC bitwise operations
+Date:   Fri, 10 Jun 2022 21:25:51 +0530
+Message-Id: <20220610155552.25892-5-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220610155552.25892-1-hbathini@linux.ibm.com>
 References: <20220610155552.25892-1-hbathini@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: QulAns6e6jerUzYVw0jpQIGkD46kBAgl
-X-Proofpoint-ORIG-GUID: l8hK_OLVrbR0Pcu_MpkUN8m6bUpaUcsH
+X-Proofpoint-GUID: al_VxdLHl_xZzFEqvo5VQZZXMCV6U71E
+X-Proofpoint-ORIG-GUID: 3BiqQ84zlO9If6zmokbeJHtWTbjnMzL_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-10_06,2022-06-09_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 adultscore=0 impostorscore=0
+ spamscore=0 mlxlogscore=942 suspectscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2204290000 definitions=main-2206100061
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding instructions for ppc64 for
+Adding instructions for ppc32 for
 
-atomic[64]_fetch_add
-atomic[64]_fetch_and
-atomic[64]_fetch_or
-atomic[64]_fetch_xor
+atomic_and
+atomic_or
+atomic_xor
+atomic_fetch_add
+atomic_fetch_and
+atomic_fetch_or
+atomic_fetch_xor
 
 Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
 ---
 
-* No changes in v2.
+Changes in v2:
+* Used an additional register (BPF_REG_AX)
+    - to avoid clobbering src_reg.
+    - to keep the lwarx reservation as intended.
+    - to avoid the odd switch/goto construct.
+* Zero'ed out the higher 32-bit explicitly when required.
 
+ arch/powerpc/net/bpf_jit_comp32.c | 53 ++++++++++++++++++++++++-------
+ 1 file changed, 41 insertions(+), 12 deletions(-)
 
- arch/powerpc/net/bpf_jit_comp64.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index c421bedd0e98..c53236b3a8b1 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -787,17 +787,25 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
- 			else
- 				EMIT(PPC_RAW_LWARX(tmp2_reg, tmp1_reg, dst_reg, 0));
- 
-+			/* Save old value in _R0 */
-+			if (imm & BPF_FETCH)
-+				EMIT(PPC_RAW_MR(_R0, tmp2_reg));
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index e46ed1e8c6ca..28dc6a1a8f2f 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -294,6 +294,7 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+ 		u32 dst_reg_h = dst_reg - 1;
+ 		u32 src_reg = bpf_to_ppc(insn[i].src_reg);
+ 		u32 src_reg_h = src_reg - 1;
++		u32 ax_reg = bpf_to_ppc(BPF_REG_AX);
+ 		u32 tmp_reg = bpf_to_ppc(TMP_REG);
+ 		u32 size = BPF_SIZE(code);
+ 		s16 off = insn[i].off;
+@@ -798,25 +799,53 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
+ 		 * BPF_STX ATOMIC (atomic ops)
+ 		 */
+ 		case BPF_STX | BPF_ATOMIC | BPF_W:
+-			if (imm != BPF_ADD) {
+-				pr_err_ratelimited("eBPF filter atomic op code %02x (@%d) unsupported\n",
+-						   code, i);
+-				return -ENOTSUPP;
+-			}
+-
+-			/* *(u32 *)(dst + off) += src */
+-
+ 			bpf_set_seen_register(ctx, tmp_reg);
++			bpf_set_seen_register(ctx, ax_reg);
 +
- 			switch (imm) {
- 			case BPF_ADD:
-+			case BPF_ADD | BPF_FETCH:
- 				EMIT(PPC_RAW_ADD(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			case BPF_AND:
-+			case BPF_AND | BPF_FETCH:
- 				EMIT(PPC_RAW_AND(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			case BPF_OR:
-+			case BPF_OR | BPF_FETCH:
- 				EMIT(PPC_RAW_OR(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			case BPF_XOR:
-+			case BPF_XOR | BPF_FETCH:
- 				EMIT(PPC_RAW_XOR(tmp2_reg, tmp2_reg, src_reg));
- 				break;
- 			default:
-@@ -807,13 +815,17 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, struct codegen_context *
- 				return -EOPNOTSUPP;
- 			}
- 
+ 			/* Get offset into TMP_REG */
+ 			EMIT(PPC_RAW_LI(tmp_reg, off));
++			tmp_idx = ctx->idx * 4;
+ 			/* load value from memory into r0 */
+ 			EMIT(PPC_RAW_LWARX(_R0, tmp_reg, dst_reg, 0));
+-			/* add value from src_reg into this */
+-			EMIT(PPC_RAW_ADD(_R0, _R0, src_reg));
 -			/* store result back */
-+			/* store new value */
- 			if (size == BPF_DW)
- 				EMIT(PPC_RAW_STDCX(tmp2_reg, tmp1_reg, dst_reg));
- 			else
- 				EMIT(PPC_RAW_STWCX(tmp2_reg, tmp1_reg, dst_reg));
- 			/* we're done if this succeeded */
- 			PPC_BCC_SHORT(COND_NE, tmp_idx);
 +
-+			/* For the BPF_FETCH variant, get old value into src_reg */
++			/* Save old value in BPF_REG_AX */
 +			if (imm & BPF_FETCH)
-+				EMIT(PPC_RAW_MR(src_reg, _R0));
++				EMIT(PPC_RAW_MR(ax_reg, _R0));
++
++			switch (imm) {
++			case BPF_ADD:
++			case BPF_ADD | BPF_FETCH:
++				EMIT(PPC_RAW_ADD(_R0, _R0, src_reg));
++				break;
++			case BPF_AND:
++			case BPF_AND | BPF_FETCH:
++				EMIT(PPC_RAW_AND(_R0, _R0, src_reg));
++				break;
++			case BPF_OR:
++			case BPF_OR | BPF_FETCH:
++				EMIT(PPC_RAW_OR(_R0, _R0, src_reg));
++				break;
++			case BPF_XOR:
++			case BPF_XOR | BPF_FETCH:
++				EMIT(PPC_RAW_XOR(_R0, _R0, src_reg));
++				break;
++			default:
++				pr_err_ratelimited("eBPF filter atomic op code %02x (@%d) unsupported\n",
++						   code, i);
++				return -EOPNOTSUPP;
++			}
++
++			/* store new value */
+ 			EMIT(PPC_RAW_STWCX(_R0, tmp_reg, dst_reg));
+ 			/* we're done if this succeeded */
+-			PPC_BCC_SHORT(COND_NE, (ctx->idx - 3) * 4);
++			PPC_BCC_SHORT(COND_NE, tmp_idx);
++
++			/* For the BPF_FETCH variant, get old data into src_reg */
++			if (imm & BPF_FETCH) {
++				EMIT(PPC_RAW_MR(src_reg, ax_reg));
++				if (!fp->aux->verifier_zext)
++					EMIT(PPC_RAW_LI(src_reg_h, 0));
++			}
  			break;
  
- 		/*
+ 		case BPF_STX | BPF_ATOMIC | BPF_DW: /* *(u64 *)(dst + off) += src */
 -- 
 2.35.3
 
