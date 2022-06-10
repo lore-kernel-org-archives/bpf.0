@@ -2,57 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FA1CCA47B
-	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 19:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34684C43334
+	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 19:49:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350256AbiFJTpW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jun 2022 15:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S1347869AbiFJTt0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jun 2022 15:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348475AbiFJTpB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:45:01 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDC440915
-        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:44:49 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id s2-20020a17090302c200b00158ea215fa2so43623plk.3
-        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:44:49 -0700 (PDT)
+        with ESMTP id S245162AbiFJTt0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jun 2022 15:49:26 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4543C0EA5
+        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:49:24 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id p10so37794532wrg.12
+        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=iWUTf7azRHWYJBbO/rjQ6tyhfLt2WZz4WFnWnc551p4=;
-        b=mumc3P+TNgOg4ihd2eRqWKQ35uOgPIScsvj7x+G/6wWVvbFH+I2nbtRULXXs4VdOE/
-         0wmkkZvtRp9Tyez18LlzzTPU28M3NdonOs1NYlc1qEQPUHE1eIdVV8VripIVkjGRyvRJ
-         yTGO2QEqI7f8EhCTJNrKIG2qzXeMWkynvPmrqGzl0QqET3N8/4hhEUQ053+G9QROdIPc
-         MTrcCLsylIYfP6OL3QbHodVKwb9mEGqt4NeJpdWPtoGLOQAuXhdAu0sB4oaC9W/umy9R
-         vOdAGRljQ9EOKDYXkVQoYum8bstPA9ROySi8z57/mloHxoMTYfkEtuXdpu+c4s7vxwuw
-         FGXA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KdwZ/vUxOQWQkpuIaKHLX7u/kAU2F/0Z5D//aWshiaw=;
+        b=DK3zmA3Y7haqkUBhh+3+yCjdIUO5DMoJqNlZ35RjXPjmo+ybkTUvi2TW9NkM6C2CaC
+         DCsoxCEmFD/7wosp76WHlPibPHSEpxXST5r95JkllGypUS15xProP8CwEdtzGL0K0jgc
+         WJv1l0b+AatR5AVl3to0Q5vkt3HMIDdzzeK4MfoY3vwzXKzyKuH2vkkURu7Xe9ArCjgS
+         ekL+9xpCoJWkcAGiatqjoiqH8o9PSRxoSyYWPPTWEvs4nnD8+WplCJWgCPu9hrJwuqTg
+         n8Fh936C4qtmi3DWV+T+r5uhUHh5jH/HPkPPvsKR9SsW+H6g6BLaeUwz5Pw3ZiTmkG6l
+         3qAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=iWUTf7azRHWYJBbO/rjQ6tyhfLt2WZz4WFnWnc551p4=;
-        b=Zov2N2OufGNurhdTNpSocgDZ6/7azBZmG0Y01uhli76JEEIXwkVgP5BW11/Oi9ewV2
-         ArSLzBJu+lF/KW8K5NOEoh4cxozrXef+wGS1H0SPSqDuNfrog6dS/5EvLtegJOYxRhII
-         OR3+zX1qrn1VQeJvQcPUwNu3JHQQ0niY2QIGjH0acjEI+z8LtzRlfaWtDgrEpK3HgXiI
-         llr+aKM6KnbvLDIyYEx8KV98rUs5jMluoe9BzayvlnVkl82upDh10X6ZfEb4WHBud/8N
-         sDFv6I9p3Gu3QVLeUlN8j85R+b0JEmxK1Z+PxeqV6WyP9BBnQxudQjLXSbRo62nHWMSW
-         cDKg==
-X-Gm-Message-State: AOAM5321I6qBgim/EmIoWbRh8GGWCa8b0p+3fNjMLItC8x2bKbDzbnus
-        bQtOV3GxKUohMDTuwx1LNY2CS+BS4gXcMVbZ
-X-Google-Smtp-Source: ABdhPJz+tTfQY7j+BSjA3MBoczrx1JLMSyr6jJy2Jyvg/mxQWhyQvGCi3dT/8Kh1ZO47fTk6jRS2jSEDYu1z1wAs
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a05:6a00:2286:b0:51c:48b7:a445 with
- SMTP id f6-20020a056a00228600b0051c48b7a445mr18711373pfe.62.1654890288366;
- Fri, 10 Jun 2022 12:44:48 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 19:44:31 +0000
-In-Reply-To: <20220610194435.2268290-1-yosryahmed@google.com>
-Message-Id: <20220610194435.2268290-5-yosryahmed@google.com>
-Mime-Version: 1.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KdwZ/vUxOQWQkpuIaKHLX7u/kAU2F/0Z5D//aWshiaw=;
+        b=z4nbUpeRDcm4IZycH+5yoVhrBtpupKPkRwGGaddJ19w/I83yjGKGrQaPtXtS23RIE+
+         8wLMicctbNis/ITvw2hL5Px+ViCnDHiMHVU92Gk1n1jaawaRhkwuJbq5LA/C1MlGUR5M
+         QPDMHeht8NoiDwpdLg3GkyhpVEpxIwZoScHMG6UNRkXBAuCViPfKMApwAqluYjyhNLGC
+         mPF0epsbfiRIfaInXDie7I0ctAVCPZLFSScPzRomZod65hrFl1GooVO2/iwU/KSxeR0k
+         JySbCRu1J3bD8mvAFBT585MPAiK9Jx+Z1DoQiA1pBM6SNxOrlPZm8p0JqS0oNy6IJMeY
+         zoNg==
+X-Gm-Message-State: AOAM531fHWW1I0DfXkfmoXOyd/Gn9azVvCiEu69tckjck3wo5xRLQ5ZN
+        TGSJlQQkLa1AlVsuzfy9l0MHNalOiQpCnQsmsoArQg==
+X-Google-Smtp-Source: ABdhPJwCie0nWJ95ss+CBxOC3ACg+EZHqwlIoedubJgaPBqRw7d0OUDgynlT/Cwg7uegqRFXiWIKhKlKvqzzT1SKrOk=
+X-Received: by 2002:a05:6000:184b:b0:219:bee5:6b75 with SMTP id
+ c11-20020a056000184b00b00219bee56b75mr8032572wri.80.1654890561453; Fri, 10
+ Jun 2022 12:49:21 -0700 (PDT)
+MIME-Version: 1.0
 References: <20220610194435.2268290-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH bpf-next v2 4/8] bpf: Introduce cgroup iter
+In-Reply-To: <20220610194435.2268290-1-yosryahmed@google.com>
 From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 10 Jun 2022 12:48:44 -0700
+Message-ID: <CAJD7tkaMAnxsfyTc4iQibBzYt5-F68yKYqbdd9AM8_8Mh59+tw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/8] bpf: rstat: cgroup hierarchical stats
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -68,414 +66,187 @@ Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
         Stanislav Fomichev <sdf@google.com>,
         Greg Thelen <gthelen@google.com>,
         Shakeel Butt <shakeelb@google.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hao Luo <haoluo@google.com>
++cc Michal Koutn=C3=BD <mkoutny@suse.com>
 
-Cgroup_iter is a type of bpf_iter. It walks over cgroups in two modes:
 
- - walking a cgroup's descendants.
- - walking a cgroup's ancestors.
-
-When attaching cgroup_iter, one can set a cgroup to the iter_link
-created from attaching. This cgroup is passed as a file descriptor and
-serves as the starting point of the walk. If no cgroup is specified,
-the starting point will be the root cgroup.
-
-For walking descendants, one can specify the order: either pre-order or
-post-order. For walking ancestors, the walk starts at the specified
-cgroup and ends at the root.
-
-One can also terminate the walk early by returning 1 from the iter
-program.
-
-Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
-program is called with cgroup_mutex held.
-
-Signed-off-by: Hao Luo <haoluo@google.com>
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- include/linux/bpf.h            |   8 ++
- include/uapi/linux/bpf.h       |  21 +++
- kernel/bpf/Makefile            |   2 +-
- kernel/bpf/cgroup_iter.c       | 235 +++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  21 +++
- 5 files changed, 286 insertions(+), 1 deletion(-)
- create mode 100644 kernel/bpf/cgroup_iter.c
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 8e6092d0ea956..48d8e836b9748 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -44,6 +44,7 @@ struct kobject;
- struct mem_cgroup;
- struct module;
- struct bpf_func_state;
-+struct cgroup;
- 
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-@@ -1590,7 +1591,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
- 	int __init bpf_iter_ ## target(args) { return 0; }
- 
- struct bpf_iter_aux_info {
-+	/* for map_elem iter */
- 	struct bpf_map *map;
-+
-+	/* for cgroup iter */
-+	struct {
-+		struct cgroup *start; /* starting cgroup */
-+		int order;
-+	} cgroup;
- };
- 
- typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f4009dbdf62da..4fd05cde19116 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -87,10 +87,27 @@ struct bpf_cgroup_storage_key {
- 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
- };
- 
-+enum bpf_iter_cgroup_traversal_order {
-+	BPF_ITER_CGROUP_PRE = 0,	/* pre-order traversal */
-+	BPF_ITER_CGROUP_POST,		/* post-order traversal */
-+	BPF_ITER_CGROUP_PARENT_UP,	/* traversal of ancestors up to the root */
-+};
-+
- union bpf_iter_link_info {
- 	struct {
- 		__u32	map_fd;
- 	} map;
-+
-+	/* cgroup_iter walks either the live descendants of a cgroup subtree, or the ancestors
-+	 * of a given cgroup.
-+	 */
-+	struct {
-+		/* Cgroup file descriptor. This is root of the subtree if for walking the
-+		 * descendants; this is the starting cgroup if for walking the ancestors.
-+		 */
-+		__u32	cgroup_fd;
-+		__u32	traversal_order;
-+	} cgroup;
- };
- 
- /* BPF syscall commands, see bpf(2) man-page for more details. */
-@@ -6050,6 +6067,10 @@ struct bpf_link_info {
- 				struct {
- 					__u32 map_id;
- 				} map;
-+				struct {
-+					__u32 traversal_order;
-+					__aligned_u64 cgroup_id;
-+				} cgroup;
- 			};
- 		} iter;
- 		struct  {
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 057ba8e01e70f..9741b9314fb46 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -8,7 +8,7 @@ CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
- 
- obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o link_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
--obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o
-+obj-$(CONFIG_BPF_SYSCALL) += local_storage.o queue_stack_maps.o ringbuf.o cgroup_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o bpf_task_storage.o
- obj-${CONFIG_BPF_LSM}	  += bpf_inode_storage.o
- obj-$(CONFIG_BPF_SYSCALL) += disasm.o
-diff --git a/kernel/bpf/cgroup_iter.c b/kernel/bpf/cgroup_iter.c
-new file mode 100644
-index 0000000000000..88deb655efa71
---- /dev/null
-+++ b/kernel/bpf/cgroup_iter.c
-@@ -0,0 +1,235 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2022 Google */
-+#include <linux/bpf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/cgroup.h>
-+#include <linux/kernel.h>
-+#include <linux/seq_file.h>
-+
-+#include "../cgroup/cgroup-internal.h"  /* cgroup_mutex and cgroup_is_dead */
-+
-+/* cgroup_iter provides two modes of traversal to the cgroup hierarchy.
-+ *
-+ *  1. Walk the descendants of a cgroup.
-+ *  2. Walk the ancestors of a cgroup.
-+ *
-+ * For walking descendants, cgroup_iter can walk in either pre-order or
-+ * post-order. For walking ancestors, the iter walks up from a cgroup to
-+ * the root.
-+ *
-+ * The iter program can terminate the walk early by returning 1. Walk
-+ * continues if prog returns 0.
-+ *
-+ * The prog can check (seq->num == 0) to determine whether this is
-+ * the first element. The prog may also be passed a NULL cgroup,
-+ * which means the walk has completed and the prog has a chance to
-+ * do post-processing, such as outputing an epilogue.
-+ *
-+ * Note: the iter_prog is called with cgroup_mutex held.
-+ */
-+
-+struct bpf_iter__cgroup {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct cgroup *, cgroup);
-+};
-+
-+struct cgroup_iter_priv {
-+	struct cgroup_subsys_state *start_css;
-+	bool terminate;
-+	int order;
-+};
-+
-+static void *cgroup_iter_seq_start(struct seq_file *seq, loff_t *pos)
-+{
-+	struct cgroup_iter_priv *p = seq->private;
-+
-+	mutex_lock(&cgroup_mutex);
-+
-+	/* support only one session */
-+	if (*pos > 0)
-+		return NULL;
-+
-+	++*pos;
-+	p->terminate = false;
-+	if (p->order == BPF_ITER_CGROUP_PRE)
-+		return css_next_descendant_pre(NULL, p->start_css);
-+	else if (p->order == BPF_ITER_CGROUP_POST)
-+		return css_next_descendant_post(NULL, p->start_css);
-+	else /* BPF_ITER_CGROUP_PARENT_UP */
-+		return p->start_css;
-+}
-+
-+static int __cgroup_iter_seq_show(struct seq_file *seq,
-+				  struct cgroup_subsys_state *css, int in_stop);
-+
-+static void cgroup_iter_seq_stop(struct seq_file *seq, void *v)
-+{
-+	/* pass NULL to the prog for post-processing */
-+	if (!v)
-+		__cgroup_iter_seq_show(seq, NULL, true);
-+	mutex_unlock(&cgroup_mutex);
-+}
-+
-+static void *cgroup_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-+{
-+	struct cgroup_subsys_state *curr = (struct cgroup_subsys_state *)v;
-+	struct cgroup_iter_priv *p = seq->private;
-+
-+	++*pos;
-+	if (p->terminate)
-+		return NULL;
-+
-+	if (p->order == BPF_ITER_CGROUP_PRE)
-+		return css_next_descendant_pre(curr, p->start_css);
-+	else if (p->order == BPF_ITER_CGROUP_POST)
-+		return css_next_descendant_post(curr, p->start_css);
-+	else
-+		return curr->parent;
-+}
-+
-+static int __cgroup_iter_seq_show(struct seq_file *seq,
-+				  struct cgroup_subsys_state *css, int in_stop)
-+{
-+	struct cgroup_iter_priv *p = seq->private;
-+	struct bpf_iter__cgroup ctx;
-+	struct bpf_iter_meta meta;
-+	struct bpf_prog *prog;
-+	int ret = 0;
-+
-+	/* cgroup is dead, skip this element */
-+	if (css && cgroup_is_dead(css->cgroup))
-+		return 0;
-+
-+	ctx.meta = &meta;
-+	ctx.cgroup = css ? css->cgroup : NULL;
-+	meta.seq = seq;
-+	prog = bpf_iter_get_info(&meta, in_stop);
-+	if (prog)
-+		ret = bpf_iter_run_prog(prog, &ctx);
-+
-+	/* if prog returns > 0, terminate after this element. */
-+	if (ret != 0)
-+		p->terminate = true;
-+
-+	return 0;
-+}
-+
-+static int cgroup_iter_seq_show(struct seq_file *seq, void *v)
-+{
-+	return __cgroup_iter_seq_show(seq, (struct cgroup_subsys_state *)v,
-+				      false);
-+}
-+
-+static const struct seq_operations cgroup_iter_seq_ops = {
-+	.start  = cgroup_iter_seq_start,
-+	.next   = cgroup_iter_seq_next,
-+	.stop   = cgroup_iter_seq_stop,
-+	.show   = cgroup_iter_seq_show,
-+};
-+
-+BTF_ID_LIST_SINGLE(bpf_cgroup_btf_id, struct, cgroup)
-+
-+static int cgroup_iter_seq_init(void *priv, struct bpf_iter_aux_info *aux)
-+{
-+	struct cgroup_iter_priv *p = (struct cgroup_iter_priv *)priv;
-+	struct cgroup *cgrp = aux->cgroup.start;
-+
-+	p->start_css = &cgrp->self;
-+	p->terminate = false;
-+	p->order = aux->cgroup.order;
-+	return 0;
-+}
-+
-+static const struct bpf_iter_seq_info cgroup_iter_seq_info = {
-+	.seq_ops                = &cgroup_iter_seq_ops,
-+	.init_seq_private       = cgroup_iter_seq_init,
-+	.seq_priv_size          = sizeof(struct cgroup_iter_priv),
-+};
-+
-+static int bpf_iter_attach_cgroup(struct bpf_prog *prog,
-+				  union bpf_iter_link_info *linfo,
-+				  struct bpf_iter_aux_info *aux)
-+{
-+	int fd = linfo->cgroup.cgroup_fd;
-+	struct cgroup *cgrp;
-+
-+	if (fd)
-+		cgrp = cgroup_get_from_fd(fd);
-+	else /* walk the entire hierarchy by default. */
-+		cgrp = cgroup_get_from_path("/");
-+
-+	if (IS_ERR(cgrp))
-+		return PTR_ERR(cgrp);
-+
-+	aux->cgroup.start = cgrp;
-+	aux->cgroup.order = linfo->cgroup.traversal_order;
-+	return 0;
-+}
-+
-+static void bpf_iter_detach_cgroup(struct bpf_iter_aux_info *aux)
-+{
-+	cgroup_put(aux->cgroup.start);
-+}
-+
-+static void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
-+					struct seq_file *seq)
-+{
-+	char *buf;
-+
-+	buf = kzalloc(PATH_MAX, GFP_KERNEL);
-+	if (!buf) {
-+		seq_puts(seq, "cgroup_path:\n");
-+		goto show_order;
-+	}
-+
-+	/* If cgroup_path_ns() fails, buf will be an empty string, cgroup_path
-+	 * will print nothing.
-+	 *
-+	 * Path is in the calling process's cgroup namespace.
-+	 */
-+	cgroup_path_ns(aux->cgroup.start, buf, PATH_MAX,
-+		       current->nsproxy->cgroup_ns);
-+	seq_printf(seq, "cgroup_path:\t%s\n", buf);
-+	kfree(buf);
-+
-+show_order:
-+	if (aux->cgroup.order == BPF_ITER_CGROUP_PRE)
-+		seq_puts(seq, "traversal_order: pre\n");
-+	else if (aux->cgroup.order == BPF_ITER_CGROUP_POST)
-+		seq_puts(seq, "traversal_order: post\n");
-+	else /* BPF_ITER_CGROUP_PARENT_UP */
-+		seq_puts(seq, "traversal_order: parent_up\n");
-+}
-+
-+static int bpf_iter_cgroup_fill_link_info(const struct bpf_iter_aux_info *aux,
-+					  struct bpf_link_info *info)
-+{
-+	info->iter.cgroup.traversal_order = aux->cgroup.order;
-+	info->iter.cgroup.cgroup_id = cgroup_id(aux->cgroup.start);
-+	return 0;
-+}
-+
-+DEFINE_BPF_ITER_FUNC(cgroup, struct bpf_iter_meta *meta,
-+		     struct cgroup *cgroup)
-+
-+static struct bpf_iter_reg bpf_cgroup_reg_info = {
-+	.target			= "cgroup",
-+	.attach_target		= bpf_iter_attach_cgroup,
-+	.detach_target		= bpf_iter_detach_cgroup,
-+	.show_fdinfo		= bpf_iter_cgroup_show_fdinfo,
-+	.fill_link_info		= bpf_iter_cgroup_fill_link_info,
-+	.ctx_arg_info_size	= 1,
-+	.ctx_arg_info		= {
-+		{ offsetof(struct bpf_iter__cgroup, cgroup),
-+		  PTR_TO_BTF_ID },
-+	},
-+	.seq_info		= &cgroup_iter_seq_info,
-+};
-+
-+static int __init bpf_cgroup_iter_init(void)
-+{
-+	bpf_cgroup_reg_info.ctx_arg_info[0].btf_id = bpf_cgroup_btf_id[0];
-+	return bpf_iter_reg_target(&bpf_cgroup_reg_info);
-+}
-+
-+late_initcall(bpf_cgroup_iter_init);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f4009dbdf62da..4fd05cde19116 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -87,10 +87,27 @@ struct bpf_cgroup_storage_key {
- 	__u32	attach_type;		/* program attach type (enum bpf_attach_type) */
- };
- 
-+enum bpf_iter_cgroup_traversal_order {
-+	BPF_ITER_CGROUP_PRE = 0,	/* pre-order traversal */
-+	BPF_ITER_CGROUP_POST,		/* post-order traversal */
-+	BPF_ITER_CGROUP_PARENT_UP,	/* traversal of ancestors up to the root */
-+};
-+
- union bpf_iter_link_info {
- 	struct {
- 		__u32	map_fd;
- 	} map;
-+
-+	/* cgroup_iter walks either the live descendants of a cgroup subtree, or the ancestors
-+	 * of a given cgroup.
-+	 */
-+	struct {
-+		/* Cgroup file descriptor. This is root of the subtree if for walking the
-+		 * descendants; this is the starting cgroup if for walking the ancestors.
-+		 */
-+		__u32	cgroup_fd;
-+		__u32	traversal_order;
-+	} cgroup;
- };
- 
- /* BPF syscall commands, see bpf(2) man-page for more details. */
-@@ -6050,6 +6067,10 @@ struct bpf_link_info {
- 				struct {
- 					__u32 map_id;
- 				} map;
-+				struct {
-+					__u32 traversal_order;
-+					__aligned_u64 cgroup_id;
-+				} cgroup;
- 			};
- 		} iter;
- 		struct  {
--- 
-2.36.1.476.g0c4daa206d-goog
-
+On Fri, Jun 10, 2022 at 12:44 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> This patch series allows for using bpf to collect hierarchical cgroup
+> stats efficiently by integrating with the rstat framework. The rstat
+> framework provides an efficient way to collect cgroup stats percpu and
+> propagate them through the cgroup hierarchy.
+>
+> The stats are exposed to userspace in textual form by reading files in
+> bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+> cgroup_iter is a type of bpf_iter. It walks over cgroups in two modes:
+>
+>  - walking a cgroup's descendants.
+>  - walking a cgroup's ancestors.
+>
+> When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+> created from attaching. This cgroup is passed as a file descriptor and
+> serves as the starting point of the walk.
+>
+> For walking descendants, one can specify the order: either pre-order or
+> post-order. For walking ancestors, the walk starts at the specified
+> cgroup and ends at the root.
+>
+> One can also terminate the walk early by returning 1 from the iter
+> program.
+>
+> Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> program is called with cgroup_mutex held.
+>
+> ** Background on rstat for stats collection **
+> (I am using a subscriber analogy that is not commonly used)
+>
+> The rstat framework maintains a tree of cgroups that have updates and
+> which cpus have updates. A subscriber to the rstat framework maintains
+> their own stats. The framework is used to tell the subscriber when
+> and what to flush, for the most efficient stats propagation. The
+> workflow is as follows:
+>
+> - When a subscriber updates a cgroup on a cpu, it informs the rstat
+>   framework by calling cgroup_rstat_updated(cgrp, cpu).
+>
+> - When a subscriber wants to read some stats for a cgroup, it asks
+>   the rstat framework to initiate a stats flush (propagation) by calling
+>   cgroup_rstat_flush(cgrp).
+>
+> - When the rstat framework initiates a flush, it makes callbacks to
+>   subscribers to aggregate stats on cpus that have updates, and
+>   propagate updates to their parent.
+>
+> Currently, the main subscribers to the rstat framework are cgroup
+> subsystems (e.g. memory, block). This patch series allow bpf programs to
+> become subscribers as well.
+>
+> Patches in this series are based off a patch in the mailing
+> list which adds a new kfunc set for sleepable functions:
+> "btf: Add a new kfunc set which allows to mark a function to be
+> sleepable" [1].
+>
+> Patches in this series are organized as follows:
+> * Patch 1 enables the use of cgroup_get_from_file() in cgroup1.
+>   This is useful because it enables cgroup_iter to work with cgroup1, and
+>   allows the entire stat collection workflow to be cgroup1-compatible.
+> * Patches 2-5 introduce cgroup_iter prog, and a selftest.
+> * Patches 6-8 allow bpf programs to integrate with rstat by adding the
+>   necessary hook points and kfunc. A comprehensive selftest that
+>   demonstrates the entire workflow for using bpf and rstat to
+>   efficiently collect and output cgroup stats is added.
+>
+> v1 -> v2:
+> - Redesign of cgroup_iter from v1, based on Alexei's idea [2]:
+>   - supports walking cgroup subtree.
+>   - supports walking ancestors of a cgroup. (Andrii)
+>   - supports terminating the walk early.
+>   - uses fd instead of cgroup_id as parameter for iter_link. Using fd is
+>     a convention in bpf.
+>   - gets cgroup's ref at attach time and deref at detach.
+>   - brought back cgroup1 support for cgroup_iter.
+> - Squashed the patches adding the rstat flush hook points and kfuncs
+>   (Tejun).
+> - Added a comment explaining why bpf_rstat_flush() needs to be weak
+>   (Tejun).
+> - Updated the final selftest with the new cgroup_iter design.
+> - Changed CHECKs in the selftest with ASSERTs (Yonghong, Andrii).
+> - Removed empty line at the end of the selftest (Yonghong).
+> - Renamed test files to cgroup_hierarchical_stats.c.
+> - Reordered CGROUP_PATH params order to match struct declaration
+>   in the selftest (Michal).
+> - Removed memory_subsys_enabled() and made sure memcg controller
+>   enablement checks make sense and are documented (Michal).
+>
+> RFC v2 -> v1:
+> - Instead of introducing a new program type for rstat flushing, add an
+>   empty hook point, bpf_rstat_flush(), and use fentry bpf programs to
+>   attach to it and flush bpf stats.
+> - Instead of using helpers, use kfuncs for rstat functions.
+> - These changes simplify the patchset greatly, with minimal changes to
+>   uapi.
+>
+> RFC v1 -> RFC v2:
+> - Instead of rstat flush programs attach to subsystems, they now attach
+>   to rstat (global flushers, not per-subsystem), based on discussions
+>   with Tejun. The first patch is entirely rewritten.
+> - Pass cgroup pointers to rstat flushers instead of cgroup ids. This is
+>   much more flexibility and less likely to need a uapi update later.
+> - rstat helpers are now only defined if CGROUP_CONFIG.
+> - Most of the code is now only defined if CGROUP_CONFIG and
+>   CONFIG_BPF_SYSCALL.
+> - Move rstat helper protos from bpf_base_func_proto() to
+>   tracing_prog_func_proto().
+> - rstat helpers argument (cgroup pointer) is now ARG_PTR_TO_BTF_ID, not
+>   ARG_ANYTHING.
+> - Rewrote the selftest to use the cgroup helpers.
+> - Dropped bpf_map_lookup_percpu_elem (already added by Feng).
+> - Dropped patch to support cgroup v1 for cgroup_iter.
+> - Dropped patch to define some cgroup_put() when !CONFIG_CGROUP. The
+>   code that calls it is no longer compiled when !CONFIG_CGROUP.
+>
+> cgroup_iter was originally introduced in a different patch series[3].
+> Hao and I agreed that it fits better as part of this series.
+> RFC v1 of this patch series had the following changes from [3]:
+> - Getting the cgroup's reference at the time at attaching, instead of
+>   at the time when iterating. (Yonghong)
+> - Remove .init_seq_private and .fini_seq_private callbacks for
+>   cgroup_iter. They are not needed now. (Yonghong)
+>
+> [1] https://lore.kernel.org/bpf/20220421140740.459558-5-benjamin.tissoire=
+s@redhat.com/
+> [2] https://lore.kernel.org/bpf/20220520221919.jnqgv52k4ajlgzcl@MBP-98dd6=
+07d3435.dhcp.thefacebook.com/
+> [3] https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.c=
+om/
+>
+> Hao Luo (4):
+>   cgroup: Add cgroup_put() in !CONFIG_CGROUPS case
+>   bpf, iter: Fix the condition on p when calling stop.
+>   bpf: Introduce cgroup iter
+>   selftests/bpf: Test cgroup_iter.
+>
+> Yosry Ahmed (4):
+>   cgroup: enable cgroup_get_from_file() on cgroup1
+>   cgroup: bpf: enable bpf programs to integrate with rstat
+>   selftests/bpf: extend cgroup helpers
+>   bpf: add a selftest for cgroup hierarchical stats collection
+>
+>  include/linux/bpf.h                           |   8 +
+>  include/linux/cgroup.h                        |   3 +
+>  include/uapi/linux/bpf.h                      |  21 ++
+>  kernel/bpf/Makefile                           |   2 +-
+>  kernel/bpf/bpf_iter.c                         |   5 +
+>  kernel/bpf/cgroup_iter.c                      | 235 ++++++++++++
+>  kernel/cgroup/cgroup.c                        |   5 -
+>  kernel/cgroup/rstat.c                         |  46 +++
+>  tools/include/uapi/linux/bpf.h                |  21 ++
+>  tools/testing/selftests/bpf/cgroup_helpers.c  | 173 +++++++--
+>  tools/testing/selftests/bpf/cgroup_helpers.h  |  15 +-
+>  .../prog_tests/cgroup_hierarchical_stats.c    | 351 ++++++++++++++++++
+>  .../selftests/bpf/prog_tests/cgroup_iter.c    | 190 ++++++++++
+>  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+>  .../bpf/progs/cgroup_hierarchical_stats.c     | 234 ++++++++++++
+>  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++
+>  16 files changed, 1303 insertions(+), 52 deletions(-)
+>  create mode 100644 kernel/bpf/cgroup_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarc=
+hical_stats.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical=
+_stats.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+>
+> --
+> 2.36.1.476.g0c4daa206d-goog
+>
