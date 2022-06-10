@@ -2,376 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2844BCCA473
-	for <bpf@archiver.kernel.org>; Thu,  9 Jun 2022 23:46:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D57BCCA473
+	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 00:18:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238761AbiFIXqj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 9 Jun 2022 19:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S233887AbiFJASL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 9 Jun 2022 20:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345637AbiFIXqg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 9 Jun 2022 19:46:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417573D1D1;
-        Thu,  9 Jun 2022 16:46:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A3AA62022;
-        Thu,  9 Jun 2022 23:46:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E93C36B01;
-        Thu,  9 Jun 2022 23:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654818393;
-        bh=GQRb5utNPH5Z44nEBllhP4ze3hxP7caLjCPeYAMVHxI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=idWrlHgmHEkPWVgacYPsauOXab/vl1BVDsNL34/WKGM0IsHmKJbB5+EmXf1gukYSN
-         rKUWqYFRXFn3EcSTYmN35jH1+FNvzCaNASEXISAm7y5gcrPsR4FN+MUaDXlaQQepYl
-         Rfcw9mMqwmO1Zt+iY8gbZ/TZ8/4Gj3LouVkXfRZhoIAPvB67/XWa9nz5gbVJOonkKk
-         Py3k5b8Etnj17TKlCc41WO9OiTwlLrX54QS22uqGllHrOIq4XMrlTYukRKPZVxYGIw
-         buN0pGmO9qM+zhhc6Nk/UdeQozOoCiKP/7exlBTfJyKMYA+CCIFitDbA7Il54kyyBc
-         5oJ0Qf9dsFDKg==
-From:   KP Singh <kpsingh@kernel.org>
-To:     linux-security-module@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Jann Horn <jannh@google.com>, KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Kees Cook <keescook@chromium.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Subject: [PATCH linux-next] security: Fix side effects of default BPF LSM hooks
-Date:   Thu,  9 Jun 2022 23:46:01 +0000
-Message-Id: <20220609234601.2026362-1-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        with ESMTP id S230371AbiFJASK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 9 Jun 2022 20:18:10 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5CE4F1F6;
+        Thu,  9 Jun 2022 17:18:08 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 259LPaJI013977;
+        Thu, 9 Jun 2022 17:17:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=O4EMEJYUPaBSwBn2vHP5uUiASN5JoXY+2rJfE6OEm1o=;
+ b=TLAoDBONbul/uXfRcn1Ja9RHwy8weWHktCQJixM0PUTB88M518X9JXr5lXaN4KiWF3wg
+ cCZ+3YacmDIz+YDp4eXS/FUH7oCD/rm6qCoR4dA3PS1EPeDnFB6AWTInQPoHshQGHSNK
+ bxx5wljob4jG9nklQQ3+VbG0ERegaC06r4c= 
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2042.outbound.protection.outlook.com [104.47.66.42])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gkajge3e6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 09 Jun 2022 17:17:49 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Oa7lJw2iIAk3/YC3pAT/brB00++Li5w60XyqMay2t/d6slM0k2/5mSv4G8BxS0zYYBNH79pLFlbKxjq+fxXfYOiLSU524EZ+rLIM1IDaGueXJ3ujEjNVr1ELwGbeIU7i9EQYQBCMPB1WKikWQmKEhLS0tKR8IQXHmpT/fKCAA1zVFU57S1jnFFoHsIDxQ45niYRAWv06ekQ4HiTTAnfIGXC8OR+7HdieXysNMQGoVWZd5ERPf35Klhv0semsBwsaRaCr/jnTxj1UiqgNJSIW5mdzM1F4+YoWRoRsh0rze0xvPLx6uy5c5BkQf9ciA6vYMhlr6ujX/kB7hHawFclzow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O4EMEJYUPaBSwBn2vHP5uUiASN5JoXY+2rJfE6OEm1o=;
+ b=D9Y6f5dYzujnkAvE3ijd5ShvnlLzm0UpuNgBcFTul1l+ICcquPyI8HUo9GuTwwuKIbiAGKTeIPaZdPfX6yig0mmxFVhmhSpYn5lSe4DkfrarFfFvZDpcAcNIu0wvzGz1w/QfdqB6AsYCqYok18pyZ0+JciAPBfMjSazez9taxK6lr1cPPc58GApw6LZeU92VQajAfoL4LY7rceY1V3olYOjmck+ZKoIDlCEO9AsrbZHTqWym4lI9T6hilnQVnYOBXue1tTD2tRFI5vtwJ/DXB2e4I5BFuQrsdlBlB051gvQCoVtxtip9QozhwMNR5iy6m6GuHL0BNbO3gmZveI90iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from CO1PR15MB5017.namprd15.prod.outlook.com (2603:10b6:303:e8::19)
+ by DS0PR15MB5421.namprd15.prod.outlook.com (2603:10b6:8:ce::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Fri, 10 Jun
+ 2022 00:17:47 +0000
+Received: from CO1PR15MB5017.namprd15.prod.outlook.com
+ ([fe80::31b7:473f:3995:c117]) by CO1PR15MB5017.namprd15.prod.outlook.com
+ ([fe80::31b7:473f:3995:c117%7]) with mapi id 15.20.5332.013; Fri, 10 Jun 2022
+ 00:17:47 +0000
+Date:   Thu, 9 Jun 2022 17:17:43 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Jon Maxwell <jmaxwell37@gmail.com>, netdev@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, atenart@kernel.org, cutaylor-pub@yahoo.com,
+        alexei.starovoitov@gmail.com, joe@cilium.io, i@lmb.io,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: bpf: fix request_sock leak in filter.c
+Message-ID: <20220610001743.z5nxapagwknlfjqi@kafai-mbp>
+References: <20220609011844.404011-1-jmaxwell37@gmail.com>
+ <56d6f898-bde0-bb25-3427-12a330b29fb8@iogearbox.net>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56d6f898-bde0-bb25-3427-12a330b29fb8@iogearbox.net>
+X-ClientProxiedBy: CO2PR04CA0010.namprd04.prod.outlook.com
+ (2603:10b6:102:1::20) To CO1PR15MB5017.namprd15.prod.outlook.com
+ (2603:10b6:303:e8::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7c0aebde-c365-4cba-0f25-08da4a76a551
+X-MS-TrafficTypeDiagnostic: DS0PR15MB5421:EE_
+X-Microsoft-Antispam-PRVS: <DS0PR15MB5421BAA04C673DF5C5F6E1EFD5A69@DS0PR15MB5421.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ustKEL4MoRyN3oCAWIfbbwyMCceLSHJ5tKr3rZT6H+l6QsblY674GmGXkKNc3GVAd71RbV61vDAGGOnJOOYflVWW1s+EWBStV0SJtUzTk+AXBmWsdln9KLLCG43cQjIJ4olNqMQY3OccIhS3h7mLzmUDa/SnnSIWetlNi27doEGjcSQ4rQfa94HP1fb3Jlm/B+6oCKERiws/P1tRixagM3sUv/1xsvksZqLx1QiVUlw/xkpF3uEr1MPPP2yhBOU7uAviCEg8ssUhOu6eNqkmQuo5SUxa+WApIOnuriwQOCcjPB40hJUqb3BTNn3aMWLSZCmAUYbxWdla9itm3zETjS4snzz3OG/8PDD1fK9mR73yQWH7tyPSu9Pi7JJVPrZ/B0/g3vEUqwXrnxDD+IokmDtlZSAbPQFmgCGKoJW0V1o3PkkfvV1LejIY/hq1Pj9GYEC+NU+okXcZjXopPWviS1nh+nWy0VIAaUQfnVqwtAj7RE2dGg2xgjUx7MnwfThhfC183wa+Y0743mEsqR5Vcx2JJGH3zAnGfyWRk1fCCBgqY/WxsYcFsAk+VY4wkcIxSKKVQaA7c5J98fVsCT/aZBxuqjlHIJL+YhjFk0zvOFdn53/J7ow+X+Yn//N4mJKlVmZT39Maenxv2VJdmKgo3A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR15MB5017.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(6916009)(6666004)(38100700002)(83380400001)(8676002)(5660300002)(86362001)(6486002)(66476007)(6506007)(8936002)(6512007)(53546011)(4326008)(52116002)(2906002)(508600001)(9686003)(7416002)(186003)(33716001)(1076003)(66556008)(66946007)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sqNEkkDw29Zy65Z0nySZ0M/L8Q5JZjRnmHAeSUvtBzEQVVIQlwxRPhEeq/N3?=
+ =?us-ascii?Q?azKllLtQJ+lk/uLb6qRxqaZ5KaiRXnHxCIpLqgzWE3gULQYBga5KSVlFu7r9?=
+ =?us-ascii?Q?GZZXYMregGnDiwa6FjP6eg2I22pxqsTAUF9kg4RnzRBE3pqUzig21wrvyH26?=
+ =?us-ascii?Q?YRsIcLOWjpzxacF8JXxzQ+wyKbraSmOJDYwxAQu/8RcHNrNu2roaJDTxxUPX?=
+ =?us-ascii?Q?2tWko8khP+9++tU9CUsldce9/Kcuw6pdkarJar6tQvCuWxA4aXt5mRB3mf9s?=
+ =?us-ascii?Q?UvEbOqr38uygm9KjGjcNSm67aDYLHWMoGCFCnSZD4NOKWQKM40qvMOfb86gr?=
+ =?us-ascii?Q?Ch06q5Vakhh+8cHOh+odklq9ykLas4Oy4fWYhk/gFDRncWj5HPNvIr6wKnl7?=
+ =?us-ascii?Q?/VWwie3gB8BZIxRbqpQBNpylnza288xw4jaqHlLRWHEqOpwshpcdOwTnKgf2?=
+ =?us-ascii?Q?cJVQp/LIcqyLCK1vAapSERzn46HCscvUNZcFm53E48LNIVbNMTZ1SgM3Ba6J?=
+ =?us-ascii?Q?XlA9KJHsUHqQajJVa8k1QIO+Dqh/N9stV53Gx1spEI2IYzF+C7l06/tPZbCZ?=
+ =?us-ascii?Q?emkEaMeXa7NeYTGgr/opbNFTjEUgqjIjoTMvYqdSDf/ZeBgDNbOfw65pLafI?=
+ =?us-ascii?Q?0cHDz2AwUsXyYZ4GRr5kqZP4fCghqUZUEo0Y1sSBHFVvZzx7fHDfXJmPeiDX?=
+ =?us-ascii?Q?dB+GeWNpidGTY/TDYZBEL9qLzgtOeQydVTlIiksCDVSzJPFzbfsEcCGLXv+I?=
+ =?us-ascii?Q?ShA0b6PMhmOJNh4YNsUUHSlgr/RxAoqV8yRy9Qmzq4zLU3xYggxmjCOeTI8o?=
+ =?us-ascii?Q?1t9HoDoUUm/RUfLG9pZ4YrzkTKMAL/bTxtEGNkmiyL5+EPCCG59DG2sPmzHk?=
+ =?us-ascii?Q?A+dgttXN9E9a9h2x7BVb2fv6LQuGWs6gAPR1xJ9qHLr1iMx2SA5yeiuBQ+aG?=
+ =?us-ascii?Q?R/lKSqK9L03DCIRZGOCAsKWyySZNigDO1rGcdOluEVnyU1ZyxVQQDFtBwer3?=
+ =?us-ascii?Q?ZRl4T7UcU6oAIG4PtcE5qwCKa4ermdaUo3RVqTVvqbaIMJO7w5atrHpnCkPV?=
+ =?us-ascii?Q?JoCW/zPHHsCRnq9i/3XxLMlfv2MqIMsQaxwzdKGlaBf0FBlIqwXwU+ymaKpg?=
+ =?us-ascii?Q?SM88e6BCUmye9L173fvOraZOIXqq1HP09tN1KPEctGpVIE/kIH5FJj33YfP9?=
+ =?us-ascii?Q?keHpW+4F4+P5zj+ARuiMlRqxfY1aT6KIUvyiokdQdSQaJ/SDycuYf48QGJAz?=
+ =?us-ascii?Q?Ch5sF62YlY8IcPX8LvGdcvOGR/r7qcTSNbi1jjw5BK7NgZjy9DhW2i/VMwg4?=
+ =?us-ascii?Q?cKd4DUVL1sdYNoZoe0uqltz7nvqhIaH6YhKsU8j4eL3M+7n7SqqmLiGZmjbr?=
+ =?us-ascii?Q?p4JC8FPgrKxKlkgRAMLiDgaFhaols9vXeSTLlQNjQJAXp91e1Ts22uPuecO5?=
+ =?us-ascii?Q?c9/IMKrMYYv1t+eR5juNv0pAkXWGDzDfKXTcez5rh8an/VJKLk8zs6RS4PpS?=
+ =?us-ascii?Q?aC0WJLHgDdOM3xapBMjR0vZpJLR4zg4R4tPhe8UiDS9Wgx7fp/+LcZbRx3UW?=
+ =?us-ascii?Q?IXVEGH/0ffCX2ltC8mOzklMsfqQHsHobBYNCbJ1wqvGW0eaX+1cDapGXiBNQ?=
+ =?us-ascii?Q?8MGXdV3zWnv0JnywWQvAqoDUb8RvvV0KqbXC9+xEU5GzKIBfP8s/OvYmmEfz?=
+ =?us-ascii?Q?pdYy8WT0gd+KF56T2KnwL6VoVkg5kIv2mSDMIlId/C+K2jLJymYoXBlW5ST/?=
+ =?us-ascii?Q?JnsGFTs6YWoIK0kJfgMcMkvolcaQGZo=3D?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c0aebde-c365-4cba-0f25-08da4a76a551
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR15MB5017.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2022 00:17:46.9140
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uQoV31nguQkE4wJC7UuNfIbHN4vEhaamxeFf4Kxa6E7KGoE0P2wC9+ERqn2ZY6j0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB5421
+X-Proofpoint-GUID: nokUl5H8J3kgRx9_k0WPVW4vhrx2t0EW
+X-Proofpoint-ORIG-GUID: nokUl5H8J3kgRx9_k0WPVW4vhrx2t0EW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-09_16,2022-06-09_02,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF LSM currently has a default implementation for each LSM hooks which
-return a default value defined in include/linux/lsm_hook_defs.h. These
-hooks should have no functional effect when there is no BPF program
-loaded to implement the hook logic.
+On Thu, Jun 09, 2022 at 10:29:15PM +0200, Daniel Borkmann wrote:
+> On 6/9/22 3:18 AM, Jon Maxwell wrote:
+> > A customer reported a request_socket leak in a Calico cloud environment. We
+> > found that a BPF program was doing a socket lookup with takes a refcnt on
+> > the socket and that it was finding the request_socket but returning the parent
+> > LISTEN socket via sk_to_full_sk() without decrementing the child request socket
+> > 1st, resulting in request_sock slab object leak. This patch retains the
+Great catch and debug indeed!
 
-Some LSM hooks treat any return value of the hook as policy decision
-which results in destructive side effects.
+> > existing behaviour of returning full socks to the caller but it also decrements
+> > the child request_socket if one is present before doing so to prevent the leak.
+> > 
+> > Thanks to Curtis Taylor for all the help in diagnosing and testing this. And
+> > thanks to Antoine Tenart for the reproducer and patch input.
+> > 
+> > Fixes: f7355a6c0497 bpf: ("Check sk_fullsock() before returning from bpf_sk_lookup()")
+> > Fixes: edbf8c01de5a bpf: ("add skc_lookup_tcp helper")
+Instead of the above commits, I think this dated back to
+6acc9b432e67 ("bpf: Add helper to retrieve socket in BPF")
 
-This issue and the effects were reported to me by Jann Horn:
+> > Tested-by: Curtis Taylor <cutaylor-pub@yahoo.com>
+> > Co-developed-by: Antoine Tenart <atenart@kernel.org>
+> > Signed-off-by:: Antoine Tenart <atenart@kernel.org>
+> > Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
+> > ---
+> >   net/core/filter.c | 20 ++++++++++++++------
+> >   1 file changed, 14 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/net/core/filter.c b/net/core/filter.c
+> > index 2e32cee2c469..e3c04ae7381f 100644
+> > --- a/net/core/filter.c
+> > +++ b/net/core/filter.c
+> > @@ -6202,13 +6202,17 @@ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+> >   {
+> >   	struct sock *sk = __bpf_skc_lookup(skb, tuple, len, caller_net,
+> >   					   ifindex, proto, netns_id, flags);
+> > +	struct sock *sk1 = sk;
+> >   	if (sk) {
+> >   		sk = sk_to_full_sk(sk);
+> > -		if (!sk_fullsock(sk)) {
+> > -			sock_gen_put(sk);
+> > +		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk1
+> > +		 * sock refcnt is decremented to prevent a request_sock leak.
+> > +		 */
+> > +		if (!sk_fullsock(sk1))
+> > +			sock_gen_put(sk1);
+> > +		if (!sk_fullsock(sk))
+In this case, sk1 == sk (timewait).  It is a bit worrying to pass
+sk to sk_fullsock(sk) after the above sock_gen_put().
+I think Daniel's 'if (sk2 != sk) { sock_gen_put(sk); }' check is better.
 
-For a system configured with CONFIG_BPF_LSM and the bpf lsm is enabled
-(via lsm= or CONFIG_LSM) an unprivileged user can vandalize the system
-by removing the security.capability xattrs from binaries, preventing
-them from working normally:
+> 
+> [ +Martin/Joe/Lorenz ]
+> 
+> I wonder, should we also add some asserts in here to ensure we don't get an unbalance for the
+> bpf_sk_release() case later on? Rough pseudocode could be something like below:
+> 
+> static struct sock *
+> __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+>                 struct net *caller_net, u32 ifindex, u8 proto, u64 netns_id,
+>                 u64 flags)
+> {
+>         struct sock *sk = __bpf_skc_lookup(skb, tuple, len, caller_net,
+>                                            ifindex, proto, netns_id, flags);
+>         if (sk) {
+>                 struct sock *sk2 = sk_to_full_sk(sk);
+> 
+>                 if (!sk_fullsock(sk2))
+>                         sk2 = NULL;
+>                 if (sk2 != sk) {
+>                         sock_gen_put(sk);
+>                         if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
+I don't think it matters if the helper-returned sk2 is refcounted or not (SOCK_RCU_FREE).
+The verifier has ensured the bpf_sk_lookup() and bpf_sk_release() are
+always balanced regardless of the type of sk2.
 
-$ getfattr -d -m- /bin/ping
-getfattr: Removing leading '/' from absolute path names
-security.capability=0sAQAAAgAgAAAAAAAAAAAAAAAAAAA=
+bpf_sk_release() will do the right thing to check the sk2 is refcounted or not
+before calling sock_gen_put().
 
-$ setfattr -x security.capability /bin/ping
-$ getfattr -d -m- /bin/ping
-$ ping 1.2.3.4
-$ ping google.com
-$ echo $?
-2
+The bug here is the helper forgot to call sock_gen_put(sk) while
+the verifier only tracks the sk2, so I think the 'if (unlikely...) { WARN_ONCE(...); }'
+can be saved.
 
-The above reproduces with:
-
-cat /sys/kernel/security/lsm
-capability,apparmor,bpf
-
-But not with SELinux as SELinux does the required check in its LSM hook:
-
-cat /sys/kernel/security/lsm
-capability,selinux,bpf
-
-In this case security_inode_removexattr() calls
-call_int_hook(inode_removexattr, 1, mnt_userns, dentry, name), which
-expects a return value of 1 to mean "no LSM hooks hit" and 0 is
-supposed to mean "the LSM decided to permit the access and checked
-cap_inode_removexattr"
-
-There are other security hooks that are similarly effected.
-
-In order to reliably fix this issue and also allow LSM Hooks and BPF
-programs which implement hook logic to choose to not make a decision
-in certain conditions (e.g. when BPF programs are used for auditing),
-introduce a special return value LSM_HOOK_NO_EFFECT which can be used
-by the hook to indicate to the framework that it does not intend to
-make a decision.
-
-Fixes: 520b7aa00d8c ("bpf: lsm: Initialize the BPF LSM hooks")
-Reported-by: Jann Horn <jannh@google.com>
-Signed-off-by: KP Singh <kpsingh@kernel.org>
----
- include/linux/lsm_hooks.h |  6 +++
- kernel/bpf/bpf_lsm.c      | 14 +++++--
- security/security.c       | 78 +++++++++++++++++++++++++++++----------
- 3 files changed, 75 insertions(+), 23 deletions(-)
-
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 91c8146649f5..fcf3c2c57127 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -1576,6 +1576,12 @@
-  *      thread (IORING_SETUP_SQPOLL).
-  *
-  */
-+
-+/*
-+ * If an LSM hook choses to make no decision. i.e. it's only for auditing or
-+ * a default hook like the BPF LSM hooks, it can return LSM_HOOK_NO_EFFECT.
-+ */
-+ #define LSM_HOOK_NO_EFFECT -INT_MAX
- union security_list_options {
- 	#define LSM_HOOK(RET, DEFAULT, NAME, ...) RET (*NAME)(__VA_ARGS__);
- 	#include "lsm_hook_defs.h"
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index c1351df9f7ee..52f2fc493c57 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -20,12 +20,18 @@
- /* For every LSM hook that allows attachment of BPF programs, declare a nop
-  * function where a BPF program can be attached.
-  */
--#define LSM_HOOK(RET, DEFAULT, NAME, ...)	\
--noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
--{						\
--	return DEFAULT;				\
-+#define DEFINE_LSM_HOOK_void(NAME, ...) \
-+noinline void bpf_lsm_##NAME(__VA_ARGS__) {}
-+
-+#define DEFINE_LSM_HOOK_int(NAME, ...)	   \
-+noinline int bpf_lsm_##NAME(__VA_ARGS__)   \
-+{					   \
-+	return LSM_HOOK_NO_EFFECT;	   \
- }
- 
-+#define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-+	DEFINE_LSM_HOOK_##RET(NAME, __VA_ARGS__)
-+
- #include <linux/lsm_hook_defs.h>
- #undef LSM_HOOK
- 
-diff --git a/security/security.c b/security/security.c
-index 188b8f782220..3c1b0b00c4a7 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -734,11 +734,16 @@ static int lsm_superblock_alloc(struct super_block *sb)
- 
- #define call_int_hook(FUNC, IRC, ...) ({			\
- 	int RC = IRC;						\
-+	int THISRC;						\
-+								\
- 	do {							\
- 		struct security_hook_list *P;			\
- 								\
- 		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
--			RC = P->hook.FUNC(__VA_ARGS__);		\
-+			THISRC = P->hook.FUNC(__VA_ARGS__);	\
-+			if (THISRC == LSM_HOOK_NO_EFFECT)	\
-+				continue;			\
-+			RC = THISRC;				\
- 			if (RC != 0)				\
- 				break;				\
- 		}						\
-@@ -831,7 +836,7 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
- {
- 	struct security_hook_list *hp;
- 	int cap_sys_admin = 1;
--	int rc;
-+	int rc, thisrc;
- 
- 	/*
- 	 * The module will respond with a positive value if
-@@ -841,7 +846,11 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
- 	 * thinks it should not be set it won't.
- 	 */
- 	hlist_for_each_entry(hp, &security_hook_heads.vm_enough_memory, list) {
--		rc = hp->hook.vm_enough_memory(mm, pages);
-+		thisrc = hp->hook.vm_enough_memory(mm, pages);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		rc = thisrc;
-+
- 		if (rc <= 0) {
- 			cap_sys_admin = 0;
- 			break;
-@@ -895,6 +904,8 @@ int security_fs_context_parse_param(struct fs_context *fc,
- 	hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
- 			     list) {
- 		trc = hp->hook.fs_context_parse_param(fc, param);
-+		if (trc == LSM_HOOK_NO_EFFECT)
-+			continue;
- 		if (trc == 0)
- 			rc = 0;
- 		else if (trc != -ENOPARAM)
-@@ -1063,14 +1074,17 @@ int security_dentry_init_security(struct dentry *dentry, int mode,
- 				  u32 *ctxlen)
- {
- 	struct security_hook_list *hp;
--	int rc;
-+	int rc, thisrc;
- 
- 	/*
- 	 * Only one module will provide a security context.
- 	 */
- 	hlist_for_each_entry(hp, &security_hook_heads.dentry_init_security, list) {
--		rc = hp->hook.dentry_init_security(dentry, mode, name,
--						   xattr_name, ctx, ctxlen);
-+		thisrc = hp->hook.dentry_init_security(dentry, mode, name,
-+						       xattr_name, ctx, ctxlen);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		rc = thisrc;
- 		if (rc != LSM_RET_DEFAULT(dentry_init_security))
- 			return rc;
- 	}
-@@ -1430,7 +1444,7 @@ int security_inode_getsecurity(struct user_namespace *mnt_userns,
- 			       void **buffer, bool alloc)
- {
- 	struct security_hook_list *hp;
--	int rc;
-+	int rc, thisrc;
- 
- 	if (unlikely(IS_PRIVATE(inode)))
- 		return LSM_RET_DEFAULT(inode_getsecurity);
-@@ -1438,7 +1452,10 @@ int security_inode_getsecurity(struct user_namespace *mnt_userns,
- 	 * Only one module will provide an attribute with a given name.
- 	 */
- 	hlist_for_each_entry(hp, &security_hook_heads.inode_getsecurity, list) {
--		rc = hp->hook.inode_getsecurity(mnt_userns, inode, name, buffer, alloc);
-+		thisrc = hp->hook.inode_getsecurity(mnt_userns, inode, name, buffer, alloc);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		rc = thisrc;
- 		if (rc != LSM_RET_DEFAULT(inode_getsecurity))
- 			return rc;
- 	}
-@@ -1448,7 +1465,7 @@ int security_inode_getsecurity(struct user_namespace *mnt_userns,
- int security_inode_setsecurity(struct inode *inode, const char *name, const void *value, size_t size, int flags)
- {
- 	struct security_hook_list *hp;
--	int rc;
-+	int rc, thisrc;
- 
- 	if (unlikely(IS_PRIVATE(inode)))
- 		return LSM_RET_DEFAULT(inode_setsecurity);
-@@ -1456,8 +1473,11 @@ int security_inode_setsecurity(struct inode *inode, const char *name, const void
- 	 * Only one module will provide an attribute with a given name.
- 	 */
- 	hlist_for_each_entry(hp, &security_hook_heads.inode_setsecurity, list) {
--		rc = hp->hook.inode_setsecurity(inode, name, value, size,
--								flags);
-+		thisrc = hp->hook.inode_setsecurity(inode, name, value, size,
-+						    flags);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		rc = thisrc;
- 		if (rc != LSM_RET_DEFAULT(inode_setsecurity))
- 			return rc;
- 	}
-@@ -1486,7 +1506,7 @@ EXPORT_SYMBOL(security_inode_copy_up);
- int security_inode_copy_up_xattr(const char *name)
- {
- 	struct security_hook_list *hp;
--	int rc;
-+	int rc, thisrc;
- 
- 	/*
- 	 * The implementation can return 0 (accept the xattr), 1 (discard the
-@@ -1495,7 +1515,10 @@ int security_inode_copy_up_xattr(const char *name)
- 	 */
- 	hlist_for_each_entry(hp,
- 		&security_hook_heads.inode_copy_up_xattr, list) {
--		rc = hp->hook.inode_copy_up_xattr(name);
-+		thisrc = hp->hook.inode_copy_up_xattr(name);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		rc = thisrc;
- 		if (rc != LSM_RET_DEFAULT(inode_copy_up_xattr))
- 			return rc;
- 	}
-@@ -1889,6 +1912,8 @@ int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
- 
- 	hlist_for_each_entry(hp, &security_hook_heads.task_prctl, list) {
- 		thisrc = hp->hook.task_prctl(option, arg2, arg3, arg4, arg5);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
- 		if (thisrc != LSM_RET_DEFAULT(task_prctl)) {
- 			rc = thisrc;
- 			if (thisrc != 0)
-@@ -2055,11 +2080,16 @@ int security_getprocattr(struct task_struct *p, const char *lsm, char *name,
- 				char **value)
- {
- 	struct security_hook_list *hp;
-+	int rc;
- 
- 	hlist_for_each_entry(hp, &security_hook_heads.getprocattr, list) {
- 		if (lsm != NULL && strcmp(lsm, hp->lsm))
- 			continue;
--		return hp->hook.getprocattr(p, name, value);
-+		rc = hp->hook.getprocattr(p, name, value);
-+		if (rc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		else
-+			return rc;
- 	}
- 	return LSM_RET_DEFAULT(getprocattr);
- }
-@@ -2068,11 +2098,16 @@ int security_setprocattr(const char *lsm, const char *name, void *value,
- 			 size_t size)
- {
- 	struct security_hook_list *hp;
-+	int rc;
- 
- 	hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
- 		if (lsm != NULL && strcmp(lsm, hp->lsm))
- 			continue;
--		return hp->hook.setprocattr(name, value, size);
-+		rc = hp->hook.setprocattr(name, value, size);
-+		if (rc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		else
-+			return rc;
- 	}
- 	return LSM_RET_DEFAULT(setprocattr);
- }
-@@ -2091,14 +2126,17 @@ EXPORT_SYMBOL(security_ismaclabel);
- int security_secid_to_secctx(u32 secid, char **secdata, u32 *seclen)
- {
- 	struct security_hook_list *hp;
--	int rc;
-+	int rc, thisrc;
- 
- 	/*
- 	 * Currently, only one LSM can implement secid_to_secctx (i.e this
- 	 * LSM hook is not "stackable").
- 	 */
- 	hlist_for_each_entry(hp, &security_hook_heads.secid_to_secctx, list) {
--		rc = hp->hook.secid_to_secctx(secid, secdata, seclen);
-+		thisrc = hp->hook.secid_to_secctx(secid, secdata, seclen);
-+		if (thisrc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		rc = thisrc;
- 		if (rc != LSM_RET_DEFAULT(secid_to_secctx))
- 			return rc;
- 	}
-@@ -2509,9 +2547,11 @@ int security_xfrm_state_pol_flow_match(struct xfrm_state *x,
- 	hlist_for_each_entry(hp, &security_hook_heads.xfrm_state_pol_flow_match,
- 				list) {
- 		rc = hp->hook.xfrm_state_pol_flow_match(x, xp, flic);
--		break;
-+		if (rc == LSM_HOOK_NO_EFFECT)
-+			continue;
-+		return rc;
- 	}
--	return rc;
-+	return LSM_RET_DEFAULT(xfrm_state_pol_flow_match);
- }
- 
- int security_xfrm_decode_session(struct sk_buff *skb, u32 *secid)
--- 
-2.36.1.476.g0c4daa206d-goog
-
+>                                 WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
+>                                 sk2 = NULL;
+>                         }
+>                 }
+>                 sk = sk2;
+>         }
+>         return sk;
+> }
