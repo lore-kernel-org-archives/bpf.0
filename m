@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A36CCC433EF
-	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 19:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B17B9C43334
+	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 19:45:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350470AbiFJTpH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jun 2022 15:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S1350519AbiFJTpJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jun 2022 15:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350290AbiFJTo4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:44:56 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0793DA6B
-        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:44:47 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id y1-20020a17090a390100b001e66bb0fcefso1925020pjb.0
-        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:44:47 -0700 (PDT)
+        with ESMTP id S1350409AbiFJTpG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jun 2022 15:45:06 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04434926B
+        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:44:52 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id d125-20020a636883000000b003db5e24db27so25318pgc.13
+        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 12:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=oRH9s66i/tSGRatQjV8lrlYVzRqMhVkli+0iViEEm3E=;
-        b=EWvIhNpLP4xn7/AaqRD2ry5tJ0od8mdvtIo1l8Mu+AVSg+pAqesAczV/0Lr9wi2kiz
-         Fy1MQLHaGvnHVaKfEvTTAGxuQ35arwQTMzrK2HRvce7BKsnt7sTyah4aPc8tPwHAGwCP
-         alnn29BH+uZT8ISPg2q0Aplzk57S3UfzlWezvPJ4bm6+UjnhYvJElPhjilELUc3eMS3i
-         biAZPX2dSat+7EcVOoZvb8GhkN6J+dYfXoCwKW+EU9nHCjcLl83cMunu9bKv9Kdj8e3T
-         TmfhQM5pKilrhRQQjzkRZ7h9oFsr0mAh0K0WVdTgcxvqo9ykb8W3YB6HehNxkS1wukLn
-         Pf+g==
+        bh=XL2ObbHh5bI7PkeXJYGc2UizZ2yMx0505kd5+6ZTGek=;
+        b=V3FC87ToUbSYHf9bcAaSuAZkXLsAVlExIxHjjiSdh7QMh02pWjjd6E4B6KhNiA1WpZ
+         wQs+tK4vP63QqacshGi7SJTaZU1yq6orG3ioQrH/ECMcW5DnQHBLM/tgT3J3gC1Y3tUE
+         NIVL9e156rrxhaF7d/TohQFAqUrJ8xhXkl+Nx51wagFPyZSTYL1LiNofjdmqEiS9AwcH
+         Wp/hJmcWK/LD0/hoTFDDIDdKENwKOsBPT5tZKRr14jzUN++hNlPv5gxli9eX7ki33559
+         PI8x7eKkaXF/raklqyIIGN2PTc5dXzYJm6hj5I6kJAJjavpnoqjMrgMM50C+/2x8XIk+
+         fEWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=oRH9s66i/tSGRatQjV8lrlYVzRqMhVkli+0iViEEm3E=;
-        b=qadks9/94sfULVIPLZET8k4vt+ba6XHTPsDOgkavuRZY1k6zJYkUtSh8Fa9r0bFAic
-         Q2YLYfLsflZwDKlm1VSeSRYriQ6pxHZcDgUwA+xznr1v9zoX279d2I5ymcVwz0ekO96E
-         JyVo4Dve0xFJDK/UZR0Nr5YzmDIhJM37dfIhfcWAr+5YJpOr/EjNpBGvwi3Zeb+gwpc2
-         jmcgbgMzbUx2jV+jPOy+5iqq9TMZlmYRw0tmIsdqVXZZgnz/5JXGLjyDIAff8vg9grbV
-         oxxPqitdhhDexuqrCxA9B9j/QdzxOqsd3da8kOw+CgUiUEdFhthi7pp9jnQHr0E9zVf6
-         5+gA==
-X-Gm-Message-State: AOAM5306ETPqPSTzl54BPxlfGarj4HaxL94qcW0i3JeV+vSpkRATGtWV
-        LA+57dtEn+yXm3rE4IHbg+zatU+uPgV8X2E/
-X-Google-Smtp-Source: ABdhPJxLzCg7BT12DYURFJcz5iuhljjyz60dSOKo1LAt2zz0VKFLfw3YaQHFlASgYFV2U5cX9TzLETp7QJyh9R1w
+        bh=XL2ObbHh5bI7PkeXJYGc2UizZ2yMx0505kd5+6ZTGek=;
+        b=8CYkTi0zeKzwHtT5IV/lkQ2O3syzn5wk51tkALv/xIDVHso9AvW0JRJH1HV21jfj5g
+         hF9ENOvc3WQ7kudWUUeaawrpDidC6EvOLrLBvSX9wSKUrP33fdqaqUTCBudQSTo3h9aJ
+         qeGLjgUud8cGuxzvraZHCgSk9M/FkFV6OnP8SAibPrBLl8RV7SEbDzSyaz39aWgh20Oe
+         vZH8y1GqSzYj382k5ZF0lJ4+t+lbBkYwu94N2CW5UoT6kceJsCegV3c02RSUuBhRKFJo
+         bF3sRZBb6D+FQZePwQ+s3BmEwLNhFWfx4NkLx6lfKmTw0cFw8yfZfzoeg6HNtNGcw/LT
+         U4vA==
+X-Gm-Message-State: AOAM533a9YDCpPmzzGLUlMCgmZ3AcRXNMv/jn0rrLexXWLq6ZDFyj2ay
+        ebM/ro8AZFPg6l7H9gJuQSuZ8OLgd/ggrrJZ
+X-Google-Smtp-Source: ABdhPJwvl+cJQi3YElE3/Lz5iGQDjGxVLKiETlBjbZAEsXfjtLViJu8qfKaeaaP+quYiPY8x/7J13hO6f3EHI64W
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP
- id t9-20020a17090a024900b001e0a8a33c6cmr2523pje.0.1654890286518; Fri, 10 Jun
- 2022 12:44:46 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 19:44:30 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a63:181:0:b0:3fe:149a:35df with SMTP id
+ 123-20020a630181000000b003fe149a35dfmr16815341pgb.158.1654890292074; Fri, 10
+ Jun 2022 12:44:52 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 19:44:33 +0000
 In-Reply-To: <20220610194435.2268290-1-yosryahmed@google.com>
-Message-Id: <20220610194435.2268290-4-yosryahmed@google.com>
+Message-Id: <20220610194435.2268290-7-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220610194435.2268290-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH bpf-next v2 3/8] bpf, iter: Fix the condition on p when
- calling stop.
+Subject: [PATCH bpf-next v2 6/8] cgroup: bpf: enable bpf programs to integrate
+ with rstat
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -77,39 +77,94 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hao Luo <haoluo@google.com>
+Enable bpf programs to make use of rstat to collect cgroup hierarchical
+stats efficiently:
+- Add cgroup_rstat_updated() kfunc, for bpf progs that collect stats.
+- Add cgroup_rstat_flush() kfunc, for bpf progs that read stats.
+- Add an empty bpf_rstat_flush() hook that is called during rstat
+  flushing, for bpf progs that flush stats to attach to. Attaching a bpf
+  prog to this hook effectively registers it as a flush callback.
 
-In bpf_seq_read, seq->op->next() could return an ERR and jump to
-the label stop. However, the existing code in stop does not handle
-the case when p (returned from next()) is an ERR. Adds the handling
-of ERR of p by converting p into an error and jumping to done.
-
-Because all the current implementations do not have a case that
-returns ERR from next(), so this patch doesn't have behavior changes
-right now.
-
-Signed-off-by: Hao Luo <haoluo@google.com>
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- kernel/bpf/bpf_iter.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ kernel/cgroup/rstat.c | 46 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index d5d96ceca1058..1585caf7c7200 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -198,6 +198,11 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
- 	}
- stop:
- 	offs = seq->count;
-+	if (IS_ERR(p)) {
-+		seq->op->stop(seq, NULL);
-+		err = PTR_ERR(p);
-+		goto done;
-+	}
- 	/* bpf program called if !p */
- 	seq->op->stop(seq, p);
- 	if (!p) {
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 24b5c2ab55983..94140bd0d02a4 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -3,6 +3,11 @@
+ 
+ #include <linux/sched/cputime.h>
+ 
++#include <linux/bpf.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
++
++
+ static DEFINE_SPINLOCK(cgroup_rstat_lock);
+ static DEFINE_PER_CPU(raw_spinlock_t, cgroup_rstat_cpu_lock);
+ 
+@@ -141,6 +146,23 @@ static struct cgroup *cgroup_rstat_cpu_pop_updated(struct cgroup *pos,
+ 	return pos;
+ }
+ 
++/*
++ * A hook for bpf stat collectors to attach to and flush their stats.
++ * Together with providing bpf kfuncs for cgroup_rstat_updated() and
++ * cgroup_rstat_flush(), this enables a complete workflow where bpf progs that
++ * collect cgroup stats can integrate with rstat for efficient flushing.
++ *
++ * A static noinline declaration here could cause the compiler to optimize away
++ * the function. A global noinline declaration will keep the definition, but may
++ * optimize away the callsite. Therefore, __weak is needed to ensure that the
++ * call is still emitted, by telling the compiler that we don't know what the
++ * function might eventually be.
++ */
++__weak noinline void bpf_rstat_flush(struct cgroup *cgrp,
++				     struct cgroup *parent, int cpu)
++{
++}
++
+ /* see cgroup_rstat_flush() */
+ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
+ 	__releases(&cgroup_rstat_lock) __acquires(&cgroup_rstat_lock)
+@@ -168,6 +190,7 @@ static void cgroup_rstat_flush_locked(struct cgroup *cgrp, bool may_sleep)
+ 			struct cgroup_subsys_state *css;
+ 
+ 			cgroup_base_stat_flush(pos, cpu);
++			bpf_rstat_flush(pos, cgroup_parent(pos), cpu);
+ 
+ 			rcu_read_lock();
+ 			list_for_each_entry_rcu(css, &pos->rstat_css_list,
+@@ -469,3 +492,26 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
+ 		   "system_usec %llu\n",
+ 		   usage, utime, stime);
+ }
++
++/* Add bpf kfuncs for cgroup_rstat_updated() and cgroup_rstat_flush() */
++BTF_SET_START(bpf_rstat_check_kfunc_ids)
++BTF_ID(func, cgroup_rstat_updated)
++BTF_ID(func, cgroup_rstat_flush)
++BTF_SET_END(bpf_rstat_check_kfunc_ids)
++
++BTF_SET_START(bpf_rstat_sleepable_kfunc_ids)
++BTF_ID(func, cgroup_rstat_flush)
++BTF_SET_END(bpf_rstat_sleepable_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
++	.owner		= THIS_MODULE,
++	.check_set	= &bpf_rstat_check_kfunc_ids,
++	.sleepable_set	= &bpf_rstat_sleepable_kfunc_ids,
++};
++
++static int __init bpf_rstat_kfunc_init(void)
++{
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
++					 &bpf_rstat_kfunc_set);
++}
++late_initcall(bpf_rstat_kfunc_init);
 -- 
 2.36.1.476.g0c4daa206d-goog
 
