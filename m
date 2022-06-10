@@ -2,206 +2,203 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABE8CCA47B
-	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 16:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D98FC43334
+	for <bpf@archiver.kernel.org>; Fri, 10 Jun 2022 17:00:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346418AbiFJQ7U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 10 Jun 2022 12:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S232819AbiFJRAl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 10 Jun 2022 13:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350008AbiFJQ6W (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 10 Jun 2022 12:58:22 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935E633A35
-        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 09:58:20 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d11-20020a170902cecb00b00163fe890197so14781810plg.1
-        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 09:58:20 -0700 (PDT)
+        with ESMTP id S1349836AbiFJRA3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 10 Jun 2022 13:00:29 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B853733A00
+        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 10:00:27 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id r187-20020a1c44c4000000b0039c76434147so1440682wma.1
+        for <bpf@vger.kernel.org>; Fri, 10 Jun 2022 10:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=RI+DinQTUMJgh2SwSVOiYCIj0hdxO3MhPrfBi6v93cY=;
-        b=ea4vysMGGsdxPdEwPmjTbCfDHX3IWHRkJZXa3lfLxwSVxcYOeQk7KwU8BQA+aYdV5R
-         6c4ERS9Ju8Yy3dg2+axAGMyO4ycqG50sc6oTexADaa0FtrgAIocnV2TJ15wkXh9ltVw4
-         WRMIBIM66IdH3ta2o0/y9LFQx3NRE8ncuT7XtReICxNvii6h3q912TPPK8scjGEGN16o
-         Y8XcUsDNIceaqaKVWjoP0M6mPR1ZFS84pnhvoi6QpbWJNyee+J1jfA4upTzG5V0rBsBv
-         Em9jseNbnAnDSYMFgWpVmdN4SQ4VKYAPnBM2tsx9ReIv5T8772Wf/2we533IuGLwMRx1
-         aiEA==
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mxkfsPOt+1BiFyYRQAUT1EkyhPIhrJYMCJ92Su1aMxY=;
+        b=LJO3jmKOWerFx3arypxcX4r5bwfzwip2rU2HA2Nk7sz+JJO9ztX+KpJfdlSH1dB1lt
+         eRErQx71aRMDbF781RiPdkpXAmEHYu+jsi7/mlR5muapj40wAvUYTeS70mEw81h5zFSg
+         niCJ+px+TExjUzm2WEGzMZJlLGfGl+n4HAcVjyXFmzJ9dV/AHkN3Y7wNJevrdQ+rCJbR
+         c7K0p8mDq2DvcRO3CkM1zOvH/c5+IZf3evkw4fSGGJJARYFvYHtHTdTAz0gN75hCN7dJ
+         bw5K+RlGBEFVXruE8G1l4NAfHKjy7ZmOmokHaWK2IP13kT98hkl5pcRPa2vnPawBdh7p
+         CoCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=RI+DinQTUMJgh2SwSVOiYCIj0hdxO3MhPrfBi6v93cY=;
-        b=oZsqsryxuPF9HCl1AEMZm4ChItj9y/1u388vQYt8eGP77LPo9kmaIQGb38sAHkyILp
-         4uBHELWaeXUVEK1H/2Tr/nCVBrnp1F030eu42zM3zyu8yZL5x3EG5xiDiHLvBgTM4xR1
-         VJCa/xQes4Xj3H718B8cik6NiGifAoRKxNQ7rLaAj+RM3o4sN35QQ0fDFdPj/FDBjtMO
-         ZtGM6pWRQ4yQnees7QTA3WfhAlPDRCZ7vK7WVAyOuvW32FHbrxIMlj7y18CGfomMCoYF
-         BRv9twSV/0bzt9Hqn3Uk5mowPhiFvl0lm8OCB20e6vjxDRFYuMylk3S2uQ5x8JJkiJBw
-         GwmA==
-X-Gm-Message-State: AOAM533S/PQoBYGED2m9itfW3SrTdWdxxTt9Ugopy3B2qC5ZO7z8ct+f
-        W1a2SQIqT0SbzOWn/UNE8ge6CpE=
-X-Google-Smtp-Source: ABdhPJxwkgjMgeuZfAcDw/49XHcVa2MujWbFA1+cCxvubeXzLRPUjhhlwAEouYmDUmWQkD5Io5wJt1s=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a05:6a00:1956:b0:51c:3a0:49d2 with SMTP id
- s22-20020a056a00195600b0051c03a049d2mr31890495pfk.29.1654880299777; Fri, 10
- Jun 2022 09:58:19 -0700 (PDT)
-Date:   Fri, 10 Jun 2022 09:58:01 -0700
-In-Reply-To: <20220610165803.2860154-1-sdf@google.com>
-Message-Id: <20220610165803.2860154-9-sdf@google.com>
-Mime-Version: 1.0
-References: <20220610165803.2860154-1-sdf@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH bpf-next v9 08/10] libbpf: implement bpf_prog_query_opts
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mxkfsPOt+1BiFyYRQAUT1EkyhPIhrJYMCJ92Su1aMxY=;
+        b=JY/Eo54V/SOrPP6id+sA8ezcueiau1T9XePhe6FNlyR6Bdbx1PIVCPd8Wdp0vZeldm
+         gQiTdNZASo47eSH+h0kPua5KrPpJkoUkDE4TQeboXOqQDAZwnvTxFQZsZe/CE44yjADo
+         aKLpmqQ+KhPPxm6RlZ+EnY8vl6eglqiEdEhD+FQshCVUOq/fsB6iPdZaRHY3+o2FGBUu
+         yKkgA7TzplxaK6vVxoFDiCsgKLQdrZJzF3sgbi0cENCk59ktai2xYny0AMnVbaARL6of
+         i0EzP6P75MfiL/0WZ+ZFrWVoTbQQ53wj4ACMS0BGofU1xi2d/zv/6J7MCXK486tnOzxh
+         CpsQ==
+X-Gm-Message-State: AOAM5325y0JyLjYMotP9i/7cct4LmUKu9LF4WusYxAW8+U+qZpZqY387
+        tkxemABBAtPrW8BxcnJIkBN2dg==
+X-Google-Smtp-Source: ABdhPJxBSwG/R7c5/8gnmc3VIvpFjAaaDK4o2lqKSoq4Q2auWa7nMVlNgwuebDXQqjbv+hmK59tVCw==
+X-Received: by 2002:a05:600c:3790:b0:39c:62b9:b164 with SMTP id o16-20020a05600c379000b0039c62b9b164mr726820wmr.0.1654880426109;
+        Fri, 10 Jun 2022 10:00:26 -0700 (PDT)
+Received: from [192.168.178.21] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id q17-20020adff951000000b002103bd9c5acsm27840901wrr.105.2022.06.10.10.00.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 10:00:25 -0700 (PDT)
+Message-ID: <71b56050-11ad-bd06-09c9-1a8c61b4c1b4@isovalent.com>
+Date:   Fri, 10 Jun 2022 18:00:24 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH bpf-next 1/2] Revert "bpftool: Use libbpf 1.0 API mode
+ instead of RLIMIT_MEMLOCK"
+Content-Language: en-GB
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Harsh Modi <harshmodi@google.com>,
+        Paul Chaignon <paul@cilium.io>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20220610112648.29695-1-quentin@isovalent.com>
+ <20220610112648.29695-2-quentin@isovalent.com> <YqNsWAH24bAIPjqy@google.com>
+ <cb05a59e-07d5-ddd1-b028-82133faaf67e@isovalent.com>
+ <CAKH8qBvvq0f+D8BXChw_8krH896J_cYg0yhRfnDOSO_U1n394w@mail.gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <CAKH8qBvvq0f+D8BXChw_8krH896J_cYg0yhRfnDOSO_U1n394w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement bpf_prog_query_opts as a more expendable version of
-bpf_prog_query. Expose new prog_attach_flags and attach_btf_func_id as
-well:
+2022-06-10 09:46 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
+> On Fri, Jun 10, 2022 at 9:34 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>>
+>> 2022-06-10 09:07 UTC-0700 ~ sdf@google.com
+>>> On 06/10, Quentin Monnet wrote:
+>>>> This reverts commit a777e18f1bcd32528ff5dfd10a6629b655b05eb8.
+>>>
+>>>> In commit a777e18f1bcd ("bpftool: Use libbpf 1.0 API mode instead of
+>>>> RLIMIT_MEMLOCK"), we removed the rlimit bump in bpftool, because the
+>>>> kernel has switched to memcg-based memory accounting. Thanks to the
+>>>> LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK, we attempted to keep compatibility
+>>>> with other systems and ask libbpf to raise the limit for us if
+>>>> necessary.
+>>>
+>>>> How do we know if memcg-based accounting is supported? There is a probe
+>>>> in libbpf to check this. But this probe currently relies on the
+>>>> availability of a given BPF helper, bpf_ktime_get_coarse_ns(), which
+>>>> landed in the same kernel version as the memory accounting change. This
+>>>> works in the generic case, but it may fail, for example, if the helper
+>>>> function has been backported to an older kernel. This has been observed
+>>>> for Google Cloud's Container-Optimized OS (COS), where the helper is
+>>>> available but rlimit is still in use. The probe succeeds, the rlimit is
+>>>> not raised, and probing features with bpftool, for example, fails.
+>>>
+>>>> A patch was submitted [0] to update this probe in libbpf, based on what
+>>>> the cilium/ebpf Go library does [1]. It would lower the soft rlimit to
+>>>> 0, attempt to load a BPF object, and reset the rlimit. But it may induce
+>>>> some hard-to-debug flakiness if another process starts, or the current
+>>>> application is killed, while the rlimit is reduced, and the approach was
+>>>> discarded.
+>>>
+>>>> As a workaround to ensure that the rlimit bump does not depend on the
+>>>> availability of a given helper, we restore the unconditional rlimit bump
+>>>> in bpftool for now.
+>>>
+>>>> [0]
+>>>> https://lore.kernel.org/bpf/20220609143614.97837-1-quentin@isovalent.com/
+>>>> [1] https://github.com/cilium/ebpf/blob/v0.9.0/rlimit/rlimit.go#L39
+>>>
+>>>> Cc: Yafang Shao <laoar.shao@gmail.com>
+>>>> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+>>>> ---
+>>>>   tools/bpf/bpftool/common.c     | 8 ++++++++
+>>>>   tools/bpf/bpftool/feature.c    | 2 ++
+>>>>   tools/bpf/bpftool/main.c       | 6 +++---
+>>>>   tools/bpf/bpftool/main.h       | 2 ++
+>>>>   tools/bpf/bpftool/map.c        | 2 ++
+>>>>   tools/bpf/bpftool/pids.c       | 1 +
+>>>>   tools/bpf/bpftool/prog.c       | 3 +++
+>>>>   tools/bpf/bpftool/struct_ops.c | 2 ++
+>>>>   8 files changed, 23 insertions(+), 3 deletions(-)
+>>>
+>>>> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+>>>> index a45b42ee8ab0..a0d4acd7c54a 100644
+>>>> --- a/tools/bpf/bpftool/common.c
+>>>> +++ b/tools/bpf/bpftool/common.c
+>>>> @@ -17,6 +17,7 @@
+>>>>   #include <linux/magic.h>
+>>>>   #include <net/if.h>
+>>>>   #include <sys/mount.h>
+>>>> +#include <sys/resource.h>
+>>>>   #include <sys/stat.h>
+>>>>   #include <sys/vfs.h>
+>>>
+>>>> @@ -72,6 +73,13 @@ static bool is_bpffs(char *path)
+>>>>       return (unsigned long)st_fs.f_type == BPF_FS_MAGIC;
+>>>>   }
+>>>
+>>>> +void set_max_rlimit(void)
+>>>> +{
+>>>> +    struct rlimit rinf = { RLIM_INFINITY, RLIM_INFINITY };
+>>>> +
+>>>> +    setrlimit(RLIMIT_MEMLOCK, &rinf);
+>>>
+>>> Do you think it might make sense to print to stderr some warning if
+>>> we actually happen to adjust this limit?
+>>>
+>>> if (getrlimit(MEMLOCK) != RLIM_INFINITY) {
+>>>     fprintf(stderr, "Warning: resetting MEMLOCK rlimit to
+>>>     infinity!\n");
+>>>     setrlimit(RLIMIT_MEMLOCK, &rinf);
+>>> }
+>>>
+>>> ?
+>>>
+>>> Because while it's nice that we automatically do this, this might still
+>>> lead to surprises for some users. OTOH, not sure whether people
+>>> actually read those warnings? :-/
+>>
+>> I'm not strictly opposed to a warning, but I'm not completely sure this
+>> is desirable.
+>>
+>> Bpftool has raised the rlimit for a long time, it changed only in April,
+>> so I don't think it would come up as a surprise for people who have used
+>> it for a while. I think this is also something that several other
+>> BPF-related applications (BCC I think?, bpftrace, Cilium come to mind)
+>> have been doing too.
+> 
+> In this case ignore me and let's continue doing that :-)
+> 
+> Btw, eventually we'd still like to stop doing that I'd presume?
 
-* prog_attach_flags is a per-program attach_type; relevant only for
-  lsm cgroup program which might have different attach_flags
-  per attach_btf_id
-* attach_btf_func_id is a new field expose for prog_query which
-  specifies real btf function id for lsm cgroup attachments
+Agreed. I was thinking either finding a way to improve the probe in
+libbpf, or waiting for some more time until 5.11 gets old, but this may
+take years :/
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- tools/include/uapi/linux/bpf.h |  3 +++
- tools/lib/bpf/bpf.c            | 38 +++++++++++++++++++++++++++-------
- tools/lib/bpf/bpf.h            | 15 ++++++++++++++
- tools/lib/bpf/libbpf.map       |  1 +
- 4 files changed, 50 insertions(+), 7 deletions(-)
+> Should
+> we at some point follow up with something like:
+> 
+> if (kernel_version >= 5.11) { don't touch memlock; }
+> 
+> ?
+> 
+> I guess we care only about <5.11 because of the backports, but 5.11+
+> kernels are guaranteed to have memcg.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index fa64b0b612fd..4271ef3c2afb 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1432,6 +1432,7 @@ union bpf_attr {
- 		__u32		attach_flags;
- 		__aligned_u64	prog_ids;
- 		__u32		prog_cnt;
-+		__aligned_u64	prog_attach_flags; /* output: per-program attach_flags */
- 	} query;
- 
- 	struct { /* anonymous struct used by BPF_RAW_TRACEPOINT_OPEN command */
-@@ -5996,6 +5997,8 @@ struct bpf_prog_info {
- 	__u64 run_cnt;
- 	__u64 recursion_misses;
- 	__u32 verified_insns;
-+	__u32 attach_btf_obj_id;
-+	__u32 attach_btf_id;
- } __attribute__((aligned(8)));
- 
- struct bpf_map_info {
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 240186aac8e6..accc97cf9928 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -888,24 +888,48 @@ int bpf_iter_create(int link_fd)
- 	return libbpf_err_errno(fd);
- }
- 
--int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query_flags,
--		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
-+int bpf_prog_query_opts(int target_fd,
-+			enum bpf_attach_type type,
-+			struct bpf_prog_query_opts *opts)
- {
- 	union bpf_attr attr;
- 	int ret;
- 
-+	if (!OPTS_VALID(opts, bpf_prog_query_opts))
-+		return libbpf_err(-EINVAL);
-+
- 	memset(&attr, 0, sizeof(attr));
-+
- 	attr.query.target_fd	= target_fd;
- 	attr.query.attach_type	= type;
--	attr.query.query_flags	= query_flags;
--	attr.query.prog_cnt	= *prog_cnt;
--	attr.query.prog_ids	= ptr_to_u64(prog_ids);
-+	attr.query.query_flags	= OPTS_GET(opts, query_flags, 0);
-+	attr.query.prog_cnt	= OPTS_GET(opts, prog_cnt, 0);
-+	attr.query.prog_ids	= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
-+	attr.query.prog_attach_flags = ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
- 
- 	ret = sys_bpf(BPF_PROG_QUERY, &attr, sizeof(attr));
- 
-+	OPTS_SET(opts, attach_flags, attr.query.attach_flags);
-+	OPTS_SET(opts, prog_cnt, attr.query.prog_cnt);
-+
-+	return libbpf_err_errno(ret);
-+}
-+
-+int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query_flags,
-+		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
-+{
-+	LIBBPF_OPTS(bpf_prog_query_opts, opts);
-+	int ret;
-+
-+	opts.query_flags = query_flags;
-+	opts.prog_ids = prog_ids;
-+	opts.prog_cnt = *prog_cnt;
-+
-+	ret = bpf_prog_query_opts(target_fd, type, &opts);
-+
- 	if (attach_flags)
--		*attach_flags = attr.query.attach_flags;
--	*prog_cnt = attr.query.prog_cnt;
-+		*attach_flags = opts.attach_flags;
-+	*prog_cnt = opts.prog_cnt;
- 
- 	return libbpf_err_errno(ret);
- }
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index cabc03703e29..e8f70ce6b537 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -442,9 +442,24 @@ LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
- LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
- LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
- LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
-+
-+struct bpf_prog_query_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+	__u32 query_flags;
-+	__u32 attach_flags; /* output argument */
-+	__u32 *prog_ids;
-+	__u32 prog_cnt; /* input+output argument */
-+	__u32 *prog_attach_flags;
-+};
-+#define bpf_prog_query_opts__last_field prog_attach_flags
-+
-+LIBBPF_API int bpf_prog_query_opts(int target_fd,
-+				   enum bpf_attach_type type,
-+				   struct bpf_prog_query_opts *opts);
- LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
- 			      __u32 query_flags, __u32 *attach_flags,
- 			      __u32 *prog_ids, __u32 *prog_cnt);
-+
- LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
- LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
- 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 116a2a8ee7c2..03c69cb821b3 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -462,6 +462,7 @@ LIBBPF_0.8.0 {
- 
- LIBBPF_1.0.0 {
- 	global:
-+		bpf_prog_query_opts;
- 		btf__add_enum64;
- 		btf__add_enum64_value;
- 		libbpf_bpf_attach_type_str;
--- 
-2.36.1.476.g0c4daa206d-goog
+You mean from uname() and parsing the release? Yes I suppose we could do
+that, can do as a follow-up.
 
+> 
+> I'm not sure whether memlock is used out there in the distros (and
+> especially for root/bpf_capable), so I'm also not sure whether we
+> really care or not.
+
+Not sure either. For what it's worth, I've never seen complaints so far
+from users about the rlimit being raised (from bpftool or other BPF apps).
