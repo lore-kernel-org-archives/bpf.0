@@ -2,59 +2,59 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BF1CCA47A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07268C43334
 	for <bpf@archiver.kernel.org>; Sat, 11 Jun 2022 11:42:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiFKLml (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 11 Jun 2022 07:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
+        id S230224AbiFKLmk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 11 Jun 2022 07:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiFKLmi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S229740AbiFKLmi (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 11 Jun 2022 07:42:38 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D588D205DB
-        for <bpf@vger.kernel.org>; Sat, 11 Jun 2022 04:42:35 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id h23so1637023ljl.3
-        for <bpf@vger.kernel.org>; Sat, 11 Jun 2022 04:42:35 -0700 (PDT)
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555861CB3A
+        for <bpf@vger.kernel.org>; Sat, 11 Jun 2022 04:42:32 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id s10so1597851ljh.12
+        for <bpf@vger.kernel.org>; Sat, 11 Jun 2022 04:42:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e0gJlAyr6iWp++zpBDPdS2GGhrkA349ug3a4vI2yiaw=;
-        b=Ufy2gtSKSQ8K/T8n1VBzY0ysVJlU9Xctml1rGWN0/S+2ECcDO/54iWS12ZOQyGDPM+
-         C5LTeW43c3uasXiyu4S/uf8YLY7MWR5Nc/E0dfq+sH1uaMfL1+PVVZCzbaRkQzOqQxF6
-         kLNUZAdvGU71ENTh3EjsYtu2/Jy3f+n7r//M+G+cmv3mEi3KeglN6RQzTCcpIpF2MK22
-         kn4uA2CJXHJOEx9MU6+BT3oP+y40RbzGAzOB/NSxB6ozEoFvthKZSqlbmAuGH2Arg+nG
-         z5dqs40CYpCJRCjH1dq9Vwac2/aUw9Mctv8qgjhCfQ+Nd/8k7/0s3B7rf9REmHmbcV8k
-         3Q1Q==
+        bh=SkDuT1KiEcVLZHXMuhgKtcOU/CnyJs5ZUeY38A+sCVM=;
+        b=bRYxU0vrJkQBWk3VuhUWmNK0aaj1Pk5Mp0RRcayPPlFnRKTGfQDSpOZlXdexJeQGMr
+         BUHaFWb99m4a+5ubMs4iAaBKvd0O/MUYJBcUmySTG33ULAKNuKyLc6QDBKp0hC26vPEU
+         Xrhpw/8FaSkV2NAN3UUH59WxEXYUM/jIPLJtv06AJJVv/FpyaW4cNQ2RkHRJxyABd9w/
+         oa4n4bhLid6wE8L2cO8NeyTOwncyAep/sCftnZ4nKO/Mr/KNlPiW9/yVtBoPjOLhq4mF
+         4CsoexQAUfVWcwl7lJEtV9ncHIt+FQsVnvrZt63PkA0ZVdYeDimW9N7U6EXxaO89i7kn
+         adHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e0gJlAyr6iWp++zpBDPdS2GGhrkA349ug3a4vI2yiaw=;
-        b=tJLlSvhqHSziT61bs9ViQlEkwC+xB0UJCwV3EepfuXE9y4YHCzjjJvr4M2FHQrgB6H
-         OngjkqkhUfJmdreslJXRwUyCh5J0M/3tNpzL01hsyaZq+/lvux6cBsUwEpR8dv6ulLTn
-         GJ12L8ozftkPxzoHHdeVAoIzESEb+SdoDqyGNBjQPZqQF7D3KFb2vPMo+IYuJoOtyLMv
-         sJp2RuSv2AXG07snEiUud94bd5rzQicYo19Mz/HoOj/hHkUuF6oE9J/9AJNxRNZPBHBO
-         L2pfwh7x2gEZQ9b5xxJBaqSdsZEKKrg0joBhlh22VzzJY7I4QIIjduU60SyiRAUMr/IW
-         FTPA==
-X-Gm-Message-State: AOAM533fhHIe9AFaO/E/5VP+hQ6rG6tWu8sVFb5fUrKm7OqRZMsBqR1V
-        ApT/DJgsdSgJd9swYutms/27p3O9lgvE5z2E
-X-Google-Smtp-Source: ABdhPJyBZXxZjdUviw92Z7SRRlZhzR5TDyr1oATzaiwSbZ+Vup9E+VVHFGv88xrtu4ew3F4dMmyVVQ==
-X-Received: by 2002:a05:651c:210b:b0:255:8278:b83e with SMTP id a11-20020a05651c210b00b002558278b83emr19848064ljq.217.1654947753968;
-        Sat, 11 Jun 2022 04:42:33 -0700 (PDT)
+        bh=SkDuT1KiEcVLZHXMuhgKtcOU/CnyJs5ZUeY38A+sCVM=;
+        b=GfAXWiC+zrGXMsLlq6g6pt43BdjDxuon3wAIa4/jU8W+V6xBkVX3RP9FrgUJuPUxd3
+         U4mdeQqthFoBTbW+8J8yrVyx8rv8PhiNxqIwbnfD/9LpvhdYtfCkPBYaponruN11Zddu
+         IP2f6Ga2SwMDnXyGv/UnHVwVJBo55pvPpPm3BRslS4RXyTCHjZ4hrpuxHKFg5sp92lBI
+         al/sE3fILx4D3VkgXCK5hAwnpEZ8xbOjjeaPhwZ+nwsVZtnjtf02cnKkQRnSLhtxQWyG
+         bPmVk2fxI30/6kBfd/GxMbsrfjtHPCNkbODeY7JY/KqIEjxTFBQILRouGO5TN0dfFbOl
+         Fl3Q==
+X-Gm-Message-State: AOAM532yUb85jSUQTRrTnPssEukusM+vgxINO7T57GD842UpHrYyg3JN
+        gppHzqQ1Lrf3A/gJbfMDHQO7UWFDvTtz+XwE
+X-Google-Smtp-Source: ABdhPJzHaPvfTjEgHQd4BehlSfbepuf6O+Xjq/sGoxnoTdcRaW13rlH/u188lJCRSDvqdG+qJnMo6Q==
+X-Received: by 2002:a2e:3c12:0:b0:255:7b24:6fe5 with SMTP id j18-20020a2e3c12000000b002557b246fe5mr24375595lja.117.1654947750416;
+        Sat, 11 Jun 2022 04:42:30 -0700 (PDT)
 Received: from localhost.localdomain (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id u18-20020ac25bd2000000b004795d64f37dsm229303lfn.105.2022.06.11.04.42.32
+        by smtp.gmail.com with ESMTPSA id u18-20020ac25bd2000000b004795d64f37dsm229303lfn.105.2022.06.11.04.42.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 04:42:33 -0700 (PDT)
+        Sat, 11 Jun 2022 04:42:29 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
         daniel@iogearbox.net, kernel-team@fb.com, song@kernel.org,
         joannelkoong@gmail.com
 Cc:     eddyz87@gmail.com, Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next v5 5/5] selftests/bpf: BPF test_prog selftests for bpf_loop inlining
-Date:   Sat, 11 Jun 2022 14:40:21 +0300
-Message-Id: <20220611114021.484408-6-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v5 2/5] selftests/bpf: allow BTF specs and func infos in test_verifier tests
+Date:   Sat, 11 Jun 2022 14:40:18 +0300
+Message-Id: <20220611114021.484408-3-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220611114021.484408-1-eddyz87@gmail.com>
 References: <20220611114021.484408-1-eddyz87@gmail.com>
@@ -64,234 +64,241 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Two new test BPF programs for test_prog selftests checking bpf_loop
-behavior. Both are corner cases for bpf_loop inlinig transformation:
- - check that bpf_loop behaves correctly when callback function is not
-   a compile time constant
- - check that local function variables are not affected by allocating
-   additional stack storage for registers spilled by loop inlining
+The BTF and func_info specification for test_verifier tests follows
+the same notation as in prog_tests/btf.c tests. E.g.:
+
+  ...
+  .func_info = { { 0, 6 }, { 8, 7 } },
+  .func_info_cnt = 2,
+  .btf_strings = "\0int\0",
+  .btf_types = {
+    BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
+    BTF_PTR_ENC(1),
+  },
+  ...
+
+The BTF specification is loaded only when specified.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- .../selftests/bpf/prog_tests/bpf_loop.c       |  62 ++++++++++
- tools/testing/selftests/bpf/progs/bpf_loop.c  | 114 ++++++++++++++++++
- 2 files changed, 176 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/btf.c |  1 -
+ tools/testing/selftests/bpf/test_btf.h       |  2 +
+ tools/testing/selftests/bpf/test_verifier.c  | 94 ++++++++++++++++----
+ 3 files changed, 79 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_loop.c b/tools/testing/selftests/bpf/prog_tests/bpf_loop.c
-index 380d7a2072e3..4cd8a25afe68 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_loop.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_loop.c
-@@ -120,6 +120,64 @@ static void check_nested_calls(struct bpf_loop *skel)
- 	bpf_link__destroy(link);
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index edb387163baa..1fd792a92a1c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -34,7 +34,6 @@ static bool always_log;
+ #undef CHECK
+ #define CHECK(condition, format...) _CHECK(condition, "check", duration, format)
  
-+static void check_non_constant_callback(struct bpf_loop *skel)
-+{
-+	struct bpf_link *link =
-+		bpf_program__attach(skel->progs.prog_non_constant_callback);
-+
-+	if (!ASSERT_OK_PTR(link, "link"))
-+		return;
-+
-+	skel->bss->callback_selector = 0x0F;
-+	usleep(1);
-+	ASSERT_EQ(skel->bss->g_output, 0x0F, "g_output #1");
-+
-+	skel->bss->callback_selector = 0xF0;
-+	usleep(1);
-+	ASSERT_EQ(skel->bss->g_output, 0xF0, "g_output #2");
-+
-+	bpf_link__destroy(link);
-+}
-+
-+static void check_stack(struct bpf_loop *skel)
-+{
-+	struct bpf_link *link = bpf_program__attach(skel->progs.stack_check);
-+	const int max_key = 12;
-+	int key;
-+	int map_fd;
-+
-+	if (!ASSERT_OK_PTR(link, "link"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.map1);
-+
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map__fd"))
-+		goto out;
-+
-+	for (key = 1; key <= max_key; ++key) {
-+		int val = key;
-+		int err = bpf_map_update_elem(map_fd, &key, &val, BPF_NOEXIST);
-+
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto out;
-+	}
-+
-+	usleep(1);
-+
-+	for (key = 1; key <= max_key; ++key) {
-+		int val;
-+		int err = bpf_map_lookup_elem(map_fd, &key, &val);
-+
-+		if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+			goto out;
-+		if (!ASSERT_EQ(val, key + 1, "bad value in the map"))
-+			goto out;
-+	}
-+
-+out:
-+	bpf_link__destroy(link);
-+}
-+
- void test_bpf_loop(void)
- {
- 	struct bpf_loop *skel;
-@@ -140,6 +198,10 @@ void test_bpf_loop(void)
- 		check_invalid_flags(skel);
- 	if (test__start_subtest("check_nested_calls"))
- 		check_nested_calls(skel);
-+	if (test__start_subtest("check_non_constant_callback"))
-+		check_non_constant_callback(skel);
-+	if (test__start_subtest("check_stack"))
-+		check_stack(skel);
+-#define BTF_END_RAW 0xdeadbeef
+ #define NAME_TBD 0xdeadb33f
  
- 	bpf_loop__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_loop.c b/tools/testing/selftests/bpf/progs/bpf_loop.c
-index e08565282759..de1fc82d2710 100644
---- a/tools/testing/selftests/bpf/progs/bpf_loop.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_loop.c
-@@ -11,11 +11,19 @@ struct callback_ctx {
- 	int output;
+ #define NAME_NTH(N) (0xfffe0000 | N)
+diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selftests/bpf/test_btf.h
+index 38782bd47fdc..fb4f4714eeb4 100644
+--- a/tools/testing/selftests/bpf/test_btf.h
++++ b/tools/testing/selftests/bpf/test_btf.h
+@@ -4,6 +4,8 @@
+ #ifndef _TEST_BTF_H
+ #define _TEST_BTF_H
+ 
++#define BTF_END_RAW 0xdeadbeef
++
+ #define BTF_INFO_ENC(kind, kind_flag, vlen)			\
+ 	((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN))
+ 
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 1f24eae9e16e..7fe897c66d81 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -59,11 +59,17 @@
+ #define MAX_TEST_RUNS	8
+ #define POINTER_VALUE	0xcafe4all
+ #define TEST_DATA_LEN	64
++#define MAX_FUNC_INFOS	8
++#define MAX_BTF_STRINGS	256
++#define MAX_BTF_TYPES	256
+ 
+ #define INSN_OFF_MASK	((__s16)0xFFFF)
+ #define INSN_IMM_MASK	((__s32)0xFFFFFFFF)
+ #define SKIP_INSNS()	BPF_RAW_INSN(0xde, 0xa, 0xd, 0xbeef, 0xdeadbeef)
+ 
++#define DEFAULT_LIBBPF_LOG_LEVEL	4
++#define VERBOSE_LIBBPF_LOG_LEVEL	1
++
+ #define F_NEEDS_EFFICIENT_UNALIGNED_ACCESS	(1 << 0)
+ #define F_LOAD_WITH_STRICT_ALIGNMENT		(1 << 1)
+ 
+@@ -158,6 +164,14 @@ struct bpf_test {
+ 	};
+ 	enum bpf_attach_type expected_attach_type;
+ 	const char *kfunc;
++	struct bpf_func_info func_info[MAX_FUNC_INFOS];
++	int func_info_cnt;
++	char btf_strings[MAX_BTF_STRINGS];
++	/* A set of BTF types to load when specified,
++	 * use macro definitions from test_btf.h,
++	 * must end with BTF_END_RAW
++	 */
++	__u32 btf_types[MAX_BTF_TYPES];
  };
  
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 32);
-+	__type(key, int);
-+	__type(value, int);
-+} map1 SEC(".maps");
+ /* Note we want this to be 64 bit aligned so that the end of our array is
+@@ -687,34 +701,66 @@ static __u32 btf_raw_types[] = {
+ 	BTF_MEMBER_ENC(71, 13, 128), /* struct prog_test_member __kptr_ref *ptr; */
+ };
+ 
+-static int load_btf(void)
++static char bpf_vlog[UINT_MAX >> 8];
 +
- /* These should be set by the user program */
- u32 nested_callback_nr_loops;
- u32 stop_index = -1;
- u32 nr_loops;
- int pid;
-+int callback_selector;
++static int load_btf_spec(__u32 *types, int types_len,
++			 const char *strings, int strings_len)
+ {
+ 	struct btf_header hdr = {
+ 		.magic = BTF_MAGIC,
+ 		.version = BTF_VERSION,
+ 		.hdr_len = sizeof(struct btf_header),
+-		.type_len = sizeof(btf_raw_types),
+-		.str_off = sizeof(btf_raw_types),
+-		.str_len = sizeof(btf_str_sec),
++		.type_len = types_len,
++		.str_off = types_len,
++		.str_len = strings_len,
+ 	};
+ 	void *ptr, *raw_btf;
+ 	int btf_fd;
++	LIBBPF_OPTS(bpf_btf_load_opts, opts,
++		    .log_buf = bpf_vlog,
++		    .log_size = sizeof(bpf_vlog),
++		    .log_level = (verbose
++				  ? VERBOSE_LIBBPF_LOG_LEVEL
++				  : DEFAULT_LIBBPF_LOG_LEVEL),
++	);
  
- /* Making these global variables so that the userspace program
-  * can verify the output through the skeleton
-@@ -111,3 +119,109 @@ int prog_nested_calls(void *ctx)
+-	ptr = raw_btf = malloc(sizeof(hdr) + sizeof(btf_raw_types) +
+-			       sizeof(btf_str_sec));
++	raw_btf = malloc(sizeof(hdr) + types_len + strings_len);
  
- 	return 0;
++	ptr = raw_btf;
+ 	memcpy(ptr, &hdr, sizeof(hdr));
+ 	ptr += sizeof(hdr);
+-	memcpy(ptr, btf_raw_types, hdr.type_len);
++	memcpy(ptr, types, hdr.type_len);
+ 	ptr += hdr.type_len;
+-	memcpy(ptr, btf_str_sec, hdr.str_len);
++	memcpy(ptr, strings, hdr.str_len);
+ 	ptr += hdr.str_len;
+ 
+-	btf_fd = bpf_btf_load(raw_btf, ptr - raw_btf, NULL);
+-	free(raw_btf);
++	btf_fd = bpf_btf_load(raw_btf, ptr - raw_btf, &opts);
+ 	if (btf_fd < 0)
+-		return -1;
+-	return btf_fd;
++		printf("Failed to load BTF spec: '%s'\n", strerror(errno));
++
++	free(raw_btf);
++
++	return btf_fd < 0 ? -1 : btf_fd;
++}
++
++static int load_btf(void)
++{
++	return load_btf_spec(btf_raw_types, sizeof(btf_raw_types),
++			     btf_str_sec, sizeof(btf_str_sec));
++}
++
++static int load_btf_for_test(struct bpf_test *test)
++{
++	int types_num = 0;
++
++	while (types_num < MAX_BTF_TYPES &&
++	       test->btf_types[types_num] != BTF_END_RAW)
++		++types_num;
++
++	int types_len = types_num * sizeof(test->btf_types[0]);
++
++	return load_btf_spec(test->btf_types, types_len,
++			     test->btf_strings, sizeof(test->btf_strings));
  }
+ 
+ static int create_map_spin_lock(void)
+@@ -793,8 +839,6 @@ static int create_map_kptr(void)
+ 	return fd;
+ }
+ 
+-static char bpf_vlog[UINT_MAX >> 8];
+-
+ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
+ 			  struct bpf_insn *prog, int *map_fds)
+ {
+@@ -1360,7 +1404,7 @@ static bool check_xlated_program(struct bpf_test *test, int fd_prog)
+ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 			   int *passes, int *errors)
+ {
+-	int fd_prog, expected_ret, alignment_prevented_execution;
++	int fd_prog, btf_fd, expected_ret, alignment_prevented_execution;
+ 	int prog_len, prog_type = test->prog_type;
+ 	struct bpf_insn *prog = test->insns;
+ 	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+@@ -1372,8 +1416,10 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	__u32 pflags;
+ 	int i, err;
+ 
++	fd_prog = -1;
+ 	for (i = 0; i < MAX_NR_MAPS; i++)
+ 		map_fds[i] = -1;
++	btf_fd = -1;
+ 
+ 	if (!prog_type)
+ 		prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
+@@ -1406,11 +1452,11 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 
+ 	opts.expected_attach_type = test->expected_attach_type;
+ 	if (verbose)
+-		opts.log_level = 1;
++		opts.log_level = VERBOSE_LIBBPF_LOG_LEVEL;
+ 	else if (expected_ret == VERBOSE_ACCEPT)
+ 		opts.log_level = 2;
+ 	else
+-		opts.log_level = 4;
++		opts.log_level = DEFAULT_LIBBPF_LOG_LEVEL;
+ 	opts.prog_flags = pflags;
+ 
+ 	if (prog_type == BPF_PROG_TYPE_TRACING && test->kfunc) {
+@@ -1428,6 +1474,19 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		opts.attach_btf_id = attach_btf_id;
+ 	}
+ 
++	if (test->btf_types[0] != 0) {
++		btf_fd = load_btf_for_test(test);
++		if (btf_fd < 0)
++			goto fail_log;
++		opts.prog_btf_fd = btf_fd;
++	}
 +
-+static int callback_set_f0(int i, void *ctx)
-+{
-+	g_output = 0xF0;
-+	return 0;
-+}
++	if (test->func_info_cnt != 0) {
++		opts.func_info = test->func_info;
++		opts.func_info_cnt = test->func_info_cnt;
++		opts.func_info_rec_size = sizeof(test->func_info[0]);
++	}
 +
-+static int callback_set_0f(int i, void *ctx)
-+{
-+	g_output = 0x0F;
-+	return 0;
-+}
-+
-+/*
-+ * non-constant callback is a corner case for bpf_loop inline logic
-+ */
-+SEC("fentry/" SYS_PREFIX "sys_nanosleep")
-+int prog_non_constant_callback(void *ctx)
-+{
-+	struct callback_ctx data = {};
-+
-+	if (bpf_get_current_pid_tgid() >> 32 != pid)
-+		return 0;
-+
-+	int (*callback)(int i, void *ctx);
-+
-+	g_output = 0;
-+
-+	if (callback_selector == 0x0F)
-+		callback = callback_set_0f;
-+	else
-+		callback = callback_set_f0;
-+
-+	bpf_loop(1, callback, NULL, 0);
-+
-+	return 0;
-+}
-+
-+static int stack_check_inner_callback(void *ctx)
-+{
-+	return 0;
-+}
-+
-+static int map1_lookup_elem(int key)
-+{
-+	int *val = bpf_map_lookup_elem(&map1, &key);
-+
-+	return val ? *val : -1;
-+}
-+
-+static void map1_update_elem(int key, int val)
-+{
-+	bpf_map_update_elem(&map1, &key, &val, BPF_ANY);
-+}
-+
-+static int stack_check_outer_callback(void *ctx)
-+{
-+	int a = map1_lookup_elem(1);
-+	int b = map1_lookup_elem(2);
-+	int c = map1_lookup_elem(3);
-+	int d = map1_lookup_elem(4);
-+	int e = map1_lookup_elem(5);
-+	int f = map1_lookup_elem(6);
-+
-+	bpf_loop(1, stack_check_inner_callback, NULL, 0);
-+
-+	map1_update_elem(1, a + 1);
-+	map1_update_elem(2, b + 1);
-+	map1_update_elem(3, c + 1);
-+	map1_update_elem(4, d + 1);
-+	map1_update_elem(5, e + 1);
-+	map1_update_elem(6, f + 1);
-+
-+	return 0;
-+}
-+
-+/* Some of the local variables in stack_check and
-+ * stack_check_outer_callback would be allocated on stack by
-+ * compiler. This test should verify that stack content for these
-+ * variables is preserved between calls to bpf_loop (might be an issue
-+ * if loop inlining allocates stack slots incorrectly).
-+ */
-+SEC("fentry/" SYS_PREFIX "sys_nanosleep")
-+int stack_check(void *ctx)
-+{
-+	if (bpf_get_current_pid_tgid() >> 32 != pid)
-+		return 0;
-+
-+	int a = map1_lookup_elem(7);
-+	int b = map1_lookup_elem(8);
-+	int c = map1_lookup_elem(9);
-+	int d = map1_lookup_elem(10);
-+	int e = map1_lookup_elem(11);
-+	int f = map1_lookup_elem(12);
-+
-+	bpf_loop(1, stack_check_outer_callback, NULL, 0);
-+
-+	map1_update_elem(7,  a + 1);
-+	map1_update_elem(8, b + 1);
-+	map1_update_elem(9, c + 1);
-+	map1_update_elem(10, d + 1);
-+	map1_update_elem(11, e + 1);
-+	map1_update_elem(12, f + 1);
-+
-+	return 0;
-+}
+ 	opts.log_buf = bpf_vlog;
+ 	opts.log_size = sizeof(bpf_vlog);
+ 	fd_prog = bpf_prog_load(prog_type, NULL, "GPL", prog, prog_len, &opts);
+@@ -1539,6 +1598,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	if (test->fill_insns)
+ 		free(test->fill_insns);
+ 	close(fd_prog);
++	close(btf_fd);
+ 	for (i = 0; i < MAX_NR_MAPS; i++)
+ 		close(map_fds[i]);
+ 	sched_yield();
 -- 
 2.25.1
 
