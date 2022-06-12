@@ -2,113 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A482C43334
-	for <bpf@archiver.kernel.org>; Sun, 12 Jun 2022 05:20:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FD59C43334
+	for <bpf@archiver.kernel.org>; Sun, 12 Jun 2022 12:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiFLFU3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 12 Jun 2022 01:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
+        id S231336AbiFLMMn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 12 Jun 2022 08:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiFLFU2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 12 Jun 2022 01:20:28 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BFF47056;
-        Sat, 11 Jun 2022 22:20:23 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id z17so2978301pff.7;
-        Sat, 11 Jun 2022 22:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xj6/KX50FekJjTpLTPqTssqKYApqg9fngLCkTaEBqV8=;
-        b=k4Nhl0GsSp6+JAoBrZRfuXI0veblVRqtvhIWSgoXsHmyPmh3Ic2Hp/elgB71bj43AZ
-         tZa1OxcOtWK5C6ixfQ3D+mYJ58HxlSM4/lNPmkGSfhfsOEdeGcxPemx1+zHZu8hN6tRz
-         43zQaatbdYdUUghpbN9H0VvTVWeWt2yL402OJNfq2KXCeDSKLI24QiFTDJSfe8zZ/A6Z
-         64N9yrcd8BKrEYhBbSOCukjSYUKITrvTatOYge7RRvMFgjnBtvSfjfs+iF8vLVL5bkqS
-         TV1pbNp7KlJwEB7Ou1h6Gi346uVFuOpkDM23m2P/xhlBQg+ajSRf3L7xEiGwMH9WdTIv
-         3vUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xj6/KX50FekJjTpLTPqTssqKYApqg9fngLCkTaEBqV8=;
-        b=4JEFRfE0UTNtzkBCWb9M7Yva7rEap2+xZkoOxB1MnaE7IpMO9IGLoaYeMXZDkxN7Bt
-         JFY1SqaFCeS9mhp0TcWQRT/uWdOc/n8cOWe3LLTIgSPEKBM7sFB1IGuyGwHSuAU47XR1
-         gchxmiXFvodLk+FDEtyJEDnj2AySs42yNfWtnrNB4OgieoD68K7mH4Jq0q1bt4isQEnV
-         ZgY+gFaojp5irQvDOEPjE+5PaE21X0NQNQc8fz9UI+vSSywwSNxNGPDRxbwPLt8WCOKr
-         GVfmu3cO23eXLXMGxdpjYOOhCDM0XqVbXujfKL9fXuynwzR6FCSKWlVuV0goEn0RFcoA
-         wMtg==
-X-Gm-Message-State: AOAM531TmMLrvOg8Bq9BR2JHAUcsCwI19k1aKWj/XD7S8tZ8lEAU8CZc
-        rBRINAHFgM4sBwLEE5UrlH08tvnPyfIVQQ==
-X-Google-Smtp-Source: ABdhPJxJAYfx23k+RSV7iSzLgCe77PjpW4Of05oOjFh51dL6IK3ZQLZS71rBMDpG1a1ieluLnXfuGw==
-X-Received: by 2002:a63:7749:0:b0:404:1c03:9244 with SMTP id s70-20020a637749000000b004041c039244mr9027890pgc.145.1655011222465;
-        Sat, 11 Jun 2022 22:20:22 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.240])
-        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b0016141e6c5acsm2330471plb.296.2022.06.11.22.20.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jun 2022 22:20:22 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     mhiramat@kernel.org, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] lib/error-inject: Convert to DEFINE_SEQ_ATTRIBUTE
-Date:   Sun, 12 Jun 2022 13:20:15 +0800
-Message-Id: <20220612052015.23283-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S236530AbiFLMMm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 12 Jun 2022 08:12:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C35ACE3D;
+        Sun, 12 Jun 2022 05:12:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C541FB80B83;
+        Sun, 12 Jun 2022 12:12:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D1A0C34115;
+        Sun, 12 Jun 2022 12:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655035957;
+        bh=tJ6ormyXu3bEZSfGwqsCn6ejLsjtXmfFrOIK6saj4Hs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mmNRwDkNf3uFe+JZOrNGzK68RSUQJl+SxuTxli03bUp/V76M57g4ULz+lrHOfVovu
+         VYzFUm00V6lRRT1WpL+a8GkONo5C+n/Ziv8EP73dy9qkOpQZYHKXRrhoNByd1tn52V
+         YNJoZmoCD6Xpv+1VM0Hgkv02fs/I/7nBS9zXv0WC+gEgj0WifOdCccgSL5ABq0QMQ5
+         Kl7VsTUnhZP5U6Fem3NNV/FNxjUh0YHXbp++LWxbl9+XOPmlBSwKlJ3/6LAHjn5DJR
+         v667gjz8R5MJ7iUkcYoCmxwtKOXem6jylsLEBlEGRnHByZYcg4fjVezQmVTDM4QfPM
+         a2zoiyfITP1RQ==
+Date:   Sun, 12 Jun 2022 21:12:32 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Dmitry Dolgov <9erthalion6@gmail.com>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Song Liu <songliubraving@fb.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH] perf/kprobe: maxactive for fd-based kprobe
+Message-Id: <20220612211232.3b82015bfabd194893cf0418@kernel.org>
+In-Reply-To: <CAADnVQLLq+=gc1r+5pxrf3=VL29yZG=_9z6Th-rzcpC+xxsoyA@mail.gmail.com>
+References: <20220609192936.23985-1-9erthalion6@gmail.com>
+        <20220609193028.zhxpxscawnd3sep6@erthalion.local>
+        <CAADnVQLLq+=gc1r+5pxrf3=VL29yZG=_9z6Th-rzcpC+xxsoyA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use DEFINE_SEQ_ATTRIBUTE helper macro to simplify the code.
+On Sat, 11 Jun 2022 11:28:36 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- lib/error-inject.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+> On Thu, Jun 9, 2022 at 1:14 PM Dmitry Dolgov <9erthalion6@gmail.com> wrote:
+> >
+> > > On Thu, Jun 09, 2022 at 09:29:36PM +0200, Dmitrii Dolgov wrote:
+> > >
+> > > Enable specifying maxactive for fd based kretprobe. This will be useful
+> > > for tracing tools like bcc and bpftrace (see for example discussion [1]).
+> > > Use highest 12 bit (bit 52-63) to allow maximal maxactive of 4095.
+> > >
+> > > The original patch [2] seems to be fallen through the cracks and wasn't
+> > > applied. I've merely rebased the work done by Song Liu and verififed it
+> > > still works.
+> > >
+> > > [1]: https://github.com/iovisor/bpftrace/issues/835
+> > > [2]: https://lore.kernel.org/all/20191007223111.1142454-1-songliubraving@fb.com/
+> >
+> > I've recently stumbled upon this seemingly lost topic, and wanted to raise it
+> > again. Please let me know if there is a more appropriate way to do so.
+> 
+> With kretprobe using rethook the maxactive limit is no longer used.
+> So we probably don't need this patch.
+> 
+> Masami, wdyt?
 
-diff --git a/lib/error-inject.c b/lib/error-inject.c
-index 2ff5ef689d72..4a4f1278c419 100644
---- a/lib/error-inject.c
-+++ b/lib/error-inject.c
-@@ -197,24 +197,14 @@ static int ei_seq_show(struct seq_file *m, void *v)
- 	return 0;
- }
- 
--static const struct seq_operations ei_seq_ops = {
-+static const struct seq_operations ei_sops = {
- 	.start = ei_seq_start,
- 	.next  = ei_seq_next,
- 	.stop  = ei_seq_stop,
- 	.show  = ei_seq_show,
- };
- 
--static int ei_open(struct inode *inode, struct file *filp)
--{
--	return seq_open(filp, &ei_seq_ops);
--}
--
--static const struct file_operations debugfs_ei_ops = {
--	.open           = ei_open,
--	.read           = seq_read,
--	.llseek         = seq_lseek,
--	.release        = seq_release,
--};
-+DEFINE_SEQ_ATTRIBUTE(ei);
- 
- static int __init ei_debugfs_init(void)
- {
-@@ -224,7 +214,7 @@ static int __init ei_debugfs_init(void)
- 	if (!dir)
- 		return -ENOMEM;
- 
--	file = debugfs_create_file("list", 0444, dir, NULL, &debugfs_ei_ops);
-+	file = debugfs_create_file("list", 0444, dir, NULL, &ei_fops);
- 	if (!file) {
- 		debugfs_remove(dir);
- 		return -ENOMEM;
+No, rethook is just a library version of kretprobe return hook,
+so the maxactive is still alive. I would like to make the rethook
+to use(share with) function graph's per-task shadow stack. When
+that is done, the maxactive will be removed.
+
+Thank you,
+
+
 -- 
-2.20.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
