@@ -2,89 +2,89 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92182C433EF
-	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 17:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD4C3C43334
+	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 18:30:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241543AbiFMRoN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jun 2022 13:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S245578AbiFMSaE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jun 2022 14:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243389AbiFMRns (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:43:48 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63F1632A3
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 06:16:41 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id 15so5731644pfy.3
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 06:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F8E8EW69SjJfLjRPxyFMXJUarXVVc6zvpFhOJ1im6tE=;
-        b=ehpF0GC/kA/vqjTRYiELruBjwg4Z/4IdizdA3YJ16HOLokC7Vt62K578JRlZYBVjDc
-         fVohQHqjIjiEARBJVaLtRWI/rA7rll0MduKdz2IPaWjV72WyBR7R3ft2jJ/FPLmRD8cu
-         6V3WVrGbjseErdGGxV/AEDBemYRre2H+UZ7LjqPuCjHhsncPFBMsjCCf4n1qOW64bxj6
-         rVI0BxXbmn4ZCrPcbl7y1kGRcZC5srG+RcygRB11mrbiRwijDahwXCXcf6eFR2YVLELC
-         JbbVGisO/Y9Opi/zhNXRnEkx8DpuTFC/fTNoM9J3TrF4mwBi6KYP0f77AsqPFrVn10/K
-         flWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F8E8EW69SjJfLjRPxyFMXJUarXVVc6zvpFhOJ1im6tE=;
-        b=6v6KjubWrB89v8FT728P/eP8YKt/8dqPgpttLtSKCwyRl3FxQwVxdeR5hfJ1nAtI5D
-         ggh+vPoKtorvw3dTxARoae7qne9gvN9OvkbGQrdYNbJKJz1CV1v+Y+rhldwMkyaskFCN
-         8E5psw6g98vMwKZx1n4hw7DUWqzy46dyDJ2a/xJ9sg6FqCXeQuPadPiffIDSCCGzA/FT
-         VK9tOvwtdtyZpPL5Ch/AL4PL+C75Kb3k5RLyBf5sDQpmRoLSiitkm6Lprk+I8c+AN5+z
-         h6sj/sHKhpVf+J+SdbvzjiybPWWAgkFEzChBeQWHKi49+o7+vBaMNqaB5u5GjPyoWPC+
-         w0/Q==
-X-Gm-Message-State: AOAM530OKa9b2mqq8dge515KGmgq7LQ+j3Xef8yhxPwDXj9FvFkrkgZf
-        Qj2wkGJA/W0OQ+W6INwLrA==
-X-Google-Smtp-Source: ABdhPJyHUxW9xYEC8N0h9QlFrid1OcatauSstYHA0RYMEjK0Kcw2DuJtLrWv+eru/EteY5c3eTOtug==
-X-Received: by 2002:a63:4f05:0:b0:405:5463:2ea8 with SMTP id d5-20020a634f05000000b0040554632ea8mr6246778pgb.94.1655126200920;
-        Mon, 13 Jun 2022 06:16:40 -0700 (PDT)
-Received: from localhost ([163.125.33.113])
-        by smtp.gmail.com with ESMTPSA id b3-20020a1709027e0300b001635a8f9dfdsm5088824plm.26.2022.06.13.06.16.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:16:40 -0700 (PDT)
-From:   john <jwnhy0@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com
-Cc:     bpf@vger.kernel.org, Hongyi Lu <jwnhy0@gmail.com>
-Subject: [PATCH] bpf: fix spelling in bpf_verifier.h
-Date:   Mon, 13 Jun 2022 21:16:33 +0000
-Message-Id: <20220613211633.58647-1-jwnhy0@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S237959AbiFMS3x (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jun 2022 14:29:53 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046C7B2E8A
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 07:44:51 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25CFxXgj028010
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 07:44:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=Z2DwcMRvAwGR0sLzNCOqbpUyDze37RamK+RcELpjIs8=;
+ b=XQYbGWXiLoMW/2aZVWta8wTQZl2MS9G42iKmKe3rXs4o7arVNn0zlgvFn7qsT41Ws+EL
+ iU3Jm/YqJQo4agNBlaNhe/MBGqUAHS36mDcpGbtpW8imQKlWg56Qw7QTPGqMrexehfms
+ teC4RrWwuZ4ky9H2ZBnuos5WdX4W/bQxp6o= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gmpcmh3tj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 07:44:51 -0700
+Received: from twshared14577.08.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 13 Jun 2022 07:44:49 -0700
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+        id 44310B8DCBB8; Mon, 13 Jun 2022 07:44:40 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        <dwarves@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH dwarves 0/2] btf: support BTF_KIND_ENUM64
+Date:   Mon, 13 Jun 2022 07:44:40 -0700
+Message-ID: <20220613144440.4107327-1-yhs@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: UolTfxeD3yjOFzMZcyYxCmP_dudkVe_n
+X-Proofpoint-GUID: UolTfxeD3yjOFzMZcyYxCmP_dudkVe_n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-13_06,2022-06-13_01,2022-02-23_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Hongyi Lu <jwnhy0@gmail.com>
+Add support for enum64. For 64-bit enumerator value,
+previously, the value is truncated into 32bit, e.g.,
+for the following enum in linux uapi bpf.h,
+  enum {
+        BPF_F_INDEX_MASK                =3D 0xffffffffULL,
+        BPF_F_CURRENT_CPU               =3D BPF_F_INDEX_MASK,
+  /* BPF_FUNC_perf_event_output for sk_buff input context. */
+        BPF_F_CTXLEN_MASK               =3D (0xfffffULL << 32),
+  };
 
-6689139af (HEAD -> master) fix spelling in bpf_verifier.h
-Spelling is no big deal, but it is still an improvement.
-This is my first patch as a newbie. Hope I didn't cause much trouble.
+BPF_F_CTXLEN_MASK will be encoded with 0 with BTF_KIND_ENUM
+after pahole dwarf-to-btf conversion.
+With this patch, the BPF_F_CTXLEN_MASK will be encoded properly
+with BTF_KIND_ENUM64.
 
-Signed-off-by: Hongyi Lu <jwnhy0@gmail.com>
----
- include/linux/bpf_verifier.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch is on top of tmp.master since tmp.master has not
+been sync'ed with master branch yet.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index e8439f6cb..3930c963f 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -299,7 +299,7 @@ struct bpf_verifier_state {
- 	 * If is_state_visited() sees a state with branches > 0 it means
- 	 * there is a loop. If such state is exactly equal to the current state
- 	 * it's an infinite loop. Note states_equal() checks for states
--	 * equvalency, so two states being 'states_equal' does not mean
-+	 * equivalency, so two states being 'states_equal' does not mean
- 	 * infinite loop. The exact comparison is provided by
- 	 * states_maybe_looping() function. It's a stronger pre-check and
- 	 * much faster than states_equal().
--- 
-2.35.1
+Yonghong Song (2):
+  libbpf: Sync with latest libbpf repo
+  btf: Support BTF_KIND_ENUM64
+
+ btf_encoder.c     | 38 +++++++++++++++++++++++++++-----------
+ dwarf_loader.c    | 12 ++++++++++++
+ dwarves.h         |  3 ++-
+ dwarves_fprintf.c |  6 +++++-
+ lib/bpf           |  2 +-
+ 5 files changed, 47 insertions(+), 14 deletions(-)
+
+--=20
+2.30.2
 
