@@ -2,191 +2,393 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3A8DCCA47D
-	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 21:12:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A908C43334
+	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 21:12:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbiFMVMP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jun 2022 17:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
+        id S243815AbiFMVMQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jun 2022 17:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352003AbiFMVME (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1351945AbiFMVME (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 13 Jun 2022 17:12:04 -0400
 Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EE330573
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 13:50:30 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id c4so10724335lfj.12
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 13:50:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429323466B
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 13:50:35 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id a15so10728331lfb.9
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 13:50:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LjHDs/59Ta6qkMSEljslYGTubvFtzDi0GEJrq/rIkrI=;
-        b=XH+0ZsreGPQQV1c0qSh7t7WlCXokEx1JQqnHqJFQju22RMtC47Vn7NpAidlunUC4oM
-         dAMwh0F2kjwzXt4NaM1CjgPkQilAKXagoluzBFj3XKBRJmevXMeBWrFII+HRGEE0oZPA
-         hnLIUwgxm6E2rGEhGJOtvFZKWIhIMhenwfFk9rAkPRYG2LZSxVhw4WU4IMPOis/RPqp0
-         Mir3CKIO6mMrj4oCMP7/fzrgtxFXFY1ifnnOgRhbzSDwNMJZorT5YxOeO6DWl+6qIZOp
-         LCtooc+tGf50yElBeO05WzWurYIirdhQ/rJx9FPG04wGioDuuqzSnQu055srUDxo7MkG
-         vWTA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=J7KMDzrqZmpplZBJYsvVeoaxkOqVXuUdSP9E1GbByUY=;
+        b=GlpPl66fSJZ3DtH8dclE0Y0Mv7B1YrY0Ll2W8Ghg5zS7ylZQ+hdj0kZaXNYmiORGNM
+         +g5od50zN/jiZ8PgyBN1bjGHN/VZaffQhNlqg6BNd+hhVnKJdmcpPoO9/SR84aNltRiL
+         inxStrOEwlpXkfDDT3Fqbq6cVv0qjOSl0qDN+ys6kKLUbJCYNEiAvQ0tVjxDGx9KmOPn
+         3hgo+I4PPdg7WpVoYVrwhtHyO/6Xe7a+iaXAJec/uAIJN1EKkxZ9dooM+RXEodZKcz/d
+         Py2w5GcLcN9HaD/ZYWzS/hf5ivLRwlo02TyBud1tiHUs+9aBbMEwTH0CJEitc/78odUQ
+         iQAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LjHDs/59Ta6qkMSEljslYGTubvFtzDi0GEJrq/rIkrI=;
-        b=VvcOueHIDZ1etvWYJgs8LAgMk1h9LyecEBNO8Qh7g6VJEM4huDH1S/nK5uED7hNxw2
-         An5Nj85Opu+WWSLxyjr3t9sX69lql8ygS6FXyEt8KimS1R8KmHNAqBEPHhi9n8CnpaOf
-         2H+pC67iUsnwHErJzYtMJepMbf0qQ4e5lQZZwDW2o6nXpjAIjpXPJRyThtSovm4c2cy7
-         fdBKrjuKRO5fqRqFCI2tWmtc4//AdihoNYeo+QfZBP0GImdEERRel5tZCdjURFuBlyRx
-         SwRgLJhBUOPsMe4j/DHzXCavpwjatNEdfBMddToNtoHCb7fxRXqG/i4/FnpoqqKtZbBY
-         /TgA==
-X-Gm-Message-State: AOAM532seZoQE7MgqEGKKIhI0gWQg/K7EQyAcuAorwBUBhUNzMmFGQua
-        ghSO43i/eXyRVR3Gh8af2+7Xx1levx+lpw==
-X-Google-Smtp-Source: AGRyM1thPLkZaVxI7wi+9TMto+vL6JOY43HAGS2MWemM7r/H6fX7VUuKX3/TV8gyEVkAfj2FBJLJCQ==
-X-Received: by 2002:a05:6512:3c84:b0:478:ee3b:1cc4 with SMTP id h4-20020a0565123c8400b00478ee3b1cc4mr1000948lfv.179.1655153428844;
-        Mon, 13 Jun 2022 13:50:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=J7KMDzrqZmpplZBJYsvVeoaxkOqVXuUdSP9E1GbByUY=;
+        b=B0QGTXfz9RQfNGXuB8Hmi1qVq+skeu/tZKWCvoCR+/OEzU+4kmvsOmb7SzbUhPW2hI
+         PSQi0YhYKfQYR3iDnpuihowfZ00n/2oOOJTEr3RfLWdxagHagn8f7TGURkdL6vJGXHF0
+         Z4KDEXhKdh9KqylxhzkFr4euVQF4vJo1UpVzuEqkcl4i1cLC1EgE//MrNGGUmiBL8lkU
+         rf37louu3Z/wPjGp/gsYWRbSlil+59Uvx87VjZVnj91qejj3GSwXcFvwc1BLmCD6Eo7g
+         ngS6GwPtnM+3zel6DEMolJcgagZEr+jf622hz6bxbfWpJfv2aMn4gxl5S+56A44y0QVZ
+         Y+MA==
+X-Gm-Message-State: AJIora+XJDl15NQIMbwNFApREi9SXs1WG2f0Dt6BR2+OLrAZHBM+anqG
+        I0EC1otbRr2Fzp8FJypuLDr3jcQFOYABGA==
+X-Google-Smtp-Source: AGRyM1swrKkZqDohdxvhdSazwEbCjkdDOi3lyefHxzINtNjPaD7+YrQSd/uZIOQWEu+odyD4VcodPQ==
+X-Received: by 2002:a05:6512:3b07:b0:479:1535:b6e9 with SMTP id f7-20020a0565123b0700b004791535b6e9mr997659lfv.494.1655153433197;
+        Mon, 13 Jun 2022 13:50:33 -0700 (PDT)
 Received: from localhost.localdomain (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id f2-20020a056512360200b004786eb19049sm1114763lfs.24.2022.06.13.13.50.26
+        by smtp.gmail.com with ESMTPSA id f2-20020a056512360200b004786eb19049sm1114763lfs.24.2022.06.13.13.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 13:50:27 -0700 (PDT)
+        Mon, 13 Jun 2022 13:50:32 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
         daniel@iogearbox.net, kernel-team@fb.com, song@kernel.org,
         joannelkoong@gmail.com
 Cc:     eddyz87@gmail.com
-Subject: [PATCH bpf-next v7 0/5] bpf_loop inlining
-Date:   Mon, 13 Jun 2022 23:50:03 +0300
-Message-Id: <20220613205008.212724-1-eddyz87@gmail.com>
+Subject: [PATCH bpf-next v7 3/5] bpf: Inline calls to bpf_loop when callback is known
+Date:   Mon, 13 Jun 2022 23:50:06 +0300
+Message-Id: <20220613205008.212724-4-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220613205008.212724-1-eddyz87@gmail.com>
+References: <20220613205008.212724-1-eddyz87@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Everyone,
-
-This is the next iteration of the patch. It includes changes suggested
-by Song, Joanne and Alexei. Please find updated intro message and
-change log below.
-
-This patch implements inlining of calls to bpf_loop helper function
-when bpf_loop's callback is statically known. E.g. the rewrite does
-the following transformation during BPF program processing:
+Calls to `bpf_loop` are replaced with direct loops to avoid
+indirection. E.g. the following:
 
   bpf_loop(10, foo, NULL, 0);
 
- ->
+Is replaced by equivalent of the following:
 
   for (int i = 0; i < 10; ++i)
     foo(i, NULL);
 
-The transformation leads to measurable latency change for simple
-loops. Measurements using `benchs/run_bench_bpf_loop.sh` inside QEMU /
-KVM on i7-4710HQ CPU show a drop in latency from 14 ns/op to 2 ns/op.
+This transformation could be applied when:
+- callback is known and does not change during program execution;
+- flags passed to `bpf_loop` are always zero.
 
-The change is split in five parts:
+Inlining logic works as follows:
 
-* Update to test_verifier.c to specify expected and unexpected
-  instruction sequences. This allows to check BPF program rewrites
-  applied by e.g. do_mix_fixups function.
+- During execution simulation function `update_loop_inline_state`
+  tracks the following information for each `bpf_loop` call
+  instruction:
+  - is callback known and constant?
+  - are flags constant and zero?
+- Function `optimize_bpf_loop` increases stack depth for functions
+  where `bpf_loop` calls can be inlined and invokes `inline_bpf_loop`
+  to apply the inlining. The additional stack space is used to spill
+  registers R6, R7 and R8. These registers are used as loop counter,
+  loop maximal bound and callback context parameter;
 
-* Update to test_verifier.c to specify BTF function infos and types
-  per test case. This is necessary for tests that load sub-program
-  addresses to a variable because of the checks applied by
-  check_ld_imm function.
+Measurements using `benchs/run_bench_bpf_loop.sh` inside QEMU / KVM on
+i7-4710HQ CPU show a drop in latency from 14 ns/op to 2 ns/op.
 
-* The update to verifier.c that tracks state of the parameters for
-  each bpf_loop call in a program and decides whether it could be
-  replaced by a loop.
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ include/linux/bpf.h          |   3 +
+ include/linux/bpf_verifier.h |  12 +++
+ kernel/bpf/bpf_iter.c        |   9 +-
+ kernel/bpf/verifier.c        | 175 ++++++++++++++++++++++++++++++++++-
+ 4 files changed, 190 insertions(+), 9 deletions(-)
 
-* A set of test cases for `test_verifier` that use capabilities added
-  by the first two patches to verify instructions produced by inlining
-  logic.
-
-* Two test cases for `test_prog` to check that possible corner cases
-  behave as expected.
-
-Additional details are available in commit messages for each patch.
-
-Changes since v6:
- - Return value of the `optimize_bpf_loop` function is no longer
-   ignored. This is necessary to properly propagate -ENOMEM error.
-
-Changes since v5:
- - Added function `loop_flag_is_zero` to skip a few checks in
-   `update_loop_inline_state` when loop instruction is not fit for
-   inline.
-
-Changes since v4:
- - Added missing `static` modifier for `update_loop_inline_state` and
-   `inline_bpf_loop` functions.
- - `update_loop_inline_state` updated for better readability.
- - Fields `initialized` and `fit_for_inline` of `struct
-   bpf_loop_inline_state` are changed back from `bool` to bitfields.
- - Acks from Song Liu added to comments for patches 1/5, 2/5, 4/5,
-   5/5.
-
-Changes since v3:
- - Function `adjust_stack_depth_for_loop_inlining` is replaced by
-   function `optimize_bpf_loop`. Function `optimize_bpf_loop` is
-   responsible for both stack depth adjustment and call instruction
-   replacement.
- - Changes in `do_misc_fixups` are reverted.
- - Changes in `adjust_subprog_starts_after_remove` are reverted and
-   function `adjust_loop_inline_subprogno` is removed. This is
-   possible because call to `optimize_bpf_loop` is placed before the
-   dead code removal in `opt_remove_dead_code` (in contrast to the
-   position of `do_misc_fixups` where inlining was done in v3).
- - Field `bpf_insn_aux_data.loop_inline_state` is now a part of
-   anonymous union at the start of the `bpf_insn_aux_data`.
- - Data structure `bpf_loop_inline_state` is simplified to use single
-   flag field `fit_for_inline` instead of separate fields
-   `flags_is_zero` & `callback_is_constant`.
- - Macro definition `BPF_MAX_LOOPS` is moved from
-   `include/linux/bpf_verifier.h` to `include/linux/bpf.h` to avoid
-   include of `include/linux/bpf_verifier.h` in `bpf_iter.c`.
- - `inline_bpf_loop` changed back to use array initialization and hard
-   coded offsets as in v2.
- - Style / formatting updates.
-
-Changes since v2:
- - fix for `stack_check` test case in `test_progs-no_alu32`, all tests
-   are passing now;
- - v2 3/3 patch is split in three parts:
-   - kernel changes
-   - test_verifier changes
-   - test_prog changes
- - updated `inline_bpf_loop` in `verifier.c` to calculate each offset
-   used in instructions to avoid "magic" numbers;
- - removed newline handling logic in `fail_log` branch of
-   `do_single_test` in `test_verifier.c` to simplify the patch set;
- - styling fixes suggested in review for v2 of this patch set.
-
-Changes since v1:
- - allow to use SKIP_INSNS in instruction pattern specification in
-   test_verifier tests;
- - fix for a bug in spill offset assignement for loop vars when
-   bpf_loop is located in a non-main function.
-
-Eduard Zingerman (5):
-  selftests/bpf: specify expected instructions in test_verifier tests
-  selftests/bpf: allow BTF specs and func infos in test_verifier tests
-  bpf: Inline calls to bpf_loop when callback is known
-  selftests/bpf: BPF test_verifier selftests for bpf_loop inlining
-  selftests/bpf: BPF test_prog selftests for bpf_loop inlining
-
- include/linux/bpf.h                           |   3 +
- include/linux/bpf_verifier.h                  |  12 +
- kernel/bpf/bpf_iter.c                         |   9 +-
- kernel/bpf/verifier.c                         | 175 +++++++++-
- .../selftests/bpf/prog_tests/bpf_loop.c       |  62 ++++
- tools/testing/selftests/bpf/prog_tests/btf.c  |   1 -
- tools/testing/selftests/bpf/progs/bpf_loop.c  | 114 ++++++
- tools/testing/selftests/bpf/test_btf.h        |   2 +
- tools/testing/selftests/bpf/test_verifier.c   | 328 +++++++++++++++++-
- .../selftests/bpf/verifier/bpf_loop_inline.c  | 244 +++++++++++++
- 10 files changed, 923 insertions(+), 27 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/verifier/bpf_loop_inline.c
-
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 8e6092d0ea95..3c75ede138b5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1236,6 +1236,9 @@ struct bpf_array {
+ #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
+ #define MAX_TAIL_CALL_CNT 33
+ 
++/* Maximum number of loops for bpf_loop */
++#define BPF_MAX_LOOPS	BIT(23)
++
+ #define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
+ 				 BPF_F_RDONLY_PROG |	\
+ 				 BPF_F_WRONLY |		\
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index e8439f6cbe57..5cf152b0a53e 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -344,6 +344,14 @@ struct bpf_verifier_state_list {
+ 	int miss_cnt, hit_cnt;
+ };
+ 
++struct bpf_loop_inline_state {
++	int initialized:1; /* set to true upon first entry */
++	int fit_for_inline:1; /* true if callback function is the same
++			       * at each call and flags are always zero
++			       */
++	u32 callback_subprogno; /* valid when fit_for_inline is true */
++};
++
+ /* Possible states for alu_state member. */
+ #define BPF_ALU_SANITIZE_SRC		(1U << 0)
+ #define BPF_ALU_SANITIZE_DST		(1U << 1)
+@@ -373,6 +381,10 @@ struct bpf_insn_aux_data {
+ 				u32 mem_size;	/* mem_size for non-struct typed var */
+ 			};
+ 		} btf_var;
++		/* if instruction is a call to bpf_loop this field tracks
++		 * the state of the relevant registers to make decision about inlining
++		 */
++		struct bpf_loop_inline_state loop_inline_state;
+ 	};
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index d5d96ceca105..7e8fd49406f6 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -723,9 +723,6 @@ const struct bpf_func_proto bpf_for_each_map_elem_proto = {
+ 	.arg4_type	= ARG_ANYTHING,
+ };
+ 
+-/* maximum number of loops */
+-#define MAX_LOOPS	BIT(23)
+-
+ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+ 	   u64, flags)
+ {
+@@ -733,9 +730,13 @@ BPF_CALL_4(bpf_loop, u32, nr_loops, void *, callback_fn, void *, callback_ctx,
+ 	u64 ret;
+ 	u32 i;
+ 
++	/* Note: these safety checks are also verified when bpf_loop
++	 * is inlined, be careful to modify this code in sync. See
++	 * function verifier.c:inline_bpf_loop.
++	 */
+ 	if (flags)
+ 		return -EINVAL;
+-	if (nr_loops > MAX_LOOPS)
++	if (nr_loops > BPF_MAX_LOOPS)
+ 		return -E2BIG;
+ 
+ 	for (i = 0; i < nr_loops; i++) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2d2872682278..db854c09b603 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7103,6 +7103,38 @@ static int check_get_func_ip(struct bpf_verifier_env *env)
+ 	return -ENOTSUPP;
+ }
+ 
++static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
++{
++	return &env->insn_aux_data[env->insn_idx];
++}
++
++static bool loop_flag_is_zero(struct bpf_verifier_env *env)
++{
++	struct bpf_reg_state *regs = cur_regs(env);
++	struct bpf_reg_state *reg = &regs[BPF_REG_4];
++
++	return register_is_const(reg) && reg->var_off.value == 0;
++}
++
++static void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno)
++{
++	struct bpf_loop_inline_state *state = &cur_aux(env)->loop_inline_state;
++
++	if (!state->initialized) {
++		state->initialized = 1;
++		state->fit_for_inline = loop_flag_is_zero(env);
++		state->callback_subprogno = subprogno;
++		return;
++	}
++
++	if (!state->fit_for_inline)
++		return;
++
++	state->fit_for_inline =
++		loop_flag_is_zero(env) &&
++		state->callback_subprogno == subprogno;
++}
++
+ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			     int *insn_idx_p)
+ {
+@@ -7255,6 +7287,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		err = check_bpf_snprintf_call(env, regs);
+ 		break;
+ 	case BPF_FUNC_loop:
++		update_loop_inline_state(env, meta.subprogno);
+ 		err = __check_func_call(env, insn, insn_idx_p, meta.subprogno,
+ 					set_loop_callback_state);
+ 		break;
+@@ -7661,11 +7694,6 @@ static bool check_reg_sane_offset(struct bpf_verifier_env *env,
+ 	return true;
+ }
+ 
+-static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env)
+-{
+-	return &env->insn_aux_data[env->insn_idx];
+-}
+-
+ enum {
+ 	REASON_BOUNDS	= -1,
+ 	REASON_TYPE	= -2,
+@@ -14294,6 +14322,140 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
++static struct bpf_prog *inline_bpf_loop(struct bpf_verifier_env *env,
++					int position,
++					s32 stack_base,
++					u32 callback_subprogno,
++					u32 *cnt)
++{
++	s32 r6_offset = stack_base + 0 * BPF_REG_SIZE;
++	s32 r7_offset = stack_base + 1 * BPF_REG_SIZE;
++	s32 r8_offset = stack_base + 2 * BPF_REG_SIZE;
++	int reg_loop_max = BPF_REG_6;
++	int reg_loop_cnt = BPF_REG_7;
++	int reg_loop_ctx = BPF_REG_8;
++
++	struct bpf_prog *new_prog;
++	u32 callback_start;
++	u32 call_insn_offset;
++	s32 callback_offset;
++
++	/* This represents an inlined version of bpf_iter.c:bpf_loop,
++	 * be careful to modify this code in sync.
++	 */
++	struct bpf_insn insn_buf[] = {
++		/* Return error and jump to the end of the patch if
++		 * expected number of iterations is too big.
++		 */
++		BPF_JMP_IMM(BPF_JLE, BPF_REG_1, BPF_MAX_LOOPS, 2),
++		BPF_MOV32_IMM(BPF_REG_0, -E2BIG),
++		BPF_JMP_IMM(BPF_JA, 0, 0, 16),
++		/* spill R6, R7, R8 to use these as loop vars */
++		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, r6_offset),
++		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_7, r7_offset),
++		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_8, r8_offset),
++		/* initialize loop vars */
++		BPF_MOV64_REG(reg_loop_max, BPF_REG_1),
++		BPF_MOV32_IMM(reg_loop_cnt, 0),
++		BPF_MOV64_REG(reg_loop_ctx, BPF_REG_3),
++		/* loop header,
++		 * if reg_loop_cnt >= reg_loop_max skip the loop body
++		 */
++		BPF_JMP_REG(BPF_JGE, reg_loop_cnt, reg_loop_max, 5),
++		/* callback call,
++		 * correct callback offset would be set after patching
++		 */
++		BPF_MOV64_REG(BPF_REG_1, reg_loop_cnt),
++		BPF_MOV64_REG(BPF_REG_2, reg_loop_ctx),
++		BPF_CALL_REL(0),
++		/* increment loop counter */
++		BPF_ALU64_IMM(BPF_ADD, reg_loop_cnt, 1),
++		/* jump to loop header if callback returned 0 */
++		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, -6),
++		/* return value of bpf_loop,
++		 * set R0 to the number of iterations
++		 */
++		BPF_MOV64_REG(BPF_REG_0, reg_loop_cnt),
++		/* restore original values of R6, R7, R8 */
++		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_10, r6_offset),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, r7_offset),
++		BPF_LDX_MEM(BPF_DW, BPF_REG_8, BPF_REG_10, r8_offset),
++	};
++
++	*cnt = ARRAY_SIZE(insn_buf);
++	new_prog = bpf_patch_insn_data(env, position, insn_buf, *cnt);
++	if (!new_prog)
++		return new_prog;
++
++	/* callback start is known only after patching */
++	callback_start = env->subprog_info[callback_subprogno].start;
++	/* Note: insn_buf[12] is an offset of BPF_CALL_REL instruction */
++	call_insn_offset = position + 12;
++	callback_offset = callback_start - call_insn_offset - 1;
++	env->prog->insnsi[call_insn_offset].imm = callback_offset;
++
++	return new_prog;
++}
++
++static bool is_bpf_loop_call(struct bpf_insn *insn)
++{
++	return insn->code == (BPF_JMP | BPF_CALL) &&
++		insn->src_reg == 0 &&
++		insn->imm == BPF_FUNC_loop;
++}
++
++/* For all sub-programs in the program (including main) check
++ * insn_aux_data to see if there are bpf_loop calls that require
++ * inlining. If such calls are found the calls are replaced with a
++ * sequence of instructions produced by `inline_bpf_loop` function and
++ * subprog stack_depth is increased by the size of 3 registers.
++ * This stack space is used to spill values of the R6, R7, R8.  These
++ * registers are used to store the loop bound, counter and context
++ * variables.
++ */
++static int optimize_bpf_loop(struct bpf_verifier_env *env)
++{
++	struct bpf_subprog_info *subprogs = env->subprog_info;
++	int i, cur_subprog = 0, cnt, delta = 0;
++	struct bpf_insn *insn = env->prog->insnsi;
++	int insn_cnt = env->prog->len;
++	u16 stack_depth = subprogs[cur_subprog].stack_depth;
++	u16 stack_depth_extra = 0;
++
++	for (i = 0; i < insn_cnt; i++, insn++) {
++		struct bpf_loop_inline_state *inline_state =
++			&env->insn_aux_data[i + delta].loop_inline_state;
++
++		if (is_bpf_loop_call(insn) && inline_state->fit_for_inline) {
++			struct bpf_prog *new_prog;
++
++			stack_depth_extra = BPF_REG_SIZE * 3;
++			new_prog = inline_bpf_loop(env,
++						   i + delta,
++						   -(stack_depth + stack_depth_extra),
++						   inline_state->callback_subprogno,
++						   &cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta     += cnt - 1;
++			env->prog  = new_prog;
++			insn       = new_prog->insnsi + i + delta;
++		}
++
++		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
++			subprogs[cur_subprog].stack_depth += stack_depth_extra;
++			cur_subprog++;
++			stack_depth = subprogs[cur_subprog].stack_depth;
++			stack_depth_extra = 0;
++		}
++	}
++
++	env->prog->aux->stack_depth = env->subprog_info[0].stack_depth;
++
++	return 0;
++}
++
+ static void free_states(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_verifier_state_list *sl, *sln;
+@@ -15031,6 +15193,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr)
+ 		ret = check_max_stack_depth(env);
+ 
+ 	/* instruction rewrites happen after this point */
++	if (ret == 0)
++		ret = optimize_bpf_loop(env);
++
+ 	if (is_priv) {
+ 		if (ret == 0)
+ 			opt_hard_wire_dead_code_branches(env);
 -- 
 2.25.1
 
