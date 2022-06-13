@@ -2,78 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84AB3C43334
-	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 18:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B4BBC43334
+	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 18:40:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240139AbiFMSbh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jun 2022 14:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53252 "EHLO
+        id S1344137AbiFMSkl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jun 2022 14:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244839AbiFMSbL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:31:11 -0400
-X-Greylist: delayed 329 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Jun 2022 07:48:45 PDT
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFFBCBB
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 07:48:45 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.155]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M1HuU-1o2PAH2rHe-002pGD; Mon, 13 Jun 2022 16:42:35 +0200
-Message-ID: <de4da55b-a074-b375-c41d-413bb19a428b@i2se.com>
-Date:   Mon, 13 Jun 2022 16:42:33 +0200
+        with ESMTP id S1343713AbiFMSkU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jun 2022 14:40:20 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C19E1706E
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 08:28:54 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id x9so6197655vsg.13
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 08:28:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=T/blLWTzm3edzIJzh9cdqF/JQAxQkYJjIod4C8ihcVs=;
+        b=ML+sAx3WYy5+SV9/ihPVldSU4+5TsvadjyOrtyCuNvLUS+YWioDrqDHjy4Y4vxu8Du
+         1A9bVAK0pPdQSKGCjliWCF8QhBI6+/39dHSeRr+oK3fkjpwE23au86HJBqaZsEpGv65/
+         7a/zDCU6MtYzL8170+mn9ACUbFcz6rsR+xPKurr5h3lDF3+ms8ImO3vYQqRbqEMGYTLX
+         XYiIBihKFicIDyGWYmjySEKyCZUewOzWngXLzOzd91o9g/LupGtxxavq+TYZ8CF+R0ZC
+         aNwuLFiM52G9EG7X7PuRXhYt+xsfQuCxQnwOiGm5dsEbimPWP1z4JsUPQxh8rf29YLnT
+         aMFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=T/blLWTzm3edzIJzh9cdqF/JQAxQkYJjIod4C8ihcVs=;
+        b=Dr/pxGTunDgzg95ak63qCzniAFJqSSKPyzh/pUYVWVXWRyG2oy/a+k6xrliQ/z/Vh3
+         dLfrtuiq48KjwXmlp9xL/3KSLK7MWkZappGpv+7Wsc8H6DR3094cq3RFUi76FwNWbMw2
+         ahhFntJoAxLj/W9hDCN7uQ6qVZdZGpGW4pGsjk8LpxUV2SNCj34SO3EjToQXUIMATVNO
+         Z6vnqd6w1qdogtSQIyTnbp6kFKsRaw7ROfMRsfoLm2PU/vz7+sCOJgE16BHoQdYVYobr
+         i5sGP5WzkU9b36W4ZnFC5UpHlI/SSmugJ9jY95ZTBskUk7rIO1D6funwFzytWJJ3DklY
+         eNlQ==
+X-Gm-Message-State: AOAM5304fBCEMziCfxBBUTMzRkQOmZiS8Ga97FPsCYUgvdDQmy1frAAa
+        jKPtT2VJJ9r9XIeSbW+/tXyatpiPyj5r5PZxrb7Zfsibo40=
+X-Google-Smtp-Source: ABdhPJyhtPumQHFw+I32i44ETKhOBGLSMXo+6xFQZ0lZQe2Bx/Bpjlr68o1aFms/ZeS7C/wBMnsomqJ4HCWH3BhwhVk=
+X-Received: by 2002:a05:6102:ec1:b0:34b:feff:2ec7 with SMTP id
+ m1-20020a0561020ec100b0034bfeff2ec7mr10346329vst.47.1655134133297; Mon, 13
+ Jun 2022 08:28:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [BUG] null pointer dereference when loading bpf_preload on
- Raspberry Pi
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        bpf@vger.kernel.org, jpalus@fastmail.com,
-        regressions@lists.linux.dev,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <f038d6f9-b96b-0749-111c-33ac8939a1c0@i2se.com>
- <YqcbgmTmezGM0VPr@shell.armlinux.org.uk>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <YqcbgmTmezGM0VPr@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:RUNrFBwO0Rxcmop+xh2sE+cCQBp6k7JRB/aBlkwKSR5DZbbnnuK
- JzNwJOnHUCBbVTQF4vvpq45KCFOfjlvWG+h0CBWrquW+sLSTdcyq/JW9ACJIuLXwXO5jOFn
- n7cX6JIug22sB911HFAVE2Ym19DV+AQ4ibGWGDXOhxUmQB8nP0YeTdozmAuE7DlToDm2xsc
- 2ggpSyzOPQFvCUCyDSnWg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WzokOsTgqhU=:qsIgKmQvGURvx6eca4GQCF
- qtonQCxBOG1f8otpPzDKPWk7zB8KtcQxcYFnfXCAr7AJu881Wax4S1d77iTlWHXkRRJqn383/
- ADm2PhfWJ1VO8IFjT5bDoHlUGm28tZRw3L/pp5GN84j8eE/z1p54E2XnRVNgSrNCHZJ8ftqcf
- UL0Ew2LABcTIelIOF3XyAuQsFZJdE9sJi6UQc/uJZ37Rh1luurl8MLGJR2EJxmIquA6IUPBzE
- JLxWkBv+QjjSziqBQ/ttt9r3dRej9/JAkKCg08kkf0PodpXD7AKQeJeGTyQqyBOawaxTK6uGq
- WNRuE6xk5M3GnR8oWlQqxG/pUB2ub3m18USg+QmznK7gxTwSfhuEpp0zq1m4kFxkVs+qMjNYt
- VrN9dAwU/Fm7KI61AsAObSelk4aJHHwd2FM64WE4V177vJbIVnfO4Hi+dbcO6RfmBJ46hy02G
- +8zXUTQdYhUls4Ngp0WPKTmCDsryEJoX2g1jUOnE4nwVPYwExC7dNt3zqrTfywT8lwicDPWq4
- 73IxjyZPlYhDseD9/UQhnhMuLXPSL7xMChNZyEl2mdP60f/gAh20ZU4vPVNxSn6FMJZsPX9Dc
- l8LirM8msZi8TYee8uQ3PtpIUkkmqMvVTQ+6GN961ZvPgwMws+cEdYCKE9vVuTF0f1/1Hxub1
- zDGlFzPjtDF/oNsMqfXMvOurPwcB/Z24953GlDrwa0DJ9YxK/a3guufxJAO0EIyw0x8qYXzJa
- 1IAl0uZyhnAgMz2/PDA8UVvX39c7iGvs3U1R1tpIt1QzW7BuUG5BGCvs3rg=
+References: <CANqewP1RFzD9TWgyyZy00ZVQhQr8QjmjUgyaaNK0g0_GJse=KA@mail.gmail.com>
+In-Reply-To: <CANqewP1RFzD9TWgyyZy00ZVQhQr8QjmjUgyaaNK0g0_GJse=KA@mail.gmail.com>
+From:   Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+Date:   Tue, 14 Jun 2022 00:28:42 +0900
+Message-ID: <CANqewP0cDTXVf1ekJTvaetB1DGkEKu56_H8dPjVQqxSvHfPziA@mail.gmail.com>
+Subject: [Resend] BPF ringbuf misses notifications due to improper coherence
+To:     bpf@vger.kernel.org, andriin@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+The BPF ringbuf defaults to a mechanism to deliver epoll notifications
+only when the userspace seems to "catch up" to the last written entry.
+This is done by comparing the consumer pointer to the head of the last
+written entry, and if it's equal, a notification is sent.
 
-Am 13.06.22 um 13:12 schrieb Russell King (Oracle):
-> On Mon, Jun 13, 2022 at 12:22:47AM +0200, Stefan Wahren wrote:
->> It would be nice to get a hint, how to narrow down or which commit might
->> trigger this issue.
-> The standard way? git bisect?
->
-> So it happens on 5.18.0 and 5.18.3. Presumably it didn't happen with
-> 5.17?
+During the effort of implementing ringbuf in aya [1] I observed that
+the epoll loop will sometimes get stuck, entering the wait state but
+never getting the notification it's supposed to get. The
+implementation originally mirrored libbpf's logic, especially its use
+of acquire and release memory operations. However, it turned out that
+the use of causal memory model is not sufficient, and using a seq_cst
+store is required to avoid anomalies as outlined below.
 
-in 5.17 there is a libelf dependency (was removed in 5.18), which cause 
-a compile issue about missing libelf.h which is only available on my 
-host system but not available in my Linaro cross toolchain.
+The release-acquire ordering permits the following anomaly to happen
+(in a simplified model where writing a new entry atomically completes
+without going through busy bit):
 
-Should i copy the libelf.h somewhere, so the cross compiler finds it?
+kernel: write p 2 -> read c X -> write p 3 -> read c 1 (X doesn't matter)
+user  : write c 2 -> read p 2
 
+This is because the release-acquire model allows stale reads, and in
+the case above the stale reads means that none of the causal effect
+can prevent this anomaly from happening. In order to prevent this
+anomaly, a total ordering needs to be enforced on producer and
+consumer writes. (Interestingly, it doesn't need to be enforced on
+reads, however.)
+
+If this is correct, then the fix needed right now is to correct
+libbpf's stores to be sequentially consistent. On the kernel side,
+however, we have something weird, probably inoptimal, but still
+correct. The kernel uses xchg when clearing the BUSY flag [2]. This
+doesn't sound like a necessary thing, since making the written event
+visible only require release ordering. However, it's this xchg that
+provides the other half of total ordering in order to prevent the
+anomalies, as it performs a smp_mb, essentially upgrading the prior
+store to seq_cst. If the intention was actually that, it would be
+really obscure and hard-to-reason way to implement coherency. I'd
+appreciate a clarification on this.
+
+[1]: https://github.com/aya-rs/aya/pull/294#issuecomment-1144385687
+[2]: https://github.com/torvalds/linux/blob/50fd82b3a9a9335df5d50c7ddcb81c81d358c4fc/kernel/bpf/ringbuf.c#L384
