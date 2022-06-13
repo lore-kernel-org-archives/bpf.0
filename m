@@ -2,336 +2,187 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38AB8C433EF
-	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 18:44:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A6A7C43334
+	for <bpf@archiver.kernel.org>; Mon, 13 Jun 2022 18:44:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344913AbiFMSo0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 13 Jun 2022 14:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S1344898AbiFMSoZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 13 Jun 2022 14:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345542AbiFMSne (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:43:34 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A39FEE
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 08:02:28 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id e4so6533545ljl.1
-        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 08:02:28 -0700 (PDT)
+        with ESMTP id S1345445AbiFMSnd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 13 Jun 2022 14:43:33 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7380FF77
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 08:02:21 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a2so9312479lfg.5
+        for <bpf@vger.kernel.org>; Mon, 13 Jun 2022 08:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CWC084HhhUPAF1fMfRJjXB2Y5AT9puI4sONMhM3mNGo=;
-        b=hGd8Ylm6Ddp+LXEa9tkECXWIHaYA2sdb4FBRR5y3Vgwbhh4adky7Ndw/T8aiHc57ZP
-         Fh6k4jy3pjdMc/mC3eQeTairuXNA1A34vAlAXArrzt8csZi3IU0d/dek2+h0t2ZuuRaI
-         Qcke4ZYTs46udFq1tIEn9yG+G6nvD/vlQEOOmdbF+xBkWarnccyyxfNsqSp3nv1KUTuI
-         IfO9DUlIiTetLqYMadrtPeTHJ5pmebZh+bvwvK1uln2j17eyWIF+BdF1kLQv5ItVUACp
-         YBbuP2W2qQxKFn+67pqo1atyHiUd8vwZbask7NR3sc9EW6M4I+noa2PKs3M0ALAukL7t
-         d5WA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4WKyGrf0mo0OgQShBnc8Zv5TVj5kESxWU/mbfCBYVJk=;
+        b=JBkLR6Jmsa3yTSF2dkRwone/J1qoIpHkoUfb69YIcTrjgSJlLfdJxHQl8+PDz2oKp9
+         Dzh1t8aB6VAkPhM491D1kPboxqh+htXf5qU+lGTxMu6x95RZLSyzwHUXtlCZa7NqKVtU
+         7DCBo90UjnwbLm/X5gx6DHiHyWkctx+3l0hXd+NZ9MDHKerUBmWnxcz88FqiqXyEFiZp
+         4NKVn4qw9QwzMWI30ErM1smmkZRRin5802kmbRM+bVgLGrIQADHGYlHdw8xcijQ5v1c9
+         8e0vwE7uY32Aw30+jeY2mvlCfJNnwjjEWMt3Mfbxj+LURDC30TLTYSt2FyAoBKD1TZJv
+         2XgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CWC084HhhUPAF1fMfRJjXB2Y5AT9puI4sONMhM3mNGo=;
-        b=7ye4Yph4SLZQtvHZ+JwZCUtG07kWMkphD/IDSlPO9ZxEA9RkfQxjQYm4TxdKW5F3CL
-         dDP+/OtddiOuVAMjce+ewg0nbthdZL63rqvtHTnjrTCOoBlP5bAoZ6LVuCxPikezpulC
-         a2+PK7gQM+bOejXW4Dkh1AZQjFZd8m4X97j9HrrpHT4Es3MrDLZujFT/Iwm059XwD3rL
-         z1j6f7EvHC6ByYcabk0w31hwCpcn4WPKQb9Zl72Pt+WTPlcsgOH9YUGJkDMTCM/EI5T4
-         3yf/S8L4MggLtJrJ6bkL2qOuYIYg3gvyr/1cU5cIeGcvx51qQXyba8jW64+eJ1MdhYWX
-         ITNQ==
-X-Gm-Message-State: AJIora9m/Mbdkc7gnohrcgLXLVEcRULMP7Kgf99q0xiz4Uw7joca8qaO
-        o+QFZuNZp7n/ChQrzfAizXXfWXaWOoLYhA==
-X-Google-Smtp-Source: AGRyM1v355NiiQhtRsR46IS/c6lS47ED39vgpo7DworCRSG9r/lyWn/mGeEJCDhlDXVsgs0hM1XOzg==
-X-Received: by 2002:a05:651c:1a22:b0:255:61fc:4645 with SMTP id by34-20020a05651c1a2200b0025561fc4645mr5701ljb.99.1655132546458;
-        Mon, 13 Jun 2022 08:02:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4WKyGrf0mo0OgQShBnc8Zv5TVj5kESxWU/mbfCBYVJk=;
+        b=aDhHj6QTJEyyDPJ/Kp5y4A3Cv+KsfeCXpJsZIxzHZL4xDtCJfjcr//mOrJphmmkibZ
+         FGeJT7SbAwDENbDe/dkr8CgqJUTmYdcUG0WBSzbuoao98R05rggE9ysdv85LvRSD6+Zf
+         b0cMPwQSaHGDwJQLhxzpvaromujnWnfR+OI0jKX+ag2XLyoaG4vWigNRwwpIonIv/8Fk
+         PDdA5tK1KMsvYHW5bx0EQMQwRreIXriymqvMNMk5Eo26KZilFbrfIEF0K8+woxLvbWM0
+         S9lFsXNibfP2dxNaZhHq+6EbQgR2q83ikBlRylJjmyTlsgp40DP/MnYAM3N//Qff+FqF
+         xNEw==
+X-Gm-Message-State: AJIora8v9hgBFHAJ886pBNw8J3N3VWbLhilLjwUAvjeFBO4rBHFPKtEY
+        4UGhv69dpxgvSd23q3pxvsdiYHJ2d/8OEg==
+X-Google-Smtp-Source: AGRyM1sBhPwGf7QzwOBrB8kpJVgtgn+sx3ncwKLik1nkXNirzQTt6ijxYT0LrQMunS9CmTGQC7rJrw==
+X-Received: by 2002:ac2:442d:0:b0:478:ed89:927f with SMTP id w13-20020ac2442d000000b00478ed89927fmr166329lfl.545.1655132539252;
+        Mon, 13 Jun 2022 08:02:19 -0700 (PDT)
 Received: from localhost.localdomain (boundsly.muster.volia.net. [93.72.16.93])
-        by smtp.gmail.com with ESMTPSA id a9-20020ac25e69000000b0047910511c23sm1021362lfr.45.2022.06.13.08.02.25
+        by smtp.gmail.com with ESMTPSA id a9-20020ac25e69000000b0047910511c23sm1021362lfr.45.2022.06.13.08.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 08:02:25 -0700 (PDT)
+        Mon, 13 Jun 2022 08:02:18 -0700 (PDT)
 From:   Eduard Zingerman <eddyz87@gmail.com>
 To:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
         daniel@iogearbox.net, kernel-team@fb.com, song@kernel.org,
         joannelkoong@gmail.com
-Cc:     eddyz87@gmail.com, Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next v6 4/5] selftests/bpf: BPF test_verifier selftests for bpf_loop inlining
-Date:   Mon, 13 Jun 2022 18:01:40 +0300
-Message-Id: <20220613150141.169619-5-eddyz87@gmail.com>
+Cc:     eddyz87@gmail.com
+Subject: [PATCH bpf-next v6 0/5] bpf_loop inlining
+Date:   Mon, 13 Jun 2022 18:01:36 +0300
+Message-Id: <20220613150141.169619-1-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613150141.169619-1-eddyz87@gmail.com>
-References: <20220613150141.169619-1-eddyz87@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A number of test cases for BPF selftests test_verifier to check how
-bpf_loop inline transformation rewrites the BPF program. The following
-cases are covered:
- - happy path
- - no-rewrite when flags is non-zero
- - no-rewrite when callback is non-constant
- - subprogno in insn_aux is updated correctly when dead sub-programs
-   are removed
- - check that correct stack offsets are assigned for spilling of R6-R8
-   registers
+Hi Everyone,
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- .../selftests/bpf/verifier/bpf_loop_inline.c  | 244 ++++++++++++++++++
- 1 file changed, 244 insertions(+)
+This is the next iteration of the patch. It includes changes suggested
+by Song, Joanne and Alexei. Please find updated intro message and
+change log below.
+
+This patch implements inlining of calls to bpf_loop helper function
+when bpf_loop's callback is statically known. E.g. the rewrite does
+the following transformation during BPF program processing:
+
+  bpf_loop(10, foo, NULL, 0);
+
+ ->
+
+  for (int i = 0; i < 10; ++i)
+    foo(i, NULL);
+
+The transformation leads to measurable latency change for simple
+loops. Measurements using `benchs/run_bench_bpf_loop.sh` inside QEMU /
+KVM on i7-4710HQ CPU show a drop in latency from 14 ns/op to 2 ns/op.
+
+The change is split in five parts:
+
+* Update to test_verifier.c to specify expected and unexpected
+  instruction sequences. This allows to check BPF program rewrites
+  applied by e.g. do_mix_fixups function.
+
+* Update to test_verifier.c to specify BTF function infos and types
+  per test case. This is necessary for tests that load sub-program
+  addresses to a variable because of the checks applied by
+  check_ld_imm function.
+
+* The update to verifier.c that tracks state of the parameters for
+  each bpf_loop call in a program and decides whether it could be
+  replaced by a loop.
+
+* A set of test cases for `test_verifier` that use capabilities added
+  by the first two patches to verify instructions produced by inlining
+  logic.
+
+* Two test cases for `test_prog` to check that possible corner cases
+  behave as expected.
+
+Additional details are available in commit messages for each patch.
+
+Changes since v5:
+ - Added function `loop_flag_is_zero` to skip a few checks in
+   `update_loop_inline_state` when loop instruction is not fit for
+   inline.
+
+Changes since v4:
+ - Added missing `static` modifier for `update_loop_inline_state` and
+   `inline_bpf_loop` functions.
+ - `update_loop_inline_state` updated for better readability.
+ - Fields `initialized` and `fit_for_inline` of `struct
+   bpf_loop_inline_state` are changed back from `bool` to bitfields.
+ - Acks from Song Liu added to comments for patches 1/5, 2/5, 4/5,
+   5/5.
+
+Changes since v3:
+ - Function `adjust_stack_depth_for_loop_inlining` is replaced by
+   function `optimize_bpf_loop`. Function `optimize_bpf_loop` is
+   responsible for both stack depth adjustment and call instruction
+   replacement.
+ - Changes in `do_misc_fixups` are reverted.
+ - Changes in `adjust_subprog_starts_after_remove` are reverted and
+   function `adjust_loop_inline_subprogno` is removed. This is
+   possible because call to `optimize_bpf_loop` is placed before the
+   dead code removal in `opt_remove_dead_code` (in contrast to the
+   position of `do_misc_fixups` where inlining was done in v3).
+ - Field `bpf_insn_aux_data.loop_inline_state` is now a part of
+   anonymous union at the start of the `bpf_insn_aux_data`.
+ - Data structure `bpf_loop_inline_state` is simplified to use single
+   flag field `fit_for_inline` instead of separate fields
+   `flags_is_zero` & `callback_is_constant`.
+ - Macro definition `BPF_MAX_LOOPS` is moved from
+   `include/linux/bpf_verifier.h` to `include/linux/bpf.h` to avoid
+   include of `include/linux/bpf_verifier.h` in `bpf_iter.c`.
+ - `inline_bpf_loop` changed back to use array initialization and hard
+   coded offsets as in v2.
+ - Style / formatting updates.
+
+Changes since v2:
+ - fix for `stack_check` test case in `test_progs-no_alu32`, all tests
+   are passing now;
+ - v2 3/3 patch is split in three parts:
+   - kernel changes
+   - test_verifier changes
+   - test_prog changes
+ - updated `inline_bpf_loop` in `verifier.c` to calculate each offset
+   used in instructions to avoid "magic" numbers;
+ - removed newline handling logic in `fail_log` branch of
+   `do_single_test` in `test_verifier.c` to simplify the patch set;
+ - styling fixes suggested in review for v2 of this patch set.
+
+Changes since v1:
+ - allow to use SKIP_INSNS in instruction pattern specification in
+   test_verifier tests;
+ - fix for a bug in spill offset assignement for loop vars when
+   bpf_loop is located in a non-main function.
+
+Eduard Zingerman (5):
+  selftests/bpf: specify expected instructions in test_verifier tests
+  selftests/bpf: allow BTF specs and func infos in test_verifier tests
+  bpf: Inline calls to bpf_loop when callback is known
+  selftests/bpf: BPF test_verifier selftests for bpf_loop inlining
+  selftests/bpf: BPF test_prog selftests for bpf_loop inlining
+
+ include/linux/bpf.h                           |   3 +
+ include/linux/bpf_verifier.h                  |  12 +
+ kernel/bpf/bpf_iter.c                         |   9 +-
+ kernel/bpf/verifier.c                         | 175 +++++++++-
+ .../selftests/bpf/prog_tests/bpf_loop.c       |  62 ++++
+ tools/testing/selftests/bpf/prog_tests/btf.c  |   1 -
+ tools/testing/selftests/bpf/progs/bpf_loop.c  | 114 ++++++
+ tools/testing/selftests/bpf/test_btf.h        |   2 +
+ tools/testing/selftests/bpf/test_verifier.c   | 328 +++++++++++++++++-
+ .../selftests/bpf/verifier/bpf_loop_inline.c  | 244 +++++++++++++
+ 10 files changed, 923 insertions(+), 27 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/verifier/bpf_loop_inline.c
 
-diff --git a/tools/testing/selftests/bpf/verifier/bpf_loop_inline.c b/tools/testing/selftests/bpf/verifier/bpf_loop_inline.c
-new file mode 100644
-index 000000000000..d1fbcfef69f2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/bpf_loop_inline.c
-@@ -0,0 +1,244 @@
-+#define BTF_TYPES \
-+	.btf_strings = "\0int\0i\0ctx\0callback\0main\0", \
-+	.btf_types = { \
-+	/* 1: int   */ BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4), \
-+	/* 2: int*  */ BTF_PTR_ENC(1), \
-+	/* 3: void* */ BTF_PTR_ENC(0), \
-+	/* 4: int __(void*) */ BTF_FUNC_PROTO_ENC(1, 1), \
-+		BTF_FUNC_PROTO_ARG_ENC(7, 3), \
-+	/* 5: int __(int, int*) */ BTF_FUNC_PROTO_ENC(1, 2), \
-+		BTF_FUNC_PROTO_ARG_ENC(5, 1), \
-+		BTF_FUNC_PROTO_ARG_ENC(7, 2), \
-+	/* 6: main      */ BTF_FUNC_ENC(20, 4), \
-+	/* 7: callback  */ BTF_FUNC_ENC(11, 5), \
-+	BTF_END_RAW \
-+	}
-+
-+#define MAIN_TYPE	6
-+#define CALLBACK_TYPE	7
-+
-+/* can't use BPF_CALL_REL, jit_subprogs adjusts IMM & OFF
-+ * fields for pseudo calls
-+ */
-+#define PSEUDO_CALL_INSN() \
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_CALL, \
-+		     INSN_OFF_MASK, INSN_IMM_MASK)
-+
-+/* can't use BPF_FUNC_loop constant,
-+ * do_mix_fixups adjusts the IMM field
-+ */
-+#define HELPER_CALL_INSN() \
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, INSN_OFF_MASK, INSN_IMM_MASK)
-+
-+{
-+	"inline simple bpf_loop call",
-+	.insns = {
-+	/* main */
-+	/* force verifier state branching to verify logic on first and
-+	 * subsequent bpf_loop insn processing steps
-+	 */
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 777, 2),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 1),
-+	BPF_JMP_IMM(BPF_JA, 0, 0, 1),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 2),
-+
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 6),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* callback */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.expected_insns = { PSEUDO_CALL_INSN() },
-+	.unexpected_insns = { HELPER_CALL_INSN() },
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.result = ACCEPT,
-+	.runs = 0,
-+	.func_info = { { 0, MAIN_TYPE }, { 12, CALLBACK_TYPE } },
-+	.func_info_cnt = 2,
-+	BTF_TYPES
-+},
-+{
-+	"don't inline bpf_loop call, flags non-zero",
-+	.insns = {
-+	/* main */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 1),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 6),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 1),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* callback */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.expected_insns = { HELPER_CALL_INSN() },
-+	.unexpected_insns = { PSEUDO_CALL_INSN() },
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.result = ACCEPT,
-+	.runs = 0,
-+	.func_info = { { 0, MAIN_TYPE }, { 8, CALLBACK_TYPE } },
-+	.func_info_cnt = 2,
-+	BTF_TYPES
-+},
-+{
-+	"don't inline bpf_loop call, callback non-constant",
-+	.insns = {
-+	/* main */
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_jiffies64),
-+	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 777, 4), /* pick a random callback */
-+
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 1),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 10),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_JMP_IMM(BPF_JA, 0, 0, 3),
-+
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 1),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 8),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* callback */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	/* callback #2 */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.expected_insns = { HELPER_CALL_INSN() },
-+	.unexpected_insns = { PSEUDO_CALL_INSN() },
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.result = ACCEPT,
-+	.runs = 0,
-+	.func_info = {
-+		{ 0, MAIN_TYPE },
-+		{ 14, CALLBACK_TYPE },
-+		{ 16, CALLBACK_TYPE }
-+	},
-+	.func_info_cnt = 3,
-+	BTF_TYPES
-+},
-+{
-+	"bpf_loop_inline and a dead func",
-+	.insns = {
-+	/* main */
-+
-+	/* A reference to callback #1 to make verifier count it as a func.
-+	 * This reference is overwritten below and callback #1 is dead.
-+	 */
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 9),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 1),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 8),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* callback */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	/* callback #2 */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.expected_insns = { PSEUDO_CALL_INSN() },
-+	.unexpected_insns = { HELPER_CALL_INSN() },
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.result = ACCEPT,
-+	.runs = 0,
-+	.func_info = {
-+		{ 0, MAIN_TYPE },
-+		{ 10, CALLBACK_TYPE },
-+		{ 12, CALLBACK_TYPE }
-+	},
-+	.func_info_cnt = 3,
-+	BTF_TYPES
-+},
-+{
-+	"bpf_loop_inline stack locations for loop vars",
-+	.insns = {
-+	/* main */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -16, 0x77),
-+	/* bpf_loop call #1 */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 1),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 22),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	/* bpf_loop call #2 */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 2),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 16),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	/* call func and exit */
-+	BPF_CALL_REL(2),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* func */
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -32, 0x55),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_1, 2),
-+	BPF_RAW_INSN(BPF_LD | BPF_IMM | BPF_DW, BPF_REG_2, BPF_PSEUDO_FUNC, 0, 6),
-+	BPF_RAW_INSN(0, 0, 0, 0, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_3, 0),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_4, 0),
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_loop),
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	/* callback */
-+	BPF_ALU64_IMM(BPF_MOV, BPF_REG_0, 1),
-+	BPF_EXIT_INSN(),
-+	},
-+	.expected_insns = {
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -16, 0x77),
-+	SKIP_INSNS(),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, -40),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_7, -32),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_8, -24),
-+	SKIP_INSNS(),
-+	/* offsets are the same as in the first call */
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, -40),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_7, -32),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_8, -24),
-+	SKIP_INSNS(),
-+	BPF_ST_MEM(BPF_DW, BPF_REG_10, -32, 0x55),
-+	SKIP_INSNS(),
-+	/* offsets differ from main because of different offset
-+	 * in BPF_ST_MEM instruction
-+	 */
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_6, -56),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_7, -48),
-+	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_8, -40),
-+	},
-+	.unexpected_insns = { HELPER_CALL_INSN() },
-+	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
-+	.result = ACCEPT,
-+	.func_info = {
-+		{ 0, MAIN_TYPE },
-+		{ 16, MAIN_TYPE },
-+		{ 25, CALLBACK_TYPE },
-+	},
-+	.func_info_cnt = 3,
-+	BTF_TYPES
-+},
-+
-+#undef HELPER_CALL_INSN
-+#undef PSEUDO_CALL_INSN
-+#undef CALLBACK_TYPE
-+#undef MAIN_TYPE
-+#undef BTF_TYPES
 -- 
 2.25.1
 
