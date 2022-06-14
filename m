@@ -2,152 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7119CCA47A
-	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 10:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C775C43334
+	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 10:52:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356077AbiFNKsG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jun 2022 06:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38766 "EHLO
+        id S236132AbiFNKwV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jun 2022 06:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355102AbiFNKr5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:47:57 -0400
+        with ESMTP id S241029AbiFNKwR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jun 2022 06:52:17 -0400
 Received: from mailrelay.tu-berlin.de (mailrelay.tu-berlin.de [130.149.7.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3F7275F0;
-        Tue, 14 Jun 2022 03:47:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657F74925A;
+        Tue, 14 Jun 2022 03:52:15 -0700 (PDT)
 Received: from SPMA-02.tubit.win.tu-berlin.de (localhost.localdomain [127.0.0.1])
-        by localhost (Email Security Appliance) with SMTP id 5022438902_2A86754B;
-        Tue, 14 Jun 2022 10:47:48 +0000 (GMT)
-Received: from mail.tu-berlin.de (bulkmail.tu-berlin.de [141.23.12.143])
+        by localhost (Email Security Appliance) with SMTP id 0F7E238902_2A8685EB;
+        Tue, 14 Jun 2022 10:52:14 +0000 (GMT)
+Received: from mail.tu-berlin.de (mail.tu-berlin.de [141.23.12.141])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (Client CN "exchange.tu-berlin.de", Issuer "DFN-Verein Global Issuing CA" (not verified))
-        by SPMA-02.tubit.win.tu-berlin.de (Sophos Email Appliance) with ESMTPS id EB3CF8C14D_2A86753F;
-        Tue, 14 Jun 2022 10:47:47 +0000 (GMT)
-Received: from jt.fritz.box (89.12.240.121) by ex-01.svc.tu-berlin.de
- (10.150.18.5) with Microsoft SMTP Server id 15.2.986.22; Tue, 14 Jun 2022
- 12:47:47 +0200
-From:   =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>, <netdev@vger.kernel.org>,
-        =?UTF-8?q?J=C3=B6rn-Thorben=20Hinz?= <jthinz@mailbox.tu-berlin.de>
-Subject: [PATCH bpf-next v3 4/5] selftests/bpf: Test an incomplete BPF CC
-Date:   Tue, 14 Jun 2022 12:44:51 +0200
-Message-ID: <20220614104452.3370148-5-jthinz@mailbox.tu-berlin.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220614104452.3370148-1-jthinz@mailbox.tu-berlin.de>
-References: <20220614104452.3370148-1-jthinz@mailbox.tu-berlin.de>
-MIME-Version: 1.0
+        by SPMA-02.tubit.win.tu-berlin.de (Sophos Email Appliance) with ESMTPS id 90CC38C145_2A8685DF;
+        Tue, 14 Jun 2022 10:52:13 +0000 (GMT)
+Received: from [192.168.178.14] (89.12.240.121) by ex-06.svc.tu-berlin.de
+ (10.150.18.10) with Microsoft SMTP Server id 15.2.986.22; Tue, 14 Jun 2022
+ 12:52:13 +0200
+Message-ID: <a246494232612c20e2a6952e3dd0a2d9fbbabf21.camel@mailbox.tu-berlin.de>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf: Require only one of cong_avoid()
+ and cong_control() from a TCP CC
+From:   =?ISO-8859-1?Q?J=F6rn-Thorben?= Hinz <jthinz@mailbox.tu-berlin.de>
+To:     Martin KaFai Lau <kafai@fb.com>
+CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, <netdev@vger.kernel.org>
+Date:   Tue, 14 Jun 2022 12:52:11 +0200
+In-Reply-To: <20220613171703.xoetc7dlr4qkss43@kafai-mbp>
+References: <20220608174843.1936060-1-jthinz@mailbox.tu-berlin.de>
+         <20220609204702.2351369-1-jthinz@mailbox.tu-berlin.de>
+         <20220609204702.2351369-3-jthinz@mailbox.tu-berlin.de>
+         <20220613171703.xoetc7dlr4qkss43@kafai-mbp>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SASI-RCODE: 200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=campus.tu-berlin.de; h=from:to:cc:subject:date:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim-tub; bh=E2iYmUCyNDsw3Cv43Je8PZ3KvY8msHTRMwcgbZ7sLLE=; b=IP2pS6xZn3XoYPi1U+dV7oa9Wpu3vriFk0rsBCEeWaZCsh1naGnsxUkSyZYWby/2HJPQjKVoUsP6n3pxpmdl8UaTfr+t5+WXTF1qkAUxiK03/rkkjenlP/3ELXjkYZMTBNx6/tonNbH+s8ZiVLtbpvRjkT3rRmnmTNTlUEgBUjo=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=campus.tu-berlin.de; h=message-id:subject:from:to:cc:date:in-reply-to:references:content-type:mime-version:content-transfer-encoding; s=dkim-tub; bh=2nfOabUdxmunixYt8omzm+xSx1kqwfwuSOXrKjF3L78=; b=eo3KEteusuAlBB8h+t3vf8Yw+UEaF0eqJbdz4R4R7VvPjq7vvZSJhivnRU7gN1nbox6l+fyvD6XPA+9j+nDsG1DFHRn0AkcrQ+FtM2C4623jv4Z8Zj4bQCv1qi7ogPdq09PcZliFidzXi7kZTH7qV7B36tEnYZxZny5JJjLn2vI=
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Test whether a TCP CC implemented in BPF providing neither cong_avoid()
-nor cong_control() is correctly rejected. This check solely depends on
-tcp_register_congestion_control() now, which is invoked during
-bpf_map__attach_struct_ops().
+On Mon, 2022-06-13 at 10:17 -0700, Martin KaFai Lau wrote:
+> On Thu, Jun 09, 2022 at 10:47:02PM +0200, Jörn-Thorben Hinz wrote:
+> > Remove the check for required and optional functions in a struct
+> > tcp_congestion_ops from bpf_tcp_ca.c. Rely on
+> > tcp_register_congestion_control() to reject a BPF CC that does not
+> > implement all required functions, as it will do for a non-BPF CC.
+> > 
+> > When a CC implements tcp_congestion_ops.cong_control(), the
+> > alternate
+> > cong_avoid() is not in use in the TCP stack. Previously, a BPF CC
+> > was
+> > still forced to implement cong_avoid() as a no-op since it was
+> > non-optional in bpf_tcp_ca.c.
+> > 
+> > Signed-off-by: Jörn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>
+> > ---
+> >  net/ipv4/bpf_tcp_ca.c | 32 --------------------------------
+> >  1 file changed, 32 deletions(-)
+> > 
+> > diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+> > index 1f5c53ede4e5..39b64f317499 100644
+> > --- a/net/ipv4/bpf_tcp_ca.c
+> > +++ b/net/ipv4/bpf_tcp_ca.c
+> > @@ -14,18 +14,6 @@
+> >  /* "extern" is to avoid sparse warning.  It is only used in
+> > bpf_struct_ops.c. */
+> >  extern struct bpf_struct_ops bpf_tcp_congestion_ops;
+> >  
+> > -static u32 optional_ops[] = {
+> > -       offsetof(struct tcp_congestion_ops, init),
+> > -       offsetof(struct tcp_congestion_ops, release),
+> > -       offsetof(struct tcp_congestion_ops, set_state),
+> > -       offsetof(struct tcp_congestion_ops, cwnd_event),
+> > -       offsetof(struct tcp_congestion_ops, in_ack_event),
+> > -       offsetof(struct tcp_congestion_ops, pkts_acked),
+> > -       offsetof(struct tcp_congestion_ops, min_tso_segs),
+> > -       offsetof(struct tcp_congestion_ops, sndbuf_expand),
+> > -       offsetof(struct tcp_congestion_ops, cong_control),
+> > -};
+> > -
+> >  static u32 unsupported_ops[] = {
+> >         offsetof(struct tcp_congestion_ops, get_info),
+> >  };
+> > @@ -51,18 +39,6 @@ static int bpf_tcp_ca_init(struct btf *btf)
+> >         return 0;
+> >  }
+> >  
+> > -static bool is_optional(u32 member_offset)
+> > -{
+> > -       unsigned int i;
+> > -
+> > -       for (i = 0; i < ARRAY_SIZE(optional_ops); i++) {
+> > -               if (member_offset == optional_ops[i])
+> > -                       return true;
+> > -       }
+> > -
+> > -       return false;
+> > -}
+> > -
+> >  static bool is_unsupported(u32 member_offset)
+> >  {
+> >         unsigned int i;
+> > @@ -268,14 +244,6 @@ static int bpf_tcp_ca_init_member(const struct
+> > btf_type *t,
+> >                 return 1;
+> >         }
+> >  
+> > -       if (!btf_type_resolve_func_ptr(btf_vmlinux, member->type,
+> > NULL))
+> > -               return 0;
+> > -
+> > -       /* Ensure bpf_prog is provided for compulsory func ptr */
+> > -       prog_fd = (int)(*(unsigned long *)(udata + moff));
+> > -       if (!prog_fd && !is_optional(moff) &&
+> > !is_unsupported(moff))
+> !is_unsupported() is still needed.
+I don’t think it is necessary here.
 
-Signed-off-by: Jörn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>
----
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     | 25 +++++++++++++
- .../bpf/progs/tcp_ca_incompl_cong_ops.c       | 35 +++++++++++++++++++
- 2 files changed, 60 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tcp_ca_incompl_cong_ops.c
+There is also bpf_tcp_ca_check_member(), which also and only tests for
+is_unsupported(). And check_member() will be called even earlier than
+init_member() when loading a struct_ops. This deleted is_unsupported()
+call should have been there only to test for missing but required &&
+supported functions.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index a797497e2864..cc2a8a12ca67 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -10,6 +10,7 @@
- #include "bpf_tcp_nogpl.skel.h"
- #include "bpf_dctcp_release.skel.h"
- #include "tcp_ca_write_sk_pacing.skel.h"
-+#include "tcp_ca_incompl_cong_ops.skel.h"
- 
- #ifndef ENOTSUPP
- #define ENOTSUPP 524
-@@ -341,6 +342,28 @@ static void test_write_sk_pacing(void)
- 	tcp_ca_write_sk_pacing__destroy(skel);
- }
- 
-+static void test_incompl_cong_ops(void)
-+{
-+	struct tcp_ca_incompl_cong_ops *skel;
-+	struct bpf_link *link;
-+
-+	skel = tcp_ca_incompl_cong_ops__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load")) {
-+		return;
-+	}
-+
-+	/* That cong_avoid() and cong_control() are missing is only reported at
-+	 * this point:
-+	 */
-+	link = bpf_map__attach_struct_ops(skel->maps.incompl_cong_ops);
-+	if (!ASSERT_ERR_PTR(link, "attach_struct_ops")) {
-+		/* Unexpected success?! */
-+		bpf_link__destroy(link);
-+	}
-+
-+	tcp_ca_incompl_cong_ops__destroy(skel);
-+}
-+
- void test_bpf_tcp_ca(void)
- {
- 	if (test__start_subtest("dctcp"))
-@@ -355,4 +378,6 @@ void test_bpf_tcp_ca(void)
- 		test_rel_setsockopt();
- 	if (test__start_subtest("write_sk_pacing"))
- 		test_write_sk_pacing();
-+	if (test__start_subtest("incompl_cong_ops"))
-+		test_incompl_cong_ops();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_incompl_cong_ops.c b/tools/testing/selftests/bpf/progs/tcp_ca_incompl_cong_ops.c
-new file mode 100644
-index 000000000000..7bb872fb22dd
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tcp_ca_incompl_cong_ops.c
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static inline struct tcp_sock *tcp_sk(const struct sock *sk)
-+{
-+	return (struct tcp_sock *)sk;
-+}
-+
-+SEC("struct_ops/incompl_cong_ops_ssthresh")
-+__u32 BPF_PROG(incompl_cong_ops_ssthresh, struct sock *sk)
-+{
-+	return tcp_sk(sk)->snd_ssthresh;
-+}
-+
-+SEC("struct_ops/incompl_cong_ops_undo_cwnd")
-+__u32 BPF_PROG(incompl_cong_ops_undo_cwnd, struct sock *sk)
-+{
-+	return tcp_sk(sk)->snd_cwnd;
-+}
-+
-+SEC(".struct_ops")
-+struct tcp_congestion_ops incompl_cong_ops = {
-+	/* Intentionally leaving out any of the required cong_avoid() and
-+	 * cong_control() here.
-+	 */
-+	.ssthresh = (void *)incompl_cong_ops_ssthresh,
-+	.undo_cwnd = (void *)incompl_cong_ops_undo_cwnd,
-+	.name = "bpf_incompl_ops",
-+};
--- 
-2.30.2
+I added a test in v3 to make sure the check for the unsupported
+get_info() (still) works.
+
+Please correct me, if I misread/misfollowed the code paths!
+
+> 
+> and remove 'int prog_fd' as reported by the test bot.
+Of course, sorry about that … Oversight on my side.
+
+> 
+> Test is still needed.  You can copy the simpler "bpf_dctcp"
+> to another tcp_congestion_ops.  Write+read the sk_packing
+> and also use .cong_control instead of .cong_avoid.  I think rs-
+> >acked_sacked
+> is the 'delivered' and the 'ack' is not used.
+Added tests in v3 of the patch series. I’m open for further feedback.
+
 
