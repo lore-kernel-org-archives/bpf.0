@@ -2,172 +2,135 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B178CCCA47C
-	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 13:06:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25706CCA47A
+	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 13:16:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243511AbiFNNGo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jun 2022 09:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S243385AbiFNNQP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jun 2022 09:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbiFNNGl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:06:41 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D4B21E36;
-        Tue, 14 Jun 2022 06:06:39 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpZ7743tz67Zsv;
-        Tue, 14 Jun 2022 21:05:03 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 15:06:36 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
-        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>
-CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [RESEND][PATCH v4 3/4] bpf: Add bpf_verify_pkcs7_signature() helper
-Date:   Tue, 14 Jun 2022 15:06:20 +0200
-Message-ID: <20220614130621.1976089-4-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614130621.1976089-1-roberto.sassu@huawei.com>
-References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
+        with ESMTP id S244522AbiFNNQO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jun 2022 09:16:14 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD393701C;
+        Tue, 14 Jun 2022 06:16:13 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gd1so8465489pjb.2;
+        Tue, 14 Jun 2022 06:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mq0+ED07IK4ulYrQkEH8DfbENVLVGZC0c/jxfIXlP9k=;
+        b=RRbD1IscvQESvnufjfYnCqshdgUeMeymkZ92ACgpyhWtCqgL9+BuKAwHZV96sX3Nlh
+         raTIB6pYc4bQvEfp2NHKjVrhU6baQsGOqmVPPCj0Nw8odVkfg+Qf6KNochwkpGc43KIA
+         YiHAIIe4VBjxm4uFeAKkE+qtTlyCIyQnQdOsX18ep4BpSyVEwwnYg62O3yRFGazhppVF
+         Yrmt/jkz15m0HeLRozs7ZRpk5UmVQOGIW1d9VlfBsmElG5I5N8FaQMVt6MVGCgJlv2i1
+         4F1fhEs4tTT7prrwUyhdyO2c0LUDoIbHLqXcgmbnZISFj1SPY4zoIWM0kpZSF3MeTcTa
+         yNYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mq0+ED07IK4ulYrQkEH8DfbENVLVGZC0c/jxfIXlP9k=;
+        b=wnXS/ph+DBzqJa2eWGDRBXwrZ4wrfN6ACqO4UNQ74Ye0lLJkbsRiPmVOf3yb3tSWII
+         qC88Y0T6gt5h1lzKpZHQqH9g1N/wpnoGEFCYzhTAExatquNfNWgVSgo0/n9j/NNADsKJ
+         UO8oNSH9V8i5N3Uk7IN+1hSKmfQbNNp+wPpYXcdBQ1RRrm6snGZkHpmGAVuiuA7Trrr/
+         PnSdV+jII66KHOOa2Kqyf2E9YPQ6WOJ8wG/vdGZvYy7douLuwJ1yLg5LXVuURfXJMPPz
+         TmlBvxYaEayFQ8QLk4rudYRAQAGF5ii5qTHtguHLp6/fUwPPmp9AAeGQHxuH+jqdA93i
+         BceQ==
+X-Gm-Message-State: AJIora/gHUMVUQrjm3lt3HLRY0UHdNwBsf1CuWAQG/fhl/3jaSihwpKI
+        XhmL6isLTneuGrdB7yVyTzF8mRUOFXpT9TugJdU=
+X-Google-Smtp-Source: AGRyM1thdHKwV0sozTLz4ZuVER5IhlAa3z/NvSF4uU2MdOaRrByWhJXZXwYcGBhabgFvrzZtg1Fb+R0aJhwEV4IM9IE=
+X-Received: by 2002:a17:90a:4897:b0:1c7:5fce:cbcd with SMTP id
+ b23-20020a17090a489700b001c75fcecbcdmr4598271pjh.45.1655212572706; Tue, 14
+ Jun 2022 06:16:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
+References: <20220614070746.8871-1-ciara.loftus@intel.com>
+In-Reply-To: <20220614070746.8871-1-ciara.loftus@intel.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Tue, 14 Jun 2022 15:16:01 +0200
+Message-ID: <CAJ8uoz0VK9tcQEv1tieGbL34Xq4W=mEcms-mG5OQx1HmZwDw7A@mail.gmail.com>
+Subject: Re: [PATCH bpf] xsk: fix generic transmit when completion queue
+ reservation fails
+To:     Ciara Loftus <ciara.loftus@intel.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the bpf_verify_pkcs7_signature() helper, to give eBPF security modules
-the ability to check the validity of a signature against supplied data, by
-using system-provided keys as trust anchor.
+On Tue, Jun 14, 2022 at 9:09 AM Ciara Loftus <ciara.loftus@intel.com> wrote:
+>
+> Two points of potential failure in the generic transmit function are:
+> 1. completion queue (cq) reservation failure.
+> 2. skb allocation failure
+>
+> Originally the cq reservation was performed first, followed by the skb
+> allocation. Commit 675716400da6 ("xdp: fix possible cq entry leak")
+> reversed the order because at the time there was no mechanism available to
+> undo the cq reservation which could have led to possible cq entry leaks in
+> the event of skb allocation failure. However if the skb allocation is
+> performed first and the cq reservation then fails, the xsk skb destructor
+> is called which blindly adds the skb address to the already full cq leading
+> to undefined behavior.
+>
+> This commit restores the original order (cq reservation followed by skb
+> allocation) and uses the xskq_prod_cancel helper to undo the cq reserve in
+> event of skb allocation failure.
 
-The new helper makes it possible to enforce mandatory policies, as eBPF
-programs might be allowed to make security decisions only based on data
-sources the system administrator approves.
+Thanks for fixing this Ciara.
 
-The caller should provide both the data to be verified and the signature as
-eBPF dynamic pointers (to minimize the number of parameters). The caller
-should also provide a keyring pointer, that can be currently obtained with
-the bpf_request_key_by_id() helper. In the future, it will be possible to
-search a keyring by its description.
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reported-by: kernel test robot <lkp@intel.com> (cast warning)
----
- include/uapi/linux/bpf.h       |  8 ++++++++
- kernel/bpf/bpf_lsm.c           | 30 ++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  8 ++++++++
- 3 files changed, 46 insertions(+)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index dfd93e0e0759..e6d9158e4981 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5265,6 +5265,13 @@ union bpf_attr {
-  *	Return
-  *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
-  *		otherwise.
-+ *
-+ * long bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr, struct bpf_dynptr *sig_ptr, struct key *trusted_keys)
-+ *	Description
-+ *		Verify the PKCS#7 signature *sig* against the supplied *data*
-+ *		with keys in *trusted_keys*.
-+ *	Return
-+ *		0 on success, a negative value on error.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5472,6 +5479,7 @@ union bpf_attr {
- 	FN(dynptr_write),		\
- 	FN(dynptr_data),		\
- 	FN(request_key_by_id),		\
-+	FN(verify_pkcs7_signature),	\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index e1911812398b..6c0d71b8c3b6 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -156,6 +156,31 @@ static const struct bpf_func_proto bpf_request_key_by_id_proto = {
- 	.ret_btf_id	= &bpf_request_key_by_id_btf_ids[0],
- 	.arg1_type	= ARG_ANYTHING,
- };
-+
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+BPF_CALL_3(bpf_verify_pkcs7_signature, struct bpf_dynptr_kern *, data_ptr,
-+	   struct bpf_dynptr_kern *, sig_ptr, struct key *, trusted_keys)
-+{
-+	return verify_pkcs7_signature(data_ptr->data,
-+				      bpf_dynptr_get_size(data_ptr),
-+				      sig_ptr->data,
-+				      bpf_dynptr_get_size(sig_ptr),
-+				      trusted_keys,
-+				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-+				      NULL);
-+}
-+
-+static const struct bpf_func_proto bpf_verify_pkcs7_signature_proto = {
-+	.func		= bpf_verify_pkcs7_signature,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
-+	.arg2_type	= ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL,
-+	.arg3_type	= ARG_PTR_TO_BTF_ID_OR_NULL,
-+	.arg3_btf_id	= &bpf_request_key_by_id_btf_ids[0],
-+	.allowed	= bpf_ima_inode_hash_allowed,
-+};
-+#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
- #endif /* CONFIG_KEYS */
- 
- static const struct bpf_func_proto *
-@@ -187,6 +212,11 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- #ifdef CONFIG_KEYS
- 	case BPF_FUNC_request_key_by_id:
- 		return &bpf_request_key_by_id_proto;
-+#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-+	case BPF_FUNC_verify_pkcs7_signature:
-+		return prog->aux->sleepable ?
-+		       &bpf_verify_pkcs7_signature_proto : NULL;
-+#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
- #endif /* CONFIG_KEYS */
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index dfd93e0e0759..e6d9158e4981 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5265,6 +5265,13 @@ union bpf_attr {
-  *	Return
-  *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
-  *		otherwise.
-+ *
-+ * long bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr, struct bpf_dynptr *sig_ptr, struct key *trusted_keys)
-+ *	Description
-+ *		Verify the PKCS#7 signature *sig* against the supplied *data*
-+ *		with keys in *trusted_keys*.
-+ *	Return
-+ *		0 on success, a negative value on error.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5472,6 +5479,7 @@ union bpf_attr {
- 	FN(dynptr_write),		\
- 	FN(dynptr_data),		\
- 	FN(request_key_by_id),		\
-+	FN(verify_pkcs7_signature),	\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
--- 
-2.25.1
-
+> Fixes: 675716400da6 ("xdp: fix possible cq entry leak")
+> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+> ---
+>  net/xdp/xsk.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 19ac872a6624..09002387987e 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -538,12 +538,6 @@ static int xsk_generic_xmit(struct sock *sk)
+>                         goto out;
+>                 }
+>
+> -               skb = xsk_build_skb(xs, &desc);
+> -               if (IS_ERR(skb)) {
+> -                       err = PTR_ERR(skb);
+> -                       goto out;
+> -               }
+> -
+>                 /* This is the backpressure mechanism for the Tx path.
+>                  * Reserve space in the completion queue and only proceed
+>                  * if there is space in it. This avoids having to implement
+> @@ -552,11 +546,19 @@ static int xsk_generic_xmit(struct sock *sk)
+>                 spin_lock_irqsave(&xs->pool->cq_lock, flags);
+>                 if (xskq_prod_reserve(xs->pool->cq)) {
+>                         spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+> -                       kfree_skb(skb);
+>                         goto out;
+>                 }
+>                 spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+>
+> +               skb = xsk_build_skb(xs, &desc);
+> +               if (IS_ERR(skb)) {
+> +                       err = PTR_ERR(skb);
+> +                       spin_lock_irqsave(&xs->pool->cq_lock, flags);
+> +                       xskq_prod_cancel(xs->pool->cq);
+> +                       spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+> +                       goto out;
+> +               }
+> +
+>                 err = __dev_direct_xmit(skb, xs->queue_id);
+>                 if  (err == NETDEV_TX_BUSY) {
+>                         /* Tell user-space to retry the send */
+> --
+> 2.25.1
+>
