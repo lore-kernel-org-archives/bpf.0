@@ -2,51 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 715EFCCA47A
-	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 15:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A4DCC433EF
+	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 15:10:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239186AbiFNPAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jun 2022 11:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S233498AbiFNPKO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jun 2022 11:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347514AbiFNPAT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:00:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9112432EE4
-        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 08:00:16 -0700 (PDT)
+        with ESMTP id S235715AbiFNPKO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jun 2022 11:10:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3FD2E68C
+        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 08:10:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 350A0B8197D
-        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 15:00:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D3BD5C341C8;
-        Tue, 14 Jun 2022 15:00:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58E3D60DB9
+        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 15:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AC6D6C3411E;
+        Tue, 14 Jun 2022 15:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655218813;
-        bh=81f/6E2D/+VvzHSSilJoBBmXwSyZMtIXiObBWKvYZsM=;
+        s=k20201202; t=1655219412;
+        bh=ncjAqe8cc6cEvsS8WzOg2TnJ0KjuFG7RSy6CPBTqtkk=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UVeEPCCvpHOL08C/OEgDROu85I3b2PXyv9MaXKvHdWSlcJciPWjtdIF01YFBd2bnm
-         ig0Lrr2C8XmJIgcV4BL+Kt6UxSa0T6wbO0WsJgBUNeGsIk2nemEH/+a00whAITnoSJ
-         ryasHRSRFhs4ltrOw0GxkuBPNEOyRl346L3YbzQVA2S7Y2emyNcJlQMPU0D6TMBrdv
-         AoTR2COz6gkRWkJsuD9tX0N1a6gcG2VM4bFL0nRYyfKNH/xpq3qVs85e9jHDOwd5ya
-         NoeVLYRZEZ7acwMxkFrQGZjqpe/JQf4oJXZHe07OZYTjk//DNcokdeQ7AI1FDsZzTr
-         96i0yu9hYcHoQ==
+        b=E/R66eeV7PcmCkaOt5pwV8h/i8wjnureIm/0PwFApKA4T+PGv0MwpWnNUttrtA1IJ
+         R8aNPCQvQlQWNnhkUhkQ4lEePX+QIxk62wtxQba1DzA2T25f/ECNQEndpjbXunJRVH
+         so96uHpSXaXch+3excrOZ45eVUu+D0HBo2/UkLUIchSXofvob7MmnpRgIm/yzhRL7N
+         cuK5CEeWIiHO9YOLllp5EgHgbYR66YHJb2kDtzlL3X2GtTd/Kqb3goLX28v8snzOWD
+         za3YvgBrQznAry1zz2DRd+VtzDLhzSPVZF0GmmOhcJXPy2dFeeEKIxLe7F7cGAxm2r
+         5zpHx3nbn7EYA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BAE4AFD99FF;
-        Tue, 14 Jun 2022 15:00:13 +0000 (UTC)
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F4AEE73854;
+        Tue, 14 Jun 2022 15:10:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: fix spelling in bpf_verifier.h
+Subject: Re: [PATCH bpf-next] libbpf: Fix an unsigned < 0 bug
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165521881376.16120.14765344364029939449.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Jun 2022 15:00:13 +0000
-References: <20220613211633.58647-1-jwnhy0@gmail.com>
-In-Reply-To: <20220613211633.58647-1-jwnhy0@gmail.com>
-To:     john <jwnhy0@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        bpf@vger.kernel.org
+Message-Id: <165521941258.21816.9774675288125317014.git-patchwork-notify@kernel.org>
+Date:   Tue, 14 Jun 2022 15:10:12 +0000
+References: <20220613054314.1251905-1-yhs@fb.com>
+In-Reply-To: <20220613054314.1251905-1-yhs@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -56,20 +55,21 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Mon, 13 Jun 2022 21:16:33 +0000 you wrote:
-> From: Hongyi Lu <jwnhy0@gmail.com>
-> 
-> 6689139af (HEAD -> master) fix spelling in bpf_verifier.h
-> Spelling is no big deal, but it is still an improvement.
-> This is my first patch as a newbie. Hope I didn't cause much trouble.
-> 
-> Signed-off-by: Hongyi Lu <jwnhy0@gmail.com>
+On Sun, 12 Jun 2022 22:43:14 -0700 you wrote:
+> Andrii reported a bug with the following information:
+>   2859 	if (enum64_placeholder_id == 0) {
+>   2860 		enum64_placeholder_id = btf__add_int(btf, "enum64_placeholder", 1, 0);
+>   >>>     CID 394804:  Control flow issues  (NO_EFFECT)
+>   >>>     This less-than-zero comparison of an unsigned value is never true. "enum64_placeholder_id < 0U".
+>   2861 		if (enum64_placeholder_id < 0)
+>   2862 			return enum64_placeholder_id;
+>   2863    	...
 > 
 > [...]
 
 Here is the summary with links:
-  - bpf: fix spelling in bpf_verifier.h
-    https://git.kernel.org/bpf/bpf-next/c/6dbdc9f35360
+  - [bpf-next] libbpf: Fix an unsigned < 0 bug
+    https://git.kernel.org/bpf/bpf-next/c/c49a44b39b31
 
 You are awesome, thank you!
 -- 
