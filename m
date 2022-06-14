@@ -2,25 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DF42CCA47E
-	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 13:06:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 305BDCCA47C
+	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 13:06:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242648AbiFNNGk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jun 2022 09:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241277AbiFNNGj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S241026AbiFNNGj (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 14 Jun 2022 09:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238639AbiFNNGi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jun 2022 09:06:38 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491ABDF9F;
-        Tue, 14 Jun 2022 06:06:38 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpWg2Blxz6877K;
-        Tue, 14 Jun 2022 21:02:55 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DDC1FCC3;
+        Tue, 14 Jun 2022 06:06:36 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpWd1F06z67JVD;
+        Tue, 14 Jun 2022 21:02:53 +0800 (CST)
 Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
  fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 15:06:35 +0200
+ 15.1.2375.24; Tue, 14 Jun 2022 15:06:33 +0200
 From:   Roberto Sassu <roberto.sassu@huawei.com>
 To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
@@ -28,12 +28,10 @@ To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
 CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RESEND][PATCH v4 2/4] bpf: Add bpf_request_key_by_id() helper
-Date:   Tue, 14 Jun 2022 15:06:19 +0200
-Message-ID: <20220614130621.1976089-3-roberto.sassu@huawei.com>
+Subject: [RESEND][PATCH v4 0/4] bpf: Add bpf_verify_pkcs7_signature() helper
+Date:   Tue, 14 Jun 2022 15:06:17 +0200
+Message-ID: <20220614130621.1976089-1-roberto.sassu@huawei.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614130621.1976089-1-roberto.sassu@huawei.com>
-References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -45,171 +43,106 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add the bpf_request_key_by_id() helper, so that an eBPF program can obtain
-a suitable key pointer to pass to the bpf_verify_pkcs7_signature() helper,
-to be introduced in a later patch.
+Resending with a fix of mktemp argument in verify_sig_setup.sh
 
-The passed identifier can have the following values: 0 for the primary
-keyring (immutable keyring of system keys); 1 for both the primary and
-secondary keyring (where keys can be added only if they are vouched for by
-existing keys in those keyrings); 2 for the platform keyring (primarily
-used by the integrity subsystem to verify a kexec'ed kerned image and,
-possibly, the initramfs signature); ULONG_MAX for the session keyring (for
-testing purposes).
+One of the desirable features in security is the ability to restrict import
+of data to a given system based on data authenticity. If data import can be
+restricted, it would be possible to enforce a system-wide policy based on
+the signing keys the system owner trusts.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- include/uapi/linux/bpf.h       | 17 +++++++++++++++++
- kernel/bpf/bpf_lsm.c           | 30 ++++++++++++++++++++++++++++++
- scripts/bpf_doc.py             |  2 ++
- tools/include/uapi/linux/bpf.h | 17 +++++++++++++++++
- 4 files changed, 66 insertions(+)
+This feature is widely used in the kernel. For example, if the restriction
+is enabled, kernel modules can be plugged in only if they are signed with a
+key whose public part is in the primary or secondary keyring.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f4009dbdf62d..dfd93e0e0759 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5249,6 +5249,22 @@ union bpf_attr {
-  *		Pointer to the underlying dynptr data, NULL if the dynptr is
-  *		read-only, if the dynptr is invalid, or if the offset and length
-  *		is out of bounds.
-+ *
-+ * struct key *bpf_request_key_by_id(unsigned long id)
-+ *	Description
-+ *		Request a keyring by *id*.
-+ *
-+ *		*id* can have the following values (some defined in
-+ *		verification.h): 0 for the primary keyring (immutable keyring of
-+ *		system keys); 1 for both the primary and secondary keyring
-+ *		(where keys can be added only if they are vouched for by
-+ *		existing keys in those keyrings); 2 for the platform keyring
-+ *		(primarily used by the integrity subsystem to verify a kexec'ed
-+ *		kerned image and, possibly, the initramfs signature); ULONG_MAX
-+ *		for the session keyring (for testing purposes).
-+ *	Return
-+ *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
-+ *		otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5455,6 +5471,7 @@ union bpf_attr {
- 	FN(dynptr_read),		\
- 	FN(dynptr_write),		\
- 	FN(dynptr_data),		\
-+	FN(request_key_by_id),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index c1351df9f7ee..e1911812398b 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -16,6 +16,7 @@
- #include <linux/bpf_local_storage.h>
- #include <linux/btf_ids.h>
- #include <linux/ima.h>
-+#include <linux/verification.h>
- 
- /* For every LSM hook that allows attachment of BPF programs, declare a nop
-  * function where a BPF program can be attached.
-@@ -132,6 +133,31 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-+#ifdef CONFIG_KEYS
-+BTF_ID_LIST_SINGLE(bpf_request_key_by_id_btf_ids, struct, key)
-+
-+BPF_CALL_1(bpf_request_key_by_id, unsigned long, id)
-+{
-+	const struct cred *cred = current_cred();
-+
-+	if (id > (unsigned long)VERIFY_USE_PLATFORM_KEYRING && id != ULONG_MAX)
-+		return (unsigned long)NULL;
-+
-+	if (id == ULONG_MAX)
-+		return (unsigned long)cred->session_keyring;
-+
-+	return id;
-+}
-+
-+static const struct bpf_func_proto bpf_request_key_by_id_proto = {
-+	.func		= bpf_request_key_by_id,
-+	.gpl_only	= false,
-+	.ret_type	= RET_PTR_TO_BTF_ID_OR_NULL,
-+	.ret_btf_id	= &bpf_request_key_by_id_btf_ids[0],
-+	.arg1_type	= ARG_ANYTHING,
-+};
-+#endif /* CONFIG_KEYS */
-+
- static const struct bpf_func_proto *
- bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -158,6 +184,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return prog->aux->sleepable ? &bpf_ima_file_hash_proto : NULL;
- 	case BPF_FUNC_get_attach_cookie:
- 		return bpf_prog_has_trampoline(prog) ? &bpf_get_attach_cookie_proto : NULL;
-+#ifdef CONFIG_KEYS
-+	case BPF_FUNC_request_key_by_id:
-+		return &bpf_request_key_by_id_proto;
-+#endif /* CONFIG_KEYS */
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
-index 855b937e7585..176917df0ac0 100755
---- a/scripts/bpf_doc.py
-+++ b/scripts/bpf_doc.py
-@@ -635,6 +635,7 @@ class PrinterHelpers(Printer):
-             'struct bpf_timer',
-             'struct mptcp_sock',
-             'struct bpf_dynptr',
-+            'struct key',
-     ]
-     known_types = {
-             '...',
-@@ -686,6 +687,7 @@ class PrinterHelpers(Printer):
-             'struct bpf_timer',
-             'struct mptcp_sock',
-             'struct bpf_dynptr',
-+            'struct key',
-     }
-     mapped_types = {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f4009dbdf62d..dfd93e0e0759 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5249,6 +5249,22 @@ union bpf_attr {
-  *		Pointer to the underlying dynptr data, NULL if the dynptr is
-  *		read-only, if the dynptr is invalid, or if the offset and length
-  *		is out of bounds.
-+ *
-+ * struct key *bpf_request_key_by_id(unsigned long id)
-+ *	Description
-+ *		Request a keyring by *id*.
-+ *
-+ *		*id* can have the following values (some defined in
-+ *		verification.h): 0 for the primary keyring (immutable keyring of
-+ *		system keys); 1 for both the primary and secondary keyring
-+ *		(where keys can be added only if they are vouched for by
-+ *		existing keys in those keyrings); 2 for the platform keyring
-+ *		(primarily used by the integrity subsystem to verify a kexec'ed
-+ *		kerned image and, possibly, the initramfs signature); ULONG_MAX
-+ *		for the session keyring (for testing purposes).
-+ *	Return
-+ *		A non-NULL pointer if *id* is valid and not 0, a NULL pointer
-+ *		otherwise.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -5455,6 +5471,7 @@ union bpf_attr {
- 	FN(dynptr_read),		\
- 	FN(dynptr_write),		\
- 	FN(dynptr_data),		\
-+	FN(request_key_by_id),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+For eBPF, it can be useful as well. For example, it might be useful to
+authenticate data an eBPF program makes security decisions on.
+
+After a discussion in the eBPF mailing list, it was decided that the stated
+goal should be accomplished by introducing a new helper:
+bpf_verify_pkcs7_signature(), dedicated to verify PKCS#7 signatures. More
+helpers will be introduced later, as necessary.
+
+The job of bpf_verify_pkcs7_signature() is simply to call the corresponding
+signature verification function verify_pkcs7_signature(). Data and
+signature can be provided to the new helper with two dynamic pointers, to
+reduce the number of parameters. The keyring containing the signature
+verification key can be obtained with a new helper
+called bpf_request_key_by_id().
+
+For now, keyrings can be obtained with an identifier defined in
+verification.h (except for the special value ULONG_MAX, used for testing).
+In the future, keyring can be searched also by their description. This
+functionality has not been included here in this patch set, as would
+require additional care for decrementing the reference count of the
+keyring. It could be added later.
+
+While bpf_request_key_by_id() can be called from any program,
+bpf_verify_pkcs7_signature(), instead, must be called by a sleepable
+program, as it is doing crypto operations. For the latter, for example,
+lsm.s/bpf is suitable, fexit/array_map_update_elem is not.
+
+The added test, which invokes both helpers, checks the ability of an eBPF
+program to verify module-style appended signatures, as produced by the
+kernel tool sign-file, currently used to sign kernel modules.
+
+The patch set is organized as follows.
+
+Patch 1 exports bpf_dynptr_get_size(), to obtain the real size of data
+carried by a dynamic pointer. Patch 2 introduces the
+bpf_request_key_by_id() helper. Patch 3 introduces the
+bpf_verify_pkcs7_signature() helper. Finally, patch 4 adds a test for both
+helpers.
+
+Changelog
+
+v3:
+ - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
+   avoid managing different parameters for each signature verification
+   function in one helper (suggested by Daniel)
+ - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
+   Alexei)
+ - Introduce bpf_request_key_by_id() to give more flexibility to the caller
+   of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
+   (suggested by Alexei)
+ - Fix test by reordering the gcc command line, always compile sign-file
+ - Improve helper support check mechanism in the test
+
+v2:
+ - Rename bpf_verify_pkcs7_signature() to a more generic
+   bpf_verify_signature() and pass the signature type (suggested by KP)
+ - Move the helper and prototype declaration under #ifdef so that user
+   space can probe for support for the helper (suggested by Daniel)
+ - Describe better the keyring types (suggested by Daniel)
+ - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
+   redeclaration
+ - Make the test selfcontained (suggested by Alexei)
+
+v1:
+ - Don't define new map flag but introduce simple wrapper of
+   verify_pkcs7_signature() (suggested by Alexei and KP)
+
+Roberto Sassu (4):
+  bpf: Export bpf_dynptr_get_size()
+  bpf: Add bpf_request_key_by_id() helper
+  bpf: Add bpf_verify_pkcs7_signature() helper
+  selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
+
+ include/linux/bpf.h                           |   1 +
+ include/uapi/linux/bpf.h                      |  25 ++
+ kernel/bpf/bpf_lsm.c                          |  60 +++++
+ kernel/bpf/helpers.c                          |   2 +-
+ scripts/bpf_doc.py                            |   2 +
+ tools/include/uapi/linux/bpf.h                |  25 ++
+ tools/testing/selftests/bpf/Makefile          |  14 +-
+ tools/testing/selftests/bpf/config            |   2 +
+ .../bpf/prog_tests/verify_pkcs7_sig.c         | 217 ++++++++++++++++++
+ .../bpf/progs/test_verify_pkcs7_sig.c         | 168 ++++++++++++++
+ .../testing/selftests/bpf/verify_sig_setup.sh | 100 ++++++++
+ 11 files changed, 612 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
+ create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+
 -- 
 2.25.1
 
