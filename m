@@ -2,205 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B72F7CCA47E
-	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 12:42:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F32E9CCA47A
+	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 13:06:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239560AbiFNMmB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jun 2022 08:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S239820AbiFNNGi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jun 2022 09:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356257AbiFNMln (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:41:43 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37B949F1A;
-        Tue, 14 Jun 2022 05:38:32 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id i186so8790265vsc.9;
-        Tue, 14 Jun 2022 05:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OEeIbFtR1YJ0tKMAVjkS0/RYn5SHAacIhGI2Z7HNRyY=;
-        b=MV3Pu/CXvXvq2gGE/O6udZ5k3Uu/AQ7FfIypxbXlfoQGeUC9EIbW8b65JQK7t3IT7Q
-         Jba5aO7U+lUXMweSlgaDTrVZctBiOf+mSPD+wlSFvPp4TDcksfNEE2wRIbIwBGfGHJeJ
-         y77XW4vSoFUfTejsKjNAYBGNcLjZNMiZnxd1/GVHB70f9CNYcpvy6mOkhsAuvMaJvsOr
-         QrUIFTIXVb6jYo0x9Ne7aJPDCqWbZpjzTQDZP6MN1AvIzylQsZKBBvmOVmlUJtMKs+yK
-         fZghWPW0G5mkXSNSk+JFFRaLT6/me1MxXBxpQLO872SqDC8YKl1bQWWIFpDtoMH/bfkQ
-         ONAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OEeIbFtR1YJ0tKMAVjkS0/RYn5SHAacIhGI2Z7HNRyY=;
-        b=KMQPFbnbPJeVKY2evXsmlNb5WEJMloB6v8vZwpLozrG+4KBuraYeqnvsHyp8GFmZ0Y
-         nhMy0AFaynzW3f9Vrc41fnFtdzumPnXqzT8RKWTGundrhmlid97Qsn1H3NzbFsI15Ys6
-         ue9iemvsvLyY4O693h8PSsXFAeIBUfoK1SpoLVkO61lDDv8XMM/DLUaBGVypedhKf+p0
-         mEg1+920ALXIqEqb0dkbVUZLZZQviNPs46IgGY7OcEowTCFkzKkEdeXr/5HylnjyOhHH
-         umOEo23L/IRK5dCJmjJRzdEoM49fEp8ZzeIBk6rOy5nJDRAgAeGCg1BnkSgubChkz/7B
-         E3kg==
-X-Gm-Message-State: AJIora/JUdo6jkcJLOwsl2+lJJI/zkrZltyj7C6M41BOOch3YNoHDMWj
-        CSyDKmptvJnBCIhUtYafbHO26ehUHRxxPdiStuqO6x+yzyg=
-X-Google-Smtp-Source: AGRyM1ufNFkqXaj4uNPKxKMLjpWCupZWqJmfv+3bhR1aC06VAJzkdSEMkWKgbWMzOs50Yt6YIec2EIUi6AJPxWSCsgU=
-X-Received: by 2002:a05:6102:2134:b0:34c:40bc:aa4e with SMTP id
- f20-20020a056102213400b0034c40bcaa4emr1847615vsg.16.1655210311631; Tue, 14
- Jun 2022 05:38:31 -0700 (PDT)
+        with ESMTP id S232691AbiFNNGi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jun 2022 09:06:38 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCCD6164;
+        Tue, 14 Jun 2022 06:06:37 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpWf0TtFz67xv7;
+        Tue, 14 Jun 2022 21:02:54 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 15:06:34 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [RESEND][PATCH v4 1/4] bpf: Export bpf_dynptr_get_size()
+Date:   Tue, 14 Jun 2022 15:06:18 +0200
+Message-ID: <20220614130621.1976089-2-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220614130621.1976089-1-roberto.sassu@huawei.com>
+References: <20220614130621.1976089-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-References: <20220610112648.29695-1-quentin@isovalent.com> <20220610112648.29695-2-quentin@isovalent.com>
- <YqNsWAH24bAIPjqy@google.com> <cb05a59e-07d5-ddd1-b028-82133faaf67e@isovalent.com>
- <CAKH8qBvvq0f+D8BXChw_8krH896J_cYg0yhRfnDOSO_U1n394w@mail.gmail.com>
- <71b56050-11ad-bd06-09c9-1a8c61b4c1b4@isovalent.com> <CAKH8qBsFyakQRd1q6XWggdv4F5+HrHoC4njg9jQFDOfq+kRBCQ@mail.gmail.com>
-In-Reply-To: <CAKH8qBsFyakQRd1q6XWggdv4F5+HrHoC4njg9jQFDOfq+kRBCQ@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Tue, 14 Jun 2022 20:37:55 +0800
-Message-ID: <CALOAHbCvWzOJ169fPTCp1KsFpkEVukKgGnH4mDeYGOEv6hsEpQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] Revert "bpftool: Use libbpf 1.0 API mode
- instead of RLIMIT_MEMLOCK"
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Harsh Modi <harshmodi@google.com>,
-        Paul Chaignon <paul@cilium.io>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:17 AM Stanislav Fomichev <sdf@google.com> wrote:
->
-> On Fri, Jun 10, 2022 at 10:00 AM Quentin Monnet <quentin@isovalent.com> wrote:
-> >
-> > 2022-06-10 09:46 UTC-0700 ~ Stanislav Fomichev <sdf@google.com>
-> > > On Fri, Jun 10, 2022 at 9:34 AM Quentin Monnet <quentin@isovalent.com> wrote:
-> > >>
-> > >> 2022-06-10 09:07 UTC-0700 ~ sdf@google.com
-> > >>> On 06/10, Quentin Monnet wrote:
-> > >>>> This reverts commit a777e18f1bcd32528ff5dfd10a6629b655b05eb8.
-> > >>>
-> > >>>> In commit a777e18f1bcd ("bpftool: Use libbpf 1.0 API mode instead of
-> > >>>> RLIMIT_MEMLOCK"), we removed the rlimit bump in bpftool, because the
-> > >>>> kernel has switched to memcg-based memory accounting. Thanks to the
-> > >>>> LIBBPF_STRICT_AUTO_RLIMIT_MEMLOCK, we attempted to keep compatibility
-> > >>>> with other systems and ask libbpf to raise the limit for us if
-> > >>>> necessary.
-> > >>>
-> > >>>> How do we know if memcg-based accounting is supported? There is a probe
-> > >>>> in libbpf to check this. But this probe currently relies on the
-> > >>>> availability of a given BPF helper, bpf_ktime_get_coarse_ns(), which
-> > >>>> landed in the same kernel version as the memory accounting change. This
-> > >>>> works in the generic case, but it may fail, for example, if the helper
-> > >>>> function has been backported to an older kernel. This has been observed
-> > >>>> for Google Cloud's Container-Optimized OS (COS), where the helper is
-> > >>>> available but rlimit is still in use. The probe succeeds, the rlimit is
-> > >>>> not raised, and probing features with bpftool, for example, fails.
-> > >>>
-> > >>>> A patch was submitted [0] to update this probe in libbpf, based on what
-> > >>>> the cilium/ebpf Go library does [1]. It would lower the soft rlimit to
-> > >>>> 0, attempt to load a BPF object, and reset the rlimit. But it may induce
-> > >>>> some hard-to-debug flakiness if another process starts, or the current
-> > >>>> application is killed, while the rlimit is reduced, and the approach was
-> > >>>> discarded.
-> > >>>
-> > >>>> As a workaround to ensure that the rlimit bump does not depend on the
-> > >>>> availability of a given helper, we restore the unconditional rlimit bump
-> > >>>> in bpftool for now.
-> > >>>
-> > >>>> [0]
-> > >>>> https://lore.kernel.org/bpf/20220609143614.97837-1-quentin@isovalent.com/
-> > >>>> [1] https://github.com/cilium/ebpf/blob/v0.9.0/rlimit/rlimit.go#L39
-> > >>>
-> > >>>> Cc: Yafang Shao <laoar.shao@gmail.com>
-> > >>>> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-> > >>>> ---
-> > >>>>   tools/bpf/bpftool/common.c     | 8 ++++++++
-> > >>>>   tools/bpf/bpftool/feature.c    | 2 ++
-> > >>>>   tools/bpf/bpftool/main.c       | 6 +++---
-> > >>>>   tools/bpf/bpftool/main.h       | 2 ++
-> > >>>>   tools/bpf/bpftool/map.c        | 2 ++
-> > >>>>   tools/bpf/bpftool/pids.c       | 1 +
-> > >>>>   tools/bpf/bpftool/prog.c       | 3 +++
-> > >>>>   tools/bpf/bpftool/struct_ops.c | 2 ++
-> > >>>>   8 files changed, 23 insertions(+), 3 deletions(-)
-> > >>>
-> > >>>> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-> > >>>> index a45b42ee8ab0..a0d4acd7c54a 100644
-> > >>>> --- a/tools/bpf/bpftool/common.c
-> > >>>> +++ b/tools/bpf/bpftool/common.c
-> > >>>> @@ -17,6 +17,7 @@
-> > >>>>   #include <linux/magic.h>
-> > >>>>   #include <net/if.h>
-> > >>>>   #include <sys/mount.h>
-> > >>>> +#include <sys/resource.h>
-> > >>>>   #include <sys/stat.h>
-> > >>>>   #include <sys/vfs.h>
-> > >>>
-> > >>>> @@ -72,6 +73,13 @@ static bool is_bpffs(char *path)
-> > >>>>       return (unsigned long)st_fs.f_type == BPF_FS_MAGIC;
-> > >>>>   }
-> > >>>
-> > >>>> +void set_max_rlimit(void)
-> > >>>> +{
-> > >>>> +    struct rlimit rinf = { RLIM_INFINITY, RLIM_INFINITY };
-> > >>>> +
-> > >>>> +    setrlimit(RLIMIT_MEMLOCK, &rinf);
-> > >>>
-> > >>> Do you think it might make sense to print to stderr some warning if
-> > >>> we actually happen to adjust this limit?
-> > >>>
-> > >>> if (getrlimit(MEMLOCK) != RLIM_INFINITY) {
-> > >>>     fprintf(stderr, "Warning: resetting MEMLOCK rlimit to
-> > >>>     infinity!\n");
-> > >>>     setrlimit(RLIMIT_MEMLOCK, &rinf);
-> > >>> }
-> > >>>
-> > >>> ?
-> > >>>
-> > >>> Because while it's nice that we automatically do this, this might still
-> > >>> lead to surprises for some users. OTOH, not sure whether people
-> > >>> actually read those warnings? :-/
-> > >>
-> > >> I'm not strictly opposed to a warning, but I'm not completely sure this
-> > >> is desirable.
-> > >>
-> > >> Bpftool has raised the rlimit for a long time, it changed only in April,
-> > >> so I don't think it would come up as a surprise for people who have used
-> > >> it for a while. I think this is also something that several other
-> > >> BPF-related applications (BCC I think?, bpftrace, Cilium come to mind)
-> > >> have been doing too.
-> > >
-> > > In this case ignore me and let's continue doing that :-)
-> > >
-> > > Btw, eventually we'd still like to stop doing that I'd presume?
-> >
-> > Agreed. I was thinking either finding a way to improve the probe in
-> > libbpf, or waiting for some more time until 5.11 gets old, but this may
-> > take years :/
-> >
-> > > Should
-> > > we at some point follow up with something like:
-> > >
-> > > if (kernel_version >= 5.11) { don't touch memlock; }
-> > >
-> > > ?
-> > >
-> > > I guess we care only about <5.11 because of the backports, but 5.11+
-> > > kernels are guaranteed to have memcg.
-> >
-> > You mean from uname() and parsing the release? Yes I suppose we could do
-> > that, can do as a follow-up.
->
-> Yeah, uname-based, I don't think we can do better? Given that probing
-> is problematic as well :-(
-> But idk, up to you.
->
+Export bpf_dynptr_get_size(), so that kernel code dealing with eBPF dynamic
+pointers can obtain the real size of data carried by this data structure.
 
-Agreed with the uname-based solution. Another possible solution is to
-probe the member 'memcg' in struct bpf_map, in case someone may
-backport memcg-based  memory accounting, but that will be a little
-over-engineering. The uname-based solution is simple and can work.
+Cc: Joanne Koong <joannelkoong@gmail.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ include/linux/bpf.h  | 1 +
+ kernel/bpf/helpers.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 8e6092d0ea95..6eb03a0c9687 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2420,5 +2420,6 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+ 		     enum bpf_dynptr_type type, u32 offset, u32 size);
+ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+ int bpf_dynptr_check_size(u32 size);
++u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr);
+ 
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 225806a02efb..29e1810afaf6 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1430,7 +1430,7 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
+ 	ptr->size |= type << DYNPTR_TYPE_SHIFT;
+ }
+ 
+-static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
++u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+ {
+ 	return ptr->size & DYNPTR_SIZE_MASK;
+ }
 -- 
-Regards
-Yafang
+2.25.1
+
