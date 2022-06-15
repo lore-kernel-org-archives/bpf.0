@@ -2,96 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D76AC433EF
-	for <bpf@archiver.kernel.org>; Tue, 14 Jun 2022 23:20:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56B39C43334
+	for <bpf@archiver.kernel.org>; Wed, 15 Jun 2022 01:20:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiFNXUS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 14 Jun 2022 19:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
+        id S232346AbiFOBUE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 14 Jun 2022 21:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbiFNXUS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 14 Jun 2022 19:20:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B064C326C0
-        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 16:20:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72E89B81BD0
-        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 23:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E72A7C341C0;
-        Tue, 14 Jun 2022 23:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655248814;
-        bh=+uqqeKGMmF5VXU4n4Agu1vWnoJHvPv9B81ryiybmGLc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=spR3TDX0AuvZwPU1X36nxeDMYmBJwMrsR9xoQSPKApU/ItJ8dctjEp/y3Gt4veRLI
-         arBGF5cuKlMQoqiThjkRJiG62AzuSphKVV4GQhxbj76zEwHEmWGLS+sAGxSG2lMaup
-         cRlA+c8WWyXDQES7fxCH/4FC8M/IIWnuvNC515i+qVNgEV5DXImUoWxTRNhzCvcmfz
-         OO0QkRldemVys83AEwnQsYtqmIjZRXXyuNFUBtccPW5qmbWs/qRGBQ84lAfuw0WNYP
-         TYUVHCrF0EXE0hl3eh/jVUpzGmKX1dSXQtZuaoL6FVyrrjSXbsSpMkrYe4wpjm3ASU
-         D2zQ19I6ilCIg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CBCAEE73858;
-        Tue, 14 Jun 2022 23:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S233337AbiFOBUD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 14 Jun 2022 21:20:03 -0400
+X-Greylist: delayed 184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Jun 2022 18:20:02 PDT
+Received: from rpt-glb-mail01.tpgi.com.au (rpt-glb-mail01.tpgi.com.au [60.241.0.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 342C1B4B8
+        for <bpf@vger.kernel.org>; Tue, 14 Jun 2022 18:20:01 -0700 (PDT)
+X-TPG-Junk-Checked: Yes
+X-TPG-Junk-Status: score=5.4 tests=DKIM_ADSP_CUSTOM_MED,FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,KHOP_HELO_FCRDNS,NML_ADSP_CUSTOM_MED,RDNS_DYNAMIC,SPF_HELO_FAIL,SPF_SOFTFAIL,SPOOFED_FREEMAIL,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE
+X-TPG-Junk-Level: *****
+X-TPG-Abuse: host=193-119-124-135.tpgi.com.au; ip=193.119.124.135; date=Wed, 15 Jun 2022 11:16:14 +1000; auth=iEj2ZfQRwc6ozpDLztTMgpwuFWivWeUIwRXsv1WQFa8=
+Received: from jmaxwell.com (193-119-124-135.tpgi.com.au [193.119.124.135])
+        (authenticated bits=0)
+        by rpt-glb-mail01.tpgi.com.au (envelope-from jmaxwell37@gmail.com) (8.14.3/8.14.3) with ESMTP id 25F1G5XX018835;
+        Wed, 15 Jun 2022 11:16:14 +1000
+From:   Jon Maxwell <jmaxwell37@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, cutaylor-pub@yahoo.com, atenart@kernel.org,
+        daniel@iogearbox.net, joe@cilium.io, i@lmb.io, kafai@fb.com,
+        alexei.starovoitov@gmail.com, jmaxwell37@gmail.com,
+        bpf@vger.kernel.org
+Subject: [PATCH v2] net: bpf: fix request_sock leak in filter.c
+Date:   Wed, 15 Jun 2022 11:15:40 +1000
+Message-Id: <20220615011540.813025-1-jmaxwell37@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix test_varlen verification failure
- with latest llvm
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165524881383.32165.10296942488067106212.git-patchwork-notify@kernel.org>
-Date:   Tue, 14 Jun 2022 23:20:13 +0000
-References: <20220613233449.2860753-1-yhs@fb.com>
-In-Reply-To: <20220613233449.2860753-1-yhs@fb.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+v2 of this patch contains, refactor as per Daniel Borkmann's suggestions to 
+validate RCU flags on the listen socket so that it balances with 
+bpf_sk_release() and update comments as per Martin KaFai Lau's suggestion.
+One small change to Daniels suggestion, put "sk = sk2" under "if (sk2 != sk)"
+to avoid an extra instruction.
+ 
+A customer reported a request_socket leak in a Calico cloud environment. We 
+found that a BPF program was doing a socket lookup with takes a refcnt on 
+the socket and that it was finding the request_socket but returning the parent 
+LISTEN socket via sk_to_full_sk() without decrementing the child request socket 
+1st, resulting in request_sock slab object leak. This patch retains the 
+existing behaviour of returning full socks to the caller but it also decrements
+the child request_socket if one is present before doing so to prevent the leak.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Thanks to Curtis Taylor for all the help in diagnosing and testing this. And 
+thanks to Antoine Tenart for the reproducer and patch input.
 
-On Mon, 13 Jun 2022 16:34:49 -0700 you wrote:
-> With latest llvm15, test_varlen failed with the following verifier log:
-> 
->   17: (85) call bpf_probe_read_kernel_str#115   ; R0_w=scalar(smin=-4095,smax=256)
->   18: (bf) r1 = r0                      ; R0_w=scalar(id=1,smin=-4095,smax=256) R1_w=scalar(id=1,smin=-4095,smax=256)
->   19: (67) r1 <<= 32                    ; R1_w=scalar(smax=1099511627776,umax=18446744069414584320,var_off=(0x0; 0xffffffff00000000),s32_min=0,s32_max=0,u32_max=)
->   20: (bf) r2 = r1                      ; R1_w=scalar(id=2,smax=1099511627776,umax=18446744069414584320,var_off=(0x0; 0xffffffff00000000),s32_min=0,s32_max=0,u32)
->   21: (c7) r2 s>>= 32                   ; R2=scalar(smin=-2147483648,smax=256)
->   ; if (len >= 0) {
->   22: (c5) if r2 s< 0x0 goto pc+7       ; R2=scalar(umax=256,var_off=(0x0; 0x1ff))
->   ; payload4_len1 = len;
->   23: (18) r2 = 0xffffc90000167418      ; R2_w=map_value(off=1048,ks=4,vs=1572,imm=0)
->   25: (63) *(u32 *)(r2 +0) = r0         ; R0=scalar(id=1,smin=-4095,smax=256) R2_w=map_value(off=1048,ks=4,vs=1572,imm=0)
->   26: (77) r1 >>= 32                    ; R1_w=scalar(umax=4294967295,var_off=(0x0; 0xffffffff))
->   ; payload += len;
->   27: (18) r6 = 0xffffc90000167424      ; R6_w=map_value(off=1060,ks=4,vs=1572,imm=0)
->   29: (0f) r6 += r1                     ; R1_w=Pscalar(umax=4294967295,var_off=(0x0; 0xffffffff)) R6_w=map_value(off=1060,ks=4,vs=1572,umax=4294967295,var_off=(0)
->   ; len = bpf_probe_read_kernel_str(payload, MAX_LEN, &buf_in2[0]);
->   30: (bf) r1 = r6                      ; R1_w=map_value(off=1060,ks=4,vs=1572,umax=4294967295,var_off=(0x0; 0xffffffff)) R6_w=map_value(off=1060,ks=4,vs=1572,um)
->   31: (b7) r2 = 256                     ; R2_w=256
->   32: (18) r3 = 0xffffc90000164100      ; R3_w=map_value(off=256,ks=4,vs=1056,imm=0)
->   34: (85) call bpf_probe_read_kernel_str#115
->   R1 unbounded memory access, make sure to bounds check any such access
->   processed 27 insns (limit 1000000) max_states_per_insn 0 total_states 2 peak_states 2 mark_read 1
->   -- END PROG LOAD LOG --
->   libbpf: failed to load program 'handler32_signed'
-> 
-> [...]
+Fixes: f7355a6c0497 ("bpf: Check sk_fullsock() before returning from bpf_sk_lookup()")
+Fixes: edbf8c01de5a ("bpf: add skc_lookup_tcp helper")
+Tested-by: Curtis Taylor <cutaylor-pub@yahoo.com>
+Co-developed-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Jon Maxwell <jmaxwell37@gmail.com>
+---
+ net/core/filter.c | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-Here is the summary with links:
-  - [bpf-next] selftests/bpf: Fix test_varlen verification failure with latest llvm
-    https://git.kernel.org/bpf/bpf-next/c/96752e1ec0e0
-
-You are awesome, thank you!
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 2e32cee2c469..ec2a1e68af12 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6204,10 +6204,21 @@ __bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 					   ifindex, proto, netns_id, flags);
+ 
+ 	if (sk) {
+-		sk = sk_to_full_sk(sk);
+-		if (!sk_fullsock(sk)) {
++		struct sock *sk2 = sk_to_full_sk(sk);
++
++		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk
++		 * sock refcnt is decremented to prevent a request_sock leak.
++		 */
++		if (!sk_fullsock(sk2))
++			sk2 = NULL;
++		if (sk2 != sk) {
+ 			sock_gen_put(sk);
+-			return NULL;
++			/* Ensure there is no need to bump sk2 refcnt */
++			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
++				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
++				return NULL;
++			}
++			sk = sk2;
+ 		}
+ 	}
+ 
+@@ -6241,10 +6252,21 @@ bpf_sk_lookup(struct sk_buff *skb, struct bpf_sock_tuple *tuple, u32 len,
+ 					 flags);
+ 
+ 	if (sk) {
+-		sk = sk_to_full_sk(sk);
+-		if (!sk_fullsock(sk)) {
++		struct sock *sk2 = sk_to_full_sk(sk);
++
++		/* sk_to_full_sk() may return (sk)->rsk_listener, so make sure the original sk
++		 * sock refcnt is decremented to prevent a request_sock leak.
++		 */
++		if (!sk_fullsock(sk2))
++			sk2 = NULL;
++		if (sk2 != sk) {
+ 			sock_gen_put(sk);
+-			return NULL;
++			/* Ensure there is no need to bump sk2 refcnt */
++			if (unlikely(sk2 && !sock_flag(sk2, SOCK_RCU_FREE))) {
++				WARN_ONCE(1, "Found non-RCU, unreferenced socket!");
++				return NULL;
++			}
++			sk = sk2;
+ 		}
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.31.1
 
