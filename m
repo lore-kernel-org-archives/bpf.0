@@ -2,133 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6406CC433EF
-	for <bpf@archiver.kernel.org>; Thu, 16 Jun 2022 19:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04E54C433EF
+	for <bpf@archiver.kernel.org>; Thu, 16 Jun 2022 20:00:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiFPTxy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 16 Jun 2022 15:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S229888AbiFPUAC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 16 Jun 2022 16:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378299AbiFPTxx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 16 Jun 2022 15:53:53 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FAE546B0;
-        Thu, 16 Jun 2022 12:53:44 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25GIemq2031683;
-        Thu, 16 Jun 2022 12:53:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=Bca4tw3u/RDW7qa6RxN1S8T82AHBip+/tZvFAqs+JTw=;
- b=bvjE128sr05gFTx+gcnljK0h07OzkOPVmhUm3eRjyrkI5IXjieYOtx1x3BIX1PwmdaoN
- tgQVe5gnzICSg9ZsCBeghlYsexcYtAB3wLhMJK5CapCOGVaA5Ry5/O8GHZwAvIOUIYRe
- JeQV3HJttOYdcLWoKz5UrbqvtP0OjOi/p9I= 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gr4xmjw5y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Jun 2022 12:53:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BTppAFSEYvjtnAK0WCyfTA9Izs+szA4/Nz2afo0hvuADklvc6W2OnuyrHrY9Y1EqR21QWWa0OWM6ct+0Aue4isQuPsyO/EANiW20bf+iANSgge0Epm1O5oeKqV0sLUuhsuylwFL19/YAvtk2zKV1OmYVSp2v5bAprYj3eS0hGoya03EoFybuUnNeU1bLNA66INznrF5fpmOMwbhPKX+a1mBQu90UVc4V1zmFA0olnz3jOOhyuGOSD53jOaAF6IrXubaxT3FVa5H4s/BH+fRQgDtBMJU6p+j42nc83f+jPd4af9C4U7eKllUdZfTWVq06Ec+oOMt3epJ4mChO/GsPLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bca4tw3u/RDW7qa6RxN1S8T82AHBip+/tZvFAqs+JTw=;
- b=cWXvDA10V8lfwpqPCML0c8nKHLR8eYSNUICs8Gh1Oa6PUuOhiIE46HJxM+k95XKTfgmA5PDXReCP428ZKfX1WFndAA2YOe2NiioAO006jTeNlxcUIOQnTz16Tp238XCjXXHIq2zS7EhFpJUsKjRFkb888V1M1fI21Q+9RRDBgR8FuOPgofX/bFcZeYH+ZTp8myVpGdtZEn7IPxElzUbMu26mS4ilIprc3kSdTA/dOB55FRnjPPQXXdZzS2DsXMUVLXaIeEuTmRbhtFrVEFQC3+lFD0+wsmOY+zu+pJJSGTjrpw/FxHmh2fgeJ0fyjehJ8rfTWRUwokZoVbRoFq6OQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
- by DM5PR15MB1721.namprd15.prod.outlook.com (2603:10b6:4:59::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Thu, 16 Jun
- 2022 19:53:26 +0000
-Received: from MW4PR15MB4475.namprd15.prod.outlook.com
- ([fe80::3941:25c6:c1cd:5762]) by MW4PR15MB4475.namprd15.prod.outlook.com
- ([fe80::3941:25c6:c1cd:5762%7]) with mapi id 15.20.5353.015; Thu, 16 Jun 2022
- 19:53:26 +0000
-Date:   Thu, 16 Jun 2022 12:53:24 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org
-Subject: Re: [PATCH bpf-next v9 01/10] bpf: add bpf_func_t and trampoline
- helpers
-Message-ID: <20220616195324.idodbt43ubqkzeww@kafai-mbp>
-References: <20220610165803.2860154-1-sdf@google.com>
- <20220610165803.2860154-2-sdf@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610165803.2860154-2-sdf@google.com>
-X-ClientProxiedBy: BYAPR07CA0055.namprd07.prod.outlook.com
- (2603:10b6:a03:60::32) To MW4PR15MB4475.namprd15.prod.outlook.com
- (2603:10b6:303:104::16)
+        with ESMTP id S229521AbiFPUAB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 16 Jun 2022 16:00:01 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD1C5A159
+        for <bpf@vger.kernel.org>; Thu, 16 Jun 2022 13:00:00 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id kq6so4699628ejb.11
+        for <bpf@vger.kernel.org>; Thu, 16 Jun 2022 13:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fXKlLlg0dFIiUQrnVgKsAhtJyK6tgvF9RjrXl4uU6UU=;
+        b=EqMrDKVMp3AGNMNgge94YciXGvC8Vr4VHsKQSl8Byxa8+rg+C07ZZo9TxCe/6wUgNc
+         XiWVQgGuLEUvSr31VuGgLcJsRnsKGuQwe/0O4vS4+g9QFQWm5NlbENKiDpTQ4SOS1xau
+         aVTbCsVpKJ52yrdFfgeyRMtrwEEZpWrpCYPY82O76jJmsrPOO+OBYJA8YgqCzSJ3D4sb
+         1dcfpOnRc7kcXGnc5SpwGI8tEhKpczwDsSYlWcb3Lpc75VCM9RCXH+/5cv9lVc4jAdp9
+         F2KnUu7nPrOEHyDfMUWYVo+9u5tj3pxifW2c2qkaA1lJ3CEVhndCX1MVtyTDUFJWzXr9
+         Fcyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fXKlLlg0dFIiUQrnVgKsAhtJyK6tgvF9RjrXl4uU6UU=;
+        b=TAVn26V1UqoEuPymKSRiUBuMB3P5BXrSkcowibWHQVDc+Bc3kHMhsSzxXgnTbvRrXZ
+         07seM7DWk79yVANf3gnP8qnhWySMkKazeJDo3iEO2x+/EXoGgW8ycDCCxy3Ux78vY2fA
+         CdplfM3O4YjHPYknvB9IDU54GY9+vMtX/r+/gQGPCyT/iqZmu2TAE+wUH2ZHffisYBKm
+         rdR3u5Eu89lD9u9RoxCjosIKKfsdCR/SuM23jzZYYpSdy/GqDfzWiySIUz+w2f2u1T04
+         FLfUz0bD8wNlJr7tRgq1xkWZAfS8pZsQJqNVHAi/x+8+o8ablualAIgI3J/5u3CY0Ok7
+         StIQ==
+X-Gm-Message-State: AJIora9Yth+/tBt+3gnOUCCtwY5eExdRhVRd680lkYEAcZjHx3T1nEKU
+        NjuGf7FAAmwjfi/tPI/KQJPVQAQWLIWl2taAErklJQzy
+X-Google-Smtp-Source: AGRyM1sGnGI4JBiZnmF7I/bl0bJDLixLz8Uxg0jGk9KSoLvF+B4/J4TdkeFoEWjsXibb4YAHYaHu93u4pX15MN9mmJg=
+X-Received: by 2002:a17:906:9b86:b0:6fe:d37f:b29d with SMTP id
+ dd6-20020a1709069b8600b006fed37fb29dmr6007141ejc.327.1655409598960; Thu, 16
+ Jun 2022 12:59:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4cfc18eb-d795-4325-7943-08da4fd1e06b
-X-MS-TrafficTypeDiagnostic: DM5PR15MB1721:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR15MB1721058A18ED97724EDF4CACD5AC9@DM5PR15MB1721.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JURZ3sZAZmVTeIlB/8Pitblwi2S3PWDinoJ1Id2KEna3O4404kGmHH7Gj+Jq/B8SEUYwU1be71UjmtCdZv3DeqmzBMbNIFQ97xMeZ7lqY1bjkiek6/V7axsezcg36FV0I6OtQshPdhUuiAFe1NkXKOv2mo752xeHWoAkOME4mdelHL16a8ClmsRk25vYLuyCUxbxemSnZ3oPfYWESkAVK+zVRZOuRR/DuKp3qwzw2xyh3hdnwZPIAJp3+BJGK6Tp3Cd3tgA8024NNOfT9vNNbHmNCdoDLJEIYI+TyH7AiZln14gHW2XUZsTIK/RoDaClWwacFuf0uNNRyTMs+UJA23dLSNFObLbZ64rfZn3h66mSfumZtABZ/VXCWZbt02T8uT7mQ9lCGEeq5C45sRec8WPoxeSVAKq9iYJjFblW/Z+YQViCNQ3hOSBDNuRhShQUoQF9mKKXp/dr05lhMZtd+zvOwOP9V8tdHRu1dVdmwc5reGdv2joiG45hfwfsppg3i/2jHIrR6DahmiCNUStz7P47slEKiBwb+kNrtqfw4ZPfq80cCvOGFBoYkZWdh/COP8h8D6qKGSGptCbl2F5A3mbnRiNcANkPDFibBIY7shAxXZdRIrsOmeZDRlSV38eIvyU81/Vm513uKHuOUPdy6Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(366004)(8936002)(38100700002)(33716001)(6486002)(498600001)(5660300002)(4326008)(8676002)(66946007)(66556008)(66476007)(9686003)(6506007)(6916009)(86362001)(52116002)(316002)(6512007)(186003)(1076003)(2906002)(558084003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xx/vjsHAYX1BXmp5r2rTZBEXL6sHE7ihpkALHqPM4Kp8GK6IHVNVeBVOTbLS?=
- =?us-ascii?Q?15zMUnb95Dq554pWXGk1IKPBdUG87IVYRoWw8GvglZ40BH7BB3gCoEy9csrv?=
- =?us-ascii?Q?yI6h8poMfGNYf2ibYmMX5e6mkIkTkne8J3cqp7mb3cJOBKB6TL/s1csy/bg2?=
- =?us-ascii?Q?pwYn+Nb49g0qKZPoqK4BBnAxAswS+ShG2YYrGh2QsTudkm49y+l3fumAHHT2?=
- =?us-ascii?Q?Pf73gvvqkzOWjUPMHDd3NeIeptemHIrfKXVDv1JQvx0uEw6m3llH6DSCIshn?=
- =?us-ascii?Q?VYbBMdDbMfZtHnpcjxS1vxJvlfqqmL2fY+lnErmukg5Z0tmvwsoJMx21iUsn?=
- =?us-ascii?Q?p4VWGNqSuPvIkgbneDYgXEVqg6woC8LFcvAA1N/ad4wmQxgeNuby1QsN7GVF?=
- =?us-ascii?Q?s17FKsd86atIBnY1x4IU4/Sbx+22CPW+HIX1WCqTkGDE6BGtofpXfuN4WIh0?=
- =?us-ascii?Q?R8Ai+KzBHSImvzYVkwucx6+f0LQ/cTg477/oLd+5jD48oe3TLU8tIrnhTvdy?=
- =?us-ascii?Q?fvCpgXrPoOrsaNxNvqRQR1CBF7WBgFoloI3rwo1rTK2dY4naSe2kiso34nmP?=
- =?us-ascii?Q?Q98//5vuVkXWcDUoOye6LYU8L5kn1IE8dH16FKDTBpANUaagfGzrI7H8TgQY?=
- =?us-ascii?Q?HVDKxCamMEeu62YRMPkXdNuhDPLtQrMfcYriwLlPAOZ7+nhWYubksJPLnQkb?=
- =?us-ascii?Q?WeGbaixoscZTNe4w52ks66QuO59TtcnZwXEiLYxcxdGWmt0S04jJXiWxVTx8?=
- =?us-ascii?Q?cg6Ev6uCZtCP5VzO+CfKI0ikzU28gVCWTKfeZ0NukkT9TW4eeBBiuAjT+7zc?=
- =?us-ascii?Q?aRlsZ+pN1He90+EfjeiUAcOpOm+PPX8fgfRAKrED5KaBtnsyhFH3ef44VmVn?=
- =?us-ascii?Q?iRxEmuzOsjYcjKPX7mrsws4eC+JRp0BQ4hG5hyR3Zw5KM3aRAGOE5BfmM8ra?=
- =?us-ascii?Q?X/GD88r8iGq3x9+hFK8wt7Muh1z6msTw0o0fgIDcMAlfdlhLOre+OqPV7MCV?=
- =?us-ascii?Q?Uy/SDagdbPMrYaabbkIY3knBFjjjdSe3NXU9UdjPw3dpUwYhX5tV99txJo3z?=
- =?us-ascii?Q?vqo7NjWGrjaesdevMDSMJuXWDToq1XN9hcPns5EXATYftgnyQKmaOzowCyBY?=
- =?us-ascii?Q?3060VF5WiurbXB1tuJVTfkVbyy8MViy++00UWYyeOwEMf8pYT+pGLeoA5f5b?=
- =?us-ascii?Q?1VfR5kGsMvT8i7ERWGq+xC58GtlJ1qF95g9G2HwRzSsvTFQQNMX3c1+Unie5?=
- =?us-ascii?Q?iBP3tWvaZGLkSru9wQt7CCLygof7KLcT/Urzhuv0xj9n3FBBD1Wn8SFn8LiT?=
- =?us-ascii?Q?th3RuXMuhzek2Y7boFmfx5xfSaHgvpjq6GtyvQes3WnuvJGj7VPXWSiq05A8?=
- =?us-ascii?Q?pIe+XIoxBr7Dn3v36bn0E7Lp4G4irmawMfAXwLTdYzZMvChD+m0zXLWQWTI+?=
- =?us-ascii?Q?M2+L8frCqPGJOPu20hJO7VWgrM2lGqEaUNkRcxNjPJ/ljkoVgBLbZklTK3Dy?=
- =?us-ascii?Q?I43zVI5bmA2yw41yXluhnR0uZlJdc6/LThTiKfIeMYPh7r7FxK2gb13J1TwV?=
- =?us-ascii?Q?rdAzcKrCvKVkcjL5LzzXVB7Xb9BgauJRMunBx9MvrN18Ye2EvsY745+O1Krj?=
- =?us-ascii?Q?5BwMGaoXY61UEcUyEc2kSrNNvlf/gz4JWwPCXWoJUpHNk2Q9l9VA+xEaJ6Bj?=
- =?us-ascii?Q?D0JveOfub78A4JgshPtg74zbkC8fPQznPdfyb6hwzn0DFlsWqcngg4iKPlM9?=
- =?us-ascii?Q?CMT9JVDUjzmTodQ40Rj6aZP5DQF+C2Y=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cfc18eb-d795-4325-7943-08da4fd1e06b
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2022 19:53:25.9807
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4G8xEJY4r/WD/aEWS1GJzDDs2Gxw9ap3niyxXwq8cHSAhtxXR/K39GKe2N3KH7U+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1721
-X-Proofpoint-GUID: 7XwO8z0dGMUAUpvuLoEcSJ-i6XsZXKzb
-X-Proofpoint-ORIG-GUID: 7XwO8z0dGMUAUpvuLoEcSJ-i6XsZXKzb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-16_18,2022-06-16_01,2022-02-23_01
+References: <20220616055543.3285835-1-andrii@kernel.org>
+In-Reply-To: <20220616055543.3285835-1-andrii@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 16 Jun 2022 12:59:47 -0700
+Message-ID: <CAADnVQ+OXAk8=FoyHP0pt5o_9sB7Qj=nm7xLZJYpLEczMt8i2g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: fix internal USDT address translation
+ logic for shared libraries
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 09:57:54AM -0700, Stanislav Fomichev wrote:
-> I'll be adding lsm cgroup specific helpers that grab
-> trampoline mutex.
-> 
-> No functional changes.
-> 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-Reviewed-by: Martin KaFai Lau <kafai@fb.com>
+On Wed, Jun 15, 2022 at 10:56 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>
+> Perform the same virtual address to file offset translation that libbpf
+> is doing for executable ELF binaries also for shared libraries.
+> Currently libbpf is making a simplifying and sometimes wrong assumption
+> that for shared libraries relative virtual addresses inside ELF are
+> always equal to file offsets.
+>
+> Unfortunately, this is not always the case with LLVM's lld linker, which
+> now by default generates quite more complicated ELF segments layout.
+> E.g., for liburandom_read.so from selftests/bpf, here's an excerpt from
+> readelf output listing ELF segments (a.k.a. program headers):
+>
+>   Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+>   PHDR           0x000040 0x0000000000000040 0x0000000000000040 0x0001f8 0x0001f8 R   0x8
+>   LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0005e4 0x0005e4 R   0x1000
+>   LOAD           0x0005f0 0x00000000000015f0 0x00000000000015f0 0x000160 0x000160 R E 0x1000
+>   LOAD           0x000750 0x0000000000002750 0x0000000000002750 0x000210 0x000210 RW  0x1000
+>   LOAD           0x000960 0x0000000000003960 0x0000000000003960 0x000028 0x000029 RW  0x1000
+>
+> Compare that to what is generated by GNU ld (or LLVM lld's with extra
+> -znoseparate-code argument which disables this cleverness in the name of
+> file size reduction):
+>
+>   Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+>   LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x000550 0x000550 R   0x1000
+>   LOAD           0x001000 0x0000000000001000 0x0000000000001000 0x000131 0x000131 R E 0x1000
+>   LOAD           0x002000 0x0000000000002000 0x0000000000002000 0x0000ac 0x0000ac R   0x1000
+>   LOAD           0x002dc0 0x0000000000003dc0 0x0000000000003dc0 0x000262 0x000268 RW  0x1000
+>
+> You can see from the first example above that for executable (Flg == "R E")
+> PT_LOAD segment (LOAD #2), Offset doesn't match VirtAddr columns.
+> And it does in the second case (GNU ld output).
+>
+> This is important because all the addresses, including USDT specs,
+> operate in a virtual address space, while kernel is expecting file
+> offsets when performing uprobe attach. So such mismatches have to be
+> properly taken care of and compensated by libbpf, which is what this
+> patch is fixing.
+>
+> Also patch clarifies few function and variable names, as well as updates
+> comments to reflect this important distinction (virtaddr vs file offset)
+> and to ephasize that shared libraries are not all that different from
+> executables in this regard.
+>
+> This patch also changes selftests/bpf Makefile to force urand_read and
+> liburand_read.so to be built with Clang and LLVM's lld (and explicitly
+> request this ELF file size optimization through -znoseparate-code linker
+> parameter) to validate libbpf logic and ensure regressions don't happen
+> in the future. I've bundled these selftests changes together with libbpf
+> changes to keep the above description tied with both libbpf and
+> selftests changes.
+>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  tools/lib/bpf/usdt.c                 | 123 ++++++++++++++-------------
+
+What should be the Fixes tag here?
+Back to the beginning of this usdt.c file?
