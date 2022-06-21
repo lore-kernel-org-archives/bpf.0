@@ -2,156 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 384C9C433EF
-	for <bpf@archiver.kernel.org>; Tue, 21 Jun 2022 12:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95EAAC433EF
+	for <bpf@archiver.kernel.org>; Tue, 21 Jun 2022 12:47:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350512AbiFUMmi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Jun 2022 08:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S230497AbiFUMrB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Jun 2022 08:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350543AbiFUMmg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Jun 2022 08:42:36 -0400
-X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 05:42:34 PDT
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090B027FEB
-        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 05:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:Message-Id
-        :Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=njJuoA2Sc/56TeF9U5fuCJ1Q1iYeeVXupfO3Z71rmfU=; b=N20iD1j4QJpCbcdtTtf0vx4SfS
-        v9vaHEUavFbJcnwamVJjVHTPAgSNlSJXTH6poPimDs9+bULGexIuzt+l9cAjUpktSS0RCyKacIuCp
-        7mkrrtulA3TPEdxbQGC4sc5Fem19JxPiWAcf5N2zGRLSh38enkeRCc5KY2ypcoD+ovxYLed2+JLKv
-        qD/IM8Xp/H194fGBE9LyVjxnqVy20zgwo5GUcbzjiUCR/QtX66QNX/o2nRLpjiZGWuqRSCMCEp5sY
-        Qwl4QveMpiaAd3HMniNlZ1tVnv3oVi371F+FhewiOTracn0ddYLjmA3dk5eXCF63MrB9E/zqurcjw
-        LYtHnsDA==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1o3cOK-005hVa-SB; Tue, 21 Jun 2022 13:49:56 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH net] virtio_net: fix xdp_rxq_info bug after suspend/resume
-Date:   Tue, 21 Jun 2022 13:48:44 +0200
-Message-Id: <20220621114845.3650258-1-stephan.gerhold@kernkonzept.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S1344117AbiFUMrA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Jun 2022 08:47:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73746286C7
+        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 05:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655815618;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=N+Zc+zs/CTabWFdASR8nBFUHsR9XBPlUJlIq03EFu3E=;
+        b=IiD+7ezlvf/XSTLaI2m29BYA6uJPg6/LgEBI91gSuR6mU2uxchziGwCpMzHA9aBIUH6W82
+        d9c7P7puXbZKBP3d0Hq5UWBUYpMi1zgmw7FPyi17v/5QVSrdJDFSXzDaUYRVxN80RRnw6u
+        v3fEdTFhUEKiw+qux+T/Vy7yavJxoOg=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-vluYtgQQP5C3-ICIUfKiZQ-1; Tue, 21 Jun 2022 08:46:57 -0400
+X-MC-Unique: vluYtgQQP5C3-ICIUfKiZQ-1
+Received: by mail-pj1-f71.google.com with SMTP id gi2-20020a17090b110200b001ecad6feb7cso2958043pjb.5
+        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 05:46:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N+Zc+zs/CTabWFdASR8nBFUHsR9XBPlUJlIq03EFu3E=;
+        b=wtgdcLqXqBbg3IC8w2gAlFjoLpoY/zi1wggxjKBJCRkaI95JcfTBDuhdJwLXkmK+G5
+         zak2a0n4Pt4VDzkx4XeV3zsmX7Q5fm5hd54Vn4wVrMcQlrxnPdhD7jWX2R4di4oOwyxy
+         FPo8X6FpUnfBCC7+r9/l/GB2J3UTaJ9MljY2U9dUKMDddy+XV8aGhYrE5/Wd3WDY3hdA
+         rrCvrMe8joFx4+/AEawcvlmq7uox7SaMEBjc1UJ5g7FsP6Ediz3f5bPs2pr9W9cYgIBP
+         XD+sXmERNolCwLx0D5ptZCR9Irvx/LBC1juyERCq1EmhgTvfGpQVVsEjGWlkV+4lu0xY
+         yecA==
+X-Gm-Message-State: AJIora++uotaIrtBQ4CAFvkb3J0FRzCz2d880m7VlLNVkAbswVMETbjw
+        804BbJDwytkVGARECx+2Jyb+iNzAuH/0QcZjUDrVqdWtuscnQgdEbzHPFcP0HIcJ0500OKeF/O9
+        s+TEg+bt+v38dcZWjAcF8sjPCowFu
+X-Received: by 2002:a17:902:6946:b0:167:8ff3:1608 with SMTP id k6-20020a170902694600b001678ff31608mr28655456plt.116.1655815616299;
+        Tue, 21 Jun 2022 05:46:56 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1teC0OkbDR7N7pOPAmvKa08vFkUWc/koR9zPlIJH29RZ+AlXdwjCmgImUHkgGInBsWhnUkoZ8Gqxeap7A+nWZw=
+X-Received: by 2002:a17:902:6946:b0:167:8ff3:1608 with SMTP id
+ k6-20020a170902694600b001678ff31608mr28655430plt.116.1655815616037; Tue, 21
+ Jun 2022 05:46:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220621012811.2683313-1-kpsingh@kernel.org>
+In-Reply-To: <20220621012811.2683313-1-kpsingh@kernel.org>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 21 Jun 2022 14:46:45 +0200
+Message-ID: <CAO-hwJ+G6ZaNUFC-Qv7Lw2PQOEs0rV7r5ZD8FEAj0=+NVy5zYw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 0/5] Add bpf_getxattr
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The following sequence currently causes a driver bug warning
-when using virtio_net:
+On Tue, Jun 21, 2022 at 3:28 AM KP Singh <kpsingh@kernel.org> wrote:
+>
+> v1 -> v2
+>
+> - Used kfuncs as suggested by Alexei
+> - Used Benjamin Tissoires' patch from the HID v4 series to add a
+>   sleepable kfunc set (I sent the patch as a part of this series as it
+>   seems to have been dropped from v5) and acked it. Hope this is okay.
 
-  # ip link set eth0 up
-  # echo mem > /sys/power/state (or e.g. # rtcwake -s 10 -m mem)
-  <resume>
-  # ip link set eth0 down
+FWIW, this is perfectly OK with me.
 
-  Missing register, driver bug
-  WARNING: CPU: 0 PID: 375 at net/core/xdp.c:138 xdp_rxq_info_unreg+0x58/0x60
-  Call trace:
-   xdp_rxq_info_unreg+0x58/0x60
-   virtnet_close+0x58/0xac
-   __dev_close_many+0xac/0x140
-   __dev_change_flags+0xd8/0x210
-   dev_change_flags+0x24/0x64
-   do_setlink+0x230/0xdd0
-   ...
+The reason I dropped the patch from the series is because I don't
+absolutely need it anymore: all of my sleepable kfuncs are now
+declared as SYSCALL type, which is by definition sleepable.
 
-This happens because virtnet_freeze() frees the receive_queue
-completely (including struct xdp_rxq_info) but does not call
-xdp_rxq_info_unreg(). Similarly, virtnet_restore() sets up the
-receive_queue again but does not call xdp_rxq_info_reg().
+I still believe it's valuable to be able to define sleepable kfuncs however.
 
-Actually, parts of virtnet_freeze_down() and virtnet_restore_up()
-are almost identical to virtnet_close() and virtnet_open(): only
-the calls to xdp_rxq_info_(un)reg() are missing. This means that
-we can fix this easily and avoid such problems in the future by
-just calling virtnet_close()/open() from the freeze/restore handlers.
+Cheers,
+Benjamin
 
-Aside from adding the missing xdp_rxq_info calls the only difference
-is that the refill work is only cancelled if netif_running(). However,
-this should not make any functional difference since the refill work
-should only be active if the network interface is actually up.
-
-Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
- drivers/net/virtio_net.c | 25 ++++++-------------------
- 1 file changed, 6 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index db05b5e930be..969a67970e71 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2768,7 +2768,6 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
- static void virtnet_freeze_down(struct virtio_device *vdev)
- {
- 	struct virtnet_info *vi = vdev->priv;
--	int i;
- 
- 	/* Make sure no work handler is accessing the device */
- 	flush_work(&vi->config_work);
-@@ -2776,14 +2775,8 @@ static void virtnet_freeze_down(struct virtio_device *vdev)
- 	netif_tx_lock_bh(vi->dev);
- 	netif_device_detach(vi->dev);
- 	netif_tx_unlock_bh(vi->dev);
--	cancel_delayed_work_sync(&vi->refill);
--
--	if (netif_running(vi->dev)) {
--		for (i = 0; i < vi->max_queue_pairs; i++) {
--			napi_disable(&vi->rq[i].napi);
--			virtnet_napi_tx_disable(&vi->sq[i].napi);
--		}
--	}
-+	if (netif_running(vi->dev))
-+		virtnet_close(vi->dev);
- }
- 
- static int init_vqs(struct virtnet_info *vi);
-@@ -2791,7 +2784,7 @@ static int init_vqs(struct virtnet_info *vi);
- static int virtnet_restore_up(struct virtio_device *vdev)
- {
- 	struct virtnet_info *vi = vdev->priv;
--	int err, i;
-+	int err;
- 
- 	err = init_vqs(vi);
- 	if (err)
-@@ -2800,15 +2793,9 @@ static int virtnet_restore_up(struct virtio_device *vdev)
- 	virtio_device_ready(vdev);
- 
- 	if (netif_running(vi->dev)) {
--		for (i = 0; i < vi->curr_queue_pairs; i++)
--			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
--				schedule_delayed_work(&vi->refill, 0);
--
--		for (i = 0; i < vi->max_queue_pairs; i++) {
--			virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
--			virtnet_napi_tx_enable(vi, vi->sq[i].vq,
--					       &vi->sq[i].napi);
--		}
-+		err = virtnet_open(vi->dev);
-+		if (err)
-+			return err;
- 	}
- 
- 	netif_tx_lock_bh(vi->dev);
--- 
-2.30.2
+> - Added support for verifying string constants to kfuncs
+>
+> Foundation for building more complex security policies using the
+> BPF LSM as presented in LSF/MM/BPF:
+>
+>  http://vger.kernel.org/bpfconf2022_material/lsfmmbpf2022-xattr.pdf
+>
+> Benjamin Tissoires (1):
+>   btf: Add a new kfunc set which allows to mark a function to be
+>     sleepable
+>
+> KP Singh (4):
+>   bpf: kfunc support for ARG_PTR_TO_CONST_STR
+>   bpf: Allow kfuncs to be used in LSM programs
+>   bpf: Add a bpf_getxattr kfunc
+>   bpf/selftests: Add a selftest for bpf_getxattr
+>
+>  include/linux/bpf_verifier.h                  |  2 +
+>  include/linux/btf.h                           |  2 +
+>  kernel/bpf/btf.c                              | 42 ++++++++-
+>  kernel/bpf/verifier.c                         | 85 +++++++++++--------
+>  kernel/trace/bpf_trace.c                      | 36 ++++++++
+>  .../testing/selftests/bpf/prog_tests/xattr.c  | 58 +++++++++++++
+>  tools/testing/selftests/bpf/progs/xattr.c     | 37 ++++++++
+>  7 files changed, 223 insertions(+), 39 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/xattr.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/xattr.c
+>
+> --
+> 2.37.0.rc0.104.g0611611a94-goog
+>
 
