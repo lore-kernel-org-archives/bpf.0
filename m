@@ -2,211 +2,85 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D41BEC43334
-	for <bpf@archiver.kernel.org>; Tue, 21 Jun 2022 16:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E665ECCA473
+	for <bpf@archiver.kernel.org>; Tue, 21 Jun 2022 16:38:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352165AbiFUQ0M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 21 Jun 2022 12:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
+        id S233627AbiFUQi4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 21 Jun 2022 12:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351898AbiFUQ0K (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 21 Jun 2022 12:26:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57112CE3C
-        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 09:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655828768;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WDvAfC8H1jWG/kPl4hssaiTNP9VbbBXL1QM5A1sW0U4=;
-        b=LWnB0hpqee1bMvMd7UPiLyyWZuMNjw8QBBiAmRK9ESkPAyVMXUVSpVFFUG5xVDeROPdc7w
-        on/Bww8mhIQ+6WojjMb+0g6LwzhsXagtOtNCyGDLsxGPFb9NTV+nVRZmNTO9npB/RAI+e/
-        /X9MZ4gkyPZD4H+4hJZQiGAmycUCh7U=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-xuhUKgBlPCKO57weXIur2Q-1; Tue, 21 Jun 2022 12:26:04 -0400
-X-MC-Unique: xuhUKgBlPCKO57weXIur2Q-1
-Received: by mail-wr1-f69.google.com with SMTP id v8-20020adfa1c8000000b0021b81a553fbso2771004wrv.18
-        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 09:26:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WDvAfC8H1jWG/kPl4hssaiTNP9VbbBXL1QM5A1sW0U4=;
-        b=Zaac59hfrtK6fnlLCXi1Gdsr/NLiFuWFegj7dLFWcFNmBHwZq7FgllNZnpfyCJFEE/
-         e7LDN+kcIQ1p+cS9E7GYdMuknFUAuILQyEMfNkkJmPjNWlAqqjvdEuMkwodK/AmMfOJZ
-         bSQfQfvLtcgfYra8pngBQeZ0y96Vk3RKGaJ76hFLz8hGR+jrOQcqw6ehlKOyrMciNDqh
-         dkwwGSm+w4l+a2tlDkEAEF9WnyLRPCBefbPYkU8F8AKs2uSt19DF3WkupilYisclWIrz
-         XLEn/I7dKsEYu3Lv/Fu3AQs4tLtQeOO1odV/6/YMHYV0+ga8MquzhFKdyCdFWVFmyH59
-         hdRw==
-X-Gm-Message-State: AJIora+lWJ0lzBf1+uPWvHmgZ02MqQlSQ3mgKTDXzzEg+7PP36TEGWm3
-        zHS1cIaUQx3XcItgXUEDYUlDbfVCpPqM4QXKNaUAZgVfGZT/w2nCdzdoiLPSUbgK0EhPeFEbIWw
-        eibo0NH3jd0J9
-X-Received: by 2002:a05:600c:2105:b0:39c:381c:1e13 with SMTP id u5-20020a05600c210500b0039c381c1e13mr31200324wml.189.1655828763407;
-        Tue, 21 Jun 2022 09:26:03 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tLVVHWep27Pszg8AaHPX0SKs7SwcyIctPWq8R/Dd6xz2vqMeAosqMqmjEE9gIClLLIIqIuEQ==
-X-Received: by 2002:a05:600c:2105:b0:39c:381c:1e13 with SMTP id u5-20020a05600c210500b0039c381c1e13mr31200305wml.189.1655828763169;
-        Tue, 21 Jun 2022 09:26:03 -0700 (PDT)
-Received: from localhost (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.gmail.com with ESMTPSA id t9-20020adfe109000000b0021018642ff8sm16673450wrz.76.2022.06.21.09.26.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 09:26:02 -0700 (PDT)
-Date:   Tue, 21 Jun 2022 18:25:59 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     Andy Gospodarek <andrew.gospodarek@broadcom.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        kpsingh@kernel.org, toke@redhat.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Andy Gospodarek <gospo@broadcom.com>
-Subject: Re: [PATCH net-next] samples/bpf: fixup some xdp progs to be able to
- support xdp multibuffer
-Message-ID: <YrHxF3j5cqqVWE2y@localhost.localdomain>
-References: <20220617220738.3593-1-gospo@broadcom.com>
+        with ESMTP id S230177AbiFUQiz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 21 Jun 2022 12:38:55 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B71C1929E;
+        Tue, 21 Jun 2022 09:38:53 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LSBz80lLDz6801q;
+        Wed, 22 Jun 2022 00:38:28 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 21 Jun 2022 18:38:50 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>
+CC:     <dhowells@redhat.com>, <keyrings@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Joanne Koong <joannelkoong@gmail.com>
+Subject: [PATCH v5 1/5] bpf: Export bpf_dynptr_get_size()
+Date:   Tue, 21 Jun 2022 18:37:53 +0200
+Message-ID: <20220621163757.760304-2-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220621163757.760304-1-roberto.sassu@huawei.com>
+References: <20220621163757.760304-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JXivmyhH6RaVy4Gq"
-Content-Disposition: inline
-In-Reply-To: <20220617220738.3593-1-gospo@broadcom.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Export bpf_dynptr_get_size(), so that kernel code dealing with eBPF dynamic
+pointers can obtain the real size of data carried by this data structure.
 
---JXivmyhH6RaVy4Gq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ include/linux/bpf.h  | 1 +
+ kernel/bpf/helpers.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-> This changes the section name for the bpf program embedded in these
-> files to "xdp.frags" to allow the programs to be loaded on drivers that
-> are using an MTU greater than PAGE_SIZE.  Rather than directly accessing
-> the buffers, the packet data is now accessed via xdp helper functions to
-> provide an example for those who may need to write more complex
-> programs.
->=20
-> Signed-off-by: Andy Gospodarek <gospo@broadcom.com>
-
-Hi Andy,
-
-Just 2 nit inline but the code is fine.
-
-Acked-by: Lorenzo Bianconi <lorenzo@kernel.org>
-
-> ---
->  samples/bpf/xdp1_kern.c            | 13 ++++++++++---
->  samples/bpf/xdp2_kern.c            | 13 ++++++++++---
->  samples/bpf/xdp_tx_iptunnel_kern.c |  2 +-
->  3 files changed, 21 insertions(+), 7 deletions(-)
->=20
-> diff --git a/samples/bpf/xdp1_kern.c b/samples/bpf/xdp1_kern.c
-> index f0c5d95084de..a798553fca3b 100644
-> --- a/samples/bpf/xdp1_kern.c
-> +++ b/samples/bpf/xdp1_kern.c
-> @@ -39,17 +39,24 @@ static int parse_ipv6(void *data, u64 nh_off, void *d=
-ata_end)
->  	return ip6h->nexthdr;
->  }
-> =20
-> -SEC("xdp1")
-> +#define XDPBUFSIZE	64
-> +SEC("xdp.frags")
->  int xdp_prog1(struct xdp_md *ctx)
->  {
-> -	void *data_end =3D (void *)(long)ctx->data_end;
-> -	void *data =3D (void *)(long)ctx->data;
-> +	__u8 pkt[XDPBUFSIZE] =3D {};
-> +	void *data_end =3D &pkt[XDPBUFSIZE-1];
-> +	void *data =3D pkt;
->  	struct ethhdr *eth =3D data;
->  	int rc =3D XDP_DROP;
->  	long *value;
->  	u16 h_proto;
->  	u64 nh_off;
->  	u32 ipproto;
-> +	int err;
-> +
-> +	err =3D bpf_xdp_load_bytes(ctx, 0, pkt, sizeof(pkt));
-> +	if (err < 0)
-> +		return rc;
-
-I guess we do not need err here:
-
-	if (bpf_xdp_load_bytes(ctx, 0, pkt, sizeof(pkt)) < 0)
-		return XDP_DROP;
-
-> =20
->  	nh_off =3D sizeof(*eth);
->  	if (data + nh_off > data_end)
-> diff --git a/samples/bpf/xdp2_kern.c b/samples/bpf/xdp2_kern.c
-> index d8a64ab077b0..1502ef820aed 100644
-> --- a/samples/bpf/xdp2_kern.c
-> +++ b/samples/bpf/xdp2_kern.c
-> @@ -55,17 +55,24 @@ static int parse_ipv6(void *data, u64 nh_off, void *d=
-ata_end)
->  	return ip6h->nexthdr;
->  }
-> =20
-> -SEC("xdp1")
-> +#define XDPBUFSIZE	64
-> +SEC("xdp.frags")
->  int xdp_prog1(struct xdp_md *ctx)
->  {
-> -	void *data_end =3D (void *)(long)ctx->data_end;
-> -	void *data =3D (void *)(long)ctx->data;
-> +	__u8 pkt[XDPBUFSIZE] =3D {};
-> +	void *data_end =3D &pkt[XDPBUFSIZE-1];
-> +	void *data =3D pkt;
->  	struct ethhdr *eth =3D data;
->  	int rc =3D XDP_DROP;
->  	long *value;
->  	u16 h_proto;
->  	u64 nh_off;
->  	u32 ipproto;
-> +	int err;
-> +
-> +	err =3D bpf_xdp_load_bytes(ctx, 0, pkt, sizeof(pkt));
-> +	if (err < 0)
-> +		return rc;
-
-same here
-
-> =20
->  	nh_off =3D sizeof(*eth);
->  	if (data + nh_off > data_end)
-> diff --git a/samples/bpf/xdp_tx_iptunnel_kern.c b/samples/bpf/xdp_tx_iptu=
-nnel_kern.c
-> index 575d57e4b8d6..0e2bca3a3fff 100644
-> --- a/samples/bpf/xdp_tx_iptunnel_kern.c
-> +++ b/samples/bpf/xdp_tx_iptunnel_kern.c
-> @@ -212,7 +212,7 @@ static __always_inline int handle_ipv6(struct xdp_md =
-*xdp)
->  	return XDP_TX;
->  }
-> =20
-> -SEC("xdp_tx_iptunnel")
-> +SEC("xdp.frags")
->  int _xdp_tx_iptunnel(struct xdp_md *xdp)
->  {
->  	void *data_end =3D (void *)(long)xdp->data_end;
-> --=20
-> 2.25.1
->=20
-
-
-
---JXivmyhH6RaVy4Gq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYrHxFAAKCRA6cBh0uS2t
-rNXWAQC9RJ9eBhQ8nqZk0eHJVD+XnR8cAsMvS3kRaQcLM0zAMgD+IVGR3IUNouQF
-obNO+iYLRxLKVLkqQ5tvRO0Xh0kAyw0=
-=LNWy
------END PGP SIGNATURE-----
-
---JXivmyhH6RaVy4Gq--
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index d05e1495a06e..3ec0f167e9d7 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2521,5 +2521,6 @@ void bpf_dynptr_init(struct bpf_dynptr_kern *ptr, void *data,
+ 		     enum bpf_dynptr_type type, u32 offset, u32 size);
+ void bpf_dynptr_set_null(struct bpf_dynptr_kern *ptr);
+ int bpf_dynptr_check_size(u32 size);
++u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr);
+ 
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index a1c84d256f83..3f5ff8dbd3cb 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1430,7 +1430,7 @@ static void bpf_dynptr_set_type(struct bpf_dynptr_kern *ptr, enum bpf_dynptr_typ
+ 	ptr->size |= type << DYNPTR_TYPE_SHIFT;
+ }
+ 
+-static u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
++u32 bpf_dynptr_get_size(struct bpf_dynptr_kern *ptr)
+ {
+ 	return ptr->size & DYNPTR_SIZE_MASK;
+ }
+-- 
+2.25.1
 
