@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3A7BCCA47E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 624E3C433EF
 	for <bpf@archiver.kernel.org>; Tue, 21 Jun 2022 01:28:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234350AbiFUB2a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S230330AbiFUB2a (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 20 Jun 2022 21:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242831AbiFUB2Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 20 Jun 2022 21:28:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13681928B
-        for <bpf@vger.kernel.org>; Mon, 20 Jun 2022 18:28:24 -0700 (PDT)
+        with ESMTP id S242659AbiFUB2Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 20 Jun 2022 21:28:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F54B1928B
+        for <bpf@vger.kernel.org>; Mon, 20 Jun 2022 18:28:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A54061596
-        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 01:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F170C341C5;
-        Tue, 21 Jun 2022 01:28:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39311B811BD
+        for <bpf@vger.kernel.org>; Tue, 21 Jun 2022 01:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99578C341C8;
+        Tue, 21 Jun 2022 01:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655774903;
-        bh=7ru/BD8lvgDJnszDvUzzT9MCF7A89UGdXDKmbwMRzZ0=;
+        s=k20201202; t=1655774900;
+        bh=uCzCkqxKsvpKuyqgDhv5DSnJm1cEprHnN5V0J61d9T4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xv/w32cd6RNANi9DSN6C5EJ7TEHeR2IsMdXkTyYfBaiPbRtc92bpph6MxHYqZH1HA
-         1XbFqxStdZHEhIUW18nNz1+7IArNM2HfUNBNegV3bqEx0Kg5UE8AWzvkCf05YEf98V
-         gXUq4ByTEOucws5je9G4P4YmCKzDx1x/cOyLcweo3TtWctbS3SaFexK1DC3G4ZQmuX
-         TEAiLy1qN/2YAWMw5PXTlD48AoNex59/4W5RDdVwMHUzXyeAW8vkJ2dtUwNSW1Z/Xx
-         COTR4i9+EkQj31BSOvfNUolGaUls7kDFOtmlQ1cAQ75ZWa2KkFH+cYUQrFwip06i4S
-         IQDVcylDaTgXg==
+        b=csP+pi3Q4b40HAHENpEeV+aM3EjuTDiMijHk1B0BWmlRjZwszOAu2uqFVS6K2V1/H
+         VmCTtsu4tFROackwzcopM21c6yaxvNwcxJebQdFpbrvPBHJcrzkSKCUB38BXsNsD3/
+         C3oThZCkGVs37sA9RQjFIvPtbvbKa7NlAYmVFHnk1xWQKHtavxDp6rPsVxngE3R3d3
+         IUEyD2Ej8onPw9p+IEtxOuqPCNtaO/R0Y6Psd3AMLMZls0tckNthbLvo7aM0EXP4lt
+         wcNaXzE7ee7dzlsXXCd8r3C1YMDqUl6x/rJI1HUPt37LEYFszc3/1Q1d2Eoz0B2CKk
+         7i1u/xQezux3g==
 From:   KP Singh <kpsingh@kernel.org>
 To:     bpf@vger.kernel.org
 Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
@@ -38,9 +38,9 @@ Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Yosry Ahmed <yosryahmed@google.com>
-Subject: [PATCH v2 bpf-next 4/5] bpf: Add a bpf_getxattr kfunc
-Date:   Tue, 21 Jun 2022 01:28:10 +0000
-Message-Id: <20220621012811.2683313-5-kpsingh@kernel.org>
+Subject: [PATCH v2 bpf-next 2/5] bpf: kfunc support for ARG_PTR_TO_CONST_STR
+Date:   Tue, 21 Jun 2022 01:28:08 +0000
+Message-Id: <20220621012811.2683313-3-kpsingh@kernel.org>
 X-Mailer: git-send-email 2.37.0.rc0.104.g0611611a94-goog
 In-Reply-To: <20220621012811.2683313-1-kpsingh@kernel.org>
 References: <20220621012811.2683313-1-kpsingh@kernel.org>
@@ -50,74 +50,191 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-LSMs like SELinux store security state in xattrs. bpf_getxattr enables
-BPF LSM to implement similar functionality. In combination with
-bpf_local_storage, xattrs can be used to develop more complex security
-policies.
+kfuncs can handle pointers to memory when the next argument is
+the size of the memory that can be read and verify these as
+ARG_CONST_SIZE_OR_ZERO
 
-This kfunc wraps around __vfs_getxattr which can sleep and is,
-therefore, limited to sleepable programs using the newly added
-sleepable_set for kfuncs.
+Similarly add support for string constants (const char *) and
+verify it similar to ARG_PTR_TO_CONST_STR.
 
 Signed-off-by: KP Singh <kpsingh@kernel.org>
 ---
- kernel/trace/bpf_trace.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ include/linux/bpf_verifier.h |  2 +
+ kernel/bpf/btf.c             | 29 ++++++++++++
+ kernel/bpf/verifier.c        | 85 ++++++++++++++++++++----------------
+ 3 files changed, 79 insertions(+), 37 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 4be976cf7d63..b5682d55ebde 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -20,6 +20,7 @@
- #include <linux/fprobe.h>
- #include <linux/bsearch.h>
- #include <linux/sort.h>
-+#include <linux/xattr.h>
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 3930c963fa67..60d490354397 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -548,6 +548,8 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
+ 			     u32 regno);
+ int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 		   u32 regno, u32 mem_size);
++int check_const_str(struct bpf_verifier_env *env,
++		    const struct bpf_reg_state *reg, int regno);
  
- #include <net/bpf_sk_storage.h>
+ /* this lives here instead of in bpf.h because it needs to dereference tgt_prog */
+ static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 668ecf61649b..02d7951591ae 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6162,6 +6162,26 @@ static bool is_kfunc_arg_mem_size(const struct btf *btf,
+ 	return true;
+ }
  
-@@ -1181,6 +1182,41 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
- 	.arg1_type	= ARG_PTR_TO_CTX,
- };
- 
-+noinline __weak ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
-+				     const char *name, void *value, int size)
++static bool btf_param_is_const_str_ptr(const struct btf *btf,
++				       const struct btf_param *param)
 +{
-+	return __vfs_getxattr(dentry, inode, name, value, size);
++	const struct btf_type *t;
++
++	t = btf_type_by_id(btf, param->type);
++	if (!btf_type_is_ptr(t))
++		return false;
++
++	t = btf_type_by_id(btf, t->type);
++	if (!(BTF_INFO_KIND(t->info) == BTF_KIND_CONST))
++		return false;
++
++	t = btf_type_skip_modifiers(btf, t->type, NULL);
++	if (!strcmp(btf_name_by_offset(btf, t->name_off), "char"))
++		return true;
++
++	return false;
 +}
 +
-+BTF_SET_START(bpf_trace_kfunc_ids)
-+BTF_ID(func, bpf_getxattr)
-+BTF_SET_END(bpf_trace_kfunc_ids)
+ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				    const struct btf *btf, u32 func_id,
+ 				    struct bpf_reg_state *regs,
+@@ -6344,6 +6364,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 		} else if (ptr_to_mem_ok) {
+ 			const struct btf_type *resolve_ret;
+ 			u32 type_size;
++			int err;
+ 
+ 			if (is_kfunc) {
+ 				bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
+@@ -6354,6 +6375,14 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
+ 				 * When arg_mem_size is true, the pointer can be
+ 				 * void *.
+ 				 */
++				if (btf_param_is_const_str_ptr(btf, &args[i])) {
++					err = check_const_str(env, reg, regno);
++					if (err < 0)
++						return err;
++					i++;
++					continue;
++				}
 +
-+BTF_SET_START(bpf_trace_sleepable_kfunc_ids)
-+BTF_ID(func, bpf_getxattr)
-+BTF_SET_END(bpf_trace_sleepable_kfunc_ids)
-+
-+static const struct btf_kfunc_id_set bpf_trace_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.check_set = &bpf_trace_kfunc_ids,
-+	.sleepable_set = &bpf_trace_sleepable_kfunc_ids,
-+};
-+
-+static int __init bpf_trace_kfunc_init(void)
+ 				if (!btf_type_is_scalar(ref_t) &&
+ 				    !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
+ 				    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2859901ffbe3..14a434792d7b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5840,6 +5840,52 @@ static u32 stack_slot_get_id(struct bpf_verifier_env *env, struct bpf_reg_state
+ 	return state->stack[spi].spilled_ptr.id;
+ }
+ 
++int check_const_str(struct bpf_verifier_env *env,
++		    const struct bpf_reg_state *reg, int regno)
 +{
-+	int ret;
++	struct bpf_map *map = reg->map_ptr;
++	int map_off;
++	u64 map_addr;
++	char *str_ptr;
++	int err;
 +
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-+					&bpf_trace_kfunc_set);
-+	if (!ret)
-+		return ret;
++	if (!bpf_map_is_rdonly(map)) {
++		verbose(env, "R%d does not point to a readonly map'\n", regno);
++		return -EACCES;
++	}
 +
-+	return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-+					&bpf_trace_kfunc_set);
++	if (!tnum_is_const(reg->var_off)) {
++		verbose(env, "R%d is not a constant address'\n", regno);
++		return -EACCES;
++	}
 +
++	if (!map->ops->map_direct_value_addr) {
++		verbose(env,
++			"no direct value access support for this map type\n");
++		return -EACCES;
++	}
++
++	err = check_map_access(env, regno, reg->off, map->value_size - reg->off,
++			       false, ACCESS_HELPER);
++	if (err)
++		return err;
++
++	map_off = reg->off + reg->var_off.value;
++	err = map->ops->map_direct_value_addr(map, &map_addr, map_off);
++	if (err) {
++		verbose(env, "direct value access on string failed\n");
++		return err;
++	}
++
++	str_ptr = (char *)(long)(map_addr);
++	if (!strnchr(str_ptr + map_off, map->value_size - map_off, 0)) {
++		verbose(env, "string is not zero-terminated\n");
++		return -EINVAL;
++	}
++
++	return 0;
 +}
-+late_initcall(bpf_trace_kfunc_init);
 +
- static const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
+ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			  struct bpf_call_arg_meta *meta,
+ 			  const struct bpf_func_proto *fn)
+@@ -6074,44 +6120,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			return err;
+ 		err = check_ptr_alignment(env, reg, 0, size, true);
+ 	} else if (arg_type == ARG_PTR_TO_CONST_STR) {
+-		struct bpf_map *map = reg->map_ptr;
+-		int map_off;
+-		u64 map_addr;
+-		char *str_ptr;
+-
+-		if (!bpf_map_is_rdonly(map)) {
+-			verbose(env, "R%d does not point to a readonly map'\n", regno);
+-			return -EACCES;
+-		}
+-
+-		if (!tnum_is_const(reg->var_off)) {
+-			verbose(env, "R%d is not a constant address'\n", regno);
+-			return -EACCES;
+-		}
+-
+-		if (!map->ops->map_direct_value_addr) {
+-			verbose(env, "no direct value access support for this map type\n");
+-			return -EACCES;
+-		}
+-
+-		err = check_map_access(env, regno, reg->off,
+-				       map->value_size - reg->off, false,
+-				       ACCESS_HELPER);
+-		if (err)
+-			return err;
+-
+-		map_off = reg->off + reg->var_off.value;
+-		err = map->ops->map_direct_value_addr(map, &map_addr, map_off);
+-		if (err) {
+-			verbose(env, "direct value access on string failed\n");
++		err = check_const_str(env, reg, regno);
++		if (err < 0)
+ 			return err;
+-		}
+-
+-		str_ptr = (char *)(long)(map_addr);
+-		if (!strnchr(str_ptr + map_off, map->value_size - map_off, 0)) {
+-			verbose(env, "string is not zero-terminated\n");
+-			return -EINVAL;
+-		}
+ 	} else if (arg_type == ARG_PTR_TO_KPTR) {
+ 		if (process_kptr_func(env, regno, meta))
+ 			return -EACCES;
 -- 
 2.37.0.rc0.104.g0611611a94-goog
 
