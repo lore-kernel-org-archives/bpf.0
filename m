@@ -2,114 +2,136 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E43CC43334
-	for <bpf@archiver.kernel.org>; Wed, 22 Jun 2022 10:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9326FC43334
+	for <bpf@archiver.kernel.org>; Wed, 22 Jun 2022 13:48:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347638AbiFVKPS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 22 Jun 2022 06:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S233919AbiFVNso (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 22 Jun 2022 09:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234389AbiFVKPQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jun 2022 06:15:16 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CD53AA56
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 03:15:15 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id a14so6076702pgh.11
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 03:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+1XWq8cw7OHb2Bf6aNzAKak0QHCkVQAfW5Wzo+sDjjk=;
-        b=U+vnYvVIkG45EDXtQB/tlbop+jl3hoZt7SOJDx5EVsD6SAenfVOatdKhxjCvhKh80h
-         ps7x+2lvF7C9wUnLa2U8SfiQ+/JNLkYJj0wskFRYgiGPojH0QVVEeMd3tcm98sJtSuKQ
-         6tK4QEOw4QUA14h6XFvA3zMmj+QjyiIzL9r9mZ3Xpxr0mHi7EP0+KkKLKM/Nlcenmuvk
-         dLqQgV1ocQ46Nd5ggC+/K+eeb55FaZmEpMat1GoWCYT61e7VauW4EkpMIRxSi27VuBg3
-         jMvhdL72i1AtFmPkz3v7rFwFRSETH4ZKV5dZ7NctQlvZnqlEDQJ62YbFoluDKS5ydsK4
-         3DBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+1XWq8cw7OHb2Bf6aNzAKak0QHCkVQAfW5Wzo+sDjjk=;
-        b=p26RCrwB/dffkDSH9ER2ex6l7WPTr/9WeDPd5ySX2SLqXI2+FBhZZVyUvYrJdo33m6
-         oFMdntkX7bT2Fa39OxHfpS0l4uvuuO9uW+dKY1/UM0ENv6emAnLnU6f2xi+YvJVvR4bv
-         +5lESxz0FDYtKB0oFcmGSwjB8+tfw1Jdf5smI/V5BI/EdoP/DabJwlW+ASYRhtr0h9rh
-         CzQzBoBAmN3fq1DhfApl2BBM/GZkhkw/Vn7GWJCs8HuQCQIbj2igYMydgOGjqMlE7ic6
-         5L67TT1OaBZ//sphlSkWP/g2a/VACP6X0wfxOfegSm+NWZdEAHA+LZYa4iH2odydQuyQ
-         W7ow==
-X-Gm-Message-State: AJIora+TJlNAAvEqENjTufP8X+EWvney2DbGQDIbasr/G9RQU+THJmej
-        +lZCfhGLABiiAxVn6OHPhA0OnKb+1b8=
-X-Google-Smtp-Source: AGRyM1vqv/PF80vPpLS6/6MNMtKILKRt7JbY8uD6dwRDdXJx5sirhECsFnJdw3oI0oIRkOr+GN3P1Q==
-X-Received: by 2002:a63:8f04:0:b0:40c:a447:a189 with SMTP id n4-20020a638f04000000b0040ca447a189mr2384493pgd.515.1655892915338;
-        Wed, 22 Jun 2022 03:15:15 -0700 (PDT)
-Received: from Laptop-X1 ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id t7-20020a17090b018700b001ece55aec38sm1131230pjs.30.2022.06.22.03.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 03:15:14 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 18:15:09 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        Yauheni Kaliuta <ykaliuta@redhat.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: Re: How about adding a name for bpftool self created maps?
-Message-ID: <YrLrrVMFApQdYpmL@Laptop-X1>
-References: <YrEoRyty7decoMhh@Laptop-X1>
- <CACdoK4JrrVoMjvwQusdpYOO5gDqZDKky2QZqyb08p+2R1186Gw@mail.gmail.com>
+        with ESMTP id S1357671AbiFVNsa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jun 2022 09:48:30 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C722E9CB;
+        Wed, 22 Jun 2022 06:48:27 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSl622Rl5zhXcb;
+        Wed, 22 Jun 2022 21:46:18 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 21:48:25 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 22 Jun 2022 21:48:25 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
+        <chenhao288@hisilicon.com>
+Subject: [PATCH] net: page_pool: optimize page pool page allocation in NUMA scenario
+Date:   Wed, 22 Jun 2022 21:42:02 +0800
+Message-ID: <20220622134202.7591-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACdoK4JrrVoMjvwQusdpYOO5gDqZDKky2QZqyb08p+2R1186Gw@mail.gmail.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 10:28:27PM +0100, Quentin Monnet wrote:
-> > When I using `bpftool map list` to show what maps user using. bpftool will
-> > show maps including self created maps. Apart from the "pid_iter.rodata",
-> > there are also array maps without name, which makes it hard to filter out
-> > what maps user using. e.g.
-> >
-> > # bpftool map list
-> > 63: array  flags 0x0
-> >          key 4B  value 32B  max_entries 1  memlock 4096B
-> > 65: array  name pid_iter.rodata  flags 0x480
-> >          key 4B  value 4B  max_entries 1  memlock 4096B
-> >          btf_id 98  frozen
-> >          pids bpftool(10572)
-> > 66: array  flags 0x0
-> >          key 4B  value 32B  max_entries 1  memlock 4096B
-> >
-> > So do you have plan to add a special name for the bpftool self created maps?
-> > Or do you know if there is a way to filter out these maps?
-> 
-> Hi Hangbin,
-> 
-> No plan currently. Adding names has been suggested before, but it's
-> not compatible with some older kernels that don't support map names
-> [0]. Maybe one solution would be to probe the kernel for map name
-> support, and to add a name if supported.
+From: Jie Wang <wangjie125@huawei.com>
 
-Hi Quentin,
+Currently NIC packet receiving performance based on page pool deteriorates
+occasionally. To analysis the causes of this problem page allocation stats
+are collected. Here are the stats when NIC rx performance deteriorates:
 
-Thanks for the reply. Probe the kernel and add name if supported makes
-sense to me.
+bandwidth(Gbits/s)		16.8		6.91
+rx_pp_alloc_fast		13794308	21141869
+rx_pp_alloc_slow		108625		166481
+rx_pp_alloc_slow_h		0		0
+rx_pp_alloc_empty		8192		8192
+rx_pp_alloc_refill		0		0
+rx_pp_alloc_waive		100433		158289
+rx_pp_recycle_cached		0		0
+rx_pp_recycle_cache_full	0		0
+rx_pp_recycle_ring		362400		420281
+rx_pp_recycle_ring_full		6064893		9709724
+rx_pp_recycle_released_ref	0		0
 
-Thanks
-Hangbin
+The rx_pp_alloc_waive count indicates that a large number of pages' numa
+node are inconsistent with the NIC device numa node. Therefore these pages
+can't be reused by the page pool. As a result, many new pages would be
+allocated by __page_pool_alloc_pages_slow which is time consuming. This
+causes the NIC rx performance fluctuations.
 
-> 
-> Other than this I'm not aware of a reliable way to filter out these
-> maps at the moment. This could probably be done in bpftool since we
-> should have the ids of the self-generated maps. But I think I'd rather
-> find a way to add map names, if possible. It would make it easier to
-> recognise/filter these maps on regular listing, whereas a new option
-> would be harder for users to discover.
-> 
-> Quentin
-> 
-> [0] https://lore.kernel.org/bpf/CAEf4BzY66WPKQbDe74AKZ6nFtZjq5e+G3Ji2egcVytB9R6_sGQ@mail.gmail.com/
+The main reason of huge numa mismatch pages in page pool is that page pool
+uses alloc_pages_bulk_array to allocate original pages. This function is
+not suitable for page allocation in NUMA scenario. So this patch uses
+alloc_pages_bulk_array_node which has a NUMA id input parameter to ensure
+the NUMA consistent between NIC device and allocated pages.
+
+Repeated NIC rx performance tests are performed 40 times. NIC rx bandwidth
+is higher and more stable compared to the datas above. Here are three test
+stats, the rx_pp_alloc_waive count is zero and rx_pp_alloc_slow which
+indicates pages allocated from slow patch is relatively low.
+
+bandwidth(Gbits/s)		93		93.9		93.8
+rx_pp_alloc_fast		60066264	61266386	60938254
+rx_pp_alloc_slow		16512		16517		16539
+rx_pp_alloc_slow_ho		0		0		0
+rx_pp_alloc_empty		16512		16517		16539
+rx_pp_alloc_refill		473841		481910		481585
+rx_pp_alloc_waive		0		0		0
+rx_pp_recycle_cached		0		0		0
+rx_pp_recycle_cache_full	0		0		0
+rx_pp_recycle_ring		29754145	30358243	30194023
+rx_pp_recycle_ring_full		0		0		0
+rx_pp_recycle_released_ref	0		0		0
+
+Signed-off-by: Jie Wang <wangjie125@huawei.com>
+---
+ net/core/page_pool.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index b151772dd94b..d88c0c24041a 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -377,6 +377,7 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 	unsigned int pp_order = pool->p.order;
+ 	struct page *page;
+ 	int i, nr_pages;
++	int pref_nid; /* preferred NUMA node */
+ 
+ 	/* Don't support bulk alloc for high-order pages */
+ 	if (unlikely(pp_order))
+@@ -386,10 +387,18 @@ static struct page *__page_pool_alloc_pages_slow(struct page_pool *pool,
+ 	if (unlikely(pool->alloc.count > 0))
+ 		return pool->alloc.cache[--pool->alloc.count];
+ 
++#ifdef CONFIG_NUMA
++	pref_nid = (pool->p.nid == NUMA_NO_NODE) ? numa_mem_id() : pool->p.nid;
++#else
++	/* Ignore pool->p.nid setting if !CONFIG_NUMA, helps compiler */
++	pref_nid = numa_mem_id(); /* will be zero like page_to_nid() */
++#endif
++
+ 	/* Mark empty alloc.cache slots "empty" for alloc_pages_bulk_array */
+ 	memset(&pool->alloc.cache, 0, sizeof(void *) * bulk);
+ 
+-	nr_pages = alloc_pages_bulk_array(gfp, bulk, pool->alloc.cache);
++	nr_pages = alloc_pages_bulk_array_node(gfp, pref_nid, bulk,
++					       pool->alloc.cache);
+ 	if (unlikely(!nr_pages))
+ 		return NULL;
+ 
+-- 
+2.30.0
+
