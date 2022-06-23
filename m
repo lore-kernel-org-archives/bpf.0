@@ -2,181 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0373ACCA489
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8549ACCA487
 	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiFWEkC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 00:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
+        id S230037AbiFWEkK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 00:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238873AbiFWD3Y (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:29:24 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF09D3584F
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id s185so12164515pgs.3
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
+        with ESMTP id S1345137AbiFWEPQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jun 2022 00:15:16 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC20B43AE1
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 21:15:13 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u12so38392150eja.8
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 21:15:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=v2cMJ22H421S3fhYLc4f4jwE1UZ1i2XJOMgK6XKGTmI=;
-        b=NzddAi+hvTRYyY4ArlVtSKNwukA4qtzfcdLE+XUz6THeX1B70vgXw10bVGAd909Ev0
-         ySke1Bh5+Y5kIbyaPqIlxKhLbPQ4/p7X/R2bx7oA/flYxXyVb1FWcFwWH/b6V5fJnFi3
-         8I5S1pyDUnW4P5rTvMPOEYX4XitUEykk4Tt0v36ZJnhGgX/1nPZEcqoMU11hBSvCt3pW
-         GbmScZCBlOBkQfrn/KATckzMg65qwJJV5zfgNyBODDNxtHS4sSawSPSHNO1p1kXT2eyv
-         dq+rLuzzyXTGz295yv+xUV6iqBWo26BuqY6cGh0QcNqKog+K6Lxr47ybBsPRy0BchJT+
-         qr5w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=XqaeoKxO25KFagg5Ozue/XbCJT1yNS3NZ8bCAzbaK/E=;
+        b=bPbyYVfnw6IWc9u6Jxxvb0sg4UNtVMXIz8wndaV5i95hZebrQfA/OkYbRykLjwhmN4
+         zhVqP1mnDrEf+uBCh/if5HsJvTYFej8PKYqlMnQLIFmtwIdggWHwx+OA9kzJtMymAMsH
+         D1UI2k8pBHkWJrKAatZcoMnoFokGzi6h/7/1aifftA+WcnYi401K9OwohgQ/PjbmoiBK
+         ICVplijuWTcwaNkExLVf5d0NUbXSVnKGjseuonZV/VCttpU0vm+zxtjWveP8mSp/s+Qx
+         PAJV7jRIv1QDRW6yqgumWUYEvJo8jJrxLQtJ4bz6fw32qNcubf4BKyCu4w01M/BPtyBb
+         ZF8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=v2cMJ22H421S3fhYLc4f4jwE1UZ1i2XJOMgK6XKGTmI=;
-        b=KKVNDFrZXxO4xvCb+ciz5cV8IXhMN9ZaHj194FU8SeixGxvc4rnPRis/a9k6IrLHoV
-         Qh7yq8E/Qqy+IrzC3QmyTyPjw7XGo1Eh4AFanIKncdfXymvc1WF7rVtFUHlksxSO4YBK
-         QCkInz+672V1UEXTIuIRIjKCNpjUXc0g4A7BXLJQ9z3dEDZPvR18AdXA/X8YTnBaTyIy
-         niv1PexgvNV+4dEB5RIG/5RTYs5uCrTrX7NdD9yUiE5G3nx3HII/SkjpM4SFi5cCZfv5
-         yE9zFTZpfmGrfOAN08hk8GW94YtRBTSzBJEKTsRbCUn6M27kWOqgpXiZv7SC9AiOMWJS
-         COFA==
-X-Gm-Message-State: AJIora+TZ1QjPaUeg50IUXRn59TIh8rO7eFxIUKvVtnCZf3atWsK4mGC
-        rOM+lFQj970rNrgO2QjKXaA=
-X-Google-Smtp-Source: AGRyM1v1/Vx1GP7GB/xRFRFRBjN7YiJ8Ray3RBxc6u6P2G3lN+6131UxKhUuEy1Ourb/KfMKzi2flg==
-X-Received: by 2002:a63:7b5c:0:b0:40d:684:b760 with SMTP id k28-20020a637b5c000000b0040d0684b760mr5793955pgn.323.1655954963344;
-        Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
-Received: from localhost ([98.97.116.244])
-        by smtp.gmail.com with ESMTPSA id y18-20020a170902ed5200b00168c4c3ed94sm5175429plb.309.2022.06.22.20.29.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 20:29:21 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     =?UTF-8?B?SsO2cm4tVGhvcmJlbiBIaW56?= <jthinz@mailbox.tu-berlin.de>,
-        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=XqaeoKxO25KFagg5Ozue/XbCJT1yNS3NZ8bCAzbaK/E=;
+        b=vr4lXXvJt5uF2W5Z0wH/oeftlyUx1gws+Ty7uPDjmyNc7g4+lY6CfuZUflm6oCJmQA
+         4LQjrsS9gyOW7ps0HpPazguvLpmrT5iEovsBAiXW0ouqQ0Ds06QwB61nPR2akfsBR1oC
+         IdgGFGTI3qi4NXtmnI2IZIshCTRlmORmyuii8a1+1Aj9BIB1Thf31LPkKb6KQ1NtlAmL
+         +SPoHfrFcWZCDebhc/HtnJaf/iA1JN3eXpIgqn+0WPimM3g1sEWMCnEeilEefG91dUp2
+         hxzPcURt8T3eWNorUQW5Ns0SuU0AfTvXXHQ0bMcwVaiU3Lx6XfFGUa2ba/kFkSl3dp8b
+         GMZA==
+X-Gm-Message-State: AJIora9DA0OEDxRGy99J44GeAxKZJDlT3NrbXeetSmID5RcOyKtJGptV
+        cJoRDctVjxBnnqt/7MS8jW1x1Y8hm7MzFJeP/QE=
+X-Google-Smtp-Source: AGRyM1ucDWZM8aGEHYf9OLwiP+V0JAagjWYoZho9Gcw5goQz10H5fgntD2l/sLtNegA383Iy8m+Ws6A0/vd4LC9DLgs=
+X-Received: by 2002:a17:907:ea5:b0:722:d031:cf3d with SMTP id
+ ho37-20020a1709070ea500b00722d031cf3dmr6252414ejc.226.1655957712248; Wed, 22
+ Jun 2022 21:15:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220622173506.860578-1-deso@posteo.net> <20220622173506.860578-2-deso@posteo.net>
+In-Reply-To: <20220622173506.860578-2-deso@posteo.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 22 Jun 2022 21:15:01 -0700
+Message-ID: <CAEf4Bzbe-r+G00Zy-wTFE+Y765BtmaTNHYdjoXc91XNwzuJWWQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: Move core "types_are_compat" logic
+ into relo_core.c
+To:     =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Message-ID: <62b3de11c4d5a_6a3b220898@john.notmuch>
-In-Reply-To: <2fb2e2f72f2bead11cf24f9ee2558e2f4169aec9.camel@mailbox.tu-berlin.de>
-References: <20220621070116.307221-1-jthinz@mailbox.tu-berlin.de>
- <62b221f3886d0_16274208b@john.notmuch>
- <2fb2e2f72f2bead11cf24f9ee2558e2f4169aec9.camel@mailbox.tu-berlin.de>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix rare segfault in sock_fields
- prog test
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-J=C3=B6rn-Thorben Hinz wrote:
-> On Tue, 2022-06-21 at 12:54 -0700, John Fastabend wrote:
-> > J=C3=B6rn-Thorben Hinz wrote:
-> > > test_sock_fields__detach() got called with a null pointer here when=
+On Wed, Jun 22, 2022 at 10:35 AM Daniel M=C3=BCller <deso@posteo.net> wrote=
+:
+>
+> This change merges the two existing implementations of the
+> bpf_core_types_are_compat() function into relo_core.c, inheriting the
+> recursion tracking from the kernel and the usage of
+> btf_kind_core_compat() from libbpf. The kernel is left untouched and
+> will be adjusted subsequently.
+>
+> Signed-off-by: Daniel M=C3=BCller <deso@posteo.net>
+> ---
 
-> > > one
-> > > of the CHECKs or ASSERTs up to the
-> > > test_sock_fields__open_and_load()
-> > > call resulted in a jump to the "done" label.
-> > > =
+I don't feel very strongly about this, but given we are consolidating
+kernel and libbpf code, I think it makes sense to do it in one patch.
 
-> > > A skeletons *__detach() is not safe to call with a null pointer,
-> > > though.
-> > > This led to a segfault.
-> > > =
+>  tools/lib/bpf/libbpf.c    | 72 +-----------------------------------
+>  tools/lib/bpf/relo_core.c | 78 +++++++++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/relo_core.h |  2 +
+>  3 files changed, 81 insertions(+), 71 deletions(-)
+>
 
-> > > Go the easy route and only call test_sock_fields__destroy() which
-> > > is
-> > > null-pointer safe and includes detaching.
-> > > =
+[...]
 
-> > > Came across this while looking[1] to introduce the usage of
-> > > bpf_tcp_helpers.h (included in progs/test_sock_fields.c) together
-> > > with
-> > > vmlinux.h.
-> > > =
+> -       default:
+> -               pr_warn("unexpected kind %s relocated, local [%d], target=
+ [%d]\n",
+> -                       btf_kind_str(local_type), local_id, targ_id);
+> -               return 0;
+> -       }
+> +       return bpf_core_types_are_compat_recur(local_btf, local_id, targ_=
+btf, targ_id, INT_MAX);
 
-> > > [1]  =
+INT_MAX seems like an overkill, let's just hard-code 32 just like we
+have for a local recursion limit here?
 
-> > > https://lore.kernel.org/bpf/629bc069dd807d7ac646f836e9dca28bbc1108e=
-2.camel@mailbox.tu-berlin.de/
-> > > =
+>  }
+>
 
-> > > Fixes: 8f50f16ff39d ("selftests/bpf: Extend verifier and bpf_sock
-> > > tests for dst_port loads")
-> > > Signed-off-by: J=C3=B6rn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>=
+[...]
 
-> > > ---
-> > > =C2=A0tools/testing/selftests/bpf/prog_tests/sock_fields.c | 1 -
-> > > =C2=A01 file changed, 1 deletion(-)
-> > > =
+>  /*
+>   * Turn bpf_core_relo into a low- and high-level spec representation,
+>   * validating correctness along the way, as well as calculating resultin=
+g
+> diff --git a/tools/lib/bpf/relo_core.h b/tools/lib/bpf/relo_core.h
+> index 7df0da0..b8998f 100644
+> --- a/tools/lib/bpf/relo_core.h
+> +++ b/tools/lib/bpf/relo_core.h
+> @@ -68,6 +68,8 @@ struct bpf_core_relo_res {
+>         __u32 new_type_id;
+>  };
+>
+> +int bpf_core_types_are_compat_recur(const struct btf *local_btf, __u32 l=
+ocal_id,
+> +                                   const struct btf *targ_btf, __u32 tar=
+g_id, int level);
 
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
-> > > b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
-> > > index 9d211b5c22c4..7d23166c77af 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
-> > > @@ -394,7 +394,6 @@ void serial_test_sock_fields(void)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test();
-> > > =C2=A0
-> > > =C2=A0done:
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test_sock_fields__detach=
-(skel);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test_sock_fields__d=
-estroy(skel);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (child_cg_fd >=3D=
- 0)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0close(child_cg_fd);
-> > > -- =
-
-> > > 2.30.2
-> > > =
-
-> > =
-
-> > But we should still call __detach(skel) after the !skel check
-> > is done I assume.
-> If I=E2=80=99m not mistaken, that=E2=80=99s not necessary for a proper =
-clean-up. It
-> should be more of a stylistic question. See the parallel message from
-> Daniel (and replies).
-> =
-
-> test_sock_fields__detach() directly translates to
-> bpf_object__detach_skeleton(). test_sock_fields__destroy() basically
-> translates to bpf_object__destroy_skeleton(), including a null-ptr
-> check.
-> =
-
-> But bpf_object__destroy_skeleton() calls bpf_object__detach_skeleton()
-> as its first step. So calling __detach()/__detach_skeleton() explicitly=
-
-> and separately is not necessary for a clean exit, if not otherwise
-> required.
-
-Seems to be the case nice catch. I'm OK with it as is then.
-
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-
-> =
-
-> =
-
-> > So rather than remove it should add a new label
-> > and jump to that,
-> > =
-
-> > =C2=A0 =
-
-> > =C2=A0done:
-> > =C2=A0=C2=A0 test_sock_fields__detach();
-> > =C2=A0done_no_skel:
-> > =C2=A0=C2=A0 test_sock_fields__destroy()
-> =
-
-> =
+Just leave it called __bpf_core_types_are_compat like in kernel, it is
+clearly an "internal" version of bpf_core_types_are_compat(), so it's
+more proper naming convention.
 
 
-
+>  int bpf_core_types_are_compat(const struct btf *local_btf, __u32 local_i=
+d,
+>                               const struct btf *targ_btf, __u32 targ_id);
+>
+> --
+> 2.30.2
+>
