@@ -2,104 +2,181 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA5DCCA485
-	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0373ACCA489
+	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbiFWEjw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 00:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
+        id S229739AbiFWEkC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 00:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiFWDBm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:01:42 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB85DE0
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:01:26 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 20:01:16 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1655953284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n5GDjc2kkjgyMykxueFJ5rZ4OEDMKe2lQ0sdlnoaP7g=;
-        b=KMRiFv2VqYyTm9OViqlVekqWYCknYcnUHiiamZt8NXvUdjhvxBx4Bd8MxgZ0gcdoVRyqhH
-        THJ82OYsgfgfisoys+32pWsW0uhkP9225fufimH/TlsH1rPYs5eVrS3Nqd3IBSCrUxC1Aa
-        RYvZf1qhHDGD/h9NpBCyY7c9sABmURc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        quentin@isovalent.com, hannes@cmpxchg.org, mhocko@kernel.org,
-        shakeelb@google.com, songmuchun@bytedance.com,
-        akpm@linux-foundation.org, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
-        linux-mm@kvack.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 03/10] mm, memcg: Add new helper
- obj_cgroup_from_current()
-Message-ID: <YrPXfG4UVNw2lmkk@castle>
-References: <20220619155032.32515-1-laoar.shao@gmail.com>
- <20220619155032.32515-4-laoar.shao@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220619155032.32515-4-laoar.shao@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+        with ESMTP id S238873AbiFWD3Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jun 2022 23:29:24 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF09D3584F
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id s185so12164515pgs.3
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=v2cMJ22H421S3fhYLc4f4jwE1UZ1i2XJOMgK6XKGTmI=;
+        b=NzddAi+hvTRYyY4ArlVtSKNwukA4qtzfcdLE+XUz6THeX1B70vgXw10bVGAd909Ev0
+         ySke1Bh5+Y5kIbyaPqIlxKhLbPQ4/p7X/R2bx7oA/flYxXyVb1FWcFwWH/b6V5fJnFi3
+         8I5S1pyDUnW4P5rTvMPOEYX4XitUEykk4Tt0v36ZJnhGgX/1nPZEcqoMU11hBSvCt3pW
+         GbmScZCBlOBkQfrn/KATckzMg65qwJJV5zfgNyBODDNxtHS4sSawSPSHNO1p1kXT2eyv
+         dq+rLuzzyXTGz295yv+xUV6iqBWo26BuqY6cGh0QcNqKog+K6Lxr47ybBsPRy0BchJT+
+         qr5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=v2cMJ22H421S3fhYLc4f4jwE1UZ1i2XJOMgK6XKGTmI=;
+        b=KKVNDFrZXxO4xvCb+ciz5cV8IXhMN9ZaHj194FU8SeixGxvc4rnPRis/a9k6IrLHoV
+         Qh7yq8E/Qqy+IrzC3QmyTyPjw7XGo1Eh4AFanIKncdfXymvc1WF7rVtFUHlksxSO4YBK
+         QCkInz+672V1UEXTIuIRIjKCNpjUXc0g4A7BXLJQ9z3dEDZPvR18AdXA/X8YTnBaTyIy
+         niv1PexgvNV+4dEB5RIG/5RTYs5uCrTrX7NdD9yUiE5G3nx3HII/SkjpM4SFi5cCZfv5
+         yE9zFTZpfmGrfOAN08hk8GW94YtRBTSzBJEKTsRbCUn6M27kWOqgpXiZv7SC9AiOMWJS
+         COFA==
+X-Gm-Message-State: AJIora+TZ1QjPaUeg50IUXRn59TIh8rO7eFxIUKvVtnCZf3atWsK4mGC
+        rOM+lFQj970rNrgO2QjKXaA=
+X-Google-Smtp-Source: AGRyM1v1/Vx1GP7GB/xRFRFRBjN7YiJ8Ray3RBxc6u6P2G3lN+6131UxKhUuEy1Ourb/KfMKzi2flg==
+X-Received: by 2002:a63:7b5c:0:b0:40d:684:b760 with SMTP id k28-20020a637b5c000000b0040d0684b760mr5793955pgn.323.1655954963344;
+        Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
+Received: from localhost ([98.97.116.244])
+        by smtp.gmail.com with ESMTPSA id y18-20020a170902ed5200b00168c4c3ed94sm5175429plb.309.2022.06.22.20.29.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 20:29:23 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 20:29:21 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     =?UTF-8?B?SsO2cm4tVGhvcmJlbiBIaW56?= <jthinz@mailbox.tu-berlin.de>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>
+Message-ID: <62b3de11c4d5a_6a3b220898@john.notmuch>
+In-Reply-To: <2fb2e2f72f2bead11cf24f9ee2558e2f4169aec9.camel@mailbox.tu-berlin.de>
+References: <20220621070116.307221-1-jthinz@mailbox.tu-berlin.de>
+ <62b221f3886d0_16274208b@john.notmuch>
+ <2fb2e2f72f2bead11cf24f9ee2558e2f4169aec9.camel@mailbox.tu-berlin.de>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix rare segfault in sock_fields
+ prog test
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 03:50:25PM +0000, Yafang Shao wrote:
-> The difference between get_obj_cgroup_from_current() and obj_cgroup_from_current()
-> is that the later one doesn't add objcg's refcnt.
-> 
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> ---
->  include/linux/memcontrol.h |  1 +
->  mm/memcontrol.c            | 24 ++++++++++++++++++++++++
->  2 files changed, 25 insertions(+)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index cf074156c6ac..402b42670bcd 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -1703,6 +1703,7 @@ bool mem_cgroup_kmem_disabled(void);
->  int __memcg_kmem_charge_page(struct page *page, gfp_t gfp, int order);
->  void __memcg_kmem_uncharge_page(struct page *page, int order);
->  
-> +struct obj_cgroup *obj_cgroup_from_current(void);
->  struct obj_cgroup *get_obj_cgroup_from_current(void);
->  struct obj_cgroup *get_obj_cgroup_from_page(struct page *page);
->  
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index abec50f31fe6..350a7849dac3 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -2950,6 +2950,30 @@ struct obj_cgroup *get_obj_cgroup_from_page(struct page *page)
->  	return objcg;
->  }
->  
-> +__always_inline struct obj_cgroup *obj_cgroup_from_current(void)
-> +{
-> +	struct obj_cgroup *objcg = NULL;
-> +	struct mem_cgroup *memcg;
-> +
-> +	if (memcg_kmem_bypass())
-> +		return NULL;
-> +
-> +	rcu_read_lock();
-> +	if (unlikely(active_memcg()))
-> +		memcg = active_memcg();
-> +	else
-> +		memcg = mem_cgroup_from_task(current);
-> +
-> +	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg)) {
-> +		objcg = rcu_dereference(memcg->objcg);
-> +		if (objcg)
-> +			break;
-> +	}
-> +	rcu_read_unlock();
+J=C3=B6rn-Thorben Hinz wrote:
+> On Tue, 2022-06-21 at 12:54 -0700, John Fastabend wrote:
+> > J=C3=B6rn-Thorben Hinz wrote:
+> > > test_sock_fields__detach() got called with a null pointer here when=
 
-Hm, what prevents the objcg from being released here? Under which conditions
-it's safe to call it?
+> > > one
+> > > of the CHECKs or ASSERTs up to the
+> > > test_sock_fields__open_and_load()
+> > > call resulted in a jump to the "done" label.
+> > > =
+
+> > > A skeletons *__detach() is not safe to call with a null pointer,
+> > > though.
+> > > This led to a segfault.
+> > > =
+
+> > > Go the easy route and only call test_sock_fields__destroy() which
+> > > is
+> > > null-pointer safe and includes detaching.
+> > > =
+
+> > > Came across this while looking[1] to introduce the usage of
+> > > bpf_tcp_helpers.h (included in progs/test_sock_fields.c) together
+> > > with
+> > > vmlinux.h.
+> > > =
+
+> > > [1]  =
+
+> > > https://lore.kernel.org/bpf/629bc069dd807d7ac646f836e9dca28bbc1108e=
+2.camel@mailbox.tu-berlin.de/
+> > > =
+
+> > > Fixes: 8f50f16ff39d ("selftests/bpf: Extend verifier and bpf_sock
+> > > tests for dst_port loads")
+> > > Signed-off-by: J=C3=B6rn-Thorben Hinz <jthinz@mailbox.tu-berlin.de>=
+
+> > > ---
+> > > =C2=A0tools/testing/selftests/bpf/prog_tests/sock_fields.c | 1 -
+> > > =C2=A01 file changed, 1 deletion(-)
+> > > =
+
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+> > > b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+> > > index 9d211b5c22c4..7d23166c77af 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+> > > @@ -394,7 +394,6 @@ void serial_test_sock_fields(void)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test();
+> > > =C2=A0
+> > > =C2=A0done:
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test_sock_fields__detach=
+(skel);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0test_sock_fields__d=
+estroy(skel);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (child_cg_fd >=3D=
+ 0)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0close(child_cg_fd);
+> > > -- =
+
+> > > 2.30.2
+> > > =
+
+> > =
+
+> > But we should still call __detach(skel) after the !skel check
+> > is done I assume.
+> If I=E2=80=99m not mistaken, that=E2=80=99s not necessary for a proper =
+clean-up. It
+> should be more of a stylistic question. See the parallel message from
+> Daniel (and replies).
+> =
+
+> test_sock_fields__detach() directly translates to
+> bpf_object__detach_skeleton(). test_sock_fields__destroy() basically
+> translates to bpf_object__destroy_skeleton(), including a null-ptr
+> check.
+> =
+
+> But bpf_object__destroy_skeleton() calls bpf_object__detach_skeleton()
+> as its first step. So calling __detach()/__detach_skeleton() explicitly=
+
+> and separately is not necessary for a clean exit, if not otherwise
+> required.
+
+Seems to be the case nice catch. I'm OK with it as is then.
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+
+> =
+
+> =
+
+> > So rather than remove it should add a new label
+> > and jump to that,
+> > =
+
+> > =C2=A0 =
+
+> > =C2=A0done:
+> > =C2=A0=C2=A0 test_sock_fields__detach();
+> > =C2=A0done_no_skel:
+> > =C2=A0=C2=A0 test_sock_fields__destroy()
+> =
+
+> =
+
+
+
