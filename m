@@ -2,167 +2,151 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A28F6CCA47E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3B11CCA47C
 	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbiFWEjU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 00:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S230314AbiFWEjg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 00:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbiFWDZi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:25:38 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A772F677
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:25:37 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c4so836140plc.8
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:25:37 -0700 (PDT)
+        with ESMTP id S240771AbiFWDhR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jun 2022 23:37:17 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1A436155;
+        Wed, 22 Jun 2022 20:37:16 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so1256728pjg.3;
+        Wed, 22 Jun 2022 20:37:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:message-id:in-reply-to:references:subject
          :mime-version:content-transfer-encoding;
-        bh=v2RSkUJeEQqizKC3fHwsPSATGrc4wBVtuNubiPn69+g=;
-        b=j7SSYu7vgHW6cVQSd1zQzQMpo7MzIZsoF5Z3xAF8Sdp4yA6oNHzXGi3z7xChK7NXnB
-         n4S5sfmivvV+Ta9snr6tejSwvy+8pbxf2t8YosoM6T3y7KCTm2D1mKgoWgIvfIW99yS5
-         2YAA1XivecRC85c1Xsg8sO4WIsvAA7sUrpDWWRhWPWLAC5eN/nHX1zNco/Zj8WMZviDz
-         kjVV0zYUYcAkPMMiqBXEVxHpWMs9K29oIsXAuVE7hH0wR/KuoFzaiRDKVXEBEOCHNJmX
-         VzxugqGy50tCKeUovl1oz+G2cJ2/S+oOp8Vy6T6hcQ22XEqbQRQEJ9xwJJwTxbHctfoa
-         cEKw==
+        bh=KYNLoM6OlEsOl9RGsNpTi6ZntIlmfhhXqJ1nIViCbJQ=;
+        b=iZIQWR+Aag78WcApUrSCQOmM60KmHwBGPVbXctBC6lirexHofTRjfbzjeFnnZurh2B
+         3fQKpsbPYH+W8i1OzIFjtOZi/QLzF3lrGDJ6QC8lhLheuAsBj4CFQ8lekzGHS2bOs2yD
+         ubjVd7Uz5OmFPkRMrJrnbynVDmGdzPKSqeK8GKSP1DBnetPLEPXrkTGUhq/EFO9SDpZr
+         6esfYoCacWIzY3I28zvQoNMND652iaD70tTxbDSbnwrOMq9/kwmvh2/tpWeTW2aX86aA
+         zfAewdgNMnjVTD4Qw0NU0X6K5kr4e8W+v5VyYfY3PUXWuz4E9JJJhw3sRv2dmhDxYnZd
+         lWyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
          :references:subject:mime-version:content-transfer-encoding;
-        bh=v2RSkUJeEQqizKC3fHwsPSATGrc4wBVtuNubiPn69+g=;
-        b=puSHooPy/+uHZ/VYQ+zS6GMebSR7TddZR584IiGqWRpXjzxLHksutDRA2fv2fQ7nQf
-         HBEryLEGpfqltpRG3m+4RfsqYs2m8x7srT4TzysBYjhTioetYEN1ZuYM77KOp62K8uUU
-         lo8hbgJwYfoFfP4F1U9GUQWkznZz6wyToF7n9BjFm/803nlyjKWVYLLkNEeg9MPDpAlH
-         AapcQVuYplrvnu/nN2btZrcIu/l69YbDJ6B74qTyYTJwboQeYxSG7nnCGc3NvxsSKpob
-         3gD9jXlp1fm4gEj3cL6rw+e0TXmsZ/ZGxv575YOcdFNqhkaJWDNu6dYRZT12IwsTZ0bD
-         EjoA==
-X-Gm-Message-State: AJIora9yts9VSzj9hS2q3aKf4WutFPoqa1Xs6T7vsMJ2LBAJ4cXXQNif
-        g2i7gRX5c4NbGTR1NLl2qDM/ab0S55Giyw==
-X-Google-Smtp-Source: AGRyM1v8iJ7/zrzx5b4J4r3pL18ZKtQ90WQr29ULFIPExelsWr2rsPNN0ScTo5LKmmjOKedVmOcqZA==
-X-Received: by 2002:a17:902:f548:b0:167:5c83:3adb with SMTP id h8-20020a170902f54800b001675c833adbmr36717534plf.70.1655954736493;
-        Wed, 22 Jun 2022 20:25:36 -0700 (PDT)
+        bh=KYNLoM6OlEsOl9RGsNpTi6ZntIlmfhhXqJ1nIViCbJQ=;
+        b=0iuVjdnNYTUknxDi4jhC1POzCMygh2vjTafopX3glnE/D3iY/QRZMjPDkvcwy+pkfz
+         C0VttDE2ogIDb74sHr6Xx8/uWDeJ2qod+UzHz2N14X6Bp8q9+xDDE17XEcvsBsAYD4Oc
+         pJmwbB4LFCE0EPvt0aqxeuZAJhKVa/d7DnB4ESOKF0S4yrju1bOgB7cvqG6Rhu+5HRVa
+         Cb9XyTZ69VDt25ululN0neTP77IBHoC7hha3TnCaMJGfIynoPPJfJZYVTLfKi/JK94TG
+         7XgVOgCQSTvmXyiLOJSeV4jrKaAZgNUNYaxNGIlXdrn+XHpjKqneeWw+9DTmW26Efx6B
+         WSOw==
+X-Gm-Message-State: AJIora+1myUQel8Y4ja6sATcrRV89a+KTDjJw6CFSppHSfN/f3/X1j5u
+        mVbxvqshib7b6V9c9yX4SwmzGLIXEu6SLA==
+X-Google-Smtp-Source: AGRyM1sJec17Ley3ioCU511oMWlFJPlqtB0xifo802yLKNfnlq8KmtHa1x+W/rHzggvvWIbJDak/zw==
+X-Received: by 2002:a17:90b:38c3:b0:1ec:cb07:f216 with SMTP id nn3-20020a17090b38c300b001eccb07f216mr1823373pjb.168.1655955436339;
+        Wed, 22 Jun 2022 20:37:16 -0700 (PDT)
 Received: from localhost ([98.97.116.244])
-        by smtp.gmail.com with ESMTPSA id c129-20020a633587000000b0040ca00cd318sm7876489pga.40.2022.06.22.20.25.35
+        by smtp.gmail.com with ESMTPSA id c18-20020a170902b69200b00168eb15f4c1sm13579227pls.210.2022.06.22.20.37.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:25:36 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 20:25:33 -0700
+        Wed, 22 Jun 2022 20:37:16 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 20:37:14 -0700
 From:   John Fastabend <john.fastabend@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+To:     Chuang W <nashuiliang@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Message-ID: <62b3dd2d8f81c_6a3b22085b@john.notmuch>
-In-Reply-To: <CAADnVQJh0BKP3+WHQ+EmEvw3h=QS9xgR=8uk_3Zb6321xhMjtg@mail.gmail.com>
-References: <20220620222554.270578-1-davemarchevsky@fb.com>
- <62b21962dc64_1627420844@john.notmuch>
- <20220622002952.6334ieb3kfysx7vl@kafai-mbp>
- <62b2ad7a21e88_34dc820812@john.notmuch>
- <20220622172632.psejkta24nwz3k5m@kafai-mbp.dhcp.thefacebook.com>
- <62b3c156ad70a_6a3b2208d7@john.notmuch>
- <CAADnVQJh0BKP3+WHQ+EmEvw3h=QS9xgR=8uk_3Zb6321xhMjtg@mail.gmail.com>
-Subject: Re: [PATCH v6 bpf-next] selftests/bpf: Add benchmark for
- local_storage get
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Chuang W <nashuiliang@gmail.com>,
+        Jingren Zhou <zhoujingren@didiglobal.com>
+Message-ID: <62b3dfeae3f40_6a3b2208a3@john.notmuch>
+In-Reply-To: <20220621073233.53776-1-nashuiliang@gmail.com>
+References: <20220621073233.53776-1-nashuiliang@gmail.com>
+Subject: RE: [PATCH v2] libbpf: Cleanup the kprobe_event on failed
+ add_kprobe_event_legacy()
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei Starovoitov wrote:
-> On Wed, Jun 22, 2022 at 6:26 PM John Fastabend <john.fastabend@gmail.co=
-m> wrote:
-> >
-> > Martin KaFai Lau wrote:
-> > > On Tue, Jun 21, 2022 at 10:49:46PM -0700, John Fastabend wrote:
-> > > > Martin KaFai Lau wrote:
-> > > > > On Tue, Jun 21, 2022 at 12:17:54PM -0700, John Fastabend wrote:=
+Chuang W wrote:
+> Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
+> livepatch"), in a scenario where livepatch and kprobe coexist on the
+> same function entry, the creation of kprobe_event using
+> add_kprobe_event_legacy() will be successful, at the same time as a
+> trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
+> perf_event_open() will return an error because both livepatch and kprobe
+> use FTRACE_OPS_FL_IPMODIFY.
+> 
+> With this patch, whenever an error is returned after
+> add_kprobe_event_legacy(), this ensures that the created kprobe_event is
+> cleaned.
+> 
+> Signed-off-by: Chuang W <nashuiliang@gmail.com>
+> Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
+> ---
+>  tools/lib/bpf/libbpf.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 
-> > > > > > > Hashmap Control
-> > > > > > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > > > > >         num keys: 10
-> > > > > > > hashmap (control) sequential    get:  hits throughput: 20.9=
-00 =C2=B1 0.334 M ops/s, hits latency: 47.847 ns/op, important_hits throu=
-ghput: 20.900 =C2=B1 0.334 M ops/s
-> > > > > > >
-> > > > > > >         num keys: 1000
-> > > > > > > hashmap (control) sequential    get:  hits throughput: 13.7=
-58 =C2=B1 0.219 M ops/s, hits latency: 72.683 ns/op, important_hits throu=
-ghput: 13.758 =C2=B1 0.219 M ops/s
-> > > > > > >
-> > > > > > >         num keys: 10000
-> > > > > > > hashmap (control) sequential    get:  hits throughput: 6.99=
-5 =C2=B1 0.034 M ops/s, hits latency: 142.959 ns/op, important_hits throu=
-ghput: 6.995 =C2=B1 0.034 M ops/s
-> > > > > > >
-> > > > > > >         num keys: 100000
-> > > > > > > hashmap (control) sequential    get:  hits throughput: 4.45=
-2 =C2=B1 0.371 M ops/s, hits latency: 224.635 ns/op, important_hits throu=
-ghput: 4.452 =C2=B1 0.371 M ops/s
-> > > > > > >
-> > > > > > >         num keys: 4194304
-> > > > > > > hashmap (control) sequential    get:  hits throughput: 3.04=
-3 =C2=B1 0.033 M ops/s, hits latency: 328.587 ns/op, important_hits throu=
-ghput: 3.043 =C2=B1 0.033 M ops/s
-> > > > > > >
-> > > > > >
-> > > > > > Why is the hashmap lookup not constant with the number of key=
-s? It looks
-> > > > > > like its prepopulated without collisions so I wouldn't expect=
- any
-> > > > > > extra ops on the lookup side after looking at the code quickl=
-y.
-> > > > > It may be due to the cpu-cache misses as the map grows.
-> > > >
-> > > > Maybe but, values are just ints so even 1k * 4B =3D 4kB should be=
+I think we want to improve the commit message otherwise I'm sure we will
+stumble on this in the future and from just above its tricky to follow.
+I would suggest almost verbatim the description you gave in reply to
+my question. Just cut'n'pasting your text together with minor edit
+glue,
 
-> > > > inside an otherwise unused server class system. Would be more
-> > > > believable (to me at least) if the drop off happened at 100k or
-> > > > more.
-> > > It is not only value (and key) size.  There is overhead.
-> > > htab_elem alone is 48bytes.  key and value need to 8bytes align als=
-o.
-> > >
-> >
-> > Right late night math didn't add up. Now I'm wondering if we can make=
+"
+ The legacy kprobe API (i.e. tracefs API) has two steps:
+ 
+ 1) register_kprobe
 
-> > hashmap behave much better, that drop off is looking really ugly.
-> >
-> > > From a random machine:
-> > > lscpu -C
-> > > NAME ONE-SIZE ALL-SIZE WAYS TYPE        LEVEL  SETS PHY-LINE COHERE=
-NCY-SIZE
-> > > L1d       32K     576K    8 Data            1    64        1       =
-      64
-> > > L1i       32K     576K    8 Instruction     1    64        1       =
-      64
-> > > L2         1M      18M   16 Unified         2  1024        1       =
-      64
-> > > L3      24.8M    24.8M   11 Unified         3 36864        1       =
-      64
-> >
-> > Could you do a couple more data point then, num keys=3D100,200,400? I=
- would
-> > expect those to fit in the cache and be same as 10 by the cache theor=
-y. I
-> > could try as well but looking like Friday before I have a spare momen=
-t.
-> =
+ $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
 
-> I think the benchmark achieved its goal :)
-> It generated plenty of interesting data.
-> Pulling random out of hot loop and any other improvements
-> can be done as follow ups.
-> Pushed it to bpf-next.
+ This will create a trace event of mykprobe and register a disable
+ kprobe that waits to be activated.
+ 
+ 2) enable_kprobe
 
-Yep just realized I hadn't ACK'd it yet. Thanks for the patches my
-guess is we can improve the hashmap a bunch. FWIW we use the
-hashmap as described here so wondering if we need to cut over to
-task storage or just make hashmap better at large values.=
+ 2.1) using syscall perf_event_open as the following code,
+ perf_event_kprobe_open_legacy (file: tools/lib/bpf/libbpf.c):
+ ---
+ attr.type = PERF_TYPE_TRACEPOINT;
+ pfd = syscall(__NR_perf_event_open, &attr,
+               pid < 0 ? -1 : pid, /* pid */
+               pid == -1 ? 0 : -1, /* cpu */
+               -1 /* group_fd */,  PERF_FLAG_FD_CLOEXEC);
+ ---
+
+ In the implementation code of perf_event_open, enable_kprobe() will be executed.
+
+ 2.2) using shell
+
+ $ echo 1 > /sys/kernel/debug/tracing/events/kprobes/mykprobe/enable
+
+ As with perf_event_open, enable_kprobe() will also be executed.
+ 
+ When using the same function XXX, kprobe and livepatch cannot coexist,
+ that is, step 2) will return an error (ref: arm_kprobe_ftrace()),
+ however, step 1) is ok! The new kprobe API (i.e. perf kprobe API)
+ aggregates register_kprobe and enable_kprobe, internally fixes the
+ issue on failed enable_kprobe.
+
+ To fix: before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
+ livepatch"), in a scenario where livepatch and kprobe coexist on the
+ same function entry, the creation of kprobe_event using
+ add_kprobe_event_legacy() will be successful, at the same time as a
+ trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
+ perf_event_open() will return an error because both livepatch and kprobe
+ use FTRACE_OPS_FL_IPMODIFY.
+ 
+ With this patch, whenever an error is returned after
+ add_kprobe_event_legacy(), this ensures that the created kprobe_event is
+ cleaned.
+"
+
+Thanks,
+John
