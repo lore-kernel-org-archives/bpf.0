@@ -2,131 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9628ECCA48B
-	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 589DECCA47C
+	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiFWEkE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 00:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
+        id S230457AbiFWEkQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 00:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245747AbiFWEDV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jun 2022 00:03:21 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBA53ED0D;
-        Wed, 22 Jun 2022 21:03:19 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id ay16so19021317ejb.6;
-        Wed, 22 Jun 2022 21:03:19 -0700 (PDT)
+        with ESMTP id S1345163AbiFWEPf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jun 2022 00:15:35 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A2343AE1
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 21:15:33 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id g26so17020324ejb.5
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 21:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p9alu82XUp6uZJtIQvNoA6NypyCiXgcxiqkWkzEr1Zo=;
-        b=Fagtrm/XTZLabpzvqPXdymcY9K3hY67eW+BnLM7Dwzpapd80AOWgR9PWqOxK+AYtSn
-         04fcR3YfOkqHL7ySLvakHZUc4KSzGqKcKzktj+VcTjK3okZ8jEE6YnNwtWcbKhuYhJmp
-         EsmXm+Y3zJkOWo3O/DFLeIzavfoDqdQEZcnL7+Hnvw+WAdYmrW+7ii2kTBESh8LkYbab
-         efrRfbtrB/kMlFuoi7mfajUrKsrH46bvvTr+nEyvs8OkeyMjFIyWlfrpEJZL9NhdT1Z2
-         VWzDk6ptr/PCP4zmlCUrD6ELuEHKhmYpCj7YPbbTSH/Rw83OvhWCZm0f648MdtfLvLqA
-         oqNA==
+         :cc:content-transfer-encoding;
+        bh=78rZhP2i9bdPK9r2fiQ66uipcMHv7v9gQuH9nlkZQfs=;
+        b=VDXIzg86qcVyLt22oZ+0yoKUVC+Z4f3km2+D2fqQALkkEY8jSfTkLuVHNq8UcAoPs5
+         xKlHYFooBDXMQ2RTPp13uH9dYsHbs3siuXwz7S6iSfEWwuY1EdsQOUA4UYWvHJL+ysHG
+         ANCTxVK4KUMXUHNXzU2OH7OFGY9mZv/lM4WcinIpzGKUSqpGmuNOnJNgZnaA5cukA0fk
+         k6C1LUVJbNOGHQePZ6aV0PaVzNVx5mI1WqsxRpHEAgoWAJ7VOlseMBRxghDjKvsbhpGp
+         J80IisvyptPOt7k+RlN2vVjkHXNUKiJjRsIst4ItPzcNELmVtAwU8sX1zLRn2abiIAvA
+         2Mgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p9alu82XUp6uZJtIQvNoA6NypyCiXgcxiqkWkzEr1Zo=;
-        b=Dmtdd2TwwD86ZIZflGm4ae4v2m7n8fEmG4hRfjFVLKGIP/g4NgZz2QBLGFlJURjULT
-         KvZmhoL6etnypeKfyw3sIgt1Yzu0/4OQ4gj+Lb4EO8VV4K//CoTR3XiSXe0JbS7405ZR
-         Gg5pzOv9oaYAAhe0TO5+Y7s6VkcZX+XqMpxGLrA/h4By+A5tJ6oZqLk62TLe5A28NtMH
-         VLieG/rMzDseppARIqvWKzFFOipaeGqwEhiKDDD+lC7dFRYTL+F2c/dnReYnz5D/vPp8
-         UwasgtbKJKSEmH2SpwstBhA/fnWRNpm5cbShXXYw2QAsgLFM4+G53q4itpxlrQZjEpnx
-         ks0g==
-X-Gm-Message-State: AJIora/hGFxjXiuDr9zx1zjb2NBOdP/Y27GRPo02KYgHBr880v5TWsJe
-        QjqF9v5hUQiSEWZzNN2mzVG6aWW0hU5vZsZRQp4=
-X-Google-Smtp-Source: AGRyM1ta1CjY0G8QOk5sXGWqbULWoob+XD2P/kZ3PpOlHzCV7ET+r/mnpgI74/SyU9Tqul9fAzH++de36O113+xB81U=
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=78rZhP2i9bdPK9r2fiQ66uipcMHv7v9gQuH9nlkZQfs=;
+        b=gbm6XCxIuKcTW5KDuW1+2YZ11dULd+YcT+Thn2bQkKF67wlqUilpyak20YD08kCpBE
+         zjcdJY8H/piCTsg5IIXSTc8+wOgv4IjgPB4SSVuHyygTKG3LzLDExnMx+5P8rfcxNzlN
+         zwXgpwItO+fyfaFleMsWnyfY7HbeXevTj7J44xaKo4XCBarANxmgAoQN6WRXZ6o881g3
+         f+dl43G4iDCZGElnBBZBsqDalSs2RUezfgVVkOAKC3vkA+O9o1B9l1oeHNrmpfWx9vWe
+         xWEJNnm/Y0vlS2IhwRXmbK0FPO9nptI5A0HuRv3SueW2BmHXUJWOzuJgRbYplJt9p2Km
+         P/nQ==
+X-Gm-Message-State: AJIora8R49djWuLQJ20Zrb4CKJvIEKF76gHyuMH890NLq48DXCiHAukf
+        anfxdDQ223aYKcYQ2TPZAL/5pSSv32yhdVfSZS0=
+X-Google-Smtp-Source: AGRyM1u1il2vGOhWAbXxsTaGJ8DVyz2kuL+dRfY7nzXa06HfF5hN8RHpVgyMjDhVhU7d6zqEAF3QdfbEVC5eN0lmub0=
 X-Received: by 2002:a17:906:3f51:b0:712:3945:8c0d with SMTP id
- f17-20020a1709063f5100b0071239458c0dmr6182429ejj.302.1655956998418; Wed, 22
- Jun 2022 21:03:18 -0700 (PDT)
+ f17-20020a1709063f5100b0071239458c0dmr6214859ejj.302.1655957732001; Wed, 22
+ Jun 2022 21:15:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220621073233.53776-1-nashuiliang@gmail.com>
-In-Reply-To: <20220621073233.53776-1-nashuiliang@gmail.com>
+References: <20220622173506.860578-1-deso@posteo.net> <20220622173506.860578-2-deso@posteo.net>
+ <20220622221921.q65wjyirsaqhvg4h@muellerd-fedora-MJ0AC3F3>
+In-Reply-To: <20220622221921.q65wjyirsaqhvg4h@muellerd-fedora-MJ0AC3F3>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 22 Jun 2022 21:03:07 -0700
-Message-ID: <CAEf4BzZmZjF62GzwQ2D7Sarhfha+Uc1g+TKPszZJ60jTMb0dbA@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: Cleanup the kprobe_event on failed add_kprobe_event_legacy()
-To:     Chuang W <nashuiliang@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Date:   Wed, 22 Jun 2022 21:15:20 -0700
+Message-ID: <CAEf4BzZqBvvzY8qrgmddkPPXeSeEqi73jh_O-LwHyQ4LCTP-7w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] libbpf: Move core "types_are_compat" logic
+ into relo_core.c
+To:     =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jingren Zhou <zhoujingren@didiglobal.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 21, 2022 at 12:32 AM Chuang W <nashuiliang@gmail.com> wrote:
+On Wed, Jun 22, 2022 at 3:19 PM Daniel M=C3=BCller <deso@posteo.net> wrote:
 >
-> Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
-> livepatch"), in a scenario where livepatch and kprobe coexist on the
-> same function entry, the creation of kprobe_event using
-> add_kprobe_event_legacy() will be successful, at the same time as a
-> trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
-> perf_event_open() will return an error because both livepatch and kprobe
-> use FTRACE_OPS_FL_IPMODIFY.
+> On Wed, Jun 22, 2022 at 05:35:05PM +0000, Daniel M=C3=BCller wrote:
+> > diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+> > index 6ad3c3..e54370 100644
+> > --- a/tools/lib/bpf/relo_core.c
+> > +++ b/tools/lib/bpf/relo_core.c
+> > @@ -141,6 +141,84 @@ static bool core_relo_is_enumval_based(enum bpf_co=
+re_relo_kind kind)
+> >       }
+> >  }
+> >
+> > +int bpf_core_types_are_compat_recur(const struct btf *local_btf, __u32=
+ local_id,
+> > +                                 const struct btf *targ_btf, __u32 tar=
+g_id, int level)
+> > +{
 >
-> With this patch, whenever an error is returned after
-> add_kprobe_event_legacy(), this ensures that the created kprobe_event is
-> cleaned.
+> [...]
 >
-> Signed-off-by: Chuang W <nashuiliang@gmail.com>
-> Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
-> ---
+> > +
+> > +             /* tail recurse for return type check */
+> > +             skip_mods_and_typedefs(local_btf, local_type->type, &loca=
+l_id);
+> > +             skip_mods_and_typedefs(targ_btf, targ_type->type, &targ_i=
+d);
+> > +             goto recur;
+> > +     }
+> > +     default:
+> > +             return 0;
+>
+> I actually left out the pr_warn here (present in libbpf but not the kerne=
+l). I
+> suppose it would be best to carry it over from libbpf?
 
-This part is good, but I think there are few error paths in
-bpf_program__attach_kprobe_opts() itself that would need to call
-remove_kprobe_event_legacy() explicitly as well, no?
+Yes, please.
 
->  tools/lib/bpf/libbpf.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
+
 >
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 0781fae58a06..d0a36350e22a 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -10809,10 +10809,11 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
->         }
->         type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
->         if (type < 0) {
-> +               err = type;
->                 pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
->                         kfunc_name, offset,
-> -                       libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
-> -               return type;
-> +                       libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-> +               goto clear_kprobe_event;
->         }
->         attr.size = sizeof(attr);
->         attr.config = type;
-> @@ -10826,9 +10827,14 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
->                 err = -errno;
->                 pr_warn("legacy kprobe perf_event_open() failed: %s\n",
->                         libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-> -               return err;
-> +               goto clear_kprobe_event;
->         }
->         return pfd;
-> +
-> +clear_kprobe_event:
-> +       /* Clear the newly added kprobe_event */
-> +       remove_kprobe_event_legacy(probe_name, retprobe);
-> +       return err;
->  }
->
->  struct bpf_link *
-> --
-> 2.34.1
->
+> Thanks,
+> Daniel
