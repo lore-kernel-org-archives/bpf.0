@@ -2,230 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAD9ECCA481
-	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14B1FCCA483
+	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiFWEjm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 00:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S229686AbiFWEjt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 00:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbiFWD10 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:27:26 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805652FFCD
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:27:25 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id p14so12169836pfh.6
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=PYLf+McgE1v7VZmfEmle34zbko4zETjKip0SRez/UOg=;
-        b=pezrpDAAMRBLAkuapdHVaP/tmYgvU5TLDp6emyGNXqQIzvK4XD1gVYfZqkrXpj9VNM
-         o7QlkBMSq+5OogWJU88IAplqWQ0fHvCdDNS36gUtEIGuJSfIkahEV0Df9b+TZxjaqwC/
-         mPnP+GHcvBJw338OeMiKQ/r0UaggWfLzOkQBZ/hXEavu1961n3DuifeK5xkhaMDagW9l
-         jMRxTzznhrZEFgeNCTe30rbgognlN6rrzy78knBk3O/bTpkIZNgsnPb9QpeGXsYZPWsK
-         32JXoWoAK6va9PcmYZiFyRpOCGCNap4mfS1PUjQvwU9WDHu13ETKbTZp/QesZiLRJNWf
-         Zmgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=PYLf+McgE1v7VZmfEmle34zbko4zETjKip0SRez/UOg=;
-        b=j9bpC/R6maMStBz8gqZC/2l8EGRxyxCOp1+bAlBvT0i717pPlhKi2+r5ZAE9+ZrSR7
-         12/XluKImtokaVg9lm6duUYcwgRm3F5vJPtFyy3TaFJpeKp7JyFGY32rd8xr9H6vUFOK
-         cKOcV1+rqSvgm5imNrdppXNraIcRb7wyFdU/MCQc5DN9Yj6J8T3HrdwUe+eX0MXB22Cv
-         DT0ofB7aaiKfGtTU14MtZ7iUOQ+Pubj4Av8019PQIJhI5L38/V/8nDhIL8XEQynI3vdG
-         wgptrcBOxfYkrNhRWntDXVuE0rtJwB3DLZTbaQdk5gUrHPu6zxtzAevOGrusVjg8MaYM
-         bDcQ==
-X-Gm-Message-State: AJIora8zVzIy4s5r8v6o4P2xHSqG8p0Y5eQ+a/Ahaiumny3bfltyTB1K
-        /HZW5/6aPhKJwudGJpgR9Wo=
-X-Google-Smtp-Source: AGRyM1vUSciN+g0qPK6mHutgB8uHuW9WlntLXGZg8bBqbl6xKf/MY35zjnvpVYdKZG11Ol6T1lRyKA==
-X-Received: by 2002:a65:6a94:0:b0:40c:977c:9665 with SMTP id q20-20020a656a94000000b0040c977c9665mr5788677pgu.5.1655954844897;
-        Wed, 22 Jun 2022 20:27:24 -0700 (PDT)
-Received: from localhost ([98.97.116.244])
-        by smtp.gmail.com with ESMTPSA id b8-20020a17090a010800b001ecd9a69933sm561626pjb.34.2022.06.22.20.27.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:27:24 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 20:27:23 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Dave Marchevsky <davemarchevsky@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Kernel Team <kernel-team@fb.com>
-Message-ID: <62b3dd9b8249b_6a3b2208a4@john.notmuch>
-In-Reply-To: <31bba044-6bb0-1a78-d706-f9fd9fbb1e2c@fb.com>
-References: <20220620222554.270578-1-davemarchevsky@fb.com>
- <62b21962dc64_1627420844@john.notmuch>
- <20220622002952.6334ieb3kfysx7vl@kafai-mbp>
- <62b2ad7a21e88_34dc820812@john.notmuch>
- <20220622172632.psejkta24nwz3k5m@kafai-mbp.dhcp.thefacebook.com>
- <62b3c156ad70a_6a3b2208d7@john.notmuch>
- <31bba044-6bb0-1a78-d706-f9fd9fbb1e2c@fb.com>
-Subject: Re: [PATCH v6 bpf-next] selftests/bpf: Add benchmark for
- local_storage get
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S238983AbiFWD3z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jun 2022 23:29:55 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC453584F
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:29:54 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 20:29:43 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1655954992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7m7PQ41eyC1auFWCI8Zpow+ZtCZNE5Ds6mZn3mJOYLE=;
+        b=gqcrSqAIqvA4tGnnDQSdrA4QcBbGIY4GjjVlUblJoFA6Ga6YgvXJiLKzSMQzckepJfBCGh
+        6ymvLL545ttlYYvLsqsmxCJscoLt+9n+UwUoDNDvJNzjzj/9uup/3ZvspazXP9RaXTMg2r
+        Xom5H1CZu6Teuici16/sjaWd7KXrLdQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        quentin@isovalent.com, hannes@cmpxchg.org, mhocko@kernel.org,
+        shakeelb@google.com, songmuchun@bytedance.com,
+        akpm@linux-foundation.org, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
+        linux-mm@kvack.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH bpf-next 00/10] bpf, mm: Recharge pages when reuse
+ bpf map
+Message-ID: <YrPeJ5L5mSI/MqrP@castle>
+References: <20220619155032.32515-1-laoar.shao@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220619155032.32515-1-laoar.shao@gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Dave Marchevsky wrote:
-> On 6/22/22 9:26 PM, John Fastabend wrote:   =
+On Sun, Jun 19, 2022 at 03:50:22PM +0000, Yafang Shao wrote:
+> After switching to memcg-based bpf memory accounting, the bpf memory is
+> charged to the loader's memcg by default, that causes unexpected issues for
+> us. For instance, the container of the loader may be restarted after
+> pinning progs and maps, but the bpf memcg will be left and pinned on the
+> system. Once the loader's new generation container is started, the leftover
+> pages won't be charged to it. That inconsistent behavior will make trouble
+> for the memory resource management for this container.
+> 
+> In the past few days, I have proposed two patchsets[1][2] to try to resolve
+> this issue, but in both of these two proposals the user code has to be
+> changed to adapt to it, that is a pain for us. This patchset relieves the
+> pain by triggering the recharge in libbpf. It also addresses Roman's
+> critical comments.
+> 
+> The key point we can avoid changing the user code is that there's a resue
+> path in libbpf. Once the bpf container is restarted again, it will try
+> to re-run the required bpf programs, if the bpf programs are the same with
+> the already pinned one, it will reuse them.
+> 
+> To make sure we either recharge all of them successfully or don't recharge
+> any of them. The recharge prograss is divided into three steps:
+>   - Pre charge to the new generation 
+>     To make sure once we uncharge from the old generation, we can always
+>     charge to the new generation succeesfully. If we can't pre charge to
+>     the new generation, we won't allow it to be uncharged from the old
+>     generation.
+>   - Uncharge from the old generation
+>     After pre charge to the new generation, we can uncharge from the old
+>     generation.
+>   - Post charge to the new generation
+>     Finnaly we can set pages' memcg_data to the new generation. 
+> In the pre charge step, we may succeed to charge some addresses, but fail
+> to charge a new address, then we should uncharge the already charged
+> addresses, so another recharge-err step is instroduced.
+>  
+> This pachset has finished recharging bpf hash map. which is mostly used
+> by our bpf services. The other maps hasn't been implemented yet. The bpf
+> progs hasn't been implemented neither.
 
-> > Martin KaFai Lau wrote:
-> >> On Tue, Jun 21, 2022 at 10:49:46PM -0700, John Fastabend wrote:
-> >>> Martin KaFai Lau wrote:
-> >>>> On Tue, Jun 21, 2022 at 12:17:54PM -0700, John Fastabend wrote:
-> >>>>>> Hashmap Control
-> >>>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>>>         num keys: 10
-> >>>>>> hashmap (control) sequential    get:  hits throughput: 20.900 =C2=
-=B1 0.334 M ops/s, hits latency: 47.847 ns/op, important_hits throughput:=
- 20.900 =C2=B1 0.334 M ops/s
-> >>>>>>
-> >>>>>>         num keys: 1000
-> >>>>>> hashmap (control) sequential    get:  hits throughput: 13.758 =C2=
-=B1 0.219 M ops/s, hits latency: 72.683 ns/op, important_hits throughput:=
- 13.758 =C2=B1 0.219 M ops/s
-> >>>>>>
-> >>>>>>         num keys: 10000
-> >>>>>> hashmap (control) sequential    get:  hits throughput: 6.995 =C2=
-=B1 0.034 M ops/s, hits latency: 142.959 ns/op, important_hits throughput=
-: 6.995 =C2=B1 0.034 M ops/s
-> >>>>>>
-> >>>>>>         num keys: 100000
-> >>>>>> hashmap (control) sequential    get:  hits throughput: 4.452 =C2=
-=B1 0.371 M ops/s, hits latency: 224.635 ns/op, important_hits throughput=
-: 4.452 =C2=B1 0.371 M ops/s
-> >>>>>>
-> >>>>>>         num keys: 4194304
-> >>>>>> hashmap (control) sequential    get:  hits throughput: 3.043 =C2=
-=B1 0.033 M ops/s, hits latency: 328.587 ns/op, important_hits throughput=
-: 3.043 =C2=B1 0.033 M ops/s
-> >>>>>>
-> >>>>>
-> >>>>> Why is the hashmap lookup not constant with the number of keys? I=
-t looks
-> >>>>> like its prepopulated without collisions so I wouldn't expect any=
+Without going into the implementation details, the overall approach looks
+ok to me. But it adds complexity and code into several different subsystems,
+and I'm 100% sure it's not worth it if we talking about a partial support
+of a single map type. Are you committed to implement the recharging
+for all/most map types and progs and support this code in the future?
 
-> >>>>> extra ops on the lookup side after looking at the code quickly.
-> >>>> It may be due to the cpu-cache misses as the map grows.
-> >>>
-> >>> Maybe but, values are just ints so even 1k * 4B =3D 4kB should be
-> >>> inside an otherwise unused server class system. Would be more
-> >>> believable (to me at least) if the drop off happened at 100k or
-> >>> more.
-> >> It is not only value (and key) size.  There is overhead.
-> >> htab_elem alone is 48bytes.  key and value need to 8bytes align also=
-.
-> >>
-> > =
+I'm still feeling you trying to solve a userspace problem in the kernel.
+Not saying it can't be solved this way, but it seems like there are
+easier options.
 
-> > Right late night math didn't add up. Now I'm wondering if we can make=
-
-> > hashmap behave much better, that drop off is looking really ugly.
-> > =
-
-> >> From a random machine:
-> >> lscpu -C
-> >> NAME ONE-SIZE ALL-SIZE WAYS TYPE        LEVEL  SETS PHY-LINE COHEREN=
-CY-SIZE
-> >> L1d       32K     576K    8 Data            1    64        1        =
-     64
-> >> L1i       32K     576K    8 Instruction     1    64        1        =
-     64
-> >> L2         1M      18M   16 Unified         2  1024        1        =
-     64
-> >> L3      24.8M    24.8M   11 Unified         3 36864        1        =
-     64
-> > =
-
-> > Could you do a couple more data point then, num keys=3D100,200,400? I=
- would
-> > expect those to fit in the cache and be same as 10 by the cache theor=
-y. I
-> > could try as well but looking like Friday before I have a spare momen=
-t.
-> > =
-
-> > Thanks,
-> > John
-> =
-
-> Here's a benchmark run with those num_keys.
-> =
-
-> Hashmap Control
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->         num keys: 10
-> hashmap (control) sequential    get:  hits throughput: 23.072 =C2=B1 0.=
-208 M ops/s, hits latency: 43.343 ns/op, important_hits throughput: 23.07=
-2 =C2=B1 0.208 M ops/s
-> =
-
->         num keys: 100
-> hashmap (control) sequential    get:  hits throughput: 17.967 =C2=B1 0.=
-236 M ops/s, hits latency: 55.659 ns/op, important_hits throughput: 17.96=
-7 =C2=B1 0.236 M ops/s
-> =
-
-
-Hmmm this is interesting. I expected a flat line and then a hard drop off=
-
-which to me would indicate the cache miss being the culprit. But this is
-almost a linear perf dec over num_keys. Guess we need to debug more.
-
->         num keys: 200
-> hashmap (control) sequential    get:  hits throughput: 17.812 =C2=B1 0.=
-428 M ops/s, hits latency: 56.143 ns/op, important_hits throughput: 17.81=
-2 =C2=B1 0.428 M ops/s
-> =
-
->         num keys: 300
-> hashmap (control) sequential    get:  hits throughput: 17.070 =C2=B1 0.=
-293 M ops/s, hits latency: 58.582 ns/op, important_hits throughput: 17.07=
-0 =C2=B1 0.293 M ops/s
-> =
-
->         num keys: 400
-> hashmap (control) sequential    get:  hits throughput: 17.667 =C2=B1 0.=
-316 M ops/s, hits latency: 56.604 ns/op, important_hits throughput: 17.66=
-7 =C2=B1 0.316 M ops/s
-> =
-
->         num keys: 500
-> hashmap (control) sequential    get:  hits throughput: 17.010 =C2=B1 0.=
-409 M ops/s, hits latency: 58.789 ns/op, important_hits throughput: 17.01=
-0 =C2=B1 0.409 M ops/s
-> =
-
->         num keys: 1000
-> hashmap (control) sequential    get:  hits throughput: 14.330 =C2=B1 0.=
-172 M ops/s, hits latency: 69.784 ns/op, important_hits throughput: 14.33=
-0 =C2=B1 0.172 M ops/s
-> =
-
->         num keys: 10000
-> hashmap (control) sequential    get:  hits throughput: 6.047 =C2=B1 0.0=
-24 M ops/s, hits latency: 165.380 ns/op, important_hits throughput: 6.047=
- =C2=B1 0.024 M ops/s
-> =
-
->         num keys: 100000
-> hashmap (control) sequential    get:  hits throughput: 4.472 =C2=B1 0.1=
-63 M ops/s, hits latency: 223.630 ns/op, important_hits throughput: 4.472=
- =C2=B1 0.163 M ops/s
-> =
-
->         num keys: 4194304
-> hashmap (control) sequential    get:  hits throughput: 2.785 =C2=B1 0.0=
-24 M ops/s, hits latency: 359.066 ns/op, important_hits throughput: 2.785=
- =C2=B1 0.024 M ops/s
-
-
+Thanks!
