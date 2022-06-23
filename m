@@ -2,28 +2,28 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14B1FCCA483
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA5DCCA485
 	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 04:41:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbiFWEjt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 00:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S230425AbiFWEjw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 00:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238983AbiFWD3z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 22 Jun 2022 23:29:55 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC453584F
-        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:29:54 -0700 (PDT)
-Date:   Wed, 22 Jun 2022 20:29:43 -0700
+        with ESMTP id S229605AbiFWDBm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 22 Jun 2022 23:01:42 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB85DE0
+        for <bpf@vger.kernel.org>; Wed, 22 Jun 2022 20:01:26 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 20:01:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1655954992;
+        t=1655953284;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=7m7PQ41eyC1auFWCI8Zpow+ZtCZNE5Ds6mZn3mJOYLE=;
-        b=gqcrSqAIqvA4tGnnDQSdrA4QcBbGIY4GjjVlUblJoFA6Ga6YgvXJiLKzSMQzckepJfBCGh
-        6ymvLL545ttlYYvLsqsmxCJscoLt+9n+UwUoDNDvJNzjzj/9uup/3ZvspazXP9RaXTMg2r
-        Xom5H1CZu6Teuici16/sjaWd7KXrLdQ=
+        bh=n5GDjc2kkjgyMykxueFJ5rZ4OEDMKe2lQ0sdlnoaP7g=;
+        b=KMRiFv2VqYyTm9OViqlVekqWYCknYcnUHiiamZt8NXvUdjhvxBx4Bd8MxgZ0gcdoVRyqhH
+        THJ82OYsgfgfisoys+32pWsW0uhkP9225fufimH/TlsH1rPYs5eVrS3Nqd3IBSCrUxC1Aa
+        RYvZf1qhHDGD/h9NpBCyY7c9sABmURc=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Roman Gushchin <roman.gushchin@linux.dev>
 To:     Yafang Shao <laoar.shao@gmail.com>
@@ -35,68 +35,71 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         akpm@linux-foundation.org, cl@linux.com, penberg@kernel.org,
         rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz,
         linux-mm@kvack.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH bpf-next 00/10] bpf, mm: Recharge pages when reuse
- bpf map
-Message-ID: <YrPeJ5L5mSI/MqrP@castle>
+Subject: Re: [RFC PATCH bpf-next 03/10] mm, memcg: Add new helper
+ obj_cgroup_from_current()
+Message-ID: <YrPXfG4UVNw2lmkk@castle>
 References: <20220619155032.32515-1-laoar.shao@gmail.com>
+ <20220619155032.32515-4-laoar.shao@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220619155032.32515-1-laoar.shao@gmail.com>
+In-Reply-To: <20220619155032.32515-4-laoar.shao@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 03:50:22PM +0000, Yafang Shao wrote:
-> After switching to memcg-based bpf memory accounting, the bpf memory is
-> charged to the loader's memcg by default, that causes unexpected issues for
-> us. For instance, the container of the loader may be restarted after
-> pinning progs and maps, but the bpf memcg will be left and pinned on the
-> system. Once the loader's new generation container is started, the leftover
-> pages won't be charged to it. That inconsistent behavior will make trouble
-> for the memory resource management for this container.
+On Sun, Jun 19, 2022 at 03:50:25PM +0000, Yafang Shao wrote:
+> The difference between get_obj_cgroup_from_current() and obj_cgroup_from_current()
+> is that the later one doesn't add objcg's refcnt.
 > 
-> In the past few days, I have proposed two patchsets[1][2] to try to resolve
-> this issue, but in both of these two proposals the user code has to be
-> changed to adapt to it, that is a pain for us. This patchset relieves the
-> pain by triggering the recharge in libbpf. It also addresses Roman's
-> critical comments.
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+> ---
+>  include/linux/memcontrol.h |  1 +
+>  mm/memcontrol.c            | 24 ++++++++++++++++++++++++
+>  2 files changed, 25 insertions(+)
 > 
-> The key point we can avoid changing the user code is that there's a resue
-> path in libbpf. Once the bpf container is restarted again, it will try
-> to re-run the required bpf programs, if the bpf programs are the same with
-> the already pinned one, it will reuse them.
-> 
-> To make sure we either recharge all of them successfully or don't recharge
-> any of them. The recharge prograss is divided into three steps:
->   - Pre charge to the new generation 
->     To make sure once we uncharge from the old generation, we can always
->     charge to the new generation succeesfully. If we can't pre charge to
->     the new generation, we won't allow it to be uncharged from the old
->     generation.
->   - Uncharge from the old generation
->     After pre charge to the new generation, we can uncharge from the old
->     generation.
->   - Post charge to the new generation
->     Finnaly we can set pages' memcg_data to the new generation. 
-> In the pre charge step, we may succeed to charge some addresses, but fail
-> to charge a new address, then we should uncharge the already charged
-> addresses, so another recharge-err step is instroduced.
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index cf074156c6ac..402b42670bcd 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -1703,6 +1703,7 @@ bool mem_cgroup_kmem_disabled(void);
+>  int __memcg_kmem_charge_page(struct page *page, gfp_t gfp, int order);
+>  void __memcg_kmem_uncharge_page(struct page *page, int order);
 >  
-> This pachset has finished recharging bpf hash map. which is mostly used
-> by our bpf services. The other maps hasn't been implemented yet. The bpf
-> progs hasn't been implemented neither.
+> +struct obj_cgroup *obj_cgroup_from_current(void);
+>  struct obj_cgroup *get_obj_cgroup_from_current(void);
+>  struct obj_cgroup *get_obj_cgroup_from_page(struct page *page);
+>  
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index abec50f31fe6..350a7849dac3 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2950,6 +2950,30 @@ struct obj_cgroup *get_obj_cgroup_from_page(struct page *page)
+>  	return objcg;
+>  }
+>  
+> +__always_inline struct obj_cgroup *obj_cgroup_from_current(void)
+> +{
+> +	struct obj_cgroup *objcg = NULL;
+> +	struct mem_cgroup *memcg;
+> +
+> +	if (memcg_kmem_bypass())
+> +		return NULL;
+> +
+> +	rcu_read_lock();
+> +	if (unlikely(active_memcg()))
+> +		memcg = active_memcg();
+> +	else
+> +		memcg = mem_cgroup_from_task(current);
+> +
+> +	for (; memcg != root_mem_cgroup; memcg = parent_mem_cgroup(memcg)) {
+> +		objcg = rcu_dereference(memcg->objcg);
+> +		if (objcg)
+> +			break;
+> +	}
+> +	rcu_read_unlock();
 
-Without going into the implementation details, the overall approach looks
-ok to me. But it adds complexity and code into several different subsystems,
-and I'm 100% sure it's not worth it if we talking about a partial support
-of a single map type. Are you committed to implement the recharging
-for all/most map types and progs and support this code in the future?
-
-I'm still feeling you trying to solve a userspace problem in the kernel.
-Not saying it can't be solved this way, but it seems like there are
-easier options.
-
-Thanks!
+Hm, what prevents the objcg from being released here? Under which conditions
+it's safe to call it?
