@@ -2,149 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66669C433EF
-	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 06:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 773F5C433EF
+	for <bpf@archiver.kernel.org>; Thu, 23 Jun 2022 08:11:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiFWGJ4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 23 Jun 2022 02:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S230292AbiFWILx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 23 Jun 2022 04:11:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiFWGJz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 23 Jun 2022 02:09:55 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9215519F;
-        Wed, 22 Jun 2022 23:09:54 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id eq6so19644551edb.6;
-        Wed, 22 Jun 2022 23:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OqGyQJ3vy7PFybuXdaUB9y/gte3aocvZWTw7e9ixzAM=;
-        b=lfk6qyQ2fHmok7eXGaiDcxvHYiLHGIceYW1LPAad5yb6Ay6jih9ZhoKkeGTZ40xkic
-         OgsbLla2SyPpwu4KFIjE9FOVcwQex/sr8vG4L7sk4MsLLMGKB2/fgenkEkHzT+a+kUTQ
-         X7lDtbiyR9z8BbBAwo/xTBitKPzbw++ToQr9P9S9tS4uBQNIUquj3tXF7rq36LK/ewTk
-         IiAwYpgj+njfWm4i7tVO9HbwL7bq0/KV2TsB8dVgpJXy2nDmbzDdRPtxbBM/bkepTui6
-         rSgnKd/NhSMrG6C8cSRVKO2qFvYaz4yz68wG4N+TckRnnpjScrXn/+mLX4cs1y71jVEl
-         AxQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OqGyQJ3vy7PFybuXdaUB9y/gte3aocvZWTw7e9ixzAM=;
-        b=Bn/ea0dKagsVaMOZHcJNr9oac5TBRAELpmIko6d3CRKiywPqty1JYZHkw2FuY3P1EL
-         qfjVLIFKNLL1mjFoFSXdmKWLLJYnDEDXDxk9hGPvxP7XAzJq+zknbkD6asoPcAHob/x5
-         TjFZpAqWYUkOzZTgvSBoWULm5BQbr+K4UnvLfNpXs1JslwK+PMLHNc/zUj63UYppAEVE
-         AK/R5TosDLV1m1SJ9PwXSR1BPqVFCSGgJaDyC2rUHxNjCdmdAymFM8b9dUbtu6Qr8mjC
-         JS7FjY7H6vbUpUERZB7+ILIv/UovD4PxEuuxVm66hSrDPYBDX04DzpDESopeNJ/z50P+
-         U0ZA==
-X-Gm-Message-State: AJIora90wO38LBb5tzM+5rSxED3ht1rBoAlSULp/j/zP4vsoNe6M0aK+
-        Z13a9iUhgcvECHLX5pfRWHOsQjOpq6XHIceksNE=
-X-Google-Smtp-Source: AGRyM1tX7/C4TnqkwnjThVlTdE+GzhG4vp86mMRor/sZYWYPxI83UaXFp/FMuDnRrnE63mmfJGJ240OuBGkPpMXORCI=
-X-Received: by 2002:a05:6402:24a4:b0:434:e43e:2462 with SMTP id
- q36-20020a05640224a400b00434e43e2462mr8577471eda.312.1655964593015; Wed, 22
- Jun 2022 23:09:53 -0700 (PDT)
+        with ESMTP id S230316AbiFWILh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 23 Jun 2022 04:11:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B81D48886;
+        Thu, 23 Jun 2022 01:11:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD40F61BF3;
+        Thu, 23 Jun 2022 08:11:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DF0C341C6;
+        Thu, 23 Jun 2022 08:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655971893;
+        bh=EAzL+AzItBNItO3lmeAFB9T+n6tm2fZAOKmF5Za+tD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LyiRW1UCGfTLc/TKq8PmvnWmX09ScnIrlOCouUQglzDZvZ1zlvtEilVfKqkESGb2B
+         MPIzacVZnO1KByoiR96bEAs9ZcZuVDAAQq2S2sIBRGg8W8oiOn76UAVpBxY0QylIES
+         hi6613/YmX7bk/DejiOI/M3oGCN6pw0Gav4JvjcI=
+Date:   Thu, 23 Jun 2022 10:11:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     mangosteen728 <mangosteen728@gmail.com>
+Cc:     ast <ast@kernel.org>, andrii <andrii@kernel.org>,
+        bpf <bpf@vger.kernel.org>, daniel <daniel@iogearbox.net>,
+        BigBro Young <hi.youthinker@gmail.com>,
+        netdev <netdev@vger.kernel.org>
+Subject: Re: [PATCH] bpf/samples: fix tbpf_perf_event_output cpu's bug
+Message-ID: <YrQgMUaQeiwpUOcy@kroah.com>
+References: <CAB8PBHLME8LcVJ3z+Rk+5wne03kPspthKXz2PpUx0cfg9dKpMQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220621073233.53776-1-nashuiliang@gmail.com> <62b3dfeae3f40_6a3b2208a3@john.notmuch>
-In-Reply-To: <62b3dfeae3f40_6a3b2208a3@john.notmuch>
-From:   Chuang W <nashuiliang@gmail.com>
-Date:   Thu, 23 Jun 2022 14:09:41 +0800
-Message-ID: <CACueBy5ia2VhgNiyQnjsrjY=b7kBUKuN4Lv38cXHymdWHYiuVQ@mail.gmail.com>
-Subject: Re: [PATCH v2] libbpf: Cleanup the kprobe_event on failed add_kprobe_event_legacy()
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jingren Zhou <zhoujingren@didiglobal.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB8PBHLME8LcVJ3z+Rk+5wne03kPspthKXz2PpUx0cfg9dKpMQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi, John. Thanks, I will resubmit V3 soon, and supplement the commit
-information.
+On Thu, Jun 23, 2022 at 02:19:50AM +0800, mangosteen728 wrote:
+> For the third parameter of this function,
+> whose flags is set to 0, the perf_buffer__poll remains blocked.
+> The flags value of BPF_F_CURRENT_CPU can receive the data normally.
+> 
+> Signed-off-by: mangosteen728 <mangosteen728@gmail.com>
+> ---
+>  Hi Greg KH:
+>  I am sorry for the wrong patch submitted due to my network reasons
+>  and causing unnecessary trouble to the audit.
+>  thanks
+>  mangosteen728
+> 
+>  samples/bpf/trace_output_kern.c | 2 +-
+>  1 files changed, 1 insertion(+), 1 deletions(-)
+> 
+> diff --git a/samples/bpf/trace_output_kern.c b/samples/bpf/trace_output_
+> kern.c
+> index b64815a..926844e 100644
+> --- a/samples/bpf/trace_output_kern.c
+> +++ b/samples/bpf/trace_output_kern.c
+> @@ -22,7 +22,7 @@ int bpf_prog1(struct pt_regs *ctx)
+>   data.pid = bpf_get_current_pid_tgid();
+>   data.cookie = 0x12345678;
+> 
+> - bpf_perf_event_output(ctx, &my_map, 0, &data, sizeof(data));
+> + bpf_perf_event_output(ctx, &my_map, BPF_F_CURRENT_CPU, &data,
+> sizeof(data));
+> 
+>   return 0;
+>  }
+> -- 
+> 1.8.3.1
 
-On Thu, Jun 23, 2022 at 11:37 AM John Fastabend
-<john.fastabend@gmail.com> wrote:
->
-> Chuang W wrote:
-> > Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
-> > livepatch"), in a scenario where livepatch and kprobe coexist on the
-> > same function entry, the creation of kprobe_event using
-> > add_kprobe_event_legacy() will be successful, at the same time as a
-> > trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
-> > perf_event_open() will return an error because both livepatch and kprobe
-> > use FTRACE_OPS_FL_IPMODIFY.
-> >
-> > With this patch, whenever an error is returned after
-> > add_kprobe_event_legacy(), this ensures that the created kprobe_event is
-> > cleaned.
-> >
-> > Signed-off-by: Chuang W <nashuiliang@gmail.com>
-> > Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> I think we want to improve the commit message otherwise I'm sure we will
-> stumble on this in the future and from just above its tricky to follow.
-> I would suggest almost verbatim the description you gave in reply to
-> my question. Just cut'n'pasting your text together with minor edit
-> glue,
->
-> "
->  The legacy kprobe API (i.e. tracefs API) has two steps:
->
->  1) register_kprobe
->
->  $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
->
->  This will create a trace event of mykprobe and register a disable
->  kprobe that waits to be activated.
->
->  2) enable_kprobe
->
->  2.1) using syscall perf_event_open as the following code,
->  perf_event_kprobe_open_legacy (file: tools/lib/bpf/libbpf.c):
->  ---
->  attr.type = PERF_TYPE_TRACEPOINT;
->  pfd = syscall(__NR_perf_event_open, &attr,
->                pid < 0 ? -1 : pid, /* pid */
->                pid == -1 ? 0 : -1, /* cpu */
->                -1 /* group_fd */,  PERF_FLAG_FD_CLOEXEC);
->  ---
->
->  In the implementation code of perf_event_open, enable_kprobe() will be executed.
->
->  2.2) using shell
->
->  $ echo 1 > /sys/kernel/debug/tracing/events/kprobes/mykprobe/enable
->
->  As with perf_event_open, enable_kprobe() will also be executed.
->
->  When using the same function XXX, kprobe and livepatch cannot coexist,
->  that is, step 2) will return an error (ref: arm_kprobe_ftrace()),
->  however, step 1) is ok! The new kprobe API (i.e. perf kprobe API)
->  aggregates register_kprobe and enable_kprobe, internally fixes the
->  issue on failed enable_kprobe.
->
->  To fix: before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
->  livepatch"), in a scenario where livepatch and kprobe coexist on the
->  same function entry, the creation of kprobe_event using
->  add_kprobe_event_legacy() will be successful, at the same time as a
->  trace event (e.g. /debugfs/tracing/events/kprobe/XX) will exist, but
->  perf_event_open() will return an error because both livepatch and kprobe
->  use FTRACE_OPS_FL_IPMODIFY.
->
->  With this patch, whenever an error is returned after
->  add_kprobe_event_legacy(), this ensures that the created kprobe_event is
->  cleaned.
-> "
->
-> Thanks,
-> John
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/email-clients.txt in order to fix this.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file, Documentation/SubmittingPatches
+  for how to do this correctly.
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
