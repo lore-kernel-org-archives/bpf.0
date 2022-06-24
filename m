@@ -2,274 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41E75CCA473
-	for <bpf@archiver.kernel.org>; Fri, 24 Jun 2022 16:46:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E5BFC43334
+	for <bpf@archiver.kernel.org>; Fri, 24 Jun 2022 16:47:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiFXQqI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jun 2022 12:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
+        id S229480AbiFXQrA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jun 2022 12:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiFXQp7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Jun 2022 12:45:59 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4138B50032;
-        Fri, 24 Jun 2022 09:45:58 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25OFYD4L023009;
-        Fri, 24 Jun 2022 16:45:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- mime-version; s=corp-2021-07-09;
- bh=0H2EswXejg6sqJQb4PJ8L6Nk0KnaVB7h/56TX6J++lU=;
- b=VdjyxT5kqifUhaS8MEQIZ3ejZxOSnKhja353oCwqF2yEnV8k52MvF80AA30Dj22DfFnP
- s3kY8SDZwnUQJ33ChY6Div4GGDn7O1LWSfbp6PLnV6XHO/mTsi4AF3fVeNyiT9JZd/w8
- wTZLEDsHqjWyFH74NxpQMSp1NbMqA8/GFCpRwahRHaDcxxEShlkDV1JuYop7zyJoJ09n
- wTPANmDEfvJeB6hqXE+2Z3+AFjWi3GWGSbl8Pn9ngyoCAE6lfCohMndqI7jdQMJgERIl
- cjK7z/PGsdQR+wjClupldNySB8Xre/w9GuYL34SwUdFRgOb0lDKM+Ygp3RW+mlyRMfbe nQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gs5a0pbx6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Jun 2022 16:45:30 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25OGUf5V034023;
-        Fri, 24 Jun 2022 16:45:28 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gtd9xc0t1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 Jun 2022 16:45:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MuciVzvmypkKQwqjyV2cuiQMPHtuCjNKcO6mR85gObpnc0k8T+8Di3UqO5hlBvU4dyLBkjmSxSIKRm+ay2FvQMYad3WYPAFrUkc4AIIvc9eNX6Gg3yLIyVyQIMzoqiqwl45aTVQLpwlMjTDG7+mtIPauZW0Ob2zuLAlpQJFK+6pLWNALkW0FA2OxVyl0ooQaYEL6//pnEtdC7OXdalHckzRq6DZEkVIF6nBcG4nUVNrzQeC7Apy69+GZcOoAlypia5GN7jJuqGgADhMlkwiZVhMmupjL8IOQn95khUGyciqKoKiOTX4VqUI9tdkFAE6NMuo8go29/nJ6SOF3JNt94A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0H2EswXejg6sqJQb4PJ8L6Nk0KnaVB7h/56TX6J++lU=;
- b=LrX422UTCjYOhGu7Iu17TiU42TUMk1X0j+mqudtbuyaMb4WVtZ/fPAhjH1fFt6QgiuwjiX55bf4it+fo75oha4RimhGjjMq3RC1mVycQdQShrEgADrxeKTTlB2+yfmiQTdFcpr/tFTbquOouBcxbYLSQGAquMvLMbvkVgsQeYuydHZ6KLEgogmh0BHT30obOXrf19GcwiLFbh1XpjvbOX+u5OhgmlvRwCJg0g2MIXhQCGSBVbCmlw3JOk8PVJXi+lq3mwq+ojlfV0sKwYXMCXUzucSTqhhUVcybFo39e1F41o+G1e/C1usVqxLRuHZuaDcCdAJA7VUZYgeaYHWGB8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        with ESMTP id S229478AbiFXQq7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jun 2022 12:46:59 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D6C53A75
+        for <bpf@vger.kernel.org>; Fri, 24 Jun 2022 09:46:58 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id t5so5906225eje.1
+        for <bpf@vger.kernel.org>; Fri, 24 Jun 2022 09:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0H2EswXejg6sqJQb4PJ8L6Nk0KnaVB7h/56TX6J++lU=;
- b=JKIdxdIzZEugHuiYKMx3rlTYajq5GhedNhLZrOKPjsvX7h4tpoKvFIdOlo59l4ntbwGI8Bpq74HX+24+sTHulMFMFOQLRxLk4NFhk+PCAvdG06qqse00NXwgpaV3rilxdKfr9Kq3rOWeen5JwmXPMX2ZYO/vNatCh5bjOdROGJk=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by CH0PR10MB5115.namprd10.prod.outlook.com (2603:10b6:610:c4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.15; Fri, 24 Jun
- 2022 16:45:27 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::a080:c357:962c:eb5]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::a080:c357:962c:eb5%5]) with mapi id 15.20.5373.017; Fri, 24 Jun 2022
- 16:45:27 +0000
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        jolsa@kernel.org
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, mhiramat@kernel.org,
-        akpm@linux-foundation.org, void@manifault.com, swboyd@chromium.org,
-        ndesaulniers@google.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC bpf-next 1/2] bpf: add a kallsyms BPF iterator
-Date:   Fri, 24 Jun 2022 17:45:17 +0100
-Message-Id: <1656089118-577-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1656089118-577-1-git-send-email-alan.maguire@oracle.com>
-References: <1656089118-577-1-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0396.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18f::23) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pXV8+aET3FoQ5HjxLu1r8THoF+tZs5D/Xr7EgaJQfwo=;
+        b=q13ZA5DuMXyJOMlisabTdnLZHCTrK/yzpdh/xx9ZhO/Bz00F+h05YYnCbVbiSLDO+O
+         rnWCXSczQ4RtmPL/vPUAE57Qu0HGQ5liolX+z0chRn2Df682NGXqMl3v0jkEaPBlHe+Z
+         C5GMnDr6/6llecL06+wscQF/mUnT16uiSZa+Sm3CAIQKlgE7Fb68ufmhjusXIEBPzneo
+         Q1lj9nv6XxNmk7ZOQrJQKLnOO7UN65CoAEh9+ZHNeU2LJKNC5Tpw6SZhU+RKeCJ8HDMY
+         Ygswo5GQB9r3bgKM2LI4YmQjYEN6ZXVTAzezTs+eAW4OKRhWgHrprQd4nUJfw592d8gU
+         KdPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pXV8+aET3FoQ5HjxLu1r8THoF+tZs5D/Xr7EgaJQfwo=;
+        b=R7jGADfZvSA08syzlB+wJr/fTi3kXmRTNU2dt62t51Wx4+UNZaDLvdj9e40LWcr8+u
+         G1M09O/X+/2XR7ZjxcT0x0Q4BD7IIoVZYEKa8WO/gHw/vnMM68KYUWWDQfGr3dzspJ1O
+         7HERUbyfCPRkVTZOI7dxWFd2a8qlEaY/ec/DoyzfJy4NaJUnM9L8x7szA9fkVgilp2VC
+         sW0CjynLi9YFH8R29yv2y3zhp2E9znQ0uDIU5o8Q2Axr26JDA6Lw1zrQUzFvxQMzRoy0
+         dTEffBZVkIlntiTUEFRBs2rNcnjjd31GygtadPT68RXamWdrfwSShBMrJmcuyjvfN1xG
+         MJJw==
+X-Gm-Message-State: AJIora/vCBgB/cV50p5w5dgXvoHU3BWxmAcdW4kKQLJcbr8Wx9XWq9N5
+        QGWXZkxEWM/Cefbio1q2wX8hi2bR/ts8Sh+Nazw=
+X-Google-Smtp-Source: AGRyM1sCz0j5dubfi1jO9rTrv1wj2VaTyJTbqmOkKm4qTdXRAJwRJwhAgYuuRLw85r5JXwD77msUcdI963ZumdInzG4=
+X-Received: by 2002:a17:907:608d:b0:722:ebcc:b108 with SMTP id
+ ht13-20020a170907608d00b00722ebccb108mr14180319ejc.94.1656089217388; Fri, 24
+ Jun 2022 09:46:57 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8680f5c7-5ef9-413a-cb96-08da5600f10b
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5115:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zLLDK1MD/7MzieVo7mkJizNZ0LZNxYTpe4O0kjnXd3gVCK6cv2o9zAW6tleXGuIhVRiZh9vdRhKBlHVeTSLA2MfOCOl/xDB4JisoeHFO2UEE1ajslmPcYRZtuu2H54MtyQNnDqbXHX5KrkoFH1n2H8PhPFfqsRApGsxXF9xfDCmBPPYNmG9dl/H6NUWtPrhd6uJVqC31b3tHZZtNPxgQSjfjqWDdu0ccCunA8oibT1B4mN+/FyIONPQgbB9lkekRasa72DhvOCwjNZ9bJKdMz+rFF7K8w7R+4Z+x9rvClauVms4oqw7pjrlFud7949iF7Z0qoObsuUvrFhAELEpdxB715fFLQMP9pbnwqjmqr8b50qsrjGng++2UDOgpM/HK9VDexthQn+nj0NNO+fKhgfIGHuV3uSZ9QcV6QEjbyQNKM41Mx42hU5tBtF4XnChO1PROgBKWO/wszlKUzNZgAC8o16Rk9tDl/wnuhxU91Tm4ux01l6WiV0AfqjZ4Qw7qKnLh3BCr50WnROCAEzLLex1niudkE6Ph0rOg6XGS5Zg8yJYVckJXiTePg6o4Q38vtT5ohUhFbxSk12uv+B1idCk9RDl6XcCvEK7eQj1pTI9CtKxi0FxiIwOgA6j0BDLfbiesj1w7eBfmdFlrSv7kEAw3AatELSXuhPsMriW+WUX+JKegPFL9cNawT6aoZrq19LjQNqbFWwbu/NatLyECaSSnnl75Guz3XXH8sHZVkLzDl27V/hG7R8dd7VEJUPyifxNVqXVe33xmP1Wfxnmh7C7UvA2h+BYYy9E7JFqd5Z3koMD4XAFSTmTmMGuCdLq+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(396003)(376002)(346002)(136003)(4326008)(8676002)(186003)(83380400001)(44832011)(478600001)(66476007)(5660300002)(2906002)(66556008)(38100700002)(7416002)(66946007)(8936002)(6506007)(107886003)(52116002)(2616005)(41300700001)(6512007)(26005)(6666004)(966005)(316002)(36756003)(38350700002)(86362001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?27kQTbdONJA7tALuCVPckhYOlMF8S0UTjX9u3+qQ1OU9ppmUxhcOJyAETuAG?=
- =?us-ascii?Q?a7bJDipPJdA4e8QMyE4dUpyW7oqKC+W1nilpGuA0sYUQCsPtbpz0GsGSwNvd?=
- =?us-ascii?Q?GW95ERUi7j9y0jgqyzLoIdltBFMhef4q0P2stkQgy4lVECmyj/PnrGOZti8x?=
- =?us-ascii?Q?Mye5g0xWDbl0G63/SBk9xTV95ATPh6nyKdK1F6BqDwHZ/82IpivDeXsm91Eg?=
- =?us-ascii?Q?pAsEHkOvo5lFT+GAIhJcgdVKYyIJjiHjPxDB583shD+lddFywe5KeFMho1yh?=
- =?us-ascii?Q?ItBurCSocgtw5m4449tH79lnmFM/DhTPUaxSyrkIMhN7yczT16V+TnMpsdgq?=
- =?us-ascii?Q?bbS8yOMqhfblULis4p2lUdIPUb0uNjR7RhUxTBEZdN0kcy/KCsOJfIoJ/7L0?=
- =?us-ascii?Q?mdZagrxi2bJ9cFyEUEr9g8Td3WQuN9qRF/R2BE7LopbgrJtLRIoAeia7Pc+Y?=
- =?us-ascii?Q?P0Li5W1/PkMRYw6iHt8QOFZm7XOg2ZLSYc3a8WWCZy3gU+yY0qShBlkSbqsC?=
- =?us-ascii?Q?tvdv9bVMTIsH797iCh7qidFqLHLklEI0oe1DOhKwBd0gXFqCgA93YkJAFR3M?=
- =?us-ascii?Q?P3b4ohPRa08tq4R+wmgX/VS6k+tktNbwXqrq8ZDhwSW5O2XeVlsfNkyG2WtY?=
- =?us-ascii?Q?c+An/0ZzymqNwHvwknB+ee80KBY8MbKz9o4sIQox92pgeDWgGzrmGRsjBTIK?=
- =?us-ascii?Q?wC25WPhGfPd7P3WeMovX7A8Ht9mMOuYDMg41QIG8u6/V/50raBllYCk1gpJV?=
- =?us-ascii?Q?lE51c1UkH30iyRhJ/GeFa8fpAptunPhbrMxTaNZ9B978DEkl2ZNBwngqisLR?=
- =?us-ascii?Q?UHmXEzFHykyIADWsq+Dbb65S2YisERDKtihOijP54s7s12720fMJ7eYYSNBp?=
- =?us-ascii?Q?g6wQyF+W0xw+qZI3aw32rV+x14FutRDJx2lzseJI74qXx1fKb4GZXu//qIeI?=
- =?us-ascii?Q?kXfbVtcI6+oS258U3uDON58k24vHkrmY1+GCWSevp6FYAB/mtEk6fLIPaCG8?=
- =?us-ascii?Q?TtiSLS4Ds7Mv+ZKtTNX9k761l9MWohNw/Ajs0AEmLMmI7ilzLw4jcWusruy6?=
- =?us-ascii?Q?NzK4qza/RgtmLuVPlzbiNOZdz4FL0wEw1nZ0yLsFZiBLF+nrvZK6jG4F2rgM?=
- =?us-ascii?Q?noMKhZWL5TcMNdDGzNgfOV/UWnBENduQ0hkDmLMoYNheOBEMlxtSNmC/hh+p?=
- =?us-ascii?Q?Nk60CKsSYp/JlUAoa7mmtnwdQ0BK+xLCpRIuqq7hOcN23OH4pOGxBcxjoYxX?=
- =?us-ascii?Q?mKjsihM+5/YaACTm/nBdwyCdgZxbXzSXjduREA5WNeAEsz6KFzqguUbmr43K?=
- =?us-ascii?Q?JFPPpRnqqpapJjp+ASh6n/w+69Aql8GA3Tp6P+mTBELquS7ODPZQc+cbdOwZ?=
- =?us-ascii?Q?2qeCM2vbxkDvrR0WhUUJEtbRIE4zLG/WrTG0TtC0Y99eo86pJPSG9BTsLjEh?=
- =?us-ascii?Q?Fgh6H4W3b3+hWLGkxgWWbCPcpstg3A9k3iRZB+Hx5ImBF0ajJfKQCzNxr458?=
- =?us-ascii?Q?KUJ88kni+0ncSEEl/5CGn4NZUJeyD3dfRJq6rDBbVR/EurIh7DCudO1II8/S?=
- =?us-ascii?Q?g45ZL9owI+tO1GmxVUiKhYdDFmLANuCsEIv5NL7T?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8680f5c7-5ef9-413a-cb96-08da5600f10b
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2022 16:45:27.2448
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cA9HxmkkKdU/ddLXvL4T5ef4gMTzRKz6PACK9yqw/xAeE2eh3KaHNCJyUhsqO3tfKriRiPdkMg8x1K1SWnbVsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5115
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.883
- definitions=2022-06-24_08:2022-06-23,2022-06-24 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- phishscore=0 malwarescore=0 mlxscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206240064
-X-Proofpoint-ORIG-GUID: bRfEBvaPNkMv5tAnxtyNGs2tLHOf5Ivw
-X-Proofpoint-GUID: bRfEBvaPNkMv5tAnxtyNGs2tLHOf5Ivw
+References: <20220613025244.31595-1-quic_satyap@quicinc.com>
+ <87r13s2a0j.fsf@toke.dk> <fc16df47-df2b-ffa2-4e66-5a3dc92cb4db@fb.com>
+ <005f01d87f4d$9a075210$ce15f630$@quicinc.com> <CAADnVQJUyvhqjnn9OuB=GN=NgA3Wu59fQqLM8nzg_TWh1HnJ4Q@mail.gmail.com>
+ <006701d87f6d$7fe0a060$7fa1e120$@quicinc.com> <CAADnVQKq-e1TT1Y2uhgCaRY4CUP37dq0HuSyTdgtxkNfv8DQUg@mail.gmail.com>
+ <009d01d87f8b$79f83140$6de893c0$@quicinc.com> <621b35ac-5c93-9a6d-eaf0-62cceb52cf34@fb.com>
+ <002601d88797$8699d6b0$93cd8410$@quicinc.com>
+In-Reply-To: <002601d88797$8699d6b0$93cd8410$@quicinc.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 24 Jun 2022 09:46:45 -0700
+Message-ID: <CAADnVQJV2kJwZeynV_2FeZ8vKXGk=Ht+R5dj8OEtKHOpNeWa7w@mail.gmail.com>
+Subject: Re: [PATCH] bpf: fix rq lock recursion issue
+To:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+Cc:     Yonghong Song <yhs@fb.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-add a "kallsyms" iterator which provides access to a "struct kallsym_iter"
-for each symbol.  Intent is to support more flexible symbol parsing
-as discussed in [1].
+On Thu, Jun 23, 2022 at 11:56 PM Satya Durga Srinivasu Prabhala
+<quic_satyap@quicinc.com> wrote:
+>
+>
+> On 6/13/22 11:09 PM, Yonghong Song wrote:
+> >
+> >
+> > On 6/13/22 6:10 PM, Satya Durga Srinivasu Prabhala wrote:
+> >>
+> >> On 6/13/22 2:49 PM, Alexei Starovoitov wrote:
+> >>> On Mon, Jun 13, 2022 at 2:35 PM Satya Durga Srinivasu Prabhala
+> >>> <quic_satyap@quicinc.com> wrote:
+> >>>>
+> >>>> On 6/13/22 2:01 PM, Alexei Starovoitov wrote:
+> >>>>> is doesn't solve anything.
+> >>>>> Please provide a reproducer.
+> >>>> I'm trying to find an easy way to repro the issue, so far,
+> >>>> unsuccessful.
+> >>>>
+> >>>>> iirc the task's affinity change can race even with preemption
+> >>>>> disabled
+> >>>>> on this cpu. Why would s/migrate/preemption/ address the deadlock ?
+> >>>> I don't think task's affinity change races with preemption
+> >>>> disabled/enabled.
+> >>>>
+> >>>> Switching to preemption disable/enable calls helps as it's just simple
+> >>>> counter increment and decrement with a barrier, but with migrate
+> >>>> disable/enable when task's affinity changes, we run into recursive bug
+> >>>> due to rq lock.
+> >>> As Yonghong already explained, replacing migrate_disable
+> >>> with preempt_disable around bpf prog invocation is not an option.
+> >>
+> >> If I understand correctly, Yonghong mentioned that replacing migrate_
+> >> with preempt_ won't work for RT Kernels and migrate_ APIs were
+> >> introduced
+> >> for RT Kernels is what he was pointing to. I went back and cross checked
+> >> on 5.10 LTS Kernel, I see that the migrate_ calls end up just calling
+> >> into
+> >> preemt_ calls [1]. So far non-RT kernels, sticking to preemt_ calls
+> >> should
+> >> still work. Please let me know if I missed anything.
+> >
+> > Yes, old kernel migrate_disable/enable() implementation with
+> > simply preempt_disable/enable() are transitional. You can check
+> > 5.12 kernel migrate_disable/enable() implementation. Note that
+> > your patch, if accepted, will apply to the latest kernel. So we
+> > cannot simply replace migrate_disable() with prempt_disable(),
+> > which won't work for RT kernel.
+>
+> Thanks for getting back and apologies for the delay. I understand that
+> we may break RT kernels with this patch. So, I was proposing to stick to
+> migrate_disable/enable() calls on RT Kernels and use preempt_disable/enable()
+> in case of non-RT Kernel. Which warrants change in scheduler, will push
+> patch and try get feedback from Scheduler experts.
 
-[1] https://lore.kernel.org/all/YjRPZj6Z8vuLeEZo@krava/
+We will stay with migrate_disable/enable on all types of kernel.
+This is not negotiable.
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- kernel/kallsyms.c | 93 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 93 insertions(+)
+> While I'm here I would like to cross check with you xperts on ideas to
+> reproduce the issue easily and consistently. Your inputs will immensely help to
+> debug issue further.
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index fbdf8d3..ffaf464 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -30,6 +30,7 @@
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/bsearch.h>
-+#include <linux/btf_ids.h>
- 
- /*
-  * These will be re-linked against their real values
-@@ -799,6 +800,95 @@ static int s_show(struct seq_file *m, void *p)
- 	.show = s_show
- };
- 
-+#ifdef CONFIG_BPF_SYSCALL
-+
-+struct bpf_iter__kallsyms {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct kallsym_iter *, kallsym_iter);
-+};
-+
-+static int s_prog_seq_show(struct seq_file *m, bool in_stop)
-+{
-+	struct bpf_iter__kallsyms ctx;
-+	struct bpf_iter_meta meta;
-+	struct bpf_prog *prog;
-+
-+	meta.seq = m;
-+	prog = bpf_iter_get_info(&meta, in_stop);
-+	if (!prog)
-+		return 0;
-+
-+	ctx.meta = &meta;
-+	ctx.kallsym_iter = m ? m->private : NULL;
-+	return bpf_iter_run_prog(prog, &ctx);
-+}
-+
-+static int bpf_iter_s_seq_show(struct seq_file *m, void *p)
-+{
-+	return s_prog_seq_show(m, false);
-+}
-+
-+static void bpf_iter_s_seq_stop(struct seq_file *m, void *p)
-+{
-+	if (!p)
-+		(void) s_prog_seq_show(m, true);
-+	else
-+		s_stop(m, p);
-+}
-+
-+static const struct seq_operations bpf_iter_kallsyms_ops = {
-+	.start = s_start,
-+	.next = s_next,
-+	.stop = bpf_iter_s_seq_stop,
-+	.show = bpf_iter_s_seq_show,
-+};
-+
-+#if defined(CONFIG_PROC_FS)
-+
-+static int bpf_iter_s_init(void *priv_data, struct bpf_iter_aux_info *aux)
-+{
-+	struct kallsym_iter *iter = priv_data;
-+
-+	reset_iter(iter, 0);
-+
-+	iter->show_value = true;
-+
-+	return 0;
-+}
-+
-+DEFINE_BPF_ITER_FUNC(kallsyms, struct bpf_iter_meta *meta, struct kallsym_iter *kallsym_iter)
-+
-+static const struct bpf_iter_seq_info kallsyms_iter_seq_info = {
-+	.seq_ops		= &bpf_iter_kallsyms_ops,
-+	.init_seq_private	= bpf_iter_s_init,
-+	.fini_seq_private	= NULL,
-+	.seq_priv_size		= sizeof(struct kallsym_iter),
-+};
-+
-+static struct bpf_iter_reg kallsyms_iter_reg_info = {
-+	.target                 = "kallsyms",
-+	.ctx_arg_info_size	= 1,
-+	.ctx_arg_info		= {
-+		{ offsetof(struct bpf_iter__kallsyms, kallsym_iter),
-+		  PTR_TO_BTF_ID_OR_NULL },
-+	},
-+	.seq_info		= &kallsyms_iter_seq_info,
-+};
-+
-+BTF_ID_LIST(btf_kallsym_iter_id)
-+BTF_ID(struct, kallsym_iter)
-+
-+static void __init bpf_kallsyms_iter_register(void)
-+{
-+	kallsyms_iter_reg_info.ctx_arg_info[0].btf_id = *btf_kallsym_iter_id;
-+	if (bpf_iter_reg_target(&kallsyms_iter_reg_info))
-+		pr_warn("Warning: could not register bpf kallsyms iterator\n");
-+}
-+
-+#endif /* CONFIG_PROC_FS */
-+
-+#endif /* CONFIG_BPF_SYSCALL */
-+
- static inline int kallsyms_for_perf(void)
- {
- #ifdef CONFIG_PERF_EVENTS
-@@ -885,6 +975,9 @@ const char *kdb_walk_kallsyms(loff_t *pos)
- static int __init kallsyms_init(void)
- {
- 	proc_create("kallsyms", 0444, NULL, &kallsyms_proc_ops);
-+#if defined(CONFIG_BPF_SYSCALL) && defined(CONFIG_PROC_FS)
-+	bpf_kallsyms_iter_register();
-+#endif
- 	return 0;
- }
- device_initcall(kallsyms_init);
--- 
-1.8.3.1
-
+Please do. No patches will be applied until there is a clear reproducer.
