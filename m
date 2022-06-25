@@ -2,175 +2,310 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35DF3C433EF
-	for <bpf@archiver.kernel.org>; Fri, 24 Jun 2022 23:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F024C433EF
+	for <bpf@archiver.kernel.org>; Sat, 25 Jun 2022 01:23:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbiFXXNa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jun 2022 19:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S231572AbiFYBXh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jun 2022 21:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbiFXXNX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Jun 2022 19:13:23 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDAA69999;
-        Fri, 24 Jun 2022 16:13:21 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id l2so2888048pjf.1;
-        Fri, 24 Jun 2022 16:13:21 -0700 (PDT)
+        with ESMTP id S231419AbiFYBXg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jun 2022 21:23:36 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD04D3AA6A
+        for <bpf@vger.kernel.org>; Fri, 24 Jun 2022 18:23:34 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id a10so4352144ioe.9
+        for <bpf@vger.kernel.org>; Fri, 24 Jun 2022 18:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
          :mime-version:content-transfer-encoding;
-        bh=dazC7TPyX4UMs7r+xqJJNBPVEDPVKb6BSLrk7hWQB1s=;
-        b=Cn1BUdNqjGwnV6Ct77HE2u31hBD0aEauc1RcVcUw5C997bVzfHnJRVNb5EUxpwxjc2
-         VNKL5E4DFLMjXL/9HIk3XdOPxWKYye7gou97s10dttVQAJY4upglVa+BT6vtRpwLC/av
-         clqYxzVK/XTUlpTIUUbCpUoI5l6tMQkKmwHRFthZqP4AXLGjz6uUsAFAlRxCroFM8g7Y
-         dAUMVDVbAHiUyj9V7dL194TjW0anFxVzMHm8MADtqqcbfvpQTXAl6QFUnBq72by14Zih
-         NQVa55oFDNe0niQ0AGprN+TvJy2K+5m47GtaIAb56iBenviyj2xp810VvSs8GjN8E/yl
-         g3gA==
+        bh=/FCHavz2tt/1Cl6T6ARVGQ8GBxF+zFPDtUR7VPrACD4=;
+        b=I5FsAtZOFHxnhJiUXc4/hlO51sKqNSFSi15U2+smkg0ccww8CWXdwXdkMxs6vzHQCP
+         wuKtQJp5NqbbBSOpIinXap//l/Nk8LsCL9pzT23lNzkt/wjc6pXg/47xNZPFcXSN9m5r
+         UJZqYPntmcQgjORywa7PP1Q3TUKT/Wp0D2x7XShZt4d9bEEOI74IuVCH/C0bjNlMcVqZ
+         36p+NupjRWm0wNz1Q0eW/Pkm9nWyrfYtMMxCMkRw2O1vLVI9gqpcHrZXyNLFbSkLVtqZ
+         ecOh6eiTnrdv1fNTba1LNIKnfV6/JoB3NZ6ebTJ728e3XQ2/aRGuErcidrcPn8OpB1AW
+         E8MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=dazC7TPyX4UMs7r+xqJJNBPVEDPVKb6BSLrk7hWQB1s=;
-        b=jymjZS8qW+WksIDkz62N+Y7y1UbgTGCGFFnwjKv1CsPbPpxZ/T2GfTLr0dtAchlMyo
-         7C7+JK7pN1GP+ZpYec06uz/m3/MUTTJC9yPO6749IyB0rhv3KyvZt91KejRLfpIYAJnR
-         iuinRuZLrtgogjY/VVemj+WWaobYd1BX8y9WYHl+FoZc+m5zxQj+VLun58owhoCdeKBM
-         sHXTLR28C+GOZp5JW2L/V3T2+H9yOkwPH7A7K/GWTkJtSYDmmLOWrhbLs9zeum1moE8O
-         KNRq+dV4xGBNByQ0jZLoEPcJ6BYx5Mxs896qjNcYSuyKuEdDwjldwbhY2L0e+C61L2aJ
-         YnBw==
-X-Gm-Message-State: AJIora/1ORH1MF6fdB+QhoDjy0Zw63lsrgFw4EAT3PCmzEQveVMKZpPH
-        MqHCIWT2IKo2b1fTFLmktEw=
-X-Google-Smtp-Source: AGRyM1vyBynoQjkTMnlXV2HF0vYM2fkcbLXBHJu+/G0mnw5G4tHCHEhOh8+zMQ7ldm8mPl8yXx8WMw==
-X-Received: by 2002:a17:903:2447:b0:16a:3b58:48dd with SMTP id l7-20020a170903244700b0016a3b5848ddmr1467413pls.120.1656112401325;
-        Fri, 24 Jun 2022 16:13:21 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:480:eeb0:3156:8fd:28f6])
-        by smtp.gmail.com with ESMTPSA id z19-20020aa78893000000b0050dc76281e0sm2242439pfe.186.2022.06.24.16.13.20
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=/FCHavz2tt/1Cl6T6ARVGQ8GBxF+zFPDtUR7VPrACD4=;
+        b=NFMmWQ3pnT6U3EQxMhJWXbQsERam5EZMZJbFAZfvDnYQqHAchz9xRLAkjfp4p6Z5WO
+         q0SSyYlv4UgPg0eNjTJmQ8vIXYiRn2XTb2QBlW4z8LgqltSKlYVxxtT7L7R/xIGBYzOU
+         7GZcHYs8ByP9IufgqNEq7RRtF1a2SAgK4zh5jUVrp/TqNO9BoAcTu6xRjVPAknBvooax
+         01cIk3i28MTD0fGalrsgj5M11Gj9W/koS14UqzwUz0Hu2l+1/bgCxcpPTOM1sLVFs7N+
+         U1IrrxebLPsOQMR5C7an76mfL7FbRqkaD/+zZz74DkTDrOHAyXwBFdY2GQQN1Er+Am1F
+         c2IQ==
+X-Gm-Message-State: AJIora8dxog0BMQ0GqhZxNZ3e0dB3JUCB3Eer7xWUd+Fmn2MeMMFEB5B
+        bPdI5WD8FLt4fondG/IDG17GSsEo+Rj9CQ==
+X-Google-Smtp-Source: AGRyM1tVLoVKvdb38IizUlFdvXZw6NfTm8dLtN7JQMASUvhEpsMKCMKB7XL++aU/M2JWWPkUJ2En9w==
+X-Received: by 2002:a02:a809:0:b0:339:e6ba:dee1 with SMTP id f9-20020a02a809000000b00339e6badee1mr1152543jaj.1.1656120214049;
+        Fri, 24 Jun 2022 18:23:34 -0700 (PDT)
+Received: from localhost ([172.243.153.43])
+        by smtp.gmail.com with ESMTPSA id d18-20020a056602185200b00669e1a9588esm1913101ioi.43.2022.06.24.18.23.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jun 2022 16:13:21 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>, bpf@vger.kernel.org,
-        Blake Jones <blakejones@google.com>
-Subject: [PATCH 5/6] perf offcpu: Track child processes
-Date:   Fri, 24 Jun 2022 16:13:12 -0700
-Message-Id: <20220624231313.367909-6-namhyung@kernel.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-In-Reply-To: <20220624231313.367909-1-namhyung@kernel.org>
-References: <20220624231313.367909-1-namhyung@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 24 Jun 2022 18:23:33 -0700 (PDT)
+Date:   Fri, 24 Jun 2022 18:23:26 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        davem@davemloft.net
+Cc:     daniel@iogearbox.net, andrii@kernel.org, tj@kernel.org,
+        kafai@fb.com, bpf@vger.kernel.org, kernel-team@fb.com
+Message-ID: <62b6638e4e0d1_347af208e3@john.notmuch>
+In-Reply-To: <20220623003230.37497-2-alexei.starovoitov@gmail.com>
+References: <20220623003230.37497-1-alexei.starovoitov@gmail.com>
+ <20220623003230.37497-2-alexei.starovoitov@gmail.com>
+Subject: RE: [PATCH bpf-next 1/5] bpf: Introduce any context BPF specific
+ memory allocator.
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When -p option used or a workload is given, it needs to handle child
-processes.  The perf_event can inherit those task events
-automatically.  We can add a new BPF program in task_newtask
-tracepoint to track child processes.
+Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> Tracing BPF programs can attach to kprobe and fentry. Hence they
+> run in unknown context where calling plain kmalloc() might not be safe.
+> 
+> Front-end kmalloc() with per-cpu per-bucket cache of free elements.
+> Refill this cache asynchronously from irq_work.
+> 
+> BPF programs always run with migration disabled.
+> It's safe to allocate from cache of the current cpu with irqs disabled.
+> Free-ing is always done into bucket of the current cpu as well.
+> irq_work trims extra free elements from buckets with kfree
+> and refills them with kmalloc, so global kmalloc logic takes care
+> of freeing objects allocated by one cpu and freed on another.
+> 
+> struct bpf_mem_alloc supports two modes:
+> - When size != 0 create kmem_cache and bpf_mem_cache for each cpu.
+>   This is typical bpf hash map use case when all elements have equal size.
+> - When size == 0 allocate 11 bpf_mem_cache-s for each cpu, then rely on
+>   kmalloc/kfree. Max allocation size is 4096 in this case.
+>   This is bpf_dynptr and bpf_kptr use case.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
 
-Before:
-  $ sudo perf record --off-cpu -- perf bench sched messaging
-  $ sudo perf report --stat | grep -A1 offcpu
-  offcpu-time stats:
-            SAMPLE events:        1
+Some initial feedback but still looking over it. Figured it made more
+sense to dump current thoughts then drop it this evening for Monday.
 
-After:
-  $ sudo perf record -a --off-cpu -- perf bench sched messaging
-  $ sudo perf report --stat | grep -A1 offcpu
-  offcpu-time stats:
-            SAMPLE events:      856
+[...]
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/bpf_off_cpu.c          |  7 ++++++
- tools/perf/util/bpf_skel/off_cpu.bpf.c | 30 ++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+> +static int bpf_mem_cache_idx(size_t size)
+    [...]
 
-diff --git a/tools/perf/util/bpf_off_cpu.c b/tools/perf/util/bpf_off_cpu.c
-index f7ee0c7a53f0..c257813e674e 100644
---- a/tools/perf/util/bpf_off_cpu.c
-+++ b/tools/perf/util/bpf_off_cpu.c
-@@ -17,6 +17,7 @@
- #include "bpf_skel/off_cpu.skel.h"
- 
- #define MAX_STACKS  32
-+#define MAX_PROC  4096
- /* we don't need actual timestamp, just want to put the samples at last */
- #define OFF_CPU_TIMESTAMP  (~0ull << 32)
- 
-@@ -164,10 +165,16 @@ int off_cpu_prepare(struct evlist *evlist, struct target *target,
- 
- 			ntasks++;
- 		}
-+
-+		if (ntasks < MAX_PROC)
-+			ntasks = MAX_PROC;
-+
- 		bpf_map__set_max_entries(skel->maps.task_filter, ntasks);
- 	} else if (target__has_task(target)) {
- 		ntasks = perf_thread_map__nr(evlist->core.threads);
- 		bpf_map__set_max_entries(skel->maps.task_filter, ntasks);
-+	} else if (target__none(target)) {
-+		bpf_map__set_max_entries(skel->maps.task_filter, MAX_PROC);
- 	}
- 
- 	if (evlist__first(evlist)->cgrp) {
-diff --git a/tools/perf/util/bpf_skel/off_cpu.bpf.c b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-index 143a8b7acf87..c4ba2bcf179f 100644
---- a/tools/perf/util/bpf_skel/off_cpu.bpf.c
-+++ b/tools/perf/util/bpf_skel/off_cpu.bpf.c
-@@ -12,6 +12,9 @@
- #define TASK_INTERRUPTIBLE	0x0001
- #define TASK_UNINTERRUPTIBLE	0x0002
- 
-+/* create a new thread */
-+#define CLONE_THREAD  0x10000
-+
- #define MAX_STACKS   32
- #define MAX_ENTRIES  102400
- 
-@@ -220,6 +223,33 @@ static int off_cpu_stat(u64 *ctx, struct task_struct *prev,
- 	return 0;
- }
- 
-+SEC("tp_btf/task_newtask")
-+int on_newtask(u64 *ctx)
-+{
-+	struct task_struct *task;
-+	u64 clone_flags;
-+	u32 pid;
-+	u8 val = 1;
-+
-+	if (!uses_tgid)
-+		return 0;
-+
-+	task = (struct task_struct *)bpf_get_current_task();
-+
-+	pid = BPF_CORE_READ(task, tgid);
-+	if (!bpf_map_lookup_elem(&task_filter, &pid))
-+		return 0;
-+
-+	task = (struct task_struct *)ctx[0];
-+	clone_flags = ctx[1];
-+
-+	pid = task->tgid;
-+	if (!(clone_flags & CLONE_THREAD))
-+		bpf_map_update_elem(&task_filter, &pid, &val, BPF_NOEXIST);
-+
-+	return 0;
-+}
-+
- SEC("tp_btf/sched_switch")
- int on_switch(u64 *ctx)
- {
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+> +#define NUM_CACHES 11
+> +
+> +struct bpf_mem_cache {
+> +	/* per-cpu list of free objects of size 'unit_size'.
+> +	 * All accesses are done with preemption disabled
+> +	 * with __llist_add() and __llist_del_first().
+> +	 */
+> +	struct llist_head free_llist;
+> +
+> +	/* NMI only free list.
+> +	 * All accesses are NMI-safe llist_add() and llist_del_first().
+> +	 *
+> +	 * Each allocated object is either on free_llist or on free_llist_nmi.
+> +	 * One cpu can allocate it from NMI by doing llist_del_first() from
+> +	 * free_llist_nmi, while another might free it back from non-NMI by
+> +	 * doing llist_add() into free_llist.
+> +	 */
+> +	struct llist_head free_llist_nmi;
 
+stupid nit but newline here helps me read this.
+
+> +	/* kmem_cache != NULL when bpf_mem_alloc was created for specific
+> +	 * element size.
+> +	 */
+> +	struct kmem_cache *kmem_cache;
+
+> +	struct irq_work refill_work;
+> +	struct mem_cgroup *memcg;
+> +	int unit_size;
+> +	/* count of objects in free_llist */
+> +	int free_cnt;
+> +	/* count of objects in free_llist_nmi */
+> +	atomic_t free_cnt_nmi;
+> +	/* flag to refill nmi list too */
+> +	bool refill_nmi_list;
+> +};
+
+What about having two types one for fixed size cache and one for buckets?
+The logic below gets a bunch of if cases with just the single type. OTOH
+I messed around with it for a bit and then had to duplicate most of the
+codes so I'm not sure its entirely a good idea, but the __alloc() with
+the 'if this else that' sort of made me think of it.
+
+> +
+> +static struct llist_node notrace *__llist_del_first(struct llist_head *head)
+     [...]
+
+> +
+> +#define BATCH 48
+> +#define LOW_WATERMARK 32
+> +#define HIGH_WATERMARK 96
+> +/* Assuming the average number of elements per bucket is 64, when all buckets
+> + * are used the total memory will be: 64*16*32 + 64*32*32 + 64*64*32 + ... +
+> + * 64*4096*32 ~ 20Mbyte
+> + */
+> +
+> +/* extra macro useful for testing by randomizing in_nmi condition */
+> +#define bpf_in_nmi() in_nmi()
+> +
+> +static void *__alloc(struct bpf_mem_cache *c, int node)
+
+For example with two types this mostly drops out. Of course then the callers
+have to know the type so not sure. And you get two alloc_bulks and
+so on. Its not obviously this works out well.
+
+[...]
+
+> +static void free_bulk_nmi(struct bpf_mem_cache *c)
+> +{
+> +	struct llist_node *llnode;
+> +	int cnt;
+> +
+> +	do {
+> +		llnode = llist_del_first(&c->free_llist_nmi);
+> +		if (llnode)
+> +			cnt = atomic_dec_return(&c->free_cnt_nmi);
+> +		else
+> +			cnt = 0;
+> +		__free(c, llnode);
+> +	} while (cnt > (HIGH_WATERMARK + LOW_WATERMARK) / 2);
+> +}
+
+Comment from irq_work_run_list,
+
+	/*
+	 * On PREEMPT_RT IRQ-work which is not marked as HARD will be processed
+	 * in a per-CPU thread in preemptible context. Only the items which are
+	 * marked as IRQ_WORK_HARD_IRQ will be processed in hardirq context.
+	 */
+
+Not an RT expert but I read this to mean in PREEMPT_RT case we can't assume
+this is !preemptible? If I read correctly then is there a risk we get
+two runners here? And by extension would need to worry about free_cnt
+and friends getting corrupted.
+
+> +
+> +static void bpf_mem_refill(struct irq_work *work)
+> +{
+> +	struct bpf_mem_cache *c = container_of(work, struct bpf_mem_cache, refill_work);
+> +	int cnt;
+> +
+> +	cnt = c->free_cnt;
+> +	if (cnt < LOW_WATERMARK)
+> +		/* irq_work runs on this cpu and kmalloc will allocate
+> +		 * from the current numa node which is what we want here.
+> +		 */
+> +		alloc_bulk(c, BATCH, NUMA_NO_NODE);
+> +	else if (cnt > HIGH_WATERMARK)
+> +		free_bulk(c);
+> +
+> +	if (!c->refill_nmi_list)
+> +		/* don't refill NMI specific freelist
+> +		 * until alloc/free from NMI.
+> +		 */
+> +		return;
+> +	cnt = atomic_read(&c->free_cnt_nmi);
+> +	if (cnt < LOW_WATERMARK)
+> +		alloc_bulk_nmi(c, BATCH, NUMA_NO_NODE);
+> +	else if (cnt > HIGH_WATERMARK)
+> +		free_bulk_nmi(c);
+> +	c->refill_nmi_list = false;
+> +}
+> +
+> +static void notrace irq_work_raise(struct bpf_mem_cache *c, bool in_nmi)
+> +{
+> +	c->refill_nmi_list = in_nmi;
+
+Should this be,
+
+	c->refill_nmi_list |= in_nmi;
+
+this would resolve comment in unit_alloc? We don't want to clear it if
+we end up calling irq_work_raise from in_nmi and then in another
+context. It would be really hard to debug if the case is possible and
+a busy box just doesn't refill nmi enough.
+
+> +	irq_work_queue(&c->refill_work);
+> +}
+> +
+> +static void prefill_mem_cache(struct bpf_mem_cache *c, int cpu)
+    [...]
+
+> +
+> +/* notrace is necessary here and in other functions to make sure
+> + * bpf programs cannot attach to them and cause llist corruptions.
+> + */
+
+Thanks for the comment.
+
+> +static void notrace *unit_alloc(struct bpf_mem_cache *c)
+> +{
+> +	bool in_nmi = bpf_in_nmi();
+> +	struct llist_node *llnode;
+> +	unsigned long flags;
+> +	int cnt = 0;
+> +
+> +	if (unlikely(in_nmi)) {
+> +		llnode = llist_del_first(&c->free_llist_nmi);
+> +		if (llnode)
+> +			cnt = atomic_dec_return(&c->free_cnt_nmi);
+
+Dumb question maybe its Friday afternoon. If we are in_nmi() and preempt
+disabled why do we need the atomic_dec_return()?
+
+> +	} else {
+> +		/* Disable irqs to prevent the following race:
+> +		 * bpf_prog_A
+> +		 *   bpf_mem_alloc
+> +		 *      preemption or irq -> bpf_prog_B
+> +		 *        bpf_mem_alloc
+> +		 */
+> +		local_irq_save(flags);
+> +		llnode = __llist_del_first(&c->free_llist);
+> +		if (llnode)
+> +			cnt = --c->free_cnt;
+> +		local_irq_restore(flags);
+> +	}
+> +	WARN_ON(cnt < 0);
+> +
+
+Is this a problem?
+
+  in_nmi = false
+  bpf_prog_A
+   bpf_mem_alloc
+   irq_restore
+   irq -> bpf_prog_B
+            bpf_mem_alloc
+               in_nmi = true
+               irq_work_raise(c, true)
+   irq_work_raise(c, false)
+
+At somepoint later
+ 
+   bpf_mem_refill()
+    refill_nmi_list <- false
+
+The timing is tight but possible I suspect. See above simple fix would
+be to just | the refill_nim_list bool? We shouldn't be clearing it
+from a raise op.
+
+> +	if (cnt < LOW_WATERMARK)
+> +		irq_work_raise(c, in_nmi);
+> +	return llnode;
+> +}
+>
+
+OK need to drop for now. Will pick up reviewing the rest later.
