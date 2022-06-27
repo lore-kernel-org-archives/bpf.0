@@ -2,301 +2,183 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B133C433EF
-	for <bpf@archiver.kernel.org>; Mon, 27 Jun 2022 21:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AEBAC43334
+	for <bpf@archiver.kernel.org>; Mon, 27 Jun 2022 21:27:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241118AbiF0VSE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 27 Jun 2022 17:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S238339AbiF0V1Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jun 2022 17:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238090AbiF0VSA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:18:00 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E9E186DB
-        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:17:58 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 25RJ1QlV015391
-        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:17:58 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3gwwv75pf8-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:17:58 -0700
-Received: from twshared16308.14.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 27 Jun 2022 14:17:56 -0700
-Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
-        id 2E3361BAC27CC; Mon, 27 Jun 2022 14:15:42 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v2 bpf-next 06/15] libbpf: clean up perfbuf APIs
-Date:   Mon, 27 Jun 2022 14:15:18 -0700
-Message-ID: <20220627211527.2245459-7-andrii@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220627211527.2245459-1-andrii@kernel.org>
-References: <20220627211527.2245459-1-andrii@kernel.org>
+        with ESMTP id S236805AbiF0V1Y (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jun 2022 17:27:24 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C726119006;
+        Mon, 27 Jun 2022 14:27:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id lw20so21818691ejb.4;
+        Mon, 27 Jun 2022 14:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ffH6sqTChxu/43eEw2gjEC1ladRfvkvB5r33/uaRpY8=;
+        b=ZH41EW1m/LJARcI+lm9nKo4a+XCFNfAO01a4+XvRgu17owajzK7SWiJ6umyLqaEI5z
+         jtUqSCXtgl7coDCjeX1nmWgXwCLebD1HkAccjXIU10uED93z6YnLewRmivRjRL8zeS3W
+         Cawk1sLYTfbz50BP0AEAPF02iWvX2GlBtoUkdeoKiarH+3f2w4hhH32aombGon+0SFww
+         B8jJCgwNvnTqbArkUoPzC6O2VrgGuXqlDSfyBSgnh/iDSv6rimLc6/zQCXKU76X8wSP/
+         a7OkL5M9QG8JOimVMYR7wPp5v2T9T/ZV5X+sA2rpRA+uu5KU1a/ottJGJKuvzNazGTYq
+         Yj4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ffH6sqTChxu/43eEw2gjEC1ladRfvkvB5r33/uaRpY8=;
+        b=stV5892MLK7w3OQNJD232hnRcalTwWVNiOt9CSwWZageXlA8MLtNKKJVjle+cEQXtp
+         Y/NpygBf3ORUG1yCmbGG0UlKbEKVT5kGF4+EXlIOrtExuWQAfZhEv2Qu/hCHRK/vxkWl
+         YRySYtnZnJR/qYtAJ7q32xGSIOiLQgZGzeMhAgxibkboBVaHfzcgWIm3Ytd+L98Pa992
+         vd4XoWDpqVrcAxgxq4xXwJ0M9FTORu04pbtKwVgqxeB2P/IuUeZ6ywv7OsQSy3bJc6+z
+         v/r2PMoPQCE6mcNl4QDRUsn/T9eOn/cOSrLulFs2TyGX5Jwhsw8HI0p0KaoELNpJ0BNK
+         SC3Q==
+X-Gm-Message-State: AJIora9NaGb1UoxfLPdMn1q95SPfnuFQZPKYOliOqgdGD7Qy1TL6h5Z2
+        MfKX5MreTiNuK8zaEh3q5gWXRaSTHjP7o3JF2YE=
+X-Google-Smtp-Source: AGRyM1ubCMGDYUtM5u6GHoJvohmX1hyk2R3j56/JEUUZbxsjNRJW9HJRpSWU/HrVmabaokS5XgV0PPvDaZB/p/KNecM=
+X-Received: by 2002:a17:907:980a:b0:722:f4a7:e00 with SMTP id
+ ji10-20020a170907980a00b00722f4a70e00mr15016491ejc.114.1656365241370; Mon, 27
+ Jun 2022 14:27:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: eUjNM5UcpIQIJDblri22_j28WWDYz2ta
-X-Proofpoint-ORIG-GUID: eUjNM5UcpIQIJDblri22_j28WWDYz2ta
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
+References: <20220626031301.60390-1-nashuiliang@gmail.com>
+In-Reply-To: <20220626031301.60390-1-nashuiliang@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Jun 2022 14:27:09 -0700
+Message-ID: <CAEf4BzbnEFqdEZTNRWf8vJ8hExpKkg_rwgoQE-cyyU7fDafxZw@mail.gmail.com>
+Subject: Re: [PATCH v3] libbpf: Cleanup the legacy kprobe_event on failed add/attach_event()
+To:     Chuang W <nashuiliang@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jingren Zhou <zhoujingren@didiglobal.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove deprecated perfbuf APIs and clean up opts structs.
+On Sat, Jun 25, 2022 at 8:13 PM Chuang W <nashuiliang@gmail.com> wrote:
+>
+> Before the 0bc11ed5ab60 commit ("kprobes: Allow kprobes coexist with
+> livepatch"), in a scenario where livepatch and kprobe coexist on the
+> same function entry, the creation of kprobe_event using
+> add_kprobe_event_legacy() will be successful, at the same time as a
+> trace event (e.g. /debugfs/tracing/events/kprobe/XXX) will exist, but
+> perf_event_open() will return an error because both livepatch and kprobe
+> use FTRACE_OPS_FL_IPMODIFY. As follows:
+>
+> 1) add a livepatch
+>
+> $ insmod livepatch-XXX.ko
+>
+> 2) add a kprobe using tracefs API (i.e. add_kprobe_event_legacy)
+>
+> $ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
+>
+> 3) enable this kprobe (i.e. sys_perf_event_open)
+>
+> This will return an error, -EBUSY.
+>
+> On Andrii Nakryiko's comment, few error paths in
+> bpf_program__attach_kprobe_opts() which should need to call
+> remove_kprobe_event_legacy().
+>
+> With this patch, whenever an error is returned after
+> add_kprobe_event_legacy() or bpf_program__attach_perf_event_opts(), this
+> ensures that the created kprobe_event is cleaned.
+>
+> Signed-off-by: Chuang W <nashuiliang@gmail.com>
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c   | 54 +++++++-----------------------
- tools/lib/bpf/libbpf.h   | 71 ++++------------------------------------
- tools/lib/bpf/libbpf.map |  5 ---
- 3 files changed, 18 insertions(+), 112 deletions(-)
+Is this your full name? Signed-off-by is required to have a full name
+of a person, please update if it's not
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index c0150a7dbd81..38dc00e440c3 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11975,6 +11975,9 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- 	return link;
- }
- 
-+typedef enum bpf_perf_event_ret (*bpf_perf_event_print_t)(struct perf_event_header *hdr,
-+							  void *private_data);
-+
- static enum bpf_perf_event_ret
- perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
- 		       void **copy_mem, size_t *copy_size,
-@@ -12023,12 +12026,6 @@ perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
- 	return libbpf_err(ret);
- }
- 
--__attribute__((alias("perf_event_read_simple")))
--enum bpf_perf_event_ret
--bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
--			   void **copy_mem, size_t *copy_size,
--			   bpf_perf_event_print_t fn, void *private_data);
--
- struct perf_buffer;
- 
- struct perf_buffer_params {
-@@ -12162,12 +12159,11 @@ perf_buffer__open_cpu_buf(struct perf_buffer *pb, struct perf_event_attr *attr,
- static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
- 					      struct perf_buffer_params *p);
- 
--DEFAULT_VERSION(perf_buffer__new_v0_6_0, perf_buffer__new, LIBBPF_0.6.0)
--struct perf_buffer *perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
--					    perf_buffer_sample_fn sample_cb,
--					    perf_buffer_lost_fn lost_cb,
--					    void *ctx,
--					    const struct perf_buffer_opts *opts)
-+struct perf_buffer *perf_buffer__new(int map_fd, size_t page_cnt,
-+				     perf_buffer_sample_fn sample_cb,
-+				     perf_buffer_lost_fn lost_cb,
-+				     void *ctx,
-+				     const struct perf_buffer_opts *opts)
- {
- 	struct perf_buffer_params p = {};
- 	struct perf_event_attr attr = {};
-@@ -12189,22 +12185,10 @@ struct perf_buffer *perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
- 	return libbpf_ptr(__perf_buffer__new(map_fd, page_cnt, &p));
- }
- 
--COMPAT_VERSION(perf_buffer__new_deprecated, perf_buffer__new, LIBBPF_0.0.4)
--struct perf_buffer *perf_buffer__new_deprecated(int map_fd, size_t page_cnt,
--						const struct perf_buffer_opts *opts)
--{
--	return perf_buffer__new_v0_6_0(map_fd, page_cnt,
--				       opts ? opts->sample_cb : NULL,
--				       opts ? opts->lost_cb : NULL,
--				       opts ? opts->ctx : NULL,
--				       NULL);
--}
--
--DEFAULT_VERSION(perf_buffer__new_raw_v0_6_0, perf_buffer__new_raw, LIBBPF_0.6.0)
--struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
--						struct perf_event_attr *attr,
--						perf_buffer_event_fn event_cb, void *ctx,
--						const struct perf_buffer_raw_opts *opts)
-+struct perf_buffer *perf_buffer__new_raw(int map_fd, size_t page_cnt,
-+					 struct perf_event_attr *attr,
-+					 perf_buffer_event_fn event_cb, void *ctx,
-+					 const struct perf_buffer_raw_opts *opts)
- {
- 	struct perf_buffer_params p = {};
- 
-@@ -12224,20 +12208,6 @@ struct perf_buffer *perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt,
- 	return libbpf_ptr(__perf_buffer__new(map_fd, page_cnt, &p));
- }
- 
--COMPAT_VERSION(perf_buffer__new_raw_deprecated, perf_buffer__new_raw, LIBBPF_0.0.4)
--struct perf_buffer *perf_buffer__new_raw_deprecated(int map_fd, size_t page_cnt,
--						    const struct perf_buffer_raw_opts *opts)
--{
--	LIBBPF_OPTS(perf_buffer_raw_opts, inner_opts,
--		.cpu_cnt = opts->cpu_cnt,
--		.cpus = opts->cpus,
--		.map_keys = opts->map_keys,
--	);
--
--	return perf_buffer__new_raw_v0_6_0(map_fd, page_cnt, opts->attr,
--					   opts->event_cb, opts->ctx, &inner_opts);
--}
--
- static struct perf_buffer *__perf_buffer__new(int map_fd, size_t page_cnt,
- 					      struct perf_buffer_params *p)
- {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 71b19ae1659c..5dc4271fcdb7 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1269,17 +1269,7 @@ typedef void (*perf_buffer_lost_fn)(void *ctx, int cpu, __u64 cnt);
- 
- /* common use perf buffer options */
- struct perf_buffer_opts {
--	union {
--		size_t sz;
--		struct { /* DEPRECATED: will be removed in v1.0 */
--			/* if specified, sample_cb is called for each sample */
--			perf_buffer_sample_fn sample_cb;
--			/* if specified, lost_cb is called for each batch of lost samples */
--			perf_buffer_lost_fn lost_cb;
--			/* ctx is provided to sample_cb and lost_cb */
--			void *ctx;
--		};
--	};
-+	size_t sz;
- };
- #define perf_buffer_opts__last_field sz
- 
-@@ -1300,21 +1290,6 @@ perf_buffer__new(int map_fd, size_t page_cnt,
- 		 perf_buffer_sample_fn sample_cb, perf_buffer_lost_fn lost_cb, void *ctx,
- 		 const struct perf_buffer_opts *opts);
- 
--LIBBPF_API struct perf_buffer *
--perf_buffer__new_v0_6_0(int map_fd, size_t page_cnt,
--			perf_buffer_sample_fn sample_cb, perf_buffer_lost_fn lost_cb, void *ctx,
--			const struct perf_buffer_opts *opts);
--
--LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use new variant of perf_buffer__new() instead")
--struct perf_buffer *perf_buffer__new_deprecated(int map_fd, size_t page_cnt,
--						const struct perf_buffer_opts *opts);
--
--#define perf_buffer__new(...) ___libbpf_overload(___perf_buffer_new, __VA_ARGS__)
--#define ___perf_buffer_new6(map_fd, page_cnt, sample_cb, lost_cb, ctx, opts) \
--	perf_buffer__new(map_fd, page_cnt, sample_cb, lost_cb, ctx, opts)
--#define ___perf_buffer_new3(map_fd, page_cnt, opts) \
--	perf_buffer__new_deprecated(map_fd, page_cnt, opts)
--
- enum bpf_perf_event_ret {
- 	LIBBPF_PERF_EVENT_DONE	= 0,
- 	LIBBPF_PERF_EVENT_ERROR	= -1,
-@@ -1328,21 +1303,9 @@ typedef enum bpf_perf_event_ret
- 
- /* raw perf buffer options, giving most power and control */
- struct perf_buffer_raw_opts {
--	union {
--		struct {
--			size_t sz;
--			long :0;
--			long :0;
--		};
--		struct { /* DEPRECATED: will be removed in v1.0 */
--			/* perf event attrs passed directly into perf_event_open() */
--			struct perf_event_attr *attr;
--			/* raw event callback */
--			perf_buffer_event_fn event_cb;
--			/* ctx is provided to event_cb */
--			void *ctx;
--		};
--	};
-+	size_t sz;
-+	long :0;
-+	long :0;
- 	/* if cpu_cnt == 0, open all on all possible CPUs (up to the number of
- 	 * max_entries of given PERF_EVENT_ARRAY map)
- 	 */
-@@ -1354,26 +1317,13 @@ struct perf_buffer_raw_opts {
- };
- #define perf_buffer_raw_opts__last_field map_keys
- 
-+struct perf_event_attr;
-+
- LIBBPF_API struct perf_buffer *
- perf_buffer__new_raw(int map_fd, size_t page_cnt, struct perf_event_attr *attr,
- 		     perf_buffer_event_fn event_cb, void *ctx,
- 		     const struct perf_buffer_raw_opts *opts);
- 
--LIBBPF_API struct perf_buffer *
--perf_buffer__new_raw_v0_6_0(int map_fd, size_t page_cnt, struct perf_event_attr *attr,
--			    perf_buffer_event_fn event_cb, void *ctx,
--			    const struct perf_buffer_raw_opts *opts);
--
--LIBBPF_API LIBBPF_DEPRECATED_SINCE(0, 7, "use new variant of perf_buffer__new_raw() instead")
--struct perf_buffer *perf_buffer__new_raw_deprecated(int map_fd, size_t page_cnt,
--						    const struct perf_buffer_raw_opts *opts);
--
--#define perf_buffer__new_raw(...) ___libbpf_overload(___perf_buffer_new_raw, __VA_ARGS__)
--#define ___perf_buffer_new_raw6(map_fd, page_cnt, attr, event_cb, ctx, opts) \
--	perf_buffer__new_raw(map_fd, page_cnt, attr, event_cb, ctx, opts)
--#define ___perf_buffer_new_raw3(map_fd, page_cnt, opts) \
--	perf_buffer__new_raw_deprecated(map_fd, page_cnt, opts)
--
- LIBBPF_API void perf_buffer__free(struct perf_buffer *pb);
- LIBBPF_API int perf_buffer__epoll_fd(const struct perf_buffer *pb);
- LIBBPF_API int perf_buffer__poll(struct perf_buffer *pb, int timeout_ms);
-@@ -1382,15 +1332,6 @@ LIBBPF_API int perf_buffer__consume_buffer(struct perf_buffer *pb, size_t buf_id
- LIBBPF_API size_t perf_buffer__buffer_cnt(const struct perf_buffer *pb);
- LIBBPF_API int perf_buffer__buffer_fd(const struct perf_buffer *pb, size_t buf_idx);
- 
--typedef enum bpf_perf_event_ret
--	(*bpf_perf_event_print_t)(struct perf_event_header *hdr,
--				  void *private_data);
--LIBBPF_DEPRECATED_SINCE(0, 8, "use perf_buffer__poll() or  perf_buffer__consume() instead")
--LIBBPF_API enum bpf_perf_event_ret
--bpf_perf_event_read_simple(void *mmap_mem, size_t mmap_size, size_t page_size,
--			   void **copy_mem, size_t *copy_size,
--			   bpf_perf_event_print_t fn, void *private_data);
--
- struct bpf_prog_linfo;
- struct bpf_prog_info;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index ff5fba17764b..f327adc66933 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -46,7 +46,6 @@ LIBBPF_0.0.1 {
- 		bpf_object__unload;
- 		bpf_object__unpin_maps;
- 		bpf_object__unpin_programs;
--		bpf_perf_event_read_simple;
- 		bpf_prog_attach;
- 		bpf_prog_detach;
- 		bpf_prog_detach2;
-@@ -144,8 +143,6 @@ LIBBPF_0.0.4 {
- 		btf__parse_elf;
- 		libbpf_num_possible_cpus;
- 		perf_buffer__free;
--		perf_buffer__new;
--		perf_buffer__new_raw;
- 		perf_buffer__poll;
- } LIBBPF_0.0.3;
- 
-@@ -369,9 +366,7 @@ LIBBPF_0.6.0 {
- 		libbpf_minor_version;
- 		libbpf_version_string;
- 		perf_buffer__new;
--		perf_buffer__new_deprecated;
- 		perf_buffer__new_raw;
--		perf_buffer__new_raw_deprecated;
- } LIBBPF_0.5.0;
- 
- LIBBPF_0.7.0 {
--- 
-2.30.2
+> Signed-off-by: Jingren Zhou <zhoujingren@didiglobal.com>
+> ---
+> V2->v3:
+> - add detail commits
+> - call remove_kprobe_event_legacy() on failed bpf_program__attach_perf_event_opts()
+>
+>  tools/lib/bpf/libbpf.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 49e359cd34df..038b0cb3313f 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -10811,10 +10811,11 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+>         }
+>         type = determine_kprobe_perf_type_legacy(probe_name, retprobe);
+>         if (type < 0) {
+> +               err = type;
+>                 pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
+>                         kfunc_name, offset,
+> -                       libbpf_strerror_r(type, errmsg, sizeof(errmsg)));
+> -               return type;
+> +                       libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> +               goto clear_kprobe_event;
+>         }
+>         attr.size = sizeof(attr);
+>         attr.config = type;
+> @@ -10828,9 +10829,14 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
+>                 err = -errno;
+>                 pr_warn("legacy kprobe perf_event_open() failed: %s\n",
+>                         libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
+> -               return err;
+> +               goto clear_kprobe_event;
+>         }
+>         return pfd;
+> +
+> +clear_kprobe_event:
+> +       /* Clear the newly added legacy kprobe_event */
+> +       remove_kprobe_event_legacy(probe_name, retprobe);
+> +       return err;
+>  }
+>
 
+this part looks good
+
+
+>  struct bpf_link *
+> @@ -10899,6 +10905,9 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
+>
+>         return link;
+>  err_out:
+> +       /* Clear the newly added legacy kprobe_event */
+> +       if (legacy)
+> +               remove_kprobe_event_legacy(legacy_probe, retprobe);
+
+this one will call remove_kprobe_event_legacy() even if we failed to
+create that kprobe_event in the first place. So let's maybe add
+
+err_clean_legacy:
+    if (legacy)
+         remove_kprobe_event_legacy(legacy_probe, retprobe);
+
+before err_out: and goto there if we fail to attach (but not if we
+fail to create pfd)?
+
+
+Also, looking through libbpf code, I realized that we have exactly the
+same problem for uprobes, so please add same fixed to
+perf_event_uprobe_open_legacy and attach_uprobe_opts. Thanks!
+
+
+
+
+>         free(legacy_probe);
+>         return libbpf_err_ptr(err);
+>  }
+> --
+> 2.34.1
+>
