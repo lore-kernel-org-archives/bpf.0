@@ -2,111 +2,230 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ACDBC433EF
-	for <bpf@archiver.kernel.org>; Mon, 27 Jun 2022 21:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14788CCA47B
+	for <bpf@archiver.kernel.org>; Mon, 27 Jun 2022 21:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238599AbiF0VMQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jun 2022 17:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S241056AbiF0VPk convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 27 Jun 2022 17:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiF0VMP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jun 2022 17:12:15 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64E9DF39
-        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:12:14 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ay16so21733482ejb.6
-        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fzQy6VDS9PEVy2A635xxoQzG14fo94e8sFrSXZgYG0I=;
-        b=bFdWaehpTA/K7L57sD/qfsi1FQ8ltXI16Ji2UJc12cIYQH/JO68Dv+VvFfUJgmkNFY
-         nnCWic2IWhinfcka+uIUa6XMOFK2n3X3pIVqVPhAEGXHsjx5PJ9vqgz2vknDwemdG21S
-         AVAGTNMCPLUXTnG8I9PmIuaE7Pb2rXS7B72mCm1K4tqT8/2fT/JKcKO5f6CYheTA791l
-         lgh9SSNU6hwQkzVraK2bb5NEGtatUGZydiJV0TGUcgfcu6BvR866xRYb4UrKnkWRhrhM
-         tjRbk2ATOfQnYJ64zILWOKgmrvx0gCDXCFmxzGbxdCmCXl9IeD5b9Jokbw/9Rl/Jx4Pt
-         GW5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fzQy6VDS9PEVy2A635xxoQzG14fo94e8sFrSXZgYG0I=;
-        b=WRl15CsFXIAwXRLt2tf+SNjqjuZoI1yORRyySowx/brVHixTsrl/W/Lu1Vx91Uu6/p
-         Pb+YlVwr95dahnJAF2zb8EgmuFJOXacvIZdnkGv+9o7awN5DziJUuh8z2sFKdV8R+8Jd
-         E/8sL1ZVXwZnn0w1znpF/azikUYH81zGgOV3h3L/1tDi0OTia57pS55YIAGq4tIWEMVX
-         mPNQx4yVH4n7gltspO8g1nFh/qjxZFoZwsduOc2Hp6hTDBOBC3HrPXhSwbo0o3wVwWi6
-         4Tj7B2qMWyq6D4bEri5D9RRsCddH3p2HMSqHzKAVUxpP2tMOFwWWjkOFCAWAs5ZNdM/1
-         jT4g==
-X-Gm-Message-State: AJIora+iT63f52YSxIwdn9A7N2IdXa6CHivppmFYgUe//A+IuGVQJQ9D
-        DrP6y4ApOLL8nT0a/BmR8FNu4dl08cMGQLumbdc=
-X-Google-Smtp-Source: AGRyM1sTjejAk/y+YfpDRwqaaNXDXnnVcn7c/ZgPIpK1m/wdbDaiIT7Rq+4EIscZkw/Wux39gYBrwaGunthbK327Jn8=
-X-Received: by 2002:a17:907:6eac:b0:726:94ef:5ff3 with SMTP id
- sh44-20020a1709076eac00b0072694ef5ff3mr10944907ejc.545.1656364333339; Mon, 27
- Jun 2022 14:12:13 -0700 (PDT)
+        with ESMTP id S234920AbiF0VPk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jun 2022 17:15:40 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66238167C7
+        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:15:39 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25RJ1Ogn024549
+        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:15:39 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gwyfsdu4r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 27 Jun 2022 14:15:38 -0700
+Received: from twshared31479.05.prn5.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 27 Jun 2022 14:15:38 -0700
+Received: by devbig019.vll3.facebook.com (Postfix, from userid 137359)
+        id ADE431BAC2790; Mon, 27 Jun 2022 14:15:35 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next 03/15] libbpf: remove deprecated XDP APIs
+Date:   Mon, 27 Jun 2022 14:15:15 -0700
+Message-ID: <20220627211527.2245459-4-andrii@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220627211527.2245459-1-andrii@kernel.org>
+References: <20220627211527.2245459-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <20220620231713.2143355-1-deso@posteo.net> <20220620231713.2143355-4-deso@posteo.net>
- <CAJnrk1YL9E2GJN+8Gnr9Db=yAHDOm2nwLb_LUQTEuStkm1jHEg@mail.gmail.com>
- <20220622172224.4curfsv7h7gfjwh5@muellerd-fedora-MJ0AC3F3>
- <CAEf4BzbyU-W8a3fzZoy7DDb=DtqdfGM2U3YpgYaS+EqHWZ0qag@mail.gmail.com> <20220627210305.ugktft5q35fnjpou@muellerd-fedora-MJ0AC3F3>
-In-Reply-To: <20220627210305.ugktft5q35fnjpou@muellerd-fedora-MJ0AC3F3>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 27 Jun 2022 14:12:01 -0700
-Message-ID: <CAEf4BzaLCh8B6+j4qXk3V2vFVyufax=rzDSwXHBXVgLgpAMNOw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/7] bpf: Add type match support
-To:     =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
-Cc:     Joanne Koong <joannelkoong@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 4Ppc6YzYyxjdM47DQZIzRvUiUjYVDKnk
+X-Proofpoint-ORIG-GUID: 4Ppc6YzYyxjdM47DQZIzRvUiUjYVDKnk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-27_06,2022-06-24_01,2022-06-22_01
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 2:03 PM Daniel M=C3=BCller <deso@posteo.net> wrote:
->
-> On Fri, Jun 24, 2022 at 02:09:33PM -0700, Andrii Nakryiko wrote:
-> > On Wed, Jun 22, 2022 at 10:22 AM Daniel M=C3=BCller <deso@posteo.net> w=
-rote:
-> > >
-> > > On Tue, Jun 21, 2022 at 12:41:22PM -0700, Joanne Koong wrote:
-> > > > Do BTF_KIND_FLOAT and BTF_KIND_TYPEDEF need to be checked as well?
-> > >
-> > > Lack of BTF_KIND_TYPEDEF is a good question. I don't know why it's mi=
-ssing from
-> > > bpf_core_types_are_compat() as well, which I took as a template. I wi=
-ll do some
-> > > testing to better understand if we can hit this case or whether there=
- is some
-> > > magic going on that would have resolved typedefs already at this poin=
-t (which is
-> > > my suspicion).
-> > > My understanding why we don't cover floats is because we do not allow=
- floating
-> > > point operations in kernel code (right?).
-> >
-> > FLOAT is an omission, we need to add it (kernel types do have floats).
->
-> [...]
->
-> Thanks for clarifying. Let's leave FLOAT support for follow-on changes, t=
-hough,
-> and not bloat this patch set unnecessarily. It's not currently support by=
- the
-> existing libbpf/kernel checks or by bpftool's BTF minimization logic from=
- what I
+Get rid of deprecated bpf_set_link*() and bpf_get_link*() APIs.
 
-it seems to be handled by bpf_core_fields_are_compat(), but yeah, we
-can do a follow up for this
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.h   | 20 -------------
+ tools/lib/bpf/libbpf.map |  4 ---
+ tools/lib/bpf/netlink.c  | 62 ++++++----------------------------------
+ 3 files changed, 8 insertions(+), 78 deletions(-)
 
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 0b2de10b5878..d1c93a1e7d66 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1164,15 +1164,6 @@ LIBBPF_API int bpf_map__get_next_key(const struct bpf_map *map,
+  */
+ LIBBPF_API long libbpf_get_error(const void *ptr);
+ 
+-/* XDP related API */
+-struct xdp_link_info {
+-	__u32 prog_id;
+-	__u32 drv_prog_id;
+-	__u32 hw_prog_id;
+-	__u32 skb_prog_id;
+-	__u8 attach_mode;
+-};
+-
+ struct bpf_xdp_set_link_opts {
+ 	size_t sz;
+ 	int old_fd;
+@@ -1180,17 +1171,6 @@ struct bpf_xdp_set_link_opts {
+ };
+ #define bpf_xdp_set_link_opts__last_field old_fd
+ 
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_attach() instead")
+-LIBBPF_API int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_attach() instead")
+-LIBBPF_API int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
+-					const struct bpf_xdp_set_link_opts *opts);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_query_id() instead")
+-LIBBPF_API int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags);
+-LIBBPF_DEPRECATED_SINCE(0, 8, "use bpf_xdp_query() instead")
+-LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
+-				     size_t info_size, __u32 flags);
+-
+ struct bpf_xdp_attach_opts {
+ 	size_t sz;
+ 	int old_prog_fd;
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index a480490914a4..713c769f125a 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -91,7 +91,6 @@ LIBBPF_0.0.1 {
+ 		bpf_prog_linfo__lfind_addr_func;
+ 		bpf_prog_linfo__lfind;
+ 		bpf_raw_tracepoint_open;
+-		bpf_set_link_xdp_fd;
+ 		bpf_task_fd_query;
+ 		btf__fd;
+ 		btf__find_by_name;
+@@ -120,7 +119,6 @@ LIBBPF_0.0.2 {
+ 		bpf_map_lookup_elem_flags;
+ 		bpf_object__btf;
+ 		bpf_object__find_map_fd_by_name;
+-		bpf_get_link_xdp_id;
+ 		btf__dedup;
+ 		btf__get_map_kv_tids;
+ 		btf__get_nr_types;
+@@ -172,7 +170,6 @@ LIBBPF_0.0.5 {
+ 
+ LIBBPF_0.0.6 {
+ 	global:
+-		bpf_get_link_xdp_info;
+ 		bpf_map__get_pin_path;
+ 		bpf_map__is_pinned;
+ 		bpf_map__set_pin_path;
+@@ -231,7 +228,6 @@ LIBBPF_0.0.8 {
+ 		bpf_program__is_lsm;
+ 		bpf_program__set_attach_target;
+ 		bpf_program__set_lsm;
+-		bpf_set_link_xdp_fd_opts;
+ } LIBBPF_0.0.7;
+ 
+ LIBBPF_0.0.9 {
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index cbc8967d5402..6c013168032d 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -27,6 +27,14 @@ typedef int (*libbpf_dump_nlmsg_t)(void *cookie, void *msg, struct nlattr **tb);
+ typedef int (*__dump_nlmsg_t)(struct nlmsghdr *nlmsg, libbpf_dump_nlmsg_t,
+ 			      void *cookie);
+ 
++struct xdp_link_info {
++	__u32 prog_id;
++	__u32 drv_prog_id;
++	__u32 hw_prog_id;
++	__u32 skb_prog_id;
++	__u8 attach_mode;
++};
++
+ struct xdp_id_md {
+ 	int ifindex;
+ 	__u32 flags;
+@@ -288,31 +296,6 @@ int bpf_xdp_detach(int ifindex, __u32 flags, const struct bpf_xdp_attach_opts *o
+ 	return bpf_xdp_attach(ifindex, -1, flags, opts);
+ }
+ 
+-int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
+-			     const struct bpf_xdp_set_link_opts *opts)
+-{
+-	int old_fd = -1, ret;
+-
+-	if (!OPTS_VALID(opts, bpf_xdp_set_link_opts))
+-		return libbpf_err(-EINVAL);
+-
+-	if (OPTS_HAS(opts, old_fd)) {
+-		old_fd = OPTS_GET(opts, old_fd, -1);
+-		flags |= XDP_FLAGS_REPLACE;
+-	}
+-
+-	ret = __bpf_set_link_xdp_fd_replace(ifindex, fd, old_fd, flags);
+-	return libbpf_err(ret);
+-}
+-
+-int bpf_set_link_xdp_fd(int ifindex, int fd, __u32 flags)
+-{
+-	int ret;
+-
+-	ret = __bpf_set_link_xdp_fd_replace(ifindex, fd, 0, flags);
+-	return libbpf_err(ret);
+-}
+-
+ static int __dump_link_nlmsg(struct nlmsghdr *nlh,
+ 			     libbpf_dump_nlmsg_t dump_link_nlmsg, void *cookie)
+ {
+@@ -413,30 +396,6 @@ int bpf_xdp_query(int ifindex, int xdp_flags, struct bpf_xdp_query_opts *opts)
+ 	return 0;
+ }
+ 
+-int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
+-			  size_t info_size, __u32 flags)
+-{
+-	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
+-	size_t sz;
+-	int err;
+-
+-	if (!info_size)
+-		return libbpf_err(-EINVAL);
+-
+-	err = bpf_xdp_query(ifindex, flags, &opts);
+-	if (err)
+-		return libbpf_err(err);
+-
+-	/* struct xdp_link_info field layout matches struct bpf_xdp_query_opts
+-	 * layout after sz field
+-	 */
+-	sz = min(info_size, offsetofend(struct xdp_link_info, attach_mode));
+-	memcpy(info, &opts.prog_id, sz);
+-	memset((void *)info + sz, 0, info_size - sz);
+-
+-	return 0;
+-}
+-
+ int bpf_xdp_query_id(int ifindex, int flags, __u32 *prog_id)
+ {
+ 	LIBBPF_OPTS(bpf_xdp_query_opts, opts);
+@@ -463,11 +422,6 @@ int bpf_xdp_query_id(int ifindex, int flags, __u32 *prog_id)
+ }
+ 
+ 
+-int bpf_get_link_xdp_id(int ifindex, __u32 *prog_id, __u32 flags)
+-{
+-	return bpf_xdp_query_id(ifindex, flags, prog_id);
+-}
+-
+ typedef int (*qdisc_config_t)(struct libbpf_nla_req *req);
+ 
+ static int clsact_config(struct libbpf_nla_req *req)
+-- 
+2.30.2
 
-> can tell -- preferably all of which would need to be updated, tests be ad=
-ded,
-> etc. This is entirely orthogonal to what is being added here from my
-> perspective.
->
-> Thanks,
-> Daniel
