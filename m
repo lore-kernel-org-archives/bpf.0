@@ -2,69 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19907C43334
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 17:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BFD9C43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 17:49:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbiF1RqL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 13:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S233452AbiF1RtG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 13:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiF1RqK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:46:10 -0400
-X-Greylist: delayed 1382 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Jun 2022 10:46:10 PDT
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F76260B;
-        Tue, 28 Jun 2022 10:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9fZi2wVpseV5qaJLN8cZxnxeYMl08M5K1Z2WID49zDo=; b=v4FWrxlcBnWQ6N/88GLnrGBy7o
-        tKSMy1wSolOLXEeAlE6mtFmhU+uBhrQoOQFkstc7W0HnfL4giQhmOp6ashAMtoP+3cNgr9+B+5S6H
-        xBQ2ir1IkhQZIY1oLL77pocaVYstTjvr7qbgXIv7vKrNd6ldKwX69fl1LtU484zB/wa7/brRjYv8S
-        lQTreRU21Al1j0tMJpquq73DtUdkScha8HvIFQag4yrXiOCrvo3G0gkD5RZErjIS8wdRBVBQ8FFQj
-        57Z8MyoUShjtQZGLoLhK35+SvJWgf1Efcqh/YZqUeHX1r5Ldz+gK+LSYH+I36Z2XCN4FsFDhOuU2+
-        e92sqrCw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o6EvZ-005gwn-Aj;
-        Tue, 28 Jun 2022 17:23:05 +0000
-Date:   Tue, 28 Jun 2022 18:23:05 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        with ESMTP id S233362AbiF1Rsr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 13:48:47 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F3D64D3
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:48:32 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id p13so8689828ilq.0
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=csp-edu.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3LBlOsHDDvMdp4y73P1jZxUXSiowmAwvg2Xs0aTbdiQ=;
+        b=WNWZQLxtnV+XDSNndK3uTuvHqQcoFqbdsbXNLG3WG/5u7zQsy836LJBWNMrB6jkmtP
+         2nUd/0YOGpoFgmxeHRthpfuaLm7Il7xiS+GtRH6Dh0N/MgVRiegDY9Lv/TM2RTA389XR
+         VZtT2RpsfggYMFOAjrXxL75Y5AW/5diMbm6NLevXIGyaoBvpjo6TPEY4XSZAom6Ol2zG
+         6aX5ZuBR48nkQpgXM1b9bT59GhBr3jwzWphxSDZOrpCk7uHoFE5fQv9gxrCbK9pBa4xY
+         GPzEykKXAQ06WWCf2vvn0tIJLHQr2eEtwWa+z/2zMt0mHZEPgzj5T36n2CjnJ7L8DpT7
+         P1lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3LBlOsHDDvMdp4y73P1jZxUXSiowmAwvg2Xs0aTbdiQ=;
+        b=AjwnnBC42Dc6enVHc+0Wxw1IKQokq+EZvydjpruRU+3y6oDWeDxvw0ek4Q2dHXIJvF
+         zwUlHQZ4CeezTb3bkJJtQ1tR/T7R7RMV8rNKI2NnNrUjzbGh3wPCduSfqIHjgFUEkEzl
+         aL8QdY1F4cYDwuzB3onNwtfOXM4eFXOjWuc/QsXQbxu1IFt1mX1TzKOt1U9dAdL7TqcU
+         K7CqC1UF2oASLcgWzMk9uv1mc019dhnUsF0xUinKlDtFBA8y6/yZQYHUMK5aVZWacg2y
+         tdkWfy2xI1iNr7GfYle22JygchRnSKeQNYpnTBhUWJK3HLVIS8SPsbhHXnTbtfMlDO4E
+         zqhw==
+X-Gm-Message-State: AJIora/m+B+YPUsFlvduhffkwNomSMGb5dS33DHNPGAR5x/c9Dv5v/bB
+        z2lqiTN1ukfDJr6rjBOEts8icQ==
+X-Google-Smtp-Source: AGRyM1sgcFYWfJ9UEVGyZgKpCri6wKICjkhE65hbuPqiGbd6RUWnd42zOoe4rRwk3R043c4MnVYl/g==
+X-Received: by 2002:a92:d94f:0:b0:2d9:3ebe:7252 with SMTP id l15-20020a92d94f000000b002d93ebe7252mr10884416ilq.279.1656438511968;
+        Tue, 28 Jun 2022 10:48:31 -0700 (PDT)
+Received: from kernel-dev-1 (75-168-90-187.mpls.qwest.net. [75.168.90.187])
+        by smtp.gmail.com with ESMTPSA id p3-20020a92da43000000b002daa3e1fe85sm1703442ilq.58.2022.06.28.10.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 10:48:31 -0700 (PDT)
+From:   Coleman Dietsch <dietschc@csp.edu>
+To:     linux-kselftest@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH v5 bpf-next 4/5] bpf: Add a bpf_getxattr kfunc
-Message-ID: <Yrs4+ThR4ACb5eD/@ZenIV>
-References: <20220628161948.475097-1-kpsingh@kernel.org>
- <20220628161948.475097-5-kpsingh@kernel.org>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Coleman Dietsch <dietschc@csp.edu>
+Subject: [PATCH] selftests net: fix kselftest net fatal error
+Date:   Tue, 28 Jun 2022 12:47:44 -0500
+Message-Id: <20220628174744.7908-1-dietschc@csp.edu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220628161948.475097-5-kpsingh@kernel.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 04:19:47PM +0000, KP Singh wrote:
-> LSMs like SELinux store security state in xattrs. bpf_getxattr enables
-> BPF LSM to implement similar functionality. In combination with
-> bpf_local_storage, xattrs can be used to develop more complex security
-> policies.
-> 
-> This kfunc wraps around __vfs_getxattr which can sleep and is,
-> therefore, limited to sleepable programs using the newly added
-> sleepable_set for kfuncs.
+The incorrect path is causing the following error when trying to run net
+kselftests:
 
-"Sleepable" is nowhere near enough - for a trivial example, consider
-what e.g. ext2_xattr_get() does.
-        down_read(&EXT2_I(inode)->xattr_sem);
-in there means that having that thing executed in anything that happens
-to hold ->xattr_sem is a deadlock fodder.
+In file included from bpf/nat6to4.c:43:
+../../../lib/bpf/bpf_helpers.h:11:10: fatal error: 'bpf_helper_defs.h' file not found
+         ^~~~~~~~~~~~~~~~~~~
+1 error generated.
 
-"Can't use that in BPF program executed in non-blocking context" is
-*not* sufficient to make it safe.
+Signed-off-by: Coleman Dietsch <dietschc@csp.edu>
+---
+ tools/testing/selftests/net/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+index 8a69c91fcca0..8ccaf8732eb2 100644
+--- a/tools/testing/selftests/net/bpf/Makefile
++++ b/tools/testing/selftests/net/bpf/Makefile
+@@ -2,7 +2,7 @@
+ 
+ CLANG ?= clang
+ CCINCLUDE += -I../../bpf
+-CCINCLUDE += -I../../../lib
++CCINCLUDE += -I../../../../lib
+ CCINCLUDE += -I../../../../../usr/include/
+ 
+ TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
+-- 
+2.34.1
+
