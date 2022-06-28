@@ -2,77 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5F35C43334
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:55:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7BB1C43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:59:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiF1QzO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S229945AbiF1Q7B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 12:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiF1Qyf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:54:35 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2262B268;
-        Tue, 28 Jun 2022 09:52:40 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id q11so17938546oih.10;
-        Tue, 28 Jun 2022 09:52:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E648dBFHTDJv9vUh9mhheRk7gXIcU15BjfaY5SWNU/4=;
-        b=gSOVjOcaZjALmK5EbfhepRESzg4GXINUrjHEeizQpL7tEMR01Fpqo/0q9LiBDhPxjX
-         7FoTvZhsbl8QY9p66GREDRk1O92ugUyTjYH+QjUSX3EpIIG9322ru9vWy8ZgkCw0vfAE
-         Cy2gLMtYI3WUUBD64a6VsoRSPjMke93xJt0GqfZQjAG+ZYK8eAilDLZHaB9pmrMRNuU0
-         Kp0zRpUJxraFtu0xJMnHHGD3q4ZFLWTGV0ENtljaPzrZAJRvmWZ5nZiOiyDvHxabd4kX
-         Whsi7Z1bUSvinvIhyTN4mQ0Qhbd9bgMvL5Em4piMmIsX6BsqCQ5Qp8tkMtqQ32frgKtG
-         /XBQ==
-X-Gm-Message-State: AJIora9iM6tLltSP80PZLveZ4OwdsovipQY1RTXzxjnmmdOkw4grTvZD
-        AUcfnCodqQKbbuVF40rhZ1eW6HWtVDMad2ZLq7M=
-X-Google-Smtp-Source: AGRyM1sbCijzlGmpKPdegGoOMfsLP5Ed4vha/ePGdTsixV1iBn+35ReKPUl0TQoX1sPRdZ7ta5gDOyitlr+H1Ui4kzg=
-X-Received: by 2002:aca:bb56:0:b0:32f:2160:bfd8 with SMTP id
- l83-20020acabb56000000b0032f2160bfd8mr402430oif.92.1656435159732; Tue, 28 Jun
- 2022 09:52:39 -0700 (PDT)
+        with ESMTP id S231834AbiF1Q5N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 12:57:13 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78E31EAE0
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:56:51 -0700 (PDT)
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o6EW8-0007gm-Ez; Tue, 28 Jun 2022 18:56:48 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1o6EW8-0000vS-1e; Tue, 28 Jun 2022 18:56:48 +0200
+Subject: Re: [PATCH bpf] bpf, docs: Better scale maintenance of BPF subsystem
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Mykola Lysenko <mykolal@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Quentin Monnet <quentin@isovalent.com>
+References: <5bdc73e7f5a087299589944fa074563cdf2c2c1a.1656353995.git.daniel@iogearbox.net>
+ <20220627122535.6020f23e@kicinski-fedora-PC1C0HJN>
+ <CAADnVQLOS4kvmcp+aaX6gtDUCUfoL906K+Y4KUZOsYBDso_xMw@mail.gmail.com>
+ <20220627133027.1e141f11@kernel.org>
+ <CAADnVQKf8huK_bdGPQzOZwXJD7aqr-2a3jFPfhYrEz8BD115qw@mail.gmail.com>
+ <ac8da400-f403-7817-414d-d3001c82dc4c@iogearbox.net>
+ <20220628164643.2gdyifct4x2zbbsb@MacBook-Pro-3.local>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <50da58e3-e056-2d24-765b-818fed09e216@iogearbox.net>
+Date:   Tue, 28 Jun 2022 18:56:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20220624231313.367909-1-namhyung@kernel.org> <20220624231313.367909-2-namhyung@kernel.org>
- <YrsT3iw+FEXb6kxF@kernel.org>
-In-Reply-To: <YrsT3iw+FEXb6kxF@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 28 Jun 2022 09:52:28 -0700
-Message-ID: <CAM9d7ciPK4Z05LYNNukAsTdEMEce4hOWRa83THbENDuWjXcyEQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] perf offcpu: Fix a build failure on old kernels
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
-        bpf <bpf@vger.kernel.org>, Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20220628164643.2gdyifct4x2zbbsb@MacBook-Pro-3.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26587/Tue Jun 28 10:07:12 2022)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 7:44 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Jun 24, 2022 at 04:13:08PM -0700, Namhyung Kim escreveu:
-> > Old kernels have task_struct which contains "state" field and newer
-> > kernels have "__state".  While the get_task_state() in the BPF code
-> > handles that in some way, it assumed the current kernel has the new
-> > definition and it caused a build error on old kernels.
-> >
-> > We should not assume anything and access them carefully.  Do not use
-> > the task struct directly and access them using new and old definitions
-> > in a row.
->
-> I added a:
->
-> Fixes: edc41a1099c2d08c ("perf record: Enable off-cpu analysis with BPF")
->
-> Ok?
+On 6/28/22 6:46 PM, Alexei Starovoitov wrote:
+> On Tue, Jun 28, 2022 at 10:59:02AM +0200, Daniel Borkmann wrote:
+>> On 6/27/22 10:38 PM, Alexei Starovoitov wrote:
+>>> On Mon, Jun 27, 2022 at 1:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
+[...]
+>> +BPF [MISC]
+>> +L:     bpf@vger.kernel.org
+>> +S:     Odd Fixes
+>> +K:     (?:\b|_)bpf(?:\b|_)
+>> +
+> 
+> Good idea!
+> 
+>>   BROADCOM B44 10/100 ETHERNET DRIVER
+>>   M:     Michael Chan <michael.chan@broadcom.com>
+>>   L:     netdev@vger.kernel.org
+>>
+>> If there are no objections, I can fold this in..
+> 
+> sgtm
 
-Sure, thanks for doing this!
-Namhyung
+Ok, done now & pushed out.
+
+Thanks,
+Daniel
