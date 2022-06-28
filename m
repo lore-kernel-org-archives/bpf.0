@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12A8FCCA479
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88966CCA47F
 	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:53:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiF1Txa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S232953AbiF1Txb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232141AbiF1Tu6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:50:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4952C11D;
-        Tue, 28 Jun 2022 12:49:53 -0700 (PDT)
+        with ESMTP id S232693AbiF1TvO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 15:51:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53942E9FA;
+        Tue, 28 Jun 2022 12:50:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445793; x=1687981793;
+  t=1656445804; x=1687981804;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7sizNGB2psf+Qq79FGgS+INcdvERhbHoOrovj1ZDfPY=;
-  b=M/JQpYwzZJwJYLF9Tj5DbVX/0AwPNHPJB73ZyBrBDIdwyHCe49XBwpR5
-   NgPfT55GO0dHoPYWA8eIO1XipcSEop4RGgEbj90jSUDC/j8AtQye8Kz3a
-   yRRIJ2lX096Zwl9nkc/d1dI12k8xMX9U2NrQXg7CaAVKQPQ4OpVTactsB
-   ECbtAaZa90vepE9sn+IYWrliZrLyBN57h39Mg5Mf0xZmSxInI6ySCFi+P
-   DjRE2AsqqU26JByo0Mseb8piFLX0OEiZ8QMN5eIskMR1KfNPjoHWShBTg
-   +YGPx9FztLnCnYbwpD05jmNx6IVx7oGj+oeiyDGWnwu6lyF8z9Mx3wpql
+  bh=kf6pyiBAKh8PfjaMPwYDzTHelnIuBG2itheZfTrrJ9k=;
+  b=Bt1WTvpGUKeNpAUYxZtPcTdoDmTu0ZXBBNQm4Qv4aefbgkaUFRUWOvJP
+   YSeO50iCTD1kZWrGLBErJWhYczVJG+r8InAvlH7fa2i1e40h6kuAtWJu2
+   Ws/8TrYicsY6nviLg5Ipcc0GkQ7rh+yUbgIIfiPS35kXD6fAAi9fqdTjr
+   i4ysNmBsUR2XMCBCibj/Nl+ghdmFuaWe30NZ0NGpbK/uvtbneDpFUGhgb
+   nsslFJ3GIJejEMpQLJmCM5H3EObtL7AQ259xS1CAHN2vlYDh3Wv+21B3j
+   MlDqFWowV+7R9erB/lIrD5y3Djh1t2ZkDc95oCTATlHaxw3STif9dnFfE
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262242993"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343523405"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="262242993"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:53 -0700
+   d="scan'208";a="343523405"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:50:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="836809532"
+   d="scan'208";a="623054245"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2022 12:49:49 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2022 12:49:59 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9e022013;
-        Tue, 28 Jun 2022 20:49:47 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9m022013;
+        Tue, 28 Jun 2022 20:49:57 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 40/52] net, xdp: add an RCU version of xdp_attachment_setup()
-Date:   Tue, 28 Jun 2022 21:48:00 +0200
-Message-Id: <20220628194812.1453059-41-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 48/52] libbpf: compress Endianness ops with a macro
+Date:   Tue, 28 Jun 2022 21:48:08 +0200
+Message-Id: <20220628194812.1453059-49-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,99 +76,54 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, xdp_attachment_setup() uses plain assignments and puts
-the previous BPF program before updating the pointer, rendering
-itself dangerous for program hot-swaps due to pointer tearing and
-potential use-after-free's.
-At the same time, &xdp_attachment_info comes handy to use it in
-drivers as a main container including hotpath -- the BTF ID and meta
-threshold values are now being used there as well, not speaking of
-reducing some boilerplate code.
-Add an RCU-protected pointer to XDP program to that structure and an
-RCU version of xdp_attachment_setup(), which will make sure that all
-the values were not corrupted and that old BPF program was freed
-only after the pointer was updated. The only thing left is that RCU
-read critical sections might happen in between each assignment, but
-since the relations between XDP prog, BTF ID and meta threshold are
-not vital, it's totally fine to allow this.
-A caller must ensure it's being executed under the RTNL lock. Reader
-sides must ensure they're being executed under the RCU read lock.
-Once all the current users of xdp_attachment_setup() are switched to
-the RCU-aware version (with appropriate adjustments), the "regular"
-one will be removed.
-Partially inspired by commit fe45386a2082 ("net/mlx5e: Use RCU to
-protect rq->xdp_prog").
+All of the Endianness helpers for BPF programs have the same
+pattern and can be defined using a compression macro, which
+will also protect against typos and copy-paste mistakes.
+Not speaking of saving locs, of course.
+Ahh, if we only could define macros inside other macros.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/net/xdp.h |  7 ++++++-
- net/bpf/core.c    | 28 ++++++++++++++++++++++++++++
- 2 files changed, 34 insertions(+), 1 deletion(-)
+ tools/lib/bpf/bpf_endian.h | 26 +++++++++-----------------
+ 1 file changed, 9 insertions(+), 17 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 5762ce18885f..49e562e4fcca 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -379,7 +379,10 @@ int xdp_reg_mem_model(struct xdp_mem_info *mem,
- void xdp_unreg_mem_model(struct xdp_mem_info *mem);
+diff --git a/tools/lib/bpf/bpf_endian.h b/tools/lib/bpf/bpf_endian.h
+index ec9db4feca9f..b03db6aa3f14 100644
+--- a/tools/lib/bpf/bpf_endian.h
++++ b/tools/lib/bpf/bpf_endian.h
+@@ -77,23 +77,15 @@
+ # error "Fix your compiler's __BYTE_ORDER__?!"
+ #endif
  
- struct xdp_attachment_info {
--	struct bpf_prog *prog;
-+	union {
-+		struct bpf_prog __rcu *prog_rcu;
-+		struct bpf_prog *prog;
-+	};
- 	union {
- 		__le64 btf_id_le;
- 		u64 btf_id;
-@@ -391,6 +394,8 @@ struct xdp_attachment_info {
- struct netdev_bpf;
- void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			  struct netdev_bpf *bpf);
-+void xdp_attachment_setup_rcu(struct xdp_attachment_info *info,
-+			      struct netdev_bpf *bpf);
+-#define bpf_htons(x)				\
++#define __bpf_endop(op, x)			\
+ 	(__builtin_constant_p(x) ?		\
+-	 __bpf_constant_htons(x) : __bpf_htons(x))
+-#define bpf_ntohs(x)				\
+-	(__builtin_constant_p(x) ?		\
+-	 __bpf_constant_ntohs(x) : __bpf_ntohs(x))
+-#define bpf_htonl(x)				\
+-	(__builtin_constant_p(x) ?		\
+-	 __bpf_constant_htonl(x) : __bpf_htonl(x))
+-#define bpf_ntohl(x)				\
+-	(__builtin_constant_p(x) ?		\
+-	 __bpf_constant_ntohl(x) : __bpf_ntohl(x))
+-#define bpf_cpu_to_be64(x)			\
+-	(__builtin_constant_p(x) ?		\
+-	 __bpf_constant_cpu_to_be64(x) : __bpf_cpu_to_be64(x))
+-#define bpf_be64_to_cpu(x)			\
+-	(__builtin_constant_p(x) ?		\
+-	 __bpf_constant_be64_to_cpu(x) : __bpf_be64_to_cpu(x))
++	 __bpf_constant_##op(x) : __bpf_##op(x))
++
++#define bpf_htons(x)			__bpf_endop(htons, x)
++#define bpf_ntohs(x)			__bpf_endop(ntohs, x)
++#define bpf_htonl(x)			__bpf_endop(htonl, x)
++#define bpf_ntohl(x)			__bpf_endop(ntohl, x)
++#define bpf_cpu_to_be64(x)		__bpf_endop(cpu_to_be64, x)
++#define bpf_be64_to_cpu(x)		__bpf_endop(be64_to_cpu, x)
  
- #define DEV_MAP_BULK_SIZE XDP_BULK_QUEUE_SIZE
- 
-diff --git a/net/bpf/core.c b/net/bpf/core.c
-index 65f25019493d..d444d0555057 100644
---- a/net/bpf/core.c
-+++ b/net/bpf/core.c
-@@ -557,6 +557,34 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
- }
- EXPORT_SYMBOL_GPL(xdp_attachment_setup);
- 
-+/**
-+ * xdp_attachment_setup_rcu - an RCU-powered version of xdp_attachment_setup()
-+ * @info: pointer to the target container
-+ * @bpf: pointer to the container passed to ::ndo_bpf()
-+ *
-+ * Protects sensitive values with RCU to allow program how-swaps without
-+ * stopping an interface. Write side (this) must be called under the RTNL lock
-+ * and reader sides must fetch any data only under the RCU read lock -- old BPF
-+ * program will be freed only after a critical section is finished (see
-+ * bpf_prog_put()).
-+ */
-+void xdp_attachment_setup_rcu(struct xdp_attachment_info *info,
-+			      struct netdev_bpf *bpf)
-+{
-+	struct bpf_prog *old_prog;
-+
-+	ASSERT_RTNL();
-+
-+	old_prog = rcu_replace_pointer(info->prog_rcu, bpf->prog,
-+				       lockdep_rtnl_is_held());
-+	WRITE_ONCE(info->btf_id, bpf->btf_id);
-+	WRITE_ONCE(info->meta_thresh, bpf->meta_thresh);
-+
-+	if (old_prog)
-+		bpf_prog_put(old_prog);
-+}
-+EXPORT_SYMBOL_GPL(xdp_attachment_setup_rcu);
-+
- struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp)
- {
- 	unsigned int metasize, totsize;
+ #endif /* __BPF_ENDIAN__ */
 -- 
 2.36.1
 
