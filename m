@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 722D7C433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0D1BCCA479
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:53:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbiF1Tvp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S231713AbiF1TwS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:50:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AC83A724;
-        Tue, 28 Jun 2022 12:49:24 -0700 (PDT)
+        with ESMTP id S231273AbiF1Tuy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 15:50:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17655223;
+        Tue, 28 Jun 2022 12:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445764; x=1687981764;
+  t=1656445774; x=1687981774;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yNkO5OonyawD491tq3UN3yp8qYpkGlKlrdxkHHQ0Dbc=;
-  b=gOkPh3YBO8qpcjeMa36Vs3wKtaPejFFtZKnlnhuLA6JniZkhhzZclpAk
-   3O7TXYUMxm2WrLoLE9U4nfkmOpFrbt2G6jOxDEtuvX+UaOlVyUFi9a0ir
-   ZhJe3VGsA7CalHtM8AiW0im1gmz60/Nu6DYFG80XGjNpfyruri+UYQgJS
-   r7MyTx4ID8ZQRXmkv6lJ1R6Fk4rWX+7iPv3/3t/UulB/wsTlqsEMLgtwT
-   fDkZMzJC3mcfyTDpi/HJ3euu9p9GCS3LM7TIpL2+Tq6yO5z5jalRwKFRM
-   uMWyJb9OtCd+jK/rbhdgIsriaI76yudOV9bm2dP1qAuPrOPY1Ti70UMBo
+  bh=NHfK9H6RSRv2T0ejOH0djO6jg9We4wQHQ8pCfIZVGsQ=;
+  b=lQQybeuzYeIdKVoitwuoX+OTzSkc8kyMsRZP1B2C7LF/Fxu3af3JsQyh
+   OvQd+CsmdxTB2ALPlHvUFG94OrpzcylhHrlHWIGJC6aGs5ZrfEBeeYuAj
+   OaPy+wfuWlX8lpru+GK0UalDJIdP16idEIJjuR1oGLzFe9NBslEAmqEQU
+   e5Cj7s07tySYz9QKwl4A5TcgsImQVL+9+G4I5J1o05z0Rg/QGiIDcndBR
+   HWD/Va2Ia9sAxoGcDQCS7+t705EPJnbXTYJvaLr6QxZunr8HGSLqwqq5i
+   YIIyCvM+V21WdLT44TRB+t9C9aAjNy1HSMfdDUP9aj8f/DQX5YCgH309h
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262242844"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343523285"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="262242844"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:17 -0700
+   d="scan'208";a="343523285"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="917306820"
+   d="scan'208";a="565181272"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2022 12:49:13 -0700
+  by orsmga006.jf.intel.com with ESMTP; 28 Jun 2022 12:49:29 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9D022013;
-        Tue, 28 Jun 2022 20:49:11 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9P022013;
+        Tue, 28 Jun 2022 20:49:27 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 13/52] libbpf: add ability to set the meta threshold on setting XDP prog
-Date:   Tue, 28 Jun 2022 21:47:33 +0200
-Message-Id: <20220628194812.1453059-14-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 25/52] net, xdp: add basic generic metadata accessors
+Date:   Tue, 28 Jun 2022 21:47:45 +0200
+Message-Id: <20220628194812.1453059-26-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,131 +76,275 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Covered functions:
- * bpf_link_create() - via &bpf_link_create_ops;
- * bpf_link_update() - via &bpf_link_update_ops;
- * bpf_xdp_attach() - via &bpf_xdp_attach_ops;
- * bpf_set_link_xdp_fd_opts() - via &bpf_xdp_set_link_opts;
-
-No support for bpf_get_link_xdp_info()/&xdp_link_info as we store
-additional data in the kernel in BPF link mode only.
+As all of the fields in the generic XDP metadata structure have
+explicit Endianness, it's worth to provide some basic helpers.
+Add get and set accessors for each field and get, set and rep
+accessors for each bitfield of ::{rx,tx}_flags. rep are for the
+cases when it's unknown whether a flags field is clear, so they
+effectively replace the value in a bitfield instead of just ORing.
+Also add a couple of helpers: to get a pointer to the generic
+metadata structure and check whether a given metadata is generic
+compatible.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- tools/lib/bpf/bpf.c     |  3 +++
- tools/lib/bpf/bpf.h     |  8 +++++++-
- tools/lib/bpf/libbpf.h  |  4 ++--
- tools/lib/bpf/netlink.c | 10 ++++++++++
- 4 files changed, 22 insertions(+), 3 deletions(-)
+ include/net/xdp_meta.h | 238 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 238 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 6036dc75cc7b..e7c713a418f6 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -807,6 +807,9 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		break;
- 	case BPF_XDP:
- 		attr.link_create.xdp.btf_id = OPTS_GET(opts, xdp.btf_id, 0);
-+		attr.link_create.xdp.meta_thresh = OPTS_GET(opts,
-+							    xdp.meta_thresh,
-+							    0);
- 		if (!OPTS_ZEROED(opts, xdp))
- 			return libbpf_err(-EINVAL);
- 		break;
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 4e17995fdaff..c0f54f24d675 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -385,6 +385,8 @@ struct bpf_link_create_opts {
- 		struct {
- 			/* target metadata BTF + type ID */
- 			__aligned_u64 btf_id;
-+			/* frame size to start composing XDP metadata from */
-+			__u32 meta_thresh;
- 		} xdp;
- 	};
- 	size_t :0;
-@@ -408,11 +410,15 @@ struct bpf_link_update_opts {
- 		struct {
- 			/* new target metadata BTF + type ID */
- 			__aligned_u64 new_btf_id;
-+			/* new frame size to start composing XDP
-+			 * metadata from
-+			 */
-+			__u32 new_meta_thresh;
- 		} xdp;
- 	};
- 	size_t :0;
- };
--#define bpf_link_update_opts__last_field xdp.new_btf_id
-+#define bpf_link_update_opts__last_field xdp.new_meta_thresh
+diff --git a/include/net/xdp_meta.h b/include/net/xdp_meta.h
+index 3a40189d71c6..f61831e39eb0 100644
+--- a/include/net/xdp_meta.h
++++ b/include/net/xdp_meta.h
+@@ -4,6 +4,7 @@
+ #ifndef __LINUX_NET_XDP_META_H__
+ #define __LINUX_NET_XDP_META_H__
  
- LIBBPF_API int bpf_link_update(int link_fd, int new_prog_fd,
- 			       const struct bpf_link_update_opts *opts);
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 4f77128ba770..99ac94f148fc 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1193,7 +1193,7 @@ struct xdp_link_info {
- struct bpf_xdp_set_link_opts {
- 	size_t sz;
- 	int old_fd;
--	__u32 :32;
-+	__u32 meta_thresh;
- 	__u64 btf_id;
- 	size_t :0;
- };
-@@ -1213,7 +1213,7 @@ LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
- struct bpf_xdp_attach_opts {
- 	size_t sz;
- 	int old_prog_fd;
--	__u32 :32;
-+	__u32 meta_thresh;
- 	__u64 btf_id;
- 	size_t :0;
- };
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index 104a809d5fb2..ac2a87243ecd 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -236,6 +236,7 @@ struct __bpf_set_link_xdp_fd_opts {
- 	int old_fd;
- 	__u32 flags;
- 	__u64 btf_id;
-+	__u32 meta_thresh;
- };
++#include <linux/bitfield.h>
+ #include <net/xdp.h>
+ #include <uapi/linux/bpf.h>
  
- static int
-@@ -276,6 +277,13 @@ __bpf_set_link_xdp_fd_replace(const struct __bpf_set_link_xdp_fd_opts *opts)
- 		if (ret < 0)
- 			return ret;
- 	}
-+	if (opts->meta_thresh) {
-+		ret = nlattr_add(&req, IFLA_XDP_META_THRESH,
-+				 &opts->meta_thresh,
-+				 sizeof(opts->meta_thresh));
-+		if (ret < 0)
-+			return ret;
-+	}
- 	nlattr_end_nested(&req, nla);
+@@ -45,4 +46,241 @@ static inline bool xdp_metalen_invalid(unsigned long metalen)
+ 	return (metalen & (sizeof(u32) - 1)) || metalen > max;
+ }
  
- 	return libbpf_netlink_send_recv(&req, NULL, NULL, NULL);
-@@ -300,6 +308,7 @@ int bpf_xdp_attach(int ifindex, int prog_fd, __u32 flags, const struct bpf_xdp_a
- 		sl_opts.old_fd = -1;
- 
- 	sl_opts.btf_id = OPTS_GET(opts, btf_id, 0);
-+	sl_opts.meta_thresh = OPTS_GET(opts, meta_thresh, 0);
- 
- 	err = __bpf_set_link_xdp_fd_replace(&sl_opts);
- 	return libbpf_err(err);
-@@ -330,6 +339,7 @@ int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
- 	}
- 
- 	sl_opts.btf_id = OPTS_GET(opts, btf_id, 0);
-+	sl_opts.meta_thresh = OPTS_GET(opts, meta_thresh, 0);
- 
- 	ret = __bpf_set_link_xdp_fd_replace(&sl_opts);
- 	return libbpf_err(ret);
++/* This builds _get(), _set() and _rep() for each bitfield.
++ * If you know for sure the field is empty (e.g. you zeroed the struct
++ * previously), use faster _set() op to save several cycles, otherwise
++ * use _rep() to avoid mixing values.
++ */
++#define XDP_META_BUILD_FLAGS_ACC(dir, pfx, FLD)				     \
++static inline u32							     \
++xdp_meta_##dir##_##pfx##_get(const struct xdp_meta_generic *md)		     \
++{									     \
++	static_assert(__same_type(md->dir##_flags, __le32));		     \
++									     \
++	return le32_get_bits(md->dir##_flags, XDP_META_##FLD);		     \
++}									     \
++									     \
++static inline void							     \
++xdp_meta_##dir##_##pfx##_set(struct xdp_meta_generic *md, u32 val)	     \
++{									     \
++	md->dir##_flags |= le32_encode_bits(val, XDP_META_##FLD);	     \
++}									     \
++									     \
++static inline void							     \
++xdp_meta_##dir##_##pfx##_rep(struct xdp_meta_generic *md, u32 val)	     \
++{									     \
++	le32p_replace_bits(&md->dir##_flags, val, XDP_META_##FLD);	     \
++}									     \
++
++/* This builds _get() and _set() for each structure field -- those are just
++ * byteswap operations however.
++ * The second static assertion is due to that all of the fields in the
++ * structure should be naturally-aligned when ::magic_id starts at
++ * `XDP_PACKET_HEADROOM + 8n`, which is the default and recommended case.
++ * This check makes no sense for the efficient unaligned access platforms,
++ * but helps the rest.
++ */
++#define XDP_META_BUILD_ACC(dir, pfx, sz)				     \
++static inline u##sz							     \
++xdp_meta_##dir##_##pfx##_get(const struct xdp_meta_generic *md)		     \
++{									     \
++	static_assert(__same_type(md->dir##_##pfx, __le##sz));		     \
++									     \
++	return le##sz##_to_cpu(md->dir##_##pfx);			     \
++}									     \
++									     \
++static inline void							     \
++xdp_meta_##dir##_##pfx##_set(struct xdp_meta_generic *md, u##sz val)	     \
++{									     \
++	static_assert((XDP_PACKET_HEADROOM - sizeof(*md) +		     \
++		       sizeof_field(typeof(*md), magic_id) +		     \
++		       offsetof(typeof(*md), dir##_##pfx)) %		     \
++		      sizeof_field(typeof(*md), dir##_##pfx) == 0);	     \
++									     \
++	md->dir##_##pfx = cpu_to_le##sz(val);				     \
++}
++
++#if 0 /* For grepping/indexers */
++u16 xdp_meta_tx_csum_action_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_csum_action_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_tx_csum_action_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_tx_vlan_type_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_vlan_type_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_tx_vlan_type_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_tx_tstamp_action_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_tstamp_action_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_tx_tstamp_action_rep(struct xdp_meta_generic *md, u16 val);
++#endif
++XDP_META_BUILD_FLAGS_ACC(tx, csum_action, TX_CSUM_ACT);
++XDP_META_BUILD_FLAGS_ACC(tx, vlan_type, TX_VLAN_TYPE);
++XDP_META_BUILD_FLAGS_ACC(tx, tstamp_action, TX_TSTAMP_ACT);
++
++#if 0
++u16 xdp_meta_tx_csum_start_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_csum_start_set(struct xdp_meta_generic *md, u64 val);
++u16 xdp_meta_tx_csum_off_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_csum_off_set(struct xdp_meta_generic *md, u64 val);
++u16 xdp_meta_tx_vid_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_vid_set(struct xdp_meta_generic *md, u64 val);
++u32 xdp_meta_tx_flags_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_flags_set(struct xdp_meta_generic *md, u32 val);
++u64 xdp_meta_tx_tstamp_get(const struct xdp_meta_generic *md);
++void xdp_meta_tx_tstamp_set(struct xdp_meta_generic *md, u64 val);
++#endif
++XDP_META_BUILD_ACC(tx, csum_start, 16);
++XDP_META_BUILD_ACC(tx, csum_off, 16);
++XDP_META_BUILD_ACC(tx, vid, 16);
++XDP_META_BUILD_ACC(tx, flags, 32);
++XDP_META_BUILD_ACC(tx, tstamp, 64);
++
++#if 0
++u16 xdp_meta_rx_csum_status_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_csum_status_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_rx_csum_status_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_rx_csum_level_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_csum_level_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_rx_csum_level_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_rx_hash_type_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_hash_type_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_rx_hash_type_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_rx_vlan_type_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_vlan_type_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_rx_vlan_type_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_rx_tstamp_present_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_tstamp_present_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_rx_tstamp_present_rep(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_rx_qid_present_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_qid_present_set(struct xdp_meta_generic *md, u16 val);
++void xdp_meta_rx_qid_present_rep(struct xdp_meta_generic *md, u16 val);
++#endif
++XDP_META_BUILD_FLAGS_ACC(rx, csum_status, RX_CSUM_STATUS);
++XDP_META_BUILD_FLAGS_ACC(rx, csum_level, RX_CSUM_LEVEL);
++XDP_META_BUILD_FLAGS_ACC(rx, hash_type, RX_HASH_TYPE);
++XDP_META_BUILD_FLAGS_ACC(rx, vlan_type, RX_VLAN_TYPE);
++XDP_META_BUILD_FLAGS_ACC(rx, tstamp_present, RX_TSTAMP_PRESENT);
++XDP_META_BUILD_FLAGS_ACC(rx, qid_present, RX_QID_PRESENT);
++
++#if 0
++u64 xdp_meta_rx_tstamp_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_tstamp_set(struct xdp_meta_generic *md, u64 val);
++u32 xdp_meta_rx_hash_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_hash_set(struct xdp_meta_generic *md, u32 val);
++u32 xdp_meta_rx_csum_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_csum_set(struct xdp_meta_generic *md, u32 val);
++u16 xdp_meta_rx_vid_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_vid_set(struct xdp_meta_generic *md, u16 val);
++u16 xdp_meta_rx_qid_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_qid_set(struct xdp_meta_generic *md, u16 val);
++u32 xdp_meta_rx_flags_get(const struct xdp_meta_generic *md);
++void xdp_meta_rx_flags_set(struct xdp_meta_generic *md, u32 val);
++#endif
++XDP_META_BUILD_ACC(rx, tstamp, 64);
++XDP_META_BUILD_ACC(rx, hash, 32);
++XDP_META_BUILD_ACC(rx, csum, 32);
++XDP_META_BUILD_ACC(rx, vid, 16);
++XDP_META_BUILD_ACC(rx, qid, 16);
++XDP_META_BUILD_ACC(rx, flags, 32);
++
++#if 0
++u32 xdp_meta_btf_id_get(const struct xdp_meta_generic *md);
++void xdp_meta_btf_id_set(struct xdp_meta_generic *md, u32 val);
++u32 xdp_meta_type_id_get(const struct xdp_meta_generic *md);
++void xdp_meta_type_id_set(struct xdp_meta_generic *md, u32 val);
++u64 xdp_meta_full_id_get(const struct xdp_meta_generic *md);
++void xdp_meta_full_id_set(struct xdp_meta_generic *md, u64 val);
++u16 xdp_meta_magic_id_get(const struct xdp_meta_generic *md);
++void xdp_meta_magic_id_set(struct xdp_meta_generic *md, u16 val);
++#endif
++XDP_META_BUILD_ACC(btf, id, 32);
++XDP_META_BUILD_ACC(type, id, 32);
++XDP_META_BUILD_ACC(full, id, 64);
++XDP_META_BUILD_ACC(magic, id, 16);
++
++/* This allows to jump from xdp_metadata_generic::{tx,rx_full,rx,id} to the
++ * parent if needed. For example, declare one of them on stack for convenience
++ * and still pass a generic pointer.
++ * No out-of-bound checks, a caller must sanitize it on its side.
++ */
++#define _to_gen_md(ptr, locptr, locmd) ({				      \
++	struct xdp_meta_generic *locmd;					      \
++	typeof(ptr) locptr = (ptr);					      \
++									      \
++	if (__same_type(*locptr, typeof(locmd->tx)))			      \
++		locmd = (void *)locptr - offsetof(typeof(*locmd), tx);	      \
++	else if (__same_type(*locptr, typeof(locmd->rx_full)))		      \
++		locmd = (void *)locptr - offsetof(typeof(*locmd), rx_full);   \
++	else if (__same_type(*locptr, typeof(locmd->rx)))		      \
++		locmd = (void *)locptr - offsetof(typeof(*locmd), rx);	      \
++	else if (__same_type(*locptr, typeof(locmd->id)))		      \
++		locmd = (void *)locptr - offsetof(typeof(*locmd), id);	      \
++	else if (__same_type(*locptr, typeof(locmd)) ||			      \
++		 __same_type(*locptr, void))				      \
++		locmd = (void *)locptr;					      \
++	else								      \
++		BUILD_BUG();						      \
++									      \
++	locmd;								      \
++})
++#define to_gen_md(ptr)	_to_gen_md((ptr), __UNIQUE_ID(ptr_), __UNIQUE_ID(md_))
++
++/* This allows to pass an xdp_meta_generic pointer instead of an
++ * xdp_meta_generic::rx{,_full} pointer for convenience.
++ */
++#define _to_rx_md(ptr, locptr, locmd) ({				      \
++	struct xdp_meta_generic_rx *locmd;				      \
++	typeof(ptr) locptr = (ptr);					      \
++									      \
++	if (__same_type(*locptr, struct xdp_meta_generic_rx))		      \
++		locmd = (struct xdp_meta_generic_rx *)locptr;		      \
++	else if (__same_type(*locptr, struct xdp_meta_generic) ||	      \
++		 __same_type(*locptr, void))				      \
++		locmd = &((struct xdp_meta_generic *)locptr)->rx_full;	      \
++	else								      \
++		BUILD_BUG();						      \
++									      \
++	locmd;								      \
++})
++#define to_rx_md(ptr)	_to_rx_md((ptr), __UNIQUE_ID(ptr_), __UNIQUE_ID(md_))
++
++/**
++ * xdp_meta_has_generic - get a pointer to the generic metadata before a frame
++ * @data: a pointer to the beginning of the frame
++ *
++ * Note: the function does not perform any access sanity checks, they should
++ * be done manually prior to calling it.
++ *
++ * Returns a pointer to the beginning of the generic metadata.
++ */
++static inline struct xdp_meta_generic *xdp_meta_generic_ptr(const void *data)
++{
++	BUILD_BUG_ON(xdp_metalen_invalid(sizeof(struct xdp_meta_generic)));
++
++	return (void *)data - sizeof(struct xdp_meta_generic);
++}
++
++/**
++ * xdp_meta_has_generic - check whether a frame has a generic meta in front
++ * @data: a pointer to the beginning of the frame
++ *
++ * Returns true if it does, false otherwise.
++ */
++static inline bool xdp_meta_has_generic(const void *data)
++{
++	return xdp_meta_generic_ptr(data)->magic_id ==
++	       cpu_to_le16(XDP_META_GENERIC_MAGIC);
++}
++
++/**
++ * xdp_meta_skb_has_generic - check whether an skb has a generic meta
++ * @skb: a pointer to the &sk_buff
++ *
++ * Note: must be called only when skb_mac_header_was_set(skb) == true.
++ *
++ * Returns true if it does, false otherwise.
++ */
++static inline bool xdp_meta_skb_has_generic(const struct sk_buff *skb)
++{
++	return xdp_meta_has_generic(skb_metadata_end(skb));
++}
++
+ #endif /* __LINUX_NET_XDP_META_H__ */
 -- 
 2.36.1
 
