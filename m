@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07CBEC433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E317CCA47E
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiF1Tu6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S231589AbiF1TvA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiF1Tut (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232173AbiF1Tut (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 28 Jun 2022 15:50:49 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE9F3A704;
-        Tue, 28 Jun 2022 12:49:01 -0700 (PDT)
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC983A707;
+        Tue, 28 Jun 2022 12:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445741; x=1687981741;
+  t=1656445744; x=1687981744;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pQr3fCJrk4WXxCYLImyg32mOo+swJBRtDbJmx5XeYg8=;
-  b=Qb6+wwwKBBVgNEnIllsp5ZfJL5X/aHS/ynQdSeTc2vkfZo0G+ko16ko2
-   FALj+HTaU1bgc1/Aw1AqHUEJ4iWGC9eDKLHKKlrYsTK0Z0lPIIDE6wfZH
-   zuwZ/KS87FATbzBGKBeKP53AgjRILlCltugzzaKp/APDStQNhpXSKGbkC
-   ZXlyc7dvCIy5z2II8MnsLs+1H0uW082avgozwOJGmixmutV1u5SGRUJPq
-   BCgNLCEdqafcN4J6+SyHz0qH8wJ0aK1Xe/6EsOFdqt8N3vz5y0QDwgGp+
-   z6fQevnMjuRZXp07EsFeBfD/zJQQ+X3Ec7XFTCVl2C9KDb+xKrUf/xN49
+  bh=k1Fba8eV9f/mQyTWxsBVzDTB/kS8fIdX5n6chBSOvzk=;
+  b=PeyzOwfvIBUvtl2KqOEYIf4ibqZUcb86+o14U0P7ii9pMyxpzEE6N3bG
+   w3bOQrzdSsdus6YzVvLnM3jOw38A0SKJ1+0KJQ1ZQ7f7yOB0HC0dJaXIR
+   rAr5M+PxKrOpPN7tZhW2/i8uOgSULA4FNwvRiwJfRRw+3xj6iBbWm9qP3
+   KCI+jPfVpcKSS6oMKuxJWuuWFCdjMnYB0c81f5VO1mv8rRjWjy64kTOm6
+   yGOS9PiX4ZP0QvV1rUgZAsRmmG338xksedMi+y7wuEriDG0vSK81wu0IO
+   wyCpawc5qXMLx3VMMv4KK7Gxq21kcwTx7jyWFCb3a6EZNmJ/ce4lk2O+K
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="307319464"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="345828284"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="307319464"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:01 -0700
+   d="scan'208";a="345828284"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:03 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="594927452"
+   d="scan'208";a="680182418"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jun 2022 12:48:56 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Jun 2022 12:48:59 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr91022013;
-        Tue, 28 Jun 2022 20:48:55 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr93022013;
+        Tue, 28 Jun 2022 20:48:57 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 01/52] libbpf: factor out BTF loading from load_module_btfs()
-Date:   Tue, 28 Jun 2022 21:47:21 +0200
-Message-Id: <20220628194812.1453059-2-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 03/52] libbpf: add function to get the pair BTF ID + type ID for a given type
+Date:   Tue, 28 Jun 2022 21:47:23 +0200
+Message-Id: <20220628194812.1453059-4-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,294 +76,175 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Larysa Zaremba <larysa.zaremba@intel.com>
+Add new libbpf API function libbpf_get_type_btf_id() to provide a
+short way to get the pair of BTF ID << 32 | type ID for the provided
+type. The primary purpose is to use it in userspace BPF prog loaders
+to pass those IDs to the kernel to tell what XDP generic metadata to
+create, as well as in AF_XDP programs to be able to compare them
+against the ones from frame metadata.
 
-In order to be able to reuse BTF loading logics, move it to the new
-btf_load_next_with_info() and call it from load_module_btfs()
-instead.
-To still be able to get the ID, introduce the ID field to the
-userspace struct btf and return it via the new btf_obj_id().
-To still be able to use bpf_btf_info::name as a string, locally add
-a counterpart to ptr_to_u64() - u64_to_ptr() and use it to filter
-vmlinux/module BTFs.
-Also, add a definition for easy bpf_btf_info name declaration and
-make btf_get_from_fd() static as it's now used only in btf.c.
-
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- tools/lib/bpf/btf.c             | 110 +++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf.c          |  52 ++++-----------
- tools/lib/bpf/libbpf_internal.h |   7 +-
- 3 files changed, 126 insertions(+), 43 deletions(-)
+ tools/lib/bpf/libbpf.c   | 113 +++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.h   |   1 +
+ tools/lib/bpf/libbpf.map |   1 +
+ 3 files changed, 115 insertions(+)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index ae1520f7e1b0..7e4dbf71fd52 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -121,6 +121,9 @@ struct btf {
- 
- 	/* Pointer size (in bytes) for a target architecture of this BTF */
- 	int ptr_sz;
-+
-+	/* BTF object ID, valid for vmlinux and module BTF */
-+	__u32 id;
- };
- 
- static inline __u64 ptr_to_u64(const void *ptr)
-@@ -128,6 +131,11 @@ static inline __u64 ptr_to_u64(const void *ptr)
- 	return (__u64) (unsigned long) ptr;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 8e27bad5e80f..9bda111c8167 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -2252,6 +2252,28 @@ const char *btf_kind_str(const struct btf_type *t)
+ 	return __btf_kind_str(btf_kind(t));
  }
  
-+static inline const void *u64_to_ptr(__u64 val)
++static __u32 btf_kind_from_str(const char **type)
 +{
-+	return (const void *)(unsigned long)val;
-+}
++	const char *pos, *orig = *type;
++	__u32 kind;
++	int len;
 +
- /* Ensure given dynamically allocated memory region pointed to by *data* with
-  * capacity of *cap_cnt* elements each taking *elem_sz* bytes has enough
-  * memory to accommodate *add_cnt* new elements, assuming *cur_cnt* elements
-@@ -463,6 +471,11 @@ const struct btf *btf__base_btf(const struct btf *btf)
- 	return btf->base_btf;
- }
- 
-+__u32 btf_obj_id(const struct btf *btf)
-+{
-+	return btf->id;
-+}
-+
- /* internal helper returning non-const pointer to a type */
- struct btf_type *btf_type_by_id(const struct btf *btf, __u32 type_id)
- {
-@@ -819,6 +832,7 @@ static struct btf *btf_new_empty(struct btf *base_btf)
- 	btf->fd = -1;
- 	btf->ptr_sz = sizeof(void *);
- 	btf->swapped_endian = false;
-+	btf->id = 0;
- 
- 	if (base_btf) {
- 		btf->base_btf = base_btf;
-@@ -869,6 +883,7 @@ static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
- 	btf->start_id = 1;
- 	btf->start_str_off = 0;
- 	btf->fd = -1;
-+	btf->id = 0;
- 
- 	if (base_btf) {
- 		btf->base_btf = base_btf;
-@@ -1334,7 +1349,7 @@ const char *btf__name_by_offset(const struct btf *btf, __u32 offset)
- 	return btf__str_by_offset(btf, offset);
- }
- 
--struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
-+static struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
- {
- 	struct bpf_btf_info btf_info;
- 	__u32 len = sizeof(btf_info);
-@@ -1382,6 +1397,8 @@ struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
- 	}
- 
- 	btf = btf_new(ptr, btf_info.btf_size, base_btf);
-+	if (!IS_ERR_OR_NULL(btf))
-+		btf->id = btf_info.id;
- 
- exit_free:
- 	free(ptr);
-@@ -4819,6 +4836,97 @@ static int btf_dedup_remap_types(struct btf_dedup *d)
- 	return 0;
- }
- 
-+/**
-+ * btf_load_next_with_info - get first BTF with ID bigger than the input one.
-+ * @start_id: ID to start the search from
-+ * @info: buffer to put BTF info to
-+ * @base_btf: base BTF, can be %NULL if @vmlinux is true
-+ * @vmlinux: true to look for the vmlinux BTF instead of a module BTF
-+ *
-+ * Obtains the first BTF with the ID bigger than the @start_id. @info::name and
-+ * @info::name_len must be initialized by the caller. The default name buffer
-+ * size is %BTF_NAME_BUF_LEN.
-+ * FD must be closed after BTF is no longer needed. If @vmlinux is true, FD can
-+ * be closed and set to -1 right away without preventing later usage.
-+ *
-+ * Returns pointer to the BTF loaded from the kernel or an error pointer.
-+ */
-+struct btf *btf_load_next_with_info(__u32 start_id, struct bpf_btf_info *info,
-+				    struct btf *base_btf, bool vmlinux)
-+{
-+	__u32 name_len = info->name_len;
-+	__u64 name = info->name;
-+	const char *name_str;
-+	__u32 id = start_id;
-+
-+	if (!name)
-+		return ERR_PTR(-EINVAL);
-+
-+	name_str = u64_to_ptr(name);
-+
-+	while (true) {
-+		__u32 len = sizeof(*info);
-+		struct btf *btf;
-+		int err, fd;
-+
-+		err = bpf_btf_get_next_id(id, &id);
-+		if (err) {
-+			err = -errno;
-+			if (err != -ENOENT)
-+				pr_warn("failed to iterate BTF objects: %d\n",
-+					err);
-+			return ERR_PTR(err);
-+		}
-+
-+		fd = bpf_btf_get_fd_by_id(id);
-+		if (fd < 0) {
-+			err = -errno;
-+			if (err == -ENOENT)
-+				/* Expected race: non-vmlinux BTF was
-+				 * unloaded
-+				 */
-+				continue;
-+			pr_warn("failed to get BTF object #%d FD: %d\n",
-+				id, err);
-+			return ERR_PTR(err);
-+		}
-+
-+		memset(info, 0, len);
-+		info->name = name;
-+		info->name_len = name_len;
-+
-+		err = bpf_obj_get_info_by_fd(fd, info, &len);
-+		if (err) {
-+			err = -errno;
-+			pr_warn("failed to get BTF object #%d info: %d\n",
-+				id, err);
-+			goto err_out;
-+		}
-+
-+		/* Filter BTFs */
-+		if (!info->kernel_btf ||
-+		    !strcmp(name_str, "vmlinux") != vmlinux) {
-+			close(fd);
-+			continue;
-+		}
-+
-+		btf = btf_get_from_fd(fd, base_btf);
-+		err = libbpf_get_error(btf);
-+		if (err) {
-+			pr_warn("failed to load module [%s]'s BTF object #%d: %d\n",
-+				name_str, id, err);
-+			goto err_out;
-+		}
-+
-+		btf->fd = fd;
-+		return btf;
-+
-+err_out:
-+		close(fd);
-+		return ERR_PTR(err);
++	pos = strchr(orig, ' ');
++	if (pos) {
++		len = pos - orig;
++		*type = pos + 1;
++	} else {
++		len = strlen(orig);
 +	}
++
++	for (kind = BTF_KIND_UNKN; kind < NR_BTF_KINDS; kind++) {
++		if (!strncmp(orig, __btf_kind_str(kind), len))
++			break;
++	}
++
++	return kind < NR_BTF_KINDS ? kind : BTF_KIND_UNKN;
 +}
 +
  /*
-  * Probe few well-known locations for vmlinux kernel image and try to load BTF
-  * data out of it to use for target BTF.
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 335467ece75f..8e27bad5e80f 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5559,11 +5559,11 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
+  * Fetch integer attribute of BTF map definition. Such attributes are
+  * represented using a pointer to an array, in which dimensionality of array
+@@ -9617,6 +9639,97 @@ int libbpf_find_vmlinux_btf_id(const char *name,
+ 	return libbpf_err(err);
+ }
  
- static int load_module_btfs(struct bpf_object *obj)
- {
--	struct bpf_btf_info info;
++static __s32 libbpf_find_btf_id(const char *type, __u32 kind,
++				struct btf **res_btf)
++{
 +	char name[BTF_NAME_BUF_LEN] = { };
- 	struct module_btf *mod_btf;
++	struct btf *vmlinux_btf, *btf;
 +	struct bpf_btf_info info;
- 	struct btf *btf;
--	char name[64];
--	__u32 id = 0, len;
 +	__u32 id = 0;
- 	int err, fd;
- 
- 	if (obj->btf_modules_loaded)
-@@ -5580,49 +5580,19 @@ static int load_module_btfs(struct bpf_object *obj)
- 		return 0;
- 
- 	while (true) {
--		err = bpf_btf_get_next_id(id, &id);
--		if (err && errno == ENOENT)
--			return 0;
--		if (err) {
--			err = -errno;
--			pr_warn("failed to iterate BTF objects: %d\n", err);
--			return err;
--		}
--
--		fd = bpf_btf_get_fd_by_id(id);
--		if (fd < 0) {
--			if (errno == ENOENT)
--				continue; /* expected race: BTF was unloaded */
--			err = -errno;
--			pr_warn("failed to get BTF object #%d FD: %d\n", id, err);
--			return err;
--		}
--
--		len = sizeof(info);
- 		memset(&info, 0, sizeof(info));
- 		info.name = ptr_to_u64(name);
- 		info.name_len = sizeof(name);
- 
--		err = bpf_obj_get_info_by_fd(fd, &info, &len);
--		if (err) {
--			err = -errno;
--			pr_warn("failed to get BTF object #%d info: %d\n", id, err);
--			goto err_out;
--		}
--
--		/* ignore non-module BTFs */
--		if (!info.kernel_btf || strcmp(name, "vmlinux") == 0) {
--			close(fd);
--			continue;
--		}
--
--		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
-+		btf = btf_load_next_with_info(id, &info, obj->btf_vmlinux,
-+					      false);
- 		err = libbpf_get_error(btf);
--		if (err) {
--			pr_warn("failed to load module [%s]'s BTF object #%d: %d\n",
--				name, id, err);
--			goto err_out;
--		}
-+		if (err)
-+			return err == -ENOENT ? 0 : err;
++	__s32 ret;
 +
-+		fd = btf__fd(btf);
-+		btf__set_fd(btf, -1);
++	if (res_btf)
++		*res_btf = NULL;
++
++	if (!type || !*type)
++		return -EINVAL;
++
++	vmlinux_btf = btf__load_vmlinux_btf();
++	ret = libbpf_get_error(vmlinux_btf);
++	if (ret < 0)
++		goto free_vmlinux;
++
++	ret = btf__find_by_name_kind(vmlinux_btf, type, kind);
++	if (ret > 0) {
++		btf = vmlinux_btf;
++		goto out;
++	}
++
++	while (true) {
++		memset(&info, 0, sizeof(info));
++		info.name = ptr_to_u64(name);
++		info.name_len = sizeof(name);
++
++		btf = btf_load_next_with_info(id, &info, vmlinux_btf, false);
++		ret = libbpf_get_error(btf);
++		if (ret)
++			break;
++
++		ret = btf__find_by_name_kind(btf, type, kind);
++		if (ret > 0)
++			break;
++
 +		id = btf_obj_id(btf);
- 
- 		err = libbpf_ensure_mem((void **)&obj->btf_modules, &obj->btf_module_cap,
- 				        sizeof(*obj->btf_modules), obj->btf_module_cnt + 1);
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index a1ad145ffa74..9b0bbd4a5f64 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -366,9 +366,14 @@ int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len);
- int btf_load_into_kernel(struct btf *btf, char *log_buf, size_t log_sz, __u32 log_level);
- 
--struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf);
- void btf_get_kernel_prefix_kind(enum bpf_attach_type attach_type,
- 				const char **prefix, int *kind);
-+__u32 btf_obj_id(const struct btf *btf);
++		btf__free(btf);
++	}
 +
-+#define BTF_NAME_BUF_LEN 64
++free_vmlinux:
++	btf__free(vmlinux_btf);
 +
-+struct btf *btf_load_next_with_info(__u32 start_id, struct bpf_btf_info *info,
-+				    struct btf *base_btf, bool vmlinux);
++out:
++	if (ret > 0 && res_btf)
++		*res_btf = btf;
++
++	return ret ? : -ESRCH;
++}
++
++/**
++ * libbpf_get_type_btf_id - get the pair BTF ID + type ID for a given type
++ * @type: pointer to the name of the type to look for
++ * @res_id: pointer to write the result to
++ *
++ * Tries to find the BTF corresponding to the provided type (full string) and
++ * write the pair of BTF ID << 32 | type ID. Such coded __u64 are being used
++ * in XDP generic-compatible metadata to distinguish between different
++ * metadata structures.
++ * @res_id can be %NULL to only check if a particular type exists within
++ * the BTF.
++ *
++ * Returns 0 in case of success, -errno otherwise.
++ */
++int libbpf_get_type_btf_id(const char *type, __u64 *res_id)
++{
++	struct btf *btf = NULL;
++	__s32 type_id;
++	__u32 kind;
++
++	if (res_id)
++		*res_id = 0;
++
++	if (!type || !*type)
++		return libbpf_err(-EINVAL);
++
++	kind = btf_kind_from_str(&type);
++
++	type_id = libbpf_find_btf_id(type, kind, &btf);
++	if (type_id > 0 && res_id)
++		*res_id = ((__u64)btf_obj_id(btf) << 32) | type_id;
++
++	btf__free(btf);
++
++	return libbpf_err(min(type_id, 0));
++}
++
+ static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd)
+ {
+ 	struct bpf_prog_info info = {};
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index fa27969da0da..4056e9038086 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -295,6 +295,7 @@ LIBBPF_API int libbpf_attach_type_by_name(const char *name,
+ 					  enum bpf_attach_type *attach_type);
+ LIBBPF_API int libbpf_find_vmlinux_btf_id(const char *name,
+ 					  enum bpf_attach_type attach_type);
++LIBBPF_API int libbpf_get_type_btf_id(const char *type, __u64 *id);
  
- struct btf_ext_info {
- 	/*
+ /* Accessors of bpf_program */
+ struct bpf_program;
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 116a2a8ee7c2..f0987df15b7a 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -468,6 +468,7 @@ LIBBPF_1.0.0 {
+ 		libbpf_bpf_link_type_str;
+ 		libbpf_bpf_map_type_str;
+ 		libbpf_bpf_prog_type_str;
++		libbpf_get_type_btf_id;
+ 
+ 	local: *;
+ };
 -- 
 2.36.1
 
