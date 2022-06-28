@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98CD3C433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22022C43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232518AbiF1TvD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45682 "EHLO
+        id S229545AbiF1TvH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbiF1Tut (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S231398AbiF1Tut (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 28 Jun 2022 15:50:49 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C343A70F;
-        Tue, 28 Jun 2022 12:49:08 -0700 (PDT)
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A444EA7;
+        Tue, 28 Jun 2022 12:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445749; x=1687981749;
+  t=1656445751; x=1687981751;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sU25U5z5Fc524fPGWGwlzdwktQUtdwxy/KN7ZKjuDgg=;
-  b=mq8Q9LSUF6oCyxKAiCE/RoEeJVrMWv4z20yJDeMLi721w6LSj4xiotIy
-   r+lewqVNNKqXZiuSi6UTDwCKanerJWk1qMbGdGLareZFKNiSL/mhBCXvs
-   xhVAh1KeqzrG7xjvI9pc2oeuX+z/WsqeH3nzecT4TU7P8/COQmfbCZmZz
-   z9nkE/hx/V1I41R63Rc0I2y+rpnTbDvpxRqz5qEhcZHj81HIgSfm0c387
-   FD/TweloT9rueCIu/A97hXz1+U5HgIRN6sqcAyLbpth/dDj46D4PAqkOv
-   O5Dwnz5tK3yCMOxsCowmleIoTAM4AS0+/wtusBWLfp7GqMyjC4dhUWaGX
+  bh=fLcsoB6VtjEUPeJ9dvKqgy5Y7I+Rr4vHLG6qaoWyTqw=;
+  b=UvHRfJQLm2wKmvyZRwbRT9mjg2nrLe5aJje+ZoxrQbEsAJx8mEPVMgw/
+   Onp9uMlxNJDs2pkzP7BuDmXPWNOVPZeZbH7cR6iKwdyC6guf+qGZDtwmp
+   /jZtzOx/LS2cXZDyftWxALH+LcNCqa39RoOVKqyrSudWWbSL0XMlgp2r6
+   GiDBbP0h5EfCNm1hgSijUviVb2q7a5doxyppZt11CyZSBrY/OujcY2Fzf
+   RxJY92cVEwaZVWLfbRUW5VVpxSJW6bw70SBwpxBTvmJwGFWSL24gFsmyR
+   j3RubVWqmdpwMrEA8SbNyqeMXaszP9KB3161KXEHDlj+dxa3r02uOwtQN
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282568051"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264874035"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="282568051"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:08 -0700
+   d="scan'208";a="264874035"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="590426284"
+   d="scan'208";a="693250940"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jun 2022 12:49:03 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 28 Jun 2022 12:49:06 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr96022013;
-        Tue, 28 Jun 2022 20:49:02 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr98022013;
+        Tue, 28 Jun 2022 20:49:04 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 06/52] bpf: pass a pointer to union bpf_attr to bpf_link_ops::update_prog()
-Date:   Tue, 28 Jun 2022 21:47:26 +0200
-Message-Id: <20220628194812.1453059-7-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 08/52] net, xdp: factor out XDP install arguments to a separate structure
+Date:   Tue, 28 Jun 2022 21:47:28 +0200
+Message-Id: <20220628194812.1453059-9-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,104 +76,257 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order to be able to use any arbitrary data from
-bpf_attr::link_update inside the bpf_link_ops::update_prog()
-implementations, pass a pointer to the whole attr as a callback
-argument.
-@new_prog and @old_prog arguments are still here as ::link_update
-contains only their FDs.
+The current way of passing parameters from userland/rtnetlink
+(do_set_link()) to dev_change_xdp_fd() and in the end to the drivers
+separately does not scale a lot: each new parameter/argument
+requires changing the prototypes of several functions at once.
+To be able to pass more, derive them into a structure which for now
+will contain:
+ * dev, the actual netdevice,
+ * extack, Netlink extack to pass arbitrary messages to userland,
+ * flags, XDP install flags passed from the user.
+and use it in the following functions instead of the separate
+arguments: dev_change_xdp_fd(), dev_xdp_attach() and
+dev_xdp_install(). Adjust the rest accordingly.
+Those three are being used in the whole chain 'user -> driver', the
+rest can {,dis}appear later, thus not included.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/bpf.h        | 3 ++-
- kernel/bpf/bpf_iter.c      | 1 +
- kernel/bpf/cgroup.c        | 4 +++-
- kernel/bpf/net_namespace.c | 1 +
- kernel/bpf/syscall.c       | 2 +-
- net/bpf/dev.c              | 4 +++-
- 6 files changed, 11 insertions(+), 4 deletions(-)
+ include/linux/netdevice.h | 10 +++++--
+ net/bpf/dev.c             | 61 ++++++++++++++++++++++++---------------
+ net/core/rtnetlink.c      | 10 +++++--
+ 3 files changed, 53 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index d05e1495a06e..c08690a49011 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1155,7 +1155,8 @@ struct bpf_link_ops {
- 	void (*release)(struct bpf_link *link);
- 	void (*dealloc)(struct bpf_link *link);
- 	int (*detach)(struct bpf_link *link);
--	int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_prog,
-+	int (*update_prog)(struct bpf_link *link, const union bpf_attr *attr,
-+			   struct bpf_prog *new_prog,
- 			   struct bpf_prog *old_prog);
- 	void (*show_fdinfo)(const struct bpf_link *link, struct seq_file *seq);
- 	int (*fill_link_info)(const struct bpf_link *link,
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 7e8fd49406f6..1d3dcc853f70 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -400,6 +400,7 @@ static void bpf_iter_link_dealloc(struct bpf_link *link)
- }
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 0b8169c23f22..1e342c285f48 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3848,11 +3848,17 @@ struct sk_buff *validate_xmit_skb_list(struct sk_buff *skb, struct net_device *d
+ struct sk_buff *dev_hard_start_xmit(struct sk_buff *skb, struct net_device *dev,
+ 				    struct netdev_queue *txq, int *ret);
  
- static int bpf_iter_link_replace(struct bpf_link *link,
-+				 const union bpf_attr *attr,
- 				 struct bpf_prog *new_prog,
- 				 struct bpf_prog *old_prog)
- {
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 7a394f7c205c..f4d8100dd22f 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -664,7 +664,9 @@ static int __cgroup_bpf_replace(struct cgroup *cgrp,
- 	return 0;
- }
++struct xdp_install_args {
++	struct net_device	*dev;
++	struct netlink_ext_ack	*extack;
++	u32			flags;
++};
++
+ DECLARE_STATIC_KEY_FALSE(generic_xdp_needed_key);
  
--static int cgroup_bpf_replace(struct bpf_link *link, struct bpf_prog *new_prog,
-+static int cgroup_bpf_replace(struct bpf_link *link,
-+			      const union bpf_attr *attr,
-+			      struct bpf_prog *new_prog,
- 			      struct bpf_prog *old_prog)
- {
- 	struct bpf_cgroup_link *cg_link;
-diff --git a/kernel/bpf/net_namespace.c b/kernel/bpf/net_namespace.c
-index 868cc2c43899..5d80a4a9d0bd 100644
---- a/kernel/bpf/net_namespace.c
-+++ b/kernel/bpf/net_namespace.c
-@@ -162,6 +162,7 @@ static void bpf_netns_link_dealloc(struct bpf_link *link)
- }
- 
- static int bpf_netns_link_update_prog(struct bpf_link *link,
-+				      const union bpf_attr *attr,
- 				      struct bpf_prog *new_prog,
- 				      struct bpf_prog *old_prog)
- {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 7d5af5b99f0d..f7a674656067 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4614,7 +4614,7 @@ static int link_update(union bpf_attr *attr)
- 	}
- 
- 	if (link->ops->update_prog)
--		ret = link->ops->update_prog(link, new_prog, old_prog);
-+		ret = link->ops->update_prog(link, attr, new_prog, old_prog);
- 	else
- 		ret = -EINVAL;
- 
+ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
+-int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+-		      int fd, int expected_fd, u32 flags);
++int dev_change_xdp_fd(const struct xdp_install_args *args, int fd,
++		      int expected_fd);
+ void dev_xdp_uninstall(struct net_device *dev);
+ u8 dev_xdp_prog_count(struct net_device *dev);
+ u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode);
 diff --git a/net/bpf/dev.c b/net/bpf/dev.c
-index dfe0402947f8..68a7b2c49392 100644
+index 0010b20719e8..7df42bb886ad 100644
 --- a/net/bpf/dev.c
 +++ b/net/bpf/dev.c
-@@ -619,7 +619,9 @@ static int bpf_xdp_link_fill_link_info(const struct bpf_link *link,
+@@ -350,17 +350,17 @@ static void dev_xdp_set_prog(struct net_device *dev, enum bpf_xdp_mode mode,
+ 	dev->xdp_state[mode].prog = prog;
+ }
+ 
+-static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
+-			   bpf_op_t bpf_op, struct netlink_ext_ack *extack,
+-			   u32 flags, struct bpf_prog *prog)
++static int dev_xdp_install(const struct xdp_install_args *args,
++			   enum bpf_xdp_mode mode, bpf_op_t bpf_op,
++			   struct bpf_prog *prog)
+ {
+ 	struct netdev_bpf xdp;
+ 	int err;
+ 
+ 	memset(&xdp, 0, sizeof(xdp));
+ 	xdp.command = mode == XDP_MODE_HW ? XDP_SETUP_PROG_HW : XDP_SETUP_PROG;
+-	xdp.extack = extack;
+-	xdp.flags = flags;
++	xdp.extack = args->extack;
++	xdp.flags = args->flags;
+ 	xdp.prog = prog;
+ 
+ 	/* Drivers assume refcnt is already incremented (i.e, prog pointer is
+@@ -371,7 +371,7 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
+ 	 */
+ 	if (prog)
+ 		bpf_prog_inc(prog);
+-	err = bpf_op(dev, &xdp);
++	err = bpf_op(args->dev, &xdp);
+ 	if (err) {
+ 		if (prog)
+ 			bpf_prog_put(prog);
+@@ -379,13 +379,16 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
+ 	}
+ 
+ 	if (mode != XDP_MODE_HW)
+-		bpf_prog_change_xdp(dev_xdp_prog(dev, mode), prog);
++		bpf_prog_change_xdp(dev_xdp_prog(args->dev, mode), prog);
+ 
  	return 0;
  }
  
--static int bpf_xdp_link_update(struct bpf_link *link, struct bpf_prog *new_prog,
-+static int bpf_xdp_link_update(struct bpf_link *link,
-+			       const union bpf_attr *attr,
-+			       struct bpf_prog *new_prog,
+ void dev_xdp_uninstall(struct net_device *dev)
+ {
++	struct xdp_install_args args = {
++		.dev		= dev,
++	};
+ 	struct bpf_xdp_link *link;
+ 	struct bpf_prog *prog;
+ 	enum bpf_xdp_mode mode;
+@@ -402,7 +405,7 @@ void dev_xdp_uninstall(struct net_device *dev)
+ 		if (!bpf_op)
+ 			continue;
+ 
+-		WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
++		WARN_ON(dev_xdp_install(&args, mode, bpf_op, NULL));
+ 
+ 		/* auto-detach link from net device */
+ 		link = dev_xdp_link(dev, mode);
+@@ -415,13 +418,16 @@ void dev_xdp_uninstall(struct net_device *dev)
+ 	}
+ }
+ 
+-static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack,
++static int dev_xdp_attach(const struct xdp_install_args *args,
+ 			  struct bpf_xdp_link *link, struct bpf_prog *new_prog,
+-			  struct bpf_prog *old_prog, u32 flags)
++			  struct bpf_prog *old_prog)
+ {
+-	unsigned int num_modes = hweight32(flags & XDP_FLAGS_MODES);
++	unsigned int num_modes = hweight32(args->flags & XDP_FLAGS_MODES);
++	struct netlink_ext_ack *extack = args->extack;
++	struct net_device *dev = args->dev;
+ 	struct bpf_prog *cur_prog;
+ 	struct net_device *upper;
++	u32 flags = args->flags;
+ 	struct list_head *iter;
+ 	enum bpf_xdp_mode mode;
+ 	bpf_op_t bpf_op;
+@@ -519,7 +525,7 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+ 			return -EOPNOTSUPP;
+ 		}
+ 
+-		err = dev_xdp_install(dev, mode, bpf_op, extack, flags, new_prog);
++		err = dev_xdp_install(args, mode, bpf_op, new_prog);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -536,12 +542,20 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+ 
+ static int dev_xdp_attach_link(struct bpf_xdp_link *link)
+ {
+-	return dev_xdp_attach(link->dev, NULL, link, NULL, NULL, link->flags);
++	struct xdp_install_args args = {
++		.dev		= link->dev,
++		.flags		= link->flags,
++	};
++
++	return dev_xdp_attach(&args, link, NULL, NULL);
+ }
+ 
+ static int dev_xdp_detach_link(struct bpf_xdp_link *link)
+ {
+ 	struct net_device *dev = link->dev;
++	struct xdp_install_args args = {
++		.dev		= dev,
++	};
+ 	enum bpf_xdp_mode mode;
+ 	bpf_op_t bpf_op;
+ 
+@@ -552,7 +566,7 @@ static int dev_xdp_detach_link(struct bpf_xdp_link *link)
+ 		return -EINVAL;
+ 
+ 	bpf_op = dev_xdp_bpf_op(dev, mode);
+-	WARN_ON(dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL));
++	WARN_ON(dev_xdp_install(&args, mode, bpf_op, NULL));
+ 	dev_xdp_set_link(dev, mode, NULL);
+ 	return 0;
+ }
+@@ -622,6 +636,10 @@ static int bpf_xdp_link_update(struct bpf_link *link,
  			       struct bpf_prog *old_prog)
  {
  	struct bpf_xdp_link *xdp_link = container_of(link, struct bpf_xdp_link, link);
++	struct xdp_install_args args = {
++		.dev		= xdp_link->dev,
++		.flags		= xdp_link->flags,
++	};
+ 	enum bpf_xdp_mode mode;
+ 	bpf_op_t bpf_op;
+ 	int err = 0;
+@@ -653,8 +671,7 @@ static int bpf_xdp_link_update(struct bpf_link *link,
+ 
+ 	mode = dev_xdp_mode(xdp_link->dev, xdp_link->flags);
+ 	bpf_op = dev_xdp_bpf_op(xdp_link->dev, mode);
+-	err = dev_xdp_install(xdp_link->dev, mode, bpf_op, NULL,
+-			      xdp_link->flags, new_prog);
++	err = dev_xdp_install(&args, mode, bpf_op, new_prog);
+ 	if (err)
+ 		goto out_unlock;
+ 
+@@ -730,18 +747,16 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+ 
+ /**
+  *	dev_change_xdp_fd - set or clear a bpf program for a device rx path
+- *	@dev: device
+- *	@extack: netlink extended ack
++ *	@args: common XDP arguments (device, extended ack, flags etc.)
+  *	@fd: new program fd or negative value to clear
+  *	@expected_fd: old program fd that userspace expects to replace or clear
+- *	@flags: xdp-related flags
+  *
+  *	Set or clear a bpf program for a device
+  */
+-int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+-		      int fd, int expected_fd, u32 flags)
++int dev_change_xdp_fd(const struct xdp_install_args *args, int fd,
++		      int expected_fd)
+ {
+-	enum bpf_xdp_mode mode = dev_xdp_mode(dev, flags);
++	enum bpf_xdp_mode mode = dev_xdp_mode(args->dev, args->flags);
+ 	struct bpf_prog *new_prog = NULL, *old_prog = NULL;
+ 	int err;
+ 
+@@ -764,7 +779,7 @@ int dev_change_xdp_fd(struct net_device *dev, struct netlink_ext_ack *extack,
+ 		}
+ 	}
+ 
+-	err = dev_xdp_attach(dev, extack, NULL, new_prog, old_prog, flags);
++	err = dev_xdp_attach(args, NULL, new_prog, old_prog);
+ 
+ err_out:
+ 	if (err && new_prog)
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index ac45328607f7..5b06ded689b2 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -2987,6 +2987,11 @@ static int do_setlink(const struct sk_buff *skb,
+ 		}
+ 
+ 		if (xdp[IFLA_XDP_FD]) {
++			struct xdp_install_args args = {
++				.dev		= dev,
++				.extack		= extack,
++				.flags		= xdp_flags,
++			};
+ 			int expected_fd = -1;
+ 
+ 			if (xdp_flags & XDP_FLAGS_REPLACE) {
+@@ -2998,10 +3003,9 @@ static int do_setlink(const struct sk_buff *skb,
+ 					nla_get_s32(xdp[IFLA_XDP_EXPECTED_FD]);
+ 			}
+ 
+-			err = dev_change_xdp_fd(dev, extack,
++			err = dev_change_xdp_fd(&args,
+ 						nla_get_s32(xdp[IFLA_XDP_FD]),
+-						expected_fd,
+-						xdp_flags);
++						expected_fd);
+ 			if (err)
+ 				goto errout;
+ 			status |= DO_SETLINK_NOTIFY;
 -- 
 2.36.1
 
