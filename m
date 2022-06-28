@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5744C433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E31DECCA479
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiF1TvZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
+        id S232852AbiF1Tv0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiF1Tuv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230298AbiF1Tuv (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 28 Jun 2022 15:50:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8353A713;
-        Tue, 28 Jun 2022 12:49:17 -0700 (PDT)
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D963819E;
+        Tue, 28 Jun 2022 12:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445757; x=1687981757;
+  t=1656445759; x=1687981759;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=UA7ojFhtLpSWs3CIAGleRKPCFOtCm25p70d35QFcy9U=;
-  b=ZIPZUwJrQuf24f83SkKWjkmKrYpt9BlkXkmmNTKV4IuMaIkALTxSFV59
-   1qwn9rIIkhMnc18ePfHo/9THxKnh8TMTvyXoO//3fZ2EUWxR7VGafYe1R
-   5qeDise7WSAKolsgpaIFIJ7Pei9k1MM8ytBXX7vnhOJs+usYVGLLZzK/t
-   PG//VZ+4ghSrxVJivWg0/p0MC9efp9fAVEOogI8t2vcZd/byoWAvKHZEf
-   Iobr8zJRd7MBCDIVfQMFTZv/Fga1Nte4o1AQUDBrNJ9TQVPPXcoyo3K9Y
-   NN9fuIQkkivwCyz1PuDEC4O1BNjAGqkJkDsSpprlaS0LahZF8lNRm8Ea2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280595783"
+  bh=KvcLFlvO+Aq/YsYPMNHuBin8lYDZ9TRXn0mscwW8tkw=;
+  b=V/GfsjM42m5u0YL8eT/47JtQYYGDQRC66vGuDwGm1YaPkTMBNAWg7Zqf
+   HLFUuExKiaV1DwQllpe5oZ34TrnSPeNGUYwCW6j4sKDGFVSmIyEBoYLRs
+   WehCNUsq3ASxJx8ow52d1FNZxPkFYAZ1plDzsUN1SycIbVwXxVv5EkKkC
+   Qft/Rm6l2JB93rgN1aA9kjLIa881RZHv63QEZZIM8BhId8ze+uevxSB8e
+   /GtWCVjYsHb/p7SjO4nyZp+0w75/Efoz+iSp9VZLcDyEbPVz29hnksg0O
+   +5B3DV+jcvvUc/RQt27x96ECRgGCoedzj9etYCSsE9usQo+8K8xLRAmun
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343523213"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="280595783"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:09 -0700
+   d="scan'208";a="343523213"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:19 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="594927476"
+   d="scan'208";a="717555046"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 28 Jun 2022 12:49:05 -0700
+  by orsmga004.jf.intel.com with ESMTP; 28 Jun 2022 12:49:14 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr97022013;
-        Tue, 28 Jun 2022 20:49:03 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9E022013;
+        Tue, 28 Jun 2022 20:49:12 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 07/52] net, xdp: remove redundant arguments from dev_xdp_{at,de}tach_link()
-Date:   Tue, 28 Jun 2022 21:47:27 +0200
-Message-Id: <20220628194812.1453059-8-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 14/52] libbpf: pass &bpf_link_create_opts directly to bpf_program__attach_fd()
+Date:   Tue, 28 Jun 2022 21:47:34 +0200
+Message-Id: <20220628194812.1453059-15-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,62 +76,84 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-dev_xdp_attach_link(): the sole caller always passes %NULL as
-@extack and @link->dev as @dev, so they both can be omitted.
-The very same story with dev_xdp_detach_link(): remove both
-@dev and @extack as they both can be obtained inside the
-function itself.
-This decreases stack usage with no functional changes.
+Instead of providing an optional @btf_id which is zero in 3 of 4
+cases as an argument, pass a pointer to &bpf_link_create_ops
+directly instead. This way we can just pass %NULL when no opts are
+needed and use any of its fields on our wish otherwise.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- net/bpf/dev.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ tools/lib/bpf/libbpf.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/net/bpf/dev.c b/net/bpf/dev.c
-index 68a7b2c49392..0010b20719e8 100644
---- a/net/bpf/dev.c
-+++ b/net/bpf/dev.c
-@@ -534,17 +534,14 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 	return 0;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 9bda111c8167..f4014c09f1cf 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -11958,11 +11958,10 @@ static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_li
  }
  
--static int dev_xdp_attach_link(struct net_device *dev,
--			       struct netlink_ext_ack *extack,
--			       struct bpf_xdp_link *link)
-+static int dev_xdp_attach_link(struct bpf_xdp_link *link)
+ static struct bpf_link *
+-bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id,
++bpf_program__attach_fd(const struct bpf_program *prog, int target_fd,
++		       const struct bpf_link_create_opts *opts,
+ 		       const char *target_name)
  {
--	return dev_xdp_attach(dev, extack, link, NULL, NULL, link->flags);
-+	return dev_xdp_attach(link->dev, NULL, link, NULL, NULL, link->flags);
+-	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
+-			    .target_btf_id = btf_id);
+ 	enum bpf_attach_type attach_type;
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+@@ -11980,7 +11979,7 @@ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id
+ 	link->detach = &bpf_link__detach_fd;
+ 
+ 	attach_type = bpf_program__expected_attach_type(prog);
+-	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
++	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, opts);
+ 	if (link_fd < 0) {
+ 		link_fd = -errno;
+ 		free(link);
+@@ -11996,19 +11995,19 @@ bpf_program__attach_fd(const struct bpf_program *prog, int target_fd, int btf_id
+ struct bpf_link *
+ bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd)
+ {
+-	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
++	return bpf_program__attach_fd(prog, cgroup_fd, NULL, "cgroup");
  }
  
--static int dev_xdp_detach_link(struct net_device *dev,
--			       struct netlink_ext_ack *extack,
--			       struct bpf_xdp_link *link)
-+static int dev_xdp_detach_link(struct bpf_xdp_link *link)
+ struct bpf_link *
+ bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd)
  {
-+	struct net_device *dev = link->dev;
- 	enum bpf_xdp_mode mode;
- 	bpf_op_t bpf_op;
+-	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
++	return bpf_program__attach_fd(prog, netns_fd, NULL, "netns");
+ }
  
-@@ -570,7 +567,7 @@ static void bpf_xdp_link_release(struct bpf_link *link)
- 	 * already NULL, in which case link was already auto-detached
- 	 */
- 	if (xdp_link->dev) {
--		WARN_ON(dev_xdp_detach_link(xdp_link->dev, NULL, xdp_link));
-+		WARN_ON(dev_xdp_detach_link(xdp_link));
- 		xdp_link->dev = NULL;
+ struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex)
+ {
+ 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
+-	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
++	return bpf_program__attach_fd(prog, ifindex, NULL, "xdp");
+ }
+ 
+ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
+@@ -12030,11 +12029,16 @@ struct bpf_link *bpf_program__attach_freplace(const struct bpf_program *prog,
  	}
  
-@@ -709,7 +706,7 @@ int bpf_xdp_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- 		goto unlock;
- 	}
+ 	if (target_fd) {
++		LIBBPF_OPTS(bpf_link_create_opts, opts);
++
+ 		btf_id = libbpf_find_prog_btf_id(attach_func_name, target_fd);
+ 		if (btf_id < 0)
+ 			return libbpf_err_ptr(btf_id);
  
--	err = dev_xdp_attach_link(dev, NULL, link);
-+	err = dev_xdp_attach_link(link);
- 	rtnl_unlock();
- 
- 	if (err) {
+-		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
++		opts.target_btf_id = btf_id;
++
++		return bpf_program__attach_fd(prog, target_fd, &opts,
++					      "freplace");
+ 	} else {
+ 		/* no target, so use raw_tracepoint_open for compatibility
+ 		 * with old kernels
 -- 
 2.36.1
 
