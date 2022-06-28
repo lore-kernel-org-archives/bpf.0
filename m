@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68746CCA47E
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:54:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73166C43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:54:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiF1TyY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S233737AbiF1Ty1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiF1Tu4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:50:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0251C62;
-        Tue, 28 Jun 2022 12:49:46 -0700 (PDT)
+        with ESMTP id S232326AbiF1Tuz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 15:50:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4760BA5;
+        Tue, 28 Jun 2022 12:49:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445786; x=1687981786;
+  t=1656445783; x=1687981783;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zVh8rnbRSL6yxYm7j3MFZi5+oKCgLy0ivUDvveHIa48=;
-  b=f2mOXHr1NtwdvSEGGpKwL2vuiVs+AXEzzrqeKg7DFtjzoX/KmuJfQVN4
-   FH43XfU3W3w6vDFrGbRH60fhLuUN8KdQPHiawSINVur6itITi/O6ITM2T
-   SZZKHXr4M/8HyugzqOOufwlvN0YmksqN/woK5BWxFB1fxNBFyztx0wSJr
-   V8asIJ5DaP9qsczjI9/KvBO3ZtfNFBEzsVa9nEEPn8ItOLZgfGtGhmbfQ
-   zJFOAQaV7IKrFEVnRusz9jpOIE0fy+Lxr1lAYulvE+u55z7eELFsfigbI
-   W+9U9zw1Hsom7HVOyFkeWsLr5FplJnqOG+lFqsvn5gHtEE8/eEMNaUhwV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="280595962"
+  bh=assH3g8cMJnpD/kb79aEpQaxf3/AadyGdz71JUQEZCc=;
+  b=k9ItFV9wBsi5bb2jx6jBFlsBOt7P9s9pksSLrsfoKSgw6BiJoL1C+o2Z
+   BfF5NEGomXvus5NlfzF27UK9FncQno2FHmxmZ0lFeAX0mpiovB8XAj1wU
+   xoyKMadcPSFHwAB3nziGKhAUBqKr04RY/8eOHEs1rOh7SAIhNixApthj5
+   beMAi7c5N+ZCsxm+AAUll7kV59mAKXlT7xwfu7xZ2F9klch6hihqVqQGC
+   V2ddAcWudk0PkXc1h6G5D4S1oPUk8Oy3iY3jVFGSVlnvpQrCOSWx/NWFx
+   O8ldWxru8Cr10LwMTxY0c1CzddJaTNmJ5WrdySX0bTYn9fAXpnZvC3t5W
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="261635707"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="280595962"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:46 -0700
+   d="scan'208";a="261635707"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:43 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="732883439"
+   d="scan'208";a="767288164"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 12:49:42 -0700
+  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2022 12:49:38 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9Z022013;
-        Tue, 28 Jun 2022 20:49:40 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9W022013;
+        Tue, 28 Jun 2022 20:49:36 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 35/52] net, skbuff: introduce napi_skb_cache_get_bulk()
-Date:   Tue, 28 Jun 2022 21:47:55 +0200
-Message-Id: <20220628194812.1453059-36-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 32/52] bpf, cpumap: switch to GRO from netif_receive_skb_list()
+Date:   Tue, 28 Jun 2022 21:47:52 +0200
+Message-Id: <20220628194812.1453059-33-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,91 +76,124 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a function to get an array of skbs from the NAPI percpu cache.
-It's supposed to be a drop-in replacement for
-kmem_cache_alloc_bulk(skbuff_head_cache, GFP_ATOMIC) and
-xdp_alloc_skb_bulk(GFP_ATOMIC). The difference (apart from the
-requirement to call it only from the BH) is that it tries to use
-as many NAPI cache entries for skbs as possible, and allocate new
-ones only if and as less as needed.
-It can save significant amounts of CPU cycles if there are GRO
-cycles and/or Tx completion cycles (anything that descends to
-napi_skb_cache_put()) happening on this CPU. If the function is
-not able to provide the requested number of entries due to an
-allocation error, it returns as much as it got.
+cpumap has its own BH context based on kthread. It has a sane batch
+size of 8 frames per one cycle.
+GRO can be used on its own, adjust cpumap calls to the
+upper stack to use GRO API instead of netif_receive_skb_list() which
+processes skbs by batches, but doesn't involve GRO layer at all.
+It is most beneficial when a NIC which frame come from is XDP
+generic metadata-enabled, but in plenty of tests GRO performs better
+than listed receiving even given that it has to calculate full frame
+checksums on CPU.
+As GRO passes the skbs to the upper stack in the batches of
+@gro_normal_batch, i.e. 8 by default, and @skb->dev point to the
+device where the frame comes from, it is enough to disable GRO
+netdev feature on it to completely restore the original behaviour:
+untouched frames will be being bulked and passed to the upper stack
+by 8, as it was with netif_receive_skb_list().
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/skbuff.h |  1 +
- net/core/skbuff.c      | 43 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+ kernel/bpf/cpumap.c | 43 ++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 38 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 0a95f753c1d9..0c1e5446653b 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -1240,6 +1240,7 @@ struct sk_buff *build_skb_around(struct sk_buff *skb,
- void skb_attempt_defer_free(struct sk_buff *skb);
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index f4860ac756cd..2d0edf8f6a05 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -29,8 +29,8 @@
+ #include <trace/events/xdp.h>
+ #include <linux/btf_ids.h>
  
- struct sk_buff *napi_build_skb(void *data, unsigned int frag_size);
-+size_t napi_skb_cache_get_bulk(void **skbs, size_t n);
+-#include <linux/netdevice.h>   /* netif_receive_skb_list */
+-#include <linux/etherdevice.h> /* eth_type_trans */
++#include <linux/netdevice.h>
++#include <net/gro.h>
  
- /**
-  * alloc_skb - allocate a network buffer
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 5b23fc7f1157..9b075f52d1fb 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -190,6 +190,49 @@ static struct sk_buff *napi_skb_cache_get(void)
- 	return skb;
+ /* General idea: XDP packets getting XDP redirected to another CPU,
+  * will maximum be stored/queued for one driver ->poll() call.  It is
+@@ -67,6 +67,8 @@ struct bpf_cpu_map_entry {
+ 	struct bpf_cpumap_val value;
+ 	struct bpf_prog *prog;
+ 
++	struct gro_node gro;
++
+ 	atomic_t refcnt; /* Control when this struct can be free'ed */
+ 	struct rcu_head rcu;
+ 
+@@ -162,6 +164,7 @@ static void put_cpu_map_entry(struct bpf_cpu_map_entry *rcpu)
+ 	if (atomic_dec_and_test(&rcpu->refcnt)) {
+ 		if (rcpu->prog)
+ 			bpf_prog_put(rcpu->prog);
++		gro_cleanup(&rcpu->gro);
+ 		/* The queue should be empty at this point */
+ 		__cpu_map_ring_cleanup(rcpu->queue);
+ 		ptr_ring_cleanup(rcpu->queue, NULL);
+@@ -295,6 +298,33 @@ static int cpu_map_bpf_prog_run(struct bpf_cpu_map_entry *rcpu, void **frames,
+ 	return nframes;
  }
  
-+/**
-+ * napi_skb_cache_get_bulk - obtain a number of zeroed skb heads from the cache
-+ * @skbs: a pointer to an at least @n-sized array to fill with skb pointers
-+ * @n: the number of entries to provide
-+ *
-+ * Tries to obtain @n &sk_buff entries from the NAPI percpu cache and writes
-+ * the pointers into the provided array @skbs. If there are less entries
-+ * available, bulk-allocates the diff from the MM layer.
-+ * The heads are being zeroed with either memset() or %__GFP_ZERO, so they are
-+ * ready for {,__}build_skb_around() and don't have any data buffers attached.
-+ * Must be called *only* from the BH context.
-+ *
-+ * Returns the number of successfully allocated skbs (@n if
-+ * kmem_cache_alloc_bulk() didn't fail).
-+ */
-+size_t napi_skb_cache_get_bulk(void **skbs, size_t n)
++static void cpu_map_gro_flush(struct bpf_cpu_map_entry *rcpu,
++			      struct list_head *list)
 +{
-+	struct napi_alloc_cache *nc = this_cpu_ptr(&napi_alloc_cache);
-+	size_t total = n;
++	bool new = !list_empty(list);
 +
-+	if (nc->skb_count < n)
-+		n -= kmem_cache_alloc_bulk(skbuff_head_cache,
-+					   GFP_ATOMIC | __GFP_ZERO,
-+					   n - nc->skb_count,
-+					   skbs + nc->skb_count);
-+	if (unlikely(nc->skb_count < n)) {
-+		total -= n - nc->skb_count;
-+		n = nc->skb_count;
++	if (likely(new))
++		gro_receive_skb_list(&rcpu->gro, list);
++
++	if (rcpu->gro.bitmask) {
++		bool flush_old = HZ >= 1000;
++
++		/* If the ring is not empty, there'll be a new iteration
++		 * soon, and we only need to do a full flush if a tick is
++		 * long (> 1 ms).
++		 * If the ring is empty, to not hold GRO packets in the
++		 * stack for too long, do a full flush.
++		 * This is equivalent to how NAPI decides whether to perform
++		 * a full flush (by batches of up to 64 frames tho).
++		 */
++		if (__ptr_ring_empty(rcpu->queue))
++			flush_old = false;
++
++		__gro_flush(&rcpu->gro, flush_old);
 +	}
 +
-+	for (size_t i = 0; i < n; i++) {
-+		skbs[i] = nc->skb_cache[nc->skb_count - n + i];
-+
-+		kasan_unpoison_object_data(skbuff_head_cache, skbs[i]);
-+		memset(skbs[i], 0, offsetof(struct sk_buff, tail));
-+	}
-+
-+	nc->skb_count -= n;
-+
-+	return total;
++	gro_normal_list(&rcpu->gro);
 +}
-+EXPORT_SYMBOL_GPL(napi_skb_cache_get_bulk);
+ 
+ static int cpu_map_kthread_run(void *data)
+ {
+@@ -384,7 +414,7 @@ static int cpu_map_kthread_run(void *data)
+ 
+ 			list_add_tail(&skb->list, &list);
+ 		}
+-		netif_receive_skb_list(&list);
++		cpu_map_gro_flush(rcpu, &list);
+ 
+ 		/* Feedback loop via tracepoint */
+ 		trace_xdp_cpumap_kthread(rcpu->map_id, n, kmem_alloc_drops,
+@@ -460,8 +490,10 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ 	rcpu->map_id = map->id;
+ 	rcpu->value.qsize  = value->qsize;
+ 
++	gro_init(&rcpu->gro, NULL);
 +
- /* Caller must provide SKB that is memset cleared */
- static void __build_skb_around(struct sk_buff *skb, void *data,
- 			       unsigned int frag_size)
+ 	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, map, fd))
+-		goto free_ptr_ring;
++		goto free_gro;
+ 
+ 	/* Setup kthread */
+ 	rcpu->kthread = kthread_create_on_node(cpu_map_kthread_run, rcpu, numa,
+@@ -482,7 +514,8 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ free_prog:
+ 	if (rcpu->prog)
+ 		bpf_prog_put(rcpu->prog);
+-free_ptr_ring:
++free_gro:
++	gro_cleanup(&rcpu->gro);
+ 	ptr_ring_cleanup(rcpu->queue, NULL);
+ free_queue:
+ 	kfree(rcpu->queue);
 -- 
 2.36.1
 
