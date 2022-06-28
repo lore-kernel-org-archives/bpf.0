@@ -2,74 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF413CCA483
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:30:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A56E3C43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:34:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234434AbiF1QaS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S232708AbiF1Qeu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 12:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347591AbiF1Q3L (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:29:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9877F37A82;
-        Tue, 28 Jun 2022 09:20:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229878AbiF1QeC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 12:34:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A91327FEF
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:30:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656433838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6NFHPYEx6LcCoCFgUJZqyB8qmbXcNWPDPiDpj5XQCFM=;
+        b=ZruP4wcY00A/TsoGXydLZNJxiz/U20Cft0onequbxhCsQ2EF8lim5mYZj7nAYyaJgCp/Cy
+        T2aPCWoCQvRPtDJLcF2vOOpaA8wQtrqme+/yjw9I63LRssDYUXCYOuG3d8ijfTP/mboJDs
+        /2Xxp0SH1noKWRTIc75H0GcS3H7RI0o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-517-FyViuAiBN9iUFauAVzNXJw-1; Tue, 28 Jun 2022 12:30:35 -0400
+X-MC-Unique: FyViuAiBN9iUFauAVzNXJw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4672BB81EF1;
-        Tue, 28 Jun 2022 16:20:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E765C341CE;
-        Tue, 28 Jun 2022 16:19:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656433200;
-        bh=AFbYjOXviL5rmJow0VE7Z2Ll+TzqAJN36EvtLVEyoBQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RBzJ3f2FDgtelVRVNO08rnuOooIsTtouQkRpgXCpCNlrB/uhh3U3M0Y7Gaklc4Be6
-         K9jU1JlvI1U4vS1cR8t1RidM2DBfbQOSXbyVsTL/cqajjsJJgbh5CPp3f64W0kfaMa
-         k1YnSbjkc6SNfm5JmCBc5JMshXme5LnHNvDzh9Z5UVvVnoecyX+xIc7esJBJYz8REh
-         buTSXg17tbE0JcunijA8JsxSd5xejcCkFA+G4n7NLJv5Wzbp3BL2YAJZx6ppNLxR+i
-         yilmppsQn6I8+Qxk1dabrbAZ7rnjLYqvi/MsbyFr60IVpV9VgbWIl8m1+yxJK/Ea8W
-         xLHQd/m0Znfxg==
-From:   KP Singh <kpsingh@kernel.org>
-To:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: [PATCH v5 bpf-next 3/5] bpf: Allow kfuncs to be used in LSM programs
-Date:   Tue, 28 Jun 2022 16:19:46 +0000
-Message-Id: <20220628161948.475097-4-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-In-Reply-To: <20220628161948.475097-1-kpsingh@kernel.org>
-References: <20220628161948.475097-1-kpsingh@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DBB5D101A589;
+        Tue, 28 Jun 2022 16:30:34 +0000 (UTC)
+Received: from firesoul.localdomain (unknown [10.40.208.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E934492C3B;
+        Tue, 28 Jun 2022 16:30:34 +0000 (UTC)
+Received: from [192.168.42.3] (localhost [IPv6:::1])
+        by firesoul.localdomain (Postfix) with ESMTP id 9DECB30736C72;
+        Tue, 28 Jun 2022 18:30:33 +0200 (CEST)
+Subject: [PATCH RFC bpf-next 0/9] Introduce XDP-hints via BTF
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     bpf@vger.kernel.org
+Cc:     xdp-hints@xdp-project.net,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Date:   Tue, 28 Jun 2022 18:30:33 +0200
+Message-ID: <165643378969.449467.13237011812569188299.stgit@firesoul>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In preparation for the addition of bpf_getxattr kfunc.
+This patchset expose the traditional hardware offload hints to XDP and
+rely on BTF to expose the layout to users.  More advanced use-case with
+driver specific offloads will likely be in followup patches.
 
-Signed-off-by: KP Singh <kpsingh@kernel.org>
+The users/consumers are (as described in [1]):
+ - XDP BPF-progs
+ - XDP to SKB conversion gaining HW offloads
+ - AF_XDP can consume BTF info in userspace
+ - Chained BPF-progs can communicate state via metadata
+
+This is still RFC as the following features are missing:
+ - Exposing XDP-hints indication in AF_XDP descriptor
+ - Exporting what XDP-hints structs are avail per driver
+
+Two drivers i40e and mvneta gets XDP-hints in this patchset.
+
+[1] https://github.com/xdp-project/xdp-project/blob/master/conference/LLC2022/xdp_hints_hw_metadata-final.pdf
+
 ---
- kernel/bpf/btf.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 9b9d6117deae..0331caa98726 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7265,6 +7265,7 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
- 	case BPF_PROG_TYPE_STRUCT_OPS:
- 		return BTF_KFUNC_HOOK_STRUCT_OPS;
- 	case BPF_PROG_TYPE_TRACING:
-+	case BPF_PROG_TYPE_LSM:
- 		return BTF_KFUNC_HOOK_TRACING;
- 	case BPF_PROG_TYPE_SYSCALL:
- 		return BTF_KFUNC_HOOK_SYSCALL;
--- 
-2.37.0.rc0.161.g10f37bed90-goog
+Jesper Dangaard Brouer (8):
+      i40e: Refactor i40e_ptp_rx_hwtstamp
+      bpf: export btf functions for modules
+      net: create xdp_hints_common and set functions
+      net: add net_device feature flag for XDP-hints
+      xdp: controlling XDP-hints from BPF-prog via helper
+      i40e: refactor i40e_rx_checksum with helper
+      i40e: add XDP-hints handling
+      net: use XDP-hints in xdp_frame to SKB conversion
+
+Lorenzo Bianconi (1):
+      mvneta: add XDP-hints support
+
+
+ drivers/net/ethernet/intel/i40e/i40e.h      |   1 +
+ drivers/net/ethernet/intel/i40e/i40e_main.c |  34 +++
+ drivers/net/ethernet/intel/i40e/i40e_ptp.c  |  36 +++-
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 222 ++++++++++++++++----
+ drivers/net/ethernet/marvell/mvneta.c       |  61 +++++-
+ include/linux/btf.h                         |   2 +
+ include/linux/netdev_features.h             |   3 +-
+ include/net/xdp.h                           | 181 +++++++++++++++-
+ include/uapi/linux/bpf.h                    |  43 ++++
+ kernel/bpf/btf.c                            |  13 +-
+ net/core/filter.c                           |  45 ++++
+ net/core/xdp.c                              |  73 ++++++-
+ net/ethtool/common.c                        |   1 +
+ 13 files changed, 644 insertions(+), 71 deletions(-)
+
+--
 
