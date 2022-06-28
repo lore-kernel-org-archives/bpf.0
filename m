@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 891F3CCA47F
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 520AECCA485
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:30:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiF1QaL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
+        id S232118AbiF1QaP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 12:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347466AbiF1Q3J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:29:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581603A182;
-        Tue, 28 Jun 2022 09:19:58 -0700 (PDT)
+        with ESMTP id S1347635AbiF1Q3L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 12:29:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4FF3A191;
+        Tue, 28 Jun 2022 09:20:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16A83B81F15;
-        Tue, 28 Jun 2022 16:19:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1614EC341CD;
-        Tue, 28 Jun 2022 16:19:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD946617CB;
+        Tue, 28 Jun 2022 16:20:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748AFC341CD;
+        Tue, 28 Jun 2022 16:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656433195;
-        bh=uZ0a5aDXW8MZkIEq0XmbcRjUTh8YkwmgzJs6XG0ENok=;
+        s=k20201202; t=1656433202;
+        bh=uBHpOboY6y9w+HwMF5AuSrCFXcv/uOgB4BTVB2oGngo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qCz6rDAbKU0oO71+34+lZjqNMXkCbW6WI+5/itTKjwMCcKz6Ukno9pgLnu0CrrQdQ
-         YbGOa/8PMeu2M8Nw+G3b7CGJ9Pp71MEMY/lJw/O/yNuL1FjP/8D3aX5ooyUx+Qgxbf
-         1Z/aOr0tbvoOwvEzuaN3ViIWWLBloc+fRcDinX58eTrzolVw6LS5ac3XVX8pi6JQXg
-         Mb/puUcabKhLRL22bKcJU6JlqPv0Vo4T9mZqmHB2v4LhQQ4la68DtBV5FdKe772o6y
-         UQ4lrA4OM796Ud5f4deH88uo6gKU1LKnjFAvdSBtvCHassLxWROhMpodfqUqA+eH5X
-         G9c2WfOI3xFgA==
+        b=cnvuNN2i97ReGHjMPkFMfNtPeC9XLQ+9qYt9/BMZH9jj3tbFvd15y6pnVHVmS+Gnd
+         swrPLE6ii2PsVrcsKhuJDmM+BVf24MKm2HXptqOk38QMgkT7IZZdU3xzjCBiLErZqE
+         Gs/u2PZT342n388LeTUOi3nUcKnrMLgMxWqj5zOyaZ3diE+Oexnz9zusWPNQeprYt8
+         0+w+p2FNodbJhhNxFwaMNkpIFXZ8sHPIf9krSQ4/w6nj9sgQP+yCnK/K964dJVX5PD
+         vAtQe/sewg5GrDmYG1MJ7hZxZKAugAV11pKqcVnFpc7OnrSinfmtGiI/Ji82tsXj3z
+         rELaR4IyoM+zg==
 From:   KP Singh <kpsingh@kernel.org>
 To:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
         linux-fsdevel@vger.kernel.org
@@ -39,9 +39,9 @@ Cc:     KP Singh <kpsingh@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Yosry Ahmed <yosryahmed@google.com>
-Subject: [PATCH v5 bpf-next 1/5] btf: Add a new kfunc set which allows to mark a function to be sleepable
-Date:   Tue, 28 Jun 2022 16:19:44 +0000
-Message-Id: <20220628161948.475097-2-kpsingh@kernel.org>
+Subject: [PATCH v5 bpf-next 4/5] bpf: Add a bpf_getxattr kfunc
+Date:   Tue, 28 Jun 2022 16:19:47 +0000
+Message-Id: <20220628161948.475097-5-kpsingh@kernel.org>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
 In-Reply-To: <20220628161948.475097-1-kpsingh@kernel.org>
 References: <20220628161948.475097-1-kpsingh@kernel.org>
@@ -51,78 +51,80 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+LSMs like SELinux store security state in xattrs. bpf_getxattr enables
+BPF LSM to implement similar functionality. In combination with
+bpf_local_storage, xattrs can be used to develop more complex security
+policies.
 
-This allows to declare a kfunc as sleepable and prevents its use in
-a non sleepable program.
+This kfunc wraps around __vfs_getxattr which can sleep and is,
+therefore, limited to sleepable programs using the newly added
+sleepable_set for kfuncs.
 
-Acked-by: KP Singh <kpsingh@kernel.org>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Signed-off-by: KP Singh <kpsingh@kernel.org>
 ---
- include/linux/btf.h |  2 ++
- kernel/bpf/btf.c    | 12 ++++++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ kernel/trace/bpf_trace.c | 42 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 1bfed7fa0428..6e7517573d9e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -18,6 +18,7 @@ enum btf_kfunc_type {
- 	BTF_KFUNC_TYPE_RELEASE,
- 	BTF_KFUNC_TYPE_RET_NULL,
- 	BTF_KFUNC_TYPE_KPTR_ACQUIRE,
-+	BTF_KFUNC_TYPE_SLEEPABLE,
- 	BTF_KFUNC_TYPE_MAX,
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 4be976cf7d63..87496d57b099 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -20,6 +20,7 @@
+ #include <linux/fprobe.h>
+ #include <linux/bsearch.h>
+ #include <linux/sort.h>
++#include <linux/xattr.h>
+ 
+ #include <net/bpf_sk_storage.h>
+ 
+@@ -1181,6 +1182,47 @@ static const struct bpf_func_proto bpf_get_func_arg_cnt_proto = {
+ 	.arg1_type	= ARG_PTR_TO_CTX,
  };
  
-@@ -37,6 +38,7 @@ struct btf_kfunc_id_set {
- 			struct btf_id_set *release_set;
- 			struct btf_id_set *ret_null_set;
- 			struct btf_id_set *kptr_acquire_set;
-+			struct btf_id_set *sleepable_set;
- 		};
- 		struct btf_id_set *sets[BTF_KFUNC_TYPE_MAX];
- 	};
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 2e2066d6af94..37bc77b3b499 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6171,7 +6171,7 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 	struct bpf_verifier_log *log = &env->log;
- 	u32 i, nargs, ref_id, ref_obj_id = 0;
- 	bool is_kfunc = btf_is_kernel(btf);
--	bool rel = false, kptr_get = false;
-+	bool rel = false, kptr_get = false, sleepable = false;
- 	const char *func_name, *ref_tname;
- 	const struct btf_type *t, *ref_t;
- 	const struct btf_param *args;
-@@ -6202,9 +6202,10 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 	}
- 
- 	if (is_kfunc) {
--		/* Only kfunc can be release func */
- 		rel = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
- 						BTF_KFUNC_TYPE_RELEASE, func_id);
-+		sleepable = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
-+						      BTF_KFUNC_TYPE_SLEEPABLE, func_id);
- 		kptr_get = btf_kfunc_id_set_contains(btf, resolve_prog_type(env->prog),
- 						     BTF_KFUNC_TYPE_KPTR_ACQUIRE, func_id);
- 	}
-@@ -6404,6 +6405,13 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 			func_name);
- 		return -EINVAL;
- 	}
++__diag_push();
++__diag_ignore_all("-Wmissing-prototypes",
++		  "kfuncs that are used in tracing/LSM BPF programs");
 +
-+	if (sleepable && !env->prog->aux->sleepable) {
-+		bpf_log(log, "kernel function %s is sleepable but the program is not\n",
-+			func_name);
-+		return -EINVAL;
-+	}
++ssize_t bpf_getxattr(struct dentry *dentry, struct inode *inode,
++		     const char *name, void *value, int value__sz)
++{
++	return __vfs_getxattr(dentry, inode, name, value, value__sz);
++}
 +
- 	/* returns argument register number > 0 in case of reference release kfunc */
- 	return rel ? ref_regno : 0;
- }
++__diag_pop();
++
++BTF_SET_START(bpf_trace_kfunc_ids)
++BTF_ID(func, bpf_getxattr)
++BTF_SET_END(bpf_trace_kfunc_ids)
++
++BTF_SET_START(bpf_trace_sleepable_kfunc_ids)
++BTF_ID(func, bpf_getxattr)
++BTF_SET_END(bpf_trace_sleepable_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_trace_kfunc_set = {
++	.owner = THIS_MODULE,
++	.check_set = &bpf_trace_kfunc_ids,
++	.sleepable_set = &bpf_trace_sleepable_kfunc_ids,
++};
++
++static int __init bpf_trace_kfunc_init(void)
++{
++	int ret;
++
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
++					&bpf_trace_kfunc_set);
++	if (!ret)
++		return ret;
++
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
++					&bpf_trace_kfunc_set);
++
++}
++late_initcall(bpf_trace_kfunc_init);
++
+ static const struct bpf_func_proto *
+ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
