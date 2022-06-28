@@ -2,57 +2,57 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E265CCCA47F
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 17:43:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE4C4C433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 17:43:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiF1Rni (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 13:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S233249AbiF1Rnj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 13:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233287AbiF1Rna (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 13:43:30 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744F2A45D
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:43:27 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id d66-20020a636845000000b0040a88edd9c1so6980694pgc.13
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:43:27 -0700 (PDT)
+        with ESMTP id S233452AbiF1Rng (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 13:43:36 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F825EC
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:43:31 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id j5-20020a170902da8500b0016b90578019so1101590plx.5
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 10:43:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=oKd8fyQJpNfPVDCb0PJbs4XAB+7b+jUjsf0mKAcfMUA=;
-        b=Q3sCHC4KTyOtjTyNHm4T1Sfz7HRVgzZ8z4SYr+d0OjHMxZh5i7H+NV9pJiJJs19d48
-         6FbBvwiVuFjLPWZKhhr629vh01QOQRmDLh4GcMhDPhSCV6Au0Y2HUimIH/Q3rbzCOtlX
-         +e8ekCp7kU8G8/FLmIgfvjoby/qh2sEQx2kWBZ5SsVyGbiW3c6hpP45EzaPtlnolWHmS
-         IsXeHyz5w8AfNF8OZFBnC8HHjDPVPXIvPZFQbUTNgFdxEq1QeZa0dJHVLIclsdoD5ji0
-         YuF0L0BZFep07bnf/z3qETjb4H+lRTxkPLQMGnmo27E3br+BslXEFFl1QfWjCzm0TpLy
-         Irtw==
+        bh=OfOmFF3x0paANMTRsZmlz3M5YweUU7pTeuMecuKy5YM=;
+        b=eflQQdShJS4qHghrd2Thz3lvJ7Hq/aZzS5/+hKkH9xWsUtRuLACdRZFrU9LsYJAcUb
+         595x7Q6b+hOs+ns+0lWZL2PjHstejCscI+h+sdyZkZar1Rtct0GELx3p3EQqnMj8DKyn
+         8fG3PohxuBDSkd72vt+TZyRv5kUcdFAw+p1hhL7TAnRB8rynBmdbRAju6BoQBq+uKg2t
+         EJjSZYEEZkEU4PG+P7DpyOb0cm8KpQrmCmwZfLMyMw59w4R1J/rHpK2QGHPKrloTSufG
+         7RIBQ6QsNh8HI2pW+MBGEdglVs9PIfQm1nHeQCNOwSsu105FmUvvCBG8K1e/tOhImVuH
+         z0Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=oKd8fyQJpNfPVDCb0PJbs4XAB+7b+jUjsf0mKAcfMUA=;
-        b=1KVupAaenIS4Oyaj2eWG15mbDHb6KrkHaZnqJYXnkrlhDNoibEyJRzWvIiJFUfCnvX
-         4a0Itd/G+TDRoNIYawhO3C1qYyM2oPigkahExjdhcbMMOMfYUDxSaI0xOkVKgoGuo2tq
-         QZnY7sHyRmbIbMxfbUpFW28Ura7CPhLtDV+ajCVwLrUwmz2a5O18q3i9UIkvKsEqclL6
-         kqVWZji7f/CyrQKM5Zt+ayHu4HhUFIHHu93KhZYGHf+ZsnFdWuREuv3w+vae+agtseA7
-         IYt4sdj7h15qW5U5G+SLKPPAIfXWEtDiI00cSKMNtwyVbKQVaFxdXV2KhQpMg0MaFU0w
-         uegA==
-X-Gm-Message-State: AJIora+ApEstdFaOojMuoxvdZuZbjRgTkrjFpV43yMPtKhZAPJG/CMUA
-        mBjwo9IqDwEpNALIIZOjTJpJaFS0EvmmsxvB9qoxwuXPxvidWNBLzHTg/qnTSzIXyBdgxiHg7E6
-        5PSbg3Oqh1vTkIW1rlqF7myHYxgR1+bG3eRuePDMX5Qeny8UadA==
-X-Google-Smtp-Source: AGRyM1tvQVmAfCsYHHhVHZG5FgrgSBEt5mwbQaFxh1XhmKkbeM64vJnDQJoxn17GW+FdB5iVx7n9uzM=
+        bh=OfOmFF3x0paANMTRsZmlz3M5YweUU7pTeuMecuKy5YM=;
+        b=yFxTnCncByhJQyzd0iTpMtIpECpjXk9C4LGtK0rKSR5dTPxXHdCmtizZZtZy2NPSLk
+         ffDhheHqS1lnee6K2Xb+qSNc9+vN/VJQQwiUX16e+XdrTs0+QE8pwSISCS7ujX29gekE
+         UeGrdSPtGOgAZF0aMo0w/Vo8oJ98cR1wPEt+/9cL0ZkE7MB6aK++A6i4dL4NuM3ty22v
+         a1o9F/AplLUVDHGs1sYJQR8PGPgeV2OXXlqEZtvGokHpA1sYyGmtlcGzSthKb5Fr0n1+
+         KZllQrzLo3gjpXmPFoI9YQKWYK/tif1X9D86KaxKQpnlHKLfSU1ZE9ii/tLZbBtxT8nP
+         jetg==
+X-Gm-Message-State: AJIora+047V5Mr9rImjIY+SpH4sRcmKve4o79ezqYYdCAi7eTmtSGrfb
+        AemIYl0g9FtLQ40HuACli0hyz6+tXffBXl0gdVmhy2z6bei56SYbFpsMWFuqkzgMGFQbH39S1Ct
+        zCp4bvckQGAmBKEJggB5unPatbluXtbcfGVJ4A+lhuqhOoepWjg==
+X-Google-Smtp-Source: AGRyM1uuWAxQc8E60tNY76sEXmvdbOPfvwxgqtqcXbtADafBIF2/xtA7uQD9adwQb5++lg9T7wEhuHk=
 X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a17:90b:1c02:b0:1ed:4bfb:7772 with SMTP id
- oc2-20020a17090b1c0200b001ed4bfb7772mr832160pjb.139.1656438206329; Tue, 28
- Jun 2022 10:43:26 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 10:43:09 -0700
+ (user=sdf job=sendgmr) by 2002:a63:2bc3:0:b0:411:66bf:9ce3 with SMTP id
+ r186-20020a632bc3000000b0041166bf9ce3mr2280991pgr.165.1656438211278; Tue, 28
+ Jun 2022 10:43:31 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 10:43:12 -0700
 In-Reply-To: <20220628174314.1216643-1-sdf@google.com>
-Message-Id: <20220628174314.1216643-7-sdf@google.com>
+Message-Id: <20220628174314.1216643-10-sdf@google.com>
 Mime-Version: 1.0
 References: <20220628174314.1216643-1-sdf@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH bpf-next v11 06/11] bpf: expose bpf_{g,s}etsockopt to lsm cgroup
+Subject: [PATCH bpf-next v11 09/11] libbpf: implement bpf_prog_query_opts
 From:   Stanislav Fomichev <sdf@google.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -65,203 +65,126 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I don't see how to make it nice without introducing btf id lists
-for the hooks where these helpers are allowed. Some LSM hooks
-work on the locked sockets, some are triggering early and
-don't grab any locks, so have two lists for now:
+Implement bpf_prog_query_opts as a more expendable version of
+bpf_prog_query. Expose new prog_attach_flags and attach_btf_func_id as
+well:
 
-1. LSM hooks which trigger under socket lock - minority of the hooks,
-   but ideal case for us, we can expose existing BTF-based helpers
-2. LSM hooks which trigger without socket lock, but they trigger
-   early in the socket creation path where it should be safe to
-   do setsockopt without any locks
-3. The rest are prohibited. I'm thinking that this use-case might
-   be a good gateway to sleeping lsm cgroup hooks in the future.
-   We can either expose lock/unlock operations (and add tracking
-   to the verifier) or have another set of bpf_setsockopt
-   wrapper that grab the locks and might sleep.
+* prog_attach_flags is a per-program attach_type; relevant only for
+  lsm cgroup program which might have different attach_flags
+  per attach_btf_id
+* attach_btf_func_id is a new field expose for prog_query which
+  specifies real btf function id for lsm cgroup attachments
 
-Reviewed-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/linux/bpf.h  |  2 ++
- kernel/bpf/bpf_lsm.c | 38 ++++++++++++++++++++++++++++
- net/core/filter.c    | 60 ++++++++++++++++++++++++++++++++++++++------
- 3 files changed, 93 insertions(+), 7 deletions(-)
+ tools/lib/bpf/bpf.c      | 38 +++++++++++++++++++++++++++++++-------
+ tools/lib/bpf/bpf.h      | 15 +++++++++++++++
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 47 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5d2afa55c7c3..2b21f2a3452f 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2386,6 +2386,8 @@ extern const struct bpf_func_proto bpf_for_each_map_elem_proto;
- extern const struct bpf_func_proto bpf_btf_find_by_name_kind_proto;
- extern const struct bpf_func_proto bpf_sk_setsockopt_proto;
- extern const struct bpf_func_proto bpf_sk_getsockopt_proto;
-+extern const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto;
-+extern const struct bpf_func_proto bpf_unlocked_sk_getsockopt_proto;
- extern const struct bpf_func_proto bpf_find_vma_proto;
- extern const struct bpf_func_proto bpf_loop_proto;
- extern const struct bpf_func_proto bpf_copy_from_user_task_proto;
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index 83aa431dd52e..d469b7f3deef 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -45,6 +45,24 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
- BTF_ID(func, bpf_lsm_sk_free_security)
- BTF_SET_END(bpf_lsm_current_hooks)
- 
-+/* List of LSM hooks that trigger while the socket is properly locked.
-+ */
-+BTF_SET_START(bpf_lsm_locked_sockopt_hooks)
-+BTF_ID(func, bpf_lsm_socket_sock_rcv_skb)
-+BTF_ID(func, bpf_lsm_sock_graft)
-+BTF_ID(func, bpf_lsm_inet_csk_clone)
-+BTF_ID(func, bpf_lsm_inet_conn_established)
-+BTF_SET_END(bpf_lsm_locked_sockopt_hooks)
-+
-+/* List of LSM hooks that trigger while the socket is _not_ locked,
-+ * but it's ok to call bpf_{g,s}etsockopt because the socket is still
-+ * in the early init phase.
-+ */
-+BTF_SET_START(bpf_lsm_unlocked_sockopt_hooks)
-+BTF_ID(func, bpf_lsm_socket_post_create)
-+BTF_ID(func, bpf_lsm_socket_socketpair)
-+BTF_SET_END(bpf_lsm_unlocked_sockopt_hooks)
-+
- void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog,
- 			     bpf_func_t *bpf_func)
- {
-@@ -201,6 +219,26 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_get_retval:
- 		return prog->expected_attach_type == BPF_LSM_CGROUP ?
- 			&bpf_get_retval_proto : NULL;
-+	case BPF_FUNC_setsockopt:
-+		if (prog->expected_attach_type != BPF_LSM_CGROUP)
-+			return NULL;
-+		if (btf_id_set_contains(&bpf_lsm_locked_sockopt_hooks,
-+					prog->aux->attach_btf_id))
-+			return &bpf_sk_setsockopt_proto;
-+		if (btf_id_set_contains(&bpf_lsm_unlocked_sockopt_hooks,
-+					prog->aux->attach_btf_id))
-+			return &bpf_unlocked_sk_setsockopt_proto;
-+		return NULL;
-+	case BPF_FUNC_getsockopt:
-+		if (prog->expected_attach_type != BPF_LSM_CGROUP)
-+			return NULL;
-+		if (btf_id_set_contains(&bpf_lsm_locked_sockopt_hooks,
-+					prog->aux->attach_btf_id))
-+			return &bpf_sk_getsockopt_proto;
-+		if (btf_id_set_contains(&bpf_lsm_unlocked_sockopt_hooks,
-+					prog->aux->attach_btf_id))
-+			return &bpf_unlocked_sk_getsockopt_proto;
-+		return NULL;
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 151aa4756bd6..c6941ab0eb52 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -5012,8 +5012,8 @@ static const struct bpf_func_proto bpf_get_socket_uid_proto = {
- 	.arg1_type      = ARG_PTR_TO_CTX,
- };
- 
--static int _bpf_setsockopt(struct sock *sk, int level, int optname,
--			   char *optval, int optlen)
-+static int __bpf_setsockopt(struct sock *sk, int level, int optname,
-+			    char *optval, int optlen)
- {
- 	char devname[IFNAMSIZ];
- 	int val, valbool;
-@@ -5024,8 +5024,6 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
- 	if (!sk_fullsock(sk))
- 		return -EINVAL;
- 
--	sock_owned_by_me(sk);
--
- 	if (level == SOL_SOCKET) {
- 		if (optlen != sizeof(int) && optname != SO_BINDTODEVICE)
- 			return -EINVAL;
-@@ -5258,14 +5256,20 @@ static int _bpf_setsockopt(struct sock *sk, int level, int optname,
- 	return ret;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 240186aac8e6..accc97cf9928 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -888,24 +888,48 @@ int bpf_iter_create(int link_fd)
+ 	return libbpf_err_errno(fd);
  }
  
--static int _bpf_getsockopt(struct sock *sk, int level, int optname,
-+static int _bpf_setsockopt(struct sock *sk, int level, int optname,
- 			   char *optval, int optlen)
-+{
-+	if (sk_fullsock(sk))
-+		sock_owned_by_me(sk);
-+	return __bpf_setsockopt(sk, level, optname, optval, optlen);
+-int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query_flags,
+-		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
++int bpf_prog_query_opts(int target_fd,
++			enum bpf_attach_type type,
++			struct bpf_prog_query_opts *opts)
+ {
+ 	union bpf_attr attr;
+ 	int ret;
+ 
++	if (!OPTS_VALID(opts, bpf_prog_query_opts))
++		return libbpf_err(-EINVAL);
++
+ 	memset(&attr, 0, sizeof(attr));
++
+ 	attr.query.target_fd	= target_fd;
+ 	attr.query.attach_type	= type;
+-	attr.query.query_flags	= query_flags;
+-	attr.query.prog_cnt	= *prog_cnt;
+-	attr.query.prog_ids	= ptr_to_u64(prog_ids);
++	attr.query.query_flags	= OPTS_GET(opts, query_flags, 0);
++	attr.query.prog_cnt	= OPTS_GET(opts, prog_cnt, 0);
++	attr.query.prog_ids	= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
++	attr.query.prog_attach_flags = ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
+ 
+ 	ret = sys_bpf(BPF_PROG_QUERY, &attr, sizeof(attr));
+ 
++	OPTS_SET(opts, attach_flags, attr.query.attach_flags);
++	OPTS_SET(opts, prog_cnt, attr.query.prog_cnt);
++
++	return libbpf_err_errno(ret);
 +}
 +
-+static int __bpf_getsockopt(struct sock *sk, int level, int optname,
-+			    char *optval, int optlen)
- {
- 	if (!sk_fullsock(sk))
- 		goto err_clear;
++int bpf_prog_query(int target_fd, enum bpf_attach_type type, __u32 query_flags,
++		   __u32 *attach_flags, __u32 *prog_ids, __u32 *prog_cnt)
++{
++	LIBBPF_OPTS(bpf_prog_query_opts, opts);
++	int ret;
++
++	opts.query_flags = query_flags;
++	opts.prog_ids = prog_ids;
++	opts.prog_cnt = *prog_cnt;
++
++	ret = bpf_prog_query_opts(target_fd, type, &opts);
++
+ 	if (attach_flags)
+-		*attach_flags = attr.query.attach_flags;
+-	*prog_cnt = attr.query.prog_cnt;
++		*attach_flags = opts.attach_flags;
++	*prog_cnt = opts.prog_cnt;
  
--	sock_owned_by_me(sk);
--
- 	if (level == SOL_SOCKET) {
- 		if (optlen != sizeof(int))
- 			goto err_clear;
-@@ -5360,6 +5364,14 @@ static int _bpf_getsockopt(struct sock *sk, int level, int optname,
- 	return -EINVAL;
+ 	return libbpf_err_errno(ret);
  }
- 
-+static int _bpf_getsockopt(struct sock *sk, int level, int optname,
-+			   char *optval, int optlen)
-+{
-+	if (sk_fullsock(sk))
-+		sock_owned_by_me(sk);
-+	return __bpf_getsockopt(sk, level, optname, optval, optlen);
-+}
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index cabc03703e29..e8f70ce6b537 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -442,9 +442,24 @@ LIBBPF_API int bpf_map_get_fd_by_id(__u32 id);
+ LIBBPF_API int bpf_btf_get_fd_by_id(__u32 id);
+ LIBBPF_API int bpf_link_get_fd_by_id(__u32 id);
+ LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
 +
- BPF_CALL_5(bpf_sk_setsockopt, struct sock *, sk, int, level,
- 	   int, optname, char *, optval, int, optlen)
- {
-@@ -5400,6 +5412,40 @@ const struct bpf_func_proto bpf_sk_getsockopt_proto = {
- 	.arg5_type	= ARG_CONST_SIZE,
- };
- 
-+BPF_CALL_5(bpf_unlocked_sk_setsockopt, struct sock *, sk, int, level,
-+	   int, optname, char *, optval, int, optlen)
-+{
-+	return __bpf_setsockopt(sk, level, optname, optval, optlen);
-+}
-+
-+const struct bpf_func_proto bpf_unlocked_sk_setsockopt_proto = {
-+	.func		= bpf_unlocked_sk_setsockopt,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.arg2_type	= ARG_ANYTHING,
-+	.arg3_type	= ARG_ANYTHING,
-+	.arg4_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
-+	.arg5_type	= ARG_CONST_SIZE,
++struct bpf_prog_query_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	__u32 query_flags;
++	__u32 attach_flags; /* output argument */
++	__u32 *prog_ids;
++	__u32 prog_cnt; /* input+output argument */
++	__u32 *prog_attach_flags;
 +};
++#define bpf_prog_query_opts__last_field prog_attach_flags
 +
-+BPF_CALL_5(bpf_unlocked_sk_getsockopt, struct sock *, sk, int, level,
-+	   int, optname, char *, optval, int, optlen)
-+{
-+	return __bpf_getsockopt(sk, level, optname, optval, optlen);
-+}
++LIBBPF_API int bpf_prog_query_opts(int target_fd,
++				   enum bpf_attach_type type,
++				   struct bpf_prog_query_opts *opts);
+ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
+ 			      __u32 query_flags, __u32 *attach_flags,
+ 			      __u32 *prog_ids, __u32 *prog_cnt);
 +
-+const struct bpf_func_proto bpf_unlocked_sk_getsockopt_proto = {
-+	.func		= bpf_unlocked_sk_getsockopt,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.arg2_type	= ARG_ANYTHING,
-+	.arg3_type	= ARG_ANYTHING,
-+	.arg4_type	= ARG_PTR_TO_UNINIT_MEM,
-+	.arg5_type	= ARG_CONST_SIZE,
-+};
-+
- BPF_CALL_5(bpf_sock_addr_setsockopt, struct bpf_sock_addr_kern *, ctx,
- 	   int, level, int, optname, char *, optval, int, optlen)
- {
+ LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
+ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
+ 				 __u32 *buf_len, __u32 *prog_id, __u32 *fd_type,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 116a2a8ee7c2..03c69cb821b3 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -462,6 +462,7 @@ LIBBPF_0.8.0 {
+ 
+ LIBBPF_1.0.0 {
+ 	global:
++		bpf_prog_query_opts;
+ 		btf__add_enum64;
+ 		btf__add_enum64_value;
+ 		libbpf_bpf_attach_type_str;
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
