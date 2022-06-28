@@ -2,120 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41A46C433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 09:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07547CCA480
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 12:28:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344511AbiF1JwG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 05:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S1345724AbiF1M20 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 08:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344547AbiF1JwC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 05:52:02 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3C92D1EA;
-        Tue, 28 Jun 2022 02:51:58 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v9so1250798wrp.7;
-        Tue, 28 Jun 2022 02:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xP6bEJNNszePrAel0wOJ+O8HtTQlu0JudOpo4V27qFg=;
-        b=ebpZPwgEjSzA/JYde3JwoNq1T7Vy4zNHa8d6n0r2EQd8meePM4d1Ql2ELQsUSaK3Kv
-         o49kptvKj32fyo3HwEg9J/8Mk5iyJv/KY7VzGAvgJfR5s/Z3v2x027Az8U/YXMZcNoYJ
-         r1esYkiCd7b9id90AZNQ7N1Mva7LxdA4uKtqB/JnMCpUmm1beBLtJXaOZaU0+yCEZ6sV
-         525/RgQwftp3WpG0RbACP4K0egjKviQ1pVErDTQnyplMR7ArLpaAt9HSuKzvYI9NerU7
-         PnOyD7ZekpX7dOxy84LVO6XPTRjfILTJrs17WgLaqE5hyItGVfoHQqjNQJRZMo0Cnpgn
-         8Q9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xP6bEJNNszePrAel0wOJ+O8HtTQlu0JudOpo4V27qFg=;
-        b=NKrSG0vHRz3Zx03coF4fuwXww63fwXrtzW3hND8N9TP/I+lP5GWcIEN4+xowJOONTT
-         P6Tfd8Q6/00wPa5nRZfsX7L9d+OosqYiRE9CP2HkYwCTcyrABnoGMiTVxqY3bLDPR24u
-         We+kbqXQtErI7M8Kzo0l7rekwSYztNeiRA4sIqKvcPE97R277w4W73NUNUrNBtZdp5DG
-         v90g/4USr4HzndVOt+KkG/b/EB9JQrcZwkz3K4g7QGTw8RSnwTApjHibbLPEB7w2H1QO
-         zvdLgOQJf9+JZVnxDbK4xFjdsY2KLzqhj2+uBWG7sy4EgsxHqT55FBY+iOPBICE+edmm
-         tw2g==
-X-Gm-Message-State: AJIora9MMR4UNeUBl0xeoqGkOnJiiHUuZtg9rAgLeLntwqQIrS35FYzO
-        7W0tQ4XHSe1v1aNqMVH9JF8=
-X-Google-Smtp-Source: AGRyM1tA8aDg/cOtRD/6R80NqWhtfksixikeKjJ3JzKrM/MoF5gVU+lYTqBmkYyneIAmqEhf3SxfyQ==
-X-Received: by 2002:a5d:59a6:0:b0:21b:a234:8314 with SMTP id p6-20020a5d59a6000000b0021ba2348314mr16498849wrr.316.1656409916821;
-        Tue, 28 Jun 2022 02:51:56 -0700 (PDT)
-Received: from krava (net-109-116-206-47.cust.vodafonedsl.it. [109.116.206.47])
-        by smtp.gmail.com with ESMTPSA id t10-20020adfe10a000000b00210320d9fbfsm15678199wrz.18.2022.06.28.02.51.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 02:51:55 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 28 Jun 2022 11:51:52 +0200
-To:     Yonghong Song <yhs@fb.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-Subject: Re: [PATCH dwarves v2 0/2] btf: support BTF_KIND_ENUM64
-Message-ID: <YrrPOFzYAGHm0oht@krava>
-References: <20220615230306.851750-1-yhs@fb.com>
+        with ESMTP id S1345736AbiF1M2S (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 08:28:18 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC265175AC;
+        Tue, 28 Jun 2022 05:28:09 -0700 (PDT)
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LXP4F0H3Tz689Py;
+        Tue, 28 Jun 2022 20:27:25 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 28 Jun 2022 14:28:07 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@kernel.org>, <john.fastabend@gmail.com>,
+        <songliubraving@fb.com>, <kafai@fb.com>, <yhs@fb.com>,
+        <dhowells@redhat.com>
+CC:     <keyrings@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH v6 3/5] scripts: Handle unsigned type prefix in bpf_doc.py
+Date:   Tue, 28 Jun 2022 14:27:48 +0200
+Message-ID: <20220628122750.1895107-4-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220628122750.1895107-1-roberto.sassu@huawei.com>
+References: <20220628122750.1895107-1-roberto.sassu@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615230306.851750-1-yhs@fb.com>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 04:03:06PM -0700, Yonghong Song wrote:
-> Add support for enum64. For 64-bit enumerator value,
-> previously, the value is truncated into 32bit, e.g.,
-> for the following enum in linux uapi bpf.h,
->   enum {
->         BPF_F_INDEX_MASK                = 0xffffffffULL,
->         BPF_F_CURRENT_CPU               = BPF_F_INDEX_MASK,
->   /* BPF_FUNC_perf_event_output for sk_buff input context. */
->         BPF_F_CTXLEN_MASK               = (0xfffffULL << 32),
->   };
-> 
-> BPF_F_CTXLEN_MASK will be encoded with 0 with BTF_KIND_ENUM
-> after pahole dwarf-to-btf conversion.
-> With this patch, the BPF_F_CTXLEN_MASK will be encoded properly
-> with BTF_KIND_ENUM64.
+While unsigned long is an accepted parameter type, the regular expression
+validating helper prototypes does not correctly take into account types
+composed by multiple words.
 
-yep, tried this on latest vmlinux and got:
+The regular expression:
 
-[705813] ENUM64 (anon) size=8
-        BPF_F_INDEX_MASK val=4294967295
-        BPF_F_CURRENT_CPU val=4294967295
-        BPF_F_CTXLEN_MASK val=4503595332403200
+((const )?(struct )?(\w+|\.\.\.)( \**\w+)?)
 
-which is correct
+accepts only const and struct as prefix before the type. The following part
+of the regular expression expects a word with [a-zA-Z0-9_] characters
+(without space), so it would get just unsigned. Parsing words with \w+ in
+greedy mode makes the regular expression work even if the type is composed
+by two words, but not always. It wouldn't have been the case in possessive
+mode \w++ (don't give back characters to match the regular expression).
 
-Tested-by: Jiri Olsa <jolsa@kernel.org>
+Simply adding unsigned as possible prefix is not correct, as the struct
+unsigned combination is not legal. Make instead struct and unsigned as
+alternatives, so that the following new combinations are legal:
 
-jirka
+unsigned type
+struct type
+const unsigned type
 
-> 
-> This patch is on top of tmp.master since tmp.master has not
-> been sync'ed with master branch yet.
-> 
-> Changelogs:
->   v1 -> v2:
->     - Add flag --skip_encoding_btf_enum64 to disable newly-added functionality.
-> 
-> Yonghong Song (2):
->   libbpf: Sync with latest libbpf repo
->   btf: Support BTF_KIND_ENUM64
-> 
->  btf_encoder.c     | 65 +++++++++++++++++++++++++++++++++++------------
->  btf_encoder.h     |  2 +-
->  dwarf_loader.c    | 12 +++++++++
->  dwarves.h         |  4 ++-
->  dwarves_fprintf.c |  6 ++++-
->  lib/bpf           |  2 +-
->  pahole.c          | 10 +++++++-
->  7 files changed, 80 insertions(+), 21 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
+and not:
+
+struct unsigned type
+
+The regular expression is a preliminary check. The type, other than being
+legal, must be also present in the known_types array.
+
+Don't mention the change in the regular expression description, as it is
+assumed that type implies also multiple words types.
+
+At this point, don't switch from greedy to possessive mode (\w+ -> \w++) to
+avoid partial parsing of the type of helper parameters, as this
+functionality has only been added recently in Python 3.11.
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ scripts/bpf_doc.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/bpf_doc.py b/scripts/bpf_doc.py
+index a0ec321469bd..25e79d811487 100755
+--- a/scripts/bpf_doc.py
++++ b/scripts/bpf_doc.py
+@@ -124,7 +124,7 @@ class HeaderParser(object):
+         #   - Same as above, with "const" and/or "struct" in front of type
+         #   - "..." (undefined number of arguments, for bpf_trace_printk())
+         # There is at least one term ("void"), and at most five arguments.
+-        p = re.compile(' \* ?((.+) \**\w+\((((const )?(struct )?(\w+|\.\.\.)( \**\w+)?)(, )?){1,5}\))$')
++        p = re.compile(' \* ?((.+) \**\w+\((((const )?((struct )|(unsigned )?)(\w+|\.\.\.)( \**\w+)?)(, )?){1,5}\))$')
+         capture = p.match(self.line)
+         if not capture:
+             raise NoHelperFound
+-- 
+2.25.1
+
