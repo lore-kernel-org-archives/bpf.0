@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B9DCCCA479
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0650EC43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:53:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbiF1Txr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S233250AbiF1Txs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiF1TvO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:51:14 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10352EA15;
-        Tue, 28 Jun 2022 12:50:05 -0700 (PDT)
+        with ESMTP id S232809AbiF1TvW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 15:51:22 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8182F396;
+        Tue, 28 Jun 2022 12:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445805; x=1687981805;
+  t=1656445808; x=1687981808;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=t8ZlSI0m7zNuVag8i0YVuPoeiLfNpeZeGU0sNzKVBRo=;
-  b=iDWCVmm1+5mIhFHPow04aog9KkjbtlJmryxRR61ivEMBKHC1L9ch8rvo
-   jhwEY2OX1oaRvXRUwJOMYRkj/+X3FIXwOg5OardII5nH8s86KuK4w8NH4
-   Y2PtVplwyK3BEjuKZXFZgrHiMUkNrRqDZ13WzE0gCwmdiF3exkPJM2q8S
-   fwP5hIGydO5zbak5EPn4NId1oNCLCEflXZNi5BHTAnS6nyhf3AR9bTqry
-   WxiOwc3I4Ov41Af3XLrcZyyMviIAvDCy7OVEMuR8hCuD9Byl1hiKg0gr6
-   fMNHslDYYihqpeM3J8wAoB6vo9WoMqQjFVmmE0wd1uNIXeRHaQmGn66Qi
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="261635779"
+  bh=u+AC2MYbg8VVczXn+494HhsrP8hqR5Z3OTGl9vIateQ=;
+  b=RUhS4kqJRnwUoQde8NR344wvzGJTF570Cg8XQHAm1y2eNjcCDy+W8BOu
+   sVsr+CfqTl9sdVW0cafr9Z4Ju1AvTOV02J5dgsJKgzemfHzCotxhj0aIN
+   Ff/9Yt9wk+CGvp8PKDNPukoIcu3zA2fAs6pgx87gAm0BppOdG6mtaW442
+   bMFufC1KlsuYPAE9/W7L40idiOEe63bg603AA2gksT6SNuWhtJIdIImul
+   m4NHSCo9wc/cBIPaPx4rC+g9QPSpnMBXcuzn49VqgnrVT/2Fw7nIcZkBC
+   eeluJO7POHgaMdfm/i92W0RNgd8e5RLwYrUOsS3TtGT8dVMubenVK9ioC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="279379122"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="261635779"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:50:05 -0700
+   d="scan'208";a="279379122"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:50:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="732883570"
+   d="scan'208";a="767288265"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 12:50:01 -0700
+  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2022 12:50:03 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9n022013;
-        Tue, 28 Jun 2022 20:49:59 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9p022013;
+        Tue, 28 Jun 2022 20:50:01 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 49/52] libbpf: add LE <--> CPU conversion helpers
-Date:   Tue, 28 Jun 2022 21:48:09 +0200
-Message-Id: <20220628194812.1453059-50-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 51/52] selftests/bpf: fix using test_xdp_meta BPF prog via skeleton infra
+Date:   Tue, 28 Jun 2022 21:48:11 +0200
+Message-Id: <20220628194812.1453059-52-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,73 +76,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Larysa Zaremba <larysa.zaremba@intel.com>
+progs/test_xdp_meta works fine when loading via iproute2, but the
+skeleton infra can't load it, saying that the types of the BPF
+programs present in the binary are not set.
+This is due to that the convention is to place XDP progs in the
+section which named 'xdp' and TC BPF progs in the section 'tc',
+so do it here as well.
 
-XDP Generic metadata structure has fields of the explicit
-Endianness, all 16, 32 and 64-bit wide.
-To make it easier to access them, define __le{16,32,64} <--> cpu
-helpers the same way it's done for the BEs.
-
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+Fixes: 22c8852624fc ("bpf: improve selftests and add tests for meta pointer")
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- tools/lib/bpf/bpf_endian.h | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c | 4 ++--
+ tools/testing/selftests/bpf/test_xdp_meta.sh      | 8 ++++----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf_endian.h b/tools/lib/bpf/bpf_endian.h
-index b03db6aa3f14..35941e6f1d99 100644
---- a/tools/lib/bpf/bpf_endian.h
-+++ b/tools/lib/bpf/bpf_endian.h
-@@ -60,6 +60,18 @@
- # define __bpf_cpu_to_be64(x)		__builtin_bswap64(x)
- # define __bpf_constant_be64_to_cpu(x)	___bpf_swab64(x)
- # define __bpf_constant_cpu_to_be64(x)	___bpf_swab64(x)
-+# define __bpf_le16_to_cpu(x)		(x)
-+# define __bpf_cpu_to_le16(x)		(x)
-+# define __bpf_constant_le16_to_cpu(x)	(x)
-+# define __bpf_constant_cpu_to_le16(x)	(x)
-+# define __bpf_le32_to_cpu(x)		(x)
-+# define __bpf_cpu_to_le32(x)		(x)
-+# define __bpf_constant_le32_to_cpu(x)	(x)
-+# define __bpf_constant_cpu_to_le32(x)	(x)
-+# define __bpf_le64_to_cpu(x)		(x)
-+# define __bpf_cpu_to_le64(x)		(x)
-+# define __bpf_constant_le64_to_cpu(x)	(x)
-+# define __bpf_constant_cpu_to_le64(x)	(x)
- #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
- # define __bpf_ntohs(x)			(x)
- # define __bpf_htons(x)			(x)
-@@ -73,6 +85,18 @@
- # define __bpf_cpu_to_be64(x)		(x)
- # define __bpf_constant_be64_to_cpu(x)  (x)
- # define __bpf_constant_cpu_to_be64(x)  (x)
-+# define __bpf_le16_to_cpu(x)		__builtin_bswap16(x)
-+# define __bpf_cpu_to_le16(x)		__builtin_bswap16(x)
-+# define __bpf_constant_le16_to_cpu(x)	___bpf_swab16(x)
-+# define __bpf_constant_cpu_to_le16(x)	___bpf_swab16(x)
-+# define __bpf_le32_to_cpu(x)		__builtin_bswap32(x)
-+# define __bpf_cpu_to_le32(x)		__builtin_bswap32(x)
-+# define __bpf_constant_le32_to_cpu(x)	___bpf_swab32(x)
-+# define __bpf_constant_cpu_to_le32(x)	___bpf_swab32(x)
-+# define __bpf_le64_to_cpu(x)		__builtin_bswap64(x)
-+# define __bpf_cpu_to_le64(x)		__builtin_bswap64(x)
-+# define __bpf_constant_le64_to_cpu(x)	___bpf_swab64(x)
-+# define __bpf_constant_cpu_to_le64(x)	___bpf_swab64(x)
- #else
- # error "Fix your compiler's __BYTE_ORDER__?!"
- #endif
-@@ -87,5 +111,11 @@
- #define bpf_ntohl(x)			__bpf_endop(ntohl, x)
- #define bpf_cpu_to_be64(x)		__bpf_endop(cpu_to_be64, x)
- #define bpf_be64_to_cpu(x)		__bpf_endop(be64_to_cpu, x)
-+#define bpf_cpu_to_le16(x)		__bpf_endop(cpu_to_le16, x)
-+#define bpf_le16_to_cpu(x)		__bpf_endop(le16_to_cpu, x)
-+#define bpf_cpu_to_le32(x)		__bpf_endop(cpu_to_le32, x)
-+#define bpf_le32_to_cpu(x)		__bpf_endop(le32_to_cpu, x)
-+#define bpf_cpu_to_le64(x)		__bpf_endop(cpu_to_le64, x)
-+#define bpf_le64_to_cpu(x)		__bpf_endop(le64_to_cpu, x)
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+index a7c4a7d49fe6..fe2d71ae0e71 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+@@ -8,7 +8,7 @@
+ #define round_up(x, y) ((((x) - 1) | __round_mask(x, y)) + 1)
+ #define ctx_ptr(ctx, mem) (void *)(unsigned long)ctx->mem
  
- #endif /* __BPF_ENDIAN__ */
+-SEC("t")
++SEC("tc")
+ int ing_cls(struct __sk_buff *ctx)
+ {
+ 	__u8 *data, *data_meta, *data_end;
+@@ -28,7 +28,7 @@ int ing_cls(struct __sk_buff *ctx)
+ 	return diff ? TC_ACT_SHOT : TC_ACT_OK;
+ }
+ 
+-SEC("x")
++SEC("xdp")
+ int ing_xdp(struct xdp_md *ctx)
+ {
+ 	__u8 *data, *data_meta, *data_end;
+diff --git a/tools/testing/selftests/bpf/test_xdp_meta.sh b/tools/testing/selftests/bpf/test_xdp_meta.sh
+index ea69370caae3..7232714e89b3 100755
+--- a/tools/testing/selftests/bpf/test_xdp_meta.sh
++++ b/tools/testing/selftests/bpf/test_xdp_meta.sh
+@@ -42,11 +42,11 @@ ip netns exec ${NS2} ip addr add 10.1.1.22/24 dev veth2
+ ip netns exec ${NS1} tc qdisc add dev veth1 clsact
+ ip netns exec ${NS2} tc qdisc add dev veth2 clsact
+ 
+-ip netns exec ${NS1} tc filter add dev veth1 ingress bpf da obj test_xdp_meta.o sec t
+-ip netns exec ${NS2} tc filter add dev veth2 ingress bpf da obj test_xdp_meta.o sec t
++ip netns exec ${NS1} tc filter add dev veth1 ingress bpf da obj test_xdp_meta.o sec tc
++ip netns exec ${NS2} tc filter add dev veth2 ingress bpf da obj test_xdp_meta.o sec tc
+ 
+-ip netns exec ${NS1} ip link set dev veth1 xdp obj test_xdp_meta.o sec x
+-ip netns exec ${NS2} ip link set dev veth2 xdp obj test_xdp_meta.o sec x
++ip netns exec ${NS1} ip link set dev veth1 xdp obj test_xdp_meta.o sec xdp
++ip netns exec ${NS2} ip link set dev veth2 xdp obj test_xdp_meta.o sec xdp
+ 
+ ip netns exec ${NS1} ip link set dev veth1 up
+ ip netns exec ${NS2} ip link set dev veth2 up
 -- 
 2.36.1
 
