@@ -2,230 +2,130 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D66AFC433EF
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0969C433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:50:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiF1QfE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S232513AbiF1Qum (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 12:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbiF1Qea (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:34:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39DB32C120
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1656433882;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GVhjnFy1p4yXXxHSIbHIAdGS4VuHqSqKY57qMTPzco4=;
-        b=dObPZMOLwOMAyFvkZPjiw1LOEyqX/hpRmiUImiDw+nMmEDxtuTW6IriTneWt5ECNgcARML
-        LhYbCGqWPoDPVHtMFf2sNcA8UYlOjj15go3B01tavKLNTOUuO54ZuM+420Qy9sAwrj7afF
-        YnE6aABr0WmQFE4nl/raBH5S1biuq/Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-607-sGnRsmI9PH2hbPVnVXIyeA-1; Tue, 28 Jun 2022 12:31:20 -0400
-X-MC-Unique: sGnRsmI9PH2hbPVnVXIyeA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D2CD38149B4;
-        Tue, 28 Jun 2022 16:31:20 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 19E9A1678F;
-        Tue, 28 Jun 2022 16:31:20 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 1A7E630736C72;
-        Tue, 28 Jun 2022 18:31:19 +0200 (CEST)
-Subject: [PATCH RFC bpf-next 9/9] mvneta: add XDP-hints support
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     xdp-hints@xdp-project.net,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Date:   Tue, 28 Jun 2022 18:31:19 +0200
-Message-ID: <165643387907.449467.15379243921107938760.stgit@firesoul>
-In-Reply-To: <165643378969.449467.13237011812569188299.stgit@firesoul>
-References: <165643378969.449467.13237011812569188299.stgit@firesoul>
-User-Agent: StGit/1.4
+        with ESMTP id S1343864AbiF1QtM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 12:49:12 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74853207A
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:46:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id w24so13116346pjg.5
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:46:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=POy+zBjn312v0YhfuOKTjwLjE/i7nInlT7W/RUAD3x0=;
+        b=mwh9lspGqFai2wIzZ2N0tIigtwUZApjXm4sL69nMcR2WGlXJdMeZNHSSmCQIEPmyS2
+         APfkkVbYEaSnXI+rpLEyznXB0rQ8927dNT0SNzWD5cRuoWk/5VNvt+Nzno5SNZr+xerA
+         jdJXFdUoELrS3bWSNsPj1Y3RWykTSOxFwWmxCUygjhMn5AlL1Ms7spXu89nuJeop6mkJ
+         ikUR56yLCVHJAFgWvNe6cQtXbeYsCU7ORFoOsrKNxX3N9D5Qib9qlX8N14TVkbTidbSV
+         kiPYlgHk0Q4iTqzTEzklKMG6kn+r7CfeBqp2Z03sDzFveMk9AMnpkALrjZtL6JYYSfjC
+         CTsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=POy+zBjn312v0YhfuOKTjwLjE/i7nInlT7W/RUAD3x0=;
+        b=VoNIaRAnuYCAAiPMIHAwyuHg5YIZ4uOHwnZqLqs7P19rUUx4Og6y87lb4Ssxmg4qBV
+         KjQJwv0siLh94xokeCEzo2QEVfCPUqZEbKp9nHKrQYYcHnb9+xBP0yxFVMmAojTbkMAz
+         Mguqie66ixYH73qwmfQf/n7OIfvNCjyiPjxNluYIL+r+x2VsSK9gTBJaLdB25u/IXqD8
+         WIkxFMhYm4/RVikH8D0eGqe/S4zHUOUFoYmCJwtsQ/8bzUPmsl+vEvZN0vGCremyfsqj
+         QndlppTXYPma8BL5Oy2ywt/H5lKzqRlnG4O6qc7Du335c8tqN6yhaHW/Tc91EyfqeKYg
+         nYKw==
+X-Gm-Message-State: AJIora++Y1NctZK2LWlBdhkzl5v+qM5UDokPKAs6MNt63HHaARbi0nu4
+        0yaQiY2IA2q6sVsZd17B6lA=
+X-Google-Smtp-Source: AGRyM1vW7Nb2qyBiAAVgyD9R0+sj+gkP53tntlKYA2kMl9UgDMK5fSKOpNVDsFU1hV9zHAWZ3+BRWQ==
+X-Received: by 2002:a17:90a:9407:b0:1ed:5b4c:4df2 with SMTP id r7-20020a17090a940700b001ed5b4c4df2mr587198pjo.114.1656434807088;
+        Tue, 28 Jun 2022 09:46:47 -0700 (PDT)
+Received: from MacBook-Pro-3.local ([2620:10d:c090:500::1:50])
+        by smtp.gmail.com with ESMTPSA id x4-20020a1709027c0400b0016a04b577f1sm9531765pll.246.2022.06.28.09.46.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jun 2022 09:46:46 -0700 (PDT)
+Date:   Tue, 28 Jun 2022 09:46:43 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Mykola Lysenko <mykolal@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: Re: [PATCH bpf] bpf, docs: Better scale maintenance of BPF subsystem
+Message-ID: <20220628164643.2gdyifct4x2zbbsb@MacBook-Pro-3.local>
+References: <5bdc73e7f5a087299589944fa074563cdf2c2c1a.1656353995.git.daniel@iogearbox.net>
+ <20220627122535.6020f23e@kicinski-fedora-PC1C0HJN>
+ <CAADnVQLOS4kvmcp+aaX6gtDUCUfoL906K+Y4KUZOsYBDso_xMw@mail.gmail.com>
+ <20220627133027.1e141f11@kernel.org>
+ <CAADnVQKf8huK_bdGPQzOZwXJD7aqr-2a3jFPfhYrEz8BD115qw@mail.gmail.com>
+ <ac8da400-f403-7817-414d-d3001c82dc4c@iogearbox.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ac8da400-f403-7817-414d-d3001c82dc4c@iogearbox.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+On Tue, Jun 28, 2022 at 10:59:02AM +0200, Daniel Borkmann wrote:
+> On 6/27/22 10:38 PM, Alexei Starovoitov wrote:
+> > On Mon, Jun 27, 2022 at 1:30 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> [...]
+> > > > vger continues to cause trouble and it doesn't sound that the fix is coming.
+> > > > So having everyone directly cc-ed is the only option we have.
+> > > 
+> > > Yeah, Exhibit A - vger is lagging right now...
+> > > I guess the "real fix" is on the vger, trying to massage MAINTAINERS
+> > > now is not a great use of time..
+> > 
+> > The real fix is to move away from vger and adjust get_maintainer
+> > script to be smarter when the mailer can do its job.
+> > MAINTAINERS file should list everyone who performs code reviews
+> > and maintains the code.
+> 
+> Agree to all above. I think to address Jakub's concern, we could adapt
+> this regex similarly as we have in XDP and move this as a remainder to
+> a misc/noise section, like below:
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index dbf978014e8a..b5a1960c8339 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3657,8 +3657,6 @@ F:        scripts/pahole-version.sh
+>  F:     tools/bpf/
+>  F:     tools/lib/bpf/
+>  F:     tools/testing/selftests/bpf/
+> -N:     bpf
+> -K:     bpf
+> 
+>  BPF JIT for ARM
+>  M:     Shubham Bansal <illusionist.neo@gmail.com>
+> @@ -3850,6 +3848,11 @@ L:       bpf@vger.kernel.org
+>  S:     Maintained
+>  F:     tools/testing/selftests/bpf/
+> 
+> +BPF [MISC]
+> +L:     bpf@vger.kernel.org
+> +S:     Odd Fixes
+> +K:     (?:\b|_)bpf(?:\b|_)
+> +
 
-Similar to i40e driver, add xdp hw-hints support for mvneta driver in
-order to report rx csum offload for xdp_redirect.
+Good idea!
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- drivers/net/ethernet/marvell/mvneta.c |   61 ++++++++++++++++++++++++++++-----
- 1 file changed, 52 insertions(+), 9 deletions(-)
+>  BROADCOM B44 10/100 ETHERNET DRIVER
+>  M:     Michael Chan <michael.chan@broadcom.com>
+>  L:     netdev@vger.kernel.org
+> 
+> If there are no objections, I can fold this in..
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 384f5a16753d..4f73ba905741 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -40,6 +40,7 @@
- #include <net/page_pool.h>
- #include <net/pkt_cls.h>
- #include <linux/bpf_trace.h>
-+#include <linux/btf.h>
- 
- /* Registers */
- #define MVNETA_RXQ_CONFIG_REG(q)                (0x1400 + ((q) << 2))
-@@ -371,6 +372,9 @@
- #define MVNETA_RX_GET_BM_POOL_ID(rxd) \
- 	(((rxd)->status & MVNETA_RXD_BM_POOL_MASK) >> MVNETA_RXD_BM_POOL_SHIFT)
- 
-+static struct btf *mvneta_btf;
-+static s32 btf_id_xdp_hints;
-+
- enum {
- 	ETHTOOL_STAT_EEE_WAKEUP,
- 	ETHTOOL_STAT_SKB_ALLOC_ERR,
-@@ -2308,12 +2312,15 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 		     struct mvneta_rx_desc *rx_desc,
- 		     struct mvneta_rx_queue *rxq,
- 		     struct xdp_buff *xdp, int *size,
--		     struct page *page)
-+		     struct page *page, u32 status)
- {
- 	unsigned char *data = page_address(page);
- 	int data_len = -MVNETA_MH_SIZE, len;
-+	struct xdp_hints_common *xdp_hints;
- 	struct net_device *dev = pp->dev;
- 	enum dma_data_direction dma_dir;
-+	u32 xdp_hints_flags;
-+	u16 cksum;
- 
- 	if (*size > MVNETA_MAX_RX_BUF_SIZE) {
- 		len = MVNETA_MAX_RX_BUF_SIZE;
-@@ -2336,6 +2343,18 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 	xdp_buff_clear_frags_flag(xdp);
- 	xdp_prepare_buff(xdp, data, pp->rx_offset_correction + MVNETA_MH_SIZE,
- 			 data_len, false);
-+
-+	if (!(pp->dev->features & NETIF_F_XDP_HINTS))
-+		return;
-+
-+	xdp_hints = xdp->data - sizeof(*xdp_hints);
-+	cksum = mvneta_rx_csum(pp, status);
-+	xdp_hints_flags = xdp_hints_set_rx_csum(xdp_hints, cksum, 0);
-+	xdp_hints_set_flags(xdp_hints, xdp_hints_flags);
-+	xdp_hints->btf_id = btf_id_xdp_hints;
-+	xdp->data_meta = xdp->data - sizeof(*xdp_hints);
-+
-+	xdp_buff_set_hints(xdp, BTF_ORIGIN_VMLINUX, true);
- }
- 
- static void
-@@ -2385,9 +2404,24 @@ mvneta_swbm_add_rx_fragment(struct mvneta_port *pp,
- 	*size -= len;
- }
- 
-+static void
-+mvneta_set_skb_cksum_from_xdp(struct xdp_buff *xdp, struct sk_buff *skb)
-+{
-+	struct xdp_hints_common *xdp_hints;
-+
-+	if (!(xdp_buff_has_hints_compat(xdp)))
-+		return;
-+
-+	if (xdp->data - xdp->data_meta < sizeof(*xdp_hints))
-+		return;
-+
-+	xdp_hints = xdp->data - sizeof(*xdp_hints);
-+	skb->ip_summed = xdp_hints->xdp_hints_flags & HINT_FLAG_CSUM_TYPE_MASK;
-+}
-+
- static struct sk_buff *
- mvneta_swbm_build_skb(struct mvneta_port *pp, struct page_pool *pool,
--		      struct xdp_buff *xdp, u32 desc_status)
-+		      struct xdp_buff *xdp)
- {
- 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
- 	struct sk_buff *skb;
-@@ -2404,7 +2438,7 @@ mvneta_swbm_build_skb(struct mvneta_port *pp, struct page_pool *pool,
- 
- 	skb_reserve(skb, xdp->data - xdp->data_hard_start);
- 	skb_put(skb, xdp->data_end - xdp->data);
--	skb->ip_summed = mvneta_rx_csum(pp, desc_status);
-+	mvneta_set_skb_cksum_from_xdp(xdp, skb);
- 
- 	if (unlikely(xdp_buff_has_frags(xdp)))
- 		xdp_update_skb_shared_info(skb, num_frags,
-@@ -2424,8 +2458,8 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 	struct net_device *dev = pp->dev;
- 	struct mvneta_stats ps = {};
- 	struct bpf_prog *xdp_prog;
--	u32 desc_status, frame_sz;
- 	struct xdp_buff xdp_buf;
-+	u32 frame_sz;
- 
- 	xdp_init_buff(&xdp_buf, PAGE_SIZE, &rxq->xdp_rxq);
- 	xdp_buf.data_hard_start = NULL;
-@@ -2458,10 +2492,8 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 
- 			size = rx_desc->data_size;
- 			frame_sz = size - ETH_FCS_LEN;
--			desc_status = rx_status;
--
- 			mvneta_swbm_rx_frame(pp, rx_desc, rxq, &xdp_buf,
--					     &size, page);
-+					     &size, page, rx_status);
- 		} else {
- 			if (unlikely(!xdp_buf.data_hard_start)) {
- 				rx_desc->buf_phys_addr = 0;
-@@ -2487,7 +2519,7 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
- 		    mvneta_run_xdp(pp, rxq, xdp_prog, &xdp_buf, frame_sz, &ps))
- 			goto next;
- 
--		skb = mvneta_swbm_build_skb(pp, rxq->page_pool, &xdp_buf, desc_status);
-+		skb = mvneta_swbm_build_skb(pp, rxq->page_pool, &xdp_buf);
- 		if (IS_ERR(skb)) {
- 			struct mvneta_pcpu_stats *stats = this_cpu_ptr(pp->stats);
- 
-@@ -5613,7 +5645,7 @@ static int mvneta_probe(struct platform_device *pdev)
- 	}
- 
- 	dev->features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM |
--			NETIF_F_TSO | NETIF_F_RXCSUM;
-+			NETIF_F_TSO | NETIF_F_RXCSUM | NETIF_F_XDP_HINTS;
- 	dev->hw_features |= dev->features;
- 	dev->vlan_features |= dev->features;
- 	dev->priv_flags |= IFF_LIVE_ADDR_CHANGE;
-@@ -5817,6 +5849,16 @@ static int __init mvneta_driver_init(void)
- {
- 	int ret;
- 
-+	mvneta_btf = btf_get_module_btf(THIS_MODULE);
-+	if (mvneta_btf) {
-+		btf_id_xdp_hints = btf_find_by_name_kind(mvneta_btf,
-+							 "xdp_hints_common",
-+							 BTF_KIND_STRUCT);
-+		if (btf_id_xdp_hints < 0)
-+			pr_warn("%s: BTF cannot find struct xdp_hints_common",
-+				MVNETA_DRIVER_NAME);
-+	}
-+
- 	ret = cpuhp_setup_state_multi(CPUHP_AP_ONLINE_DYN, "net/mvneta:online",
- 				      mvneta_cpu_online,
- 				      mvneta_cpu_down_prepare);
-@@ -5844,6 +5886,7 @@ module_init(mvneta_driver_init);
- 
- static void __exit mvneta_driver_exit(void)
- {
-+	btf_put_module_btf(mvneta_btf);
- 	platform_driver_unregister(&mvneta_driver);
- 	cpuhp_remove_multi_state(CPUHP_NET_MVNETA_DEAD);
- 	cpuhp_remove_multi_state(online_hpstate);
-
-
+sgtm
