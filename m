@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77FA0CCA47E
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0CFCCA479
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:53:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbiF1TxX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S232124AbiF1Tx0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbiF1Tu6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:50:58 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C7A2BB02;
-        Tue, 28 Jun 2022 12:49:52 -0700 (PDT)
+        with ESMTP id S232487AbiF1Tu7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 15:50:59 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB8E2DD78;
+        Tue, 28 Jun 2022 12:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445792; x=1687981792;
+  t=1656445796; x=1687981796;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=n5bnddshct4lzfMKnn45sHWwTzSqDqX5LzB68we3Q6Q=;
-  b=Im4sDK6NiaLeCnl/W2PkC6o4jIf3WZC948fOzJVRf8CniDqR+Qbtj4p6
-   mKR3HpecQ37hErlyN23Jo920xlfxyFUDvhCmRfoOC1o2ZLOkM+8Yrjl+y
-   5opLdkwMAaGOA2R97jyp4wIyskFpIeqGj0PbcvxDViDjQsomWwRUlOh6A
-   huDTw2yRhO3l09sagLEH72QqT9toNRXtihivghqOWQb+lyr8qOKxieYdi
-   sowCWaLvFEGAfzZs/cBIm6fHtyH0uxobBIOuPSmm/Al20XPNg1WpcfKlM
-   GHOxRy3oC8D5ILgcml+9Gt1Q+r3qC08ML0XoJvKnHAiFGzsY9uocKKwOK
+  bh=ht3UfTVIR3bDx+pf/6oyHp02PGIIQJZ5QLXufKfdPmY=;
+  b=IfKOPtkyuqHWDCMOUAHZUPZrJUwZHn089HW50CTQ6lgSkjU6uTeoEimT
+   7b6ahgE79FxFAGVq13uGEyJqfN5QvTA3md4TQUboSIg/QJ9wu/QP205Vm
+   M6HsD+zUeLUSOB5vyx/Nlbwp58aLCkGa3hQ04FGOKD+luP6Pq+q9X0AD5
+   y+jtZvE8mVvrnw5zfRyVgWWc8I1Tu1OB3XhC8IyJjRg4M9w/B/YyBOaMy
+   htIblI4JbrfK9PdmGSMEUe8tdao8AwnS/uEf0QHX+7WasXQiljHPR+Dbt
+   XnnqlJIy6Uena6/vrm/anv/Hfh4Zq68krycShv3mGnQrErg6ZvGg0ce7Z
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="281869648"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="343523339"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="281869648"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:43 -0700
+   d="scan'208";a="343523339"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:53 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="836809505"
+   d="scan'208";a="658257552"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2022 12:49:39 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 28 Jun 2022 12:49:47 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9X022013;
-        Tue, 28 Jun 2022 20:49:38 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9d022013;
+        Tue, 28 Jun 2022 20:49:45 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 33/52] bpf, cpumap: add option to set a timeout for deferred flush
-Date:   Tue, 28 Jun 2022 21:47:53 +0200
-Message-Id: <20220628194812.1453059-34-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 39/52] net, xdp: make &xdp_attachment_info a bit more useful in drivers
+Date:   Tue, 28 Jun 2022 21:47:59 +0200
+Message-Id: <20220628194812.1453059-40-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,128 +76,37 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-GRO efficiency depends a lot on the batch size. With the size of 8,
-it is less efficient than e.g. with NAPI and the size of 64.
-To do less percentage of full flushes and not hold GRO packets for
-too long, use the GRO hrtimer to wake up the kthread even if there's
-no new frames in the ptr_ring. Its value is being passed from the
-user side inside the corresponding &bpf_cpumap_val on map creation,
-in nanoseconds.
-When the timeout is 0/unset, the behaviour is the same as it was
-prior to the change.
+Add a new field which will store an arbitrary 'driver cookie', the
+closest usage is to store enum there corresponding to the metadata
+types supported by a driver to shortcut them on hotpath.
+In fact, it's just reusing the 4-byte padding at the end.
+Also, make it possible to store BTF ID in LE rather than CPU
+byteorder, so that drivers could save some cycles on [potential]
+byteswapping on hotpath.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/cpumap.c            | 39 +++++++++++++++++++++++++++++-----
- tools/include/uapi/linux/bpf.h |  1 +
- 3 files changed, 36 insertions(+), 5 deletions(-)
+ include/net/xdp.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 1caaec1de625..097719ee2172 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -5989,6 +5989,7 @@ struct bpf_cpumap_val {
- 		int   fd;	/* prog fd on map write */
- 		__u32 id;	/* prog id on map read */
- 	} bpf_prog;
-+	__u64 timeout;		/* timeout to wait for new packets, in ns */
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index d1fd809655be..5762ce18885f 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -380,8 +380,12 @@ void xdp_unreg_mem_model(struct xdp_mem_info *mem);
+ 
+ struct xdp_attachment_info {
+ 	struct bpf_prog *prog;
+-	u64 btf_id;
++	union {
++		__le64 btf_id_le;
++		u64 btf_id;
++	};
+ 	u32 meta_thresh;
++	u32 drv_cookie;
  };
  
- enum sk_action {
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 2d0edf8f6a05..145f49de0931 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -95,7 +95,8 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
- 	/* check sanity of attributes */
- 	if (attr->max_entries == 0 || attr->key_size != 4 ||
- 	    (value_size != offsetofend(struct bpf_cpumap_val, qsize) &&
--	     value_size != offsetofend(struct bpf_cpumap_val, bpf_prog.fd)) ||
-+	     value_size != offsetofend(struct bpf_cpumap_val, bpf_prog.fd) &&
-+	     value_size != offsetofend(struct bpf_cpumap_val, timeout)) ||
- 	    attr->map_flags & ~BPF_F_NUMA_NODE)
- 		return ERR_PTR(-EINVAL);
- 
-@@ -312,18 +313,42 @@ static void cpu_map_gro_flush(struct bpf_cpu_map_entry *rcpu,
- 		/* If the ring is not empty, there'll be a new iteration
- 		 * soon, and we only need to do a full flush if a tick is
- 		 * long (> 1 ms).
--		 * If the ring is empty, to not hold GRO packets in the
--		 * stack for too long, do a full flush.
-+		 * If the ring is empty, and there were some new packets
-+		 * processed, either do a partial flush and spin up a timer
-+		 * to flush the rest if the timeout is set, or do a full
-+		 * flush otherwise.
-+		 * No new packets with non-zero gro_bitmask can mean that we
-+		 * probably came from the timer call and/or there's [almost]
-+		 * no activity here right now. To not hold GRO packets in
-+		 * the stack for too long, do a full flush.
- 		 * This is equivalent to how NAPI decides whether to perform
- 		 * a full flush (by batches of up to 64 frames tho).
- 		 */
- 		if (__ptr_ring_empty(rcpu->queue))
--			flush_old = false;
-+			flush_old = new ? !!rcpu->value.timeout : false;
- 
- 		__gro_flush(&rcpu->gro, flush_old);
- 	}
- 
- 	gro_normal_list(&rcpu->gro);
-+
-+	/* Non-zero gro_bitmask at this point means that we have some packets
-+	 * held in the GRO engine after a partial flush. If we have a timeout
-+	 * set up, and there are no signs of a new kthread iteration, launch
-+	 * a timer to flush them as well.
-+	 */
-+	if (rcpu->gro.bitmask && __ptr_ring_empty(rcpu->queue))
-+		gro_timer_start(&rcpu->gro, rcpu->value.timeout);
-+}
-+
-+static enum hrtimer_restart cpu_map_gro_watchdog(struct hrtimer *timer)
-+{
-+	const struct bpf_cpu_map_entry *rcpu;
-+
-+	rcpu = container_of(timer, typeof(*rcpu), gro.timer);
-+	wake_up_process(rcpu->kthread);
-+
-+	return HRTIMER_NORESTART;
- }
- 
- static int cpu_map_kthread_run(void *data)
-@@ -489,8 +514,9 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
- 	rcpu->cpu    = cpu;
- 	rcpu->map_id = map->id;
- 	rcpu->value.qsize  = value->qsize;
-+	rcpu->value.timeout = value->timeout;
- 
--	gro_init(&rcpu->gro, NULL);
-+	gro_init(&rcpu->gro, cpu_map_gro_watchdog);
- 
- 	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, map, fd))
- 		goto free_gro;
-@@ -606,6 +632,9 @@ static int cpu_map_update_elem(struct bpf_map *map, void *key, void *value,
- 		return -EEXIST;
- 	if (unlikely(cpumap_value.qsize > 16384)) /* sanity limit on qsize */
- 		return -EOVERFLOW;
-+	/* Don't allow timeout longer than 1 ms -- 1 tick on HZ == 1000 */
-+	if (unlikely(cpumap_value.timeout > 1 * NSEC_PER_MSEC))
-+		return -ERANGE;
- 
- 	/* Make sure CPU is a valid possible cpu */
- 	if (key_cpu >= nr_cpumask_bits || !cpu_possible(key_cpu))
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 436b925adfb3..a3579cdb0225 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -5989,6 +5989,7 @@ struct bpf_cpumap_val {
- 		int   fd;	/* prog fd on map write */
- 		__u32 id;	/* prog id on map read */
- 	} bpf_prog;
-+	__u64 timeout;		/* timeout to wait for new packets, in ns */
- };
- 
- enum sk_action {
+ struct netdev_bpf;
 -- 
 2.36.1
 
