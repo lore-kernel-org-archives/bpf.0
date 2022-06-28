@@ -2,78 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E366CCA479
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD38AC43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:55:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiF1QyM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S233976AbiF1QzN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 12:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236991AbiF1Qwv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:52:51 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB1B94;
-        Tue, 28 Jun 2022 09:51:31 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id s124so18064548oia.0;
-        Tue, 28 Jun 2022 09:51:31 -0700 (PDT)
+        with ESMTP id S234076AbiF1Qye (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 12:54:34 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF09C0
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:52:37 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 189so7257189wmz.2
+        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:52:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lFKEEyiTQsvs2ddCbf3cjiC1UaHwb4p7/C9iETksuO8=;
+        b=CjZanmBpOZVdIhdZrYwxOXbpdv6zqkxzEuKTNItGvSCPZhoMuKkyIBBjzqWaM1qIkT
+         4cp1CBG4bkgLSyZM63b4xOp9YC40E7Hw9Y81hA6LlZIKIZNzhCpLP/yjlAZqS0MHocPi
+         +5ErFzJmdTCRdGrH2mnRMpRerFtOO7ltlVAK3kwCwVTt4qeM0XsU87BvgnNUW+b9fwlq
+         rvn6C379YPkF/5omQaIHDjn5PsmmNsT2HSutk2gY7aps9yZgeYYB1oHYHJvsdHNFdRTg
+         6EUDCy3t2JRq5syjjCwa+rp51Gptse7IBxpneCgSdFOVZKIk2nRF9Ktyom3HAKdzzIvO
+         1aRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IIImyclzEie6daS3MJ59Y7qzWwGyVcdl7WmTJMYAfBM=;
-        b=hx5wBBQdWlzXhLE5vvIfhrfWHa4n3G0I3Ira/SYyfBPJ+TIINyQHgGYRfftkZrxOjr
-         1MPsew884z8izxh4Kwo3yUtDrKfv+BLDrSoJuzvyE4GM8qYdW4rLxMGLsKA13wJBIGhi
-         /WmzZOxosFUDmRsMiSosMhQq/kAreWqQqLaKDzSvL+GK8HYg+MeaLfNty/wGhNZK2vzh
-         g835RSJGvfxM3n0XwF5uesun7P8OGQtDwoN5c7U+Hh2ASAO/IVgprV/UGsozcXHwW2fZ
-         Vj+WWuzBtpsdz4xTMRvJmgPb5GgyMn0LxM6/v6/3Rn2+jWU7yyeyO0jd7guHo73JqZtz
-         3+oQ==
-X-Gm-Message-State: AJIora+GLAv6S2Ld9at5KeQvYz+NFLYyUqg5jiGwEzoFXpIoDWUOXCxO
-        Fg2KUrP54St1x7kZ79GHNUM52+SCgvcIxN+T1tc=
-X-Google-Smtp-Source: AGRyM1sOtsVwdJ9t72bf0ILlSISY03R56hUBLB6mIgS4vFfDEJFKDdMGcdmSxd6tYCt4BfSguYwmaKOLEn/UNsm8c18=
-X-Received: by 2002:a05:6808:1385:b0:32f:729e:4869 with SMTP id
- c5-20020a056808138500b0032f729e4869mr366556oiw.5.1656435090599; Tue, 28 Jun
- 2022 09:51:30 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lFKEEyiTQsvs2ddCbf3cjiC1UaHwb4p7/C9iETksuO8=;
+        b=zGd7r0Rf1ruUNnK4nHq1Uy5jmy4oehcQ+NJDekW11VGVyuJAkgGbxU5L2/rqwGSPWF
+         4bfugO+awrejSiV4WU+lbhW2j7rcNl8N4t7fTolUhr60txUIpVnooYjzeoE89UegOIeX
+         mnHvX6qV3Avx/Omc3+b0zL8bRJy1VghnDYotHJgcyjBzOJMEKMcjws1pGWpfcTQt69f9
+         xn6RcR5zk/DE+A5Srdp6Y19FM3WeByAaE5Q2bxiXT1xT48nVizWpjnZi5uKoTUjQB2St
+         c+o0AHlCmLPI+X7728DKqulX6pDvMQlCK4vUtNQ7t3Sc0YTVyMPw3mZRA86BJRJQGIDS
+         E69A==
+X-Gm-Message-State: AJIora/47ygKxJ2PQ6GWTg6c8AJmTkeOetgnvpXDQiyHncgbCNL7wtXs
+        RLLLmBCSaCnYwM80jXFt8w57HA==
+X-Google-Smtp-Source: AGRyM1sydGLUZduCj94shSkzl/ouVI7Gpo7XW+fVDk5SXwhYfIOPIuulXGtRLG87TmyLgSpCA4qnPg==
+X-Received: by 2002:a05:600c:3d92:b0:3a0:4b71:f2c4 with SMTP id bi18-20020a05600c3d9200b003a04b71f2c4mr638988wmb.160.1656435156093;
+        Tue, 28 Jun 2022 09:52:36 -0700 (PDT)
+Received: from [192.168.178.21] ([51.155.200.13])
+        by smtp.gmail.com with ESMTPSA id j3-20020a05600c410300b0039c4506bd25sm160657wmi.14.2022.06.28.09.52.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 09:52:35 -0700 (PDT)
+Message-ID: <2acc744b-be20-2503-2c2d-40a0a8d47a57@isovalent.com>
+Date:   Tue, 28 Jun 2022 17:52:34 +0100
 MIME-Version: 1.0
-References: <20220624231313.367909-1-namhyung@kernel.org> <YrsS4HxNBUk5wtcU@kernel.org>
-In-Reply-To: <YrsS4HxNBUk5wtcU@kernel.org>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 28 Jun 2022 09:51:19 -0700
-Message-ID: <CAM9d7cgWLPADU66L_5vfoA3NgofTcjCbOgp7DWxA6LyqekV=mQ@mail.gmail.com>
-Subject: Re: [PATCHSET 0/6] perf tools: A couple of fixes for perf record
- --off-cpu (v1)
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
-        Milian Wolff <milian.wolff@kdab.com>,
-        bpf <bpf@vger.kernel.org>, Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH bpf-next v3 02/10] bpftool: Honor BPF_CORE_TYPE_MATCHES
+ relocation
+Content-Language: en-GB
+To:     =?UTF-8?Q?Daniel_M=c3=bcller?= <deso@posteo.net>,
+        bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, kernel-team@fb.com
+Cc:     joannelkoong@gmail.com
+References: <20220628160127.607834-1-deso@posteo.net>
+ <20220628160127.607834-3-deso@posteo.net>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20220628160127.607834-3-deso@posteo.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Arnaldo,
+2022-06-28 16:01 UTC+0000 ~ Daniel Müller <deso@posteo.net>
+> bpftool needs to know about the newly introduced BPF_CORE_TYPE_MATCHES
+> relocation for its 'gen min_core_btf' command to work properly in the
+> present of this relocation.
+> Specifically, we need to make sure to mark types and fields so that they
+> are present in the minimized BTF for "type match" checks to work out.
+> However, contrary to the existing btfgen_record_field_relo, we need to
+> rely on the BTF -- and not the spec -- to find fields. With this change
+> we handle this new variant correctly. The functionality will be tested
+> with follow on changes to BPF selftests, which already run against a
+> minimized BTF created with bpftool.
+> 
+> Cc: Quentin Monnet <quentin@isovalent.com>
+> Signed-off-by: Daniel Müller <deso@posteo.net>
 
-On Tue, Jun 28, 2022 at 7:40 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Fri, Jun 24, 2022 at 04:13:07PM -0700, Namhyung Kim escreveu:
-> > Hello,
-> >
-> > The first patch fixes a build error on old kernels which has
-> > task_struct->state field that is renamed to __state.  Actually I made
-> > a mistake when I wrote the code and assumed new kernel version.
-> >
-> > The second patch is to prevent invalid sample synthesize by
-> > disallowing unsupported sample types.
->
-> So I'll pick the first two for perf/urgent and then when that is merged
-> into perf/core pick the rest, ok?
+Acked-by: Quentin Monnet <quentin@isovalent.com>
 
-Sounds good!
+Thanks!
 
-Thanks,
-Namhyung
