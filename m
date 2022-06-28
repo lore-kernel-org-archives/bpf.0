@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF542CCA479
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 722D7C433EF
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbiF1Tvp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S233016AbiF1Tvp (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 28 Jun 2022 15:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S232292AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 28 Jun 2022 15:50:52 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FFF62FA;
-        Tue, 28 Jun 2022 12:49:29 -0700 (PDT)
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AC83A724;
+        Tue, 28 Jun 2022 12:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445769; x=1687981769;
+  t=1656445764; x=1687981764;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SutG8vtwjgxHponFr0JSgxWBk/og3Hhe0diuNsWKHbE=;
-  b=MTibYOcQnodnkJWUOqTgp6T/m8KOaAMZuCjoqwkBhxDSAFVJeuGWDzA0
-   gluNCtMqofVjmVOy5+RApv0SdK1VgM/ebRjUcu3Fhd7U011/mCYSnlcTX
-   w11c8ieCNDmU/dirMoiGk99Z7MizVZxMEudaEhjbH8niNuSRfxyuoj/Sq
-   GPj4rTkSIzlEktthH8uuMAmNoy7omx0/Bn+kWUwszpe9EhMYnpthfUieE
-   mZm1pNzIhT/nbo/bjJigZtA0FDKH1dya4lQB9eJH4Ci3HIsIllDTc93YO
-   72mPI5jR/ZRiC00Z775Zvm0WxiJhdD5c0UDJTg7nH/Q0cu65A3CatPToJ
+  bh=yNkO5OonyawD491tq3UN3yp8qYpkGlKlrdxkHHQ0Dbc=;
+  b=gOkPh3YBO8qpcjeMa36Vs3wKtaPejFFtZKnlnhuLA6JniZkhhzZclpAk
+   3O7TXYUMxm2WrLoLE9U4nfkmOpFrbt2G6jOxDEtuvX+UaOlVyUFi9a0ir
+   ZhJe3VGsA7CalHtM8AiW0im1gmz60/Nu6DYFG80XGjNpfyruri+UYQgJS
+   r7MyTx4ID8ZQRXmkv6lJ1R6Fk4rWX+7iPv3/3t/UulB/wsTlqsEMLgtwT
+   fDkZMzJC3mcfyTDpi/HJ3euu9p9GCS3LM7TIpL2+Tq6yO5z5jalRwKFRM
+   uMWyJb9OtCd+jK/rbhdgIsriaI76yudOV9bm2dP1qAuPrOPY1Ti70UMBo
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="368146910"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="262242844"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="368146910"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:29 -0700
+   d="scan'208";a="262242844"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:17 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="732883398"
+   d="scan'208";a="917306820"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 12:49:25 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2022 12:49:13 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9M022013;
-        Tue, 28 Jun 2022 20:49:23 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9D022013;
+        Tue, 28 Jun 2022 20:49:11 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 22/52] net, skbuff: add ability to skip skb metadata comparison
-Date:   Tue, 28 Jun 2022 21:47:42 +0200
-Message-Id: <20220628194812.1453059-23-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 13/52] libbpf: add ability to set the meta threshold on setting XDP prog
+Date:   Tue, 28 Jun 2022 21:47:33 +0200
+Message-Id: <20220628194812.1453059-14-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,85 +76,131 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some XDP metadata fields maybe be unique from frame to frame, not
-necessarily indicating that it's from a different flow. This
-includes frame checksums, timestamps etc.
-The drivers usually carry the metadata to skbs along with the
-payload, and the GRO layer tries to compare the metadata of
-the frames. This not only leads to perf regressions (esp. given
-that metadata can now be larger than 32 bytes -> a slower call to
-memmp() will be used), but also breaks frame coalescing at all.
-To avoid that, add an skb flag indicating that the metadata can
-carry unique values and thus should not be compared. If at least
-one of the skbs passed to skb_metadata_differs() carries it, the
-function will then immediately return reporting that they're
-identical.
-The underscored version of the function is not affected, allowing
-to explicitly compare the meta if needed. The flag is being cleared
-on pskb_expand_head() when the skb_shared_info::meta_len gets
-zeroed.
+Covered functions:
+ * bpf_link_create() - via &bpf_link_create_ops;
+ * bpf_link_update() - via &bpf_link_update_ops;
+ * bpf_xdp_attach() - via &bpf_xdp_attach_ops;
+ * bpf_set_link_xdp_fd_opts() - via &bpf_xdp_set_link_opts;
+
+No support for bpf_get_link_xdp_info()/&xdp_link_info as we store
+additional data in the kernel in BPF link mode only.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/skbuff.h | 18 ++++++++++++++++++
- net/core/skbuff.c      |  1 +
- 2 files changed, 19 insertions(+)
+ tools/lib/bpf/bpf.c     |  3 +++
+ tools/lib/bpf/bpf.h     |  8 +++++++-
+ tools/lib/bpf/libbpf.h  |  4 ++--
+ tools/lib/bpf/netlink.c | 10 ++++++++++
+ 4 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index a825ea7f375d..1c308511acbb 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -509,6 +509,11 @@ enum {
- 	 * charged to the kernel memory.
- 	 */
- 	SKBFL_PURE_ZEROCOPY = BIT(2),
-+
-+	/* skb metadata may contain unique values such as checksums
-+	 * and we should not compare it against others.
-+	 */
-+	SKBFL_METADATA_NOCOMP = BIT(3),
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 6036dc75cc7b..e7c713a418f6 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -807,6 +807,9 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		break;
+ 	case BPF_XDP:
+ 		attr.link_create.xdp.btf_id = OPTS_GET(opts, xdp.btf_id, 0);
++		attr.link_create.xdp.meta_thresh = OPTS_GET(opts,
++							    xdp.meta_thresh,
++							    0);
+ 		if (!OPTS_ZEROED(opts, xdp))
+ 			return libbpf_err(-EINVAL);
+ 		break;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 4e17995fdaff..c0f54f24d675 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -385,6 +385,8 @@ struct bpf_link_create_opts {
+ 		struct {
+ 			/* target metadata BTF + type ID */
+ 			__aligned_u64 btf_id;
++			/* frame size to start composing XDP metadata from */
++			__u32 meta_thresh;
+ 		} xdp;
+ 	};
+ 	size_t :0;
+@@ -408,11 +410,15 @@ struct bpf_link_update_opts {
+ 		struct {
+ 			/* new target metadata BTF + type ID */
+ 			__aligned_u64 new_btf_id;
++			/* new frame size to start composing XDP
++			 * metadata from
++			 */
++			__u32 new_meta_thresh;
+ 		} xdp;
+ 	};
+ 	size_t :0;
+ };
+-#define bpf_link_update_opts__last_field xdp.new_btf_id
++#define bpf_link_update_opts__last_field xdp.new_meta_thresh
+ 
+ LIBBPF_API int bpf_link_update(int link_fd, int new_prog_fd,
+ 			       const struct bpf_link_update_opts *opts);
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 4f77128ba770..99ac94f148fc 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1193,7 +1193,7 @@ struct xdp_link_info {
+ struct bpf_xdp_set_link_opts {
+ 	size_t sz;
+ 	int old_fd;
+-	__u32 :32;
++	__u32 meta_thresh;
+ 	__u64 btf_id;
+ 	size_t :0;
+ };
+@@ -1213,7 +1213,7 @@ LIBBPF_API int bpf_get_link_xdp_info(int ifindex, struct xdp_link_info *info,
+ struct bpf_xdp_attach_opts {
+ 	size_t sz;
+ 	int old_prog_fd;
+-	__u32 :32;
++	__u32 meta_thresh;
+ 	__u64 btf_id;
+ 	size_t :0;
+ };
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index 104a809d5fb2..ac2a87243ecd 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -236,6 +236,7 @@ struct __bpf_set_link_xdp_fd_opts {
+ 	int old_fd;
+ 	__u32 flags;
+ 	__u64 btf_id;
++	__u32 meta_thresh;
  };
  
- #define SKBFL_ZEROCOPY_FRAG	(SKBFL_ZEROCOPY_ENABLE | SKBFL_SHARED_FRAG)
-@@ -4137,6 +4142,9 @@ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
+ static int
+@@ -276,6 +277,13 @@ __bpf_set_link_xdp_fd_replace(const struct __bpf_set_link_xdp_fd_opts *opts)
+ 		if (ret < 0)
+ 			return ret;
+ 	}
++	if (opts->meta_thresh) {
++		ret = nlattr_add(&req, IFLA_XDP_META_THRESH,
++				 &opts->meta_thresh,
++				 sizeof(opts->meta_thresh));
++		if (ret < 0)
++			return ret;
++	}
+ 	nlattr_end_nested(&req, nla);
  
- 	if (!(len_a | len_b))
- 		return false;
-+	if ((skb_shinfo(skb_a)->flags | skb_shinfo(skb_b)->flags) &
-+	    SKBFL_METADATA_NOCOMP)
-+		return false;
+ 	return libbpf_netlink_send_recv(&req, NULL, NULL, NULL);
+@@ -300,6 +308,7 @@ int bpf_xdp_attach(int ifindex, int prog_fd, __u32 flags, const struct bpf_xdp_a
+ 		sl_opts.old_fd = -1;
  
- 	return len_a != len_b ?
- 	       true : __skb_metadata_differs(skb_a, skb_b, len_a);
-@@ -4152,6 +4160,16 @@ static inline void skb_metadata_clear(struct sk_buff *skb)
- 	skb_metadata_set(skb, 0);
- }
+ 	sl_opts.btf_id = OPTS_GET(opts, btf_id, 0);
++	sl_opts.meta_thresh = OPTS_GET(opts, meta_thresh, 0);
  
-+static inline void skb_metadata_nocomp_set(struct sk_buff *skb)
-+{
-+	skb_shinfo(skb)->flags |= SKBFL_METADATA_NOCOMP;
-+}
-+
-+static inline void skb_metadata_nocomp_clear(struct sk_buff *skb)
-+{
-+	skb_shinfo(skb)->flags &= ~SKBFL_METADATA_NOCOMP;
-+}
-+
- struct sk_buff *skb_clone_sk(struct sk_buff *skb);
+ 	err = __bpf_set_link_xdp_fd_replace(&sl_opts);
+ 	return libbpf_err(err);
+@@ -330,6 +339,7 @@ int bpf_set_link_xdp_fd_opts(int ifindex, int fd, __u32 flags,
+ 	}
  
- #ifdef CONFIG_NETWORK_PHY_TIMESTAMPING
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 00bf35ee8205..5b23fc7f1157 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -1750,6 +1750,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 	atomic_set(&skb_shinfo(skb)->dataref, 1);
+ 	sl_opts.btf_id = OPTS_GET(opts, btf_id, 0);
++	sl_opts.meta_thresh = OPTS_GET(opts, meta_thresh, 0);
  
- 	skb_metadata_clear(skb);
-+	skb_metadata_nocomp_clear(skb);
- 
- 	/* It is not generally safe to change skb->truesize.
- 	 * For the moment, we really care of rx path, or
+ 	ret = __bpf_set_link_xdp_fd_replace(&sl_opts);
+ 	return libbpf_err(ret);
 -- 
 2.36.1
 
