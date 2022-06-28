@@ -2,158 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4036FCCA47E
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:50:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E366CCA479
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 16:54:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233311AbiF1Quu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 12:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
+        id S233159AbiF1QyM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 12:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237751AbiF1Qrq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 12:47:46 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0E4286FB
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:44:50 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso17804482fac.4
-        for <bpf@vger.kernel.org>; Tue, 28 Jun 2022 09:44:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:reply-to:from:in-reply-to:content-transfer-encoding;
-        bh=vJfBn+f7lVK7AifdRhZ14mIHvBk5ROqtbtEkpEUekVI=;
-        b=PStwN8J9WglnPwSrV0dM3AVahzXE6kSqMbbkzaOjiLnRigpJdtZbsznzA6h0ZHFxCl
-         VCc2EwXkgQTpc2I8msSXawKjWhovEq4qPlEq9FHqwcAnhsRf38LfjGSr2OksXXnBDVe5
-         D2AXYVst8rALAmrORJawmosR19EMmGOJojF8g=
+        with ESMTP id S236991AbiF1Qwv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 12:52:51 -0400
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB1B94;
+        Tue, 28 Jun 2022 09:51:31 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id s124so18064548oia.0;
+        Tue, 28 Jun 2022 09:51:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:reply-to:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vJfBn+f7lVK7AifdRhZ14mIHvBk5ROqtbtEkpEUekVI=;
-        b=TElkDEi1i+Y/Dqqmxk2fg7Yl2LLTSA78bAi4QiL3e6Cr7qxuT2tzzfqhzK95q5w7eX
-         M9xhn2UeM36cnzOyefuJGahLZMhAT+/q9IiXm1toGZmjyu5tgRNdIpObHWUoqw+R9kxA
-         FhbgiAlA7e6JNBgHVljKaO2E+Qqh6abkC+XpaVAgNwKb5RnZ23soDBpZ6YqcRPv4/0c8
-         hVFxjuRV5U1YDKOk1duiWj0ObqwePMuWFRZW5FcY8/CDa+PZ+uB9LuWbQpMkkEvNcsWw
-         uJJuDpEbshrutmAmuZWY5z7RWQysRl2wuFGbRYWg8FDnslON8UTZmaIFDEH5h4c8Ftkv
-         UxDA==
-X-Gm-Message-State: AJIora+i6TMP80AorA93E46ytX4SCmQwBfGgkHPkYP+M70TLaHLxcQVl
-        vE9YsFLnGIngIrp4Q7wjZVczkA==
-X-Google-Smtp-Source: AGRyM1uH8/M2iGX2n2wOrXwL+tXc5HmSsj392p52tR/beA2RwQ1QmjHwdDlm5rbSnYFM5umdpppZNA==
-X-Received: by 2002:a05:6870:649e:b0:ed:a1c0:f810 with SMTP id cz30-20020a056870649e00b000eda1c0f810mr285467oab.289.1656434689573;
-        Tue, 28 Jun 2022 09:44:49 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id y27-20020a544d9b000000b0032b99637366sm4400950oix.25.2022.06.28.09.44.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 09:44:49 -0700 (PDT)
-Message-ID: <83b9774f-5cda-d05f-e62d-7bf7547ae7ba@cloudflare.com>
-Date:   Tue, 28 Jun 2022 11:44:47 -0500
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IIImyclzEie6daS3MJ59Y7qzWwGyVcdl7WmTJMYAfBM=;
+        b=hx5wBBQdWlzXhLE5vvIfhrfWHa4n3G0I3Ira/SYyfBPJ+TIINyQHgGYRfftkZrxOjr
+         1MPsew884z8izxh4Kwo3yUtDrKfv+BLDrSoJuzvyE4GM8qYdW4rLxMGLsKA13wJBIGhi
+         /WmzZOxosFUDmRsMiSosMhQq/kAreWqQqLaKDzSvL+GK8HYg+MeaLfNty/wGhNZK2vzh
+         g835RSJGvfxM3n0XwF5uesun7P8OGQtDwoN5c7U+Hh2ASAO/IVgprV/UGsozcXHwW2fZ
+         Vj+WWuzBtpsdz4xTMRvJmgPb5GgyMn0LxM6/v6/3Rn2+jWU7yyeyO0jd7guHo73JqZtz
+         3+oQ==
+X-Gm-Message-State: AJIora+GLAv6S2Ld9at5KeQvYz+NFLYyUqg5jiGwEzoFXpIoDWUOXCxO
+        Fg2KUrP54St1x7kZ79GHNUM52+SCgvcIxN+T1tc=
+X-Google-Smtp-Source: AGRyM1sOtsVwdJ9t72bf0ILlSISY03R56hUBLB6mIgS4vFfDEJFKDdMGcdmSxd6tYCt4BfSguYwmaKOLEn/UNsm8c18=
+X-Received: by 2002:a05:6808:1385:b0:32f:729e:4869 with SMTP id
+ c5-20020a056808138500b0032f729e4869mr366556oiw.5.1656435090599; Tue, 28 Jun
+ 2022 09:51:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] Introduce security_create_user_ns()
-Content-Language: en-US
-To:     KP Singh <kpsingh@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>, revest@chromium.org,
-        jackmanb@chromium.org, ast@kernel.org, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, jmorris@namei.org, serge@hallyn.com,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@cloudflare.com
-References: <20220621233939.993579-1-fred@cloudflare.com>
- <ce1653b1-feb0-1a99-0e97-8dfb289eeb79@schaufler-ca.com>
- <b72c889a-4a50-3330-baae-3bbf065e7187@cloudflare.com>
- <CAHC9VhSTkEMT90Tk+=iTyp3npWEm+3imrkFVX2qb=XsOPp9F=A@mail.gmail.com>
- <20220627121137.cnmctlxxtcgzwrws@wittgenstein>
- <CAHC9VhSQH9tE-NgU6Q-GLqSy7R6FVjSbp4Tc4gVTbjZCqAWy5Q@mail.gmail.com>
- <6a8fba0a-c9c9-61ba-793a-c2e0c2924f88@iogearbox.net>
- <CAHC9VhQQJH95jTWMOGDB4deS=whSfnaF_e73zoabOOeHJMv+0Q@mail.gmail.com>
- <685096bb-af0a-08c0-491a-e176ac009e85@schaufler-ca.com>
- <9ae473c4-cd42-bb45-bce2-8aa2e4784a43@cloudflare.com>
- <d70d3b2d-6c3f-b1fc-f40c-f5ec01a627c0@schaufler-ca.com>
- <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
-Reply-To: CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <CACYkzJ6GmotfhBk1+9BjGC6Ct7bGxQGVTZTX2iQcrhjfV7VHwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220624231313.367909-1-namhyung@kernel.org> <YrsS4HxNBUk5wtcU@kernel.org>
+In-Reply-To: <YrsS4HxNBUk5wtcU@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 28 Jun 2022 09:51:19 -0700
+Message-ID: <CAM9d7cgWLPADU66L_5vfoA3NgofTcjCbOgp7DWxA6LyqekV=mQ@mail.gmail.com>
+Subject: Re: [PATCHSET 0/6] perf tools: A couple of fixes for perf record
+ --off-cpu (v1)
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>,
+        Milian Wolff <milian.wolff@kdab.com>,
+        bpf <bpf@vger.kernel.org>, Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 6/28/22 11:12 AM, KP Singh wrote:
-> On Tue, Jun 28, 2022 at 6:02 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>
->> On 6/28/2022 8:14 AM, Frederick Lawler wrote:
->>> On 6/27/22 6:18 PM, Casey Schaufler wrote:
->>>> On 6/27/2022 3:27 PM, Paul Moore wrote:
->>>>> On Mon, Jun 27, 2022 at 6:15 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->>>>>> On 6/27/22 11:56 PM, Paul Moore wrote:
->>>>>>> On Mon, Jun 27, 2022 at 8:11 AM Christian Brauner <brauner@kernel.org> wrote:
->>>>>>>> On Thu, Jun 23, 2022 at 11:21:37PM -0400, Paul Moore wrote:
->>>>>>> ...
->>>>>>>
->>>>>>>>> This is one of the reasons why I usually like to see at least one LSM
->>>>>>>>> implementation to go along with every new/modified hook.  The
->>>>>>>>> implementation forces you to think about what information is necessary
->>>>>>>>> to perform a basic access control decision; sometimes it isn't always
->>>>>>>>> obvious until you have to write the access control :)
->>>>>>>> I spoke to Frederick at length during LSS and as I've been given to
->>>>>>>> understand there's a eBPF program that would immediately use this new
->>>>>>>> hook. Now I don't want to get into the whole "Is the eBPF LSM hook
->>>>>>>> infrastructure an LSM" but I think we can let this count as a legitimate
->>>>>>>> first user of this hook/code.
->>>>>>> Yes, for the most part I don't really worry about the "is a BPF LSM a
->>>>>>> LSM?" question, it's generally not important for most discussions.
->>>>>>> However, there is an issue unique to the BPF LSMs which I think is
->>>>>>> relevant here: there is no hook implementation code living under
->>>>>>> security/.  While I talked about a hook implementation being helpful
->>>>>>> to verify the hook prototype, it is also helpful in providing an
->>>>>>> in-tree example for other LSMs; unfortunately we don't get that same
->>>>>>> example value when the initial hook implementation is a BPF LSM.
->>>>>> I would argue that such a patch series must come together with a BPF
->>>>>> selftest which then i) contains an in-tree usage example, ii) adds BPF
->>>>>> CI test coverage. Shipping with a BPF selftest at least would be the
->>>>>> usual expectation.
->>>>> I'm not going to disagree with that, I generally require matching
->>>>> tests for new SELinux kernel code, but I was careful to mention code
->>>>> under 'security/' and not necessarily just a test implementation :)  I
->>>>> don't want to get into a big discussion about it, but I think having a
->>>>> working implementation somewhere under 'security/' is more
->>>>> discoverable for most LSM folks.
->>>>
->>>> I agree. It would be unfortunate if we added a hook explicitly for eBPF
->>>> only to discover that the proposed user needs something different. The
->>>> LSM community should have a chance to review the code before committing
->>>> to all the maintenance required in supporting it.
->>>>
->>>> Is there a reference on how to write an eBPF security module?
->>>
->>> There's a documentation page that briefly touches on a BPF LSM implementation [1].
->>
->> That's a brief touch, alright. I'll grant that the LSM interface isn't
->> especially well documented for C developers, but we have done tutorials
->> and have multiple examples. I worry that without an in-tree example for
->> eBPF we might well be setting developers up for spectacular failure.
->>
-> 
-> Casey, Daniel and I are recommending an in-tree example, it will be
-> in BPF selftests and we will CC you on the reviews.
-> 
-> Frederick, is that okay with you?
+Hi Arnaldo,
 
-Yep.
+On Tue, Jun 28, 2022 at 7:40 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Fri, Jun 24, 2022 at 04:13:07PM -0700, Namhyung Kim escreveu:
+> > Hello,
+> >
+> > The first patch fixes a build error on old kernels which has
+> > task_struct->state field that is renamed to __state.  Actually I made
+> > a mistake when I wrote the code and assumed new kernel version.
+> >
+> > The second patch is to prevent invalid sample synthesize by
+> > disallowing unsupported sample types.
+>
+> So I'll pick the first two for perf/urgent and then when that is merged
+> into perf/core pick the rest, ok?
 
-> 
->>>
->>>> There should be something out there warning the eBPF programmer of the
->>>> implications of providing a secid_to_secctx hook for starters.
->>>>
->>>
->>> Links:
->>> 1. https://docs.kernel.org/bpf/prog_lsm.html?highlight=bpf+lsm#
->>>
+Sounds good!
 
+Thanks,
+Namhyung
