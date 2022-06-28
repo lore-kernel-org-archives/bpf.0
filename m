@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CC7CCA47F
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF542CCA479
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiF1Tvn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S233001AbiF1Tvp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230089AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 28 Jun 2022 15:50:52 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA7A27162;
-        Tue, 28 Jun 2022 12:49:28 -0700 (PDT)
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FFF62FA;
+        Tue, 28 Jun 2022 12:49:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445768; x=1687981768;
+  t=1656445769; x=1687981769;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=IwD1xgC8YcxcPkOhlwX1jFE7MQDmCVGifCPPmYbvVTg=;
-  b=NQJzYvFJYsk03tB7pX6ZzA578GfrgNBmKOvqK/CzJicspYBiyugbwWaw
-   yjkcKQXg8be/Q6K+XR2POI4Lu7hDdLWc8BUlgcW/KUhRTO7KED/Hp1vLl
-   RIfsZB8kHfD1/99dcBq9WxYIKbrCRtJ+pqC78lXn6BDhYe6V0Iz4vFFGc
-   Zilzd0tWTjYd6LbZL5PwUoleTonpw85oPr+ibC8HrU1u4XHuE6I/PGmB9
-   Xo6kWhZiV+jxwAgijTpiHkkL7E258TUdr1jSdWHrHYQoLuek4eTBhB+DF
-   Ew6z0dVQAYXoAduQftkgtUXLZiCG7lr9RXn/xZM7O0yHyxGe7x9kG0C8u
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="282927829"
+  bh=SutG8vtwjgxHponFr0JSgxWBk/og3Hhe0diuNsWKHbE=;
+  b=MTibYOcQnodnkJWUOqTgp6T/m8KOaAMZuCjoqwkBhxDSAFVJeuGWDzA0
+   gluNCtMqofVjmVOy5+RApv0SdK1VgM/ebRjUcu3Fhd7U011/mCYSnlcTX
+   w11c8ieCNDmU/dirMoiGk99Z7MizVZxMEudaEhjbH8niNuSRfxyuoj/Sq
+   GPj4rTkSIzlEktthH8uuMAmNoy7omx0/Bn+kWUwszpe9EhMYnpthfUieE
+   mZm1pNzIhT/nbo/bjJigZtA0FDKH1dya4lQB9eJH4Ci3HIsIllDTc93YO
+   72mPI5jR/ZRiC00Z775Zvm0WxiJhdD5c0UDJTg7nH/Q0cu65A3CatPToJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="368146910"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="282927829"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:28 -0700
+   d="scan'208";a="368146910"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="836809462"
+   d="scan'208";a="732883398"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2022 12:49:19 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 28 Jun 2022 12:49:25 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9I022013;
-        Tue, 28 Jun 2022 20:49:18 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9M022013;
+        Tue, 28 Jun 2022 20:49:23 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 18/52] samples/bpf: add ability to specify metadata threshold
-Date:   Tue, 28 Jun 2022 21:47:38 +0200
-Message-Id: <20220628194812.1453059-19-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 22/52] net, skbuff: add ability to skip skb metadata comparison
+Date:   Tue, 28 Jun 2022 21:47:42 +0200
+Message-Id: <20220628194812.1453059-23-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,248 +76,85 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For all of the users of sample_install_xdp() infra (primarily for
-xdp_redirect_cpu), add the ability to enable/disable/control generic
-metadata generation using the new UAPI.
-The format is either just '-M' to enable it unconditionally or
-'--meta-thresh=<frame_size>' to enable it starting from frames
-bigger than <frame_size>.
+Some XDP metadata fields maybe be unique from frame to frame, not
+necessarily indicating that it's from a different flow. This
+includes frame checksums, timestamps etc.
+The drivers usually carry the metadata to skbs along with the
+payload, and the GRO layer tries to compare the metadata of
+the frames. This not only leads to perf regressions (esp. given
+that metadata can now be larger than 32 bytes -> a slower call to
+memmp() will be used), but also breaks frame coalescing at all.
+To avoid that, add an skb flag indicating that the metadata can
+carry unique values and thus should not be compared. If at least
+one of the skbs passed to skb_metadata_differs() carries it, the
+function will then immediately return reporting that they're
+identical.
+The underscored version of the function is not affected, allowing
+to explicitly compare the meta if needed. The flag is being cleared
+on pskb_expand_head() when the skb_shared_info::meta_len gets
+zeroed.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- samples/bpf/xdp_redirect_cpu_user.c       |  7 +++++-
- samples/bpf/xdp_redirect_map_multi_user.c |  7 +++++-
- samples/bpf/xdp_redirect_map_user.c       |  7 +++++-
- samples/bpf/xdp_redirect_user.c           |  6 ++++-
- samples/bpf/xdp_router_ipv4_user.c        |  7 +++++-
- samples/bpf/xdp_sample_user.c             | 28 +++++++++++++++++++----
- samples/bpf/xdp_sample_user.h             |  1 +
- 7 files changed, 53 insertions(+), 10 deletions(-)
+ include/linux/skbuff.h | 18 ++++++++++++++++++
+ net/core/skbuff.c      |  1 +
+ 2 files changed, 19 insertions(+)
 
-diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
-index 15745d8cb5c2..ca457c34eb0f 100644
---- a/samples/bpf/xdp_redirect_cpu_user.c
-+++ b/samples/bpf/xdp_redirect_cpu_user.c
-@@ -60,6 +60,7 @@ static const struct option long_options[] = {
- 	{ "mprog-filename", required_argument, NULL, 'f' },
- 	{ "redirect-device", required_argument, NULL, 'r' },
- 	{ "redirect-map", required_argument, NULL, 'm' },
-+	{ "meta-thresh", optional_argument, NULL, 'M' },
- 	{}
- };
- 
-@@ -382,7 +383,7 @@ int main(int argc, char **argv)
- 	}
- 
- 	prog = skel->progs.xdp_prognum5_lb_hash_ip_pairs;
--	while ((opt = getopt_long(argc, argv, "d:si:Sxp:f:e:r:m:c:q:Fvh",
-+	while ((opt = getopt_long(argc, argv, "d:si:Sxp:f:e:r:m:c:q:FMvh",
- 				  long_options, &longindex)) != -1) {
- 		switch (opt) {
- 		case 'd':
-@@ -461,6 +462,10 @@ int main(int argc, char **argv)
- 		case 'v':
- 			sample_switch_mode();
- 			break;
-+		case 'M':
-+			opts.meta_thresh = optarg ? strtoul(optarg, NULL, 0) :
-+					   1;
-+			break;
- 		case 'h':
- 			error = false;
- 		default:
-diff --git a/samples/bpf/xdp_redirect_map_multi_user.c b/samples/bpf/xdp_redirect_map_multi_user.c
-index 85e66f9dc259..b1c575f3d5f6 100644
---- a/samples/bpf/xdp_redirect_map_multi_user.c
-+++ b/samples/bpf/xdp_redirect_map_multi_user.c
-@@ -43,6 +43,7 @@ static const struct option long_options[] = {
- 	{ "stats", no_argument, NULL, 's' },
- 	{ "interval", required_argument, NULL, 'i' },
- 	{ "verbose", no_argument, NULL, 'v' },
-+	{ "meta-thresh", optional_argument, NULL, 'M' },
- 	{}
- };
- 
-@@ -89,7 +90,7 @@ int main(int argc, char **argv)
- 	bool error = true;
- 	int i, opt;
- 
--	while ((opt = getopt_long(argc, argv, "hSFXi:vs",
-+	while ((opt = getopt_long(argc, argv, "hSFMXi:vs",
- 				  long_options, NULL)) != -1) {
- 		switch (opt) {
- 		case 'S':
-@@ -98,6 +99,10 @@ int main(int argc, char **argv)
- 			mask &= ~(SAMPLE_DEVMAP_XMIT_CNT |
- 				  SAMPLE_DEVMAP_XMIT_CNT_MULTI);
- 			break;
-+		case 'M':
-+			opts.meta_thresh = optarg ? strtoul(optarg, NULL, 0) :
-+					   1;
-+			break;
- 		case 'F':
- 			opts.force = true;
- 			break;
-diff --git a/samples/bpf/xdp_redirect_map_user.c b/samples/bpf/xdp_redirect_map_user.c
-index d09ef866e62b..29dd7df804dc 100644
---- a/samples/bpf/xdp_redirect_map_user.c
-+++ b/samples/bpf/xdp_redirect_map_user.c
-@@ -37,6 +37,7 @@ static const struct option long_options[] = {
- 	{ "stats", no_argument, NULL, 's' },
- 	{ "interval", required_argument, NULL, 'i' },
- 	{ "verbose", no_argument, NULL, 'v' },
-+	{ "meta-thresh", optional_argument, NULL, 'M' },
- 	{}
- };
- 
-@@ -58,7 +59,7 @@ int main(int argc, char **argv)
- 	bool error = true;
- 	int opt, key = 0;
- 
--	while ((opt = getopt_long(argc, argv, "hSFXi:vs",
-+	while ((opt = getopt_long(argc, argv, "hSFMXi:vs",
- 				  long_options, NULL)) != -1) {
- 		switch (opt) {
- 		case 'S':
-@@ -67,6 +68,10 @@ int main(int argc, char **argv)
- 			mask &= ~(SAMPLE_DEVMAP_XMIT_CNT |
- 				  SAMPLE_DEVMAP_XMIT_CNT_MULTI);
- 			break;
-+		case 'M':
-+			opts.meta_thresh = optarg ? strtoul(optarg, NULL, 0) :
-+					   1;
-+			break;
- 		case 'F':
- 			opts.force = true;
- 			break;
-diff --git a/samples/bpf/xdp_redirect_user.c b/samples/bpf/xdp_redirect_user.c
-index 2da686a9b8a0..f37c570877ca 100644
---- a/samples/bpf/xdp_redirect_user.c
-+++ b/samples/bpf/xdp_redirect_user.c
-@@ -36,6 +36,7 @@ static const struct option long_options[] = {
- 	{"stats",	no_argument,		NULL, 's' },
- 	{"interval",	required_argument,	NULL, 'i' },
- 	{"verbose",	no_argument,		NULL, 'v' },
-+	{"meta-thresh",	optional_argument,	NULL, 'M' },
- 	{}
- };
- 
-@@ -51,7 +52,7 @@ int main(int argc, char **argv)
- 	struct xdp_redirect *skel;
- 	bool error = true;
- 
--	while ((opt = getopt_long(argc, argv, "hSFi:vs",
-+	while ((opt = getopt_long(argc, argv, "hSFMi:vs",
- 				  long_options, NULL)) != -1) {
- 		switch (opt) {
- 		case 'S':
-@@ -59,6 +60,9 @@ int main(int argc, char **argv)
- 			mask &= ~(SAMPLE_DEVMAP_XMIT_CNT |
- 				  SAMPLE_DEVMAP_XMIT_CNT_MULTI);
- 			break;
-+		case 'M':
-+			opts.meta_thresh = optarg ? strtoul(optarg, NULL, 0) :
-+					   1;
- 		case 'F':
- 			opts.force = true;
- 			break;
-diff --git a/samples/bpf/xdp_router_ipv4_user.c b/samples/bpf/xdp_router_ipv4_user.c
-index 48e9bcb38c8e..5ff12688a31b 100644
---- a/samples/bpf/xdp_router_ipv4_user.c
-+++ b/samples/bpf/xdp_router_ipv4_user.c
-@@ -53,6 +53,7 @@ static const struct option long_options[] = {
- 	{ "interval", required_argument, NULL, 'i' },
- 	{ "verbose", no_argument, NULL, 'v' },
- 	{ "stats", no_argument, NULL, 's' },
-+	{ "meta-thresh", optional_argument, NULL, 'M' },
- 	{}
- };
- 
-@@ -593,7 +594,7 @@ int main(int argc, char **argv)
- 		goto end_destroy;
- 	}
- 
--	while ((opt = getopt_long(argc, argv, "si:SFvh",
-+	while ((opt = getopt_long(argc, argv, "si:SFMvh",
- 				  long_options, &longindex)) != -1) {
- 		switch (opt) {
- 		case 's':
-@@ -621,6 +622,10 @@ int main(int argc, char **argv)
- 			total_ifindex--;
- 			ifname_list++;
- 			break;
-+		case 'M':
-+			opts.meta_thresh = optarg ? strtoul(optarg, NULL, 0) :
-+					   1;
-+			break;
- 		case 'h':
- 			error = false;
- 		default:
-diff --git a/samples/bpf/xdp_sample_user.c b/samples/bpf/xdp_sample_user.c
-index 8bc23b4c5f19..354352541c5e 100644
---- a/samples/bpf/xdp_sample_user.c
-+++ b/samples/bpf/xdp_sample_user.c
-@@ -1283,6 +1283,8 @@ static int __sample_remove_xdp(int ifindex, __u32 prog_id, int xdp_flags)
- int sample_install_xdp(struct bpf_program *xdp_prog,
- 		       const struct sample_install_opts *opts)
- {
-+	LIBBPF_OPTS(bpf_xdp_attach_opts, attach_opts,
-+		    .meta_thresh = opts->meta_thresh);
- 	__u32 ifindex = opts->ifindex;
- 	int ret, xdp_flags = 0;
- 	__u32 prog_id = 0;
-@@ -1293,18 +1295,34 @@ int sample_install_xdp(struct bpf_program *xdp_prog,
- 		return -ENOTSUP;
- 	}
- 
-+	if (attach_opts.meta_thresh) {
-+		ret = libbpf_get_type_btf_id("struct xdp_meta_generic",
-+					     &attach_opts.btf_id);
-+		if (ret) {
-+			fprintf(stderr, "Failed to retrieve BTF ID: %s\n",
-+				strerror(-ret));
-+			return ret;
-+		}
-+	}
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index a825ea7f375d..1c308511acbb 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -509,6 +509,11 @@ enum {
+ 	 * charged to the kernel memory.
+ 	 */
+ 	SKBFL_PURE_ZEROCOPY = BIT(2),
 +
- 	xdp_flags |= !opts->force ? XDP_FLAGS_UPDATE_IF_NOEXIST : 0;
- 	xdp_flags |= opts->generic ? XDP_FLAGS_SKB_MODE : XDP_FLAGS_DRV_MODE;
--	ret = bpf_xdp_attach(ifindex, bpf_program__fd(xdp_prog), xdp_flags, NULL);
-+	ret = bpf_xdp_attach(ifindex, bpf_program__fd(xdp_prog), xdp_flags,
-+			     &attach_opts);
- 	if (ret < 0) {
- 		ret = -errno;
- 		fprintf(stderr,
--			"Failed to install program \"%s\" on ifindex %d, mode = %s, "
--			"force = %s: %s\n",
-+			"Failed to install program \"%s\" on ifindex %d, mode = %s, force = %s, metadata = ",
- 			bpf_program__name(xdp_prog), ifindex,
- 			opts->generic ? "skb" : "native",
--			opts->force ? "true" : "false",
--			strerror(-ret));
-+			opts->force ? "true" : "false");
-+		if (attach_opts.meta_thresh)
-+			fprintf(stderr,
-+				"true (from %u bytes, BTF ID is 0x%16llx)",
-+				attach_opts.meta_thresh, attach_opts.btf_id);
-+		else
-+			fprintf(stderr, "false");
-+		fprintf(stderr, ": %s\n", strerror(-ret));
- 		return ret;
- 	}
- 
-diff --git a/samples/bpf/xdp_sample_user.h b/samples/bpf/xdp_sample_user.h
-index 22afe844ae30..207953406ee1 100644
---- a/samples/bpf/xdp_sample_user.h
-+++ b/samples/bpf/xdp_sample_user.h
-@@ -34,6 +34,7 @@ struct sample_install_opts {
- 	int ifindex;
- 	__u32 force:1;
- 	__u32 generic:1;
-+	__u32 meta_thresh;
++	/* skb metadata may contain unique values such as checksums
++	 * and we should not compare it against others.
++	 */
++	SKBFL_METADATA_NOCOMP = BIT(3),
  };
  
- int sample_setup_maps(struct bpf_map **maps);
+ #define SKBFL_ZEROCOPY_FRAG	(SKBFL_ZEROCOPY_ENABLE | SKBFL_SHARED_FRAG)
+@@ -4137,6 +4142,9 @@ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
+ 
+ 	if (!(len_a | len_b))
+ 		return false;
++	if ((skb_shinfo(skb_a)->flags | skb_shinfo(skb_b)->flags) &
++	    SKBFL_METADATA_NOCOMP)
++		return false;
+ 
+ 	return len_a != len_b ?
+ 	       true : __skb_metadata_differs(skb_a, skb_b, len_a);
+@@ -4152,6 +4160,16 @@ static inline void skb_metadata_clear(struct sk_buff *skb)
+ 	skb_metadata_set(skb, 0);
+ }
+ 
++static inline void skb_metadata_nocomp_set(struct sk_buff *skb)
++{
++	skb_shinfo(skb)->flags |= SKBFL_METADATA_NOCOMP;
++}
++
++static inline void skb_metadata_nocomp_clear(struct sk_buff *skb)
++{
++	skb_shinfo(skb)->flags &= ~SKBFL_METADATA_NOCOMP;
++}
++
+ struct sk_buff *skb_clone_sk(struct sk_buff *skb);
+ 
+ #ifdef CONFIG_NETWORK_PHY_TIMESTAMPING
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 00bf35ee8205..5b23fc7f1157 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -1750,6 +1750,7 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
+ 	atomic_set(&skb_shinfo(skb)->dataref, 1);
+ 
+ 	skb_metadata_clear(skb);
++	skb_metadata_nocomp_clear(skb);
+ 
+ 	/* It is not generally safe to change skb->truesize.
+ 	 * For the moment, we really care of rx path, or
 -- 
 2.36.1
 
