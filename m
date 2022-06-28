@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A6C0C43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE364CCA47E
 	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiF1Tvj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
+        id S232984AbiF1Tvl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jun 2022 15:50:52 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794CA381A6;
-        Tue, 28 Jun 2022 12:49:26 -0700 (PDT)
+        with ESMTP id S231670AbiF1Tux (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jun 2022 15:50:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C80381B2;
+        Tue, 28 Jun 2022 12:49:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445766; x=1687981766;
+  t=1656445768; x=1687981768;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ZpVJYqira/LWPous20gpNOuBnyMMME3HZPBbCSlm2FQ=;
-  b=QxbTB5SYn8q40YWGQiOe/0q7LF8uxTBmvLIKprYBosUotwXOixYIDrDR
-   ogO9nLWYZve8dXYHZz25GGisnZW6j+IBKX8n7WpZv9e6CQ536vwhoKFjn
-   OAWGO9DFr+Mqq1U16yqTGI2G5Sb93zqMFmDfLf7RES7Gzwm9GSq7el6ZA
-   7iwR64ZKFOSmDnp+AuBIVfRStu/YY8ZOscaUn2Oe4oPmcbk9WkBkwwP18
-   YlgtiD4Jqwg+dvW62xPlVBEoEqFHXYi0KKNG6ikpPmP1XVNAakcpuMce/
-   pZUYPc29SWrWcMeLEPjFEiBxkrOBeVM9IXdwRc7a5wCAfVb39nxgu4lTW
+  bh=ZoktIBH2DcbAQq3Yb1c6s52MpIMxZuvptyzwO9VbH6M=;
+  b=KDWxERp5hZjnzyL92jLmpa3tHJ/Mbdxukb39r9VL6V4jyQwgzzQMMghj
+   6yjEMKa/twYYIiE/DLNY+AwHM9eJvOgHykwvmb9zu68rPc5p/n4kNBZtx
+   EAE2ze6DML/eNjnh5jtcPsjS0yXLKelHhT3z6Bk5fjM0ztpALcJsF2Bh6
+   qR6X93EHtNYA7y+Qqken7ALmII3/VUh/RfjXOd+DbeEVdFKE7uQbdGASw
+   Ql9GWQ98EvK65v/u5O906ftTlHYe3DKsVvhJ8JYxW6cwx8+iEJR0KxwIu
+   Ty+0NW9oFdnsWBIOJfUC0yFxXplpbtJzq8tFqDHA+QgwV/tsB1Zyz2LvY
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="261635648"
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="281869586"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="261635648"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:26 -0700
+   d="scan'208";a="281869586"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="587988527"
+   d="scan'208";a="767288101"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 28 Jun 2022 12:49:21 -0700
+  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2022 12:49:23 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9J022013;
-        Tue, 28 Jun 2022 20:49:19 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9L022013;
+        Tue, 28 Jun 2022 20:49:22 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 19/52] stddef: make __struct_group() UAPI C++-friendly
-Date:   Tue, 28 Jun 2022 21:47:39 +0200
-Message-Id: <20220628194812.1453059-20-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 21/52] net, xdp: allow metadata > 32
+Date:   Tue, 28 Jun 2022 21:47:41 +0200
+Message-Id: <20220628194812.1453059-22-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,120 +76,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For the most part of C++ history, it couldn't have type declarations
-inside anonymous unions for different reasons. At the same time,
-__struct_group() relies on the latters, so when the @TAG arguments
-is not empty, C++ code doesn't want to build:
+Hardware/driver-prepended XDP metadata might be much bigger than 32
+bytes, especially if it includes a piece of a descriptor.
+Relax the restriction and allow metadata larger than 32 bytes and
+make __skb_metadata_differs() work with bigger lengths. The new
+restriction is pretty much mechanical -- skb_shared_info::meta_len
+is a u8 and XDP_PACKET_HEADROOM is 256 (minus
+`sizeof(struct xdp_frame)`).
+The requirement of having its length aligned to 4 bytes is still
+valid.
 
-In file included from test_cpp.cpp:5:
-In file included from tools/testing/selftests/bpf/tools/include/bpf/libbpf.h:18:
-tools/include/uapi/linux/bpf.h:6774:17: error: types cannot be declared in an anonymous union
-        __struct_group(xdp_meta_generic_rx, rx_full, /* no attrs */,
-                       ^
-
-The safest way to fix this without trying to switch standards (which
-is impossible anyway in UAPI) etc., is to disable tag declaration
-for that language. This won't break anything since for now it's not
-buildable at all.
-Use a separate definition for __struct_group() when __cplusplus is
-defined to mitigate the error.
-Also, mirror stddef.h into tools/ so that kernel-shipped userspace
-code would use the fixed definition instead of _something_ present
-in the system.
-
-Fixes: 50d7bd38c3aa ("stddef: Introduce struct_group() helper macro")
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/uapi/linux/stddef.h       | 12 ++++++--
- tools/include/uapi/linux/stddef.h | 50 +++++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+), 2 deletions(-)
- create mode 100644 tools/include/uapi/linux/stddef.h
+ include/linux/skbuff.h | 13 ++++++++-----
+ include/net/xdp_meta.h | 21 ++++++++++++++++++++-
+ 2 files changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/include/uapi/linux/stddef.h b/include/uapi/linux/stddef.h
-index 7837ba4fe728..67ee9c8aba56 100644
---- a/include/uapi/linux/stddef.h
-+++ b/include/uapi/linux/stddef.h
-@@ -20,14 +20,22 @@
-  * and size: one anonymous and one named. The former's members can be used
-  * normally without sub-struct naming, and the latter can be used to
-  * reason about the start, end, and size of the group of struct members.
-- * The named struct can also be explicitly tagged for layer reuse, as well
-- * as both having struct attributes appended.
-+ * The named struct can also be explicitly tagged for layer reuse (C only),
-+ * as well as both having struct attributes appended.
-  */
-+#ifndef __cplusplus
- #define __struct_group(TAG, NAME, ATTRS, MEMBERS...) \
- 	union { \
- 		struct { MEMBERS } ATTRS; \
- 		struct TAG { MEMBERS } ATTRS NAME; \
- 	}
-+#else
-+#define __struct_group(__IGNORED, NAME, ATTRS, MEMBERS...) \
-+	union { \
-+		struct { MEMBERS } ATTRS; \
-+		struct { MEMBERS } ATTRS NAME; \
-+	}
-+#endif
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 82edf0359ab3..a825ea7f375d 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -4096,10 +4096,13 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
+ {
+ 	const void *a = skb_metadata_end(skb_a);
+ 	const void *b = skb_metadata_end(skb_b);
+-	/* Using more efficient varaiant than plain call to memcmp(). */
+-#if defined(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) && BITS_PER_LONG == 64
+ 	u64 diffs = 0;
  
- /**
-  * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
-new file mode 100644
-index 000000000000..40d1c4b21003
---- /dev/null
-+++ b/tools/include/uapi/linux/stddef.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++	if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS) ||
++	    BITS_PER_LONG != 64)
++		goto slow;
 +
-+#ifndef __always_inline
-+#define __always_inline inline
-+#endif
-+
++	/* Using more efficient variant than plain call to memcmp(). */
+ 	switch (meta_len) {
+ #define __it(x, op) (x -= sizeof(u##op))
+ #define __it_diff(a, b, op) (*(u##op *)__it(a, op)) ^ (*(u##op *)__it(b, op))
+@@ -4119,11 +4122,11 @@ static inline bool __skb_metadata_differs(const struct sk_buff *skb_a,
+ 		fallthrough;
+ 	case  4: diffs |= __it_diff(a, b, 32);
+ 		break;
++	default:
++slow:
++		return memcmp(a - meta_len, b - meta_len, meta_len);
+ 	}
+ 	return diffs;
+-#else
+-	return memcmp(a - meta_len, b - meta_len, meta_len);
+-#endif
+ }
+ 
+ static inline bool skb_metadata_differs(const struct sk_buff *skb_a,
+diff --git a/include/net/xdp_meta.h b/include/net/xdp_meta.h
+index e1f3df9ceb93..3a40189d71c6 100644
+--- a/include/net/xdp_meta.h
++++ b/include/net/xdp_meta.h
+@@ -5,6 +5,7 @@
+ #define __LINUX_NET_XDP_META_H__
+ 
+ #include <net/xdp.h>
++#include <uapi/linux/bpf.h>
+ 
+ /* Drivers not supporting XDP metadata can use this helper, which
+  * rejects any room expansion for metadata as a result.
+@@ -21,9 +22,27 @@ xdp_data_meta_unsupported(const struct xdp_buff *xdp)
+ 	return unlikely(xdp->data_meta > xdp->data);
+ }
+ 
 +/**
-+ * __struct_group() - Create a mirrored named and anonyomous struct
++ * xdp_metalen_invalid -- check if the length of a frame's metadata is valid
++ * @metalen: the length of the frame's metadata
 + *
-+ * @TAG: The tag name for the named sub-struct (usually empty)
-+ * @NAME: The identifier name of the mirrored sub-struct
-+ * @ATTRS: Any struct attributes (usually empty)
-+ * @MEMBERS: The member declarations for the mirrored structs
-+ *
-+ * Used to create an anonymous union of two structs with identical layout
-+ * and size: one anonymous and one named. The former's members can be used
-+ * normally without sub-struct naming, and the latter can be used to
-+ * reason about the start, end, and size of the group of struct members.
-+ * The named struct can also be explicitly tagged for layer reuse (C only),
-+ * as well as both having struct attributes appended.
++ * skb_shared_info::meta_len is of 1 byte long, thus it can't be longer than
++ * 255, but this always can change. XDP_PACKET_HEADROOM is 256, and this is a
++ * UAPI. sizeof(struct xdp_frame) is reserved since xdp_frame is being placed
++ * at xdp_buff::data_hard_start whilst being constructed on XDP_REDIRECT.
++ * The 32-bit alignment requirement is arbitrary, kept for simplicity and,
++ * sometimes, speed.
 + */
-+#ifndef __cplusplus
-+#define __struct_group(TAG, NAME, ATTRS, MEMBERS...) \
-+	union { \
-+		struct { MEMBERS } ATTRS; \
-+		struct TAG { MEMBERS } ATTRS NAME; \
-+	}
-+#else
-+#define __struct_group(__IGNORED, NAME, ATTRS, MEMBERS...) \
-+	union { \
-+		struct { MEMBERS } ATTRS; \
-+		struct { MEMBERS } ATTRS NAME; \
-+	}
-+#endif
+ static inline bool xdp_metalen_invalid(unsigned long metalen)
+ {
+-	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
++	typeof(metalen) max;
 +
-+/**
-+ * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-+ *
-+ * @TYPE: The type of each flexible array element
-+ * @NAME: The name of the flexible array member
-+ *
-+ * In order to have a flexible array member in a union or alone in a
-+ * struct, it needs to be wrapped in an anonymous struct with at least 1
-+ * named member, but that member can be empty.
-+ */
-+#define __DECLARE_FLEX_ARRAY(TYPE, NAME)	\
-+	struct { \
-+		struct { } __empty_ ## NAME; \
-+		TYPE NAME[]; \
-+	}
++	max = min_t(typeof(max),
++		    (typeof_member(struct skb_shared_info, meta_len))~0UL,
++		    XDP_PACKET_HEADROOM - sizeof(struct xdp_frame));
++	BUILD_BUG_ON(!__builtin_constant_p(max));
++
++	return (metalen & (sizeof(u32) - 1)) || metalen > max;
+ }
+ 
+ #endif /* __LINUX_NET_XDP_META_H__ */
 -- 
 2.36.1
 
