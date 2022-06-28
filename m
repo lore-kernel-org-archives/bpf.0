@@ -2,44 +2,44 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B23DCCA479
-	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03E35C43334
+	for <bpf@archiver.kernel.org>; Tue, 28 Jun 2022 19:51:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbiF1Tvd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S232279AbiF1Tvf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S230178AbiF1Tuw (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 28 Jun 2022 15:50:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144CB3A71C;
-        Tue, 28 Jun 2022 12:49:22 -0700 (PDT)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865E425C6E;
+        Tue, 28 Jun 2022 12:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656445762; x=1687981762;
+  t=1656445767; x=1687981767;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=V/LelW6Mb5Cc8sNSdQPVZg4VOEAQ0MECgTTL8gSA07g=;
-  b=aJa6bknhYwbF4rMjA/gztvpXrCxKIUFAH4+Tqj9UYtaStH0OiQsCBGhf
-   P9fJB2VcIKAva1Rc5TuWO7KLE54Rp/B5LGJfaRpNsgYai6lUfNiqrzm+9
-   vcksegu+CK4OiAktBZ5DRQrylc67bJvbW5ul1uYpVN3N7CLT2i3mTUL5Y
-   DaC+OVrGwYSENbix6+3JKbAnGaz9Bs6za65kWWUCBX+PMnNWhdm0btCuq
-   69ahgG8dmntXw6PEvovMBkdQT5viMOBJItwyjdiYmFQkdOPJl1lMnQNQ9
-   sq/AEuPOVG9IM25G91T7o3zFZO+GfaJaYRX7aqltaj2CA5OrlV9FYj1FR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264874102"
+  bh=h7GfN6EnBGflCzZCdEPR/mE/rqKzDdKMQ5giru4caVw=;
+  b=CMV1qtcdyI8q50+aCMlNgjDlrcgJC1a+viCx5Q1HGbvgOUC3Va6Poxt5
+   99iug9ITq0Flsqc1cWxZ5IIfolMidWTp4WQldokI2V0mA6bS1YtZwiPfo
+   nDNxhJqhF2HxODfKRReoa59uEXKba7lw941oJyu7NQwCzeN/aYK38bG0t
+   E0nSl9ZwnRHkALPi6DCg4FGKtWapwsz5elAp7s7wkpwLTZO0URN1AjHa7
+   StU27kgTkGEE0zqckf4C1Rp8Y/1nClKEzLVQoL3KYAbnUCxN56cj8rhDR
+   /EpZi9u++B9hzzPHSEJFOLXQkrPmls+wbSwPGjyIP7Px424yLru0YRRmp
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="281869581"
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="264874102"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:21 -0700
+   d="scan'208";a="281869581"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 12:49:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,229,1650956400"; 
-   d="scan'208";a="767288073"
+   d="scan'208";a="623054112"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2022 12:49:17 -0700
+  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2022 12:49:22 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9G022013;
-        Tue, 28 Jun 2022 20:49:15 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25SJmr9K022013;
+        Tue, 28 Jun 2022 20:49:20 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -64,9 +64,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Willem de Bruijn <willemb@google.com>, bpf@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         xdp-hints@xdp-project.net
-Subject: [PATCH RFC bpf-next 16/52] selftests/bpf: expand xdp_link to check that setting meta opts works
-Date:   Tue, 28 Jun 2022 21:47:36 +0200
-Message-Id: <20220628194812.1453059-17-alexandr.lobakin@intel.com>
+Subject: [PATCH RFC bpf-next 20/52] net, xdp: move XDP metadata helpers into new xdp_meta.h
+Date:   Tue, 28 Jun 2022 21:47:40 +0200
+Message-Id: <20220628194812.1453059-21-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
 References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
@@ -76,88 +76,194 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a check in xdp_link to ensure that the values of btf_id and
-meta_thresh gotten via bpf_obj_get_info_by_fd() is the same as was
-passed via bpf_link_update(). Plus, that the kernel should fail to
-set btf_id to 0 when meta_thresh != 0.
-Also, use the new bpf_program__attach_xdp_opts() instead of the
-non-optsed version and set the initial metadata threshold value
-to check whether the kernel is able to process this request.
-When the threshold is being set via the Netlink interface, it's
-not being stored anywhere in the kernel core, so no test for it.
+<net/xdp.h> gets included indirectly into tons of different files
+across the kernel. To not make them dependent on the header files
+needed for the XDP metadata definitions, which will be used only
+by several driver and XDP core files, and have the metadata code
+logically separated, create a new header file, <net/xdp_meta.h>,
+and move several already existing metadata helpers to it.
 
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- .../selftests/bpf/prog_tests/xdp_link.c       | 30 +++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
+ MAINTAINERS                                   |  1 +
+ .../ethernet/mellanox/mlx5/core/en/xsk/rx.c   |  1 +
+ drivers/net/ethernet/netronome/nfp/nfd3/xsk.c |  1 +
+ drivers/net/tun.c                             |  2 +-
+ include/net/xdp.h                             | 20 -------------
+ include/net/xdp_meta.h                        | 29 +++++++++++++++++++
+ net/bpf/core.c                                |  2 +-
+ net/bpf/prog_ops.c                            |  1 +
+ net/bpf/test_run.c                            |  2 +-
+ net/xdp/xsk.c                                 |  2 +-
+ 10 files changed, 37 insertions(+), 24 deletions(-)
+ create mode 100644 include/net/xdp_meta.h
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-index 3e9d5c5521f0..0723278c448f 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
-@@ -10,6 +10,7 @@ void serial_test_xdp_link(void)
- {
- 	struct test_xdp_link *skel1 = NULL, *skel2 = NULL;
- 	__u32 id1, id2, id0 = 0, prog_fd1, prog_fd2;
-+	LIBBPF_OPTS(bpf_link_update_opts, lu_opts);
- 	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
- 	struct bpf_link_info link_info;
- 	struct bpf_prog_info prog_info;
-@@ -103,8 +104,16 @@ void serial_test_xdp_link(void)
- 	bpf_link__destroy(skel1->links.xdp_handler);
- 	skel1->links.xdp_handler = NULL;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 91190e12a157..24a640c8a306 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21722,6 +21722,7 @@ L:	netdev@vger.kernel.org
+ L:	bpf@vger.kernel.org
+ S:	Supported
+ F:	include/net/xdp.h
++F:	include/net/xdp_meta.h
+ F:	include/net/xdp_priv.h
+ F:	include/trace/events/xdp.h
+ F:	kernel/bpf/cpumap.c
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
+index 9a1553598a7c..c1fc5c79d90f 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/rx.c
+@@ -3,6 +3,7 @@
  
-+	opts.old_prog_fd = 0;
-+	opts.meta_thresh = 128;
-+
-+	err = libbpf_get_type_btf_id("struct xdp_meta_generic", &opts.btf_id);
-+	if (!ASSERT_OK(err, "libbpf_get_type_btf_id"))
-+		goto cleanup;
-+
- 	/* new link attach should succeed */
--	link = bpf_program__attach_xdp(skel2->progs.xdp_handler, IFINDEX_LO);
-+	link = bpf_program__attach_xdp_opts(skel2->progs.xdp_handler,
-+					    IFINDEX_LO, &opts);
- 	if (!ASSERT_OK_PTR(link, "link_attach"))
- 		goto cleanup;
- 	skel2->links.xdp_handler = link;
-@@ -113,11 +122,25 @@ void serial_test_xdp_link(void)
- 	if (!ASSERT_OK(err, "id2_check_err") || !ASSERT_EQ(id0, id2, "id2_check_val"))
- 		goto cleanup;
+ #include "rx.h"
+ #include "en/xdp.h"
++#include <net/xdp_meta.h>
+ #include <net/xdp_sock_drv.h>
+ #include <linux/filter.h>
  
-+	lu_opts.xdp.new_meta_thresh = 256;
-+	lu_opts.xdp.new_btf_id = opts.btf_id;
-+
- 	/* updating program under active BPF link works as expected */
--	err = bpf_link__update_program(link, skel1->progs.xdp_handler);
-+	err = bpf_link_update(bpf_link__fd(link),
-+			      bpf_program__fd(skel1->progs.xdp_handler),
-+			      &lu_opts);
- 	if (!ASSERT_OK(err, "link_upd"))
- 		goto cleanup;
+diff --git a/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c b/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c
+index 454fea4c8be2..0957e866799b 100644
+--- a/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c
++++ b/drivers/net/ethernet/netronome/nfp/nfd3/xsk.c
+@@ -4,6 +4,7 @@
  
-+	lu_opts.xdp.new_btf_id = 0;
-+
-+	/* BTF ID can't be 0 when meta_thresh != 0, and vice versa */
-+	err = bpf_link_update(bpf_link__fd(link),
-+			      bpf_program__fd(skel1->progs.xdp_handler),
-+			      &lu_opts);
-+	if (!ASSERT_ERR(err, "link_upd_fail"))
-+		goto cleanup;
-+
- 	memset(&link_info, 0, sizeof(link_info));
- 	err = bpf_obj_get_info_by_fd(bpf_link__fd(link), &link_info, &link_info_len);
- 	if (!ASSERT_OK(err, "link_info"))
-@@ -126,6 +149,9 @@ void serial_test_xdp_link(void)
- 	ASSERT_EQ(link_info.type, BPF_LINK_TYPE_XDP, "link_type");
- 	ASSERT_EQ(link_info.prog_id, id1, "link_prog_id");
- 	ASSERT_EQ(link_info.xdp.ifindex, IFINDEX_LO, "link_ifindex");
-+	ASSERT_EQ(link_info.xdp.btf_id, opts.btf_id, "btf_id");
-+	ASSERT_EQ(link_info.xdp.meta_thresh, lu_opts.xdp.new_meta_thresh,
-+		  "meta_thresh");
+ #include <linux/bpf_trace.h>
+ #include <linux/netdevice.h>
++#include <net/xdp_meta.h>
  
- 	/* updating program under active BPF link with different type fails */
- 	err = bpf_link__update_program(link, skel1->progs.tc_handler);
+ #include "../nfp_app.h"
+ #include "../nfp_net.h"
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 87a635aac008..0eb0cc6966e4 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -61,7 +61,7 @@
+ #include <net/netns/generic.h>
+ #include <net/rtnetlink.h>
+ #include <net/sock.h>
+-#include <net/xdp.h>
++#include <net/xdp_meta.h>
+ #include <net/ip_tunnels.h>
+ #include <linux/seq_file.h>
+ #include <linux/uio.h>
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 7b8ba068d28a..1663d0b3a05a 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -378,26 +378,6 @@ int xdp_reg_mem_model(struct xdp_mem_info *mem,
+ 		      enum xdp_mem_type type, void *allocator);
+ void xdp_unreg_mem_model(struct xdp_mem_info *mem);
+ 
+-/* Drivers not supporting XDP metadata can use this helper, which
+- * rejects any room expansion for metadata as a result.
+- */
+-static __always_inline void
+-xdp_set_data_meta_invalid(struct xdp_buff *xdp)
+-{
+-	xdp->data_meta = xdp->data + 1;
+-}
+-
+-static __always_inline bool
+-xdp_data_meta_unsupported(const struct xdp_buff *xdp)
+-{
+-	return unlikely(xdp->data_meta > xdp->data);
+-}
+-
+-static inline bool xdp_metalen_invalid(unsigned long metalen)
+-{
+-	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
+-}
+-
+ struct xdp_attachment_info {
+ 	struct bpf_prog *prog;
+ 	u64 btf_id;
+diff --git a/include/net/xdp_meta.h b/include/net/xdp_meta.h
+new file mode 100644
+index 000000000000..e1f3df9ceb93
+--- /dev/null
++++ b/include/net/xdp_meta.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (C) 2022, Intel Corporation. */
++
++#ifndef __LINUX_NET_XDP_META_H__
++#define __LINUX_NET_XDP_META_H__
++
++#include <net/xdp.h>
++
++/* Drivers not supporting XDP metadata can use this helper, which
++ * rejects any room expansion for metadata as a result.
++ */
++static __always_inline void
++xdp_set_data_meta_invalid(struct xdp_buff *xdp)
++{
++	xdp->data_meta = xdp->data + 1;
++}
++
++static __always_inline bool
++xdp_data_meta_unsupported(const struct xdp_buff *xdp)
++{
++	return unlikely(xdp->data_meta > xdp->data);
++}
++
++static inline bool xdp_metalen_invalid(unsigned long metalen)
++{
++	return (metalen & (sizeof(__u32) - 1)) || (metalen > 32);
++}
++
++#endif /* __LINUX_NET_XDP_META_H__ */
+diff --git a/net/bpf/core.c b/net/bpf/core.c
+index dcd3b6ae86b7..18174d6d8687 100644
+--- a/net/bpf/core.c
++++ b/net/bpf/core.c
+@@ -14,7 +14,7 @@
+ #include <linux/bug.h>
+ #include <net/page_pool.h>
+ 
+-#include <net/xdp.h>
++#include <net/xdp_meta.h>
+ #include <net/xdp_priv.h> /* struct xdp_mem_allocator */
+ #include <trace/events/xdp.h>
+ #include <net/xdp_sock_drv.h>
+diff --git a/net/bpf/prog_ops.c b/net/bpf/prog_ops.c
+index 33f02842e715..bf174b8d8a36 100644
+--- a/net/bpf/prog_ops.c
++++ b/net/bpf/prog_ops.c
+@@ -2,6 +2,7 @@
+ 
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
++#include <net/xdp_meta.h>
+ #include <net/xdp_sock.h>
+ #include <trace/events/xdp.h>
+ 
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 2ca96acbc50a..596b523ccced 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -19,7 +19,7 @@
+ #include <linux/error-injection.h>
+ #include <linux/smp.h>
+ #include <linux/sock_diag.h>
+-#include <net/xdp.h>
++#include <net/xdp_meta.h>
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/bpf_test_run.h>
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 19ac872a6624..ebf6a67424cd 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -24,7 +24,7 @@
+ #include <linux/rculist.h>
+ #include <net/xdp_sock_drv.h>
+ #include <net/busy_poll.h>
+-#include <net/xdp.h>
++#include <net/xdp_meta.h>
+ 
+ #include "xsk_queue.h"
+ #include "xdp_umem.h"
 -- 
 2.36.1
 
